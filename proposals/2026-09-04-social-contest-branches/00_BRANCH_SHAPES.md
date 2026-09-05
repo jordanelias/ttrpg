@@ -1,7 +1,7 @@
 # 00 · BRANCH SHAPES — negotiation · inquiry · consensus
 
 ## Status: **PROPOSED — shape spec only, nothing ratifies.** 2026-09-04. Read-only planner output (Fable, CLAUDE.md §10 row: audit/planner, not author). Paper grade throughout (§7.6).
-## Compliance target: `proposals/2026-09-03-meta-architecture/04_CODE_ARCHITECTURE.md` (PR #362, PROPOSED, HELD BACK IN FULL) — a **shape constraint, not canon**. Where its shape and the live kernel conflict, the conflict is named, never resolved by declaring prose authoritative (CLAUDE.md §0.05).
+## Compliance target: `architecture/meta/04_CODE_ARCHITECTURE.md` (PR #362, PROPOSED, HELD BACK IN FULL) — a **shape constraint, not canon**. Where its shape and the live kernel conflict, the conflict is named, never resolved by declaring prose authoritative (CLAUDE.md §0.05).
 ## What this is: the SEQUENCE and SHAPE of the three `GAMES` rows that are STUB at `systems/social_contest/sim/contest/wrapper.py:236 GAMES`, decomposed for downstream builders. Every anchor below is `path:line symbol`, verified against the working tree at HEAD `1e163ee` on 2026-09-04. Snapshot material is cited `v30-snapshot-2026-06-28:<path>` and is **not in `main`**.
 
 ---
@@ -67,7 +67,7 @@ Tier codes are the corpus's own: the rhetoric research uses `[PR]` primary-sourc
 
 **Also found (each anchored; none padded):**
 
-- **The tracer seam refuses social prizes.** `proposals/2026-09-01-season-loop-tests/tracer/shape.py:4903 contest` dispatches `personal_combat` via `combat_seam.py:125 resolve` and raises `Unspecified` for `"a standing"`/`"a proposition"` (`rosters.yaml:359-360`). H-88 (`hole_register.yaml:1016`, Jordan verbatim at `:1026`, 2026-09-02): the seam naming the subsystem and refusing IS the intended behaviour for now. So the branches below plug a socket that exists and is deliberately empty.
+- **The tracer seam refuses social prizes.** `engine/season/shape.py:4903 contest` dispatches `personal_combat` via `combat_seam.py:125 resolve` and raises `Unspecified` for `"a standing"`/`"a proposition"` (`rosters.yaml:359-360`). H-88 (`hole_register.yaml:1016`, Jordan verbatim at `:1026`, 2026-09-02): the seam naming the subsystem and refusing IS the intended behaviour for now. So the branches below plug a socket that exists and is deliberately empty.
 - **Margin already exists one field deeper.** `resolver.py:88 PersuasionTrack.resolve` reads `self.track(s)` (:87) = `start + scale·(adv[A] − adv[B])` and *then* bands it; `:67 ProofBar` computes `net`. The kernel has a margin at every win-condition; it throws it away at the return. `KEY_INDEX.md:811 scene.contest_resolved` payload `persuasion_track_final` is the same number under another name.
 - **`contest_side.a/b` are `kind: value` roles** (`module_contracts.yaml:176,180`) while the wrapper returns band *strings* (`"A_decisive"`, `"committee"`, …) — a latent mismatch; `scene_dispatch.py:305` comments the shape is "a win-condition band or side label".
 - **Factions are claimants today.** `scene_dispatch.py:121 _emergency_council_parties` returns faculty ints derived from `f.L` / `f.Sta` (`:139`); `coalition_vote` pools faction Mandate. PR #362 §C.5 grades "a faction as combatant" **STRUCTURAL** (`claimants : PersonId[]`), §B.6.1 `Faction` is a Query return. Conflict named; not resolved here (§2.5 adapter).

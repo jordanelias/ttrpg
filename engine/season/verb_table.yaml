@@ -1,0 +1,555 @@
+# PART E, AS DATA — THE VERB TABLE, WHICH IS THE RESOLVER'S BODY.
+#
+# W3 of `architecture/PLAN.md`, and PLAN §5.1 calls it "the item
+# that turns grading into running". #353 gives `resolve : (Act[], World) -> Event[]` and NEVER SAYS
+# WHAT ANY VERB DOES — the semantics are prose scattered across §11, §36, §37 and §54. That is
+# defect `D20`, and it is why the tested instrument could only GRADE cases and never RUN them: with
+# no table, every act needed a hand-written `effect` lambda, and a lambda per act IS a second
+# resolver.
+#
+# ONE `resolve` READS THIS TABLE. The fold is: eligibility → `requires` evaluated AGAINST THE WORLD
+# THE PREDECESSORS LEFT → each `writes:` through `write()` → `emits` or `emits_on_refusal`.
+#
+# `emits_on_refusal` IS THE SCARCITY CHANNEL AND IT IS LOAD-BEARING (§27.1, §E2). "The second
+# claimant on an emptied granary gets a DIFFERENT Event." A verb that RAISES on a failed
+# precondition produces no Event, no witness and no arc — so scarcity stops being something the
+# world does and becomes something the engine forbids.
+#
+# `writes:` ENTRIES MUST BE ROWS OF `write_matrix.yaml`. Anything else is an unmarked cell under
+# §30's own rule. The loader checks it; a verb naming a pair Part D does not carry raises at load
+# rather than at the first act that uses it.
+#
+# ELIGIBILITY IS ONE OF FOUR KINDS — `own`, `remit:<act>`, `hold:<object>`, `presence:<rung>` — AND
+# NEVER `capability`. #353 §9.2: "`capability` supplies dice and GATES NOTHING." An office makes an
+# ORDINARY verb eligible; no verb exists only for office-holders, and none carries a modifier.
+#
+# WHAT W3 CHANGED, each with the reason:
+#   * FOUR VERBS ADDED that #353 names and Part E omits — `utter`, `establish`, `exchange`,
+#     `succeed`. Without `utter` NO PROPOSITION EXISTS and `commit`/`petition`/`issue` cannot fire,
+#     so the season cannot start.
+#   * SIX REFUSAL EVENTS ADDED. W3 names `tell`; applying W3's own rule rather than its list finds
+#     the same defect in `commit`, `repudiate`, `comply`, `evade`/`defy` and `refract` — each had a
+#     `requires` and no refusal channel. The eight verbs still without one genuinely have no
+#     precondition.
+#   * `restore`'s EFFECT FORMULA moved out of its `requires` column. A precondition is a question
+#     the fold asks of the world; an effect is what the write does.
+#   * `open_case`'s eligibility graded `assumption` with `own` swept — #353's five remit acts are
+#     CLOSED and opening a case is not among them, so V2 invented one.
+#   * `create_record` and `destroy_record` regraded from `D7` — a Part B DEFECT ID sitting in the
+#     grade column — to `ruled`, which W2 earned by landing Part D's five `Record` rows.
+#
+# PROVENANCE. The 28 carried rows are extracted mechanically from §E3's markdown table. ⚠ The first
+# extraction SILENTLY DROPPED FOUR of them — `transfer`, `work`, `restore`, `destroy_record` —
+# because their cells contain an ESCAPED pipe (`own \| hold:<store>`) and a naive split produced
+# nine columns, which a `len == 8` filter then discarded without a word. The extractor asserts that
+# nothing is skipped now. A filter that drops what it cannot parse reports clean over an unknown
+# number of missing rows.
+
+# =============================================================================================
+# ⚠ CONDITIONED BY #358 rev.2, 2026-09-03. WHAT THIS TABLE NOW FAILS, AND THE RESOLUTION FOR EACH.
+#
+# #358's Stage 4 was rewritten after an adversarial pass; its loader gained a twelfth invariant and
+# corrected four others. Run against THIS table, the rewritten loader refuses it in three places.
+# They are recorded here rather than fixed silently, because two of the three need a ruling.
+#
+# 1. `scale:` ON TEN ROWS FAILS INVARIANT 10 (unknown key; `scale:` refused BY NAME).
+#    Rows: confer, convene, determine, dispatch, establish, exchange, issue, levy, revoke, succeed.
+#    #358 §E.3 and Stage 2 §C.3: scale is a POSITION IN THE CONTAINMENT TREE, derived on demand,
+#    stored nowhere -- "a label cannot be walked", and indexing code by scale deletes the property
+#    that makes one type with many kinds worth having.
+#    ⚠ DO NOT DELETE THE TEN KEYS YET. They answer a real Jordan question ("is it unnecessary to
+#    nest these and instead just explicitly define scale?"), and #358 rev.2 supplies the answer:
+#    THE SCOPE OF THE SEAT BEING EXERCISED -- `Act.via.scope` -- not a column on the verb. The key
+#    is retired when `Act.via` carries the scope; until then each row's `scale_note` is the
+#    provenance that would be lost. Tracked as the conditioning item, not as a hole.
+#
+# 2. `kill / wound` NOW CARRIES A `Degree`-KEYED `writes` (invariant 12, #358 §C.4 / F6).
+#    Done, in this file. It is the only row declaring `contests:`, so it is the only row affected.
+#    The BANDS are `assumption` and swept at H-98; the SHAPE is ruled.
+#
+# 3. INVARIANT 4 IS WIDENED to every failable clause, not only a `requires`.
+#    `kill / wound` gained `kill.refused` (a seam can return a typed Refusal at the depth cap).
+#    ⚠ STILL OPEN: eligibility itself can decline -- `destroy_record` declines on BOTH its
+#    alternatives (H-75) and can never fire -- and no row declares an eligibility-refusal kind.
+#    The live fold emits `act.ineligible` and `act.refused` as BODY LITERALS, which invariant 7's
+#    derived kind roster refuses at `append` and which ID-12 refuses outright. Owner: this table.
+#
+# WHAT #358 rev.2 DOES NOT CHANGE HERE, checked rather than assumed: all 32 `writes:` entries
+# resolve to `write_matrix.yaml` rows; all eligibility kinds are in the four-member roster and none
+# is `capability`; all 24 verbs carrying a `requires` carry a non-empty `emits_on_refusal`.
+# =============================================================================================
+
+verbs:
+  - verb:        "carry"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "a Petition exists; costs budget like any act"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      Petition
+    requires_typed_note: "§E3 `:415` — *a Petition exists; **costs budget like any act***. The second half is not a precondition; §26.3's budget is spent by every act and is charged in `pack_scenes`. ⚠ THE SCOPING IS A CHOICE AND IS DECLARED: the prose is INDEFINITE (*a* Petition) and this reads it as *the petition being carried*, which is the act's `subject`. The alternative — any Petition anywhere in the world — would admit a `carry` of a petition that does not exist, and `carry` writes `(DocketItem, matter)`, i.e. it carries a PARTICULAR one. Under-refusing is the failure `G4` weighs equally with an invention, so the tighter reading is taken and named."
+    writes:      ["DocketItem.matter"]
+    emits:       ["petition.carried"]
+    emits_on_refusal: ["carry.refused"]
+    grade:       "ruled"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "commit"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "the Proposition exists (immutable, §14)"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      Proposition
+    requires_typed_note: "§E3 `:426` — *the Proposition exists (immutable, §14)*. Definite article: the one the act commits to, which is the act's `subject`. §14 makes a Proposition immutable and `utter` is the only verb that creates one, so this is the clause that makes `utter` a precondition of the social layer rather than a formality."
+    writes:      ["Tenure.since"]
+    emits:       ["commitment.made"]
+    emits_on_refusal: ["commitment.refused"]
+    grade:       "ruled"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: the Proposition does not exist (§14 -- it is immutable and must be uttered first)"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "comply"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "a claim of the dispensation's terms is in the actor's own ledger"
+    requires_typed: none
+    requires_typed_note: "§E3 `:430` — *a claim of the dispensation's terms is in the actor's **own** ledger*. §F.24a form 6, and the FORM is not the problem — `tell` is typed on it. THE OPERAND IS: the entity is a DISPENSATION, and `rosters.yaml: requires_operands` is closed on (actor, subject, from, to, site, kind, amount, floor) with no name for one. Typing it as `of: subject` would assert that an act's subject IS the dispensation whose terms are sought, which no in-chain document says; coining `dispensation` would be filling `H-94` by keyword argument. Stays on REQUIRES_PREDICATES, where it has no predicate, so the fold refuses and names what is missing — today's behaviour exactly."
+    writes:      []
+    emits:       ["compliance.given"]
+    emits_on_refusal: ["compliance.impossible"]
+    grade:       "ruled"
+    writes_note: "per the term's own row"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: no claim of the dispensation's terms is in the actor's own ledger"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "confer"
+    scale:   "settlement"
+    scale_note: "conferral seats an office, and an office sits at a rung"
+    stratum:     "binding_decision"
+    eligibility: ["remit:confer"]
+    requires:    "the office's conferral basis, and 1-per-object: no live hold on the object, or the holder-Proposition has zero live commit (§54 it. 20)"
+    writes:      ["Tenure.until", "Tenure.since"]
+    emits:       ["tenure.opened", "tenure.closed"]
+    emits_on_refusal: ["confer.refused"]
+    grade:       "ruled"
+    eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:confer + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "convene"
+    scale:   "settlement"
+    scale_note: "a convening gathers a venue's rung, not a person -- ARCHITECTURE_V2 :`the venue's container resolves`"
+    stratum:     "binding_decision"
+    eligibility: ["remit:convene"]
+    requires:    "the venue's container resolves, or is NONE (§6.2)"
+    writes:      ["Date.due_at", "ConveningCondition.attached"]
+    emits:       ["date.scheduled"]
+    emits_on_refusal: ["convene.refused"]
+    grade:       "ruled"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "create_record"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    requires:    "—"
+    writes:      ["Record.exists", "Record.stages"]
+    emits:       ["record.created"]
+    emits_on_refusal: []
+    grade:       "ruled"
+    grade_note:  "V2 §E3 put `D7` in the grade column -- a Part B defect id, not one of §G4's four grades. W2 landed Part D's five `Record` rows, which IS D7's discharge, so the verb is `ruled` on that table."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "destroy_record"
+    stratum:     "uncontested_material"
+    eligibility: ["hold:<record>", "presence"]
+    requires:    "—"
+    writes:      ["Record.exists"]
+    emits:       ["record.destroyed"]
+    emits_on_refusal: ["destroy.refused"]
+    grade:       "ruled"
+    grade_note:  "V2 §E3 put `D7` in the grade column -- a Part B defect id, not one of §G4's four grades. W2 landed Part D's five `Record` rows, which IS D7's discharge, so the verb is `ruled` on that table."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "determine"
+    scale:   "settlement"
+    scale_note: "a sitting decides at the venue's rung"
+    stratum:     "binding_decision"
+    eligibility: ["remit:determine"]
+    requires:    "a fired Date with a DocketItem; judging_set — D11, absent"
+    writes:      ["Tenure.degree"]
+    emits:       ["matter.determined"]
+    emits_on_refusal: ["determine.refused"]
+    grade:       "absent"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "dispatch"
+    scale:   "territory"
+    scale_note: "a dispatch sends a person across rungs; its reach is the territory, not the sender"
+    stratum:     "binding_decision"
+    eligibility: ["remit:dispatch"]
+    requires:    "the named person exists"
+    writes:      []
+    emits:       ["order.given"]
+    emits_on_refusal: ["dispatch.refused"]
+    grade:       "ruled"
+    writes_note: "— (§11.1: it names a person; their own choose decides)"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "establish"
+    scale:   "settlement"
+    scale_note: "founding an office is an act on the rung that will hold it"
+    stratum:     "binding_decision"
+    eligibility: ["remit:confer"]
+    requires:    "the establishing office's conferral basis, and a rung to establish it at"
+    writes:      ["Office.exists", "Office.remit", "Office.establishment"]
+    emits:       ["office.established"]
+    emits_on_refusal: ["establish.refused"]
+    grade:       "assumption"
+    source:      "W3 -- #353 names it and Part E omits it, and V2 NAMES IT IN ITS OWN `(Office, remit)` ROW ('`establish` is an act') while giving it no verb row. Its three Part D rows were RETIRED BY W2 for having no producing verb; they return in the same commit as this row, which is the discipline: a row exists because a producer produces it. Eligibility is `assumption` -- #353 does not say which remit establishes an office. Register rows H-41, H-34."
+  - verb:        "evade / defy"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "as comply"
+    requires_typed: none
+    requires_typed_note: "§E3 `:431` — *as `comply`*, and it inherits `comply`'s reason unchanged: the operand is a Dispensation and the closed operand roster has no name for one."
+    writes:      []
+    emits:       ["compliance.withheld"]
+    emits_on_refusal: ["compliance.impossible"]
+    grade:       "ruled"
+    writes_note: "per the term's own row"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: as `comply`"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "exchange"
+    scale:   "settlement"
+    scale_note: "as `levy` -- it writes `Rung.stores`"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    requires:    "both sides' stores cover their side of the exchange"
+    requires_typed: none
+    requires_typed_note: "W3's own cell — *both sides' stores cover their side of the exchange*. §F.24a form 2 TWICE, one clause per side, and the SECOND side cannot be written: it needs the counterparty's matter kind and quantity, and `rosters.yaml: requires_operands` is closed with no names for them. ⚠ TYPING ONE SIDE ONLY IS THE `_req_confer` DEFECT — a dropped conjunct is an over-admission, and `G4` weighs it equally with an invention. Stays on REQUIRES_PREDICATES with no predicate, so the fold refuses."
+    writes:      ["Rung.stores"]
+    emits:       ["exchange.made"]
+    emits_on_refusal: ["exchange.refused"]
+    grade:       "assumption"
+    writes_note: "`(Rung, stores)` x2, one per side -- as `transfer`"
+    source:      "W3 -- #353 `:1899` names it and Part E omits it. Modelled on `transfer`, whose scarcity property (§27.1) it must share: the second party on an emptied larder gets a DIFFERENT Event, not a raise."
+  - verb:        "forge"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    requires:    "—"
+    writes:      ["Record.exists", "Record.forgery_quality"]
+    emits:       ["record.created"]
+    emits_on_refusal: []
+    grade:       "assumption"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "issue"
+    scale:   "province"
+    scale_note: "a Dispensation's `scope` enumerates executors -- §37.1 -- so its reach is the domain the issuer governs"
+    stratum:     "binding_decision"
+    eligibility: ["remit:issue"]
+    requires:    "scope enumerates executors, not places (§37.1)"
+    writes:      ["Dispensation.exists"]
+    emits:       ["dispensation.issued"]
+    emits_on_refusal: ["issue.refused"]
+    grade:       "ruled"
+    writes_note: "— (a Dispensation is not a state write — §37.3)  ||  ⚠ W3, ON THE W2 AUDIT: as `petition`. Part E's '(a Dispensation is not a state write)' is the bypass §1.4 hole 4 names, not a licence for one."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "kill / wound"
+    stratum:     "contested_physical"
+    eligibility: ["own"]
+    requires:    "—"
+    contests: "the body"
+    requires_note: "⚠ `contests:` IS A REAL FIELD NOW, NOT A NOTE. ARCHITECTURE_V2.md:394 declares the column -- `contests: <prize> | none`, *if set, routes to the seam at RESOLVE (§39)* -- and :434 sets it on this row. The transcription put it here, where nothing reads it, so the fold executed a kill as a DIRECT WRITE. Jordan, 2026-09-02: *that would trigger the personal combat scene. you can't just kill or wound.* The design already said so."
+    # ⚠ DEGREE-KEYED 2026-09-03 (#358 rev.2 §C.4 / F6, loader invariant 12). The flat list below
+    # was UNCONDITIONAL AFTER THE SEAM RESOLVED, so LOSING the fight killed the loser's target
+    # exactly as winning it did. `contests:` routed to the seam and then nothing read the degree
+    # that came back -- which is the same defect as the transcription note above, one layer deeper:
+    # the column was honoured and its RESULT was discarded.
+    #
+    # `Failure: []` is lawful HERE AND NOWHERE ELSE, and the act still EMITS with degree=Failure:
+    # the attempt happened, was witnessed, and cost a scene. That is what separates a LOSS (the
+    # contest occurred and went against you) from a REFUSAL (the precondition failed, no contest).
+    #
+    # ⚠ RE-DERIVED 2026-09-03 ON A JORDAN RULING, AND THE FIRST VERSION OF THIS BLOCK WAS WRONG
+    # IN KIND. Verbatim: *"kill/wound degrees should be directly taken from scene combat, which is
+    # what actually needs to be called when kill/wound is considered."*
+    #
+    # The first version guessed four bands and graded them `assumption` with a sweep. That was an
+    # invented MAPPING from a winner to a degree -- exactly the second resolver §27.2 forbids,
+    # arriving as a data row instead of as code. The ruling says the degree is not mapped: it is
+    # READ OFF THE SCENE, because scene combat computed it.
+    #
+    # WHAT THE SCENE ACTUALLY CARRIES (`combat_seam.resolve` -> `wound_state`, read from the
+    # engine's own WoundTracker on the combatants the seam holds):
+    #   felled            -- the fighter went down. `wrapper.fight` sets a result ONLY on a
+    #                        felling, so `result != 0` and `felled` are the same event.
+    #   wounds            -- gates crossed, floor(cumulative_damage / wound_interval)
+    #   health_remaining  -- what is left
+    #   result == 0       -- UNRESOLVED, and a RULED legitimate outcome (Jordan 2026-06-02):
+    #                        *"an undecided fight is a legitimate outcome."* Not a failure.
+    #
+    # SO THE BANDS BELOW ARE A READING, NOT A GUESS, AND TWO OF THE THREE ARE MECHANICAL:
+    #   felled                      -> the person is down: body, existence, and every tenure
+    #                                  naming them closes. This is the kill.
+    #   unresolved AND wounds > 0   -> blood was drawn and nobody fell: body only. This is the
+    #                                  wound, and it is the case the verb's name has always
+    #                                  carried and the table could not express.
+    #   unresolved AND wounds == 0  -> the fight happened and changed nothing. WRITES NOTHING and
+    #                                  STILL EMITS: the attempt was made, witnessed, and cost a
+    #                                  scene. That is a LOSS, not a REFUSAL.
+    #
+    # ⚠ WHAT REMAINS OPEN IS NARROWER THAN IT WAS AND IS STILL H-98: the engine does not separate
+    # a decisive win from a narrow one beyond wound count on the VICTOR, so a fourth band
+    # (Overwhelming vs Success) has no source in the data. It is NOT invented here. The three
+    # bands below are the ones the scene can distinguish.
+    writes:
+      Felled:       ["Person.body", "Person.exists", "Tenure.until"]
+      Wounded:      ["Person.body"]
+      Untouched:    []
+    writes_grade: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer. ⚠ EXECUTED 2026-09-04 (`W-E`): all three branches now run end to end through `SeasonDriver.resolve` -> `contest()` -> `combat_seam` -> `wrapper.fight`, and their consequences differ -- Felled deletes the subject and emits `person.died`, Wounded leaves them alive with a lower body and emits `body.changed`, Untouched writes nothing and emits `contest.undecided`. Falsifier: `test_we_a_contested_acts_consequence_differs_by_degree`."
+    writes_source: "combat_seam.resolve -> wound_state[THE ACT'S SUBJECT]: felled | wounds. ⚠ CORRECTED 2026-09-04 BY `W-E`, AND THE OLD CELL SAID `wound_state[loser]`, WHICH WOULD KILL THE WRONG PERSON. This verb's writes land on `payload[\"subject\"]` (`_eff_kill`), so if the ACTOR is the one felled, reading `[loser]` selects the `Felled` branch and the fold deletes the TARGET -- who is standing. The band is read off the person the writes land on. `health_remaining`/`health_full` are still read, but for the MAGNITUDE (`wound_harm_model`, `H-125`), not for the band."
+    # ⚠ `emits:` IS DEGREE-KEYED TOO, AND THE FLAT VERSION WAS A LIVE `ID-9` DEFECT.
+    # This read `["person.died"]` for every band. With the bands above that means A WOUND EMITS
+    # `person.died` -- a success report for something that did not happen, in the verb whose own
+    # name carries the distinction. Every witness in the world would mint a claim that a living
+    # man was killed.
+    #
+    # ⚠ AND THE ANSWER WAS ALREADY IN THE MATRIX, WHICH IS WHY THIS IS A TRANSCRIPTION DEFECT
+    # RATHER THAN A DESIGN GAP: `write_matrix.yaml`'s `Person.body` row declares
+    # `body.changed` · `person.died`, and `Person.exists` declares `person.died`. The kinds
+    # existed; the verb table used one of them for both outcomes.
+    #
+    # `contest.undecided` is the one NEW kind, and declaring it here IS its declaration -- under
+    # invariant 7 the registered roster is DERIVED from the emission columns, so a kind for an
+    # outcome that writes nothing has no other home. It is required because the act still
+    # happened: it was attempted, witnessed, and cost a scene. Jordan, 2026-06-02: *an undecided
+    # fight is a legitimate outcome.* An outcome nothing emits is an outcome nobody can witness.
+    emits:
+      Felled:      ["person.died"]
+      Wounded:     ["body.changed"]
+      Untouched:   ["contest.undecided"]
+    # ⚠ WAS `[]`. Under #358 rev.2 loader invariant 4 (widened, F7) every failable clause needs a
+    # refusal kind, and a contested verb can be refused by the seam at the depth cap (§C.5 returns
+    # a typed Refusal, never a raise). A contest that cannot report its own refusal is D22.
+    emits_on_refusal: ["kill.refused"]
+    grade:       "ruled"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed; writes re-keyed by #358 rev.2 §C.4"
+  - verb:        "levy"
+    scale:   "settlement"
+    scale_note: "a levy moves a Rung's stores -- the rung IS the subject"
+    stratum:     "uncontested_material"
+    eligibility: ["remit:issue", "presence:<rung>"]
+    requires:    "stores(...) >= amount"
+    writes:      ["Rung.stores"]
+    emits:       ["levy.taken"]
+    emits_on_refusal: ["levy.refused"]
+    grade:       "assumption"
+    eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:levy + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
+    eligibility_substitution: "⚠ DECLARED 2026-09-03 rather than left silent. The source cell named `remit:levy`, and `levy` IS NOT IN `remit_acts` (issue · determine · confer · revoke · dispatch · convene, a CLOSED roster). W3 substituted `remit:issue` and wrote no note, which is an off-register fill under §42.2/G.4.8 — an instrument may fill exactly what the register declares. Either `levy` joins the roster (a ruling: it is a SEVENTH remit act) or `issue` is genuinely the remit a levy exercises (defensible — a levy is issued). Injected as `issue`, declared here, swept at the site. The same substitution is live on `establish`, which uses `remit:confer` and is likewise not a remit act."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "move"
+    stratum:     "movement"
+    eligibility: ["own"]
+    requires:    "a contain path exists"
+    requires_typed:
+      form:      contain_path
+      of:        actor
+      to:        to
+    requires_typed_note: "§E3 `:408` — *a `contain` path exists*. ⚠ THIS DROPS TWO TERMS `_req_move` CARRIED AND THE DROP IS DELIBERATE: that predicate ended `on_ladder or here.kind == \"person\"`, which is true of every actor with a person-rung, so the ladder term decided nothing; and its `dest == a.actor` refusal is kept, as the reader's own rule that a node is not a path to itself. What replaces them is an actual path check — the two rungs must be connected in the containment forest — which is what the cell says and what `_req_move` never tested. ⚠ THIS CELL ENDED *\"No case moves: `to` is unbound for every computed act (`H-94`), so the verdict is UNKNOWN and the fold refuses, exactly as before\"* AND `W-C` FALSIFIED IT WITHOUT EDITING IT. Struck by the `W-C` adversarial pass. `operands_for` binds `to` from the question's referent, so a computed `move` carries a destination: measured over the 89 runnable corpus worlds, `move` EXECUTES 650 times and is blocked 73. The path check is what decides it now — `corpus_run.build_at` makes every person a `person`-kind rung, so a SIBLING destination fails `contain_ascends` and emits `travel.blocked`, while the actor's own containing rung is a valid ascent."
+    writes:      ["Person.travel_leg", "Tenure.until", "Tenure.since"]
+    emits:       ["travel.moved"]
+    emits_on_refusal: ["travel.blocked"]
+    grade:       "assumption"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "oblige"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "—"
+    writes:      ["Tenure.since"]
+    emits:       ["duty.taken"]
+    emits_on_refusal: []
+    grade:       "ruled"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "open_case"
+    stratum:     "social"
+    eligibility: ["remit:determine"]
+    requires:    "the act DECLARES the stages and their terms (§13.1)"
+    writes:      ["Record.exists", "Record.stages"]
+    emits:       ["case.opened"]
+    emits_on_refusal: ["case.refused"]
+    grade:       "assumption"
+    eligibility_note: "W3: graded `assumption`, NOT `ruled`. #353's five remit acts are CLOSED -- issue, determine, confer, revoke, dispatch -- and opening a case is not among them, so V2 invented this eligibility. `own` is a different game (anyone may open a case), which is why it is swept rather than chosen. The roster is `rosters.yaml: remit_acts`."
+    eligibility_sweep: ["remit:determine (V2's value)", "own", "hold:<the matter's record>"]
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "petition"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "—"
+    requires_note: "— no dedup, no cap, no per-venue limit (§26.3)"
+    writes:      ["Petition.exists"]
+    emits:       ["petition.filed"]
+    emits_on_refusal: []
+    grade:       "ruled"
+    writes_note: "— (a Petition is created, not written)  ||  ⚠ W3, ON THE W2 AUDIT: Part E says a Petition is 'created, not written', and PLAN §1.4 hole 4 says THAT IS THE DEFECT — #353 :1061-1064, 'Either the gate applies the write, or direct assignment is made impossible.' With `writes: []` the creation row W2 added was INERT and creation still bypassed the gate."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "refract"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "as comply — ⚠ emitter- or receiver-side is absent, D18"
+    requires_typed: none
+    requires_typed_note: "§E3 `:432` — *as `comply` — ⚠ **emitter- or receiver-side is `absent`, D18***. Grade `absent`. Even setting aside `comply`'s operand problem, WHOSE ledger is read is the thing `D18` records as missing, and a typed cell would have to pick one. §42.2.1: the honest behaviour is to refuse, not to pick."
+    writes:      []
+    emits:       ["terms.distorted"]
+    emits_on_refusal: ["refraction.impossible"]
+    grade:       "absent"
+    writes_note: "—"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: as `comply`"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "repudiate"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "a live commit exists"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      commit
+    requires_typed_note: "§E3 `:427` — *a live `commit` exists*. §F.24a form 1's own named cell. `commit` is a `tenure_kinds` member, so the reader counts LIVE `commit` edges whose OBJECT is the subject — the Proposition being repudiated. Same shape as `revoke`'s *a live `hold` exists*, which `_req_revoke` reads as `t.object == obj`."
+    writes:      ["Tenure.until"]
+    emits:       ["commitment.ended"]
+    emits_on_refusal: ["repudiation.refused"]
+    grade:       "ruled"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: no live `commit` exists to end"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "restore"
+    stratum:     "uncontested_material"
+    eligibility: ["own", "presence:<site>"]
+    requires:    "the site exists and the actor is present at it"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        site
+          kind:      Site
+        - form:      relation
+          of:        site
+          relation:  present_at
+    requires_typed_note: "The `requires` cell here is W3's, not §E3's — §E3 `:421` put an EFFECT formula in the column and W3 moved it to `effect:`, leaving *the site exists and the actor is present at it*. Two clauses, conjoined because the prose conjoins them. ⚠ `present_at` DUPLICATES THE `presence:<site>` ELIGIBILITY ALTERNATIVE, and that duplication is in the prose rather than introduced here; eligibility is a DISJUNCTION (`own | presence:<site>`) so `own` alone admits, and the precondition is where presence actually binds. ⚠ THE PREMISE OF THIS CELL'S LAST SENTENCE WAS FALSIFIED BY `W-C` AND ITS CONCLUSION SURVIVES; corrected by the `W-C` adversarial pass rather than left standing. It read *\"`site` is unbound for every computed act\"*, and `operands_for` now BINDS `site` from the question's referent — a `restore` Candidate carries `{site: <referent>, subject: <referent>, to: <referent>}`. What keeps `restore` unexecutable is the OTHER half, unchanged and now the only half: it writes `Site.condition` and has no `EFFECTS` entry, so `resolvable_verbs()` excludes it and the chooser never offers it to the fold at all. Were it offered, the `existence` clause would still read UNKNOWN, because no referent this corpus produces is a Site."
+    writes:      ["Site.condition"]
+    emits:       ["site.restored"]
+    emits_on_refusal: ["restore.refused"]
+    grade:       "ruled"
+    effect:      "Δ = +(1 − condition) × f(degree) × share (§54 it. 7's mirror)"
+    effect_note: "W3: this formula was in the `requires` column. A precondition is a question the fold asks of the world; an effect is what the write does. Conflating them is how a resolver grows a second body."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "revoke"
+    scale:   "settlement"
+    scale_note: "as `confer` -- it unseats the same office"
+    stratum:     "binding_decision"
+    eligibility: ["remit:revoke"]
+    requires:    "the office's revocation basis, and a live hold exists"
+    writes:      ["Tenure.until"]
+    emits:       ["tenure.closed"]
+    emits_on_refusal: ["revoke.refused"]
+    grade:       "ruled"
+    eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:revoke + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "speak"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "—"
+    writes:      []
+    emits:       ["speech.made"]
+    emits_on_refusal: []
+    grade:       "assumption"
+    writes_note: "—"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "succeed"
+    scale:   "person"
+    scale_note: "succession is one person taking another's tenure; the office's rung does not change"
+    stratum:     "binding_decision"
+    eligibility: ["own"]
+    requires:    "the actor holds the office or estate whose heir is being designated"
+    requires_typed:
+      form:      relation
+      of:        subject
+      relation:  held_by
+    requires_typed_note: "W3's cell — *the actor holds the office or estate whose heir is being designated* (`succeed` is a W3 addition; #353 `:371`, `:542` name it and Part E omits it). §F.24a form 5, whose named live cell is this one. The relation is a live `hold` Tenure from the actor to the subject."
+    writes:      ["Tenure.since"]
+    emits:       ["heir.designated"]
+    emits_on_refusal: ["succession.refused"]
+    grade:       "assumption"
+    writes_note: "a `succeed` Tenure -- the kind is in `rosters.yaml`"
+    source:      "W3 -- heir designation. #353 `:371`, `:542` name `succeed` as a Tenure kind and `transmission` as the mechanism, and Part E carries no verb that CREATES one. Without it F13's contested-succession cases have no producer."
+  - verb:        "tell"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "the teller holds a claim on the subject"
+    requires_typed:
+      form:      own_ledger
+      of:        subject
+    requires_typed_note: "§E3 `:417` — *the teller holds a claim on the subject*. §F.24a form 6's first named cell, and the one the `F8` carve-out was written for. This is `_req_tell` verbatim: `any(c.subject == subj for c in teller.ledger)`, with the ledger reached through a reader that can name no other person's."
+    writes:      []
+    emits:       ["news.told"]
+    emits_on_refusal: ["news.untold"]
+    grade:       "ruled"
+    writes_note: "— (deposits at WITNESS, not here)"
+    refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: the teller holds no claim on the subject"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "the six investigation acts"
+    stratum:     "contested_physical"
+    eligibility: ["own"]
+    requires:    "per act"
+    requires_typed: none
+    requires_typed_note: "§E3 `:433` — *per act*. There is no precondition here to type: the cell defers to six acts the table does not carry as rows. Typing it would mean inventing six preconditions, which is what §42.2.1 forbids."
+    writes:      []
+    emits:       ["finding.made"]
+    emits_on_refusal: ["finding.none"]
+    grade:       "assumption"
+    writes_note: "— (they produce claims at WITNESS)"
+    eligibility_note: "eligibility NEVER consults office (T9)"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "tie / knot"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "—"
+    requires_note: "stored once, on the lower id (§15.1)"
+    writes:      ["Tenure.since"]
+    emits:       ["bond.formed"]
+    emits_on_refusal: []
+    grade:       "ruled"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "transfer"
+    stratum:     "uncontested_material"
+    eligibility: ["own", "hold:<store>"]
+    requires:    "stores(hearth(giver), kind) >= amount (§54 it. 7)"
+    requires_typed:
+      form:      scalar_threshold
+      of:        from
+      scalar:    stores
+      key:       kind
+      threshold: amount
+      comparator: ">="
+    requires_typed_note: "§E3 `:418` — ***`stores(hearth(giver), kind) >= amount`*** (§54 it. 7), the scarcity predicate §27.1 rests on. ⚠ `operand_defaults:` STOOD HERE AND `W-C` DELETED IT. It held `kind: grain` / `amount: 1`, carried over from `_req_transfer`'s two literals, and `evaluate` bound them for any act whose payload lacked them — i.e. THE FOLD supplied the person's operands, invisibly, under the person. Once `H-94`'s structural half closed that became two owners of one value AND an incoherence: the cell would ADMIT a transfer on operands it had invented, and `_eff_transfer` would then raise on those same operands being absent from the payload. The values moved unchanged to `DEFAULT_FIXTURES` (`default_store_kind`, `default_transfer_amount`), where `operands_for` derives them PERSON-SIDE and the act CARRIES them; `from` is the actor's own live `contain` Tenure and `to` is the question's referent, so neither is a fixture at all."
+    writes:      ["Rung.stores", "Rung.stores"]
+    emits:       ["transfer.made"]
+    emits_on_refusal: ["transfer.refused"]
+    grade:       "ruled"
+    writes_note: "×2, ONE PER SIDE (§E3 `:418`). ⚠ W3 AUDIT: this was collapsed to ×1 and the effect only DECREMENTED the giver, so six grain left the world and arrived nowhere — in an economy where `yield` is the only source (#353 `:856`)."
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "utter"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "—"
+    writes:      ["Proposition.exists"]
+    emits:       ["proposition.uttered"]
+    emits_on_refusal: []
+    grade:       "assumption"
+    source:      "W3 -- #353 names it and Part E omits it. WITHOUT IT NO PROPOSITION EXISTS, and `commit`, `petition` and `issue` all `require` one, so the season cannot start. Register row H-42. §14 makes a Proposition IMMUTABLE, so this row admits its CREATION and nothing else -- there is no verb that alters one."
+  - verb:        "work"
+    stratum:     "uncontested_material"
+    eligibility: ["own", "presence:<site>"]
+    requires:    "condition >= floor(verb) (§12.1)"
+    requires_typed:
+      form:      scalar_threshold
+      of:        site
+      scalar:    condition
+      threshold_predicate: floor
+      comparator: ">="
+    requires_typed_note: "§E3 `:420` — *`condition >= floor(verb)`* (§12.1). ⚠ **RETRACTED BY THE `W-C` ADVERSARIAL PASS: THIS CELL SAID THE THRESHOLD READS UNKNOWN AND DOES NOT SUBSTITUTE, AND THE CODE DOES THE OPPOSITE.** `WorldReader.read`'s `floor` branch returns `min(floors.values())` and argues at length for doing so — *`work` is the GENERIC labour verb, so a site is workable if it clears the floor of its LEAST demanding use* — having built and measured both alternatives (`max` refuses a seam surface-gleaning supports; `UNKNOWN` destroys the gate outright, since `work`'s precondition could then never return False). Measured on the fixture: `floor` reads **100** for `site_harbour` and **50** for `site_seam`, and a named workable site emits `site.worked` (`test_tracer_is_honest.py`). So the `W-A` correction landed in THIS PROSE and was reversed in the CODE, and the prose was never retracted. Under `CLAUDE.md` §0.05 the code is the mechanism: the substitution is LIVE, it is a declared reading of `floor(verb)` for a verb that names no use, and it is registered on `H-08`/`H-94`. The paragraph below is kept because the objection it records is real and is what the code answers — read it as the argument, not as the behaviour. The first version resolved `floor` to `min(band_floors[site.kind].values())` — but `band_floors`' own roster note says its inner keys are SITE-USE verbs (bulk_shipping, fishing, deep_mining …), **NOT verb-table rows**, so `work` is not among them and the cell silently substituted the LOOSEST floor for the one the prose names. On a harbour it asked `condition >= 100` where `floor(bulk_shipping)` is 800: every condition in 100..800 was ADMITTED WHERE THE PROSE REFUSES — an UNDER-refusal, which `G4` weighs equally with an invention. Worse, the reader raised `Unspecified` for an unregistered site KIND citing §42.2.1 (*forbids picking a plausible number for a kind nobody registered*) and then picked a plausible number for a VERB nobody registered, three lines on. ⚠ THE SITE-USE IS AN OPERAND THE CLOSED ROSTER DOES NOT CARRY, and the reader's answer to that is `min` WITH THE READING STATED, not UNKNOWN — see the retraction above. What stays open, and is not papered over, is that a `work` MEANING deep-mining is admitted on a seam only surface-gleaning could support, because nothing on the act says which use is intended. ⚠ AND THE LATENCY IS SPENT: `W-C` binds `site` to the question's referent, so the substitution is now reached on every computed `work` — the corpus refuses all 723 because no referent it produces is a Site, which is a fact about these worlds and not about the threshold. Registered on `H-08`/`H-94`; typing the threshold needs a site-use operand first."
+    writes:      ["Site.condition"]
+    emits:       ["site.worked"]
+    emits_on_refusal: ["work.unavailable"]
+    grade:       "ruled"
+    source:      "ARCHITECTURE_V2.md §E3, transcribed"

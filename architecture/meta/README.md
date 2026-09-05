@@ -1,0 +1,176 @@
+# THE META-ARCHITECTURE — the layer above the plan
+
+## Status: **RATIFIED 2026-09-05 (ED-IN-0202) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+
+> ### ⚠ **REV. 3 — the change list an outside evaluation left unapplied, applied; and its own two
+> ### grading errors caught by the critics who checked the applying.**
+> **`proposals/2026-09-03-v2-against-the-meta-architecture.md` §6A prescribed thirteen edits and
+> applied none of them** — it is an evaluation, and its §6 recommendations were *"proposals, not
+> applied edits."* ⚠ **The arithmetic, re-run rather than asserted: rev. 2 had already landed SIX of
+> the thirteen** — `A1` (`ID-16`), `A2` (`§C.11`), `A3` (`ID-17`), `A5` (the irreversibility
+> enumeration, which landed as `PART D` row 30b and not as the prescribed loader invariant), `S2`
+> (`§G.4.3`'s third critic direction) and `S3` (`§G.4.1`'s trace clause). **Rev. 3 lands the other
+> SEVEN** — `A4`, `C1`, `C2`, `C3`, `S1`, `S4`, `S5` — **plus `§6/3`'s permutation falsifier, which
+> §6A's thirteen omitted, plus five defects found in passing and named as such**: `T-o` missing from
+> `§B.8`, `ID-16`'s over-refusal, `§D.6`'s second `establishment` site, three stale counts, and a
+> gap-register table broken since #361's merge. Every entry names the file and section it touched:
+>
+> - **ADDED** — `§D.0`, the third admission clause (*what kind of assertion is this field making?*),
+>   asked of every carrier rather than re-derived per entry · **`§G.2.9`**, *a procedure is required
+>   wherever the order of sub-steps changes the outcome* · `PART D` **`27a`** (a proper-noun scan of
+>   the rule-bearing content layer, where `D-27` scans only code) and **`41a`** (the permutation
+>   falsifier for `DELIBERATE`'s pure map — the property was asserted structurally and never observed)
+>   · **`§E.2.2a`**, two corpses of a kind this exercise did not have · **`§D.9`**'s word reservation
+>   on `Claim`.
+> - **CORRECTED** — **`Tenure.conferrer` DELETED** (`ID-13` admits no third state, and it had no
+>   reader anywhere) · **`establishment` is a Query at BOTH Stage 1 sites**, `§D.6`'s `OWNS` line and
+>   `§E.2.5`'s council row · `§B.8` gains `T-o`, which Stage 1 declared and the type section omitted ·
+>   **`ID-16`'s *unbuildable* is retracted in half** — the *declared* signed loop list is buildable
+>   today and is what the idiom owes; only the *derived* check waits on `F.24` · three stale counts
+>   (`§B.13`'s invariants, `PART D`'s denominator, the front door's).
+> - **REGRADED** — `§F.4`'s `ID-15` row was marked ✅ *fired and survived* on a candidate that could
+>   not fire it, **and the candidate that can — `Polity.Legitimacy`, stored at the polity — was in
+>   the same document.** It is now RUN
+>   against both, **open**, and the harder one is named. *A weakness recorded as a strength, inside
+>   the falsifier table, is `§G.4.3`'s third direction — and it was caught by the critic, not by the
+>   author.*
+> - **PROPAGATED** — the readings and the front door, which rev. 2 left behind: Reading 05 (three
+>   closing routes, not two; and `§D.0`'s clause), Reading 07 (`ID-16` now names what closes the spiral hole), Reading 09
+>   (`§C.11`, and what it does **not** reach), `00_THE_METHOD.md` (the third critic direction, the
+>   admission clause, the count).
+
+> ### ⚠ **REV. 2 — a read-only adversarial pass over this exercise, the executable chain (#357) and an
+> ### independent governance design (#359) found TWENTY defects, FOURTEEN of them here.**
+> **`01_AXIOMS.md` and `04_CODE_ARCHITECTURE.md` are rewritten in place, every change marked with its
+> finding id.** The four that change what the architecture IS:
+>
+> - **`AX-3` and `AX-5` contradicted each other.** *"Nothing moves either on a clock"* against a
+>   `MATTER`-class `(Claim, confidence)` fade. `AX-3` gains the carve-out: fading **removes**, never
+>   **revises**.
+> - **`AX-6` had no scope clause**, so it either forbade this document's own schema or could not
+>   reach `T-a`'s ratchet. It now binds **game state**; schema permanences are enumerated (`ID-18`).
+> - **The write gate never checked `subject == actor`** — `AX-4`'s second clause was `CONVENTION`,
+>   and two live verbs write another person's `Tenure.until`. **`T-o` makes the third closing path
+>   lawful and declared**, and `§E.1.2`'s *"there is no third way"* is retracted.
+> - **A lost contest still wrote.** `writes:` is now **`Degree`-keyed** for any verb declaring
+>   `contests:` — the one thing #359 contributed, filed as corroboration until it was traced.
+>
+> Three new idioms (`ID-16` loops · `ID-17` licensed suspension · `ID-18` schema permanences), a new
+> `§C.11` explanation contract, `§F.24a`'s seven-form `requires` grammar **derived from the 32 live
+> cells rather than assumed**, and loader invariant 12.
+
+| file | what it is |
+|---|---|
+| **`00_THE_METHOD.md`** | ⭐ **THE FRONT DOOR — read this first, and on most days only this.** Three generators · three questions · six moves · four rules of emergence · one hazard |
+| **`01_AXIOMS.md`** | **Stage 1 — axioms, idioms, schema.** Start at PART A |
+| **`02_HIERARCHIES.md`** | **Stage 2 — hierarchies, dependencies, nests, scales** |
+| **`03_VERBS_AND_LOOPS.md`** | **Stage 3 — verbs, consequences, slices, season loops** |
+| **`04_CODE_ARCHITECTURE.md`** | **Stage 4 — the code shape (A–F) and THE METHOD (G).** Read **PART G first** |
+| | **THE READINGS — the stages indexed by question rather than by stage.** They introduce nothing; **if a reading and a stage disagree, the stage is right** |
+| `05_ONTOLOGY.md` | objects · relations · edges · fields — and the four kinds of value |
+| `06_STRUCTURE.md` | hierarchies · nestings · dependencies · state changes |
+| `07_DYNAMICS.md` | slices · graphs · chains · loops · echo and propagation |
+| `08_DATA_AND_KEYS.md` | dictionaries · definitions · registers · keys — **and why there is no bus** |
+| `09_WORKED_EXAMPLES.md` | political strife · a settlement at risk of revolt · excommunication — each ending in **what is blocked today, at a nameable row** |
+| **`10_FACTIONS_AND_DEPLOYMENT.md`** | ⚠ **AMENDS the stages.** The faction as a deployable abstraction; war as an uttered declaration |
+
+## What this is
+
+Jordan-directed, 2026-09-03: *"a top-down exercise to develop axioms/idioms/schema and consequently
+hierarchies, dependencies, nests and scales and therefore discussing verbs, consequences alongside
+slices and season loops… We are not building something bottom up that can run as code — we are
+performing a meta-architecture exercise from top down to determine the ideal logical shape for
+future work."*
+
+**`00_THE_METHOD.md` is the unification and the working instrument. The four stages are the
+derivation that justifies it** — consult them when one of the three questions is contested, and
+believe the stage over the front page if they ever disagree.
+
+**Four stages.** Jordan's own ordering gives the first three — axioms/idioms/schema, *"and
+consequently"* hierarchies/dependencies/nests/scales, *"and therefore"* verbs/consequences/slices/
+season-loops — and **Stage 4 is a read-only Fable synthesis holding all three in context to design
+the code architecture.**
+
+**STAGE 4 IS COMPLETE, AND ITS PART G IS THE MOST DURABLE THING IN THIS DIRECTORY.** A–F describe how
+this design came out; **G says how design proceeds going forward:**
+
+> **Derive the shape from the axioms WITH THE TREE CLOSED; decompose it by WHO WRITES WHAT; write it
+> in a form A LOADER OR A FALSIFIER CAN EVALUATE; and close a stage ONLY ON REPRESENTATIONS.**
+
+Two results in G are worth naming here. **A check is exactly as strong as the representation of the
+thing it checks** — so if the guarded thing is prose, the guard is prose, and the honest act is to
+type the thing first. And **the hazard a session under pressure repeats is deferring to what exists
+instead of deriving from what is true**, whose fix is a *scope*, not an instruction: the derivation
+runs with the tree closed, enforced by what an agent can reach rather than by a sentence in its
+prompt.
+
+**PART F is the section to read first.** Thirty-three gaps, and its closing finding is about the
+exercise rather than the architecture: **the architecture is derived through Stages 1 and 2 and
+ASSUMED through Stage 3** — Stage 3 states its subjects as properties without representations, which
+is where the density is. **Two gaps block the build outright:** nothing founds a hearth or builds a
+site (`F.20`, so *the world only decays*), and every verb's `requires` is a prose string (`F.24`, so
+*the resolver has no body* returns as *the resolver has thirty*).
+
+## Scope — the rule this exercise is under
+
+**The admissible sources are the axioms themselves and the PR chain #337 → #357.** Nothing under
+`canon/`, `systems/`, `research/` or `engine/` is authority. **We are designing an idealized system,
+so prior work is not a constraint on it** — and "the tree already does it this way" is not an
+argument for anything.
+
+⚠ **A first draft of PART E broke this rule and is withdrawn in full.** It was built on a sweep of
+the repository, and the reason that is wrong is worth keeping: *evidence that something is already so
+is not an argument that it should be so.* An idealized shape argued from the existing tree is the
+existing tree with better prose.
+
+## The one-sentence difference from everything upstream
+
+> **`PLAN.md` says what to BUILD. `ARCHITECTURE.md` says what the season loop IS. This asks what the
+> THINGS are — and states the small number of commitments everything else is derived from.**
+
+`PLAN.md` is **PAUSED at Jordan's direction, not superseded.** Its critical path
+`W18→W20→W21→W22→W23→W26→W27→W30` stands and is not withdrawn.
+
+## What Stage 1 concludes
+
+- **Axioms and theorems are different things, and the chain's five coordinate "laws" mix them.**
+  `L5` derives from `AX-1`; `L3`'s clause 1 from `AX-4` and its clause 3 from `AX-6` — ⚠ **not all
+  of `L3` from `AX-4`, which the first publication claimed and an adversarial pass broke.** The
+  demotion is the point: **break an axiom and you have chosen a different game, deliberately; break
+  a theorem and you have introduced a contradiction that surfaces later as a defect nobody can
+  localise.**
+- **The schema is written as ADMISSION TESTS, not field lists.** A schema that lists fields can only
+  grow, which is exactly how the entities *"grew one defect at a time."*
+- ⚠ **`H-101`'s first answer was WRONG and is corrected in place.** It said subordination *cannot be
+  stored*. An adversarial pass showed the step never established that the edge is
+  Proposition→Proposition, and that **`oblige` — already rostered, and named by `H-101` itself** — is
+  storable, owned by the person who swore it, and **more `AX-1`-faithful than a Query nobody
+  authored.** The faction half is derived; **the office half SPLITS**, by this section's own
+  falsifier.
+- **And the correction found the better result: FOUR OF SEVEN RELATIONS CAN BE OPENED AND NEVER
+  CLOSED.** `oblige`, `succeed`, `tie`, `knot` have no closing verb, so a duty cannot be discharged,
+  a bond cannot be broken and a succession cannot be changed. **That is why the first answer looked
+  right** — facing an irreversible edge, "make it a Query" is the reachable repair. The reversibility
+  was real; the diagnosis was wrong.
+- **There are SIX axioms.** `AX-6` — *nothing becomes permanent without an author* — was found
+  missing when two separate derivations reached for it and neither could get there from the other
+  five: `L3`'s ratchet clause, and the four open-only relations above. **`AX-1` says nothing moves
+  without an author; `AX-6` says nothing stops being able to move without one.**
+- **Part C gained two idioms because it FAILED its own acceptance test.** The chain's commonest
+  instance of the named defect class is *a declared axis that decides nothing* — which `ID-9` misses
+  (it needs a write) and `ID-10` is satisfied by. `ID-13` and `ID-14` close it.
+- **A `Title` is not an entity**, and the missing conferral path is a **half-landed ruling** (two
+  eligibility models, only `revoke` rebuilt on the second) rather than a hole in the ontology.
+- ✅ **RULED 2026-09-03, and it dissolved the question rather than answering it.** Jordan:
+  *"Regency and puppet rulers must be possible."* · *"Same with delegation."* The document had
+  offered two readings of `hold`; **both were wrong**, because the blocker was never the `hold`
+  overload — it was that **rank+containment is not conferrable**, so a delegate has no seam to enter
+  through. The answer is one sentence: **AUTHORITY IS A PROPERTY OF THE SEAT BEING EXERCISED, NEVER
+  OF THE PERSON EXERCISING IT.** A regency, a puppet ruler, a governor, a council and a mayoral
+  election are then all **a conferred seat**, with no mechanism written for any of them.
+
+## What it is not
+
+Not ratified · does not run and is not meant to · changes no code, register row, roster or plan ·
+proposes no guard, validator or tool · **not a second architecture** — #353's Parts I–VI stand, and
+this states what they rest on.

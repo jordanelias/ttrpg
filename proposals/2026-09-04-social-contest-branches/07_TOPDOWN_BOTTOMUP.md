@@ -16,7 +16,7 @@
 
 ## Status: **READ-ONLY AUDIT, 2026-09-04. PROPOSED. HELD BACK IN FULL. Nothing here runs; nothing ratifies on merge.**
 ## Produced by Fable 5.1 under `CLAUDE.md` §10's audit/guardrail row. Branch `claude/social-contest-system-review-dn2y5d`, HEAD `7a23b831`. **This file is the only thing created or edited.** No `pytest` was run; the only executed code was `python3 -c` arithmetic over `key_types.json`, `canon_buckets.canonical_accord`, and file listings.
-## Scope: `systems/` (15 subsystems), `engine/`, the registries in `references/`, and — by Jordan's direction — this session's five proposals (`00`–`05`) against PR #362's shape (`proposals/2026-09-03-meta-architecture/04_CODE_ARCHITECTURE.md`, PROPOSED, HELD BACK IN FULL).
+## Scope: `systems/` (15 subsystems), `engine/`, the registries in `references/`, and — by Jordan's direction — this session's five proposals (`00`–`05`) against PR #362's shape (`architecture/meta/04_CODE_ARCHITECTURE.md`, PROPOSED, HELD BACK IN FULL).
 
 ---
 

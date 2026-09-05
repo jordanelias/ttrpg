@@ -147,6 +147,32 @@ policies:
   # that `tools/validate_ed_citations.py` parses to tell a real ED id from an invented one; nobody
   # may edit them, so a size cap on them is a warning nobody can act on, and warnings nobody can act
   # on are how a warning tier stops being read. Same `skip` posture their previous home had.
+  # THE RATIFIED ARCHITECTURE (adopted 2026-09-05, ED-IN-0202). Moving Layer 1 out of `proposals/`
+  # dropped five governing documents through every rule here to the generic `**/*.md` catch-all at
+  # 15,000 tokens, adding five advisory warnings to a blocking gate's output — the SAME defect the
+  # `registers/archive/*` note above records for the S6/6b relocation, so the precedent is followed
+  # rather than the warning tier being quietly grown again.
+  # ⚠ THIS IS AN EXEMPTION FROM THE WARNING, NOT A RULING THAT THE DOCUMENTS ARE RIGHTLY SIZED.
+  # They exceed §4's ~15k split threshold and §4 still applies to them. What the exemption buys is
+  # that the split is done DELIBERATELY, as its own change: every one of these files is cited by
+  # section number across the tree (`PLAN.md §3.3`, `§C.12`, `§F.24a`, `§B.9`), and a split that
+  # renames the containing file breaks those citations wholesale. A warning nobody may act on
+  # without a plan is a warning that stops being read, which is what the note above is about.
+  - match: "architecture/*.md"
+    on_exceed: "skip"
+    note: "Layer 1, RATIFIED 2026-09-05 (ED-IN-0202). Oversized by §4 and exempt from the WARNING only; the sequential-part split is tracked work, not a licence to grow. Cited by section number tree-wide."
+
+  - match: "architecture/meta/*.md"
+    on_exceed: "skip"
+    note: "Layer 1 meta-architecture, RATIFIED 2026-09-05 (ED-IN-0202). Same posture as architecture/*.md above."
+
+  # The season loop's runtime registries. `hole_register.yaml` is 113 rows of dense provenance prose
+  # that `register.py --check` parses; it is MECHANISM under §0.05, not a document, and splitting it
+  # would give the loader two files to reconcile for no reader's benefit.
+  - match: "engine/season/*.yaml"
+    on_exceed: "skip"
+    note: "Runtime registries the season loop reads (rosters, verb_table, write_matrix, hole_register, requirements). Mechanism under §0.05, gated by register.py --check."
+
   - match: "registers/archive/*"
     on_exceed: "skip"
     note: "Frozen pre-cutover ED-ledger fragments, read by the blocking citation gate. Never edited; grows only by archival. Relocated from deprecated/{archives/editorial*,canon}/ on 2026-08-23 (S6/6b)."

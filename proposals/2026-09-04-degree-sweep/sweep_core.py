@@ -25,7 +25,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-TRACER = Path("/home/user/ttrpg/proposals/2026-09-01-season-loop-tests/tracer")
+TRACER = Path(__file__).resolve().parents[2] / "engine" / "season"
 if str(TRACER) not in sys.path:
     sys.path.insert(0, str(TRACER))
 
@@ -39,7 +39,7 @@ LADDER_C = ("Overwhelming", "Success", "Partial", "Failure")
 LADDER_C_WHY = ("engine/autoload/dice_engine.py::degree_from_net -- THE ladder, single owner for "
                 "every scale (Jordan ruling 2026-08-14), read off the margin `net - ob`")
 LADDER_D = ("Felled", "Wounded", "Untouched")
-LADDER_D_WHY = ("proposals/2026-09-02-executable-architecture/verb_table.yaml, the `kill / wound` "
+LADDER_D_WHY = ("engine/season/verb_table.yaml, the `kill / wound` "
                 "row -- the ONLY degree-keyed verb in the corpus")
 
 # The contested verb. There is exactly one; that is measured, not assumed (see `contested_verbs`).
