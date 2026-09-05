@@ -44,10 +44,17 @@ rows:
       scene
     status: not_met
     measured: >-
-      There is no scene container. `W17` was put on the critical path 2026-09-02 when Jordan
-      ruled the budget unit ("5 scenes for a character to play per season"); it is unbuilt.
-      `headless.py` ticks SEASONS, not scenes — acts within a season are folded without an
-      intervening scene boundary, so nothing can occur "after one scene".
+      The scene container EXISTS and is not what's missing: `Scene` is a dataclass
+      (`engine/season/shape.py:2289`) and `deliberate` packs each person's choices into scenes and
+      stamps every act with its scene id (`a.scene = sc.id`, `shape.py:5727`); `W17` LANDED
+      2026-09-02 (`architecture/PLAN.md:1216`, `:1315`). What is missing is a scene-granular TICK.
+      `SeasonDriver.season` (`shape.py:6470`) calls `self.deliberate(...)` once
+      (`shape.py:6477`), then `self.resolve(acts, ...)` once (`shape.py:6478`), then
+      `self.witness(...)` once (`shape.py:6482`), then increments `w.tick` once
+      (`shape.py:6484`) — every scene for every person in the season is flattened into one
+      `acts` list before RESOLVE ever runs, so nothing that happens in one scene can reach a
+      later scene within the same season; the boundary that exists is season-to-season, not
+      scene-to-scene.
     measure: "python engine/season/headless.py --case NPC-088 --seasons 2 --seed 0"
     blocks: [W17]
 
@@ -79,9 +86,16 @@ rows:
     status: partial
     measured: >-
       `Person` carries `convictions` against a `conviction_axes` roster with an alignment
-      matrix, and a zero matrix is refused at load (PLAN §W5's dead-carrier guardrail). GOALS
-      and AMBITIONS have no field and no verb. Convictions barely discriminate: only 2–7 of 22
-      candidates carry a nonzero score; the rest tie and are ordered alphabetically.
+      matrix, and a zero matrix is refused at load (PLAN §W5's dead-carrier guardrail). AMBITION
+      is not fieldless: a person's motive is expressed as a `commit` Tenure to an OUGHT
+      Proposition (`engine/season/headless.py:81`, `S.Tenure(..., "commit", ...)` to
+      `prop_einhir`), and `shape.py`'s Q4 source (`"Q4 -- \`need\`"`, `shape.py:3929-3936`) reads
+      exactly that live `commit`-to-OUGHT tenure as a standing question every season — that IS
+      the ambition mechanism, and it is why Carin acts in a quiet season. What's missing is a
+      READ over it (no `ambitions(p)` query anywhere in `shape.py`) and a real cast per case
+      (`W27`, `architecture/PLAN.md:1583`) rather than one shared OUGHT for all 143 corpus worlds.
+      Convictions separately barely discriminate: only 2–7 of 22 candidates carry a nonzero
+      score; the rest tie and are ordered alphabetically.
     measure: "python engine/season/corpus_run.py  # 'RANKING DISCRIMINATION' line"
     blocks: [W27, H-62]
 
