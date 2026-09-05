@@ -452,3 +452,47 @@ needs a cheap liveness test or it rots silently. If you add another one, add its
   is proven by probes rather than by a second real user. If a second subsystem wants an
   extension, expect the "veto the top band only" power to be the thing under pressure, and widen
   it by ruling and ledger entry rather than by convenience.
+
+---
+
+## Session close 2026-09-05 — the social-contest review programme (branch `claude/social-contest-system-review-dn2y5d`)
+
+**Everything this session produced is PAPER under `CLAUDE.md` §0.2.** Fourteen documents under
+`proposals/2026-09-04-social-contest-branches/`, all `PROPOSED · HELD BACK IN FULL`. No file under
+`systems/`, `engine/` or `tools/` was changed. Nothing ratifies on merge. Read `11_` §9-§12 first — it
+is the operative section and is written to be executed without its author.
+
+### The state of the four games, measured — the thing a next session most needs
+
+| game | `GAMES` row | what actually exists |
+|---|---|---|
+| `agon` | **WIRED** | one path executes: `build_contest` -> `Bout.resolve` -> one terminal. Over-built ~3x around a ~1,000-line atom; 62 % of non-test defs unreachable at any argument, 21 % runtime line coverage, `armature`/`rhetoric`/`appraise`/`narrative`/`faction` at 0.0 %. Five measured edge defects: leverage quantized so faculties 0-3 are inert at the lower ladder edges; CR4's `+1D` is a *penalty* above pool 9; `draw` unreachable on every shipped bench (0/12,000 at 5, 7, 15); weighted ballot == head count on every constructible bench; `Resonance.effective` is a stale duplicate returning 0.372 where the live rule returns 0.420 |
+| `negotiation` | STUB | one new object, `settle()`, six lines, arithmetically sound, **on the wrong arity** (2 parties, 1 axis, inherited from `resolver.py:241`) |
+| `inquiry` | STUB | a venue row plus a write. Its central addition, `restricted`, is a **measured false N-line** — the "dominant defensive line" loses 500/500 |
+| `consensus` | STUB | the right slot (`unanimity_required` is declared and stubbed at `dictionaries.py:707-722`) and **arithmetically inoperable as written** — `margin in [-1,0]` against fixed edges at 0/1/3 |
+
+`MECHANICS`: 21 WIRED, 1 PARTIAL (`audience_resistance` — derived, not plumbed), 3 STUB (the three game
+rows). Eight canonical proceedings, three terminals: `PersuasionTrack` x4, `VoteAtClose` x1
+(`guild_arbitration`, the only production path), `TallyAtClose` x3.
+
+### Decisions closed this session, with their rung
+
+- **J-P1 (parliament: raw margin or banded degree) — closed RAW**, rung 3, `13_` §1.8.1. Banded
+  collapses the chamber to 69 % committee and makes total victory unreachable on the dice; raw is the
+  three-outcome distribution, canon §10 verbatim, and byte-identical. **What raw owes:** the depth
+  reasoning must be written at `resolve_body`'s call site, not left in the proposal. Reopens only if the
+  parliament acquires more than one reception per motion.
+- Six further fold questions closed at rungs 3-4 in `13_` §1.8; none escalated.
+
+### Open, and where
+
+- **`11_` §8 E1** is the one genuine escalation the programme produced: the dead compare-model in
+  `contest_legacy_stub.py:132-190` versus the live per-side kernel. Live code and the goldens back the
+  kernel; canon describes the stub. That is a design fork, not a bug.
+- **The four requirements Jordan added mid-session** (bands so a loss is partial; many lines of
+  adjudication per contest; multi-topic / conditional stakes; non-zero-sum and >2 sides) all reduce to
+  one finding: **the unit of resolution is wrong** — the kernel builds exactly `{A, B}` and returns one
+  label. `11_` §5 answers the shape, `12_` interrogates it on six lenses, `13_` folds the parliament in.
+  Nothing has been built.
+- **`stash@{0}`** still holds an unlanded Tier-0 gate fix plus ED rows, held pending a scope decision
+  that the seam rebuild supersedes. Re-derive against the rebuilt seam; do not apply it as-is.
