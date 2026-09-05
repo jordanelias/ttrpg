@@ -171,6 +171,14 @@ rows:
       `acts` list before RESOLVE ever runs, so nothing that happens in one scene can reach a
       later scene within the same season; the boundary that exists is season-to-season, not
       scene-to-scene.
+      ⚠ CONSTRAINT ON HOW THIS IS BUILT — Jordan, 2026-09-05: *"only players really need the scene
+      in its entirety"*, and the loop *"enables events to occur without a scene being called for not
+      players"*. THE SCENE IS PLAYER GRANULARITY. The tick must give a PLAYER scene-by-scene
+      resolution WITHOUT routing every NPC through a constructed scene — an NPC needs a resolution
+      and an event, not a played-out scene. Built as "every person gets a scene per round", the cost
+      of a season scales with the CAST rather than with the PLAYERS. The actorless channel
+      (`SeasonDriver.matter`) already exists for the no-scene case, and both channels converge at
+      `witness` into one log (S19.5).
     measure: "python engine/season/headless.py --case NPC-088 --seasons 2 --seed 0"
     blocks: [W17]
 

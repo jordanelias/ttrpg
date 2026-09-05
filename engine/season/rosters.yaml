@@ -409,6 +409,41 @@ rosters:
       post_remit:    "the person holds a live office Tenure whose remit covers the verb that emitted this kind"
       chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
 
+  # ── WHAT THE SEASON LOOP IS ───────────────────────────────────────────────────────────────────
+  # RULED BY JORDAN, 2026-09-05:
+  #   *"season loop governs inputs into the seams and collected outputs. it's the processor of all
+  #    events, and it enables events to occur without a scene being called for not players"*
+  #   *"only players really need the scene in its entirety"*
+  #
+  # THREE PROPERTIES, and the loop already implements two of them — verified in `SeasonDriver`:
+  #
+  # 1. IT MARSHALS THE SEAMS. Nothing crosses a seam except what the loop puts in, and nothing
+  #    returns except what the loop collects. `deliberate` produces the acts, `resolve` is where a
+  #    contest is called (S39: exactly one place), `witness` collects. A subsystem never reaches
+  #    into the world and the world never reaches into a subsystem.
+  #
+  # 2. IT IS THE PROCESSOR OF ALL EVENTS — ONE LOG, NOT TWO (S19.5). `season()` merges both
+  #    channels before deposit: `witness(matter_events + events)`. Already true in code.
+  #
+  # 3. IT ENABLES EVENTS WITHOUT A SCENE, FOR NON-PLAYERS. `matter(actorless)` is that channel and
+  #    it already exists: an actorless Event has NO ACTOR by type — "attribution is a per-witness
+  #    Claim" — so the world can move with nobody acting and nobody watching. ⚠ THIS IS NERS **R**'s
+  #    half with no player in it (§0.06: *emergent hooks and scenarios WITHOUT player involvement*),
+  #    and it is the property that makes the world generate drama when nobody is looking.
+  #
+  # ⚠ SO THERE ARE TWO WAYS INTO THE EVENT STREAM AND THEY ARE NOT THE SAME COST:
+  #     ACTORLESS  — `matter()`, no scene, no deliberation, no player. The world moving.
+  #     ACTED      — `deliberate()` -> `resolve()`, a person chose. A seam may be called here.
+  #   Both converge at `witness()` into one log. A mode of play that needs no scene attaches to the
+  #   first channel; one that plays out attaches to the second.
+  #
+  # ⚠ AND THE SCENE IS PLAYER GRANULARITY, NOT WORLD GRANULARITY. Jordan: *"only players really
+  # need the scene in its entirety."* An NPC's action does not require a scene to be constructed and
+  # played out — it needs a resolution and an event. This binds R-03's scene tick directly: the tick
+  # must give a PLAYER scene-by-scene granularity WITHOUT forcing every NPC in the realm through a
+  # full scene, or the cost of a season scales with the cast rather than with the players. Do not
+  # implement the tick as "every person gets a scene per round".
+
   # ── THE SEAMS ─────────────────────────────────────────────────────────────────────────────────
   # RULED BY JORDAN, 2026-09-05, and this is the architecture, not a taxonomy:
   #   *"what matters is the seams"*
