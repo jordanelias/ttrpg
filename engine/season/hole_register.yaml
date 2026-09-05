@@ -209,7 +209,7 @@ rows:
     site:      "registry: the axis roster"
     sweep:     ["the closed 13 alone", "13 + suspicion + harm_borne (the default)", "corpus-asked only"]
     unblocks:  "**~28**"
-    cite:      "PLAN §3.2. SCHEMA_ROW-shaped by V2's own kinds, so the row is injectable and only the roster is open. ⚠ THE AXIS MUST NEVER BE SPELLED `exposure` BARE -- #353 :1897 names \"The Exposure collision -- three senses of one word, including a need scalar and a per-person tally\". Verified by hand 2026-09-02. ⚠ JORDAN, 2026-09-02, VERBATIM: 'please note that convictions roster and axes etc may be modified in future.' THIS ROW THEREFORE STAYS `assumption` AND MUST NOT BE CLOSED `ruled` -- not on this chain's reading and not on the tree's. It also fixes the ARCHITECTURE: the roster is a REGISTRY ROW READ AT RUNTIME, never a constant in a body, so changing it is a data edit and not a code change. CORROBORATION, RECORDED PER PLAN §2.6 AND NOT DEPENDED ON: the tree carries a live owner for the SHAPE -- `systems/_architecture/key_substrate_v30.md` §2.5, 'each Conviction projects onto the 4 axes via a 13-entry x 4-column matrix', with `npc.armature_position[axis] = sum over c of npc.personal_convictions[c] x CONVICTION_AXIS_MATRIX[c][axis]`, and `engine/substrate/keys.py:59` names the four as `AXES = (hierarchical, sacred, instrumental, traditional)`. That is a 13x4 PROJECTION MATRIX, which is the shape §F2's `alignment(c.verb, axis)` needs and which PLAN §1.4 hole 7 says appears nowhere in the chain -- it appears in the TREE. The shape corroborates; the CONTENT is explicitly open by the ruling above."
+    cite:      "PLAN §3.2. SCHEMA_ROW-shaped by V2's own kinds, so the row is injectable and only the roster is open. ⚠ THE AXIS MUST NEVER BE SPELLED `exposure` BARE -- #353 :1897 names \"The Exposure collision -- three senses of one word, including a need scalar and a per-person tally\". Verified by hand 2026-09-02. ⚠ JORDAN, 2026-09-02, VERBATIM: 'please note that convictions roster and axes etc may be modified in future.' THIS ROW THEREFORE STAYS `assumption` AND MUST NOT BE CLOSED `ruled` -- not on this chain's reading and not on the tree's. It also fixes the ARCHITECTURE: the roster is a REGISTRY ROW READ AT RUNTIME, never a constant in a body, so changing it is a data edit and not a code change. CORROBORATION, RECORDED PER PLAN §2.6 AND NOT DEPENDED ON: the tree carries a live owner for the SHAPE -- `systems/_architecture/key_substrate_v30.md` §2.5, 'each Conviction projects onto the 4 axes via a 13-entry x 4-column matrix', with `npc.armature_position[axis] = sum over c of npc.personal_convictions[c] x CONVICTION_AXIS_MATRIX[c][axis]`, and `engine/substrate/keys.py::AXES` names the four as `AXES = (hierarchical, sacred, instrumental, traditional)`. That is a 13x4 PROJECTION MATRIX, which is the shape §F2's `alignment(c.verb, axis)` needs and which PLAN §1.4 hole 7 says appears nowhere in the chain -- it appears in the TREE. The shape corroborates; the CONTENT is explicitly open by the ruling above."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **assumption** for the row (Part D) · **absent** for the roster"
   - id:        H-21
     tier:      1
@@ -529,7 +529,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "unmeasured"
-    cite:      " ⚠ JORDAN, 2026-09-02, VERBATIM: 'please note that convictions roster and axes etc may be modified in future.' THIS ROW THEREFORE STAYS OPEN. CORRECTED 2026-09-02 by W10's adversarial pass -- this sentence asserted the assumption grade, which is H-20's conclusion pasted onto H-46 and CONTRADICTS THE GRADE THIS ROW CARRIES. They are different questions and take different grades. H-20 is the axis roster's SHAPE: injectable, so assumption with a site and three sweep points. H-46 is THE ENUMERATION ITSELF, and there is nothing to inject -- #353 says 'the closed 13' and never lists them, so a default here would be thirteen invented axis names, the fabrication G1 calls a red test. absent is right, and rosters.yaml agrees in data (conviction_axes.incomplete: have 4, target 13, blocked_by H-46). Jordan's ruling below is why the row stays open; it is not an argument for a grade. It also fixes the ARCHITECTURE: the roster is a REGISTRY ROW READ AT RUNTIME, never a constant in a body, so changing it is a data edit and not a code change. CORROBORATION, RECORDED PER PLAN §2.6 AND NOT DEPENDED ON: the tree carries a live owner for the SHAPE -- `systems/_architecture/key_substrate_v30.md` §2.5, 'each Conviction projects onto the 4 axes via a 13-entry x 4-column matrix', with `npc.armature_position[axis] = sum over c of npc.personal_convictions[c] x CONVICTION_AXIS_MATRIX[c][axis]`, and `engine/substrate/keys.py:59` names the four as `AXES = (hierarchical, sacred, instrumental, traditional)`. That is a 13x4 PROJECTION MATRIX, which is the shape §F2's `alignment(c.verb, axis)` needs and which PLAN §1.4 hole 7 says appears nowhere in the chain -- it appears in the TREE. The shape corroborates; the CONTENT is explicitly open by the ruling above."
+    cite:      " ⚠ JORDAN, 2026-09-02, VERBATIM: 'please note that convictions roster and axes etc may be modified in future.' THIS ROW THEREFORE STAYS OPEN. CORRECTED 2026-09-02 by W10's adversarial pass -- this sentence asserted the assumption grade, which is H-20's conclusion pasted onto H-46 and CONTRADICTS THE GRADE THIS ROW CARRIES. They are different questions and take different grades. H-20 is the axis roster's SHAPE: injectable, so assumption with a site and three sweep points. H-46 is THE ENUMERATION ITSELF, and there is nothing to inject -- #353 says 'the closed 13' and never lists them, so a default here would be thirteen invented axis names, the fabrication G1 calls a red test. absent is right, and rosters.yaml agrees in data (conviction_axes.incomplete: have 4, target 13, blocked_by H-46). Jordan's ruling below is why the row stays open; it is not an argument for a grade. It also fixes the ARCHITECTURE: the roster is a REGISTRY ROW READ AT RUNTIME, never a constant in a body, so changing it is a data edit and not a code change. CORROBORATION, RECORDED PER PLAN §2.6 AND NOT DEPENDED ON: the tree carries a live owner for the SHAPE -- `systems/_architecture/key_substrate_v30.md` §2.5, 'each Conviction projects onto the 4 axes via a 13-entry x 4-column matrix', with `npc.armature_position[axis] = sum over c of npc.personal_convictions[c] x CONVICTION_AXIS_MATRIX[c][axis]`, and `engine/substrate/keys.py::AXES` names the four as `AXES = (hierarchical, sacred, instrumental, traditional)`. That is a 13x4 PROJECTION MATRIX, which is the shape §F2's `alignment(c.verb, axis)` needs and which PLAN §1.4 hole 7 says appears nowhere in the chain -- it appears in the TREE. The shape corroborates; the CONTENT is explicitly open by the ruling above."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   - id:        H-47
     tier:      1
@@ -1074,7 +1074,7 @@ rows:
     default:   ""
     site:      ""
     sweep:     []
-    unblocks:  "unmeasured, and NOT zero: a `hold` whose object is a RUNG already exists in the probe corpus at probes.py:978 and :985 (probe F2 holds the settlement `S`), so the object class pre-dates `in_holdings` and any world that both holds a rung and asks for a budget already miscounts. No verb MINTS a holding, which is why nothing has surfaced it"
+    unblocks:  "unmeasured, and NOT zero: a `hold` whose object is a RUNG already exists in the probe corpus at probes.py::f2 (probe F2 holds the settlement `S`), so the object class pre-dates `in_holdings` and any world that both holds a rung and asks for a budget already miscounts. No verb MINTS a holding, which is why nothing has surfaced it"
     cite:      "FOUND BY THE GOVERNANCE-CANON ADVERSARIAL PASS, and the honest attribution matters: THIS IS PRE-EXISTING AND WAS WIDENED, NOT INTRODUCED. `_eff_create_record` already mints a `hold` over a Record, so `Query.budget` already counted a possessed book as an office; `in_holdings` adds a second non-office object class to a relation two readers already misread. The narrow §8 claim made for `in_holdings` -- *no new tenure kind, `tenure_kinds` does not move* -- is TRUE and was the wrong thing to check: what needed checking was the READERS, and a sweep of all sixteen `t.kind == 'hold'` sites in shape.py found two that treat every hold as an office. Clean: `_ch_post_remit` guards with `w.offices.get`; `Query.hold_force` is per-object; the bare-`hold` eligibility branches are unreachable because every `hold:` in the verb table carries a placeholder argument and declines (H-75). `absent` rather than a default: whether a landholding should confer scene actions is a design question, and the fix belongs with whatever builds holdings as a general relation (H-90)."
     source:    "governance-canon adversarial pass"
 
@@ -1710,7 +1710,7 @@ rows:
     tier:      0
     hole:      >-
       THE FEEDBACK EDGE FROM CONSEQUENCE TO DECISION IS SEVERED, AND BY A TYPE MISMATCH RATHER
-      THAN BY AN ABSENCE. `belief_contradicts` (engine/season/shape.py:2537-2560) narrows a person's candidate
+      THAN BY AN ABSENCE. `belief_contradicts` (engine/season/shape.py::belief_contradicts) narrows a person's candidate
       set only for a claim whose `predicate` is in `PERSON_PREDICATES` (church_standing, grade,
       heritage, office, residence) AND whose `value is False`. Measured over 4,800 deposited
       claims across 8 cases x 3 seasons, the predicates WITNESS actually deposits are
@@ -1752,7 +1752,7 @@ rows:
   - id:        "H-113"
     tier:      0
     hole:      >-
-      `VerbRow.emits_at` (engine/season/shape.py:701) HAS ZERO CALLERS ANYWHERE IN THE TRACER, so a contested
+      `VerbRow.emits_at` (engine/season/shape.py::emits_at) HAS ZERO CALLERS ANYWHERE IN THE TRACER, so a contested
       verb's degree-keyed emissions are never selected. The fold emits `row.emits` at
       engine/season/shape.py:4507 - the FLAT UNION of all branches - so all three of `kill / wound`'s degrees
       emit the same set. Executed - a contest resolved `Untouched`, the degree meaning nobody was
@@ -1760,7 +1760,7 @@ rows:
       returns empty, so `_pairs` is falsy and the whole `if _pairs:` block INCLUDING the refusal
       guard at engine/season/shape.py:4480 is skipped, leaving `earned` empty. On `Wounded` it is the union for a second
       reason - `_eff_kill` returns a LIST, and only a dict return populates `earned`
-      (engine/season/shape.py:4542-4548). LATENT, not live - a contested verb cannot reach engine/season/shape.py:4507 today because
+      (engine/season/shape.py::_eff_kill). LATENT, not live - a contested verb cannot reach engine/season/shape.py:4507 today because
       `_degree_for_writes` is hardcoded `None` at engine/season/shape.py:4447 and `resolve()`'s contest branch
       `continue`s at engine/season/shape.py:4676.
     kind:      "WIRING"
@@ -1796,7 +1796,7 @@ rows:
   - id:        "H-114"
     tier:      0
     hole:      >-
-      `_eff_kill` (engine/season/shape.py:3847-3867) TAKES NO DEGREE PARAMETER, so the effect that computes the
+      `_eff_kill` (engine/season/shape.py::_eff_kill) TAKES NO DEGREE PARAMETER, so the effect that computes the
       VALUES cannot honour the branch `writes_at` selected. Worse, `int(d.get("harm", p.body))`
       defaults harm to the person's ENTIRE body, so body reaches exactly 0, `if p.body > 0` is
       passed and `del w.persons[who]` fires. Executed - a fold at degree `Wounded` DELETES THE
@@ -1840,9 +1840,9 @@ rows:
     tier:      1
     hole:      >-
       THE FOUR DEGREE BRANCHES ARE THE ONLY RUN-TIME REFUSALS IN `shape.py` THAT BYPASS THE TYPED
-      GAP TAXONOMY. `writes_at` and `emits_at` raise `SystemExit` (engine/season/shape.py:708 engine/season/shape.py:712 engine/season/shape.py:728 engine/season/shape.py:733), which
-      derives from `BaseException`. `corpus_run.run_case` catches `InstrumentDefect` (engine/season/shape.py:343) and
-      the `ShapeGap` family (engine/season/shape.py:350); executed under those exact clauses the raise ESCAPES BOTH. Of
+      GAP TAXONOMY. `writes_at` and `emits_at` raise `SystemExit` (engine/season/shape.py::emits_at and engine/season/shape.py::writes_at), which
+      derives from `BaseException`. `corpus_run.run_case` catches `InstrumentDefect` (engine/season/corpus_run.py::run_case) and
+      the `ShapeGap` family (same function, the second clause); executed under those exact clauses the raise ESCAPES BOTH. Of
       18 `SystemExit` raises in shape.py, 14 are load-time (missing or malformed YAML) and
       correctly fatal; these 4 are the exception. They produce no DESIGN-GAP row, no `kind`
       histogram entry and no section citation, and they end the PROCESS - converting a one-case
@@ -1995,7 +1995,7 @@ rows:
       load-bearing control in #362's body as the byte-identical corpus_run output, therefore
       pins that the EVENT STREAM replays identically and NOT that the world state does. A state
       divergence leaving the log identical is invisible to it. A second blindness one field
-      deeper - `StateChange.delta` is `None` for every act-driven write (engine/season/shape.py:1231-1239 default,
+      deeper - `StateChange.delta` is `None` for every act-driven write (engine/season/shape.py::StateChange default,
       engine/season/shape.py:4552 four-positional construction), and `content_hash` folds `c.delta`, so two runs writing
       DIFFERENT VALUES to the same field also hash identically.
     kind:      "SCHEMA_COLUMN"
@@ -2020,7 +2020,7 @@ rows:
       DECIDED FIGHTS. It returns `winner` and `wound_state` and names the second THE DEGREE
       SOURCE. Measured over 300 seeded fights the reported winner is the FELLED fighter in 6.06%;
       cross-confirmed from an independent quantity, 28 of 595 losers are not at health 0 (4.7%).
-      Cause - `systems/combat/combat_engine_v1/wrapper.py:493`, `if result!=0 and rng.random()<cfg['UPSET_FLOOR']: result =
+      Cause - `systems/combat/combat_engine_v1/wrapper.py::fight`, `if result!=0 and rng.random()<cfg['UPSET_FLOOR']: result =
       -result`, which inverts the result after the fell was recorded and never touches the wound
       trackers. Under Jordan's 2026-09-04 ruling (the combat engine determines the result; the
       caller accepts it) this is answerable by precedent rather than escalation - accept
