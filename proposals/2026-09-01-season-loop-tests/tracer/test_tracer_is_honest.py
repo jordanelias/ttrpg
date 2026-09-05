@@ -7310,7 +7310,7 @@ def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
 
     ⚠ AND THE OPERAND DOES NOT EXIST YET, WHICH THIS TEST DOES NOT PRETEND OTHERWISE ABOUT.
     Nothing in the tracer produces a `net`; the branch is a READER WITH NO PRODUCER and is
-    registered as `H-124`. `test_we_only_a_verb_that_declares_contests_can_be_graded_today` is
+    recorded on `H-98`. `test_we_only_a_verb_that_declares_contests_can_be_graded_today` is
     where that is measured rather than asserted."""
     lad = S.degree_ladder()
     assert lad is not None, f"the tree's degree ladder is unavailable: {S.ladder_error()}"
@@ -7380,7 +7380,7 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     assert set(refused) == {"a field", "a proposition", "a standing"}, refused
 
     # NOTHING PRODUCES A MARGIN. The only `net` in the instrument is `degree_of`'s own read of
-    # one, so the ladder branch is a reader with no producer (`H-124`).
+    # one, so the ladder branch is a reader with no producer (recorded on `H-98`).
     producers = []
     for f in sorted(HERE.glob("*.py")):
         if f.name == "test_tracer_is_honest.py":
@@ -7390,7 +7390,7 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
                 producers.append(f"{f.name}:{i} {line.strip()[:90]}")
     assert not producers, (
         "something now produces a margin. `W-E` published `the ladder branch has no producer` "
-        "and registered it as `H-124`; that sentence is now false and must be rewritten rather "
+        "and recorded it on `H-98`; that sentence is now false and must be rewritten rather "
         "than left standing:\n  " + "\n  ".join(producers))
 
 

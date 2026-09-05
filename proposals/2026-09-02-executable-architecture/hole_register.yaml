@@ -1260,7 +1260,7 @@ rows:
 
   - id:        H-98
     tier:      0
-    hole:      "⚠ NARROWED BY A JORDAN RULING, 2026-09-03: *'kill/wound degrees should be directly taken from scene combat, which is what actually needs to be called when kill/wound is considered.'* THE SOURCE IS SETTLED AND THIS ROW IS NO LONGER ABOUT A MAPPING. `wrapper.fight` returns +1/-1/0 and DISCARDS what it computed; the seam constructs the Combatants and still holds them, so the engine's own WoundTracker (felled / wounds / max_wounds / health_remaining) is readable after the call. `combat_seam.resolve` now returns it as `wound_state`, and `verb_table.yaml`'s `kill / wound` reads three bands off it -- felled, unresolved-with-wounds, unresolved-untouched -- two of which are mechanical. WHAT SURVIVES IN THIS ROW: the engine does not separate a DECISIVE win from a NARROW one beyond wound count on the victor, so a fourth band has no source in the data and is NOT invented. That is an edge over a real quantity, not a correspondence between types that never meet -- a much smaller question than the one this row opened with. THE SUBSYSTEM RETURNS A WINNER AND THE SEAM'S CONTRACT WANTS A DEGREE. S39.4 reads four bands off a MARGIN; `wrapper.fight` returns `+1` / `-1` / `0`. No document maps one onto the other, and `0` is a RULED outcome rather than a failure — Jordan, 2026-06-02, in the engine: *NO automatic tiebreak … an undecided fight is a legitimate outcome*"
+    hole:      "⚠ NARROWED BY A JORDAN RULING, 2026-09-03: *'kill/wound degrees should be directly taken from scene combat, which is what actually needs to be called when kill/wound is considered.'* THE SOURCE IS SETTLED AND THIS ROW IS NO LONGER ABOUT A MAPPING. `wrapper.fight` returns +1/-1/0 and DISCARDS what it computed; the seam constructs the Combatants and still holds them, so the engine's own WoundTracker (felled / wounds / max_wounds / health_remaining) is readable after the call. `combat_seam.resolve` now returns it as `wound_state`, and `verb_table.yaml`'s `kill / wound` reads three bands off it -- felled, unresolved-with-wounds, unresolved-untouched -- two of which are mechanical. WHAT SURVIVES IN THIS ROW: the engine does not separate a DECISIVE win from a NARROW one beyond wound count on the victor, so a fourth band has no source in the data and is NOT invented. That is an edge over a real quantity, not a correspondence between types that never meet -- a much smaller question than the one this row opened with. THE SUBSYSTEM RETURNS A WINNER AND THE SEAM'S CONTRACT WANTS A DEGREE. S39.4 reads four bands off a MARGIN; `wrapper.fight` returns `+1` / `-1` / `0`. No document maps one onto the other, and `0` is a RULED outcome rather than a failure — Jordan, 2026-06-02, in the engine: *NO automatic tiebreak … an undecided fight is a legitimate outcome* ⚠⚠ NARROWED AGAIN 2026-09-04 BY `W-E`, AND WHAT IS LEFT IS THE SMALLEST IT HAS BEEN. THE MAPPING HALF IS CLOSED AND EXECUTED: nothing maps a winner. `shape.degree_of` reads the band off the SCENE and `_fold` writes and emits at it, all three branches, through the real engine. WHAT STAYS `absent` IS TWO THINGS AND NEITHER IS THE MAPPING. (1) THE FOURTH BAND -- the engine does not separate a decisive win from a narrow one beyond wound count on the victor, so `Overwhelming` vs `Success` has no source in the data and is not invented. (2) THE MARGIN PRODUCER, for the two subsystems the seam does not call: `degree_of` also carries the LADDER branch, which imports and calls `engine/autoload/dice_engine.py::degree_from_net` rather than mirroring it -- and NOTHING PRODUCES A `net` ANYWHERE IN THE TRACER, so that branch is a reader with no producer. That is this row's own first option -- *give the ladder a margin the subsystem can supply* -- located precisely instead of listed."
     kind:      "COLLISION"
     owner:     "S39.4's ladder and the subsystem's return type"
     grade:     "absent"
@@ -1268,8 +1268,54 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "every verb that declares `contests:`, and whatever reads a contest's degree"
-    cite:      "FOUND BY BUILDING THE CALL Jordan ruled for. `H-88` said that if the seam dispatches, *the degree is the SUBSYSTEM's output and inventing one here would be the second resolver S27.2 names* — and calling the subsystem shows the subsystem does not produce one. It produces a winner and a legitimate undecided case. So the degree ladder is not merely unwritten at the seam; the thing it was to be read from is a different shape. ⚠ NOT RESOLVED BY MAPPING, AND THE SEAM ASSERTS IT DOES NOT: a test refuses any `degree`/`band` key on the seam's return, because mapping a winner onto a band is the second resolver arriving in the seam for the SECOND time (rev 1 of `contest()` hardcoded `band = Partial`). `absent` with no default: choosing between *give the ladder a margin the subsystem can supply*, *change what a contest returns*, and *let the prize decide the shape* is a design call."
+    cite:      "FOUND BY BUILDING THE CALL Jordan ruled for. `H-88` said that if the seam dispatches, *the degree is the SUBSYSTEM's output and inventing one here would be the second resolver S27.2 names* — and calling the subsystem shows the subsystem does not produce one. It produces a winner and a legitimate undecided case. So the degree ladder is not merely unwritten at the seam; the thing it was to be read from is a different shape. ⚠ NOT RESOLVED BY MAPPING, AND THE SEAM ASSERTS IT DOES NOT: a test refuses any `degree`/`band` key on the seam's return, because mapping a winner onto a band is the second resolver arriving in the seam for the SECOND time (rev 1 of `contest()` hardcoded `band = Partial`). `absent` with no default: choosing between *give the ladder a margin the subsystem can supply*, *change what a contest returns*, and *let the prize decide the shape* is a design call. ⚠ EXECUTED 2026-09-04 BY `W-E`, AND THE THIRD OPTION IS THE ONE JORDAN TOOK. *let the prize decide the shape*: combat's prize is graded by the scene, and the other two prizes are not graded at all because the seam does not call their subsystems (Jordan, 2026-09-02, on mass_battle and social_contest, carried verbatim at proposals/2026-09-02-executable-architecture/rosters.yaml under `contest_subsystems`: *\"we don't NEED to worry about them at this point in time.\"*). MEASURED, per verb rather than in aggregate: **1 of the 32 rows in `verb_table.yaml` declares `contests:` at all** -- `kill / wound`, prize `the body` -- so the other 31, INCLUDING every person-to-person verb a degree would matter most for (`speak`, `tell`, `utter`, `petition`, `the six investigation acts`), are not ungraded but UNGRADEABLE: nothing resolves a contest for them, and a degree wired onto one would be a number with no producer. The three prizes that are not `the body` route to `mass_battle` / `social_contest` and `contest()` refuses each BY NAME, executed. And the ladder branch's operand is absent in the strongest form the tracer can state: a comment- and docstring-stripped scan of every module in the instrument finds NO producer of a `net`, `roll_pool` or `successes` -- there is no roll anywhere in this instrument. FALSIFIERS, both executed: `test_we_only_a_verb_that_declares_contests_can_be_graded_today` (which goes red the day something produces a margin, so this sentence cannot quietly outlive its truth) and `test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it` (identity against `degree_from_net`, the four band boundaries including the fractional cases, and a follow-the-owner arm that reddens if `degree_of` ever answers from a private band table). REPRODUCE: `python -m pytest proposals/2026-09-01-season-loop-tests/tracer/test_tracer_is_honest.py -q -k test_we_`"
     source:    "Jordan 2026-09-02 -- the calling seam"
+
+  # ─── 2026-09-04 · from `W-E`, the degree wired through the fold ────────────
+  - id:        "H-123"
+    tier:      1
+    hole:      >-
+      HOW MUCH BODY A WOUND COSTS. Part E's `writes:` column names the CELL and never the VALUE,
+      and no in-chain document says what a non-lethal wound does to a person. The instrument's
+      answer until 2026-09-04 was the worst available one and `H-114` measured it: the harm was a
+      payload key with the person's ENTIRE body as its fallback, so a fold at degree `Wounded`
+      took the body to 0 and DELETED THE PERSON -- the band that exists to mean *did not die*
+      killing exactly as `Felled` does. The SPLIT is ruled (Jordan, 2026-09-03) and executed; this
+      row is the MAGNITUDE inside the `Wounded` branch, which the ruling does not settle.
+    kind:      "FORMULA"
+    owner:     "`_eff_kill` -- the value the `Wounded` branch writes to `(Person, body)`"
+    grade:     "assumption"
+    default:   "`scene_fraction` -- the body is scaled by the fraction of health the fight left standing, `health_remaining / health_full`, both computed by the engine's own `WoundTracker` on the Combatants `combat_seam` still holds"
+    site:      "proposals/2026-09-01-season-loop-tests/tracer/shape.py -- `DEFAULT_FIXTURES.wound_harm_model`, read by `_eff_kill`"
+    sweep:     ["scene_fraction (the default -- the scene decides, and it introduces NO constant, which is the whole argument for it)", "total (THE CONTROL: any wound is lethal -- the code exactly as it stood before `W-E`, so the arm that measures what the degree is worth is the defect re-run deliberately)", "none (the SECOND control: a wound writes nothing, the fold's write-nothing guard emits the REFUSAL instead of the success, isolating *the band selected a different write set* from *the band changed a value*)"]
+    unblocks:  "the `Wounded` band being a distinct outcome rather than a second spelling of `Felled`"
+    cite: >-
+      FOUND BY EXECUTION AND CLOSED IN THE SAME PASS, EXCEPT FOR THE VALUE, WHICH IS WHY THIS IS A
+      ROW RATHER THAN A FIX. JORDAN, 2026-09-04, VERBATIM: *"the combat engine determines the
+      result there. your code just has to accept the result."* That ruling is what makes the
+      default a READ rather than a choice -- the loss is the one the scene already computed -- and
+      it is also why the alternatives are worth sweeping: a proportional read needs no constant,
+      and every alternative reading (an absolute subtraction, a band-step off `band_floors`) needs
+      one that nobody has ruled. ⚠ A WOUND CANNOT KILL ON ANY ARM BUT `total`, AND THE FLOOR IS
+      STRUCTURAL RATHER THAN NUMERIC: the band means the engine did NOT fell this person, so a
+      model that took their body to 0 would contradict the band it implements. `max(1, ...)` is
+      `combat_seam.derive_party`'s own floor (*"a dying person still fights"*), followed rather
+      than reinvented. MEASURED 2026-09-04 in `tiny_world`, one act per band, seed as the world
+      sets it: at `scene_fraction` the three bands give (deleted) / (alive, body 1000 -> 650) /
+      (alive, body 1000); at `total` they give (deleted) / (deleted) / (alive); at `none` they
+      give (deleted) / (alive, unchanged, `kill.refused`) / (alive). ⚠ AND THE CONTROL ARM IS
+      VISIBLY WRONG IN A SECOND WAY, WHICH IS WHY IT IS A CONTROL AND NOT A CANDIDATE: at `total`
+      the fold deletes the person and still emits `body.changed`, i.e. a success report for
+      something that did not happen -- `ID-9`, asserted directly in the test.
+      FALSIFIER: `test_we_a_contested_acts_consequence_differs_by_degree`, which runs all three
+      arms and asserts the control still reproduces the defect. REPRODUCE:
+      `python -m pytest proposals/2026-09-01-season-loop-tests/tracer/test_tracer_is_honest.py -q -k test_we_`
+      SOURCES QUOTED HERE: the 2026-09-04 ruling is carried at
+      proposals/2026-09-01-season-loop-tests/tracer/shape.py (`_eff_kill`'s docstring and the S39.4
+      block) and at proposals/2026-09-02-executable-architecture/rosters.yaml
+      (`wound_harm_models`); the floor precedent is at
+      proposals/2026-09-01-season-loop-tests/tracer/combat_seam.py (`derive_party`).
+    source:    "`W-E`, 2026-09-04 -- found by execution while wiring the degree through the fold"
 
   # -------------------------------------------------------------------------
   # `ID-16` -- THE LOOPS, NAMED AND SIGNED. Added 2026-09-03.
@@ -1734,6 +1780,18 @@ rows:
       reaching no reader is one that does not exist. It is also the fabricated-deaths defect
       returning through a different door - Artifact 2 published four deaths for state changes that
       did not happen, and `person.died` is one of the three endings the chain check accepts.
+      ⚠ CLOSED 2026-09-04 BY `W-E`, AND THE CLOSURE IS AN EXECUTION RATHER THAN AN EDIT.
+      `SeasonDriver._fold` now reads `row.emits_at(_degree)` and the `earned` intersection runs
+      against the BAND's kinds instead of against the union. Executed through the whole road --
+      `resolve()` -> `contest()` -> `combat_seam` -> `wrapper.fight` -> `_fold` -- all three bands
+      now emit exactly their own branch: Felled `person.died`, Wounded `body.changed`, Untouched
+      `contest.undecided`. The case this row names as live is the one asserted directly: a contest
+      resolving `Untouched` no longer emits `person.died`.
+      FALSIFIER: `test_we_emits_at_has_a_caller_and_the_band_selects_the_kind`, which compares each
+      band's kinds against `row.emits_at(band)` AND against the union, so a revert to `row.emits`
+      reddens it. MUTATION RUN 2026-09-04: reverting `_declared = row.emits_at(_degree)` to
+      `row.emits` fails 3 of the 6 `W-E` tests; restored, all 6 pass.
+      REPRODUCE: `python -m pytest proposals/2026-09-01-season-loop-tests/tracer/test_tracer_is_honest.py -q -k test_we_`
 
   - id:        "H-114"
     tier:      0
@@ -1757,6 +1815,26 @@ rows:
       computed act omits `subject` too, so `_eff_kill` returns early at proposals/2026-09-01-season-loop-tests/tracer/shape.py (line 3858) and the fold takes
       the refusal branch. The correct and weaker claim - ANY `kill / wound` naming a subject and
       no `harm` is lethal at every degree, which is reachable from a hand-built act.
+      ⚠ CLOSED 2026-09-04 BY `W-E`, BOTH HALVES. (1) THE SIGNATURE: every effect now takes a
+      third argument, the `Resolution` the seam returned, so the effect that computes the VALUES
+      can honour the branch `writes_at` selected. One signature for all ten effects rather than an
+      inspect-the-callable dispatch -- a fold passing different arguments to different effects
+      would be a second contract nobody declared. (2) THE LETHAL DEFAULT IS DELETED: the harm is
+      no longer a payload key with the person's whole body as its fallback. It is READ off the
+      scene under a declared, swept fixture (`wound_harm_model`, `H-123`), and a `kill / wound`
+      folded with no scene REFUSES rather than choosing a number. Executed: at the shipped arm a
+      `Wounded` fold leaves the subject alive with a lower body (1000 -> 650 in `tiny_world`, printed by the test named below),
+      where before it deleted them.
+      ⚠ AND `W-C`'s CARVE-OUT IS RETIRED WITH ITS SUBJECT, NOT WIDENED -- `("harm", "_eff_kill")`
+      is gone from that guard's `EXEMPT` set. It nearly survived on a DOCSTRING: `W-E`'s first
+      rewrite quoted the deleted line verbatim while explaining it, the guard scans raw source, so
+      the carve-out went on matching and `used == EXEMPT` stayed green. That is the staleness that
+      assertion exists to catch and it caught it.
+      FALSIFIER: `test_we_a_contested_acts_consequence_differs_by_degree` (the `total` arm re-runs
+      this defect deliberately and asserts it still reproduces) and
+      `test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_eff_kill`.
+      MUTATIONS RUN 2026-09-04: restoring the carve-out with no live hit reddens `used == EXEMPT`;
+      re-inserting the defaulted read in `_eff_kill` reddens the offender assertion; both restored.
 
   - id:        "H-115"
     tier:      1

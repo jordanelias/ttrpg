@@ -5199,6 +5199,15 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
                         REFUSAL rather than the success -- the second control, and it isolates
                         "the band selected a different write set" from "the band changed a value".
 
+    ⚠ AND THIS SUPERSEDES ONE HARNESS TECHNIQUE, WHICH IS SAID HERE SO ITS OUTPUT IS NOT
+    MISREAD. `proposals/2026-09-04-degree-sweep/arm3_tree.py` injects a degree by monkeypatching
+    `VerbRow.writes_at` / `emits_at` and then calls `_fold` bare. That reached the effect while
+    the effect took no degree; it cannot now, because the degree travels on the `Resolution` the
+    SEAM returns and a patched READER is invisible from here. Re-run after `W-E`, its `Felled` and
+    `Wounded` nodes report REFUSED with the message below. That is the closure of `H-114` seen
+    from the probe's side -- the probe measured a world in which the degree could not reach the
+    effect -- and not a new defect.
+
     ⚠ A WOUND CANNOT KILL, AND THE FLOOR IS STRUCTURAL RATHER THAN NUMERIC. The `Wounded` band
     means the engine did NOT fell this person; a model that took their body to 0 would contradict
     the band it is implementing. `max(1, ...)` is `combat_seam.derive_party`'s own floor
@@ -6545,7 +6554,8 @@ def contest_subsystem(prize: Any) -> Optional[dict]:
 #      `degree_from_net` reads `net - ob`. NOTHING IN THIS TRACER PRODUCES A `net`: there is no
 #      roll anywhere in `shape.py`, `Act.pool` / `Act.obstacle` are read only by `S27.4`'s
 #      refusal gate, and no subsystem the seam can call returns one. So this branch is a READER
-#      WITH NO PRODUCER today. It is written anyway, and registered (`H-124`), because the
+#      WITH NO PRODUCER today. It is written anyway, and recorded on `H-98` -- whose own `cite:` lists
+#      *give the ladder a margin the subsystem can supply* as one of its three options -- because the
 #      alternative is worse in a specific way: without it the shape of the missing thing is a
 #      guess, and with it the gap is exactly *"no subsystem returns a margin"* -- which is one of
 #      the three options `H-98`'s own `cite:` lists.
