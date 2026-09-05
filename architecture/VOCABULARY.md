@@ -1,5 +1,16 @@
 # VOCABULARY — THE HIERARCHY, AS A BALLOT
 
+## ⚠ **DO NOT RULE ON THIS FILE YET (2026-09-05).** An adversarial pass overturned four dispositions
+## after it was committed: **`degree`** (RATIFY is false — `shape.py:6666` branches to two band
+## vocabularies and `rosters.yaml:349` says so in capitals; the null cited a falsifier that was not
+## run), **`module`** (FIXED overwrites `architecture/meta/04_CODE_ARCHITECTURE.md:110`, ratified the
+## same day, and its "the registry is transitional" reason is contradicted by three live tools),
+## **`role`** (two runtime `ROLES` constants in `engine/substrate/`, one re-exported at package
+## level), and **the block-ratify of twenty** (at least seven carry a second sense). Seven measured
+## cells do not reproduce. The structural cause: the tier scheme has **no tier for process
+## vocabulary**, so the null was checked against `shape.py` + `rosters.yaml` — the two files the
+## scheme itself points at — which guaranteed a clean result. Rebuild before ruling.
+
 ## Status: **PROPOSED — a ballot, not a ruling.** Every row carries a status. `RATIFY` rows need one
 ## word from Jordan. `CHOOSE` rows are live forks. `FIXED` rows were answered by CLAUDE.md §0's
 ## tests 1-5 and are recorded here rather than escalated — object to any of them and it reopens.

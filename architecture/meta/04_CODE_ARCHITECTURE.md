@@ -814,7 +814,7 @@ principles while still being bespoke to our project".** §C.8–§C.10 above nam
 *degrades* — no private constructors, no module system, no cycle collector, no exceptions. That is
 the defensive half and it was the only half. A porter reading it learns what will weaken and still
 has to guess what to *build*. This section is the constructive half: every core shape's Godot
-construct, and — more important — **the four places where the idiomatic Godot answer is the wrong
+construct, and — more important — **the five places where the idiomatic Godot answer is the wrong
 answer here, with the invariant that forbids it.** A divergence a porter cannot see is a divergence
 a porter will "fix".
 
@@ -830,7 +830,7 @@ a porter will "fix".
 | `port/` | `Node`s, the scene tree, signals, `_process` | the shell, and the ONLY place these appear |
 | the RNG (unbuilt) | a seeded `RandomNumberGenerator` **threaded like `World`** | see rejection 4 |
 
-### The four rejections
+### The five rejections
 
 1. **`World` is NOT an autoload**, though an autoload singleton is the idiomatic Godot answer for
    global game state. An autoload is reachable by name from every script in the project, and D-2
@@ -861,6 +861,53 @@ a porter will "fix".
    its generator must be constructed by the driver from the run seed and passed down exactly as
    `World` is. This is the one rejection that is **not yet load-bearing**, because no roll exists
    yet; it is stated now so the roll is not built the idiomatic way first and retrofitted after.
+
+5. **A refusal is NOT a sentinel-plus-last-error, though that is Godot's own convention.**
+   *(Added 2026-09-05, read against `docs.godotengine.org/en/4.6` on Jordan's instruction to settle
+   the Godot logic before more of the loop is written. Sourced from the engine reference, not
+   inferred.)*
+
+   Three facts from the 4.6 docs, which together leave GDScript with **no release-build way to stop**:
+
+   - **No `try` / `catch` / `throw`.** The GDScript reference documents no exception construct at all.
+   - **`assert()` is compiled out.** *"For performance reasons, the code inside `assert()` is only
+     executed in debug builds or when running the project from the editor."* A refusal written as an
+     assert **is absent from the shipped game.**
+   - **`push_error()` is `void`.** It logs and returns; it cannot halt.
+
+   And the engine's own fallible-call convention is a **sentinel plus an out-of-band error**:
+   `FileAccess.open()` *"Returns `null` if opening the file failed… You can use `get_open_error()` to
+   check the error that occurred"* — a thread-local last-error the caller must remember to consult.
+
+   ⚠ **That convention is forbidden here, and §G is why.** The delegation doctrine's whole content is
+   that a hole must be LOUD. A `null` return with the reason parked in a last-error slot is a hole
+   that is **silent by default**: skip the check and the run continues with a fabricated absence,
+   which is the one outcome §G exists to prevent. Godot cannot make loudness structural, so **the
+   refusal must ride in the value the caller is already using**, not beside it — the typed `Result`
+   this section's own write-gate row already requires.
+
+   ⚠ **THIS IS THE LARGEST UNPAID PORT COST IN THE TREE, and it grows with every verb written.**
+   Measured 2026-09-05, re-derived with named commands (`grep -c '^\s*raise ' engine/season/*.py`
+   and siblings): `engine/season/*.py` signals refusal by `raise` **167 times** — 128 of them in
+   `shape.py`, as `Unspecified` 43, `Forbidden` 42, `SystemExit` 28, `Ungraded` 6, and 9 more across
+   five other types. Against that, **exactly one** site returns a typed result
+   (`shape.py:6726`, `return ContestError(...)`). The package carries 18 `except` clauses, 4 of them
+   in `shape.py`. ⚠ An earlier draft of this paragraph said "two typed results" and "7 except
+   clauses"; both came from substring greps and neither reproduces — the corrected figures are above
+   and the conclusion is strengthened, not weakened, by them.
+   Every one of the ~139 non-`SystemExit` sites is a refusal with **no release-build equivalent**:
+   ported naively it either vanishes (assert) or is ignored (push_error). A hole that halts the
+   Python oracle would pass silently in the shipped game — an oracle/port divergence, which §6's
+   standing ED-1050 rule forbids outright.
+
+   **The correct shape is the minority that already exists.** `shape.py`'s `ContestError` is a
+   returned typed value and is the only one; the other 127 sites in that file raise. New verbs and new seams are to be written to the
+   returned `Result` — carrying the `needs` and `law` fields `Unspecified` already constructs — or
+   the port debt compounds at the rate the loop grows.
+
+   ⚠ **PROPOSED, not ruled.** Which shape the `Result` takes — a Godot `Error` code, a typed record,
+   or a record whose code field is an `Error` — is open. What is settled by the docs above is only
+   that a raise and a bare sentinel are both wrong.
 
 ### What stays bespoke, and is not a Godot question at all
 
