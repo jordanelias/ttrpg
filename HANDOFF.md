@@ -23,16 +23,34 @@ the fold records *what it looked at* rather than *that it said no*.
 **Full detail, the four retractions, and the open questions: `registers/handoffs/HANDOFF_IN.md`,
 top section.** The short version a cold session needs:
 
-- **Degree of success reaches nothing.** `_degree_for_writes` is hardcoded `None`, no verb declares
-  `writes_by_degree`, `Event.degree` is never assigned, and the bands are unruled (`H-98`). A partial
-  and an overwhelming success are identical today. Jordan asked for this next (W-E, 2026-09-04).
+- **Degree WORKS now, for exactly one verb (W-E, `ef041e6`).** Felled/Wounded/Untouched produce
+  genuinely different outcomes on the real road — a wound leaves the subject alive at body
+  1000 → 650. But **1 of 32 verbs declares `contests:`**: `kill / wound`. `speak`, `tell`, `utter`,
+  `petition` and the six investigation acts declare none, so person-to-person interaction is not
+  ungraded, it is **UNGRADEABLE** — no contest resolves it. And there is **no roll anywhere in the
+  instrument**, so the general ladder branch has no producer. `H-98` stays `absent` on purpose.
+- **The acceptance is CELL-DEPENDENT and the cheaper cell fails it.** 95.77% at `2 x 1`;
+  **100.00%, zero divergences, at `2 x 3`** — which is one fixture change from shipped rather than
+  two. Do not quote 95.77% without the cell.
+- **Cross-person transmission is NOT zero.** It measures zero through the *belief* channel and is
+  live through the *question* channel — one person's act changes what another deliberates about,
+  at the control arm, via an undeclared content-hash tiebreak. Make it deliberate; do not build it
+  from scratch.
 - **Ripple is throttled by design**: `assemble` takes ONE question per person per season and all
-  three `H-54` arms return one; nothing accumulates in a person; cross-person transmission measures
-  **zero**. Every term damps.
+  three `H-54` arms return one; nothing accumulates in a person (`Person.stance` untouched, ledger
+  evicts at 200). Every term still damps.
+- **Stories: `NPC RUNS = 0`, `ARC ENDS = 0`, unmoved.** The criterion that would earn the name is
+  NOT-COMPUTABLE — it needs authored `exercises:` rows and a real cast, and neither exists. Only
+  2–7 of 22 options carry any preference (the rest tie, broken by hash), 54 of 143 cases are
+  unrepresentable (44 faction, 10 world), and 89 worlds produce **2** distinct behaviours. The
+  engine produces event sequences; nobody is in them.
 - **Two rulings wanted**: the undeclared content-hash tiebreak that decides which question a person
   answers, and `H-111` — whether a failure should occasion a decision.
-- **Method**: producer → independent `valoria-critic` → fix pass, five items, a real defect found
-  **every** time. Do not skip the critic half.
+- **Method**: producer → independent `valoria-critic` → fix pass. **Six items, a real defect found
+  every time, and three fix passes correctly REFUTED their own critic.** Do not skip either half.
+- **Next, per Jordan (2026-09-05):** plan cross-person transmission + accumulation with Fable
+  (planner, read-only) and have Opus write the spec — the §10 tier split, not an improvisation.
+  Add the tie problem: nothing yet makes two people want different things.
 
 ---
 

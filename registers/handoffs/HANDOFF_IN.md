@@ -33,17 +33,51 @@ the finding. Every fork produces different acts, events and state; the people ba
    (`LEDGER_DERIVED_STEMS`), not a special case.
 4. **W-D's fixture cell was not forced** — wrong for two independent reasons. `L` is the packer's
    take, not the slot product; and it is per *deliberation*, not per cell. Two cells qualify and
-   the cheaper one was never run. `wd_cells.py` makes the claim checkable; an adversarial pass on
-   this was in flight at session end.
+   the cheaper one was never run. `wd_cells.py` makes the claim checkable. ⚠ **THE CHEAPER CELL
+   WAS THEN RUN AND IT FAILS THE ACCEPTANCE.** At `2 x 3` — ONE declared-arm change from the
+   shipped fixture, against `2 x 1`'s two — the default arm reconverges **733/733 = 100.00%,
+   ZERO divergences**. So the verdict is CELL-DEPENDENT and the cell that was run is the one where
+   it passes. Only `total` diverges there (11 of 727), and `total` is the arm this chain
+   established is *wrong* for form 6. The zero is a null result, not a blind scorer: the widened
+   `(verb, subject)` fingerprint reads 78.17% at the same cell, and the positive control detects
+   4 of 4 plants.
+5. **Cross-person transmission is NOT zero — the opposite of what this chain kept saying.**
+   Re-traced with a spy, not inferred: `p_a`'s forked `speak` lands in **`p_c`'s** ledger and flips
+   which question `p_c` answers. The depositing event's subject is `p_a`. Event-kind claims mint in
+   every arm and `fan_out_mode` defaults to `total`, so the pre-`W-B` **question** channel carries
+   cross-person effects AT THE CONTROL ARM and always has. What measures zero is transmission
+   through the **belief** channel `W-B` built. The mechanism is a content-hash tiebreak, not append
+   order — `questions_for` SORTS by `(source, q.id)` and `q.id` is a hash.
+6. **A citation-gate remedy that would have made the gate worse.** The critic proposed naming the
+   register in a row's own `cite:`; mutation-checking showed that makes a quotation verify AGAINST
+   ITSELF — a planted fabricated figure passed. The GATE was fixed instead. A row may not be its
+   own evidence.
 
-### The state of DEGREE — this is the next item and it reaches nothing
+### The state of DEGREE — W-E LANDED, and the answer is a measurement
 
-**A partial success and an overwhelming one are currently identical.** Verified:
-`_degree_for_writes = None` is hardcoded in the fold; **zero** verbs declare `writes_by_degree`;
-`Event.degree` is never assigned. Underneath all three, the bands are unruled (`H-98`). The social
-contest engine — the one that would grade *speaking, arguing, accusing, investigating* — is
-unfinished, and the combat engine returns a **winner** with no winner→degree mapping. Jordan asked
-for W-E explicitly on 2026-09-04.
+**A degree now reaches the fold and changes the consequence — for the one verb that can be
+graded.** All three links closed: `_fold` takes a `Resolution(degree, result)` so
+`_degree_for_writes` is no longer hardcoded and `resolve()`'s contest branch falls through instead
+of `continue`ing; `row.emits_at(_degree)` now HAS a caller; `Event.degree` is assigned. Demonstrated
+on the real road with only the act id varying — **Felled** kills and closes every tenure,
+**Wounded leaves the subject alive at body 1000 → 650**, **Untouched** changes nothing — with a
+`total` control that re-runs the old defect and collapses two bands into one.
+
+⚠ **BUT: 1 of 32 VERBS DECLARES `contests:` — `kill / wound`, and nothing else.** `speak`, `tell`,
+`utter`, `petition` and all six investigation acts declare none, so they are not UNGRADED, they are
+**UNGRADEABLE**: nothing resolves a contest for them and a degree wired onto one would be a number
+with no producer. That is the answer to *"can we grade person-to-person interaction"* — no, and the
+blocker is the missing contest, not the missing wiring.
+
+⚠ **AND THE LADDER BRANCH HAS NO PRODUCER.** A comment-stripped scan finds no `net`, no
+`roll_pool`, no `successes` anywhere in the instrument — there is no roll. The branch calls the
+engine's real ladder (`degree_from_net`, imported by path, NOT mirrored) and locates `H-98`'s first
+option; it is the weakest thing shipped and W-E said so rather than defending it. `H-98` stays
+`absent` deliberately: the fourth band and the margin producer are genuinely missing.
+
+**A correction W-E made to its own brief:** the claim "zero verbs declare `writes_by_degree`" was
+FALSE — `kill / wound` has carried Felled/Wounded/Untouched since 2026-09-03. What was true is
+narrower and worse: `emits_at` had **zero callers**, so every band emitted the flat union.
 
 ### The throttle on ripple, if amplification is the goal
 
@@ -53,8 +87,11 @@ person as one question, and the option set is generated from that question's ref
 question wins is a fixed source priority then a **content-hash tiebreak** that nothing declares.
 Three other damping terms: no degree; nothing accumulates (`Person.stance` untouched by outcomes,
 ledger evicts at 200 — a person was observed forgetting a fact and resuming the blocked
-behaviour); and **cross-person transmission measured at exactly zero** in every configuration.
-Every term is below 1, so the system damps rather than amplifies.
+behaviour); and cross-person transmission through the **belief** channel measures zero.
+⚠ **BUT NOT THROUGH THE QUESTION CHANNEL — see retraction 5.** One person's act already changes
+what another deliberates about, at the control arm, via an undeclared content-hash tiebreak. So
+transmission is not something to build from nothing; the job is to make the existing accidental
+mechanism deliberate. Every term is still below 1, so the system damps rather than amplifies.
 
 ### Two questions that want a ruling, not a session's guess
 
