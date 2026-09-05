@@ -14,7 +14,7 @@ You are implementing one work item in the Valoria season-loop tracer. Read
 
 Binding constraints, none negotiable:
 - §27.2 NO SECOND RESOLVER. Read contest() at
-  /home/user/ttrpg/proposals/2026-09-01-season-loop-tests/tracer/shape.py:4903-4984.
+  /home/user/ttrpg/engine/season/shape.py:4903-4984.
   You may not compute a band, a margin, an auto-resolve, or a fast path anywhere. A
   degree is read off a subsystem's return or minted by
   /home/user/ttrpg/engine/autoload/dice_engine.py::degree_from_net, nowhere else.
@@ -38,7 +38,7 @@ Binding constraints, none negotiable:
   and register rows; commit message under 40 lines; PR body says PROPOSED, HELD BACK
   IN FULL, NOTHING RATIFIES ON MERGE (§2).
 - Commit format `[design] ...`, on a branch, citing the H-rows touched. Run
-  `python -m pytest proposals/2026-09-01-season-loop-tests/tracer/test_tracer_is_honest.py -q`
+  `python -m pytest engine/season/tests/test_season_shape.py -q`
   and `python -m pytest tests/valoria -q` before committing; report red honestly.
 Return: (1) the unified diff, (2) the verbatim output of every command you ran,
 (3) the register rows you changed, (4) one paragraph naming the falsifier and its
@@ -51,8 +51,8 @@ outcome. Nothing else.
 You are the antagonist (valoria-critic; Read/Grep/Glob only). You receive a producer's
 OUTPUT below — a diff, command output, register rows — and never its reasoning. Re-verify
 every claim against disk at
-/home/user/ttrpg/proposals/2026-09-01-season-loop-tests/tracer/ and
-/home/user/ttrpg/proposals/2026-09-02-executable-architecture/. Rule per claim:
+/home/user/ttrpg/engine/season/ and
+/home/user/ttrpg/architecture/. Rule per claim:
 uphold / overturn / soften / sharpen, each with file:line. Then hunt what the producer
 did not cite: read at least one surface outside the diff. Check the repo's recurring
 failure modes: a number without a reproducing command; a "missing" mechanic that exists
@@ -126,7 +126,7 @@ Report per claim, then coverage.
 ```
 [COMMON PRODUCER BLOCK]
 Work item W-A. Type the `requires` column so ONE declaration has THREE readers.
-Read first: /home/user/ttrpg/proposals/2026-09-03-meta-architecture/04_CODE_ARCHITECTURE.md
+Read first: /home/user/ttrpg/architecture/meta/04_CODE_ARCHITECTURE.md
 §F.24a (lines 978-1010) — seven forms derived from the 32 live cells; and :226-230, the
 carve-out licensing the fold to read the ACTOR'S OWN ledger and no other. Read
 shape.py:2537-2560 (belief_contradicts), :3270-3660 (REQUIRES_PREDICATES and every

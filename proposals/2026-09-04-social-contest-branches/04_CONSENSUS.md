@@ -17,7 +17,7 @@
 
 Under §0.2 the grade is what matters and the grade is **paper**. It stops being paper when S2's execution artifact exists (§9).
 
-**What a PR #362 veto costs this branch.** PR #362 (`proposals/2026-09-03-meta-architecture/`) is PROPOSED and HELD BACK IN FULL; it is a *shape constraint*, not canon. If it is vetoed:
+**What a PR #362 veto costs this branch.** PR #362 (`architecture/meta/`) is PROPOSED and HELD BACK IN FULL; it is a *shape constraint*, not canon. If it is vetoed:
 
 - **Survives unchanged** (all kernel-local): the `unanimity_required` aggregation branch, ballot retention, the assembly venue row, the two antibody channels, the holdout-round loop, `on_hung`, and every falsifier in §9. None of them names a PR #362 type.
 - **Dies with it**: the seam vocabulary — `determine`/`Receipt`, `Act.actor`, seat `remit` for the convener, `claimants : PersonId[]`, the write gate. The branch then writes `LedgerTag`s directly to `Settlement.ledger`, which is what the tree does today anyway (`registry.py:102`).
@@ -407,7 +407,7 @@ The zero-exchange arm is not a new construct: the three-lens audit already obser
 
 **Where the tags land, and the gap that is not mine.** `LedgerTag` has **no holder field** — tags live on `Settlement.ledger` (`ledger.py:14-17`, `registry.py:102`), never on a Person. So a Grudge against a holdout is a fact the *place* holds, not a fact the holdout carries. `00_BRANCH_SHAPES.md` §2.4 names this as the SE-lane custody gap and proposes one optional `holder: PersonId | None` field. **Not proposed here, not needed here** — the Grudge's game function (raising a hostile-action weight at that place) works without custody. Named so a reader does not think it was missed.
 
-**The degree-keyed consequence column on the calling verb.** Per `§C.4`'s `writes_at(degree)` (`04_CODE_ARCHITECTURE.md:583-594`) and the `kill / wound` precedent (`proposals/2026-09-02-executable-architecture/verb_table.yaml:234 kill / wound`, whose `contests: "the body"` is at `:238`, the only live `contests:` row):
+**The degree-keyed consequence column on the calling verb.** Per `§C.4`'s `writes_at(degree)` (`04_CODE_ARCHITECTURE.md:583-594`) and the `kill / wound` precedent (`engine/season/verb_table.yaml:234 kill / wound`, whose `contests: "the body"` is at `:238`, the only live `contests:` row):
 
 ```yaml
 determine:

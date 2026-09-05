@@ -4,7 +4,7 @@
 
 ## Status: **PROPOSED — nothing ratifies on merge.** 2026-09-04. Agonist (producer) output for the shared spine of the social-contest rebuild. Verified against the working tree at branch `claude/social-contest-system-review-dn2y5d`, HEAD `1e163ee`. **Nothing was executed:** no `pytest`, no mutation of `systems/`, `engine/`, `registers/`, `references/`, `canon/` or `CURRENT.md`. This file is the only one created.
 ## Consumers: `02_NEGOTIATION.md`, `03_INQUIRY.md`, `04_CONSENSUS.md`. **They consume this; they do not restate it.** Anything branch-specific is theirs and is deliberately absent here.
-## Compliance target: `proposals/2026-09-03-meta-architecture/04_CODE_ARCHITECTURE.md` (PR #362, PROPOSED, HELD BACK IN FULL) — a **shape constraint, not canon**. Where its shape and the live kernel conflict, the conflict is NAMED (§3.4, §9), never resolved by declaring prose authoritative (`CLAUDE.md` §0.05).
+## Compliance target: `architecture/meta/04_CODE_ARCHITECTURE.md` (PR #362, PROPOSED, HELD BACK IN FULL) — a **shape constraint, not canon**. Where its shape and the live kernel conflict, the conflict is NAMED (§3.4, §9), never resolved by declaring prose authoritative (`CLAUDE.md` §0.05).
 
 **Paper/executes grade (`CLAUDE.md` §0.2): `paper`.** Nothing in this document runs. Every element it
 specifies is an edit to code that exists and passes today; none of the edits has been made. The grade

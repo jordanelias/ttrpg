@@ -2,7 +2,7 @@
 
 ## Status: **PROPOSED (2026-09-01). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.** Nothing here runs.
 
-> ### ⚠ **A SUCCESSOR EXISTS: `proposals/2026-09-02-executable-architecture/ARCHITECTURE_V2.md`**
+> ### ⚠ **A SUCCESSOR EXISTS: `architecture/ARCHITECTURE_V2.md`**
 > **This document was TESTED BY EXECUTION and the result was that no case ran end to end.** An
 > instrument implementing it was built, run against **46 NPCs and 97 arcs**, and attacked by four
 > independent read-only passes producing 56 findings.

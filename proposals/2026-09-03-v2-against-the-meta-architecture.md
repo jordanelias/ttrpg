@@ -1,7 +1,7 @@
 # `03-design-v2.md` evaluated against the meta-architecture
 
 ## Status: **EVALUATION. PROPOSED. NOTHING RATIFIES ON MERGE.**
-## Subjects: **#358** `proposals/2026-09-03-meta-architecture/` (12 files) · **#359**
+## Subjects: **#358** `architecture/meta/` (12 files) · **#359**
 ## `proposals/2026-09-03-governance-corpus-rebuild/03-design-v2.md`
 ## Question, Jordan-directed 2026-09-03: *to what extent can v2 improve on #358 for
 ## meta-architecture and code shape?*
@@ -1017,23 +1017,23 @@ in text that reads perfectly.
 - ⚠ **It is not an argument from `main`.** Both subjects were read as written; the working tree was
   consulted only to check three claims about #358's own text — the feedback-sign vocabulary, the
   `conferrer` reader, and the absence of `preview`/`explanation` — each of which is a count over
-  `proposals/2026-09-03-meta-architecture/` reproducible by `grep -rin`.
+  `architecture/meta/` reproducible by `grep -rin`.
 
 ---
 
 # AUDIT TRAIL
 
 ```
-[READ: proposals/2026-09-03-meta-architecture/*.md — all 12 files, in full (3,775 lines / 239,464 bytes)]
+[READ: architecture/meta/*.md — all 12 files, in full (3,775 lines / 239,464 bytes)]
 [READ: proposals/2026-09-03-governance-corpus-rebuild/03-design-v2.md — in full (1,598 lines)]
 [READ: proposals/2026-09-03-governance-corpus-rebuild/02-critique-and-precedents.md — in full]
 [READ: both READMEs — in full, for the provenance and scope statements §1 turns on]
 [MEASURED: 358's feedback-sign vocabulary = 2 lines, both admissions of absence
           — grep -rin 'positive feedback\|amplif\|snowball\|runaway\|spiral\|compound\|escalat\|damping'
-            over proposals/2026-09-03-meta-architecture/ ; hits at 07_DYNAMICS.md:89 and
+            over architecture/meta/ ; hits at 07_DYNAMICS.md:89 and
             04_CODE_ARCHITECTURE.md:628 are the two; the other two hits are unrelated prose]
 [MEASURED: 'conferrer' occurs exactly once — 04_CODE_ARCHITECTURE.md:257, the type declaration.
-          No reader. grep -rn 'conferrer' proposals/2026-09-03-meta-architecture/]
+          No reader. grep -rn 'conferrer' architecture/meta/]
 [MEASURED: 'preview|explanation|explain|inspectable' — ZERO hits across all 12 files]
 [ASSUMPTION: "twenty-six candidate contributions" counts v2's 13 TL principles + 10 named structural
              objects (incl. the twelve-phase tick) + 3 method results. The four buckets SUM TO MORE
@@ -1086,7 +1086,7 @@ in text that reads perfectly.
              for the actual code shape, what does #359 do to the work?" §6A is the itemized change
              list — 5 additions, 3 corrections, 5 sharpenings, and NO axiom, theorem or schema entry
              moves. §6B scores v2 against #357's live artifacts rather than against #358's prose]
-[MEASURED: proposals/2026-09-02-executable-architecture/verb_table.yaml — 32 verbs, ALL 32 with a
+[MEASURED: engine/season/verb_table.yaml — 32 verbs, ALL 32 with a
              PROSE `requires`, 24 carrying `emits_on_refusal`, grades 20 ruled / 10 assumption /
              2 absent. Reproduce: python3 -c "import yaml;d=yaml.safe_load(open(...))['verbs']"]
 [MEASURED: write_matrix.yaml — 40 rows; `social:` takes true(20)/false(18)/n/a(2), which is the

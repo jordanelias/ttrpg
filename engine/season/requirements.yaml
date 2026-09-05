@@ -1,0 +1,138 @@
+# THE NINE — the acceptance requirements for the adopted season loop.
+#
+# RULED BY JORDAN 2026-09-05, at adoption (ED-IN-0202), verbatim in `statement:`.
+#
+# ⚠ THIS FILE IS MECHANISM, NOT REFERENCE (CLAUDE.md §0.05). `register.py --requirements`
+# reads it and FAILS on a row that claims `met` with no `measured:` line behind it. That is
+# the whole point: these are the things the loop must DO, and §0.2 says a thing is done when
+# it EXECUTES. A row here may not be closed by writing a document.
+#
+# `status:` is one of  not_met | partial | met  — and every value is the measurement in
+# `measured:`, reproduced by `measure:`, NOT a judgement. Where a requirement has no
+# instrument yet, status is `not_met` and `measure:` names what would have to exist.
+
+ruled_by: "Jordan, 2026-09-05"
+ed: "ED-IN-0202"
+rows:
+
+  - id: R-01
+    statement: "decisions must propagate"
+    status: not_met
+    measured: >-
+      R3 (cross-person propagation) passes 30/30 NPC and 54/59 ARC on the cases that are
+      representable, and the planted-edge control fires — so the DETECTOR works. But the
+      forking exercise measured 2,403 forks with 100% reconvergence, and after W-A/W-B the
+      later-decision divergence is only ~4%. Propagation is structurally present and
+      behaviourally near-absent.
+    measure: "python engine/season/corpus_run.py  # check R3 rows + the planted control"
+    blocks: [W-F, H-111, H-116]
+
+  - id: R-02
+    statement: "decisions affect subsequent decisions"
+    status: not_met
+    measured: >-
+      The loop was CLOSED by a theorem, not a bug — `Query.opening_set` never consults world
+      state, so the only channel a decision has into a later decision is a ledger claim, and
+      `belief_contradicts` could read no claim the corpus deposits. W-A/W-B opened it; the
+      measured effect is ~4% later-decision divergence against 100% world divergence.
+    measure: "python proposals/2026-09-04-degree-sweep/wd_acceptance.py  # fork-and-follow, both arms"
+    blocks: [W-F, H-111]
+
+  - id: R-03
+    statement: >-
+      seasons must tick scene-by-scene, so what occurs after one scene can impact the next
+      scene
+    status: not_met
+    measured: >-
+      There is no scene container. `W17` was put on the critical path 2026-09-02 when Jordan
+      ruled the budget unit ("5 scenes for a character to play per season"); it is unbuilt.
+      `headless.py` ticks SEASONS, not scenes — acts within a season are folded without an
+      intervening scene boundary, so nothing can occur "after one scene".
+    measure: "python engine/season/headless.py --case NPC-088 --seasons 2 --seed 0"
+    blocks: [W17]
+
+  - id: R-04
+    statement: "strategic and management actions must be possible, ie decisions at differing scales"
+    status: not_met
+    measured: >-
+      54 of 143 cases are UNREPRESENTABLE — 44 at faction scale, 10 at world scale. The loop
+      runs at person, settlement and realm only. The strategic layer has no expression in this
+      model; `engine/mc_v18.py` runs the faction scale and the two are not joined.
+    measure: "python engine/season/corpus_run.py  # 'unrepresentable scales:' line"
+    blocks: [W10, W13]
+
+  - id: R-05
+    statement: >-
+      all verbs must be built out, and doing so requires planning out all the different scales
+      of play required in a season
+    status: not_met
+    measured: >-
+      6 of 32 verbs execute in the corpus (create_record, move, speak, tell, transfer, utter).
+      20 carry no predicate and no effect, 5 are foldable but never attempted, 1 (`work`) is
+      attempted and always refused. 1 of 32 declares `contests:`.
+    measure: "python engine/season/corpus_run.py  # 'WHERE THE 32 GO' line"
+    blocks: [W10-core, H-65, H-94]
+
+  - id: R-06
+    statement: >-
+      characters must be robustly built with goals, ambitions, convictions, moral values, etc
+    status: partial
+    measured: >-
+      `Person` carries `convictions` against a `conviction_axes` roster with an alignment
+      matrix, and a zero matrix is refused at load (PLAN §W5's dead-carrier guardrail). GOALS
+      and AMBITIONS have no field and no verb. Convictions barely discriminate: only 2–7 of 22
+      candidates carry a nonzero score; the rest tie and are ordered alphabetically.
+    measure: "python engine/season/corpus_run.py  # 'RANKING DISCRIMINATION' line"
+    blocks: [W27, H-62]
+
+  - id: R-07
+    statement: >-
+      characters must have memories and feelings and attitudes and relationships, and they must
+      only have imperfect knowledge
+    status: partial
+    measured: >-
+      IMPERFECT KNOWLEDGE IS STRUCTURAL AND HOLDS — `choose` receives no World (enforced by
+      test), a `View` is capped at k and raises on any world collection, and `LedgerReader`
+      answers from the person's own ledger. `beliefs` and `ledger` carry memory. FEELINGS,
+      ATTITUDES and RELATIONSHIPS have no field; `stance` is the nearest and nothing writes it
+      — W-F, the item that would, is not started.
+    measure: "python -m pytest engine/season/tests -k 'choose_receives_no_world or a_view'"
+    blocks: [W-F, W27]
+
+  - id: R-08
+    statement: >-
+      decisions must not be omniscient and perfectly rational — characters may not make the
+      optimal decision based upon their epistemic knowledge and personal inclinations
+    status: partial
+    measured: >-
+      NON-OMNISCIENCE HOLDS, structurally (see R-07). NON-RATIONALITY DOES NOT EXIST: the chooser
+      takes the top-ranked candidate deterministically — `shape.py:3508` sorts on
+      `(-score, verb, subject)`, so a tie breaks ALPHABETICALLY BY VERB — and only 2–7 of 22
+      candidates carry a nonzero conviction score, so most choices are settled by verb name rather
+      than by anything about the person. There is no mechanism by which a person declines the
+      optimum, and no mechanism by which inclination breaks a tie.
+    measure: "python engine/season/corpus_run.py  # 'RANKING DISCRIMINATION' + tie ordering"
+    blocks: [W26, H-62]
+    needs_jordan: false
+    disposition: >-
+      ⚠ AN EARLIER DRAFT OF THIS ROW FLAGGED `needs_jordan: true` AND WAS WRONG TWICE — corrected
+      here rather than carried. (1) It described the CANDIDATE tie as broken by "an undeclared
+      content-hash tiebreak". It is not; it is alphabetical, and the row's own `measure:` command
+      prints that. The content hash is the WITHIN-SOURCE QUESTION tiebreak (`q.id`,
+      `shape.py:3958`), a different mechanism. (2) That question tiebreak is ALREADY DISPOSED:
+      `shape.py:3939-3956` records it closing at §0 step 4 on `H-54`'s precedent with
+      `needs_jordan` FALSE. Re-surfacing it as open is the ED-IN-0185 failure CLAUDE.md §0's five
+      tests exist to prevent, and PR #368's body made the same error first. What remains open here
+      is not a ruling but BUILD WORK: W26 and `H-62`.
+
+  - id: R-09
+    statement: "chains of events within a scene are probabilistic, not deterministic"
+    status: not_met
+    measured: >-
+      THERE IS NO ROLL ANYWHERE IN THE LOOP. A test scans every non-test module for `net =` /
+      `roll_pool` / `successes` with comments stripped and asserts the set is EMPTY — the degree
+      ladder is a reader with no producer. The only randomness in the package is the seeded
+      `Random` `combat_seam.py` hands to `systems/combat/`. No act has ever resolved at a degree
+      of success in a corpus run; the contest seam is wired and unreached.
+    measure: "python -m pytest engine/season/tests -k ladder_is_the_trees_own"
+    blocks: [W23, H-98]
