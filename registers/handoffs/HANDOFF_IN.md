@@ -1,5 +1,49 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## 2026-09-05 — the attribute roster: a core of six, the tenth argued, and what naming it actually costs
+
+`proposals/2026-09-05-primary-attribute-core.md` (PROPOSED, design-only, no registry row added).
+Answers Jordan's request for a primary-attribute core derived from mass battle, personal combat,
+social contest and fieldwork. **Closes the verify half of `2026-09-01-holonic-architecture/03_DROPPED_IN_CHAIN.md:159`
+item 25** (*"Recall as the tenth — recorded by precedent, then contradicted silently | verify, then a row"*).
+
+**What it concludes.** Six attributes clear the tree's own promotion criterion (≥2 systems, same
+semantics, same shape — `research/provenance/2026-08-28-systems-integration-harvest/records.json:2205`):
+Cognition, Attunement, Charisma, Spirit, Endurance, **Recall**. Four more clear one system each and are
+argued individually: Strength, Agility (irreducible substrate), Bonds (capacity), Focus (weak — the one
+open call). That is the ruled ten.
+
+**Three things a next session should not re-derive.**
+
+1. **Recall's case is the Appraise pool, not the History cap.** `social_contest_v30.md:147` —
+   *"Roll **Attunement + Recall**, TN 7, Ob = opponent's Charisma ÷ 2"* (PP-614/ED-893) — plus
+   fieldwork's Research/Reconstruct primaries. The History-cap argument is corroboration and is
+   **weaker than it looks**: no code enforces the cap anywhere in this tree, and *"History is in every
+   pool"* is FALSE — threadwork's History term is identically the constant 3
+   (`systems/threadwork/sim/operations.py:173`, `min(3, history + 3)`).
+2. **⚠ Naming the tenth is NOT a registry-only edit.** `tests/valoria/test_descriptor_registry.py:36`
+   asserts `resolve(reg,'Recall') is None, "'Recall' was retired; must not resolve"` — a **blocking**
+   test that encodes the opposite decision. Eight assertions in that file break (`:19,21,24,25,31,36,39,43`),
+   plus `aggregates.agg.mind` at `descriptor_registry.yaml:65` which the exporter never reads. The
+   `pending_tenth` sentinel is *derived*, not stored (`tools/export_descriptors.py:159-163`) — there is
+   nothing to delete.
+3. **There is NO attribute-roster assertion.** `assert_faction_roster_is_covered` exists only for
+   faction stats; `descriptors.ATTRIBUTES` has **zero consumers** in `engine/` or `systems/`. Naming
+   the tenth lifts the Godot binding flag; it does not make anything run.
+
+**Open, and Jordan's:** (1) is the tenth Recall; (2) **is combat's `att` the same faculty as
+Attunement?** — the engine glosses it *"attention"* (`combat_systems.py:1326`) and never says
+Attunement; if they differ the core is five, not six; (3) Focus — steadiness job or fold;
+(4) Acuity/Will → Cognition/Spirit, which is a rename against shipped keys, not a free edit;
+(5) does `valoria-game` already settle it — it reportedly ships all ten with `History dice_bonus ≤ recall`
+validation (`proposals/2026-08-18-breaking-the-recursion.md:344-353`), **unverified, separate clone**.
+
+**Method note.** The first draft was overturned on four load-bearing claims by a read-only critic and
+rewritten; §8.1 records every retraction. Four grep counts were withdrawn — the same proxy this file
+already records at `:3591-3596` as having *inverted* an attribute ranking.
+
+---
+
 ## ⚠ CURRENT — 2026-09-04, PR #368: the season loop can now branch, and by how little (read this first)
 
 **The question this branch answered.** Fork every mechanical decision in the ARC/NPC corpus and
