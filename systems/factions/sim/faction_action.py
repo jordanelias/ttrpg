@@ -208,15 +208,7 @@ def _threat_signal(faction, world) -> float:
 def faction_take_action(faction, world, rng) -> str:
     """Select and execute one action for a faction this season.
 
-    ⚠ GD-2 IS NOT IMPLEMENTED HERE, AND THIS LINE USED TO CLAIM IT WAS (corrected 2026-09-05,
-    ED-IN-0202). It read "GD-2: mandatory threat-response before stochastic selection." There is
-    no mandatory pass in this function: the body computes four signals, re-weights three buckets
-    and takes ONE selection draw. Canon (canon/02_canon_constraints.md, GD-2) requires a Muster
-    forced at Accord <= 3 ungarrisoned and a Govern forced at Accord <= 2 garrisoned, ahead of
-    stochastic candidates; neither exists. What DOES exist is `_threat_signal` entering as a
-    Muster weight multiplier below, which raises Muster's probability and never guarantees it.
-    Recorded rather than quietly fixed because closing it is a behaviour change with campaign
-    goldens attached (engine/tests), not a docstring edit.
+    ⚠ GD-2 IS NOT IMPLEMENTED HERE; this line claimed it was (ED-IN-0202). No mandatory pass.
     ED-FA-0012 (FA-5): the four action buckets' PRIOR weights (30/35/20/15, M7_ASSUMPTION_SIX) are
     re-weighted by faction state BEFORE the single selection draw, then renormalized to sum 1.0, so
     the cumulative-threshold dispatch below is identical in structure to v17 — only the boundaries
