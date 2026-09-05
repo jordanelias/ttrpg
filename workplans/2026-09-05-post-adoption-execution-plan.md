@@ -181,6 +181,82 @@ merging at `3.1`, and `2.4` running beside everything from day one.
 
 ---
 
+## §4a · THE SCALES OF PLAY — the roster this plan must accommodate (Jordan, 2026-09-05)
+
+> *"we need to enable all scales of play that the game calls for, which includes character
+> creation/development/chronicling, grand strategy politics, social contests/debates, mass
+> battles/strategy warfare, personal combat/grid-based map combat with units,
+> investigations/detective/interactive fiction"* — and, the same day, *"oh and management games and
+> city builders. like, the repository outlines all of this pretty explicitly at the different
+> scales. the proposal since it's becoming adopted now and real needs to accommodate it all."*
+
+**THIS SECTION EXISTS BECAUSE THE PLAN'S §4 WAS SCOPED TOO NARROWLY AND WOULD HAVE DELIVERED A
+ONE-SCALE GAME.** Wave 4's R-04 was framed as "faction and world scale" — two of seven. Work was
+PAUSED mid-wave-1 to fix this rather than build further on it; the machine roster is
+`engine/season/requirements.yaml`'s `scales:` block, and this section is what it means for the work.
+
+### The seven, against what exists
+
+| scale | subsystem(s) | retention | in the loop | the honest state |
+|---|---|---|---|---|
+| character creation / development / chronicling | `characters` (5 py), `npcs` (0 py, 19 md) | retire-set | **no** | `Person` holds convictions/beliefs/ledger/stance/capability and NOTHING creates or develops one. ⚠ `capability` is EMPTY on every corpus person |
+| grand strategy politics | `factions` (18 py), `settlements`, `world` | retire-set | **no** | 44 of 143 cases unrepresentable at faction scale, 10 at world. `mc_v18` runs it; the loop does not |
+| **settlement management / city building** | `settlements` (8 py), `overview` | retire-set | **no** | `domain_actions` and `settlement_economy` are BOTH `doc: null` — two of the nine unimplementable contracts. The loop has `Site`/`stores`/`condition`, no economy, no build, no domain action |
+| social contests / debates | `social_contest` (21 py) | **RETAINED** | seam unbuilt | kernel is real and already rolls through the substrate. 1 of 32 verbs declares `contests:` |
+| mass battles / strategy warfare | `mass_battle` (33 py) | **RETAINED** | seam unbuilt | wave 4 item 4.2 |
+| personal combat / **grid-based map combat with units** | `combat/combat_engine_v1` (29 py) | **RETAINED, NOT DONE** | duel only | Jordan: *"combat engine isn't done."* The duel is a CONTINUOUS-RANGE two-party model; **grid/hex/tile combat with units EXISTS NOWHERE** — no such module in `systems/` or `engine/` |
+| investigations / detective / interactive fiction | `fieldwork` (5 py, 19 md) | retire-set | **no** | six investigation acts, NONE declaring `contests:` — not ungraded, UNGRADEABLE |
+
+**Three of seven are retained subsystems the loop cannot reach. Four map entirely to the retire
+set.** That is the finding: "superseded by `engine/season/`" means the loop must EXPRESS the scale.
+It never meant the scale goes away, and Step B cannot touch a subsystem whose scale the loop has not
+subsumed.
+
+### What canon already specifies, and the loop honours none of it
+
+`systems/_architecture/scale_transitions_v30.md` (Status: **CANONICAL**) is the surface Jordan means
+by *"the repository outlines all of this pretty explicitly"*:
+
+- **§1 three modes** — TTRPG (scene-by-scene, rounds) · **Hybrid** (strategic layer + personal
+  scenes via Zoom In/Out) · BG (faction Domain Actions, seasonal Accounting). The loop has one tick
+  granularity and no zoom. **R-03's scene tick is the precondition of Hybrid mode**, not a local nicety.
+- **§2 five scales** — Object · Personal · Relational · Territorial · Structural. ⚠ Its "Base Ob"
+  column is **THREAD-ONLY and must be ignored as a general obstacle source** (Jordan, 2026-09-05).
+  I misread it as R-09's Ob source and sent it to a live producer as canon before that correction —
+  recorded here because the scoping was visible in the table's own sibling columns ("Min Thread
+  Sensitivity", "Coherence auto-cost"). What survives is the SCALE SET: the loop's
+  `person`/`realm`/`settlement` vocabulary is not canon's five and **no mapping exists**.
+- **§3 eight handoff rules** — Personal→Thread, Personal→Faction, Personal→Scene (Contest),
+  Scene→Faction (Domain Echo), Thread→Faction and three more. These are NERS **S**'s concrete tests
+  (§0.06: *zooms out and in well across scales*, *transitions and sequences cleanly*). The loop
+  implements none.
+
+⚠ `systems/_architecture/` is in the retire set and holds ZERO `.py`. Step A's split kept it under
+"the document IS the spec" — and this is the worked case for why that rule mattered: **the spec the
+adopted system must satisfy lives in a tree the ruling marked superseded.**
+
+### What this changes in the plan
+
+1. **R-04 is not a wave-4 item. It is the plan's spine**, and 4.1 as written ("faction and world
+   scale") covers two of seven. Wave 4 splits per scale, each with its own seam or its own
+   authoring, and each gated on the loop's scale vocabulary being mapped onto canon's first.
+2. **R-05's second clause is now answered.** *"Requires planning out all the different scales of
+   play required in a season"* — this roster is that plan. The verb build-out is scoped BY it: a
+   32-verb set serving one scale is not R-05 met.
+3. **THREE ITEMS THE PLAN DID NOT HAVE, and one is not a seam at all.** Grid-based map combat with
+   units is **unbuilt design**, not unwired code — it needs a design pass before any wiring item can
+   exist, and it is the only scale in this table with nothing to point at. Settlement management /
+   city building needs `domain_actions` and `settlement_economy` authored (both `doc: null`).
+   Character creation/development needs W27's cast and a progression model.
+4. **The eight handoffs are the S-axis acceptance test** and belong in the falsifiers, not as an
+   afterthought.
+
+⚠ **NOTHING ABOVE IS A LICENCE TO WRITE SEVEN DESIGN DOCUMENTS.** §0.2 still binds: a scale is done
+when it EXECUTES in the loop. The roster is scope, not a deliverable — and §6's fourteen traps apply
+to it exactly as they apply to everything else in this plan.
+
+---
+
 ## §5 · THE FALSIFIERS (§0.1 pt 3 — named before the work, not after)
 
 | wave | it failed if | control |

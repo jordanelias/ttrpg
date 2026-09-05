@@ -13,6 +13,122 @@
 
 ruled_by: "Jordan, 2026-09-05"
 ed: "ED-IN-0202"
+
+# THE SCALES OF PLAY — ruled by Jordan 2026-09-05, verbatim:
+#   "we need to enable all scales of play that the game calls for, which includes character
+#    creation/development/chronicling, grand strategy politics, social contests/debates, mass
+#    battles/strategy warfare, personal combat/grid-based map combat with units,
+#    investigations/detective/interactive fiction"
+#
+# ⚠ THIS IS R-05's SECOND CLAUSE, ANSWERED. R-05 says building out the verbs "requires planning out
+# all the different scales of play required in a season" — this roster IS that plan, and it is
+# Jordan's, not a session's inference. R-04 is measured against it.
+#
+# ⚠ AND IT COLLIDES WITH THE RETIREMENT AS STEP A RECORDED IT. Three of the six map ENTIRELY to
+# subsystems in the retire set. "Superseded by engine/season/" means the loop must EXPRESS the
+# scale, never that the scale goes away — so R-04 is not the narrow "faction + world" item the
+# execution plan framed; it is six scales, and Step B cannot proceed on any subsystem whose scale
+# the loop has not subsumed.
+# ⚠ AND THE REPOSITORY ALREADY SPECIFIES THIS, WHICH IS THE POINT JORDAN MADE: *"the repository
+# outlines all of this pretty explicitly at the different scales. the proposal since it's becoming
+# adopted now and real needs to accommodate it all."* The canonical surface is
+# `systems/_architecture/scale_transitions_v30.md` (Status: CANONICAL), and the adopted loop
+# currently honours NEITHER of its two tables:
+#
+#   §1 THREE MODES — TTRPG (scene-by-scene, rounds) · Hybrid (BG strategic + TTRPG scenes via
+#   Zoom In/Out, seasons + scenes) · BG (faction Domain Actions, seasonal Accounting). The loop
+#   implements one tick granularity and no zoom, so R-03's scene tick is the Hybrid mode's
+#   precondition, not a local nicety.
+#
+#   §2 FIVE SCALES — Object · Personal · Relational · Territorial · Structural. ⚠ ITS "Base Ob"
+#   COLUMN IS **THREAD-ONLY** AND IS NOT A GENERAL OBSTACLE SOURCE (Jordan, 2026-09-05: "base ob
+#   by scale only makes sense for thread operations so ignore it"). I read that column as R-09's
+#   Ob source and sent it to a live producer as canon before Jordan caught it. The scoping was
+#   visible in the table I was quoting — its sibling columns are "Min Thread Sensitivity" and
+#   "Coherence auto-cost", and every example in it is a Thread act. Recorded because the error is
+#   instructive: pattern-matching on the term "Base Ob" instead of reading what the table governs.
+#   **The live obstacle ruling is Jordan's 2026-08-14 "score/2 plus modifiers"**
+#   (`dice_engine.py:241-247`, which records it as implemented nowhere). What DOES survive from §2
+#   for R-04 is the SCALE SET itself: the loop's `person`/`realm`/`settlement` vocabulary is not
+#   canon's five, and no mapping between them exists — that gap is R-04's real content.
+#
+#   §3 EIGHT HANDOFF RULES — Personal→Thread, Personal→Faction, Personal→Scene (Contest),
+#   Scene→Faction (Domain Echo), Thread→Faction, and three more. These are the "zooms out and in
+#   well across scales of play" and "transitions and sequences cleanly" tests of NERS **S**
+#   (CLAUDE.md §0.06). The loop implements none of them.
+#
+# ⚠ `systems/_architecture/` IS IN THE RETIRE SET AND HOLDS ZERO `.py`. Under Step A's split rule
+# it is kept because "the document IS the spec" — and this is the worked case for why that rule
+# matters: the spec the adopted system must satisfy lives in a tree the ruling marked superseded.
+# Superseded means the LOOP must express it. It never meant the requirement goes away.
+
+scales:
+  - scale:    "character creation / development / chronicling"
+    subsystem: ["systems/characters (5 py, 13 md)", "systems/npcs (0 py, 19 md)"]
+    retention: retire-set
+    in_loop:   false
+    note: >-
+      `Person` carries `convictions`, `beliefs`, `ledger`, `stance`, `capability` — but NOTHING
+      creates or develops a person: no generation, no progression, no chronicle. ⚠ `capability` is
+      EMPTY on every person in the corpus (only `probes.py::_zero_capability` touches it, to zero
+      it), which is why R-09's roll will vary by seed and not yet by person. W27 is the cast.
+  - scale:    "grand strategy politics"
+    subsystem: ["systems/factions (18 py)", "systems/settlements (8 py)", "systems/world (6 py)"]
+    retention: retire-set
+    in_loop:   false
+    note: >-
+      This is R-04's headline: 44 of 143 cases are UNREPRESENTABLE at faction scale and 10 at world
+      scale. `engine/mc_v18.py` runs this scale today and the season loop does not; the two are not
+      joined. Layer 1 PART D rows 1/8/14 forbid porting `game_state.Faction` as-is.
+  - scale:    "social contests / debates"
+    subsystem: ["systems/social_contest (21 py)"]
+    retention: RETAINED
+    in_loop:   "seam unbuilt"
+    note: >-
+      The kernel exists and already rolls through the substrate (`resolver.py` calls
+      `degree_from_net`; `parliamentary_vote.py` calls `roll_pool`). The loop does NOT reach it —
+      1 of 32 verbs declares `contests:` and it is `kill / wound`. Wave 2 item 2.3 is this seam.
+  - scale:    "mass battles / strategy warfare"
+    subsystem: ["systems/mass_battle (33 py)"]
+    retention: RETAINED
+    in_loop:   "seam unbuilt"
+    note: "Wave 4 item 4.2 carries the seam, alongside the season-loop campaign artifact."
+  - scale:    "personal combat / grid-based map combat with units"
+    subsystem: ["systems/combat/combat_engine_v1 (29 py)"]
+    retention: "RETAINED, NOT DONE (Jordan, 2026-09-05: \"combat engine isn't done\")"
+    in_loop:   "duel only, via combat_seam.py"
+    note: >-
+      ⚠ THE TWO HALVES OF THIS SCALE ARE NOT THE SAME THING AND ONLY ONE EXISTS. The duel engine is
+      real and the loop already calls it (`combat_seam.py` -> `wrapper.fight`), but it is a
+      CONTINUOUS RANGE model (`combat_systems.py::RANGE_COMMIT_PEAK`, `RANGE_AVAIL_FLOOR`) between
+      two combatants. **GRID-BASED MAP COMBAT WITH UNITS DOES NOT EXIST ANYWHERE IN THE TREE** — no
+      grid, hex or tile module in `systems/` or `engine/`; the only map artifacts are
+      `settlements/valoria_map_v30.svg` (a picture) and `world/adjacency_map.jsx` (adjacency, not a
+      tactical grid). This is unbuilt design, not an unwired seam, and it has no work item in the
+      execution plan.
+  - scale:    "settlement management / city building / domain actions"
+    subsystem: ["systems/settlements (8 py, 12+ md)", "systems/overview (8 py)"]
+    retention: retire-set
+    in_loop:   false
+    note: >-
+      ADDED 2026-09-05 on Jordan's correction — the first draft of this roster missed it. The design
+      surface is substantial and explicit: `settlement_layer_v30.md`, `settlement_generator_v1.md`,
+      `settlements_currency_v1.md`, `march_layer_v30.md`, `governance_play_redesign_v1.md`,
+      `scale_hierarchy_v1.md`. `references/module_contracts.yaml` declares `domain_actions` and
+      `settlement_economy` — BOTH with `doc: null`, two of the nine contracts §6 counts as
+      unimplementable. The loop has `Site`, `stores` and `condition` but no economy, no build and
+      no domain action.
+
+  - scale:    "investigations / detective / interactive fiction"
+    subsystem: ["systems/fieldwork (5 py, 19 md)"]
+    retention: retire-set
+    in_loop:   false
+    note: >-
+      Six investigation acts exist in `verb_table.yaml` and NONE declares `contests:` — so
+      investigation is not ungraded, it is UNGRADEABLE. Two composition roles
+      (`scene_resolver.fieldwork`, `scene_resolver.investigation`) target this subsystem, which is
+      why it is in the R04-pending ceiling.
+
 rows:
 
   - id: R-01
