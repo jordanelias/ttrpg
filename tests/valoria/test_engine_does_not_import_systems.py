@@ -527,3 +527,41 @@ def test_every_declared_composition_role_resolves():
     assert sum(1 for r in composition.ROLES.values() if r.get('kind') != 'value') >= 20, (
         'the callable branch above checked almost nothing - most roles should be callables'
     )
+
+
+# ---------------------------------------------------------------------------------------------
+# DECISION 1 STEP A (ED-IN-0202, 2026-09-05): "only ... social contests, personal combat and mass
+# battles to be retained. All work in /engine is retained as well." 19 of the 27 declared
+# composition roles above target one of the twelve subsystems that ruling does NOT retain
+# (`references/module_contracts.yaml`'s composition_roles: block). Retiring those subsystems is
+# Step B, gated on R-04, and has not happened — this ceiling only makes the count SHRINK-ONLY, the
+# same shape as `ALLOWED`/`PATH_SEAM_ALLOWED` above: a role LEAVING the set is Step B progress and
+# needs no update here; a role ENTERING it — a NEW seam into a subsystem Jordan ruled out — is
+# drift during a retirement window and must fail.
+R04_PENDING_SUBSYSTEMS = {
+    '_architecture', 'articulation', 'characters', 'factions', 'fieldwork', 'npcs', 'overview',
+    'settlements', 'threadwork', 'ui', 'victory', 'world',
+}
+
+R04_PENDING_ROLES = {
+    'faction_action', 'season_driver', 'accounting', 'territory_transfer_candidate',
+    'territory_transfer_proposal', 'world_gen_settlements', 'snapshot_state.practitioners',
+    'snapshot_state.insurgencies', 'snapshot_state.npcs', 'snapshot_state.treaties',
+    'snapshot_state.convictions', 'snapshot_state.beliefs', 'snapshot_state.knots',
+    'snapshot_state.territory_infrastructure', 'snapshot_state.threadcut_beings',
+    'snapshot_state.settlements', 'scene_resolver.fieldwork', 'scene_resolver.investigation',
+    'rs_track_delta',
+}
+
+
+def test_r04_pending_composition_roles_can_only_shrink():
+    from engine.substrate import composition
+    live = {role for role, row in composition.ROLES.items()
+            if row['target'].split('.', 2)[1] in R04_PENDING_SUBSYSTEMS}
+    new = sorted(live - R04_PENDING_ROLES)
+    assert not new, (
+        'NEW composition role(s) target a non-retained subsystem during the ED-IN-0202 retirement '
+        'window: ' + ', '.join(new) + '. This is the exact collision Decision 1 Step A named — '
+        'engine/ naming more of the twelve superseded subsystems is drift, not Step A work. If the '
+        'role is genuine, say so in the plan and add it to R04_PENDING_ROLES deliberately.'
+    )

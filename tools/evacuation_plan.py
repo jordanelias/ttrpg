@@ -171,6 +171,34 @@ RULES = [
      'LAYER 2 -- the game code, RATIFIED 2026-09-05. The executable season loop, the four '
      'registries it reads at runtime, its corpus and its suite. This is the mechanism'),
 
+    # ---- DECISION 1 STEP A (ED-IN-0202, Jordan 2026-09-05): "only the repository's systems for
+    # social contests, personal combat and mass battles to be retained. All work in /engine is
+    # retained as well." Those two clauses collide TODAY -- a seeded 1-season probe loads 65
+    # systems.* modules across six subsystems, and 19 of the 27 composition roles declared in
+    # references/module_contracts.yaml target one of the twelve subsystems below. Step A does not
+    # resolve the collision, it makes it LEGIBLE to this classifier: the verdict stays 'keep'
+    # (deleting anything is Step B, and Step B is gated on R-04, which has not run), but the
+    # reason a reader sees is no longer R-CODE's "the executable model" for these twelve -- they
+    # are superseded design surface kept alive by a live runtime dependency, not canon in their
+    # own right. `combat/`, `social_contest/` and `mass_battle/` are NOT matched here and fall
+    # through to R-CODE below, unchanged, because the ruling retains them outright.
+    (lambda p: p.startswith((
+        'systems/_architecture/', 'systems/articulation/', 'systems/characters/',
+        'systems/factions/', 'systems/fieldwork/', 'systems/npcs/', 'systems/overview/',
+        'systems/settlements/', 'systems/threadwork/', 'systems/ui/', 'systems/victory/',
+        'systems/world/',
+    )), 'keep', 'R-SUPERSEDED-RETAINED-PENDING-R04',
+     "SUPERSEDED by engine/season/ (ED-IN-0202, 2026-09-05) but RETAINED, and retained for exactly "
+     "one reason: engine/ still resolves into this subsystem at runtime through a composition role "
+     "declared in references/module_contracts.yaml's composition_roles: block (engine/substrate/"
+     "composition.py imports the role's target by string at first call, per CLAUDE.md 0.05's "
+     "distinction between reference prose and the code that is the actual mechanism). This is not "
+     "the design source of truth any more -- the season loop is -- and it is not evacuating either: "
+     "deleting it today would silently break a live composition role, which is exactly the "
+     "blocking-reader hazard this tool exists to catch. It becomes deletable only once every role "
+     "targeting it is removed or repointed at R-04's closure; until then this verdict is a record "
+     "of the collision, not a step toward resolving it -- DELETE NOTHING on the strength of it"),
+
     # ---- inside an evacuating parent, but KEEP (this is why the cut is per-file, not per-root)
     (lambda p: p.startswith('tests/sim/mass_battle/'), 'keep', 'R-MB-CANON',
      'the CANON mass-battle engine (J2/ED-MB-0064) -- 28 .py, zero .md, misfiled under tests/'),
