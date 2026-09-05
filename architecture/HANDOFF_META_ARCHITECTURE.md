@@ -39,7 +39,7 @@ Nothing states what any of them IS, so every new requirement lands as another fi
 
 ## What the last two commits ESTABLISHED that this stage should build on
 
-These are measured, not asserted, and each has a falsifier in `test_tracer_is_honest.py`.
+These are measured, not asserted, and each has a falsifier in `engine/season/tests/test_season_shape.py`.
 
 1. **There is exactly one containment relation, and it is under-used.** `contain : Rung → Rung` is
    now direction-validated (`World.add_tenure`; 46/46 downward edges refuse). It is the ONLY

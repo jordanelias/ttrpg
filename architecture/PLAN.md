@@ -847,8 +847,8 @@ and nothing else** — asserted, not printed, which is **G3**.
 > | `(Claim, confidence)` decays at MATTER and emits | **yes** — the third licensed clock (#353 `:864`) runs; a decay walks back through its deposit to the act that was witnessed |
 >
 > ```
-> cd proposals/2026-09-01-season-loop-tests/tracer
-> python -m pytest test_tracer_is_honest.py -q -k w4       # 4 passed
+> cd engine/season
+> python -m pytest tests -q -k w4                          # 6 passed (2026-09-05)
 > python delta.py                                          # PROBE FLIPS 0
 > ```
 > **Events per 2-season run: 18 → 108. Distinct kinds emitted: 9 → 12. `TRACE.EVENT` 62 → 1204.**
@@ -959,8 +959,8 @@ being a queryable object rather than a table a human reads a page at a time.
 > none of them a copy. `delta.py`'s own instruction is quote, don't retype.)*
 >
 > ```
-> cd proposals/2026-09-01-season-loop-tests/tracer
-> python -m pytest test_tracer_is_honest.py -q -k w6      # 3 passed
+> cd engine/season
+> python -m pytest tests -q -k w6                         # 3 passed
 > ```
 >
 > ### ⚠ AMENDED BY `W6`'s ADVERSARIAL PASS — three corrections to the note above
@@ -2080,7 +2080,7 @@ return.**
 | | |
 |---|---|
 | **Adjudicated by** | a read-only `valoria-critic` on the top tier — `Read`/`Grep`/`Glob`, **no write tools**, so its independence is a property of `.claude/agents/valoria-critic.md` and not of its prompt (`CLAUDE.md` §10). It read #353 (2,068 lines) and `ARCHITECTURE_V2.md` (830) in full, produced **no files**, and stated its own coverage, its own sampling and its own null results |
-| **Measured by** | direct execution during composition — `report.py`, `pytest test_tracer_is_honest.py` (**63 passed at composition; 143 today — run it**), and set-cover/verdict queries over `results.json`, each with its command in-line |
+| **Measured by** | direct execution during composition — `report.py`, `python -m pytest engine/season/tests -q` (**63 passed at composition; run it for today's count**), and set-cover/verdict queries over `results.json`, each with its command in-line |
 | **Corrections this document makes to its own author's prior work** | three, in §1.3: `H-23` (a precedent that would have overturned an explicit sentence of the specification), `H-36` (emitter- vs receiver-side, decided the wrong way), and the Part E verb-roster check (**a keyword search reported as a verified negative** — the same router failure the plan exists to end) |
 | **Escalations** | **zero.** `H-35` was escalated and **ruled by Jordan on 2026-09-02** — *"5 scenes for a character to play per season"* — and is recorded at §3.4 with its consequences and the two `assumption` rows it creates. **Nothing in the FIRST item set was waiting on a ruling ⚠ **and that is no longer true of the document**: §9.0 records three live escalations — `H-94`'s structural half, `H-98`, and (until `W28` decided it) `H-95`'s `world` half.** |
 | **Held back for objection** | **one** — `H-36`, closed receiver-side |
