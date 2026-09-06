@@ -92,6 +92,8 @@ Per `CLAUDE.md` §2 a merge ratifies PROPOSED contents *by default*, with one ex
 | `atoms/FIGURE_ATOMS.md` | the 591-row atom table itself — figure · kind · atom · where it lands. The evidence `16` is a summary of |
 | **`17_PLAYABILITY.md`** | ⭐ **the agonist–antagonist relay, adjudicated.** Thirteen positions put up, **seven broken, six wounded, none clean**; the two counts recounted; the twelve-term obstacle found to be **noise at the player interface**; and **four defects fixed in this directory**, the first of which retracts its own most-cited measurement |
 | `relay/A…D` | the four stages verbatim and unpatched — the interrogation (`fable`, informing only), the agonist (`opus`), and two structurally read-only `opus` critics on disjoint lanes. `17` is their adjudication; these are its evidence |
+| **`18_FINDINGS.md`** | ⭐ **the gameplay audit and the figure adjudication, written up.** Sixteen ranked opportunities; the character model (wants · fears · pressures · secrets); evidence and witnesses; **the eight recurring shapes the corpus itself supplies**; emergent narrative, where **six of eight mechanisms do not exist**; and the twelve variants, **three of which have no distinct play as the code stands** |
+| `relay/E…G` | the three passes behind `18` — the `fable` opportunity audit (two passes), the `fable` adjudication of all 27 figures into bands, and the `sonnet` emergence-precedent survey |
 
 ## Scope — the rule this exercise was under
 
