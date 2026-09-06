@@ -114,8 +114,32 @@ signature: *a design with one quantity that both measures and decides.*
 **This directory implements C, because C is what was ruled on 2026-09-06, and records A as the
 recommendation with the evidence for it.** Registered `P-29`. **It is one line either way.**
 
-> ### ⛔ **CORRECTED 2026-09-06 — THAT SENTENCE IS FALSE ABOUT THIS FILE. AS WRITTEN, THIS DIRECTORY
-> IMPLEMENTS B — THE OPTION IT ITSELF CALLS A DOUBLE-COUNT.**
+> ### ✅ **RULED 2026-09-06 BY JORDAN: *"pool only it is."* OPTION A. THE THREE-WAY CONTRADICTION IS CLOSED.**
+>
+> **What the file did before this ruling, stated once so the record is honest:** `latitude` appeared in
+> BOTH places — §B.1's pool and §C.1's obstacle — which is **option B**, the one this section calls a
+> double-count. The text said it implemented **C** and recommended **A**. Three answers to one question.
+>
+> **The ruling takes A, and the decisive argument is not the one this section led with.** It is not that
+> B double-counts (true but weak). It is **who interposition helps**:
+>
+> | | a WEAK speaker | a BRILLIANT speaker |
+> |---|---|---|
+> | **A — pool only** | ⭐ **helped** — the multiplier removes the half of them that was bad. *A duke who speaks badly is carried by his rank* | **hurt** — the brilliance is multiplied away |
+> | **B — both** | hurt once | **hurt twice** |
+>
+> **A compresses the variance between people. That IS the leader-effect finding** — present in
+> autocracies, absent in democracies; 23.8% private vs 16.6% public — which is a statement about **the
+> size of the person-effect**, not about how hard the room is. **B reverses it**, punishing the
+> incompetent hardest. **C — harder for everyone equally — is the one thing the evidence rules out.**
+>
+> ⭐ **AND A IS MULTIPLICATIVE WHERE MULTIPLICATION BELONGS.** Every flat obstacle term swings a weak
+> speaker far more than a strong one (`§C.2`, `1/√pool`, `P-27`). Scaling a *pool* is proportional by
+> construction and has no such asymmetry.
+>
+> **THE OBSTACLE THEREFORE HAS FOUR ROOM TERMS: reception · the rung · register fit · proofs told.**
+> Every *"five terms"* statement in this directory is off by one at the base and is corrected where it
+> is load-bearing. `P-29` closes.
 > Raised by the playability relay's lane B as an out-of-lane observation and confirmed here.
 > **`latitude` appears in BOTH places:** §B.1's pool is `brought + conduct × latitude(game)`, and
 > §C.1's obstacle carries `± latitude` as its **first term**. That is exactly option **B**, three
@@ -125,11 +149,52 @@ recommendation with the evidence for it.** Registered `P-29`. **It is one line e
 > C, and recommends A.** `G.1.5`'s signature — *a design with one quantity that both measures and
 > decides* — is not a hazard this section flags; it is a defect this section has.
 >
-> ⭐ **AND THE COUNT MOVES WITH IT.** If **A** is adopted, the obstacle has **four** room terms, not
-> five, and every *"five terms"* statement in this directory — including
-> `17_PLAYABILITY.md`'s *"five terms to twelve"* — is off by one at the base. **`P-29` is therefore
-> not a one-line preference. It is a precondition for any term arithmetic being right**, and it is
-> the first thing to rule on in §I's order.
+> ### ⚠ **AND THE RULING CARRIES A CONSTRAINT, IN JORDAN'S WORDS: *"ensure you don't go so far as to
+> deprive player of a chance at winning."*** §B.3a below is that constraint discharged.
+
+## B.3a · ⭐ THE DEPRIVATION CONSTRAINT — *"don't go so far as to deprive player of a chance at winning"* (Jordan, 2026-09-06)
+
+**The ruling's own risk, named by the person who made it.** Under A, a heavily interposed room
+multiplies `conduct` toward zero. If nothing else held the pool up, a speaker in a scripted,
+office-and-procedure-interposed audience would roll at the floor against an obstacle that has not
+shrunk — **which is not a hard game, it is a wasted turn wearing a game's clothes.** Four things stop
+it, and only the last needs building.
+
+**1 · ⭐ `brought` IS NOT MULTIPLIED, AND THAT IS THE WHOLE ANSWER.** The pool is
+`brought + conduct × latitude`. Interposition strips the half of you that **operates in the room** and
+leaves the half you **walked in with** entirely intact.
+
+> ### **SO INTERPOSITION DOES NOT DEPRIVE THE PLAYER. IT CONVERTS THE PROCEEDING FROM A PERFORMANCE
+> GAME INTO A PREPARATION GAME.**
+> A ceremony strips your bearing and leaves your dossier. The counter to a room that will not let you
+> perform is to have **done the work beforehand** — the research, the examination, the proofs gathered,
+> the people reached in the seasons before the sitting. **Those are acts the player already had, and
+> this ruling is what makes them pay.** The corpus says the same thing about the written summary: it is
+> *all `brought` and no `conduct`*, which is exactly what a written channel is.
+
+**2 · The 1D floor holds the mean as well as the variance** (ruled 2026-09-04). The pool cannot reach
+zero, so a person who tries something they are bad at **still rolls** — `§A.2`.
+
+**3 · ⭐ THE σ-CHANNEL IS UNIFORM, AND THAT IS THE ENGINE'S OWN ANSWER TO THIS EXACT PROBLEM.**
+`Δz = soft_cap(net_σ)` at **every pool size** — measured `0.874174` across pools 0.5→25. **Bought
+advantage helps a 1D speaker exactly as much as a 16D one**, which is the property no flat obstacle
+term has. So a player stripped of conduct **can still buy their way back into contention**, and the
+thing they buy it with is something they did — a promise made in front of the bench, a debt opened.
+
+**4 · The arrangement is VISIBLE** (`07_THE_GAME.md`'s owed column). The player **sees** the room is
+interposed before spending the turn. A thin dossier walked into a ceremony is an informed decision that
+loses, not a trap.
+
+> ### ⚠ **THE ONE ASYMMETRY THAT COULD STILL DEPRIVE, AND IT IS NOW A MEASUREMENT.**
+> **The obstacle is floored at 1 and CEILINGED AT NOTHING.** The pool has a floor; the composed
+> obstacle has no cap. So the shape that would break the ruling is not low latitude — it is a composed
+> obstacle growing without bound against a floored pool.
+>
+> **The check:** at the **minimum lawful pool** against the **maximum plausible composed obstacle**,
+> `p_success` must not be effectively zero. **If it is, the remedy is (a) the σ-channel must be
+> REACHABLE in that room — advantage must be buyable there — or (b) the obstacle takes a ceiling.**
+> Registered as the deprivation floor, and it is a blocking check on shipping the composed obstacle,
+> not an advisory one.
 
 ## B.4 · What is still `assumption`-grade, now narrowly
 

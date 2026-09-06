@@ -359,9 +359,9 @@ with no code change; **a declared-disposal row with no quorum fails the load.**
 
 **Change.**
 
-**(a)** Rule the latitude question as **pool-only** — this file's own recommendation, and the term count
-is wrong until it is ruled. It needs the owner's confirmation (PART H, D-2); the build proceeds on it
-with the alternative as a swept arm. The obstacle is then **four room terms plus aptness**, floored at 1.
+**(a)** ✅ **RULED: pool-only** (D-2). The obstacle is **four room terms plus aptness**, floored at 1 —
+reception · the rung · register fit · proofs told. ⚠ **And it ships only once M-7 is green:** the
+deprivation floor is a blocking check, not an advisory one.
 
 **(b)** The pool is *brought + conduct × latitude*, fractional, floored at one die, drawn **once per
 interaction** through the continuous path — **never the discrete one.**
@@ -754,6 +754,7 @@ either direction — every row names its control.**
 | **M-3** | ⭐ **the weak-speaker swing** | step 20, and any further obstacle term | the five terms at four pool sizes, **one term at a time**, seeded; record band by pool | a rank advantage swings a small pool more than a large one **and it reads wrong in play** → move **reception alone** to the other channel. Not the other four — they are properties of the room |
 | **M-4** | **silence versus the held step** | shipping 14d | a joint 3×3 on the buildable order; count runs where silence is chosen | **silence step ≥ held step** → silence is strictly dominated and the decision does not exist. **Too small** → a shrug. ⭐ **The ratio, not either constant** |
 | **M-5** | **standing concentration over forty seasons, and the conviction loop's sign** | step 24's magnitude; any claim the loops are bounded | forty seasons, twelve persons, three seeds; the inequality of reception per season; each judge's weight per season | **rising monotonically** → the standing loop is unbounded, and three of its four bounds are corpus properties with no column to turn. **Judges converging** → the conviction loop is negative; diverging → positive |
+| ⭐ **M-7** | **THE DEPRIVATION FLOOR — Jordan's constraint on the pool-only ruling** | ⛔ **BLOCKING on shipping the composed obstacle** (step 12) | at the **minimum lawful pool** (the 1D floor) against the **maximum plausible composed obstacle** across the twelve rows, compute `p_success`. Then repeat with a bought σ-advantage at each rostered level | **effectively zero and not recoverable by buying advantage** → the ruling deprives, and the remedy is either making the σ-channel reachable in that room or **ceilinging the obstacle**. ⭐ Note the asymmetry that creates the risk: **the pool has a floor and the obstacle has no cap** |
 | **M-6** | **starvation on the narrowed fan-out** | making step 1 the shipped default rather than an arm | the corpus at both arms: the claim→question→act chain on the NPC lane | **the chain falls** → two channels are matching nobody and the narrowing is too tight |
 
 ---
@@ -844,11 +845,21 @@ regardless. **Options:** leave it unreferenced with a note that its rows are gon
 culling precedent · migrate anything in it this provider lacks. ⛔ **This plan cannot assess the third
 without opening the tree, and will not.**
 
-**D-2 · Where latitude lives.** The resolution file **implements one option, says it implements a
-second, and recommends a third.** The term arithmetic in every magnitude row is wrong until it is ruled.
-**Options:** *pool only* — an interposed room is one where **who you are matters less**, four room terms,
-and it is the study's claim stated exactly (recommended, and the build proceeds on it); *both* — harder
-**and** flatter, which double-counts. **Blocks:** the term count everywhere.
+> ### ✅ **D-2 · RULED 2026-09-06 BY JORDAN — *"pool only it is."* OPTION A.**
+>
+> The three-way contradiction in `06_RESOLUTION.md` closes: the file implemented one option, claimed a
+> second and recommended a third. **The obstacle now has FOUR room terms — reception · the rung ·
+> register fit · proofs told** — and every *"five terms"* figure in the directory is off by one at the
+> base. `P-29` closes.
+>
+> ⚠ **AND THE RULING CARRIES A CONSTRAINT: *"ensure you don't go so far as to deprive player of a
+> chance at winning."*** Discharged at `06_RESOLUTION.md` §B.3a, and it changes **step 12** and adds
+> **M-7**. The short form: `brought` is not multiplied, so **interposition converts a proceeding from a
+> performance game into a preparation game** rather than depriving anyone; the 1D floor holds the mean;
+> the σ-channel is uniform so bought advantage helps a floored pool as much as a large one; and the
+> arrangement is visible, so a thin dossier walked into a ceremony is an informed loss rather than a
+> trap. **The one asymmetry that could still deprive — a floored pool against an unceilinged obstacle —
+> is M-7, and it is a BLOCKING check.**
 
 **D-3 · Where the cornered man's drastic act lands.** He breaks in the direction of his own convictions —
 **toward the feared thing**, never toward the presser, unless a live edge already binds them. Retaliation
