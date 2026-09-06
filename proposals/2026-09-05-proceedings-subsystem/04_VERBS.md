@@ -443,8 +443,8 @@ same gap `06_RESOLUTION.md` §C.4 hits from the speech side.**
 `PART D` rows 3 and 4 — *find who decides* and *what may not be said* — and both are **reception**,
 which this design already resolves without a verb:
 
-- `06_RESOLUTION.md` §B.1c makes `discernment` the fidelity of the read. **Read #1 is "WHO decides",
-  narrowed 2026-09-06**, and it is answered by the fog, not by an act. A low-`discernment` character
+- `06_RESOLUTION.md` §B.1c makes `attunement` the fidelity of the read. **Read #1 is "WHO decides",
+  narrowed 2026-09-06**, and it is answered by the fog, not by an act. A low-`attunement` character
   gets a noisy answer; they do not get a failed `interview`.
 - `reception` and the rung supply "what may not be said" as an **obstacle term** (§C.1), which is a
   property of the room rather than a fact a player extracts.
@@ -541,7 +541,7 @@ the verbs are the right ones** — and the interesting result is the third colum
 | **0** whether to enter at all | **no verb** — not taking `move` | ⭐ **TERMINAL, and free.** The largest lever in the corpus is the absence of an act |
 | 1 audit one's own standing | **no verb** — `standing` is a Query the player is shown of their own character | reception, not action |
 | 2 classify the body | **no verb** — a claim the person holds, which **may be false** | `AX-2`. A wrong classification is a story |
-| 3 find who decides | ⭐ **no verb — `discernment`, in-room.** Out of the room: an `FI` act, or `tell` from someone who knows | the judging set is resolver-side and **unreadable from a decision**, so the fog answers it (`06_RESOLUTION.md` §B.1c read #1) rather than an act |
+| 3 find who decides | ⭐ **no verb — `attunement`, in-room.** Out of the room: an `FI` act, or `tell` from someone who knows | the judging set is resolver-side and **unreadable from a decision**, so the fog answers it (`06_RESOLUTION.md` §B.1c read #1) rather than an act |
 | **4** what may not be said | ⭐ **no verb — `reception` + the rung, as an obstacle term** (§C.1). Out of the room: an `FI` act | ⭐ **TERMINAL, and the one evidenced capacity.** ⚠ **Its clearing verb was `interview` until 2026-09-06; that citation is withdrawn with §B.3's rows** |
 | 5 inventory the proofs | **no verb** — the claims in one's own ledger | the mirror test is the player's reasoning |
 | 6 fix the concession in advance | **no verb** — deciding what one will `release` before entering | prior specification under low arousal |
@@ -557,7 +557,7 @@ the verbs are the right ones** — and the interesting result is the third colum
 > ### **EIGHT OF THE FIFTEEN ARE CLEARED BY NO VERB AT ALL, AND THAT IS THE RESULT RATHER THAN A GAP.**
 > ⚠ **This read SIX until 2026-09-06.** Rows 3 and 4 joined the group when §B.3's investigation rows
 > were withdrawn to the `FI` lane: **in the room, neither is an act any more.** Row 3 is answered by
-> `discernment`'s fidelity and row 4 by the obstacle's `reception` term. Out of the room they are
+> `attunement`'s fidelity and row 4 by the obstacle's `reception` term. Out of the room they are
 > still `FI`'s to clear, and a player who has done that work arrives holding proofs — **which is the
 > correct division and not a loss.** `06_RESOLUTION.md` §B.1c banks the corrected figure; anything
 > still citing six is stale.

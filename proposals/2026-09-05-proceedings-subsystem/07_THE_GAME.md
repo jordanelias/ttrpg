@@ -195,7 +195,7 @@ what makes investigation worth a scene.*
 ## D.0 · The two presentation rules — **MOVED HERE 2026-09-06, because this part owns the surface**
 
 ⚠ **These were written in `06_RESOLUTION.md` §B.1c, which is the wrong home.** That section owns
-*what `discernment` does*; **this part owns what a player is shown**, and two files stating rules about
+*what `attunement` does*; **this part owns what a player is shown**, and two files stating rules about
 the same screen is `T-k` one level up. They are reproduced here in full and §B.1c now points at them.
 
 **Jordan:** *"the limitations of the character can impose limitations on the player. with the right UI,
@@ -216,7 +216,7 @@ it is owed **as they hold it**, including when it is false.
 > the room is DESCRIBED as**, not what the list contains.
 
 ⭐ **AND WHAT MAKES THE LIMITATION READ AS CHARACTER RATHER THAN AS PUNISHMENT IS THAT IT CAN BE
-PLAYED AGAINST.** A player who suspects their own read can send an advocate whose `discernment` is
+PLAYED AGAINST.** A player who suspects their own read can send an advocate whose `attunement` is
 better, spend a season reaching a bench member before the sitting, or go and find out what the room
 was told. **A limitation you can act against is characterization; one you can only suffer is a gate.**
 
@@ -235,7 +235,7 @@ instead:
 
 1. **The arithmetic of their own hand** — every claim they hold, graded, sourced, dated. *This is a lot.*
 2. **The rung**, which is public and is the single best summary of where a case stands.
-3. **A read they get for free, and one they can go and buy.** In the room, `discernment` returns *who
+3. **A read they get for free, and one they can go and buy.** In the room, `attunement` returns *who
    decides* and *how the body is set*, at their character's fidelity — **which may be wrong and which
    they cannot tell is wrong** (`06_RESOLUTION.md` §B.1c). Out of the room, an investigation act buys
    a better answer at the price of a season and of being seen asking. ⚠ **That second half is the

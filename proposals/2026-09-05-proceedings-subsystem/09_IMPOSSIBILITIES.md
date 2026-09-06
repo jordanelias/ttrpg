@@ -45,8 +45,11 @@ term and names no scan.** A later reader should re-run the rule rather than trus
 > **Row 13** — the closure claim is a scan, and a scan is the weakest thing that can carry the
 > proposal's central promise. **Row 9** — a quorum is the natural next feature and the natural place
 > to store a tally. **Row 16** — a subsystem writing its own band edges is *locally reasonable every
-> time*, and `P-01` leaves the edges unruled, which is precisely the condition under which somebody
-> writes them locally. **Row 10** — a bias field would be an easy, plausible, ruinous addition.
+> time*. ⚠ **This sentence continued *"and `P-01` leaves the edges unruled, which is precisely the
+> condition under which somebody writes them locally"* until 2026-09-06. `P-01` IS DISSOLVED** — the
+> four band edges are ruled (Jordan, 2026-08-14) and pinned by a parity golden. **The worry survives
+> and is now the narrower, truer one:** a subsystem writing its own edges is still locally reasonable
+> every time, and what makes it *detectable* is the golden rather than anything in this design. **Row 10** — a bias field would be an easy, plausible, ruinous addition.
 >
 > **Each of the four is a place where a later session does something sensible and deletes a
 > mechanism.** That is what this table is for.

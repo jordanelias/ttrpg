@@ -90,8 +90,8 @@ pool  =  brought                      -- DERIVED, not a key (§B.1a). A Query ov
                                          no modifier. Registered P-44.
       floored at 1D                   -- ruled 2026-09-04; the MEAN as well as the variance
 
-   -- THREE attributes on the sheet: eloquence · discernment · composure.
-   -- `discernment` is NOT DICE. It gates the fidelity of the read (§B.1c) -- the fog of war.
+   -- THREE attributes on the sheet: eloquence · attunement · composure.
+   -- `attunement` is NOT DICE. It gates the fidelity of the read (§B.1c) -- the fog of war.
       fractional throughout           -- continuous_engine_sample, never roll_pool
 ```
 
@@ -101,7 +101,7 @@ floor, not a ceiling** — `Person.capability` is a dict whose keys are content,
 cuts both ways. Jordan lifted the constraint (*"you're allowed to venture duplicates of what exists
 there if it makes sense here"* — the earlier ban was contamination-avoidance, not a design position),
 and running the test over this subsystem's own six contested acts returns **three attributes** —
-`eloquence` · `discernment` · `composure` — **with `brought` and `conduct` DERIVED from them and from
+`eloquence` · `attunement` · `composure` — **with `brought` and `conduct` DERIVED from them and from
 what the world already holds.** An aggregate cannot be a field, so the two halves of the pool are
 Queries and never sheet values.
 
@@ -141,14 +141,48 @@ attributes** — and the two that an intermediate draft added as *keys*, `brough
 | | | |
 |---|---|---|
 | **1 · what the world holds** | your claims on this matter (source · confidence · when) · the records you hold · your seat and edges · what the arrangement admits as proof | already in the model |
-| **2 · THE ATTRIBUTES** — irreducible, not derivable from world state | ⭐ **`eloquence`** — presenting, speaking and acting convincingly · ⭐ **`discernment`** — whether your live read of this room is true · ⭐ **`composure`** — steadiness: using what you prepared, and holding under attack | **`Person.capability`**, three keys |
-| **3 · derived, computed at entry, stored nowhere** | **`brought`** = what you hold **× composure** — *"the ability to make use of what you've prepared, remember it under pressure"* · **`conduct`** = `eloquence` **× latitude** (floored, §B.3c), modulated by your role in the room | **Queries.** The two halves of the pool |
+| **2 · THE ATTRIBUTES** — irreducible, not derivable from world state | ⭐ **`eloquence`** — presenting, speaking and acting convincingly · ⭐ **`attunement`** — whether your live read of this room is true · ⭐ **`composure`** — steadiness: using what you prepared, and holding under attack | **`Person.capability`**, three keys |
+| **3 · derived, computed at entry, stored nowhere** | **`brought`** = what you hold **× composure** — *"the ability to make use of what you've prepared, remember it under pressure"* · **`conduct`** = `eloquence` **× latitude** (floored, §B.3c) | **Queries.** The two halves of the pool |
+
+⚠ **`conduct` carried *"modulated by your role in the room"* here until 2026-09-06 and it is STRUCK, a
+second time.** The phrase was cut from the pool block above on the same day and survived in this cell —
+which is how a struck claim comes back. **Nothing anywhere defines the modulation, and `§B.0` says in
+terms that a seat adds no modifier.** `P-44`.
+
+> ### ⚠ **`attunement` WAS CALLED `discernment` UNTIL 2026-09-06, AND THE RENAME IS A NARROWING (Jordan-directed).**
+>
+> Jordan: *"discernment here sounds like it's a different function if it's more narrow."* **The premise
+> needed correcting and the instinct did not.** What narrowed on 2026-09-06 was an OBJECT, not the
+> faculty — §B.1c's read #1 lost *"has it already decided"* because that is the bench's leaning, which
+> `07_THE_GAME.md` PART D forbids on `T-f`. **But the name was wider than the specification either
+> way:** all three of §B.1c's reads are reads of **people in a room** — who decides, whether an
+> opponent can run your proof back, how your manner will be taken — and `discernment` promises a
+> general faculty for judging anything.
+>
+> **`attunement` is the narrowing, and it is Jordan's own word for the surface** — *"social
+> attunement/reading the room"*, quoted at the head of this section. Ordinary usage attunes a person
+> to **people and rooms**, not to facts about the world, so the name now says what the mechanism does.
+>
+> ⛔ **WHAT WAS REFUSED, AND WHY IT MATTERS MORE THAN THE RENAME.** The proposal considered
+> `discern.social` — a domain suffix. **Refused on this section's own roster test:** an attribute earns
+> a key when *two acts in THIS subsystem's own set would draw differently and currently draw the same*,
+> and every act in this set happens in a room, so `.social` distinguishes nothing this design can test.
+> Whatever it would contrast against lives in another subsystem's act set — **so the distinction is not
+> this proposal's to make**, which is `ED-SC-0036`'s verb ruling applied to the noun side. **And the
+> design already has a place for a room's effect on a faculty and it is not the key:** `conduct` is
+> `eloquence × latitude`, where `latitude` is a property of the ARRANGEMENT. A domain in the key would
+> be the first place this design put a room inside a person.
+>
+> ⚠ **The cost of the new name, stated rather than hidden:** *attunement* is softer than *discernment*
+> and a reader may take it for empathy or rapport. **It is neither — it is ACCURACY**, and §B.1c's own
+> headline is what holds that line. If the word starts reading as sympathy, rename again; do not add a
+> second key to disambiguate.
 
 ⭐ **`composure` therefore does the work in BOTH halves, coherently:** it is why you can *use* what you
 brought, and it is what resists being read and pressed. **That is one quality — self-command — and the
 corpus already grades its failure as terminal-once-seen** (*visible effort*, *anxiety displayed*).
 
-⭐ **`discernment` enters NEITHER half.** It is not dice at all — it gates the fidelity of what you are
+⭐ **`attunement` enters NEITHER half.** It is not dice at all — it gates the fidelity of what you are
 told about the room (§B.1c). **So of three attributes, one is never rolled.**
 
 **The same shape the design already uses for `standing`** — *a Query, owned by nobody, stored
@@ -199,7 +233,7 @@ conduct  ->  a better band  ->  a better thing witnessed  ->  better claims abou
 other people saw it** — which is precisely where eloquence pays, and it pays across seasons rather than
 inside one turn. Mid-run it also compounds: each band deposits as you go.
 
-## B.1c · ⭐⭐ `discernment` IS THE FOG OF WAR — and it gates FIDELITY, never AVAILABILITY
+## B.1c · ⭐⭐ `attunement` IS THE FOG OF WAR — and it gates FIDELITY, never AVAILABILITY
 
 > **Jordan:** *"Why are we not having our attributes act as a 'fog of war' for decision making? Someone
 > who is less astute than another may not make the right choice even if they knew the proceeding
@@ -211,7 +245,7 @@ perfectly.** That is player skill substituting for character skill, and it is no
 
 **The lawful fix is not gating options** — `if skill < N: return []` is refused by name (`R-9`).
 
-> ### **EVERY LAWFUL MOVE IS ALWAYS AVAILABLE. `discernment` DETERMINES WHETHER WHAT YOU ARE TOLD
+> ### **EVERY LAWFUL MOVE IS ALWAYS AVAILABLE. `attunement` DETERMINES WHETHER WHAT YOU ARE TOLD
 > ABOUT THE ROOM IS TRUE.**
 > **And the primitive already exists**, in code rather than in the rows that are leaving: the `W-B`
 > deposit records *what the fold read*, and `AX-2` is what makes a wrong read indistinguishable from a
@@ -245,7 +279,7 @@ perfectly.** That is player skill substituting for character skill, and it is no
 >     the provider's own reads  →  deposited TO THE ACTOR ALONE
 >       who decides here (judging_set) · what this room admits and what each manner
 >       invites · whether a proof can be mirrored (a Query over two ledgers)
->     fidelity = DETERMINISTIC, from `discernment` against an injected room-opacity
+>     fidelity = DETERMINISTIC, from `attunement` against an injected room-opacity
 >                magnitude (inject · declare · sweep)
 >     a MISREAD deposits at the SAME confidence with the WRONG value
 >     ⛔ NO DRAW. No verb, no field, no Event kind.
@@ -257,7 +291,7 @@ perfectly.** That is player skill substituting for character skill, and it is no
 > than a gap** — rows 1, 2 and 5 are precisely reading the room. ⚠ **The figure was SIX until
 > 2026-09-06**, when `04_VERBS.md` §B.3 withdrew the investigation rows to the `FI` lane and rows 3
 > and 4 joined the group. **That withdrawal is what makes this section load-bearing rather than
-> merely elegant:** with no `interview` here, `discernment` is the ONLY in-room answer to *who
+> merely elegant:** with no `interview` here, `attunement` is the ONLY in-room answer to *who
 > decides*, so read #1 is no longer one convenience among several.
 >
 > **Cost: one magnitude**, plus a dependency this subsystem already had (the product column, `P-05`).
@@ -273,7 +307,7 @@ perfectly.** That is player skill substituting for character skill, and it is no
 > **Two rules follow — a misread is presented indistinguishably from a true read, and nothing is
 > greyed out — and they were written here until 2026-09-06.** They are now at `07_THE_GAME.md` §D.0,
 > in full, **because `07` PART D is the single owner of what a player is shown** and two files stating
-> rules about one screen is `T-k` a level up. **This section owns what `discernment` DOES; that one
+> rules about one screen is `T-k` a level up. **This section owns what `attunement` DOES; that one
 > owns how it reaches the player.** Do not restate them here.
 
 > ### ⚠ **AND READ #1 IS NARROWER THAN A DRAFT MADE IT — `07_THE_GAME.md` PART D IS ARCHITECTURE AND
@@ -321,7 +355,7 @@ about the mover*) applied to the one attribute that is visible while you use it.
 
 **A per-proceeding skill** — a *negotiation* stat and a *trial* stat is pair-count growth (`§0.06`).
 **An office bonus** — a title gates access and shapes how you are read, and never adds dice.
-**An `aptness` attribute** — with `discernment` doing the fog of war, aptness stays a term you avoid by
+**An `aptness` attribute** — with `attunement` doing the fog of war, aptness stays a term you avoid by
 knowing the room, and the knowing is now the character's. **A `reception` attribute** — standing is
 what others hold, one ledger at a time, and any of them may be wrong. ⭐ **`brought` or `conduct` AS GLOBAL CHARACTER PROPERTIES** — they are run-local to one proceeding
 (§B.1a), so a person does not *have* a conduct; they derive one on entering a room. **And as SHEET
