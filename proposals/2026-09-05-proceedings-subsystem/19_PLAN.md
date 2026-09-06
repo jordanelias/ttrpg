@@ -865,15 +865,23 @@ identical under either; the arm is one line. **Options:** the gap — *a man is 
 yet believe about himself*; the adverse sum — *a man is pressed by how badly he is thought of, whether or
 not he agrees.*
 
-**D-5 · The second-person lever.** ⭐ **This is the wall.** Forgiveness is inexpressible — release is the
-obligor's own, so it is the debtor discharging himself, and an obligee who forgives has no act. The same
-wall from the other end is the creditor calling a debt. **Both are a non-owner write. The wall holds in
-this plan.** What is expressible without breaching it: **publicity** (tell that the debt exists) and
-**mercy as a new edge the creditor owns** (a counter-obligation). **Blocks:** nothing built here — but it
-blocks the hook and forgiveness-as-clemency **forever** unless ruled. **Options:** leave it intact (a
-world of people; the lever is publicity and counter-promise, slow and political) · amend the theorem with
-an obligee-side closer **for one edge kind only** (one verb, one theorem amended — and a broken theorem
-is a contradiction unless re-derived).
+> ### ✅ **D-5 · RULED 2026-09-06 BY JORDAN — *"second-person lever stays refused."* THE WALL HOLDS.**
+>
+> **What is now settled, permanently rather than pending:** no creditor verb · no `call_in` · no
+> obligee-side closer on an obligation · **no hook.** `T-m` is not amended, and forgiveness is
+> **inexpressible as clemency** — that absence is now *accepted and stated* rather than open. `P-36`
+> closes as ruled.
+>
+> **What survives, and it is not nothing.** *Publicity* — the creditor tells that the debt exists,
+> which is an act on their own ledger and is witnessed. And *mercy as a new edge the creditor owns* —
+> a counter-obligation. **Slower, more political, and visible to the room. That is the trade, and it
+> is the one the design was built for.**
+>
+> ⭐ **AND THIS IS WHY THE FEAR LEVER IS LAWFUL AT ALL.** You cannot move a man. You can name what he
+> dreads, and **his own decision procedure does the rest** — the coercion happens inside the target,
+> by their own reading, never by your write. **A design that had granted the second-person lever would
+> not have needed to find that, and would have been much worse for it.** Every mechanism in PART D
+> that reaches another person reaches them through what they themselves hold.
 
 **D-6 · The one corpus fault that does not reconcile with fail-forward.** *"Whoever touches it is
 killed"* is the single terminal fault with no corpus-supplied next move. **Options:** treat it as the one
