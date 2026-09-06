@@ -83,17 +83,19 @@ off:**
 pool  =  brought                      -- DERIVED, not a key (§B.1a). A Query over what you hold
                                          on this matter, × `composure`. Always live; never multiplied
                                          by latitude -- preparation survives any room
-      +  conduct                      -- DERIVED. `eloquence` × latitude(game), FLOORED (§B.3c),
-                                         modulated by your role. Never multiplied to zero
+      +  conduct                      -- DERIVED. `eloquence` × latitude(game), FLOORED (§B.3c).
+                                         Never multiplied to zero.
+                                         ⚠ a draft added "modulated by your role" -- STRUCK: no
+                                         mechanism anywhere defines it, and §B.0 says a seat adds
+                                         no modifier. Registered P-44.
       floored at 1D                   -- ruled 2026-09-04; the MEAN as well as the variance
 
    -- THREE attributes on the sheet: eloquence · discernment · composure.
    -- `discernment` is NOT DICE. It gates the fidelity of the read (§B.1c) -- the fog of war.
-      floored at 1D                   -- ruled 2026-09-04; applies to the MEAN as well as the variance
       fractional throughout           -- continuous_engine_sample, never roll_pool
 ```
 
-⛔ **AMENDED 2026-09-06 — FOUR KEYS, §B.1a.** This read *"Two `capability` keys … naming two rather
+⛔ **AMENDED 2026-09-06 — THREE ATTRIBUTES, TWO DERIVED, §B.1a.** This read *"Two `capability` keys … naming two rather
 than nine costs nothing and commits to nothing."* **The reasoning was right and the number was a
 floor, not a ceiling** — `Person.capability` is a dict whose keys are content, so the cost argument
 cuts both ways. Jordan lifted the constraint (*"you're allowed to venture duplicates of what exists
@@ -115,8 +117,10 @@ Queries and never sheet values.
 > in light of attack and failures."*
 
 **Two was a floor, not a ceiling — and the two it named were the wrong KIND of thing** — `Person.capability` is a dict whose keys are content, so naming
-more costs nothing structurally. **The test a key must pass: two acts in THIS subsystem's own set would
-draw differently, and currently draw the same.** Run across the six contested acts, it returns four.
+more costs nothing structurally. **The test an attribute must pass: two acts in THIS subsystem's own set would
+draw differently, and currently draw the same.** Run across the six contested acts, **it returns THREE
+attributes** — and the two that an intermediate draft added as *keys*, `brought` and `conduct`, are
+**derived** rather than named (below).
 
 > ### ⛔ **AND `brought` AND `conduct` ARE NOT KEYS. THEY ARE DERIVED.** *(Jordan: "brought and conduct
 > are derived scores/aggregates since they involve so many factors that you've identified already like
@@ -147,21 +151,39 @@ corpus already grades its failure as terminal-once-seen** (*visible effort*, *an
 ⭐ **`discernment` enters NEITHER half.** It is not dice at all — it gates the fidelity of what you are
 told about the room (§B.1c). **So of three attributes, one is never rolled.**
 
-**The same shape the design already uses for `standing`** — *a Query, season-local, owned by nobody,
-stored nowhere.* `brought` and `conduct` join it.
+**The same shape the design already uses for `standing`** — *a Query, owned by nobody, stored
+nowhere.* ⚠ **But NOT the same scope, and the difference is a ruling.** `standing` is **season-local**;
+`brought` and `conduct` are **RUN-LOCAL** — computed at entry to *this* proceeding and gone with it.
 
-**Where the five acts land, and four of them needed no new key** — because the study's own two-row
-partition had already named those capacities: `examine`, `research` and `reconstruct` are `brought`
-(evidential discrimination, memory, inference); `interview` is `conduct` (elicitation). **`surveil` was
-the one act neither covered** — *"present at the place, for a declared interval"*, contesting *what is
-done unseen*.
+> **Jordan, 2026-09-06:** *"It's a derived score that is used for the subsystem for a character, but it
+> is not a character attribute in and of itself."*
+>
+> ⭐ **So they are properties of a PERSON-IN-THIS-SUBSYSTEM, never of a person.** Another subsystem
+> facing the same character derives its own from the same three attributes. **Nothing in this
+> directory may speak of someone's `conduct` as though they carried it around.**
 
-> ### ⭐ **AND `surveil` IS COMPOSURE, NOT PERCEPTION.** *(Jordan: "'patient watcher' speaks towards
-> composure")*
-> **The hard part of surveillance is not noticing — it is STAYING.** Anyone watching a door for a
-> season sees who goes through it; what separates people is whether they keep watching, without
-> leaving, without being drawn off, without being seen. **That is self-command, and it gives composure
-> one coherent shape rather than two stapled together: sustaining, and resisting.**
+> ### ⛔ **THE FIVE INVESTIGATION ACTS ARE NOT THIS SUBSYSTEM'S, AND THE MAPPING THAT STOOD HERE IS
+> WITHDRAWN.** *(Jordan, 2026-09-06)*
+>
+> A draft of this section mapped `examine`/`research`/`reconstruct` to `brought`, `interview` to
+> `conduct`, and **`surveil` to `composure`.** All of it goes. Verbatim:
+>
+> > *"the five investigation rows and so forth are verbs for investigating…they don't make sense being
+> > remade into some function for this social subsystem when we can just create the correct verb for
+> > the subsystem instead"* — and, on the mapping specifically, *"No. Surveil doesn't make sense
+> > there."*
+>
+> **Investigation is its own lane (`FI`), and `verb_table.yaml:490-503` already carries the row.**
+> §B.3 of `04_VERBS.md` records what this subsystem needs from it as a **dependency**, not as a
+> mapping.
+>
+> ⚠ **And the mapping was a category slip as well as a lane trespass**: `conduct` is `eloquence ×
+> latitude`, and latitude is a property of an **arrangement**. An interview conducted between sittings
+> has no arrangement, so it cannot draw on a run-local score derived from one.
+>
+> ⭐ **What this subsystem contributes across the boundary is the three attributes themselves.** They
+> sit on `Person.capability`, which is not this directory's property, and **any lane may read them** —
+> including FI, if it wants `composure` as the quantity its `interview` contests (§B.1d).
 
 ## B.1b · `conduct` feeds `reception`, with a lag — the brilliant speaker's actual payoff
 
@@ -191,8 +213,9 @@ perfectly.** That is player skill substituting for character skill, and it is no
 
 > ### **EVERY LAWFUL MOVE IS ALWAYS AVAILABLE. `discernment` DETERMINES WHETHER WHAT YOU ARE TOLD
 > ABOUT THE ROOM IS TRUE.**
-> **And the primitive already exists: `Misread` emits identically to `Read`.** The investigation rows
-> deposit at the **same confidence with the wrong value** on a misread — `AX-2` doing real work. **The
+> **And the primitive already exists**, in code rather than in the rows that are leaving: the `W-B`
+> deposit records *what the fold read*, and `AX-2` is what makes a wrong read indistinguishable from a
+> right one at the same confidence. **The
 > same shape applies to the pre-speech read**, which is Fig. 17's four reads. **The player still
 > chooses; they choose on the character's information, because there is no other kind.**
 
@@ -200,9 +223,43 @@ perfectly.** That is player skill substituting for character skill, and it is no
 
 | | Jordan's phrasing |
 |---|---|
-| **has this body settled · is it attentive · has it already decided** | *"reading the room"* |
+| ⭐ **WHO DECIDES HERE** (`judging_set`), and **what each of them has been WITNESSED to commit to** | *"reading the room"* |
 | ⭐ **can the opponent run my proof back** — the mirror test, which the player must GUESS | *"anticipate your opponent's evidence"* |
 | **which misreading my manner invites HERE** (Fig. 8's 7→7) | *"comporting oneself appropriately"* |
+
+> ### ⭐⭐ **THE CARRIER IS A DEPOSIT, NOT A VERB — AND IT ALREADY EXISTS IN CODE.**
+>
+> **No verb is authored for the in-room read, and the reason is Jordan's:** *"authoring a verb is
+> something that likely belongs in the main system."* ⭐ **And the live table's own cell forbids what a
+> draft of this directory did** — `verb_table.yaml:490-503` carries the investigation row and notes
+> that enumerating the six *"would mean INVENTING SIX PRECONDITIONS, which is what §42.2.1 FORBIDS."*
+> `04_VERBS.md` §B.3 then invented five. **That is the defect the cell names by rule number.**
+>
+> **What the read runs on instead:** the `W-B` second deposit (`shape.py:6350+`, *"ONE CLAIM PER READ
+> THE FOLD MADE"*), under `observation_deposit_mode="actor"` (`:1847`) — **landed 2026-09-04**
+> (`:725`). A read reaching the actor's own ledger without a verb is **not new; it is how the tracer
+> already works.**
+>
+> ```
+> at the sitting's opening Event, and again after each witnessed act:
+>     the provider's own reads  →  deposited TO THE ACTOR ALONE
+>       who decides here (judging_set) · what this room admits and what each manner
+>       invites · whether a proof can be mirrored (a Query over two ledgers)
+>     fidelity = DETERMINISTIC, from `discernment` against an injected room-opacity
+>                magnitude (inject · declare · sweep)
+>     a MISREAD deposits at the SAME confidence with the WRONG value
+>     ⛔ NO DRAW. No verb, no field, no Event kind.
+> ```
+>
+> **Why no draw, and it is the design's own answer:** `§C.5` — *"a design that rolled for whether you
+> noticed the room would be modelling the half of the variance that is not there."* And `04_VERBS.md`
+> banks that **six of the fifteen steps are cleared by no verb at all, and that is the result rather
+> than a gap** — rows 1, 2 and 5 are precisely reading the room.
+>
+> **Cost: one magnitude**, plus a dependency this subsystem already had (the product column, `P-05`).
+> ⚠ **A turn-spending *look harder* act is a defensible different game.** It is closed rather than
+> escalated — the carrier exists and the design refuses the draw — and the alternative is recorded
+> here rather than dropped.
 
 > ### ⭐⭐ **AND THE UI IS THE HALF THAT MAKES IT FEEL LIKE A CHARACTER RATHER THAN A GATE.**
 >
@@ -229,6 +286,22 @@ perfectly.** That is player skill substituting for character skill, and it is no
 > player learns their character reads rooms badly the way a person does — **by being wrong and finding
 > out afterwards** — never by being shown a number.
 
+> ### ⚠ **AND READ #1 IS NARROWER THAN A DRAFT MADE IT — `07_THE_GAME.md` PART D IS ARCHITECTURE AND
+> WINS.**
+> A draft wrote read #1 as *"has this body settled · is it attentive · **has it already decided**."*
+> **The last of those, computed from the bench's convictions, IS *"the bench's leaning, in any form"***
+> — which `07`'s forbidden column refuses outright, on `T-f`. **A section cannot cite `07` as its
+> licence and then breach `07`'s own table.**
+>
+> **What is lawful, and it is still the fog Jordan asked for:** ⭐ **WHO decides** — which is a Query
+> over seats, and a dull character genuinely misreads it — **and what those people have been
+> WITNESSED to commit to**, which is in ledgers rather than in heads. **Hincmar is the worked case:**
+> *"persuading the assembly when the inner council has settled it."* Mistaking the assembly for the
+> council is a misread of *who*, not a peek at a leaning.
+>
+> **The bearing half survives too**, because it needs no interior: a member's visible effort, or a
+> concession he was seen to make, is **a witnessed act** (§B.1d, and Fig. 3's *terminal once seen*).
+
 ⚠ **The challenge it has to survive is inside Fig. 17, and the figure splits it for us.** *What kind of
 body is this* — expediency to a parliament, fact to a court — is **institutional classification, which
 is `brought`.** *Has it already decided* is a live read of **this** room, today. **That is Jordan's
@@ -237,12 +310,16 @@ them.**
 
 ## B.1d · `composure` owns `obstinacy`, which the design named and left with no owner
 
-`interview` declares `contests: "a disposition"` **against `obstinacy`** (`04_VERBS.md` §B.3.2) — and
-**nothing in the design supplies obstinacy.** It is the defensive half of *"maintaining composure and
+**FI's `interview` declares `contests: "a disposition"` against `obstinacy`, and nothing supplies it.**
+⭐ **So this subsystem OFFERS one across the lane boundary:** `composure` sits on `Person.capability`,
+which is nobody's private property, and FI may read it as that quantity. **An offer, not a claim on
+their row** — recorded in `HANDOFF_SC.md`'s cross-lane note. It is the defensive half of *"maintaining composure and
 dignity in light of attack and failures"*, sitting unclaimed.
 
-**What composure resists:** being read (`interview`), the fear press's habituated boost (§F.2 of
-`18_FINDINGS.md`), and a standing band crossing. **What it sustains:** `surveil`.
+**What composure does HERE:** it multiplies `brought` (§B.1a — using what you prepared, under
+pressure), resists the fear press's habituated boost, and resists a standing band crossing. ⛔ **The
+clause *"what it sustains: `surveil`"* is struck** — that act is FI's and the assignment was withdrawn
+(§B.1a).
 
 ⭐ **AND LOSING IT IS ITS OWN WITNESSED FAILURE, which the corpus states directly.** Fig. 3's erosion
 list carries *"visible effort — TERMINAL once seen"*; Fig. 9's Q1 carries *"anxiety displayed; the
@@ -256,8 +333,9 @@ about the mover*) applied to the one attribute that is visible while you use it.
 **An office bonus** — a title gates access and shapes how you are read, and never adds dice.
 **An `aptness` attribute** — with `discernment` doing the fog of war, aptness stays a term you avoid by
 knowing the room, and the knowing is now the character's. **A `reception` attribute** — standing is
-what others hold, one ledger at a time, and any of them may be wrong. ⭐ **And `brought` or `conduct`
-AS SHEET VALUES** — they are aggregates over standing, evidence, records and role, and an aggregate
+what others hold, one ledger at a time, and any of them may be wrong. ⭐ **`brought` or `conduct` AS GLOBAL CHARACTER PROPERTIES** — they are run-local to one proceeding
+(§B.1a), so a person does not *have* a conduct; they derive one on entering a room. **And as SHEET
+VALUES** — they are aggregates over standing, evidence, records and role, and an aggregate
 that becomes a field is the exact defect `T-a` names.
 
 ## B.2 · What this buys, and why it is better than a skill-per-proceeding table
@@ -272,18 +350,18 @@ that becomes a field is the exact defect `T-a` names.
 
 ## B.3 · ⚠ **THE ONE CONSEQUENCE THAT TOUCHES A RULING, PUT UP RATHER THAN TAKEN**
 
-**If `latitude` multiplies the pool, it should come OUT of the obstacle's five terms** — otherwise one
+**If `latitude` multiplies the pool, it should come OUT of the obstacle's terms** — otherwise one
 parameter both sets how much of the actor is present **and** how hard the room is, which is `G.1.5`'s
 signature: *a design with one quantity that both measures and decides.*
 
 | option | what it says |
 |---|---|
-| ⭐ **A — latitude in the POOL only** *(recommended)* | *an interposed room does not become harder to persuade; it becomes a room where **who you are matters less**.* That is the study's claim, stated exactly. The obstacle keeps **four** terms: reception, the rung, register fit, proofs told |
+| ⭐ **A — latitude in the POOL only** *(recommended)* | *an interposed room does not become harder to persuade; it becomes a room where **who you are matters less**.* That is the study's claim, stated exactly. The obstacle keeps **four** terms — enumerated once at §C.1 |
 | **B — latitude in BOTH** | an interposed room is harder **and** flattens the person. Defensible for a ceremony, and it double-counts |
 | **C — latitude in the OBSTACLE only** *(the current ruling)* | interposition makes the room harder for everyone equally — **which is the one thing the leader-effect evidence says it does not do** |
 
-**This directory implements C, because C is what was ruled on 2026-09-06, and records A as the
-recommendation with the evidence for it.** Registered `P-29`. **It is one line either way.**
+~~**This directory implements C … Registered `P-29`. It is one line either way.**~~ ⛔ **PRE-RULING
+TEXT, kept as record.** `P-29` closed on 2026-09-06 as **A** — see the box below.
 
 > ### ✅ **RULED 2026-09-06 BY JORDAN: *"pool only it is."* OPTION A. THE THREE-WAY CONTRADICTION IS CLOSED.**
 >
@@ -308,7 +386,9 @@ recommendation with the evidence for it.** Registered `P-29`. **It is one line e
 > speaker far more than a strong one (`§C.2`, `1/√pool`, `P-27`). Scaling a *pool* is proportional by
 > construction and has no such asymmetry.
 >
-> **THE OBSTACLE THEREFORE HAS FOUR ROOM TERMS: reception · the rung · register fit · proofs told.**
+> **THE OBSTACLE THEREFORE HAS FOUR ROOM TERMS, ENUMERATED ONCE AT §C.1** — and the membership is
+> `reception · the rung · proofs told · aptness`, not the register-fit list an intermediate draft
+> carried.
 > Every *"five terms"* statement in this directory is off by one at the base and is corrected where it
 > is load-bearing. `P-29` closes.
 > Raised by the playability relay's lane B as an out-of-lane observation and confirmed here.
@@ -507,8 +587,8 @@ difference between a proceeding and a cutscene.
 
 | | position | verdict |
 |---|---|---|
-| **1 · the draft** | `margin := pool − obstacle(latitude, reception, rung, register, proofs)` — five terms composing the obstacle | ⭐ **RIGHT, and restored at §C.1** |
-| **2 · my "correction"** | *`base_Ob` — **NEVER MODIFIED***; all five terms rewritten as σ-levels | ⚠ **OVERREACH.** It read a narrow constraint on **advantage** as a blanket prohibition on **obstacles** |
+| **1 · the draft** | `margin := pool − obstacle(latitude, reception, rung, register, proofs)` — five terms composing the obstacle | ⭐ **RIGHT IN SHAPE, and restored at §C.1** — *(record: five at the time; four since the pool-only ruling, and `register` retired into `aptness`)* |
+| **2 · my "correction"** | *`base_Ob` — **NEVER MODIFIED***; all five terms *(as they then were)* rewritten as σ-levels | ⚠ **OVERREACH.** It read a narrow constraint on **advantage** as a blanket prohibition on **obstacles** |
 | **3 · the ruling** | Jordan, 2026-09-06: *"I'm fine with Ob being modified by things. **+modifiers means it's already being modified, so that note warning is insane**."* and, on the draft, *"your presentation of obstacle makes sense to me"* | **implemented** |
 
 **The ruling is right and the tree says so twice over — I cited both sources and then contradicted
@@ -562,7 +642,7 @@ disagree, and `parliamentary_transfer`'s `L+2` contradicts the ruling while bein
 > not have to invent the shape; it has to not contradict it. Registered `P-25` as *follow the tribunal,
 > do not re-derive.*
 
-## C.1 · The shape — **RULED: the terms compose the obstacle, and as of the pool-only ruling there are FOUR**
+## C.1 · ⭐ THE SINGLE OWNER OF THE OBSTACLE — four room terms, enumerated here and nowhere else
 
 > **Jordan, on the original five-term model:** *"your presentation of obstacle makes sense to me."*
 
@@ -572,22 +652,59 @@ the call wrong.
 
 ```
 pool      = the actor's capability          FRACTIONAL · floored at 1D · continuous_engine_sample
-base_Ob   = the opposition's corresponding score / 2
+base_Ob   = THE RESISTER'S composure / 2      -- a party holding a live commit AGAINST the
+                                                disposition (§C.1.2). Where NOBODY resists the
+                                                term is ABSENT, not substituted.
          ⛔ ± latitude -- REMOVED 2026-09-06 by the pool-only ruling (§B.3c). Latitude
             multiplies `conduct` in the POOL and appears here NO LONGER; carrying it in
-            both places was option B, the double-count. FOUR room terms remain.
+            both places was option B, the double-count.
             ± reception         — ⭐ COMPOSED FROM THE HEARERS' OWN CLAIMS ABOUT THE SPEAKER
                                   AND THEIR CONVICTIONS ON THIS MATTER'S AXES.  Resolver-side,
                                   hidden from every decision by T-f.   (Figs. 3, 25; and see
                                   15_WHY_IT_IS_A_GAME.md PART C — this is what stops the
                                   proceeding being computable)
             ± the rung          — what is being asked for                    (Fig. 5)
-            ± register fit      — which misreading this manner invites       (Fig. 8)
             ± proofs told so far in this run                                 (Fig. 6, S8)
+            ± aptness           — genre and rung fit; the manner's invited misreading
+                                  rides HERE rather than in a term of its own    (Figs. 8, 23)
             FLOORED AT 1        — canon P-232: "no modifier may reduce Ob below 1"
 margin    = net − Ob   →   degree_from_net   →   Overwhelming | Success | Partial | Failure
-veto      = the licence conditions (Fig. 26) — demote-only
+veto      = the licence conditions (Fig. 26) — demote-only, one BandExtension
 ```
+
+> ### ⭐ **THIS IS THE ONE ENUMERATION. FOUR ROOM TERMS: `reception` · `the rung` · `proofs told` ·
+> `aptness`.**
+> **Nowhere else in this directory lists them** — every other mention cites §C.1 instead. Two
+> enumerations were in circulation and they disagreed: one carried `register fit`, which **retires
+> with the `registers[]` key** (`19_PLAN.md` step 11), its idea folding into `aptness` as the same
+> term (step 12c) rather than becoming a second one. `P-39` forbids the 7→7 lookup that a standalone
+> register term would need.
+
+### C.1.2 · Whose score — the declared default, and what stays suspended
+
+⭐ **Two roles were collapsed into the phrase *"the opposition."*** The **resister** is whoever
+contests the same matter from the other side; the **audience** is whoever must be moved — and the
+audience is already in the obstacle, as `reception`. **Substituting the hearer where nobody resists
+counts the hearer twice.**
+
+**The default follows the tree's own classification rather than re-deriving it**, which is what this
+directory's disposition requires:
+
+| | |
+|---|---|
+| **opposed** | the base derives from **the party that RESISTS** — the tribunal rolls against the *accused*'s score, not the bench's |
+| **unopposed** | **no score-derived base at all.** An audience with a well-disposed sovereign on an uncontested request is near-free, floored at 1 — which is right |
+| **roles coincide** *(negotiation, interrogation — `bench ∩ parties`)* | one person supplies **one score and one ledger**. Two different quantities, not a double count |
+
+**The key halved is `composure`** — what resists being pressed (§B.1d) — **declared, and swept
+`{resister · hearer · absent}`.**
+
+⚠ **WHAT STAYS SUSPENDED, AND THIS PARAGRAPH DOES NOT TOUCH IT.** Jordan suspended *wiring a
+single-owner `score/2` derivation across the tree* (2026-08-21), because reconciling the three opposed
+sites would overwrite ratified canon. **Nothing here is wired, no opposed site is edited, and
+`parliamentary_transfer` is not reconciled.** `P-25` stays `registered` with its disposition unchanged;
+what is added is a default and three sweep arms **inside a held-back proposal**, which `19_PLAN.md`
+already licenses (*"gets its declared default, swept, and is not re-escalated"*).
 
 **This is the ruling's own shape**: *"their corresponding score/2 **plus whatever specific modifiers
 exist for them in that instance**"* (Jordan, 2026-08-14). Four named modifiers, each sourced to a
@@ -597,7 +714,7 @@ figure, each a property of **how hard this is in this room** — which is what a
 
 **σ-leverage advantage may not be spent as an Ob reduction** — `Eff_Ob = base_Ob − eff_σ·σ_N`, F1,
 resolved by ED-884. **That is a statement about the σ-channel, not about obstacles**, and the two do
-not collide here: the five terms above are **composed into** `base_Ob` and floored, not **subtracted
+not collide here: the four terms above are **composed into** `base_Ob` and floored, not **subtracted
 from** it by an unbounded σ-scaled term.
 
 **So the design carries both channels, and the rule for which is which is one line:**
@@ -610,9 +727,9 @@ from** it by an unbounded σ-scaled term.
 ⚠ **AND `eff_ob()` / `effective_ob()` REMAIN DISPLAY-ONLY.** A caller that **resolves** on `eff_ob`
 instead of `p_success` has reintroduced the retracted form. That finding is unaffected by this ruling.
 
-### C.1.2 · What this call costs, recorded so it can be revisited rather than re-argued
+### C.1.3 · What this call costs, recorded so it can be revisited rather than re-argued
 
-**An Ob modifier's probabilistic impact scales as `1/√pool`** — `Δz = X/(0.8·√pool)`. So the five terms
+**An Ob modifier's probabilistic impact scales as `1/√pool`** — `Δz = X/(0.8·√pool)`. So the four terms
 **matter more to a weak speaker than a strong one.** That is the non-uniformity the σ-layer exists to
 remove *from advantage levels*, and it is being accepted here for *obstacle composition*.
 
@@ -623,7 +740,7 @@ remove *from advantage levels*, and it is being accepted here for *obstacle comp
 | ⚠ **what a draft argued** | that reception-in-Ob makes a title *disproportionately* powerful for a poor speaker, contradicting *"position dominates an inattentive room and merely tilts an attentive one"* |
 | ⭐ **why that was probably backwards** | the study's *inattentive/attentive* axis is about **the room's elaboration**, not the speaker's skill. **A duke who speaks badly being carried by his rank, while a brilliant commoner is not, is the fiction the corpus actually describes** — Mi Zixia, Liudprand's seating, *the asking is itself evidence*. The `1/√pool` behaviour delivers exactly that |
 
-> **The falsifier, so this is a call and not a preference:** sweep the five terms at pools {1, 4, 9, 16}
+> **The falsifier, so this is a call and not a preference:** sweep the four terms at pools {1, 4, 9, 16}
 > and check whether a rank advantage swings a weak speaker's band **more** than a strong one's. **If it
 > does and that reads wrong in play, the term to move to the σ-channel is `reception` alone** — not
 > the other four, which are properties of the room and of the claim rather than of the person.
@@ -633,7 +750,7 @@ remove *from advantage levels*, and it is being accepted here for *obstacle comp
 
 | the engine already does | the study already wanted it |
 |---|---|
-| **UNIFORM LEVERAGE** on the σ-channel — `Δz = soft_cap(net_σ)` at every pool size and every TN (measured `0.874174` across pools 0.5→25 at `net_σ = 1.0`) | ⚠ **available and not used by the five terms**, which are Ob composition by ruling (§C.1). It is the channel to move `reception` into if `P-27`'s sweep says so |
+| **UNIFORM LEVERAGE** on the σ-channel — `Δz = soft_cap(net_σ)` at every pool size and every TN (measured `0.874174` across pools 0.5→25 at `net_σ = 1.0`) | ⚠ **available and not used by the four terms**, which are Ob composition by ruling (§C.1). It is the channel to move `reception` into if `P-27`'s sweep says so |
 | **THE SOFT CAP** on the σ-channel — `M_MAX·tanh(σ/M_MAX)`, `M_MAX = 1.5` | ⚠ **the design's overshoot ceiling is therefore NOT the soft cap** — it is `P-232`'s **Ob floor of 1**, which is what stops a speaker composing their way to a free win. **`S3`'s *excess of a virtue* is carried by the floor, not by the cap**, and that is a weaker guarantee: a floor binds only at the bottom, while `tanh` bites everywhere. Registered `P-28` |
 | ⭐ **THE WHOLE-SUCCESS-WIDE `Partial` WINDOW** (`0 ≤ margin < 1`) — *"what keeps Partial reachable; on point-equality Partial would essentially never fire against a fractional Ob"* | **`Partial: []` is the speech that moved nothing** — the design's most-needed band, and the fractional-Ob analysis says it only exists because the window is a whole success wide |
 | **THE 1D POOL FLOOR** — ruled 2026-09-04, *"1D is floor"*, applied to the **mean as well as the variance** | `§A.2`: *"a person who tries something they are bad at is the engine working."* **An incompetent speaker still rolls** |
