@@ -45,6 +45,21 @@ mechanical decision in the ARC/NPC corpus and following three decisions on: at s
 **2,403 forks changed nothing downstream**. Now the world diverges **100%** of the time and later
 decisions diverge **~4%**. That gap is the result.
 
+⚠ **CORRECTED 2026-09-06 — THE "2,403 CHANGED NOTHING" BASELINE IS RETRACTED AND MUST NOT BE
+RE-QUOTED AS A FINDING ABOUT THE ENGINE.** `H-117`
+(`proposals/2026-09-02-executable-architecture/hole_register.yaml`) classifies those same 2,403
+probes **INERT-BY-CONSTRUCTION**: the harness that produced them restricted **both** arms to
+`ranked[:1]`, so the alternative it flipped was already inside the engine's own budget and it
+measured a triage the engine does not perform. Re-run over all 89 runnable worlds at
+DEFAULT_FIXTURES *and* at `interactions_per_scene=1`, every arm reads **3,204 probed = 801
+NO-LIVE-WINDOW + 2,403 INERT-BY-CONSTRUCTION + 0 GENUINE** — an **empty denominator**, so no
+reconvergence rate exists at either point and one quoted from either is a ratio over zero.
+⚠ **The retraction is about RELEVANCE, not possibility** — H-117 self-corrects an earlier, stronger
+wording of its own. Those probes ran and were free to diverge; what is defensible is that the
+exclusivity was imposed by the instrument. Whether they moved the act stream is **not recoverable
+from the tree**. So the 2,403 is evidence for nothing in either direction — neither that
+propagation is dead nor that it works.
+
 Concretely: `move` and `transfer` execute for the first time (650 and 702 across the corpus,
 previously refused in every world), and success-vs-failure now leaves a trace a person can read —
 the fold records *what it looked at* rather than *that it said no*.
