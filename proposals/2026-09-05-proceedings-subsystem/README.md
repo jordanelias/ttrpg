@@ -85,7 +85,9 @@ Per `CLAUDE.md` §2 a merge ratifies PROPOSED contents *by default*, with one ex
 | `10_LOOPS_AND_GAPS.md` | six loops signed (**two unsigned, and that is a finding**) · the gap register · what is *not* a gap |
 | `11_NERS.md` | the self-audit. **N narrowed · R fails completeness · S passes with one landing · E scored last, as a ratio** |
 | `12_BUILD_ORDER.md` | twelve steps with execution artifacts, and **the three that are buildable today with no ruling** |
-| `13_ADVERSARIAL.md` | the independent passes, what they broke, and what survived |
+| **`13_ADVERSARIAL.md`** | ⭐ **the two independent passes** — ~35 findings, 12 applied, 11 registered, 12 named claims that survived a named attack. **And its own first finding is that this file was cited five times before it existed** |
+| **`14_THE_WORLD_IN_THE_ROOM.md`** | what a matter IS (the mood selects the genre) · the four worked matters · the eight nouns and their carriers · **the ABOUT-the-world ruling, which fails two of the twelve rows** · and the honest half: the belief→decision edge is **measured-severed** |
+| **`15_WHY_IT_IS_A_GAME.md`** | ⭐ **the solver, written out** — and the one change that defeats it: the obstacle must depend on what the room holds |
 
 ## Scope — the rule this exercise was under
 
