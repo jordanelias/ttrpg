@@ -3,14 +3,21 @@
 ## Status: **PROPOSED (2026-09-05). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
 
 > ### THE HEADLINE
-> **The game structure adds ZERO new verbs.** It gives a body to **four rows that exist and do
-> nothing**, and it lands **one verb the architecture already specified and the table never got**.
-> Every other act a proceeding needs is already in `verb_table.yaml`, already graded `ruled`, and
-> already doing the same job somewhere else.
+> **The game structure adds ZERO new verbs.** It gives a body to **two rows that exist and do
+> nothing**, it **corrects** a third, and it lands **one verb the architecture already specified and
+> the table never got**. Every other act a proceeding needs is already in `verb_table.yaml`, already
+> graded `ruled`, and already doing the same job somewhere else.
 >
 > **That is the test `03_VERBS_AND_LOOPS.md` §F.1 sets** — *four stages of design added no primitive*
 > — and it is the only defence against a proceedings subsystem, which is the single most tempting
 > place in this game to write thirty verbs.
+>
+> ⚠ **AND IT WAS NEARLY UNTRUE TWICE, IN THE SAME PLACE.** This design first split `the six
+> investigation acts` into five rows of its own, then — told those verbs belong to investigation —
+> moved to author a replacement in-room read verb here instead. **Jordan refused both** (2026-09-06:
+> *"authoring a verb is something that likely belongs in the main system"*). Both are withdrawn, the
+> need is **flagged to the `FI` lane** rather than met here, and §B.3 records the two corrections in
+> full because the near-miss is the load-bearing part.
 
 ---
 
@@ -20,7 +27,7 @@
 |---|---|---|---|
 | 1 | **`speak`** | `own` · `requires: "—"` · **`writes: []`** · `emits: [speech.made]` · **`grade: assumption`** | ⭐ **GIVEN A BODY AND A MEANING.** Today it is the table's emptiest row: no precondition, no write, no refusal channel, and no statement anywhere of what it is *for*. **It becomes the act of addressing a convened body on a docketed matter — and it is the verb that opens the contest.** §B.1 |
 | 2 | **`determine`** | `remit:determine` · `writes: [Tenure.degree]` · **`grade: absent`** · `requires: "a fired Date with a DocketItem; judging_set — D11, absent"` | ⭐ **GIVEN ITS `requires`.** Blocked since it was written on `Query.judging_set`, which **raises unconditionally** (`shape.py:3161-3163`). §B.2 |
-| 3 | **`the six investigation acts`** | `own` · **`writes: []`** · **ONE ROW FOR SIX ACTS** · `grade: assumption` | ⭐ **SPLIT INTO ROWS — five of six, with typed preconditions, contests and bands.** The six were already named and specified *in prose*, which Jordan's *"unless they are rows, they are useless"* correctly grades as **not existing**. §B.3 |
+| 3 | **`the six investigation acts`** | `own` · **`writes: []`** · **ONE ROW FOR SIX ACTS** · `grade: assumption` | ⚠ **UNTOUCHED — WITHDRAWN TO THE `FI` LANE (Jordan, 2026-09-06).** A draft split it into five rows *here*; that was this subsystem writing investigation's verbs. **Nothing in this proposal now resolves through any of the six.** What survives is a three-part handover — stratum, the four-band ladder, and the deposit gap — at §B.3 |
 | 4 | **`convene`** | `remit:convene` · `writes: [Date.due_at, ConveningCondition.attached]` · **`grade: ruled`** | **CORRECTED, not extended.** `scale: "settlement"` → an ordinal floor above the person tier (Jordan, 2026-09-05). `03_PARAMETERS.md` §C.1 |
 | 5 | **`release`** | ⚠ **DOES NOT EXIST IN THE TABLE.** Specified as `§A.3` row 14 of Stage 4 — *one generic `release` verb, eligibility `own`, generic over kind* — and `HANDOFF_NEXT.md` §2a records the consequence: *"`hold` is closable only by `revoke`, so **A PERSON CANNOT RESIGN AN OFFICE**"* | ⭐ **LANDED.** `ID-14` requires it — every duty a proceeding imposes must be dischargeable — and **this design cannot be `AX-6`-compliant without it** |
 
@@ -32,14 +39,14 @@ declaring its stages and terms) · `petition` (to ask) · `issue` / `comply` / `
 stay, a summons, and defiance of one) · `confer` / `revoke` (the bench's seats) · `carry` /
 `create_record` / `destroy_record` / `forge` (the record, and burning it).
 
-> **Nineteen verbs reach into a proceeding. Fourteen are untouched. `speak` and `determine` gain a
-> body, `convene` is corrected, `release` is landed, and one row is SPLIT INTO FIVE. Every name used
-> was already in the tree; NO NEW ACT IS INVENTED, and the one this design nearly invented is
-> recorded at §B.3 as the error it was.**
+> **Nineteen verbs reach into a proceeding. FIFTEEN are untouched — fourteen by reuse and one,
+> `the six investigation acts`, by withdrawal. `speak` and `determine` gain a body, `convene` is
+> corrected, `release` is landed. Every name used was already in the tree; NO NEW ACT IS INVENTED,
+> and the TWO this design nearly invented are recorded at §B.3 as the errors they were.**
 
 ---
 
-# PART B · THE FIVE, IN FULL
+# PART B · THE FOUR THIS DESIGN TOUCHES — AND THE FIFTH, WITHDRAWN
 
 ## B.1 · `speak` — *to address a convened body on a docketed matter*, and it is the contest
 
@@ -354,9 +361,9 @@ pressed is **refused, with `determine.unheard`, witnessed.**
 > checked against Jordan's intent, because if trials are wanted in one tick, the stratum roster is
 > the row to argue about, not this verb.** `10_LOOPS_AND_GAPS.md` `P-14`.
 
-## B.3 · The six investigation acts — **SPLIT INTO ROWS, because prose is not a mechanism**
+## B.3 · The six investigation acts — **NOT THIS SUBSYSTEM'S TO WRITE.** A dependency on the `FI` lane.
 
-⚠ **TWO CORRECTIONS, RECORDED RATHER THAN OVERWRITTEN, BECAUSE THE SECOND OVERTURNS THE FIRST.**
+⚠ **THREE CORRECTIONS, RECORDED RATHER THAN OVERWRITTEN, BECAUSE EACH OVERTURNS THE ONE BEFORE IT.**
 
 **First**, a draft of this section **invented a verb called `elicit`**. That was wrong: the six are
 already named and specified in `proposals/`, and inventing a seventh name for one of them is
@@ -374,169 +381,91 @@ So the six do not exist**, and citing them as though they did would have been th
 mechanism it had only read about. `HANDOFF_NEXT.md` §2b says the same thing and calls it *the real
 backlog*: **split into six rows with writes.**
 
-### B.3.1 · What the prose supplies, and what it does not
+**Third — and this is the one that governs, RULED BY JORDAN 2026-09-06.** The second correction was
+right about *what the six need* and wrong about *whose job it is*. This proposal answered "they must
+be rows" by writing five rows **here**, inside a proceedings subsystem. Jordan:
 
-*(`proposals/2026-08-31-unified-code-shape/08_FUNCTION_SURFACE.md` §3.3, citing `KTI:526-531`;
-indexed at `proposals/2026-08-31-throughlines.md:413`.)*
+> ### **"the five investigation rows and so forth are verbs for investigating... they don't make sense being remade into some function for this social subsystem when we can just create the correct verb for the subsystem instead."**
 
-| act | contests | produces | cost / risk |
-|---|---|---|---|
-| `examine` | *vs* `retention` | `firsthand` facets still persisting | **you are witnessed examining** |
-| **`interview`** | *vs* obstinacy | **their `SAID` row — which may be a lie** | **they learn what you are asking**, and can tell others |
-| `research` | *vs* the record's silence | `told_by(record, …)` with verified rootprints | access is an **admission gate held by persons with stances** |
-| `surveil` | *vs* concealment | `firsthand` over the interval | duration; **exposure accrues to you** |
-| `reconstruct` | *vs* the gap in the evidence | `inferred` claims and root identification | **a WRONG reconstruction deposits at real confidence and is acted on** |
-| `Thread-Read` | — | rendering-side facets | Coherence risk; **claims most people cannot be told** |
+**So the five drafted rows are WITHDRAWN from this proposal.** They were `examine`, `interview`,
+`research`, `reconstruct` and `surveil` with typed preconditions in `§F.24a`'s seven-form grammar;
+they are at `FORK`-equivalent in this branch's history (`git log -p 04_VERBS.md`) and nowhere else.
+Nothing in `05_PROCEDURE.md`, `06_RESOLUTION.md` or `03_PARAMETERS.md` resolves through them.
 
-*(The source's fifth column named a pool per act. It is struck, per the ruling above; the obstacle
-side of each contest is kept, because it is a property of the world rather than of a stat roster.)*
+**And the follow-on — authoring the replacement here was ALSO refused, by Jordan, in the same
+exchange:** *"because authoring a verb is something that likely belongs in the main system, right? so
+maybe we have to flag this."* A draft of this design was about to land an in-room read verb to cover
+what `interview` had been covering. **It is withdrawn too, and flagged instead.** A subsystem
+proposal may state that a verb is needed and say precisely what shape it must have; it may not add
+one to the roster. That is `PART A`'s headline holding under pressure rather than being argued
+around: **the game structure adds ZERO new verbs, and this is the place it nearly stopped being
+true.**
 
-⚠ **THE POOL COLUMN IS NOT ADOPTED — RULED BY JORDAN, 2026-09-05: *"ignore their use of
-attributes."*** *Acuity · Charisma · Attunement · Focus · Agility · Will · Thread Pool* is an
-attribute vocabulary from another exercise, and the roster it belongs to is **not settled**:
-`CLAUDE.md` §5 records the derived-stat schema as **IN FLUX**, with the count ruled at ten, the
-registry shipping nine, and **the tenth unnamed**. Adopting six pool expressions off a roster in that
-state would be `ID-12`'s failure — branching on the members of a set that is still being decided —
-and it would put this proposal's rows on a foundation somebody else is still pouring.
+### B.3.1 · What is handed to `FI`, and what this design binds itself to
 
-> **What is taken from the table is the NAME, the PRODUCT and the COST of each act. What is taken from
-> the pool column is nothing.** Every row below therefore says what it contests **and not what it
-> contests with**; `capability` supplies the dice, its keys are content by `ID-12`, and this design
-> names none of them (`06_RESOLUTION.md` PART B, registered `P-06`).
+Three things survive the withdrawal, and they are handed over rather than discarded. **`ED-SC-0036`
+carries them; `registers/handoffs/HANDOFF_SC.md` carries the cross-lane note.**
 
-**So the table supplies a product and a cost. It supplies NO `requires` for any of the six** — which
-is precisely why the live row's note refuses to type the cell: *"typing it would mean inventing six
-preconditions."*
-
-> ### **THAT REFUSAL WAS CORRECT WHEN THE ONLY OPTION WAS INVENTION. IT IS NO LONGER THE ONLY OPTION.**
-> `§F.24a` derived a **seven-form grammar** from the 32 live cells *after* that note was written.
-> **Five of the six preconditions are expressible in it without inventing anything** — each falls out
-> of the act's own stated product or cost. **The sixth is not, and is registered rather than forced.**
-
-### B.3.2 · The five rows
-
-⚠ **THE STRATUM IS THE SOURCE ROW'S, NOT THIS DESIGN'S.** `verb_table.yaml:491` carries
-`stratum: "contested_physical"` for `the six investigation acts`, and a draft of this section silently
-wrote `social` on all five. **`rosters.yaml` says the strata are ordered semantically and that
+**(a) The stratum is the SOURCE ROW's, and moving it is a game change.** `verb_table.yaml:491` carries
+`stratum: "contested_physical"` for `the six investigation acts`, and the withdrawn draft had silently
+written `social` on all five. `rosters.yaml` says the strata are ordered semantically and that
 *"editing the order changes which acts see which world — that is a game change"*, so moving five acts
-two strata later is a game change, unstated.** Kept at `contested_physical`. **The consequence is
-worth naming: investigation resolves BEFORE speech in the same season, so what an `examine` finds can
-be `tell`-ed at a hearing in the season it was found.** Under the draft's `social` it could not have
-been.
+two strata later is a game change, unstated. **The consequence is worth naming for whoever writes the
+rows: at `contested_physical`, investigation resolves BEFORE speech in the same season, so what an
+`examine` finds can be `tell`-ed at a hearing in the season it was found.** Under `social` it could
+not have been. **This subsystem has a stake in that ordering, and the stake is stated rather than
+assumed:** every proof reaching a hearing arrives by `tell`, which resolves at `social`. So long as
+the six sit earlier in the order, a proof found this season can be produced this season. **If `FI`
+moves them to `social`, that same-season path closes and a proceeding can only ever hear last
+season's findings** — a different game, and a defensible one. **Flagged, not decided here.**
 
-```yaml
-- verb: "examine"
-  stratum: "contested_physical" · eligibility: ["own"]
-  requires: "the actor is present where the thing examined is"
-  requires_typed: { form: path, of: subject, kind: contain }          # form 3
-  contests: "what persists"                                          # vs `retention`
-  writes:  { Found: [], Partial: [], Nothing: [] }
-  emits:   { Found: ["facet.found"], Partial: ["facet.found"], Nothing: ["facet.none"] }
-  emits_on_refusal: ["examine.impossible"]
-  grade: "assumption"
-  # COST — "you are witnessed examining" — NEEDS NOTHING. The act emits at a venue; whoever is
-  # co-located deposits a claim that you were looking. AX-2 + WITNESS, at zero cost.
+**(b) Whatever the rows band, they band on the ONE LADDER.** The withdrawn draft gave each act a
+bespoke three-band result (`Found` / `Partial` / `Nothing`; `Read` / `Misread` / `Nothing`). **That is
+a `T-k` violation and it was this design's own defect, not the source's.** `06_RESOLUTION.md` §C.1
+holds that there is one ladder, `degree_from_net`, and it has **four** bands — Overwhelming ≥ 3,
+Success ≥ 1, Partial 0 ≤ m < 1, Failure < 0. A verb that reports three has either merged two bands
+without saying which, or invented a fifth. **Handed to `FI` as a constraint on the rows, not as a
+preference.**
 
-- verb: "interview"
-  stratum: "contested_physical" · eligibility: ["own"]
-  requires: "the actor and the subject are present at the same venue"
-  requires_typed: { form: path, of: subject, kind: contain }          # form 3
-  contests: "a disposition"                                          # vs obstinacy -- OWNED BY
-                                                                     # `composure` as of 2026-09-06,
-                                                                     # 06_RESOLUTION.md §B.1d
-  writes:  { Read: [], Misread: [], Nothing: [] }
-  emits:   { Read: ["said.given"], Misread: ["said.given"], Nothing: ["said.withheld"] }
-  emits_on_refusal: ["interview.impossible"]
-  grade: "assumption"
-  # COST — "they learn what you are asking" — NEEDS NOTHING, and it is the same mechanism:
-  # the SUBJECT is co-located by the precondition, so they always witness the asking.
+**(c) The rows cannot deposit what they find, and that is upstream of both lanes.** Every draft row
+carried `writes: []`, because what an investigation produces is a **claim**, and claims are deposited
+at **WITNESS**, not written at RESOLVE — which is why `tell` writes nothing either (*"deposits at
+WITNESS, not here"*). So the rows would emit a degree that nothing consumes, which is `ID-13`. The
+mechanism that would carry a degree into a deposit is `observation_deposit_modes` / `H-122`, **open**.
+Registered `P-05`. **This is not an `FI` defect and not an `SC` defect; it blocks both, and it is the
+same gap `06_RESOLUTION.md` §C.4 hits from the speech side.**
 
-- verb: "research"
-  stratum: "contested_physical" · eligibility: ["own"]
-  requires: "the actor holds a live admission to the archive"
-  requires_typed: { form: existence, of: subject, kind: Tenure }      # form 1 — an `oblige` or `hold`
-  contests: "what the record holds"
-  writes:  { Found: [], Partial: [], Nothing: [] }
-  emits:   { Found: ["record.read"], Partial: ["record.read"], Nothing: ["record.silent"] }
-  emits_on_refusal: ["research.unadmitted"]
-  grade: "assumption"
-  # ⭐ "EVERY GATE IS A PERSON, SO EVERY GATE HAS A PRICE AND A GRIEVANCE" — the source's own words,
-  # and the admission is an EDGE, so the three routes around it (interview an archivist, use a deep
-  # channel, steal) are already three existing verbs. No gate mechanism is added.
+### B.3.2 · What this subsystem uses instead, in the meantime
 
-- verb: "reconstruct"
-  stratum: "contested_physical" · eligibility: ["own"]
-  requires: "the actor holds claims bearing on the subject"
-  requires_typed: { form: own_ledger, of: subject }                   # form 6 — `tell`'s own form
-  contests: "what can be inferred"
-  writes:  { Sound: [], Wrong: [], Nothing: [] }
-  emits:   { Sound: ["inference.made"], Wrong: ["inference.made"], Nothing: ["inference.none"] }
-  emits_on_refusal: ["reconstruct.groundless"]
-  grade: "assumption"
-  # ⭐ `Sound` AND `Wrong` EMIT THE SAME KIND. "A WRONG reconstruction deposits at real confidence
-  # and is acted on." This is the purest AX-2 act in the game and the one most worth building first.
+**Nothing, and it does not need to.** The two places a proceeding wanted an investigation act are
+`PART D` rows 3 and 4 — *find who decides* and *what may not be said* — and both are **reception**,
+which this design already resolves without a verb:
 
-- verb: "surveil"
-  stratum: "contested_physical" · eligibility: ["own"]
-  requires: "the actor is present at the place, for a declared interval"
-  requires_typed: none
-  requires_typed_note: >-
-    form 3 for the place, AND a declared interval, which is `T-n` — the opening act declares its
-    term. ⚠ `Tenure` HAS NO `term` FIELD in the tracer (`shape.py:2066-2091`), so the second half
-    is UNTYPABLE TODAY. Registered `P-04`; the row is written and the cell is honest.
-  contests: "what is done unseen"                                    # ⭐ the pool term is `composure`,
-                                                                     # NOT perception: the hard part of
-                                                                     # watching is STAYING (§B.1a)
-  writes:  { Seen: [], Glimpsed: [], Nothing: [] }
-  emits:   { Seen: ["watch.kept"], Glimpsed: ["watch.kept"], Nothing: ["watch.empty"] }
-  emits_on_refusal: ["surveil.impossible"]
-  grade: "assumption"
-  # COST — "exposure accrues to you" — is the duration: a longer term is more occasions on which
-  # somebody co-located deposits a claim that you were there. Again, WITNESS, at zero cost.
-```
+- `06_RESOLUTION.md` §B.1c makes `discernment` the fidelity of the read. **Read #1 is "WHO decides",
+  narrowed 2026-09-06**, and it is answered by the fog, not by an act. A low-`discernment` character
+  gets a noisy answer; they do not get a failed `interview`.
+- `reception` and the rung supply "what may not be said" as an **obstacle term** (§C.1), which is a
+  property of the room rather than a fact a player extracts.
 
-### B.3.3 · The sixth is NOT written, and that is the honest state
+**So the withdrawal costs this subsystem nothing.** What it costs is the *out-of-room* half — going
+and finding a proof before the hearing — and that half was always `FI`'s, which is the point Jordan
+was making. `PART D`'s third column is corrected accordingly below.
 
-**`Thread-Read` gets no row here.** Its risk is *Coherence*, which this design does not touch, and its
-obstacle is not a property of the world but of a rendering layer this proposal has not derived.
-**Writing a row that refers to a mechanism this proposal has not derived would be exactly the
-invention the live note refuses.** Registered:
-`10_LOOPS_AND_GAPS.md` `P-19`, graded `absent`, **with no default.**
+⚠ **ONE SOCKET STAYS REFUSED, AND NOW FOR A SECOND REASON.** `Thread-Read` — the sixth act, which
+this design never drafted (`P-19`, graded `absent`, **no default**) — has **Coherence risk** as its
+cost, and `(Person, coherence)` is the one matrix row the gate licenses to a `driver="Seam"`
+(`shape.py:2829-2836`). `00_DERIVATION.md` PART C refuses that socket because a seam that writes has
+begun to own. **The refusal now has a better reason than the principled one: the field is already
+spoken for.**
 
-⭐ **AND ITS EXISTENCE EXPLAINS A SOCKET THIS DESIGN DECLINED TO TAKE.** `Thread-Read`'s cost is
-**Coherence risk** — which is why `(Person, coherence)` is the one matrix row the gate licenses to a
-`driver="Seam"` (`shape.py:2829-2836`), and why `F.5` asks what reads it. **That socket belongs to
-Thread-Read.** `00_DERIVATION.md` PART C refuses it because a seam that writes has begun to own; **the
-refusal now has a second and better reason — the field is already spoken for.**
-
-### B.3.4 · Why this belongs in a proceedings proposal at all
-
-Because **row 4 of the requirement table is TERMINAL and `interview` is the only act that clears it.**
-
-| the study says | the act already said it |
-|---|---|
-| `S5` — **the read is MADE, not taken.** Perspective-*getting* is the one positive result in twenty-five experiments; perspective-*taking* raised confidence without accuracy | it is contested **against the other person**, so the read is produced by acting on them |
-| the *Guiguzi* loop — *draw the other party out; provoke a reply, because the reply reveals; if it does not fit, say the opposite and listen again* | the product is **their `SAID` row**, not a fact about them |
-| Han Feizi 12 — *the divided motive*, where **both the stated and the operative motive are unsafe to address** | ⭐ **the cost is that they learn what you are asking** |
-
-⚠ **AND THE SOURCE'S OWN FRAME IS THE ONE THIS DESIGN NEEDED AND WOULD OTHERWISE HAVE ARGUED FOR:**
-*"Every one is available to any person; the substrate's rule that action eligibility never consults
-office binds here without exception — the detective seat is not a seat, it is six acts anyone may
-take"*, and *"there is no clue counter, no case object, no investigation skill, and no threshold
-anyone sets."* **That is `§A.2` and `§A.3` stated from the other side, by somebody who was not writing
-a proceedings subsystem** — which is corroboration rather than a source.
-
-⚠ **THE ONE DEFECT THE SPLIT DOES NOT FIX, AND IT IS THIS PROPOSAL'S LARGEST.** All five rows carry
-`writes: []`, because what an investigation produces is a **claim**, and claims are deposited at
-**WITNESS**, not written at RESOLVE — which is why `tell` writes nothing either (*"deposits at WITNESS,
-not here"*). **So five verbs emit a degree that nothing consumes**, which is `ID-13` on rows this
-proposal is itself adding — the half `HANDOFF_NEXT.md` says sessions forget. The mechanism that would
-carry a degree into a deposit is `observation_deposit_modes` / `H-122`, **open**. Registered `P-05`.
-
-> ### **SO THE HONEST HEADLINE FOR THIS SECTION IS NARROWER THAN "THE SIX ARE LANDED".**
-> **Five of six become rows with typed preconditions, contests and bands. None of the five can yet
-> deposit what it found.** The split is necessary and is not sufficient, and saying so is the
-> difference between this and a document that claims discovery works.
+⚠ **AND THE POOL COLUMN IS STILL NOT ADOPTED, BY ANY LANE, ON THIS DESIGN'S EVIDENCE — RULED BY
+JORDAN 2026-09-05: *"ignore their use of attributes."*** *Acuity · Charisma · Attunement · Focus ·
+Agility · Will · Thread Pool* is an attribute vocabulary from another exercise, and the roster it
+belongs to is **not settled**: `CLAUDE.md` §5 records the derived-stat schema as **IN FLUX**, with the
+count ruled at ten, the registry shipping nine, and **the tenth unnamed**. Adopting six pool
+expressions off a roster in that state would be `ID-12`'s failure — branching on the members of a set
+that is still being decided. **Recorded here because the withdrawn rows obeyed it and their successor
+should too**, not because this subsystem still has a claim on the question.
 
 ## B.4 · `convene` — corrected, not extended
 
@@ -610,8 +539,8 @@ the verbs are the right ones** — and the interesting result is the third colum
 | **0** whether to enter at all | **no verb** — not taking `move` | ⭐ **TERMINAL, and free.** The largest lever in the corpus is the absence of an act |
 | 1 audit one's own standing | **no verb** — `standing` is a Query the player is shown of their own character | reception, not action |
 | 2 classify the body | **no verb** — a claim the person holds, which **may be false** | `AX-2`. A wrong classification is a story |
-| 3 find who decides | **`interview`**, or `tell` from someone who knows | the judging set is resolver-side and **unreadable from a decision** |
-| **4** what may not be said | **`interview`** | ⭐ **TERMINAL, and the one evidenced capacity** |
+| 3 find who decides | ⭐ **no verb — `discernment`, in-room.** Out of the room: an `FI` act, or `tell` from someone who knows | the judging set is resolver-side and **unreadable from a decision**, so the fog answers it (`06_RESOLUTION.md` §B.1c read #1) rather than an act |
+| **4** what may not be said | ⭐ **no verb — `reception` + the rung, as an obstacle term** (§C.1). Out of the room: an `FI` act | ⭐ **TERMINAL, and the one evidenced capacity.** ⚠ **Its clearing verb was `interview` until 2026-09-06; that citation is withdrawn with §B.3's rows** |
 | 5 inventory the proofs | **no verb** — the claims in one's own ledger | the mirror test is the player's reasoning |
 | 6 fix the concession in advance | **no verb** — deciding what one will `release` before entering | prior specification under low arousal |
 | 7 choose a register | **a parameter of the act**, admissible per `arrangement.registers` | Fig. 8 |
@@ -623,11 +552,19 @@ the verbs are the right ones** — and the interesting result is the third colum
 | 13 attack | **`speak`** with a person subject, under Fig. 26's four conjuncts | §B.4 of `03_PARAMETERS.md` |
 | **14** close, leaving a way down | **`release`** | ⭐ **TERMINAL for the relationship** |
 
-> ### **SIX OF THE FIFTEEN ARE CLEARED BY NO VERB AT ALL, AND THAT IS THE RESULT RATHER THAN A GAP.**
-> Rows 0, 1, 2, 5, 6 and 10 are **things a person holds or declines to do**. They are not inert: they
-> decide which Candidates form and which the player takes. **And two of the three TERMINAL rows are in
-> that group** — row 0 is not acting, and row 4 is the one act nobody else in the game has a reason
-> to take.
+> ### **EIGHT OF THE FIFTEEN ARE CLEARED BY NO VERB AT ALL, AND THAT IS THE RESULT RATHER THAN A GAP.**
+> ⚠ **This read SIX until 2026-09-06.** Rows 3 and 4 joined the group when §B.3's investigation rows
+> were withdrawn to the `FI` lane: **in the room, neither is an act any more.** Row 3 is answered by
+> `discernment`'s fidelity and row 4 by the obstacle's `reception` term. Out of the room they are
+> still `FI`'s to clear, and a player who has done that work arrives holding proofs — **which is the
+> correct division and not a loss.** `06_RESOLUTION.md` §B.1c banks the corrected figure; anything
+> still citing six is stale.
+>
+> Rows 0, 1, 2, 3, 4, 5, 6 and 10 are **things a person holds, reads, or declines to do**. They are
+> not inert: they decide which Candidates form and which the player takes. **And two of the three
+> TERMINAL rows are in that group** — row 0 is not acting, and row 4 is now read rather than taken,
+> which is a sharper version of the same point: *the step the corpus says matters most has no act in
+> it at all.*
 >
 > **This is `S7` reproduced mechanically without having aimed at it.** The study's finding is that the
 > corpus says least about exactly the steps that matter most, because they are the steps for which no

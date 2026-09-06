@@ -253,8 +253,12 @@ perfectly.** That is player skill substituting for character skill, and it is no
 >
 > **Why no draw, and it is the design's own answer:** `§C.5` — *"a design that rolled for whether you
 > noticed the room would be modelling the half of the variance that is not there."* And `04_VERBS.md`
-> banks that **six of the fifteen steps are cleared by no verb at all, and that is the result rather
-> than a gap** — rows 1, 2 and 5 are precisely reading the room.
+> banks that **EIGHT of the fifteen steps are cleared by no verb at all, and that is the result rather
+> than a gap** — rows 1, 2 and 5 are precisely reading the room. ⚠ **The figure was SIX until
+> 2026-09-06**, when `04_VERBS.md` §B.3 withdrew the investigation rows to the `FI` lane and rows 3
+> and 4 joined the group. **That withdrawal is what makes this section load-bearing rather than
+> merely elegant:** with no `interview` here, `discernment` is the ONLY in-room answer to *who
+> decides*, so read #1 is no longer one convenience among several.
 >
 > **Cost: one magnitude**, plus a dependency this subsystem already had (the product column, `P-05`).
 > ⚠ **A turn-spending *look harder* act is a defensible different game.** It is closed rather than

@@ -33,11 +33,24 @@ person set on a shorter clock.* It runs **inside the seam**, opened by a `speak`
 `contests: "a matter"`.
 
 ```
-seam.proceed(proj, venue, matter, arrangement, attendees, depth, max_depth) -> Margin
+proceedings.run(proj, place, claimants, depth, max_depth) -> Margin
+  -- ⚠ SIGNATURE CORRECTED 2026-09-06, AND IT IS NOW THE SAME STRING AS `08_SEAM.md` PART A.
+  --   A draft of this file wrote `seam.proceed(proj, venue, matter, arrangement, attendees,
+  --   depth, max_depth)` -- THREE parameters the provider contract does not carry, under a
+  --   name the seam does not have. Two files in one proposal spelled the entry point two
+  --   ways, which is `T-k`'s defect one level up: one thing, one signature.
+  --   `venue` IS `place`; `attendees` ARE `claimants`; `matter` and `arrangement` are READ
+  --   OFF the projection, because they are facts about the convened body rather than things
+  --   a caller supplies. `prize` is consumed by `seam.contest` to SELECT this provider and
+  --   is not passed on -- a provider that read its own prize could branch on it.
   depth < max_depth                     or return Refusal(depth_cap)      -- NO DEFAULT (H-87)
-  roster = resolve_once(proj)                                            -- §C.5.1, FROZEN at entry
-  repeat until nobody acts, or the declared term matures:
-      ORDER    the attendees, per arrangement.order                       -- THE PROCEDURE
+  arrangement = data.arrangements[ occasion_at(proj, place).arrangement ] -- a ROW, read at load
+  bench       = judging_set(proj, place, matter)                          -- a Query. §B.2
+  attendees   = present_at(proj, place)                                   -- RESOLVED ONCE, then
+                                                                          --   FROZEN for the run
+  term        = the opening act's declared term, or NONE                  -- T-n. §B.1
+  repeat until nobody acts, or `term` matures:
+      ORDER    `attendees`, per `arrangement.order`                       -- THE PROCEDURE
       for each, in that order:
           the person forms candidates from WHAT THEY HOLD                 -- AX-2. No World.
           the act resolves against the world its predecessors left        -- the ordered fold
@@ -50,7 +63,7 @@ seam.proceed(proj, venue, matter, arrangement, attendees, depth, max_depth) -> M
 | property | construction | grade (Py / GD) |
 |---|---|---|
 | the proceeding writes nothing | **the wrapper holds no token** (`§A.2`) | **STRUCTURAL / MECHANICAL** — GDScript needs a copy or a lock (`D-49`) |
-| the roster cannot change mid-proceeding | resolved once from the projection, `§C.5.1` | STRUCTURAL by lifetime |
+| the roster cannot change mid-proceeding | `attendees` is resolved once from the projection at entry and never re-read; the projection itself is read-only, so there is nothing that could change it | STRUCTURAL by lifetime |
 | an appeal terminates | `max_depth`, caller-supplied, typed `Refusal` at the cap | MECHANICAL |
 | nobody reads world truth | each turn forms candidates from a `PersonInterior` | STRUCTURAL by signature |
 | the order is the arrangement's | one sort, at one site, keyed on a data value | **MECHANICAL** — and see `08_SEAM.md` §3 |
@@ -60,7 +73,7 @@ seam.proceed(proj, venue, matter, arrangement, attendees, depth, max_depth) -> M
 | ending | mechanism |
 |---|---|
 | **nobody acts** | every attendee forms no candidate, or takes none. **A proceeding everybody abandons lapses** — and *a hearing nobody pressed* is a legitimate outcome, exactly as an undecided fight is |
-| **the declared term matures** | `T-n` — the opening act declared it; MATTER matures it, citing the act that wound it. ⚠ **Unbuilt: `Tenure` has no `term`** (`P-04`) |
+| **the declared term matures** | `T-n` — the opening act declared it; MATTER matures it, citing the act that wound it. ⚠⚠ **THE CARRIER IS UNDER REVIEW, NOT SETTLED** — see the flag below the table |
 | **the depth cap** | a typed `Refusal`, never a raise. An appeal chain that exhausts itself |
 | **the matter reaches the foot of the ladder** | the rungs are finite; below *quality* there is nothing to concede |
 
@@ -77,10 +90,32 @@ spending, and the term somebody declared.**
 > ⭐ **a clock a PERSON wound**, which is precisely what the theorem requires rather than what it
 > forbids — and a draft of this file read the theorem as banning the very thing that satisfies it.
 >
-> **The carrier already exists and costs nothing new.** `T-n` says the opening act declares the terms;
-> `Tenure.term` — the one new field in `19_PLAN.md` — carries `matures_at`, `declared_by` and
-> `closer`. **A time limit is a term declared by the presiding seat, and it matures citing the act
-> that wound it.** No new machinery, and it is the same shape as the depth cap.
+> **The carrier is proposed, not settled, and this sentence is weaker than the one it replaces.**
+> `T-n` says the opening act declares the terms; `Tenure.term` — the one new field in `19_PLAN.md` —
+> would carry `matures_at`, `declared_by` and `closer`. ⚠ **Two of those three are struck below.** **A time limit is then a term declared by the
+> presiding seat, and it matures citing the act that wound it**, which is the same shape as the depth
+> cap.
+>
+> ⚠ **WHY IT IS FLAGGED RATHER THAN BANKED (2026-09-06).** A draft here wrote *"the carrier already
+> exists and costs nothing new."* **It does not exist** — `shape.py:2066-2091` shows `Tenure` with no
+> `term` field — and *costs nothing* was doing the work of an argument. This is the only new field in
+> the whole proposal, so it is the one place `PART A`'s zero-primitive claim is spent, and it should
+> be spent knowingly:
+>
+> | the question | state |
+> |---|---|
+> | **is a term a property of the TENURE, or of the DOCKET ITEM?** | ⚠ **open.** A presiding seat's *"this hearing closes at sunset"* binds the sitting, not the seat — which argues for `DocketItem`. `Tenure` was chosen because `declared_by` and `closer` want a person and a seat, and `Tenure` already has both. **Neither is obviously right and the choice is not this file's to make alone** |
+> | **does anything OTHER than a proceeding want it?** | **yes, and that is the argument for the field.** Any duty with a horizon — a surety, a term of service, a stay — matures the same way. A field only a proceeding reads would be this subsystem growing the shared shape for itself, which is `ID-2` |
+> | **could a declared term be an existing `Date` instead?** | ⚠ **not examined.** `convene` already writes `Date.due_at`, and a maturing Date is machinery that exists. **If it can, the proposal's new-field count goes to ZERO** — which is worth an hour before the field is built |
+> | ⚠⚠ **is `declared_by` the field the tracer DELETED three days ago?** | ⭐ **almost certainly yes, and this is the sharpest of the four.** `shape.py:2074-2083` deletes `Tenure.conferrer` (2026-09-03) for occurring exactly once and reaching no reader — `ID-13` — **and gives the reason a replacement must answer:** *"WHAT CONFERRED a Tenure is the opening Act, in an append-only log with `causes[]`. A field here would be a second home for a fact the act already holds — `ID-2`."* **`declared_by` is `conferrer` under a new name.** The act that wound the clock is already in the log. **And `closer` goes the same way for the same reason** — the tracer's own note says WHO MAY REVOKE is the Seat's declared `revocation` basis (`T-o`), not a field, and `T-m` already holds that closure is ownership. **So the field, if it is built at all, is `matures_at` and nothing else: ONE column, not three** |
+>
+> ⚠ **AND `Tenure` ALREADY HAS `until`, WHICH A READER WILL REACH FOR AND WHICH IS NOT THIS.**
+> `shape.py:2072` — `until: Optional[int]`, and `live` is `until is None`. **It records when the edge
+> CLOSED, not when it is due to.** Writing a future value into it makes the tenure dead on arrival.
+> Named here because the resemblance is close enough to cost somebody an afternoon.
+>
+> **Registered `P-04`. Do not build the field on this document's say-so** — and if it is built, build
+> it at ONE column.
 >
 > ⭐ **AND IT IS A BETTER GAME, NOT A CONCESSION.** A declared limit is *a thing somebody set and
 > somebody can be reached about*: you may **petition to extend it**, **run it out deliberately** while
