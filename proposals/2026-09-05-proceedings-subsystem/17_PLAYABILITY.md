@@ -230,6 +230,32 @@ did the damage, and an adjudication that says what — if anything — is left t
 > `apt_rung` **is** promised at `04_VERBS.md:144-148` and does not exist in data. Authoring it is
 > content, costs nothing, and is needed by the design as it already stands.
 
+### D.1a · ⛔ **CORRECTED 2026-09-06 — I KILLED THE MECHANISM ALONG WITH THE POSITION, AND ONLY THE POSITION DESERVED IT**
+
+> **Jordan:** *"you can have someone choose the 'wrong' action and roll against a higher obstacle but
+> still succeed, which means that the entire proceeding has pivoted from its deterministic flow for
+> what is optimal by being subverted. finally you can have a character roll against the obstacle of
+> the right choice as per flow chart and still fail!"*
+
+**The four attacks above are all sound and none of them touches the mechanism.** They kill P1's
+*premise* (it misstated current behaviour), its *delivery channel* (it destroyed its own), its
+*subtraction* (the conjunct was never in the row), and one *citation*. **What none of them shows is
+that pricing an inapt speech is wrong** — and it is right, for a reason neither the position nor I
+gave:
+
+⭐ **`03_PARAMETERS.md:133` celebrates Demosthenes *"winning by refusing the frame"* as this design's
+best worked case, and the rule as written REFUSES that speech.** A design cannot forbid a move and
+cite winning by it as its showcase. That is a contradiction inside the directory, and the aptness
+term is what resolves it.
+
+**And the defence of the refusal survives in better shape.** `04_VERBS.md` §B.1.2 argues *a refusal
+EMITS and a weight does not — the player is witnessed committing a category error.* **So does a
+failure**: `matter.turned` fans out to every ledger in the room. The public category error is
+delivered by the band and does not need the gate.
+
+**Landed** at `04_VERBS.md` §B.1 — and it is one prose deletion plus one obstacle term, because the
+schema never refused in the first place.
+
 ---
 
 ## D.2 · P2 · The finding carries a strength · ⛔ **BROKEN — material**
@@ -829,6 +855,31 @@ binary told them.**
 > WITHOUT player involvement."* **That defence needs no player legibility at all and it is sound.**
 > The document instead claims eleven-of-twelve estimability, **an uninstrumented number with no
 > control (`§0.1` point 4) defending the most expensive claim in the file.**
+
+> ### ⛔ **CORRECTED 2026-09-06 — I JUDGED THE OBSTACLE BY THE WRONG CRITERION, AND THE VERDICT ABOVE IS NARROWED.**
+>
+> > **Jordan:** *"if you have a character roll a pool against an obstacle, then you can have someone
+> > choose the 'wrong' action and roll against a higher obstacle but still succeed … finally you can
+> > have a character roll against the obstacle of the right choice as per flow chart and still fail!"*
+>
+> **Everything above measures whether a player can SOLVE the obstacle. That is not what it is for.**
+> The obstacle exists so the proceeding **cannot** be solved: so the flowchart's right answer is not
+> guaranteed and its wrong answer is not foreclosed. **Under that criterion, unrecoverable magnitude
+> is the mechanism working, not noise.** A player who could recover the coefficients would be back to
+> a solved line, which is precisely what `15` PART A warns about.
+>
+> **What survives of the section, and it is the part that matters:** uncertainty alone gives a slot
+> machine. What makes it a game is that the four outcomes must be **mechanically distinct states** —
+> and Jordan's own question found the hole: *what does a Partial bring forward that a failure or a
+> success doesn't?* **Under the row as it stood, nothing.** `Partial` wrote no state and moved no
+> rung, so the middle band was emptier than the bottom one. **Fixed at `04_VERBS.md` §B.1 (vii):
+> `Partial` writes `DocketItem.matter` and emits `docket.formed` — the matter stays put and the
+> DOCKET GROWS**, which is the one outcome neither victory nor defeat produces.
+>
+> **So the three counts above stand as arithmetic and fall as a verdict.** The primitive count is
+> still false on the seam axis; the magnitude accounting is still incomplete; **but "the twelve-term
+> obstacle is a decorative gradient" was judged against a criterion the design never adopted, and is
+> withdrawn.**
 
 ---
 

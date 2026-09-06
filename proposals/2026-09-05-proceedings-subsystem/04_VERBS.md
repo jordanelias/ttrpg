@@ -68,12 +68,12 @@ stay, a summons, and defiance of one) · `confer` / `revoke` (the bench's seats)
   writes:
     Overwhelming: ["Person.stance"]
     Success:      ["Person.stance"]
-    Partial:      []
+    Partial:      ["DocketItem.matter"]     # ⭐ CORRECTED 2026-09-06 — was []. See (vii)
     Failure:      ["Person.stance"]         # ⚠ an ADVERSE write. See (v)
   emits:
     Overwhelming: ["matter.carried"]
     Success:      ["matter.advanced"]
-    Partial:      ["matter.held"]
+    Partial:      ["matter.held", "docket.formed"]   # ⭐ the question MULTIPLIES
     Failure:      ["matter.turned"]
   emits_on_refusal: ["speech.unheard"]
   grade:       "assumption"
@@ -113,7 +113,7 @@ verb with a meaning instead of a verb with a gap.
 
 **(iii) `contests: "a matter"` makes the proceeding ONE act at the season scale.** See §C.
 
-**(iv) `Partial: []` is a lawful empty write, and it is the difference between a refusal and a loss.**
+**(iv) ⛔ SUPERSEDED 2026-09-06 — `Partial: []` was NOT lawful here, and (vii) below replaces it.** ~~`Partial: []` is a lawful empty write, and it is the difference between a refusal and a loss.~~
 `§C.4`: *the act still emits, so the attempt happened, was witnessed, and cost a scene.* **A speech
 that moved nothing is not the same as a speech that was never made** — and in a game about overshoot,
 that distinction is most of the point. ⚠ **A draft called this *"the one lawful empty write"*; it is
@@ -127,6 +127,73 @@ stance when it does. **This is the mechanical home of the corpus's whole fault c
 turnable opening, the joke that costs the speaker his dignity, the detailed denial that reads as
 anxiety. **A ladder whose bottom band wrote nothing could not express the study's central finding**,
 and the one ladder's `Failure` is exactly the adverse band the coined `Turned` was reaching for.
+
+**(vii) ⭐ WHAT A `Partial` BRINGS FORWARD — THE QUESTION MULTIPLIES (Jordan, 2026-09-06).**
+
+> *"what does a partial bring forward mechanically that a failure or success doesn't?"*
+
+**Under the row as it stood, nothing.** `Partial` was the only band that wrote no state and moved no
+rung — `matter.held` and an empty write. `Failure` at least turns the matter and writes an adverse
+stance. **So the middle band was strictly emptier than the bottom one**, which is the classic dead
+middle band and it is worse than having three bands.
+
+**And a weaker Success is not the answer either.** If `Partial` is *"you moved it, but less far"*, it
+sits on the same axis as the two bands above it and adds no state. **A middle band earns its place
+only by being OFF that axis** — a state neither winning nor losing produces.
+
+> ### **`Partial` WRITES `DocketItem.matter` AND EMITS `docket.formed`. THE MATTER STAYS WHERE IT IS
+> AND THE DOCKET GROWS.**
+> You did not move the matter. **You made the room take up something that was not before it.** That is
+> what a held matter does in every real proceeding — it is referred, adjourned, or answered with a
+> subsidiary question — and it is the one outcome neither `Overwhelming` nor `Failure` can produce.
+> Mechanically it is a **detour**: the proceeding now has more to get through, and somebody put it
+> there on purpose or by accident.
+
+**It costs nothing new.** `(DocketItem, matter)` is a live `[CAL, RES]` matrix row emitting
+`docket.formed` (`write_matrix.yaml:119-125`); `carry` already writes it. **No carrier, no field, no
+Event kind, no verb.**
+
+⭐ **AND THIS IS FAIL-FORWARD, WHICH THE ROW HALF-HAD ALREADY.** `Failure` emits `matter.turned` — the
+matter changes hands rather than the turn evaporating, so losing already **changes course** instead of
+negating. `Partial` was the band that negated. **Now every one of the four leaves the proceeding in a
+different place**, which is the condition a flowchart cannot satisfy.
+
+**(viii) ⭐ WHERE THE BAND CONTENT COMES FROM, AND WHY THE READING WAS DONE (Jordan, 2026-09-06).**
+
+> *"this is also why we did all that research so that we could reason degrees of success/failure from
+> it whether it was presented directly or shown by omission or seeing how success would define what a
+> failure is."*
+
+> **Jordan, sharpening it:** *"each figure by showing success within its set of constraints by the
+> same token shows failures, and the qualitative corpus and discussion will therefore discuss that
+> either directly or indirectly as the opposite of success."*
+
+> ### ⭐ **THE DERIVATION IS TOTAL, NOT SELECTIVE. A CONSTRAINT SET DEFINES BOTH SIDES OF ITSELF.**
+> **You never go hunting for the failure material.** A figure that states what a move must satisfy to
+> land has, by stating it, said what happens when it does not — the corpus then discusses that either
+> directly (a fault table) or as the opposite of the success it named. **So every one of the 27
+> figures yields bands, not only the ones that happen to be written as faults.**
+>
+> **This is what the reading was FOR**, and it is why the bands cost a data roster rather than
+> measurement: the study is not being mined for numbers, it is being read for **what a move is taken
+> as** when it satisfies its constraints and when it does not. `PERCEPTION` at **155 atoms in 26 of 27
+> figures** is that, and it is inherently graded — *how a thing is taken* has no binary form.
+
+**The four bands are DERIVED from the figures, not invented, and the census says the material is
+there.** `16_THE_FLATTENING.md` measured the study at **591 atoms**, of which **`CONDITION` is 86 in
+21 of 27 figures** and **`PERCEPTION` is 155 in 26 of 27** — and its PART B finding was that *"the
+study's conditions **price** a move and this design's **refuse** one."* **That is the same correction
+as §B.1's, arriving from the atom side before Jordan made it.**
+
+| how the corpus states it | worked examples — **these are illustrations of the rule above, not an exhaustive list of where bands can be found** |
+|---|---|
+| **stated directly** | Fig. 26's four conditions each name **what a frank criticism is READ AS** when the condition fails — hostile · competing · characterizing · bargaining. That is a failure catalogue, not a veto |
+| **shown by omission** | Figs. 9 and 10 — *conduct under attack*, *attacking without cost* — are **68 atoms of fault tables**, the densest material in the corpus, and they enumerate ways a move goes wrong with no matching table of ways it goes right |
+| ⭐ **by seeing how success defines failure** | Fig. 5's ladder gives what is being asked for at each rung; **the failure is the same request read at the wrong rung**, which needs no separate authority |
+
+⚠ **So a band's content is a READING obligation, not a magnitude to sweep** — which is exactly the
+distinction `§B.1.2` draws below between aptness and coefficients, and it is why the twelve speech
+kinds cost a data roster rather than 144 numbers.
 
 ### B.1.1 · ⭐ **ONE VERB, MANY SPEECH KINDS — and a proceeding weights them by APTNESS, not by coefficients**
 
@@ -154,9 +221,43 @@ an act at all, §C, and asking is `interview`, §B.3.)*
 
 | what decides | mechanism | effect |
 |---|---|---|
-| ⭐ **the genre** (Fig. 23, derived from the bench's remit) | a mismatch **fails `requires`** | *"Inverted, the case is lost regardless of its merits, because the speaker is answering a question the body has no office to decide."* **A `refute` before a deliberative body has no fact in dispute to refute — the act is refused and the refusal emits** |
+| ⭐ **the genre** (Fig. 23, derived from the bench's remit) | ⛔ **CORRECTED 2026-09-06 — a mismatch PRICES, it does not refuse.** See the block below | *"Inverted, the case is lost regardless of its merits."* ⭐ **Lost, not FORBIDDEN.** An inapt speech forms, draws against a higher obstacle, and can still land — which is what makes the frame refusable |
 | **the rung** (Fig. 5) | the ladder's current position | `refute` is apt at **conjecture** and empty at **quality**, where the fact is admitted. `construe` is the reverse |
 | **`registers[]` · `proofs[]`** (Figs. 8, 6) | admissibility sets on the arrangement | a ceremony admits few manners; a deliberative body admits **no proofs at all** |
+
+> ### ⛔ **CORRECTION, 2026-09-06 (Jordan) — THE GENRE MISMATCH WAS A REFUSAL AND MUST BE A PRICE.**
+>
+> > *"if you have a character roll a pool against an obstacle, then you can have someone choose the
+> > 'wrong' action and roll against a higher obstacle but still succeed, which means that the entire
+> > proceeding has pivoted from its deterministic flow for what is optimal by being subverted. finally
+> > you can have a character roll against the obstacle of the right choice as per flow chart and still
+> > fail!"*
+>
+> **Three facts, and they point the same way.**
+>
+> 1. ⭐ **THE ROW ALREADY DOES THE RIGHT THING. ONLY THIS PROSE SAID OTHERWISE.** `speak`'s
+>    `requires_typed` is a **single clause** — `form: existence · of: subject · kind: DocketItem`.
+>    There is no genre conjunct in the schema and there never was. **The refusal existed only in the
+>    sentence above**, which under `CLAUDE.md` §0.05 is reference and not mechanism. Found by the
+>    playability relay's lane A.
+> 2. ⭐ **AND THIS DESIGN'S OWN SHOWCASE EXAMPLE REQUIRES THE ACT TO FORM.**
+>    `03_PARAMETERS.md:133` celebrates *Demosthenes on the crown* — *"it explains why Demosthenes
+>    **wins by refusing the frame**"*. **The rule as written refuses that speech.** A design cannot
+>    both forbid a move and cite winning by it as its best worked case.
+> 3. **A refusal is still a binary, which is the whole complaint.** You could speak or you could not.
+>    Priced, the inapt move is a *decision under uncertainty*: you may take the worse ground on
+>    purpose, and you may get away with it.
+>
+> **`§B.1.2`'s defence below survives in a better form and is NOT discarded.** Its real argument is
+> *"a refusal EMITS and a weight does not — the player is witnessed committing a category error."*
+> ⭐ **So does a failure.** `matter.turned` fans out to every ledger in the room exactly as a refusal
+> does. **The public category error is delivered by the BAND, and does not need the gate** — so the
+> argument's substance is kept and its mechanism is dropped.
+>
+> **What this costs:** one obstacle term (`aptness`), composed and floored like the others. What it
+> buys is the thing a flowchart cannot have — **the right choice can fail and the wrong choice can
+> land.** `17_PLAYABILITY.md` §D.1 killed a position proposing this term; the kill was right about
+> that position's four errors and **wrong to take the mechanism down with it** (§D.1a).
 
 ## B.1.2 · Why aptness rather than weights, and it is not a preference
 
