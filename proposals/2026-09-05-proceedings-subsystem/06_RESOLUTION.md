@@ -80,14 +80,153 @@ off:**
 | **what you DO IN THE ROOM** | **top row** — calibration of reception · elicitation · control of display · tempo · rank-calibration | **conduct.** Reading, asking, withholding, timing | ⭐ **YES — this is what interposition removes** |
 
 ```
-pool  =  brought                      -- always live. Two keys, not nine.
-      +  conduct × latitude(game)     -- live in proportion to what the arrangement allows
+pool  =  brought                      -- always live. FOUR keys, not two and not nine (§B.1a).
+      +  conduct × latitude(game)     -- live in proportion to what the arrangement allows,
+                                         and FLOORED (§B.3c) -- never multiplied to zero
+   -- `discernment` and `composure` do NOT enter the pool. They are not dice:
+   --   discernment gates the FIDELITY of the read (§B.1c) -- the fog of war
+   --   composure owns `obstinacy` and sustains `surveil` (§B.1d)
       floored at 1D                   -- ruled 2026-09-04; applies to the MEAN as well as the variance
       fractional throughout           -- continuous_engine_sample, never roll_pool
 ```
 
-**Two `capability` keys. `Person.capability` is already a dict and its keys are content by `ID-12`, so
-naming two rather than nine costs nothing and commits to nothing.**
+⛔ **AMENDED 2026-09-06 — FOUR KEYS, §B.1a.** This read *"Two `capability` keys … naming two rather
+than nine costs nothing and commits to nothing."* **The reasoning was right and the number was a
+floor, not a ceiling** — `Person.capability` is a dict whose keys are content, so the cost argument
+cuts both ways. Jordan lifted the constraint (*"you're allowed to venture duplicates of what exists
+there if it makes sense here"* — the earlier ban was contamination-avoidance, not a design position),
+and running the key test over this subsystem's own six contested acts returns **four**: `brought` ·
+`conduct` · `discernment` · `composure`. **Two of them are not dice.**
+
+## B.1a · ⭐ FOUR CAPABILITY KEYS, NOT TWO — derived from this subsystem's own act set (Jordan, 2026-09-06)
+
+> **Jordan, lifting the earlier constraint:** *"we're precluding the existing attribute roster in
+> repository to avoid contamination. You're allowed to venture duplicates of what exists there if it
+> makes sense here."*
+>
+> **And naming the surface himself:** *"social attunement/reading the room, comporting oneself
+> appropriately, presenting and speaking and acting in a convincing manner, knowing what to expect and
+> how to use your evidence and anticipate your opponent's evidence, maintaining composure and dignity
+> in light of attack and failures."*
+
+**Two was a floor, not a ceiling** — `Person.capability` is a dict whose keys are content, so naming
+more costs nothing structurally. **The test a key must pass: two acts in THIS subsystem's own set would
+draw differently, and currently draw the same.** Run across the six contested acts, it returns four.
+
+| key | what it is | where it acts |
+|---|---|---|
+| **`brought`** | what you know and hold — classification, evidential discrimination, generative reframing, memory | the pool, **unmultiplied.** Survives any room |
+| **`conduct`** | craft in the room — presenting, speaking and acting convincingly; elicitation; timing | the pool, **discounted by latitude** (§B.3c) — ⭐ **and it feeds `reception` forward** (§B.1b) |
+| ⭐ **`discernment`** | social attunement — **whether your live read of THIS room is true** | ⭐ **the fidelity of the read, never the availability of the move** (§B.1c) |
+| ⭐ **`composure`** | self-command — sustaining an act, and holding under attack | ⭐ **owns `obstinacy`**, which the design named and left unclaimed (§B.1d) |
+
+**Where the five acts land, and four of them needed no new key** — because the study's own two-row
+partition had already named those capacities: `examine`, `research` and `reconstruct` are `brought`
+(evidential discrimination, memory, inference); `interview` is `conduct` (elicitation). **`surveil` was
+the one act neither covered** — *"present at the place, for a declared interval"*, contesting *what is
+done unseen*.
+
+> ### ⭐ **AND `surveil` IS COMPOSURE, NOT PERCEPTION.** *(Jordan: "'patient watcher' speaks towards
+> composure")*
+> **The hard part of surveillance is not noticing — it is STAYING.** Anyone watching a door for a
+> season sees who goes through it; what separates people is whether they keep watching, without
+> leaving, without being drawn off, without being seen. **That is self-command, and it gives composure
+> one coherent shape rather than two stapled together: sustaining, and resisting.**
+
+## B.1b · `conduct` feeds `reception`, with a lag — the brilliant speaker's actual payoff
+
+**`reception` is composed from the hearers' claims about the speaker — and those claims come from what
+they witnessed him do.** Every act deposits into every present ledger.
+
+```
+conduct  ->  a better band  ->  a better thing witnessed  ->  better claims about you
+                                                          ->  a lower `reception` term NEXT time
+```
+
+**So `reception` is not your attribute at any instant. It is the accumulated record of your conduct as
+other people saw it** — which is precisely where eloquence pays, and it pays across seasons rather than
+inside one turn. Mid-run it also compounds: each band deposits as you go.
+
+## B.1c · ⭐⭐ `discernment` IS THE FOG OF WAR — and it gates FIDELITY, never AVAILABILITY
+
+> **Jordan:** *"Why are we not having our attributes act as a 'fog of war' for decision making? Someone
+> who is less astute than another may not make the right choice even if they knew the proceeding
+> overall."*
+
+⛔ **This corrects a real defect.** A draft of this file held that aptness is *the player's* judgment
+rather than the character's — **which means a dull character played by a clever player picks
+perfectly.** That is player skill substituting for character skill, and it is not acceptable.
+
+**The lawful fix is not gating options** — `if skill < N: return []` is refused by name (`R-9`).
+
+> ### **EVERY LAWFUL MOVE IS ALWAYS AVAILABLE. `discernment` DETERMINES WHETHER WHAT YOU ARE TOLD
+> ABOUT THE ROOM IS TRUE.**
+> **And the primitive already exists: `Misread` emits identically to `Read`.** The investigation rows
+> deposit at the **same confidence with the wrong value** on a misread — `AX-2` doing real work. **The
+> same shape applies to the pre-speech read**, which is Fig. 17's four reads. **The player still
+> chooses; they choose on the character's information, because there is no other kind.**
+
+**Three things it reads, all of the form *is what I believe about this room true?*:**
+
+| | Jordan's phrasing |
+|---|---|
+| **has this body settled · is it attentive · has it already decided** | *"reading the room"* |
+| ⭐ **can the opponent run my proof back** — the mirror test, which the player must GUESS | *"anticipate your opponent's evidence"* |
+| **which misreading my manner invites HERE** (Fig. 8's 7→7) | *"comporting oneself appropriately"* |
+
+> ### ⭐⭐ **AND THE UI IS THE HALF THAT MAKES IT FEEL LIKE A CHARACTER RATHER THAN A GATE.**
+>
+> **Jordan:** *"the limitations of the character can impose limitations on the player. with the right
+> UI, this will feel natural."*
+>
+> **This is licensed by `07_THE_GAME.md`'s existing rule rather than an exception to it.** The engine
+> owes *the arithmetic of what the character already holds*. **A read is something the character
+> holds** — so it is owed, and it is owed **as they hold it**, including when it is false.
+>
+> **Two rules follow, and the first is the whole discipline:**
+>
+> 1. ⛔ **A MISREAD MUST BE PRESENTED INDISTINGUISHABLY FROM A TRUE READ.** No hedge, no *"you are not
+>    certain"*, no confidence bar. **The moment the UI marks a read as unreliable, the player routes
+>    around the character** and the fog is gone. This is the same rule the investigation rows already
+>    live under — `Misread` emits identically to `Read`, at the same confidence, with the wrong value.
+> 2. **Nothing is greyed out.** Every lawful move stays selectable. What differs between a sharp
+>    character and a dull one is **what the room is described as**, not what the list contains.
+>
+> ⭐ **AND WHAT MAKES THE LIMITATION READ AS CHARACTER RATHER THAN AS PUNISHMENT IS THAT IT CAN BE
+> PLAYED AGAINST.** A player who suspects their own read can `interview` someone who was there, send an
+> advocate whose discernment is better, or spend a season reaching a bench member before the sitting.
+> **A limitation you can act against is characterization; one you can only suffer is a gate.** The
+> player learns their character reads rooms badly the way a person does — **by being wrong and finding
+> out afterwards** — never by being shown a number.
+
+⚠ **The challenge it has to survive is inside Fig. 17, and the figure splits it for us.** *What kind of
+body is this* — expediency to a parliament, fact to a court — is **institutional classification, which
+is `brought`.** *Has it already decided* is a live read of **this** room, today. **That is Jordan's
+distinction exactly: a person may know the proceeding overall and still misread the one in front of
+them.**
+
+## B.1d · `composure` owns `obstinacy`, which the design named and left with no owner
+
+`interview` declares `contests: "a disposition"` **against `obstinacy`** (`04_VERBS.md` §B.3.2) — and
+**nothing in the design supplies obstinacy.** It is the defensive half of *"maintaining composure and
+dignity in light of attack and failures"*, sitting unclaimed.
+
+**What composure resists:** being read (`interview`), the fear press's habituated boost (§F.2 of
+`18_FINDINGS.md`), and a standing band crossing. **What it sustains:** `surveil`.
+
+⭐ **AND LOSING IT IS ITS OWN WITNESSED FAILURE, which the corpus states directly.** Fig. 3's erosion
+list carries *"visible effort — TERMINAL once seen"*; Fig. 9's Q1 carries *"anxiety displayed; the
+accuser's framing accepted"*. **Composure does not change how a failure is read. Losing composure IS a
+failure, and it is witnessed** — which is the corpus's shape #1 (*failure is the move read as a signal
+about the mover*) applied to the one attribute that is visible while you use it.
+
+## B.1e · What four keys still refuse
+
+**A per-proceeding skill** — a *negotiation* stat and a *trial* stat is pair-count growth (`§0.06`).
+**An office bonus** — a title gates access and shapes how you are read, and never adds dice.
+**An `aptness` attribute** — with `discernment` doing the fog of war, aptness stays a term you avoid by
+knowing the room, and the knowing is now the character's. **And a `reception` attribute** — standing is
+what others hold, one ledger at a time, and any of them may be wrong.
 
 ## B.2 · What this buys, and why it is better than a skill-per-proceeding table
 

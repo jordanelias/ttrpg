@@ -441,7 +441,9 @@ been.
   stratum: "contested_physical" · eligibility: ["own"]
   requires: "the actor and the subject are present at the same venue"
   requires_typed: { form: path, of: subject, kind: contain }          # form 3
-  contests: "a disposition"                                          # vs obstinacy
+  contests: "a disposition"                                          # vs obstinacy -- OWNED BY
+                                                                     # `composure` as of 2026-09-06,
+                                                                     # 06_RESOLUTION.md §B.1d
   writes:  { Read: [], Misread: [], Nothing: [] }
   emits:   { Read: ["said.given"], Misread: ["said.given"], Nothing: ["said.withheld"] }
   emits_on_refusal: ["interview.impossible"]
@@ -482,7 +484,9 @@ been.
     form 3 for the place, AND a declared interval, which is `T-n` — the opening act declares its
     term. ⚠ `Tenure` HAS NO `term` FIELD in the tracer (`shape.py:2066-2091`), so the second half
     is UNTYPABLE TODAY. Registered `P-04`; the row is written and the cell is honest.
-  contests: "what is done unseen"
+  contests: "what is done unseen"                                    # ⭐ the pool term is `composure`,
+                                                                     # NOT perception: the hard part of
+                                                                     # watching is STAYING (§B.1a)
   writes:  { Seen: [], Glimpsed: [], Nothing: [] }
   emits:   { Seen: ["watch.kept"], Glimpsed: ["watch.kept"], Nothing: ["watch.empty"] }
   emits_on_refusal: ["surveil.impossible"]
