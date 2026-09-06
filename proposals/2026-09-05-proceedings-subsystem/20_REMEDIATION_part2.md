@@ -111,7 +111,25 @@ design's central promise — has ZERO execution surface today.** `README.md` say
    (`:6692`) a reader, or licenses deleting it.** Find 5 closes either way.
 5. ⭐⭐ **The falsifier, and it is the reason this proposal exists in this shape.** A test that loads
    `arrangements.yaml`, **rewrites every `id` to an opaque token**, reruns one seeded proceeding per
-   row, and asserts every `content_hash` is unchanged.
+   row, and asserts the outcome is unchanged.
+
+   ⛔ **AND A DRAFT SAID `content_hash` IS THE THING TO COMPARE, WHICH IS RED BY CONSTRUCTION.**
+   `World.content_hash` folds `dates` through `_entity_digest` (`shape.py:3016-3018`), and for a
+   plain dict `_entity_digest` returns `repr(sorted((str(k), repr(v)) …))` (`:2604-2607`) — **so the
+   arrangement NAME is inside the world hash.** Rename `tribunal` to an opaque token and the hash
+   moves **with nothing branching on the name at all.**
+
+   > ### ⛔ **THE PROPOSAL THAT SHOUTED §0.1 POINT 2 LOUDEST SHIPPED AN ASSERTION THAT VIOLATES IT.**
+   > *An assertion must be able to observe the failure it excludes.* This one cannot distinguish the
+   > failure from its own instrumentation: **it goes red on a clean implementation and green on
+   > none.** Caught by the adversarial pass; it is the single best catch in it, because the draft's
+   > whole argument for replacing the `grep` was that a grep cannot see what it excludes.
+   >
+   > **The fix is to compare the OUTCOME, not the world:** the per-row sequence of
+   > `(act id, degree, net, ob)` from the seeded proceeding, which is what *"nothing branches on the
+   > name"* actually claims. The hash is contaminated by design — dates carry the arrangement — and
+   > **that contamination is correct**, because a world whose sitting is arranged differently IS a
+   > different world.
 
 > ### **WHY RENAME-INVARIANCE AND NOT A GREP.**
 > `P-34` says the closure falsifier *"cannot see the failure it excludes"*: a scan for
@@ -131,8 +149,20 @@ a `licence_failures=1` result at margin ≥ 3 bands `Success` rather than `Overw
 
 ### Primitive count · NERS
 
-**0 · 0 · 0 · 0.** One data file, one loader, one Date-dict key (declared, no schema), one
-`BandExtension` subclass, one keyword argument.
+⛔ **NOT ZERO — one undeclared carrier cell.** One data file, one loader, one `BandExtension`
+subclass (genuinely free — `dice_engine.py:95-138` exposes the seam and `degree_from_net` already
+takes `extension=` at `:227-228`), one keyword argument — **and `date["arrangement"]`, which a draft
+called "no schema, because dates are dicts."**
+
+> ⛔ **THAT ARGUMENT IS THE DEFECT THE VERB TABLE ALREADY RECORDS.** `convene` declares
+> `writes: ["Date.due_at", "ConveningCondition.attached"]` (`verb_table.yaml:143`), and the loader
+> refuses a `writes:` cell with no write-matrix row — *"§30: ANY UNMARKED CELL IS A WRITE-CLASS
+> VIOLATION. Rule the Part D row first, then add the verb"* (`shape.py:1616-1621`). **Writing a new
+> cell from inside the effect body EVADES that check rather than satisfying it** — and
+> `verb_table.yaml:386` names this exact move as a past failure: *"With `writes: []` the creation row
+> W2 added was INERT and creation still bypassed the gate."* **Declare the cell, or do not write
+> it.** ⚠ **`P2`'s `date["holder"]` and `date["matter"]` are the same defect — three undeclared
+> cells across the suite, not zero.**
 
 **N** — this is the ruled framing (`README.md:18-21`): games as rows. Without it there is one game.
 **R** — *completeness at the extremes:* a row with `order: rank` needs a rank source — the title
@@ -165,7 +195,7 @@ step's own text allows** (`:620-624`); and all three of `05_PROCEDURE.md:105-118
 
 | the question `P-04` asked | the tree's answer |
 |---|---|
-| **`Tenure` or `DocketItem`?** | ⭐ **Neither: the `Record`.** `open_case` writes `Record.stages` (`verb_table.yaml:370`); `_eff_create_record` stamps `(due_tick, label, winding_act)` (`shape.py:5137-5140`); **MATTER matures the stage at `due == w.tick` and emits `term.matured`** (`:5424-5444`, declared at `write_matrix.yaml:265`) **citing the record's last change**, so `causes[]` walks |
+| **`Tenure` or `DocketItem`?** | ⭐ **Neither: the `Record`.** ⛔ **A draft cited `open_case` as the producer of `Record.stages` (`verb_table.yaml:370`) — and `open_case` is one of the EIGHT inert verbs `§A.3` find 7 names.** The suite indicted its own evidence chain two documents earlier and did not notice. **The reachable producer is `create_record`** (`shape.py:5118-5146`), which has an effect and runs. ⚠ **And the stamp is conditional:** `_eff_create_record` stamps `(due_tick, label, winding_act)` **only in its default branch** (`:5131-5139`); an act declaring its own stages gets whatever the payload holds (`:5130`). **MATTER then matures the stage at `due == w.tick` and emits `term.matured`** (`:5424-5444`, declared at `write_matrix.yaml:265`) **citing the record's last change**, so `causes[]` walks |
 | **Does `convene`'s `Date.due_at` already carry the summons?** | **Yes.** `convene` writes it (`:5044-5046`); CALENDAR fires it (`:5363-5381`) |
 | **Is `Tenure.until` the horizon?** | **No, and nothing needs it to be.** It is a closure stamp; `live` is `until is None` |
 | **An in-run limit — *"each party heard twice"*?** | A key on the opening act's payload that the provider reads. ⭐ **A clock a person wound, which is what `T-c` requires rather than what it forbids** |
@@ -190,8 +220,14 @@ ancestry. One assertion is worth adding inside `P3`'s test: a case record whose 
 
 **−1 field against the plan.** **N** — a second horizon carrier would be `ID-2`'s second home for a
 fact the record already holds. **R** — complete: the winder-gone case is the extreme, and it is
-handled. **S** — one maturation mechanism for every clock in the game. **E, as a ratio** — maximal,
-and it is the only proposal here where that is true: **nothing is built.**
+handled. **S** — one maturation mechanism for every clock in the game.
+
+⛔ **E — NOT APPLICABLE, AND A DRAFT SCORED IT "MAXIMAL … BECAUSE NOTHING IS BUILT."** That is
+§0.06's named failure wearing the word *ratio*: *"scored alone it is satisfiable by amputation — cut
+enough and what remains is simple, clear and cheap."* **A ratio needs a numerator, and `P7`'s is
+empty** — it delivers no `N` gain and no `R` gain, it **withdraws a field**. ⭐ **The honest score is
+that there is nothing to be elegant about**, and the proposal is good for a reason that has nothing
+to do with `E`: *the thing was already built.*
 
 ### What it breaks
 
@@ -283,8 +319,19 @@ at the default confidence.** ⛔ **No draw, no verb, no field** — which is wha
 `(source, confidence, when)` triple. ⭐ **That assertion is `P-46`'s enforcer**, and it is a test
 rather than a hope.
 
-**Primitive count.** **0 · 0 · 0 · 0**; one magnitude. **Breaks:** the `bench.holders` predicate must
-not fall in `LEDGER_DERIVED_STEMS`; it does not. **Ranked low** — it needs `P3` and `P6`.
+**Primitive count.** **0 · 0 · 0 · 0**; one magnitude.
+
+**NERS** — ⛔ **absent from a draft, against a preamble promising one for each; supplied here.**
+**N** — the fog is ruled and has no enforcer without it, so `P-46` closes by a mechanism rather than
+a hope; and from below, this is the only reader `attunement` has, and an attribute with no reader is
+`ID-13`. **R** — no-player half: NPCs misread benches too, so the world's wrong decisions are wrong
+for a modelled reason; *completeness:* a zero-opacity room reads true for everyone, the correct
+degenerate case. **S** — it rides the `actor` deposit arm that already exists, so no second read
+mechanism. **E, as a ratio** — one hash comparison and one deposit against an `N` that closes a
+register row; **amputation fails, because removing it removes the enforcer.**
+
+**Breaks:** the `bench.holders` predicate must not fall in `LEDGER_DERIVED_STEMS`; it does not.
+**Ranked low** — it needs `P3` and `P6`.
 
 ---
 
@@ -304,6 +351,11 @@ the prose axis** to what it measures — *persuasion-rewarding vs constraint-rew
 ⚠ **Execution artifact: NONE of its own.** It rides on `P1` reading `capability["eloquence"]`.
 **Under §0.2 this is a naming closure, not a juncture, and it is listed here so that it is not
 mistaken for one.** **Count: zero. Breaks: nothing.**
+
+⚠ **NERS: NOT SCORED, AND THE EXEMPTION IS STATED RATHER THAN ASSUMED.** A draft omitted it silently
+against a preamble promising one for each — caught by the adversarial pass. **NERS judges a design
+object, and a rename of a prose term with no reader is not one:** there is no mechanism here to be
+necessary, robust or smooth about. **§4's idempotence test is the whole of its justification.**
 
 ---
 
@@ -367,9 +419,9 @@ than of any proposal, so this section is load-bearing rather than decorative.**
 | **P1 × P5 × P6** | the obstacle composition | ⭐ **ONE function** — `proceedings_seam.obstacle()`, enumerated once (`06_RESOLUTION.md:669-697`). `P5` fills a declared slot; `P6` supplies `aptness` and rung inputs. **Neither creates a second composition site**, which is why `P1` ships the zero-valued terms rather than omitting them |
 | **P1 × the prize name** | `"a proposition"` (exists) vs `"a matter"` (coined) | **the existing name wins**, on `ED-SC-0033` (2) + §4. `04_VERBS.md:74`, `08_SEAM.md:60-73`, `README.md:112-116` and `02_THE_SOCKET.md:207-221` are rewritten in `P1`'s commit |
 | **P2 × P4** | ledger pressure at the 200 cap (`:1772`, `:6429`) | **both increase deposits.** `M-1` runs after both and before `P5` reads person-claims across seasons |
-| **P2 × P3** | `DocketItem.matter`'s producer | `P2`'s `_eff_convene` fix populates it; `P3`'s predicate reads it; **`judging_set`'s third parameter waits on it** |
+| ⛔ **P2 × P3** | `DocketItem.matter`'s producer | ⛔ **THIS ROW WAS FALSE AND IS THE SUITE'S WORST SINGLE ERROR.** A draft said *"`P2`'s `_eff_convene` fix populates it."* **CALENDAR writes the item with `matter: None` hardcoded** (`shape.py:5377-5380`); the declared producer is **`carry`** (`verb_table.yaml:92`), **which this suite's own find 7 lists as inert.** `P2`, `P3`'s predicate and `P3`'s two-parameter argument all rest on it. **Neither proposal lands until `carry` is revived or `speak` is retyped** |
 | **P3 × `04_VERBS.md:303`** | `determine`'s `writes`, which the file says is UNCHANGED | **one extra pair**, because `commit` has no effect (find 7). **A finding against the file, not a design change** |
-| **P4 × H-122** | two recipient rules at one barrier | **kept as two loops** — reads → actor via `observation_deposit_mode`; product → observers via the column. `H-121`'s lesson (`:6355-6360`) forbids one fixture carrying two decisions |
+| ⚠ **P4 × H-122** | two recipient rules at one barrier | **kept as two loops** — reads → actor via `observation_deposit_mode`; product → observers via the column. `H-121`'s lesson (`:6355-6360`) forbids one fixture carrying two decisions. ⛔ **BUT THE PLACEMENT CONTRADICTS THE SEPARATION:** *"a third loop after `:6423`"* puts it **inside** the `obs_mode != "none"` gate opened at `:6389`, **coupling it to the very fixture the proposal says it must not share.** Set `observation_deposit_mode="none"` — H-122's declared control — and the product silently stops depositing. **The loop belongs outside that gate.** Found by the adversarial pass |
 | **P5 × P8** | `Person.convictions` — `P8` writes, `P5` arm 2 reads | **a dependency, not a conflict.** `L-6` is measurable only with both |
 | **P6 × P1** | `degree_of`'s ladder call gains `extension=` | **`P6` owns the change.** `P1` returns no extension and the ladder is unmodified |
 | **P7 × `19_PLAN` step 22 / `05_PROCEDURE` §B.1** | `Tenure.term` | **deleted from the plan. The field is never built** |
@@ -446,9 +498,21 @@ above by a ruling, a precedent, the tree, or an engineering call, and `PART E` s
 **Named here rather than left for a reader, because a remediation document that reads as clean is
 the one to distrust.**
 
-1. ⚠ **Find 7 is not fixed.** Six of the seven inert "reused" verbs belong to other lanes. This
+0. ⛔⛔ **FIVE OF THE ELEVEN SHOULD NOT LAND AS WRITTEN, AND THE ADVERSARIAL PASS IS WHY THIS LIST
+   EXISTS AT ALL.** `P1` (wrong refusal line, three unnamed reddened assertions, a capability rule
+   that refuses for every person the tracer contains) · `P2` (a docket road that does not connect, a
+   gate narrowing with nothing behind it, a breakage list short by an order of magnitude) · `P3`
+   (inherits `P2`'s broken road; misstates two probe verdicts; answers `04_VERBS.md:333-337`'s
+   objection to the two-parameter form by not mentioning it) · `P6` (a headline falsifier red by
+   construction; an undeclared carrier cell) · `P7` (the right conclusion from a broken evidence
+   chain — it cited `open_case`, one of the inert verbs, as the producer of `Record.stages`; the
+   reachable producer is `create_record`). **The mechanisms are sound. The artifacts, the breakage
+   lists and several supporting claims were not, and are corrected above rather than quietly
+   fixed.**
+1. ⚠ **Find 7 is not fixed.** Seven of the eight inert "reused" verbs belong to other lanes. This
    suite adds an effect for `determine` only. **`04_VERBS.md`'s economy claim needs rewording, and
-   this suite does not make it true.**
+   this suite does not make it true.** ⚠ **And `carry` moved from *not our problem* to *on the
+   critical path* when the docket road broke** — see the conflict matrix.
 2. ⚠ **`P1`'s `R` is genuinely short in both halves** — no NPC reaches it, and the obstacle is
    computable — and it is still ranked first. **That is a deliberate ordering of `N` over `R`**, on
    the ground that nothing else can run until it does. A reader who disagrees should reorder, not
@@ -466,5 +530,23 @@ the one to distrust.**
 
 ---
 
-*The adversarial pass on this document, and its reconciliation, are recorded in the commit that
-lands it — `CLAUDE.md` §0: the adversarial pass is a STAGE, not a deliverable.*
+> ### THE ADVERSARIAL PASS
+>
+> **Ran read-only against the working tree, on the OUTPUT of this suite and not on its reasoning.**
+> It returned fourteen findings; **five were confirmed severe and are corrected inline above**, each
+> marked ⛔ at its site rather than collected here — `CLAUDE.md` §0: *the adversarial pass is a
+> STAGE, and its output is edits to the thing under review.*
+>
+> **What it could not break, and said so:** `PART A`'s three corrections all held under
+> re-verification; `P5`'s anti-solver claim survived a direct attempt to reach `reception` from a
+> decision (`choose` receives no `World` at `shape.py:3471-3474`; `LedgerReader` takes claims and
+> never a World or a Person, `:1287-1301`); the prize repoint's licence survived, because
+> `HANDOFF_SC.md:65` records the ruling that answers `README.md:112-116`'s reservation; and the
+> `P12` reconciliation was upheld as argued rather than asserted.
+>
+> ⚠ **Two things neither reader could check**, marked rather than ruled on: whether
+> `register.py --check` requires a `cite:` when `H-32` moves grade, and anything resolving through
+> `systems/social_contest/`, which is under the standing scope ban. **On the second the pass made an
+> observation and refused to rule:** repointing the two prize rows away from `social_contest` may
+> make some of that tree's 20+ inbound sites inconsistent before the ruled retirement wave runs.
+> **That is a cross-lane question and this suite does not decide it.**

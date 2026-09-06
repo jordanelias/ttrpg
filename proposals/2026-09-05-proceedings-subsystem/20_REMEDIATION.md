@@ -10,16 +10,29 @@
 >
 > **This directory is a specification with an execution-artifact count of zero, and the shortest
 > path off zero is one pull request touching four files.** Two roster values, one registry row, one
-> dispatch table, one provider module and one test. **No verb-table edit, no ruling, no new
-> primitive.** Everything after that first PR is what turns a running thing into a game: a verb with
-> a body, a bench that exists, a telling that lands in somebody's ledger, and a room that remembers
-> you. **Eleven proposals, and ten of them spend ZERO primitives.** The eleventh spends one
-> verb-table column.
+> dispatch table, one provider module and one test. **No verb-table edit and no ruling.** Everything
+> after that first PR is what turns a running thing into a game: a verb with a body, a bench that
+> exists, a telling that lands in somebody's ledger, and a room that remembers you.
 >
-> ⭐ **And the plan gets SHORTER, not longer, at two places.** `Tenure.term` — the one new field in
-> the whole design — **is not built at all**: the carrier exists, matures citing the act that wound
-> it, and is already tested (`P7`). And `P-04`, `P-03`, and half of `P-05` close from the tree
-> rather than from work.
+> ⛔ **THE PRIMITIVE COUNT IS NOT ZERO, AND A DRAFT OF THIS PARAGRAPH SAID IT WAS.** It banked *"ten
+> of eleven spend ZERO primitives; the eleventh spends one verb-table column."* **The adversarial
+> pass found four more:** three **undeclared carrier cells** on `Date` — `holder`, `matter`,
+> `arrangement` — written from inside effect bodies, which **evades** the loader's write-class gate
+> (`shape.py:1616-1621`) rather than satisfying it, and one **hardcoded grammar kind** in a branch
+> the tracer deliberately keeps data-derived. **The true count is one column, three cells and one
+> literal**, and the three cells must be declared as Part D rows before they are written.
+>
+> ⛔ **AND FIVE OF THE ELEVEN SHOULD NOT LAND AS WRITTEN** — `P1`, `P2`, `P3`, `P6`, `P7`. Their
+> *mechanisms* survived the pass; their **artifacts, breakage lists and several supporting claims
+> did not.** Every correction is inline at its site, marked ⛔. `20_REMEDIATION_part2.md` PART G
+> item 0 is the list.
+>
+> ⭐ **The plan still gets SHORTER, not longer, at two places, and the pass did not dislodge it.**
+> `Tenure.term` — the one new field in the whole design — **is not built at all**: the carrier
+> exists, matures citing the act that wound it, and is already tested (`P7`). ⚠ **Its evidence chain
+> named the wrong producer and is corrected** — `create_record`, not the inert `open_case` — but the
+> conclusion stands. And `P-04`, `P-03` and half of `P-05` close from the tree rather than from
+> work.
 
 ---
 
@@ -32,9 +45,12 @@ it is.
 
 ## A.1 · What was verified, and what it cost to verify
 
-Every claim in `PART B` was checked against the working tree at `da834ae` by two independent
-readers — the planner, and this document's author re-reading nine load-bearing citations
-line-by-line before writing them down. **The nine that were re-read, and held:** the dispatch
+Every claim in `PART B` was checked against the working tree at `da834ae` by **three** readers — the
+planner; this document's author, re-reading nine load-bearing citations line-by-line before writing
+them down; and **a read-only adversarial pass that received this document's OUTPUT and not its
+reasoning.** ⚠ **The third reader broke five of the eleven proposals**, which is the argument for
+structural independence over a careful self-review: *the author's nine re-reads all held, and every
+one of them was a claim the author had chosen to check.* **The nine that were re-read, and held:** the dispatch
 literal and its two refusal sites (`shape.py:6740`, `:6757-6765`, `:6766`); `degree_of`'s
 never-fed margin branch (`:6668-6679`); the deposit-mode default (`:1847`); `judging_set`'s
 unconditional raise (`:3161-3163`); `resolvable_verbs`' third gate and its stated ground
@@ -103,19 +119,31 @@ pass at all.
 | | the defect | why it matters |
 |---|---|---|
 | ⭐ **1** | **`speak`'s own precondition cannot be evaluated.** `04_VERBS.md:70-73` types it `{form: existence, of: subject, kind: DocketItem}`; `WorldReader.read`'s `exists` branch (`shape.py:1155-1164`) resolves a kind against `_STATE_COLLECTIONS` (`:2988-2989`), which has no docket — `w.docket` is a `_STATE_SEQUENCES` list of dicts (`:2993`). **Verdict UNKNOWN → refusal, every time.** The design's headline verb refuses unconditionally as drafted | **on the critical path.** `P2` fixes it with one branch |
-| ⭐ **2** | **No convened date ever forms a docket item, because nothing writes a Date's `holder`.** `_eff_convene` (`:5030-5048`) does not set it; CALENDAR's firing path reads it (`:3888`, `:5371`); every convened date is therefore vacant, fires and lapses | **on the critical path.** The road from `convene` to a hearing is closed and no register row says so |
+| ⭐ **2** | **No convened date ever forms a docket item, because nothing writes a Date's `holder`.** `_eff_convene` (`:5029-5046`) does not set it; CALENDAR's firing path reads it (`:3888`, `:5371`); every convened date is therefore vacant, fires and lapses | **on the critical path.** The road from `convene` to a hearing is closed and no register row says so |
 | ⭐ **3** | **`resolvable_verbs()`'s third gate excludes every contested verb** (`:3352-3375`), so an NPC is never offered a `speak` that contests. **The "zero authored acts" bar is unreachable by construction**, for any verb this subsystem cares about | **on the critical path.** It is the gate between a specification and `R`'s no-player half |
 | ⭐ **4** | **`resolve()` hands the seam a non-person claimant.** `_parties = [a.actor] + [payload["subject"]]` (`:6135-6136`) — for a `speak` the subject is a **Proposition id**, and the seam's own law text says claimants are persons (`:6703`) | **on the critical path**, and a one-line fix |
 | **5** | **`contest()`'s `extension` parameter is dead** (`:6692`; the only other occurrence in the file is unrelated, `:4096`) and `degree_of` passes no extension (`:6679`) — **so the "one BandExtension" veto has no path to the ladder** | `P6`. It also means `09_IMPOSSIBILITIES.md` row 5's *"veto : bool, and the ladder takes the minimum"* has no executable spelling |
 | **6** | **`_fold` emits EVERY kind in `emits_on_refusal`** (`:5857-5861`, `:5913`), so `04_VERBS.md:305`'s two-kind refusal would publish both on every refusal | `P2`. A design decision made by a loop nobody read |
-| ⭐⭐ **7** | **Seven of the fourteen "reused unchanged" verbs cannot execute.** The `@effect_for` roster is exactly ten — `confer · revoke · convene · move · work · create_record · destroy_record · kill/wound · utter · transfer`. **`commit`, `oblige`, `carry`, `open_case`, `petition`, `repudiate` and `determine` have no effect at all** | ⚠ **This one is not on the critical path and is worse than the ones that are.** `04_VERBS.md:34-40` banks *"everything else is reused unchanged"* as the design's economy argument. **Half of what it reuses is inert**, and the count that carries the whole no-new-primitive claim was never checked against the fold |
+| ⭐⭐ **7** | **EIGHT of the "reused unchanged" verbs cannot execute.** The `@effect_for` roster is exactly ten — `confer · revoke · convene · move · work · create_record · destroy_record · kill/wound · utter · transfer` — and every one of the eight has a non-empty `writes`, so each raises `Unspecified` at `:5942-5949` on its first fold: **`commit`, `repudiate`, `oblige`, `open_case`, `petition`, `carry`, `issue`, `forge`** | ⚠ **Not on the critical path, and worse than the ones that are.** `04_VERBS.md:34-40` banks *"everything else is reused unchanged"* as the design's economy argument. **More than half of what it reuses is inert** |
 
 > ### ⚠ **FIND 7 IS THE ONE TO SIT WITH, AND IT IS NOT FIXED BY THIS SUITE.**
 > The zero-new-verbs claim is true and remains true. **What it does not say, and what a reader takes
-> from it, are different things:** *reused* has been doing the work of *works*. Six of those seven
-> are other lanes' verbs and other lanes' effects — this suite adds an effect for `determine` only,
-> because `determine` is this subsystem's own. **The honest form of the economy claim is: this
-> design adds no verb, and inherits six that do not yet run.** `04_VERBS.md` should say that.
+> from it, are different things:** *reused* has been doing the work of *works*. **The honest form of
+> the economy claim is: this design adds no verb, and inherits EIGHT that do not yet run.**
+> `04_VERBS.md` should say that.
+>
+> ⛔ **THE MEMBERSHIP ABOVE IS THE ADVERSARIAL PASS'S, AND IT CORRECTED THIS FINDING IN BOTH
+> DIRECTIONS.** A draft said *seven*, and got the list wrong twice: it counted **`determine`**,
+> which is **not** a reused verb — `04_VERBS.md:29` lists it among the four this design *touches*,
+> so counting it inflated the indictment with a verb the economy claim never made — and it **missed
+> `issue` and `forge`**, which are on the reuse list (`04_VERBS.md:38-40`) and are inert
+> (`verb_table.yaml:233`, `:244`). ⭐ **The finding is worse than first stated, and was stated
+> against the wrong list** — which is the shape of error that survives an author's own re-read and
+> does not survive an independent one.
+>
+> ⚠ **AND ONE ALTERNATIVE READING WAS TESTED AND FAILS.** `resolvable_verbs`' own predicate is
+> `effected = not row.writes or v in EFFECTS` (`shape.py:3362`) — so a verb with an EMPTY `writes`
+> legitimately needs no effect. **All eight have non-empty `writes`.** None is saved by that clause.
 
 ---
 
@@ -205,7 +233,10 @@ ob       = max(1.0, base_ob + rung + proofs_told + aptness)
 
 seed     = int(H(w.world_seed, w.tick, speaker, f"contest:{prize}:{causes[0]}"), 16)
 net      = continuous_engine_sample(pool, rng=random.Random(seed))
-           NEVER roll_pool — dice_engine.py:196 keeps int(round(pool)) and the pool is fractional
+           NEVER roll_pool — dice_engine.py:202 is `effective_pool = max(1, pool_size)`;
+           there is NO rounding, and a float pool raises TypeError at range().
+           (A draft said ":196 keeps int(round(pool))" -- wrong line, wrong reason,
+            right conclusion. Corrected by the adversarial pass.)
 
 return   dict(status="RESOLVED", module="proceedings", resolver="continuous",
               net=net, ob=ob, pool=pool, seed=seed, parties=...)
@@ -223,6 +254,15 @@ branch that has existed since the ladder was imported and has never once been en
 **5 · Fixtures.** `brought_per_claim`, `latitude_floor`, `resister_rule` join `DEFAULT_FIXTURES`
 (`shape.py:1740-1860`), each with a three-point sweep and a hole-register row — `H-87`'s exact
 shape, and `ID-6` discharged rather than escalated.
+
+⛔ **6 · M-7 AND M-8 GATE THIS, AND A DRAFT OF THIS SUITE NEVER MENTIONED THEM.**
+`registers/handoffs/HANDOFF_SC.md:82` is unambiguous: *"**M-7 and M-8 gate the composed obstacle**
+and are blocking, not advisory"* — they are Jordan's 2026-09-06 ruling that a player is not deprived
+of a chance at winning and that a brilliant speaker is still rewarded, turned into measurements.
+**`P1` ships the composed obstacle.** ⚠ **And shipping it with `latitude` pinned at `1.0` until
+`P6` makes M-7 and M-8 UNRUNNABLE — both arms identical by construction**, which is the fake-control
+shape `CLAUDE.md` §7 flags through `ED-MB-0066`. **So `latitude` must be a swept fixture from `P1`,
+not a constant**, even though nothing varies it until `P6`.
 
 ### ⭐ Execution artifact
 
@@ -245,9 +285,19 @@ shape, and `ID-6` discharged rather than escalated.
 **Control:** the same act with `contests=[]` still emits `speech.made` with `degree=None` — the
 existing assertion at `:7262-7265`, unchanged.
 
-**Red today** at `shape.py:6766` — `Unspecified: the degree ladder's margin model`. **Green after,
-with a degree on the Event and a stable hash.** That transition is the execution-artifact count
-going from zero to one.
+⛔ **CORRECTED BY THE ADVERSARIAL PASS — THIS NAMED THE WRONG REFUSAL, FIVE TIMES.** A draft said
+*"Red today at `shape.py:6766` — `Unspecified: the degree ladder's margin model`."* **`:6766` is
+unreachable for these prizes.** It sits outside the `if _sub is not None:` block opened at `:6734`,
+so it fires only for a prize on **no** roster row — and `"a proposition"` has one (`rosters.yaml:445`).
+
+**The real red is `shape.py:6757-6765`:** *"a contest for 'a proposition' belongs to the
+`social_contest` subsystem (resolver: dice_pool), and nothing connects the seam to it."*
+
+⭐ **And the correction changes the finding's meaning, not just its address.** The current failure is
+a **dispatch gap the tree already names by subsystem** — not the unspecified-margin gap this
+proposal was framed around. *The seam knows exactly who should answer and has no way to call
+them.* **Green after, with a degree on the Event and a stable hash** — that transition is the
+execution-artifact count going from zero to one.
 
 ### Primitive count
 
@@ -280,7 +330,47 @@ gap-returning refusal.
 gain and a *partial* R gain. **Amputation fails the test explicitly:** cutting anything here cuts
 the producer, which is the thing being bought.
 
-### What it breaks — four things, and the second is a real bug
+### What it breaks — and the adversarial pass found three the first draft missed
+
+⛔ **THREE CURRENTLY-GREEN ASSERTIONS GO RED, ALL IN ONE TEST**, and a draft of this section named
+none of them. `test_we_only_a_verb_that_declares_contests_can_be_graded_today`
+(`test_tracer_is_honest.py:7346-7394`):
+
+| the assertion | what breaks it |
+|---|---|
+| `:7376-7380` — `pytest.raises(Unspecified)` per prize, then `assert set(refused) == {"a field", "a proposition", "a standing"}` | **`P1` step 1.** Two of those three now resolve instead of raising |
+| ⭐⭐ `:7384-7394` — a scan over `HERE.glob("*.py")` for `\bnet\b\s*=\|roll_pool\|\bsuccesses\b`, asserting `not producers` | **`P1` step 4 lands `proceedings_seam.py` IN THAT DIRECTORY computing `net = continuous_engine_sample(...)`. Red by construction** |
+| `:7362-7366` — `assert contested == {"kill / wound": "the body"}` | **`P2`**, when `speak` gains `contests:` |
+
+> ### ⭐ **THE SECOND ONE IS A DESIGNED TRIPWIRE AND MUST BE TREATED AS ONE.**
+> Its own failure message reads: *"something now produces a margin. `W-E` published `the ladder
+> branch has no producer` and recorded it on `H-98`; **that sentence is now false and must be
+> rewritten rather than left standing**."* **The test is not an obstacle to `P1` — it is `P1`'s
+> receipt.** Tripping it silently is the exact thing it exists to prevent, so the commit that lands
+> the provider rewrites `W-E`'s published sentence and re-pins `H-98` **in the same commit**.
+
+⛔⛔ **AND THE CAPABILITY RULE REFUSES FOR EVERY PERSON THE TRACER ACTUALLY CONTAINS.** The spec
+above says *a missing key REFUSES; it never defaults*. **Nothing anywhere populates
+`Person.capability`**: it is `field(default_factory=dict)` (`shape.py:2368`); `tiny_world` sets none
+on any of its five persons (`probes.py:57-98`); `corpus_run.py` and `headless.py` contain the word
+zero times; and the only writer in the tree is probe **P11**, which *zeroes* it to prove it gates
+nothing (`probes.py:432`).
+
+**So as drafted, `P1` returns `CAPABILITY-GAP` for every corpus person, and — mirroring the combat
+branch at `:6750-6756` — `contest()` raises.** `P2`'s bar test cannot go green; `P5`'s two-world
+comparison cannot run; and `P2`'s *"`results.json` moves"* understates it, because the corpus does
+not produce a delta, it produces a raise.
+
+⚠ **AND THE POLARITY IS ARGUABLE IN BOTH DIRECTIONS, WHICH IS WHY IT IS NOT SILENTLY FLIPPED HERE.**
+Refusing on a missing key routes around `shape.py:1622-1629`, which refuses at load any verb *gated*
+on capability — *"#353 §9.2: capability supplies dice and GATES NOTHING."* The seam is not the
+`eligibility:` column, so that loader guard cannot see the provider — **but the behaviour a refusal
+produces (no `eloquence` key ⇒ the act cannot happen) is precisely what the rule forbids.**
+**Resolution: seed `capability` in `tiny_world` and default a missing key to the fixture's floor,
+and refuse only on a key present-but-unparseable.** A `CAPABILITY-GAP` that fires on the whole
+corpus is not an honest gap, it is a broken default.
+
+**Four further consequences, and the second is a real bug:**
 
 1. **Every `speak` with `contests` set now needs a caller-supplied cap.** `probes._run` passes none
    by default (`probes.py:124-131`), so any probe hand-setting `contests` must pass
@@ -342,15 +432,65 @@ finds 1, 2, 3 and 6 of `§A.3`.**
 
 **3 · The gate.** `resolvable_verbs()`'s third gate (`:3352-3375`) excludes every contested verb.
 Its stated ground is *a contested act needs a `subject` operand, and `operands_for` returns `{}` for
-an UNTYPED verb.* **So narrow it to exactly that:** `contested and row.requires_typed is None`. A
-typed contested verb binds its subject and is offered. **The gate's own comment records that its
-previous ground became false and was replaced with a checkable one; this is the same move again, on
-evidence.**
+an UNTYPED verb.* The draft narrowed it to `contested and row.requires_typed is None`, on the ground
+that a typed contested verb binds its subject.
 
-**4 · The docket road** (find 2). `_eff_convene` (`:5030-5048`) must set `date["holder"] = a.actor`
-— **the convener holds the sitting** — and `date["matter"]` from `a.payload["matter"]`. ⚠ **This is
-a bug fix in an existing effect, not a mechanism**, and without it no convened date ever produces a
-`DocketItem`, so `speak`'s precondition can never be satisfied by the loop.
+⛔ **THE ADVERSARIAL PASS BROKE THIS, AND THE BREAK IS ORDERING, NOT TYPING.** In
+`SeasonDriver.resolve` the contest dispatch is at `shape.py:6114-6140` and `_fold` is called **after
+it** at `:6182`. Eligibility (`_eligible`, `:5863`) and the typed precondition (`:5869-5894`) are
+both **inside** `_fold`. ⭐ **So a contested act reaches the provider BEFORE anything checks whether
+it should have been formed** — and the typed cell the narrowing relies on is evaluated *downstream
+of the call it would have to gate.*
+
+**And the subject is not guaranteed to be a Proposition.** `_derive_operand` binds `subject` to the
+question's referent (`:3719-3720`), and the four question sources supply Dates (Q1), ledger subjects
+(Q2), band-crossing sites (Q3) and Propositions (Q4) (`:3886-3933`). **Three of four hand the
+provider a non-Proposition** → `MATTER-GAP` → `Unspecified` → whole-case DESIGN-GAP.
+
+> **That is verbatim the failure the gate's own comment says it exists to prevent** (`:3378-3382`):
+> *"A computed `kill / wound` would therefore reach the seam with ONE claimant, `combat_seam` would
+> return `PARTY-GAP`, and every case that produced one would become a whole-case DESIGN-GAP."*
+>
+> ⭐ **The narrowing IS safe for `kill / wound`** — it is untyped, so `requires_typed is None` keeps
+> it excluded, and the pass confirmed that. **It is not safe for `speak`, and no typing can make it
+> safe**, because the check runs after the call. **`P2` does not land until the gate filters on
+> something evaluable at formation time** — the candidate is `_derive_operand`'s own source, which is
+> known before the act is built.
+
+**4 · The docket road — ⛔ AND A DRAFT OF THIS STEP DID NOT CONNECT IT.**
+
+`_eff_convene` (`shape.py:5029-5046`) must set `date["holder"] = a.actor` — **the convener holds the
+sitting** — and that half is right: `vacant = not d.get("holder")` (`:5371`), so setting it is what
+makes a `DocketItem` form at all.
+
+⛔ **But the draft then said `_eff_convene` should set `date["matter"]`, and claimed that populates
+`DocketItem.matter`. IT DOES NOT.** The DocketItem is written by **CALENDAR, not by `convene`**, and
+its matter is a hardcoded `None`:
+
+```python
+w.write("DocketItem", WriteClass.CALENDAR,
+        lambda did=did: w.docket.append({"date": did, "matter": None}),
+        record_kind="DocketItem", fieldname="matter", driver="Event")
+```
+(`shape.py:5377-5380`.) **Nothing reads `date["matter"]` anywhere in the tracer.**
+
+> ### ⛔⛔ **SO THE WHOLE CHAIN BUILT ON IT FAILS, AND THE SUITE HAD THE ANSWER IN ITS OWN HAND.**
+> - `P2`'s grammar branch — `sum(1 for it in w.docket if it.get("matter") == subject)` — returns
+>   **0 for every CALENDAR-formed item**, so `speak` refuses and the bar test's asserted `matter.*`
+>   Event never appears. What appears is `act.refused` (`:5913`).
+> - `P3`'s predicate (*"a docket item naming `payload["subject"]`"*) has the same problem.
+> - `P3`'s two-vs-three-parameter argument rests on the same false premise.
+>
+> ⭐ **The declared producer of `DocketItem.matter` is `carry`** (`verb_table.yaml:92`) — **and
+> `carry` is one of the seven inert verbs `§A.3` find 7 names and this suite explicitly declines to
+> fix.** *The road from a convened date to a docketed matter runs through a dead verb, and two
+> findings that were both in this document never met.*
+>
+> **What this costs `P2`:** either an `@effect_for("carry")` joins this proposal — which makes it
+> the second proposal to spend an effect on another lane's verb — or `speak`'s precondition is
+> retyped against something the loop can actually populate. **`P2` does not land until that is
+> chosen**, and the choice is an engineering call, not a ruling: `carry` is declared, its write
+> matrix row exists, and reviving it costs one effect.
 
 ### ⭐ Execution artifact — two, and the second is the bar
 
@@ -359,7 +499,7 @@ until all four bands appear; assert stance `+1` / `+1` / unchanged-with-docket-g
 `len({state signature per band}) == 4`.
 
 **`test_pr_a_hearing_runs_with_zero_authored_acts`** — ⭐ **this is `R`'s no-player half becoming an
-artifact.** `convene` by `p_high` (who holds it, `probes.py:84-86`) in season *n*; in *n+1* the date
+artifact.** `convene` by `p_high` (who holds it, `probes.py:82-84` + `:95`) in season *n*; in *n+1* the date
 fires (`:5363-5381`), `questions_for` raises `date_due` for everyone with `holder in (p.id, None)`
 (`:3888`), the chooser forms a `speak` Candidate, the seam runs, and `w.log` holds a `matter.*`
 Event carrying a degree. **Twice at one seed, byte-identical hash, and `causes[]` walks from that
@@ -399,9 +539,15 @@ is the only overhead and it is eight lines.
    no precondition; with a typed `DocketItem` precondition it refuses wherever no docket names its
    subject. **`runs/results.json` moves, and the deltas must be printed** — `19_PLAN.md:139-140`'s
    discipline, and the §0.1 point 4 rule that a number without a control is not a measurement.
-2. **Probe A38** (`probes.py:2351-2376`) uses `speak` as an incidental vehicle for the S27.4 gate;
-   with `contests:` on the row its second act reaches the seam without a cap. Move it to `utter` or
-   pass the cap.
+2. ⛔ **ABOUT A DOZEN SITES NEED A CAP, NOT ONE.** A draft named probe A38 alone. **Every
+   hand-authored `speak` folded through `probes._run` / `_run_d` raises `Forbidden` once `speak`
+   carries `contests:`**, because `_run` passes no `contest_max_depth` (`probes.py:124-131`;
+   `shape.py:6117-6119`). The sites: `probes.py:146, 246, 266, 675, 1999, 2119, 2339-2341` (probe
+   **A37**, three `speak`s, the same shape as A38 and unnamed in the draft), `:2364-2365`;
+   `test_tracer_is_honest.py:922, 2419, 2459, 2741`; and ⭐ **`corpus_run.py:445-448`, which uses two
+   bare `speak`s AS A CONTROL** and reads `VERB_TABLE["speak"].emits[0]`. Three further assertions
+   pin `speak` in the executed-verb set (`test_tracer_is_honest.py:4651`, `:4721-4722`, `:5575`).
+   ⚠ **Ordering rule 2 does not help these** — the failure is a missing cap, not the gate.
 3. **`test_we_event_degree_is_assigned…`** (`:7262-7265`) folds a bare `speak` expecting
    `degree is None`; it now reaches the seam. Rewrite to `utter`.
 4. ⛔ **Landing `P2` before `P1` turns every corpus case that speaks into a DESIGN-GAP**, because
@@ -463,11 +609,15 @@ made it is the person who may close it.
 `p_high` opens a Tenure with a degree and emits `matter.determined`; by `p_low` it emits
 `determine.refused`.
 
-⚠ **Red today in an unusual way, and it must be handled in the same commit:** probes **F8 and F21**
-(`probes.py:1093-1097`, `:2312-2317`) *assert the raise*, returning `"UNREACHABLE"` with
-`by="construction"`. **They flip from passing to failing and must be rewritten as passes** — a
-verdict change on two probes, which is exactly the kind of thing that gets missed and then read as
-a regression.
+⚠ **Two probes must be rewritten in the same commit — and a draft of this paragraph described the
+transition wrongly.** Probes **F8 and F21** (`probes.py:1097`, `:2315`) call
+`Query.judging_set(w, "D")`, which raises. **They are not passing today:** `run_probe` catches
+`ShapeGap` and records `verdict="GAP"` (`run_cases.py:89-91`). After `P3` the call returns a list,
+the probe returns its literal `"UNREACHABLE"`, and `run_probe:78-85` records
+**`verdict="NOT-REFUSED"`** — *"the shape PERMITTED what this probe expected it to refuse."* **Both
+feed `DEGRADED` (`run_cases.py:321`) before and after.** The rewrite is required; the *"green-to-red
+flip somebody reads as a regression"* framing was false, and would have sent a reader looking for a
+pass that was never there.
 
 ### Primitive count
 
