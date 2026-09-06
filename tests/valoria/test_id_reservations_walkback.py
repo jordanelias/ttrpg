@@ -156,7 +156,16 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # registers/editorial_ledger_fa.jsonl. Same update-the-pin-and-say-so path as the notes above:
     # ED-IN-0098 "returned" 0037-0039 per this lane's own annotation in
     # references/id_reservations.yaml, so reverting the walk-back would give 40, not 39.
-    released = {'SC': 33, 'FA': 39, 'WR': 10, 'SE': 51}
+    # PIN UPDATED 2026-09-06: SC 33 -> 36. ED-SC-0033/0034/0035 allocated for the proceedings
+    # subsystem's rulings -- ownership of all social contests plus the retirement of the orphaned
+    # tree (0033); resolution, where aggregates are licensed as Queries, the multilateral tally and
+    # the debate score are accepted, and latitude is pool-only WITH A FLOOR because the evidence
+    # says ~70% retention rather than elimination (0034); and the character model, where fears are
+    # pressed rather than spent and the second-person lever stays refused (0035). The entries exist
+    # in registers/editorial_ledger_sc.jsonl. Same update-the-pin-and-say-so path as the FA note
+    # above -- and this test is the guard that caught the omission, so the allocation and the pin
+    # now land in one commit, which is exactly what its own failure message asks for.
+    released = {'SC': 36, 'FA': 39, 'WR': 10, 'SE': 51}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (
