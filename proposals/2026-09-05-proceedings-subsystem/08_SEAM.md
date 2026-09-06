@@ -104,9 +104,10 @@ stated as amendments; neither is smuggled.**
 `shape.py:6553-6561`: *"NOTHING PRODUCES A `net` ANYWHERE IN THE TRACER"*).
 
 > **This provider is the first producer of the margin-graded branch.** That is not an amendment —
-> **it is the branch working for the first time** — but it means every defect in that path will be
-> found here, and the band edges (`F.9`, `H-31`) do not exist. **The subsystem cannot run until
-> somebody rules them, and this design refuses to invent them.**
+> **it is the branch working for the first time** — but it means every defect in that path is found
+> here first. ⚠ **A draft added *"and the band edges do not exist"*. They do**: `degree_from_net` owns
+> all four and a parity golden pins them. What this provider must supply is a **composed `Ob`** and the
+> magnitudes that compose it (`P-06`).
 
 ---
 

@@ -128,6 +128,56 @@ turnable opening, the joke that costs the speaker his dignity, the detailed deni
 anxiety. **A ladder whose bottom band wrote nothing could not express the study's central finding**,
 and the one ladder's `Failure` is exactly the adverse band the coined `Turned` was reaching for.
 
+### B.1.1 · ⭐ **ONE VERB, MANY SPEECH KINDS — and a proceeding weights them by APTNESS, not by coefficients**
+
+> **Jordan, 2026-09-06:** *"I assume the different proceedings weigh different kinds of social verbs
+> (eg speak, refute) differently?"*
+
+**The intuition is right and the mechanism is not a weight.** Refutation matters at a trial and is
+meaningless at a parliament; amplification carries an epideictic occasion and is empty at the
+conjecture rung. **What varies is whether the move is APT — and an inapt move is REFUSED, not
+discounted.**
+
+**First, there are not many social verbs. There is one, with kinds in data** (`ID-7`: *one type, many
+kinds; the membership in data*):
+
+```yaml
+# rosters.yaml: speech_kinds — a closed set in DATA. Adding one is a data edit.
+#   what the move DOES to the matter                      which rung / genre it is apt at
+propose      · concede      · refute       · define       · construe   · amplify
+object       · impugn       · pre-empt     · recapitulate · withhold*  · elicit-in-room*
+```
+*(the two starred are named for completeness and are not this design's to roster — `withhold` is not
+an act at all, §C, and asking is `interview`, §B.3.)*
+
+**Then three data facts decide aptness, and none of them is a coefficient:**
+
+| what decides | mechanism | effect |
+|---|---|---|
+| ⭐ **the genre** (Fig. 23, derived from the bench's remit) | a mismatch **fails `requires`** | *"Inverted, the case is lost regardless of its merits, because the speaker is answering a question the body has no office to decide."* **A `refute` before a deliberative body has no fact in dispute to refute — the act is refused and the refusal emits** |
+| **the rung** (Fig. 5) | the ladder's current position | `refute` is apt at **conjecture** and empty at **quality**, where the fact is admitted. `construe` is the reverse |
+| **`registers[]` · `proofs[]`** (Figs. 8, 6) | admissibility sets on the arrangement | a ceremony admits few manners; a deliberative body admits **no proofs at all** |
+
+## B.1.2 · Why aptness rather than weights, and it is not a preference
+
+| | |
+|---|---|
+| ⭐ **weights grow with the PAIR COUNT** | 12 speech kinds × 12 games = **144 numbers nobody measured.** `§0.06`'s emergence rule: *"interaction must be uniform — the rule count must not grow with the pair count. When it starts to, you have stopped composing and started scripting"* |
+| **and the study forbids the numbers** | *"a type inventory is not a frequency inventory… Han Fei's seven registers exhaust the ways a manner can be misread and say nothing about which misreading is likeliest before a given ruler"* |
+| ⭐ **a refusal EMITS, and a weight does not** | an inapt move at `-2 dice` is a bad roll nobody sees. **An inapt move refused is an Event, fanned out to everyone present, deposited in every ledger.** The player is *witnessed committing a category error* — which is exactly the corpus's fault at requirement row 2, and it is how they learn |
+| **and it keeps the closure claim** | aptness reads `genre`, the rung and two admissibility sets. **Nothing reads the game's name** |
+
+> ### **WHAT *IS* GRADED IS THE MANNER, NOT THE MOVE.**
+> `register fit` is a term in the obstacle (`06_RESOLUTION.md` §C.1) and it is exactly *"which
+> misreading this manner invites, before this room."* **So: WHICH move you make is apt or refused;
+> HOW you make it is graded.** That is Fig. 8 and Fig. 23 doing two different jobs, and collapsing
+> them into one weight table would have lost both.
+
+⚠ **CONVERGENCE, RECORDED BECAUSE IT IS THE ONLY CLEAN ONE IN THIS EXERCISE.** An independent Fable
+synthesis under the same brief and the same scope ban reached **`speak` with fifteen data-rostered
+speech kinds** from the other end. **Two derivations reaching *one verb, kinds in data* without either
+taking it from the other is corroboration** (`§G.4.3`) — and neither reached a weight table.
+
 ## B.2 · `determine` — *to dispose of a matter that has been heard*
 
 Blocked since it was written, on a Query that raises. **The design supplies the Query and the

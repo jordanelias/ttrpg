@@ -53,8 +53,10 @@ Per `CLAUDE.md` §2 a merge ratifies PROPOSED contents *by default*, with one ex
 
 **Five holes sit on its executable path, three `absent` with no default.** `10_LOOPS_AND_GAPS.md`:
 
-- **`P-01`** — **no band edges and no margin model.** Nothing can resolve. This is a **ruling**, not a
-  research question: the study supplies no numbers **and says so.**
+- ~~**`P-01`**~~ — ⚠ **WITHDRAWN.** A draft said *no band edges, nothing can resolve, a ruling between this
+  and running.* **The band edges are ruled and pinned**; `H-31` grades the margin model `assumption`
+  **with a default and a sweep.** The row was an over-escalation and is closed. What survives is
+  `P-06`: which key feeds the pool, and the modifier magnitudes — **inject, declare, sweep** (`ID-6`).
 - **`P-05`** — **an investigation cannot deposit what it found.** Five new rows emit a degree nothing
   consumes.
 - **`P-21`** — ⚠ **nothing here moves a conviction**, so `AX-3`'s normative half has no producer in the

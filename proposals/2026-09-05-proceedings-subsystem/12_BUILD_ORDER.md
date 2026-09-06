@@ -8,7 +8,7 @@
 
 | # | delivers | done when — **an execution artifact, not a document** | blocked by |
 |---|---|---|---|
-| **0** | **the band edges and the margin model** | a seeded margin produces the same band twice, and a planted margin one unit either side of an edge produces different bands | ⭐ **`P-01`, and it is a RULING, not a research question.** The study supplies no numbers and says so |
+| **0** | **the composed obstacle and the injected magnitudes** | a seeded margin produces the same band twice; a planted margin either side of an edge bands differently; **a composed Ob never falls below 1** | ⚠ **NOT a ruling.** The band edges are ruled and pinned by a parity golden. What is open is `P-06` — the key and the magnitudes — which `ID-6` says to **inject, declare and sweep** |
 | **1** | `Query.judging_set(w, venue, matter)` | a bench resolves over a planted seat roster; **removing the seat's remit empties it**; a purview walk one rung up still finds it | `H-32`, `W26`. **Nothing else** — this is buildable today |
 | **2** | `arrangements.yaml` + the loader | **twelve rows load; a fifteenth key fails the load naming the row; a thirteenth game (the examination) loads with no code change** | step 1 for `bench_basis` |
 | **3** | `release` as a table row | **loader invariant 6 is satisfiable for the first time**; `release` closes a Tenure of every kind in `tenure_kinds \ {contain}`; **a person resigns an office** | nothing |
@@ -38,6 +38,7 @@ architecture has carried since it was written** (*a person cannot resign an offi
 | **step 3 — `release`** | already specified as `§A.3` row 14, with its eligibility and its domain. **It is a missing row, not a missing decision** |
 | **step 4 — `convene`** | a wrong value, corrected by a ruling that has already been made |
 
-> **Everything else waits on `P-01`, and `P-01` is a design decision somebody has to take.** The
-> honest statement of this directory's status is therefore: **a shape, three free builds, and one
-> ruling between it and running.**
+> ⚠ **A DRAFT CLOSED THIS FILE WITH *"one ruling between it and running"*. THAT WAS WRONG** — the
+> ruling it named had already been made in 2026-08-14. **The honest statement is: a shape, three free
+> builds, and a set of magnitudes to inject and sweep** — which is work, not a decision somebody else
+> has to take.
