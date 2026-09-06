@@ -670,6 +670,23 @@ veto      = the licence conditions (Fig. 26) — demote-only, one BandExtension
 > term (step 12c) rather than becoming a second one. `P-39` forbids the 7→7 lookup that a standalone
 > register term would need.
 
+### C.1.1 · The ONE thing that is still forbidden, and it is not this
+
+**σ-leverage advantage may not be spent as an Ob reduction** — `Eff_Ob = base_Ob − eff_σ·σ_N`, F1,
+resolved by ED-884. **That is a statement about the σ-channel, not about obstacles**, and the two do
+not collide here: the four terms above are **composed into** `base_Ob` and floored, not **subtracted
+from** it by an unbounded σ-scaled term.
+
+**So the design carries both channels, and the rule for which is which is one line:**
+
+| | |
+|---|---|
+| **compose into `Ob`** | anything that is a property of **how hard this is** — the opposition's score, what the room interposes, what is being asked for, what has already been produced |
+| **enter as a σ-level** | anything the engine already treats as a **level of advantage** in σ-units, reached through `levels_to_net_sigma` → `net_boost` |
+
+⚠ **AND `eff_ob()` / `effective_ob()` REMAIN DISPLAY-ONLY.** A caller that **resolves** on `eff_ob`
+instead of `p_success` has reintroduced the retracted form. That finding is unaffected by this ruling.
+
 ### C.1.2 · Whose score — the declared default, and what stays suspended
 
 ⭐ **Two roles were collapsed into the phrase *"the opposition."*** The **resister** is whoever
@@ -699,23 +716,6 @@ already licenses (*"gets its declared default, swept, and is not re-escalated"*)
 **This is the ruling's own shape**: *"their corresponding score/2 **plus whatever specific modifiers
 exist for them in that instance**"* (Jordan, 2026-08-14). Four named modifiers, each sourced to a
 figure, each a property of **how hard this is in this room** — which is what an obstacle is.
-
-### C.1.1 · The ONE thing that is still forbidden, and it is not this
-
-**σ-leverage advantage may not be spent as an Ob reduction** — `Eff_Ob = base_Ob − eff_σ·σ_N`, F1,
-resolved by ED-884. **That is a statement about the σ-channel, not about obstacles**, and the two do
-not collide here: the four terms above are **composed into** `base_Ob` and floored, not **subtracted
-from** it by an unbounded σ-scaled term.
-
-**So the design carries both channels, and the rule for which is which is one line:**
-
-| | |
-|---|---|
-| **compose into `Ob`** | anything that is a property of **how hard this is** — the opposition's score, what the room interposes, what is being asked for, what has already been produced |
-| **enter as a σ-level** | anything the engine already treats as a **level of advantage** in σ-units, reached through `levels_to_net_sigma` → `net_boost` |
-
-⚠ **AND `eff_ob()` / `effective_ob()` REMAIN DISPLAY-ONLY.** A caller that **resolves** on `eff_ob`
-instead of `p_success` has reintroduced the retracted form. That finding is unaffected by this ruling.
 
 ### C.1.3 · What this call costs, recorded so it can be revisited rather than re-argued
 
