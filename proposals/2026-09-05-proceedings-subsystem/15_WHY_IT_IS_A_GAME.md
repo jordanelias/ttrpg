@@ -77,7 +77,7 @@ from decoration to load-bearing in one edit.
 
 ### C.2 · ⭐ Elicitation becomes an information economy, which is what the study says it is
 
-`interview` currently *"emits a degree nothing consumes"* (`P-05`) — **and that is why it is
+`tell` currently *"emits a degree nothing consumes"* (`P-05`) — **and that is why it is
 pointless.** Once the Ob depends on what they hold, **buying a read is buying an estimate of the
 obstacle**, and every clause of the *Guiguzi* loop earns its keep:
 
@@ -186,7 +186,7 @@ the line is:
 | | |
 |---|---|
 | **`reception` reads the hearers' ledgers and convictions** | **resolver-side only.** `world_q` may read any store; `T-f` keeps it out of `choose`. **No new carrier, no new field** — it reads `Claim` rows and `Person.convictions`, both of which exist |
-| ⭐ **`P-05` is promoted from a hole to THE build-order bar** | without the deposit path, `interview` returns nothing the player can use, and PART C.2 does not exist. **It moves from step 11 to step 8** |
+| ⭐ **`P-05` is promoted from a hole to THE build-order bar** | without the deposit path, **a proof told at a hearing changes nobody's ledger**, and PART C.2 does not exist. **It moves from step 11 to step 8.** ⚠ **Restated 2026-09-06:** this row said *"`interview` returns nothing the player can use"*, which located the defect in a verb now withdrawn to `FI`. **It was never `interview`'s — it is `tell`'s, and `tell` is this subsystem's own** |
 | **`P-21` — nothing moves a conviction — becomes worse, not better** | if a bench's convictions set the obstacle, **a bench whose convictions never move is a bench that never learns.** The loop `L-6` stays severed and now matters |
 | **the display rule** | a constraint on the port, not on the engine. **Free, and easy to lose** |
 

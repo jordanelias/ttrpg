@@ -28,9 +28,10 @@ Per `CLAUDE.md` §2 a merge ratifies PROPOSED contents *by default*, with one ex
 |---|---|
 | **new carriers** | ⭐ **ZERO** |
 | **new edge kinds** | ⭐ **ZERO** |
-| **new verb names invented** | ⭐ **ZERO.** One was invented in draft (`elicit`), found to duplicate an act the tree had already named (`interview`), and the error is recorded at `04_VERBS.md` §B.3 rather than erased |
-| **new fields** | **ONE, contested** — and it turns out to be `Tenure.degree`, **a field the architecture already carries with a writer and no reader**, which `F.4` names as its standing falsifier and `ID-13` is about to delete. **This design is its reader** |
-| **verb rows changed** | `speak` and `determine` **gain a body** · `convene` is **corrected** · `release` is **landed** · `the six investigation acts` is **split into five rows** |
+| **new verb names invented** | ⭐ **ZERO — and it was nearly untrue TWICE, in the same place.** ⑴ A draft invented `elicit`, which duplicated an act the tree had already named (`interview`). ⑵ Told the investigation verbs belong to investigation, this design then moved to author a replacement in-room read verb of its own — **and Jordan refused that too** (2026-09-06: *"authoring a verb is something that likely belongs in the main system, right?"*). Both are recorded at `04_VERBS.md` §B.3 rather than erased, **because the near-miss is the load-bearing part of a zero-verb claim** |
+| **new fields** | **ONE, contested, and possibly ZERO.** The build plan's one new field is `Tenure.term` (step 22), **cut from three columns to one on 2026-09-06** — `declared_by` is `Tenure.conferrer` under a new name, deleted from the tracer three days earlier for reaching no reader, and `closer` is `T-o` plus `T-m`. ⚠ **`P-04` asks whether `convene`'s existing `Date.due_at` already carries it, in which case the count is zero.** Separately, `Tenure.degree` is a field the architecture already carries with a writer and no reader, which `ID-13` is about to delete — **this design is its reader**, which is a rescue rather than an addition |
+| **verb rows changed** | **THREE** — `speak` and `determine` **gain a body**; `convene` is **corrected**. ⚠ **`the six investigation acts` is UNTOUCHED:** a draft split it into five rows here and Jordan withdrew them to the `FI` lane on 2026-09-06 |
+| **verb rows added** | **ONE** — `release`, which **does not exist in the table** and which the architecture already specified (Stage 4 `§A.3` row 14). Not a new name: without it *a person cannot resign an office*, so `AX-6` fails |
 | **Queries** | three, of which **`judging_set` is already specified, already registered (`H-32`), and already on the executable chain's critical path (`W26`)** |
 
 > **The bar this is written against:** `03_VERBS_AND_LOOPS.md` §F.1 — *four stages of design added no
@@ -76,7 +77,7 @@ Per `CLAUDE.md` §2 a merge ratifies PROPOSED contents *by default*, with one ex
 | `01_THE_STUDY.md` | the requirement source — the uploaded study, and **the ten things it explicitly refuses to supply** |
 | `02_THE_SOCKET.md` | what the season loop actually exposes, **measured at commit `1b1e382`**, and the five things it is missing |
 | **`03_PARAMETERS.md`** | ⭐ **the parameter space.** All 27 figures mapped; the arrangement row (**fifteen keys** as of 2026-09-06 — `disposal_reach` split the reach of a ruling from the reach of the arguing); **the twelve games as twelve rows**; a thirteenth authored; three the structure refuses |
-| **`04_VERBS.md`** | ⭐ **the action set.** The five rows, the fifteen reused, and the fifteen steps mapped — **six of which are cleared by no verb at all** |
+| **`04_VERBS.md`** | ⭐ **the action set.** The four rows touched, the fifteen reused, the one withdrawn to `FI` with its three-part handover, and the fifteen steps mapped — **EIGHT of which are cleared by no verb at all** |
 | `05_PROCEDURE.md` | what is ordered and what is a map, by the permutation test; the nested run; the ladder |
 | `06_RESOLUTION.md` | convictions · ethos · stances · biases — **only two are fields** — the pool, the margin, and where a title enters (**not the pool**) |
 | **`07_THE_GAME.md`** | ⭐ **what a player does**, the four decisions, what the engine may and may not show them, and **the twelve as games** |

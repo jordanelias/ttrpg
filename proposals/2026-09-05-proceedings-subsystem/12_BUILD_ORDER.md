@@ -13,13 +13,13 @@
 | **2** | `arrangements.yaml` + the loader | **twelve rows load; a fifteenth key fails the load naming the row; a thirteenth game (the examination) loads with no code change** | step 1 for `bench_basis` |
 | **3** | `release` as a table row | **loader invariant 6 is satisfiable for the first time**; `release` closes a Tenure of every kind in `tenure_kinds \ {contain}`; **a person resigns an office** | nothing |
 | **4** | `convene` corrected | a convening at a hearth-rung and at a realm-rung both load; **one at a person-rung is refused by the ordinal test**; the `scale:` key fails the load | nothing |
-| **5** | the five investigation rows | each loads with a typed `requires`; **a planted `capability` eligibility is refused by name**; `surveil` refuses for want of a term | `P-04` for `surveil` |
+| ~~**5**~~ | ~~the five investigation rows~~ | ⛔ **REMOVED 2026-09-06 — NOT THIS SUBSYSTEM'S BUILD.** Jordan withdrew the rows to the `FI` lane (`04_VERBS.md` §B.3). **The step number is kept struck rather than renumbered**, so that citations of steps 6–14 elsewhere still resolve | the handover is `§B.3.1`; the dependency is `P-47` |
 | **6** | `speak` with its `requires` and its four bands | **a `speak` with no live occasion forms no Candidate**; the four `writes` and four `emits` key-sets are equal; `Held: []` still emits | steps 0, 2 |
 | **7** | `determine` with its three conjuncts | ⭐ **a bench member determines a heard matter**; **determining an unheard one emits `determine.unheard`**; an unseated actor emits `determine.unseated` | steps 0, 1, 6; **`P-03`** for the `via` conjunct |
 | **8** | `proceedings.run` + the manifest row | a misspelled manifest row **fails at boot naming the row**; a nested proceeding at the cap returns a typed `Refusal` **and in GDScript reaches it without a crash** | steps 0–7 |
 | **9** | ⭐ **THE BAR** | **one seeded proceeding runs end to end with zero authored acts, twice, byte-identical including the hash — and `causes[]` walks from the determination back to the date that raised it** | everything above |
 | **10** | the closure falsifier | **red on a planted `if arrangement.id == "tribunal"`, green otherwise** | step 2 |
-| **11** | the deposit path | an investigation's degree reaches the actor's ledger | **`P-05` / `H-122`** |
+| **11** | the deposit path | ⚠ **RESTATED 2026-09-06 — it got bigger.** Not *an investigation's degree reaches the actor's ledger* but **an ACT's product reaches the ledgers that should hold it**, which `tell` needs here whether or not `FI` ever lands the six. One owner serves both lanes | **`P-05` / `H-122`** |
 | **12** | a conviction producer | a determination moves the determiner's convictions, and `L-6` gains a sign | **`P-21`.** ⚠ **Not on the critical path and it is the most interesting row here** |
 
 **Critical path: 0 → 1 → 2 → 6 → 7 → 8 → 9.** Steps 3, 4, 5 are beside it and are the cheapest real

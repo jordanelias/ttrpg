@@ -125,7 +125,7 @@ Registered `P-24`, and it is the sharpest thing this question surfaced.
 | Jordan's word | its carrier | how it reaches a proceeding |
 |---|---|---|
 | **events** | `Event`, in the one log, carrying no actor and no target | → WITNESS → claims in ledgers → a **question** → a Candidate |
-| **facts** | `Claim(holder, subject, predicate, value, when, source, confidence, visibility)` | **the only currency there is.** Produced at a hearing by `tell`, and by the five investigation acts |
+| **facts** | `Claim(holder, subject, predicate, value, when, source, confidence, visibility)` | **the only currency there is.** Produced at a hearing by `tell`, and out of it by the `FI` lane's investigation acts. ⚠ **`visibility` IS INERT** — one occurrence in `shape.py`, the declaration, with no writer and no reader (`18_FINDINGS.md` correction, `19_PLAN.md` step 21) |
 | **pressures** | `Sensation(subsistence, standing)` — the two scalars a person feels | a question source: a **need** raises a candidate |
 | **clocks** | `Date`, wound by an act (`T-c`), matured by MATTER citing the act that wound it | ⭐ **this is how a proceeding CONVENES.** A date fires; CALENDAR appends a `DocketItem`; nothing is decided |
 | **issues** | the matter — a `Proposition`, uttered by somebody | `open_case`, which declares the stages and their terms |
