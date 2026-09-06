@@ -211,7 +211,11 @@ the call wrong.
 pool      = the actor's capability          FRACTIONAL · floored at 1D · continuous_engine_sample
 base_Ob   = the opposition's corresponding score / 2
             ± latitude          — what the arrangement interposes            (Fig. 4)
-            ± reception         — what the hearers read off the speaker, incl. rank  (Figs. 3, 25)
+            ± reception         — ⭐ COMPOSED FROM THE HEARERS' OWN CLAIMS ABOUT THE SPEAKER
+                                  AND THEIR CONVICTIONS ON THIS MATTER'S AXES.  Resolver-side,
+                                  hidden from every decision by T-f.   (Figs. 3, 25; and see
+                                  15_WHY_IT_IS_A_GAME.md PART C — this is what stops the
+                                  proceeding being computable)
             ± the rung          — what is being asked for                    (Fig. 5)
             ± register fit      — which misreading this manner invites       (Fig. 8)
             ± proofs told so far in this run                                 (Fig. 6, S8)
