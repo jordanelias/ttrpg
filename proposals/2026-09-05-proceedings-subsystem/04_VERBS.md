@@ -389,8 +389,10 @@ be rows" by writing five rows **here**, inside a proceedings subsystem. Jordan:
 
 **So the five drafted rows are WITHDRAWN from this proposal.** They were `examine`, `interview`,
 `research`, `reconstruct` and `surveil` with typed preconditions in `§F.24a`'s seven-form grammar;
-they are at `FORK`-equivalent in this branch's history (`git log -p 04_VERBS.md`) and nowhere else.
-Nothing in `05_PROCEDURE.md`, `06_RESOLUTION.md` or `03_PARAMETERS.md` resolves through them.
+**they survive only in this branch's history** — `git log -p 04_VERBS.md` — and nowhere else. Nothing
+in `05_PROCEDURE.md`, `06_RESOLUTION.md` or `03_PARAMETERS.md` resolves through them: `06`'s §B.1d
+names `interview` exactly once, to **offer** `composure` as the quantity it might contest, which is a
+handover and not a dependency.
 
 **And the follow-on — authoring the replacement here was ALSO refused, by Jordan, in the same
 exchange:** *"because authoring a verb is something that likely belongs in the main system, right? so

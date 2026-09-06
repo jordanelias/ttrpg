@@ -26,6 +26,14 @@ The multilateral tally and debate score are accepted. Latitude is **pool-only wi
 evidence says ~70% retention, so *"multiplies away"* was struck as an overshoot. A cornered man breaks
 toward the feared thing; pressure is the gap; **the second-person lever stays refused**, closing `P-36`.
 
+**A ninth ruling landed later the same day (ED-SC-0036), and it is a LANE BOUNDARY.** The proposal had
+split `verb_table.yaml`'s single row for `the six investigation acts` into five verb rows of its own.
+Jordan withdrew all five to the **`FI` lane** — *"they don't make sense being remade into some function
+for this social subsystem"* — and then refused the replacement verb this session moved to author in
+their place: *"authoring a verb is something that likely belongs in the main system, right?"* **A
+subsystem proposal may specify a verb's shape; it may not add one to the roster.** The proposal's
+zero-new-verbs claim survives because it was stopped twice in the same place.
+
 **Cross-lane items this creates for other lanes:**
 - ⛔ **IN / SC — the retirement wave.** `systems/social_contest/` deletion touches
   `module_contracts.yaml`, `canonical_sources.yaml`, `descriptor_registry.yaml`,
@@ -33,6 +41,13 @@ toward the feared thing; pressure is the gap; **the second-person lever stays re
 - **IN — the deposit rules** (`shape.py` attribution, channel-sourced hearsay, fan-out default) are
   season-loop changes, not proceedings changes. They are steps 1–4 of `19_PLAN.md` and they belong to
   whoever owns the tracer.
+- ⚠ **FI — the six investigation acts, with a three-part handover.** ⑴ **the stratum is the source
+  row's** (`contested_physical`); moving it to `social` is an unstated game change **and `SC` has a
+  stake**, because `tell` resolves at `social` and today a proof found this season can be produced this
+  season. ⑵ **whatever the rows band, they band on the one ladder's four degrees** — the withdrawn
+  draft gave each act a bespoke three-band result, which was `T-k`. ⑶ **the deposit path is ONE owner
+  for both lanes** (`H-122`): `SC` needs it for `tell`, `FI` for all six. ⚠ **The dependency is tracked
+  only at `P-47` and in `HANDOFF_SC.md` — if `FI` re-strata the six, `SC` has no notification path.**
 
 **Full detail: `registers/handoffs/HANDOFF_SC.md`, top section.**
 

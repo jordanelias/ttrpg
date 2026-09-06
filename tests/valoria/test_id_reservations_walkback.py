@@ -165,7 +165,14 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # in registers/editorial_ledger_sc.jsonl. Same update-the-pin-and-say-so path as the FA note
     # above -- and this test is the guard that caught the omission, so the allocation and the pin
     # now land in one commit, which is exactly what its own failure message asks for.
-    released = {'SC': 36, 'FA': 39, 'WR': 10, 'SE': 51}
+    # PIN UPDATED 2026-09-06: SC 36 -> 37. ED-SC-0036 allocated for the verb-authoring lane
+    # boundary -- Jordan withdrew the proceedings proposal's five investigation verb rows to the
+    # FI lane, and then refused the replacement verb the subsystem moved to author in their place
+    # ("authoring a verb is something that likely belongs in the main system"). The entry exists
+    # in registers/editorial_ledger_sc.jsonl. Same update-the-pin-and-say-so path as the note
+    # above; the frozen pre-walk-back SC pointer was 21, so 37 cannot be reached by reverting
+    # ED-IN-0098.
+    released = {'SC': 37, 'FA': 39, 'WR': 10, 'SE': 51}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

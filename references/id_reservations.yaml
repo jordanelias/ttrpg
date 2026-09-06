@@ -192,7 +192,11 @@ lane_ids:
     # recommendation. next_free bumped 12->13.
     FI: { name: "Field investigation", next_free: 9 }   # no reservation held; allocate at next_free as normal. Narrative: id_reservations_history.md#fi
     # ED-FI-0003 allocated 2026-07-07 (status open): ed_options OPT-6 (knots propagation completion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
-    SC: { name: "Social contest",      next_free: 36 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    SC: { name: "Social contest",      next_free: 37 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    # ED-SC-0036 allocated 2026-09-06 (status ruled, not needs_jordan): the verb-authoring lane
+    # boundary -- the five investigation rows withdrawn to FI, and the replacement verb this
+    # subsystem moved to author refused with them. Carries the three-part handover to FI (stratum,
+    # the four-band ladder, the shared deposit path) and opens P-47. next_free 36->37.
     # ED-SC-0033..0035 allocated 2026-09-06 (all status ruled, none needs_jordan): the proceedings
     # subsystem rulings -- 0033 ownership of all social contests + retirement of the orphaned tree;
     # 0034 resolution (aggregates licensed, multilateral + debate score accepted, latitude pool-only

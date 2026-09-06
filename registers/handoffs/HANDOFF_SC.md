@@ -30,6 +30,34 @@ confidence 100 (`:6336`); `told_by` is rostered and never minted; fan-out defaul
 solver is intact.** ⭐ **The fix is three deposit rules and one field, not a redesign** — `19_PLAN.md`
 steps 1, 2, 4 and 22.
 
+### ⚠⚠ CROSS-LANE — **`FI` OWNS THE SIX INVESTIGATION ACTS, AND THIS LANE NOW DEPENDS ON THEM** (ED-SC-0036, 2026-09-06)
+
+**Read this before touching `04_VERBS.md`.** This proposal had split `verb_table.yaml`'s single row for
+`the six investigation acts` into **five rows of its own** — `examine`, `interview`, `research`,
+`reconstruct`, `surveil`. **Jordan withdrew all five**: *"the five investigation rows and so forth are
+verbs for investigating… they don't make sense being remade into some function for this social
+subsystem when we can just create the correct verb for the subsystem instead."* When this session then
+moved to author a **replacement** in-room read verb here instead, that was refused too — *"because
+authoring a verb is something that likely belongs in the main system, right? so maybe we have to flag
+this."* **A subsystem proposal may specify a verb's shape; it may not add one to the roster.**
+
+**What `FI` is handed, and it is not a wish-list** (`04_VERBS.md` §B.3.1):
+
+| | the handover | why `FI` cannot skip it |
+|---|---|---|
+| **a** | the stratum is the SOURCE row's — `contested_physical`, not `social` | ⚠ **`SC` HAS A STAKE.** `tell` resolves at `social`, so while the six sit earlier a proof found this season can be produced this season. **Move them to `social` and a proceeding can only ever hear last season's findings** — a different game, defensible, and one `SC` would learn about by accident |
+| **b** | whatever the rows band, they band on **the one ladder's four degrees** | the withdrawn draft gave each act a bespoke three-band result (`Found`/`Partial`/`Nothing`). **That was `T-k`, and it was this design's defect, not the source's** |
+| **c** | the deposit path is **one owner for both lanes** | `H-122` / `observation_deposit_modes`. `SC` needs it for `tell` and `FI` needs it for all six; **whichever lane builds it, builds it once.** `P-05`, restated — it was never `interview`'s defect |
+
+**What the withdrawal costs `SC`: nothing in the room.** The two requirement-table steps that wanted an
+investigation act — *find who decides* and *what may not be said* — are **reception**, answered by
+`discernment`'s fidelity and by `reception` as an obstacle term. The no-verb count went from six of
+fifteen to **eight**, which closed `P-37` as a side effect. What it costs is the **out-of-room** half,
+which was always `FI`'s.
+
+⚠ **The dependency is tracked in ONE place and that is a gap: `P-47`.** If `FI` re-strata the six, `SC`
+has no notification path.
+
 ### Jordan's rulings, 2026-09-06 — ED-SC-0033 / 0034 / 0035
 
 | ruling | consequence |
@@ -52,12 +80,26 @@ steps 1, 2, 4 and 22.
 3. **Step 3's measurement before anything stands on it** — the ledger cap, with 1 and 2 live. The
    eviction key is **recency-dominated**, so it forgets the oldest thing first regardless of subject.
 4. **M-7 and M-8 gate the composed obstacle** and are blocking, not advisory.
+5. ⚠ **Before `Tenure.term` is built (step 22), answer `P-04`'s three prior questions.** The field was
+   cut from three columns to one on 2026-09-06 — `declared_by` is `Tenure.conferrer`, which the tracer
+   **deleted on 2026-09-03** for reaching no reader, and `closer` is `T-o` + `T-m`. **And `convene`
+   already writes `Date.due_at`; if that carries a declared term, this proposal's new-field count is
+   ZERO.**
 
 ### Still open, and they are Jordan's
 
 **None.** All five decisions in `19_PLAN.md` PART H are ruled. What remains open is measurement
 (M-1…M-8) and the ten weak joints in PART I — the sharpest being that **the outer act's degree is
 specified nowhere in the design**: a proceeding is six draws and the seam returns one margin.
+
+⚠ **ONE THING THE 2026-09-06 RECONCILE FLAGGED AND DID NOT DECIDE, AND IT IS A REAL FORK.**
+`06_RESOLUTION.md` §B.1c narrows `discernment`'s read #1 to **"WHO decides"**, because the draft's
+wider version — *"has it already decided"*, computed from the bench's convictions — **is the bench's
+leaning**, which `07_THE_GAME.md` PART D forbids outright on `T-f`. **The narrowing is correct against
+`07`.** But if the intent was for the fog to include a **noisy read of the bench's unwitnessed
+leaning**, that is a different and defensible game — and `T-f` is on the other side of it. **Not
+escalated as `needs_jordan`, because `07`'s table already answers it under `§G.4.5` test 3; recorded
+here because the answer was reached by a rule rather than by asking.**
 
 ---
 
