@@ -64,10 +64,33 @@ seam.proceed(proj, venue, matter, arrangement, attendees, depth, max_depth) -> M
 | **the depth cap** | a typed `Refusal`, never a raise. An appeal chain that exhausts itself |
 | **the matter reaches the foot of the ladder** | the rungs are finite; below *quality* there is nothing to concede |
 
-⚠ **THERE IS NO TURN LIMIT AND THERE MUST NOT BE.** A round cap would be a clock nobody wound
-(`AX-5`), and it would make the *length* of a hearing a property of the engine rather than of the
-people in it. **The bound is the attendees' willingness to keep spending, and the term somebody
-declared.**
+⚠ **THERE IS NO SYSTEMIC ROUND CAP AND THERE MUST NOT BE.** A number in the engine that ends
+proceedings is a clock nobody wound (`AX-5`, `T-c`). **The bound is the attendees' willingness to keep
+spending, and the term somebody declared.**
+
+> ### ⛔ **CORRECTED 2026-09-06 — A DECLARED TIME LIMIT IS LAWFUL, AND THIS SECTION HAD REFUSED IT.**
+> *(Jordan: "you can have turn limits because an adjudicator may impose a time limit on the
+> proceeding")*
+>
+> **The refusal was aimed at the wrong thing.** What `T-c` forbids is a clock **nobody wound**. A
+> presiding seat declaring *"this hearing closes at sunset"* or *"each party is heard twice"* is
+> ⭐ **a clock a PERSON wound**, which is precisely what the theorem requires rather than what it
+> forbids — and a draft of this file read the theorem as banning the very thing that satisfies it.
+>
+> **The carrier already exists and costs nothing new.** `T-n` says the opening act declares the terms;
+> `Tenure.term` — the one new field in `19_PLAN.md` — carries `matures_at`, `declared_by` and
+> `closer`. **A time limit is a term declared by the presiding seat, and it matures citing the act
+> that wound it.** No new machinery, and it is the same shape as the depth cap.
+>
+> ⭐ **AND IT IS A BETTER GAME, NOT A CONCESSION.** A declared limit is *a thing somebody set and
+> somebody can be reached about*: you may **petition to extend it**, **run it out deliberately** while
+> holding the floor, or **reach the person who set it** before the sitting. **A clock nobody wound
+> gives a player nothing to do; a clock the chancellor wound is a second contest.** The historical
+> case is the Athenian *klepsydra* — a water clock, stopped by an officer for the reading of
+> documents, which is a declared term with a declared exception.
+>
+> **What stays refused:** a fixture that ends a hearing after N turns with no author. **If no term is
+> declared, the run ends only when nobody acts, the ladder bottoms out, or the depth cap returns.**
 
 ---
 
