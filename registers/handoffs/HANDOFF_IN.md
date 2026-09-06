@@ -39,6 +39,15 @@ it as one. Independently hit by the 2026-09-04 social-contest pass, which reache
 follow three decisions on: does anything downstream change? At session start the answer was
 **no, 2,403 times out of 2,403**. Things happened and nothing followed from them.
 
+⚠ **RETRACTED 2026-09-06 — that baseline measured the instrument, not the engine.** `H-117`
+reclassifies the same 2,403 probes **INERT-BY-CONSTRUCTION**: the pre-`H-117` harness truncated
+**both** baseline and fork to `ranked[:1]`, so the alternative was inside the engine's own budget.
+Re-run corpus-wide at both fixture points, every arm reads **3,204 = 801 NO-LIVE-WINDOW + 2,403
+INERT-BY-CONSTRUCTION + 0 GENUINE** — an empty denominator, no rate. The retraction is about
+**relevance, not possibility**: those probes ran and were free to diverge, and whether they moved
+the act stream is not recoverable (`runs/arm9.json` predates the stream/decision split). Do not
+re-derive a propagation verdict from this number in either direction.
+
 **The answer now: the world diverges 100% of the time, later decisions diverge ~4%.** That gap is
 the finding. Every fork produces different acts, events and state; the people barely notice.
 

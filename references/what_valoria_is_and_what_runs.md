@@ -169,7 +169,25 @@ downstream, 2,403 times.** After the 2026-09-04 work the world diverges in **100
 decisions diverge **4.2% at the 2×1 cell by verb-only fingerprint** — 34.6% by `(verb, subject)`, and
 **0% at 2×3**. ⚠ **The result is cell-dependent and the number must never be quoted without its cell**
 (`HANDOFF.md`, and `registers/handoffs/HANDOFF_IN.md` top section, which says so in as many words).
-`NPC RUNS = 0`, `ARC ENDS = 0`.
+
+⚠ **CORRECTED 2026-09-06, TWICE — both halves of this paragraph were wrong.**
+
+**(1) The 2,403 baseline is RETRACTED.** `H-117`
+(`proposals/2026-09-02-executable-architecture/hole_register.yaml`) reclassifies those probes
+**INERT-BY-CONSTRUCTION** — the harness truncated **both** arms to `ranked[:1]`, measuring a triage
+the engine does not perform. Corpus-wide at both fixture points every arm reads **3,204 = 801
+NO-LIVE-WINDOW + 2,403 INERT-BY-CONSTRUCTION + 0 GENUINE**, an empty denominator with no rate. The
+retraction is about **relevance, not possibility**, and H-117 self-corrects a stronger first wording
+of its own. This paragraph's use of the number as *"the corroborating measurement"* does not survive:
+it corroborates nothing in either direction.
+
+**(2) `NPC RUNS = 0`, `ARC ENDS = 0` is FALSE — the instrument prints NOT-COMPUTABLE.** The
+constant-printing defect behind that figure was found and fixed; the bar now reports
+`RUNS = NOT-COMPUTABLE` (closed by W10-core + W27) and `ENDS = NOT-COMPUTABLE` (closed by W23 + W26 +
+W30), which is a different claim from zero and must not be re-stated as zero. Reproduce:
+`python engine/season/corpus_run.py` on the branch carrying `engine/season/` — measured 2026-09-06:
+143 cases, 54 UNREPRESENTABLE (faction 44, world 10), 6 of 32 verbs executed, DISTINCT EXECUTED
+SETS 2 over 89 worlds, R3 30/30 NPC and 54/59 ARC with the planted control firing.
 
 Corpus run: 122 probes at **63 PASS / 59 GAP**; **46 NPC cases** (6 BLOCKED, 2 DEGRADED, 38
 NOT-ASSESSED) and **97 ARC cases**, all NOT-ASSESSED. ⚠ NOT-ASSESSED is defined by the caselog as
