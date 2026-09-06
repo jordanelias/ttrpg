@@ -75,8 +75,16 @@ than from doctrine.
 **A third, and it solves a problem the design had parked.** The corpus's shape #4, in 7 figures:
 **terminal = being seen at it.** *"the DISCOVERED lie — not the lie"* · *"visible effort once seen"* ·
 *"it need only be visible that you know"* · *"as legible as a plain statement"*. **Costly faults are
-EFFECT faults; terminal faults are EXPOSURE faults.** ⭐ **So Failure's severity is a function of
-visibility — and `Claim.visibility` already exists on the schema.** That grades Failure three ways
+EFFECT faults; terminal faults are EXPOSURE faults.**
+
+> ⛔ **CORRECTED 2026-09-06 — THIS SENTENCE NAMED THE WRONG CARRIER.** It read *"Failure's severity is
+> a function of visibility — and `Claim.visibility` already exists on the schema."* **The field is
+> INERT.** `grep -n "visibility" shape.py` returns **exactly one line — the declaration.** No writer by
+> name, no reader anywhere. Building severity on it would have been `ID-13`'s dead carrier committed in
+> the document that names the defect. Found by the planning pass, **verified by hand before acting on
+> it.** ⭐ **The honest carrier is the SIZE OF THE OBSERVER SET at witness, minus the actor** — a
+> barrier-scoped aggregate, licensed by the aggregates ruling. `19_PLAN.md` step 21, which also deletes
+> the inert field. That grades Failure three ways
 without a second ladder, without a coefficient, and without `stakes_grade`, which was already this
 directory's most likely deletion.
 

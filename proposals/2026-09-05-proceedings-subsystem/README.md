@@ -94,6 +94,8 @@ Per `CLAUDE.md` §2 a merge ratifies PROPOSED contents *by default*, with one ex
 | `relay/A…D` | the four stages verbatim and unpatched — the interrogation (`fable`, informing only), the agonist (`opus`), and two structurally read-only `opus` critics on disjoint lanes. `17` is their adjudication; these are its evidence |
 | **`18_FINDINGS.md`** | ⭐ **the gameplay audit and the figure adjudication, written up.** Sixteen ranked opportunities; the character model (wants · fears · pressures · secrets); evidence and witnesses; **the eight recurring shapes the corpus itself supplies**; emergent narrative, where **six of eight mechanisms do not exist**; and the twelve variants, **three of which have no distinct play as the code stands** |
 | `relay/E…G` | the three passes behind `18` — the `fable` opportunity audit (two passes), the `fable` adjudication of all 27 figures into bands, and the `sonnet` emergence-precedent survey |
+| **`19_PLAN.md`** | ⭐ **the plan.** Twenty-seven instructions in four phases, each with its execution artifact and its falsifier; the character model in full; six measurement debts; what not to do; every refusal re-sorted under the ownership ruling; **five decisions that are genuinely Jordan's**; and ten places the plan is weakest |
+| `relay/H_FABLE_PLAN.md` | the `fable` planning pass behind `19`, verbatim |
 
 ## Scope — the rule this exercise was under
 
