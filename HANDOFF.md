@@ -9,6 +9,35 @@ experiment it was the instrument for. Read this file, and your lane's, yourself.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
+## ⚠ CURRENT — 2026-09-06, PR #373 · the proceedings subsystem owns all social contests (SC lane)
+
+**A from-scratch proceedings subsystem exists at `proposals/2026-09-05-proceedings-subsystem/`, PROPOSED
+and HELD BACK IN FULL, and Jordan ruled 2026-09-06 that it owns all social contests.** Twelve games as
+twelve parameter rows over one provider, nothing branching on a game's name.
+
+**The finding that subsumes the rest:** `reception` — the one hidden term the anti-solver argument rests
+on — **reads a set the world cannot populate.** No deposit names the actor; every claim is firsthand at
+full confidence; hearsay is never minted; fan-out is `total`. The room has no mind. **The fix is three
+deposit rules and one field.**
+
+**Eight rulings landed (ED-SC-0033/0034/0035).** Ownership + retire the orphaned tree (ruled, **not
+executed** — 47 files with 20+ inbound sites, a cross-lane wave). Aggregates are licensed as Queries.
+The multilateral tally and debate score are accepted. Latitude is **pool-only with a FLOOR** — the
+evidence says ~70% retention, so *"multiplies away"* was struck as an overshoot. A cornered man breaks
+toward the feared thing; pressure is the gap; **the second-person lever stays refused**, closing `P-36`.
+
+**Cross-lane items this creates for other lanes:**
+- ⛔ **IN / SC — the retirement wave.** `systems/social_contest/` deletion touches
+  `module_contracts.yaml`, `canonical_sources.yaml`, `descriptor_registry.yaml`,
+  `ci_checks_registry.yaml`, `lane_assignments.yaml`, the restructure ledger and three skills.
+- **IN — the deposit rules** (`shape.py` attribution, channel-sourced hearsay, fan-out default) are
+  season-loop changes, not proceedings changes. They are steps 1–4 of `19_PLAN.md` and they belong to
+  whoever owns the tracer.
+
+**Full detail: `registers/handoffs/HANDOFF_SC.md`, top section.**
+
+---
+
 ## ⚠ CURRENT — 2026-09-04, PR #368 (read this first; the 2026-08-27 section below is still true of `main`)
 
 **The season loop can branch now, and the interesting number is how little.** Forking every

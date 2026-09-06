@@ -4,6 +4,63 @@ Lane-scoped continuity for the `SC` (social contest) lane, per the `ED-<LANE>-NN
 (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. Root `HANDOFF.md` is the
 index; see it for cross-lane/global items.
 
+## ⚠ CURRENT — 2026-09-06, PR #373 · the proceedings subsystem (read this first)
+
+**A from-scratch proceedings subsystem exists at `proposals/2026-09-05-proceedings-subsystem/`, it is
+PROPOSED and HELD BACK IN FULL, and Jordan has ruled that it owns all social contests.** Nothing below
+in *Pending* is superseded — that work is still true of `main` — but the ownership ruling changes what
+it is for.
+
+**What it is.** One provider behind the one seam. **Twelve games as twelve parameter rows** —
+negotiation, negotiation by envoys, arbitration, trial, tribunal, interrogation, inquisition,
+excommunication, parliamentary debate, council of state, audience/embassy, appeal — with **nothing
+anywhere branching on a game's name**. Built under a standing scope ban: *"this from scratch proposal
+will not refer to any previous work concerning social contests"*, so `systems/social_contest/` and
+`proposals/2026-09-04-social-contest-branches/` were **not read**.
+
+**Read in this order:** `README.md` → `19_PLAN.md` (what to build) → `18_FINDINGS.md` (why) →
+`00_DERIVATION.md` (what a proceeding is). `relay/A…H` are the eight passes behind them, verbatim.
+
+### The one finding that subsumes the rest
+
+⛔ **`reception` — the single hidden term the whole anti-solver argument rests on — reads a set the
+world cannot populate.** No deposit names the actor (`shape.py:4203-4205`); every claim is firsthand at
+confidence 100 (`:6336`); `told_by` is rostered and never minted; fan-out defaults to `total`
+(`:1798`). **So the room has no mind, nothing is hidden because nothing is hideable, and the flowchart
+solver is intact.** ⭐ **The fix is three deposit rules and one field, not a redesign** — `19_PLAN.md`
+steps 1, 2, 4 and 22.
+
+### Jordan's rulings, 2026-09-06 — ED-SC-0033 / 0034 / 0035
+
+| ruling | consequence |
+|---|---|
+| *"this subsystem obviously owns all social contests"* | the seam dispatches by manifest **row**; the two prizes at `rosters.yaml:441-446` repoint here; **the obstacle has a single owner** |
+| *"orphaned social contest code: retire it"* | ⚠ **ruled, NOT executed.** 47 files, 1.2 MB, **20+ inbound sites**, several machine-read by blocking gates. A cross-lane wave: delete · `FORK:` row · repoint each site · confirm gates green. **Does not block the prize repoint** |
+| *"why can't we have aggregates in a subsystem?"* | the coordinator was **over-applying** the theorem — a Query is its *licensed* form. **Per-proceeding aggregates are free** |
+| *"of course we accept those shapes"* | the multilateral tally and the debate score land. `P-15` closes; **`records_dissent` withdrawn from the cut list** — under a declared disposal it is the tally made visible |
+| *"pool only it is"* | `P-29` closes. **Four room terms, not five** — every *"five terms"* figure in the directory is off by one |
+| *"don't deprive player of a chance at winning"* · *"a brilliant speaker rewarded"* | ⭐ **`latitude` is FLOORED.** The evidence (23.8% vs 16.6%, ≈70% retention) says *reduced*, not *eliminated* — *"multiplies away"* was **struck as an overshoot**. Both become **blocking** measurements, M-7 and M-8 |
+| *"cornered man breaks toward the feared thing"* · *"pressure is the gap"* | zero cost each. The presser **cannot predict the break**; a man is pressed by what he does not yet believe about himself |
+| *"second-person lever stays refused"* | `T-m` unamended. No creditor verb, no hook. **`P-36` closes with the absence accepted and stated** — and it is *why the fear lever is lawful*: the coercion happens inside the target |
+
+### Next actions
+
+1. ⛔ **The retirement wave** — cross-lane, ruled, unexecuted. **Not this PR.**
+2. **`19_PLAN.md` steps 1–4** — narrow the fan-out, attribute the deposit, mint hearsay, add the
+   want/fear term. ⭐ **One roster member, one deposit line, one sweep arm, one score term** — and with
+   those four the world starts generating first-order drama.
+3. **Step 3's measurement before anything stands on it** — the ledger cap, with 1 and 2 live. The
+   eviction key is **recency-dominated**, so it forgets the oldest thing first regardless of subject.
+4. **M-7 and M-8 gate the composed obstacle** and are blocking, not advisory.
+
+### Still open, and they are Jordan's
+
+**None.** All five decisions in `19_PLAN.md` PART H are ruled. What remains open is measurement
+(M-1…M-8) and the ten weak joints in PART I — the sharpest being that **the outer act's degree is
+specified nowhere in the design**: a proceeding is six draws and the seam returns one margin.
+
+---
+
 ## Pending
 
 - **Three-lens pessimistic NERS audit + upload delta FILED 2026-08-06 (ED-SC-0017..0022).**
