@@ -22,10 +22,14 @@
 > the tracer deliberately keeps data-derived. **The true count is one column, three cells and one
 > literal**, and the three cells must be declared as Part D rows before they are written.
 >
-> ⛔ **AND FIVE OF THE ELEVEN SHOULD NOT LAND AS WRITTEN** — `P1`, `P2`, `P3`, `P6`, `P7`. Their
-> *mechanisms* survived the pass; their **artifacts, breakage lists and several supporting claims
-> did not.** Every correction is inline at its site, marked ⛔. `20_REMEDIATION_part2.md` PART G
-> item 0 is the list.
+> ✅ **THE PASS REJECTED FIVE OF THE ELEVEN — `P1`, `P2`, `P3`, `P6`, `P7` — AND ALL FIVE ARE NOW
+> FIXED.** Their *mechanisms* had survived; their artifacts, breakage lists and several supporting
+> claims had not. **Three of the fixes made the suite better rather than merely correct:** `P1`'s
+> capability rule became *zero-and-floor*, which is the engine's own rule instead of a refusal;
+> `P2` revives **`carry`**, a `grade: ruled` row missing only an effect, which makes the docket road
+> a chain of person-acts end to end; and `P3` takes back the **third parameter** it had dropped,
+> withdrawing an argument that would have re-admitted a defect this design had already deleted.
+> Every defect and its fix are inline at the site, marked ⛔ then ⭐.
 >
 > ⭐ **The plan still gets SHORTER, not longer, at two places, and the pass did not dislodge it.**
 > `Tenure.term` — the one new field in the whole design — **is not built at all**: the carrier
@@ -219,8 +223,9 @@ brought  = brought_per_claim × |{c ∈ speaker.ledger : c.subject == matter.sub
 conduct  = eloquence × latitude             -- latitude = 1.0 until P6; floored by fixture
 pool     = max(1.0, brought + conduct)      -- the 1D floor, mean as well as variance
 
-           the three keys are read off Person.capability (shape.py:2368);
-           A MISSING KEY REFUSES (status="CAPABILITY-GAP"). It never defaults.
+           the three keys are read off Person.capability (shape.py:2368).
+           ⭐ A MISSING KEY CONTRIBUTES ZERO AND THE 1D FLOOR CATCHES IT.
+           There is NO CapabilityGap and no refusal -- see THE FIX below.
 
 resister = a person holding a live `commit` to a Proposition with the matter's
            (subject, predicate) and a DIFFERENT value          (Proposition, shape.py:2425-2434)
@@ -263,6 +268,12 @@ of a chance at winning and that a brilliant speaker is still rewarded, turned in
 `P6` makes M-7 and M-8 UNRUNNABLE — both arms identical by construction**, which is the fake-control
 shape `CLAUDE.md` §7 flags through `ED-MB-0066`. **So `latitude` must be a swept fixture from `P1`,
 not a constant**, even though nothing varies it until `P6`.
+
+> ### ⭐ **THE FIX.** `latitude_floor` is swept `{0.4 · 0.7 · 1.0}` from `P1`'s first commit —
+> `0.7` being the ~70% retention the evidence gave and Jordan ruled to
+> (`registers/handoffs/HANDOFF_SC.md:70`). **M-7 and M-8 then have two genuinely different arms on
+> day one**, and the blocking measurement is runnable before the composed obstacle acquires a
+> second term. **A fixture pinned to a constant is a sweep with one arm, which is not a control.**
 
 ### ⭐ Execution artifact
 
@@ -346,8 +357,21 @@ none of them. `test_we_only_a_verb_that_declares_contests_can_be_graded_today`
 > Its own failure message reads: *"something now produces a margin. `W-E` published `the ladder
 > branch has no producer` and recorded it on `H-98`; **that sentence is now false and must be
 > rewritten rather than left standing**."* **The test is not an obstacle to `P1` — it is `P1`'s
-> receipt.** Tripping it silently is the exact thing it exists to prevent, so the commit that lands
-> the provider rewrites `W-E`'s published sentence and re-pins `H-98` **in the same commit**.
+> receipt.**
+>
+> ### ⭐⭐ **THE FIX: `P1`'s COMMIT DISCHARGES ALL THREE, AND THE THIRD IS THE POINT.**
+>
+> | assertion | what the commit does |
+> |---|---|
+> | the `refused` set | **narrow it to `{"a field"}`.** `mass_battle` is still uncalled and still refuses by name; that is the assertion's remaining true content |
+> | ⭐ the `producers` scan | **rewrite `W-E`'s published sentence and re-pin `H-98` in the same commit**, which is what the failure message instructs. Then **re-arm the scan against the new truth** — it excludes `proceedings_seam.py` by name and keeps guarding every other file, so a *second* undeclared margin producer still trips it |
+> | the `contested` set | `P2`'s commit, not `P1`'s — `{"kill / wound": "the body", "speak": "a proposition"}` |
+>
+> ⚠ **Excluding a file by name from a scan is normally the move that hollows a guard out.** It is
+> admissible here only because the scan's own message says the published claim must be rewritten
+> rather than the test loosened — **the exclusion is the guard recording that its subject changed,
+> and the rewrite is the price.** If `P1` lands without the `W-E` rewrite, the exclusion is
+> unearned and the guard is hollow.
 
 ⛔⛔ **AND THE CAPABILITY RULE REFUSES FOR EVERY PERSON THE TRACER ACTUALLY CONTAINS.** The spec
 above says *a missing key REFUSES; it never defaults*. **Nothing anywhere populates
@@ -366,9 +390,22 @@ Refusing on a missing key routes around `shape.py:1622-1629`, which refuses at l
 on capability — *"#353 §9.2: capability supplies dice and GATES NOTHING."* The seam is not the
 `eligibility:` column, so that loader guard cannot see the provider — **but the behaviour a refusal
 produces (no `eloquence` key ⇒ the act cannot happen) is precisely what the rule forbids.**
-**Resolution: seed `capability` in `tiny_world` and default a missing key to the fixture's floor,
-and refuse only on a key present-but-unparseable.** A `CAPABILITY-GAP` that fires on the whole
-corpus is not an honest gap, it is a broken default.
+> ### ⭐⭐ **THE FIX, AND IT IS BETTER THAN WHAT IT REPLACES.**
+> **A missing key contributes ZERO to the pool, and `max(1.0, brought + conduct)` catches it.**
+> There is no `CAPABILITY-GAP` status, no refusal, and no seeding of `tiny_world` required — **the
+> corpus runs unmodified and a person with no declared capability is simply bad at speaking.**
+>
+> **This is the design's own rule arriving rather than a workaround.** `§A.2`: *"a person who tries
+> something they are bad at is the engine working."* The 1D floor was ruled on 2026-09-04 and
+> applied to **the mean as well as the variance** precisely so that an incompetent speaker still
+> rolls. **An unspecified speaker is the limiting case of an incompetent one**, and the floor was
+> already the right answer for both.
+>
+> ⭐ **And it puts the proposal back on the right side of `shape.py:1622-1629`** — *"capability
+> supplies dice and GATES NOTHING."* The draft's refusal made capability a gate in everything but
+> name, in a place the loader's guard could not see. **Zero-and-floor makes it supply dice, which is
+> what the rule says it does.** Refuse only on a key **present but unparseable**, which is an
+> instrument fault rather than a world fact.
 
 **Four further consequences, and the second is a real bug:**
 
@@ -452,10 +489,38 @@ provider a non-Proposition** → `MATTER-GAP` → `Unspecified` → whole-case D
 > return `PARTY-GAP`, and every case that produced one would become a whole-case DESIGN-GAP."*
 >
 > ⭐ **The narrowing IS safe for `kill / wound`** — it is untyped, so `requires_typed is None` keeps
-> it excluded, and the pass confirmed that. **It is not safe for `speak`, and no typing can make it
-> safe**, because the check runs after the call. **`P2` does not land until the gate filters on
-> something evaluable at formation time** — the candidate is `_derive_operand`'s own source, which is
-> known before the act is built.
+> it excluded, and the pass confirmed that.
+>
+> ### ⭐⭐ **THE FIX: THE FORMATION-TIME FILTER ALREADY EXISTS, AND TYPING `speak` IS WHAT SWITCHES IT ON.**
+>
+> The pass was right that the check must happen before the act is minted, and wrong that no such
+> check exists. **`operands_for` is it**, and its own docstring says so in terms:
+>
+> > *"`None` means THIS PERSON CANNOT FORM THIS CANDIDATE. **⚠ THE RETURN OF `None` IS THE
+> > LOAD-BEARING HALF, NOT THE DICT.** Never mint an act with a hole."*
+>
+> It runs inside the candidate loop at `shape.py:3284-3286`, **before `Candidate(...)` is built at
+> `:3289`**, followed at `:3287` by `belief_contradicts(p, row, subject, ops)` — which the same file
+> describes as asking *"whether the requirement is known-false ABOUT THIS BINDING."*
+>
+> ⭐ **And the reason it does not fire for `speak` today is stated in that same docstring:**
+> *"AN UNTYPED VERB IS NOT DECLINED. `{}` is the right answer for `speak`, `utter` and
+> `create_record`: the grammar states no precondition for them, so there is nothing to bind."*
+>
+> **So typing `speak` is not merely compatible with the narrowing — it is what arms the filter.**
+> A `date_due` question binding a Date, a ledger subject or a band-crossing site now fails to bind
+> a `DocketItem`-kind existence cell, `operands_for` returns `None`, and **the candidate is never
+> formed.** Where the person *believes* no docket names the subject, `belief_contradicts` declines
+> it one line later — `AX-2`-clean, because a person who believes wrongly forms the candidate and
+> the fold refuses it.
+>
+> **The narrowing therefore stands as written — `contested and row.requires_typed is None` — and
+> what makes it safe is the typed cell routing through a filter that already runs at the right
+> time.** The draft asserted safety; this is the mechanism that supplies it.
+>
+> ⚠ **The falsifier this needs, and it is cheap:** fold a season with `speak` typed and assert that
+> **no `Candidate(verb="speak")` is formed against a Date or a site subject** — `TRACE.note` makes
+> the declines countable, and `assert declined >= 1` is the assert-that-it-asserted.
 
 **4 · The docket road — ⛔ AND A DRAFT OF THIS STEP DID NOT CONNECT IT.**
 
@@ -486,11 +551,47 @@ w.write("DocketItem", WriteClass.CALENDAR,
 > fix.** *The road from a convened date to a docketed matter runs through a dead verb, and two
 > findings that were both in this document never met.*
 >
-> **What this costs `P2`:** either an `@effect_for("carry")` joins this proposal — which makes it
-> the second proposal to spend an effect on another lane's verb — or `speak`'s precondition is
-> retyped against something the loop can actually populate. **`P2` does not land until that is
-> chosen**, and the choice is an engineering call, not a ruling: `carry` is declared, its write
-> matrix row exists, and reviving it costs one effect.
+> ### ⭐⭐ **THE FIX: REVIVE `carry`. IT IS NOT A COMPROMISE — IT IS THE ROAD THE DESIGN ALREADY
+> ### DREW AND NOBODY WALKED.**
+>
+> `carry`'s row is **`grade: "ruled"`** — not assumption, not absent — and it is complete
+> (`verb_table.yaml:88-96`):
+>
+> ```yaml
+> requires_typed:  {form: existence, of: subject, kind: Petition}
+> writes:          ["DocketItem.matter"]
+> emits:           ["petition.carried"]
+> emits_on_refusal:["carry.refused"]
+> grade:           "ruled"
+> ```
+>
+> **It is the declared producer of the exact field `speak` needs, it has a typed precondition, and
+> it is missing precisely one thing: an `@effect_for`.** Reviving it is not a design decision — the
+> row is ruled and its own note already reasons about scoping (*"`carry` writes `(DocketItem,
+> matter)`, i.e. it carries a PARTICULAR one"*).
+>
+> ⭐ **AND THE SEMANTICS ARE RIGHT, WHICH IS THE ARGUMENT.** *A person carries a petition to the
+> sitting, and that names the matter.* The road becomes a chain of person-acts end to end:
+>
+> ```
+>   convene  →  the date has a HOLDER, so it is not vacant        (P2 step 4)
+>            →  CALENDAR fires it and forms a DocketItem          (shape.py:5371-5380)
+>   carry    →  a person carries a Petition; the item gains its MATTER
+>   speak    →  requires a DocketItem naming this matter
+> ```
+>
+> **`AX-1` holds at every link: only a person acts, and CALENDAR's step is the maturation of a term
+> a person wound.** A docket that filled itself would have been the defect.
+>
+> **What it costs:** one `@effect_for("carry")`. **Zero primitives** — the row exists, the write is
+> declared, the write-matrix row for `DocketItem.matter` exists because CALENDAR already writes it.
+> ⚠ **And `_eff_convene` sets `holder` ONLY.** The draft's `date["matter"]` is dropped: the matter
+> belongs to the docket item, written by `carry`, and a second home for it would be `ID-2`.
+>
+> ⚠ **One consequence, stated:** `speak` now depends on a verb outside this design's five. That is
+> the *eight inert reused verbs* finding arriving as work rather than as an observation — **and it
+> is the right one to revive first**, because it is the only one of the eight on this subsystem's
+> critical path.
 
 ### ⭐ Execution artifact — two, and the second is the bar
 
@@ -575,16 +676,30 @@ holders of a live `hold` on an `Office` whose `remit_acts` includes `determine` 
 never a raise** — the date fires and lapses, which is `H-32`'s own stated default. Sweep arms
 `remit+scope / remit only / scope only`, as data.
 
-> ⚠ **TWO PARAMETERS, NOT THREE — and this is a narrowing of the design, argued rather than
-> assumed.** `04_VERBS.md:330-337` wants `judging_set(w, venue, matter)`. **The third operand has no
-> producer until `DocketItem.matter` is populated**, which is `P2` step 4. The two-argument form
-> answers *who sits here*, which is the executable half today; the matter parameter arrives when its
-> operand exists. **Shipping a three-argument signature whose third argument is always `None` would
-> be `ID-13` on a parameter.**
+> ⛔ **A DRAFT SHIPPED TWO PARAMETERS AND ARGUED THE THIRD HAD NO PRODUCER. IT NOW HAS ONE, AND
+> ### THE ARGUMENT IS WITHDRAWN — `judging_set(w, venue, matter)`, THREE PARAMETERS.**
+>
+> The draft's reasoning was that `DocketItem.matter` is never populated, so a third argument would
+> always be `None` and would be `ID-13` on a parameter. **`P2`'s revival of `carry` populates it**,
+> so the premise is gone.
+>
+> ⭐ **And the draft ignored the design's own objection, which the adversarial pass caught.**
+> `04_VERBS.md:333-337` does not argue for the third parameter on completeness grounds — it argues
+> that **a venue-only judging set makes two different questions before one bench return the same
+> answer**, which it names as *"the `Rung.judging_set_rule` defect — decision-shaped state on a
+> place — arriving one level up."* **And `Rung.judging_set_rule` was deleted for exactly that
+> shape** (`04_VERBS.md:341-343`). A two-parameter form would have re-admitted a defect this design
+> had already removed, **one level up, where nothing would have caught it.**
+>
+> ⚠ **The draft also claimed to settle `P-35` "by the code" while shipping the reading the design
+> document argues against.** That is a design objection answered by silence — which is the one
+> disposition `§G.4.5`'s five tests do not offer. **Withdrawn.**
 
 **2 · The predicate.** `@requires_predicate("determine")`, beside `_req_convene` (`:4848`): a date
-at `payload["venue"]` that has `fired`, a docket item naming `payload["subject"]`, **and**
-`a.actor in Query.judging_set(w, venue)`.
+at `payload["venue"]` that has `fired`, a docket item **whose `matter` is** `payload["subject"]`,
+**and** `a.actor in Query.judging_set(w, venue, matter)`. ⚠ **This depends on `P2`'s revival of
+`carry`** — without it the docket item's matter is `None` for every date and the predicate never
+holds. **`P3` does not land before `P2`.**
 
 > ⭐ **AND THIS NARROWS `P-03` SUBSTANTIALLY.** Eligibility (`remit:determine`) is already evaluated
 > by `_eligible` (`:5757-5762`) over the actor's own live holds — **so a seat-holder can already act

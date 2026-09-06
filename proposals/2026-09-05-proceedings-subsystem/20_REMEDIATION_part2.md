@@ -125,11 +125,18 @@ design's central promise — has ZERO execution surface today.** `README.md` say
    > none.** Caught by the adversarial pass; it is the single best catch in it, because the draft's
    > whole argument for replacing the `grep` was that a grep cannot see what it excludes.
    >
-   > **The fix is to compare the OUTCOME, not the world:** the per-row sequence of
-   > `(act id, degree, net, ob)` from the seeded proceeding, which is what *"nothing branches on the
-   > name"* actually claims. The hash is contaminated by design — dates carry the arrangement — and
-   > **that contamination is correct**, because a world whose sitting is arranged differently IS a
-   > different world.
+   > ### ⭐ **THE FIX: COMPARE THE OUTCOME, NOT THE WORLD.**
+   > The assertion becomes the per-row sequence of **`(act id, degree, net, ob)`** from the seeded
+   > proceeding, which is what *"nothing branches on the name"* actually claims. **The hash is
+   > contaminated by design** — dates carry the arrangement — and **that contamination is correct**,
+   > because a world whose sitting is arranged differently IS a different world. *The draft compared
+   > the one quantity guaranteed to move.*
+   >
+   > **Both halves of §0.1 point 2 are then satisfiable, which the draft's version could not be:**
+   > plant `if arr.id == "tribunal": ob += 1` and the outcome sequence moves → **red**; remove it,
+   > rename every id, and the sequence is identical → **green**. **And it catches what a grep
+   > cannot** — a lookup table keyed on the name, a dict comprehension over ids, any path from the
+   > name to a number — which was the whole reason for replacing the grep.
 
 > ### **WHY RENAME-INVARIANCE AND NOT A GREP.**
 > `P-34` says the closure falsifier *"cannot see the failure it excludes"*: a scan for
@@ -161,8 +168,16 @@ called "no schema, because dates are dicts."**
 > cell from inside the effect body EVADES that check rather than satisfying it** — and
 > `verb_table.yaml:386` names this exact move as a past failure: *"With `writes: []` the creation row
 > W2 added was INERT and creation still bypassed the gate."* **Declare the cell, or do not write
-> it.** ⚠ **`P2`'s `date["holder"]` and `date["matter"]` are the same defect — three undeclared
-> cells across the suite, not zero.**
+> it.**
+>
+> ### ⭐ **THE FIX, AND IT SHRINKS THE COUNT TO TWO.** `P2`'s `date["matter"]` **is dropped
+> entirely** — `carry` writes `DocketItem.matter` through its own declared `writes`, so the second
+> home was never needed. **The two that remain — `Date.holder` and `Date.arrangement` — are
+> DECLARED as Part D write-matrix rows and added to `convene`'s `writes:` column**, which is what
+> `shape.py:1616-1621` asks for and what `verb_table.yaml:386` records as the step a past session
+> skipped. **Declared, they cost the same as `Date.due_at` already costs: nothing.** ⚠ **They are
+> still carrier cells and they are still counted** — the suite spends `product`, two declared `Date`
+> cells and one grammar literal. **Not zero, and no longer evasive.**
 
 **N** — this is the ruled framing (`README.md:18-21`): games as rows. Without it there is one game.
 **R** — *completeness at the extremes:* a row with `order: rank` needs a rank source — the title
@@ -210,11 +225,34 @@ mature a stage whose holder is gone:
 `05_PROCEDURE.md` argued for exactly this as a *better game* and did not know the tree already did
 it.
 
+### ⭐ The chain, re-argued from a producer that runs
+
+**A draft ran this argument through `open_case`, which has no `@effect_for` and cannot execute.**
+Re-argued end to end from `create_record`, which does:
+
+```
+create_record   →  @effect_for at shape.py:5118-5146. RUNS TODAY.
+                   Default branch stamps (due_tick, label, winding_act)   (:5131-5139)
+                   ⚠ ONLY the default branch -- an act declaring its own
+                     stages gets whatever the payload holds               (:5130)
+MATTER          →  matures the stage where due == w.tick, emits `term.matured`,
+                   citing the record's last change so causes[] WALKS      (:5424-5444)
+                →  ⭐ AND REFUSES TO MATURE IF THE WINDER IS GONE          (:5427-5432)
+```
+
+⚠ **The conditional stamp is the residue and it is stated rather than smoothed.** A declared-stages
+act supplies its own terms, so `T-n` holds for it too — **but nothing validates that payload**, and
+a malformed one produces a stage with no due tick. **That is a real gap, it belongs to `H-80`, and
+it is not this proposal's to close.** What `P7` claims is narrower and survives: **the horizon this
+subsystem needs has a producer that runs, a maturation that cites its winder, and a stop condition.**
+
 ### Execution artifact
 
 **Already green** — `test_tracer_is_honest.py:3926-3952` counts `term.matured` and walks its
-ancestry. One assertion is worth adding inside `P3`'s test: a case record whose stage matures cites
-**the opening act's emission**, not `[ROOT]` (`:5437-5438`).
+ancestry. Two assertions are worth adding inside `P3`'s test: a case record whose stage matures
+cites **the opening act's emission**, not `[ROOT]` (`:5437-5438`); and ⭐ **a record whose winder is
+removed before the due tick does NOT mature** — which is `T-c`'s dividend, currently proven only by
+a `TRACE.note` nobody asserts on.
 
 ### Primitive count · NERS
 
@@ -369,6 +407,7 @@ necessary, robust or smooth about. **§4's idempotence test is the whole of its 
         or in parallel                 │
                                        └─►  P2  speak row · effect · grammar branch
                                                  convene's holder · the gate
+                                                 ⭐ + @effect_for("carry") -- the docket road
                                                   │
                                                   └─►  P3  judging_set · determine   (F8/F21 flip)
                                                         │
@@ -383,7 +422,8 @@ necessary, robust or smooth about. **§4's idempotence test is the whole of its 
                                                         └─►  P8  conviction producer
                                                                feeds P5's second arm
 
-   P7  P-04 closes NOW, by citation      (one assertion added inside P3's test)
+   P7  P-04 closes NOW, by citation      (two assertions added inside P3's test)
+       re-argued from create_record, not the inert open_case
    P9  refusal roster                    (any time)
    P11 P-45                              (any time; prose)
 ```
@@ -419,7 +459,7 @@ than of any proposal, so this section is load-bearing rather than decorative.**
 | **P1 × P5 × P6** | the obstacle composition | ⭐ **ONE function** — `proceedings_seam.obstacle()`, enumerated once (`06_RESOLUTION.md:669-697`). `P5` fills a declared slot; `P6` supplies `aptness` and rung inputs. **Neither creates a second composition site**, which is why `P1` ships the zero-valued terms rather than omitting them |
 | **P1 × the prize name** | `"a proposition"` (exists) vs `"a matter"` (coined) | **the existing name wins**, on `ED-SC-0033` (2) + §4. `04_VERBS.md:74`, `08_SEAM.md:60-73`, `README.md:112-116` and `02_THE_SOCKET.md:207-221` are rewritten in `P1`'s commit |
 | **P2 × P4** | ledger pressure at the 200 cap (`:1772`, `:6429`) | **both increase deposits.** `M-1` runs after both and before `P5` reads person-claims across seasons |
-| ⛔ **P2 × P3** | `DocketItem.matter`'s producer | ⛔ **THIS ROW WAS FALSE AND IS THE SUITE'S WORST SINGLE ERROR.** A draft said *"`P2`'s `_eff_convene` fix populates it."* **CALENDAR writes the item with `matter: None` hardcoded** (`shape.py:5377-5380`); the declared producer is **`carry`** (`verb_table.yaml:92`), **which this suite's own find 7 lists as inert.** `P2`, `P3`'s predicate and `P3`'s two-parameter argument all rest on it. **Neither proposal lands until `carry` is revived or `speak` is retyped** |
+| ✅ **P2 × P3** | `DocketItem.matter`'s producer | ⛔ **THIS ROW WAS FALSE AND WAS THE SUITE'S WORST SINGLE ERROR.** A draft said *"`P2`'s `_eff_convene` fix populates it."* **CALENDAR writes the item with `matter: None` hardcoded** (`shape.py:5377-5380`); the declared producer is **`carry`** (`verb_table.yaml:92`), **which this suite's own find 7 lists as inert.** ✅ **FIXED: `P2` revives `carry` with one `@effect_for`** — its row is `grade: ruled` and complete. `P3`'s predicate reads the matter it writes, and `P3` takes its third parameter back. **`P3` does not land before `P2`** |
 | **P3 × `04_VERBS.md:303`** | `determine`'s `writes`, which the file says is UNCHANGED | **one extra pair**, because `commit` has no effect (find 7). **A finding against the file, not a design change** |
 | ⚠ **P4 × H-122** | two recipient rules at one barrier | **kept as two loops** — reads → actor via `observation_deposit_mode`; product → observers via the column. `H-121`'s lesson (`:6355-6360`) forbids one fixture carrying two decisions. ⛔ **BUT THE PLACEMENT CONTRADICTS THE SEPARATION:** *"a third loop after `:6423`"* puts it **inside** the `obs_mode != "none"` gate opened at `:6389`, **coupling it to the very fixture the proposal says it must not share.** Set `observation_deposit_mode="none"` — H-122's declared control — and the product silently stops depositing. **The loop belongs outside that gate.** Found by the adversarial pass |
 | **P5 × P8** | `Person.convictions` — `P8` writes, `P5` arm 2 reads | **a dependency, not a conflict.** `L-6` is measurable only with both |
@@ -498,8 +538,21 @@ above by a ruling, a precedent, the tree, or an engineering call, and `PART E` s
 **Named here rather than left for a reader, because a remediation document that reads as clean is
 the one to distrust.**
 
-0. ⛔⛔ **FIVE OF THE ELEVEN SHOULD NOT LAND AS WRITTEN, AND THE ADVERSARIAL PASS IS WHY THIS LIST
-   EXISTS AT ALL.** `P1` (wrong refusal line, three unnamed reddened assertions, a capability rule
+0. ✅ **THE FIVE THE PASS REJECTED ARE FIXED, AND THREE OF THE FIXES MADE THE SUITE BETTER RATHER
+   THAN MERELY CORRECT.** `P1`'s capability rule becomes *zero-and-floor*, which is the design's own
+   *"a person who tries something they are bad at is the engine working"* instead of a refusal that
+   made capability a gate the loader could not see. `P2` revives **`carry`** — a `grade: ruled` row
+   missing only an effect — which turns the docket road into a chain of person-acts end to end and
+   converts the *eight inert reused verbs* finding from an observation into work. `P2`'s gate
+   narrowing is armed by **`operands_for`**, whose `None` return already runs at candidate formation
+   and which the draft had asserted safety without. `P3` takes the **third parameter** it had
+   dropped, withdrawing an argument that would have re-admitted the `Rung.judging_set_rule` defect
+   one level up. `P6` compares **the outcome sequence** rather than the hash it was guaranteed to
+   move, and declares its carrier cells. `P7` is re-argued from **`create_record`**.
+
+   ⚠ **What the fixes cost, stated plainly:** `P2` now depends on a verb outside this design's five;
+   `P3` depends on `P2`; the suite's primitive count is `product`, **two declared `Date` cells** and
+   one grammar literal. **The previous state of this item, for the record:** `P1` (wrong refusal line, three unnamed reddened assertions, a capability rule
    that refuses for every person the tracer contains) · `P2` (a docket road that does not connect, a
    gate narrowing with nothing behind it, a breakage list short by an order of magnitude) · `P3`
    (inherits `P2`'s broken road; misstates two probe verdicts; answers `04_VERBS.md:333-337`'s
@@ -508,7 +561,7 @@ the one to distrust.**
    chain — it cited `open_case`, one of the inert verbs, as the producer of `Record.stages`; the
    reachable producer is `create_record`). **The mechanisms are sound. The artifacts, the breakage
    lists and several supporting claims were not, and are corrected above rather than quietly
-   fixed.**
+   fixed.** ✅ **All five now land.**
 1. ⚠ **Find 7 is not fixed.** Seven of the eight inert "reused" verbs belong to other lanes. This
    suite adds an effect for `determine` only. **`04_VERBS.md`'s economy claim needs rewording, and
    this suite does not make it true.** ⚠ **And `carry` moved from *not our problem* to *on the
