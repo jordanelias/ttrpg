@@ -31,7 +31,7 @@ makes the other twenty-two credible.
 | **7** the *Guiguzi* loop | reconstruction | **the shape of the elicitation act** — generative, iterative, revised after each return | — (it is a verb's shape, not a parameter) | `04_VERBS.md` §2.3 |
 | **8** the register matrix | fault table | **`registers[]` — which manners this game admits** — and the 7→7 misreading map, which is **content in a roster**, read at deposit time | `register ∈ 7` | WITNESS's deposit; `06_RESOLUTION.md` |
 | **9** conduct under attack | fault table | **not a parameter — a ladder and a set of refusals.** Its Q1–Q6 collapse into Fig. 27's ordered methods plus Fig. 26's licence gate | — | `05_PROCEDURE.md` |
-| **10** attacking without cost | fault table | **the licence gate (Fig. 26) plus `P3`'s indirect forms, which are CONTENT** — a Proposition template, not a mechanism | `forms[]` (content) | `charge`'s `requires` |
+| **10** attacking without cost | fault table | **the licence veto (Fig. 26)**, plus `P3`'s indirect forms — ⚠ **and P3 is NOT content, see §B.7** | veto terms | `speak`'s veto |
 | **11 + 21** recoverability | anatomy | ⭐ **the per-step cost grade, and it governs what a misstep WRITES** | `TERMINAL \| COSTLY \| FREE` | the degree-keyed `writes` |
 | **12** the capacity map | anatomy | ⚠ **the most dangerous figure in the study, and it becomes almost nothing.** See §B.2 | — | — |
 | **13** environments | anatomy | **`verdict_reasons` and the feedback triple** — whether an actor can ever learn they were wrong | `reasons ∈ {given, withheld}` | advancement; `07_THE_GAME.md` |
@@ -39,14 +39,14 @@ makes the other twenty-two credible.
 | **15** the pincer | anatomy | **nothing.** It is why the study exists | — | — |
 | **16** transmission | anatomy | **nothing.** Provenance of the study's own withdrawal | — | — |
 | **17** reading the body, person, moment | anatomy | **nothing new — it decomposes into 4, 5, 12 and the verbs.** Its value here is negative and large: it is why "reading the room" is four different things and not a stat | — | — |
-| **18** the circle of justice | anatomy | **CONTENT — a `form`, i.e. a Proposition template that lets a criticism be uttered as an observation.** The cleanest worked example of the architecture/content cut (`G.1.6`) | a row in `forms` | `charge`'s payload |
-| **19** Han Feizi's traps | fault table | **what elicitation can DISCOVER** — the divided motive, the plan he wants as his own. These are claims a person may hold about another | claim predicates | `elicit`'s writes |
+| **18** the circle of justice | anatomy | ⚠ **NOT SIMPLY CONTENT — see §B.7.** The form's protection is a property of the AUDIENCE, not of the utterance | — | §B.7 |
+| **19** Han Feizi's traps | fault table | **what elicitation can DISCOVER** — the divided motive, the plan he wants as his own. These are claims a person may hold about another | claim predicates | `interview`'s writes |
 | **20** the derivation grid | anatomy | **nothing.** The study's own confidence apparatus | — | — |
 | **22** five canons vs capacities | anatomy | **nothing mechanical** — it is the evidence that the requirement analysis was recovered from the corpus rather than imposed | — | — |
 | **23 the genre triangle** | anatomy | ⭐ **`genre` — and it is DERIVED from the bench's remit, not declared.** With the three bends. See §B.3 | `forensic \| deliberative \| epideictic` | which ladder runs; which verbs are apt |
 | **24 the interposition taxonomy** | anatomy | ⭐ **the richest single parameter: six kinds × absorbs / cannot absorb / cost.** *Cannot absorb* is a refusal predicate | `interposed ⊆ 6` | `latitude`; the consequence routing |
 | **25** prestige vs dominance | anatomy | **`route` — and it sets the EROSION PROFILE, which is the whole reason the matrix is drawn** | `route ∈ {prestige, dominance}` | the interior writes' magnitude |
-| **26** licensing frank speech | reconstruction | ⭐ **a four-conjunct `requires` with a NAMED REFUSAL PER CONJUNCT.** See §B.4 — this is the single tightest fit in the whole mapping | 4 conjuncts | `charge`'s `requires` |
+| **26** licensing frank speech | reconstruction | ⭐ **a four-part VETO on `speak`, demote-only**, each failure with its own named reading. See §B.4 | 4 veto terms | `speak` |
 | **27** dissolving a prejudicial attack | reconstruction | ⭐ **the LADDER primitive, instance 2 of 2.** Six rungs ordered by what each concedes | `ladder: charge` | `05_PROCEDURE.md` |
 
 **Tally: 27 figures → 5 that yield nothing, 3 that yield policy rather than parameters, 6 that yield
@@ -132,9 +132,35 @@ case is lost regardless of its merits* — is the refusal channel (`§B.3`), not
 |---|---|---|
 | **a trial that is really about honour** — Demosthenes on the crown | the bench's remit is forensic; the **prize** is standing, which is not the bench's to dispose of. **Two games run on one occasion**: a forensic game with a bench, and an epideictic game with an empty bench and the same floor | ✅ expressible, and it explains why Demosthenes *wins by refusing the frame* — he plays the second game |
 | **an assembly asked to judge a past act** — the scrutiny of a magistrate | one bench, whose remit covers both; `genre` resolves to a **set**, not a value; **the speaker faces both ladders at once** | ⚠ **expressible only if `genre` is a set.** It is declared as one. **A `genre` typed as a single value would have failed here**, and this bend is why |
-| **epideictic inside the other two** | amplification is not a game; it is what `charge` and `utter` do to standing regardless of bench | ✅ needs nothing |
+| **epideictic inside the other two** | amplification is not a game; it is what any `speak` with a person subject does to standing, bench or no bench | ✅ needs nothing |
 
-## B.4 · Fig. 26 is a four-conjunct `requires` with a refusal kind per conjunct — the tightest fit in the study
+## B.4 · Fig. 26 is a four-part VETO on `speak`, not a `requires` on a verb of its own
+
+⚠ **A PUBLISHED DRAFT OF THIS SECTION HUNG FIG. 26 ON A VERB CALLED `charge`, WHICH DOES NOT EXIST IN
+THE TABLE AND WHICH THIS DIRECTORY NEVER COUNTED.** It was used at five sites and carried mechanism at
+every one, while `README.md` claimed **zero invented verb names**. **The count was false, and the
+retraction is here rather than in a footnote.**
+
+**There is no `charge`. There is `speak`, whose subject is a person.** `G.2.3`'s test decides it: *does
+any mechanism need to behave differently for this variant in a way a data row could not express?*
+**No** — what differs is that the four conditions below apply when the subject can be hurt by what is
+said, and that is a condition on the act's subject, not a second verb.
+
+⭐ **AND MAKING IT A VETO RATHER THAN A `requires` FIXES A DEFECT THE DRAFT HAD AND DID NOT SEE.**
+Fig. 26 names **three institutional substitutes** for the four conditions, and the first is decisive:
+*"An office — conditions 1 and 4 are satisfied by the appointment itself, and 2 and 3 cease to apply —
+**a censor is expected to repeat himself in public**."* **Under the draft's `requires`, a tribunal
+member speaking publicly and twice would have been REFUSED as "a standing contest" and "a
+characterization" — the verb the tribunal row needs, refused by the row that makes it a tribunal.**
+As a veto the substitute is free: `interposed: [office]` **waives it**, which is data, and the
+proceeding keeps working.
+
+**This also closes `P-17`** — the draft used the conjuncts as a refusal on one verb and a demotion on
+another, and could not say which was right. **It is always a demotion**, because `§E.3`'s extension
+*"can only narrow an outcome, never widen one"*, and because a refusal would delete the study's point:
+**unlicensed frankness is not impossible, it is *priced as an attack*.**
+
+### B.4.1 · The four conditions, and what each removes
 
 The licensing conditions on frank speech are **cumulative**: all four hold, or the speech is received
 as an attack and priced as one. And the study gives each failure **its own named mode**:
@@ -146,16 +172,19 @@ as an attack and priced as one. And the study gives each failure **its own named
 | it is unrepeated | **a characterization** | *"said once it is about the act; said twice it is about the man"* |
 | the speaker's own advantage is absent, and seen to be | **self-interest** | removes the reading that he is bargaining |
 
-> ### **THAT IS LOADER INVARIANT 4, WIDENED (`F7`), WRITTEN OUT BY A HUMANIST IN THE FIRST CENTURY.**
-> `04_CODE_ARCHITECTURE.md` §B.13 invariant 4: *"every failable clause has a refusal kind — not only
-> a verb with a `requires`, but **each conjunct of it**."* The first wording covered `requires` as a
-> whole and *"was satisfied by luck."*
+> ### **THE FOUR ARE A VETO INPUT, AND THE STUDY SUPPLIES THE VOCABULARY FOR WHAT EACH FAILURE
+> ### PRODUCES — which is what a demotion needs and a refusal would have thrown away.**
+> A refusal says only *no*. **A demotion has to say what the room heard instead**, and Fig. 26 gives
+> exactly that for each condition: hostile · competing · characterizing · bargaining. **Those are the
+> emission's content when the veto fires.**
 >
-> **Fig. 26 supplies four conjuncts and four refusal kinds, matched.** The design does not have to
-> invent the refusal vocabulary for its most dangerous act; **the study already enumerated it, and
-> the loader can check it.**
+> ⚠ **AND THE DRAFT'S CLAIM THAT THIS *"IS LOADER INVARIANT 4, WIDENED"* IS WITHDRAWN.** Invariant 4
+> is about **a `requires`'s conjuncts each having a refusal kind**. These are not `requires` conjuncts;
+> they are veto terms. **The fit was real and the invariant was the wrong one**, and citing it made a
+> design choice look like a loader guarantee.
 
-And the four are expressible in `§F.24a`'s seven-form grammar with **no eighth form**:
+The four are nonetheless expressible in `§F.24a`'s seven-form grammar, which matters because a veto
+term must be evaluable from the same vocabulary:
 
 | conjunct | form |
 |---|---|
@@ -353,7 +382,7 @@ branch on its value; everything is read as an ordinal, a set membership, or a re
                                               # what counts as a proof here          [Fig. 6]
 
   # ── WHAT IT DOES ────────────────────────────────────────────────────────────
-  disposes:        <tenure kind> | standing | none
+  disposes:        <tenure kind> | Record | none   # ⚠ NEVER a Query — see 14_THE_WORLD_IN_THE_ROOM §E.2
                                               # what a finding writes                [AX-6 · §A.6]
   verdict_reasons: given | withheld           # can anyone learn why?                [Fig. 13]
   stakes_grade:    terminal | costly | free   # what a loss costs the loser          [Fig. 11 · 21]
@@ -481,7 +510,7 @@ concessions are cheaper. `appeal_basis: none` makes the finding final, which und
 disposal: bench · bench_basis: determine · floor: closed · records_dissent: false
 venue_min_rank: hearth · term_required: false · appeal_basis: none
 interposed: [] · order: scripted · registers: [restricted] · proofs: [testimony, confession]
-disposes: standing · verdict_reasons: withheld · stakes_grade: terminal
+disposes: <tenure> · verdict_reasons: withheld · stakes_grade: terminal
 ```
 **The asymmetry is not a key — it is `bench ∩ parties = {the questioner}`.** The questioner is both a
 party and the only person who may dispose, so **the subject has no third party to persuade.**
@@ -527,7 +556,7 @@ a later proceeding, not a mercy.**
 disposal: bench · bench_basis: determine · floor: open · records_dissent: true
 venue_min_rank: duchy · term_required: true · appeal_basis: none
 interposed: [procedure] · order: rank · registers: [all seven] · proofs: []
-disposes: issue · verdict_reasons: given · stakes_grade: costly
+disposes: Record · verdict_reasons: given · stakes_grade: costly
 ```
 **`proofs: []` is not an oversight — it is Fig. 23.** A deliberative body decides the **future**, and
 *the future admits no witnesses*; **the fact is not in dispute and there is no issue ladder to
@@ -553,7 +582,7 @@ nobody having made a mistake.
 disposal: bench · bench_basis: <any remit> · floor: admitted · venue_min_rank: realm
 term_required: false · appeal_basis: none
 interposed: [ceremony, person, document] · order: scripted · registers: [restricted]
-proofs: [record] · disposes: issue · verdict_reasons: withheld · stakes_grade: terminal
+proofs: [record] · disposes: Record · verdict_reasons: withheld · stakes_grade: terminal
 ```
 **Three interpositions is the lowest latitude on the board, and Fig. 14's pairing inverts:** one
 person who can constrain means **consequence matters and eloquence does not.** `interposed:

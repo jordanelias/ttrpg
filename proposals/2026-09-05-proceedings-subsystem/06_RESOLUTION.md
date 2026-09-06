@@ -85,69 +85,145 @@ influence*, and both of those are the HEARER'S side of the exchange, not the spe
 
 ---
 
-# PART C · THE MARGIN AND THE ONE LADDER
+# PART C · THE DRAW — **rewritten against the σ-leverage engine, which refutes the first version**
 
-> **`T-k`: one resolver, one degree ladder.** `§C.5`: *the subsystem returns a **Margin**. A subsystem
-> returning a winner has not met the contract.* `§E.3`: *a subsystem varies the ladder by passing a
-> declared extension that can only NARROW an outcome, never widen one.*
+> **Jordan, 2026-09-06, directing this section:** *"To what extent is the designed system probabilistic
+> instead of deterministic? Please now refer to the sigma-leverage resolver for its use of standard
+> deviation, dice pools rolling against obstacles, and use of fractional dice and fractional
+> obstacles."*
+>
+> ⚠ **This is the one place this directory reads outside `proposals/`, and it does so on that
+> instruction.** The sources are `skills/valoria-resolution-diagnostic/SKILL.md` §11 and the API it
+> names. **Behaviour is quoted from that document, not restated from memory**, and where it says a
+> claim is *ruled and implemented nowhere*, this file says so too.
+
+## C.0 · ⚠ **THE FIRST VERSION OF THIS PART WAS THE DEFECT THE ENGINE EXISTS TO KILL**
+
+A published draft wrote:
 
 ```
-margin  :=  pool(speaker, act)  −  obstacle(hearers, arrangement, rung, register)
-degree  :=  ladder.degree(margin, veto = <the licence gate failed>)
+margin := pool(speaker) − obstacle(latitude, reception, the rung, register fit, proofs told)
 ```
 
-## C.1 · The obstacle — four terms, each sourced, none numbered
+**Five terms, all modifying the obstacle. That is the retracted form, and it is retracted by name.**
 
-| term | source | direction |
+> `§11.2`: **"ADVANTAGE IS A μ-SHIFT. IT IS NOT AN Ob REDUCTION… `base_Ob` and TN are never
+> modified."** The earlier `Eff_Ob = base_Ob − eff_σ·σ_N` form *"drove effective Ob below 1, violating
+> P-232 (Ob minimum 1)"* and was **F1, resolved by ED-884.** *"Treat a document that describes
+> advantage as an Ob reduction as **stale**."*
+>
+> And the failure mode is exact: **"a flat `+X` to net or `−X` to Ob that is not σ_N-scaled gives
+> `Δz = X/(0.8·√pool) ∝ 1/√pool` — hot at small pools, the exact non-uniformity this engine exists to
+> kill, re-imported through a bonus."**
+
+⭐ **AND THE DIRECTION OF THE ERROR IS THE OPPOSITE OF WHAT THE STUDY SAYS.** A flat obstacle reduction
+is **strongest for the weakest speaker**. The study's finding is the reverse — *"position dominates an
+inattentive room and merely tilts an attentive one"* — so the draft's model would have made a title
+disproportionately powerful in exactly the rooms where the study says it counts least. **The engine's
+uniformity is not a constraint on the design here; it is the design's own claim, already enforced.**
+
+## C.1 · The correct shape — one draw, and the five terms are σ-LEVELS
+
+```
+pool       = the actor's capability                    FRACTIONAL · floored at 1D · continuous_engine_sample
+base_Ob    = the opposing side's corresponding score / 2, plus specific modifiers   ⚠ NEVER MODIFIED
+net_σ      = levels_to_net_sigma(advantages, disadvantages)      ⭐ THE FIVE TERMS LIVE HERE
+net_boost  = soft_cap(net_σ) · σ_per_die · √N          soft_cap(σ) = M_MAX·tanh(σ/M_MAX), M_MAX = 1.5
+p_success  = 1 − Φ( (base_Ob − (μ·N + net_boost)) / (σ_per_die·√N) )
+margin     = net − Ob   →   degree_from_net   →   Overwhelming | Success | Partial | Failure
+```
+
+**So the five things a draft called obstacle terms are five signed σ-levels**, aggregated by
+`levels_to_net_sigma`, boosting the **roll**:
+
+| σ-level | sign | source |
 |---|---|---|
-| **latitude** | Fig. 4, derived from `interposed[]` (`03_PARAMETERS.md` §B.1) | **low latitude raises the obstacle** — that is what an interposition is *for* |
-| **reception** | Fig. 3 + Fig. 25 — what the hearers read off the speaker, weighted by attention | **high standing lowers it; and it tilts rather than dominates an attending room** |
-| **the rung** | Fig. 5 — a lower rung is a smaller claim | **descending LOWERS the obstacle.** That is why the ladder is worth descending, and why the descent must cost something visible or it would be free |
-| **register fit** | Fig. 8 — which misreading this manner invites, before this room | ⚠ **the term this design is least sure of** — `05_PROCEDURE.md` §D |
+| **latitude** | − as interposition rises | Fig. 4, derived from `interposed[]` |
+| **reception** | + or − | Fig. 3 + Fig. 25 — what the hearers read off the speaker, **including rank** |
+| **the rung** | + as the ladder is descended | Fig. 5 — a lower rung is a smaller claim |
+| **register fit** | ± | Fig. 8 |
+| **proofs told so far in this run** | + | Fig. 6 + `S8` |
+| **the licence veto** | ⚠ **not a σ-level — a DEMOTION** | Fig. 26. `§E.3`: an extension may only narrow |
 
-⚠ **NO COEFFICIENTS, NO WEIGHTS, NO BAND EDGES ARE PROPOSED.** `F.9` — *the ladder's margin model and
-band edges* — is an open gap in the architecture itself, and `H-31` records that **nothing in the
-tracer has ever produced a `net`**, so the margin-graded branch of `degree_of()` (`shape.py:6668-6679`)
-is *a reader with no producer.* **This design is the first producer. It supplies the shape and refuses
-to supply the numbers**, and the honest statement is that **the subsystem cannot run until somebody
-rules the band edges.**
+## C.2 · What the engine gives this design for free, and it is a great deal
 
-## C.2 · The veto — a demotion, and the licence gate is what fires it
+| the engine already does | the study already wanted it |
+|---|---|
+| ⭐ **UNIFORM LEVERAGE.** `σ_per_die·√N` cancels in the z-score, so **`Δz = soft_cap(net_σ)` at every pool size and every TN** — measured `Δz = 0.874174` across pools {0.5, 1, 4, 9, 16, 25} at `net_σ = 1.0` | **a title changes WHETHER YOU ARE HEARD, not how well you speak.** Fig. 1's three layers, enforced arithmetically: an advantage helps a poor speaker exactly as much as a good one |
+| ⭐ **THE SOFT CAP.** `M_MAX·tanh(σ/M_MAX)`, `M_MAX = 1.5` — advantages **saturate** | ⭐ **THIS IS OVERSHOOT, ALREADY IN THE ENGINE.** `S3`: the named fault across seven traditions is *excess of a virtue*. Past the cap, piling on buys **nothing**, and the scene was still spent |
+| ⭐ **THE WHOLE-SUCCESS-WIDE `Partial` WINDOW** (`0 ≤ margin < 1`) — *"what keeps Partial reachable; on point-equality Partial would essentially never fire against a fractional Ob"* | **`Partial: []` is the speech that moved nothing** — the design's most-needed band, and the fractional-Ob analysis says it only exists because the window is a whole success wide |
+| **THE 1D POOL FLOOR** — ruled 2026-09-04, *"1D is floor"*, applied to the **mean as well as the variance** | `§A.2`: *"a person who tries something they are bad at is the engine working."* **An incompetent speaker still rolls** |
+| **FRACTIONAL Ob IS STRICTLY MONOTONIC** — `Ob 1.4 ≢ 1.6` | a room is not a step function. **Half a point of resistance is a real difference** |
 
-`§E.3`'s extension *"can only narrow an outcome, never widen one — injected by the wrapper, never
-resolved by the engine"*, and the constraint is **structural by signature**: `veto : bool`, and the
-ladder takes the minimum.
+## C.3 · ⚠ Two things this design must NOT do, both named by the diagnostic
 
-**Fig. 26's four conjuncts are the veto's source.** Frankness toward someone who can be hurt by it is
-a **licence**, and when it is unlicensed the speech *"is received as an attack and priced as one."*
-**Mechanically: the best available band is demoted.** ⚠ **And the four conjuncts are ALSO a `requires`
-with a refusal per conjunct** (`03_PARAMETERS.md` §B.4) — the difference is which act they gate. **On
-a `charge` they refuse it outright; on a `speak` that shades into one they demote it.** That is a
-real ambiguity and it is registered as `P-17`.
+1. **Never route a fractional pool to `roll_pool`.** *"`roll_pool` is the discrete path and keeps
+   `int(round(pool))`, correctly — a fractional pool routed to `roll_pool` is a finding"* (**P-v**).
+   A proceeding's pool is fractional, so it goes to `continuous_engine_sample`.
+2. **Never resolve on `eff_ob()`.** *"`eff_ob()` / `effective_ob()` are DISPLAY ONLY… a caller that
+   resolves on `eff_ob` instead of `p_success` has reintroduced the retracted form — **that** is the
+   finding to look for."* ⚠ **And it is a live temptation here**, because a player-facing screen wants
+   to show *how hard this is* — which is exactly what `eff_ob` is for and exactly what must not decide
+   anything.
 
-## C.3 · The bands, and why an undecided proceeding must be one of them
+## C.4 · What is still open, said at the diagnostic's own strength
 
-**Named by what the subsystem can actually distinguish, per the 2026-09-03 ruling: *the degree is READ
-OFF the subsystem, never mapped onto it by the table.***
+⚠ **THE OBSTACLE'S DERIVATION IS A RULING AWAITING EXECUTION, NOT AN ACCOMPLISHED FACT.** Jordan ruled
+2026-08-14 that an Ob rolled against a character or faction is *"their corresponding score/2 plus
+whatever specific modifiers exist for them in that instance"* — and **"every call site in the tree
+still passes a hand-set Ob."** So this design **names the derivation and cannot claim it runs**.
 
-| band | what it means | writes |
-|---|---|---|
-| **Carried** | the matter moved as the speaker pressed it | the rung, and the speaker's stance |
-| **Advanced** | it moved, short of what was pressed for | the rung |
-| **Held** | nothing moved | **nothing** — and the act still emits (`§C.4`) |
-| **Turned** | it moved **against** the speaker | the rung, and the speaker's stance |
+**And it must say whose score.** In a contested speech the opposing party's; where nobody opposes — an
+audience with a sovereign — **the hearer's**. That is a design call, stated as one, and registered
+`P-25`.
 
-⭐ **`Held` IS THE LEGITIMATE UNDECIDED OUTCOME, AND IT IS LOAD-BEARING.** `§C.5`: *"an undecided
-outcome is a legitimate result, and inventing a tiebreak to fill the contract is how a refusal becomes
-a fabrication."* The precedent is exact and ruled: `wrapper.fight` returns `0` and *"an undecided
-fight is a legitimate outcome"* (Jordan, 2026-06-02). **A hearing that settled nothing is a hearing.**
-
-⚠ **AND `Turned` IS WHAT MAKES THIS A DESIGN ABOUT OVERSHOOT.** The study's central finding (`S3`) is
-that the named fault across seven traditions is **excess of a virtue**, not deficiency — *"a competent
-thing done too hard, too soon, or too visibly."* **A ladder with no adverse band cannot express it**,
-and the design would then be about how much you win by.
+⚠ **`P-01` IS THEREFORE REWRITTEN AND LARGELY DISSOLVED.** A draft called the band edges *absent, no
+default, a ruling between this and running.* **They are none of those things:** `degree_from_net` is
+*"THE ladder, single owner for every scale"*, its four bands are ruled and pinned by a parity golden,
+and `H-31` grades the margin model **`assumption` with a default and a four-point sweep** — not
+`absent`. **What remains is `P-06`: which `capability` key feeds the pool, and the σ-level magnitudes
+— and `ID-6` says inject, declare and sweep those rather than escalate them.** Done at `P-06`.
 
 ---
+
+# PART C.5 · **HOW PROBABILISTIC IS IT? — one draw per interaction, and nothing else**
+
+> ### **THE ANSWER: EXACTLY ONE THING IN THIS SUBSYSTEM IS STOCHASTIC, AND IT IS THE DRAW.**
+
+| deterministic | stochastic |
+|---|---|
+| eligibility — four kinds, a disjunction | |
+| `requires` — seven typed forms; a precondition holds or it does not | |
+| who is in the room — **whoever travelled** | |
+| the arrangement — a data row read at load | |
+| the order of speaking — `arrangement.order` | |
+| the rung the matter stands at — a fold over this run's own emissions | |
+| **refusals** — scarcity, obstruction, an unseated determiner, a speech with no occasion | |
+| what WITNESS deposits, to whom, through which channel | |
+| the veto — the licence conditions either hold or they do not | |
+| | ⭐ **`continuous_engine_sample(pool)` against `base_Ob`, once per interaction** |
+
+**So a six-interaction hearing contains six draws and several dozen deterministic decisions.** The
+uncertainty is concentrated at exactly the point the fiction puts it — *how well did that land* — and
+nowhere else.
+
+⭐ **AND IT IS SEEDED, SO IT IS DETERMINISTIC ON REPLAY.** The seam seeds from
+`H(world_seed, tick, actor, prize, cause)`, following `combat_seam.py`'s discipline — *"a contest is
+reproducible exactly as every other draw in this instrument is"*. **The same season replays
+byte-identically, including the hash.** Probabilistic in the fiction; deterministic in the record.
+
+> ### **WHY THIS RATIO IS THE RIGHT ONE, AND IT IS THE STUDY'S ARGUMENT RATHER THAN A PREFERENCE**
+> The study's central finding is that **the actor's failures are not perceptual and not random** —
+> *"the perception is available and does not govern the action."* **A design that rolled for whether
+> you noticed the room, whether you remembered the precedent, or whether you kept your temper would
+> be modelling the half of the variance that is not there.** What is genuinely uncertain is **how a
+> room takes a thing**, and that is one number, drawn once, against a resistance somebody else's
+> attributes set.
+>
+> ⚠ **The honest cost: a player who plays well can still lose every draw**, and the design offers no
+> mitigation — no re-roll, no fate point, no escalating bonus. **The soft cap makes that worse on
+> purpose**, since advantage saturates at `M_MAX = 1.5`. Whether that is too harsh is a play question
+> and `P-26` records it as one.
 
 # PART D · WHAT A LOSS COSTS, AND THE TWO BOUNDS THAT NEED NO MECHANISM
 

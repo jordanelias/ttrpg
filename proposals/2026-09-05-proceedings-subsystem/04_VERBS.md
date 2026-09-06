@@ -66,18 +66,37 @@ stay, a summons, and defiance of one) · `confer` / `revoke` (the bench's seats)
     kind:      DocketItem
   contests:    "a matter"                   # ⭐ THE PRIZE
   writes:
-    Carried:    ["Tenure.degree", "Person.stance"]
-    Advanced:   ["Tenure.degree"]
-    Held:       []                          # ⚠ lawful ONLY here — the attempt happened and cost a scene
-    Turned:     ["Tenure.degree", "Person.stance"]
+    Overwhelming: ["Person.stance"]
+    Success:      ["Person.stance"]
+    Partial:      []
+    Failure:      ["Person.stance"]         # ⚠ an ADVERSE write. See (v)
   emits:
-    Carried:    ["matter.carried"]
-    Advanced:   ["matter.advanced"]
-    Held:       ["matter.held"]
-    Turned:     ["matter.turned"]
+    Overwhelming: ["matter.carried"]
+    Success:      ["matter.advanced"]
+    Partial:      ["matter.held"]
+    Failure:      ["matter.turned"]
   emits_on_refusal: ["speech.unheard"]
   grade:       "assumption"
 ```
+
+> ### ⚠ **THE BAND NAMES ARE THE LADDER'S OWN, AND A DRAFT OF THIS ROW COINED FOUR OF ITS OWN.**
+> The draft keyed `writes`/`emits` on `Carried · Advanced · Held · Turned`. **That row could not have
+> loaded and could not have run.** `VerbRow.writes_at` / `emits_at` **raise on any degree the row does
+> not declare**, and a margin-graded contest returns `DEGREE_LABEL[…]` — `Overwhelming · Success ·
+> Partial · Failure` — from `engine/autoload/dice_engine.py::degree_from_net`, *"THE degree ladder.
+> Single owner for every scale of the game (Jordan ruling, 2026-08-14)."* **Every `speak` would have
+> raised at the first fold.**
+>
+> **And it was not merely a naming slip — it was the exact defect `09_IMPOSSIBILITIES.md` row 16
+> names as this design's weak point**, committed in its headline verb. Jordan, 2026-08-15: *"systems
+> should not need different degree bands. it should be consistent in application."* Combat's
+> three-band exemption exists **by ruling, because combat reads a scene rather than a margin**, and
+> `rosters.yaml` says it "MUST NOT BE CONFUSED" with the ladder's four.
+>
+> **The four canonical bands say everything the coined ones did**, and the mapping is one-to-one:
+> carried → `Overwhelming`, advanced → `Success`, held → `Partial`, **turned → `Failure`.** The
+> *emission* kinds keep the proceeding's own vocabulary, because Event kinds are per-row and declared;
+> **only the KEYS are the ladder's**, which is exactly the line `T-k` draws.
 
 **Four things about this row are load-bearing.**
 
@@ -94,16 +113,20 @@ verb with a meaning instead of a verb with a gap.
 
 **(iii) `contests: "a matter"` makes the proceeding ONE act at the season scale.** See §C.
 
-**(iv) `Held: []` is the one lawful empty write, and it is the difference between a refusal and a
-loss.** `§C.4`: *the act still emits, so the attempt happened, was witnessed, and cost a scene.* **A
-speech that moved nothing is not the same as a speech that was never made** — and in a game about
-overshoot, that distinction is most of the point.
+**(iv) `Partial: []` is a lawful empty write, and it is the difference between a refusal and a loss.**
+`§C.4`: *the act still emits, so the attempt happened, was witnessed, and cost a scene.* **A speech
+that moved nothing is not the same as a speech that was never made** — and in a game about overshoot,
+that distinction is most of the point. ⚠ **A draft called this *"the one lawful empty write"*; it is
+not.** Every band of all five investigation rows writes `[]` for the same reason (they deposit at
+WITNESS), so the claim was falsified fifteen times in this file. **Corrected: an empty write is lawful
+wherever the act's product is a deposit rather than a state change.**
 
-⚠ **`Turned` is the band that makes this a design about overshoot rather than about winning.** A
-speech can move the matter **against** the speaker: it writes the rung *and* the speaker's stance, and
-it is the mechanical home of the corpus's whole fault catalogue — the turnable opening, the joke that
-costs the speaker his dignity, the detailed denial that reads as anxiety. **A three-band ladder with
-no adverse band could not express the study's central finding.**
+⚠ **`Failure` WRITING `Person.stance` IS WHAT MAKES THIS A DESIGN ABOUT OVERSHOOT RATHER THAN ABOUT
+WINNING.** A speech can move the matter **against** the speaker, and the band writes the speaker's own
+stance when it does. **This is the mechanical home of the corpus's whole fault catalogue** — the
+turnable opening, the joke that costs the speaker his dignity, the detailed denial that reads as
+anxiety. **A ladder whose bottom band wrote nothing could not express the study's central finding**,
+and the one ladder's `Failure` is exactly the adverse band the coined `Turned` was reaching for.
 
 ## B.2 · `determine` — *to dispose of a matter that has been heard*
 
@@ -114,18 +137,29 @@ Blocked since it was written, on a Query that raises. **The design supplies the 
 - verb:        "determine"
   stratum:     "binding_decision"
   eligibility: ["remit:determine"]          # unchanged
-  requires:    "a fired Date with a DocketItem · the actor's seat is in judging_set(venue, matter)
-                · the matter has been heard"
+  requires:    "a fired Date with a DocketItem, and the actor's seat is in judging_set(venue, matter)"
   requires_typed:
     all_of:
-      - { form: existence,  of: subject, kind: DocketItem }        # form 1
-      - { form: basis,      of: actor,   on: via }                 # form 7 — a basis lookup on the exercised seat
-      - { form: relation,   of: subject, holds: heard }            # form 5
-  writes:      ["Tenure.degree", "Tenure.since", "Tenure.until"]
+      - { form: existence, of: subject, kind: DocketItem }         # form 1
+      - { form: basis,     of: actor,   on: subject }              # form 7 — a basis lookup on the seat
+  writes:      ["Tenure.degree"]             # ⚠ UNCHANGED from the live row
   emits:       ["matter.determined"]
-  emits_on_refusal: ["determine.refused", "determine.unheard", "determine.unseated"]
+  emits_on_refusal: ["determine.refused", "determine.unseated"]
   grade:       "assumption"                  # was `absent`
 ```
+
+⚠ **THREE CORRECTIONS TO A PUBLISHED DRAFT OF THIS ROW, EACH OF WHICH WOULD HAVE FAILED THE LOADER.**
+
+| the draft | why it fails |
+|---|---|
+| `writes: [Tenure.degree, Tenure.since, Tenure.until]` **while the prose said *"does not change what the verb writes"*** | the live row writes `["Tenure.degree"]`. **The prose and the YAML contradicted each other in the same section** — and the prose was the true one, so the YAML is corrected to it |
+| `{ form: basis, of: actor, on: via }` | ⚠ **`via` is not in the closed operand roster** `(actor, subject, from, to, site, kind, amount, floor)`, and *"a cell naming an operand outside this roster REFUSES AT LOAD."* **`Act` has no `via` at all** (`P-03`), so this conjunct was unloadable twice over |
+| `{ form: relation, of: subject, holds: heard }` | **no act in this design writes a `heard` relation**, so the conjunct had no producer — `ID-13` committed inside a `requires` cell |
+
+⭐ **AND THE THIRD CORRECTION COSTS THE DESIGN A RESULT IT LIKED.** The `heard` conjunct was what
+produced `determine.unheard` — *a bench that determines a matter nobody has pressed is refused.*
+**Without a producer for `heard` that refusal does not exist**, and the "hearing precedes judgment"
+tempo below now rests on the stratum order **alone**, which is a weaker claim. Registered `P-23`.
 
 **`Query.judging_set(w, venue, matter)`** — the function `shape.py:3161-3163` reserves and refuses:
 
@@ -230,9 +264,18 @@ preconditions."*
 
 ### B.3.2 · The five rows
 
+⚠ **THE STRATUM IS THE SOURCE ROW'S, NOT THIS DESIGN'S.** `verb_table.yaml:491` carries
+`stratum: "contested_physical"` for `the six investigation acts`, and a draft of this section silently
+wrote `social` on all five. **`rosters.yaml` says the strata are ordered semantically and that
+*"editing the order changes which acts see which world — that is a game change"*, so moving five acts
+two strata later is a game change, unstated.** Kept at `contested_physical`. **The consequence is
+worth naming: investigation resolves BEFORE speech in the same season, so what an `examine` finds can
+be `tell`-ed at a hearing in the season it was found.** Under the draft's `social` it could not have
+been.
+
 ```yaml
 - verb: "examine"
-  stratum: "social" · eligibility: ["own"]
+  stratum: "contested_physical" · eligibility: ["own"]
   requires: "the actor is present where the thing examined is"
   requires_typed: { form: path, of: subject, kind: contain }          # form 3
   contests: "what persists"                                          # vs `retention`
@@ -244,7 +287,7 @@ preconditions."*
   # co-located deposits a claim that you were looking. AX-2 + WITNESS, at zero cost.
 
 - verb: "interview"
-  stratum: "social" · eligibility: ["own"]
+  stratum: "contested_physical" · eligibility: ["own"]
   requires: "the actor and the subject are present at the same venue"
   requires_typed: { form: path, of: subject, kind: contain }          # form 3
   contests: "a disposition"                                          # vs obstinacy
@@ -256,7 +299,7 @@ preconditions."*
   # the SUBJECT is co-located by the precondition, so they always witness the asking.
 
 - verb: "research"
-  stratum: "social" · eligibility: ["own"]
+  stratum: "contested_physical" · eligibility: ["own"]
   requires: "the actor holds a live admission to the archive"
   requires_typed: { form: existence, of: subject, kind: Tenure }      # form 1 — an `oblige` or `hold`
   contests: "what the record holds"
@@ -269,7 +312,7 @@ preconditions."*
   # channel, steal) are already three existing verbs. No gate mechanism is added.
 
 - verb: "reconstruct"
-  stratum: "social" · eligibility: ["own"]
+  stratum: "contested_physical" · eligibility: ["own"]
   requires: "the actor holds claims bearing on the subject"
   requires_typed: { form: own_ledger, of: subject }                   # form 6 — `tell`'s own form
   contests: "what can be inferred"
@@ -281,7 +324,7 @@ preconditions."*
   # and is acted on." This is the purest AX-2 act in the game and the one most worth building first.
 
 - verb: "surveil"
-  stratum: "social" · eligibility: ["own"]
+  stratum: "contested_physical" · eligibility: ["own"]
   requires: "the actor is present at the place, for a declared interval"
   requires_typed: none
   requires_typed_note: >-

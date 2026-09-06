@@ -133,13 +133,13 @@ interior write is a consequence of an outcome, which is what the degree-keyed co
 |---|---|---|
 | 1 | every `verb.writes` pair is a matrix row, **for every `Degree` branch** | four branches × the rows above |
 | 2 | every `RES` row has ≥1 producing verb | ⭐ `(Person, stance)` gains one |
-| 3 | eligibility kinds ⊆ roster, **`capability` refused by name** | `speak` and `elicit` are `own`; `determine` is `remit:` |
+| 3 | eligibility kinds ⊆ roster, **`capability` refused by name** | `speak` and `interview` are `own`; `determine` is `remit:` |
 | 4 | **every failable CONJUNCT has a refusal kind** | ⭐ **Fig. 26 supplies four conjuncts and four named failures** (`03_PARAMETERS.md` §B.4) |
 | 6 | `release`'s kind domain == `tenure_kinds \ {contain}` | ⭐ **satisfiable for the first time — `release` lands** |
 | 7 | the Event-kind roster is **derived** from emission columns | nine kinds, all declared. **No body literal** (`F.20b`) |
 | 9 | contest prizes ⊆ the subsystem roster | `"a matter"` → `proceedings` |
 | 10 | unknown keys rejected — **a `scale:` key fails the load** | ⚠ `convene`'s `scale:` must go (`03_PARAMETERS.md` §C.1) |
-| 12 | a verb declaring `contests:` has **`Degree`-keyed `writes` AND `emits`, key sets equal** | `speak`: 4 and 4 · `elicit`: 3 and 3 |
+| 12 | a verb declaring `contests:` has **`Degree`-keyed `writes` AND `emits`, key sets equal** | `speak`: 4 and 4 · the five investigation rows: 3 and 3 each |
 
 ⚠ **AND ONE THIS DESIGN CANNOT SATISFY, NAMED RATHER THAN GLOSSED.** `§C.2`'s `Receipt` — *only the
 gate mints one; the log's append asserts every receipt id is in the minted set* — **has no

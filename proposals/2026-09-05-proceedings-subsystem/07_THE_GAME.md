@@ -68,7 +68,7 @@ formed from what they hold** — `AX-2`, and the same function an NPC uses.
 |---|---|
 | **press the matter** at a rung, in a register | `speak` |
 | **produce a proof** they hold | `tell` |
-| **ask** — act on someone to produce a read | `elicit` |
+| **ask** — act on someone to produce a read | `interview` |
 | **take or abandon a position** | `commit` / `repudiate` |
 | **release** something they could have held | `release` — and this is the close |
 | ⭐ **say nothing** | **not an act.** It emits nothing, writes nothing, and is sometimes correct |
@@ -89,7 +89,7 @@ that they are hoarded."*
 
 ⚠ **AND THE GAME MUST NOT TELL THE PLAYER THE ROOM IS LOST.** That is the room's disposition, which
 `AX-2` forbids. **What the player has instead is what they were told, by whom, and how long ago** —
-which is why `elicit` before the day is a use of a scene, and why *the envoy who arrives early and
+which is why `interview` before the day is a use of a scene, and why *the envoy who arrives early and
 observes* (Nizām al-Mulk's envoy, requirement row 3) is a strategy rather than flavour.
 
 ## C.2 · Whether to descend — the core tactical decision, and the one the corpus is loudest about
@@ -201,7 +201,7 @@ instead:
 
 1. **The arithmetic of their own hand** — every claim they hold, graded, sourced, dated. *This is a lot.*
 2. **The rung**, which is public and is the single best summary of where a case stands.
-3. **`elicit`, which is a real answer** — the player who wants to know the room can **act on it**, at
+3. **`interview`, which is a real answer** — the player who wants to know the room can **act on it**, at
    the price of a turn, in front of everybody, and get back a read that **may be wrong and that they
    cannot tell is wrong.**
 4. **The room's reaction as fiction, not as numbers** — what people did, which is public, rather than
@@ -328,7 +328,7 @@ on it — and `AX-6` means it can be revoked, which means it can be held against
 | your convictions, which weight the axes | any indication that they are biasing you |
 | what was said in front of you, if you were there | what was said before you arrived |
 
-**The decisions:** determine on what you hold, or **`elicit` first and spend the turn**; determine now
+**The decisions:** determine on what you hold, or **`interview` first and spend the turn**; determine now
 or let the date lapse (**not determining is not acting, and the vacant date is already a mechanism**);
 determine against your convictions because the evidence is overwhelming, or against the evidence
 because your convictions are what you are.

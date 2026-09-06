@@ -272,33 +272,51 @@ is therefore not *did we cover the twelve kinds* but *what did we add to cover t
 | **Event kinds** | 9 | all declared as columns; none minted in a body (`F.20b`'s defect not repeated) |
 | **rosters** | 5 closed sets, in data | ladder rungs · interposition kinds · genre · register · standing route |
 
-## B.2 · The one field, argued against before it is admitted
+## B.2 · ⚠ **THE ONE FIELD IS WITHDRAWN. THERE IS NO NEW FIELD, AND THE REASON IS BETTER THAN THE FIELD WAS.**
 
-**`Proposition.rung` — the issue-ladder rung the matter has reached.**
+**A published draft of this section claimed the design's one new field was `Tenure.degree` — the field
+`F.4` grades as *a field with a writer and no reader* — and called it "the strongest result in this
+document." An independent read-only pass overturned it on five grounds, each cited, and the
+retraction is recorded here rather than overwritten.**
 
-**What was tried first, and why each failed:**
+| # | the objection | why it is fatal |
+|---|---|---|
+| 1 | **the field is not unspoken-for** | `§B.6.1`'s `Faction.head?` is *"by the proposition's own rule — input is `F.4`"*, and `F.4` hypothesises `Tenure.degree` is **the strength of a `commit`**. A matter is a Proposition; a faction is a Proposition plus `commit` edges. **Writing a rung name into `degree` on a `commit` puts a string where the faction-head rule expects a strength** |
+| 2 | **every descent would be a NON-OWNER write** | a `Tenure` is owned by its **subject** (`T-m`), and `HANDOFF_NEXT.md` `1a` plans the gate to assert `subject == actor` on every Tenure write. **Each party who descends would write the OPENER's edge.** Many writers, one owner — which is the exact `AX-4` objection this section used to reject the Query option |
+| 3 | **the opener has no `commit` edge** | `open_case` writes `Record.exists` and `Record.stages`, **not `Tenure.since`**. And **five of the twelve games have no `open_case` at all** — negotiation, public debate, audience, interrogation, negotiation-by-envoys — so the rung would have no home in them |
+| 4 | **two senses of one field** | `determine` already writes `Tenure.degree` as the **finding's** degree. A rung name on a different Tenure is one field carrying two meanings, which is the collision `ID-2` names |
+| 5 | **the falsifier could not discriminate** | `Tenure.payload` is **equally unread**. Deleting `degree` and moving the rung to `payload` would leave the design unaffected — so *"this design is its reader"* was never a test of that field |
 
-| candidate | failure |
-|---|---|
-| a **Query** over the acts so far | it is not derivable. Two people can descend to *quality* by different routes and the log does not say which rung is live now — it says which descents occurred. **A Query that must pick among histories is a resolver making a decision, which is `T-b`** |
-| a field on the **venue** (`Rung`) | `§D.2`'s NEVER — decision-shaped state on a container. This is exactly `judging_set_rule`, deleted for this reason |
-| a field on the **`Act`** that descended | an Act is not a carrier of ongoing state; the next actor would have to search the log for the most recent descent, which is the Query above |
-| a field on the **case `Record`** | ⚠ **this is the live alternative and it is close.** A `Record` is carried, forgeable and burnable — and *burning the record of what has been conceded* is a superb mechanic. **It is rejected only because a matter can be proceeded on with no record at all** (an audience, a public debate), and a field that exists only when a document does is a field whose absence has no meaning |
+> ### **AND THE REPLACEMENT IS NOT A DIFFERENT FIELD. IT IS NO FIELD.**
+>
+> **The rung is intra-contest state, and a proceeding is ONE contest inside ONE `RESOLVE`.** It is
+> opened by a `speak` that declares `contests:`, it runs on a shorter clock inside the seam, and it
+> ends within the tick. **So the rung never has to survive a barrier**, and a value that never
+> crosses a barrier is not a field — it is a local of the run, derived from the Events the run has
+> emitted so far.
+>
+> ```
+> rung(run) := the lowest rung any emitted `matter.*` Event in THIS run has named
+>              -- a fold over the run's own emissions. Owned by nobody. Stored nowhere.
+>              -- Dies with the run, exactly as a barrier cache dies at the next barrier
+> ```
+>
+> **This is `T-a` and `ID-1` applied one scale down**, and it removes the objection this section
+> originally used against the Query option: *"a Query that must pick among histories is a resolver
+> making a decision."* **Inside one run there is one history** — the run's own ordered emissions —
+> so there is nothing to pick among.
 
-**Admitted, with its price stated:** `Proposition` is declared **immutable** (`§D.5`: *"OWNS nothing.
-It is unowned because nothing may change it"*), so **a mutable rung on it is a category error by the
-schema's own admission test.** The resolution is that the rung is **not on the Proposition** but is a
-`Tenure` of kind `commit` from **the case's opener to the matter**, carrying the rung in `degree` —
-the field that Stage 4 `F.4` calls *"a field with a writer and no reader"* and that `ID-13` is about
-to delete.
+**What this costs, stated because a refusal with no cost is not a refusal.** ⚠ **A matter's ladder
+position does not persist between seasons.** A hearing adjourned and resumed next season **starts at
+the top of the ladder again**, and the only thing that carries across is what people were witnessed
+conceding — claims in ledgers, which is `AX-2`'s currency and not a rung. **Whether that is right is
+a play question**: it says a concession is remembered by people rather than recorded by a process,
+which is this game's whole posture, **and it means a long case cannot be ground down across years.**
+Registered `10_LOOPS_AND_GAPS.md` `P-22`.
 
-> ### **SO THE ONE FIELD THIS DESIGN NEEDS IS A FIELD THE DESIGN ALREADY HAS AND IS ABOUT TO THROW
-> ### AWAY FOR WANT OF A READER — AND THAT IS THE STRONGEST RESULT IN THIS DOCUMENT.**
-> `Tenure.degree` is written by `determine` (`verb_table.yaml:174`) and read by nothing. `F.4` names
-> it as `G.1`'s standing falsifier: *"a field the admission tests admit that the game needs refused,
-> or refuse that it needs admitted."* **This subsystem is its reader.** Either the field stays and
-> proceedings work, or the field goes and this design must find another home — and **that is a
-> falsifiable claim, testable today, by deleting the field and seeing what breaks.**
+⭐ **AND THE COUNT IMPROVES: ZERO NEW FIELDS.** The design touches no schema at all. `F.4`'s question —
+what `Tenure.degree` is for — is left **exactly as it was**, and this directory now has no stake in
+its answer, which is a cleaner position than claiming to be its reader.
 
 ## B.3 · What it makes unnecessary — the deletions this earns
 
