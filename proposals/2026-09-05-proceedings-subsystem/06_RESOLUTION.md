@@ -94,7 +94,7 @@ naming two rather than nine costs nothing and commits to nothing.**
 | | |
 |---|---|
 | ⭐ **it answers Jordan's second question with a derivation rather than a table** | **the pool does not change by proceeding kind. The multiplier does** — and the multiplier is `latitude`, which is itself derived from what the arrangement interposes (`03_PARAMETERS.md` §B.1). **Nothing anywhere branches on a game's name** |
-| ⭐ **the interposition price becomes mechanical, and it is the measured one** | Fig. 24: every interposition device moves a setting leftward. **Here it literally multiplies away the half of you that operates in the room.** The leader-effect evidence — *present in autocracies, absent in democracies; 23.8% private vs 16.6% public* — **is a statement about the size of the person-effect, and the person-effect IS the pool** |
+| ⭐ **the interposition price becomes mechanical, and it is the measured one** | Fig. 24: every interposition device moves a setting leftward. ~~**Here it literally multiplies away the half of you that operates in the room.**~~ ⛔ **STRUCK 2026-09-06 — see §B.3c. The measurement says the constrained condition RETAINS ~70% of the person-effect; "multiplies away" overshoots it. It DISCOUNTS that half, and `latitude` is floored.** The leader-effect evidence — *present in autocracies, absent in democracies; 23.8% private vs 16.6% public* — **is a statement about the size of the person-effect, and the person-effect IS the pool** |
 | **the corpus falls out** | the **written summary** is all *brought* and no *conduct* — which is exactly what a written channel is. The **envoy alone abroad** has both. **Liudprand at Constantinople** had his preparation and almost no conduct, and the *Relatio* is what he did with the half he kept |
 | **it explains why the terminal steps are terminal** | rows 0 and 14 — entry and close — are **decisions about the encounter**, taken where the multiplier does not reach. **You cannot be interposed out of choosing whether to go** |
 | **it keeps `§A.2`** | still nothing gates. A person with almost no *conduct* at a scripted audience **still rolls**, at the 1D floor |
@@ -250,6 +250,61 @@ largest lever in the game.**
 seed, a high-`conduct` speaker taking an INAPT move at low latitude must lose to a low-`conduct`
 speaker taking an APT one — **and the margin between them must be LARGER at low latitude than at
 high.** If it is not, judgment is not amplified and this section is wrong.
+
+## B.3c · ⭐⭐ `latitude` HAS A FLOOR, AND THE FLOOR IS WHAT THE EVIDENCE SAYS (Jordan, 2026-09-06)
+
+> *"we still need a brilliant speaker to be rewarded because if that is the player who is invested in
+> their character being a brilliant speaker, then the game has stripped away their investment"*
+
+**This is correct, it beats §B.3b's answer on its own terms, and checking the evidence shows the fault
+was mine rather than the ruling's.** §B.3b says brilliance-as-judgment survives — true, and it stacks
+below. But *"choose a different room"* is no answer to a player who built a brilliant speaker and finds
+the trial, the tribunal, the audience and the appeal all muting them. **That is stripping an
+investment, and the design does not get to call it fidelity.**
+
+> ### **AND IT IS NOT FIDELITY. THE MEASUREMENT SAYS *REDUCED*, NOT *ELIMINATED*, AND I HAD BEEN
+> READING IT AS ELIMINATED.**
+>
+> The one **magnitude** in the corpus is Quigley, Chirico & Baù 2022 (`01_THE_STUDY.md:150-151`):
+> private firms **23.8%** of variance in return on assets against public firms' **16.6%**.
+>
+> ### **16.6 / 23.8 ≈ 70%. THE CONSTRAINED CONDITION RETAINS ROUGHLY SEVENTY PER CENT OF THE
+> PERSON-EFFECT.** *(the ~70% figure is one of the numerics the adversarial pass verified against the
+> study, `13_ADVERSARIAL.md:82`)*
+>
+> **That is a modest discount. It is nowhere near an erasure — and a `latitude` that reaches zero
+> overshoots the finding it claims to implement.**
+
+⛔ **§B.2's own line is therefore struck as written.** It read *"here it literally multiplies away the
+half of you that operates in the room"* — **and "multiplies away" is the overshoot.** The measured
+claim is that it *discounts* that half. **Nothing in the corpus measures a person-effect going to zero
+in a bounded encounter**; the *"present in autocracies, absent in democracies"* contrast is about
+leaders' effects on national outcomes over years, which is not a speaker in a room and cannot carry a
+zero here.
+
+> ### **SO: `latitude ∈ [LATITUDE_FLOOR, 1]`, with the floor injected, declared and swept — and the
+> sweep's centre is the measured ~0.7, not 0.**
+> A brilliant speaker **keeps most of their brilliance in every room in the catalogue**, including the
+> most heavily interposed one. **Their investment is discounted, never stripped.**
+
+**This is the same shape as the two floors the design already has** — the 1D pool floor on the mean as
+well as the variance, and canon's obstacle floor of 1. **A quantity that can reach zero deletes a
+player's choices; this design floors such quantities on principle, and `latitude` was the one place it
+had forgotten to.**
+
+**What now stacks, in order, for a player who built a brilliant speaker:**
+
+| in the most interposed room in the catalogue | they keep |
+|---|---|
+| **the pool** | ⭐ **~70% of their conduct advantage** — the measured discount, not an erasure |
+| **the obstacle** | **every term they avoid by judgment** — aptness, the proof they chose, the rung they held (§B.3b) |
+| **the leverage** | the σ-channel, **uniform at every pool size**, bought with a debt they opened |
+| **the entry** | the choice of room, the arbiter, whether to go or send — the largest lever in the game |
+
+⚠ **M-8 is extended accordingly, and it is the falsifier for Jordan's constraint stated exactly:**
+**the high-`conduct` speaker must beat the low-`conduct` one at EVERY latitude including the floor**,
+all else equal. If they do not, the floor is too low. **A player's investment showing up nowhere is a
+failure of the design, not a finding about interposition.**
 
 ## B.4 · What is still `assumption`-grade, now narrowly
 

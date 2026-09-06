@@ -754,7 +754,7 @@ either direction — every row names its control.**
 | **M-3** | ⭐ **the weak-speaker swing** | step 20, and any further obstacle term | the five terms at four pool sizes, **one term at a time**, seeded; record band by pool | a rank advantage swings a small pool more than a large one **and it reads wrong in play** → move **reception alone** to the other channel. Not the other four — they are properties of the room |
 | **M-4** | **silence versus the held step** | shipping 14d | a joint 3×3 on the buildable order; count runs where silence is chosen | **silence step ≥ held step** → silence is strictly dominated and the decision does not exist. **Too small** → a shrug. ⭐ **The ratio, not either constant** |
 | **M-5** | **standing concentration over forty seasons, and the conviction loop's sign** | step 24's magnitude; any claim the loops are bounded | forty seasons, twelve persons, three seeds; the inequality of reception per season; each judge's weight per season | **rising monotonically** → the standing loop is unbounded, and three of its four bounds are corpus properties with no column to turn. **Judges converging** → the conviction loop is negative; diverging → positive |
-| ⭐ **M-8** | **BRILLIANCE IS AMPLIFIED, NOT SUPPRESSED, AT LOW LATITUDE** — Jordan's second constraint on the pool-only ruling | ⛔ **BLOCKING with M-7** on shipping the composed obstacle | at a fixed seed, a high-`conduct` speaker taking an **inapt** move against a low-`conduct` speaker taking an **apt** one, run at high and at low latitude | the apt speaker must win at both **and the margin between them must be LARGER at low latitude.** ⭐ If it is not, `06_RESOLUTION.md` §B.3b is wrong and judgment is not amplified — the remedy is a bigger aptness term, not a smaller multiplier |
+| ⭐ **M-8** | **BRILLIANCE IS AMPLIFIED, NOT SUPPRESSED, AT LOW LATITUDE** — Jordan's second constraint on the pool-only ruling | ⛔ **BLOCKING with M-7** on shipping the composed obstacle | at a fixed seed, a high-`conduct` speaker taking an **inapt** move against a low-`conduct` speaker taking an **apt** one, run at high and at low latitude | the apt speaker must win at both **and the margin must be LARGER at low latitude** — else §B.3b is wrong and the remedy is a bigger aptness term, not a smaller multiplier. ⭐⭐ **AND THE SECOND ARM, WHICH IS JORDAN'S CONSTRAINT STATED EXACTLY: a high-`conduct` speaker must beat a low-`conduct` one AT EVERY LATITUDE INCLUDING THE FLOOR, all else equal. If they do not, `LATITUDE_FLOOR` is too low.** A player's investment showing up nowhere is a failure of the design, not a finding about interposition |
 | ⭐ **M-7** | **THE DEPRIVATION FLOOR — Jordan's constraint on the pool-only ruling** | ⛔ **BLOCKING on shipping the composed obstacle** (step 12) | at the **minimum lawful pool** (the 1D floor) against the **maximum plausible composed obstacle** across the twelve rows, compute `p_success`. Then repeat with a bought σ-advantage at each rostered level | **effectively zero and not recoverable by buying advantage** → the ruling deprives, and the remedy is either making the σ-channel reachable in that room or **ceilinging the obstacle**. ⭐ Note the asymmetry that creates the risk: **the pool has a floor and the obstacle has no cap** |
 | **M-6** | **starvation on the narrowed fan-out** | making step 1 the shipped default rather than an arm | the corpus at both arms: the claim→question→act chain on the NPC lane | **the chain falls** → two channels are matching nobody and the narrowing is too tight |
 
@@ -840,11 +840,28 @@ including conclaves, votes and five-party settlements.**
 precedent · answered by what makes sense for the architecture. ⭐ Ownership is NOT here: it is settled,
 and its consequences are steps 8–9.**
 
-**D-1 · What happens to the code the repointed rows previously reached.**
-Repointing orphans whatever was reachable through those two rows. **Blocks nothing** — the rows repoint
-regardless. **Options:** leave it unreferenced with a note that its rows are gone · retire it under the
-culling precedent · migrate anything in it this provider lacks. ⛔ **This plan cannot assess the third
-without opening the tree, and will not.**
+> ### ✅ **D-1 · RULED 2026-09-06 BY JORDAN — *"orphaned social contest code: retire it."***
+>
+> **Retire** in this repository's sense: **deleted from `main`, kept at a named ref, with a `FORK:` row
+> in `references/restructure_ledger.md` so every path still resolves.** Not deprecated, not staged —
+> the staging tree does not exist any more.
+>
+> ⚠ **MEASURED BEFORE ACTING, AND IT IS NOT A ONE-LINE DELETION.** `systems/social_contest/` is **47
+> files, 1.2 MB**, with **more than twenty inbound reference sites outside it** — among them
+> `references/module_contracts.yaml`, `canonical_sources.yaml`, `descriptor_registry.yaml`,
+> `ci_checks_registry.yaml`, `lane_assignments.yaml`, the restructure ledger itself, and three
+> `skills/` files. **Several of those are machine-read by blocking CI gates**, so a bare `git rm`
+> turns validators red and the broken-dependency checker starts reporting.
+>
+> ⭐ **THEREFORE: RULED HERE, EXECUTED ELSEWHERE.** It is a cross-lane retirement wave, not a design
+> edit, and folding it into this proposal's PR would balloon a design change into a deletion touching
+> twenty registries. **The work is:** delete the tree · write the `FORK:` row · update each inbound
+> site to resolve through the ledger · confirm the blocking gates stay green. **And it does not block
+> step 9** — the two prize rows repoint here regardless, which is what orphans the tree in the first
+> place.
+>
+> ⛔ **The scope ban still holds while doing it:** the tree is not to be *read*. A retirement needs its
+> paths and its inbound references, which is what is measured above — it does not need its contents.
 
 > ### ✅ **D-2 · RULED 2026-09-06 BY JORDAN — *"pool only it is."* OPTION A.**
 >
