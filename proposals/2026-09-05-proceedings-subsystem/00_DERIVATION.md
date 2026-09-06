@@ -4,7 +4,7 @@
 ## Method: `04_CODE_ARCHITECTURE.md` PART G. Derived from the six axioms and the study; the executable
 ## chain was opened only to check that each shape is expressible in it (`§G.4.6`).
 ## ⚠ **This file is one of TWO independent derivations.** The second was produced by a read-only
-## Fable 5.1 synthesis under the same brief and with the same scope ban. `11_ADVERSARIAL.md` records
+## Fable 5.1 synthesis under the same brief and with the same scope ban. `13_ADVERSARIAL.md` records
 ## where they converged, where they disagreed, and which won.
 
 ---
@@ -25,7 +25,7 @@
 **This raises the bar rather than lowering it.** If a game is *just defined parameters*, then **every
 difference between two games must be locatable in the row**, and a difference that will not fit is a
 defect in the parameter set, not a licence to write a branch. The twelve rows in
-`03_ARRANGEMENT.md` are the proof obligation, and §5 there discharges it twice — once by authoring a
+`03_PARAMETERS.md` are the proof obligation, and §5 there discharges it twice — once by authoring a
 thirteenth game the study never describes, and once by naming a game this structure **cannot** host,
 because a parameter space with no inexpressible neighbour has not been bounded (`G.1.4`).
 
@@ -39,9 +39,8 @@ because a parameter space with no inexpressible neighbour has not been bounded (
 > ## **A PROCEEDING IS AN OCCASION AT WHICH PERSONS ADDRESS PERSONS WHO MAY DISPOSE OF A MATTER.**
 >
 > **The matter is a `Proposition`. The persons who may dispose of it are the holders of seats whose
-> remit covers it at that venue — a Query, not a body. Everything that distinguishes a trial from a
-> negotiation from an inquisition is the RELATION BETWEEN THOSE TWO SETS AND THE SET OF PERSONS
-> PRESENT.**
+> remit covers it at that venue — a Query, not a body. What distinguishes a trial from a negotiation
+> from an inquisition is THE RELATION BETWEEN THREE SETS OF PEOPLE, plus ONE DECLARED KEY.**
 
 Three sets, all of which already exist:
 
@@ -51,29 +50,48 @@ bench    = holders of seats whose remit covers the matter at the venue -- Query.
 floor    = persons present at the venue                                -- the presence cache.
 ```
 
-**And the twelve proceeding kinds are twelve configurations of those three sets**, plus what stands
-between them. Not twelve mechanisms. **Nothing in the list below is a new object.**
+⚠ **AND THE THREE SETS ALONE ARE NOT SUFFICIENT — A FIRST DRAFT OF THIS TABLE CLAIMED THEY WERE, AND
+IT WAS WRONG. THE DEFECT IS RECORDED RATHER THAN OVERWRITTEN, BECAUSE IT IS THE EXACT SHAPE
+`§G.4.3`'s THIRD DIRECTION EXISTS TO CATCH.** The draft gave **negotiation** as *`bench ∩ parties =
+bench`, 0 seats* and **public debate** as *`bench = ∅`* — **which are the same set-theoretic
+condition.** An empty bench intersects everything in the empty set. **Two of the twelve games were
+indistinguishable on the column the whole coverage argument rested on**, and the error read as
+rigour because the arithmetic was correct.
 
-| | `bench ∩ parties` | `\|bench\|` | subject present? | what it is |
-|---|---|---|---|---|
-| **negotiation** | **= bench** — the deciders *are* the parties | 0 seats; the parties decide by agreeing | yes | the pure case: nobody outside the exchange disposes of anything |
-| **interrogation** | **≠ ∅, asymmetric** — one party is also the only decider | 1 | yes, and is the subject | the asymmetry *is* the proceeding |
-| **legal trial** | **∅** | > 1 | yes | parties address deciders who are not parties |
-| **tribunal** | **∅** | > 1 | yes | as above; the arrangement differs, not the shape |
-| **arbitration** | **∅** | 1 | yes | one decider, chosen by the parties — which is a term of the opening act |
-| **appeal to authority** | **∅** | 1 | usually | a decider with few constraints; and the appeal is a *nested* proceeding |
-| **audience / embassy** | **∅ or = bench** | 1 | yes | one hearer, heavy staging, low candour |
-| **council of state** | **⊇ parties** — the deciders argue among themselves | > 1 | yes | the parties and the bench are the same body |
-| **parliamentary debate** | **⊇ parties**, and the floor is large | ≫ 1 | yes | many who must be persuaded |
-| **public debate** | **∅ — the bench is EMPTY** | 0 | yes | nobody can dispose of anything; the prize is standing |
-| **inquisition hearing** | **≠ ∅** — the accuser sits on the bench | ≥ 1 | yes, as subject | interrogation with a bench; the subject cannot win, only survive |
-| **excommunication deliberation** | **∅** | > 1 | **NO — the subject is absent** | a body disposing of a person who cannot address it |
+> **What separates them is `disposal`, and it is a declared key rather than a derived relation.**
+> In a negotiation **the parties dispose by mutual commitment**; in a public debate **nothing is
+> disposed of at all**. Both have an empty bench, and no set relation can tell them apart — because
+> the difference is not about *who is in the room*, it is about **whether the room can settle
+> anything.**
 
-> ### **THAT TABLE IS THE WHOLE OF THE COVERAGE ARGUMENT, AND IT IS A TABLE OF QUERIES.**
-> Every column is answered by set membership over `commit` edges, `hold` Tenures and the presence
-> cache. **There is no `ProceedingKind` enum and no branch on one.** Adding a thirteenth kind — a
-> guild hearing, a synod, a formal challenge — is adding a row of arrangement data, and §5 of
-> `03_ARRANGEMENT.md` demonstrates it on a kind the study does not describe.
+**So the claim is narrower and true: three derived sets and ONE declared key. Twelve configurations,
+not twelve mechanisms — and nothing below is a new object.**
+
+| | `disposal` | `bench ∩ parties` | `\|bench\|` | subject on the floor? | what it is |
+|---|---|---|---|---|---|
+| **negotiation** | ⭐ **mutual** | ∅ (bench is empty) | **0** | yes | the parties settle it by both committing. **Nobody outside the exchange disposes of anything** |
+| **public debate** | ⭐ **none** | ∅ (bench is empty) | **0** | yes | **nothing is settled and nobody is bound.** The only prize is standing |
+| **interrogation** | bench | **the questioner** — a party is the only decider | 1 | yes, **as subject** | the asymmetry *is* the proceeding |
+| **inquisition hearing** | bench | **the accuser sits** | ≥ 1 | yes, **as subject** | interrogation with a bench; the subject cannot win, only survive |
+| **legal trial** | bench | ∅ | > 1 | yes | parties address deciders who are not parties |
+| **tribunal** | bench | ∅ | > 1 | yes | the same shape; the arrangement differs |
+| **arbitration** | bench | ∅ | 1 | yes | one decider, **chosen by the parties** — a term of the opening act |
+| **appeal to authority** | bench | ∅ | 1 | usually | a decider with few constraints, and the appeal is a **nested** proceeding |
+| **audience / embassy** | bench | ∅ | 1 | yes | one hearer, heavy staging, low candour |
+| **council of state** | bench | **⊇ parties** — the deciders argue among themselves | > 1 | yes | the parties and the bench are the same body |
+| **parliamentary debate** | bench | **⊇ parties**, and the floor is large | ≫ 1 | yes | many who must be persuaded |
+| **excommunication deliberation** | bench | ∅ | > 1 | ⭐ **NO — the subject did not travel** | a body disposing of a person who cannot address it |
+
+> ### **THE COVERAGE ARGUMENT, STATED AT ITS CORRECTED STRENGTH.**
+> **Eleven of the twelve rows are separated by relations over data that already exists** — `commit`
+> edges, `hold` Tenures, the presence cache. **One key does the rest.** There is no `ProceedingKind`
+> enum and no branch on one, and adding a thirteenth game is adding a row (`03_PARAMETERS.md` §F.1
+> authors one).
+>
+> ⚠ **And the near-miss above is why `09_IMPOSSIBILITIES.md` row 13 grades the closure claim
+> CONVENTION + a scan rather than STRUCTURAL.** The claim was *arithmetically* true and
+> *mechanically* false for two of twelve rows, and no type would have caught it. **Only writing the
+> rows out and reading them against each other did.**
 
 ---
 
@@ -204,7 +222,7 @@ person who must renew it.
 
 ⚠ **AND THE TRACER CANNOT SPELL THIS TODAY.** `Tenure` has no `term` field (`shape.py:2066-2091`
 carries `degree` and `payload`, no `term`). `T-n` is specified in Stage 1 and unbuilt in the chain.
-**Registered, not assumed** — see `08_LOOPS_AND_GAPS.md` row `P-04`.
+**Registered, not assumed** — see `10_LOOPS_AND_GAPS.md` row `P-04`.
 
 ## A.6 · `AX-6` — nothing permanent without an author. **So every verdict is appealable, and the appeal is the nesting.**
 
@@ -249,7 +267,7 @@ is therefore not *did we cover the twelve kinds* but *what did we add to cover t
 | **carriers** | **0** | `Proposition` (the matter) · `Record` (the record, the summons, the writ) · `Seat` (the bench) · `Tenure` (`commit`, `oblige`, `hold`) · `Person` · `Rung` (the venue) · `Date` (the occasion) · `Act` · `Event` · `Claim`. **Every one already rostered** |
 | **fields on existing carriers** | **1, and it is contested** | `Proposition.rung` — the ladder rung a matter has reached. See B.2, where it is argued *against* and then admitted with its price |
 | **Queries** | **3** | `judging_set` (**already specified, already registered as `H-32`, already on `W26`**) · `latitude` (derived from the interposition set) · `standing` (**already defined in the design as *the gap between what everyone reads off you and what you hold***) |
-| **verbs** | **4 new, 6 reused, 1 filled** | `05_PARAMETERS_AND_VERBS.md` §3 |
+| **verbs** | **4 new, 6 reused, 1 filled** | `04_VERBS.md` PART A |
 | **edge kinds** | **0** | `commit` and `oblige` carry everything |
 | **Event kinds** | 9 | all declared as columns; none minted in a body (`F.20b`'s defect not repeated) |
 | **rosters** | 5 closed sets, in data | ladder rungs · interposition kinds · genre · register · standing route |
@@ -325,7 +343,7 @@ delete it.**
 | the claim | its form | grade |
 |---|---|---|
 | the twelve kinds differ only in data | **a loader + a falsifier** — twelve rows, and a test asserting no resolver branches on a kind name | **MECHANICAL** — the same `kind ==` scan `02_HIERARCHIES.md` §C.2 specifies |
-| the subsystem writes nothing | **a type** — no token in the wrapper's parameter list | **STRUCTURAL (Python) / MECHANICAL (GDScript)** — see `07_IMPOSSIBILITIES.md` on the reference-copy divergence |
+| the subsystem writes nothing | **a type** — no token in the wrapper's parameter list | **STRUCTURAL (Python) / MECHANICAL (GDScript)** — see `09_IMPOSSIBILITIES.md` on the reference-copy divergence |
 | the two tracks never touch | **a loader check** — no verb writing a conviction may phrase its `requires` over the actor's ledger (`§B.2`, `F.23`) | **MECHANICAL at load; CONVENTION until `requires` is typed (`F.24`)** |
 | a bench member's decision reads their own convictions | **a falsifier** — permute the bench's convictions and the finding must move | **MECHANICAL**, and it is the sharpest test in the design |
 | an appeal terminates | **a falsifier** — a chain at the cap returns `Refusal`, typed, in both languages | **MECHANICAL** |

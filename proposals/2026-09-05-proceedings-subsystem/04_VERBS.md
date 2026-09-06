@@ -135,6 +135,15 @@ judging_set(w, venue, matter) := { seat : seat.remit.acts ∋ arrangement.bench_
                                         ∧ live hold on seat exists }
 ```
 
+⚠ **THE LIVE SIGNATURE IS `judging_set(w, rung_id)` — TWO PARAMETERS, NOT THREE** (`shape.py:3161`).
+This design's third parameter, the **matter**, is an extension and is stated as one. **The reason it
+is needed rather than convenient:** `§B.7` says the judging set is *the seats whose remit covers **the
+matter** at that venue*, so a signature that cannot see the matter can only answer *who sits here*,
+never *who may decide this*. **A venue-only judging set would make two different questions before one
+bench return the same answer**, which is the `Rung.judging_set_rule` defect — decision-shaped state on
+a place — arriving one level up. The function currently raises and therefore has no caller whose
+signature this breaks.
+
 **Owned by nobody, computed, stored nowhere** — which is `§B.7` verbatim: *"the judging set is the
 seats whose remit covers the matter at that venue — a Query over seats, which are arrangements of the
 political layer, not a rule stored on a place."* And `Rung.judging_set_rule` was **deleted** by

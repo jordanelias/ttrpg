@@ -405,9 +405,13 @@ code branch, and every difference between any two of them locatable in the row.
 | **appeal to authority** | bench | ∅ | admitted | **document** | written_only | costly |
 | **public debate** | **none** | **no bench at all** | **open** | — | free | costly |
 
-⭐ **Read the `bench ∩ parties` column down and the taxonomy is there.** It is not a key. **It is a set
-intersection over edges that already exist**, and it is what makes an interrogation asymmetric, a
-council collegial, and a public debate a contest for standing alone.
+⭐ **Read the first two columns together and the taxonomy is there** — and it takes two, not one.
+`bench ∩ parties` **is not a key**: it is a set intersection over edges that already exist, and it is
+what makes an interrogation asymmetric and a council collegial. **But it cannot separate a negotiation
+from a public debate**, because both have an empty bench and an empty bench intersects everything in
+the empty set. **`disposal` is what does that**, and it is declared. ⚠ **A first draft of
+`00_DERIVATION.md` claimed the sets alone were sufficient and was wrong for two of the twelve rows;
+the correction is recorded there rather than overwritten.**
 
 ## E.2 · The rows in full, each with what makes it play differently
 

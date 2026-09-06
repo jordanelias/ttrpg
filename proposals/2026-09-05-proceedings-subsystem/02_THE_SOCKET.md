@@ -234,7 +234,7 @@ not have.** The divergences that matter here:
 | `Tenure.conferrer` deleted; `Tenure.term(matures_at, declared_by, closer)` | `Tenure` carries `degree`, `payload`; **no `term`** | `T-n` — *every opener declares its terms* — is the mechanism a summons, a term of service and a stay of proceedings all need. **It is not built** |
 | `Act.via : SeatId?` — how a seat enters an act | **`Act` has no `via`** (`shape.py:2333-2355`) | `H-108`: *"delegation unbuildable."* An adjudicator acting **as** a seat cannot currently be spelled, and the gate's `T-o` check (`§C.2`) has nothing to read |
 | four write tokens minted only by the driver | `WriteClass` + a `Step` check inside `World.write` | equivalent in effect, weaker in grade. Record it, do not overclaim it |
-| `explain(p, v) -> Derivation`, person-side, no `World` | **does not exist** | the player-facing contract (`04_THE_GAME.md`) specifies it and grades it `absent` |
+| `explain(p, v) -> Derivation`, person-side, no `World` | **does not exist** | the player-facing contract (`07_THE_GAME.md`) specifies it and grades it `absent` |
 
 `[CONFIDENCE: high — every row above is a direct read of the named file at commit 1b1e382. The line numbers in §2 were reported by an independent read-only mapping pass and spot-checked against `combat_seam.py`, which was read in full.]`
 

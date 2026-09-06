@@ -11,8 +11,9 @@ Per `CLAUDE.md` §2 a merge ratifies PROPOSED contents *by default*, with one ex
 
 > ## THE ONE SENTENCE
 > **A PROCEEDING IS AN OCCASION AT WHICH PERSONS ADDRESS PERSONS WHO MAY DISPOSE OF A MATTER** — and
-> a negotiation, a trial, an interrogation and an excommunication deliberation differ **only in the
-> relation between three sets of people and in what stands between them.**
+> a negotiation, a trial, an interrogation and an excommunication deliberation differ in **the
+> relation between three sets of people** (parties · bench · floor), **one declared key** (who may
+> dispose), **and what stands between them.**
 
 > ## THE FRAMING, RULED BY JORDAN, 2026-09-05
 > *"The subsystem is a game structure, which means that it hosts the parameters, logic, processes,
