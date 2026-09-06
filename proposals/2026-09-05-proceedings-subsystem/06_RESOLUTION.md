@@ -196,6 +196,61 @@ loses, not a trap.
 > Registered as the deprivation floor, and it is a blocking check on shipping the composed obstacle,
 > not an advisory one.
 
+## B.3b · ⭐ AND THE BRILLIANT SPEAKER IS STILL REWARDED — the ruling changes WHICH brilliance pays, and AMPLIFIES the kind that survives (Jordan, 2026-09-06)
+
+> *"although I still want the brilliant speaker to be rewarded for brilliance"*
+
+**The worry is legitimate and it is sharper than it looks.** Brilliance pays in full wherever latitude
+is high — a negotiation and an arbitration both carry `interposed: []`, so `conduct` is entirely live.
+But **the high-stakes rooms are the interposed ones**: the trial interposes a person and a procedure,
+the tribunal an office and a procedure, the audience heavy staging, the appeal a written-only order.
+**If interposition flattened brilliance, the flagship games would reward nothing about the person.**
+
+**It does not, and §B.3a's *preparation game* framing — while true — understates it.**
+
+> ### **INTERPOSITION REMOVES BRILLIANCE-AS-EXECUTION AND LEAVES BRILLIANCE-AS-JUDGMENT ENTIRELY INTACT.**
+> The multiplier hits the **pool** — *how much of your capability is present in the room.* It does not
+> touch **which move you choose**. And the obstacle is composed of four terms a good speaker can
+> *avoid paying*:
+>
+> | the term | what avoiding it is |
+> |---|---|
+> | **aptness** | choosing the speech kind this genre and this rung admit. ⭐ **The term is the same size for everyone; the brilliant speaker simply does not pay it** |
+> | **proofs told** | knowing which proof to spend, when, and whether they can mirror it |
+> | **the rung** | descending only when forced, and never unannounced |
+> | **reception** | unchangeable in the room — but changeable in the seasons before it |
+
+**And this is the study's own finding, not an accommodation.** The capacity map says it directly:
+*"the bottom row survives a tight arrangement. The top row does not: where latitude is low, capacities
+1 and 2 do the work and the rest barely operate."* **Capacity 2 is knowing where on the line you are
+standing and which capacities this arrangement leaves live.** That is judgment, and the study puts it
+in the row that *survives*.
+
+> ### ⭐⭐ **AND THE MECHANICS AMPLIFY IT RATHER THAN MERELY PERMITTING IT.**
+> `Δz = X/(0.8·√pool)` — **an obstacle point moves the band MORE for a small pool than a large one.**
+> That is the `1/√pool` asymmetry, and here it works *for* the design instead of against it:
+>
+> **In a tight room, avoiding an obstacle term is worth MORE than it is in an open one.** The same
+> apt-move choice that saves a fraction of a band at a negotiation saves a larger one at a scripted
+> audience. **Interposition therefore does not suppress judgment — it raises the price of getting it
+> wrong and the return on getting it right.**
+
+**So the duke carried by his rank still loses** — to a speaker with half his pool who picks the apt
+move at the right rung with an unmirrorable proof, because the duke pays three terms the other does
+not, **and at his opponent's smaller pool those terms bite harder.**
+
+**What is genuinely lost, stated so the ruling is not oversold:** a *performer* — someone whose gift is
+bearing, timing and delivery — is muted by a ceremony, and no term gives that back. **That is correct
+and it is the device working**: a ceremony exists to make the person matter less, and the corpus's
+whole account of interposition is that this is what such rooms are *for*. **The remedy available to
+that player is not mechanical — it is to choose a different room, which is the entry decision, the
+largest lever in the game.**
+
+⚠ **This is now a load-bearing claim and it gets a falsifier, not a paragraph.** `M-8`: at a fixed
+seed, a high-`conduct` speaker taking an INAPT move at low latitude must lose to a low-`conduct`
+speaker taking an APT one — **and the margin between them must be LARGER at low latitude than at
+high.** If it is not, judgment is not amplified and this section is wrong.
+
 ## B.4 · What is still `assumption`-grade, now narrowly
 
 **Not *"the pool is unspecified"* — that was the over-refusal. What is open is two magnitudes:**

@@ -754,6 +754,7 @@ either direction — every row names its control.**
 | **M-3** | ⭐ **the weak-speaker swing** | step 20, and any further obstacle term | the five terms at four pool sizes, **one term at a time**, seeded; record band by pool | a rank advantage swings a small pool more than a large one **and it reads wrong in play** → move **reception alone** to the other channel. Not the other four — they are properties of the room |
 | **M-4** | **silence versus the held step** | shipping 14d | a joint 3×3 on the buildable order; count runs where silence is chosen | **silence step ≥ held step** → silence is strictly dominated and the decision does not exist. **Too small** → a shrug. ⭐ **The ratio, not either constant** |
 | **M-5** | **standing concentration over forty seasons, and the conviction loop's sign** | step 24's magnitude; any claim the loops are bounded | forty seasons, twelve persons, three seeds; the inequality of reception per season; each judge's weight per season | **rising monotonically** → the standing loop is unbounded, and three of its four bounds are corpus properties with no column to turn. **Judges converging** → the conviction loop is negative; diverging → positive |
+| ⭐ **M-8** | **BRILLIANCE IS AMPLIFIED, NOT SUPPRESSED, AT LOW LATITUDE** — Jordan's second constraint on the pool-only ruling | ⛔ **BLOCKING with M-7** on shipping the composed obstacle | at a fixed seed, a high-`conduct` speaker taking an **inapt** move against a low-`conduct` speaker taking an **apt** one, run at high and at low latitude | the apt speaker must win at both **and the margin between them must be LARGER at low latitude.** ⭐ If it is not, `06_RESOLUTION.md` §B.3b is wrong and judgment is not amplified — the remedy is a bigger aptness term, not a smaller multiplier |
 | ⭐ **M-7** | **THE DEPRIVATION FLOOR — Jordan's constraint on the pool-only ruling** | ⛔ **BLOCKING on shipping the composed obstacle** (step 12) | at the **minimum lawful pool** (the 1D floor) against the **maximum plausible composed obstacle** across the twelve rows, compute `p_success`. Then repeat with a bought σ-advantage at each rostered level | **effectively zero and not recoverable by buying advantage** → the ruling deprives, and the remedy is either making the σ-channel reachable in that room or **ceilinging the obstacle**. ⭐ Note the asymmetry that creates the risk: **the pool has a floor and the obstacle has no cap** |
 | **M-6** | **starvation on the narrowed fan-out** | making step 1 the shipped default rather than an arm | the corpus at both arms: the claim→question→act chain on the NPC lane | **the chain falls** → two channels are matching nobody and the narrowing is too tight |
 
@@ -861,22 +862,27 @@ without opening the tree, and will not.**
 > trap. **The one asymmetry that could still deprive — a floored pool against an unceilinged obstacle —
 > is M-7, and it is a BLOCKING check.**
 
-**D-3 · Where the cornered man's drastic act lands.** He breaks in the direction of his own convictions —
-**toward the feared thing**, never toward the presser, unless a live edge already binds them. Retaliation
-at the presser needs the question set widened; that is person-side, so **not an axiom breach**, but it
-changes every character's questions. **Blocks nothing** — the default ships without it. **Options:** keep
-the audit's picture (the study's picture, zero cost) · widen it (one clause; every grudge becomes a
-question about a person, which is the rival flag from the precedent — **and every character gets
-noisier**).
+> ### ✅ **D-3 · RULED — *"cornered man breaks toward the feared thing."***
+>
+> The audit's picture, and **zero cost**: the question set is NOT widened. A man under repeated pressure
+> breaks in the direction of his own convictions — he burns the record, flees the settlement, kills the
+> witness, confesses to the lesser crime — **and not at the presser**, unless a live edge already binds
+> them. ⭐ **What this preserves is the thing that makes pressing a fear a GAME rather than a button:
+> the presser cannot predict the break, because he cannot read the man's convictions.** He knows only
+> that he is pressing, not what he is pressing *into*. **Every character stays quieter for it, too** —
+> the widened alternative would have turned every grudge into a standing question about a person.
 
-**D-4 · The polarity of pressure.** The standing measure is a **gap**, so *everyone reads you as you read
-yourself* is **zero pressure** — a hated man who knows he is hated feels nothing. **That may be exactly
-right** (the study's inhibition is about knowing and acting anyway) **or backwards.** The mechanism is
-identical under either; the arm is one line. **Options:** the gap — *a man is pressed by what he does not
-yet believe about himself*; the adverse sum — *a man is pressed by how badly he is thought of, whether or
-not he agrees.*
+> ### ✅ **D-4 · RULED — *"pressure is the gap."***
+>
+> **A man is pressed by what he does not yet believe about himself**, not by how badly he is thought of.
+> So a hated man who knows he is hated **feels nothing** — and that is now the design, deliberately.
+> ⭐ **It is also the study's own inhibition finding**: the constraint sits *downstream of perception* —
+> *"the perception is available and does not govern the action"* — so a man who has correctly read his
+> own standing has already absorbed it. **What presses him is the gap between the room's reading and
+> his own**, which is exactly what he cannot see. Step 23 ships on the gap arm; the alternative stays
+> as a one-line sweep arm and is not expected to be taken.
 
-> ### ✅ **D-5 · RULED 2026-09-06 BY JORDAN — *"second-person lever stays refused."* THE WALL HOLDS.**
+**D-5 · RULED 2026-09-06 BY JORDAN — *"second-person lever stays refused."* THE WALL HOLDS.**
 >
 > **What is now settled, permanently rather than pending:** no creditor verb · no `call_in` · no
 > obligee-side closer on an obligation · **no hook.** `T-m` is not amended, and forgiveness is
