@@ -90,6 +90,8 @@ Per `CLAUDE.md` §2 a merge ratifies PROPOSED contents *by default*, with one ex
 | **`15_WHY_IT_IS_A_GAME.md`** | ⭐ **the solver, written out** — and the one change that defeats it: the obstacle must depend on what the room holds |
 | **`16_THE_FLATTENING.md`** | ⭐ **the census.** All 27 figures decomposed to **591 atoms** in twelve kinds; the prediction scored (one right, one wrong, one half-wrong, one unpredicted); **what the mapping dropped, quantified at 106 atoms**; and **PART D, the seven primitives** |
 | `atoms/FIGURE_ATOMS.md` | the 591-row atom table itself — figure · kind · atom · where it lands. The evidence `16` is a summary of |
+| **`17_PLAYABILITY.md`** | ⭐ **the agonist–antagonist relay, adjudicated.** Thirteen positions put up, **seven broken, six wounded, none clean**; the two counts recounted; the twelve-term obstacle found to be **noise at the player interface**; and **four defects fixed in this directory**, the first of which retracts its own most-cited measurement |
+| `relay/A…D` | the four stages verbatim and unpatched — the interrogation (`fable`, informing only), the agonist (`opus`), and two structurally read-only `opus` critics on disjoint lanes. `17` is their adjudication; these are its evidence |
 
 ## Scope — the rule this exercise was under
 

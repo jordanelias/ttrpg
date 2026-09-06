@@ -182,8 +182,38 @@ Answered in full at `06_RESOLUTION.md` PART A; the mapping to Jordan's four word
 | the edge | state | the measurement |
 |---|---|---|
 | world → belief | **present, wrong payload** | 339,804 claims deposited, carrying **event-kind predicates** |
-| ⭐ **belief → decision** | ⚠ **SEVERED** | `belief_contradicts` fires only on `predicate ∈ PERSON_PREDICATES ∧ value is False`. Over **4,800** claims the vocabularies are **disjoint** and **zero** are falsy. **The clause cannot fire** |
+| ⭐ **belief → decision** | ⚠ **RETRACTED 2026-09-06 — SEE BELOW. The reader is LIVE; the WRITE into its namespace is not** | ~~`belief_contradicts` fires only on `predicate ∈ PERSON_PREDICATES ∧ value is False`. Over **4,800** claims the vocabularies are **disjoint** and **zero** are falsy~~ — **that describes DELETED CODE** |
 | outcome → magnitude | **absent** | **0 acts** have ever resolved at a degree; 12 of 12 interpersonal verbs are degreeless |
+
+> ### ⛔ **RETRACTION, 2026-09-06 — THE SEVERANCE MEASUREMENT ABOVE WAS STALE WHEN THIS FILE QUOTED IT.**
+> Found by the antagonist stage of the playability relay, which refused to take the row on trust and
+> read the code; **verified by hand afterwards, because a retraction of a measured claim is not
+> something to delegate.** Full account at `17_PLAYABILITY.md` §C.2.
+>
+> `shape.py:3834-3843`, the docstring of `belief_contradicts`, **naming its own previous version**:
+> *"⚠ `W-A`: IT ASKS THE VERB'S OWN TYPED CELL, NOT A ROSTER. **The previous version filtered on
+> `predicate in PERSON_PREDICATES and value is False`** … `H-116` then measured the consequence: over
+> 4,800 deposited claims the two vocabularies were DISJOINT … **The predicate is DERIVED from the
+> form now** … so there is one namespace and **the write side has a name to aim at.**"*
+>
+> **The row above reproduced the `H-116` measurement of the implementation `W-A` replaced, and
+> presented it as the current state.** That is `06_RESOLUTION.md:185-189`'s own named defect — *a fact
+> about the tree stated as timeless* — committed in the directory that names it. **`shape.py:1265-1274`
+> records a firing:** seed 0, NPC-088, mode `actor`, 2026-09-04 — a ledger claim made a person
+> **decline `tell` for a season** on a belief the fold would have admitted.
+>
+> ### **THE CORRECTED STATE, WHICH IS NARROWER THAN "THE LOOP IS LIVE" AND BETTER THAN "SEVERED".**
+> **The reader is live and aimed at a named namespace.** The **write** into that namespace is unbuilt,
+> and the same docstring declares it a separate item — *"`H-116`'s other half — WITNESS depositing
+> claims in that namespace — is not this item."* And the one recorded firing is on `claim.held`, a
+> self-referential predicate the surrounding comment is **in the act of excluding**.
+>
+> ⭐ **So provocation is still not runnable today — but it is blocked on a WRITE that a rostered arm
+> can supply (`observation_deposit_modes` : `none / actor / total`), not on a vocabulary mismatch that
+> no arm could fix.** That moves the ceiling this directory placed on itself: **every "measured-severed"
+> statement about `H-72` in this directory and in `relay/B_AGONIST_CONVERSIONS.md` is withdrawn**, and
+> the paragraphs below — written under the old reading — overstate the block accordingly.
+
 
 ⚠ **AND THE DESIGN'S OWN WORKED EXAMPLE IS ONE TYPE MISMATCH FROM RUNNING.** `opening_set`'s docstring
 describes the loop as working — *"a person who wrongly believes the granary full still forms the

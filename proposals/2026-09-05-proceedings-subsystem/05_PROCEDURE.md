@@ -73,8 +73,26 @@ declared.**
 
 # PART C · THE LADDER, AND THE ONE PLACE THE MAP CLAIM IS AT RISK
 
-**The ladder is a procedure and its state is one value: the rung the matter has reached**, held on the
-`commit` edge from the case's opener to the matter, in `Tenure.degree` (`00_DERIVATION.md` §B.2).
+**The ladder is a procedure and its state is one value: the rung the matter has reached.**
+
+> ### ⛔ **CORRECTED 2026-09-06 — THIS PARAGRAPH CITED §B.2 AS ITS AUTHORITY WHILE ASSERTING THE
+> EXACT MODEL §B.2 RETRACTED.**
+> It read: *"held on the `commit` edge from the case's opener to the matter, in `Tenure.degree`
+> (`00_DERIVATION.md` §B.2)."* **`00_DERIVATION.md:275-302` overturned that on five grounds** and
+> `13_ADVERSARIAL.md:51` records the retraction. A live internal contradiction, found by the
+> playability relay's lane A while running a falsifier that was aimed at something else entirely.
+>
+> **The rung is not stored and has no owner.** It is a fold over the run's own emissions —
+> `00_DERIVATION.md:299-301`: *"the lowest rung **any** emitted `matter.*` Event in THIS run has
+> named."* ⭐ **Note the word `any`: the fold is NOT filtered to the acting person**, so a matter
+> stands where the *run* has put it and not where each speaker last left it. A speaker can therefore
+> be pushed down the ladder by an opponent's emission without conceding anything — which the next
+> paragraph, written under the discarded model, denied. `17_PLAYABILITY.md` §D.5.
+>
+> ⚠ **And the fold is band-blind:** all four `speak` bands emit `matter.*`, so a *failing* speech
+> moves the shared rung exactly as much as a winning one. Whether that is right is an open design
+> question, not a settled reading — `Event.degree` is assigned (`shape.py:5854`) and a
+> winning-emissions-only fold is available if wanted.
 
 ```
 issue ladder:   procedural → conjecture → definition → quality

@@ -114,6 +114,23 @@ signature: *a design with one quantity that both measures and decides.*
 **This directory implements C, because C is what was ruled on 2026-09-06, and records A as the
 recommendation with the evidence for it.** Registered `P-29`. **It is one line either way.**
 
+> ### ⛔ **CORRECTED 2026-09-06 — THAT SENTENCE IS FALSE ABOUT THIS FILE. AS WRITTEN, THIS DIRECTORY
+> IMPLEMENTS B — THE OPTION IT ITSELF CALLS A DOUBLE-COUNT.**
+> Raised by the playability relay's lane B as an out-of-lane observation and confirmed here.
+> **`latitude` appears in BOTH places:** §B.1's pool is `brought + conduct × latitude(game)`, and
+> §C.1's obstacle carries `± latitude` as its **first term**. That is exactly option **B**, three
+> rows above, annotated *"an interposed room is harder **and** flattens the person … and it double-counts."*
+>
+> **So this file states three different answers to one question: it implements B, says it implements
+> C, and recommends A.** `G.1.5`'s signature — *a design with one quantity that both measures and
+> decides* — is not a hazard this section flags; it is a defect this section has.
+>
+> ⭐ **AND THE COUNT MOVES WITH IT.** If **A** is adopted, the obstacle has **four** room terms, not
+> five, and every *"five terms"* statement in this directory — including
+> `17_PLAYABILITY.md`'s *"five terms to twelve"* — is off by one at the base. **`P-29` is therefore
+> not a one-line preference. It is a precondition for any term arithmetic being right**, and it is
+> the first thing to rule on in §I's order.
+
 ## B.4 · What is still `assumption`-grade, now narrowly
 
 **Not *"the pool is unspecified"* — that was the over-refusal. What is open is two magnitudes:**
