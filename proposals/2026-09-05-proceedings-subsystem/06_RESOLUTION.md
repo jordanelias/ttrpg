@@ -80,12 +80,15 @@ off:**
 | **what you DO IN THE ROOM** | **top row** — calibration of reception · elicitation · control of display · tempo · rank-calibration | **conduct.** Reading, asking, withholding, timing | ⭐ **YES — this is what interposition removes** |
 
 ```
-pool  =  brought                      -- always live. FOUR keys, not two and not nine (§B.1a).
-      +  conduct × latitude(game)     -- live in proportion to what the arrangement allows,
-                                         and FLOORED (§B.3c) -- never multiplied to zero
-   -- `discernment` and `composure` do NOT enter the pool. They are not dice:
-   --   discernment gates the FIDELITY of the read (§B.1c) -- the fog of war
-   --   composure owns `obstinacy` and sustains `surveil` (§B.1d)
+pool  =  brought                      -- DERIVED, not a key (§B.1a). A Query over what you hold
+                                         on this matter, × `composure`. Always live; never multiplied
+                                         by latitude -- preparation survives any room
+      +  conduct                      -- DERIVED. `eloquence` × latitude(game), FLOORED (§B.3c),
+                                         modulated by your role. Never multiplied to zero
+      floored at 1D                   -- ruled 2026-09-04; the MEAN as well as the variance
+
+   -- THREE attributes on the sheet: eloquence · discernment · composure.
+   -- `discernment` is NOT DICE. It gates the fidelity of the read (§B.1c) -- the fog of war.
       floored at 1D                   -- ruled 2026-09-04; applies to the MEAN as well as the variance
       fractional throughout           -- continuous_engine_sample, never roll_pool
 ```
@@ -95,10 +98,12 @@ than nine costs nothing and commits to nothing."* **The reasoning was right and 
 floor, not a ceiling** — `Person.capability` is a dict whose keys are content, so the cost argument
 cuts both ways. Jordan lifted the constraint (*"you're allowed to venture duplicates of what exists
 there if it makes sense here"* — the earlier ban was contamination-avoidance, not a design position),
-and running the key test over this subsystem's own six contested acts returns **four**: `brought` ·
-`conduct` · `discernment` · `composure`. **Two of them are not dice.**
+and running the test over this subsystem's own six contested acts returns **three attributes** —
+`eloquence` · `discernment` · `composure` — **with `brought` and `conduct` DERIVED from them and from
+what the world already holds.** An aggregate cannot be a field, so the two halves of the pool are
+Queries and never sheet values.
 
-## B.1a · ⭐ FOUR CAPABILITY KEYS, NOT TWO — derived from this subsystem's own act set (Jordan, 2026-09-06)
+## B.1a · ⭐ THREE ATTRIBUTES AND TWO DERIVED SCORES — the roster, from this subsystem's own act set (Jordan, 2026-09-06)
 
 > **Jordan, lifting the earlier constraint:** *"we're precluding the existing attribute roster in
 > repository to avoid contamination. You're allowed to venture duplicates of what exists there if it
@@ -109,16 +114,41 @@ and running the key test over this subsystem's own six contested acts returns **
 > how to use your evidence and anticipate your opponent's evidence, maintaining composure and dignity
 > in light of attack and failures."*
 
-**Two was a floor, not a ceiling** — `Person.capability` is a dict whose keys are content, so naming
+**Two was a floor, not a ceiling — and the two it named were the wrong KIND of thing** — `Person.capability` is a dict whose keys are content, so naming
 more costs nothing structurally. **The test a key must pass: two acts in THIS subsystem's own set would
 draw differently, and currently draw the same.** Run across the six contested acts, it returns four.
 
-| key | what it is | where it acts |
+> ### ⛔ **AND `brought` AND `conduct` ARE NOT KEYS. THEY ARE DERIVED.** *(Jordan: "brought and conduct
+> are derived scores/aggregates since they involve so many factors that you've identified already like
+> standing and amount of evidence etc")*
+>
+> **The design's own rule forces this and a draft of this section broke it.** An aggregate **cannot be
+> a field** — a **Query is its licensed form** (`T-a`, and §B.3's aggregates ruling). `brought` sums
+> the claims you hold on this matter, their source and confidence, the records in your hand and which
+> proofs this arrangement admits. **Every one of those is already in the world model.** A number on a
+> sheet standing in for them is a second home for facts the world already carries.
+>
+> ⭐ **AND DERIVING IT IS THE BETTER GAME, NOT A CONCESSION:** it makes preparation **something you
+> DID in prior seasons** rather than something you bought at character creation. The dossier is real,
+> it was assembled by acts, and it can be burned.
+
+**THREE LAYERS, and only the middle one is on the sheet.**
+
+| | | |
 |---|---|---|
-| **`brought`** | what you know and hold — classification, evidential discrimination, generative reframing, memory | the pool, **unmultiplied.** Survives any room |
-| **`conduct`** | craft in the room — presenting, speaking and acting convincingly; elicitation; timing | the pool, **discounted by latitude** (§B.3c) — ⭐ **and it feeds `reception` forward** (§B.1b) |
-| ⭐ **`discernment`** | social attunement — **whether your live read of THIS room is true** | ⭐ **the fidelity of the read, never the availability of the move** (§B.1c) |
-| ⭐ **`composure`** | self-command — sustaining an act, and holding under attack | ⭐ **owns `obstinacy`**, which the design named and left unclaimed (§B.1d) |
+| **1 · what the world holds** | your claims on this matter (source · confidence · when) · the records you hold · your seat and edges · what the arrangement admits as proof | already in the model |
+| **2 · THE ATTRIBUTES** — irreducible, not derivable from world state | ⭐ **`eloquence`** — presenting, speaking and acting convincingly · ⭐ **`discernment`** — whether your live read of this room is true · ⭐ **`composure`** — steadiness: using what you prepared, and holding under attack | **`Person.capability`**, three keys |
+| **3 · derived, computed at entry, stored nowhere** | **`brought`** = what you hold **× composure** — *"the ability to make use of what you've prepared, remember it under pressure"* · **`conduct`** = `eloquence` **× latitude** (floored, §B.3c), modulated by your role in the room | **Queries.** The two halves of the pool |
+
+⭐ **`composure` therefore does the work in BOTH halves, coherently:** it is why you can *use* what you
+brought, and it is what resists being read and pressed. **That is one quality — self-command — and the
+corpus already grades its failure as terminal-once-seen** (*visible effort*, *anxiety displayed*).
+
+⭐ **`discernment` enters NEITHER half.** It is not dice at all — it gates the fidelity of what you are
+told about the room (§B.1c). **So of three attributes, one is never rolled.**
+
+**The same shape the design already uses for `standing`** — *a Query, season-local, owned by nobody,
+stored nowhere.* `brought` and `conduct` join it.
 
 **Where the five acts land, and four of them needed no new key** — because the study's own two-row
 partition had already named those capacities: `examine`, `research` and `reconstruct` are `brought`
@@ -220,13 +250,15 @@ accuser's framing accepted"*. **Composure does not change how a failure is read.
 failure, and it is witnessed** — which is the corpus's shape #1 (*failure is the move read as a signal
 about the mover*) applied to the one attribute that is visible while you use it.
 
-## B.1e · What four keys still refuse
+## B.1e · What this roster still refuses
 
 **A per-proceeding skill** — a *negotiation* stat and a *trial* stat is pair-count growth (`§0.06`).
 **An office bonus** — a title gates access and shapes how you are read, and never adds dice.
 **An `aptness` attribute** — with `discernment` doing the fog of war, aptness stays a term you avoid by
-knowing the room, and the knowing is now the character's. **And a `reception` attribute** — standing is
-what others hold, one ledger at a time, and any of them may be wrong.
+knowing the room, and the knowing is now the character's. **A `reception` attribute** — standing is
+what others hold, one ledger at a time, and any of them may be wrong. ⭐ **And `brought` or `conduct`
+AS SHEET VALUES** — they are aggregates over standing, evidence, records and role, and an aggregate
+that becomes a field is the exact defect `T-a` names.
 
 ## B.2 · What this buys, and why it is better than a skill-per-proceeding table
 
