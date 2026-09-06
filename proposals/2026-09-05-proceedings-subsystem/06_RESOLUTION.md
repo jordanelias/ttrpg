@@ -562,18 +562,20 @@ disagree, and `parliamentary_transfer`'s `L+2` contradicts the ruling while bein
 > not have to invent the shape; it has to not contradict it. Registered `P-25` as *follow the tribunal,
 > do not re-derive.*
 
-## C.1 · The shape — **RULED BY JORDAN, 2026-09-06: the five terms compose the obstacle**
+## C.1 · The shape — **RULED: the terms compose the obstacle, and as of the pool-only ruling there are FOUR**
 
 > **Jordan, on the original five-term model:** *"your presentation of obstacle makes sense to me."*
 
-**So the five terms are obstacle composition, and they are floored at 1.** That is the ruling; it is
+**So the terms are obstacle composition, and they are floored at 1.** ⛔ **They were five; `latitude` left for the pool on 2026-09-06 (§B.3c), so there are FOUR.** That is the ruling; it is
 implemented here; and the section below records what remains genuinely constrained and what would show
 the call wrong.
 
 ```
 pool      = the actor's capability          FRACTIONAL · floored at 1D · continuous_engine_sample
 base_Ob   = the opposition's corresponding score / 2
-            ± latitude          — what the arrangement interposes            (Fig. 4)
+         ⛔ ± latitude -- REMOVED 2026-09-06 by the pool-only ruling (§B.3c). Latitude
+            multiplies `conduct` in the POOL and appears here NO LONGER; carrying it in
+            both places was option B, the double-count. FOUR room terms remain.
             ± reception         — ⭐ COMPOSED FROM THE HEARERS' OWN CLAIMS ABOUT THE SPEAKER
                                   AND THEIR CONVICTIONS ON THIS MATTER'S AXES.  Resolver-side,
                                   hidden from every decision by T-f.   (Figs. 3, 25; and see
@@ -588,7 +590,7 @@ veto      = the licence conditions (Fig. 26) — demote-only
 ```
 
 **This is the ruling's own shape**: *"their corresponding score/2 **plus whatever specific modifiers
-exist for them in that instance**"* (Jordan, 2026-08-14). Five named modifiers, each sourced to a
+exist for them in that instance**"* (Jordan, 2026-08-14). Four named modifiers, each sourced to a
 figure, each a property of **how hard this is in this room** — which is what an obstacle is.
 
 ### C.1.1 · The ONE thing that is still forbidden, and it is not this
