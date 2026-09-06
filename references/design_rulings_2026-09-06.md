@@ -195,9 +195,139 @@ person) · delayed news as distance (`travel_leg`, `travel.moved` exist) · rumo
 
 ---
 
+## R8 · PARTIAL OBSERVATION — every term of an observation is independently unknowable
+
+> *"we need for misattribution/epistemics in general to have a way for someone to say 'I don't know
+> the description of the person who did x' and 'someone looking like y did x' and so forth"*
+>
+> *"Or 'I saw this person doing y, but I don't know what y is'"*
+>
+> *"Eg they saw someone skulking around for no reason they could discern"*
+>
+> *"but I don't know why they were doing y"*
+
+**Reading — these are one requirement, not four. `T-d` generalises.** `T-d` says attribution must be
+a per-witness Claim rather than a field. Jordan's four statements say the same of *every other term*:
+identity, act and motive are three separate claims, not three fields of one. A term that is its own
+claim can be absent, partial, inferred or wrong; a term that is a slot can only be correct, wrong or
+absent. **That distinction is the whole of the requirement.**
+
+**What the deposit does today** (`shape.py:6336`): `Claim(cid, pid, subj, e.kind, True, …)`. The
+predicate **is `e.kind`** — the engine's own verb token, handed to every witness verbatim. There is
+no actor slot at all (not "unknown" — absent; `01_AXIOMS.md:319-330` already admits this: *"T-d is
+currently a naming convention, not a mechanism"*) and no motive slot. So a witness today has perfect
+knowledge of *what* and no capacity whatever for *who* or *why*.
+
+### R8.1 · The shape that survives adjudication
+
+**One claim per (witness, event)**, added beside the two existing deposits, not replacing them:
+
+- **`subject`** — the changed thing when there is one, **else the rung the event happened at**
+  (`_event_place`, `shape.py:4311`).
+- **`predicate`** — `seen`.
+- **`value`** — a frozen struct `{stratum, marks, who, why}`, each term `None` where the channel
+  withholds it. `Claim.value` is already `Any` (`shape.py:2154`) and the tree already carries opaque
+  payloads on `Act.payload`, `Tenure.payload` and `StateChange.spec`.
+
+**Why the rung subject is the load-bearing half.** `questions_for` Q2 (`shape.py:3902`) fires only
+when `c.subject == p.id or c.subject in mine`, where `mine = {t.object for t in p.tenures if t.live}`
+(`:3883`) — and a person's `contain` Tenure has the person as subject and **a rung as object**
+(`:3643`). So a `seen` claim subjected to the rung **raises Q2 for everyone standing in that rung**.
+*Someone was skulking around the market and I could not tell why* propagates to the ward. The least
+informative observation reaches the most correct listener set, out of machinery that already exists.
+
+The four cases: **(1)** *no description* → `who=None, marks=()`. **(2)** *someone looking like y* →
+`marks=(…,), who=None`, identification deferred. **(3)** *doing something I can't name* → `who` set,
+`stratum` set, no verb token. **(4)** *skulking for no discernible reason* → `stratum` alone, `why=None`.
+
+### R8.2 · What was tried and overturned — recorded so it is not re-proposed
+
+The first shape minted a **sighting** — a per-(witness, event) id used as a `Claim.subject`, with the
+observation split into up to six claims over that term. It is the more expressive shape and it was
+**broken by adjudication on four counts, each verified by hand against the tree:**
+
+1. **It severs the one live propagation route.** A sighting id is neither a person id nor a Tenure
+   object, so **no member of the bundle can ever raise Q2** — and `occasioned_by`'s own docstring
+   names `claim_landed` as *"the one propagation runs on"*. It would return `R3` to the 0-of-30 the
+   tree measured before `H-79`.
+2. **Its remedy for uneven bundle decay crosses `PART D` row 39** (`04_CODE_ARCHITECTURE.md:972`) —
+   *"the comparator's signature takes `confidence` and `recency` and nothing else — STRUCTURAL by
+   signature."*
+3. **It mints six predicates nothing reads** — the same `ID-13` charge it levelled at `Person.marks`.
+4. **Its own advantage has no consumer.** Per-term contestability needs an inference or recognition
+   producer, which it deferred by name.
+
+**Sequencing ruling: the sighting term earns its own id at the commit that builds a recognition or
+inference producer, and not before.** Until then the struct is strictly better; at that point split
+the struct into per-term claims. What the struct gives up, plainly, is per-term contestability — a
+second witness's marks cannot contradict the first's `who`, and a later inference must *replace* the
+struct rather than layer beneath it (`LedgerReader`'s newest-wins, `shape.py:1307`).
+
+### R8.3 · The gate on all of it — `Claim.value` has exactly two readers
+
+Every `.ledger` access in `shape.py` was enumerated (`:1229, 3125, 3660, 3860, 3901, 4011-4012,
+4522-4532, 5461, 6429-6445`). They read `c.subject`, `c.predicate`, `c.source`, `c.confidence` and
+`c.when`. **`Claim.value` itself is read in exactly two places in the whole loop:**
+
+1. **`LedgerReader.read`** (`:1309`, `return best.value`) — and its consumers are closed at load:
+   `_require_known_stem` (`:1311`) raises `SystemExit` on any predicate stem outside
+   `REQUIRES_STEMS`, so a `seen` predicate is **refused at load** until it is declared.
+2. **`agreement()`** (`:3989`, `c.value == own_by[c.predicate].value`) — an equality test, scoped to
+   `person_predicates`.
+
+Two consequences, and both are sharper than "nothing reads a description":
+
+- **The struct must be declared before it can be deposited.** This is not a lint; it is a load-time
+  refusal, and it is the correct one — it forces the roster row (`observation_terms`) that both
+  shapes need anyway.
+- **`agreement()` compares whole values**, so under the struct two witnesses who agree on `who` and
+  differ on `marks` register as **disagreeing**. That is the concrete price of the deferred
+  per-term split, stated in one line rather than in the abstract.
+
+So the first thing to build is not the carrier but **the consumer — a person who forms a candidate
+because of what they came to believe** — which is the same thing `R6` needs and did not have.
+`R6`'s formulation stands: **propagation without reaction is a chronicle, not a game.**
+
+### R8.4 · Four defects verified in passing, each load-bearing on `R5`–`R7`
+
+| defect | site | what |
+|---|---|---|
+| **`document_key` cannot fire on any act** | `shape.py:4356` vs `:5857` | the predicate tests `t.object == e.subject`; every fold-emitted Event sets `subject = a.actor`; no `hold` Tenure takes a person as object. The channel is reachable only for `MATTER`/`CALENDAR` events, which carry no verb and no actor. **`R5`'s bureaucratic mechanism is unreachable on acts** — not underused, unreachable. |
+| **`Person.marks` is dead AND its matrix row is retired** | `shape.py:2367`; `write_matrix.yaml:358-370` | zero writers, zero readers anywhere in `engine/season/`. `matrix_row()` raises `Unspecified` on a retired row, so a gate write refuses today. Constructor assignment bypasses the gate, but `_entity_digest` is `repr(dataclass)` (`:2602`), so writing marks at world-build **moves every same-seed hash** — a re-baseline, not a red test. |
+| **`Candidate.why` is written once and read nowhere** | `shape.py:2284`, written `:3289` | `why=q.source`; dropped at `pack_scenes`; `Act` carries no `why`. **The engine forgets the motive before the act executes**, which is why no witness could ever learn it. |
+| **Q2's subject membership gates every future claim shape** | `shape.py:3902`, `:3883`, `:3643` | any new deposit whose subject is not a person id or a live Tenure object is inert on arrival. Design against this line first, not last. |
+
+### R8.5 · Corrections
+
+⚠ **The channel asymmetry runs the OPPOSITE way from the shape first proposed in session, and the
+architecture already said so.** `08_DATA_AND_KEYS.md:104-105` — which carries a `RATIFIED`
+status line on PR #371's branch, on a PR that has not merged — says verbatim: *"a co-located witness saw who acted; a document holder saw only that the document
+changed."* A first draft of `R8` had eyewitnesses withholding identity and documents supplying it,
+and sold that inversion as the result justifying the work. **It is wrong in both directions.** The
+asymmetry is real, it is already ratified, and it points the other way: the eyewitness knows who and
+not what; the record knows what and not who.
+
+⚠ **`stratum` is injective on `movement` and therefore leaks the verb it is supposed to withhold.**
+`verb_table.yaml` carries exactly one `stratum: "movement"` row — `move` (`:344`). A `stratum` term
+is only genuinely uninterpreted where the stratum has several verbs (`social` has ten,
+`binding_decision` eight).
+
+⚠ **The `678 → 68` deposit figure quoted in session is a stale literal.** `PLAN.md:1838-1840` records
+the current measurement as **`711 → 66`** and says so itself; the factor holds, the numbers moved.
+`ledger_cap` remains 200 (`shape.py:1772`). The affordability constraint is unchanged: a per-witness
+addition is affordable only under a narrow fan, which is why `+1` per witness-event and not `+6`.
+---
+
 ## WHAT THESE RULINGS CLOSE
 
 `F.32` (R1) · the Echo question, in both its factual (R6) and statistical (R7) forms, **with no axiom
 moved** · the instant-vs-news-speed fork (R7). **The escalation count from the superseded plan is
 stale: D5 was mooted by the canon dismissal, D6 is closed by R1.** Only `AX-5`'s fourth motion (R4
 route 4) and the Godot key-types decision remain candidates, and both need §0's five tests run.
+
+**R8 adds no escalation.** Its adjudication ran §0's five tests and returned none: the shape question
+was answered by precedent and by architecture (test 4 and test 5), the eviction question was already
+answered by `PART D` row 39 (test 3), and the sequencing question answers itself under `ID-13`. What
+R8 leaves open is **work, not a ruling** — and it is one item, shared with `R6`: *build the consumer
+that makes a person form a candidate from what they came to believe.* Until that exists, every
+epistemic carrier this file names is a carrier without a reader.

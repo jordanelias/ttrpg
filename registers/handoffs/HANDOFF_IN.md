@@ -1,5 +1,56 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⚠ CURRENT — 2026-09-06, ED-IN-0202: eight design rulings recorded, and the one thing to build first
+
+**`references/design_rulings_2026-09-06.md`** holds `R1`–`R8`, given by Jordan in conversation and
+recorded because nothing else in the tree carries them and this repo keeps no context between
+sessions. **Reference only under §0.05** — it ratifies nothing and is a mechanism for nothing; where
+it and the code disagree the code is right and the file is stale.
+
+⚠ **Most of it cites `engine/season/…` and `architecture/…`, and NEITHER TREE EXISTS ON `main`.**
+Both are on PR #371's branch `claude/issue-368-architecture-review-2nnilz`. A cold reader who cannot
+find `engine/season/` will conclude these rulings cite nothing; they cite a great deal. The file's
+own header says this too.
+
+**The single next action, and it is shared by `R6` and `R8`:** build the consumer that makes a person
+form a **candidate** from what they came to **believe**. `question_sources` carries `date_due`,
+`claim_landed`, `band_crossed` and `need`, and **none is "a world-fact changed in a way that concerns
+me."** `R6`'s formulation holds until it exists: *propagation without reaction is a chronicle, not
+a game.*
+
+**Two lines constrain any new claim shape; know them before designing one.** `questions_for` Q2
+(`shape.py:3902`) fires only on `c.subject == p.id or c.subject in mine`, so a deposit whose subject
+is not a person id or a live Tenure object is **inert on arrival** — and `mine` includes the person's
+**rung**, via their `contain` Tenure (`:3643`), which is the cheap way to reach a whole ward. And
+`Claim.value` has exactly **two** readers in the loop: `LedgerReader.read` (`:1309`), whose predicate
+stems are closed at load by `_require_known_stem` (`:1311`, `SystemExit`), and `agreement()`
+(`:3989`), which compares whole values.
+
+**Four defects verified this session** (worktree of PR #371 @ `480cb43`; full detail in `R8.4`):
+
+| defect | site | lane |
+|---|---|---|
+| `document_key` **cannot fire on any act** — the predicate tests `t.object == e.subject` and every fold Event sets `subject = a.actor`; no `hold` Tenure takes a person as object. `R5`'s bureaucratic channel is unreachable on acts, not merely underused. | `shape.py:4356` vs `:5857` | IN |
+| `Person.marks` has zero writers and zero readers, **and its write-matrix row is RETIRED** so a gate write refuses today. Writing it at world-build moves every same-seed hash (`_entity_digest` is `repr(dataclass)`) — a re-baseline, not a red test. | `shape.py:2367`; `write_matrix.yaml:358-370` | IN |
+| `Candidate.why` is written once (`why=q.source`) and **read nowhere**; `Act` carries no `why`. The engine forgets the motive before the act executes. | `shape.py:2284`, `:3289` | IN |
+| One `stratum: "movement"` row exists (`move`), so a stratum term is **injective there** and leaks the verb it is meant to withhold. | `verb_table.yaml:344` | IN |
+
+**Also corrected in `R8.5`:** the witness/document asymmetry runs the *opposite* way from a shape
+proposed and discarded in session — `08_DATA_AND_KEYS.md:104-105` says *"a co-located witness saw
+who acted; a document holder saw only that the document changed."* And the `678 → 68`
+deposit literal quoted in several places is stale; `PLAN.md:1838` measures `711 → 66`.
+
+**No head moved, no `CURRENT.md` row changed, no `needs_jordan` row opened.** `R8`'s adjudication ran
+§0's five tests and returned zero escalations.
+
+**Held, not landed:** a twelve-module decomposition of `engine/season/shape.py` (6,771 lines) with a
+ten-step migration order, each step revertible and each carrying its own execution artifact. Held
+because `epistemic.py` is one of the twelve and `R8` changes what belongs in it. It also found that
+the blocking import gate's own probe already loads every season module twice under two names
+(`shape` and `engine.season.shape`), which is a real finding independent of the split.
+
+---
+
 ## ⚠ CURRENT — 2026-09-05, ED-IN-0202: a reference for future sessions, and eight false self-claims
 
 **`references/what_valoria_is_and_what_runs.md`** is new and is the thing to read if you are asked
