@@ -192,6 +192,40 @@ before this room fell, from a cause you cannot name"* is **admissible** — the 
 fall. What they are additionally given is **that it has an author they do not know**, and *that is
 what makes investigation worth a scene.*
 
+## D.0 · The two presentation rules — **MOVED HERE 2026-09-06, because this part owns the surface**
+
+⚠ **These were written in `06_RESOLUTION.md` §B.1c, which is the wrong home.** That section owns
+*what `discernment` does*; **this part owns what a player is shown**, and two files stating rules about
+the same screen is `T-k` one level up. They are reproduced here in full and §B.1c now points at them.
+
+**Jordan:** *"the limitations of the character can impose limitations on the player. with the right UI,
+this will feel natural."*
+
+**That is licensed by the table above rather than excepted from it.** The engine owes *the arithmetic
+of what the character already holds*. **A read is something the character holds** — so it is owed, and
+it is owed **as they hold it**, including when it is false.
+
+> ### **1 · ⛔ A MISREAD IS PRESENTED INDISTINGUISHABLY FROM A TRUE READ.**
+> No hedge, no *"you are not certain"*, no confidence bar. **The moment the UI marks a read as
+> unreliable, the player routes around the character and the fog is gone.** The player learns their
+> character reads rooms badly the way a person does — **by being wrong and finding out afterwards** —
+> never by being shown a number.
+>
+> ### **2 · Nothing is greyed out.**
+> Every lawful move stays selectable. What differs between a sharp character and a dull one is **what
+> the room is DESCRIBED as**, not what the list contains.
+
+⭐ **AND WHAT MAKES THE LIMITATION READ AS CHARACTER RATHER THAN AS PUNISHMENT IS THAT IT CAN BE
+PLAYED AGAINST.** A player who suspects their own read can send an advocate whose `discernment` is
+better, spend a season reaching a bench member before the sitting, or go and find out what the room
+was told. **A limitation you can act against is characterization; one you can only suffer is a gate.**
+
+⚠ **RULE 1 HAS NO ENFORCER, AND THAT IS THE HONEST STATE.** It is a constraint on a renderer nobody
+has written, in a repository whose §0.05 ruling says prose is not a mechanism. **What would make it
+one is a single presentation call that takes a claim and CANNOT take its confidence** — the same
+shape as `explain`'s missing `World`. Until that exists, rule 1 is a convention, stated at that
+strength. Registered `P-46`.
+
 ## D.1 · The honest residue — the design's sharpest open question
 
 > **A player at a trial will want to know how it is going, and cannot be told.**
@@ -201,9 +235,13 @@ instead:
 
 1. **The arithmetic of their own hand** — every claim they hold, graded, sourced, dated. *This is a lot.*
 2. **The rung**, which is public and is the single best summary of where a case stands.
-3. **`interview`, which is a real answer** — the player who wants to know the room can **act on it**, at
-   the price of a turn, in front of everybody, and get back a read that **may be wrong and that they
-   cannot tell is wrong.**
+3. **A read they get for free, and one they can go and buy.** In the room, `discernment` returns *who
+   decides* and *how the body is set*, at their character's fidelity — **which may be wrong and which
+   they cannot tell is wrong** (`06_RESOLUTION.md` §B.1c). Out of the room, an investigation act buys
+   a better answer at the price of a season and of being seen asking. ⚠ **That second half is the
+   `FI` lane's to build** — this proposal withdrew its own investigation rows on 2026-09-06
+   (`04_VERBS.md` §B.3) — **so today only the free half exists**, and item 3 is weaker than it reads
+   until `FI` lands the acts.
 4. **The room's reaction as fiction, not as numbers** — what people did, which is public, rather than
    what they think, which is not.
 

@@ -13,9 +13,15 @@
 > that order — because the first is measurable today on the existing harness with no proceeding in the
 > world, the second is now ruled, and the third is where the flowchart becomes a game.
 >
-> **Twenty-seven instructions in four phases. One new field in the whole plan. Four fields deleted,
-> three arrangement keys cut, one dead channel removed.** Every step ends in a run, a hash, or a
-> red-then-green test — `§0.2`: a document with a status line counts for nothing.
+> **Twenty-seven instructions in four phases. AT MOST one new field in the whole plan — and step 22
+> now records three ways it could be zero. Four fields deleted, three arrangement keys cut, one dead
+> channel removed.** Every step ends in a run, a hash, or a red-then-green test — `§0.2`: a document
+> with a status line counts for nothing.
+>
+> ⚠ **AND ONE THING THIS PLAN NO LONGER BUILDS.** Step 19 read *"the five rows land"* — five
+> investigation verbs. **Jordan withdrew them to the `FI` lane on 2026-09-06** and refused the
+> replacement verb this design moved to author in their place. The step survives at its true scope:
+> **the deposit mechanism**, which `tell` needs here and the six acts need there, at one owner.
 
 ---
 
@@ -105,7 +111,7 @@ what it is about** — which is exactly wrong for a recurring cast pricing each 
 |---|---|---|---|
 | **1 · The ledger holds a reading of a person** (1–7) | fan-out narrowed · attribution · hearsay minted · the cap measured · the want/fear term with habituation · the press traced to its terminus · the speech-kind roster | runs on the existing harness with no seam. **It is where the owner's central ask lives**, and it makes the *world* a story-generator before any proceeding runs | ⭐ **the world becomes a story instead of a log** |
 | **2 · The subsystem owns the contest** (8–16) | the manifest row and the prize repoint · the bench Query · the arrangements loader with the multilateral disposal · the composed obstacle and the licence extension · the two verb rows · the provider with its three in-run aggregates · the reach in code | nothing here needs Phase 1 to **run**; all of it needs Phase 1 to be a **game**. Doing 1 first means the first end-to-end proceeding is run against a world whose ledgers already differ — a game-shaped test rather than a flowchart test | the structure exists and resolves |
-| **3 · The room reads you** (17–21) | `reception` reads the bench's ledgers · proofs weighed by remove and discounted by the mirror · the investigation product deposit · route erosion · Failure severity by observer set | **the join.** `reception` is the only hidden load-bearing term and cannot exist before both stems | ⭐⭐ **THIS IS THE PHASE THAT MAKES IT A GAME** |
+| **3 · The room reads you** (17–21) | `reception` reads the bench's ledgers · proofs weighed by remove and discounted by the mirror · **the told-proof product deposit** · route erosion · Failure severity by observer set | **the join.** `reception` is the only hidden load-bearing term and cannot exist before both stems | ⭐⭐ **THIS IS THE PHASE THAT MAKES IT A GAME** |
 | **4 · Forty seasons stop looking like four** (22–27) | the one new field, with the return day and defiance · pressure crossings · conviction moved by consequence · the forged record examined · cross-season momentum priced · the deletions | polish in the exact sense that it is a game without them — **but without them every loop damps and season 40 resembles season 30** | polish that prevents convergence |
 
 ---
@@ -531,20 +537,31 @@ do not moves it by the step times its remove.
 
 **Falsifier.** The mirrored proof moves the obstacle.
 
-### 19 · The investigation acts deposit their PRODUCT, at a confidence keyed on the degree
+### 19 · An act deposits its PRODUCT, at a confidence keyed on the degree
 
-**Change.** The five rows land. Today the actor's deposit carries what the **precondition** read — for
-an interview, co-location, not the disposition. So each row gains a **product** column naming the
-predicate its finding deposits: an interview deposits a stance, an examination a retention, research a
-record, a reconstruction an inference, surveillance a presence. At witness, the actor's deposit carries
-that product at a confidence keyed on the degree — ⭐ **and a misread deposits at the SAME confidence
-with the WRONG value.** Never silence: absence must not be legible.
+⚠ **RESCOPED 2026-09-06, AND IT SHRANK.** This step read *"the five rows land"* — the five
+investigation verbs this proposal had drafted. **Jordan withdrew them to the `FI` lane**
+(`04_VERBS.md` §B.3), so this step no longer lands any verb. What it lands is **the deposit
+mechanism**, which this subsystem needs for its own `tell` whether or not `FI` ever writes a row.
 
-**Why here.** Without it nobody has a reason to ask anybody anything, and the obstacle they would be
-estimating now exists.
+**Change.** Today an actor's deposit carries what the **precondition** read — for a telling,
+co-location, not the content told. So the deposit gains a **product**: the predicate a finding
+actually deposits. At witness, the actor's deposit carries that product at a confidence keyed on the
+degree — ⭐ **and a misread deposits at the SAME confidence with the WRONG value.** Never silence:
+absence must not be legible.
 
-**Artifact.** An interview about a record deposits a stance into the asker's ledger; on a misread the
-sign is wrong and the confidence identical; **and the subject's ledger records that they were asked.**
+**Why here.** `15_WHY_IT_IS_A_GAME.md` PART C.2 — without it, **a proof produced at a hearing changes
+nobody's ledger**, so `tell` emits a degree nothing consumes (`ID-13`, `P-05`) and the obstacle the
+speaker was estimating never moves. It is `H-122` / `observation_deposit_modes`, **open**, and the
+mode is forced for this case: `actor`.
+
+⭐ **AND IT IS THE SAME MECHANISM `FI` NEEDS, WHICH IS WHY THE WITHDRAWAL COSTS NEITHER LANE.** A
+`product` column keyed on the degree serves `tell` here and `examine` / `interview` / `research` /
+`reconstruct` / `surveil` there, at one owner. **Whichever lane builds it first builds it for both** —
+`ED-SC-0036` records that, and it is the one place `SC` and `FI` must not each write their own.
+
+**Artifact.** A proof told at a hearing deposits its predicate into each hearer's ledger; on a misread
+the value is wrong and the confidence identical; **and the teller's ledger records that they told it.**
 
 **Falsifier.** A read and a misread are distinguishable by anything except the value.
 
@@ -582,10 +599,29 @@ costly consequence in both and the terminal one only in the second.
 
 ### 22 · `Tenure.term` — the one new field in the whole plan
 
-**Change.** A tenure gains an optional term carrying *when it matures*, *the act that declared it*, and
-*who may close it*. **The unread payload field is deleted in the same change** — its replacement is
-already scheduled. Maturation happens at the matter barrier and **cites the declaring act as its cause**,
-so it is one causation-bound seam rather than a fourth clock.
+**Change.** A tenure gains an optional term carrying **when it matures — and nothing else.**
+Maturation happens at the matter barrier and **cites the declaring act as its cause**, so it is one
+causation-bound seam rather than a fourth clock. **The unread payload field is deleted in the same
+change** — its replacement is already scheduled.
+
+⛔ **TWO COLUMNS STRUCK 2026-09-06, AND THE REASON IS IN THE TRACER'S OWN COMMENT.** This step
+proposed three columns: `matures_at`, `declared_by`, `closer`.
+
+- **`declared_by` is `Tenure.conferrer` under a new name**, and `shape.py:2074-2083` deleted that
+  field on **2026-09-03** — three days before this plan proposed it back — for occurring exactly once
+  and reaching no reader (`ID-13`). Its deletion note answers the replacement in advance: *"WHAT
+  CONFERRED a Tenure is the opening Act, in an append-only log with `causes[]`. A field here would be
+  a second home for a fact the act already holds — `ID-2`."* **The act that wound the clock is
+  already in the log.**
+- **`closer` goes the same way.** The same note: *"WHO MAY REVOKE is the Seat's declared `revocation`
+  basis (`T-o`), not the identity of whoever conferred"* — and `T-m` already holds that closure is
+  ownership.
+
+⚠ **AND THE FIELD ITSELF IS NOT SETTLED.** `05_PROCEDURE.md` §B.1 registers three open questions
+under `P-04`: whether a term belongs to the `Tenure` or the `DocketItem`; whether `convene`'s existing
+`Date.due_at` already carries it — **in which case this plan's new-field count is ZERO**; and the
+near-miss that `Tenure.until` is a closure stamp rather than a horizon (`live` is `until is None`, so
+a future value kills the tenure on write). **Resolve those before the column is cut, not after.**
 
 **Then, all at once:** a summons declares a return day · **defying it is contumacy, and in canon and
 common law contumacy IS the finding** · surveillance gets its interval · an overdue obligation becomes a
@@ -972,8 +1008,12 @@ after the bar).
    **That is probably right, and the row's prose says otherwise.**
 8. **A told claim carries the teller's MAXIMUM held confidence**, so a teller holding one thing at full
    confidence and another at low tells at full. **Which of the two was told is not distinguished** —
-   that is the *content of a told claim does not exist* problem, and step 19 fixes only the investigation
-   half. ⚠ **Telling's own product column is not planned here and probably should be.**
+   that is the *content of a told claim does not exist* problem. ⭐ **RESOLVED 2026-09-06 by the
+   rescope, and in the direction this joint asked for:** step 19 no longer fixes the investigation
+   half, it fixes **telling's own product column**, which is what this entry said was missing. ⚠ **The
+   residue is real and stays here:** a product column says *which predicate* was deposited, not *at
+   what confidence the teller held that particular claim*. The max-confidence read is still wrong and
+   step 19 does not repair it.
 9. **The forty-season run has never been done**, and three of the standing loop's four bounds are corpus
    properties with no column to turn if it concentrates.
 10. **The verb-lookup for a claim's valence assumes every event kind sits on exactly one verb's emit

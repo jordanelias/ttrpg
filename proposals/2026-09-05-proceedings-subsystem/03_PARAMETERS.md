@@ -480,6 +480,25 @@ second home (`ID-2`):**
 | **`floor` membership** | who travelled | C.1.1 |
 | **eloquence vs consequence** | `\|bench\|` and `latitude` | Fig. 14's pairing: *eloquence requires many who must be persuaded; consequence requires few who can constrain* |
 
+⚠⚠ **ONE WORD, TWO MEANINGS ACROSS TWO FILES — NAMED HERE BECAUSE NOTHING ELSE WOULD CATCH IT
+(2026-09-06).** *Eloquence* in the row above is **Fig. 14's property of a ROOM** — the axis along
+which a body rewards persuasion rather than constraint, derived from `|bench|` and `latitude`, owned
+by nobody. `06_RESOLUTION.md` §B.1a then made **`eloquence` an ATTRIBUTE ON A PERSON**, one of three
+on `Person.capability`. **They are not the same quantity and neither is derivable from the other**: a
+room where eloquence *matters* is not a room where anybody *has* it.
+
+`CLAUDE.md` §4's test is whether a later session reading the word cold lands on the same meaning.
+**Here it cannot**, and this proposal wrote both. Recorded rather than renamed because the rename is
+a design call with a cost either way:
+
+| option | cost |
+|---|---|
+| rename the ATTRIBUTE | it is the best word for the thing a speaker has, and §B.1a's roster was ruled by Jordan on 2026-09-06 |
+| rename FIG. 14's AXIS | it is the study's own word, quoted from the source, and this design does not own the figure |
+| ⭐ **qualify both at every use** | what is done here and at §B.1a. **Cheapest, and it is what a reader needs anyway** — *the room's eloquence-axis* vs *a person's `eloquence`* |
+
+**Registered `P-45`.** Whichever way it goes, it must go one way in both files.
+
 ⚠ **THREE KEYS ARE THE LEAST DEFENSIBLE AS ARCHITECTURE AND ARE FLAGGED RATHER THAN DEFENDED**
 (`G.1.6`: *a shape decision is one that would be correct for ANY membership of the data it governs*):
 

@@ -265,30 +265,16 @@ perfectly.** That is player skill substituting for character skill, and it is no
 > escalated — the carrier exists and the design refuses the draw — and the alternative is recorded
 > here rather than dropped.
 
-> ### ⭐⭐ **AND THE UI IS THE HALF THAT MAKES IT FEEL LIKE A CHARACTER RATHER THAN A GATE.**
+> ### ⭐⭐ **AND THE UI IS THE HALF THAT MAKES IT FEEL LIKE A CHARACTER RATHER THAN A GATE — SPECIFIED AT `07_THE_GAME.md` §D.0, NOT HERE.**
 >
 > **Jordan:** *"the limitations of the character can impose limitations on the player. with the right
 > UI, this will feel natural."*
 >
-> **This is licensed by `07_THE_GAME.md`'s existing rule rather than an exception to it.** The engine
-> owes *the arithmetic of what the character already holds*. **A read is something the character
-> holds** — so it is owed, and it is owed **as they hold it**, including when it is false.
->
-> **Two rules follow, and the first is the whole discipline:**
->
-> 1. ⛔ **A MISREAD MUST BE PRESENTED INDISTINGUISHABLY FROM A TRUE READ.** No hedge, no *"you are not
->    certain"*, no confidence bar. **The moment the UI marks a read as unreliable, the player routes
->    around the character** and the fog is gone. This is the same rule the investigation rows already
->    live under — `Misread` emits identically to `Read`, at the same confidence, with the wrong value.
-> 2. **Nothing is greyed out.** Every lawful move stays selectable. What differs between a sharp
->    character and a dull one is **what the room is described as**, not what the list contains.
->
-> ⭐ **AND WHAT MAKES THE LIMITATION READ AS CHARACTER RATHER THAN AS PUNISHMENT IS THAT IT CAN BE
-> PLAYED AGAINST.** A player who suspects their own read can `interview` someone who was there, send an
-> advocate whose discernment is better, or spend a season reaching a bench member before the sitting.
-> **A limitation you can act against is characterization; one you can only suffer is a gate.** The
-> player learns their character reads rooms badly the way a person does — **by being wrong and finding
-> out afterwards** — never by being shown a number.
+> **Two rules follow — a misread is presented indistinguishably from a true read, and nothing is
+> greyed out — and they were written here until 2026-09-06.** They are now at `07_THE_GAME.md` §D.0,
+> in full, **because `07` PART D is the single owner of what a player is shown** and two files stating
+> rules about one screen is `T-k` a level up. **This section owns what `discernment` DOES; that one
+> owns how it reaches the player.** Do not restate them here.
 
 > ### ⚠ **AND READ #1 IS NARROWER THAN A DRAFT MADE IT — `07_THE_GAME.md` PART D IS ARCHITECTURE AND
 > WINS.**
