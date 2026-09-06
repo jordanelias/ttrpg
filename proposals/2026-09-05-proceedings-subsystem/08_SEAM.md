@@ -141,6 +141,45 @@ interior write is a consequence of an outcome, which is what the degree-keyed co
 | 9 | contest prizes ⊆ the subsystem roster | `"a matter"` → `proceedings` |
 | 10 | unknown keys rejected — **a `scale:` key fails the load** | ⚠ `convene`'s `scale:` must go (`03_PARAMETERS.md` §C.1) |
 | 12 | a verb declaring `contests:` has **`Degree`-keyed `writes` AND `emits`, key sets equal** | `speak`: 4 and 4 · the five investigation rows: 3 and 3 each |
+| ⭐ **13** | **every arrangement declares `disposal_reach`, and a row whose `disposes` is not `none` may not declare `room` unless the disposal is between the parties themselves** | ⭐ **NEW 2026-09-06** — `03_PARAMETERS.md` §B.7. Without it a ruling that binds a duchy is known only to whoever sat in the room |
+
+## D.3 · ⭐ THE DISPOSAL'S SECOND SCOPE — no new Event, no new verb, no new kind (2026-09-06)
+
+**`floor` scopes who witnessed the ARGUING. `disposal_reach` scopes who learns the RULING.** They are
+orthogonal, and until 2026-09-06 only the first existed — so a ruling's publicity fell out of whoever
+happened to carry the document. `03_PARAMETERS.md` §B.7 has the argument; this is the mechanism, and
+it is deliberately almost nothing.
+
+```
+the disposal already emits          tenure.opened | tenure.closed | case.opened
+                                    (D.1 above -- these rows exist and have writers)
+
+what changes                        that emission's WITNESS SET is computed from
+                                    `arrangement.disposal_reach`, not from who was present.
+
+    room            ->  attendees_at(proj, place)          -- the frozen entry set. Today's behaviour
+    body            ->  holders of a seat whose remit reaches the matter
+    <rung kind>     ->  the containment walk from the venue, up to that tier
+
+every OTHER emission                unchanged -- `matter.*` from a `speak` still scopes by `floor`,
+                                    which is what makes a concession cheap in a closed room
+```
+
+**Three properties worth stating, because each is a thing that could have gone wrong.**
+
+1. **It is not an act, so `AX-1` is untouched.** Nothing announces. **The reach is a property of the
+   disposal**, the way a stake is a property of what is disposed. A ruling nobody is told about is not
+   a ruling — it is a private understanding, and the design already spells that one `disposes: oblige`
+   with `disposal_reach: room`.
+2. **It adds no Event kind**, so loader invariant 7 — *the Event-kind roster is derived from emission
+   columns* — still holds at nine kinds with no body literal.
+3. ⭐ **It is the FIRST thing in this design whose reach is not the room**, which is what makes a
+   proceeding a public institution rather than a conversation. Everything else here scopes to who was
+   present, by construction.
+
+⚠ **AND IT DOES NOT MAKE THE ARGUMENT LEAK, DELIBERATELY.** The concessions stay scoped by `floor`.
+`03_PARAMETERS.md` §B.8 records why that is correct rather than a gap: **the argument's audience is
+the room, and at the scale this subsystem is played the player is IN the room.**
 
 ⚠ **AND ONE THIS DESIGN CANNOT SATISFY, NAMED RATHER THAN GLOSSED.** `§C.2`'s `Receipt` — *only the
 gate mints one; the log's append asserts every receipt id is in the minted set* — **has no

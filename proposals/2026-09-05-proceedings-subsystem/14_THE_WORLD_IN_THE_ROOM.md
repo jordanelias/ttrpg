@@ -270,6 +270,34 @@ in the world moves.** Stated as two questions every game must answer:
 | **interrogation** | ⚠ **`disposes: standing` — WHICH IS NOTHING.** See E.2 | the questioner by custody or office; the subject by being held | ⚠ **FAILS 1** |
 | **public debate** | ⚠ **`disposal: none`. Nothing changes.** See E.3 | anyone who came | ⚠ **FAILS 1** |
 
+## E.1a · ⭐ THE TEST HAD A THIRD QUESTION AND NOBODY ASKED IT (Jordan, 2026-09-06)
+
+**The two questions above are the right two and they were answered honestly. A third belongs beside
+them, and its absence was an accident rather than a decision.**
+
+> **3 · WHO LEARNS THAT IT HAPPENED?** A disposal that changes the world and that **nobody outside
+> the room is told about** compels the people it binds and lets none of them react. **If the answer
+> is "whoever happens to carry the document", the game has no public.**
+
+> **Jordan:** *"the outcome of a closed parliament may have epistemic impacts on those who
+> participated, but the decisions made therein still get announced to the world as the parliament's
+> decision, which means state change and propagation."*
+
+**The state half of §E was already right and is not in question.** A parliament writes a `Record`
+somebody carries, burns or defies; a negotiation writes an `oblige`; an excommunication severs a
+`commit`. None of it runs through belief — **the reeve collects the levy because the document exists
+and he holds a duty, not because he heard the debate.**
+
+⚠ **What was missing is the knowing, and `grep -rn "announce"` over this whole directory returned one
+phrase — *"a concession that was not announced"* — which is about the ARGUING.** There was no
+announcement of anything, ever. So a ruling that bound a duchy was known to whoever sat in the room,
+and **the people it compelled could be compelled by it and could not react to it**: nobody petitions
+against a levy they never heard was raised.
+
+**Closed by `disposal_reach`** — `03_PARAMETERS.md` §B.7, mechanism at `08_SEAM.md` §D.3. It is not an
+act (so `AX-1` is untouched) and adds no Event kind: **the reach is a property of the disposal**, and
+the disposal's existing emission scopes by it instead of by who was present.
+
 ## E.2 · `disposes: standing` is not a disposal, and two rows used it
 
 **Standing is *"the gap between what everyone reads off you and what you hold"* — a Query, season-local,

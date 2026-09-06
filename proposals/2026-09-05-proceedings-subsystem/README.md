@@ -75,7 +75,7 @@ Per `CLAUDE.md` §2 a merge ratifies PROPOSED contents *by default*, with one ex
 | **`00_DERIVATION.md`** | ⭐ **start here.** What a proceeding is, derived from the six axioms with the tree closed. The ownership decomposition, the no-new-primitive account, and eight falsifiers |
 | `01_THE_STUDY.md` | the requirement source — the uploaded study, and **the ten things it explicitly refuses to supply** |
 | `02_THE_SOCKET.md` | what the season loop actually exposes, **measured at commit `1b1e382`**, and the five things it is missing |
-| **`03_PARAMETERS.md`** | ⭐ **the parameter space.** All 27 figures mapped; the fourteen-key arrangement row; **the twelve games as twelve rows**; a thirteenth authored; three the structure refuses |
+| **`03_PARAMETERS.md`** | ⭐ **the parameter space.** All 27 figures mapped; the arrangement row (**fifteen keys** as of 2026-09-06 — `disposal_reach` split the reach of a ruling from the reach of the arguing); **the twelve games as twelve rows**; a thirteenth authored; three the structure refuses |
 | **`04_VERBS.md`** | ⭐ **the action set.** The five rows, the fifteen reused, and the fifteen steps mapped — **six of which are cleared by no verb at all** |
 | `05_PROCEDURE.md` | what is ordered and what is a map, by the permutation test; the nested run; the ladder |
 | `06_RESOLUTION.md` | convictions · ethos · stances · biases — **only two are fields** — the pool, the margin, and where a title enters (**not the pool**) |

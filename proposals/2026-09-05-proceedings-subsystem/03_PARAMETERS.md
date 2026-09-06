@@ -246,6 +246,82 @@ one primitive that could not express the price, which is the mechanism.
 
 ---
 
+## B.7 · ⭐ WHO WITNESSED THE ARGUING AND WHO LEARNS THE RULING ARE TWO DIFFERENT REACHES (Jordan, 2026-09-06)
+
+> **Jordan:** *"the outcome of a closed parliament may have epistemic impacts on those who
+> participated, but the decisions made therein still get announced to the world as the parliament's
+> decision, which means state change and propagation."*
+
+**This corrects a hole that was an accident rather than a decision, and the word for it appeared
+nowhere in this design.** `grep -rn "announce"` over the whole directory returned only the phrase
+*"a concession that was not announced"* — which is about the ARGUING. **There was no announcement
+of anything, ever.**
+
+**What was already right, and is not in question.** `§E` below runs the *about-the-world* test over
+all twelve rows: a disposal must write a thing somebody can lose. A parliament writes a **`Record`** —
+a document carried to a place, forgeable, burnable, obeyed by `comply` or defied by `evade / defy`. A
+negotiation writes an **`oblige`**. An excommunication severs a **`commit`** and with it eligibility
+for every seat that body confers. **None of that runs through anybody's belief.** The reeve collects
+the levy because the document exists and he holds a duty, not because he heard the debate. **State
+change and consequential propagation were already there.**
+
+**What was missing is the KNOWING, and it matters because of what it blocks.** With no announcement,
+publicity fell out of whoever happened to carry the paper. So a ruling that **binds** a duchy was
+known only to whoever sat in the room. **The people a decision compels could be compelled by it and
+could not react to it** — nobody can petition against a levy they never heard was raised, move
+against a ruling before it reaches them, or make common cause with the others it hurts, because
+nothing put it in their heads.
+
+**Why the hole formed, said plainly so it is not re-dug.** `AX-1` says only a person acts, so a body
+cannot announce. Rather than answer that, the design let the question go unasked. ⭐ **The answer is
+that the announcement is not an act at all — it is a PROPERTY OF THE DISPOSAL.** A ruling nobody is
+told about is not a ruling; it is a private understanding, and the design already has one of those
+(`disposes: oblige` between two parties). **What makes a disposal a disposal is that it reaches
+beyond the people who made it.** No act, no verb, no new Event — the disposal's existing emission
+gets a witness scope of its own.
+
+| value | who learns the ruling | worked case |
+|---|---|---|
+| **`room`** | the attendees, and nobody else | ⭐ **a negotiation.** A private deal stays private until somebody talks. **This is the value that makes the key worth having** — without it the key would be a blanket rule |
+| **`body`** | everyone the disposing body's remit reaches | a tribunal, an inquisition hearing — the finding binds the order and is known to it |
+| **`<rung kind>`** | everyone at or below that tier of the containment ladder | a parliament's levy proclaimed to the **realm**; a manor court's judgment to the **settlement** |
+
+> ### **`floor` SCOPES THE ARGUMENT. `disposal_reach` SCOPES THE OUTCOME. THEY ARE ORTHOGONAL AND
+> THE INTERESTING ROWS SET THEM DIFFERENTLY.**
+> An excommunication is decided `floor: closed` and proclaimed to the realm. A negotiation is often
+> `floor: open` — held in a hall where people can see — and its terms are `room`. **A row that sets
+> both to the same reach is the uninteresting case.**
+
+## B.8 · ⚠ AND THIS RETIRES `P-41` AS A DEFECT (Jordan, 2026-09-06)
+
+`P-41` — *descent is free in 6 of 12 rows, 3 of them terminal* — was carried as the sharpest
+playability finding this directory produced, and `17_PLAYABILITY.md` §D.11 spent a fatal verdict
+establishing that the concessions made in a closed room reach nobody.
+
+> **Jordan:** *"so what if the argument doesn't come out of a closed room? that's irrelevant. but if
+> you're playing the head of a major faction like Baralta, you're going to be in those closed rooms
+> with your game adversaries/peers in that room too."*
+
+**Both halves land, and together they close it.**
+
+1. **The argument's audience was never the world.** A concession is priced by the people who saw it,
+   and they are the people it was made to. Asking it to leak was asking it to do a job it does not have.
+2. ⭐ **THE PLAYER IS IN THE ROOM.** The closed conclave is not a black box the player stands outside
+   of — **it is where the player's game happens**, against the same handful of peers and rivals, season
+   after season. The finding assumed a spectator who does not exist at this scale of play.
+
+**So `P-41` closes as IRRELEVANT** (`CLAUDE.md` §0's test 2), and `17_PLAYABILITY.md` §D.11's verdict
+is narrowed: the four channels genuinely do not fire for a `speak`, and **that is now a correct
+property rather than a defect.**
+
+⚠ **AND IT RELOCATES THE RISK RATHER THAN REMOVING IT.** If the game is a small recurring cast
+accumulating readings of each other across seasons, **the thing that can break it is FORGETTING, not
+concealment.** `shape.py:1772` sets `ledger_cap=200` and the cap evicts on `(confidence, recency)`.
+A firsthand witnessed concession is high-confidence and should outlive hearsay about it — **which is
+probably the right shape** — but *probably* is doing real work in that sentence and nothing has
+measured it. **The question to ask of a closed room is no longer "who else finds out"; it is "does
+the bishop who watched you fold three seasons ago still hold it."** Registered `P-42`.
+
 # PART C · VENUES AND ROLES — the two the study does not enumerate and the architecture does
 
 ## C.1 · The venue — **any rung above the person tier, and the ordinal is the parameter**
@@ -384,6 +460,9 @@ branch on its value; everything is read as an ordinal, a set membership, or a re
   # ── WHAT IT DOES ────────────────────────────────────────────────────────────
   disposes:        <tenure kind> | Record | none   # ⚠ NEVER a Query — see 14_THE_WORLD_IN_THE_ROOM §E.2
                                               # what a finding writes                [AX-6 · §A.6]
+  disposal_reach:  room | body | <rung kind>  # ⭐ WHO LEARNS THE RULING — see §B.7   [Jordan 2026-09-06]
+                                              # INDEPENDENT of `floor`, which scopes
+                                              # who witnessed the ARGUING
   verdict_reasons: given | withheld           # can anyone learn why?                [Fig. 13]
   stakes_grade:    terminal | costly | free   # what a loss costs the loser          [Fig. 11 · 21]
 ```
@@ -449,7 +528,7 @@ the correction is recorded there rather than overwritten.**
 disposal: mutual · bench_basis: none · floor: closed · records_dissent: false
 venue_min_rank: hearth · term_required: false · appeal_basis: none
 interposed: [] · order: alternating · registers: [all seven] · proofs: [record, testimony]
-disposes: oblige · verdict_reasons: given · stakes_grade: costly
+disposes: oblige · verdict_reasons: given · stakes_grade: costly · disposal_reach: room
 ```
 **Why it plays as it does.** `disposal: mutual` means nothing settles until **both parties commit to
 the same Proposition** — so there is no bench to persuade and no verdict to lose, only an agreement
@@ -475,6 +554,7 @@ new way to lose.
 disposal: bench · bench_basis: determine · floor: closed · venue_min_rank: hearth
 term_required: true · appeal_basis: none · interposed: [] · order: alternating
 proofs: [record, testimony, oath] · disposes: oblige · verdict_reasons: given · stakes_grade: costly
+disposal_reach: room
 ```
 **`appeal_basis: none` is what makes it arbitration** rather than a trial, and it is one key. The
 arbiter is named in the **opening act's terms** (`T-n`) — so *who arbitrates* is itself negotiable
@@ -486,6 +566,7 @@ disposal: bench · bench_basis: determine · floor: open · records_dissent: tru
 venue_min_rank: settlement · term_required: true · appeal_basis: determine
 interposed: [person, procedure] · order: rank · registers: [restricted]
 proofs: [record, testimony, oath] · disposes: <tenure> · verdict_reasons: given · stakes_grade: terminal
+disposal_reach: settlement
 ```
 **`floor: open` is the parameter that does the most work.** An open floor means **every descent of the
 issue ladder is witnessed by everyone present**, so conceding the fact to argue quality is expensive
@@ -497,6 +578,7 @@ set and somebody can be reached about.
 ### **tribunal** — *a standing commission, admitted floor*
 ```yaml
 floor: admitted:<basis> · interposed: [office, procedure] · appeal_basis: none
+disposal_reach: body            # the finding binds the order, and is known to it
 ```
 **Differs from a trial in three keys and the difference is real.** `office` interposed means the
 tribunal's members criticise **as a duty**, which absorbs the personal affront — **and is therefore
@@ -510,7 +592,7 @@ concessions are cheaper. `appeal_basis: none` makes the finding final, which und
 disposal: bench · bench_basis: determine · floor: closed · records_dissent: false
 venue_min_rank: hearth · term_required: false · appeal_basis: none
 interposed: [] · order: scripted · registers: [restricted] · proofs: [testimony, confession]
-disposes: <tenure> · verdict_reasons: withheld · stakes_grade: terminal
+disposes: <tenure> · verdict_reasons: withheld · stakes_grade: terminal · disposal_reach: room
 ```
 **The asymmetry is not a key — it is `bench ∩ parties = {the questioner}`.** The questioner is both a
 party and the only person who may dispose, so **the subject has no third party to persuade.**
@@ -525,7 +607,7 @@ subject cannot even learn what moved it, which by Fig. 13 means **they cannot im
 bench_basis: determine · floor: closed · records_dissent: false · venue_min_rank: settlement
 term_required: false · appeal_basis: determine · interposed: [office, procedure, document]
 order: scripted · registers: [restricted] · proofs: [testimony, confession, record]
-disposes: <tenure> · verdict_reasons: withheld · stakes_grade: terminal
+disposes: <tenure> · verdict_reasons: withheld · stakes_grade: terminal · disposal_reach: body
 ```
 **`term_required: false` with a bench and a closed floor is the whole horror of it, and it is one
 boolean.** By `T-n`, an act that opens something without declaring its end has opened something with
@@ -541,7 +623,7 @@ than a trap.
 disposal: bench · bench_basis: determine · floor: closed · records_dissent: false
 venue_min_rank: settlement · term_required: true · appeal_basis: determine
 interposed: [procedure, ceremony] · order: rank · proofs: [record, testimony]
-disposes: <tenure> · verdict_reasons: given · stakes_grade: terminal
+disposes: <tenure> · verdict_reasons: given · stakes_grade: terminal · disposal_reach: realm
 ```
 ⭐ **There is NO `subject_absent` key, and that is the result.** The subject is absent because they did
 not travel (§C.1.1). **A trial in absentia and an excommunication deliberation are the ordinary case
@@ -556,7 +638,7 @@ a later proceeding, not a mercy.**
 disposal: bench · bench_basis: determine · floor: open · records_dissent: true
 venue_min_rank: duchy · term_required: true · appeal_basis: none
 interposed: [procedure] · order: rank · registers: [all seven] · proofs: []
-disposes: Record · verdict_reasons: given · stakes_grade: costly
+disposes: Record · verdict_reasons: given · stakes_grade: costly · disposal_reach: realm
 ```
 **`proofs: []` is not an oversight — it is Fig. 23.** A deliberative body decides the **future**, and
 *the future admits no witnesses*; **the fact is not in dispute and there is no issue ladder to
@@ -569,6 +651,8 @@ loser is on the record as having lost.
 ### **council of state** — *the same shape, and the opposite trade*
 ```yaml
 floor: closed · records_dissent: false · venue_min_rank: duchy · verdict_reasons: withheld
+disposal_reach: realm           # ⭐ UNCHANGED from the parliament, and that is the point:
+                                # the deliberation is sealed, the decree is proclaimed
 ```
 ⭐ **Four keys differ from the parliament and they produce the Fig. 14 inversion exactly.** A closed
 floor conceals disagreement from outsiders **while permitting it in the room**; `records_dissent:
@@ -583,6 +667,7 @@ disposal: bench · bench_basis: <any remit> · floor: admitted · venue_min_rank
 term_required: false · appeal_basis: none
 interposed: [ceremony, person, document] · order: scripted · registers: [restricted]
 proofs: [record] · disposes: Record · verdict_reasons: withheld · stakes_grade: terminal
+disposal_reach: realm
 ```
 **Three interpositions is the lowest latitude on the board, and Fig. 14's pairing inverts:** one
 person who can constrain means **consequence matters and eloquence does not.** `interposed:
@@ -596,6 +681,7 @@ in error, and never tested.**
 disposal: bench · bench_basis: determine   # at a bench whose remit REACHES the first bench
 floor: admitted · interposed: [document] · order: written_only
 proofs: [record] · disposes: <the prior tenure's closure> · stakes_grade: costly
+disposal_reach: body
 ```
 ⭐ **This is the only row that is not a sibling of the others — it is one of them, NESTED.** The matter
 is the disposition of a prior game; `seam.contest` already carries `depth` and `max_depth` and
@@ -608,7 +694,7 @@ the exchange in which unshared information would have been pooled.
 disposal: none · bench_basis: none · floor: open · records_dissent: n/a
 venue_min_rank: settlement · term_required: false · appeal_basis: none
 interposed: [] · order: free · registers: [all seven] · proofs: [record, testimony]
-disposes: standing · verdict_reasons: n/a · stakes_grade: costly
+disposes: standing · verdict_reasons: n/a · stakes_grade: costly · disposal_reach: room
 ```
 **`disposal: none` is the key that makes it a different game entirely.** Nothing is settled; nobody is
 bound; **what moves is what the floor holds about the speakers.** Fig. 23's epideictic. ⚠ **And it is
@@ -707,7 +793,7 @@ N days on its own is a fourth motion.
 ## F.3 · The closure claim, stated so it can be checked
 
 > **CLAIM.** The game structure is correct for any membership of the parameter space: the twelve
-> games, the thirteenth, and any game whose parameters are values of the fourteen keys, require **no
+> games, the thirteenth, and any game whose parameters are values of the fifteen keys, require **no
 > code change and no branch on a game's name.**
 >
 > **FALSIFIER.** `tests/…/test_no_branch_on_arrangement.py` — a scan asserting no resolver, Query or

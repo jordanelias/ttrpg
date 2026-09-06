@@ -637,9 +637,39 @@ position **states** the `T-d` dependency for `witness_key` and then writes an ar
 > shipping the six `floor: closed` rows unchanged. **A wrong fix gets caught by its own falsifier. A
 > wrong reassurance closes the ticket.**
 >
-> ⭐ **`P-41` STANDS, and `10_LOOPS_AND_GAPS.md:99`'s own first option is the live one:** either a
-> closed room's concessions reach the world some other way — which today they **do not** — or the
-> catalogue's floors are wrong. **That is a real design decision and it is now unavoidable.**
+> ⛔ **SUPERSEDED SAME DAY — `P-41` IS CLOSED AS IRRELEVANT, AND SO IS MY OWN VERDICT ABOVE.**
+>
+> The paragraph that stood here read: *"`P-41` STANDS … either a closed room's concessions reach the
+> world some other way — which today they do not — or the catalogue's floors are wrong."* **Both horns
+> were wrong, and the antagonist's fatal verdict on P11 is narrowed rather than upheld.**
+>
+> > **Jordan, 2026-09-06:** *"so what if the argument doesn't come out of a closed room? that's
+> > irrelevant. but if you're playing the head of a major faction like Baralta, you're going to be in
+> > those closed rooms with your game adversaries/peers in that room too."*
+>
+> **Two things, and together they close it.**
+> 1. **The argument's audience was never the world.** A concession is priced by the people who saw it,
+>    and they are the people it was made to. Asking it to leak was asking it to do a job it does not have.
+> 2. ⭐ **THE PLAYER IS IN THE ROOM.** The closed conclave is not a black box the player stands outside
+>    of — **it is where the player's game happens**, against the same handful of peers and rivals,
+>    season after season. **The finding assumed a spectator who does not exist at this scale of play.**
+>
+> **So lane B's four channel checks are still correct and are now a correct PROPERTY:** the concessions
+> stay in the room, and that is what makes a closed room worth entering. What P11 got wrong was
+> arguing they arrive later; what I got wrong was treating their staying put as a defect.
+>
+> ⚠ **AND THE REAL RISK IS RELOCATED, NOT REMOVED.** If the game is a small recurring cast
+> accumulating readings of each other across seasons, the thing that breaks it is **forgetting**.
+> `shape.py:1772` sets `ledger_cap=200`, evicting on `(confidence, recency)`. A firsthand witnessed
+> concession is high-confidence and should outlive hearsay — **probably the right shape, and nothing
+> has measured it.** The question of a closed room is no longer *who else finds out*; it is **does the
+> bishop who watched you fold three seasons ago still hold it.** Registered `P-42`.
+>
+> ⭐ **Separately, the outcome half was a real hole and is now closed.** Nothing in this design
+> announced anything — the word appeared only in *"a concession that was not announced"*. A ruling
+> that binds a duchy was known only to whoever sat in the room. `disposal_reach` splits the two reaches
+> (`03_PARAMETERS.md` §B.7, `08_SEAM.md` §D.3): **`floor` scopes the arguing, `disposal_reach` scopes
+> the ruling.** No act, no verb, no Event kind — the reach is a property of the disposal.
 
 ---
 
@@ -916,7 +946,7 @@ first two are rulings rather than builds because the arithmetic is wrong without
 | # | do this | why first |
 |---|---|---|
 | **1** | ⚖ **Rule `P-29` — latitude in the pool, the obstacle, or both** | **H.4.** Until it is ruled, the base term count is unknown and every magnitude claim is off by one |
-| **2** | ⚖ **Rule `P-41` — either the closed rows' floors are wrong, or a closed room's concessions reach the world some other way** | **D.11.** P11's reassurance is false on four lines, so this is now unavoidable rather than deferrable |
+| ~~**2**~~ | ⛔ ~~Rule `P-41`~~ — **CLOSED as irrelevant, 2026-09-06.** Replaced by: **measure `P-42`** — does a witnessed concession survive the 200-claim ledger cap across seasons? | the argument's audience is the room, and the player is in it. **Forgetting, not concealment, is what can break a recurring cast** |
 | **3** | ✏ **Make the three free prose retractions** | **H.3 / D.5** (the rung is a shared, unfiltered fold), **D.3** (`Person.stance` is the actor's own — closing a live `AX-4` breach in the row as written), and **§C.2**'s ceiling correction. Zero cost, three real defects |
 | **4** | ✏ **Author the `speech_kinds` roster** | promised at `04_VERBS.md:144-148`, absent from data, needed by the design **as it already stands** — independent of whether P1 is ever built |
 | **5** | 🔨 **Rebuild P9 with the three fixes** | **D.9.** The only mechanism that survived its attack. Charge only where a lawful act existed and was not taken; falsify on `order: scripted`; carve out from the row, not from a membership test |
