@@ -161,7 +161,9 @@ rows:
     status: not_met
     measured: >-
       The scene container EXISTS and is not what's missing: `Scene` is a dataclass
-      (`engine/season/shape.py:2289`) and `deliberate` packs each person's choices into scenes and
+      (`engine/season/state/carriers.py::Scene`, moved there at step 4 of the decomposition; this
+      citation read `shape.py:2289` and named a file that no longer holds the class) and
+      `deliberate` packs each person's choices into scenes and
       stamps every act with its scene id (`a.scene = sc.id`, `shape.py:5727`); `W17` LANDED
       2026-09-02 (`architecture/PLAN.md:1216`, `:1315`). What is missing is a scene-granular TICK.
       `SeasonDriver.season` (`shape.py:6470`) calls `self.deliberate(...)` once
