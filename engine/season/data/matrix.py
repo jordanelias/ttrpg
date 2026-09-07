@@ -6,10 +6,13 @@ Owns the six-step loop's `Step`/`WriteClass` enums, the STEP -> WRITE CLASS rela
 field, and how (S30's own rule: ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION).
 
 ⚠ TWO THINGS THIS MODULE DELIBERATELY DOES NOT OWN, BOTH ADJUDICATED AT THE SAME TIME AS THE MOVE:
-`MATRIX_REFUSAL_LAW` stays in `shape.py`, with its only reader -- the gate in `World`. It is a
-loop over a fix, not a definition, and moving it here would invite editing it as one.
-`rows_without_a_producer` also stays in `shape.py`: it reads `VERB_TABLE`, which belongs to the
-verb table this module does not load, and moves with it in a later step.
+`MATRIX_REFUSAL_LAW` travels with its only reader -- the gate in `World` -- which is why it is now
+in `season.state.world` and not here. (This sentence read *"stays in `shape.py`"* until step 4;
+that named where the READER was, and the reader moved. The ruling is unchanged: the table goes
+where the gate is.) It is a loop over a fix, not a definition, and moving it here would invite
+editing it as one. `rows_without_a_producer` also left `shape.py`, at step 3, for
+`season.data.verbs`: it reads `VERB_TABLE`, which belongs to the verb table this module does not
+load, and it moved with it.
 
 `load_yaml` -- the one YAML reader every loader in this package shares -- lives in
 `season.data.rosters`, not here, which is why `season/data/__init__.py` loads `rosters` before
