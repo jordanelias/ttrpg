@@ -115,13 +115,36 @@ stated as amendments; neither is smuggled.**
 
 ## D.1 · `write_matrix.yaml` — the rows the verbs need
 
-| kind | field | steps | class | writer | emits | status |
+⚠ **CORRECTED 2026-09-07 — the `emits` column carried four kinds the matrix does not have.** It
+read `matter.moved`, `stance.changed` and `case.opened` (twice), which are this directory's own
+vocabulary written into a column owned by `write_matrix.yaml`. **The matrix's kinds are below**, and
+they are what a reader must expect. This is not cosmetic: loader invariant 7 derives the Event-kind
+roster *from emission columns*, so a design quoting kinds the matrix does not carry describes a
+roster nobody will generate.
+
+| kind | field | steps | class | writer | emits **(the matrix's own)** | status |
 |---|---|---|---|---|---|---|
-| `Tenure` | `degree` | `[RES]` | ACTS | `act_only` | `matter.moved` | ⚠ **exists, with a writer and NO READER** (`F.4`). **This design is its reader** |
-| `Tenure` | `since` / `until` | `[MAT, RES]` | MATTER/ACTS | — | `tenure.opened` / `tenure.closed` | exists |
-| `Person` | `stance` | `[RES]` | ACTS | `act_only` | `stance.changed` | ⚠ `F.20a` — **a matrix row with no producing verb.** `speak` is a producer |
-| `Record` | `exists` / `stages` | `[RES]` | ACTS | `act_only` | `case.opened` | exists |
+| `Tenure` | `degree` | `[RES]` | ACTS | `act_only` | `tenure.graded` | ⚠ **exists, with a writer and NO READER** (`F.4`). **This design is its reader** |
+| `Tenure` | `since` / `until` | `[MAT, RES]` | MATTER/ACTS | — | `tenure.opened` / `tenure.closed` | exists. ⭐ **And `since` gains a writer here** — `determine` opens the disposal (`21_RECONCILIATION.md` C-1) |
+| `Person` | `stance` | `[RES]` | ACTS | `act_only` | `stance.moved` | ⚠ `F.20a` — **a matrix row with no producing verb.** `speak` is a producer |
+| `Record` | `exists` / `stages` | `[RES]` | ACTS | `act_only` | `record.created` · `record.destroyed` / `record.staged` | exists |
 | `Date` | `due_at` | `[RES]` | ACTS | `act_only` | `date.scheduled` | exists |
+| `DocketItem` | `matter` | `[CAL, RES]` | CALENDAR/ACTS | `act_only` | `docket.formed` | exists; written by `carry`, and ⭐ **by `open_case` after C-5** |
+
+> ### ⚠ **AND THE COLUMN ABOVE IS NOT THE ONE THAT FIRES AT RESOLVE, WHICH IS THE THING THE
+> ### CORRECTION MAKES VISIBLE.**
+> This design has **two** emission columns bearing on the same write — the matrix row's, above, and
+> the verb row's (`speak` declares `matter.carried` · `matter.advanced` · `matter.held` ·
+> `matter.turned`). The directory resolves this once, correctly, for band **keys** — §B.1's *only
+> the KEYS are the ladder's; the emission kinds stay the proceeding's* — and never resolved it for
+> the kinds themselves.
+>
+> **The answer is precedent rather than a new rule:** what an act emits at RESOLVE is the verb
+> row's `emits_at(degree)` intersected with what the fold judges earned. **The matrix's kind is what
+> a write emits when a step other than an act makes it** — a MATTER maturation, a CALENDAR fire.
+> So both columns are live, they fire at different steps, and neither is dead. **`21_RECONCILIATION.md`
+> PART A records that this was found by reading the matrix rather than by any gate**, because no
+> gate compares the two columns.
 
 ⭐ **`(Person, stance)` IS ONE OF THE FOUR ROWS `F5` FOUND WITH NO PRODUCER** — *"no verb in the table
 writes any `Person` interior field at all"*, which blocks build step 2 and is tier-0 `H-62`. **`speak`
