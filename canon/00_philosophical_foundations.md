@@ -1,3 +1,29 @@
+> # ⚠ SUPERSEDED — 2026-09-07
+>
+> **This document is no longer the live statement of what it describes.** It is superseded by
+> **`canon/philosophy/`**, whose eleven sections carry this document's content in reorganized form. Its §1–§18 are
+> distributed across `01_limit_and_ground.md` through `09_terminology.md`.
+>
+> **It remains in place, unedited below this banner, so that existing citations resolve.** Roughly
+> seventy files across `audit/`, `proposals/`, `references/`, `registers/` and `engine/` cite this
+> path or its sections; those citations are historical and are not being rewritten. A reader who lands
+> here from one of them is in the right place for what was said, and should go to `canon/philosophy/`
+> for what is held.
+>
+> **Section numbers changed.** The concordance at `canon/philosophy/00_standing.md` §0.4 maps every
+> section of this document to its new home.
+>
+> **What the philosophy suite is, and how it came to supersede this.** It reorganizes these documents
+> foundations-upward, resolves the contradictions between them, and incorporates the author's rulings
+> of 2026-09-07 on every question the reorganization left open. Those rulings are recorded verbatim in
+> `canon/philosophy/RULINGS.md`, which governs where any document disagrees. Several of them changed
+> the doctrine rather than merely clarifying it — the stabilizing tendency, the nature of rendering,
+> temporality, the Calamity's mechanism, and what the Church worships are all now stated differently
+> than below.
+>
+> **The text below this banner is unedited** and is the text the review was run against. For
+> byte-exactness without the banner, see `canon/philosophy/PROVENANCE.md`.
+
 **VALORIA COMPENDIUM**
 
 *Philosophical Foundations*

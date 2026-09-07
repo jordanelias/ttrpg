@@ -358,8 +358,8 @@ Seven, marked rather than presented as obvious.
 ## §8 Method, and what would falsify this
 
 **Reading.** All five sources read in full. The two Leap-mechanism uploads are byte-identical
-duplicates, so the suite is five documents, not six. Sources are preserved at `_sources/` with
-checksums matching the uploads.
+duplicates, so the suite is five documents, not six. The reviewed text is the body of the five files
+in `canon/`, below their supersession banners and unedited; see `PROVENANCE.md`.
 
 **Review.** Conducted read-only by Fable 5.1 under four lenses plus a cross-document consistency sweep
 and a derivation audit. Read-only was structural: the reviewing agent had no write, edit or shell

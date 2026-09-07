@@ -1,3 +1,33 @@
+> # ⚠ SUPERSEDED — 2026-09-07
+>
+> **This document is no longer the live statement of what it describes.** It is superseded by
+> **`canon/philosophy/`**, chiefly `06_operations.md` (the Leap, knot formation, the operation-type taxonomy) and
+> `08_history.md` (the Calamity, the Church's category error).
+>
+> **It remains in place, unedited below this banner, so that existing citations resolve.** Roughly
+> seventy files across `audit/`, `proposals/`, `references/`, `registers/` and `engine/` cite this
+> path or its sections; those citations are historical and are not being rewritten. A reader who lands
+> here from one of them is in the right place for what was said, and should go to `canon/philosophy/`
+> for what is held.
+>
+> **Section numbers changed.** The concordance at `canon/philosophy/00_standing.md` §0.4 maps every
+> section of this document to its new home.
+>
+> **What the philosophy suite is, and how it came to supersede this.** It reorganizes these documents
+> foundations-upward, resolves the contradictions between them, and incorporates the author's rulings
+> of 2026-09-07 on every question the reorganization left open. Those rulings are recorded verbatim in
+> `canon/philosophy/RULINGS.md`, which governs where any document disagrees. Several of them changed
+> the doctrine rather than merely clarifying it — the stabilizing tendency, the nature of rendering,
+> temporality, the Calamity's mechanism, and what the Church worships are all now stated differently
+> than below.
+>
+> **Two of its claims were ruled against.** The Calamity is tensile on a holding-against reading, not
+> an inversion event; and the stabilizing tendency belongs to the futural-potential-legible rather than
+> to substrate spooling, which reshapes the operation-type taxonomy built on it.
+>
+> **The text below this banner is unedited** and is the text the review was run against. For
+> byte-exactness without the banner, see `canon/philosophy/PROVENANCE.md`.
+
 # Foundations Amendment: The Leap Mechanism — Suspension, Knot Formation, Operation-Type Risk
 
 **Status:** Canonical

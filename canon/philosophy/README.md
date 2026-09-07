@@ -36,7 +36,7 @@ suite's own resources decided them, and marking the remainder for a decision tha
 | — | `RULINGS.md` | **The author's decisions, verbatim.** Each ruling in his own words, what it displaced, where it was applied. The live record |
 | — | `DECISIONS.md` | The questions as originally posed. Superseded by `RULINGS.md`; kept for the context each question was asked in |
 | — | `DISCUSSION_SUPPLEMENT.md` | Every finding, every resolution with its authority, the method and what would falsify it |
-| — | `_sources/` | The five originals, byte-identical. Never edit; they are the provenance baseline |
+| — | `PROVENANCE.md` | Where the reviewed text is, and how to verify a quotation against it |
 
 **If you read only one thing:** `RULINGS.md`. Every decision the framework now rests on, in the
 author's own words, with what each one displaced.
@@ -78,8 +78,8 @@ The ordering calls that are genuinely contestable — there are seven — are li
 
 ## Relationship to the five source documents
 
-This suite **does not delete anything**. It sits beside the sources at `_sources/`, which remain
-byte-identical to what was supplied.
+This suite **does not delete anything**. The five sources remain at `canon/`, carrying supersession
+banners and unedited below them. See `PROVENANCE.md`.
 
 Adopting it means retiring those five files, and that is a decision for the author, not for this
 branch. The concordance in `00_standing.md` §0.4 maps every old section to its new home so that

@@ -1,3 +1,36 @@
+> # ⚠ SUPERSEDED — 2026-09-07
+>
+> **This document is no longer the live statement of what it describes.** It is superseded by
+> **`canon/philosophy/`**, for §A, and by **`canon/04_game_design_constraints.md`** for §B.
+>
+> **It remains in place, unedited below this banner, so that existing citations resolve.** Roughly
+> seventy files across `audit/`, `proposals/`, `references/`, `registers/` and `engine/` cite this
+> path or its sections; those citations are historical and are not being rewritten. A reader who lands
+> here from one of them is in the right place for what was said, and should go to `canon/philosophy/`
+> for what is held.
+>
+> **Section numbers changed.** The concordance at `canon/philosophy/00_standing.md` §0.4 maps every
+> section of this document to its new home.
+>
+> **What the philosophy suite is, and how it came to supersede this.** It reorganizes these documents
+> foundations-upward, resolves the contradictions between them, and incorporates the author's rulings
+> of 2026-09-07 on every question the reorganization left open. Those rulings are recorded verbatim in
+> `canon/philosophy/RULINGS.md`, which governs where any document disagrees. Several of them changed
+> the doctrine rather than merely clarifying it — the stabilizing tendency, the nature of rendering,
+> temporality, the Calamity's mechanism, and what the Church worships are all now stated differently
+> than below.
+>
+> **§A (P-01…P-15)** is regenerated at `canon/philosophy/10_constraints.md`, with every Foundations
+> Ref verified against the section it cites. Several were repointed and two were corrected against
+> sections they contradicted.
+>
+> **§B (GD-1, GD-2, GD-3)** was extracted verbatim to `canon/04_game_design_constraints.md` — it is
+> mutable canon of a different kind, and `engine/autoload/victory.py` and `engine/mc_v18.py` cite it
+> as their canon source. **Code citing §B should be repointed at that file.**
+>
+> **The text below this banner is unedited** and is the text the review was run against. For
+> byte-exactness without the banner, see `canon/philosophy/PROVENANCE.md`.
+
 # Valoria Canon Constraints — Updated
 ## Extracted from: Valoria_Philosophical_Foundations.docx
 ## Version: 2026-04-02 (P-15 added from Amendment 01: three-layer being-persistence, Leap mechanics, Coherence 0)
