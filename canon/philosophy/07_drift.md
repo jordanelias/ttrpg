@@ -115,12 +115,15 @@ not threadcut and not dissolving. What is gone is the layer that maintained the 
 human. They are being spooled into whatever raw spooling produces with nothing shaping it.
 
 **Every band is written from the observer's side, and that is a consequence rather than a stylistic
-choice.** Temporal Disjunction is a gap between retention and thread-history; if the retention pole is
-itself degrading, the gap becomes indeterminate *for the practitioner* while remaining perfectly
-determinate for observers, who retain normally. **A drifting practitioner does not experience mounting
-disjunction. They experience less and less of it, while being more and more disjoined.** This is the
-temporal instance of the self-judgment asymmetry (§4.3): the faculty that would register the failure is
-the faculty failing.
+choice.** What degrades here is the practitioner's own retention and protention — the capacity by
+which they hold themselves across time. So the faculty that would register the degradation is the
+faculty degrading, and others see it first. This is the temporal instance of the self-judgment
+asymmetry (§4.3).
+
+*(This is a fact about Coherence, not about Temporal Disjunction. Disjunction is a configuration out of
+step with its surroundings and is witnessed by anyone not pulled (§2.7); it is not a private gap that a
+degrading retention could hide. The two are distinct effects and this section concerns only the
+second.)*
 
 ## §7.5 Reality-strain
 

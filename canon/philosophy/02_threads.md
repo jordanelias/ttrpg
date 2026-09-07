@@ -71,34 +71,28 @@ description of the Locked Zones as regions where *the rendering cannot present* 
 epistemic claim) when §8.5 makes them regions where *the substrate itself has failed* (an
 ontological one). §8.5 is correct and the epistemic restatement is struck.
 
-## §2.4 The temporal dimension: constituting and constituted
+## §2.4 The temporal dimension
 
-Temporality is the axis upon which all rendering occurs. It is not derived from actuality or
-intelligibility.
+**Temporality is one dimension. Splitting it is a metaphysical violation.** *(Ruled 2026-09-07; an
+earlier draft proposed dividing it into a manipulable time and a protected constituting time, and
+that proposal is struck.)* The framework has one substrate, and cannot hold two temporalities over it.
 
-**Two temporalities must be distinguished, and the source suite ran them together.** The distinction
-is not a scholarly nicety; the framework's own central temporal mechanic requires it.
+What temporality is, for a configuration, is its **becoming itself in equilibrium**: the movement by
+which it goes on being what it is, always already toward the harmony it tends to (§3.4).
 
-**Constituting temporality** is the practitioner's living present: the flow in which the present is
-immediately given, with the past as a horizon of retention and the future as a horizon of
-protention. This is the condition under which anything is experienced as temporal at all. It is not
-itself a temporal object, and it is not a thread. **It cannot be operated upon.**
+### What a temporal operation actually does
 
-**Constituted temporality** is the temporal dimension *of threads*: when and how a thread existed as
-it did, the temporal depth a configuration has accumulated. This is a property of what is rendered,
-and it **can** be operated upon.
+**It does not rewind time.** Pulling a configuration temporally does not mean all of time has been
+rewound, and does not pull other configurations back with it. Nothing global happens.
 
-Collapsing these produces incoherence: if the flow that gives operations their "within" were itself
-manipulable, there would be no standpoint from which an operation could be performed or registered.
-Worse, the collapse destroys the framework's own account of Temporal Disjunction, which needs the
-two apart — see §2.7.
+**It pulls that configuration out of its always-already moving toward equilibrium.** Its threads are
+manipulated such that **it is no longer becoming itself in equilibrium** — no longer going where it
+was going, in the manner it was going there.
 
-**A consequence the framework should adopt.** If Coherence's temporal facet is degradation of
-*constituting* temporality — retention and protention decohering (§7.1) — then a practitioner losing
-Coherence should progressively lose the capacity to *register* Temporal Disjunction at all. The gap
-between what is retained and what now factually was requires a stable retention to be a gap from. A
-deeply drifted practitioner does not experience mounting disjunction; they experience less and less
-of it, while being more and more disjoined. Nothing in the source suite draws this, and it follows.
+**This is where tension and tearing enter.** A configuration held out of its own becoming is held
+against the draw (§3.4), and that holding is a load. Temporal manipulation is not a special kind of
+operation with its own physics; it is the general physics of equilibrium and stability, applied on
+the temporal axis.
 
 ## §2.5 The actualized dimension
 
@@ -109,12 +103,15 @@ The source suite named this dimension in every list and never characterized it i
 stated here for completeness, and the framework should be aware that the third member of its central
 triad is the least developed of the three.
 
-**Why these three, and are they exhaustive?** The suite never argues it. One derivation is available
-from the framework's own commitments: the three correspond to the moments of any constitution
-whatever — *that* something is given (actuality), *when* it is given (temporality), and *as what* it
-is given (intelligibility). On that reading exhaustiveness follows from the structure of givenness
-rather than being stipulated. This is offered as the strongest available derivation, not as a
-ruling; see supplement, gap G-1.
+**Why these three, and the list is closed.** *(Ruled 2026-09-07.)* They are the **moments of
+constitution**: *that* something is given (actuality), *when* it is given (temporality), and *as what*
+it is given (intelligibility). Exhaustiveness follows from the structure of givenness rather than
+being stipulated — there is no fourth moment for a fourth axis to occupy.
+
+**And the *how* is spooling.** That is what the list appeared to be missing, and it is not a
+dimension. The three moments are moments of what is constituted; spooling (§4.1) is the manner in
+which constituting happens at all. Looking for it among the axes was a category error: it is not one
+of the things a thread has, it is how a thread is supplied.
 
 ## §2.6 The Inseparability Principle
 
@@ -147,28 +144,31 @@ reintroduce foregrounding. It is defined instead by direction relative to tenden
 
 ## §2.7 Temporal Disjunction
 
-Manipulating a thread's constituted temporality alters the objective factual history of when and how
-that thread existed. This creates a gap: the practitioner's retention holds the memory of performing
-the operation, while the past from which the present *should have* come has been altered.
+**A disjunct in temporality is a disjunct in threads.** *(Ruled 2026-09-07.)*
 
-**Temporal Disjunction is the gap between retained experience and altered factual history.** Because
-every operation moves the temporal dimension (§2.6), every operation produces some disjunction. It
-is not confined to past-oriented work.
+When a configuration is pulled out of its becoming (§2.4), it falls out of step with everything that
+was not pulled. That is Temporal Disjunction: a relation between configurations, not a condition of
+anyone's inner life.
 
-The degree varies with the magnitude and directness of the temporal co-movement. An operation
-primarily targeting actuality produces minimal disjunction, the temporal shift being a secondary
-consequence. A past-oriented pull, directly and massively moving the temporal dimension, produces
-extreme disjunction.
+**It is witnessed.** Those not themselves pulled see the configuration's temporality **pulled out of
+sync with what had been the case in reality**. They are not misremembering, and they are not holding a
+private true record against a changed public one. They simply were not pulled, and they can see that
+something was.
 
-**Why this works only on the distinction of §2.4.** Disjunction requires a retention that the
-operation did *not* touch, held against a history it did. Constituting temporality supplies the
-untouched term; constituted temporality supplies the touched one. Without the distinction there is
-no gap, because there is nothing stable to be disjoined from.
+**It is local.** Only what was pulled is disjoined, and only relative to what was not. No global
+mismatch opens between how things are and how anyone recalls them.
 
-**Disjunction is produced by operations, not by ordinary self-rendering.** An *operation* is a
-deliberate layer-three act (§6.1); layer-two self-maintenance is threadwork but not an operation, and
-carries no disjunction. **Ordinary human experience has no baseline disjunction**, and what is tracked
-is therefore the whole of it rather than an excess over a floor. *(Ruled 2026-09-07.)*
+Because every operation moves the temporal dimension along with the others (§2.6), every operation
+produces some disjunction. The degree varies with how far the configuration is taken out of its
+becoming: an operation primarily targeting actuality displaces it slightly; a direct temporal pull
+displaces it severely.
 
-One question does remain open: whether Temporal Disjunction and Coherence's temporal facet are the
-same effect or two — see §6.8.
+**Operations only.** Layer-two self-maintenance is threadwork and is not an operation (§6.1), and it
+pulls nothing out of its becoming — it *is* the becoming, held. **Ordinary experience carries no
+disjunction.**
+
+**Disjunction and Coherence's temporal facet are two distinct effects.** *(Ruled 2026-09-07.)*
+Disjunction is a configuration out of step with its surroundings. Coherence's temporal facet is the
+degradation of a being's own retention and protention (§7.2) — its capacity to hold itself across time
+at all. A configuration can be badly disjoined while whoever pulled it remains entirely intact, and a
+practitioner can be deep in drift without having disjoined anything. Neither converts into the other.

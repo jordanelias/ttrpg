@@ -149,7 +149,7 @@ Existing citations name the source sections. This table repoints them. `F` = the
 | F §1 | §2.1 | |
 | F §1.1 | §2.6 | |
 | F §1.2 | §2.3 | |
-| F §1.3 | §2.4, §2.7 | Split: constituting vs constituted temporality, then Temporal Disjunction |
+| F §1.3 | §2.4, §2.7 | Temporality as one dimension, then Temporal Disjunction |
 | F §2.1 | §1.3, §1.4 | The ground now follows the limit rather than preceding it |
 | F §2.2 | §1.1, §1.2 | Promoted to the suite's opening |
 | F §3.1 | §3.1 | |

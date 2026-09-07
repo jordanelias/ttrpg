@@ -261,3 +261,49 @@ thread paradigm — the thread-level analogue of morphogenesis, unexamined in th
 therefore unexplained here. Witnesses render the *form as perceived*, within their bounds; they do not
 constitute the being's organization. *Applied:* §4.6 (rewritten), §8.7 (catalysis re-derived from the
 uncapturable remainder rather than from constitution-by-rendering).
+
+---
+
+## 2026-09-07 — Batch 6: temporality, disjunction, whose Coherence, the three moments
+
+**Temporality is one dimension. The proposed split is a metaphysical violation.** Verbatim:
+
+> "One dimension. Splitting is a metaphysical violation. Pulling temporality on a configuration does
+> not mean all of time has been rewound or all configurations have been pulled back in time. It means
+> that the specific configuration has been pulled out of its always already moving towards
+> equilibrium, and this is where thread tensions and tears come into play with equilibrium and
+> stability: the configuration has had its threads manipulated in such a way that the configuration is
+> no longer becoming itself in equilibrium, and this disjunct in temporality of a disjunct in threads.
+> If people's prescriptions aren't pulled, they witness the configuration temporality being pulled out
+> of sync from what had been the case in reality"
+
+**Struck:** the constituting/constituted distinction, which came from the review (U-1) and was adopted
+at §2.4. The framework has one substrate and cannot hold two temporalities over it.
+
+**What replaces it, and it is stronger:** a temporal operation does nothing global. It pulls **one
+configuration** out of its always-already moving toward equilibrium, so that it is no longer becoming
+itself in equilibrium. **A disjunct in temporality is a disjunct in threads.** Those not themselves
+pulled witness that configuration's temporality out of sync with what had been the case.
+
+*Two consequences:* Temporal Disjunction is **local and witnessed** rather than a private mismatch —
+nobody holds a true inner record against a changed world. And temporal manipulation stops being a
+special physics: it is the general physics of equilibrium and stability (§3.4) applied on the temporal
+axis, which is why it produces tension and, at magnitude, tears.
+
+*Applied:* §2.4 (rewritten), §2.7 (rebuilt), §7.4 (a claim derived from the struck split — that a
+drifting practitioner cannot register disjunction — corrected: what degrades is retention/protention,
+a Coherence matter, not disjunction), §9.3, §0.4, supplement C-9.
+
+**Temporal Disjunction vs Coherence's temporal facet.** Ruled: **two distinct effects.** A
+configuration can be badly disjoined while whoever pulled it stays intact; a practitioner can be deep
+in drift without having disjoined anything. Neither converts into the other. *Applied:* §2.7, §7.4.
+
+**Who has Coherence.** Ruled: **everyone.** It is layer-2 integrity and everyone has layer 2.
+Practitioners are distinguished by **spending** it. This is why drift propagates to family and
+community — they have the same thing to lose, and knots carry the load to it. For someone who never
+operates and never stands near what exceeds, the variable is simply quiet. *Applied:* §4.3, §9.3.
+
+**Why three dimensions.** Ruled: **the moments of constitution — and the *how* is spooling.** That,
+when, as-what; exhaustiveness follows from the structure of givenness, and there is no fourth moment
+for a fourth axis. Spooling is not a missing axis but the manner in which constituting happens at all;
+looking for it among the dimensions was a category error. *Applied:* §2.5.

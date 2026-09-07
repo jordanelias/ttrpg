@@ -109,6 +109,15 @@ shifts), intelligibility (harder to apprehend, to self and others), and temporal
 protention decohere) drift together. Any account treating it as movement along one axis — as a moral
 state, a perceptual quality, or a somatic signature — is incomplete by definition.
 
+**Everyone has Coherence.** *(Ruled 2026-09-07.)* It is the integrity of layer-two self-rendering, and
+every human has layer 2. Practitioners are not distinguished by having it but by **spending** it: they
+operate, and operating is what puts it under load (§6.8).
+
+This is why drift propagates to family and community at all (§7.3). Those bound to a drifting
+practitioner are not suffering some other kind of harm by analogy — they have the same thing to lose,
+and knots carry the load to it. For someone who never operates and never stands near what exceeds, the
+variable is simply quiet.
+
 **Orthogonal to Thread Sensitivity.** Sensitivity concerns perceptual reach into the substrate;
 Coherence concerns the integrity of self-maintenance. They are structurally independent, and any
 combination of high and low is possible. They do become *contingently* correlated, because
