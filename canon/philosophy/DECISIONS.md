@@ -6,14 +6,20 @@ You should be able to decide any item here without reading anything else. Each c
 text at issue, what depends on it, the options with their real costs, a recommendation with its
 confidence, and the concrete edits that follow from each choice.
 
+**Nothing here is decided.** Forty-seven choices, all yours. The rewritten suite shows what each
+proposal looks like *applied* — that is what a proposal is for — but every file in it is marked
+PROPOSED, nothing is canon, and any item you rule against comes back out cleanly.
+
+Where I give a recommendation it is argument, not decision. Ignore any of them without explanation.
+
 **Four parts:**
 
 - **Part A — Twelve rulings.** Live choices where two defensible options build materially different
   frameworks. Ordered by how much depends on them, not by difficulty.
-- **Part B — Twenty-two resolutions I already took.** Ratify or reverse. These were made under your
-  instruction to resolve as I saw fit; you should see every one.
-- **Part C — Seven ordering calls.** How the suite is arranged. All reversible.
-- **Part D — Six optional enrichments.** Additions, not repairs. Easy to decline.
+- **Part B — Twenty-two proposed resolutions.** Contradictions and errors in the sources, each with
+  what happens if you leave it alone and what happens if you change it.
+- **Part C — Seven ordering calls.** How the suite is arranged.
+- **Part D — Six optional enrichments.** Additions, not repairs.
 
 **One thing to read first**, because it is not a ruling but everything else rests on it: **D-0**.
 
@@ -66,7 +72,7 @@ knowingly, not inherit it from a rewrite.
 threads rather than a rule about practice, and because the general reading is what makes the
 framework's best structures derivable rather than asserted.
 
-**Decision:** ☐ general ☐ narrow ☐ needs thought
+**Your ruling:** ☐ general ☐ narrow ☐ needs thought
 
 ---
 
@@ -133,7 +139,7 @@ them more or less well.
   reality/perception, and the framework becomes realist about threads and phenomenological only about
   access. That is a smaller philosophical claim than the one you currently make.
 
-### Recommendation
+### Argument for one option
 
 **(A)**, with high confidence — and note that under D-0's general reading it is not merely
 preferable but **entailed**: if rendering moves threads, then others' rendering of you moves your
@@ -144,7 +150,7 @@ stand; §4.7's "residual maintenance" is defined as others' continuing rendering
 **If you take (B):** §3.1 loses its second paragraph; §4.3's outward facing becomes evidential only;
 §4.6's account of third-mode origin fails and D-8 reopens.
 
-**Decision:** ☐ A ☐ B
+**Your ruling:** ☐ A ☐ B
 
 ---
 
@@ -209,7 +215,7 @@ places, the equilibrium of the shared rendering.
 Mending must be re-described — not as "what would have happened anyway," but as **labour that
 re-enables the conditions under which spooling can resume.**
 
-### Recommendation
+### Argument for one option
 
 **(B)**, with high confidence. The audit finds the taxonomy **underivable** on (A) and **entailed** on
 (B), by two independent routes. §3.4 and §6.6 already take it.
@@ -218,7 +224,7 @@ re-enables the conditions under which spooling can resume.**
 what the breach interrupted*. That is a better thing for your Wardens to be doing, and it is what
 makes their work meaningful rather than merely faster.
 
-**Decision:** ☐ A ☐ B
+**Your ruling:** ☐ A ☐ B
 
 ---
 
@@ -284,7 +290,7 @@ foundations never supply.
 **(C) Phased.** Strain as the precondition, inversion as the trigger. Genuinely available — but it
 must be *stated* as phased, and "identical in mechanism" becomes "identical in precondition."
 
-### Recommendation
+### Argument for one option
 
 **(A) on the holding-against reading**, with medium confidence — medium because (C) is dramatically
 better material and costs only a sentence of honesty. §8.1 provisionally states (A) and names the
@@ -293,7 +299,7 @@ event *the Calamity*, and flags the whole question inline.
 **Either way: pick one name.** Two names for one event is the exact failure your own vocabulary
 discipline warns about.
 
-**Decision:** ☐ A ☐ B ☐ C · **Name:** ☐ Calamity ☐ Catastrophe
+**Your ruling:** ☐ A ☐ B ☐ C · **Name:** ☐ Calamity ☐ Catastrophe
 
 ---
 
@@ -349,13 +355,13 @@ Sensitivity then has two components — ontic access to the substrate, and the o
 and §5.5 already needs that split for independent reasons.
 **Cost:** one section rewritten and the vocabulary table regenerated.
 
-### Recommendation
+### Argument for one option
 
 **(B)**, with medium-high confidence. §9.1 takes it and states (A)'s cost fairly. Both are honest;
 the present arrangement — asserting correct orientation while operating the substrate as a layer of
 entities — is not.
 
-**Decision:** ☐ A ☐ B
+**Your ruling:** ☐ A ☐ B
 
 ---
 
@@ -415,12 +421,12 @@ nothing about the operation changed — only where it was performed. Danger beco
 **(B) No.** Only operation type costs. The universal window is struck.
 **(C) The dissolution.** Risk is environment × duration, plus type × scale.
 
-### Recommendation
+### Argument for one option
 
 **(C)**, with high confidence. §6.8 takes it. It is the highest-value reconciliation in the audit and
 it turns a contradiction into a formula.
 
-**Decision:** ☐ A ☐ B ☐ C
+**Your ruling:** ☐ A ☐ B ☐ C
 
 ---
 
@@ -465,13 +471,13 @@ Clean, and §6.1 adopts this vocabulary regardless.
 rises unboundedly across a life. Though "past-present mismatch grows with age" is not an absurd thing
 for your world to hold.
 
-### Recommendation
+### Argument for one option
 
 **(B)** as a thesis worth adopting, with medium confidence — medium because it is a real addition to
 what your world claims, not just a tidy-up. (A) is safe and available. The suite defines the
 vocabulary either way and leaves the substantive question to you.
 
-**Decision:** ☐ A ☐ B
+**Your ruling:** ☐ A ☐ B
 
 ---
 
@@ -518,7 +524,7 @@ passively — as valence, somatic trace, fragments — before any sensitivity ex
 **(B) Loosening plus sub-threshold access.** Cost: re-word "architecture built" and "no human
 rendering can access."
 
-### Recommendation
+### Argument for one option
 
 **(B)**, with high confidence. §5.5 and §9.1 take it, and the Leap's derivation independently supports
 it.
@@ -527,7 +533,7 @@ it.
 — what grows is equanimity, not immunity. And capacity for the surfeit is fixed for everyone,
 forever, at every level of skill.
 
-**Decision:** ☐ A ☐ B
+**Your ruling:** ☐ A ☐ B
 
 ---
 
@@ -581,7 +587,7 @@ nothing of it.**
 This needs an answer either way. If he did, the historical record should show it and does not. If he
 did not, the reality-strain principle needs an exemption it currently lacks.
 
-**Decisions:**
+**Your rulings:**
 Depth from rendering? ☐ yes (stabilizes with age) ☐ no (undiminished cost forever)
 Solmund's dissolution: ☐ ceased work ☐ insufficient maintenance ☐ the community's re-rendering ☐ his own strain ☐ leave open
 Did he strain reality? ☐ yes, record it ☐ no, exempt threadcut beings ☐ needs thought
@@ -618,13 +624,13 @@ region and what lies beyond**, which is exactly what your own text already calls
 **Cost:** violates your no-agency constraint, unless that constraint is scoped to the
 post-contraction ground.
 
-### Recommendation
+### Argument for one option
 
 **(B)**, with medium-high confidence. §1.4 names it as strongest without committing. It is already
 one word away in your text, it costs nothing, and it makes the anchors structurally meaningful rather
 than a metaphor that happens to be load-bearing.
 
-**Decision:** ☐ A ☐ B ☐ C
+**Your ruling:** ☐ A ☐ B ☐ C
 
 ---
 
@@ -662,12 +668,12 @@ ground: positive theology against negative. The Church holds an **inverted truth
 - **Cost:** your refusal to resolve Solmund into "bad all along" gets much harder to hold. A false god
   invites a villain.
 
-### Recommendation
+### Argument for one option
 
 **(A)**, with medium-high confidence. It is what your §9 prophylaxis argument needs and never says,
 and it protects the refusal you clearly care about. §8.10 raises it inline and does not commit.
 
-**Decision:** ☐ A ☐ B
+**Your ruling:** ☐ A ☐ B
 
 ---
 
@@ -699,13 +705,13 @@ be foregrounded *from* is the same thing.
 **(B) Scrub it.** About twenty phrase-edits, and you lose the trace and supplement structures you
 have actually built.
 
-### Recommendation
+### Argument for one option
 
 **(A)**, with high confidence. §0.3 names him, along with Kant and Freud/Jentsch, both also present
 and uncredited. Naming is cheaper than scrubbing at twenty uses, and the doublet paragraph makes your
 strongest principle stronger.
 
-**Decision:** ☐ A ☐ B
+**Your ruling:** ☐ A ☐ B
 
 ---
 
@@ -741,124 +747,222 @@ the word's own meaning.
 **(C) Retire the word entirely.** Mode 2 is named descriptively; the tendency is called the
 stabilizing tendency, which is what §3.4 already calls it.
 
-### Recommendation
+### Argument for one option
 
 **(C)**, with medium confidence — medium because "Providence" is evocative and you may want it for
 exactly the irony it creates in a world whose ground cannot provide. If you keep it, keep it for the
 **mode**, where the irony lands on the survivors' interpretation rather than on the framework's own
 vocabulary. §4.6 currently avoids the word; §9.2 flags it.
 
-**Decision:** ☐ A ☐ B ☐ C
+**Your ruling:** ☐ A ☐ B ☐ C
 
 ---
 
-# Part B — Twenty-two resolutions already taken
+# Part B — Twenty-two proposed resolutions
 
-**Ratify or reverse.** These were made under your instruction to resolve inconsistencies as I saw
-fit. Each is listed with what changed and the authority it was made under. Anything you reverse, I
-will revert cleanly.
+Each is a contradiction or error found in the sources. **Leaving one alone is a real option** — it
+usually means keeping a contradiction, and sometimes that is the right call because the alternative
+commits you to something you don't want. The cost of *not* changing is stated for every one.
 
-## B.1 — Made because your own later text had already decided it
+Numbered B-1 to B-22 so you can rule by number.
 
-| # | Change | Reverse? |
-|---|---|---|
-| 1 | Stabilizing tendency located in the rendering | ☐ |
-| 2 | Coherence-loss causation unified into two channels plus a derived failure condition | ☐ |
-| 3 | The Leap's target is the reflexive facing; "entire suspension of all grounding" struck | ☐ |
-| 4 | Threadcut beings distinguished from Coherence-0 **by layer profile** rather than by kind | ☐ |
+---
 
-## B.2 — Made because a surface contradicted the section it cited
+## B.1 — Where your own later text already points one way
 
-| # | Change | Reverse? |
-|---|---|---|
-| 5 | The epistemic barrier is **inertness, not amnesia**. The "Forgetting" constraint contradicted its own cited section, which opens by saying non-sensitives *do not* forget | ☐ |
-| 6 | "What came through the fracture were threadcut beings" — struck. Over-specified and collapsed the three modes | ☐ |
-| 7 | Locked Zones restored to substrate-side; the epistemic restatement struck | ☐ |
-| 8 | Threadcut deterioration made conditional on maintenance failure | ☐ |
-| 9 | "Restorative" redefined by direction rather than by return to a prior *actualized* state (which defined a type by one dimension, reintroducing foregrounding) | ☐ |
-| 10 | Two constraints repointed — one cited §21.1 and §22.2 of an eighteen-section document; another cited a section on threadcut beings for a claim about knowledge | ☐ |
-| 11 | "GM is the rendering engine" restated as the metaphysical claim, there being no GM | ☐ |
+**B-1. The stabilizing tendency's location.** *(Same question as D-2; listed here because it is also
+an editorial fix.)*
+☐ **Leave** — the suite keeps two locations and the taxonomy stands on the one your no-agency
+constraint forbids.
+☐ **Change** — locate it in the rendering throughout.
 
-## B.3 — Made because your text contained the repair and had never joined the two halves
+**B-2. Coherence-loss causation.** Sources give three to five accounts; two contradict on whether the
+Leap is inherently risky.
+☐ **Leave** — a reader cannot tell what causes drift.
+☐ **Change** — two channels (operational, confrontation) plus a derived failure condition. *(This is
+D-5's dissolution; ruling D-5 rules this.)*
 
-**These are the most substantive, and the most worth your eye.**
+**B-3. The Leap's target.** Stated four ways, one of which suspends layer 1 — which your own text says
+continues throughout.
+☐ **Leave** — the "entire suspension of all grounding" wording stands, incompatible with the
+practitioner remaining locatable in shared reality.
+☐ **Change** — the reflexive-facing account is canonical; the other wording struck.
 
-| # | Change | Reverse? |
-|---|---|---|
-| 12 | **The cup does not grow.** What develops is the loosening of commitment to the given — which your text already said three sections away | ☐ |
-| 13 | **The bootstrap closed.** The first confrontation is registered passively, needing no faculty it creates | ☐ |
-| 14 | **"It was not constituted" → "not constituted as world."** Your passage insisted the residue is *real* while saying it was unconstituted — a trace of nothing with no registrar. Now: the cup does not hold the water, but it is wet | ☐ |
-| 15 | **The passive stratum named once.** It was posited four times under four names | ☐ |
-| 16 | **The cost channel joined** — the head asserted it, an amendment derived it, and the two files never met | ☐ |
-| 17 | **The two uncannies unified** — one disclosure met from two sides: that a human configuration is *held*, not given | ☐ |
-| 18 | **Layer 2's derivation rewritten** with a valid chain. Your conclusion was right; the citation ran the wrong direction | ☐ |
-| 19 | **Third-mode origin derived** — the witnesses organize the surfeit by rendering it. Closes the bootstrap without touching the no-agency constraint | ☐ |
-| 20 | **Constituting and constituted time split.** Temporal Disjunction *requires* the split — it needs an untouched retention to be a gap from | ☐ |
+**B-4. Threadcut versus Coherence-0.** One passage says "not a categorical difference in kind" and
+three lines later "remain categorically distinct."
+☐ **Leave** — the passage contradicts itself.
+☐ **Change** — categorically distinct **by layer profile**. *(Note: this is more than tidying. It
+makes a human "a threadcut being with a supplement," which is why the two uncannies unify in B-17.
+If you dislike that consequence, leave B-4 alone.)*
 
-## B.4 — Attribution corrections
+## B.2 — Where a surface contradicts the section it cites
 
-| # | Change | Reverse? |
-|---|---|---|
-| 21 | "After Husserl: the I-think that accompanies all representations" is **Kant**. Corrected, and Husserl's own terms substituted — which makes your intersubjectivity claim rigorous rather than decorative | ☐ |
-| 22 | Process philosophy credited with valorizing being-without-becoming; it holds the **opposite**. Sentence struck; the framing you actually need survives without it | ☐ |
+**B-5. Forgetting versus inertness.** A constraint requires that non-sensitives cannot retain
+thread-knowledge. The section it cites opens: *"Non-sensitive practitioners who learn the same facts
+intellectually **do not continually forget them.**"*
+☐ **Leave** — constraint and foundation contradict; implementations will follow whichever they read.
+☐ **Change** — the barrier is inertness. They retain and cannot render.
+*(Worth knowing: "they can recite it and it means nothing to them" is a stranger and better horror
+than "they forget," and it is what your foundation actually says.)*
 
-**Also:** "adopts the Kabbalistic usage correctly" restated as a regulative inference from the
-rendered side; "thrownness" (claimed in the lineage, never used) now bound to layer 1; Derrida, Kant
-and Freud/Jentsch added to the lineage.
+**B-6. What came through the tear.** A restatement says threadcut beings did. Your head document says
+the forms remain unknowable, and names three modes.
+☐ **Leave** — the three modes collapse into one.
+☐ **Change** — surfeit came through; the modes are outcomes of how it was rendered.
+
+**B-7. Locked Zones — substrate or epistemic?** Your head: *"places where being-as-such has failed …
+New threads cannot spool."* A restatement: regions where *"the rendering cannot stably present what
+exists."*
+☐ **Leave** — the two accounts differ on whether the place is broken or merely unreadable.
+☐ **Change** — substrate-side. *(This one has teeth: it decides whether a Locked Zone can be fixed by
+a better renderer.)*
+
+**B-8. Threadcut deterioration.** "Indefinite persistence" in one place, "deteriorates" in another.
+☐ **Leave** — unresolved.
+☐ **Change** — conditional on maintenance failure. *(D-8 decides the deeper question of whether they
+stabilize with age.)*
+
+**B-9. Defining "restorative."** Currently defined as returning a configuration to a prior
+**actualized** state — which defines a type by one dimension, and your Inseparability Principle says
+that is impossible.
+☐ **Leave** — the taxonomy appears to reintroduce foregrounding.
+☐ **Change** — defined by direction relative to the tendency.
+
+**B-10. Two dangling constraint references.** One cites §21.1 and §22.2 of an eighteen-section
+document; another cites the threadcut-beings section for a claim about knowledge.
+☐ **Leave** ☐ **Change** — repoint both.
+
+**B-11. "GM is the rendering engine."** There is no GM; the engine resolves.
+☐ **Leave** ☐ **Change** — restate as the metaphysical claim that binds.
+
+## B.3 — Where your text contains the repair and never joined the halves
+
+**These are the substantive ones.** Each proposes a claim your text nearly makes.
+
+**B-12. Does the cup grow?** Confrontation "develops" sensitivity; the finitude pivot says capacity
+was never going to include the surfeit.
+☐ **Leave** — the two claims sit in tension.
+☐ **Change** — what develops is the loosening of commitment to the given, which your §14 already
+says. The cup doesn't grow; the drinker stops insisting on it.
+*(Consequence to accept: the trauma signature never diminishes with skill. Only equanimity grows.)*
+
+**B-13. The bootstrap.** Confrontation develops sensitivity, but registering excess *as* excess seems
+to need sensitivity already.
+☐ **Leave** — circular.
+☐ **Change** — the passive stratum registers it, needing no faculty it creates. *(Depends on B-15.)*
+
+**B-14. "It was not constituted."** Your passage insists the residue is *real* — emotional, somatic,
+fragmentary — while saying the remainder was not constituted. A trace of nothing, with no registrar.
+☐ **Leave** — the strongest paragraph you have written contains a hole.
+☐ **Change** — "not constituted **as world**," registered passively as trace. The cup doesn't hold
+the water, but it is wet.
+*(This strengthens the pivot: the trauma resemblance stops being an observation and becomes a
+theorem about what a two-stratum rendering must produce.)*
+
+**B-15. Name the passive stratum.** Posited four times under four names: a "primitive system," others'
+somatic labour, seismographic awareness, sub-threshold noise.
+☐ **Leave** — four unrelated posits.
+☐ **Change** — one named stratum of rendering. *(B-13 and B-14 both depend on this. If you leave it,
+leave those too.)*
+
+**B-16. Join the cost channel.** Your head asserts that misalignment cost falls on the practitioner;
+an amendment derives why (the knot is directional and bidirectional). The two files never meet.
+☐ **Leave** — a reader of the foundations alone meets a stipulation.
+☐ **Change** — join them.
+
+**B-17. The two uncannies.** One for a practitioner's own contingency, one for the not-quite-alive
+otherness of threadcut beings, treated as unrelated.
+☐ **Leave** — two unrelated uses of a word.
+☐ **Change** — one disclosure from two sides: that a human configuration is *held*, not given. The
+threadcut being shows a human what a human is. *(Depends on B-4.)*
+
+**B-18. Layer 2's derivation.** Your amendment's chain cites a claim running from operations to
+rendering, when the argument needs the converse.
+☐ **Leave** — the framework's central derivation is invalid as cited.
+☐ **Change** — rewrite with a valid chain. *(Requires D-0's general reading.)*
+
+**B-19. Third-mode origin.** They "arrive organized" — but the ground may not organize and nothing
+else was present.
+☐ **Leave** — an unclosed bootstrap.
+☐ **Change** — the witnesses organize the surfeit by rendering it. Closes it with no-agency intact,
+and explains why such a being is a *catalyst*. *(Requires D-1(A) and D-0.)*
+
+**B-20. Split constituting from constituted time.**
+☐ **Leave** — one "dimension" that is both foundational and manipulable.
+☐ **Change** — split them. *(Your Temporal Disjunction needs the split: it requires an untouched
+retention to be a gap from. And it yields a consequence — a drifting practitioner progressively loses
+the ability to *register* disjunction, which is why every degradation band is written from the
+observer's side.)*
+
+## B.4 — Attribution
+
+**B-21. "After Husserl: the I-think that accompanies all representations."** That formulation is
+Kant's.
+☐ **Leave** ☐ **Change** — credit Kant, or substitute Husserl's own terms, which make your
+intersubjectivity claim rigorous rather than decorative.
+
+**B-22. Process philosophy.** Credited with seeing being-without-becoming as ontologically *richer*.
+It holds the opposite — that is the least real thing there is.
+☐ **Leave** ☐ **Change** — strike the sentence. The framing you actually use survives without it.
+
+**Also open, same terms:** "adopts the Kabbalistic usage correctly" (restate as inference from the
+rendered side, or keep the claim); "thrownness" claimed in the lineage and never used (bind it to
+layer 1, or strike it); Derrida, Kant and Freud/Jentsch added to the lineage (see D-11).
 
 ---
 
 # Part C — Seven ordering calls
 
-All reversible; none affect content.
+The suite is arranged one way; here is each call and its alternative.
 
-| # | Call | Taken | Alternative |
+| # | The call | Argument for | Argument against |
 |---|---|---|---|
-| C-1 | Limit before threads | The epistemic charter governs what may be said everywhere else, so it opens | Threads first reads more like a game's premise |
-| C-2 | Rendering before the layers | D-1 and D-2 condition what layer 2 can mean | If self-rendering is primary, the layers come first |
-| C-3 | Monstrosity with confrontation | It is defined by the rendering's limit | If threadcut beings are primarily a *mode of being*, it belongs in §4 |
-| C-4 | History as §8 | Your own text calls the Calamity a consequence of the mechanism | Keep only the mechanism here; move the narrative to the timeline |
-| C-5 | A-rule set retired | It introduced two of the worst drifts; a condensed set that changed its claims is worse than none | Keep and repair it |
-| C-6 | Numbers excluded | No foundational premise yields a magnitude | Keep bands in the philosophy |
-| C-7 | Derrida named | See D-11 | — |
+| C-1 | Limit before threads | The epistemic charter governs what may be said everywhere else | Threads first reads more like a game's premise, and is more inviting |
+| C-2 | Rendering before the layers | D-1 and D-2 condition what layer 2 can mean | If self-rendering is primary, the layers should come first |
+| C-3 | Monstrosity with confrontation | It is defined by the rendering's limit | If threadcut beings are primarily a *mode of being*, it belongs with §4 |
+| C-4 | History as §8 | Your own text calls the Calamity a consequence of the mechanism | Keep only the mechanism here and move the narrative to the timeline |
+| C-5 | Retire the A-rule set | It introduced two of the worst drifts; a condensed set that changed its claims is worse than none | Keep it and repair it — a loadable summary has real utility |
+| C-6 | Exclude numbers | No foundational premise yields a magnitude | Bands in the philosophy keep it in one place |
+| C-7 | Metaphysics → ontology → phenomenology, rejected | Opening with the ground describes what your charter says is inaccessible | It is the order you originally proposed, and it is legible |
 
 ---
 
 # Part D — Six optional enrichments
 
-**Additions, not repairs.** Declining any of these costs nothing. The amalgam may well prefer to stay
-unnamed at these joints — naming makes the borrowing louder, and that is a real cost.
+**Additions, not repairs.** Declining any costs nothing. Naming makes the borrowing louder, and that
+is a real cost in an amalgam.
 
-| Figure | Where it already is in your text | Verdict |
-|---|---|---|
-| **The vessel** (*keli*) | Your cup-and-ocean figure **is** this | **Take it.** The figure is already yours; the tradition just has the word |
-| **The breaking of the vessels** (*shevirat ha-kelim*) | The tear at the anchor points | **Take it, with one inversion stated** — in the tradition the break is on the light's side; here it must stay rendered-side. Note it favours D-3(B), since that break comes at maximum intake, not from fatigue |
-| **Repair** (*tikkun*) | Mending; the restorative type | **Take it, strip the teleology.** It is *human* labour completing what the shattering interrupted — precisely the definition of "restorative" that D-2(B) needs and your source lacked. No completion is promised, nothing is restored to a plan |
-| **The ray** (*kav*) | The anchors — threads continuous between the contracted region and beyond | Falls out of D-9(B) if you take it |
-| **The husks** (*qelippot*) | Residue fields, Locked Zones, and strikingly the high-reach Coherence-0 being | **Mention at most.** They carry a moral association your own constraints forbid |
-| **The residue of light** (*reshimu*) | "The trace of exactly what it was not"; the passive stratum | **Only if the passive stratum is formalized.** Otherwise it over-determines |
-
-**Why this tradition and not another:** it is the one cosmology where catastrophe is *structural
-rather than a fall*, and repair is *human rather than divine*. You already hold both commitments
-independently.
+| Figure | Where it already is in your text | For | Against |
+|---|---|---|---|
+| **The vessel** (*keli*) | Your cup-and-ocean figure **is** this | The figure is already yours; the tradition just has the word | You may not want the reader thinking of Kabbalah at that moment |
+| **The breaking of the vessels** (*shevirat ha-kelim*) | The tear at the anchor points | The closest structural parallel in any tradition | The break is light-side there and must stay rendered-side here; and it quietly favours D-3(B) |
+| **Repair** (*tikkun*) | Mending; the restorative type | Supplies exactly the definition of "restorative" that D-2(B) needs — human labour completing what the shattering interrupted | Carries a redemptive teleology that must be stripped |
+| **The ray** (*kav*) | The anchors | Makes the anchors structurally meaningful | Only coherent if you take D-9(B) |
+| **The husks** (*qelippot*) | Residue fields, Locked Zones, the high-reach Coherence-0 being | Strikingly apt | Carries a moral association your own constraints forbid. **Recommend against** |
+| **The residue of light** (*reshimu*) | "The trace of exactly what it was not" | Explains why the finite can register the infinite's excess at all | Over-determines unless B-15 is taken |
 
 ---
 
 # The short version
 
-If you rule on nothing else, rule on these four:
+**Four choices carry the most weight:**
 
-1. **D-0** — is "to move one is to move all" general or narrow? Everything rests on it.
-2. **D-2** — where the tendency lives. One clause decides the whole operational layer.
-3. **D-1** — one rendering or many. The largest gap, and D-8 depends on it.
+1. **D-0** — is "to move one is to move all" general or narrow? Everything rests on it, and B-18,
+   B-19 and D-1's strength all follow from it.
+2. **D-2 / B-1** — where the tendency lives. One clause decides the whole operational layer.
+3. **D-1** — one rendering or many. The largest gap.
 4. **D-3** — what the Calamity was. The only genuine contradiction left, and it needs one name either
    way.
 
-**D-5, D-6, D-7 and D-9 already have answers the framework's own text supports**; they need
-confirmation more than deliberation.
+**Four have answers your own text supports** and need confirming more than deliberating: D-5, D-6,
+D-7, D-9.
 
-**D-4, D-10, D-11 and D-12** are matters of how you want to present the work rather than what it
-claims.
+**Four are presentation rather than content:** D-4, D-10, D-11, D-12.
 
-And one thing is **not** on this list, deliberately: whether Solmund was good. Your refusal to resolve
-that is the framework's strongest move, and nothing in the review touches it.
+**Part B splits cleanly:** B-5 through B-11 are cases where a surface contradicts the section it
+cites, and leaving them means implementations will follow whichever document they happen to read.
+B-12 through B-20 are substantive and several depend on each other — B-13 and B-14 need B-15; B-17
+needs B-4; B-18 and B-19 need D-0.
+
+**One thing is deliberately absent:** whether Solmund was good. Your refusal to resolve that is the
+framework's strongest move, and nothing in the review touches it.
