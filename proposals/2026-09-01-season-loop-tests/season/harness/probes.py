@@ -30,7 +30,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, Optional
 
-from shape import (
+from ..shape import (
     CLAIM_SOURCES, Candidate, Claim, Collision, ContestError, DEFAULT_FIXTURES, Event,
     Fixtures, Forbidden, H, NoProducer, Office, Person, VERB_TABLE,
     Proposition, Query, Question, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver,
@@ -38,7 +38,7 @@ from shape import (
     Site, StateChange, Step, Tenure, Ungraded, Unowned, Unspecified, View, World,
     CHANNEL_PREDICATES, WITNESS_CHANNELS, WriteClass, contest, expect_refusal,
     observers_for, sense, roster, table, SUBSISTENCE_WEIGHTS)
-from trace_log import TRACE
+from ..trace_log import TRACE
 
 PROBES: dict[str, dict] = {}
 
@@ -173,7 +173,7 @@ def Act_(w, p, verb, key: str = "", **kw):
     went arbitrary. The discriminator restores the property A5's own comment states: the id is
     derived from the DELTA, not from the position, so reversing the list changes the SEQUENCE and
     not the SET."""
-    from shape import Act
+    from ..shape import Act
     return Act(H(w.world_seed, w.tick, p.id, f"act:{verb}:{key}"), p.id, verb, **kw)
 
 
@@ -443,7 +443,7 @@ def p11():
 @probe("P12", "opening_set returns Candidate[], not Act[]", "S17", by="construction",
        tests="the set of things a character may do must be computed, not an authored list")
 def p12():
-    from shape import Act
+    from ..shape import Act
     import inspect as _i
     w = tiny_world()
     p = w.persons["p_low"]
@@ -1008,7 +1008,7 @@ def f2():
        tests="a faction must be able to take an action of its own")
 def f3():
     w = tiny_world()
-    from shape import Act
+    from ..shape import Act
     actor_field = Act.__dataclass_fields__["actor"]
     props = list(w.propositions) + ["prop_any"]
     raise Forbidden(
@@ -1839,7 +1839,7 @@ def a16():
 @probe("A17", "the loop has one resolver", "S27.2", by="convention",
        tests="every outcome in the game must go through one place")
 def a17():
-    import shape as _s
+    from .. import shape as _s
     resolvers = [n for n in dir(_s) if n in ("contest",)] + ["SeasonDriver.resolve"]
     return (f"PASS-BY-CONVENTION ONLY, AND THE DESIGN SAYS SO ITSELF. Surface: {resolvers}. S27.2 "
             "is explicit that this refusal has NEITHER A MECHANISM NOR A CHEAP TEST -- IT IS "
@@ -2433,7 +2433,7 @@ def a39():
         a = Act_(w, p, "press_claim", contests=["the barn"], payload="S")
         seen["act"] = a.id
         return [a]
-    import shape as _s
+    from .. import shape as _s
     real, captured = _s.contest, {}
     def spy(w_, rung, prize, claimants, depth, max_depth, causes, extension=None):
         captured["causes"] = list(causes)

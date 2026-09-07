@@ -51,14 +51,13 @@ from __future__ import annotations
 
 import hashlib
 import re
-from pathlib import Path
 
 import yaml
 
-from register import REG_ID_RE as REG_ID
+from ..data import files
+from .register import REG_ID_RE as REG_ID
 
-HERE = Path(__file__).resolve().parent
-OVERLAY = HERE.parent / "cases" / "exercises"
+OVERLAY = files.EXERCISES_DIR
 
 
 def need_sha(need: str) -> str:
@@ -187,7 +186,7 @@ def coverage(overlay: dict, cases: list) -> dict:
 
 
 if __name__ == "__main__":
-    import run_cases as R
+    from . import run_cases as R
     ov = load()
     every = []
     for kind in ("NPC", "ARC"):

@@ -21,11 +21,14 @@ import json
 import subprocess
 import sys
 from collections import Counter
-from pathlib import Path
 
-RESULTS = "proposals/2026-09-01-season-loop-tests/runs/results.json"
-HERE = Path(__file__).resolve().parent
-REPO = HERE.parent.parent.parent
+from ..data import files
+
+# THE ARTIFACT AS GIT SEES IT. This reads a committed revision (`git show <rev>:<path>`), and git
+# speaks repo-relative paths only -- so the string and the directory it is resolved against are
+# two halves of one anchor and are named together in `season.data.files`.
+RESULTS = files.RESULTS_REPO_REL
+REPO = files.REPO_ROOT
 
 
 def at(rev: str) -> dict:

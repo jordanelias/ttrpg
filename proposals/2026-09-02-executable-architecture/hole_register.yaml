@@ -6,7 +6,7 @@
 # `site:`, `sweep:` or `cite:` fields its own §G4 defines; its self-reported counts did not
 # reproduce from its own rows; and it could not report that TWENTY-TWO holes had no row at all.
 # By `CLAUDE.md` §0.05's test -- would the game behave differently if this were deleted? -- it
-# was reference. This file is the object. `tracer/register.py` is the only thing that reads it,
+# was reference. This file is the object. `season/harness/register.py` is the only thing that reads it,
 # and `register.py --check` is what makes a wrong row FAIL rather than merely read oddly.
 #
 # THE ROW SHAPE is `ARCHITECTURE_V2.md` §G4's TEN FIELDS VERBATIM --
@@ -757,10 +757,10 @@ rows:
     owner:     "the resolver (Part E)"
     grade:     "assumption"
     default:   "a TYPED `requires_typed:` cell beside the prose, in one of §F.24a's seven forms, evaluated by `evaluate()`; a hand-written `REQUIRES_PREDICATES` entry where no typed cell exists; and a verb with NEITHER still REFUSES, naming what is missing, rather than silently succeeding"
-    site:      "proposals/2026-09-01-season-loop-tests/tracer/shape.py — `evaluate` + `WorldReader` (the fold's reader), `SeasonDriver._fold`, `resolvable_verbs`; and the surviving `REQUIRES_PREDICATES` entries. Grammar in `rosters.yaml: requires_forms`"
+    site:      "proposals/2026-09-01-season-loop-tests/season/shape.py — `evaluate` + `WorldReader` (the fold's reader), `SeasonDriver._fold`, `resolvable_verbs`; and the surviving `REQUIRES_PREDICATES` entries. Grammar in `rosters.yaml: requires_forms`"
     sweep:     ["typed cell where the form fits, predicate where it does not, refuse otherwise (the default)", "one hand-written predicate per verb (the pre-`W-A` state)", "no preconditions — every eligible act succeeds"]
     unblocks:  "unmeasured"
-    cite:      "NARROWED BY `W-A`, 2026-09-04, AND THE REMAINDER IS NAMED RATHER THAN COUNTED. `04_CODE_ARCHITECTURE.md` §F.24a read SEVEN forms off the 32 live cells, so the column can be TYPED rather than re-read once per verb, and one declaration now has three readers: `SeasonDriver._fold` (through `WorldReader`), `belief_contradicts` (through `LedgerReader`, `H-72`) and `resolvable_verbs`. MEASURED 2026-09-04: 23 of 32 verbs carry a prose precondition; 9 have a TYPED CELL (carry · commit · move · repudiate · restore · succeed · tell · transfer · work), 4 have a PREDICATE (confer · convene · dispatch · revoke), and the REMAINDER IS TEN, listed so it cannot be reported as a number: comply · determine · establish · evade / defy · exchange · issue · levy · open_case · refract · the six investigation acts. Reproducible with `python -c \"import sys;sys.path.insert(0,'proposals/2026-09-01-season-loop-tests/tracer');import shape as S;p=[v for v,r in S.VERB_TABLE.items() if r.requires.strip() not in S.NO_PRECONDITION];print(len(p), sorted(v for v in p if S.VERB_TABLE[v].requires_typed is not None), sorted(v for v in p if v in S.REQUIRES_PREDICATES), sorted(v for v in p if S.VERB_TABLE[v].requires_typed is None and v not in S.REQUIRES_PREDICATES))\"`. ⚠ THE PREVIOUS CITE SAID '26 of the 32 verbs carry a prose precondition and 3 have a predicate'. THE 26 WAS ALREADY STALE — the same command returns 23 against the table as it stood before this item, which changed no `requires:` prose — and the 3 was a snapshot taken before the governance slice added four. Corrected rather than carried. ⚠ THE REMAINDER IS NOT ONE HOLE. Two of the ten (`issue`, `open_case`) are §F.24a's own finding that their cells are NOT PREDICATES AT ALL but constraints on the well-formedness of the Act, which belong in the `Act` schema; three (`comply`, `evade / defy`, `refract`) fit form 6 and are blocked on an OPERAND the closed `requires_operands` roster has no name for — a Dispensation — which is `H-94`; one (`exchange`) needs the counterparty's side of a trade, same cause; `refract` is additionally `absent` (D18); and `determine`, `establish`, `levy` and `the six investigation acts` are `remit:`-eligible or defer to acts the table does not carry. ⚠ ONE BEHAVIOUR MOVED AND IT IS RECORDED HERE RATHER THAN LEFT TO BE FOUND: `_req_work` ended in a bare `return True` for an act naming no Site, so for every COMPUTED act its precondition could not fail. The typed cell binds `site` from the act's operands and UNKNOWN refuses, so `work` leaves the corpus's executed set and joins `move` and `transfer` in the always-refused set — the same cause, `H-94`. Falsifier: `test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction`."
+    cite:      "NARROWED BY `W-A`, 2026-09-04, AND THE REMAINDER IS NAMED RATHER THAN COUNTED. `04_CODE_ARCHITECTURE.md` §F.24a read SEVEN forms off the 32 live cells, so the column can be TYPED rather than re-read once per verb, and one declaration now has three readers: `SeasonDriver._fold` (through `WorldReader`), `belief_contradicts` (through `LedgerReader`, `H-72`) and `resolvable_verbs`. MEASURED 2026-09-04: 23 of 32 verbs carry a prose precondition; 9 have a TYPED CELL (carry · commit · move · repudiate · restore · succeed · tell · transfer · work), 4 have a PREDICATE (confer · convene · dispatch · revoke), and the REMAINDER IS TEN, listed so it cannot be reported as a number: comply · determine · establish · evade / defy · exchange · issue · levy · open_case · refract · the six investigation acts. Reproducible with `python -c \"import sys;sys.path.insert(0,'proposals/2026-09-01-season-loop-tests');from season import shape as S;p=[v for v,r in S.VERB_TABLE.items() if r.requires.strip() not in S.NO_PRECONDITION];print(len(p), sorted(v for v in p if S.VERB_TABLE[v].requires_typed is not None), sorted(v for v in p if v in S.REQUIRES_PREDICATES), sorted(v for v in p if S.VERB_TABLE[v].requires_typed is None and v not in S.REQUIRES_PREDICATES))\"`. ⚠ THE PREVIOUS CITE SAID '26 of the 32 verbs carry a prose precondition and 3 have a predicate'. THE 26 WAS ALREADY STALE — the same command returns 23 against the table as it stood before this item, which changed no `requires:` prose — and the 3 was a snapshot taken before the governance slice added four. Corrected rather than carried. ⚠ THE REMAINDER IS NOT ONE HOLE. Two of the ten (`issue`, `open_case`) are §F.24a's own finding that their cells are NOT PREDICATES AT ALL but constraints on the well-formedness of the Act, which belong in the `Act` schema; three (`comply`, `evade / defy`, `refract`) fit form 6 and are blocked on an OPERAND the closed `requires_operands` roster has no name for — a Dispensation — which is `H-94`; one (`exchange`) needs the counterparty's side of a trade, same cause; `refract` is additionally `absent` (D18); and `determine`, `establish`, `levy` and `the six investigation acts` are `remit:`-eligible or defer to acts the table does not carry. ⚠ ONE BEHAVIOUR MOVED AND IT IS RECORDED HERE RATHER THAN LEFT TO BE FOUND: `_req_work` ended in a bare `return True` for an act naming no Site, so for every COMPUTED act its precondition could not fail. The typed cell binds `site` from the act's operands and UNKNOWN refuses, so `work` leaves the corpus's executed set and joins `move` and `transfer` in the always-refused set — the same cause, `H-94`. Falsifier: `test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction`."
     source:    "PLAN.md §1.4 — a hole an instrument must fill that carried no row"
   # -------------------------------------------------------------------------
   # W5 — PART F. Six rows: two are the defaults §G's discipline requires for holes the plan
@@ -811,10 +811,10 @@ rows:
     owner:     "the resolver (Part E's `requires:` column) + Person (the claim)"
     grade:     "measured"
     default:   "the verb's OWN `requires_typed:` cell, evaluated against the actor's ledger by `evaluate(req, LedgerReader(p.ledger), binding_from(...))`. The predicate is DERIVED from the form — `f\"stores:{kind}\"`, `condition`, `f\"contain.path:{to}\"` — so it is not a roster entry and cannot drift from what the verb requires"
-    site:      "proposals/2026-09-01-season-loop-tests/tracer/shape.py — `evaluate` + `LedgerReader` (the person's reader) and `belief_contradicts` (its one caller). Grammar in `rosters.yaml: requires_forms`; cells in `verb_table.yaml: requires_typed`"
+    site:      "proposals/2026-09-01-season-loop-tests/season/shape.py — `evaluate` + `LedgerReader` (the person's reader) and `belief_contradicts` (its one caller). Grammar in `rosters.yaml: requires_forms`; cells in `verb_table.yaml: requires_typed`"
     sweep:     ["the verb's typed cell, predicate derived from the form (the default)", "the retired `person_predicates` membership filter (`value is False` on any of five marks)", "no belief filter — every eligible verb forms"]
     unblocks:  "the epistemic half of every NPC decision"
-    cite:      "CLOSED AS A MAP AND RE-GRADED `measured` BY `W-A`, 2026-09-04. The map exists now and it is not authored: a verb's `requires_typed:` cell states its form, and the predicate a claim must carry to contradict it FALLS OUT of that form. §F1's ASYMMETRY IS UNCHANGED and is the thing to re-check first — `evaluate` returns three values and `belief_contradicts` tests `is False`, so an UNKNOWN (no claim, or an untyped verb) is NOT a contradiction. FALSIFIERS, both green: `test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_forms` (every typed cell over an EMPTY ledger is UNKNOWN and every Candidate still forms — mutation: `LedgerReader.read` returning False instead of UNKNOWN turns all nine typed verbs into contradictions and reddens it) and `test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it` (a planted `(Hh, stores:grain, 0)` removes `transfer x Hh` from `opening_set` and a planted `9` leaves it, with the rest of the option set unchanged in both arms). MEASURED: 9 of 32 verbs carry a typed cell, reproducible with `python -c \"import sys;sys.path.insert(0,'proposals/2026-09-01-season-loop-tests/tracer');import shape as S;print(sum(1 for r in S.VERB_TABLE.values() if r.requires_typed is not None), len(S.VERB_TABLE))\"`. ⚠ WHAT IS STILL OPEN IS `H-116`, NOT THIS ROW: the namespace is now single, and nothing WRITES a claim into it — WITNESS deposits `travel.blocked`, `stores.changed` and nine others, none of which any form derives. Clause 4 can fire; in the corpus nothing yet makes it. ⚠ AND `H-94`: the person binds ONE operand (the Candidate's subject, onto the requirement's own entity operand) and everything else is UNKNOWN, so a requirement needing `kind`/`amount` is contradictable only through the cell's declared `operand_defaults`."
+    cite:      "CLOSED AS A MAP AND RE-GRADED `measured` BY `W-A`, 2026-09-04. The map exists now and it is not authored: a verb's `requires_typed:` cell states its form, and the predicate a claim must carry to contradict it FALLS OUT of that form. §F1's ASYMMETRY IS UNCHANGED and is the thing to re-check first — `evaluate` returns three values and `belief_contradicts` tests `is False`, so an UNKNOWN (no claim, or an untyped verb) is NOT a contradiction. FALSIFIERS, both green: `test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_forms` (every typed cell over an EMPTY ledger is UNKNOWN and every Candidate still forms — mutation: `LedgerReader.read` returning False instead of UNKNOWN turns all nine typed verbs into contradictions and reddens it) and `test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it` (a planted `(Hh, stores:grain, 0)` removes `transfer x Hh` from `opening_set` and a planted `9` leaves it, with the rest of the option set unchanged in both arms). MEASURED: 9 of 32 verbs carry a typed cell, reproducible with `python -c \"import sys;sys.path.insert(0,'proposals/2026-09-01-season-loop-tests');from season import shape as S;print(sum(1 for r in S.VERB_TABLE.values() if r.requires_typed is not None), len(S.VERB_TABLE))\"`. ⚠ WHAT IS STILL OPEN IS `H-116`, NOT THIS ROW: the namespace is now single, and nothing WRITES a claim into it — WITNESS deposits `travel.blocked`, `stores.changed` and nine others, none of which any form derives. Clause 4 can fire; in the corpus nothing yet makes it. ⚠ AND `H-94`: the person binds ONE operand (the Candidate's subject, onto the requirement's own entity operand) and everything else is UNKNOWN, so a requirement needing `kind`/`amount` is contradictable only through the cell's declared `operand_defaults`."
     source:    "W5 — found by execution"
   - id:        H-73
     tier:      1
@@ -1268,7 +1268,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "every verb that declares `contests:`, and whatever reads a contest's degree"
-    cite:      "FOUND BY BUILDING THE CALL Jordan ruled for. `H-88` said that if the seam dispatches, *the degree is the SUBSYSTEM's output and inventing one here would be the second resolver S27.2 names* — and calling the subsystem shows the subsystem does not produce one. It produces a winner and a legitimate undecided case. So the degree ladder is not merely unwritten at the seam; the thing it was to be read from is a different shape. ⚠ NOT RESOLVED BY MAPPING, AND THE SEAM ASSERTS IT DOES NOT: a test refuses any `degree`/`band` key on the seam's return, because mapping a winner onto a band is the second resolver arriving in the seam for the SECOND time (rev 1 of `contest()` hardcoded `band = Partial`). `absent` with no default: choosing between *give the ladder a margin the subsystem can supply*, *change what a contest returns*, and *let the prize decide the shape* is a design call. ⚠ EXECUTED 2026-09-04 BY `W-E`, AND THE THIRD OPTION IS THE ONE JORDAN TOOK. *let the prize decide the shape*: combat's prize is graded by the scene, and the other two prizes are not graded at all because the seam does not call their subsystems (Jordan, 2026-09-02, on mass_battle and social_contest, carried verbatim at proposals/2026-09-02-executable-architecture/rosters.yaml under `contest_subsystems`: *\"we don't NEED to worry about them at this point in time.\"*). MEASURED, per verb rather than in aggregate: **1 of the 32 rows in `verb_table.yaml` declares `contests:` at all** -- `kill / wound`, prize `the body` -- so the other 31, INCLUDING every person-to-person verb a degree would matter most for (`speak`, `tell`, `utter`, `petition`, `the six investigation acts`), are not ungraded but UNGRADEABLE: nothing resolves a contest for them, and a degree wired onto one would be a number with no producer. The three prizes that are not `the body` route to `mass_battle` / `social_contest` and `contest()` refuses each BY NAME, executed. And the ladder branch's operand is absent in the strongest form the tracer can state: a comment- and docstring-stripped scan of every module in the instrument finds NO producer of a `net`, `roll_pool` or `successes` -- there is no roll anywhere in this instrument. FALSIFIERS, both executed: `test_we_only_a_verb_that_declares_contests_can_be_graded_today` (which goes red the day something produces a margin, so this sentence cannot quietly outlive its truth) and `test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it` (identity against `degree_from_net`, the four band boundaries including the fractional cases, and a follow-the-owner arm that reddens if `degree_of` ever answers from a private band table). REPRODUCE: `python -m pytest proposals/2026-09-01-season-loop-tests/tracer/test_tracer_is_honest.py -q -k test_we_`"
+    cite:      "FOUND BY BUILDING THE CALL Jordan ruled for. `H-88` said that if the seam dispatches, *the degree is the SUBSYSTEM's output and inventing one here would be the second resolver S27.2 names* — and calling the subsystem shows the subsystem does not produce one. It produces a winner and a legitimate undecided case. So the degree ladder is not merely unwritten at the seam; the thing it was to be read from is a different shape. ⚠ NOT RESOLVED BY MAPPING, AND THE SEAM ASSERTS IT DOES NOT: a test refuses any `degree`/`band` key on the seam's return, because mapping a winner onto a band is the second resolver arriving in the seam for the SECOND time (rev 1 of `contest()` hardcoded `band = Partial`). `absent` with no default: choosing between *give the ladder a margin the subsystem can supply*, *change what a contest returns*, and *let the prize decide the shape* is a design call. ⚠ EXECUTED 2026-09-04 BY `W-E`, AND THE THIRD OPTION IS THE ONE JORDAN TOOK. *let the prize decide the shape*: combat's prize is graded by the scene, and the other two prizes are not graded at all because the seam does not call their subsystems (Jordan, 2026-09-02, on mass_battle and social_contest, carried verbatim at proposals/2026-09-02-executable-architecture/rosters.yaml under `contest_subsystems`: *\"we don't NEED to worry about them at this point in time.\"*). MEASURED, per verb rather than in aggregate: **1 of the 32 rows in `verb_table.yaml` declares `contests:` at all** -- `kill / wound`, prize `the body` -- so the other 31, INCLUDING every person-to-person verb a degree would matter most for (`speak`, `tell`, `utter`, `petition`, `the six investigation acts`), are not ungraded but UNGRADEABLE: nothing resolves a contest for them, and a degree wired onto one would be a number with no producer. The three prizes that are not `the body` route to `mass_battle` / `social_contest` and `contest()` refuses each BY NAME, executed. And the ladder branch's operand is absent in the strongest form the tracer can state: a comment- and docstring-stripped scan of every module in the instrument finds NO producer of a `net`, `roll_pool` or `successes` -- there is no roll anywhere in this instrument. FALSIFIERS, both executed: `test_we_only_a_verb_that_declares_contests_can_be_graded_today` (which goes red the day something produces a margin, so this sentence cannot quietly outlive its truth) and `test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it` (identity against `degree_from_net`, the four band boundaries including the fractional cases, and a follow-the-owner arm that reddens if `degree_of` ever answers from a private band table). REPRODUCE: `python -m pytest proposals/2026-09-01-season-loop-tests/season/test_tracer_is_honest.py -q -k test_we_`"
     source:    "Jordan 2026-09-02 -- the calling seam"
 
   # ─── 2026-09-04 · from `W-E`, the degree wired through the fold ────────────
@@ -1286,7 +1286,7 @@ rows:
     owner:     "`_eff_kill` -- the value the `Wounded` branch writes to `(Person, body)`"
     grade:     "assumption"
     default:   "`scene_fraction` -- the body is scaled by the fraction of health the fight left standing, `health_remaining / health_full`, both computed by the engine's own `WoundTracker` on the Combatants `combat_seam` still holds"
-    site:      "proposals/2026-09-01-season-loop-tests/tracer/shape.py -- `DEFAULT_FIXTURES.wound_harm_model`, read by `_eff_kill`"
+    site:      "proposals/2026-09-01-season-loop-tests/season/shape.py -- `DEFAULT_FIXTURES.wound_harm_model`, read by `_eff_kill`"
     sweep:     ["scene_fraction (the default -- the scene decides, and it introduces NO constant, which is the whole argument for it)", "total (THE CONTROL: any wound is lethal -- the code exactly as it stood before `W-E`, so the arm that measures what the degree is worth is the defect re-run deliberately)", "none (the SECOND control: a wound writes nothing, the fold's write-nothing guard emits the REFUSAL instead of the success, isolating *the band selected a different write set* from *the band changed a value*)"]
     unblocks:  "the `Wounded` band being a distinct outcome rather than a second spelling of `Felled`"
     cite: >-
@@ -1309,12 +1309,12 @@ rows:
       something that did not happen -- `ID-9`, asserted directly in the test.
       FALSIFIER: `test_we_a_contested_acts_consequence_differs_by_degree`, which runs all three
       arms and asserts the control still reproduces the defect. REPRODUCE:
-      `python -m pytest proposals/2026-09-01-season-loop-tests/tracer/test_tracer_is_honest.py -q -k test_we_`
+      `python -m pytest proposals/2026-09-01-season-loop-tests/season/test_tracer_is_honest.py -q -k test_we_`
       SOURCES QUOTED HERE: the 2026-09-04 ruling is carried at
-      proposals/2026-09-01-season-loop-tests/tracer/shape.py (`_eff_kill`'s docstring and the S39.4
+      proposals/2026-09-01-season-loop-tests/season/shape.py (`_eff_kill`'s docstring and the S39.4
       block) and at proposals/2026-09-02-executable-architecture/rosters.yaml
       (`wound_harm_models`); the floor precedent is at
-      proposals/2026-09-01-season-loop-tests/tracer/combat_seam.py (`derive_party`).
+      proposals/2026-09-01-season-loop-tests/season/combat_seam.py (`derive_party`).
     source:    "`W-E`, 2026-09-04 -- found by execution while wiring the degree through the fold"
 
   # -------------------------------------------------------------------------
@@ -1710,7 +1710,7 @@ rows:
     tier:      0
     hole:      >-
       THE FEEDBACK EDGE FROM CONSEQUENCE TO DECISION IS SEVERED, AND BY A TYPE MISMATCH RATHER
-      THAN BY AN ABSENCE. `belief_contradicts` (proposals/2026-09-01-season-loop-tests/tracer/shape.py:2537-2560) narrows a person's candidate
+      THAN BY AN ABSENCE. `belief_contradicts` (proposals/2026-09-01-season-loop-tests/season/shape.py:2537-2560) narrows a person's candidate
       set only for a claim whose `predicate` is in `PERSON_PREDICATES` (church_standing, grade,
       heritage, office, residence) AND whose `value is False`. Measured over 4,800 deposited
       claims across 8 cases x 3 seasons, the predicates WITNESS actually deposits are
@@ -1752,17 +1752,17 @@ rows:
   - id:        "H-113"
     tier:      0
     hole:      >-
-      `VerbRow.emits_at` (proposals/2026-09-01-season-loop-tests/tracer/shape.py:701) HAS ZERO CALLERS ANYWHERE IN THE TRACER, so a contested
+      `VerbRow.emits_at` (proposals/2026-09-01-season-loop-tests/season/shape.py:701) HAS ZERO CALLERS ANYWHERE IN THE TRACER, so a contested
       verb's degree-keyed emissions are never selected. The fold emits `row.emits` at
-      proposals/2026-09-01-season-loop-tests/tracer/shape.py:4507 - the FLAT UNION of all branches - so all three of `kill / wound`'s degrees
+      proposals/2026-09-01-season-loop-tests/season/shape.py:4507 - the FLAT UNION of all branches - so all three of `kill / wound`'s degrees
       emit the same set. Executed - a contest resolved `Untouched`, the degree meaning nobody was
       hurt, emits `person.died`. The `earned` guard cannot intervene - on `Untouched` `writes_at`
       returns empty, so `_pairs` is falsy and the whole `if _pairs:` block INCLUDING the refusal
-      guard at proposals/2026-09-01-season-loop-tests/tracer/shape.py:4480 is skipped, leaving `earned` empty. On `Wounded` it is the union for a second
+      guard at proposals/2026-09-01-season-loop-tests/season/shape.py:4480 is skipped, leaving `earned` empty. On `Wounded` it is the union for a second
       reason - `_eff_kill` returns a LIST, and only a dict return populates `earned`
-      (proposals/2026-09-01-season-loop-tests/tracer/shape.py:4542-4548). LATENT, not live - a contested verb cannot reach proposals/2026-09-01-season-loop-tests/tracer/shape.py:4507 today because
-      `_degree_for_writes` is hardcoded `None` at proposals/2026-09-01-season-loop-tests/tracer/shape.py:4447 and `resolve()`'s contest branch
-      `continue`s at proposals/2026-09-01-season-loop-tests/tracer/shape.py:4676.
+      (proposals/2026-09-01-season-loop-tests/season/shape.py:4542-4548). LATENT, not live - a contested verb cannot reach proposals/2026-09-01-season-loop-tests/season/shape.py:4507 today because
+      `_degree_for_writes` is hardcoded `None` at proposals/2026-09-01-season-loop-tests/season/shape.py:4447 and `resolve()`'s contest branch
+      `continue`s at proposals/2026-09-01-season-loop-tests/season/shape.py:4676.
     kind:      "WIRING"
     owner:     "`_fold`'s emission line - it reads `row.emits` where `writes_at` reads the degree"
     grade:     "measured"
@@ -1772,10 +1772,10 @@ rows:
     source:    "the degree sweep, 2026-09-04 — found by execution, confirmed by an independent read-only critic"
     unblocks:  "any degree-keyed verb emitting the outcome it actually had"
     cite: >-
-      MEASURED 2026-09-04. Verified exhaustively by an independent read-only critic - proposals/2026-09-01-season-loop-tests/tracer/shape.py (line 701)
-      (def) and proposals/2026-09-01-season-loop-tests/tracer/shape.py (line 702) (docstring) are the only occurrences of `emits_at` in the whole tracer
+      MEASURED 2026-09-04. Verified exhaustively by an independent read-only critic - proposals/2026-09-01-season-loop-tests/season/shape.py (line 701)
+      (def) and proposals/2026-09-01-season-loop-tests/season/shape.py (line 702) (docstring) are the only occurrences of `emits_at` in the whole tracer
       directory, with no getattr or string-dispatch path; `writes_at` by contrast has its one
-      caller at proposals/2026-09-01-season-loop-tests/tracer/shape.py (line 4448). THIS IS THE `ID-13` TEST #362 APPLIED TO DELETE `Tenure.conferrer` AND DID
+      caller at proposals/2026-09-01-season-loop-tests/season/shape.py (line 4448). THIS IS THE `ID-13` TEST #362 APPLIED TO DELETE `Tenure.conferrer` AND DID
       NOT APPLY TO `emits_by_degree`, WHICH IT ADDED IN THE SAME REVISION - a declared field
       reaching no reader is one that does not exist. It is also the fabricated-deaths defect
       returning through a different door - Artifact 2 published four deaths for state changes that
@@ -1791,12 +1791,12 @@ rows:
       band's kinds against `row.emits_at(band)` AND against the union, so a revert to `row.emits`
       reddens it. MUTATION RUN 2026-09-04: reverting `_declared = row.emits_at(_degree)` to
       `row.emits` fails 3 of the 6 `W-E` tests; restored, all 6 pass.
-      REPRODUCE: `python -m pytest proposals/2026-09-01-season-loop-tests/tracer/test_tracer_is_honest.py -q -k test_we_`
+      REPRODUCE: `python -m pytest proposals/2026-09-01-season-loop-tests/season/test_tracer_is_honest.py -q -k test_we_`
 
   - id:        "H-114"
     tier:      0
     hole:      >-
-      `_eff_kill` (proposals/2026-09-01-season-loop-tests/tracer/shape.py:3847-3867) TAKES NO DEGREE PARAMETER, so the effect that computes the
+      `_eff_kill` (proposals/2026-09-01-season-loop-tests/season/shape.py:3847-3867) TAKES NO DEGREE PARAMETER, so the effect that computes the
       VALUES cannot honour the branch `writes_at` selected. Worse, `int(d.get("harm", p.body))`
       defaults harm to the person's ENTIRE body, so body reaches exactly 0, `if p.body > 0` is
       passed and `del w.persons[who]` fires. Executed - a fold at degree `Wounded` DELETES THE
@@ -1812,7 +1812,7 @@ rows:
     cite: >-
       MEASURED 2026-09-04. SCOPE NARROWED AFTER AN ADVERSARIAL PASS - a first statement claimed
       every computed act is lethal because §F1's Candidate carries no operands (`H-80`). FALSE - a
-      computed act omits `subject` too, so `_eff_kill` returns early at proposals/2026-09-01-season-loop-tests/tracer/shape.py (line 3858) and the fold takes
+      computed act omits `subject` too, so `_eff_kill` returns early at proposals/2026-09-01-season-loop-tests/season/shape.py (line 3858) and the fold takes
       the refusal branch. The correct and weaker claim - ANY `kill / wound` naming a subject and
       no `harm` is lethal at every degree, which is reachable from a hand-built act.
       ⚠ CLOSED 2026-09-04 BY `W-E`, BOTH HALVES. (1) THE SIGNATURE: every effect now takes a
@@ -1840,14 +1840,14 @@ rows:
     tier:      1
     hole:      >-
       THE FOUR DEGREE BRANCHES ARE THE ONLY RUN-TIME REFUSALS IN `shape.py` THAT BYPASS THE TYPED
-      GAP TAXONOMY. `writes_at` and `emits_at` raise `SystemExit` (proposals/2026-09-01-season-loop-tests/tracer/shape.py:708 proposals/2026-09-01-season-loop-tests/tracer/shape.py:712 proposals/2026-09-01-season-loop-tests/tracer/shape.py:728 proposals/2026-09-01-season-loop-tests/tracer/shape.py:733), which
-      derives from `BaseException`. `corpus_run.run_case` catches `InstrumentDefect` (proposals/2026-09-01-season-loop-tests/tracer/shape.py:343) and
-      the `ShapeGap` family (proposals/2026-09-01-season-loop-tests/tracer/shape.py:350); executed under those exact clauses the raise ESCAPES BOTH. Of
+      GAP TAXONOMY. `writes_at` and `emits_at` raise `SystemExit` (proposals/2026-09-01-season-loop-tests/season/shape.py:708 proposals/2026-09-01-season-loop-tests/season/shape.py:712 proposals/2026-09-01-season-loop-tests/season/shape.py:728 proposals/2026-09-01-season-loop-tests/season/shape.py:733), which
+      derives from `BaseException`. `corpus_run.run_case` catches `InstrumentDefect` (proposals/2026-09-01-season-loop-tests/season/shape.py:343) and
+      the `ShapeGap` family (proposals/2026-09-01-season-loop-tests/season/shape.py:350); executed under those exact clauses the raise ESCAPES BOTH. Of
       18 `SystemExit` raises in shape.py, 14 are load-time (missing or malformed YAML) and
       correctly fatal; these 4 are the exception. They produce no DESIGN-GAP row, no `kind`
       histogram entry and no section citation, and they end the PROCESS - converting a one-case
       design gap into a whole-corpus run termination. The guard's DIRECTION is right and
-      proposals/2026-09-01-season-loop-tests/tracer/shape.py:4441-4447 says so; only its mechanism is at issue.
+      proposals/2026-09-01-season-loop-tests/season/shape.py:4441-4447 says so; only its mechanism is at issue.
     kind:      "WIRING"
     owner:     "`writes_at` / `emits_at` - the raise type, not the raise"
     grade:     "measured"
@@ -1995,8 +1995,8 @@ rows:
       load-bearing control in #362's body as the byte-identical corpus_run output, therefore
       pins that the EVENT STREAM replays identically and NOT that the world state does. A state
       divergence leaving the log identical is invisible to it. A second blindness one field
-      deeper - `StateChange.delta` is `None` for every act-driven write (proposals/2026-09-01-season-loop-tests/tracer/shape.py:1231-1239 default,
-      proposals/2026-09-01-season-loop-tests/tracer/shape.py:4552 four-positional construction), and `content_hash` folds `c.delta`, so two runs writing
+      deeper - `StateChange.delta` is `None` for every act-driven write (proposals/2026-09-01-season-loop-tests/season/shape.py:1231-1239 default,
+      proposals/2026-09-01-season-loop-tests/season/shape.py:4552 four-positional construction), and `content_hash` folds `c.delta`, so two runs writing
       DIFFERENT VALUES to the same field also hash identically.
     kind:      "SCHEMA_COLUMN"
     owner:     "`content_hash` - its name promises the world and its body reads the log"
@@ -2181,7 +2181,7 @@ rows:
       REFUTING `claim.held` CLASS and are no longer deposited. What the count lost is a belief
       that was false at deposit; see the first paragraph of `cite:`.
     cite:      >-
-      SOURCES QUOTED HERE: proposals/2026-09-01-season-loop-tests/tracer/shape.py,
+      SOURCES QUOTED HERE: proposals/2026-09-01-season-loop-tests/season/shape.py,
       proposals/2026-09-02-executable-architecture/hole_register.yaml (row `H-94`) and
       proposals/2026-09-04-degree-sweep/arm9_forking.py (arm 9c's own statement of its diagnosis,
       added 2026-09-04 -- it was being quoted with no source that carries it).

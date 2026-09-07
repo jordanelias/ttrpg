@@ -25,14 +25,18 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-TRACER = Path("/home/user/ttrpg/proposals/2026-09-01-season-loop-tests/tracer")
+# The tracer is a PACKAGE now (`season`), so what goes on the path is the directory that CARRIES
+# it and the modules are named by dotted path. Nothing here is imported by a bare name any more:
+# a bare name would give these modules a second identity the moment anything else imports them
+# properly, which is the confound `README.md` §instrument depends on not having.
+TRACER = Path("/home/user/ttrpg/proposals/2026-09-01-season-loop-tests")
 if str(TRACER) not in sys.path:
     sys.path.insert(0, str(TRACER))
 
-import shape as S            # noqa: E402
-import corpus_run as C       # noqa: E402
-import run_cases as R        # noqa: E402
-import combat_seam as CS     # noqa: E402
+from season import shape as S                # noqa: E402
+from season import combat_seam as CS         # noqa: E402
+from season.harness import corpus_run as C   # noqa: E402
+from season.harness import run_cases as R    # noqa: E402
 
 # `CLAUDE.md` §0.1 pt 5 / G1: declared with its reason, never a bare literal in a body.
 LADDER_C = ("Overwhelming", "Success", "Partial", "Failure")

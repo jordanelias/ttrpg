@@ -44,17 +44,17 @@ onto `settlement` would manufacture a pass for the largest single block of the c
 from __future__ import annotations
 import sys
 from collections import Counter
-from pathlib import Path
 
-import shape as S
-import run_cases as R
-import probes as P
+from .. import shape as S
+from ..data import files
+from . import probes as P
+from . import run_cases as R
 
 # `CLAUDE.md` §0.1 pt 5 / `G1`: declared here with its reason, not a bare literal in a body.
 MAX_SEASONS = 6          # the corpus asks for up to 16; the flood (`W6`) makes that unaffordable
 DEFAULT_SEASONS = 2      # for the 86 cases whose `span_seasons` is prose ("ongoing")
 
-_ENDINGS = Path(__file__).resolve().parents[2] / "2026-08-31-shape-tracer" / "cases" / "ENDINGS_CLASSIFIED.yaml"
+_ENDINGS = files.ENDINGS_CLASSIFIED_YAML
 
 
 def endings() -> dict:
@@ -92,7 +92,7 @@ def rescales() -> dict:
     `W10` deleted, returning as a corpus tool. Measured before deciding not to build one."""
     import yaml
     out: dict = {}
-    d = Path(__file__).resolve().parents[1] / "cases" / "exercises"
+    d = files.EXERCISES_DIR
     if not d.is_dir():
         return out
     for f in sorted(d.glob("*.yaml")):
@@ -274,7 +274,7 @@ def _register_sites() -> str:
 
     ⚠ THE SAME READING `W9` CHECK 3 USES, not a second one (§8). That check asserts the milestone
     run's fixture reads all resolve; this asks the same question per case."""
-    import register as REG
+    from . import register as REG
     return " ".join(str(r.get("site") or "") for r in REG.load()["rows"])
 
 

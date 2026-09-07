@@ -64,11 +64,11 @@ from pathlib import Path
 
 import yaml
 
-HERE = Path(__file__).resolve().parent
-PROPOSALS = HERE.parent.parent
-ARCH_DIR = PROPOSALS / "2026-09-02-executable-architecture"
-REGISTER = ARCH_DIR / "hole_register.yaml"
-ARCHITECTURE_V2 = ARCH_DIR / "ARCHITECTURE_V2.md"
+from ..data import files
+
+ARCH_DIR = files.ARCH_DIR
+REGISTER = files.HOLE_REGISTER_YAML
+ARCHITECTURE_V2 = files.ARCHITECTURE_V2_MD
 
 GRADES = ("ruled", "measured", "assumption", "absent")
 # Strictest first. A row V2 grades in parts (H-02, H-20) takes the strictest grade present,
@@ -455,8 +455,8 @@ def counts(reg: dict) -> dict:
     }
 
 
-SOURCE_353 = PROPOSALS / "2026-09-01-holonic-architecture" / "ARCHITECTURE.md"
-REPO = PROPOSALS.parent
+SOURCE_353 = files.SOURCE_353_MD
+REPO = files.REPO_ROOT
 # A `cite:` may quote MORE THAN #353. The first version of this gate checked every quote against
 # #353 alone and reported ten legitimate quotations of V2, PLAN.md, CLAUDE.md and a live engine
 # module as FABRICATED -- the same false-positive class as comparing typography instead of prose,
@@ -466,9 +466,9 @@ CITE_SOURCES = {
     "#353": SOURCE_353,
     "ARCHITECTURE_V2": ARCHITECTURE_V2,
     "V2": ARCHITECTURE_V2,
-    "PLAN.md": ARCH_DIR / "PLAN.md",
-    "PLAN §": ARCH_DIR / "PLAN.md",
-    "CLAUDE.md": REPO / "CLAUDE.md",
+    "PLAN.md": files.ARCH_PLAN_MD,
+    "PLAN §": files.ARCH_PLAN_MD,
+    "CLAUDE.md": files.CLAUDE_MD,
 }
 # Any repo-relative path the cite mentions, e.g. `engine/autoload/dice_engine.py`.
 PATH_RE = re.compile(r"\b((?:[\w.-]+/)+[\w.-]+\.(?:py|md|ya?ml|json))\b")

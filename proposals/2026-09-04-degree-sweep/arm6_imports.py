@@ -64,7 +64,7 @@ def run(log: Log) -> dict:
             # grade, and an earlier draft probed only the grade. Both are checked now.
             r = rows.get("determine")
             try:
-                import shape as _S
+                from season import shape as _S
                 js = hasattr(_S.Query, "judging_set") or "judging_set" in dir(_S)
             except Exception:
                 js = None

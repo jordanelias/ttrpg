@@ -22,17 +22,12 @@ different facts and conflating them would let a case appear to have run somethin
 from __future__ import annotations
 
 import json
-import sys
 from collections import Counter
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+from ..data import files
+from . import exercises as EX
 
-import exercises as EX          # noqa: E402 -- needs the path insert above
-
-HERE = Path(__file__).resolve().parent
-ROOT = HERE.parent
-RUNS = ROOT / "runs"
+RUNS = files.RUNS_DIR
 
 
 def emit(rep: dict, trace_rows: list) -> None:
@@ -261,7 +256,7 @@ def emit(rep: dict, trace_rows: list) -> None:
         (RUNS / f"UNMAPPED_{kind}.md").write_text("\n".join(out))
 
     # THE DISCLOSURE S320 PROMISED AND REV 4 NEVER DELIVERED.
-    import shape as _s
+    from .. import shape as _s
     used = sorted(_s.ASSUMPTIONS_USED)
     out = ["# THE INSTRUMENT'S OWN ASSUMPTIONS — what it had to supply to run at all", "",
            "**§42.2.1's inject-declare-name pattern, applied to SCHEMA ROWS rather than to",
@@ -300,8 +295,8 @@ def emit(rep: dict, trace_rows: list) -> None:
 
 
 if __name__ == "__main__":
-    import run_cases as R
-    from trace_log import TRACE
+    from . import run_cases as R
+    from ..trace_log import TRACE
     rep = R.main()
     (RUNS).mkdir(exist_ok=True)
     (RUNS / "results.json").write_text(json.dumps(rep, indent=1, default=str))

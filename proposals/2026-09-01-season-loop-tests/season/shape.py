@@ -59,10 +59,10 @@ import enum
 import hashlib
 import sys
 from dataclasses import dataclass, field, fields as dc_fields
-from pathlib import Path
 from typing import Any, Callable, Optional
 
-from trace_log import TRACE
+from .data import files
+from .trace_log import TRACE
 
 
 # ===========================================================================
@@ -287,9 +287,7 @@ _STEP_CLASS = {
 # W2's own proof, and it is a REDUCTION in what the instrument supplies, not an addition.
 # ===========================================================================
 
-_HERE = Path(__file__).resolve().parent
-WRITE_MATRIX_YAML = (_HERE.parent.parent / "2026-09-02-executable-architecture"
-                     / "write_matrix.yaml")
+WRITE_MATRIX_YAML = files.WRITE_MATRIX_YAML
 
 # A step determines its write class exactly. ONE OWNER: the YAML's `class:` column carries V2's
 # own string and the loader CHECKS it against this map rather than trusting either alone.
@@ -446,7 +444,7 @@ def assume_partition_row(record_kind: str, fieldname: str, social: bool, why: st
 # makes every membership test false and every closed-set guard vacuous.
 # ===========================================================================
 
-ROSTERS_YAML = (_HERE.parent.parent / "2026-09-02-executable-architecture" / "rosters.yaml")
+ROSTERS_YAML = files.ROSTERS_YAML
 
 
 def _load_rosters() -> tuple:
@@ -1404,7 +1402,7 @@ def build_typed_requires(verb: str, cell) -> Optional[TypedRequires]:
 # `verb_table.yaml` is the body. One `resolve` reads it.
 # ===========================================================================
 
-VERB_TABLE_YAML = (_HERE.parent.parent / "2026-09-02-executable-architecture" / "verb_table.yaml")
+VERB_TABLE_YAML = files.VERB_TABLE_YAML
 
 ELIGIBILITY_KINDS = roster("eligibility_kinds")
 
@@ -4909,7 +4907,7 @@ _S353_CACHE: list = []
 
 def SOURCE_353_TEXT() -> str:
     if not _S353_CACHE:
-        f = _HERE.parent.parent / "2026-09-01-holonic-architecture" / "ARCHITECTURE.md"
+        f = files.SOURCE_353_MD
         _S353_CACHE.append(f.read_text() if f.exists() else "")
     return _S353_CACHE[0]
 
@@ -6502,7 +6500,7 @@ def contest_subsystem(prize: Any) -> Optional[dict]:
     if name is None:
         return None
     import yaml as _y
-    contracts = _HERE.parent.parent.parent / "references" / "module_contracts.yaml"
+    contracts = files.MODULE_CONTRACTS_YAML
     if not contracts.exists():
         return dict(module=name, resolver="unknown", doc="module_contracts.yaml not found")
     for m in (_y.safe_load(contracts.read_text()) or {}).get("modules") or []:
@@ -6516,7 +6514,7 @@ def contest_subsystem(prize: Any) -> Optional[dict]:
             # the tree is asked directly rather than falling back to the markdown.
             where = m.get("sim_module") or ""
             if not where:
-                guess = _HERE.parent.parent.parent / "systems" / name / "sim"
+                guess = files.subsystem_sim_dir(name)
                 where = (f"systems/{name}/sim/" if guess.is_dir()
                          else f"(no `sim_module:` in module_contracts.yaml; "
                               f"`doc:` is {m.get('doc')!r} and is out of date)")
@@ -6597,7 +6595,7 @@ def degree_ladder() -> Optional[tuple]:
     global _LADDER, _LADDER_ERROR
     if _LADDER is not None or _LADDER_ERROR:
         return _LADDER
-    root = _HERE.parent.parent.parent
+    root = files.REPO_ROOT
     try:
         if str(root) not in sys.path:
             sys.path.insert(0, str(root))
@@ -6738,7 +6736,7 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
         # overrides. `combat_seam` is the IN-side, built on `engine/cross_scale/combat_bridge.py`'s
         # precedent rather than a new pattern.
         if _sub["module"] == "personal_combat":
-            import combat_seam
+            from . import combat_seam
             out = combat_seam.resolve(w, claimants, causes, prize)
             if out.get("status") == "RESOLVED":
                 TRACE.decision(f"contest for {prize!r} dispatched", "S39",
