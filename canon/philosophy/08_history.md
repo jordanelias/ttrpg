@@ -184,17 +184,35 @@ one ground — positive against negative, a schism about the Ein Sof. That is wr
 referent. The inner tradition's apophatic transmission (§5.7) concerns the ground; the Church's
 positive theology concerns a being. They are not disagreeing about how to speak of the same thing.
 
-### Two things the framework still owes an answer on
+### What ended him, and what he cost while he lasted
 
-- **What dissolved him.** Ceased threadwork, insufficient maintenance, or the reality-strain of his own
-  presence tearing his vicinity. §7.5 predicts the third and the record notes nothing of it. One derived
-  mechanism is available and is not an account: since others' rendering holds a third-mode being, a
-  change in *how the community rendered him* would weaken what held him — and the essentialist
-  reinterpretation described at §8.9 is exactly such a change. Suggestive, not established.
-- **Whether he strained reality.** §7.5 says every layer-3-sustained being does. A generation of his
-  presence should have left marks the record does not report.
+**He ceased the work.** *(Ruled 2026-09-07.)*
 
-Both go to supplement ruling R-7.
+A threadcut being persists only by continuous threadwork, at undiminished cost, for as long as it
+lasts (§4.5). There is no settling into it and no easing of the burden with practice — only spooling
+yields the depth that makes an organic configuration progressively cheaper to be, and he had none.
+
+So his dissolution requires no external cause and no enemy. **He stopped.** Whether from exhaustion,
+from choice, or from something the framework does not name, the work ended and his rendering
+collapsed, because nothing else was holding it.
+
+**And his presence strained reality throughout — the record simply does not name it as his.** *(Ruled
+2026-09-07.)*
+
+§7.5 requires this: a being sustaining itself by continuous threadwork holds a configuration standing
+in harmony with nothing around it, and the load it cannot absorb is borne by the threads in its
+vicinity. Solmund was such a being for a generation. The strain was real, it was continuous, and it
+was substantial.
+
+**It went unrecorded because it was legible as two other things.** Those who came after the Calamity
+lived in a world of torn fabric and were already attributing every anomaly to the aftermath; strain
+around Solmund was strain among a great deal of strain. And what could not be attributed to the
+Calamity was attributed to *him* — as wonder rather than as cost. A being in whose vicinity reality
+behaves strangely is a being who works miracles, if you have already decided that is what he is.
+
+**So the marks are in the record. They are misread, not missing.** The framework's own warning was
+being illustrated in front of everyone for a generation, in the one place nobody was looking for it,
+and the tradition that formed around him is built on the evidence.
 
 ## §8.8 The perceptual prophylaxis
 

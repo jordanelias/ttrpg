@@ -116,6 +116,9 @@ than possessing one it declines to tell.
 
 ### On Derrida
 
+*(Ruled 2026-09-07: Derrida, Kant and Freud/Jentsch are all named. The alternative — scrubbing the
+borrowed vocabulary at about twenty sites — was available and not taken.)*
+
 Derrida was named by the author as a source and appeared in none of the source documents' lineage.
 His machinery is nonetheless everywhere in the suite: *always-already* is used some twenty times as
 a term of art; §5.3's "somatic echo retaining traces the mind cannot retrieve" is the trace; layer

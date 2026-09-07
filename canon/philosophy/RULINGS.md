@@ -171,3 +171,35 @@ sincere and the error still does what it does.
 **D-12 — Providence.** Ruled: **kept for mode 2, retired from the tendency.** The imported foresight
 is now deliberate — it sits on an accident that survivors named, not on a structure the framework
 claims. *Applied:* §4.6, §9.2, §9.3.
+
+---
+
+## 2026-09-07 — Batch 4: finitude, Solmund's end, the lineage
+
+**D-7 follow-up — the threads/surfeit split is rejected.** Ruled: **one undivided capacity.** The
+editor's proposed split (capacity for threads grows, capacity for surfeit fixed) is **not** the
+framework's position.
+
+*Consequence, and it required restating §5.3 rather than preserving it:* finitude was never a claim
+about **size**. The rendering is finite *as such* — bounded, however large the bound. Capacity grows;
+the bound moves; the relation to what is uncontracted is unchanged, because a finite increase does not
+approach an infinite quantity. **A larger cup is still a cup.** Growth changes how much, not what kind.
+
+*Second consequence:* the earlier claim that "the trauma signature does not diminish" is replaced by
+something sharper — **the threshold moves and the structure does not.** A practitioner of great reach
+meets far more before being overwhelmed, and when overwhelmed meets it at magnitudes that would have
+unmade someone lesser. Sensitivity buys altitude, not immunity. *Applied:* §5.3 (restated), §5.5
+(restated).
+
+**D-8b — what ended Solmund.** Ruled: **he ceased the work.** No external cause required. Threadcut
+persistence is undiminished cost forever (§4.5); he stopped, and his rendering collapsed because
+nothing else held it. *Applied:* §8.7.
+
+**D-8c — did he strain reality?** Ruled: **yes, and it is unrecorded.** The marks are in the record
+and are misread, not missing — absorbed into the Calamity's aftermath, or attributed to him as miracle
+rather than as cost. A being in whose vicinity reality behaves strangely works miracles, if you have
+already decided that is what he is. *Applied:* §8.7, §7.5 (Solmund named as the worked example).
+
+**D-11 — the lineage.** Ruled: **name all three.** Derrida, Kant, and Freud/Jentsch. The alternative —
+scrubbing the borrowed vocabulary at roughly twenty sites — was available and not taken. *Applied:*
+§0.3 (already written; now marked as ruled).

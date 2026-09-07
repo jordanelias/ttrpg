@@ -62,17 +62,21 @@ The resemblance is not incidental. The subject was, in an ordinary sense, overwh
 exceeded, integration failed, the ordinary storage-and-recall of experience did not complete. The
 emotional residue is real. The somatic trace is real. The fragments are real.
 
-**The rendering is a finite process, and its finitude is constitutive** — not a limitation on a
-potentially unlimited capacity, but a feature of what the rendering is. It is the apprehension of a
-contracted region of being; it is by specification a bounded operation on bounded material. When a
-subject encounters what exceeds that boundary — what is itself uncontracted, arriving through a
-breach as surfeit — the rendering does not malfunction. It operates exactly within specification. The
-specification does not include what has arrived.
+**The rendering is a finite process, and its finitude is constitutive.** This does not mean its
+capacity is fixed. Capacity grows — that is what sensitivity is (§5.5). It means the rendering is
+**finite as such**: bounded, however large the bound, and apprehending a contracted region of what is
+uncontracted.
 
-*A cup pouring the ocean: the cup has not failed. The cup holds what cups hold. The water that does
-not fit does not fail to enter because the cup was defective. It does not fit because the cup is the
-cup. What is not cup-shaped and cup-sized does not become contained by failing differently; it does
-not become contained at all.*
+So no amount of growth closes the gap. What arrives through a breach is not merely larger than what a
+given practitioner can hold; it is of a different order, and a finite increase does not approach an
+infinite one. When a subject encounters it, the rendering does not malfunction. It operates exactly
+within specification, and the specification — being finite — does not include what has arrived.
+
+*A cup pouring the ocean: the cup has not failed. The cup holds what cups hold. And a larger cup is
+still a cup. It takes more water and it stands in exactly the same relation to the sea — the water
+that does not fit does not fail to enter because the cup was too small, but because what is not
+cup-shaped does not become contained by any cup. Growth changes how much. It does not change what
+kind.*
 
 **What remains, stated precisely.** The residue, the fragments, the somatic echo are exactly what the
 active stratum was able to constitute, plus the trace of exactly what it was not.
@@ -95,9 +99,16 @@ resemblance is not a coincidence to be noted; it is what this architecture must 
 **The pivot.** The ordinary trauma model presumes a capacity exceeded by a particular stressor — an
 experience whose magnitude surpassed a capacity that, under other conditions, would have been
 adequate. Confrontation is not this. Confrontation is the rendering meeting what is constitutively
-beyond it: not a stressor exceeding capacity, but an encounter the specification was never going to
+beyond it: not a stressor exceeding capacity, but an encounter no capacity of this kind was going to
 include. **The signature is not pathology. It is the signature of finitude meeting the surfeit it is,
 by structure, finite against.**
+
+**What growth changes, and what it does not.** A practitioner of great reach meets more before being
+overwhelmed — the threshold moves, and moves far. What does not change is the structure of what
+happens when it is reached: the same passive registration, the same fragments, the same somatic
+residue, the same failure to constitute as world. Sensitivity buys altitude, not immunity. And the
+encounters that reach a great practitioner are the ones that would have annihilated a lesser one, so
+the signature is not merely undiminished in kind — it is met at magnitudes that make it worse.
 
 *(The Church reads this signature in the inverted register: what the framework recognizes as a
 structurally correct response to surfeit, the prophylaxis names spiritual contamination, treating the
@@ -145,34 +156,32 @@ deliberately.
 
 ### Does the cup grow, then?
 
-**Yes for threads, no for surfeit — and §5.3 turns on the second.**
+**Yes. It is one capacity and it grows — and the finitude pivot survives anyway, because finitude was
+never a claim about size.** *(Ruled 2026-09-07: there is no threads/surfeit split in what develops;
+the capacity is undivided.)*
 
-Two different objects are in play and the source suite ran them together:
+The rendering is finite **as such**: bounded, however large the bound. Growth moves the bound. It does
+not make the rendering unbounded, and it does not change the relation between a bounded apprehension
+and what is uncontracted. A larger cup is still a cup (§5.3).
 
-- **Threads — the substrate, on the intelligible side.** Capacity here **grows**. That is what
-  sensitivity *is*: an expanding ability to hold what is given, achieved by acting into a different
-  imbrication.
-- **The uncontracted surfeit — what lies beyond the boundary.** Capacity here **does not grow**, and
-  cannot. §5.3's finitude is constitutive: the rendering is the apprehension of a contracted region,
-  and no development makes it the apprehension of an uncontracted one.
+So the two claims that appeared to be in conflict are not:
 
-The cup argument was always about the second. A practitioner of great reach still meets a monstrous
-incursion with a rendering whose specification was never going to include it.
+- **Capacity grows without a ceiling in view.** A practitioner of deep reach holds vastly more of what
+  is given, and holds themselves among vastly more, than a novice can.
+- **No growth reaches the surfeit.** Not because a limit is hit, but because the increase is finite
+  and what it would have to reach is not. This is why §5.3 says the specification "was never going to
+  include" what arrives — not *this* specification, but a specification of this kind.
 
-**Two consequences follow, and both should be held.**
+**Three consequences, all to be held.**
 
-- **The trauma signature does not diminish with sensitivity.** What grows is equanimity (§5.8) — the
-  cultivated capacity to sustain engagement with what one cannot hold — not immunity. A Warden of
-  fifty years at a Gap margin is not less overwhelmed by surfeit; they are better at continuing
-  anyway.
-- **The bootstrap dissolves.** The first confrontation, before any sensitivity exists, is registered
-  by the passive stratum (§3.3), which requires no reach to operate. Sensitivity was never needed to
+- **The threshold moves; the signature does not soften.** A practitioner of great reach meets far more
+  before being overwhelmed. When they are overwhelmed, what happens is structurally identical — and it
+  happens at magnitudes that would have unmade someone lesser. Sensitivity buys altitude, not immunity.
+- **Equanimity is the thing that actually helps** (§5.8): the cultivated capacity to sustain
+  engagement with what one cannot hold. It does not reduce the encounter; it makes continuing possible.
+- **The bootstrap dissolves.** The first confrontation, before any sensitivity exists, is registered by
+  the passive stratum (§3.3), which requires no reach to operate. Sensitivity was never needed to
   *have* the first encounter; it is what the encounters build, by altering how one is tied in.
-
-*(Ruled 2026-09-07: position and capacity are one. ⚠ One reading is mine and should be confirmed —
-that the growth is in capacity for **threads** while capacity for **surfeit** stays constitutively
-fixed. If capacity for surfeit also grows, §5.3's finitude pivot needs rewriting rather than
-preserving.)*
 
 ## §5.6 The epistemic barrier
 

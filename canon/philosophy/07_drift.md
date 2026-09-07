@@ -151,8 +151,10 @@ that.
   beings are the limiting case, not a separate phenomenon. This is also why proximity to third-mode
   presences erodes Coherence in others: they are standing in strained fabric.
 - **Threadcut beings strain reality too.** The profile is the same minus spooling, and the derivation
-  is untouched by the difference. Solmund strained the substrate for the whole generation of his
-  presence — and the record notes nothing of it. See supplement, ruling R-7.
+  is untouched by the difference. **Solmund is the worked example**: he strained the substrate for the
+  whole generation of his presence, and the record does not name it as his — it was absorbed into the
+  Calamity's aftermath or read as miracle (§8.7). The setting's central warning was being demonstrated
+  continuously, in the one place nobody thought to look.
 
 **The history is therefore not only backstory.** It is the structural consequence of exactly the
 configuration such a being sustains, localized and reduced in scale but identical in mechanism. The
