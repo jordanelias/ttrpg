@@ -44,6 +44,7 @@ are for, and forbidding it would only push the reach into a fixture.
 from __future__ import annotations
 
 import pathlib
+import ast
 import re
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
@@ -209,7 +210,53 @@ def test_this_check_can_observe_its_own_failure(tmp_path):
 #: out of scope for a step whose subject is the composition registry.
 #:
 #: It can only shrink. Converting it deletes this entry.
-PATH_SEAM_ALLOWED = {'cross_scale/combat_bridge.py'}
+#: SECOND ENTRY ADDED 2026-09-05 (ED-IN-0202, the adoption). `season/combat_seam.py` is the SAME
+#: seam from the season loop's side, into the same flat module set, following combat_bridge's
+#: discipline deliberately (its own header cites it as precedent). It is declared rather than
+#: converted for the identical reason the first entry gives: dotted-path loading would give
+#: `wrapper`/`combatant` a second identity in a process that also loads them flat, which the
+#: balance workbench does. Still shrink-only: converting either one deletes its entry.
+PATH_SEAM_ALLOWED = {'cross_scale/combat_bridge.py', 'season/combat_seam.py'}
+
+
+def _inserts_a_systems_path(text):
+    """True iff this module puts a path NAMING `systems` onto `sys.path` — which is the seam.
+    Reads the inserted expression, not the file's word soup, and follows one level of local
+    assignment (`_PC = _REPO / "systems" / ...` then `sys.path.insert(0, str(_PC))`)."""
+    try:
+        tree = ast.parse(text)
+    except SyntaxError:
+        return False
+    assigned = {}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign):
+            for t in node.targets:
+                if isinstance(t, ast.Name):
+                    assigned[t.id] = ast.get_source_segment(text, node.value) or ""
+    names_re = re.compile(r"""['"]systems['"]|/systems/""")
+    for node in ast.walk(tree):
+        if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)):
+            continue
+        if node.func.attr not in ("insert", "append"):
+            continue
+        if ast.unparse(node.func.value).replace(" ", "") not in ("sys.path", "path"):
+            continue
+        for arg in node.args:
+            expr = ast.get_source_segment(text, arg) or ""
+            seen = set()
+            while expr:
+                if names_re.search(expr):
+                    return True
+                try:
+                    nxt = [n.id for n in ast.walk(ast.parse(expr, mode="eval"))
+                           if isinstance(n, ast.Name) and n.id in assigned and n.id not in seen]
+                except SyntaxError:
+                    break
+                if not nxt:
+                    break
+                seen.update(nxt)
+                expr = " ".join(assigned[n] for n in nxt)
+    return False
 
 
 def _modules_loaded_from_systems(probe_body):
@@ -283,7 +330,20 @@ def test_the_one_declared_path_seam_is_still_the_only_one():
         if rel.startswith('tests/') or '__pycache__' in rel:
             continue
         text = path.read_text(encoding='utf-8')
-        if re.search(r"sys\.path\.(insert|append)", text) and "'systems'" in text:
+        # ⚠ TWO DEFECTS FOUND AT THE 2026-09-05 ADOPTION, BOTH IN THIS PREDICATE.
+        # (1) It was `"'systems'" in text` — a SINGLE-QUOTED literal only — so
+        #     `season/combat_seam.py`'s `_REPO / "systems" / ...` was invisible and this guard
+        #     stayed green while a second undeclared seam existed. Matching on TYPOGRAPHY rather
+        #     than on the concept is the defect this file exists to prevent one level down.
+        # (2) Widening the quoting alone then reported `season/shape.py`, which is NOT a seam: it
+        #     inserts the REPO ROOT to import `engine.autoload.dice_engine` by dotted path, and
+        #     `systems` appears elsewhere in it as a directory probe for a diagnostic string.
+        #     Co-occurrence ANYWHERE IN THE FILE was never the right question. An over-refusal is
+        #     a defect of equal weight to a miss: it would push a later author to delete a
+        #     legitimate dotted import.
+        # So the predicate now asks what is actually INSERTED — the argument expression of each
+        # `sys.path.insert/append`, following one level of local assignment.
+        if _inserts_a_systems_path(text):
             offenders[rel] = True
     assert set(offenders) == PATH_SEAM_ALLOWED, (
         f'sys.path seams into systems/ are now {sorted(offenders)}, declared {sorted(PATH_SEAM_ALLOWED)}. '
@@ -466,4 +526,42 @@ def test_every_declared_composition_role_resolves():
         assert callable(resolved), f'role {role} did not resolve to a callable'
     assert sum(1 for r in composition.ROLES.values() if r.get('kind') != 'value') >= 20, (
         'the callable branch above checked almost nothing - most roles should be callables'
+    )
+
+
+# ---------------------------------------------------------------------------------------------
+# DECISION 1 STEP A (ED-IN-0202, 2026-09-05): "only ... social contests, personal combat and mass
+# battles to be retained. All work in /engine is retained as well." 19 of the 27 declared
+# composition roles above target one of the twelve subsystems that ruling does NOT retain
+# (`references/module_contracts.yaml`'s composition_roles: block). Retiring those subsystems is
+# Step B, gated on R-04, and has not happened — this ceiling only makes the count SHRINK-ONLY, the
+# same shape as `ALLOWED`/`PATH_SEAM_ALLOWED` above: a role LEAVING the set is Step B progress and
+# needs no update here; a role ENTERING it — a NEW seam into a subsystem Jordan ruled out — is
+# drift during a retirement window and must fail.
+R04_PENDING_SUBSYSTEMS = {
+    '_architecture', 'articulation', 'characters', 'factions', 'fieldwork', 'npcs', 'overview',
+    'settlements', 'threadwork', 'ui', 'victory', 'world',
+}
+
+R04_PENDING_ROLES = {
+    'faction_action', 'season_driver', 'accounting', 'territory_transfer_candidate',
+    'territory_transfer_proposal', 'world_gen_settlements', 'snapshot_state.practitioners',
+    'snapshot_state.insurgencies', 'snapshot_state.npcs', 'snapshot_state.treaties',
+    'snapshot_state.convictions', 'snapshot_state.beliefs', 'snapshot_state.knots',
+    'snapshot_state.territory_infrastructure', 'snapshot_state.threadcut_beings',
+    'snapshot_state.settlements', 'scene_resolver.fieldwork', 'scene_resolver.investigation',
+    'rs_track_delta',
+}
+
+
+def test_r04_pending_composition_roles_can_only_shrink():
+    from engine.substrate import composition
+    live = {role for role, row in composition.ROLES.items()
+            if row['target'].split('.', 2)[1] in R04_PENDING_SUBSYSTEMS}
+    new = sorted(live - R04_PENDING_ROLES)
+    assert not new, (
+        'NEW composition role(s) target a non-retained subsystem during the ED-IN-0202 retirement '
+        'window: ' + ', '.join(new) + '. This is the exact collision Decision 1 Step A named — '
+        'engine/ naming more of the twelve superseded subsystems is drift, not Step A work. If the '
+        'role is genuine, say so in the plan and add it to R04_PENDING_ROLES deliberately.'
     )

@@ -4,7 +4,7 @@
 other systems) from v2 that were identified as valuable to import we're not?"*
 
 Answered against the tree rather than against the PR bodies, because the PR bodies are what the
-question is about. The prescription is `proposals/2026-09-03-meta-architecture/HANDOFF_NEXT.md`
+question is about. The prescription is `architecture/meta/HANDOFF_NEXT.md`
 §2 -- which calls itself ***"this is the real backlog"*** -- crossed with #359's design-v2.
 """
 from __future__ import annotations
@@ -13,7 +13,7 @@ import yaml
 from sweep_core import Log
 
 _REPO = Path("/home/user/ttrpg")
-VT = _REPO / "proposals/2026-09-02-executable-architecture/verb_table.yaml"
+VT = _REPO / "engine/season/verb_table.yaml"
 
 # HANDOFF_NEXT.md §2, verbatim subjects. Each row: (id, what it is, what blocks, the probe).
 ROWS = [
@@ -36,7 +36,7 @@ ROWS = [
 
 def run(log: Log) -> dict:
     log.rule("ARM 6 — the v2 systems marked for import, checked against the tree")
-    log("SOURCE", "proposals/2026-09-03-meta-architecture/HANDOFF_NEXT.md §2 — "
+    log("SOURCE", "architecture/meta/HANDOFF_NEXT.md §2 — "
                   "'The five root causes that block #359's actions — ⚠ this is the real backlog'")
     log("SOURCE", "proposals/2026-09-03-governance-corpus-rebuild/03-design-v2.md §discovery — "
                   "'Discovery is a contest — the investigator's relevant capability against the "

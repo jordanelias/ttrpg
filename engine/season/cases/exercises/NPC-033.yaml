@@ -1,0 +1,46 @@
+# NPC-033 · KOLBRUN THALE — `W28`'s `scale:` re-authoring.
+#
+# ⚠ WHAT IS BEING REPAIRED, AND WHOSE DEFECT IT IS. `CASE_BRIEF.md:25` gave the extraction schema
+# as `scale: <person | settlement | faction | realm | world>`. `faction` and `world` are not in
+# `rung_kinds` and never were — `ARCHITECTURE_V2.md:93` lists a faction ACTING among five refusals
+# held under all 143 cases, and `shape.py` states it: *"a faction never acts: a PERSON HOLDING AN
+# OFFICE acts."* So the brief offered a vocabulary the architecture had closed, every extractor
+# used it, and 47 cases are unrepresentable through no fault of their own reading of the character.
+#
+# ⚠ THIS IS AN OVERLAY, NOT AN EDIT TO THE CORPUS. NPC-033 lives in a PREDECESSOR chain's committed
+# extraction (`engine/season/cases/chain/NPC2.yaml`), which this chain reads and does not own.
+# The corpus is evidence of what was extracted; overwriting it would destroy that record.
+#
+# ⚠ THIS IS ALSO THE PILOT THAT EXERCISES THE SCHEMA'S GAP ARM, DELIBERATELY. Canon gives the
+# Crown five bodies (§6.1: Imperial Court, Court Parliament, Ministries, Rectorates, Praefectures)
+# and NONE of them is an intelligence service. So this office authors `faction` directly and names
+# no `body` — the arm `H-99` provides for a faction whose organ canon has not written.
+case: NPC-033
+name: Kolbrun Thale
+scale:
+  was: faction
+  is: realm
+  why: >-
+    The case's own `one_line` names her "Crown's Spymaster and sole formal channel to the
+    peninsula's informal intelligence-broker networks". A CROWN office is held at the realm — the
+    Crown is the realm's government, and `rung_kinds`' top member is `realm`. The reach named is
+    "the peninsula's" networks, which is realm-wide rather than any one settlement's. Nothing here
+    is inferred from outside the case: the office is in the first clause and its scope in the
+    second.
+  office:
+    post: "Crown's Spymaster"
+    faction: "Crown"
+    remit: [issue, dispatch]
+    why: >-
+      ⚠ NO `body`, AND THE ABSENCE IS THE FINDING RATHER THAN AN OMISSION. The tempting seat is the
+      Löwenritter's **Royal Investigators** (`worldbuilding_v30.md` §4.1: *"Investigation,
+      counter-espionage, court prosecution"*) or its **Riskbreakers** (*"Extralegal infiltration"*)
+      — and taking either would silently move her from the Crown to the Löwenritter, which are
+      distinct factions in canon's own starting-control and event tables. The case says CROWN'S
+      Spymaster. Canon has no Crown intelligence organ, so the honest record is a faction with no
+      body, not a plausible body with the wrong faction (§42.2's polarity rule).
+      `issue` and `dispatch` are the two `remit_acts` her own text supports — she is the "sole
+      formal CHANNEL", which is dispatch (sending word), and she operates "on the edge of
+      institutional propriety", which is the authority to issue. ⚠ NOT `determine`: nothing in the
+      case says she judges anything, and `determine` is the sitting's act. Where the text does not
+      say, the remit does not carry it.

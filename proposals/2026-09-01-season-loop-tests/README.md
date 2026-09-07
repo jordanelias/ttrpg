@@ -6,7 +6,7 @@
 ## Scope — the rule that decides what counts as evidence
 
 **The only admissible source is the design chain PR #337 → now**, head =
-`proposals/2026-09-01-holonic-architecture/ARCHITECTURE.md` (#353). No file under `engine/`, no
+`architecture/holonic_ARCHITECTURE.md` (#353). No file under `engine/`, no
 subsystem `sim/`, and no decision ratified before #337 is authority — not as support, not as
 precedent, not as an incumbent to defer to. This is `ARCHITECTURE.md` §0.1's own rule, applied to
 the thing measuring it.

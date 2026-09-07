@@ -1,7 +1,7 @@
 # THE SESSION'S FINDINGS LEDGER — four adversarial passes, 56 findings, and what each fix broke
 
 ## Status: **PROPOSED (2026-09-01). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
-## Scope: **PR #337 → now only.** Head = `proposals/2026-09-01-holonic-architecture/ARCHITECTURE.md` (#353).
+## Scope: **PR #337 → now only.** Head = `architecture/holonic_ARCHITECTURE.md` (#353).
 
 > ### ⚠ HONESTY MARKER ON THIS ARTIFACT ITSELF
 > **This is a TRANSCRIPTION made during the session, not a machine-captured log.** The four
