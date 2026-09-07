@@ -93,17 +93,78 @@ investigation rows onto the one ladder; the stance owner named on all three band
 **Six stress-test instruments were rebuilt in the same pass**, because they were substring searches
 that could not observe their own fix — a falsifier that cannot fire green is not one.
 
-### Next actions
+---
 
-1. ⛔ **The retirement wave** — cross-lane, ruled, unexecuted. **Not this PR.**
-2. ⭐ **PHASE 1 step 1 — `R8.4`'s `document_key` repair — is the first thing that moves the game.**
-   It must land **before** the fan-out flip, or `M-6` measures a starved propagation chain rather
-   than a narrowed one. `21_RECONCILIATION.md` C-3 is the ordering constraint.
-3. **`M-7`/`M-8` are runnable now** via `sigma_leverage.p_success` with the injected magnitudes.
-4. ⚠ **One `IN`-lane defect this design revealed and does not own**: the write gate's `F3` clause has
-   four exceptions and a conferral-basis opener matches none of them — **so `confer`, a live `ruled`
-   verb, would be refused by the gate as specified.** `determine` opening a disposal needs the same
-   clause. Register it there.
+# ⭐ THE HANDOFF — where the proceedings work stands, and what to do next
+
+**Written at session close 2026-09-07, PR #376 merged. Read this before anything else in this file;
+everything below it is history.**
+
+## The state in one paragraph
+
+**The proceedings subsystem is PROPOSED, held back in full, and does not run.** Nothing in PR #376
+changed that — it touched **zero lines under `engine/` or `systems/`**. What it did was measure the
+design against the executable tracer (38 tests), reconcile the results against
+`04_CODE_ARCHITECTURE.md` and R1–R8 (twelve conflicts ruled, zero escalations), and execute the
+corrections that carried no design decision. **The design is now accurate about itself in about
+fifteen places where it was not.** The game is where it was.
+
+## What is DONE and needs nobody
+
+| | |
+|---|---|
+| the stress suite | `proposals/2026-09-05-proceedings-subsystem/20_STRESS_TESTS.md` — **a closed record, not a work queue.** Reproduce: `python3 stress/stress_proceedings.py` |
+| the reconciliation and the plan | `21_RECONCILIATION.md` — **this is the file a next session reads.** PART C rules the conflicts; PART D is the ordered plan; PART E is what must not be done |
+| PHASE 0 | executed. Ten edits, falsifiers green (`ST-06 · ST-12 · ST-13 · ST-23 · ST-27 · ST-37 · ST-38`) |
+
+## ⭐ WHAT TO DO NEXT, in order, and the first one is the only one that matters
+
+**1 · `R8.4`'s `document_key` repair — `IN` lane, and it is the first step that moves the game.**
+`shape.py`'s `document_key` channel tests `t.object == e.subject` while every fold Event sets
+`subject = actor` and no `hold` Tenure takes a person as object, **so the channel cannot fire on any
+act at all.** Repair: test the changed record in `changes[]`. ⚠ **It must land BEFORE the fan-out
+flip** or `M-6` measures a starved propagation chain rather than a narrowed one
+(`21_RECONCILIATION.md` C-3). Everything about absence, secrecy, hearsay and `R5`'s bureaucratic
+fact is behind it.
+
+**2 · Fan-out off `total`** (`19_PLAN.md` step 1). **Forced by `R7`** — `total` is the echo model
+Jordan refused, arriving at the deposit layer. The six campaign goldens are the control, not a
+dependency: they re-baseline and the deltas print.
+
+**3 · ⛔ The obstacle needs a ceiling, and this is new.** `M-7` was run for the first time and
+**fails**: at the 1D pool floor `p_success` is `0.2266 / 0.0228 / 0.0006` at Ob 1/2/3 and **0.0000
+from Ob 4** — reaching effectively zero at a value `opposition_score / 2` produces alone against a
+score of 6, before any room term. **And remedy (a) is refuted**: σ-leverage at the floor against
+Ob 7 gives `0.0000` at net_σ 0, 1, 2 **and 3**, because a channel uniform in Δz cannot lift a
+probability already at zero. **So `06_RESOLUTION.md` §B.3a's remedy (b) — a ceiling — or a higher
+pool floor is what is left.** ⚠ Magnitudes are `MD-07`'s injected set; 1D is the pathological pool.
+
+**4 · Then PHASE 2** — the six rosters and the arrangements loader, `judging_set`, `release`,
+`convene`, the docketing step, `determine`'s row, the provider, and the BAR.
+
+## What is genuinely open, and it is not much
+
+- **Nothing needs Jordan.** All twelve conflicts closed on `CLAUDE.md` §0's five tests. The one that
+  came closest is `C-7`'s quorum: a filtered-cardinality eighth form would be more expressive and is
+  **refused by default**, with its trigger named — if a non-bench person's commitment counting toward
+  quorum reads wrong in play, that is when it is earned, and it must be argued then.
+- ⚠ **One `IN`-lane defect this design revealed and does not own.** The write gate's `F3` clause has
+  four exceptions and a conferral-basis opener matches none — **so `confer`, a live `ruled` verb,
+  would be refused by the gate as specified**, and `determine` opening a disposal needs the same
+  clause. **Register it in `IN`; it is not this lane's to fix.**
+- ⛔ **The retirement wave** — cross-lane, ruled 2026-09-06, still unexecuted. 47 files, 20+ inbound
+  sites. Not this lane's PR.
+
+## ⚠ Two method lessons this session paid for, worth more than any single finding
+
+1. **Six falsifiers were substring searches and could not observe their own fix.** A correction that
+   quotes a retracted claim while withdrawing it still read as the defect, so every one of them would
+   have gone on failing after its target was corrected. **A test that cannot go green when the thing
+   it names is fixed is not a falsifier** — `§0.1` point 2 from the other side.
+2. **Three things written as *Registered* / *blocking* / *done* had never been exercised** — five
+   orphan `P-` rows, `M-7`, and `12_BUILD_ORDER.md`'s missing docketing step, whose absence made its
+   own step 9 BAR unreachable. **Writing the citation is not filing the row.** ⚠ And the M1 gate's
+   own row 4 (`0/7`, self-declared DOC-DERIVED) is the same disease at the milestone scale.
 
 ---
 

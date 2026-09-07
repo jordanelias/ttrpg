@@ -1,5 +1,30 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⚠ FILED 2026-09-07 FROM THE SC LANE — one write-gate defect that is `IN`'s and not theirs
+
+**Surfaced by the proceedings stress suite (PR #376, `ED-SC-0036`); registered here rather than
+fixed there, because the gate is not that lane's to amend.**
+
+⛔ **`§C.2`'s `F3` clause has four exceptions and `confer` matches none of them.** The clause admits
+`actor == subject`, `T-n`, `T-o`-with-`via`, and the destroy cascade. **`confer` opens a `hold`
+whose subject is the conferee, not the conferrer** — a live, `ruled`, in-table verb that the gate as
+specified would refuse. `HANDOFF_NEXT.md` `1a`'s planned `subject == actor` assertion would fire on
+it.
+
+**The missing exception, and it is a lookup the tree already has:** *`via` is a Seat whose CONFERRAL
+BASIS names this verb for this kind* — which is `ID-14`'s opener map read at the gate, not a fifth
+special case.
+
+⚠ **It blocks more than `confer`.** `21_RECONCILIATION.md` C-1 rules that `determine` opens the
+Tenure a finding IS — the disposal every arrangement row's `disposes:` key names — and that write
+needs the identical clause. **So the proceedings subsystem's central write is gated on an `IN`-lane
+fix**, and the same fix un-breaks a verb that is already shipped.
+
+⚠ **And `Act.via` does not exist** (`P-03` / `H-108`), so the clause has nothing to read until it
+does. That ordering is the real dependency.
+
+---
+
 ## ⚠ CURRENT — 2026-09-06, ED-IN-0202: eight design rulings recorded, and the one thing to build first
 
 **`references/design_rulings_2026-09-06.md`** holds `R1`–`R8`, given by Jordan in conversation and
