@@ -118,37 +118,44 @@ loosen, reducing the lattice's capacity without necessarily collapsing the work.
 
 ## §6.6 The operation-type taxonomy
 
-Operations differ in their **direction relative to the stabilizing tendency** (§3.4) — that is, in
-whether the resulting shape is one that rendering already holds.
+Operations differ in their **direction relative to the futural-potential-legible** (§3.4) — that is,
+in whether the resulting shape is one the configurations were tending toward anyway.
 
 **This is not foregrounding readmitted.** Inseparability governs which dimensions move: all of them,
 always. Type governs the direction of the whole tridimensional movement. A direction is not a
 dimension. For the same reason, "restorative" is *not* defined as returning a configuration to a prior
-actualized state — that would define a type by one dimension and would reintroduce foregrounding.
+actualized state — that would define a type by one dimension, and it is doubly wrong here, since the
+equilibrium is futural and nothing is being returned to anything.
 
-**Restorative.** The result is a shape that rendering already holds — the target's own layer-two
-self-maintenance, for a being; the collective rendering, for a place. Nothing further is required to
-hold it, so no residual load falls on the practitioner. Mending is the paradigm case.
+**Restorative.** The result lies toward the equilibrium — a shape the configurations were already
+tending to reach. Once actualized it needs no holding: it stands in harmony with what surrounds it,
+which is what harmony means. Nothing returns to the practitioner because nothing is being sustained
+against anything. Mending is the paradigm case.
 
-**Manipulative.** The result is a shape no rendering holds. It is held only by the practitioner, and
-must go on being held.
+**Manipulative.** The result lies off the attractor: a shape the configurations were not tending
+toward. It stands only while it is held, and the holding is the practitioner's. The load persists for
+as long as the shape does.
 
-**Destructive.** A shape rendering holds is removed. Rendering's hold persists as an unresolved force
-— the orphan structure of §4.7 — and the practitioner bears the severance.
+**Destructive.** A configuration standing in harmony with others is removed or unmade. The harmony it
+was part of is broken, and the configurations that depended on it are left off the attractor too —
+which is the orphan structure of §4.7 generalized. The practitioner bears the severance, and the
+damage is not confined to the target.
 
 **These are categorically different, not points on one scale.** Scale makes destructive operations
-worse; alignment makes restorative operations non-corrosive.
+worse; direction makes restorative operations non-corrosive at any scale.
 
-**Mending torn substrate.** On the older, ground-located account of the tendency this case failed:
-where the fabric is broken, spooling would *never* resume the prior configuration (§8.5), so Mending a
-Locked Zone would not have counted as restorative at all. On the rendering-located account it
-succeeds without special pleading. A Locked Zone is a region the collective rendering cannot hold;
-Mending builds a shape rendering *can* hold; once held, rendering maintains it. Mending is not "what
-would have happened anyway" — it is labour that re-enables the conditions under which spooling can
-resume, completing what the breach interrupted.
+**Mending torn substrate, and why this account is the one that works.** In a Locked Zone the
+futural-potential is itself damaged: no harmonious configuration is reachable, so nothing is drawn
+anywhere (§3.4). Mending does not accelerate an inevitable recovery — there is none to accelerate. It
+**restores reachability**: it builds a configuration from which a harmonious future is attainable
+again, and thereafter the tendency does the rest.
 
-*(That is the Lurianic figure of repair, and naming it costs nothing provided the redemptive teleology
-is stripped: no completion is promised and nothing is being restored to a plan. See supplement §4.)*
+That is why Mending is restorative without being a return, and why it is labour rather than midwifery.
+It is the re-opening of a future for a region that had none.
+
+*(Naming this as the tradition's figure of repair costs nothing and clarifies much, provided the
+redemptive teleology is stripped: no completion is promised, and nothing is being restored to a plan.
+Optional — see the enrichment list.)*
 
 ## §6.7 Memory operations
 

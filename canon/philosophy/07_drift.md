@@ -10,14 +10,14 @@
 
 Not every act of threadwork produces drift.
 
-**Operations aligned with the stabilizing tendency produce no Coherence cost.** Their result is a
-shape rendering already holds, so nothing further needs holding and no residual load returns through
-the knot.
+**Operations directed toward the futural-potential-legible produce no Coherence cost.** Their result
+is a shape the configurations were tending toward, so once actualized it stands in harmony with what
+surrounds it and needs no holding. Nothing returns through the knot.
 
-**Operations that impose what no rendering holds must be sustained against the absence of that
-support**, and the cost of holding such a configuration is a configurational alteration to the
-practitioner. This is the operational origin of drift: not threadwork as such, but threadwork that
-opposes the tendency.
+**Operations that impose a shape off the attractor must be held against the draw**, and the cost of
+holding such a configuration is a configurational alteration to the practitioner. This is the
+operational origin of drift: not threadwork as such, but threadwork directed away from the harmony
+configurations tend toward.
 
 The second channel is confrontation — environmental, and not confined to practitioners (§6.8).
 
@@ -25,14 +25,15 @@ The second channel is confrontation — environmental, and not confined to pract
 
 ## §7.2 The phenomenology of drift
 
-The rendering's stabilizing tendency is not only a limit on what it can hold; it is a pull exerted on
-what it is holding. A configuration fully held is drawn toward equilibrium, maintained by continuous
-unconscious work. A practitioner at full Coherence is aligned with that pull.
+Configurations are drawn toward the futural-potential-legible (§3.4): the equilibrium in which they
+stand in harmony, needing no sustaining. A practitioner at full Coherence is aligned with that draw —
+their layer-two self-maintenance holds them in a shape that is close to one they tend toward anyway,
+so the holding is cheap.
 
-**Drift is the progressive decoupling of the practitioner's configuration from it.** As Coherence
-drops, the maintenance no longer holds the configuration in human-mode shape, and it begins to take
-other shapes — shapes the tendency does not pull back, because they were never the stable forms it was
-holding.
+**Drift is the progressive decoupling of the practitioner's configuration from that equilibrium.** As
+Coherence drops, self-maintenance no longer holds the configuration in human-mode shape, and it takes
+other shapes — shapes standing in harmony with nothing, which the tendency therefore draws nowhere.
+The further the drift, the more of the being's persistence has to be *held* rather than tended toward.
 
 **Early.** The practitioner seems slightly off — uncanny in small ways, harder to read, less
 predictable. Their presence exerts a faint dissonance on the shared rendering around them. This is not
@@ -124,8 +125,8 @@ the faculty failing.
 ## §7.5 Reality-strain
 
 A practitioner whose Coherence has failed and who has the perceptual reach to maintain themselves
-through deliberate threadwork is holding a **non-human configuration that no rendering holds**. By
-§6.6 that is manipulative by definition — held only by the being itself.
+through deliberate threadwork is holding a **configuration standing in harmony with nothing around
+it**. By §6.6 that is manipulative by definition — off the attractor, held only by the being itself.
 
 The cost channel for manipulative holding is Coherence. **But there is no layer 2 left to bear it.**
 With nothing to absorb the load into the being's own configuration, it is borne by the threads the
@@ -133,8 +134,9 @@ being draws on: its vicinity. **That is reality-strain**, and it is the external
 would otherwise have been Coherence cost.
 
 The scale differs from the Einhir lattice — one being rather than a civilization, a lifetime rather
-than generations — but the mechanism is the same: an unheld shape, held against the rendering, drawing
-the fabric taut. Sustained long enough and deep enough, it produces the conditions the Calamity
+than generations — but the mechanism is the same: a shape held against the draw of the equilibrium,
+drawing the fabric taut. Strain is the summed difference, across everything affected, between what is
+held and where the configurations tend. Sustained long enough and deep enough, it produces the conditions the Calamity
 produced: anchor-points strain, the fabric tears, incursions and gaps and failures occur in the
 strained vicinity.
 

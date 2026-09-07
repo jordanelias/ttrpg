@@ -86,7 +86,7 @@ Three collisions in the source suite, recorded because each cost something:
 | Term | Definition |
 |---|---|
 | **Threads** | Both the constitutive ground of all that is and the condition of possibility for being to be rendered. Simultaneously substrate and enabling condition; see §2.1 on what that doubleness commits the framework to. |
-| **Rendering** | The constitutive process by which the thread-substrate is given as experienceable reality; conscious apprehension is its reflective face. Has an active stratum (constitutes as world) and a passive stratum (registers without constituting as object). |
+| **Rendering** | The constitutive process by which the thread-substrate is given as experienceable reality; conscious apprehension is its reflective face. **Positional**: what is given to a being follows from how that being is imbricated, and acting alters imbrication. Has an active stratum (constitutes as world) and a passive stratum (registers without constituting as object). |
 | **Ein Sof** | The unintelligible ground: infinite positive being, epistemically inaccessible, without agency, intention, responsiveness or direction. Its fullness is inferred from the rendered side, not known. |
 | **Spooling** | The ground's continuous supply of a being's thread-substrate. Impersonal and directionless: *that* it gives is available; *how* or *why* is not. |
 | **Layer 1 / 2 / 3** | Spooling; continuous unconscious self-rendering; deliberate threadwork. A being's *layer profile* is what distinguishes kinds of being. |
@@ -94,16 +94,19 @@ Three collisions in the source suite, recorded because each cost something:
 | **Operation** | A deliberate layer-three act upon threads. Narrower than threadwork; the distinction is load-bearing. |
 | **Threadcut** | The condition of a being not continuously spooled — layer 3 only. Radically is without *spooled* becoming. Requires active maintenance. Categorically distinct from a Coherence-0 practitioner by layer profile: threadcut lacks layer 1, Coherence-0 has lost layer 2. |
 | **Coherence** | The structural integrity of layer-two self-rendering. Two facings: reflexive (self-positing as a worldly human) and outward (apprehended by others — itself a disposition plus an occurrent holding). Tridimensional by construction. Orthogonal to Thread Sensitivity. |
-| **Drift** | Progressive decoupling of a configuration from the rendering's equilibrium-tendency, indexed by Coherence, manifesting in all three dimensions. |
+| **Drift** | Progressive decoupling of a configuration from the futural-potential-legible, indexed by Coherence, manifesting in all three dimensions. |
 | **Thread Sensitivity** | Two components: access to the substrate below layer 2's threshold, and the loosening of commitment to the rendering as given. Developed by confrontation; does not enlarge the capacity to constitute surfeit. |
 | **Confrontation** | Felt encounter with what exceeds the rendering's capacity to constitute as world. The developmental mechanism for sensitivity, and one of the two channels of Coherence loss. |
 | **The Leap** | Suspension of the reflexive facing, undertaken to reach layer three. Layer 1 and the outward facing continue. |
 | **Knotting** | Binding of one thread to another, creating mutual influence. |
 | **Wrapping** | A thread's frayed edges entangling with an entity — looser, still consequential. |
-| **Operation type** | Direction of an operation's whole tridimensional movement relative to the stabilizing tendency: restorative, manipulative, destructive. Not a dimension, and not foregrounding. |
+| **Operation type** | Direction of an operation's whole tridimensional movement relative to the futural-potential-legible: restorative, manipulative, destructive. Not a dimension, and not foregrounding. |
 | **Orphaned configuration** | A present state whose causal history has been removed. Threadcut at the operational level; decays because temporal depth is accumulated holding. |
 | **Temporal Disjunction** | The gap between retained experience and altered factual history. Requires the distinction between constituting and constituted temporality. |
-| **Reality-strain** | Substrate tension produced by holding a shape no rendering holds. The externalized form of what would otherwise be Coherence cost. |
+| **Reality-strain** | Substrate tension produced by holding a configuration off the futural-potential-legible. The externalized form of what would otherwise be Coherence cost. |
+| **The futural-potential-legible** | The equilibrium configurations tend toward: the state in which they stand in harmony, needing no sustaining. *Futural* — ahead, not a return. *Potential* — not yet actual. *Legible* — renderable. A property of configuration-space, not of the ground; §1.5 is untouched. See §3.4. |
+| **Imbrication** | How a thread is bound into or separated from others. A being *is* threads, so its imbrication is its position in the weave — and what is given to it follows from that position. Acting alters it. See §3.5. |
+| **Harmony** | The relation obtaining among configurations at equilibrium: each holds its shape without being held against the others. |
 | **Apperception** | The apprehension of a subject as a unified whole. The *reflexive* facing is the practitioner's self-apperception as a worldly human; the *outward* facing is others' apperception of them as a unified human subject. |
 | **The Real** | That which escapes symbolization; the unassimilable remainder. Adopted from Lacan and redefined ontologically as plenitude rather than structurally — see §0.3 for what that pivot costs and where it is paid. |
 | **Ontical / substrate / ontological** | See §9.1. The three-way scoping replaces the source suite's two-way one. |

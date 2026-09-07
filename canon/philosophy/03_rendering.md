@@ -81,67 +81,109 @@ lower register.
   anything survives an encounter that exceeded active constitution.
 - **The bootstrap of thread sensitivity is closed.** §5.5 depends on this.
 
-## §3.4 The stabilizing tendency, and where it lives
+## §3.4 The stabilizing tendency: the futural-potential-legible
 
-The rendering privileges stable actualization: configurations with determinate structure, temporal
-depth and epistemic accessibility. This is not a value built into reality. It is a consequence of
-the rendering being a finite process operating on an infinite ground. It can process what is finite,
-determinate and temporally accumulated; it cannot process what is infinite, indeterminate, or
-radically present without becoming.
+**Configurations tend toward an equilibrium in which they stand in harmony with one another. That
+equilibrium is the futural-potential-legible, and the tendency belongs to it.**
 
-**The tendency is a fact about rendering, not about the ground.** This is stated flatly because the
-source suite located it in both places, and the operation-type taxonomy — the whole account of why
-some threadwork costs the practitioner and some does not — was built on the version that puts it in
-the ground.
+Three terms, each doing work:
 
-That version cannot stand. A spooling that "would resume," was "already moving toward," or has a
-"tendency toward coherence" is responsive to disruption, and §1.5 forbids that. Disclaiming active
-resistance is not sufficient; the objection is to directedness, not to force.
+- **Futural.** The equilibrium is *ahead*, not behind. This is a draw toward, not a return to. Nothing
+  is being restored to a prior state; configurations tend toward a harmony that has not yet obtained.
+- **Potential.** It is not actual. It is what *could* coherently come to be, given how the
+  configurations presently stand.
+- **Legible.** It is renderable. States that could never be rendered are not among those
+  configurations tend toward.
 
-And the ground-located version fails on the framework's own facts at the one place it matters most.
-§8.5 states that **new threads cannot spool through regions where the fabric's structural integrity
-is broken.** So in a Locked Zone the spooling would *never* resume the prior configuration, no
-matter how much time passed. Mending torn substrate is therefore not "what the constitutive spooling
-would do, granted sufficient time" — and by the ground-located definition, Mending a torn region
-would not count as restorative at all. The setting's central benign practice would be ungrounded
-exactly where it is most needed.
+**Harmony** is the relation at issue: a set of configurations is at equilibrium when each can hold its
+shape without being held against the others — when nothing in the set requires sustaining to persist.
 
-**The tendency, restated.** It has two faces, and both are rendered-side:
+### Why the tendency is neither the ground's nor the rendering's
 
-- **For beings:** the target's own layer-two self-maintenance (§4.1) — the continuous unconscious
-  threadwork holding a configuration in its shape.
-- **For places and configurations without layer two:** the equilibrium of the shared rendering that
-  holds them.
+**Not the ground's.** §1.5 forbids the ground agency, intention, responsiveness or direction. A
+spooling that "would resume" a prior configuration is responsive to disruption, and disclaiming
+active resistance does not help — the objection is to directedness. The futural-potential-legible is
+not a property of the ground at all. It is a property of **configuration-space**: given a set of
+configurations, some future arrangements are harmonious and reachable and most are not. Nothing
+intends this. It is the shape of what can coherently obtain.
 
-A configuration fully held by the rendering is drawn toward equilibrium; the rendering performs
-continuous, unconscious work to maintain it. This is what drift decouples from (§7.2), and what
-operation type is measured against (§6.6).
+**Not the rendering's, either — but legibility is where the two meet.** The rendering has a *capacity
+limit*: it is a finite process and can hold only what is determinate and stable (§5.2). That limit is
+real and it is a fact about rendering. But it is not the tendency. What it does is **select which
+equilibria count**: an arrangement that could never be rendered is not among the states configurations
+tend toward, because legibility is one of the three terms. So the rendering's finitude shapes the
+attractor without owning it.
 
-## §3.5 One rendering or many
+### What this settles
 
-**This is the framework's largest unanswered question, and several other answers depend on it.**
+**The Locked Zones.** Where the fabric's integrity is broken, new threads cannot spool (§8.5). On any
+account that put the tendency in the ground's spooling, Mending a torn region could not be restorative
+— spooling would never resume the prior configuration, so there would be nothing to accelerate. On
+this account the diagnosis is different and better: **what is damaged in a Locked Zone is the
+futural-potential itself.** No harmonious configuration is reachable from there. Nothing is drawn
+anywhere, because there is nowhere to be drawn to.
 
-The suite speaks of "the rendering" in the singular when it maintains configurations, and of "their
-renderings" in the plural when observers fail to integrate a drifting practitioner. It invokes
-shared reality, co-worlding and collective rendering without defining any of them. And §3.2 explains
-inter-observer agreement by appeal to a substrate each mind independently tracks — which is the
-appearance/reality picture §3.1 rejects, with threads occupying the reality slot.
+**And Mending is therefore the restoration of reachability** — making a harmonious configuration
+attainable again for a region that had none. Not acceleration of the inevitable; the re-opening of a
+future. That is a better thing for a Warden to be doing and it is what §6.6 builds the operation-type
+taxonomy on.
 
-Two answers are available and they build materially different worlds. The supplement sets out both
-(ruling R-4). The framework's own commitments lean toward the first:
+**Two faces in practice.** For a being, the nearest thing to the attractor is its own layer-two
+self-maintenance (§4.1), which is what holds it in a shape it can sustain. For a place, it is the
+harmony of the configurations composing it. Both are approaches to the same equilibrium, not two
+different tendencies.
 
-**Co-constitution.** The shared world is constituted *through* the community of renderings; each
-subject apprehends others as themselves rendering, and objectivity is what holds across that
-apprehension. On this reading "collective rendering" has a definite meaning, Coherence's outward
-facing is genuinely constitutive rather than merely evidential, and §4.3's claim that Coherence is
-*structurally intersubjective* is literally true: a practitioner losing their outward facing is the
-community failing to constitute them as human. It also explains, without appeal to a hidden
-substrate, why non-sensitive observers see the healing.
+*(Ruled 2026-09-07. Two prior formulations are retired: locating the tendency in the ground's
+spooling, which §1.5 forbids and which fails in Locked Zones; and locating it in the rendering, which
+survives only as the capacity limit above.)*
 
-**Realism about threads.** Threads exist determinately regardless of any rendering; each mind
-apprehends them more or less well. This is simpler and it costs §3.1: the denial that rendering is
-an overlay on an independent world has to go, and constitution/experience reverts to
-reality/perception.
+## §3.5 Rendering is positional: constitution through imbrication
 
-Until this is ruled, three things remain undefined: what a hermit's outward-facing Coherence is,
-what "shared reality" names, and whether drift propagates to people who are not present.
+**Threads are real, and their reality is unfixed.** It shifts as they become imbricated with, or
+separated from, other threads. There is no static thread-state that a rendering is a rendering *of*.
+
+**A person is threads.** So a person is not a viewpoint onto the weave, situated outside it and
+looking in. They are a position *within* it, and that position is constituted by how they have become
+tied in.
+
+**Therefore: acting determines imbrication, and imbrication determines perceiving.** One acts within
+the world; acting binds and separates threads; how one is bound is what one is; and what one is
+determines what is given. Perception is positional, not spectatorial.
+
+### What this dissolves
+
+The framework appeared to face a dilemma. Either rendering is a subjective overlay on an independent
+objective world — which §3.1 denies — or inter-observer agreement has to be explained by a substrate
+each mind separately tracks, which reinstates the appearance/reality split under another name.
+
+**Both horns assume a fixity the ontology denies.** They picture reality as a factual static state
+that minds perceive more or less well. Here it is not static: it is a weave whose configuration
+changes as beings act within it, and beings *are* part of what changes.
+
+So:
+
+- **Agreement needs no shared static substrate.** Two beings render alike to the extent their
+  imbrications overlap. Shared reality is the region of overlapping imbrication — which is what
+  "co-worlding" names, and what makes it a genuine achievement rather than a coincidence.
+- **Disagreement is not error.** Two beings imbricated differently are tied into a differently-shaped
+  reality. Neither is failing to perceive correctly. This is why a drifting practitioner can be
+  *apperceived differently by different observers* — not in opinion, but in what was perceived — and
+  why that is a fact about the world rather than a failure of witness.
+- **The non-sensitive observer sees the healing** because the threads they are imbricated with have
+  moved. No independent substrate is required, and no separate tracking.
+- **What a thread is when nobody renders it** (§2.2's open question): real, and *unfixed* — its reality
+  being its imbrication with other threads at that moment. It is not waiting in a determinate state to
+  be found.
+
+### The loop this creates, and it is deliberate
+
+Rendering moves threads (§4.2). Moved threads change imbrication. Changed imbrication changes what is
+rendered. **A being's perceiving alters the position from which it perceives.**
+
+This is why thread sensitivity can be *developed* by acting rather than merely learned, why the
+epistemic barrier (§5.6) is not stupidity, and why exposure to a drifting practitioner is bivalent
+(§7.3): being imbricated with an altered configuration alters you, and what that alteration produces
+depends on what you are already tied into.
+
+*(Ruled 2026-09-07. This replaces the co-constitution / realism dichotomy the suite previously posed,
+which mischaracterized realism as a static factual state.)*

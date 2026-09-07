@@ -145,7 +145,9 @@ redefinition** (the debt — explaining resistance — is paid by the finitude a
 
 Each is a live choice where two defensible options lead to materially different frameworks.
 
-**R-1. The Calamity's mechanism.** *Contradictory; unresolved.*
+**R-1. The Calamity's mechanism.** ✅ **RULED 2026-09-07 — tensile, holding-against, with cascade.**
+The Einhir held a precarious balance; when it broke, every configuration associated broke, because
+none stood at its own equilibrium. Named *the Calamity*. See `RULINGS.md`. Superseded text follows.
 The two source accounts put the cause on different sides of the boundary and cannot be edited into
 agreement.
 - **(A) Tensile.** Strain exceeds a limit; no event, no operator error. The Calamity is a consequence of
@@ -162,7 +164,9 @@ agreement.
   aligned with what rendering held could not have strained anything.
 - *§8.1 provisionally states (A) on the holding-against reading, and names the event the Calamity.*
 
-**R-2. Where the tendency lives.** *Provisionally resolved; confirm.*
+**R-2. Where the tendency lives.** ✅ **RULED 2026-09-07 — neither option.** The tendency belongs to
+the *futural-potential-legible*: the equilibrium in which configurations stand in harmony. A property
+of configuration-space, not of the ground or the rendering. See `RULINGS.md`. Superseded text follows.
 - **(A) In the ground's spooling.** Gives the taxonomy cosmic backing. *Costs:* the ground acquires a
   direction, which §1.5 forbids; and it fails in Locked Zones.
 - **(B) In the rendering.** §1.5 safe; Mending re-describes cleanly. *Costs:* "restorative" then depends
@@ -175,7 +179,10 @@ derivation at §6.8 yields **neither**: risk is environment × duration, plus ty
 vulnerability window is real *and* Mending in a quiet place is genuinely free. Confirm you want this
 rather than one of the flat answers.
 
-**R-4. One rendering or many.** *Under-specified; the largest open question.*
+**R-4. One rendering or many.** ✅ **RULED 2026-09-07 — the dichotomy was rejected.** Rendering is
+*positional*: threads are real and unfixed, a being is threads, and acting determines imbrication
+which determines perceiving. Agreement is overlapping imbrication. See `RULINGS.md`. Superseded text
+follows.
 - **(A) Co-constitution.** The shared world is made by the community of renderings. Coherence's outward
   facing becomes genuinely constitutive; "collective rendering" acquires a definition; a person unrendered
   by others is at structural risk. Strange, strong, and consistent with the intersubjectivity claim.

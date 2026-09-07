@@ -4,22 +4,18 @@ Append-only. Each entry records the ruling in the author's own terms, what it ch
 
 ---
 
-> ## ⚠ STATUS: UNCONFIRMED — NOT APPLIED
+> ## ✅ STATUS: CONFIRMED BY THE AUTHOR AND APPLIED (2026-09-07)
 >
-> The batch-1 entries below record four answers that came back through the question prompt on
-> 2026-09-07. **The author has since said he did not answer them.** Until he confirms the wording is
-> his, nothing here has been applied to the suite: §3.4, §3.5, §6.6 and §8.1 are unchanged, and the
-> corresponding items in `DECISIONS.md` remain open.
->
-> This file is committed as a record of what was received, not as a record of what was decided. If
-> the rulings are disowned, delete this file and re-ask.
+> Confirmed verbatim: *"those are mine, apply them and continue."* All four are applied to the suite.
+> Two of them — D-1 and D-2 — rejected the options as posed and replaced them; the framings they
+> displaced are recorded below so the reasoning survives.
 
 ---
 
-## 2026-09-07 — Batch 1: the foundational cluster  ·  **UNCONFIRMED**
+## 2026-09-07 — Batch 1: the foundational cluster  ·  **APPLIED**
 
 ### D-0 — Co-movement is general
-**Recorded as: general.** "To move one is, necessarily and inescapably, to move all" holds for **any**
+**Ruled: general.** "To move one is, necessarily and inescapably, to move all" holds for **any**
 movement of a thread by any process, not only for deliberate practitioner manipulation — as the
 source text itself says, calling it a fact about the nature of threads.
 
@@ -53,7 +49,7 @@ the ontology denies. The dichotomy was false.
 - Therefore agreement between observers needs no shared static substrate and no appearance/reality
   split. Two beings render alike to the extent their imbrications overlap.
 
-*Would apply at:* §3.5, §2.2, §4.3, §4.6, §7.3. **Not applied.**
+*Applied at:* §3.5 (rewritten), §2.2 (answered), §9.3 (vocabulary).
 
 ### D-2 — Neither option; the tendency is futural
 
@@ -80,11 +76,11 @@ intends, responds, or acts.
 no harmonious configuration is reachable — so nothing is drawn anywhere. Mending is the restoration
 of reachability.
 
-*Would apply at:* §3.4, §6.6, §7.1, §7.2, §7.5, §8.1, §8.5. **Not applied.**
+*Applied at:* §3.4 (rewritten), §6.6 (taxonomy rebuilt), §7.1, §7.2, §7.5, §8.1, §9.3.
 
 ### D-3 — Tensile, holding-against, with cascade
 
-**Recorded as: tensile.** The author's gloss:
+**Ruled: tensile.** The author's gloss:
 
 > "The precarious balance of configurations at some point broke in such a manner that all
 > configurations associated broke"
@@ -98,4 +94,4 @@ When the balance broke, everything associated with it broke, because those confi
 *Required edit, accepted:* "in pursuit of ever-greater coherence" becomes a refinement the
 configurations of their time did not tend toward.
 *Name:* **the Calamity**, throughout. The *Catastrophe* usage is retired.
-*Would apply at:* §8.1, §8.4, §7.5. **Not applied.**
+*Applied at:* §8.1 (rewritten), §7.5.

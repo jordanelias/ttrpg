@@ -12,42 +12,49 @@ a high-reach Coherence-0 being sustains (§7.5). What follows from the mechanism
 
 ## §8.1 The Calamity
 
-⚠ **This section states one mechanism where the source suite carried two, and the choice between them
-is the author's, not this document's.** What follows is the reconciliation the framework's own
-derivations support; the alternatives and their costs are in the supplement at ruling R-1. One
-terminological decision is made unilaterally and can be reversed with a find-and-replace: the event is
-called **the Calamity** throughout. The source suite called it that in one document and the
-*Catastrophe* in another, and two names for one event is precisely the failure the framework's own
-vocabulary discipline warns against.
+**Ruled 2026-09-07: tensile, on the holding-against reading.** The event is named **the Calamity**
+throughout; the *Catastrophe* usage is retired. The alternative account — a single working whose
+directional vector inverted mid-execution — is not canon.
 
-**The mechanism: holding against.**
+### The mechanism
 
-The Einhir's sustained precision Weaving over generations did not organize the ground — that would
+The Einhir's sustained precision Weaving over generations did not organize the ground; that would
 attribute responsiveness to it, which §1.5 forbids. The mechanism is entirely on the rendered side.
 
-Threads are both substrate and condition of possibility. Drawing on them with increasing precision and
-density draws the fabric taut from one side. The **anchors** — the points at which threads are
-continuous between the intelligible and the unintelligible — bear increasing tension.
+They held **a precarious balance**. Their configurations stood in a harmony that was not the harmony
+those configurations tended toward — an arrangement of extraordinary refinement that could obtain only
+while it was actively sustained. Every generation of the site-network inherited the holding and
+extended it.
 
-**What produces strain is not use of the substrate but *holding against* it**: the summed difference,
-across the lattice, between what practitioners hold and what the collective rendering holds. This
-matters, and it is a correction to the source suite's wording. The suite said the Einhir drew the
-fabric tighter "in pursuit of ever-greater coherence and civilizational refinement" — but if their
-working had been aligned with what rendering held, it could not have strained anything. **They were
-holding, at foundational scale and for generations, a refinement the rendering of their time could not
-hold.** That is what strains.
+**What strains is not use of the substrate but holding against the draw of the equilibrium**: the
+summed difference, across the whole lattice, between what the Einhir held and where the configurations
+themselves tended. The anchors — the points at which threads are continuous between the intelligible
+and the unintelligible — bear that difference.
+
+*(This is why the source wording "in pursuit of ever-greater coherence" had to change. A working
+directed toward the harmony the configurations were tending toward could not have strained anything;
+it would have been restorative by definition. What the Einhir pursued was a refinement their
+configurations did not tend toward, and that is precisely why holding it cost what it cost.)*
 
 The structural limits of the substrate were eventually exceeded and the fabric tore at the anchor
 points. This is not a metaphor; it is the mechanics of what occurred.
 
-*(What this reconciliation costs: the source suite's second account had a specific coordinated working
-**invert** during execution, its directional vector flipping and releasing everything the network had
-accumulated. That version makes the Calamity an event with an operator error rather than a consequence
-of scale, and it introduces a potential/actuality axis the foundations never define. It cannot simply
-be merged with the tensile account, because the two put the cause on different sides. The available
-compromise is to phase them — strain as the precondition, inversion as the trigger — and if that is
-taken, the claim that a Coherence-0 being's strain is "identical in mechanism" to the Calamity must
-weaken to "identical in precondition." Ruling R-1.)*
+### Why it took everything with it
+
+**The balance did not break in one place. It broke as a balance.**
+
+Because the arrangement was held rather than tended toward, its parts were not each standing at their
+own equilibrium — they were standing *in the balance*, and in nothing else. Each configuration's
+persistence depended on the others being held in their positions.
+
+So when the balance broke, **every configuration associated with it broke**. Not by propagation from a
+first failure outward, but because what failed was the thing that had been holding all of them at once.
+A configuration held only by a balance has nowhere to fall back to when the balance goes; there is no
+equilibrium it was independently near.
+
+This is what distinguishes the Calamity from ordinary structural damage, and it is why §8.4's cascade
+runs as far as it does: the lattice was not a network of stable things connected to each other, but a
+single sustained arrangement that had been mistaken for one.
 
 ## §8.2 What came through
 
