@@ -91,10 +91,17 @@ from .trace_log import TRACE
 # bare use of these names further down this file keeps resolving, and so `S.<name>` keeps
 # resolving for the harness and tests: this is a re-export, not a second definition.
 #
-# TWO THINGS STAYED, BOTH ADJUDICATED AT THE MOVE: `MATRIX_REFUSAL_LAW` (below) stays with its
-# only reader, the gate in `World` -- it is a loop over a fix, not a definition, and moving it
-# would invite editing it as one. `rows_without_a_producer` (below) stays because it reads
-# `VERB_TABLE`, which has not moved yet (`season.data`'s verb table is step 3).
+# TWO THINGS STAYED AT STEP 2, BOTH ADJUDICATED AT THAT MOVE, AND BOTH HAVE SINCE LEFT -- the
+# sentence is kept in its corrected form because BOTH RULINGS STILL HOLD; only the addresses
+# moved. `MATRIX_REFUSAL_LAW` goes WITH ITS ONLY READER, the gate in `World`, and is therefore in
+# `season.state.world` since step 4; it is a loop over a fix, not a definition, and filing it with
+# the matrix would invite editing it as one. `rows_without_a_producer` goes WITH `VERB_TABLE`,
+# which it reads, and is therefore in `season.data.verbs` since step 3.
+#
+# ⚠ THIS PARAGRAPH SAID "STAYS ... IN `shape.py`" AND WENT FALSE WITHOUT ANYTHING CHANGING ITS
+# MIND, TWICE -- at step 3 and again at step 4, the second time in the same commit that moved the
+# thing. Nothing catches it: the file still exists and every gate stays green. WRITE THE RULE, NOT
+# THE ADDRESS. A ruling recorded as a location is a claim that expires silently at the next move.
 # ===========================================================================
 
 from .data.matrix import (  # noqa: F401 -- re-exported so `S.<name>` and every bare use resolve

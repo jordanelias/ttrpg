@@ -1459,7 +1459,7 @@ rows:
     tier:      1
     kind:      "SCHEMA_COLUMN"
     hole:      "`Event.subject` EXISTS AND CARRIES TWO DIFFERENT THINGS. The meta-architecture refuses the field outright -- *no actor, no target, no subject on Event; the fields do not exist* -- and grades that STRUCTURAL. Here it is declared, and what it holds depends on who emitted: `World.write` sets it to THE CHANGED THING, the fold sets it to `a.actor`. One column, two meanings, and the second is the one `T-d` forbids"
-    owner:     "shape.py -- `Event`, `World.write`, the fold's `ev()`"
+    owner:     "state/carriers.py -- `Event`; state/world.py -- `World.write`; shape.py -- the fold's `ev()` (step 4 split the three homes; verified by `Event.__module__` and the defining `def`, not by grep)"
     grade:     "absent"
     default:   "none"
     site:      ""
@@ -1471,7 +1471,7 @@ rows:
     tier:      0
     kind:      "SCHEMA_COLUMN"
     hole:      "`Act` CARRIES NO `via : SeatId?`, SO AUTHORITY IS READ OFF THE ACTOR AND DELEGATION IS UNBUILDABLE HERE. The meta-architecture's rule is that authority is a property of the SEAT being exercised, never of the person exercising it, and its mechanism is one field: `Act.via`, with every purview walk going through `via.scope`. `_req_revoke` instead reads the ACTOR's own purview, holdings and title rank"
-    owner:     "shape.py -- `Act`, `_req_revoke`, `under_purview`"
+    owner:     "state/carriers.py -- `Act`; shape.py -- `_req_revoke`, `under_purview` (step 4)"
     grade:     "absent"
     default:   "none"
     site:      ""
@@ -1522,10 +1522,10 @@ rows:
     kind:      "LOOP"
     sign:      "+"
     hole:      "WITNESS'S OWN EMISSIONS RE-WITNESSED. A deposit emits `claim.deposited`; if that emission reaches the fan-out it is witnessed; the deposits from THAT mint further emissions. It is a second amplifying loop, distinct from `H-102` -- that one runs through a PERSON deciding, and this one closes entirely inside the machinery with nobody acting"
-    owner:     "shape.py -- `World.write`'s `_emitted_by_write` buffer and `matter()`'s drain"
+    owner:     "state/world.py -- `World.write`'s `_emitted_by_write` buffer; shape.py -- `matter()`'s drain (step 4)"
     grade:     "measured"
     default:   "BOUNDED BY A SCOPE DECISION IN ONE LINE OF CODE: the buffer is filled ONLY at MATTER (`if step is Step.MATTER`), and `claim.deposited` is a WITNESS-step emission, so it never enters the buffer and is never re-fanned. ⚠ THE BOUND IS A COMMENT AND AN `if`, WHICH IS THE WEAKEST FORM `§G.3.1` RANKS -- and H-104's own cite states the cost: a bound nobody has written down is one the next session may remove without knowing what it was holding. It is written down here"
-    site:      "shape.py `World.write` (the MATTER-only buffer append); shape.py `matter()` (the drain)"
+    site:      "state/world.py `World.write` (the MATTER-only buffer append); shape.py `matter()` (the drain)"
     sweep:     []
     unblocks:  "nothing -- it is a bound, and the row exists so the bound survives the next edit"
     cite:      "MEASURED BEFORE THE GUARD EXISTED AND RECORDED IN THE CODE THAT ADDED IT: `claim.deposited` reached 249 in a TWO-SEASON run and was ACCELERATING. That is an amplifying loop with executable evidence, and it had no register row until an audit read `World.write` instead of the register -- which is `H-106` demonstrated rather than argued: a gate that validates every declared loop cannot see one nobody declared. REPRODUCE: remove the `if step is Step.MATTER` guard on the buffer append, run two seasons, count `claim.deposited`. ⚠ DO NOT BUILD A TEST FOR IT -- the guard is one line and a test would guard the guard, which is the `§0.1` point 5 predicate refusing itself"
@@ -1995,7 +1995,7 @@ rows:
       load-bearing control in #362's body as the byte-identical corpus_run output, therefore
       pins that the EVENT STREAM replays identically and NOT that the world state does. A state
       divergence leaving the log identical is invisible to it. A second blindness one field
-      deeper - `StateChange.delta` is `None` for every act-driven write (engine/season/shape.py::StateChange default,
+      deeper - `StateChange.delta` is `None` for every act-driven write (engine/season/state/carriers.py::StateChange default,
       engine/season/shape.py::_apply_write four-positional construction), and `content_hash` folds `c.delta`, so two runs writing
       DIFFERENT VALUES to the same field also hash identically.
     kind:      "SCHEMA_COLUMN"

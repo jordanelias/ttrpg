@@ -6,10 +6,11 @@ read-only tenure concatenation `_TenureView`, the per-entity digest `_entity_dig
 `from ..shape import World` and `S.World` keep resolving exactly as before.
 
 ⚠ `MATRIX_REFUSAL_LAW` TRAVELS WITH ITS READER, NOT WITH THE MATRIX. It is a table and it looks
-like data, and `data/matrix.py`'s own docstring records the adjudication at step 2: it stays with
-`World.write`, its only reader. `data/matrix.py` says *"stays in `shape.py`"* because that is where
-the reader was when step 2 ran; the reader has moved and the table has moved with it, which is the
-same ruling and not a new one. What makes it not-data is what it holds: a cell's `("no")` here
+like data, and `data/matrix.py`'s own docstring records the adjudication at step 2: it goes with
+`World.write`, its only reader. That docstring used to state the ruling as an ADDRESS -- *"stays in
+`shape.py`"* -- which named where the reader happened to be, and went false the moment the reader
+moved; it now states the ruling. The table's home followed the gate here, which is the same ruling
+applied, not a new one. What makes it not-data is what it holds: a cell's `("no")` here
 carries the NAME OF THE LAW REFUSING (`S3-L4`, `S24`, `S9.3`, `S20`, `S30`), so that the gate can
 log a refusal as *the design saying no* rather than as bookkeeping. The matrix says which cells are
 closed; this says on whose authority.

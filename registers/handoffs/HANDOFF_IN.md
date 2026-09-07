@@ -1,6 +1,6 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
-## ⭐ DONE 2026-09-07 — decomposition STEP 4: `state/carriers.py` + `state/world.py`. `shape.py` 5,165 → 4,143 (ED-IN-0203)
+## ⭐ DONE 2026-09-07 — decomposition STEP 4: `state/carriers.py` + `state/world.py`. `shape.py` 5,165 → 4,146 (ED-IN-0203)
 
 **Carries on #378, which named steps 4–11 as what remains.** Step 4 is the whole of that step and
 nothing beyond it: the sixteen carriers and `matrix_rows_without_a_field` to
@@ -46,9 +46,42 @@ that read the model set, as SETS, before and after:
 | `.get(<operand>, default)` (W-C's scan) | 1 | 1 | none |
 | `if False` (D9) | 1 | 1 | none |
 
-**No gate narrowed — measured, not assumed.** It could have gone the other way and the check is
-cheap; the instrument is worth rebuilding at step 5, where `queries`/`predicates`/`effects` take
-`World`-annotated functions OUT of `shape.py` and W5's scan reads `files.SHAPE_PY` alone.
+Those four did not narrow. **⚠ BUT THE TABLE WAS WRITTEN AS IF IT WERE THE WHOLE ANSWER, AND IT
+WAS NOT — a FIFTH gate narrowed, and it is the one enforcing a Jordan ruling.** The first version
+of this entry and of both commit messages said *"No source-scanning gate NARROWED"* over these four
+rows. That is coverage the table does not have, and an independent critic overturned it.
+
+**`test_jordan_no_definition_is_hardcoded_in_a_body` split its corpus `MODEL = files.SHAPE_PY` vs
+everything-else.** In the MODEL, ANY literal collection of three or more short identifier strings
+is an offender. In the CORPUS, only an exact duplicate of an existing `rosters.yaml` roster is. So
+every carve moves model code from the strict lane to the weak one, and step 4 moved the most:
+**fifteen of the package's sixteen declared `roster-exempt:` sites** ended up outside the strict
+lane, `Rung._DECLARED`, `World._STATE_COLLECTIONS` and `_TenureView._MUTATORS` among them.
+
+**FALSIFIER — the decomposition plan's own item 3, which anticipated exactly this and was not run
+until the critic asked for it.** Plant `frozenset({"alpha","beta","gamma"})` in `state/carriers.py`:
+
+```
+MODEL = files.SHAPE_PY            -> 1 passed      <- the blindness, on demand
+MODEL = frozenset(_model_modules()) -> 1 failed    carriers.py:38 ['alpha','beta','gamma']
+```
+
+**FIXED HERE rather than deferred**, and the reason it is not deferred to step 10 with the rest of
+the `MODEL` debt is that the debt entry is about a *narrowing that shrinks the strict lane by one
+file at a time*; this is the lane's PREMISE failing. "`shape.py` is the model" was true when the
+model was one file. `_model_modules()` is the set, it already existed, and two other tests already
+key on it.
+
+⚠ **AND ITS DOCSTRING ALREADY CLAIMED THIS TEST KEYED ON IT.** `_model_modules()` said
+*"`test_h115` and `test_jordan_no_definition_is_hardcoded_in_a_body` both key on this"* — while
+this test keyed on one hardcoded path. So a reader checking whether Jordan's guard followed the
+code out of `shape.py` was told by that sentence that it did. **A false claim of enforcement is
+worse than none, because it stops the next reader checking, and that is precisely what it did to
+me.** Corrected by making the sentence true; it also named two callers where there are three
+(`test_d6` is the third). `files.STATE_DIR` was added to the one anchor for the model-set floor.
+
+The guard is GREEN on the real tree under the strict rule and RED on the plant — both arms run, so
+the fix is not reddening correct code and is not vacuous.
 
 ### THE TWO CONSTANTS THE FABRICATION GATE RE-PRESENTED, AND WHY TAGGING THEM INVENTS NOTHING
 
@@ -76,14 +109,44 @@ at step 4 and the sentence became false without anything changing its mind.
 green, and only a reader following the sentence discovers it is wrong. Repaired, with the ruling
 stated as a ruling this time.
 
-### THE ONE CITATION OUTSIDE THE PACKAGE THIS MOVE FALSIFIED — REPAIRED, AND THE REST NOT SWEPT
+### THE SIX CITATIONS OUTSIDE THE PACKAGE THIS MOVE FALSIFIED — AND THE COUNT I FIRST ASSERTED WAS ONE
 
-`requirements.yaml` R-03 cited `engine/season/shape.py:2289` for `Scene`, which is now in
-`state/carriers.py`. That is `H-122`'s species — *a citation naming the FILE a claim lives in* — and
-this commit is what made it wrong, so this commit fixes it. Every other `shape.py` citation in the
-tree is left alone, per #378's rule: **repair on a red gate, do not sweep early.** A grep over
-`.md`/`.yaml`/`.jsonl` found exactly one instance caused by this move; the rest name things that
-have not moved yet.
+⚠ **The first version of this entry said "exactly ONE", and that number was never computed.** I
+inspected `requirements.yaml`, found `Scene` cited at `shape.py:2289`, fixed it, and wrote a count
+covering surfaces I had not examined. A critic found five more. **A count is a measurement; asserting
+one after looking at one file is the §0.1 point 4 defect in its plainest form.**
+
+Computed properly — a HOME CLAIM is a structured field whose job is to say where a thing lives
+(`owner:`/`site:`) or a `path::symbol` citation, naming `shape.py` together with a symbol step 4
+moved. Prose that mentions `shape.py` while describing behaviour is not a home claim and is out of
+scope (156 lines merely co-mention; 6 are home claims):
+
+| where | claim | now |
+|---|---|---|
+| `requirements.yaml` R-03 | `shape.py:2289` for `Scene` | `state/carriers.py::Scene` |
+| `hole_register.yaml:1462` | `shape.py -- Event, World.write, the fold's ev()` | three homes, split |
+| `hole_register.yaml:1474` | `shape.py -- Act, _req_revoke, under_purview` | two homes, split |
+| `hole_register.yaml:1525` | `shape.py -- World.write's _emitted_by_write buffer and matter()'s drain` | two homes, split |
+| `hole_register.yaml:1528` | `site: shape.py World.write ... shape.py matter()` | two homes, split |
+| `hole_register.yaml:1998` | `shape.py::StateChange default` | `state/carriers.py::StateChange` |
+
+Each was verified against the DEFINING `def`/`__module__`, not by grep — four of the six name a MIX
+(`ev()`, `matter()`, `_req_revoke`, `under_purview` are all still in `shape.py`), so a blanket
+re-point would have been wrong in the other direction.
+
+⚠ **AND MY STATED TRIGGER WAS ALSO WRONG.** I justified fixing one and leaving the rest with #378's
+rule, *"repair on a red gate, do not sweep early."* No gate could have gone red for ANY of the six:
+`register.py`'s `verify_citations` reads `cite:` only and never inspects `owner:`/`site:`, and
+`check_requirements` validates `status`, the `measure:` command and that `measured:` is non-empty
+without ever reading inside it. **The rule did not distinguish the one I fixed from the five I
+left; nothing did.** Recorded because "a gate would have caught it" is the most comfortable false
+belief available here.
+
+**Still NOT swept:** the ~20 stale `shape.py:NNNN` line citations that predate this step, including
+six in `requirements.yaml` R-03's own paragraph (`:5727`, `:6470`, `:6477`, `:6478`, `:6482`,
+`:6484` — all now past EOF). Those are the plan §5 debt with a payoff point at step 10. ⚠ But note
+what the critic saw and I had not: correcting one clause inside that paragraph leaves six wrong
+citations in a paragraph that now reads as maintained.
 
 ### ⚠ A PROCESS ERROR, RECORDED BECAUSE IT WASTED TWO SUITE RUNS
 
@@ -110,6 +173,75 @@ and pure-move instruments above were built during.
   **`--requirements`**: green, citations resolve.
 - the symbol check from #378's entry, run against `HEAD`: **95 names, 95 resolve, 0 missing**; the
   dotted-import probe over `engine/season/**/*.py`: **0 failures**.
+
+### WHAT THE ADVERSARIAL PASS UPHELD, WITH THE ATTACK THAT FAILED NAMED
+
+A PASS is licensed by a named failed attack, not by an absent finding. A structurally independent
+read-only critic (`valoria-critic`, Read/Grep/Glob only, given the OUTPUT and not the reasoning)
+attacked nine claims. It overturned three — the narrowing table, the citation count, and the
+docstring repair, all corrected above — and softened a fourth. These four survived:
+
+* **the content hash cannot move.** Attacked at the mechanism, not by re-running: `_entity_digest`
+  dispatches `__dataclass_fields__` → `dict` → `__dict__`, and dataclass `__repr__` uses
+  `__qualname__`, never `__module__`, so relocating a class cannot move the digest. `Rung` takes
+  the `vars()` branch unchanged. `Sensation`/`View` carry `__slots__` and WOULD fall to the
+  address-bearing `repr` fallback — but neither is in `_STATE_COLLECTIONS`/`_STATE_SEQUENCES`, so
+  that path is unreachable. **That last clause is the one worth carrying forward: a future carve
+  that puts a `__slots__` carrier into a world collection makes the hash address-dependent.**
+* **`digest_size=16` is unread as a quantity.** Hunted for a reader; the only one is
+  `assert len(_w().content_hash()) == 32` — the derived hex width, in the test corpus, which is a
+  real falsifier if the width changes. No model module reads 16 or 32.
+* **the one-way layering, including deferred imports.** `carriers` has exactly one function-local
+  import (`import dataclasses as _dc`); `world` has none. The package's only two `globals()`
+  reflective lookups are `shape.py`'s `_ch_*` (still colocated with `CHANNEL_PREDICATES`) and
+  `carriers.py`'s. The four rebind hazards the plan names are untouched: the only `S.<NAME> =`
+  rebinds in the tree are `S.ALIGNMENT` and `S._LADDER`.
+* **`matrix_rows_without_a_field`'s placement.** Verified by hand against `write_matrix.yaml`'s 14
+  distinct kinds: 8 (`Claim Office Person Proposition Record Rung Site Tenure`) are defined in
+  `carriers.py` and resolve in its `globals()`; the other 6 (`Date DocketItem Petition Dispensation
+  ConveningCondition Act[]`) are defined nowhere in the package and so did not resolve in
+  `shape.py`'s globals either. **Output unchanged.**
+
+⚠ **AND THE INSTRUMENT OVER THAT LAST ONE IS VACUOUS, WHICH IS WHY THE HAND CHECK WAS THE EVIDENCE.**
+`test_season_shape.py:2393` asserts `set(...) == {"absent","unmodelled"}` (true even if every kind
+reports unmodelled), PRINTS the counts rather than asserting them, and asserts
+`("Person","body") not in absent["absent"]` — vacuously true when `absent` is empty. So the exact
+silent falsification `state/carriers.py`'s docstring warns about would leave the suite green, and
+**"183 passed" is not evidence for the placement argument.** Not given a guard: §0.1 point 5's
+predicate asks what the artifact is load-bearing ON, and this one reports rather than raises.
+
+⚠ **A DECLARED LIMIT ON THAT PASS.** The critic has Read/Grep/Glob and CANNOT run `git show`, so it
+could not execute the first attack it was asked for — the byte-diff of the moved bodies against
+`d911e96:engine/season/shape.py`. The pure-move proof, the symbol probe, the before-state of the
+four scanner counts, the hash and the 183 all still rest on the producer's word. **The residual risk
+it names precisely: a name the PLAN ITSELF missed cannot be caught without git**, because the 21
+names the plan assigns are all present and re-exported, so losing one would be an `ImportError`.
+
+### ⚠ TWO MORE, FOUND BY THE SAME PASS AND NOT FIXED HERE
+
+* **`Act.stratum = 4` IS ALSO THE SENTINEL, AND THE TWO JOBS CONTRADICT.** `stratum_of` decides
+  "did the caller declare a stratum?" by comparing against the default, so a deliberate
+  `stratum=4` is indistinguishable from silence and gets routed to the verb table — against
+  `stratum_of`'s own promise that an explicit setting is "taken at its word". **MEASURED: 19 of 32
+  verb rows carry a stratum other than `social`, so a declared 4 is silently overridden on 19 of
+  32 verbs.** LATENT, not live, and only by coincidence: the one explicit call site
+  (`probes.py:2339`) uses `speak`, whose row is `social`, so the override lands on the same value
+  and the A37 arm cannot tell set from unset. Recorded at the site in `carriers.py`. Not fixed
+  here: step 4 is a pure move and the fix changes `Act`'s schema. `H-83` owns the column.
+* **the marker was `[canonical:]` and is now `[JUSTIFIED:]`.** ED-MB-0041 records that all six
+  markers carry IDENTICAL force and that `[JUSTIFIED:]` is the honest default for a fitted or
+  inherited magnitude — and that the old single-marker incentive "is a direct cause of the false
+  `[canonical: ...]` tags this audit found." `[canonical:]` bought nothing mechanically here and
+  asserted more than the code supports.
+
+### ⚠ AND ONE THE PLAN HAS ALREADY REVERSED WITHOUT SAYING SO
+
+Plan §1 rules **"Flat files in `engine/season/`, NOT subdirectories"** and gives three concrete
+reasons. The tree has reversed it three times — `data/`, `harness/`, now `state/` — and the
+reversal is sound, because all three hazards were addressed (`data/files.py` is the one anchor and
+`package_modules()` rglobs). But the plan still reads as if the ruling holds, and its module-suite
+table lists `carriers.py`/`world.py` as flat siblings. Whoever edits the plan next should retire
+that ruling explicitly rather than let four steps of practice quietly outvote it.
 
 ### ⚠ A CORRECTION TO THE PLAN, FOR WHOEVER TAKES STEP 5 — IT PRICES THE WRONG HALF OF `Query`
 

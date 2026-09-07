@@ -313,7 +313,18 @@ class Act:
     payload: Any = None
     # S27's five strata. 4 == "social", the stratum most acts in this corpus belong to; the
     # value is declared rather than silent, and A37 exercises the ordering.
-    # [canonical: engine/season/rosters.yaml `strata` -- #353 §27, the five strata in canonical resolution order; `social` is index 4 of that list]
+    # ⚠ THIS DEFAULT IS ALSO THE SENTINEL, AND THE TWO JOBS CONTRADICT EACH OTHER. `stratum_of`
+    # decides "did the caller declare a stratum?" by comparing against THIS VALUE
+    # (`a.stratum != Act.__dataclass_fields__["stratum"].default`), so an act that deliberately
+    # declares `stratum=4` is indistinguishable from one that declared nothing and is routed to
+    # the verb table instead -- against `stratum_of`'s own promise that "a caller that sets it
+    # explicitly is taken at its word". MEASURED: 19 of the 32 verb-table rows carry a stratum
+    # other than `social`, so a declared 4 would be silently overridden on 19 of 32 verbs.
+    # LATENT, NOT LIVE, and only by coincidence: the sole explicit call site is
+    # `probes.py:2339`, verb `speak`, whose row is `social` -- so the override lands on the same
+    # value and the A37 arm cannot tell "set" from "unset". Found by the step-4 adversarial pass.
+    # NOT fixed here: step 4 is a pure move, and the fix changes `Act`'s schema.
+    # [JUSTIFIED: an INDEX into the `strata` roster (#353 §27), inherited -- `social` is index 4 and `stratum_of` returns `STRATA.index(row.stratum)`. NOT `[canonical:]`: this 4 is also the "caller declared nothing" sentinel `stratum_of` tests against, so it is a fitted default doing two jobs, not a ratified value -- see the ⚠ below]
     stratum: int = 4
     # ⚠ S27.4 refuses an attempt at Ob > 2 x Pool and routes an UNCONTESTED attempt to A GATE,
     # "never to an Ob = 0 roll". `None` means UNCONTESTED (no obstacle was declared); 0 would
