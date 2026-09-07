@@ -192,7 +192,11 @@ lane_ids:
     # recommendation. next_free bumped 12->13.
     FI: { name: "Field investigation", next_free: 9 }   # no reservation held; allocate at next_free as normal. Narrative: id_reservations_history.md#fi
     # ED-FI-0003 allocated 2026-07-07 (status open): ed_options OPT-6 (knots propagation completion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
-    SC: { name: "Social contest",      next_free: 36 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    SC: { name: "Social contest",      next_free: 37 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    # ED-SC-0036 allocated 2026-09-07 (status open, NOT needs_jordan): the stress suite run against
+    # the proceedings subsystem -- 38 executable tests, 23 inventions, 8 mechanical decisions, 35
+    # findings of which 15 new; two independent read-only critics killed two of them, overturned a
+    # third as stale and voided one execution, all applied in place. next_free 36 -> 37.
     # ED-SC-0033..0035 allocated 2026-09-06 (all status ruled, none needs_jordan): the proceedings
     # subsystem rulings -- 0033 ownership of all social contests + retirement of the orphaned tree;
     # 0034 resolution (aggregates licensed, multilateral + debate score accepted, latitude pool-only

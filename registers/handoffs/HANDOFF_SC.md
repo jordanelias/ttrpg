@@ -4,6 +4,74 @@ Lane-scoped continuity for the `SC` (social contest) lane, per the `ED-<LANE>-NN
 (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. Root `HANDOFF.md` is the
 index; see it for cross-lane/global items.
 
+## ⚠ CURRENT — 2026-09-07 · the proceedings subsystem was STRESS-TESTED
+### *(read the section below this one first — it says what the subsystem IS; this one says what happened when somebody tried to run it)*
+
+**`proposals/2026-09-05-proceedings-subsystem/20_STRESS_TESTS.md`** — 38 tests executed against the
+tracer at `proposals/2026-09-01-season-loop-tests/tracer/shape.py`, harness at
+`stress/stress_proceedings.py`, machine-readable run at `stress/results.json`. **ED-SC-0036.**
+**Nothing was ratified and no design file was edited.** Reproduce: `python3 stress/stress_proceedings.py`.
+
+**⚠ Read the second number, not the first.** 35 findings, **of which 20 restate a row this
+directory already registers** — the gap register, `13_ADVERSARIAL.md` and `17_PLAYABILITY.md` are
+unusually complete, and every finding carries an *already registered?* line saying which it is.
+**Fifteen are new.**
+
+### The four things that PASS, because a report of only holes has not checked anything
+
+`speak` folds and emits for a person holding no seat · the appeal depth cap returns a typed
+`ContestError` · ⭐ **a seeded proceeding replays identically** (21 Events, 18 claims, twice) ·
+⭐ **permuting who attends does not move the outcome** — `05_PROCEDURE.md`'s own permutation
+criterion, run for the first time.
+
+### The five new results that survived an adversarial pass
+
+| | |
+|---|---|
+| ⭐ **`F-14`** | **`disposes:` names a write and has no writer.** `determine` grades a Tenure and cannot open one; the draft row that would have opened it was corrected away. **`11_NERS.md`'s diagonal PASS rests on that write verbatim** |
+| ⭐ **`F-38`** | **the count table at `00_DERIVATION.md` §B.1 — which `README.md` calls *the whole argument* — is stale in three of five rows.** The fields cell names `Proposition.rung` and says §B.2 *admits* what §B.2 retracts; the verbs cell says *4 new* where two other files say ZERO; the carriers cell lists `Seat`, which is not a carrier |
+| ⭐ **`F-37`** | **five gaps are in the gap register nowhere** — `P-22 · P-23 · P-24 · P-28 · P-29` — each written as *Registered `P-nn`* at its own site. `P-24` is the one `14_THE_WORLD_IN_THE_ROOM.md` calls the sharpest thing its hardest question surfaced |
+| ⭐ **`F-28`** | **the ladder rung is a fold over emitted `matter.*` Events and no emission can name a rung.** The zero-new-fields result rests on a fold with no operand |
+| ⭐ **`F-33`** | **under the fan-out arm in force there is no such thing as being absent.** The subject who never travelled holds the same claims as the bench member who sat through it, so *a player can be condemned and not know it* is a claim about a sweep arm |
+
+⭐ **And one CORRECTION to this lane's own headline diagnosis (`F-32`)**: *no deposit names the
+actor* is false — one does, `(speaker, speech.made, 100, firsthand)`. **The defect is that
+deposit's CONTENT**: the only claim about a speaker is that he spoke, which is the one shape the
+question machinery cannot read. **`19_PLAN.md` step 2 is aimed one step to the left of the hole.**
+
+### The shape, which matters more than the count
+
+**No arrangement row is blocked on a parameter of its own** — all twelve stop on needs shared
+across the catalogue. That is the closure claim holding in the only direction currently testable,
+and it is why twelve rows have not yet bought anything. **Of sixteen steps in one worked trial
+(`PART D`), the five that are supplied are all things the tree owned before this design existed.**
+And **the clerk — somebody putting the matter on the docket — is in none of `12_BUILD_ORDER.md`'s
+twelve steps**, which leaves its own step 9 BAR (*one seeded proceeding, zero authored acts*)
+unreachable by its own plan for want of one act that costs nothing.
+
+### What the suite got wrong, since it is the record that makes the rest readable
+
+Two structurally independent read-only critics attacked the output without seeing its reasoning.
+They **killed two findings** (the `convene` `scale:` key is live at `verb_table.yaml:138`, not gone;
+`disposal_reach` does NOT need a sixth channel — `_ch_post_remit` and `_ch_chronicle` already carry
+`body` and `<rung kind>`), **overturned a third as stale** (P-15 is closed by `ED-SC-0034`; the
+gap-register row is what is stale), **voided one execution** (a docket test ran one season against
+a date due at tick 1 and measured its own off-by-one), and **corrected four counts** — including
+`runnable = []`, which was an identity that could not have come out otherwise. All applied in place;
+`PART F` is the record.
+
+### Next actions this adds to the four below
+
+1. **`F-38`, `F-37` and the stale `P-15` row are documentation fixes with no ruling in them** —
+   correct §B.1's three cells, put the five orphan P-rows in the register, mark P-15/P-29 closed.
+2. **`F-14` is the one that needs a design answer**: which act opens the Tenure a finding grades.
+   It is `ID-14` on the design's own most load-bearing key and it is not in any register.
+3. **`F-32` re-aims `19_PLAN.md` step 2** — the deposit exists; its content is the hole.
+4. **`ST-34` could not run the deprivation floor** (`M-7`/`M-8` are blocking measurements) because
+   the ladder module exports no `p_success` under that name. Resolve the name before the sweep.
+
+---
+
 ## ⚠ CURRENT — 2026-09-06, PR #373 · the proceedings subsystem (read this first)
 
 **A from-scratch proceedings subsystem exists at `proposals/2026-09-05-proceedings-subsystem/`, it is
