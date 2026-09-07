@@ -2726,8 +2726,39 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     # because nothing moves a Record to a second person. `W4` lengthens the repetition; it does
     # not make a second person act. That finding stands untouched and is the reason this PR does
     # not claim §6.3 is met.
-    assert d_pub >= 4, (
-        f"the published two-season run reaches only {d_pub} — `W4`'s clock chaining has regressed")
+    #
+    # ⚠⚠ **AMENDED AGAIN 2026-09-07 BY `R7`, AND THE DEPTH FELL FOR A GOOD REASON.** This asserted
+    # `d_pub >= 4` and fired on the fan-out flip. MEASURED, same seed, same world, by arm:
+    #     `total`    2 seasons depth 4 — blocked · deposited · DECAYED · DEPOSITED
+    #                4 seasons depth 8 — ... decayed · deposited · decayed · deposited
+    #     `all_five` 2 seasons depth 3 — blocked · deposited · decayed
+    #                4 seasons depth 5 — blocked · deposited · decayed · decayed · decayed
+    # **The links `total` had and `all_five` does not are `claim.deposited` ones.** Under total
+    # fan-out a `claim.decayed` Event was itself witnessed by everyone and re-deposited, which
+    # decayed, and was witnessed again: the chain grew two links a season because THE ECHO WAS
+    # FEEDING ON ITS OWN MEMORY LOSS. A claim fading in one person's head is not news that reaches
+    # the hearth, and under `R7` it no longer is. What is left is one deposit and one decay per
+    # season — the honest shape of a memory dimming.
+    #
+    # SO THE ASSERTION MOVES FROM THE NUMBER TO THE MECHANISM, which is what it was always for.
+    # §6.3's depth clause is still MET at the four seasons `d` measures (5 >= 4, asserted above);
+    # what changed is the two-season artifact, and pinning `d_pub` at 3 alone would pin an
+    # arithmetic consequence rather than the thing that produced it.
+    pub_chain, cur = [], max(pub_hers, key=pub_depth)
+    while cur:
+        pub_chain.append(cur)
+        cur = next((pub_by_id[c] for c in cur.causes if c in pub_by_id), None)
+    redeposits = sum(1 for e in pub_chain if e.kind == "claim.deposited")
+    assert redeposits == 1, (
+        f"the published run's longest chain carries {redeposits} `claim.deposited` links: "
+        f"{[e.kind for e in reversed(pub_chain)]}. More than one means a claim's own DECAY is "
+        "being witnessed and re-deposited — the echo model feeding on itself, which is exactly "
+        "what `R7` took the fan-out off `total` to stop. Fewer than one means her act reaches no "
+        "ledger at all and the channel is broken closed")
+    assert d_pub == 3, (
+        f"the published two-season run reaches {d_pub}, not the 3 that one deposit plus one decay "
+        "per season produces. Above 3 with `redeposits == 1`, some other clock has started "
+        "chaining; below 3, `W4`'s decay chaining has regressed")
     late_root = [e for e in w.log if e.causes == ["ROOT"] and e.emitted_at > 0]
     assert not late_root, (
         f"{len(late_root)} Event(s) after the seed declare `causes: [ROOT]` — §19.4 reserves that "
@@ -3209,6 +3240,163 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
         "names the channels and supplies no predicate — and grading the row `ruled` on the back "
         "of this item would credit the design with an answer this session invented")
     assert len(h33["sweep"]) >= 3 and h33["site"], h33
+
+
+# ===========================================================================
+# `R7` — THE FAN-OUT DEFAULT IS OFF `total`. `19_PLAN.md` step 1, `21_RECONCILIATION.md` PHASE 1
+# step 2. The ruling is *legitimacy falls where the news has reached*; `total` is the echo model
+# Jordan refused, arriving one layer down at the deposit.
+# ===========================================================================
+
+def _r7_witness_claims(w) -> dict:
+    """Each person's witness deposits, as `(subject, predicate)` pairs.
+
+    ⚠ RESTRICTED TO EVENT KINDS, AND THE RESTRICTION IS THE WHOLE POINT. `19_PLAN.md` step 1's
+    artifact is *"two persons whose ledgers differ in at least one (subject, predicate) pair"* with
+    the falsifier *"it passes at `total` — it cannot, `total` fans identically"*. **It does pass at
+    `total`**, measured: `p_carin` holds `('hearth_ostvik', 'stores:grain')` and the other two do
+    not. That is not a witness deposit at all — it is `W-B`'s OBSERVATION deposit, minted to the
+    person who READ the cell and per-reader by construction, so the unrestricted assertion is green
+    at the control via a mechanism the flip does not touch. An artifact that is already green at
+    the arm it is meant to distinguish certifies nothing; this is the same defect class as the six
+    substring falsifiers `21_RECONCILIATION.md` PHASE 0 had to rebuild, in its other polarity."""
+    kinds = {e.kind for e in w.log}
+    return {pid: {(c.subject, c.predicate) for c in p.ledger if c.predicate in kinds}
+            for pid, p in sorted(w.persons.items())}
+
+
+def _r7_run(mode: str, seasons: int = 2, seed: int = 0):
+    from ..harness import headless as HL
+    w = HL.build_world(seed, S.DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
+    d = S.SeasonDriver(w)
+    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    dep = 0
+    for _ in range(seasons):
+        dep += d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                        None, HL.subsistence)["deposits"]
+    return w, d, dep
+
+
+def test_r7_the_shipped_default_is_not_the_echo_model():
+    """The flip itself, asserted against the roster rather than against a literal here."""
+    assert S.DEFAULT_FIXTURES.get("fan_out_mode") != "total", (
+        "the shipped fan-out is `total`, which is `R7`'s echo model at the deposit layer: every "
+        "person holds every Event, so nothing is hideable and there is no absence, secret, lie or "
+        "rumour. `R7` ruled the architecture model — *legitimacy falls where the news has reached*")
+    assert S.DEFAULT_FIXTURES.get("fan_out_mode") in ("presence_only", "all_five"), (
+        "the default left `H-33`'s declared sweep. The channel list is an arm set and step 1 "
+        "forbids editing it; a fourth point needs the register moved first")
+
+
+def test_r7_two_persons_hold_different_things_and_at_total_they_cannot():
+    """⭐ THE FIRST SECRET IN THE WORLD — `19_PLAN.md` step 1's artifact, with the falsifier the
+    plan names built into the same test rather than asserted about it.
+
+    Two persons' witness deposits differ under the shipped arm; under `total` they CANNOT, because
+    `total` fans every Event to every person. The control is inside the test, so this cannot go
+    green on a world that simply has no deposits: `total` must be non-empty AND identical."""
+    ctl, _, ctl_dep = _r7_run("total")
+    ctl_sets = _r7_witness_claims(ctl)
+    assert ctl_dep and all(ctl_sets.values()), (
+        f"the control arm deposited {ctl_dep} and left sets {[len(v) for v in ctl_sets.values()]} "
+        "— with nothing deposited, 'identical' below would be vacuously true")
+    ctl_diff = [(a, b) for a in ctl_sets for b in ctl_sets if a < b and ctl_sets[a] != ctl_sets[b]]
+    assert not ctl_diff, (
+        f"two ledgers differ under `total`: {ctl_diff}. `total` fans identically, so either a "
+        "channel is being consulted on the control arm or a non-witness deposit has leaked into "
+        f"`_r7_witness_claims` — it filters on the logged Event kinds {sorted({e.kind for e in ctl.log})}")
+
+    w, _, dep = _r7_run(S.DEFAULT_FIXTURES.get("fan_out_mode"))
+    sets = _r7_witness_claims(w)
+    ps = sorted(sets)
+    differ = [(a, b, len(sets[a] ^ sets[b]))
+              for i, a in enumerate(ps) for b in ps[i + 1:] if sets[a] != sets[b]]
+    print(f"\n  R7 — witness-claim set sizes: total {[len(v) for v in ctl_sets.values()]} "
+          f"({ctl_dep} deposits) -> shipped {[len(v) for v in sets.values()]} ({dep} deposits); "
+          f"differing pairs {differ}")
+    assert differ, (
+        f"no two persons' witness deposits differ under the shipped arm: {sets}. Then the "
+        "narrowing admits everyone anyway and nothing in this world is hidden from anyone")
+    # ⚠ AND ONE OF THEM IS A DIFFERENCE BETWEEN TWO PEOPLE WHO BOTH WITNESSED SOMETHING, not
+    # merely between a participant and someone holding nothing. `presence_only` gives ABSENCE
+    # (`p_warden` holds nothing) and gives no secret between the two who are present — their sets
+    # are equal, because they are co-located. A secret needs two people in the world who both
+    # receive deposits and receive DIFFERENT ones, which is what the shipped arm buys over the
+    # narrowest one and is the reason the default is not `presence_only`.
+    both = [(a, b, n) for a, b, n in differ if sets[a] and sets[b]]
+    assert both, (
+        f"every difference is against a person holding nothing: {differ}. That is absence, which "
+        "`presence_only` already gives; it is not yet a secret between two people who were both "
+        "told something")
+
+
+def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
+    """`M-6` — starvation on the narrowed fan-out, run at every arm, reported link by link.
+
+    ⚠ THE CHAIN IS THREE LINKS AND M-6, AS SPECIFIED, CANNOT OBSERVE THE THIRD. `19_PLAN.md`
+    names the risk as *the claim→question→act chain drops to zero on the NPC lane* and points at
+    `_r3_propagates` — which walks `Event.causes[]` over `driver.resolved` and **never reads a
+    ledger**. Measured: the corpus tallies (NPC R3 30/30, ARC 54/59) are identical across all three
+    arms BOTH co-located AND with the three persons dispersed to distinct rungs, while deposits
+    fall by an order of magnitude. So M-6 as specified cannot fail, and a check that cannot fail is
+    not a measurement (§0.1 pt 2).
+
+    ⚠⚠ **AND "THE ACT SET IS INVARIANT" IS TRUE OF THIS WORLD AND FALSE IN GENERAL — the first
+    writing of this docstring said it without the qualifier and `test_w8_the_proof_clause…` caught
+    it within the hour.** In `build_world(0)` the resolved-act set IS identical under all three
+    arms (19 acts, seven verbs, asserted below): three persons, one of whom acts. In `tiny_world`
+    — five persons across four rungs — it is **not**: 233 acts at `total` against 221 at
+    `all_five`, and suppressing `move` stops being larder-neutral. So the third link is REAL and
+    this world is too small to show it; what is registered as flattening it here
+    (`question_aggregation_rule: first` plus the five-scene budget, `ID-16`; the gain is `H-106`)
+    bounds the gain, not the existence. The invariance asserted below is therefore a property OF
+    THIS FIXTURE, pinned so that the day it breaks this test says so — not a claim about the loop.
+
+    What this test asserts is therefore the narrower claim the numbers license: **links 1 and 2
+    survive the flip**, deposits fall hard, and the arm chosen preserves the question stream that
+    the narrowest arm thins."""
+    got = {}
+    for mode in ("total", "presence_only", "all_five"):
+        # Comparable with `test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls` above.
+        # [GROUNDED: three seasons is `W6`'s own H-33 sweep length]
+        w, d, dep = _r7_run(mode, seasons=3)
+        w.step = S.Step.DELIBERATE
+        qs = sum(len(S.questions_for(w, p)) for p in w.persons.values())
+        got[mode] = (dep, sorted(len(p.ledger) for p in w.persons.values()), qs,
+                     sorted({(a.actor, a.verb) for a in getattr(d, "resolved", [])}))
+    print("\n  M-6 — (deposits, ledgers, questions, acts) by arm:")
+    for m, (dep, led, qs, acts) in got.items():
+        print(f"    {m:15} deposits={dep:5} ledgers={led} questions={qs} acts={len(acts)}")
+
+    # LINK 1 — the fan. It must actually bite, or nothing below is about the narrowing.
+    assert got["all_five"][0] * 5 < got["total"][0], (
+        f"the shipped arm deposits within 5x of `total`: {got}. Then the narrowing is cosmetic")
+    assert max(got["total"][1]) == S.DEFAULT_FIXTURES.get("ledger_cap"), (
+        f"the control's fullest ledger is {max(got['total'][1])}, not the cap — the flood this "
+        "flip relieves has gone away on its own and the item should be re-argued")
+    assert max(got["all_five"][1]) < S.DEFAULT_FIXTURES.get("ledger_cap"), (
+        f"the shipped arm still pins a ledger at the cap: {got['all_five'][1]}")
+
+    # LINK 2 — claims to questions. THIS is where `presence_only` pays and `all_five` does not,
+    # and it is the measured reason the default is the arm it is.
+    assert got["all_five"][2] == got["total"][2], (
+        f"the shipped arm raises {got['all_five'][2]} questions against `total`'s "
+        f"{got['total'][2]} — the claim→question link lost something to the narrowing, which is "
+        "the starvation M-6 is about, one link earlier than M-6 looks for it")
+    assert got["presence_only"][2] < got["total"][2], (
+        f"`presence_only` raises as many questions as `total` ({got}) — then the two arms are not "
+        "distinguishable at this link and the default's stated reason for preferring `all_five` "
+        "over it is not supported by this world")
+
+    # LINK 3 — questions to acts. INVARIANT IN THIS FIXTURE AND NOT IN GENERAL (see the docstring:
+    # `tiny_world` goes 233 acts -> 221 on the same flip). Pinned here so that the day this world
+    # too becomes sensitive, the change is announced rather than absorbed into a later reading.
+    assert got["total"][3] == got["presence_only"][3] == got["all_five"][3], (
+        f"the resolved-act set now moves with the fan-out arm IN THIS WORLD: {got}. `tiny_world` "
+        "has always done so; `build_world(0)` seats three persons of whom one acts, which is why "
+        "it did not. If it does now, this fixture has grown a second actor or the question→act "
+        "link has widened — and `_r3_propagates` may at last be sensitive to the arm, which would "
+        "make M-6 runnable as `19_PLAN.md` specifies it. Re-run the corpus at both arms")
 
 
 # ===========================================================================
@@ -3754,6 +3942,18 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
         `Query.presence(w, "S")` is exactly `['p_high']` in every season of every arm, and
         suppressing `move` leaves the settlement at **356** — unchanged.
 
+        ⚠ **NARROWED 2026-09-07 BY `R7`, AND THE LAST CLAUSE IS THE ONE THAT WENT.** Off `total`
+        fan-out, suppressing `move` leaves the settlement at **357**, not 356. The refutation
+        SURVIVES — presence at `S` is `('p_high',)` in every season of every arm, still measured,
+        so no extra eater is ever seated — but "unchanged" was a fact about one arm and read as a
+        fact about the verb. `move` does move the number, through a channel the paragraph never
+        considered: it competes for scene budget, so suppressing it changes WHICH TRANSFERS are
+        granted (3 out of `S` with `move` live, 1 without). Measured, all four cells, against a
+        no-transfer baseline of 358: `total` 356/356 at drain 2/2, `all_five` 355/357 at drain
+        3/1. **`transfer` is the sole proximate cause in every one of them** — the end state is
+        358 minus that arm's own drain, exactly — which is what this bullet was for, and it is now
+        asserted in that form instead of by pinning a constant that only held on the old arm.
+
     Both controls are RUN below rather than recorded here, because a control in a docstring is
     the thing §0.1 point 4 forbids.
 
@@ -3818,12 +4018,46 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
         f"{no_transfer[-1]['S'].get('grain', 0) - settle[-1]} against {drained} grain actually "
         "carried out of `S` by granted transfers. Something OTHER than `transfer` is moving the "
         "settlement's larder and the docstring's attribution is confounded again")
-    no_move, _, _ = _ten_seasons(P.tiny_world(), verbs=S.resolvable_verbs() - {"move"})
-    assert no_move[-1]["S"].get("grain", 0) == settle[-1], (
-        f"suppressing `move` moved the settlement to {no_move[-1]['S'].get('grain', 0)} from "
-        f"{settle[-1]}. `move` relocates people and `Query.presence` is what the subsistence draw "
-        "reads, so `move` HAS become a cause of the settlement's larder — re-attribute the "
-        "docstring rather than re-pinning this number")
+    # ⚠ THIS ASSERTED `no_move[-1] == settle[-1]` AND FIRED ON THE `R7` FAN-OUT FLIP (2026-09-07),
+    # and the re-attribution its message demanded was RUN rather than reasoned. What it found is
+    # that the docstring's conclusion survives and its scope does not:
+    #     arm          S_end   drained   |  no-transfer baseline is 358 in every cell
+    #     total   full   356      2       |  358 - 2 = 356  ✔
+    #     total   no_move 356     2       |  358 - 2 = 356  ✔
+    #     all_five full   355     3       |  358 - 3 = 355  ✔
+    #     all_five no_move 357    1       |  358 - 1 = 357  ✔
+    # **`transfer` is still the SOLE PROXIMATE CAUSE of the larder — the end state is the baseline
+    # minus that arm's own drain, exactly, in all four cells.** And the mechanism the docstring
+    # refutes is still refuted: `Query.presence(w, "S")` is `('p_high',)` in every season of every
+    # arm, measured, so no extra eater is seated and `move` moves nothing by subsistence.
+    # WHAT IS NEW is the CHANNEL by which suppressing `move` changes the number at all: it frees
+    # scene budget, so different transfers are granted (3 out of `S` with `move` live, 1 without).
+    # That is competition for slots, not a second economy — so the assertion moves from "the
+    # number does not change" (which was true of one arm by accident) to "whatever the number is,
+    # `transfer` accounts for all of it", which is the claim the docstring actually makes.
+    no_move, _, no_move_d = _ten_seasons(P.tiny_world(), verbs=S.resolvable_verbs() - {"move"})
+    nm_ids = {e.id for e in no_move_d.w.log}
+    nm_drained = sum(int((a.payload or {}).get("amount", 0))
+                     for a in no_move_d.resolved
+                     if a.verb == "transfer"
+                     and (a.payload or {}).get("from") == "S"
+                     and (a.payload or {}).get("to") != "S"
+                     and any(S.H(no_move_d.w.world_seed, t, a.actor, f"transfer.made:{a.id}")
+                             in nm_ids for t in range(len(hist) + 1)))
+    assert no_transfer[-1]["S"].get("grain", 0) - no_move[-1]["S"].get("grain", 0) == nm_drained, (
+        f"with `move` suppressed the settlement ends at {no_move[-1]['S'].get('grain', 0)} against "
+        f"a no-transfer baseline of {no_transfer[-1]['S'].get('grain', 0)}, a difference of "
+        f"{no_transfer[-1]['S'].get('grain', 0) - no_move[-1]['S'].get('grain', 0)} against "
+        f"{nm_drained} grain actually carried out. `transfer` no longer accounts for the whole "
+        "movement, so something else HAS become a cause of the settlement's larder — re-attribute "
+        "the docstring rather than re-pinning this number")
+    # AND THE MECHANISM THE DOCSTRING REFUTES STAYS REFUTED, asserted rather than recited: an extra
+    # eater at `S` would draw 2 a season, which is the order of magnitude of every delta here.
+    assert {tuple(sorted(S.Query.presence(no_move_d.w, "S")))} == {("p_high",)}, (
+        f"presence at `S` is {sorted(S.Query.presence(no_move_d.w, 'S'))}, not just `p_high` — "
+        "`move` HAS seated a second eater and the subsistence mechanism the docstring rules out "
+        "is live after all — which would make the budget-competition account above wrong, not "
+        "merely incomplete")
 
 
 def test_w8_work_emits_a_success_while_repairing_nothing(): 
@@ -6453,6 +6687,15 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     below. MEASURED 2026-09-04: ever-in-a-ledger `none=0 · actor=1 · total=3`, still-held-at-end
     `0 · 0 · 0`.
 
+    ⚠ **RE-MEASURED 2026-09-07 ON THE `R7` FAN-OUT FLIP: `none=0 · actor=1 · total=2`,
+    still-held-at-end `0 · 1 · 2`.** The paragraph above is kept verbatim because its REASONING is
+    still the reason this test measures the union rather than the end state — but its worked
+    example has inverted. The `stores:grain` read is no longer evicted, because with `fan_out_mode`
+    off `total` no ledger in this world reaches the 200-claim cap at all (evictions 48/49/204 ->
+    0/0/0). `total`'s ever-count falls 3 -> 2 for the same reason it falls everywhere: fewer
+    Events reach fewer people. **A test reading only the end state would now report the channel as
+    OPEN, and would have been right for the wrong reason** — which is why the union measure stays.
+
     MUTATION (run 2026-09-04): make `none` deposit as `actor` does — the `none` count goes to 1
     and this goes RED on the first assertion. Restored, GREEN."""
     from ..harness import headless as HL
@@ -6492,13 +6735,24 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     assert len(total_arm) >= len(actor_arm), (
         f"`total` saw {len(total_arm)} and `actor` saw {len(actor_arm)}: a wider fan-out "
         "deposited fewer claims, which cannot happen at the deposit and means the measure moved")
-    # ⚠ AND THE SURVIVAL FIGURE, ASSERTED AS THE FINDING IT IS. In THIS world every grammar claim
-    # is evicted before the run ends. That is not a failure of `W-B` and it is not hidden: it is
-    # `H-40`'s cap doing what `H-122`'s row argues it does, in the smallest world that shows it.
-    assert actor_end == [], (
-        f"a grammar-vocabulary claim now SURVIVES to end-of-run in this world: {actor_end}. That "
-        "is a change in eviction pressure and `H-122`'s cap argument must be re-measured rather "
-        "than this line relaxed")
+    # ⚠ THE SURVIVAL FIGURE INVERTED ON 2026-09-07, AND ITS OWN MESSAGE IS WHAT SENT ME TO
+    # RE-MEASURE. This asserted `actor_end == []` — in this world every grammar claim was evicted
+    # before the run ended — and called that *"`H-40`'s cap doing what `H-122`'s row argues it
+    # does, in the smallest world that shows it"*. `R7` took `fan_out_mode` off `total`, the flood
+    # that filled the 200-claim ledger went with it, and the cap now evicts NOTHING in any arm
+    # (48/49/204 -> 0/0/0, measured on the `H-40` sweep beside this). So the claim survives, and
+    # the assertion is inverted rather than deleted: what it pins is still the cap's behaviour,
+    # which is now that there is no pressure on it.
+    assert actor_end == [("hearth_ostvik", "stores:grain", 0)], (
+        f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
+        "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
+        "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
+        "`H-122` reading here depends on which of those it is")
+    # AND THE CHANNEL IS STILL WIDER AT `total` THAN AT `actor` AT END-OF-RUN, which is the thing
+    # the survival figure is FOR now that survival is possible at all.
+    assert len(_te) > len(actor_end), (
+        f"`total` ends holding {len(_te)} grammar claim(s) against `actor`'s {len(actor_end)} — a "
+        "wider deposit fan-out did not leave more behind, which cannot happen without eviction")
 
 
 def test_wb_a_read_computed_from_the_ledger_is_never_deposited_into_it():
@@ -6814,6 +7068,29 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
     (Before the `claim.held` exclusion these read `actor` 191/70 and `total` 240/282; the
     exclusion removed most of `W-B`'s deposit pressure and did not change which arm goes inert.)
 
+    ⚠ **RE-MEASURED AGAIN 2026-09-07 ON THE `R7` FAN-OUT FLIP, AND THE FINDING ABOVE IS GONE —
+    NOT WEAKENED, GONE.** Same command, same seed, same world, `fan_out_mode` `total` -> `all_five`:
+      * `none`  — (0,100,0) (61,90,0) (61,60,0)
+      * `actor` — (0,100,0) (61,90,0) (61,60,0)
+      * `total` — (0,100,0) (79,90,0) (79,60,0).  **OBSERVABLE, like the other two.**
+    **Evictions go 48 / 49 / 204 -> 0 / 0 / 0.** That single column is the whole explanation.
+    `total`'s inertness was never a property of the deposit mode: it was the 200-claim cap
+    discarding every once-decayed claim before end-of-run, and the cap only ever filled because
+    WITNESS fanned every Event to every person. `R7` narrows the fan, no ledger reaches the cap,
+    and the three arms decay identically.
+
+    ⚠ **SO `H-122`'s STATED REASON FOR DEFAULTING TO `actor` HAS EXPIRED, AND THE DEFAULT IS NOT
+    MOVED HERE.** The row's argument is *"that `total` flattens it is still why the default is
+    `actor`"*; both halves of the mechanism behind that — the flattening and the eviction pressure
+    producing it — are gone. What follows is that the row must say what, if anything, still
+    supports `actor`; what does NOT follow is that the default should flip, which would be a second
+    design change on a measurement that has only just moved. Recorded on `H-122`, not decided here.
+
+    ⚠ AND ONE THING THE FLIP DID NOT CHANGE: the rate is STILL behaviourally inert in all three
+    arms (`inert` below is all-True at both fan-outs). Rate 5 and rate 20 still leave the same
+    claims in the same ledgers and produce the same acts. That is `H-40`'s own finding and it
+    survives its cause being removed, which is worth more than the reading that did not.
+
     ⚠ **WHAT "OBSERVABLE" MEANS HERE IS NARROWER THAN IT LOOKS, AND THE FIRST WRITING OF THIS
     DOCSTRING OVERSTATED IT.** Minimum confidence is exactly `100 - rate` in every non-100 cell,
     which is an ARITHMETIC IDENTITY, not a behavioural measurement: it says only *the deepest
@@ -6880,15 +7157,33 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
     assert out["actor"][20][1] < out["actor"][5][1] < out["actor"][0][1], (
         f"`H-40`'s sweep went inert in the DEFAULT arm: {out['actor']}. That is the precedent in "
         "`claim_subjects` repeating, and the default must move rather than the assertion")
-    # AND `total` DOES NOT — asserted, because it is the finding.
-    assert out["total"][20][1] == out["total"][5][1] == out["total"][0][1] == 100, (
-        f"`total` no longer flattens `H-40`: {out['total']}. `H-122`'s argument for `actor` rests "
-        "on this being true; if it has stopped being true the ROW must be re-argued, not this line")
-    # AND THE MECHANISM IS THE CAP, not a coincidence: evictions rise monotonically with fan-out.
-    assert (out["none"][5][2] < out["actor"][5][2] < out["total"][5][2]), (
-        f"evictions do not rise with the deposit fan-out: "
-        f"{[out[m][5][2] for m in ('none', 'actor', 'total')]}. Then the flattening above has "
-        "some other cause and the reading on `H-122` is wrong")
+    # ⚠ `total` USED TO FLATTEN IT AND NO LONGER DOES, BECAUSE `R7` TOOK THE CAP OUT OF PLAY.
+    # This asserted `out["total"] == 100` at every rate and the assertion FIRED on 2026-09-07, on
+    # the fan-out flip, exactly as its message asked it to. The re-measurement is in the docstring;
+    # the mechanism is the line below, and it is the whole explanation: THE LEDGER CAP NO LONGER
+    # EVICTS ANYTHING IN ANY ARM. `total`'s flatness was never about the deposit mode — it was the
+    # 200-claim cap discarding every once-decayed claim before end-of-run, and the cap only ever
+    # filled because WITNESS fanned every Event to every person. Remove the flood and all three
+    # arms decay identically. So this now asserts the arms AGREE, which is the same finding stated
+    # after its cause was removed rather than the opposite one.
+    # These are INDICES into the sweep the loop above ran, not magnitudes chosen here.
+    # [GROUNDED: 0/5/20 are `H-40`'s own declared three-point sweep]
+    assert (out["total"][20][1] == out["actor"][20][1] == out["none"][20][1]
+            and out["total"][5][1] == out["actor"][5][1] == out["none"][5][1]), (
+        f"the three deposit arms no longer agree on minimum confidence: {out}. Under `R7` nothing "
+        "is evicted, so the deposit mode cannot change which claims survive to be decayed — if it "
+        "does, eviction pressure is back and `H-122`'s row must be re-argued a second time")
+    # AND THE MECHANISM, ASSERTED: NOTHING IS EVICTED, IN ANY ARM. This asserted evictions rise
+    # monotonically with the deposit fan-out (48 < 49 < 204 at `total` fan-out) — true then, and
+    # the reading `H-122` rests on. It is 0 < 0 < 0 now, which is not a weaker version of that
+    # claim but its refutation, so the assertion is replaced rather than loosened.
+    # The 0 is the MEASURED eviction count at every sweep point under the R7 fan-out.
+    # [GROUNDED: 0/5/20 are `H-40`'s declared sweep points; reproduce with the loop above]
+    assert all(out[m][r][2] == 0 for m in ("none", "actor", "total") for r in (0, 5, 20)), (
+        f"the cap is evicting again: {[out[m][5][2] for m in ('none', 'actor', 'total')]}. Under "
+        "`R7`'s narrowed fan-out no ledger reaches the 200-claim cap in this world, so an eviction "
+        "means either the fan-out default moved back or a new deposit channel opened — and every "
+        "`H-40`/`H-122` reading above depends on which")
     # ⚠ AND THE RATE ITSELF IS BEHAVIOURALLY INERT IN ALL THREE ARMS — ASSERTED, BECAUSE IT IS THE
     # FINDING (`H-40`). Rate 5 and rate 20 leave the same claims in the same ledgers and produce
     # the same acts; the only thing that moves is the confidence NUMBER, and it moves by
@@ -7063,14 +7358,54 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
         "the candidate set must be invariant with respect to everything that happens. A "
         "divergence here means some channel other than `W-B`'s reaches `opening_set`, and every "
         "other figure in `W-D` is confounded until it is found")
-    # THE ACCEPTANCE — reconvergence STRICTLY below 100% at the shipped default.
-    assert got["actor"]["diverged"] > 0, (
-        f"the SHIPPED default diverged 0 times of {got['actor']['genuine']}: {got}. Either "
-        "`observation_deposit_mode` has been flipped to `none`, or the deposit no longer reaches "
-        "`belief_contradicts`, or the fork no longer changes which acts are performed")
+    # ⛔⛔ THE ACCEPTANCE ASSERTED `got["actor"]["diverged"] > 0` AND IT FIRED ON THE `R7` FAN-OUT
+    # FLIP (2026-09-07). **THIS IS THE ONE PLACE THE FLIP COSTS SOMETHING, AND IT IS RECORDED AS A
+    # LOSS RATHER THAN RE-PINNED AS A FACT.** Measured, same slice, same seed, both variables:
+    #
+    #     divergences of 16 genuine forks, by (fan_out_mode x observation_deposit_mode)
+    #                        none    actor    total
+    #     total                0       2        4      <- before the flip
+    #     all_five             0       0        4      <- SHIPPED
+    #     presence_only        0       7        6
+    #
+    # At the shipped `observation_deposit_mode: actor`, `all_five` diverges ZERO times where both
+    # of its neighbours diverge — 2 below it and 7 above. **The result is NON-MONOTONIC in the
+    # channel set**, which is why it is not read as "narrowing costs divergence": `all_five` is a
+    # SUPERSET of `presence_only` and does worse than it.
+    #
+    # WHY THE ARM IS NOT RE-CHOSEN ON THIS NUMBER, run against `CLAUDE.md` §0's five tests rather
+    # than escalated: (3) a design document answers WHICH arm — `19_PLAN.md` step 1 says take the
+    # fixture to the channel-predicate set and *"do not touch the channel list itself"*; (5) the
+    # architecture answers whether 7-vs-0 on SIXTEEN forks can overturn it, and it cannot — `H-54`
+    # registers that within-source question order is settled by LEXICOGRAPHIC ORDER OVER CONTENT
+    # HASHES in 801 of 1,068 deliberations, so a 16-fork slice is dominated by hash ordering and
+    # supports no ranking of the arms. Acting on it would be choosing a game mechanism on noise.
+    # ⚠ AND THE LOSS IS HALF A CHANNEL, NOT A WHOLE ONE, which the bare zero above overstates.
+    # This instrument fingerprints a deliberation by VERB SET ONLY. Under the widened
+    # `(verb, subject)` fingerprint — `test_wd_the_decision_fingerprint_is_verbs_only…`, same
+    # slice — the shipped `actor` arm still diverges 8 times against the control's 6, where before
+    # the flip it was 11 against 7. So `W-B` STILL changes what a person deliberates ABOUT at the
+    # shipped arm; what it stopped changing is WHICH VERBS they consider. Both numbers are pinned,
+    # in their own tests, so neither reading can be quoted without the other.
+    #
+    # So: `all_five` stands, the number is recorded, and the assertion below PINS THE LOSS so it
+    # cannot drift back into a claim that the acceptance still holds at the shipped configuration.
+    assert got["actor"]["diverged"] == 0, (
+        f"the shipped default diverged {got['actor']['diverged']} times of "
+        f"{got['actor']['genuine']}: {got}. That is BETTER than the pinned state and the pin is "
+        "what must move — `W-D`'s acceptance was lost at `all_five` on 2026-09-07 and this line "
+        "is the record of it. If it is back, say what restored it")
+    # AND THE PROPERTY STILL EXISTS SOMEWHERE, which is what stops the zero above reading as
+    # "§F1 clause 4 is dead". At `observation_deposit_mode: total` the same slice still diverges.
+    assert got["total"]["diverged"] > 0, (
+        f"NO arm diverges any more: {got}. Then the fork changes no later decision under any "
+        "deposit mode, and §F1 clause 4 is unreachable rather than merely quiet at the shipped "
+        "arm — which is a different and much larger finding than the one recorded above")
     # PINNED, so a mechanism change is visible rather than merely allowed.
     assert (got["none"]["genuine"], got["none"]["diverged"]) == (17, 0), got
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (16, 2), got
+    # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
+    # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (16, 0), got
     assert (got["total"]["genuine"], got["total"]["diverged"]) == (16, 4), got
     # AND THE TWO LAYERS ARE SEPARATED. Every genuine fork changes the act/event stream — that was
     # already true BEFORE `W-B` and is not the finding. The finding is the DECISION count above.
@@ -7187,11 +7522,36 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
         "finding: a fork changes what a person deliberates ABOUT even with no `W-B` deposit at "
         "all, through `questions_for` Q2 -> `q.referents` -> `opening_set` clause 3. If the "
         "second number is now 0, that channel has closed and `W-D`'s reading must be rewritten")
-    # AND `W-B` ADDS ON TOP OF IT rather than being the only channel.
-    assert got["actor"]["wide"] > got["none"]["wide"] and got["actor"]["verbonly"] > 0, (
-        f"the shipped default no longer adds divergence over the control: {got}")
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (17, 7), got
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (16, 11), got
+    # AND `W-B` ADDS ON TOP OF IT rather than being the only channel — HALF OF WHICH SURVIVED THE
+    # `R7` FAN-OUT FLIP AND HALF OF WHICH DID NOT, which is the sharpest statement of that flip's
+    # one cost. Measured, same slice, both fan-out arms:
+    #     fan=total     none wide 7 · actor wide 11, verbonly 2 · total wide 12, verbonly 4
+    #     fan=all_five  none wide 6 · actor wide  8, verbonly 0 · total wide 12, verbonly 4
+    # So at the shipped `actor` arm, `W-B` STILL changes what a person deliberates ABOUT (8 over
+    # the control's 6) and NO LONGER changes the verb set at all (2 -> 0). This test's own
+    # docstring names that split as the thing it guards — *"if `actor` ever stops adding VERB-SET
+    # changes on top of it, `W-B` has stopped reaching a decision"* — and it has, at this
+    # resolution, on this 16-fork slice. It is recorded rather than relaxed, and the arm is not
+    # re-chosen on it: see the reasoning at
+    # `test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_the_control`,
+    # where the same loss is pinned and `H-54`'s hash-ordering result is why 16 forks cannot
+    # overturn `19_PLAN.md` step 1's choice of arm.
+    assert got["actor"]["wide"] > got["none"]["wide"], (
+        f"the shipped default no longer adds SUBJECT-level divergence over the control: {got}. "
+        "That is the half of this channel that survived `R7`; if it has gone too, `W-B` reaches "
+        "no decision at all at the shipped arm and the item must be re-argued rather than re-pinned")
+    assert got["actor"]["verbonly"] == 0, (
+        f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences again: {got}. "
+        "That is BETTER than the pinned state — this line records a loss taken on 2026-09-07 with "
+        "the `R7` fan-out flip, not a property. Say what restored it")
+    # RE-PINNED 2026-09-07 ON THE `R7` FLIP: `none` 7 -> 6 and `actor` 11 -> 8. `total`'s 12 does
+    # not move, which is the control saying the shift is in the arms the fan-out narrows and not
+    # in the instrument.
+    # Reproduce with the A9S/A9 loop above, run at each `fan_out_mode`.
+    # [GROUNDED: measured 2026-09-07 on the R7 flip — `none` 7 -> 6 under the widened fingerprint]
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (17, 6), got
+    # [GROUNDED: measured 2026-09-07 on the R7 flip — `actor` 11 -> 8 under the widened fingerprint]
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (16, 8), got
     assert (got["total"]["genuine"], got["total"]["wide"]) == (16, 12), got
 
 

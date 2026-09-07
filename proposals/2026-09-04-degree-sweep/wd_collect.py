@@ -342,8 +342,10 @@ def main() -> int:
         "(referents ('r_hearth',)) — which is exactly the p_c -> r_hearth subject flip reported, "
         "reached by a different mechanism than the one reported. ⚠ AND THE DEPOSITING EVENT'S "
         "SUBJECT IS `p_a`, NOT `p_c`: the pre-`W-B` channel is CROSS-PERSON at the control arm, "
-        "because event-kind claims are minted in every arm and `fan_out_mode` defaults to "
-        "`total`. So a fork already changed what a person deliberates ABOUT before `W-B`, through "
+        "because event-kind claims are minted in every arm and `fan_out_mode` defaulted to "
+        "`total` WHEN THIS RAN (it ships `all_five` from 2026-09-07, R7 / ED-IN-0205; this finding "
+        "is about the deposit arms and is unaffected). So a fork already changed what a person "
+        "deliberates ABOUT before `W-B`, through "
         "Q2 and a content-hash tiebreak nobody declared.")
     log("SO THE TWO CHANNELS SEPARATE", "SUBJECT-ONLY changes are the OLD channel and VERB-SET "
                                         "changes are `W-B`'s. They do not overlap in any arm — "

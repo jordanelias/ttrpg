@@ -498,7 +498,7 @@ be *edits to the thing under review*, which is what PHASE 0 is.
 | # | step | class | artifact | falsifier | unblocks |
 |---|---|---|---|---|---|
 | **1** | ⭐ **`document_key`'s repair** — test the changed record in `changes[]` rather than `e.subject` (`R8.4`) — plus `H-84`'s record-moving route. ✅ **PREDICATE HALF DONE 2026-09-07 (PR #379)**; the record-moving route is NOT done and is `H-84`'s, which forbids inventing a verb for it | spec | a non-author holding a `Record` deposits from a `record.*` Event — ⚠ **still red, and `H-84` is why.** But the falsifier was written narrower than the mechanism: a non-author holding a **STORE** already witnesses `transfer.made` through this channel, executed and pinned. `R5` is reachable now | the channel still fires for nobody but the author — ⚠ **this is now FALSE of the mechanism and true only of Carin's world**, which holds no rung; re-read it before citing it | **2**, 6, and all of `R5` |
-| **2** | ⭐ **fan-out off `total`** (`19_PLAN.md` step 1), `M-6` measured at both arms | spec, **ruled by `R7`** | two persons' ledgers differ after two seasons; the six goldens re-baseline with deltas printed | the propagation chain collapses on the narrowed arm → step 1 was incomplete | secrets, absence, `F-33`, C-3 |
+| **2** | ✅ **EXECUTED 2026-09-07 (`ED-IN-0205`) — fan-out off `total`** (`19_PLAN.md` step 1). `engine/season/data/fixtures.py` ships `all_five`; `total` stays as `H-33`'s control arm and the channel list is untouched. `M-6` measured at every arm — **and it cannot fail as specified; see below** | spec, **ruled by `R7`** | ⭐ **two persons' witness deposits differ after two seasons, and are IDENTICAL under `total`** — the control is inside the test. Deposits 649 → 60, ledgers `[200,200,200]` → `[0,28,32]`. **122 probes, ZERO verdict changes** | the propagation chain collapses on the narrowed arm → step 1 was incomplete | secrets, absence, `F-33`, C-3 |
 | **3** | `R8.1`'s `seen` claim and the `observation_terms` roster, declared at load | spec | a witness holds `(rung, seen, {stratum, who, …})`; `Q2` fires for everyone in the rung | an undeclared struct member loads | PHASE 3 |
 | **4** | `told_by` minted from the channel at the teller's confidence (`19_PLAN.md` step 4) | spec | a told claim at less than firsthand confidence; standing stops returning its maximum | every deposit is still firsthand | 17, 18 |
 | **5** | the ledger-cap measurement (`19_PLAN.md` step 3, `M-1`) with 1–4 live | spec | the printed 3×3 | a witnessed concession survives twelve seasons → no change needed | PHASE 3, `P-42` |
@@ -506,6 +506,61 @@ be *edits to the thing under review*, which is what PHASE 0 is.
 > ⚠ **The ordering 1 → 2 is the plan's single hardest constraint.** Flip fan-out before repairing
 > `document_key` and `M-6` measures a starved chain rather than a narrowed one, and the ruling that
 > forced the flip gets read back as evidence against itself.
+>
+> ### ⛔ **STEP 2 IS DONE AND `M-6` DID NOT ANSWER ITS OWN QUESTION. Read this before citing it.**
+>
+> **`M-6` as this plan specifies it CANNOT FAIL.** It asks whether *the claim→question→act chain
+> drops to zero on the NPC lane* and points at `_r3_propagates` — which walks `Event.causes[]` over
+> `driver.resolved` and **never reads a ledger**. The corpus tallies (NPC R3 30/30, ARC 54/59) are
+> identical across all three arms **both co-located and with the three persons dispersed to
+> distinct rungs**, while deposits fall by an order of magnitude. A check that cannot fail is not a
+> measurement (`§0.1` pt 2), so the flip is **not** reported as "M-6 passed".
+>
+> **What was measured instead, link by link, `build_world(0)` at three seasons:**
+>
+> | | `total` | `presence_only` | `all_five` (shipped) |
+> |---|---|---|---|
+> | deposits | 649 | 57 | **60** |
+> | ledgers | `[200,200,200]` (at the cap) | `[0,28,29]` | **`[0,28,32]`** |
+> | questions raised | 5 / 9 / 10 | 5 / **8 / 8** | **5 / 9 / 10** |
+>
+> **Links 1 and 2 survive; `presence_only` costs questions and `all_five` does not.** That is the
+> measured reason the arm is `all_five` rather than the narrowest one.
+>
+> ⚠ **The third link is REAL and this world is too small to show it.** In `build_world(0)` the act
+> set is identical under all three arms; in `tiny_world` (five persons, four rungs) the same flip
+> takes **233 acts to 221**. A first draft of this record called the link inert and
+> `test_w8_the_proof_clause…` refuted it within the hour.
+>
+> ### ⚠ The one measured COST, recorded and deliberately not acted on
+>
+> At the shipped `observation_deposit_mode: actor`, `W-D`'s 16-fork slice diverges **2** times at
+> `total` fan-out, **0** at `all_five`, and **7** at `presence_only` — **non-monotonic**, since
+> `all_five` is a superset of `presence_only`. Half the channel survives: under the widened
+> `(verb, subject)` fingerprint the shipped arm still diverges 8 against the control's 6 (was 11
+> against 7), so `W-B` still changes what a person deliberates **about** and no longer changes the
+> **verb set**.
+>
+> **The arm is not re-chosen on it**, on `CLAUDE.md` §0's tests 3 and 5: `19_PLAN.md` step 1 names
+> the channel-predicate arm and forbids editing the arm set, and `H-54` registers that
+> within-source question order is decided by **lexicographic order over content hashes in 801 of
+> 1,068 deliberations** — so a 16-fork slice is dominated by hash ordering and supports no ranking
+> of the arms. Choosing a game mechanism on that would be choosing it on noise. Both numbers are
+> pinned in their own tests so neither reading can be quoted without the other.
+>
+> ### ⚠ And one registered argument EXPIRED, which is the flip's largest side effect
+>
+> **The ledger cap now evicts nothing in any arm — 48 / 49 / 204 → 0 / 0 / 0.** The flood that
+> filled the 200-claim ledger was the total fan-out. Consequences, all re-measured and re-pinned:
+> `H-40`'s decay sweep is observable in **every** deposit arm (`total` read 100/100 and now reads
+> 90/60); a grammar-vocabulary claim now **survives** to end-of-run where none did; and the
+> published causal chain shortens 4 → 3 at two seasons **because the links it lost were
+> `claim.deposited` ones — under `total` a claim's own DECAY was witnessed by everyone and
+> re-deposited, so the chain grew two links a season by feeding on its own memory loss.**
+>
+> **`H-122`'s first reason for defaulting to `actor` is therefore gone**, and the default does not
+> move: its second reason — that at form 6 `total` records a holder-relative value in the wrong
+> holder's ledger — is a correctness argument the flip does not touch. Recorded on the row.
 
 ## PHASE 2 · The structure exists and resolves — **this lane's own work**
 ### Properties: **capable · flexible**

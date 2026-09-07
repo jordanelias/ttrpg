@@ -195,11 +195,56 @@ DEFAULT_FIXTURES = Fixtures(
     # — `wear`'s precedent, and S42.2.1's rule.
     # [JUSTIFIED: engine/season/hole_register.yaml H-40 -- the THIRD licensed clock; #353 licenses decay at MATTER and gives NO RATE, so the rate is injected with a `site:` and a three-point sweep]
     claim_decay_per_season=5,
-    # `W6` / `H-33`. WHICH WITNESS CHANNELS ARE LIVE. `total` is the DEFAULT AND THE CONTROL --
-    # it is #353's specified behaviour (S61: *"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY
-    # PERSON"*), so the sweep's control arm is the design as written rather than a baseline
-    # somebody invented. The three points are `H-33`'s own declared sweep.
-    fan_out_mode="total",
+    # `W6` / `H-33`. WHICH WITNESS CHANNELS ARE LIVE.
+    #
+    # ⚠ THE DEFAULT MOVED OFF `total` ON 2026-09-07, BY RULING, AND `total` IS STILL THE CONTROL.
+    # It was both until then, on the ground that S61's *"WITNESS AS SPECIFIED FANS EVERY EVENT TO
+    # EVERY PERSON"* is the design as written. `R7` (`references/design_rulings_2026-09-06.md`)
+    # overtakes that: Jordan chose the architecture model over the echo model -- *legitimacy falls
+    # where the news has reached* -- and `total` IS the echo model arriving one layer down, at the
+    # deposit. Under it nothing is hideable, so there is no secret, no lie, no rumour and no such
+    # thing as being ABSENT: the person who never travelled holds what the person in the room holds.
+    # `19_PLAN.md` step 1 is the same instruction from the subsystem's side.
+    #
+    # WHY `all_five` AND NOT `presence_only` -- MEASURED, both arms, `build_world(0)`, 3 seasons:
+    #   deposits          649 (total) -> 57 (presence_only) -> 60 (all_five)
+    #   ledgers      [200,200,200]    -> [0,28,29]          -> [0,28,32]   (cap L=200; `total` pins)
+    #   questions raised    5/9/10    -> 5/8/8              -> 5/9/10
+    # `presence_only` COSTS QUESTIONS and `all_five` does not: the narrowest arm thins the
+    # claim->question link, while `all_five` removes 91% of the deposits and leaves that link
+    # exactly where `total` had it. So the arm chosen is the one that buys the epistemic gap
+    # without paying for it upstream. (`all_five` names five channels and is currently a
+    # measurement of THREE -- `chronicle` matches nobody and `post_remit` needs an office whose
+    # remit covers the emitting verb; `test_w6_every_named_channel_has_a_predicate…` asserts
+    # exactly which two are inert.)
+    #
+    # ⚠ AND IT IS NOT FREE. At the shipped `observation_deposit_mode: actor`, `W-D`'s 16-fork slice
+    # diverges 2 times at `total`, 0 at `all_five` and 7 at `presence_only` -- NON-MONOTONIC, since
+    # `all_five` is a superset of `presence_only`. Half that channel survives (under the widened
+    # `(verb, subject)` fingerprint the shipped arm still diverges 8 against the control's 6), and
+    # the arm is not re-chosen on 16 forks whose question order `H-54` measures as hash-decided in
+    # 801 of 1,068 deliberations. Both numbers are pinned in the two `test_wd_…` tests, which carry
+    # the full reasoning; this comment is not the place it is decided.
+    #
+    # ⚠ AND M-6 IS NOT REPORTED AS "PASSED", because its instrument cannot observe the third link.
+    # `_r3_propagates` is an `Event.causes[]` walk over `driver.resolved` and never reads a ledger:
+    # the corpus tallies (NPC R3 30/30, ARC 54/59) are identical across all three arms BOTH
+    # co-located AND with the three persons dispersed to distinct rungs. M-6 as `19_PLAN.md`
+    # specifies it therefore CANNOT FAIL, and a check that cannot fail is not a measurement
+    # (§0.1 pt 2). What is licensed by the numbers above is narrower and is what is claimed: the
+    # first two links survive the flip.
+    #
+    # ⚠ THE THIRD LINK IS REAL, AND A FIRST WRITING OF THIS COMMENT DENIED IT. It said the
+    # resolved-act set is identical under all three arms, full stop. That is true of
+    # `build_world(0)` -- three persons, one of whom acts -- and FALSE of `tiny_world`, five
+    # persons across four rungs, where the same flip takes 233 acts to 221 and makes suppressing
+    # `move` stop being larder-neutral (`test_w8_the_proof_clause_is_still_not_met…`, which caught
+    # this). So what `question_aggregation_rule: first` and the five-scene budget flatten
+    # (`ID-16`; the gain is `H-106`) is the SIZE of the third link, not its existence.
+    #
+    # The three points remain `H-33`'s own declared sweep and the channel list is untouched
+    # (`19_PLAN.md` step 1: *"do not touch the channel list itself -- it is a sweep's arm set"*).
+    fan_out_mode="all_five",
     # `H-87`. S39.3 REFUSES a default for the contest depth cap -- *"a default is a number
     # somebody made up and it will be cited later as though it were measured"* -- so `contest()`
     # takes it from the CALLER. This is the caller's number, injected and swept, and it lives here

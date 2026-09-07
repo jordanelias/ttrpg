@@ -1,5 +1,71 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⭐ DONE 2026-09-07, LATER — FAN-OUT IS OFF `total`. `R7` executed in the season loop (ED-IN-0205)
+
+**`engine/season/data/fixtures.py` ships `fan_out_mode="all_five"`.** `total` fanned every Event to
+every person, which is `R7`'s **echo model arriving at the deposit layer**: nothing is hideable, so
+there is no secret, no lie, no rumour and no such thing as being absent. `total` stays as `H-33`'s
+control arm and #353 S61's specified behaviour; **the channel list is untouched** (`19_PLAN.md`
+step 1 forbids editing the arm set). **`H-33` stays `assumption`** — `R7` rules which arm ships and
+says nothing about what the five predicates are.
+
+| | `total` | `presence_only` | `all_five` (shipped) |
+|---|---|---|---|
+| deposits | 649 | 57 | **60** |
+| ledgers | `[200,200,200]` — at the cap | `[0,28,29]` | **`[0,28,32]`** |
+| questions raised | 5 / 9 / 10 | 5 / **8 / 8** | **5 / 9 / 10** |
+
+**The arm is `all_five` because `presence_only` costs questions and it does not.** ⭐ The artifact
+is the first secret in the world: two persons' witness deposits differ after two seasons and are
+**identical under `total`**, with that control inside the same test. **122 probes, ZERO verdict
+changes** (63 PASS / 59 GAP either side); run artifacts re-baselined, deltas in the commit.
+
+### ⛔ Three things a next session must not misread
+
+1. **`M-6` cannot fail as specified, and this is NOT reported as "M-6 passed".** `_r3_propagates`
+   walks `Event.causes[]` over `driver.resolved` and **never reads a ledger**, so the corpus tallies
+   (NPC R3 30/30, ARC 54/59) are identical across all three arms **both co-located and with the
+   three persons dispersed to distinct rungs**. A check that cannot fail is not a measurement
+   (`§0.1` pt 2). What is claimed is links 1 and 2 of the chain, above.
+2. **The third link is real; `build_world(0)` is too small to show it.** The act set is invariant
+   there and **not** in `tiny_world` — 233 acts → 221 on the same flip. A first draft of this record
+   said the link was inert and `test_w8_the_proof_clause…` refuted it within the hour.
+3. **One measured COST, recorded and deliberately not acted on.** At the shipped
+   `observation_deposit_mode: actor`, `W-D`'s 16-fork slice diverges **2** at `total`, **0** at
+   `all_five`, **7** at `presence_only` — non-monotonic, since `all_five` is a superset of
+   `presence_only`. Half the channel survives: under the widened `(verb, subject)` fingerprint the
+   shipped arm still diverges 8 against the control's 6 (was 11 against 7), so `W-B` still changes
+   what a person deliberates **about** and no longer changes the **verb set**. **Not re-chosen on
+   it**, per `CLAUDE.md` §0 tests 3 and 5: `19_PLAN.md` step 1 names the arm, and `H-54` registers
+   that within-source question order is decided by lexicographic order over content hashes in
+   **801 of 1,068** deliberations — 16 forks support no ranking of arms.
+
+### ⚠ The flip's largest side effect: the ledger cap stopped evicting, and a registered argument expired
+
+**Evictions go 48 / 49 / 204 → 0 / 0 / 0 in this world.** The flood that filled the 200-claim ledger
+*was* the total fan-out. Everything that rested on that pressure moved, and all of it is re-measured
+and re-pinned rather than relaxed:
+
+- **`H-40`'s decay sweep is now observable in EVERY deposit arm** — `total` read 100/100 at rates
+  5/20 and now reads 90/60, like the other two. Its flatness was never a property of the deposit
+  mode; it was the cap.
+- **`H-122`'s FIRST reason for defaulting to `actor` is therefore gone.** Its second — that at form
+  6 `total` records a holder-relative value in the **wrong holder's** ledger — is a *correctness*
+  argument the flip does not touch, and is why the default **does not move**. Recorded on the row;
+  flipping a default on a measurement that has just moved would be a second design change riding an
+  unmeasured one.
+- **A grammar-vocabulary claim now survives to end-of-run** where none did in any arm.
+- **The published causal chain shortens 4 → 3 at two seasons, and that is the flip working.** The
+  links it lost were `claim.deposited` ones: under `total` a claim's own DECAY was witnessed by
+  everyone and re-deposited, so the chain grew two links a season **by feeding on its own memory
+  loss**. What is left is one deposit and one decay per season — a memory dimming.
+
+**Next in `PHASE 1`:** step 3 (`R8.1`'s `seen` claim and the `observation_terms` roster), which is
+what supplies the WHAT-they-learn half that the channels do not decide. Step 1's Record route stays
+blocked on `H-84`, whose owner is *Part E — the verb that would do it*, and nothing was invented to
+get round it.
+
+
 ## ⭐ DONE 2026-09-07 — THE DECOMPOSITION IS IN `engine/season/`. `shape.py` 6,771 → 5,165 (ED-IN-0203)
 
 **The entry below this one says the decomposition "has to be redone" on `engine/season/`. It has

@@ -29,7 +29,7 @@ exercised by this run.**
 | `wear_per_season` | `{'harbour': 10, 'seam': 10, 'body': 10}` | no — a harness fixture |
 | `confidence_default` | `100` | no — a harness fixture |
 | `claim_decay_per_season` | `5` | no — a harness fixture |
-| `fan_out_mode` | `total` | no — a harness fixture |
+| `fan_out_mode` | `all_five` | no — a harness fixture |
 | `contest_max_depth` | `2` | no — a harness fixture |
 | `entrenchment_seasons` | `60` | yes — §15.2 |
 | `obstacle_refusal_multiple` | `2` | yes — §27.4 |

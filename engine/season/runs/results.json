@@ -9259,7 +9259,7 @@
   "P15": {
    "id": "P15",
    "verdict": "PASS",
-   "detail": "PASS, BY CONSTRUCTION, AND IN BOTH DIRECTIONS: the same Event reaches 5 person(s) under `total` (S61's specified behaviour, and `H-33`'s control) and 3 under `presence_only` -- it ADMITS the 3 people standing in the emitter's rung and EXCLUDES ['p_high', 'p_king'], who are elsewhere. Admitting is asserted as well as excluding, because a channel broken CLOSED also shrinks the set and that is what the first version of this probe was reading. \u26a0 THE DESIGN STILL SUPPLIES NO PREDICATE: these are an INJECTED default, `H-33` stays `assumption`, and `total` remains the default because it is what #353 specifies. What is closed is that an exclusion is now EXPRESSIBLE and swept, not that #353 said how. \u26a0 TWO OF THE FIVE ADMIT NOBODY IN THIS WORLD -- `post_remit` needs an office whose remit covers the emitting verb, and `chronicle` fires only on a binding decision; neither is reachable from the verbs the fold can execute",
+   "detail": "PASS, BY CONSTRUCTION, AND IN BOTH DIRECTIONS: the same Event reaches 5 person(s) under `total` (S61's specified behaviour, and `H-33`'s control) and 3 under `presence_only` -- it ADMITS the 3 people standing in the emitter's rung and EXCLUDES ['p_high', 'p_king'], who are elsewhere. Admitting is asserted as well as excluding, because a channel broken CLOSED also shrinks the set and that is what the first version of this probe was reading. \u26a0 THE DESIGN STILL SUPPLIES NO PREDICATE: these are an INJECTED default, `H-33` stays `assumption`, and `total` remains #353's SPECIFIED behaviour and this sweep's control -- but it is NO LONGER THE DEFAULT. It was, on the ground that the specified behaviour should ship; `R7` (2026-09-06) overtakes that by ruling the architecture model over the echo model, and `total` is the echo model at the deposit layer. The default is `all_five` from 2026-09-07. The GRADE is untouched: `R7` rules which arm ships and says nothing about what the five predicates are. What is closed is that an exclusion is now EXPRESSIBLE and swept, not that #353 said how. \u26a0 TWO OF THE FIVE ADMIT NOBODY IN THIS WORLD -- `post_remit` needs an office whose remit covers the emitting verb, and `chronicle` fires only on a binding decision; neither is reachable from the verbs the fold can execute",
    "kind": null,
    "section": "S61",
    "title": "a person's private act stays private",
@@ -9783,7 +9783,7 @@
   "W6": {
    "id": "W6",
    "verdict": "PASS",
-   "detail": "PASS: ONE Event spanning many rungs, with ONE id, emitted SERIALLY before the parallel section. Sharding it per rung would BREAK causes[], because ONE CAUSE IS ONE ID (S31.1 exception 3). It reached 35 ledger(s) through WITNESS",
+   "detail": "PASS: ONE Event spanning many rungs, with ONE id, emitted SERIALLY before the parallel section. Sharding it per rung would BREAK causes[], because ONE CAUSE IS ONE ID (S31.1 exception 3). It reached 9 ledger(s) through WITNESS",
    "kind": null,
    "section": "S31.1",
    "title": "a plague spans many rungs as one event",
@@ -9901,7 +9901,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (da3335a665a7...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (feb6c4b20ba5...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10163,7 +10163,7 @@
   "A28": {
    "id": "A28",
    "verdict": "PASS",
-   "detail": "PASS over 7836 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 4 causes name an ACT and 7827 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
+   "detail": "PASS over 127 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 4 causes name an ACT and 118 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
    "kind": null,
    "section": "S19.1",
    "title": "the log's invariants hold",
@@ -11027,10 +11027,10 @@
   "DECISION": 665,
   "QUERY": 6023,
   "NOTE": 471,
-  "WRITE": 24534,
-  "EVENT": 18970,
+  "WRITE": 10394,
+  "EVENT": 10360,
   "ACT": 75,
-  "CLAIM": 8372,
+  "CLAIM": 1023,
   "GAP": 66
  },
  "_corpus_defects": [

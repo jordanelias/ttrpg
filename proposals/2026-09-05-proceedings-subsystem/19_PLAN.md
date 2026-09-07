@@ -122,6 +122,24 @@ sweeps, and that is the laundering it exists to stop.
 
 ### 1 · Take fan-out off `total`
 
+> ## ✅ **EXECUTED 2026-09-07 — `ED-IN-0205`.** `engine/season/data/fixtures.py` ships `all_five`.
+> Three corrections this step's own text needs, all found by running it:
+>
+> 1. **The arm is `all_five`, not "the four-channel set".** `H-33`'s declared sweep is
+>    `total | presence_only | all_five` and there is no four-channel point. Five channels are
+>    named; `chronicle` matches nobody and `post_remit` needs an office whose remit covers the
+>    emitting verb, so the arm is currently **a measurement of three**.
+> 2. ⛔ **This step's ARTIFACT passes at `total` and is therefore not a falsifier as written.**
+>    *"Two persons whose ledgers differ in at least one (subject, predicate) pair"* is TRUE under
+>    `total`: `p_carin` holds `('hearth_ostvik','stores:grain')` and the others do not. That is
+>    `W-B`'s **observation** deposit — minted to whoever READ the cell, per-reader by construction —
+>    not a witness deposit at all. Restricted to claims whose predicate is a logged Event kind, the
+>    control behaves as this step assumed: **0 differing pairs at `total`, 3 at the shipped arm.**
+>    The artifact is right; its unrestricted form was measuring the wrong deposit.
+> 3. ⛔ **`M-6` cannot fail as specified** — `_r3_propagates` never reads a ledger. See
+>    `21_RECONCILIATION.md` PHASE 1 for the link-by-link measurement that replaced it, for the one
+>    cost the flip carries at `W-D`, and for the eviction argument it retired.
+
 **Change.** The fixture flips from `total` to the four-channel set. `total` stays in the roster as the
 control arm of its existing sweep. **Do not touch the channel list itself** — it is a sweep's arm set.
 
