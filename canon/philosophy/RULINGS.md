@@ -534,3 +534,47 @@ provincial scale, sustained, it is the Calamity's mechanism exactly.
 will remember what it looked like and will want that; wanting it is what converts the work. Mending's
 discipline is to restart the tending and let it go where it goes — which may be nowhere anyone
 remembers. *Applied:* §6.6.
+
+---
+
+## Questions the rulings opened (2026-09-07)
+
+**Not gaps in the framework, and not required for it to close.** These are second-order: each became
+askable *because* a ruling was substantive rather than a selection between options. Recorded so they
+are not answered by drift later.
+
+**1. Why have the Locked Zones not been restored?** Previously answered structurally — spooling would
+never resume, so restoration was impossible. That answer is gone: Mending restarts becoming and is
+non-corrosive at any scale (§6.6). So the obstacle is now something else — available reach, lost
+knowledge, the Church's persecution, or the knife-edge itself, that nobody restoring a ruined province
+can resist wanting it back as they remember it. **The last would be the strongest answer and is
+nowhere in the suite.**
+
+**2. Sensitivity cuts both ways, and the Southernmost are the case.** Greater reach captures more of an
+encounter, so it reconfigures more (§5.4); reach at the crossing also determines how much of one's
+beyond-human being one comprehends (§7.6). So communities that deliberately cultivate sensitivity are
+systematically **more likely to become other and better off when they do.** That is a strong claim
+about the Southernmost which the framework implies and never states.
+
+**3. Is moral standing lost continuously, or at the yield point?** The yield point is binary — return
+is available until it is not (§7.1). Drift is progressive. Does a practitioner halfway along hold
+partial standing, or full standing until the crossing and none after? Materially different for how a
+community treats someone drifting.
+
+**4. What is it like to be in a Locked Zone?** Becoming is precluded, so a person there does not
+accumulate (§8.5). Whether that means no ageing, no new memory, nothing settling — and what it looks
+like from outside — is underived.
+
+**5. Can a Gap itself be Mended?** Mending restarts becoming; a Gap is an **absence**, with nothing
+there to restart (§8.4a). So does Mending close Gaps, or only treat the Locked Zone around one? If
+Gaps cannot be closed, the standing breaches are permanent, which is a significant fact about the
+world.
+
+**6. Does ordinary life change imbrication?** Acting determines imbrication and imbrication determines
+perceiving (§3.5). Non-practitioners act constantly. So is everyone's imbrication slowly shifting —
+with sensitivity the far end of something universal — or does ordinary action leave one where one was?
+
+**One implication for mechanism rather than philosophy.** Coherence is now a **distance** with a
+**stress-based yield point** and no accumulation (§7.1). A track that depletes does not model that, so
+whatever implements it will need a different shape. Under §0.05 that is code's problem, not this
+suite's — but it follows from what was ruled.
