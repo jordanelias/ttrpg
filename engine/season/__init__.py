@@ -1,30 +1,37 @@
-"""THE SEASON LOOP — the adopted game code (ED-IN-0202, Jordan 2026-09-05, "adopt in full").
+"""`engine.season` — the season loop, as a package. The adopted game code (ED-IN-0202, Jordan
+2026-09-05, *"adopt in full"*), decomposed into modules (ED-IN-0203).
 
-⚠ WHY THIS FILE INSERTS ITS OWN DIRECTORY ON `sys.path`, WHICH IS NOT ORDINARY PACKAGE STYLE.
+⚠ NO `sys.path` INSERT HERE, AND THE ABSENCE IS THE POINT — THIS FILE USED TO BE ONE. At adoption
+the modules imported each other by BARE NAME (`import shape`, `import probes`), a flat convention
+carried in from the instrument they came from, and this file inserted its own directory to make
+that work under `tests/valoria/test_engine_does_not_import_systems.py`, which walks every
+`engine/**/*.py` and imports it by dotted path. That insert bought a real repair and charged a real
+price, which the file it replaced named honestly: a module could be reached as `shape` AND as
+`engine.season.shape`, two module objects with two sets of module-level state in one process — the
+same second-identity hazard `CLAUDE.md` §3 records for `combat_engine_v1`.
 
-The modules here import each other by BARE NAME (`import shape`, `import probes`) — a flat
-module-set convention carried in from the instrument this package was adopted from, and the same
-convention `systems/combat/combat_engine_v1/` uses. Without this insert the package is importable
-ONLY by a caller that has already arranged the path, which is how it worked while it lived under
-`proposals/` and every entry point did the insert itself.
+The decomposition pays that price off rather than carrying it. Every import inside this package is
+now relative, so there is exactly one identity per module and no path repair to perform. A package
+that repairs its own import path works from anywhere and therefore hides where it is being imported
+from; the `sys.path` mutations that remain are DECLARED SEAMS reaching OUT of this package — the
+flat personal-combat module set, the repo root for `engine.autoload`, the degree sweep — each
+inside a function body, each with its reason at the site.
 
-That stopped being adequate at adoption. `tests/valoria/test_engine_does_not_import_systems.py`
-walks EVERY `engine/**/*.py` and imports it by dotted path in a subprocess, to hold the
-engine→systems import count at zero. Under that walk `engine.season.corpus_run` raised
-`ModuleNotFoundError: shape` and reddened a BLOCKING CI gate — found by an adversarial pass on the
-conversion, not by the move itself, which is the §0.1 pt 1 read/write-asymmetry signature: the
-importers were fine, the IMPORT CONTEXT changed underneath them.
+Entry points are modules, not scripts:
 
-⚠ THE COST, NAMED RATHER THAN GLOSSED: a module here can now be reached as `shape` AND as
-`engine.season.shape`, and those are TWO module objects with two sets of module-level state if a
-process loads both. That is the same second-identity hazard `CLAUDE.md` §3 records for
-`combat_engine_v1`, and it is accepted here for the same reason — converting 11 modules to dotted
-imports would shift every line number, and `hole_register.yaml` cites those files by `:NNN`.
-Prefer `engine.season.X` in new callers; the bare form exists for the modules' own siblings.
+    python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0
+    python -m engine.season.harness.run_cases
+    python -m engine.season.harness.report      # the SOLE emitter of runs/ (W15, guardrail G7)
+    python -m engine.season.harness.corpus_run
+    python -m engine.season.harness.register --counts
+    python -m engine.season.harness.delta HEAD
+
+⚠ `report` BEFORE `delta`, ALWAYS. `delta` compares a committed revision's `runs/results.json`
+against the WORKING TREE's copy and regenerates nothing, so running it alone compares a file with
+itself and prints `PROBE FLIPS 0` no matter what changed. That number was quoted as a control in
+five commit messages before an independent verifier caught it.
+
+Every path this package derives is named once in `engine.season.data.files`, the only module here
+allowed to anchor itself on its own module location. That is checkable rather than aspirational:
+grepping the dunder-file spelling across `engine/season/` must print exactly that one file.
 """
-import sys
-from pathlib import Path
-
-_PKG = Path(__file__).resolve().parent
-if str(_PKG) not in sys.path:
-    sys.path.insert(0, str(_PKG))

@@ -28,15 +28,9 @@ central claim made falsifiable.
 from __future__ import annotations
 
 import argparse
-import sys
-from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-if str(HERE) not in sys.path:
-    sys.path.insert(0, str(HERE))
-
-import shape as S                                                     # noqa: E402
-from trace_log import TRACE                                           # noqa: E402
+from .. import shape as S
+from ..trace_log import TRACE
 
 CASE = "NPC-088"
 

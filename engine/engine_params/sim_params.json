@@ -395,7 +395,7 @@
       "value": 2,
       "kind": "scalar",
       "module": "engine.season",
-      "file": "engine/season/corpus_run.py",
+      "file": "engine/season/harness/corpus_run.py",
       "note": "for the 86 cases whose `span_seasons` is prose (\"ongoing\")",
       "citation": null,
       "citation_grade": null
@@ -406,7 +406,7 @@
       "value": 6,
       "kind": "scalar",
       "module": "engine.season",
-      "file": "engine/season/corpus_run.py",
+      "file": "engine/season/harness/corpus_run.py",
       "note": "the corpus asks for up to 16; the flood (`W6`) makes that unaffordable",
       "citation": null,
       "citation_grade": null
@@ -417,7 +417,7 @@
       "value": 3,
       "kind": "scalar",
       "module": "engine.season",
-      "file": "engine/season/register.py",
+      "file": "engine/season/harness/register.py",
       "note": "",
       "citation": null,
       "citation_grade": null

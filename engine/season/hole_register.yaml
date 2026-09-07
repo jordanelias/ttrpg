@@ -2182,6 +2182,10 @@ rows:
       that was false at deposit; see the first paragraph of `cite:`.
     cite:      >-
       SOURCES QUOTED HERE: engine/season/shape.py,
+      engine/season/data/requires.py (the dead-carrier sentence MOVED THERE with `TypedRequires`
+      in the decomposition, ED-IN-0203, a PURE MOVE -- this row is one of the citations that broke
+      because it names the FILE a claim lives in rather than the claim; that is the debt the
+      decomposition plan defers to its step 10, and it is paid here only where a gate went red),
       engine/season/hole_register.yaml (row `H-94`) and
       proposals/2026-09-04-degree-sweep/arm9_forking.py (arm 9c's own statement of its diagnosis,
       added 2026-09-04 -- it was being quoted with no source that carries it).

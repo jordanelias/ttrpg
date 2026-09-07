@@ -65,11 +65,16 @@ from __future__ import annotations
 
 import random
 import sys
-from pathlib import Path
 from typing import Any, Optional
 
-_REPO = Path(__file__).resolve().parents[2]
-_PC = _REPO / "systems" / "combat" / "combat_engine_v1"
+from .data import files
+
+# ⚠ THE SILENT ONE, AND IT IS NAMED HERE BECAUSE ITS FAILURE IS GREEN. This used to climb four
+# `parents[...]` levels from this module's own location -- a depth that is a fact about where this
+# file sits rather than about the tree. Move the file one directory and `_PC` names something that
+# does not exist, `engine()` returns `None`, `resolve()` answers `ENGINE-UNAVAILABLE`, the six seam
+# tests SKIP, and the run reports success. The anchor is asserted at import in `season.data.files`.
+_PC = files.PC_ENGINE_DIR
 
 _LOADED: Optional[tuple] = None
 _LOAD_ERROR: str = ""
@@ -114,7 +119,7 @@ def derive_party(person: Any, fx: Any, label: str) -> Any:
     if eng is None:
         return None
     _, combatant = eng
-    import shape as S
+    from . import shape as S
     bands = S.body_band_penalty(person, fx)
     # `end`'s class default is 4 (combatant.py). One band = one point, floored at 1: a dying
     # person still fights, which is the same floor `Query.budget` applies for the same reason.
@@ -129,7 +134,7 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any) -> dict:
     exactly as every other draw in this instrument is (`S33`: *unique per DRAW, not per
     operation*). `wrapper.fight`'s own note says to pass `random.Random(seed)` for determinism.
     """
-    import shape as S
+    from . import shape as S
     eng = engine()
     if eng is None:
         return dict(status="ENGINE-UNAVAILABLE", why=load_error(), module="personal_combat")

@@ -7,7 +7,7 @@ producer's reasoning. THE FIDELITY CLAIM DID NOT SURVIVE. It found ten defects a
 FLATTERED THE SHAPE. Each is pinned below so a recurrence is caught BY A MACHINE RATHER THAN
 BY LUCK -- `ARCHITECTURE.md` S0's own discipline, applied to the thing doing the measuring.
 
-Run: python3 -m pytest test_tracer_is_honest.py -q
+Run: python3 -m pytest engine/season/tests -q
 """
 
 from __future__ import annotations
@@ -22,17 +22,22 @@ from pathlib import Path
 
 import pytest
 
-import probes as P
-import run_cases as R
-import shape as S
-from shape import (
+from .. import shape as S
+from ..data import files
+from ..data import verbs as VERBS
+from ..harness import probes as P
+from ..harness import run_cases as R
+from ..shape import (
     Event, Fixtures, Forbidden, Person, Proposition, Query, Rung, Site,
     Step, Tenure, Unspecified, View, World, WriteClass,
 )
 
-HERE = Path(__file__).resolve().parent.parent   # the season package (tests/ is one below)
-SHAPE_SRC = (HERE / "shape.py").read_text()
-PROBES_SRC = (HERE / "probes.py").read_text()
+SHAPE_SRC = files.SHAPE_PY.read_text()
+PROBES_SRC = files.PROBES_PY.read_text()
+# `Fixtures`/`DEFAULT_FIXTURES` moved to `season.data.fixtures` in step 3 of the decomposition
+# (ED-IN-0203, a PURE MOVE) -- a fixed source string, alongside `SHAPE_SRC`/`PROBES_SRC` above,
+# for the checks below that scan the FIXTURES construction body specifically.
+FIXTURES_SRC = (files.DATA_DIR / "fixtures.py").read_text()
 
 
 
@@ -61,6 +66,7 @@ def _code_only(src: str) -> str:
 
 SHAPE_CODE = _code_only(SHAPE_SRC)
 PROBES_CODE = _code_only(PROBES_SRC)
+FIXTURES_CODE = _code_only(FIXTURES_SRC)
 
 def _w() -> World:
     return P.tiny_world()
@@ -172,10 +178,30 @@ def test_d5_the_budget_is_the_persons_choice_not_an_engine_truncation():
 
 def test_d6_no_invented_constant_sits_in_a_body():
     """DEFECT 6. Rev 1 had a wear rate uniform across every site kind, a //60, and
-    confidence=1 -- all below Fixtures, all outside the sweep."""
-    body = SHAPE_CODE.split("DEFAULT_FIXTURES = Fixtures (", 1)[1]
-    for bad in ("// 100", "// 60", "confidence = 1 ,"):
-        assert bad not in body, bad
+    confidence=1 -- all below Fixtures, all outside the sweep.
+
+    ⚠ RE-POINTED, step 3 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0203).
+    `DEFAULT_FIXTURES` moved to `season.data.fixtures` with its body unchanged; the split this
+    test performs must follow it to `FIXTURES_CODE`, or it silently stops finding the
+    construction it exists to scan -- `SHAPE_CODE` would then answer a DIFFERENT question (does
+    shape.py, which no longer defines `DEFAULT_FIXTURES` at all, contain the string), which is
+    the same corpus-shrinks-while-still-passing failure `test_h115` documents for the load-time
+    exit count."""
+    # ⚠⚠ THE STEP-3 RE-POINT NARROWED THIS TO NOTHING, AND AN ADVERSARIAL PASS CAUGHT IT.
+    # `split(token, 1)[1]` is "everything after the token to EOF". In `shape.py` that was ~4,750
+    # lines INCLUDING EVERY FUNCTION BODY -- which is D6's whole subject, "a constant in a BODY".
+    # In `fixtures.py` `DEFAULT_FIXTURES` is the LAST statement, so the scanned region became the
+    # kwargs list and nothing else. FALSIFIED BY EXECUTION: hardcoding `// 60` into
+    # `entrenchment`'s body (shape.py) left this test GREEN. A re-pointed guard that can no
+    # longer fire is worse than a broken one -- it reports coverage it does not have.
+    # The corpus is now the MODEL SET, so it follows the code wherever later steps move it.
+    mods = _model_modules()
+    assert len(mods) >= 8, f"model set collapsed to {len(mods)} -- this guard would pass vacuously"
+    for m in mods:
+        code = _code_only(m.read_text())
+        body = code.split("DEFAULT_FIXTURES = Fixtures (", 1)[-1] if "DEFAULT_FIXTURES = Fixtures (" in code else code
+        for bad in ("// 100", "// 60", "confidence = 1 ,"):
+            assert bad not in body, f"{m.name}: {bad}"
 
 
 def test_d6b_wear_has_no_silent_default():
@@ -267,8 +293,16 @@ def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
 
 def test_d9c_max_depth_has_no_default_anywhere():
     """S39.3: 'the depth cap has NO DEFAULT... a default is a number somebody made up and it
-    will be cited later as though it were measured.'"""
+    will be cited later as though it were measured.'
+
+    ⚠ WIDENED, step 3 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0203). `Fixtures`'s own
+    docstring names `caller_supplied_max_depth` as the exact field it REMOVED, and `Fixtures`
+    (with that docstring) now lives in `season.data.fixtures`, not `shape.py` -- so a regression
+    that re-added the retired default there would pass a `SHAPE_CODE`-only check. Same corpus-
+    shrinks-while-still-passing shape `test_h115` and `test_d6` document; checked in both places
+    now."""
     assert "caller_supplied_max_depth" not in SHAPE_CODE
+    assert "caller_supplied_max_depth" not in FIXTURES_CODE
     assert inspect.signature(S.contest).parameters["max_depth"].default is inspect.Parameter.empty
     w = _w()
     def fight(p, v, s, ask_budget):
@@ -452,6 +486,19 @@ def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
         "the process ending")
 
 
+
+def _model_modules():
+    """THE MODEL: every package module that is not the instrument.
+
+    Derived, never listed. `test_h115` and `test_jordan_no_definition_is_hardcoded_in_a_body`
+    both key on this, and both previously named files by hand — the exact shape this file
+    records three separate incidents about (`files.package_modules`, `:1773-1783`, `:4306-4311`),
+    each written after a module went unscanned BY CONSTRUCTION. A decomposition adds a model
+    module every step, so a hardcoded list is guaranteed to fall behind; this cannot.
+    """
+    return [m for m in files.package_modules()
+            if "harness" not in m.parts and not m.name.startswith("test_")]
+
 def test_h115_the_fourteen_load_time_raises_are_unchanged():
     """`H-115`: only the FOUR run-time degree-branch raises (in `emits_at`/`writes_at`) moved to
     `Unspecified`. The 14 load-time raises -- missing/malformed `write_matrix.yaml`/
@@ -482,8 +529,24 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     ⚠ THE BARE COUNT IS THIS TEST'S WEAKNESS AND IS LEFT IN PLACE DELIBERATELY: it goes red on any
     change and forces the author to say which side of the load/run-time line the new raise is on,
     which is the question, and a shape-based check (`is this raise inside a loader?`) would answer
-    it with a heuristic instead of a person."""
-    assert SHAPE_CODE.count("raise SystemExit") == 28
+    it with a heuristic instead of a person.
+
+    ⚠ RE-POINTED, step 2 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0203). `_load_rosters`
+    and `_load_write_matrix` -- 1 + 3 of the 28 -- moved to `season.data.rosters` and
+    `season.data.matrix` with their bodies unchanged; the count did not move WITH them if this
+    test still asked only `SHAPE_CODE`, which is `files.SHAPE_PY` alone. That is the exact
+    corpus-shrinks-while-still-passing failure `CLAUDE.md` names: `SHAPE_CODE` would have silently
+    started answering a DIFFERENT, smaller question (load-time raises in `shape.py` only) while
+    the assertion kept reading as the whole-instrument count. Summed across the three files that
+    now hold a `_load_*` this test's own docstring names, so a raise MOVED still counts and a raise
+    QUIETLY DROPPED during a future move still flips this to a number other than 28."""
+    mods = _model_modules()
+    assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
+    total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
+    assert total == 28, (
+        f"{total} load-time exits across the model set, expected 28. Per file: "
+        + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
+                    for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
 
 def test_d10b_resolve_sums_then_clamps_once():
@@ -492,8 +555,22 @@ def test_d10b_resolve_sums_then_clamps_once():
 
 
 def test_d10c_the_obstacle_refusal_gate_exists():
-    """S27.4 / S34: 'an attempt at Ob > 2 x Pool is refused' -- 'mechanical in RESOLVE'."""
-    assert "obstacle_refusal_multiple" in SHAPE_CODE
+    """S27.4 / S34: 'an attempt at Ob > 2 x Pool is refused' -- 'mechanical in RESOLVE'.
+
+    ⚠ RE-POINTED, step 3 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0203).
+    `obstacle_refusal_multiple` is a `DEFAULT_FIXTURES` key, and `DEFAULT_FIXTURES` moved to
+    `season.data.fixtures`; `SeasonDriver.resolve`, which reads it, did not move and is
+    unaffected."""
+    # ⚠ THE STEP-3 RE-POINT WEAKENED THIS AND WAS REVERTED. Asserting the key is REGISTERED in
+    # `fixtures.py` proves only that a default exists; the gate could stop reading it entirely
+    # and this would stay green. FALSIFIED BY EXECUTION: replacing the read at the gate with a
+    # literal `2` left the re-pointed form GREEN. The READ is the mechanism, and post-move the
+    # read-side assertion is STRONGER than before -- `obstacle_refusal_multiple` is no longer in
+    # shape.py's import list, so only the gate's own read can satisfy it.
+    assert "obstacle_refusal_multiple" in SHAPE_CODE, (
+        "the Ob>2xPool gate no longer READS its multiple from the fixtures")
+    assert "obstacle_refusal_multiple" in FIXTURES_CODE, (
+        "the multiple is no longer registered as a fixture default")
     assert "attempt.refused" in inspect.getsource(S.SeasonDriver.resolve)
 
 
@@ -852,7 +929,7 @@ def test_r3_the_instrument_assumes_no_partition_row_at_all():
     the same false-disclosure defect in a quieter form."""
     assert S.PARTITION_ASSUMED == {}, (
         f"W2's proof is ZERO assumed Partition rows; found {sorted(S.PARTITION_ASSUMED)}")
-    import report
+    from ..harness import report
     assert "PARTITION_ASSUMED" in inspect.getsource(report.emit), (
         "report.py stopped reading the disclosure hook, so a future assumption would go "
         "unreported -- which is exactly the false-disclosure defect rev 5 fixed")
@@ -1044,7 +1121,7 @@ def test_r4_the_l1_actor_identity_is_checked():
     SPELLABLE" false, while both were labelled on the strength of it."""
     w = _w()
     def impostor(p, v, s, ask_budget):
-        from shape import Act
+        from ..shape import Act
         return [Act("x", "the_church", "excommunicate")] if p.id == "p_low" else []
     with pytest.raises(Forbidden):
         P._run(w, impostor)
@@ -1115,15 +1192,20 @@ def test_the_corpus_defects_are_reported_not_hidden():
 # renders, which does catch SCN-06.
 # ===========================================================================
 
-PROPOSAL = HERE   # adopted: the season package owns runs/ and cases/ (ED-IN-0202)
+# ⚠ RENAMED FROM `PROPOSAL` AT THE ADOPTION, NOT ALIASED. The package no longer lives under
+# `proposals/`, and a name that says otherwise is the vocabulary defect `CLAUDE.md` §4 names:
+# a later session reading `PROPOSAL` cold derives a directory that does not exist. The SUBJECT
+# is unchanged -- the tree these entry points must not write to -- and that tree is now the
+# package itself, which owns `runs/` and `cases/`.
+PACKAGE = files.PACKAGE_DIR
 
 
 def _proposal_files():
-    """Every tracked-shaped file under the proposal, not just `runs/`. The first draft
+    """Every tracked-shaped file under the package, not just `runs/`. The first draft
     fingerprinted `runs/` alone with a non-recursive `iterdir()`, so a restored write to
     `ROOT / "out"` -- a one-token edit -- or to `runs/sub/` passed it. The property is *this
     entrypoint does not write*, so the sweep has to be the tree, not one directory."""
-    return sorted(f for f in PROPOSAL.rglob("*")
+    return sorted(f for f in PACKAGE.rglob("*")
                   if f.is_file() and "__pycache__" not in f.parts and f.suffix != ".pyc")
 
 
@@ -1137,15 +1219,20 @@ def _fingerprint(with_mtime: bool) -> dict:
     out = {}
     for f in _proposal_files():
         h = hashlib.sha256(f.read_bytes()).hexdigest()
-        out[str(f.relative_to(PROPOSAL))] = (h, f.stat().st_mtime_ns) if with_mtime else h
+        out[str(f.relative_to(PACKAGE))] = (h, f.stat().st_mtime_ns) if with_mtime else h
     return out
 
 
-def _run(script: str):
+def _run(module: str):
     import subprocess
-    proc = subprocess.run([sys.executable, str(HERE / script)],
-                          capture_output=True, text=True, cwd=str(HERE))
-    assert proc.returncode == 0, f"{script} failed:\n{proc.stderr[-3000:]}"
+    # ⚠ `-m`, NOT A PATH TO THE FILE. These are package modules now, so running one as a loose
+    # script gives it no package and its relative imports fail before it can do the thing this
+    # test is watching for. The cwd is the REPOSITORY ROOT, which is the directory that carries
+    # `engine/` -- the same route pytest's own rootdir insertion takes. It was the proposal
+    # directory until the adoption moved the package one home up.
+    proc = subprocess.run([sys.executable, "-m", f"engine.season.harness.{module}"],
+                          capture_output=True, text=True, cwd=str(files.REPO_ROOT))
+    assert proc.returncode == 0, f"{module} failed:\n{proc.stderr[-3000:]}"
     return proc
 
 
@@ -1157,7 +1244,7 @@ def test_w15_the_run_cases_entrypoint_writes_nothing():
     # Assert that it asserted (CLAUDE.md S0.1 point 2): an empty tree would otherwise let this
     # pass having observed nothing, which is the exact vacuity its sibling test guards against.
     assert len(before) > 10, f"fingerprinted only {len(before)} files -- the sweep is broken"
-    _run("run_cases.py")
+    _run("run_cases")
     after = _fingerprint(with_mtime=True)
     changed = sorted(k for k in set(before) | set(after) if before.get(k) != after.get(k))
     assert not changed, f"run_cases.py wrote under the proposal: {changed}"
@@ -1169,11 +1256,11 @@ def test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte():
     it covers `results.json`, `TRACE.txt` and all eight markdown files, and every field rendered
     into them -- not the one scalar the per-case test can reach. It subsumes the four wrong ARC
     cases, including the three a verdict comparison cannot see."""
-    runs = PROPOSAL / "runs"
+    runs = PACKAGE / "runs"
     before = {f.name: f.read_bytes() for f in sorted(runs.iterdir()) if f.is_file()}
     assert len(before) >= 10, f"expected the ten run artifacts, fingerprinted {sorted(before)}"
     try:
-        _run("report.py")
+        _run("report")
         after = {f.name: f.read_bytes() for f in sorted(runs.iterdir()) if f.is_file()}
     finally:
         # PUT THE COMMITTED BYTES BACK. Without this the test HEALS the tree it is judging: a
@@ -1202,7 +1289,7 @@ def _caselog_records(kind: str) -> dict:
     """Parse every field `report.py` renders per case out of the committed caselog -- the header
     line's id and verdict, and the meta line's scale, row counts and blockers. Comparing the
     verdict ALONE is what let SCN-06's defect through the first draft of this test."""
-    lines = (PROPOSAL / "runs" / f"CASELOG_{kind}.md").read_text().splitlines()
+    lines = (PACKAGE / "runs" / f"CASELOG_{kind}.md").read_text().splitlines()
     out, pending = {}, None
     for line in lines:
         h = _CASE_HEAD.match(line)
@@ -1224,7 +1311,7 @@ def test_w15_every_case_record_in_the_caselog_equals_results_json():
     all 143. A DIAGNOSIS rather than the guard -- see the block comment above -- but the one that
     names the case and the field when the reproduction test says only *CASELOG_ARC.md differs*."""
     import json as json_
-    results = json_.loads((PROPOSAL / "runs" / "results.json").read_text())
+    results = json_.loads((PACKAGE / "runs" / "results.json").read_text())
     expected = sum(len(results[k]) for k in ("NPC", "ARC"))
     checked = 0
     for kind in ("NPC", "ARC"):
@@ -1265,8 +1352,8 @@ def test_w15_every_case_record_in_the_caselog_equals_results_json():
 # assert the CHECKER WORKS, which is the part a later session could break without noticing.
 # ===========================================================================
 
-import exercises as EX
-import register as REG
+from ..harness import exercises as EX
+from ..harness import register as REG
 
 
 def test_w0_every_part_b_defect_binds_to_a_row_or_a_section():
@@ -1548,7 +1635,7 @@ def _write_call_sites(*paths):
     import ast as ast_
     pairs, dynamic = {}, []
     for path in paths:
-        tree = ast_.parse((HERE / path).read_text())
+        tree = ast_.parse(path.read_text())
         for node in ast_.walk(tree):
             if not (isinstance(node, ast_.Call) and isinstance(node.func, ast_.Attribute)
                     and node.func.attr == "write"):
@@ -1564,9 +1651,9 @@ def _write_call_sites(*paths):
                 return v.value if isinstance(v, ast_.Constant) and isinstance(v.value, str) else None
             rk, fn = lit("record_kind", 3), lit("fieldname", 4)
             if rk and fn:
-                pairs.setdefault((rk, fn), []).append(f"{path}:{node.lineno}")
+                pairs.setdefault((rk, fn), []).append(f"{path.name}:{node.lineno}")
             else:
-                dynamic.append(f"{path}:{node.lineno}")
+                dynamic.append(f"{path.name}:{node.lineno}")
     return pairs, dynamic
 
 
@@ -1576,7 +1663,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     ⚠ Sites whose `record_kind`/`fieldname` are not literals are reported as a HOLE IN THIS CHECK
     rather than skipped: a walk that silently ignores what it cannot read is a walk that reports
     `clean` over an unknown number of unchecked writes."""
-    pairs, dynamic = _write_call_sites("shape.py", "probes.py")
+    pairs, dynamic = _write_call_sites(files.SHAPE_PY, files.PROBES_PY)
     assert pairs, "the AST walk found no write call sites at all -- the walk is broken"
     # W3: THE FOLD'S WRITE IS GENERIC BY CONSTRUCTION -- `_apply_write` passes the pair as
     # variables, because one `resolve` serving 32 verbs cannot name a literal. Its coverage did
@@ -1590,7 +1677,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     # property is *"this call is inside `_apply_write`"*, and the AST answers it exactly. `G3`:
     # assert the property, never the proxy. Found while reconciling the governance-slice pass.
     import ast as _ast
-    _tree = _ast.parse((HERE / "shape.py").read_text())
+    _tree = _ast.parse(files.SHAPE_PY.read_text())
     fold_span = next(((n.lineno, n.end_lineno) for n in _ast.walk(_tree)
                       if isinstance(n, _ast.FunctionDef) and n.name == "_apply_write"), None)
     assert fold_span, "`_apply_write` is gone; the fold's declared exemption names nothing"
@@ -1608,11 +1695,18 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     doc = _yaml.safe_load((REG.REGISTER.parent / "verb_table.yaml").read_text())
     doc["verbs"][0] = dict(doc["verbs"][0], writes=["Person.no_such_field"])
     import unittest.mock as _mock, io as _io
-    with _mock.patch.object(S, "VERB_TABLE_YAML") as fake:
+    # ⚠ RE-POINTED, step 3 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0203). `_load_verb_table`
+    # moved to `season.data.verbs` with its body unchanged, and it reads `VERB_TABLE_YAML` as ITS
+    # OWN module global -- patching `S.VERB_TABLE_YAML` (`shape`'s re-exported copy of the name)
+    # no longer reaches it, which is the exact fail-open `season/data/__init__.py` documents for
+    # this package's loaders: "patching a path stopped reaching the loader." The patch point is
+    # the module that READS the name, `VERBS` (`season.data.verbs`), not the module that merely
+    # re-exports it for `S.<name>` convenience.
+    with _mock.patch.object(VERBS, "VERB_TABLE_YAML") as fake:
         fake.exists.return_value = True
         fake.read_text.return_value = _yaml.safe_dump(doc)
         with pytest.raises(SystemExit) as e:
-            S._load_verb_table()
+            VERBS._load_verb_table()
     assert "no row of" in str(e.value), (
         "the verb-table loader no longer refuses a `writes:` off the matrix, so the fold's "
         f"generic write has NO coverage and the exemption above is void: {e.value}")
@@ -1711,16 +1805,20 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
     # data, not a definition the game resolves from, so flagging every one of them would bury the
     # signal. They are checked for the defect that DOES matter there — a roster DUPLICATED from
     # the data file, which is how a definition comes back after being moved.
-    MODEL = "shape.py"
+    MODEL = files.SHAPE_PY
     # ⚠ THE CORPUS IS DISCOVERED, NOT LISTED, AND THE DIFFERENCE IS THIS TEST'S OWN LESSON. Its
     # docstring names the original defect as "IT READ `shape.py` ALONE while `probes.py`,
     # `report.py` and `run_cases.py` went unscanned" — and the fix was a hardcoded four-name
     # tuple, so `headless.py` and `delta.py`, added by `W9`, were unscanned BY CONSTRUCTION. A
     # filename roster is a router and `G2` forbids the shape: forbid it, never enumerate it.
     # Every module in the instrument directory except this file is the corpus.
-    CORPUS = tuple(sorted(f.name for f in HERE.glob("*.py")
-                          if f.name not in (MODEL, "test_tracer_is_honest.py")))
-    assert {"probes.py", "report.py", "run_cases.py", "headless.py"} <= set(CORPUS), CORPUS
+    # ⚠ RECURSIVE, AND THAT IS THE SAME LESSON ONE MOVE LATER. This read `HERE.glob("*.py")` when
+    # every module sat in one directory; the harness modules now live in `season/harness/`, and a
+    # flat glob would have gone on reporting clean over eight files it no longer reached -- the
+    # unscanned-BY-CONSTRUCTION defect this comment already describes, in a new spelling. The set
+    # is `files.package_modules()`, discovered from the package root.
+    CORPUS = tuple(f for f in files.package_modules() if f not in (MODEL, files.TEST_PY))
+    assert {"probes.py", "report.py", "run_cases.py", "headless.py"} <= {f.name for f in CORPUS}, CORPUS
     FILES = (MODEL,) + CORPUS
     # ⚠ A ROSTER ROW NEED NOT CARRY `values:`. `witness_channel_predicates` carries only
     # `predicates:` — the five names live once, in `witness_channels`, and that row states what
@@ -1728,8 +1826,9 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
     # file legitimately supports, which is a guard failing on correct data (`G4`).
     known = {frozenset(r["values"]) for r in S._ROSTERS.values() if "values" in r}
     offenders, exempted = [], []
-    for fname in FILES:
-        tree = ast_.parse((HERE / fname).read_text())
+    for fpath in FILES:
+        fname = fpath.name
+        tree = ast_.parse(fpath.read_text())
         for node in ast_.walk(tree):
             elts = None
             if isinstance(node, (ast_.Tuple, ast_.List, ast_.Set)):
@@ -1764,14 +1863,14 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
             # NOT a whitelist of names — G2 — because a name list is a router and this one would
             # need to grow every time a variable is renamed. The reason is visible where the
             # decision is made, and the COUNT IS PINNED below so exemptions cannot creep.
-            src_lines = (HERE / fname).read_text().splitlines()
+            src_lines = fpath.read_text().splitlines()
             # Look back far enough for a multi-line reason. A one-line window would force the
             # reason to be short, and a short reason is the one nobody can evaluate.
             ctx = " ".join(src_lines[max(0, node.lineno - 9):node.lineno])
             if "roster-exempt:" in ctx:
                 exempted.append((fname, node.lineno))
                 continue
-            if fname != MODEL:
+            if fpath != MODEL:
                 # In the corpus, only a DUPLICATE of a roster that is already data is a defect:
                 # the same closed set written out again, which is the definition coming back.
                 if frozenset(vals) not in known:
@@ -1942,7 +2041,7 @@ def test_w5_no_gap_is_an_instrument_defect():
     assert not issubclass(S.InstrumentDefect, S.ShapeGap), (
         "InstrumentDefect became a ShapeGap — every call-site bug is now reportable as a design "
         "hole again, and the plant above would stop catching it.")
-    runs = HERE / "runs"
+    runs = files.RUNS_DIR
     results = json.loads((runs / "results.json").read_text())
     errs = sorted(k for k, v in results["_probes"].items()
                   if v.get("verdict") == "INSTRUMENT-ERROR")
@@ -2094,7 +2193,7 @@ def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
     #353 `:634`: `sense()` is "the ONE non-decision function permitted a `World`". V2 §F3 broke it
     by giving `budget` a World; PLAN §3.3's smaller amendment is what this checks held."""
     import ast as ast_
-    tree = ast_.parse((HERE / "shape.py").read_text())
+    tree = ast_.parse(files.SHAPE_PY.read_text())
 
     def named(ann) -> str:
         """The type an annotation NAMES, however it is spelled.
@@ -2518,7 +2617,7 @@ def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
 def test_w9_check1_the_run_is_reproducible():
     """§6.3 check 1: *`headless.py --case NPC-088 --seasons 2 --seed 0` prints a content hash. Run
     twice: byte-identical.*"""
-    import headless as HL
+    from ..harness import headless as HL
     a, b = HL.run(seasons=2, seed=0), HL.run(seasons=2, seed=0)
     assert a["hash"] == b["hash"], f"two runs of one seed diverged: {a['hash']} vs {b['hash']}"
     assert a["acts"] and a["events"], f"the season did nothing: {a['acts']} acts, {a['events']} events"
@@ -2536,7 +2635,7 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     arc model on this edge — 'the arc itself' — and the measured state is that the specified loop
     emits `causes=[]`, so the substrate of the entire emergent-narrative claim is declared and
     never populated."* `[ROOT]` everywhere is `[]` wearing a marker."""
-    import headless as HL
+    from ..harness import headless as HL
     # ⚠ §6.3'S OWN TWO CLAUSES CANNOT BOTH HOLD, AND THE ARITHMETIC IS STATED RATHER THAN THE
     # LONGER RUN QUIETLY SUBSTITUTED. Check 1 fixes the run at `--seasons 2`; check 2 demands a
     # chain of at least four Events. The only edge that chains is term maturation, one stage per
@@ -2643,7 +2742,7 @@ def test_w9_check3_every_fixture_read_resolves_to_a_register_site():
 
     A fixture the run READS whose name appears in no row's `site:` is a number the instrument
     supplied and nobody declared."""
-    import headless as HL
+    from ..harness import headless as HL
     # ⚠ THIS RUN'S READS, NOT THE PROCESS'S. `DEFAULT_FIXTURES` is a module-level singleton and
     # `reads` accumulates on it, so every earlier test in the session contributes — the first
     # version passed alone and failed in the suite, reporting other tests' fixtures as artifact
@@ -2669,11 +2768,11 @@ def test_w9_check4_no_effect_lambda_and_no_roster():
     assert "roster" not in inspect.signature(S.Query.opening_set).parameters
     assert "effect" not in inspect.signature(S.SeasonDriver.resolve).parameters
     assert "effect" not in inspect.signature(S.SeasonDriver._fold).parameters
-    src = _code_only((HERE / "headless.py").read_text())
+    src = _code_only(files.HEADLESS_PY.read_text())
     assert "effect" not in src and "roster" not in src, (
         "headless.py mentions an effect or a roster — artifact 2 must not author either")
     # and the run genuinely goes through the table.
-    import headless as HL
+    from ..harness import headless as HL
     assert HL.run(seasons=1, seed=0)["acts"] > 0
 
 
@@ -2685,7 +2784,7 @@ def test_w9_check4b_she_returned_at_most_budget_scenes():
     The season completing is itself the assertion — `deliberate` raises on either violation — so
     this re-runs it at a TIGHTENED bound and requires the refusal, which is what makes the
     passing run evidence rather than an absence."""
-    import headless as HL
+    from ..harness import headless as HL
     w = HL.build_world(0)
     b = w.fixtures.get("scene_budget")
     cap = w.fixtures.get("interactions_per_scene")
@@ -2729,8 +2828,8 @@ def test_w9_check5_every_declared_exercises_verb_runs_or_is_recorded_not_assesse
     OUTSIDE the run (#353 §13.1 and the case's own text) and cites the line. This test asserts
     that substitute is real — a row whose `from:` is missing fails."""
     import yaml as _y
-    import headless as HL
-    spec = _y.safe_load((HERE / "cases" / "exercises" / "NPC-088.yaml").read_text())
+    from ..harness import headless as HL
+    spec = _y.safe_load((files.EXERCISES_DIR / "NPC-088.yaml").read_text())
     assert spec["authored_after_first_run"] is True, (
         "the provenance declaration was removed — check 5's substitute for the ordering guarantee "
         "is that the file DECLARES it was written late and cites an outside source for each row")
@@ -2803,7 +2902,7 @@ def test_w9_check5_every_declared_exercises_verb_runs_or_is_recorded_not_assesse
 # ===========================================================================
 
 def _w4_run(seasons: int, seed: int = 0, condition: int | None = None):
-    import headless as HL
+    from ..harness import headless as HL
     w = HL.build_world(seed)
     if condition is not None:
         list(w.sites.values())[0].condition = condition
@@ -2869,7 +2968,7 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
     ⚠ THE GATE FOUND SIX SILENT MATTER WRITES THE MOMENT IT WAS TURNED ON — `(Record, matured)`,
     `(Person, exists)` twice, `(Tenure, until)`, `(Record, ttl)` and `(Rung, envelope)`, every one
     on a row whose `emits:` Part D declares. Five were fixed; the sixth is `H-86`."""
-    import headless as HL
+    from ..harness import headless as HL
     w = HL.build_world(0)
     w.step = S.Step.MATTER
     site = list(w.sites.values())[0]
@@ -2951,7 +3050,7 @@ def test_w4_a_refused_attempt_names_the_attempt_not_the_campaign_seed():
     "`[]` wearing a marker". `Act.obstacle` defaults to `None` and the computed chooser never sets
     one, so no seeded run could reach the branch and the ROOT-count proof could not see it. An
     `Act` with an obstacle is built here directly. Found by the `W4` adversarial pass."""
-    import headless as HL
+    from ..harness import headless as HL
     w = HL.build_world(0)
     d = S.SeasonDriver(w)
     pid = next(iter(w.persons))
@@ -2978,7 +3077,7 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
     CONTROL ARM published a decay that did not happen. The rule against that is enforced twice in
     `shape.py` already (`_fold`'s *"an effect that touched nothing did not do the thing"*, and
     `H-86`'s exemption argument). A sweep point that fabricates is worse than one nobody runs."""
-    import headless as HL
+    from ..harness import headless as HL
     from collections import Counter
     seen = {}
     for rate in (0, 5, 20):
@@ -3005,7 +3104,7 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
 # ===========================================================================
 
 def _w6_run(mode: str, seasons: int = 3, seed: int = 0):
-    import headless as HL
+    from ..harness import headless as HL
     w = HL.build_world(seed, S.DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
     d = S.SeasonDriver(w)
     mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
@@ -3056,7 +3155,7 @@ def test_w6_an_unrecognised_fan_out_mode_refuses_rather_than_falling_back():
     """§42.2's polarity rule applied to a sweep parameter. A mode outside `H-33`'s three points
     that silently fell back to `total` would make every reading of this sweep report THE CONTROL,
     which is the failure mode that makes a sweep worse than no sweep."""
-    import headless as HL
+    from ..harness import headless as HL
     w = HL.build_world(0)
     e = next(iter(w.log), None) or S.Event(S.H(w.world_seed, 0, "x", "t"), "speech.made", "x",
                                            [], [S.ROOT], 0)
@@ -3082,7 +3181,7 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     # AND WHICH CHANNELS CAN ACTUALLY ADMIT ANYONE, WHICH IS THE THING THE FIRST VERSION ASSERTED
     # BY IMPLICATION AND NEVER MEASURED. Two of the five admit nobody in the world the fold can
     # currently drive, and that is published rather than left for a reader to discover.
-    import headless as HL
+    from ..harness import headless as HL
     w = HL.build_world(0)
     d = S.SeasonDriver(w)
     mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
@@ -3507,7 +3606,7 @@ def test_the_corpus_cannot_reach_the_governance_branch_and_h71_is_not_the_reason
     # guarded on `hw is not None` — `load_case` does not exist, so the second half of the reason
     # was never asserted at all. §0.1 pt 2, inside the test written to enforce §0.1 pt 4, caught
     # by checking whether the branch ran rather than by reading it.
-    import headless as HL
+    from ..harness import headless as HL
     hw = HL.build_world(seed=0)
     assert not hw.offices, (
         "the milestone world has offices now; the governance branch may be reachable in a run "
@@ -3829,7 +3928,7 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     when the run is long enough, so check 2's `>= 4` is met at the declared 3 with ZERO MARGIN and
     fails at 2. The four-Event chain rests on a number this session invented, and that is a fact
     about the milestone, not a reason to hide the sweep."""
-    import headless as HL
+    from ..harness import headless as HL
     depths, matured = {}, {}
     for n in (0, 3, 6):
         # ⚠ `observation_deposit_mode` IS PINNED TO ITS CONTROL ARM, AND THAT IS CONFOUND REMOVAL
@@ -3928,7 +4027,7 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
     `W9`'s own rows declare, because the previous pass added five sweeps and executed none — in
     the same session whose `test_w5_every_new_assumption_rows_sweep_is_actually_executed` names
     that exact laundering."""
-    import headless as HL
+    from ..harness import headless as HL
     moved = {}
 
     # H-79 — the claim subject. `per_change` must change WHAT a ledger holds.
@@ -4246,7 +4345,7 @@ def _pipeline_sources() -> list:
     hardcoded_in_a_body` already settled this shape four hundred lines above: a filename roster is
     a router and `G2` forbids it. The `test_` prefix is pytest's own discovery rule, not one of
     mine."""
-    return sorted(f for f in HERE.glob("*.py") if not f.name.startswith("test_"))
+    return [f for f in files.package_modules() if not f.name.startswith("test_")]
 
 
 def test_w10_no_verdict_turns_on_the_text_of_a_need():
@@ -4352,7 +4451,7 @@ def test_w10_the_deciding_path_is_the_authored_overlay():
     with _declared("T", {need: [ok]}):
         got = R.grade({"id": "T", "season_requires": [{"need": need, "hardness": "core"}]})
     assert got["verdict"] == "PLAYABLE" and got["core_routed"] == 1, got
-    assert not (HERE / "route_precision.py").exists(), (
+    assert not (files.PACKAGE_DIR / "route_precision.py").exists(), (
         "route_precision.py survives -- a guard for a thing that no longer exists is the "
         "apparatus §0.3 is about, and `PLAN.md` W10 retires it with the router")
 
@@ -4364,7 +4463,7 @@ def test_g12_a_cite_may_not_argue_for_a_grade_the_row_does_not_carry():
 
     Not bookkeeping: `H-46` is `tier: 0`, so its grade is inside artifact 0's verdict, and
     `resolve()` turns a grade into a case verdict. Found by the `W10` adversarial pass."""
-    import register as REG
+    from ..harness import register as REG
     reg = REG.load()
     assert not REG.rule_G12(reg), REG.rule_G12(reg)
     # ⚠ AND IT CAN FIRE. A rule asserted only against a clean register is a rule nobody has seen
@@ -4483,7 +4582,7 @@ def test_w10_no_playable_verdict_rests_on_an_undeclared_row():
     case is not the same fact as no BAD PLAYABLE case. It is kept because it is the clause that
     starts biting the moment authoring reaches a full case, and it is PAIRED with a constructed
     control so the mechanism it guards is exercised now rather than whenever that happens."""
-    rep = json.loads((HERE / "runs" / "results.json").read_text())
+    rep = json.loads(files.RESULTS_JSON.read_text())
     bad = [c["id"] for sec in ("NPC", "ARC") for c in rep[sec]
            if c["verdict"] == "PLAYABLE" and c["core_unmapped"]]
     assert not bad, f"PLAYABLE with undeclared core rows: {bad}"
@@ -4527,8 +4626,8 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     person-side. The worlds now genuinely differ — per-case convictions, season counts 1..6,
     forced deadlines — and the executed set is STILL one, for the reason this test now pins:
     §F2's scoring separates 2..7 of 22 candidates and the rest tie (`H-96`)."""
-    import corpus_run as C
-    import run_cases as R
+    from ..harness import corpus_run as C
+    from ..harness import run_cases as R
     rows = [C.run_case(c, 0, lane) for lane in ("NPC", "ARC") for c in R.load_cases(lane)]
     bad = [r for r in rows if r["status"] == "INSTRUMENT-DEFECT"]
     assert not bad, (f"the corpus runner has a call-site bug on {[(r['id'], r['why']) for r in bad][:3]}"
@@ -4707,7 +4806,7 @@ def test_the_seam_calls_personal_combat_rather_than_naming_it():
     Before this, `contest()` resolved the subsystem by name and then REFUSED — a pointer, not a
     call — on a scope note that ruling overrides. The seam calls now, and these are the properties
     that make the call honest rather than merely present."""
-    import combat_seam as C
+    from .. import combat_seam as C
     w = P.tiny_world(); w.step = S.Step.RESOLVE
     if C.engine() is None:                     # a NAMED gap, never a silent skip
         assert C.load_error(), "the engine is unavailable and the seam reports no reason"
@@ -4756,7 +4855,7 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
     ⚠ THE SECOND ASSERTION IS THE ONE THAT MATTERS. A derivation that reaches the engine and
     changes no outcome would be decoration — the `uniform` arm of its own sweep. Condition has to
     move the result, or the seam is passing a constant."""
-    import combat_seam as C
+    from .. import combat_seam as C
     w = P.tiny_world()
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
@@ -4791,8 +4890,8 @@ def test_w18_the_run_instrument_and_its_control():
     said it was. Printing 0 on a corpus where 0 is entailed shows nothing (§0.1 pt 4). The planted
     cross-person edge is the control: it must flip `R3` false → true, and if it ever stops flipping,
     the instrument has gone blind and every zero it prints afterwards is worthless."""
-    import corpus_run as C
-    import run_cases as R
+    from ..harness import corpus_run as C
+    from ..harness import run_cases as R
 
     # 1 — THE CONTROL.
     before, after = C.planted_control()
@@ -4896,7 +4995,7 @@ def test_h99_the_office_carries_its_three_canon_axes_and_a_misseating_refuses():
             "invented — the fabrication the precedence ruling exists to stop")
 
     # 6 — EVERY LOADED OVERLAY RESOLVES, and the loader refuses a mis-seated one.
-    import corpus_run as C
+    from ..harness import corpus_run as C
     for cid, sc in C.RESCALES.items():
         off = sc.get("office") or {}
         assert S.office_faction(off.get("body"), off.get("faction")) in S.FACTIONS, cid
@@ -4926,8 +5025,8 @@ def test_h99_the_office_carries_its_three_canon_axes_and_a_misseating_refuses():
 
 
 def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told():
-    import corpus_run as C
-    import run_cases as R
+    from ..harness import corpus_run as C
+    from ..harness import run_cases as R
     from collections import Counter
 
     case = next(c for c in R.load_cases("NPC") if str(c.get("scale")) in set(S.RUNG_KINDS))
@@ -5023,7 +5122,7 @@ def test_id16_the_sign_column_is_shape_validated_and_the_gate_can_fail():
     ⚠ MUTATION-CHECKED, BECAUSE A GATE NOBODY HAS SEEN FAIL IS `ID-10`'s ABSENT CHECK. Three
     plants, one per clause. The clean register must pass, and each mutation must be named."""
     import copy
-    import register as R
+    from ..harness import register as R
 
     reg = R.load()
     assert R.rule_G13(reg) == [], "the committed register does not satisfy its own loop gate"
@@ -5396,8 +5495,8 @@ def _wc_corpus_pass():
 
     One owner because two tests need the same run and a second copy would let them measure
     different corpora; cached because the pass is the slowest thing either of them does."""
-    import corpus_run as C
-    import run_cases as R
+    from ..harness import corpus_run as C
+    from ..harness import run_cases as R
     if getattr(_wc_corpus_pass, "_memo", None) is not None:
         return _wc_corpus_pass._memo
     from collections import Counter
@@ -5853,7 +5952,7 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # a reader while this test's scope note silently stops covering it, so the structure is what
     # is pinned rather than a sentence about it.
     import ast as _ast
-    _fold_fn = next(n for n in _ast.walk(_ast.parse((HERE / "shape.py").read_text()))
+    _fold_fn = next(n for n in _ast.walk(_ast.parse(files.SHAPE_PY.read_text()))
                     if isinstance(n, _ast.FunctionDef) and n.name == "_fold")
     _calls = [n for n in _ast.walk(_fold_fn)
               if isinstance(n, _ast.Call) and getattr(n.func, "id", "") == "evaluate"]
@@ -5920,7 +6019,7 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
     `create_record` then carries `kind="grain"`, every record made by the loop becomes a record of
     grain, and the second assertion goes RED. Both run."""
     import re as _re
-    src = (HERE / "shape.py").read_text()
+    src = files.SHAPE_PY.read_text()
     names = "|".join(sorted(_re.escape(o) for o in S.REQUIRES_OPERANDS) + ["harm"])
     pattern = _re.compile(r'\.(?:get|setdefault)\(\s*["\'](' + names + r')["\']\s*,')
     # ⚠ THE ATTRIBUTION MATCHED A COLUMN-0 `def` ONLY, so a default inside a METHOD was reported
@@ -6310,7 +6409,7 @@ def test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own
     MUTATION (run 2026-09-04): drop the `if o.value is UNKNOWN ... continue` guard in `witness` —
     3 `condition = UNKNOWN` claims and 3 `contain.path:* = UNKNOWN` claims land, and this goes RED
     on the second assertion. Restored, GREEN."""
-    import headless as HL
+    from ..harness import headless as HL
     w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "total"))
     d = S.SeasonDriver(w)
     mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
@@ -6353,7 +6452,7 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
 
     MUTATION (run 2026-09-04): make `none` deposit as `actor` does — the `none` count goes to 1
     and this goes RED on the first assertion. Restored, GREEN."""
-    import headless as HL
+    from ..harness import headless as HL
 
     def grammar_claims(mode):
         w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode))
@@ -6425,9 +6524,9 @@ def test_wb_a_read_computed_from_the_ledger_is_never_deposited_into_it():
     MUTATION (run 2026-09-04): delete the `LEDGER_DERIVED_STEMS` guard in `witness` — 3
     `claim.held` claims land in `p_a`'s ledger and this goes RED on the second assertion.
     Restored, GREEN."""
-    import headless as HL
-    import corpus_run as C
-    import run_cases as R
+    from ..harness import headless as HL
+    from ..harness import corpus_run as C
+    from ..harness import run_cases as R
     case = next(c for c in R.load_cases("NPC") if c["id"] == "NPC-088")
     w = C.build_at(case, 0)
     w.fixtures = S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "actor")
@@ -6548,7 +6647,7 @@ def test_wb_the_carrier_moves_the_seeded_hash():
 
     MUTATION (run 2026-09-04): delete the `for o in (getattr(e, "observed", None) or [])` loop
     from `World.content_hash` — the two hashes match and this goes RED. Restored, GREEN."""
-    import headless as HL
+    from ..harness import headless as HL
     hashes = []
     for strip in (False, True):
         w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
@@ -6609,8 +6708,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     live arm records 0 drops and this goes RED on the second assertion. Restored, GREEN.
     MUTATION 2: `LEDGER_DERIVED_STEMS` emptied — the drop count on ARC-01 goes 1 -> 6 and five of
     the six are `tell` on `r_realm`, and this goes RED on the third. Restored, GREEN."""
-    import corpus_run as C
-    import run_cases as R
+    from ..harness import corpus_run as C
+    from ..harness import run_cases as R
     case = next(c for c in R.load_cases("ARC") if c["id"] == "ARC-01")
 
     def drops(fx):
@@ -6639,7 +6738,7 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     live, wl = drops(S.DEFAULT_FIXTURES)
 
     # ---- THE SECOND SHAPE, IN A DIFFERENT WORLD AND A DIFFERENT `requires` FORM.
-    import headless as HL
+    from ..harness import headless as HL
 
     def hl_drops(fx):
         hits = []
@@ -6742,7 +6841,7 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
     the shape of the defect, not a failure of the assertion: the rate is inert because nothing
     downstream READS a confidence except the eviction sort's product, and only a reader that
     separates 95 from 80 can make it live."""
-    import headless as HL
+    from ..harness import headless as HL
     from collections import Counter
     out, inert = {}, {}
     for mode in ("none", "actor", "total"):
@@ -6803,7 +6902,7 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
 # `W-D` — THE ACCEPTANCE RUN. Does an open §F1 clause 4 make a fork change a LATER DECISION?
 # =================================================================================================
 
-_WD_SWEEP = HERE.parent.parent / "proposals" / "2026-09-04-degree-sweep"
+_WD_SWEEP = files.DEGREE_SWEEP_DIR
 
 
 def _wd_arm9():
@@ -6913,7 +7012,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
         of 3, a same-tick successor rarely changes which slots fill the window. A mutation that
         does not kill is evidence about the mutation, not about the guard."""
     A9 = _wd_arm9()
-    import corpus_run as C
+    from ..harness import corpus_run as C
     case = C.apply_rescale(next(c for c in R.load_cases("NPC") if c["id"] == "NPC-088"))
     base = S.DEFAULT_FIXTURES.sweep("scene_budget", 2).sweep("interactions_per_scene", 1)
 
@@ -7050,7 +7149,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
         sys.path.insert(0, str(_WD_SWEEP))
     import arm9_subj as A9S           # the copy; its ONLY edit is the fingerprint
     import arm9_forking as A9
-    import corpus_run as C
+    from ..harness import corpus_run as C
     # ⚠ THE COPY IS VERIFIED TO BE A COPY. A "widened fingerprint" that had drifted from the
     # shipped probe in any other line would make this table a comparison of two instruments.
     a, b = (_WD_SWEEP / "arm9_forking.py").read_text(), (_WD_SWEEP / "arm9_subj.py").read_text()
@@ -7146,7 +7245,7 @@ def test_we_a_contested_acts_consequence_differs_by_degree():
     MUTATION (run 2026-09-04): revert `_fold`'s `_pairs = row.writes_at(_degree)` to
     `writes_at(None)` and this raises `Unspecified` on the first act; revert the emission line to
     `row.emits` and the `Untouched` assertion goes red with `person.died` in its kinds."""
-    import combat_seam as C
+    from .. import combat_seam as C
     if C.engine() is None:                      # a NAMED gap, never a silent skip
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
 
@@ -7213,7 +7312,7 @@ def test_we_event_degree_is_assigned_and_stays_none_where_nothing_graded_it():
 
     MUTATION (run 2026-09-04): drop `degree=_degree` from `_fold`'s `ev(...)` and the first
     assertion goes red; stamp a degree unconditionally and the second does."""
-    import combat_seam as C
+    from .. import combat_seam as C
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
     seen = _we_bands()
@@ -7235,7 +7334,7 @@ def test_we_emits_at_has_a_caller_and_the_band_selects_the_kind():
 
     FALSIFIER: revert `_fold`'s `_declared = row.emits_at(_degree)` to `row.emits` and the union
     assertion below goes red naming the extra kinds."""
-    import combat_seam as C
+    from .. import combat_seam as C
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
     row = S.VERB_TABLE["kill / wound"]
@@ -7343,8 +7442,8 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # NOTHING PRODUCES A MARGIN. The only `net` in the instrument is `degree_of`'s own read of
     # one, so the ladder branch is a reader with no producer (recorded on `H-98`).
     producers = []
-    for f in sorted(HERE.glob("*.py")):
-        if f.name == "test_tracer_is_honest.py":
+    for f in files.package_modules():
+        if f == files.TEST_PY:
             continue
         for i, line in enumerate(_code_only_lines(f), 1):
             if re.search(r"\bnet\b\s*=|roll_pool|\bsuccesses\b", line):
@@ -7399,7 +7498,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
 
     MUTATION (run 2026-09-04): change `combat_degree`'s subject lookup to the loser (the party
     that is not `result["winner"]`) and this goes red -- `p_mid` is deleted by a fight he won."""
-    import combat_seam as C
+    from .. import combat_seam as C
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
     w = _w(); w.step = S.Step.RESOLVE

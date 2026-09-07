@@ -1,6 +1,213 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⭐ DONE 2026-09-07 — THE DECOMPOSITION IS IN `engine/season/`. `shape.py` 6,771 → 5,165 (ED-IN-0203)
+
+**The entry below this one says the decomposition "has to be redone" on `engine/season/`. It has
+been, and by a three-way merge rather than by re-executing four steps.** The package now is:
+
+```
+engine/season/  shape.py 5,165 · gaps.py 94 · trace_log.py 116 · combat_seam.py 191 · __init__.py
+                data/   files 158 · rosters 293 · matrix 225 · requires 606 · verbs 402 · fixtures 295
+                state/  ids 23
+                harness/  probes · report · run_cases · headless · corpus_run · register · exercises · delta
+                tests/  __init__.py · test_season_shape.py
+                *.yaml · cases/ · runs/
+```
+
+### ⛔ FIRST, THE ERROR THAT MADE THIS NECESSARY, RECORDED BECAUSE IT COST A DAY
+
+Merging #371 (commit `2f13271`), this session resolved `engine/season/*` to #371's version
+**wholesale and deleted the decomposed prototype** — trading a carved 5,080-line `shape.py` plus
+nine modules for the uncarved 6,771-line one, and writing *"the decomposition is not ported"* in
+the merge message as though that were a status rather than a loss. Jordan's reading, verbatim:
+*"I think you fucked up"* · *"I think we didn't actually need #371 to split up shape.py"* ·
+*"we could have just built our own commensurate version of whatever 371 did"*.
+
+**That reading is correct, and it is checkable.** The prototype's `shape.py` and `engine/season/`'s
+were line-for-line identical except **seven** path-constant lines. The split needed nothing from
+#371. Measured, here is the whole of what #371 contributed over the prototype base:
+
+| | changed lines |
+|---|---|
+| `register.py` | 206 |
+| the test file | 53 |
+| `delta.py` · `corpus_run.py` · `shape.py` · `run_cases.py` · `combat_seam.py` · `exercises.py` · `report.py` | 23 · 17 · 14 · 6 · 2 · 2 · 2 |
+| `probes.py` · `trace_log.py` | **0** |
+| new | the five YAML registries co-located, `cases/`, `runs/`, `__init__.py`, `tests/` |
+
+~330 lines and a relocation. **The lesson is not "should have kept the prototype" — it is that
+the two trees were never in competition.** #371 supplied a LOCATION and co-located registries;
+the prototype supplied a DECOMPOSITION. Nothing forced a choice, and treating a merge conflict as
+one is what destroyed the work.
+
+### THE METHOD, WHICH IS THE REUSABLE PART
+
+A three-way merge, not a re-execution and not a rewrite:
+
+| | tree |
+|---|---|
+| **base** | `264eb0e:proposals/2026-09-01-season-loop-tests/tracer/` — the prototype BEFORE the split |
+| **ours** | `b5e56f0:proposals/2026-09-01-season-loop-tests/season/` — the decomposed package |
+| **theirs** | `engine/season/` at `0dd51d5` — #371's tree, plus this session's R8.4 port |
+
+`git merge-file -p ours base theirs`, per file. **26 conflicts, every one small**, and they fell
+into exactly three kinds, which is why the resolution is a rule rather than a judgement each time:
+
+1. **path anchors** (19) — ours routes them through `data/files.py`, theirs hardcodes #371's new
+   layout. Take OURS, then encode the layout facts ONCE in `data/files.py`.
+2. **`R8.4` docstring** (3) — this session's corrections. Take THEIRS.
+3. **substantive content** (4) — take THEIRS.
+
+⚠ **The decomposed tree ALREADY CARRIED `R8.4`**, because `86c84bb` merged `main` into this branch
+before `b5e56f0` and git followed the `tracer/` → `season/` rename. That is why kind 2 exists at
+all, and it is worth knowing before assuming a merge will drop a repair.
+
+### ⚠⚠ THE DEFECT CLASS THE MERGE INTRODUCED, AND WHY IT IS THE ONE TO HUNT
+
+**A conflict hunk can hold a DEFINITION while its USE sits outside the hunk.** Resolve to one side
+and the use survives with nothing behind it. Seven instances, all found by execution and none by
+reading the diff:
+
+| where | what |
+|---|---|
+| `harness/delta.py` | `RESULTS_BEFORE_ADOPTION` used, never defined → `NameError` on `delta.py <rev>`, while `delta.py` with no argument still worked |
+| `harness/register.py` ×3 | `HERE` and `REPO_ROOT` in the `requirements.yaml` block #371 added after the fork |
+| `harness/{corpus_run,exercises,report,run_cases}.py` | the same `HERE`, reached transitively through `register` |
+| `tests/test_season_shape.py` | `files.PROPOSAL_DIR`, deleted by the re-anchor |
+
+**The instrument that found all seven is three lines**: import every `engine/season/**/*.py` by
+dotted path and print the failures. Run it after any merge in this package; a green test suite
+does not substitute for it, because four of the seven modules are only imported by tests that
+skip when they fail to import.
+
+### ⚠⚠⚠ AND ONE DEFECT THE MERGE DID NOT INTRODUCE BUT UNCOVERED — A BLOCKING GATE WENT BLIND
+
+`tests/valoria/test_engine_does_not_import_systems.py::test_the_one_declared_path_seam_is_still_the_only_one`
+stopped seeing `season/combat_seam.py`'s `sys.path` seam. **The seam did not move.**
+`sys.path.insert(0, str(_PC))` is still there. What moved is the literal `"systems"`, into
+`data/files.py`, because consolidating every path into one anchor is exactly what the
+decomposition was for. The gate's predicate followed local NAME assignments only, so it stopped at
+`files` and reported the file clean.
+
+**Consolidating an anchor is an ordinary, correct refactor, and it silently deleted a blocking
+gate's coverage.** The fix is in the predicate, never in `PATH_SEAM_ALLOWED`: it now takes ONE HOP
+into a relatively-imported module and resolves the constant **in that module's own namespace**.
+
+⚠ The first writing of that hop resolved the constant in the IMPORTER's namespace, so the chain
+stopped one link short of the literal and the gate still read clean — **a half-resolved chain is
+worse than no hop, because it looks like coverage.** Falsifier, run both ways:
+
+```
+WITH hop   : ['cross_scale/combat_bridge.py', 'season/combat_seam.py']   == declared
+WITHOUT hop: ['cross_scale/combat_bridge.py']    <- the blindness, on demand
+```
+
+### ⚠⚠⚠⚠ A CLASS WAS SILENTLY DELETED BY THE DECOMPOSITION ITSELF, AND THE CHECK THAT FOUND IT
+
+**`Ineligible` — a `ShapeGap` subclass, `kind = "INELIGIBLE"` — was removed from `shape.py` by
+step 1 (`5a412ab`) and never added to `gaps.py`, where the plan assigns it.** It survived four
+steps, a merge, a full test suite and every gate in this repository. It has **no callers**, and
+that is exactly why: a class with no users cannot fail a test when it disappears. Restored to
+`gaps.py` and re-exported.
+
+**THE CHECK, AND RUN IT AFTER EVERY REMAINING CARVE — steps 4 through 11 are seven more chances
+at this same defect:**
+
+```python
+# every top-level name in the PRE-carve shape.py must still resolve as S.<name>
+before = {top-level defs/classes/assignments in `git show <rev>:engine/season/shape.py`}
+missing = [n for n in before if not hasattr(S, n)]
+```
+
+Run against `0dd51d5` it reads **199 names, 196 resolve, 3 missing** — `_HERE`,
+`_load_rosters`, `_load_write_matrix`, all deliberate (the anchor and the two loaders moved, and
+are patched on the module that READS them, never through `shape`). Any fourth name is a symbol
+the carve dropped.
+
+⚠ **It is deliberately NOT a test, and the reason is `CLAUDE.md` §0.1 point 5 rather than
+laziness.** The check needs a BASELINE REVISION, which is a per-step argument and not a fixture;
+pinning one in a test file makes it rot into a comparison against a commit nobody remembers, and
+pinning the name list makes it a router that has to be edited by the same person who would have
+noticed the loss. The procedure is the guard here, and it lives in this handoff, which is what a
+session reads before carving.
+
+### WHAT WAS VERIFIED, AND WHAT EACH ARTIFACT CAN ACTUALLY SHOW
+
+- **content hash `dd017e6560955a4206a76192903e42ba`** — unchanged across every step, including the
+  first run of the reconciled package.
+- **`report.py` re-ran the whole corpus through the decomposed model and reproduced all eight
+  artifacts byte-identically** (`results.json` md5 `61a2e75204afdcd62ed48f33a1a5121a`). This is the
+  real control; `delta.py` alone is not, and proved it again here — it printed `PROBE FLIPS 0`
+  during a run in which `report.py` had CRASHED and regenerated nothing.
+- **a PLANTED VIOLATION in `data/verbs.py`** — a roster duplicated one directory down — turns
+  `test_jordan_no_definition_is_hardcoded_in_a_body` RED. That is the proof the corpus scan reaches
+  the new subdirectories rather than passing over them, which is the failure this lane hit four
+  times in four steps.
+- **every anchor asserted by value**, not inferred from a green suite: all 15 constants in
+  `data/files.py` resolve to existing paths, and `combat_seam.engine()` is not `None`. A wrong
+  anchor there returns `ENGINE-UNAVAILABLE`, skips six seam tests and leaves the hash identical.
+
+### FOUR SURFACES OUTSIDE THE PACKAGE THAT THE MOVE BROKE
+
+Each was found by running the thing, not by grepping:
+
+1. **CI step `python engine/season/register.py --requirements`** — the file moved to `harness/` AND
+   became a package module, so it dies before checking a row. Now `python -m
+   engine.season.harness.register --requirements`.
+2. **`engine/season/requirements.yaml`'s `measure:` commands** — six named
+   `engine/season/corpus_run.py` / `headless.py`. The acceptance gate caught this itself, which is
+   the gate working.
+3. **`proposals/2026-09-04-degree-sweep/sweep_core.py`** — inserted `engine/season/` and imported
+   `shape`/`corpus_run`/`run_cases`/`combat_seam` by BARE NAME. Now inserts the repo root and
+   imports dotted. Six sibling arms used `from season.trace_log import …`; all re-pointed.
+4. **`engine/engine_params/sim_params.json`** — three constants recorded `engine/season/{corpus_run,
+   register}.py` as their file. Re-exported with `tools/export_sim_params.py --build`.
+
+### WHAT REMAINS — steps 4–11, and the honest note about their value
+
+`state/carriers.py` + `state/world.py` · `queries/` · `decision/` · `seam/` · `loop/` · facade
+deletion · test split. **They buy structure, not capability**, and this session's own R8.4 port did
+more for the game than any of the structural steps. The game work `R6` and `R8` name is unblocked
+and separate: **build the consumer that makes a person form a candidate from what they came to
+believe.**
+
+### DEBTS, each with its designated payoff point
+
+- **Line citations into `shape.py`** — ~60 across 10 proceedings documents plus 5 register `site:`
+  fields. **Pay at step 10**, when `shape.py` becomes a facade and line citations into it become
+  impossible. ⚠ This move added a new species: a citation naming the FILE a claim lives in, which
+  breaks when the claim moves to a sibling module. `H-122` was the first (its dead-carrier quote
+  moved to `data/requires.py`); it was repaired here **only because a gate went red**, which is the
+  right trigger — do not sweep the rest early.
+- **`MODEL = files.SHAPE_PY`** narrows at every step. **Pay at step 10**, where the plan re-points
+  MODEL to the model set.
+- **⛔ `ci_sim_fabrication_check` IS RED ON THIS COMMIT AND WAS COMMITTED THAT WAY, DELIBERATELY.**
+  It is a BLOCKING CI gate, so the PR shows red on it. Twelve constants trip it — eight in
+  `data/fixtures.py` (`condition_scale=1000`, `scene_budget=5`, `ledger_cap=200`, `view_k=12`,
+  `claim_decay_per_season=5`, `entrenchment_seasons=60`, `interactions_per_scene=3`,
+  `record_stages_default=3`), one each in `data/matrix.py` and `state/ids.py`, three test
+  assertions. **Every one is a byte-identical MOVE out of `shape.py`, where each was equally
+  uncited and grandfathered** — the gate is changeset-scoped, so relocating a line re-presents it
+  as new. Nothing was invented and nothing changed value.
+
+  ⚠ **The fix is provenance, and provenance is research, not typing.** The gate accepts
+  `# [canonical: path §section]`, and writing one that is not true would be exactly the
+  fabrication it exists to catch — done to a gate, which is worse. Several of these have real
+  sources within reach (`interactions_per_scene` already carries `H-76, swept 1 / 3 / unbounded`
+  in a bare comment; `entrenchment_seasons` and `claim_decay_per_season` are register rows), so
+  the honest path is one constant at a time against its row. Do not close this by adding a
+  `sim_verification_ledger.json` full of numbers copied out of the code — that satisfies the gate
+  while deleting its meaning.
+
+---
+
 ## ⛔ RULED 2026-09-07 (Jordan) — #371 EXISTS. `engine/season/` IS THE HEAD. THE DECOMPOSITION WAS DONE ON THE PROTOTYPE.
+
+> **⚠ SUPERSEDED BY THE ENTRY ABOVE, 2026-09-07 — the work it says must be redone HAS been,
+> by three-way merge rather than re-execution. Kept because it is where the partition, the six
+> plan corrections and the guard-narrowing findings are recorded, and all of those still hold.
+> Its one wrong sentence is the ordering claim: it says land #371 first and re-apply the steps.
+> Landing #371 first is what destroyed the split. Merge the two trees instead.**
 
 **RULED, verbatim:** *"oh. then we have to assume #371 exists then."*
 

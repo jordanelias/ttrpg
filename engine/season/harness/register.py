@@ -63,11 +63,11 @@ from pathlib import Path
 
 import yaml
 
-HERE = Path(__file__).resolve().parent
-REPO_ROOT = HERE.parent.parent
-ARCH_DIR = REPO_ROOT / "architecture"   # LAYER 1 doctrine; the YAML below is mechanism (§0.05)
-REGISTER = HERE / "hole_register.yaml"
-ARCHITECTURE_V2 = ARCH_DIR / "ARCHITECTURE_V2.md"
+from ..data import files
+
+ARCH_DIR = files.ARCH_DIR
+REGISTER = files.HOLE_REGISTER_YAML
+ARCHITECTURE_V2 = files.ARCHITECTURE_V2_MD
 
 GRADES = ("ruled", "measured", "assumption", "absent")
 # Strictest first. A row V2 grades in parts (H-02, H-20) takes the strictest grade present,
@@ -414,8 +414,8 @@ def counts(reg: dict) -> dict:
     }
 
 
-SOURCE_353 = ARCH_DIR / "holonic_ARCHITECTURE.md"
-REPO = REPO_ROOT
+SOURCE_353 = files.SOURCE_353_MD
+REPO = files.REPO_ROOT
 # A `cite:` may quote MORE THAN #353. The first version of this gate checked every quote against
 # #353 alone and reported ten legitimate quotations of V2, PLAN.md, CLAUDE.md and a live engine
 # module as FABRICATED -- the same false-positive class as comparing typography instead of prose,
@@ -425,9 +425,9 @@ CITE_SOURCES = {
     "#353": SOURCE_353,
     "ARCHITECTURE_V2": ARCHITECTURE_V2,
     "V2": ARCHITECTURE_V2,
-    "PLAN.md": ARCH_DIR / "PLAN.md",
-    "PLAN §": ARCH_DIR / "PLAN.md",
-    "CLAUDE.md": REPO / "CLAUDE.md",
+    "PLAN.md": files.ARCH_PLAN_MD,
+    "PLAN §": files.ARCH_PLAN_MD,
+    "CLAUDE.md": files.CLAUDE_MD,
 }
 # Any repo-relative path the cite mentions, e.g. `engine/autoload/dice_engine.py`.
 PATH_RE = re.compile(r"\b((?:[\w.-]+/)+[\w.-]+\.(?:py|md|ya?ml|json))\b")
@@ -615,7 +615,7 @@ def verify_citations(reg: dict) -> list:
 
 
 # ── THE NINE (ED-IN-0202, Jordan 2026-09-05) ──────────────────────────────────────────────────
-REQUIREMENTS = HERE / "requirements.yaml"
+REQUIREMENTS = files.REQUIREMENTS_YAML
 
 
 def check_requirements() -> int:
@@ -654,14 +654,17 @@ def check_requirements() -> int:
                 names = re.findall(r"[A-Za-z_][A-Za-z0-9_]*", expr)
                 names = [n for n in names if n not in ("or", "and", "not")]
                 src = ""
-                for t in (HERE / "tests").glob("test_*.py"):
+                # ⚠ `rglob`, NOT `glob`. A flat glob over `tests/` is the exact shape that made
+                # four guards in this package pass over corpora they no longer reached when the
+                # decomposition moved files one directory down. It costs nothing to be right.
+                for t in files.TESTS_DIR.rglob("test_*.py"):
                     src += t.read_text(encoding="utf-8")
                 if names and not any(("def test_" in src) and (n in src) for n in names):
                     bad.append(f"{rid}: `-k {expr}` selects NO test -- the measure is dead")
             else:
                 m = re.search(r"python3?\s+([\w./-]+\.py)", head)
                 if m:
-                    f = REPO_ROOT / m.group(1)
+                    f = files.REPO_ROOT / m.group(1)
                     if not f.exists():
                         bad.append(f"{rid}: `measure:` names {m.group(1)}, which does not exist")
                     elif "__main__" not in f.read_text(encoding="utf-8"):

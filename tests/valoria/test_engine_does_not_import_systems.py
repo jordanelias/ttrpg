@@ -45,6 +45,7 @@ from __future__ import annotations
 
 import pathlib
 import ast
+import os
 import re
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
@@ -219,10 +220,76 @@ def test_this_check_can_observe_its_own_failure(tmp_path):
 PATH_SEAM_ALLOWED = {'cross_scale/combat_bridge.py', 'season/combat_seam.py'}
 
 
-def _inserts_a_systems_path(text):
+def _chain_hits(expr, assigned, names_re):
+    """Does `expr` reach a `systems` literal, substituting names from ONE namespace until it stops?
+
+    `assigned` maps a source spelling to its right-hand side — a bare name (`_PC`) or, for the one
+    hop `_relative_module_files` supplies, a dotted one (`files.PC_ENGINE_DIR`). Substitution is
+    textual and terminates because each key is consumed at most once.
+    """
+    seen = set()
+    while expr:
+        if names_re.search(expr):
+            return True
+        try:
+            walked = list(ast.walk(ast.parse(expr, mode="eval")))
+        except SyntaxError:
+            return False
+        nxt = [n.id for n in walked
+               if isinstance(n, ast.Name) and n.id in assigned and n.id not in seen]
+        nxt += [f'{n.value.id}.{n.attr}' for n in walked
+                if isinstance(n, ast.Attribute) and isinstance(n.value, ast.Name)
+                and f'{n.value.id}.{n.attr}' in assigned
+                and f'{n.value.id}.{n.attr}' not in seen]
+        if not nxt:
+            return False
+        seen.update(nxt)
+        expr = " ".join(assigned[n] for n in nxt)
+    return False
+
+
+def _relative_module_files(text, path):
+    """`{alias: Path}` for every `from .<pkg> import <alias>` in this file that names a MODULE.
+
+    ⚠ THIS EXISTS BECAUSE THE PREDICATE BELOW WENT BLIND TO A LIVE SEAM, ON 2026-09-07, and the
+    blindness looked exactly like a fix. `engine/season/` was decomposed and every path it derives
+    moved into ONE anchor module, `season/data/files.py` — which is good architecture and which
+    deleted the literal `"systems"` from `combat_seam.py`. The insert did not move:
+    `sys.path.insert(0, str(_PC))` is still there, with `_PC = files.PC_ENGINE_DIR`. The chain
+    below followed local NAME assignments only, so it stopped at `files` and reported the file
+    clean. A blocking gate reporting a live seam as absent is the same defect this whole module
+    exists to prevent, one level up: consolidating an anchor is exactly the kind of ordinary,
+    correct refactor that must not be able to hide a seam.
+
+    Relative imports only, and one hop only. That is not laziness: a relative import names a file
+    unambiguously from the importer's own location, so the resolution cannot be wrong, and every
+    package under `engine/` that anchors its paths in one module does it this way."""
+    files = {}
+    try:
+        tree = ast.parse(text)
+    except SyntaxError:
+        return files
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.ImportFrom) or not node.level:
+            continue
+        base = path.parent
+        for _ in range(node.level - 1):
+            base = base.parent
+        if node.module:
+            base = base / node.module.replace('.', os.sep)
+        for alias in node.names:
+            cand = base / (alias.name + '.py')
+            if cand.is_file():
+                files[alias.asname or alias.name] = cand
+    return files
+
+
+def _inserts_a_systems_path(text, path=None):
     """True iff this module puts a path NAMING `systems` onto `sys.path` — which is the seam.
     Reads the inserted expression, not the file's word soup, and follows one level of local
-    assignment (`_PC = _REPO / "systems" / ...` then `sys.path.insert(0, str(_PC))`)."""
+    assignment (`_PC = _REPO / "systems" / ...` then `sys.path.insert(0, str(_PC))`), then ONE HOP
+    into a relatively-imported module for `_PC = files.PC_ENGINE_DIR`. See
+    `_relative_module_files` for why the second half is not optional."""
     try:
         tree = ast.parse(text)
     except SyntaxError:
@@ -234,6 +301,27 @@ def _inserts_a_systems_path(text):
                 if isinstance(t, ast.Name):
                     assigned[t.id] = ast.get_source_segment(text, node.value) or ""
     names_re = re.compile(r"""['"]systems['"]|/systems/""")
+    # ONE HOP OUTWARD: `alias.CONST` resolves to that module's own top-level `CONST`, and the
+    # resolution happens IN THAT MODULE'S NAMESPACE. ⚠ THE FIRST WRITING OF THIS HOP GOT THAT
+    # WRONG AND STAYED BLIND: it copied `files.PC_ENGINE_DIR`'s right-hand side
+    # (`SYSTEMS_DIR / "combat" / ...`) into the IMPORTER's chain, where `SYSTEMS_DIR` is not a
+    # name, so the walk stopped one link short of the literal and the gate still reported clean.
+    # A half-resolved chain is worse than no hop, because it looks like coverage.
+    for alias, mod_path in (_relative_module_files(text, path) if path is not None else {}).items():
+        try:
+            mod_text = mod_path.read_text(encoding='utf-8')
+            mod_tree = ast.parse(mod_text)
+        except (OSError, SyntaxError):
+            continue
+        mod_assigned = {}
+        for node in ast.walk(mod_tree):
+            if isinstance(node, ast.Assign):
+                for t in node.targets:
+                    if isinstance(t, ast.Name):
+                        mod_assigned[t.id] = ast.get_source_segment(mod_text, node.value) or ""
+        for const, expr in mod_assigned.items():
+            assigned[f'{alias}.{const}'] = (
+                '"systems"' if _chain_hits(expr, mod_assigned, names_re) else '')
     for node in ast.walk(tree):
         if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)):
             continue
@@ -242,20 +330,8 @@ def _inserts_a_systems_path(text):
         if ast.unparse(node.func.value).replace(" ", "") not in ("sys.path", "path"):
             continue
         for arg in node.args:
-            expr = ast.get_source_segment(text, arg) or ""
-            seen = set()
-            while expr:
-                if names_re.search(expr):
-                    return True
-                try:
-                    nxt = [n.id for n in ast.walk(ast.parse(expr, mode="eval"))
-                           if isinstance(n, ast.Name) and n.id in assigned and n.id not in seen]
-                except SyntaxError:
-                    break
-                if not nxt:
-                    break
-                seen.update(nxt)
-                expr = " ".join(assigned[n] for n in nxt)
+            if _chain_hits(ast.get_source_segment(text, arg) or "", assigned, names_re):
+                return True
     return False
 
 
@@ -343,7 +419,7 @@ def test_the_one_declared_path_seam_is_still_the_only_one():
         #     legitimate dotted import.
         # So the predicate now asks what is actually INSERTED — the argument expression of each
         # `sys.path.insert/append`, following one level of local assignment.
-        if _inserts_a_systems_path(text):
+        if _inserts_a_systems_path(text, path):
             offenders[rel] = True
     assert set(offenders) == PATH_SEAM_ALLOWED, (
         f'sys.path seams into systems/ are now {sorted(offenders)}, declared {sorted(PATH_SEAM_ALLOWED)}. '

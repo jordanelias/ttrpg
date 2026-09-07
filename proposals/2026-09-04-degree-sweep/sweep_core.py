@@ -25,14 +25,22 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-TRACER = Path(__file__).resolve().parents[2] / "engine" / "season"
-if str(TRACER) not in sys.path:
-    sys.path.insert(0, str(TRACER))
+# ⚠ THE REPOSITORY ROOT, NOT THE PACKAGE DIRECTORY, AND THE IMPORTS ARE DOTTED. This inserted
+# `engine/season/` and imported `shape`/`corpus_run`/`run_cases`/`combat_seam` by BARE NAME, which
+# worked while those were loose modules sharing a directory. The decomposition (ED-IN-0203) made
+# `engine.season` an ordinary package whose modules import each other relatively, so a bare import
+# of `shape` now raises *attempted relative import with no known parent package* — and it does so
+# from inside this file, four levels away from the change. Dotted imports also end the second
+# identity the flat form created: a module reachable as both `shape` and `engine.season.shape` is
+# two module objects with two sets of module-level state in one process.
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 
-import shape as S            # noqa: E402
-import corpus_run as C       # noqa: E402
-import run_cases as R        # noqa: E402
-import combat_seam as CS     # noqa: E402
+from engine.season import shape as S                    # noqa: E402
+from engine.season.harness import corpus_run as C       # noqa: E402
+from engine.season.harness import run_cases as R        # noqa: E402
+from engine.season import combat_seam as CS             # noqa: E402
 
 # `CLAUDE.md` §0.1 pt 5 / G1: declared with its reason, never a bare literal in a body.
 LADDER_C = ("Overwhelming", "Success", "Partial", "Failure")

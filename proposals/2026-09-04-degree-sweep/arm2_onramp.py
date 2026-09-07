@@ -29,7 +29,7 @@ def run(log: Log) -> dict:
     log("MEASURE", f"`resolvable_verbs()` = {len(fold)} of {len(S.VERB_TABLE)} verbs",
         "the chooser draws candidates from this set only; a verb outside it can never be proposed")
     row = S.VERB_TABLE[KW]
-    from season import shape as _S
+    from engine.season import shape as _S
     has_eff = KW in getattr(_S, "EFFECTS", {})
     log("MEASURE", f"is {KW!r} in it? {KW in fold}")
     log("WHY-NOT", f"and the reason is NOT what an earlier draft of this arm said. "

@@ -140,7 +140,7 @@ rows:
       forking exercise measured 2,403 forks with 100% reconvergence, and after W-A/W-B the
       later-decision divergence is only ~4%. Propagation is structurally present and
       behaviourally near-absent.
-    measure: "python engine/season/corpus_run.py  # check R3 rows + the planted control"
+    measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [W-F, H-111, H-116]
 
   - id: R-02
@@ -179,7 +179,7 @@ rows:
       of a season scales with the CAST rather than with the PLAYERS. The actorless channel
       (`SeasonDriver.matter`) already exists for the no-scene case, and both channels converge at
       `witness` into one log (S19.5).
-    measure: "python engine/season/headless.py --case NPC-088 --seasons 2 --seed 0"
+    measure: "python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0"
     blocks: [W17]
 
   - id: R-04
@@ -189,7 +189,7 @@ rows:
       54 of 143 cases are UNREPRESENTABLE — 44 at faction scale, 10 at world scale. The loop
       runs at person, settlement and realm only. The strategic layer has no expression in this
       model; `engine/mc_v18.py` runs the faction scale and the two are not joined.
-    measure: "python engine/season/corpus_run.py  # 'unrepresentable scales:' line"
+    measure: "python -m engine.season.harness.corpus_run  # 'unrepresentable scales:' line"
     blocks: [W10, W13]
 
   - id: R-05
@@ -201,7 +201,7 @@ rows:
       6 of 32 verbs execute in the corpus (create_record, move, speak, tell, transfer, utter).
       20 carry no predicate and no effect, 5 are foldable but never attempted, 1 (`work`) is
       attempted and always refused. 1 of 32 declares `contests:`.
-    measure: "python engine/season/corpus_run.py  # 'WHERE THE 32 GO' line"
+    measure: "python -m engine.season.harness.corpus_run  # 'WHERE THE 32 GO' line"
     blocks: [W10-core, H-65, H-94]
 
   - id: R-06
@@ -220,7 +220,7 @@ rows:
       (`W27`, `architecture/PLAN.md:1583`) rather than one shared OUGHT for all 143 corpus worlds.
       Convictions separately barely discriminate: only 2–7 of 22 candidates carry a nonzero
       score; the rest tie and are ordered alphabetically.
-    measure: "python engine/season/corpus_run.py  # 'RANKING DISCRIMINATION' line"
+    measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [W27, H-62]
 
   - id: R-07
@@ -249,7 +249,7 @@ rows:
       candidates carry a nonzero conviction score, so most choices are settled by verb name rather
       than by anything about the person. There is no mechanism by which a person declines the
       optimum, and no mechanism by which inclination breaks a tie.
-    measure: "python engine/season/corpus_run.py  # 'RANKING DISCRIMINATION' + tie ordering"
+    measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' + tie ordering"
     blocks: [W26, H-62]
     needs_jordan: false
     disposition: >-

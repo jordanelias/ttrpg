@@ -17,20 +17,15 @@ records what went wrong without them, and re-tightened here:
 from __future__ import annotations
 
 import re
-import sys
-from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+from .. import shape as S
+from ..data import files
+from ..shape import ShapeGap
+from ..trace_log import TRACE
+from . import exercises as EX
+from . import probes as P
 
-import probes as P
-import exercises as EX
-import shape as S
-from shape import ShapeGap
-from trace_log import TRACE
-
-HERE = Path(__file__).resolve().parent
-ROOT = HERE  # the season package IS the root now (adopted 2026-09-05)
-CHAIN = ROOT / "cases" / "chain"
+CHAIN = files.CHAIN_CASES_DIR
 
 
 # ---------------------------------------------------------------------------
@@ -181,9 +176,9 @@ def load_cases(kind: str) -> list[dict]:
     seen: set[str] = set()
     sources = []
     if kind == "NPC":
-        sources = sorted(CHAIN.glob("NPC*.yaml")) + sorted((ROOT / "cases").glob("NPC*.yaml"))
+        sources = sorted(CHAIN.glob("NPC*.yaml")) + sorted(files.CASES_DIR.glob("NPC*.yaml"))
     else:
-        sources = sorted(CHAIN.glob("ARC*.yaml")) + sorted((ROOT / "cases").glob("ARC*.yaml"))
+        sources = sorted(CHAIN.glob("ARC*.yaml")) + sorted(files.CASES_DIR.glob("ARC*.yaml"))
     for f in sources:
         data, notes = _tolerant_yaml(f.read_text(), f.name)
         CORPUS_DEFECTS.extend(notes)
@@ -199,7 +194,7 @@ def load_cases(kind: str) -> list[dict]:
 def _probe_view() -> dict:
     """Every probe's verdict, run once and cached by `run_probe`. Built lazily so a row that
     names no probe never triggers the corpus run."""
-    import probes as _P
+    from . import probes as _P
     return {pid: run_probe(pid) for pid in _P.PROBES}
 
 
@@ -214,7 +209,7 @@ def _register() -> dict:
     to raise for a different reason."""
     if not _REGISTER:
         import yaml as _y
-        path = (ROOT / "hole_register.yaml")
+        path = files.HOLE_REGISTER_YAML
         for r in (_y.safe_load(path.read_text()) or {}).get("rows") or []:
             _REGISTER[r["id"]] = r
     return _REGISTER

@@ -36,7 +36,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import wd_acceptance as W
 import arm9_forking as A9
 from sweep_core import S
-from season.trace_log import TRACE
+from engine.season.trace_log import TRACE
 
 # `H-10`'s declared sweep x `H-76`'s declared sweep. Neither list is invented here.
 SCENE_BUDGETS = [2, 5, 9]                    # `H-10`
