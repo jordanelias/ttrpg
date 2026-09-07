@@ -1,29 +1,55 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
-## ⛔ FILED 2026-09-07 — `_ch_document_key` EXISTS IN THREE LIVE COPIES AND THE `R8.4` REPAIR IS IN ONE
+## ⛔ RULED 2026-09-07 (Jordan) — `engine/season/` IS THE HEAD, AND THE `R8.4` REPAIR MUST BE CARRIED INTO IT
 
-**This is a `§8` violation that predates the repair and that the repair has now made expensive.** Found
-by the second adversarial critic on PR #379, verified by reading all three trees:
+**The ruling:** *"Other tree wins for its work."* `engine/season/` on **PR #371** (*ADOPT IN FULL*) is
+the tree that survives; `proposals/2026-09-01-season-loop-tests/tracer/` is the prototype it
+supersedes. PR #379 repaired the prototype.
 
-| copy | branch | state |
+### ⚠ Scope, stated narrowly because the first writing of this entry overstated it
+
+**Most of PR #379 is tree-independent and stands as merged.** The corrections to
+`design_rulings_2026-09-06.md`, `21_RECONCILIATION.md`, `17_PLAYABILITY.md`,
+`workplans/2026-09-06-season-loop-execution-plan.md`, `HANDOFF_SC.md` and this file are shared
+reference and continuity; they are about the mechanism and the plan, not about a tree. **Exactly
+three things are tree-bound**, and `engine/season/` carries its own copy of each — it reads
+`_HERE / "rosters.yaml"`, not the shared registry:
+
+| # | surface in `engine/season/` | state |
 |---|---|---|
-| `proposals/2026-09-01-season-loop-tests/tracer/shape.py` | `main` + PR #379 | ✅ **repaired** — reads `changes[]` |
-| `engine/season/shape.py` | **PR #371** (`claude/issue-368-architecture-review-2nnilz`, *ADOPT IN FULL*) | ⛔ **unrepaired**, byte-identical to the pre-`R8.4` predicate |
-| `proposals/2026-09-01-season-loop-tests/season/shape.py` | **PR #378** (`claude/shape-py-modular-architecture-b013sg`) | ⛔ **unrepaired** |
+| 1 | `shape.py:4356` `_ch_document_key` | ⛔ unrepaired — byte-identical to the pre-`R8.4` predicate |
+| 2 | `rosters.yaml:407` `document_key`'s declared meaning | ⛔ unrepaired — still *"over the Event's subject"* |
+| 3 | the two `r8_4` falsifiers | absent; they live in the prototype's `test_tracer_is_honest.py` |
 
-⚠ **The copy that was repaired is the one PR #371 supersedes.** `engine/season/` is the intended home —
-`workplans/2026-09-06-season-loop-execution-plan.md` is written against it throughout and says plainly
-that the tree does not exist on `main`. So if #371 merges as it stands, `R5`'s bureaucratic channel is
-dead again in the tree that matters, and PR #379 will read as a fix that was applied and lost.
+### ✅ THE PORT IS VERIFIED AGAINST PR #371's ACTUAL TREE, NOT INFERRED FROM THE PROTOTYPE
 
-**What this lane owes, in order.** (1) Decide which of the three trees is the head — that is the
-prerequisite for everything, not a tidy-up. (2) Carry the two-line repair plus its two falsifiers into
-whichever it is. (3) Collapse the copies, because a predicate with three homes will diverge again and
-this is the second time it has cost something.
+Both hunks apply cleanly to `engine/season/shape.py` and `engine/season/rosters.yaml` as they stand
+on that branch. Executed there:
 
-⚠ **Not ported by PR #379 deliberately.** #371 and #378 are other people's open PRs; pushing a change
-into a PR this session did not open is out of bounds. Filed here so the decision has an owner rather
-than being made by whichever PR merges last.
+```
+PR #371's tree, WITH the port:      record-route falsifier PASS   store-route falsifier PASS
+same tree, port REVERTED (control): record-route falsifier FAIL   store-route falsifier FAIL
+```
+
+So the defect is **live in the winning tree** and the fix is proven against it. The predicate hunk is:
+
+```python
+    return any(t.kind == "hold" and t.subject == pid and t.object == c.subject and t.live
+               for c in e.changes if c.subject
+               for t in w.tenures)
+```
+
+⚠ **NOT PUSHED BY PR #379, and deliberately.** #371 is an open PR this session did not open, and
+this session's branch is `claude/pr376-handoff-y3qrye`. Whoever lands #371 carries the three items
+above, or the channel is dead again in the tree that matters.
+
+### What this means for `PHASE 1` step 1's second half
+
+**`H-84`'s record-moving route is `workplans/2026-09-06-season-loop-execution-plan.md` item 2.7** —
+the `Record.rung` matrix row plus *deposit · take · give · send/carry · copy · destroy · read*,
+composed from existing primitives, tiered `opus`, marked PAPER. Under this ruling **it is built in
+`engine/season/`, not in the prototype**, so it waits on #371 landing rather than being written into
+the tree that loses. Its constraints are already recorded in row 2.7 and are not restated here.
 
 ---
 
