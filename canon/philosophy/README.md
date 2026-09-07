@@ -31,11 +31,12 @@ suite's own resources decided them, and marking the remainder for a decision tha
 | 8 | `08_history.md` | The Calamity, Solmund, the Church, the betrayal — as worked cases of the mechanism |
 | 9 | `09_terminology.md` | The ontical/ontological question, and the vocabulary |
 | 10 | `10_constraints.md` | P-01…P-15, regenerated against the new section numbers |
-| — | `DISCUSSION_SUPPLEMENT.md` | **Read this second, after `00`.** Every finding, every resolution, every open ruling |
+| — | `DECISIONS.md` | **The choices that need you.** Twelve rulings, twenty-two resolutions to ratify, ordering calls, enrichments — each self-contained |
+| — | `DISCUSSION_SUPPLEMENT.md` | Every finding, every resolution with its authority, the method and what would falsify it |
 | — | `_sources/` | The five originals, byte-identical. Never edit; they are the provenance baseline |
 
-**If you read only two things:** `00_standing.md` for how the suite hangs together, and
-`DISCUSSION_SUPPLEMENT.md` for what is still undecided and why it matters.
+**If you read only one thing:** `DECISIONS.md`. It is the whole decision surface, and every item on
+it stands alone.
 
 ---
 
