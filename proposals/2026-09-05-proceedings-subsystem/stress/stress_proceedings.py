@@ -199,7 +199,7 @@ def proceedings_world() -> World:
     edge("p_bench_a", "off_justice", "hold")
     INV("INV-05", "p_bench_b holds NO seat, deliberately",
         "so the bench Query has something to exclude. A bench of one cannot test "
-        "`|bench| > 1`, which four of the twelve rows require.",
+        "`&#124;bench&#124; > 1`, which four of the twelve rows require.",
         owner="harness")
 
     INV("INV-06", "the matter: Proposition(HOLDS, subject=p_absent, predicate='took', "
