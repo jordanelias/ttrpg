@@ -307,3 +307,52 @@ operates and never stands near what exceeds, the variable is simply quiet. *Appl
 when, as-what; exhaustiveness follows from the structure of givenness, and there is no fourth moment
 for a fourth axis. Spooling is not a missing axis but the manner in which constituting happens at all;
 looking for it among the dimensions was a category error. *Applied:* §2.5.
+
+---
+
+## 2026-09-07 — Coherence degradation: what it is, where it ends, how it is graded
+
+**What degradation is.** Verbatim:
+
+> "coherence degradation means that the configuration of their spooling is being changed as their
+> temporality actuality legibility as human is increasingly out of equilibrium for being human as
+> human"
+
+Three things ruled at once:
+
+1. **It reaches the spooling.** Layer 1 continues, but layer 2 shapes what layer 1 supplies, so as
+   layer 2's integrity fails the *shaping* changes and the being is progressively differently
+   configured. Not a shell degrading around an unchanged core — it goes to what one is being made of.
+2. **Tridimensional, against a specifically human equilibrium.** Temporality, actuality and legibility
+   as human depart together — not from equilibrium in general, but from the equilibrium of being human
+   as human.
+3. **Coherence is a distance, not a quantity.** It indexes how far a configuration stands from that
+   equilibrium. It is not a store that depletes.
+
+*Applied:* §7.1 (rewritten), §7.2, §4.3, §9.3.
+
+**Where it ends.** Verbatim:
+
+> "eventually you get so reconfigured that your being as human is no longer possible to return to as
+> you are too far out of equilibrium that you became other"
+
+The threshold is **irreversibility**, not exhaustion. Before it, the human equilibrium can still draw
+the configuration back; after it, that equilibrium is simply not where this configuration tends. The
+being **became other**. *Applied:* §7.1, §7.6.
+
+**How it is graded — and it is not.** Verbatim:
+
+> "this isn't necessarily bad so much as it radically is as it is"
+
+Clarified by the author immediately after: *"bad as in 'evil', ie there's no moral judgment to it from
+a design standpoint."*
+
+So the ruling is about **the moral register specifically**, and an earlier phrasing of it ("not
+necessarily bad") overshot into "not harmful" and has been corrected. **Drift is not evil** — no sin,
+no corruption, no fall, no taint, nothing punished. **It can nonetheless be terrible**: losing the
+possibility of return is a catastrophe for the person and for everyone knotted to them, and people
+will fear, resist, grieve and prevent it, rightly. None of that is a moral judgment. A thing can be
+feared and mourned without being wicked.
+
+At the level of design: no alignment, no corruption track, no arc from good to evil. *Applied:* §7.1,
+§7.6, §9.3.

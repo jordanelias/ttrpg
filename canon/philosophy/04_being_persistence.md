@@ -74,6 +74,10 @@ reality-strain (§7.5); and a baseline of Temporal Disjunction in ordinary life 
 **Coherence is the structural integrity of layer-two self-rendering** — the adhering-together
 (*cohaerere*) by which a practitioner's threads are sustained in the shape of human-mode being.
 
+**It is a distance, not a quantity.** Coherence indexes how far a configuration stands from the
+equilibrium proper to being human. It is not a store that depletes; degradation is progressive
+reconfiguration, reaching all the way to how the spooling is shaped (§7.1).
+
 It is not spiritual strength, moral standing, sanity, capability, or willpower. It is structural
 maintenance of being-as-human against environmental thread-forces.
 

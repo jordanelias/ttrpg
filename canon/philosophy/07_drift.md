@@ -6,12 +6,64 @@
 
 ---
 
-## §7.1 How Coherence is lost
+## §7.1 What Coherence degradation is
 
-Not every act of threadwork produces drift.
+**Coherence degradation is the progressive change of the configuration of one's spooling**, as one's
+**temporality, actuality and legibility as human** go increasingly out of the equilibrium proper to
+being human as human. *(Ruled 2026-09-07.)*
 
-**Operations directed toward the futural-potential-legible produce no Coherence cost.** Their result
-is a shape the configurations were tending toward, so once actualized it stands in harmony with what
+Three things in that, each load-bearing:
+
+**It reaches the spooling.** Layer 1 continues — the ground goes on supplying (§4.4) — but layer 2 is
+what shapes that supply into a human configuration, and as layer 2's integrity fails the shaping
+changes. So what is being spooled is progressively *differently configured*. This is not a shell
+degrading around an unchanged core. The degradation goes all the way down to what one is being made
+of.
+
+**It is tridimensional, and the equilibrium is a specifically human one.** Temporality, actuality and
+legibility are the three moments of constitution (§2.5), and drift is departure on all three at once
+(§2.6) — not from equilibrium in general, but from **the equilibrium of being human as human**. There
+is a shape that human-mode existence tends toward and holds itself in; drift is increasing distance
+from it.
+
+**So Coherence is not a resource that runs out.** It is **distance from the human equilibrium**. A
+practitioner does not spend it down to nothing and then break; they are progressively reconfigured,
+and the reconfiguration is the thing.
+
+### The point of no return
+
+**Eventually the reconfiguration is far enough that being human is no longer possible to return to.**
+Too far out of equilibrium — and what has happened is not that the person has been damaged, or emptied,
+or reduced. **They became other.**
+
+That is the real threshold, and it is a threshold of *irreversibility* rather than of exhaustion.
+Before it, the human equilibrium can still draw the configuration back. After it, that equilibrium is
+simply not where this configuration tends any more.
+
+### Drift carries no moral valence
+
+**It is not evil. It radically is as it is.** *(Ruled 2026-09-07.)*
+
+This is a claim about the moral register specifically, and it should not be read as a claim that drift
+is harmless. **It is not bad in the sense of evil** — there is no sin here, no corruption, no fall, no
+taint, and nothing being punished. Becoming other is not a moral failure and a being who has become
+other has not thereby become wrong.
+
+**It can nonetheless be terrible.** Losing the possibility of return to being human is a catastrophe
+for the person it happens to and for everyone bound to them. Those knotted to a practitioner are
+knotted to a *human* configuration, and drift carries force to them (§7.3). People will fear it,
+resist it, grieve it, and intervene to prevent it, and they will be right to. **None of that is a
+moral judgment.** A thing can be feared and mourned without being wicked.
+
+The distinction matters at the level of design, and it is what the framework holds to: there is no
+alignment here, no corruption track, no arc from good to evil. What there is, is a configuration
+moving out of one equilibrium and, past a point, no longer able to return to it — described
+accurately, and left ungraded.
+
+### What produces it
+
+**Operations directed toward the futural-potential-legible produce no Coherence cost.** Their result is
+a shape the configurations were tending toward, so once actualized it stands in harmony with what
 surrounds it and needs no holding. Nothing returns through the knot.
 
 **Operations that impose a shape off the attractor must be held against the draw**, and the cost of
@@ -21,8 +73,6 @@ configurations tend toward.
 
 The second channel is confrontation — environmental, and not confined to practitioners (§6.8).
 
-**Drift accumulates from misalignment and from exposure. It does not accumulate from threadwork.**
-
 ## §7.2 The phenomenology of drift
 
 Configurations are drawn toward the futural-potential-legible (§3.4): the equilibrium in which they
@@ -30,10 +80,12 @@ stand in harmony, needing no sustaining. A practitioner at full Coherence is ali
 their layer-two self-maintenance holds them in a shape that is close to one they tend toward anyway,
 so the holding is cheap.
 
-**Drift is the progressive decoupling of the practitioner's configuration from that equilibrium.** As
-Coherence drops, self-maintenance no longer holds the configuration in human-mode shape, and it takes
-other shapes — shapes standing in harmony with nothing, which the tendency therefore draws nowhere.
-The further the drift, the more of the being's persistence has to be *held* rather than tended toward.
+**Drift is the progressive decoupling of the practitioner's configuration from the human
+equilibrium.** As Coherence degrades, self-maintenance no longer shapes the spooling into human-mode
+shape, and the configuration takes other shapes — shapes standing in harmony with nothing around them,
+which the tendency therefore draws nowhere. The further the drift, the more of the being's persistence
+has to be *held* rather than tended toward, and the less of what they are being made of is
+human-configured.
 
 **Early.** The practitioner seems slightly off — uncanny in small ways, harder to read, less
 predictable. Their presence exerts a faint dissonance on the shared rendering around them. This is not
@@ -165,8 +217,11 @@ warning applies forward as well as backward.
 
 ## §7.6 Coherence 0 and what follows
 
-At Coherence 0 the same structural event occurs for everyone: layer 2 ceases. What follows depends on
-**perceptual reach** — how much of the substrate the being can perceive and deliberately work.
+At the far end of drift the same structural event occurs for everyone: the configuration has gone so
+far out of the human equilibrium that being human is no longer possible to return to (§7.1). Layer 2
+no longer shapes the spooling into a human configuration at all. **They became other**, and what
+follows depends on **perceptual reach** — how much of the substrate the being can perceive and
+deliberately work.
 
 **Sensitivity does not increase at Coherence 0.** The being does not suddenly perceive more because
 their human rendering collapsed. They have exactly the perceptual architecture they built, and that
@@ -203,7 +258,8 @@ Calamity-scale events, not because they intend it, but because the physics of wh
 exist demands it.
 
 **The endpoint is not one state.** It is a reach-gated set of structurally distinct trajectories, and
-the distinction is structural rather than moral or narrative.
+the distinction is structural rather than moral or narrative. None of these is a punishment and none is
+a reward. Each is a configuration that radically is as it is (§7.1).
 
 *(The source suite gave four bands in one document and a two-way split in another, without saying
 which superseded which. The four-way account above is the finer and is treated as canonical; the
