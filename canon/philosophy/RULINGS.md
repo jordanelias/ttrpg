@@ -203,3 +203,61 @@ already decided that is what he is. *Applied:* §8.7, §7.5 (Solmund named as th
 **D-11 — the lineage.** Ruled: **name all three.** Derrida, Kant, and Freud/Jentsch. The alternative —
 scrubbing the borrowed vocabulary at roughly twenty sites — was available and not taken. *Applied:*
 §0.3 (already written; now marked as ruled).
+
+---
+
+## 2026-09-07 — Batch 5: the barrier, the passive stratum, singularity, and how surfeit is met
+
+**B-5 — the epistemic barrier.** Ruled: **non-sensitives retain thread-level knowledge; it stays
+inert.** They do not forget. The constraint that required instability contradicted the section it
+cited and is rewritten. *Applied:* §5.6, §10 (P-08).
+
+**B-15 — the passive stratum.** Ruled: **name it as one stratum of rendering.** Pre-predicative,
+registering affect, intensity and trace without composing them into an object. Houses the four
+registrations the sources posited separately. *Applied:* §3.3, and it does work in §5.3, §5.5, §6.3.
+
+**B-17 — the two uncannies. REJECTED, and the editorial proposal struck.**
+
+> "what? I didn't write this. but threadcut are radically singular and alien."
+
+The unification — "the threadcut being shows a human what a human is" — came from the review, not the
+author. It is struck from §4.5 and §5.8. **Threadcut beings are radically singular and alien:**
+singular in that they are not a category with members and nothing about one licenses an inference
+about another; alien in that, lacking spooled becoming, they share no temporal mode with anything else
+in the world. The layer profile says what they *lack*, not what they *are*, and must not be read as
+"a human minus one layer." The uncanniness is irreducibility, not a mirror. *Applied:* §4.5
+(rewritten), §5.8 (un-unified).
+
+**B-19 — the three modes, and how surfeit is met.** The proposed derivation (witnesses organize the
+surfeit by rendering it) is **struck**. The author's account:
+
+> "a surfeit of being means that people with ordinary thread sensitivity can only see the being within
+> the bounds of their ordinary domain of rationality and perception, which means that the excess is
+> something that is a confrontation with the uncanny and disturbing or awe-inducing and overwhelming
+> because that excess cannot be captured. the more thread sensitive you are, the more you that surfeit
+> can be captured and perceived despite being beyond the ordinary realm of human rationality -- as an
+> okay analogy, 2D can represent 3D without being 3D and 3D can represent 4D without being 4D, so tell
+> can human rationality abstract surfeit without being surfeit. hence the propositions being available
+> even if meaningless. so the form of the being is rendered by others within the bounds of what they
+> can render itself, and the experience of rendering it as being beyond comprehension is dependent
+> upon their thread sensitivity. mode-3 organization is radically opaque (with the governance over
+> form being how biology and organisms unfold within this threads paradigm)"
+
+Three things ruled at once:
+
+1. **Abstraction without capture.** Human rationality can abstract surfeit without being surfeit, as
+   two dimensions represent three without being three. The representation is real and lossy, and the
+   loss is what representing across a difference of order means. *Applied:* §5.1 (new subsection).
+2. **Sensitivity sets the resolution.** Greater sensitivity captures more of the surfeit without making
+   it commensurable. Two witnesses of one being have genuinely different encounters and neither is
+   mistaken; what differs is the resolution of the abstraction each can form, and therefore how much
+   remains as excess. *Applied:* §5.1, §4.6, §8.7.
+3. **This is why the propositions are available though inert.** A proposition about thread-level
+   reality *is* such an abstraction — genuinely constructed and transmissible. What it lacks is not
+   sense but anchorage. Joins B-5. *Applied:* §5.6.
+
+**Mode-3 organization is radically opaque**, governed by whatever governs how organisms unfold in the
+thread paradigm — the thread-level analogue of morphogenesis, unexamined in the ordinary case and
+therefore unexplained here. Witnesses render the *form as perceived*, within their bounds; they do not
+constitute the being's organization. *Applied:* §4.6 (rewritten), §8.7 (catalysis re-derived from the
+uncapturable remainder rather than from constitution-by-rendering).

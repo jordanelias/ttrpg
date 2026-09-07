@@ -149,15 +149,26 @@ description the phrase is contradicted two sentences later by "maintained perfor
 moment" — a moment-to-moment maintenance is temporal and retentional. A threadcut being is not
 outside time; it is outside *accumulation*.
 
-**What is uncanny about them, stated correctly.** The source suite said their mode of being
-"contradicts the mode in which everything else exists." Under §4.2 that is false: their mode is ours
-minus one layer. Both perform self-maintaining threadwork; only the source and mode differ.
+**They are radically singular and alien.** *(Ruled 2026-09-07.)*
 
-The uncanniness is therefore sharper than the suite claimed, not weaker. **A threadcut being shows a
-human what a human is: a configuration that is held, not given.** The estrangement a practitioner
-feels at contingency (§5.8) and the estrangement anyone feels near a threadcut being are the same
-disclosure, met from inside and from outside. That unification is worth having, and it is what makes
-these beings disturbing in a way that has nothing to do with what they do.
+The layer profile says what a threadcut being *lacks*; it does not say what one *is*, and it must not
+be read as "a human minus one layer." That reading domesticates them, and it is wrong.
+
+**Singular:** they are not a category with members. Each arrived through its own opening, organized in
+its own way, and there is no type of which any is an instance. Nothing about one licenses an inference
+about another.
+
+**Alien:** having no spooled becoming, a threadcut being shares no temporal mode with anything else in
+the world. Everything else accumulates; it does not. That is not a difference of degree along a scale
+everything else is also on. It is incommensurability.
+
+So the uncanniness of their presence is **not** self-recognition. A witness is not glimpsing what they
+themselves are. They are meeting something that does not resolve into any category they have, and the
+disturbance is that irreducibility — not a mirror.
+
+*(An earlier draft unified this with the practitioner's vertigo at their own contingency — "the
+threadcut being shows a human what a human is." That was an editorial proposal from the review, not
+the author's, and it is struck. The two are different experiences and §5.8 keeps them apart.)*
 
 **Their cost never eases. Only spooling yields temporal depth; rendering displaces without
 accumulating it.** *(Ruled 2026-09-07.)*
@@ -178,40 +189,54 @@ it does not reduce the cost.
 
 ## §4.6 The three modes of emergence
 
-Configurations that come through a breach take one of three forms. The source suite listed them; the
-framework can now say *why* there are three and what makes them distinct.
+Configurations that come through a breach take one of three forms. **What distinguishes them is not
+how they were witnessed; it is what they are.** *(Ruled 2026-09-07.)*
 
-**What comes through is thread-substrate, uncontracted — threads, rendered as nothing yet.** It is
-rendered by whoever is present, because rendering is always occurring. And rendering actualizes what
-it renders, in the shape rendered (§4.2). So the form the surfeit takes is determined on the rendered
-side — which is exactly what §1.1 requires, and it attributes nothing whatever to the ground.
+- **Mode 1 — ordinary incursion.** Pure surfeit pressing through a structural opening, with no
+  organization, no self-awareness, and no capacity to sustain its own rendering. It deteriorates
+  because nothing maintains it. *(No layers.)*
+- **Mode 2 — Providence.** Enough internal organization to persist temporarily, without the continuous
+  threadwork indefinite maintenance would require. Its organization is accidental — a product of
+  whatever configuration the surfeit happened to take. It is an event, not an entity.
 
-The three modes are three outcomes of that rendering:
+  *The name is kept for this mode and retired from the stabilizing tendency (§3.4). The irony is
+  deliberate and lands where it belongs — on survivors calling an accident providence. Nothing
+  provided it.*
+- **Mode 3 — threadcut beings.** Arrive organized, and maintain their rendering through continuous
+  threadwork. Radically singular and alien (§4.5). *(Layer 3 only.)*
 
-- **Mode 1 — ordinary incursion.** Rendered as nothing coherent: as horror, as the unassimilable. No
-  shape is held. It deteriorates, having no self-maintenance and nothing sustaining it. *(No layers.)*
-- **Mode 2 — Providence.** Rendered coherently, but by few or briefly. A shape persists temporarily;
-  its organization is accidental, being the accidental shape of a few witnesses' rendering. It is an
-  event, not an entity. *(Transient organization; no layer 3.)*
+### Mode-3 organization is radically opaque
 
-  *The name is kept for this mode and retired from the stabilizing tendency (§3.4), which was the
-  other thing the sources called Providence. Kept here because the irony lands where it belongs — on
-  survivors calling an accident providence — rather than on the framework's own vocabulary. Nothing
-  foresaw or provided anything. Ruled 2026-09-07.*
-- **Mode 3 — threadcut beings.** Rendered coherently, widely and durably *as a being*. And since what
-  was rendered is thread-substrate, and any thread-woven consciousness renders, the rendered being now
-  renders itself. *(Layer 3 only.)*
+**The framework does not explain how a third-mode being comes to be organized, and does not intend
+to.** *(Ruled 2026-09-07.)*
 
-**This closes the framework's sharpest gap without touching §1.5.** The source suite had mode-3 beings
-"arriving organized" with no possible organizer: the ground may not organize, and nothing else was
-present. The answer is that the witnesses organized it — not deliberately, but by rendering it.
+This is not an unfilled gap. It is the epistemic charter (§1.1) applied where it bites hardest: the
+question concerns what happened at and beyond a breach, and any answer would be a claim about how form
+arises on the far side of what can be rendered.
 
-**What remains genuinely unknowable is preserved.** *Why* the witnesses rendered the surfeit as this
-rather than that is a fact about the rendering of their time and place. The mechanism is available;
-the content is not, and §1.1 still forbids asking the ground.
+What can be said is where the question belongs. **Form here is governed by whatever governs how
+organisms unfold within the thread paradigm at all** — the thread-level analogue of morphogenesis, by
+which a configuration comes to take and hold a shape. That process is not specially mysterious in the
+ordinary case and it is not specially explained either. A third-mode being is that process operating
+without spooling, at the site of a breach. Opaque there because it is unexamined everywhere.
 
-Two variables replace the source suite's four undefined disjuncts ("excess, gap, tear, or error"): an
-**opening**, and a **rendering** of what comes through it.
+**What the framework does *not* say — and an earlier draft did.** It does not say that witnesses
+organize the surfeit by rendering it. Witnesses render the *form as perceived*, within the bounds of
+what they can render (§5.1); they do not constitute the being's organization. That proposal came from
+the review, closed the bootstrap too cheaply, and is struck.
+
+### What witnessing does determine
+
+The *encounter*, not the being.
+
+A surfeit is perceived within the bounds of the perceiver's ordinary rationality, and what exceeds
+those bounds is met as excess — uncanny and disturbing, or awe-inducing and overwhelming. Greater
+sensitivity captures more of the surfeit without making it commensurable (§5.1). **So two witnesses
+of one being have genuinely different encounters, and neither is mistaken.** What differs is the
+resolution of the abstraction each can form, and therefore how much remains as excess.
+
+This is what made Solmund a figure around whom a religion could form (§8.7), and it is not a fact
+about his organization. It is a fact about what those who met him could hold of him.
 
 ## §4.7 Orphaned configurations
 

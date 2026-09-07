@@ -152,10 +152,17 @@ centuries. The parallels are direct: prophetic figures catalyze; human communiti
 for a generation or less before his dissolution; the Church took two to three centuries to reach mature
 form.
 
-**Why a catalyst, derived.** §4.6 gives the reason the source suite could only assert. A third-mode
-being exists *as a community's rendering of it* — and a being that exists as a community's rendering is
-exactly the kind of thing a community forms around. The catalysis is not a fact about his charisma. It
-is a fact about his mode of being.
+**Why a catalyst.** Not because he existed *as* the community's rendering — he did not; his
+organization is his own and radically opaque (§4.6). Because of what he was to *them*.
+
+A being of surfeit is met within the bounds of the meeter's own rationality, and the remainder arrives
+as excess: uncanny, or overwhelming, or awe-inducing (§5.1). Every person who encountered him took
+away an abstraction at their own resolution, and a remainder none of them could hold. **A community
+forms around exactly that** — a shared object that no member has fully rendered, which each is
+therefore compelled to keep interpreting, and about which no interpretation can be final.
+
+The catalysis is not a fact about his charisma, and not a fact about his organization. It is a fact
+about the shape of what could not be captured.
 
 ### The Church worships Solmund
 
@@ -167,7 +174,8 @@ worshipped as one.
 
 **The ground of his miracles, and of his existence, is the Ein Sof** — as it is the ground of
 everything that comes to be. But the Ein Sof is not what is worshipped. What is worshipped is a being
-that came through a tear and was rendered, by the people who met him, into the shape of a god.
+that came through a tear, and whose form those who met him could render only within the bounds of
+their own rationality (§5.1). The shape they could give the remainder was a god.
 
 **This is a category error, not a deception, and not a lie people were told.** Nothing here requires
 Solmund to have claimed godhood, to have encouraged the reading, or to have known what was being made

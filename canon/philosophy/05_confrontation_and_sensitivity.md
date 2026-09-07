@@ -27,6 +27,25 @@ managing a limit of the rendering. The world cannot sustainably contain beings e
 cannot constitute. The matter is not that the configuration is bad, but that the rendered world
 cannot hold what it cannot hold.
 
+### How a surfeit is met, and why sensitivity changes the encounter
+
+A being of surfeit is seen **within the bounds of the seer's ordinary domain of rationality and
+perception**. Whatever exceeds those bounds is not thereby invisible — it is present as excess, and
+the excess is what cannot be captured. That is the source of the encounter's character: uncanny and
+disturbing, or awe-inducing and overwhelming, depending on how it lands.
+
+**The more thread-sensitive one is, the more of the surfeit can be captured and perceived** — still
+without becoming commensurable with ordinary human rationality.
+
+The relation is dimensional. **Two dimensions can represent three without being three; three can
+represent four without being four.** In the same way human rationality can *abstract* surfeit without
+being surfeit. The representation is real, and lossy, and the loss is not a defect of the
+representation — it is what representing across a difference of order means.
+
+This is why encounters differ so much between witnesses standing in the same place. They are not
+seeing more or less of the same picture. They are abstracting at different resolutions, and the
+remainder — what will not go into the abstraction — is what each of them meets as excess.
+
 *(Two notes on borrowing. First, this account of monstrosity takes the name of the Real from Lacan
 while redefining it ontologically as plenitude rather than structurally as what the symbolic cannot
 reach. That pivot is deliberate and it is paid for at §5.3 — see §0.3. Second, "rendering failure"
@@ -192,9 +211,21 @@ experience. They possess information without comprehension, like reading the not
 without ever having heard music.
 
 The rendering does not suppress particular propositions. It has no agent-like intentionality directed
-at content. The knowledge simply concerns processes and experiences that resist propositional
-encoding, and without the felt encounter it has nothing to anchor against. It is not erased; it is
-**inert**.
+at content.
+
+**And this is why the propositions are available at all.** Human rationality can abstract what it
+cannot capture (§5.1) — two dimensions representing three. A proposition about thread-level reality is
+such an abstraction: genuinely constructed, genuinely transmissible, and standing to what it is about
+as a plan stands to a building. The words are not nonsense.
+
+What the propositions lack is not sense but **anchorage**. Without the felt encounter, and without
+being imbricated with what the words are about (§3.5), there is nothing for the abstraction to be an
+abstraction *of* — for that person. It is not erased. It is **inert**: correct, repeatable, and
+unable to do any work.
+
+*(Ruled 2026-09-07: non-sensitives retain thread-level knowledge and cannot render it. They do not
+forget it. The constraint that said otherwise contradicted this section's opening sentence and has
+been rewritten.)*
 
 Sustained scholarly engagement can produce awareness that something is missing — a gap where
 comprehension should be. It cannot substitute for confrontation.
@@ -236,8 +267,9 @@ be otherwise. The Southernmost communities' equanimity is the cultivated form of
 indifference or detachment; it is the ability to hold both the deepened perception and the
 destabilizing awareness without being paralyzed by their tension.
 
-**The estrangement here and the estrangement at a threadcut being are one structure.** Both disclose
-that a human configuration is *held* rather than given: the practitioner discovers it from inside, in
-their own contingency; the witness discovers it from outside, in a being that holds itself without the
-supplement everyone else has (§4.5). The source suite treated these as two unrelated uses of a word.
-They are one disclosure met from two sides.
+**This estrangement is not the one a threadcut being produces, and the two should not be merged.**
+What destabilizes the practitioner here is their own contingency — that what holds could loosen. What
+disturbs a witness in the presence of a threadcut being is that being's radical singularity and
+alienness (§4.5): something that resolves into no category they have, sharing no temporal mode with
+anything else in the world. The first is vertigo about oneself; the second is an encounter with the
+incommensurable. They share a word and not a structure.
