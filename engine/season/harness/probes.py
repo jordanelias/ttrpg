@@ -557,8 +557,13 @@ def p15():
             f"are elsewhere. Admitting is asserted as well as excluding, because a channel broken "
             f"CLOSED also shrinks the set and that is what the first version of this probe was "
             f"reading. ⚠ THE DESIGN STILL SUPPLIES NO PREDICATE: these are an INJECTED default, "
-            f"`H-33` stays `assumption`, and `total` remains the default because it is what #353 "
-            f"specifies. What is closed is that an exclusion is now EXPRESSIBLE and swept, not "
+            f"`H-33` stays `assumption`, and `total` remains #353's SPECIFIED behaviour and this "
+            f"sweep's control -- but it is NO LONGER THE DEFAULT. It was, on the ground that the "
+            f"specified behaviour should ship; `R7` (2026-09-06) overtakes that by ruling the "
+            f"architecture model over the echo model, and `total` is the echo model at the deposit "
+            f"layer. The default is `all_five` from 2026-09-07. The GRADE is untouched: `R7` rules "
+            f"which arm ships and says nothing about what the five predicates are. What is closed "
+            f"is that an exclusion is now EXPRESSIBLE and swept, not "
             f"that #353 said how. ⚠ TWO OF THE FIVE ADMIT NOBODY IN THIS WORLD -- `post_remit` "
             f"needs an office whose remit covers the emitting verb, and `chronicle` fires only on "
             f"a binding decision; neither is reachable from the verbs the fold can execute")
@@ -1349,7 +1354,11 @@ def _seed_near_floor(w, site) -> None:
     injected wear rate. That was cheap while a season emitted a handful of Events. After `W4` made
     MATTER emit per write, and with `W6`'s default arm keeping the fan-out total (because that is
     what #353 specifies), the two of them cost 71 SECONDS between them and were the slowest things
-    in the suite by two orders of magnitude.
+    in the suite by two orders of magnitude. ⚠ THAT SENTENCE IS NOW HISTORY, AND THE HELPER IS NOT:
+    `R7` took the default off `total` on 2026-09-07, so the flood it describes no longer arrives by
+    default. The seeding stays, because the reason it stays is the one below — two probes answering
+    the same question with 2 and 11 — and because `total` is still the control arm, where the cost
+    is exactly what this paragraph says it is.
     ⚠ AND IT MOVES A PUBLISHED NUMBER, WHICH IS SAID HERE RATHER THAN LEFT TO BE FOUND. `P18` and
     `W1` reported ELEVEN seasons before this and report TWO after — `site_harbour` starts at 900,
     the `bulk_shipping` floor is 800 and wear is 10. `A31b` in the SAME artifact still reports 11

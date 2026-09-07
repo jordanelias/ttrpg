@@ -150,9 +150,65 @@ flip** or `M-6` measures a starved propagation chain rather than a narrowed one
 (`21_RECONCILIATION.md` C-3). Everything about absence, secrecy, hearsay and `R5`'s bureaucratic
 fact is behind it.
 
-**2 · Fan-out off `total`** (`19_PLAN.md` step 1). **Forced by `R7`** — `total` is the echo model
-Jordan refused, arriving at the deposit layer. The six campaign goldens are the control, not a
-dependency: they re-baseline and the deltas print.
+**2 · ✅ DONE 2026-09-07 — fan-out off `total`** (`19_PLAN.md` step 1, `ED-IN-0205`, `IN` lane).
+`engine/season/data/fixtures.py` ships `all_five`; `total` stays as `H-33`'s control arm and the
+channel list is untouched. **Forced by `R7`** — `total` is the echo model Jordan refused, arriving
+at the deposit layer.
+
+- **The artifact.** Two persons' witness deposits differ after two seasons and are **identical under
+  `total`** — the control sits inside the same test. Deposits 649 → 60; ledgers `[200,200,200]`
+  (pinned at the cap) → `[0,28,32]`. **Control: 122 probes, ZERO verdict changes** (63 PASS / 59
+  GAP before and after); the run artifacts re-baselined and the deltas are in the commit.
+- ⛔ **`M-6` cannot fail as specified and is not reported as passed.** `_r3_propagates` walks
+  `Event.causes[]` and never reads a ledger, so the corpus tallies are identical across all three
+  arms **both co-located and dispersed to distinct rungs**. What is claimed is links 1 and 2:
+  questions raised hold at 5/9/10 under `all_five` and fall to 5/8/8 under `presence_only`, which
+  is the measured reason for the arm.
+- ⚠ **One cost, recorded and not acted on.** At the shipped `observation_deposit_mode: actor`,
+  `W-D`'s 16-fork slice diverges 2 at `total`, **0 at `all_five`**, 7 at `presence_only` —
+  non-monotonic. Half the channel survives (widened fingerprint: 8 vs the control's 6). The arm is
+  not re-chosen on 16 forks whose question order `H-54` says is decided by hash ordering 75% of the
+  time. Both numbers are pinned in their own tests.
+- ⚠ **And the flip retired a registered argument.** The ledger cap now evicts **nothing** in any arm
+  (48/49/204 → 0/0/0), so `H-40`'s decay sweep is observable in every deposit arm and `H-122`'s
+  first reason for defaulting to `actor` is gone. Its second — form 6 recording a holder-relative
+  value in the wrong holder's ledger — is a correctness argument, untouched, and is why the default
+  does not move. Recorded on the row.
+
+### ⭐ DIAGNOSED — why the shipped arm shows zero, and why the arm is not chosen on it
+
+A fork reaches a later decision by exactly **one** route: §F1 clause 4 (`shape.py:627`,
+`belief_contradicts`) — a claim in the actor's own ledger contradicts a candidate's precondition,
+so the candidate is dropped. Counting that population over the same 89 worlds
+(`wd_extra.corpus_drops`), at `observation_deposit_mode: actor`:
+
+| `fan_out_mode` | clause-4 drops | fork divergences |
+|---|---|---|
+| `total` | 37 | 62 of 1467 |
+| **`all_five` (shipped)** | **0** | **0 of 1467** |
+| `presence_only` | 114 | 229 of 1467 |
+
+**The divergences track the drops exactly.** The zero is neither a property of the arm nor a defect
+in the channels: at the shipped configuration **clause 4 never fires**, so a fork has nothing to
+change. Beliefs still form there (22 false-when-recorded); they contradict nothing.
+
+⭐ **And the reason is the finding.** Every clause-4 drop in the entire corpus, in every cell, is
+the verb **`move`** refusing on a **`contain.path:<person>`** belief — *there is no road from here
+to there*, formed by witnessing a `travel.blocked` and overturned by a later `travel.moved`.
+Nothing else in the corpus fires clause 4 at all. So the metric measures **people being wrong**,
+and a wider channel set does not suppress propagation — **it corrects the stale belief before it
+can bite.** Better-informed people refuse fewer acts.
+
+⚠ **So the arm is not chosen on this metric in either direction.** It is a monoculture: one verb,
+one predicate, one stale-belief shape. Choosing an epistemic model to preserve `move`'s refusals
+would tune the design's whole knowledge layer to protect a single worked instance. **The defect it
+exposes is that §F1 clause 4 has exactly ONE reachable instance in the corpus** — a producer hole,
+and the place the next work goes. The shipped arm stays `19_PLAN.md` step 1's, which is also the
+only arm that produces a secret between two people in the same room.
+
+**2b · ⚠ The Record route is still blocked on `H-84`,** whose owner is *Part E — the verb that would
+do it*, and which forbids in terms inventing a `give_record` to make a case pass. The STORE route is
+open and executed (PR #379). Nothing was invented.
 
 **3 · ⛔ The obstacle needs a ceiling, and this is new.** `M-7` was run for the first time and
 **fails**: at the 1D pool floor `p_success` is `0.2266 / 0.0228 / 0.0006` at Ob 1/2/3 and **0.0000
