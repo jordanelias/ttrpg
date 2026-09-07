@@ -363,7 +363,7 @@ jobs:
       # IF THIS EVER NEEDS TO BE FASTER STILL: split into JOBS whose union is the full
       # collection. Do not select a subset of it.
       - run: python -m pytest tests/valoria -q -n auto
-      # ED-IN-0202 (adoption, 2026-09-05). `engine/season/` is the game code now and NOTHING ran
+      # ED-IN-0204 (adoption, 2026-09-05). `engine/season/` is the game code now and NOTHING ran
       # its 184 tests — `pytest.ini`'s `testpaths` is `tests/valoria` and the sim-regression job
       # runs `engine/tests`, so the suite fell between both. An adopted mechanism outside every
       # gate is the state this adoption exists to end.

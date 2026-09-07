@@ -158,7 +158,7 @@ RULES = [
     (lambda p: relocation(p) is not None, 'relocate', 'R-RELOCATE',
      'kept, but moved to its subsystem home -- see the RELOCATE table'),
 
-    # ---- THE ADOPTED SYSTEM (ED-IN-0202, Jordan 2026-09-05, "adopt in full"). Two new top-level
+    # ---- THE ADOPTED SYSTEM (ED-IN-0204, Jordan 2026-09-05, "adopt in full"). Two new top-level
     # trees left `proposals/` and matched no rule here, which `test_partition_is_total` caught as
     # the CARRY-union-LEAVE defect: a file with no verdict would be removed under a mirror-image
     # deletion without ever appearing in a plan. Both are KEEP, and for different reasons worth
@@ -171,7 +171,7 @@ RULES = [
      'LAYER 2 -- the game code, RATIFIED 2026-09-05. The executable season loop, the four '
      'registries it reads at runtime, its corpus and its suite. This is the mechanism'),
 
-    # ---- DECISION 1 STEP A (ED-IN-0202, Jordan 2026-09-05): "only the repository's systems for
+    # ---- DECISION 1 STEP A (ED-IN-0204, Jordan 2026-09-05): "only the repository's systems for
     # social contests, personal combat and mass battles to be retained. All work in /engine is
     # retained as well." Those two clauses collide TODAY -- a seeded 1-season probe loads 65
     # systems.* modules across six subsystems, and 19 of the 27 composition roles declared in
@@ -192,7 +192,7 @@ RULES = [
         'systems/characters/', 'systems/factions/', 'systems/fieldwork/', 'systems/overview/',
         'systems/settlements/', 'systems/threadwork/', 'systems/world/',
     )), 'keep', 'R-SUPERSEDED-RETAINED-PENDING-R04',
-     "SUPERSEDED by engine/season/ (ED-IN-0202, 2026-09-05) but RETAINED, and retained for exactly "
+     "SUPERSEDED by engine/season/ (ED-IN-0204, 2026-09-05) but RETAINED, and retained for exactly "
      "one reason: engine/ still resolves into this subsystem at runtime through a composition role "
      "declared in references/module_contracts.yaml's composition_roles: block (engine/substrate/"
      "composition.py imports the role's target by string at first call, per CLAUDE.md 0.05's "
@@ -211,7 +211,7 @@ RULES = [
         'systems/_architecture/', 'systems/articulation/', 'systems/npcs/',
         'systems/ui/', 'systems/victory/',
     )), 'keep', 'R-SUPERSEDED-DOC-ONLY',
-     "SUPERSEDED by engine/season/ (ED-IN-0202, 2026-09-05) and RETAINED, but NOT for the reason "
+     "SUPERSEDED by engine/season/ (ED-IN-0204, 2026-09-05) and RETAINED, but NOT for the reason "
      "its seven code-bearing siblings are. This subsystem holds ZERO .py files -- it is not an "
      "importable package and no composition role targets it, so engine/ cannot resolve into it and "
      "its retention is NOT gated on R-04. It is kept under this tool's standing rule for prose with "

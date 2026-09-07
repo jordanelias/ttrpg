@@ -58,7 +58,7 @@ assert (REPO_ROOT / "CLAUDE.md").is_file() and (REPO_ROOT / "engine").is_dir() \
 # ---------------------------------------------------------------------------
 # THIS PACKAGE'S OWN DATA. `runs/` is written by `harness/report.py` alone (`W15`, guardrail `G7`).
 # ⚠ THE FIVE YAML REGISTRIES BELOW USED TO LIVE IN A SIBLING PROPOSAL DIRECTORY AND NOW LIVE
-# HERE, co-located with the code that reads them -- the adoption's doing (ED-IN-0202), not the
+# HERE, co-located with the code that reads them -- the adoption's doing (ED-IN-0204), not the
 # decomposition's. They are listed in this section rather than under SIBLINGS because that is now
 # what they are: files this package owns.
 # ---------------------------------------------------------------------------

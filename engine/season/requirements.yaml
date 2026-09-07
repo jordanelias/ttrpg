@@ -1,6 +1,6 @@
 # THE NINE — the acceptance requirements for the adopted season loop.
 #
-# RULED BY JORDAN 2026-09-05, at adoption (ED-IN-0202), verbatim in `statement:`.
+# RULED BY JORDAN 2026-09-05, at adoption (ED-IN-0204), verbatim in `statement:`.
 #
 # ⚠ THIS FILE IS MECHANISM, NOT REFERENCE (CLAUDE.md §0.05). `register.py --requirements`
 # reads it and FAILS on a row that claims `met` with no `measured:` line behind it. That is
@@ -12,7 +12,7 @@
 # instrument yet, status is `not_met` and `measure:` names what would have to exist.
 
 ruled_by: "Jordan, 2026-09-05"
-ed: "ED-IN-0202"
+ed: "ED-IN-0204"
 
 # THE SCALES OF PLAY — ruled by Jordan 2026-09-05, verbatim:
 #   "we need to enable all scales of play that the game calls for, which includes character

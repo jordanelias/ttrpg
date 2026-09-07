@@ -1,4 +1,4 @@
-"""`engine.season` — the season loop, as a package. The adopted game code (ED-IN-0202, Jordan
+"""`engine.season` — the season loop, as a package. The adopted game code (ED-IN-0204, Jordan
 2026-09-05, *"adopt in full"*), decomposed into modules (ED-IN-0203).
 
 ⚠ NO `sys.path` INSERT HERE, AND THE ABSENCE IS THE POINT — THIS FILE USED TO BE ONE. At adoption

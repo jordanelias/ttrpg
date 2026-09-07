@@ -1,7 +1,7 @@
 # `engine/season/shape.py` — DECOMPOSITION PLAN (12 modules, 10 steps)
 
 ## Status: **PROPOSED. Reference under §0.05 — delete this file and the game behaves identically.**
-## Lane: IN. Recorded 2026-09-06, ED-IN-0202. Adjudicated read-only; zero escalations.
+## Lane: IN. Recorded 2026-09-06, ED-IN-0203. Adjudicated read-only; zero escalations.
 
 > ### ⚠ THE TREE THIS PLANS DOES NOT EXIST ON `main`.
 > `engine/season/` was added by PR #371 (`claude/issue-368-architecture-review-2nnilz`). Every
