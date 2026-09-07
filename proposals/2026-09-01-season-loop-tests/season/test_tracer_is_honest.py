@@ -452,6 +452,19 @@ def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
         "the process ending")
 
 
+
+def _model_modules():
+    """THE MODEL: every package module that is not the instrument.
+
+    Derived, never listed. `test_h115` and `test_jordan_no_definition_is_hardcoded_in_a_body`
+    both key on this, and both previously named files by hand — the exact shape this file
+    records three separate incidents about (`files.package_modules`, `:1773-1783`, `:4306-4311`),
+    each written after a module went unscanned BY CONSTRUCTION. A decomposition adds a model
+    module every step, so a hardcoded list is guaranteed to fall behind; this cannot.
+    """
+    return [m for m in files.package_modules()
+            if "harness" not in m.parts and not m.name.startswith("test_")]
+
 def test_h115_the_fourteen_load_time_raises_are_unchanged():
     """`H-115`: only the FOUR run-time degree-branch raises (in `emits_at`/`writes_at`) moved to
     `Unspecified`. The 14 load-time raises -- missing/malformed `write_matrix.yaml`/
@@ -484,7 +497,7 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     which is the question, and a shape-based check (`is this raise inside a loader?`) would answer
     it with a heuristic instead of a person.
 
-    ⚠ RE-POINTED, step 2 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0202). `_load_rosters`
+    ⚠ RE-POINTED, step 2 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0203). `_load_rosters`
     and `_load_write_matrix` -- 1 + 3 of the 28 -- moved to `season.data.rosters` and
     `season.data.matrix` with their bodies unchanged; the count did not move WITH them if this
     test still asked only `SHAPE_CODE`, which is `files.SHAPE_PY` alone. That is the exact
@@ -493,12 +506,13 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     the assertion kept reading as the whole-instrument count. Summed across the three files that
     now hold a `_load_*` this test's own docstring names, so a raise MOVED still counts and a raise
     QUIETLY DROPPED during a future move still flips this to a number other than 28."""
-    rosters_code = _code_only((files.DATA_DIR / "rosters.py").read_text())
-    matrix_code = _code_only((files.DATA_DIR / "matrix.py").read_text())
-    total = (SHAPE_CODE.count("raise SystemExit")
-             + rosters_code.count("raise SystemExit")
-             + matrix_code.count("raise SystemExit"))
-    assert total == 28
+    mods = _model_modules()
+    assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
+    total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
+    assert total == 28, (
+        f"{total} load-time exits across the model set, expected 28. Per file: "
+        + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
+                    for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
 
 def test_d10b_resolve_sums_then_clamps_once():

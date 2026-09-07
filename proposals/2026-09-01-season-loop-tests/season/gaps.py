@@ -1,5 +1,5 @@
 """The gap taxonomy. Extracted from `shape.py` (step 1 of the shape.py decomposition,
-ED-IN-0202) with no behaviour change: every symbol here is re-exported by `shape.py` so
+ED-IN-0203) with no behaviour change: every symbol here is re-exported by `shape.py` so
 `from ..shape import Forbidden` and `S.Unspecified` keep resolving exactly as before.
 
 `InstrumentDefect` is deliberately NOT a subclass of `ShapeGap` -- see its own docstring.

@@ -1,5 +1,5 @@
 """S33 -- DETERMINISM. The mint (`H`) and its sentinel (`ROOT`), extracted from `shape.py`
-(step 1 of the shape.py decomposition, ED-IN-0202) with no behaviour change. `shape.py`
+(step 1 of the shape.py decomposition, ED-IN-0203) with no behaviour change. `shape.py`
 re-exports both, so `from ..shape import H, ROOT` and `S.H(...)` keep resolving exactly as
 before. Living here, on their own, makes "the mint lives once" CHECKABLE in one grep
 (`grep -rln "def H(" season/` prints exactly this file today). ⚠ That is a CONVENTION,
