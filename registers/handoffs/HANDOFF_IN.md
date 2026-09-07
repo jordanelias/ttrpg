@@ -131,6 +131,46 @@ pinning the name list makes it a router that has to be edited by the same person
 noticed the loss. The procedure is the guard here, and it lives in this handoff, which is what a
 session reads before carving.
 
+### ⚠⚠⚠⚠⚠ TWO IMPORT CYCLES BECAME VISIBLE, AND THE MIRROR-IMAGE DEFECT IN THE SAME COMMIT
+
+`test_exactly_four_cycles_remain_and_they_are_the_expected_families` (renamed from `..._two_...`).
+Converting intra-package imports from bare names to relative ones made two `engine.season` cycles
+appear to `structure_audit`. **They pre-existed** — measured, not assumed: run against a worktree
+at `2f13271`, the detector returns 2 cycles and ZERO season cycles, while the same edges are
+already in those files spelled `import shape as S` / `import run_cases as R`. `_resolve_internal`
+cannot bind a bare name to an internal module, so every edge was dropped.
+
+**Note what happened in ONE commit, in OPPOSITE directions.** Consolidating the path anchor made a
+LIVE seam invisible to a blocking gate; converting the imports made two DORMANT cycles visible to
+another. Both are the same underlying fact — *an instrument sees spellings, not relationships* —
+and neither was findable by reading the diff.
+
+Declared shrink-only, matched by EXACT member set so a third season cycle from a later carving step
+cannot hide inside a family that matched two:
+
+  * `combat_seam` <-> `shape` — real, both edges function-local; **goes at step 8**, where
+    `body_band_penalty` lands below the seam.
+  * `harness.exercises` <-> `harness.run_cases` — **not a runtime cycle at all**: the return edge is
+    one import inside a `if __name__ == "__main__":` block. `build_g_code` walks the whole AST while
+    `ci_common.has_main_guard` (already single-owned, OI-52a) is used only for orphan/CLI
+    classification. ⚠ Fixing that is a real consolidation and was NOT taken: **ten modules repo-wide**
+    carry `__main__`-guarded imports, so the rule change moves edges well outside this lane. Its own
+    change, its own before/after.
+
+### THE CLASS THIS MOVE PRODUCED FOUR TIMES — name it before the next carving step
+
+**A PATH OR NAME MOVE INVALIDATES EVERY INSTRUCTION THAT NAMES IT.** Four instances, each caught by
+a *different* gate and none by reading the diff:
+
+| what named it | caught by |
+|---|---|
+| `requirements.yaml`'s six `measure:` commands | the acceptance gate itself |
+| `hole_register` H-122's source list | `test_w1_every_citation_in_the_register_resolves_in_353` |
+| `ED-IN-0203`'s `MEASURED-BY` fields | `ci_claim_provenance_check` |
+| four SC-lane citations of the renamed cycle test (incl. falsifier F-N6) | a grep, after the rename |
+
+Before step 4, grep for the moving names across `.md`, `.yaml` and `.jsonl` — not just `.py`.
+
 ### WHAT WAS VERIFIED, AND WHAT EACH ARTIFACT CAN ACTUALLY SHOW
 
 - **content hash `dd017e6560955a4206a76192903e42ba`** — unchanged across every step, including the
