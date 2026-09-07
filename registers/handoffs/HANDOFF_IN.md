@@ -42,7 +42,7 @@ changes** (63 PASS / 59 GAP either side); run artifacts re-baselined, deltas in 
 
 ### ⭐ DIAGNOSED — why the shipped arm shows zero, and why the arm is not chosen on it
 
-A fork reaches a later decision by exactly **one** route: §F1 clause 4 (`shape.py:1639`,
+A fork reaches a later decision by exactly **one** route: §F1 clause 4 (`shape.py:627`,
 `belief_contradicts`) — a claim in the actor's own ledger contradicts a candidate's precondition,
 so the candidate is dropped. Counting that population over the same 89 worlds
 (`wd_extra.corpus_drops`), at `observation_deposit_mode: actor`:

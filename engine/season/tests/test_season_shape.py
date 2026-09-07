@@ -7432,7 +7432,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     #     divergence in general, it destroys it specifically at the shipped `actor` arm.
     #
     # ⭐⭐ (c) AND THE ZERO IS DIAGNOSED, WHICH RETIRES THE ARM QUESTION RATHER THAN ANSWERING IT.
-    #     A fork reaches a later decision by exactly ONE route: §F1 clause 4 (`shape.py:1639`,
+    #     A fork reaches a later decision by exactly ONE route: §F1 clause 4 (`shape.py:627`,
     #     `belief_contradicts`). `wd_extra.corpus_drops` counts that population over the same 89
     #     worlds. At `observation_deposit_mode: actor`:
     #
