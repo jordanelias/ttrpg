@@ -7399,12 +7399,35 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     #     the `total` deposit arm barely moves (182 -> 170) — so the flip does not destroy
     #     divergence in general, it destroys it specifically at the shipped `actor` arm.
     #
-    # The arm still is not re-chosen HERE, and the reason is now scope rather than noise:
-    # `19_PLAN.md` step 1 and `R7` govern the FAN, and what this measurement indicts is the
-    # DEPOSIT MODE — `H-122`, a different row, whose two stated reasons for preferring `actor` are
-    # both independently dead (see that row). Changing it is a second design change on a row in
-    # flux and belongs in its own commit with its own argument. **It is recorded as the open
-    # question it is, not discounted.**
+    # ⭐⭐ (c) AND THE ZERO IS DIAGNOSED, WHICH RETIRES THE ARM QUESTION RATHER THAN ANSWERING IT.
+    #     A fork reaches a later decision by exactly ONE route: §F1 clause 4 (`shape.py:1639`,
+    #     `belief_contradicts`). `wd_extra.corpus_drops` counts that population over the same 89
+    #     worlds. At `observation_deposit_mode: actor`:
+    #
+    #         fan_out_mode        clause-4 drops     fork divergences
+    #         total                    37               62 of 1467
+    #         all_five (SHIPPED)        0                0 of 1467
+    #         presence_only           114              229 of 1467
+    #
+    #     **The divergences track the drops exactly.** So the zero is not a property of the arm and
+    #     not a channel defect — clause 4 never fires at the shipped configuration, and a fork has
+    #     nothing to change. Beliefs still form there (22 false-when-recorded); they contradict
+    #     nothing.
+    #
+    # ⭐ AND THE REASON IS THE FINDING WORTH KEEPING. **Every clause-4 drop in the entire corpus,
+    # in every cell, is the verb `move` refusing on a `contain.path:<person>` belief** — *there is
+    # no road from here to there*, formed by witnessing a `travel.blocked` and overturned by a
+    # later `travel.moved`. Nothing else in the corpus fires clause 4 at all. This metric therefore
+    # measures PEOPLE BEING WRONG, and a wider channel set does not suppress propagation: it
+    # CORRECTS THE STALE BELIEF BEFORE IT CAN BITE. Better-informed people refuse fewer acts.
+    #
+    # ⚠ SO THE ARM IS NOT CHOSEN ON THIS METRIC IN EITHER DIRECTION. It is a monoculture — one
+    # verb, one predicate, one stale-belief shape — and picking an epistemic model to preserve
+    # `move`'s refusals would tune the design's whole knowledge layer to protect a single worked
+    # instance. **The defect this exposes is that §F1 clause 4 has exactly ONE reachable instance
+    # in the corpus**; that is a producer hole and is where the work goes. The shipped arm stays
+    # `19_PLAN.md` step 1's, which is also the only arm that produces a secret between two
+    # co-located people. Recorded on `H-33`.
     # ⚠ AND THE LOSS IS HALF A CHANNEL, NOT A WHOLE ONE, which the bare zero above overstates.
     # This instrument fingerprints a deliberation by VERB SET ONLY. Under the widened
     # `(verb, subject)` fingerprint — `test_wd_the_decision_fingerprint_is_verbs_only…`, same

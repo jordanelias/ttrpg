@@ -40,6 +40,37 @@ changes** (63 PASS / 59 GAP either side); run artifacts re-baselined, deltas in 
    that within-source question order is decided by lexicographic order over content hashes in
    **801 of 1,068** deliberations — 16 forks support no ranking of arms.
 
+### ⭐ DIAGNOSED — why the shipped arm shows zero, and why the arm is not chosen on it
+
+A fork reaches a later decision by exactly **one** route: §F1 clause 4 (`shape.py:1639`,
+`belief_contradicts`) — a claim in the actor's own ledger contradicts a candidate's precondition,
+so the candidate is dropped. Counting that population over the same 89 worlds
+(`wd_extra.corpus_drops`), at `observation_deposit_mode: actor`:
+
+| `fan_out_mode` | clause-4 drops | fork divergences |
+|---|---|---|
+| `total` | 37 | 62 of 1467 |
+| **`all_five` (shipped)** | **0** | **0 of 1467** |
+| `presence_only` | 114 | 229 of 1467 |
+
+**The divergences track the drops exactly.** The zero is neither a property of the arm nor a defect
+in the channels: at the shipped configuration **clause 4 never fires**, so a fork has nothing to
+change. Beliefs still form there (22 false-when-recorded); they contradict nothing.
+
+⭐ **And the reason is the finding.** Every clause-4 drop in the entire corpus, in every cell, is
+the verb **`move`** refusing on a **`contain.path:<person>`** belief — *there is no road from here
+to there*, formed by witnessing a `travel.blocked` and overturned by a later `travel.moved`.
+Nothing else in the corpus fires clause 4 at all. So the metric measures **people being wrong**,
+and a wider channel set does not suppress propagation — **it corrects the stale belief before it
+can bite.** Better-informed people refuse fewer acts.
+
+⚠ **So the arm is not chosen on this metric in either direction.** It is a monoculture: one verb,
+one predicate, one stale-belief shape. Choosing an epistemic model to preserve `move`'s refusals
+would tune the design's whole knowledge layer to protect a single worked instance. **The defect it
+exposes is that §F1 clause 4 has exactly ONE reachable instance in the corpus** — a producer hole,
+and the place the next work goes. The shipped arm stays `19_PLAN.md` step 1's, which is also the
+only arm that produces a secret between two people in the same room.
+
 ### ⚠ The flip's largest side effect: the ledger cap stopped evicting, and a registered argument expired
 
 **Evictions go 48 / 49 / 204 → 0 / 0 / 0 in this world.** The flood that filled the 200-claim ledger

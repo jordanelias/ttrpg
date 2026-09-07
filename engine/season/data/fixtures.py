@@ -234,16 +234,39 @@ DEFAULT_FIXTURES = Fixtures(
     # world -- diverges 229 times, nearly four times the pre-flip arm. On the property `W-D` exists
     # to establish, the ranking is the reverse of the one chosen here.
     #
-    # ⚠ WHY THE FIXTURE STILL READS `all_five`, AND WHY THAT IS NOT A DEFENCE OF IT. The two arms
-    # trade two things the design wants against each other: `all_five` is the only arm that gives a
-    # SECRET BETWEEN TWO PEOPLE IN THE SAME ROOM (at `presence_only` two co-located persons hold
-    # identical witness sets -- it gives absence, not secrecy; `test_r7_two_persons_hold_different…`
-    # asserts the difference that `presence_only` cannot produce), and `presence_only` is the arm
-    # that keeps a fork reaching a later decision. `R7` rules `total` OUT and is SILENT between
-    # these two. **That is a live design choice between two defensible options leading to
-    # materially different games, it is flagged `needs_jordan`, and it is NOT settled by this
-    # comment or by the person who wrote it.** Until it is ruled, the fixture holds the arm
-    # `19_PLAN.md` step 1 names; the corpus table above is the reason that is provisional.
+    # ⭐⭐ AND THE ZERO IS NOW DIAGNOSED, WHICH DISSOLVES THE CHOICE RATHER THAN SETTLING IT.
+    # A fork can change a later decision by exactly ONE route: §F1 clause 4 (`shape.py:1639`,
+    # `belief_contradicts`) -- a claim in the actor's own ledger contradicts a candidate's
+    # precondition, so the candidate is DROPPED. `wd_extra.corpus_drops` counts that population
+    # over the same 89 worlds. Measured at `observation_deposit_mode: actor`:
+    #
+    #     fan_out_mode        clause-4 drops        fork divergences
+    #     total                    37                  62 of 1467
+    #     all_five (SHIPPED)        0                   0 of 1467
+    #     presence_only           114                 229 of 1467
+    #
+    # **The divergences track the drops exactly.** The zero is not a property of the arm and not a
+    # defect in the channels: at the shipped configuration clause 4 SIMPLY NEVER FIRES, so a fork
+    # has nothing to change. Beliefs still form (22 false-when-recorded at that cell) -- they never
+    # contradict anything.
+    #
+    # ⭐ AND THE REASON IS THE FINDING. **Every clause-4 drop in the entire corpus, in every cell,
+    # is the verb `move` refusing on a `contain.path:<person>` belief** -- *there is no road from
+    # here to there*, formed by witnessing a `travel.blocked` and overturned by a later
+    # `travel.moved`. Nothing else in the corpus ever fires clause 4. So the reactivity this metric
+    # measures is produced ENTIRELY BY PEOPLE BEING WRONG, and a wider channel set does not suppress
+    # propagation -- **it corrects the stale belief before it can bite.** Better-informed people
+    # refuse fewer acts.
+    #
+    # ⚠ WHICH MEANS THE ARM MUST NOT BE CHOSEN ON THIS METRIC AT ALL, in either direction. It is a
+    # monoculture: one verb, one predicate, one stale-belief shape. Picking an epistemic model to
+    # preserve `move`'s refusals would be tuning the whole design's knowledge layer to protect a
+    # single worked instance. **The real defect it exposes is that §F1 clause 4 has exactly ONE
+    # reachable instance in the corpus** -- that is the thing to fix, and it is not this fixture's.
+    # So the fixture holds `19_PLAN.md` step 1's arm, which is also the only arm that produces a
+    # SECRET BETWEEN TWO PEOPLE IN THE SAME ROOM (`presence_only` gives absence, not secrecy: two
+    # co-located persons hold identical witness sets, and `test_r7_two_persons_hold_different…`
+    # asserts the difference `presence_only` cannot produce). Recorded on `H-33`.
     #
     # ⚠ AND M-6 IS NOT REPORTED AS "PASSED", because its instrument cannot observe the third link.
     # `_r3_propagates` is an `Event.causes[]` walk over `driver.resolved` and never reads a ledger:
