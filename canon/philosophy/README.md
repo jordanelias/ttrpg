@@ -36,6 +36,7 @@ suite's own resources decided them, and marking the remainder for a decision tha
 | — | `RULINGS.md` | **The author's decisions, verbatim.** Each ruling in his own words, what it displaced, where it was applied. The live record |
 | — | `DECISIONS.md` | The questions as originally posed. Superseded by `RULINGS.md`; kept for the context each question was asked in |
 | — | `DISCUSSION_SUPPLEMENT.md` | Every finding, every resolution with its authority, the method and what would falsify it |
+| — | `DIAGRAM.md` | **Eight diagrams of the system.** The stack, layer profiles, an operation end to end, what strains, Coherence, emergence, damage, and everything at once |
 | — | `PROVENANCE.md` | Where the reviewed text is, and how to verify a quotation against it |
 
 **If you read only one thing:** `RULINGS.md`. Every decision the framework now rests on, in the
