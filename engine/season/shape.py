@@ -3651,7 +3651,7 @@ class SeasonDriver:
             (pid, e, mode) for e in events for pid in observers_for(w, e, mode, everyone)]
         TRACE.decision(f"fan-out over {len(events)} events -> {len(fan)} deposits", "S28/S61",
                        chose=f"mode={mode} over {len(everyone)} persons "
-                             f"({'the specified behaviour' if mode == 'total' else 'a swept arm of H-33'})",
+                             f"({'#353 S61 as specified, and H-33 control' if mode == 'total' else 'H-33 arm; `all_five` is the ruled default since 2026-09-07, R7'})",
                        alternatives=[
                            "shard per rung (retired: made the parallelism claim unsound)",
                            "total (S61's specified behaviour, and H-33's control arm)",

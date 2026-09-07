@@ -236,7 +236,18 @@ rows:
       answers from the person's own ledger. `beliefs` and `ledger` carry memory. FEELINGS,
       ATTITUDES and RELATIONSHIPS have no field; `stance` is the nearest and nothing writes it
       — W-F, the item that would, is not started.
-    measure: "python -m pytest engine/season/tests -k 'choose_receives_no_world or a_view'"
+      ⚠ AND UNTIL 2026-09-07 THAT SENTENCE WAS TRUE OF THE PLUMBING AND FALSE OF THE WORLD, which
+      is worth stating because the row read as stronger than it was. Every clause above is about
+      the ACCESS PATH — who may read what, through which object. The CONTENT was identical for
+      everyone: `fan_out_mode` shipped at `total`, so every person's ledger held every Event, and
+      knowledge was private in its plumbing and universal in its facts. Under `R7` the default is
+      `all_five` and the content differs: measured at `build_world(0)` over two seasons, the three
+      persons' witness-deposit sets are IDENTICAL under `total` (0 differing pairs) and differ
+      under the shipped arm (3 differing pairs, one of them between two people who both received
+      deposits — a fact one holds and the other does not). Falsifier:
+      `test_r7_two_persons_hold_different_things_and_at_total_they_cannot`, whose control is the
+      `total` arm inside the same test.
+    measure: "python -m pytest engine/season/tests -k 'choose_receives_no_world or a_view or r7_two_persons'"
     blocks: [W-F, W27]
 
   - id: R-08

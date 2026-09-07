@@ -195,11 +195,98 @@ DEFAULT_FIXTURES = Fixtures(
     # — `wear`'s precedent, and S42.2.1's rule.
     # [JUSTIFIED: engine/season/hole_register.yaml H-40 -- the THIRD licensed clock; #353 licenses decay at MATTER and gives NO RATE, so the rate is injected with a `site:` and a three-point sweep]
     claim_decay_per_season=5,
-    # `W6` / `H-33`. WHICH WITNESS CHANNELS ARE LIVE. `total` is the DEFAULT AND THE CONTROL --
-    # it is #353's specified behaviour (S61: *"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY
-    # PERSON"*), so the sweep's control arm is the design as written rather than a baseline
-    # somebody invented. The three points are `H-33`'s own declared sweep.
-    fan_out_mode="total",
+    # `W6` / `H-33`. WHICH WITNESS CHANNELS ARE LIVE.
+    #
+    # ⚠ THE DEFAULT MOVED OFF `total` ON 2026-09-07, BY RULING, AND `total` IS STILL THE CONTROL.
+    # It was both until then, on the ground that S61's *"WITNESS AS SPECIFIED FANS EVERY EVENT TO
+    # EVERY PERSON"* is the design as written. `R7` (`references/design_rulings_2026-09-06.md`)
+    # overtakes that: Jordan chose the architecture model over the echo model -- *legitimacy falls
+    # where the news has reached* -- and `total` IS the echo model arriving one layer down, at the
+    # deposit. Under it nothing is hideable, so there is no secret, no lie, no rumour and no such
+    # thing as being ABSENT: the person who never travelled holds what the person in the room holds.
+    # `19_PLAN.md` step 1 is the same instruction from the subsystem's side.
+    #
+    # WHY `all_five` AND NOT `presence_only` -- MEASURED, both arms, `build_world(0)`, 3 seasons:
+    #   deposits          649 (total) -> 57 (presence_only) -> 60 (all_five)
+    #   ledgers      [200,200,200]    -> [0,28,29]          -> [0,28,32]   (cap L=200; `total` pins)
+    #   questions raised    5/9/10    -> 5/8/8              -> 5/9/10
+    # `presence_only` COSTS QUESTIONS and `all_five` does not: the narrowest arm thins the
+    # claim->question link, while `all_five` removes 91% of the deposits and leaves that link
+    # exactly where `total` had it. So the arm chosen is the one that buys the epistemic gap
+    # without paying for it upstream. (`all_five` names five channels and is currently a
+    # measurement of THREE -- `chronicle` matches nobody and `post_remit` needs an office whose
+    # remit covers the emitting verb; `test_w6_every_named_channel_has_a_predicate…` asserts
+    # exactly which two are inert.)
+    #
+    # ⛔⛔ AND IT IS NOT FREE -- **THE COST IS LARGER THAN THE REASON, AND THIS COMMENT FIRST SAID
+    # THE OPPOSITE.** It argued the cost away as a 16-fork artifact, citing `H-54`'s hash ordering.
+    # An adversarial pass demanded the corpus-scale control; it was run, and it REFUTES that
+    # argument. `W-D`, 89 worlds, 1,467 genuine forks, `narrow` cell, at the shipped
+    # `observation_deposit_mode: actor`:
+    #
+    #     fan_out_mode        forks that changed a later decision      reconvergence
+    #     total  (before)              62 of 1467                         95.77%
+    #     all_five (SHIPPED)            0 of 1467                        100.00%   <- ZERO
+    #     presence_only               229 of 1467                         84.39%
+    #
+    # **Zero of 1,467 is not noise.** At the shipped arm a fork NEVER changes a later decision, and
+    # `presence_only` -- the arm this comment rejected on a 2-question difference in one 3-person
+    # world -- diverges 229 times, nearly four times the pre-flip arm. On the property `W-D` exists
+    # to establish, the ranking is the reverse of the one chosen here.
+    #
+    # ⭐⭐ AND THE ZERO IS NOW DIAGNOSED, WHICH DISSOLVES THE CHOICE RATHER THAN SETTLING IT.
+    # A fork can change a later decision by exactly ONE route: §F1 clause 4 (`shape.py:627`,
+    # `belief_contradicts`) -- a claim in the actor's own ledger contradicts a candidate's
+    # precondition, so the candidate is DROPPED. `wd_extra.corpus_drops` counts that population
+    # over the same 89 worlds. Measured at `observation_deposit_mode: actor`:
+    #
+    #     fan_out_mode        clause-4 drops        fork divergences
+    #     total                    37                  62 of 1467
+    #     all_five (SHIPPED)        0                   0 of 1467
+    #     presence_only           114                 229 of 1467
+    #
+    # **The divergences track the drops exactly.** The zero is not a property of the arm and not a
+    # defect in the channels: at the shipped configuration clause 4 SIMPLY NEVER FIRES, so a fork
+    # has nothing to change. Beliefs still form (22 false-when-recorded at that cell) -- they never
+    # contradict anything.
+    #
+    # ⭐ AND THE REASON IS THE FINDING. **Every clause-4 drop in the entire corpus, in every cell,
+    # is the verb `move` refusing on a `contain.path:<person>` belief** -- *there is no road from
+    # here to there*, formed by witnessing a `travel.blocked` and overturned by a later
+    # `travel.moved`. Nothing else in the corpus ever fires clause 4. So the reactivity this metric
+    # measures is produced ENTIRELY BY PEOPLE BEING WRONG, and a wider channel set does not suppress
+    # propagation -- **it corrects the stale belief before it can bite.** Better-informed people
+    # refuse fewer acts.
+    #
+    # ⚠ WHICH MEANS THE ARM MUST NOT BE CHOSEN ON THIS METRIC AT ALL, in either direction. It is a
+    # monoculture: one verb, one predicate, one stale-belief shape. Picking an epistemic model to
+    # preserve `move`'s refusals would be tuning the whole design's knowledge layer to protect a
+    # single worked instance. **The real defect it exposes is that §F1 clause 4 has exactly ONE
+    # reachable instance in the corpus** -- that is the thing to fix, and it is not this fixture's.
+    # So the fixture holds `19_PLAN.md` step 1's arm, which is also the only arm that produces a
+    # SECRET BETWEEN TWO PEOPLE IN THE SAME ROOM (`presence_only` gives absence, not secrecy: two
+    # co-located persons hold identical witness sets, and `test_r7_two_persons_hold_different…`
+    # asserts the difference `presence_only` cannot produce). Recorded on `H-33`.
+    #
+    # ⚠ AND M-6 IS NOT REPORTED AS "PASSED", because its instrument cannot observe the third link.
+    # `_r3_propagates` is an `Event.causes[]` walk over `driver.resolved` and never reads a ledger:
+    # the corpus tallies (NPC R3 30/30, ARC 54/59) are identical across all three arms BOTH
+    # co-located AND with the three persons dispersed to distinct rungs. M-6 as `19_PLAN.md`
+    # specifies it therefore CANNOT FAIL, and a check that cannot fail is not a measurement
+    # (§0.1 pt 2). What is licensed by the numbers above is narrower and is what is claimed: the
+    # first two links survive the flip.
+    #
+    # ⚠ THE THIRD LINK IS REAL, AND A FIRST WRITING OF THIS COMMENT DENIED IT. It said the
+    # resolved-act set is identical under all three arms, full stop. That is true of
+    # `build_world(0)` -- three persons, one of whom acts -- and FALSE of `tiny_world`, five
+    # persons across four rungs, where the same flip takes 233 acts to 221 and makes suppressing
+    # `move` stop being larder-neutral (`test_w8_the_proof_clause_is_still_not_met…`, which caught
+    # this). So what `question_aggregation_rule: first` and the five-scene budget flatten
+    # (`ID-16`; the gain is `H-106`) is the SIZE of the third link, not its existence.
+    #
+    # The three points remain `H-33`'s own declared sweep and the channel list is untouched
+    # (`19_PLAN.md` step 1: *"do not touch the channel list itself -- it is a sweep's arm set"*).
+    fan_out_mode="all_five",
     # `H-87`. S39.3 REFUSES a default for the contest depth cap -- *"a default is a number
     # somebody made up and it will be cited later as though it were measured"* -- so `contest()`
     # takes it from the CALLER. This is the caller's number, injected and swept, and it lives here
