@@ -647,7 +647,7 @@ defect cleanly.**
 |---|---|
 | `chronicle` | `rosters.yaml:410` — the kind is emitted by a `binding_decision` verb; `speak` is `social`. And dead outright: `shape.py:4398-4403` — ***"`chronicle` matches NOBODY."*** |
 | `post_remit` | `shape.py:4378-4381` derives remits from verbs whose eligibility starts `remit:`; `speak`'s is `["own"]`, so remits is empty and it returns `False` before any tenure scan |
-| `document_key` | `shape.py:4357` matches `t.object == e.subject`, and **`e.subject` is the actor** — it fires for whoever holds a `hold` over *the descending person*, not over the case Record. The position's gloss is false at that line |
+| `document_key` | ⚠ **MECHANISM CORRECTED 2026-09-07 (`R8.4`); THE VERDICT SURVIVES BY A DIFFERENT ROUTE.** This read *`shape.py:4357` matches `t.object == e.subject`, and `e.subject` is the actor*. That predicate is gone: it now tests a live `hold` against the subjects named in the Event's `changes[]`. **The row's conclusion is unchanged and is now load-bearing on a different fact** — `speak` has `writes: []`, so its emissions carry an EMPTY `changes[]` and the channel returns `False` for everyone, vacuously. So the position's gloss is still false for `speak`, and it would no longer be false for a verb that WROTE the case Record. Do not cite the old mechanism from this row |
 | `witness_key` | `shape.py:4361-4365` requires `e.subject ∈ (t.subject, t.object)`. **"Knot the clerk" delivers acts the clerk TOOK, not acts done in the clerk's presence.** The headline play delivers nothing |
 
 **And the falsifier would fail for a reason its own "shows it wrong" list does not contain** — which

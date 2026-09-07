@@ -404,7 +404,7 @@ rosters:
     # pass.
     predicates:
       co_located:    "the person shares a live `contain` Tenure with the Event's place -- the presence index S28 already builds and the fan-out never read"
-      document_key:  "the person holds a live `hold` Tenure over the Event's subject (a Record, a store)"
+      document_key:  "the person holds a live `hold` Tenure over something THIS EVENT CHANGED -- a subject named in `changes[]` (a Record, a store). ⚠ THIS ROW READ *the Event's SUBJECT* until `R8.4`, and that clause is why the channel could not fire on a single act: every fold-emitted Event sets `subject = a.actor` and no `hold` takes a PERSON as object, so the equality held only on `MATTER`/`CALENDAR` kinds, which carry no verb and no actor. The parenthetical was always right and the clause it qualified was wrong. Corrected here in the same change as the predicate, because this row is where the meaning lives (see the note above) and `R5` quotes it verbatim as the channel's definition"
       witness_key:   "the person IS the Event's subject, or shares a live `knot` Tenure with it -- S28's knot deposit, which already reuses the Event id"
       post_remit:    "the person holds a live office Tenure whose remit covers the verb that emitted this kind"
       chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"

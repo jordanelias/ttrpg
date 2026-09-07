@@ -1,5 +1,61 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⭐ DONE 2026-09-07 — `R8.4`'s `document_key` repair is EXECUTED (PR #379, ED-IN-0202)
+
+**`PHASE 1` step 1 of `21_RECONCILIATION.md` — half of it. Read which half.**
+
+`_ch_document_key` tested `t.object == e.subject`; every fold-emitted Event sets `subject = actor`
+and no `hold` takes a person as object, so **`R5`'s bureaucratic channel could not fire on a single
+act.** It now reads `changes[]`. Measured before: **1** (event, person) pair in Carin's world at
+seed 0 — on `term.matured`, not an act. After: **3**, including `record.created`.
+
+⭐ **AND THE CHANNEL REACHES A NON-AUTHOR TODAY, WHICH THIS LANE'S OWN DIAGNOSIS SAID IT DID NOT.**
+`R8.4`'s row and the first draft of the repair both said the channel *fires for nobody but the
+author*. That is true of Carin's world — she holds no rung — and **false of the mechanism.**
+`_eff_transfer` returns `[src.id, dst.id]`, `_apply_write` subjects the `StateChange`s to those
+RUNGS, and the fold puts them on the Event. **EXECUTED:** with `p_other` holding `S` and acting and
+`p_low` holding the destination `Hh`, `transfer.made` carries `changes=['S','Hh']` and
+`document_key` returns True for `p_low` — a non-author, witnessing an act, bureaucratically.
+Pinned by `test_r8_4_document_key_reaches_a_non_author_through_a_store`.
+
+**So `H-84` is narrower than it reads.** It blocks the **Record** route — nothing moves a Record to
+a second person. The **store** route is open and needs no new verb. `PHASE 1` step 1's falsifier is
+written about Records and stays red; the channel it was protecting is already live.
+
+### What is now safe, and what step 2 still needs
+
+**The flip to a narrowed fan-out (`19_PLAN.md` step 1, forced by `R7`) is no longer blocked by a
+dead channel.** Controls: the seeded content hash is **identical on all three arms**
+(`total` / `presence_only` / `all_five`) and deposit counts are unchanged at 2 and 3 seasons —
+because the author was already admitted by `co_located`, so no observer set moves. The live arm is
+`total`, under which channels are never consulted, so this step cannot move a golden.
+
+⚠ **Step 3 now has a REACHABLE problem it did not have.** A channel decides WHO witnesses, not WHAT
+they learn. `observers_for` discards which channel admitted a person, and `claim_subjects` under the
+default `both` starts from `e.subject` — the actor. So a `document_key`-only witness **learns who
+acted**, which is the opposite of the asymmetry `R8.5` cites (*"a document holder saw only that the
+document changed"*, on unmerged PR #371, not in this tree). That was vacuous while the channel was
+dead. It is not vacuous now. **`R8.1`'s `seen` claim is what supplies it.**
+
+### Three surfaces were corrected in the same change, because the code moved under them
+
+`rosters.yaml:407`'s declared meaning (the row `R5` quotes verbatim as the definition, and which
+**nothing in the tree would have caught** — the only test on it checks name set-equality) ·
+`shape.py`'s `in_holdings()` docstring, which stated the retracted mechanism two functions from the
+repair · `H-92`, whose `levy` example was **already unreachable when written** and whose hole this
+repair makes WIDER and reachable for the first time · `17_PLAYABILITY.md`'s `document_key` row,
+whose verdict survives but now rests on `speak` having `writes: []` rather than on the old predicate.
+
+### ⚠ Two things found and deliberately NOT fixed here
+
+- **`PLAN.md:951-955` says `all_five` = 71 deposits over 3 seasons; the tree measures 60**, both
+  before and after this repair. A stale literal that predates this change — same class as the
+  `678 → 68` one that line already self-reports. Not this PR's to move.
+- **`H-92` is not re-graded.** Its mechanism is corrected so the next reader is not working from a
+  retracted one; the grade belongs to its owner.
+
+---
+
 ## ⚠ FILED 2026-09-07 FROM THE SC LANE — one write-gate defect that is `IN`'s and not theirs
 
 **Surfaced by the proceedings stress suite (PR #376, `ED-SC-0036`); registered here rather than

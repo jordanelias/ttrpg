@@ -7496,9 +7496,30 @@ def test_r8_4_document_key_fires_for_a_non_author_holding_the_changed_record():
         "operand the repair reads does not exist and every assertion below would be vacuous")
 
     doc = S.CHANNEL_PREDICATES["document_key"]
+    # ⚠ THE AUTHOR'S OWN CASE, WHICH HAD NO FALSIFIER UNTIL THE ADVERSARIAL PASS ASKED FOR ONE.
+    # `_eff_create_record` mints the maker's `hold` in the SAME fold call that emits
+    # `record.created`, and `Tenure.live` is `until is None`, so the hold is live immediately.
+    # This is therefore True on every `record.created` in the corpus — and it was CATEGORICALLY
+    # IMPOSSIBLE pre-repair, because `t.object` (the record) was never `e.subject` (the actor).
+    # It is the whole of the measured 1 -> 3 firing increase in Carin's world, so leaving it
+    # unasserted meant the repair's most frequent effect had no test (§0.1 point 3).
+    assert doc(w, e, author), (
+        "`document_key` does not admit the record's own maker on the `record.created` that minted "
+        "their hold — then the predicate is not reading `changes[]`, since the record is the only "
+        "thing there")
     assert not doc(w, e, holder), (
         "`document_key` admits a person holding NO tenure over the record — it is not reading the "
         "hold at all")
+    # ⚠ THE MAKER'S HOLD IS CLOSED FIRST, AND THE ADVERSARIAL PASS IS WHY. `_eff_create_record`
+    # gives the maker a live `hold` on the record, and `S15` makes `hold` ONE PER OBJECT --
+    # `Query.hold_force` raises `Forbidden` on two live holds and
+    # `test_hold_cardinality_is_one_per_object` pins it. The first version of this test simply
+    # added a second live hold, which passes ONLY because nothing on the predicate path calls
+    # `hold_force`: it proved the predicate in a state the world forbids. Closing the maker's hold
+    # also makes the fixture the shape `H-84` actually describes -- a Record MOVED, not co-held.
+    for t in w.tenures:
+        if t.kind == "hold" and t.object == rec and t.live:
+            t.until = w.tick
     w.add_tenure(S.Tenure("t_hold_rec", holder, rec, "hold", since=w.tick))
     assert doc(w, e, holder), (
         "`document_key` still does not fire for a non-author holding the record this act CHANGED. "
@@ -7507,3 +7528,48 @@ def test_r8_4_document_key_fires_for_a_non_author_holding_the_changed_record():
     assert not doc(w, e, bystander), (
         "`document_key` admits a person holding nothing — the repair has widened the channel to "
         "everyone instead of to holders, which would make it a second `total`")
+
+
+
+def test_r8_4_document_key_reaches_a_non_author_through_a_store():
+    """⭐ `R5`'s bureaucratic channel, reachable on an ACT, for somebody who did not act — TODAY,
+    with no verb added and `H-84` still open.
+
+    This is the result the first writing of the `R8.4` repair MISSED and denied in its own
+    docstring (*"the channel still fires for nobody but the author"*). That is true of Carin's
+    world, which contains no `hold` over a rung, and false of the mechanism: `_eff_transfer`
+    returns `[src.id, dst.id]`, `_apply_write` subjects the `StateChange`s to those RUNGS, and the
+    fold puts them on the Event. So a person holding the DESTINATION witnesses a transfer they
+    took no part in.
+
+    ⚠ WHY THIS MATTERS MORE THAN THE RECORD CASE. `H-84` blocks the RECORD route — nothing moves a
+    Record to a second person — so the sibling test above has to construct its holder as a declared
+    fixture. **This one constructs no holder for the witness at all**: `p_low` holds `Hh` before the
+    act, the act is a legal `transfer` by somebody else, and the channel does the rest. It is the
+    first evidence in the tree that `R5`'s *documented and borne bureaucratically* is a live
+    mechanism rather than a specified one.
+    """
+    w = P.tiny_world()
+    actor, witness, uninvolved = "p_other", "p_low", "p_mid"
+    w.add_tenure(S.Tenure("t_src", actor, "S", "hold", since=0))
+    w.add_tenure(S.Tenure("t_dst", witness, "Hh", "hold", since=0))
+    d = S.SeasonDriver(w)
+    d.matter([])
+    out = d.resolve([S.Act(id="tr1", actor=actor, verb="transfer",
+                           payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 3})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    e = next((x for x in out if x.kind == "transfer.made"), None)
+    assert e is not None, (
+        f"the fold emitted {[x.kind for x in out]} — a `transfer.refused` means the eligibility or "
+        "the typed `scalar_threshold` cell rejected the act, and nothing below is about the channel")
+    assert e.subject == actor and {c.subject for c in e.changes} == {"S", "Hh"}, (
+        f"`transfer.made` carries subject={e.subject!r} changes={[c.subject for c in e.changes]} — "
+        "if the changes stop naming both rungs this test is no longer exercising the reach it claims")
+
+    doc = S.CHANNEL_PREDICATES["document_key"]
+    assert doc(w, e, witness), (
+        "`document_key` does not admit the holder of the rung this act WROTE TO. Then `R5`'s "
+        "bureaucratic channel is still unreachable for anyone but an actor, and the `R8.4` repair "
+        "buys only the Record case that `H-84` blocks")
+    assert not doc(w, e, uninvolved), (
+        "`document_key` admits a person holding neither rung — the channel has widened to everyone")
