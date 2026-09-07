@@ -180,6 +180,35 @@ equilibrium, and thereafter the tendency does the rest.
 That is why Mending is restorative without being a return, and why it is labour rather than midwifery.
 It does not put anything back. **It starts something going again.**
 
+### Mending at scale, and the knife-edge
+
+**A Locked Zone can in principle be Mended entirely — becoming restarted across a whole region — and
+doing so does not self-defeat, provided it is genuinely Mending.** *(Ruled 2026-09-07.)*
+
+One might expect the opposite: that restoring a province would require threadwork at the scale that
+tore the fabric in the first place, so that healing a zone risks making another. **It does not, and the
+reason is the taxonomy.** What strained the substrate under the Einhir was not the scale of their work
+but its *direction* — they held, at foundational scale and for generations, a configuration the
+tendency did not supply (§8.1). Alignment makes restorative operations non-corrosive **at any scale**.
+An operation that restarts a movement toward equilibrium is not holding anything against anything, so
+there is nothing for the scale to multiply.
+
+**The knife-edge is elsewhere, and it is fine.** The safety belongs to *restoring equilibrium*, not to
+the word "Mending" or to the practitioner's good intentions. Two workings can look identical from
+outside:
+
+- **Restoring equilibrium** — bringing configurations back into a movement toward the harmony they
+  tend to, whatever that turns out to be. Restorative. Safe at scale.
+- **Restoring a remembered state, or an intended one** — bringing configurations to how things *were*,
+  or how they *ought* to be. That is a shape chosen by the practitioner, and if the configurations do
+  not tend toward it, holding them there is manipulation. At provincial scale, sustained, it is the
+  Calamity's mechanism exactly.
+
+**The temptation is precise and it is not a temptation to do evil.** Someone restoring a ruined
+province will have in mind what it looked like before, and will want that. Wanting it is what converts
+the work. The discipline Mending requires is to restart the tending and *let it go where it goes* —
+which may not be anywhere anyone remembers.
+
 *(Naming this as the tradition's figure of repair costs nothing and clarifies much, provided the
 redemptive teleology is stripped: no completion is promised, and nothing is being restored to a plan.
 Optional — see the enrichment list.)*

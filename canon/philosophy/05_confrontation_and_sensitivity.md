@@ -151,6 +151,27 @@ intelligibility.
 passive registration: *held* is allowing the registration to loosen the given; *repressed* is
 disowning it. The distinction was doing heavy work in the source suite with nothing behind it.
 
+### One encounter, and why the sensitive are more exposed rather than less
+
+**What a single confrontation does depends on the reach of whoever meets it.** *(Ruled 2026-09-07.)*
+
+A person of little reach is **overwhelmed and marked**. Most of what arrived was never captured
+(§5.1), so most of it never entered their configuration. They carry the residue — the dread, the
+fragments, the somatic trace — and they are not thereby reconfigured.
+
+A person of greater reach **holds more of it, and is reconfigured more.** This follows directly and it
+inverts the intuitive expectation: sensitivity is not armour. What is captured is what gets *into* you,
+so the same encounter that leaves a farmer shaken can take a practitioner a real distance from the
+human equilibrium (§7.1).
+
+**So the exposed are not the ignorant. They are the ones who can see.** A Warden at a Gap margin is in
+more danger than the villager beside them, not less, and not because of what they are doing — because
+of what they are able to hold.
+
+This bears directly on §7.1's yield point: what matters is the stress, and reach determines how much of
+an encounter arrives as stress at all. A single sufficiently overwhelming confrontation, met by someone
+with the reach to capture it, can carry a configuration past return.
+
 ## §5.5 What develops: position and capacity are one thing
 
 **Thread sensitivity is a position, and the position *is* a capacity.** These are not two achievements

@@ -108,6 +108,31 @@ The collapse was simultaneously:
 torn.** And the cascade follows from the lattice regardless of which mechanism tore the anchors — it is
 one of the few parts of the history that the open ruling at §8.1 does not touch.
 
+## §8.4a Gaps
+
+**A Gap is a standing breach — and also the absence where a configuration was.** *(Ruled 2026-09-07.)*
+The term is used throughout and was never defined; both senses are correct, and they are one thing.
+
+**A Gap is an absence where something should be.**
+
+- **In the boundary.** An opening between the rendered world and what lies beyond that has not closed:
+  an absence where boundary should be. Surfeit came through such an opening at the Calamity, and where
+  one still stands it can come through again. **Gap margins** are the edges of such an absence, which
+  is why they are dangerous to stand near and why Wardens are found there.
+- **In the fabric.** An absence where a configuration was, when something has been removed rather than
+  changed. This is why a past-oriented pull against a threadcut being produces one: having no spooled
+  past to be pulled toward, there is nothing for the pull to move it into, and what the operation
+  leaves is a hole where the being's configuration had been.
+
+The two are not homonyms. A breach in the boundary is a Gap in the same sense a torn-out configuration
+is: **something is missing that the fabric requires**, and the surrounding threads stand at the edge of
+nothing.
+
+**A Gap is not a Locked Zone.** A Gap is an absence. A Locked Zone is a region where becoming has been
+precluded (§8.5). A large enough Gap will produce one around itself — configurations at the edge of an
+absence have nothing to tend toward across it — but the two are distinct, and a small Gap need not
+lock anything.
+
 ## §8.5 The Locked Zones
 
 **A Locked Zone is a place where becoming has been precluded, so the threads are no longer moving

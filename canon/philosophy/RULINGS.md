@@ -466,3 +466,58 @@ Mending does not put anything back; it starts something going again.
 exists"). A Locked Zone would be one with no one to fail to render it.
 
 *Applied:* §8.5 (rewritten), §3.4, §6.6, §4.4, §9.3.
+
+---
+
+## 2026-09-07 — Batch 7: what is owed, Gaps, one encounter, Mending at scale
+
+**What is owed to a being outside the moral register.** Ruled: **leave it unsettled.** Communities will
+answer differently and that disagreement is material. Remains the framework's one item open by
+deliberate refusal, alongside Solmund's intent.
+
+**What a Gap is.** Ruled: *"a standing breach, but also the absence where a configuration was."* Both
+senses, and they are one thing: **a Gap is an absence where the fabric requires something.**
+
+- In the boundary: an unclosed opening between the rendered world and what lies beyond. *Gap margins*
+  are its edges, which is why they are dangerous and why Wardens are found there.
+- In the fabric: the absence left where a configuration was removed rather than changed. This is why a
+  past-pull against a threadcut being produces one — no spooled past to be pulled toward, so the
+  operation leaves a hole where the being's configuration was.
+
+**Not a Locked Zone.** A Gap is an absence; a Locked Zone is a region where becoming has been
+precluded. A large Gap will produce one around itself — configurations at the edge of an absence have
+nothing to tend toward across it — but a small Gap need not lock anything. *Applied:* §8.4a (new), §9.3.
+
+**One confrontation, gated by reach.** Ruled: **depends on the person's reach**, and the consequence
+inverts the intuitive expectation.
+
+A person of little reach is **overwhelmed and marked**: most of what arrived was never captured (§5.1),
+so most never entered their configuration. A person of greater reach **holds more and is reconfigured
+more** — what is captured is what gets *into* you.
+
+**Sensitivity is not armour. The exposed are the ones who can see.** A Warden at a Gap margin is in
+more danger than the villager beside them, not because of what they are doing but because of what they
+can hold. And per §7.1's yield point — stress, not tally — a single sufficiently overwhelming
+confrontation met by someone with the reach to capture it can carry a configuration past return.
+*Applied:* §5.4.
+
+**Mending at scale.** Ruled: *"possible but self defeating UNLESS it's mending and trying to restore
+equilibrium."*
+
+So a Locked Zone **can in principle be Mended entirely**, and doing so does not self-defeat. The
+expected trap — that restoring a province needs threadwork at the scale that tore the fabric — does not
+hold, because what strained the substrate under the Einhir was the **direction** of their work, not its
+scale (§8.1). Alignment makes restorative operations non-corrosive at any scale; an operation that
+restarts a movement toward equilibrium holds nothing against anything, so there is nothing for scale to
+multiply.
+
+**The knife-edge is elsewhere and it is fine.** Safety belongs to *restoring equilibrium*, not to the
+word "Mending" or to good intentions. Restoring the harmony configurations tend toward, whatever that
+turns out to be, is restorative and safe at scale. Restoring a **remembered** state or an **intended**
+one is a shape the practitioner chose, and holding configurations there is manipulation — at
+provincial scale, sustained, it is the Calamity's mechanism exactly.
+
+**The temptation is precise and is not a temptation to do evil.** Someone restoring a ruined province
+will remember what it looked like and will want that; wanting it is what converts the work. Mending's
+discipline is to restart the tending and let it go where it goes — which may be nowhere anyone
+remembers. *Applied:* §6.6.
