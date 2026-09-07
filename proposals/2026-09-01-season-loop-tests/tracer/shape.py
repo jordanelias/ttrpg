@@ -4354,7 +4354,38 @@ def _ch_co_located(w, e, pid) -> bool:
 
 
 def _ch_document_key(w, e, pid) -> bool:
-    return any(t.kind == "hold" and t.subject == pid and t.object == e.subject and t.live
+    """⚠ THIS COULD NEVER FIRE ON AN ACT, AND THE REPAIR IS TO READ `changes[]` (`R8.4`).
+
+    It tested `t.object == e.subject`. Every fold-emitted Event sets `subject = a.actor` on the one
+    path every act-emission takes (`:5857`), and no `hold` Tenure takes a PERSON as object -- a
+    `hold` is over a Record or an Office. So the equality could hold only where an Event's subject
+    was itself the held thing, which is `MATTER`/`CALENDAR` kinds alone: those carry no verb and no
+    actor. **`R5`'s bureaucratic channel was unreachable on acts -- not underused, unreachable**,
+    and `R5` names three of the five channels bureaucratic rather than memorial.
+
+    MEASURED before the repair, Carin's world at seed 0, two seasons, the `all_five` arm: 81 calls,
+    **1** True -- on `term.matured`, whose subject IS the record. Not one act.
+
+    THE OPERAND IS `changes[]` AND NOTHING IS ADDED TO CARRY IT. `H-79` already established that an
+    act names what it wrote there, and `claim_subjects` already reads it to say what a deposit is
+    ABOUT; this asks the same primitive who was WATCHING. `PLAN.md` §8.1 forbids an `actor` or
+    `target` field on `Event` and this needs neither.
+
+    ⚠ AND THE REPLACEMENT LOSES NOTHING, WHICH IS WHY IT IS A REPLACEMENT AND NOT A UNION. The one
+    pre-repair firing was `term.matured`, and that Event carries `changes=['rec:6bf46a…']` -- the
+    same record its subject names. `changes[]` SUBSUMES the old operand on the only Event that ever
+    satisfied it, so keeping `e.subject` beside it would admit nobody new and would leave a reader
+    unable to tell which clause was load-bearing. Measured, not assumed.
+
+    ⚠ WHAT THIS DOES **NOT** FIX, STATED HERE SO IT IS NOT READ AS FIXED: `H-84`. No verb in the
+    resolvable vocabulary moves a Record to another person, so the only person holding one is still
+    its maker, and the channel still fires for nobody but the author. That is a PRODUCER hole with
+    its own row and its own owner (*Part E -- the verb that would do it*), and `H-84` forbids in
+    terms inventing a `give_record` here to make a case pass. This function is now correct and the
+    outcome is still blocked; both halves are true and the second is not this predicate's to close.
+    """
+    return any(t.kind == "hold" and t.subject == pid and t.object == c.subject and t.live
+               for c in e.changes if c.subject
                for t in w.tenures)
 
 

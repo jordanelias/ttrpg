@@ -7459,3 +7459,51 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
         "the subject was deleted by a fight the ACTOR lost -- the band is being read off the "
         "loser, which is the defect `verb_table.yaml`'s `writes_source:` cell used to specify")
     assert evs[0].degree == S.WOUNDED
+
+
+def test_r8_4_document_key_fires_for_a_non_author_holding_the_changed_record():
+    """`R8.4`'s repair: `document_key` tested `t.object == e.subject` and could not fire on ANY act.
+
+    ⚠ THE EVENT COMES FROM A FOLD, NOT A CONSTRUCTOR — the same rule
+    `test_a_binding_decision_lights_the_two_witness_channels_that_needed_one` states above and for
+    the same reason. A hand-built `S.Event(subject=<record>, changes=[…])` would pass on the
+    UNREPAIRED predicate too, because its subject would be the record: it could not observe the
+    change it is offered as evidence for (`§0.1` point 2). `create_record` is folded, and the
+    `record.created` the fold emitted is what the channel is asked about — that Event's subject is
+    `p_low`, the ACTOR, which is precisely the shape the old predicate could not read.
+
+    ⚠ THE SECOND HOLDER IS A HARNESS FIXTURE AND IS NAMED AS ONE. `H-84` — *no verb in the
+    resolvable vocabulary moves a Record to another person* — is an OPEN PRODUCER hole owned by
+    Part E, and it forbids in terms inventing a `give_record` to make a case pass. So the tenure is
+    added directly. **This test therefore proves the PREDICATE is correct and proves nothing about
+    whether the world can reach the state**; the assertion below on `p_mid` is what keeps the two
+    apart, and `H-84` is what stands between them.
+    """
+    w = P.tiny_world()
+    author, holder, bystander = "p_low", "p_other", "p_mid"
+    d = S.SeasonDriver(w)
+    d.matter([])
+    out = d.resolve([S.Act(id="r_mk", actor=author, verb="create_record", payload={})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    e = next((x for x in out if x.kind == "record.created"), None)
+    assert e is not None, f"the fold emitted {[x.kind for x in out]} — no `record.created`"
+    assert e.subject == author, (
+        f"`record.created`'s subject is {e.subject!r}, not the actor — then this test is no longer "
+        "exercising the shape `R8.4` is about, and the repair needs re-deriving, not re-asserting")
+    rec = next((c.subject for c in e.changes if c.subject), None)
+    assert rec is not None and rec != author, (
+        f"the fold wrote no record into `changes[]` (got {[c.subject for c in e.changes]}) — the "
+        "operand the repair reads does not exist and every assertion below would be vacuous")
+
+    doc = S.CHANNEL_PREDICATES["document_key"]
+    assert not doc(w, e, holder), (
+        "`document_key` admits a person holding NO tenure over the record — it is not reading the "
+        "hold at all")
+    w.add_tenure(S.Tenure("t_hold_rec", holder, rec, "hold", since=w.tick))
+    assert doc(w, e, holder), (
+        "`document_key` still does not fire for a non-author holding the record this act CHANGED. "
+        "That is the pre-`R8.4` predicate: it is reading `e.subject` (the actor) rather than "
+        "`changes[]`, so `R5`'s bureaucratic channel is unreachable on every act in the game")
+    assert not doc(w, e, bystander), (
+        "`document_key` admits a person holding nothing — the repair has widened the channel to "
+        "everyone instead of to holders, which would make it a second `total`")
