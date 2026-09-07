@@ -8,9 +8,19 @@
 
 ## §3.1 Rendering as constitutive process
 
-Rendering is always already being performed. It is the way the world is given — the process by which
-the thread-substrate becomes experienceable reality. It is not an objective mechanism external to
-minds, nor a cosmic process operating independently of consciousness.
+**Rendering is the always-already occurring interpretation of things *as* something.** It is the way
+the world is given — not a mechanism external to consciousness, and not a cosmic process running
+independently of it.
+
+**It is not an activity undertaken.** No one performs it, begins it, or could decline it. It is
+occurring, as an act of consciousness in the sense that consciousness *is* this taking-as, not in the
+sense that a subject does it. To render is to interpret something as something.
+
+**And rendering does not configure. Spooling configures (§4.1).** What rendering does is take-as — and
+being taken-as is a determination on the intelligibility axis, which by co-movement is a determination
+across all three (§4.2). The force is in the as-structure, not in any work performed. Formulations
+that have rendering "actualizing," "performing work," or "maintaining" a configuration give it an
+agency it does not have, and borrow spooling's role for it.
 
 Because threads are constitutive ground and condition of possibility simultaneously (§2.1), rendering
 is **not a subjective overlay on an independent objective world**. What rendering produces is the

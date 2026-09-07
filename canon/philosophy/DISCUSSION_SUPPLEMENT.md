@@ -216,7 +216,7 @@ follows.
 - Do threadcut beings deteriorate absent a failure of maintenance? Both source answers are
   underdetermined until one premise is ruled: *does rendering yield temporal depth, or only spooling?*
   If rendering does, a threadcut being **stabilizes with age**.
-- What dissolved Solmund? A mechanism is derivable — others' rendering holds such a being, so a change
+- What dissolved Solmund? A mechanism is derivable — others' taking-him-as determines such a being, so a change
   in how the community rendered him would weaken what held him, and the essentialist reinterpretation
   is exactly such a change — but that is suggestive, not an account.
 - **Did his presence strain reality?** §7.5 says every layer-3-sustained being does. A generation of his

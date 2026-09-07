@@ -15,15 +15,15 @@ reality-strain. A spine that arrives as a patch after the body it supports is in
 Organic beings persist through three layers of maintenance, and the distinctions between kinds of
 being in this framework are distinctions of **which layers are operative**.
 
-**Layer 1 — spooling.** Passive, from the ground. The continuous supply of the being's
-thread-substrate, and the source of temporal accumulation: becoming. This is what a being is
-delivered over to and cannot get behind — one does not choose it, precede it, or inspect its source
-(§1.1).
+**Layer 1 — spooling. Spooling configures.** Passive, from the ground: the continuous supply of the
+being's thread-substrate, the source of temporal accumulation, and **the source of the being's having a
+configuration at all**. This is what a being is delivered over to and cannot get behind — one does not
+choose it, precede it, or inspect its source (§1.1).
 
-**Layer 2 — self-rendering.** Continuous, unconscious, default. Consciousness presenting its own
-threads to itself as *I am this person, in this time, in this world.* It shapes the raw spooling into
-a human configuration and maintains that configuration against environmental thread-forces. It is a
-form of threadwork — not deliberate, not trained, but real.
+**Layer 2 — self-rendering.** Continuous, unconscious, default. Consciousness taking its own threads
+*as* — *I am this person, in this time, in this world.* It does not configure; spooling does that. What
+it does is give the configuring its human shape, and hold that shape against environmental
+thread-forces. It is a form of threadwork — not deliberate, not trained, but real.
 
 **Layer 3 — deliberate threadwork.** Conscious, trained. What practitioners do. Requires the
 temporary suspension of layer 2 (§6.2).
@@ -52,19 +52,28 @@ because it is the single most load-bearing derivation in the framework.
 
 **The chain:**
 
-- To render a thread is to move it along its epistemic dimension. *(1)*
-- Therefore rendering a thread moves its actuality and its temporality too. *(2)*
-- Therefore **rendering is a thread operation**. *(3)*
-- Consciousness renders its own threads. *(4, with §3.1)*
-- Therefore **self-rendering is threadwork on one's own threads** — continuous, unconscious, holding
-  the being's configuration. That is layer 2.
+- To render a thread is to take it *as* something — and being taken-as **is** a determination on its
+  intelligibility axis. Not an effect produced upon it: that is what being interpreted-as consists in.
+  *(1)*
+- A determination on one dimension is a determination on all three. *(2)*
+- So a thread that is rendered is thereby determined in actuality and temporality as well. What moves
+  threads is a thread operation, so rendering meets that description. *(2, 3)*
+- Consciousness takes its own threads as something. *(4, with §3.1)*
+- Therefore **self-rendering is threadwork on one's own threads** — continuous, unconscious, giving the
+  being's configuration its shape. That is layer 2.
 
-**What this costs and what it buys.** It costs one commitment: that rendering *actualizes* what it
-renders. That is §3.1's "what rendering produces is the world as world" taken at its word.
+**What this costs, stated carefully.** It costs one commitment: **what is taken-as is thereby
+determinate.** That is §3.1's "what rendering produces is the world as world" taken at its word.
 
-What it buys is most of the rest of this document. From this chain alone follow: the stabilizing
-tendency's location in the rendering (§3.4); the operation-type taxonomy and its cost channel (§6.6,
-§6.8); the outward facing as a holding force rather than a mere appearance (§4.3); a definition of
+**It does not make rendering an activity, and the distinction matters.** Rendering is not something a
+being *does*; it is the always-already occurring interpretation of things *as* something. The force in
+this chain is in the as-structure, not in any work performed. **Spooling configures; rendering
+takes-as.** Where earlier drafts said rendering "actualizes" or "performs work," they gave rendering an
+agency it does not have and quietly borrowed spooling's role for it.
+
+What it buys is most of the rest of this document. From this chain alone follow: the operation-type
+taxonomy (§6.6); the outward facing as a determination rather than a mere appearance (§4.3); a
+definition of
 "collective rendering" (§3.5); why orphaned configurations decay (§4.7); the three modes as layer
 profiles (§4.6); what a Locked Zone does to a person (§8.5); the origin of third-mode beings (§4.6);
 reality-strain (§7.5); and a baseline of Temporal Disjunction in ordinary life (§2.7).
@@ -155,8 +164,14 @@ within rather than through a breach.
 
 ## §4.5 Threadcut beings
 
-A threadcut being is not continuously spooled. It maintains itself through continuous deliberate
-threadwork; if that work ceases, its rendering collapses, because no organic spooling underwrites it.
+A threadcut being is not continuously spooled. **Spooling configures (§4.1) — so nothing configures a
+threadcut being.** It must actively perform thread operations on itself in order to be configured as
+anything at all, and if that work ceases there is nothing else giving it a configuration.
+
+This is the asymmetry that makes them what they are. For a spooled being, having a configuration is
+given, and layer 2 only gives it a human shape — an always-already taking-oneself-as, not a job being
+done. For a threadcut being there is no giving. **Being configured is itself the work**, performed
+deliberately, from moment to moment, or not at all.
 
 **"Radically is without becoming" must be read as "without *spooled* becoming."** As a bare
 description the phrase is contradicted two sentences later by "maintained performance, from moment to

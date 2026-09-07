@@ -32,7 +32,11 @@ Append-only. Each entry records the ruling in the author's own terms, what it ch
 movement of a thread by any process, not only for deliberate practitioner manipulation — as the
 source text itself says, calling it a fact about the nature of threads.
 
-*Consequence accepted:* rendering actualizes what it renders.
+*Consequence accepted:* **what is taken-as is thereby determinate.** ⚠ Recorded at the time as
+"rendering actualizes what it renders" — **corrected 2026-09-07**: that phrasing gives rendering an
+agency it does not have. Rendering is the always-already interpretation of things *as* something, not
+an activity undertaken; **spooling configures, rendering takes-as**. The derivation is unaffected and
+is cleaner without the step — the force is in the as-structure, not in work performed.
 *Unlocks:* the layer-2 derivation (§4.2), the tendency's derivation, the operation-type taxonomy's
 grounding, the outward facing as a holding force, the rendered-side origin of third-mode beings.
 
@@ -578,3 +582,45 @@ with sensitivity the far end of something universal — or does ordinary action 
 **stress-based yield point** and no accumulation (§7.1). A track that depletes does not model that, so
 whatever implements it will need a different shape. Under §0.05 that is code's problem, not this
 suite's — but it follows from what was ruled.
+
+---
+
+## 2026-09-07 — Rendering is not an activity; spooling configures
+
+**What rendering is.** Verbatim:
+
+> "rendering isn't an active thing so much as it always already is occurring as an act of consciousness
+> where you render ie interpret things as something"
+
+> "spooling configures"
+
+**The correction.** Earlier drafts had rendering *performing work*, *actualizing*, *maintaining* and
+*holding* configurations. That gives it an agency it does not have, and it quietly borrows spooling's
+role. **Rendering is the always-already occurring interpretation of things *as* something** — an act of
+consciousness in the sense that consciousness *is* this taking-as, not in the sense that a subject
+undertakes it.
+
+**Spooling configures.** It is the source of a being's having a configuration at all. Rendering
+takes-as.
+
+**The D-0 derivation is unaffected and is cleaner without the step.** It no longer needs rendering to
+do anything: to render a thread is to take it *as* something; being taken-as **is** a determination on
+the intelligibility axis, not an effect produced upon it; a determination on one dimension is a
+determination on all three. The force is in the as-structure, not in work performed. The consequence
+recorded under D-0 as "rendering actualizes what it renders" is corrected to **"what is taken-as is
+thereby determinate."**
+
+**Consequence for layer 2, and a correction the author supplied directly:**
+
+> "layer 2 beings still need to actively perform thread operations on themselves to be as something
+> configured because they aren't being spooled into anything"
+
+For a **spooled** being, having a configuration is given; layer 2 only gives it a human shape, as an
+always-already taking-oneself-as rather than a job being done. For an **unspooled** being there is no
+giving at all — **being configured is itself the work**, performed deliberately, moment to moment, or
+not at all. This sharpens §4.5's "immortality as unremitting labour": the labour is not maintenance of
+a configuration one has, it is the having of one.
+
+*Applied:* §3.1 (rewritten), §4.1 (layer definitions), §4.2 (chain rewritten without agency), §4.5,
+§9.3, and the D-0 entry above. `DECISIONS.md` is left as written — it records questions as they were
+posed, and quoted source text in it must not be altered.
