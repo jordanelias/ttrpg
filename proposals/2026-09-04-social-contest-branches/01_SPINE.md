@@ -912,7 +912,7 @@ candidates. Six cut. One survives with a downgrade.**
 
 ### §6.1 ⚠ The import-cycle test — **the brief's §9.1 is CORRECT about the number and WRONG about what the test asserts, and the difference decides how a builder proceeds**
 
-`SESSION_BRIEF.md` §9.1 says `test_exactly_two_cycles_remain_and_they_are_the_expected_families`
+`SESSION_BRIEF.md` §9.1 says `test_exactly_four_cycles_remain_and_they_are_the_expected_families`
 *"fails if the count changes"*. I read the test. **The 9 appears only in the module docstring
 (`tests/valoria/test_import_cycle_game_state_npe.py:23`). It is asserted nowhere.**
 
@@ -956,7 +956,7 @@ resolves a bare `from . import X` to **both** the package and the submodule (`:3
   are untouched, so the `wrapper -> PKG` back-edge survives.
 - `dictionaries.py:45` is untouched, so `dictionaries -> PKG` survives.
 
-**So the family stays at 9 and `test_exactly_two_cycles_remain_and_they_are_the_expected_families`
+**So the family stays at 9 and `test_exactly_four_cycles_remain_and_they_are_the_expected_families`
 passes unchanged. No test update is required by the spine.** State it that way in the commit rather
 than leaving the reader to infer it.
 
