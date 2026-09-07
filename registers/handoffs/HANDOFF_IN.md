@@ -1,5 +1,123 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⚠⚠ OPEN QUESTION FOR JORDAN, 2026-09-07 — WHICH TREE DID THE shape.py DECOMPOSITION BELONG IN?
+
+**Two rulings from the same day point different ways, and a session executed four steps against one
+of them. This is the first thing to settle; everything below depends on it.**
+
+| | said | implies |
+|---|---|---|
+| **A** — to the decomposition session, in conversation | *"assume #371 never existed and that its work will need to be reinvented but in a better shape since we're doing it now"* · *"engine/season/shape.py is our target"* | #371 is not the vehicle; reinvent it; destination `engine/season/` |
+| **B** — the entry directly below, via PR #379 | *"Other tree wins for its work."* `engine/season/` on **PR #371** is the head; `proposals/…/tracer/` is the prototype it supersedes | #371's tree survives and carries the work |
+
+They agree that **`engine/season/` is the destination**. They disagree on whether #371 is the
+vehicle — and the session took a third path neither names: it decomposed the prototype IN PLACE,
+`proposals/2026-09-01-season-loop-tests/tracer/` → `…/season/`, because that is where the file lives
+on `main` and `engine/season/` does not exist there. **That was the executing session's call and it
+matches neither ruling's destination.**
+
+**What transfers if `engine/season/` wins, and what does not.** The decomposition is a partition plus
+a set of measured findings; the partition, the controls and every defect found transfer wholly — they
+are about the code, not the path. What does not transfer is the file relocation itself. Re-applying
+it to `engine/season/` is mechanical given the record below. **Nothing is lost either way; the cost
+of guessing wrong is redoing ~5 file moves, not redoing the analysis.**
+
+---
+
+## ⭐ DONE 2026-09-07 — `shape.py` decomposition steps 0b–3 (ED-IN-0203, PR #378)
+
+`shape.py` **6,771 → 5,080 lines**. The `data/` layer is complete and is a coherent stopping point:
+
+```
+season/  gaps.py 94 · trace_log.py 116 · state/ids.py 23
+         data/  files.py 131 · rosters.py 293 · matrix.py 225
+                requires.py · verbs.py · fixtures.py
+```
+
+**⚠ ZERO GAME YIELD, and a completed split is NOT milestone progress (§0.2).** It is licensed only
+as the precondition for the work that does. Stated plainly because half of this session's commits
+were repairs to apparatus, which is the §0.3 pattern.
+
+**The one Layer-1 property the split made TRUE rather than tidier:** all **28** load-time refusals now
+live in `data/` (matrix 3 · requires 13 · rosters 1 · verbs 11) and `shape.py` has **none**. One place
+where inputs are resolved and validated, with the model above it free of load-time concerns.
+
+### ⚠ SIX CORRECTIONS TO `workplans/2026-09-06-shape-decomposition-plan.md`, each found by executing it
+
+The plan is sound in outline and wrong in these specifics. A session following it literally repeats them.
+
+1. **ADDRESS CODE BY SYMBOL, NEVER BY LINE.** Every step edits `shape.py`, so every span the plan
+   gives is stale, and staler each step. The plan's step-1 spans were already wrong before step 1
+   ran (`Ineligible` cited `:4604`, actually `4602-4605`). Resolve names from the current AST at the
+   moment of use. Where a bare name is ambiguous (11 collide) qualify it `path::symbol`.
+2. **STEP 0a IS DROPPED, for a reason the plan could not have known.** It converts `shape.py:NNNN`
+   citations in `hole_register.yaml` to `::symbol`. But those 14 citations describe a state that no
+   longer exists — H-113 is CLOSED in code (`test_we_emits_at_has_a_caller…`) and OPEN in the
+   register, and re-pointing them would make a closed hole read as live at a live symbol. The stale
+   line numbers at least announce themselves by pointing at nonsense.
+3. **`delta.py`'s `PROBE FLIPS 0` IS A TAUTOLOGY UNLESS `report.py` RUNS FIRST.** It compares
+   `git show <rev>:runs/results.json` against the WORKING TREE copy of that file, and nothing in it
+   regenerates that file. Quoted as a control in five commit messages before an independent verifier
+   caught it. Correct form: `python -m season.harness.report && python -m season.harness.delta <rev>`.
+   Now documented in `delta.py` itself.
+4. **THE `h115` CORPUS MUST BE DERIVED, NOT LISTED.** The plan's step-2 form named two files as
+   string literals — the shape this test file records three prior incidents about. Now sums
+   `_model_modules()`.
+5. **DO NOT MAKE `data/__init__.py` IMPORT THE LOADERS EAGERLY.** Tried at step 2; it made seven
+   path-only importers parse two YAML registries and **destroyed a working control** (patching a path
+   stopped reaching the loader, silently, fail-open). It buys nothing: `matrix` imports
+   `rosters.load_yaml` at module scope, so order is fixed by the data dependency.
+6. **SPLIT BEHAVIOUR CHANGES OUT OF MOVES.** The plan bundles the `SOURCE_353_TEXT` `else ""`
+   deletion into step 2. Landed separately as 2b so "the hash did not move" stays testable about each.
+
+### THE DOMINANT FAILURE MODE, named so the next session hunts it
+
+**Six instances in four steps of "a guard keeps passing over a corpus it no longer reaches."** Flat
+globs (0b) · the MODEL/CORPUS strict→lenient migration (1) · the `h115` filename list (2) ·
+`test_d6`, `test_d9c`, `test_d10c` when `DEFAULT_FIXTURES` moved (3). **Two of those were introduced
+by the FIX for the same class.** `test_d6` was re-pointed at `split(token,1)[1]` in a file where the
+token is the last statement — scanning a kwargs list instead of ~4,750 lines of function bodies,
+which is its entire subject. Falsified by execution: `// 60` hardcoded in a body left it GREEN.
+
+**CI cannot see this.** Step 3 passed all 10 checks with two guards inert. Passing is what the defect
+looks like from outside. Every step needs a PLANTED VIOLATION that goes red before it goes green.
+
+### DEBTS, each with a designated payoff point — do not chase them per-step
+
+- **Line citations into `shape.py`** — ~60 across 10 proceedings documents plus 5 register `site:`
+  fields, invalidated as the file shrinks. **Pay at step 10**, when `shape.py` becomes a facade with
+  no bodies and line citations into it become impossible, so they MUST become `module::symbol`.
+  Converting once there beats chasing them eleven times. ⚠ The SC lane is actively writing NEW
+  citations in the old form.
+- **`MODEL = files.SHAPE_PY`** narrows at every step (1,303 more lines at step 3). Verified latent —
+  no offender masked, exemption markers travelled, `EXEMPT_CEILING` intact. **Pay at step 10**, where
+  the plan already re-points MODEL.
+
+### METHOD — two antagonists per step, not one, and why
+
+`valoria-critic` is read-only **by tooling**, which is what makes its independence structural — and
+means it **cannot execute**. At step 1 it said so and the central claim (byte-identity) went
+unchecked. Since then: **antagonist A** (read-only, doctrine and guard coverage) and **antagonist B**
+(execution tools, re-derives every number from the diff, **never told the claimed result**), run in
+parallel and blind to each other, then reconciled.
+
+B is the one that earned it: it measured the destroyed control, proved the delta tautology, and
+**falsified a claim in a commit message of mine** that A had accepted.
+
+⚠ Brief agents with the **literal baseline SHA**, never "HEAD" — B's first delta compared
+after-vs-after because a commit landed mid-run. ⚠ Namespace scratch files; a subagent overwrote the
+orchestrator's `symbols.py` with its own tool of the same name.
+
+### WHAT REMAINS
+
+Steps **4–11**: `state/carriers.py` + `state/world.py` · `queries/{world_q,person_q,cache}.py` ·
+`decision/choose.py` · `seam/` · `loop/` · facade deletion · test split. They buy structure, not
+capability. **The game work both `R6` and `R8` name is unblocked and separate: build the consumer
+that makes a person form a candidate from what they came to believe.** PR #379 did more for the game
+in one change than these four steps did.
+
+---
+
 ## ⛔ RULED 2026-09-07 (Jordan) — `engine/season/` IS THE HEAD, AND THE `R8.4` REPAIR MUST BE CARRIED INTO IT
 
 **The ruling:** *"Other tree wins for its work."* `engine/season/` on **PR #371** (*ADOPT IN FULL*) is
