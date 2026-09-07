@@ -390,3 +390,49 @@ same as losing everything.
 
 *Applied:* §7.1 (new subsection), §8.9 (rewritten — refusal becomes derivation), §5.1, §9.3, §10
 (P-04 grounded, with a second violation test).
+
+**What the drifted retain, and the yield point.** Verbatim:
+
+> "the drifted being retains preferences and attachments insofar as they are understood by a being
+> post-human in sensibilities that is alien to its prior self"
+>
+> "we can talk about concerns and compartments and desires and stuff, but we can no longer bound them
+> to human language as they exceed human rationality"
+>
+> "the more thread sensitive the individual at the time of losing coherence permanently (kind of like
+> plastic materials which can return to the same arrangement until such a point of stress that their
+> atomic structure changes) the more of their beyond being as human thst the individual comprehendd
+> for themselves"
+>
+> "so the individual who has permanently lost being able to return to human equilibrium has their
+> understanding of self and relationship with world gated by their thread sensitivity"
+
+This closes the item previously recorded as deliberately unsettled.
+
+**Retention is real and transformed.** Nothing is emptied out — concerns, comportments, desires remain.
+What changes is whose they are and how they are held: from a mode of being the person never occupied.
+
+**The vocabulary fails, and that failure is principled.** Human rationality abstracts what it cannot
+capture (§5.1), so "desire" and "attachment" are real abstractions, not empty words — but they do not
+*bound* what they name. Those who knew the person will hear their words used and be unable to tell
+whether they mean what they used to. Neither will the drifted.
+
+**The yield point.** The irreversibility threshold now has mechanics: a plastic material returns to the
+same arrangement under stress, repeatedly, until a stress at which its structure changes and the return
+is no longer available. Drift is recoverable across a wide range, with no accumulating debt and no
+countdown — and then it is not. **What matters is the stress, not the tally**, which is why nothing in
+a practitioner's history tells you how close they are, and why intervention is early or not at all.
+
+**Sensitivity at the crossing gates self-comprehension.** Reach is measured **at the moment of
+permanent loss** — not before, not after. And it gates not only what the being can do but what it can
+comprehend of itself and of its relationship with the world. This is §5.5's identity (perceiving and
+holding-oneself are one capacity) arriving where it matters most: **a being of shallow reach does not
+merely lack power; it lacks any grasp of what has happened to it, and cannot form one.**
+
+*Consistency note:* retaining concerns does not restore moral standing. The two come apart here, and
+that coming-apart is much of what makes such a being hard to be near.
+
+*Still unsettled by ruling:* what is owed *to* a being outside the moral register.
+
+*Applied:* §7.1 (yield point; new subsection on retention), §7.6 (gating extended to
+self-comprehension, measured at the crossing), §9.3.

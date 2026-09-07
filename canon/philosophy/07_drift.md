@@ -40,6 +40,16 @@ That is the real threshold, and it is a threshold of *irreversibility* rather th
 Before it, the human equilibrium can still draw the configuration back. After it, that equilibrium is
 simply not where this configuration tends any more.
 
+**The mechanics are those of a yield point.** A plastic material deforms under stress and returns to
+the same arrangement, again and again — until a stress at which its structure itself changes, and
+after which it will never return to that arrangement, however the load is removed. Coherence works
+this way. Drift is recoverable, repeatedly, across a wide range; there is no accumulating debt and no
+countdown. And then there is a stress past which the configuration has been reordered, and the return
+is not merely difficult but no longer available.
+
+This is why intervention is *early* or not at all (§7.3), and why nothing about a practitioner's
+history tells you how close they are. What matters is the stress, not the tally.
+
 ### Drift carries no moral valence
 
 **It is not evil. It radically is as it is.** *(Ruled 2026-09-07.)*
@@ -77,10 +87,30 @@ with whom the question of right conduct could be raised at all.
 
 That is what the community is preserving when it intervenes early (§7.3). Not virtue. Standing.
 
-*(Two things this does not settle, deliberately. It does not say that a being outside the register may
-be treated any way at all — what is owed *to* the non-human is a separate question the framework does
-not answer here. And it says nothing about whether a drifted being retains preferences, attachments,
-or something that functions as care. Losing moral standing is not the same as losing everything.)*
+### What is retained, and why we cannot say it
+
+**The drifted being retains preferences and attachments** — but as they are understood by a being whose
+sensibilities are post-human and alien to its prior self. *(Ruled 2026-09-07.)*
+
+Nothing is emptied out. There are still concerns, comportments, desires — things of that kind. What
+has changed is *whose* they are and how they are held: the successor holds them from a mode of being
+the person never occupied, and the holding is not the holding a human does.
+
+**And they cannot be bound to human language, because they exceed human rationality.** We can speak of
+them — human rationality abstracts what it cannot capture (§5.1), and "desire" or "attachment" is such
+an abstraction. The words are not empty. But they do not *bound* what they name. A word for a human
+concern, applied to a post-human one, marks a place rather than enclosing a thing.
+
+So this is the honest position and it should not be tidied: **something is there, it matters, and the
+vocabulary available for saying what it is belongs to a mode of being it has left.** Those who knew
+the person before will hear their words used and will not be able to tell whether they mean what they
+used to. Neither will the drifted.
+
+*(This does not restore moral standing. Having concerns is not being in the moral register — the two
+come apart here, and that coming-apart is much of what makes such a being hard to be near.)*
+
+*(One thing remains deliberately unsettled: what is owed *to* a being outside the register. The
+framework does not answer it.)*
 
 At the level of design: no alignment, no corruption track, no arc from good to evil. A configuration
 moves out of one equilibrium and, past a point, cannot return — described accurately, and not graded,
@@ -249,9 +279,20 @@ no longer shapes the spooling into a human configuration at all. **They became o
 follows depends on **perceptual reach** — how much of the substrate the being can perceive and
 deliberately work.
 
-**Sensitivity does not increase at Coherence 0.** The being does not suddenly perceive more because
-their human rendering collapsed. They have exactly the perceptual architecture they built, and that
-architecture determines what they become.
+**Sensitivity does not increase at the crossing.** The being does not suddenly perceive more because
+the human equilibrium became unreachable. They have exactly the reach they had built, and it is
+**their reach at the moment of permanent loss** that matters — not their reach before, and not any
+reach acquired after.
+
+**And what it gates is not only what they can do. It gates what they can comprehend of themselves.**
+*(Ruled 2026-09-07.)* The more thread-sensitive the individual at the time of losing the human
+equilibrium permanently, the more of their own beyond-human being they comprehend. **A drifted
+being's understanding of itself, and of its relationship with the world, is gated by its thread
+sensitivity** exactly as its capacity to act is.
+
+This is the same identity as §5.5 — perceiving and holding-oneself are one capacity — arriving at the
+moment it matters most. A being of shallow reach does not merely lack power. It lacks any grasp of
+what has happened to it, and cannot form one.
 
 **Shallow reach — freefall.** No capacity to threadwork oneself at the depth lost self-rendering
 required. The configuration is exposed: raw spooling plus environmental thread-forces begin reshaping
