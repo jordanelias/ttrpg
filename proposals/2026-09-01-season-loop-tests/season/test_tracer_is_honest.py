@@ -482,8 +482,23 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     ⚠ THE BARE COUNT IS THIS TEST'S WEAKNESS AND IS LEFT IN PLACE DELIBERATELY: it goes red on any
     change and forces the author to say which side of the load/run-time line the new raise is on,
     which is the question, and a shape-based check (`is this raise inside a loader?`) would answer
-    it with a heuristic instead of a person."""
-    assert SHAPE_CODE.count("raise SystemExit") == 28
+    it with a heuristic instead of a person.
+
+    ⚠ RE-POINTED, step 2 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0202). `_load_rosters`
+    and `_load_write_matrix` -- 1 + 3 of the 28 -- moved to `season.data.rosters` and
+    `season.data.matrix` with their bodies unchanged; the count did not move WITH them if this
+    test still asked only `SHAPE_CODE`, which is `files.SHAPE_PY` alone. That is the exact
+    corpus-shrinks-while-still-passing failure `CLAUDE.md` names: `SHAPE_CODE` would have silently
+    started answering a DIFFERENT, smaller question (load-time raises in `shape.py` only) while
+    the assertion kept reading as the whole-instrument count. Summed across the three files that
+    now hold a `_load_*` this test's own docstring names, so a raise MOVED still counts and a raise
+    QUIETLY DROPPED during a future move still flips this to a number other than 28."""
+    rosters_code = _code_only((files.DATA_DIR / "rosters.py").read_text())
+    matrix_code = _code_only((files.DATA_DIR / "matrix.py").read_text())
+    total = (SHAPE_CODE.count("raise SystemExit")
+             + rosters_code.count("raise SystemExit")
+             + matrix_code.count("raise SystemExit"))
+    assert total == 28
 
 
 def test_d10b_resolve_sums_then_clamps_once():
