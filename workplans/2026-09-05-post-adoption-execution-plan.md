@@ -1,6 +1,6 @@
 # POST-ADOPTION EXECUTION PLAN — the nine, and the retirement
 
-## Status: **RULED 2026-09-05 (ED-IN-0202). This is a WORKPLAN, not doctrine.** Layer 1 doctrine is
+## Status: **RULED 2026-09-05 (ED-IN-0204). This is a WORKPLAN, not doctrine.** Layer 1 doctrine is
 `architecture/`; the mechanism is `engine/season/`. This file says what to build and in what order,
 and it is superseded by its own completion — not by a successor plan.
 
@@ -15,7 +15,7 @@ and it is superseded by its own completion — not by a successor plan.
 | published claim | the tree | consequence |
 |---|---|---|
 | *"`npc_ai.select_action`'s stub hits fail `m1_acceptance` row 1"* | `select_action` is **not on the campaign path** (pinned only by `engine/tests/test_pipeline_reach.py:789`). The two stub hits are `engine/mc_v18.py:194` (`generate_npc`) and `:212` (`form_knot`) | the CONCLUSION survives and is stronger: both stubs cite *"personal-scale actor fields absent from the aggregate strategic World"* — exactly what `engine/season/` supplies. The mechanism named was wrong |
-| *"the four registries the code reads at runtime"* (`CLAUDE.md` §3, ED-IN-0202's commit body, PR #371) | `shape.py` opens **three** — `rosters.yaml:449`, `verb_table.yaml:1407`, `write_matrix.yaml:292`. It never opens `hole_register.yaml`, whose readers are `register.py`, `exercises.py`, `run_cases.py` | under §0.05 the register is **mechanism for the corpus grader and reference for the game**. Its stale `:NNN` citations are reference-grade drift, which is why item 0.1 fixes them by hand and mints no guard |
+| *"the four registries the code reads at runtime"* (`CLAUDE.md` §3, ED-IN-0204's commit body, PR #371) | `shape.py` opens **three** — `rosters.yaml:449`, `verb_table.yaml:1407`, `write_matrix.yaml:292`. It never opens `hole_register.yaml`, whose readers are `register.py`, `exercises.py`, `run_cases.py` | under §0.05 the register is **mechanism for the corpus grader and reference for the game**. Its stale `:NNN` citations are reference-grade drift, which is why item 0.1 fixes them by hand and mints no guard |
 | `requirements.yaml` R-03: *"There is no scene container. `W17` … is unbuilt"* | `class Scene` exists (`shape.py:2289`), `deliberate` packs scenes and stamps `a.scene` (`:5675-5728`), `PLAN.md:1315` records W17 landed | R-03's `measured:` is **wrong about the mechanism and right about the requirement**. What is absent is a scene-granular TICK: `SeasonDriver.season` (`:6470-6486`) runs deliberate→resolve→witness once per season and flattens every scene's acts into one batch. The work item is not W17 |
 | `requirements.yaml` R-06: *"GOALS and AMBITIONS have no field and no verb"* | `headless.py:74-81` — Carin's motive is a `commit` Tenure to an OUGHT Proposition, and it is the Q4 source. That **is** the ambition mechanism | missing is a READ (`ambitions(p)`) and a cast (W27). R-06 is closer than its row says |
 

@@ -614,7 +614,7 @@ def verify_citations(reg: dict) -> list:
     return bad
 
 
-# ── THE NINE (ED-IN-0202, Jordan 2026-09-05) ──────────────────────────────────────────────────
+# ── THE NINE (ED-IN-0204, Jordan 2026-09-05) ──────────────────────────────────────────────────
 REQUIREMENTS = files.REQUIREMENTS_YAML
 
 
@@ -699,7 +699,7 @@ def main(argv=None) -> int:
                     help="every `:NNN` a cite names exists, and every verbatim quote is there")
     ap.add_argument("--rule", default="", help="comma-separated subset, e.g. R0,R1,R2,R3")
     ap.add_argument("--requirements", action="store_true",
-                    help="THE NINE (ED-IN-0202) -- every row carries a measurement or names one")
+                    help="THE NINE (ED-IN-0204) -- every row carries a measurement or names one")
     a = ap.parse_args(argv)
     if a.requirements:
         return check_requirements()

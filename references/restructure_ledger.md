@@ -1802,7 +1802,7 @@ paths and resolve through this row rather than reading as broken.
 
 
 
-## THE ADOPTION — `proposals/` → `architecture/` + `engine/season/` (2026-09-05, ED-IN-0202)
+## THE ADOPTION — `proposals/` → `architecture/` + `engine/season/` (2026-09-05, ED-IN-0204)
 
 Jordan ruled *"adopt in full"*. The season-loop chain left `proposals/` in two layers: the code
 architecture and shape to `architecture/`, the game code and the registries it reads at runtime to

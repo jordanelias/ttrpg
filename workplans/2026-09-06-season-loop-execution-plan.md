@@ -15,7 +15,7 @@ produced, and PLAN_v2's §4/§4a wave tables.
 **What it does NOT supersede.** `workplans/2026-09-05-post-adoption-execution-plan.md`, whose own
 status line forbids exactly that — *"superseded by its own completion — not by a successor plan"*.
 Its §0–§3 rulings stand unrestated; what is replaced is its §4 wave table, which covered two of seven
-scales. It does not supersede `architecture/` (Layer 1, RATIFIED 2026-09-05, ED-IN-0202), which it
+scales. It does not supersede `architecture/` (Layer 1, RATIFIED 2026-09-05, ED-IN-0204), which it
 cites throughout and never overrides.
 
 > **Scope this was produced under, stated because it shows in the citations.** `systems/`,
@@ -404,7 +404,7 @@ serialised** — not `act_of`, not `_barrier_cache`, not the presence index. **N
 
 SESSION_STATE §G called this *"live, unruled"*. It is not.
 
-1. **Superseded?** **YES, and that closes it.** `architecture/` is RATIFIED 2026-09-05 (ED-IN-0202,
+1. **Superseded?** **YES, and that closes it.** `architecture/` is RATIFIED 2026-09-05 (ED-IN-0204,
    *"adopt in full"*), which is **newer** than the export. `04_CODE_ARCHITECTURE.md:810` §C.12 **is**
    the Godot mapping, and it maps `World`, carriers, `Tenure`, `Act`/`Scene`/`Query`, `Event` + the
    log, the registries, the gate and `port/` — **and it never maps a `Key`**. `08_DATA_AND_KEYS.md:96`:
@@ -470,7 +470,7 @@ negotiation, never an automatic exit**. Standing, not a switch — which keeps t
 | `AX-5`'s fourth motion | test 3 | `01:174-178`, already ruled for individuation |
 | `H-84`'s transport shape | test 3 | `Record.rung` + PART D rows 12/13 |
 | replay-as-load | test 1 | `holonic:1831` supersedes the strategy doc |
-| what the Godot port ingests | test 1 | ED-IN-0202 is newer than the export |
+| what the Godot port ingests | test 1 | ED-IN-0204 is newer than the export |
 | the boot manifest | test 4 | `composition.py` is the precedent and it ships |
 | `levy` as a seventh remit act (D3) | test 5 | a declared substitution is reversible; a roster edit is not |
 | `release` generic (D4) | test 4 | PART D row 15's generic-closer pattern |

@@ -211,7 +211,7 @@ def test_this_check_can_observe_its_own_failure(tmp_path):
 #: out of scope for a step whose subject is the composition registry.
 #:
 #: It can only shrink. Converting it deletes this entry.
-#: SECOND ENTRY ADDED 2026-09-05 (ED-IN-0202, the adoption). `season/combat_seam.py` is the SAME
+#: SECOND ENTRY ADDED 2026-09-05 (ED-IN-0204, the adoption). `season/combat_seam.py` is the SAME
 #: seam from the season loop's side, into the same flat module set, following combat_bridge's
 #: discipline deliberately (its own header cites it as precedent). It is declared rather than
 #: converted for the identical reason the first entry gives: dotted-path loading would give
@@ -606,7 +606,7 @@ def test_every_declared_composition_role_resolves():
 
 
 # ---------------------------------------------------------------------------------------------
-# DECISION 1 STEP A (ED-IN-0202, 2026-09-05): "only ... social contests, personal combat and mass
+# DECISION 1 STEP A (ED-IN-0204, 2026-09-05): "only ... social contests, personal combat and mass
 # battles to be retained. All work in /engine is retained as well." 19 of the 27 declared
 # composition roles above target one of the twelve subsystems that ruling does NOT retain
 # (`references/module_contracts.yaml`'s composition_roles: block). Retiring those subsystems is
@@ -636,7 +636,7 @@ def test_r04_pending_composition_roles_can_only_shrink():
             if row['target'].split('.', 2)[1] in R04_PENDING_SUBSYSTEMS}
     new = sorted(live - R04_PENDING_ROLES)
     assert not new, (
-        'NEW composition role(s) target a non-retained subsystem during the ED-IN-0202 retirement '
+        'NEW composition role(s) target a non-retained subsystem during the ED-IN-0204 retirement '
         'window: ' + ', '.join(new) + '. This is the exact collision Decision 1 Step A named — '
         'engine/ naming more of the twelve superseded subsystems is drift, not Step A work. If the '
         'role is genuine, say so in the plan and add it to R04_PENDING_ROLES deliberately.'
