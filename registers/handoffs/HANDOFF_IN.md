@@ -181,23 +181,35 @@ believe.**
   right trigger — do not sweep the rest early.
 - **`MODEL = files.SHAPE_PY`** narrows at every step. **Pay at step 10**, where the plan re-points
   MODEL to the model set.
-- **⛔ `ci_sim_fabrication_check` IS RED ON THIS COMMIT AND WAS COMMITTED THAT WAY, DELIBERATELY.**
-  It is a BLOCKING CI gate, so the PR shows red on it. Twelve constants trip it — eight in
-  `data/fixtures.py` (`condition_scale=1000`, `scene_budget=5`, `ledger_cap=200`, `view_k=12`,
-  `claim_decay_per_season=5`, `entrenchment_seasons=60`, `interactions_per_scene=3`,
-  `record_stages_default=3`), one each in `data/matrix.py` and `state/ids.py`, three test
-  assertions. **Every one is a byte-identical MOVE out of `shape.py`, where each was equally
-  uncited and grandfathered** — the gate is changeset-scoped, so relocating a line re-presents it
-  as new. Nothing was invented and nothing changed value.
+- **✅ `ci_sim_fabrication_check` — CLOSED, and closed HONESTLY, which is the part worth reading.**
+  Twelve constants tripped it, every one a byte-identical MOVE out of `shape.py` where each was
+  equally uncited and grandfathered; the gate is changeset-scoped, so relocating a line re-presents
+  it as new. The first instinct was to leave it red and call the fix "research". **That was wrong,
+  and checking rather than assuming is what showed it:** every one of the eight fixtures ALREADY
+  CARRIED its provenance in a prose comment directly above it, and every one has a hole-register
+  row (`H-06` condition_scale · `H-10` scene_budget · `H-09` ledger_cap and view_k · `H-40`
+  claim_decay · `H-76` interactions_per_scene · `H-80` record_stages). Writing the claim the
+  comment already made, in the syntax the gate reads, invents nothing.
 
-  ⚠ **The fix is provenance, and provenance is research, not typing.** The gate accepts
-  `# [canonical: path §section]`, and writing one that is not true would be exactly the
-  fabrication it exists to catch — done to a gate, which is worse. Several of these have real
-  sources within reach (`interactions_per_scene` already carries `H-76, swept 1 / 3 / unbounded`
-  in a bare comment; `entrenchment_seasons` and `claim_decay_per_season` are register rows), so
-  the honest path is one constant at a time against its row. Do not close this by adding a
-  `sim_verification_ledger.json` full of numbers copied out of the code — that satisfies the gate
-  while deleting its meaning.
+  **The gate accepts an honest vocabulary and that is the whole reason this worked** (ED-MB-0041):
+  `[JUSTIFIED: …]` means *mechanism sourced, magnitude fitted or inherited* — which is exactly what
+  a declared-and-swept injected default is. Only `entrenchment_seasons=60` is labelled
+  `[canonical: …]`, because it is the one value genuinely in-chain
+  (`architecture/holonic_ARCHITECTURE.md` §15.2 at :556, verified by reading it). The four
+  structural values (`matrix.py`'s sort sentinel, `ids.py`'s hash width, two test vacuity floors
+  and the load-time refusal count) say plainly that they are not game values.
+
+  ⚠ **TWO MECHANICAL TRAPS, both of which bit:** the tag must be a SINGLE line (the `[` and `]`
+  on one line) and it must be the line IMMEDIATELY ABOVE the flagged line — for a multi-line
+  statement that means inside the brackets, above the continuation carrying the value, not above
+  the statement.
+
+  ⚠⚠ **AND ONE NEAR-MISS THAT IS THE REAL LESSON.** Restructuring the comments with a greedy
+  regex silently ATE ALL EIGHT CONSTANTS out of the `DEFAULT_FIXTURES(...)` call, leaving my prose
+  stacked where they had been. `Fixtures.get` raised `Ungraded: harness fixture 'condition_scale'
+  is not registered` on the very next run — S42.2.1's no-silent-default rule catching a defect it
+  was not written for. **Edit a construction site by literal replacement, never by a regex that
+  spans it**, and run the model after touching a file whose comments other code reads.
 
 ---
 

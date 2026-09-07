@@ -127,6 +127,7 @@ def _load_write_matrix() -> dict:
         # disagree, one of them is wrong and neither may be trusted silently.
         derived = "/".join(sorted({STEP_CLASS[st].value for st in steps},
                                   key=lambda v: [s.value for s in Step].index(v)
+                                  # [JUSTIFIED: a SORT SENTINEL, not a game value -- it orders a class outside `Step` last, and any value above len(Step) is equivalent]
                                   if v in [s.value for s in Step] else 99))
         stated = r["class"].strip()
         if steps and stated != "—":

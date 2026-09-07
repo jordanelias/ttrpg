@@ -17,6 +17,7 @@ def H(world_seed: int, tick: int, subject_id: str, purpose: str) -> str:
     """S33/S49: an OWNED, VERSIONED mix -- never a language built-in hash(), whose value is not
     a cross-version contract. `purpose` must be unique per DRAW, not per operation."""
     return hashlib.blake2b(f"v1|{world_seed}|{tick}|{subject_id}|{purpose}".encode(),
+                           # [JUSTIFIED: a HASH WIDTH, not a game value -- 8 bytes is 16 hex characters of id; nothing in the model reads it as a quantity]
                            digest_size=8).hexdigest()
 
 

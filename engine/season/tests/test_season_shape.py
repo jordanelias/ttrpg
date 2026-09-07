@@ -196,6 +196,7 @@ def test_d6_no_invented_constant_sits_in_a_body():
     # longer fire is worse than a broken one -- it reports coverage it does not have.
     # The corpus is now the MODEL SET, so it follows the code wherever later steps move it.
     mods = _model_modules()
+    # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- it fails when the corpus collapses, and is measured by `files.package_modules()`]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} -- this guard would pass vacuously"
     for m in mods:
         code = _code_only(m.read_text())
@@ -541,8 +542,10 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     now hold a `_load_*` this test's own docstring names, so a raise MOVED still counts and a raise
     QUIETLY DROPPED during a future move still flips this to a number other than 28."""
     mods = _model_modules()
+    # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
+    # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
     assert total == 28, (
         f"{total} load-time exits across the model set, expected 28. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"

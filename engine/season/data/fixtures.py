@@ -156,6 +156,7 @@ WEAR_RATES, BAND_FLOORS, SUBSISTENCE_WEIGHTS, SITE_YIELD = _load_matter_tables()
 DEFAULT_FIXTURES = Fixtures(
     # S48: condition is an int on an EXPORTED scale. S22 assigns the scale to `params`, and the
     # in-chain params document "proposes NO VALUES", so this is a fixture. Injection site: here.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-06 -- `site: Fixtures condition_scale`, graded `assumption`; the mechanism is sourced and the magnitude is injected here and swept]
     condition_scale=1000,
     # RULED TWICE. #353 §26.3 puts the budget at "~5"; Jordan ruled 2026-09-02 that the UNIT is
     # the SCENE and the number is 5 -- *"5 scenes for a character to play per season"*. A band is
@@ -166,10 +167,13 @@ DEFAULT_FIXTURES = Fixtures(
     # spray argument survives the noun change unaltered -- five scenes each spent petitioning is
     # exactly the triage the budget exists to create -- but the key must not keep saying `act`,
     # because a name is where the next reader learns what the number counts.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-10 -- *the SCENE budget as an integer of the ruled band ~5*; #353 §26.3 gives the band, Jordan's 2026-09-02 ruling the unit, and a band is not an integer]
     scene_budget=5,
     # S20: the ledger cap L. Params-owned; no in-chain value.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-09 -- `site: Fixtures ledger_cap (L) · view_k (K) · confidence_default`; S20 names L, no in-chain value exists, 200 is injected and swept]
     ledger_cap=200,
     # S18: "at most K claim ids from the holder's OWN ledger -- BUILT, NOT FILTERED".
+    # [JUSTIFIED: engine/season/hole_register.yaml H-09, the same row as `ledger_cap` above; S18 names K and the magnitude is injected and swept]
     view_k=12,
     # S22 assigns `wear per site kind` to params. NO in-chain table exists, so every kind the
     # instrument touches is declared here and an unregistered kind RAISES (see Fixtures.wear).
@@ -189,6 +193,7 @@ DEFAULT_FIXTURES = Fixtures(
     # sweep on the register, exactly as `H-09` treats the confidence default beside it. It is a
     # fixture rather than a literal so `Fixtures.claim_decay` can REFUSE when it is unregistered
     # — `wear`'s precedent, and S42.2.1's rule.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-40 -- the THIRD licensed clock; #353 licenses decay at MATTER and gives NO RATE, so the rate is injected with a `site:` and a three-point sweep]
     claim_decay_per_season=5,
     # `W6` / `H-33`. WHICH WITNESS CHANNELS ARE LIVE. `total` is the DEFAULT AND THE CONTROL --
     # it is #353's specified behaviour (S61: *"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY
@@ -202,6 +207,7 @@ DEFAULT_FIXTURES = Fixtures(
     contest_max_depth=2,
     # S15.2: entrenchment(h,H) = min(1, seasons_held / 60). The 60 IS in-chain; it is a fixture
     # only so no literal sits in a body.
+    # [canonical: architecture/holonic_ARCHITECTURE.md §15.2 -- `entrenchment(h, H) = min(1, seasons_held / 60)`, verbatim at :556 under the §15.2 heading at :553. THE 60 IS IN-CHAIN, which is why this label is `canonical` where its neighbours are `JUSTIFIED`]
     entrenchment_seasons=60,
     # S27.4: "an attempt at Ob > 2 x Pool is refused, and the season is spent."
     obstacle_refusal_multiple=2,
@@ -234,6 +240,7 @@ DEFAULT_FIXTURES = Fixtures(
     # `player_agency_v30.md` §6.3 -- "One scene action = one scene opportunity pursued. A scene
     # contains 1-3 mechanical interactions" -- which is `## Status: CANONICAL` but pre-#337 and,
     # under `CLAUDE.md` §0.05, REFERENCE rather than mechanism. `None` means unbounded.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-76 -- `site: Fixtures interactions_per_scene`; `player_agency_v30.md` §6.3 gives *1-3 mechanical interactions*, CANONICAL but pre-#337 and REFERENCE under CLAUDE.md §0.05, so the magnitude is fitted]
     interactions_per_scene=3,          # `H-76`, swept 1 / 3 / unbounded
     extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
     scene_packing_rule="greedy",       # `H-78`, swept greedy / one_per_scene / by_subject
@@ -248,6 +255,7 @@ DEFAULT_FIXTURES = Fixtures(
     # is `(verb, subject, why)` and carries no operands, so NO COMPUTED ACT CAN DECLARE ANY --
     # `(Record, stages)` is a Part D row unreachable from the person's own decision. These are
     # the instrument's declared stand-in, swept, and the row says plainly that they are.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-80 -- a computed act cannot declare its OPERANDS, so this is the instrument's declared stand-in, swept, and the row says so]
     record_stages_default=3,
     record_stage_term=1,
     budget_office_bonus=1,
