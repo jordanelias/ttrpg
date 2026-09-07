@@ -1,26 +1,48 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
-## ⚠⚠ OPEN QUESTION FOR JORDAN, 2026-09-07 — WHICH TREE DID THE shape.py DECOMPOSITION BELONG IN?
+## ⛔ RULED 2026-09-07 (Jordan) — #371 EXISTS. `engine/season/` IS THE HEAD. THE DECOMPOSITION WAS DONE ON THE PROTOTYPE.
 
-**Two rulings from the same day point different ways, and a session executed four steps against one
-of them. This is the first thing to settle; everything below depends on it.**
+**RULED, verbatim:** *"oh. then we have to assume #371 exists then."*
+
+**So the question below is CLOSED, and it closed against this session.** `engine/season/` on PR #371
+is the head; `proposals/2026-09-01-season-loop-tests/` is the prototype it supersedes. The four
+decomposition steps were executed on the tree that loses. The record of how the question arose is
+kept because the next session needs to know the work exists and where it is — not to re-litigate it.
 
 | | said | implies |
 |---|---|---|
 | **A** — to the decomposition session, in conversation | *"assume #371 never existed and that its work will need to be reinvented but in a better shape since we're doing it now"* · *"engine/season/shape.py is our target"* | #371 is not the vehicle; reinvent it; destination `engine/season/` |
 | **B** — the entry directly below, via PR #379 | *"Other tree wins for its work."* `engine/season/` on **PR #371** is the head; `proposals/…/tracer/` is the prototype it supersedes | #371's tree survives and carries the work |
 
-They agree that **`engine/season/` is the destination**. They disagree on whether #371 is the
-vehicle — and the session took a third path neither names: it decomposed the prototype IN PLACE,
-`proposals/2026-09-01-season-loop-tests/tracer/` → `…/season/`, because that is where the file lives
-on `main` and `engine/season/` does not exist there. **That was the executing session's call and it
-matches neither ruling's destination.**
+Both agreed the DESTINATION is `engine/season/`. The session took a third path neither named — it
+decomposed the prototype IN PLACE, because that is where the file lives on `main` and
+`engine/season/` does not exist there. That was the executing session's call and it was wrong.
 
-**What transfers if `engine/season/` wins, and what does not.** The decomposition is a partition plus
-a set of measured findings; the partition, the controls and every defect found transfer wholly — they
-are about the code, not the path. What does not transfer is the file relocation itself. Re-applying
-it to `engine/season/` is mechanical given the record below. **Nothing is lost either way; the cost
-of guessing wrong is redoing ~5 file moves, not redoing the analysis.**
+### WHAT SURVIVES, AND WHAT HAS TO BE REDONE
+
+**Survives wholly — it is about the CODE, not the path.** The partition (which symbols belong in
+which module, and why); the six plan corrections below; every guard defect found and repaired; the
+two-antagonist method and its findings; the fact that all 28 load-time refusals belong in `data/`.
+`engine/season/shape.py` and the prototype's `shape.py` were byte-identical at the fork, so **every
+symbol-level conclusion applies unchanged.**
+
+**Has to be redone:** the file relocations themselves — roughly five `git mv`-scale operations —
+re-applied to `engine/season/`. Mechanical given the record below.
+
+### THE ORDER TO DO IT IN, and one hazard
+
+1. **Land #371 first.** Decomposing a tree that has not merged means resolving the decomposition
+   against #371's own conflicts later; #371 is already `mergeable_state: dirty` against `main`.
+2. **Then re-apply steps 0b–3 to `engine/season/`,** in the order recorded below, with the six
+   corrections applied from the start rather than discovered again.
+3. ⚠ **`engine/season/` is under `engine/`, which the prototype is not.** That puts it in scope of
+   `tests/valoria/test_engine_does_not_import_systems.py`, which imports every `engine/**/*.py` by
+   dotted path — and of `tools/export_sim_params.py`, so its constants cross into the typed layer the
+   Godot port ingests. `PATH_SEAM_ALLOWED` will need the combat wrapper's `sys.path` seam. **None of
+   that applied to the prototype, so none of it was exercised by this session's four steps.**
+4. ⚠ **PR #379's three tree-bound items land in the same place** — see the entry directly below.
+   `_ch_document_key`, `rosters.yaml:407`, and the two `r8_4` falsifiers are all unrepaired in
+   `engine/season/`. Carry them with the decomposition, not separately.
 
 ---
 
