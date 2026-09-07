@@ -40,6 +40,12 @@ That is the real threshold, and it is a threshold of *irreversibility* rather th
 Before it, the human equilibrium can still draw the configuration back. After it, that equilibrium is
 simply not where this configuration tends any more.
 
+> ⚠ **UNDER REVISION 2026-09-07.** The paragraph below states a pure yield-point model with no
+> accumulation and no recovery. The author has corrected both: Coherence is **elastic then plastic**,
+> accumulation is real, and configurations that have taken no plastic change can heal back toward
+> equilibrium over time. The mechanism connecting repeated exposure to thread-sensitivity gain is
+> under discussion. Do not build on this paragraph.
+
 **The mechanics are those of a yield point.** A plastic material deforms under stress and returns to
 the same arrangement, again and again — until a stress at which its structure itself changes, and
 after which it will never return to that arrangement, however the load is removed. Coherence works
