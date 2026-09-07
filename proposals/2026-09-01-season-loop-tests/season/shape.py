@@ -1396,14 +1396,15 @@ class VerbRow:
         it does not declare, RAISES rather than reporting the wrong outcome.
 
         ⚠ `H-115`: THESE TWO RAISES USED TO BE `SystemExit`, THE ONLY RUN-TIME REFUSALS IN
-        `shape.py` OUTSIDE THE TYPED GAP TAXONOMY. `SystemExit` derives from `BaseException`, so
+        `shape.py` OUTSIDE THE TYPED GAP TAXONOMY (which now lives in `season/gaps.py`). `SystemExit` derives from `BaseException`, so
         `corpus_run.run_case`'s `except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer)`
         clause never catches it -- a one-case design gap escaped as a whole-corpus run
-        termination, with no DESIGN-GAP row and no section citation. The 14 load-time raises
-        beside these (missing/malformed YAML, at shape.py:365/383/395/454/743/749/776/785/791/
-        800/808/813/821/825) are CORRECTLY fatal and are UNCHANGED -- this file loads once, and a
+        termination, with no DESIGN-GAP row and no section citation. The load-time raises
+        beside these (missing/malformed YAML, in the loader functions -- locate them by grepping for the
+        load-time exit token itself, NOT from a line list, which rots on every edit and had
+        already rotted before step 1) are CORRECTLY fatal and are UNCHANGED -- this file loads once, and a
         broken table should end the process. These four are not load-time; they fire per-act,
-        mid-corpus, and belong in the taxonomy every other per-case refusal in this file uses."""
+        mid-corpus, and belong in the taxonomy every other per-case refusal in the package uses."""
         if not self.emits_by_degree:
             return self.emits
         if degree is None:

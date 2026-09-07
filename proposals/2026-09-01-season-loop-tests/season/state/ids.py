@@ -1,8 +1,12 @@
 """S33 -- DETERMINISM. The mint (`H`) and its sentinel (`ROOT`), extracted from `shape.py`
 (step 1 of the shape.py decomposition, ED-IN-0202) with no behaviour change. `shape.py`
 re-exports both, so `from ..shape import H, ROOT` and `S.H(...)` keep resolving exactly as
-before. Living here, on their own, makes "the mint lives once" a one-file, one-`grep`
-property (`grep -rln "def H(" season/` must print exactly this file)."""
+before. Living here, on their own, makes "the mint lives once" CHECKABLE in one grep
+(`grep -rln "def H(" season/` prints exactly this file today). ⚠ That is a CONVENTION,
+not an enforcement -- no test asserts it. Said plainly per S47: "a false claim of
+enforcement is worse than none, because it stops the next reader from checking."
+The property is also narrower than "hashing lives once": it covers the id MINT, not
+hashing generally -- `World.content_hash` hashes too, and correctly."""
 
 from __future__ import annotations
 
