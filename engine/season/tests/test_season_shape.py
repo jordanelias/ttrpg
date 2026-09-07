@@ -7373,13 +7373,38 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     # channel set**, which is why it is not read as "narrowing costs divergence": `all_five` is a
     # SUPERSET of `presence_only` and does worse than it.
     #
-    # WHY THE ARM IS NOT RE-CHOSEN ON THIS NUMBER, run against `CLAUDE.md` §0's five tests rather
-    # than escalated: (3) a design document answers WHICH arm — `19_PLAN.md` step 1 says take the
-    # fixture to the channel-predicate set and *"do not touch the channel list itself"*; (5) the
-    # architecture answers whether 7-vs-0 on SIXTEEN forks can overturn it, and it cannot — `H-54`
-    # registers that within-source question order is settled by LEXICOGRAPHIC ORDER OVER CONTENT
-    # HASHES in 801 of 1,068 deliberations, so a 16-fork slice is dominated by hash ordering and
-    # supports no ranking of the arms. Acting on it would be choosing a game mechanism on noise.
+    # ⛔⛔ **THE "IT IS ONLY 16 FORKS" ARGUMENT WAS PUBLISHED HERE AND IS REFUTED. AN ADVERSARIAL
+    # PASS DEMANDED THE CORPUS-SCALE CONTROL, IT WAS RUN, AND IT SAYS THE OPPOSITE.** The retracted
+    # reasoning was: *`H-54` registers that within-source question order is settled by lexicographic
+    # order over content hashes in 801 of 1,068 deliberations, so a 16-fork slice is dominated by
+    # hash ordering and supports no ranking of the arms.* Two things were wrong with it.
+    #
+    # (a) THE 801/1,068 STATISTIC WAS MEASURED AT `fan_out_mode="total"` AND CITED TO JUSTIFY
+    #     MOVING OFF IT. `wd_acceptance.fixtures_for` sweeps `scene_budget`,
+    #     `interactions_per_scene` and `observation_deposit_mode` and NEVER `fan_out_mode`, so the
+    #     artifact could not have been about the shipped arm. Re-run at `all_five`
+    #     (`wd_extra.py`): **801 of 1,068, identical in all six cells** — 39 of its 108 fields moved,
+    #     so the re-run was not a no-op and the statistic is genuinely invariant. The number
+    #     survives; citing it before running it did not.
+    # (b) THE SLICE WAS NEVER THE ONLY EVIDENCE AVAILABLE. The 89-world corpus was chunked and
+    #     ready. Run at `all_five`, `narrow` cell (`wd_chunk.py`, 12 chunks):
+    #
+    #         deposit arm      fan=total (committed)      fan=all_five (re-run)
+    #         none                0 of 1504                  0 of 1504
+    #         actor              62 of 1467                  0 of 1467      <- SHIPPED
+    #         total             182 of 1467                170 of 1467
+    #
+    #     **Zero of one thousand four hundred and sixty-seven is not a slice artifact and not
+    #     noise.** At the shipped configuration the W-B verb-set channel is CLOSED corpus-wide, and
+    #     the `total` deposit arm barely moves (182 -> 170) — so the flip does not destroy
+    #     divergence in general, it destroys it specifically at the shipped `actor` arm.
+    #
+    # The arm still is not re-chosen HERE, and the reason is now scope rather than noise:
+    # `19_PLAN.md` step 1 and `R7` govern the FAN, and what this measurement indicts is the
+    # DEPOSIT MODE — `H-122`, a different row, whose two stated reasons for preferring `actor` are
+    # both independently dead (see that row). Changing it is a second design change on a row in
+    # flux and belongs in its own commit with its own argument. **It is recorded as the open
+    # question it is, not discounted.**
     # ⚠ AND THE LOSS IS HALF A CHANNEL, NOT A WHOLE ONE, which the bare zero above overstates.
     # This instrument fingerprints a deliberation by VERB SET ONLY. Under the widened
     # `(verb, subject)` fingerprint — `test_wd_the_decision_fingerprint_is_verbs_only…`, same

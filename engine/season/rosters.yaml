@@ -384,8 +384,23 @@ rosters:
     cite: "H-33"
     note: >-
       ⚠ THESE PREDICATES ARE AN INJECTED DEFAULT, NOT SOMETHING #353 STATES. `H-33` is graded
-      `assumption` for exactly that reason, its declared sweep is `total / presence-only / all
-      five`, and `total` is BOTH the default and the control because it is the specified behaviour.
+      `assumption` for exactly that reason, and its declared sweep is `total / presence-only / all
+      five`.
+      ⚠ **`total` IS THE CONTROL AND THE SPECIFIED BEHAVIOUR, AND SINCE 2026-09-07 IT IS NO LONGER
+      THE DEFAULT** (`ED-IN-0205`; this line read *"`total` is BOTH the default and the control"*
+      until then). `R7` chose the architecture model over the echo model -- *legitimacy falls where
+      the news has reached* -- and total fan-out is that echo model at the deposit layer. The
+      shipped arm is `all_five`, in `data/fixtures.py`. **The GRADE does not move with it**: `R7`
+      rules which arm ships and says nothing about what these five predicates are, so they remain
+      an injected default and this row stays `assumption`.
+      ⚠ **AND THE GRADE NOW CARRIES MORE WEIGHT THAN IT DID.** Under `total`, `observers_for`
+      returned everyone and these predicates were **never consulted**; under `all_five` they decide
+      every deposit in the game. An `assumption`-grade `FORMULA x5` went from decorative to
+      load-bearing on the whole epistemic layer -- and only THREE of the five can admit anyone in a
+      world the fold can currently drive (`chronicle` matches nobody, `post_remit` needs an office
+      whose remit covers the emitting verb; `test_w6_every_named_channel_has_a_predicate_and_they_are_data`
+      asserts exactly which two are inert). That is the risk this row is carrying, said here rather
+      than left for a reader to derive.
       Every predicate below is computed from WORLD STATE and never from a recipient the emitter
       declared -- §19.3 is explicit that an Event carries NO TARGET, *"observers are computed at
       WITNESS from presence; the emitter declares no recipient"*, so a channel that needed the

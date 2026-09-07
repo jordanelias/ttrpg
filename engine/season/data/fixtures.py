@@ -218,13 +218,32 @@ DEFAULT_FIXTURES = Fixtures(
     # remit covers the emitting verb; `test_w6_every_named_channel_has_a_predicate…` asserts
     # exactly which two are inert.)
     #
-    # ⚠ AND IT IS NOT FREE. At the shipped `observation_deposit_mode: actor`, `W-D`'s 16-fork slice
-    # diverges 2 times at `total`, 0 at `all_five` and 7 at `presence_only` -- NON-MONOTONIC, since
-    # `all_five` is a superset of `presence_only`. Half that channel survives (under the widened
-    # `(verb, subject)` fingerprint the shipped arm still diverges 8 against the control's 6), and
-    # the arm is not re-chosen on 16 forks whose question order `H-54` measures as hash-decided in
-    # 801 of 1,068 deliberations. Both numbers are pinned in the two `test_wd_…` tests, which carry
-    # the full reasoning; this comment is not the place it is decided.
+    # ⛔⛔ AND IT IS NOT FREE -- **THE COST IS LARGER THAN THE REASON, AND THIS COMMENT FIRST SAID
+    # THE OPPOSITE.** It argued the cost away as a 16-fork artifact, citing `H-54`'s hash ordering.
+    # An adversarial pass demanded the corpus-scale control; it was run, and it REFUTES that
+    # argument. `W-D`, 89 worlds, 1,467 genuine forks, `narrow` cell, at the shipped
+    # `observation_deposit_mode: actor`:
+    #
+    #     fan_out_mode        forks that changed a later decision      reconvergence
+    #     total  (before)              62 of 1467                         95.77%
+    #     all_five (SHIPPED)            0 of 1467                        100.00%   <- ZERO
+    #     presence_only               229 of 1467                         84.39%
+    #
+    # **Zero of 1,467 is not noise.** At the shipped arm a fork NEVER changes a later decision, and
+    # `presence_only` -- the arm this comment rejected on a 2-question difference in one 3-person
+    # world -- diverges 229 times, nearly four times the pre-flip arm. On the property `W-D` exists
+    # to establish, the ranking is the reverse of the one chosen here.
+    #
+    # ⚠ WHY THE FIXTURE STILL READS `all_five`, AND WHY THAT IS NOT A DEFENCE OF IT. The two arms
+    # trade two things the design wants against each other: `all_five` is the only arm that gives a
+    # SECRET BETWEEN TWO PEOPLE IN THE SAME ROOM (at `presence_only` two co-located persons hold
+    # identical witness sets -- it gives absence, not secrecy; `test_r7_two_persons_hold_different…`
+    # asserts the difference that `presence_only` cannot produce), and `presence_only` is the arm
+    # that keeps a fork reaching a later decision. `R7` rules `total` OUT and is SILENT between
+    # these two. **That is a live design choice between two defensible options leading to
+    # materially different games, it is flagged `needs_jordan`, and it is NOT settled by this
+    # comment or by the person who wrote it.** Until it is ruled, the fixture holds the arm
+    # `19_PLAN.md` step 1 names; the corpus table above is the reason that is provisional.
     #
     # ⚠ AND M-6 IS NOT REPORTED AS "PASSED", because its instrument cannot observe the third link.
     # `_r3_propagates` is an `Event.causes[]` walk over `driver.resolved` and never reads a ledger:
