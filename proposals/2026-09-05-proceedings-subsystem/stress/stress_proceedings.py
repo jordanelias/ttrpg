@@ -435,9 +435,18 @@ def st06():
     i = src.index("vacant = not d.get(\"holder\")")
     window = src[i:i + 900]
     guarded_by_not_vacant = "if not vacant:" in window and "w.docket.append" in window
-    claim = "CALENDAR appends a `DocketItem` when a fired date is\n   **vacant**"
     doc = (DESIGN / "03_PARAMETERS.md").read_text()
-    asserts_vacant = "vacant" in doc
+    # ⛔ THE INSTRUMENT WAS A BARE SUBSTRING SEARCH FOR "vacant" OVER THE WHOLE FILE, which cannot
+    # tell a live assertion from a quoted retraction — so it would have gone on failing after the
+    # claim was withdrawn, which is `CLAUDE.md` §0.1 point 2 from the other side: an assertion that
+    # cannot observe the SUCCESS it is looking for. It now finds the claim and asks whether a
+    # retraction marker governs it.
+    claim = "CALENDAR\n   appends a `DocketItem` when a fired date is **vacant**"
+    alt = "appends a `DocketItem` when a fired date is\n   **vacant**"
+    where = doc.find(claim)
+    if where < 0:
+        where = doc.find(alt)
+    asserts_vacant = where >= 0 and "CORRECTED" not in doc[max(0, where - 400):where + 400]
     if guarded_by_not_vacant and asserts_vacant:
         FIND("F-06", "the design states the docketing rule BACKWARDS against the code it cites "
              "by line number",
@@ -540,9 +549,16 @@ def st09():
              by="construction", severity="material", site="verb_table.yaml speak",
          dup="—")
         return "FAILED", "no Event names the speech", ["F-09"]
+    live = VERB_TABLE.get("speak")
     return "RAN", (f"a `speak` by a person holding no seat folded and emitted "
-                   f"{[e.kind for e in mine]} — the ONE thing in the whole proceeding that "
-                   f"executes today, and it writes nothing"), []
+                   f"{[e.kind for e in mine]}. ⚠ **CORRECTED 2026-09-07 — WHOSE ROW RAN.** This "
+                   f"executed the LIVE row (`requires: {live.requires!r}`, "
+                   f"`writes: {list(live.writes)}`), not the design's, which adds a precondition "
+                   f"and four degree-keyed bands. So it is a fact about what the tree had BEFORE "
+                   f"this directory existed — the same class as the presence walk and the degree "
+                   f"ladder — and a draft filed it as the design working. What it does show and "
+                   f"the design keeps: **eligibility is `own`, so a person holding no seat "
+                   f"speaks, and there is no spectator mode**"), []
 
 
 @stress("ST-10", "a `speak` that contests a matter reaches a provider",
@@ -638,49 +654,76 @@ def st11():
                       f"ladder: {same}"), ["F-11"]
 
 
-@stress("ST-12", "every `requires_typed` form the design declares exists in the grammar",
-        "04_VERBS.md · rosters.yaml requires_forms", by="construction")
+@stress("ST-12", "every `requires_typed` cell names a form the grammar has AND an operand that "
+        "form admits", "04_VERBS.md · rosters.yaml requires_forms", by="construction")
 def st12():
+    """⭐ **EXTENDED 2026-09-07 after an adversarial pass found the narrower version blind to the
+    defect beside the one it caught.** The first version hand-typed a form name per verb and checked
+    membership in `requires_forms`. That misses the other half of `§F.24a`'s grammar: each form
+    declares the closed set of OPERANDS a cell of that form may reference, and a cell naming one
+    outside it refuses at load exactly as an unknown form does. **`determine`'s corrected conjunct
+    named `of: actor` against `basis: [subject, from, to]` — so the correction that fixed one load
+    failure introduced another, and the narrow test could not see it.** Both halves are now read out
+    of the design's own YAML rather than transcribed."""
     forms = roster("requires_forms")
-    declared = {
-        "speak": "existence",
-        "determine (conjunct 1)": "existence",
-        "determine (conjunct 2)": "basis",
-        "examine": "path",
-        "interview": "path",
-        "research": "existence",
-        "reconstruct": "own_ledger",
-        "release": "existence",
-    }
-    bad = {v: f for v, f in declared.items() if f not in forms}
-    if not bad:
-        return "RAN", "every declared form is in the roster", []
+    needs = yaml.safe_load((ARCH / "rosters.yaml").read_text())["rosters"]["requires_forms"]["needs"]
+    doc = (DESIGN / "04_VERBS.md").read_text()
+    # ⚠ SCAN THE YAML BLOCKS ONLY. A `requires_typed` cell IS a YAML row; the prose quotes
+    # corrected-away cells verbatim when it records a retraction, and a whole-file scan counts
+    # those as live — the same blindness `ST-06` had, found the same way (the test could not go
+    # green after the defect it names was fixed).
+    blocks = re.findall(r"```yaml\n(.*?)```", doc, re.S)
+    cells = [m for b in blocks
+             for m in re.findall(r"\{\s*form:\s*([a-z_]+)((?:\s*,\s*[a-z_]+:\s*[^,}]+)*)\s*\}", b)]
+    bad_form, bad_operand = [], []
+    for form, rest in cells:
+        if form not in forms:
+            bad_form.append(form)
+            continue
+        for key, val in re.findall(r"([a-z_]+):\s*([^,}]+)", rest):
+            if key != "of":
+                continue
+            operand = val.strip().strip("`<> ")
+            if operand and operand not in needs.get(form, []):
+                bad_operand.append(f"{{form: {form}, of: {operand}}} — {form} admits {needs.get(form)}")
     probe = None
     try:
-        shape.build_typed_requires("examine", {"form": "path", "of": "subject", "kind": "contain"})
+        shape.build_typed_requires("probe", {"form": "path", "of": "subject", "kind": "contain"})
         probe = "the loader ACCEPTED an unrostered form"
     except SystemExit as e:
-        probe = f"the loader refused: {e}"
+        probe = f"the loader refused an unrostered form: {str(e)[:90]}"
     except Exception as e:  # noqa: BLE001
         probe = f"{type(e).__name__}: {e}"
-    FIND("F-12", "two of the five new investigation rows name a `requires_typed` form that is "
-         "not in the closed grammar, and would refuse at load",
-         f"roster `requires_forms` = {forms}. Declared but absent: {sorted(bad)} — both write "
-         f"`form: path` where the roster's member is `contain_path`. Probe against the real "
-         f"loader: {probe}. This is a one-word fix and it is worth recording only because of "
-         f"WHERE it is: `04_VERBS.md` §B.3.1 argues that five of six preconditions are "
-         f"*'expressible in it without inventing anything'*, and two of the five are written in "
-         f"a form name the grammar does not carry. The claim is right; the cells do not "
-         f"instantiate it.",
-         by="construction", severity="nit", site="04_VERBS.md §B.3.2",
-         dup="NEW")
-    return "FAILED", f"{len(bad)} cells name a non-member form", ["F-12"]
+    if not bad_form and not bad_operand:
+        return "RAN", (f"all {len(cells)} typed cells in `04_VERBS.md` name a rostered form and an "
+                       f"operand that form admits. Loader control: {probe}"), []
+    FIND("F-12", "typed `requires` cells name a form the grammar does not have, or an operand the "
+         "form does not admit — either refuses at load",
+         f"roster forms = {forms}. Cells scanned: {len(cells)}. "
+         f"Unrostered form names: {sorted(set(bad_form)) or 'none'}. "
+         f"Operands outside their form's set: {sorted(set(bad_operand)) or 'none'}. "
+         f"Loader control: {probe}. "
+         f"⚠ **The operand half is the one that matters and it was invisible until this test was "
+         f"extended.** `§F.24a` derived each form's operand set from the 32 live cells rather than "
+         f"designing it, so an operand is as closed as a form name is — and `04_VERBS.md` §B.3.1 "
+         f"argues that five of six preconditions are *expressible without inventing anything* while "
+         f"one of them named an operand its form does not carry.",
+         by="construction", severity="nit", site="04_VERBS.md §B.2/§B.3.2",
+         dup="NEW on the operand half")
+    return "FAILED", (f"{len(set(bad_form))} unrostered forms, "
+                      f"{len(set(bad_operand))} inadmissible operands"), ["F-12"]
 
 
 @stress("ST-13", "whose stance a `speak` writes", "04_VERBS.md §B.1(v)", by="document")
 def st13():
     doc = (DESIGN / "04_VERBS.md").read_text()
     says_own = "the band writes the speaker's own" in doc
+    settled = "EVERY `Person.stance` IS THE SPEAKER'S OWN" in doc or \
+              "THE SPEAKER'S ON ALL THREE BANDS" in doc
+    if settled:
+        return "RAN", ("the row now names the owner on every band that writes `Person.stance` — "
+                       "the speaker's, on all three — and §B.1 (ix) records why the architecture "
+                       "forces it rather than preferring it"), []
     FIND("F-13", "three of `speak`'s four bands write `Person.stance` and the design says whose "
          "only for the fourth",
          f"`writes: {{Overwhelming: [Person.stance], Success: [Person.stance], "
@@ -1009,6 +1052,15 @@ def st23():
     header = re.search(r"\*\*(\w+) keys\.\*\*", doc)
     header_word = header.group(1) if header else "?"
     partial = [r for r in rows if r[1]]
+    WORDS = {"twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16}
+    header_n = WORDS.get(header_word.lower())
+    # The header/schema half is the one this test can settle; the partial-row half is a statement
+    # about prose written as prose, and becomes a defect only against the loader step 6 builds.
+    if header_n == len(keys):
+        return "RAN", (f"the schema declares {len(keys)} keys and its header says {header_word}; "
+                       f"they agree. {len(partial)} of {len(rows)} §E.2 blocks are still written "
+                       f"as diffs rather than complete rows, which is prose behaving as prose "
+                       f"until the loader exists (PHASE 2 step 6)"), []
     FIND("F-23", "the schema declares fifteen keys, its own header says fourteen, and every "
          "one of the twelve game rows is written as a partial row",
          f"parsed schema keys = {len(keys)}: {keys}. PART D's header word = '{header_word}'. "
@@ -1134,7 +1186,27 @@ def st27():
               ("Record", "exists"): "case.opened",
               ("Record", "stages"): "case.opened",
               ("Date", "due_at"): "date.scheduled"}
-    bad = {k: (v, got.get(k)) for k, v in claims.items() if got.get(k) and v not in got.get(k, "")}
+    # ⛔ THE INSTRUMENT COMPARED A HAND-TYPED DICT OF WHAT THE DESIGN *WAS THOUGHT* TO CLAIM against
+    # the matrix, so it could not observe the design being corrected. It now reads §D.1's own table.
+    seam = (DESIGN / "08_SEAM.md").read_text()
+    block = seam.split("## D.1 ·")[1].split("## D.2")[0] if "## D.1 ·" in seam else ""
+    claims = {}
+    for line in block.splitlines():
+        cells = [c.strip() for c in line.split("|")]
+        if len(cells) >= 8 and cells[1].startswith("`") and cells[2].startswith("`"):
+            kind = cells[1].strip("` ")
+            # A row may carry two fields and two emission groups in parallel — `since / until`
+            # against `tenure.opened / tenure.closed`. Zip them when the counts agree; otherwise
+            # every field is compared against the whole cell, which is what a first version did
+            # and it manufactured four mismatches out of two correct rows.
+            flds = [f.strip("` ") for f in re.split(r"\s*/\s*", cells[2].strip("` "))]
+            emits = [e.strip() for e in re.split(r"\s+/\s+", cells[6])]
+            for n, fld in enumerate(flds):
+                claims[(kind, fld)] = emits[n] if len(emits) == len(flds) else cells[6]
+    bad = {k: (v, got.get(k)) for k, v in claims.items()
+           if got.get(k) is not None
+           and not all(part.strip("`· ") in got.get(k, "")
+                       for part in re.split(r"[·/]", v) if part.strip("`· "))}
     if not bad:
         return "RAN", "every claimed emission matches the matrix", []
     FIND("F-27", "`08_SEAM.md`'s data table names emissions the write matrix does not carry",
@@ -1584,46 +1656,38 @@ def st32():
     confs = sorted({c.confidence for c in bench.ledger})
     srcs = sorted({c.source for c in bench.ledger})
     absent_l = w.persons["p_absent"].ledger
-    FIND("F-32", "the room's memory of a speech is ONE claim, at one confidence, from one source, "
-         "saying that it happened — and `reception` needs claims about how it LANDED",
-         f"after one season with a `speak` by p_party_a in front of five people, p_bench_a's "
-         f"ledger holds {len(bench.ledger)} claims, of which {len(about_speaker)} name the "
-         f"speaker: predicates {kinds}, confidences {confs}, sources {srcs}. "
-         f"⛔ **A DRAFT OF THIS FINDING SAID NO CLAIM NAMES THE SPEAKER AND THAT WAS FALSE** — "
-         f"the execution says one does, and the retraction is recorded here rather than "
-         f"overwritten because the corrected finding is the sharper one. "
-         f"⭐ **WHAT IS ACTUALLY DEPOSITED IS `(p_party_a, speech.made, 100, firsthand)` — that "
-         f"he spoke.** `06_RESOLUTION.md` §C.1 composes `reception` from *the hearers' own claims "
-         f"about the speaker*, and `PART A` defines ethos as *what others take a person to be — "
-         f"claims in OTHER PEOPLE'S ledgers, each of which may be wrong*. The only claim about "
-         f"the speaker is that he made a speech. There is no reading in it, nothing that could "
-         f"be wrong, and nothing that differs between two hearers. "
-         f"⚠ **AND THE TRACER SAYS WHY, IN ITS OWN COMMENT AT `claim_subjects`**: an Event with "
-         f"an empty `changes[]` — which is every `speak`, since `writes: []` — mints its claim "
-         f"about the ACTOR by the `e.subject` fallback, and *'a claim about the actor can never "
-         f"raise a listener's question: the news arrived in a form nobody could act on'*, "
-         f"measured at *R3 = 0 of 30 on the NPC lane, 0 of 59 on ARC*. So the one claim a speech "
-         f"deposits about its speaker is the one shape the question machinery cannot read. "
-         f"⚠ **CREDIT WHERE IT IS DUE**: `18_FINDINGS.md` PART B and `HANDOFF_SC.md` already "
-         f"name this as the directory's headline diagnosis. What this adds is the execution and "
-         f"one correction — their wording is *no deposit names the actor*, and a deposit does; "
-         f"the defect is the CONTENT of that deposit, not its absence, and the fix named in "
-         f"`19_PLAN.md` step 2 (attribution) is aimed at a hole one step to the left of the "
-         f"real one.",
-         by="construction", severity="blocking", site="15_WHY_IT_IS_A_GAME.md PART C",
-         dup="`18_FINDINGS.md` PART B / `HANDOFF_SC.md`, the directory's own headline diagnosis. **ADDS: the execution, and a CORRECTION — a deposit does name the actor; the defect is its content**")
-    MD("MD-08", "report the deposit's CONTENT as the defect rather than its absence",
-       "the execution shows a claim naming the actor; the directory's own wording says there is "
-       "none. Reporting the absence would have repeated a claim the run refutes.",
-       alternative="take `18_FINDINGS.md` PART B at its word — which is what the draft did, and "
-                   "it produced a false finding",
-       falsifier="`shape.py`'s `claim_subjects` under a different `claim_subject_rule` arm: at "
-                 "`per_change` an Event with no changes deposits NOTHING, which would make the "
-                 "directory's wording true and this finding arm-dependent. The arm in force is "
-                 "`both` (INV-21) and it is a swept fixture, not a ruling")
-    return "BLOCKED", (f"{len(about_speaker)} of {len(bench.ledger)} claims name the speaker, "
-                       f"and it says only that he spoke; the absent man holds "
-                       f"{len(absent_l)} identical claims"), ["F-32"]
+    # ⛔ RUN THE CASE THE RULE IS ACTUALLY ABOUT. `claim_subjects` replaces the actor with the act's
+    # REFERENTS when the act names a subject and writes nothing; the draft's `speak` carried no
+    # payload, so the actor survived by the `or [e.subject]` default rather than by the rule.
+    w2 = proceedings_world()
+    def choose2(p, v, s_, ask_budget):
+        return [act(w2, "p_party_a", "speak", key="press",
+                    payload={"subject": "p_absent"})] if p.id == "p_party_a" else []
+    SeasonDriver(w2).season(choose2, question=None, subsistence=SUBSIST)
+    named = [c for c in w2.persons["p_bench_a"].ledger if c.subject == "p_party_a"]
+    FIND("F-32", "⛔ WITHDRAWN — the lane's original diagnosis was right and this suite's "
+         "correction of it was an artifact of the case it ran",
+         f"**The claim was**: `18_FINDINGS.md` PART B and `HANDOFF_SC.md` say *no deposit names the "
+         f"actor*, and a speech deposits `(speaker, speech.made, 100, firsthand)`, so the defect is "
+         f"the deposit's CONTENT rather than its absence. "
+         f"⛔ **It is withdrawn.** `claim_subjects` **replaces** the actor with the act's referents "
+         f"when the act names a subject and writes nothing — `speak` writes nothing, so a real "
+         f"`speak` at a proceeding, which presses a matter ABOUT somebody, deposits about the "
+         f"matter's subject and not about the speaker. The draft's probe built its `speak` with no "
+         f"payload, so the act had no referents and the actor survived through the default branch. "
+         f"**EXECUTED, both ways:** with no payload the bench holds {len(about_speaker)} claim(s) "
+         f"naming the speaker; with a subject named, {len(named)}. "
+         f"⭐ **So the mechanism the directory named is real, and `19_PLAN.md` step 2 is aimed "
+         f"correctly** — though `R8.1` supersedes its *prepend the actor* mechanism with the "
+         f"`seen` struct, subjected to the changed thing or else the rung. "
+         f"⚠ **The method lesson is `§0.1` point 1 in reverse**: I checked a claim about a rule by "
+         f"running a case the rule does not cover, and a green result read as a refutation. Two "
+         f"critics missed it; a third caught it by reading the branch instead of the output.",
+         by="construction", severity="material", site="18_FINDINGS.md PART B",
+         dup="⛔ WITHDRAWN — the row it 'corrected' stands. Kept as a record of the error, not as a "
+             "finding")
+    return "FAILED", (f"the correction is withdrawn: with no payload {len(about_speaker)} claim "
+                      f"names the speaker, with a subject named {len(named)}"), ["F-32"]
 
 
 @stress("ST-33", "a person who was not there does not learn what happened",
@@ -1679,6 +1743,17 @@ def st34():
         return "BLOCKED", f"could not import the ladder: {type(e).__name__}: {e}", []
     fn = getattr(DE, "p_success", None) or getattr(DE, "success_probability", None)
     names = [n for n in dir(DE) if "success" in n.lower() or "prob" in n.lower()]
+    # ⛔ THE DRAFT SEARCHED `dice_engine` ALONE AND REPORTED THE DESIGN'S OWN BLOCKING CHECK
+    # UNRUNNABLE. `p_success` is in the sigma-leverage resolver, which is the module
+    # `06_RESOLUTION.md` PART C is written against by name.
+    if fn is None:
+        try:
+            from engine.autoload import sigma_leverage as SL
+            fn = getattr(SL, "p_success", None)
+            if fn is not None:
+                names.append("sigma_leverage.p_success")
+        except Exception:  # noqa: BLE001
+            pass
     MD("MD-07", "inject a declared obstacle set rather than refuse the measurement",
        "`ID-6` says inject, declare and sweep an `assumption`-grade magnitude rather than "
        "escalate it, and `06_RESOLUTION.md` grades the four room terms exactly that. The "
@@ -1701,19 +1776,50 @@ def st34():
              by="construction", severity="material", site="06_RESOLUTION.md §B.3a",
          dup="NEW")
         return "BLOCKED", f"no p_success in the ladder module; exports: {names}", ["F-34"]
-    worst = [fn(pool=1.0, ob=ob) if "pool" in fn.__code__.co_varnames else fn(1.0, ob)
-             for ob in (3, 7, 11)]
+    ladder = {ob: fn(base_ob=float(ob), pool=1.0) for ob in (1, 2, 3, 4, 5, 7, 11)}
+    # where does it die, and does the design's own named remedy reach it?
+    crossing = next((ob for ob, pv in sorted(ladder.items()) if pv < 0.005), None)
+    sigma = {ns: fn(base_ob=7.0, pool=1.0, net_sigma=float(ns)) for ns in (0, 1, 2, 3)}
+    pools = {pl: fn(base_ob=11.0, pool=float(pl)) for pl in (1, 4, 9, 16)}
+    worst = [ladder[3], ladder[7], ladder[11]]
     ok = worst[-1] > 0.01
-    FIND("F-34", f"at the 1D floor against the maximum injected obstacle, p_success = "
-         f"{worst[-1]:.4f}",
-         f"p_success at pool=1 against Ob {{3, 7, 11}} = {[round(x, 4) for x in worst]}. "
-         f"The design's constraint is that this must not be *effectively zero*. "
-         f"{'It is not' if ok else 'IT IS'}. ⚠ Under MD-07's injected magnitudes only — the "
-         f"design supplies none, so this is a measurement of my numbers, and its value is that "
-         f"it is now a number somebody can disagree with rather than a check nobody ran.",
-         by="probe-model", severity="material" if ok else "blocking",
-         site="06_RESOLUTION.md §B.3a")
-    return "RAN", f"p_success at the floor vs Ob 11 = {worst[-1]:.4f} (injected magnitudes)", ["F-34"]
+    FIND("F-34", "⛔ THE DEPRIVATION FLOOR IS VIOLATED, AND THE σ-CHANNEL REMEDY THE DESIGN "
+         "NAMES FOR IT DOES NOT REACH THE FLOOR",
+         f"⛔ **RETRACTION FIRST.** A draft of this test reported the check unrunnable because "
+         f"*the ladder module exports no `p_success`*; it searched `dice_engine.py` alone, and "
+         f"`p_success` is in `engine/autoload/sigma_leverage.py` — the resolver "
+         f"`06_RESOLUTION.md` PART C is written against by name. **The design's own BLOCKING check "
+         f"was called unrunnable and was runnable the whole time.** It has now been run. "
+         f"⭐ **AND IT FAILS.** §B.3a requires that *at the minimum lawful pool against the maximum "
+         f"plausible composed obstacle, `p_success` must not be effectively zero*. At the 1D pool "
+         f"floor: {json.dumps({f'Ob {k}': round(v, 4) for k, v in ladder.items()})}. "
+         f"**It reaches zero at Ob {crossing}** — not at some exotic maximum, but at a value "
+         f"`base_Ob = opposition_score / 2` alone produces against an opposition score of "
+         f"{crossing * 2}, before a single one of the four room terms is added. "
+         f"⚠ ⭐ **AND REMEDY (a) IS REFUTED BY MEASUREMENT.** §B.3a offers two: *(a) the σ-channel "
+         f"must be REACHABLE in that room — advantage must be buyable there — or (b) the obstacle "
+         f"takes a ceiling.* Buying σ-leverage at the floor against Ob 7 gives "
+         f"{json.dumps({f'net_σ {k}': round(v, 4) for k, v in sigma.items()})} — **the uniform "
+         f"channel the design leans on throughout is uniform in Δz and cannot lift a probability "
+         f"that is already zero.** `06_RESOLUTION.md` §B.3a item 3 calls it *the engine's own "
+         f"answer to this exact problem*; at the floor it is not an answer. **So (b) — a ceiling — "
+         f"is the only one of the two remedies that can work**, unless the pool floor rises. "
+         f"⚠ **What is NOT claimed.** The magnitudes are `MD-07`'s injected set, not a ruling, and "
+         f"the 1D floor is the pathological pool rather than the typical one: with `latitude` "
+         f"floored near the measured 0.7, a real pool is `brought + 0.7 × conduct` and exceeds 1 "
+         f"for anyone with any preparation at all. Against Ob 11 the pool sweep reads "
+         f"{json.dumps({f'pool {k}': round(v, 4) for k, v in pools.items()})}, so the room is "
+         f"survivable with a dossier and not without one — **which is `§B.3a`'s *preparation game* "
+         f"working exactly as it says, and simultaneously the case its own floor forbids.** "
+         f"The design predicted this shape in the same section: *the obstacle is floored at 1 and "
+         f"CEILINGED AT NOTHING … the shape that would break the ruling is a composed obstacle "
+         f"growing without bound against a floored pool.* **This is that shape, measured.**",
+         by="probe-model", severity="blocking", site="06_RESOLUTION.md §B.3a",
+         dup="NEW — `M-7` is registered as a blocking measurement and had never been run. The "
+             "prediction is the design's own; the number, the crossing point and the refutation "
+             "of remedy (a) are not")
+    return "FAILED", (f"the deprivation floor FAILS: p_success at the 1D floor hits zero at "
+                      f"Ob {crossing}; σ-leverage does not lift it"), ["F-34"]
 
 
 # ===========================================================================
@@ -1743,11 +1849,15 @@ def st35():
                        for p in wb.persons.values() for c in p.ledger)
     same = a == b and ledgers_a == ledgers_b
     if same:
-        return "RAN", (f"two independent runs of the same seeded proceeding produced identical "
-                       f"logs ({len(a)} Events) and identical ledgers ({len(ledgers_a)} claims). "
-                       f"⭐ The determinism claim HOLDS on the path that exists — credited "
-                       f"because a suite that only reports holes has not checked whether "
-                       f"anything works"), []
+        return "RAN", (f"two independent runs of the same seeded world produced identical logs "
+                       f"({len(a)} Events) and identical ledgers ({len(ledgers_a)} claims). "
+                       f"⚠ **CORRECTED 2026-09-07 — WHAT THIS IS DETERMINISM OF.** The season "
+                       f"contains one UNCONTESTED `speak`: no draw occurred, no seam was entered, "
+                       f"no margin was produced. So this is **season-loop determinism**, not "
+                       f"`06_RESOLUTION.md` C.5's claim that *the same seam draw replays "
+                       f"byte-identically* — which cannot be tested until a provider exists "
+                       f"(PHASE 2 step 16 is where it is). Real, and a narrower claim than a draft "
+                       f"made of it"), []
     FIND("F-35", "the same seeded season does not replay identically",
          f"run A: {len(a)} Events / {len(ledgers_a)} claims; run B: {len(b)} / {len(ledgers_b)}.",
          by="construction", severity="blocking", site="06_RESOLUTION.md PART C.5",
@@ -1788,11 +1898,15 @@ def st36():
     fwd = run(["p_party_a", "p_party_b", "p_bench_a", "p_floor"])
     rev = run(["p_floor", "p_bench_a", "p_party_b", "p_party_a"])
     if sorted(fwd) == sorted(rev):
-        return "RAN", (f"permuting the attendee list left the Event multiset identical "
-                       f"({len(fwd)} Events both ways). ⭐ `05_PROCEDURE.md`'s MAP claim for "
-                       f"'who attends' HOLDS under execution — the fold's canonical sort is "
-                       f"content-derived, so insertion order does not reach the outcome. "
-                       f"This is the design's permutation criterion run for the first time"), []
+        return "RAN", (f"permuting the insertion order of the same attendee set left the Event "
+                       f"multiset identical ({len(fwd)} Events both ways). "
+                       f"⚠ **CORRECTED 2026-09-07 — WHICH PERMUTATION THIS IS.** It permutes the "
+                       f"ORDER a fixed set is deliberated in, which is `PART D` row 41a's "
+                       f"DELIBERATE falsifier — not `05_PROCEDURE.md`'s *who attends*, which would "
+                       f"require two different attendee SETS. And row 41a demands the **content "
+                       f"hash**; this compares an Event multiset, which is weaker. **What it does "
+                       f"establish, and it is worth having**: the fold's canonical sort is "
+                       f"content-derived, so insertion order does not reach the outcome"), []
     FIND("F-36", "permuting the attendee list moves the outcome, so 'who attends' is not a map",
          f"forward: {len(fwd)} Events; reversed: {len(rev)}. Difference: "
          f"{sorted(set(map(str, fwd)) ^ set(map(str, rev)))[:4]}.",
@@ -1864,6 +1978,18 @@ def st38():
     readme_zero = "ZERO" in readme
     import shape as _sh
     seat_is_a_carrier = hasattr(_sh, "Seat")
+    stale = []
+    if not (withdrawn and "**0**" in (fields_cell.group(0) if fields_cell else "")):
+        stale.append("fields")
+    if verbs_cell and "4 new" in verbs_cell.group(0) and "CORRECTED" not in verbs_cell.group(0):
+        stale.append("verbs")   # a corrected cell QUOTES the old count while retracting it
+    if carriers_cell and "`Seat`" in carriers_cell.group(0) and not seat_is_a_carrier \
+            and "CORRECTED" not in carriers_cell.group(0):
+        stale.append("carriers")
+    if not stale:
+        return "RAN", ("all five rows of §B.1's count table agree with the sections they cite: "
+                       "zero fields (§B.2 retracts), zero new verbs (PART A and README both say "
+                       "so), and the carriers cell no longer names a type the tracer lacks"), []
     FIND("F-38", "the count table §B.1 exists to produce is stale in three of five rows, and one "
          "of them names a different field than the section it points at",
          f"**fields** — the cell reads *1, and it is contested · `Proposition.rung` … See B.2, "
@@ -1889,7 +2015,7 @@ def st38():
          by="construction", severity="material", site="00_DERIVATION.md §B.1",
          dup="NEW — `17_PLAYABILITY.md` §H.2/§H.3 fixed two instances of this class and did not "
              "reach §B.1; `13_ADVERSARIAL.md` records the retraction that made the cell stale")
-    return "FAILED", "3 of 5 count rows stale: fields (wrong field, inverted verdict), verbs (4 vs ZERO), carriers (names `Seat`)", ["F-38"]
+    return "FAILED", f"{len(stale)} of 5 count rows stale: {stale}", ["F-38"]
 
 
 

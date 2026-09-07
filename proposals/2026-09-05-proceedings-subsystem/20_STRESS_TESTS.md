@@ -1,5 +1,39 @@
 # 20 · THE STRESS SUITE — thirty-eight attempts to run a proceeding, and the bill they came back with
 
+> ## ⛔ **THIS IS A CLOSED RECORD, NOT A WORK QUEUE. READ `21_RECONCILIATION.md` FIRST.**
+>
+> **PHASE 0 of `21_RECONCILIATION.md` has been executed** (2026-09-07). What survived of the
+> findings below is **fixed in the design files themselves** — `10_LOOPS_AND_GAPS.md`,
+> `00_DERIVATION.md`, `03_PARAMETERS.md`, `08_SEAM.md`, `04_VERBS.md`, `12_BUILD_ORDER.md`,
+> `19_PLAN.md` — which is what `04_CODE_ARCHITECTURE.md` §G.4.4 requires of an adversarial pass:
+> **edits to the thing under review, not a register beside it.**
+>
+> **Nothing here is a pending item.** A session looking for what to do next wants
+> `21_RECONCILIATION.md` PART D, not this file.
+>
+> ### ⚠ Four results below were WITHDRAWN OR DOWNGRADED after review, two of them headline
+>
+> | | |
+> |---|---|
+> | **`F-32`** | ⛔ **withdrawn.** The lane's original diagnosis was right; this suite's correction of it ran the case the rule does not cover. **Executed both ways**: with no payload, 1 claim names the speaker; with a subject named, **0** |
+> | **`F-34`** | ⛔ **withdrawn as stated — and the check it called unrunnable now runs and FAILS.** `p_success` was in `sigma_leverage.py` all along. At the 1D floor the deprivation floor hits zero at **Ob 3**, and σ-leverage does not lift it |
+> | **`F-14`** | **downgraded** — `19_PLAN.md` step 15 already ruled the declaring act. The row has been corrected |
+> | **`F-05`** | **re-cut sharper** — `exists:DocketItem` returns `UNKNOWN`, so `speak` cannot form at all |
+>
+> **And three *what executes today* claims are corrected in place**: `ST-09` ran the pre-design
+> `speak` row, `ST-35` is season determinism rather than a seam draw, `ST-36` permutes deliberation
+> order rather than attendance.
+>
+> ### ⚠ Why this file was not deleted, which its own plan told me to do
+>
+> `21_RECONCILIATION.md` PHASE 0h says *retire the findings register*. **I narrowed that and am
+> saying so rather than doing it quietly.** §G.4.4 governs an adversarial pass that creates a
+> document **nobody asked for**; Jordan asked for this one — *"log all instances where you have had
+> to create/invent something … log all mechanical decisions as well as gaps and conflicts and
+> failures."* Deleting the logs to satisfy a rule about unrequested documents would be obeying the
+> letter against the instruction. **What the rule is actually protecting against is a parallel queue
+> that accumulates, and that is closed by the banner above rather than by deletion.**
+
 ## Status: **PROPOSED (2026-09-07). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
 ## Instrument: `stress/stress_proceedings.py` — executes against
 ## `proposals/2026-09-01-season-loop-tests/tracer/shape.py`, the tracer this directory cites by
@@ -122,9 +156,9 @@ of how much of the design is specification, not a criticism of it being one.
 ---
 ## The run
 
-⚠ **READ THE SECOND LINE, NOT THE FIRST.** Of the 35 findings, **15 are new** and the rest restate a row the design already registers — its gap register, its adversarial record and its playability adjudication are unusually complete, and a stress report that presents their honestly-registered holes as discoveries is padding. Every finding carries an *already registered?* line saying which it is and what the execution adds. **The new ones are `F-02`, `F-05`, `F-06`, `F-11`, `F-12`, `F-14`, `F-23`, `F-25`, `F-27`, `F-28`, `F-31`, `F-33`, `F-34`, `F-37`, `F-38`.**
+⚠ **READ THE SECOND LINE, NOT THE FIRST.** Of the 28 findings, **9 are new** and the rest restate a row the design already registers — its gap register, its adversarial record and its playability adjudication are unusually complete, and a stress report that presents their honestly-registered holes as discoveries is padding. Every finding carries an *already registered?* line saying which it is and what the execution adds. **The new ones are `F-02`, `F-05`, `F-11`, `F-14`, `F-25`, `F-28`, `F-31`, `F-33`, `F-34`.**
 
-**38 stress tests** · **BLOCKED** 16 · **FAILED** 18 · **RAN** 4 · **35 findings** · **23 inventions** · **8 mechanical decisions**
+**38 stress tests** · **BLOCKED** 14 · **FAILED** 13 · **RAN** 11 · **28 findings** · **23 inventions** · **6 mechanical decisions**
 
 | # | stress test | stresses | evidence | verdict |
 |---|---|---|---|---|
@@ -133,14 +167,14 @@ of how much of the design is specification, not a criticism of it being one.
 | `ST-03` | the bench Query answers | 00_DERIVATION.md §A.4 · 04_VERBS.md §B.2 | `construction` | **BLOCKED** |
 | `ST-04` | there is an occasion to attach an arrangement to | 08_SEAM.md PART A · 03_PARAMETERS.md PART D | `no-signature` | **BLOCKED** |
 | `ST-05` | a fired Date puts the matter on a docket a `speak` can name | 04_VERBS.md §B.1(ii) · 03_PARAMETERS.md §C.1.1 | `construction` | **BLOCKED** |
-| `ST-06` | the design's account of when CALENDAR dockets is the code's | 03_PARAMETERS.md §C.1.1 vs shape.py:5363-5381 | `document` | **FAILED** |
+| `ST-06` | the design's account of when CALENDAR dockets is the code's | 03_PARAMETERS.md §C.1.1 vs shape.py:5363-5381 | `document` | **RAN** |
 | `ST-07` | a party with no seat can open the case that names its own terms | 00_DERIVATION.md §A.5 (T-n) · verb_table.yaml | `construction` | **FAILED** |
 | `ST-08` | the `scale:` key invariant 10 forbids actually fails the load | 03_PARAMETERS.md §C.1 · 08_SEAM.md D.2 invariant 10 | `construction` | **FAILED** |
 | `ST-09` | a `speak` reaches RESOLVE and emits | 04_VERBS.md §B.1 | `construction` | **RAN** |
 | `ST-10` | a `speak` that contests a matter reaches a provider | 04_VERBS.md PART C · 08_SEAM.md | `construction` | **BLOCKED** |
 | `ST-11` | the four band keys the design writes against are the ladder's | 04_VERBS.md §B.1 · 09_IMPOSSIBILITIES.md row 16 | `construction` | **FAILED** |
-| `ST-12` | every `requires_typed` form the design declares exists in the grammar | 04_VERBS.md · rosters.yaml requires_forms | `construction` | **FAILED** |
-| `ST-13` | whose stance a `speak` writes | 04_VERBS.md §B.1(v) | `document` | **FAILED** |
+| `ST-12` | every `requires_typed` cell names a form the grammar has AND an operand that form admits | 04_VERBS.md · rosters.yaml requires_forms | `construction` | **RAN** |
+| `ST-13` | whose stance a `speak` writes | 04_VERBS.md §B.1(v) | `document` | **RAN** |
 | `ST-14` | a verdict is a Tenure its determiner OPENED | 00_DERIVATION.md §A.6 | `construction` | **BLOCKED** |
 | `ST-15` | an adjudicator can act AS a seat | 10_LOOPS_AND_GAPS.md P-03 | `construction` | **BLOCKED** |
 | `ST-16` | two bench members determining is a MAP, not a procedure | 05_PROCEDURE.md PART A · §C | `document` | **FAILED** |
@@ -150,22 +184,22 @@ of how much of the design is specification, not a criticism of it being one.
 | `ST-20` | the world can say WHY the subject is absent | 10_LOOPS_AND_GAPS.md P-33 | `construction` | **FAILED** |
 | `ST-21` | a disposal's reach can be computed from anything but presence | 08_SEAM.md §D.3 · 03_PARAMETERS.md §B.7 | `construction` | **FAILED** |
 | `ST-22` | a witnessed concession survives long enough to be worth making | 10_LOOPS_AND_GAPS.md P-42 | `probe-model` | **BLOCKED** |
-| `ST-23` | the arrangement rows carry the keys the schema declares | 03_PARAMETERS.md PART D · §E.2 | `construction` | **FAILED** |
+| `ST-23` | the arrangement rows carry the keys the schema declares | 03_PARAMETERS.md PART D · §E.2 | `construction` | **RAN** |
 | `ST-24` | the closure falsifier can see the failure it excludes | 03_PARAMETERS.md §F.3 · P-34 | `probe-model` | **FAILED** |
 | `ST-25` | `matter` means one thing | CLAUDE.md §4 (idempotent in meaning) | `construction` | **FAILED** |
 | `ST-26` | `release` exists, so a duty a proceeding imposes can be discharged | 04_VERBS.md §B.5 · ID-14 | `construction` | **FAILED** |
-| `ST-27` | the emission a write produces is the one the design names | 08_SEAM.md §D.1 vs write_matrix.yaml | `document` | **FAILED** |
+| `ST-27` | the emission a write produces is the one the design names | 08_SEAM.md §D.1 vs write_matrix.yaml | `document` | **RAN** |
 | `ST-28` | the rung fold is computable from the run's own emissions | 00_DERIVATION.md §B.2 · 05_PROCEDURE.md PART C | `probe-model` | **BLOCKED** |
 | `ST-29` | each of the twelve arrangement rows can be run, one row at a time | 03_PARAMETERS.md §E.2 · 07_THE_GAME.md PART F | `probe-model` | **BLOCKED** |
 | `ST-30` | the thirteenth game is a data edit, as the closure claim promises | 03_PARAMETERS.md §F.1 | `construction` | **BLOCKED** |
 | `ST-31` | ONE WORKED TRIAL, step by step, until it stops | the whole directory | `construction` | **BLOCKED** |
-| `ST-32` | the room remembers WHO spoke | 15_WHY_IT_IS_A_GAME.md PART C · 18_FINDINGS.md | `construction` | **BLOCKED** |
+| `ST-32` | the room remembers WHO spoke | 15_WHY_IT_IS_A_GAME.md PART C · 18_FINDINGS.md | `construction` | **FAILED** |
 | `ST-33` | a person who was not there does not learn what happened | 07_THE_GAME.md PART E | `construction` | **BLOCKED** |
-| `ST-34` | the deprivation floor holds: a floored pool against a composed obstacle still has a chance | 06_RESOLUTION.md §B.3a | `probe-model` | **BLOCKED** |
+| `ST-34` | the deprivation floor holds: a floored pool against a composed obstacle still has a chance | 06_RESOLUTION.md §B.3a | `probe-model` | **FAILED** |
 | `ST-35` | the same season replays byte-identically | 06_RESOLUTION.md PART C.5 · 12_BUILD_ORDER.md | `construction` | **RAN** |
 | `ST-36` | permuting who attends does not move the outcome | 05_PROCEDURE.md PART A row 5 | `construction` | **RAN** |
-| `ST-37` | every gap the design registers is IN the gap register | 10_LOOPS_AND_GAPS.md PART C · §F.34 | `construction` | **FAILED** |
-| `ST-38` | the count table that is the design's whole argument is current | 00_DERIVATION.md §B.1 · README.md | `construction` | **FAILED** |
+| `ST-37` | every gap the design registers is IN the gap register | 10_LOOPS_AND_GAPS.md PART C · §F.34 | `construction` | **RAN** |
+| `ST-38` | the count table that is the design's whole argument is current | 00_DERIVATION.md §B.1 · README.md | `construction` | **RAN** |
 
 ---
 
@@ -226,12 +260,6 @@ of how much of the design is specification, not a criticism of it being one.
 - **the alternative not taken:** grade them broken outright, as §B.1 graded the coined `speak` bands
 - **falsifier:** a ruling, or a `writes_at` call against one of these rows returning a band
 
-### `MD-03` — trace `Overwhelming`/`Success` as writing the SPEAKER's stance, matching Failure
-
-- **because:** it is the only reading that survives `T-m`, and it keeps all four bands one-owner.
-- **the alternative not taken:** the hearers' stances move — which is what 'carrying the room' means in the fiction, and what `06_RESOLUTION.md` PART D's 'COSTLY writes Person.stance AND claims into every witness's ledger' implies
-- **falsifier:** a ruling; or a `speak` fold that writes two persons' stances and passes the one-owner gate, which would mean the gate does not check subject==actor
-
 ### `MD-04` — check every gap-register row against the newer rulings before citing it
 
 - **because:** the register at `10_LOOPS_AND_GAPS.md` predates the 2026-09-06 rulings recorded in `19_PLAN.md`, `ED-SC-0033..0035` and `HANDOFF_SC.md`, and P-15 and P-29 are both stale there. A suite that cites the register without the ledger reports settled questions.
@@ -249,12 +277,6 @@ of how much of the design is specification, not a criticism of it being one.
 - **because:** a row's needs are what its keys imply — `disposal: bench` needs a bench, `|bench| > 1` needs a quorum, `appeal_basis: determine` needs a fed cap.
 - **the alternative not taken:** score every row against every need, which would make the matrix a constant in the other direction and say nothing about the rows
 - **falsifier:** a row whose YAML implies a need this reading omits — the parliament's `proofs: []`, for instance, arguably needs nothing of the forensic machinery and is scored here as needing the disposal writer only
-
-### `MD-08` — report the deposit's CONTENT as the defect rather than its absence
-
-- **because:** the execution shows a claim naming the actor; the directory's own wording says there is none. Reporting the absence would have repeated a claim the run refutes.
-- **the alternative not taken:** take `18_FINDINGS.md` PART B at its word — which is what the draft did, and it produced a false finding
-- **falsifier:** `shape.py`'s `claim_subjects` under a different `claim_subject_rule` arm: at `per_change` an Event with no changes deposits NOTHING, which would make the directory's wording true and this finding arm-dependent. The arm in force is `both` (INV-21) and it is a swept fixture, not a ruling
 
 ### `MD-07` — inject a declared obstacle set rather than refuse the measurement
 
@@ -326,15 +348,7 @@ the fold dispatched and the seam refused: [UNSPECIFIED] the degree ladder's marg
 >
 > **already registered?** `P-03` / `H-108` on the `via` half. **ADDS: the tribunal `interposed: [office]` discount and the verdict's authorship as sites that depend on it and are not marked blocked by it**
 
-Act fields = ['id', 'actor', 'verb', 'changes', 'reads', 'contests', 'payload', 'stratum', 'obstacle', 'pool', 'scene']. `requires_operands` = frozenset({'floor', 'site', 'subject', 'to', 'actor', 'kind', 'from', 'amount'}) — no `via`. The design registers this as `P-03` / `H-108` and then relies on it in four places that are not marked as blocked by it: the verdict's authorship (`AX-6`), `T-o`'s revocation gate, the tribunal's `interposed: [office]` discount, and `03_PARAMETERS.md` §C.2's whole adjudicator row (*'holds a seat … and acts **via** it'*). Without `via`, an adjudicator's determination is indistinguishable from a private opinion by the same person, which deletes the difference between the bench and the floor.
-
-### `F-32` · the room's memory of a speech is ONE claim, at one confidence, from one source, saying that it happened — and `reception` needs claims about how it LANDED
-
-> **`by=construction`** · site: `15_WHY_IT_IS_A_GAME.md PART C`
->
-> **already registered?** `18_FINDINGS.md` PART B / `HANDOFF_SC.md`, the directory's own headline diagnosis. **ADDS: the execution, and a CORRECTION — a deposit does name the actor; the defect is its content**
-
-after one season with a `speak` by p_party_a in front of five people, p_bench_a's ledger holds 3 claims, of which 1 name the speaker: predicates ['speech.made', 'stores.changed'], confidences [100], sources ['firsthand']. ⛔ **A DRAFT OF THIS FINDING SAID NO CLAIM NAMES THE SPEAKER AND THAT WAS FALSE** — the execution says one does, and the retraction is recorded here rather than overwritten because the corrected finding is the sharper one. ⭐ **WHAT IS ACTUALLY DEPOSITED IS `(p_party_a, speech.made, 100, firsthand)` — that he spoke.** `06_RESOLUTION.md` §C.1 composes `reception` from *the hearers' own claims about the speaker*, and `PART A` defines ethos as *what others take a person to be — claims in OTHER PEOPLE'S ledgers, each of which may be wrong*. The only claim about the speaker is that he made a speech. There is no reading in it, nothing that could be wrong, and nothing that differs between two hearers. ⚠ **AND THE TRACER SAYS WHY, IN ITS OWN COMMENT AT `claim_subjects`**: an Event with an empty `changes[]` — which is every `speak`, since `writes: []` — mints its claim about the ACTOR by the `e.subject` fallback, and *'a claim about the actor can never raise a listener's question: the news arrived in a form nobody could act on'*, measured at *R3 = 0 of 30 on the NPC lane, 0 of 59 on ARC*. So the one claim a speech deposits about its speaker is the one shape the question machinery cannot read. ⚠ **CREDIT WHERE IT IS DUE**: `18_FINDINGS.md` PART B and `HANDOFF_SC.md` already name this as the directory's headline diagnosis. What this adds is the execution and one correction — their wording is *no deposit names the actor*, and a deposit does; the defect is the CONTENT of that deposit, not its absence, and the fix named in `19_PLAN.md` step 2 (attribution) is aimed at a hole one step to the left of the real one.
+Act fields = ['id', 'actor', 'verb', 'changes', 'reads', 'contests', 'payload', 'stratum', 'obstacle', 'pool', 'scene']. `requires_operands` = frozenset({'actor', 'from', 'to', 'site', 'amount', 'floor', 'kind', 'subject'}) — no `via`. The design registers this as `P-03` / `H-108` and then relies on it in four places that are not marked as blocked by it: the verdict's authorship (`AX-6`), `T-o`'s revocation gate, the tribunal's `interposed: [office]` discount, and `03_PARAMETERS.md` §C.2's whole adjudicator row (*'holds a seat … and acts **via** it'*). Without `via`, an adjudicator's determination is indistinguishable from a private opinion by the same person, which deletes the difference between the bench and the floor.
 
 ### `F-33` · the absent subject learns everything, because the fan-out mode that is the specified behaviour deposits to EVERYONE regardless of presence
 
@@ -344,7 +358,15 @@ after one season with a `speak` by p_party_a in front of five people, p_bench_a'
 
 fan-out mode = 'total' (`H-33`'s control and the tracer's declared default). After the sitting, p_absent — contained at the hearth, never at the venue — holds 3 claims against the attending bench member's 3. `observers_for` returns `list(everyone)` at this mode with no presence predicate. ⭐ So the design's most-quoted *needs no mechanism* claim — *a player can be condemned and not know it* — is **false under the current fixture and true under a different arm of a sweep that has not been run.** `H-33`'s other two arms (`presence_only`, `all_five`) would make it true. ⚠ This is exactly what `19_PLAN.md` step 1 (*take fan-out off `total`*) is for, so the design KNOWS the arm is wrong; what it does not say is that four of its own structural claims — trial in absentia, the closed floor, the covert approach, and *finding out too late is the game* — are claims about a sweep arm rather than about the architecture. Under `total` there is no such thing as being absent.
 
-## C.2 · MATERIAL (24)
+### `F-34` · ⛔ THE DEPRIVATION FLOOR IS VIOLATED, AND THE σ-CHANNEL REMEDY THE DESIGN NAMES FOR IT DOES NOT REACH THE FLOOR
+
+> **`by=probe-model`** · site: `06_RESOLUTION.md §B.3a`
+>
+> **already registered?** NEW — `M-7` is registered as a blocking measurement and had never been run. The prediction is the design's own; the number, the crossing point and the refutation of remedy (a) are not
+
+⛔ **RETRACTION FIRST.** A draft of this test reported the check unrunnable because *the ladder module exports no `p_success`*; it searched `dice_engine.py` alone, and `p_success` is in `engine/autoload/sigma_leverage.py` — the resolver `06_RESOLUTION.md` PART C is written against by name. **The design's own BLOCKING check was called unrunnable and was runnable the whole time.** It has now been run. ⭐ **AND IT FAILS.** §B.3a requires that *at the minimum lawful pool against the maximum plausible composed obstacle, `p_success` must not be effectively zero*. At the 1D pool floor: {"Ob 1": 0.2266, "Ob 2": 0.0228, "Ob 3": 0.0006, "Ob 4": 0.0, "Ob 5": 0.0, "Ob 7": 0.0, "Ob 11": 0.0}. **It reaches zero at Ob 3** — not at some exotic maximum, but at a value `base_Ob = opposition_score / 2` alone produces against an opposition score of 6, before a single one of the four room terms is added. ⚠ ⭐ **AND REMEDY (a) IS REFUTED BY MEASUREMENT.** §B.3a offers two: *(a) the σ-channel must be REACHABLE in that room — advantage must be buyable there — or (b) the obstacle takes a ceiling.* Buying σ-leverage at the floor against Ob 7 gives {"net_\u03c3 0": 0.0, "net_\u03c3 1": 0.0, "net_\u03c3 2": 0.0, "net_\u03c3 3": 0.0} — **the uniform channel the design leans on throughout is uniform in Δz and cannot lift a probability that is already zero.** `06_RESOLUTION.md` §B.3a item 3 calls it *the engine's own answer to this exact problem*; at the floor it is not an answer. **So (b) — a ceiling — is the only one of the two remedies that can work**, unless the pool floor rises. ⚠ **What is NOT claimed.** The magnitudes are `MD-07`'s injected set, not a ruling, and the 1D floor is the pathological pool rather than the typical one: with `latitude` floored near the measured 0.7, a real pool is `brought + 0.7 × conduct` and exceeds 1 for anyone with any preparation at all. Against Ob 11 the pool sweep reads {"pool 1": 0.0, "pool 4": 0.0, "pool 9": 0.001, "pool 16": 0.0753}, so the room is survivable with a dossier and not without one — **which is `§B.3a`'s *preparation game* working exactly as it says, and simultaneously the case its own floor forbids.** The design predicted this shape in the same section: *the obstacle is floored at 1 and CEILINGED AT NOTHING … the shape that would break the ruling is a composed obstacle growing without bound against a floored pool.* **This is that shape, measured.**
+
+## C.2 · MATERIAL (18)
 
 
 ### `F-04` · every function `08_SEAM.md`'s own pseudocode calls is absent, and the arrangement file it reads does not exist
@@ -354,14 +376,6 @@ fan-out mode = 'total' (`H-33`'s control and the tracer's declared default). Aft
 > **already registered?** `03_PARAMETERS.md` §F.3 self-grades the closure claim `STATUS: HYPOTHESIS`. **ADDS: the count of absent signatures**
 
 absent from the tracer: ['occasion_at', 'present_at', 'attendees_at', 'arrangements', 'latitude', 'reception', 'genre_of']. `Query.presence(w, rung)` exists and is the only one of the seven with a live analogue. No `arrangements.yaml` anywhere in the repo (0 matches). So the twelve games are twelve YAML blocks inside a markdown file — which under `CLAUDE.md` §0.05 is REFERENCE, not mechanism, and is the exact grade `04_VERBS.md` §B.3 applies to the six investigation acts when it says a prose table means they do not exist. The same test applied to this design's own parameter space returns the same answer.
-
-### `F-06` · the design states the docketing rule BACKWARDS against the code it cites by line number
-
-> **`by=document`** · site: `03_PARAMETERS.md §C.1.1`
->
-> **already registered?** NEW
-
-`03_PARAMETERS.md` §C.1.1 item 2: *'the path already exists: CALENDAR appends a `DocketItem` when a fired date is **vacant** (`shape.py:5363-5381`)'*. The code at that exact range computes `vacant = not d.get('holder')` and then appends the docket item under `if not vacant:`. A VACANT date fires and lapses and dockets NOTHING. The design's proof that 'a convened proceeding nobody attends is a legitimate outcome' therefore cites the branch that does the opposite of what it says. The OUTCOME may still be legitimate; the mechanism named for it is not there.
 
 ### `F-07` · `open_case` is `remit:determine`, so in the games with no bench NOBODY CAN OPEN THE CASE — and with it, nobody can declare the term, the stages or the appeal cap
 
@@ -377,7 +391,7 @@ absent from the tracer: ['occasion_at', 'present_at', 'attendees_at', 'arrangeme
 >
 > **already registered?** `03_PARAMETERS.md` §C.1 + `08_SEAM.md` D.2 invariant 10 both say the key must go. **ADDS: that the loader does not refuse it, so the invariant is unimplemented; and that the replacement needs a `venue` operand the closed roster lacks**
 
-`convene` carries `scale: 'settlement'` at `verb_table.yaml:138` (present: True), and the tracer's loader parsed it into a live `VerbRow.scale` = 'settlement' without complaint. So `08_SEAM.md` D.2 invariant 10 — *a `scale:` key fails the load* — is a specified invariant with **no implementation**, and Jordan's 2026-09-05 correction is unexecuted rather than already applied. ⚠ **AND THE REPLACEMENT IS NOT EXPRESSIBLE**: `rank(venue.kind) > rank(person)` needs `venue` as an operand and `requires_operands` = frozenset({'floor', 'site', 'subject', 'to', 'actor', 'kind', 'from', 'amount'}) has none; the nearest member is `site`, a different carrier. `rung_kinds` IS ordered, so the comparison exists — it has nothing to compare. **The correction is one roster member away and the design does not say so.**
+`convene` carries `scale: 'settlement'` at `verb_table.yaml:138` (present: True), and the tracer's loader parsed it into a live `VerbRow.scale` = 'settlement' without complaint. So `08_SEAM.md` D.2 invariant 10 — *a `scale:` key fails the load* — is a specified invariant with **no implementation**, and Jordan's 2026-09-05 correction is unexecuted rather than already applied. ⚠ **AND THE REPLACEMENT IS NOT EXPRESSIBLE**: `rank(venue.kind) > rank(person)` needs `venue` as an operand and `requires_operands` = frozenset({'actor', 'from', 'to', 'site', 'amount', 'floor', 'kind', 'subject'}) has none; the nearest member is `site`, a different carrier. `rung_kinds` IS ordered, so the comparison exists — it has nothing to compare. **The correction is one roster member away and the design does not say so.**
 
 ### `F-11` · `speak` uses the ruled four-band ladder and the five investigation rows use NINE band names of their own, in the same directory that calls a second ladder its weak point
 
@@ -386,14 +400,6 @@ absent from the tracer: ['occasion_at', 'present_at', 'attendees_at', 'arrangeme
 > **already registered?** NEW — §B.1 retracts the coined bands for `speak` and leaves the five investigation rows
 
 the tree's ladder labels = ['Overwhelming', 'Success', 'Partial', 'Failure'] (speak matches: True). `04_VERBS.md` §B.3.2 keys the five investigation rows on ['Found', 'Glimpsed', 'Misread', 'Nothing', 'Partial', 'Read', 'Seen', 'Sound', 'Wrong'], of which 8 are not the ladder's: ['Found', 'Glimpsed', 'Misread', 'Nothing', 'Read', 'Seen', 'Sound', 'Wrong']. ⚠ `Partial` IS the ladder's third band and appears in two of the five rows, so a draft's *none of them the ladder's* was wrong by two. ⭐ EXECUTED: the row RAISED on the ladder's own band: [UNSPECIFIED] 'examine' has no `writes` branch for degree 'Success'. Declared: ['Found', 'Nothing', 'Partial']. An unlisted degree RAISES rather than defaulting. Three bands per row, none of them the ladder's, in three different vocabularies (Found/Partial/Nothing · Read/Misread/Nothing · Sound/Wrong/Nothing · Seen/Glimpsed/Nothing). §B.1 retracts exactly this defect for `speak` — *'every `speak` would have raised at the first fold'* — and leaves it standing in the five rows on the next page. `writes_at`/`emits_at` raise on any undeclared degree, so if these five ever route through a margin-graded contest they raise identically. ⚠ The narrower reading, which the design does not state: they contest against something (`retention`, `obstinacy`, concealment) and are three-band, so either they are NOT margin-graded — in which case they need combat's kind of ruled exemption and do not have one — or they are, and they are broken.
-
-### `F-13` · three of `speak`'s four bands write `Person.stance` and the design says whose only for the fourth
-
-> **`by=document`** · site: `04_VERBS.md §B.1`
->
-> **already registered?** `17_PLAYABILITY.md` §D.3 and §I item 3, which already grade it *a live `AX-4` breach in the row as written*. **ADDS: nothing but a second confirmation — and this suite failed to cite it, which is the citation defect it faults elsewhere**
-
-`writes: {Overwhelming: [Person.stance], Success: [Person.stance], Partial: [DocketItem.matter], Failure: [Person.stance]}`. The text names the owner for `Failure` only — *'the band writes the speaker's own stance'* (present: True) — and it is named there precisely because writing the SPEAKER's stance on a failure is the surprising half. On `Overwhelming` and `Success` the natural reading is the opposite one: the speech moved THE HEARERS' stances. That reading is a one-act-many-owners write, which `T-m` refuses and which `00_DERIVATION.md` §B.2 objection 2 uses to KILL the `Tenure.degree` proposal in this same directory (*'each party who descends would write the OPENER's edge. Many writers, one owner'*). The design applies that objection to a field it rejected and not to the verb it kept. ⚠ And the harness cannot resolve it from the row: a matrix row is `(Person, stance)` with no subject column, so BOTH readings load.
 
 ### `F-16` · the quorum is RULED, not open — what is unbuilt is a ruled thing, and six rows wait on it
 
@@ -441,7 +447,7 @@ presence at S = ['p_bench_a', 'p_bench_b', 'p_floor', 'p_party_a', 'p_party_b'];
 >
 > **already registered?** `P-43`, closed 2026-09-06 by `disposal_reach`. **ADDS: that the two channels which would implement it exist and do not fire, and a RETRACTION of this suite's own draft claim that they do not exist**
 
-⛔ **RETRACTION.** A draft of this finding said the reach *needs a SIXTH channel* and graded it `construction` without opening the five. It is false: `_ch_post_remit` walks a person's live `hold` Tenures for an office whose `remit_acts` intersect the emitting verb's `remit:` eligibility, **with no presence test at all** — which is `08_SEAM.md`'s `body` reach exactly — and `_ch_chronicle`'s own docstring says *when it fires it fires for everyone alive*, which is the `<rung kind>` case at its widest. **The mechanism `disposal_reach` needs is closer to free than either the design or the draft said.** ⭐ **THE CORRECTED FINDING IS ABOUT FIRING, NOT ABOUT EXISTING.** On a `tenure.opened` Event in this fixture the five channels select: {"post_remit": [], "chronicle": ["p_absent", "p_bench_a", "p_bench_b", "p_floor", "p_party_a", "p_party_b"], "co_located": ["p_bench_a", "p_bench_b", "p_floor", "p_party_a", "p_party_b"], "witness_key": ["p_bench_a"], "document_key": []}. `chronicle` is an EVENT-KIND filter over verbs the fold can resolve, and the tracer's own comment records that *the eight `binding_decision` verbs all have prose `requires:` and none is in `REQUIRES_PREDICATES`*, so it matches nobody — and `determine`, the verb that disposes, is one of those eight. `post_remit` needs somebody holding the remit the emitting verb requires. **So the reach has carriers and no traffic**, and closing `P-43` on `disposal_reach` was right about the shape and has not been tested against the channels that must carry it.
+⛔ **RETRACTION.** A draft of this finding said the reach *needs a SIXTH channel* and graded it `construction` without opening the five. It is false: `_ch_post_remit` walks a person's live `hold` Tenures for an office whose `remit_acts` intersect the emitting verb's `remit:` eligibility, **with no presence test at all** — which is `08_SEAM.md`'s `body` reach exactly — and `_ch_chronicle`'s own docstring says *when it fires it fires for everyone alive*, which is the `<rung kind>` case at its widest. **The mechanism `disposal_reach` needs is closer to free than either the design or the draft said.** ⭐ **THE CORRECTED FINDING IS ABOUT FIRING, NOT ABOUT EXISTING.** On a `tenure.opened` Event in this fixture the five channels select: {"co_located": ["p_bench_a", "p_bench_b", "p_floor", "p_party_a", "p_party_b"], "post_remit": [], "chronicle": ["p_absent", "p_bench_a", "p_bench_b", "p_floor", "p_party_a", "p_party_b"], "witness_key": ["p_bench_a"], "document_key": []}. `chronicle` is an EVENT-KIND filter over verbs the fold can resolve, and the tracer's own comment records that *the eight `binding_decision` verbs all have prose `requires:` and none is in `REQUIRES_PREDICATES`*, so it matches nobody — and `determine`, the verb that disposes, is one of those eight. `post_remit` needs somebody holding the remit the emitting verb requires. **So the reach has carriers and no traffic**, and closing `P-43` on `disposal_reach` was right about the shape and has not been tested against the channels that must carry it.
 
 ### `F-22` · the ledger cap is the only bound on the design's one amplifying loop and nothing has measured it
 
@@ -450,14 +456,6 @@ presence at S = ['p_bench_a', 'p_bench_b', 'p_floor', 'p_party_a', 'p_party_b'];
 > **already registered?** `P-42`, which already carries the cap, the eviction key, *nothing has measured it*, and the instrument. **ADDS: nothing. Kept only because ST-22 declined to run an instrument the harness holds**
 
 `ledger_cap` = 200, evicting on `(confidence, recency)`. `L-1` (standing → reception → outcome → standing) is signed `+` and three of its four bounds are properties of the corpus rather than columns. The design's answer to 'does a concession stay paid' is `P-42`, open. This harness cannot settle it — a seeded multi-season run with one recurring bench is the instrument and it does not exist — but it can name why it matters HERE rather than generally: a proceeding is the heaviest depositor in the game (one occasion, many witnesses, many deposits), so a proceedings subsystem is what makes the cap bind. The subsystem that stresses the bound is the one shipping without measuring it.
-
-### `F-23` · the schema declares fifteen keys, its own header says fourteen, and every one of the twelve game rows is written as a partial row
-
-> **`by=construction`** · site: `03_PARAMETERS.md PART D`
->
-> **already registered?** NEW on the header (`disposal_reach` was added 2026-09-06 and the header was not bumped)
-
-parsed schema keys = 15: ['disposal', 'bench_basis', 'floor', 'records_dissent', 'venue_min_rank', 'term_required', 'appeal_basis', 'interposed', 'order', 'registers', 'proofs', 'disposes', 'disposal_reach', 'verdict_reasons', 'stakes_grade']. PART D's header word = 'Fourteen'. Of the 13 YAML blocks in §E.2, 8 omit at least one key; the omission counts run [0, 0, 0, 0, 0, 1, 1, 1, 2, 6, 10, 11, 14]. The rows are written as DIFFS — 'differs from a trial in three keys' — which is fine as prose and is not a loadable row, and `08_SEAM.md` D.2 invariant 13 already requires that *every* arrangement declare `disposal_reach`. So the closure claim's own evidence (twelve rows, no branch) cannot be run against a loader, because there are no twelve complete rows to load. ⚠ **The header mismatch has a visible cause and is the NEW half**: `disposal_reach` was added on 2026-09-06 by §B.7 and the count word above the schema was not bumped with it, so the schema and its own header disagree by exactly the key that was added last. The partial-row half is a statement about prose written as prose, and is a defect only against the loader `19_PLAN.md` step 11 proposes.
 
 ### `F-24` · the design's own falsifier greps for a literal the provider will never write, while the provider must branch on six enums totalling ~19 values
 
@@ -474,14 +472,6 @@ parsed schema keys = 15: ['disposal', 'bench_basis', 'floor', 'records_dissent',
 > **already registered?** `09_IMPOSSIBILITIES.md` row 8, which already self-grades CONVENTION *only once `release` exists. Today it does not*. **ADDS: nothing**
 
 `release` in the verb table: False. Verbs writing `Tenure.until` = ['confer', 'kill / wound', 'move', 'repudiate', 'revoke'] — `repudiate` (`own`), `revoke` (`remit:revoke`), `confer` (`remit:confer`), `move` (containment). So a penance, a surety or a term of service imposed by a finding can be ended by `repudiate` — which is REPUDIATION, publicly, not discharge — or by a seat-holder revoking. `ID-14` (what an act opens, an act must close) is therefore unmet for the design's own principal output, and `09_IMPOSSIBILITIES.md` row 8 already grades itself CONVENTION for this reason: *'only once `release` exists. Today it does not.'* ⛔ **A DRAFT READ `04_VERBS.md` PART A's '⭐ LANDED' AS A CLAIM THAT THE ROW IS IN THE TREE. IT IS NOT ONE** — the same table cell reads *'⚠ DOES NOT EXIST IN THE TABLE'*, and 'landed' means landed in this proposal, whose complete replacement row is written out at §B.5. The retraction is recorded; the draft read the second word of a two-word cell. ⭐ **What survives is worth keeping and is smaller**: the row is written, it is the cheapest thing in the directory to ship, `ID-14` cannot hold without it, and it is ⛔ **AND A DRAFT ADDED THAT IT IS ABSENT FROM `12_BUILD_ORDER.md`'s buildable-today list. THAT IS FALSE**: `release` is **step 3**, with its dependency column reading *nothing* and its execution artifact written out (*loader invariant 6 is satisfiable for the first time; a person resigns an office*). So the plan has it, costed at zero, and nobody has run the plan — which is a statement about execution and not about the design, and is why this is `material` rather than `blocking`.
-
-### `F-27` · `08_SEAM.md`'s data table names emissions the write matrix does not carry
-
-> **`by=document`** · site: `08_SEAM.md §D.1`
->
-> **already registered?** NEW
-
-claimed vs matrix: {"Tenure.degree": ["matter.moved", "tenure.graded"], "Person.stance": ["stance.changed", "stance.moved"], "Record.exists": ["case.opened", "record.created` \u00b7 `record.destroyed"], "Record.stages": ["case.opened", "record.staged"]}. Loader invariant 7 is that *the Event-kind roster is DERIVED from emission columns*, and this design has two emission columns for the same write — the matrix row's and the verb row's (`speak` declares `matter.carried/advanced/held/turned`). The design resolves this once, correctly, for band KEYS (§B.1: *'only the KEYS are the ladder's'*) and never for emission KINDS. If both fire, one write emits twice; if the verb's wins, the matrix's column is dead; if the matrix's wins, the proceeding's whole vocabulary is dead and with it the rung fold, which reads `matter.*` emissions.
 
 ### `F-28` · the ladder rung is a fold over `matter.*` emissions and NOTHING IN THE EMISSION SAYS WHICH RUNG
 
@@ -515,40 +505,16 @@ absent from `rosters.yaml`: ['proofs', 'registers', 'interposition_kinds', 'spee
 
 5 of 16 steps are supplied or run; 10 stop; 1 is ambiguous. ⭐ The distribution is the result: the steps that RUN are the ones the tree already owned before this design existed — the calendar firing, the presence walk, the fold, the degree ladder. **Every step that stops is one this directory specified.** That is not a criticism of the specification; it is the measurement of how much of it is specification. ⭐ **AND THE WALK FINDS ONE THING THE BUILD ORDER DOES NOT HAVE A STEP FOR.** `12_BUILD_ORDER.md` has twelve steps, three of them (`judging_set`, `release`, `convene` corrected) with a dependency column reading *nothing*. **Step 3 of this walk — somebody putting the matter on the docket — is in none of them.** Step 6 is *`speak` with its `requires`* and depends on steps 0 and 2; step 9 is **THE BAR**, *one seeded proceeding runs end to end with zero authored acts, twice, byte-identical*. A proceeding with zero authored acts requires a docket item naming a matter, `DocketItem.matter` is written by `carry` alone, and no step of the build order produces one. **The plan's own bar is unreachable by the plan's own steps**, by one missing act that costs nothing. ⛔ A draft of this finding said the build order's first buildable thing should be the clerk; the correction is that the build order's step 1 is genuinely buildable and the clerk is simply not in it at all.
 
-### `F-34` · the design's own blocking check cannot be run, because the ladder exposes no `p_success` and the design forbids resolving on the thing it does expose
+### `F-32` · ⛔ WITHDRAWN — the lane's original diagnosis was right and this suite's correction of it was an artifact of the case it ran
 
-> **`by=construction`** · site: `06_RESOLUTION.md §B.3a`
+> **`by=construction`** · site: `18_FINDINGS.md PART B`
 >
-> **already registered?** NEW
+> **already registered?** ⛔ WITHDRAWN — the row it 'corrected' stands. Kept as a record of the error, not as a finding
 
-`engine/autoload/dice_engine.py` exports nothing matching /success|prob/. `06_RESOLUTION.md` §C.3 forbids resolving on `eff_ob()` — *display only* — and §B.3a's deprivation floor is stated in terms of `p_success`. So the BLOCKING check is specified against a function name and the module is the wrong place to look, or the name is wrong. Either way the check has not been run and cannot be run from the spec as written.
+**The claim was**: `18_FINDINGS.md` PART B and `HANDOFF_SC.md` say *no deposit names the actor*, and a speech deposits `(speaker, speech.made, 100, firsthand)`, so the defect is the deposit's CONTENT rather than its absence. ⛔ **It is withdrawn.** `claim_subjects` **replaces** the actor with the act's referents when the act names a subject and writes nothing — `speak` writes nothing, so a real `speak` at a proceeding, which presses a matter ABOUT somebody, deposits about the matter's subject and not about the speaker. The draft's probe built its `speak` with no payload, so the act had no referents and the actor survived through the default branch. **EXECUTED, both ways:** with no payload the bench holds 1 claim(s) naming the speaker; with a subject named, 0. ⭐ **So the mechanism the directory named is real, and `19_PLAN.md` step 2 is aimed correctly** — though `R8.1` supersedes its *prepend the actor* mechanism with the `seen` struct, subjected to the changed thing or else the rung. ⚠ **The method lesson is `§0.1` point 1 in reverse**: I checked a claim about a rule by running a case the rule does not cover, and a green result read as a refutation. Two critics missed it; a third caught it by reading the branch instead of the output.
 
-### `F-37` · five gaps are registered by the files that raise them and appear in the gap register nowhere — including the one the design calls the sharpest thing its own hardest question surfaced
+## C.3 · NIT (1)
 
-> **`by=construction`** · site: `10_LOOPS_AND_GAPS.md PART B`
->
-> **already registered?** NEW — and it is a defect in the register the design's `README.md` sends a reader to first
-
-the register carries 38 P-rows. Cited elsewhere and absent from it: {"P-22": ["00_DERIVATION.md", "17_PLAYABILITY.md"], "P-23": ["04_VERBS.md", "13_ADVERSARIAL.md"], "P-24": ["14_THE_WORLD_IN_THE_ROOM.md"], "P-28": ["06_RESOLUTION.md"], "P-29": ["06_RESOLUTION.md", "17_PLAYABILITY.md", "19_PLAN.md"]}. `10_LOOPS_AND_GAPS.md` PART C states the discipline in the words this test applies — *a defect in neither the gap register nor the not-a-gap register is invisible to both counts* — and five are in exactly that position. ⭐ **What is in the five matters more than the count.** `P-24` is `14_THE_WORLD_IN_THE_ROOM.md`'s own verdict on Jordan's fourth worked matter (*a claim about a future state has no producer … nothing writes the `commit` that would make a person's fear legible to a bench*), which that file calls **the sharpest thing this question surfaced**. `P-22` is the price of the zero-new-fields result — *a matter's ladder position does not persist between seasons* — and `00_DERIVATION.md` §B.2 says *Registered `P-22`* while registering it nowhere. `P-23` is the refusal the design lost when it corrected `determine` (*without a producer for `heard`, `determine.unheard` does not exist*). `P-28` and `P-29` are the two resolution rows, one of them RULED. ⚠ **The failure mode is the one the design names and not a filing error:** each was written as *Registered `P-nn`* at its own site, which reads as done, and the register is what a next session opens. Five of them are invisible to both counts.
-
-### `F-38` · the count table §B.1 exists to produce is stale in three of five rows, and one of them names a different field than the section it points at
-
-> **`by=construction`** · site: `00_DERIVATION.md §B.1`
->
-> **already registered?** NEW — `17_PLAYABILITY.md` §H.2/§H.3 fixed two instances of this class and did not reach §B.1; `13_ADVERSARIAL.md` records the retraction that made the cell stale
-
-**fields** — the cell reads *1, and it is contested · `Proposition.rung` … See B.2, where it is argued against and then **admitted with its price**.* §B.2 is titled *THE ONE FIELD IS WITHDRAWN. THERE IS NO NEW FIELD* (present: True), it argues about **`Tenure.degree`** rather than `Proposition.rung`, and it RETRACTS rather than admits. Three defects in one cell: a stale number, the wrong field name, and a description that inverts the section's verdict. `13_ADVERSARIAL.md` books the result as *the count improves to zero new fields* — so the retraction propagated everywhere except the table it was a retraction OF. **verbs** — the cell reads *4 new, 6 reused, 1 filled*, while `04_VERBS.md`'s headline is *the game structure adds ZERO new verbs* (present: True) and `README.md`'s cost table says *new verb names invented: ZERO* (present: True). Two files say zero and the count table says four. **carriers** — the cell claims *0 new* and lists ten as *every one already rostered*, including **`Seat`**, which is not a carrier in the tracer (`Seat` defined: False; the seat is an `Office` and a `hold` Tenure, which is what the rest of the directory says). The claim is still true — the design adds no carrier — and its evidence names one that does not exist. ⭐ **Why this is worth a row rather than a nit: §B.1 IS the argument.** `README.md` puts the same count at the top under *what it costs — the count, which is the whole argument*, and a reader checking the design's central claim reads this table first.
-
-## C.3 · NIT (2)
-
-
-### `F-12` · two of the five new investigation rows name a `requires_typed` form that is not in the closed grammar, and would refuse at load
-
-> **`by=construction`** · site: `04_VERBS.md §B.3.2`
->
-> **already registered?** NEW
-
-roster `requires_forms` = frozenset({'relation', 'contain_path', 'basis', 'scalar_threshold', 'own_ledger', 'cardinality', 'existence'}). Declared but absent: ['examine', 'interview'] — both write `form: path` where the roster's member is `contain_path`. Probe against the real loader: the loader refused: verb_table.yaml: 'examine' names requires form 'path', which is not in rosters.yaml's requires_forms: ['basis', 'cardinality', 'contain_path', 'existence', 'own_ledger', 'relation', 'scalar_threshold']. §F.24a derives SEVEN forms from the 32 live cells; an eighth is a new thing a precondition can ASK, which is a design change and not a table edit. This is a one-word fix and it is worth recording only because of WHERE it is: `04_VERBS.md` §B.3.1 argues that five of six preconditions are *'expressible in it without inventing anything'*, and two of the five are written in a form name the grammar does not carry. The claim is right; the cells do not instantiate it.
 
 ### `F-25` · `matter` carries five distinct senses across the live tree and this design, one of which is a barrier name
 

@@ -65,11 +65,11 @@ stay, a summons, and defiance of one) · `confer` / `revoke` (the bench's seats)
     of:        subject
     kind:      DocketItem
   contests:    "a matter"                   # ⭐ THE PRIZE
-  writes:
-    Overwhelming: ["Person.stance"]
-    Success:      ["Person.stance"]
+  writes:                                   # ⭐ EVERY `Person.stance` IS THE SPEAKER'S OWN. See (ix)
+    Overwhelming: ["Person.stance"]         #   the actor's, not the hearers'
+    Success:      ["Person.stance"]         #   the actor's
     Partial:      ["DocketItem.matter"]     # ⭐ CORRECTED 2026-09-06 — was []. See (vii)
-    Failure:      ["Person.stance"]         # ⚠ an ADVERSE write. See (v)
+    Failure:      ["Person.stance"]         # ⚠ an ADVERSE write, and the actor's. See (v)
   emits:
     Overwhelming: ["matter.carried"]
     Success:      ["matter.advanced"]
@@ -195,6 +195,30 @@ as §B.1's, arriving from the atom side before Jordan made it.**
 distinction `§B.1.2` draws below between aptness and coefficients, and it is why the twelve speech
 kinds cost a data roster rather than 144 numbers.
 
+**(ix) ⭐ WHOSE STANCE — THE SPEAKER'S, ON ALL THREE BANDS (settled 2026-09-07).**
+
+The row wrote `Person.stance` at three bands and named the owner for one of them. **(v) says of
+`Failure` that *the band writes the speaker's own stance*** — and it says it there precisely because
+the speaker's stance moving on a *loss* is the surprising half. On `Overwhelming` and `Success` the
+natural reading is the opposite one: the speech moved **the hearers'** stances, which is what
+*carrying the room* means in the fiction.
+
+> ### **IT IS THE SPEAKER'S ON ALL THREE, AND THE ARCHITECTURE FORCES IT RATHER THAN PREFERRING IT.**
+> A `Person` carrier holds nothing about another person, and an act writing many hearers' interiors
+> is **one act, many owners** — which is the exact objection `00_DERIVATION.md` §B.2 uses to KILL the
+> `Tenure.degree` proposal in this same directory: *each party who descends would write the OPENER's
+> edge. Many writers, one owner.* **The design applied that objection to a field it rejected and not
+> to the verb it kept.** `17_PLAYABILITY.md` §D.3 and §I item 3 reached the same place independently
+> and called it *a live `AX-4` breach in the row as written*; this is that edit, made.
+>
+> ⚠ **And the matrix cannot settle it, which is why it needed saying in the row.** `(Person, stance)`
+> is one row with no subject column, so **both readings load**. Nothing would have caught the wrong
+> one.
+>
+> **What moves in the hearers is not a stance at all** — it is what they now hold about the speaker
+> and the matter, deposited at WITNESS as claims, per person, per channel, each of which may be
+> wrong. That is `AX-2`'s currency and it needs no interior write.
+
 ### B.1.1 · ⭐ **ONE VERB, MANY SPEECH KINDS — and a proceeding weights them by APTNESS, not by coefficients**
 
 > **Jordan, 2026-09-06:** *"I assume the different proceedings weigh different kinds of social verbs
@@ -291,13 +315,60 @@ Blocked since it was written, on a Query that raises. **The design supplies the 
   requires:    "a fired Date with a DocketItem, and the actor's seat is in judging_set(venue, matter)"
   requires_typed:
     all_of:
-      - { form: existence, of: subject, kind: DocketItem }         # form 1
-      - { form: basis,     of: actor,   on: subject }              # form 7 — a basis lookup on the seat
-  writes:      ["Tenure.degree"]             # ⚠ UNCHANGED from the live row
-  emits:       ["matter.determined"]
+      - { form: existence,   of: subject, kind: DocketItem }       # form 1
+      - { form: basis,       of: subject }                         # form 7 -- CORRECTED, see below
+      - { form: cardinality, of: subject, amount: <the row's quorum> }   # form 4 -- the quorum
+  writes:                                    # ⭐ DEGREE-KEYED, and no longer "unchanged"
+    Overwhelming: ["Tenure.since", "Tenure.degree"]
+    Success:      ["Tenure.since", "Tenure.degree"]
+    Partial:      ["Tenure.degree"]
+    Failure:      []
+  emits:
+    Overwhelming: ["matter.determined"]
+    Success:      ["matter.determined"]
+    Partial:      ["matter.determined"]
+    Failure:      ["matter.undetermined"]
   emits_on_refusal: ["determine.refused", "determine.unseated"]
   grade:       "assumption"                  # was `absent`
 ```
+
+> ### ⭐ **TWO CORRECTIONS TO THIS ROW, 2026-09-07 — and the first reverses a correction this file
+> ### already made and was proud of.**
+>
+> **⑴ `writes` GAINS `Tenure.since`, AND THE *UNCHANGED* NOTE IS STRUCK.** The table below records a
+> draft being corrected *away* from `[Tenure.degree, Tenure.since, Tenure.until]` on the ground that
+> the live row writes only `degree` — **and the live row is precisely the thing this design changes.**
+> The result was a verb that can GRADE a Tenure and cannot OPEN one, in a design whose every
+> arrangement row carries a `disposes:` key naming what a finding writes. **`disposes:` had a
+> declared meaning and no writer anywhere in the table.**
+>
+> `19_PLAN.md` step 15 already ruled it — *the declaring act is the determination … the declaration
+> writes the disposal* — and `04_CODE_ARCHITECTURE.md` §B.7 names `determine` as a seat's conferral
+> basis, which is what licenses opening an edge on somebody else. **Who owns the Tenure a determiner
+> opens: its SUBJECT**, exactly as `confer` opens a `hold` owned by its conferee and not by the
+> conferrer. `AX-4` is untouched; what licenses the write is the seat's basis, not the actor's
+> ownership.
+>
+> ⚠ **Two consequences, both stated rather than discovered later.** The row now declares `contests:`
+> in the same build step, so loader invariant 12 requires `writes` and `emits` to be degree-keyed
+> with equal key sets — they are, above. And **the write gate needs one more clause**: `§C.2`'s `F3`
+> admits `actor == subject`, `T-n`, `T-o`-with-`via` and the destroy cascade, and a conferral-basis
+> opener matches none of the four. **So does `confer`, today**, which is an `IN`-lane defect this
+> design reveals rather than causes.
+>
+> **⑵ THE `basis` CONJUNCT NAMED AN OPERAND ITS FORM DOES NOT ADMIT.** The corrected cell read
+> `{ form: basis, of: actor, on: subject }`. `rosters.yaml` gives `basis` the operand set
+> `[subject, from, to]` — **`actor` is not in it**, and a cell naming an operand outside its form's
+> set refuses at load. **So the correction that fixed one load failure introduced another**, and the
+> table below is one row short of the truth. The conjunct binds `subject`; the actor is the acting
+> person by construction and needs no operand.
+>
+> **⑶ AND THE QUORUM CONJUNCT IS ADDED, WITH ITS PRICE ON THE RECORD.** `19_PLAN.md` step 15 states
+> it plainly: this **widens the precondition grammar by two entries, counted as a design change and
+> taken because it is what works best** (`ED-SC-0034`). ⚠ **A read-only planning pass proposed making
+> it free** by binding the threshold to `amount` through form 4 as it stands; `cardinality`'s operand
+> set is `[subject, from, to]` and **does not admit `amount`**, which is the same defect as ⑵ one
+> form along. **The widening is real and is paid for openly** — `21_RECONCILIATION.md` PART A.1.
 
 ⚠ **THREE CORRECTIONS TO A PUBLISHED DRAFT OF THIS ROW, EACH OF WHICH WOULD HAVE FAILED THE LOADER.**
 
@@ -415,6 +486,31 @@ preconditions."*
 
 ### B.3.2 · The five rows
 
+> ### ⛔ **CORRECTED 2026-09-07 — THE FIVE ROWS CARRIED THREE PRIVATE BAND VOCABULARIES, IN THE
+> ### DIRECTORY THAT NAMES A SECOND LADDER AS ITS WEAK POINT.**
+> They keyed `writes`/`emits` on `Found · Partial · Nothing`, `Read · Misread · Nothing`,
+> `Sound · Wrong · Nothing` and `Seen · Glimpsed · Nothing` — **eight names that are not the
+> ladder's**, three bands per row instead of four, across five rows on the page after §B.1 retracts
+> exactly this defect for `speak`. **The retraction did not travel one section.**
+>
+> **Executed rather than argued:** building the `examine` row as it stood and handing it the band a
+> margin-graded contest actually returns raises —
+> *`'examine' has no `writes` branch for degree 'Success'. Declared: ['Found', 'Nothing', 'Partial']`*.
+> `writes_at`/`emits_at` refuse an undeclared degree rather than defaulting, so these rows would have
+> raised at the first fold exactly as the coined `speak` bands would have.
+>
+> **Why the ladder's four and not a ruled exemption:** combat has three bands **by ruling**, because
+> it reads a scene rather than a margin. **These five have no provider at all** — nothing routes
+> `what persists` or `a disposition` to any subsystem — so nothing can report a non-margin band, and
+> `§C.4` forbids a verb declaring a band its subsystem cannot report. If an investigation provider is
+> ever built that reads something other than a margin, *that* is when an exemption is earned, and it
+> must be argued as combat's was. `Found → Success`, `Partial → Partial`, `Nothing → Failure`, and
+> `Overwhelming` is declared because the ladder can return it.
+>
+> ⚠ **`{ form: path }` is corrected to `{ form: contain_path }` in the two rows that used it** —
+> `path` is in no roster and would have refused at load. Two of the five preconditions §B.3.1 calls
+> *expressible without inventing anything* were written in a form name the grammar does not carry.
+
 ⚠ **THE STRATUM IS THE SOURCE ROW'S, NOT THIS DESIGN'S.** `verb_table.yaml:491` carries
 `stratum: "contested_physical"` for `the six investigation acts`, and a draft of this section silently
 wrote `social` on all five. **`rosters.yaml` says the strata are ordered semantically and that
@@ -428,10 +524,10 @@ been.
 - verb: "examine"
   stratum: "contested_physical" · eligibility: ["own"]
   requires: "the actor is present where the thing examined is"
-  requires_typed: { form: path, of: subject, kind: contain }          # form 3
+  requires_typed: { form: contain_path, of: subject, kind: contain }          # form 3
   contests: "what persists"                                          # vs `retention`
-  writes:  { Found: [], Partial: [], Nothing: [] }
-  emits:   { Found: ["facet.found"], Partial: ["facet.found"], Nothing: ["facet.none"] }
+  writes:  { Overwhelming: [], Success: [], Partial: [], Failure: [] }
+  emits:   { Overwhelming: ["facet.found"], Success: ["facet.found"], Partial: ["facet.found"], Failure: ["facet.none"] }
   emits_on_refusal: ["examine.impossible"]
   grade: "assumption"
   # COST — "you are witnessed examining" — NEEDS NOTHING. The act emits at a venue; whoever is
@@ -440,10 +536,10 @@ been.
 - verb: "interview"
   stratum: "contested_physical" · eligibility: ["own"]
   requires: "the actor and the subject are present at the same venue"
-  requires_typed: { form: path, of: subject, kind: contain }          # form 3
+  requires_typed: { form: contain_path, of: subject, kind: contain }          # form 3
   contests: "a disposition"                                          # vs obstinacy
-  writes:  { Read: [], Misread: [], Nothing: [] }
-  emits:   { Read: ["said.given"], Misread: ["said.given"], Nothing: ["said.withheld"] }
+  writes:  { Overwhelming: [], Success: [], Partial: [], Failure: [] }
+  emits:   { Overwhelming: ["said.given"], Success: ["said.given"], Partial: ["said.given"], Failure: ["said.withheld"] }
   emits_on_refusal: ["interview.impossible"]
   grade: "assumption"
   # COST — "they learn what you are asking" — NEEDS NOTHING, and it is the same mechanism:
@@ -454,8 +550,8 @@ been.
   requires: "the actor holds a live admission to the archive"
   requires_typed: { form: existence, of: subject, kind: Tenure }      # form 1 — an `oblige` or `hold`
   contests: "what the record holds"
-  writes:  { Found: [], Partial: [], Nothing: [] }
-  emits:   { Found: ["record.read"], Partial: ["record.read"], Nothing: ["record.silent"] }
+  writes:  { Overwhelming: [], Success: [], Partial: [], Failure: [] }
+  emits:   { Overwhelming: ["record.read"], Success: ["record.read"], Partial: ["record.read"], Failure: ["record.silent"] }
   emits_on_refusal: ["research.unadmitted"]
   grade: "assumption"
   # ⭐ "EVERY GATE IS A PERSON, SO EVERY GATE HAS A PRICE AND A GRIEVANCE" — the source's own words,
@@ -467,8 +563,8 @@ been.
   requires: "the actor holds claims bearing on the subject"
   requires_typed: { form: own_ledger, of: subject }                   # form 6 — `tell`'s own form
   contests: "what can be inferred"
-  writes:  { Sound: [], Wrong: [], Nothing: [] }
-  emits:   { Sound: ["inference.made"], Wrong: ["inference.made"], Nothing: ["inference.none"] }
+  writes:  { Overwhelming: [], Success: [], Partial: [], Failure: [] }
+  emits:   { Overwhelming: ["inference.made"], Success: ["inference.made"], Partial: ["inference.made"], Failure: ["inference.none"] }
   emits_on_refusal: ["reconstruct.groundless"]
   grade: "assumption"
   # ⭐ `Sound` AND `Wrong` EMIT THE SAME KIND. "A WRONG reconstruction deposits at real confidence
@@ -483,8 +579,8 @@ been.
     term. ⚠ `Tenure` HAS NO `term` FIELD in the tracer (`shape.py:2066-2091`), so the second half
     is UNTYPABLE TODAY. Registered `P-04`; the row is written and the cell is honest.
   contests: "what is done unseen"
-  writes:  { Seen: [], Glimpsed: [], Nothing: [] }
-  emits:   { Seen: ["watch.kept"], Glimpsed: ["watch.kept"], Nothing: ["watch.empty"] }
+  writes:  { Overwhelming: [], Success: [], Partial: [], Failure: [] }
+  emits:   { Overwhelming: ["watch.kept"], Success: ["watch.kept"], Partial: ["watch.kept"], Failure: ["watch.empty"] }
   emits_on_refusal: ["surveil.impossible"]
   grade: "assumption"
   # COST — "exposure accrues to you" — is the duration: a longer term is more occasions on which

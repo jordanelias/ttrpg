@@ -60,15 +60,50 @@ a date due at tick 1 and measured its own off-by-one), and **corrected four coun
 `runnable = []`, which was an identity that could not have come out otherwise. All applied in place;
 `PART F` is the record.
 
-### Next actions this adds to the four below
+## ⚠ 2026-09-07, LATER — THE REVIEW, AND PHASE 0 EXECUTED
 
-1. **`F-38`, `F-37` and the stale `P-15` row are documentation fixes with no ruling in them** —
-   correct §B.1's three cells, put the five orphan P-rows in the register, mark P-15/P-29 closed.
-2. **`F-14` is the one that needs a design answer**: which act opens the Tenure a finding grades.
-   It is `ID-14` on the design's own most load-bearing key and it is not in any register.
-3. **`F-32` re-aims `19_PLAN.md` step 2** — the deposit exists; its content is the hole.
-4. **`ST-34` could not run the deprivation floor** (`M-7`/`M-8` are blocking measurements) because
-   the ladder module exports no `p_success` under that name. Resolve the name before the sweep.
+**`21_RECONCILIATION.md`** — a read-only Fable 5.1 pass over the stress report's PARTS A–F against
+`04_CODE_ARCHITECTURE.md` and R1–R8, **with every decision-changing citation re-verified by hand**.
+Twelve conflicts ruled, **zero escalations**, a five-phase plan. **PHASE 0 is executed** and its
+falsifiers are green: `ST-06 · ST-12 · ST-13 · ST-23 · ST-27 · ST-37 · ST-38` all return RAN.
+
+### ⛔ Four of the stress report's results did not survive, and the next actions below are retracted
+
+| was | is |
+|---|---|
+| ~~*`F-14` is the one that needs a design answer*~~ | ⛔ **answered before it was written.** `19_PLAN.md` step 15: *the declaring act is the determination … the declaration writes the disposal.* The finding is real and its grade was wrong — `04_VERBS.md` §B.2 had been corrected **away** from the plan. **Now fixed in the row**: `determine` writes `Tenure.since` + `Tenure.degree`, degree-keyed |
+| ~~*`F-32` re-aims `19_PLAN.md` step 2*~~ | ⛔ **withdrawn — this lane's original diagnosis was right.** `claim_subjects` **replaces** the actor with the act's referents when the act names a subject and writes nothing; `ST-32` ran a `speak` with no payload, so the actor survived by the default branch rather than by the rule. **I refuted a claim by running the case it was not about.** `R8.1`'s struct supersedes step 2's mechanism |
+| ~~*`ST-34` could not run the deprivation floor*~~ | ⛔ **withdrawn.** `p_success` is at `engine/autoload/sigma_leverage.py:246`; the suite searched `dice_engine` only. **`M-7` and `M-8` are runnable today** |
+| ~~*`F-05`: the docket never names a matter, so a clerk is mandatory*~~ | **re-cut sharper.** `exists:DocketItem` returns `UNKNOWN` — `docket` is a state *sequence* and the reader looks for a *collection* — so **the design's `speak` cannot form at all.** The fix is a reader branch plus `open_case` gaining the write |
+
+⚠ **Three "what executes today" claims are also corrected**: `ST-09` ran the **pre-design** `speak`
+row; `ST-35` replays a season rather than a seam draw; `ST-36` permutes deliberation order rather
+than attendance, against an Event multiset rather than the hash.
+
+### What PHASE 0 changed, all of it documentation
+
+`10_LOOPS_AND_GAPS.md` (five orphan rows filed; `P-08`/`P-15`/`P-29`/`P-33` closed with citations) ·
+`00_DERIVATION.md` §B.1 (three stale cells) · `03_PARAMETERS.md` (header; the inverted `vacant`
+claim) · `08_SEAM.md` §D.1 (four wrong emission kinds, and which column fires when) ·
+`04_VERBS.md` (`determine`'s row per C-1; the `basis` operand; `path` → `contain_path`; the five
+investigation rows onto the one ladder; the stance owner named on all three bands) ·
+`12_BUILD_ORDER.md` (the docketing step, which was in none of the twelve) · `19_PLAN.md` step 22
+(the field is the doctrine's, not the plan's).
+
+**Six stress-test instruments were rebuilt in the same pass**, because they were substring searches
+that could not observe their own fix — a falsifier that cannot fire green is not one.
+
+### Next actions
+
+1. ⛔ **The retirement wave** — cross-lane, ruled, unexecuted. **Not this PR.**
+2. ⭐ **PHASE 1 step 1 — `R8.4`'s `document_key` repair — is the first thing that moves the game.**
+   It must land **before** the fan-out flip, or `M-6` measures a starved propagation chain rather
+   than a narrowed one. `21_RECONCILIATION.md` C-3 is the ordering constraint.
+3. **`M-7`/`M-8` are runnable now** via `sigma_leverage.p_success` with the injected magnitudes.
+4. ⚠ **One `IN`-lane defect this design revealed and does not own**: the write gate's `F3` clause has
+   four exceptions and a conferral-basis opener matches none of them — **so `confer`, a live `ruled`
+   verb, would be refused by the gate as specified.** `determine` opening a disposal needs the same
+   clause. Register it there.
 
 ---
 

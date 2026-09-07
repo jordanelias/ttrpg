@@ -362,8 +362,21 @@ convenes at a place; a person-rung is an address, not a place.**
 2. **So the arrangement never declares a cast.** It may say who is **admitted** (the closed-floor
    parameter); it may not say who is **present**. *Present* is whoever travelled. **A convened
    proceeding nobody attends is a legitimate outcome**, exactly as an undecided fight is (Jordan,
-   2026-06-02) — and the path already exists: CALENDAR appends a `DocketItem` when a fired date is
-   **vacant** (`shape.py:5363-5381`).
+   2026-06-02).
+   ⛔ **CORRECTED 2026-09-07 — this sentence continued *and the path already exists: CALENDAR
+   appends a `DocketItem` when a fired date is **vacant***, and it was wrong twice over against the
+   code it cited by line number.** ⑴ **The branch is inverted**: `shape.py` computes
+   `vacant = not d.get("holder")` and then appends the docket item under `if not vacant:` — **a
+   vacant date fires, lapses, and dockets nothing.** ⑵ **And `vacant` does not mean what the
+   sentence needed it to mean**: it says the date has no *holder* — nobody presiding — while the
+   outcome being claimed is that nobody *attended*. Those are facts about different people. A
+   sitting with a presiding seat and an empty floor is the case this design wants, and it is the
+   branch that **does** docket.
+   ⭐ **The outcome remains legitimate and it needs no path**: a proceeding nobody attends is one
+   where every attendee formed no candidate, which `05_PROCEDURE.md` §B.1 already lists first among
+   the four things that end a run. **What was false was the mechanism named for it, not the
+   claim** — and `21_RECONCILIATION.md` C-5 records the real docketing gap, which is that
+   `DocketItem.matter` is written by `carry` alone and no step of any procedure here calls it.
 3. ⭐ **The venue's ordinal produces the draw radius with no rule at all.** A hearth arbitration, a
    settlement tribunal, a duchy assize and a realm parliament differ in **how far a person must
    travel to attend**, therefore in **who realistically comes** — out of containment, travel and the
@@ -429,8 +442,22 @@ halves of Fig. 24's hardest cell fall out of *the actor is the author*.
 
 # PART D · THE ARRANGEMENT — the row a designer writes
 
-**Fourteen keys.** Every one is sourced to a figure or marked invented. Nothing here is read by a
+**Fifteen keys.** Every one is sourced to a figure or marked invented. Nothing here is read by a
 branch on its value; everything is read as an ordinal, a set membership, or a relation.
+
+> ⚠ **CORRECTED 2026-09-07: this header read *Fourteen* while the block below listed fifteen.**
+> The cause is visible and worth naming rather than just fixing: `disposal_reach` was added on
+> 2026-09-06 by §B.7, and the count above it was not bumped with it — **so the schema and its own
+> header disagreed by exactly the key that was added last.** A header that miscounts the block it
+> introduces is the cheapest possible defect and it survived two adversarial passes.
+>
+> ⚠ **AND THE NUMBER IS ALREADY SCHEDULED TO MOVE AGAIN, WHICH IS WHY IT IS STATED AS TODAY'S.**
+> `19_PLAN.md` step 11 deletes three keys — `registers` (a second home for the obstacle's register
+> term), and the two `10_LOOPS_AND_GAPS.md` grades as most likely to go (`stakes_grade`, `P-09`;
+> and `order`'s hardest value, `P-08`) — taking the row to **thirteen**. **This header says fifteen
+> because fifteen is what the block below carries now**; writing thirteen ahead of the deletion
+> would reintroduce the same defect pointing the other way. `21_RECONCILIATION.md` PHASE 2 step 6
+> is where it becomes thirteen, and the header moves in that commit.
 
 ```yaml
 # data/arrangements.yaml — a CLOSED SET IN DATA (ID-12). Changing one is a data edit.

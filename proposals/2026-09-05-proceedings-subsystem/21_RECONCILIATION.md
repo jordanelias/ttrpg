@@ -408,7 +408,72 @@ unbuilt specification with a named home · **new** = something that must earn it
 predicate stem, one reader branch, one witness channel, two grammar entries, and one field that is
 the doctrine's own.** Every one of the six is named as a cost below.
 
-## PHASE 0 · Corrections carrying no design decision — **free**
+## ✅ PHASE 0 · EXECUTED 2026-09-07 — with two deviations and one result that changes PHASE 2
+
+**All ten edits are made and their falsifiers are green.** `ST-06 · ST-12 · ST-13 · ST-23 · ST-27 ·
+ST-37 · ST-38` return RAN; the suite's RAN count went 4 → 11.
+
+⚠ **SIX OF THE FALSIFIERS HAD TO BE REBUILT BEFORE THEY COULD FIRE**, and that is worth recording
+because it is the same defect in six places: they were **substring searches over a whole document**,
+so a correction that *quotes the retracted claim while withdrawing it* still read as the defect. A
+test that cannot go green when the thing it names is fixed is not a falsifier — `§0.1` point 2 from
+the other side. `ST-06` now asks whether a retraction marker governs the claim; `ST-12` scans the
+YAML blocks rather than the prose; `ST-23`, `ST-27`, `ST-13` and `ST-38` compare parsed values
+rather than the presence of a word.
+
+### Deviation 1 — `03_PARAMETERS.md`'s header says **fifteen**, not thirteen
+
+**The plan said thirteen, per step 11's deletions. Writing thirteen now would have reintroduced the
+same defect pointing the other way**, since the block below the header lists fifteen keys today.
+The header states today's count and carries a note that step 11 takes it to thirteen, and the header
+moves in that commit. **A header that miscounts the block it introduces is the defect; the direction
+of the miscount is not a mitigation.**
+
+### Deviation 2 — `20_STRESS_TESTS.md` is **not deleted**, and PHASE 0h is narrowed
+
+**PHASE 0h said *retire the findings register*.** I have not, and the reason is on the file's own
+front page rather than only here. **§G.4.4 governs an adversarial pass that creates a document
+nobody asked for; Jordan asked for this one** — *"log all instances where you have had to
+create/invent something … log all mechanical decisions as well as gaps and conflicts and failures."*
+**What the rule protects against is a parallel queue that accumulates**, and that is closed by
+marking the file a **closed record** with the surviving findings folded into the design files —
+which is what the other nine edits did — rather than by deleting the logs that were requested.
+
+### ⛔ Result — `M-7` was run, and the deprivation floor FAILS
+
+**PHASE 2 step 14 said *`M-7` is runnable now*. It was run, in PHASE 0, and it does not hold.**
+
+| at the **1D pool floor** | `p_success` |
+|---|---|
+| Ob 1 | 0.2266 |
+| Ob 2 | 0.0228 |
+| **Ob 3** | **0.0006** |
+| Ob 4 and above | **0.0000** |
+
+`06_RESOLUTION.md` §B.3a requires that *at the minimum lawful pool against the maximum plausible
+composed obstacle, `p_success` must not be effectively zero*, and calls it **a blocking check on
+shipping the composed obstacle, not an advisory one**. It reaches zero at **Ob 3** — a value
+`base_Ob = opposition_score / 2` produces on its own against an opposition score of 6, **before a
+single room term is added.**
+
+⭐ **And one of the two remedies §B.3a names is refuted by measurement.** It offers *(a) the σ-channel
+must be REACHABLE in that room* or *(b) the obstacle takes a ceiling*. Buying σ-leverage at the floor
+against Ob 7 gives `0.0000` at net_σ of 0, 1, 2 **and 3** — **the uniform channel this design leans on
+throughout is uniform in Δz and cannot lift a probability that is already zero.** §B.3a item 3 calls
+it *the engine's own answer to this exact problem*; at the floor it is not an answer.
+
+> **So PHASE 2 step 14 changes from *run the measurement* to *the measurement failed and the
+> obstacle needs a ceiling*** — remedy (b), or a pool floor above 1D. ⚠ **Stated at its true
+> strength**: the magnitudes are `MD-07`'s injected set and the 1D pool is the pathological case,
+> since a `latitude` floored near 0.7 makes a real pool `brought + 0.7 × conduct`. Against Ob 11 the
+> pool sweep reads `pool 9 → 0.0010`, `pool 16 → 0.0753` — **the room is survivable with a dossier
+> and not without one**, which is §B.3a's *preparation game* working and simultaneously the case its
+> own floor forbids. **The design predicted this shape in the same section** — *the obstacle is
+> floored at 1 and ceilinged at nothing* — and this is that shape, measured.
+
+---
+
+## PHASE 0 · the ten edits — **free**
 
 **These advance none of the five properties and are done first anyway**, because each removes a false
 statement a next session would act on, and because `§G.4.4` requires an adversarial pass's output to
