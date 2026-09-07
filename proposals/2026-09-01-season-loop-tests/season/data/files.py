@@ -56,7 +56,7 @@ TRACE_TXT = RUNS_DIR / "TRACE.txt"
 
 # The same artifact as a REPO-RELATIVE string, because `harness/delta.py` reads it out of git
 # (`git show <rev>:<path>`) rather than off the disk, and git speaks repo-relative paths only.
-RESULTS_REPO_REL = "proposals/2026-09-01-season-loop-tests/runs/results.json"
+RESULTS_REPO_REL = RESULTS_JSON.relative_to(REPO_ROOT).as_posix()
 
 # ---------------------------------------------------------------------------
 # SIBLING PROPOSALS IN THE CHAIN. Read, never written: `2026-08-31-shape-tracer/cases/` is a

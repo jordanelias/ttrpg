@@ -1819,7 +1819,7 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
             if "roster-exempt:" in ctx:
                 exempted.append((fname, node.lineno))
                 continue
-            if fname != MODEL:
+            if fpath != MODEL:
                 # In the corpus, only a DUPLICATE of a roster that is already data is a defect:
                 # the same closed set written out again, which is the definition coming back.
                 if frozenset(vals) not in known:
