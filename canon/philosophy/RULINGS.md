@@ -95,3 +95,79 @@ When the balance broke, everything associated with it broke, because those confi
 configurations of their time did not tend toward.
 *Name:* **the Calamity**, throughout. The *Catastrophe* usage is retired.
 *Applied at:* §8.1 (rewritten), §7.5.
+
+---
+
+## 2026-09-07 — Batch 2: practitioner mechanics
+
+**D-5 — the Leap's danger.** Ruled: **environment × duration, plus type × scale.** Not inherent, not
+absent. All four contradictory source claims come out true together. *Applied:* §6.8.
+
+**D-6 — is ordinary self-rendering an operation?** Ruled: **no, operations are deliberate only** —
+and the author supplied the criterion that makes the line principled:
+
+> "threadwork as an operation requires one to go beyond one's self as a finite ordinary human"
+
+Layer 2 holds one *within* that shape; layer 3 cannot be done from within it. Consequences: no
+baseline Temporal Disjunction; the Leap's necessity follows rather than being posited; the cost has a
+location; the Church's terror is structurally accurate about what an operation is. *Applied:* §6.1
+(rewritten), §6.2, §2.7, §9.3.
+
+**D-7 — what Thread Sensitivity is.** Ruled: **position and capacity are one achievement.**
+
+> "It is a position whereby you can hold more and more of what is being given to consciousness … by
+> being able to hold more, you are able to bear more as you are better able to imbricate yourself with
+> threads. it's both simultaneously. your own ability to perceive threads is at the same time the
+> capacity to hold yourself with threads because your rendering is able to handle the expanded limits"
+
+*Applied:* §5.5 (rewritten), §9.3. ⚠ **One reading is the editor's and awaits confirmation:** that the
+growth is in capacity for **threads** while capacity for **surfeit** stays constitutively fixed. That
+split is what preserves §5.3's finitude pivot; if surfeit-capacity also grows, §5.3 needs rewriting.
+
+**D-8a — temporal depth.** Ruled: **only spooling yields depth.** Rendering displaces without
+accumulating. Threadcut beings never settle; every moment costs what the first cost. Immortality as
+unremitting labour. Also grounds orphan decay. *Applied:* §4.5, §4.7.
+
+---
+
+## 2026-09-07 — Batch 3: presentation, the ground, and the Church
+
+**D-4 — the ontological register.** Ruled: **re-scope to three tiers** — ontical (the rendered world),
+substrate (thread-constitution: deep, normally inapparent, ontic), ontological (the register of
+givenness: that there is rendering at all, that a configuration is held rather than given). The
+alternative, owning the reification, was available and not taken. *Applied:* §9.1, §9.3.
+
+**D-9 — who contracts.** Ruled: **originary and uncaused.** Nothing performs it; asking what did is
+malformed, of a kind with asking what preceded time. Must be stated rather than left in the passive
+voice. Forecloses both a withdrawing ground and a contracting rendering. *Applied:* §1.4.
+
+**D-10 — the Church's God.** Ruled, and the question as posed was dissolved:
+
+> "The Church's God is Solmund, the threadcut being who performed what people saw as miracles. Solmund
+> was seen to be miraculous, a deity come down to earth. So the ground of Solmunds miracles and
+> Solmund's very existence is Ein Sof, but people worship Solmund as a deity. Don't fall into some
+> trap about a false God necessarily being antagonistic, btw."
+
+Neither "the ground misrendered" nor "a fiction." The Church worships **a real being, misidentified as
+the ground.** The Ein Sof grounds Solmund's existence as it grounds everything, and is not itself
+worshipped.
+
+*Displaced:* the reading that Church and inner tradition were two theologies of one referent, positive
+against negative. They do not share a referent at all.
+
+*Consequence drawn:* the doctrine's specific content is now derivable from what Solmund was. To render
+a threadcut being as a god one must render him as unchanging (he did not age — no spooled becoming),
+all-knowing (his surfeit-connection read as knowledge rather than excess), and determining (his
+operations reshaped what others took as fixed). Each is a true perception pushed into the only
+available shape — and those three commitments are exactly the ones that foreclose sensitivity. **The
+prophylaxis was not designed; it fell out of what he was.**
+
+*Constraint honoured:* a false god is not thereby an antagonist. Nothing requires Solmund to have
+claimed godhood or encouraged the reading, and nothing requires the Church to be malign. Both can be
+sincere and the error still does what it does.
+
+*Applied:* §8.7 (new subsection), §8.8 (doctrine derived), §8.10 (open question closed).
+
+**D-12 — Providence.** Ruled: **kept for mode 2, retired from the tendency.** The imported foresight
+is now deliberate — it sits on an accident that survivors named, not on a structure the framework
+claims. *Applied:* §4.6, §9.2, §9.3.

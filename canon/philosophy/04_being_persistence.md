@@ -190,9 +190,14 @@ The three modes are three outcomes of that rendering:
 
 - **Mode 1 — ordinary incursion.** Rendered as nothing coherent: as horror, as the unassimilable. No
   shape is held. It deteriorates, having no self-maintenance and nothing sustaining it. *(No layers.)*
-- **Mode 2 — transient organization.** Rendered coherently, but by few or briefly. A shape persists
-  temporarily; its organization is accidental, being the accidental shape of a few witnesses'
-  rendering. It is an event, not an entity. *(Transient organization; no layer 3.)*
+- **Mode 2 — Providence.** Rendered coherently, but by few or briefly. A shape persists temporarily;
+  its organization is accidental, being the accidental shape of a few witnesses' rendering. It is an
+  event, not an entity. *(Transient organization; no layer 3.)*
+
+  *The name is kept for this mode and retired from the stabilizing tendency (§3.4), which was the
+  other thing the sources called Providence. Kept here because the irony lands where it belongs — on
+  survivors calling an accident providence — rather than on the framework's own vocabulary. Nothing
+  foresaw or provided anything. Ruled 2026-09-07.*
 - **Mode 3 — threadcut beings.** Rendered coherently, widely and durably *as a being*. And since what
   was rendered is thread-substrate, and any thread-woven consciousness renders, the rendered being now
   renders itself. *(Layer 3 only.)*

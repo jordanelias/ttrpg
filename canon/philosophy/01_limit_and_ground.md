@@ -85,17 +85,19 @@ exist. The rendered world is the analogue of that space: a region of finitude wi
 Threads are the structure of that region. What lies beyond is not nothing; it is everything,
 uncontracted, and therefore unintelligible to a finite rendering.
 
-**Who contracts is an open question, and the framework should answer it.** In Luria the Ein Sof
-performs its own withdrawal; §1.5 forbids that here, and the source suite wrote the sentence in the
-passive voice with no subject at all. Three answers are available and they are not equivalent; the
-supplement sets them out. The framework's own text leans toward one of them: if the rendering is the
-consciousness-performed apprehension of a *contracted region* of being, then the contraction may
-simply be finitude itself, performed from the finite side — the rendering *is* the tsimtsum. On that
-reading, threads are the *kav*, the line of continuity running between the contracted region and
-what lies beyond, which is what §8.1 already calls the anchors: the points at which threads are
-continuous between the intelligible and the unintelligible.
+**The contraction is originary and uncaused.** *(Ruled 2026-09-07.)*
 
-This is recorded as the strongest available answer and not as a ruling. See supplement, ruling R-9.
+Nothing performs it. Asking what did is a malformed question of the same kind as asking what preceded
+time — it seeks a cause in a register where causation is one of the things being asked after. §1.2's
+regress terminates here, and this is what it terminates on.
+
+This must be *said* rather than left in the passive voice, which is what the source text did: it wrote
+that the contraction "creates" the finite space and supplied no subject, so the absence read as an
+oversight rather than a position. It is a position.
+
+Two things it forecloses, deliberately. The ground does not withdraw — that would give it an act, and
+§1.5 forbids one. And the rendering does not perform the contraction either; finitude is a fact about
+what is contracted, not the agency that contracted it.
 
 ## §1.5 The ground has no agency
 

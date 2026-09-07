@@ -157,7 +157,34 @@ being exists *as a community's rendering of it* — and a being that exists as a
 exactly the kind of thing a community forms around. The catalysis is not a fact about his charisma. It
 is a fact about his mode of being.
 
-**Two things the framework owes an answer on, and does not have one.**
+### The Church worships Solmund
+
+**Ruled 2026-09-07. The Church's God is Solmund.** Not the Ein Sof, and not a fiction.
+
+He performed what witnesses saw as miracles — operations of enormous reach, which is what threadwork
+looks like to those who cannot perceive threads. He was seen as a deity come down to earth, and he was
+worshipped as one.
+
+**The ground of his miracles, and of his existence, is the Ein Sof** — as it is the ground of
+everything that comes to be. But the Ein Sof is not what is worshipped. What is worshipped is a being
+that came through a tear and was rendered, by the people who met him, into the shape of a god.
+
+**This is a category error, not a deception, and not a lie people were told.** Nothing here requires
+Solmund to have claimed godhood, to have encouraged the reading, or to have known what was being made
+of him. §8.9's account already holds: the tradition was the emergent product of human interpretation.
+People deified him. Whether he asked is a separate question the framework does not answer.
+
+**A false god is not therefore an antagonist.** The Church does not worship nothing; it worships
+something real, and misidentifies what it is. That misidentification has enormous consequences (§8.8),
+and none of them require Solmund to have been malign — or the Church to be. Both can be entirely
+sincere and the error still does what it does.
+
+**What this displaces.** An earlier reading had the Church and the inner tradition as two theologies of
+one ground — positive against negative, a schism about the Ein Sof. That is wrong. They do not share a
+referent. The inner tradition's apophatic transmission (§5.7) concerns the ground; the Church's
+positive theology concerns a being. They are not disagreeing about how to speak of the same thing.
+
+### Two things the framework still owes an answer on
 
 - **What dissolved him.** Ceased threadwork, insufficient maintenance, or the reality-strain of his own
   presence tearing his vicinity. §7.5 predicts the third and the record notes nothing of it. One derived
@@ -188,6 +215,21 @@ Essentialist theology closes each specifically:
 
 **The most devout are the most thoroughly immunized** — not by suppressing a faculty they have, but
 through formation into an orientation that makes the faculty's developmental preconditions unavailable.
+
+**And the doctrine's specific content is derivable from what Solmund actually was** (§8.7), which is
+the part that makes this more than a coincidence of theology. To render a threadcut being as a god,
+one must render him as:
+
+- **unchanging** — and he did not age or develop, because he had no spooled becoming (§4.5);
+- **all-knowing** — because his connection to what exceeds intelligibility read, from outside, as
+  knowledge rather than as excess;
+- **determining** — because his operations reshaped what people took to be fixed, and a being who can
+  do that is more easily understood as having authored the order than as having exceeded it.
+
+Each of these is a true perception of a threadcut being, pushed into the only shape available for
+something that behaves that way. **The theology is an accurate rendering of Solmund misidentified as a
+rendering of the ground** — and the three commitments it thereby acquires are exactly the three that
+foreclose sensitivity. The prophylaxis was not designed. It fell out of what he was.
 
 And the trauma signature is read in the inverted register: what §5.3 recognizes as the rendering's
 structurally correct response to surfeit, the prophylaxis names spiritual contamination, treating the
@@ -245,14 +287,11 @@ heterogeneous.**
 drift; it is a category-identification error at the layer beneath doctrine, produced by the
 institution's lack of access to the distinction §6.6 names.
 
-*(An open question with real consequences: what is the relation between the Church's God and the ground
-this framework calls the Ein Sof? Both posit a ground. On the framework's own terms the Church's error
-is precise — it attributes essence, knowledge and determination to a ground that has none, rendering
-the unrenderable as fully intelligible — while the inner tradition's apophatic transmission (§5.7) is a
-negative theology. If the referent is the same, Church and inner tradition are a schism about one
-ground, cataphatic against apophatic, and the Church holds an inverted truth. If distinct, the Church's
-God is simply a fiction — which makes §8.9's refusal of "bad all along" much harder to sustain. See
-ruling R-8.)*
+*(The relation between the Church's God and the ground is settled at §8.7: the Church worships
+Solmund, and the Ein Sof is the ground of his existence as it is of everything else. So the Church's
+error is not a misdescription of the ground — it is worshipping a being **as** the ground. That is a
+deeper error than bad theology and a more forgivable one than fraud: nobody is lying, and the object
+of worship is real.)*
 
 ## §8.11 The betrayal
 

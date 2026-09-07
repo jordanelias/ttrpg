@@ -24,10 +24,10 @@ distinction was formulated to diagnose.
 The source suite felt the tension — "threads are both a noun and a not-noun" — and then asserted
 correctness without addressing it.
 
-**Two honest options, and the framework must take one.** They are set out at supplement ruling R-5;
-this section states the one it recommends and the cost of the other.
+**Ruled 2026-09-07: re-scope the word.** The alternative — keeping the labels and owning the
+reification outright — was available and was not taken.
 
-**Recommended: re-scope the word.** Reserve *ontological* for the disclosure register — rendering,
+**The three tiers.** Reserve *ontological* for the disclosure register — rendering,
 givenness, layer 2, the being-held of a configuration — and call thread-constitution **substrate**.
 Then:
 
@@ -43,14 +43,16 @@ commitment to the rendering as given, which is the genuinely ontological achieve
 requires this split for independent reasons, and §6.2's derivation of the Leap supports the second
 component being primary.
 
-**The alternative: own the reification.** Keep the current labels and state outright that the framework
-deliberately renders the condition of possibility as a manipulable substrate — that this is its founding
-departure and the premise of threadwork itself. This is defensible and costs only the fidelity claim.
-It is not recommended only because it leaves the framework using a distinction whose point it has
-discarded.
+**What the re-scoping buys.** The substrate can be touched, torn and measured without embarrassment,
+because it is no longer being asked to carry a distinction it was never shaped for. And the
+*ontological* register gets something real to name: not a deep layer of stuff, but the fact that there
+is rendering at all, and that a configuration is **held** rather than given. That is what a
+practitioner comes to feel, and what a threadcut being discloses from outside (§4.5).
 
-**What is not an option** is the present arrangement: asserting correct orientation while operating the
-substrate as a layer of entities.
+The rejected alternative — keeping the old labels and stating plainly that the framework renders the
+condition of possibility as a manipulable substrate — remains coherent and is recorded in `RULINGS.md`
+should the ruling ever be revisited. What is not available is the arrangement the sources had:
+asserting correct orientation while operating the substrate as a layer of entities.
 
 *(A related consequence for §5.1: the same reification makes the Real "arrive as a being." Under the
 recommended scoping that phrasing needs care — what arrives is surfeit; what is unassimilable is a
@@ -75,11 +77,10 @@ Three collisions in the source suite, recorded because each cost something:
   throughout, and then reused for a dice check on reconstitution. The same word means two things in one
   suite. The check should be renamed; this document does not name it, because naming mechanisms is not
   its business.
-- **Providence** — used for a mode of emergence in one document and for the rendering's stabilizing
-  tendency in another. These have nothing to do with each other. Worse, the word imports foresight into
-  a framework whose ground has none, and the source text's own hasty disclaimer ("not divine
-  intervention, but…") shows the discomfort. One referent must go, and arguably the word should. See
-  ruling R-12.
+- **Providence** — named a mode of emergence in one document and the stabilizing tendency in another.
+  **Ruled 2026-09-07: kept for the mode, retired from the tendency.** The word imports foresight, and
+  that is now deliberate: it sits on an accident that survivors named, not on a structure the framework
+  claims. The tendency is the futural-potential-legible (§3.4), which is what it is.
 
 ## §9.3 Vocabulary reference
 
@@ -106,6 +107,7 @@ Three collisions in the source suite, recorded because each cost something:
 | **Reality-strain** | Substrate tension produced by holding a configuration off the futural-potential-legible. The externalized form of what would otherwise be Coherence cost. |
 | **The futural-potential-legible** | The equilibrium configurations tend toward: the state in which they stand in harmony, needing no sustaining. *Futural* — ahead, not a return. *Potential* — not yet actual. *Legible* — renderable. A property of configuration-space, not of the ground; §1.5 is untouched. See §3.4. |
 | **Imbrication** | How a thread is bound into or separated from others. A being *is* threads, so its imbrication is its position in the weave — and what is given to it follows from that position. Acting alters it. See §3.5. |
+| **Providence** | The second mode of emergence: a configuration rendered coherently by few or briefly, persisting temporarily on accidental organization. An event, not an entity. The name is the survivors', and it is ironic — nothing provided it. |
 | **Harmony** | The relation obtaining among configurations at equilibrium: each holds its shape without being held against the others. |
 | **Apperception** | The apprehension of a subject as a unified whole. The *reflexive* facing is the practitioner's self-apperception as a worldly human; the *outward* facing is others' apperception of them as a unified human subject. |
 | **The Real** | That which escapes symbolization; the unassimilable remainder. Adopted from Lacan and redefined ontologically as plenitude rather than structurally — see §0.3 for what that pivot costs and where it is paid. |
