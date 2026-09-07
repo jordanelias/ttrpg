@@ -1,5 +1,32 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⛔ FILED 2026-09-07 — `_ch_document_key` EXISTS IN THREE LIVE COPIES AND THE `R8.4` REPAIR IS IN ONE
+
+**This is a `§8` violation that predates the repair and that the repair has now made expensive.** Found
+by the second adversarial critic on PR #379, verified by reading all three trees:
+
+| copy | branch | state |
+|---|---|---|
+| `proposals/2026-09-01-season-loop-tests/tracer/shape.py` | `main` + PR #379 | ✅ **repaired** — reads `changes[]` |
+| `engine/season/shape.py` | **PR #371** (`claude/issue-368-architecture-review-2nnilz`, *ADOPT IN FULL*) | ⛔ **unrepaired**, byte-identical to the pre-`R8.4` predicate |
+| `proposals/2026-09-01-season-loop-tests/season/shape.py` | **PR #378** (`claude/shape-py-modular-architecture-b013sg`) | ⛔ **unrepaired** |
+
+⚠ **The copy that was repaired is the one PR #371 supersedes.** `engine/season/` is the intended home —
+`workplans/2026-09-06-season-loop-execution-plan.md` is written against it throughout and says plainly
+that the tree does not exist on `main`. So if #371 merges as it stands, `R5`'s bureaucratic channel is
+dead again in the tree that matters, and PR #379 will read as a fix that was applied and lost.
+
+**What this lane owes, in order.** (1) Decide which of the three trees is the head — that is the
+prerequisite for everything, not a tidy-up. (2) Carry the two-line repair plus its two falsifiers into
+whichever it is. (3) Collapse the copies, because a predicate with three homes will diverge again and
+this is the second time it has cost something.
+
+⚠ **Not ported by PR #379 deliberately.** #371 and #378 are other people's open PRs; pushing a change
+into a PR this session did not open is out of bounds. Filed here so the decision has an owner rather
+than being made by whichever PR merges last.
+
+---
+
 ## ⭐ DONE 2026-09-07 — `R8.4`'s `document_key` repair is EXECUTED (PR #379, ED-IN-0202)
 
 **`PHASE 1` step 1 of `21_RECONCILIATION.md` — half of it. Read which half.**
