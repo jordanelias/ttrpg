@@ -1,5 +1,114 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⛔ RULED 2026-09-07 (Jordan) — `engine/season/` IS THE HEAD, AND THE `R8.4` REPAIR MUST BE CARRIED INTO IT
+
+**The ruling:** *"Other tree wins for its work."* `engine/season/` on **PR #371** (*ADOPT IN FULL*) is
+the tree that survives; `proposals/2026-09-01-season-loop-tests/tracer/` is the prototype it
+supersedes. PR #379 repaired the prototype.
+
+### ⚠ Scope, stated narrowly because the first writing of this entry overstated it
+
+**Most of PR #379 is tree-independent and stands as merged.** The corrections to
+`design_rulings_2026-09-06.md`, `21_RECONCILIATION.md`, `17_PLAYABILITY.md`,
+`workplans/2026-09-06-season-loop-execution-plan.md`, `HANDOFF_SC.md` and this file are shared
+reference and continuity; they are about the mechanism and the plan, not about a tree. **Exactly
+three things are tree-bound**, and `engine/season/` carries its own copy of each — it reads
+`_HERE / "rosters.yaml"`, not the shared registry:
+
+| # | surface in `engine/season/` | state |
+|---|---|---|
+| 1 | `shape.py:4356` `_ch_document_key` | ⛔ unrepaired — byte-identical to the pre-`R8.4` predicate |
+| 2 | `rosters.yaml:407` `document_key`'s declared meaning | ⛔ unrepaired — still *"over the Event's subject"* |
+| 3 | the two `r8_4` falsifiers | absent; they live in the prototype's `test_tracer_is_honest.py` |
+
+### ✅ THE PORT IS VERIFIED AGAINST PR #371's ACTUAL TREE, NOT INFERRED FROM THE PROTOTYPE
+
+Both hunks apply cleanly to `engine/season/shape.py` and `engine/season/rosters.yaml` as they stand
+on that branch. Executed there:
+
+```
+PR #371's tree, WITH the port:      record-route falsifier PASS   store-route falsifier PASS
+same tree, port REVERTED (control): record-route falsifier FAIL   store-route falsifier FAIL
+```
+
+So the defect is **live in the winning tree** and the fix is proven against it. The predicate hunk is:
+
+```python
+    return any(t.kind == "hold" and t.subject == pid and t.object == c.subject and t.live
+               for c in e.changes if c.subject
+               for t in w.tenures)
+```
+
+⚠ **NOT PUSHED BY PR #379, and deliberately.** #371 is an open PR this session did not open, and
+this session's branch is `claude/pr376-handoff-y3qrye`. Whoever lands #371 carries the three items
+above, or the channel is dead again in the tree that matters.
+
+### What this means for `PHASE 1` step 1's second half
+
+**`H-84`'s record-moving route is `workplans/2026-09-06-season-loop-execution-plan.md` item 2.7** —
+the `Record.rung` matrix row plus *deposit · take · give · send/carry · copy · destroy · read*,
+composed from existing primitives, tiered `opus`, marked PAPER. Under this ruling **it is built in
+`engine/season/`, not in the prototype**, so it waits on #371 landing rather than being written into
+the tree that loses. Its constraints are already recorded in row 2.7 and are not restated here.
+
+---
+
+## ⭐ DONE 2026-09-07 — `R8.4`'s `document_key` repair is EXECUTED (PR #379, ED-IN-0202)
+
+**`PHASE 1` step 1 of `21_RECONCILIATION.md` — half of it. Read which half.**
+
+`_ch_document_key` tested `t.object == e.subject`; every fold-emitted Event sets `subject = actor`
+and no `hold` takes a person as object, so **`R5`'s bureaucratic channel could not fire on a single
+act.** It now reads `changes[]`. Measured before: **1** (event, person) pair in Carin's world at
+seed 0 — on `term.matured`, not an act. After: **3**, including `record.created`.
+
+⭐ **AND THE CHANNEL REACHES A NON-AUTHOR TODAY, WHICH THIS LANE'S OWN DIAGNOSIS SAID IT DID NOT.**
+`R8.4`'s row and the first draft of the repair both said the channel *fires for nobody but the
+author*. That is true of Carin's world — she holds no rung — and **false of the mechanism.**
+`_eff_transfer` returns `[src.id, dst.id]`, `_apply_write` subjects the `StateChange`s to those
+RUNGS, and the fold puts them on the Event. **EXECUTED:** with `p_other` holding `S` and acting and
+`p_low` holding the destination `Hh`, `transfer.made` carries `changes=['S','Hh']` and
+`document_key` returns True for `p_low` — a non-author, witnessing an act, bureaucratically.
+Pinned by `test_r8_4_document_key_reaches_a_non_author_through_a_store`.
+
+**So `H-84` is narrower than it reads.** It blocks the **Record** route — nothing moves a Record to
+a second person. The **store** route is open and needs no new verb. `PHASE 1` step 1's falsifier is
+written about Records and stays red; the channel it was protecting is already live.
+
+### What is now safe, and what step 2 still needs
+
+**The flip to a narrowed fan-out (`19_PLAN.md` step 1, forced by `R7`) is no longer blocked by a
+dead channel.** Controls: the seeded content hash is **identical on all three arms**
+(`total` / `presence_only` / `all_five`) and deposit counts are unchanged at 2 and 3 seasons —
+because the author was already admitted by `co_located`, so no observer set moves. The live arm is
+`total`, under which channels are never consulted, so this step cannot move a golden.
+
+⚠ **Step 3 now has a REACHABLE problem it did not have.** A channel decides WHO witnesses, not WHAT
+they learn. `observers_for` discards which channel admitted a person, and `claim_subjects` under the
+default `both` starts from `e.subject` — the actor. So a `document_key`-only witness **learns who
+acted**, which is the opposite of the asymmetry `R8.5` cites (*"a document holder saw only that the
+document changed"*, on unmerged PR #371, not in this tree). That was vacuous while the channel was
+dead. It is not vacuous now. **`R8.1`'s `seen` claim is what supplies it.**
+
+### Three surfaces were corrected in the same change, because the code moved under them
+
+`rosters.yaml:407`'s declared meaning (the row `R5` quotes verbatim as the definition, and which
+**nothing in the tree would have caught** — the only test on it checks name set-equality) ·
+`shape.py`'s `in_holdings()` docstring, which stated the retracted mechanism two functions from the
+repair · `H-92`, whose `levy` example was **already unreachable when written** and whose hole this
+repair makes WIDER and reachable for the first time · `17_PLAYABILITY.md`'s `document_key` row,
+whose verdict survives but now rests on `speak` having `writes: []` rather than on the old predicate.
+
+### ⚠ Two things found and deliberately NOT fixed here
+
+- **`PLAN.md:951-955` says `all_five` = 71 deposits over 3 seasons; the tree measures 60**, both
+  before and after this repair. A stale literal that predates this change — same class as the
+  `678 → 68` one that line already self-reports. Not this PR's to move.
+- **`H-92` is not re-graded.** Its mechanism is corrected so the next reader is not working from a
+  retracted one; the grade belongs to its owner.
+
+---
+
 ## ⚠ FILED 2026-09-07 FROM THE SC LANE — one write-gate defect that is `IN`'s and not theirs
 
 **Surfaced by the proceedings stress suite (PR #376, `ED-SC-0036`); registered here rather than
@@ -55,7 +164,7 @@ stems are closed at load by `_require_known_stem` (`:1311`, `SystemExit`), and `
 
 | defect | site | lane |
 |---|---|---|
-| `document_key` **cannot fire on any act** — the predicate tests `t.object == e.subject` and every fold Event sets `subject = a.actor`; no `hold` Tenure takes a person as object. `R5`'s bureaucratic channel is unreachable on acts, not merely underused. | `shape.py:4356` vs `:5857` | IN |
+| `document_key` **cannot fire on any act** — the predicate tests `t.object == e.subject` and every fold Event sets `subject = a.actor`; no `hold` Tenure takes a person as object. `R5`'s bureaucratic channel is unreachable on acts, not merely underused. ⚠ **REPAIRED 2026-09-07 (`ED-IN-0202`, PR #379)** — `_ch_document_key` now tests the subjects in `changes[]`, so the channel fires on acts. Kept as written because it is the argument that produced the repair; **it is no longer true of the tree.** And the second clause was narrower than it read: `H-84` blocks the RECORD route only. The STORE route is open and executed — a non-author holding the destination rung witnesses `transfer.made` (`test_r8_4_document_key_reaches_a_non_author_through_a_store`). | `shape.py:4356` vs `:5889` | IN — **CLOSED** |
 | `Person.marks` has zero writers and zero readers, **and its write-matrix row is RETIRED** so a gate write refuses today. Writing it at world-build moves every same-seed hash (`_entity_digest` is `repr(dataclass)`) — a re-baseline, not a red test. | `shape.py:2367`; `write_matrix.yaml:358-370` | IN |
 | `Candidate.why` is written once (`why=q.source`) and **read nowhere**; `Act` carries no `why`. The engine forgets the motive before the act executes. | `shape.py:2284`, `:3289` | IN |
 | One `stratum: "movement"` row exists (`move`), so a stratum term is **injective there** and leaks the verb it is meant to withhold. | `verb_table.yaml:344` | IN |

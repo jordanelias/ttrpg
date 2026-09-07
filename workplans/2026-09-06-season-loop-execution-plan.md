@@ -215,12 +215,28 @@ is not a taxonomy: it decides whether the scale costs a scene.**
 a scene per round'."* `shape.py:5655` iterates **every person in the world** once per deliberation.
 
 **⚠ THREE OF FIVE WITNESS CHANNELS ARE BUREAUCRATIC, AND THEY ARE STARVED.** `rosters.yaml:406-410`:
-`document_key` (*holds a live `hold` Tenure over the Event's subject*), `post_remit` (*holds an office
+`document_key` (*holds a live `hold` Tenure over something the Event CHANGED — a `changes[]` subject; ⚠ **this read "the Event's subject" until `R8.4` landed 2026-09-07, PR #379**, which is why the channel could not fire on a single act*), `post_remit` (*holds an office
 whose remit covers the verb*), `chronicle` (*a `binding_decision` verb — public because
 institutional*). Only `co_located` is memory-of-presence. **`H-84` starves the first**: no verb moves a
 Record to another person, so *"the only person holding it is its maker"* and `document_key` can never
 fire for anyone else. That is R5's mechanism sitting dead in the tree, and item **2.7** is the whole
 of the repair.
+
+> ⚠ **AMENDED 2026-09-07 (PR #379) — THE PARAGRAPH ABOVE IS HALF WRONG NOW, AND THE HALF THAT SURVIVES
+> IS NARROWER.** `R8.4`'s repair landed: the predicate reads `changes[]`, so `document_key` fires on
+> acts. **`H-84` starves the RECORD route only.** The STORE route was always open and nobody had
+> noticed — `_eff_transfer` subjects its `StateChange`s to the RUNGS, so a person holding the
+> destination rung witnesses a `transfer` they took no part in. Executed and pinned by
+> `test_r8_4_document_key_reaches_a_non_author_through_a_store`. **So R5's mechanism is not dead**, and
+> item **2.7** is the whole of the repair *for Records*, not for the channel.
+>
+> ⛔ **AND THE REPAIR IS IN ONLY ONE OF THREE LIVE COPIES.** `_ch_document_key` exists at
+> `proposals/2026-09-01-season-loop-tests/tracer/shape.py` (repaired), at `engine/season/shape.py` on
+> **PR #371** (unrepaired) and at `proposals/2026-09-01-season-loop-tests/season/shape.py` on **PR #378**
+> (unrepaired) — verified by reading all three. This plan is written against `engine/season/`, which
+> does not exist on `main`, so **the copy this plan's item 2.7 would build on still carries the bug.**
+> Whichever of the three trees becomes the head must carry the repair; §8's *never re-implement a rule*
+> is already broken here and the repair did not cause it.
 
 ---
 
@@ -517,7 +533,7 @@ different property from being on the critical path.**
 |---|---|---|---|---|
 | 1 | an act resolves **probabilistically** | `R-09` → `margin()` → `degree_from_net` | **absent.** Zero roll producers; 1 of 32 verbs declares `contests:` | 1.1 |
 | 2 | writes state through the **gate with receipts** | `Receipt(id, kind, field, subject, before, after)` (`04:395`) | **absent.** `before`/`after` are `None` at both emitters; the Tenure receipt's subject is the wrong entity | 1.2 |
-| 3 | **WITNESS deposits claims** per channel — the fact propagates as imperfect per-person belief | five channels, `rosters.yaml:406-410` | **partial.** Three channels are bureaucratic and `document_key` can fire only for the author (`H-84`) | 2.7 |
+| 3 | **WITNESS deposits claims** per channel — the fact propagates as imperfect per-person belief | five channels, `rosters.yaml:406-410` | **partial.** Three channels are bureaucratic. ⚠ **AMENDED 2026-09-07 (PR #379):** `document_key` fires on acts now and reaches a NON-AUTHOR through the store route; `H-84` restricts the RECORD route alone | 2.7 |
 | 4 | claims **reach later decisions** through the typed `requires` | `H-72` (`LedgerReader`), `H-94` (operands) | **partial.** 9 verbs typed · 4 predicates · **10 neither**; four of the ten are blocked on the Dispensation operand | 2.4 |
 | 5 | outcomes write **interiorities** — the person is CHANGED, not merely informed | the Degree-keyed `writes:` column (`H-62`, `W-F`) | **absent.** `F.20a` (`04:1083`): **NO VERB WRITES ANY `Person` INTERIOR FIELD** | 2.3 |
 | 6 | changed interiorities **alter what they choose** | `R-08` non-rational choice over the moved interior | **absent.** `choose` is argmax over a constant | 2.3 |
@@ -666,7 +682,7 @@ is not a flourish — it is §0.06's six, and half of them have no code.
 |---|---|---|
 | **0** | any command a replacement names prints something other than the replacement; `--verify-citations` output changes for any reason but the corrected sentences; the `headless` hash moves | `git diff --stat`; the commands themselves; the unchanged seeded hash |
 | **1** | **1.6** any module loads twice under two names, or the corpus hash moves; **1.1** two seeds give identical degree histograms over ≥50 acts, or one seed differs across runs; **1.2** an effect that touches nothing still mints a receipt, **or the `Tenure.until` receipt still names the dead person**; **1.5** a save/load round trip changes `content_hash`, or a new `_STATE_COLLECTIONS` entry passes without a serializer change; **1.3** the loader accepts a `release` domain missing a kind, or the ten `scale:` keys are deleted before `via.scope` is read; **1.4** a planted round-1 deposit does not change a round-2 candidate set | **the campaign-scale goldens byte-identical** — `python -m pytest engine/tests -q` (named, not read: out of scope). Same-seed hash equality for 1.4 and 1.6 |
-| **2** | executed-verb count and DISTINCT EXECUTED SETS do not **both** rise; `stance` still has zero writers after two seasons; **2.6: the ambitious person still forms no candidate for a vacated office**; **2.7: `document_key` still deposits for nobody but the author**; 2.8: the 10-season run ends with no more Sites than it started with | **τ→0 arm byte-identical to HEAD** — a sampler whose zero-temperature limit is not the old argmax changed two things at once. For 2.6, the with/without-clause pair. For 2.8, the growth term zeroed |
+| **2** | executed-verb count and DISTINCT EXECUTED SETS do not **both** rise; `stance` still has zero writers after two seasons; **2.6: the ambitious person still forms no candidate for a vacated office**; **2.7: `document_key` still deposits for nobody but the author *from a `record.*` Event*** — ⚠ **narrowed 2026-09-07:** the unqualified form is no longer a falsifier for 2.7, because the store route already deposits for a non-author; only the RECORD route is 2.7's; 2.8: the 10-season run ends with no more Sites than it started with | **τ→0 arm byte-identical to HEAD** — a sampler whose zero-temperature limit is not the old argmax changed two things at once. For 2.6, the with/without-clause pair. For 2.8, the growth term zeroed |
 | **3** | GENUINE forks are still 0 at shipped defaults (**the denominator is empty today, not the rate low**), or reconvergence ≥96%; **3.3: any of its seven assertions still passes with its link reverted** — then it guards nothing | the `observation_deposit_mode=none` arm ≥ the default arm; **both** fingerprints, or the run is the 95.77-vs-65.44 conflation again; 3.3's two reverted-link controls |
 | **4** | a faction-scale case is still UNREPRESENTABLE; **4.3b changed the seam contract** — then the seam was never the boundary and the replacement claim is void; the settlement economy still runs inline anywhere; 4.8's exported count differs from the loader's derived count; after 4.9 anything retained imports a forked module | `test_engine_does_not_import_systems`, `test_r04_pending_composition_roles_can_only_shrink`, `test_partition_is_total`; an **empty** diff on the seam contract for 4.3b; a two-arm campaign run (n≥30) showing the realm does not degenerate to one holder |
 | ⚠ **CHURN / PROPAGATION** | **after wave 2, if DISTINCT EXECUTED SETS is still 2, or later-decision divergence is still ~4% while world divergence is ~100% — then the world churned and changed no decision. THAT IS SCENERY**, and R3/R4 are `not_met` however many verbs execute | both numbers reported together, from the same run, at shipped defaults. **Neither number alone is the criterion** |

@@ -119,6 +119,29 @@ fifteen places where it was not.** The game is where it was.
 
 ## ⭐ WHAT TO DO NEXT, in order, and the first one is the only one that matters
 
+> ### ✅ **UPDATE 2026-09-07 (PR #379, `ED-IN-0202`) — action 1's PREDICATE HALF IS DONE, and it reaches further than this handoff said.**
+>
+> `_ch_document_key` now tests the subjects in `changes[]` instead of `e.subject`, so **`R5`'s
+> bureaucratic channel fires on acts.** Two falsifiers, both mutation-checked (green repaired, **red**
+> on the pre-repair predicate); seeded hashes identical on all three fan-out arms, because the live
+> arm is `total`, under which channels are never consulted.
+>
+> ⚠ **The claim below that the channel *fires for nobody but the author* is FALSE of the mechanism.**
+> It is true only of Carin's world, which holds no rung. `_eff_transfer` subjects its `StateChange`s
+> to the RUNGS, so a person holding the destination witnesses `transfer.made` without acting —
+> executed, and pinned by `test_r8_4_document_key_reaches_a_non_author_through_a_store`. **`H-84`
+> blocks the RECORD route only**, and nothing was invented to get round it.
+>
+> **So action 2 (fan-out off `total`) is now unblocked** — C-3's ordering constraint is satisfied for
+> the store route. The Record route stays blocked on `H-84`, whose owner is *Part E — the verb that
+> would do it*, and which forbids in terms inventing a `give_record` to make a case pass.
+>
+> ⚠ **And one consequence that is `PHASE 1` step 3's, not step 2's:** a `document_key`-only witness
+> now learns WHO ACTED, because `observers_for` discards which channel admitted a person and
+> `claim_subjects` under the default `both` rule starts from the actor. `R8.5` cites a ratified line
+> pointing the other way. That asymmetry was vacuous while the channel was dead; it is reachable now.
+
+
 **1 · `R8.4`'s `document_key` repair — `IN` lane, and it is the first step that moves the game.**
 `shape.py`'s `document_key` channel tests `t.object == e.subject` while every fold Event sets
 `subject = actor` and no `hold` Tenure takes a person as object, **so the channel cannot fire on any

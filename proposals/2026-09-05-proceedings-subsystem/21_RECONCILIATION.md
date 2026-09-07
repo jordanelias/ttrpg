@@ -223,7 +223,7 @@ happened, not how far. That sentence needs the qualifier.
 | | |
 |---|---|
 | **A** | flip `fan_out_mode` off `total` (`19_PLAN.md` step 1), so absence means something |
-| **B** | 89 corpus worlds and six campaign goldens sit on that arm; `chronicle` matches nobody; `document_key` cannot fire on any act — so the narrowed arm may **starve** the propagation chain rather than shape it |
+| **B** | 89 corpus worlds and six campaign goldens sit on that arm; `chronicle` matches nobody; `document_key` cannot fire on any act — so the narrowed arm may **starve** the propagation chain rather than shape it. ⚠ **THE `document_key` HALF IS REPAIRED (2026-09-07, PR #379)**; `chronicle` still matches nobody, so the starvation risk is reduced, not gone |
 
 > ### ⭐ **RULED: A, and it is not this design's call — `R7` already made it.**
 
@@ -497,7 +497,7 @@ be *edits to the thing under review*, which is what PHASE 0 is.
 
 | # | step | class | artifact | falsifier | unblocks |
 |---|---|---|---|---|---|
-| **1** | ⭐ **`document_key`'s repair** — test the changed record in `changes[]` rather than `e.subject` (`R8.4`) — plus `H-84`'s record-moving route | spec | a non-author holding a `Record` deposits from a `record.*` Event | the channel still fires for nobody but the author | **2**, 6, and all of `R5` |
+| **1** | ⭐ **`document_key`'s repair** — test the changed record in `changes[]` rather than `e.subject` (`R8.4`) — plus `H-84`'s record-moving route. ✅ **PREDICATE HALF DONE 2026-09-07 (PR #379)**; the record-moving route is NOT done and is `H-84`'s, which forbids inventing a verb for it | spec | a non-author holding a `Record` deposits from a `record.*` Event — ⚠ **still red, and `H-84` is why.** But the falsifier was written narrower than the mechanism: a non-author holding a **STORE** already witnesses `transfer.made` through this channel, executed and pinned. `R5` is reachable now | the channel still fires for nobody but the author — ⚠ **this is now FALSE of the mechanism and true only of Carin's world**, which holds no rung; re-read it before citing it | **2**, 6, and all of `R5` |
 | **2** | ⭐ **fan-out off `total`** (`19_PLAN.md` step 1), `M-6` measured at both arms | spec, **ruled by `R7`** | two persons' ledgers differ after two seasons; the six goldens re-baseline with deltas printed | the propagation chain collapses on the narrowed arm → step 1 was incomplete | secrets, absence, `F-33`, C-3 |
 | **3** | `R8.1`'s `seen` claim and the `observation_terms` roster, declared at load | spec | a witness holds `(rung, seen, {stratum, who, …})`; `Q2` fires for everyone in the rung | an undeclared struct member loads | PHASE 3 |
 | **4** | `told_by` minted from the channel at the teller's confidence (`19_PLAN.md` step 4) | spec | a told claim at less than firsthand confidence; standing stops returning its maximum | every deposit is still firsthand | 17, 18 |
