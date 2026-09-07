@@ -187,9 +187,21 @@ def test_d6_no_invented_constant_sits_in_a_body():
     shape.py, which no longer defines `DEFAULT_FIXTURES` at all, contain the string), which is
     the same corpus-shrinks-while-still-passing failure `test_h115` documents for the load-time
     exit count."""
-    body = FIXTURES_CODE.split("DEFAULT_FIXTURES = Fixtures (", 1)[1]
-    for bad in ("// 100", "// 60", "confidence = 1 ,"):
-        assert bad not in body, bad
+    # ⚠⚠ THE STEP-3 RE-POINT NARROWED THIS TO NOTHING, AND AN ADVERSARIAL PASS CAUGHT IT.
+    # `split(token, 1)[1]` is "everything after the token to EOF". In `shape.py` that was ~4,750
+    # lines INCLUDING EVERY FUNCTION BODY -- which is D6's whole subject, "a constant in a BODY".
+    # In `fixtures.py` `DEFAULT_FIXTURES` is the LAST statement, so the scanned region became the
+    # kwargs list and nothing else. FALSIFIED BY EXECUTION: hardcoding `// 60` into
+    # `entrenchment`'s body (shape.py) left this test GREEN. A re-pointed guard that can no
+    # longer fire is worse than a broken one -- it reports coverage it does not have.
+    # The corpus is now the MODEL SET, so it follows the code wherever later steps move it.
+    mods = _model_modules()
+    assert len(mods) >= 8, f"model set collapsed to {len(mods)} -- this guard would pass vacuously"
+    for m in mods:
+        code = _code_only(m.read_text())
+        body = code.split("DEFAULT_FIXTURES = Fixtures (", 1)[-1] if "DEFAULT_FIXTURES = Fixtures (" in code else code
+        for bad in ("// 100", "// 60", "confidence = 1 ,"):
+            assert bad not in body, f"{m.name}: {bad}"
 
 
 def test_d6b_wear_has_no_silent_default():
@@ -549,7 +561,16 @@ def test_d10c_the_obstacle_refusal_gate_exists():
     `obstacle_refusal_multiple` is a `DEFAULT_FIXTURES` key, and `DEFAULT_FIXTURES` moved to
     `season.data.fixtures`; `SeasonDriver.resolve`, which reads it, did not move and is
     unaffected."""
-    assert "obstacle_refusal_multiple" in FIXTURES_CODE
+    # ⚠ THE STEP-3 RE-POINT WEAKENED THIS AND WAS REVERTED. Asserting the key is REGISTERED in
+    # `fixtures.py` proves only that a default exists; the gate could stop reading it entirely
+    # and this would stay green. FALSIFIED BY EXECUTION: replacing the read at the gate with a
+    # literal `2` left the re-pointed form GREEN. The READ is the mechanism, and post-move the
+    # read-side assertion is STRONGER than before -- `obstacle_refusal_multiple` is no longer in
+    # shape.py's import list, so only the gate's own read can satisfy it.
+    assert "obstacle_refusal_multiple" in SHAPE_CODE, (
+        "the Ob>2xPool gate no longer READS its multiple from the fixtures")
+    assert "obstacle_refusal_multiple" in FIXTURES_CODE, (
+        "the multiple is no longer registered as a fixture default")
     assert "attempt.refused" in inspect.getsource(S.SeasonDriver.resolve)
 
 

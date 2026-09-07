@@ -5,6 +5,19 @@
 BEFORE state that is not in the tree, with no command that produces any of them. An adversarial
 pass could neither confirm nor refute them, which is the same as not having reported them.
 
+⚠⚠ THIS COMPARISON IS VACUOUS UNLESS YOU REGENERATE `results.json` FIRST.
+The BEFORE side is `git show <rev>:runs/results.json`; the AFTER side is the WORKING TREE copy of
+that same file. Nothing here writes it -- only `python -m season.harness.report` does. So running
+`delta <rev>` without regenerating compares the committed artifact against an unchanged copy of
+ITSELF, and `PROBE FLIPS 0` is TRUE BY CONSTRUCTION rather than measured. It cannot fail.
+
+Found 2026-09-07 by an independent verifier during the shape.py decomposition, after
+`PROBE FLIPS 0` had been quoted as a control in five commit messages. The conclusion happened to
+survive re-measurement, but the command as run had proved nothing. CLAUDE.md §0.1 pt 2: an
+assertion that cannot observe the failure it excludes is an ABSENT assertion, not a weak one.
+
+  CORRECT:  python -m season.harness.report && python -m season.harness.delta <rev>
+
 `results.json` carries no verdict summary and no history, so the before-state has to come from
 git. This reads a committed revision's artifact and the working tree's, and prints the deltas a
 commit message is allowed to claim.
