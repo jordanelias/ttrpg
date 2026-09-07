@@ -1,6 +1,12 @@
 # Discussion Supplement
 
-**Read this second, after `00_standing.md`.**
+> ⚠ **PARTLY SUPERSEDED.** This file was written before the author's rulings. §3's twelve open rulings
+> are all now decided, and several were decided *against* the options this file sets out — see
+> `RULINGS.md`, which is the live record. §1's verdict, §2's findings, and §5–§8's method and gaps
+> remain accurate as a record of what the review found. Where this file and `RULINGS.md` disagree,
+> `RULINGS.md` governs.
+
+**Read this after `00_standing.md` and `RULINGS.md`.**
 
 This records what was found in the five source documents, what was resolved and on what authority,
 and what could not be resolved because it is genuinely the author's to decide. Nothing here is

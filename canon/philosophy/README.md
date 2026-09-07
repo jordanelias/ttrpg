@@ -1,6 +1,8 @@
 # Valoria — Philosophical Foundations (reorganized suite)
 
-**Status:** PROPOSED. Nothing here is ratified. This suite is a reorganization of five existing
+**Status:** PROPOSED as a reorganization; the philosophical content is **RULED**. The author decided
+every open question on 2026-09-07 (see `RULINGS.md`). What remains unratified is the arrangement —
+whether this suite replaces the five sources, and the ordering calls in the supplement. This suite is a reorganization of five existing
 documents, with the inconsistencies between them resolved where resolution was editorial and
 flagged where it requires an authorial ruling.
 
@@ -31,12 +33,13 @@ suite's own resources decided them, and marking the remainder for a decision tha
 | 8 | `08_history.md` | The Calamity, Solmund, the Church, the betrayal — as worked cases of the mechanism |
 | 9 | `09_terminology.md` | The ontical/ontological question, and the vocabulary |
 | 10 | `10_constraints.md` | P-01…P-15, regenerated against the new section numbers |
-| — | `DECISIONS.md` | **The choices that need you.** Twelve rulings, twenty-two resolutions to ratify, ordering calls, enrichments — each self-contained |
+| — | `RULINGS.md` | **The author's decisions, verbatim.** Each ruling in his own words, what it displaced, where it was applied. The live record |
+| — | `DECISIONS.md` | The questions as originally posed. Superseded by `RULINGS.md`; kept for the context each question was asked in |
 | — | `DISCUSSION_SUPPLEMENT.md` | Every finding, every resolution with its authority, the method and what would falsify it |
 | — | `_sources/` | The five originals, byte-identical. Never edit; they are the provenance baseline |
 
-**If you read only one thing:** `DECISIONS.md`. It is the whole decision surface, and every item on
-it stands alone.
+**If you read only one thing:** `RULINGS.md`. Every decision the framework now rests on, in the
+author's own words, with what each one displaced.
 
 ---
 

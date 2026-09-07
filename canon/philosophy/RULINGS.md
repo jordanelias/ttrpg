@@ -1,5 +1,18 @@
 # Rulings — the author's decisions, as given
 
+> **This is the live record of what the framework holds.** Where any other file in this suite
+> disagrees with it, this file governs. `DECISIONS.md` records the questions as originally posed and is
+> superseded; `DISCUSSION_SUPPLEMENT.md` remains accurate on what the review found, but not on what is
+> open.
+>
+> **Reading it:** each entry gives the ruling in the author's own words, what it displaced, the
+> consequences drawn, and where it was applied. Entries marked *struck* record proposals from the
+> review that the author rejected — kept so they do not creep back in.
+>
+> **Two things remain open by deliberate refusal**, and are not gaps: what is owed *to* a being outside
+> the moral register, and whether Solmund understood what was being made of him.
+
+
 Append-only. Each entry records the ruling in the author's own terms, what it changed, and where.
 
 ---

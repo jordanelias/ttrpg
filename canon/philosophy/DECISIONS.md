@@ -1,12 +1,28 @@
 # Valoria Foundations — The Decision Surface
 
+> ## ✅ SUPERSEDED — every question in this document has been ruled on
+>
+> **This file is now a record of what was asked, not a list of what is open.** All twelve rulings in
+> Part A, and the Part B items that needed judgment, were decided by the author on 2026-09-07 across
+> seven batches. Several rulings **rejected the options as posed** and replaced them with something
+> better — the tendency, the one/many question, temporality, the two uncannies, third-mode origin.
+>
+> **`RULINGS.md` is the live record.** It carries each ruling in the author's own words, what it
+> displaced, and where it was applied. Read that first; read this only for the context a question was
+> asked in.
+>
+> **Two items remain open by deliberate refusal**, not by omission: what is owed *to* a being outside
+> the moral register, and whether Solmund understood what was being made of him. Both are recorded as
+> refusals in the suite itself.
+
+
 **Everything that needs your ruling, in one place, each item self-contained.**
 
 You should be able to decide any item here without reading anything else. Each carries the source
 text at issue, what depends on it, the options with their real costs, a recommendation with its
 confidence, and the concrete edits that follow from each choice.
 
-**Nothing here is decided.** Forty-seven choices, all yours. The rewritten suite shows what each
+**As originally written:** Forty-seven choices, all yours. The rewritten suite shows what each
 proposal looks like *applied* — that is what a proposal is for — but every file in it is marked
 PROPOSED, nothing is canon, and any item you rule against comes back out cleanly.
 
