@@ -171,14 +171,14 @@ damage is not confined to the target.
 **These are categorically different, not points on one scale.** Scale makes destructive operations
 worse; direction makes restorative operations non-corrosive at any scale.
 
-**Mending torn substrate, and why this account is the one that works.** In a Locked Zone the
-futural-potential is itself damaged: no harmonious configuration is reachable, so nothing is drawn
-anywhere (§3.4). Mending does not accelerate an inevitable recovery — there is none to accelerate. It
-**restores reachability**: it builds a configuration from which a harmonious future is attainable
-again, and thereafter the tendency does the rest.
+**Mending torn substrate, and why this account is the one that works.** In a Locked Zone becoming has
+been precluded: the threads are no longer moving toward an equilibrium at all (§8.5). Mending does not
+accelerate an inevitable recovery — there is none to accelerate, because nothing there is going
+anywhere. It **restarts the becoming**: it brings the configurations back into a movement toward
+equilibrium, and thereafter the tendency does the rest.
 
 That is why Mending is restorative without being a return, and why it is labour rather than midwifery.
-It is the re-opening of a future for a region that had none.
+It does not put anything back. **It starts something going again.**
 
 *(Naming this as the tradition's figure of repair costs nothing and clarifies much, provided the
 redemptive teleology is stripped: no completion is promised, and nothing is being restored to a plan.

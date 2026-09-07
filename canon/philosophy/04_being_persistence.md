@@ -148,9 +148,10 @@ what both were reaching for.
 | Threadcut being | 3 | Deliberately self-maintained, unspooled |
 | **In a Locked Zone** | **2 (no 1)** | **See §8.5 — the row the source suite omitted** |
 
-That last row is not decoration. Where the fabric's integrity is broken, new threads cannot spool
-(§8.5). A person there has a layer 2 with nothing arriving to shape, and a deep-reach practitioner
-there becomes threadcut in the strict sense — a second route into the third mode, from inside.
+That last row is not decoration. In a Locked Zone becoming has been precluded (§8.5), so a person
+there does not accumulate: no temporal depth gathers and nothing settles. A deep-reach practitioner
+there has only what they deliberately hold, which is the mode of a threadcut being reached from
+within rather than through a breach.
 
 ## §4.5 Threadcut beings
 

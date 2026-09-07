@@ -110,23 +110,49 @@ one of the few parts of the history that the open ruling at §8.1 does not touch
 
 ## §8.5 The Locked Zones
 
-The Locked Zones persist because the conditions of possibility in those regions remain damaged. Where
-the substrate has been torn, the conditions for new being to emerge and persist are compromised. **New
-threads cannot spool through regions where the fabric's structural integrity is broken.**
+**A Locked Zone is a place where becoming has been precluded, so the threads are no longer moving
+toward an equilibrium.** *(Ruled 2026-09-07.)*
 
-They are not merely dangerous places. They are places where being-as-such has failed — regions where
-the rendering cannot maintain coherence because the constitutive ground has been ruptured.
+The name is literal. Nothing there is going anywhere.
 
-*(This is a substrate-side claim and must not be restated epistemically. One source restatement
-described them as regions where the rendering cannot stably *present* what exists, which is a claim
-about accessibility rather than constitution — exactly the conflation §2.3 exists to prevent.)*
+### What that means, given what becoming is
 
-**What a Locked Zone does to a person, derived.** This follows from §4.4's omitted row and the source
-suite never stated it. A person in a Locked Zone has a layer 2 with nothing arriving to shape: spooling
-has stopped, and self-rendering has no supply to work on. A being of shallow reach has nothing to hold
-and nothing holding them. **A being of deep reach becomes threadcut in the strict sense** — layer 3
-only, unspooled — which is a second route into the third mode, reached from inside rather than through
-a breach.
+A configuration's temporality *is* its becoming itself in equilibrium — the movement by which it goes
+on being what it is, toward the harmony it tends to (§2.4, §3.4). Preclude the becoming and you have
+not slowed that movement or redirected it. **You have removed the tending.** The threads remain; the
+motion toward does not.
+
+So a Locked Zone is not a region that is damaged and healing slowly, nor one drawn toward some
+different and worse equilibrium. It is a region where the draw itself does not operate. There is no
+direction things are going, because there is no going.
+
+**This is why they persist.** Ordinary damage is repaired by the tendency: configurations are drawn
+back toward harmony and, given time, get there. That mechanism is exactly what a Locked Zone lacks.
+Time passing does nothing, because what time does for a configuration is carry it toward equilibrium,
+and here it carries nothing. **A Locked Zone will still be a Locked Zone in a thousand years**, not
+because the damage is severe but because the process that would undo it is the process that was
+precluded.
+
+### What it does to a person
+
+A being inside one is a configuration among configurations, and the preclusion does not exempt them.
+**Their becoming is precluded too.** Whatever else is true of their time there, they do not accumulate:
+no temporal depth gathers, nothing settles, and the ordinary process by which a configuration is
+carried along is simply not running.
+
+For a being of shallow reach there is nothing to be done about this from inside. For one of deep reach,
+the only persistence available is what they deliberately hold — which is the mode of a threadcut being
+(§4.5), reached from within rather than through a breach.
+
+### Why "the rendering cannot present what exists" is the wrong description
+
+That formulation appears in one of the source restatements and it is an **epistemic** claim: it says
+the zone is unreadable. The zone is not unreadable. **Becoming has been precluded there**, which is a
+fact about the configurations and not about anyone's access to them.
+
+Confusing the two is exactly the conflation §2.3 exists to prevent — intelligibility is epistemic
+accessibility, and this is not that. A Locked Zone would be a Locked Zone with no one to fail to
+render it.
 
 ## §8.6 Why the collapse was irreducible
 

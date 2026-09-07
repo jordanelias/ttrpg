@@ -116,17 +116,16 @@ attractor without owning it.
 
 ### What this settles
 
-**The Locked Zones.** Where the fabric's integrity is broken, new threads cannot spool (§8.5). On any
-account that put the tendency in the ground's spooling, Mending a torn region could not be restorative
-— spooling would never resume the prior configuration, so there would be nothing to accelerate. On
-this account the diagnosis is different and better: **what is damaged in a Locked Zone is the
-futural-potential itself.** No harmonious configuration is reachable from there. Nothing is drawn
-anywhere, because there is nowhere to be drawn to.
+**The Locked Zones.** On any account that put the tendency in the ground's spooling, Mending a torn
+region could not be restorative — spooling would never resume the prior configuration there, so there
+would be nothing to accelerate. On this account the diagnosis is different and better: **in a Locked
+Zone, becoming has been precluded, and the threads are no longer moving toward an equilibrium at all**
+(§8.5). The draw does not operate. Nothing is going anywhere.
 
-**And Mending is therefore the restoration of reachability** — making a harmonious configuration
-attainable again for a region that had none. Not acceleration of the inevitable; the re-opening of a
-future. That is a better thing for a Warden to be doing and it is what §6.6 builds the operation-type
-taxonomy on.
+**And Mending is therefore the restoration of becoming** — restarting the movement toward equilibrium
+for a region in which it had stopped. Not acceleration of the inevitable, and not repair of a
+structure: the re-opening of a tending. That is a better thing for a Warden to be doing, and it is
+what §6.6 builds the operation-type taxonomy on.
 
 **Two faces in practice.** For a being, the nearest thing to the attractor is its own layer-two
 self-maintenance (§4.1), which is what holds it in a shape it can sustain. For a place, it is the

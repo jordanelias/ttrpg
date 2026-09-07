@@ -436,3 +436,33 @@ that coming-apart is much of what makes such a being hard to be near.
 
 *Applied:* §7.1 (yield point; new subsection on retention), §7.6 (gating extended to
 self-comprehension, measured at the crossing), §9.3.
+
+**Locked Zones.** Verbatim:
+
+> "locked zone: It is a place where becoming has been precluded, so the threads are no longer moving
+> towards an equilibrium"
+
+The name is literal: nothing there is going anywhere.
+
+*What it means, given §2.4:* a configuration's temporality **is** its becoming itself in equilibrium.
+Precluding the becoming does not slow that movement or redirect it — **it removes the tending**. The
+threads remain; the motion toward does not.
+
+*Why they persist:* ordinary damage is repaired by the tendency, given time. A Locked Zone lacks
+exactly that mechanism, so time passing does nothing — what time does for a configuration is carry it
+toward equilibrium, and here it carries nothing. **A Locked Zone will still be one in a thousand
+years, not because the damage is severe but because the process that would undo it is the process that
+was precluded.**
+
+*What it does to a person:* their becoming is precluded too. They do not accumulate — no temporal
+depth gathers, nothing settles. For deep reach, the only persistence available is what they
+deliberately hold, which is the threadcut mode reached from within rather than through a breach.
+
+*What Mending is, restated:* not the restoration of reachability (an earlier editorial phrasing) but
+**the restarting of becoming** — bringing configurations back into a movement toward equilibrium.
+Mending does not put anything back; it starts something going again.
+
+*Struck again:* the epistemic restatement ("regions where the rendering cannot stably present what
+exists"). A Locked Zone would be one with no one to fail to render it.
+
+*Applied:* §8.5 (rewritten), §3.4, §6.6, §4.4, §9.3.
