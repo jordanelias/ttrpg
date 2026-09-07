@@ -580,7 +580,21 @@ costly consequence in both and the terminal one only in the second.
 
 ## PHASE 4 · FORTY SEASONS STOP LOOKING LIKE FOUR
 
-### 22 · `Tenure.term` — the one new field in the whole plan
+### 22 · `Tenure.term` — ⚠ **the doctrine's own unbuilt field, not this plan's addition**
+
+> ⚠ **CORRECTED 2026-09-07. This step was headed *the one new field in the whole plan*, which
+> misattributes it.** `04_CODE_ARCHITECTURE.md` §B.8 specifies `Tenure.term` as part of the type;
+> the tracer does not carry it. So building it is **closing a gap between the doctrine and the
+> chain**, not adding a field to the doctrine — and `10_LOOPS_AND_GAPS.md` `P-04` grades it `absent`
+> for exactly that reason. The plan's true new-field count is **zero**.
+>
+> ⚠ **AND ONE HALF OF WHAT THIS STEP CARRIES MAY NOT NEED IT AT ALL.** There are two clocks here and
+> they are different objects: **a summons's return day and a stay's length are a DOCUMENT's life**,
+> and `Record.ttl` / `Record.stages` already exist with a MATTER maturation — written by `open_case`,
+> which is already the act that opens the case document. **A term of service, `surveil`'s declared
+> interval and an oblige's deadline are an EDGE's life**, and those are `Tenure.term`.
+> `21_RECONCILIATION.md` C-10 splits them; the document half can land earlier and more cheaply, once
+> `term.matured` marks something.
 
 **Change.** A tenure gains an optional term carrying *when it matures*, *the act that declared it*, and
 *who may close it*. **The unread payload field is deleted in the same change** — its replacement is

@@ -165,7 +165,16 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # in registers/editorial_ledger_sc.jsonl. Same update-the-pin-and-say-so path as the FA note
     # above -- and this test is the guard that caught the omission, so the allocation and the pin
     # now land in one commit, which is exactly what its own failure message asks for.
-    released = {'SC': 36, 'FA': 39, 'WR': 10, 'SE': 51}
+    # PIN UPDATED 2026-09-07: SC 36 -> 37. ED-SC-0036 allocated for the STRESS SUITE run against
+    # the proceedings subsystem -- 38 executable tests against the season-loop tracer, with three
+    # registers as the deliverable (23 inventions, 8 mechanical decisions, 35 findings of which 20
+    # restate a row the directory already carries and say so). Two structurally independent
+    # read-only critics then killed two findings, overturned a third as stale and voided one
+    # execution; all corrections are applied in place. The entry exists in
+    # registers/editorial_ledger_sc.jsonl and nothing it reports is ratified -- the subsystem stays
+    # PROPOSED and HELD BACK IN FULL. Same update-the-pin-and-say-so path as the 2026-09-06 note
+    # above; this test asked for the allocation and the pin in one commit and that is what this is.
+    released = {'SC': 37, 'FA': 39, 'WR': 10, 'SE': 51}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

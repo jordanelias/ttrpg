@@ -2668,7 +2668,73 @@ def _ch_co_located(w, e, pid) -> bool:
 
 
 def _ch_document_key(w, e, pid) -> bool:
-    return any(t.kind == "hold" and t.subject == pid and t.object == e.subject and t.live
+    """⚠ THIS COULD NEVER FIRE ON AN ACT, AND THE REPAIR IS TO READ `changes[]` (`R8.4`).
+
+    It tested `t.object == e.subject`. Every fold-emitted Event sets `subject = a.actor` on the one
+    path every act-emission takes (`:5889`), and no `hold` Tenure takes a PERSON as object. So the
+    equality could hold only where an Event's subject was ITSELF the held thing, which is
+    `MATTER`/`CALENDAR` kinds alone: those carry no verb and no actor. **`R5`'s bureaucratic
+    channel was unreachable on acts -- not underused, unreachable**, and `R5` names three of the
+    five channels bureaucratic rather than memorial.
+
+    ⚠ A `hold` IS NOT ONLY OVER A RECORD OR AN OFFICE, and an earlier writing of this docstring
+    said so and was wrong. `hold` over a RUNG is built all over the tree (`probes.py:991,998`;
+    Part E's own `hold:<store>` eligibility cell). `tenure_kinds` declares no object type at all.
+    The load-bearing half survives the correction -- no `hold` takes a PERSON as object, which is
+    what makes the old predicate unsatisfiable on an act -- but the enumeration was false and the
+    repair's reach is wider than it claimed. Found by the adversarial pass.
+
+    MEASURED before the repair, Carin's world at seed 0, two seasons, the `all_five` arm: the
+    predicate returned True for **1** (event, person) pair -- on `term.matured`, whose subject IS
+    the record. Not one act. ⚠ Count the predicate EXHAUSTIVELY, not through `observers_for`: that
+    function's `any(...)` short-circuits per person, so once `co_located` matches, later channels
+    are never called and every count taken through it under-reports.
+
+    THE OPERAND IS `changes[]` AND NOTHING IS ADDED TO CARRY IT. `H-79` already established that an
+    act names what it wrote there, and `claim_subjects` already reads it to say what a deposit is
+    ABOUT; this asks the same primitive who was WATCHING. `PLAN.md` §8.1 forbids an `actor` or
+    `target` field on `Event` and this needs neither.
+
+    ⚠ WHY A REPLACEMENT AND NOT A UNION -- BY CONSTRUCTION, WITH ONE NAMED CARVE-OUT. The first
+    writing of this paragraph rested the decision on ONE SEEDED RUN, which is the weaker argument
+    and was available in the stronger form. Structurally: `write()` and `term.matured` both put
+    their subject into `changes[0]`, so NEW is a superset of OLD wherever they fire at all; every
+    fold-emitted Event and every refusal has a PERSON subject, where OLD never fired. **The one
+    exception is `condition.band_crossed` (`:5633`), which carries `subject = <Site>` and
+    `changes = []`** -- a person holding that Site would satisfy OLD and not NEW. No `hold` over a
+    Site exists anywhere in the tree, so the union would admit nobody today; the carve-out is named
+    rather than hidden, because a Site-hold is not forbidden and this line is what would break.
+    Found by the adversarial pass, which was right that a measurement was standing in for a proof.
+
+    ⚠ THE CHANNEL DOES REACH A NON-AUTHOR TODAY, AND AN EARLIER WRITING OF THIS DOCSTRING DENIED
+    IT. It said *the channel still fires for nobody but the author*, which is true of Carin's world
+    -- she holds no rung -- and FALSE OF THE MECHANISM. `_eff_transfer` returns `[src.id, dst.id]`,
+    `_apply_write` turns those into `StateChange`s subjected to the RUNGS, and the fold puts them on
+    the Event. EXECUTED on `tiny_world`: with `p_other` holding `S` and acting, and `p_low` holding
+    the destination `Hh`, `transfer.made` carries `changes=['S','Hh']` and `document_key` returns
+    True for `p_low` -- **a non-author, witnessing an act, through the bureaucratic channel**. That
+    is `R5` reachable, which is what this repair was for, and it under-reported itself. Found by the
+    adversarial pass; pinned by `test_r8_4_document_key_reaches_a_non_author_through_a_store`.
+
+    ⚠ WHAT THIS DOES **NOT** FIX, STATED HERE SO IT IS NOT READ AS FIXED: `H-84`, and it is now
+    narrower than the sentence above once made it sound. No verb in the resolvable vocabulary moves
+    a RECORD to another person, so the only person holding a Record is still its maker. The STORE
+    route above is open; the RECORD route is not, and `PHASE 1` step 1's own falsifier is written
+    about Records. That is a PRODUCER hole with its own row and its own owner (*Part E -- the verb
+    that would do it*), and `H-84` forbids in terms inventing a `give_record` here to make a case
+    pass. Nothing was invented.
+
+    ⚠ AND ONE INTERACTION THIS DOES NOT SETTLE, BECAUSE IT IS `PHASE 1` STEP 3's. A channel decides
+    WHO witnesses, not WHAT they learn. Composed with the deposit layer as it stands -- `observers_for`
+    discards which channel admitted a person, and `claim_subjects` under the default `both` rule
+    starts from `e.subject`, the actor -- a `document_key`-only witness learns WHO ACTED. `R8.5`
+    cites a ratified line pointing the other way (*"a document holder saw only that the document
+    changed"*), and that line lives on unmerged PR #371, not in this tree. The asymmetry is step 3's
+    `seen` claim to supply. Named here rather than built, and it is now REACHABLE rather than
+    vacuous, which is a consequence of this repair and belongs in its record.
+    """
+    return any(t.kind == "hold" and t.subject == pid and t.object == c.subject and t.live
+               for c in e.changes if c.subject
                for t in w.tenures)
 
 
@@ -2962,12 +3028,26 @@ def in_holdings(w: "World", actor: str, rung: Optional[str]) -> bool:
     ⚠ THE ORIGINAL WORDING ALSO CITED *"a store"* AS AN EXISTING INSTANCE, AND THAT WAS
     UNSUPPORTED — no `hold` Tenure over a store is constructed anywhere in the instrument.
     Corrected rather than kept, because the sentence's whole job is to say what the tree already
-    does. Found by the governance-canon adversarial pass.
+    does. Found by the governance-canon adversarial pass. ⚠ **AND IT IS TRUE NO LONGER, AS OF
+    `R8.4` (2026-09-07):** `test_r8_4_document_key_reaches_a_non_author_through_a_store` constructs
+    a `hold` over the hearth `Hh`, a rung carrying `stores`, precisely to exercise Part E's own
+    `hold:<store>` cell. The sentence is kept with its retraction attached rather than deleted,
+    because it is the argument that produced the paragraph.
 
     ⚠ AND THE NARROW CLAIM WAS THE WRONG THING TO CHECK. *`tenure_kinds` does not move* is true
     and proves nothing about the READERS: `Query.budget` counts every live `hold` as an office, so
-    a landholding buys scene actions, and `_ch_document_key` makes a landholder a witness of every
-    Event whose subject is their rung. Both pre-date this function; registered as `H-92`."""
+    a landholding buys scene actions, and `_ch_document_key` makes a landholder a witness. Both
+    pre-date this function; registered as `H-92`.
+
+    ⚠ **THAT SECOND READER MOVED UNDER `R8.4` AND THIS SENTENCE SAID THE OLD THING.** It read
+    *"a witness of every Event whose subject is their rung"*, which was the pre-repair predicate —
+    and that predicate could not fire on an act at all, because a fold Event's subject is the
+    ACTOR. `_ch_document_key` now reads `changes[]`, so a landholder witnesses every Event that
+    **changed** their rung, which is strictly wider and is the first form in which `H-92`'s concern
+    is actually reachable: a `transfer` into a hearth now makes its holder a witness of an act they
+    took no part in. `H-92` is not re-graded here — it is an `FI`/`IN` register row with its own
+    owner, and this note exists so the next reader of it is not working from the retracted
+    mechanism. Found by the `R8.4` adversarial pass."""
     if rung is None or rung not in w.rungs:
         return False
     return any(t.kind == "hold" and t.subject == actor and t.object == rung and t.live
