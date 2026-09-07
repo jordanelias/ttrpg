@@ -32,7 +32,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import wd_acceptance as W
 import arm9_forking as A9
 from sweep_core import S
-from trace_log import TRACE
+from engine.season.trace_log import TRACE
 
 _REAL_QF = S.questions_for
 

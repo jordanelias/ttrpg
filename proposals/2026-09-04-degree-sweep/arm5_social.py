@@ -123,7 +123,7 @@ def run_b(log: Log) -> dict:
     """5b -- the same question asked of the PROPOSAL CHAIN's verb table."""
     log.rule("ARM 5b — the same acts, in the chain's verb table")
     import yaml
-    vt = yaml.safe_load((_REPO / "proposals/2026-09-02-executable-architecture/verb_table.yaml"
+    vt = yaml.safe_load((_REPO / "engine/season/verb_table.yaml"
                          ).read_text())
     rows = {str(r.get("verb")): r for r in vt["verbs"]}
     # The interpersonal surface, by what the row's own `emits` says it is.

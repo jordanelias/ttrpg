@@ -158,6 +158,67 @@ RULES = [
     (lambda p: relocation(p) is not None, 'relocate', 'R-RELOCATE',
      'kept, but moved to its subsystem home -- see the RELOCATE table'),
 
+    # ---- THE ADOPTED SYSTEM (ED-IN-0202, Jordan 2026-09-05, "adopt in full"). Two new top-level
+    # trees left `proposals/` and matched no rule here, which `test_partition_is_total` caught as
+    # the CARRY-union-LEAVE defect: a file with no verdict would be removed under a mirror-image
+    # deletion without ever appearing in a plan. Both are KEEP, and for different reasons worth
+    # stating separately rather than under one pattern.
+    (lambda p: p.startswith('architecture/'), 'keep', 'R-ARCH-LAYER1',
+     'LAYER 1 -- the code architecture and shape, RATIFIED 2026-09-05. It governs how all coding '
+     'is conducted, which is agent instruction (CLAUDE.md 0.05 exempts that class from demotion), '
+     'and it is the citation target of `PLAN.md` section references across the tree'),
+    (lambda p: p.startswith('engine/season/'), 'keep', 'R-SEASON-LAYER2',
+     'LAYER 2 -- the game code, RATIFIED 2026-09-05. The executable season loop, the four '
+     'registries it reads at runtime, its corpus and its suite. This is the mechanism'),
+
+    # ---- DECISION 1 STEP A (ED-IN-0202, Jordan 2026-09-05): "only the repository's systems for
+    # social contests, personal combat and mass battles to be retained. All work in /engine is
+    # retained as well." Those two clauses collide TODAY -- a seeded 1-season probe loads 65
+    # systems.* modules across six subsystems, and 19 of the 27 composition roles declared in
+    # references/module_contracts.yaml target one of the twelve subsystems below. Step A does not
+    # resolve the collision, it makes it LEGIBLE to this classifier: the verdict stays 'keep'
+    # (deleting anything is Step B, and Step B is gated on R-04, which has not run), but the
+    # reason a reader sees is no longer R-CODE's "the executable model" for these twelve -- they
+    # are superseded design surface kept alive by a live runtime dependency, not canon in their
+    # own right. `combat/`, `social_contest/` and `mass_battle/` are NOT matched here and fall
+    # through to R-CODE below, unchanged, because the ruling retains them outright.
+    # ⚠ SPLIT 2026-09-05 AFTER AN ADVERSARIAL PASS. The first version matched all twelve and gave
+    # ONE reason -- "engine/ still resolves into this subsystem at runtime". That is FALSE for five
+    # of them: _architecture, articulation, npcs, ui and victory contain ZERO .py files and are not
+    # importable packages, so nothing can resolve into them by any mechanism. Emitting that reason
+    # verbatim as their verdict would tell a Step B session all twelve are blocked on R-04 when five
+    # are not blocked on anything code-related. Two rules now, because there are two reasons.
+    (lambda p: p.startswith((
+        'systems/characters/', 'systems/factions/', 'systems/fieldwork/', 'systems/overview/',
+        'systems/settlements/', 'systems/threadwork/', 'systems/world/',
+    )), 'keep', 'R-SUPERSEDED-RETAINED-PENDING-R04',
+     "SUPERSEDED by engine/season/ (ED-IN-0202, 2026-09-05) but RETAINED, and retained for exactly "
+     "one reason: engine/ still resolves into this subsystem at runtime through a composition role "
+     "declared in references/module_contracts.yaml's composition_roles: block (engine/substrate/"
+     "composition.py imports the role's target by string at first call, per CLAUDE.md 0.05's "
+     "distinction between reference prose and the code that is the actual mechanism). This is not "
+     "the design source of truth any more -- the season loop is -- and it is not evacuating either: "
+     "deleting it today would silently break a live composition role, which is exactly the "
+     "blocking-reader hazard this tool exists to catch. It becomes deletable only once every role "
+     "targeting it is removed or repointed at R-04's closure; until then this verdict is a record "
+     "of the collision, not a step toward resolving it -- DELETE NOTHING on the strength of it"),
+
+    # The five code-free members of the same superseded set. Same ruling, DIFFERENT reason, and the
+    # difference is the point: these are prose with no code pair, which this tool's own docstring
+    # already covers ("prose with NO code pair -> KEEP, and it IS the spec"). Their retention does
+    # not wait on R-04 and never did.
+    (lambda p: p.startswith((
+        'systems/_architecture/', 'systems/articulation/', 'systems/npcs/',
+        'systems/ui/', 'systems/victory/',
+    )), 'keep', 'R-SUPERSEDED-DOC-ONLY',
+     "SUPERSEDED by engine/season/ (ED-IN-0202, 2026-09-05) and RETAINED, but NOT for the reason "
+     "its seven code-bearing siblings are. This subsystem holds ZERO .py files -- it is not an "
+     "importable package and no composition role targets it, so engine/ cannot resolve into it and "
+     "its retention is NOT gated on R-04. It is kept under this tool's standing rule for prose with "
+     "no code pair: the document IS the spec, and deleting it would delete design intent that "
+     "nothing else records. Whoever runs Step B should read this verdict as 'decide on the prose', "
+     "not as 'wait for the code dependency to clear' -- there is no code dependency to clear"),
+
     # ---- inside an evacuating parent, but KEEP (this is why the cut is per-file, not per-root)
     (lambda p: p.startswith('tests/sim/mass_battle/'), 'keep', 'R-MB-CANON',
      'the CANON mass-battle engine (J2/ED-MB-0064) -- 28 .py, zero .md, misfiled under tests/'),

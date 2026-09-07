@@ -11,7 +11,7 @@ the code is right and this file is stale.
 > ### ⚠ WHERE THE CITED PATHS LIVE — read this before concluding a citation is broken.
 > Most rulings below cite **`engine/season/…`** and **`architecture/…`**. **Neither tree exists on
 > `main`.** Both were added by PR #371 (*"ADOPT IN FULL — the season loop becomes the system, in two
-> layers"*, `ED-IN-0202`), which at the time of writing is **open, unmerged, two commits behind
+> layers"*, `ED-IN-0204`), which at the time of writing is **open, unmerged, two commits behind
 > `main`, and had never had CI run on it**. Read those citations against branch
 > `claude/issue-368-architecture-review-2nnilz`, not against `main`. A `shape.py:NNNN` reference is
 > to `engine/season/shape.py` on that branch.

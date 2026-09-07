@@ -5,7 +5,7 @@
 
 Per `CLAUDE.md` §2 a merge ratifies PROPOSED contents *by default*, with one exception — held back
 **loudly** in the PR body. This is that mark. No `CURRENT.md` row moves, no `ED`/`PP` is allocated,
-and **nothing in `proposals/2026-09-01-season-loop-tests/`, `proposals/2026-09-02-executable-architecture/`
+and **nothing in `proposals/2026-09-01-season-loop-tests/`, `architecture/`
 or `systems/` is edited.** The sweep reads them and reports.
 
 ---
@@ -151,7 +151,7 @@ Full table: **`runs/CASE_PROFILES.md`**, one row per case.
 | **cases** | **143 — 46 NPC + 97 ARC**, from **all 11 case files** in the chain: `2026-08-31-shape-tracer/cases/{ARC1-3,NPC1-3}.yaml` and `2026-09-01-season-loop-tests/cases/{ARC4-6,NPC4-5}.yaml` |
 | **runnable** | **89** (30 NPC + 59 ARC) — a case runs when its `scale:` is a rung kind, **after `apply_rescale`** |
 | **unrepresentable** | **54** — `faction` and `world` are not rung kinds, so 38% of the corpus never enters the loop at all. ⚠ The per-scale split was previously quoted from `corpus_run.main()`, which `sweep.py` never calls — a number in this table with no instrument in the shipped run. Arm 0 prints it now. |
-| **instrument** | `proposals/2026-09-01-season-loop-tests/tracer/` at `1e163ee` (PR #362), unmodified |
+| **instrument** | `engine/season/` at `1e163ee` (PR #362), unmodified |
 
 ⚠ **`apply_rescale` is why this says 89 and an earlier draft said 86.** `corpus_run.run_case`
 re-authors a case's `scale:` before testing it, so filtering the raw `scale:` silently measured a
@@ -672,8 +672,8 @@ them, not left in this directory:
 
 | surface | what landed |
 |---|---|
-| **code design** — `proposals/2026-09-02-executable-architecture/hole_register.yaml` | **eight new rows, all grade `measured`**: `H-113` `emits_at` has zero callers · `H-114` `_eff_kill` is degree-blind · `H-115` the degree branches raise `SystemExit` · **`H-116` the severed belief→decision edge** · `H-117` the act budget never binds · `H-118` `content_hash` reads the log, not the world · `H-119` the seam's two degree surfaces contradict · `H-120` 3 of 4 prizes claimed by no verb. Register clean: `R0/R1/R3/G8/G12/G13` ok, transcription clean, citations all resolve, and `R2`/`G6`'s pre-existing violation counts (6 and 15) are **unchanged** — verified by stashing. |
-| **meta-architecture** — `proposals/2026-09-03-meta-architecture/HANDOFF_NEXT.md` | new **§2A, "THE BACKLOG, MEASURED"**. §2's five root causes were argued from reading; they are now executed against all 143 cases. The rows survive and **the ordering changes**: `H-72`/`F.24`/`H-94` moves ahead of all five, because a discovery model or a degree ladder that cannot reach a later decision is a better-labelled log line. |
+| **code design** — `engine/season/hole_register.yaml` | **eight new rows, all grade `measured`**: `H-113` `emits_at` has zero callers · `H-114` `_eff_kill` is degree-blind · `H-115` the degree branches raise `SystemExit` · **`H-116` the severed belief→decision edge** · `H-117` the act budget never binds · `H-118` `content_hash` reads the log, not the world · `H-119` the seam's two degree surfaces contradict · `H-120` 3 of 4 prizes claimed by no verb. Register clean: `R0/R1/R3/G8/G12/G13` ok, transcription clean, citations all resolve, and `R2`/`G6`'s pre-existing violation counts (6 and 15) are **unchanged** — verified by stashing. |
+| **meta-architecture** — `architecture/meta/HANDOFF_NEXT.md` | new **§2A, "THE BACKLOG, MEASURED"**. §2's five root causes were argued from reading; they are now executed against all 143 cases. The rows survive and **the ordering changes**: `H-72`/`F.24`/`H-94` moves ahead of all five, because a discovery model or a degree ladder that cannot reach a later decision is a better-labelled log line. |
 
 ⚠ **One finding indicts a habit rather than a row, and it is recorded in both places.** #362 applied
 `ID-13` — *a declared field reaching no reader is one that does not exist* — to delete

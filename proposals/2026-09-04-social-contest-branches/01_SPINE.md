@@ -4,7 +4,7 @@
 
 ## Status: **PROPOSED — nothing ratifies on merge.** 2026-09-04. Agonist (producer) output for the shared spine of the social-contest rebuild. Verified against the working tree at branch `claude/social-contest-system-review-dn2y5d`, HEAD `1e163ee`. **Nothing was executed:** no `pytest`, no mutation of `systems/`, `engine/`, `registers/`, `references/`, `canon/` or `CURRENT.md`. This file is the only one created.
 ## Consumers: `02_NEGOTIATION.md`, `03_INQUIRY.md`, `04_CONSENSUS.md`. **They consume this; they do not restate it.** Anything branch-specific is theirs and is deliberately absent here.
-## Compliance target: `proposals/2026-09-03-meta-architecture/04_CODE_ARCHITECTURE.md` (PR #362, PROPOSED, HELD BACK IN FULL) — a **shape constraint, not canon**. Where its shape and the live kernel conflict, the conflict is NAMED (§3.4, §9), never resolved by declaring prose authoritative (`CLAUDE.md` §0.05).
+## Compliance target: `architecture/meta/04_CODE_ARCHITECTURE.md` (PR #362, PROPOSED, HELD BACK IN FULL) — a **shape constraint, not canon**. Where its shape and the live kernel conflict, the conflict is NAMED (§3.4, §9), never resolved by declaring prose authoritative (`CLAUDE.md` §0.05).
 
 **Paper/executes grade (`CLAUDE.md` §0.2): `paper`.** Nothing in this document runs. Every element it
 specifies is an edit to code that exists and passes today; none of the edits has been made. The grade
@@ -912,7 +912,7 @@ candidates. Six cut. One survives with a downgrade.**
 
 ### §6.1 ⚠ The import-cycle test — **the brief's §9.1 is CORRECT about the number and WRONG about what the test asserts, and the difference decides how a builder proceeds**
 
-`SESSION_BRIEF.md` §9.1 says `test_exactly_two_cycles_remain_and_they_are_the_expected_families`
+`SESSION_BRIEF.md` §9.1 says `test_exactly_four_cycles_remain_and_they_are_the_expected_families`
 *"fails if the count changes"*. I read the test. **The 9 appears only in the module docstring
 (`tests/valoria/test_import_cycle_game_state_npe.py:23`). It is asserted nowhere.**
 
@@ -956,7 +956,7 @@ resolves a bare `from . import X` to **both** the package and the submodule (`:3
   are untouched, so the `wrapper -> PKG` back-edge survives.
 - `dictionaries.py:45` is untouched, so `dictionaries -> PKG` survives.
 
-**So the family stays at 9 and `test_exactly_two_cycles_remain_and_they_are_the_expected_families`
+**So the family stays at 9 and `test_exactly_four_cycles_remain_and_they_are_the_expected_families`
 passes unchanged. No test update is required by the spine.** State it that way in the commit rather
 than leaving the reader to infer it.
 

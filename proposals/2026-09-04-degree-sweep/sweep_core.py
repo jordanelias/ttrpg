@@ -25,21 +25,29 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-TRACER = Path("/home/user/ttrpg/proposals/2026-09-01-season-loop-tests/tracer")
-if str(TRACER) not in sys.path:
-    sys.path.insert(0, str(TRACER))
+# ⚠ THE REPOSITORY ROOT, NOT THE PACKAGE DIRECTORY, AND THE IMPORTS ARE DOTTED. This inserted
+# `engine/season/` and imported `shape`/`corpus_run`/`run_cases`/`combat_seam` by BARE NAME, which
+# worked while those were loose modules sharing a directory. The decomposition (ED-IN-0203) made
+# `engine.season` an ordinary package whose modules import each other relatively, so a bare import
+# of `shape` now raises *attempted relative import with no known parent package* — and it does so
+# from inside this file, four levels away from the change. Dotted imports also end the second
+# identity the flat form created: a module reachable as both `shape` and `engine.season.shape` is
+# two module objects with two sets of module-level state in one process.
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 
-import shape as S            # noqa: E402
-import corpus_run as C       # noqa: E402
-import run_cases as R        # noqa: E402
-import combat_seam as CS     # noqa: E402
+from engine.season import shape as S                    # noqa: E402
+from engine.season.harness import corpus_run as C       # noqa: E402
+from engine.season.harness import run_cases as R        # noqa: E402
+from engine.season import combat_seam as CS             # noqa: E402
 
 # `CLAUDE.md` §0.1 pt 5 / G1: declared with its reason, never a bare literal in a body.
 LADDER_C = ("Overwhelming", "Success", "Partial", "Failure")
 LADDER_C_WHY = ("engine/autoload/dice_engine.py::degree_from_net -- THE ladder, single owner for "
                 "every scale (Jordan ruling 2026-08-14), read off the margin `net - ob`")
 LADDER_D = ("Felled", "Wounded", "Untouched")
-LADDER_D_WHY = ("proposals/2026-09-02-executable-architecture/verb_table.yaml, the `kill / wound` "
+LADDER_D_WHY = ("engine/season/verb_table.yaml, the `kill / wound` "
                 "row -- the ONLY degree-keyed verb in the corpus")
 
 # The contested verb. There is exactly one; that is measured, not assumed (see `contested_verbs`).

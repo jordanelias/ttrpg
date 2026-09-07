@@ -8,7 +8,7 @@ from __future__ import annotations
 import collections
 import sweep_core as K
 from sweep_core import S, C, R, Log
-from trace_log import TRACE
+from engine.season.trace_log import TRACE
 
 
 def run(log: Log, seed: int = 0) -> dict:
