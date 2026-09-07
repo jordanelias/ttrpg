@@ -30,31 +30,96 @@ from it.
 practitioner does not spend it down to nothing and then break; they are progressively reconfigured,
 and the reconfiguration is the thing.
 
+### The mechanics: elastic, then plastic
+
+**A stress displaces the configuration. Below a threshold the displacement is elastic and the
+configuration returns. Above it, the configuration's own resting shape has moved, and that move does
+not reverse.** *(Ruled 2026-09-07.)*
+
+Four further rulings fix the model. They are stated separately because each was decided separately,
+and because three of them close off a mechanism the materials analogy would otherwise have supplied
+for free.
+
+**The elastic range is a constant of the being; what moves is the resting point.** Taking a permanent
+set does not make a practitioner tougher, and it does not make them brittle. They can be stretched
+exactly as far as they ever could and still come back. What has changed is where coming back lands
+them. So drift has no shape of its own — no accelerating slide, no hardened plateau ending in a
+single catastrophic step. It is additive, and the tenth permanent set is the same kind of event as
+the first.
+
+**Only events deform.** There is no creep. A load held below the threshold leaves nothing behind,
+however long it is held. Living beside a Gap, inside a Warden zone or within a Locked Zone does not
+slowly reconfigure you. The environment bears on drift by raising the load during an operation
+actually performed — not by wearing at someone who merely stands in it.
+
+**Recovery is return over time, conditioned on the environment.** *(Ruled: "you heal as going towards
+equilibrium over time so long as you are in an environment where things are in equilibrium. but you
+can accelerate this by your own acting and others acting to mend you.")* Time is the mechanism.
+**Environmental equilibrium is the condition** — the surrounding configurations must themselves stand
+in harmony, or there is nothing to return toward. Mending, one's own or another's, accelerates the
+return without being required for it. And recovery is elastic only: it never undoes a permanent set.
+
+**Sensitivity is independent of all of this. Exposure teaches; stress deforms.** Thread sensitivity
+accrues from being present to the substrate's workings, whether or not any threshold was crossed.
+These are two different relations to the same phenomena, and a practitioner can accumulate a great
+deal of the one with very little of the other. This is what keeps sensitivity and Coherence
+orthogonal (§5.5): an adept is not thereby a partly drifted being.
+
+**The asymmetry between the second and third of those is deliberate and should not be smoothed.**
+Place does not deform you, and place gates your recovery. So someone who lives beside a Gap takes no
+permanent set from living there, does not heal there, and grows more sensitive for having been there.
+Nothing accumulates, nothing returns, and perception sharpens. That combination is not what the
+analogy would predict, and it is the account.
+
+**Duration is a term inside an event, never across a life.** The Leap is the case that makes the
+distinction do work: during suspension the configuration is unresisted, so environmental force × time
+is a real load (§6.8). That is duration *within* one episode. Years spent at a Gap margin with
+self-rendering intact are not an episode at all, and sum to nothing.
+
 ### The point of no return
 
-**Eventually the reconfiguration is far enough that being human is no longer possible to return to.**
-Too far out of equilibrium — and what has happened is not that the person has been damaged, or emptied,
-or reduced. **They became other.**
+Being human is a **band**, not a point: the equilibrium proper to being human as human is a shape a
+range of configurations can occupy. Two quantities therefore have to be kept apart, and the
+distinction is what makes the rest of this section legible.
+
+- **Where a practitioner rests** — the configuration they hold once fully recovered. This moves only
+  by permanent set, and only outward.
+- **Where a practitioner presently is** — their resting point plus whatever displacement current
+  stress has produced. This is what §7.4's bands read, and it returns.
+
+**Eventually the resting point leaves the band.** Too far out of equilibrium — and what has happened
+is not that the person has been damaged, or emptied, or reduced. **They became other.**
 
 That is the real threshold, and it is a threshold of *irreversibility* rather than of exhaustion.
-Before it, the human equilibrium can still draw the configuration back. After it, that equilibrium is
-simply not where this configuration tends any more.
+Nothing moves a resting point back: permanent set does not reverse, and recovery returns a
+configuration to its own resting point, not to the one it started from.
 
-> ⚠ **UNDER REVISION 2026-09-07.** The paragraph below states a pure yield-point model with no
-> accumulation and no recovery. The author has corrected both: Coherence is **elastic then plastic**,
-> accumulation is real, and configurations that have taken no plastic change can heal back toward
-> equilibrium over time. The mechanism connecting repeated exposure to thread-sensitivity gain is
-> under discussion. Do not build on this paragraph.
+**Three consequences follow from the model rather than being added to it**, and they change how drift
+runs:
 
-**The mechanics are those of a yield point.** A plastic material deforms under stress and returns to
-the same arrangement, again and again — until a stress at which its structure itself changes, and
-after which it will never return to that arrangement, however the load is removed. Coherence works
-this way. Drift is recoverable, repeatedly, across a wide range; there is no accumulating debt and no
-countdown. And then there is a stress past which the configuration has been reordered, and the return
-is not merely difficult but no longer available.
+- **A practitioner's history is exactly what tells you how close they are.** The resting point *is*
+  the tally. This inverts what the first draft of this section claimed.
+- **A veteran presents as further gone under the same load, and is not more fragile.** The elastic
+  range is constant, so a practitioner resting at Dissonant, pushed as far as their range allows,
+  arrives deeper into Fractured than a novice resting at Stable pushed exactly as far. They are
+  nearer the edge because they start further out, not because they break more easily.
+- **Recovery has a floor, and the floor rises.** A drifting practitioner who rests in an environment
+  at equilibrium and is mended returns to their resting point and no further — and that point is no
+  longer where they began. Full recovery is real, and it is not restoration.
 
-This is why intervention is *early* or not at all (§7.3), and why nothing about a practitioner's
-history tells you how close they are. What matters is the stress, not the tally.
+> **Derived, not ruled — reject this and the four rulings above survive it.** The band-and-resting-point
+> reading is the only way I can find to hold all four rulings together with the earlier ruling that
+> healing is available to configurations that have taken no plastic change. Progressive drift with a
+> threshold *requires* the human equilibrium to have extent: if it were a point, the first permanent
+> set would already be the crossing. The three consequences are then arithmetic on a constant elastic
+> range and a moving resting point. The rulings are the author's; this reading is mine.
+
+**This is why intervention is early, and why it is legible.** Early, because a permanent set cannot be
+undone once taken, so everything a community can do for a practitioner is done inside the elastic
+range. Legible, because a resting point is a history and a history can be read — the people around a
+practitioner have been watching that floor rise. (§7.4's observer asymmetry concerns present
+displacement, which the practitioner cannot see in themselves. The floor is visible to everyone,
+including them, in the quiet after.)
 
 ### Drift carries no moral valence
 
@@ -190,21 +255,40 @@ So a drifting practitioner who leaves the community stops straining the local sh
 **keeps pulling on knotted kin**. Exile does not protect the people who love them. A stranger nearby is
 affected by the rendering channel only — until wrapping forms a bond.
 
-**Exposure is bivalent.** Cumulative exposure to a drifting practitioner is itself low-grade
-confrontation, and confrontation has the consequences described at §5.4: it can develop sensitivity in
-the exposed person, if their configuration can hold it, or initiate drift in them, if it cannot. Which
-branch occurs turns on whether the registration is held or overwhelms.
+**Exposure is bivalent, and the two branches run on different clocks.** Being near a drifting
+practitioner is low-grade confrontation, with the consequences described at §5.4 — but the creep
+ruling (§7.1) separates what the source suite ran together.
 
-Drift is therefore propagable through community. A single drifting practitioner is, over time, a
-vector by which others' Coherence may begin to fail — which is why early detection and communal
-accountability are structurally necessary rather than merely prudent. The practitioner is not the only
-one at risk.
+- **Sensitivity develops cumulatively.** Exposure teaches. Repeated presence to a drifting
+  configuration develops the capacity to perceive threads whether or not anything is ever overwhelmed.
+- **Drift is not initiated cumulatively.** Only an event does that: a registration exceeding what the
+  exposed configuration can hold. Ten years beside a drifting practitioner deform nobody by
+  accumulation.
+
+So long exposure reliably makes a community **more thread-sensitive**, and reconfigures only those it
+at some point overwhelms. The two outcomes are not the ends of one spectrum; they are different
+mechanisms that happen to share a cause.
+
+Drift is therefore propagable through community, though not by accrual. A drifting practitioner is a
+standing source of registrations that may exceed someone — and the longer they drift, the deeper the
+registrations go and the more sensitive the people around them become, which by §5.4 means more of
+each encounter arrives as stress at all. **That is the real compounding, and it is indirect.** It is
+why early detection and communal accountability are structurally necessary rather than merely
+prudent. The practitioner is not the only one at risk.
 
 ## §7.4 The observable bands
 
 The degradation has recognizable stages. **The numbers below are mechanism and are not owned by this
 document** — the philosophy holds only that Coherence is indexed and that the stages are ordered. The
 phenomenology is foundations material; the thresholds are not.
+
+**Every band below reads present displacement, not the resting point (§7.1).** A practitioner shows
+as Fragmented while a hard operation still has hold of them and shows as Dissonant a month later,
+rested, without anything having been undone — that is elastic return, and it is the ordinary case. So
+a single observation dates a practitioner's *load*, not their history. Reading the history means
+seeing where they settle: **the band someone comes to rest in is their floor, and it never falls.**
+The community's real instrument is not the worst state a practitioner has been seen in but the best
+state they have been seen in lately.
 
 **Stable.** No perceptible change. Self-rendering re-engages fully after each Leap.
 
@@ -289,6 +373,12 @@ deliberately work.
 the human equilibrium became unreachable. They have exactly the reach they had built, and it is
 **their reach at the moment of permanent loss** that matters — not their reach before, and not any
 reach acquired after.
+
+*(This now follows instead of being stipulated. Sensitivity accrues from exposure; the crossing is a
+stress event; stress deforms and does not teach (§7.1). And the gate does not re-open: a drifted being
+may go on being exposed and go on gaining reach, and it will not thereby come to comprehend what
+happened to it. What was fixed at the crossing is the frame within which anything later is understood
+at all.)*
 
 **And what it gates is not only what they can do. It gates what they can comprehend of themselves.**
 *(Ruled 2026-09-07.)* The more thread-sensitive the individual at the time of losing the human

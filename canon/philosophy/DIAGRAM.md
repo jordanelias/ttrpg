@@ -2,9 +2,11 @@
 
 Seven views of one structure. Each is a different cut, not a different system.
 
-**Provisional material is marked.** Two areas are under active discussion and are drawn dashed:
-the elastic/plastic model of Coherence, and the constitutive account of operational cost. Everything
-else is ruled — see `RULINGS.md`.
+**Provisional material is marked.** One area remains under active discussion and is drawn dashed: the
+constitutive account of operational cost (§6.8) — whether restorative work helps the practitioner,
+whether their displacement scales with the target's, and whether the Leap displaces before any
+operation. Everything else is ruled — see `RULINGS.md`. The elastic/plastic model of Coherence was
+ruled 2026-09-07 and view 5 is no longer provisional.
 
 ---
 
@@ -91,7 +93,7 @@ flowchart TD
     E --> G --> J
     E --> H --> J
     I --> L
-    J -.->|"PROVISIONAL — see §5"| L
+    J -.->|"PROVISIONAL — the cost model, §6.8"| L
     D --> K
 
     style J stroke-dasharray: 5 5
@@ -135,41 +137,62 @@ chose — and holding configurations there at scale is the Calamity's mechanism 
 
 ---
 
-## 5. Coherence — PROVISIONAL
+## 5. Coherence — RULED 2026-09-07
 
-> ⚠ **This section is under discussion and is not ruled.** What is settled: Coherence is a *distance*
-> from the equilibrium proper to being human, not a store that depletes; degradation reaches the
-> spooling's configuring; everyone has it; the endpoint is irreversibility, not exhaustion. What is
-> being worked out is the elastic/plastic model below.
+> Coherence is a **distance** from the equilibrium proper to being human, not a store that depletes.
+> Degradation reaches the spooling's configuring; everyone has it; the endpoint is irreversibility,
+> not exhaustion. The elastic/plastic model below is now ruled (RULINGS, Batch 8). One element is
+> derived rather than ruled and is marked.
 
 ```mermaid
 flowchart TD
-    E0["configuration at the human equilibrium"]
-    STR["stress<br/>an operation off the attractor,<br/>or confrontation"]
-    EL["<b>elastic</b><br/>displaced, recoverable<br/>heals back toward equilibrium over time"]
-    FAT["<b>fatigue</b><br/>repeated cycling below yield<br/>still accumulates"]
-    PL["<b>plastic</b><br/>permanent set<br/>does not heal"]
-    WH["<b>work hardening?</b><br/>permanent set toward substrate access<br/>= thread sensitivity<br/>and less elastic range remaining"]
-    CR["<b>creep?</b><br/>sustained low load<br/>Gap margins, residue fields<br/>= Warden environmental erosion"]
-    OTH["<b>became other</b><br/>the human equilibrium is no longer<br/>where this configuration tends"]
+    BAND["<b>the human band</b><br/>the equilibrium proper to being human<br/>has extent, not a single point"]
+    Z["<b>resting point</b><br/>where the configuration settles<br/>once fully recovered<br/>moves outward only, never back"]
+    STR["<b>stress</b><br/>an operation off the attractor,<br/>or a confrontation that overwhelms<br/><i>always an event</i>"]
+    EL["<b>elastic displacement</b><br/>where the being presently is<br/>= resting point + current load<br/>this is what the bands read"]
+    PL["<b>plastic set</b><br/>the resting point itself moves<br/>never undone by anything"]
+    OTH["<b>became other</b><br/>the resting point has left the band<br/>the human equilibrium is no longer<br/>where this configuration tends"]
 
-    E0 --> STR --> EL
-    EL -->|"time, rest, being taken-as-human by others?"| E0
-    EL --> FAT --> PL
-    STR -->|"single sufficient stress"| PL
-    CR -.-> PL
-    PL --> WH
-    PL --> OTH
+    SENS["<b>thread sensitivity</b><br/>accrues from exposure alone<br/>independent of any threshold"]
+    ENV["<b>environment at equilibrium</b><br/>the condition on recovery"]
+    MEND["<b>mending</b> — one's own or another's<br/>accelerates, never required"]
 
-    style EL stroke-dasharray: 5 5
-    style FAT stroke-dasharray: 5 5
-    style WH stroke-dasharray: 5 5
-    style CR stroke-dasharray: 5 5
+    BAND --- Z
+    Z --> EL
+    STR --> EL
+    EL -->|"below threshold"| REC(["return over time"])
+    REC --> Z
+    ENV -.->|"gates"| REC
+    MEND -.->|"quickens"| REC
+    STR -->|"beyond threshold"| PL
+    PL --> Z
+    Z -->|"once outside the band"| OTH
+
+    EXP["<b>exposure</b><br/>presence to the substrate's workings"] --> SENS
+    SENS -.->|"converts more of the next<br/>encounter into stress"| STR
+
+    style OTH stroke-width:3px
+    style BAND stroke-dasharray: 5 5
 ```
 
-**Open:** what recovery requires; whether sensitivity gain is *identical* to plastic set or a
-component of it distinguished by direction; whether work hardening spends future elastic range;
-whether creep is distinct from fatigue.
+**The dashed node is the one derived rather than ruled.** *Being human is a band* is not the author's
+ruling; it is what the four rulings force when held together with the earlier ruling that healing is
+available to configurations that have taken no plastic change. With a point rather than a band, the
+first permanent set would already be the crossing.
+
+**Four things the diagram deliberately does not contain**, each ruled out rather than merely absent:
+
+| absent | why |
+|---|---|
+| **creep** — sustained low load deforming you | Only events deform. A load below threshold leaves nothing behind, however long held. |
+| **fatigue** — cycling below yield accumulating | Same ruling. Ten years beside a Gap sum to nothing. |
+| **work hardening** — elastic range changing with use | Range is a constant of the being. Only the resting point moves. |
+| **sensitivity as a form of plastic set** | Independent. Exposure teaches; stress deforms. |
+
+**Two readings the shape yields.** A **veteran** rests further out with the same elastic range, so an
+identical load carries them deeper — nearer the edge without being more fragile. And someone who
+lives beside a Gap takes no permanent set from living there, does not recover there, and grows more
+sensitive for having been there: nothing accumulates, nothing returns, perception sharpens.
 
 ---
 
@@ -257,7 +280,7 @@ flowchart TB
     EQ -.-> OPS
     HU --> LEAP --> OPS --> KN
     OPS --> STRAIN
-    OPS -.->|"PROVISIONAL"| DR
+    OPS -.->|"PROVISIONAL — the cost model, §6.8"| DR
     STRAIN --> GAP --> LOCK
     TC --> STRAIN
     ABS --> TS --> BAR

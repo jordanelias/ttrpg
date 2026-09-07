@@ -254,9 +254,15 @@ ones flatly contradicted each other on whether the Leap is dangerous in itself. 
 
 ### The confrontation channel
 
-Sustained proximity to Gap margins, dissolution residue fields and third-mode presences is low-grade
-confrontation, and so is cumulative exposure to a drifting practitioner (§7.3). This channel is
-environmental and operates on anyone present, whether or not they ever perform an operation.
+Proximity to Gap margins, dissolution residue fields and third-mode presences is low-grade
+confrontation, and so is exposure to a drifting practitioner (§7.3). This channel is environmental and
+operates on anyone present, whether or not they ever perform an operation.
+
+**What it does not do is accumulate.** Under §7.1 there is no creep: a load held below the threshold
+leaves nothing behind however long it is held. So the environmental channel deforms a bystander only
+through an *event* — a registration that at some moment exceeds what they can hold. What it does
+steadily is develop their sensitivity, which by §5.4 raises how much of the next encounter arrives as
+stress. The danger of living somewhere is real and it is second-order.
 
 ### The retention roll, and why the Leap's danger is not uniform
 
@@ -264,6 +270,12 @@ During suspension the reflexive facing is not holding the configuration — and 
 what holds it against environmental thread-forces. So for the duration of the Leap those forces act
 unresisted, and the configuration drifts in proportion to **environmental force × duration**, less
 whatever the outward facing continues to hold.
+
+*(Duration is a term here and nowhere else. §7.1 rules that nothing accumulates below the threshold,
+so time spent in a dangerous place with self-rendering intact sums to nothing. What makes a Leap
+different is not that it is long but that it is unresisted: the whole suspension is one load, and its
+length is that load's magnitude. A practitioner is not exposed for years. They are exposed for
+minutes, repeatedly.)*
 
 Then, at or just after re-engagement, **knot feedback arrives**, weighted by operation type.
 

@@ -168,9 +168,15 @@ human equilibrium (§7.1).
 more danger than the villager beside them, not less, and not because of what they are doing — because
 of what they are able to hold.
 
-This bears directly on §7.1's yield point: what matters is the stress, and reach determines how much of
-an encounter arrives as stress at all. A single sufficiently overwhelming confrontation, met by someone
-with the reach to capture it, can carry a configuration past return.
+This bears directly on §7.1's yield point: **reach determines how much of an encounter arrives as
+stress at all.** A single sufficiently overwhelming confrontation, met by someone with the reach to
+capture it, can carry a configuration past return.
+
+**And the two things reach does here run opposite ways, which is the whole of why sensitivity is not
+armour.** Exposure develops reach whether or not anything is ever overwhelmed (§7.1). Greater reach
+then converts more of the *next* encounter into stress. So the capacity that safe exposure builds is
+the capacity that makes an unsafe exposure worse — not because sensitivity weakens anyone, but
+because it enlarges what can get in. Nothing in the model lets a practitioner grow out of that.
 
 ## §5.5 What develops: position and capacity are one thing
 

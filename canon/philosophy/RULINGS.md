@@ -434,6 +434,13 @@ capture (§5.1), so "desire" and "attachment" are real abstractions, not empty w
 *bound* what they name. Those who knew the person will hear their words used and be unable to tell
 whether they mean what they used to. Neither will the drifted.
 
+> ⚠ **SUPERSEDED 2026-09-07** by *Batch 8 — the elasticity/plasticity model*, at the end of this
+> file. The paragraph below reads the analogy as a pure yield point with no accumulation; the author
+> corrected that the same day. **Accumulation is real, and a practitioner's history is exactly what
+> tells you how close they are.** The text is kept as written because the ruling it records — that
+> the threshold is one of irreversibility rather than exhaustion — survives intact; only the
+> "stress, not tally" gloss was wrong. It was mine, not the author's.
+
 **The yield point.** The irreversibility threshold now has mechanics: a plastic material returns to the
 same arrangement under stress, repeatedly, until a stress at which its structure changes and the return
 is no longer available. Drift is recoverable across a wide range, with no accumulating debt and no
@@ -583,6 +590,10 @@ with sensitivity the far end of something universal — or does ordinary action 
 whatever implements it will need a different shape. Under §0.05 that is code's problem, not this
 suite's — but it follows from what was ruled.
 
+> ⚠ **PARTLY SUPERSEDED 2026-09-07** by Batch 8. "No accumulation" is wrong: accumulation is real and
+> permanent. What a track must not model is *depletion* — the quantity that accumulates is a **resting
+> point**, which moves outward and never falls, not a reserve that empties. The rest of the note holds.
+
 ---
 
 ## 2026-09-07 — Rendering is not an activity; spooling configures
@@ -624,3 +635,98 @@ a configuration one has, it is the having of one.
 *Applied:* §3.1 (rewritten), §4.1 (layer definitions), §4.2 (chain rewritten without agency), §4.5,
 §9.3, and the D-0 entry above. `DECISIONS.md` is left as written — it records questions as they were
 posed, and quoted source text in it must not be altered.
+
+---
+
+## 2026-09-07 — Batch 8: the elasticity/plasticity model  ·  **APPLIED**
+
+Four questions were put on the model §7.1 had been left holding under an UNDER REVISION banner. The
+banner is now removed. Confirmed by the author: *"I wrote those."*
+
+### E-1 — What recovery requires
+
+Verbatim, and it rejects all four options as posed:
+
+> "rendering isn't something that you choose to do; it is phenomenological terminology for how one
+> comes to perceive the world as meaningful by taking things *as* things. you heal as going towards
+> equilibrium over time so long as you are in an environment where things are in equilibrium. but you
+> can accelerate this by your own acting and others acting to mend you"
+
+**The framing it displaced.** One option offered "being taken-as-human by others" as the engine of
+recovery. That reads rendering as something people *do at* you, which is the agency error already
+ruled out under *Rendering is not an activity*. It is now struck a second time, in a second place.
+Others contribute to recovery by **mending** — threadwork — not by rendering.
+
+**What was ruled.** Three terms, in order of force:
+
+- **Time is the mechanism.** Recovery is return toward equilibrium over time.
+- **Environmental equilibrium is the condition.** You heal *so long as you are in an environment where
+  things are in equilibrium.* Surroundings out of harmony give you nothing to return toward.
+- **Mending accelerates.** One's own acting and others' acting both speed the return. Neither is
+  required for it.
+
+**Consequence drawn.** Place does not deform you (E-4) and place gates your recovery (E-1). That
+asymmetry is deliberate and is written into §7.1 with a note not to smooth it.
+
+### E-2 — Sensitivity gain is independent of plastic set
+
+> **Independent — exposure teaches, stress deforms.**
+
+Sensitivity accrues from being present to the substrate's workings whether or not any threshold was
+crossed. It is not the plastic set under another description, and not a component of it. Sensitivity
+and Coherence stay orthogonal, and an adept is not thereby partly drifted.
+
+**Consequence drawn.** The stated cost of this option was that mastery-without-drift becomes
+achievable. It does — but §5.4's inversion means the mastery is not protective: reach converts more of
+the *next* encounter into stress. Safe exposure builds exactly the capacity that makes an unsafe
+exposure worse. Written into §5.4.
+
+### E-3 — No work hardening; only the resting point moves
+
+> **Unchanged — only the zero-point moves.**
+
+Elastic range is a constant of the being. Permanent set relocates where "rest" sits without altering
+how far the being can be stretched from it and still return.
+
+**Consequences drawn.** Drift has no shape of its own — no accelerating slide, no hardened plateau
+before a catastrophic step. And a veteran presents as further gone under identical load, while being
+no more fragile: constant range from a further-out resting point reaches deeper. Both in §7.1.
+
+### E-4 — No creep; only events deform
+
+> **No — only events deform.**
+
+A load held below the threshold leaves nothing behind, however long it is held. Living beside a Gap,
+inside a Warden zone or within a Locked Zone does not slowly reconfigure anyone.
+
+**Consequences drawn, and three passages corrected.**
+
+- §7.3's "cumulative exposure … can initiate drift" is wrong as written and is rewritten. Cumulative
+  exposure develops **sensitivity**; drift is initiated only by an event. The community compounding is
+  real but indirect — rising sensitivity makes more of each later encounter arrive as stress.
+- §6.8's confrontation channel no longer claims environmental accrual, for the same reason.
+- §6.8's retention roll keeps **environmental force × duration**, and §7.1 now says why that is not a
+  contradiction: **duration is a term inside an event, never across a life.** The Leap is one
+  unresisted load whose length is its magnitude. A practitioner is not exposed for years; they are
+  exposed for minutes, repeatedly.
+
+### Derived, not ruled — flagged in the text so it can be rejected
+
+The four rulings, held together with the earlier ruling that healing is available to configurations
+that have taken no plastic change, force **being human to be a band rather than a point**: with a
+point, the first permanent set would already be the crossing, and progressive drift with a threshold
+would be impossible. From a band plus a constant elastic range plus a resting point that only moves
+outward, three consequences are arithmetic — history is the tally, veterans present worse under equal
+load, and recovery has a rising floor.
+
+**This reading is mine, not the author's**, and §7.1 says so in a blockquote. The rulings survive its
+rejection; the consequences do not.
+
+*Applied:* §7.1 (banner removed; mechanics and point-of-no-return rewritten), §7.3 (exposure
+bivalence), §7.4 (present displacement vs the floor), §5.4 (reach runs both ways), §6.8 (confrontation
+channel; duration reconciled). Supersession markers added above at the two entries this displaces.
+
+*Still open:* the constitutive cost model for §6.8 — whether restorative operations actively help the
+practitioner, whether the practitioner's displacement scales with the target's, and whether the Leap's
+suspension displaces before any operation. Those three are the next batch and nothing about them is
+written.
