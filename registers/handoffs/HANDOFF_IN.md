@@ -282,11 +282,33 @@ says the defect is live.**
 by grade. So the register cannot distinguish a hole that was filled from one that was never touched,
 and its headline numbers are counts of *rows*, not of *holes*.
 
-⚠ **NOT ACTED ON, and the reason is that the two fixes lead to different work.** (a) a `status:`
-field — the shape the ED ledger already uses, so the tree has a precedent — which changes what
-`--counts` and `ARTIFACT 0` report; or (b) rewrite the 17 `hole:` fields into the past tense where
-`cite:` records the closure, prose only, no consumer moves. **(a) moves a gate's verdict**, which is
-why it is not a silent call. Put to Jordan 2026-09-07.
+⚠⚠ **CORRECTED WITHIN THE HOUR, BY RUNNING THE ONE TEST I SKIPPED. The paragraph here first
+offered Jordan a choice between (a) adding a `status:` field and (b) rewriting the 17 `hole:` fields
+into the past tense. BOTH ARE FORBIDDEN BY THE REGISTER'S OWN HEADER, and it says so in terms:**
+
+> *"A `cite:` backfilled here with 'V2 says so' would launder a transcription into a closure, **which
+> is the exact move this register exists to stop.**"*
+
+**The absence of a `status:` field is not an omission. It is the design.** A hole may not be closed
+by writing — the same doctrine as §0.2's *DONE MEANS IT RUNS*, applied to holes. (a) adds the close
+mechanism the register deliberately lacks; (b) is that laundering performed by hand. I ran §0's
+tests 1, 2, 4 and 5 and skipped **test 3 — answered by a design document** — and test 3 is the one
+that answers it. The escalation was not needed and is withdrawn; recorded rather than deleted,
+because skipping test 3 while citing the other four is the failure §0's ordering exists to prevent
+and I committed it after quoting that ordering.
+
+**What survives the correction, and it is sharper than what it replaces.** The design is coherent:
+a hole closes by EXECUTION and the evidence goes in `cite:`. So the gap is not a missing field —
+it is that **nothing mechanically checks whether a row's `hole:` is still true**, while the field
+is written in a form that often makes it decidable. H-113's *"HAS ZERO CALLERS"* is a proposition
+the AST answers in one pass. That is the register-shaped version of §0.2: not *let a row be marked
+closed*, but *let the row's own claim be tested*.
+
+**And that is deliberately NOT built here.** H-113 is the **only** mechanically-decidable
+zero-callers claim among 113 rows — a checker over a sample of one is precisely the apparatus §0.1
+point 5's predicate forbids. The finding stands as a reading of the register, the seventeen rows
+stay exactly as they are, and a session meeting a tier-0 `hole:` should read that row's `cite:`
+before believing it.
 
 #### ⚠ AND THE METHOD'S OWN COST, RECORDED BECAUSE IT IS THE PART THAT GENERALISES
 
