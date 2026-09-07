@@ -356,3 +356,37 @@ feared and mourned without being wicked.
 
 At the level of design: no alignment, no corruption track, no arc from good to evil. *Applied:* §7.1,
 §7.6, §9.3.
+
+**Amoral in the strict sense.** Verbatim:
+
+> "It's amoral aside from the notion that being moral requires being human"
+
+This is stronger than the "no moral judgment" ruling it refines, and it changes the kind of claim
+being made. Drift is not *morally neutral* — neutrality is a position within the register. **The
+register does not extend where drift goes**, because being moral requires being human: morality is a
+feature of human-mode existence, something one is *in* by being human, not a standard applied from
+outside under which some pass and others fail.
+
+*Consequence for drift:* a drifting practitioner does not become worse. They progressively depart from
+the mode of being in which better and worse are things one can be. Those knotted to them lose **a
+moral interlocutor** — someone with whom the question of right conduct could be raised at all — which
+is what the community is preserving when it intervenes early. Not virtue. Standing.
+
+*Consequence for monstrosity:* P-04 stops being a stipulation and gets a ground. A monstrous being is
+not exempted from moral assessment by the framework's generosity; it is outside the register in which
+assessment operates. Calling it evil is a category error, not harshness.
+
+*Consequence for Solmund — the largest one:* the moral question about him is **malformed, not merely
+unanswered**. He was threadcut, never human, never in the register. The framework's earlier refusal to
+resolve "was he good" was a stance; it is now a derivation, and a stronger one — a framework that
+declines to judge invites the reader to judge anyway, while one that shows the question has no
+purchase does not. What remains genuinely open about him is different and answerable in principle:
+whether his presence catalyzed real flourishing alongside the prophylaxis, and whether he understood
+what was being made of him.
+
+*Deliberately unsettled:* what is owed *to* a being outside the register, and whether a drifted being
+retains preferences, attachments, or something functioning as care. Losing moral standing is not the
+same as losing everything.
+
+*Applied:* §7.1 (new subsection), §8.9 (rewritten — refusal becomes derivation), §5.1, §9.3, §10
+(P-04 grounded, with a second violation test).

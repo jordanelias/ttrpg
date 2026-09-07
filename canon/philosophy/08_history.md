@@ -287,12 +287,22 @@ arose from the community's own limitations, not from strategic deception.
 **Whether Solmund intended any suppressive effect is left deliberately open.** The inner tradition may
 debate it; the outer tradition lacks the epistemic access to frame the question.
 
-**And the moral consequence is left unresolved by structure.** Even granting that he was monstrous in
-the ontological sense, the framework offers no verdict on whether his presence catalyzed genuine human
-flourishing alongside a prophylaxis, nor whether the prophylaxis was deliberate or a misreading of a
-teaching that could not be held. **The reveal of his non-human nature does not resolve into "he was bad
-all along."** This refusal is the framework's stance, and it should be preserved against the pressure
-to resolve it.
+**And the moral question about him is malformed, not merely unanswered.** *(Ruled 2026-09-07 — see
+§7.1.)*
+
+Being moral requires being human. Solmund was threadcut: never human, never in the register. So asking
+whether he was good is not a hard question the framework declines out of caution — it is a question
+that does not apply to what he was, in the way asking whether a season is honest does not apply.
+
+**The reveal of his non-human nature therefore cannot resolve into "he was bad all along."** Not
+because the framework withholds the verdict, but because the reveal removes the ground on which any
+verdict would stand. What remains genuinely open is different and more interesting: whether his
+presence catalyzed real human flourishing alongside the prophylaxis, and whether he understood what was
+being made of him. Those are questions about consequences and about knowledge, and both are answerable
+in principle.
+
+*(This is stronger than the refusal it replaces. A framework that declines to judge invites the reader
+to judge anyway. A framework that shows the question has no purchase does not.)*
 
 ## §8.10 The Church's category error
 

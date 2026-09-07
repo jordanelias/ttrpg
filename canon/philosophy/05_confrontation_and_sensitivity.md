@@ -8,7 +8,10 @@
 
 ## §5.1 Monstrosity
 
-Monstrosity is an **ontological** category, not a moral one.
+Monstrosity is an **ontological** category, not a moral one — and this now has a reason rather than
+being stipulated. **Being moral requires being human** (§7.1). A monstrous being is not exempted from
+moral assessment by the framework's generosity; it stands outside the register in which moral
+assessment operates. Calling it evil is not harsh, it is a category error.
 
 A monstrous being is what escapes symbolization: what cannot be captured by the rendering's
 constituting capacity, the unassimilable remainder when the rendering has done all it can. It is not

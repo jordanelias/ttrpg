@@ -55,10 +55,36 @@ knotted to a *human* configuration, and drift carries force to them (§7.3). Peo
 resist it, grieve it, and intervene to prevent it, and they will be right to. **None of that is a
 moral judgment.** A thing can be feared and mourned without being wicked.
 
-The distinction matters at the level of design, and it is what the framework holds to: there is no
-alignment here, no corruption track, no arc from good to evil. What there is, is a configuration
-moving out of one equilibrium and, past a point, no longer able to return to it — described
-accurately, and left ungraded.
+### Why it is amoral, in the strict sense
+
+**Drift is amoral rather than morally neutral, and the reason is that being moral requires being
+human.** *(Ruled 2026-09-07.)*
+
+Morality is a feature of human-mode existence. It is not a standard applied to beings from outside,
+under which some pass and others fail; it is something one is *in* by being human, in the way one is
+in a language by speaking it.
+
+So the framework is not declining to grade drift out of delicacy. **The moral register does not extend
+where drift goes.** A being that has become other is not immoral, not amoral in the sense of being
+callous, and not exempt from a judgment that still applies elsewhere. It stands outside the register
+in which moral predicates get a grip at all.
+
+**And this is what actually happens as a practitioner drifts.** They do not become worse. They
+progressively depart from the mode of being in which better and worse are things one can be — which is
+stranger and worse to witness than corruption, because there is nothing to appeal to and no one to
+argue with. Those knotted to them are losing not a good person but **a moral interlocutor**: someone
+with whom the question of right conduct could be raised at all.
+
+That is what the community is preserving when it intervenes early (§7.3). Not virtue. Standing.
+
+*(Two things this does not settle, deliberately. It does not say that a being outside the register may
+be treated any way at all — what is owed *to* the non-human is a separate question the framework does
+not answer here. And it says nothing about whether a drifted being retains preferences, attachments,
+or something that functions as care. Losing moral standing is not the same as losing everything.)*
+
+At the level of design: no alignment, no corruption track, no arc from good to evil. A configuration
+moves out of one equilibrium and, past a point, cannot return — described accurately, and not graded,
+because grading it would be a category error rather than a kindness withheld.
 
 ### What produces it
 
