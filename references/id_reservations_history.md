@@ -89,6 +89,21 @@ BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0036-0039 RES
 
 <a id="in"></a>
 
+**ED-IN-0203 allocated 2026-09-07** (next_free 203 -> 204), moved here rather than onto the lane
+row because that row sits at 598 of its 600-char cap — any append breaks
+`test_narrative_does_not_creep_back_into_the_state_file`, exactly as it did to the 0170/0171
+append below at 659. The guard is right and the fix is the one it names.
+
+- **ED-IN-0203 — the `shape.py` decomposition.** Breaking the 6,771-line idealized system into
+  holonic modules addressed BY SYMBOL, so the eight play surfaces can be developed in parallel.
+  Zero game yield; a completed split is NOT milestone progress under §0.2.
+  ⚠ **A PROVENANCE CORRECTION, and it is why this ID exists.** Steps 0b/1/2 cited `ED-IN-0202`,
+  which is the cross-lane reading of the game (2026-09-05) and names no `season/` file. No ID had
+  been allocated for this work at all — §4's read-next_free-allocate-bump-co-commit was skipped.
+  Found by an adversarial pass verifying provenance BY HAND against the ledger, which is precisely
+  the leak §7 names: a miscited but REAL id resolves, so `validate_ed_citations` passes it. The
+  gate can tell an invented ID from a real one; it cannot tell a right one from a wrong one.
+
 **ED-IN-0170/0171 allocated 2026-08-12** (next_free 170 -> 172), moved here from the lane row so
 that row stays a pointer rather than a narrative (`test_narrative_does_not_creep_back_into_the_state_file`
 caps it at 600 chars, and it caught this append at 659).
