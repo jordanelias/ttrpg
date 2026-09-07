@@ -159,15 +159,22 @@ feels at contingency (§5.8) and the estrangement anyone feels near a threadcut 
 disclosure, met from inside and from outside. That unification is worth having, and it is what makes
 these beings disturbing in a way that has nothing to do with what they do.
 
-**Whether they deteriorate is open.** If accumulated holding yields stability (§3.4), a threadcut
-being might stabilize with age and need less effort over time. Blocking that requires a premise the
-framework has not stated: *only spooling yields depth; rendering yields displacement without depth.*
-Until that is ruled, both "indefinite persistence" and "deteriorates" are underdetermined. See
-supplement, ruling R-7.
+**Their cost never eases. Only spooling yields temporal depth; rendering displaces without
+accumulating it.** *(Ruled 2026-09-07.)*
 
-One derived factor bears on it: since others' rendering holds a configuration (§4.3), a threadcut
-being rendered by many is held more strongly than one rendered by few. Persistence is partly a
-function of *being rendered*.
+So a threadcut being does not settle with age. It cannot accumulate the depth that makes an organic
+configuration progressively cheaper to be, because the only process supplying depth is the one it
+lacks. Every moment costs what the first moment cost, and it will do so for as long as the being
+lasts. **Immortality here is unremitting labour, not repose** — and a threadcut being that has
+persisted for centuries is not more settled than a new one, only more practised.
+
+This also grounds §4.7: an orphaned configuration decays because removing its causal history removes
+accumulated depth, and nothing in present rendering replaces it.
+
+One derived factor still bears on persistence: since others' rendering moves a configuration's threads
+(§4.2), a threadcut being rendered by many is bound into the weave more strongly than one rendered by
+few. Persistence is partly a function of *being rendered* — though this is imbrication, not depth, and
+it does not reduce the cost.
 
 ## §4.6 The three modes of emergence
 

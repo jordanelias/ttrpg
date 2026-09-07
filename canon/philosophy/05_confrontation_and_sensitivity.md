@@ -118,30 +118,61 @@ intelligibility.
 passive registration: *held* is allowing the registration to loosen the given; *repressed* is
 disowning it. The distinction was doing heavy work in the source suite with nothing behind it.
 
-## §5.5 What develops — and why the cup does not grow
+## §5.5 What develops: position and capacity are one thing
 
-Two claims in the source suite appeared to be in direct conflict: that the rendering's finitude is
-constitutive and could never have included the surfeit, and that repeated confrontation *develops*
-sensitivity. If capacity develops, the cup grows and §5.3 fails.
+**Thread sensitivity is a position, and the position *is* a capacity.** These are not two achievements
+that happen to correlate. Being able to perceive threads and being able to hold oneself among threads
+are the same accomplishment described from two sides.
 
-**It does not grow.** What develops is not the capacity to constitute the surfeit. Two things develop:
+The mechanism, stated in order:
 
-1. **The loosening of commitment to the rendering as given** — a change in the practitioner's relation
-   to their own constituting, not an enlargement of what it can constitute.
-2. **Access below layer 2's threshold** (§6.2) — which is intelligible-side, and concerns threads, not
-   the uncontracted ground.
+1. One becomes able to **hold more of what is being given** — more of what threads are and how they
+   are.
+2. Holding more is *being imbricated differently*: one is tied into the weave more extensively and
+   more finely (§3.5).
+3. And being imbricated more extensively is itself **being able to bear more** — because one's
+   rendering is now working at expanded limits, and what it can hold of threads is also what it can
+   hold *of itself among* threads.
 
-Capacity for the surfeit is fixed. The drinker stops insisting on the cup; the cup is unchanged.
+So perceptual reach and self-holding are one variable. **Your ability to perceive threads is at the
+same time your capacity to hold yourself with threads**, because both are what your rendering can
+handle.
 
-**Two consequences follow, and the framework should accept both.** The trauma signature does not
-diminish with sensitivity — what grows is equanimity (§5.8), not immunity. And the bootstrap problem
-dissolves: the first confrontation, before any sensitivity exists, is registered by the passive
-stratum, which requires no sensitivity to operate. Sensitivity was never needed to *have* the first
-encounter; it is what the encounters build.
+This is why perceptual reach gates what becomes of a practitioner at Coherence 0 (§7.6). It is not
+that perception happens to be useful when self-maintenance fails. It is that perception *was* the
+self-holding capacity all along, and at Coherence 0 what remains is exactly what that capacity can do
+deliberately.
 
-*(This resolves a circularity in the source suite, where confrontation was defined as the mechanism
-producing sensitivity while sensitivity was said to provide the felt encounter that confrontation
-requires.)*
+### Does the cup grow, then?
+
+**Yes for threads, no for surfeit — and §5.3 turns on the second.**
+
+Two different objects are in play and the source suite ran them together:
+
+- **Threads — the substrate, on the intelligible side.** Capacity here **grows**. That is what
+  sensitivity *is*: an expanding ability to hold what is given, achieved by acting into a different
+  imbrication.
+- **The uncontracted surfeit — what lies beyond the boundary.** Capacity here **does not grow**, and
+  cannot. §5.3's finitude is constitutive: the rendering is the apprehension of a contracted region,
+  and no development makes it the apprehension of an uncontracted one.
+
+The cup argument was always about the second. A practitioner of great reach still meets a monstrous
+incursion with a rendering whose specification was never going to include it.
+
+**Two consequences follow, and both should be held.**
+
+- **The trauma signature does not diminish with sensitivity.** What grows is equanimity (§5.8) — the
+  cultivated capacity to sustain engagement with what one cannot hold — not immunity. A Warden of
+  fifty years at a Gap margin is not less overwhelmed by surfeit; they are better at continuing
+  anyway.
+- **The bootstrap dissolves.** The first confrontation, before any sensitivity exists, is registered
+  by the passive stratum (§3.3), which requires no reach to operate. Sensitivity was never needed to
+  *have* the first encounter; it is what the encounters build, by altering how one is tied in.
+
+*(Ruled 2026-09-07: position and capacity are one. ⚠ One reading is mine and should be confirmed —
+that the growth is in capacity for **threads** while capacity for **surfeit** stays constitutively
+fixed. If capacity for surfeit also grows, §5.3's finitude pivot needs rewriting rather than
+preserving.)*
 
 ## §5.6 The epistemic barrier
 

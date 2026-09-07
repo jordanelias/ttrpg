@@ -11,15 +11,37 @@
 The source suite quantified over "operations" in nearly every principle it stated and never defined
 the word. Two senses were in play, and the ambiguity propagated.
 
-**An operation is a deliberate layer-three act upon threads.** Where this document says *operation*
-without qualification, that is what is meant.
+**An operation is threadwork that requires going beyond oneself as a finite ordinary human.**
 
-**Threadwork** is the wider term: any thread-moving act, deliberate or not. Layer-two self-rendering
-is threadwork and is **not** an operation.
+That is the criterion, and it is not arbitrary. It draws the line where the framework's own structure
+already draws it:
 
-This distinction is not tidy-mindedness. It decides whether ordinary human self-rendering produces
-Temporal Disjunction — see §2.7 and supplement ruling R-6 — and it is the reason that question could
-not previously be posed clearly.
+- **Layer-two self-rendering is threadwork**, and it maintains one *as* a finite ordinary human. It
+  never exceeds that shape; it is the holding of it. So it is not an operation.
+- **Layer-three threadwork is an operation**, because it cannot be done from within that shape. One
+  must first stop being held in it — which is the Leap (§6.2), and which is why every operation
+  requires one and self-maintenance requires none.
+
+**Threadwork** is therefore the wider term: any thread-moving act, deliberate or not. **Operation** is
+the narrower: threadwork performed from outside the finite ordinary human.
+
+### What this settles
+
+- **Ordinary experience carries no Temporal Disjunction.** Disjunction is produced by operations
+  (§2.7), and no one produces one merely by being a person. The tracked quantity is the whole of a
+  practitioner's disjunction, not an excess over a universal floor.
+- **The Leap's necessity is not an added rule.** It follows: if operating requires going beyond the
+  finite ordinary human, and layer 2 is what holds one within it, then operating requires layer 2's
+  suspension.
+- **The cost has a location.** What an operation costs, it costs because it is performed from outside
+  the shape one is otherwise maintained in — which is why the cost lands on the practitioner's own
+  maintenance (§6.8), and why prolonged or repeated operating drifts them (§7.1).
+- **The Church's terror is not wholly misplaced**, even though its category is wrong (§8.10). It reads
+  threadwork as a transgression of the human, and at the level of structure that is exactly what an
+  operation is. Its error is in what follows from that — not in noticing it.
+
+*(Ruled 2026-09-07: operations are deliberate acts only, and the criterion is going beyond oneself as
+a finite ordinary human.)*
 
 ## §6.2 The Leap
 
@@ -55,6 +77,11 @@ standpoint by positing themselves as a being in the world. Suspend the self-posi
 standpoint from which threads are presented-as-world lapses. Meanwhile others' rendering continues to
 hold the practitioner as a being in the world — which is exactly why they remain locatable while
 suspended.
+
+**And this is the same line §6.1 draws.** An operation is threadwork requiring one to go beyond
+oneself as a finite ordinary human; layer 2 is what holds one within that. The Leap is not a technique
+that happens to be required for operations. **It is the crossing that makes an act an operation at
+all.**
 
 **On calling this an epoché.** The comparison is apt and the departure should be owned. A
 phenomenological epoché brackets the positing of the natural attitude; it is reversible, and it
@@ -224,4 +251,5 @@ This reconciles what looked irreconcilable:
 
 So the question *"is the Leap risky in itself?"* has no yes-or-no answer. **Risk is environment ×
 duration, plus type × scale.** A Mending in a quiet place is genuinely free. The same Mending at a Gap
-margin is not, and nothing about the operation changed.
+margin is not, and nothing about the operation changed — only where the practitioner stood while
+suspended. *(Ruled 2026-09-07.)*

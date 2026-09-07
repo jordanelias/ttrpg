@@ -165,8 +165,10 @@ operation did *not* touch, held against a history it did. Constituting temporali
 untouched term; constituted temporality supplies the touched one. Without the distinction there is
 no gap, because there is nothing stable to be disjoined from.
 
-**Two questions this raises, both open.** Whether Temporal Disjunction is the same thing as
-Coherence's temporal facet, or a distinct effect, is unsettled — see §6.8. And whether ordinary
-unconscious self-rendering counts as an "operation" for the purposes of universal disjunction is a
-question with a large consequence: if it does, human experience is constitutively disjoined from its
-own history. See supplement, ruling R-6.
+**Disjunction is produced by operations, not by ordinary self-rendering.** An *operation* is a
+deliberate layer-three act (§6.1); layer-two self-maintenance is threadwork but not an operation, and
+carries no disjunction. **Ordinary human experience has no baseline disjunction**, and what is tracked
+is therefore the whole of it rather than an excess over a floor. *(Ruled 2026-09-07.)*
+
+One question does remain open: whether Temporal Disjunction and Coherence's temporal facet are the
+same effect or two — see §6.8.
