@@ -1,5 +1,139 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⭐ DONE 2026-09-07 — decomposition STEP 4: `state/carriers.py` + `state/world.py`. `shape.py` 5,165 → 4,143 (ED-IN-0203)
+
+**Carries on #378, which named steps 4–11 as what remains.** Step 4 is the whole of that step and
+nothing beyond it: the sixteen carriers and `matrix_rows_without_a_field` to
+`engine/season/state/carriers.py`; `World`, `_TenureView`, `_entity_digest` and
+`MATRIX_REFUSAL_LAW` to `engine/season/state/world.py`. `shape.py` re-exports all twenty-one names,
+so `S.<name>` and every bare use resolve unchanged.
+
+```
+engine/season/state/  ids 24 · carriers 562 · world 577
+```
+
+**⚠ ZERO GAME YIELD, and this remains true however many steps land.** #378 said the remaining steps
+"buy structure, not capability" and that is still the honest reading of this one. It is licensed as
+a precondition, not as progress: `register.py --requirements` reads **6 `not_met` · 3 `partial`**
+before and after, unchanged, which is the only reading of progress §0.2 accepts.
+
+### THE PROOF THAT THIS IS A PURE MOVE, WHICH A GREEN SUITE IS NOT
+
+A passing suite says the tree still works; it does not say the code is the same code. The claim
+"PURE MOVE" is licensed by a line-multiset comparison instead — every body line of the two new
+modules must appear, byte-identically and no more often, in `git show HEAD:engine/season/shape.py`:
+
+```
+carriers.py: 525 body lines, 1 not present in HEAD:shape.py   <- the [canonical:] tag, added deliberately
+world.py:    532 body lines, 1 not present in HEAD:shape.py   <- the [JUSTIFIED:] tag, added deliberately
+```
+
+Two lines, both provenance tags this commit added on purpose (below). Everything else is the same
+bytes. Run it after every remaining carve; it is ten lines and it is the only artifact here that
+can distinguish a move from an edit.
+
+### ⚠ THE NARROWING CHECK, RUN AS A MEASUREMENT RATHER THAN AS A HOPE
+
+Step 0b's worst finding was that consolidating a path anchor **silently deleted a blocking gate's
+coverage** — the seam did not move, the literal did. Every carve can do that to every
+source-scanning gate, and reading the diff cannot see it. So this step measured the four scanners
+that read the model set, as SETS, before and after:
+
+| scanner | before | after | lost |
+|---|---|---|---|
+| `write` call sites (W2's AST walk) | 32 | 32 | none |
+| functions taking a `World` (W5's proof) | 45 | 45 | none |
+| `.get(<operand>, default)` (W-C's scan) | 1 | 1 | none |
+| `if False` (D9) | 1 | 1 | none |
+
+**No gate narrowed — measured, not assumed.** It could have gone the other way and the check is
+cheap; the instrument is worth rebuilding at step 5, where `queries`/`predicates`/`effects` take
+`World`-annotated functions OUT of `shape.py` and W5's scan reads `files.SHAPE_PY` alone.
+
+### THE TWO CONSTANTS THE FABRICATION GATE RE-PRESENTED, AND WHY TAGGING THEM INVENTS NOTHING
+
+`ci_sim_fabrication_check` is changeset-scoped on ADDED lines, so a byte-identical relocation
+re-presents an old constant as new. Step 3 hit this with twelve; step 4 hit it with two, and the
+step-3 disposition applies unchanged — each already carried its provenance in prose above it:
+
+* `Act.stratum = 4` → `[canonical: rosters.yaml \`strata\`]`. Verified rather than asserted:
+  `list(roster("strata")).index("social") == 4`, and `stratum_of` returns `STRATA.index(row.stratum)`,
+  so the int genuinely IS an index into that roster. The roster's own `source:` is #353 §27.
+* `content_hash`'s `digest_size=16` → `[JUSTIFIED: a HASH WIDTH, not a game value]`, the same form
+  `state/ids.py` already carries for its `digest_size=8`.
+
+⚠ The two mechanical traps recorded at step 3 both still apply and were both obeyed: single line,
+immediately above the flagged line.
+
+### ⚠ A DOCSTRING THAT ENCODED A RULING'S CONSEQUENCE INSTEAD OF THE RULING, AND SO WENT FALSE
+
+`data/matrix.py` said, of the table it deliberately does not own: *"`MATRIX_REFUSAL_LAW` stays in
+`shape.py`, with its only reader — the gate in `World`."* The adjudication at step 2 was **the table
+travels with its reader**; the sentence recorded where the reader HAPPENED TO BE. The reader moved
+at step 4 and the sentence became false without anything changing its mind.
+
+**Write the rule, not the address.** Nothing catches this: the file still exists, the gate is still
+green, and only a reader following the sentence discovers it is wrong. Repaired, with the ruling
+stated as a ruling this time.
+
+### THE ONE CITATION OUTSIDE THE PACKAGE THIS MOVE FALSIFIED — REPAIRED, AND THE REST NOT SWEPT
+
+`requirements.yaml` R-03 cited `engine/season/shape.py:2289` for `Scene`, which is now in
+`state/carriers.py`. That is `H-122`'s species — *a citation naming the FILE a claim lives in* — and
+this commit is what made it wrong, so this commit fixes it. Every other `shape.py` citation in the
+tree is left alone, per #378's rule: **repair on a red gate, do not sweep early.** A grep over
+`.md`/`.yaml`/`.jsonl` found exactly one instance caused by this move; the rest name things that
+have not moved yet.
+
+### ⚠ A PROCESS ERROR, RECORDED BECAUSE IT WASTED TWO SUITE RUNS
+
+I started the suite and then went on editing the tree — adding a file, then a tag — twice. Several
+tests discover their corpus with `files.package_modules()` **at run time**, so a run over a moving
+tree measures a tree that never existed. Both runs were killed and the suite re-run once on a
+settled tree. **Finish the step, then measure it.** A six-minute suite makes the temptation to
+overlap real; the answer is to use the wait for read-only work, which is what the scanner-coverage
+and pure-move instruments above were built during.
+
+### WHAT WAS VERIFIED
+
+- **content hash `dd017e6560955a4206a76192903e42ba`** — unchanged, after each of the two files.
+- **`report.py` re-ran the whole corpus and reproduced all eight artifacts byte-identically**
+  (`git status engine/season/runs/` empty). This is the control; `delta.py` alone is not.
+- **`pytest engine/season/tests`: 183 passed**, the same count as #378.
+- **`pytest tests/valoria/test_engine_does_not_import_systems.py`: 17 passed** — no new
+  `engine.season` cycle, and the two declared `sys.path` seams are still the only two.
+- **the plan's own step-4 artifacts**: `test_h118_content_hash_folds_*` green, and the load-time
+  refusal count over the model set still **28** (`test_h115_...`), with `state/` holding **none** of
+  them — all 28 are still in `data/`, which is the Layer-1 property step 3 made true.
+- **`tools/valoria_local.py --staged`**: all local gates passed. **`compliance_check --check-only`**:
+  0 errors. **`export_sim_params.py --check`**: current. **`register.py --counts`** and
+  **`--requirements`**: green, citations resolve.
+- the symbol check from #378's entry, run against `HEAD`: **95 names, 95 resolve, 0 missing**; the
+  dotted-import probe over `engine/season/**/*.py`: **0 failures**.
+
+### ⚠ A CORRECTION TO THE PLAN, FOR WHOEVER TAKES STEP 5 — IT PRICES THE WRONG HALF OF `Query`
+
+`workplans/2026-09-06-shape-decomposition-plan.md` splits `Query` across TWO steps: the eleven
+World-first statics go to `queries.py` at **step 5**, the four person-side ones to `decision.py` at
+**step 7**. It prices only the second: *"Cost: **56 call sites** across 5 files; a mechanical
+rename."*
+
+**Measured on the current tree, the step-5 half is the bigger one and the plan does not mention it:**
+
+| half | occurrences | source lines | outside the test file |
+|---|---|---|---|
+| person-side (step 7) — `assemble` `budget` `entrenchment` `opening_set` | 59 | **56** | 25 |
+| World-first (step 5) — `parent_of` `presence` `descendants` `lateral` `verbs` `hold_force` `judging_set` `r1_aggregate` `aggregate_guard` `commit_count_guard` `single_holder_counter` | 62 | **62** | **51**, of which 35 in `probes.py` |
+
+The plan's 56 is CORRECT on its own basis (distinct source lines, all files) — checked before
+reporting a discrepancy, and there is none. The finding is the omission, not an error in the number.
+Step 5's stated artifact is *"`EFFECTS` and `REQUIRES_PREDICATES` keys diffed identical"*, which
+cannot observe a botched 62-site rename at all. **Step 5 needs the person-side artifact too:
+`Query` must keep exactly its four person-side statics afterwards, and the count of resolved
+`Query.<world-first>` references must go to zero in the same commit.**
+
+---
+
 ## ⭐ DONE 2026-09-07 — THE DECOMPOSITION IS IN `engine/season/`. `shape.py` 6,771 → 5,165 (ED-IN-0203)
 
 **The entry below this one says the decomposition "has to be redone" on `engine/season/`. It has
