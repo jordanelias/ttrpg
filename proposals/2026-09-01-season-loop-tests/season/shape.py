@@ -4374,7 +4374,23 @@ _S353_CACHE: list = []
 def SOURCE_353_TEXT() -> str:
     if not _S353_CACHE:
         f = files.SOURCE_353_MD
-        _S353_CACHE.append(f.read_text() if f.exists() else "")
+        if not f.exists():
+            # ⚠ THIS USED TO BE `else ""`, AND IT WAS A FAIL-OPEN IN THE WORST DIRECTION.
+            # `names_a_verb` regex-searches this text; over an empty string EVERY verb reads as
+            # NOT named by the design, so every gap the fold reports is billed to the
+            # SPECIFICATION. That is the exact mis-attribution `names_a_verb`'s own docstring
+            # says it exists to prevent ("telling a reader that #353 owes a row for `purge`"),
+            # and it fired silently — measured before the fix: with the source absent,
+            # `names_a_verb("move")` returned False for a verb #353 genuinely names.
+            # An absent source is an INSTRUMENT problem, not a design gap, so it raises the
+            # kind that is deliberately NOT a `ShapeGap` and cannot reach the design-gap column.
+            raise InstrumentDefect(
+                f"the #353 design source is not at {f}, where `season.data.files` anchors it. "
+                "SOURCE_353_TEXT() has no honest answer without it: `names_a_verb` regex-searches "
+                "this text, so an empty string makes EVERY verb read as not-named-by-the-design "
+                "and bills every reported gap to the specification. Restore the file, or "
+                "re-anchor files.SOURCE_353_MD.")
+        _S353_CACHE.append(f.read_text())
     return _S353_CACHE[0]
 
 NO_PRECONDITION = ("—", "-", "")
