@@ -2182,6 +2182,9 @@ rows:
       that was false at deposit; see the first paragraph of `cite:`.
     cite:      >-
       SOURCES QUOTED HERE: proposals/2026-09-01-season-loop-tests/season/shape.py,
+      proposals/2026-09-01-season-loop-tests/season/data/requires.py (`Observation` and `Verdict`
+      moved there, step 3 of the `shape.py` decomposition, ED-IN-0203, a PURE MOVE -- the two
+      quotes below that name them are unaffected in wording, only in file),
       proposals/2026-09-02-executable-architecture/hole_register.yaml (row `H-94`) and
       proposals/2026-09-04-degree-sweep/arm9_forking.py (arm 9c's own statement of its diagnosis,
       added 2026-09-04 -- it was being quoted with no source that carries it).

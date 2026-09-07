@@ -70,81 +70,16 @@ from .trace_log import TRACE
 
 
 # ===========================================================================
-# S48 -- FIXED POINT.  S42.2.1 -- INJECT, GRADE, SWEEP. NO LITERAL IN ANY BODY.
+# S48 -- FIXED POINT; W8 -- THE MATTER ECONOMY. BOTH EXTRACTED, step 3 of the decomposition.
+#
+# `Fixtures`, `_load_matter_tables`, `WEAR_RATES`/`BAND_FLOORS`/`SUBSISTENCE_WEIGHTS`/
+# `SITE_YIELD`, and `DEFAULT_FIXTURES` all now live in `season.data.fixtures`, in that same
+# order (`_load_matter_tables` sits between the class and the baseline instance there too --
+# `DEFAULT_FIXTURES` reads three of its values off `rosters.yaml` and cannot be built before they
+# load; see that module's docstring). Imported here so every bare use of these names further down
+# this file keeps resolving, and so `S.<name>` keeps resolving for the harness and tests: this is
+# a re-export, not a second definition.
 # ===========================================================================
-
-class Fixtures:
-    """S42.2.1: never invent a constant. Inject it, declare it a harness fixture at
-    `grade: assumption`, name the injection site, run a 3-point sweep, and treat A VERDICT
-    THAT FLIPS ACROSS THE SWEEP AS ITSELF A FINDING.
-
-    REV 2 added `wear_per_season` (per SITE KIND, with NO SILENT DEFAULT -- S42.2.1 names a
-    wear table with a silent default as the exact prior sin), `confidence_default`, and
-    `entrenchment_seasons`. It REMOVED `caller_supplied_max_depth`: S39.3 says the depth cap
-    has NO DEFAULT, and a default relocated into a default-argument object is still a default."""
-
-    def __init__(self, **vals: Any):
-        self._v = dict(vals)
-        self.reads: dict[str, int] = {}
-
-    def get(self, name: str) -> Any:
-        if name not in self._v:
-            raise Ungraded(
-                f"harness fixture '{name}' is not registered",
-                "S42.2.1",
-                needs="inject it, grade it assumption, name the injection site, sweep it",
-                law="S42.2.1 -- a silent default does not fail; it answers, plausibly and wrongly, forever",
-            )
-        self.reads[name] = self.reads.get(name, 0) + 1
-        return self._v[name]
-
-    def wear(self, site_kind: str) -> int:
-        """NO SILENT DEFAULT. An unregistered site kind RAISES rather than answering 20."""
-        table = self.get("wear_per_season")
-        if site_kind not in table:
-            raise Ungraded(
-                f"wear for site kind '{site_kind}' is not registered",
-                "S42.2.1",
-                needs="a per-kind wear row; S22 assigns `wear per site kind` to params",
-                law="S42.2.1 -- 'a wear table that returns 20 for an unregistered site kind does not fail -- it answers, plausibly and wrongly, forever'",
-            )
-        return table[site_kind]
-
-    def claim_decay(self) -> int:
-        """`W4` / `H-40`. Confidence lost per season by a claim nobody refreshed — the THIRD
-        licensed clock (#353 `:864`).
-
-        ⚠ ON `wear`'s PRECEDENT, DELIBERATELY, INCLUDING THE REFUSAL. #353 licenses the clock and
-        gives NO RATE, so this is an INJECTED DEFAULT with a site and a sweep (`H-40`, re-graded
-        `assumption`), not a value the design states. It is registered rather than literal for the
-        same reason `wear` is: *"a wear table that returns 20 for an unregistered site kind does
-        not fail — it answers, plausibly and wrongly, forever."*"""
-        # ⚠ ROUTED THROUGH `get()`, AND THE BYPASS WAS LOAD-BEARING ON A GREEN CHECK. This read
-        # `self._v` directly, so `self.reads` was never incremented and `claim_decay_per_season`
-        # was INVISIBLE to R5 and to `W9`'s check 3 -- the two guards whose whole job is "no fill
-        # off the register". Check 3 was green BECAUSE of the bypass: route the read properly and
-        # it fails with `missing == ["claim_decay_per_season"]` unless the fixture is named in a
-        # register row's `site:`. A guard that cannot see the thing it guards is not a weak guard,
-        # it is an absent one (§0.1 point 2). Found by the adversarial pass.
-        if "claim_decay_per_season" not in self._v:
-            raise Ungraded(
-                "claim confidence decay is not registered", "S42.2.1",
-                needs="a `claim_decay_per_season` fixture row",
-                law="S42.2.1 -- an unregistered rate must REFUSE, never answer plausibly")
-        return self.get("claim_decay_per_season")
-
-    def sweep(self, name: str, value: Any) -> "Fixtures":
-        f = Fixtures(**self._v)
-        f._v[name] = value
-        return f
-
-
-# ⚠ `DEFAULT_FIXTURES` USED TO BE DEFINED HERE, AND `W8` MOVED IT BELOW THE ROSTER READERS.
-# Three of its values are now READ FROM `rosters.yaml` rather than written as literals, and a
-# reader that runs before `roster()` / `table()` / `roster_map()` exist cannot read anything.
-# The move is mechanical: nothing between here and there referenced it except lazily.
-
-
 
 # ===========================================================================
 # S23/S30 -- THE WRITE MATRIX; THE ROSTERS -- BOTH EXTRACTED, step 2 of the decomposition.
@@ -175,490 +110,55 @@ from .data.rosters import (  # noqa: F401 -- re-exported so `S.<name>` and every
     VIEW_BUILDER_RULES, WITNESS_CHANNELS, WOUND_HARM_MODELS, WOUNDED, _ROSTERS, _TABLES,
     load_yaml, office_faction, roster, roster_map, table, table_meta, title_domain, title_rank,
 )
+from .data.requires import (  # noqa: F401 -- re-exported so `S.<name>` and every bare use resolve
+    REQUIRES_FORMS, REQUIRES_OPERANDS, REQUIRES_FORM_NEEDS, _Unknown, UNKNOWN, Observation,
+    Verdict, _as_number, _bound, COMPARATORS, REQUIREMENT_TYPES, requirement_form, Requirement,
+    Existence, ScalarThreshold, ContainPath, Relation, OwnLedger, AllOf, TypedRequires, _observe,
+    evaluate, binding_of, binding_from_act, REQUIRES_STEMS, LEDGER_DERIVED_STEMS,
+    _require_known_stem, _build_clause, build_typed_requires,
+)
+from .data.verbs import (  # noqa: F401 -- re-exported so `S.<name>` and every bare use resolve
+    VERB_TABLE_YAML, ELIGIBILITY_KINDS, VerbRow, _load_verb_table, VERB_TABLE, _load_alignment,
+    ALIGNMENT, ALIGNMENT_DECLARED, ALIGNMENT_DEFAULT_CELL, rows_without_a_producer,
+    ALIGNMENT_SWEEP, alignment_at, NO_PRECONDITION,
+)
+from .data.fixtures import (  # noqa: F401 -- re-exported so `S.<name>` and every bare use resolve
+    Fixtures, _load_matter_tables, WEAR_RATES, BAND_FLOORS, SUBSISTENCE_WEIGHTS, SITE_YIELD,
+    DEFAULT_FIXTURES,
+)
 
 # ===========================================================================
 # THE `requires` GRAMMAR -- W-A. ONE DECLARATION, THREE READERS.
 #
-# `04_CODE_ARCHITECTURE.md` §F.24a: *"`F.24` said 'assumed: a small typed predicate grammar' and
-# supplied none, which is the shape of handing a property forward. The 32 `requires` cells in the
-# executable chain are the specification, and reading them yields SEVEN forms."* This block is
-# those seven forms as code, and `rosters.yaml: requires_forms` is the closed roster of their
-# names -- a cell naming an eighth REFUSES AT LOAD.
+# EXTRACTED, step 3 of the decomposition (a PURE MOVE): the grammar itself -- `REQUIRES_FORMS`/
+# `REQUIRES_OPERANDS`/`REQUIRES_FORM_NEEDS`, the third truth value (`_Unknown`/`UNKNOWN`),
+# `Observation`, `Verdict`, the seven-form machinery (`requirement_form`, `Requirement` and its
+# five `@requirement_form` classes including `OwnLedger`), the conjunction `AllOf`, the cell
+# wrapper `TypedRequires`, the one evaluator (`evaluate`), the one binding pair (`binding_of`/
+# `binding_from_act`), and the loader (`_build_clause`/`build_typed_requires`) -- now lives in
+# `season.data.requires`. See that module's docstring for the ordering constraint the split
+# creates (`_build_clause` needs every `@requirement_form` registered before `verb_table.yaml`
+# loads) and how it is satisfied structurally rather than by file position.
 #
-# WHY A GRAMMAR RATHER THAN ANOTHER PREDICATE. `H-65` records the defect: Part E states every
-# precondition in PROSE, so each verb needed its own hand-written `_req_*`, and `D20 -- the
-# resolver has no body` came back as *the resolver has thirty*. Eight were written. Each was a
-# SECOND reading of a cell that already exists in the table, and two of the eight were found to
-# have dropped a conjunct or a disjunct (`_req_confer`, `_req_revoke`) -- which is the failure
-# mode a per-verb body has and a typed cell does not.
+# `04_CODE_ARCHITECTURE.md` §F.24a: *"`F.24` said 'assumed: a small typed predicate grammar' and
+# supplied none... The 32 `requires` cells in the executable chain are the specification, and
+# reading them yields SEVEN forms."*
 #
 # THE THREE READERS, and the reason this is worth doing at all:
 #   1. THE FOLD (`SeasonDriver._fold`), through `WorldReader` -- §E2's `requires` against the
 #      world the predecessors left.
 #   2. THE PERSON (`belief_contradicts`), through `LedgerReader` -- §F1 clause 4, the SAME cell
-#      asked of one person's OWN claims and of nothing else. Before this, the person's reading was
-#      a `person_predicates` membership test that shared NO vocabulary with anything the fold
-#      wrote (`H-116`), so clause 4 could not fire in any run.
-#   3. `resolvable_verbs()` -- *can the fold carry this verb through RESOLVE at all*. It asked
-#      `v in REQUIRES_PREDICATES`; a typed cell is evaluable too, and one owner means that
-#      question has one answer.
+#      asked of one person's OWN claims and of nothing else.
+#   3. `resolvable_verbs()` -- *can the fold carry this verb through RESOLVE at all*.
 #
-# ⚠ THE HAZARD THIS BLOCK IS MOST LIKELY TO CARRY, stated so the next reader hunts for it: a cell
-# that OVER-refuses (a conjunct the prose does not have) or UNDER-refuses (a dropped disjunct).
-# `G4` weighs the two equally, and `_req_confer`'s own history in this file is the precedent for
-# the second. Every cell names the §E3 line it was transcribed from, in `verb_table.yaml`.
+# `WorldReader` AND `LedgerReader` STAY HERE, DELIBERATELY -- adjudicated at the move. They are
+# READERS, `queries/` territory at a later step, and the grammar they serve asks only
+# `reader.read(subject, predicate)`; moving a reader into the grammar module would give the
+# grammar an opinion about where its answers come from. Both import `UNKNOWN` back from
+# `season.data.requires` below; imported here so every bare use of the grammar's names further
+# down this file keeps resolving, and so `S.<name>` keeps resolving for the harness and tests --
+# this is a re-export, not a second definition.
 # ===========================================================================
-
-REQUIRES_FORMS = roster("requires_forms")
-REQUIRES_OPERANDS = roster("requires_operands")
-REQUIRES_FORM_NEEDS = roster_map("requires_forms", "needs")
-
-
-class _Unknown:
-    """THE THIRD TRUTH VALUE, AND IT IS NOT `False`.
-
-    An operand the binding does not supply, or a question the reader cannot answer, is UNKNOWN --
-    *nobody knows*, which is a different fact from *it is false*. The distinction is the whole of
-    §F1 clause 4: `opening_set` drops a Candidate only on a KNOWN-FALSE requirement, and *"absence
-    of a belief is not a belief in the negative"*. Collapse UNKNOWN into False here and every
-    person stops forming every candidate whose requirement they happen to hold no claim about.
-
-    ⚠ IT IS FALSY, AND DELIBERATELY SO. The FOLD's polarity is §42.2's -- zero evidence goes to
-    the verdict AGAINST the thing measured -- so an unevaluable precondition must REFUSE. Callers
-    still test `is True` / `is False` rather than truthiness, because the two readings differ; the
-    falsy `__bool__` is the safe default for a caller that forgets."""
-    __slots__ = ()
-
-    def __bool__(self) -> bool:
-        return False
-
-    def __repr__(self) -> str:
-        return "UNKNOWN"
-
-
-UNKNOWN = _Unknown()
-
-
-@dataclass(frozen=True)
-class Observation:
-    """ONE READ, RECORDED. `(subject, predicate, value)` -- the same triple a `Claim` carries,
-    which is not a coincidence: an Observation is what a Claim would be if the reader wrote one.
-
-    ⚠ THE PREDICATE IS DERIVED FROM THE FORM, NEVER LOOKED UP IN A ROSTER. `f"stores:{kind}"`,
-    `"condition"`, `f"contain.path:{to}"` -- the string falls out of the cell's own fields, so a
-    verb cannot acquire a predicate nobody can produce, and the write side has a name to aim at."""
-    subject: Any
-    predicate: str
-    value: Any
-
-
-@dataclass(frozen=True)
-class Verdict:
-    """`True | False | UNKNOWN`, plus every read that produced it.
-
-    `observed` is kept here AND is attached to every Event the act emits -- that is `W-B`
-    (`H-122`), landed 2026-09-04. `W-A` refused to attach it because *"building the carrier before
-    its reader exists is the dead-carrier defect `ID-13` refuses"*; the reader is
-    `belief_contradicts`, which evaluates the SAME cell against `LedgerReader`, so the refusal is
-    DISCHARGED rather than overridden and no second evaluator exists (§27.2). ⚠ THIS DOCSTRING
-    SAID THE OPPOSITE UNTIL THE `W-B` ADVERSARIAL PASS READ IT: it still described attaching the
-    field as the defect, in the file that had just attached it. A comment asserting the absence of
-    a field the class above it carries is the *doctrine asserting an enforcement that does not
-    exist* failure, one seam over."""
-    value: Any
-    observed: tuple = ()
-
-
-def _as_number(v):
-    """A read coerced to a number, or UNKNOWN. A string is UNKNOWN rather than an error: a ledger
-    claim may carry anything, and a comparison against a word is a question nobody can answer."""
-    if v is UNKNOWN or v is None or isinstance(v, str):
-        return UNKNOWN
-    try:
-        return float(v)
-    except (TypeError, ValueError):
-        return UNKNOWN
-
-
-def _bound(binding: dict, name: str):
-    return binding.get(name, UNKNOWN) if binding.get(name, UNKNOWN) is not None else UNKNOWN
-
-
-# `>=` is the only comparator both live cells use (§E3 `:418`, `:420`). `<=` is admitted because a
-# threshold has a DIRECTION and a cell that cannot state the other one cannot be shown to have
-# stated this one. MEASURED 2026-09-04: flipping `transfer`'s cell to `<=` reddens THREE tests --
-# `test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it`, `test_no_probe_errors`
-# (probe `F10`, where both claimants on a one-unit larder are then GRANTED, so §27.1's scarcity
-# stops happening) and the artifact round-trip. A strict `<`/`>` is NOT admitted: §12.1's floor is
-# inclusive, and a fourth comparator would be a change to what a precondition can say.
-COMPARATORS = {">=": lambda a, b: a >= b, "<=": lambda a, b: a <= b}
-
-REQUIREMENT_TYPES: dict = {}
-
-
-def requirement_form(name: str):
-    """Bind a form NAME from `rosters.yaml` to the class that evaluates it. The roster is the
-    closed grammar; this is the implementation, and a name in one and not the other raises."""
-    def deco(cls):
-        if name not in REQUIRES_FORMS:
-            raise SystemExit(f"{name!r} is not in rosters.yaml's requires_forms roster")
-        REQUIREMENT_TYPES[name] = cls
-        # ⚠ THE FORM'S NAME, ON THE CLASS. `rosters.yaml` gives each form a `needs:` -- the closed
-        # set of operands a cell OF THAT FORM MAY reference -- and `operands_for` reads it to
-        # decide which operands a Candidate carries BEYOND the ones its own cell binds. Without
-        # this the mapping would have to be re-derived by scanning `REQUIREMENT_TYPES` backwards,
-        # which is the same declaration written twice.
-        cls._form = name
-        return cls
-    return deco
-
-
-class Requirement:
-    # The form's name, stamped by `@requirement_form`. `AllOf` has none -- a conjunction is not a
-    # form (`rosters.yaml`: "CONJUNCTION IS NOT AN EIGHTH FORM") -- and unions its clauses'.
-    _form = ""
-
-    def needs(self) -> frozenset:
-        """The operand names a cell OF THIS FORM MAY reference -- `rosters.yaml`'s `needs:`.
-
-        Wider than `operands()`, which is what THIS cell actually binds. The gap between them is
-        where `operands_for` looks for the operands an act needs and its precondition does not:
-        `transfer`'s cell binds one rung (`from`) and §E3 gives it TWO `Rung.stores` writes."""
-        return frozenset(REQUIRES_FORM_NEEDS.get(self._form) or ())
-
-    # ⚠ EVERY FORM DECLARES THE STEMS IT ASKS FOR, so `_build_clause` can close the predicate
-    # vocabulary at LOAD without a second list to keep in step (§8). A form that reads a stem it
-    # does not declare here would pass the load check and still read UNKNOWN forever -- so the
-    # rule is: whatever `check()` passes to `_observe`, `stems()` names.
-    def stems(self) -> tuple:
-        return ()
-
-    """One clause of a typed `requires:`. Subclasses ARE the seven forms; `evaluate` never
-    branches on a form name, because the class IS the branch (`G2` -- forbid the shape, never
-    enumerate the words)."""
-
-    def operands(self) -> tuple:
-        """Every operand name this clause reads. Checked at load against the form's `needs:`."""
-        return ()
-
-    def entity_operands(self) -> tuple:
-        """The operand naming THE THING THE REQUIREMENT IS ABOUT -- what a Candidate's `subject`
-        can bind, and nothing else. A Candidate is `(verb, subject, why)` and carries exactly one
-        entity (`H-94`/`H-80`), so this is the only operand the person's reading can supply."""
-        return ()
-
-    def check(self, reader, binding: dict, observed: list):
-        raise NotImplementedError
-
-
-@requirement_form("existence")
-@dataclass(frozen=True)
-class Existence(Requirement):
-    """§F.24a form 1 -- *existence over an edge kind*, read to cover an OBJECT of a named class
-    as well. The widening is argued in `rosters.yaml: requires_forms`, and it is what makes
-    §F.24a's own "closes 30 of 32 cells" true of `carry`, `commit` and `dispatch`."""
-    of: str
-    kind: str
-
-    def operands(self) -> tuple:
-        return (self.of,)
-
-    def entity_operands(self) -> tuple:
-        return (self.of,)
-
-
-    def stems(self) -> tuple:
-        return ("exists",)
-
-    def check(self, reader, binding, observed):
-        subj = _bound(binding, self.of)
-        if subj is UNKNOWN:
-            return UNKNOWN
-        n = _as_number(_observe(reader, subj, f"exists:{self.kind}", observed))
-        return UNKNOWN if n is UNKNOWN else n >= 1
-
-
-@requirement_form("scalar_threshold")
-@dataclass(frozen=True)
-class ScalarThreshold(Requirement):
-    """§F.24a form 2 -- *a computed scalar against a threshold*. `transfer`'s
-    `stores(hearth(giver), kind) >= amount` and `work`'s `condition >= floor(verb)`.
-
-    The threshold is EITHER an operand (`transfer`'s `amount`) or a SECOND READ on the same
-    entity (`work`'s `floor`, which is `band_floors[site.kind]`'s minimum and lives in Fixtures,
-    `H-08`). Exactly one, checked at load: a cell with both states two thresholds and a cell with
-    neither states none."""
-    of: str
-    scalar: str
-    comparator: str = ">="
-    key: str = ""
-    threshold: str = ""
-    threshold_predicate: str = ""
-
-    def __post_init__(self) -> None:
-        if bool(self.threshold) == bool(self.threshold_predicate):
-            raise SystemExit(
-                f"a `scalar_threshold` cell needs exactly one of `threshold:` (an operand) and "
-                f"`threshold_predicate:` (a second read); got {self.threshold!r} / "
-                f"{self.threshold_predicate!r}")
-        if self.comparator not in COMPARATORS:
-            raise SystemExit(
-                f"comparator {self.comparator!r} is not one of {sorted(COMPARATORS)}. §12.1's "
-                "floor is inclusive; a strict comparator is a change to what a precondition can "
-                "say and needs a ruling, not a table edit")
-
-    def operands(self) -> tuple:
-        return tuple(x for x in (self.of, self.key, self.threshold) if x)
-
-    def entity_operands(self) -> tuple:
-        return (self.of,)
-
-
-    def stems(self) -> tuple:
-        return (self.scalar, self.threshold_predicate) if self.threshold_predicate else (self.scalar,)
-
-    def check(self, reader, binding, observed):
-        subj = _bound(binding, self.of)
-        if subj is UNKNOWN:
-            return UNKNOWN
-        pred = self.scalar
-        if self.key:
-            k = _bound(binding, self.key)
-            if k is UNKNOWN:
-                return UNKNOWN
-            pred = f"{self.scalar}:{k}"
-        lhs = _as_number(_observe(reader, subj, pred, observed))
-        if lhs is UNKNOWN:
-            return UNKNOWN
-        rhs = (_as_number(_observe(reader, subj, self.threshold_predicate, observed))
-               if self.threshold_predicate else _as_number(_bound(binding, self.threshold)))
-        if rhs is UNKNOWN:
-            return UNKNOWN
-        return bool(COMPARATORS[self.comparator](lhs, rhs))
-
-
-@requirement_form("contain_path")
-@dataclass(frozen=True)
-class ContainPath(Requirement):
-    """§F.24a form 3 -- *path existence in the containment tree*. `move`'s whole cell (§E3 `:408`).
-
-    ⚠ THE ENTITY IS THE DESTINATION, NOT THE ORIGIN. The origin is the actor and is bound from the
-    act; a Candidate's `subject` names WHERE, which is the operand a person could hold a belief
-    about (*there is no road from here to there*)."""
-    of: str
-    to: str
-
-    def operands(self) -> tuple:
-        return (self.of, self.to)
-
-    def entity_operands(self) -> tuple:
-        return (self.to,)
-
-
-    def stems(self) -> tuple:
-        return ("contain.path",)
-
-    def check(self, reader, binding, observed):
-        origin, dest = _bound(binding, self.of), _bound(binding, self.to)
-        if origin is UNKNOWN or dest is UNKNOWN:
-            return UNKNOWN
-        v = _observe(reader, origin, f"contain.path:{dest}", observed)
-        return UNKNOWN if v is UNKNOWN else bool(v)
-
-
-@requirement_form("relation")
-@dataclass(frozen=True)
-class Relation(Requirement):
-    """§F.24a form 5 -- *a relation between actor and subject*. `succeed`'s *the actor holds the
-    office or estate whose heir is being designated*, and `restore`'s *the actor is present at
-    it*. The relation NAME is the cell's; a relation the reader cannot answer is UNKNOWN, so an
-    unimplemented one refuses rather than admitting."""
-    of: str
-    relation: str
-
-    def operands(self) -> tuple:
-        return (self.of, "actor")
-
-    def entity_operands(self) -> tuple:
-        return (self.of,)
-
-
-    def stems(self) -> tuple:
-        return (self.relation,)
-
-    def check(self, reader, binding, observed):
-        subj, actor = _bound(binding, self.of), _bound(binding, "actor")
-        if subj is UNKNOWN or actor is UNKNOWN:
-            return UNKNOWN
-        v = _observe(reader, subj, f"{self.relation}:{actor}", observed)
-        return UNKNOWN if v is UNKNOWN else bool(v)
-
-
-@requirement_form("own_ledger")
-@dataclass(frozen=True)
-class OwnLedger(Requirement):
-    """§F.24a form 6 -- *membership in the ACTOR'S OWN ledger*, and the form the cross-read missed.
-
-    `tell`'s *the teller holds a claim on the subject* (§E3 `:417`). §B.2's corrected row (`F8`):
-    *"the fold may ask the ACTOR'S OWN ledger ... and no other."* That carve-out is what licenses
-    a resolver-side clause to read a ledger at all, and `WorldReader` makes it structural rather
-    than promised -- it is constructed with one actor and can name no other person's claims.
-
-    ⚠ IT READS WHETHER THE CLAIM IS HELD, NEVER WHETHER IT IS TRUE, which is the whole of `T3`.
-    A liar and a mistaken witness both pass it, and the distortion lands at the receiver's
-    WITNESS deposit -- `_req_tell`'s own docstring said so and this preserves it exactly."""
-    of: str
-
-    def operands(self) -> tuple:
-        return (self.of,)
-
-    def entity_operands(self) -> tuple:
-        return (self.of,)
-
-
-    def stems(self) -> tuple:
-        return ("claim.held",)
-
-    def check(self, reader, binding, observed):
-        subj = _bound(binding, self.of)
-        if subj is UNKNOWN:
-            return UNKNOWN
-        v = _observe(reader, subj, "claim.held", observed)
-        return UNKNOWN if v is UNKNOWN else bool(v)
-
-
-@dataclass(frozen=True)
-class AllOf(Requirement):
-    """CONJUNCTION, AND IT IS NOT AN EIGHTH FORM. `restore`'s cell is *the site exists AND the
-    actor is present at it*; `confer`'s and `revoke`'s carry an `and` too. §F.24a enumerated the
-    ATOMS -- the `and` was already in the cells it read.
-
-    ⚠ THREE-VALUED, AND FALSE DOMINATES UNKNOWN. One known-false conjunct makes the conjunction
-    known-false even if a sibling is unreadable, which is what lets §F1 clause 4 fire on a person
-    who knows one half of a requirement fails. Collapsing to UNKNOWN there would drop the
-    contradiction, which is the under-refusal `G4` weighs equally with an invention."""
-    clauses: tuple
-
-    def operands(self) -> tuple:
-        return tuple(dict.fromkeys(o for c in self.clauses for o in c.operands()))
-
-    def entity_operands(self) -> tuple:
-        return tuple(dict.fromkeys(o for c in self.clauses for o in c.entity_operands()))
-
-    def needs(self) -> frozenset:
-        return frozenset().union(*(c.needs() for c in self.clauses)) if self.clauses else frozenset()
-
-    def stems(self) -> tuple:
-        return tuple(x for c in self.clauses for x in c.stems())
-
-    def check(self, reader, binding, observed):
-        unknown = False
-        for c in self.clauses:
-            r = c.check(reader, binding, observed)
-            if r is False:
-                return False
-            if r is UNKNOWN:
-                unknown = True
-        return UNKNOWN if unknown else True
-
-
-@dataclass(frozen=True)
-class TypedRequires:
-    """ONE `requires_typed:` CELL -- the clause tree, and nothing else.
-
-    ⚠ `operand_defaults` WAS A FIELD HERE AND `W-C` DELETED IT, WHICH IS THE ONE-OWNER HALF OF
-    `H-94`. It held `transfer`'s `{kind: grain, amount: 1}` -- the relocated form of
-    `_req_transfer`'s two literals -- and it filled them INSIDE `evaluate`, i.e. at the FOLD, for
-    an act whose payload carried neither. Two consequences, and the second is why it could not
-    stay once operands became real: (1) the value had two homes, the cell and the person's
-    derivation, free to disagree; (2) the fold would ADMIT a `transfer` on operands the cell had
-    invented and `_eff_transfer` would then raise on the very same operands being absent from the
-    payload -- a precondition and an effect reading different acts. The values moved to
-    `DEFAULT_FIXTURES` (`default_store_kind`, `default_transfer_amount`), unchanged, where the
-    person derives them and the act CARRIES them."""
-    requirement: Requirement
-
-    def operands(self) -> tuple:
-        return self.requirement.operands()
-
-    def entity_operands(self) -> tuple:
-        return self.requirement.entity_operands()
-
-    def needs(self) -> frozenset:
-        return self.requirement.needs()
-
-    def stems(self) -> tuple:
-        """Delegated like every other accessor here, so the load-time stem closure sees a cell's
-        stems whether it is asked of the wrapper or of the clause tree (§8: one owner)."""
-        return self.requirement.stems()
-
-    def check(self, reader, binding, observed):
-        return self.requirement.check(reader, binding, observed)
-
-
-def _observe(reader, subject, predicate: str, observed: list):
-    v = reader.read(subject, predicate)
-    observed.append(Observation(subject, predicate, v))
-    return v
-
-
-def evaluate(req: Optional[TypedRequires], reader, binding: dict) -> Verdict:
-    """THE ONE EVALUATOR. `Verdict(value in {True, False, UNKNOWN}, observed)`.
-
-    An UNTYPED verb is UNKNOWN to every reader -- not True, and not False. That is what makes
-    `belief_contradicts` return *not contradicted* for one (§F1's asymmetry) while the fold still
-    REFUSES one whose predicate is missing (§42.2's polarity). The same value, read with the two
-    polarities the two sites actually have."""
-    if req is None:
-        return Verdict(UNKNOWN, ())
-    # ⚠ THE BINDING IS THE CALLER'S AND THE CELL CONTRIBUTES NOTHING TO IT. Until `W-C` this
-    # started from `req.operand_defaults`, so an operand the ACT did not carry was supplied HERE
-    # -- under both readers, invisibly. An unsupplied operand is UNKNOWN now, and UNKNOWN refuses
-    # in the fold and does not contradict for the person, which is the polarity pair the rest of
-    # this block is built on.
-    b = {k: v for k, v in (binding or {}).items() if v is not None}
-    observed: list = []
-    return Verdict(req.check(reader, b, observed), tuple(observed))
-
-
-def binding_of(actor: str, operands: dict) -> dict:
-    """THE ONE BINDING. An actor, plus the operands something carries -- and BOTH READERS BUILD IT
-    HERE, which is `W-C`'s whole point.
-
-    ⚠ WHAT THIS REPLACED WAS TWO DIFFERENT DECISIONS WEARING ONE DECLARATION'S CLOTHES.
-    `binding_from_act` did a LITERAL key match on the payload; `binding_from` (the person's side,
-    now deleted) REBOUND the Candidate's `subject` onto whatever the requirement's entity operand
-    happened to be called -- `from` for `transfer`, `to` for `move`, `site` for `restore`. So the
-    person evaluated `stores(SUBJECT, kind)` and the fold evaluated `stores(<unbound>, kind)`:
-    not the same cell asked twice, but a second, undeclared decision about WHOSE granary the
-    requirement is about. The person's rebinding was also WRONG on its own terms -- §54 item 7
-    says `hearth(GIVER)`, and the giver is the actor, never the referent.
-
-    There is nothing left to rebind: `operands_for` derives every operand the cell names, the act
-    CARRIES them, and both sides pass the same bag through here. `actor` is the one operand that
-    is never carried, because it is structural on both sides -- `Act.actor` for the fold, `p.id`
-    for the person -- and a copy of it on the payload would be a second home for a fact the Act
-    already holds (`ID-2`).
-
-    Operands outside `requires_operands` are dropped: a payload is also where `record`, `stages`,
-    `venue` and `harm` ride, and the grammar's vocabulary is closed."""
-    return {"actor": actor,
-            **{k: v for k, v in (operands or {}).items() if k in REQUIRES_OPERANDS}}
-
-
-def binding_from_act(a) -> dict:
-    """THE RESOLVER'S BINDING -- `Act.payload`, plus the actor.
-
-    ⚠ IT WAS ALLOWED TO BE INCOMPLETE AND IT ALWAYS WAS; `W-C` CLOSED THAT AND DID NOT MAKE IT
-    IMPOSSIBLE. `pack_scenes` used to put only the Candidate's `subject` on the payload, so
-    `transfer` had no `kind`, `move` had no `to` and `work` had no `site`, and every one of those
-    evaluated UNKNOWN and refused. A COMPUTED act now carries the operands its verb's cell names,
-    because a Candidate that could not bind them was never formed. A HAND-BUILT act still binds
-    whatever its author put on the payload, and an author who omits one still gets UNKNOWN and a
-    refusal -- which is the polarity §42.2 wants and the reason this is not asserted here."""
-    return binding_of(a.actor,
-                      a.payload if isinstance(getattr(a, "payload", None), dict) else {})
-
 
 class WorldReader:
     """§F.24a's questions asked OF THE WORLD, with every read recorded as an `Observation`.
@@ -763,61 +263,9 @@ class WorldReader:
             p = w.persons.get(self._actor)
             return UNKNOWN if p is None else any(c.subject == subject for c in p.ledger)
         return UNKNOWN
-
-
-# THE STEMS `WorldReader.read`/`LedgerReader.read` DISPATCH ON. The two readers below are the
-# only consumers.
-#
-# ⚠ WHY THIS EXISTS: THE GRAMMAR CLOSED ON FORM AND OPERAND NAMES AND NOT ON THE STRINGS THAT
-# ACTUALLY SELECT THE PREDICATE. Found by the W-A adversarial pass. `_build_clause` refused at load
-# on an unrostered form, an unrostered operand, and an operand outside the form's `needs:` -- and
-# validated NOTHING about `Existence.kind`, `ScalarThreshold.scalar`/`threshold_predicate` or
-# `Relation.relation`. Those four strings are what `read` dispatches on, and an unrecognised one
-# fell through to `return UNKNOWN` forever: `kind: Commit` for `commit`, or `relation: present-at`
-# for `present_at`, LOADED CLEAN, evaluated UNKNOWN in every world, and the fold refused the verb
-# everywhere -- reported as `H-94`'s honest operand famine. A typo and a design gap were
-# indistinguishable, which is the silent-wrong-answer shape this file refuses everywhere else.
-# roster-exempt: MECHANISM. These are the grammar's own predicate stems -- what a REQUIREMENT MAY
-# ASK -- not the game's vocabulary; `rosters.yaml` says what the world contains.
-REQUIRES_STEMS = frozenset({
-    "exists", "stores", "condition", "floor", "contain.path", "held_by", "present_at",
-    "claim.held",
-})
-
-# THE STEMS WHOSE VALUE IS COMPUTED **FROM THE HOLDER'S OWN LEDGER** -- and which therefore MAY
-# NOT BE DEPOSITED INTO IT. `WorldReader.read`'s `claim.held` branch answers
-# `any(c.subject == subject for c in p.ledger)`, so a WITNESS deposit of
-# `Observation(X, "claim.held", False)` appends a Claim whose `subject` IS `X` and makes that same
-# read return True from the barrier that stored it. **The belief is false the moment it becomes
-# readable, and it is made false by the act of recording it.**
-#
-# ⚠ THIS IS A CLOSURE PROPERTY OF THE GRAMMAR, NOT A SPECIAL CASE ON A VALUE OR AN ENTITY. The
-# rule quantifies over PREDICATES THAT READ THE STORE THEY WOULD BE WRITTEN INTO; `claim.held` is
-# the only member today because `OwnLedger` is the only form that reads a ledger. It is the THIRD
-# principled exclusion at the deposit site and it has the same shape as the other two -- UNKNOWN
-# (the instrument's gap must not become a belief) and duplicates (one belief, stored once).
-#
-# ⚠ MEASURED BEFORE EXCLUDING, seed 0, NPC-088 at `actor`, 8 seasons (`W-B` adversarial pass,
-# 2026-09-04): at end of season 0 `LedgerReader(p_a).read('r_hearth','claim.held')` is **False**
-# while `WorldReader(w,'p_a').read('r_hearth','claim.held')` is **True** -- the two readers
-# disagreeing about the SAME person's SAME ledger, which is the one thing `belief_contradicts`'
-# docstring says cannot happen (*"the same cell asked of two readers, differing only in WHAT THEY
-# READ and in POLARITY"*). The person then declines `tell` for a season on a belief the fold
-# would have admitted. It is not permanent: the block is per-SUBJECT and the claim is EVICTED by
-# the ledger cap at season 2, after which `tell` runs again -- so the belief is corrected by
-# FORGETTING rather than by anything the world did, which is a worse property than a wrong belief,
-# not a milder one.
-#
-# ⚠ THE ALTERNATIVE WAS BUILT IN ARGUMENT AND REJECTED, and is recorded so it is not re-derived:
-# make `LedgerReader` answer `claim.held` FROM MEMBERSHIP too, so the readers agree. That fails
-# three ways -- the deposited Claim's `value` would then be written and never read (`ID-13`'s dead
-# carrier, exactly what `W-A` refused to build), `any(c.subject == ...)` would live in two classes
-# (§8: never re-implement a rule), and the belief store would become incapable of being wrong for
-# form 6, which is the `T3` property `OwnLedger`'s own docstring exists to preserve.
-# roster-exempt: MECHANISM, as `REQUIRES_STEMS` above -- this is a property of the GRAMMAR'S
-# predicates (which of them read the ledger), not vocabulary the world contains.
-LEDGER_DERIVED_STEMS = frozenset({"claim.held"})
-
+# `REQUIRES_STEMS` and `LEDGER_DERIVED_STEMS` -- the stems `WorldReader.read`/`LedgerReader.read`
+# dispatch on, above and below -- now live in `season.data.requires` (step 3), imported back at
+# the top of this file. See that module for the two roster-exempt notes that used to stand here.
 
 class LedgerReader:
     """THE SAME QUESTIONS ASKED OF ONE PERSON'S OWN CLAIMS, AND OF NOTHING ELSE.
@@ -842,598 +290,41 @@ class LedgerReader:
                 if best is None or (c.when, c.confidence) > (best.when, best.confidence):
                     best = c
         return UNKNOWN if best is None else best.value
+# `_require_known_stem`, `_build_clause` and `build_typed_requires` -- the loader that turns a
+# `verb_table.yaml` cell into a `Requirement` -- now live in `season.data.requires` (step 3),
+# imported back at the top of this file. `season.data.verbs._load_verb_table` calls
+# `build_typed_requires` directly (it imports `season.data.requires` itself); this re-export
+# exists only so `S.build_typed_requires` keeps resolving for the harness and tests.
 
-
-def _require_known_stem(stem: str, where: str) -> None:
-    """A predicate stem outside `REQUIRES_STEMS` REFUSES AT LOAD rather than reading UNKNOWN
-    forever. The three sibling closure checks below already do this for forms and operands; this
-    is the fourth, and its absence made a typo indistinguishable from a design gap."""
-    if stem not in REQUIRES_STEMS:
-        raise SystemExit(
-            f"verb_table.yaml: {where} names predicate stem {stem!r}, which no reader dispatches "
-            f"on. Declared stems: {sorted(REQUIRES_STEMS)}. An unknown stem would evaluate "
-            f"UNKNOWN in every world and refuse the verb everywhere, which is indistinguishable "
-            f"from an honest operand gap.")
-
-
-def _build_clause(verb: str, cell: dict) -> Requirement:
-    if not isinstance(cell, dict):
-        raise SystemExit(f"verb_table.yaml: {verb!r} `requires_typed:` clause is not a mapping: "
-                         f"{cell!r}")
-    if "all" in cell:
-        clauses = tuple(_build_clause(verb, c) for c in (cell["all"] or ()))
-        if len(clauses) < 2:
-            raise SystemExit(f"verb_table.yaml: {verb!r} has an `all:` with {len(clauses)} "
-                             "clause(s); a conjunction of one is the clause itself")
-        return AllOf(clauses)
-    form = cell.get("form")
-    if form not in REQUIRES_FORMS:
-        raise SystemExit(
-            f"verb_table.yaml: {verb!r} names requires form {form!r}, which is not in "
-            f"rosters.yaml's requires_forms: {sorted(REQUIRES_FORMS)}. §F.24a derives SEVEN forms "
-            "from the 32 live cells; an eighth is a new thing a precondition can ASK, which is a "
-            "design change and not a table edit")
-    cls = REQUIREMENT_TYPES.get(form)
-    if cls is None:
-        raise SystemExit(
-            f"verb_table.yaml: {verb!r} uses form {form!r}, which is IN the grammar and has no "
-            "implementation. `cardinality` and `basis` have no `own`-eligible cell -- their live "
-            "cells are `confer` and `revoke`, which stay on REQUIRES_PREDICATES")
-    try:
-        req = cls(**{k: v for k, v in cell.items() if k != "form"})
-    except TypeError as e:
-        raise SystemExit(f"verb_table.yaml: {verb!r}'s {form!r} cell does not fit the form: {e}")
-    allowed = set(REQUIRES_FORM_NEEDS.get(form) or ())
-    for o in req.operands():
-        if o not in REQUIRES_OPERANDS:
-            raise SystemExit(
-                f"verb_table.yaml: {verb!r} binds operand {o!r}, which is not in rosters.yaml's "
-                f"requires_operands: {sorted(REQUIRES_OPERANDS)}. Coining an operand is filling "
-                "`H-94` by keyword argument")
-        if o not in allowed:
-            raise SystemExit(
-                f"verb_table.yaml: {verb!r}'s {form!r} cell binds {o!r}, which is not in that "
-                f"form's `needs:` ({sorted(allowed)})")
-    # ⚠ THE FOURTH CLOSURE CHECK, AND THE ONE THAT WAS MISSING. The three above close the FORM
-    # and the OPERANDS; this closes the PREDICATE STEM, which is what the readers actually
-    # dispatch on. Every stem a requirement can ask for is read off the requirement itself, so a
-    # new form contributes its stems automatically rather than needing this list edited.
-    for stem in req.stems():
-        _require_known_stem(stem, f"{verb!r}'s {form!r} cell")
-    return req
-
-
-def build_typed_requires(verb: str, cell) -> Optional[TypedRequires]:
-    """A `requires_typed:` cell into a `TypedRequires`, or `None` for an explicit `none`.
-
-    `None` means THE COLUMN IS NOT TYPED FOR THIS VERB, and the verb stays on
-    `REQUIRES_PREDICATES` -- which for a verb with no predicate is the fold's existing refusal,
-    naming what is missing. It is never a silent success."""
-    if cell is None:
-        return None
-    if isinstance(cell, str):
-        if cell.strip().lower() == "none":
-            return None
-        raise SystemExit(f"verb_table.yaml: {verb!r} `requires_typed:` is the string {cell!r}; "
-                         "the only string admitted is `none`, which must carry a "
-                         "`requires_typed_note:` saying why")
-    if not isinstance(cell, dict):
-        raise SystemExit(f"verb_table.yaml: {verb!r} `requires_typed:` is not a mapping: {cell!r}")
-    # ⚠ `operand_defaults:` IS NO LONGER A KEY AND A CELL CARRYING ONE MUST REFUSE, not be
-    # ignored. `W-C` moved `transfer`'s two to `DEFAULT_FIXTURES`; dropping the key silently would
-    # let a later table edit re-introduce a fold-side default that no longer has a reader, and it
-    # would read as accepted. `_build_clause` raises on any key the form does not take, so the
-    # refusal is already structural -- this comment is here so the next reader knows the absence
-    # is a decision and not an oversight.
-    return TypedRequires(_build_clause(verb, cell))
 
 
 # ===========================================================================
 # PART E, LOADED FROM DATA -- W3. THE RESOLVER'S BODY.
 #
-# #353 types `resolve : (Act[], World) -> Event[]` and never says what any verb DOES. That is
-# defect `D20`, and it is why the tested instrument could only GRADE cases: with no table, every
-# act needed a hand-written `effect` lambda, and A LAMBDA PER ACT IS A SECOND RESOLVER -- the
-# thing §27.2 forbids, arriving as a parameter rather than as a function.
+# EXTRACTED, step 3 of the decomposition (a PURE MOVE): `VerbRow`, its loader
+# (`_load_verb_table`/`VERB_TABLE`), the load-time constants a row checks against
+# (`VERB_TABLE_YAML`, `ELIGIBILITY_KINDS`), and the alignment table's loader
+# (`_load_alignment`/`ALIGNMENT`) now live in `season.data.verbs`. See that module's docstring
+# for the two-phase `VERB_TABLE` assignment and why it is preserved unchanged, and for why
+# `align()` (below, unmoved) still sees a sweep's rebind of `S.ALIGNMENT`.
 #
-# `verb_table.yaml` is the body. One `resolve` reads it.
+# #353 types `resolve : (Act[], World) -> Event[]` and never says what any verb DOES. That is
+# defect `D20`: with no table, every act needed a hand-written `effect` lambda, and A LAMBDA PER
+# ACT IS A SECOND RESOLVER -- the thing §27.2 forbids. `verb_table.yaml` is the body.
+#
+# Imported here so every bare use of these names further down this file keeps resolving, and so
+# `S.<name>` keeps resolving for the harness and tests: this is a re-export, not a second
+# definition.
 # ===========================================================================
 
-VERB_TABLE_YAML = files.VERB_TABLE_YAML
-
-ELIGIBILITY_KINDS = roster("eligibility_kinds")
 
 
-@dataclass(frozen=True)
-class VerbRow:
-    verb: str
-    stratum: str
-    eligibility: tuple        # a DISJUNCTION -- `transfer` is eligible by `own` OR `hold:<store>`
-    requires: str
-    writes: tuple          # ("Kind.field", ...) -- each MUST be a Part D row
-    emits: tuple
-    emits_on_refusal: tuple
-    grade: str
-    # ⚠ THE SCALE THE ACT REACHES — a `rung_kinds` member (Jordan, 2026-09-02: *"we also need
-    # stratum that concern governance and management re different scales of factions/governing
-    # bodies"*). It is a SEPARATE AXIS from `stratum`, crossed with it: the stratum says what KIND
-    # of act this is and orders resolution; the scale says WHOSE BODY it reaches. Five strata x
-    # eight scales covers the governance surface without multiplying strata.
-    #
-    # ⚠ AND THE SCALE LADDER ALREADY EXISTED — `rung_kinds`: person, hearth, community,
-    # settlement, territory, province, duchy, realm. Minting a second roster for it would be §8
-    # broken on the exact axis this column is about.
-    #
-    # ⚠ A FACTION IS NOT ONE OF THEM, AND THAT IS A RULING RATHER THAN AN OMISSION.
-    # `ARCHITECTURE_V2.md:93` lists *"a **faction acting** as an actor"* in its REFUSAL table, at
-    # `L1`, with three corpus cases that wanted it; `H-21` completes it — *"a faction's treasury is
-    # matter at the rung or office that holds it"*. So a faction never acts: a PERSON HOLDING AN
-    # OFFICE acts, and the scale is the rung that office reaches. Governance at faction scale is
-    # `binding_decision x <rung>`, not a faction verb.
-    scale: str = "person"
-    # ⚠ PART E'S `contests:` COLUMN, WHICH WAS TRANSCRIBED INTO A NOTE AND LOST.
-    # `ARCHITECTURE_V2.md:394` declares it — *"`contests: <prize> | none` — if set, ROUTES TO THE
-    # SEAM AT RESOLVE (§39)"* — and `:434` sets it on `kill / wound` (*"`contests: the body` → the
-    # seam"*). The loader had no such field, so the routing landed in `requires_note`, which
-    # nothing reads, and the fold executed a kill AS A DIRECT WRITE. Jordan, 2026-09-02:
-    # *"that…would trigger the personal combat scene. you can't just kill or wound imo."* The
-    # design agrees with him and the instrument was the thing disagreeing.
-    contests: str = ""
-    # ⚠ THE SIXTH COLUMN, ADDED 2026-09-03 (#358 rev.2 §C.4 / F6, loader invariant 12).
-    # `writes` was a flat tuple applied UNCONDITIONALLY AFTER THE SEAM RESOLVED, so a LOST contest
-    # wrote exactly what a won one did -- `kill / wound` killed on any degree, and `Event.degree`
-    # was read by nothing anywhere. A resolution whose result is discarded is not a weak outcome
-    # model; it is a contest that did not happen.
-    #
-    # A verb WITHOUT `contests:` keeps the flat tuple and this stays empty.
-    # A verb WITH `contests:` declares `writes` as a MAP from degree, and `writes` holds the union
-    # (so the load-time Part D check below still sees every pair it must validate).
-    writes_by_degree: dict = field(default_factory=dict)
-    # ⚠ AND SO IS `emits:`, FOR THE SAME REASON ONE FIELD DEEPER. A flat `emits` on a contested
-    # verb reports ONE outcome for every band -- `kill / wound` emitted `person.died` whether the
-    # target died, was wounded, or walked away untouched. That is ID-9's class (a success report
-    # for something that did not happen) inside the epistemic layer, where every witness then
-    # mints a claim from it.
-    emits_by_degree: dict = field(default_factory=dict)
-    # ⚠ THE SEVENTH COLUMN, ADDED BY `W-A` (2026-09-04). THE PROSE `requires` STAYS BESIDE IT AND
-    # IS THE PROVENANCE -- each cell names the §E3 line it was transcribed from, so the derivation
-    # can be checked rather than trusted. `None` means the column is NOT typed for this verb and
-    # the fold falls back to `REQUIRES_PREDICATES`, which for a verb with no predicate is the
-    # existing refusal naming what is missing.
-    requires_typed: Optional["TypedRequires"] = None
-    # Why a row carries `requires_typed: none`. Required BY THE LOADER on such a row: an untyped
-    # cell with no reason is indistinguishable from one nobody got to.
-    requires_typed_note: str = ""
+# `_load_matter_tables` / `WEAR_RATES` / `BAND_FLOORS` / `SUBSISTENCE_WEIGHTS` / `SITE_YIELD` /
+# `DEFAULT_FIXTURES` moved to `season.data.fixtures`, and `ALIGNMENT_DECLARED` /
+# `ALIGNMENT_DEFAULT_CELL` moved to `season.data.verbs` (step 3, both imported back at the top of
+# this file). `matrix_rows_without_a_field`, directly below, did not move -- it inspects THIS
+# module's own dataclasses via `globals()` and stays with them.
 
-    def eligibility_kinds(self) -> tuple:
-        return tuple(a.split(":")[0].strip() for a in self.eligibility)
-
-    def emits_at(self, degree: str | None) -> tuple:
-        """WHAT THIS ACT REPORTS, GIVEN WHAT THE SEAM RETURNED. Same polarity as `writes_at`:
-        an uncontested verb ignores the degree; a contested one with no degree, or with a degree
-        it does not declare, RAISES rather than reporting the wrong outcome.
-
-        ⚠ `H-115`: THESE TWO RAISES USED TO BE `SystemExit`, THE ONLY RUN-TIME REFUSALS IN
-        `shape.py` OUTSIDE THE TYPED GAP TAXONOMY (which now lives in `season/gaps.py`). `SystemExit` derives from `BaseException`, so
-        `corpus_run.run_case`'s `except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer)`
-        clause never catches it -- a one-case design gap escaped as a whole-corpus run
-        termination, with no DESIGN-GAP row and no section citation. The load-time raises
-        beside these (missing/malformed YAML, in the loader functions -- locate them by grepping for the
-        load-time exit token itself, NOT from a line list, which rots on every edit and had
-        already rotted before step 1) are CORRECTLY fatal and are UNCHANGED -- this file loads once, and a
-        broken table should end the process. These four are not load-time; they fire per-act,
-        mid-corpus, and belong in the taxonomy every other per-case refusal in the package uses."""
-        if not self.emits_by_degree:
-            return self.emits
-        if degree is None:
-            raise Unspecified(
-                f"{self.verb!r} declares `contests: {self.contests}` and was folded with no "
-                "degree, so there is no way to say WHICH outcome to report.",
-                "S39/H-98",
-                needs="a degree from the seam (contest()) before `emits_at` reads an outcome",
-                law="#358 rev.2 §C.4 -- a contested verb's `emits` is degree-keyed; folding one "
-                    "with no degree is the defect the column exists to make unwritable")
-        if degree not in self.emits_by_degree:
-            raise Unspecified(
-                f"{self.verb!r} has no `emits` branch for degree {degree!r}. Declared: "
-                f"{sorted(self.emits_by_degree)}.",
-                "S39/H-98",
-                needs=f"an `emits` branch for degree {degree!r}, or a resolver that returns only "
-                      "a degree this verb declares",
-                law="#358 rev.2 §C.4 -- an unlisted degree RAISES rather than reporting a "
-                    "branch that did not happen")
-        return tuple(self.emits_by_degree[degree])
-
-    def writes_at(self, degree: str | None) -> tuple:
-        """THE PAIRS THIS ACT ACTUALLY WRITES, GIVEN WHAT THE SEAM RETURNED.
-
-        An uncontested verb ignores the degree entirely. A contested one looks the degree up, and
-        an ABSENT degree RAISES rather than falling back to the union -- §42.2's polarity: zero
-        evidence goes to the verdict AGAINST, never to a silent full write. `Failure: []` is
-        lawful and means the act still EMITS having written nothing, which is what separates a
-        LOSS from a REFUSAL.
-
-        ⚠ `H-115`, SAME FIX AS `emits_at` ABOVE -- see that docstring. These two raised
-        `SystemExit` and escaped `run_case`'s `ShapeGap` clause whole."""
-        if not self.writes_by_degree:
-            return self.writes
-        if degree is None:
-            raise Unspecified(
-                f"{self.verb!r} declares `contests: {self.contests}` and was folded with no "
-                "degree. A contested verb's writes are degree-keyed (#358 rev.2 §C.4); folding "
-                "one without a degree is the defect that column exists to make unwritable.",
-                "S39/H-98",
-                needs="a degree from the seam (contest()) before `writes_at` selects a branch",
-                law="#358 rev.2 §C.4 -- a contested verb's `writes` is degree-keyed; folding one "
-                    "with no degree is the defect the column exists to make unwritable")
-        if degree not in self.writes_by_degree:
-            raise Unspecified(
-                f"{self.verb!r} has no `writes` branch for degree {degree!r}. Declared: "
-                f"{sorted(self.writes_by_degree)}. An unlisted degree RAISES rather than "
-                "defaulting -- a missing branch is a hole, not a full write.",
-                "S39/H-98",
-                needs=f"a `writes` branch for degree {degree!r}, or a resolver that returns only "
-                      "a degree this verb declares",
-                law="#358 rev.2 §C.4 -- an unlisted degree RAISES rather than defaulting to the "
-                    "union, which would write more than the contest actually resolved")
-        return tuple(self.writes_by_degree[degree])
-
-
-def _load_verb_table() -> dict:
-    import yaml as _y
-    if not VERB_TABLE_YAML.exists():
-        raise SystemExit(f"verb_table.yaml not found at {VERB_TABLE_YAML}")
-    doc = load_yaml(VERB_TABLE_YAML.read_text())
-    out = {}
-    for r in doc["verbs"]:
-        name = r["verb"]
-        if name in out:
-            raise SystemExit(f"verb_table.yaml: {name!r} appears more than once")
-        # ⚠ `writes:` NOW TAKES TWO SHAPES (#358 rev.2 invariant 12). A mapping is degree-keyed;
-        # a sequence is the flat form. The union feeds the Part D check below either way, so a
-        # pair named in ANY branch is still validated against the matrix at load.
-        raw_writes = r["writes"]
-        by_degree: dict = {}
-        if isinstance(raw_writes, dict):
-            by_degree = {str(k): list(v or []) for k, v in raw_writes.items()}
-            flat = tuple(dict.fromkeys(w for v in by_degree.values() for w in v))
-        else:
-            flat = tuple(raw_writes)
-        raw_emits = r["emits"]
-        emits_by_degree: dict = {}
-        if isinstance(raw_emits, dict):
-            emits_by_degree = {str(k): list(v or []) for k, v in raw_emits.items()}
-            flat_emits = tuple(dict.fromkeys(e for v in emits_by_degree.values() for e in v))
-        else:
-            flat_emits = tuple(raw_emits)
-        row = VerbRow(name, r["stratum"], tuple(r["eligibility"]), r["requires"],
-                      flat, flat_emits,
-                      tuple(r["emits_on_refusal"]), r["grade"],
-                      str(r.get("scale") or "person").strip(),
-                      str(r.get("contests") or "").strip(),
-                      by_degree, emits_by_degree,
-                      build_typed_requires(name, r.get("requires_typed")),
-                      str(r.get("requires_typed_note") or "").strip())
-        # A row that declares `requires_typed: none` must SAY WHY. The three admissible reasons
-        # are a well-formedness constraint on the Act (§F.24a: `issue`, `open_case` -- *"they
-        # belong in the `Act` schema and are refused at construction"*), a `per act` cell, and an
-        # operand the closed `requires_operands` roster has no name for. None of the three is
-        # "nobody got to it", and a blank note cannot tell the two apart.
-        if "requires_typed" in r and row.requires_typed is None and not row.requires_typed_note:
-            raise SystemExit(
-                f"verb_table.yaml: {name!r} declares `requires_typed: none` and no "
-                "`requires_typed_note:`. An untyped cell with no reason is indistinguishable "
-                "from one nobody typed, which is the state W-A exists to end.")
-        # The two keyed columns must agree on their band set, or a band writes with nothing to
-        # report or reports with nothing written.
-        if by_degree and emits_by_degree and set(by_degree) != set(emits_by_degree):
-            raise SystemExit(
-                f"verb_table.yaml: {name!r} keys `writes` on {sorted(by_degree)} and `emits` on "
-                f"{sorted(emits_by_degree)}. A band in one and not the other is an outcome that "
-                "either changes the world silently or reports a change it did not make.")
-        # LOADER INVARIANT 12 (#358 rev.2 §B.13). The two shapes are NOT interchangeable, and
-        # both directions are checked: a contested verb with a flat list is the `kill / wound`
-        # defect, and an uncontested verb with a degree map is a verb claiming an outcome it
-        # never resolves.
-        if row.contests and not by_degree:
-            raise SystemExit(
-                f"verb_table.yaml: {name!r} declares `contests: {row.contests}` and a FLAT "
-                "`writes:`. Its writes must be keyed by Degree (#358 rev.2 §C.4) -- otherwise "
-                "losing the contest writes exactly what winning it does, which is the defect "
-                "that routes to the seam and then discards what the seam returned.")
-        if by_degree and not row.contests:
-            raise SystemExit(
-                f"verb_table.yaml: {name!r} has a degree-keyed `writes:` and no `contests:`. "
-                "Nothing resolves a degree for it, so no branch could ever be selected.")
-        # EVERY `writes:` MUST BE A PART D ROW. Checked AT LOAD, not at the first act that uses
-        # it: a verb naming an unmarked cell is a defect in the table, and finding it when some
-        # case happens to exercise that verb makes it look like a defect in the case.
-        for w in row.writes:
-            kind, _, fld = w.partition(".")
-            if (kind, fld) not in MATRIX:
-                raise SystemExit(
-                    f"verb_table.yaml: {name!r} writes ({kind}, {fld}), which is on no row of "
-                    "write_matrix.yaml. §30: ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION. Rule "
-                    "the Part D row first, then add the verb.")
-        # §E4: eligibility is one of four kinds and NEVER `capability` -- asserted OVER THE TABLE,
-        # not over the prose, which is §7.2's per-item rule for W3.
-        for k in row.eligibility_kinds():
-            if k == "capability":
-                raise SystemExit(
-                    f"verb_table.yaml: {name!r} is gated on `capability`. #353 §9.2 -- "
-                    "'capability supplies dice and GATES NOTHING'. No verb exists only for "
-                    "office-holders.")
-            if k not in ELIGIBILITY_KINDS:
-                raise SystemExit(
-                    f"verb_table.yaml: {name!r} has eligibility kind {k!r}, which is not one of "
-                    f"{ELIGIBILITY_KINDS}. §E4 admits exactly four and a fifth would be a new "
-                    "way to make a verb unavailable -- which is a design change, not a table edit.")
-        # The scale must be a rung kind, and `rung_kinds` owns which. An unrostered scale RAISES
-        # rather than defaulting to `person`: a governance verb quietly filed at person scale is
-        # the silent-wrong-answer shape this file refuses everywhere else.
-        if row.scale not in RUNG_KINDS:
-            raise SystemExit(f"verb_table.yaml: {name!r} has scale {row.scale!r}, which is not a "
-                             f"`rung_kinds` member: {sorted(RUNG_KINDS)}")
-        # The stratum must be one of the five, and the roster owns which five.
-        if row.stratum not in STRATA:
-            raise SystemExit(f"verb_table.yaml: {name!r} has stratum {row.stratum!r}, which is "
-                             f"not one of rosters.yaml's {list(STRATA)}")
-        out[name] = row
-    return out
-
-
-VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
-
-
-VERB_TABLE = _load_verb_table()
-
-
-def _load_alignment() -> dict:
-    """§F2's `alignment(c.verb, axis)`, from `rosters.yaml`, with THREE load-time checks.
-
-    Each check exists because the corresponding failure would be SILENT. A cell naming a verb the
-    table no longer carries is dead weight nothing reports; an axis outside the roster makes
-    `conviction[axis]` unreachable; and an all-zero matrix -- PLAN §W5's named guardrail -- "would
-    pass every test while meaning nothing", which is the dead-carrier defect #353 `:739-744`
-    describes. All three raise HERE rather than producing a plausible score later."""
-    cells = table("alignment")
-    verbs = set(VERB_TABLE)
-    for axis, row in cells.items():
-        if axis not in CONVICTION_AXES:
-            raise Forbidden(
-                f"alignment names axis {axis!r}, which is not in the conviction_axes roster",
-                "rosters.yaml",
-                needs="add the axis to conviction_axes, or drop the row",
-                law="§F2 -- `conviction[axis] * alignment(verb, axis)` sums over the ROSTER. A "
-                    "cell on an unrostered axis is never read and never reported")
-        unknown = sorted(set(row) - verbs)
-        if unknown:
-            raise Forbidden(
-                f"alignment[{axis}] names {len(unknown)} verb(s) no verb table row carries: {unknown}",
-                "rosters.yaml",
-                needs="spell the verb exactly as verb_table.yaml spells it, or drop the cell",
-                law="§E2 -- the verb table is the roster of verbs. A cell keyed on a verb that "
-                    "does not exist is a weight on an option nobody can ever form")
-    if not any(v for row in cells.values() for v in row.values()):
-        raise Forbidden(
-            "the alignment table is all zeroes", "rosters.yaml",
-            needs="a default with at least one non-zero weight",
-            law="PLAN §W5 -- 'a zero matrix makes convictions inert, which is the dead-carrier "
-                "defect #353 `:739-744` names, and it would pass every test while meaning nothing'")
-    return cells
-
-
-ALIGNMENT = _load_alignment()
-
-
-def _load_matter_tables() -> tuple:
-    """`W8`. The matter economy's three tables, from `rosters.yaml`, with load-time checks.
-
-    ⚠ THESE WERE LITERALS IN `DEFAULT_FIXTURES` AND PLAN `W8` ASKS FOR THEM AS REGISTRY ROWS. The
-    comment that stood beside them objected, reasonably, that *"splitting them into rosters.yaml
-    would put one declaration in two files"* — and the answer is that the fixture READS the data
-    rather than restating it, so there is still exactly one declaration and it is the data.
-
-    ⚠ THE CHECKS ARE THE POINT, not the relocation. A wear or weight table whose keys drift from
-    the roster is §42.2.1's worked sin arriving through a data edit instead of through a literal:
-    an unregistered kind that ANSWERS. Both directions are checked — a rate for a kind no roster
-    carries, and a site kind with no rate."""
-    kinds = set(roster("site_kinds"))
-    rates = roster_map("wear_per_season", "rates")
-    floors = table("band_floors")
-    weights = roster_map("subsistence_weight", "weights")
-    for name, got in (("wear_per_season", set(rates)), ("band_floors", set(floors))):
-        if got - kinds:
-            raise Forbidden(
-                f"{name} names site kind(s) no roster carries: {sorted(got - kinds)}",
-                "rosters.yaml",
-                needs="add the kind to `site_kinds`, or drop the row",
-                law="S42.2.1 -- an unregistered kind must RAISE, and a table keyed past its own "
-                    "roster is that same silent answer arriving through the data file")
-        if kinds - got:
-            raise Ungraded(
-                f"{name} has no row for site kind(s): {sorted(kinds - got)}", "rosters.yaml",
-                needs=f"a {name} row per site kind",
-                law="S42.2.1 -- 'a wear table that returns 20 for an unregistered site kind does "
-                    "not fail -- it answers, plausibly and wrongly, forever'")
-    yields = table("site_yield")
-    if set(yields) - kinds:
-        raise Forbidden(
-            f"site_yield names site kind(s) no roster carries: {sorted(set(yields) - kinds)}",
-            "rosters.yaml", needs="add the kind to `site_kinds`, or drop the row",
-            law="S42.2.1 -- a table keyed past its own roster answers for a kind nobody declared")
-    mk = set(roster("matter_kinds"))
-    for sk, produced in yields.items():
-        if set(produced) - mk:
-            raise Forbidden(
-                f"site_yield[{sk}] produces matter kind(s) no registry row carries: "
-                f"{sorted(set(produced) - mk)}", "rosters.yaml",
-                needs="add the kind to `matter_kinds`, or drop the cell",
-                law="#353 §10.4 -- MatterKind is a REGISTRY. Open means addable, not unchecked")
-    if not any(produced for produced in yields.values()):
-        raise Ungraded(
-            "site_yield is empty for every site kind", "rosters.yaml",
-            needs="at least one producing kind, or delete the economy",
-            law="PLAN W8 -- `yield` is the matter economy's ONLY source; an all-empty table is "
-                "the `none` CONTROL ARM, and shipping the control as the default would make "
-                "every store deplete monotonically while the proof clause claims otherwise")
-    unknown = set(weights) - mk
-    if unknown:
-        raise Forbidden(
-            f"subsistence_weight names matter kind(s) no registry row carries: {sorted(unknown)}",
-            "rosters.yaml",
-            needs="add the kind to `matter_kinds`, or drop the weight",
-            law="#353 §10.4 -- MatterKind is a REGISTRY. Open means addable, not unchecked")
-    return rates, floors, weights, yields
-
-
-WEAR_RATES, BAND_FLOORS, SUBSISTENCE_WEIGHTS, SITE_YIELD = _load_matter_tables()
-
-
-DEFAULT_FIXTURES = Fixtures(
-    # S48: condition is an int on an EXPORTED scale. S22 assigns the scale to `params`, and the
-    # in-chain params document "proposes NO VALUES", so this is a fixture. Injection site: here.
-    condition_scale=1000,
-    # RULED TWICE. #353 §26.3 puts the budget at "~5"; Jordan ruled 2026-09-02 that the UNIT is
-    # the SCENE and the number is 5 -- *"5 scenes for a character to play per season"*. A band is
-    # not an integer; this is the integer the instrument runs on, and A31 sweeps it because the
-    # verdict moves with it.
-    # ⚠ `W17` RENAMED THIS FROM `act_budget`. #353 §26.3's prose counts ACTS throughout and the
-    # ruling re-states it in scenes: "a wounded duke gets fewer SCENES than a healthy one". The
-    # spray argument survives the noun change unaltered -- five scenes each spent petitioning is
-    # exactly the triage the budget exists to create -- but the key must not keep saying `act`,
-    # because a name is where the next reader learns what the number counts.
-    scene_budget=5,
-    # S20: the ledger cap L. Params-owned; no in-chain value.
-    ledger_cap=200,
-    # S18: "at most K claim ids from the holder's OWN ledger -- BUILT, NOT FILTERED".
-    view_k=12,
-    # S22 assigns `wear per site kind` to params. NO in-chain table exists, so every kind the
-    # instrument touches is declared here and an unregistered kind RAISES (see Fixtures.wear).
-    # roster-exempt: Fixtures keys. `Fixtures` IS the registry for numbers and raises on an
-    # unregistered kind, so the kinds are already declared data; splitting them into
-    # rosters.yaml would put one declaration in two files. ⚠ `site_kinds` belongs in
-    # rosters.yaml when W8 builds H-07's per-kind table, and not before.
-    # ⚠ `W8` MOVED THE TABLE TO `rosters.yaml` AND THIS READS IT. The literal that stood here
-    # carried an objection to splitting it out ("one declaration in two files"); the fixture
-    # reading the data answers it, because the declaration is now in exactly one place and this
-    # is not a copy of it. `Fixtures.wear` still refuses an unregistered kind.
-    wear_per_season=WEAR_RATES,
-    # S20: Claim.confidence. Rev 1 hardcoded 1, which degenerated the eviction comparator.
-    confidence_default=100,
-    # `W4` / `H-40`, THE THIRD LICENSED CLOCK (#353 `:864`). #353 licenses confidence decay at
-    # MATTER and gives NO RATE, so this is an INJECTED DEFAULT with a `site:` and a three-point
-    # sweep on the register, exactly as `H-09` treats the confidence default beside it. It is a
-    # fixture rather than a literal so `Fixtures.claim_decay` can REFUSE when it is unregistered
-    # — `wear`'s precedent, and S42.2.1's rule.
-    claim_decay_per_season=5,
-    # `W6` / `H-33`. WHICH WITNESS CHANNELS ARE LIVE. `total` is the DEFAULT AND THE CONTROL --
-    # it is #353's specified behaviour (S61: *"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY
-    # PERSON"*), so the sweep's control arm is the design as written rather than a baseline
-    # somebody invented. The three points are `H-33`'s own declared sweep.
-    fan_out_mode="total",
-    # `H-87`. S39.3 REFUSES a default for the contest depth cap -- *"a default is a number
-    # somebody made up and it will be cited later as though it were measured"* -- so `contest()`
-    # takes it from the CALLER. This is the caller's number, injected and swept, and it lives here
-    # rather than in a body so that it is one.
-    contest_max_depth=2,
-    # S15.2: entrenchment(h,H) = min(1, seasons_held / 60). The 60 IS in-chain; it is a fixture
-    # only so no literal sits in a body.
-    entrenchment_seasons=60,
-    # S27.4: "an attempt at Ob > 2 x Pool is refused, and the season is spent."
-    obstacle_refusal_multiple=2,
-    # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
-    # coefficients" and "the obstacle floor" to params; the params document proposes NO
-    # VALUES, so these are harness fixtures and A31c sweeps them. S42.2.1 names "three band
-    # edges" as one of the four constants a prior instrument in the chain invented -- rev 2
-    # fixed the other three and left these hardcoded in probe bodies, unswept.
-    # roster-exempt: Fixtures keys, as `wear_per_season` above. These are H-08 and are swept.
-    band_floors=BAND_FLOORS,          # `W8` -- `rosters.yaml: tables.band_floors`, `H-08`
-    # ⚠ `W8` / `H-26`. #353 §22.3 names *"`season_factor`'s distribution"* as a value with NO
-    # OWNER, and §25 says `yield` is *"blocked on"* it -- so the SHAPE ruled is a DISTRIBUTION and
-    # what is injected here is a degenerate one. The sweep is on its value, which is the only axis
-    # a constant has; a real distribution is a different hole and is not invented here.
-    season_factor=1.0,                # `H-26`, swept 0.5 / 1 / 2
-    # ⚠ `W8` / `H-11`. #353 §10.4 makes `MatterKind` open and V2 gives the draw's SHAPE -- *from
-    # the containing rung's stores, scaled by weight* -- and no weights. Registry row, not literal.
-    subsistence_weight=SUBSISTENCE_WEIGHTS,
-    # W5 / `H-28`. §F3's `budget` has three modifier terms and #353 gives a value for NONE of
-    # them -- `:912-913` says only that "a wounded duke gets fewer acts than a healthy one".
-    # So the DIRECTION is ruled and the MAGNITUDE is not, which is exactly a fixture. Injection
-    # site: here. Row: `H-70`, swept. ⚠ The BAND TABLE they read is NOT invented -- `band_floors`
-    # above already carries a `"body"` row, so `condition_penalty(p's body band)` counts bands
-    # against the table the site gate already uses. `H-38` closed with "`Site.condition` is the
-    # model"; this is that closure spent rather than restated.
-    # `H-54`, swept. The rule was `qs[0]` in a subscript; see `aggregate_questions`.
-    question_aggregation_rule="first",
-    # `W17` / Jordan 2026-09-02. The unit is the scene and the number is 5; NEITHER of these two
-    # was ruled, so both are fixtures with register rows and a sweep. Source for both defaults:
-    # `player_agency_v30.md` §6.3 -- "One scene action = one scene opportunity pursued. A scene
-    # contains 1-3 mechanical interactions" -- which is `## Status: CANONICAL` but pre-#337 and,
-    # under `CLAUDE.md` §0.05, REFERENCE rather than mechanism. `None` means unbounded.
-    interactions_per_scene=3,          # `H-76`, swept 1 / 3 / unbounded
-    extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
-    scene_packing_rule="greedy",       # `H-78`, swept greedy / one_per_scene / by_subject
-    claim_subject_rule="both",         # `H-79`, swept actor / per_change / both
-    # `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. #353 §28 says WITNESS
-    # deposits and never says whether the deposit may carry the reads, or to whom; the arms are
-    # `rosters.yaml: observation_deposit_modes` and the row is `H-122`. `none` is the CONTROL --
-    # the behaviour before `W-B` exactly -- and the default below is argued on the row rather than
-    # assumed here. Injection site: this line, read by `SeasonDriver.witness`.
-    observation_deposit_mode="actor",  # `H-122`, swept none / actor / total
-    # `H-80`. #353 §13.1 says the ACT declares a Record's stages and their terms. §F1's Candidate
-    # is `(verb, subject, why)` and carries no operands, so NO COMPUTED ACT CAN DECLARE ANY --
-    # `(Record, stages)` is a Part D row unreachable from the person's own decision. These are
-    # the instrument's declared stand-in, swept, and the row says plainly that they are.
-    record_stages_default=3,
-    record_stage_term=1,
-    budget_office_bonus=1,
-    budget_leg_penalty=1,
-    # `H-94`, `W-C`. THE TWO OPERANDS §54 ITEM 7'S FORMULA NAMES AND THE DESIGN NEVER SUPPLIES.
-    # `stores(hearth(giver), kind) >= amount`: `hearth(giver)` is the actor's own live `contain`
-    # Tenure and `to` is the question's referent, so both are DERIVED person-side -- but `kind`
-    # and `amount` are values nobody states, which is `H-80`'s shape exactly (a declared stand-in
-    # for operands the person cannot supply). Declare, default, sweep.
-    #
-    # ⚠ THESE ARE A MOVE, NOT AN INVENTION, AND THE OLD HOME IS DELETED. They were
-    # `transfer`'s `operand_defaults: {kind: grain, amount: 1}` in `verb_table.yaml` -- the
-    # relocated form of `_req_transfer`'s two literals -- and that cell filled them AT THE FOLD,
-    # under the person, for an act whose payload carried neither. Two owners of one value, and
-    # the fold's copy would have admitted a `transfer` whose effect then raised on the operands
-    # the precondition had invented for it. The values are carried across unchanged.
-    # ⚠ THE COMMENT HERE READ *"`H-94`, swept with the amount below"* AND NOTHING SWEPT IT. Struck
-    # by the `W-C` adversarial pass: every `.sweep(...)` in the instrument named
-    # `default_transfer_amount`, and `H-94`'s `sweep: [0, 1, 3]` are INTEGERS, which cannot be
-    # arms for a matter kind -- one `sweep:` field was carrying two declared fixtures and
-    # `register.rule_R2` cannot see that, so R2 was green on an unswept default. It has its own
-    # row now (`H-121`) and its own three arms, RUN: `grain` (stocked) · `salt` (a second stocked
-    # kind, which proves the fixture reaches the effect -- the store that moves is the one it
-    # names) · `coin` (registered in `rosters.yaml: matter_kinds`, produced by no site and held by
-    # no rung: THE CONTROL, and the only arm that can flip the verdict, because
-    # `WorldReader.read` returns 0 rather than UNKNOWN for a kind a rung does not hold, so
-    # `0 >= amount` is False and the transfer REFUSES).
-    # ⚠ AND THE POLARITY WAS INVERTED: the SWEPT fixture was the decision-inert one and this
-    # UNSWEPT one is decision-live. Measured over all 89 corpus worlds -- `transfer` executes
-    # 702 / refuses 21 at both `grain` and `salt`, and 0 / 723 at `coin`, where it leaves the
-    # executed set entirely (6 verbs -> 5). The 702-execution headline does rest on this value.
-    default_store_kind="grain",        # `H-121`, swept grain / salt / coin
-    # ⚠ `0` IS THE CONTROL AND IT IS SWEPT FIRST. Nothing is spent, so scarcity never binds and
-    # `stores >= 0` admits every giver: a run at this point shows how much of the transfer
-    # behaviour rests on the default rather than on the world.
-    default_transfer_amount=1,         # `H-94`, swept 0 / 1 / 3
-    # `W-E` / `H-125`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
-    # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
-    # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,
-    # which is what `H-114` measured the cost of (`harm` defaulted to the whole body, so a fold at
-    # `Wounded` deleted the person). The default introduces NO CONSTANT: it scales the body by the
-    # health fraction the ENGINE computed. `total` is the CONTROL and is the code exactly as it
-    # stood before `W-E`. Injection site: this line, read by `_eff_kill`.
-    wound_harm_model="scene_fraction",  # `H-125`, swept scene_fraction / total / none
-)
-# The immutable baseline. `ALIGNMENT` is REBOUND by a sweep; this is not, so every sweep point is
-# built from the declared table rather than from the previous point (see `alignment_at`).
-ALIGNMENT_DECLARED = {ax: dict(row) for ax, row in ALIGNMENT.items()}
-ALIGNMENT_DEFAULT_CELL = float(table_meta("alignment").get("default_cell", 0.0))
 
 
 def matrix_rows_without_a_field() -> dict:
@@ -1471,33 +362,9 @@ def matrix_rows_without_a_field() -> dict:
             out["absent"].append((kind, fld))
     return out
 
-
-def rows_without_a_producer() -> dict:
-    """Every `social: true` row that no verb writes — §7.2's rule for W2, as a REPORT.
-
-    ⚠ IT IS A FLAG AND NOT A DELETE INSTRUCTION, and the W2 audit is why. W2 retired six rows on
-    this rule; applied literally the same rule condemns `(Person, convictions)`, which #353 §9.3
-    REQUIRES ("moved by argument and consequence"). So a producerless row is one of two different
-    things and the report cannot tell them apart:
-
-      * A HOLE — the verb is missing. `(Person, convictions)` has no verb because Part E carries
-        no argument verb, which is a gap in Part E, not a reason to delete a row #353 mandates.
-      * DEAD — nothing in the design produces it. That was the six.
-
-    Distinguishing them is a judgement, so this reports and a human decides. What it MUST NOT do
-    is what the first reading of the rule did: delete on sight. `emits:` was parsed and never read
-    by anything until this function, so the column the retirement rested on was inert data."""
-    produced = {w for v in VERB_TABLE.values() for w in v.writes}
-    out = {}
-    for (kind, fld), row in MATRIX.items():
-        if row.social is not True:
-            continue                      # the world may write it; a verb is not required
-        if f"{kind}.{fld}" not in produced:
-            out[(kind, fld)] = row.emits
-    return out
-
-
-
+# `rows_without_a_producer` moved to `season.data.verbs` (step 3) -- it reads `VERB_TABLE`, which
+# moved with it in the same step, which is why it did not move with the write matrix in step 2.
+# Imported back at the top of this file.
 
 # Where S30's matrix says "no", the refusal belongs to the LAW THE CELL ENFORCES, not to the
 # matrix's bookkeeping rule. These are the cells whose "no" is a named law refusing.
@@ -2871,47 +1738,9 @@ def resolvable_verbs() -> frozenset:
     return frozenset(out)
 
 
-# From `rosters.yaml`, not a literal: the three points ARE a definition -- each names a claim
-# the sweep compares -- so Jordan's no-hardcoding ruling reaches them. The guard caught this
-# as a literal tuple and was right to; it is one of the few hits that was not mechanism.
-ALIGNMENT_SWEEP = tuple(table_meta("alignment")["sweep"])
-
-
-def alignment_at(point: str) -> dict:
-    """`H-66`'s three sweep points. `rosters.yaml` declares the SET; this is the transform.
-
-    ⚠ `uniform` IS THE CONTROL, and naming it so is the point. Every cell equal makes
-    `SIGMA_axis conviction[axis] * alignment(verb, axis)` the same for every candidate, so
-    convictions cannot discriminate at all -- a verdict that does NOT move between `declared` and
-    `uniform` is a verdict the table was never deciding. §0.1 point 4: a number without a control
-    is not a measurement, in EITHER direction.
-
-    `sign_only` discards the magnitudes and keeps the signs, which separates "the table's
-    DIRECTIONS are load-bearing" from "its INVENTED NUMBERS are". Since the numbers are declared
-    invented, that separation is the one worth having."""
-    if point not in ALIGNMENT_SWEEP:
-        raise Unspecified(
-            f"{point!r} is not an alignment sweep point", "H-66",
-            needs=f"one of {list(ALIGNMENT_SWEEP)}",
-            law="§G -- declare it, default it, sweep it. A fourth point is a fourth claim")
-    # ⚠ EVERY POINT IS BUILT FROM `ALIGNMENT_DECLARED`, NEVER FROM `ALIGNMENT`. A sweep works by
-    # rebinding `ALIGNMENT`, so a transform reading the live global transforms whatever the last
-    # point left: `alignment_at("sign_only")` after `uniform` returned sign(1.0) == 1.0 — i.e.
-    # uniform again — and the sweep reported two arms as one. The baseline is captured at import
-    # and never rebound, which is what makes the three points independent.
-    if point == "declared":
-        return {ax: dict(row) for ax, row in ALIGNMENT_DECLARED.items()}
-    if point == "uniform":
-        # ⚠ EVERY (verb, axis) PAIR, NOT EVERY LISTED CELL, and the difference is the whole
-        # control. The first version returned `{v: 1.0 for v in row}`, which left UNLISTED pairs
-        # falling through `align()` to `default_cell = 0.0` — so a verb absent from an axis still
-        # scored differently from one present on it, convictions could still discriminate, and
-        # `P31` passed under the "control". The test's own observability check caught it: a
-        # control that the probe survives is not a control (§0.1 point 2).
-        return {ax: {v: 1.0 for v in VERB_TABLE} for ax in CONVICTION_AXES}
-    return {ax: {v: (1.0 if w > 0 else -1.0 if w < 0 else 0.0) for v, w in row.items()}
-            for ax, row in ALIGNMENT_DECLARED.items()}
-
+# `ALIGNMENT_SWEEP` and `alignment_at` moved to `season.data.verbs` (step 3), imported back at
+# the top of this file. `align()`, directly below, did NOT move -- it is the per-call reader
+# (`decision/` territory, a later step), not part of the table.
 
 def align(verb: str, axis: str) -> float:
     """§F2's `alignment(c.verb, axis)`. Sparse: an unlisted pair reads the table's own declared
@@ -4393,7 +3222,7 @@ def SOURCE_353_TEXT() -> str:
         _S353_CACHE.append(f.read_text())
     return _S353_CACHE[0]
 
-NO_PRECONDITION = ("—", "-", "")
+# `NO_PRECONDITION` moved to `season.data.verbs` (step 3), imported back at the top of this file.
 
 
 # ---------------------------------------------------------------------------

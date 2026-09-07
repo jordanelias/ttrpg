@@ -24,6 +24,7 @@ import pytest
 
 from . import shape as S
 from .data import files
+from .data import verbs as VERBS
 from .harness import probes as P
 from .harness import run_cases as R
 from .shape import (
@@ -33,6 +34,10 @@ from .shape import (
 
 SHAPE_SRC = files.SHAPE_PY.read_text()
 PROBES_SRC = files.PROBES_PY.read_text()
+# `Fixtures`/`DEFAULT_FIXTURES` moved to `season.data.fixtures` in step 3 of the decomposition
+# (ED-IN-0203, a PURE MOVE) -- a fixed source string, alongside `SHAPE_SRC`/`PROBES_SRC` above,
+# for the checks below that scan the FIXTURES construction body specifically.
+FIXTURES_SRC = (files.DATA_DIR / "fixtures.py").read_text()
 
 
 
@@ -61,6 +66,7 @@ def _code_only(src: str) -> str:
 
 SHAPE_CODE = _code_only(SHAPE_SRC)
 PROBES_CODE = _code_only(PROBES_SRC)
+FIXTURES_CODE = _code_only(FIXTURES_SRC)
 
 def _w() -> World:
     return P.tiny_world()
@@ -172,8 +178,16 @@ def test_d5_the_budget_is_the_persons_choice_not_an_engine_truncation():
 
 def test_d6_no_invented_constant_sits_in_a_body():
     """DEFECT 6. Rev 1 had a wear rate uniform across every site kind, a //60, and
-    confidence=1 -- all below Fixtures, all outside the sweep."""
-    body = SHAPE_CODE.split("DEFAULT_FIXTURES = Fixtures (", 1)[1]
+    confidence=1 -- all below Fixtures, all outside the sweep.
+
+    ⚠ RE-POINTED, step 3 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0203).
+    `DEFAULT_FIXTURES` moved to `season.data.fixtures` with its body unchanged; the split this
+    test performs must follow it to `FIXTURES_CODE`, or it silently stops finding the
+    construction it exists to scan -- `SHAPE_CODE` would then answer a DIFFERENT question (does
+    shape.py, which no longer defines `DEFAULT_FIXTURES` at all, contain the string), which is
+    the same corpus-shrinks-while-still-passing failure `test_h115` documents for the load-time
+    exit count."""
+    body = FIXTURES_CODE.split("DEFAULT_FIXTURES = Fixtures (", 1)[1]
     for bad in ("// 100", "// 60", "confidence = 1 ,"):
         assert bad not in body, bad
 
@@ -267,8 +281,16 @@ def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
 
 def test_d9c_max_depth_has_no_default_anywhere():
     """S39.3: 'the depth cap has NO DEFAULT... a default is a number somebody made up and it
-    will be cited later as though it were measured.'"""
+    will be cited later as though it were measured.'
+
+    ⚠ WIDENED, step 3 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0203). `Fixtures`'s own
+    docstring names `caller_supplied_max_depth` as the exact field it REMOVED, and `Fixtures`
+    (with that docstring) now lives in `season.data.fixtures`, not `shape.py` -- so a regression
+    that re-added the retired default there would pass a `SHAPE_CODE`-only check. Same corpus-
+    shrinks-while-still-passing shape `test_h115` and `test_d6` document; checked in both places
+    now."""
     assert "caller_supplied_max_depth" not in SHAPE_CODE
+    assert "caller_supplied_max_depth" not in FIXTURES_CODE
     assert inspect.signature(S.contest).parameters["max_depth"].default is inspect.Parameter.empty
     w = _w()
     def fight(p, v, s, ask_budget):
@@ -521,8 +543,13 @@ def test_d10b_resolve_sums_then_clamps_once():
 
 
 def test_d10c_the_obstacle_refusal_gate_exists():
-    """S27.4 / S34: 'an attempt at Ob > 2 x Pool is refused' -- 'mechanical in RESOLVE'."""
-    assert "obstacle_refusal_multiple" in SHAPE_CODE
+    """S27.4 / S34: 'an attempt at Ob > 2 x Pool is refused' -- 'mechanical in RESOLVE'.
+
+    ⚠ RE-POINTED, step 3 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0203).
+    `obstacle_refusal_multiple` is a `DEFAULT_FIXTURES` key, and `DEFAULT_FIXTURES` moved to
+    `season.data.fixtures`; `SeasonDriver.resolve`, which reads it, did not move and is
+    unaffected."""
+    assert "obstacle_refusal_multiple" in FIXTURES_CODE
     assert "attempt.refused" in inspect.getsource(S.SeasonDriver.resolve)
 
 
@@ -1680,11 +1707,18 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     doc = _yaml.safe_load((REG.ARCH_DIR / "verb_table.yaml").read_text())
     doc["verbs"][0] = dict(doc["verbs"][0], writes=["Person.no_such_field"])
     import unittest.mock as _mock, io as _io
-    with _mock.patch.object(S, "VERB_TABLE_YAML") as fake:
+    # ⚠ RE-POINTED, step 3 of the `shape.py` decomposition (a PURE MOVE, ED-IN-0203). `_load_verb_table`
+    # moved to `season.data.verbs` with its body unchanged, and it reads `VERB_TABLE_YAML` as ITS
+    # OWN module global -- patching `S.VERB_TABLE_YAML` (`shape`'s re-exported copy of the name)
+    # no longer reaches it, which is the exact fail-open `season/data/__init__.py` documents for
+    # this package's loaders: "patching a path stopped reaching the loader." The patch point is
+    # the module that READS the name, `VERBS` (`season.data.verbs`), not the module that merely
+    # re-exports it for `S.<name>` convenience.
+    with _mock.patch.object(VERBS, "VERB_TABLE_YAML") as fake:
         fake.exists.return_value = True
         fake.read_text.return_value = _yaml.safe_dump(doc)
         with pytest.raises(SystemExit) as e:
-            S._load_verb_table()
+            VERBS._load_verb_table()
     assert "no row of" in str(e.value), (
         "the verb-table loader no longer refuses a `writes:` off the matrix, so the fold's "
         f"generic write has NO coverage and the exemption above is void: {e.value}")
