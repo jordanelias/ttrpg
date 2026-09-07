@@ -243,6 +243,62 @@ reversal is sound, because all three hazards were addressed (`data/files.py` is 
 table lists `carriers.py`/`world.py` as flat siblings. Whoever edits the plan next should retire
 that ruling explicitly rather than let four steps of practice quietly outvote it.
 
+### ⚠ THE CRITIC'S RESIDUAL RISK, CLOSED — THREE SYMBOLS THE PLAN NEVER PLACED, ONE OF THEM SILENT
+
+The step-4 critic declared a limit it could not pass: it has no `git`, so *"a name the PLAN ITSELF
+missed remains unverifiable without git"*. That is a real hole and not a rhetorical one — the symbol
+check catches a name that VANISHES, and cannot catch one the plan never gave a home to, because
+such a name has no expected destination to compare against. **Closed here, with git.**
+
+Over the pre-decomposition `shape.py` at `0dd51d5`: **208 top-level names; 46 the plan mentions
+nowhere.** ⚠ Do not quote the 46 as a finding — **43 of them were carved anyway in steps 0b–4**,
+each given a home by the executing session without the plan's help, which is the honest reason the
+omission had cost nothing yet. **Three were still in `shape.py`, unplaced:**
+
+| symbol | belongs with | leaving it behind |
+|---|---|---|
+| `_S353_CACHE` | `SOURCE_353_TEXT` → `loop.py` (step 9) | **loud** — `NameError` |
+| `_REFERENT_OPERANDS` | `operands_for` → `decision.py` (step 7) | **loud** — `NameError` |
+| `_LADDER_ERROR` | `_LADDER` + `degree_ladder` → `seam.py` (step 8) | ⚠ **SILENT** |
+
+**The third is the finding; the first two are the contrast that makes it legible.** `degree_ladder`
+writes `_LADDER_ERROR` through `global`, and a `global` statement CREATES a module-level binding on
+first assignment rather than requiring one. So building `seam.py` from the plan's table — which
+named `_LADDER` and `ladder_error` but not `_LADDER_ERROR` — raises nothing: a second home appears
+in `seam.py` and the original stays `""` forever. **Demonstrated on two throwaway modules rather
+than argued:**
+
+```
+after   left._LADDER_ERROR = ''                             <- the re-exported home, never written
+after  right._LADDER_ERROR = 'ImportError: the ladder ...'  <- a SECOND home, created silently
+no NameError was raised: True
+```
+
+That is `§0.1` point 1's read/write asymmetry one level down, and the same shape as `_TenureView`,
+which the plan's §2 already lists as un-splittable. Live blast radius is narrow today — nothing
+patches `S._LADDER_ERROR`, and `ladder_error()` would keep working off `seam`'s copy — but the
+re-exported name becomes a permanently-empty string that a later reader takes as *"the ladder
+loaded cleanly"*. **A polarity inversion (§42.2) reached by a refactor that raises nothing.**
+
+All three are now in the plan's module-suite rows, and `_LADDER_ERROR` is in its §2 un-splittable
+group beside `_LADDER`.
+
+⚠ **THE GENERAL RULE, WHICH OUTLIVES THESE THREE NAMES: a module-level name REBOUND through
+`global` cannot be left behind loudly.** Before each remaining carve, grep the moving functions for
+`global` and check every name they list is moving too. Run over the whole package now, it is clean
+and shows the pattern handled correctly elsewhere:
+
+```
+combat_seam.py:91  global _LOADED       ok        shape.py:3979  global _LADDER        ok
+combat_seam.py:91  global _LOAD_ERROR   ok        shape.py:3979  global _LADDER_ERROR  ok
+```
+
+`combat_seam.py` keeps its `_LOADED`/`_LOAD_ERROR` pair together already — the same value-plus-reason
+shape, in a module that was moved and did not lose it. **Not made a test:** §0.1 point 5's predicate
+asks what the artifact is load-bearing on, and a four-line grep run before a carve is a procedure,
+not a guard. It lives here, which is what a session reads before carving — the same disposition the
+199-name symbol check got at step 3.
+
 ### ⚠ A CORRECTION TO THE PLAN, FOR WHOEVER TAKES STEP 5 — IT PRICES THE WRONG HALF OF `Query`
 
 `workplans/2026-09-06-shape-decomposition-plan.md` splits `Query` across TWO steps: the eleven
