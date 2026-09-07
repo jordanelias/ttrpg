@@ -63,7 +63,7 @@ promoted to the position a spine occupies.
 
 **History is a worked case, not a foundation.** The source suite places the Calamity in Part Three,
 before the knotting mechanics it depends on — §7.1 forward-references a Part Five that has not
-happened yet. And §16.4 says outright that the Calamity is "the structural consequence of exactly
+happened yet. And the source §16.4 says outright that the Calamity is "the structural consequence of exactly
 the configuration" a high-reach Coherence-0 practitioner sustains. If the history is a consequence
 of the mechanism, it belongs after the mechanism.
 
