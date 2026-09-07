@@ -243,6 +243,75 @@ reversal is sound, because all three hazards were addressed (`data/files.py` is 
 table lists `carriers.py`/`world.py` as flat siblings. Whoever edits the plan next should retire
 that ruling explicitly rather than let four steps of practice quietly outvote it.
 
+### ⛔ DECOMPOSING THE PROSE AGAINST THE CODE (Jordan-directed, 2026-09-07) — THE HOLE REGISTER CANNOT SAY A HOLE IS CLOSED
+
+**Jordan, verbatim:** *"You have to decompose all prose references so that you can see what is
+actually happening mechanically/in code."* This is the method §0.05 implies and does not spell out:
+prose is reference, but prose ASSERTS things about the code, and every assertion of the form *X
+lives in F* · *N of M* · *the ONLY reader* · *A imports nothing of B* · *checked by T* has an exact
+mechanical answer. Extract the assertion, ask the AST.
+
+**Run over `engine/season/`'s prose surfaces — 60 exclusivity claims found. The finding is one
+structural fact, not a list of wrong sentences.**
+
+#### The mechanism: `hole_register.yaml` rows have **no field that can mark a row closed**
+
+Measured over all 113 rows: twelve fields, uniform across every row — `id · tier · hole · kind ·
+owner · grade · default · site · sweep · unblocks · cite · source` (plus `sign` on four). **None of
+them is `status`, `closed` or `resolved`.** So when a hole is filled, the closure has nowhere
+structural to go and is written as **prose inside `cite:`**, usually at the end of a long paragraph,
+while `hole:` — the field that states the defect, and the field a reader scans — goes on asserting
+it in the present tense forever.
+
+| | |
+|---|---|
+| rows carrying a closure marker in `cite:` | **18** |
+| of those, whose `hole:` still reads as an open defect | **17** |
+| of those, at **tier 0** — the register's strongest standing | **7** (`H-02` `H-40` `H-42` `H-94` `H-113` `H-114` `H-122`) |
+
+**`H-113` is the worked case, and it is unambiguous.** `hole:` says *"`VerbRow.emits_at` HAS ZERO
+CALLERS ANYWHERE IN THE TRACER, so a contested verb's degree-keyed emissions are never selected."*
+Asked of the AST, `emits_at` has **two** callers — `shape.py:3387` (the live fold) and the test at
+`:7381` — and the comment directly above `shape.py:3387` narrates H-113 being found and fixed. Its
+own `cite:` agrees: *"⚠ CLOSED 2026-09-04 BY `W-E`, AND THE CLOSURE IS AN EXECUTION RATHER THAN AN
+EDIT"*, with the falsifier named. **grade `measured`, tier 0 — and the field a session reads first
+says the defect is live.**
+
+**Every mechanical consumer counts these rows as open.** `register.py --counts` reports `tier 0: 44
+· by grade: measured 16` with no notion of closure, and `ARTIFACT 0` is evaluated over tier-0 rows
+by grade. So the register cannot distinguish a hole that was filled from one that was never touched,
+and its headline numbers are counts of *rows*, not of *holes*.
+
+⚠ **NOT ACTED ON, and the reason is that the two fixes lead to different work.** (a) a `status:`
+field — the shape the ED ledger already uses, so the tree has a precedent — which changes what
+`--counts` and `ARTIFACT 0` report; or (b) rewrite the 17 `hole:` fields into the past tense where
+`cite:` records the closure, prose only, no consumer moves. **(a) moves a gate's verdict**, which is
+why it is not a silent call. Put to Jordan 2026-09-07.
+
+#### ⚠ AND THE METHOD'S OWN COST, RECORDED BECAUSE IT IS THE PART THAT GENERALISES
+
+**Decomposing prose needs instruments, and mine were wrong three times in one pass — every time
+producing a plausible answer rather than an error.** Each is the same defect this lane keeps
+recording, *an instrument sees spellings, not relationships*:
+
+1. **A regex over source matched a docstring.** Scanning for `write_text(` to test *"`report.py` is
+   the SOLE emitter of `runs/`"* flagged the test file — the hit was inside a docstring **quoting**
+   `TRACE.txt.write_text(...)`. Redone over the AST: `report.py` is the sole emitter, the claim
+   holds. **A regex cannot tell a call from a sentence about a call.**
+2. **A falsy zero read as absent.** `str(r.get("tier") or "")` printed `tier:` empty for every
+   **tier-0** row — the highest-severity tier, rendered invisible by `0 or ""`.
+3. **A gap pattern that forbade `.`** made the zero-callers scan return **0 checkable claims** when
+   the answer is 1: H-113's text carries `(engine/season/shape.py::emits_at)` between the symbol and
+   the assertion, and my `[^.]{0,120}` could not cross the dots. **A null result from a broken
+   pattern is indistinguishable from a clean bill** — §0.1 point 2, in the instrument built to check
+   §0.1 point 2.
+
+**So: prefer the AST to a regex whenever the question is about code; and when a decomposition
+returns a NULL, falsify the instrument before banking it** — plant a known-true instance and check
+the scan finds it. Two of these three were caught only because I already knew the answer from
+reading; the second was caught by a printout looking odd. None would have been caught by a green
+suite.
+
 ### ⚠ THE CRITIC'S RESIDUAL RISK, CLOSED — THREE SYMBOLS THE PLAN NEVER PLACED, ONE OF THEM SILENT
 
 The step-4 critic declared a limit it could not pass: it has no `git`, so *"a name the PLAN ITSELF
