@@ -96,6 +96,418 @@ what supplies the WHAT-they-learn half that the channels do not decide. Step 1's
 blocked on `H-84`, whose owner is *Part E — the verb that would do it*, and nothing was invented to
 get round it.
 
+## ⭐ DONE 2026-09-07 — decomposition STEP 4: `state/carriers.py` + `state/world.py`. `shape.py` 5,165 → 4,146 (ED-IN-0203)
+
+**Carries on #378, which named steps 4–11 as what remains.** Step 4 is the whole of that step and
+nothing beyond it: the sixteen carriers and `matrix_rows_without_a_field` to
+`engine/season/state/carriers.py`; `World`, `_TenureView`, `_entity_digest` and
+`MATRIX_REFUSAL_LAW` to `engine/season/state/world.py`. `shape.py` re-exports all twenty-one names,
+so `S.<name>` and every bare use resolve unchanged.
+
+```
+engine/season/state/  ids 24 · carriers 562 · world 577
+```
+
+**⚠ ZERO GAME YIELD, and this remains true however many steps land.** #378 said the remaining steps
+"buy structure, not capability" and that is still the honest reading of this one. It is licensed as
+a precondition, not as progress: `register.py --requirements` reads **6 `not_met` · 3 `partial`**
+before and after, unchanged, which is the only reading of progress §0.2 accepts.
+
+### THE PROOF THAT THIS IS A PURE MOVE, WHICH A GREEN SUITE IS NOT
+
+A passing suite says the tree still works; it does not say the code is the same code. The claim
+"PURE MOVE" is licensed by a line-multiset comparison instead — every body line of the two new
+modules must appear, byte-identically and no more often, in `git show HEAD:engine/season/shape.py`:
+
+```
+carriers.py: 525 body lines, 1 not present in HEAD:shape.py   <- the [canonical:] tag, added deliberately
+world.py:    532 body lines, 1 not present in HEAD:shape.py   <- the [JUSTIFIED:] tag, added deliberately
+```
+
+Two lines, both provenance tags this commit added on purpose (below). Everything else is the same
+bytes. Run it after every remaining carve; it is ten lines and it is the only artifact here that
+can distinguish a move from an edit.
+
+### ⚠ THE NARROWING CHECK, RUN AS A MEASUREMENT RATHER THAN AS A HOPE
+
+Step 0b's worst finding was that consolidating a path anchor **silently deleted a blocking gate's
+coverage** — the seam did not move, the literal did. Every carve can do that to every
+source-scanning gate, and reading the diff cannot see it. So this step measured the four scanners
+that read the model set, as SETS, before and after:
+
+| scanner | before | after | lost |
+|---|---|---|---|
+| `write` call sites (W2's AST walk) | 32 | 32 | none |
+| functions taking a `World` (W5's proof) | 45 | 45 | none |
+| `.get(<operand>, default)` (W-C's scan) | 1 | 1 | none |
+| `if False` (D9) | 1 | 1 | none |
+
+Those four did not narrow. **⚠ BUT THE TABLE WAS WRITTEN AS IF IT WERE THE WHOLE ANSWER, AND IT
+WAS NOT — a FIFTH gate narrowed, and it is the one enforcing a Jordan ruling.** The first version
+of this entry and of both commit messages said *"No source-scanning gate NARROWED"* over these four
+rows. That is coverage the table does not have, and an independent critic overturned it.
+
+**`test_jordan_no_definition_is_hardcoded_in_a_body` split its corpus `MODEL = files.SHAPE_PY` vs
+everything-else.** In the MODEL, ANY literal collection of three or more short identifier strings
+is an offender. In the CORPUS, only an exact duplicate of an existing `rosters.yaml` roster is. So
+every carve moves model code from the strict lane to the weak one, and step 4 moved the most:
+**fifteen of the package's sixteen declared `roster-exempt:` sites** ended up outside the strict
+lane, `Rung._DECLARED`, `World._STATE_COLLECTIONS` and `_TenureView._MUTATORS` among them.
+
+**FALSIFIER — the decomposition plan's own item 3, which anticipated exactly this and was not run
+until the critic asked for it.** Plant `frozenset({"alpha","beta","gamma"})` in `state/carriers.py`:
+
+```
+MODEL = files.SHAPE_PY            -> 1 passed      <- the blindness, on demand
+MODEL = frozenset(_model_modules()) -> 1 failed    carriers.py:38 ['alpha','beta','gamma']
+```
+
+**FIXED HERE rather than deferred**, and the reason it is not deferred to step 10 with the rest of
+the `MODEL` debt is that the debt entry is about a *narrowing that shrinks the strict lane by one
+file at a time*; this is the lane's PREMISE failing. "`shape.py` is the model" was true when the
+model was one file. `_model_modules()` is the set, it already existed, and two other tests already
+key on it.
+
+⚠ **AND ITS DOCSTRING ALREADY CLAIMED THIS TEST KEYED ON IT.** `_model_modules()` said
+*"`test_h115` and `test_jordan_no_definition_is_hardcoded_in_a_body` both key on this"* — while
+this test keyed on one hardcoded path. So a reader checking whether Jordan's guard followed the
+code out of `shape.py` was told by that sentence that it did. **A false claim of enforcement is
+worse than none, because it stops the next reader checking, and that is precisely what it did to
+me.** Corrected by making the sentence true; it also named two callers where there are three
+(`test_d6` is the third). `files.STATE_DIR` was added to the one anchor for the model-set floor.
+
+The guard is GREEN on the real tree under the strict rule and RED on the plant — both arms run, so
+the fix is not reddening correct code and is not vacuous.
+
+### THE TWO CONSTANTS THE FABRICATION GATE RE-PRESENTED, AND WHY TAGGING THEM INVENTS NOTHING
+
+`ci_sim_fabrication_check` is changeset-scoped on ADDED lines, so a byte-identical relocation
+re-presents an old constant as new. Step 3 hit this with twelve; step 4 hit it with two, and the
+step-3 disposition applies unchanged — each already carried its provenance in prose above it:
+
+* `Act.stratum = 4` → `[canonical: rosters.yaml \`strata\`]`. Verified rather than asserted:
+  `list(roster("strata")).index("social") == 4`, and `stratum_of` returns `STRATA.index(row.stratum)`,
+  so the int genuinely IS an index into that roster. The roster's own `source:` is #353 §27.
+* `content_hash`'s `digest_size=16` → `[JUSTIFIED: a HASH WIDTH, not a game value]`, the same form
+  `state/ids.py` already carries for its `digest_size=8`.
+
+⚠ The two mechanical traps recorded at step 3 both still apply and were both obeyed: single line,
+immediately above the flagged line.
+
+### ⚠ A DOCSTRING THAT ENCODED A RULING'S CONSEQUENCE INSTEAD OF THE RULING, AND SO WENT FALSE
+
+`data/matrix.py` said, of the table it deliberately does not own: *"`MATRIX_REFUSAL_LAW` stays in
+`shape.py`, with its only reader — the gate in `World`."* The adjudication at step 2 was **the table
+travels with its reader**; the sentence recorded where the reader HAPPENED TO BE. The reader moved
+at step 4 and the sentence became false without anything changing its mind.
+
+**Write the rule, not the address.** Nothing catches this: the file still exists, the gate is still
+green, and only a reader following the sentence discovers it is wrong. Repaired, with the ruling
+stated as a ruling this time.
+
+### THE SIX CITATIONS OUTSIDE THE PACKAGE THIS MOVE FALSIFIED — AND THE COUNT I FIRST ASSERTED WAS ONE
+
+⚠ **The first version of this entry said "exactly ONE", and that number was never computed.** I
+inspected `requirements.yaml`, found `Scene` cited at `shape.py:2289`, fixed it, and wrote a count
+covering surfaces I had not examined. A critic found five more. **A count is a measurement; asserting
+one after looking at one file is the §0.1 point 4 defect in its plainest form.**
+
+Computed properly — a HOME CLAIM is a structured field whose job is to say where a thing lives
+(`owner:`/`site:`) or a `path::symbol` citation, naming `shape.py` together with a symbol step 4
+moved. Prose that mentions `shape.py` while describing behaviour is not a home claim and is out of
+scope (156 lines merely co-mention; 6 are home claims):
+
+| where | claim | now |
+|---|---|---|
+| `requirements.yaml` R-03 | `shape.py:2289` for `Scene` | `state/carriers.py::Scene` |
+| `hole_register.yaml:1462` | `shape.py -- Event, World.write, the fold's ev()` | three homes, split |
+| `hole_register.yaml:1474` | `shape.py -- Act, _req_revoke, under_purview` | two homes, split |
+| `hole_register.yaml:1525` | `shape.py -- World.write's _emitted_by_write buffer and matter()'s drain` | two homes, split |
+| `hole_register.yaml:1528` | `site: shape.py World.write ... shape.py matter()` | two homes, split |
+| `hole_register.yaml:1998` | `shape.py::StateChange default` | `state/carriers.py::StateChange` |
+
+Each was verified against the DEFINING `def`/`__module__`, not by grep — four of the six name a MIX
+(`ev()`, `matter()`, `_req_revoke`, `under_purview` are all still in `shape.py`), so a blanket
+re-point would have been wrong in the other direction.
+
+⚠ **AND MY STATED TRIGGER WAS ALSO WRONG.** I justified fixing one and leaving the rest with #378's
+rule, *"repair on a red gate, do not sweep early."* No gate could have gone red for ANY of the six:
+`register.py`'s `verify_citations` reads `cite:` only and never inspects `owner:`/`site:`, and
+`check_requirements` validates `status`, the `measure:` command and that `measured:` is non-empty
+without ever reading inside it. **The rule did not distinguish the one I fixed from the five I
+left; nothing did.** Recorded because "a gate would have caught it" is the most comfortable false
+belief available here.
+
+**Still NOT swept:** the ~20 stale `shape.py:NNNN` line citations that predate this step, including
+six in `requirements.yaml` R-03's own paragraph (`:5727`, `:6470`, `:6477`, `:6478`, `:6482`,
+`:6484` — all now past EOF). Those are the plan §5 debt with a payoff point at step 10. ⚠ But note
+what the critic saw and I had not: correcting one clause inside that paragraph leaves six wrong
+citations in a paragraph that now reads as maintained.
+
+### ⚠ A PROCESS ERROR, RECORDED BECAUSE IT WASTED TWO SUITE RUNS
+
+I started the suite and then went on editing the tree — adding a file, then a tag — twice. Several
+tests discover their corpus with `files.package_modules()` **at run time**, so a run over a moving
+tree measures a tree that never existed. Both runs were killed and the suite re-run once on a
+settled tree. **Finish the step, then measure it.** A six-minute suite makes the temptation to
+overlap real; the answer is to use the wait for read-only work, which is what the scanner-coverage
+and pure-move instruments above were built during.
+
+### WHAT WAS VERIFIED
+
+- **content hash `dd017e6560955a4206a76192903e42ba`** — unchanged, after each of the two files.
+- **`report.py` re-ran the whole corpus and reproduced all eight artifacts byte-identically**
+  (`git status engine/season/runs/` empty). This is the control; `delta.py` alone is not.
+- **`pytest engine/season/tests`: 183 passed**, the same count as #378.
+- **`pytest tests/valoria/test_engine_does_not_import_systems.py`: 17 passed** — no new
+  `engine.season` cycle, and the two declared `sys.path` seams are still the only two.
+- **the plan's own step-4 artifacts**: `test_h118_content_hash_folds_*` green, and the load-time
+  refusal count over the model set still **28** (`test_h115_...`), with `state/` holding **none** of
+  them — all 28 are still in `data/`, which is the Layer-1 property step 3 made true.
+- **`tools/valoria_local.py --staged`**: all local gates passed. **`compliance_check --check-only`**:
+  0 errors. **`export_sim_params.py --check`**: current. **`register.py --counts`** and
+  **`--requirements`**: green, citations resolve.
+- the symbol check from #378's entry, run against `HEAD`: **95 names, 95 resolve, 0 missing**; the
+  dotted-import probe over `engine/season/**/*.py`: **0 failures**.
+
+### WHAT THE ADVERSARIAL PASS UPHELD, WITH THE ATTACK THAT FAILED NAMED
+
+A PASS is licensed by a named failed attack, not by an absent finding. A structurally independent
+read-only critic (`valoria-critic`, Read/Grep/Glob only, given the OUTPUT and not the reasoning)
+attacked nine claims. It overturned three — the narrowing table, the citation count, and the
+docstring repair, all corrected above — and softened a fourth. These four survived:
+
+* **the content hash cannot move.** Attacked at the mechanism, not by re-running: `_entity_digest`
+  dispatches `__dataclass_fields__` → `dict` → `__dict__`, and dataclass `__repr__` uses
+  `__qualname__`, never `__module__`, so relocating a class cannot move the digest. `Rung` takes
+  the `vars()` branch unchanged. `Sensation`/`View` carry `__slots__` and WOULD fall to the
+  address-bearing `repr` fallback — but neither is in `_STATE_COLLECTIONS`/`_STATE_SEQUENCES`, so
+  that path is unreachable. **That last clause is the one worth carrying forward: a future carve
+  that puts a `__slots__` carrier into a world collection makes the hash address-dependent.**
+* **`digest_size=16` is unread as a quantity.** Hunted for a reader; the only one is
+  `assert len(_w().content_hash()) == 32` — the derived hex width, in the test corpus, which is a
+  real falsifier if the width changes. No model module reads 16 or 32.
+* **the one-way layering, including deferred imports.** `carriers` has exactly one function-local
+  import (`import dataclasses as _dc`); `world` has none. The package's only two `globals()`
+  reflective lookups are `shape.py`'s `_ch_*` (still colocated with `CHANNEL_PREDICATES`) and
+  `carriers.py`'s. The four rebind hazards the plan names are untouched: the only `S.<NAME> =`
+  rebinds in the tree are `S.ALIGNMENT` and `S._LADDER`.
+* **`matrix_rows_without_a_field`'s placement.** Verified by hand against `write_matrix.yaml`'s 14
+  distinct kinds: 8 (`Claim Office Person Proposition Record Rung Site Tenure`) are defined in
+  `carriers.py` and resolve in its `globals()`; the other 6 (`Date DocketItem Petition Dispensation
+  ConveningCondition Act[]`) are defined nowhere in the package and so did not resolve in
+  `shape.py`'s globals either. **Output unchanged.**
+
+⚠ **AND THE INSTRUMENT OVER THAT LAST ONE IS VACUOUS, WHICH IS WHY THE HAND CHECK WAS THE EVIDENCE.**
+`test_season_shape.py:2393` asserts `set(...) == {"absent","unmodelled"}` (true even if every kind
+reports unmodelled), PRINTS the counts rather than asserting them, and asserts
+`("Person","body") not in absent["absent"]` — vacuously true when `absent` is empty. So the exact
+silent falsification `state/carriers.py`'s docstring warns about would leave the suite green, and
+**"183 passed" is not evidence for the placement argument.** Not given a guard: §0.1 point 5's
+predicate asks what the artifact is load-bearing ON, and this one reports rather than raises.
+
+⚠ **A DECLARED LIMIT ON THAT PASS.** The critic has Read/Grep/Glob and CANNOT run `git show`, so it
+could not execute the first attack it was asked for — the byte-diff of the moved bodies against
+`d911e96:engine/season/shape.py`. The pure-move proof, the symbol probe, the before-state of the
+four scanner counts, the hash and the 183 all still rest on the producer's word. **The residual risk
+it names precisely: a name the PLAN ITSELF missed cannot be caught without git**, because the 21
+names the plan assigns are all present and re-exported, so losing one would be an `ImportError`.
+
+### ⚠ TWO MORE, FOUND BY THE SAME PASS AND NOT FIXED HERE
+
+* **`Act.stratum = 4` IS ALSO THE SENTINEL, AND THE TWO JOBS CONTRADICT.** `stratum_of` decides
+  "did the caller declare a stratum?" by comparing against the default, so a deliberate
+  `stratum=4` is indistinguishable from silence and gets routed to the verb table — against
+  `stratum_of`'s own promise that an explicit setting is "taken at its word". **MEASURED: 19 of 32
+  verb rows carry a stratum other than `social`, so a declared 4 is silently overridden on 19 of
+  32 verbs.** LATENT, not live, and only by coincidence: the one explicit call site
+  (`probes.py:2339`) uses `speak`, whose row is `social`, so the override lands on the same value
+  and the A37 arm cannot tell set from unset. Recorded at the site in `carriers.py`. Not fixed
+  here: step 4 is a pure move and the fix changes `Act`'s schema. `H-83` owns the column.
+* **the marker was `[canonical:]` and is now `[JUSTIFIED:]`.** ED-MB-0041 records that all six
+  markers carry IDENTICAL force and that `[JUSTIFIED:]` is the honest default for a fitted or
+  inherited magnitude — and that the old single-marker incentive "is a direct cause of the false
+  `[canonical: ...]` tags this audit found." `[canonical:]` bought nothing mechanically here and
+  asserted more than the code supports.
+
+### ⚠ AND ONE THE PLAN HAS ALREADY REVERSED WITHOUT SAYING SO
+
+Plan §1 rules **"Flat files in `engine/season/`, NOT subdirectories"** and gives three concrete
+reasons. The tree has reversed it three times — `data/`, `harness/`, now `state/` — and the
+reversal is sound, because all three hazards were addressed (`data/files.py` is the one anchor and
+`package_modules()` rglobs). But the plan still reads as if the ruling holds, and its module-suite
+table lists `carriers.py`/`world.py` as flat siblings. Whoever edits the plan next should retire
+that ruling explicitly rather than let four steps of practice quietly outvote it.
+
+### ⛔ DECOMPOSING THE PROSE AGAINST THE CODE (Jordan-directed, 2026-09-07) — THE HOLE REGISTER CANNOT SAY A HOLE IS CLOSED
+
+**Jordan, verbatim:** *"You have to decompose all prose references so that you can see what is
+actually happening mechanically/in code."* This is the method §0.05 implies and does not spell out:
+prose is reference, but prose ASSERTS things about the code, and every assertion of the form *X
+lives in F* · *N of M* · *the ONLY reader* · *A imports nothing of B* · *checked by T* has an exact
+mechanical answer. Extract the assertion, ask the AST.
+
+**Run over `engine/season/`'s prose surfaces — 60 exclusivity claims found. The finding is one
+structural fact, not a list of wrong sentences.**
+
+#### The mechanism: `hole_register.yaml` rows have **no field that can mark a row closed**
+
+Measured over all 113 rows: twelve fields, uniform across every row — `id · tier · hole · kind ·
+owner · grade · default · site · sweep · unblocks · cite · source` (plus `sign` on four). **None of
+them is `status`, `closed` or `resolved`.** So when a hole is filled, the closure has nowhere
+structural to go and is written as **prose inside `cite:`**, usually at the end of a long paragraph,
+while `hole:` — the field that states the defect, and the field a reader scans — goes on asserting
+it in the present tense forever.
+
+| | |
+|---|---|
+| rows carrying a closure marker in `cite:` | **18** |
+| of those, whose `hole:` still reads as an open defect | **17** |
+| of those, at **tier 0** — the register's strongest standing | **7** (`H-02` `H-40` `H-42` `H-94` `H-113` `H-114` `H-122`) |
+
+**`H-113` is the worked case, and it is unambiguous.** `hole:` says *"`VerbRow.emits_at` HAS ZERO
+CALLERS ANYWHERE IN THE TRACER, so a contested verb's degree-keyed emissions are never selected."*
+Asked of the AST, `emits_at` has **two** callers — `shape.py:3387` (the live fold) and the test at
+`:7381` — and the comment directly above `shape.py:3387` narrates H-113 being found and fixed. Its
+own `cite:` agrees: *"⚠ CLOSED 2026-09-04 BY `W-E`, AND THE CLOSURE IS AN EXECUTION RATHER THAN AN
+EDIT"*, with the falsifier named. **grade `measured`, tier 0 — and the field a session reads first
+says the defect is live.**
+
+**Every mechanical consumer counts these rows as open.** `register.py --counts` reports `tier 0: 44
+· by grade: measured 16` with no notion of closure, and `ARTIFACT 0` is evaluated over tier-0 rows
+by grade. So the register cannot distinguish a hole that was filled from one that was never touched,
+and its headline numbers are counts of *rows*, not of *holes*.
+
+⚠⚠ **CORRECTED WITHIN THE HOUR, BY RUNNING THE ONE TEST I SKIPPED. The paragraph here first
+offered Jordan a choice between (a) adding a `status:` field and (b) rewriting the 17 `hole:` fields
+into the past tense. BOTH ARE FORBIDDEN BY THE REGISTER'S OWN HEADER, and it says so in terms:**
+
+> *"A `cite:` backfilled here with 'V2 says so' would launder a transcription into a closure, **which
+> is the exact move this register exists to stop.**"*
+
+**The absence of a `status:` field is not an omission. It is the design.** A hole may not be closed
+by writing — the same doctrine as §0.2's *DONE MEANS IT RUNS*, applied to holes. (a) adds the close
+mechanism the register deliberately lacks; (b) is that laundering performed by hand. I ran §0's
+tests 1, 2, 4 and 5 and skipped **test 3 — answered by a design document** — and test 3 is the one
+that answers it. The escalation was not needed and is withdrawn; recorded rather than deleted,
+because skipping test 3 while citing the other four is the failure §0's ordering exists to prevent
+and I committed it after quoting that ordering.
+
+**What survives the correction, and it is sharper than what it replaces.** The design is coherent:
+a hole closes by EXECUTION and the evidence goes in `cite:`. So the gap is not a missing field —
+it is that **nothing mechanically checks whether a row's `hole:` is still true**, while the field
+is written in a form that often makes it decidable. H-113's *"HAS ZERO CALLERS"* is a proposition
+the AST answers in one pass. That is the register-shaped version of §0.2: not *let a row be marked
+closed*, but *let the row's own claim be tested*.
+
+**And that is deliberately NOT built here.** H-113 is the **only** mechanically-decidable
+zero-callers claim among 113 rows — a checker over a sample of one is precisely the apparatus §0.1
+point 5's predicate forbids. The finding stands as a reading of the register, the seventeen rows
+stay exactly as they are, and a session meeting a tier-0 `hole:` should read that row's `cite:`
+before believing it.
+
+#### ⚠ AND THE METHOD'S OWN COST, RECORDED BECAUSE IT IS THE PART THAT GENERALISES
+
+**Decomposing prose needs instruments, and mine were wrong three times in one pass — every time
+producing a plausible answer rather than an error.** Each is the same defect this lane keeps
+recording, *an instrument sees spellings, not relationships*:
+
+1. **A regex over source matched a docstring.** Scanning for `write_text(` to test *"`report.py` is
+   the SOLE emitter of `runs/`"* flagged the test file — the hit was inside a docstring **quoting**
+   `TRACE.txt.write_text(...)`. Redone over the AST: `report.py` is the sole emitter, the claim
+   holds. **A regex cannot tell a call from a sentence about a call.**
+2. **A falsy zero read as absent.** `str(r.get("tier") or "")` printed `tier:` empty for every
+   **tier-0** row — the highest-severity tier, rendered invisible by `0 or ""`.
+3. **A gap pattern that forbade `.`** made the zero-callers scan return **0 checkable claims** when
+   the answer is 1: H-113's text carries `(engine/season/shape.py::emits_at)` between the symbol and
+   the assertion, and my `[^.]{0,120}` could not cross the dots. **A null result from a broken
+   pattern is indistinguishable from a clean bill** — §0.1 point 2, in the instrument built to check
+   §0.1 point 2.
+
+**So: prefer the AST to a regex whenever the question is about code; and when a decomposition
+returns a NULL, falsify the instrument before banking it** — plant a known-true instance and check
+the scan finds it. Two of these three were caught only because I already knew the answer from
+reading; the second was caught by a printout looking odd. None would have been caught by a green
+suite.
+
+### ⚠ THE CRITIC'S RESIDUAL RISK, CLOSED — THREE SYMBOLS THE PLAN NEVER PLACED, ONE OF THEM SILENT
+
+The step-4 critic declared a limit it could not pass: it has no `git`, so *"a name the PLAN ITSELF
+missed remains unverifiable without git"*. That is a real hole and not a rhetorical one — the symbol
+check catches a name that VANISHES, and cannot catch one the plan never gave a home to, because
+such a name has no expected destination to compare against. **Closed here, with git.**
+
+Over the pre-decomposition `shape.py` at `0dd51d5`: **208 top-level names; 46 the plan mentions
+nowhere.** ⚠ Do not quote the 46 as a finding — **43 of them were carved anyway in steps 0b–4**,
+each given a home by the executing session without the plan's help, which is the honest reason the
+omission had cost nothing yet. **Three were still in `shape.py`, unplaced:**
+
+| symbol | belongs with | leaving it behind |
+|---|---|---|
+| `_S353_CACHE` | `SOURCE_353_TEXT` → `loop.py` (step 9) | **loud** — `NameError` |
+| `_REFERENT_OPERANDS` | `operands_for` → `decision.py` (step 7) | **loud** — `NameError` |
+| `_LADDER_ERROR` | `_LADDER` + `degree_ladder` → `seam.py` (step 8) | ⚠ **SILENT** |
+
+**The third is the finding; the first two are the contrast that makes it legible.** `degree_ladder`
+writes `_LADDER_ERROR` through `global`, and a `global` statement CREATES a module-level binding on
+first assignment rather than requiring one. So building `seam.py` from the plan's table — which
+named `_LADDER` and `ladder_error` but not `_LADDER_ERROR` — raises nothing: a second home appears
+in `seam.py` and the original stays `""` forever. **Demonstrated on two throwaway modules rather
+than argued:**
+
+```
+after   left._LADDER_ERROR = ''                             <- the re-exported home, never written
+after  right._LADDER_ERROR = 'ImportError: the ladder ...'  <- a SECOND home, created silently
+no NameError was raised: True
+```
+
+That is `§0.1` point 1's read/write asymmetry one level down, and the same shape as `_TenureView`,
+which the plan's §2 already lists as un-splittable. Live blast radius is narrow today — nothing
+patches `S._LADDER_ERROR`, and `ladder_error()` would keep working off `seam`'s copy — but the
+re-exported name becomes a permanently-empty string that a later reader takes as *"the ladder
+loaded cleanly"*. **A polarity inversion (§42.2) reached by a refactor that raises nothing.**
+
+All three are now in the plan's module-suite rows, and `_LADDER_ERROR` is in its §2 un-splittable
+group beside `_LADDER`.
+
+⚠ **THE GENERAL RULE, WHICH OUTLIVES THESE THREE NAMES: a module-level name REBOUND through
+`global` cannot be left behind loudly.** Before each remaining carve, grep the moving functions for
+`global` and check every name they list is moving too. Run over the whole package now, it is clean
+and shows the pattern handled correctly elsewhere:
+
+```
+combat_seam.py:91  global _LOADED       ok        shape.py:3979  global _LADDER        ok
+combat_seam.py:91  global _LOAD_ERROR   ok        shape.py:3979  global _LADDER_ERROR  ok
+```
+
+`combat_seam.py` keeps its `_LOADED`/`_LOAD_ERROR` pair together already — the same value-plus-reason
+shape, in a module that was moved and did not lose it. **Not made a test:** §0.1 point 5's predicate
+asks what the artifact is load-bearing on, and a four-line grep run before a carve is a procedure,
+not a guard. It lives here, which is what a session reads before carving — the same disposition the
+199-name symbol check got at step 3.
+
+### ⚠ A CORRECTION TO THE PLAN, FOR WHOEVER TAKES STEP 5 — IT PRICES THE WRONG HALF OF `Query`
+
+`workplans/2026-09-06-shape-decomposition-plan.md` splits `Query` across TWO steps: the eleven
+World-first statics go to `queries.py` at **step 5**, the four person-side ones to `decision.py` at
+**step 7**. It prices only the second: *"Cost: **56 call sites** across 5 files; a mechanical
+rename."*
+
+**Measured on the current tree, the step-5 half is the bigger one and the plan does not mention it:**
+
+| half | occurrences | source lines | outside the test file |
+|---|---|---|---|
+| person-side (step 7) — `assemble` `budget` `entrenchment` `opening_set` | 59 | **56** | 25 |
+| World-first (step 5) — `parent_of` `presence` `descendants` `lateral` `verbs` `hold_force` `judging_set` `r1_aggregate` `aggregate_guard` `commit_count_guard` `single_holder_counter` | 62 | **62** | **51**, of which 35 in `probes.py` |
+
+The plan's 56 is CORRECT on its own basis (distinct source lines, all files) — checked before
+reporting a discrepancy, and there is none. The finding is the omission, not an error in the number.
+Step 5's stated artifact is *"`EFFECTS` and `REQUIRES_PREDICATES` keys diffed identical"*, which
+cannot observe a botched 62-site rename at all. **Step 5 needs the person-side artifact too:
+`Query` must keep exactly its four person-side statics afterwards, and the count of resolved
+`Query.<world-first>` references must go to zero in the same commit.**
+
+---
 
 ## ⭐ DONE 2026-09-07 — THE DECOMPOSITION IS IN `engine/season/`. `shape.py` 6,771 → 5,165 (ED-IN-0203)
 

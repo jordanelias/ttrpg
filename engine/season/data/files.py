@@ -42,6 +42,7 @@ from pathlib import Path
 DATA_DIR = Path(__file__).resolve().parent
 PACKAGE_DIR = DATA_DIR.parent
 HARNESS_DIR = PACKAGE_DIR / "harness"
+STATE_DIR = PACKAGE_DIR / "state"
 TESTS_DIR = PACKAGE_DIR / "tests"
 ENGINE_DIR = PACKAGE_DIR.parent
 REPO_ROOT = ENGINE_DIR.parent

@@ -82,10 +82,10 @@ silently. Directories can come later, once both glob-based guards are made recur
 | 8 | `predicates.py` — governance | `REQUIRES_PREDICATES`, `requires_predicate`, `in_holdings`, `under_purview`, `titles_held`, `highest_title_rank`, `_req_confer`, `_req_revoke`, `_req_dispatch`, `_req_convene` |
 | 8 | `effects.py` | `EFFECTS`, `effect_for`, `_operand`, the ten `_eff_*` |
 | 9 | `epistemic.py` | `belief_contradicts`, `act_refs`, `claim_subjects`, `_event_place`, the five `_ch_*`, `CHANNEL_PREDICATES`, `observers_for`, and the deposit body at `:6323-6423` as one function |
-| 10 | `decision.py` — AX-2's island | `_load_alignment`, `ALIGNMENT*`, `alignment_at`, `align`, `stance_toward`, `urgency`, `make_chooser`, `person_side_eligible`, `containing_rung_of`, `store_kind_of`, `_derive_operand`, `operands_for`, `agreement`, `standing_of`, `_payload_of`, `pack_scenes`, `view_ids`, `body_band_penalty`, `aggregate_questions`, `sense`, and the four person-side statics (`budget`, `opening_set`, `assemble`, `entrenchment`) as module functions |
-| 11 | `seam.py` | `ContestError`, `contest_subsystem`, `_LADDER`, `degree_ladder`, `ladder_error`, `Resolution`, `combat_degree`, `degree_of`, `contest` |
+| 10 | `decision.py` — AX-2's island | `_load_alignment`, `ALIGNMENT*`, `alignment_at`, `align`, `stance_toward`, `urgency`, `make_chooser`, `person_side_eligible`, `containing_rung_of`, `store_kind_of`, `_derive_operand`, `operands_for`, `_REFERENT_OPERANDS`, `agreement`, `standing_of`, `_payload_of`, `pack_scenes`, `view_ids`, `body_band_penalty`, `aggregate_questions`, `sense`, and the four person-side statics (`budget`, `opening_set`, `assemble`, `entrenchment`) as module functions |
+| 11 | `seam.py` | `ContestError`, `contest_subsystem`, `_LADDER`, **`_LADDER_ERROR`**, `degree_ladder`, `ladder_error`, `Resolution`, `combat_degree`, `degree_of`, `contest` |
 | 11 | `combat_seam.py` *(exists)* | as today |
-| 12 | `loop.py` | `SeasonDriver`, `as_scenes`, `stratum_of`, `resolvable_verbs`, `names_a_verb`, `SOURCE_353_TEXT` |
+| 12 | `loop.py` | `SeasonDriver`, `as_scenes`, `stratum_of`, `resolvable_verbs`, `names_a_verb`, `SOURCE_353_TEXT`, `_S353_CACHE` |
 | — | `shape.py` | transitional facade; re-exports, owns nothing; deleted at step 10 |
 
 **Direction rule, stated so it applies without the picture:** *a module imports only from a strictly
@@ -96,6 +96,51 @@ name"*); `combat_seam.py` imports `decision` and `ids`, never `seam` or `loop`; 
 imports nothing from `decision` or `loop`. The graph is acyclic by construction of the layer
 numbers, and the one live cycle (`shape.contest` ↔ `combat_seam`, both function-local) dissolves
 because `body_band_penalty` lands below the seam.
+
+### ⚠ THREE SYMBOLS THIS TABLE DID NOT PLACE, AND THE ONE WHOSE OMISSION IS DANGEROUS
+
+Added 2026-09-07, after step 4. The step-4 adversarial critic named a residual risk it could not
+test — *"a name the PLAN ITSELF missed remains unverifiable without git"* — because a symbol check
+catches a name that VANISHES and cannot catch one the plan never gave a home to: such a name has no
+expected destination, so a later carve can drop or misplace it with nothing to compare against.
+
+Checked with git, over the pre-decomposition `shape.py` at `0dd51d5`: **208 top-level names, 46 that
+this document does not mention anywhere.** Of those 46, **43 were carved anyway in steps 0b–4** (the
+executing session found each a home without the plan's help, which is the honest reason the omission
+had not yet cost anything). **Three were still in `shape.py` with no assigned destination**, and they
+are now in the rows above:
+
+| symbol | belongs with | if a carve leaves it behind |
+|---|---|---|
+| `_S353_CACHE` | `SOURCE_353_TEXT` → `loop.py` | **loud** — `NameError` on first call |
+| `_REFERENT_OPERANDS` | `operands_for` → `decision.py` | **loud** — `NameError` on first call |
+| `_LADDER_ERROR` | `_LADDER` + `degree_ladder` → `seam.py` | ⚠ **SILENT** |
+
+**Why the third is different, demonstrated rather than argued.** `degree_ladder` writes it through
+`global _LADDER, _LADDER_ERROR`. A `global` statement does not require the name to exist — it CREATES
+a module-level binding on first assignment. So building `seam.py` from the table above without
+`_LADDER_ERROR` raises nothing: a second home appears in `seam.py`, and the original in `shape.py`
+stays `""` forever. Simulated on two throwaway modules:
+
+```
+before  left._LADDER_ERROR = ''
+after   left._LADDER_ERROR = ''                                  <- the re-exported home, never written
+after  right._LADDER_ERROR = 'ImportError: the ladder ...'       <- a SECOND home, created silently
+no NameError was raised: True
+```
+
+That is `§0.1` point 1's read/write asymmetry exactly — *"every writer silently becomes a no-op"* —
+one level down, and it is the same shape as `_TenureView` (item 6 of §2). Nothing patches
+`S._LADDER_ERROR` today, so the live blast radius is narrow: `ladder_error()` keeps working because
+it reads `seam`'s copy, while the re-exported `S._LADDER_ERROR` becomes a permanently-empty string
+that any later reader or test would take as *"the ladder loaded cleanly"*. **A polarity inversion
+(§42.2) reached by a refactor that raises nothing.**
+
+⚠ **The general lesson, which outlives these three names: a module-level name REBOUND through
+`global` cannot be left behind loudly.** Before each remaining carve, grep the moving functions for
+`global` and check that every name they list is moving too. The three above are the ones that exist
+now; step 5's `queries`/`predicates`/`effects` should be re-checked the same way rather than trusting
+this table to have become complete.
 
 ### The placements a lazy pass would get wrong
 
@@ -121,7 +166,7 @@ pins it inside `witness`. **Whichever moves, the other moves in the same commit.
 ## 2 · What must not be split
 
 1. `ALIGNMENT` + `align` + `alignment_at` + `ALIGNMENT_DECLARED` — the sweep rebinds the global.
-2. `_LADDER` + `degree_ladder` + `degree_of` — same mechanism; `degree_of` is "THE ONE PLACE" a result becomes a token.
+2. `_LADDER` + **`_LADDER_ERROR`** + `degree_ladder` + `degree_of` — same mechanism; `degree_of` is "THE ONE PLACE" a result becomes a token. ⚠ `_LADDER_ERROR` was **absent from this list and from the `seam.py` row** until 2026-09-07; see §1's added paragraph for why its omission is the dangerous one of the three.
 3. `VerbRow.writes_at` + `emits_at` (`:1476-1543`) — one polarity, checked against each other at load.
 4. The gap taxonomy (`:72-150`) — `InstrumentDefect` is deliberately not a `ShapeGap`; the separation is by class.
 5. `Step`/`WriteClass`/`MatrixRow` + `_load_write_matrix` — the loader cross-checks the map against the YAML's `class:` column.

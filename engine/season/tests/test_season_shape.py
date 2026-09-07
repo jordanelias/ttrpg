@@ -491,11 +491,21 @@ def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
 def _model_modules():
     """THE MODEL: every package module that is not the instrument.
 
-    Derived, never listed. `test_h115` and `test_jordan_no_definition_is_hardcoded_in_a_body`
-    both key on this, and both previously named files by hand — the exact shape this file
-    records three separate incidents about (`files.package_modules`, `:1773-1783`, `:4306-4311`),
-    each written after a module went unscanned BY CONSTRUCTION. A decomposition adds a model
-    module every step, so a hardcoded list is guaranteed to fall behind; this cannot.
+    Derived, never listed. Three tests key on this — `test_d6_no_constant_is_hardcoded_in_a_body`,
+    `test_h115_the_fourteen_load_time_raises_are_unchanged` and
+    `test_jordan_no_definition_is_hardcoded_in_a_body` — and each previously named files by hand:
+    the exact shape this file records three separate incidents about (`files.package_modules`,
+    `:1773-1783`, `:4306-4311`), each written after a module went unscanned BY CONSTRUCTION. A
+    decomposition adds a model module every step, so a hardcoded list is guaranteed to fall
+    behind; this cannot.
+
+    ⚠ THIS DOCSTRING WAS FALSE UNTIL STEP 4 OF THE DECOMPOSITION, IN THE DIRECTION THAT MATTERS.
+    It named `test_jordan_no_definition_is_hardcoded_in_a_body` as keying on this function while
+    that test keyed on the single path `files.SHAPE_PY` — so a reader checking whether Jordan's
+    no-hardcoding guard followed the code out of `shape.py` was told by this sentence that it did,
+    and it did not. It also named two callers where there are three. Both corrected, and the first
+    by making the sentence TRUE rather than by softening it. A false claim of enforcement is worse
+    than none, because it stops the next reader checking — which is precisely what happened.
     """
     return [m for m in files.package_modules()
             if "harness" not in m.parts and not m.name.startswith("test_")]
@@ -1803,12 +1813,34 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
     every node of every module and looks at the VALUE: a collection of three or more string
     constants, however it is spelled."""
     import ast as ast_
-    # `shape.py` IS THE MODEL — where a game definition would live, and where Jordan's ruling
-    # bites. The other three are the test corpus and the reporter: a fixture in a probe is test
-    # data, not a definition the game resolves from, so flagging every one of them would bury the
-    # signal. They are checked for the defect that DOES matter there — a roster DUPLICATED from
-    # the data file, which is how a definition comes back after being moved.
-    MODEL = files.SHAPE_PY
+    # THE MODEL IS WHERE A GAME DEFINITION WOULD LIVE, and where Jordan's ruling bites. The
+    # instrument -- probes, the reporter, the runners -- is the test corpus: a fixture in a probe
+    # is test data, not a definition the game resolves from, so flagging every one of them would
+    # bury the signal. The corpus is checked for the defect that DOES matter there: a roster
+    # DUPLICATED from the data file, which is how a definition comes back after being moved.
+    #
+    # ⚠ THIS READ `MODEL = files.SHAPE_PY` UNTIL STEP 4 OF THE DECOMPOSITION, AND THAT SPELLING
+    # SILENTLY NARROWED THE GUARD ON EVERY CARVE. One file was the whole model when the model was
+    # one file. It stopped being true at step 2 and became large at step 4: the sixteen carriers
+    # and `World` moved to `state/`, so fifteen of the sixteen `roster-exempt:` sites in the
+    # package -- `Rung._DECLARED`, `World._STATE_COLLECTIONS`, `_TenureView._MUTATORS` among them
+    # -- sat under the CORPUS rule, which only catches an exact duplicate of an existing roster.
+    # A brand-new literal roster in `state/carriers.py` passed. FALSIFIER, the decomposition
+    # plan's own item 3 (`workplans/2026-09-06-shape-decomposition-plan.md`), run both ways:
+    # planting `frozenset({"alpha","beta","gamma"})` in `state/carriers.py` is GREEN with
+    # `MODEL = files.SHAPE_PY` and RED with the model set below.
+    #
+    # `_model_modules()` is the set, and using it here also makes that function's own docstring
+    # TRUE: it claimed this test and `test_h115` "both key on this" while this test keyed on one
+    # hardcoded path. A false claim of enforcement is worse than none, because it stops the next
+    # reader checking -- which is exactly what it did.
+    MODEL = frozenset(_model_modules())
+    # ANTI-VACUITY, because a MODEL that silently empties makes the strict lane observe nothing
+    # and this test go green over the whole package (§0.1 point 2). The floor is the property,
+    # not a count someone re-pins: the file the model is carved OUT of, and the two files step 4
+    # carved INTO it, must all be in the set.
+    assert {files.SHAPE_PY, files.STATE_DIR / "carriers.py", files.STATE_DIR / "world.py"} <= MODEL, (
+        f"the model set does not contain the model: {sorted(m.name for m in MODEL)}")
     # ⚠ THE CORPUS IS DISCOVERED, NOT LISTED, AND THE DIFFERENCE IS THIS TEST'S OWN LESSON. Its
     # docstring names the original defect as "IT READ `shape.py` ALONE while `probes.py`,
     # `report.py` and `run_cases.py` went unscanned" — and the fix was a hardcoded four-name
@@ -1820,9 +1852,9 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
     # flat glob would have gone on reporting clean over eight files it no longer reached -- the
     # unscanned-BY-CONSTRUCTION defect this comment already describes, in a new spelling. The set
     # is `files.package_modules()`, discovered from the package root.
-    CORPUS = tuple(f for f in files.package_modules() if f not in (MODEL, files.TEST_PY))
+    CORPUS = tuple(f for f in files.package_modules() if f not in MODEL and f != files.TEST_PY)
     assert {"probes.py", "report.py", "run_cases.py", "headless.py"} <= {f.name for f in CORPUS}, CORPUS
-    FILES = (MODEL,) + CORPUS
+    FILES = tuple(sorted(MODEL)) + CORPUS
     # ⚠ A ROSTER ROW NEED NOT CARRY `values:`. `witness_channel_predicates` carries only
     # `predicates:` — the five names live once, in `witness_channels`, and that row states what
     # each MEANS. Assuming the key existed made this guard raise a KeyError on a data shape the
@@ -1873,7 +1905,7 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
             if "roster-exempt:" in ctx:
                 exempted.append((fname, node.lineno))
                 continue
-            if fpath != MODEL:
+            if fpath not in MODEL:
                 # In the corpus, only a DUPLICATE of a roster that is already data is a defect:
                 # the same closed set written out again, which is the definition coming back.
                 if frozenset(vals) not in known:
