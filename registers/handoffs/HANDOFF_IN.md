@@ -16,35 +16,52 @@ engine/season/queries/  world_q 328 · readers 158        engine/season/loop/  p
 reads **6 `not_met` · 3 `partial`** before and after, unchanged — the only reading of progress §0.2
 accepts. It is licensed as a precondition, not as progress.
 
-### THE FINDING THAT MATTERS: I SHIPPED A MODULE MISSING AN IMPORT, AND THE FAILURE WAS SILENT
+### I SHIPPED A MODULE MISSING AN IMPORT — AND MY FIRST ACCOUNT OF IT WAS THE FLATTERING ONE
 
 `queries/world_q.py` went out without `Forbidden`. `aggregate_guard` and `commit_count_guard` both
-raise it; with the name unbound they raised `NameError` instead. **The probe harness catches broad
-exceptions, so two probes — `A23` and `F14` — did not fail. They VANISHED**, and the corpus gap
-count fell 66 → 63 with nothing red.
+raise it; unbound, they raised `NameError`.
 
-- **What caught it: `report.py`, and only because it is a BYTE comparison.** `git status
-  engine/season/runs/` showed three artifacts modified. The module imported cleanly, the headless
-  content hash was **unchanged**, and `delta.py` was not consulted. This is the third session in a
-  row to record *report before delta, and report is the control*; it is the first to record the
-  control catching something the hash could not.
-- **The suite would also have caught it**, and saying so is owed:
-  `test_season_shape.py:1128` asserts `pytest.raises(Forbidden)` on `aggregate_guard`. So this was
-  not invisible — it was invisible to the two instruments I ran FIRST, which is a different and
-  smaller claim than "only the corpus control could see it".
-- **The cause was a scan I ran on three of the four moving groups and not the fourth.** I computed
-  free names for `questions_for`/`occasioned_by`, the predicates and the effects, and never for the
-  eleven statics, because they arrived through a different extraction path. **A dependency scan that
-  covers most of a carve is not a dependency scan.**
-- **The instrument, for step 6: one AST walk over the finished module, before running anything.**
-  Bind every import, `def`, `class`, assignment target, `arg` and `except` name; every remaining
-  `Name` in `Load` context that is not a builtin is unbound. Run over all four new modules it printed
-  `Forbidden` and nothing else — one pass, ten lines, and it found in seconds what a per-group scan
-  missed. **NO GUARD WAS ADDED FOR THIS AND NONE SHOULD BE:** Python raises on it, the suite asserts
-  it, and a test that greps modules for unbound names is a linter — the checker-of-a-checker §0.1
-  point 5 forbids. It is a pre-flight a session runs, recorded here so the next one runs it.
+⚠ **THE FIRST WRITING OF THIS SECTION SAID THE HARNESS "SWALLOWED" IT, THAT THE PROBES "VANISHED",
+AND THAT "NOTHING WENT RED". All three are false, and an independent critic overturned them.**
+Reproduced by re-planting the defect rather than argued:
 
-### `Query` SPLIT WITHOUT RENAMING A SINGLE CALL SITE, AND THE PLAN'S PRICE WAS WRONG IN BOTH HALVES
+```
+A23: verdict='INSTRUMENT-ERROR'  detail="NameError: name 'Forbidden' is not defined"
+F14: verdict='INSTRUMENT-ERROR'  detail="NameError: name 'Forbidden' is not defined"
+test_no_probe_errors -> FAILED
+```
+
+`harness/run_cases.py:90-92` converts any exception into **`INSTRUMENT-ERROR`, a declared and
+ordered verdict** (`report.py:193`) carrying the exception text. The probes did not vanish; they
+left the FORBIDDEN table for a different published bucket, which is what the `runs/` diff showed
+and what I read as disappearance. **Four guards covered this class, not one:**
+
+| guard | what it does |
+|---|---|
+| `test_season_shape.py:1128` | `pytest.raises(Forbidden)` on `aggregate_guard` — a `NameError` is not a `Forbidden` |
+| `test_no_probe_errors` (`:770`) | runs every probe, asserts zero `INSTRUMENT-ERROR`, prints the ids and details |
+| `test_season_shape.py:2108-2116` | reads the COMMITTED `results.json`, same assertion — *"must be fixed rather than published"* |
+| `report.py` byte comparison | what I actually ran first, and the only one of the four I gave credit to |
+
+**Why the wrong version is worth recording rather than just replacing.** It made the corpus control
+look uniquely valuable and the tree look thinner than it is — the most self-flattering account
+available, reached by running one instrument and inferring the rest. §0.1 point 4 is about
+uncontrolled numbers; this is the same error about an uncontrolled *mechanism*.
+
+- **Cause of the defect itself:** a free-name scan run on three of the four moving groups and not
+  the fourth. A dependency scan that covers most of a carve is not a dependency scan.
+- **The instrument for step 6, unchanged:** one AST walk over each finished module before running
+  anything — bind every import, `def`, `class`, assignment target, `arg` and `except` name; every
+  remaining `Name` in `Load` context that is not a builtin is unbound. It printed `Forbidden` and
+  nothing else.
+- **NO GUARD ADDED — but the first stated REASON for that was also wrong.** I wrote that §0.1 pt 5
+  forbids it as a linter. It does not: that predicate turns on whether the defective artifact is
+  **load-bearing on the game**, and `world_q.py` is ratified Layer-2 game code, so the predicate
+  *admits* a guard here. The real reason is §8's — **four guards already own this rule, and a fifth
+  would be re-implementing it.** A correct disposition reached through a wrong test is worth
+  correcting, because the wrong test would license the opposite call somewhere it matters.
+
+### `Query` SPLIT WITHOUT RENAMING A SINGLE CALL SITE — AND MY RE-PRICING OF IT WAS WRONG
 
 `04:116` splits the two families **by module**. The eleven are module functions in `world_q` now;
 `shape.Query` binds each as `staticmethod(world_q.<fn>)`. **`Query.parent_of is world_q.parent_of`
@@ -52,13 +69,22 @@ is True**, so there is one owner of each rule and every existing call site resol
 body — including the frozen `proposals/2026-09-04-degree-sweep/` arms, which read `S.Query.presence`
 and must keep working.
 
-| | plan said | measured |
-|---|---|---|
-| person-side call sites (step 7's bill) | 56 | **67** (`budget` 23, `opening_set` 34, `assemble` 9, `entrenchment` 1) |
-| world-first call sites (step 5's, unpriced) | — | **73** |
-| renames actually paid at step 5 | — | **0** |
+⚠ **THE COUNTS I FIRST PUBLISHED (73 world-first, 67 person-side) DO NOT REPRODUCE, AND ONE OF
+THEM WAS WRITTEN INTO SHIPPED SOURCE.** A critic could not derive 73 on any basis; nor can I. The
+error is §0.1 point 5's *two bases, both true of their own basis* — my grep counted matching LINES
+including comments and docstrings over `engine/ tests/ tools/ proposals/`, and the plan's 56
+counted `.py` lines under `engine/season/`. Publishing the delta as a **correction to the plan**
+was the defect: the plan was not wrong, the basis changed. Re-measured, all three bases stated:
 
-Step 7 still pays the 67 when the class goes. What the binding buys is that step 5 did not have to.
+| | occurrences | matching lines | actual CALLS |
+|---|---|---|---|
+| `Query.<world-first>` | 72 | 71 | **54** |
+| `Query.<person-side>` | 68 | 65 | **47** |
+
+*(repo-wide, `.py` only; CALLS excludes comment lines and docstring mentions.)* **Step 7's bill is
+47 calls, not "67" anything.** The bare `73` is out of `shape.py` and `world_q.py`: those comments
+needed the PROPERTY — every world-first call site resolves to the moved body — and a count was
+decoration that then had to be defended. **Renames paid at step 5: 0.**
 
 ### THE PURE-MOVE PROOF, AND WHY IT NEEDED WIDENING THIS TIME
 
@@ -83,24 +109,48 @@ docstring continuation-line indentation, which the dedent correctly moves. The t
 dedented block against the new module is decisive where the AST walk was noise: **109 lines each,
 one line differing, and that line is the declared `Query.descendants` → `descendants` rewrite.**
 
-### THE NARROWING CHECK — STEP 4'S FIX PAID FOR ITSELF HERE, WITH NO EDIT
+### ⚠ THE NARROWING CHECK WAS THE WRONG MEASUREMENT, AND THREE GATES HAD NARROWED
 
-Step 4 re-pointed `test_jordan_no_definition_is_hardcoded_in_a_body` from the hardcoded
-`files.SHAPE_PY` onto `_model_modules()`. **Step 5 is the first carve after it, and the five new
-modules entered the strict lane with nothing edited** — `package_modules()` is `rglob`, so
-`queries/` and `loop/` were discovered like `state/` was. Measured before and after with one
-predicate on both trees:
+**The first writing of this entry said "no source-scanning gate narrowed" over four counts. That
+claim is OVERTURNED.** The counts were mine, taken over the model set, and a count over the model
+set cannot detect a gate whose corpus is **one hardcoded file** — such a count is invariant under a
+move out of that file *by construction*. I measured a quantity that could not answer the question.
 
-| scanner | before | after |
+**Three gates read `files.SHAPE_PY` and did narrow:**
+
+| gate | corpus it read | what step 5 took out of it |
 |---|---|---|
-| `write` call sites | 21 | 21 |
-| functions taking a `World` | 41 | 41 |
-| `.get(x, default)` | 20 | 20 |
-| `if False` | 0 | 0 |
+| `test_wc_no_operand_is_defaulted_...` | `files.SHAPE_PY` (`:6291`) | **all ten `_eff_*`** — including the four its own docstring names |
+| `test_w5_sense_is_still_the_only_world_taking_...` | `files.SHAPE_PY` (`:2231`) | the thirteen `world_q` functions |
+| `test_d9_no_rule_is_written_and_switched_off` | `SHAPE_CODE` + `PROBES_CODE` | all four new modules |
 
-⚠ **These are MY predicates, not the tests'** — approximations, run identically on both trees, which
-is what makes the *comparison* valid and the absolute numbers not comparable to step 4's table. The
-four tests themselves are inside the 186 that passed.
+A fourth, `test_d9c_max_depth_has_no_default_anywhere`, named `SHAPE_CODE` **and** `FIXTURES_CODE`
+by hand — right at step 3, and one carve from wrong at every step after.
+
+The `test_wc_` case is the sharpest: its `used == EXEMPT` non-vacuity assertion **stayed green**,
+because `_payload_of` happens to have stayed in `shape.py`. So the gate reported a healthy
+carve-out over a corpus that no longer contained the family it polices.
+
+**FIXED, NOT DEFERRED**, on step 4's precedent — all four re-pointed to `_model_modules()`, each
+with the vacuity floor `test_h115` already carries. **No new test file; four re-points and one
+shared corpus helper.** ⚠ Positive assertions (`"x" in SHAPE_CODE`) are deliberately NOT
+re-pointed: those go red the day their subject leaves the file, which is a guard reporting a move
+rather than missing one. Only `not in` fails open.
+
+**THE FALSIFIER, BOTH ARMS, AND THE COUNTERFACTUAL THAT LICENSES THE CLAIM.** Plant an operand
+default, an `if False`, a person-side `World` and a `caller_supplied_max_depth` in `loop/effects.py`
+and `queries/world_q.py`:
+
+```
+post-fix gates, plants in place  ->  4 failed      <- all four detect
+pre-fix gates, SAME plants       ->  4 passed      <- the narrowing, on demand
+```
+
+That second line is the measurement the first version of this entry should have taken. **And this
+is the third time this package has recorded this exact failure** — `test_h115` at step 2,
+`test_jordan_no_definition_is_hardcoded_in_a_body` at step 4, these four at step 5. The lesson that
+did not transfer: step 4 fixed *the gate it happened to check*. **The property to check at every
+carve is "which gates read a hardcoded path", not "did my counts move".**
 
 ### THE FABRICATION GATE FIRED ONCE, AND THE TAG INVENTS NOTHING
 
@@ -112,11 +162,24 @@ already carry. Both mechanical traps step 3 recorded were obeyed: single line, i
 
 ### ELEVEN HOME CLAIMS RE-POINTED, AND THE COUNT WAS COMPUTED BEFORE IT WAS WRITTEN
 
-Step 4's entry records asserting "exactly ONE" after inspecting one file and being wrong by five.
-So this count was taken first, on step 4's own definition — a structured field whose job is to say
-where a thing lives (`owner:`/`site:`) or a `path::symbol` citation, naming a symbol step 5 moved.
-**Prose that mentions `shape.py` while describing behaviour is not a home claim**: 31 lines
-co-mention, **11 are home claims**, and each was verified against `__module__` rather than by grep.
+⚠ **THE COUNT WAS 11 AND IT IS 19. Step 4's entry records asserting "exactly ONE" and being wrong
+by five; step 5 took the count FIRST, verified every home against `__module__` — and still missed
+eight, because the defect had moved from the verification to the SELECTOR.** Two defects in it:
+
+1. **It matched the literal string `shape.py`. The register's dominant home spelling is
+   `shape.<symbol>`** — `shape.questions_for`, `shape._eff_create_record`, `shape.in_holdings`,
+   `shape.WorldReader`. That spelling was invisible to the sweep. The proof it was a selection
+   failure and not a convention failure is inside the same commit: `occasioned_by` was re-pointed
+   at `:1350` and `:1353`, while its same-module same-commit sibling `questions_for` was left at
+   `:101`.
+2. **It was line-scoped, over a file of YAML block scalars.** A claim wrapped across two lines —
+   `engine/season/shape.py` on one, `` `_eff_kill` `` on the next — cannot match a line-scoped
+   grep. That is how `:1313` (a `SOURCES QUOTED HERE:` provenance claim) and `:1815` survived, the
+   latter three rows below a `::_eff_kill` I had just re-pointed.
+
+**All 19 are fixed and the residual sweep over both spellings is clean.** The right lesson is not
+"look harder": **verifying each hit against `__module__` does nothing for a hit the selector never
+surfaced**, and a count is only as good as what it counted over.
 
 | where | now |
 |---|---|
@@ -171,9 +234,12 @@ the old hash kept so an older citation still resolves.
 - **content hash `ee0383bf3f4606e56b80cd07c0284f0a`** — unchanged after each of the two carves and
   after the `Forbidden` repair.
 - **`report.py` reproduced all eight artifacts byte-identically** (`git status engine/season/runs/`
-  empty). **This is the control, and this time it earned it** — see the first finding. Isolated
-  properly: with the carve stashed, `report.py` on clean `HEAD` also reproduces, so the three
-  modified artifacts were mine and not pre-existing drift.
+  empty). Isolated properly rather than assumed: with the carve stashed, `report.py` on clean
+  `HEAD` also reproduces, so the three modified artifacts were mine and not pre-existing drift.
+  ⚠ A first writing called it *"the control, and this time it earned it"* over the `Forbidden`
+  defect. It is **a** control and it did fire first; it was not the only thing that would have —
+  three test assertions cover that class, and crediting the one instrument I happened to run is
+  the same error as the account it was supporting.
 - **`delta.py HEAD`: `PROBE FLIPS 0`**, probes 122 → 122, gap events 66 → 66.
 - **`pytest engine/season/tests`: 186 passed** (203s baseline, 197s after).
 - **`pytest tests/valoria`: 1,776 passed · 2 failed · 23 skipped · 15 xfailed.** ⚠ Both failures are
@@ -192,6 +258,57 @@ the old hash kept so an older citation still resolves.
 - **`tools/valoria_local.py --staged`**: all local gates passed. **`compliance_check --check-only`**:
   0 errors. **`export_sim_params.py --check`**: current. **`register.py --counts`/`--requirements`**:
   green, citations resolve.
+
+### THE ADVERSARIAL PASS — FIVE CLAIMS OVERTURNED, ALL FIVE MINE
+
+A structurally independent read-only critic (`valoria-critic`, Read/Grep/Glob only, given the
+OUTPUT and never the reasoning) attacked nine claims. **It overturned five, and the move itself
+survived every one of them** — each overturned claim was something I wrote *about* the move.
+Everything above is the corrected text; this is the index.
+
+| # | claim | verdict |
+|---|---|---|
+| 1 | "no source-scanning gate narrowed" | **OVERTURNED** — three had, and my measurement could not have seen it |
+| 2 | "the harness swallowed it, the probes vanished, nothing went red" | **OVERTURNED** — `INSTRUMENT-ERROR` is published, and three other guards go red |
+| 3 | "eleven home claims" | **OVERTURNED** — nineteen; the selector missed a whole spelling |
+| 4 | "73 world-first / 67 person-side call sites" | **OVERTURNED** — reproduces on no basis; 54 / 47 calls |
+| 5 | §0.1 pt 5 forbids a guard here | **OVERTURNED** — the predicate *admits* one; §8 is the reason |
+
+**Four more defects it found that I had not claimed either way**, all in prose this commit wrote:
+
+- `loop/__init__.py` said **"thirteen decorator registrations"**; there are **ten**, and
+  `effects.py`, `shape.py` and the plan all say ten. A count written from memory beside three
+  correct copies of it.
+- `loop/effects.py`'s module docstring said *"Every effect writes through `w.write(...)`"*. **No
+  effect calls `w.write`** — the only occurrence of that spelling in the file was my own sentence,
+  and `_eff_confer`'s docstring seventy lines below states the opposite in terms.
+- `world_q.py` cited `test_w5_...` as keeping its one-way rule *"checkable by signature"*. That
+  test parsed `shape.py` alone and **could not see the module the sentence was written in.** Made
+  true by the re-point above rather than softened.
+- `queries/__init__.py` said *"nothing imports `readers`"*. `shape.py:144` does.
+
+**Upheld under named failed attacks** (a PASS is licensed by the attack, not by silence): no moved
+symbol has a surviving second definition at any indentation; every free name in all four modules
+resolves; the only `globals()` lookup in `shape.py` is `_ch_*`, all five of which stayed; the only
+`global` statements in the package name nothing that moved; `EFFECTS`/`REQUIRES_PREDICATES` are
+rebound nowhere, so no `monkeypatch` desynchronises the fold from the registry; `PATH_SEAM_ALLOWED`
+is still two; and the plan's three retracted "flat files" reasons are each genuinely closed
+(`__file__` appears exactly once in the package).
+
+**One observation left open, and answered rather than escalated.** `queries/` now holds **four**
+modules where `04_CODE_ARCHITECTURE.md` §A.2 names three (`world_q`, `person_q`, `cache`) — the
+first draft of that docstring quoted the roster without noticing it was describing four files. By
+source the readers split `WorldReader` → `world_q` and `LedgerReader` → `person_q`; `person_q` does
+not exist until step 7, and filing an asker-scoped reader that takes no `World` inside the
+World-first module in the meantime would be worse. Recorded at the site; **step 7's call, not
+this one** (§0 test 5).
+
+**One pre-existing defect named and deliberately not fixed.** `harness/corpus_run.py:404` is
+`except Exception: r4 = False` — and `hole_register.yaml:1356` declares R4 *"the load-bearing
+control"*. A `NameError` there becomes a clean `False`, so the control cannot distinguish *the
+property is false* from *the instrument crashed* — §0.1 point 2, on the run's own control, in
+exactly the defect class this step tripped over. **Not fixed here because step 5 is a pure move and
+changing it changes behaviour**; it belongs to whoever next touches the corpus runner.
 
 ### WHAT REMAINS, AND THE ONE HAZARD THE NEXT CARVE MUST GREP FOR FIRST
 

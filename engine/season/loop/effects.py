@@ -11,9 +11,13 @@ every probe wrote its own. That is a resolver per caller, each free to disagree 
 does. A verb-keyed effect registered here is one implementation for every caller, and a verb with
 a `writes:` column and no effect REFUSES rather than silently writing nothing. Register row H-63.
 
-⚠ NOTHING HERE TAKES A WRITE TOKEN, AND NOTHING HERE OPENS THE STORE. Every effect writes through
-`w.write(...)` — the one write path — and returns the ids it touched. The gate is `state.world`'s
-and stays there; this module supplies the *what*, never the *may*.
+⚠ NOTHING HERE TAKES A WRITE TOKEN, AND NO EFFECT CALLS `w.write`. The first version of this
+docstring said every effect writes THROUGH `w.write(...)`, which is the exact inversion
+`_eff_confer`'s own docstring refutes seventy lines below — *"AN EFFECT MUTATES AND RETURNS THE
+IDS IT TOUCHED; IT DOES NOT CALL `w.write` … My first version did both, and the fold correctly
+refused."* An effect mutates directly (`w.add_tenure`, `w.records[...] =`, `src.stores[kind] =`)
+and returns the ids; the FOLD passes those ids through the gate. Caught by a read-only critic,
+and it is §47's failure exactly: a false claim of enforcement stops the next reader checking.
 """
 
 from __future__ import annotations

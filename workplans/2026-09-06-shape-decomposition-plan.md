@@ -83,7 +83,10 @@ that is LAYER 1, ratified 2026-09-05 (ED-IN-0204). The three hazards:
 
 **The layer table below still reads `queries.py`, `predicates.py`, `effects.py` as flat files.** The
 modules that landed are `queries/world_q.py`, `queries/readers.py`, `loop/predicates.py`,
-`loop/effects.py` — the layer assignments are unchanged, only the addresses.
+`loop/effects.py` — the layer assignments are unchanged **except `LedgerReader`, which moved layer
+as well as address** (3 → 7, `requires` → `queries/readers.py`, on step 3's recorded adjudication;
+the placement table below records the override, and the layer table still files it under
+`requires.py`, which is the older of the two and is the one that is wrong).
 
 | layer | module | owns |
 |---|---|---|
@@ -173,7 +176,7 @@ this table to have become complete.
 | `sense` (`:4550`) | queries | `decision` | the guard whitelists the NAME inside the scanned file; it must stay where the guard scans |
 | the alignment block | verbs | `decision`, **whole** | the sweep rebinds `ALIGNMENT` and `align` reads it through its own globals; splitting makes the H-66 sweep a fake control |
 | `stratum_of`, `resolvable_verbs` | verbs | `loop` | read `Act`, `REQUIRES_PREDICATES`, `EFFECTS` — all above `verbs` |
-| the person-side `Query` statics | keep `Query` whole | `decision`, as functions | `04:116` splits the families by module. ⚠ **PRICE CORRECTED 2026-09-08 (step 5), in both halves.** Measured: **67** person-side call sites (`budget` 23, `opening_set` 34, `assemble` 9, `entrenchment` 1), not 56 — and the WORLD-FIRST half, which this plan priced at nothing, is **73**. Neither was paid at step 5: the eleven moved to `queries/world_q.py` as module functions and `shape.Query` binds them as `staticmethod`s, so `Query.parent_of is world_q.parent_of` and all 73 sites resolve to the moved bodies unmodified. Step 7 pays the 67 when the class goes. |
+| the person-side `Query` statics | keep `Query` whole | `decision`, as functions | `04:116` splits the families by module. ⚠ **A "PRICE CORRECTION" POSTED HERE ON 2026-09-08 IS ITSELF RETRACTED THE SAME DAY.** It read 67 person-side and 73 world-first and called the plan's 56 wrong. **The plan is not wrong; the basis differed** — 56 is `.py` matching lines under `engine/season/`, and my figures were repo-wide lines including comments and docstrings. 73 reproduces on no basis at all. Re-measured repo-wide over `.py`, all three bases: world-first **72 occurrences / 71 lines / 54 CALLS**, person-side **68 / 65 / 47**. Step 7's real bill is **47 calls**. A count published as a correction to someone else's count, on a basis nobody stated, is `§0.1` pt 5's recorded error arriving a second time. Neither was paid at step 5: the eleven moved to `queries/world_q.py` as module functions and `shape.Query` binds them as `staticmethod`s, so `Query.parent_of is world_q.parent_of` and all 73 sites resolve to the moved bodies unmodified. Step 7 pays the 67 when the class goes. |
 
 **Genuinely ambiguous, left to the implementer:** the ledger eviction (`:6429-6446`). `04:149` gives
 `state/ledgers` "the eviction comparator", which makes it `epistemic.py`'s; `test_season_shape.py:265`

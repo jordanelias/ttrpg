@@ -14,6 +14,8 @@ they will not import it.
 
 ⚠ THIS FILE IMPORTS NEITHER MODULE — the same reason `season/state/__init__.py` and
 `season/data/__init__.py` both give at length, and for `effects` a sharper one: importing it runs
-thirteen decorator registrations, so an eager package import would make anything wanting one name
-from `loop` build the whole effect table.
+TEN `@effect_for` registrations, so an eager package import would make anything wanting one name
+from `loop` build the whole effect table. (This said "thirteen" when it shipped; there are ten
+`_eff_*`, which `effects.py`, `shape.py` and the plan all state correctly. A count written from
+memory beside three correct copies of it.)
 """

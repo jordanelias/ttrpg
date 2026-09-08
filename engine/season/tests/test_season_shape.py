@@ -68,6 +68,29 @@ SHAPE_CODE = _code_only(SHAPE_SRC)
 PROBES_CODE = _code_only(PROBES_SRC)
 FIXTURES_CODE = _code_only(FIXTURES_SRC)
 
+
+def _model_code() -> str:
+    """EVERY MODEL MODULE'S CODE, comment- and docstring-stripped, as one string.
+
+    ⚠ ADDED AT STEP 5 OF THE DECOMPOSITION, BECAUSE THREE `not in SHAPE_CODE` GUARDS HAD
+    NARROWED AND NONE OF THEM COULD SAY SO. `SHAPE_CODE` is `files.SHAPE_PY` alone. Every carve
+    moves code out of it, so a NEGATIVE assertion over that string keeps passing while the
+    question it answers shrinks — the exact failure `test_h115` records at step 2 and
+    `test_jordan_no_definition_is_hardcoded_in_a_body` at step 4, arriving a third time. Step 5
+    moved all ten `_eff_*` out of `SHAPE_CODE`, which is the family two of these guards name in
+    their own docstrings.
+
+    ⚠ POSITIVE assertions (`"x" in SHAPE_CODE`) are NOT re-pointed and must not be: they go red
+    the day their subject leaves the file, which is a guard reporting a move rather than missing
+    one. It is only `not in` that fails open.
+
+    Derived from `_model_modules()`, never listed, so the module a later step adds is scanned the
+    day it lands (`G2` — forbid the shape, never enumerate the words)."""
+    mods = _model_modules()
+    # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- the same floor `test_h115` carries, and for the same reason]
+    assert len(mods) >= 8, f"model set collapsed to {len(mods)} — every guard below would pass vacuously"
+    return "\n".join(_code_only(m.read_text()) for m in mods)
+
 def _w() -> World:
     return P.tiny_world()
 
@@ -253,8 +276,13 @@ def test_d8_one_doctrinal_condition_raises_one_kind():
 
 
 def test_d9_no_rule_is_written_and_switched_off():
-    """DEFECT 9. Rev 1 wrote the knot-deposit rule and disabled it with `if False`."""
-    assert "if False" not in SHAPE_CODE and "if False" not in PROBES_CODE
+    """DEFECT 9. Rev 1 wrote the knot-deposit rule and disabled it with `if False`.
+
+    ⚠ RE-POINTED, step 5 of the decomposition. This asked `SHAPE_CODE` alone, so a rule written
+    and switched off in `state/`, `data/`, `queries/` or `loop/` was unscanned — and the plan's
+    own falsifier 3 named this guard as one of the two that would pass VACUOUSLY on an empty
+    facade. Over the model set it cannot."""
+    assert "if False" not in _model_code() and "if False" not in PROBES_CODE
 
 
 def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
@@ -302,8 +330,10 @@ def test_d9c_max_depth_has_no_default_anywhere():
     that re-added the retired default there would pass a `SHAPE_CODE`-only check. Same corpus-
     shrinks-while-still-passing shape `test_h115` and `test_d6` document; checked in both places
     now."""
-    assert "caller_supplied_max_depth" not in SHAPE_CODE
-    assert "caller_supplied_max_depth" not in FIXTURES_CODE
+    # ⚠ WIDENED AGAIN AT STEP 5: naming two files by hand was right at step 3 and wrong by step 5,
+    # because the answer to "which file could hold it now" changes at every carve. The model set
+    # subsumes both, and `_model_code()`'s floor is what stops it passing on an empty corpus.
+    assert "caller_supplied_max_depth" not in _model_code()
     assert inspect.signature(S.contest).parameters["max_depth"].default is inspect.Parameter.empty
     w = _w()
     def fight(p, v, s, ask_budget):
@@ -2228,7 +2258,16 @@ def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
     #353 `:634`: `sense()` is "the ONE non-decision function permitted a `World`". V2 §F3 broke it
     by giving `budget` a World; PLAN §3.3's smaller amendment is what this checks held."""
     import ast as ast_
-    tree = ast_.parse(files.SHAPE_PY.read_text())
+    # ⚠ RE-POINTED TO THE MODEL SET, step 5 of the decomposition. This parsed `files.SHAPE_PY`
+    # alone, so the thirteen functions that moved to `queries/world_q.py` left its corpus in the
+    # same commit that added a module whose docstring cites THIS TEST as what keeps its one-way
+    # rule "checkable by signature rather than by intention". That sentence was false when
+    # written and is made true here rather than softened — the same repair, and the same reason,
+    # as `_model_modules()`'s own docstring records for step 4.
+    _mods = _model_modules()
+    # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- as `test_h115` carries]
+    assert len(_mods) >= 8, f"model set collapsed to {len(_mods)} — this walk would prove nothing"
+    trees = {m.name: ast_.parse(m.read_text()) for m in _mods}
 
     def named(ann) -> str:
         """The type an annotation NAMES, however it is spelled.
@@ -2257,21 +2296,22 @@ def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
     # signatures rather than from a name list, so a new person-side function is covered the day
     # it is written (G2 — forbid the shape, never enumerate the words).
     offenders = []
-    for node in ast_.walk(tree):
-        if not isinstance(node, (ast_.FunctionDef, ast_.AsyncFunctionDef)):
-            continue
-        args = [a for a in node.args.args if a.arg not in ("self", "cls")]
-        if not args or named(args[0].annotation) != "Person":
-            continue
-        takes_world = [a.arg for a in args if named(a.annotation) == "World"]
-        if takes_world and node.name != "sense":
-            offenders.append((node.name, node.lineno, takes_world))
+    for _fname, tree in trees.items():
+        for node in ast_.walk(tree):
+            if not isinstance(node, (ast_.FunctionDef, ast_.AsyncFunctionDef)):
+                continue
+            args = [a for a in node.args.args if a.arg not in ("self", "cls")]
+            if not args or named(args[0].annotation) != "Person":
+                continue
+            takes_world = [a.arg for a in args if named(a.annotation) == "World"]
+            if takes_world and node.name != "sense":
+                offenders.append((_fname, node.name, node.lineno, takes_world))
     assert not offenders, (
         "a person-side function takes a World, and #353 :634 permits exactly one:\n  "
-        + "\n  ".join(f"{n} at shape.py:{ln} takes {w}" for n, ln, w in offenders))
+        + "\n  ".join(f"{n} at {f}:{ln} takes {w}" for f, n, ln, w in offenders))
     # And the control: the AST walk must actually be finding person-side functions, or it proves
     # nothing by finding no offenders among zero candidates (§0.1 point 2).
-    found = [n.name for n in ast_.walk(tree)
+    found = [n.name for tree in trees.values() for n in ast_.walk(tree)
              if isinstance(n, ast_.FunctionDef)
              and [a for a in n.args.args if a.arg not in ("self", "cls")]
              and named([a for a in n.args.args if a.arg not in ("self", "cls")][0].annotation)
@@ -6288,15 +6328,25 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
     `create_record` then carries `kind="grain"`, every record made by the loop becomes a record of
     grain, and the second assertion goes RED. Both run."""
     import re as _re
-    src = files.SHAPE_PY.read_text()
+    # ⚠ RE-POINTED TO THE MODEL SET, step 5 of the decomposition, and this guard is the sharpest
+    # case of the narrowing: it read `files.SHAPE_PY` alone, and step 5 moved ALL TEN `_eff_*` out
+    # of that file — including `_eff_transfer`, `_eff_create_record`, `_eff_utter` and `_eff_kill`,
+    # the four this test's own docstring names. It would have gone on passing over a corpus that
+    # no longer contained the family it polices, and `used == EXEMPT` would have stayed green
+    # because `_payload_of` happens to have stayed behind. A gate that cannot see its subject is
+    # §0.1 point 2's absent assertion, not a weak one.
+    mods = _model_modules()
+    # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- as `test_h115` carries]
+    assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this scan would pass vacuously"
     names = "|".join(sorted(_re.escape(o) for o in S.REQUIRES_OPERANDS) + ["harm"])
     pattern = _re.compile(r'\.(?:get|setdefault)\(\s*["\'](' + names + r')["\']\s*,')
     # ⚠ THE ATTRIBUTION MATCHED A COLUMN-0 `def` ONLY, so a default inside a METHOD was reported
     # against the previous top-level function -- a true violation named at the wrong site, which
     # is how a reader dismisses it. Nearest preceding `def` at ANY indentation now.
-    heads = [(m2.start(), m2.group(1))
-             for m2 in _re.finditer(r"^[ \t]*def[ \t]+(\w+)", src, _re.M)]
-    def _enclosing(pos: int) -> str:
+    def _heads(src: str):
+        return [(m2.start(), m2.group(1))
+                for m2 in _re.finditer(r"^[ \t]*def[ \t]+(\w+)", src, _re.M)]
+    def _enclosing(heads, pos: int) -> str:
         return next((n for start, n in reversed(heads) if start < pos), "<module>")
     # THE DECLARED CARVE-OUTS, both `(operand, function)` and both with their reason. A carve-out
     # that stops matching anything is asserted below, so a stale one cannot sit here hiding a
@@ -6322,17 +6372,20 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
         ("subject", "_payload_of"),
     }
     offenders, used = [], set()
-    for m in pattern.finditer(src):
-        line = src.count("\n", 0, m.start()) + 1
-        head = _enclosing(m.start())
-        if (m.group(1), head) in EXEMPT:
-            used.add((m.group(1), head))
-            continue
-        offenders.append((line, head, m.group(1)))
+    for mod in mods:
+        src = mod.read_text()
+        heads = _heads(src)
+        for m in pattern.finditer(src):
+            line = src.count("\n", 0, m.start()) + 1
+            head = _enclosing(heads, m.start())
+            if (m.group(1), head) in EXEMPT:
+                used.add((m.group(1), head))
+                continue
+            offenders.append((mod.name, line, head, m.group(1)))
     assert not offenders, (
         "an operand is silently defaulted in a body — §0.05 puts a value the engine uses in a "
         "data file or in `DEFAULT_FIXTURES` with a register row:\n  "
-        + "\n  ".join(f"shape.py:{ln} in {fn}() defaults {op!r}" for ln, fn, op in offenders))
+        + "\n  ".join(f"{f}:{ln} in {fn}() defaults {op!r}" for f, ln, fn, op in offenders))
     # AND THE SCAN IS NOT VACUOUS: the pattern must be able to find the legitimate hits, and
     # EVERY declared carve-out must still match something. A carve-out nothing uses is a licence
     # sitting open for whatever lands on that name next.
@@ -6354,8 +6407,12 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
             "scope — either the scope note is stale or correct code is about to redden")
     # AND THE ATTRIBUTION FINDS A METHOD, which is the half that was broken: `_enclosing` must
     # name an indented `def` rather than the nearest top-level one.
-    _m = _re.search(r"^[ \t]+def[ \t]+(\w+)", src, _re.M)
-    assert _m and _enclosing(_m.end()) == _m.group(1), (
+    # ⚠ `src`/`heads` are now per-module, so this arm names the file it probes rather than
+    # inheriting whatever the scan loop happened to leave bound — a loop variable read after the
+    # loop is exactly the kind of accident a re-point introduces.
+    _src = files.SHAPE_PY.read_text()
+    _m = _re.search(r"^[ \t]+def[ \t]+(\w+)", _src, _re.M)
+    assert _m and _enclosing(_heads(_src), _m.end()) == _m.group(1), (
         "`_enclosing` cannot see an indented `def`, so a default inside a method would be "
         "reported against the previous top-level function")
 

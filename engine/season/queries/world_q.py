@@ -9,8 +9,8 @@ person-side statics stay on `Query` in `shape.py` until step 7 puts them in `dec
 the module that may not name `World` at all.
 
 ⚠ THE ELEVEN ARE MODULE FUNCTIONS NOW, AND `shape.Query` BINDS THEM AS `staticmethod`s. That is a
-re-export, not a copy — `Query.parent_of is world_q.parent_of` — so the 73 call sites reading
-`Query.<world-first>` resolve to these bodies and there is exactly one owner of each rule. The
+re-export, not a copy — `Query.parent_of is world_q.parent_of` — so every call site reading
+`Query.<world-first>` resolves to these bodies and there is exactly one owner of each rule. The
 binding is what makes the class deletable at step 7 without a second migration.
 
 ⚠ THIS MODULE MUST NOT LEARN A PERSON. Its one-way rule is the same one `state/` states: nothing
@@ -18,6 +18,13 @@ here imports `shape`, `decision`, `loop` or `seam`. `questions_for` takes a `Per
 argument and asks the WORLD about them; that is a world-first function, not a person-side one, and
 the AST guard (`test_w5_sense_is_still_the_only_world_taking_non_decision_function`) is what keeps
 the distinction checkable by signature rather than by intention.
+
+⚠ THAT SENTENCE WAS FALSE WHEN FIRST WRITTEN AND IS MADE TRUE RATHER THAN SOFTENED. The guard
+parsed `files.SHAPE_PY` alone, so it could not see this module at all — a claim of enforcement
+naming a gate that does not read the file it is written in, which is the §47 defect the package
+records twice already. Caught by a read-only critic; the guard now parses the model set, and
+`_model_modules()` derives that set from a recursive glob, so it will read the module a later
+step adds without anyone remembering to say so.
 """
 
 from __future__ import annotations

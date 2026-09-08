@@ -294,7 +294,10 @@ class Query:
     # EXTRACTED, step 5 of the decomposition: the eleven are MODULE FUNCTIONS in
     # `season.queries.world_q` now, and the lines below are BINDINGS to them, not copies --
     # `Query.parent_of is world_q.parent_of` is true, so there is exactly one owner of each rule
-    # and all 73 `Query.<world-first>` call sites resolve to the moved bodies unchanged.
+    # and EVERY `Query.<world-first>` call site resolves to the moved body unchanged — the property,
+    # not a count. A bare "73" stood here and no instrument reproduced it (occurrences, matching lines
+    # and actual calls all differ, as do `engine/season/` and the repo): the two-bases error §0.1 pt 5
+    # already records once.
     #
     # `04_CODE_ARCHITECTURE.md` §A.3 row 2 is why the split is BY MODULE and not by first
     # parameter: *"in one class, a person-side function calls a resolver-side one with no import
