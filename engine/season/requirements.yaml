@@ -214,11 +214,12 @@ rows:
       `Person` carries `convictions` against a `conviction_axes` roster with an alignment
       matrix, and a zero matrix is refused at load (PLAN §W5's dead-carrier guardrail). AMBITION
       is not fieldless: a person's motive is expressed as a `commit` Tenure to an OUGHT
-      Proposition (`engine/season/headless.py:81`, `S.Tenure(..., "commit", ...)` to
-      `prop_einhir`), and `shape.py`'s Q4 source (`"Q4 -- \`need\`"`, `shape.py:3929-3936`) reads
+      Proposition (`engine/season/harness/headless.py::build_world`, `S.Tenure(..., "commit", ...)` to
+      `prop_einhir`), and the Q4 source (`"Q4 -- \`need\`"`,
+      `engine/season/queries/world_q.py::questions_for`, moved there at step 5) reads
       exactly that live `commit`-to-OUGHT tenure as a standing question every season — that IS
       the ambition mechanism, and it is why Carin acts in a quiet season. What's missing is a
-      READ over it (no `ambitions(p)` query anywhere in `shape.py`) and a real cast per case
+      READ over it (no `ambitions(p)` query anywhere in the package) and a real cast per case
       (`W27`, `architecture/PLAN.md:1583`) rather than one shared OUGHT for all 143 corpus worlds.
       Convictions separately barely discriminate: only 2–7 of 22 candidates carry a nonzero
       score; the rest tie and are ordered alphabetically.

@@ -60,12 +60,30 @@ it is at `:1476`. Nothing noticed, because nothing reads them.
 
 ## 1 · The module suite
 
-**Flat files in `engine/season/`, NOT subdirectories**, for three concrete reasons: `_HERE`-relative
-paths (`:290, 449, 1407, 4912, 6505, 6600`) stay valid; `test_jordan_no_definition_is_hardcoded_in_a_body`
-discovers its corpus by `HERE.glob("*.py")` and would **silently stop scanning** a subdirectory; and
-`SOURCE_353_TEXT` returns `""` when its path is wrong (`:4913`), which makes `names_a_verb` charge
-every invented verb to the design (`:5832`) — the exact mis-attribution it exists to prevent,
-silently. Directories can come later, once both glob-based guards are made recursive.
+⚠ **THE "FLAT FILES, NOT SUBDIRECTORIES" RULING IS RETRACTED (2026-09-08, step 5). It was reversed
+in practice five times before it was reversed on paper** — `data/`, `harness/`, `state/` at steps
+0b–4, and `queries/`, `loop/` at step 5 — and PR #381 flagged that the text still read as if it
+held. A plan that describes a tree nobody has built for four steps is worse than a silent one,
+because the next reader takes it for the ruling and finds the tree in violation of it.
+
+It is retracted rather than merely overtaken, because **all three of its reasons are closed**, and
+the ruling that replaces it is older and higher: `architecture/meta/04_CODE_ARCHITECTURE.md` §A.2
+names **nine modules — `state/ data/ queries/ decision/ loop/ seam/ manifest/ port/ tests/`** — and
+that is LAYER 1, ratified 2026-09-05 (ED-IN-0204). The three hazards:
+
+  1. `_HERE`-relative paths — **gone.** `data/files.py` is the ONE anchor (step 0b) and the only
+     module permitted to name its own location; a subdirectory costs one constant there, not 29.
+  2. `HERE.glob("*.py")` silently skipping a subdirectory — **closed.** `files.package_modules()`
+     is `rglob`, and its docstring records that a flat glob "would silently drop eight of them".
+     Step 4 re-pointed the Jordan guard onto `_model_modules()`, which is derived from it, so the
+     five modules added at step 5 were scanned with no edit to any test. Measured at step 5: the
+     four source-scanning gates hold 21 / 41 / 20 / 0 sites before and after.
+  3. `SOURCE_353_TEXT` returning `""` on a wrong path — **same anchor.** It reads
+     `files.SOURCE_353_MD`, which is checked at import.
+
+**The layer table below still reads `queries.py`, `predicates.py`, `effects.py` as flat files.** The
+modules that landed are `queries/world_q.py`, `queries/readers.py`, `loop/predicates.py`,
+`loop/effects.py` — the layer assignments are unchanged, only the addresses.
 
 | layer | module | owns |
 |---|---|---|
@@ -147,7 +165,7 @@ this table to have become complete.
 | symbol | tempting | ruled | decided by |
 |---|---|---|---|
 | `WorldReader` (`:1128`) | grammar | `queries` | calls `Query.parent_of`/`presence` and reads `World._STATE_COLLECTIONS` at call time; the grammar must stay reader-agnostic |
-| `LedgerReader` (`:1287`) | epistemic | `requires` | needs only `UNKNOWN`; both consumers sit above it |
+| `LedgerReader` (`:1287`) | epistemic | ~~`requires`~~ → **`queries/readers.py`** | ⚠ **OVERRULED at step 3 and executed at step 5.** The step-3 note left in `shape.py` is the adjudication: *"they are READERS, `queries/` territory at a later step, and the grammar they serve asks only `reader.read(subject, predicate)`; moving a reader into the grammar module would give the grammar an opinion about where its answers come from."* It travels with `WorldReader`. |
 | `title_domain`, `title_rank` (`:4636`) | governance | `data` | pure roster reads, and `Office.__post_init__` needs them below the resolver |
 | `matrix_rows_without_a_field` (`:1903`) | data | `carriers` | its `globals()` lookup must run where the classes are defined; `data` cannot import `carriers` |
 | `MATRIX_REFUSAL_LAW` (`:1968`) | data | `world` | its only reader is the gate (`:2804`) |
@@ -155,7 +173,7 @@ this table to have become complete.
 | `sense` (`:4550`) | queries | `decision` | the guard whitelists the NAME inside the scanned file; it must stay where the guard scans |
 | the alignment block | verbs | `decision`, **whole** | the sweep rebinds `ALIGNMENT` and `align` reads it through its own globals; splitting makes the H-66 sweep a fake control |
 | `stratum_of`, `resolvable_verbs` | verbs | `loop` | read `Act`, `REQUIRES_PREDICATES`, `EFFECTS` — all above `verbs` |
-| the person-side `Query` statics | keep `Query` whole | `decision`, as functions | `04:116` splits the families by module. Cost: **56 call sites** across 5 files; a mechanical rename |
+| the person-side `Query` statics | keep `Query` whole | `decision`, as functions | `04:116` splits the families by module. ⚠ **PRICE CORRECTED 2026-09-08 (step 5), in both halves.** Measured: **67** person-side call sites (`budget` 23, `opening_set` 34, `assemble` 9, `entrenchment` 1), not 56 — and the WORLD-FIRST half, which this plan priced at nothing, is **73**. Neither was paid at step 5: the eleven moved to `queries/world_q.py` as module functions and `shape.Query` binds them as `staticmethod`s, so `Query.parent_of is world_q.parent_of` and all 73 sites resolve to the moved bodies unmodified. Step 7 pays the 67 when the class goes. |
 
 **Genuinely ambiguous, left to the implementer:** the ledger eviction (`:6429-6446`). `04:149` gives
 `state/ledgers` "the eviction comparator", which makes it `epistemic.py`'s; `test_season_shape.py:265`
@@ -211,7 +229,7 @@ and `trace_log.py` records no caller file or line, so `TRACE.txt` is invariant t
 | **2** | `data.py`, `fixtures.py` — moved as one block so load order is unchanged | `len(data.MATRIX)`, `len(data._ROSTERS)` match |
 | **3** | `requires.py`, `verbs.py` — decorator registry and consumer together | the loader still refuses a planted eighth form |
 | **4** | `carriers.py`, then `world.py` | `test_h118_content_hash_folds_*` green; the `SystemExit` count re-pointed to the model set and still 28 |
-| **5** | `queries.py`, `predicates.py`, `effects.py` | `EFFECTS` and `REQUIRES_PREDICATES` keys diffed identical |
+| **5** ✅ **LANDED 2026-09-08** | `queries/world_q.py`, `queries/readers.py`, `loop/predicates.py`, `loop/effects.py`; `shape.py` 4,153 → 3,121 | `EFFECTS` and `REQUIRES_PREDICATES` keys diffed identical AND the same dict objects (`S.EFFECTS is effects.EFFECTS`); 996 body lines moved with 7 novel, all declared; `report.py` reproduced all eight artifacts byte-identically |
 | **6** | `epistemic.py` — **coordinate with the R8 work, do not do it for them** | `test_wb_*` green with `S.belief_contradicts` re-pointed |
 | **7** | `decision.py` — the 56 `Query.<person static>` call sites renamed in the same commit | `grep 'import.*\(world\|queries\)' decision.py` → 0; H-66 sweep green |
 | **8** | `seam.py`; `combat_seam.py` imports `decision.body_band_penalty` and `ids.H` dotted — **the cycle ends here** | ladder test green with `S._LADDER` re-pointed; the `probes.py` spy re-pointed |

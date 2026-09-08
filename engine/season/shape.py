@@ -140,6 +140,19 @@ from .state.carriers import (  # noqa: F401 -- re-exported so `S.<name>` and eve
 from .state.world import (  # noqa: F401 -- re-exported so `S.<name>` and every bare use resolve
     MATRIX_REFUSAL_LAW, World, _TenureView, _entity_digest,
 )
+from .queries import world_q  # noqa: F401 -- `Query` binds its eleven functions as staticmethods
+from .queries.readers import (  # noqa: F401 -- re-exported so `S.<name>` and every bare use resolve
+    LedgerReader, WorldReader,
+)
+from .queries.world_q import occasioned_by, questions_for  # noqa: F401 -- re-exported, as above
+from .loop.effects import (  # noqa: F401 -- re-exported so `S.<name>` and every bare use resolve
+    EFFECTS, _eff_confer, _eff_convene, _eff_create_record, _eff_destroy_record, _eff_kill,
+    _eff_move, _eff_revoke, _eff_transfer, _eff_utter, _eff_work, _operand, effect_for,
+)
+from .loop.predicates import (  # noqa: F401 -- re-exported, as above
+    REQUIRES_PREDICATES, _req_confer, _req_convene, _req_dispatch, _req_revoke,
+    highest_title_rank, in_holdings, requires_predicate, titles_held, under_purview,
+)
 
 # ===========================================================================
 # THE `requires` GRAMMAR -- W-A. ONE DECLARATION, THREE READERS.
@@ -174,136 +187,23 @@ from .state.world import (  # noqa: F401 -- re-exported so `S.<name>` and every 
 # this is a re-export, not a second definition.
 # ===========================================================================
 
-class WorldReader:
-    """§F.24a's questions asked OF THE WORLD, with every read recorded as an `Observation`.
-
-    ⚠ THE ACTOR'S OWN LEDGER AND NO OTHER, STRUCTURALLY. `04_CODE_ARCHITECTURE.md` §B.2's
-    corrected row (`F8`): *"the carve-out is exact and it is not a widening: the fold may ask the
-    ACTOR'S OWN ledger ... and no other. A Query taking a ledger and an asker who is not its
-    holder still does not exist."* This reader is constructed with ONE actor id, so there is no
-    argument by which a caller could name somebody else's claims -- the same move the
-    `valoria-critic` agent definition makes against a read-only promise written in a prompt.
-
-    ⚠ THE `if stem ==` CHAIN IS NOT THE ROUTER `G2` FORBIDS. It enumerates the GRAMMAR'S OWN
-    predicates -- the strings `Observation` derives from the seven forms -- not verbs, entities or
-    outcomes. A predicate it does not know is UNKNOWN, so an unanswerable question refuses."""
-
-    def __init__(self, w, actor: str):
-        self._w, self._actor = w, actor
-
-    def _ancestry(self, start: str) -> list:
-        seen, cur = [], start
-        while cur is not None and cur not in seen:
-            seen.append(cur)
-            cur = Query.parent_of(self._w, cur)
-        return seen
-
-    def read(self, subject, predicate: str):
-        w = self._w
-        stem, _, arg = str(predicate).partition(":")
-        if stem == "exists":
-            # An EDGE kind is a `tenure_kinds` member and an OBJECT class is one of `World`'s own
-            # collections. Both are DATA -- neither is a list written here.
-            if arg in TENURE_KINDS:
-                return sum(1 for t in w.tenures
-                           if t.kind == arg and t.object == subject and t.live)
-            attr = arg.lower() + "s"
-            if attr in World._STATE_COLLECTIONS:
-                return 1 if subject in getattr(w, attr) else 0
-            return UNKNOWN
-        if stem == "stores":
-            r = w.rungs.get(subject)
-            return UNKNOWN if r is None else (r.stores or {}).get(arg, 0)
-        if stem == "condition":
-            s = w.sites.get(subject)
-            return UNKNOWN if s is None else s.condition
-        if stem == "floor":
-            s = w.sites.get(subject)
-            if s is None:
-                return UNKNOWN
-            floors = w.fixtures.get("band_floors").get(s.kind)
-            if floors is None:
-                # `_req_work`'s refusal, carried unchanged: `H-08` owns the per-kind floors and
-                # §42.2.1 forbids picking a plausible number for a kind nobody registered.
-                raise Unspecified(
-                    f"no band floors for site kind {s.kind!r}", "S12.1",
-                    needs="a per-kind floor table -- register row H-08",
-                    law="§12.1 gates verbs on `condition` against per-kind FLOORS, and §42.2.1 "
-                        "forbids picking a plausible number for a kind nobody registered")
-            # ⚠ THE LOOSEST FLOOR, AND AN ADVERSARIAL PASS CALLED THIS AN UNDER-REFUSAL.
-            # The objection was exact and is answered rather than dismissed. It said: the prose is
-            # `condition >= floor(verb)`, `band_floors`' inner keys are SITE-USE verbs
-            # (bulk_shipping, fishing, deep_mining …) which its roster note says are "NOT
-            # verb-table rows", so `work` is not among them and `min` silently substitutes the
-            # loosest floor for the one the prose names — admitting, on a harbour, every condition
-            # in 100..800 where `floor(bulk_shipping)` is 800.
-            #
-            # WHAT THE OBJECTION GETS RIGHT: this is not `floor(verb)`, and the site-USE is an
-            # operand neither the act nor `requires_operands` carries (`H-94`).
-            # WHAT IT GETS WRONG, AND WHY `min` STAYS: `work` is the GENERIC labour verb, so the
-            # question its precondition asks is *can this site be worked at all* — and a site is
-            # workable if it clears the floor of its LEAST demanding use. A seam at condition 100
-            # cannot be deep-mined and CAN be surface-gleaned (`surface_gleaning: 50`); a harbour
-            # at 150 cannot take bulk shipping and can be fished. So `min` is the READING of
-            # `floor(verb)` for a verb that names no use, not a substitute for it.
-            #
-            # BOTH ALTERNATIVES WERE BUILT AND MEASURED BEFORE SETTLING HERE, which is why this
-            # comment is long: `max` refuses a seam at 100 that surface-gleaning supports, and
-            # turned `test_w8_...` red for exactly that site; `UNKNOWN` destroys the gate outright
-            # — `work`'s precondition could then never return False, so §12.1's condition gate
-            # could not observe the failure it exists to exclude (§0.1 point 2), and it turned
-            # `test_w3_...` red. `min` is the only one of the three that both refuses an unworkable
-            # site and admits a workable one.
-            #
-            # WHAT REMAINS OPEN AND IS NOT PAPERED OVER: a `work` that MEANS deep-mining is
-            # admitted on a seam only surface-gleaning could support, because nothing on the act
-            # says which use is intended. That is `H-94`'s operand, and when it exists this line
-            # reads `floors[use]` and the reading collapses to the prose.
-            return min(floors.values())
-        if stem == "contain.path":
-            if subject not in w.rungs or arg not in w.rungs:
-                return UNKNOWN
-            if subject == arg:
-                return False           # a node is not a path to itself
-            return bool(set(self._ancestry(subject)) & set(self._ancestry(arg)))
-        if stem == "held_by":
-            return any(t.kind == "hold" and t.subject == arg and t.object == subject and t.live
-                       for t in w.tenures)
-        if stem == "present_at":
-            s = w.sites.get(subject)
-            place = s.rung if s is not None else (subject if subject in w.rungs else None)
-            return UNKNOWN if place is None else (arg in Query.presence(w, place))
-        if stem == "claim.held":
-            p = w.persons.get(self._actor)
-            return UNKNOWN if p is None else any(c.subject == subject for c in p.ledger)
-        return UNKNOWN
-# `REQUIRES_STEMS` and `LEDGER_DERIVED_STEMS` -- the stems `WorldReader.read`/`LedgerReader.read`
-# dispatch on, above and below -- now live in `season.data.requires` (step 3), imported back at
-# the top of this file. See that module for the two roster-exempt notes that used to stand here.
-
-class LedgerReader:
-    """THE SAME QUESTIONS ASKED OF ONE PERSON'S OWN CLAIMS, AND OF NOTHING ELSE.
-
-    ⚠ IT TAKES CLAIMS, NOT A WORLD, AND NOT A PERSON. `#353 :634` permits `sense()` exactly one
-    World among the non-decision functions, and §F1 clause 4 runs person-side; handing this a
-    World would make `belief_contradicts` read the world, which is the filter §F1 spends two
-    paragraphs forbidding (*"a filter on world truth would be `choose` reading the world"*).
-
-    THE MOST RECENT, THEN THE MOST CONFIDENT. A ledger may hold two claims about one
-    `(subject, predicate)` -- that is what a ledger IS -- and answering with the first found would
-    make the verdict depend on append order. No matching claim is UNKNOWN, never False: §F1's
-    asymmetry is that absence of a belief is not a belief in the negative."""
-
-    def __init__(self, claims):
-        self._claims = list(claims or [])
-
-    def read(self, subject, predicate: str):
-        best = None
-        for c in self._claims:
-            if c.subject == subject and c.predicate == predicate:
-                if best is None or (c.when, c.confidence) > (best.when, best.confidence):
-                    best = c
-        return UNKNOWN if best is None else best.value
+# ===========================================================================
+# THE TWO READERS -- EXTRACTED, step 5 of the decomposition.
+#
+# `WorldReader` and `LedgerReader` now live in `season.queries.readers`. Step 3 left them here
+# deliberately and said why: they are READERS, and the grammar they serve asks only
+# `reader.read(subject, predicate)`, so filing a reader with the grammar would give the grammar an
+# opinion about where its answers come from. It also said where they were going -- `queries/`, "at
+# a later step" -- and this is that step.
+#
+# THE RULE, NOT THE ADDRESS (the correction step 4 had to make twice): a reader is filed by WHAT
+# IT READS, not by who calls it. `WorldReader` reads the world and the ACTOR'S OWN ledger and
+# nothing else; `LedgerReader` reads one person's claims and takes no `World` at all. Both answer
+# `UNKNOWN` where they cannot resolve, which is the grammar's third truth value.
+#
+# Imported at the top of this file so every bare use further down keeps resolving, and so
+# `S.WorldReader` keeps resolving for the harness and tests: a re-export, not a second definition.
+# ===========================================================================
 # `_require_known_stem`, `_build_clause` and `build_typed_requires` -- the loader that turns a
 # `verb_table.yaml` cell into a `Requirement` -- now live in `season.data.requires` (step 3),
 # imported back at the top of this file. `season.data.verbs._load_verb_table` calls
@@ -390,125 +290,28 @@ class LedgerReader:
 
 class Query:
     # ---- resolver-side: World FIRST, always -----------------------------
-    @staticmethod
-    def parent_of(w: World, rung_id: str) -> Optional[str]:
-        for t in w.tenures:
-            if t.kind == "contain" and t.subject == rung_id and t.live:
-                return t.object
-        return None
-
-    @staticmethod
-    def descendants(w: World, rung_id: str) -> list[str]:
-        """S6.1 -- the CONTAINMENT TREE and only it. S38.1: ITERATIVE, with a visited set --
-        the reference graph is cyclic ON PURPOSE and a tree walk hangs on the NORMAL case."""
-        TRACE.query("descendants", "resolver")
-        out, seen, stack = [], {rung_id}, [rung_id]
-        while stack:
-            cur = stack.pop()
-            for t in w.tenures:
-                if t.kind == "contain" and t.object == cur and t.live and t.subject not in seen:
-                    seen.add(t.subject); out.append(t.subject); stack.append(t.subject)
-        return out
-
-    @staticmethod
-    def r1_aggregate(w: World, rung_id: str, over: Callable[[str], int]) -> int:
-        """R-1: COMPUTE ON DEMAND over DESCENDANTS. Never received, never stored. S22.4 cl.3:
-        LIVE EDGES ONLY. S6.2: this is a claim about the CONTAINMENT TREE."""
-        TRACE.query("r1_aggregate", "resolver")
-        return sum(over(d) for d in Query.descendants(w, rung_id))
-
-    @staticmethod
-    def aggregate_guard(w: World, name: str, *, per_person_tally: bool = False,
-                        over_ended_edges: bool = False) -> None:
-        """S22.4 -- THE AGGREGATION BOUNDARY.
-
-        REV 2 HONESTY NOTE. S22.4 clause 2 is a READ-SIDE rule and is therefore checkable by
-        GREPPING THE RESOLVER for a Query crossing holders -- a static check, not a runtime one.
-        This function is the runtime half and THE CALLER VOLUNTEERS ITS OWN VIOLATION, which
-        detects nothing on its own. `commit_count_guard` below is the part that actually
-        detects, because it inspects the edge set rather than trusting a flag."""
-        if per_person_tally:
-            raise Forbidden(
-                f"resolver-side Query '{name}' aggregates per-person tallies ACROSS HOLDERS",
-                "S22.4", law="L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down")
-        if over_ended_edges:
-            raise Forbidden(
-                f"Query '{name}' composes over ENDED edges and is monotone", "S22.4",
-                law="L3 clause 3 -- any Query monotone in the ENDED-edge set is a ratchet and is REFUSED. `count{commit}` over live AND ended rows is monotone; `count{hold: until != null}` is revocations-ever; each is built only from 'structural' edges and each EVADES clause 2")
-
-    @staticmethod
-    def single_holder_counter(w: World, person: str, axis: str, registry: set[str]) -> int:
-        """L3 CLAUSE 1 -- and rev 4 exists because revisions 1-3 refused what this clause
-        EXPLICITLY PERMITS.
-
-        The head, verbatim: *"a monotone counter exists ONLY per `(Person, axis)` where `axis`
-        is on a closed registry"*, and its own note calls such a counter **"legal, since every
-        increment is in the holder's own ledger"**. Clause 2 bars only the CROSS-HOLDER SUM.
-
-        Revisions 1-3 routed every "a character's risk builds up quietly" row to a probe that
-        raised clause 2 -- on a need that never crosses a holder. It was THE LARGEST SINGLE
-        BLOCKER IN THE CORPUS (18 cases), and it was the instrument measuring AGAINST the
-        design, which S0.1 point 4 rules is no more acceptable than flattering it.
-
-        What is genuinely missing is narrower and is what this raises: THE CLOSED REGISTRY."""
-        TRACE.query("single_holder_counter", "resolver")
-        if not registry:
-            raise Unspecified(
-                f"the closed `axis` registry L3 clause 1 requires (asked for '{axis}')",
-                "S22.4",
-                needs="a closed roster of axes, and a write-matrix row admitting the increment",
-                law="L3 clause 1 permits a monotone counter PER (Person, axis) -- 'legal, since every increment is in the holder's own ledger' -- but ONLY where `axis` is ON A CLOSED REGISTRY. No such registry exists in the chain, and no S30 row admits the write. S54 item 6 adds that the axis must not be spelled `exposure` bare, or it collides with the need scalar",
-            )
-        if axis not in registry:
-            raise Forbidden(f"axis '{axis}' is not on the closed registry", "S22.4",
-                            law="L3 clause 1 -- ONLY where `axis` is on a closed registry")
-        return sum(1 for c in w.persons[person].ledger if c.predicate == axis)
-
-    @staticmethod
-    def commit_count_guard(w: World, edges: list[Tenure], name: str) -> int:
-        """The DETECTING half of clause 3: it looks at the rows, not at a flag."""
-        ended = [t for t in edges if not t.live]
-        if ended:
-            raise Forbidden(
-                f"aggregate '{name}' composed over {len(ended)} ENDED edge(s)", "S22.4",
-                needs="filter to until == null before summing",
-                law="L3 clause 3 -- ended Tenures PERSIST as historical claim subjects (S15.2), so a count over live AND ended rows is monotone non-decreasing. That is a ratchet built entirely out of 'structural' edges")
-        return len(edges)
-
-    @staticmethod
-    def lateral(w: World, name: str, kind: str) -> list[Tenure]:
-        """S6.2/S38 -- THE LATERAL GRAPH. Not governed by R-1/R-2. Resolver-side, World first,
-        therefore unreachable from choose() BY CONSTRUCTION."""
-        TRACE.query(f"lateral:{name}", "resolver")
-        return [t for t in w.tenures if t.kind == kind and t.live]
-
-    @staticmethod
-    def verbs(w: World, site: Site, floors: dict[str, int]) -> set[str]:
-        """S12.1 -- condition GATES VERBS. The comparison is on a SUMMED FIXED-POINT INT."""
-        TRACE.query("verbs", "resolver")
-        return {v for v, floor in floors.items() if site.condition >= floor}
-
-    @staticmethod
-    def hold_force(w: World, obj: str) -> Optional[Tenure]:
-        """S15 -- `hold` is 1 PER OBJECT. S54 item 20's lawful form rests on this cardinality."""
-        live = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
-        if len(live) > 1:
-            raise Forbidden(f"{len(live)} live `hold` Tenures on {obj}", "S15",
-                            law="S15 -- `hold` cardinality is 1 PER OBJECT")
-        return live[0] if live else None
-
-    @staticmethod
-    def judging_set(w: World, rung_id: str) -> list[str]:
-        raise Unspecified("judging_set_rule", "S61", needs="who decides at a sitting",
-                          law="S61 -- NOTHING IS DECIDED AT A SITTING. T5's 'filtered at a rung' runs straight through it, and S10.2's 'arrangements, not choices' cannot be confirmed until it is")
-
-    @staticmethod
-    def presence(w: World, rung_id: str) -> list[str]:
-        """S28 -- the PRESENCE INDEX the global fan-out reads."""
-        TRACE.query("presence", "resolver")
-        return [t.subject for t in w.tenures
-                if t.kind == "contain" and t.object == rung_id and t.live
-                and t.subject in w.persons]
+    #
+    # EXTRACTED, step 5 of the decomposition: the eleven are MODULE FUNCTIONS in
+    # `season.queries.world_q` now, and the lines below are BINDINGS to them, not copies --
+    # `Query.parent_of is world_q.parent_of` is true, so there is exactly one owner of each rule
+    # and all 73 `Query.<world-first>` call sites resolve to the moved bodies unchanged.
+    #
+    # `04_CODE_ARCHITECTURE.md` §A.3 row 2 is why the split is BY MODULE and not by first
+    # parameter: *"in one class, a person-side function calls a resolver-side one with no import
+    # to scan."* The class survives one more step only as the call-site facade; it goes at step 7,
+    # when the four person-side statics below become `decision`'s module functions -- and
+    # `decision` is the module that may not name `World` at all (AX-2).
+    parent_of = staticmethod(world_q.parent_of)
+    descendants = staticmethod(world_q.descendants)
+    r1_aggregate = staticmethod(world_q.r1_aggregate)
+    aggregate_guard = staticmethod(world_q.aggregate_guard)
+    single_holder_counter = staticmethod(world_q.single_holder_counter)
+    commit_count_guard = staticmethod(world_q.commit_count_guard)
+    lateral = staticmethod(world_q.lateral)
+    verbs = staticmethod(world_q.verbs)
+    hold_force = staticmethod(world_q.hold_force)
+    judging_set = staticmethod(world_q.judging_set)
+    presence = staticmethod(world_q.presence)
 
     # ---- person-side: takes the ASKER; own interior only ----------------
     @staticmethod
@@ -1163,102 +966,11 @@ def belief_contradicts(p: Person, row: "VerbRow", subject: str, operands: dict) 
                     binding_of(p.id, operands)).value is False
 
 
-def questions_for(w: World, p: Person) -> list[Question]:
-    """§F1's `q` producer -- FOUR sources, resolver-side, at the DELIBERATE barrier.
-
-    ⚠ THIS CLOSES `H-04` AND §61's `NoProducer`, which between them blocked every NPC case: with
-    no producer for `q`, `assemble(person, question)` was UNSATISFIABLE and DELIBERATE had no
-    declared entry point, so `opening_set` had nothing to compute a set FROM. That is why the
-    instrument needed an authored `roster` -- `D2`.
-
-    ⚠ V2 §F1 SAYS "EXACTLY THREE SOURCES, AND BY NOTHING ELSE" AND IS WRONG BY ONE. PLAN `W5`
-    adds **Q4 `need`** (#353 `:509`, `:605`, `:1297`): a live `commit` to an OUGHT Proposition
-    generates a standing question every season. Without it "an NPC with a standing ambition and a
-    quiet season forms no candidates at all", which is most of the NPC corpus -- a person with a
-    goal and no inbox would simply not act. The sources are `rosters.yaml`'s `question_sources`,
-    IN ORDER, because a budget-bounded person answers the earlier ones first.
-
-    Resolver-side by construction: it takes a `World`. §F1 says all four are "already produced by
-    the loop" -- no new step, no new carrier, no clock -- and that is what this reads."""
-    TRACE.query("questions_for", "resolver")
-    out: list[Question] = []
-    mine = {t.object for t in p.tenures if t.live}
-
-    # Q1 -- a Date coming due whose DocketItem names a matter, for every person in its judging set.
-    for did, d in sorted(w.dates.items()):
-        if d.get("due_at", 1 << 30) <= w.tick and not d.get("fired"):
-            if d.get("holder") in (p.id, None) or d.get("holder") in mine:
-                items = [it for it in w.docket if it.get("date") == did]
-                refs = tuple(sorted({str(it.get("matter")) for it in items if it.get("matter")}))
-                out.append(Question(f"q:date:{did}", "date_due", refs or (did,), did))
-
-    # Q2 -- a claim landing in p's OWN ledger whose subject is p, something p holds, or a
-    # Proposition p has committed to. `since_tick` is the season boundary: "landing" is new.
-    # ⚠ THE PREVIOUS SEASON'S WITNESS, NOT THIS ONE'S. §F1 Q2 is "a claim LANDING in the
-    # holder's ledger AT WITNESS", and WITNESS runs at the END of a season: the deposit is
-    # stamped `when = t` and DELIBERATE reads it at `t + 1`. Testing `c.when == w.tick` therefore
-    # matched nothing, ever — Q2 was dead for every person in every season, which is half of why
-    # nothing propagated. Found by running `headless.py` and reading the ledgers.
-    landed = w.tick - 1
-    for c in p.ledger:
-        if c.when == landed and (c.subject == p.id or c.subject in mine):
-            out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,), c.id))
-
-    # Q3 -- a Sensation band change: `subsistence` crossing a floor since last season. The
-    # crossing is D22's emission, read person-side; the loop records them on `w.crossings`.
-    # ⚠ REV 1 COMPARED A SITE ID TO A PERSON ID, SO Q3 COULD NEVER FIRE. `matter()` appends
-    # `(s.id, verb, before, after, ev.id)` where `s` is a SITE, and this read `if who == p.id`.
-    # A site id never equals a person id, so `band_crossed` produced ZERO Questions in every run
-    # while `rosters.yaml` declared four sources and three were live. The falsifier did not catch
-    # it because the test hand-planted a PERSON-keyed 3-tuple that `matter()` never emits -- it
-    # asserted the reader against a shape the writer does not produce, which is a test of itself.
-    # Found by the adversarial pass.
-    #
-    # ⚠ THE FIX IS PRESENCE, NOT A RENAME, and it is the reading §F1 Q3 actually asks for: a
-    # crossing is a fact about a PLACE, and it becomes a person's question when that person is
-    # THERE to notice it. `Query.presence` is the existing owner of "who is at this rung" (§8), so
-    # nothing new is invented here. A person elsewhere gets no question, which is L2 working.
-    #
-    # ⚠ AND THIS IS WHY `F1`'s MOVE BUG MATTERED BEYOND MOVE: while every actor left the world in
-    # season 1, `presence` was empty for every rung, so this source would have stayed dead even
-    # once keyed correctly. The two defects hid each other.
-    for who, what, *_rest in w.crossings:
-        site = w.sites.get(who)
-        at = getattr(site, "rung", None) if site is not None else None
-        if who == p.id or (at is not None and p.id in Query.presence(w, at)):
-            out.append(Question(f"q:band:{what}", "band_crossed", (what,), what))
-
-    # Q4 -- `need`. A live `commit` Tenure whose object is an OUGHT Proposition is a STANDING
-    # question: it recurs every season until the commitment ends, which is what makes an NPC with
-    # an ambition act in a quiet season.
-    for t in p.tenures:
-        if t.kind == "commit" and t.live:
-            prop = w.propositions.get(t.object)
-            if prop is not None and str(prop.mood).upper() == "OUGHT":
-                out.append(Question(f"q:need:{t.object}", "need",
-                                    (prop.subject,), t.object))
-
-    # ⚠ TWO ORDERINGS LIVE IN THIS ONE LINE AND ONLY THE FIRST IS DECLARED ANYWHERE.
-    # `order[q.source]` is `rosters.yaml: question_sources`, whose own note says ORDER IS SEMANTIC
-    # and that editing it "changes which question a budget-bounded person answers first". That is
-    # the ACROSS-source rule, declared, and `H-54` sweeps its consumer.
-    # `q.id` is the WITHIN-source tiebreak and NOTHING DECLARES IT. For `claim_landed` -- the
-    # source that supplies most questions in the corpus -- `q.id` is `f"q:claim:{c.id}"` and
-    # `c.id` is a CONTENT HASH minted in `SeasonDriver.witness` off the depositing Event's own id,
-    # so WHICH QUESTION A PERSON ANSWERS IS SETTLED BY LEXICOGRAPHIC ORDER OVER HASHES. It is not
-    # cosmetic: MEASURED over 89 corpus baselines (`wd_extra.py`), the leading source is SHARED
-    # with at least one other question in 801 of 1,068 deliberations, and a traced fork moved
-    # `qs[0]` from a question about `p_c` to one about `r_hearth` purely because `0261...` sorts
-    # before `219a...` -- changing every Candidate that person formed.
-    # ⚠ THE SORT ALSO DESTROYS APPEND ORDER, so anything attributing this effect to "the ledger's
-    # append order" is wrong; `W-D` did, and is corrected. Disposition (`CLAUDE.md` §0's five
-    # tests) is recorded on `H-54`, which already owns "which question a budget-bounded person
-    # answers": it closes at step 4 on `H-54`'s own precedent, `needs_jordan` is FALSE, and NO
-    # RULE IS CHANGED HERE -- editing this sort is a design edit to a line three rows depend on,
-    # not a repair, so it is declared and left alone.
-    order = {src: i for i, src in enumerate(QUESTION_SOURCES)}
-    out.sort(key=lambda q: (order[q.source], q.id))
-    return out
+# `questions_for` moved to `season.queries.world_q` (step 5). It takes a `World` FIRST and a
+# `Person` second, which is what makes it a world query rather than a person-side one -- the
+# distinction `test_w5_sense_is_still_the_only_world_taking_non_decision_function` checks by
+# SIGNATURE, so it survives the move as a checkable property rather than as this sentence.
+# Imported back at the top of this file.
 
 
 def agreement(told: list[Claim], own: list[Claim]) -> tuple:
@@ -1507,86 +1219,8 @@ def claim_subjects(e: "Event", rule: str, refs: Optional[list] = None) -> list:
     return out or [e.subject]
 
 
-def occasioned_by(w: "World", q: Optional["Question"]) -> list:
-    """What EVENT occasioned a question — the antecedent an act formed from it must cite.
-
-    ⚠ THIS IS `N3`'s MISSING EDGE, AND `N3` WAS MEASURED, NOT INFERRED: *60 act-Events, 0
-    resolving to a question*. An act emitted `causes=[a.id]` and nothing else, so the graph knew
-    which act made an Event and never which Event made the act — and `R3` (an act by one person
-    caused by an act of another) scored **0 of 30** while `R1`, `R4` and `R5` all passed. The
-    chain Reading 07 §4 calls *"the one that is actually the game"* — a claim lands in a ledger,
-    raises a question, forms a candidate, becomes an act, emits an Event, is witnessed, deposits
-    in SOMEONE ELSE'S ledger — was built end to end except for this one edge.
-
-    **One route per question source, and `need` is a deliberate empty rather than a guess:**
-
-      * `claim_landed` — the deposit Event names the claim in its `changes[]`; its `causes[]`
-        name the Event the claim is ABOUT. **The originating Event is returned, not the deposit.**
-        The claim IS a belief about that Event — `Claim.predicate` is literally `e.kind` at the
-        deposit — so citing the transport instead would put the postman in the arc. The deposit
-        stays in the graph on its own `causes[]`; nothing is lost by not naming it twice.
-      * `date_due` — ⚠ **ALSO DEAD, AND FOR A DIFFERENT CAUSE THAN `band_crossed`.** `calendar()`
-        writes `Date.fired` through the gate with **no `emits=`**, and the gate builds an Event
-        only when one is passed (it is *required* only at MATTER), so **no Event in any log
-        carries a date id** and the search below cannot match. `write_matrix.yaml` declares
-        `date.fired` for `(Date, fired)` and nothing emits it — a CALENDAR-class silent write of
-        exactly the shape the gate refuses at MATTER. Doubly latent today, because `N1` means Q1
-        never forms at all; when `W20` closes `N1` the question will form and walk to nothing.
-        **Making CALENDAR emit is `W20`'s and is not done here** — it would put a new Event in
-        every log and move every hash.
-      * `band_crossed` — ⚠ **THIS ROUTE IS DEAD, AND IT IS NAMED DEAD RATHER THAN LEFT TO LOOK
-        LIVE.** `questions_for` builds the question as `Question(f"q:band:{what}", "band_crossed",
-        (what,), what)` where `what` is the crossing's **verb** — `"work"` — not an id, so the
-        search below can never match: nothing in the log has id `"work"` or a change whose
-        subject is `"work"`. The crossing Event's id EXISTS, as element 4 of the `w.crossings`
-        tuple `(s.id, verb, before, after, ev.id)`, and `questions_for` discards it. Carrying it
-        onto the Question is a one-line change to a surface this function does not own, so it is
-        registered (`H-110`) rather than taken here. **A route that returns nothing is honest; a
-        docstring saying it walks is not, and the first writing of this one said it walks.**
-      * `need` — **empty, on purpose.** A standing commitment to an OUGHT is interior; no Event
-        caused it this season, and `ID-5`'s polarity says absence maps to the refusal rather than
-        to a plausible default. An act taken out of a standing ambition genuinely has no
-        antecedent but the actor, and `[ROOT]` is what the design already has for that.
-
-    ⚠ **SO ONE OF FOUR ROUTES IS LIVE** — `claim_landed`, which is the one propagation runs on.
-    One is empty by design (`need`) and **two are dead**, each for a cause it does not own:
-    `band_crossed` because the question carries a verb name where an id is needed, `date_due`
-    because CALENDAR emits nothing. ⚠ **This count has been wrong twice**: *"one route per
-    question source"* first, then *"two of four"* after a critic found `band_crossed`. Both were
-    written by looking at this function rather than at what feeds it. **The lesson is in the
-    count, not in the routes: a route's liveness is a property of its PRODUCER, and this function
-    cannot see its producers.**
-
-    ⚠ **IT RETURNS IDS AND WRITES NOTHING.** Resolver-side, read-only over `w.log`, callable from
-    a test without a driver — which is `ID-10`: a check that cannot observe the failure it
-    excludes is absent, and this one can be asked directly what it found."""
-    if q is None:
-        return []
-    about = str(getattr(q, "about", "") or "")
-    if not about or q.source == "need":
-        return []
-    if q.source == "claim_landed":
-        for e in reversed(w.log):
-            if e.kind == "claim.deposited" and any(c.subject == about for c in e.changes):
-                return [x for x in (e.causes or []) if x != ROOT]
-        return []
-    if q.source not in ("date_due", "band_crossed"):
-        # ⚠ NOT A BARE `else`. An undeclared source added to the roster would otherwise fall into
-        # the id search below and answer plausibly forever, which is the polarity `ID-5` refuses:
-        # zero evidence maps to the verdict AGAINST the thing measured, never to a quiet default.
-        # ⚠ AND IT IS DEFENCE IN DEPTH, NOT THE FIRST GATE: `Question.__post_init__` already
-        # refuses a source outside `question_sources`, so this is unreachable from a rostered
-        # question and would fire only if that constructor were bypassed or the roster grew
-        # without this function being taught the new route.
-        raise Unspecified(
-            f"no occasion route for question source {q.source!r}", "ID-16",
-            needs=f"a route here, or one of {sorted(QUESTION_SOURCES)}",
-            law="ID-5 -- refuse, don't default. A new question source silently taking the id "
-                "search would answer plausibly and wrongly for every question it raised")
-    for e in reversed(w.log):
-        if e.id == about or any(c.subject == about for c in e.changes):
-            return [e.id]
-    return []
+# `occasioned_by` moved to `season.queries.world_q` (step 5) -- it takes a `World` first and asks
+# it which acts a question is occasioned by. Imported back at the top of this file.
 
 
 # ---------------------------------------------------------------------------
@@ -1974,272 +1608,16 @@ class ContestError:
 # `writes:` through `write()` -> `emits` or `emits_on_refusal`.
 # ===========================================================================
 
-# A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
-# the same defect `resolve` had, one column along. A verb with a prose precondition and no
-# predicate here REFUSES, naming what is missing, rather than silently succeeding.
-REQUIRES_PREDICATES: dict = {}
-
-
-def requires_predicate(verb: str):
-    def deco(fn):
-        REQUIRES_PREDICATES[verb] = fn
-        return fn
-    return deco
-
-
-# ---------------------------------------------------------------------------
-# THE GOVERNANCE SLICE. Jordan, 2026-09-02, asked for governance and management across scales of
-# governing bodies. The verbs for it ALREADY EXIST -- all eight `binding_decision` rows -- and not
-# one of them executed, because each states its precondition in PROSE. So `post_remit` and
-# `chronicle`, two of `W6`'s five witness channels, could never fire: both need a binding decision
-# and no binding decision could happen.
+# `REQUIRES_PREDICATES`, its `@requires_predicate` decorator, the four surviving predicates
+# (`confer`, `revoke`, `dispatch`, `convene`) and the governance readers they use --
+# `in_holdings`, `under_purview`, `titles_held`, `highest_title_rank` -- moved to
+# `season.loop.predicates` (step 5), imported back at the top of this file. The registry travels
+# with the functions it registers, which is the same rule step 3 applied to `REQUIREMENT_TYPES`.
 #
-# ⚠ A FACTION DOES NOT ACT. `ARCHITECTURE_V2.md:93` puts *"a faction acting as an actor"* in its
-# REFUSAL table at `L1`, with three corpus cases that wanted it, and `H-21` completes it -- *"a
-# faction's treasury is matter at the rung or office that holds it"*. Governance at a scale above
-# the person is A PERSON HOLDING AN OFFICE acting at a rung, which is what these four do.
-# ---------------------------------------------------------------------------
-
-
-
-def in_holdings(w: "World", actor: str, rung: Optional[str]) -> bool:
-    """Is this rung one of the actor's HOLDINGS? A `hold` Tenure whose object is a RUNG.
-
-    ⚠ HOLDINGS ARE NOT GOVERNING AUTHORITY, AND JORDAN RULED THE DIFFERENCE OPERATIONAL:
-    *"King/Queen cannot revoke title of Duke/Duchess if they do not have duchy is in their
-    holdings. King/Queen can revoke title of Duke/Duchess if the duchy is one of their
-    holdings."* So a king with governing authority over the whole realm still cannot unmake a
-    duke whose duchy he does not hold — which is the same ruling as *"they do not necessarily
-    have all territories/provinces/duchies in their holdings"*, made mechanical.
-
-    ⚠ NO NEW TENURE KIND, AND NOT EVEN A NEW OBJECT CLASS. `hold` is already polymorphic over an
-    office and over a Record (§13) — and a `hold` WHOSE OBJECT IS A RUNG ALREADY EXISTED in the
-    corpus before this function did: probe `F2` writes one at `probes.py:978` and `:985`, holding
-    the settlement `S`. So this names a shape the tree was already using rather than adding one,
-    and `tenure_kinds` does not move (§8).
-
-    ⚠ THE ORIGINAL WORDING ALSO CITED *"a store"* AS AN EXISTING INSTANCE, AND THAT WAS
-    UNSUPPORTED — no `hold` Tenure over a store is constructed anywhere in the instrument.
-    Corrected rather than kept, because the sentence's whole job is to say what the tree already
-    does. Found by the governance-canon adversarial pass. ⚠ **AND IT IS TRUE NO LONGER, AS OF
-    `R8.4` (2026-09-07):** `test_r8_4_document_key_reaches_a_non_author_through_a_store` constructs
-    a `hold` over the hearth `Hh`, a rung carrying `stores`, precisely to exercise Part E's own
-    `hold:<store>` cell. The sentence is kept with its retraction attached rather than deleted,
-    because it is the argument that produced the paragraph.
-
-    ⚠ AND THE NARROW CLAIM WAS THE WRONG THING TO CHECK. *`tenure_kinds` does not move* is true
-    and proves nothing about the READERS: `Query.budget` counts every live `hold` as an office, so
-    a landholding buys scene actions, and `_ch_document_key` makes a landholder a witness. Both
-    pre-date this function; registered as `H-92`.
-
-    ⚠ **THAT SECOND READER MOVED UNDER `R8.4` AND THIS SENTENCE SAID THE OLD THING.** It read
-    *"a witness of every Event whose subject is their rung"*, which was the pre-repair predicate —
-    and that predicate could not fire on an act at all, because a fold Event's subject is the
-    ACTOR. `_ch_document_key` now reads `changes[]`, so a landholder witnesses every Event that
-    **changed** their rung, which is strictly wider and is the first form in which `H-92`'s concern
-    is actually reachable: a `transfer` into a hearth now makes its holder a witness of an act they
-    took no part in. `H-92` is not re-graded here — it is an `FI`/`IN` register row with its own
-    owner, and this note exists so the next reader of it is not working from the retracted
-    mechanism. Found by the `R8.4` adversarial pass."""
-    if rung is None or rung not in w.rungs:
-        return False
-    return any(t.kind == "hold" and t.subject == actor and t.object == rung and t.live
-               for t in w.tenures)
-
-
-def under_purview(w: "World", actor: str, holding: Optional[str]) -> bool:
-    """Is `holding` under the governing authority of a title `actor` holds?
-
-    ⚠ JORDAN, 2026-09-02: *"a Duke can revoke office from any individual in that office so long as
-    that office is for a holding under their purview."* So authority over a governance act is
-    **RANK + CONTAINMENT** — the actor holds a title whose domain contains the holding — and NOT
-    `remit:<act>` on the particular office. That is a different eligibility model from the one
-    Part E states, and the difference is registered rather than resolved here (`H-90`).
-
-    ⚠ GOVERNING AUTHORITY, NOT SOVEREIGNTY AND NOT OWNERSHIP. Jordan, same ruling: a King *"may
-    have governing authority over the country"* yet hold neither sovereign power over it nor all
-    of it in their holdings. This function answers the FIRST question only; the tree models
-    neither of the other two."""
-    if holding is None:
-        return False
-    # ⚠ EVERY SEAT, NOT THE FIRST. This read `next((... for t in w.tenures ...), None)` and took
-    # whichever title-hold appeared first in an INSERTION-ORDERED list, which was wrong twice
-    # over. `Office.rung` is Optional (the office-cluster case, S6.2), and the generator YIELDED
-    # `None` as a value -- so a title office with a null rung ended the scan and returned False,
-    # and a Duke who was also made a King LOST PURVIEW OVER HIS OWN DUCHY. And a person holding
-    # two titles got whichever the tenure list happened to hold first: a Count of P who is also
-    # Duke of D was refused purview over D, or over P, depending on insertion order.
-    #
-    # It is a DISJUNCTION over the seats: authority over a holding is authority from ANY title the
-    # actor holds. Taking the highest-ranked seat instead would be the same bug wearing a better
-    # argument -- a Duke of D who is also Count of an unrelated P would lose P. Found by the
-    # governance-canon adversarial pass.
-    for seat in [rung for _, rung in titles_held(w, actor) if rung is not None]:
-        # containment walks UP from the holding: a duchy's province is under the duke, a duchy's
-        # neighbour is not.
-        seen, cur = set(), holding
-        while cur is not None and cur not in seen:
-            if cur == seat:
-                return True
-            seen.add(cur)
-            cur = Query.parent_of(w, cur)
-    return False
-
-
-def titles_held(w: "World", actor: str) -> list:
-    """Every TITLE this person holds, as `(post, rung)`. THE SINGLE OWNER of the question *what
-    does this person govern* -- `under_purview` reads it for containment and `highest_title_rank`
-    for rank, so the two cannot drift into different answers about the same person (§8)."""
-    out = []
-    for t in w.tenures:
-        if t.kind == "hold" and t.subject == actor and t.live and t.object in w.offices:
-            o = w.offices[t.object]
-            if title_domain(o.post) is not None:
-                out.append((o.post, o.rung))
-    return out
-
-
-def highest_title_rank(w: "World", actor: str) -> int:
-    """The best rank this person holds, or `-1` for someone holding no title at all.
-
-    ⚠ THIS IS WHAT MAKES `title_rank` LOAD-BEARING. Until the governance-canon pass, `title_rank`
-    had no caller outside its own test: the ladder was asserted and then decided nothing, which is
-    §0.05's reference-wearing-mechanism's clothes. It decides a revocation now."""
-    return max((title_rank(post) for post, _ in titles_held(w, actor)), default=-1)
-
-
-@requires_predicate("confer")
-def _req_confer(w: "World", a: "Act") -> bool:
-    """Part E, IN FULL: *"the office's **conferral basis**, and 1-per-object: no live `hold` on the
-    object, **or** the holder-Proposition has zero live `commit` (§54 it. 20)"*.
-
-    ⚠ THE FIRST VERSION IMPLEMENTED HALF OF ONE OF TWO CLAUSES -- it dropped the conferral-basis
-    conjunct entirely and the `or` disjunct with it, while its docstring claimed *"the cardinality
-    rule stated structurally"*. Dropping a disjunct is an OVER-REFUSAL: an office whose
-    holder-Proposition has no live commit was refused where Part E admits it. `G4` weighs that
-    equally with an invention, and the docstring made it invisible. Found by the governance-slice
-    adversarial pass."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    obj = d.get("office")
-    if not obj or obj not in w.offices:
-        return False
-    if not (w.offices[obj].conferral or "").strip():
-        return False                       # no conferral basis: the office cannot be conferred
-    if not any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures):
-        return True                        # 1-per-object satisfied
-    # THE `or` DISJUNCT: a held office is still conferrable when the holder-Proposition carries
-    # no live `commit`. §54 item 20.
-    holder = next((t.subject for t in w.tenures
-                   if t.kind == "hold" and t.object == obj and t.live), None)
-    return holder is not None and not any(
-        t.kind == "commit" and t.subject == holder and t.live for t in w.tenures)
-
-
-@requires_predicate("revoke")
-def _req_revoke(w: "World", a: "Act") -> bool:
-    """Part E: *"the office's **revocation basis**, and a live `hold` exists"*.
-
-    ⚠ THE FIRST VERSION DROPPED THE OFFICE CLAUSE AND WAS AN OVER-ADMISSION -- it scanned for any
-    live `hold` on the payload's object with no check that the object IS AN OFFICE, and §13 makes
-    possession of a Record a `hold` Tenure. So a holder of `remit:revoke` could revoke a person's
-    possession of a book, and `_eff_revoke` would close it. Asymmetric with `confer`, which did
-    check. Found by the governance-slice adversarial pass."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    obj = d.get("office")
-    if not obj or obj not in w.offices:
-        return False
-    if not (w.offices[obj].revocation or "").strip():
-        return False
-    # ⚠ TWO RULES, AND WHICH ONE APPLIES TURNS ON WHETHER THE TARGET IS A TITLE.
-    #
-    # An ORDINARY office — a governor, a council seat — is revocable by GOVERNING AUTHORITY.
-    # Jordan, 2026-09-02: *"a Duke can revoke office from any individual in that office so long as
-    # that office is for a holding UNDER THEIR PURVIEW."* Rank plus containment.
-    #
-    # A TITLE is revocable only from HOLDINGS. Jordan, same exchange: *"King/Queen cannot revoke
-    # title of Duke/Duchess if they do not have duchy is in their holdings. King/Queen can revoke
-    # title of Duke/Duchess if the duchy is one of their holdings."* So a king with governing
-    # authority over the entire realm STILL CANNOT unmake a duke whose duchy he does not hold.
-    # This is the distinction he drew at the start — governing authority, sovereign power and
-    # holdings are three different things — arriving as a branch rather than as prose.
-    #
-    # ⚠ AND PURVIEW ALONE WOULD HAVE BEEN WRONG HERE. The first version applied `under_purview` to
-    # every revocation, so a king could strip any duke in his realm. That is exactly the reading
-    # the ruling exists to forbid.
-    target_is_title = title_domain(w.offices[obj].post) is not None
-    domain = w.offices[obj].rung
-    if target_is_title:
-        # ⚠ A CONJUNCTION, AND THE FIRST VERSION WAS A SINGLE TERM. It tested `in_holdings`
-        # ALONE, which makes holdings SUFFICIENT — so a Dicastery clerk who happened to hold a
-        # duchy could unmake its Duke, and a Duke holding the realm could unmake the King. That is
-        # the MIRROR of the defect it was written to fix: the version before it conflated governing
-        # authority with holdings in one direction, and this conflated them in the other. Jordan's
-        # message states a NECESSARY condition on someone who already has the authority —
-        # *"King/Queen CANNOT revoke title of Duke/Duchess IF they do not have duchy is in their
-        # holdings"* — and message 1 separates the two concepts on purpose. Both terms,
-        # therefore, plus rank: the whole point of *"they do not necessarily have sovereign power"*
-        # is that holding the land is not the same as outranking the person who governs it. Found
-        # by the governance-canon adversarial pass.
-        if not under_purview(w, a.actor, domain):
-            return False                       # governing authority over the domain
-        if not in_holdings(w, a.actor, domain):
-            return False                       # AND the domain is one of the actor's holdings
-        if highest_title_rank(w, a.actor) <= title_rank(w.offices[obj].post):
-            # AND strictly higher rank — which also forbids revoking YOUR OWN title, an
-            # equal-rank case nothing else in the branch excluded, and which a Duke who holds his
-            # own duchy (the ordinary case) otherwise satisfied.
-            return False
-    elif not under_purview(w, a.actor, domain):
-        return False
-    #
-    # ⚠ THIS IS A DIFFERENT ELIGIBILITY MODEL FROM THE ONE PART E STATES, AND CALLING IT A
-    # COMPATIBLE NARROWING WAS WRONG — that is what this comment said, and it is false of
-    # Jordan's text. *"a Duke can revoke office from any individual in that office SO LONG AS that
-    # office is for a holding under their purview"* states a SUFFICIENT condition, so keeping Part
-    # E's `remit:revoke` as a necessary one on top means a Duke whose office lacks the `revoke`
-    # remit cannot revoke a governor inside his own duchy — an OVER-REFUSAL, which `G4` weighs
-    # equally with an invention. It is a narrowing relative to PART E, never relative to the
-    # ruling. The transcribed `eligibility:` column is not this item's to rewrite, so the conflict
-    # is REGISTERED (`H-91`) and named here rather than resolved by a quiet table edit.
-    return any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures)
-
-
-@requires_predicate("dispatch")
-def _req_dispatch(w: "World", a: "Act") -> bool:
-    """Part E: *the named person exists*."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    return d.get("subject") in w.persons
-
-
-@requires_predicate("convene")
-def _req_convene(w: "World", a: "Act") -> bool:
-    """Part E: *the venue's **container** resolves, or is NONE* (§6.2).
-
-    ⚠ THE FIRST VERSION TESTED THE WRONG THING -- `venue in w.rungs` asks whether the venue IS a
-    rung, not whether its CONTAINER resolves, so a top rung (which has no container) passed. And
-    `Query.parent_of` already existed, so re-deriving a weaker test here was §8-adjacent. Found by
-    the governance-slice adversarial pass."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    venue = d.get("venue")
-    if venue is None:
-        return True                        # §6.2's carve-out
-    return venue in w.rungs and Query.parent_of(w, venue) is not None
-
-
-# ---------------------------------------------------------------------------
-# ⚠ FOUR PREDICATES WERE RETIRED HERE BY `W-A` (2026-09-04) -- `_req_transfer`, `_req_tell`,
-# `_req_move` and `_req_work`. Each is now a TYPED CELL in `verb_table.yaml`'s `requires_typed:`
-# column, read by `evaluate()`, and §8's rule is that the rule lives once: a verb with both would
-# be two readings of one cell, which is exactly how `_req_confer` came to drop a disjunct and
-# `_req_revoke` an entire clause.
+# `W-A`'s retirement note travelled with them: the four that are GONE (`transfer`, `tell`, `move`,
+# `work`) are typed cells in `verb_table.yaml` now, and
 # `test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both` is the guard that
-# fails on a recurrence.
-#
-# THE FOUR THAT REMAIN -- `confer`, `revoke`, `dispatch`, `convene` -- are `remit:`-eligible, not
-# `own`-eligible, and `W-A`'s scope is the `own` rows. Two of them need grammar forms with no
-# `own` cell (`cardinality`, `basis`) and `confer` needs a DISJUNCTION, which no `own` cell has
-# and which is therefore not built (`ID-13`: a combinator nothing uses is a dead carrier).
-# ---------------------------------------------------------------------------
+# fails if a verb ever carries both. That guard reads `S.REQUIRES_PREDICATES` and is unmoved.
 
 
 # Verbs the probe corpus uses that #353 does not name AS A VERB — checked, not assumed: the
@@ -2298,427 +1676,17 @@ def SOURCE_353_TEXT() -> str:
 # `NO_PRECONDITION` moved to `season.data.verbs` (step 3), imported back at the top of this file.
 
 
-# ---------------------------------------------------------------------------
-# THE EFFECTS. One per verb, OWNED BY THE RESOLVER.
+# ===========================================================================
+# THE EFFECTS -- EXTRACTED, step 5 of the decomposition (a PURE MOVE).
 #
-# ⚠ PART E's `writes:` COLUMN NAMES THE CELL AND NEVER THE VALUE. `transfer` writes
-# `(Rung, stores)` -- it does not say BY HOW MUCH, or that the giver's store goes DOWN. Without
-# that the fold checks a precondition, emits, and changes nothing, so `transfer` twice from a
-# one-unit larder succeeds twice: the scarcity §27.1 rests on never happens.
+# `EFFECTS`, its `@effect_for` decorator, the ONE operand reader (`_operand`) and the ten `_eff_*`
+# now live in `season.loop.effects`. They moved as one block and had to: §8's "THE OWNER OF THE
+# RULE, AND THREE EFFECTS HAD THEIR OWN COPY" is about `_operand`, and a decorator-filled table
+# must be defined where the decorated functions are or it is empty when the fold reads it.
 #
-# THE DISTINCTION FROM THE `effect` PARAMETER W3 REMOVED IS THE WHOLE POINT, and it is §27.2's.
-# A CALLER-supplied lambda is a second resolver: every caller may disagree about what a verb does,
-# and each probe did. A VERB-KEYED effect registered here is the resolver's BODY -- one
-# implementation, the same for every caller, and a verb with a `writes:` and no effect REFUSES
-# rather than silently writing nothing.
-#
-# This gap is register row H-63.
-# ---------------------------------------------------------------------------
-EFFECTS: dict = {}
-
-
-def effect_for(verb: str):
-    def deco(fn):
-        EFFECTS[verb] = fn
-        return fn
-    return deco
-
-
-def _operand(a: "Act", name: str):
-    """THE FOLD'S ONE READ OF A CARRIED OPERAND. A missing one RAISES.
-
-    ⚠ AN ABSENT OPERAND AT RESOLVE IS AN `InstrumentDefect`, NOT A REFUSAL, AND THE DISTINCTION
-    IS THE WHOLE OF `W-C`'s SECOND HALF. A refusal says *the world would not permit this*; a
-    caller minting a `transfer` that names no receiver is saying nothing about the world at all.
-    Filing it as a refusal would emit `emits_on_refusal`, `W-B` would deposit that at WITNESS, and
-    every witness would end the season holding a belief about a granary the act never named --
-    the instrument's own gap, laundered into the game as evidence. `operands_for` is what makes
-    this unreachable from a COMPUTED act: a Candidate whose operands cannot be derived is never
-    formed, so an act arriving here without one came from a hand-written call site.
-
-    ⚠ IT IS THE OWNER OF THE RULE, AND THREE EFFECTS HAD THEIR OWN COPY. `_eff_move` raised on a
-    missing `to` and `_eff_work` on a missing `site` -- both correct, both written twice -- while
-    `_eff_transfer` DEFAULTED four operands (`from`/`to` to `""`, `kind` to `"grain"`, `amount` to
-    `1`) and `_eff_confer` defaulted `to` to the actor, i.e. conferred an office on whoever
-    happened to be acting when the act named nobody. Same situation, four verbs, three answers.
-    §8: the rule lives once."""
-    d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
-    if d.get(name) is None:
-        raise InstrumentDefect(
-            f"a {a.verb!r} reached its effect with no {name!r} operand. The fold binds operands "
-            f"from the act's payload and `operands_for` forms NO Candidate whose operands it "
-            f"cannot derive, so an act minted without one is a CALLER defect and not a design "
-            f"gap -- and fabricating a value here would name a thing nobody chose. Payload: "
-            f"{sorted(d)}")
-    return d[name]
-
-
-# --- THE GOVERNANCE SLICE'S EFFECTS. `dispatch` needs none: Part E gives it `writes: []`, so an
-# order is an EMISSION and nothing else, which is `L1` in one row -- a dispatch does not move a
-# person, it tells one, and whether they go is their own act next season.
-
-@effect_for("confer")
-def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
-    """Seats an office: a new `hold` Tenure opens, and any prior holder's closes.
-
-    ⚠ AN EFFECT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `w.write`. The fold
-    calls it INSIDE the gate's `apply()`, once, for all of the row's `writes:` — so a nested
-    `w.write` is a write inside a write, and returning `None` tells the fold nothing was touched,
-    which makes it emit the REFUSAL. My first version did both, and the fold correctly refused an
-    act whose state change had in fact happened. `_apply_write`'s docstring states the contract."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    # ⚠ `to` WAS `d.get("to") or a.actor` -- a silent default that seated the ACTOR whenever the
-    # act named nobody, which is the same class as `_eff_transfer`'s four and is deleted with
-    # them. A conferral onto nobody is a malformed act, not a self-conferral.
-    # ⚠ THIS CHANGE IS A DELIBERATE EXTRA AND NOT A PATH `H-94` MADE REACHABLE; RECLASSIFIED BY
-    # THE `W-C` ADVERSARIAL PASS, because filing it as a consequence overstates what closing the
-    # operand channel did. NO COMPUTED ACT CAN REACH THIS EFFECT: `confer` is untyped, `office`
-    # is not in `rosters.yaml: requires_operands` so `operands_for` can never derive one, and
-    # `_req_confer` returns False when the payload names none -- `corpus_run`'s own output lists
-    # `confer` among the verbs "foldable but never even attempted". The improvement is real (a
-    # silent self-conferral becomes a loud `InstrumentDefect`) and nothing measurable moved.
-    obj, to = d.get("office"), _operand(a, "to")
-    if not obj or obj not in w.offices:
-        return []
-    closed = []
-    for t in w.tenures:
-        if t.kind == "hold" and t.object == obj and t.live:
-            t.until = w.tick
-            closed.append(t.id)
-    nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{obj}"), to, obj, "hold", w.tick)
-    w.add_tenure(nt)
-    # ⚠ PER-KIND. Conferring onto an UNHELD office closes nothing, and returning a flat list made
-    # the fold publish `tenure.closed` anyway -- a state change that did not happen, which is the
-    # fabricated-`person.died` class committed inside the fix for it. The mapping's empty entry is
-    # dropped by `_apply_write`.
-    return {"tenure.opened": [nt.id], "tenure.closed": closed}
-
-
-@effect_for("revoke")
-def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
-    """Unseats an office: the live `hold` closes. The mirror of `confer`, which is why the two are
-    the pair that proves the slice — one opens what the other closes, on the same row."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    obj = d.get("office")
-    touched = []
-    for t in w.tenures:
-        if t.kind == "hold" and t.object == obj and t.live:
-            t.until = w.tick
-            touched.append(t.id)
-    return touched
-
-
-@effect_for("convene")
-def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
-    """Schedules a sitting: a Date comes due, with a ConveningCondition attached — Part E's two
-    writes, both done by this one effect because the fold calls it once for the row.
-
-    ⚠ A DATE IS A DICT HERE, not a class: `w.dates` is read as `d.get("due_at")` / `d.get("fired")`
-    at CALENDAR. The first version built a `Date(...)` that does not exist.
-
-    ⚠ WHAT THE SITTING THEN DECIDES IS `H-32` AND IS NOT HERE. `convene` puts a date on the
-    calendar and stops, which is `L5`: a clock may not produce an outcome. `W7` is the item that
-    makes the sitting decide."""
-    d = (a.payload or {}) if isinstance(a.payload, dict) else {}
-    when = int(d.get("when", w.tick + 1))
-    did = H(w.world_seed, w.tick, a.actor, f"convene:{d.get('venue') or '-'}")
-    date = w.dates.setdefault(did, {"id": did, "venue": d.get("venue")})
-    date["due_at"] = when
-    date["convening_attached"] = True
-    return [did]
-
-
-@effect_for("move")
-def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
-    """§D4 / #353 §15.1: travel is a TENURE ALTER, owned by the traveller as the Tenure's subject.
-    The old leg closes and a new one opens; the destination rides on the payload where the act
-    names one. ⚠ This is `H-63`: Part E's `writes:` names the three cells and never the values, so
-    what a `move` DOES is stated here rather than in the table — one implementation owned by the
-    resolver, which is the distinction §27.2 draws against a caller-supplied lambda."""
-    dest = _operand(a, "to")
-    # ⚠ THE GUARD MOVED TO `_operand` AND ITS HISTORY IS KEPT HERE, because the history is what
-    # makes the guard's shape legible. Rev 1 fell through on a missing destination, closed every
-    # live leg and STILL returned `[a.actor]`, so `_fold` saw a non-empty `changed` and published
-    # `travel.moved` for a move that did not happen. Returning `[]` would be quieter and just as
-    # wrong: the caller would report a no-op as a legitimate nothing. §42.2's polarity rule -- no
-    # destination is a refusal, never a silent success. The version of this guard that lived here
-    # was found to pass `needs=`/`law=` to `InstrumentDefect`, which takes no keywords, so it
-    # would have raised `TypeError` if it had ever fired -- a guard that crashes instead of
-    # reporting, unfired because the precondition refuses first. One owner is also one place for
-    # that mistake to be made.
-    # ⚠ A DESTINATION THE LADDER WILL NOT SEAT THE MOVER IN IS A BLOCKED TRAVEL, NOT A CRASH, and
-    # this branch is `W-C`'s doing: once `move` carries a real `to`, a person can name any rung
-    # their containment path reaches, and `contain.path` asks for a SHARED ANCESTOR -- which a
-    # sibling has. So `move p_low -> p_mid` passed the precondition, `add_tenure` raised
-    # `Forbidden` on the §10 ladder, and the season died. Declining here returns nothing changed,
-    # so the fold emits `move`'s own `emits_on_refusal`. The rule itself is not re-implemented:
-    # `World.contain_ascends` is the one owner and `add_tenure` still RAISES on it, because a
-    # caller writing the edge directly is a bug where a person attempting the journey is not.
-    if not w.contain_ascends(a.actor, dest):
-        # ⚠ THE INSTANCE DETAIL SITS AFTER ` -> `, WHICH IS `report.py`'s CLUSTER KEY
-        # (`d.what.split(" -> ")[0]`). Putting the actor and the destination in the prefix would
-        # mint one register entry per pair and leave the label reading mid-sentence.
-        TRACE.decision(f"a move's destination is not up the §10 ladder -> {a.actor} into {dest!r}",
-                       "S10/E3", chose="change nothing, so the fold emits the refusal",
-                       alternatives=["write the edge anyway (add_tenure raises and the season "
-                                     "dies)", "let the precondition admit it and crash later"])
-        return []
-    for t in w.tenures:
-        if t.subject == a.actor and t.kind == "contain" and t.until is None:
-            t.until = w.tick
-    w.add_tenure(Tenure(H(w.world_seed, w.tick, a.actor, f"leg:{a.id}"),
-                        a.actor, dest, "contain", since=w.tick))
-    # ⚠ THE DECLARED WRITE, NOW ACTUALLY WRITTEN. `verb_table.yaml`'s `move` row names
-    # `(Person, travel_leg)` as its FIRST write and rev 1 never touched the field, so
-    # `Query.budget`'s distance penalty read `len(p.travel_leg)` == 0 in every run and the only
-    # test of it set the field by hand. A declared write that no effect performs is a lie the
-    # write matrix cannot catch, because the matrix gates writes that HAPPEN.
-    mover = w.persons.get(a.actor)
-    if mover is not None:
-        mover.travel_leg = list(mover.travel_leg) + [dest]
-    return [a.actor]
-
-
-@effect_for("work")
-def _eff_work(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
-    """`work` alters `(Site, condition)` by the act's declared delta. The DELTA IS NOT APPLIED
-    HERE -- §27.3 sums every delta across the fold and clamps ONCE, so applying it per act would
-    make the clamp arrival-order dependent, which §32 forbids. The write goes through the gate so
-    the class and Partition are checked; the value lands in the accumulator.
-
-    ⚠ IT REPORTS THE SITE ANYWAY. The fold now refuses an act whose effect touched nothing, and
-    `work`'s DELTA is deferred while its SUBJECT is not: the act is about that site, and saying
-    so is what keeps the deferral from reading as a no-op."""
-    # ⚠ NO FALLBACK. This read `or next((x for x in sorted(w.sites)), None)` -- the alphabetically
-    # FIRST site in the world -- so a `work` with no site named one nobody chose. `_eff_move`
-    # refused the identical situation and this did not; found by the W-A adversarial pass, which
-    # noted the two are the same defect one verb along. `W-C` gave that answer ONE owner
-    # (`_operand`) rather than two copies of it.
-    return [_operand(a, "site")]
-
-
-@effect_for("create_record")
-def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
-    """§E3: `create_record` writes `(Record, exists)` and `(Record, stages)`. `H-63` is why the
-    VALUES are here and not in the table.
-
-    ⚠ THE STAGES COME FROM THE ACT, NOT FROM A DEFAULT. #353 `:1043` (§54 item 14) makes the
-    stage list ACT-DECLARED -- "the act DECLARES the stages and their terms" -- so an act that
-    names none creates a record with none, and the instrument does not invent a ladder. That is
-    what makes Carin's season the case `PLAN.md` §6.1 chose: a Record with act-declared stages is
-    the largest ruled row in the corpus and nothing about it needs a default."""
-    d = a.payload if isinstance(a.payload, dict) else {}
-    rid = d.get("record") or f"rec:{a.id}"
-    stages = list(d.get("stages") or [])
-    if not stages:
-        # `H-80`, DECLARED AND SWEPT. The act SHOULD declare these (#353 §13.1) and a computed
-        # act cannot: §F1's Candidate is `(verb, subject, why)` with no operand channel. Refusing
-        # instead would make `(Record, stages)` -- a Part D row -- unreachable from any person's
-        # decision, so the honest form is §G's declare-default-sweep rather than either an
-        # invention or a blocker. Each stage is `(due_tick, label, the act that wound the clock)`.
-        n = w.fixtures.get("record_stages_default")
-        term = w.fixtures.get("record_stage_term")
-        stages = [(w.tick + (i + 1) * term, f"stage{i + 1}", a.id) for i in range(n)]
-    w.records[rid] = Record(rid, d.get("rung") or a.actor, d.get("kind") or "text",
-                            subject_matter=d.get("subject_matter"), stages=stages)
-    # S13: possession is a `hold` Tenure owned by the holder, never a field on the Record. The
-    # maker holds what they made until they part with it.
-    w.add_tenure(Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}"),
-                        a.actor, rid, "hold", since=w.tick))
-    return [rid]
-
-
-@effect_for("destroy_record")
-def _eff_destroy_record(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
-    """§E3: writes `(Record, exists)`. The Record goes, and every `hold` on it ends -- S15.3's
-    rule that a tenure dies THROUGH the death of what it is over, never beside it."""
-    d = a.payload if isinstance(a.payload, dict) else {}
-    rid = d.get("record")
-    if rid is None or rid not in w.records:
-        return None
-    del w.records[rid]
-    for t in w.tenures:
-        if t.object == rid and t.live:
-            t.until = w.tick
-    return [rid]
-
-
-@effect_for("kill / wound")
-def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
-    """§E3: writes `(Person, body)`, `(Person, exists)` and `(Tenure, until)`.
-
-    ⚠ THE TENURE ENDS THROUGH THE DEATH, which is §15.3's rule and the reason this is ONE effect
-    rather than three writes a caller sequences: "a plague that kills the praefect ends his
-    tenure THROUGH THE DEATH; A STORM CANNOT TOUCH IT." A wound that does not kill writes only
-    the band, so the same verb covers both -- which is why the table's row is `kill / wound`.
-
-    ⚠ `W-E`, 2026-09-04. THE EFFECT NOW TAKES THE RESOLUTION, AND `harm` IS GONE. Register row
-    `H-114` measured what the old signature cost: the effect could not honour the branch
-    `writes_at` had just selected, and the payload's `harm` key was read with the person's ENTIRE
-    body as its fallback -- so a fold at degree `Wounded` reached `p.body == 0`, passed
-    `if p.body > 0`, and DELETED THE PERSON. Both halves are closed here, and the `W-C` carve-out
-    that named `harm` as `W-E`'s to own is retired with its subject rather than widened.
-    ⚠ THE OLD SPELLING IS DELIBERATELY NOT QUOTED IN THIS DOCSTRING. `W-C`'s guard
-    (`test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_eff_kill`) scans
-    RAW SOURCE TEXT, so quoting the deleted line here would keep its carve-out "used" and leave
-    an open licence on the name `harm` -- the exact staleness that test's own `used == EXEMPT`
-    assertion exists to catch, satisfied by prose describing the defect rather than by the defect.
-    Found while running that test against this change.
-
-    WHERE THE MAGNITUDE COMES FROM NOW, AND WHY IT IS NOT INVENTED. JORDAN, 2026-09-04, VERBATIM:
-    *"the combat engine determines the result there. your code just has to accept the result."*
-    So the harm is not a number this file chooses: it is the LOSS THE SCENE ALREADY COMPUTED, on
-    the engine's own `WoundTracker`, read as the fraction of the subject's health the fight left
-    standing. No constant is introduced by the default arm -- a fraction needs none, which is
-    exactly why it is the default and the other two arms are the sweep.
-
-    THE THREE ARMS (`wound_harm_model`, registered at `H-125`, injected at `DEFAULT_FIXTURES`):
-      `scene_fraction`  body <- body x health_remaining / health_full. The scene decides.
-      `total`           any wound is lethal. ⚠ THIS IS THE CONTROL AND IT IS THE BEHAVIOUR THIS
-                        FUNCTION HAD BEFORE `W-E` (`harm` defaulting to full body), so the arm
-                        that shows what the degree is worth is the code as it stood.
-      `none`            a wound writes nothing. The fold's own write-nothing guard then emits the
-                        REFUSAL rather than the success -- the second control, and it isolates
-                        "the band selected a different write set" from "the band changed a value".
-
-    ⚠ AND THIS SUPERSEDES ONE HARNESS TECHNIQUE, WHICH IS SAID HERE SO ITS OUTPUT IS NOT
-    MISREAD. `proposals/2026-09-04-degree-sweep/arm3_tree.py` injects a degree by monkeypatching
-    `VerbRow.writes_at` / `emits_at` and then calls `_fold` bare. That reached the effect while
-    the effect took no degree; it cannot now, because the degree travels on the `Resolution` the
-    SEAM returns and a patched READER is invisible from here. Re-run after `W-E`, its `Felled` and
-    `Wounded` nodes report REFUSED with the message below. That is the closure of `H-114` seen
-    from the probe's side -- the probe measured a world in which the degree could not reach the
-    effect -- and not a new defect.
-
-    ⚠ A WOUND CANNOT KILL, AND THE FLOOR IS STRUCTURAL RATHER THAN NUMERIC. The `Wounded` band
-    means the engine did NOT fell this person; a model that took their body to 0 would contradict
-    the band it is implementing. `max(1, ...)` is `combat_seam.derive_party`'s own floor
-    (*"a dying person still fights"*), followed rather than reinvented."""
-    d = a.payload if isinstance(a.payload, dict) else {}
-    who = d.get("subject")
-    p = w.persons.get(who)
-    if p is None:
-        return None
-    # ⚠ NO SCENE, NO HARM -- AND THIS IS A REFUSAL TO INVENT, NOT A MISSING FEATURE. `kill / wound`
-    # declares `contests: the body`, so the only lawful route into this effect is through the
-    # seam; an act folded without one has no scene to read a severity off, and the pre-`W-E`
-    # answer to that was to kill. `writes_at(None)` already refuses one line earlier for the same
-    # reason, so this is the second gate on the same road rather than a new rule.
-    if res is None or not isinstance(res.result, dict):
-        raise Unspecified(
-            f"`kill / wound` on {who!r} was folded with no scene to read a severity from",
-            "S39.4/H-98",
-            needs="a Resolution from `resolve()`'s seam branch -- the personal-combat scene",
-            law="Jordan 2026-09-03 -- kill/wound degrees are taken directly from scene combat. A "
-                "harm this function chose would be the number `H-114` measured: the old default "
-                "was the person's whole body, so an act naming no harm killed")
-    st = (res.result.get("wound_state") or {}).get(who) or {}
-    model = w.fixtures.get("wound_harm_model")
-    if model not in WOUND_HARM_MODELS:
-        raise Unspecified(
-            f"wound-harm model {model!r} is not in the roster", "H-125",
-            needs=f"one of {sorted(WOUND_HARM_MODELS)}",
-            law="`observers_for`'s precedent and its reason -- *an unrecognised mode silently "
-                "falling back would make every measurement of this sweep read the control*")
-    if res.degree == FELLED:
-        # The scene says this person went down, and the table says that is the kill. The body
-        # goes to 0 on every arm: the arms grade a WOUND, and a felling is not one.
-        p.body = 0
-    elif model == "none":
-        return None
-    elif model == "total":
-        p.body = 0
-    else:                                       # `scene_fraction`
-        full = int(st.get("health_full") or 0)
-        left = int(st.get("health_remaining") or 0)
-        if full <= 0:
-            raise Unspecified(
-                f"the scene reports no health scale for {who!r} ({st!r})", "S39.4/H-125",
-                needs="`health_full` on the subject's wound state",
-                law="the magnitude is READ from the scene; a scene that carries none cannot be "
-                    "read, and choosing a number here is what this arm exists not to do")
-        p.body = max(1, p.body * max(0, left) // full)
-    if p.body > 0:
-        return [who]
-    # ⚠ `w.tenures`, NOT `p.tenures + w._unowned`, AND THAT IS A FIX `W-E`'s OWN TEST FOUND.
-    # `p.tenures` is the tenures this person is the SUBJECT of (§15.1 -- a Tenure is owned by its
-    # subject), so the old scan could not see an edge ANOTHER PERSON owns that names the dead one
-    # as its OBJECT. Measured in `tiny_world`: `t10`, a live `tie` from `p_low` to `p_mid`,
-    # survived `p_mid`'s death and then DANGLED, because `del w.persons[who]` had already removed
-    # the person it pointed at. §15.3 is explicit that the tenure ends THROUGH THE DEATH; this is
-    # the write the `Felled` branch declares (`Tenure.until`) actually reaching every edge it
-    # names. `w.tenures` is owner-first over every person plus `_unowned`, so it is a WIDENING of
-    # the same scan and not a second rule.
-    for t in list(w.tenures):
-        if (t.subject == who or t.object == who) and t.live:
-            t.until = w.tick
-    del w.persons[who]
-    return [who]
-
-
-@effect_for("utter")
-def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
-    """§E3: writes `(Proposition, exists)`. §14: a Proposition is IDENTITY-BEARING AND IMMUTABLE,
-    fixed at utterance and never destroyed -- `Proposition` is a frozen dataclass, so that is
-    structural here rather than asserted."""
-    d = a.payload if isinstance(a.payload, dict) else {}
-    pid = d.get("proposition") or f"prop:{a.id}"
-    if pid in w.propositions:
-        return None                       # immutable: an utterance never overwrites one
-    w.propositions[pid] = Proposition(pid, d.get("mood") or "OUGHT",
-                                      d.get("subject") or a.actor,
-                                      d.get("predicate") or "", d.get("value"), w.tick)
-    return [pid]
-
-
-@effect_for("transfer")
-def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
-    """§54 item 7's mirror: the giver's store goes DOWN and the receiver's goes UP.
-
-    ⚠ THE FIRST VERSION ONLY DECREMENTED, and §E3 says `transfer` writes `(Rung, stores)` **×2**,
-    one per side. A one-sided transfer ANNIHILATES MATTER -- six grain left the world and arrived
-    nowhere, in an economy where `yield` is the only source (#353 `:856`). The scarcity proof still
-    passed, because it only watched the giver: a run can be right about the thing it looks at and
-    wrong about the world."""
-    # ⚠ FOUR SILENT DEFAULTS STOOD HERE AND `W-C` DELETED ALL FOUR: `from`/`to` defaulted to
-    # `""`, `kind` to `"grain"` and `amount` to `1`. Each was §0.05's literal-in-a-body, and
-    # together they made an operand-less `transfer` a WELL-FORMED act about a granary nobody
-    # named. They are `_operand` reads now, and their two open values are fixtures with a register
-    # row and a sweep (`H-94`).
-    src = w.rungs.get(_operand(a, "from"))
-    dst = w.rungs.get(_operand(a, "to"))
-    kind, amount = _operand(a, "kind"), _operand(a, "amount")
-    # ⚠ A SIDE THAT IS NOT A RUNG MEANS THE TRANSFER DID NOT HAPPEN, and returning nothing is what
-    # makes the fold emit the refusal. This branch became reachable FROM A COMPUTED ACT the moment
-    # operands became real: a person names a receiver from their question's referents and may name
-    # something that is no rung at all. The old shape moved the giver's side anyway, which is the
-    # matter ANNIHILATION this effect's own docstring records -- grain leaving the world and
-    # arriving nowhere. §42.2's polarity: an unperformable transfer refuses; it does not
-    # half-happen.
-    # ⚠ *"IT SURVIVED ONLY BECAUSE NO COMPUTED ACT EVER BOUND `from` TO BEGIN WITH"* STOOD HERE
-    # AND IS FALSE; STRUCK BY THE `W-C` ADVERSARIAL PASS. No COMPUTED act bound `from` -- but
-    # probe `F10` did, in its payload, and omitted `to`, so the old effect decremented `Hh` and
-    # delivered nowhere: `F10` DESTROYED 6 GRAIN ON EVERY PROBE RUN, in an economy where `yield`
-    # is the only source. Measured by weighing every rung across the probe's own season: total
-    # store mass ends at 107 on the pre-`W-C` tree (`45a537c`) and at 113 here, and the difference
-    # is exactly the 6. The path was reachable AND REACHED; only the computed path was closed, and
-    # `F10`'s payload edit is a BUG FIX in a live probe rather than a signature accommodation.
-    # `F10` now asserts conservation, because its old assertion set could not observe the failure
-    # it was sitting on (§0.1 point 2).
-    if src is None or dst is None:
-        TRACE.decision(f"transfer names a side that is no rung -> from "
-                       f"{_operand(a, 'from')!r} to {_operand(a, 'to')!r}", "E3/S27.1",
-                       chose="change nothing, so the fold emits the refusal",
-                       alternatives=["move the giver's side anyway (matter leaves the world)"])
-        return []
-    src.stores = dict(src.stores or {})
-    src.stores[kind] = src.stores.get(kind, 0) - amount
-    dst.stores = dict(dst.stores or {})
-    dst.stores[kind] = dst.stores.get(kind, 0) + amount
-    # BOTH SIDES, because §E3 says `transfer` writes `(Rung, stores)` twice -- one per side -- and
-    # a one-sided report would make the Event name half of what it did. The `if r is not None`
-    # filter that stood here is gone with the branch above that made it necessary.
-    return [src.id, dst.id]
+# The fold below reads `EFFECTS` through the import at the top of this file, which is the SAME
+# DICT OBJECT -- `S.EFFECTS is effects.EFFECTS`. A re-export, not a second definition.
+# ===========================================================================
 
 
 class SeasonDriver:

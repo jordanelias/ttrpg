@@ -1,5 +1,211 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⭐ DONE 2026-09-08 — decomposition STEP 5: `queries/` + `loop/`. `shape.py` 4,153 → 3,121 (ED-IN-0203)
+
+**Carries on #381, which named steps 5–11 as what remains.** Step 5 is the whole of that step and
+nothing beyond it: the eleven World-first statics of `Query`, `questions_for` and `occasioned_by` to
+`engine/season/queries/world_q.py`; `WorldReader` and `LedgerReader` to `queries/readers.py`;
+`REQUIRES_PREDICATES` + the four surviving `_req_*` + the four governance readers to
+`engine/season/loop/predicates.py`; `EFFECTS`, `_operand` and the ten `_eff_*` to `loop/effects.py`.
+
+```
+engine/season/queries/  world_q 328 · readers 158        engine/season/loop/  predicates 296 · effects 448
+```
+
+**⚠ ZERO GAME YIELD, and this remains true however many steps land.** `register.py --requirements`
+reads **6 `not_met` · 3 `partial`** before and after, unchanged — the only reading of progress §0.2
+accepts. It is licensed as a precondition, not as progress.
+
+### THE FINDING THAT MATTERS: I SHIPPED A MODULE MISSING AN IMPORT, AND THE FAILURE WAS SILENT
+
+`queries/world_q.py` went out without `Forbidden`. `aggregate_guard` and `commit_count_guard` both
+raise it; with the name unbound they raised `NameError` instead. **The probe harness catches broad
+exceptions, so two probes — `A23` and `F14` — did not fail. They VANISHED**, and the corpus gap
+count fell 66 → 63 with nothing red.
+
+- **What caught it: `report.py`, and only because it is a BYTE comparison.** `git status
+  engine/season/runs/` showed three artifacts modified. The module imported cleanly, the headless
+  content hash was **unchanged**, and `delta.py` was not consulted. This is the third session in a
+  row to record *report before delta, and report is the control*; it is the first to record the
+  control catching something the hash could not.
+- **The suite would also have caught it**, and saying so is owed:
+  `test_season_shape.py:1128` asserts `pytest.raises(Forbidden)` on `aggregate_guard`. So this was
+  not invisible — it was invisible to the two instruments I ran FIRST, which is a different and
+  smaller claim than "only the corpus control could see it".
+- **The cause was a scan I ran on three of the four moving groups and not the fourth.** I computed
+  free names for `questions_for`/`occasioned_by`, the predicates and the effects, and never for the
+  eleven statics, because they arrived through a different extraction path. **A dependency scan that
+  covers most of a carve is not a dependency scan.**
+- **The instrument, for step 6: one AST walk over the finished module, before running anything.**
+  Bind every import, `def`, `class`, assignment target, `arg` and `except` name; every remaining
+  `Name` in `Load` context that is not a builtin is unbound. Run over all four new modules it printed
+  `Forbidden` and nothing else — one pass, ten lines, and it found in seconds what a per-group scan
+  missed. **NO GUARD WAS ADDED FOR THIS AND NONE SHOULD BE:** Python raises on it, the suite asserts
+  it, and a test that greps modules for unbound names is a linter — the checker-of-a-checker §0.1
+  point 5 forbids. It is a pre-flight a session runs, recorded here so the next one runs it.
+
+### `Query` SPLIT WITHOUT RENAMING A SINGLE CALL SITE, AND THE PLAN'S PRICE WAS WRONG IN BOTH HALVES
+
+`04:116` splits the two families **by module**. The eleven are module functions in `world_q` now;
+`shape.Query` binds each as `staticmethod(world_q.<fn>)`. **`Query.parent_of is world_q.parent_of`
+is True**, so there is one owner of each rule and every existing call site resolves to the moved
+body — including the frozen `proposals/2026-09-04-degree-sweep/` arms, which read `S.Query.presence`
+and must keep working.
+
+| | plan said | measured |
+|---|---|---|
+| person-side call sites (step 7's bill) | 56 | **67** (`budget` 23, `opening_set` 34, `assemble` 9, `entrenchment` 1) |
+| world-first call sites (step 5's, unpriced) | — | **73** |
+| renames actually paid at step 5 | — | **0** |
+
+Step 7 still pays the 67 when the class goes. What the binding buys is that step 5 did not have to.
+
+### THE PURE-MOVE PROOF, AND WHY IT NEEDED WIDENING THIS TIME
+
+A passing suite says the tree still works; it does not say the code is the same code. The
+line-multiset comparison against `git show HEAD:engine/season/shape.py`, **allowing a 4-space
+re-indent** because the eleven statics were dedented out of a class body:
+
+```
+queries/world_q.py    262 body lines · 3 novel      loop/predicates.py  232 body lines · 2 novel
+queries/readers.py    120 body lines · 2 novel      loop/effects.py     382 body lines · 0 novel
+                                                    TOTAL 996 moved · 7 novel
+```
+
+All seven declared: six are `Query.<x>` → `world_q.<x>` at the call sites a reader or a predicate
+must not reach a world query through the class that also holds the person-side family, and the
+seventh is the `[JUSTIFIED:]` tag below. **`loop/effects.py` is byte-identical at 382 lines**, which
+is the strongest single result here. Run it after every remaining carve.
+
+⚠ **The dedent is why an AST comparison is NOT the instrument for this step.** A first attempt
+compared normalised ASTs and reported five of eleven "differing"; the differences were entirely
+docstring continuation-line indentation, which the dedent correctly moves. The text diff of the
+dedented block against the new module is decisive where the AST walk was noise: **109 lines each,
+one line differing, and that line is the declared `Query.descendants` → `descendants` rewrite.**
+
+### THE NARROWING CHECK — STEP 4'S FIX PAID FOR ITSELF HERE, WITH NO EDIT
+
+Step 4 re-pointed `test_jordan_no_definition_is_hardcoded_in_a_body` from the hardcoded
+`files.SHAPE_PY` onto `_model_modules()`. **Step 5 is the first carve after it, and the five new
+modules entered the strict lane with nothing edited** — `package_modules()` is `rglob`, so
+`queries/` and `loop/` were discovered like `state/` was. Measured before and after with one
+predicate on both trees:
+
+| scanner | before | after |
+|---|---|---|
+| `write` call sites | 21 | 21 |
+| functions taking a `World` | 41 | 41 |
+| `.get(x, default)` | 20 | 20 |
+| `if False` | 0 | 0 |
+
+⚠ **These are MY predicates, not the tests'** — approximations, run identically on both trees, which
+is what makes the *comparison* valid and the absolute numbers not comparable to step 4's table. The
+four tests themselves are inside the 186 that passed.
+
+### THE FABRICATION GATE FIRED ONCE, AND THE TAG INVENTS NOTHING
+
+`ci_sim_fabrication_check` is changeset-scoped on ADDED lines, so a byte-identical relocation
+re-presents an old constant as new. Step 3 hit twelve, step 4 two, step 5 **one**: `1 << 30`, the
+`.get("due_at", …)` default in `questions_for` — a Date with no `due_at` is never due. Tagged
+`[JUSTIFIED: a SENTINEL, not a game value]`, the same form `state/ids.py` and `state/world.py`
+already carry. Both mechanical traps step 3 recorded were obeyed: single line, immediately above.
+
+### ELEVEN HOME CLAIMS RE-POINTED, AND THE COUNT WAS COMPUTED BEFORE IT WAS WRITTEN
+
+Step 4's entry records asserting "exactly ONE" after inspecting one file and being wrong by five.
+So this count was taken first, on step 4's own definition — a structured field whose job is to say
+where a thing lives (`owner:`/`site:`) or a `path::symbol` citation, naming a symbol step 5 moved.
+**Prose that mentions `shape.py` while describing behaviour is not a home claim**: 31 lines
+co-mention, **11 are home claims**, and each was verified against `__module__` rather than by grep.
+
+| where | now |
+|---|---|
+| `hole_register:760` | `evaluate`→`data/requires`, `WorldReader`→`queries/readers`, `REQUIRES_PREDICATES`→`loop/predicates`; `_fold`/`resolvable_verbs` stay |
+| `hole_register:814` | `LedgerReader`→`queries/readers`; `belief_contradicts` stays |
+| `hole_register:1289` | `DEFAULT_FIXTURES`→`data/fixtures`, `_eff_kill`→`loop/effects` |
+| `hole_register:1350`, `:1353` | `occasioned_by`→`queries/world_q`; `claim_subjects`/`witness` stay |
+| `hole_register:1474`, `:1486` | `_req_revoke`, `under_purview`→`loop/predicates` |
+| `hole_register:1499` | `questions_for`→`queries/world_q` |
+| `hole_register` ×2 `::_eff_kill` | →`engine/season/loop/effects.py::_eff_kill` |
+| `requirements.yaml` R-06 | Q4 source→`queries/world_q.py::questions_for` |
+
+⚠ **Three of the eleven were falsified at step 3, not step 5** (`evaluate` ×2, `DEFAULT_FIXTURES`)
+**and step 4's sweep did not see them, because it scanned only the symbols step 4 moved.** A fourth
+pre-existing falsehood — `requirements.yaml`'s `engine/season/headless.py:81` — names no `shape.py`
+symbol at all, so it fell outside every sweep any step has run. They are fixed here rather than left, on step 4's own critic's finding:
+correcting one clause in a paragraph leaves the rest wrong in a paragraph that now reads as
+maintained. `requirements.yaml`'s `engine/season/headless.py:81` was wrong in path AND line — the
+`commit` Tenure is at `harness/headless.py:75` — and is now `::build_world`.
+
+**Still NOT swept:** the ~20 stale `shape.py:NNNN` line citations, six of them inside
+`requirements.yaml` R-03's own paragraph. Plan §5 debt, payoff at step 10. Unchanged from #381.
+
+### THE PLAN'S "FLAT FILES, NOT SUBDIRECTORIES" RULING IS RETRACTED, NOT QUIETLY IGNORED
+
+#381 flagged that the ruling had been reversed three times in practice while the text still read as
+if it held; step 5 makes it five (`data/`, `harness/`, `state/`, `queries/`, `loop/`). Retracted in
+the plan with all three of its reasons shown closed — the `_HERE` paths are one anchor
+(`data/files.py`), `package_modules()` is recursive, and `SOURCE_353_TEXT` reads a checked constant.
+**The ruling that replaces it is older and higher:** `04_CODE_ARCHITECTURE.md` §A.2's nine modules,
+LAYER 1, ratified 2026-09-05 (ED-IN-0204). `predicates`/`effects` are in `loop/` because §A.2 gives
+`loop/resolve` *"every ACTS row, through the gate; the ordered fold"* — they are what the fold
+dispatches on. `LedgerReader` is in `queries/` on step 3's recorded adjudication, overruling the
+plan's `requires`.
+
+### ⚠ TWO INVARIANTS THIS ROW PINNED WERE ALREADY STALE ON `main` WHEN STEP 5 STARTED
+
+Not by anything step 5 did. **PR #380 merged 25 minutes AFTER PR #381** and its `fan_out_mode` flip
+moved both:
+
+| | #381 pinned | measured on `main` at step 5 |
+|---|---|---|
+| content hash | `dd017e65…` | **`ee0383bf3f4606e56b80cd07c0284f0a`** |
+| `pytest engine/season/tests` | 183 | **186** |
+
+A decomposition invariant recorded in prose expires the moment a GAME change lands beside it, and
+nothing relates a written hash to the code that produces it. Both corrected on the ledger row, with
+the old hash kept so an older citation still resolves.
+
+### WHAT WAS VERIFIED
+
+- **content hash `ee0383bf3f4606e56b80cd07c0284f0a`** — unchanged after each of the two carves and
+  after the `Forbidden` repair.
+- **`report.py` reproduced all eight artifacts byte-identically** (`git status engine/season/runs/`
+  empty). **This is the control, and this time it earned it** — see the first finding. Isolated
+  properly: with the carve stashed, `report.py` on clean `HEAD` also reproduces, so the three
+  modified artifacts were mine and not pre-existing drift.
+- **`delta.py HEAD`: `PROBE FLIPS 0`**, probes 122 → 122, gap events 66 → 66.
+- **`pytest engine/season/tests`: 186 passed** (203s baseline, 197s after).
+- **`pytest tests/valoria`: 1,776 passed · 2 failed · 23 skipped · 15 xfailed.** ⚠ Both failures are
+  `test_forked_status.py`'s shallow-clone pair, exactly as #381's environment note predicts —
+  `c451bcb` is unreachable, `git rev-parse --is-shallow-repository` is `true`. **Verified rather
+  than assumed: after `git fetch --unshallow` both pass (5 passed).**
+- **collection is identical with and without the carve — 1,817 both ways**, so nothing was silently
+  deselected. (#381 reported 1,779 passing where this reads 1,778; that delta is between #381's tree
+  and today's `main`, not this branch — the collection check is what licenses saying so.)
+- **`test_engine_does_not_import_systems.py`: 17 passed** — no new `engine.season` cycle, and the
+  two declared `sys.path` seams are still the only two.
+- **registry identity:** `sorted(EFFECTS)` and `sorted(REQUIRES_PREDICATES)` unchanged, and they are
+  **the same dict objects** — `S.EFFECTS is loop.effects.EFFECTS`, so the fold reads what the
+  decorators filled and there is no second table.
+- **symbol check against `HEAD`: 217 top-level names, 217 resolve on `S`, 0 missing.**
+- **`tools/valoria_local.py --staged`**: all local gates passed. **`compliance_check --check-only`**:
+  0 errors. **`export_sim_params.py --check`**: current. **`register.py --counts`/`--requirements`**:
+  green, citations resolve.
+
+### WHAT REMAINS, AND THE ONE HAZARD THE NEXT CARVE MUST GREP FOR FIRST
+
+Steps 6–10 plus 0a. Step 6 is `epistemic.py` — `belief_contradicts`, `act_refs`, `claim_subjects`,
+`_event_place`, the five `_ch_*`, `CHANNEL_PREDICATES`, `observers_for`, and the deposit body.
+
+⚠ **`CHANNEL_PREDICATES` is a `globals()` lookup for `_ch_*`** (plan §0 item 2). It must move in the
+same commit as the five predicates or it raises at import — **loud, which is the good case**. The
+plan's §1 addendum names the silent one: **a module-level name rebound through `global` cannot be
+left behind loudly**, because `global` CREATES the binding on first assignment. Step 5's four groups
+carried no `global` statement, checked. `_LADDER_ERROR` at step 8 is the live instance and is
+already in the plan; **re-grep the moving functions at every remaining step rather than trusting
+that table to be complete.**
+
 ## ⭐ DONE 2026-09-07, LATER — FAN-OUT IS OFF `total`. `R7` executed in the season loop (ED-IN-0205)
 
 **`engine/season/data/fixtures.py` ships `fan_out_mode="all_five"`.** `total` fanned every Event to
