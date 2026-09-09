@@ -26,7 +26,7 @@ those configurations tended toward — an arrangement of extraordinary refinemen
 while it was actively sustained. Every generation of the site-network inherited the holding and
 extended it.
 
-**What strains is not use of the substrate but holding against the draw of the equilibrium**: the
+**What strains is not use of the substrate but holding against the orientation toward equilibrium**: the
 summed difference, across the whole lattice, between what the Einhir held and where the configurations
 themselves tended. The anchors — the points at which threads are continuous between the intelligible
 and the unintelligible — bear that difference.

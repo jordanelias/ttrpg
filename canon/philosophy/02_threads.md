@@ -148,7 +148,7 @@ manipulated such that **it is no longer becoming itself in equilibrium** — no 
 was going, in the manner it was going there.
 
 **This is where tension and tearing enter.** A configuration held out of its own becoming is held
-against the draw (§3.4), and that holding is a load. Temporal manipulation is not a special kind of
+against that orientation (§3.4), and that holding is a load. Temporal manipulation is not a special kind of
 operation with its own physics; it is the general physics of equilibrium and stability, applied on
 the temporal axis.
 

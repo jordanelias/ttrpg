@@ -294,14 +294,16 @@ being that **threadwork for mending can be performed on one's own configuration 
 difficult to do but possible."**
 
 The mechanism is the operational channel read backwards, and it needs nothing new. Manipulation costs
-because the practitioner is imbricated with a shape that must be **held against the draw**, and the
-holding lives where the holder is. Restoration holds nothing; it hands the target back to the draw.
+because the practitioner is imbricated with a shape that must be **held against what its threads are
+oriented toward**, and the holding lives where the holder is. Restoration holds nothing; it lets the
+target go where it is oriented.
 But **the imbrication is the same imbrication**, and the futural-potential-legible does not
 distinguish which end of a knot it has hold of. A practitioner joined to a configuration that is being
 returned to the attractor is themselves joined to something the attractor is acting on.
 
-So the real asymmetry is not cost versus no-cost. It is **holding against the draw**, which displaces
-the holder, against **giving to the draw**, which moves whatever is imbricated with the giving. One
+So the real asymmetry is not cost versus no-cost. It is **holding a configuration against its own
+orientation**, which displaces the holder, against **letting it go where it is oriented**, which moves
+whatever is imbricated with the letting-go. One
 channel, one imbrication, opposite relations to the equilibrium.
 
 **Aim decides how deep it reaches, and this is what makes self-mending the demanding case.**

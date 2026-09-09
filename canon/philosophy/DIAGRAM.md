@@ -88,7 +88,8 @@ deliberately, moment to moment, or not at all.
 ## 3. An operation, end to end
 
 **Direction decides everything.** The same imbrication carries the cost and the benefit; what the
-practitioner is joined to is either being held against the draw or handed back to it.
+practitioner is joined to is either held against what it is oriented toward, or let go where it is
+oriented.
 
 ```mermaid
 flowchart TD
@@ -100,8 +101,8 @@ flowchart TD
     F["<b>restorative</b><br/>toward the equilibrium<br/>configurations already tend to"]
     G["<b>manipulative</b><br/>off the attractor<br/>held only by the practitioner"]
     H["<b>destructive</b><br/>a harmony unmade"]
-    I["<i>giving to the draw</i><br/>nothing needs holding<br/><b>and the practitioner is drawn too</b>"]
-    J["<i>holding against the draw</i><br/>working the target out of equilibrium<br/>is working one's own threads<br/>out of equilibrium"]
+    I["<i>letting it go where it is oriented</i><br/>nothing needs holding<br/><b>and the practitioner moves too</b>"]
+    J["<i>held against its own orientation</i><br/>working the target out of equilibrium<br/>is working one's own threads<br/>out of equilibrium"]
     M{"what was the working <b>aimed</b> at?"}
     N["aimed at another<br/>→ moves your present displacement<br/>you recover faster for having done it"]
     O["aimed at your own configuration<br/>→ moves your <b>resting point</b><br/><i>extremely difficult, and possible</i>"]
@@ -217,7 +218,8 @@ only work answers the floor. That is what makes the cost bite without making it 
 the floor movable, the threshold cannot be "the floor stops moving". It is §6.6's ruled knife-edge:
 Mending restores the harmony a configuration tends toward, **not a remembered state**. Past the band,
 human is no longer where this configuration tends — so the identical-looking act of working it back is
-manipulation, held against the draw, performed on a whole person. Nothing about the difficulty changes
+manipulation, held against what that configuration is oriented toward, performed on a whole person.
+Nothing about the difficulty changes
 at the crossing. What changes is which operation it is.
 
 **The dashed node is the other derived element.** *Being human is a band* is not a ruling; it is what

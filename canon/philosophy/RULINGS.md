@@ -1478,3 +1478,34 @@ retraction note; the vessel and toughness language (C-3/R-14); "deep layer" as a
 - **`_review/round2/04_MY_UNDERSTANDING.md`** banner-marked SUPERSEDED with the void and changed codes
   listed. **Roughly a third of its 82 codes moved in one afternoon**, which is the honest measure of
   how much of it was mine rather than the author's.
+
+### R-20 — "The draw" is retired
+
+> "yeah, what the hell is the draw? that's not my verbiage"
+
+**Confirmed by search before acting: the word appears in none of the author's quoted words anywhere in
+this file.** The single blockquote hit is my own supersession note. It was the editor's, or the source
+suite's, and it propagated to twelve sites across seven files including two diagram nodes.
+
+**Why it had to go, beyond not being the author's.** It names the orientation toward equilibrium as
+something that *pulls* — which is the exact trap R-12 corrected when it ruled that **tending is not an
+action**. Striking the verbs and keeping the noun would have left the same picture standing in one
+word.
+
+**Replaced with plain phrasing throughout**, and nothing coined to replace it:
+
+| was | now |
+|---|---|
+| held against the draw | held against what its threads are oriented toward |
+| hands the target back to the draw | lets the target go where it is oriented |
+| giving to the draw | letting it go where it is oriented |
+| the draw of the equilibrium | the orientation toward equilibrium |
+| this is a draw toward, not a return to | threads are oriented toward it; they are not returning to it |
+
+*Applied:* §2.6, §3.4, §6.8 (two passages), §7.1 (two), §7.5, §8.1, `DIAGRAM.md` (four, two of them
+node labels).
+
+⚠ **This is the third coinage of mine retired today** — after *givenness* (R-6) and the hyphenated
+*taking-as-world* compounds. All three were words that looked like the framework's own vocabulary and
+were not. A session reading this suite cold cannot tell my coinages from the author's without
+checking, which is what §9.2 exists to prevent and what this file's marked entries are for.

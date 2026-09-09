@@ -129,7 +129,7 @@ because what is being described is not a mechanism inside the world but the way 
 
 Three terms, each doing work:
 
-- **Futural.** The equilibrium is *ahead*, not behind. This is a draw toward, not a return to. Nothing
+- **Futural.** The equilibrium is *ahead*, not behind. Threads are oriented toward it; they are not returning to it. Nothing
   is being restored to a prior state; configurations tend toward a harmony that has not yet obtained.
 - **Potential.** It is not actual. It is what *could* coherently come to be, given how the
   configurations presently stand.

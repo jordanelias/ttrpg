@@ -129,7 +129,8 @@ tending toward the harmony it is drawn to. That is why it is available, and why 
 attempt (§6.6). But §6.6's knife-edge is exact about what restoration *is*: **restoring the harmony
 configurations tend toward, not a remembered state.** Once the resting point has left the band, the
 human shape is no longer where that configuration tends. Working it back toward human is therefore
-**restoring a remembered state** — which is manipulation, held against the draw, and at the scale of
+**restoring a remembered state** — which is manipulation, held against what the configuration is
+oriented toward, and at the scale of
 a whole being it is the Calamity's mechanism performed on a person.
 
 Before the crossing, bringing someone back is Mending. After it, the identical-looking act is the one
@@ -244,7 +245,8 @@ oriented toward, restorative work
 moves them **toward** their own equilibrium rather than merely leaving them where they were (§6.8).
 Aimed at their own configuration, it is what moves a resting point back.
 
-**Operations that impose a shape off the attractor must be held against the draw**, and the cost of
+**Operations that impose a shape off the attractor must be held against what the configurations are
+oriented toward**, and the cost of
 holding such a configuration is a configurational alteration to the practitioner. This is the
 operational origin of drift: not threadwork as such, but threadwork directed away from the harmony
 configurations tend toward.
@@ -389,7 +391,8 @@ being draws on: its vicinity. **That is reality-strain**, and it is the external
 would otherwise have been Coherence cost.
 
 The scale differs from the Einhir lattice — one being rather than a civilization, a lifetime rather
-than generations — but the mechanism is the same: a shape held against the draw of the equilibrium,
+than generations — but the mechanism is the same: a shape held against the orientation toward
+equilibrium,
 drawing the fabric taut. Strain is the summed difference, across everything affected, between what is
 held and where the configurations tend. Sustained long enough and deep enough, it produces the conditions the Calamity
 produced: anchor-points strain, the fabric tears, incursions and gaps and failures occur in the
