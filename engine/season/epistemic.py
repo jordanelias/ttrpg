@@ -17,12 +17,19 @@ moves the table, its loop and its `del` as one block rather than as three statem
 package's second such lookup; `state/carriers.py` records the first.
 
 ⚠ NOTHING HERE READS `belief_contradicts`, AND THAT IS LOAD-BEARING RATHER THAN INCIDENTAL. Its
-only bare-name caller is `Query.opening_set`, still in `shape.py`, which resolves it through
-`shape.py`'s globals at call time — so the four suite rebinds and the two in the frozen
-`proposals/2026-09-04-degree-sweep/wd_acceptance.py` (`S.belief_contradicts = counted`) keep
-working across this move. **If a function here ever calls it directly, that reader would bind
-THIS module's copy and every one of those rebinds would silently become a no-op on it** — plan
-§0 item 1's hazard, which arrives for real at step 7 when `opening_set` moves to `decision`.
+only bare-name caller is `opening_set`, which lives in `season.decision` since step 7 and resolves
+the name in THAT module's globals at call time — so every rebind must name `decision`, and all of
+them do: the suite's six sites and `wd_acceptance.py`'s five, the latter through `sweep_core.PS`.
+**If a function here ever calls it directly, that reader would bind THIS module's copy and those
+rebinds would become no-ops on it** — the same hazard, one module over.
+
+⚠ THIS PARAGRAPH PREDICTED ITS OWN EXPIRY AND THEN OUTLIVED IT. Until step 7 it read *"its only
+bare-name caller is `Query.opening_set`, still in `shape.py`"* and closed with *"plan §0 item 1's
+hazard, which arrives for real at step 7"*. Step 7 arrived; `Query.opening_set` no longer exists;
+three clauses went false at once, and the step that falsified them corrected four other
+breadcrumbs and skipped this one — the file that had named itself as the tripwire. `shape.py`'s
+own rule covers it: WRITE THE RULE, NOT THE ADDRESS. A ruling recorded as a location is a claim
+that expires silently at the next move.
 
 ⚠ `04_CODE_ARCHITECTURE.md` §A.2 DOES NOT NAME AN `epistemic` MODULE, and this docstring says so
 rather than implying otherwise. Its nine are `state/ data/ queries/ decision/ loop/ seam/

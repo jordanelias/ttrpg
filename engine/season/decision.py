@@ -17,8 +17,15 @@ WHAT MOVED HERE, all as a pure line-slice of `shape.py` at HEAD `d4858c27`:
     PERSON-SIDE statics, now MODULE FUNCTIONS. Their eleven WORLD-side siblings did not move with
     them: they were already bindings to `season.queries.world_q` (step 5), and every call site
     renames to `world_q.<name>` directly (see `shape.py`'s breadcrumb). `class Query` itself is
-    DELETED -- it survived as a call-site facade for exactly as long as SA.3 row 2 predicted
-    ("the class survives one more step only as the call-site facade; it goes at step 7").
+    DELETED -- it survived as a call-site facade for exactly one step. ⚠ THE FIRST DRAFT OF THIS
+    SENTENCE ATTRIBUTED A QUOTATION TO `04_CODE_ARCHITECTURE.md` §A.3 ROW 2 THAT IS NOT IN THAT
+    DOCUMENT, OR ANYWHERE UNDER `architecture/`. The words quoted ("the class survives one more
+    step only as the call-site facade; it goes at step 7") were `shape.py`'s OWN step-5 breadcrumb
+    -- this repository quoting itself and crediting the spec. §A.3 row 2 actually reads: *"one
+    `Query` class holding both families | two modules; the second cannot import the first | T-f.
+    In one class, a person-side function calls a resolver-side one with no import to scan."* That
+    row licenses the SPLIT and says nothing about a facade or a step number. Falsifier:
+    `rg -n "call-site facade" architecture/` returns nothing.
   * Seventeen top-level names: `align`, `stance_toward`, `urgency`, `make_chooser`,
     `person_side_eligible`, `containing_rung_of`, `store_kind_of`, `_derive_operand`,
     `_REFERENT_OPERANDS` (with its preceding comment block), `operands_for`, `agreement`,
@@ -47,6 +54,14 @@ warned that `ALIGNMENT`, `belief_contradicts` and `pack_scenes` are each rebound
 readers here, in the same commit as the corresponding test/arm re-points (`decision.ALIGNMENT`,
 `decision.belief_contradicts`, one alias in `sweep_core.py` for `pack_scenes`), is what keeps every
 rebind live rather than turning it into a silent no-op on the facade's stale copy.
+
+⚠ "EVERY" IS EXACT, AND THE FIRST DRAFT OF THIS COMMIT MADE IT FALSE WHILE ASSERTING IT. Two more
+files rebind these names -- `arm7_flexibility.py` (`pack_scenes`, 6 sites) and `wd_acceptance.py`
+(`belief_contradicts`, 5) -- and the plan, the step brief and the commit message all said "nothing
+imports either, so they cannot fail the suite". That premise is false on disk: `sweep.py:19`
+imports and runs `arm7_flexibility`, and six files import `wd_acceptance`. Both are re-pointed
+here. An unrepointed arm does not fail; it reports every branch identical, which is a fabricated
+null and worse than a failure (§0.1 pt 4).
 
 AX-2, ENFORCED HERE FOR REAL: this module may not import `state.world`, `queries.*`, `loop.*`,
 `seam`, `combat_seam` or `shape`, and may not name `World` anywhere -- not as an import, not as a
@@ -81,8 +96,11 @@ from .trace_log import TRACE
 #    owner. `person_side_eligible()` reads it (`if kind not in ELIGIBILITY_KINDS`), and importing
 #    it from `.data.rosters` as written raises `ImportError` at module load, immediately, for
 #    every caller -- the loud failure mode, not the step-5 kind that hides until a byte-compare.
-#    Verified against the actual definition site: `engine/season/data/verbs.py:55`
-#    (`ELIGIBILITY_KINDS = roster("eligibility_kinds")`) -- it is *sourced* from the rosters file's
+#    Verified against the actual definition site, which is `engine/season/data/verbs.py`'s
+#    `ELIGIBILITY_KINDS = roster("eligibility_kinds")` -- located by `rg -n "^ELIGIBILITY_KINDS"`
+#    and deliberately cited WITHOUT a line number, because the first draft of this comment said
+#    `:55` and the assignment is at `:68`, in a file this same commit edits (CLAUDE.md §3: "a LINE
+#    citation into a file being decomposed is wrong twice over"). It is *sourced* from the rosters file's
 #    `eligibility_kinds` table but the module-level NAME lives in `verbs`, because `verbs.py` is
 #    what checks a verb row's `eligible:` cell against it.
 #

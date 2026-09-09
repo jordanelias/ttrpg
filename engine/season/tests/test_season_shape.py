@@ -801,7 +801,16 @@ def test_a_hand_raised_gap_is_never_labelled_construction():
         # alternative (most commonly `fixtures` or `View(`). `Query\.` is kept rather than removed:
         # it is dead weight now, not a hazard, and removing a working alternative for no reason
         # would be an unforced edit.
-        calls = re.search(r"(w\.write|Query\.|world_q\.|decision\.|contest\(|sense\(|_run\("
+        # ⚠ `world_q\.` AND `decision\.` REPLACE THE `Query\.` THIS PATTERN WAS WRITTEN FOR --
+        # step 7 deleted `class Query` and renamed 93 call expressions to their owning modules,
+        # so a probe that genuinely calls one would have stopped matching. BOTH CARRY `\w`, AND
+        # THAT IS NOT DECORATION: "decision." is an ordinary English bigram, so a bare
+        # `decision\.` would excuse any probe whose gap message happens to end a sentence on the
+        # word -- widening a guard until it stops guarding. `_code_only` strips docstrings but
+        # NOT inline message strings, so the exposure is real. Measured before the change: 0 of
+        # 78 `by="construction"` probes matched on `Query\.` alone, and 0 match on `decision\.`
+        # alone, so this is meaning-preservation and not a repair.
+        calls = re.search(r"(w\.write|Query\.|world_q\.\w|decision\.\w|contest\(|sense\(|_run\("
                           r"|Event\(|cache_at_barrier|boot\(|setattr\(|Rung\(|View\(|fixtures)",
                           body)
         if raises and not calls:
@@ -2363,8 +2372,17 @@ def test_decision_module_never_names_world():
 
     TWO CHECKS, MATCHING WHAT AX-2 ACTUALLY FORBIDS:
       (a) no `Import`/`ImportFrom` in `decision.py` resolves to `state.world`, `queries` (either
-          `world_q` or `readers`), `loop`, `seam`, `combat_seam` or `shape` — the six places a
-          `World` (or a function that takes one) could be smuggled in from.
+          `world_q` or `readers`), `loop`, `seam`, `combat_seam` or `shape`.
+      (a2) NO IMPORTED NAME TAKES A `World`, WHATEVER MODULE IT CAME FROM. ⚠ (a) ALONE WAS NOT
+          ENOUGH AND ITS FIRST DRAFT CLAIMED IT WAS — it called its six modules "the six places a
+          `World` (or a function that takes one) could be smuggled in from", which is false, and a
+          read-only critic constructed the seventh from the module `decision.py` already imports:
+          `from .epistemic import observers_for` would have been GREEN while handing the decision
+          island `observers_for(w: "World", ...)`. That is exactly the route `04:171` row 2 names —
+          *"a person-side function calls a resolver-side one with no import to scan"* — reaching it
+          through an import that IS scanned and simply was not on the list. (a2) resolves each
+          imported name and reads its real signature, so it DERIVES the forbidden set from what a
+          function takes rather than enumerating module names, and no new module can open the hole.
       (b) no bare `Name`, `Attribute` attribute, or string `Constant` in `decision.py` equals
           `"World"` — catching a `World` referenced without an import (impossible today, since (a)
           already forbids importing it, but a decorator, a `globals()` lookup, or a future
@@ -2395,6 +2413,45 @@ def test_decision_module_never_names_world():
                 bad_imports.append((node.lineno, node.module))
     assert not bad_imports, (
         f"decision.py imports from a forbidden module (AX-2): {bad_imports}")
+
+    # (a2) -- the derived half. An allowed module may still export a World-taking function, so
+    # read every imported name's actual signature instead of trusting its address.
+    world_takers, inspected = [], 0
+    for node in ast_.walk(tree):
+        if not isinstance(node, ast_.ImportFrom) or node.module is None:
+            continue
+        src_mod = sys.modules.get(f"engine.season.{node.module}")
+        if src_mod is None:
+            continue
+        for alias in node.names:
+            obj = getattr(src_mod, alias.name, None)
+            if not callable(obj):
+                continue
+            try:
+                params = inspect.signature(obj).parameters
+            except (TypeError, ValueError):
+                continue
+            inspected += 1
+            for pname, param in params.items():
+                ann = param.annotation
+                if ann is inspect.Parameter.empty:
+                    continue
+                # ⚠ COMPARE BY TOKEN, NOT BY EQUALITY, AND THE FIRST DRAFT OF THIS CHECK GOT IT
+                # WRONG IN THE ONE WAY THAT MATTERS: it tested `text == "World"`, which is FALSE
+                # for every module carrying `from __future__ import annotations` -- `epistemic.py`
+                # does, so a source annotation already written `w: "World"` reaches here as the
+                # string `"'World'"`, quotes and all. The check passed on the exact plant it was
+                # written to catch. A word-boundary search reads the token instead of the spelling,
+                # and also catches `Optional[World]` and `list["World"]`.
+                text = ann if isinstance(ann, str) else getattr(ann, "__name__", repr(ann))
+                if re.search(r"\bWorld\b", text):
+                    world_takers.append((node.lineno, node.module, alias.name, pname))
+    assert inspected >= 5, (
+        f"the World-taking-import check inspected only {inspected} signatures; it has stopped "
+        "resolving decision.py's imports and is passing vacuously (§0.1 pt 2)")
+    assert not world_takers, (
+        "decision.py imports a function that TAKES a World, which is AX-2's substance rather "
+        f"than its spelling: {world_takers}")
 
     bad_names = []
     for node in ast_.walk(tree):

@@ -50,10 +50,23 @@ from engine.season import decision as PS                # noqa: E402
 # on it. `arm9_forking.py` and `arm9_subj.py` install a spy/fake by rebinding the module attribute
 # around a scoped run (`_REAL_PACK = S.pack_scenes` / `S.pack_scenes = packed` / restore); both are
 # re-pointed to `PS.pack_scenes` in the same commit that adds this alias, so the rebind reaches the
-# function `make_chooser` actually calls. `arm7_flexibility.py` does the identical thing and is
-# DELIBERATELY left unrepointed -- nothing imports that file, so it cannot fail the suite, and it
-# is recorded rather than fixed (CLAUDE.md §0.1 pt 5's load-bearing predicate: a defect with no
-# cost is evidence the artifact needs no guard, not evidence it needs a fix).
+# function `make_chooser` actually calls.
+#
+# ⚠ SO ARE `arm7_flexibility.py` AND `wd_acceptance.py`, AND THE FIRST DRAFT OF THIS PARAGRAPH SAID
+# OTHERWISE ON A FALSE PREMISE. It read: *"`arm7_flexibility.py` ... is DELIBERATELY left
+# unrepointed -- nothing imports that file, so it cannot fail the suite"*, and cited §0.1 pt 5 to
+# license leaving it. Both halves were wrong. `sweep.py:19` imports `arm7_flexibility` and runs it
+# at `:111`; `wd_acceptance` is imported by SIX files (`wd_chunk`, `wd_collect`, `wd_ipc1`,
+# `wd_cells`, `wd_subj`, `wd_extra`). The premise came from the decomposition plan's §2.3, was
+# repeated by the step-7 brief and by the commit message, and no one ran `rg 'import arm7'` until a
+# read-only critic did. Reproduce with: `rg -n 'import (arm7_flexibility|wd_acceptance)'`.
+#
+# AND THE CITATION WAS A MISREADING. §0.1 pt 5 governs whether a pattern defect earns A GUARD; it
+# is not a licence to leave an instrument you just broke returning a wrong number. Its own text is
+# *"Delete it, or accept the defect and write nothing"* -- and the draft wrote eleven lines while
+# leaving the arm live in the runner. An unrepointed `arm7` reports all four branches identical
+# because `take_kth` becomes an inert context manager: a FABRICATED NULL, which is precisely the
+# §0.1 pt 4 failure ("a number without a control is not a measurement -- in either direction").
 
 # `CLAUDE.md` §0.1 pt 5 / G1: declared with its reason, never a bare literal in a body.
 LADDER_C = ("Overwhelming", "Success", "Partial", "Failure")

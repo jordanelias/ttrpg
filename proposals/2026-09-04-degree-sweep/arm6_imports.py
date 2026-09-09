@@ -64,8 +64,16 @@ def run(log: Log) -> dict:
             # grade, and an earlier draft probed only the grade. Both are checked now.
             r = rows.get("determine")
             try:
-                from engine.season import shape as _S
-                js = hasattr(_S.Query, "judging_set") or "judging_set" in dir(_S)
+                # ⚠ THE ADDRESS MOVED; THE QUESTION DID NOT (step 7, ED-IN-0203). This read
+                # `hasattr(_S.Query, "judging_set")` under a bare `except`, and `class Query` was
+                # DELETED at step 7 -- so the probe raised `AttributeError`, the except swallowed
+                # it, and this row silently printed ABSENT where `runs/SWEEP_LOG.txt:339` records
+                # PRESENT. A verdict inversion with its cause caught, which is the one shape a
+                # measurement must never have (§0.1 pt 4: a number without a control). `judging_set`
+                # is a `queries/world_q.py` module function now, unchanged in behaviour, and asking
+                # its real owner is what keeps the ROW's answer true across the decomposition.
+                from engine.season.queries import world_q as _WQ
+                js = hasattr(_WQ, "judging_set")
             except Exception:
                 js = None
             state = (("`determine` grade=%r contests=%r; `judging_set` as a Query in shape.py: %s"

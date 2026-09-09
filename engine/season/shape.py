@@ -307,10 +307,15 @@ from .decision import (  # noqa: F401 -- re-exported so `S.<name>` and every bar
 # four person-side statics -- `budget`, `opening_set`, `assemble`, `entrenchment` -- are MODULE
 # FUNCTIONS in `season.decision` now, dedented out of the class body with nothing else changed.
 #
-# `04_CODE_ARCHITECTURE.md` SA.3 row 2 predicted this exact moment: "the class survives one more
-# step only as the call-site facade; it goes at step 7, when the four person-side statics below
-# become `decision`'s module functions -- and `decision` is the module that may not name `World`
-# at all (AX-2)." This is that step.
+# ⚠ THE QUOTATION THAT STOOD HERE WAS ATTRIBUTED TO `04_CODE_ARCHITECTURE.md` §A.3 ROW 2 AND IS
+# NOT IN IT. It read: *"the class survives one more step only as the call-site facade; it goes at
+# step 7, when the four person-side statics below become `decision`'s module functions."* Those
+# are THIS FILE'S OWN step-5 words, deleted by this very commit -- the repository quoted itself
+# and credited the spec, which is the anti-fabrication failure §7 names, arriving through prose
+# rather than through a number. §A.3 row 2 actually reads: *"one `Query` class holding both
+# families | two modules; the second cannot import the first | T-f. In one class, a person-side
+# function calls a resolver-side one with no import to scan."* That row licenses the SPLIT and is
+# silent on facades and step numbers. Falsifier: `rg -n "call-site facade" architecture/` -> 0.
 #
 # SEVENTEEN MORE TOP-LEVEL NAMES MOVED WITH THEM, in the same commit, all to `season.decision`:
 # `align`, `stance_toward`, `urgency`, `make_chooser`, `person_side_eligible`,
@@ -434,9 +439,13 @@ def resolvable_verbs() -> frozenset:
 # sentence was a forecast; this edit is the fix it forecast needing. ⚠ **NOT "SILENT", WHICH THIS
 # COMMENT ALSO ONCE CLAIMED.** All three names are caught by an existing assertion: this one by the
 # falsifier below, `ALIGNMENT` by `test:2376`'s uniform control, `pack_scenes` by the arms'
-# `in_budget` consumer. What IS silent is the residue -- `wd_acceptance.py` and
-# `arm7_flexibility.py` are imported by nothing, so they cannot fail the suite and would mismeasure
-# only on a re-run; both are left as they are (§F of the step-7 brief), recorded rather than fixed.
+# `in_budget` consumer. ⚠ AND THERE IS NO SILENT RESIDUE, BECAUSE THE PREMISE THAT CREATED ONE WAS
+# FALSE. What stood here said *"`wd_acceptance.py` and `arm7_flexibility.py` are imported by
+# nothing, so they cannot fail the suite"* -- inherited from the decomposition plan's §2.3,
+# repeated by the step brief and by the commit message, and refuted by one grep:
+# `rg -n "import (arm7_flexibility|wd_acceptance)"` returns `sweep.py:19` (which RUNS arm7 at
+# `:111`) and six importers of `wd_acceptance`. Both are re-pointed to `sweep_core.PS` in the same
+# commit, so all three rebind families now reach the module their reader lives in.
 # The falsifier is not vacuous:
 # `test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_the_control`
 # asserts `live` is non-empty and says in its own message *"or the deposit no longer reaches

@@ -86,7 +86,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 import sweep_core as K
-from sweep_core import S, C, R, Log
+from sweep_core import S, C, R, Log, PS
 import arm9_forking as A9
 
 SEED = 0
@@ -217,7 +217,7 @@ def sweep_arm(mode: str, slots: str, cases=None, seasons: int = SEASONS) -> dict
 # RECORDED? `W-B`'s whole retraction was that a self-refuting belief produced 95% of its published
 # effect, so a divergence driven by a belief that was false at deposit is a DEFECT, not a result.
 # ---------------------------------------------------------------------------------------------
-_REAL_BC = S.belief_contradicts
+_REAL_BC = PS.belief_contradicts
 _REAL_WITNESS = S.SeasonDriver.witness
 
 
@@ -280,12 +280,12 @@ def _instrumented(fn):
                                                      else world_now == c.value)))
         return out
 
-    S.belief_contradicts = bc
+    PS.belief_contradicts = bc
     S.SeasonDriver.witness = witness
     try:
         res = fn()
     finally:
-        S.belief_contradicts = _REAL_BC
+        PS.belief_contradicts = _REAL_BC
         S.SeasonDriver.witness = _REAL_WITNESS
     return res, drops, deps
 
@@ -398,11 +398,11 @@ def positive_control(cases, slots: str = "narrow", mode: str = "none") -> dict:
             if _REAL_BC(p, row, subject, operands):
                 return True
             return any(c.subject == subject and c.predicate == _p for c in p.ledger)
-        S.belief_contradicts = bc
+        PS.belief_contradicts = bc
         try:
             rows = [A9.fork_case(c, SEED, SEASONS, fixtures=fx) for _, c in cases]
         finally:
-            S.belief_contradicts = _REAL_BC
+            PS.belief_contradicts = _REAL_BC
         good = [r for r in rows if r.get("ok")]
         real = [f for r in good for f in r["forks"]
                 if f.get("status") in ("DIVERGED", "RECONVERGED")]
