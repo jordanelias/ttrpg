@@ -250,13 +250,16 @@ systems:
     canonical_sha__systems__world__reference__ms_trajectory_v1_md: "f029a064ed5d26b2a7b73636a0ac844a28d1d05f"
     canonical_sha__systems__world__ms_trajectory_v1_md: "f029a064ed5d26b2a7b73636a0ac844a28d1d05f"
 
-# ── Foundations amendments (canonical philosophy) ──────────────────────
+# ── Foundations (canonical philosophy) ─────────────────────────────────
+# Repointed 2026-09-07. The two amendments these entries named are SUPERSEDED and
+# carry banners saying so; pinning them here would have made this index name
+# superseded documents as canonical. Their content lives in the philosophy suite.
   leap_mechanism:
-    design_doc: canon/02_foundations_amendment_leap_mechanism.md
-    canonical_sha__canon__02_foundations_amendment_leap_mechanism_md: "c7c416a570de69b5fb32dbafba2625ac7a4d17fe"
+    design_doc: canon/philosophy/06_operations.md
+    canonical_sha__canon__philosophy__06_operations_md: "ecee0261e09c00e7525cd0535e89b2e62f759749"
   self_rendering:
-    design_doc: canon/01_foundations_amendment_self_rendering.md
-    canonical_sha__canon__01_foundations_amendment_self_rendering_md: "4f0a67e15cae6ce7c8864527ab2000f31fbfc951"
+    design_doc: canon/philosophy/04_being_persistence.md
+    canonical_sha__canon__philosophy__04_being_persistence_md: "55045a32520f92ea1317cb0de86606185e3b00ea"
 
 # ────────────────────────────────────────────────────────────────────────
 # All 17 full_stack systems mapped. sim_gate('full_stack') will pass after a
