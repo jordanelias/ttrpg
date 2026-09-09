@@ -1,8 +1,8 @@
 """
 systems/settlements/sim/registry.py — Settlement registry (closes audit gap G1)
 
-Canon source: systems/settlements/goldenfurt_slice/sim_build_spec.md §1;
-              systems/settlements/settlement_layer_v30.md §1.1-1.3, §2.1
+Canon source: systems/settlements/goldenfurt_slice/reference/sim_build_spec.md §1;
+              systems/settlements/reference/settlement_layer_v30.md §1.1-1.3, §2.1
 
 The Settlement is the base civic/political unit (settlement_layer §1.1; the
 siege-target). Before this module, systems/settlements/sim/settlement.py mapped 1:1

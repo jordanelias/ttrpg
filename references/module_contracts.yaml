@@ -197,7 +197,7 @@ modules:
   - module: faction_state
     aliases: ["Faction Layer"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "faction_layer"   # Key Type Registry vocabulary
-    doc: systems/factions/faction_behavior_v30.md
+    doc: systems/factions/reference/faction_behavior_v30.md
     sim_module: engine/autoload/game_state.py   # OI-54 (ED-IN-0097, W4): the `Faction` dataclass
       # (L/Sta/W/I/Mil "faction stats 1-7", `.adjust()` mutator) is the real code home for this
       # contract's state: block. NOT mechanics_index-precedented under this name (mechanics_index
@@ -270,7 +270,7 @@ modules:
   - module: npc_behavior
     aliases: ["NPC Behaviour"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "npc_behavior (+ Procedures B/D/E)"   # Key Type Registry vocabulary
-    doc: systems/factions/political_dynamics_keys_migration_v30.md   # C-KEY-2 repoint (2026-07-29): the prior doc: (npc_behavior_v30.md) is Key-silent; this is the module's real Key-sequencing spec ("Doc 12 Procedures — Key-Migration Spec", PP-687) and was already cited under sources: below. npc_behavior_v30.md stays reachable in sources: (behavioral spec, not superseded).
+    doc: systems/factions/reference/political_dynamics_keys_migration_v30.md   # C-KEY-2 repoint (2026-07-29): the prior doc: (npc_behavior_v30.md) is Key-silent; this is the module's real Key-sequencing spec ("Doc 12 Procedures — Key-Migration Spec", PP-687) and was already cited under sources: below. npc_behavior_v30.md stays reachable in sources: (behavioral spec, not superseded).
     sim_module: none   # OI-54 (ED-IN-0097, W4): re-verified — systems/npcs/ has ZERO .py files
       # (matches this entry's own consumes: comment above, "npc_behavior has no runtime"). Doc is
       # real (not doc:null) but there is no code home yet; the NPC family lane is unresolved (§5
@@ -362,11 +362,11 @@ modules:
       - "SUPERSEDED 2026-07-07 (ED-IN-0023 / C-KEY-6): the four types this note flagged as registry-absent (scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed) were registered by ED-935 (2026-06-14, key_type_registry_v30 §9). The residual gap was that npc_behavior's own consumes[] never added the corresponding edges (plus scene.thread_operation / scene.draft_da, also registry-declared to it) despite being both self-loop consumer and emitter for four — closed by this same commit's consumes[] additions above."
       - "Accounting sequence (doc-12 §8, canonical): mechanical.accounting boundary -> Procedure B (Knowledge Decay -> Generation -> Resolution) -> DA Proposal Phase -> C -> D -> E; substrate §4.1 single-update rule processes emissions inline"
       - "OI-24 residue CLOSED 2026-07-29 (W3 item 3 contract-truth sweep): the emits:[] inline comments on the same four types (scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed) still asserted 'NOT in registry' after the SUPERSEDED note above had already recorded ED-935's registration — a stale comment/gap_note contradiction, not a live gap. Verified in-tree against key_type_registry_v30.md (§4/§5 entries, emitting_systems: [npc_behavior]) that the SUPERSEDED note is the true state; the four emits:[] comments corrected to match."
-      - "C-KEY-2 CLOSED 2026-07-29 (W3 item 3): doc: repointed from the Key-silent systems/npcs/npc_behavior_v30.md to political_dynamics_keys_migration_v30.md, the module's actual Key-sequencing spec (was cited only under sources:, per audit/2026-07-07-unaddressed-areas-audit/01_workings/cluster_C-KEY.md C-KEY-2). npc_behavior_v30.md remains reachable in sources: above — not superseded, just no longer the doc: pointer."
+      - "C-KEY-2 CLOSED 2026-07-29 (W3 item 3): doc: repointed from the Key-silent systems/npcs/reference/npc_behavior_v30.md to political_dynamics_keys_migration_v30.md, the module's actual Key-sequencing spec (was cited only under sources:, per audit/2026-07-07-unaddressed-areas-audit/01_workings/cluster_C-KEY.md C-KEY-2). npc_behavior_v30.md remains reachable in sources: above — not superseded, just no longer the doc: pointer."
     status: extracted
     sources:
-      - "systems/npcs/npc_behavior_v30.md (behavioral spec — kept reachable here per C-KEY-2 repoint 2026-07-29; see doc: above) [READ: 2026-07-29]"
-      - "systems/npcs/npc_behavior_v30_index.md [READ: 2026-06-10]"
+      - "systems/npcs/reference/npc_behavior_v30.md (behavioral spec — kept reachable here per C-KEY-2 repoint 2026-07-29; see doc: above) [READ: 2026-07-29]"
+      - "systems/npcs/reference/npc_behavior_v30_index.md [READ: 2026-06-10]"
       - "political_dynamics_keys_migration_v30 full incl. §8 sequencing [READ: 2026-06-10]"
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
       - "key_substrate_v30 §8.2, §8.3 [READ: 2026-06-10]"
@@ -409,7 +409,7 @@ modules:
   - module: piety_track
     aliases: ["Conviction Track"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "conviction_track"   # Key Type Registry vocabulary
-    doc: systems/characters/conviction_track_v1.md
+    doc: systems/characters/reference/conviction_track_v1.md
     sim_module: systems/characters/sim/conviction.py   # OI-54 (ED-IN-0097, W4): matches
       # mechanics_index.yaml's `certainty_track`/`conviction_scar` entries (same file); content
       # verified directly (apply_conviction_scar, per-Conviction Scar thresholds — §2 of this
@@ -445,7 +445,7 @@ modules:
         "on": "conviction scars"
         source: "conviction_track_v1 §2 (PP-718 per-Conviction)"
     gap_notes:
-      - "NAME COLLISION (3-way) [OPEN — Jordan]: substrate §8.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home systems/characters/conviction_track_v1.md) vs systems/characters/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-406-418, CV per territory) — two different systems share both names"
+      - "NAME COLLISION (3-way) [OPEN — Jordan]: substrate §8.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home systems/characters/reference/conviction_track_v1.md) vs systems/characters/reference/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-406-418, CV per territory) — two different systems share both names"
     status: extracted
     sources:
       - "key_substrate_v30 §8.4 [READ: 2026-06-10]"
@@ -459,7 +459,7 @@ modules:
       note: conviction.py Scar accumulation real; reached only via the unwired knot chain.
 
   - module: territorial_piety
-    doc: systems/characters/conviction_track_v30.md
+    doc: systems/characters/reference/conviction_track_v30.md
     sim_module: systems/overview/sim/ci_track.py   # OI-54 (ED-IN-0097, W4): matches
       # mechanics_index.yaml's `ci_track` entry — implements the CI (Church Influence) half of
       # this module's state: block (PP-412 5-step seasonal calc; content verified). The CV
@@ -508,7 +508,7 @@ modules:
 
   - module: threadwork
     registry_system: "threadwork"   # Key Type Registry vocabulary
-    doc: systems/threadwork/threadwork_v30.md
+    doc: systems/threadwork/reference/threadwork_v30.md
     sim_module: systems/threadwork/sim/operations.py   # OI-54 (ED-IN-0097, W4): matches
       # mechanics_index.yaml's `thread_leap`/`thread_weaving`/`thread_pulling`/`thread_locking`/
       # `thread_dissolution`/`thread_mending` entries (all this file — the operation-roll
@@ -547,7 +547,7 @@ modules:
   - module: fieldwork_knots
     aliases: ["Knots"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "fieldwork"   # Key Type Registry vocabulary
-    doc: systems/fieldwork/knots_v30.md
+    doc: systems/fieldwork/reference/knots_v30.md
     sim_module: systems/fieldwork/sim/knots.py   # OI-54 (ED-IN-0097, W4): matches
       # mechanics_index.yaml's `knots` entry directly (module alias is literally "Knots"); this
       # module's gap_notes already flag it as needing a rebuild (C-TW-12) — real code, imperfect
@@ -738,7 +738,7 @@ modules:
 
   - module: social_contest
     registry_system: "social_contest"   # Key Type Registry vocabulary
-    doc: systems/social_contest/social_contest_v30.md
+    doc: systems/social_contest/reference/social_contest_v30.md
     sim_module: systems/social_contest/sim/contest/   # OI-54 (ED-IN-0097, W4): directory path —
       # matches mechanics_index.yaml's `social_contest` entry verbatim (the live contest kernel
       # package, contest_rebuild Stages 0-3 landed per that entry's own note).
@@ -772,7 +772,7 @@ modules:
   - module: mass_battle
     aliases: ["Mass Combat"]   # prose display-names (Workbench module-counterpart matching, ED-IN-0082)
     registry_system: "mass_battle"   # Key Type Registry vocabulary
-    doc: systems/mass_battle/mass_battle_v30.md
+    doc: systems/mass_battle/reference/mass_battle_v30.md
     # sim_module: DELIBERATELY NOT ADDED HERE (OI-54, ED-IN-0097, W4): this module's rows are
     # MB-owned per the plan's shared-file single-writer table ("module_contracts.yaml: MB owns
     # rows [mass_battle] and its E1 deletion; IN owns the rest") — the join lane does not touch
@@ -863,7 +863,7 @@ modules:
 
   - module: peninsular_strain
     registry_system: "peninsular_strain"   # Key Type Registry vocabulary
-    doc: systems/overview/peninsular_strain_v30.md
+    doc: systems/overview/reference/peninsular_strain_v30.md
     sim_module: systems/overview/sim/   # OI-54 (ED-IN-0097, W4): DIRECTORY — this module's
       # state: block splits across several files with no single owner: MS is
       # systems/overview/sim/ms_track.py (this module's own state: comment already names it as
@@ -930,7 +930,7 @@ modules:
 
   - module: settlement_layer
     registry_system: "settlement_layer"   # Key Type Registry vocabulary
-    doc: systems/settlements/settlement_layer_v30.md
+    doc: systems/settlements/reference/settlement_layer_v30.md
     sim_module: systems/settlements/sim/settlement.py   # OI-54 (ED-IN-0097, W4): matches
       # mechanics_index.yaml's `settlement_state` entry verbatim; content verified directly
       # (Prosperity/Order/derived Local-Economy computation, §1.3). Legitimacy/Popular Support
@@ -1044,7 +1044,7 @@ modules:
       note: phantom (in-3/out-0); ED-SE-0005 folds it into settlement_layer.
 
   - module: ci_political
-    doc: systems/factions/ci_political_v30.md
+    doc: systems/factions/reference/ci_political_v30.md
     sim_module: none   # OI-54 (ED-IN-0097, W4): re-verified — no dedicated code found (grep for
       # political_pool/card_hand/ci_political across systems/+engine/ finds only a docstring
       # listing in systems/factions/__init__.py, not implementation). Matches this entry's own
@@ -1076,7 +1076,7 @@ modules:
       note: CANONICAL doc, ZERO Key integration; card system unbuilt.
 
   - module: victory
-    doc: systems/victory/victory_v30.md
+    doc: systems/victory/reference/victory_v30.md
     sim_module: engine/autoload/victory.py   # OI-54 (ED-IN-0097, W4): matches
       # mechanics_index.yaml's `victory_check_service` AND `peninsular_sovereignty` entries (both
       # cite this same file) — cross-checked, no discrepancy.
@@ -1146,7 +1146,7 @@ modules:
     accounting_phase: [season_tick, accounting_boundary]
     gap_notes:
       - "registry-derived; home doc unlocated [GAP] — campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)"
-      - "2026-07-02: systems/_architecture/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open — awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
+      - "2026-07-02: systems/_architecture/reference/propagation_spec_v1.md (ED-1093, CANONICAL per ED-1094 merge-ratifies-by-default) supplies the candidate home doc. ED-1051, open — awaiting Jordan: doc: null stays unflipped until then (a separate editorial item this doc's ratification does not by itself close)."
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -1160,7 +1160,7 @@ modules:
 
   - module: faction_politics
     registry_system: "faction_politics"   # Key Type Registry vocabulary
-    doc: systems/factions/faction_politics_v30.md   # [verification ED-IN-0016: doc:null was stale — CANONICAL, PP-660, 1115 lines; confirmed by key_type_registry_v30.md:502,506,525,546,723 and references/restructure_ledger.md:165]
+    doc: systems/factions/reference/faction_politics_v30.md   # [verification ED-IN-0016: doc:null was stale — CANONICAL, PP-660, 1115 lines; confirmed by key_type_registry_v30.md:502,506,525,546,723 and references/restructure_ledger.md:165]
     sim_module: none   # OI-54 (ED-IN-0097, W4): re-verified — no dedicated code found (a
       # Standing/coup_attempted/succession grep across systems/+engine/ turns up only unrelated
       # substring hits). Matches this entry's own state: comment above ("contract-truth
@@ -1184,12 +1184,12 @@ modules:
     loops: []
     gap_notes:
       - "registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) — boundary vs faction_state unestablished [OPEN — Jordan]; home doc [GAP]"
-      - "home doc [GAP] closed 2026-07-08 (ED-IN-0016): the 'home doc [GAP]' clause above is now stale — doc: field flipped to systems/factions/faction_politics_v30.md. The faction_politics-vs-faction_state boundary question remains genuinely open."
+      - "home doc [GAP] closed 2026-07-08 (ED-IN-0016): the 'home doc [GAP]' clause above is now stale — doc: field flipped to systems/factions/reference/faction_politics_v30.md. The faction_politics-vs-faction_state boundary question remains genuinely open."
       - "state: [] CLOSED 2026-07-29 (W3 item 3, OI-24/OI-20 contract half): declared the 3 top-level state items (Standing, Coup posture, Succession status) directly off faction_politics_v30.md §1.0/§1.0a/§1.1-1.4/§6/§10.1. This is a contract-truth declaration, not a sim build — OI-20's sim half stays DEFERRED to the FA lane (§3.5 of the orchestration plan)."
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
-      - "systems/factions/faction_politics_v30.md §1.0, §1.0a, §1.1-§1.4, §6, §10.1 [READ: 2026-07-29]"
+      - "systems/factions/reference/faction_politics_v30.md §1.0, §1.0a, §1.1-§1.4, §6, §10.1 [READ: 2026-07-29]"
     wiring:
       build: deferred
       godot: python-oracle
@@ -1199,7 +1199,7 @@ modules:
 
   - module: miraculous_event
     registry_system: "miraculous_event"   # Key Type Registry vocabulary
-    doc: systems/world/miraculous_event_v30.md   # [verification P6: doc:null was stale — the doc exists; resolve its CANONICAL-vs-PROVISIONAL header]
+    doc: systems/world/reference/miraculous_event_v30.md   # [verification P6: doc:null was stale — the doc exists; resolve its CANONICAL-vs-PROVISIONAL header]
     sim_module: systems/world/sim/miraculous_event.py   # OI-54 (ED-IN-0097, W4): matches
       # mechanics_index.yaml's `miraculous_event` entry verbatim.
     scales: [personal, settlement, peninsula]   # [verification P6: was [personal, scene]; matches registry default_scale_signature]
@@ -1211,7 +1211,7 @@ modules:
     transitions: []
     loops: []
     gap_notes:
-      - "registry-derived; system-vs-event-source classification [OPEN — Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): systems/world/miraculous_event_v30.md, ## Status: CANONICAL — the prior 'home doc [GAP]' clause was stale and contradicted this entry's own doc: field/comment (L738). [ED-IN-0023, C-INJ-2]"
+      - "registry-derived; system-vs-event-source classification [OPEN — Jordan] (godot_conversion_strategy_v1.md register item #23, unresolved). Home doc RESOLVED (verification P6): systems/world/reference/miraculous_event_v30.md, ## Status: CANONICAL — the prior 'home doc [GAP]' clause was stale and contradicted this entry's own doc: field/comment (L738). [ED-IN-0023, C-INJ-2]"
     status: extracted
     sources:
       - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
@@ -1252,7 +1252,7 @@ modules:
 
   - module: articulation_layer
     registry_system: "articulation"   # Key Type Registry vocabulary
-    doc: systems/articulation/articulation_layer_v30.md
+    doc: systems/articulation/reference/articulation_layer_v30.md
     sim_module: engine/cross_scale/articulation.py   # OI-54 (ED-IN-0097, W4): matches
       # mechanics_index.yaml's `articulation_layer` entry verbatim. A doc-bearing module whose
       # code home is differently-named/located (not under systems/*/sim) — a legitimate explicit
@@ -1279,7 +1279,7 @@ modules:
       note: the universal Key consumer — 3x raises. No consume-side oracle exists anywhere.
 
   - module: clock_registry
-    doc: systems/overview/clock_registry_v30.md
+    doc: systems/overview/reference/clock_registry_v30.md
     sim_module: none   # OI-54 (ED-IN-0097, W4): by design, per this module's own resolver comment
       # ("catalog of clocks/tracks; owns no state, resolves nothing") and gap_notes ("pure
       # manifest — every listed clock is owned by its source system"). Re-verified: no
@@ -1380,7 +1380,7 @@ modules:
         which is canon, not a flag flip or a wiring fix. Jordan call.'
 
   - module: campaign_architecture
-    doc: systems/_architecture/campaign_architecture_v30.md
+    doc: systems/_architecture/reference/campaign_architecture_v30.md
     sim_module: none   # OI-54 (ED-IN-0097, W4): status: stub below — RECLASSIFIED 2026-06-10 as a
       # cross-cutting consolidation doc, not a runtime module (this entry's own gap_notes); its
       # contents distribute across victory/threadwork/settlement_layer/peninsular_strain, each

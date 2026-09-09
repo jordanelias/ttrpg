@@ -210,8 +210,8 @@ foundation the faction-management ask needs (see §9).
 
 ## 2. Settlement governance
 
-**Live head:** `systems/settlements/settlement_layer_v30.md` (CANONICAL).
-**In proposal:** `systems/settlements/governance_play_redesign_v1.md` (PROPOSAL, 2026-06-22).
+**Live head:** `systems/settlements/reference/settlement_layer_v30.md` (CANONICAL).
+**In proposal:** `systems/settlements/reference/governance_play_redesign_v1.md` (PROPOSAL, 2026-06-22).
 **Sim:** `systems/settlements/sim/` — registry, adjacency, ledger, infrastructure, temperaments.
 **No governance-verb resolver exists in code.** Every verb below is design-only.
 
@@ -286,7 +286,7 @@ Influence / 2)` to revoke — **SO**) · Quo Warranto charter challenge · Churc
 
 ## 3. Mass battle
 
-**Live head:** `systems/mass_battle/mass_battle_v30.md`; **engine:** `systems/mass_battle/sim/`
+**Live head:** `systems/mass_battle/reference/mass_battle_v30.md`; **engine:** `systems/mass_battle/sim/`
 (~8,400 lines). This is the most completely built strategic system in the tree — the `MECHANICS`
 registry in `engine.py` lists **31 mechanics, every one `status: WIRED`.**
 
@@ -482,7 +482,7 @@ Contact node built-but-unactivated. Menu-weighting of the grapple outcome table 
 
 ## 5. Social contest
 
-**Live head:** `systems/social_contest/social_contest_v30.md`; **kernel:**
+**Live head:** `systems/social_contest/reference/social_contest_v30.md`; **kernel:**
 `systems/social_contest/sim/contest/` (~6,700 lines) — the most mechanically complete *personal*
 system after combat. ⚠ A staged **contest_rebuild** is in flight (Stage 4 "four games" next), and a
 2026-08 three-lens audit found **three resolution models under one name** — findings only, nothing
@@ -575,8 +575,8 @@ gain, public pressure raises leak *and* biases.
 
 ## 6. Fieldwork & investigation
 
-**Live heads:** `systems/fieldwork/fieldwork_v30.md` (DESIGN) +
-`systems/fieldwork/investigation_systems_v30.md` (CANONICAL).
+**Live heads:** `systems/fieldwork/reference/fieldwork_v30.md` (DESIGN) +
+`systems/fieldwork/reference/investigation_systems_v30.md` (CANONICAL).
 
 ### ⚠ 6.0 The execution status, stated plainly
 
@@ -686,7 +686,7 @@ Disposition −3. *The Knot itself never breaks — Knots are constitutive, not 
 
 ## 7. Threadwork (cross-cutting)
 
-**Live head:** `systems/threadwork/threadwork_v30.md`; **sim:** `systems/threadwork/sim/`
+**Live head:** `systems/threadwork/reference/threadwork_v30.md`; **sim:** `systems/threadwork/sim/`
 (1,410 lines) — **BUILT**, except `rendering.py` (stub).
 
 Pool: `(Spirit × 2) + min(3, History + 3) + TPS`, `TPS = floor(TS/10)`. TN 7 for **every** operation
@@ -914,6 +914,6 @@ Code: `engine/autoload/{dice_engine,sigma_leverage,engine_clock,scene_slate,vict
 `systems/threadwork/sim/operations.py` · `engine/engine_params/params_tables.yaml`.
 
 Docs: `CURRENT.md` · `systems/settlements/{settlement_layer_v30,governance_play_redesign_v1}.md` ·
-`systems/factions/faction_layer_v30.md` · `systems/fieldwork/fieldwork_v30.md` ·
+`systems/factions/reference/faction_layer_v30.md` · `systems/fieldwork/reference/fieldwork_v30.md` ·
 `systems/_architecture/{auto_manual_resolution_duality_v1,player_agency_v30,throughlines_complete}.md` ·
 `research/rise_to_power_roster_system_research_v1.md` · `registers/handoffs/HANDOFF_{FA,PC,SC}.md`.

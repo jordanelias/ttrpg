@@ -1,7 +1,7 @@
 """
 systems/factions/sim/parliamentary_action.py — Parliamentary Sanction proposal mechanism (faction scale)
 
-Canon source: systems/factions/faction_layer_v30.md §5.4 (Parliamentary Actions table) —
+Canon source: systems/factions/reference/faction_layer_v30.md §5.4 (Parliamentary Actions table) —
     the "Parliamentary Sanction" parameterized action (ED-FA-0006 DISTILL). This module implements
     the CENSURE tier only (the mildest sanction: Mandate-2 proposer min, Majority vote, target
     Stability −1 / Mandate −1, no proposer cost, one-time). The four heavier Sanction tiers

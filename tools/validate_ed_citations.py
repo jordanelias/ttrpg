@@ -149,11 +149,11 @@ SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 # deferred; anything else is a build failure wherever it appears.
 BURN_DOWN_PREFIXES = ('systems/',)  # engine/params/ evacuated 2026-08-05
 BURN_DOWN_ALLOW = frozenset({
-    ('systems/_architecture/decision_policy_v1.md', 'ED-IN-0113'),
-    ('systems/_architecture/key_type_registry_v30.md', 'ED-IN-0014'),
-    ('systems/_architecture/key_type_registry_v30.md', 'ED-IN-0091'),
-    ('systems/articulation/articulation_layer_v30.md', 'ED-IN-0004'),
-    ('systems/articulation/articulation_layer_v30.md', 'ED-IN-0091'),
+    ('systems/_architecture/reference/decision_policy_v1.md', 'ED-IN-0113'),
+    ('systems/_architecture/reference/key_type_registry_v30.md', 'ED-IN-0014'),
+    ('systems/_architecture/reference/key_type_registry_v30.md', 'ED-IN-0091'),
+    ('systems/articulation/reference/articulation_layer_v30.md', 'ED-IN-0004'),
+    ('systems/articulation/reference/articulation_layer_v30.md', 'ED-IN-0091'),
 })
 BURN_DOWN_MAX = 10  # occurrences across those 5 pairs; measured 2026-08-01, a test pins it both ways
 

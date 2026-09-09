@@ -1,7 +1,7 @@
 """
 systems/threadwork/sim/operations.py — Thread operations: Leap, Weaving, Pulling, Past-Pulling, Locking, Dissolution, Mending
 
-Canon source: systems/threadwork/threadwork_v30.md Part 2 (§2.3-§2.6)
+Canon source: systems/threadwork/reference/threadwork_v30.md Part 2 (§2.3-§2.6)
 Params source: params/threadwork.md (TN modifiers, Three-Axis Ob, Thread Pool formula)
 
 Implements 7 operation entry points + the Three-Axis Ob lookup (Depth + Breadth

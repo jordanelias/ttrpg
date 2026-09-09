@@ -1,5 +1,5 @@
 <!-- [SUPERSEDED 2026-04-19] -->
-<!-- This analysis is superseded by designs/architecture/conflict_architecture_proposal.md -->
+<!-- This analysis is superseded by systems/_architecture/reference/conflict_architecture_proposal.md -->
 <!-- Key changes: Niflhel dissolved into settlement phenomena (not a faction). Tensions Deck -->
 <!-- rescoped to 6 external bilateral cards, draw 2 (was 8 mixed cards). Assassination timing -->
 <!-- changed to S8+ fuse model (was game-start). Internal tension cards removed (emergent instead). -->

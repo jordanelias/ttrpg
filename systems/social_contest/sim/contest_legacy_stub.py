@@ -12,7 +12,7 @@ systems/social_contest/sim/contest_legacy_stub.py — DEPRECATED single-compare 
    module directly in new code; import `systems.social_contest.sim.contest` (the package) instead. The v30
    re-skin + build_contest/resolve_contest wrapper land in the NEXT stage.
 
-Canon source: systems/social_contest/social_contest_v30.md §1-§9
+Canon source: systems/social_contest/reference/social_contest_v30.md §1-§9
 
 Implements the contest pipeline:
   - build_argue_pool: §3 Argue Pool = (Primary Attribute × 2) + History

@@ -4,51 +4,51 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 | path | lines | records | note |
 |---|---|---|---|
-| systems/victory/victory_v30.md | 836 | 11 | Full read. §0/§1/§2/§6/§7 live (GD-1 survivors); §0.1/§3.1-3.6/§4/§8 struck-but-preserved by GD-1 (2026-05-17). |
-| systems/victory/victory_v30_index.md | 149 | 0 | Auto-generated heading index of victory_v30.md; no independent content. |
-| systems/victory/victory_v30_infill.md | 69 | 0 | Prose-extraction companion to victory_v30.md; content is a subset already captured from the skeleton. |
-| systems/victory/victory_flow_skeleton_v1.md | 127 | 7 | Full read. Traced execution skeleton with exact path:line citations; several gaps independently confirmed against code. |
-| systems/overview/peninsular_strain_v30.md | 601 | 6 | Full read. Turmoil/Accord/IP mechanics; ED-743 held-instability revision; §7 Accounting Integration steps never wired in code. |
-| systems/overview/peninsular_strain_v30_index.md | 107 | 0 | Auto-generated heading index; no independent content. |
-| systems/overview/clock_registry_v30.md | 143 | 2 | Full read. Single clock/track registry; surfaced a CI starting-value mismatch against code. |
-| systems/overview/clock_registry_v30_infill.md | 15 | 0 | Stub infill companion, no additional content beyond the skeleton. |
-| systems/overview/overview_flow_skeleton_v1.md | 182 | 5 | Full read. Confirms/extends Turmoil-dead-write finding; PI/Strain clocks fully dead; multiple stub tracks. |
-| systems/overview/ms_budget.md | 141 | 1 | Skimmed. Mostly threadwork-scale MS drain (out of lane); one cross-lane starting-value conflict noted (already covered by ms_track.py's own inline resolution). |
-| systems/overview/wc_survival_spine.md | 122 | 0 | Skimmed. WC track already captured via clock_registry_v30.md and victory_v30.md §6; no new governance-mechanical content. |
-| systems/world/insurgency_pipeline_v30.md | 348 | 8 | Full read. GD-3 4-stage pipeline; §6.2/§6.3 dissolution ratified (ED-881) but unbuilt. |
-| systems/world/world_flow_skeleton_v1.md | 187 | 5 | Full read. Traced skeleton; confirms npe/insurgency wiring and several dead entry points. |
-| systems/world/worldbuilding_v30.md | 341 | 5 | Full read. Four-Cardinal Church, Löwenritter/Guild structure, Motion of No Confidence — all designed-canonical, zero code. |
-| systems/world/worldbuilding_v30_index.md | 106 | 0 | Auto-generated heading index of worldbuilding_v30.md. |
-| systems/world/worldbuilding_v30_infill.md | 72 | 0 | Prose-extraction companion; content subsumed by worldbuilding_v30.md read above. |
-| systems/world/solmund_master_document.md | 585 | 2 | Full read. Parts 1-6 pure literary/voice lore (out of scope); Part 7 Southernmost/Miraculous Event and Baralta theology in scope. |
-| systems/world/miraculous_event_v30.md | 149 | 1 | Skimmed. Atomized duplicate of solmund_master_document §19-26; status-contradiction gap recorded. |
-| systems/world/southernmost_v30.md | 197 | 2 | Skimmed. Southernmost Awareness (SA) faction stat + starting values; unbuilt. |
-| systems/world/southernmost_v30_infill.md | 59 | 0 | Prose companion; no independent governance content beyond southernmost_v30.md. |
-| systems/world/geography_v30.md | 165 | 1 | Skimmed. Territory/adjacency source table feeding insurgency's ADJACENCY registry. |
-| systems/world/geography_v30_infill.md | 41 | 0 | Companion file, no independent content. |
-| systems/world/worldbuilding_canon_audit_v30.md | 128 | 0 | Skimmed. 2026-04-03 pre-restructure audit of worldbuilding v3 vs canon; content already folded into worldbuilding_v30.md's live text. |
-| systems/world/worldbuilding_canon_audit_v30_infill.md | 50 | 0 | Companion file, no independent content. |
-| systems/world/calamity_radiation_v30.md | 170 | 0 | Skimmed. RS-band/radiation mechanics are threadwork-scale, not governance-bearing. |
-| systems/world/calamity_radiation_v30_infill.md | 41 | 0 | Companion file, no independent content. |
-| systems/world/ms_trajectory_v1.md | 155 | 0 | Skimmed. Lore-layer MS trajectory (245 AG framing); no governance/faction mechanic. |
-| systems/world/narrative_voice_canon_v30.md | 71 | 0 | Skimmed. Pure prose-voice doctrine; no mechanical content. |
-| systems/world/solmund_artifacts_v30.md | 53 | 0 | Skimmed. Artifact/relic lore; zero governance hits. |
-| systems/world/solmund_philosophy_v30.md | 70 | 0 | Skimmed. Philosophical/theological lore; zero governance hits. |
-| systems/world/solmund_v30.md | 76 | 0 | Skimmed. Character lore for Solmund himself; zero governance hits. |
-| systems/world/solmund_voice_v30.md | 214 | 0 | Skimmed. Voice/register guide; zero governance hits. |
-| systems/characters/conviction_track_v30.md | 530 | 4 | Full read. Misnamed — this is the territorial Piety-Track & Church-Victory-redesign doc, not personal Conviction; heavy overlap with victory_v30/peninsular_strain_v30 (mostly GD-1-struck). |
-| systems/characters/conviction_track_v30_index.md | 95 | 0 | Auto-generated heading index of conviction_track_v30.md. |
-| systems/characters/conviction_track_v30_infill.md | 60 | 0 | Prose companion; no independent content. |
-| systems/characters/conviction_track_v1.md | 106 | 3 | Skimmed (targeted). This is the actual personal-scale Conviction Scar mechanic (distinct from the file above). §1 superseded by conviction_taxonomy_v30; §2/§3 live, ratified by PP-718. |
-| systems/characters/conviction_track_v1_pp718_vetting.md | 280 | 1 | Skimmed (targeted). Full Class-B ruling vetting of per-Conviction Scar accumulation; ratifies conviction_track_v1.md §2. |
-| systems/characters/conviction_taxonomy_v30.md | 349 | 2 | Skimmed (targeted). PP-684 13-Conviction roster + structured-concentration weighting; single-owned via descriptor_registry.yaml. |
-| systems/characters/conviction_axis_matrix_v30.md | 250 | 0 | Not opened in detail — its 4-axis vectorization is combat/social-contest math (personal-scale resolution), not governance-bearing; §2.2 caveat already captured via conviction_taxonomy_v30.md. |
-| systems/characters/conviction_migration_roster_v30.md | 295 | 0 | Not opened in detail — per-NPC migration mapping (9→13 Conviction roster), a data-migration table, not a governance mechanic. |
-| systems/characters/character_histories_v30.md | 543 | 1 | Full read. Almost entirely personal-scale/combat lifepath skill trees, out of governance scope per scope discipline; one content note on the Knot-to-faction-stakes pattern. |
-| systems/characters/character_histories_v30_index.md | 113 | 0 | Auto-generated heading index; no independent content. |
-| systems/characters/character_histories_v30_infill.md | 121 | 0 | Prose companion; no independent content. |
-| systems/characters/character_generation_questionnaire_v30.md | 116 | 0 | Skimmed. Character-creation interview flow, personal-scale only, zero governance hits. |
-| systems/characters/characters_flow_skeleton_v1.md | 149 | 3 | Full read. Traced skeleton for conviction/beliefs/companion; reveals apply_conviction_scar's only caller is itself uncalled in production. |
+| systems/victory/reference/victory_v30.md | 836 | 11 | Full read. §0/§1/§2/§6/§7 live (GD-1 survivors); §0.1/§3.1-3.6/§4/§8 struck-but-preserved by GD-1 (2026-05-17). |
+| systems/victory/reference/victory_v30_index.md | 149 | 0 | Auto-generated heading index of victory_v30.md; no independent content. |
+| systems/victory/reference/victory_v30_infill.md | 69 | 0 | Prose-extraction companion to victory_v30.md; content is a subset already captured from the skeleton. |
+| systems/victory/reference/victory_flow_skeleton_v1.md | 127 | 7 | Full read. Traced execution skeleton with exact path:line citations; several gaps independently confirmed against code. |
+| systems/overview/reference/peninsular_strain_v30.md | 601 | 6 | Full read. Turmoil/Accord/IP mechanics; ED-743 held-instability revision; §7 Accounting Integration steps never wired in code. |
+| systems/overview/reference/peninsular_strain_v30_index.md | 107 | 0 | Auto-generated heading index; no independent content. |
+| systems/overview/reference/clock_registry_v30.md | 143 | 2 | Full read. Single clock/track registry; surfaced a CI starting-value mismatch against code. |
+| systems/overview/reference/clock_registry_v30_infill.md | 15 | 0 | Stub infill companion, no additional content beyond the skeleton. |
+| systems/overview/reference/overview_flow_skeleton_v1.md | 182 | 5 | Full read. Confirms/extends Turmoil-dead-write finding; PI/Strain clocks fully dead; multiple stub tracks. |
+| systems/overview/reference/ms_budget.md | 141 | 1 | Skimmed. Mostly threadwork-scale MS drain (out of lane); one cross-lane starting-value conflict noted (already covered by ms_track.py's own inline resolution). |
+| systems/overview/reference/wc_survival_spine.md | 122 | 0 | Skimmed. WC track already captured via clock_registry_v30.md and victory_v30.md §6; no new governance-mechanical content. |
+| systems/world/reference/insurgency_pipeline_v30.md | 348 | 8 | Full read. GD-3 4-stage pipeline; §6.2/§6.3 dissolution ratified (ED-881) but unbuilt. |
+| systems/world/reference/world_flow_skeleton_v1.md | 187 | 5 | Full read. Traced skeleton; confirms npe/insurgency wiring and several dead entry points. |
+| systems/world/reference/worldbuilding_v30.md | 341 | 5 | Full read. Four-Cardinal Church, Löwenritter/Guild structure, Motion of No Confidence — all designed-canonical, zero code. |
+| systems/world/reference/worldbuilding_v30_index.md | 106 | 0 | Auto-generated heading index of worldbuilding_v30.md. |
+| systems/world/reference/worldbuilding_v30_infill.md | 72 | 0 | Prose-extraction companion; content subsumed by worldbuilding_v30.md read above. |
+| systems/world/reference/solmund_master_document.md | 585 | 2 | Full read. Parts 1-6 pure literary/voice lore (out of scope); Part 7 Southernmost/Miraculous Event and Baralta theology in scope. |
+| systems/world/reference/miraculous_event_v30.md | 149 | 1 | Skimmed. Atomized duplicate of solmund_master_document §19-26; status-contradiction gap recorded. |
+| systems/world/reference/southernmost_v30.md | 197 | 2 | Skimmed. Southernmost Awareness (SA) faction stat + starting values; unbuilt. |
+| systems/world/reference/southernmost_v30_infill.md | 59 | 0 | Prose companion; no independent governance content beyond southernmost_v30.md. |
+| systems/world/reference/geography_v30.md | 165 | 1 | Skimmed. Territory/adjacency source table feeding insurgency's ADJACENCY registry. |
+| systems/world/reference/geography_v30_infill.md | 41 | 0 | Companion file, no independent content. |
+| systems/world/reference/worldbuilding_canon_audit_v30.md | 128 | 0 | Skimmed. 2026-04-03 pre-restructure audit of worldbuilding v3 vs canon; content already folded into worldbuilding_v30.md's live text. |
+| systems/world/reference/worldbuilding_canon_audit_v30_infill.md | 50 | 0 | Companion file, no independent content. |
+| systems/world/reference/calamity_radiation_v30.md | 170 | 0 | Skimmed. RS-band/radiation mechanics are threadwork-scale, not governance-bearing. |
+| systems/world/reference/calamity_radiation_v30_infill.md | 41 | 0 | Companion file, no independent content. |
+| systems/world/reference/ms_trajectory_v1.md | 155 | 0 | Skimmed. Lore-layer MS trajectory (245 AG framing); no governance/faction mechanic. |
+| systems/world/reference/narrative_voice_canon_v30.md | 71 | 0 | Skimmed. Pure prose-voice doctrine; no mechanical content. |
+| systems/world/reference/solmund_artifacts_v30.md | 53 | 0 | Skimmed. Artifact/relic lore; zero governance hits. |
+| systems/world/reference/solmund_philosophy_v30.md | 70 | 0 | Skimmed. Philosophical/theological lore; zero governance hits. |
+| systems/world/reference/solmund_v30.md | 76 | 0 | Skimmed. Character lore for Solmund himself; zero governance hits. |
+| systems/world/reference/solmund_voice_v30.md | 214 | 0 | Skimmed. Voice/register guide; zero governance hits. |
+| systems/characters/reference/conviction_track_v30.md | 530 | 4 | Full read. Misnamed — this is the territorial Piety-Track & Church-Victory-redesign doc, not personal Conviction; heavy overlap with victory_v30/peninsular_strain_v30 (mostly GD-1-struck). |
+| systems/characters/reference/conviction_track_v30_index.md | 95 | 0 | Auto-generated heading index of conviction_track_v30.md. |
+| systems/characters/reference/conviction_track_v30_infill.md | 60 | 0 | Prose companion; no independent content. |
+| systems/characters/reference/conviction_track_v1.md | 106 | 3 | Skimmed (targeted). This is the actual personal-scale Conviction Scar mechanic (distinct from the file above). §1 superseded by conviction_taxonomy_v30; §2/§3 live, ratified by PP-718. |
+| systems/characters/reference/conviction_track_v1_pp718_vetting.md | 280 | 1 | Skimmed (targeted). Full Class-B ruling vetting of per-Conviction Scar accumulation; ratifies conviction_track_v1.md §2. |
+| systems/characters/reference/conviction_taxonomy_v30.md | 349 | 2 | Skimmed (targeted). PP-684 13-Conviction roster + structured-concentration weighting; single-owned via descriptor_registry.yaml. |
+| systems/characters/reference/conviction_axis_matrix_v30.md | 250 | 0 | Not opened in detail — its 4-axis vectorization is combat/social-contest math (personal-scale resolution), not governance-bearing; §2.2 caveat already captured via conviction_taxonomy_v30.md. |
+| systems/characters/reference/conviction_migration_roster_v30.md | 295 | 0 | Not opened in detail — per-NPC migration mapping (9→13 Conviction roster), a data-migration table, not a governance mechanic. |
+| systems/characters/reference/character_histories_v30.md | 543 | 1 | Full read. Almost entirely personal-scale/combat lifepath skill trees, out of governance scope per scope discipline; one content note on the Knot-to-faction-stakes pattern. |
+| systems/characters/reference/character_histories_v30_index.md | 113 | 0 | Auto-generated heading index; no independent content. |
+| systems/characters/reference/character_histories_v30_infill.md | 121 | 0 | Prose companion; no independent content. |
+| systems/characters/reference/character_generation_questionnaire_v30.md | 116 | 0 | Skimmed. Character-creation interview flow, personal-scale only, zero governance hits. |
+| systems/characters/reference/characters_flow_skeleton_v1.md | 149 | 3 | Full read. Traced skeleton for conviction/beliefs/companion; reveals apply_conviction_scar's only caller is itself uncalled in production. |
 | systems/world/sim/insurgency_pipeline.py (code, cross-checked) | 267 | — | Read in full to verify insurgency_pipeline_v30.md against the executing code. |
 | systems/world/sim/npe.py (code, cross-checked) | 414 | — | Read (partial, targeted) to verify NPC genome + affiliation_loyalty/Disposition collision against baseline. |
 | systems/overview/sim/accounting.py (code, cross-checked) | 144 | — | Read in full — the season orchestrator for CI/MS/insurgency/NPE. |
@@ -61,7 +61,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 ```yaml
 - id: H7B-001
   name: Peninsular Sovereignty (GD-1 sole victory condition)
-  source: systems/victory/victory_v30.md:35
+  source: systems/victory/reference/victory_v30.md:35
   system: territory-world
   touches: [faction-strategy, resolution-kernel]
   slice: mechanic
@@ -80,7 +80,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-002
   name: Faction-specific victory conditions — struck by GD-1
-  source: systems/victory/victory_v30.md:186
+  source: systems/victory/reference/victory_v30.md:186
   system: faction-strategy
   touches: [territory-world]
   slice: ruling
@@ -101,7 +101,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-003
   name: Turmoil clock has zero write sites — GD-1 gate is structurally a no-op
-  source: systems/victory/victory_flow_skeleton_v1.md:121
+  source: systems/victory/reference/victory_flow_skeleton_v1.md:121
   system: territory-world
   touches: [resolution-kernel, faction-strategy]
   slice: gap
@@ -122,7 +122,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-004
   name: VICTORY_THRESHOLD dead parameter
-  source: systems/victory/victory_flow_skeleton_v1.md:120
+  source: systems/victory/reference/victory_flow_skeleton_v1.md:120
   system: territory-world
   touches: [cross-scale-plumbing]
   slice: gap
@@ -138,7 +138,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-005
   name: Undocumented fallback winner formula (non-GD-1 path)
-  source: systems/victory/victory_flow_skeleton_v1.md:124
+  source: systems/victory/reference/victory_flow_skeleton_v1.md:124
   system: territory-world
   touches: [faction-strategy]
   slice: mechanic
@@ -157,7 +157,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-006
   name: Four world-state era victory gates declared but unimplemented
-  source: systems/victory/victory_flow_skeleton_v1.md:122
+  source: systems/victory/reference/victory_flow_skeleton_v1.md:122
   system: territory-world
   touches: [cross-scale-plumbing]
   slice: gap
@@ -176,7 +176,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-007
   name: CI starting-value mismatch — design 28 vs code 30.0
-  source: systems/overview/clock_registry_v30.md:17
+  source: systems/overview/reference/clock_registry_v30.md:17
   system: resolution-kernel
   touches: [faction-strategy]
   slice: gap
@@ -193,7 +193,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-008
   name: PI and Strain clocks are fully dead
-  source: systems/overview/overview_flow_skeleton_v1.md:170
+  source: systems/overview/reference/overview_flow_skeleton_v1.md:170
   system: resolution-kernel
   touches: [faction-strategy]
   slice: gap
@@ -204,13 +204,13 @@ I now have sufficient material across all four trees. Let me write the final rep
     Strain as peninsular_strain_v30's original name for the Turmoil track before its 2026-04-29
     ED-743 rename) but carry zero live mechanical weight.
   status: gap
-  status_evidence: "engine/autoload/game_state.py:338; systems/overview/overview_flow_skeleton_v1.md:170"
+  status_evidence: "engine/autoload/game_state.py:338; systems/overview/reference/overview_flow_skeleton_v1.md:170"
   rolls: "no"
   shape: none
 
 - id: H7B-009
   name: Turmoil (Strain) global pressure track
-  source: systems/overview/peninsular_strain_v30.md:286
+  source: systems/overview/reference/peninsular_strain_v30.md:286
   system: territory-world
   touches: [resolution-kernel, faction-strategy]
   slice: primitive
@@ -229,7 +229,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-010
   name: Accord seasonal accounting steps (4c/4d/4e) never wired
-  source: systems/overview/peninsular_strain_v30.md:475
+  source: systems/overview/reference/peninsular_strain_v30.md:475
   system: territory-world
   touches: [resolution-kernel]
   slice: gap
@@ -249,7 +249,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-011
   name: Institutional Pressure (IP) track — stub
-  source: systems/overview/peninsular_strain_v30.md:266
+  source: systems/overview/reference/peninsular_strain_v30.md:266
   system: territory-world
   touches: [faction-strategy]
   slice: primitive
@@ -266,7 +266,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-012
   name: Accord per-territory attribute and its Prosperity/legitimacy gate
-  source: systems/overview/peninsular_strain_v30.md:47
+  source: systems/overview/reference/peninsular_strain_v30.md:47
   system: territory-world
   touches: [faction-strategy]
   slice: primitive
@@ -304,7 +304,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-014
   name: Church Mass Seizure — one-shot territorial acquisition
-  source: systems/victory/victory_v30.md:220
+  source: systems/victory/reference/victory_v30.md:220
   system: faction-strategy
   touches: [territory-world]
   slice: mechanic
@@ -322,7 +322,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-015
   name: Church Seizure Ob formula — three incompatible variants across the corpus
-  source: systems/characters/conviction_track_v30.md:130
+  source: systems/characters/reference/conviction_track_v30.md:130
   system: faction-strategy
   touches: [territory-world]
   slice: gap
@@ -341,7 +341,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-016
   name: conviction_track_v30.md is the territorial Piety Track doc, not personal Conviction
-  source: systems/characters/conviction_track_v30.md:5
+  source: systems/characters/reference/conviction_track_v30.md:5
   system: npc-social
   touches: [territory-world, faction-strategy]
   slice: gap
@@ -355,13 +355,13 @@ I now have sufficient material across all four trees. Let me write the final rep
     (conviction_track_v30.md → piety_track_v30.md) as deferred and never executed. A session
     resolving "Conviction" canon via filename alone lands on the wrong document.
   status: gap
-  status_evidence: "systems/characters/conviction_track_v30.md:1-8, 31"
+  status_evidence: "systems/characters/reference/conviction_track_v30.md:1-8, 31"
   rolls: "no"
   shape: none
 
 - id: H7B-017
   name: Revolt → Insurgency → Faction emergence pipeline (GD-3)
-  source: systems/world/insurgency_pipeline_v30.md:1
+  source: systems/world/reference/insurgency_pipeline_v30.md:1
   system: territory-world
   touches: [faction-strategy]
   slice: ruling
@@ -381,7 +381,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-018
   name: Insurgency formation trigger (Stage 3)
-  source: systems/world/insurgency_pipeline_v30.md:107
+  source: systems/world/reference/insurgency_pipeline_v30.md:107
   system: territory-world
   touches: [faction-strategy]
   slice: mechanic
@@ -399,7 +399,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-019
   name: Insurgency promotion to Faction (Stage 4)
-  source: systems/world/insurgency_pipeline_v30.md:156
+  source: systems/world/reference/insurgency_pipeline_v30.md:156
   system: territory-world
   touches: [faction-strategy]
   slice: mechanic
@@ -437,7 +437,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-021
   name: RM PT decay / Latent RM emergence (Stages 1-2) — stub
-  source: systems/world/insurgency_pipeline_v30.md:38
+  source: systems/world/reference/insurgency_pipeline_v30.md:38
   system: territory-world
   touches: [faction-strategy]
   slice: stub
@@ -455,7 +455,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-022
   name: Insurgency/Promoted-Faction dissolution (4-path model) — ratified, unbuilt
-  source: systems/world/insurgency_pipeline_v30.md:229
+  source: systems/world/reference/insurgency_pipeline_v30.md:229
   system: territory-world
   touches: [faction-strategy]
   slice: ruling
@@ -568,7 +568,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-028
   name: 13-Conviction taxonomy (PP-684)
-  source: systems/characters/conviction_taxonomy_v30.md:5
+  source: systems/characters/reference/conviction_taxonomy_v30.md:5
   system: npc-social
   touches: [faction-strategy]
   slice: primitive
@@ -585,7 +585,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-029
   name: Structured concentration — Conviction weighting model (PP-684)
-  source: systems/characters/conviction_taxonomy_v30.md:115
+  source: systems/characters/reference/conviction_taxonomy_v30.md:115
   system: npc-social
   touches: []
   slice: formula
@@ -602,7 +602,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-030
   name: Per-Conviction Scar accumulation and crisis mechanic
-  source: systems/characters/conviction_track_v1.md:32
+  source: systems/characters/reference/conviction_track_v1.md:32
   system: npc-social
   touches: [resolution-kernel]
   slice: mechanic
@@ -622,7 +622,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-031
   name: PP-718 ruling — per-Conviction Scars, not aggregate
-  source: systems/characters/conviction_track_v1_pp718_vetting.md:3
+  source: systems/characters/reference/conviction_track_v1_pp718_vetting.md:3
   system: npc-social
   touches: []
   slice: ruling
@@ -641,7 +641,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-032
   name: Conviction mechanics have zero production campaign reachability
-  source: systems/characters/characters_flow_skeleton_v1.md:143
+  source: systems/characters/reference/characters_flow_skeleton_v1.md:143
   system: npc-social
   touches: [fieldwork-investigation]
   slice: gap
@@ -656,13 +656,13 @@ I now have sufficient material across all four trees. Let me write the final rep
     The mechanic is correctly implemented (H7B-030) but unreachable end-to-end in a seeded
     campaign today.
   status: gap
-  status_evidence: "systems/characters/characters_flow_skeleton_v1.md:143-144 (traced callers); systems/fieldwork/sim/knots.py:349-363 (the one real call site, itself uncalled)"
+  status_evidence: "systems/characters/reference/characters_flow_skeleton_v1.md:143-144 (traced callers); systems/fieldwork/sim/knots.py:349-363 (the one real call site, itself uncalled)"
   rolls: "no"
   shape: none
 
 - id: H7B-033
   name: Close-Knot conviction scar — corrected roster collision (ED-912)
-  source: systems/characters/characters_flow_skeleton_v1.md:149
+  source: systems/characters/reference/characters_flow_skeleton_v1.md:149
   system: fieldwork-investigation
   touches: [npc-social]
   slice: gap
@@ -683,7 +683,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-034
   name: Southernmost Awareness (SA) — faction stat
-  source: systems/world/southernmost_v30.md:47
+  source: systems/world/reference/southernmost_v30.md:47
   system: territory-world
   touches: [faction-strategy]
   slice: primitive
@@ -701,7 +701,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-035
   name: Miraculous Event — SA/Accord world-effect mechanic
-  source: systems/world/solmund_master_document.md:365
+  source: systems/world/reference/solmund_master_document.md:365
   system: territory-world
   touches: [faction-strategy]
   slice: mechanic
@@ -722,7 +722,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-036
   name: miraculous_event_v30.md CANONICAL vs its own source document DRAFT
-  source: systems/world/miraculous_event_v30.md:2
+  source: systems/world/reference/miraculous_event_v30.md:2
   system: territory-world
   touches: []
   slice: gap
@@ -737,13 +737,13 @@ I now have sufficient material across all four trees. Let me write the final rep
     prose, and a session trusting the atomized copy's header would treat unratified design as
     settled.
   status: gap
-  status_evidence: "systems/world/miraculous_event_v30.md:1-2; systems/world/solmund_master_document.md:1,5"
+  status_evidence: "systems/world/reference/miraculous_event_v30.md:1-2; systems/world/reference/solmund_master_document.md:1,5"
   rolls: "no"
   shape: none
 
 - id: H7B-037
   name: Territory adjacency graph (source table)
-  source: systems/world/geography_v30.md:60
+  source: systems/world/reference/geography_v30.md:60
   system: territory-world
   touches: [mass-battle-seam]
   slice: primitive
@@ -759,7 +759,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-038
   name: Four-Cardinal Church structure and cardinal-specific event mechanics
-  source: systems/world/worldbuilding_v30.md:33
+  source: systems/world/reference/worldbuilding_v30.md:33
   system: faction-strategy
   touches: [npc-social]
   slice: content
@@ -777,7 +777,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-039
   name: Motion of No Confidence — Crown deposal mechanic
-  source: systems/world/worldbuilding_v30.md:179
+  source: systems/world/reference/worldbuilding_v30.md:179
   system: parliament-politics
   touches: [faction-strategy]
   slice: mechanic
@@ -796,7 +796,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-040
   name: Named Character Event Cards — governance-crisis pattern
-  source: systems/world/worldbuilding_v30.md:273
+  source: systems/world/reference/worldbuilding_v30.md:273
   system: faction-strategy
   touches: [settlement-governance]
   slice: mechanic
@@ -814,7 +814,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-041
   name: Court Parliament and governance body structure
-  source: systems/world/worldbuilding_v30.md:169
+  source: systems/world/reference/worldbuilding_v30.md:169
   system: parliament-politics
   touches: [settlement-governance]
   slice: content
@@ -831,7 +831,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-042
   name: World-State Transitions (Post-Calamity / Occupation / Anarchy Eras)
-  source: systems/overview/peninsular_strain_v30.md:461
+  source: systems/overview/reference/peninsular_strain_v30.md:461
   system: territory-world
   touches: []
   slice: process
@@ -851,7 +851,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-043
   name: Warden Cooperation (WC) — the world-survival contest's endgame lever
-  source: systems/overview/wc_survival_spine.md:22
+  source: systems/overview/reference/wc_survival_spine.md:22
   system: territory-world
   touches: [faction-strategy]
   slice: primitive
@@ -867,7 +867,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-044
   name: Personal-scale Knot-to-political-stakes design pattern
-  source: systems/characters/character_histories_v30.md:71
+  source: systems/characters/reference/character_histories_v30.md:71
   system: npc-social
   touches: [faction-strategy]
   slice: content
@@ -886,7 +886,7 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 - id: H7B-045
   name: Askeheim/MS world-survival victory interaction
-  source: systems/victory/victory_v30.md:641
+  source: systems/victory/reference/victory_v30.md:641
   system: territory-world
   touches: [resolution-kernel]
   slice: gap
@@ -906,4 +906,4 @@ I now have sufficient material across all four trees. Let me write the final rep
 
 ## Coverage notes
 
-The two named baselines cover almost nothing of this lane directly — the catalogue names only Mass Seizure (H7B-014) and the code-file list at its end; the personnel-muster master document's NPE/REL findings (H7B-024, H7B-025) are cited as `baseline_ref` rather than re-derived. The three flow-skeleton documents (victory, world, overview) turned out to be the highest-value source in the lane: pre-verified, path:line-cited execution traces that independently confirmed several defects I found by reading code directly (Turmoil dead-write, dead VICTORY_THRESHOLD param) and surfaced others I would not have found alone (InsurgencyRecord.L never incrementing was my own find via grep, but PI/Strain total deadness, the undocumented mc_v18 fallback-winner formula, and Conviction mechanics' zero production reachability came from the skeletons). The biggest surprise was `systems/characters/conviction_track_v30.md`: despite its filename and location, it is not about personal Conviction at all — it's an older, largely GD-1-superseded draft of the territorial Piety Track / Church Victory material that lives properly in `victory_v30.md` and `peninsular_strain_v30.md`, which I recorded as a standalone gap (H7B-016) rather than re-harvesting its content as if novel. The boundary cut hardest through `systems/world/` and `systems/characters/character_histories_v30.md`: a large fraction of both trees (Solmund voice/literary-register guides, artifact taxonomy, character lifepath skill trees) is genuinely pure lore or personal-combat content with no governance/faction/NPC/territory mechanical weight, so those files got 0-record manifest rows on purpose rather than padding the harvest with `content` records for material that fails the "does it bear on governance" test.
+The two named baselines cover almost nothing of this lane directly — the catalogue names only Mass Seizure (H7B-014) and the code-file list at its end; the personnel-muster master document's NPE/REL findings (H7B-024, H7B-025) are cited as `baseline_ref` rather than re-derived. The three flow-skeleton documents (victory, world, overview) turned out to be the highest-value source in the lane: pre-verified, path:line-cited execution traces that independently confirmed several defects I found by reading code directly (Turmoil dead-write, dead VICTORY_THRESHOLD param) and surfaced others I would not have found alone (InsurgencyRecord.L never incrementing was my own find via grep, but PI/Strain total deadness, the undocumented mc_v18 fallback-winner formula, and Conviction mechanics' zero production reachability came from the skeletons). The biggest surprise was `systems/characters/reference/conviction_track_v30.md`: despite its filename and location, it is not about personal Conviction at all — it's an older, largely GD-1-superseded draft of the territorial Piety Track / Church Victory material that lives properly in `victory_v30.md` and `peninsular_strain_v30.md`, which I recorded as a standalone gap (H7B-016) rather than re-harvesting its content as if novel. The boundary cut hardest through `systems/world/` and `systems/characters/reference/character_histories_v30.md`: a large fraction of both trees (Solmund voice/literary-register guides, artifact taxonomy, character lifepath skill trees) is genuinely pure lore or personal-combat content with no governance/faction/NPC/territory mechanical weight, so those files got 0-record manifest rows on purpose rather than padding the harvest with `content` records for material that fails the "does it bear on governance" test.

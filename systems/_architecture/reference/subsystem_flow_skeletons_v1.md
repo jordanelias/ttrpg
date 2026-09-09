@@ -122,21 +122,21 @@ One row per subsystem folder under `systems/`. The guard reads this table.
 
 | Subsystem | Lane | Skeleton |
 |---|---|---|
-| `_architecture` | IN | `systems/_architecture/_architecture_flow_skeleton_v1.md` |
-| `articulation` | IN | `systems/articulation/articulation_flow_skeleton_v1.md` |
-| `characters` | PC | `systems/characters/characters_flow_skeleton_v1.md` |
-| `combat` | PC | `systems/combat/combat_flow_skeleton_v1.md` |
-| `factions` | FA | `systems/factions/factions_flow_skeleton_v1.md` |
-| `fieldwork` | FI | `systems/fieldwork/fieldwork_flow_skeleton_v1.md` |
-| `mass_battle` | MB | `systems/mass_battle/mass_battle_flow_skeleton_v1.md` |
-| `npcs` | WR | `systems/npcs/npcs_flow_skeleton_v1.md` |
-| `overview` | IN | `systems/overview/overview_flow_skeleton_v1.md` |
-| `settlements` | SE | `systems/settlements/settlements_flow_skeleton_v1.md` |
-| `social_contest` | SC | `systems/social_contest/social_contest_flow_skeleton_v1.md` |
-| `threadwork` | WR | `systems/threadwork/threadwork_flow_skeleton_v1.md` |
-| `ui` | IN | `systems/ui/ui_flow_skeleton_v1.md` |
-| `victory` | IN | `systems/victory/victory_flow_skeleton_v1.md` |
-| `world` | WR | `systems/world/world_flow_skeleton_v1.md` |
+| `_architecture` | IN | `systems/_architecture/reference/_architecture_flow_skeleton_v1.md` |
+| `articulation` | IN | `systems/articulation/reference/articulation_flow_skeleton_v1.md` |
+| `characters` | PC | `systems/characters/reference/characters_flow_skeleton_v1.md` |
+| `combat` | PC | `systems/combat/reference/combat_flow_skeleton_v1.md` |
+| `factions` | FA | `systems/factions/reference/factions_flow_skeleton_v1.md` |
+| `fieldwork` | FI | `systems/fieldwork/reference/fieldwork_flow_skeleton_v1.md` |
+| `mass_battle` | MB | `systems/mass_battle/reference/mass_battle_flow_skeleton_v1.md` |
+| `npcs` | WR | `systems/npcs/reference/npcs_flow_skeleton_v1.md` |
+| `overview` | IN | `systems/overview/reference/overview_flow_skeleton_v1.md` |
+| `settlements` | SE | `systems/settlements/reference/settlements_flow_skeleton_v1.md` |
+| `social_contest` | SC | `systems/social_contest/reference/social_contest_flow_skeleton_v1.md` |
+| `threadwork` | WR | `systems/threadwork/reference/threadwork_flow_skeleton_v1.md` |
+| `ui` | IN | `systems/ui/reference/ui_flow_skeleton_v1.md` |
+| `victory` | IN | `systems/victory/reference/victory_flow_skeleton_v1.md` |
+| `world` | WR | `systems/world/reference/world_flow_skeleton_v1.md` |
 
 Lane assignments follow `CLAUDE.md` §4's `ED-<LANE>-NNNN` taxonomy. For the folders that are not
 yet formalized 1:1 subsystems, the lane column is the nearest owning lane, not a claim that the
@@ -147,7 +147,7 @@ lane exists for them.
 folders with no row of their own: `characters`, `ui`, `victory`, `world`.** An earlier draft of this
 note copied `CLAUDE.md` §3's list (`characters`/`overview`/`victory`) and added `ui`, which was wrong
 twice over: it **included `overview`**, which does have a row — *Clocks & tracks (cross-cutting)*,
-naming `systems/overview/clock_registry_v30.md` — and it **omitted `world`**, which has none, despite
+naming `systems/overview/reference/clock_registry_v30.md` — and it **omitted `world`**, which has none, despite
 `systems/world/` holding live code that the season loop reaches every turn. `npcs` also has a row
 (*NPC behaviour*), so it is not on the list either.
 
@@ -169,7 +169,7 @@ ratify nothing: no head moves, no status flips, no contract edits follow from au
 | Surface | Relationship |
 |---|---|
 | `references/module_contracts.yaml` | Declares the intended `consumes → resolver → emits` per module. A skeleton traces what the code does; §7 records where the two disagree. Neither edits the other. |
-| `references/ENGINE_ATLAS.md` + `engine_atlas.json` | **The countable view, generated** (`tools/build_engine_atlas.py`, ED-IN-0152). Renders what is derivable without judgment: which subsystems exist, which contracts they own and *how that was attributed*, what a seeded campaign actually called, and — the part that checks this format — **which public callables an authored skeleton never names**. That coverage list is a candidate-omission report, not a defect list: §1 lists what an outside caller can enter through, which is legitimately narrower than every public def. It discovers subsystems from the **filesystem**, not from this file's roster, so a folder added tomorrow appears (flagged undeclared) instead of being silently skipped. Its authored companion is `systems/_architecture/engine_atlas_v1.md`. |
+| `references/ENGINE_ATLAS.md` + `engine_atlas.json` | **The countable view, generated** (`tools/build_engine_atlas.py`, ED-IN-0152). Renders what is derivable without judgment: which subsystems exist, which contracts they own and *how that was attributed*, what a seeded campaign actually called, and — the part that checks this format — **which public callables an authored skeleton never names**. That coverage list is a candidate-omission report, not a defect list: §1 lists what an outside caller can enter through, which is legitimately narrower than every public def. It discovers subsystems from the **filesystem**, not from this file's roster, so a folder added tomorrow appears (flagged undeclared) instead of being silently skipped. Its authored companion is `systems/_architecture/reference/engine_atlas_v1.md`. |
 | `references/CONTRACT_INDEX.md` + `KEY_INDEX.md` | **The declared view, generated** (`tools/build_contract_index.py`, ED-IN-0151) — always fresh, because it is rebuilt from the contracts, the key graph and the wiring manifest. These skeletons are **the as-built view, hand-traced**. **Precedence: on any question of what is *declared*, the generated index wins and a skeleton must not restate it; on any question of what the code *does at the traced commit*, the skeleton wins.** Where they disagree, that is usually not an error in either — a declared-but-unbuilt edge is the system's real state, and §7 is where that gap is recorded. A skeleton's `Contracts:` header names contracts the index defines; `test_contract_names_resolve_in_the_generated_index` enforces that the names resolve there, so the two cannot drift in the place they overlap. |
 | `godot/skeleton/` | GDScript illustration of one module (personal combat). Different artifact, different language, same word. These are `*_flow_skeleton_v1.md`; that one stays `godot/skeleton/`. |
 | The retired index+infill pair | Unrelated. `CLAUDE.md` §4 retired `*_index.md`/`*_infill.md` as a default; "skeleton" there meant a document-atomization half. Here it means structure-without-mechanics. |

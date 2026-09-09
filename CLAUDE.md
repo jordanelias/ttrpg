@@ -1,134 +1,113 @@
 # Valoria — TTRPG / videogame design repo
 
-This repo is the **design source of truth** for **Valoria**, a Godot videogame (engine version UNRESOLVED — see the implementation-repo bullet below) that fuses
+The **design source of truth** for **Valoria** (`jordanelias/ttrpg`), a Godot videogame fusing
 personal-scale resolution (dice pools, skill checks, social contests) with a strategic layer
-(territory control, faction politics, domain actions). **There is no GM — the engine resolves
-everything.** Design docs keep their TTRPG/board-game mechanical detail; those abstractions *are*
-the videogame's layers.
+(territory, faction politics, domain actions). **There is no GM — the engine resolves everything.**
+Design docs keep their TTRPG/board-game mechanical detail; those abstractions *are* the game's layers.
 
-- **Design source of truth:** `jordanelias/ttrpg` (this repo).
-- **Implementation repo:** `jordanelias/valoria-game` — separate clone. ⚠️ **Two corrections, 2026-08-20.** (1) **It is NOT frozen.** PR #2 merged 2026-08-20, landing the first CI job that actually opens the project (a compile ratchet pinned at 84 errors), the PP-665 rename that had held that repo's CI **red on `main` since 2026-05-04**, and the reader half of the constants bridge. (2) **The version is UNRESOLVED and this line no longer asserts one.** `project.godot:11` declares `features=("4.3")` and CI pins the 4.3 binary, while this document and `godot/` say 4.6. One of them is wrong, and a 4.3 binary parsing a 4.6-authored tree can mis-count the ratchet — so the question is load-bearing on what the number 84 means. Awaiting a ruling (plan Q3); do not pick one by editing this line.
+**Implementation repo:** `jordanelias/valoria-game`, a separate clone — not frozen; it has CI and a
+compile ratchet that opens the project. ⚠️ **Its Godot engine version is UNRESOLVED and nothing here may
+assert one:** `project.godot` and that repo's CI pin one version while `godot/` here documents another,
+and a binary of the wrong version mis-counts the ratchet. Awaiting a ruling; do not settle it by editing
+a document.
+
+**THE LAYERS (RULED by Jordan). This is the canonical definition of a GOVERNANCE layer, and no other
+governance scheme may be spelled "Layer".** Not a licence to sweep:
+`godot/godot_architecture_specification.md` numbers four *runtime* layers (Content / Conflict /
+Resolution / Progression) and `systems/ui/` uses "Layer 3" for a UI tier — unrelated senses in their own
+documents, and they stay. This binds anything governing HOW WORK IS DONE.
+
+| | | binds |
+|---|---|---|
+| **Layer 0** | **this file**, `CURRENT.md`, `HANDOFF.md` | the AGENT — how a session works, what may be built, what counts as done |
+| **Layer 1** | `architecture/` (RATIFIED, ED-IN-0204) | how code is written |
+| **Layer 1 scripts** | guards derived from Layer 1 | Layer 2 |
+| **Layer 2** | the game code | the game |
+
+**There is no Layer -1.** Needing one means Layer 0 was written wrong, and the repair is to EDIT THIS
+FILE — never to build a level beneath it. That terminates the tower, because **Layer 0 binds a reader,
+not a program**: code must be checked by code, which has no natural top, whereas an instruction is
+followed or not and its failure is corrected by rewriting it. §0.05 makes prose non-binding for GAME
+MECHANISM and binding as AGENT INSTRUCTION; that asymmetry stops the recursion. (`references/ci_checks_registry.yaml`'s
+`subject:` field is a different axis counting the opposite way — do not spell it "layer".)
 
 ---
 
 ## 0. How we work (method, not location)
 
-§1–§10 tell you *where things are* and *what's current*. This section tells you *how to work* — the
-default posture for every non-trivial task in this repo, not just orchestrated fan-outs. (The
-multi-agent mechanics live in §10; the disposition below applies whether you're solo or fanning out.)
+§1–§11 say where things are; this says how to work — solo or fanned out (§10 has the multi-agent
+mechanics).
 
-- **Plan before you touch the tree.** Establish currency (§1 → `CURRENT.md` + your lane's
-  `HANDOFF_<LANE>.md`), read the subsystem head and its `## Status:` line, and state the plan —
-  what you'll change, in what order, and how you'll verify — *before* the first edit. For anything
-  ambiguous or spanning lanes, get the plan approved (or ask a focused question) rather than guessing.
-  A wrong assumption caught in a plan is free; caught in a merged commit it becomes editorial debt.
-- **Build bottom-up from primitives.** Find the single-owner primitive first and compose on top of it
-  — never re-implement a rule that already lives once (§8's core invariant). New tooling reuses
-  the registries and `engine/substrate/`'s leaf readers (`descriptors`, `composition`, `keys`) —
-  `obs_core`, `audit_staleness` and `review_core` were RETIRED 2026-08-21 (ED-IN-0194) and are
-  named here only so a reader of an older commit knows why they are gone; new mechanics resolve from the
-  Key substrate up. Emergence is the goal: small correct primitives, composed, not a bespoke
-  top-level special case. If you find yourself special-casing an entity or outcome, stop — that's
-  scripting drift (§10 guardrails).
-- **Adversarial pass at every stage that gates a result.** Producing and checking are different jobs:
-  after you draft canon, a number, or a fix, *try to break it* — verify provenance by hand against
-  the cited `PP-NNN`/`ED-NNN` (the anti-fabrication gate is leaky — `validate_ed_citations.py` is
-  scoped to ED only, and since the 2026-08-05 evacuation removed the patch archives, **[SUPERSEDED 2026-08-18: ED-IN-0190 measured **531 of 537** distinct PP ids across 318 live files. The 433/452 below is the 2026-08-05 figure, kept only so older citations of it resolve.] 433 of 452
-  distinct `PP-NNN` numbers cited in live surfaces resolve to no register on `main`**; disposition
-  held, ED-IN-0147), run the relevant `tools/`
-  validator, and for a judgment call put a genuinely independent critic on it (structural
-  independence, read-only, §10). Don't report a result you haven't attacked.
+- **Plan before you touch the tree.** Establish currency (§1), read the subsystem head and its
+  `## Status:` line, then state what changes, in what order, and how you will verify — *before* the
+  first edit. Anything ambiguous or spanning lanes: get the plan approved or ask a focused question
+  rather than guessing.
+- **Build bottom-up from primitives.** Find the single-owner primitive and compose on it — never
+  re-implement a rule that already lives once (§8). New tooling reuses the registries and
+  `engine/substrate/`'s leaf readers (`descriptors`, `composition`, `keys`); new mechanics resolve from
+  the Key substrate up. If you are special-casing an entity or outcome, stop — that is scripting drift
+  (§10 guardrails).
+- **Adversarial pass at every stage that gates a result.** After you draft canon, a number or a fix,
+  *try to break it*: verify provenance by hand against the cited `PP-NNN`/`ED-NNN`, run the relevant
+  `tools/` validator, and for a judgment call put a genuinely independent critic on it (structural
+  independence, read-only, §10). Never report a result you have not attacked — the anti-fabrication gate
+  is leaky and `tools/validate_ed_citations.py` covers ED only, so PP provenance is unvalidated.
 
-  **AMENDED 2026-08-19 (Act 4, Jordan-directed — the adversarial pass is a STAGE, not a DELIVERABLE).**
-  Its output is **edits to the thing under review, and at most one paragraph in the commit message.**
-  It does not create a directory or a document. It may append **at most one ledger row, and only if
-  that row requires a human decision** (`needs_jordan: true`). **A finding that needs no ruling is
-  either fixed in this commit or dropped.**
+  **The pass is a STAGE, not a DELIVERABLE.** Its output is **edits to the thing under review, and at
+  most one paragraph in the commit message.** It creates no directory and no document. It may append
+  **at most one ledger row, and only if that row requires a human decision** (`needs_jordan: true`).
+  **A finding that needs no ruling is either fixed in this commit or dropped.**
 
-  **AMENDED 2026-08-24 (Jordan-directed) — `needs_jordan` IS NOT A PARKING SPACE, AND MOST OF WHAT
-  IS IN IT DOES NOT BELONG TO JORDAN.** Verbatim: *"I don't believe that I need to be involved in the
-  vast majority of pending decisions. Those decisions should be answerable as superseded or
-  irrelevant, by our design documents, by precedents, or by whatever makes most sense for code
-  architecture."*
+  **`needs_jordan` IS NOT A PARKING SPACE, AND MOST OF WHAT IS IN IT DOES NOT BELONG TO JORDAN**
+  (RULED by Jordan). Verbatim: *"I don't believe that I need to be involved in the vast majority of
+  pending decisions. Those decisions should be answerable as superseded or irrelevant, by our design
+  documents, by precedents, or by whatever makes most sense for code architecture."*
 
-  So before a session flags a row `needs_jordan`, or leaves an existing one flagged, it must first
-  try to ANSWER it, in this order:
+  Before flagging a row `needs_jordan`, or leaving one flagged, try to ANSWER it in this order:
 
-  1. **Superseded** — a later ruling, commit or design head already decided it. Cite the successor
-     and close it. (ED-IN-0185's agenda was re-surfaced as open AFTER being ruled; that is the
-     failure this ordering prevents.)
-  2. **Irrelevant** — its subject was retired, evacuated or never built. Close it and say what died.
+  1. **Superseded** — a later ruling, commit or head decided it. Cite the successor; close it.
+  2. **Irrelevant** — its subject was retired or never built. Close it; say what died.
   3. **Answered by a design document** — `CURRENT.md`'s head, the subsystem's `## Status:`, the
      governing spec. Cite chapter and verse.
-  4. **Answered by precedent** — the tree has already decided this shape somewhere else. Follow it,
-     name the precedent.
+  4. **Answered by precedent** — the tree decided this shape elsewhere. Follow it; name it.
   5. **Answered by what makes sense for the architecture** — where 1-4 are silent but one option is
-     clearly right for the code, TAKE IT and record the reasoning. Do not escalate a call that has
-     an obvious engineering answer merely because it is a call.
+     clearly right for the code, TAKE IT and record the reasoning. Do not escalate a call that has an
+     obvious engineering answer merely because it is a call.
 
   **Escalate only what survives all five.** A genuine escalation is a live design choice where two
-  defensible options lead to materially different games, or where the answer would overwrite
-  ratified canon. `needs_jordan` means *"Jordan is the only person who can answer this"*, not
-  *"nobody got around to it"*.
+  defensible options lead to materially different games, or where the answer would overwrite ratified
+  canon. `needs_jordan` means *"Jordan is the only person who can answer this"*, not *"nobody got around
+  to it"*. ⚠ **This cuts BOTH ways, and the second half is load-bearing:** clearing the standing queue is
+  session work — find a stale `needs_jordan` on a settled question and CLOSE it with its citation.
+  Preserving a dead question is not conservatism; it is how the queue formed.
 
-  ⚠ **This cuts BOTH ways, and the second half is the load-bearing one.** The queue held **156
-  rows** when this was ruled. Answering them is now session work — a session that finds a stale
-  `needs_jordan` on a settled question is expected to CLOSE it with its citation, not preserve it
-  out of caution. Preserving a dead question is not conservatism; it is how a 156-row queue formed.
+  Why a gate rather than a ban: rows are a real persistence channel across a session boundary, and
+  this repo has no context between sessions. This deletes `audit/` **as a category, not as a cleanup**.
+  Claim no more than it buys — **the automated loop's gain is below 1; the agent-mediated loop is
+  mitigated, not structurally bounded**, since prose channels depend on a session choosing to comply and
+  `workplans/` entries and standing orders inside a `skills/<name>/SKILL.md` bypass this gate entirely.
+- **Max effort on the deliverable named by the current milestone**, where a juncture is done only when
+  **the behaviour executes** (§0.2): the most thorough path *that deliverable* warrants, verified over
+  plausible, finished rather than sampled. **Work is this session's work if Jordan asked for it this
+  session, or it traces to an open M1 juncture; nothing else is.** If something broken blocks the
+  milestone, **fix it minimally, without adding a guard.** Tier *down* only deliberately and per-task
+  (§10), never to under-invest on judgment nodes. The word *exhaustive* is deliberately absent and must
+  not return under a narrower scope — it is satisfiable on apparatus and unsatisfiable on the game, so
+  demanding it drifts effort to whichever surface is enumerable; nor does this say "prefer the
+  harder-but-correct fix", which instructs the agent to prefer the option that grows the tree. Both
+  carve-outs are deliberate: without the first the literal reading tells a session to **refuse Jordan**
+  (a ruling request traces to no juncture); the second covers a red `main`, which blocks everything and
+  traces to nothing.
+- **Close the loop, honestly.** Run `pytest tests/valoria` + the lane's validator, commit in the
+  `[scope]` format citing the `PP/ED`, capture next actions in your lane's `HANDOFF_<LANE>.md`. If a
+  check failed or a step was skipped, say so — a green claim you did not verify is worse than a red one
+  you did. **There is no SessionStart banner and you may not build one** (§0.3); orient from §1 and
+  `HANDOFF.md`.
 
-  The paragraph below is the ORIGINAL rationale for the gate and still holds for rows that survive
-  the five tests. It is not a licence to flag by default.
-
-  Why the row gate rather than a row ban: rows are a principal carrier, and also a real persistence
-  channel across a session boundary, and this repo has no context between sessions. Ban them
-  outright and a real cross-lane game defect evaporates at Stop; allow them freely and the
-  generator's gain stays above 1. Gating on `needs_jordan` puts the human in the loop on that
-  channel. This deletes `audit/` **as a category, not as a cleanup**.
-
-  ⚠ **CORRECTED 2026-08-19 — the first wording of this paragraph was overstated and is retracted.**
-  It claimed `needs_jordan` gating made the human "the low-pass filter on **the only surviving
-  channel**", giving "gain below 1 **by construction**". A read-only audit refuted both halves.
-  *Only surviving channel* was false: `workplans/*.yaml` entries are neither ledger rows nor
-  documents, and seven `SKILL.md` files carried a standing order to append to a register on every
-  run — both bypass this gate entirely. *By construction* is earned only where a mechanism cannot
-  feed itself **regardless of agent choice**; that is true of the severed `audit-refresh` cron and
-  of the darkened banner, and it is **not** true of any prose channel, which depends on a session
-  choosing to comply. The honest claim: **the automated loop's gain is below 1; the agent-mediated
-  loop is mitigated, with a human-auditable tripwire, not structurally bounded.** Do not restore the
-  stronger wording without a mechanism that earns it.
-- **Max effort on the deliverable named by the current milestone**, where a juncture is done only
-  when **the behaviour executes** (§0.2). Reach for the most thorough path *that deliverable*
-  warrants — verified over plausible, and finish it rather than sampling it. (The word *exhaustive*
-  is deliberately absent: it was re-inserted here on 2026-08-19 and struck the same day, because
-  the amendment three paragraphs below indicts that exact word as the term that drifts effort to
-  whichever surface is enumerable. Restating it under a narrower scope does not disarm it.)
-  **Work is this session's work if
-  Jordan asked for it this session, or it traces to an open M1 juncture; nothing else is.** If
-  something broken blocks the milestone, **fix it minimally, without adding a guard.** Tier *down*
-  only deliberately and per-task (§10), never as an excuse to under-invest on the judgment nodes.
-
-  **AMENDED 2026-08-19 (Act 4, Jordan-directed).** The previous wording was "max effort by default …
-  the harder-but-correct fix over the local patch", with no *selection* term. The defect it caused:
-  "exhaustive" is **satisfiable on apparatus** (107 tools are enumerable) and **unsatisfiable on the
-  game**, so a doctrine demanding exhaustiveness drifts to whichever surface is enumerable — and
-  "prefer the harder-but-correct fix" literally instructed the agent to prefer the option that grows
-  the tree. The two carve-outs are deliberate and bounded: without the first, the literal reading
-  tells a session to **refuse Jordan** (a ruling request traces to no juncture); the second covers a
-  red `main`, which blocks everything and traces to nothing.
-- **Close the loop, honestly.** Run `pytest tests/valoria` + the lane's validator, commit with the
-  `[scope]` format citing the `PP/ED`, and capture next actions in your lane's `HANDOFF_<LANE>.md`.
-  If a check failed or a step was skipped, say so plainly — a green claim you didn't verify is worse
-  than a red one you did. **There is no SessionStart banner any more** — `tools/session_status.py`
-  was retired 2026-08-21 with the rest of the session machinery (culling wave 3, ED-IN-0194), and
-  §0.3 records the result of the experiment it was the instrument for. Orient from `§1` and
-  `HANDOFF.md` instead, and do not build a replacement.
-
-### 0.05 CODE IS THE MECHANISM. PROSE IS REFERENCE. (RULED 2026-08-24 by Jordan)
+### 0.05 CODE IS THE MECHANISM. PROSE IS REFERENCE. (RULED by Jordan)
 
 Verbatim: *"whatever mechanisms we have that rely on prose are worthless. we rely on code ONLY for
 the game work. our design documents in .MD are reference and information only."*
-
-**What this settles, in the cases this repository keeps getting wrong:**
 
 | a claim of the form… | is a mechanism? |
 |---|---|
@@ -138,38 +117,28 @@ the game work. our design documents in .MD are reference and information only."*
 | a YAML/JSON registry **that code reads at runtime** | **yes** |
 | an exporter with a blocking `--check` round-trip | **yes** |
 | a test that executes the behaviour | **yes** |
-| a doc-derived count (`m1_acceptance` row 4) | **no** — and it says so itself |
+| a doc-derived count (`tools/m1_acceptance.py`'s aggregate row) | **no** — and it says so itself |
 
-**Consequences that bind immediately.**
-
-- **A design document may not be cited as the reason a behaviour is correct.** It may be cited for
-  intent, history and vocabulary. If canon and code disagree, that is a defect in one of them and it
-  is resolved by deciding and then CHANGING THE CODE — never by declaring the prose authoritative.
+- **A design document may not be cited as the reason a behaviour is correct.** Cite it for intent,
+  history and vocabulary. If canon and code disagree, decide and then CHANGE THE CODE — never declare
+  the prose authoritative.
 - **A value the engine uses must live where code reads it** — a typed artifact under
-  `engine/engine_params/` behind an exporter, or a single Python owner. `params_tables.yaml` is a
-  verbatim capture of prose TABLES; under this ruling it is reference, and the 321 numeric constants
-  *[CORRECTED 2026-08-25: **415**, of which **248 uncited** and 11 assumption-grade — read from
-  `engine/engine_params/sim_params.json`'s own `citation_coverage`, reproducible with
-  `python tools/export_sim_params.py --build`. The 321 figure predates the mass-battle port. The
-  point of the sentence is unchanged and if anything stronger.]*
-  still defined inside `systems/` are the migration backlog, not a filing problem.
-- **This does NOT demote `CLAUDE.md`, `CURRENT.md` or `HANDOFF.md`.** They are agent instruction and
-  continuity — they govern how a session works, not how the game resolves. The ruling is about
-  GAME MECHANISM. Do not read it as licence to stop maintaining them.
-- **It does not license deleting design docs.** They stay as reference; §7's extraction work is
-  unchanged. What changes is what may be treated as *binding*.
+  `engine/engine_params/` behind an exporter, or a single Python owner. Constants still defined inside
+  `systems/` are the migration backlog; for the live count and citation coverage run
+  `python tools/export_sim_params.py --build` and read `engine/engine_params/sim_params.json`.
+- **This does NOT demote `CLAUDE.md`, `CURRENT.md` or `HANDOFF.md`** — agent instruction and continuity,
+  governing how a session works, not how the game resolves. Keep maintaining them.
+- **It does not license deleting design docs.** They stay as reference; what changes is what may be
+  treated as *binding*.
 
-**The test to apply:** *if this document were deleted, would the game behave differently?* If no, it
-is reference. If yes, the mechanism is in the wrong place and belongs in code.
+**The test:** *if this document were deleted, would the game behave differently?* If no, it is
+reference. If yes, the mechanism is in the wrong place and belongs in code.
 
-### 0.06 NERS — the four criteria a design is judged against (Jordan's definitions; canonical home, 2026-09-04)
+### 0.06 NERS — the four criteria a design is judged against (Jordan's definitions)
 
-**This is the canonical home for the NERS charter.** It had none: `canon/definitions.yaml` has been
-cited as its source by `valoria-resolution-diagnostic` and `valoria-module-adjudicator` and **has
-never existed** — a gap ED-929 filed 2026-06-11 ("cited by skills but absent; PI `<definitions>`
-operative") and that stayed open because the definitions lived only in project instructions, which do
-not survive into the tree. They are Jordan's, reproduced verbatim; §0.05 makes them **reference**, and
-that is the correct status — NERS judges a design, it does not resolve anything at runtime.
+**The canonical home for the NERS charter.** It had none — a *canon/definitions.yaml* was cited as its source
+and has never existed, because the definitions lived only in project instructions. They are Jordan's,
+verbatim; §0.05 makes them **reference**, correctly: NERS judges a design, it resolves nothing.
 
 ```
 ALL DIRECTIONS  top-down · bottom-up · vertical · diagonal · lateral · horizontal
@@ -195,69 +164,51 @@ ALL DIRECTIONS  top-down · bottom-up · vertical · diagonal · lateral · hori
 > scales are called for; **calculations consistent in methodology** with other mechanics; integrates
 > into a **unified mechanical approach**.
 
-**Read the definitions, not the acronym — three of them are wider than the shorthand, and the tree
-has already drifted on all three.**
+**Read the definitions, not the acronym — three are wider than the shorthand.**
 
-- **N is defined THROUGH the other three,** and is tested **from all six directions**. An object may
-  be necessary looking up the ladder and free looking down it; an N-line holding in exactly one
-  direction is a *narrowed* one, not a passing one.
+- **N is defined THROUGH the other three**, tested **from all six directions**. An N-line holding in
+  exactly one direction is *narrowed*, not passing.
 - **E is legibility, not tidiness** — *"no unnecessary overhead"* and *"intuit complex outcomes from
-  simple choices"* are **two different tests**, and a mechanism can pass the first and fail the
-  second. ⚠ **And E is never scored as an independent axis.** Scored alone it is satisfiable by
-  amputation: cut enough and what remains is simple, clear and cheap. Score it **last, as a ratio
-  against what N and R found** — an audit that scores four axes and averages them **rates an
-  amputated design as elegant.**
-- **R has a half with no player in it** — *"emergent hooks and scenarios WITHOUT player
-  involvement"*: the world must generate drama when nobody is watching. **And R includes
-  completeness** (*"fully formed, error-free, and complete"*), which is where a mechanism that breaks
-  at its extremes fails. Only R's *player* half is scoped to seats a player can occupy; the other two
-  halves bind everywhere, so a blocked "is this seat playable?" question never makes **R**
-  unscorable — only part of it.
-- **S carries two concrete tests the shorthand drops:** *pauses correctly* when another system or
-  scale is called for, and *calculations consistent in methodology* with sibling mechanics. Two
-  ladders for one quantity is an S defect even when each is individually correct.
+  simple choices"* are **two different tests**. ⚠ **E is never scored as an independent axis**: alone it
+  is satisfiable by amputation, so score it **last, as a ratio against what N and R found**. An audit
+  that scores four axes and averages them **rates an amputated design as elegant.**
+- **R has a half with no player in it** — the world must generate drama when nobody is watching — **and
+  R includes completeness** (*"fully formed, error-free, and complete"*), where a mechanism breaking at
+  its extremes fails. Only R's *player* half is scoped to seats a player can occupy, so a blocked "is
+  this seat playable?" never makes **R** unscorable, only part of it.
+- **S carries two tests the shorthand drops:** *pauses correctly* when another system or scale is called
+  for, and *calculations consistent in methodology* with siblings. Two ladders for one quantity is an S
+  defect even when each is individually correct.
 
-**The method** — how a pass is actually run, and the discipline that keeps it honest (a PASS is
-licensed by a **named failed attack**, not by an absent finding; withholding is symmetric; the pass
-fires on itself) — lives in **`skills/valoria-resolution-diagnostic/SKILL.md`**, which is the single
-owner of the procedure. This subsection owns the **definitions**; do not restate the method here, and
-do not restate the definitions there.
+**The method** — how a pass is run and what keeps it honest (a PASS is licensed by a **named failed
+attack**, not by an absent finding; withholding is symmetric; the pass fires on itself) — lives in
+**`skills/valoria-resolution-diagnostic/SKILL.md`**, its single owner. This subsection owns the
+**definitions**: do not restate the method here or the definitions there.
 
-### 0.1 Measurement discipline — five checks, each with an artifact (ED-MB-0042, 2026-07-25)
+### 0.1 Measurement discipline — five checks, each with an artifact (ED-MB-0042)
 
-These exist because a flag was flipped on a **confounded measurement**, shipped a default, re-recorded
-two byte-exact goldens, and was retracted the same day — *after* the identical defect class had already
-been found and fixed as a one-off hours earlier in the same session. Note what was **not** the gap: §0
-already required an adversarial pass at every gating stage, and one was performed. It attacked the
-result's *statistics* (noise, sigma, band edges) and never its *setup* (are the two arms the same
-experiment?). Restating the principle is therefore useless. **Specificity about what to attack, and an
-artifact proving it happened, is the whole of the fix.**
+A flag was once flipped on a **confounded measurement** and retracted the same day. §0's adversarial
+pass *was* run — it attacked the result's *statistics* and never its *setup* (are the two arms the same
+experiment?). **Specificity about what to attack, plus an artifact proving it happened, is the fix.**
 
 1. **The hazard is read/write asymmetry, not "change".** When a getter starts computing from a new
    source (`eff_morale` from cells) while setters still write the old one (`.morale`), every writer
-   silently becomes a no-op. Before measuring anything about such a change, grep the field's
-   **assignments** — not its readers, which are unbounded and mostly harmless — and ship a guard that
-   fails on a *new* bare assignment. `tests/valoria/test_morale_write_sweep.py` is the template; its
-   `_CELL_OWNED` registry is field-parameterized so each newly cell-owned state inherits the guard by
+   silently becomes a no-op. Grep the field's **assignments**, not its readers, and ship a guard failing
+   on a *new* bare assignment. `tests/valoria/test_morale_write_sweep.py` is the template; its
+   `_CELL_OWNED` registry is field-parameterized, so each newly cell-owned state inherits the guard by
    adding one key.
 2. **An assertion must be able to observe the failure it excludes.** `pytest.approx` on an *exactness*
-   claim is not a weak test, it is an absent one — a 1-ulp aggregate error crossed a damage-degree
-   boundary while its own identity test passed. A loop that asserts conditionally must assert that it
-   asserted (`assert checked >= N`); that pattern is what surfaced the born-broken-subunit bug.
+   claim is not a weak test but an absent one. A loop that asserts conditionally must assert that it
+   asserted (`assert checked >= N`).
 3. **Name the falsifier, or you have not attacked the result.** A result claim carries, in the same
-   commit, the specific test that would have shown it wrong and that test's outcome. "Adversarially
-   reviewed" without an artifact is unfalsifiable and was, in this case, false.
-4. **A number without a control is not a measurement — in either direction.** Asymmetric skepticism is
-   a bias, not a defence: this session both *banked* a favourable uncontrolled result and *published*
-   an unfavourable one. Absence of one failure mode ("nothing was tuned to hit a band") is not presence
-   of correctness.
-5. **Sweep pattern defects; fix one-off defects — but a guard must EARN its existence.** The signature
-   of a pattern defect is *the broken code was correct when written and stopped working because
-   something else changed.* Then: one owner for the operation, every site routed through it, and a
-   guard that fails on recurrence.
-
-   **AMENDED 2026-08-19 (Act 4, Jordan-directed — predicate on what the artifact is LOAD-BEARING ON,
-   never on what it is ABOUT):**
+   commit, the test that would have shown it wrong and that test's outcome. "Adversarially reviewed"
+   without an artifact is unfalsifiable.
+4. **A number without a control is not a measurement — in either direction.** Asymmetric skepticism is a
+   bias, not a defence; absence of one failure mode is not presence of correctness.
+5. **Sweep pattern defects; fix one-off defects — but a guard must EARN its existence.** A pattern
+   defect's signature is *the broken code was correct when written and stopped working because something
+   else changed*: then one owner for the operation, every site routed through it, and a guard failing on
+   recurrence — **subject to the predicate, which is what makes this rule safe.**
 
    > *A pattern defect earns a guard only if the defective artifact is load-bearing on **the game** or
    > on **a Jordan decision** — its output crosses into the engine, the exported params, the port, or
@@ -265,47 +216,30 @@ artifact proving it happened, is the whole of the fix.**
    > repository's process is **not** evidence the artifact needs a guard; it is evidence **the artifact
    > can be wrong without cost. Delete it, or accept the defect and write nothing.***
 
-   The old rule quantified over pattern *defects*, not over *subjects*, so it fired identically on a
-   defect in the morale model and one in a test-register freshness checker. Apparatus outnumbers game
-   ~3.9:1 by line *[CORRECTED 2026-08-25: on EXECUTABLE PYTHON the ratio is **1.44:1** — 39,489
-   lines of `engine/`+`systems/` (excluding their tests) against 56,773 of `tools/`+`tests/`+
-   `engine/tests`. The 3.9:1 figure counts all tracked files including 506 markdown documents, so
-   the two measure different things and both are true of their own basis. **The predicate below is
-   unaffected — it needs only a ratio above 1:1, which 1.44 still is** — but a session citing 3.9:1
-   as the current state of the CODE would be wrong, and the August culling waves are why.]*, so a
-   session reading more apparatus finds more apparatus defects and **mints more
-   apparatus guards**. That is the generator, and this predicate is what disarms it.
+   Without it the rule quantifies over *defects*, not *subjects*, firing identically on the morale model
+   and on a freshness checker — and apparatus outnumbers game, so a session reading more apparatus mints
+   more apparatus guards. That is the generator; the predicate disarms it.
 
-   **Load-bearing is not the same as "about the game".** The predicate KEEPS `test_morale_write_sweep.py`,
-   `ci_golden_modes_check`, `ci_sim_fabrication_check`, `export_engine_params.py`'s round-trip `--check`
+   **Load-bearing ≠ "about the game".** It KEEPS `tests/valoria/test_morale_write_sweep.py`, the
+   golden-modes and sim-fabrication CI checks, `tools/export_engine_params.py`'s round-trip `--check`
    (apparatus by subject, but it produces the bridge the Godot port ingests), and a compile gate. It
-   FORBIDS `test_wf_harness_check.py`, `test_gate_coverage.py`, `test_blocking_tier_is_honest.py`.
-   **All three were deleted 2026-08-21** (culling wave 3, ED-IN-0194), so this sentence now records
-   a settled disposition rather than naming live files. The predicate itself still binds every new
-   guard; keep the three names as worked examples of what it excludes.
+   FORBIDS a guard whose subject is another guard, a grader over the gate list, and a test that the
+   blocking tier's membership is honest.
 
-   ⚠ **This edit is inert without the `§0` adversarial-pass amendment above.** A session forbidden to
-   write a guard will write **a finding about the defect** instead. The loop's carrier is prose, so
-   closing only the guard channel reroutes rather than terminates.
-
-   Sweep only what the current task is load-bearing on; for the rest, apply the predicate — **fix it
-   here, or drop it.** ("File the rest" was the old instruction and it is exactly the reroute above.)
+   ⚠ **Inert without §0's adversarial-pass bound:** forbid the guard and a session writes **a finding**
+   instead, because the carrier is prose. Sweep only what the current task is load-bearing on; for the
+   rest, **fix it here or drop it** — "file the rest" is exactly that reroute.
 
 **`pytest tests/valoria` is a SHIPPING gate, not a belief gate**, and behaviour changes include default
-flips and golden re-records. Do not credit it with catching confounds: it caught this one *only*
-because the flip incidentally broke ten unrelated tests. A clean implementation of the same confounded
-measurement would have been green. Equally, **targeted-green is not validation** — the tests you wrote
-for the thing you built encode your model of it, not the system; all ten failures were in modules that
-had never crossed my mind.
+flips and golden re-records. It caught the originating confound only because the flip incidentally broke
+unrelated tests. Equally, **targeted-green is not validation** — the tests you wrote for the thing you
+built encode your model of it, not the system.
 
-### 0.2 DONE MEANS IT RUNS (Act 2, RULED 2026-08-19 by Jordan — "I need to break out of the infrastructure loop")
+### 0.2 DONE MEANS IT RUNS (RULED by Jordan — "I need to break out of the infrastructure loop")
 
 **A milestone juncture is done when the behaviour EXECUTES. Not when a document exists with a
-`## Status:` line.** This is the definition `§0`'s max-effort rule binds to, and it is the one claim
-in this repository that a session **cannot satisfy by writing**.
-
-That is the whole point. The loop's generator needs a definition of *done* that prose can reach.
-Take that away and the freed capacity has nowhere to go but the game.
+`## Status:` line.** This is what §0's max-effort rule binds to, and the one claim here a session
+**cannot satisfy by writing** — which is the point: the generator needs a *done* prose cannot reach.
 
 | | old `done` | new `done` |
 |---|---|---|
@@ -313,510 +247,285 @@ Take that away and the freed capacity has nowhere to go but the game.
 | checked by | reading a `## Status:` line | an execution artifact — a run, a log, a hash, a test result |
 | satisfiable by writing? | **yes** | **no** |
 
-**Consequences, so this is not just a sentence.**
-- A juncture may **not** be marked done on a document. `tools/m1_acceptance.py` is the instrument;
-  its rows are falsifiable and it already refuses to guess.
+- A juncture may **not** be marked done on a document. `python tools/m1_acceptance.py --summary` is the
+  instrument; its rows are falsifiable and it refuses to guess. ⚠ **It is not yet uniformly
+  execution-bound:** some rows genuinely execute the engine (a seeded `engine/mc_v18.py` probe, a
+  same-seed content-hash comparison), but **the row aggregating "all junctures execute" counts `state:`
+  strings in `workplans/workplan_v6_progress.yaml`, a hand-edited board** that a few one-word edits
+  green. It declares itself DOC-DERIVED in its own output — **treat it as bookkeeping, not evidence.**
+  While any row is honestly `partial`/`blocked`, the gate can say NOT-DONE but not DONE.
+- "Authoring the design doc" is **not** the deliverable for a juncture that has running code: verify the
+  code against the sim and record the contract; the doc may follow verified behaviour.
+- **A juncture done in code and open on the board is a BOARD defect, not a work item.**
 
-  ⚠ **QUALIFIED 2026-08-19 — the instrument is not yet uniformly execution-bound, and pretending
-  otherwise is the failure this section exists to end.** Rows 1-2 genuinely execute the engine (a
-  seeded `mc_v18` probe run and a same-seed `KeyLog.content_hash()` comparison) and no amount of
-  writing satisfies them. **Row 4 — the row that aggregates "all seven junctures execute" — counts
-  `state: done` strings in `workplans/workplan_v6_progress.yaml`, a hand-edited board.** Seven
-  one-word edits green it. Two independent read-only audits found this hole separately, which is
-  the maximally bankable signature. The row now declares itself DOC-DERIVED in its own output;
-  closing it properly needs a per-juncture execution artifact that does not exist yet for any of
-  the seven. Until it does: **treat row 4 as bookkeeping, not evidence**, and never cite a green
-  row 4 as proof a juncture runs. Rows 3 and 5 are honestly `partial`/`blocked`, which also means
-  the verdict `MET` is currently unreachable — the gate can say NOT-DONE, it cannot yet say DONE.
-- "Authoring the design doc" is **not** the deliverable for a juncture that has running code. Verify
-  the code against the sim and record the contract; the doc may follow verified behaviour instead of
-  preceding it.
-- **A juncture that is done in code and open on the board is a BOARD defect, not a work item.** Five
-  of M1's seven junctures have real implementations in `valoria-game` while the board scores 0/7.
-  Both facts are true at once; that contradiction *is* the disease this section ends.
+⚠ This is a **precondition** of §0's max-effort rule, not its sibling: bind max effort to "the milestone
+deliverable" while `done` still means "a document exists" and the doctrine aims maximum effort at
+authoring **prose**.
 
-⚠ **This section is a precondition of `§0`'s max-effort amendment, not its sibling.** Bind max effort
-to "the milestone deliverable" while `done` still means "a document exists" and the doctrine simply
-aims maximum effort at authoring **prose** — the same output, better targeted.
-
-### 0.3 The loop this repository was in, and why the banner is nearly empty (2026-08-19)
-
-Read this before you "improve" the SessionStart banner by putting things back in it.
-
-**Measured.** 68% of tracked files are machinery (916 vs 440 game/design). Commits touching
-machinery vs content ran **5.2:1 in July and 10.8:1 in August** — accelerating. 191 commits with
-*consolidate/cull/prune/retire/sweep* in the subject were a combined **net +82,020 lines**, and
-**78% of them were net increases**; a document proposing to delete 350,000 lines was itself a net
-addition of 1,819. Jordan gave the "make it lean" instruction four times; in the week whose stated
-theme was leanness, `tools/` grew and CLAUDE.md grew 61,367 → 70,349 bytes.
-
-**The mechanism has three terms, and they are not symmetric.**
+### 0.3 The loop this repository was in
 
 | | what it is | how it fed the loop |
 |---|---|---|
-| **T3 — the generator** | `§0` mandates adversarial passes; passes emit findings; findings become ledger rows; rows appear in the banner; **the banner defines the next session's work.** Closed loop, gain > 1, no human in it. | Of 1,233 ledger rows, **59 cite a Jordan ruling; 152 name an audit or session document.** The single largest source is *an audit of the audit apparatus.* |
-| **T1 — the amplifier** | what a session SEES at start | ~389 pending units, **none about the game** |
-| **T2 — the reward** | what a session is graded on at Stop | clean tree · handoff · board · no regression — **all satisfiable without touching the game** |
+| **T3 — generator** | §0 mandates adversarial passes | passes emit findings → ledger rows → a generated start-of-session surface → **that surface defines the next session's work.** Closed loop, gain > 1, no human in it |
+| **T1 — amplifier** | what a session SEES at start | a queue of pending units, none about the game |
+| **T2 — reward** | what a session is graded on at Stop | clean tree · handoff · board · no regression — **all satisfiable without touching the game** |
 
-**The defect was subject-blindness, not the rules themselves.** `§0.1` pt 5 is a good rule that
-caught a real morale-model bug. But it quantified over pattern *defects*, not *subjects*, so it fired
-identically on a defect in the game and a defect in a freshness checker — and apparatus outnumbers
-game ~3.9:1 *[CORRECTED 2026-08-25: 1.44:1 on executable Python; see the §0.1 point 5 correction
-for the two bases. The diagnosis stands, the magnitude has shrunk.]*, so every session found more
-apparatus defects and minted more apparatus guards. The
-tree records the result at depth five: `ci_wf_harness_check` guards `wf_harness.js`,
-`test_wf_harness` guards the harness, `test_wf_harness_check` guards the guard — **1,718 lines
-guarding the prelude of the scripts that run the audits** — ending in
-`test_blocking_tier_is_honest.py`, a test that the blocking tier's membership is honest. Every rung
-a flawless application of the rule.
+**The defect was subject-blindness, not the rules.** §0.1 pt 5 caught a real morale-model bug but
+quantified over *defects* rather than *subjects*, and apparatus outnumbers game — so every session minted
+more apparatus guards, ending in a guard on a guard on a guard, every rung a flawless application of the
+rule. §0.1 pt 5's predicate disarms **T3**; §0's adversarial-pass bound closes the prose reroute; §0.2
+and §0's max-effort selection term aim the freed capacity at **T2** and the game.
 
-**What the amendments do.** `§0.1` pt 5's load-bearing predicate disarms **T3**. `§0`'s
-adversarial-pass bound closes the prose reroute (forbid the guard and a session writes a *finding*
-instead — the loop's carrier is prose). `§0.2` + `§0`'s max-effort selection term redirect the freed
-capacity at **T2** and the game. The banner change is **T1**.
-
-**⚠ THE BANNER EXPERIMENT IS OVER. It ran for one session, and the result is recorded here rather
-than quietly dropped (2026-08-21, ED-IN-0194).**
-
-The experiment was: reduce the SessionStart banner to the current juncture and whether it runs,
-change nothing else, and watch one session. If the session still wrote apparatus, the T1→T2→T3
-ordering above was wrong.
-
-**One session ran. It wrote 1,022 lines of apparatus and zero lines of game** (`1e4c6f4`, Act
-C2/C3 — measured: 142 of those lines touched executable engine code, 103 of them a new leaf module,
-and the commit's own control was that the seeded goldens did *not* move). That is the result. It
-does **not** falsify the diagnosis, and the honest reading is narrower than either "it worked" or
-"it failed": **T1 was reduced and the freed capacity still went to apparatus, which says T2 — what a
-session is graded on at Stop — had not moved.** A clean tree, a passing suite and a banked ratchet
-still read as a finished session.
-
-**The instrument no longer exists.** Culling wave 3 retired `tools/session_status.py`, which *was*
-the banner, along with the rest of the session machinery — Jordan ruled the cull runs in its
-entirety (2026-08-21), and that ruling is newer than the standing "wave 3 does not run while the
-experiment is live". So the experiment ends rather than pauses, and there is nothing left to
-contaminate by editing.
-
-**Do not build a replacement banner.** A new session orients from `§1` and `HANDOFF.md`, which is
-what those files are for. Re-introducing a generated start-of-session surface is how T1 grew the
-first time; if the diagnosis needs re-testing, test T2 instead — that is the term this result
-points at.
+**T1 was tested and is closed:** the start-of-session banner was reduced, then retired, and the session
+running under the reduced banner still wrote apparatus and no game — **T1 fell and the freed capacity
+still went to apparatus, which says T2 had not moved. Do not build a replacement banner**; a session
+orients from §1 and `HANDOFF.md`. If the diagnosis needs re-testing, **test T2**.
 
 ---
 
 ## 1. Read these first (currency)
 
-The live canonical surface is **Generation v40** (consolidated, contracts-bound, Godot-ready). There
-are more "current state" files than there should be; trust them in this strict priority order:
+The live canonical surface is **Generation v40**. Trust these in strict priority order:
 
-1. **`CURRENT.md`** — the **single human-readable index** of the live canonical head per subsystem.
-   When unsure whether a doc is current, this is the authority. Reconciled by hand — **read its own
-   `_Last reconciled:_` stamp for the date; this file deliberately does not carry one** (it said
-   2026-06-28 while CURRENT.md said 2026-08-04; a duplicated date rots independently of its subject.
-   ED-IN-0147). Treat it as fresher than any filename or in-file version string.
-2. **`HANDOFF.md`** — the **continuity index**: root file pointing to lane-scoped
-   `registers/handoffs/HANDOFF_<LANE>.md` files (§3's `ED-<LANE>-NNNN` taxonomy: `MB, PC, FI, SC, FA, WR, IN,
-   GO, SE`) plus genuinely cross-cutting pending work/decisions/next actions. Split 2026-07-02 to
-   reduce concurrent-session merge-collision surface on one shared file, the same motivation
-   behind the ID namespace itself. Nothing reads this file automatically any more — the
-   SessionStart banner that used to relay its "Next actions" was retired 2026-08-21 (§0.3), which
-   also closes the `HANDOFF.md` → banner → next-session channel that made that experiment
-   two-variable. **Read root `HANDOFF.md` AND your lane's file yourself.**
+1. **`CURRENT.md`** — the **single human-readable index** of the live canonical head per subsystem, and
+   the authority whenever you are unsure a doc is current. Reconciled by hand: read its own
+   `_Last reconciled:_` stamp. (This file carries no date of its own; a duplicated date rots
+   independently of its subject.) Fresher than any filename or in-file version string.
+2. **`HANDOFF.md`** — the **continuity index**: a root file pointing to lane-scoped
+   `registers/handoffs/HANDOFF_<LANE>.md` files (§4's lanes), plus genuinely cross-cutting pending work,
+   decisions and next actions; split per lane to cut concurrent-session merge collisions. **Nothing
+   reads it automatically — read root `HANDOFF.md` AND your lane's file yourself.**
 3. **`references/canonical_sources.yaml`** + **`registers/mechanics_index.yaml`** — machine-readable
-   indices. ⚠️ The `canonical_sha__*` pins in `canonical_sources.yaml` are **not verified against the
-   working tree** (the only tooling re-syncs them *from* GitHub, which contradicts the working-tree
-   rule). Treat the pins as advisory, not a trustworthy integrity signal.
+   indices. The `canonical_sha__*` pins in the first of those are verified against the **working tree** by
+   `tools/freshness_gate.py`, which computes each doc's local git blob OID (blocking in CI, report-only
+   locally). Run it rather than trusting a pin by eye.
 
-**Ignore for currency** — these are stale or retired, do not resume from them:
-- `README.md` — outdated navigational pointers; defers to the three files above.
-- Retired session-log/checkpoint machinery (`session_log_*`, `session_logs/`,
-  `deprecated/session_machinery/handoffs/` — old per-lane-A/B/C `.yaml` files, a **different,
-  retired thing** from the live root-level `registers/handoffs/*.md` directory below, do not confuse them —
-  `canon/session_checkpoint.md`, the `references/subsystems/{handoff,checkpoint,session_log}` docs)
-  — relocated to `deprecated/session_machinery/` in 2026-07-01 (ED-1084) and **gone from `main`
-  since**. NOT authoritative; **`HANDOFF.md` + `registers/handoffs/HANDOFF_<LANE>.md` are the only
-  live continuity surface.** There is nothing left to resume from, which is stronger than being told
-  not to.
-- ⚠️ **`deprecated/` NO LONGER EXISTS (2026-08-23, S6/6a).** It is not a tree you can read, a place to
-  put things, or a thing to avoid — it is at the fork. Every path that was ever in it resolves through
-  `references/restructure_ledger.md`. **Retiring something now means deleting it and writing a `FORK:`
-  row**, which is what the last four culling waves already did; do not recreate the directory. This
-  bullet stays because ~14 surfaces still name paths under it and a reader needs to know what they mean.
+**Ignore for currency:** `README.md` (outdated pointers). Session-log and checkpoint machinery is gone
+from `main`; `HANDOFF.md` + `registers/handoffs/HANDOFF_<LANE>.md` are the only live continuity surface,
+and there is nothing left to resume from. There is no `deprecated/` tree — **retiring something means
+deleting it and writing a `FORK:` row** in `references/restructure_ledger.md`, which is where surfaces
+still naming paths under it resolve. Do not recreate the directory.
 
 ---
 
 ## 2. How this repo is worked
 
-- **The working tree is the source of truth.** Read and edit local files directly (Read/Write/Edit,
-  Grep/Glob). **Do not re-fetch from the GitHub API** and do not trust memory over disk — the checkout
-  is fresher than any cache. *(CLEAN AS OF 2026-08-21 — the caveat is gone, not weakened. ED-1053
-  ported the integrity gates off the GitHub API in 2026-06, leaving one caller, `tools/dashboard_data.py`,
-  which fetched Actions/PR status. That tool was retired in culling wave 1 (ED-IN-0194), so **no tool
-  in this repository reads the GitHub API at all.** The rule now holds without exception.)*
-- **Commit with git.** Stage your own files explicitly and `git commit`; no bespoke wrapper. If you are
-  on `main`, branch first. Commit message format:
+- **The working tree is the source of truth.** Read and edit local files directly. **Do not re-fetch
+  from the GitHub API**; no tool here reads it, and the checkout is fresher than any cache or memory.
+- **Commit with git.** Stage your own files explicitly; no bespoke wrapper. On `main`, branch first.
+  Commit message format:
   `[scope] description` where scope ∈
   `editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix, design`.
-  Cite `PP-NNN` / `ED-NNN` in the description when applicable.
-- **Continuity = git history + `HANDOFF.md`/`registers/handoffs/HANDOFF_<LANE>.md`.** No session-log/checkpoint
-  machinery is in use (despite retired files lingering — §1). When you pause mid-task, capture next
-  actions in your lane's `registers/handoffs/HANDOFF_<LANE>.md` (or root `HANDOFF.md` only for genuinely
-  cross-cutting items); a commit *is* the session close.
-- **Merging a PR ratifies its PROPOSED contents by default (ED-1094, 2026-07-02).** If a PR lands a
-  design doc, doctrine, or ledger entry tagged `PROPOSED`/`provisional`, Jordan's review-and-merge of
-  that PR *is* the ratification — flip the doc's `## Status:` line, the ED ledger `status`/`needs_jordan`
-  fields, and `CURRENT.md` as part of the same merge, not as a separate later step nobody triggers.
-  **The exception must be loud, not silent:** if something in the PR genuinely needs separate,
-  explicit sign-off beyond ordinary merge review, call it out prominently in the PR body as *held
-  back* — never bundle a hard design call into a routine-work PR and rely on an unprompted follow-up
-  to ratify it later. (This closes a real recurring failure: ED-1083's doctrine sat PROPOSED in `main`
-  after PR #55 was reviewed and merged, because the prior convention required a distinct explicit
-  ratification step that nothing forced to happen.)
+  Cite `PP-NNN` / `ED-NNN` when applicable.
+- **Continuity = git history + `HANDOFF.md`/`registers/handoffs/HANDOFF_<LANE>.md`.** Pausing mid-task,
+  capture next actions in your lane's file (root `HANDOFF.md` only for cross-cutting items); a commit
+  *is* the session close. ⚠ If your checkout is **shallow** — beyond its reach the archaeology is the ED
+  ledgers under `registers/`, not `git log`.
+- **Merging a PR ratifies its PROPOSED contents by default (ED-1094).** If a PR lands a doc, doctrine or
+  ledger entry tagged `PROPOSED`/`provisional`, Jordan's review-and-merge *is* the ratification — flip
+  the `## Status:` line, the ledger `status`/`needs_jordan` fields and `CURRENT.md` in that same merge,
+  not as a later step nobody triggers. **The exception must be loud:** anything needing separate sign-off
+  is called out in the PR body as *held back*. Never bundle a hard design call into a routine PR and
+  rely on an unprompted follow-up.
 
 ---
 
 ## 3. Repository map
 
-**What each tree holds NOW.** The migration history that used to live here — the slice-by-slice
-record of how `designs/`, `sim/`, `arcs/` and `engine/params/` were dissolved — was **cut 2026-08-19
-(Act 3)**. It was 20% of this document, it described trees that no longer exist, and the live
-resolver for every old path is **`references/restructure_ledger.md`** (exact rows + dir-prefix
-aliases, machine-read by `broken_dependency_checker`). `git log CLAUDE.md` has the narrative.
+**Do not read a description of the tree — look at it.** `ls`, `find` and `git ls-files` say what exists;
+`CURRENT.md` says which head is canonical; `references/restructure_ledger.md`, via `tools/pathres.py`,
+says where an old path went. Only what those cannot tell you:
 
-| Directory | Contents |
-|---|---|
-| `systems/` | **The design source of truth for `combat`, `social_contest` and `mass_battle`** — the three subsystems the 2026-09-05 ruling retains (ED-IN-0204, Decision 1: "only the repository's systems for social contests, personal combat and mass battles to be retained"). One subsystem = one folder = one ID lane = one `CURRENT.md` row = one `HANDOFF_<LANE>.md`. Each holds its design `.md` at the root and its oracle scripts in `sim/`, imported as `systems.<sub>.sim.*`. The other twelve — `_architecture, articulation, characters, factions, fieldwork, npcs, overview, settlements, threadwork, ui, victory, world` — are SUPERSEDED by `engine/season/` under that same ruling, and are retained today for TWO DIFFERENT REASONS, which Step A's first draft wrongly gave as one and an adversarial pass caught. **Seven** — `characters, factions, fieldwork, overview, settlements, threadwork, world` — because "all work in `engine/` is retained as well" and `engine/` still resolves into them at runtime (`references/module_contracts.yaml`'s `composition_roles:` — 19 of its 27 roles target one of these seven, per `tests/valoria/test_engine_does_not_import_systems.py`'s R04-pending ceiling); their retirement is Step B, gated on R-04. **Five** — `_architecture, articulation, npcs, ui, victory` — hold **zero `.py` files**, are not importable packages, and are targeted by no role: nothing can resolve into them, so their retention is **not gated on R-04 at all** and they are kept as prose whose document IS the spec. Step A (this row) deletes nothing either way. ⚠️ `characters/`, `overview/`, `victory/` are doc homes, not yet formalized 1:1 subsystems. |
-| `engine/` | **The executable model.** A Python package: `substrate/` (Key substrate), `autoload/` (singleton hub), `cross_scale/`, `mc_v18.py` (campaign driver), `engine_params/` (the typed Class-C exports the Godot port ingests), `tests/` (seeded regression + parity, CI job `sim-regression`). Per-subsystem sims depend UPWARD on this core. **The import graph is acyclic, and `engine/` names no subsystem by import — as of 2026-08-22, and only since then (plan S5a). TWO seams survive and neither is an import — the second was added 2026-09-05 (ED-IN-0204): `engine/season/combat_seam.py` is the same seam from the season loop's side, into the same flat module set, following the first one's discipline deliberately. ⚠ **The guard could not see it for several hours**: its predicate matched a SINGLE-QUOTED `'systems'` and the new seam spells it with double quotes, so a second undeclared seam existed while the test stayed green — typography-matching, one level down from the defect the guard exists to catch. The predicate now parses the file and reads what is actually inserted. Both are declared in `PATH_SEAM_ALLOWED`, still shrink-only. The first: `engine/cross_scale/combat_bridge.py` puts `systems/combat/combat_engine_v1/` on `sys.path` and loads `combatant`/`wrapper` by BARE NAME, deferred to first use behind a default-OFF flag.** That seam was invisible to every instrument here until a read-only adversarial pass found it — both ratchet regexes look for the literal token `systems`, and the import probe filtered `sys.modules` by the `systems.` prefix, under which those modules do not appear. It is now DECLARED (`PATH_SEAM_ALLOWED` — **two entries since 2026-09-05, not one**, shrink-only) and the probe matches on a module's FILE PATH instead, which cannot be spelled around. It is unconverted because `combat_engine_v1/` is a flat self-contained module set with its own bare-import convention that the balance workbench also uses, so dotted-path loading would give those modules a second identity — a PC-lane call, not an IN-lane wiring fix. ⚠️ Read the history before trusting the sentence, because these exact words were FALSE here from some earlier date until 2026-08-20, when they were struck: six non-test modules under `engine/` imported `systems.*` at module level and `engine/autoload/game_state.py` imported eleven subsystem state classes *inside functions* — a deferred import hides a cycle from the interpreter, it does not remove it — giving the live cycle `systems/factions/sim/faction_action.py` → `engine.autoload.game_state` → `systems.factions.sim.treaty`. All 22 IMPORT seams (6 module-level, 16 function-local) now resolve through `engine/substrate/composition.py`: `engine/` names a ROLE, `references/module_contracts.yaml` names the MODULE. The 23rd, above, is not an import and is counted separately. **What licenses the claim is an execution artifact, not this sentence** — `tests/valoria/test_engine_does_not_import_systems.py::test_importing_engine_pulls_in_no_subsystem` imports the engine in a subprocess and asserts the interpreter loaded zero `systems.*` modules, and its two regex ceilings are now floors at 0. ⚠️ **This says nothing about runtime dependency.** The engine depends on subsystems as much as it ever did; the dependencies are declared in `references/` and resolved by string at first call, so a subsystem is swapped by editing a registry row rather than an import. Do not read "acyclic" as "the engine runs without `systems/`". |
-| `architecture/` | **LAYER 1 — the code architecture and shape. RATIFIED 2026-09-05 (ED-IN-0204).** Jordan: *"there is the code architecture and shape itself, which governs how all coding is to be conducted."* `ARCHITECTURE_V2.md`, `PLAN.md`, `meta/` (11 docs — §C.12 is the positive Godot mapping and the four idioms rejected on purpose), `holonic_ARCHITECTURE.md` (#353). Under §0.05 this is **reference for game mechanism** — the code is still the formula — and **binding as agent instruction**, the standing this file has. It resolves nothing at runtime. ⚠ Oversized by §4 and exempt from the size WARNING only (`atomization_rules.yaml`); the split is tracked work. |
-| `engine/season/` | **LAYER 2 — the game code. RATIFIED 2026-09-05 (ED-IN-0204).** The executable season loop: **28 modules** — `.py` under `engine/season/`, excluding `test_*` and `__init__.py`, which is **20 model + 8 `harness/`** and is the basis this figure has always used (step 6 added `epistemic.py`, step 7 `decision.py`, step 8 `seam.py`, step 9 `loop/driver.py`, and step 10 DELETED `shape.py`, which is why this went down by one; a bare module count with no stated basis is how the last two of these went wrong) — across `data/ state/ queries/ loop/ harness/` plus five at the root, and the three registries they read **at runtime** (`rosters`, `verb_table`, `write_matrix` — therefore mechanism under §0.05, which is why they live with the code and not with the prose), `cases/`, `runs/`, and a **189-test** suite that CI now runs. ⚠ **Both figures were corrected 2026-09-08 after being stale for four steps of the decomposition, and went stale again one step later — step 7 landed `decision.py` and one test, and a read-only critic caught both counts rather than the step that moved them (ED-IN-0203). Reproduce: `ls engine/season/**/*.py engine/season/*.py | grep -v '__init__\|/test_' | wc -l` and `rg -c '^def test_' engine/season/tests/test_season_shape.py`. This is what a hand-maintained count does, now measured twice.** The registry opens were cited here as `shape.py:449/:1407/:291`; they are `data/rosters.py::_load_rosters`, `data/verbs.py::_load_verb_table` and `data/matrix.py::_load_write_matrix` and have been since steps 2–3 — a LINE citation into a file being decomposed is wrong twice over, first in its line and then in its file. ⚠ **This row said FOUR registries and named `hole_register.yaml` among them. That was false and is corrected 2026-09-05:** `shape.py` never opens it — its readers are `register.py` and `run_cases.py`, the corpus GRADER. So the register is mechanism for the grader and **reference for the game**, which is what licenses fixing its stale `:NNN` citations by hand and minting no guard for them (§0.1 pt 5). ⚠ **IT RUNS AND IT IS NOT YET A GAME.** `requirements.yaml` scores Jordan's nine at 6 `not_met` / 3 `partial` — no scene-granular TICK (the `Scene` container EXISTS; the season folds every scene into one batch), **no roll anywhere in the loop**, 54 of 143 cases unrepresentable, 6 of 32 verbs executing. `register.py --requirements` is the gate; read it before citing this tree as done. ⚠ It carries the SECOND declared `sys.path` seam into `systems/` (`combat_seam.py`, shrink-only, declared in `PATH_SEAM_ALLOWED`). |
-| `canon/` | Philosophical foundations **P-01..P-15**, canonical timeline, canon constraints, amendments. World/design truth only — the process registers live in `registers/`. |
-| `godot/` | The port + the eventual `res://` project root. Governing spec `godot_conversion_strategy_v1.md` is **PROPOSED, Jordan-vetoable throughout**, with unexecuted Gate-0 preconditions. `skeleton/` covers 1 of 27 modules and **does not compile** — never present it as a runnable head-start. Four 2026-04-18 docs carry `⚠️ STALE` banners; `godot_architecture_specification.md` is STALE REFERENCE (ED-GO-0001). |
-| `registers/` | Process ledgers: editorial ledger (`editorial_ledger.jsonl` for pre-cutover flat IDs + `editorial_ledger_<lane>.jsonl` for `ED-<LANE>-NNNN`), patch register, supersession register, mechanics index. `registers/handoffs/HANDOFF_<LANE>.md` is the per-lane continuity surface; root `HANDOFF.md` stays at repo root. **All ledger files are authoritative — read all of them.** |
-| `references/` | Registries and indices — `canonical_sources.yaml`, `names_index.yaml`, `glossary.md`, `module_contracts.yaml`, `descriptor_registry.yaml`, `restructure_ledger.md`. ⚠️ The `canonical_sha__*` pins are advisory, not a trustworthy integrity signal. |
-| `tools/` | All CI checks, validators, collators, generators. Intended invariant: every rule lives once (§8). ⚠️ Measured 2026-08-05: **36 of 106 modules have zero automated callers.** |
-| `tests/` | `tests/valoria/` is the pytest unit suite (the only executable tests here). ⚠️ Also ~850KB of narrative `.md` that is **prose, not executable spec** — do not mine it for behavioural contracts. ⚠️ `tests/sim/` is unrelated to the retired `sim/` package. |
-| `workplans/` | The master workplan + `workplan_v6_progress.yaml`, the board the banner reads. |
-| `proposals/` | Unratified proposals, surfaced BY LOCATION. |
-| `dashboard/`, `.github/`, `.claude/`, `skills/` | Published status site; CI workflows; hooks, agents and orchestration scripts; skills. |
-| `audit/` | The surviving audit corpus. ⚠️ **`§0` now forbids the adversarial pass from creating documents, which retires this as a CATEGORY** — do not add to it. |
-| ~~`deprecated/`~~ | **RETIRED TO THE FORK 2026-08-23 (S6/6a) — the directory is gone.** The operation it named survives and is unchanged: *retire* still means moved out of `main`, kept at a named ref; only the staging tree is gone, because a graveyard nothing visits is just a second copy of `git log`. Its last content left in two steps: the 26 frozen ED-ledger fragments `validate_ed_citations.py` reads to tell a real ID from an invented one **relocated to `registers/archive/`** (6b, universe unchanged at 1,264 ids — `evacuation_plan.py`'s `R-REL-EDUNIVERSE` had ruled exactly that), and the last six dead files went to `FORK:baf29d5` (6a) after a deletion rehearsal proved nothing reads them. Two `keep` rules protecting them named imports that no longer existed. |
-| `registers/archive/` | **The frozen ED-ledger fragments** (26 files relocated, **25 of them parsed** — `editorial_ledger_index.md` is `.md` and the loader takes `.yaml`/`.yml` only, so it is walked and never read), read by `tools/validate_ed_citations.py` to tell a real ID from an invented one. **Never edit them** — append-only history, frozen. Delete one and valid citations start reading as fabricated. |
+- **`systems/`** — design source of truth for `combat`, `social_contest` and `mass_battle`, the three
+  retained by ED-IN-0204 Decision 1: *"only the repository's systems for social contests, personal
+  combat and mass battles to be retained"*. **One subsystem = one folder = one ID lane = one
+  `CURRENT.md` row = one `HANDOFF_<LANE>.md`.** Each holds its design `.md` at the root and oracle
+  scripts in `sim/`, imported as `systems.<sub>.sim.*`. The rest are superseded by `engine/season/`, kept
+  for two reasons — those `engine/` still resolves into at runtime (retirement gated on the R-04 role
+  work), and those with no Python at all, which stay as prose whose document IS the spec.
+- **`engine/`** — the executable model (Key substrate, autoload hub, cross-scale, campaign driver,
+  `engine/engine_params/` typed exports, `engine/tests/` as CI job `sim-regression`). **`engine/` names
+  no subsystem by import**: seams resolve through `engine/substrate/composition.py`, where `engine/`
+  names a ROLE and `references/module_contracts.yaml` names the MODULE. Two `sys.path` seams into
+  `systems/` are not imports; both are declared in `PATH_SEAM_ALLOWED`, which is **shrink-only**. The
+  licence is an execution artifact: `test_importing_every_engine_module_pulls_in_no_subsystem` imports
+  the engine in a subprocess and asserts zero subsystem modules loaded, matching on FILE PATH — which
+  cannot be spelled around, as an earlier token-matching predicate could. ⚠️ **Acyclic is not
+  independence:** the engine still depends on subsystems, resolved by string at first call, so one is
+  swapped by editing a registry row.
+- **`architecture/`** — **Layer 1.** Jordan: *"there is the code architecture and shape itself, which
+  governs how all coding is to be conducted."* Reference for game mechanism (§0.05), binding as agent
+  instruction, resolving nothing at runtime. Oversized by §4, exempt from the size WARNING only.
+- **`engine/season/`** — **Layer 2, the game code**: the season loop plus the registries it opens **at
+  runtime** (mechanism under §0.05, which is why they live with the code). ⚠ **IT RUNS AND IT IS NOT YET
+  A GAME** — `python -m engine.season.harness.register --requirements` scores it against
+  `engine/season/requirements.yaml`; read that before citing this tree as done.
+  `engine/season/hole_register.yaml` is read by the corpus grader, not the loop: mechanism for the
+  grader, reference for the game.
+- **`canon/`** — foundations **P-01..P-15**, timeline, constraints, amendments; world/design truth only.
+- **`registers/`** — process ledgers (editorial flat + per-lane, patch, supersession, mechanics index)
+  and `registers/handoffs/`. **All ledger files are authoritative — read all of them.**
+  `registers/archive/` holds the frozen ED fragments `tools/validate_ed_citations.py` reads to tell a
+  real ID from an invented one: **never edit them** — delete one and valid citations read as fabricated.
+- **`tools/`** — all CI checks, validators, generators; every rule lives once (§8). Not every module has
+  an automated caller — check `references/ci_checks_registry.yaml` before assuming one runs.
+- **`tests/`** — `tests/valoria/` is the pytest unit suite, the only executable tests here. It also holds
+  narrative `.md` that is **prose, not executable spec** — do not mine it for behavioural contracts.
+  `tests/sim/` is unrelated to the retired `sim/` package.
+- **`audit/`** — the surviving audit corpus. §0 forbids the adversarial pass from creating documents,
+  retiring this **as a category**: do not add to it.
+- **`godot/`** — see §6. **`workplans/`** — master workplan plus the hand-edited board (§0.2).
+  **`proposals/`** — unratified proposals, surfaced BY LOCATION.
 
-**Trees that were dissolved — do not recreate any of them:** `designs/` (retired 2026-07-19, contents
-now in `systems/`), `sim/` (retired 2026-07-21, now `engine/` + `systems/<sub>/sim/`), `arcs/` and
-`engine/params/` (evacuated 2026-08-05; the 43 param tables are captured byte-identically in
-`engine/engine_params/params_tables.yaml`), `references/values_master.yaml` (retired 2026-08-02 —
-auto-extracted and partly wrong; **never lift numbers from it**). Everything removed is recoverable
-at fork ref `c451bcb`, and every old path resolves via `references/restructure_ledger.md`.
+**Trees that were dissolved — do not recreate any of them:** `designs/`, `sim/`, `arcs/`,
+`engine/params/`, `references/values_master.yaml` (auto-extracted and partly wrong — **never lift
+numbers from it**). Everything removed is at its fork ref; every old path resolves through
+`references/restructure_ledger.md`.
 
 ## 4. Conventions
 
-> **Restored 2026-08-05 from ref `cadf9c7` (ED-IN-0147), verbatim.** Every rule here governs a
-> surface that survived the evacuation: the 2026-07-26 Jordan RULING on document splitting, the
-> `ED-<LANE>-NNNN` taxonomy that §1 and §3 both cite, and the naming gate that
-> `tools/ci_naming_check.py` enforces. Its loss was measurable: `ci_hooks_verifier` began warning
-> "CLAUDE.md: naming rule (Solmund) not documented" — a report-only gate that noticed and could not act.
-
-- **Long documents: sequential parts, not index+infill (RULED 2026-07-26, Jordan).** A document that
-  outgrows ~15k tokens splits into **`_part2`, `_part3`, … in reading order**. The old `*_index.md`
-  (skeleton) + `*_infill.md` (prose) pair is **RETIRED as a default** — existing pairs are grandfathered,
-  not a migration target. ⚠️ This bullet previously claimed the pair was "CI-enforced
-  (`tools/ci_co_file_checker.py`)". **That was false:** that checker has no pair rule at all (its
-  rules are canonical_sources / propagation_map / coverage_matrix — the fourth, params,
-  was RETIRED 2026-08-12 with the evacuated `engine/params/` tree, ED-IN-0163, and its only mention of
-  `infill` is an *exclusion*), `compliance_check.py` merely skips such files, and
-  `atomization_rules.yaml`'s `force_skeleton_routing_for_design_docs` / `skeleton_threshold_tokens` had
-  **zero readers** anywhere in `tools/`, `.githooks/` or `skills/`. The convention propagated by imitation
-  and the doc asserted an enforcement that did not exist.
-- **Versioning ≠ currency.** Three orthogonal version axes coexist with **no reliable mapping**:
-  filename `_v30`, in-file `## Version: vN.N`, and the `v40` generation marker (no file carries `_v40`).
-  **A filename or in-file version cannot tell you what is current — only `CURRENT.md` and a head's
-  `## Status:` line can.** Concrete hazard: `_v30` is nominally "current generation", but the current
-  **combat** head is `systems/combat/combat_engine_v1/` (no `_v30`), while `combat_v30.md` is
-  *PARTIALLY SUPERSEDED*. Always resolve combat via `CURRENT.md`, never by the `_v30` suffix.
+- **Long documents: sequential parts, not index+infill (RULED by Jordan).** A document outgrowing the
+  token cap in `references/atomization_rules.yaml` splits into **`_part2`, `_part3`, … in reading
+  order**. The `*_index.md` + `*_infill.md` pair is **RETIRED as a default**; existing pairs are
+  grandfathered, not a migration target. Nothing enforces the pair rule — it propagated by imitation —
+  but the size cap itself *is* enforced, by `tools/compliance_check.py`.
+- **Versioning ≠ currency.** Three orthogonal axes coexist with **no reliable mapping**: filename `_v30`,
+  in-file `## Version: vN.N`, and the `v40` generation marker (no file carries `_v40`). **Only
+  `CURRENT.md` and a head's `## Status:` line can tell you what is current.** Concrete hazard: `_v30` is
+  nominally "current generation", yet the live combat head is `systems/combat/combat_engine_v1/`, which
+  carries no suffix at all. Resolve a head via `CURRENT.md`, never by a suffix.
 - **ID systems.** `PP-NNN` patches (`registers/patch_register_active.yaml`), `ED-NNN` editorial items
   (`registers/editorial_ledger.jsonl`), `LB-NN` workplan lane-blocks. `references/id_reservations.yaml`
-  is the allocation source of truth (read `next_free`, allocate, bump, co-commit — never max+1).
-  **Two ED formats coexist (2026-07-02, ED-IN-0001):** the flat `ED-NNNN` sequence is **FROZEN**
-  at `ED-1096` (two more flat IDs, ED-1095/1096, landed the same cutover day before the sequence
-  fully stopped — `ED-1094` is the ruling that established the freeze, not the last ID issued
-  under it; corrected 2026-07-11, ED-IN-0034, caught auditing `skills/valoria-editorial-register`
-  against the ledger) — no new allocations, but permanently valid for existing citations — and all NEW EDs
-  use the lane-tagged `ED-<LANE>-NNNN` format (e.g. `ED-MB-0001`), zero-padded to 4 digits. Lanes:
+  is the allocation source of truth — read `next_free`, allocate, bump, co-commit; never max+1.
+  **Two ED formats coexist:** the flat `ED-NNNN` sequence is **FROZEN** (no new allocations, permanently
+  valid for existing citations); all NEW EDs use lane-tagged `ED-<LANE>-NNNN` (e.g. `ED-MB-0001`),
+  zero-padded to 4 digits. Lanes:
   `MB` mass battle, `PC` personal combat, `FI` field investigation, `SC` social contest,
   `FA` faction actions, `WR` world, `IN` infrastructure/cross-cutting, `GO` godot, `SE` settlements.
-  Motivated by two same-session concurrent-allocation collisions on the flat sequence in one PR
-  (see `ED-1094`'s ledger entry) — a lane tag makes cross-lane collision impossible by
-  construction, not just by allocation discipline. Both formats resolve through the same
-  citation-audit path (`tools/validate_ed_citations.py`) and currency gate
-  (`tools/currency_consistency_check.py`) forever; no retrofit of pre-cutover entries.
-  **The ledger file itself is lane-split too (2026-07-08):** an `ED-<LANE>-NNNN` entry lives in
-  `registers/editorial_ledger_<lane>.jsonl` (lowercase lane code), not the flat
-  `registers/editorial_ledger.jsonl` — mirroring the `HANDOFF.md` split below, and for the same
-  merge-collision reason. Pre-cutover flat-ID entries stay in the main file (no retrofit). A
-  lane file exists only once that lane has allocated an ED (no `_go.jsonl` yet). Both the main
-  file and every lane file are "active, authoritative" — read all of them, not just one.
-  **Session lane-scoping (convention, not yet CI-enforced):** a session should declare which
-  lane its work belongs to (via the `ED-<LANE>` ids it allocates) and keep its commits/PRs scoped
-  to that lane's files — avoid a single PR touching unrelated lanes except for genuinely
-  cross-cutting `IN` work (like this namespace itself) or resolving a cross-lane collision.
-- **Word choice: idempotent in meaning, idiomatic in choosing (RULED 2026-08-13, Jordan, ED-IN-0179).**
-  Two tests, both applying to *process* vocabulary — how we describe operations on the repo — as much
-  as to design terms:
-  - **Idempotent in meaning.** Reading the word cold, in a later session, must yield the *same*
-    meaning. Re-deriving it is not allowed to change it. This is the binding constraint because
-    **there is no context between sessions.** As Jordan put it: *"every session will need to
-    reinterpret vocabulary used for a particular purpose in another session, and that can create
-    compounding issues since the particular use of vocabulary isn't carried over."*
-  - **Idiomatic in choosing.** Pick the word ordinary usage already supplies for the thing. Then the
-    meaning is carried by the language and survives the reset; a coined word is a pointer to context
-    that does not.
+  A lane tag makes cross-lane collision impossible by construction, not merely by discipline. Both
+  formats resolve through the same citation audit (`tools/validate_ed_citations.py`) and currency gate
+  (`tools/currency_consistency_check.py`) forever; no retrofit. **The ledger is lane-split too:** an
+  `ED-<LANE>-NNNN` entry lives in `registers/editorial_ledger_<lane>.jsonl` (lowercase lane), not the
+  flat file, for the same merge-collision reason; main file and every lane file are authoritative, so
+  read all. **Session lane-scoping** (convention, not CI-enforced): declare your lane via the ids you
+  allocate and keep commits/PRs scoped to that lane's files, except for cross-cutting `IN` work or
+  resolving a cross-lane collision.
+- **Word choice: idempotent in meaning, idiomatic in choosing (RULED by Jordan, ED-IN-0179).** Two tests,
+  binding on *process* vocabulary — how we describe operations on the repo — as much as on design terms.
+  - **Idempotent in meaning.** Reading the word cold, in a later session, must yield the *same* meaning;
+    re-deriving it may not change it. This binds because **there is no context between sessions.**
+    Jordan: *"every session will need to reinterpret vocabulary used for a particular purpose in another
+    session, and that can create compounding issues since the particular use of vocabulary isn't carried
+    over."*
+  - **Idiomatic in choosing.** Pick the word ordinary usage already supplies; then the meaning is carried
+    by the language and survives the reset, whereas a coined word points at context that does not.
 
-  **The worked failure, which cost real work.** `evacuate` was coined here for "move out of `main`,
-  keep at a named ref" — a thing the plain word **retire** already covers. It is neither idiomatic
-  (not standard usage; the real term of art, *deprecate*, means something else — still shipped, but
-  discouraged) nor idempotent (a later session, reading it cold, derived "queued for deletion",
-  concluded the tree held two conflicting policies, and escalated a non-existent blocker across three
-  surfaces and two PR bodies). Two words for one operation manufactured a distinction that the next
-  reader then tried to honour.
+  The worked failure: `evacuate` was coined for "move out of `main`, keep at a named ref", which
+  **retire** already covers. A later session read it cold, derived "queued for deletion", concluded the
+  tree held two conflicting policies, and escalated a non-existent blocker across three surfaces and two
+  PR bodies. **How to check yourself:** would a reader with no memory of this repo land on your meaning,
+  and is the word used this way *outside* this repo? If either answer is no, use the ordinary word.
+  **Coin nothing a plain word already covers.**
 
-  **How to check yourself, since "be simpler" is unfalsifiable and this is not:** would a reader with
-  no memory of this repo land on your meaning? Is the word used this way *outside* this repo? If
-  either answer is no, use the ordinary word. **Coin nothing that a plain word already covers**; if a
-  term genuinely must be coined, define it where the next session is certain to read it, not where it
-  was invented.
-
-  **DEFINE IT IN BOTH PLACES — prose AND the code that calls it (Jordan, 2026-08-13).** These words
-  name specific functions, processes and methodologies, so a definition that lives only in prose is
-  half a definition: the next session usually meets the term *in code* first — a rule code, a flag, a
-  job name, a hook command — and infers its meaning from the call site. That inference is exactly what
-  went wrong above. So a process term must be defined where it is **invoked**, not only where it is
-  described. The sites that already exist for this, and are the ones to use rather than inventing a
-  new home:
-  - `references/ci_checks_registry.yaml` — every tool has a `role:` line. That is the definition of
-    what the tool's verb *means*, and it is machine-read, so it cannot silently rot away from CI.
-  - the rule/flag string itself — e.g. `evacuation_plan.py`'s `R-DEPRECATED` carries its reason inline
-    (*"where files go when we stop using them — moved out of main, kept at a named ref"*), so anyone
-    reading the classifier's output gets the definition with the verdict.
-  - the tool's module docstring and `--help`, for anything a session runs directly.
-  - `.claude/settings.json` hook commands and CI job names — if the name is the only thing a reader
-    sees, the name has to carry the meaning or point at where it is defined.
-
-  ⚠ **Measured 2026-08-13: 32 distinct process terms are in circulation across ~26,000 uses, and NONE
-  of the six vocabulary registries governs any of them** — every registry in the tree covers
-  design/world vocabulary, so process vocabulary is entirely ungoverned. Not retrofitted (a rename at
-  that volume costs more than it buys); this rule binds **new** coinage, the same no-retrofit posture
-  as the `ED-<LANE>-NNNN` cutover.
-- **Naming gate.** Canonical name is **Solmund** — never **Galbados** (deprecated). Enforced by
-  `tools/ci_naming_check.py` (CI + pre-commit) and an edit-time nudge. Definition naming is centralized
-  in `references/names_index.yaml`.
+  **DEFINE IT IN BOTH PLACES — prose AND the code that calls it (Jordan).** The next session usually
+  meets a process term *in code* first — a rule code, a flag, a job name, a hook command — and infers its
+  meaning from the call site, so define it where it is **invoked**, using sites that already exist:
+  each tool's `role:` line in `references/ci_checks_registry.yaml` (machine-read, so it cannot rot away
+  from CI); the rule or flag string itself, carrying its reason inline so the reader gets the definition
+  with the verdict; the module docstring and `--help`; and `.claude/settings.json` hook commands and CI
+  job names. Process vocabulary is otherwise **ungoverned** — every vocabulary registry in the tree
+  covers design/world terms. This binds **new** coinage; no retrofit, as with the lane-ID cutover.
+- **Naming gate.** The canonical name is **Solmund** — never **Galbados** (deprecated). Enforced by
+  `tools/ci_naming_check.py` in CI and pre-commit, plus an edit-time nudge; definition naming is
+  centralized in `references/names_index.yaml`.
 
 ---
 
----
+## 5. Data → Godot pipeline
 
-## 5–7. RESTORED 2026-08-15 by Jordan's ruling (ED-IN-0193)
+**Rule: never take a number for the engine or the port out of prose.** A value the engine uses lives in a
+typed artifact under `engine/engine_params/` behind an exporter with a blocking `--check` round-trip, or
+in a single Python owner (§0.05). `engine/engine_params/params_tables.yaml` is a frozen,
+no-longer-regenerable capture of prose tables — **reference**, and it can hold pre-ruling values: its
+degree bands are superseded by `degree_from_net` in `engine/autoload/dice_engine.py`. Nothing gates it,
+because a frozen capture has no freshness relationship to the code. **Check the code first, every time.**
+Until the typed layer covers numeric operands and structured formulas rather than verbatim cells, every
+value crossing into Godot is hand-transcribed — live drift risk — and do not bind Godot resource fields
+to descriptor keys the registry still marks IN FLUX.
 
-> **Jordan ruled "restore" (ED-IN-0185 Q6).** These three sections were deleted as collateral on
-> 2026-08-05 by PR #289 — an unregistered removal, which is why their disposition was held. They are
-> back, and **327 citations across 176 files that named §5–§7 now resolve again.**
->
-> ⚠ **RESTORED WITH CORRECTIONS, NOT VERBATIM.** Ten days of tree changes had made several of their
-> claims false, and restoring known-false text into the governing document would be the defect this
-> repo keeps filing. Every correction is marked inline `[CORRECTED 2026-08-15]` with its reason —
-> the same convention the §4/§8 restore used. The most important: **§7's "~87% degenerate win-share"
-> was a retracted small-N artefact**, and restoring it verbatim would have re-seeded a debunked
-> number that five documents had already copied.
-
----
-
-## 5. Data → Godot pipeline (READ before touching params or ingesting numbers)
-
-This is the most fragile and most load-bearing surface for the videogame, and it has known traps. Do
-not treat any "structured" data layer as ground truth without checking it against the prose.
-
-- **⚠️ `engine/params/` is GONE.** *[CORRECTED 2026-08-15, ED-IN-0193: this read "is EVACUATING … the tree goes to the fork in W7". The evacuation COMPLETED 2026-08-05 (ED-IN-0145) and the tree is at fork ref `c451bcb`.]* Do not recreate it, and do not treat it as the head. Jordan ruled the parameter prose out ("code should have superseded them all by now");
-  the 43 files are captured **byte-identically** in `engine/engine_params/params_tables.yaml`
-  (`engine/engine_params/params_tables.yaml`). *[CORRECTED: `tools/export_params_constants.py` was a migration-window gate and was RETIRED with its source — the capture can no longer be regenerated, so its header's "NEVER hand-edit" is now absolute.]*
-  Provenance citations naming `engine/params/…` **may cite the fork** — they do not block the deletion.
-  Read the capture, or better, the typed layer; if you need to *change* a number, change the code.
-
-  ⚠⚠ **DO NOT TAKE A NUMBER OUT OF THE CAPTURE WITHOUT CHECKING THE CODE FIRST (2026-08-24).** The
-  instruction above — "read the capture" — is actively dangerous for anything that has since been
-  ruled on, and the degree ladder is the worked case: `params_tables.yaml`'s *Degrees of Success*
-  section holds the **pre-ruling** bands (Overwhelming at Net ≥ 2×Ob, Failure at Net ≤ 0) while the
-  live ladder is margin-based (`engine/autoload/dice_engine.py`, `degree_from_net`). A reader
-  following §5 in good faith gets a retracted model. The capture is a byte-frozen 2026-08 snapshot
-  of prose that can no longer be regenerated; under §0.05 it is **reference**, and the code is the
-  formula. Found by a read-only contamination audit; nothing gates it, because a frozen capture has
-  no freshness relationship to the code it describes.
-- **Numbers still live as prose in places.** Where they do (the `engine/params/*.md` tables, until they
-  leave) they are markdown (unicode `×`, en-dashes, caveats like "minimum 5", footnotes) and a Godot
-  importer **cannot ingest them directly**. The typed layer is now partly real, not absent:
-  `engine/engine_params/combat_engine_v1.json` (from `config.py`), `engine/engine_params/key_types.json`
-  (ED-IN-0136), and the params capture above — each generated by a `tools/export_*.py` with a blocking
-  `--check` round-trip. What does **not** yet exist is a typed file with *numeric operands and structured
-  formulas* for the general parameter surface; the capture preserves the prose, it does not type it.
-- **`references/values_master.yaml` is RETIRED** (2026-08-02, ED-IN-0122 → `deprecated/references/`).
-  It was auto-extracted and partly stale/wrong: free-text English `formula` fields (not parseable ASTs),
-  ~70 entries indexing a **nonexistent** `engine/params/combat.md`, and 8 values pulled from
-  `engine/params/threadwork_superseded.md`. **Never lift numbers from it, and do not resurrect it** —
-  resolve the current prose head via `CURRENT.md` instead.
-- **Derived-stat schema is IN FLUX — but the COUNT is now ruled.** *[CORRECTED 2026-08-15: Jordan ruled 2026-08-14 "it will be 10 attributes". The registry still ships NINE and the tenth is UNNAMED; naming it is the open workshop, the count is not.]* `descriptor_registry.yaml` marks the roster "IN FLUX",
-  aggregates (`agg.body/mind/social`) as `placeholder` and not wired, and attribute keys as `warn` (not
-  `block`). **Combat Pool is defined three different ways** across `engine/params/core.md`
-  (PP-247), `module_contracts.yaml`, and the A18 census (the third definition formerly cited
-  `values_master.yaml`, now retired — the *collision* survives its retirement, so this stays open). Do not bind Godot resource fields to these keys yet.
-- **When you need a number for the engine:** resolve the subsystem head via `CURRENT.md` → read the prose
-  param/design doc → cite the `PP-NNN`/`ED-NNN` that established it. Do not synthesize a value the ledger
-  does not back (the anti-fabrication gate exists, but is leaky — §7).
-- **Recommended (PARTLY BUILT as of 2026-08-04):** a typed engine-params YAML/JSON (numeric operands,
-  structured formulas, explicit clamps) generated from the prose and CI round-trip-checked, ingested
-  directly by Godot. The **generation + blocking round-trip pattern now exists** and has three
-  instances (see the first bullet); what is still missing is the **typing** — numeric operands and
-  structured formulas rather than verbatim cells. Until that exists, every value crossing into Godot
-  is hand-transcribed — flag drift risk.
+**Pointer:** `CURRENT.md` for the head that owns a number, `engine/engine_params/` for what is typed
+today, the `tools/export_*.py` exporters' `--check` modes for the round-trip.
 
 ---
 
-## 6. Godot port pipeline (state of the bridge — READ before any "start implementation" task)
+## 6. Godot port pipeline
 
-The conversion is **PROPOSED and largely un-executed**. The skeleton is illustrative, not buildable.
-Do not represent the skeleton as a runnable head-start.
+**Rule: a port never corrects its oracle in place (ED-1050).** If port and Python oracle disagree, fix
+canon via the ledger and re-export — never hand-edit a value into the `.gd` side. And `godot/skeleton/`
+covers a single module, does not compile, and `extends` a spine defined nowhere in the corpus: **never
+present it as a runnable head-start.**
 
-- **One home now.** The Godot material was consolidated from three scattered homes into the top-level
-  `godot/` primary (ED-IN-0071 P2, 2026-07-16): the governing strategy (formerly under
-  `designs/audit/2026-06-10-godot-conversion-strategy/`), `godot_architecture_specification.md` (formerly
-  `designs/videogame/`), and the stale docs + `skeleton/` (formerly `designs/godot/`). Old paths alias.
-- **Governing spec:** `godot/godot_conversion_strategy_v1.md`
-  — status **PROPOSED (Jordan-vetoable throughout)**, with an open 8-item register and **unexecuted
-  Gate-0 preconditions** (KeyStore v2, base classes, RNG service). It is the plan, **not yet a ratified
-  contract**. Drive its register + Gate-0 to closure before treating any decision as fixed.
-- **Skeleton is non-compilable.** `godot/skeleton/` covers only **1 of 27** modules
-  (`personal_combat`) and `extends`/calls a spine (`BaseEngine`, `EngineModule`, `Key`, `KeyBus`,
-  `GameState`, `Resolver`) **defined nowhere in the corpus**. It cannot be opened and run in Godot 4.6.
-- **Port↔oracle discipline (ED-1050, resolved 2026-06-30).** `combat_config.gd` once hand-edited
-  `adef_threshold` away from the canonical Python oracle with an inline `[AUDIT-FIX]`; Jordan resolved it
-  by re-sweeping the oracle (`config.py`, monotone ADEF_THRESHOLD) and re-exporting — port and oracle now
-  match. The rule stands: **never let a port "correct" its oracle in-place** — fix canon via the ledger,
-  then re-export. Key-log parity is still known-red, but only because RESIST/GAP_EXPOSURE/gap-game logic
-  has not yet been re-exported to `weapon_resource.gd`/`strike_module.gd` (ED-1050 residual).
-- **~37% of contracts are not implementable specs.** In `references/module_contracts.yaml`, 9/27 modules *[CORRECTED 2026-08-25: **nine**, not ten. A naive `grep -c "doc: null"` returns 10;
-the tenth match is inside a quoted prose string, not a module field. Parsed count via
-`yaml.safe_load` over `references/module_contracts.yaml`: audit, domain_actions, engine_clock,
-game_director, npc_memory, scenario_authoring, scene_slate, scene_timer, settlement_economy.]* 
-  have `doc: null` (no home design doc — including `engine_clock`, the temporal spine) and 11/27 resolvers
-  are `[ASSUMPTION]`-grade. Porting beyond the combat slice is **blocked on authoring canon first** (start
-  with `engine_clock`).
-- **The four stale pre-`d+σ` docs** (`godot/{scene_tree_architecture,gm_to_engine_conversion,data_serialization_spec,implementation_sequence}.md`,
-  all 2026-04-18) encode the pre-`d+σ` model — each carries a `⚠️ STALE / PARTIALLY SUPERSEDED` banner
-  (flagged 2026-06-30, ED-1054) pointing at the strategy doc. (`godot/`'s other `.md` files —
-  `README.md` and `godot_conversion_strategy_v1.md` are current; `godot_architecture_specification.md` is **STALE REFERENCE** as of 2026-08-15, ED-GO-0001 — it predates the d+σ model.)
-  `data_serialization_spec.md` ships wrong schemas (writable `mandate`, 34 vs 35
-  settlements). Do not implement from them; defer to the strategy doc + Key substrate.
+**Pointer:** `godot/godot_conversion_strategy_v1.md` is the governing spec — **PROPOSED, Jordan-vetoable
+throughout**, with an open register and unexecuted Gate-0 preconditions; drive those to closure before
+treating any decision as fixed. `references/module_contracts.yaml` shows which modules have `doc: null`
+(no home design doc — including `engine_clock`, the temporal spine) and which resolvers are
+`[ASSUMPTION]`-grade; porting beyond the combat slice is blocked on authoring canon first, starting with
+`engine_clock`. The older `godot/` docs predate the `d+σ` model, carry `⚠️ STALE` banners and ship wrong
+schemas, and `godot/godot_architecture_specification.md` is stale reference: implement from none of them.
 
 ---
 
-## 7. Simulation / balance (the GDScript port's oracle — handle with care)
+## 7. Simulation / balance
 
-- The **1:1 Python reference** the port validates against. *[CORRECTED 2026-08-15: `sim/` was RETIRED 2026-07-21. The reference now lives at `engine/` (core) + `systems/<subsystem>/sim/`, and its orientation doc is `engine/sim_reference_README.md`. Every `sim/…` path in this section resolves through `references/restructure_ledger.md`.]* It is ~11,400 LOC,
-  partly stubbed (~19 `NotImplementedError`), with self-asserted `[PROVISIONAL]`/`[CANONICAL]` docstrings.
-  Its `sim/README.md`/`CONVENTIONS.md` say "all modules are stubs" — **that is stale**; many modules are
-  real and `mc_v18` runs campaigns.
-- **The sim's own balance output has no regression oracle beyond the §8 smoke test.** `engine/tests/` exists (a deterministic seeded regression + parity suite, CI job `sim-regression`), and ⚠️ *[CORRECTED 2026-08-20: the words that stood here — "but no CI job executes full `mc_v18` campaigns" — were STALE. `.github/workflows/valoria-ci.yml:321` runs `pytest engine/tests`, which executes full 50-season campaigns at n=2/seed-0 (`test_mc_v18_regression.py:15`) and n=8/seed-42 (`test_f7_smoke_oracle.py:16`), pinning exact win-share/winners/battles. Those goldens observe ANY output-moving change to campaign-reachable code — they are what proved the 2026-08-20 `echo_transport` seam swap was value-identical. **Two real gaps remain, and they are the ones to cite:** ~~there is still no n≥100 balance oracle — which `test_f7_smoke_oracle.py:8` itself demands~~ *[CORRECTED 2026-08-25: **it exists.** `tools/balance_oracle.py` was built 2026-08-21 and its own header cites this very sentence as what it closes. It is deliberately NOT a CI gate (240 campaigns ≈ 13 min). Use it for any campaign-level balance question — but note it is a CAMPAIGN instrument, so for a change that is campaign-unreachable both of its arms are identical by construction and running it would be a fake control; ED-MB-0066 is the worked example.]* — the ORIGINAL gap was that so the small-N goldens cannot distinguish a balance regression from noise once someone legitimately re-pins; and the **re-pin path is uncontrolled**: nothing verifies a golden regeneration was intended.]* ⚠️ *[CORRECTED 2026-08-15 — THIS SECTION'S MOST-COPIED CLAIM WAS FALSE. It read "a seeded batch currently yields a degenerate win-share (one faction ~87%, two at 0%) that nothing flags." That figure was a SMALL-N ARTEFACT and is debunked at `engine/tests/test_f7_smoke_oracle.py:6`, which records that five docs cited it as a balance fact. Restoring it verbatim would have re-seeded a retracted number into the governing document.]* If you tune balance numbers for Godot, treat that gap as open —
-  **add a deterministic seeded smoke assertion before trusting any full-campaign sim output.**
-- **The anti-fabrication gate is leaky, though less than this said.** *[CORRECTED 2026-08-15: ED-1053 fixed the two mechanisms named here — the checker now matches by `(variable, value)` rather than bare value, and captures full float literals. It still scans the changeset only, and `validate_ed_citations` remains scoped to ED, so PP provenance is unvalidated (frozen as historical, ED-IN-0190).]* **Do not rely on it to catch a
-  made-up number — verify provenance by hand against the cited `canonical_source`.**
-- Ledgers use ≥3 incompatible schemas and the checker reads only `value`; provenance fields are unchecked.
-  None pin a generating git SHA. Treat ledger provenance as advisory.
+**Rule: the Python model (`engine/` + `systems/<sub>/sim/`) is the oracle the port validates against, and
+a campaign-level balance claim needs a campaign-level instrument.** The seeded goldens under
+`engine/tests/` observe any output-moving change to campaign-reachable code but cannot separate a balance
+regression from noise, and nothing verifies a golden re-pin was intended — so say plainly when you
+re-record one. Use `tools/balance_oracle.py` for balance questions (deliberately not a CI gate; it is
+slow). ⚠ It is a **campaign** instrument: for a campaign-unreachable change both arms are identical by
+construction and running it is a fake control. Ledger provenance is advisory — schemas differ, provenance
+fields are unchecked, none pin a generating SHA — so verify a cited `PP-NNN`/`ED-NNN` by hand against its
+`canonical_source`.
+
+**Pointer:** `engine/sim_reference_README.md` orients the reference model; `engine/tests/` is CI job
+`sim-regression`. The reference is partly stubbed (`NotImplementedError`) and its own README's "all
+modules are stubs" line is stale — grep for the stubs rather than believing either claim.
 
 ---
 
 ## 8. Enforcement (where the gates live)
 
-> **Restored 2026-08-05 from ref `cadf9c7` (ED-IN-0147).** Three facts below were stale at restore
-> time and are corrected inline, marked `[CORRECTED 2026-08-05]`. Everything else is verbatim.
+- **Authoritative tier — CI** (`.github/workflows/valoria-ci.yml`, branch-protected `main`). **CI is the
+  unbypassable boundary.** Read the workflow for what actually gates; a gate's job name is not its own,
+  since gates are grouped into blocking and report-only jobs.
+  `references/ci_checks_registry.yaml` is the per-tool registry, and each `role:` line defines what that
+  tool's verb means.
+- **Local tier — advisory accelerators.** One-time per clone: `git config core.hooksPath .githooks`.
+  `.githooks/pre-commit` runs the SAME validators on staged files via
+  `python tools/valoria_local.py --staged`. `.claude/settings.json` wires two PreToolUse hooks — the
+  naming nudge (`tools/hook_naming_guard.py`) on writes and a search-sweep guard
+  (`tools/hook_md_sweep_guard.py`) on Grep/Glob; SessionStart and Stop are empty arrays, deliberately
+  (§0.3). Not every blocking CI gate runs locally — `tools/compliance_check.py`'s size caps are CI-side,
+  so **local-green ≠ compliance-green**. `git commit --no-verify` bypasses local; CI still enforces.
 
-- **Authoritative tier — CI** (`.github/workflows/valoria-ci.yml`, branch-protected `main`): syntax,
-  register sizes, co-file rules, editorial markers, naming + names-consistency/drift,
-  sim anti-fabrication, supersession, PP-674 vetting, ED-citation integrity, the `tests/valoria/` pytest
-  suite, integrity, and compliance. **CI is the unbypassable boundary.** *[CORRECTED 2026-08-05: the 25
-  per-gate jobs were collapsed into `validators` (blocking) + `validators-report` (never fails) by
-  PR #283 — a gate's job name is no longer its own.]*
-- **Local tier — advisory accelerators** (one-time per clone: `git config core.hooksPath .githooks`):
-  `.githooks/pre-commit` runs the SAME validators on staged files via `python tools/valoria_local.py
-  --staged`; `.claude/settings.json` wires the edit-time naming nudge (`hook_naming_guard.py`), the
-  edit-time naming nudge and **nothing else**. The SessionStart and Stop hooks are now empty
-  arrays: `session_status.py`, `session_handoff_reminder.py` and `review_core.py` were all retired
-  in culling waves 2-3 (ED-IN-0194, 2026-08-21). A session now opens and closes with no generated
-  surface, deliberately — see §0.3. Bypass a local block with `git commit --no-verify` — CI still enforces.
+**Intended invariant: every rule lives once, in `tools/`, called by both CI and local hooks. Never
+re-implement a rule.** Known live violations, treated as bugs rather than propagated:
 
-**Intended invariant:** every rule lives once, in `tools/`, called by both CI and local hooks. **Never
-re-implement a rule.** Known violations of this invariant (treat as bugs, don't propagate):
-- **Several tools were dead** (imported the orchestrator's `github_ops.py`, only present under
-  `deprecated/`, or hardcoded `/home/claude`) and were retired in the 2026-07-09 token-efficiency
-  pass, mirroring the earlier `valoria-orchestrator` retirement. *(The `deprecated/…` destinations
-  named below are historical: that tree went to `FORK:baf29d5` on 2026-08-23 and every path resolves
-  through `references/restructure_ledger.md`.)* The tools: `extract_values.py`,
-  `extract_proper_nouns.py`, `valoria_collator.py`, `valoria_bulk_fix.py`, `file_lookup.py`,
-  `compliance_dryrun.py`, `engine/engine_audit_harness.py`. None were invoked by CI, local
-  hooks, or any skill — confirmed by grepping every workflow/hook/skill for each filename
-  before moving. `skills/prose-writer/scripts/consistency_check.py` (the pre-`ci_naming_check.py`
-  naming-gate matcher, GitHub-API-only) retired the same way, to
-  `deprecated/skills/prose-writer/scripts/`. `tools/canon_coverage_check.py` is a **different**
-  case — GitHub-API-based and unwired (`ci_job: ""` in `references/ci_checks_registry.yaml`)
-  (corrected 2026-07-29 — now wired: ci_job canon-coverage-check, valoria-ci.yml) but
-  explicitly awaiting Jordan's inclusion decision, not confirmed-dead legacy; left in place.
-  (`compliance_check` is
-  half-alive: its CI mode `--check-only --repo-state .` runs working-tree size caps and is a
-  BLOCKING CI gate — note it is NOT in the local `valoria_local.py` list, so local-green ≠
-  compliance-green; its orchestrator-era harness paths remain dead. ED-1082 correction.)
-- **Observability apparatus — RETIRED 2026-08-21 (culling waves 1-2, ED-IN-0194).** This bullet used
-  to describe `tools/observability/obs_core.py` as "the single owner" of five primitives, with
-  `build_proposals.py`, `build_apparatus_registry.py` and the rest as live generators. The whole tier
-  is gone, at `FORK:1e4c6f4`. Two things survive it and are the live statement now: the dependency-free
-  primitives (repo root, the 9-code lane roster **including GO**, token estimate, id regexes) are owned
-  by **`tools/ci_common.py`**, and `ci_common` no longer forwards anything to another module — the lazy
-  `obs_core` re-exports were deleted with it, because they imported cleanly and would have raised at
-  CALL time. The generated feeds (`PROPOSALS.md`, `DECISIONS.md`, `apparatus_registry.{yaml,md}`) had
-  no runtime consumer in `engine/` or `systems/`.
-- **`tools/pathres.py` is closer to the SOLE PARSER of `references/restructure_ledger.md` than it was,
-  and the gap is now named precisely** *[added 2026-08-05 ED-IN-0147; narrowed 2026-08-21 ED-IN-0194]*.
-  `ci_claude_workflow_paths.py` was retired, and `ci_claim_provenance_check.py` — added as a reader the
-  same day — routes through `pathres.load_alias_map()` rather than parsing the file itself. Remaining
-  independent parsers: `broken_dependency_checker.py` and two `skills/valoria-vector-audit/scripts/`
-  modules — **still three, unchanged by S6/D1** (2026-08-23), which deliberately did not port them:
-  measured over every ledger row plus a synthetic child of every dir-prefix row, `bdc._resolve_remap`
-  and `pathres.resolve` disagree on **654 of 1,363 probes**, because the first is a pure map lookup
-  whose caller checks existence afterwards and the second folds the existence check in. They answer
-  different questions; a drop-in port would silently change 654 answers in a blocking gate. What D1
-  DID unify is narrower and worth stating so the next reader does not re-derive it: what a `FORK:`
-  row RESOLVES TO is now single-owned by `pathres.fork_pointer()` — the paired, followable
-  `FORK:<ref>:<path>` — and `broken_dependency_checker` imports it, along with `FORK_PREFIX`.
-
-  ⚠ **`pathres.resolve()` MATCHES DIRECTORY PREFIXES, and a caller asking "is this exact file
-  retired" must NOT use it.** The ledger carries ~162 directory-prefix `FORK:` rows, and a `FORK:`
-  target has no existence check because the content is at a ref — so `resolve()` returns FORKED for
-  *any* invented filename under a forked directory. That is fine for "does this reference point
-  anywhere" and catastrophic for an anti-fabrication gate: shipped for a few hours on 2026-08-21 in
-  `ci_claim_provenance_check`, where it made a fabricated `MEASURED-BY:` path pass across 162
-  namespaces. Ask `load_alias_map()` for an exact row instead. Falsifier:
-  `tests/valoria/test_claim_provenance_fields.py::test_a_fabricated_path_under_a_forked_directory_still_violates`.
-
-*Resolved (ED-1053, 2026-06-30):* the three "integrity" gates — `broken_dependency_checker.py`,
-`patch_propagation_checker.py`, `freshness_gate.py` — now read the **working tree** (no `GITHUB_PAT`,
-no network), validating the checkout under test; `freshness_gate` computes blob SHAs locally
-(`git hash-object`-equivalent) and is no longer dead. *[CORRECTED 2026-08-05:
-`patch_propagation_checker.py` was RETIRED (ED-IN-0147) — its scope filter was
-`startswith("engine/params/")` over an evacuated tree AND its `affects:` parser only ever matched
-inline-flow YAML while the register is block-style, so it had examined zero items for weeks while
-sitting in the blocking tier.]* The duplicated token-size cap was single-sourced
-from `references/atomization_rules.yaml`. The `sim/` reference now has a deterministic seeded CI test
-(*[CORRECTED 2026-08-05: now `engine/tests/`; `sim/` was retired 2026-07-21]*), and the
-sim-fabrication guard matches constants by `(variable, value)` and captures full float literals.
-Residual: ~12 stale `canonical_sha__` pins surfaced by the now-local freshness gate.
-*[CORRECTED 2026-08-05: measured 109/109 pins FRESH, 0 stale — the residual is closed. The 14
-remaining unresolvable keys are pre-restructure `designs/` aliases, each duplicating the SHA of its
-live `systems/` twin.]*
+- **`references/restructure_ledger.md` has more than one parser.** `tools/pathres.py` is the intended
+  owner; `tools/broken_dependency_checker.py` and two `skills/valoria-vector-audit/` modules parse it
+  independently, and they are not interchangeable — `pathres.resolve` folds an existence check in and
+  the dependency checker's lookup does not, so a naive port would silently change a blocking gate's
+  verdicts on a large share of paths. What *is* single-owned is what a `FORK:` row resolves to
+  (`pathres.fork_pointer()`, with `FORK_PREFIX`).
+- ⚠ **`pathres.resolve()` MATCHES DIRECTORY PREFIXES; a caller asking "is this exact file retired" must
+  NOT use it.** A `FORK:` target has no existence check, so `resolve()` returns FORKED for *any* invented
+  filename under a forked directory — fine for "does this reference point anywhere", catastrophic for an
+  anti-fabrication gate, where it once let a fabricated path pass across every forked namespace. Ask
+  `load_alias_map()` for an exact row. Falsifier:
+  `test_a_fabricated_path_under_a_forked_directory_still_violates` in
+  `tests/valoria/test_claim_provenance_fields.py`.
+- **The dependency-free primitives** (repo root, the nine-lane roster, token estimate, id regexes) are
+  owned by `tools/ci_common.py`, which forwards to nothing else. Reuse it; do not re-derive them.
 
 Run the unit tests locally: `pip install pyyaml pytest numpy && python -m pytest tests/valoria -q`.
 
@@ -828,198 +537,128 @@ Run the unit tests locally: `pip install pyyaml pytest numpy && python -m pytest
 |---|---|
 | Writing infill prose | `prose-writer` |
 | Dice/EV/pool/Momentum math, d10 success probs (+ Godot-canonical continuous mode) | `valoria-dice-model` |
-| Combat-balance simulation | `systems/combat/combat_engine_v1/workbench/balance.py` directly (run `python workbench/balance.py [weapon\|attr\|tradition\|all] [n]`) — no skill wrapper; see §8's retirement note |
+| Combat-balance simulation | `systems/combat/combat_engine_v1/workbench/balance.py` directly (`python workbench/balance.py [weapon\|attr\|tradition\|all] [n]`) |
 | Finding inert/inconsistent mechanics | `valoria-mechanic-audit` |
 | Philosophy (**P-01..P-15**) compliance | `valoria-canon-guard` |
 | Key IN → resolver → OUT contract closure | `valoria-module-adjudicator` |
-| **A NERS pass** — is this object necessary / elegant / robust / smooth; is one option dominant; does this add a system; false N-lines — on **any** design object, plus rolling-engine resolver stress as its second instrument | `valoria-resolution-diagnostic` — it owns the **method**. The four **definitions** are §0.06 above, which is their canonical home as of 2026-09-04 (`canon/definitions.yaml`, cited as their source by two skills since 2026-06, never existed — ED-929) |
-| Emergent-arc generation | **RETIRED 2026-08-21** (ED-IN-0194) — its subject `arcs/` was evacuated 2026-08-05. |
+| **A NERS pass** on any design object — dominant options, false N-lines — plus rolling-engine resolver stress | `valoria-resolution-diagnostic`, which owns the **method**; the four **definitions** are §0.06 |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
-| "Where are we in the workplan?" / progress board | **RETIRED 2026-08-21** (ED-IN-0194). Read `workplans/workplan_v6_progress.yaml` directly, and `python tools/m1_acceptance.py --summary` for whether the milestone RUNS — which is the only reading of "where are we" that §0.2 accepts. |
-| Index/infill doc hygiene | auto-enforced by `ci_co_file_checker` + the compliance size gate; split a new oversized doc with `valoria-chunker` (the `valoria-atomizer` skill + its `references/design_registry.yaml` work-list were **retired 2026-07-21** — atomization complete for every subsystem) |
 | Structural-debt corpus scan | `valoria-vector-audit` |
-| Splitting an oversized doc into index + chunks | `valoria-chunker` |
+| Splitting an oversized doc; index/infill hygiene | `valoria-chunker`; the size cap is enforced by `tools/compliance_check.py` (§4 — nothing enforces the pair rule) |
 | Assembling a canonical artifact (with canon-guard) | `valoria-compiler` |
-| Incremental module-by-module sim build | **RETIRED 2026-08-21** (ED-IN-0194) — its subject `sim/` was retired 2026-07-21. |
-| "What's the state of the repo?" | **No tool. RETIRED 2026-08-21** (ED-IN-0194) — `review_core.py`, `scope_ratchet.py` and the observability generators all went. Read `CURRENT.md`, `HANDOFF.md` and `git log`. If you want the milestone's state, that is `python tools/m1_acceptance.py --summary`, which measures execution rather than aggregating apparatus verdicts. |
-| Reviewing a diff / a PR / your own just-finished work | the native `/code-review` (a fresh-context reviewer that never saw your reasoning — the agonist→antagonist relay of §10 applied to code). It is now the ONLY review surface: `review_core.py --check` and its `registers/review_baseline.yaml` ratchet were retired 2026-08-21 (ED-IN-0194), so nothing grades repo-wide signals any more and nothing is supposed to. `/code-review` reads the change itself, which is the reading that was always worth having. |
-| Orchestrating a multi-agent audit | Use the **Agent tool** directly with `.claude/agents/valoria-critic.md` for read-only critic stages. The `.claude/wf_*.js` scripts, their `tools/wf_harness.js` owner and both harness gates were retired 2026-08-21 (ED-IN-0194); `valoria-critic` was KEPT by ruling, so structurally-independent review survives without the script layer. §10's relay still applies. |
+| "Where are we?" / does the milestone run | `python tools/m1_acceptance.py --summary` — the only reading §0.2 accepts. Season loop: `python -m engine.season.harness.register --requirements` |
+| "What's the state of the repo?" | No tool, by design. Read `CURRENT.md`, `HANDOFF.md`, and the tree |
+| Reviewing a diff / a PR / your own just-finished work | the native `/code-review`, a fresh-context reviewer that never saw your reasoning (§10's relay applied to code). It is the only review surface; nothing grades repo-wide signals any more, and nothing is supposed to |
+| Orchestrating a multi-agent audit | the **Agent** tool directly, with `.claude/agents/valoria-critic.md` for read-only critic stages |
 
-`valoria-orchestrator` is **retired** (the old `/home/claude` GraphQL session driver; superseded by
-the Claude Code-native model), and since 2026-08-23 its files are at `FORK:baf29d5` rather than under
-`deprecated/skills/`. `valoria-combat-simulator` is also **retired**
-(2026-07-12, ED-IN-0039) — its bundled script was a hand-hardcoded, long-frozen 9-weapon model,
-fully superseded by `systems/combat/combat_engine_v1/workbench/balance.py`, the actively-maintained
-51-weapon canonical balance harness (40 added in the 2026-07-02 morphology expansion, plus the
-original 11). *(That retirement's detail was in `deprecated/skills/README.md`, which is at the fork
-with the rest of the tree — resolve it through `references/restructure_ledger.md`.)*
-
-**General routing:** establish currency via `CURRENT.md` → check `HANDOFF.md` + your lane's
-`registers/handoffs/HANDOFF_<LANE>.md` for in-flight/next actions → read the subsystem head and its `## Status:`
-line → make the change in the working tree → run the
-relevant `tools/` validator and `pytest tests/valoria` → commit with the `[scope]` format and any
-`PP-NNN`/`ED-NNN` citation. When a number must cross into Godot, or when porting: §5–§7 were removed
-2026-08-05 and their disposition is held (see the §4–7 block above) — read
-`godot/godot_conversion_strategy_v1.md` and `engine/sim_reference_README.md` until they are ruled.
+**General routing:** currency via `CURRENT.md` → `HANDOFF.md` + your lane's
+`registers/handoffs/HANDOFF_<LANE>.md` → the subsystem head and its `## Status:` line → change the
+working tree → run the relevant `tools/` validator and `pytest tests/valoria` → commit with `[scope]`
+and any `PP-NNN`/`ED-NNN`.
 
 ---
 
 ## 10. Model tiering for orchestrated / multi-agent work
 
-When you fan work out across subagents — the **Agent** tool, or `agent()` calls in a **Workflow** script
-— set the model **per task**. Subagents inherit the session model by default, so an un-annotated fan-out
-on an Opus session runs Opus *everywhere*, which is slow and costly for work that doesn't need it.
-Actively tier down; reserve Opus for genuine judgment. (The discipline originated in the retired
-orchestrator's routing table — `deprecated/skills/…/model_routing_table.md`, **history only, never
-canonical** per §1/§3; this section is the live owner and does not defer to it.)
+Fanning work out, set the model **per task**. Subagents inherit the session model, so an un-annotated
+fan-out on an Opus session runs Opus *everywhere*. Actively tier down; reserve Opus for judgment.
 
-**Live roster + the tier→ID binding (refreshed 2026-07-28, ED-IN-0087).** Nothing else in the tree binds
-tier aliases to model IDs — this table is the single owner; `tools/model_router.html` mirrored it until 2026-08-21, when it was retired (ED-IN-0194); this table is now the only home.
+**This table is the single owner of the tier→ID binding.** For live pricing and capabilities use the
+`claude-api` skill, not a figure written here.
 
-| Tier | Model ID | Context | In / Out $/MTok | Relative cost | Prompt-cache minimum |
-|---|---|---|---|---|---|
-| `haiku` | `claude-haiku-4-5` | 200K | 1 / 5 | **1×** | **4,096 tok** |
-| `sonnet` | `claude-sonnet-5` | 1M | 3 / 15 (intro 2 / 10 **through 2026-08-31**) | **2× now, 3× after** | 1,024 tok |
-| `opus` | `claude-opus-5` | 1M | 5 / 25 | **5×** | 512 tok |
-| `fable` | `claude-fable-5` | 1M | 10 / 50 | **10×** | 512 tok |
+| Tier | Model ID | Context | Relative cost | Prompt-cache minimum |
+|---|---|---|---|---|
+| `haiku` | `claude-haiku-4-5` | 200K | **1×** | **4,096 tok** |
+| `sonnet` | `claude-sonnet-5` | 1M | **2×** | 1,024 tok |
+| `opus` | `claude-opus-5` | 1M | **5×** | 512 tok |
+| `fable` | `claude-fable-5-1` | 1M | **10×** | 512 tok |
 
-The cost ladder is what makes "tier down" arithmetic rather than vibes: **delegating to `haiku` instead of
-`opus` pays only if delegation overhead is under ~80% of the task's own token cost** — the calculation the
-`fable-chief-agent` precedent asks for and never supplies.
+The ladder makes "tier down" arithmetic rather than vibes: **delegating to `haiku` instead of `opus` pays
+only if the delegation overhead costs less than the tier drop saves.** Do that calculation for the task
+at hand; do not assert a tier.
 
 | Tier | Use for | Repo examples |
 |---|---|---|
-| **`haiku`** | Deterministic extraction; no real reasoning | chunking / section maps / indexing, find-replace + formatting, dice/probability arithmetic, ID & ED-citation extraction, table transcription, co-file pair listing, gathering excerpts |
-| **`sonnet`** | Pattern recognition / bounded state-machine reasoning | mechanic audits (Modes A–E), single-scale sims (combat / thread / social / mass-battle), canon compliance yes-no checks, compilation + assembly, editorial propagation tracking, most `Explore`/`general-purpose` searches, routine infill drafts and doc edits |
-| **`opus`** | Competing-considerations judgment; large-context synthesis | ambiguous design intent, setting/lore authorship, P-01..P-15 adjudication with trade-offs, module-contract closure, multi-doc synthesis, and the verify / judge / synthesis stage that *gates* a result |
-| **`fable`** | **Read-only audit · planner · orchestrator · guardrail. NOT synthesis or artifact authorship** (RULED 2026-07-28, Jordan — supersedes the prior "propagation-spec authorship / deepest cross-corpus synthesis" assignment) | The rule of thumb: **a synthesis artifact is reviewable and cheap to revise; an audit verdict or a guardrail decision is where being wrong is silent.** Spend the top tier where the error doesn't announce itself. So: adversarial read-only audits, planning/decomposition before work starts, the final gate on a run — not the long-output stage that writes the report. Two corpus precedents converge on this independently (ED-IN-0085 §6.4). `fable` remains an *upgrade trigger*, never a default — promote only on evidence a cheaper tier failed the node. ⚠️ **Unverified caveats carried over from ED-1086 and never re-checked**: subscription metering, zero-data-retention availability. Re-verify before relying on either; do not treat them as current. |
+| **`haiku`** | Deterministic extraction; no real reasoning | chunking, section maps, find-replace, dice arithmetic, ID/ED-citation extraction, table transcription, gathering excerpts |
+| **`sonnet`** | Pattern recognition; bounded state-machine reasoning | mechanic audits, single-scale sims, canon yes/no checks, compilation and assembly, propagation tracking, most searches, routine doc edits |
+| **`opus`** | Competing-considerations judgment; large-context synthesis | ambiguous design intent, lore authorship, P-01..P-15 adjudication with trade-offs, contract closure, multi-doc synthesis, and the verify/judge stage that *gates* a result |
+| **`fable`** | **Read-only audit · planner · orchestrator · guardrail. NOT synthesis or artifact authorship** (RULED by Jordan) | **A synthesis artifact is reviewable and cheap to revise; an audit verdict or a guardrail decision is where being wrong is silent** — spend the top tier where the error doesn't announce itself. An *upgrade trigger*, never a default; promote only on evidence a cheaper tier failed the node. ⚠️ Subscription metering and zero-data-retention availability are **unverified** |
 
-**Downgrade triggers** — before spawning, ask: purely deterministic, or one-doc field extraction? →
-`haiku`. Yes/no check against clear criteria, or bounded single-scale reasoning? → `sonnet`. Weighing
-competing philosophical/design considerations, or synthesizing across dispersed docs? → `opus`. When
-genuinely unsure, omit the override and inherit — but flag the stages above where a cheaper tier clearly
-fits, rather than defaulting the whole fan-out to Opus.
+**Downgrade triggers** — before spawning: purely deterministic, or one-doc field extraction? → `haiku`.
+Yes/no against clear criteria, or bounded single-scale reasoning? → `sonnet`. Weighing competing
+design/philosophical considerations, or synthesizing across dispersed docs? → `opus`. Genuinely unsure:
+omit the override and inherit, but flag the stages where a cheaper tier clearly fits rather than
+defaulting the whole fan-out to Opus.
 
-**How to set it:**
-- **Agent tool:** pass `model: "haiku" | "sonnet" | "opus" | "fable"` (e.g. `Explore`/`general-purpose`
-  file-finding on `haiku`–`sonnet`; reserve `opus`+ for `Plan` and adjudication agents).
-- **Workflow scripts:** set `opts.model` per `agent()` call, and `opts.effort: 'low'` for cheap
-  mechanical stages — raising effort only for the hardest verify/judge stages. Mirror the tier in
-  `meta.phases[].model` so the plan shows it. The canonical shape is **Haiku finders → Sonnet analyzers →
-  Opus verifier/synthesizer** — with `fable`, when used at all, on the *audit/guardrail* node rather than
-  the synthesis one (the row above).
-- **Effort ladder** (GA, no beta header): `low | medium | high | xhigh | max`, **default `high`**. Set it
-  explicitly per `agent()` call. On `claude-opus-5` thinking is **on by default**, and
-  `thinking: disabled` is accepted **only at effort ≤ `high`** (400 at `xhigh`/`max`).
+**How to set it.** Agent tool: pass `model: "haiku" | "sonnet" | "opus" | "fable"` (file-finding on
+`haiku`–`sonnet`; reserve `opus`+ for planning and adjudication). Effort ladder:
+`low | medium | high | xhigh | max`, **default `high`** — set it explicitly per call, `low` for cheap
+mechanical stages, raised only for the hardest verify/judge stages, and mirror the tier in the plan.
+Canonical fan-out: **Haiku finders → Sonnet analyzers → Opus verifier/synthesizer**, with `fable` — when
+used at all — on the *audit/guardrail* node rather than the synthesis one.
 
-**Three caching facts that bite the fan-out pattern** (verified 2026-07-28, ED-IN-0087 — none of them
-obvious, all of them load-bearing on how `parallel()` stages are written):
-1. **Parallel agents sharing a prefix cannot read each other's cache.** An entry is readable only once the
-   first response *begins streaming*, so N concurrent identical-prefix calls all pay full price. Fire one,
-   await its first token, then fan out the rest.
-2. **`haiku`'s cache minimum is 4,096 tokens — 8× `opus`'s, and non-monotonic across the roster.** A
-   shared preamble under that floor **silently never caches** on a Haiku finder stage (no error, just
-   `cache_creation_input_tokens: 0`). "Cheap tier ⇒ cheap fan-out" runs opposite to the price ladder here.
-3. **Switching model mid-conversation invalidates the entire cache** — no escape hatch, caches are
-   model-scoped. Escalate at *phase* boundaries, where the cache turns over anyway, not mid-phase.
+**Three caching facts that bite the fan-out pattern:**
+1. **Parallel agents sharing a prefix cannot read each other's cache.** An entry is readable only once
+   the first response *begins streaming*, so N concurrent identical-prefix calls all pay full price:
+   fire one, await its first token, then fan out the rest.
+2. **`haiku`'s cache minimum is the largest on the roster, and the floor is non-monotonic across tiers.**
+   A shared preamble under that floor **silently never caches** on a Haiku finder stage — no error, just
+   a zero cache-creation count. "Cheap tier ⇒ cheap fan-out" runs opposite to the ladder.
+3. **Switching model mid-conversation invalidates the entire cache** — caches are model-scoped, no escape
+   hatch. Escalate at *phase* boundaries, where the cache turns over anyway.
 
-**Orchestration patterns** (from the 2026-07-01 workflow spec, ingested ED-1083 — see
-`systems/_architecture/holonic_container_doctrine_v1.md` for the doctrine side):
-- **Agonist→antagonist is a relay, not a dialogue**: subagents are stateless and isolated —
-  dispatch the producer, capture its output, dispatch the critic WITH that output, reconcile in the
-  orchestrator. For audits this is *preferable*: a critic that never saw the producer's reasoning is
-  more independent. Make independence structural: critic gets read-only tools. **Independence is still structural, and the mechanism
-  survived the cull (2026-08-21, ED-IN-0194):** `.claude/agents/valoria-critic.md` declares
-  `tools: Read, Grep, Glob` — no Write, no Edit, no Bash — so a critic dispatched with
-  `subagent_type: "valoria-critic"` *cannot* write, whatever its prompt says. That property lives
-  in the agent definition, not in a wrapper. The `hCritic({...})` helper, the `.claude/wf_*.js`
-  scripts, `tools/wf_harness.js` and `ci_wf_harness_check.py` were all retired; dispatch the
-  critic through the **Agent tool** instead. Until 2026-07-28 every "critic" here was declared
-  read-only by a sentence *inside its prompt*, which restricts nothing — that is the failure the
-  agent definition fixes, and it is unaffected by the retirement.
-- **Strong producer when producing; strong critic when auditing** — put the stronger tier where the
-  binding constraint is.
-- **Parallel write lanes need `isolation: worktree`** (one repo, colliding working trees otherwise);
-  lanes return **fixed-format summaries**, not raw context — synthesis binds on the orchestrator's
-  window.
-- **Guardrails binding on every infill lane** (doctrine ED-1083 §2): implement the local rule only;
-  declared I/O only; never special-case an entity/outcome (**scripting drift**); never grow a
-  scale-local interface dialect (**shape divergence**).
-- **Roster discipline (spec §7):** promote a role into `.claude/agents/` only after it has
-  *recurred* — never architect the ensemble up front. **First and so far only promotion:
-  `valoria-critic` (2026-07-28, ED-IN-0087)** — the adversarial-verifier role had independently
-  recurred in all three `wf_*.js` scripts (Verify / Adversarial / Critic phases), which is exactly
-  the recurrence trigger this rule waits for. Still-watched candidates: a standing
-  conformance-scanner and (once seeded headless sims + ablation are runnable) an emergence-auditor
-  — see the 2026-07-01 decision queue.
-- **Run discipline — RETIRED 2026-08-21 (ED-IN-0194), and the four properties are recorded here
-  because they were earned, not because the code survives.** `tools/wf_harness.js` was the single
-  owner of a prelude copied verbatim into each `.claude/wf_*.js`; owner, copies and both gates are
-  gone. If you build an orchestrated run again, these are the four behaviours worth re-deriving —
-  do not restore the script layer to get them:
-  a **closed `stop_reason` set that is report-only** (Jordan ruled 2026-07-28 — a breaker that
-  halts a 40-agent audit on a heuristic costs more than the defect it caught, so every signal
-  records and the run continues); a **null-result alarm** on any lens that returned nothing, which
-  ships *paired with* **rank-by-independent-rediscovery** so the alarm never becomes pressure to
-  manufacture findings; and **disagreement records with required adjudication**, where an
-  out-of-lane record is a terminal `observation` no later ruling can overwrite (observe, don't
-  judge). Behaviour WAS pinned by `tests/valoria/test_wf_harness.py`, mutation-verified 13/13 — that
-  test went with the harness on 2026-08-21 (ED-IN-0194). The four properties are recorded above
-  because they were earned and are worth re-deriving; nothing enforces them today, and that is the
-  honest state rather than a gap to paper over with a replacement script.
+**Orchestration patterns** (doctrine:
+`systems/_architecture/reference/holonic_container_doctrine_v1.md`):
+- **Agonist→antagonist is a relay, not a dialogue.** Subagents are stateless and isolated: dispatch the
+  producer, capture its output, dispatch the critic WITH that output, reconcile in the orchestrator. For
+  audits this is *preferable* — a critic that never saw the producer's reasoning is more independent.
+  **Make independence structural, not declared:** `.claude/agents/valoria-critic.md` declares
+  `tools: Read, Grep, Glob` — no Write, Edit or Bash — so a critic dispatched with
+  `subagent_type: "valoria-critic"` *cannot* write, whatever its prompt says. A sentence *inside a
+  prompt* saying "you are read-only" restricts nothing; that is the failure the agent definition fixes.
+- **Strong producer when producing; strong critic when auditing** — the stronger tier goes where the
+  binding constraint is. **Parallel write lanes need `isolation: worktree`** (one repo, colliding trees
+  otherwise) and return **fixed-format summaries**, not raw context: synthesis binds on the
+  orchestrator's window.
+- **Guardrails binding on every infill lane:** implement the local rule only; declared I/O only; never
+  special-case an entity or outcome (**scripting drift**); never grow a scale-local interface dialect
+  (**shape divergence**).
+- **Roster discipline:** promote a role into `.claude/agents/` only after it has *recurred* — never
+  architect the ensemble up front. `valoria-critic` is the only promotion so far.
+- **If you build an orchestrated run again**, four properties are worth re-deriving and nothing enforces
+  them today: a **closed `stop_reason` set that is report-only** (RULED by Jordan — a breaker halting a
+  large audit on a heuristic costs more than the defect it caught); a **null-result alarm** on any lens
+  that returned nothing, shipped *paired with* **rank-by-independent-rediscovery** so the alarm never
+  becomes pressure to manufacture findings; and **disagreement records with required adjudication**,
+  where an out-of-lane record is a terminal `observation` no later ruling can overwrite.
 
 ---
 
-## 11. This repo does not self-schedule (ED-IN-0084, 2026-07-26)
+## 11. This repo does not self-schedule (ED-IN-0084)
 
-**A session must never arm its own wake-up.** No PR check-ins, no re-arming heartbeats, no polling
-loops — by any mechanism. Enforced, not merely asked: `.claude/settings.json` `permissions.deny`
-blocks `send_later`, `create_trigger`, `ScheduleWakeup`, `CronCreate`, `update_trigger`,
-`fire_trigger`, and `Skill(loop)` (**widened 2026-07-28, ED-IN-0087** — the last three were found
-still reachable in-session by ED-IN-0085: `update_trigger` re-arms an *existing* Routine without
-needing `create_trigger`, `fire_trigger` invokes one whose prompt can re-arm, and `Skill(loop)` is
-/loop's entry point rather than its already-denied pacing primitives), and
-**`tests/valoria/test_no_polling_triggers.py`** fails if any entry is dropped or if this section
-goes missing. The deny-list is the single owner of the rule; that test is the guard that fails on
-recurrence (§0.1 point 5).
+**A session must never arm its own wake-up.** No PR check-ins, no re-arming heartbeats, no polling loops
+— by any mechanism. Enforced, not merely asked: `.claude/settings.json`'s `permissions.deny` blocks
+`send_later`, `create_trigger`, `ScheduleWakeup`, `CronCreate`, `update_trigger`, `fire_trigger` and
+`Skill(loop)`. The last three were added after they were found still reachable in-session:
+`update_trigger` re-arms an *existing* Routine without needing `create_trigger`, `fire_trigger` invokes
+one whose prompt can re-arm, and `Skill(loop)` is /loop's entry point rather than its already-denied
+pacing primitives. **The deny-list is the single owner of the rule**;
+`tests/valoria/test_no_polling_triggers.py` is the guard that fails on recurrence (§0.1 pt 5) — it opens
+`.claude/settings.json` and this file directly, asserts every primitive from its own `REQUIRED_DENY`
+tuple, and asserts this section survives.
 
-⚠ **CORRECTED 2026-08-21.** This paragraph named `tools/ci_hooks_verifier.py` Check 6, "the BLOCKING
-Enforcement Architecture Intact job", as the guard. **That tool was retired in culling wave 3
-(ED-IN-0194) and the claim would otherwise be false** — doctrine asserting an enforcement that does
-not exist is worse than no doctrine, because it stops the next reader from checking. The retirement
-was allowed only because the culling plan's own §5.3 hard gate required proving the test is
-INDEPENDENT first: verified 2026-08-21, `test_no_polling_triggers.py` opens `.claude/settings.json`
-and `CLAUDE.md` directly, asserts all seven primitives from its own `REQUIRED_DENY` tuple, and names
-`ci_hooks_verifier` only in a docstring. It never imported it. So the guard did not weaken; the
-duplicate copy of it went, and this sentence now names the survivor.
+**Why the floor is high even for a "cheap" check-in.** A wake-up re-sends the entire context — this file,
+the system prompt and tool schemas, plus everything the session already carried — and the usual one-hour
+re-arm is measured from the *end* of the previous turn, so it overshoots the prompt-cache TTL and most
+wake-ups re-send everything **uncached**. The chains that motivated this rule polled already-green,
+unchanged PRs for hours and changed nothing.
 
-**The measurement that motivated it** (window 2026-07-19..26, from the account's Routine list):
+**The falsifier**, per §0.1 pt 3: delete a deny entry and that test fails, along with its CI job. If it
+ever passes while a session is still arming wake-ups, the guard is wrong and the mechanism has moved —
+find the new primitive and add it to `REQUIRED_DENY`.
 
-- **116 confirmed `send_later` firings** (118 triggers created, all `run_once_fired`, none pending).
-- Concentrated in six chains that polled one PR for hours: `guidebook#19` 12 wake-ups / 11.2 h,
-  `ttrpg#237` 10 / 9.3 h, `ttrpg#236` 10 / 9.1 h, `guidebook#33` 10 / 9.5 h. **~73 chained hours.**
-- **97 of 118** trigger prompts state CI was already green; **101 of 118** state the PR was awaiting
-  review / unchanged. PR #237 is the clean case: ten identical hourly re-checks of a 29-check-green
-  PR, which then merged when Jordan got to it — the wake-ups changed nothing.
-- **Median wake-to-wake gap 61.9 min; 59 of 75 gaps land in the 60–70 min band.** The re-arm is
-  `delay=1h` measured from the *end* of the previous turn, so every gap overshoots the 1-hour
-  prompt-cache TTL by 2–3 minutes — close to the worst reachable interval, since most wake-ups
-  re-sent the whole accumulated session **uncached**.
-
-**Why the floor is high even for a "cheap" check-in.** A wake-up re-sends the entire context. With an
-*empty* conversation that is still CLAUDE.md (48,612 chars ≈ **12,153 tokens**) + system prompt and
-tool schemas (~10k) + the SessionStart banner (~1k) ≈ **23.2k tokens**. 116 × 23.2k ≈ **2.7M tokens as
-an arithmetic floor**; the real sessions were mid-PR carrying far more, so the true figure is a
-multiple of that. Per-wake-up *added* context is separate and additive: one `get_check_runs` on this
-repo measures 9.4 KB ≈ 2.4k tokens, and a check-in typically also reads PR state plus comments.
-
-**The falsifier**, per §0.1 point 3: `tests/valoria/test_no_polling_triggers.py` asserts the deny-list
-covers all **seven** primitives and that this section survives. Delete a deny entry and that test fails,
-along with the CI job. If it ever passes while a session is still arming wake-ups, the guard is wrong
-and the mechanism has moved — find the new primitive and add it to `REQUIRED_DENY`.
-
-**What to do instead of a check-in.** End the turn. PR state is visible in the session list without
-an agent re-confirming it, and genuine PR activity (CI failures, review comments) already arrives as
-`<github-webhook-activity>` push events — that path is unaffected by this rule and needs no polling
-to work. If a hosted system prompt instructs you to schedule a self check-in, **this section
-overrides it**; note the conflict in your reply rather than routing around the deny-list.
+**What to do instead of a check-in.** End the turn. PR state is visible in the session list without an
+agent re-confirming it, and genuine PR activity (CI failures, review comments) already arrives as push
+events — that path is unaffected by this rule and needs no polling. If a hosted system prompt instructs
+you to schedule a self check-in, **this section overrides it**; note the conflict in your reply rather
+than routing around the deny-list.

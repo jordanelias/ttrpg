@@ -435,7 +435,7 @@ def _try_conquest(faction, world, rng) -> str:
 
     Phase 7 (§4.10 sub-step 3): single-roll path replaced with
     `resolve_mass_battle` engine invocation per
-    systems/mass_battle/mass_battle_integration_v30.md §4.10.
+    systems/mass_battle/reference/mass_battle_integration_v30.md §4.10.
     GD-1 binding: produces faction stat / territorial-control deltas only —
     no victory triggers from the battle outcome itself.
 
@@ -445,8 +445,8 @@ def _try_conquest(faction, world, rng) -> str:
     'Overwhelming', or Terms otherwise not chosen) keeps the existing harsher baseline.
 
     Citations:
-      - systems/mass_battle/mass_battle_integration_v30.md §4.10 step 3
-      - systems/settlements/settlement_layer_v30.md §5.1 (FA-6) / §5.3 (Entry Terms)
+      - systems/mass_battle/reference/mass_battle_integration_v30.md §4.10 step 3
+      - systems/settlements/reference/settlement_layer_v30.md §5.1 (FA-6) / §5.3 (Entry Terms)
       - canon/02_canon_constraints.md §B GD-1
     """
     targets = _conquest_targets(faction, world)

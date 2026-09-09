@@ -214,7 +214,7 @@ subsumed.
 
 ### What canon already specifies, and the loop honours none of it
 
-`systems/_architecture/scale_transitions_v30.md` (Status: **CANONICAL**) is the surface Jordan means
+`systems/_architecture/reference/scale_transitions_v30.md` (Status: **CANONICAL**) is the surface Jordan means
 by *"the repository outlines all of this pretty explicitly"*:
 
 - **§1 three modes** — TTRPG (scene-by-scene, rounds) · **Hybrid** (strategic layer + personal

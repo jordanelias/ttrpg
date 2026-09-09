@@ -13,7 +13,7 @@ WHAT IT DELIBERATELY DOES NOT DO. It does not write flow. An import graph yields
 it does not yield "the read contest feeds the sigma assembly", which is the claim a reader
 actually needs. Nor can it rule whether an absence is a defect or a deliberate deferral. Those
 live in the authored flow skeletons (`systems/<x>/<x>_flow_skeleton_v1.md`) and the authored
-companion (`systems/_architecture/engine_atlas_v1.md`). This tool's job is to render what is
+companion (`systems/_architecture/reference/engine_atlas_v1.md`). This tool's job is to render what is
 countable and to CHECK what was authored — not to replace it.
 
 COMPOSES, DOES NOT REINVENT (CLAUDE.md section 8). Every input has an existing owner:
@@ -59,13 +59,13 @@ CONTRACTS = os.path.join(ROOT, 'references', 'module_contracts.yaml')
 KEY_GRAPH = os.path.join(ROOT, 'references', 'key_graph.json')
 EXEC_MAP = os.path.join(ROOT, 'references', 'execution_map.json')
 EXEC_TRACE = os.path.join(ROOT, 'references', 'execution_trace.json')
-SPEC = os.path.join(SYSTEMS, '_architecture', 'subsystem_flow_skeletons_v1.md')
+SPEC = os.path.join(SYSTEMS, '_architecture', 'reference', 'subsystem_flow_skeletons_v1.md')
 
 BANNER = ('> **GENERATED** by `tools/build_engine_atlas.py`. Do not hand-edit — a hand-edit is '
           'silently discarded on the next build.\n>\n'
           '> This is the **countable** half of the atlas. The reading guide, the campaign spine '
           'and the open-decision set are authored in '
-          '[`systems/_architecture/engine_atlas_v1.md`](../systems/_architecture/engine_atlas_v1.md); '
+          '[`systems/_architecture/reference/engine_atlas_v1.md`](../systems/_architecture/reference/engine_atlas_v1.md); '
           'the per-subsystem flow is authored in each `systems/<x>/<x>_flow_skeleton_v1.md`. '
           'Nothing here ratifies anything.')
 
@@ -347,7 +347,7 @@ def build_rows():
     rows = []
     for sub in on_disk:
         meta = declared.get(sub)
-        skel_rel = meta['skeleton'] if meta else f'systems/{sub}/{sub}_flow_skeleton_v1.md'
+        skel_rel = meta['skeleton'] if meta else f'systems/{sub}/reference/{sub}_flow_skeleton_v1.md'
         skel = skeleton_facts(skel_rel)
         owned_src = contracts_for(sub, contracts, emap, graph, skel)
         owned = sorted(owned_src)

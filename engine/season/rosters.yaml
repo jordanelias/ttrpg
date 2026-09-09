@@ -59,7 +59,7 @@
 #            make everything more robust"*, and *"the research directory will also speak towards
 #            the kind of governance and bureaucratic functions that may be relevant to game too."*
 #            It informs DESIGN; it is not a source of canon names.
-#   TIER 4 · `systems/settlements/governance_play_redesign_v1.md` — IDEAS. Verbatim: *"governance
+#   TIER 4 · `systems/settlements/reference/governance_play_redesign_v1.md` — IDEAS. Verbatim: *"governance
 #            play redesign is just for ideas. do not treat as required."*
 #
 # ⚠ THE PRECEDENCE IS A RULE ABOUT SOURCING, AND IT HAS ALREADY CAUGHT TWO ERRORS IN THIS FILE —
@@ -718,11 +718,11 @@ rosters:
       grain: 2
       salt:  1
   factions:
-    source: "`systems/world/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/worldbuilding_v30.md` §3, §4, §5, §8, §10."
+    source: "`systems/world/reference/geography_v30.md` (`## Status: CANONICAL`) starting-control table; `systems/world/reference/worldbuilding_v30.md` §3, §4, §5, §8, §10."
     row: H-99
     note: >-
       ⚠ SOURCED FROM `systems/world/` BECAUSE JORDAN RULED THE PRECEDENCE, AND THE FIRST VERSION OF
-      THIS ROSTER WAS SOURCED WRONG. It cited `systems/factions/faction_canon_v30.md`. Jordan,
+      THIS ROSTER WAS SOURCED WRONG. It cited `systems/factions/reference/faction_canon_v30.md`. Jordan,
       2026-09-02: *"systems/factions, systems/settlements are for inspiration/reference only.
       systems/world contains information to use regarding factions ... but for the
       identity/names/organizations it is canon"*, then: *"systems/factions if it concerns directly
@@ -754,7 +754,7 @@ rosters:
              "Guilds", "Restoration Movement", "Schoenland"]
 
   role_templates:
-    source: "`systems/factions/faction_canon_v30.md` §4 'Role Templates and Expected Convictions', per PP-686 §3.3.1 over the PP-684 13-Conviction taxonomy."
+    source: "`systems/factions/reference/faction_canon_v30.md` §4 'Role Templates and Expected Convictions', per PP-686 §3.3.1 over the PP-684 13-Conviction taxonomy."
     row: H-99
     note: >-
       ⚠ TIER 2 — NEAR-CANON, AND IT SURVIVES BECAUSE WORLD IS SILENT, NOT BECAUSE IT OUTRANKS
@@ -795,7 +795,7 @@ rosters:
       "Restoration Movement": reformist
 
   office_bodies:
-    source: "`systems/world/worldbuilding_v30.md` §6.1 (Court Parliament and Governance), §3.1 (Church Four-Cardinal structure), §4.1 (Löwenritter internal structure), §5.1 (Guild structure)."
+    source: "`systems/world/reference/worldbuilding_v30.md` §6.1 (Court Parliament and Governance), §3.1 (Church Four-Cardinal structure), §4.1 (Löwenritter internal structure), §5.1 (Guild structure)."
     row: H-99
     note: >-
       ⚠ THIS IS THE *TYPE OF OFFICE* AXIS JORDAN ASKED FOR, AND IT IS CANON'S OWN ORGANIZATION

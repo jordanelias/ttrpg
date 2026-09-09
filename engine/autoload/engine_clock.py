@@ -3,7 +3,7 @@
 Status: [live, 2026-08-27] — ED-IN-0199, plan Phase A1 (behaviour-neutral re-siting).
 
 WHAT THIS OWNS — AND, PRECISELY, WHICH SECTION OF THE SPEC.
-`systems/_architecture/propagation_spec_v1.md` §O.1 states the tick model: "There is no
+`systems/_architecture/reference/propagation_spec_v1.md` §O.1 states the tick model: "There is no
 sub-season fixed timestep today. The season is the tick," composing exactly SEASON_TICK ->
 ACTION -> ACCOUNTING_BOUNDARY, and "engine_clock owns this composition and is the only module
 that may advance the season counter." That spec has been CANONICAL since 2026-07-02 and the

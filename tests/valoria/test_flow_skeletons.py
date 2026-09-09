@@ -1,7 +1,7 @@
 """The subsystem flow skeletons must be TRACED, not recalled.
 
 A flow skeleton (`systems/<x>/<x>_flow_skeleton_v1.md`, format owned by
-`systems/_architecture/subsystem_flow_skeletons_v1.md`) is a structural description of one
+`systems/_architecture/reference/subsystem_flow_skeletons_v1.md`) is a structural description of one
 subsystem assembled by reading its code. The failure mode that matters is not a typo — it is a
 skeleton that *reads* correct, cites plausible files, and was never traced. Prose cannot
 distinguish the two, and neither can a reviewer skimming it.
@@ -50,7 +50,7 @@ import re
 import pytest
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-SPEC = os.path.join(ROOT, 'systems', '_architecture', 'subsystem_flow_skeletons_v1.md')
+SPEC = os.path.join(ROOT, 'systems', '_architecture', 'reference', 'subsystem_flow_skeletons_v1.md')
 
 # The format spec's §2 section contract, in order. A skeleton that drops or reorders one of
 # these has diverged in shape, which is the failure the doctrine calls shape divergence.
@@ -113,7 +113,7 @@ SUBSYSTEM_IDS = [r[0] for r in ROSTER]
 # exactly like originals do — a review found ~178 of them checked by nothing, because this suite
 # was parameterized over the 15-row roster alone. Anchor-bearing files get anchor checks; the
 # roster decides which SUBSYSTEMS exist, not which files are guarded.
-ATLAS = 'systems/_architecture/engine_atlas_v1.md'
+ATLAS = 'systems/_architecture/reference/engine_atlas_v1.md'
 ANCHORED_DOCS = [(r[0], r[1], r[2]) for r in ROSTER] + [('engine_atlas', 'IN', ATLAS)]
 ANCHORED_IDS = SUBSYSTEM_IDS + ['engine_atlas']
 
@@ -122,7 +122,7 @@ def test_roster_parses():
     """If the roster parse breaks, every parameterized test below silently vanishes."""
     assert len(ROSTER) >= 15, f"roster parsed only {len(ROSTER)} rows from {SPEC}"
     for name, lane, path in ROSTER:
-        assert path == f'systems/{name}/{name}_flow_skeleton_v1.md', \
+        assert path == f'systems/{name}/reference/{name}_flow_skeleton_v1.md', \
             f"roster row {name!r} names an off-convention path: {path}"
 
 

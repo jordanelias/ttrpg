@@ -60,7 +60,7 @@ authoring problem.**
 
 ### 1.2 Jordan already ruled that personnel is the faction primitive, and it is unexecuted
 
-`systems/settlements/scale_hierarchy_v1.md` §5.1, **RATIFIED** by direct ruling 2026-07-13, verbatim:
+`systems/settlements/reference/scale_hierarchy_v1.md` §5.1, **RATIFIED** by direct ruling 2026-07-13, verbatim:
 
 > "Factions do not necessarily need to hold territory — they need to hold **PEOPLE**, and it is the
 > number of people and the weight of their positions that carry the value of that faction."
@@ -70,7 +70,7 @@ of a standing ruling**, not a feature proposal — which changes what kind of ap
 
 ### 1.3 The cross-scale bridge is already canon
 
-`systems/mass_battle/mass_battle_v30.md:949`, CANONICAL:
+`systems/mass_battle/reference/mass_battle_v30.md:949`, CANONICAL:
 
 > "**Officer as settlement governor:** After a battle, a named officer at Disposition ≥ +2 may be
 > assigned as governor of the battle settlement or any garrisoned settlement… The military officer

@@ -13,7 +13,7 @@
   "modules": {
     "articulation_layer": {
       "impl_path": "engine/cross_scale/articulation.py",
-      "doc": "systems/articulation/articulation_layer_v30.md",
+      "doc": "systems/articulation/reference/articulation_layer_v30.md",
       "emits": [],
       "consumes": [],
       "emits_any": false,
@@ -33,7 +33,7 @@
     },
     "campaign_architecture": {
       "impl_path": null,
-      "doc": "systems/_architecture/campaign_architecture_v30.md",
+      "doc": "systems/_architecture/reference/campaign_architecture_v30.md",
       "emits": [],
       "consumes": [],
       "emits_any": false,
@@ -41,7 +41,7 @@
     },
     "ci_political": {
       "impl_path": null,
-      "doc": "systems/factions/ci_political_v30.md",
+      "doc": "systems/factions/reference/ci_political_v30.md",
       "emits": [],
       "consumes": [],
       "emits_any": false,
@@ -49,7 +49,7 @@
     },
     "clock_registry": {
       "impl_path": null,
-      "doc": "systems/overview/clock_registry_v30.md",
+      "doc": "systems/overview/reference/clock_registry_v30.md",
       "emits": [],
       "consumes": [],
       "emits_any": false,
@@ -83,7 +83,7 @@
     },
     "faction_politics": {
       "impl_path": null,
-      "doc": "systems/factions/faction_politics_v30.md",
+      "doc": "systems/factions/reference/faction_politics_v30.md",
       "emits": [
         "scene.investigation_resolved",
         "state.coup_attempted",
@@ -96,7 +96,7 @@
     },
     "faction_state": {
       "impl_path": "engine/autoload/game_state.py",
-      "doc": "systems/factions/faction_behavior_v30.md",
+      "doc": "systems/factions/reference/faction_behavior_v30.md",
       "emits": [
         "mechanical.cascade_resolution",
         "mechanical.mission_shift",
@@ -134,7 +134,7 @@
     },
     "fieldwork_knots": {
       "impl_path": "systems/fieldwork/sim/knots.py",
-      "doc": "systems/fieldwork/knots_v30.md",
+      "doc": "systems/fieldwork/reference/knots_v30.md",
       "emits": [
         "meta.knot_formed",
         "meta.knot_ruptured",
@@ -159,7 +159,7 @@
     },
     "mass_battle": {
       "impl_path": null,
-      "doc": "systems/mass_battle/mass_battle_v30.md",
+      "doc": "systems/mass_battle/reference/mass_battle_v30.md",
       "emits": [
         "scene.battle_concluded"
       ],
@@ -169,7 +169,7 @@
     },
     "miraculous_event": {
       "impl_path": "systems/world/sim/miraculous_event.py",
-      "doc": "systems/world/miraculous_event_v30.md",
+      "doc": "systems/world/reference/miraculous_event_v30.md",
       "emits": [
         "meta.miraculous_event"
       ],
@@ -179,7 +179,7 @@
     },
     "npc_behavior": {
       "impl_path": null,
-      "doc": "systems/factions/political_dynamics_keys_migration_v30.md",
+      "doc": "systems/factions/reference/political_dynamics_keys_migration_v30.md",
       "emits": [
         "mechanical.project_advanced",
         "scene.dialogue",
@@ -244,7 +244,7 @@
     },
     "peninsular_strain": {
       "impl_path": "systems/overview/sim",
-      "doc": "systems/overview/peninsular_strain_v30.md",
+      "doc": "systems/overview/reference/peninsular_strain_v30.md",
       "emits": [
         "env.crisis",
         "env.disaster",
@@ -272,7 +272,7 @@
     },
     "piety_track": {
       "impl_path": "systems/characters/sim/conviction.py",
-      "doc": "systems/characters/conviction_track_v1.md",
+      "doc": "systems/characters/reference/conviction_track_v1.md",
       "emits": [
         "state.scar_acquired"
       ],
@@ -343,7 +343,7 @@
     },
     "settlement_layer": {
       "impl_path": "systems/settlements/sim/settlement.py",
-      "doc": "systems/settlements/settlement_layer_v30.md",
+      "doc": "systems/settlements/reference/settlement_layer_v30.md",
       "emits": [
         "env.population_change"
       ],
@@ -356,7 +356,7 @@
     },
     "social_contest": {
       "impl_path": "systems/social_contest/sim/contest",
-      "doc": "systems/social_contest/social_contest_v30.md",
+      "doc": "systems/social_contest/reference/social_contest_v30.md",
       "emits": [
         "scene.contest_resolved",
         "scene.dialogue",
@@ -371,7 +371,7 @@
     },
     "territorial_piety": {
       "impl_path": "systems/overview/sim/ci_track.py",
-      "doc": "systems/characters/conviction_track_v30.md",
+      "doc": "systems/characters/reference/conviction_track_v30.md",
       "emits": [],
       "consumes": [],
       "emits_any": false,
@@ -379,7 +379,7 @@
     },
     "threadwork": {
       "impl_path": "systems/threadwork/sim/operations.py",
-      "doc": "systems/threadwork/threadwork_v30.md",
+      "doc": "systems/threadwork/reference/threadwork_v30.md",
       "emits": [
         "meta.thread_woven",
         "scene.thread_operation"
@@ -390,7 +390,7 @@
     },
     "victory": {
       "impl_path": "engine/autoload/victory.py",
-      "doc": "systems/victory/victory_v30.md",
+      "doc": "systems/victory/reference/victory_v30.md",
       "emits": [],
       "consumes": [],
       "emits_any": false,

@@ -29,7 +29,7 @@ behavioural question is worse than carrying a dead row.
 
 ⚠ THE MACHINE-READ SET IS DERIVED FROM CODE, NEVER HARDCODED. `machine_read_inputs()` scans
 `tools/`, `engine/`, `systems/`, `skills/` for filenames used in a read context. That matters:
-`systems/_architecture/key_type_registry_v30.md` IS an input (the Key-type schema is authored
+`systems/_architecture/reference/key_type_registry_v30.md` IS an input (the Key-type schema is authored
 in markdown), so rows about it are CODE, not reference — a hardcoded "all .md are reference"
 rule would have culled the schema of the Key bus.
 

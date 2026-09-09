@@ -142,7 +142,7 @@ def test_doc_resolver_distinguishes_none_declared_and_missing():
     """Finding 2: the old _read_doc conflated 'no doc declared' with 'declared doc missing from
     disk' — both returned None, so a BROKEN contract pointer read as benign built-but-unspecced."""
     assert workbench._resolve_doc(_ROOT, None) == (None, 'none')
-    text, status = workbench._resolve_doc(_ROOT, 'systems/settlements/settlement_layer_v30.md')
+    text, status = workbench._resolve_doc(_ROOT, 'systems/settlements/reference/settlement_layer_v30.md')
     assert status == 'declared' and text and 'Prosperity' in text
     assert workbench._resolve_doc(_ROOT, 'systems/nope/ghost_v30.md') == (None, 'missing')
 

@@ -13,7 +13,7 @@ existed anywhere in sim/ (unaddressed-areas audit, cluster C-REACH/C-KEY
 calibration; see designs/audit/2026-07-07-unaddressed-areas-audit/).
 
 Deliberately NOT implemented here (each blocked on an open fork — see
-designs/architecture/key_echo_armature_v1.md §5, the consolidated docket):
+systems/_architecture/reference/key_echo_armature_v1.md §5, the consolidated docket):
   - observer resolution / armature interpretation (§4.1 steps 3-4): ORD-3 is a
     PROPOSED, unratified ordering rule; implementing compute_observers() before
     it lands would bake in hash-order nondeterminism.

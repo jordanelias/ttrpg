@@ -10,9 +10,9 @@ framework for propagation and dissemination, accumulation and dissipation... a s
 keys." Compiled from four parallel corpus surveys (faction canon, settlement/territory canon,
 cross-cutting clocks/tracks, the 58-item governance-compendium research corpus) plus the
 generation-methodology stack (VSG's P-series, the F/R-series paradigm stacks) already synthesized this
-session. Grounded against `designs/territory/scale_hierarchy_v1.md` (the ratified
+session. Grounded against `systems/settlements/reference/scale_hierarchy_v1.md` (the ratified
 Settlement→Territory→Province→Duchy→Country hierarchy + independent Faction tiers) and the **existing**
-`designs/architecture/key_echo_armature_v1.md` substrate — this registry feeds that armature, it does not
+`systems/_architecture/reference/key_echo_armature_v1.md` substrate — this registry feeds that armature, it does not
 replace it.
 
 ---
@@ -219,7 +219,7 @@ duplication:
 ## §4 · Toward a wrapper-and-keys surface — propagation, dissemination, accumulation, dissipation
 
 **Grounding first: this maps onto an existing substrate, it doesn't invent a new one.** The
-`designs/architecture/key_echo_armature_v1.md` (RATIFIED 2026-07-07, ED-IN-0018/0026) already defines a
+`systems/_architecture/reference/key_echo_armature_v1.md` (RATIFIED 2026-07-07, ED-IN-0018/0026) already defines a
 per-seam Key/Echo transport with directions — bottom-up, top-down, lateral, diagonal, outward, temporal —
 and an executable core (`sim/substrate/keys.py`: `Key`, `KeyLog`, `TypeRegistry`, `TickScheduler`). The
 four terms Jordan named map onto that existing vocabulary directly:

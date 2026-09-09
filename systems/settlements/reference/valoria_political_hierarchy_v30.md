@@ -8,7 +8,7 @@
 
 **Class:** A — substrate-defining canon.
 **Status:** PROVISIONAL. ⚠️ **§1's "Territory = Settlement" equivalence and §2.3's fracturing rule are
-SUPERSEDED (2026-07-13, direct Jordan ruling)** by `designs/territory/scale_hierarchy_v1.md` — Territory
+SUPERSEDED (2026-07-13, direct Jordan ruling)** by `systems/settlements/reference/scale_hierarchy_v1.md` — Territory
 is now a real intermediate tier (Settlement → Territory → Province, multiple settlements per territory,
 multiple territories per province), and provinces are conditional aggregations of common-faction
 territories rather than fixed units that fracture. **This doc's Duchy tier, §2.1's settlement-count

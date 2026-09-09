@@ -593,7 +593,7 @@ def test_direction7b_temporal_decay_is_a_declared_deferral():
     gap: propagation_spec_v1.md documents 'OF-3 (decay() unspecified...)' in the working tree.
     §1's acceptance bar for this half is exactly 'flagged, not faked' — this test asserts the flag
     is genuinely present in the canonical doc, not asserting decay() exists (it should not, yet)."""
-    doc_path = os.path.join(_REPO_ROOT, "systems", "_architecture", "propagation_spec_v1.md")
+    doc_path = os.path.join(_REPO_ROOT, "systems", "_architecture", 'reference', "propagation_spec_v1.md")
     assert os.path.isfile(doc_path), "propagation_spec_v1.md (OF-3's home) is missing entirely"
     text = open(doc_path, encoding="utf-8").read()
     assert "OF-3" in text and "decay()" in text, (

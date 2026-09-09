@@ -52,7 +52,7 @@
 ```yaml
 - id: H7A-001
   name: Three-Mode Architecture (TTRPG/Hybrid/BG)
-  source: systems/_architecture/scale_transitions_v30.md:14
+  source: systems/_architecture/reference/scale_transitions_v30.md:14
   system: cross-scale-plumbing
   touches: [faction-strategy, settlement-governance]
   slice: ruling
@@ -66,7 +66,7 @@
 
 - id: H7A-002
   name: No-GM invariant violation in mode table and Personal→Faction handoff
-  source: systems/_architecture/scale_transitions_v30.md:19
+  source: systems/_architecture/reference/scale_transitions_v30.md:19
   system: cross-scale-plumbing
   slice: gap
   statement: >-
@@ -79,7 +79,7 @@
 
 - id: H7A-003
   name: "§3.3 Personal → Scene (Contest) handoff is empty"
-  source: systems/_architecture/scale_transitions_v30.md:51
+  source: systems/_architecture/reference/scale_transitions_v30.md:51
   system: cross-scale-plumbing
   touches: [social-contest]
   slice: gap
@@ -92,7 +92,7 @@
 
 - id: H7A-004
   name: "§3.1 Personal→Thread handoff"
-  source: systems/_architecture/scale_transitions_v30.md:46
+  source: systems/_architecture/reference/scale_transitions_v30.md:46
   system: cross-scale-plumbing
   touches: [resolution-kernel]
   slice: process
@@ -104,7 +104,7 @@
 
 - id: H7A-005
   name: "§3.2 Personal→Faction handoff"
-  source: systems/_architecture/scale_transitions_v30.md:48
+  source: systems/_architecture/reference/scale_transitions_v30.md:48
   system: cross-scale-plumbing
   touches: [faction-strategy]
   slice: process
@@ -116,7 +116,7 @@
 
 - id: H7A-006
   name: "§3.4 Scene→Faction (Domain Echo trigger + tie-break)"
-  source: systems/_architecture/scale_transitions_v30.md:53
+  source: systems/_architecture/reference/scale_transitions_v30.md:53
   system: cross-scale-plumbing
   touches: [faction-strategy, settlement-governance]
   slice: process
@@ -131,7 +131,7 @@
 
 - id: H7A-007
   name: "§3.5 Thread→Faction handoff"
-  source: systems/_architecture/scale_transitions_v30.md:59
+  source: systems/_architecture/reference/scale_transitions_v30.md:59
   system: cross-scale-plumbing
   touches: [faction-strategy]
   slice: process
@@ -143,7 +143,7 @@
 
 - id: H7A-008
   name: "§3.6 Thread→Mass handoff"
-  source: systems/_architecture/scale_transitions_v30.md:62
+  source: systems/_architecture/reference/scale_transitions_v30.md:62
   system: cross-scale-plumbing
   touches: [mass-battle-seam]
   slice: process
@@ -158,7 +158,7 @@
 
 - id: H7A-009
   name: "§3.7 Mass→Personal (General Duel)"
-  source: systems/_architecture/scale_transitions_v30.md:68
+  source: systems/_architecture/reference/scale_transitions_v30.md:68
   system: cross-scale-plumbing
   touches: [mass-battle-seam, personnel-roster]
   slice: process
@@ -172,7 +172,7 @@
 
 - id: H7A-010
   name: "§3.8 Scene→Mass handoff"
-  source: systems/_architecture/scale_transitions_v30.md:71
+  source: systems/_architecture/reference/scale_transitions_v30.md:71
   system: cross-scale-plumbing
   touches: [mass-battle-seam]
   slice: process
@@ -187,7 +187,7 @@
 
 - id: H7A-011
   name: "§3.9 Fieldwork ↔ All Systems bridge family"
-  source: systems/_architecture/scale_transitions_v30.md:81
+  source: systems/_architecture/reference/scale_transitions_v30.md:81
   system: cross-scale-plumbing
   touches: [fieldwork-investigation, mass-battle-seam]
   slice: process
@@ -203,7 +203,7 @@
 
 - id: H7A-012
   name: "TTRPG Fieldwork → BG Domain Echo (governance-relevant row)"
-  source: systems/_architecture/scale_transitions_v30.md:92
+  source: systems/_architecture/reference/scale_transitions_v30.md:92
   system: cross-scale-plumbing
   touches: [fieldwork-investigation, faction-strategy]
   slice: process
@@ -215,7 +215,7 @@
 
 - id: H7A-013
   name: "§4.1 Zoom In protocol"
-  source: systems/_architecture/scale_transitions_v30.md:98
+  source: systems/_architecture/reference/scale_transitions_v30.md:98
   system: cross-scale-plumbing
   touches: [mass-battle-seam, faction-strategy]
   slice: process
@@ -230,7 +230,7 @@
 
 - id: H7A-014
   name: "§4.1 Scene Opportunity Ob modifier"
-  source: systems/_architecture/scale_transitions_v30.md:105
+  source: systems/_architecture/reference/scale_transitions_v30.md:105
   system: cross-scale-plumbing
   touches: [faction-strategy]
   slice: formula
@@ -243,7 +243,7 @@
 
 - id: H7A-015
   name: "§4.2 Zoom Out protocol"
-  source: systems/_architecture/scale_transitions_v30.md:110
+  source: systems/_architecture/reference/scale_transitions_v30.md:110
   system: cross-scale-plumbing
   touches: [mass-battle-seam, faction-strategy]
   slice: process
@@ -258,7 +258,7 @@
 
 - id: H7A-016
   name: "Mandatory Zoom-In Triggers (§4.3.2)"
-  source: systems/_architecture/scale_transitions_v30.md:125
+  source: systems/_architecture/reference/scale_transitions_v30.md:125
   system: cross-scale-plumbing
   slice: process
   statement: >-
@@ -271,7 +271,7 @@
 
 - id: H7A-017
   name: The "debt scene" mechanic is referenced but never defined
-  source: systems/_architecture/scale_transitions_v30.md:138
+  source: systems/_architecture/reference/scale_transitions_v30.md:138
   system: cross-scale-plumbing
   touches: [faction-strategy, personnel-roster]
   slice: gap
@@ -284,7 +284,7 @@
 
 - id: H7A-018
   name: "§4.3.3 World-State Zoom-In triggers (Priority 1)"
-  source: systems/_architecture/scale_transitions_v30.md:146
+  source: systems/_architecture/reference/scale_transitions_v30.md:146
   system: cross-scale-plumbing
   touches: [faction-strategy, territory-world]
   slice: process
@@ -297,7 +297,7 @@
 
 - id: H7A-019
   name: "§4.4 'Where Were You?' retrospective scene generation"
-  source: systems/_architecture/scale_transitions_v30.md:154
+  source: systems/_architecture/reference/scale_transitions_v30.md:154
   system: cross-scale-plumbing
   touches: [faction-strategy, personnel-roster]
   slice: mechanic
@@ -312,7 +312,7 @@
 
 - id: H7A-020
   name: "§5.1/§5.2 Domain Echo trigger + magnitude formula"
-  source: systems/_architecture/scale_transitions_v30.md:176
+  source: systems/_architecture/reference/scale_transitions_v30.md:176
   system: cross-scale-plumbing
   touches: [faction-strategy]
   slice: formula
@@ -327,7 +327,7 @@
 
 - id: H7A-021
   name: Domain Echo timing (per-mode)
-  source: systems/_architecture/scale_transitions_v30.md:189
+  source: systems/_architecture/reference/scale_transitions_v30.md:189
   system: cross-scale-plumbing
   touches: [faction-strategy]
   slice: ruling
@@ -341,7 +341,7 @@
 
 - id: H7A-022
   name: "Debate → Domain Echo (Piety Track band) + COMPOSED reconciliation with social_contest"
-  source: systems/_architecture/scale_transitions_v30.md:194
+  source: systems/_architecture/reference/scale_transitions_v30.md:194
   system: cross-scale-plumbing
   touches: [social-contest, faction-strategy]
   slice: ruling
@@ -358,7 +358,7 @@
 
 - id: H7A-023
   name: Accord Domain Echo
-  source: systems/_architecture/scale_transitions_v30.md:208
+  source: systems/_architecture/reference/scale_transitions_v30.md:208
   system: cross-scale-plumbing
   touches: [territory-world, faction-strategy, settlement-governance]
   slice: formula
@@ -376,7 +376,7 @@
 
 - id: H7A-024
   name: Thread Domain Echo
-  source: systems/_architecture/scale_transitions_v30.md:225
+  source: systems/_architecture/reference/scale_transitions_v30.md:225
   system: cross-scale-plumbing
   touches: [faction-strategy]
   slice: formula
@@ -393,7 +393,7 @@
 
 - id: H7A-025
   name: No season-level Domain Echo aggregate ceiling
-  source: systems/_architecture/scale_transitions_v30.md:242
+  source: systems/_architecture/reference/scale_transitions_v30.md:242
   system: cross-scale-plumbing
   touches: [faction-strategy]
   slice: gap
@@ -407,7 +407,7 @@
 
 - id: H7A-026
   name: Coherence handling across Zoom cycles
-  source: systems/_architecture/scale_transitions_v30.md:255
+  source: systems/_architecture/reference/scale_transitions_v30.md:255
   system: cross-scale-plumbing
   touches: [personnel-roster]
   slice: ruling
@@ -423,7 +423,7 @@
 
 - id: H7A-027
   name: "§7 Sufficient Scope conditions"
-  source: systems/_architecture/scale_transitions_v30.md:265
+  source: systems/_architecture/reference/scale_transitions_v30.md:265
   system: cross-scale-plumbing
   touches: [faction-strategy, settlement-governance, fieldwork-investigation]
   slice: mechanic
@@ -439,7 +439,7 @@
 
 - id: H7A-028
   name: "§7 Companion modifier on Sufficient Scope"
-  source: systems/_architecture/scale_transitions_v30.md:275
+  source: systems/_architecture/reference/scale_transitions_v30.md:275
   system: cross-scale-plumbing
   touches: [faction-strategy, personnel-roster]
   slice: formula
@@ -452,7 +452,7 @@
 
 - id: H7A-029
   name: "§8 Scope Shift Rules is an empty section"
-  source: systems/_architecture/scale_transitions_v30.md:280
+  source: systems/_architecture/reference/scale_transitions_v30.md:280
   system: cross-scale-plumbing
   slice: gap
   statement: >-
@@ -462,7 +462,7 @@
 
 - id: H7A-030
   name: "§9 PC Faction Embedding"
-  source: systems/_architecture/scale_transitions_v30.md:285
+  source: systems/_architecture/reference/scale_transitions_v30.md:285
   system: cross-scale-plumbing
   touches: [faction-strategy, territory-world]
   slice: mechanic
@@ -476,7 +476,7 @@
 
 - id: H7A-031
   name: "§10 Thread Timing in Hybrid (CI effects)"
-  source: systems/_architecture/scale_transitions_v30.md:291
+  source: systems/_architecture/reference/scale_transitions_v30.md:291
   system: cross-scale-plumbing
   slice: formula
   statement: >-
@@ -490,7 +490,7 @@
 
 - id: H7A-032
   name: "§11 Contested Figure System"
-  source: systems/_architecture/scale_transitions_v30.md:304
+  source: systems/_architecture/reference/scale_transitions_v30.md:304
   system: cross-scale-plumbing
   touches: [mass-battle-seam, personnel-roster]
   slice: formula
@@ -503,7 +503,7 @@
 
 - id: H7A-033
   name: All-Directions Key Delivery ruling (J-1)
-  source: systems/_architecture/scale_transitions_v30.md:311
+  source: systems/_architecture/reference/scale_transitions_v30.md:311
   system: cross-scale-plumbing
   slice: ruling
   statement: >-
@@ -520,7 +520,7 @@
 
 - id: H7A-034
   name: "§12.3 Authoring discipline for sub-scale targets"
-  source: systems/_architecture/scale_transitions_v30.md:332
+  source: systems/_architecture/reference/scale_transitions_v30.md:332
   system: cross-scale-plumbing
   slice: process
   statement: >-
@@ -534,7 +534,7 @@
 
 - id: H7A-035
   name: Known unpopulated down-seams touching governance
-  source: systems/_architecture/scale_transitions_v30.md:340
+  source: systems/_architecture/reference/scale_transitions_v30.md:340
   system: cross-scale-plumbing
   touches: [faction-strategy, settlement-governance, personnel-roster]
   slice: gap
@@ -548,7 +548,7 @@
 
 - id: H7A-036
   name: NERS self-note on the all-directions ruling
-  source: systems/_architecture/scale_transitions_v30.md:343
+  source: systems/_architecture/reference/scale_transitions_v30.md:343
   system: cross-scale-plumbing
   touches: [resolution-kernel]
   slice: ruling
@@ -563,7 +563,7 @@
 
 - id: H7A-037
   name: "§2 Scale Table (5-scale ladder)"
-  source: systems/_architecture/scale_transitions_v30.md:30
+  source: systems/_architecture/reference/scale_transitions_v30.md:30
   system: resolution-kernel
   touches: [territory-world]
   slice: formula
@@ -577,7 +577,7 @@
 
 - id: H7A-038
   name: Scale roster count collision (this doc's 5 vs code's 4 vs threadwork's 6)
-  source: systems/_architecture/scale_transitions_v30.md:30
+  source: systems/_architecture/reference/scale_transitions_v30.md:30
   system: resolution-kernel
   slice: gap
   statement: >-
@@ -590,7 +590,7 @@
 
 - id: H7A-039
   name: Conviction system (definition + structure)
-  source: systems/_architecture/player_agency_v30.md:67
+  source: systems/_architecture/reference/player_agency_v30.md:67
   system: personnel-roster
   touches: [npc-social]
   slice: mechanic
@@ -606,7 +606,7 @@
 
 - id: H7A-040
   name: Conviction resolution states + Momentum formula
-  source: systems/_architecture/player_agency_v30.md:91
+  source: systems/_architecture/reference/player_agency_v30.md:91
   system: personnel-roster
   slice: formula
   statement: >-
@@ -622,7 +622,7 @@
 
 - id: H7A-041
   name: Duty system — definition, generation, types
-  source: systems/_architecture/player_agency_v30.md:120
+  source: systems/_architecture/reference/player_agency_v30.md:120
   system: faction-strategy
   touches: [personnel-roster]
   slice: mechanic
@@ -638,7 +638,7 @@
 
 - id: H7A-042
   name: Duty completion — Standing deltas and rank-threshold unlocks
-  source: systems/_architecture/player_agency_v30.md:147
+  source: systems/_architecture/reference/player_agency_v30.md:147
   system: faction-strategy
   touches: [personnel-roster]
   slice: formula
@@ -655,7 +655,7 @@
 
 - id: H7A-043
   name: Stature/Standing ladder (0-7) with titles
-  source: systems/_architecture/player_agency_v30.md:367
+  source: systems/_architecture/reference/player_agency_v30.md:367
   system: faction-strategy
   touches: [personnel-roster, settlement-governance]
   slice: ruling
@@ -671,7 +671,7 @@
 
 - id: H7A-044
   name: Leadership acquisition on faction-leader removal, and an internal unverified cross-reference
-  source: systems/_architecture/player_agency_v30.md:380
+  source: systems/_architecture/reference/player_agency_v30.md:380
   system: faction-strategy
   touches: [personnel-roster]
   slice: gap
@@ -688,7 +688,7 @@
 
 - id: H7A-045
   name: Renown track — cross-faction personal authority, independent of Standing
-  source: systems/_architecture/player_agency_v30.md:404
+  source: systems/_architecture/reference/player_agency_v30.md:404
   system: personnel-roster
   touches: [faction-strategy]
   slice: mechanic
@@ -705,7 +705,7 @@
 
 - id: H7A-046
   name: Governance Responsibility — Renown risk from governance failure
-  source: systems/_architecture/player_agency_v30.md:423
+  source: systems/_architecture/reference/player_agency_v30.md:423
   system: settlement-governance
   touches: [personnel-roster, faction-strategy]
   slice: formula
@@ -719,7 +719,7 @@
 
 - id: H7A-047
   name: Scene Slate generation — mandatory-crisis priority ordering
-  source: systems/_architecture/player_agency_v30.md:195
+  source: systems/_architecture/reference/player_agency_v30.md:195
   system: faction-strategy
   touches: [settlement-governance, personnel-roster]
   slice: process
@@ -735,7 +735,7 @@
 
 - id: H7A-048
   name: Witness Mode — the mandatory-overflow fidelity, and its no-GM fix
-  source: systems/_architecture/player_agency_v30.md:207
+  source: systems/_architecture/reference/player_agency_v30.md:207
   system: faction-strategy
   touches: [personnel-roster]
   slice: process
@@ -752,7 +752,7 @@
 
 - id: H7A-049
   name: Scene Slate deterministic cross-step pruning algorithm
-  source: systems/_architecture/player_agency_v30.md:310
+  source: systems/_architecture/reference/player_agency_v30.md:310
   system: faction-strategy
   touches: [personnel-roster]
   slice: process
@@ -768,7 +768,7 @@
 
 - id: H7A-050
   name: Conviction-text keyword scanner and disambiguation validator
-  source: systems/_architecture/player_agency_v30.md:252
+  source: systems/_architecture/reference/player_agency_v30.md:252
   system: faction-strategy
   touches: [territory-world]
   slice: mechanic
@@ -783,7 +783,7 @@
 
 - id: H7A-051
   name: Resources track (personal economic capacity) + consolidation ruling
-  source: systems/_architecture/player_agency_v30.md:535
+  source: systems/_architecture/reference/player_agency_v30.md:535
   system: economy-accounting
   touches: [settlement-governance, faction-strategy]
   slice: ruling
@@ -801,7 +801,7 @@
 
 - id: H7A-052
   name: Legacy Conviction + Lineage Acts (character succession/inheritance)
-  source: systems/_architecture/player_agency_v30.md:558
+  source: systems/_architecture/reference/player_agency_v30.md:558
   system: personnel-roster
   touches: [faction-strategy, settlement-governance]
   slice: mechanic
@@ -817,7 +817,7 @@
 
 - id: H7A-053
   name: Independent (non-faction) player path
-  source: systems/_architecture/player_agency_v30.md:392
+  source: systems/_architecture/reference/player_agency_v30.md:392
   system: faction-strategy
   touches: [personnel-roster]
   slice: ruling
@@ -830,7 +830,7 @@
 
 - id: H7A-054
   name: D1 ruling — event architecture (card-deck vs predicate-sweep)
-  source: systems/_architecture/governance_consolidation_v1.md:33
+  source: systems/_architecture/reference/governance_consolidation_v1.md:33
   system: settlement-governance
   touches: [economy-accounting]
   slice: ruling
@@ -844,7 +844,7 @@
 
 - id: H7A-055
   name: D2 ruling — AP economy is the canonical action model
-  source: systems/_architecture/governance_consolidation_v1.md:36
+  source: systems/_architecture/reference/governance_consolidation_v1.md:36
   system: settlement-governance
   slice: ruling
   statement: >-
@@ -858,7 +858,7 @@
 
 - id: H7A-056
   name: D3 ruling — Compact modeled as a Debt subtype, not a 6th ledger family
-  source: systems/_architecture/governance_consolidation_v1.md:39
+  source: systems/_architecture/reference/governance_consolidation_v1.md:39
   system: settlement-governance
   slice: ruling
   statement: >-
@@ -873,7 +873,7 @@
 
 - id: H7A-057
   name: D3's Compact ruling appears unexecuted as of the later baseline audit
-  source: systems/_architecture/governance_consolidation_v1.md:39
+  source: systems/_architecture/reference/governance_consolidation_v1.md:39
   system: settlement-governance
   slice: gap
   statement: >-
@@ -889,7 +889,7 @@
 
 - id: H7A-058
   name: D4 ruling — retire the §1.8 Mandate formula as collapse carrier; rename to resolve two-Mandates collision
-  source: systems/_architecture/governance_consolidation_v1.md:42
+  source: systems/_architecture/reference/governance_consolidation_v1.md:42
   system: settlement-governance
   touches: [faction-strategy, territory-world]
   slice: ruling
@@ -906,7 +906,7 @@
 
 - id: H7A-059
   name: D5 ruling — merge §1.0d Performance Audit into the suspicion/recall spine
-  source: systems/_architecture/governance_consolidation_v1.md:45
+  source: systems/_architecture/reference/governance_consolidation_v1.md:45
   system: settlement-governance
   touches: [personnel-roster, faction-strategy]
   slice: ruling
@@ -921,7 +921,7 @@
 
 - id: H7A-060
   name: D6 ruling — cumulative suspicion accrual, conditioned on a symmetric decay counter-mechanic
-  source: systems/_architecture/governance_consolidation_v1.md:105
+  source: systems/_architecture/reference/governance_consolidation_v1.md:105
   system: settlement-governance
   touches: [personnel-roster]
   slice: ruling
@@ -937,7 +937,7 @@
 
 - id: H7A-061
   name: The twelve PR#119 item dispositions
-  source: systems/_architecture/governance_consolidation_v1.md:56
+  source: systems/_architecture/reference/governance_consolidation_v1.md:56
   system: settlement-governance
   slice: ruling
   statement: >-
@@ -952,7 +952,7 @@
 
 - id: H7A-062
   name: "§1.3a Locked Extraction/Compact — BREAK verdict + fixes required"
-  source: systems/_architecture/governance_consolidation_v1.md:63
+  source: systems/_architecture/reference/governance_consolidation_v1.md:63
   system: settlement-governance
   touches: [economy-accounting]
   slice: gap
@@ -965,7 +965,7 @@
 
 - id: H7A-063
   name: "§1.3b Bind the Cells — population-granularity gap, not an actor cap"
-  source: systems/_architecture/governance_consolidation_v1.md:64
+  source: systems/_architecture/reference/governance_consolidation_v1.md:64
   system: settlement-governance
   touches: [personnel-roster]
   slice: gap
@@ -980,7 +980,7 @@
 
 - id: H7A-064
   name: The death-spiral bias and its designed-but-unported fix, with a later-superseding measurement
-  source: systems/_architecture/governance_consolidation_v1.md:81
+  source: systems/_architecture/reference/governance_consolidation_v1.md:81
   system: settlement-governance
   slice: gap
   statement: >-
@@ -997,7 +997,7 @@
 
 - id: H7A-065
   name: B1 ruling — starting faction count is 4, with named emergent-faction paths
-  source: systems/_architecture/governance_consolidation_v1.md:198
+  source: systems/_architecture/reference/governance_consolidation_v1.md:198
   system: faction-strategy
   slice: ruling
   statement: >-
@@ -1012,7 +1012,7 @@
 
 - id: H7A-066
   name: B12, Territory/Province hierarchy conflict, open as of this doc
-  source: systems/_architecture/governance_consolidation_v1.md:206
+  source: systems/_architecture/reference/governance_consolidation_v1.md:206
   system: territory-world
   touches: [settlement-governance]
   slice: gap
@@ -1026,7 +1026,7 @@
 
 - id: H7A-067
   name: "E2 — Mandate-Challenge (political, non-violent privilege removal) is unauthored"
-  source: systems/_architecture/governance_consolidation_v1.md:86
+  source: systems/_architecture/reference/governance_consolidation_v1.md:86
   system: faction-strategy
   touches: [settlement-governance]
   slice: gap
@@ -1040,7 +1040,7 @@
 
 - id: H7A-068
   name: Ripple substrate's own ratification status is ambiguous
-  source: systems/_architecture/governance_ripple_substrate_v1.md:5
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:5
   system: settlement-governance
   touches: [faction-strategy]
   slice: gap
@@ -1054,7 +1054,7 @@
 
 - id: H7A-069
   name: The five governance primitives
-  source: systems/_architecture/governance_ripple_substrate_v1.md:384
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:384
   system: cross-scale-plumbing
   touches: [faction-strategy, settlement-governance]
   slice: ruling
@@ -1070,7 +1070,7 @@
 
 - id: H7A-070
   name: The core causal-spine loop
-  source: systems/_architecture/governance_ripple_substrate_v1.md:35
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:35
   system: cross-scale-plumbing
   touches: [settlement-governance, faction-strategy]
   slice: process
@@ -1086,7 +1086,7 @@
 
 - id: H7A-071
   name: Five new settlement mechanical levers + open ruling R-1
-  source: systems/_architecture/governance_ripple_substrate_v1.md:93
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:93
   system: settlement-governance
   slice: gap
   statement: >-
@@ -1101,7 +1101,7 @@
 
 - id: H7A-072
   name: The three response-pressure vectors, kept mechanically distinct
-  source: systems/_architecture/governance_ripple_substrate_v1.md:114
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:114
   system: settlement-governance
   touches: [personnel-roster, faction-strategy]
   slice: mechanic
@@ -1119,7 +1119,7 @@
 
 - id: H7A-073
   name: resolution_quality — the event→standing bridge formula
-  source: systems/_architecture/governance_ripple_substrate_v1.md:158
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:158
   system: settlement-governance
   touches: [faction-strategy, personnel-roster]
   slice: formula
@@ -1136,7 +1136,7 @@
 
 - id: H7A-074
   name: The event→standing bridge is HOOK-NEEDED, not wired
-  source: systems/_architecture/governance_ripple_substrate_v1.md:473
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:473
   system: settlement-governance
   touches: [faction-strategy]
   slice: gap
@@ -1150,7 +1150,7 @@
 
 - id: H7A-075
   name: Event→Parliament/Social-Contest ripple is AT-RISK
-  source: systems/_architecture/governance_ripple_substrate_v1.md:288
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:288
   system: social-contest
   touches: [faction-strategy]
   slice: gap
@@ -1166,7 +1166,7 @@
 
 - id: H7A-076
   name: Faction-Action ripple routes through the existing Mandate aggregation
-  source: systems/_architecture/governance_ripple_substrate_v1.md:302
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:302
   system: faction-strategy
   touches: [settlement-governance]
   slice: process
@@ -1179,7 +1179,7 @@
 
 - id: H7A-077
   name: "'Mandate' names at least two incompatible formulas in the corpus"
-  source: systems/_architecture/governance_ripple_substrate_v1.md:333
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:333
   system: faction-strategy
   touches: [settlement-governance]
   slice: gap
@@ -1194,7 +1194,7 @@
 
 - id: H7A-078
   name: Cross-scale aggregation chain — four scales, bidirectional
-  source: systems/_architecture/governance_ripple_substrate_v1.md:319
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:319
   system: faction-strategy
   touches: [settlement-governance, territory-world]
   slice: formula
@@ -1211,7 +1211,7 @@
 
 - id: H7A-079
   name: Territory is the one genuinely unbuilt aggregation scale (open ruling R-3)
-  source: systems/_architecture/governance_ripple_substrate_v1.md:355
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:355
   system: territory-world
   touches: [settlement-governance]
   slice: gap
@@ -1225,7 +1225,7 @@
 
 - id: H7A-080
   name: "Open ruling R-2 — can an NPC contest a player-held seat?"
-  source: systems/_architecture/governance_ripple_substrate_v1.md:265
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:265
   system: personnel-roster
   touches: [faction-strategy]
   slice: ruling
@@ -1240,7 +1240,7 @@
 
 - id: H7A-081
   name: "Open ruling R-4 — event-deck band-cliff discreteness"
-  source: systems/_architecture/governance_ripple_substrate_v1.md:427
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:427
   system: settlement-governance
   slice: gap
   statement: >-
@@ -1253,7 +1253,7 @@
 
 - id: H7A-082
   name: Two proposals independently found defective by the NERS audit, both diagnosed the same way
-  source: systems/_architecture/governance_ripple_substrate_v1.md:437
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:437
   system: settlement-governance
   touches: [personnel-roster]
   slice: gap
@@ -1269,7 +1269,7 @@
 
 - id: H7A-083
   name: Architecture-compliance summary — no new Key types or resolvers needed
-  source: systems/_architecture/governance_ripple_substrate_v1.md:500
+  source: systems/_architecture/reference/governance_ripple_substrate_v1.md:500
   system: cross-scale-plumbing
   touches: [settlement-governance, faction-strategy]
   slice: gap
@@ -1284,7 +1284,7 @@
 
 - id: H7A-084
   name: FLAG vs VECTOR taxonomy — the governing classification
-  source: systems/_architecture/governance_type_registry_v1.md:20
+  source: systems/_architecture/reference/governance_type_registry_v1.md:20
   system: faction-strategy
   touches: [settlement-governance, cross-scale-plumbing]
   slice: ruling
@@ -1301,7 +1301,7 @@
 
 - id: H7A-085
   name: Five same-name/different-concept collisions across the scale hierarchy
-  source: systems/_architecture/governance_type_registry_v1.md:160
+  source: systems/_architecture/reference/governance_type_registry_v1.md:160
   system: faction-strategy
   touches: [settlement-governance, personnel-roster, territory-world]
   slice: gap
@@ -1317,7 +1317,7 @@
 
 - id: H7A-086
   name: Legitimacy/Popular Support confirmed 100% inert in sim
-  source: systems/_architecture/governance_type_registry_v1.md:98
+  source: systems/_architecture/reference/governance_type_registry_v1.md:98
   system: settlement-governance
   touches: [faction-strategy]
   slice: gap
@@ -1330,7 +1330,7 @@
 
 - id: H7A-087
   name: The consent/legitimacy gate wears three costumes (MERGE candidate)
-  source: systems/_architecture/governance_type_registry_v1.md:188
+  source: systems/_architecture/reference/governance_type_registry_v1.md:188
   system: faction-strategy
   touches: [settlement-governance, economy-accounting]
   slice: gap
@@ -1345,7 +1345,7 @@
 
 - id: H7A-088
   name: Weighted-cascade-with-noise — a recurring design-grammar pattern
-  source: systems/_architecture/governance_type_registry_v1.md:196
+  source: systems/_architecture/reference/governance_type_registry_v1.md:196
   system: faction-strategy
   touches: [territory-world, personnel-roster]
   slice: ruling
@@ -1358,7 +1358,7 @@
 
 - id: H7A-089
   name: Rank decoupled from formal office — convergent cross-civilization pattern
-  source: systems/_architecture/governance_type_registry_v1.md:201
+  source: systems/_architecture/reference/governance_type_registry_v1.md:201
   system: personnel-roster
   touches: [faction-strategy]
   slice: ruling
@@ -1375,7 +1375,7 @@
 
 - id: H7A-090
   name: "The Field/Gauge gap — Keys model FLAGs well, VECTORs poorly"
-  source: systems/_architecture/governance_type_registry_v1.md:234
+  source: systems/_architecture/reference/governance_type_registry_v1.md:234
   system: cross-scale-plumbing
   slice: gap
   statement: >-
@@ -1390,7 +1390,7 @@
 
 - id: H7A-091
   name: OF-3 decay() deferral — still outstanding, now with working templates
-  source: systems/_architecture/governance_type_registry_v1.md:152
+  source: systems/_architecture/reference/governance_type_registry_v1.md:152
   system: cross-scale-plumbing
   slice: gap
   statement: >-
@@ -1405,7 +1405,7 @@
 
 - id: H7A-092
   name: Ascendancy consolidation_progress — NERS-validated strongest keep
-  source: systems/_architecture/governance_type_registry_v1.md:87
+  source: systems/_architecture/reference/governance_type_registry_v1.md:87
   system: personnel-roster
   touches: [faction-strategy]
   slice: derivative
@@ -1418,7 +1418,7 @@
 
 - id: H7A-093
   name: Faction Scale derived-value system
-  source: systems/_architecture/derived_stats_v30.md:295
+  source: systems/_architecture/reference/derived_stats_v30.md:295
   system: faction-strategy
   slice: formula
   statement: >-
@@ -1432,7 +1432,7 @@
 
 - id: H7A-094
   name: Faction derived-value income/drain tables and stat-damage threshold rule
-  source: systems/_architecture/derived_stats_v30.md:303
+  source: systems/_architecture/reference/derived_stats_v30.md:303
   system: faction-strategy
   touches: [economy-accounting]
   slice: mechanic
@@ -1448,7 +1448,7 @@
 
 - id: H7A-095
   name: Legitimacy/Popular Support are per-settlement, not a faction-level Mandate split
-  source: systems/_architecture/derived_stats_v30.md:561
+  source: systems/_architecture/reference/derived_stats_v30.md:561
   system: settlement-governance
   touches: [faction-strategy]
   slice: ruling
@@ -1462,7 +1462,7 @@
 
 - id: H7A-096
   name: Settlement Scale derived values (PENDING, uncanonicalized)
-  source: systems/_architecture/derived_stats_v30.md:372
+  source: systems/_architecture/reference/derived_stats_v30.md:372
   system: settlement-governance
   slice: gap
   statement: >-
@@ -1475,7 +1475,7 @@
 
 - id: H7A-097
   name: "Renown ↔ derived-value governance-failure bridge"
-  source: systems/_architecture/derived_stats_v30.md:409
+  source: systems/_architecture/reference/derived_stats_v30.md:409
   system: settlement-governance
   touches: [personnel-roster, faction-strategy]
   slice: formula
@@ -1492,7 +1492,7 @@
 
 - id: H7A-098
   name: "Renown/governance-failure bridge citation mismatch (§8.3 vs §10.3, v1 vs v30)"
-  source: systems/_architecture/derived_stats_v30.md:409
+  source: systems/_architecture/reference/derived_stats_v30.md:409
   system: personnel-roster
   touches: [faction-strategy, settlement-governance]
   slice: gap
@@ -1506,7 +1506,7 @@
 
 - id: H7A-099
   name: Settlement combat-defense feedback loop
-  source: systems/_architecture/derived_stats_v30.md:422
+  source: systems/_architecture/reference/derived_stats_v30.md:422
   system: settlement-governance
   touches: [cross-scale-plumbing]
   slice: formula
@@ -1522,7 +1522,7 @@
 
 - id: H7A-100
   name: Faction-scale stat-modification conversion registry
-  source: systems/_architecture/derived_stats_v30.md:454
+  source: systems/_architecture/reference/derived_stats_v30.md:454
   system: faction-strategy
   touches: [economy-accounting]
   slice: ruling
@@ -1537,7 +1537,7 @@
 
 - id: H7A-101
   name: B12 resolution — Territory/Province hierarchy ruling
-  source: systems/_architecture/ners_vsg_reconciliation_v1.md:217
+  source: systems/_architecture/reference/ners_vsg_reconciliation_v1.md:217
   system: territory-world
   touches: [settlement-governance]
   slice: ruling
@@ -1554,7 +1554,7 @@
 
 - id: H7A-102
   name: PR#127 empirical confirmation of three governance_consolidation rulings, sharpened severity
-  source: systems/_architecture/ners_vsg_reconciliation_v1.md:37
+  source: systems/_architecture/reference/ners_vsg_reconciliation_v1.md:37
   system: settlement-governance
   touches: [faction-strategy]
   slice: gap
@@ -1570,7 +1570,7 @@
 
 - id: H7A-103
   name: D6 (NEW) — the G606 wiring-model fork, genuinely open pre-ruling
-  source: systems/_architecture/ners_vsg_reconciliation_v1.md:65
+  source: systems/_architecture/reference/ners_vsg_reconciliation_v1.md:65
   system: settlement-governance
   touches: [personnel-roster]
   slice: gap
@@ -1586,7 +1586,7 @@
 
 - id: H7A-104
   name: The Π term alone does not de-fang the death spiral (E1 sequencing overrule)
-  source: systems/_architecture/ners_vsg_reconciliation_v1.md:43
+  source: systems/_architecture/reference/ners_vsg_reconciliation_v1.md:43
   system: settlement-governance
   slice: gap
   statement: >-
@@ -1600,7 +1600,7 @@
 
 - id: H7A-105
   name: "B2 resolution — S-006/Goldenfurt identity kept, full 37-settlement geography resync"
-  source: systems/_architecture/ners_vsg_reconciliation_v1.md:203
+  source: systems/_architecture/reference/ners_vsg_reconciliation_v1.md:203
   system: territory-world
   touches: [settlement-governance]
   slice: ruling
@@ -1616,7 +1616,7 @@
 
 - id: H7A-106
   name: The Ascendancy roster system is validated-ready but unauthored as canon
-  source: systems/_architecture/ners_vsg_reconciliation_v1.md:155
+  source: systems/_architecture/reference/ners_vsg_reconciliation_v1.md:155
   system: personnel-roster
   touches: [faction-strategy]
   slice: gap
@@ -1629,7 +1629,7 @@
 
 - id: H7A-107
   name: E8/E9/E10 named foundation gaps under promote-ready proposals
-  source: systems/_architecture/ners_vsg_reconciliation_v1.md:78
+  source: systems/_architecture/reference/ners_vsg_reconciliation_v1.md:78
   system: faction-strategy
   touches: [personnel-roster]
   slice: gap
@@ -1644,7 +1644,7 @@
 
 - id: H7A-108
   name: "B11 — engine_clock is unauthored and blocks the Territory-scale Relay Tier/Beacon Network"
-  source: systems/_architecture/ners_vsg_reconciliation_v1.md:93
+  source: systems/_architecture/reference/ners_vsg_reconciliation_v1.md:93
   system: territory-world
   touches: [cross-scale-plumbing]
   slice: gap
@@ -1658,7 +1658,7 @@
 
 - id: H7A-109
   name: The three-scale conflict engine (Peninsula/Province/Settlement) — likely superseded terminology
-  source: systems/_architecture/conflict_architecture_proposal.md:18
+  source: systems/_architecture/reference/conflict_architecture_proposal.md:18
   system: territory-world
   touches: [settlement-governance, faction-strategy]
   slice: gap
@@ -1674,7 +1674,7 @@
 
 - id: H7A-110
   name: Five starting settlement-governance friction points
-  source: systems/_architecture/conflict_architecture_proposal.md:30
+  source: systems/_architecture/reference/conflict_architecture_proposal.md:30
   system: settlement-governance
   touches: [faction-strategy, territory-world]
   slice: content
@@ -1689,7 +1689,7 @@
 
 - id: H7A-111
   name: Bishop Appointment — Church's settlement-scale territorial expansion path
-  source: systems/_architecture/conflict_architecture_proposal.md:48
+  source: systems/_architecture/reference/conflict_architecture_proposal.md:48
   system: settlement-governance
   touches: [faction-strategy]
   slice: mechanic
@@ -1706,7 +1706,7 @@
 
 - id: H7A-112
   name: Graduated Löwenritter Autonomy — four-stage progression
-  source: systems/_architecture/conflict_architecture_proposal.md:68
+  source: systems/_architecture/reference/conflict_architecture_proposal.md:68
   system: faction-strategy
   touches: [settlement-governance, personnel-roster]
   slice: mechanic
@@ -1723,7 +1723,7 @@
 
 - id: H7A-113
   name: Niflhel Dissolution — faction retired, functions redistributed to settlement-level phenomena
-  source: systems/_architecture/conflict_architecture_proposal.md:103
+  source: systems/_architecture/reference/conflict_architecture_proposal.md:103
   system: faction-strategy
   touches: [personnel-roster, settlement-governance]
   slice: ruling
@@ -1738,7 +1738,7 @@
 
 - id: H7A-114
   name: Royal Assassination Fuse — one event, three divergent faction-restructuring outcomes
-  source: systems/_architecture/conflict_architecture_proposal.md:85
+  source: systems/_architecture/reference/conflict_architecture_proposal.md:85
   system: faction-strategy
   touches: [personnel-roster]
   slice: mechanic
@@ -1754,7 +1754,7 @@
 
 - id: H7A-115
   name: Tensions Deck (rescoped to 6 cards, draw 1)
-  source: systems/_architecture/conflict_architecture_proposal.md:119
+  source: systems/_architecture/reference/conflict_architecture_proposal.md:119
   system: faction-strategy
   touches: [settlement-governance]
   slice: content
@@ -1768,7 +1768,7 @@
 
 - id: H7A-116
   name: Aggregate-Up Transform — faction stats are read-only aggregates, never write targets
-  source: systems/_architecture/propagation_spec_v1.md:145
+  source: systems/_architecture/reference/propagation_spec_v1.md:145
   system: faction-strategy
   touches: [settlement-governance, cross-scale-plumbing]
   slice: ruling
@@ -1785,7 +1785,7 @@
 
 - id: H7A-117
   name: A Key targeting a faction observer must carry empty stat_deltas
-  source: systems/_architecture/propagation_spec_v1.md:179
+  source: systems/_architecture/reference/propagation_spec_v1.md:179
   system: faction-strategy
   touches: [cross-scale-plumbing]
   slice: ruling
@@ -1799,7 +1799,7 @@
 
 - id: H7A-118
   name: "OF-7 — deferred-apply target amendment, RATIFIED"
-  source: systems/_architecture/propagation_spec_v1.md:16
+  source: systems/_architecture/reference/propagation_spec_v1.md:16
   system: cross-scale-plumbing
   touches: [faction-strategy, settlement-governance]
   slice: ruling
@@ -1815,7 +1815,7 @@
 
 - id: H7A-119
   name: D.6 double-count risk on the up/down aggregation loop, HIGH PRIORITY unruled
-  source: systems/_architecture/propagation_spec_v1.md:260
+  source: systems/_architecture/reference/propagation_spec_v1.md:260
   system: faction-strategy
   touches: [settlement-governance]
   slice: gap
@@ -1829,7 +1829,7 @@
 
 - id: H7A-120
   name: The eight cross-scale down-seams closure worklist
-  source: systems/_architecture/propagation_spec_v1.md:241
+  source: systems/_architecture/reference/propagation_spec_v1.md:241
   system: cross-scale-plumbing
   touches: [faction-strategy, settlement-governance, personnel-roster]
   slice: gap
@@ -1844,7 +1844,7 @@
 
 - id: H7A-121
   name: The one-Key-N-targets fan-out rule
-  source: systems/_architecture/propagation_spec_v1.md:228
+  source: systems/_architecture/reference/propagation_spec_v1.md:228
   system: cross-scale-plumbing
   touches: [faction-strategy, territory-world]
   slice: ruling
@@ -1858,7 +1858,7 @@
 
 - id: H7A-122
   name: "Stability Crisis hysteresis (ED-749) is ruled but the sim doesn't comply"
-  source: systems/_architecture/propagation_spec_v1.md:353
+  source: systems/_architecture/reference/propagation_spec_v1.md:353
   system: faction-strategy
   touches: [settlement-governance]
   slice: gap
@@ -1874,7 +1874,7 @@
 
 - id: H7A-123
   name: Church settlement infrastructure — four independent axes
-  source: systems/_architecture/campaign_architecture_v30.md:12
+  source: systems/_architecture/reference/campaign_architecture_v30.md:12
   system: settlement-governance
   touches: [faction-strategy]
   slice: mechanic
@@ -1890,7 +1890,7 @@
 
 - id: H7A-124
   name: CI=100 Mass Seizure Declaration
-  source: systems/_architecture/campaign_architecture_v30.md:39
+  source: systems/_architecture/reference/campaign_architecture_v30.md:39
   system: faction-strategy
   touches: [settlement-governance, territory-world]
   slice: mechanic
@@ -1905,7 +1905,7 @@
 
 - id: H7A-125
   name: RM identity ruling — Community Organizing is political, not Thread-mechanical
-  source: systems/_architecture/campaign_architecture_v30.md:51
+  source: systems/_architecture/reference/campaign_architecture_v30.md:51
   system: faction-strategy
   slice: ruling
   statement: >-
@@ -1918,7 +1918,7 @@
 
 - id: H7A-126
   name: Phased Altonian invasion (IP escalation)
-  source: systems/_architecture/campaign_architecture_v30.md:153
+  source: systems/_architecture/reference/campaign_architecture_v30.md:153
   system: faction-strategy
   touches: [territory-world]
   slice: mechanic
@@ -1934,7 +1934,7 @@
 
 - id: H7A-127
   name: Three named Altonian repulsion paths
-  source: systems/_architecture/campaign_architecture_v30.md:165
+  source: systems/_architecture/reference/campaign_architecture_v30.md:165
   system: faction-strategy
   touches: [territory-world]
   slice: mechanic
@@ -1950,7 +1950,7 @@
 
 - id: H7A-128
   name: Elske residency / Löwenritter autonomy null-intersection ruling
-  source: systems/_architecture/campaign_architecture_v30.md:177
+  source: systems/_architecture/reference/campaign_architecture_v30.md:177
   system: faction-strategy
   touches: [personnel-roster]
   slice: gap
@@ -1966,7 +1966,7 @@
 
 - id: H7A-129
   name: Five Warden paths to political relevance
-  source: systems/_architecture/campaign_architecture_v30.md:208
+  source: systems/_architecture/reference/campaign_architecture_v30.md:208
   system: faction-strategy
   touches: [personnel-roster]
   slice: mechanic
@@ -1982,7 +1982,7 @@
 
 - id: H7A-130
   name: Early-game ignition analysis is entirely superseded
-  source: systems/_architecture/early_game_ignition_analysis.md:9
+  source: systems/_architecture/reference/early_game_ignition_analysis.md:9
   system: faction-strategy
   touches: [settlement-governance]
   slice: gap
@@ -1997,11 +1997,11 @@
     mechanism historical taxonomy is retained as valid reference material even though the mechanical
     proposals built on it are dead.
   status: superseded
-  status_evidence: "systems/_architecture/conflict_architecture_proposal.md:1 (Supersedes line) and its 'What's Cut' table"
+  status_evidence: "systems/_architecture/reference/conflict_architecture_proposal.md:1 (Supersedes line) and its 'What's Cut' table"
 
 - id: H7A-131
   name: New Key types proposed for major settlement/world state-transition events
-  source: systems/_architecture/key_echo_armature_v1.md:178
+  source: systems/_architecture/reference/key_echo_armature_v1.md:178
   system: settlement-governance
   touches: [faction-strategy, territory-world]
   slice: gap
@@ -2017,7 +2017,7 @@
 
 - id: H7A-132
   name: "ED-SE-0002 Accord-stacking fork, deferred to SE lane, not this document's ruling"
-  source: systems/_architecture/key_echo_armature_v1.md:255
+  source: systems/_architecture/reference/key_echo_armature_v1.md:255
   system: settlement-governance
   touches: [faction-strategy]
   slice: gap
@@ -2032,7 +2032,7 @@
 
 - id: H7A-133
   name: ER-2 resolution-band symmetry adopted across combat/contest kernels
-  source: systems/_architecture/key_echo_armature_v1.md:280
+  source: systems/_architecture/reference/key_echo_armature_v1.md:280
   system: resolution-kernel
   slice: ruling
   statement: >-
@@ -2047,7 +2047,7 @@
 
 - id: H7A-134
   name: The Key primitive — universal event schema
-  source: systems/_architecture/key_substrate_v30.md:31
+  source: systems/_architecture/reference/key_substrate_v30.md:31
   system: cross-scale-plumbing
   slice: primitive
   statement: >-
@@ -2062,7 +2062,7 @@
 
 - id: H7A-135
   name: The 4-axis Conviction/symbolic-dimension space
-  source: systems/_architecture/key_substrate_v30.md:127
+  source: systems/_architecture/reference/key_substrate_v30.md:127
   system: personnel-roster
   touches: [cross-scale-plumbing]
   slice: primitive
@@ -2079,7 +2079,7 @@
 
 - id: H7A-136
   name: "PP-686 faction integration via Keys — L/PS and Mission/Cascade triggers"
-  source: systems/_architecture/key_substrate_v30.md:490
+  source: systems/_architecture/reference/key_substrate_v30.md:490
   system: faction-strategy
   touches: [personnel-roster]
   slice: process
@@ -2094,7 +2094,7 @@
 
 - id: H7A-137
   name: Domain Action outcome Key family — five subtypes classify every strategic action
-  source: systems/_architecture/key_type_registry_v30.md:187
+  source: systems/_architecture/reference/key_type_registry_v30.md:187
   system: faction-strategy
   slice: derivative
   statement: >-
@@ -2110,7 +2110,7 @@
 
 - id: H7A-138
   name: state_transition family — Standing, Coup, and Succession Key types
-  source: systems/_architecture/key_type_registry_v30.md:630
+  source: systems/_architecture/reference/key_type_registry_v30.md:630
   system: personnel-roster
   touches: [faction-strategy]
   slice: primitive
@@ -2126,7 +2126,7 @@
 
 - id: H7A-139
   name: Four new settlement/world-state Key types registered but zero live emit sites
-  source: systems/_architecture/key_type_registry_v30.md:464
+  source: systems/_architecture/reference/key_type_registry_v30.md:464
   system: settlement-governance
   touches: [faction-strategy, territory-world]
   slice: gap
@@ -2142,7 +2142,7 @@
 
 - id: H7A-140
   name: victory_v30's CANONICAL status for §5 contradicts module_contracts.yaml's gap_note
-  source: systems/_architecture/key_type_registry_v30.md:521
+  source: systems/_architecture/reference/key_type_registry_v30.md:521
   system: faction-strategy
   touches: [territory-world]
   slice: gap
@@ -2156,7 +2156,7 @@
 
 - id: H7A-141
   name: scene.accord_echo is wired end-to-end but organically dormant
-  source: systems/_architecture/key_type_registry_v30.md:969
+  source: systems/_architecture/reference/key_type_registry_v30.md:969
   system: settlement-governance
   touches: [faction-strategy]
   slice: gap
@@ -2172,7 +2172,7 @@
 
 - id: H7A-142
   name: "T-07 Turmoil → Accord Erosion → Governance Collapse"
-  source: systems/_architecture/throughlines_complete.md:57
+  source: systems/_architecture/reference/throughlines_complete.md:57
   system: settlement-governance
   touches: [faction-strategy, territory-world]
   slice: process
@@ -2187,7 +2187,7 @@
 
 - id: H7A-143
   name: "T-15 Player Progression and T-25 Generational Arc"
-  source: systems/_architecture/throughlines_complete.md:126
+  source: systems/_architecture/reference/throughlines_complete.md:126
   system: personnel-roster
   touches: [faction-strategy]
   slice: process
@@ -2201,7 +2201,7 @@
 
 - id: H7A-144
   name: "T-20 The Two Contests — structurally unresolvable resource competition"
-  source: systems/_architecture/throughlines_complete.md:170
+  source: systems/_architecture/reference/throughlines_complete.md:170
   system: faction-strategy
   touches: [territory-world]
   slice: ruling
@@ -2216,7 +2216,7 @@
 
 - id: H7A-145
   name: This unratified proposal's Domain Echo Reference Table conflicts with the later ratified table
-  source: systems/_architecture/integration_proposal_v30.md:290
+  source: systems/_architecture/reference/integration_proposal_v30.md:290
   system: faction-strategy
   slice: gap
   statement: >-
@@ -2232,7 +2232,7 @@
 
 - id: H7A-146
   name: Counselor Negotiation Output (unratified)
-  source: systems/_architecture/integration_proposal_v30.md:174
+  source: systems/_architecture/reference/integration_proposal_v30.md:174
   system: faction-strategy
   touches: [personnel-roster]
   slice: gap
@@ -2246,7 +2246,7 @@
 
 - id: H7A-147
   name: Parliamentary Intent scene action (unratified)
-  source: systems/_architecture/integration_proposal_v30.md:190
+  source: systems/_architecture/reference/integration_proposal_v30.md:190
   system: faction-strategy
   touches: [personnel-roster]
   slice: gap
@@ -2261,7 +2261,7 @@
 
 - id: H7A-148
   name: Occupation state generates a distinct Resistance Scene subtype (unratified)
-  source: systems/_architecture/integration_proposal_v30.md:182
+  source: systems/_architecture/reference/integration_proposal_v30.md:182
   system: faction-strategy
   touches: [territory-world, personnel-roster]
   slice: gap
@@ -2275,7 +2275,7 @@
 
 - id: H7A-149
   name: "'What must not change' constraints binding on faction/territory design"
-  source: systems/_architecture/integration_proposal_v30.md:356
+  source: systems/_architecture/reference/integration_proposal_v30.md:356
   system: faction-strategy
   touches: [territory-world]
   slice: ruling
@@ -2291,7 +2291,7 @@
 
 - id: H7A-150
   name: The zoom-system architecture supersedes three-mode branching (CANONICAL no-GM collapse)
-  source: systems/_architecture/videogame_mode_spec.md:10
+  source: systems/_architecture/reference/videogame_mode_spec.md:10
   system: cross-scale-plumbing
   slice: ruling
   statement: >-
@@ -2306,7 +2306,7 @@
 
 - id: H7A-151
   name: "scale_transitions_v30's literal GM language was never run through this document's own resolution register"
-  source: systems/_architecture/videogame_mode_spec.md:159
+  source: systems/_architecture/reference/videogame_mode_spec.md:159
   system: cross-scale-plumbing
   slice: gap
   statement: >-
@@ -2320,7 +2320,7 @@
 
 - id: H7A-152
   name: Faction/NPC-behavior mode collapse
-  source: systems/_architecture/videogame_mode_spec.md:112
+  source: systems/_architecture/reference/videogame_mode_spec.md:112
   system: faction-strategy
   touches: [personnel-roster, npc-social]
   slice: ruling
@@ -2334,7 +2334,7 @@
 
 - id: H7A-153
   name: "This document's '36 settlements' figure predates the later 37-settlement canonical count"
-  source: systems/_architecture/videogame_mode_spec.md:138
+  source: systems/_architecture/reference/videogame_mode_spec.md:138
   system: settlement-governance
   touches: [territory-world]
   slice: gap
@@ -2348,7 +2348,7 @@
 
 - id: H7A-154
   name: The auto/manual resolution fidelity doctrine — calibration constraint and forks
-  source: systems/_architecture/auto_manual_resolution_duality_v1.md:1
+  source: systems/_architecture/reference/auto_manual_resolution_duality_v1.md:1
   system: cross-scale-plumbing
   touches: [faction-strategy]
   slice: ruling
@@ -2365,7 +2365,7 @@
 
 - id: H7A-155
   name: Calibration constraint (fork C, still open)
-  source: systems/_architecture/auto_manual_resolution_duality_v1.md:59
+  source: systems/_architecture/reference/auto_manual_resolution_duality_v1.md:59
   system: cross-scale-plumbing
   touches: [faction-strategy]
   slice: gap
@@ -2381,7 +2381,7 @@
 
 - id: H7A-156
   name: The shipped Parliamentary auto-resolver violates the slate-specificity principle
-  source: systems/_architecture/auto_manual_resolution_duality_v1.md:53
+  source: systems/_architecture/reference/auto_manual_resolution_duality_v1.md:53
   system: faction-strategy
   slice: gap
   statement: >-
@@ -2395,7 +2395,7 @@
 
 - id: H7A-157
   name: Generational Transition — full PRESERVE/TRANSFORM/RESET/BREAK/TRANSFER taxonomy
-  source: systems/_architecture/generational_transition_v30.md:9
+  source: systems/_architecture/reference/generational_transition_v30.md:9
   system: personnel-roster
   touches: [faction-strategy]
   slice: process
@@ -2413,7 +2413,7 @@
 
 - id: H7A-158
   name: Tensions Deck pairwise validation — all 15 combinations pass
-  source: systems/_architecture/tensions_pair_validation.md:1
+  source: systems/_architecture/reference/tensions_pair_validation.md:1
   system: faction-strategy
   slice: gap
   statement: >-
@@ -2427,7 +2427,7 @@
 
 - id: H7A-159
   name: PP-675 Three-Scale Resolution Model is a third rival to the corpus's territory-hierarchy models
-  source: systems/_architecture/session_a_spec_patches.md:9
+  source: systems/_architecture/reference/session_a_spec_patches.md:9
   system: territory-world
   touches: [settlement-governance]
   slice: gap
@@ -2444,7 +2444,7 @@
 
 - id: H7A-160
   name: Bishop Appointment full degree table (PP-675)
-  source: systems/_architecture/session_a_spec_patches.md:41
+  source: systems/_architecture/reference/session_a_spec_patches.md:41
   system: faction-strategy
   touches: [settlement-governance]
   slice: gap
@@ -2460,7 +2460,7 @@
 
 - id: H7A-161
   name: RM Settlement Emergence threshold hardened to Order=0 exactly
-  source: systems/_architecture/session_a_spec_patches.md:99
+  source: systems/_architecture/reference/session_a_spec_patches.md:99
   system: faction-strategy
   touches: [settlement-governance]
   slice: formula
@@ -2475,7 +2475,7 @@
 
 - id: H7A-162
   name: Faction-splinter succession asset split — Influence now splits 60/40 alongside Mandate
-  source: systems/_architecture/session_a_spec_patches.md:120
+  source: systems/_architecture/reference/session_a_spec_patches.md:120
   system: faction-strategy
   touches: [personnel-roster]
   slice: formula
@@ -2490,7 +2490,7 @@
 
 - id: H7A-163
   name: Secession candidate restriction — subnational-held settlements cannot secede further
-  source: systems/_architecture/session_a_spec_patches.md:81
+  source: systems/_architecture/reference/session_a_spec_patches.md:81
   system: faction-strategy
   touches: [territory-world]
   slice: mechanic
@@ -2504,7 +2504,7 @@
 
 - id: H7A-164
   name: NPC Recruitment procedure
-  source: systems/_architecture/complete_systems_reference.md:122
+  source: systems/_architecture/reference/complete_systems_reference.md:122
   system: personnel-roster
   touches: [faction-strategy]
   slice: mechanic
@@ -2519,7 +2519,7 @@
 
 - id: H7A-165
   name: Crown Decree Mandate-gate patch (PP-NPC-01)
-  source: systems/_architecture/complete_systems_reference.md:54
+  source: systems/_architecture/reference/complete_systems_reference.md:54
   system: faction-strategy
   touches: [personnel-roster]
   slice: mechanic
@@ -2532,7 +2532,7 @@
 
 - id: H7A-166
   name: Territory-scale value ranges (0-4, balanced at 2) — possible collision with settlement-layer's 0-5/0-7 ranges
-  source: systems/_architecture/canonical_registry.md:58
+  source: systems/_architecture/reference/canonical_registry.md:58
   system: territory-world
   touches: [settlement-governance]
   slice: gap
@@ -2550,7 +2550,7 @@
 
 - id: H7A-167
   name: Faction card-hand system — per-faction domain-action decks with expertise bonus
-  source: systems/_architecture/canonical_registry.md:117
+  source: systems/_architecture/reference/canonical_registry.md:117
   system: faction-strategy
   slice: primitive
   statement: >-
@@ -2562,7 +2562,7 @@
 
 - id: H7A-168
   name: Faction-specific personnel/political tracks roster
-  source: systems/_architecture/canonical_registry.md:128
+  source: systems/_architecture/reference/canonical_registry.md:128
   system: faction-strategy
   touches: [personnel-roster]
   slice: primitive
@@ -2575,7 +2575,7 @@
 
 - id: H7A-169
   name: Only 1 of 8 declared cross-scale handoff pairs is production-reachable
-  source: systems/_architecture/_architecture_flow_skeleton_v1.md:193
+  source: systems/_architecture/reference/_architecture_flow_skeleton_v1.md:193
   system: cross-scale-plumbing
   touches: [faction-strategy]
   slice: gap
@@ -2590,7 +2590,7 @@
 
 - id: H7A-170
   name: The Thread Domain Echo leg has zero callers anywhere
-  source: systems/_architecture/_architecture_flow_skeleton_v1.md:41
+  source: systems/_architecture/reference/_architecture_flow_skeleton_v1.md:41
   system: faction-strategy
   slice: gap
   statement: >-
@@ -2602,7 +2602,7 @@
 
 - id: H7A-171
   name: "npc_ai.py, the engine's dedicated NPC-decision module, is a fully orphaned stub"
-  source: systems/_architecture/_architecture_flow_skeleton_v1.md:201
+  source: systems/_architecture/reference/_architecture_flow_skeleton_v1.md:201
   system: personnel-roster
   touches: [faction-strategy]
   slice: gap
@@ -2616,7 +2616,7 @@
 
 - id: H7A-172
   name: The live parliamentary vote derivation and only-one-live-termination-guard finding
-  source: systems/_architecture/_architecture_flow_skeleton_v1.md:123
+  source: systems/_architecture/reference/_architecture_flow_skeleton_v1.md:123
   system: faction-strategy
   touches: [cross-scale-plumbing]
   slice: gap
@@ -2632,7 +2632,7 @@
 
 - id: H7A-173
   name: The Church Tribunal is implemented twice, sharing canon but no code
-  source: systems/_architecture/engine_atlas_v1.md:309
+  source: systems/_architecture/reference/engine_atlas_v1.md:309
   system: faction-strategy
   touches: [social-contest, personnel-roster]
   slice: gap
@@ -2644,7 +2644,7 @@
 
 - id: H7A-174
   name: The per-settlement Mandate/Treasury pipeline has no step in the live accounting cascade
-  source: systems/_architecture/engine_atlas_v1.md:296
+  source: systems/_architecture/reference/engine_atlas_v1.md:296
   system: settlement-governance
   touches: [faction-strategy]
   slice: gap
@@ -2658,7 +2658,7 @@
 
 - id: H7A-175
   name: Two uncoordinated settlement-scale entity families built at world-gen, cross-validated by nothing
-  source: systems/_architecture/engine_atlas_v1.md:234
+  source: systems/_architecture/reference/engine_atlas_v1.md:234
   system: settlement-governance
   touches: [territory-world]
   slice: gap
@@ -2670,7 +2670,7 @@
 
 - id: H7A-176
   name: A contract-layer wiring cycle spans factions/npcs/characters/social_contest
-  source: systems/_architecture/engine_atlas_v1.md:308
+  source: systems/_architecture/reference/engine_atlas_v1.md:308
   system: faction-strategy
   touches: [personnel-roster, social-contest]
   slice: gap
@@ -2682,7 +2682,7 @@
 
 - id: H7A-177
   name: settlement_economy is a phantom module with an open retire-vs-merge decision
-  source: systems/_architecture/engine_atlas_v1.md:375
+  source: systems/_architecture/reference/engine_atlas_v1.md:375
   system: settlement-governance
   touches: [economy-accounting]
   slice: gap
@@ -2695,7 +2695,7 @@
 
 - id: H7A-178
   name: Hybrid Gap Resolutions is a pre-videogame, GM-dependent design layer
-  source: systems/_architecture/hybrid_gaps_v30.md:1
+  source: systems/_architecture/reference/hybrid_gaps_v30.md:1
   system: faction-strategy
   slice: gap
   statement: >-
@@ -2712,7 +2712,7 @@
 
 - id: H7A-179
   name: Campaign Modes (TTRPG/BG/Hybrid session structure) is GM-dependent, superseded
-  source: systems/_architecture/campaign_modes_v30.md:1
+  source: systems/_architecture/reference/campaign_modes_v30.md:1
   system: faction-strategy
   touches: [cross-scale-plumbing]
   slice: gap
@@ -2728,7 +2728,7 @@
 
 - id: H7A-180
   name: "The 'empty' §3.3 and §8 sections have unmerged, GM-dependent infill content"
-  source: systems/_architecture/scale_transitions_v30_infill.md:17
+  source: systems/_architecture/reference/scale_transitions_v30_infill.md:17
   system: cross-scale-plumbing
   touches: [social-contest]
   slice: gap

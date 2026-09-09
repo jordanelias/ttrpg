@@ -21,7 +21,7 @@ RATIFIED.** `key_substrate_v30.md` §4.1 step 4 is amended to permit a deferred-
 both flags ON to match (still caller-toggleable). The other items left open by this document
 (D.6 double-count, `decay()`, cap constants, RNG-MODEL-COLLISION, OF-HYSTERESIS-AUDIT,
 ORD-3/ORD-4) remain open — this update rules OF-7/OF-B1 only. See the ruling log in
-`designs/architecture/key_echo_armature_v1.md` §5 for the full disposition of every fork this
+`systems/_architecture/reference/key_echo_armature_v1.md` §5 for the full disposition of every fork this
 document raised.
 
 **What this is.** Workplan v5 §3 docket item **J-38**: the cross-scale propagation contract the

@@ -3121,7 +3121,7 @@ tables:
     - - Health
       - (End+6) × (MW+1), MW = min(floor(End/2)+1, 3)
       - 14–48 (cap MW=3)
-      - Total damage capacity. Non-resetting; each wound subtracts WI=(End+6). **Each wound adds a fractional Ob to the roll — NEVER a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005; reverses PP-716's −1D unification). Combat = ED-1041's bilateral channel (+0.15 Ob attacking / +0.25 Ob defending per wound); non-combat per-pool values are a follow-on calibration, flagged pending (ED-PC-0006). Equipment adds flat Health. **See `systems/_architecture/derived_stats_v30.md` §4.1 as authoritative.** (PP-716's −1D unification superseded by ED-PC-0005; PP-717 D1 MW cap)
+      - Total damage capacity. Non-resetting; each wound subtracts WI=(End+6). **Each wound adds a fractional Ob to the roll — NEVER a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005; reverses PP-716's −1D unification). Combat = ED-1041's bilateral channel (+0.15 Ob attacking / +0.25 Ob defending per wound); non-combat per-pool values are a follow-on calibration, flagged pending (ED-PC-0006). Equipment adds flat Health. **See `systems/_architecture/reference/derived_stats_v30.md` §4.1 as authoritative.** (PP-716's −1D unification superseded by ED-PC-0005; PP-717 D1 MW cap)
     - - Stamina
       - (3 × Endurance) + (2 × Spirit)
       - 5–35
@@ -3141,7 +3141,7 @@ tables:
     - - Concentration
       - (3 × Focus) + (2 × Spirit)
       - 5–35
-      - Social-contest and combat attention/composure resource, shared derivation (ED-902 coefficients; ED-901 struck the interim Focus×3 form; ED-933 params propagation). Row added 2026-07-08 (ED-IN-0029 docket, OPT-AV-7) — this table lacked a Concentration row entirely despite the quantity being load-bearing in both contest (`params/contest.md`) and combat (`systems/combat/combat_engine_v1/config.py` `CONC_FOCUS`/`CONC_SPIRIT`). **See `systems/_architecture/derived_stats_v30.md` §4 as authoritative.**
+      - Social-contest and combat attention/composure resource, shared derivation (ED-902 coefficients; ED-901 struck the interim Focus×3 form; ED-933 params propagation). Row added 2026-07-08 (ED-IN-0029 docket, OPT-AV-7) — this table lacked a Concentration row entirely despite the quantity being load-bearing in both contest (`params/contest.md`) and combat (`systems/combat/combat_engine_v1/config.py` `CONC_FOCUS`/`CONC_SPIRIT`). **See `systems/_architecture/reference/derived_stats_v30.md` §4 as authoritative.**
     - - Truth
       - 5 (starting, varies by background)
       - 0–5
@@ -7710,7 +7710,7 @@ raw:
     # Royal Assassination Fuse
 
 
-    **Source:** designs/architecture/conflict_architecture_proposal.md (CANON)
+    **Source:** systems/_architecture/reference/conflict_architecture_proposal.md (CANON)
 
     **Trigger:** Royal Crisis Tension Card (Card #1)
 
@@ -8017,7 +8017,7 @@ raw:
     # Tensions Deck
 
 
-    **Source:** designs/architecture/conflict_architecture_proposal.md (CANON)
+    **Source:** systems/_architecture/reference/conflict_architecture_proposal.md (CANON)
 
     **Purpose:** Per-game variability modifier. Settlement governance friction is the ignition system — the Tensions Deck amplifies one specific friction point per campaign.
 
@@ -9140,7 +9140,7 @@ raw:
 
     |-------|---------|-------|-------|
 
-    | Health | (End+6) × (MW+1), MW = min(floor(End/2)+1, 3) | 14–48 (cap MW=3) | Total damage capacity. Non-resetting; each wound subtracts WI=(End+6). **Each wound adds a fractional Ob to the roll — NEVER a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005; reverses PP-716''s −1D unification). Combat = ED-1041''s bilateral channel (+0.15 Ob attacking / +0.25 Ob defending per wound); non-combat per-pool values are a follow-on calibration, flagged pending (ED-PC-0006). Equipment adds flat Health. **See `systems/_architecture/derived_stats_v30.md` §4.1 as authoritative.** (PP-716''s −1D unification superseded by ED-PC-0005; PP-717 D1 MW cap) |
+    | Health | (End+6) × (MW+1), MW = min(floor(End/2)+1, 3) | 14–48 (cap MW=3) | Total damage capacity. Non-resetting; each wound subtracts WI=(End+6). **Each wound adds a fractional Ob to the roll — NEVER a −1D pool cut** (Jordan ruling 2026-07-08, ED-PC-0005; reverses PP-716''s −1D unification). Combat = ED-1041''s bilateral channel (+0.15 Ob attacking / +0.25 Ob defending per wound); non-combat per-pool values are a follow-on calibration, flagged pending (ED-PC-0006). Equipment adds flat Health. **See `systems/_architecture/reference/derived_stats_v30.md` §4.1 as authoritative.** (PP-716''s −1D unification superseded by ED-PC-0005; PP-717 D1 MW cap) |
 
     | Stamina | (3 × Endurance) + (2 × Spirit) | 5–35 | Combat action economy. Variable action costs (standard 5, heavy 8, defensive 3). Armor adds to drain per action. Take a Breath restores (End + History) × 2. (ED-694) |
 
@@ -9150,7 +9150,7 @@ raw:
 
     | Thread Fatigue | Spirit × 5 (threshold) | 5–35 | Thread action economy. Counts up from 0. Contact breaks at threshold. Variable operation costs (Pulling 5, Locking 7, Dissolution 10). Focus sets max operations per session (Focus − 1). (ED-694, replaces Contact Rounds = Focus) |
 
-    | Concentration | (3 × Focus) + (2 × Spirit) | 5–35 | Social-contest and combat attention/composure resource, shared derivation (ED-902 coefficients; ED-901 struck the interim Focus×3 form; ED-933 params propagation). Row added 2026-07-08 (ED-IN-0029 docket, OPT-AV-7) — this table lacked a Concentration row entirely despite the quantity being load-bearing in both contest (`params/contest.md`) and combat (`systems/combat/combat_engine_v1/config.py` `CONC_FOCUS`/`CONC_SPIRIT`). **See `systems/_architecture/derived_stats_v30.md` §4 as authoritative.** |
+    | Concentration | (3 × Focus) + (2 × Spirit) | 5–35 | Social-contest and combat attention/composure resource, shared derivation (ED-902 coefficients; ED-901 struck the interim Focus×3 form; ED-933 params propagation). Row added 2026-07-08 (ED-IN-0029 docket, OPT-AV-7) — this table lacked a Concentration row entirely despite the quantity being load-bearing in both contest (`params/contest.md`) and combat (`systems/combat/combat_engine_v1/config.py` `CONC_FOCUS`/`CONC_SPIRIT`). **See `systems/_architecture/reference/derived_stats_v30.md` §4 as authoritative.** |
 
     | Truth | 5 (starting, varies by background) | 0–5 | Per-character metaphysical stance — **consolidates the former Certainty Track + the character-scale piety / "religious standing" notion** (ED-IN-0075). Solmund orthodoxy (5, *Himmelenger pole*) → Thread-truth acceptance (0, *Edeyja pole*). Numeric is engine-internal — **players see the qualitative band, never the number**. The 13 Convictions are a separate value-frame system (`conviction_taxonomy_v30.md`) and are unchanged. See Truth Track section below. |
 
@@ -9678,7 +9678,7 @@ raw:
     ## ~~Coup Counter (Löwenritter)~~ STRUCK (ED-781 — supersedes per ED-589)
 
 
-    Per `designs/architecture/conflict_architecture_proposal.md §Graduated Löwenritter Autonomy` and `designs/provincial/clock_registry_v30.md L30 Löwenritter Autonomy`, the Coup Counter binary mechanism is replaced by a four-stage progression: **Loyal → Restless → Autonomous → Split** (track-state, not numeric counter). Triggers, Crown effects, and reversibility rules are in `conflict_architecture_proposal.md` L67-L82. Above §59 of this file (Löwenritter Graduated Autonomy entry) is the canonical reference for params lookup. The legacy Coup Counter spec is preserved in `deprecated/` per editorial policy.
+    Per `systems/_architecture/reference/conflict_architecture_proposal.md §Graduated Löwenritter Autonomy` and `designs/provincial/clock_registry_v30.md L30 Löwenritter Autonomy`, the Coup Counter binary mechanism is replaced by a four-stage progression: **Loyal → Restless → Autonomous → Split** (track-state, not numeric counter). Triggers, Crown effects, and reversibility rules are in `conflict_architecture_proposal.md` L67-L82. Above §59 of this file (Löwenritter Graduated Autonomy entry) is the canonical reference for params lookup. The legacy Coup Counter spec is preserved in `deprecated/` per editorial policy.
 
 
     Migration note: prior canonical text was "Counter never decrements. At 3: coup fires at next accounting." This is replaced by stage-based progression where stages 1-3 are reversible and only stage 4 (Split) is permanent. References to "Coup Counter" in NPC priority trees (`params/bg/npc_priority_trees.md` L42, L86, L149, L197) refer to the legacy track and should be migrated to "Löwenritter Autonomy stage" in a future cleanup pass.

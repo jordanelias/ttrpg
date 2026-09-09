@@ -1,7 +1,7 @@
 """
 systems/threadwork/sim/co_movement.py — Co-Movement Version C with 15 cards (ED-577)
 
-Canon source: systems/threadwork/threadwork_v30.md Part 4 (Co-Movement)
+Canon source: systems/threadwork/reference/threadwork_v30.md Part 4 (Co-Movement)
 
 Implements the 15-card canonical deck (CM-01 through CM-15) per §4.3
 ED-577. CM-16/17/18 are Mending-specific additions per §7.1; not
