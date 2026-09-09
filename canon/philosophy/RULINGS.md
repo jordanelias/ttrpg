@@ -1154,3 +1154,44 @@ without a warrant:**
   configuration, differently organized, because it is the same being.
 
 *Applied:* §2.1, §9.3 (new row).
+
+### R-12 — Equilibrium, and where the orientation toward it belongs
+
+> "equilibrium is a state whereby elements are in stable perdurant balance"
+
+> "the world is always tending towards equilibrium because that is what the world does because the
+> world worlds"
+
+> "threads as conditions of possibility and substrate tend towards equilibrium, ie are naturally and
+> fundamentally oriented towards being in equilibrium with all other threads"
+
+**And a fourth, correcting how I first wrote the third:**
+
+> "'tending' is not an action or verb in this context"
+
+**What this closes.** Both read-only passes converged on the tendency's location as a live defect, and
+it was the editor's doing: §3.4 said the tendency is *"a property of **configuration-space**"*, which
+is a gloss on D-2, not D-2's words. The author's Locked Zone ruling had already made it untenable — a
+fact about which arrangements could harmonize is not the sort of thing that stops being true in one
+province, and §8.5 requires exactly that.
+
+**The orientation belongs to the threads.** They are naturally and fundamentally oriented toward
+being in equilibrium with all other threads. Not a property of the equilibrium, not of the range of
+possible arrangements.
+
+**§1.5 and P-07 survive, and more cleanly than before.** The ground supplies; what is supplied is
+oriented toward the rest of what there is. **Supply has no direction; threads do.** The forbidden
+formulation — the ground's spooling having a tendency — stays forbidden.
+
+**Tending is not an action.** Threads do not *perform* it. Being oriented toward equilibrium is what
+threads are **like** — their character, not their behaviour. This is the same distinction the suite
+draws for rendering, and I had written the relocation in action-language before being corrected. §3.4
+now carries the point explicitly so the next reader does not restore the verb.
+
+**Explanation stops here, and the author says where.** *The world worlds.* The formulation is
+Heidegger's (*die Welt weltet*) and is used as he used it: the point at which explanation properly
+ends, because what is described is not a mechanism inside the world but the way the world is at all.
+§0.3 should record the borrowing.
+
+*Applied:* §3.4 (opening rewritten; the configuration-space gloss struck in place; action-language
+swept), §9.3 (new *Equilibrium* row; the futural-potential-legible row corrected).

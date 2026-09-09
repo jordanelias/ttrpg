@@ -80,7 +80,7 @@ Three collisions in the source suite, recorded because each cost something:
 - **Providence** — named a mode of emergence in one document and the stabilizing tendency in another.
   **Ruled 2026-09-07: kept for the mode, retired from the tendency.** The word imports foresight, and
   that is now deliberate: it sits on an accident that survivors named, not on a structure the framework
-  claims. The tendency is the futural-potential-legible (§3.4), which is what it is.
+  claims. Threads are oriented toward equilibrium (§3.4), which is what they are like.
 
 ## §9.3 Vocabulary reference
 
@@ -106,7 +106,8 @@ Three collisions in the source suite, recorded because each cost something:
 | **Orphaned configuration** | A present state whose causal history has been removed. Threadcut at the operational level; decays because temporal depth is accumulated spooling and the accumulation is gone. |
 | **Temporal Disjunction** | A configuration pulled out of its becoming and thereby out of step with everything not pulled. A disjunct in temporality is a disjunct in threads. Local and witnessed, not a private gap. Produced by operations only. Distinct from Coherence's temporal facet. |
 | **Reality-strain** | Substrate tension produced by holding a configuration off the futural-potential-legible. The externalized form of what would otherwise be Coherence cost. |
-| **The futural-potential-legible** | The equilibrium configurations tend toward: the state in which they stand in harmony, needing no sustaining. *Futural* — ahead, not a return. *Potential* — not yet actual. *Legible* — renderable. A property of configuration-space, not of the ground; §1.5 is untouched. See §3.4. |
+| **Equilibrium** | A state whereby elements are in **stable perdurant balance** (ruled 2026-09-09). In thread terms: each holds its shape without being held against the others. |
+| **The futural-potential-legible** | The equilibrium threads are oriented toward. *Futural* — ahead, not a return. *Potential* — not yet actual. *Legible* — renderable. **The orientation belongs to the threads**, which are naturally and fundamentally oriented toward being in equilibrium with all other threads (ruled 2026-09-09); it is not a property of the ground, so §1.5 is untouched, and it is **not an action threads perform**. See §3.4. |
 | **Imbrication** | How a thread is bound into or separated from others. A being *is* threads, so its imbrication is its position in the weave — and what is given to it follows from that position. Acting alters it. See §3.5. |
 | **Providence** | The second mode of emergence: a configuration with enough internal organization to persist temporarily, its organization accidental, persisting temporarily on accidental organization. An event, not an entity. The name is the survivors', and it is ironic — nothing provided it. |
 | **Gap** | An absence where the fabric requires something: a standing breach in the boundary (whose edges are *Gap margins*), or the absence left where a configuration was removed rather than changed. Both senses are one — something is missing and the surrounding threads stand at the edge of nothing. Distinct from a Locked Zone, though a large Gap will produce one around itself. See §8.4a. |

@@ -112,8 +112,20 @@ rendering would not be the originary premise §3.1 makes it. It is rendering's l
 
 ## §3.4 The stabilizing tendency: the futural-potential-legible
 
-**Configurations tend toward an equilibrium in which they stand in harmony with one another. That
-equilibrium is the futural-potential-legible, and the tendency belongs to it.**
+**Equilibrium is a state whereby elements are in stable perdurant balance.** *(Ruled 2026-09-09.)*
+
+**The tendency toward it belongs to the threads.** *(Ruled 2026-09-09.)* Threads — as substrate and as
+condition of possibility both — are **naturally and fundamentally oriented toward being in equilibrium
+with all other threads**. It is not a property of the equilibrium, and not a property of the range of
+arrangements that could obtain; it is what threads are like.
+
+**And it needs no further ground: the world is always tending toward equilibrium because that is what
+the world does, because the world worlds.** *(Ruled 2026-09-09. The formulation is Heidegger's —
+*die Welt weltet* — and is used here as he used it: the point at which explanation properly stops,
+because what is being described is not a mechanism inside the world but the way the world is at all.
+§0.3 records the borrowing.)*
+
+**The equilibrium those threads are oriented toward is the futural-potential-legible.**
 
 Three terms, each doing work:
 
@@ -131,10 +143,20 @@ shape without being held against the others — when nothing in the set requires
 
 **Not the ground's.** §1.5 forbids the ground agency, intention, responsiveness or direction. A
 spooling that "would resume" a prior configuration is responsive to disruption, and disclaiming
-active resistance does not help — the objection is to directedness. The futural-potential-legible is
-not a property of the ground at all. It is a property of **configuration-space**: given a set of
-configurations, some future arrangements are harmonious and reachable and most are not. Nothing
-intends this. It is the shape of what can coherently obtain.
+active resistance does not help — the objection is to directedness. **The orientation is the
+threads', not the spooling's**, and that is what keeps §1.5 and P-07 intact: the ground supplies, and
+what is supplied is oriented toward the rest of what there is. Supply has no direction; threads do.
+
+*(An earlier draft of this paragraph made the tendency "a property of configuration-space". That was
+the editor's gloss, and it was struck 2026-09-09 for a reason the author's Locked Zone ruling had
+already implied: a fact about which arrangements could harmonize is not the sort of thing that stops
+being true in one province, and §8.5 requires the tending to stop in one province while the threads
+remain. What can be precluded regionally is what the threads are *oriented toward*.)*
+
+⚠ **Tending is not an action.** *(Ruled 2026-09-09.)* Threads do not *perform* a tending, and nothing
+in this section should be read as describing an activity they carry out. Being oriented toward
+equilibrium is what threads are **like** — their character, not their behaviour. The same distinction
+the suite draws for rendering (§3.1): real, and not a thing anyone or anything does.
 
 **Not the rendering's, either — but legibility is where the two meet.** The rendering has a *capacity
 limit*: it is a finite process and can hold only what is determinate and stable (§5.2). That limit is
@@ -149,11 +171,11 @@ attractor without owning it.
 region could not be restorative — spooling would never resume the prior configuration there, so there
 would be nothing to accelerate. On this account the diagnosis is different and better: **in a Locked
 Zone, becoming has been precluded, and the threads are no longer moving toward an equilibrium at all**
-(§8.5). The draw does not operate. Nothing is going anywhere.
+(§8.5). Nothing there is oriented anywhere.
 
-**And Mending is therefore the restoration of becoming** — restarting the movement toward equilibrium
-for a region in which it had stopped. Not acceleration of the inevitable, and not repair of a
-structure: the re-opening of a tending. That is a better thing for a Warden to be doing, and it is
+**And Mending is therefore the restoration of becoming** — restoring, to a region that had lost it,
+the orientation toward equilibrium. Not acceleration of the inevitable, and not repair of a
+structure: the restoration of an orientation. That is a better thing for a Warden to be doing, and it is
 what §6.6 builds the operation-type taxonomy on.
 
 **Two faces in practice.** For a being, the nearest thing to the attractor is its own layer-two
