@@ -225,13 +225,28 @@ band and holding oneself further outside it are the same accomplishment.
 > *"It's like holding an extendable item between two hands. Ordinarily the item is only a foot apart,
 > but then you can pull it and you discover there is more to see."* *(The author's, offered with the
 > caveat that it is not the best analogy. Kept because its one point is the load-bearing one: what is
-> gained is **more of the same thread**, not more threads.)*
+> gained is **more of the same thread**, not more threads. Read it for that alone — threads are not
+> literal threads and nothing here is being physically drawn out, §2.1.)*
 
 So the two are not separate questions with separate answers. Sensing further outside the human band
 and having more of a thread available to work with are the same development from two sides, which is
 what D-7 says: *"by being able to hold more, you are able to bear more as you are better able to
 imbricate yourself with threads."* Reach is how far one can sense; imbrication is how much of what is
 sensed one can purposefully engage.
+
+**And that is what reach is for.** *(Ruled 2026-09-09.)*
+
+> **The more of a thread you can see, the more you can manipulate — both substrate and conditions of
+> possibility — along those three constitutive axes.**
+
+Threads are both at once (§2.1), so working a thread is never only moving something about. It is
+also working on **what makes things possible**.
+
+**And the conditions of possibility include the three axes themselves.** *(Ruled 2026-09-09.)*
+Temporality, actuality and intelligibility are not merely the coordinates along which a thread is
+moved; they are among what makes anything possible for that thread at all. So an operation does not
+only move a configuration *along* them — it can work on them. That is the whole of what an operation
+reaches (§6.1), and it is why reach and capability are one measure rather than two.
 
 ⚠ *An earlier draft of this paragraph — mine, the same day — said the two were "different questions"
 and that "two beings identically imbricated can differ in sensitivity". Neither was ruled and both are

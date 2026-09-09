@@ -18,6 +18,16 @@ condition is met with nothing to suspend, so their self-maintenance is threadwor
 default. That is why §7.6 can say every moment of such a being's existence is an operation. The
 criterion is unchanged; it has a trivial case.)*
 
+**What an operation reaches.** *(Ruled 2026-09-09.)* Because threads are both the substrate and the
+condition of possibility (§2.1), an operation works on **both at once** — and **how much of either it
+can reach is set by how much of the thread the practitioner can see** (§5.5).
+
+**The conditions of possibility include the three axes themselves.** Temporality, actuality and
+intelligibility are not only the coordinates along which a configuration is moved; they are among
+what makes anything possible for it. So an operation is not a rearrangement within fixed conditions —
+**it can work on the conditions**, which is why threadwork alters what is possible and not merely what
+obtains.
+
 That is the criterion, and it is not arbitrary. It draws the line where the framework's own structure
 already draws it:
 

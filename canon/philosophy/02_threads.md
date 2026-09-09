@@ -8,6 +8,13 @@
 
 ## §2.1 The dual role, and the doublet it creates
 
+**Before anything else: these are not literal threads.** *(Ruled 2026-09-09.)* The word **gestures
+toward their essence**; it does not describe their form. Nothing about their nature follows from the
+picture — not length, not ends, not being string-like, not lying alongside one another in a physical
+weave. The suite's imagery throughout (*woven*, *fabric*, *tied in*, *frayed*, *tear*) is the same
+gesture extended, and is to be read the same way. Where an analogy in this suite is physical, it is
+illustrating a relation, never reporting a shape.
+
 Threads are both a noun and a not-noun. They are simultaneously **the condition of possibility** for
 being able to render being as being, and **the constitutive ground** upon which an entity is able to
 be a being to be rendered at all.

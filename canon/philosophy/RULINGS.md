@@ -1350,3 +1350,50 @@ Clearer than the window for the point that matters, and it fixes what the window
 **the band widens in both directions** from where ordinary human sensing sits. Reach is not a
 direction one presses further along; it is a span opening out. §5.5 carries both, the window for the
 vantage and the colour range for the band.
+
+### R-16 — What reach is for
+
+> "the point is that the more of a thread you can see, the more you can manipulate both substrate and
+> conditions of possibility along those three constitutive axes"
+
+**This is the operational payoff of R-2, R-13 and R-15 together, and the suite had never stated it.**
+Threads are both the substrate and the condition of possibility (R-2). So working a thread is never
+only moving something about — it is also working on **what makes things possible**. And how much of
+either an operation can reach is set by how much of the thread the practitioner can see.
+
+Which is why reach and capability are one measure and not two: not because perception is *useful* for
+operating, but because what one can operate on is what one can see of the thread.
+
+*Applied:* §5.5 (close of the reach/imbrication passage), §6.1 (what an operation reaches).
+
+**R-16 addendum — the axes are themselves conditions of possibility.**
+
+> "the conditions of possibility include the three axes"
+
+I had written R-16 as manipulation *along* the three axes, treating them as coordinates. They are not
+only coordinates: **temporality, actuality and intelligibility are among the conditions of possibility
+themselves.** So an operation is not a rearrangement within fixed conditions — it can work on the
+conditions. That is why threadwork alters what is *possible* and not merely what obtains.
+
+*Applied:* §5.5, §6.1 — both restated.
+
+### R-17 — Threads are not literal threads
+
+> "also these are not literal threads"
+
+> "it's just a term that gestures towards their essence"
+
+**The word gestures toward their essence; it does not describe their form.** Nothing follows from the
+picture — not length, not ends, not being string-like, not lying alongside one another in a physical
+weave.
+
+**This binds the suite's whole imagery**, which is extensive and was never qualified: *woven*,
+*fabric*, *tied in*, *frayed*, *tear*, *knot*, *wrap*, *spool*. All of it is the same gesture extended.
+Where an analogy in this suite is physical, it illustrates a relation and does not report a shape.
+
+⚠ **Including the analogies recorded earlier today.** The extendable-item image is the most physical
+thing in the suite and now carries a caution at its site: read it for its one point — *more of the
+same thread, not more threads* — and not as anything being drawn out.
+
+*Applied:* §2.1 (stated first, before the dual role), §9.3 (Threads row), §5.5 (caution at the
+analogy).
