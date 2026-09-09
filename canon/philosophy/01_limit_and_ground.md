@@ -116,8 +116,9 @@ Three formulations that violate it, all of which appeared in the source suite:
 
 The third is the subtle one and it did real damage. Disclaiming *active resistance* is not enough: a
 spooling that resumes prior configurations after a disruption is responsive to disruption, whether
-or not anything wills it. §3.4 relocates that tendency to where the framework's own earlier text put
-it — in the rendering — and §6.6 rebuilds the operation-type taxonomy on the relocated version.
+or not anything wills it. §3.4 relocates that tendency to configuration-space — the
+futural-potential-legible, which is neither the ground's nor the rendering's — and §6.6 rebuilds the
+operation-type taxonomy on the relocated version.
 
 **A note on what this constraint is not.** It is not a denial that the ground gives. Spooling is
 retained in full. The constraint bites on *directedness*, not on supply.

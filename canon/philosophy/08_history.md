@@ -64,7 +64,8 @@ container breaches, fullness fills the opening.
 
 **What came through was surfeit** — not beings of any particular kind. The forms it took are explained
 at §4.6, and the explanation is entirely rendered-side: what floods through is thread-substrate, and it
-takes the shape the witnesses' rendering gives it. Mode 1, mode 2 and mode 3 are three outcomes of that
+takes the shape it takes. Mode 1, mode 2 and mode 3 are distinguished by **what they are** (§4.6), not
+by how anyone met them; what witnesses determine is the encounter, not the being. The three outcomes of that
 rendering.
 
 *(One source restatement claimed that what came through the fracture *were threadcut beings*. That
@@ -119,7 +120,7 @@ The collapse was simultaneously:
 
 **This is not war-damage. It is ontological devastation: the conditions for being a civilization were
 torn.** And the cascade follows from the lattice regardless of which mechanism tore the anchors — it is
-one of the few parts of the history that the open ruling at §8.1 does not touch.
+one of the few parts of the history that the ruling at §8.1 does not touch.
 
 ## §8.4a Gaps
 

@@ -50,8 +50,9 @@ the first.
 
 **Only events deform.** There is no creep. A load held below the threshold leaves nothing behind,
 however long it is held. Living beside a Gap, inside a Warden zone or within a Locked Zone does not
-slowly reconfigure you. The environment bears on drift by raising the load during an operation
-actually performed — not by wearing at someone who merely stands in it.
+slowly reconfigure you. The environment bears on drift in two ways only: by raising the load during
+an operation, and by a confrontation that at some moment exceeds what the exposed configuration can
+hold (§6.8) — never by wearing at someone who merely stands in it.
 
 **Recovery is return over time, conditioned on the environment.** *(Ruled: "you heal as going towards
 equilibrium over time so long as you are in an environment where things are in equilibrium. but you
@@ -331,11 +332,14 @@ The degradation has recognizable stages. **The numbers below are mechanism and a
 document** — the philosophy holds only that Coherence is indexed and that the stages are ordered. The
 phenomenology is foundations material; the thresholds are not.
 
-**Every band below reads present displacement, not the resting point (§7.1).** A practitioner shows
+**Every band below reads present displacement, not the resting point (§7.1) — except the last.**
+Coherence failure is not a displacement reading: it is the resting point having left the band, and
+rest does not return anyone from it. A practitioner shows
 as Fragmented while a hard operation still has hold of them and shows as Dissonant a month later,
 rested, without anything having been undone — that is elastic return, and it is the ordinary case. So
 a single observation dates a practitioner's *load*, not their history. Reading the history means
-seeing where they settle: **the band someone comes to rest in is their floor, and it never falls.**
+seeing where they settle: **the band someone comes to rest in is their floor, and it falls only under
+deliberate restorative work aimed at them (§7.1, §6.8) — never by resting.**
 The community's real instrument is not the worst state a practitioner has been seen in but the best
 state they have been seen in lately.
 
@@ -398,8 +402,13 @@ that.
 
 - **Every manipulative operation leaves some strain.** For a practitioner with Coherence remaining, the
   load is *split* — part absorbed by layer 2 as Coherence loss, part left in the substrate. Coherence-0
-  beings are the limiting case, not a separate phenomenon. This is also why proximity to third-mode
-  presences erodes Coherence in others: they are standing in strained fabric.
+  beings are the limiting case, not a separate phenomenon. *(**Posit, not derived.** §6.8's cost model
+  has no substrate term, so nothing upstream partitions the load. The rival — all of it lands on the
+  practitioner while Coherence remains, and strain appears only at Coherence 0 — fits every ruling
+  equally and is what §7.5's opening argument implies. Flagged 2026-09-09; not resolved.)*
+  And this is why proximity to third-mode presences is dangerous: strained fabric raises what an
+  encounter there amounts to, so a registration is likelier to exceed what someone can hold. **Standing
+  in it deforms nobody by itself** (§7.1, E-4).
 - **Threadcut beings strain reality too.** The profile is the same minus spooling, and the derivation
   is untouched by the difference. **Solmund is the worked example**: he strained the substrate for the
   whole generation of his presence, and the record does not name it as his — it was absorbed into the

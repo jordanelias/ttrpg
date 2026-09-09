@@ -155,7 +155,7 @@ Existing citations name the source sections. This table repoints them. `F` = the
 | F §3.1 | §3.1 | |
 | F §3.2 | §3.2 | |
 | F §4.1 | §5.1 | |
-| F §4.2 | §3.4, §5.2 | Split: the tendency is a fact about rendering and belongs with rendering |
+| F §4.2 | §3.4, §5.2 | Split: the tendency is a property of configuration-space, stated alongside rendering because legibility is one of its terms |
 | F §4.3 | §5.3 | Kept substantially intact; it is the strongest passage in the suite |
 | F §5.1–5.2 | §4.6 | |
 | F §5.3 | §4.5, §4.6 | |
@@ -186,7 +186,7 @@ Existing citations name the source sections. This table repoints them. `F` = the
 | L Am. 1 | §6.2 | Canonical account of the Leap's target |
 | L Am. 2 | §6.3 | |
 | L Am. 3 | §6.6, §6.8 | |
-| L Am. 4 | §8.1 | Reconciled with F §6.1 — or flagged, per the open ruling |
+| L Am. 4 | §8.1 | Reconciled with F §6.1 — or flagged, per D-3 |
 | L Am. 5 | §8.10 | |
 | L Am. 6 | — | **Not migrated.** Mechanism, not foundations. See supplement §6 |
 | R A1–A15 | — | **Not migrated.** See supplement §6 |

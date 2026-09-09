@@ -56,7 +56,7 @@ flowchart LR
     D["<b>drifted, shallow reach</b><br/>1 only<br/>reshaped by what meets it"]
     DD["<b>drifted, deep reach</b><br/>1 + 3<br/>self-maintained"]
     T["<b>threadcut</b><br/>3 only<br/>radically singular and alien"]
-    LZ["<b>in a Locked Zone</b><br/>2, with nothing arriving<br/>becoming precluded"]
+    LZ["<b>in a Locked Zone</b><br/>1 + 2 — spooled, shaped,<br/>becoming precluded"]
 
     L --> H
     L --> D
@@ -232,11 +232,11 @@ someone able to aim it at them.
 flowchart TD
     TEAR["a tear in the boundary"]
     SUR["<b>surfeit</b><br/>uncontracted being<br/>floods the opening"]
-    W{"how it is rendered<br/>by whoever is present"}
-    M1["<b>mode 1</b> · ordinary incursion<br/>rendered as nothing coherent<br/>no layers · deteriorates"]
-    M2["<b>mode 2</b> · Providence<br/>rendered briefly or by few<br/>transient · an event, not an entity"]
-    M3["<b>mode 3</b> · threadcut<br/>rendered widely and durably as a being<br/>layer 3 only"]
-    OP["<b>organisation is radically opaque</b><br/>governed by whatever governs how<br/>organisms unfold in the thread paradigm.<br/>Witnesses render the <i>form as perceived</i>,<br/>within their bounds — they do not<br/>constitute the organisation."]
+    W{"what organisation it took<br/><i>radically opaque</i>"}
+    M1["<b>mode 1</b> · ordinary incursion<br/>no organisation<br/>no layers · deteriorates"]
+    M2["<b>mode 2</b> · Providence<br/>organisation accidental<br/>persists temporarily · an event, not an entity"]
+    M3["<b>mode 3</b> · threadcut<br/>self-maintaining organisation<br/>layer 3 only"]
+    OP["<b>witnesses do not constitute this</b><br/>they render the <i>form as perceived</i>,<br/>within their bounds — what distinguishes<br/>the modes is what they <i>are</i> (§4.6).<br/>The proposal that witnesses organise<br/>the surfeit was struck (B-19)."]
 
     TEAR --> SUR --> W
     W --> M1

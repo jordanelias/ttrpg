@@ -43,7 +43,7 @@ collapse and this distinction, and it can have both, provided it says which is w
 
 ## §2.2 What a thread is when nobody renders it
 
-**This is an open question and the framework should answer it.** §3.1 says rendering is not a
+**This was open, and §3.5 answers it** (D-1: positional constitution through imbrication). §3.1 says rendering is not a
 subjective overlay on an independent objective world. §3.2, §8.1's "literal mechanics", and every
 operational rule treat threads as having determinate structure that operations act upon and that
 different observers' renderings independently track.
@@ -176,7 +176,7 @@ mismatch opens between how things are and how anyone recalls them.
 
 Because every operation moves the temporal dimension along with the others (§2.6), every operation
 produces some disjunction. The degree varies with how far the configuration is taken out of its
-becoming: an operation primarily targeting actuality displaces it slightly; a direct temporal pull
+becoming: an operation whose target configuration differs mainly in actuality displaces it slightly; a direct temporal pull
 displaces it severely.
 
 **Operations only.** Layer-two self-maintenance is threadwork and is not an operation (§6.1), and it

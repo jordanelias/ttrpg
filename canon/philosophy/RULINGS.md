@@ -113,6 +113,14 @@ intends, responds, or acts.
 no harmonious configuration is reachable — so nothing is drawn anywhere. Mending is the restoration
 of reachability.
 
+> ⚠ **SUPERSEDED 2026-09-09 by the Locked Zone ruling** (this file, 2026-09-07): *"becoming has been
+> precluded, so the threads are no longer moving towards an equilibrium"* — which **removes the
+> tending** and leaves the threads and the reachable harmonies intact. That is a different mechanism
+> from a damaged futural-potential, and the later ruling governs. The difference matters beyond
+> bookkeeping: a property of configuration-space cannot be switched off in one region, while a
+> property of threads can — so the *draw* is a substrate dynamic, not part of the landscape §3.4
+> describes. "Restoration of reachability" does not survive; Mending restarts a tending.
+
 *Applied at:* §3.4 (rewritten), §6.6 (taxonomy rebuilt), §7.1, §7.2, §7.5, §8.1, §9.3.
 
 ### D-3 — Tensile, holding-against, with cascade

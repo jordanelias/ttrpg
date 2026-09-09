@@ -13,6 +13,11 @@ the word. Two senses were in play, and the ambiguity propagated.
 
 **An operation is threadwork that requires going beyond oneself as a finite ordinary human.**
 
+*(For a being with no layer 2 to be held within — a threadcut being, or one past Coherence 0 — the
+condition is met with nothing to suspend, so their self-maintenance is threadwork of this kind by
+default. That is why §7.6 can say every moment of such a being's existence is an operation. The
+criterion is unchanged; it has a trivial case.)*
+
 That is the criterion, and it is not arbitrary. It draws the line where the framework's own structure
 already draws it:
 
@@ -243,9 +248,10 @@ configuration, or the pulling creates Temporal Disjunction in the person's exper
 
 **Memory pulling is possible but messy, costly, and detectable. It is not a clean erasing tool.**
 
-*(There is a deeper reason it can never be clean, available from §2.7: no memory was ever an exact
-record. Retention is itself a rendering that moves what it retains, so a baseline gap between the
-retained past and the thread-past exists before any operation touches it.)*
+*(There is a deeper reason it can never be clean, and it is not about disjunction: no memory was ever an exact
+record. **Recollection** is itself a rendering that moves what it re-presents, so no pulling of a
+remembered configuration was ever going to be clean. *(Recollection, not retention: retention holds
+the just-elapsed in the living present and does not move its content — §9.2.)*)*
 
 *(One consequence the source suite never stated: a manipulative operation on a person imposes a shape
 their own layer 2 opposes. That is an environmental thread-force on their self-maintenance — so the

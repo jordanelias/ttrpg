@@ -76,7 +76,7 @@ taxonomy (§6.6); the outward facing as a determination rather than a mere appea
 definition of
 "collective rendering" (§3.5); why orphaned configurations decay (§4.7); the three modes as layer
 profiles (§4.6); what a Locked Zone does to a person (§8.5); the origin of third-mode beings (§4.6);
-reality-strain (§7.5); and a baseline of Temporal Disjunction in ordinary life (§2.7).
+reality-strain (§7.5); and why ordinary life carries **no** Temporal Disjunction (§2.7, §6.1).
 
 ## §4.3 Coherence
 
@@ -110,6 +110,14 @@ source suite left open:
 So a practitioner alone has a determinate Coherence (the disposition holds), but is held by layer 2
 alone, without the supplementary hold of others. **Other things equal, the isolated drift faster.**
 This is why communal life is structurally protective and not merely comforting.
+
+**Holding is not returning, and the distinction is load-bearing.** *(2026-09-09.)* Others taking you
+as human is a **determination** on your configuration (§4.2) and resists displacement; it is not a
+mechanism of recovery. E-1 ruled that others contribute to recovery by **mending** — threadwork —
+never by rendering, and struck the option that made being-taken-as-human the engine of return. Both
+hold: rendering is a process and processes do things (§3.1), so it can resist; and what draws a
+displaced configuration back is time in surroundings at equilibrium, quickened by mending (§7.1). A
+community protects by holding and by mending, and those are two different things it does.
 
 **The asymmetry of self-judgment.** A practitioner cannot fully judge their own Coherence: the
 apperceptive self-presentation that is failing is the same one that would be needed to perceive the
@@ -155,7 +163,7 @@ what both were reaching for.
 | Coherence-0, shallow reach | 1 | Spooled, unshaped — reshaped by whatever meets it |
 | Coherence-0, deep reach | 1 + 3 | Spooled, deliberately self-maintained |
 | Threadcut being | 3 | Deliberately self-maintained, unspooled |
-| **In a Locked Zone** | **2 (no 1)** | **See §8.5 — the row the source suite omitted** |
+| **In a Locked Zone** | **1 + 2, becoming precluded** | **See §8.5 — the row the source suite omitted** |
 
 That last row is not decoration. In a Locked Zone becoming has been precluded (§8.5), so a person
 there does not accumulate: no temporal depth gathers and nothing settles. A deep-reach practitioner
@@ -273,8 +281,8 @@ When a past-oriented operation removes the cause of a prior operation, the prior
 an **orphaned configuration** — a present state without a past cause.
 
 Orphans deteriorate faster than causally grounded configurations, and the reason is now derivable:
-temporal depth is accumulated holding (§3.4), and removing the causal history removes the
-accumulation. What remains is held only by present rendering.
+temporal depth is accumulated **spooling** (§4.5) — only spooling yields it — and removing the causal
+history removes what was accumulated. Nothing in present rendering replaces it.
 
 Orphaned configurations are the threadcut principle at the operational level. A third-mode being is
 cut from the ground's spooling; an orphan is cut from its causal history. Both persist only through
