@@ -174,7 +174,16 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # registers/editorial_ledger_sc.jsonl and nothing it reports is ratified -- the subsystem stays
     # PROPOSED and HELD BACK IN FULL. Same update-the-pin-and-say-so path as the 2026-09-06 note
     # above; this test asked for the allocation and the pin in one commit and that is what this is.
-    released = {'SC': 37, 'FA': 39, 'WR': 10, 'SE': 51}
+    # PIN UPDATED 2026-09-09: SC 37 -> 38. ED-SC-0037 allocated, and it is the rarer kind: a
+    # `needs_jordan: true` row. It records the one design call in
+    # workplans/2026-09-09-r-execution-plan.md (§11.0) that survived all five of CLAUDE.md
+    # §0's tests -- which provider resolves a social contest until the proceedings subsystem
+    # lands: an interim `dice` provider now, which unblocks the plan's root unit but adds an
+    # obstacle site against ED-SC-0033 clause (3)'s single-owner ruling, or wait, which
+    # honours clause (2) but leaves R-09 waiting on an unbuilt subsystem. The entry is in
+    # registers/editorial_ledger_sc.jsonl; nothing about it is decided. Same
+    # update-the-pin-and-say-so path this test's own failure message asks for.
+    released = {'SC': 38, 'FA': 39, 'WR': 10, 'SE': 51}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (
