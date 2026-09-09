@@ -1,6 +1,6 @@
 [
  {
-  "path": "systems/settlements/settlement_layer_v30.md",
+  "path": "systems/settlements/reference/settlement_layer_v30.md",
   "tree": "systems",
   "bytes": 107530,
   "lines": 1216,
@@ -26,7 +26,7 @@
   ]
  },
  {
-  "path": "systems/factions/faction_politics_v30.md",
+  "path": "systems/factions/reference/faction_politics_v30.md",
   "tree": "systems",
   "bytes": 167044,
   "lines": 1182,
@@ -78,7 +78,7 @@
   ]
  },
  {
-  "path": "systems/overview/peninsular_strain_v30.md",
+  "path": "systems/overview/reference/peninsular_strain_v30.md",
   "tree": "systems",
   "bytes": 50588,
   "lines": 602,
@@ -156,7 +156,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_behavior_v30.md",
+  "path": "systems/npcs/reference/npc_behavior_v30.md",
   "tree": "systems",
   "bytes": 104814,
   "lines": 1259,
@@ -234,7 +234,7 @@
   ]
  },
  {
-  "path": "systems/factions/faction_canon_v30.md",
+  "path": "systems/factions/reference/faction_canon_v30.md",
   "tree": "systems",
   "bytes": 53611,
   "lines": 731,
@@ -260,7 +260,7 @@
   ]
  },
  {
-  "path": "systems/factions/faction_layer_v30.md",
+  "path": "systems/factions/reference/faction_layer_v30.md",
   "tree": "systems",
   "bytes": 57440,
   "lines": 720,
@@ -286,7 +286,7 @@
   ]
  },
  {
-  "path": "systems/victory/victory_v30.md",
+  "path": "systems/victory/reference/victory_v30.md",
   "tree": "systems",
   "bytes": 59248,
   "lines": 836,
@@ -312,7 +312,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/player_agency_v30.md",
+  "path": "systems/_architecture/reference/player_agency_v30.md",
   "tree": "systems",
   "bytes": 54400,
   "lines": 601,
@@ -338,7 +338,7 @@
   ]
  },
  {
-  "path": "systems/settlements/settlements_flow_skeleton_v1.md",
+  "path": "systems/settlements/reference/settlements_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 28851,
   "lines": 151,
@@ -364,7 +364,7 @@
   ]
  },
  {
-  "path": "systems/factions/factions_flow_skeleton_v1.md",
+  "path": "systems/factions/reference/factions_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 32877,
   "lines": 190,
@@ -416,7 +416,7 @@
   ]
  },
  {
-  "path": "systems/ui/valoria_ui_ux_v4_1_max_audit.md",
+  "path": "systems/ui/reference/valoria_ui_ux_v4_1_max_audit.md",
   "tree": "systems",
   "bytes": 101386,
   "lines": 742,
@@ -468,7 +468,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_relational_graph_v30.md",
+  "path": "systems/npcs/reference/npc_relational_graph_v30.md",
   "tree": "systems",
   "bytes": 59294,
   "lines": 682,
@@ -520,7 +520,7 @@
   ]
  },
  {
-  "path": "systems/settlements/valoria_political_hierarchy_v30.md",
+  "path": "systems/settlements/reference/valoria_political_hierarchy_v30.md",
   "tree": "systems",
   "bytes": 21378,
   "lines": 172,
@@ -546,7 +546,7 @@
   ]
  },
  {
-  "path": "systems/ui/valoria_ui_ux_v4.md",
+  "path": "systems/ui/reference/valoria_ui_ux_v4.md",
   "tree": "systems",
   "bytes": 141952,
   "lines": 2474,
@@ -572,7 +572,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/integration_proposal_v30.md",
+  "path": "systems/_architecture/reference/integration_proposal_v30.md",
   "tree": "systems",
   "bytes": 61228,
   "lines": 437,
@@ -650,7 +650,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/governance_type_registry_v1.md",
+  "path": "systems/_architecture/reference/governance_type_registry_v1.md",
   "tree": "systems",
   "bytes": 31368,
   "lines": 299,
@@ -676,7 +676,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/key_type_registry_v30.md",
+  "path": "systems/_architecture/reference/key_type_registry_v30.md",
   "tree": "systems",
   "bytes": 58119,
   "lines": 1296,
@@ -702,7 +702,7 @@
   ]
  },
  {
-  "path": "systems/factions/faction_behavior_v30.md",
+  "path": "systems/factions/reference/faction_behavior_v30.md",
   "tree": "systems",
   "bytes": 28801,
   "lines": 551,
@@ -728,7 +728,7 @@
   ]
  },
  {
-  "path": "systems/social_contest/social_contest_v30.md",
+  "path": "systems/social_contest/reference/social_contest_v30.md",
   "tree": "systems",
   "bytes": 95725,
   "lines": 725,
@@ -754,7 +754,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_behavior_system_v1.md",
+  "path": "systems/npcs/reference/npc_behavior_system_v1.md",
   "tree": "systems",
   "bytes": 65510,
   "lines": 829,
@@ -806,7 +806,7 @@
   ]
  },
  {
-  "path": "systems/factions/franchise_v30.md",
+  "path": "systems/factions/reference/franchise_v30.md",
   "tree": "systems",
   "bytes": 15579,
   "lines": 206,
@@ -832,7 +832,7 @@
   ]
  },
  {
-  "path": "systems/factions/ci_political_v30.md",
+  "path": "systems/factions/reference/ci_political_v30.md",
   "tree": "systems",
   "bytes": 25816,
   "lines": 430,
@@ -858,7 +858,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/throughlines_complete.md",
+  "path": "systems/_architecture/reference/throughlines_complete.md",
   "tree": "systems",
   "bytes": 51839,
   "lines": 378,
@@ -884,7 +884,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/governance_ripple_substrate_v1.md",
+  "path": "systems/_architecture/reference/governance_ripple_substrate_v1.md",
   "tree": "systems",
   "bytes": 44449,
   "lines": 560,
@@ -910,7 +910,7 @@
   ]
  },
  {
-  "path": "systems/settlements/governance_play_redesign_v1.md",
+  "path": "systems/settlements/reference/governance_play_redesign_v1.md",
   "tree": "systems",
   "bytes": 35218,
   "lines": 338,
@@ -936,7 +936,7 @@
   ]
  },
  {
-  "path": "systems/settlements/scale_hierarchy_v1.md",
+  "path": "systems/settlements/reference/scale_hierarchy_v1.md",
   "tree": "systems",
   "bytes": 13171,
   "lines": 188,
@@ -962,7 +962,7 @@
   ]
  },
  {
-  "path": "systems/ui/valoria_ui_ux_v4_1.md",
+  "path": "systems/ui/reference/valoria_ui_ux_v4_1.md",
   "tree": "systems",
   "bytes": 81112,
   "lines": 1431,
@@ -988,7 +988,7 @@
   ]
  },
  {
-  "path": "systems/social_contest/social_contest_flow_skeleton_v1.md",
+  "path": "systems/social_contest/reference/social_contest_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 45651,
   "lines": 185,
@@ -1040,7 +1040,7 @@
   ]
  },
  {
-  "path": "systems/world/insurgency_pipeline_v30.md",
+  "path": "systems/world/reference/insurgency_pipeline_v30.md",
   "tree": "systems",
   "bytes": 24873,
   "lines": 348,
@@ -1092,7 +1092,7 @@
   ]
  },
  {
-  "path": "systems/mass_battle/mass_battle_v30.md",
+  "path": "systems/mass_battle/reference/mass_battle_v30.md",
   "tree": "systems",
   "bytes": 78182,
   "lines": 999,
@@ -1118,7 +1118,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_v30.md",
+  "path": "systems/fieldwork/reference/fieldwork_v30.md",
   "tree": "systems",
   "bytes": 79267,
   "lines": 908,
@@ -1144,7 +1144,7 @@
   ]
  },
  {
-  "path": "systems/characters/conviction_track_v30.md",
+  "path": "systems/characters/reference/conviction_track_v30.md",
   "tree": "systems",
   "bytes": 33466,
   "lines": 531,
@@ -1170,7 +1170,7 @@
   ]
  },
  {
-  "path": "systems/npcs/character_canon_v30.md",
+  "path": "systems/npcs/reference/character_canon_v30.md",
   "tree": "systems",
   "bytes": 32696,
   "lines": 440,
@@ -1196,7 +1196,7 @@
   ]
  },
  {
-  "path": "systems/factions/factions_personal_v30.md",
+  "path": "systems/factions/reference/factions_personal_v30.md",
   "tree": "systems",
   "bytes": 30056,
   "lines": 437,
@@ -1248,7 +1248,7 @@
   ]
  },
  {
-  "path": "systems/settlements/generation_sourcebook_v1.md",
+  "path": "systems/settlements/reference/generation_sourcebook_v1.md",
   "tree": "systems",
   "bytes": 18178,
   "lines": 199,
@@ -1274,7 +1274,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/scale_transitions_v30.md",
+  "path": "systems/_architecture/reference/scale_transitions_v30.md",
   "tree": "systems",
   "bytes": 29249,
   "lines": 345,
@@ -1300,7 +1300,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/conflict_architecture_proposal.md",
+  "path": "systems/_architecture/reference/conflict_architecture_proposal.md",
   "tree": "systems",
   "bytes": 20175,
   "lines": 177,
@@ -1326,7 +1326,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/derived_stats_v30.md",
+  "path": "systems/_architecture/reference/derived_stats_v30.md",
   "tree": "systems",
   "bytes": 46375,
   "lines": 606,
@@ -1352,7 +1352,7 @@
   ]
  },
  {
-  "path": "systems/mass_battle/military_layer_v30.md",
+  "path": "systems/mass_battle/reference/military_layer_v30.md",
   "tree": "systems",
   "bytes": 27311,
   "lines": 413,
@@ -1378,7 +1378,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/investigation_systems_v30.md",
+  "path": "systems/fieldwork/reference/investigation_systems_v30.md",
   "tree": "systems",
   "bytes": 37325,
   "lines": 460,
@@ -1404,7 +1404,7 @@
   ]
  },
  {
-  "path": "systems/factions/faction_systems_overview_v30.md",
+  "path": "systems/factions/reference/faction_systems_overview_v30.md",
   "tree": "systems",
   "bytes": 17033,
   "lines": 309,
@@ -1456,7 +1456,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npcs_flow_skeleton_v1.md",
+  "path": "systems/npcs/reference/npcs_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 15199,
   "lines": 134,
@@ -1508,7 +1508,7 @@
   ]
  },
  {
-  "path": "systems/factions/faction_succession_split_v30.md",
+  "path": "systems/factions/reference/faction_succession_split_v30.md",
   "tree": "systems",
   "bytes": 13975,
   "lines": 172,
@@ -1560,7 +1560,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/ners_vsg_reconciliation_v1.md",
+  "path": "systems/_architecture/reference/ners_vsg_reconciliation_v1.md",
   "tree": "systems",
   "bytes": 25738,
   "lines": 240,
@@ -1638,7 +1638,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/early_game_ignition_analysis.md",
+  "path": "systems/_architecture/reference/early_game_ignition_analysis.md",
   "tree": "systems",
   "bytes": 35702,
   "lines": 288,
@@ -1664,7 +1664,7 @@
   ]
  },
  {
-  "path": "systems/factions/fractional_province_ownership_v30.md",
+  "path": "systems/factions/reference/fractional_province_ownership_v30.md",
   "tree": "systems",
   "bytes": 10010,
   "lines": 152,
@@ -1690,7 +1690,7 @@
   ]
  },
  {
-  "path": "systems/settlements/lps_wiring_v1.md",
+  "path": "systems/settlements/reference/lps_wiring_v1.md",
   "tree": "systems",
   "bytes": 15888,
   "lines": 228,
@@ -1716,7 +1716,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/engine_atlas_v1.md",
+  "path": "systems/_architecture/reference/engine_atlas_v1.md",
   "tree": "systems",
   "bytes": 37860,
   "lines": 399,
@@ -1742,7 +1742,7 @@
   ]
  },
  {
-  "path": "systems/overview/overview_flow_skeleton_v1.md",
+  "path": "systems/overview/reference/overview_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 30538,
   "lines": 182,
@@ -1768,7 +1768,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/_architecture_flow_skeleton_v1.md",
+  "path": "systems/_architecture/reference/_architecture_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 33610,
   "lines": 203,
@@ -1794,7 +1794,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_roster_v30.md",
+  "path": "systems/npcs/reference/npc_roster_v30.md",
   "tree": "systems",
   "bytes": 34964,
   "lines": 420,
@@ -1846,7 +1846,7 @@
   ]
  },
  {
-  "path": "systems/settlements/goldenfurt_slice/sim_build_spec.md",
+  "path": "systems/settlements/goldenfurt_slice/reference/sim_build_spec.md",
   "tree": "systems",
   "bytes": 12937,
   "lines": 205,
@@ -1872,7 +1872,7 @@
   ]
  },
  {
-  "path": "systems/factions/political_dynamics_keys_migration_v30.md",
+  "path": "systems/factions/reference/political_dynamics_keys_migration_v30.md",
   "tree": "systems",
   "bytes": 28215,
   "lines": 640,
@@ -1898,7 +1898,7 @@
   ]
  },
  {
-  "path": "systems/factions/faction_state_authoring_v30.md",
+  "path": "systems/factions/reference/faction_state_authoring_v30.md",
   "tree": "systems",
   "bytes": 19452,
   "lines": 373,
@@ -1924,7 +1924,7 @@
   ]
  },
  {
-  "path": "systems/threadwork/threadwork_v30.md",
+  "path": "systems/threadwork/reference/threadwork_v30.md",
   "tree": "systems",
   "bytes": 83765,
   "lines": 1020,
@@ -2002,7 +2002,7 @@
   ]
  },
  {
-  "path": "systems/settlements/settlement_layer_v30_index.md",
+  "path": "systems/settlements/reference/settlement_layer_v30_index.md",
   "tree": "systems",
   "bytes": 10589,
   "lines": 152,
@@ -2028,7 +2028,7 @@
   ]
  },
  {
-  "path": "systems/world/world_flow_skeleton_v1.md",
+  "path": "systems/world/reference/world_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 24123,
   "lines": 187,
@@ -2054,7 +2054,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_character_analyses_v30_infill.md",
+  "path": "systems/npcs/reference/npc_character_analyses_v30_infill.md",
   "tree": "systems",
   "bytes": 45570,
   "lines": 119,
@@ -2080,7 +2080,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_foils_v30_infill.md",
+  "path": "systems/npcs/reference/npc_foils_v30_infill.md",
   "tree": "systems",
   "bytes": 32389,
   "lines": 135,
@@ -2106,7 +2106,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/campaign_architecture_v30.md",
+  "path": "systems/_architecture/reference/campaign_architecture_v30.md",
   "tree": "systems",
   "bytes": 18849,
   "lines": 279,
@@ -2132,7 +2132,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_behavior_v30_infill.md",
+  "path": "systems/npcs/reference/npc_behavior_v30_infill.md",
   "tree": "systems",
   "bytes": 19287,
   "lines": 183,
@@ -2158,7 +2158,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/propagation_spec_v1.md",
+  "path": "systems/_architecture/reference/propagation_spec_v1.md",
   "tree": "systems",
   "bytes": 54935,
   "lines": 408,
@@ -2184,7 +2184,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_roster_v30_infill.md",
+  "path": "systems/npcs/reference/npc_roster_v30_infill.md",
   "tree": "systems",
   "bytes": 32797,
   "lines": 122,
@@ -2210,7 +2210,7 @@
   ]
  },
  {
-  "path": "systems/factions/parliamentary_transfer_v30.md",
+  "path": "systems/factions/reference/parliamentary_transfer_v30.md",
   "tree": "systems",
   "bytes": 12323,
   "lines": 180,
@@ -2236,7 +2236,7 @@
   ]
  },
  {
-  "path": "systems/combat/combat_reference_v1.md",
+  "path": "systems/combat/reference/combat_reference_v1.md",
   "tree": "systems",
   "bytes": 52451,
   "lines": 703,
@@ -2262,7 +2262,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/session_a_spec_patches.md",
+  "path": "systems/_architecture/reference/session_a_spec_patches.md",
   "tree": "systems",
   "bytes": 8627,
   "lines": 182,
@@ -2288,7 +2288,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/tensions_pair_validation.md",
+  "path": "systems/_architecture/reference/tensions_pair_validation.md",
   "tree": "systems",
   "bytes": 15930,
   "lines": 276,
@@ -2366,7 +2366,7 @@
   ]
  },
  {
-  "path": "systems/characters/conviction_track_v1_pp718_vetting.md",
+  "path": "systems/characters/reference/conviction_track_v1_pp718_vetting.md",
   "tree": "systems",
   "bytes": 38287,
   "lines": 281,
@@ -2392,7 +2392,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/governance_consolidation_v1.md",
+  "path": "systems/_architecture/reference/governance_consolidation_v1.md",
   "tree": "systems",
   "bytes": 21968,
   "lines": 213,
@@ -2418,7 +2418,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_behavior_v30_index.md",
+  "path": "systems/npcs/reference/npc_behavior_v30_index.md",
   "tree": "systems",
   "bytes": 12877,
   "lines": 238,
@@ -2444,7 +2444,7 @@
   ]
  },
  {
-  "path": "systems/victory/victory_flow_skeleton_v1.md",
+  "path": "systems/victory/reference/victory_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 16046,
   "lines": 127,
@@ -2470,7 +2470,7 @@
   ]
  },
  {
-  "path": "systems/threadwork/thread_horizontal_integration_spec.md",
+  "path": "systems/threadwork/reference/thread_horizontal_integration_spec.md",
   "tree": "systems",
   "bytes": 19611,
   "lines": 294,
@@ -2496,7 +2496,7 @@
   ]
  },
  {
-  "path": "systems/settlements/settlement_adjacency_v30.md",
+  "path": "systems/settlements/reference/settlement_adjacency_v30.md",
   "tree": "systems",
   "bytes": 10674,
   "lines": 147,
@@ -2522,7 +2522,7 @@
   ]
  },
  {
-  "path": "systems/settlements/settlement_generator_v1.md",
+  "path": "systems/settlements/reference/settlement_generator_v1.md",
   "tree": "systems",
   "bytes": 17683,
   "lines": 225,
@@ -2548,7 +2548,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/canonical_registry.md",
+  "path": "systems/_architecture/reference/canonical_registry.md",
   "tree": "systems",
   "bytes": 14835,
   "lines": 322,
@@ -2574,7 +2574,7 @@
   ]
  },
  {
-  "path": "systems/factions/faction_politics_v30_index.md",
+  "path": "systems/factions/reference/faction_politics_v30_index.md",
   "tree": "systems",
   "bytes": 13214,
   "lines": 206,
@@ -2600,7 +2600,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/key_echo_armature_v1.md",
+  "path": "systems/_architecture/reference/key_echo_armature_v1.md",
   "tree": "systems",
   "bytes": 36367,
   "lines": 353,
@@ -2652,7 +2652,7 @@
   ]
  },
  {
-  "path": "systems/factions/factions_personal_v30_infill.md",
+  "path": "systems/factions/reference/factions_personal_v30_infill.md",
   "tree": "systems",
   "bytes": 12925,
   "lines": 87,
@@ -2678,7 +2678,7 @@
   ]
  },
  {
-  "path": "systems/ui/valoria_ui_ux_v4_2_workplan.md",
+  "path": "systems/ui/reference/valoria_ui_ux_v4_2_workplan.md",
   "tree": "systems",
   "bytes": 35889,
   "lines": 594,
@@ -2704,7 +2704,7 @@
   ]
  },
  {
-  "path": "systems/factions/baralta_crown_claim_v30.md",
+  "path": "systems/factions/reference/baralta_crown_claim_v30.md",
   "tree": "systems",
   "bytes": 13673,
   "lines": 205,
@@ -2730,7 +2730,7 @@
   ]
  },
  {
-  "path": "systems/world/worldbuilding_v30.md",
+  "path": "systems/world/reference/worldbuilding_v30.md",
   "tree": "systems",
   "bytes": 19341,
   "lines": 342,
@@ -2756,7 +2756,7 @@
   ]
  },
  {
-  "path": "systems/mass_battle/mass_battle_flow_skeleton_v1.md",
+  "path": "systems/mass_battle/reference/mass_battle_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 28056,
   "lines": 198,
@@ -2808,7 +2808,7 @@
   ]
  },
  {
-  "path": "systems/settlements/march_layer_v30.md",
+  "path": "systems/settlements/reference/march_layer_v30.md",
   "tree": "systems",
   "bytes": 14736,
   "lines": 200,
@@ -2834,7 +2834,7 @@
   ]
  },
  {
-  "path": "systems/world/solmund_master_document.md",
+  "path": "systems/world/reference/solmund_master_document.md",
   "tree": "systems",
   "bytes": 47769,
   "lines": 585,
@@ -2886,7 +2886,7 @@
   ]
  },
  {
-  "path": "systems/characters/character_histories_v30.md",
+  "path": "systems/characters/reference/character_histories_v30.md",
   "tree": "systems",
   "bytes": 38977,
   "lines": 543,
@@ -2912,7 +2912,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_character_analyses_v30.md",
+  "path": "systems/npcs/reference/npc_character_analyses_v30.md",
   "tree": "systems",
   "bytes": 21231,
   "lines": 276,
@@ -2938,7 +2938,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/videogame_mode_spec.md",
+  "path": "systems/_architecture/reference/videogame_mode_spec.md",
   "tree": "systems",
   "bytes": 16455,
   "lines": 206,
@@ -2964,7 +2964,7 @@
   ]
  },
  {
-  "path": "systems/threadwork/threadwork_v25_historical.md",
+  "path": "systems/threadwork/reference/threadwork_v25_historical.md",
   "tree": "systems",
   "bytes": 96933,
   "lines": 1013,
@@ -3094,7 +3094,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/complete_systems_reference.md",
+  "path": "systems/_architecture/reference/complete_systems_reference.md",
   "tree": "systems",
   "bytes": 15906,
   "lines": 236,
@@ -3120,7 +3120,7 @@
   ]
  },
  {
-  "path": "systems/articulation/articulation_layer_v30.md",
+  "path": "systems/articulation/reference/articulation_layer_v30.md",
   "tree": "systems",
   "bytes": 22102,
   "lines": 400,
@@ -3172,7 +3172,7 @@
   ]
  },
  {
-  "path": "systems/settlements/goldenfurt_slice/generation_methodology.md",
+  "path": "systems/settlements/goldenfurt_slice/reference/generation_methodology.md",
   "tree": "systems",
   "bytes": 12654,
   "lines": 191,
@@ -3198,7 +3198,7 @@
   ]
  },
  {
-  "path": "systems/settlements/settlements_currency_v1.md",
+  "path": "systems/settlements/reference/settlements_currency_v1.md",
   "tree": "systems",
   "bytes": 6582,
   "lines": 26,
@@ -3224,7 +3224,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_behavior_system_v1_index.md",
+  "path": "systems/npcs/reference/npc_behavior_system_v1_index.md",
   "tree": "systems",
   "bytes": 8565,
   "lines": 159,
@@ -3276,7 +3276,7 @@
   ]
  },
  {
-  "path": "systems/overview/clock_registry_v30.md",
+  "path": "systems/overview/reference/clock_registry_v30.md",
   "tree": "systems",
   "bytes": 9381,
   "lines": 144,
@@ -3302,7 +3302,7 @@
   ]
  },
  {
-  "path": "systems/factions/fail_forward_pp177.md",
+  "path": "systems/factions/reference/fail_forward_pp177.md",
   "tree": "systems",
   "bytes": 6738,
   "lines": 125,
@@ -3328,7 +3328,7 @@
   ]
  },
  {
-  "path": "systems/settlements/goldenfurt_slice/npc_cast.md",
+  "path": "systems/settlements/goldenfurt_slice/reference/npc_cast.md",
   "tree": "systems",
   "bytes": 13635,
   "lines": 128,
@@ -3354,7 +3354,7 @@
   ]
  },
  {
-  "path": "systems/factions/faction_layer_v30_infill.md",
+  "path": "systems/factions/reference/faction_layer_v30_infill.md",
   "tree": "systems",
   "bytes": 13359,
   "lines": 123,
@@ -3432,7 +3432,7 @@
   ]
  },
  {
-  "path": "systems/overview/peninsular_strain_v30_index.md",
+  "path": "systems/overview/reference/peninsular_strain_v30_index.md",
   "tree": "systems",
   "bytes": 6886,
   "lines": 108,
@@ -3458,7 +3458,7 @@
   ]
  },
  {
-  "path": "systems/settlements/territory_temperaments_v30.md",
+  "path": "systems/settlements/reference/territory_temperaments_v30.md",
   "tree": "systems",
   "bytes": 7649,
   "lines": 113,
@@ -3484,7 +3484,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_v30_infill.md",
+  "path": "systems/fieldwork/reference/fieldwork_v30_infill.md",
   "tree": "systems",
   "bytes": 27708,
   "lines": 159,
@@ -3536,7 +3536,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/key_substrate_v30.md",
+  "path": "systems/_architecture/reference/key_substrate_v30.md",
   "tree": "systems",
   "bytes": 29576,
   "lines": 628,
@@ -3588,7 +3588,7 @@
   ]
  },
  {
-  "path": "systems/npcs/companion_specification_v30.md",
+  "path": "systems/npcs/reference/companion_specification_v30.md",
   "tree": "systems",
   "bytes": 11203,
   "lines": 224,
@@ -3614,7 +3614,7 @@
   ]
  },
  {
-  "path": "systems/world/miraculous_event_v30.md",
+  "path": "systems/world/reference/miraculous_event_v30.md",
   "tree": "systems",
   "bytes": 10587,
   "lines": 150,
@@ -3666,7 +3666,7 @@
   ]
  },
  {
-  "path": "systems/settlements/goldenfurt_slice/README.md",
+  "path": "systems/settlements/goldenfurt_slice/reference/README.md",
   "tree": "systems",
   "bytes": 8344,
   "lines": 89,
@@ -3718,7 +3718,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_roster_v30_index.md",
+  "path": "systems/npcs/reference/npc_roster_v30_index.md",
   "tree": "systems",
   "bytes": 5050,
   "lines": 102,
@@ -3744,7 +3744,7 @@
   ]
  },
  {
-  "path": "systems/social_contest/social_contest_system_v2.md",
+  "path": "systems/social_contest/reference/social_contest_system_v2.md",
   "tree": "systems",
   "bytes": 29455,
   "lines": 423,
@@ -3796,7 +3796,7 @@
   ]
  },
  {
-  "path": "systems/factions/treaty_expiration_v30.md",
+  "path": "systems/factions/reference/treaty_expiration_v30.md",
   "tree": "systems",
   "bytes": 10358,
   "lines": 198,
@@ -3848,7 +3848,7 @@
   ]
  },
  {
-  "path": "systems/factions/faction_layer_v30_index.md",
+  "path": "systems/factions/reference/faction_layer_v30_index.md",
   "tree": "systems",
   "bytes": 6874,
   "lines": 138,
@@ -3874,7 +3874,7 @@
   ]
  },
  {
-  "path": "systems/characters/conviction_track_v30_infill.md",
+  "path": "systems/characters/reference/conviction_track_v30_infill.md",
   "tree": "systems",
   "bytes": 6364,
   "lines": 61,
@@ -3900,7 +3900,7 @@
   ]
  },
  {
-  "path": "systems/factions/factions_personal_v30_index.md",
+  "path": "systems/factions/reference/factions_personal_v30_index.md",
   "tree": "systems",
   "bytes": 2519,
   "lines": 60,
@@ -3926,7 +3926,7 @@
   ]
  },
  {
-  "path": "systems/overview/wc_survival_spine.md",
+  "path": "systems/overview/reference/wc_survival_spine.md",
   "tree": "systems",
   "bytes": 10531,
   "lines": 123,
@@ -3978,7 +3978,7 @@
   ]
  },
  {
-  "path": "systems/ui/valoria_ui_ux_supplement_derived_settlement.md",
+  "path": "systems/ui/reference/valoria_ui_ux_supplement_derived_settlement.md",
   "tree": "systems",
   "bytes": 2861,
   "lines": 67,
@@ -4004,7 +4004,7 @@
   ]
  },
  {
-  "path": "systems/factions/ci_political_v30_index.md",
+  "path": "systems/factions/reference/ci_political_v30_index.md",
   "tree": "systems",
   "bytes": 4099,
   "lines": 90,
@@ -4056,7 +4056,7 @@
   ]
  },
  {
-  "path": "systems/characters/conviction_taxonomy_v30.md",
+  "path": "systems/characters/reference/conviction_taxonomy_v30.md",
   "tree": "systems",
   "bytes": 16125,
   "lines": 350,
@@ -4160,7 +4160,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_foils_v30.md",
+  "path": "systems/npcs/reference/npc_foils_v30.md",
   "tree": "systems",
   "bytes": 5081,
   "lines": 214,
@@ -4186,7 +4186,7 @@
   ]
  },
  {
-  "path": "systems/settlements/goldenfurt_slice/event_deck.md",
+  "path": "systems/settlements/goldenfurt_slice/reference/event_deck.md",
   "tree": "systems",
   "bytes": 14428,
   "lines": 139,
@@ -4212,7 +4212,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/hybrid_gaps_v30_infill.md",
+  "path": "systems/_architecture/reference/hybrid_gaps_v30_infill.md",
   "tree": "systems",
   "bytes": 7558,
   "lines": 58,
@@ -4316,7 +4316,7 @@
   ]
  },
  {
-  "path": "systems/characters/conviction_track_v1.md",
+  "path": "systems/characters/reference/conviction_track_v1.md",
   "tree": "systems",
   "bytes": 9927,
   "lines": 107,
@@ -4360,7 +4360,7 @@
   ]
  },
  {
-  "path": "systems/characters/character_generation_questionnaire_v30.md",
+  "path": "systems/characters/reference/character_generation_questionnaire_v30.md",
   "tree": "systems",
   "bytes": 8477,
   "lines": 117,
@@ -4412,7 +4412,7 @@
   ]
  },
  {
-  "path": "systems/ui/valoria_ui_ux_v4_1_index.md",
+  "path": "systems/ui/reference/valoria_ui_ux_v4_1_index.md",
   "tree": "systems",
   "bytes": 13220,
   "lines": 270,
@@ -4438,7 +4438,7 @@
   ]
  },
  {
-  "path": "systems/world/worldbuilding_v30_infill.md",
+  "path": "systems/world/reference/worldbuilding_v30_infill.md",
   "tree": "systems",
   "bytes": 6878,
   "lines": 73,
@@ -4464,7 +4464,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_godot.md",
+  "path": "systems/fieldwork/reference/fieldwork_godot.md",
   "tree": "systems",
   "bytes": 11262,
   "lines": 133,
@@ -4564,7 +4564,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/hybrid_gaps_v30.md",
+  "path": "systems/_architecture/reference/hybrid_gaps_v30.md",
   "tree": "systems",
   "bytes": 7099,
   "lines": 150,
@@ -4642,7 +4642,7 @@
   ]
  },
  {
-  "path": "systems/world/ms_trajectory_v1.md",
+  "path": "systems/world/reference/ms_trajectory_v1.md",
   "tree": "systems",
   "bytes": 17053,
   "lines": 156,
@@ -4668,7 +4668,7 @@
   ]
  },
  {
-  "path": "systems/victory/victory_v30_infill.md",
+  "path": "systems/victory/reference/victory_v30_infill.md",
   "tree": "systems",
   "bytes": 5522,
   "lines": 70,
@@ -4694,7 +4694,7 @@
   ]
  },
  {
-  "path": "systems/npcs/npc_character_analyses_v30_index.md",
+  "path": "systems/npcs/reference/npc_character_analyses_v30_index.md",
   "tree": "systems",
   "bytes": 4787,
   "lines": 82,
@@ -4742,7 +4742,7 @@
   ]
  },
  {
-  "path": "systems/world/worldbuilding_canon_audit_v30.md",
+  "path": "systems/world/reference/worldbuilding_canon_audit_v30.md",
   "tree": "systems",
   "bytes": 5086,
   "lines": 129,
@@ -4768,7 +4768,7 @@
   ]
  },
  {
-  "path": "systems/victory/victory_v30_index.md",
+  "path": "systems/victory/reference/victory_v30_index.md",
   "tree": "systems",
   "bytes": 8824,
   "lines": 150,
@@ -4794,7 +4794,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_exploration.md",
+  "path": "systems/fieldwork/reference/fieldwork_exploration.md",
   "tree": "systems",
   "bytes": 8741,
   "lines": 73,
@@ -4846,7 +4846,7 @@
   ]
  },
  {
-  "path": "systems/settlements/goldenfurt_slice/verification_findings.md",
+  "path": "systems/settlements/goldenfurt_slice/reference/verification_findings.md",
   "tree": "systems",
   "bytes": 7206,
   "lines": 60,
@@ -4872,7 +4872,7 @@
   ]
  },
  {
-  "path": "systems/world/calamity_radiation_v30.md",
+  "path": "systems/world/reference/calamity_radiation_v30.md",
   "tree": "systems",
   "bytes": 11886,
   "lines": 171,
@@ -4898,7 +4898,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_exposure.md",
+  "path": "systems/fieldwork/reference/fieldwork_exposure.md",
   "tree": "systems",
   "bytes": 4854,
   "lines": 83,
@@ -4920,7 +4920,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_bg_v30.md",
+  "path": "systems/fieldwork/reference/fieldwork_bg_v30.md",
   "tree": "systems",
   "bytes": 2852,
   "lines": 48,
@@ -4946,7 +4946,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_socializing.md",
+  "path": "systems/fieldwork/reference/fieldwork_socializing.md",
   "tree": "systems",
   "bytes": 10583,
   "lines": 166,
@@ -5020,7 +5020,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/campaign_modes_v30.md",
+  "path": "systems/_architecture/reference/campaign_modes_v30.md",
   "tree": "systems",
   "bytes": 9963,
   "lines": 223,
@@ -5046,7 +5046,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/generational_transition_v30.md",
+  "path": "systems/_architecture/reference/generational_transition_v30.md",
   "tree": "systems",
   "bytes": 3441,
   "lines": 56,
@@ -5072,7 +5072,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/knots_v30.md",
+  "path": "systems/fieldwork/reference/knots_v30.md",
   "tree": "systems",
   "bytes": 24209,
   "lines": 369,
@@ -5098,7 +5098,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/subsystem_flow_skeletons_v1.md",
+  "path": "systems/_architecture/reference/subsystem_flow_skeletons_v1.md",
   "tree": "systems",
   "bytes": 12370,
   "lines": 177,
@@ -5150,7 +5150,7 @@
   ]
  },
  {
-  "path": "systems/characters/character_histories_v30_infill.md",
+  "path": "systems/characters/reference/character_histories_v30_infill.md",
   "tree": "systems",
   "bytes": 16263,
   "lines": 122,
@@ -5176,7 +5176,7 @@
   ]
  },
  {
-  "path": "systems/world/geography_v30.md",
+  "path": "systems/world/reference/geography_v30.md",
   "tree": "systems",
   "bytes": 7660,
   "lines": 166,
@@ -5198,7 +5198,7 @@
   ]
  },
  {
-  "path": "systems/world/southernmost_v30.md",
+  "path": "systems/world/reference/southernmost_v30.md",
   "tree": "systems",
   "bytes": 10038,
   "lines": 198,
@@ -5224,7 +5224,7 @@
   ]
  },
  {
-  "path": "systems/world/southernmost_v30_infill.md",
+  "path": "systems/world/reference/southernmost_v30_infill.md",
   "tree": "systems",
   "bytes": 8612,
   "lines": 60,
@@ -5250,7 +5250,7 @@
   ]
  },
  {
-  "path": "systems/npcs/edeyja_npc.md",
+  "path": "systems/npcs/reference/edeyja_npc.md",
   "tree": "systems",
   "bytes": 9720,
   "lines": 93,
@@ -5276,7 +5276,7 @@
   ]
  },
  {
-  "path": "systems/settlements/settlement_adjacency_v30_index.md",
+  "path": "systems/settlements/reference/settlement_adjacency_v30_index.md",
   "tree": "systems",
   "bytes": 1749,
   "lines": 46,
@@ -5294,7 +5294,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/auto_manual_resolution_duality_v1.md",
+  "path": "systems/_architecture/reference/auto_manual_resolution_duality_v1.md",
   "tree": "systems",
   "bytes": 9287,
   "lines": 85,
@@ -5320,7 +5320,7 @@
   ]
  },
  {
-  "path": "systems/characters/conviction_migration_roster_v30.md",
+  "path": "systems/characters/reference/conviction_migration_roster_v30.md",
   "tree": "systems",
   "bytes": 10428,
   "lines": 296,
@@ -5346,7 +5346,7 @@
   ]
  },
  {
-  "path": "systems/factions/baralta_crown_claim_v30_infill.md",
+  "path": "systems/factions/reference/baralta_crown_claim_v30_infill.md",
   "tree": "systems",
   "bytes": 4646,
   "lines": 41,
@@ -5372,7 +5372,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/cogload_moderate_target.md",
+  "path": "systems/_architecture/reference/cogload_moderate_target.md",
   "tree": "systems",
   "bytes": 15663,
   "lines": 290,
@@ -5398,7 +5398,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/campaign_architecture_v30_index.md",
+  "path": "systems/_architecture/reference/campaign_architecture_v30_index.md",
   "tree": "systems",
   "bytes": 5247,
   "lines": 92,
@@ -5424,7 +5424,7 @@
   ]
  },
  {
-  "path": "systems/world/worldbuilding_v30_index.md",
+  "path": "systems/world/reference/worldbuilding_v30_index.md",
   "tree": "systems",
   "bytes": 5718,
   "lines": 107,
@@ -5450,7 +5450,7 @@
   ]
  },
  {
-  "path": "systems/social_contest/social_contest_currency_v1.md",
+  "path": "systems/social_contest/reference/social_contest_currency_v1.md",
   "tree": "systems",
   "bytes": 5164,
   "lines": 24,
@@ -5476,7 +5476,7 @@
   ]
  },
  {
-  "path": "systems/threadwork/threadwork_v30_infill.md",
+  "path": "systems/threadwork/reference/threadwork_v30_infill.md",
   "tree": "systems",
   "bytes": 40583,
   "lines": 196,
@@ -5502,7 +5502,7 @@
   ]
  },
  {
-  "path": "systems/combat/combat_flow_skeleton_v1.md",
+  "path": "systems/combat/reference/combat_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 28060,
   "lines": 150,
@@ -5516,7 +5516,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/player_agency_v30_index.md",
+  "path": "systems/_architecture/reference/player_agency_v30_index.md",
   "tree": "systems",
   "bytes": 6407,
   "lines": 136,
@@ -5542,7 +5542,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_rationale.md",
+  "path": "systems/fieldwork/reference/fieldwork_rationale.md",
   "tree": "systems",
   "bytes": 7358,
   "lines": 70,
@@ -5594,7 +5594,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/scale_transitions_v30_infill.md",
+  "path": "systems/_architecture/reference/scale_transitions_v30_infill.md",
   "tree": "systems",
   "bytes": 4529,
   "lines": 61,
@@ -5620,7 +5620,7 @@
   ]
  },
  {
-  "path": "systems/mass_battle/mass_battle_integration_v30.md",
+  "path": "systems/mass_battle/reference/mass_battle_integration_v30.md",
   "tree": "systems",
   "bytes": 30379,
   "lines": 476,
@@ -5646,7 +5646,7 @@
   ]
  },
  {
-  "path": "systems/combat/scene_combat_design_v1.md",
+  "path": "systems/combat/reference/scene_combat_design_v1.md",
   "tree": "systems",
   "bytes": 8094,
   "lines": 120,
@@ -5672,7 +5672,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/integration_proposal_v30_index.md",
+  "path": "systems/_architecture/reference/integration_proposal_v30_index.md",
   "tree": "systems",
   "bytes": 5889,
   "lines": 106,
@@ -5698,7 +5698,7 @@
   ]
  },
  {
-  "path": "systems/factions/faction_succession_split_v30_index.md",
+  "path": "systems/factions/reference/faction_succession_split_v30_index.md",
   "tree": "systems",
   "bytes": 1773,
   "lines": 44,
@@ -5716,7 +5716,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_editorial.md",
+  "path": "systems/fieldwork/reference/fieldwork_editorial.md",
   "tree": "systems",
   "bytes": 5215,
   "lines": 78,
@@ -5742,7 +5742,7 @@
   ]
  },
  {
-  "path": "systems/articulation/articulation_flow_skeleton_v1.md",
+  "path": "systems/articulation/reference/articulation_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 13459,
   "lines": 132,
@@ -5768,7 +5768,7 @@
   ]
  },
  {
-  "path": "systems/ui/valoria_ui_ux_v4_index.md",
+  "path": "systems/ui/reference/valoria_ui_ux_v4_index.md",
   "tree": "systems",
   "bytes": 12657,
   "lines": 276,
@@ -5790,7 +5790,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/derived_stats_v30_index.md",
+  "path": "systems/_architecture/reference/derived_stats_v30_index.md",
   "tree": "systems",
   "bytes": 4131,
   "lines": 84,
@@ -5808,7 +5808,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/videogame_mode_spec_index.md",
+  "path": "systems/_architecture/reference/videogame_mode_spec_index.md",
   "tree": "systems",
   "bytes": 3524,
   "lines": 66,
@@ -5830,7 +5830,7 @@
   ]
  },
  {
-  "path": "systems/world/geography_v30_infill.md",
+  "path": "systems/world/reference/geography_v30_infill.md",
   "tree": "systems",
   "bytes": 5454,
   "lines": 42,
@@ -5892,7 +5892,7 @@
   ]
  },
  {
-  "path": "systems/overview/ms_budget.md",
+  "path": "systems/overview/reference/ms_budget.md",
   "tree": "systems",
   "bytes": 9022,
   "lines": 142,
@@ -5918,7 +5918,7 @@
   ]
  },
  {
-  "path": "systems/factions/fractional_province_ownership_v30_index.md",
+  "path": "systems/factions/reference/fractional_province_ownership_v30_index.md",
   "tree": "systems",
   "bytes": 1715,
   "lines": 44,
@@ -5932,7 +5932,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_investigation.md",
+  "path": "systems/fieldwork/reference/fieldwork_investigation.md",
   "tree": "systems",
   "bytes": 12139,
   "lines": 112,
@@ -5958,7 +5958,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/scale_transitions_v30_index.md",
+  "path": "systems/_architecture/reference/scale_transitions_v30_index.md",
   "tree": "systems",
   "bytes": 5012,
   "lines": 106,
@@ -5976,7 +5976,7 @@
   ]
  },
  {
-  "path": "systems/characters/conviction_track_v30_index.md",
+  "path": "systems/characters/reference/conviction_track_v30_index.md",
   "tree": "systems",
   "bytes": 4931,
   "lines": 96,
@@ -5998,7 +5998,7 @@
   ]
  },
  {
-  "path": "systems/characters/character_histories_v30_index.md",
+  "path": "systems/characters/reference/character_histories_v30_index.md",
   "tree": "systems",
   "bytes": 5755,
   "lines": 114,
@@ -6020,7 +6020,7 @@
   ]
  },
  {
-  "path": "systems/world/worldbuilding_canon_audit_v30_infill.md",
+  "path": "systems/world/reference/worldbuilding_canon_audit_v30_infill.md",
   "tree": "systems",
   "bytes": 6095,
   "lines": 51,
@@ -6046,7 +6046,7 @@
   ]
  },
  {
-  "path": "systems/mass_battle/military_layer_v30_index.md",
+  "path": "systems/mass_battle/reference/military_layer_v30_index.md",
   "tree": "systems",
   "bytes": 4149,
   "lines": 90,
@@ -6068,7 +6068,7 @@
   ]
  },
  {
-  "path": "systems/social_contest/social_contest_v30_infill.md",
+  "path": "systems/social_contest/reference/social_contest_v30_infill.md",
   "tree": "systems",
   "bytes": 6377,
   "lines": 63,
@@ -6094,7 +6094,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/investigation_systems_v30_index.md",
+  "path": "systems/fieldwork/reference/investigation_systems_v30_index.md",
   "tree": "systems",
   "bytes": 4616,
   "lines": 96,
@@ -6138,7 +6138,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/campaign_modes_v30_infill.md",
+  "path": "systems/_architecture/reference/campaign_modes_v30_infill.md",
   "tree": "systems",
   "bytes": 6129,
   "lines": 55,
@@ -6164,7 +6164,7 @@
   ]
  },
  {
-  "path": "systems/world/narrative_voice_canon_v30.md",
+  "path": "systems/world/reference/narrative_voice_canon_v30.md",
   "tree": "systems",
   "bytes": 7226,
   "lines": 72,
@@ -6186,7 +6186,7 @@
   ]
  },
  {
-  "path": "systems/factions/varfell_path_b_v30.md",
+  "path": "systems/factions/reference/varfell_path_b_v30.md",
   "tree": "systems",
   "bytes": 4019,
   "lines": 103,
@@ -6238,7 +6238,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/holonic_container_doctrine_v1.md",
+  "path": "systems/_architecture/reference/holonic_container_doctrine_v1.md",
   "tree": "systems",
   "bytes": 9809,
   "lines": 112,
@@ -6264,7 +6264,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/repo_state_armature_v1.md",
+  "path": "systems/_architecture/reference/repo_state_armature_v1.md",
   "tree": "systems",
   "bytes": 13390,
   "lines": 158,
@@ -6286,7 +6286,7 @@
   ]
  },
  {
-  "path": "systems/characters/conviction_axis_matrix_v30.md",
+  "path": "systems/characters/reference/conviction_axis_matrix_v30.md",
   "tree": "systems",
   "bytes": 12245,
   "lines": 251,
@@ -6312,7 +6312,7 @@
   ]
  },
  {
-  "path": "systems/world/solmund_voice_v30.md",
+  "path": "systems/world/reference/solmund_voice_v30.md",
   "tree": "systems",
   "bytes": 17207,
   "lines": 215,
@@ -6330,7 +6330,7 @@
   ]
  },
  {
-  "path": "systems/social_contest/social_contest_v30_index.md",
+  "path": "systems/social_contest/reference/social_contest_v30_index.md",
   "tree": "systems",
   "bytes": 5899,
   "lines": 108,
@@ -6352,7 +6352,7 @@
   ]
  },
  {
-  "path": "systems/threadwork/thread_horizontal_integration_spec_index.md",
+  "path": "systems/threadwork/reference/thread_horizontal_integration_spec_index.md",
   "tree": "systems",
   "bytes": 3963,
   "lines": 74,
@@ -6422,7 +6422,7 @@
   ]
  },
  {
-  "path": "systems/ui/ui_flow_skeleton_v1.md",
+  "path": "systems/ui/reference/ui_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 7315,
   "lines": 61,
@@ -6448,7 +6448,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/repository_keep_set_v1.md",
+  "path": "systems/_architecture/reference/repository_keep_set_v1.md",
   "tree": "systems",
   "bytes": 24767,
   "lines": 376,
@@ -6474,7 +6474,7 @@
   ]
  },
  {
-  "path": "systems/world/calamity_radiation_v30_infill.md",
+  "path": "systems/world/reference/calamity_radiation_v30_infill.md",
   "tree": "systems",
   "bytes": 4508,
   "lines": 42,
@@ -6492,7 +6492,7 @@
   ]
  },
  {
-  "path": "systems/npcs/baralta_v30.md",
+  "path": "systems/npcs/reference/baralta_v30.md",
   "tree": "systems",
   "bytes": 3941,
   "lines": 46,
@@ -6562,7 +6562,7 @@
   ]
  },
  {
-  "path": "systems/combat/combat_engine_v1/phase4_5_plan_v1.md",
+  "path": "systems/combat/combat_engine_v1/reference/phase4_5_plan_v1.md",
   "tree": "systems",
   "bytes": 51783,
   "lines": 327,
@@ -6588,7 +6588,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/companion_app_design_note.md",
+  "path": "systems/_architecture/reference/companion_app_design_note.md",
   "tree": "systems",
   "bytes": 2604,
   "lines": 46,
@@ -6610,7 +6610,7 @@
   ]
  },
  {
-  "path": "systems/characters/characters_flow_skeleton_v1.md",
+  "path": "systems/characters/reference/characters_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 21778,
   "lines": 150,
@@ -6624,7 +6624,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_hybrid_v30.md",
+  "path": "systems/fieldwork/reference/fieldwork_hybrid_v30.md",
   "tree": "systems",
   "bytes": 1627,
   "lines": 30,
@@ -6646,7 +6646,7 @@
   ]
  },
  {
-  "path": "systems/overview/clock_registry_v30_infill.md",
+  "path": "systems/overview/reference/clock_registry_v30_infill.md",
   "tree": "systems",
   "bytes": 645,
   "lines": 16,
@@ -6708,7 +6708,7 @@
   ]
  },
  {
-  "path": "systems/ui/valoria_ui_ux_v4_2_workplan_index.md",
+  "path": "systems/ui/reference/valoria_ui_ux_v4_2_workplan_index.md",
   "tree": "systems",
   "bytes": 2743,
   "lines": 64,
@@ -6726,7 +6726,7 @@
   ]
  },
  {
-  "path": "systems/ui/valoria_ui_ux_v4_1_max_audit_index.md",
+  "path": "systems/ui/reference/valoria_ui_ux_v4_1_max_audit_index.md",
   "tree": "systems",
   "bytes": 4449,
   "lines": 88,
@@ -6744,7 +6744,7 @@
   ]
  },
  {
-  "path": "systems/social_contest/social_contest_system_v2_index.md",
+  "path": "systems/social_contest/reference/social_contest_system_v2_index.md",
   "tree": "systems",
   "bytes": 4427,
   "lines": 92,
@@ -6762,7 +6762,7 @@
   ]
  },
  {
-  "path": "systems/threadwork/threadwork_flow_skeleton_v1.md",
+  "path": "systems/threadwork/reference/threadwork_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 26103,
   "lines": 161,
@@ -6776,7 +6776,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_flow_skeleton_v1.md",
+  "path": "systems/fieldwork/reference/fieldwork_flow_skeleton_v1.md",
   "tree": "systems",
   "bytes": 21553,
   "lines": 154,
@@ -6790,7 +6790,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_bg_v30_infill.md",
+  "path": "systems/fieldwork/reference/fieldwork_bg_v30_infill.md",
   "tree": "systems",
   "bytes": 961,
   "lines": 16,
@@ -6876,7 +6876,7 @@
   ]
  },
  {
-  "path": "systems/combat/combat_currency_v1.md",
+  "path": "systems/combat/reference/combat_currency_v1.md",
   "tree": "systems",
   "bytes": 5203,
   "lines": 24,
@@ -6894,7 +6894,7 @@
   ]
  },
  {
-  "path": "systems/combat/combat_engine_v1/ability_armature.md",
+  "path": "systems/combat/combat_engine_v1/reference/ability_armature.md",
   "tree": "systems",
   "bytes": 15428,
   "lines": 182,
@@ -6908,7 +6908,7 @@
   ]
  },
  {
-  "path": "systems/world/solmund_v30.md",
+  "path": "systems/world/reference/solmund_v30.md",
   "tree": "systems",
   "bytes": 8615,
   "lines": 77,
@@ -6922,7 +6922,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_hybrid_v30_infill.md",
+  "path": "systems/fieldwork/reference/fieldwork_hybrid_v30_infill.md",
   "tree": "systems",
   "bytes": 907,
   "lines": 13,
@@ -6976,7 +6976,7 @@
   ]
  },
  {
-  "path": "systems/_architecture/cogload_moderate_target_index.md",
+  "path": "systems/_architecture/reference/cogload_moderate_target_index.md",
   "tree": "systems",
   "bytes": 4737,
   "lines": 88,
@@ -6990,7 +6990,7 @@
   ]
  },
  {
-  "path": "systems/mass_battle/mass_battle_v30_index.md",
+  "path": "systems/mass_battle/reference/mass_battle_v30_index.md",
   "tree": "systems",
   "bytes": 6963,
   "lines": 110,
@@ -7004,7 +7004,7 @@
   ]
  },
  {
-  "path": "systems/threadwork/threadwork_v30_index.md",
+  "path": "systems/threadwork/reference/threadwork_v30_index.md",
   "tree": "systems",
   "bytes": 8772,
   "lines": 184,
@@ -7018,7 +7018,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_summary.md",
+  "path": "systems/fieldwork/reference/fieldwork_summary.md",
   "tree": "systems",
   "bytes": 1560,
   "lines": 21,
@@ -7036,7 +7036,7 @@
   ]
  },
  {
-  "path": "systems/fieldwork/fieldwork_v30_index.md",
+  "path": "systems/fieldwork/reference/fieldwork_v30_index.md",
   "tree": "systems",
   "bytes": 8944,
   "lines": 162,
@@ -7064,7 +7064,7 @@
   ]
  },
  {
-  "path": "systems/combat/combat_engine_v1/tradition_decomposition_v1.md",
+  "path": "systems/combat/combat_engine_v1/reference/tradition_decomposition_v1.md",
   "tree": "systems",
   "bytes": 12697,
   "lines": 162,
@@ -7078,7 +7078,7 @@
   ]
  },
  {
-  "path": "systems/world/solmund_artifacts_v30.md",
+  "path": "systems/world/reference/solmund_artifacts_v30.md",
   "tree": "systems",
   "bytes": 3621,
   "lines": 54,
@@ -7092,7 +7092,7 @@
   ]
  },
  {
-  "path": "systems/threadwork/threadwork_philosophical_reference_v30_infill.md",
+  "path": "systems/threadwork/reference/threadwork_philosophical_reference_v30_infill.md",
   "tree": "systems",
   "bytes": 12314,
   "lines": 39,
@@ -7151,7 +7151,7 @@
   "top": []
  },
  {
-  "path": "systems/combat/combat_c4_draft_v0.md",
+  "path": "systems/combat/reference/combat_c4_draft_v0.md",
   "tree": "systems",
   "bytes": 11292,
   "lines": 210,
@@ -7160,7 +7160,7 @@
   "top": []
  },
  {
-  "path": "systems/combat/combat_engine_v1/combat_throughlines_v1.md",
+  "path": "systems/combat/combat_engine_v1/reference/combat_throughlines_v1.md",
   "tree": "systems",
   "bytes": 4489,
   "lines": 63,
@@ -7169,7 +7169,7 @@
   "top": []
  },
  {
-  "path": "systems/combat/combat_engine_v1/REARCHITECTURE_v1.md",
+  "path": "systems/combat/combat_engine_v1/reference/REARCHITECTURE_v1.md",
   "tree": "systems",
   "bytes": 7482,
   "lines": 96,
@@ -7178,7 +7178,7 @@
   "top": []
  },
  {
-  "path": "systems/combat/combat_engine_v1/README.md",
+  "path": "systems/combat/combat_engine_v1/reference/README.md",
   "tree": "systems",
   "bytes": 1343,
   "lines": 18,
@@ -7187,7 +7187,7 @@
   "top": []
  },
  {
-  "path": "systems/combat/combat_engine_v1/engagement_psychology_recovered.md",
+  "path": "systems/combat/combat_engine_v1/reference/engagement_psychology_recovered.md",
   "tree": "systems",
   "bytes": 5164,
   "lines": 70,
@@ -7196,7 +7196,7 @@
   "top": []
  },
  {
-  "path": "systems/combat/combat_engine_v1/combat_balancing_methodology.md",
+  "path": "systems/combat/combat_engine_v1/reference/combat_balancing_methodology.md",
   "tree": "systems",
   "bytes": 7722,
   "lines": 106,
@@ -7205,7 +7205,7 @@
   "top": []
  },
  {
-  "path": "systems/_architecture/decision_policy_v1.md",
+  "path": "systems/_architecture/reference/decision_policy_v1.md",
   "tree": "systems",
   "bytes": 9528,
   "lines": 173,
@@ -7214,7 +7214,7 @@
   "top": []
  },
  {
-  "path": "systems/world/solmund_philosophy_v30.md",
+  "path": "systems/world/reference/solmund_philosophy_v30.md",
   "tree": "systems",
   "bytes": 4791,
   "lines": 71,
@@ -7223,7 +7223,7 @@
   "top": []
  },
  {
-  "path": "systems/mass_battle/mass_battle_v30_infill.md",
+  "path": "systems/mass_battle/reference/mass_battle_v30_infill.md",
   "tree": "systems",
   "bytes": 3391,
   "lines": 46,
@@ -7232,7 +7232,7 @@
   "top": []
  },
  {
-  "path": "systems/factions/varfell_path_b_v30_infill.md",
+  "path": "systems/factions/reference/varfell_path_b_v30_infill.md",
   "tree": "systems",
   "bytes": 2020,
   "lines": 22,
@@ -7241,7 +7241,7 @@
   "top": []
  },
  {
-  "path": "systems/threadwork/threadwork_v25_historical_index.md",
+  "path": "systems/threadwork/reference/threadwork_v25_historical_index.md",
   "tree": "systems",
   "bytes": 8157,
   "lines": 182,
@@ -7250,7 +7250,7 @@
   "top": []
  },
  {
-  "path": "systems/threadwork/threadwork_philosophical_reference_v30.md",
+  "path": "systems/threadwork/reference/threadwork_philosophical_reference_v30.md",
   "tree": "systems",
   "bytes": 860,
   "lines": 52,

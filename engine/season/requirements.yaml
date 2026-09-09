@@ -32,7 +32,7 @@ ed: "ED-IN-0204"
 # ⚠ AND THE REPOSITORY ALREADY SPECIFIES THIS, WHICH IS THE POINT JORDAN MADE: *"the repository
 # outlines all of this pretty explicitly at the different scales. the proposal since it's becoming
 # adopted now and real needs to accommodate it all."* The canonical surface is
-# `systems/_architecture/scale_transitions_v30.md` (Status: CANONICAL), and the adopted loop
+# `systems/_architecture/reference/scale_transitions_v30.md` (Status: CANONICAL), and the adopted loop
 # currently honours NEITHER of its two tables:
 #
 #   §1 THREE MODES — TTRPG (scene-by-scene, rounds) · Hybrid (BG strategic + TTRPG scenes via

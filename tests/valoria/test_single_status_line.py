@@ -10,15 +10,15 @@ gate, while remaining perfectly visible to a human reading the file.
 Found 2026-08-14 by a read-only contradiction hunt. Three of the five instances are genuine
 contradictions, not duplications:
 
-  · `systems/_architecture/derived_stats_v30.md:2,4` — `CANONICAL` and `PROPOSAL — supersedes
+  · `systems/_architecture/reference/derived_stats_v30.md:2,4` — `CANONICAL` and `PROPOSAL — supersedes
     prior derived_stats_v30.md`. One file, two statuses, the second self-referentially superseding
     the file it appears in. This doc is load-bearing: CURRENT.md names its §14.2 as the Truth-Track
     source of truth, and the combat wound constants resolve through its §4.1.
-  · `systems/factions/faction_canon_v30.md:6,7` — `CANONICAL` and `PROVISIONAL — pending
+  · `systems/factions/reference/faction_canon_v30.md:6,7` — `CANONICAL` and `PROVISIONAL — pending
     ratification`, where the PROVISIONAL line explicitly redirects per-faction texture authority
     back to four other documents. An ED-1094 ratify-on-merge flip that never happened; the loser is
     not a softer version of the winner, it points somewhere else entirely.
-  · `systems/characters/character_generation_questionnaire_v30.md:2,4` — `CANONICAL` and
+  · `systems/characters/reference/character_generation_questionnaire_v30.md:2,4` — `CANONICAL` and
     `DESIGN DIRECTION (not yet authored — question set pending)`. Incompatible claims about whether
     canonical content exists at all.
 
@@ -44,11 +44,11 @@ STATUS_RE = re.compile(r'^##\s*Status:', re.M)
 
 # MEASURED 2026-08-14. Shrink this as each is dispositioned; never grow it to make a run pass.
 KNOWN_MULTI_STATUS = {
-    'systems/_architecture/derived_stats_v30.md',            # CONTRADICTION — CANONICAL vs self-superseding PROPOSAL
-    'systems/factions/faction_canon_v30.md',                  # CONTRADICTION — CANONICAL vs PROVISIONAL (ED-1094 flip missed)
-    'systems/characters/character_generation_questionnaire_v30.md',  # CONTRADICTION — CANONICAL vs "not yet authored"
-    'systems/_architecture/scale_transitions_v30.md',          # duplication, dissolved on inspection
-    'systems/_architecture/subsystem_flow_skeletons_v1.md',    # unassessed
+    'systems/_architecture/reference/derived_stats_v30.md',            # CONTRADICTION — CANONICAL vs self-superseding PROPOSAL
+    'systems/factions/reference/faction_canon_v30.md',                  # CONTRADICTION — CANONICAL vs PROVISIONAL (ED-1094 flip missed)
+    'systems/characters/reference/character_generation_questionnaire_v30.md',  # CONTRADICTION — CANONICAL vs "not yet authored"
+    'systems/_architecture/reference/scale_transitions_v30.md',          # duplication, dissolved on inspection
+    'systems/_architecture/reference/subsystem_flow_skeletons_v1.md',    # unassessed
 }
 
 
@@ -121,9 +121,9 @@ def test_the_three_real_contradictions_are_still_the_named_ones():
     statuses, it was dispositioned and this test points at the record to update.
     """
     found = set(_multi_status_docs())
-    for rel in ('systems/_architecture/derived_stats_v30.md',
-                'systems/factions/faction_canon_v30.md',
-                'systems/characters/character_generation_questionnaire_v30.md'):
+    for rel in ('systems/_architecture/reference/derived_stats_v30.md',
+                'systems/factions/reference/faction_canon_v30.md',
+                'systems/characters/reference/character_generation_questionnaire_v30.md'):
         assert rel in found, (
             f'{rel} no longer carries two Status lines — if it was dispositioned, update '
             f'KNOWN_MULTI_STATUS and this test together and record the disposition.')

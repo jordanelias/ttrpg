@@ -1,7 +1,7 @@
 """
 systems/factions/sim/treaty.py — Crown Treaties + Treaty Expiration (90-95%/arc lapse per v12c)
 
-Canon source: systems/factions/treaty_expiration_v30.md (CANONICAL, Pass 2h
+Canon source: systems/factions/reference/treaty_expiration_v30.md (CANONICAL, Pass 2h
 2026-05-17); designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md §4.5 + §4.7
 
 IMPLEMENTATION STATUS (2026-05-26 review):

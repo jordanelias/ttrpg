@@ -71,14 +71,14 @@ def test_parliamentary_transfer_still_uses_the_full_score():
     """`holder.L + 2` — FULL score, contradicting the ruling, and stated as canon in its design doc.
 
     Pinned deliberately. This is the site a session would most plausibly "fix", and doing so
-    overwrites `systems/factions/parliamentary_transfer_v30.md:30`, which states the number in its
+    overwrites `systems/factions/reference/parliamentary_transfer_v30.md:30`, which states the number in its
     own resolution table. That is a ruling, not an implementation.
     """
     from systems.factions.sim import parliamentary_transfer as pt
 
     assert pt.PARL_MAJORITY_OB_BONUS == 2, 'the +2 modifier moved (parliamentary_transfer_v30.md:30)'
 
-    doc = os.path.join(ROOT, 'systems', 'factions', 'parliamentary_transfer_v30.md')
+    doc = os.path.join(ROOT, 'systems', 'factions', 'reference', 'parliamentary_transfer_v30.md')
     text = open(doc, encoding='utf-8').read()
     assert 'Holder Legitimacy' in text, (
         'the design doc no longer states the obstacle as Holder Legitimacy. If canon changed, '

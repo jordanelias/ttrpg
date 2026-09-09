@@ -187,7 +187,7 @@ This is the deepest correction and it changes what U3 authors.
   moral axes\""*. It ships **4** members with `incomplete: {have: 4, target: 13, blocked_by: H-46}`.
   Its own note: *"this roster is NOT the closed 13 and must never be cited as it"*.
 - `references/descriptor_registry.yaml:235-251` declares **`conviction_roster`**, `count: 13`, source
-  `systems/characters/conviction_taxonomy_v30.md §2` — **Faith, Authority, Order, Scholastic, Utility,
+  `systems/characters/reference/conviction_taxonomy_v30.md §2` — **Faith, Authority, Order, Scholastic, Utility,
   Equity, Liberty, Precedent, Community, Identity, Warden, Virtue, Honor.** These are **CONVICTIONS.**
 - The same file, `:258` (the `by_reference` block), declares separately: `{key: "axis.*", kind: ethical_axis, name: "4 ethical
   axes (hierarchical/sacred/instrumental/traditional)", source: "…conviction_axis_matrix_v30.md /
@@ -971,7 +971,7 @@ moves. Feeds R-08.
 ```yaml
   convictions:
     source: "references/descriptor_registry.yaml `conviction_roster` (:235-251), count 13, itself
-             sourced from systems/characters/conviction_taxonomy_v30.md §2 and exported to
+             sourced from systems/characters/reference/conviction_taxonomy_v30.md §2 and exported to
              engine/engine_params/descriptors.json behind a BLOCKING --check
              (tools/export_descriptors.py, valoria-ci.yml:137)."
     open: false
@@ -990,7 +990,7 @@ moves. Feeds R-08.
 ```yaml
   tables:
     conviction_projection:         # NEW. 13 x 4.
-      source: "systems/characters/conviction_axis_matrix_v30.md / PP-687, registered by reference at
+      source: "systems/characters/reference/conviction_axis_matrix_v30.md / PP-687, registered by reference at
                references/descriptor_registry.yaml:259 -- the `map.conviction_axis` row, shape 13x4"
       row: H-46
       default_cell: 0.0
@@ -1377,7 +1377,7 @@ and U8's NPC-lane cast landed.
   `row 48` (`:982` — *"`at_war` is a Query over the live ones… There is no boolean between two factions
   to set"*).
 - `rosters.yaml`: a `scale_of_rung` mapping from the eight `rung_kinds` to canon's five scales
-  (`systems/_architecture/scale_transitions_v30.md` §2, `:26` — **THE SCALE SET ONLY**; its *"Base Ob"*
+  (`systems/_architecture/reference/scale_transitions_v30.md` §2, `:26` — **THE SCALE SET ONLY**; its *"Base Ob"*
   column is thread-only and is **not an obstacle source**, Jordan 2026-09-05).
   **[CLOSED — READ 2026-09-09, AND IT RAISES A PROBLEM THIS UNIT MUST SOLVE RATHER THAN INHERIT.**
   §2's five scales are **Object · Personal · Relational · Territorial · Structural**, with columns

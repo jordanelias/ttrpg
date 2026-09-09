@@ -4,7 +4,7 @@
 ## Version: v1.0 (consolidation of combat_v30 v1.7 + combat_v30_infill v1.6 + combat_design_v1 v1.6)
 ## Date: 2026-08-08
 ## Authority: Philosophical Foundations → `systems/combat/combat_engine_v1/` (the resolver, canonical per CURRENT.md) → **this document** (design-layer prose reference)
-## Mode applicability: personal scale. Per `systems/_architecture/videogame_mode_spec.md` §4, TTRPG-only and board-game-only modes are formally discarded; mode-split passages below are retained as historical rationale, not as live alternatives.
+## Mode applicability: personal scale. Per `systems/_architecture/reference/videogame_mode_spec.md` §4, TTRPG-only and board-game-only modes are formally discarded; mode-split passages below are retained as historical rationale, not as live alternatives.
 
 > **What this document is.** The single design-layer reference for personal combat. It replaces five
 > overlapping files that each claimed, in identical words, to be *"the design-layer source for personal

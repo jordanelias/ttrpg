@@ -1,7 +1,7 @@
 """
 systems/settlements/sim/infrastructure.py — Church infrastructure — Religious Buildings, Templar Stations, Inquisitor Bases, Church Governors
 
-Canon source: systems/settlements/settlement_layer_v30.md §1.5-§1.7
+Canon source: systems/settlements/reference/settlement_layer_v30.md §1.5-§1.7
 
 Implements the §1.5 four-independent-axis model:
   Axis 1 (Religious Building, mutually exclusive): None / Chapel / Church / Cathedral

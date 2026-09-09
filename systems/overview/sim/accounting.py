@@ -3,9 +3,9 @@ sim/peninsular/accounting.py — End-of-season Accounting
 
 Canon source: designs/scene/conviction_track_v30.md §3 PP-412 (CI generation);
               params/core.md §MS Baseline Decay PP-255 (MS year-end decay);
-              systems/factions/ci_political_v30.md (CI political role);
+              systems/factions/reference/ci_political_v30.md (CI political role);
               canon/02_canon_constraints.md §B GD-3 (insurgency pipeline);
-              systems/fieldwork/investigation_systems_v30.md SYSTEM 1 (NPE).
+              systems/fieldwork/reference/investigation_systems_v30.md SYSTEM 1 (NPE).
 Status: [CANONICAL — Phase 2 2026-05-17; Deferred Migration Batch 2026-05-20;
                     insurgency + NPE wire-up 2026-05-20]
 [PRE-LPS-1 (schema gap, NOT a port block) — ED-FA-0004, 2026-07-07: run_accounting() has NO Mandate-aggregation
@@ -135,7 +135,7 @@ def run_accounting(world):
     # NPE — territory-level NPC stance drift. Pairs with shared worldview and
     # adjacent stance positions roll Volatility to drift toward each other.
     # Side-effect: world.npcs state mutated. Actions list discarded here.
-    # [canonical: systems/fieldwork/investigation_systems_v30.md SYSTEM 1 §Persistence]
+    # [canonical: systems/fieldwork/reference/investigation_systems_v30.md SYSTEM 1 §Persistence]
     simulate_npc_actions(world)
 
     # W3 Handoff item 2 (ED-IN-0091 plan §3 Wave 3) — report-only; see the function's own

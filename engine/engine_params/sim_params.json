@@ -256,8 +256,8 @@
       "kind": "scalar",
       "module": "engine.cross_scale",
       "file": "engine/cross_scale/echo_transport.py",
-      "note": "[canonical: designs/architecture/key_echo_armature_v1.md §5.7 — OF-CAP caller cap, ED-IN-0026]",
-      "citation": "designs/architecture/key_echo_armature_v1.md §5.7 — OF-CAP caller cap, ED-IN-0026",
+      "note": "[canonical: systems/_architecture/reference/key_echo_armature_v1.md §5.7 — OF-CAP caller cap, ED-IN-0026]",
+      "citation": "systems/_architecture/reference/key_echo_armature_v1.md §5.7 — OF-CAP caller cap, ED-IN-0026",
       "citation_grade": "source"
     },
     {
@@ -267,8 +267,8 @@
       "kind": "scalar",
       "module": "engine.cross_scale",
       "file": "engine/cross_scale/echo_transport.py",
-      "note": "[canonical: designs/architecture/key_echo_armature_v1.md §5.7 — OF-CAP operational cap, ED-IN-0026]",
-      "citation": "designs/architecture/key_echo_armature_v1.md §5.7 — OF-CAP operational cap, ED-IN-0026",
+      "note": "[canonical: systems/_architecture/reference/key_echo_armature_v1.md §5.7 — OF-CAP operational cap, ED-IN-0026]",
+      "citation": "systems/_architecture/reference/key_echo_armature_v1.md §5.7 — OF-CAP operational cap, ED-IN-0026",
       "citation_grade": "source"
     },
     {

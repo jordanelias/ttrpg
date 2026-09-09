@@ -6,7 +6,7 @@ WHY. The architecture says subsystems communicate by emitting typed Keys. MEASUR
 Python imports. The contracts reference 47 dotted key names; implemented coverage is ~2%.
 
 Nothing noticed because nothing could: the graph was authored TWICE, in two formats, and no tool
-ever joined them. `systems/_architecture/key_type_registry_v30.md` carries
+ever joined them. `systems/_architecture/reference/key_type_registry_v30.md` carries
 `emitting_systems`/`consuming_systems` as FREE PROSE (values include `'all subscribing systems'`
 and `'npc_behavior / Procedure E'`); `references/module_contracts.yaml` carries typed
 `emits`/`consumes`. A prose field cannot be joined to a typed one, so the two drifted in public

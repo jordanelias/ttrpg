@@ -954,7 +954,7 @@ obvious, all of them load-bearing on how `parallel()` stages are written):
    model-scoped. Escalate at *phase* boundaries, where the cache turns over anyway, not mid-phase.
 
 **Orchestration patterns** (from the 2026-07-01 workflow spec, ingested ED-1083 — see
-`systems/_architecture/holonic_container_doctrine_v1.md` for the doctrine side):
+`systems/_architecture/reference/holonic_container_doctrine_v1.md` for the doctrine side):
 - **Agonist→antagonist is a relay, not a dialogue**: subagents are stateless and isolated —
   dispatch the producer, capture its output, dispatch the critic WITH that output, reconcile in the
   orchestrator. For audits this is *preferable*: a critic that never saw the producer's reasoning is

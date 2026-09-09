@@ -15,7 +15,7 @@ other two were not asked:
    most surveyed games, the player spends the majority of their decisions.
 
 ⚠ **And a coverage failure in this companion, stated before anything else.** Valoria already has a
-**declared six-title precedent analysis for the within-faction stance** — `systems/_architecture/player_agency_v30.md`
+**declared six-title precedent analysis for the within-faction stance** — `systems/_architecture/reference/player_agency_v30.md`
 §1, covering ROTK Officer Mode, CK3 Vassal Play, Disco Elysium, Mount & Blade / Manor Lords,
 Pathologic 2 and Pentiment, each with an explicit *"What Valoria takes"*. **Parts 1–4 of this
 companion never read it.** They surveyed the strategic layer's precedents and skipped the design's own

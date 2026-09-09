@@ -88,7 +88,7 @@ practitioner_stats:
 # province-to-settlement inheritance rule itself is a separate open item, OPT-AV-18, fed to SE).
 # ============================================================================
 territory_stats:
-  source: "engine/params/bg/geography.md; systems/settlements/settlement_layer_v30.md (Fort Level)"
+  source: "engine/params/bg/geography.md; systems/settlements/reference/settlement_layer_v30.md (Fort Level)"
   entries:
     - {key: terr.fort_level, name: Fort Level, aliases: [Fort], scale: "0-4"}
 
@@ -162,14 +162,14 @@ faction_stats:
 # SETTLEMENT stats (settlement domain).
 # ============================================================================
 settlement_stats:
-  source: "systems/settlements/settlement_layer_v30.md §1.8"
+  source: "systems/settlements/reference/settlement_layer_v30.md §1.8"
   entries:
     - {key: set.legitimacy,      name: Legitimacy,       scale: "0-7"}
     - {key: set.popular_support, name: Popular Support,  scale: "0-7"}
     - {key: set.prosperity,      name: Prosperity,       scale: "0-5"}
     - {key: set.defense,         name: Defense,          scale: "0-5"}
     - {key: set.order,           name: Order,            scale: "0-5"}
-    - {key: set.facility_tier,   name: Facility Tier,    aliases: [FacilityTier, FacilityTier_s], scale: "0-3", source: "systems/settlements/settlement_layer_v30.md §1.8 line 162"}   # ED-IN-0029 D5 residual, filed 2026-07-08 (Wave-Q-step-3 pass) -- distinct from `terr.fort_level` above; the companion derived `settlement_weight`/W_s is registered below under not_descriptors (no derived.* KIND exists in this file)
+    - {key: set.facility_tier,   name: Facility Tier,    aliases: [FacilityTier, FacilityTier_s], scale: "0-3", source: "systems/settlements/reference/settlement_layer_v30.md §1.8 line 162"}   # ED-IN-0029 D5 residual, filed 2026-07-08 (Wave-Q-step-3 pass) -- distinct from `terr.fort_level` above; the companion derived `settlement_weight`/W_s is registered below under not_descriptors (no derived.* KIND exists in this file)
 
 # ============================================================================
 # CATEGORY-B SCALARS (07-14 unification §3 / ED-IN-0059 list). Registered 2026-07-29 (W3 item 4,
@@ -190,13 +190,13 @@ category_b_scalars:
     - {key: pc.initiative, kind: personal_track, name: Initiative, scope: actor,
        source: "references/module_contracts.yaml personal_combat state: :872 (bucket: track, writable: true) -- systems/combat/combat_engine_v1/ (Vor/Nach, full port pending -- combat.initiative module PENDING)"}
     - {key: prov.turmoil, kind: personal_track, name: Turmoil, scope: territory,
-       source: "references/module_contracts.yaml peninsular_strain state: :548 (bucket: clock, writable: true) -- systems/overview/peninsular_strain_v30.md §4, scale 0-10 (clock_registry)"}
+       source: "references/module_contracts.yaml peninsular_strain state: :548 (bucket: clock, writable: true) -- systems/overview/reference/peninsular_strain_v30.md §4, scale 0-10 (clock_registry)"}
     - {key: set.accord, kind: personal_track, name: "province Accord", scope: settlement,
-       source: "references/module_contracts.yaml settlement_layer state: :598 (bucket: derived_value, writable: false) -- systems/settlements/settlement_layer_v30.md §1.3 (floor(mean Order across settlements)); [CORRECTION] the lane prompt's '§5.5' citation does not resolve in the source doc (no §5.5 heading exists) -- §1.3 is the actual Accord-derivation section, confirmed in-tree."}
+       source: "references/module_contracts.yaml settlement_layer state: :598 (bucket: derived_value, writable: false) -- systems/settlements/reference/settlement_layer_v30.md §1.3 (floor(mean Order across settlements)); [CORRECTION] the lane prompt's '§5.5' citation does not resolve in the source doc (no §5.5 heading exists) -- §1.3 is the actual Accord-derivation section, confirmed in-tree."}
     - {key: fac.coup_posture, kind: personal_track, name: "Coup posture", scope: faction,
-       source: "references/module_contracts.yaml faction_politics state: :776 (bucket: track, writable: true) -- systems/factions/faction_politics_v30.md §1.1d/§2.1 Coup Counter (numeric mechanics deferred per §10.1 ED-POL-09; declared W3/ED-IN-0096 with the state row it names)"}
+       source: "references/module_contracts.yaml faction_politics state: :776 (bucket: track, writable: true) -- systems/factions/reference/faction_politics_v30.md §1.1d/§2.1 Coup Counter (numeric mechanics deferred per §10.1 ED-POL-09; declared W3/ED-IN-0096 with the state row it names)"}
     - {key: fac.succession_status, kind: personal_track, name: "Succession status", scope: faction,
-       source: "references/module_contracts.yaml faction_politics state: :777 (bucket: track, writable: true) -- systems/factions/faction_politics_v30.md §1.0 SUC-01-03/LIN-01-04 + §6 Baralta outcomes (declared W3/ED-IN-0096 with the state row it names)"}
+       source: "references/module_contracts.yaml faction_politics state: :777 (bucket: track, writable: true) -- systems/factions/reference/faction_politics_v30.md §1.0 SUC-01-03/LIN-01-04 + §6 Baralta outcomes (declared W3/ED-IN-0096 with the state row it names)"}
     - {key: clock.season_counter, kind: personal_track, name: "season counter", scope: environment,
        source: "references/module_contracts.yaml engine_clock state: :745 (bucket: clock, writable: true, [ASSUMPTION]) -- doc: is null (home doc unresolved, ED-1051 open). FORK-3 GATE: engine_clock is fork-3-gated (ED-1051, sole T0) -- this registration is a pointer only and does NOT assert the module is live or that its consumer set is closed; re-check fork 3's resolution before treating this entry as more than a name+pointer."}
   note: >
@@ -229,11 +229,11 @@ category_b_scalars:
 #
 # RESOLVED ON ARCHITECTURE, not by picking a favourite: this registry is the centralized surface
 # every descriptor already resolves through, and it already declared the count as 13. So the 13
-# are transcribed here from `systems/characters/conviction_taxonomy_v30.md` 2, exported into
+# are transcribed here from `systems/characters/reference/conviction_taxonomy_v30.md` 2, exported into
 # `engine/engine_params/descriptors.json` behind the existing blocking `--check`, and read by
 # `engine/substrate/descriptors.py`. Both subsystems now read the leaf. One roster, one home.
 conviction_roster:
-  source: "systems/characters/conviction_taxonomy_v30.md §2"
+  source: "systems/characters/reference/conviction_taxonomy_v30.md §2"
   count: 13
   names:
     - Faith        # devotion to ecclesiastical authority and theological order
@@ -254,13 +254,13 @@ conviction_roster:
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).
 # ============================================================================
 by_reference:
-  - {key: "conv.*",  kind: conviction_weight,    name: "13 Convictions",                                         scale: "0-1 weight (vector)", scope: "actor + faction", source: "systems/characters/conviction_taxonomy_v30.md §2"}
-  - {key: "axis.*",  kind: ethical_axis,         name: "4 ethical axes (hierarchical/sacred/instrumental/traditional)", scale: "[-1,+1] basis",       source: "systems/characters/conviction_axis_matrix_v30.md / PP-687"}
-  - {key: map.conviction_axis, kind: conviction_axis_map, name: CONVICTION_AXIS_MATRIX,                           shape: "13x4",                source: "systems/characters/conviction_axis_matrix_v30.md §2"}
-  - {key: orient.self_other,   kind: orientation_scalar,  name: "Self-Other Orientation",                         scale: "[-1,+1]",             source: "systems/characters/conviction_taxonomy_v30.md §3"}
-  - {key: "style.*", kind: contest_style,        name: "Contest styles (Precedent/Suppression/Vision/Insinuation = Memory|Projection x Revealing|Obscuring)", effect: "style bonus die", source: "systems/social_contest/social_contest_v30.md (Step 2-3)"}
-  - {key: "temp.*",  kind: temperament_type,     name: "5 territory temperaments",                               value: "alpha (outcomes) + beta (conduct) weights", scope: "territory/faction (pop-weighted avg)", source: "systems/settlements/territory_temperaments_v30.md §3.4.1"}
-  - {key: template.cultural_background, kind: template, name: "Cultural Background Templates (conviction-distribution presets)", source: "systems/characters/conviction_taxonomy_v30.md §5"}
+  - {key: "conv.*",  kind: conviction_weight,    name: "13 Convictions",                                         scale: "0-1 weight (vector)", scope: "actor + faction", source: "systems/characters/reference/conviction_taxonomy_v30.md §2"}
+  - {key: "axis.*",  kind: ethical_axis,         name: "4 ethical axes (hierarchical/sacred/instrumental/traditional)", scale: "[-1,+1] basis",       source: "systems/characters/reference/conviction_axis_matrix_v30.md / PP-687"}
+  - {key: map.conviction_axis, kind: conviction_axis_map, name: CONVICTION_AXIS_MATRIX,                           shape: "13x4",                source: "systems/characters/reference/conviction_axis_matrix_v30.md §2"}
+  - {key: orient.self_other,   kind: orientation_scalar,  name: "Self-Other Orientation",                         scale: "[-1,+1]",             source: "systems/characters/reference/conviction_taxonomy_v30.md §3"}
+  - {key: "style.*", kind: contest_style,        name: "Contest styles (Precedent/Suppression/Vision/Insinuation = Memory|Projection x Revealing|Obscuring)", effect: "style bonus die", source: "systems/social_contest/reference/social_contest_v30.md (Step 2-3)"}
+  - {key: "temp.*",  kind: temperament_type,     name: "5 territory temperaments",                               value: "alpha (outcomes) + beta (conduct) weights", scope: "territory/faction (pop-weighted avg)", source: "systems/settlements/reference/territory_temperaments_v30.md §3.4.1"}
+  - {key: template.cultural_background, kind: template, name: "Cultural Background Templates (conviction-distribution presets)", source: "systems/characters/reference/conviction_taxonomy_v30.md §5"}
 
 # ============================================================================
 # DEPRECATED.

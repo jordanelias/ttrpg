@@ -29,7 +29,7 @@ where it was found, what referenced it, and why it landed in its bucket.
 WHAT COUNTS AS "BUILT". Resolution runs through the primitives the repo actually has, in order:
   1. a Python name (module-level constant, class, function, or dict key) in engine/ or systems/
   2. a key in the typed exports (engine/engine_params/*.json) -- what Godot will read
-  3. a Key TYPE in the substrate registry (systems/_architecture/key_type_registry_v30.md)
+  3. a Key TYPE in the substrate registry (systems/_architecture/reference/key_type_registry_v30.md)
   (There is deliberately NO alias step here. An earlier version claimed one and its body was
   byte-identical to the plain lookup -- dead code advertising an enforcement that did not exist.
   It was wrong in principle too: `pathres` resolves PATHS, and no path resolution can change an
@@ -191,7 +191,11 @@ def subsystems() -> list[str]:
     out = []
     for name in sorted(os.listdir(os.path.join(REPO, 'systems'))):
         d = os.path.join(REPO, 'systems', name)
-        if os.path.isdir(d) and glob.glob(os.path.join(d, '*.md')):
+        # ED-IN-0179 (2026-09-09): design prose moved to `systems/<sub>/reference/`, so a
+        # subsystem is no longer detectable by `*.md` at its root. Check both, so this keeps
+        # working for any subsystem whose docs have not moved.
+        if os.path.isdir(d) and (glob.glob(os.path.join(d, '*.md'))
+                                 or glob.glob(os.path.join(d, 'reference', '*.md'))):
             out.append(name)
     return out
 
@@ -266,7 +270,7 @@ def built_names() -> dict[str, list[str]]:
                     walk(v)
         walk(doc)
     # the Key substrate: a type id like `combat.strike` is the primitive an identifier may name
-    reg = os.path.join(REPO, 'systems', '_architecture', 'key_type_registry_v30.md')
+    reg = os.path.join(REPO, 'systems', '_architecture', 'reference', 'key_type_registry_v30.md')
     if os.path.exists(reg):
         for m in re.finditer(r'^###\s+`?([a-z_]+\.[a-z_]+)`?', open(reg, encoding='utf-8').read(),
                              re.M):
@@ -286,7 +290,7 @@ def doc_status(text: str) -> str | None:
 
       GAINED  engine/sim_reference_CONVENTIONS.md      (bare `Status:`)
       GAINED  references/restructure_ledger.md         (`# Status:`, one hash)
-      GAINED  systems/combat/combat_engine_v1/README.md (bare `Status:`)
+      GAINED  systems/combat/combat_engine_v1/reference/README.md (bare `Status:`)
       LOST    godot/godot_architecture_specification.md
 
     The loss is a FIX, not a regression: that file's `## Status:` line reads
@@ -348,7 +352,10 @@ def purpose_for(ident: str, text: str) -> str | None:
 
 
 def census_for(sub: str, built: dict) -> dict:
-    docs = sorted(glob.glob(os.path.join(REPO, 'systems', sub, '*.md')))
+    # ED-IN-0179 (2026-09-09): design prose lives under `systems/<sub>/reference/`. Scan both,
+    # so a subsystem whose docs have not moved still censuses correctly.
+    docs = sorted(glob.glob(os.path.join(REPO, 'systems', sub, '*.md'))
+                  + glob.glob(os.path.join(REPO, 'systems', sub, 'reference', '*.md')))
     rows: dict[str, dict] = {}
     dropped: dict[str, str] = {}
     for path in docs:

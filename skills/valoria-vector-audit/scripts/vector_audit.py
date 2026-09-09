@@ -379,7 +379,7 @@ def _canonical_paths(root):
               'references/throughlines_meta_infill.md',
               # `designs/` retired 2026-07-19 (ED-IN-0071 P4/P5); this reference doc
               # moved to `systems/_architecture/` — the old path was silently `missing`.
-              'systems/_architecture/complete_systems_reference.md'):
+              'systems/_architecture/reference/complete_systems_reference.md'):
         paths.add(p)
     return sorted(paths)
 
@@ -1058,7 +1058,7 @@ def parse_throughlines(root):
     return rows
 
 
-# systems/_architecture/throughlines_complete.md carries a SECOND, richer throughline→systems membership than
+# systems/_architecture/reference/throughlines_complete.md carries a SECOND, richer throughline→systems membership than
 # the meta table: EVERY `### T-NN:` block (T-01..T-41, both the main sections AND the post-atomization
 # T-31..T-41) has a `**Systems:**` line, and it lists more systems than the meta table's row (T-04:
 # 7 systems here vs 4 there). Same relation (systems co-listed under a throughline), broader source.
@@ -1079,7 +1079,7 @@ _TL_COMPLETE_RE = re.compile(
 
 def parse_throughlines_complete(root):
     """Yield (T-id, '', '', [system_slugs]) from EVERY `### T-NN:` block's `**Systems:**` line in
-    systems/_architecture/throughlines_complete.md (whole doc — T-01..T-41, letter-suffixed T-15b/T-15c included; the
+    systems/_architecture/reference/throughlines_complete.md (whole doc — T-01..T-41, letter-suffixed T-15b/T-15c included; the
     STRUCK T-10 has no Systems line so it is correctly skipped). Shape matches parse_throughlines so
     it composes with build_g_throughline; the two μ fields are empty (this source carries no Μ-mode
     data — μ stays meta-table-only)."""
@@ -1089,7 +1089,7 @@ def parse_throughlines_complete(root):
     # rows and the audit reports a smaller graph with no error, which is why
     # test_throughline_graph_extended_by_second_registry_source (and not this function) is what
     # caught the move.
-    fp = root / 'systems' / '_architecture' / 'throughlines_complete.md'
+    fp = root / 'systems' / '_architecture' / 'reference' / 'throughlines_complete.md'
     if not fp.exists():
         return []
     rows = []

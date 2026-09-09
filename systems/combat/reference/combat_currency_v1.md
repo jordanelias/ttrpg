@@ -11,7 +11,7 @@ point at it.
 split. Nothing here is a source of truth; where this file and a design doc or the engine disagree, **they win**.
 
 - **Live head:** `systems/combat/combat_engine_v1/` (the resolver package — the engine wins on any disagreement with prose)
-- **Design-layer reference:** `systems/combat/combat_reference_v1.md` (explicitly subordinate to the engine)
+- **Design-layer reference:** `systems/combat/reference/combat_reference_v1.md` (explicitly subordinate to the engine)
 - **Lane status + open items:** `registers/handoffs/HANDOFF_PC.md` · `registers/editorial_ledger_pc.jsonl`
 - **Typed export:** `engine/engine_params/combat_engine_v1.json`, GENERATED from `combat_engine_v1/config.py`
 - **Balance harness:** `systems/combat/combat_engine_v1/workbench/balance.py`

@@ -8,7 +8,7 @@ I have all the citations I need. Now compiling the complete harvest output.
 | audit/2026-07-12-governance-compendium/40_roster_officer_system.md | 621 | 21 | Full-read. The eight M1–M8 mechanisms (not ten — see Coverage notes) plus the `power_base` architecture, the autonomous loop, and 7 named architectural gaps. |
 | audit/2026-07-12-governance-compendium/41_proactive_scale_menus.md | 494 | 13 | Full-read. ~72 catalogued historical proposals (S/O/T/F/X series) read in full; only the load-bearing new entities/levers extracted as records — not the individual proposals (see Coverage notes). |
 | audit/2026-07-12-governance-compendium/42_action_verb_catalogue.md | 254 | 8 | Full-read. Counted ~99–101 verb rows, not the index's claimed 109 (see Coverage notes). Only governance/personnel-relevant, non-baseline verbs harvested individually. |
-| audit/2026-07-12-governance-compendium/43_directive_types.md | 121 | 9 | Full-read. Cross-checked against `systems/settlements/sim/registry.py` and `systems/settlements/settlement_generator_v1.md`. |
+| audit/2026-07-12-governance-compendium/43_directive_types.md | 121 | 9 | Full-read. Cross-checked against `systems/settlements/sim/registry.py` and `systems/settlements/reference/settlement_generator_v1.md`. |
 | audit/2026-07-12-governance-compendium/44_standing_institutions.md | 274 | 9 | Full-read. |
 | audit/2026-07-12-governance-compendium/45_hidden_longfuse_stats.md | 152 | 5 | Full-read. Cross-checked against `systems/settlements/sim/registry.py` (confirms no granular meters exist, consistent with the cited Jordan ruling). |
 | audit/2026-07-12-governance-compendium/tier3_proposal_status_closure.md | 449 | 10 | Full-read. Verified the 58 = 12+9+23+14 partition (exact match to index's claim). |
@@ -496,7 +496,7 @@ I have all the citations I need. Now compiling the complete harvest output.
 
 - id: H8A-051
   name: "gap" — a later design doc already cites Part 43's proposed Directive types as if adopted
-  source: systems/settlements/settlement_generator_v1.md:126
+  source: systems/settlements/reference/settlement_generator_v1.md:126
   system: faction-strategy
   touches: [settlement-governance]
   slice: gap

@@ -1,7 +1,7 @@
 """
 systems/fieldwork/sim/fieldwork.py — Fieldwork resolution — Exploration / Investigation / Socializing
 
-Canon source: systems/fieldwork/fieldwork_v30.md
+Canon source: systems/fieldwork/reference/fieldwork_v30.md
 Params source: params/fieldwork.md
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17; STUB-WIRED 2026-07-29, OI-02,
          ED-IN-0091 plan §2.2/§3 Wave 1 stage 3]

@@ -1214,7 +1214,7 @@ steps:
       - "Add the tenth row (Recall) marked: [ASSUMPTION] — derived from engine/engine_params/params_tables.yaml:9118
          (canonical capture: '31 points across 10 attributes', 'Recall (Rec)'), corroborated by 22 valoria-game
          .tres files, CharacterData.gd:14-23's ten @export fields, Constants.gd:33 ATTRIBUTE_CREATION_POOL = 31,
-         and systems/fieldwork/fieldwork_v30.md:295-298; Jordan veto."
+         and systems/fieldwork/reference/fieldwork_v30.md:295-298; Jordan veto."
       - "INVERT the fold directions: Cognition primary / Acuity alias, Spirit primary / Will alias.
          This is the direction with ZERO code churn. The current direction would rename across 13 .gd + 22 .tres
          + 19 .py files, and the registry's promise that consumers 'bind BY KEY so renames are free' is void —
@@ -1387,7 +1387,7 @@ jordan_docket:
     options: ["(a) outranks", "(b) shares the subordinate tier", "(c) SPLIT — constraints supreme, numbers subordinate"]
     recommend: "(c)"
     why: "decision_policy_v1's own 134-ruling precedent mine is least inconsistent with (c). This is the ruling that makes future defaults self-executing."
-    home: "ED-IN-0113 §A, systems/_architecture/decision_policy_v1.md §3"
+    home: "ED-IN-0113 §A, systems/_architecture/reference/decision_policy_v1.md §3"
   - id: D2
     question: "Is the tenth attribute Recall, and should the Spirit/Will and Cognition/Acuity folds be inverted so the primaries match the code?"
     options: ["(a) yes to both", "(b) a different tenth name", "(c) keep current folds and accept the rename"]

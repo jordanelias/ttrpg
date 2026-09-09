@@ -4,7 +4,7 @@ sim/cross_scale/echo_transport.py — deterministic echo-transport bridge (PR-2a
 Un-orphans `domain_echo.py` and routes a resolved personal/scene outcome through the
 executable Key substrate (`sim/substrate`) to a DEFERRED faction/territory stat write at
 the accounting boundary. This is the "no more zoom_out({})" plumbing of the Key & Echo
-Armature §6.2 (designs/architecture/key_echo_armature_v1.md), landed FLAG-GATED and
+Armature §6.2 (systems/_architecture/reference/key_echo_armature_v1.md), landed FLAG-GATED and
 byte-exact by default.
 
 Canon source: designs/architecture/scale_transitions_v30.md §5 (Domain Echo, degree-keyed
@@ -99,8 +99,8 @@ def _registry() -> TypeRegistry:
 # supplies caps, no fabricated canonical constant enters the repo. domain_echo emits exactly
 # one non-cascading Key per resolved scene, so depth 0 suffices; the per-tick ceiling is a
 # safety bound, caller-tunable via run_campaign params.
-DEFAULT_CASCADE_DEPTH_MAX = 0  # [canonical: designs/architecture/key_echo_armature_v1.md §5.7 — OF-CAP caller cap, ED-IN-0026]
-DEFAULT_EMISSIONS_PER_TICK_MAX = 64  # [canonical: designs/architecture/key_echo_armature_v1.md §5.7 — OF-CAP operational cap, ED-IN-0026]
+DEFAULT_CASCADE_DEPTH_MAX = 0  # [canonical: systems/_architecture/reference/key_echo_armature_v1.md §5.7 — OF-CAP caller cap, ED-IN-0026]
+DEFAULT_EMISSIONS_PER_TICK_MAX = 64  # [canonical: systems/_architecture/reference/key_echo_armature_v1.md §5.7 — OF-CAP operational cap, ED-IN-0026]
 
 # scene_type -> canonical scene.*_resolved Key type (registry §7). Only the two live
 # personal-scale resolvers are mapped; adding a scale here without its resolver is

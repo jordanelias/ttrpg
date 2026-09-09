@@ -353,7 +353,7 @@ ci_checks:
     level: 5
     subject: compliance
     posture: harden
-    role: "Registry -> typed-JSON round-trip: engine/engine_params/key_types.json must match the authored systems/_architecture/key_type_registry_v30.md (--check mode)."
+    role: "Registry -> typed-JSON round-trip: engine/engine_params/key_types.json must match the authored systems/_architecture/reference/key_type_registry_v30.md (--check mode)."
     ci_job: validators
     notes: "BLOCKING (deterministic, no external pins). ED-IN-0136 — the markdown stays the AUTHORED surface; code and the Godot port read the cooked JSON. Order is ORD-1 registry order and is NOT sorted. Falsifier: tests/valoria/test_key_substrate.py::test_the_round_trip_check_can_fail plants a mutation and asserts exit 1. Also runs locally via valoria_local.py --staged (blocking)."
 

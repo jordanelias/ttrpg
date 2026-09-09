@@ -1,7 +1,7 @@
 """
 systems/social_contest/sim/parliamentary_vote.py — Parliamentary Vote (faction scale)
 
-Canon source: systems/social_contest/social_contest_v30.md §10 (Parliamentary Vote)
+Canon source: systems/social_contest/reference/social_contest_v30.md §10 (Parliamentary Vote)
 Game Design constraints applicable: GD-3 (extra-parliamentary factions cannot cast
     Parliamentary votes — canon/02_canon_constraints.md §B GD-3)
 Status: [implemented: 2026-05-31 — §10 BG vote against social_contest_v30. Faction-scale

@@ -1,7 +1,7 @@
 """
 systems/threadwork/sim/rendering.py — Rendering Stability world-track and strain mechanics (P-07 — Calamity = rendered-side)
 
-Canon source: systems/threadwork/threadwork_v30.md Part 5
+Canon source: systems/threadwork/reference/threadwork_v30.md Part 5
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 
 Dependencies:
@@ -31,7 +31,7 @@ def apply_rs_strain(delta: int, source: str, world: GameState):
         'systems.threadwork.sim.rendering',
         'apply_rs_strain(delta: int, source: str, world: GameState) -> RSState',
         reason='Pass 2l armature stub, implementation pending against canonical source '
-               '(systems/threadwork/threadwork_v30.md Part 5); OI-17, ED-IN-0091 plan §2.2')
+               '(systems/threadwork/reference/threadwork_v30.md Part 5); OI-17, ED-IN-0091 plan §2.2')
 
 
 def check_calamity_threshold(world: GameState):
@@ -39,4 +39,4 @@ def check_calamity_threshold(world: GameState):
         'systems.threadwork.sim.rendering',
         'check_calamity_threshold(world: GameState) -> CalamityState',
         reason='Pass 2l armature stub, implementation pending against canonical source '
-               '(systems/threadwork/threadwork_v30.md Part 5); OI-17, ED-IN-0091 plan §2.2')
+               '(systems/threadwork/reference/threadwork_v30.md Part 5); OI-17, ED-IN-0091 plan §2.2')

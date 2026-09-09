@@ -1,7 +1,7 @@
 """
 systems/world/sim/npe.py — NPC Population Engine
 
-Canon source: systems/fieldwork/investigation_systems_v30.md SYSTEM 1 (NPE)
+Canon source: systems/fieldwork/reference/investigation_systems_v30.md SYSTEM 1 (NPE)
 
 Implements §Territory Social Ecology weights + §NPC Genome 5-axis structure
 + §Two-Tier Generation (archetype seed + deviation roll) + §Persistence
@@ -313,7 +313,7 @@ def generate_npc(faction: Optional[str], role: Optional[str], world,
             # an opposition model any taxonomy in the corpus states, so re-keying them onto the
             # thirteen would have invented canon rather than restored it. A GROUNDED opposition
             # does exist on paper — the 13x4 conviction-axis matrix
-            # (systems/characters/conviction_axis_matrix_v30.md, registered as `map.conviction_axis`)
+            # (systems/characters/reference/conviction_axis_matrix_v30.md, registered as `map.conviction_axis`)
             # would give "most anti-correlated Conviction" a real definition — but that matrix is
             # prose and is not cooked into any artifact code reads. Until it is, a uniform draw over
             # the other twelve is the honest deviation: it says "this NPC diverges from the faction
