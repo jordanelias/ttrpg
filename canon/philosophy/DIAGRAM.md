@@ -18,24 +18,38 @@ that performs a taking-as — it is one. It is a process nonetheless.
 ```mermaid
 flowchart TD
     ES["<b>Ein Sof</b><br/>infinite positive being<br/>no agency, no direction, no response"]
-    LIM{{"<b>the limit</b><br/>epistemically inaccessible<br/>the contraction is originary and uncaused"}}
-    SP["<b>spooling</b> — layer 1<br/><i>configures</i><br/>supplies substrate · gives temporal accumulation<br/>the <i>how</i> of constitution"]
-    CFG["<b>a configuration</b><br/>threads, with three moments:<br/>actuality · temporality · intelligibility"]
-    REND["<b>rendering</b><br/>always-already interpretation of things <i>as</i> something<br/><i>takes-as — does not configure</i>"]
+    LIM{{"<b>the grounding</b><br/>radically opaque and <i>always withdrawing</i><br/>from capture by human rationality —<br/>a receding limit, not a wall"}}
+    TH["<b>threads</b> — <i>not literal threads</i><br/>the word gestures at their essence<br/><b>substrate</b> and <b>conditions of possibility</b><br/><i>coprimordially — neither prior</i>"]
+    AX["the <b>three axes</b> are themselves<br/>among the conditions of possibility<br/>actuality · temporality · intelligibility"]
+    SP["<b>spooling</b> — layer 1<br/><i>configures</i><br/>supplies substrate · gives temporal accumulation"]
+    CFG["<b>a configuration</b><br/>an organization of threads cohering<br/>such that they constitute a being or entity"]
+    CON["<b>beings have consciousness</b>"]
+    REND["<b>rendering</b><br/>the ability for consciousness to interpret<br/>phenomena as <i>meaningful</i><br/><i>nothing prior to it — within consciousness</i>"]
     DET["being taken-as <b>is</b> a determination<br/>on the intelligibility axis"]
     CO["<b>co-movement</b><br/>a determination on one moment<br/>is a determination on all three"]
 
     ES -.->|"inferred from the rendered side only"| LIM
-    LIM --> SP
-    SP -->|configures| CFG
-    CFG --> REND
-    REND --> DET
-    DET --> CO
+    LIM --> TH
+    TH --- AX
+    TH --> SP --> CFG
+    CFG -->|"threads comprise beings"| CON
+    CON -->|"rendering occurs due to<br/>conscious beings"| REND
+    REND --> DET --> CO
     CO -->|"so rendering determines threads<br/>— a process, not a configuring"| CFG
 ```
 
-**Read the loop.** A configuration is rendered; being rendered is a determination; determinations
-co-move; so the configuration is thereby determined across all three moments. No agency anywhere.
+**Read the chain, then the loop.** Threads comprise beings; beings have consciousness; rendering
+occurs due to conscious beings. That is the **constitutive** order, and it is the only sense in which
+anything is prior to rendering — *within* consciousness there is no prior state of rendering, because
+you are either conscious or you are not.
+
+Then the loop: a configuration is rendered, being rendered is a determination, determinations
+co-move, so the configuration is determined across all three moments.
+
+**Consciousness does the rendering** — it does not decide to, and that restricts its deliberateness
+and nothing else. The ground has no agency; spooling has no direction; threads are oriented toward
+equilibrium without performing a tending. Those are three different denials and none of them is a
+denial that rendering does anything.
 
 ---
 

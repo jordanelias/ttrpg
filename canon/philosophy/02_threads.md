@@ -229,7 +229,9 @@ sync with what had been the case in reality**. They are not misremembering, and 
 private true record against a changed public one. They simply were not pulled, and they can see that
 something was.
 
-**It is local.** Only what was pulled is disjoined, and only relative to what was not. No global
+**It is local.** Only what was pulled is disjoined, and only relative to what was not — and what
+counts as "what was pulled" is well-posed because a configuration is bounded by the being or entity it
+constitutes (§2.1, R-11). Until that ruling the suite had no answer to where one configuration ends. No global
 mismatch opens between how things are and how anyone recalls them.
 
 Because every operation moves the temporal dimension along with the others (§2.6), **every operation

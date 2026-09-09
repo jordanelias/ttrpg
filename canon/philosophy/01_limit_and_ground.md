@@ -13,7 +13,12 @@ that the ground is inaccessible cannot open by describing it.
 ## §1.1 The charter: epistemic opacity
 
 No causal claim about the ground's internal constitution, mechanisms, or responses is supportable
-within this framework. Practitioners do not know why the Calamity occurred at the metaphysical
+within this framework.
+
+**And the reason is not that a boundary happens to sit there.** *(R-19, 2026-09-09.)* The grounding of
+threads is **always withdrawing from any capture by human rationality** — a receding limit, not a wall
+one might in principle arrive at and find closed (§2.1). The charter is the consequence of that, not a
+stipulation beside it. Practitioners do not know why the Calamity occurred at the metaphysical
 level, only that it did and what it produced. Every account of any event's mechanism must be
 confined to the rendered side.
 

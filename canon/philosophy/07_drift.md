@@ -239,7 +239,8 @@ because grading it would be a category error rather than a kindness withheld.
 **Operations directed toward the futural-potential-legible produce no Coherence cost — and go
 further.** Their result is a shape the configurations were tending toward, so once actualized it
 stands in harmony with what surrounds it and needs no holding. Nothing returns through the knot. And
-because the practitioner is imbricated with a configuration the draw is acting on, restorative work
+because the practitioner is imbricated with a configuration that is being returned to what it is
+oriented toward, restorative work
 moves them **toward** their own equilibrium rather than merely leaving them where they were (§6.8).
 Aimed at their own configuration, it is what moves a resting point back.
 

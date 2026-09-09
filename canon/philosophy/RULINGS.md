@@ -1441,3 +1441,40 @@ wrote a ruling into action-language and had to be corrected. If §1.5 needs a no
 ruling.)*
 
 *Applied:* §2.1.
+
+---
+
+## 2026-09-09 — Propagation sweep for R-10 … R-19
+
+Applied on instruction, after the rulings had landed only at their primary sites.
+
+**Swept and clean** — no surviving instance found: sensitivity-as-tiedness (R-13/R-15) outside its own
+retraction note; the vessel and toughness language (C-3/R-14); "deep layer" as an endorsed reading.
+
+**Corrected:**
+
+- **The draw as an actor** (R-12). Three explicit action-verbs struck — *"the draw is acting on"*
+  (§7.1), *"the draw itself does not operate"* (§8.5), *"a region where the draw does not operate"*
+  (§9.3). ⚠ **Flagged, not changed:** the noun **"the draw"** itself survives at ~5 sites, most
+  prominently *"held against the draw"*. It implies something doing the drawing, which may be the same
+  trap R-12 corrected — but replacing it across the suite is a vocabulary decision and would be
+  inference. **Needs a ruling.**
+- **§1.1's charter now has its ground** (R-19). It stated the limit and never said why; it now says the
+  grounding is always withdrawing, so the charter is a consequence rather than a stipulation.
+- **§9.1's substrate tier** said *"Deep, normally inapparent"* while §6.2 rejects the hidden-layer
+  reading **and cites §9.1 as agreeing with it**. Corrected to match §6.2 — the same thing met as
+  threads rather than as world.
+- **§9.1's "two components"** of sensitivity re-grounded on R-13's band rather than on "ontic access
+  to a deep layer".
+- **§2.7's boundary** — *"only what was pulled"* — now cites R-11 for what makes it well-posed. The
+  suite had no answer to where one configuration ends until that ruling.
+- **`DIAGRAM.md` view 1 rewritten** for R-10, R-11, R-17, R-18 and R-19. The chain
+  (threads → beings → consciousness → rendering) is drawn, and the caption now distinguishes three
+  denials that had been collapsing into one: the ground has no agency, spooling has no direction,
+  threads are oriented without performing a tending — none of which denies that rendering does
+  anything.
+- **§0.3** gains *the world worlds* and *coprimordial* to the Heidegger row, both owed by R-12 and
+  R-18. The **as-structure** is still owed and is marked in the row as outstanding.
+- **`_review/round2/04_MY_UNDERSTANDING.md`** banner-marked SUPERSEDED with the void and changed codes
+  listed. **Roughly a third of its 82 codes moved in one afternoon**, which is the honest measure of
+  how much of it was mine rather than the author's.

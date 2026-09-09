@@ -159,7 +159,7 @@ not slowed that movement or redirected it. **You have removed the tending.** The
 motion toward does not.
 
 So a Locked Zone is not a region that is damaged and healing slowly, nor one drawn toward some
-different and worse equilibrium. It is a region where the draw itself does not operate. There is no
+different and worse equilibrium. It is a region where nothing is oriented anywhere. There is no
 direction things are going, because there is no going.
 
 **This is why they persist.** Ordinary damage is repaired by the tendency: configurations are drawn

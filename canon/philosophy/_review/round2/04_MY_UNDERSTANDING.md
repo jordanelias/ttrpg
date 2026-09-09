@@ -1,5 +1,26 @@
 # The system as I understand it — coded
 
+> ⚠ **SUPERSEDED 2026-09-09, later the same day. Do not read this as current.**
+>
+> This was written before rulings R-10 through R-19. It is kept as the record of what one round of
+> review produced and what I understood at that point; the live statement is the suite itself and
+> `RULINGS.md`.
+>
+> **Void:** `U-42`, `U-47`, `U-48` — the vessel/magnitude account, retracted with C-3.
+> **Superseded:** `U-06`/`U-07` (rendering is the *ability* for consciousness to interpret phenomena
+> as meaningful; consciousness does it), `U-15` (threads condition rendering by *composing the beings
+> whose consciousness renders* — R-10), `U-03` (the two roles are *coprimordial* — R-18),
+> `U-05` (a configuration is *an organization of threads cohering such that they constitute a being
+> or entity* — R-11), `U-14`/`U-16`/`U-17`/`U-23` (imbrication is how much of a thread one can
+> purposefully interact with — R-15), `U-57`/`U-59`/`U-60` (sensitivity is perceptual range across a
+> band, not extent of connection — R-13).
+> **Also now stated and absent here:** threads are not literal threads (R-17); the grounding always
+> withdraws (R-19); the orientation toward equilibrium belongs to the threads and is not an action
+> (R-12); cost is resisted by how strongly configured one is (R-14).
+>
+> Roughly a third of the 82 codes moved in a single afternoon. That is the honest measure of how much
+> of it was mine rather than the author's.
+
 Drawn fresh after the 2026-09-09 corrections. **Every claim carries a code `U-NN`.** Strike
 or correct by code — "U-23 wrong, it's X" is enough; I will not touch anything you have not
 named. The manifest at the end lists all of them with provenance, so you can scan without

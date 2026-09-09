@@ -32,14 +32,17 @@ layer 2, the being-held of a configuration — and call thread-constitution **su
 Then:
 
 - **Ontical** — the rendered world: particular beings, facts, everyday experience as given.
-- **Substrate** — thread-constitution: what things are woven from, and what operations act upon. Deep,
-  normally inapparent, and *ontic*.
+- **Substrate** — thread-constitution: what things are constituted of, and what operations act upon.
+  **Normally inapparent, and *ontic*** — but **not a deeper layer behind the ontical**. It is the same
+  thing, met as threads rather than as world. §6.2 rejects the hidden-layer reading outright and cites
+  this section as agreeing with it; until 2026-09-09 this row said "deep" and did not. *(And per §2.1,
+  nothing here is literally woven.)*
 - **Ontological** — the register of rendering itself: that there is rendering at all, that a
   configuration is held rather than given, that the world is disclosed as world.
 
 On this scoping, **thread sensitivity has two components that the source suite ran together as one
-faculty**: access to the substrate, which is ontic access to a deep layer; and the loosening of one's
-commitment to the rendering as given, which is the genuinely ontological achievement. These are two **aspects of one capacity**, not two capacities — §5.5 rules the capacity
+faculty**: access to the substrate — sensing further outside the human band (§5.5) — and the loosening
+of one's commitment to the rendering as given, which is the genuinely ontological achievement. These are two **aspects of one capacity**, not two capacities — §5.5 rules the capacity
 undivided — and §6.2's derivation of the Leap supports the second
 component being primary.
 
@@ -111,7 +114,7 @@ Three collisions in the source suite, recorded because each cost something:
 | **Imbrication** | How a thread is bound into or separated from others, and **how much of a thread — and therefore of threads — a practitioner can purposefully interact with**: seeing more being (ruled 2026-09-09). A being *is* threads, so its imbrication is its position in the weave, and what is given to it follows from that position. Acting alters it. The engagement side of what §5.5 describes as reach. See §3.5. |
 | **Providence** | The second mode of emergence: a configuration with enough internal organization to persist temporarily, its organization accidental, persisting temporarily on accidental organization. An event, not an entity. The name is the survivors', and it is ironic — nothing provided it. |
 | **Gap** | An absence where the fabric requires something: a standing breach in the boundary (whose edges are *Gap margins*), or the absence left where a configuration was removed rather than changed. Both senses are one — something is missing and the surrounding threads stand at the edge of nothing. Distinct from a Locked Zone, though a large Gap will produce one around itself. See §8.4a. |
-| **Locked Zone** | A place where becoming has been precluded, so the threads are no longer moving toward an equilibrium. Not damage awaiting repair and not a region drawn toward a worse equilibrium — a region where the draw does not operate. Persists indefinitely, because the process that would undo it is the one precluded. A substrate-side fact, not an epistemic one. See §8.5. |
+| **Locked Zone** | A place where becoming has been precluded, so the threads are no longer moving toward an equilibrium. Not damage awaiting repair and not a region drawn toward a worse equilibrium — a region where nothing is oriented anywhere. Persists indefinitely, because the process that would undo it is the one precluded. A substrate-side fact, not an epistemic one. See §8.5. |
 | **Harmony** | The relation obtaining among configurations at equilibrium: each holds its shape without being held against the others. |
 | **Apperception** | The apprehension of a subject as a unified whole. The *reflexive* facing is the practitioner's self-apperception as a worldly human; the *outward* facing is others' apperception of them as a unified human subject. |
 | **The Real** | That which escapes symbolization; the unassimilable remainder. Adopted from Lacan and redefined ontologically as plenitude rather than structurally — see §0.3 for what that pivot costs and where it is paid. |
