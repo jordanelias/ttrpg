@@ -1,6 +1,15 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
-## ⏳ PRODUCED 2026-09-09, NOT YET COMMITTED — decomposition STEP 8: `seam.py`. `shape.py` 2,075 → 1,788, `seam.py` 372 new (ED-IN-0203)
+## ⭐ DONE 2026-09-09, MERGED IN PR #383 — decomposition STEP 8: `seam.py`. `shape.py` 2,075 → 1,788, `seam.py` 372 new (ED-IN-0203)
+
+> ⚠ **HEADER CORRECTED.** This section and the STEP 7 section below both read `⏳ PRODUCED … NOT YET
+> COMMITTED` after PR #383 merged, so the first 430 lines of this file told a cold session that landed
+> work was uncommitted. Steps 5–10 all shipped in `c3b51e3`; `shape.py` is deleted. The bodies below
+> are the producer sessions' own records and are left as written — only the two headers were wrong.
+> ⚠ **AND STEP 8's PLACEMENT WAS SUPERSEDED BEFORE IT LANDED:** `seam.py` is a FILE and
+> `combat_seam.py` did not move, against `architecture/meta/04_CODE_ARCHITECTURE.md` §A.2 and the
+> D2/D5 corrections PR #384 had already merged. Filed as ED-IN-0206; the repair is unit L2 of
+> `workplans/2026-09-09-layer1-conformance-plan.md`.
 
 **Producer session only — a read-only critic reviews this next, per the plan's relay (§6). Nothing
 below is committed or pushed.** Written against the step-8 brief handed down from
@@ -175,7 +184,7 @@ an unreconciled base; wait for this step's critic pass. A39's spy (`probes.py:24
 target `seam.contest` **only when** `SeasonDriver.resolve` itself moves to `loop/driver.py` at that
 step — moving one without the other is exactly falsifier (d) above.
 
-## ⏳ PRODUCED 2026-09-09, NOT YET COMMITTED — decomposition STEP 7: `decision.py`. `shape.py` 2,813 → 2,066, `decision.py` 872 new (ED-IN-0203)
+## ⭐ DONE 2026-09-09, MERGED IN PR #383 — decomposition STEP 7: `decision.py`. `shape.py` 2,813 → 2,066, `decision.py` 872 new (ED-IN-0203)
 
 **Producer session only — a read-only critic reviews this next, per the plan's relay (§6). Nothing
 below is committed or pushed.** Written against `workplans/2026-09-09-shape-decomposition-plan-v2.md`
