@@ -150,6 +150,10 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any) -> dict:
         return dict(status="PARTY-GAP", why=f"claimant not a person: {a_id!r} / {b_id!r}",
                     module="personal_combat")
     A, B = derive_party(pa, w.fixtures, a_id), derive_party(pb, w.fixtures, b_id)
+    # `H` returns a blake2b hexdigest (`state/ids.py`), so 16 is the RADIX that parses it back to
+    # an int for the RNG -- structural, not a game value. Pre-existing; surfaced because step 8's
+    # `S.H(...)` -> `H(...)` lift rewrote the line and the gate scores added lines.
+    # [JUSTIFIED: radix for parsing H()'s hex digest, not a mechanical constant]
     seed = int(H(w.world_seed, w.tick, a_id, f"contest:{prize}:{causes[0] if causes else ''}"), 16)
     trace: list = []
     prev = getattr(wrapper, "_TRACE", None)
