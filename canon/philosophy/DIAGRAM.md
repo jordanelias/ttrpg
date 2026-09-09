@@ -2,11 +2,10 @@
 
 Seven views of one structure. Each is a different cut, not a different system.
 
-**Provisional material is marked.** One area remains under active discussion and is drawn dashed: the
-constitutive account of operational cost (§6.8) — whether restorative work helps the practitioner,
-whether their displacement scales with the target's, and whether the Leap displaces before any
-operation. Everything else is ruled — see `RULINGS.md`. The elastic/plastic model of Coherence was
-ruled 2026-09-07 and view 5 is no longer provisional.
+**Nothing here is provisional any more.** The elastic/plastic model of Coherence was ruled
+2026-09-07 and the constitutive cost model on 2026-09-08; both views are drawn as settled. Where a
+node or edge is the framework's own inference rather than a ruling, the note under that view says so
+— see `RULINGS.md` for which is which.
 
 ---
 
@@ -73,18 +72,24 @@ deliberately, moment to moment, or not at all.
 
 ## 3. An operation, end to end
 
+**Direction decides everything.** The same imbrication carries the cost and the benefit; what the
+practitioner is joined to is either being held against the draw or handed back to it.
+
 ```mermaid
 flowchart TD
     A["practitioner, at rest<br/>layer 2 holding them as human"]
-    B["<b>the Leap</b><br/>suspend taking-oneself-as-human<br/>layer 1 continues · outward facing persists residually"]
+    B["<b>the Leap</b><br/>suspend taking-oneself-as-human<br/>layer 1 continues · outward facing persists residually<br/><i>no intrinsic cost — D-5</i>"]
     C["threads presentable <i>as threads</i><br/>because presentation-as-world has lapsed"]
     D["<b>imbrication</b><br/>practitioner and target joined<br/>during the working"]
     E{"direction of the working<br/>relative to the futural-potential-legible"}
     F["<b>restorative</b><br/>toward the equilibrium<br/>configurations already tend to"]
     G["<b>manipulative</b><br/>off the attractor<br/>held only by the practitioner"]
     H["<b>destructive</b><br/>a harmony unmade"]
-    I["no residual load<br/>nothing needs holding"]
-    J["<i>working the target out of equilibrium<br/>is working one's own threads<br/>out of equilibrium</i>"]
+    I["<i>giving to the draw</i><br/>nothing needs holding<br/><b>and the practitioner is drawn too</b>"]
+    J["<i>holding against the draw</i><br/>working the target out of equilibrium<br/>is working one's own threads<br/>out of equilibrium"]
+    M{"what was the working <b>aimed</b> at?"}
+    N["aimed at another<br/>→ moves your present displacement<br/>you recover faster for having done it"]
+    O["aimed at your own configuration<br/>→ moves your <b>resting point</b><br/><i>extremely difficult, and possible</i>"]
     K["<b>knots</b> — permanent<br/>residue of the imbrication<br/>carry <i>later</i> events, not the immediate cost"]
     L["re-engagement<br/>layer 2 re-takes-oneself-as-human"]
 
@@ -92,20 +97,28 @@ flowchart TD
     E --> F --> I
     E --> G --> J
     E --> H --> J
-    I --> L
-    J -.->|"PROVISIONAL — the cost model, §6.8"| L
+    I --> M
+    M --> N
+    M --> O
+    N --> L
+    O --> L
+    J -->|"displacement ÷ your own magnitude"| L
     D --> K
 
-    style J stroke-dasharray: 5 5
+    style O stroke-width:3px
 ```
 
-> ⚠ **The J path is under discussion.** The cost is constitutive rather than fed back through the
-> knot: you suspended your self-rendering to join the target, so taking it out of equilibrium takes
-> *you* out. Three questions are open — whether restorative work actively *helps* the practitioner,
-> whether displacement scales with the target's, and whether the suspension itself displaces you
-> before any operation.
+**Two things the shape carries that a list of rules would lose.**
 
----
+- **F and G are the same machinery.** Nothing in the diagram distinguishes them except where the
+  working points. Cost is not a penalty attached to certain operations; it is what being imbricated
+  with a held shape *consists in*, and the benefit is what being imbricated with a released one
+  consists in.
+- **The edge into L is divided, not doubled.** A manipulative working's displacement is a fixed
+  quantity, and what it is a fraction of is the practitioner (§6.8). A larger vessel is not tougher;
+  the same load is simply less of it.
+
+------
 
 ## 4. What strains, and why scale is not the variable
 
@@ -137,25 +150,26 @@ chose — and holding configurations there at scale is the Calamity's mechanism 
 
 ---
 
-## 5. Coherence — RULED 2026-09-07
+## 5. Coherence — RULED 2026-09-07 / 2026-09-08
 
 > Coherence is a **distance** from the equilibrium proper to being human, not a store that depletes.
-> Degradation reaches the spooling's configuring; everyone has it; the endpoint is irreversibility,
-> not exhaustion. The elastic/plastic model below is now ruled (RULINGS, Batch 8). One element is
-> derived rather than ruled and is marked.
+> **What it is for:** to make repeated threadwork expensive enough that a practitioner recuperates
+> before working again — so it must bite *and* be answerable. A cost with no remedy is a countdown,
+> not a discouragement. Two elements below are derived rather than ruled and are marked.
 
 ```mermaid
 flowchart TD
     BAND["<b>the human band</b><br/>the equilibrium proper to being human<br/>has extent, not a single point"]
-    Z["<b>resting point</b><br/>where the configuration settles<br/>once fully recovered<br/>moves outward only, never back"]
+    Z["<b>resting point</b><br/>where the configuration settles<br/>once fully recovered<br/><i>the floor — rises easily, falls only under work</i>"]
     STR["<b>stress</b><br/>an operation off the attractor,<br/>or a confrontation that overwhelms<br/><i>always an event</i>"]
     EL["<b>elastic displacement</b><br/>where the being presently is<br/>= resting point + current load<br/>this is what the bands read"]
-    PL["<b>plastic set</b><br/>the resting point itself moves<br/>never undone by anything"]
-    OTH["<b>became other</b><br/>the resting point has left the band<br/>the human equilibrium is no longer<br/>where this configuration tends"]
+    PL["<b>plastic set</b><br/>the resting point moves outward<br/>no amount of rest undoes it"]
+    SELF["<b>restorative threadwork</b><br/>aimed at one's own configuration<br/><i>extremely difficult, and possible</i>"]
+    OTH["<b>became other</b><br/>the resting point has left the band"]
 
     SENS["<b>thread sensitivity</b><br/>accrues from exposure alone<br/>independent of any threshold"]
     ENV["<b>environment at equilibrium</b><br/>the condition on recovery"]
-    MEND["<b>mending</b> — one's own or another's<br/>accelerates, never required"]
+    MEND["<b>mending</b> — one's own or another's<br/>quickens, never required"]
 
     BAND --- Z
     Z --> EL
@@ -165,20 +179,33 @@ flowchart TD
     ENV -.->|"gates"| REC
     MEND -.->|"quickens"| REC
     STR -->|"beyond threshold"| PL
-    PL --> Z
+    PL -->|"outward"| Z
+    SELF -->|"inward"| Z
     Z -->|"once outside the band"| OTH
+    OTH -.->|"the same act is now <b>manipulation</b>:<br/>human is no longer where<br/>this configuration tends"| SELF
 
     EXP["<b>exposure</b><br/>presence to the substrate's workings"] --> SENS
     SENS -.->|"converts more of the next<br/>encounter into stress"| STR
+    SENS -.->|"and divides the cost of<br/>work you choose to do — §6.8"| EL
 
     style OTH stroke-width:3px
     style BAND stroke-dasharray: 5 5
+    style SELF stroke-width:3px
 ```
 
-**The dashed node is the one derived rather than ruled.** *Being human is a band* is not the author's
-ruling; it is what the four rulings force when held together with the earlier ruling that healing is
-available to configurations that have taken no plastic change. With a point rather than a band, the
-first permanent set would already be the crossing.
+**Read the two edges into the resting point together — that pair is the whole model.** Stress pushes
+it outward and nothing but deliberate restorative threadwork pulls it back. Rest answers displacement;
+only work answers the floor. That is what makes the cost bite without making it a countdown.
+
+**The dotted edge out of *became other* is where irreversibility now lives, and it is derived.** With
+the floor movable, the threshold cannot be "the floor stops moving". It is §6.6's ruled knife-edge:
+Mending restores the harmony a configuration tends toward, **not a remembered state**. Past the band,
+human is no longer where this configuration tends — so the identical-looking act of working it back is
+manipulation, held against the draw, performed on a whole person. Nothing about the difficulty changes
+at the crossing. What changes is which operation it is.
+
+**The dashed node is the other derived element.** *Being human is a band* is not a ruling; it is what
+the rulings force, since with a point the first permanent set would already be the crossing.
 
 **Four things the diagram deliberately does not contain**, each ruled out rather than merely absent:
 
@@ -189,10 +216,12 @@ first permanent set would already be the crossing.
 | **work hardening** — elastic range changing with use | Range is a constant of the being. Only the resting point moves. |
 | **sensitivity as a form of plastic set** | Independent. Exposure teaches; stress deforms. |
 
-**Two readings the shape yields.** A **veteran** rests further out with the same elastic range, so an
-identical load carries them deeper — nearer the edge without being more fragile. And someone who
-lives beside a Gap takes no permanent set from living there, does not recover there, and grows more
-sensitive for having been there: nothing accumulates, nothing returns, perception sharpens.
+**Three readings the shape yields.** A **veteran** rests further out with the same elastic range, so an
+identical load carries them deeper — nearer the edge without being more fragile. Someone who **lives
+beside a Gap** takes no permanent set from living there, does not recover there, and grows more
+sensitive for having been there. And a **practitioner who has drifted and wants back** cannot rest
+their way there: they need the hardest operation in the discipline, performed on themselves, or
+someone able to aim it at them.
 
 ---
 
@@ -280,7 +309,7 @@ flowchart TB
     EQ -.-> OPS
     HU --> LEAP --> OPS --> KN
     OPS --> STRAIN
-    OPS -.->|"PROVISIONAL — the cost model, §6.8"| DR
+    OPS -->|"manipulative work only,<br/>÷ the practitioner's magnitude"| DR
     STRAIN --> GAP --> LOCK
     TC --> STRAIN
     ABS --> TS --> BAR

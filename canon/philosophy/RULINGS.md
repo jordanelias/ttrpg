@@ -730,3 +730,96 @@ channel; duration reconciled). Supersession markers added above at the two entri
 practitioner, whether the practitioner's displacement scales with the target's, and whether the Leap's
 suspension displaces before any operation. Those three are the next batch and nothing about them is
 written.
+
+---
+
+## 2026-09-08 — Batch 9: the constitutive cost model  ·  **APPLIED**
+
+Put as three questions; **one of the three had already been ruled and should not have been asked.**
+Q3 — *does the Leap itself displace you before any operation?* — is **D-5**, Batch 2: *"environment ×
+duration, plus type × scale. Not inherent, not absent."* "Not inherent" settles it. §6.8 already
+carried it, correctly tagged. Struck from the batch.
+
+### C-1 — Restorative work reaches the practitioner, and the floor is not sealed
+
+> "(c) I think, and it's because threadworkers can perform thread operations for mending upon
+> themselves, which is extremely difficult to do but possible."
+
+**What was ruled.** Restorative operations do not merely cost nothing; they move the practitioner
+toward their own equilibrium, and can reach the **resting point** itself. Self-directed mending is the
+named mechanism: difficult, and possible.
+
+**And the author rejected a claim of mine, which is the more consequential half:**
+
+> "I also never agreed to the notion that you can't move a resting point back."
+
+**Retracted.** "Nothing moves a resting point back" was written into §7.1 as part of the derived
+band model on 2026-09-07. It was never ruled and it is now struck from every surface. The ratchet is
+real and it is not absolute.
+
+### C-2 — What Coherence loss is *for*
+
+> "The idea of coherence loss is to prevent players/characters from spamming thread operations without
+> penalty, so it's supposed to build up in increments or a big operation to discourage that
+> player/character from doing it again without recuperation"
+
+**This is a design-purpose ruling and it constrains the model from both sides**, which is why it kills
+the absolute ratchet rather than merely amending it.
+
+- **It must bite** — accumulation is real, in increments or at once from a large operation, or nothing
+  discourages the next working.
+- **It must be answerable** — **recuperation is the designed response.** A cost with no remedy is not a
+  discouragement but a countdown, and a countdown makes the first operation as fraught as the
+  hundredth.
+
+**Applied as a new §7.1 subsection, "What the model is for", placed before the mechanics** so that a
+later reader meets the purpose before the machinery and cannot re-derive an absolute ratchet from the
+machinery alone.
+
+### C-3 — Cost is relative magnitude: you are the vessel
+
+> "2b I think but expand upon it"
+
+D-5 gave the operational term as **type × scale**; this settles what *scale* is measured against. The
+same working costs a small being more, because cost is a displacement of the practitioner's own
+configuration and the configuration is the denominator. **There is no toughness term and there was
+never a place to put one.**
+
+*Expanded, per the request, into four consequences in §6.8:* scale is dangerous because a person is
+small; the Einhir lattice was a **larger vessel, not a stronger tool**; magnitude is imbrication and
+imbrication is sensitivity (§5.5); and therefore **sensitivity makes you better at doing and worse at
+being done to** — it divides operational cost while converting more of an unbidden confrontation into
+stress that arrives.
+
+### Derived, and flagged in the text so it can be rejected
+
+**1. Where irreversibility now comes from.** With the floor movable, the point of no return needed a
+new basis, and §6.6's ruled knife-edge supplies one without adding anything: **Mending restores the
+harmony configurations tend toward, not a remembered state.** Once a resting point has left the human
+band, human is no longer where that configuration tends — so working it back is restoring a remembered
+state, which is manipulation held against the draw. Before the crossing, bringing someone back is
+Mending; after it, the identical-looking act is the one thing the discipline forbids. **Nothing about
+the difficulty changes at the threshold. What changes is which operation it is.** This also gives the
+setting a structural tragedy that will keep recurring, since restoring a loved one to who they were is
+precisely the remembered state.
+
+**2. Aim decides depth.** Mending another reliably moves the mender's *present displacement* — the
+operation is aimed at the target, so the mender is drawn along rather than worked. Mending one's own
+configuration is what moves a *resting point*, and it is the hardest operation in the discipline: one
+must be imbricated with oneself while suspended from taking oneself as human. This is why E-1 names
+two routes — being mended by another aims at you, and is simply easier to arrange than doing it to
+yourself.
+
+**3. Magnitude is imbrication.** §5.5 rules that perceiving threads and holding oneself among them are
+one accomplishment, so a being tied more extensively into the weave *is* a larger configuration. That
+is the framework's only candidate for what magnitude consists in, and it produces the two-channel
+asymmetry above.
+
+*Applied:* §7.1 (new purpose subsection; point-of-no-return rewritten; the retracted claim struck;
+"what produces it" extended), §7.6 (what closes at the crossing, narrowed), §6.8 (two new
+subsections — the restorative direction, and the vessel account — plus the reconciliation table),
+§5.5 (the two-channel asymmetry), §8.3 (the lattice as vessel, and why the collapse was
+civilizational for the same reason it was capable).
+
+*Nothing is left open in the cost model.* The §6.8 material that DIAGRAM marked provisional is now
+ruled.

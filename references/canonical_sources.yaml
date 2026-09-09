@@ -218,7 +218,7 @@ systems:
 # superseded documents as canonical. Their content lives in the philosophy suite.
   leap_mechanism:
     design_doc: canon/philosophy/06_operations.md
-    canonical_sha__canon__philosophy__06_operations_md: "f1390e753ead4194687c825f0aebffc532362a18"
+    canonical_sha__canon__philosophy__06_operations_md: "c24a140c91b8b82c00e3cae4f6589513e3c94a27"
   self_rendering:
     design_doc: canon/philosophy/04_being_persistence.md
     canonical_sha__canon__philosophy__04_being_persistence_md: "95776c3bfbe1c39290f0bff40849aec5fc58e303"

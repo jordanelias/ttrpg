@@ -252,6 +252,86 @@ ones flatly contradicted each other on whether the Leap is dangerous in itself. 
   target's own layer 2 *opposes* the imposed shape; nothing on the target side holds it; the tension
   between held and unheld is located in the holder.
 
+### The restorative direction — the same channel, run the other way
+
+**Restorative operations do not merely cost nothing. They move the practitioner toward their own
+equilibrium, and they can reach the resting point itself** *(Ruled 2026-09-08)*, the author's reason
+being that **threadwork for mending can be performed on one's own configuration — "extremely
+difficult to do but possible."**
+
+The mechanism is the operational channel read backwards, and it needs nothing new. Manipulation costs
+because the practitioner is imbricated with a shape that must be **held against the draw**, and the
+holding lives where the holder is. Restoration holds nothing; it hands the target back to the draw.
+But **the imbrication is the same imbrication**, and the futural-potential-legible does not
+distinguish which end of a knot it has hold of. A practitioner joined to a configuration that is being
+returned to the attractor is themselves joined to something the attractor is acting on.
+
+So the real asymmetry is not cost versus no-cost. It is **holding against the draw**, which displaces
+the holder, against **giving to the draw**, which moves whatever is imbricated with the giving. One
+channel, one imbrication, opposite relations to the equilibrium.
+
+**Aim decides how deep it reaches, and this is what makes self-mending the demanding case.**
+
+- **Mending another** reliably moves the mender's present displacement — you recover faster for having
+  done it. The operation is *aimed* at the target's configuration, so your own is drawn along rather
+  than worked. The floor moves incidentally, if at all.
+- **Mending oneself** aims at one's own configuration, and that is what moves a resting point
+  decisively. It is also the strangest operation in the discipline: one must be imbricated with
+  oneself while suspended from taking oneself as human (§6.2). Difficult, and possible.
+- **This is why E-1 lists two routes** — *"your own acting and others acting to mend you."* Being
+  mended by someone else aims at you, so it reaches as deep as self-mending does; it is simply easier
+  to find someone else who can do it than to do it to yourself.
+
+**None of this makes drift cheap.** The floor answers only to deliberate restorative work aimed at
+the configuration carrying it. It does not move while a practitioner sleeps, and it does not move as a
+by-product of a career spent Mending other people. What the ruling establishes is that the door exists
+and that walking through it is work — not that the ratchet was never real.
+
+*(Derived, not ruled: the aim distinction — that mending another reaches elastic displacement while
+mending the carrier reaches the floor. The ruling settles that the floor is movable and names
+self-mending as the hard case; the mechanism above is why those two facts belong together. Reject it
+and the ruling stands.)*
+
+### How large the cost is — you are the vessel
+
+**The operational cost scales with the working relative to the practitioner, not with the working
+alone.** *(Ruled 2026-09-08.)* D-5 already gave the operational term as **type × scale**; this settles
+what *scale* is measured against. A displacement is a quantity, and what it is a fraction **of** is the
+configuration bearing it. The same working therefore costs a small being more.
+
+**Why the framework has to read it this way.** Cost here is not damage absorbed, which is what the
+alternative quietly assumes. It is the practitioner's own configuration being moved out of its
+equilibrium (§6.8, the constitutive account). A configuration moved a fixed distance has been moved
+further *as a proportion of itself* the smaller it is. Nothing about the practitioner's fortitude
+enters. There is no toughness term, and there was never a place to put one.
+
+**Four things follow, and they collapse several separate-looking facts into one.**
+
+- **Scale is dangerous because a person is small.** Not because large workings are intrinsically
+  harder — a manipulation of a province is the same *kind* of act as a manipulation of a cup. What
+  makes the first lethal is that one person is the denominator.
+- **The Einhir lattice was a larger vessel, not a stronger tool.** This is the reading that makes
+  §7.5 and §8.1 one mechanism rather than two. A lattice binds many configurations into a single
+  imbricated whole, so a provincial working's displacement is divided across a civilization and each
+  participant bears a survivable fraction. It let them do what no person could — and it is also
+  exactly why the failure was civilizational: when the shape being held is manipulative, what the
+  lattice distributes is **strain**, and everything it was spread across is what tore.
+- **Magnitude is imbrication, and imbrication is sensitivity.** §5.5 rules that being able to perceive
+  threads and being able to hold oneself among threads are one accomplishment. A being tied more
+  extensively into the weave *is* a larger configuration. So **thread sensitivity is what makes a
+  practitioner a bigger vessel**, and it divides the cost of everything they deliberately do.
+- **Which produces a clean asymmetry across the two channels, and it is not a contradiction.**
+  Sensitivity makes the **confrontation** channel worse — greater reach converts more of an unbidden
+  encounter into stress that actually arrives (§5.4). It makes the **operational** channel better —
+  greater magnitude divides the displacement of a working you chose to perform. *Sensitivity makes
+  you better at doing and worse at being done to.* The one profile that gets both halves at once is a
+  highly sensitive person standing somewhere dangerous, which is the Warden, and §6.8 had already
+  derived that they are the exposed case for environmental rather than operational reasons.
+
+*(Derived, not ruled: the identification of magnitude with imbrication via §5.5, and the two-channel
+asymmetry that follows. The ruling settles relative magnitude; what magnitude consists in is the
+framework's own answer, and §5.5 is the only candidate it offers.)*
+
 ### The confrontation channel
 
 Proximity to Gap margins, dissolution residue fields and third-mode presences is low-grade
@@ -286,7 +366,7 @@ This reconciles what looked irreconcilable:
 | Source claim | Status under this account |
 |---|---|
 | Every Leap has a vulnerability window | **True** — the window is the unresisted interval |
-| Mending's Coherence cost is zero | **True of the knot term** — restorative feedback is stabilizing |
+| Mending's Coherence cost is zero | **True of the knot term, and understated** — restorative feedback is not merely non-corrosive but restorative to the practitioner too |
 | Warden erosion is environmental, not operational | **Derived** — Wardens Mend where environmental force is high, so their environmental term is large while their operational term is zero |
 | The retention roll tests reconstitution | **True** — it is the moment both terms land |
 

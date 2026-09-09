@@ -33,8 +33,9 @@ and the reconfiguration is the thing.
 ### The mechanics: elastic, then plastic
 
 **A stress displaces the configuration. Below a threshold the displacement is elastic and the
-configuration returns. Above it, the configuration's own resting shape has moved, and that move does
-not reverse.** *(Ruled 2026-09-07.)*
+configuration returns. Above it, the configuration's own resting shape has moved, and no amount of
+rest brings it back.** *(Ruled 2026-09-07.)* Deliberate restorative threadwork can — that is a
+separate undertaking, and it is what the point-of-no-return section below turns on.
 
 Four further rulings fix the model. They are stated separately because each was decided separately,
 and because three of them close off a mechanism the materials analogy would otherwise have supplied
@@ -76,25 +77,65 @@ distinction do work: during suspension the configuration is unresisted, so envir
 is a real load (§6.8). That is duration *within* one episode. Years spent at a Gap margin with
 self-rendering intact are not an episode at all, and sum to nothing.
 
+### What the model is for
+
+**Coherence loss exists to make repeated threadwork expensive.** *(Ruled 2026-09-08.)* In the author's
+terms: it discourages a practitioner from working again without recuperation. It builds up in
+increments, or arrives at once from a large operation, and either way the answer to it is **rest and
+mending** rather than acceptance.
+
+That purpose constrains the model in two directions at once, and both matter.
+
+- **It must bite.** A practitioner who works and works with nothing accruing has no reason to stop.
+  So displacement accumulates, and the accumulation is felt.
+- **It must be answerable.** A cost with no remedy is not a discouragement, it is a countdown —
+  and a countdown makes the *first* operation as fraught as the hundredth, which is the opposite of
+  what is wanted. **Recuperation is the designed response**, and the model has to leave it genuinely
+  available.
+
+Everything below is shaped by holding those two together. Where an earlier draft of this section made
+the ratchet absolute, it was wrong on the second count, and the correction is recorded rather than
+quietly applied.
+
 ### The point of no return
 
 Being human is a **band**, not a point: the equilibrium proper to being human as human is a shape a
 range of configurations can occupy. Two quantities therefore have to be kept apart, and the
 distinction is what makes the rest of this section legible.
 
-- **Where a practitioner rests** — the configuration they hold once fully recovered. This moves only
-  by permanent set, and only outward.
+- **Where a practitioner rests** — the configuration they hold once fully recovered. This moves by
+  permanent set, and it moves back only by deliberate restorative threadwork, which is difficult.
 - **Where a practitioner presently is** — their resting point plus whatever displacement current
-  stress has produced. This is what §7.4's bands read, and it returns.
+  stress has produced. This is what §7.4's bands read, and it returns on its own.
+
+**The two have different remedies, and that is the whole shape of the model.** Present displacement
+answers to time, rest and being mended (§7.1's recovery ruling). The resting point answers to none of
+those — no amount of rest moves it. It answers only to **restorative threadwork directed at the
+configuration itself**, and a practitioner can perform that on themselves: *"extremely difficult to do
+but possible."* *(Ruled 2026-09-08.)*
+
+So the ratchet is real but not absolute. Drift is hard to undo and it is not sealed. A practitioner
+who has taken permanent set is not simply diminished for good; they are carrying something that will
+take deliberate, skilled, difficult work to address, and that will not address itself while they
+sleep.
 
 **Eventually the resting point leaves the band.** Too far out of equilibrium — and what has happened
 is not that the person has been damaged, or emptied, or reduced. **They became other.**
 
-That is the real threshold, and it is a threshold of *irreversibility* rather than of exhaustion.
-Nothing moves a resting point back: permanent set does not reverse, and recovery returns a
-configuration to its own resting point, not to the one it started from.
+**And this is where irreversibility actually comes from — not from a floor that cannot move.**
+The operation that would bring a resting point back in is restorative: it restarts a configuration's
+tending toward the harmony it is drawn to. That is why it is available, and why it costs nothing to
+attempt (§6.6). But §6.6's knife-edge is exact about what restoration *is*: **restoring the harmony
+configurations tend toward, not a remembered state.** Once the resting point has left the band, the
+human shape is no longer where that configuration tends. Working it back toward human is therefore
+**restoring a remembered state** — which is manipulation, held against the draw, and at the scale of
+a whole being it is the Calamity's mechanism performed on a person.
 
-**Three consequences follow from the model rather than being added to it**, and they change how drift
+Before the crossing, bringing someone back is Mending. After it, the identical-looking act is the one
+thing the discipline forbids. Nothing about the difficulty changed at the threshold; **what changed is
+which operation it is.**
+
+**Four consequences follow from the model rather than being added to it**, and they change how drift
 runs:
 
 - **A practitioner's history is exactly what tells you how close they are.** The resting point *is*
@@ -103,23 +144,28 @@ runs:
   range is constant, so a practitioner resting at Dissonant, pushed as far as their range allows,
   arrives deeper into Fractured than a novice resting at Stable pushed exactly as far. They are
   nearer the edge because they start further out, not because they break more easily.
-- **Recovery has a floor, and the floor rises.** A drifting practitioner who rests in an environment
-  at equilibrium and is mended returns to their resting point and no further — and that point is no
-  longer where they began. Full recovery is real, and it is not restoration.
+- **Recovery has a floor; the floor rises easily and falls only under work.** Rest returns a
+  practitioner to their resting point and no further. Moving the point itself is a separate
+  undertaking, deliberate and hard, and nobody drifts into doing it by accident.
+- **The tragedy is structural and it will keep happening.** Someone will always try to bring a crossed
+  being back to who they were, because that is precisely what love asks for, and it is precisely the
+  remembered state. §6.6 already names the temptation and says it is not a temptation to do evil. This
+  is where it costs the most.
 
-> **Derived, not ruled — reject this and the four rulings above survive it.** The band-and-resting-point
-> reading is the only way I can find to hold all four rulings together with the earlier ruling that
-> healing is available to configurations that have taken no plastic change. Progressive drift with a
-> threshold *requires* the human equilibrium to have extent: if it were a point, the first permanent
-> set would already be the crossing. The three consequences are then arithmetic on a constant elastic
-> range and a moving resting point. The rulings are the author's; this reading is mine.
+> **Derived, not ruled — reject this and the rulings above survive it.** Two things here are mine. The
+> **band** reading: progressive drift with a threshold requires the human equilibrium to have extent,
+> since with a point the first permanent set would already be the crossing. And the account of
+> **why the crossing is irreversible** — that past it, restoration-to-human becomes restoration of a
+> remembered state and so converts to manipulation under §6.6's ruled knife-edge. That second one
+> replaces a claim of mine that the author has explicitly rejected: I had written that nothing moves
+> a resting point back. It was never ruled, and it is retracted.
 
-**This is why intervention is early, and why it is legible.** Early, because a permanent set cannot be
-undone once taken, so everything a community can do for a practitioner is done inside the elastic
-range. Legible, because a resting point is a history and a history can be read — the people around a
-practitioner have been watching that floor rise. (§7.4's observer asymmetry concerns present
-displacement, which the practitioner cannot see in themselves. The floor is visible to everyone,
-including them, in the quiet after.)
+**This is why intervention is early, and why it is legible.** Early, because the elastic range answers
+to rest and the floor does not — everything cheap a community can do is done before permanent set,
+and everything after is work. Legible, because a resting point is a history and a history can be read
+— the people around a practitioner have been watching that floor rise. (§7.4's observer asymmetry
+concerns present displacement, which the practitioner cannot see in themselves. The floor is visible
+to everyone, including them, in the quiet after.)
 
 ### Drift carries no moral valence
 
@@ -189,9 +235,12 @@ because grading it would be a category error rather than a kindness withheld.
 
 ### What produces it
 
-**Operations directed toward the futural-potential-legible produce no Coherence cost.** Their result is
-a shape the configurations were tending toward, so once actualized it stands in harmony with what
-surrounds it and needs no holding. Nothing returns through the knot.
+**Operations directed toward the futural-potential-legible produce no Coherence cost — and go
+further.** Their result is a shape the configurations were tending toward, so once actualized it
+stands in harmony with what surrounds it and needs no holding. Nothing returns through the knot. And
+because the practitioner is imbricated with a configuration the draw is acting on, restorative work
+moves them **toward** their own equilibrium rather than merely leaving them where they were (§6.8).
+Aimed at their own configuration, it is what moves a resting point back.
 
 **Operations that impose a shape off the attractor must be held against the draw**, and the cost of
 holding such a configuration is a configurational alteration to the practitioner. This is the
@@ -368,6 +417,12 @@ far out of the human equilibrium that being human is no longer possible to retur
 no longer shapes the spooling into a human configuration at all. **They became other**, and what
 follows depends on **perceptual reach** — how much of the substrate the being can perceive and
 deliberately work.
+
+*(What is closed here is narrower than it sounds, and §7.1 has the reason. A resting point can be
+moved back by restorative threadwork; that is difficult and it is real. What ends at the crossing is
+not the capacity to move a configuration but the **restorative** character of moving this one toward
+human — past the band, human is no longer where it tends, so working it there is manipulation. The
+door is not locked. It leads somewhere else now.)*
 
 **Sensitivity does not increase at the crossing.** The being does not suddenly perceive more because
 the human equilibrium became unreachable. They have exactly the reach they had built, and it is
