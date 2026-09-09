@@ -1307,3 +1307,25 @@ whether there is an operational cost at all. The practitioner-side term sits alo
 
 *Applied:* §6.8 (subsection rewritten, with what stood there recorded rather than deleted),
 `DIAGRAM.md` (two elements).
+
+### R-15 — What imbrication speaks toward
+
+> "imbrication speaks towards how much of a thread (and therefore threads) that the practitioner can
+> purposefully interact with, ie seeing more being"
+
+**Corrects an over-correction of mine made an hour earlier.** R-13 struck the claim that sensitivity
+*is* being tied into the weave more extensively. In writing that up I swung the other way and declared
+imbrication a **different question** answering *what is given* to one, with the invented consequence
+that "two beings identically imbricated can differ in sensitivity". Neither was ruled.
+
+**They are two sides of one development.** Reach is how far outside the human band one can sense;
+imbrication is how much of what is sensed one can purposefully engage. That is exactly what D-7 says
+and what I had failed to hold: *"by being able to hold more, you are able to bear more as you are
+better able to imbricate yourself with threads."*
+
+⚠ **Sixth instance, and a new shape.** R-1, R-2, R-7, R-8 were building on a plain statement; C-3 was
+manufacturing one. This is **over-correcting a correction** — taking a ruling that struck one claim
+and inferring its opposite. The instruction stands and widens: when a ruling strikes something, record
+what it struck and nothing further.
+
+*Applied:* §5.5, §9.3 (Imbrication row).

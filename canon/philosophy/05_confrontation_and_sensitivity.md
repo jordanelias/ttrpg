@@ -210,10 +210,21 @@ So perceptual reach and self-holding are one variable, and the reason is the one
 both are what one's rendering can handle at its expanded limits. Sensing further outside the human
 band and holding oneself further outside it are the same accomplishment.
 
-**Keep this apart from imbrication, which answers a different question.** How one is tied in
-determines **what is given** to one (§3.5, D-1). Sensitivity determines **how far across the axes one
-can sense** — how much of the band's outside is available at all. Two beings identically imbricated
-can differ in sensitivity, and the suite conflated the two until this ruling.
+**And imbrication is the engagement side of the same thing.** *(Ruled 2026-09-09.)*
+
+> **Imbrication speaks toward how much of a thread — and therefore of threads — the practitioner can
+> purposefully interact with**, which is *seeing more being*.
+
+So the two are not separate questions with separate answers. Sensing further outside the human band
+and having more of a thread available to work with are the same development from two sides, which is
+what D-7 says: *"by being able to hold more, you are able to bear more as you are better able to
+imbricate yourself with threads."* Reach is how far one can sense; imbrication is how much of what is
+sensed one can purposefully engage.
+
+⚠ *An earlier draft of this paragraph — mine, the same day — said the two were "different questions"
+and that "two beings identically imbricated can differ in sensitivity". Neither was ruled and both are
+struck. Having corrected an over-reading of imbrication, I promptly over-corrected in the other
+direction.*
 
 This is why perceptual reach gates what becomes of a practitioner at Coherence 0 (§7.6). It is not
 that perception happens to be useful when self-maintenance fails. It is that perception *was* the
