@@ -214,6 +214,11 @@ band and holding oneself further outside it are the same accomplishment.
 
 > **Imbrication speaks toward how much of a thread — and therefore of threads — the practitioner can
 > purposefully interact with**, which is *seeing more being*.
+>
+> *"It's like holding an extendable item between two hands. Ordinarily the item is only a foot apart,
+> but then you can pull it and you discover there is more to see."* *(The author's, offered with the
+> caveat that it is not the best analogy. Kept because its one point is the load-bearing one: what is
+> gained is **more of the same thread**, not more threads.)*
 
 So the two are not separate questions with separate answers. Sensing further outside the human band
 and having more of a thread available to work with are the same development from two sides, which is

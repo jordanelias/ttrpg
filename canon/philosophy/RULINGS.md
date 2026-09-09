@@ -1329,3 +1329,14 @@ and inferring its opposite. The instruction stands and widens: when a ruling str
 what it struck and nothing further.
 
 *Applied:* §5.5, §9.3 (Imbrication row).
+
+**R-15 addendum — the author's analogy, with his caveat.**
+
+> "it's like holding an extendable item between two hands. ordinarily the item is only a foot apart,
+> but then you can pull it and you discover there is more to see (not best analogy)"
+
+Recorded with the caveat attached. Its one point is the load-bearing one and is why it is kept: what
+is gained is **more of the same thread**, not more threads — which is precisely the distinction R-13
+struck the old §5.5 for missing. Two analogies now sit in §5.5, doing different jobs: the **window**
+for reach (stand nearer, see further outside the band) and the **extendable item** for imbrication
+(pull, and there is more of it than you had).
