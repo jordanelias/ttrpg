@@ -134,8 +134,21 @@ constructor's import.
 fingerprint) and that both have equal line counts. Edit both identically or that test fires — which
 is the guard, not a risk.
 
-**Leave and record:** `wd_acceptance.py:283,:288,:401,:405` and `arm7_flexibility.py:66,:69,:82,:90`
-— nothing imports either, so they cannot fail the suite; both would mismeasure on re-run.
+~~**Leave and record:** `wd_acceptance.py:283,:288,:401,:405` and `arm7_flexibility.py:66,:69,:82,:90`
+— nothing imports either, so they cannot fail the suite; both would mismeasure on re-run.~~
+
+⚠ **STRUCK 2026-09-09 AT STEP 7's ADVERSARIAL PASS — THE PREMISE IS FALSE ON DISK, AND IT
+PROPAGATED FROM HERE INTO A STEP BRIEF, A COMMIT MESSAGE AND TWO SOURCE COMMENTS BEFORE ANYONE
+RAN THE GREP.** `rg -n 'import (arm7_flexibility|wd_acceptance)'` → `sweep.py:19` imports
+`arm7_flexibility` and RUNS it at `:111`; `wd_acceptance` is imported by **six** files
+(`wd_chunk`, `wd_collect`, `wd_ipc1`, `wd_cells`, `wd_subj`, `wd_extra`). Both were re-pointed
+through `sweep_core.PS` at step 7 — 11 sites — and a third instrument the row never mentioned,
+`arm6_imports.py:68`, was inverting a recorded verdict behind a bare `except` because it probed
+`_S.Query`. **The lesson for steps 8–10 is the mechanical one:** this row asserted a *negative*
+about the import graph and no instrument in this plan checks one. Before any later step declares
+a file safe to leave broken, run the grep. A file that cannot fail the suite is not thereby a
+file that produces no number — arm7 unrepointed reports every branch identical, which is a
+fabricated null (§0.1 pt 4), not a silence.
 
 - **Home-claim sweep** over `hole_register.yaml`, `requirements.yaml`, `rosters.yaml`, `CLAUDE.md`,
   `CURRENT.md`, `HANDOFF_IN.md`, **and `architecture/`** (frozen `> ### LANDED` blocks excepted).
