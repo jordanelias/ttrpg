@@ -109,7 +109,7 @@ DEGREE_SWEEP_DIR = REPO_ROOT / "proposals" / "2026-09-04-degree-sweep"
 
 # ---------------------------------------------------------------------------
 # THE REPOSITORY. Two seams reach out of the proposal and both load BY PATH and ON FIRST USE:
-# `combat_seam.engine()` (the flat personal-combat module set) and `shape.degree_ladder()`
+# `combat_seam.engine()` (the flat personal-combat module set) and `seam.degree_ladder()`
 # (`engine.autoload.dice_engine`). Each is deferred so the tracer still runs where the tree is
 # absent, degrading to a NAMED gap rather than an ImportError at import.
 # ---------------------------------------------------------------------------

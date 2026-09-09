@@ -23,6 +23,7 @@ from pathlib import Path
 import pytest
 
 from .. import decision
+from .. import seam
 from .. import shape as S
 from ..data import files
 from ..data import verbs as VERBS
@@ -8047,15 +8048,15 @@ def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
     assert checked == 14, checked
 
     # 3. FOLLOW THE OWNER. Replace the RESOLVED ladder and every band must move with it.
-    saved = S._LADDER
+    saved = seam._LADDER
     try:
-        S._LADDER = (lambda net, ob, **k: Degree.FAILURE, DEGREE_LABEL)
+        seam._LADDER = (lambda net, ob, **k: Degree.FAILURE, DEGREE_LABEL)
         moved = {S.degree_of({"net": n, "ob": o}) for n, o in ((5, 2), (3, 2), (2.5, 2), (1, 2))}
         assert moved == {"Failure"}, (
             f"replacing the ladder changed nothing ({moved}) -- `degree_of` is answering from a "
             "band table of its own, which is the second resolver S27.2 refuses")
     finally:
-        S._LADDER = saved
+        seam._LADDER = saved
     assert S.degree_of({"net": 5, "ob": 2}) == "Overwhelming", "the ladder was not restored"
 
 

@@ -1,5 +1,180 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⏳ PRODUCED 2026-09-09, NOT YET COMMITTED — decomposition STEP 8: `seam.py`. `shape.py` 2,075 → 1,788, `seam.py` 372 new (ED-IN-0203)
+
+**Producer session only — a read-only critic reviews this next, per the plan's relay (§6). Nothing
+below is committed or pushed.** Written against the step-8 brief handed down from
+`workplans/2026-09-09-shape-decomposition-plan-v2.md` §3, whose own line numbers were DEAD (basis
+`e03abff2`; steps 6–7 removed ~2,100 lines since). Every span below is re-derived by `ast` at HEAD
+`3e273d3d`, the actual starting point of this session (**not** `d4858c27`, which step 7's own
+entry above cites — steps 5,6,7's post-review fix commits landed between that entry and this one).
+
+**What moved, as a pure line-slice, script-verified against `git show 3e273d3d:engine/season/shape.py`
+by Counter-multiset diff (zero lines lost, 85 added — all new docstring/import/comment text,
+verified by hand):** `ContestError` (541–550), `contest_subsystem` (1797–1832), the S39.4 comment
+block on the two sources of a degree (1834–1889), `_LADDER`/`_LADDER_ERROR` (1890–1891),
+`degree_ladder` **with its `global _LADDER, _LADDER_ERROR`** (1894–1914), `ladder_error`
+(1917–1919), `Resolution` (1923–1932), `combat_degree` (1935–1954), `degree_of` (1957–1991), and
+`contest` **with its local `from . import combat_seam`** (1994–2075, running to EOF).
+
+**⚠ ONE LINE MOVED THAT NEITHER THE PLAN NOR THE BRIEF ENUMERATED:** the `# S39 -- THE SEAM`
+section-header comment (1793–1796), immediately above `contest_subsystem`. The brief's table
+starts at `contest_subsystem` itself. Left behind, it would have orphaned a section title over
+`shape.py`'s own closing blank lines — nothing in `shape.py` follows it after this move. A comment
+carries no runtime behaviour, so this doesn't touch the pure-move claim the multiset/hash
+falsifiers check; it's a judgment call about where a piece of prose belongs, recorded rather than
+silently made. Documented in `seam.py`'s own module docstring.
+
+**⚠ ZERO GAME YIELD.** `register.py --requirements` reads **6 `not_met` · 3 `partial`** before and
+after (`python -m engine.season.harness.register --requirements`). Unchanged, per §0.2. ⚠ The
+brief's literal invocation, `python3 engine/season/harness/register.py --requirements` (no `-m`),
+raises `ImportError: attempted relative import with no known parent package` — a brief-vs-tree
+disagreement, noted per the standing rule; the `-m` form is what actually runs and is what every
+other citation in this tree (CURRENT.md, `00_ADOPTION_README.md`) already uses.
+
+### The rebind hazard, closed as specified — and one place the brief's own falsifier disagreed with itself
+
+`global _LADDER, _LADDER_ERROR` in `degree_ladder()` moved WITH both names in the same commit; the
+facade (`shape.py`'s `from . import seam` + re-export block) re-exports every moved name **except**
+`_LADDER` and `_LADDER_ERROR` — re-exporting either would bind a snapshot in `shape.py`'s own
+globals, permanently stale the moment `seam`'s copy rebinds through `global`. `shape.py` carries an
+inline `⚠` comment at the import site saying so, for the next reader who reaches for `S._LADDER`.
+Verified: `getattr(S, n) is getattr(seam, n)` for all 8 re-exported names (True, all); `hasattr(S,
+'_LADDER')` / `hasattr(S, '_LADDER_ERROR')` both **False** — the facade holds no residual binding at
+all, not even a stale one, because neither name is imported.
+
+`engine/season/tests/test_season_shape.py:8050,8052,8058` (`saved = S._LADDER` / `S._LADDER = (...)`
+/ `S._LADDER = saved`) is the one caller in this tree that reaches the raw attribute rather than
+calling a function; re-pointed to `seam._LADDER` at all three sites, **including the read-capture
+at :8050**, per the brief's own warning that a prior step's brief listed only the writes for an
+analogous chain and would have left a `finally:` restoring a value into a module that never held it.
+
+**Falsifier (a), run and reverted:** left `S._LADDER` unrepointed → `AttributeError: module
+'engine.season.shape' has no attribute '_LADDER'` at the exact planted line. RED as predicted.
+
+**Falsifier (b), run TWO ways and reverted, and it DISAGREES WITH THE BRIEF'S OWN PREDICTION —
+reported rather than papered over.** The brief says "build `seam.py` WITHOUT `_LADDER_ERROR` →
+expect everything GREEN. That IS the demonstration: the grep pair is what goes red, not a test."
+
+*Construction 1* (both the declaration AND `degree_ladder`'s `global _LADDER, _LADDER_ERROR`
+edited, dropping the second name from each): run through the full `engine/season/tests` suite —
+**1 failed, 186 passed** (`test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it`), with
+`UnboundLocalError: cannot access local variable '_LADDER_ERROR'` at the guard clause. Dropping a
+name from `global` while a later branch still assigns it makes that name LOCAL to the whole
+function, and reading it before that assignment is exactly an `UnboundLocalError`.
+
+*Construction 2*, closer to what a careless pure-move actually produces (only the module-level
+`_LADDER_ERROR: str = ""` declaration removed; `degree_ladder`'s `global _LADDER, _LADDER_ERROR`
+left BYTE-IDENTICAL, since it is function-body text a line-slice would carry over unedited):
+verified by direct interpreter call rather than the full suite — `NameError: name '_LADDER_ERROR'
+is not defined`, on the FIRST EVER call to `degree_ladder()`, success or failure alike. Reason:
+the guard clause `if _LADDER is not None or _LADDER_ERROR:` unconditionally READS `_LADDER_ERROR`
+whenever `_LADDER is None` (true on every process's first call, via short-circuit `or`), and a
+`global` name never bound anywhere in the module raises on READ, not only on write — `global`
+guarantees WHICH namespace a name resolves in, not that a binding already exists there.
+
+**Both constructions are LOUD, not silent — the opposite of the brief's prediction for the literal
+instruction, under this function's actual guard-clause shape.** The TRUE silent variant —
+reproduced separately on two throwaway modules, matching `registers/handoffs/HANDOFF_IN.md`'s own
+prior demonstration line-for-line ("no exception raised: True") — requires `_LADDER_ERROR` to be
+independently BOUND in *both* modules, e.g. `shape.py` wrongly doing `from .seam import
+_LADDER_ERROR` (a real, non-stale binding taken at import time) while `seam.py` also declares its
+own: then neither raises, and only the RE-EXPORTED copy in `shape.py` freezes at `""` forever.
+That is precisely the mistake §C's rule (exclude both names from the facade) forecloses, and it is
+the one this codebase actually avoids — but it is not what "build `seam.py` WITHOUT
+`_LADDER_ERROR`" produces under either literal reading. The `rg -c '^_LADDER_ERROR'` grep pair
+(§J.9) does correctly read (0, 0) under both constructions above — so the grep-pair half of the
+claim holds even though the "stays green" half does not, for either variant actually tried.
+
+### `combat_seam.py` co-edit — the cycle it was carrying, and what breaks it
+
+Both of its deferred `from . import shape as S` imports existed ONLY for the
+`combat_seam <-> shape` cycle this step dissolves (`HANDOFF_IN.md`'s step-7 entry above predicted
+exactly this: *"goes at step 8, where `body_band_penalty` lands below the seam"*). Both moved to
+module level: `body_band_penalty` from `.decision` (moved there at step 7), `H` from `.state.ids`.
+`combat_seam.py` now imports neither `shape` nor `seam` — `grep -c 'import shape'` → **0**. Also
+fixed while in the file: a stale comment naming `Query.budget` (deleted at step 7) → `decision.budget`.
+
+**Repo test co-edit, same change:** `tests/valoria/test_import_cycle_game_state_npe.py` —
+`len(cycles) == 4` → `== 3`, the `seam_shape` family and its assertion deleted, function renamed
+`test_exactly_three_cycles_remain_and_they_are_the_expected_families` (matching the file's own
+established convention: it was itself renamed from `..._two_...` at the four-cycle step), docstring
+rewritten to record the dissolution and keep the pre-existing history. **BEFORE** (stashed to
+verify against unmodified `3e273d3d`): `2 passed`. **AFTER**: `2 passed`, at **3** cycles.
+
+**Falsifiers (c), both run and reverted:**
+- skip the `combat_seam.py` co-edit → cycle test RED, and the cycle it reports is now a **3-node**
+  one (`combat_seam`, `seam`, `shape`) rather than the original 2-node pair — the seam moved into
+  the cycle's path rather than off it, since `shape.contest()`'s local `from . import combat_seam`
+  stayed behind while `contest()` itself moved to `seam.py`.
+- do the co-edit but skip the test co-edit → RED, `3 != 4`, exactly as predicted.
+
+**Falsifier (d), run and reverted:** re-pointed A39's spy (`probes.py:2469`) from `shape` to `seam`.
+`SeasonDriver.resolve` (unmoved, still in `shape.py`) calls `contest(...)` bare, resolving it from
+`shape`'s own globals at call time — rebinding `seam.contest` never touches that binding. Result:
+`captured` stays empty, the probe's own assertion fails inside its `except Unspecified:` branch,
+and `report.py` + `delta.py HEAD` show `PROBE FLIPS 1` / `A39: PASS -> INSTRUMENT-ERROR`, exactly as
+predicted. **Confirms A39 belongs to step 9**, not this one — its spy must keep targeting whichever
+module holds `SeasonDriver.resolve`.
+
+### Other fixes in scope, and the home-claim sweep
+
+`engine/season/data/files.py:112` — a comment naming `shape.degree_ladder()` → `seam.degree_ladder()`
+(the plan files this at step 10; the claim goes false at step 8, so fixed here rather than deferred,
+per the recurring "claim left true-when-written" lesson).
+
+Sweep of the 11 moved symbols, both spellings, over `hole_register.yaml`, `requirements.yaml`,
+`CLAUDE.md`, `CURRENT.md`, this file, and `architecture/`: two hits, both in `hole_register.yaml`,
+both updated — `:1023`'s `site:` (`shape.contest_subsystem`/`shape.contest` → `seam.…`) and `:1263`'s
+prose (`` `shape.degree_of` `` → `` `seam.degree_of` ``), following the exact precedent step 7 set
+sweeping `Query.budget`/`shape.view_ids` → `decision.…` in the same file. `requirements.yaml`,
+`CLAUDE.md`, `CURRENT.md` and `architecture/`: no hits (verified by grep, not assumed — a `contest`
+hit in `CURRENT.md` was a false positive from a greedy regex spanning one very long single-line
+stamp entry, confirmed by re-running with an anchored pattern). Not touched: three `shape.py::…`
+citations in `hole_register.yaml`/this file naming `emits_at`/`_fold`/`resolve`/`writes_at`/
+`_apply_write`/`StateChange`/`belief_contradicts` — none of the 11 moved symbols, all correctly
+still in `shape.py`.
+
+### Instruments (§J), each reproduced
+
+1. `pytest engine/season/tests -q` → **187 passed** (171.76s)
+2. `pytest tests/valoria/test_import_cycle_game_state_npe.py -q` → **2 passed**, at **3** cycles
+   (verified 2 passed at HEAD `3e273d3d` before any edit, via `git stash`)
+3. `pytest tests/valoria/test_engine_does_not_import_systems.py -q` → **17 passed** (110s); seams
+   still exactly two
+4. `python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0` →
+   `ee0383bf3f4606e56b80cd07c0284f0a` — unchanged
+5. `report.py` then `git status --short engine/season/runs/` → clean, all eight artifacts
+   byte-identical, no exceptions this step
+6. `delta.py HEAD` → `PROBE FLIPS 0`
+7. `register.py --requirements` (via `-m`, see above) → 6 not_met · 3 partial
+8. Identity: `getattr(shape, n) is getattr(seam, n)` for all 8 re-exported names → all True
+9. `grep -c '^_LADDER_ERROR'` → shape.py **0**, seam.py **1**
+10. `grep -c 'import shape' engine/season/combat_seam.py` → **0**
+11. Anti-fabrication gate, run as CI does (`GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main
+    python3 tools/ci_sim_fabrication_check.py`) → **OK, 13 sim files scanned, all constants cited**;
+    142 pre-existing uncited constants in touched files reported as NOT gated (added-lines-only,
+    as documented) — no `[JUSTIFIED: …]` marker was needed, a null result from the check actually
+    running under CI's env vars rather than a bare unfired run.
+12. `pytest tests/valoria -q`, once, last — **1779 passed, 23 skipped, 15 xfailed, 3 warnings,
+    598.27s (0:09:58).** Matches the 1,779 figure CURRENT.md's step-7 stamp already cites — this
+    step changed zero repo-level test outcomes, consistent with a pure move.
+
+### What I did not check
+
+- Did not sweep `dashboard/` or any other generated/published surface for a stale symbol location
+  (same scope line step 7's entry drew).
+- Did not attempt to reconcile `requirements.yaml`'s `shape.py:NNNN` line citations for code that
+  did not move this step — out of declared scope, same as step 7.
+- Did not re-verify `references/canonical_sources.yaml` / `mechanics_index.yaml` for a `shape.py`
+  home-claim on any of the 11 symbols — grepped, zero hits, but not loaded-and-parsed as YAML the
+  way `hole_register.yaml` was.
+
+**Next: step 9, `engine/season/loop/driver.py`.** Strictly serial per plan §6 — do not start it on
+an unreconciled base; wait for this step's critic pass. A39's spy (`probes.py:2469`) moves to
+target `seam.contest` **only when** `SeasonDriver.resolve` itself moves to `loop/driver.py` at that
+step — moving one without the other is exactly falsifier (d) above.
+
 ## ⏳ PRODUCED 2026-09-09, NOT YET COMMITTED — decomposition STEP 7: `decision.py`. `shape.py` 2,813 → 2,066, `decision.py` 872 new (ED-IN-0203)
 
 **Producer session only — a read-only critic reviews this next, per the plan's relay (§6). Nothing
