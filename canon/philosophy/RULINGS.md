@@ -1249,3 +1249,61 @@ four diagram elements, and two rounds of audit findings built on top of them.
 This is the fifth instance of one pattern: R-1, R-2, R-7, R-8 and now C-3. The first four were the
 editor building on a plain statement. This one is the editor **manufacturing** a statement and the
 author consenting to a label. It is the worse failure of the two.
+
+### R-13 — What thread sensitivity is: how far outside the human band one can sense
+
+> "Practitioners don't get 'tied to more threads'"
+
+> "they can just see more of the threads across the three axes of temporality legibility actuality —
+> human consciousness can only sense within a band or range of threads"
+
+> "so the more thread sensitive you are, the more outside that normal band you can sense"
+
+> "it's like looking out a window, and the closer you get to it the more you can see out of it"
+
+**Sensitivity is perceptual range, not extent of connection.** Human consciousness senses within a
+band across the three axes; sensitivity is how far outside that band one can sense. The window is the
+author's image and it carries the point exactly: **the window does not grow, you stand nearer it.**
+
+**What this corrects, and it is the root of the C-3 disaster.** §5.5 had step 2 read *"holding more is
+being imbricated differently: one is tied into the weave more extensively and more finely"*. That was
+me over-reading D-7's word **position** as *position-in-the-weave*. D-7's own words say *"better able
+to **imbricate yourself** with threads"* — an ability exercised when one engages threads, not a
+standing tiedness. From that misreading came "magnitude is imbrication", and from that the whole
+retracted vessel account. **One misread noun, five documents.**
+
+**D-7 is unaffected and still governs**: position and capacity are one achievement, because both are
+what one's rendering can handle at its expanded limits. What "position" means is now stated —
+**vantage**, how near the window one stands.
+
+**And it separates two things the suite had run together.** Imbrication answers *what is given* to
+one (§3.5, D-1). Sensitivity answers *how far across the axes one can sense*. Two beings identically
+imbricated can differ in sensitivity. §5.5 now says so.
+
+*Applied:* §5.5 (rewritten, heading changed, the bootstrap's closing clause corrected), §9.3 (Thread
+Sensitivity row).
+
+### R-14 — What the cost is, and what resists it
+
+> "6.8 re cost to practitioner: the cost is their coherence, and their ability to prevent that cost
+> stems from how resilient their spirit is, which is basically how strongly configured they are"
+
+**Closes the gap C-3's retraction opened, and answers it the other way.** The retracted subsection had
+said *"there is no toughness term, and there was never a place to put one."* There is one, and this is
+where it goes: **the resilience of the practitioner's spirit — how strongly configured they are.**
+
+Three things it is not, each of which the suite had asserted at some point:
+
+- **not size** — a configuration is an organization of threads cohering such that they constitute a
+  being (R-11); how *strongly* it coheres is what resists. Nothing about how much of the weave one
+  occupies.
+- **not thread sensitivity** — that is how far outside the human band one can sense (R-13). Reach and
+  resilience vary independently: a great perceiver is not thereby hard to move.
+- **not imbrication** — how one is tied in determines what is *given* to one (D-1), not what one
+  withstands.
+
+**Unchanged:** D-5's **type × scale** for the working's contribution, and §6.6's direction test for
+whether there is an operational cost at all. The practitioner-side term sits alongside those.
+
+*Applied:* §6.8 (subsection rewritten, with what stood there recorded rather than deleted),
+`DIAGRAM.md` (two elements).

@@ -178,25 +178,42 @@ then converts more of the *next* encounter into stress. So the capacity that saf
 the capacity that makes an unsafe exposure worse — not because sensitivity weakens anyone, but
 because it enlarges what can get in. Nothing in the model lets a practitioner grow out of that.
 
-## §5.5 What develops: position and capacity are one thing
+## §5.5 What develops: how far outside the human band one can sense
 
-**Thread sensitivity is a position, and the position *is* a capacity.** These are not two achievements
-that happen to correlate. Being able to perceive threads and being able to hold oneself among threads
-are the same accomplishment described from two sides.
+**Thread sensitivity is how much of the threads one can sense.** *(Ruled 2026-09-09.)*
 
-The mechanism, stated in order:
+> **Human consciousness can only sense within a band or range of threads** — across the three axes of
+> temporality, legibility and actuality. **The more thread-sensitive you are, the more outside that
+> normal band you can sense.**
+>
+> *"It's like looking out a window, and the closer you get to it the more you can see out of it."*
 
-1. One becomes able to **hold more of what is being given** — more of what threads are and how they
-   are.
-2. Holding more is *being imbricated differently*: one is tied into the weave more extensively and
-   more finely (§3.5).
-3. And being imbricated more extensively is itself **being able to bear more** — because one's
-   rendering is now working at expanded limits, and what it can hold of threads is also what it can
-   hold *of itself among* threads.
+**Practitioners are not tied to more threads.** *(Ruled 2026-09-09.)* Sensitivity is not a standing
+extent of connection and it does not make anyone a larger part of the weave. What changes is **how
+much can be sensed** — the vantage, not the size. The window does not grow; you stand nearer it.
 
-So perceptual reach and self-holding are one variable. **Your ability to perceive threads is at the
-same time your capacity to hold yourself with threads**, because both are what your rendering can
-handle.
+⚠ *An earlier version of this section had step 2 read "holding more is being imbricated differently:
+one is tied into the weave more extensively and more finely". That was the editor over-reading D-7's
+word* position *as position-in-the-weave. The author's own words are* "better able to **imbricate
+yourself** with threads" *— an ability exercised when one engages threads, not a standing tiedness.
+Struck 2026-09-09, along with everything the misreading supported (§6.8's retracted cost account).*
+
+**Position and capacity are still one achievement**, which is D-7 and is unaffected:
+
+> "It is a position whereby you can hold more and more of what is being given to consciousness … by
+> being able to hold more, you are able to bear more as you are better able to imbricate yourself
+> with threads. it's both simultaneously. your own ability to perceive threads is at the same time
+> the capacity to hold yourself with threads because your rendering is able to handle the expanded
+> limits"
+
+So perceptual reach and self-holding are one variable, and the reason is the one the author gives:
+both are what one's rendering can handle at its expanded limits. Sensing further outside the human
+band and holding oneself further outside it are the same accomplishment.
+
+**Keep this apart from imbrication, which answers a different question.** How one is tied in
+determines **what is given** to one (§3.5, D-1). Sensitivity determines **how far across the axes one
+can sense** — how much of the band's outside is available at all. Two beings identically imbricated
+can differ in sensitivity, and the suite conflated the two until this ruling.
 
 This is why perceptual reach gates what becomes of a practitioner at Coherence 0 (§7.6). It is not
 that perception happens to be useful when self-maintenance fails. It is that perception *was* the
@@ -230,7 +247,8 @@ So the two claims that appeared to be in conflict are not:
   engagement with what one cannot hold. It does not reduce the encounter; it makes continuing possible.
 - **The bootstrap dissolves.** The first confrontation, before any sensitivity exists, is registered by
   the passive stratum (§3.3), which requires no reach to operate. Sensitivity was never needed to
-  *have* the first encounter; it is what the encounters build, by altering how one is tied in.
+  *have* the first encounter; it is what the encounters build — moving one nearer the window, not
+  tying one in further (§5.5).
 
 > ⚠ **RETRACTED 2026-09-09.** A passage stood here deriving, from §5.5's identity, that a
 > practitioner of deep reach is a **larger configuration** and therefore pays less for deliberate

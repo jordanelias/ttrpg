@@ -316,33 +316,35 @@ mending the carrier reaches the floor. The ruling settles that the floor is mova
 self-mending as the hard case; the mechanism above is why those two facts belong together. Reject it
 and the ruling stands.)*
 
-### How large the cost is — RETRACTED, and open
+### How large the cost is, and what resists it
 
-> ⚠ **RETRACTED 2026-09-09.** Everything this subsection asserted rested on a ruling the author has
-> since said was answered under a misunderstanding: *"it was nonsense so I had no idea that's what I
-> apparently ruled. I thought you were saying that the scale of the working changed the cost."*
->
-> The question I put offered three options and the author chose one by letter. The label was mine,
-> and it did not carry to the reader the meaning it carried to me. **A selection made under a
-> misreading is not a ruling**, so C-3 is withdrawn and everything derived from it goes with it:
->
-> - that cost is measured *relative to the practitioner* rather than by the working alone;
-> - that there is "no toughness term, and there was never a place to put one";
-> - that **magnitude is imbrication**, and therefore that thread sensitivity makes a practitioner a
->   bigger vessel;
-> - that sensitivity is accordingly *"better at doing and worse at being done to"*;
-> - that the Einhir lattice was **a larger vessel rather than a stronger tool** (§8.3).
->
-> None of that was ruled. All of it was mine.
+**The cost is the practitioner's Coherence. What determines their ability to prevent that cost is how
+resilient their spirit is — which is how strongly configured they are.** *(Ruled 2026-09-09.)*
 
-**What survives, because it was ruled separately and earlier:** D-5 gives the operational term as
-**type × scale**. So the *scale of the working* bears on the cost, and the *direction* of the working
-decides whether there is an operational cost at all (§6.6). Neither of those depends on C-3.
+So there **is** a practitioner-side term, and three things about it are worth stating plainly because
+the suite got each of them wrong before.
 
-**What is now open:** whether anything about the *practitioner* bears on the cost — whether beings
-differ in what a given working costs them, and if so in virtue of what. The framework has no answer,
-and the previous answer was mine rather than the author's. Do not fill this in by inference; it is
-exactly the gap that produced the retraction.
+- **It is strength of configuration, not size.** A configuration is an organization of threads
+  cohering such that they constitute a being (§2.1); how *strongly* it coheres is what resists being
+  worked out of equilibrium. Nothing here is about how much of the weave one occupies.
+- **It is not thread sensitivity.** Sensitivity is how far outside the human band one can sense
+  (§5.5). A practitioner of great reach is not thereby resistant, and a resistant one is not thereby
+  perceptive. They vary independently.
+- **It is not imbrication.** How one is tied in determines what is given to one (§3.5); it does not
+  determine what one withstands.
+
+**What the working contributes is unchanged**: D-5 gives the operational term as **type × scale**, and
+§6.6's direction test decides whether there is an operational cost at all. The practitioner-side term
+sits alongside those, not in place of them.
+
+> ⚠ **What stood here until 2026-09-09, and why it is worth recording rather than deleting.** This
+> subsection asserted that cost is measured *relative to the practitioner's magnitude*, that
+> **"there is no toughness term, and there was never a place to put one"**, that magnitude is
+> imbrication and therefore that sensitivity makes one a larger vessel, and that the Einhir lattice
+> was a larger vessel rather than a stronger tool. All of it was the editor's, built on a lettered
+> option the author selected under a misreading (C-3, retracted) and on a misreading of D-7's word
+> *position* (R-13). The ruling above says the opposite of the sentence in bold: **resilience is
+> exactly the term, and this is the place it goes.**
 
 ### The confrontation channel
 

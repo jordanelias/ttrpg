@@ -103,7 +103,7 @@ flowchart TD
     M --> O
     N --> L
     O --> L
-    J -->|"how much it costs: OPEN<br/>see §6.8"| L
+    J -->|"cost = Coherence<br/>resisted by how strongly<br/>configured you are"| L
     D --> K
 
     style O stroke-width:3px
@@ -116,8 +116,9 @@ flowchart TD
   with a held shape *consists in*, and the benefit is what being imbricated with a released one
   consists in.
 - **The edge into L is divided, not doubled.** A manipulative working's displacement is a fixed
-  quantity. **What decides how much it costs the practitioner is now open** — the account that stood
-  here was retracted 2026-09-09 (§6.8).
+  quantity, and what the practitioner brings against it is **how strongly configured they are** —
+  the resilience of their spirit (§6.8). Not their size, their sensitivity, or how widely they are
+  tied in.
 
 ------
 
