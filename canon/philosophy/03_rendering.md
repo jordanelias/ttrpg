@@ -10,7 +10,10 @@
 
 **Rendering is the ability for consciousness to interpret phenomena as meaningful.** *(Ruled
 2026-09-09.)* It is something consciousness does, and **nothing is prior to it** — it is a
-foundational, originary premise. Not a mechanism external to consciousness, and not a cosmic process
+foundational, originary premise. **The scope of that claim is consciousness itself:** there is no
+prior state of rendering in consciousness, because you are either conscious or you are not. It does
+not deny that threads compose the beings whose consciousness renders, which is a claim in the
+constitutive order (§2.1). Not a mechanism external to consciousness, and not a cosmic process
 running independently of it.
 
 **And *meaningful* carries its ordinary weight:** the thing is not just there **ontically**, without

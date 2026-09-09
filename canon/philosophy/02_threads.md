@@ -10,7 +10,22 @@
 
 Threads are both a noun and a not-noun. They are simultaneously **the condition of possibility** for
 being able to render being as being, and **the constitutive ground** upon which an entity is able to
-be a being to be rendered at all. Threads weave organic beings and inorganic matter, and also
+be a being to be rendered at all.
+
+**In what sense threads condition rendering.** *(Ruled 2026-09-09.)* The chain is:
+
+> **Threads comprise beings. Beings have consciousness. Rendering occurs due to conscious beings.**
+
+So threads condition rendering by composing the beings whose consciousness renders — a claim in the
+**constitutive** order, about what anything is made of. **The ground of rendering is consciousness**,
+not threads directly.
+
+**This is why it does not collide with §3.1's "nothing is prior to rendering".** That claim ranges
+over what happens *within consciousness*: **there is no prior state of rendering in consciousness —
+you are either conscious or you are not.** There is no stage of being conscious that has not yet
+begun to interpret phenomena as meaningful. The two priorities are in different orders and neither
+displaces the other. *(An audit reached this as the deepest open question in the suite; it is closed
+here rather than by construction.)* Threads weave organic beings and inorganic matter, and also
 thoughts, concepts and memories. Everything experienceable, internally and externally, is woven from
 them — as substrate, and as the oscillating tension of temporal, epistemic and actualized bounds.
 

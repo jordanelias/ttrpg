@@ -1094,3 +1094,40 @@ it is why §9.1 reserves *ontological* for this register rather than for a deepe
 
 *Applied for R-8:* §3.1 (opening rewritten, the two struck drafts recorded in place), §3.3, §2.5,
 §9.1.
+
+---
+
+## 2026-09-09 — Batch 12: the priority relation, closed
+
+### R-10 — In what order threads are prior, and what "nothing is prior to rendering" ranges over
+
+> "Threads comprise beings, beings have consciousness, rendering occurs due to conscious beings"
+
+> "ground of rendering is consciousness, but there is no prior state of rendering in consciousness:
+> you are either conscious or you are not"
+
+**What this closes.** A read-only foundations audit found the suite asserting two originary premises
+with no stated relation: §2.1 makes threads *"the condition of possibility"* of rendering — a borrowed
+term whose structure is priority — while §3.1 says of rendering *"nothing is prior to it"*. R-2 ruled
+that threads are **both** substrate and condition without saying how "both" relates to "nothing
+prior"; R-7 proposed an order and **R-8 retracted it without replacing the relation**, leaving the
+joint open. The audit named it the deepest open item in the framework and declined to answer it,
+citing the editor's own confessed pattern.
+
+**The answer is a chain, and the two claims turn out to be in different orders.**
+
+| | claim | order |
+|---|---|---|
+| threads are prior | they **comprise beings**; beings have consciousness; rendering occurs due to conscious beings | **constitutive** — what things are made of |
+| nothing is prior | there is **no prior state of rendering in consciousness**; you are either conscious or you are not | **within consciousness** |
+
+So threads condition rendering by composing the beings whose consciousness renders. **The ground of
+rendering is consciousness**, not threads directly — which is the step the suite never stated, and
+the reason the two claims never actually collided.
+
+**And "nothing is prior" is narrower than it read.** It denies a stage of consciousness that has not
+yet begun to interpret phenomena as meaningful. It does not deny that something composes the being
+whose consciousness that is.
+
+*Applied:* §2.1 (the chain stated, with the order it belongs to), §3.1 (the scope of "nothing is
+prior" stated).
