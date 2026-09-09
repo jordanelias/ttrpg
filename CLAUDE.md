@@ -162,6 +162,32 @@ the game work. our design documents in .MD are reference and information only."*
 **The test to apply:** *if this document were deleted, would the game behave differently?* If no, it
 is reference. If yes, the mechanism is in the wrong place and belongs in code.
 
+**THE LAYERS (RULED 2026-09-09 by Jordan). This is the canonical definition; nothing else may spell
+one "Layer".**
+
+| | | binds |
+|---|---|---|
+| **Layer 0** | **this file**, `CURRENT.md`, `HANDOFF.md` | the AGENT — how a session works, what may be built, what counts as done |
+| **Layer 1** | `architecture/` (RATIFIED, ED-IN-0204) | how code is written |
+| **Layer 1 scripts** | guards derived from Layer 1 | Layer 2 |
+| **Layer 2** | the game code | the game |
+
+**There is no Layer -1.** Needing one means Layer 0 was written wrong, and the repair is to EDIT THIS
+FILE — never to build a level beneath it. That terminates the tower, because **Layer 0 binds a reader,
+not a program**: code must be checked by code, which has no natural top, whereas an instruction is
+followed or not and its failure mode is corrected by rewriting it. This is not a new rule — it is
+§0.1 pt 5's load-bearing predicate and §0.3's diagnosis stated as a structure, and the repository has
+already run it once: the depth-five guard recursion §0.3 measured was repaired on 2026-08-19 by
+editing this file's predicate and deleting three artifacts, not by adding a fourth checker.
+
+⚠ The `layer:` field in `references/ci_checks_registry.yaml` was a DIFFERENT axis counting the
+opposite way (its `L0` was the game). It was renamed `subject:` on 2026-09-09 for that reason; the
+word "Layer" is now unambiguous. Do not reintroduce it there.
+
+**Why Layer 0 being prose is not a defect:** the carve-out above is exactly this. §0.05 makes prose
+non-binding for GAME MECHANISM and leaves it binding as AGENT INSTRUCTION. That asymmetry is the
+property that stops the recursion.
+
 ### 0.06 NERS — the four criteria a design is judged against (Jordan's definitions; canonical home, 2026-09-04)
 
 **This is the canonical home for the NERS charter.** It had none: `canon/definitions.yaml` has been
