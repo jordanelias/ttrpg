@@ -935,13 +935,23 @@ def operands_for(p: Person, row: "VerbRow", q: "Question", subject,
 # person's OWN ledger can refuse a candidate. Imported back at the top of this file.
 #
 # ⚠ ITS ONE BARE-NAME CALLER IS `Query.opening_set` BELOW, AND THAT IS WHAT KEEPS THE REBINDS
-# WORKING. Six sites rebind `S.belief_contradicts` to a counting wrapper -- four in the suite's
-# `test_wb_clause_four_fires_...` and two in the frozen `proposals/2026-09-04-degree-sweep/
-# wd_acceptance.py`. They rebind THIS module's global, and `opening_set` resolves the name in
+# WORKING. `S.belief_contradicts` is rebound at EIGHT assignment lines in TWO files -- four in the
+# suite's `test_wb_clause_four_fires_...` (:7069, :7080, :7097, :7107) and four in
+# `proposals/2026-09-04-degree-sweep/wd_acceptance.py` (:283, :288, :401, :405); half of each set
+# installs a wrapper and half restores the original. ⚠ THIS COMMENT SAID "SIX SITES ... FOUR AND
+# TWO", WHICH RECONCILES ON NO BASIS -- it mixed lines in one file with installs in the other.
+# ⚠ AND `belief_contradicts` IS NOT THE ONLY NAME IN THIS CLASS: `ALIGNMENT` (4 lines, suite) and
+# `pack_scenes` (8 lines, three degree-sweep arms) are rebound by the same mechanism, and
+# `pack_scenes` is absent from the decomposition plan's own hazard list. All three readers move at
+# step 7. They rebind THIS module's global, and `opening_set` resolves the name in
 # THIS module's globals at call time, so the wrapper is seen. **When `opening_set` moves to
 # `decision` at step 7 it will resolve the name in `decision`'s globals instead, and every one
-# of those six rebinds becomes a silent no-op** -- plan §0 item 1's hazard, arriving there
-# rather than here. The falsifier already exists and is not vacuous:
+# of those rebinds becomes a no-op on it** -- plan §0 item 1's hazard, arriving there rather than
+# here. ⚠ **NOT "SILENT", WHICH THIS COMMENT ALSO CLAIMED.** All three names are caught by an
+# existing assertion: this one by the falsifier below, `ALIGNMENT` by `test:2376`'s uniform
+# control, `pack_scenes` by the arms' `in_budget` consumer. What IS silent is the residue --
+# `wd_acceptance.py` and `arm7_flexibility.py` are imported by nothing, so they cannot fail the
+# suite and would mismeasure only on a re-run. The falsifier is not vacuous:
 # `test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_the_control`
 # asserts `live` is non-empty and says in its own message *"or the deposit no longer reaches
 # `belief_contradicts`"*.

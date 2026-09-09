@@ -14,9 +14,11 @@ after. Unchanged, which is the only reading of progress §0.2 accepts.
 ### THE HAZARD THIS STEP EXISTED TO NOT TRIP, AND THE ONE IT HANDS TO STEP 7
 
 Plan §0 item 1 names `S.belief_contradicts` as a rebind hazard: *"split the owner from the reader
-and each rebind becomes a silent no-op on a copied binding."* **Six sites rebind it** — four in
-`test_wb_clause_four_fires_...`, two in the frozen `proposals/2026-09-04-degree-sweep/
-wd_acceptance.py`. Measured before cutting:
+and each rebind becomes a silent no-op on a copied binding."* **Eight assignment lines in two files** — four in `test_wb_clause_four_fires_...`, four in
+`wd_acceptance.py`; half install, half restore. ⚠ *A first writing said "six sites … four and two",
+which reconciles on no basis.* **And two more names are rebound the same way:** `ALIGNMENT` (4
+lines) and `pack_scenes` (8 lines, three degree-sweep arms) — the latter absent from the plan's own
+hazard list. All three readers move at step 7. Measured before cutting:
 
 ```
 bare-name callers of belief_contradicts, whole package:  ONE — shape.py:437, inside Query.opening_set
@@ -272,8 +274,10 @@ was the defect: the plan was not wrong, the basis changed. Re-measured, all thre
 | `Query.<world-first>` | 72 | 71 | **54** |
 | `Query.<person-side>` | 68 | 65 | **47** |
 
-*(repo-wide, `.py` only; CALLS excludes comment lines and docstring mentions.)* **Step 7's bill is
-47 calls, not "67" anything.** The bare `73` is out of `shape.py` and `world_q.py`: those comments
+*(repo-wide, `.py` only; CALLS excludes comment lines and docstring mentions.)* **Step 7's bill is 45 LIVE call expressions** — 47 exist,
+but two are in `proposals/…/instrument_history/shape_rev1.py`, a self-contained frozen snapshot
+that resolves against its own `Query`. *A count published without saying what it counted, in the
+paragraph correcting a count published without saying what it counted.* The bare `73` is out of `shape.py` and `world_q.py`: those comments
 needed the PROPERTY — every world-first call site resolves to the moved body — and a count was
 decoration that then had to be defended. **Renames paid at step 5: 0.**
 

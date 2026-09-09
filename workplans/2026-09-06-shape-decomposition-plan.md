@@ -1,6 +1,12 @@
 # `engine/season/shape.py` — DECOMPOSITION PLAN (12 modules, 10 steps)
 
-## Status: **PROPOSED. Reference under §0.05 — delete this file and the game behaves identically.**
+## Status: **SUPERSEDED FOR STEPS 7–10 AND 0a by `workplans/2026-09-09-shape-decomposition-plan-v2.md` (2026-09-09).** This file remains the record of steps 0b–6 and is still reference under §0.05.
+
+> ⚠ **Rows 1–6 of §1's table are HISTORY, NOT INSTRUCTIONS**, and four of this document's forward-looking
+> claims are wrong against the tree as it stands: `sense`'s placement contradicts `04:116`/`:133`/`:158`;
+> the step-7 artifact grep is a verified false negative; step 9's flat `loop.py` is shadowed by the
+> `loop/` package; and `pack_scenes` is missing from §0's rebind list. v2 §0 tabulates all seven with
+> their measurements. **Do not execute steps 7–10 from this file.**
 ## Lane: IN. Recorded 2026-09-06, ED-IN-0203. Adjudicated read-only; zero escalations.
 
 > ### ⚠ THE TREE THIS PLANS DOES NOT EXIST ON `main`.
