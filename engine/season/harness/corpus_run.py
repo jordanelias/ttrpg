@@ -223,6 +223,7 @@ def build_at(case: dict, seed: int = 0) -> World:
         # -- rather than in a person-shaped container, which is what the ladder actually says.
         if chain:
             w.add_tenure(Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
+        # [JUSTIFIED: radix for parsing H()'s blake2b hexdigest -- same as combat_seam.py:153]
         pick = int(H(seed, 0, str(case.get("id")), f"axis:{pid}"), 16) % len(axes)
         w.persons[pid].convictions = {axes[pick]: 0.9}
     # ⚠ `W28`: THE CASE MAY SEAT ITS OWN ACTOR ON AN OFFICE. A re-scaled case carries

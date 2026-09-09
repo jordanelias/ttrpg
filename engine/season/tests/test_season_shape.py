@@ -215,11 +215,15 @@ def test_d4_contest_is_not_a_second_resolver():
     assert 'band = "' not in src and "band = '" not in src
     assert "w.log [ - 1 ]" not in src and "w.log[-1]" not in src
     with pytest.raises(Unspecified):
+        # The assertion is on the refusal, which fires before depth is ever consulted.
+        # [JUSTIFIED: an arbitrary non-zero recursion ceiling for a one-claimant refusal test]
         contest(_w(), "S", "a prize", ["p_low"], depth=0, max_depth=3, causes=["x"])
 
 
 def test_d4b_contest_causes_must_be_supplied_and_non_empty():
     with pytest.raises(Forbidden):
+        # Kept identical to the sibling case above so the two differ only in `causes`.
+        # [JUSTIFIED: the same recursion ceiling as the case above; the pair measures `causes`]
         contest(_w(), "S", "a prize", ["p_low"], depth=0, max_depth=3, causes=[])
 
 
@@ -336,6 +340,7 @@ def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
     ranked = lambda claims: sorted(claims, key=lambda c: c.confidence * (c.when + 1))
     old_and_confident = Claim("a", "p", "s", "k", True, when=0, source="f",
                                 confidence=100, visibility="own")
+    # [JUSTIFIED: a fixture tick, chosen only to be recent relative to `recent_mid` below]
     recent_and_spent = Claim("b", "p", "s", "k", True, when=9, source="f",
                                confidence=0, visibility="own")
     # THE DISCRIMINATING PAIR. Under the product, the spent claim goes first however recent it is.
@@ -346,6 +351,7 @@ def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
                               confidence=40, visibility="own")
     high_but_ancient = Claim("d", "p", "s", "k", True, when=0, source="f",
                                confidence=41, visibility="own")
+    # [JUSTIFIED: a fixture tick, chosen only to order after the claims above in the comparator]
     recent_mid = Claim("e", "p", "s", "k", True, when=50, source="f",
                          confidence=39, visibility="own")
     got = ranked([recent_mid, high_but_ancient, low_but_ancient])
@@ -518,7 +524,8 @@ def test_wa_an_unknown_predicate_stem_refuses_at_load():
 
 def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
     """`H-115`: `VerbRow.emits_at`/`writes_at` raised `SystemExit` on their two run-time degree
-    refusals (pre-fix: shape.py:708/712/728/733). `SystemExit` derives from `BaseException`, so
+    refusals (pre-fix: `shape.py:708/712/728/733`, at 480cb43 -- the file is deleted; kept as a
+    dated pointer into history rather than rewritten). `SystemExit` derives from `BaseException`, so
     `corpus_run.run_case`'s `except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer)` never
     caught it and a one-case design gap ended the whole corpus run.
 
@@ -2302,6 +2309,8 @@ def test_w5_f2s_third_term_cannot_change_any_decision():
         f"urgency moved the decision: {picks}. If that is now true the third term is no longer "
         "inert and this finding about §F2 should be retired — but check it is candidate-DEPENDENT "
         "and not merely numeric noise before doing so.")
+    # Only the inequality is asserted, so any pair that differs would serve.
+    # [JUSTIFIED: two far-apart inputs, to prove `urgency` reads its argument at all]
     assert urgency(1000, w.fixtures) != urgency(0, w.fixtures), (
         "urgency returns a constant, which would make this test vacuous — it must actually vary "
         "with subsistence for the inertness claim to be about §F2 rather than about a stub")
@@ -2402,8 +2411,17 @@ def test_decision_module_never_names_world():
     IMPORTS, and it would not catch a `decision.py` that imported `World` and never annotated a
     parameter with it (e.g. reading a module-level `_WORLD` singleton, or constructing one). A
     false claim of enforcement is worse than none, because it stops the next reader from checking
-    (`ARCHITECTURE.md` S47, quoted in `shape.py`'s own module docstring) — this test is what makes
-    04:1046's claim true rather than aspirational.
+    (`ARCHITECTURE.md` S47).
+
+    ⚠ AND THIS DOCSTRING ONCE COMMITTED THAT VERY FAULT. CORRECTED 2026-09-09 (ED-IN-0206). It
+    said this test "is what makes 04:1046's claim true rather than aspirational." IT DOES NOT.
+    04:1046's mechanism is a scan BY PATH over a `decision/` DIRECTORY, and its stated purpose is
+    to catch *"a `choose` drafted inside `loop/` and moved later"*. This walks the AST of the one
+    file `decision.py`, so code drafted elsewhere and never moved is never scanned — it is
+    structurally blind to the exact failure 04:1046 names. What it DOES enforce, and all of it:
+    nothing already inside `decision.py` names a `World` or imports a module holding one, plus
+    (a2) nothing it imports TAKES one. `decision/` is still a FILE, not a directory, and the path
+    scan does not exist. Layer-1 conformance is ED-IN-0206, not this test.
 
     TWO CHECKS, MATCHING WHAT AX-2 ACTUALLY FORBIDS:
       (a) no `Import`/`ImportFrom` in `decision.py` resolves to `state.world`, `queries` (either
@@ -2607,6 +2625,7 @@ def test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner():
     its subject existed was invisible to exactly the three readers the docstring listed, unless
     some unrelated code happened to read `w.tenures` first. It passed only because the fixture
     creates persons before tenures. This plants the reverse order, which is §0.1 point 2."""
+    # [JUSTIFIED: an arbitrary world seed for a structural test that never reads a draw]
     w = World(7)
     w.add_tenure(Tenure("t_early", "p_late", "off_x", "hold", since=0))   # subject first…
     assert w._unowned, "the plant did not land in _unowned — the ordering is not being tested"
@@ -7622,7 +7641,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
         "nothing to be true of and this test is not checking confound 1 at all")
     assert bad_windows == 0, (
         f"{bad_windows} of {windows} scored lookahead slots sit at the fork's OWN tick or "
-        "earlier. DELIBERATE is a parallel map over a frozen world (shape.py:4204-4221), so those "
+        "earlier. DELIBERATE is a parallel map over a frozen world (engine/season/loop/driver.py::SeasonDriver.deliberate), so those "
         "slots cannot differ and counting them inflates reconvergence — the exact defect the "
         "NO-LIVE-WINDOW exclusion exists to prevent")
     assert all(g["genuine"] > 0 for g in got.values()), (
@@ -7680,7 +7699,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     #     divergence in general, it destroys it specifically at the shipped `actor` arm.
     #
     # ⭐⭐ (c) AND THE ZERO IS DIAGNOSED, WHICH RETIRES THE ARM QUESTION RATHER THAN ANSWERING IT.
-    #     A fork reaches a later decision by exactly ONE route: §F1 clause 4 (`shape.py:627`,
+    #     A fork reaches a later decision by exactly ONE route: §F1 clause 4 (`engine/season/epistemic.py::belief_contradicts`,
     #     `belief_contradicts`). `wd_extra.corpus_drops` counts that population over the same 89
     #     worlds. At `observation_deposit_mode: actor`:
     #
@@ -8085,6 +8104,8 @@ def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
     saved = seam._LADDER
     try:
         seam._LADDER = (lambda net, ob, **k: Degree.FAILURE, DEGREE_LABEL)
+        # A replaced ladder that collapses all four to one band is then observable.
+        # [JUSTIFIED: four (net, ob) pairs spanning the ladder's four bands]
         moved = {degree_of({"net": n, "ob": o}) for n, o in ((5, 2), (3, 2), (2.5, 2), (1, 2))}
         assert moved == {"Failure"}, (
             f"replacing the ladder changed nothing ({moved}) -- `degree_of` is answering from a "
@@ -8114,6 +8135,8 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     assert contested == {"kill / wound": "the body"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set")
+    # Pins the roster against silent growth; CLAUDE.md quotes the same 32.
+    # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
     assert len(VERB_TABLE) == 32, len(VERB_TABLE)
 
     prizes = roster_map("contest_subsystems", "prizes")

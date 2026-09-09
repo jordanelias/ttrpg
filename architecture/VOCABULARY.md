@@ -1,7 +1,7 @@
 # VOCABULARY — THE HIERARCHY, AS A BALLOT
 
 ## ⚠ **DO NOT RULE ON THIS FILE YET (2026-09-05).** An adversarial pass overturned four dispositions
-## after it was committed: **`degree`** (RATIFY is false — `shape.py:6666` branches to two band
+## after it was committed: **`degree`** (RATIFY is false — `engine/season/seam.py::degree_of` branches to two band
 ## vocabularies and `rosters.yaml:349` says so in capitals; the null cited a falsifier that was not
 ## run), **`module`** (FIXED overwrites `architecture/meta/04_CODE_ARCHITECTURE.md:110`, ratified the
 ## same day, and its "the registry is transitional" reason is contradicted by three live tools),
@@ -122,7 +122,7 @@ these are the rows worth your time.
 | **prize** | what a contest is over. `rosters.yaml` maps four: *the body*, *a field*, *a standing*, *a proposition*. | **RATIFY** | **What is at stake, and the key that selects which subsystem resolves it.** |
 | **claimant** | S39.1: *"claimant[] is PERSONS, ALWAYS. Not factions, not units, not sides."* | **RATIFY** | As S39.1 states. No second sense found. |
 | **cause** | S39.2: *"events, into the same log, WITH `causes[]` NAMING THE ACTS"*. | **RATIFY** | **The acts that produced the contest**, carried so the log stays one log (S19.5). |
-| **degree** | the band a contest returns. | **RATIFY** | [NULL: checked across `shape.py`, `engine/autoload/dice_engine.py` and `module_contracts.yaml` — examined, ONE sense. `shape.py:6604` imports `degree_from_net` rather than deriving a second ladder, so the contest's degree *is* the dice ladder's band.] I looked for a collision here because it seemed likely; there is none. |
+| **degree** | the band a contest returns. | **RATIFY** | [NULL: checked across `shape.py`, `engine/autoload/dice_engine.py` and `module_contracts.yaml` — examined, ONE sense. `engine/season/seam.py::degree_ladder` imports `degree_from_net` rather than deriving a second ladder, so the contest's degree *is* the dice ladder's band.] I looked for a collision here because it seemed likely; there is none. |
 | **resolver** | ⚠ **TWO SENSES.** In `module_contracts.yaml` it names a **ladder** — `d_sigma`, `dice_pool`, `deterministic_accounting`, `state_reader` — i.e. *which math grades this*. But `contest_subsystem` reports `resolver=` while `composition.require()` returns **the function you call**. | **FIXED** | **`resolver` = the ladder** (the older, wider use — 27 contract rows). **`target` = the callable** — which is already the field name in `composition.py` (`ROLES[role]['target']`). No rename needed anywhere; the prose stops conflating them. |
 | **role** | `composition_roles:` in `module_contracts.yaml`; `composition.require(role)`. A name the engine states so it need not name a module. | **RATIFY** | **A capability the engine requires, named so the engine never imports its provider.** ⚠ Watch for the person-side sense (a person's office/tenure) — no collision found today, but it is one word away. |
 | **attach point** | `rosters.yaml`'s seam-table column; S39 fixes the contest one at RESOLVE. | **RATIFY** | **Where in the loop a seam is called.** Part of a seam's declaration, not a separate thing. |

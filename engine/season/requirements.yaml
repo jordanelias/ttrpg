@@ -164,12 +164,11 @@ rows:
       (`engine/season/state/carriers.py::Scene`, moved there at step 4 of the decomposition; this
       citation read `shape.py:2289` and named a file that no longer holds the class) and
       `deliberate` packs each person's choices into scenes and
-      stamps every act with its scene id (`a.scene = sc.id`, `shape.py:5727`); `W17` LANDED
+      stamps every act with its scene id (`a.scene = sc.id`, `engine/season/loop/driver.py::SeasonDriver.deliberate`); `W17` LANDED
       2026-09-02 (`architecture/PLAN.md:1216`, `:1315`). What is missing is a scene-granular TICK.
-      `SeasonDriver.season` (`shape.py:6470`) calls `self.deliberate(...)` once
-      (`shape.py:6477`), then `self.resolve(acts, ...)` once (`shape.py:6478`), then
-      `self.witness(...)` once (`shape.py:6482`), then increments `w.tick` once
-      (`shape.py:6484`) — every scene for every person in the season is flattened into one
+      `SeasonDriver.season` (`engine/season/loop/driver.py`) calls `self.deliberate(...)` once, then
+      `self.resolve(acts, ...)` once, then `self.witness(...)` once, then increments `w.tick`
+      once — every scene for every person in the season is flattened into one
       `acts` list before RESOLVE ever runs, so nothing that happens in one scene can reach a
       later scene within the same season; the boundary that exists is season-to-season, not
       scene-to-scene.
@@ -258,7 +257,7 @@ rows:
     status: partial
     measured: >-
       NON-OMNISCIENCE HOLDS, structurally (see R-07). NON-RATIONALITY DOES NOT EXIST: the chooser
-      takes the top-ranked candidate deterministically — `shape.py:3508` sorts on
+      takes the top-ranked candidate deterministically — `engine/season/decision.py::make_chooser` sorts on
       `(-score, verb, subject)`, so a tie breaks ALPHABETICALLY BY VERB — and only 2–7 of 22
       candidates carry a nonzero conviction score, so most choices are settled by verb name rather
       than by anything about the person. There is no mechanism by which a person declines the
@@ -271,8 +270,8 @@ rows:
       here rather than carried. (1) It described the CANDIDATE tie as broken by "an undeclared
       content-hash tiebreak". It is not; it is alphabetical, and the row's own `measure:` command
       prints that. The content hash is the WITHIN-SOURCE QUESTION tiebreak (`q.id`,
-      `shape.py:3958`), a different mechanism. (2) That question tiebreak is ALREADY DISPOSED:
-      `shape.py:3939-3956` records it closing at §0 step 4 on `H-54`'s precedent with
+      `engine/season/decision.py::make_chooser`), a different mechanism. (2) That question tiebreak is ALREADY DISPOSED:
+      `engine/season/decision.py::make_chooser` records it closing at §0 step 4 on `H-54`'s precedent with
       `needs_jordan` FALSE. Re-surfacing it as open is the ED-IN-0185 failure CLAUDE.md §0's five
       tests exist to prevent, and PR #368's body made the same error first. What remains open here
       is not a ruling but BUILD WORK: W26 and `H-62`.
