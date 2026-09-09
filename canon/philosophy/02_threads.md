@@ -12,6 +12,18 @@ Threads are both a noun and a not-noun. They are simultaneously **the condition 
 being able to render being as being, and **the constitutive ground** upon which an entity is able to
 be a being to be rendered at all.
 
+**And what a configuration is**, since it is the unit almost every later mechanic quantifies over and
+the suite had never said. *(Ruled 2026-09-09.)*
+
+> A configuration is an **organization or cohering of threads such that they come to constitute a
+> being or entity.**
+
+Two things follow directly, and they are the two the framework had been assuming without a warrant.
+**Its boundary is the being it constitutes** — which is what makes §2.7's distinction between what was
+pulled and what was not well-posed. And **its identity across time is that being's identity**, which
+is what lets §7.1 speak of "the configuration's own resting shape" having moved: after a permanent set
+it is the same configuration, differently organized, because it is the same being.
+
 **In what sense threads condition rendering.** *(Ruled 2026-09-09.)* The chain is:
 
 > **Threads comprise beings. Beings have consciousness. Rendering occurs due to conscious beings.**

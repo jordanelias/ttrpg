@@ -1131,3 +1131,26 @@ whose consciousness that is.
 
 *Applied:* §2.1 (the chain stated, with the order it belongs to), §3.1 (the scope of "nothing is
 prior" stated).
+
+### R-11 — What a configuration is
+
+> "a configuration is an organization/cohering of threads such that they come to constitute a being
+> or entity"
+
+**Closes the audit's second-deepest foundations finding.** *Configuration* is the unit almost every
+mechanic quantifies over — what spooling supplies, what an operation moves, what Coherence measures
+the displacement of, what a working's cost is a fraction of — and it had **no definition anywhere**,
+including no row in §9.3. Magnitude had been answered by derivation (§6.8: magnitude is imbrication);
+individuation and identity never had been.
+
+**Two things follow directly from the ruling, and they are the two the framework had been assuming
+without a warrant:**
+
+- **Its boundary is the being or entity it constitutes.** That is what makes §2.7's distinction
+  between what was pulled and what was not well-posed — the audit had flagged it as needing a
+  boundary the suite never supplied.
+- **Its identity across time is that being's identity.** Which is what licenses §7.1's talk of "the
+  configuration's own resting shape" having moved: after a permanent set it is the **same**
+  configuration, differently organized, because it is the same being.
+
+*Applied:* §2.1, §9.3 (new row).
