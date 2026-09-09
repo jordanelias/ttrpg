@@ -131,6 +131,11 @@ def subsystem_sim_dir(name: str) -> Path:
 # -- an AST walk over the write call sites, the roster scan, the margin-producer scan.
 # ---------------------------------------------------------------------------
 SHAPE_PY = PACKAGE_DIR / "shape.py"
+LOOP_DIR = PACKAGE_DIR / "loop"
+# The season loop itself, extracted from `shape.py` at step 9. Source-scanning guards that
+# used to read `SHAPE_PY` for `SeasonDriver` code read this instead -- `shape.py` is a facade
+# with no bodies left in it, so a scan pointed there passes by finding nothing.
+DRIVER_PY = LOOP_DIR / "driver.py"
 COMBAT_SEAM_PY = PACKAGE_DIR / "combat_seam.py"
 TRACE_LOG_PY = PACKAGE_DIR / "trace_log.py"
 TEST_PY = TESTS_DIR / "test_season_shape.py"

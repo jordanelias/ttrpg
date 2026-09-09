@@ -2466,7 +2466,10 @@ def a39():
         a = Act_(w, p, "press_claim", contests=["the barn"], payload="S")
         seen["act"] = a.id
         return [a]
-    from .. import shape as _s
+    # step 9: `SeasonDriver.resolve` -- the caller this spy exists to observe -- moved to
+    # `loop/driver.py`, and it calls `contest(...)` BARE, so the rebind has to land in the module
+    # the call resolves in. Left on `shape` it would be a no-op and `captured` would be empty.
+    from ..loop import driver as _s
     real, captured = _s.contest, {}
     def spy(w_, rung, prize, claimants, depth, max_depth, causes, extension=None):
         captured["causes"] = list(causes)

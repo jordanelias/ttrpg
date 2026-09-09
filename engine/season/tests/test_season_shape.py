@@ -35,7 +35,7 @@ from ..shape import (
     Step, Tenure, Unspecified, View, World, WriteClass,
 )
 
-SHAPE_SRC = files.SHAPE_PY.read_text()
+SHAPE_SRC = files.DRIVER_PY.read_text()   # step 9: the loop moved; `shape.py` is a facade now
 PROBES_SRC = files.PROBES_PY.read_text()
 # `Fixtures`/`DEFAULT_FIXTURES` moved to `season.data.fixtures` in step 3 of the decomposition
 # (ED-IN-0203, a PURE MOVE) -- a fixed source string, alongside `SHAPE_SRC`/`PROBES_SRC` above,
@@ -1728,7 +1728,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     ⚠ Sites whose `record_kind`/`fieldname` are not literals are reported as a HOLE IN THIS CHECK
     rather than skipped: a walk that silently ignores what it cannot read is a walk that reports
     `clean` over an unknown number of unchecked writes."""
-    pairs, dynamic = _write_call_sites(files.SHAPE_PY, files.PROBES_PY)
+    pairs, dynamic = _write_call_sites(files.DRIVER_PY, files.PROBES_PY)
     assert pairs, "the AST walk found no write call sites at all -- the walk is broken"
     # W3: THE FOLD'S WRITE IS GENERIC BY CONSTRUCTION -- `_apply_write` passes the pair as
     # variables, because one `resolve` serving 32 verbs cannot name a literal. Its coverage did
@@ -1742,7 +1742,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     # property is *"this call is inside `_apply_write`"*, and the AST answers it exactly. `G3`:
     # assert the property, never the proxy. Found while reconciling the governance-slice pass.
     import ast as _ast
-    _tree = _ast.parse(files.SHAPE_PY.read_text())
+    _tree = _ast.parse(files.DRIVER_PY.read_text())
     fold_span = next(((n.lineno, n.end_lineno) for n in _ast.walk(_tree)
                       if isinstance(n, _ast.FunctionDef) and n.name == "_apply_write"), None)
     assert fold_span, "`_apply_write` is gone; the fold's declared exemption names nothing"
@@ -6418,7 +6418,7 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # a reader while this test's scope note silently stops covering it, so the structure is what
     # is pinned rather than a sentence about it.
     import ast as _ast
-    _fold_fn = next(n for n in _ast.walk(_ast.parse(files.SHAPE_PY.read_text()))
+    _fold_fn = next(n for n in _ast.walk(_ast.parse(files.DRIVER_PY.read_text()))
                     if isinstance(n, _ast.FunctionDef) and n.name == "_fold")
     _calls = [n for n in _ast.walk(_fold_fn)
               if isinstance(n, _ast.Call) and getattr(n.func, "id", "") == "evaluate"]
@@ -6567,7 +6567,7 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
     # ⚠ `src`/`heads` are now per-module, so this arm names the file it probes rather than
     # inheriting whatever the scan loop happened to leave bound — a loop variable read after the
     # loop is exactly the kind of accident a re-point introduces.
-    _src = files.SHAPE_PY.read_text()
+    _src = files.DRIVER_PY.read_text()
     _m = _re.search(r"^[ \t]+def[ \t]+(\w+)", _src, _re.M)
     assert _m and _enclosing(_heads(_src), _m.end()) == _m.group(1), (
         "`_enclosing` cannot see an indented `def`, so a default inside a method would be "
