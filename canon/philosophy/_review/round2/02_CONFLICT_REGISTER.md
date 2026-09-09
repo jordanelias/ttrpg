@@ -326,3 +326,148 @@ the draw is relocated). 32 are mechanical. 3 reviewer claims overturned.
 B-5, E-1/E-2 and the F-block. Every one of them sits in a **hand-written restatement** — the
 glossary table, the diagrams, a band list, a summary paragraph. Not one is in the section
 that owns the concept.
+
+---
+
+# ADDENDUM · the derivation scorecard (132 claims scored)
+
+The fourth reviewer scored every claim in the suite that asserts something *follows*.
+Its findings-list was lost twice to an API fault; the scorecard and the equivocation
+analysis survived, and the equivocations are the more valuable half.
+
+## H · Equivocations — a term enters with one sense and the conclusion is drawn with another
+
+**This is the deepest layer.** Everything in blocks A–G is a rotted copy. These are faults
+in the argument itself, and two of them are load-bearing on the entire suite.
+
+**H-1 · `determination` / `move` — and it cuts the suite's central chain.**
+*State:* "being taken-as **is** a determination on the intelligibility axis"
+(`04_being_persistence.md:55-57`; `RULINGS.md:619-620`).
+*Change:* "so rendering **moves** threads" (`DIAGRAM.md:33`; `03_rendering.md:189`;
+`04_being_persistence.md:214`).
+Co-movement (`02_threads.md:118-121`) is stated in the second sense — "to move one is to
+move all" — and the §4.2 chain feeds it the first.
+**Depends on the switch:** layer 2 as threadwork (`04:62`), the outward facing as an
+occurrent hold (`04:107`), the positional loop (`03:189-190`), knots formed by rendering
+(`04:214`), memory as inexact (`06:228-230`).
+And `03_rendering.md:19` — "rendering does not configure" — sits on the first sense and is
+**incompatible with the second**.
+
+**H-2 · `rendering` / layer 2 — takes-as (no work) versus holds-against-force (work).**
+*No work:* `03_rendering.md:15-22`; `04_being_persistence.md:68-72` — "the force is in the
+as-structure, **not in any work performed**".
+*Work:* `04_being_persistence.md:25-26` — "**hold** that shape **against environmental
+thread-forces**"; `06_operations.md:248-250`; `06_operations.md:349-350`.
+**The entire §6.8 cost model, the retention roll, and "the isolated drift faster" require
+the second. Your "spooling configures" ruling requires the first. A taking-as cannot resist
+a force.**
+This is the root of A-3, and it is not fixable by deleting the word "holding": something
+has to resist environmental force or the cost model has no bearer.
+
+**H-3 · `operation` — wide versus narrow.** Wide: `04_being_persistence.md:49`, "what moves
+threads is a thread operation", which the §4.2 chain uses to reach "rendering meets that
+description" (`04:59-60`). Narrow: `06_operations.md:14-26`, deliberate threadwork beyond
+the finite human. **A-6 is this switch**, and so is B-7.
+
+**H-4 · `becoming` — accumulation versus movement-toward.** Depth from spooling
+(`04:19-20, 176-179`; `08:177`) versus movement toward equilibrium (`02:80-81`;
+`08:151-160`). **B-5 is this switch:** precluding the second is read as removing the first,
+which is how the Locked Zone row lost layer 1. "The threads remain" needs the senses apart.
+
+**H-5 · `hold` / `bear`.** Capture (`05:189-191`) · withstand (`05:193-195`) ·
+maintain-as-human (`04:83-84, 135`). D-7's identity is stated across the first two; §5.4's
+inversion uses the first *against* the second; §4.3's orthogonality uses the third against
+both.
+
+**H-6 · `overwhelmed`.** Active stratum exceeded, residue only, "not thereby reconfigured"
+(`05:83-84, 157-160`) versus *the* deforming event (`06:342-343`; `07:51, 313-314`).
+
+**H-7 · `event`.** Instantaneous registration (`07:51-54, 313`) versus a time-extended
+interval whose magnitude is force × duration (`06:354-358`; `07:75-78`). **My E-4/D-5
+reconciliation of yesterday depends on the switch** — E-4 says a load leaves nothing
+"however long it is held", with no resisted/unresisted qualifier.
+
+**H-8 · `return` versus the futural draw.** D-2: "a draw **toward**, not a return **to**"
+(`03:101-102`) versus "nowhere to **fall back to**" (`08:52-53`), "restoration" of becoming
+(`03:135`), "left off the attractor" (`06:167-168`).
+
+**H-9 · `remembered state` versus `the human band`.** A specific chosen shape (`06:196-205`)
+versus any point in a range (`07:129-132`). **B-1's derivation depends on this switch**, and
+it is the same defect from a third direction.
+
+**H-10 · `unfixed` versus `indeterminate`.** Changes over time (`03:150-151`) versus has no
+state to be found (`03:183-185`). Determines the answer to §2.2.
+
+**H-11 · `as something` versus `as world`.** Generic taking-as (`03:17`) versus
+presentation-as-world specifically (`06:62-64`). **"Entailed by §3.1 alone" depends on it**,
+and generic taking-as includes threads-as-threads, which is what the Leap was supposed to be
+needed for.
+
+**H-12 · how sensitivity develops.** Confrontation "held rather than repressed"
+(`05:141-144, 150-152`) versus presence alone (`07:63-64, 311-312`, E-2). Determines whether
+the Church's prophylaxis works at all.
+
+**H-13 · `always-already`.** Reserved for unsuspendable rendering as such (`04:31-35`)
+versus applied to layer 2 (`04:172`).
+
+**H-14 · `dimension`.** Transcendental/empirical (`02:30-33`) versus the three axes
+(`02:118-121`).
+
+**H-15 · `operational`.** The knot term, type × scale (`06:370`) versus "during an operation
+actually performed" (`07:53-54`). **B-4 is this switch.**
+
+## Further conflicts the scorecard surfaced
+
+**B-11 · Is there a toughness term?** *(This one I found independently before any report
+landed — recorded in my own pre-read notes. Two sources.)*
+`06_operations.md:299-306` — "there is **no toughness term** and there was never a place to
+put one."
+against
+`07_drift.md:44` — "**The elastic range is a constant of the being.**"
+A per-being constant that sets how much displacement one can take and return from **is** a
+toughness term. And magnitude grows with sensitivity while the range is fixed, which the
+suite never reconciles — the reconciliation would need displacement-units distinguished from
+load-units, and no document draws that distinction. My §7.1 veteran bullet assumes equal
+load gives equal displacement, which the vessel account denies.
+
+**C-5 · Two RULED passages conflict.**
+`02_threads.md:85-90` — a temporal pull "**does not rewind time**", does not move a
+configuration into a past state.
+against
+`08_history.md:135-138` (+ `RULINGS.md:507-509`) — a past-pull on a threadcut being leaves a
+Gap because it has "**no spooled past to be pulled toward**".
+The second needs the rewind picture the first struck. **Both are ruled.** → this may need
+you.
+
+**E-8 · `07_drift.md:63-67`** cites §5.5 for the **orthogonality** of sensitivity and
+Coherence. §5.5 asserts their **identity** (perceiving and self-holding are one
+achievement). The citation says the opposite of what it is cited for. Third instance of the
+§5.5 miscitation, after E-1 and E-2.
+
+**D-7 · `DIAGRAM.md:5, 93`** draws knot permanence as settled — "nothing here is provisional
+any more" — while `06_operations.md:111-113` says permanence "does not follow from
+anything". The diagram promotes a flagged posit to a ruling.
+
+**B-12 · `07_drift.md:259-264`** — drifted shapes are "drawn nowhere". But being off-harmony
+is exactly what the draw acts on (`07:56-58`; `06:265-267`); "draws nowhere" is the **Locked
+Zone** condition (`08:151-154`), imported into drift. Same family as B-1.
+
+**B-13 · `07_drift.md:400-402`** — "proximity to third-mode presences erodes Coherence:
+standing in strained fabric." E-4 (`07:51-54`) says standing in a place deforms nobody.
+
+**B-14 · `07_drift.md:399-400`** — "the load is **split**" between layer 2 and the substrate.
+§6.8's cost model has no substrate term; the split is introduced with no premise.
+
+**B-15 · `05_confrontation_and_sensitivity.md:291-295`** derives the outer tradition's
+reception as apophatic religious poetry; `08_history.md:291-294` has that same tradition
+receiving it as **fixed positive essentialism** — the opposite.
+
+## Revised count
+
+**61 conflicts.** 15 equivocations, 46 contradictions. Seven need your ruling: B-1, B-10,
+C-5, D-2, D-6, and the two structural ones — **H-1** and **H-2** — which are not editorial
+and cannot be fixed by deleting a word.
+
+**H-2 is the one to read first.** Your "spooling configures" ruling requires rendering to do
+no work; §6.8's whole cost model requires layer 2 to resist environmental force. Something
+must bear that force, and under the ruling it cannot be a taking-as.
