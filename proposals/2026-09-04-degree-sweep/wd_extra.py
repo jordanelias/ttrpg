@@ -31,10 +31,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 import wd_acceptance as W
 import arm9_forking as A9
-from sweep_core import S
+from sweep_core import S, DRV
 from engine.season.trace_log import TRACE
 
-_REAL_QF = S.questions_for
+_REAL_QF = DRV.questions_for
 
 
 def corpus_drops(mode: str, slots: str = "narrow"):
@@ -72,12 +72,12 @@ def corpus_drops(mode: str, slots: str = "narrow"):
         # the change must reproduce the committed 0 / 37 / 123 drops and 123-of-123
         # true-when-recorded exactly. They do.
         TRACE.rows.clear()
-        S.questions_for = qspy
+        DRV.questions_for = qspy
         try:
             (_r, drops, deps) = W._instrumented(
                 lambda: A9._run(case, W.SEED, W.SEASONS, fixtures=fx))
         finally:
-            S.questions_for = _REAL_QF
+            DRV.questions_for = _REAL_QF
         w = W._WORLDS[-1]
         kinds.update(e.kind for e in w.log)
         by_cid = {d["cid"]: d for d in deps}

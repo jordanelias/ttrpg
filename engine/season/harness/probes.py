@@ -32,14 +32,23 @@ from typing import Any, Callable, Optional
 
 from .. import decision
 from ..queries import world_q
-from ..shape import (
-    CLAIM_SOURCES, Candidate, Claim, Collision, ContestError, DEFAULT_FIXTURES, Event,
-    Fixtures, Forbidden, H, NoProducer, Office, Person, VERB_TABLE,
-    Proposition, Question, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver,
-    ShapeGap, questions_for, make_chooser, Scene, Sensation, resolvable_verbs, standing_of, body_band_penalty,
-    Site, StateChange, Step, Tenure, Ungraded, Unowned, Unspecified, View, World,
-    CHANNEL_PREDICATES, WITNESS_CHANNELS, WriteClass, contest, expect_refusal,
-    observers_for, sense, roster, table, SUBSISTENCE_WEIGHTS)
+from ..data.fixtures import DEFAULT_FIXTURES, Fixtures, SUBSISTENCE_WEIGHTS
+from ..data.matrix import Step, WriteClass
+from ..data.rosters import CLAIM_SOURCES, RUNG_KINDS, STRATA, WITNESS_CHANNELS, roster, table
+from ..data.verbs import VERB_TABLE
+from ..decision import body_band_penalty, make_chooser, standing_of
+from ..epistemic import CHANNEL_PREDICATES, observers_for
+from ..gaps import (
+    Collision, Forbidden, NoProducer, ShapeGap, Ungraded, Unowned, Unspecified, expect_refusal,
+)
+from ..loop.driver import SeasonDriver, resolvable_verbs, sense
+from ..queries.world_q import questions_for
+from ..seam import ContestError, contest
+from ..state.carriers import (
+    Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View,
+)
+from ..state.ids import H, ROOT
+from ..state.world import World
 from ..trace_log import TRACE
 
 PROBES: dict[str, dict] = {}
@@ -175,7 +184,7 @@ def Act_(w, p, verb, key: str = "", **kw):
     went arbitrary. The discriminator restores the property A5's own comment states: the id is
     derived from the DELTA, not from the position, so reversing the list changes the SEQUENCE and
     not the SET."""
-    from ..shape import Act
+    from ..state.carriers import Act
     return Act(H(w.world_seed, w.tick, p.id, f"act:{verb}:{key}"), p.id, verb, **kw)
 
 
@@ -445,7 +454,7 @@ def p11():
 @probe("P12", "opening_set returns Candidate[], not Act[]", "S17", by="construction",
        tests="the set of things a character may do must be computed, not an authored list")
 def p12():
-    from ..shape import Act
+    from ..state.carriers import Act
     import inspect as _i
     w = tiny_world()
     p = w.persons["p_low"]
@@ -1025,7 +1034,7 @@ def f2():
        tests="a faction must be able to take an action of its own")
 def f3():
     w = tiny_world()
-    from ..shape import Act
+    from ..state.carriers import Act
     actor_field = Act.__dataclass_fields__["actor"]
     props = list(w.propositions) + ["prop_any"]
     raise Forbidden(
@@ -1869,7 +1878,8 @@ def a16():
 @probe("A17", "the loop has one resolver", "S27.2", by="convention",
        tests="every outcome in the game must go through one place")
 def a17():
-    from .. import shape as _s
+    # step 10: the facade is gone. `contest` is `season.seam`'s, so that is the surface to ask.
+    from .. import seam as _s
     resolvers = [n for n in dir(_s) if n in ("contest",)] + ["SeasonDriver.resolve"]
     return (f"PASS-BY-CONVENTION ONLY, AND THE DESIGN SAYS SO ITSELF. Surface: {resolvers}. S27.2 "
             "is explicit that this refusal has NEITHER A MECHANISM NOR A CHEAP TEST -- IT IS "

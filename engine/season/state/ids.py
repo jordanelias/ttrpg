@@ -1,7 +1,7 @@
 """S33 -- DETERMINISM. The mint (`H`) and its sentinel (`ROOT`), extracted from `shape.py`
-(step 1 of the shape.py decomposition, ED-IN-0203) with no behaviour change. `shape.py`
-re-exports both, so `from ..shape import H, ROOT` and `S.H(...)` keep resolving exactly as
-before. Living here, on their own, makes "the mint lives once" CHECKABLE in one grep
+(step 1 of the shape.py decomposition, ED-IN-0203) with no behaviour change. Importers name
+this module directly (`from ..state.ids import H, ROOT`); the `shape.py` facade that used to
+re-export them was deleted at step 10. Living here, on their own, makes "the mint lives once" CHECKABLE in one grep
 (`grep -rln "def H(" season/` prints exactly this file today). ⚠ That is a CONVENTION,
 not an enforcement -- no test asserts it. Said plainly per S47: "a false claim of
 enforcement is worse than none, because it stops the next reader from checking."

@@ -37,7 +37,37 @@ _REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
-from engine.season import shape as S                    # noqa: E402
+from engine.season.data.verbs import VERB_TABLE
+from engine.season.loop.driver import resolvable_verbs
+
+# ⚠ `S` IS A COMPATIBILITY SHIM, NOT THE FACADE COMING BACK (step 10, ED-IN-0203).
+# `engine/season/shape.py` was DELETED at step 10; seventeen files in this frozen sweep tree do
+# `from sweep_core import S` and read ~35 names off it. Rewriting all seventeen would be a large
+# edit to a set of instruments whose committed outputs are the record of a finished measurement,
+# so the alias is rebuilt here, over the real owner modules, instead.
+#
+# ⚠ READS ONLY. Assigning through this object rebinds THE SHIM, never the owner, so a spy
+# installed as `S.<name> = ...` would be a silent no-op. The three chains that do that
+# (`pack_scenes`, `belief_contradicts`, `questions_for`) name their owner module directly --
+# `PS` (= `season.decision`) since steps 7-8, and `DRV` (= `season.loop.driver`) since step 10.
+# Do not add a fourth without giving it the same treatment.
+import types as _types
+from engine.season import decision as _dec, epistemic as _epi, seam as _seam
+from engine.season.data import fixtures as _fx, matrix as _mx, requires as _req, rosters as _ros, verbs as _vb
+from engine.season.loop import driver as _drv
+from engine.season.queries import readers as _rd, world_q as _wq
+from engine.season import gaps as _gaps
+from engine.season.state import carriers as _car, ids as _ids, world as _wld
+
+S = _types.ModuleType("sweep_core.S")
+S.__doc__ = "read-only aggregate over season's owner modules; see the note in sweep_core.py"
+for _m in (_gaps, _ids, _car, _wld, _ros, _mx, _req, _vb, _fx, _wq, _rd, _epi, _dec, _seam, _drv):
+    for _k in dir(_m):
+        if not _k.startswith("__"):
+            setattr(S, _k, getattr(_m, _k))
+del _m, _k
+
+DRV = _drv                                              # for rebinds whose reader lives in the loop
 from engine.season.harness import corpus_run as C       # noqa: E402
 from engine.season.harness import run_cases as R        # noqa: E402
 from engine.season import combat_seam as CS             # noqa: E402
@@ -83,11 +113,11 @@ KW = "kill / wound"
 def contested_verbs() -> dict:
     """Every verb declaring `contests:`. Measured from the table, so a second one appearing
     later shows up here rather than silently falling outside a hardcoded name."""
-    return {v: r for v, r in S.VERB_TABLE.items() if getattr(r, "contests", "")}
+    return {v: r for v, r in VERB_TABLE.items() if getattr(r, "contests", "")}
 
 
 def foldable() -> set:
-    return set(S.resolvable_verbs())
+    return set(resolvable_verbs())
 
 
 class Log:

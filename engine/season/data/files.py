@@ -130,7 +130,6 @@ def subsystem_sim_dir(name: str) -> Path:
 # THIS PACKAGE'S OWN SOURCES. Several guards read the instrument's source rather than importing it
 # -- an AST walk over the write call sites, the roster scan, the margin-producer scan.
 # ---------------------------------------------------------------------------
-SHAPE_PY = PACKAGE_DIR / "shape.py"
 LOOP_DIR = PACKAGE_DIR / "loop"
 # The season loop itself, extracted from `shape.py` at step 9. Source-scanning guards that
 # used to read `SHAPE_PY` for `SeasonDriver` code read this instead -- `shape.py` is a facade

@@ -3,7 +3,8 @@
 Extracted from `shape.py` at step 4 of the decomposition (ED-IN-0203), a PURE MOVE: `World`, the
 read-only tenure concatenation `_TenureView`, the per-entity digest `_entity_digest` that
 `World.content_hash` folds, and `MATRIX_REFUSAL_LAW`. `shape.py` re-exports all four, so
-`from ..shape import World` and `S.World` keep resolving exactly as before.
+importers name this module directly (`from ..state.world import World`). The `shape.py`
+facade that used to re-export it was deleted at step 10 of the decomposition.
 
 ⚠ `MATRIX_REFUSAL_LAW` TRAVELS WITH ITS READER, NOT WITH THE MATRIX. It is a table and it looks
 like data, and `data/matrix.py`'s own docstring records the adjudication at step 2: it goes with

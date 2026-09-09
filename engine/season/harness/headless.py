@@ -29,7 +29,13 @@ from __future__ import annotations
 
 import argparse
 
-from .. import shape as S
+from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.verbs import VERB_TABLE
+from ..decision import make_chooser
+from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..state.carriers import Person, Proposition, Rung, Site, Tenure
+from ..state.ids import H
+from ..state.world import World
 from ..trace_log import TRACE
 
 CASE = "NPC-088"
@@ -40,7 +46,7 @@ CASE = "NPC-088"
 CARIN, BAILIFF, WARDEN = "p_carin", "p_bailiff", "p_warden"
 
 
-def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> S.World:
+def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     """Carin's world. Fixtures default to `DEFAULT_FIXTURES`, unmodified, so check 3's claim --
     that every number read resolves to a register `site:` -- is about the registered defaults and
     not about a set tuned for this run.
@@ -51,28 +57,28 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> S.World:
     sweep silently compared a site at 1000 against floors scaled to 10000 -- a confounded arm,
     which duly reported a "finding" that was the confound. Found while writing the sweep itself;
     §0.1 point 1 is the general form of it."""
-    w = S.World(seed, fixtures or S.DEFAULT_FIXTURES)
-    w.rungs["hearth_ostvik"] = S.Rung("hearth_ostvik", "hearth")
-    w.rungs["ostvik"] = S.Rung("ostvik", "settlement")
-    w.sites["scriptorium"] = S.Site("scriptorium", "hearth_ostvik", "body",
+    w = World(seed, fixtures or DEFAULT_FIXTURES)
+    w.rungs["hearth_ostvik"] = Rung("hearth_ostvik", "hearth")
+    w.rungs["ostvik"] = Rung("ostvik", "settlement")
+    w.sites["scriptorium"] = Site("scriptorium", "hearth_ostvik", "body",
                                     condition=w.fixtures.get("condition_scale"))
 
     for pid, name in ((CARIN, "Carin Vedel"), (BAILIFF, "Uwe the bailiff"),
                       (WARDEN, "the warden")):
-        w.persons[pid] = S.Person(pid, name)
-    w.add_tenure(S.Tenure("t_carin_in", CARIN, "hearth_ostvik", "contain", since=0))
-    w.add_tenure(S.Tenure("t_bailiff_in", BAILIFF, "hearth_ostvik", "contain", since=0))
-    w.add_tenure(S.Tenure("t_warden_in", WARDEN, "ostvik", "contain", since=0))
-    w.add_tenure(S.Tenure("t_hearth_in", "hearth_ostvik", "ostvik", "contain", since=0))
+        w.persons[pid] = Person(pid, name)
+    w.add_tenure(Tenure("t_carin_in", CARIN, "hearth_ostvik", "contain", since=0))
+    w.add_tenure(Tenure("t_bailiff_in", BAILIFF, "hearth_ostvik", "contain", since=0))
+    w.add_tenure(Tenure("t_warden_in", WARDEN, "ostvik", "contain", since=0))
+    w.add_tenure(Tenure("t_hearth_in", "hearth_ostvik", "ostvik", "contain", since=0))
 
     # ⚠ HER MOTIVE IS A `commit` TO AN OUGHT PROPOSITION, WHICH IS Q4 -- the source `PLAN.md` `W5`
     # added and V2 §F1 omitted. Without it "an NPC with a standing ambition and a quiet season
     # forms no candidates at all", and Carin IS that NPC: nothing is due, nobody has told her
     # anything, and her subsistence has not moved. Q4 is the only reason she acts.
-    prop = S.Proposition("prop_einhir", "OUGHT", "einhir_texts",
+    prop = Proposition("prop_einhir", "OUGHT", "einhir_texts",
                          "the Einhir texts should survive", True, 0)
     w.propositions[prop.id] = prop
-    w.add_tenure(S.Tenure("t_carin_commits", CARIN, prop.id, "commit", since=0))
+    w.add_tenure(Tenure("t_carin_commits", CARIN, prop.id, "commit", since=0))
 
     # Convictions read PERSON-SIDE ONLY, scored against `rosters.yaml`'s alignment table. These
     # are hers; nothing else in the loop reads them.
@@ -89,7 +95,7 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> S.World:
     return w
 
 
-def subsistence(p: S.Person, w: S.World) -> int:
+def subsistence(p: Person, w: World) -> int:
     """The injected formula §42.2.1 requires. No in-chain document supplies one and S10.4 makes
     MatterKind an OPEN registry, so summing kinds as if fungible is a model choice this instrument
     may not make on the design's behalf. A person is at the scale unless a store says otherwise."""
@@ -99,8 +105,8 @@ def subsistence(p: S.Person, w: S.World) -> int:
 def run(seasons: int = 2, seed: int = 0) -> dict:
     """Run Carin's season(s) and return the artifact. NOTHING HERE CHOOSES AN ACT."""
     w = build_world(seed)
-    d = S.SeasonDriver(w)
-    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     out = []
     for _ in range(seasons):
         # ⚠ NARROWED TO WHAT THE FOLD CAN EXECUTE, AND THE NARROWING IS COMPUTED, NOT AUTHORED.
@@ -120,12 +126,12 @@ def run(seasons: int = 2, seed: int = 0) -> dict:
         # `H-87`: the contest depth cap is the CALLER's to supply (S39.3 refuses a default), and
         # artifact 2 never had to decide until Part E's `contests:` column became real and the
         # seam started firing on `kill / wound`.
-        out.append(d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+        out.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                             None, subsistence,
                             contest_max_depth=w.fixtures.get("contest_max_depth")))
     return dict(seasons=out, hash=w.content_hash(), world=w,
                 events=len(w.log), acts=sum(s["acts"] for s in out),
-                resolvable=len(S.resolvable_verbs()), verbs=len(S.VERB_TABLE))
+                resolvable=len(resolvable_verbs()), verbs=len(VERB_TABLE))
 
 
 def main() -> int:
