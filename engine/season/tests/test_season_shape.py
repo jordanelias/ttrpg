@@ -22,17 +22,54 @@ from pathlib import Path
 
 import pytest
 
-from .. import shape as S
+from .. import decision
+from .. import seam
+from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
+from ..data.matrix import (
+    ASSUMPTIONS_USED, MATRIX, MATRIX_RETIRED, PARTITION_ASSUMED, STEP_CLASS, Step, WRITE_MATRIX_YAML, assume_partition_row, partition_lookup,
+)
+from ..data.requires import (
+    Observation, REQUIRES_OPERANDS, REQUIRES_STEMS, UNKNOWN, binding_from_act, binding_of, build_typed_requires, evaluate,
+)
+from ..data.rosters import (
+    BODY_FACTION, BODY_FUNCTION, CLAIM_SOURCES, CLAIM_SUBJECT_RULES, COMBAT_BANDS, FACTIONS, FELLED, QUESTION_SOURCES, REMIT_ACTS, ROLE_TEMPLATE_OF, ROSTERS_YAML, RUNG_KINDS, SCENE_PACKING_RULES, STRATA, TENURE_KINDS, TITLE_DOMAINS, UNTOUCHED, VIEW_BUILDER_RULES, WITNESS_CHANNELS, WOUNDED, _ROSTERS, load_yaml, office_faction, roster, roster_map, title_domain, title_rank,
+)
+from ..data.verbs import (
+    ALIGNMENT_SWEEP, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, alignment_at, rows_without_a_producer,
+)
+from .. import decision
+from ..decision import (
+    align, containing_rung_of, make_chooser, opening_set, operands_for, pack_scenes,
+    person_side_eligible, store_kind_of, urgency, view_ids,
+)
+from ..epistemic import (
+    CHANNEL_PREDICATES, act_refs, belief_contradicts, claim_subjects, observers_for,
+)
+from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Ungraded, Unspecified
+from ..loop.driver import SeasonDriver, resolvable_verbs, sense
+from ..loop.predicates import REQUIRES_PREDICATES, highest_title_rank, in_holdings, under_purview
+from ..queries import world_q
+from ..queries.readers import LedgerReader, WorldReader
+from ..queries.world_q import occasioned_by, questions_for
+from ..seam import combat_degree, contest, degree_ladder, degree_of, ladder_error
+from ..state.carriers import (
+    Act, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View, matrix_rows_without_a_field,
+)
+from ..state.ids import H, ROOT
+from ..state.world import World
+from ..trace_log import TRACE
 from ..data import files
 from ..data import verbs as VERBS
 from ..harness import probes as P
 from ..harness import run_cases as R
-from ..shape import (
-    Event, Fixtures, Forbidden, Person, Proposition, Query, Rung, Site,
-    Step, Tenure, Unspecified, View, World, WriteClass,
-)
+from ..queries import world_q
+from ..data.fixtures import Fixtures
+from ..data.matrix import Step, WriteClass
+from ..gaps import Forbidden, Unspecified
+from ..state.carriers import Event, Person, Proposition, Rung, Site, Tenure, View
+from ..state.world import World
 
-SHAPE_SRC = files.SHAPE_PY.read_text()
+SHAPE_SRC = files.DRIVER_PY.read_text()   # step 9: the loop moved; `shape.py` is a facade now
 PROBES_SRC = files.PROBES_PY.read_text()
 # `Fixtures`/`DEFAULT_FIXTURES` moved to `season.data.fixtures` in step 3 of the decomposition
 # (ED-IN-0203, a PURE MOVE) -- a fixed source string, alongside `SHAPE_SRC`/`PROBES_SRC` above,
@@ -68,6 +105,29 @@ SHAPE_CODE = _code_only(SHAPE_SRC)
 PROBES_CODE = _code_only(PROBES_SRC)
 FIXTURES_CODE = _code_only(FIXTURES_SRC)
 
+
+def _model_code() -> str:
+    """EVERY MODEL MODULE'S CODE, comment- and docstring-stripped, as one string.
+
+    ⚠ ADDED AT STEP 5 OF THE DECOMPOSITION, BECAUSE THREE `not in SHAPE_CODE` GUARDS HAD
+    NARROWED AND NONE OF THEM COULD SAY SO. `SHAPE_CODE` is `files.SHAPE_PY` alone. Every carve
+    moves code out of it, so a NEGATIVE assertion over that string keeps passing while the
+    question it answers shrinks — the exact failure `test_h115` records at step 2 and
+    `test_jordan_no_definition_is_hardcoded_in_a_body` at step 4, arriving a third time. Step 5
+    moved all ten `_eff_*` out of `SHAPE_CODE`, which is the family two of these guards name in
+    their own docstrings.
+
+    ⚠ POSITIVE assertions (`"x" in SHAPE_CODE`) are NOT re-pointed and must not be: they go red
+    the day their subject leaves the file, which is a guard reporting a move rather than missing
+    one. It is only `not in` that fails open.
+
+    Derived from `_model_modules()`, never listed, so the module a later step adds is scanned the
+    day it lands (`G2` — forbid the shape, never enumerate the words)."""
+    mods = _model_modules()
+    # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- the same floor `test_h115` carries, and for the same reason]
+    assert len(mods) >= 8, f"model set collapsed to {len(mods)} — every guard below would pass vacuously"
+    return "\n".join(_code_only(m.read_text()) for m in mods)
+
 def _w() -> World:
     return P.tiny_world()
 
@@ -94,11 +154,11 @@ def test_d1_the_partition_is_not_invented():
     # the gap rather than the instrument flattering it: V2 §D3 gives each its own row -- RESOLVE
     # only, ACTS, `social: true`, DR-2 and §9.3. What must still raise is a field with NO row,
     # and it must not be able to ride on a neighbour's.
-    assert S.MATRIX, "the write matrix loaded empty -- nothing was checked"
-    for (kind, fname), row in S.MATRIX.items():
+    assert MATRIX, "the write matrix loaded empty -- nothing was checked"
+    for (kind, fname), row in MATRIX.items():
         assert row.by.strip(), f"({kind}, {fname}) carries no provenance"
     for kind, fname in (("Person", "convictions"), ("Person", "beliefs")):
-        social, by = S.partition_lookup(kind, fname)
+        social, by = partition_lookup(kind, fname)
         assert social is True and by.strip(), f"({kind}, {fname}) has a row but no usable grade"
 
 
@@ -120,14 +180,14 @@ def test_d1b_a_field_cannot_ride_on_another_fields_matrix_row():
 def test_d2_witness_does_not_lie_about_its_driver():
     """DEFECT 2. Rev 1's WITNESS declared driver="Act" for a deposit caused by an Event -- the
     ONE site where the gate would otherwise have fired."""
-    src = inspect.getsource(S.SeasonDriver.witness)
+    src = inspect.getsource(SeasonDriver.witness)
     assert 'driver="Event"' in src and 'driver="Act"' not in src
 
 
 def test_d3_the_write_gate_cannot_be_silenced_by_omission():
     """DEFECT 3. S30.2: 'EITHER THE GATE APPLIES THE WRITE, OR DIRECT ASSIGNMENT IS MADE
     IMPOSSIBLE.' Rev 1 ran L4 only if two optional kwargs were supplied."""
-    sig = inspect.signature(S.World.write)
+    sig = inspect.signature(World.write)
     for name in ("record_kind", "fieldname", "driver"):
         assert sig.parameters[name].default is inspect.Parameter.empty, name
 
@@ -142,7 +202,7 @@ def test_d3b_the_gate_applies_the_write():
     # emission in its world — which is exactly the carve-out, and saying it is the point.
     w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", before - 7),
             record_kind="Site", fieldname="condition", driver="Event",
-            emits="condition.worn", subject=site.id, causes=[S.ROOT])
+            emits="condition.worn", subject=site.id, causes=[ROOT])
     assert site.condition == before - 7
     assert w.log[-1].kind == "condition.worn" and w.log[-1].subject == site.id
 
@@ -151,23 +211,27 @@ def test_d4_contest_is_not_a_second_resolver():
     """DEFECT 4. Rev 1 hardcoded band="Partial" with no margin, guarded the demote-only veto
     with dead code, and named THE MOST RECENT UNRELATED EVENT as its cause -- worse than
     [ROOT], because it yields a plausible, wrong arc graph THAT WALKS."""
-    src = _code_only(inspect.getsource(S.contest))
+    src = _code_only(inspect.getsource(contest))
     assert 'band = "' not in src and "band = '" not in src
     assert "w.log [ - 1 ]" not in src and "w.log[-1]" not in src
     with pytest.raises(Unspecified):
-        S.contest(_w(), "S", "a prize", ["p_low"], depth=0, max_depth=3, causes=["x"])
+        # The assertion is on the refusal, which fires before depth is ever consulted.
+        # [JUSTIFIED: an arbitrary non-zero recursion ceiling for a one-claimant refusal test]
+        contest(_w(), "S", "a prize", ["p_low"], depth=0, max_depth=3, causes=["x"])
 
 
 def test_d4b_contest_causes_must_be_supplied_and_non_empty():
     with pytest.raises(Forbidden):
-        S.contest(_w(), "S", "a prize", ["p_low"], depth=0, max_depth=3, causes=[])
+        # Kept identical to the sibling case above so the two differ only in `causes`.
+        # [JUSTIFIED: the same recursion ceiling as the case above; the pair measures `causes`]
+        contest(_w(), "S", "a prize", ["p_low"], depth=0, max_depth=3, causes=[])
 
 
 def test_d5_the_budget_is_the_persons_choice_not_an_engine_truncation():
     """DEFECT 5. S26 types budget as (Person, View) -> int with NO World, so `choose` can ask
     its own. Rev 1 gave it a World and then SILENTLY DISCARDED the tail -- an engine deciding
     a person's options, which is L1."""
-    sig = inspect.signature(Query.budget)
+    sig = inspect.signature(decision.budget)
     assert "w" not in sig.parameters and "world" not in sig.parameters
     w = _w()
     def over(p, v, s, ask_budget):
@@ -210,7 +274,7 @@ def test_d6b_wear_has_no_silent_default():
     it answers, plausibly and wrongly, forever.'"""
     f = Fixtures(wear_per_season={"harbour": 10})
     assert f.wear("harbour") == 10
-    with pytest.raises(S.Ungraded):
+    with pytest.raises(Ungraded):
         f.wear("reliquary")
 
 
@@ -224,15 +288,15 @@ def test_d7_sense_does_not_return_a_constant_standing():
     a raise and a hardcoded 0 are both constants, and only one of them was ever the defect."""
     w = _w()
     p = w.persons["p_low"]
-    seen = {S.sense(p, w, P.SUBSIST).standing}
-    p.ledger.append(S.Claim("c_a", p.id, p.id, "grade", "warden", 0, "firsthand", 100, "own"))
-    p.ledger.append(S.Claim("c_b", p.id, p.id, "grade", "warden", 0, "told_by", 100, "own"))
-    seen.add(S.sense(p, w, P.SUBSIST).standing)
+    seen = {sense(p, w, P.SUBSIST).standing}
+    p.ledger.append(Claim("c_a", p.id, p.id, "grade", "warden", 0, "firsthand", 100, "own"))
+    p.ledger.append(Claim("c_b", p.id, p.id, "grade", "warden", 0, "told_by", 100, "own"))
+    seen.add(sense(p, w, P.SUBSIST).standing)
     assert len(seen) > 1, (
         f"standing returned {seen.pop()} for two materially different ledgers — it is a constant, "
         "which is D7 exactly, whether the constant is 0 or a raise")
     # and it is still the ONE bridge: `sense` computes it, nobody stores it.
-    assert not any(f.name == "standing" for f in dataclasses.fields(S.Person)), (
+    assert not any(f.name == "standing" for f in dataclasses.fields(Person)), (
         "`standing` became a field on Person — S18.2 makes it a computed scalar of Sensation, and "
         "a stored one is the aggregate-as-field shape §22.1 complains about")
 
@@ -249,12 +313,17 @@ def test_d8_one_doctrinal_condition_raises_one_kind():
         w.write("stores", WriteClass.ACTS, lambda: None,
                 record_kind="Rung", fieldname="no_such_field", driver="Act")
     with pytest.raises(Unspecified):
-        S.partition_lookup("Record", "anything")
+        partition_lookup("Record", "anything")
 
 
 def test_d9_no_rule_is_written_and_switched_off():
-    """DEFECT 9. Rev 1 wrote the knot-deposit rule and disabled it with `if False`."""
-    assert "if False" not in SHAPE_CODE and "if False" not in PROBES_CODE
+    """DEFECT 9. Rev 1 wrote the knot-deposit rule and disabled it with `if False`.
+
+    ⚠ RE-POINTED, step 5 of the decomposition. This asked `SHAPE_CODE` alone, so a rule written
+    and switched off in `state/`, `data/`, `queries/` or `loop/` was unscanned — and the plan's
+    own falsifier 3 named this guard as one of the two that would pass VACUOUSLY on an empty
+    facade. Over the model set it cannot."""
+    assert "if False" not in _model_code() and "if False" not in PROBES_CODE
 
 
 def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
@@ -269,19 +338,21 @@ def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
     claim at confidence 0 is evicted first however recent it is. That is the difference the test
     is supposed to be about, and the string could not see it. Found by the `W4` adversarial pass."""
     ranked = lambda claims: sorted(claims, key=lambda c: c.confidence * (c.when + 1))
-    old_and_confident = S.Claim("a", "p", "s", "k", True, when=0, source="f",
+    old_and_confident = Claim("a", "p", "s", "k", True, when=0, source="f",
                                 confidence=100, visibility="own")
-    recent_and_spent = S.Claim("b", "p", "s", "k", True, when=9, source="f",
+    # [JUSTIFIED: a fixture tick, chosen only to be recent relative to `recent_mid` below]
+    recent_and_spent = Claim("b", "p", "s", "k", True, when=9, source="f",
                                confidence=0, visibility="own")
     # THE DISCRIMINATING PAIR. Under the product, the spent claim goes first however recent it is.
     # Under a lexicographic `(confidence, when)` tuple it ALSO goes first — so that pair alone
     # proves nothing, and the second pair below is what separates the two comparators.
     assert ranked([old_and_confident, recent_and_spent])[0] is recent_and_spent
-    low_but_ancient = S.Claim("c", "p", "s", "k", True, when=0, source="f",
+    low_but_ancient = Claim("c", "p", "s", "k", True, when=0, source="f",
                               confidence=40, visibility="own")
-    high_but_ancient = S.Claim("d", "p", "s", "k", True, when=0, source="f",
+    high_but_ancient = Claim("d", "p", "s", "k", True, when=0, source="f",
                                confidence=41, visibility="own")
-    recent_mid = S.Claim("e", "p", "s", "k", True, when=50, source="f",
+    # [JUSTIFIED: a fixture tick, chosen only to order after the claims above in the comparator]
+    recent_mid = Claim("e", "p", "s", "k", True, when=50, source="f",
                          confidence=39, visibility="own")
     got = ranked([recent_mid, high_but_ancient, low_but_ancient])
     assert [c.id for c in got] == ["c", "d", "e"], (
@@ -289,7 +360,7 @@ def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
         "rank ['e', 'c', 'd'] — the recent mid-confidence claim first. That is the comparator this "
         "test exists to exclude, and it is now excluded by BEHAVIOUR")
     # AND THE LIVE COMPARATOR IS THE ONE MEASURED ABOVE, not a copy of it in this file.
-    assert "c.confidence * (c.when" in inspect.getsource(S.SeasonDriver.witness)
+    assert "c.confidence * (c.when" in inspect.getsource(SeasonDriver.witness)
 
 
 def test_d9c_max_depth_has_no_default_anywhere():
@@ -302,9 +373,11 @@ def test_d9c_max_depth_has_no_default_anywhere():
     that re-added the retired default there would pass a `SHAPE_CODE`-only check. Same corpus-
     shrinks-while-still-passing shape `test_h115` and `test_d6` document; checked in both places
     now."""
-    assert "caller_supplied_max_depth" not in SHAPE_CODE
-    assert "caller_supplied_max_depth" not in FIXTURES_CODE
-    assert inspect.signature(S.contest).parameters["max_depth"].default is inspect.Parameter.empty
+    # ⚠ WIDENED AGAIN AT STEP 5: naming two files by hand was right at step 3 and wrong by step 5,
+    # because the answer to "which file could hold it now" changes at every carve. The model set
+    # subsumes both, and `_model_code()`'s floor is what stops it passing on an empty corpus.
+    assert "caller_supplied_max_depth" not in _model_code()
+    assert inspect.signature(contest).parameters["max_depth"].default is inspect.Parameter.empty
     w = _w()
     def fight(p, v, s, ask_budget):
         return [P.Act_(w, p, "fight", contests=["x"], payload="S")] if p.id == "p_low" else []
@@ -316,7 +389,7 @@ def test_d9d_the_frozen_world_is_read_not_merely_written():
     """S32 rest 1 is the FIRST thing order-independence rests on. Rev 1 set w.frozen and
     nothing ever read it."""
     with pytest.raises(Forbidden):
-        S.SeasonDriver(_w()).deliberate(lambda p, v, s, ask_budget: [], None, P.SUBSIST)
+        SeasonDriver(_w()).deliberate(lambda p, v, s, ask_budget: [], None, P.SUBSIST)
 
 
 def test_d9e_the_rung_guard_is_a_whitelist_not_a_blacklist():
@@ -385,7 +458,7 @@ def test_h118_content_hash_folds_every_game_state_collection():
     `_emitted_by_write` are the write-gate's own audit channels; `manifest` is S43's boot
     resolution; `fixtures` is configuration, not world state; the underscored ones are caches."""
     w = _w()
-    declared = set(S.World._STATE_COLLECTIONS) | set(S.World._STATE_SEQUENCES) | {"tenures"}
+    declared = set(World._STATE_COLLECTIONS) | set(World._STATE_SEQUENCES) | {"tenures"}
     INFRASTRUCTURE = {"log", "writes", "crossings", "manifest", "fixtures", "docket_seen"}
     missed = []
     for name, val in vars(w).items():
@@ -409,7 +482,7 @@ def test_h118_a_record_written_with_no_event_moves_the_hash():
     fails, because the Record becomes invisible to the hash again."""
     w1, w2 = _w(), _w()
     assert w1.content_hash() == w2.content_hash()
-    w2.records["r_probe"] = S.Record("r_probe", "p_low", "text", ())
+    w2.records["r_probe"] = Record("r_probe", "p_low", "text", ())
     assert w1.content_hash() != w2.content_hash(), (
         "a Record written with no Event must move the hash -- `create_record` executes in the "
         "corpus, so this blindness was live")
@@ -433,17 +506,17 @@ def test_wa_an_unknown_predicate_stem_refuses_at_load():
     import inspect as _i
     # (a) every stem a loaded cell declares is closed
     declared = set()
-    for row in S.VERB_TABLE.values():
+    for row in VERB_TABLE.values():
         rt = getattr(row, "requires_typed", None)
         if rt is not None:
             declared |= set(rt.stems())
     assert declared, "no typed cell declares a stem — the grammar is not loaded"
-    assert declared <= S.REQUIRES_STEMS, (
-        f"typed cells declare stem(s) outside REQUIRES_STEMS: {sorted(declared - S.REQUIRES_STEMS)}")
+    assert declared <= REQUIRES_STEMS, (
+        f"typed cells declare stem(s) outside REQUIRES_STEMS: {sorted(declared - REQUIRES_STEMS)}")
     # (b) every closed stem is one a reader actually dispatches on — else the roster grows
     #     entries nothing honours, which is the same defect one direction over.
-    src = _i.getsource(S.WorldReader) + _i.getsource(S.LedgerReader)
-    unread = [st for st in S.REQUIRES_STEMS if f'"{st}"' not in src]
+    src = _i.getsource(WorldReader) + _i.getsource(LedgerReader)
+    unread = [st for st in REQUIRES_STEMS if f'"{st}"' not in src]
     assert not unread, (
         f"REQUIRES_STEMS declares {sorted(unread)}, which no reader dispatches on. A stem no "
         f"reader honours evaluates UNKNOWN forever — the defect this roster exists to stop.")
@@ -451,7 +524,8 @@ def test_wa_an_unknown_predicate_stem_refuses_at_load():
 
 def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
     """`H-115`: `VerbRow.emits_at`/`writes_at` raised `SystemExit` on their two run-time degree
-    refusals (pre-fix: shape.py:708/712/728/733). `SystemExit` derives from `BaseException`, so
+    refusals (pre-fix: `shape.py:708/712/728/733`, at 480cb43 -- the file is deleted; kept as a
+    dated pointer into history rather than rewritten). `SystemExit` derives from `BaseException`, so
     `corpus_run.run_case`'s `except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer)` never
     caught it and a one-case design gap ended the whole corpus run.
 
@@ -471,16 +545,16 @@ def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
     `except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer)` would no longer catch it and
     it would propagate past this test's own `try`."""
     w = _w()
-    d = S.SeasonDriver(w)
-    act = S.Act(id="sweep_kw", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"})
+    d = SeasonDriver(w)
+    act = Act(id="sweep_kw", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"})
     with pytest.raises(Unspecified):
         d._fold(w, act)
     # THE CATCH LIST run_case ACTUALLY USES (corpus_run.py:350), not a copy of it (§8).
-    act2 = S.Act(id="sweep_kw2", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"})
+    act2 = Act(id="sweep_kw2", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"})
     caught_as_gap = False
     try:
         d._fold(w, act2)
-    except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer):
+    except (ShapeGap, Unspecified, Forbidden, NoProducer):
         caught_as_gap = True
     assert caught_as_gap, (
         "the degree-branch raise must be a ShapeGap so run_case reports DESIGN-GAP rather than "
@@ -563,7 +637,7 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
 
 
 def test_d10b_resolve_sums_then_clamps_once():
-    src = inspect.getsource(S.SeasonDriver.resolve)
+    src = inspect.getsource(SeasonDriver.resolve)
     assert "sum(deltas)" in src and "clamp ONCE" in src
 
 
@@ -584,7 +658,7 @@ def test_d10c_the_obstacle_refusal_gate_exists():
         "the Ob>2xPool gate no longer READS its multiple from the fixtures")
     assert "obstacle_refusal_multiple" in FIXTURES_CODE, (
         "the multiple is no longer registered as a fixture default")
-    assert "attempt.refused" in inspect.getsource(S.SeasonDriver.resolve)
+    assert "attempt.refused" in inspect.getsource(SeasonDriver.resolve)
 
 
 # ===========================================================================
@@ -614,11 +688,11 @@ def test_event_never_grows_a_target_or_an_actor():
 def test_causes_is_never_empty():
     with pytest.raises(Forbidden):
         Event("i", "a.b", "s", [], [], 0)
-    assert Event("i", "a.b", "s", [], [S.ROOT], 0).causes == [S.ROOT]
+    assert Event("i", "a.b", "s", [], [ROOT], 0).causes == [ROOT]
 
 
 def test_choose_receives_no_world():
-    src = inspect.getsource(S.SeasonDriver.deliberate)
+    src = inspect.getsource(SeasonDriver.deliberate)
     # REV 3: `choose` receives the budget QUERY, not the answer -- S26.3's "the person chooses
     # what to leave undone". Pinning the literal 4-ary string was how rev 2 locked in a
     # deviation as an invariant, so this pins the PROPERTY instead.
@@ -644,14 +718,14 @@ def test_sensation_is_constructed_by_the_loop_and_standing_raises_on_read():
     was routed around, and a test pinned the deviated call as the invariant. The type is now
     built every season and `standing` raises AT THE POINT OF USE."""
     w = _w()
-    sn = S.sense(w.persons["p_low"], w, P.SUBSIST)
-    assert isinstance(sn, S.Sensation) and isinstance(sn.subsistence, int)
+    sn = sense(w.persons["p_low"], w, P.SUBSIST)
+    assert isinstance(sn, Sensation) and isinstance(sn.subsistence, int)
     # BOTH scalars now (`H-29`). §18.2 says EXACTLY TWO, and the loop builds both.
     assert isinstance(sn.standing, int) and len(tuple(sn)) == 2, tuple(sn)
     # The refusal survives where it is still true: a Sensation built with ONE scalar is half a
     # Sensation, and reading the missing half must refuse rather than answer 0.
     with pytest.raises(Unspecified):
-        _ = S.Sensation(5).standing
+        _ = Sensation(5).standing
     with pytest.raises(AttributeError):
         sn.third = 3
 
@@ -666,15 +740,15 @@ def test_r1_aggregates_over_live_edges_only():
     that walks them is monotone -- a ratchet built out of 'structural' edges."""
     w = _w()
     f = lambda r: w.rungs[r].stores.get("grain", 0) if r in w.rungs else 0
-    base = Query.r1_aggregate(w, "S", f)
+    base = world_q.r1_aggregate(w, "S", f)
     w.rungs["Ghost"] = Rung("Ghost", "hearth", stores={"grain": 500})
     w.add_tenure(Tenure("t_end", "Ghost", "S", "contain", since=0, until=0))
-    assert Query.r1_aggregate(w, "S", f) == base
+    assert world_q.r1_aggregate(w, "S", f) == base
 
 
 def test_the_ratchet_guard_detects_rather_than_trusting_a_flag():
     with pytest.raises(Forbidden):
-        Query.commit_count_guard(_w(), [Tenure("a", "p", "o", "commit", since=0, until=1)], "ever")
+        world_q.commit_count_guard(_w(), [Tenure("a", "p", "o", "commit", since=0, until=1)], "ever")
 
 
 def test_a_cache_cannot_be_built_inside_a_parallel_map():
@@ -687,7 +761,7 @@ def test_a_cache_cannot_be_built_inside_a_parallel_map():
 def test_witness_writes_no_belief_and_no_conviction():
     """S9.3: 'IF EVIDENCE CAN MOVE A CONVICTION, the moral layer has become a second epistemic
     layer and T2 is gone. This is the single most dangerous collision in the design.'"""
-    src = inspect.getsource(S.SeasonDriver.witness)
+    src = inspect.getsource(SeasonDriver.witness)
     for banned in ("beliefs", "convictions"):
         assert f'fieldname="{banned}"' not in src
 
@@ -696,7 +770,7 @@ def test_hold_cardinality_is_one_per_object():
     w = _w()
     w.add_tenure(Tenure("t_dup", "p_mid", "off_duke", "hold", since=0))
     with pytest.raises(Forbidden):
-        Query.hold_force(w, "off_duke")
+        world_q.hold_force(w, "off_duke")
 
 
 def test_the_partition_seam_is_bounded_by_causation_not_by_the_column():
@@ -708,18 +782,18 @@ def test_the_partition_seam_is_bounded_by_causation_not_by_the_column():
     with pytest.raises(Forbidden):
         w.write("Tenure", WriteClass.MATTER, lambda: setattr(t, "until", 0),
                 record_kind="Tenure", fieldname="until", driver="Event",
-                emits="tenure.closed", subject=t.object, causes=[S.ROOT])
+                emits="tenure.closed", subject=t.object, causes=[ROOT])
     w.write("Tenure", WriteClass.MATTER, lambda: setattr(t, "until", 0),
             record_kind="Tenure", fieldname="until", driver="Event",
             caused_person_exists="p_high",
-            emits="tenure.closed", subject=t.object, causes=[S.ROOT])
+            emits="tenure.closed", subject=t.object, causes=[ROOT])
     assert not t.live
 
 
 def test_a_missing_provider_is_a_boot_failure():
     w = _w()
     w.boot(("contest",))
-    with pytest.raises(S.NoProducer):
+    with pytest.raises(NoProducer):
         w.boot(("contest", "no_such_role"))
 
 
@@ -760,8 +834,27 @@ def test_a_hand_raised_gap_is_never_labelled_construction():
             continue
         body = _code_only(inspect.getsource(spec["fn"]))
         raises = re.search(r"\braise (Forbidden|Unspecified|NoProducer|Collision|Unowned)\(", body)
-        calls = re.search(r"(w\.write|Query\.|contest\(|sense\(|_run\(|Event\(|cache_at_barrier"
-                          r"|boot\(|setattr\(|Rung\(|View\(|fixtures)", body)
+        # ⚠ `world_q\.` / `decision\.` ADDED, step 7: the `Query\.` alternative alone stopped
+        # matching once every `Query.<name>(` call site in `probes.py` was renamed to
+        # `world_q.<name>(` / `decision.<name>(` (`class Query` no longer exists). MEASURED before
+        # editing (step-7 producer, per the decomposition plan's own hazard note): zero
+        # `by="construction"` probes depended SOLELY on the `Query\.` alternative to avoid being
+        # flagged here -- every one that raises a typed gap also independently matches another
+        # alternative (most commonly `fixtures` or `View(`). `Query\.` is kept rather than removed:
+        # it is dead weight now, not a hazard, and removing a working alternative for no reason
+        # would be an unforced edit.
+        # ⚠ `world_q\.` AND `decision\.` REPLACE THE `Query\.` THIS PATTERN WAS WRITTEN FOR --
+        # step 7 deleted `class Query` and renamed 93 call expressions to their owning modules,
+        # so a probe that genuinely calls one would have stopped matching. BOTH CARRY `\w`, AND
+        # THAT IS NOT DECORATION: "decision." is an ordinary English bigram, so a bare
+        # `decision\.` would excuse any probe whose gap message happens to end a sentence on the
+        # word -- widening a guard until it stops guarding. `_code_only` strips docstrings but
+        # NOT inline message strings, so the exposure is real. Measured before the change: 0 of
+        # 78 `by="construction"` probes matched on `Query\.` alone, and 0 match on `decision\.`
+        # alone, so this is meaning-preservation and not a repair.
+        calls = re.search(r"(w\.write|Query\.|world_q\.\w|decision\.\w|contest\(|sense\(|_run\("
+                          r"|Event\(|cache_at_barrier|boot\(|setattr\(|Rung\(|View\(|fixtures)",
+                          body)
         if raises and not calls:
             offenders.append(pid)
     assert not offenders, offenders
@@ -914,18 +1007,18 @@ def test_r3_the_partition_is_stated_and_refuses_by_default():
     remembered."""
     for kind, fname in (("Date", "fired"), ("DocketItem", "matter"),
                         ("ConveningCondition", "attached"), ("Person", "claim_ledger")):
-        social, by = S.partition_lookup(kind, fname)
+        social, by = partition_lookup(kind, fname)
         assert social is False, f"({kind}, {fname}) should be social:false under DR-3"
         assert "DR-3" in by, (
             f"({kind}, {fname}) is one of the four the old classifier could not reach; its row "
             f"must carry DR-3's provenance, not {by!r}")
-    assert S.partition_lookup("Site", "condition")[0] is False
-    assert S.partition_lookup("Person", "stance")[0] is True
+    assert partition_lookup("Site", "condition")[0] is False
+    assert partition_lookup("Person", "stance")[0] is True
     # THE POLARITY, which is the part that must never invert: an unstated cell refuses, for every
     # kind on the table and for a kind that is not.
-    for kind in sorted({k for k, _ in S.MATRIX} | {"NoSuchKind"}):
+    for kind in sorted({k for k, _ in MATRIX} | {"NoSuchKind"}):
         with pytest.raises(Unspecified):
-            S.partition_lookup(kind, "a_field_nobody_ruled")
+            partition_lookup(kind, "a_field_nobody_ruled")
 
 
 def test_r3_the_instrument_assumes_no_partition_row_at_all():
@@ -940,8 +1033,8 @@ def test_r3_the_instrument_assumes_no_partition_row_at_all():
 
     The disclosure hook stays and must keep reporting: an empty set that nothing reads would be
     the same false-disclosure defect in a quieter form."""
-    assert S.PARTITION_ASSUMED == {}, (
-        f"W2's proof is ZERO assumed Partition rows; found {sorted(S.PARTITION_ASSUMED)}")
+    assert PARTITION_ASSUMED == {}, (
+        f"W2's proof is ZERO assumed Partition rows; found {sorted(PARTITION_ASSUMED)}")
     from ..harness import report
     assert "PARTITION_ASSUMED" in inspect.getsource(report.emit), (
         "report.py stopped reading the disclosure hook, so a future assumption would go "
@@ -952,14 +1045,14 @@ def test_r3_the_instrument_assumes_no_partition_row_at_all():
     # BY DELETION. `assume_partition_row` is the path; this exercises it and checks the DISCLOSURE
     # side too, since a channel nothing reports through is the same defect one level along.
     try:
-        S.assume_partition_row("Person", "planted", True, "planted by a test")
-        assert ("Person", "planted") in S.PARTITION_ASSUMED, "the channel did not record the row"
-        assert ("Person", "planted") in S.ASSUMPTIONS_USED, (
+        assume_partition_row("Person", "planted", True, "planted by a test")
+        assert ("Person", "planted") in PARTITION_ASSUMED, "the channel did not record the row"
+        assert ("Person", "planted") in ASSUMPTIONS_USED, (
             "the row was declared and not marked EXERCISED -- `report.py` counts the intersection, "
             "so it would report an assumption nobody used")
     finally:
-        S.PARTITION_ASSUMED.pop(("Person", "planted"), None)
-        S.ASSUMPTIONS_USED.discard(("Person", "planted"))
+        PARTITION_ASSUMED.pop(("Person", "planted"), None)
+        ASSUMPTIONS_USED.discard(("Person", "planted"))
 
 
 def test_r3_the_l4_limb_is_actually_exercised():
@@ -984,8 +1077,8 @@ def test_r3_the_l5_crossing_emits_a_witnessable_event():
     # here identical, because a band crossing does not depend on who witnesses it. Without it this
     # single test took **213 seconds**, more than the rest of the suite combined, once `W4` made
     # MATTER emit per write and the default arm kept the fan-out total.
-    w = P.tiny_world(S.DEFAULT_FIXTURES.sweep("fan_out_mode", "presence_only"))
-    d = S.SeasonDriver(w)
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("fan_out_mode", "presence_only"))
+    d = SeasonDriver(w)
     site = w.sites["site_harbour"]
     for _ in range(3):
         d.season(P.NOCHOOSE, None, P.SUBSIST)
@@ -1007,11 +1100,11 @@ def test_r3_witness_fans_to_everyone_as_specified():
     in a probe that never touched the loop. §61: 'WITNESS as specified fans every Event to
     every person.'"""
     w = _w()
-    d = S.SeasonDriver(w)
+    d = SeasonDriver(w)
     def choose(p, v, s, ask_budget):
         return [P.Act_(w, p, "speak")] if p.id == "p_low" else []
     def effect(w, a):
-        return [P.Ev(w, a.actor, "a.shout", a.actor, [S.ROOT])]
+        return [P.Ev(w, a.actor, "a.shout", a.actor, [ROOT])]
     r = d.season(choose, None, P.SUBSIST)
     assert r["deposits"] >= len(w.persons), (r["deposits"], len(w.persons))
 
@@ -1019,14 +1112,14 @@ def test_r3_witness_fans_to_everyone_as_specified():
 def test_r3_choose_asks_its_own_budget():
     """DEFECT C11. §26.3: the PERSON chooses what to leave undone. Rev 2 computed the budget in
     the engine and handed the number down — the half of retraction 5 that never landed."""
-    src = _code_only(inspect.getsource(S.SeasonDriver.deliberate))
+    src = _code_only(inspect.getsource(SeasonDriver.deliberate))
     assert "ask_budget" in src
     asked = []
     w = _w()
     def choose(p, v, s, ask_budget):
         asked.append(ask_budget())
         return []
-    S.SeasonDriver(w).season(choose, None, P.SUBSIST)
+    SeasonDriver(w).season(choose, None, P.SUBSIST)
     assert asked, "no person was asked for a budget at all"
     # ⚠ W5 REPOINTED THIS ASSERTION, AND THE OLD ONE WAS THE DEFECT. It read
     # `all(n == w.fixtures.get("scene_budget") for n in asked)` — i.e. it PINNED A FLAT BUDGET,
@@ -1051,29 +1144,29 @@ def test_w5_budget_moves_with_the_persons_own_state_in_the_ruled_directions():
     w = _w()
     fx = w.fixtures
     p = next(iter(w.persons.values()))
-    v = S.View(p.id, [], fx.get("view_k"))
+    v = View(p.id, [], fx.get("view_k"))
     k = fx.get("scene_budget")
-    base = S.Query.budget(p, v, k, fx)
+    base = decision.budget(p, v, k, fx)
 
     # office: a live `hold` Tenure the person OWNS. Routed through add_tenure, so the store is
     # the person's own — which is the whole reason budget can read it with no World.
-    w.add_tenure(S.Tenure("t_b1", p.id, "off_x", "hold", since=0))
-    assert S.Query.budget(p, v, k, fx) > base, "holding an office did not raise the budget"
+    w.add_tenure(Tenure("t_b1", p.id, "off_x", "hold", since=0))
+    assert decision.budget(p, v, k, fx) > base, "holding an office did not raise the budget"
     p.tenures = [t for t in p.tenures if t.id != "t_b1"]
 
     # body: falling a band. `band_floors["body"]` is the table the SITE gate already uses.
     floors = sorted(fx.get("band_floors")["body"].values(), reverse=True)
     p.body, was = floors[0] - 1, p.body
-    assert S.Query.budget(p, v, k, fx) < base, "falling a body band did not lower the budget"
-    lower = S.Query.budget(p, v, k, fx)
+    assert decision.budget(p, v, k, fx) < base, "falling a body band did not lower the budget"
+    lower = decision.budget(p, v, k, fx)
     p.body = floors[-1] - 1
-    assert S.Query.budget(p, v, k, fx) < lower, "the narrowing is not monotone across bands"
-    assert S.Query.budget(p, v, k, fx) >= 1, "a dying person must still get one scene, not zero"
+    assert decision.budget(p, v, k, fx) < lower, "the narrowing is not monotone across bands"
+    assert decision.budget(p, v, k, fx) >= 1, "a dying person must still get one scene, not zero"
     p.body = was
 
     # travel: a leg spent this season.
     p.travel_leg = ["leg_a"]
-    assert S.Query.budget(p, v, k, fx) < base, "a travel leg did not lower the budget"
+    assert decision.budget(p, v, k, fx) < base, "a travel leg did not lower the budget"
 
 
 def test_r3_the_dead_code_is_reached():
@@ -1090,7 +1183,7 @@ def test_r3_the_band_floors_are_swept():
     """DEFECT C14. §42.2.1 names 'three band edges' among the four constants a prior instrument
     invented. Rev 2 fixed the other three and left these as literals in probe bodies, so every
     pacing claim was a one-dimensional sweep of a two-parameter model."""
-    assert "band_floors" in S.DEFAULT_FIXTURES._v
+    assert "band_floors" in DEFAULT_FIXTURES._v
     body = PROBES_CODE.split("def tiny_world", 1)[1]
     assert "scale * 8 // 10" not in body, "a band edge is still a literal in a probe body"
 
@@ -1121,11 +1214,11 @@ def test_r4_l3_clause_1_is_permitted_and_clause_2_is_refused():
     more acceptable than flattering it."""
     w = _w()
     with pytest.raises(Unspecified) as e:
-        Query.single_holder_counter(w, "p_low", "suspicion", registry=set())
+        world_q.single_holder_counter(w, "p_low", "suspicion", registry=set())
     assert "closed" in str(e.value)                      # the registry is the real gap
-    assert Query.single_holder_counter(w, "p_low", "x", registry={"x"}) == 0
+    assert world_q.single_holder_counter(w, "p_low", "x", registry={"x"}) == 0
     with pytest.raises(Forbidden):
-        Query.aggregate_guard(w, "cohort_unrest", per_person_tally=True)
+        world_q.aggregate_guard(w, "cohort_unrest", per_person_tally=True)
 
 
 def test_r4_the_l1_actor_identity_is_checked():
@@ -1134,7 +1227,7 @@ def test_r4_the_l1_actor_identity_is_checked():
     SPELLABLE" false, while both were labelled on the strength of it."""
     w = _w()
     def impostor(p, v, s, ask_budget):
-        from ..shape import Act
+        from ..state.carriers import Act
         return [Act("x", "the_church", "excommunicate")] if p.id == "p_low" else []
     with pytest.raises(Forbidden):
         P._run(w, impostor)
@@ -1152,7 +1245,7 @@ def test_r4_event_ids_are_unique_per_draw_and_reproducible():
             # distinct, which is the property this test is about — one person, one tick, three
             # acts, three DIFFERENT Event ids.
             return ([P.Act_(w, p, "work", key=str(i),
-                            changes=[S.StateChange("site_harbour", "alter", "Act",
+                            changes=[StateChange("site_harbour", "alter", "Act",
                                                    "condition", i + 1)])
                      for i in range(3)] if p.id == "p_low" else [])
         P._run(w, choose)
@@ -1676,7 +1769,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     ⚠ Sites whose `record_kind`/`fieldname` are not literals are reported as a HOLE IN THIS CHECK
     rather than skipped: a walk that silently ignores what it cannot read is a walk that reports
     `clean` over an unknown number of unchecked writes."""
-    pairs, dynamic = _write_call_sites(files.SHAPE_PY, files.PROBES_PY)
+    pairs, dynamic = _write_call_sites(files.DRIVER_PY, files.PROBES_PY)
     assert pairs, "the AST walk found no write call sites at all -- the walk is broken"
     # W3: THE FOLD'S WRITE IS GENERIC BY CONSTRUCTION -- `_apply_write` passes the pair as
     # variables, because one `resolve` serving 32 verbs cannot name a literal. Its coverage did
@@ -1690,7 +1783,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     # property is *"this call is inside `_apply_write`"*, and the AST answers it exactly. `G3`:
     # assert the property, never the proxy. Found while reconciling the governance-slice pass.
     import ast as _ast
-    _tree = _ast.parse(files.SHAPE_PY.read_text())
+    _tree = _ast.parse(files.DRIVER_PY.read_text())
     fold_span = next(((n.lineno, n.end_lineno) for n in _ast.walk(_tree)
                       if isinstance(n, _ast.FunctionDef) and n.name == "_apply_write"), None)
     assert fold_span, "`_apply_write` is gone; the fold's declared exemption names nothing"
@@ -1724,7 +1817,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
         "the verb-table loader no longer refuses a `writes:` off the matrix, so the fold's "
         f"generic write has NO coverage and the exemption above is void: {e.value}")
     off = {p: where for p, where in pairs.items()
-           if p not in S.MATRIX and p not in S.MATRIX_RETIRED}
+           if p not in MATRIX and p not in MATRIX_RETIRED}
     assert not off, (
         "write call sites naming a `(kind, field)` on no row of write_matrix.yaml:\n  "
         + "\n  ".join(f"{k}: {v}" for k, v in sorted(off.items()))
@@ -1753,11 +1846,11 @@ def test_w2_the_retired_rows_get_their_own_diagnosis():
     """A row that was RETIRED and a row that never existed are different facts about the design,
     and a reader deciding whether to add one needs to know which they are looking at. Two of the
     six come back at W3 WITH `establish`, their producer."""
-    assert S.MATRIX_RETIRED, "nothing is recorded as retired -- the distinction is gone"
-    for kind, fname in S.MATRIX_RETIRED:
-        assert (kind, fname) not in S.MATRIX, f"({kind}, {fname}) is both retired and live"
+    assert MATRIX_RETIRED, "nothing is recorded as retired -- the distinction is gone"
+    for kind, fname in MATRIX_RETIRED:
+        assert (kind, fname) not in MATRIX, f"({kind}, {fname}) is both retired and live"
         with pytest.raises(Unspecified) as e:
-            S.partition_lookup(kind, fname)
+            partition_lookup(kind, fname)
         assert "RETIRED" in str(e.value), (
             f"({kind}, {fname}) is retired and its refusal does not say so")
 
@@ -1766,12 +1859,12 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
     """`class:` is V2's prose and `STEP_CLASS` is this file's derivation. The loader raises if they
     disagree, so neither can drift into being trusted alone. CENSUS writes in the MATTER class --
     §30's reconciliation is a world write, not an act."""
-    assert S.STEP_CLASS[Step.CENSUS] is WriteClass.MATTER
-    assert S.STEP_CLASS[Step.WITNESS] is WriteClass.INTERIOR
-    assert S.STEP_CLASS[Step.RESOLVE] is WriteClass.ACTS
-    for (kind, fname), row in S.MATRIX.items():
+    assert STEP_CLASS[Step.CENSUS] is WriteClass.MATTER
+    assert STEP_CLASS[Step.WITNESS] is WriteClass.INTERIOR
+    assert STEP_CLASS[Step.RESOLVE] is WriteClass.ACTS
+    for (kind, fname), row in MATRIX.items():
         for st in row.steps:
-            assert row.write_class(st) is S.STEP_CLASS[st], f"({kind}, {fname}) at {st}"
+            assert row.write_class(st) is STEP_CLASS[st], f"({kind}, {fname}) at {st}"
 
 
 # ===========================================================================
@@ -1839,7 +1932,7 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
     # and this test go green over the whole package (§0.1 point 2). The floor is the property,
     # not a count someone re-pins: the file the model is carved OUT of, and the two files step 4
     # carved INTO it, must all be in the set.
-    assert {files.SHAPE_PY, files.STATE_DIR / "carriers.py", files.STATE_DIR / "world.py"} <= MODEL, (
+    assert {files.DRIVER_PY, files.STATE_DIR / "carriers.py", files.STATE_DIR / "world.py"} <= MODEL, (
         f"the model set does not contain the model: {sorted(m.name for m in MODEL)}")
     # ⚠ THE CORPUS IS DISCOVERED, NOT LISTED, AND THE DIFFERENCE IS THIS TEST'S OWN LESSON. Its
     # docstring names the original defect as "IT READ `shape.py` ALONE while `probes.py`,
@@ -1859,7 +1952,7 @@ def test_jordan_no_definition_is_hardcoded_in_a_body():
     # `predicates:` — the five names live once, in `witness_channels`, and that row states what
     # each MEANS. Assuming the key existed made this guard raise a KeyError on a data shape the
     # file legitimately supports, which is a guard failing on correct data (`G4`).
-    known = {frozenset(r["values"]) for r in S._ROSTERS.values() if "values" in r}
+    known = {frozenset(r["values"]) for r in _ROSTERS.values() if "values" in r}
     offenders, exempted = [], []
     for fpath in FILES:
         fname = fpath.name
@@ -1930,16 +2023,16 @@ def test_jordan_every_roster_comes_from_the_data_file_and_an_absent_one_refuses(
     """The six that moved must actually be READ, not merely copied — and a roster the file does
     not carry must RAISE. An empty set would make every membership test silently false and every
     closed-set guard vacuous, which is §42.2's polarity rule inverted."""
-    for name, value in (("tenure_kinds", S.TENURE_KINDS), ("rung_kinds", S.RUNG_KINDS),
-                        ("remit_acts", S.REMIT_ACTS), ("witness_channels", S.WITNESS_CHANNELS),
-                        ("claim_sources", S.CLAIM_SOURCES), ("strata", S.STRATA)):
-        assert set(value) == set(S._ROSTERS[name]["values"]), f"{name} diverged from the data"
+    for name, value in (("tenure_kinds", TENURE_KINDS), ("rung_kinds", RUNG_KINDS),
+                        ("remit_acts", REMIT_ACTS), ("witness_channels", WITNESS_CHANNELS),
+                        ("claim_sources", CLAIM_SOURCES), ("strata", STRATA)):
+        assert set(value) == set(_ROSTERS[name]["values"]), f"{name} diverged from the data"
         assert value, f"{name} loaded empty"
     with pytest.raises(Unspecified):
-        S.roster("a_roster_nobody_declared")
+        roster("a_roster_nobody_declared")
     # Order is semantic for the strata — the fold resolves in sequence — so it must be a tuple
     # and must match the file's order, not a set's arbitrary one.
-    assert isinstance(S.STRATA, tuple) and list(S.STRATA) == S._ROSTERS["strata"]["values"]
+    assert isinstance(STRATA, tuple) and list(STRATA) == _ROSTERS["strata"]["values"]
 
 
 def test_jordan_a_roster_edit_is_a_data_edit_and_nothing_else():
@@ -1952,15 +2045,15 @@ def test_jordan_a_roster_edit_is_a_data_edit_and_nothing_else():
     and is not what the ruling is about. The ruling is about WHERE THE DEFINITION LIVES. A test
     that failed on an import-time binding would be guarding a non-defect, and `CLAUDE.md` §0.1
     point 5 says a guard must earn its existence."""
-    before = set(S.roster("tenure_kinds"))
-    S._ROSTERS["tenure_kinds"]["values"].append("_planted_kind")
+    before = set(roster("tenure_kinds"))
+    _ROSTERS["tenure_kinds"]["values"].append("_planted_kind")
     try:
-        assert "_planted_kind" in S.roster("tenure_kinds"), (
+        assert "_planted_kind" in roster("tenure_kinds"), (
             "a roster edit did not reach the accessor — something cached or copied the values, "
             "which reintroduces the hardcoding one level down")
     finally:
-        S._ROSTERS["tenure_kinds"]["values"].remove("_planted_kind")
-    assert set(S.roster("tenure_kinds")) == before
+        _ROSTERS["tenure_kinds"]["values"].remove("_planted_kind")
+    assert set(roster("tenure_kinds")) == before
 
 
 def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
@@ -1978,21 +2071,21 @@ def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
     deleted: the CLAIM is unchanged — a site below every floor must be unworkable — and it is now
     asked of `evaluate()`, which is where that rule lives. The gap count is now over verbs with
     NEITHER a predicate NOR a typed cell, which is the same question one owner further along."""
-    prose = [v for v, r in S.VERB_TABLE.items()
-             if r.requires.strip() not in S.NO_PRECONDITION]
+    prose = [v for v, r in VERB_TABLE.items()
+             if r.requires.strip() not in NO_PRECONDITION]
     assert prose, "no verb carries a precondition -- the check is vacuous"
     # The gap is COUNTABLE, which is what stops it being forgotten: H-65's number.
     def _evaluable(v):
-        return v in S.REQUIRES_PREDICATES or S.VERB_TABLE[v].requires_typed is not None
+        return v in REQUIRES_PREDICATES or VERB_TABLE[v].requires_typed is not None
     missing = [v for v in prose if not _evaluable(v)]
     assert len(missing) == len(prose) - len([v for v in prose if _evaluable(v)])
 
     # A verb with a prose precondition and no predicate must REFUSE, not succeed.
     w = _w()
     w.step = Step.RESOLVE
-    d = S.SeasonDriver(w)
+    d = SeasonDriver(w)
     victim = next(v for v in missing)
-    act = S.Act(id="a_x", actor="p_low", verb=victim)
+    act = Act(id="a_x", actor="p_low", verb=victim)
     with pytest.raises(Unspecified) as e:
         d._fold(w, act)
     assert "precondition" in str(e.value) or "no row" in str(e.value)
@@ -2001,9 +2094,9 @@ def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
     site = w.sites["site_harbour"]
     kept, site.condition = site.condition, 0
     try:
-        a_w = S.Act(id="a_w", actor="p_low", verb="work", payload={"site": site.id})
-        v = S.evaluate(S.VERB_TABLE["work"].requires_typed, S.WorldReader(w, a_w.actor),
-                       S.binding_from_act(a_w))
+        a_w = Act(id="a_w", actor="p_low", verb="work", payload={"site": site.id})
+        v = evaluate(VERB_TABLE["work"].requires_typed, WorldReader(w, a_w.actor),
+                       binding_from_act(a_w))
         assert v.value is False, (
             f"`work`'s precondition returned {v.value!r} for a site at condition 0 -- it cannot "
             "observe the failure it excludes")
@@ -2056,7 +2149,7 @@ def test_w5_no_gap_is_an_instrument_defect():
     # whether a call-site bug lands in the GAP column.
     def called_wrong():
         w = _w()
-        w.tenures.append(S.Tenure("t_plant", "p_mid", "off_x", "hold", since=0))
+        w.tenures.append(Tenure("t_plant", "p_mid", "off_x", "hold", since=0))
 
     P.PROBES["PLANT"] = dict(id="PLANT", title="planted", section="S15.1", by="probe-model",
                              tests="a call-site bug must not grade as a design hole",
@@ -2073,7 +2166,7 @@ def test_w5_no_gap_is_an_instrument_defect():
         "exists for — check `InstrumentDefect` is not a `ShapeGap`.")
 
     # ---- and the real corpus is clean of them. ----
-    assert not issubclass(S.InstrumentDefect, S.ShapeGap), (
+    assert not issubclass(InstrumentDefect, ShapeGap), (
         "InstrumentDefect became a ShapeGap — every call-site bug is now reportable as a design "
         "hole again, and the plant above would stop catching it.")
     runs = files.RUNS_DIR
@@ -2095,7 +2188,7 @@ def test_w5_opening_set_has_no_roster_and_is_computed_from_the_table():
 
     Tests the PROPERTY as well as the name (G3) — a parameter renamed `options` would satisfy the
     name test and be the same defect — by checking the set MOVES with the verb table."""
-    params = list(inspect.signature(S.Query.opening_set).parameters)
+    params = list(inspect.signature(opening_set).parameters)
     assert "roster" not in params, f"the roster survived: {params}"
     # ⚠ `["p","v","q"]` -> `["p","v","q","fx"]`, `W-C`, AND THE PROPERTY THIS PINS IS UNCHANGED.
     # `D2` is that NO AUTHORED OPTION LIST reaches here. `Fixtures` is the params registry -- flat
@@ -2112,19 +2205,19 @@ def test_w5_opening_set_has_no_roster_and_is_computed_from_the_table():
 
     w = P.tiny_world()
     p = w.persons["p_mid"]
-    q = S.Question("q:t", "need", ("rec_writ", "S"))
-    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-    got = S.Query.opening_set(p, v, q, w.fixtures)
+    q = Question("q:t", "need", ("rec_writ", "S"))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    got = decision.opening_set(p, v, q, w.fixtures)
     assert got, "the computed set is empty — nothing is derivable and the roster is only absent"
-    assert all(c.verb in S.VERB_TABLE for c in got)
+    assert all(c.verb in VERB_TABLE for c in got)
 
     # THE PROPERTY: it is derived from the table, so removing a table row removes its candidates.
     victim = sorted({c.verb for c in got})[0]
-    saved = S.VERB_TABLE.pop(victim)
+    saved = VERB_TABLE.pop(victim)
     try:
-        after = {c.verb for c in S.Query.opening_set(p, v, q, w.fixtures)}
+        after = {c.verb for c in decision.opening_set(p, v, q, w.fixtures)}
     finally:
-        S.VERB_TABLE[victim] = saved
+        VERB_TABLE[victim] = saved
     assert victim not in after, (
         f"{victim!r} survived being removed from the verb table — the set is not computed from it")
 
@@ -2137,7 +2230,7 @@ def test_w5_q_has_a_producer_across_all_four_sources():
     is why: without it "an NPC with a standing ambition and a quiet season forms no candidates at
     all", which is most of the NPC corpus."""
     seen = {}
-    for src in S.QUESTION_SOURCES:
+    for src in QUESTION_SOURCES:
         w = P.tiny_world()
         p = w.persons["p_mid"]
         if src == "date_due":
@@ -2150,7 +2243,7 @@ def test_w5_q_has_a_producer_across_all_four_sources():
             # sides shared the off-by-one, so the test could not observe it. `headless.py` could:
             # every ledger filled and no question ever formed.
             w.tick = 1
-            p.ledger.append(S.Claim("c_t", p.id, p.id, "office", "duke", 0,
+            p.ledger.append(Claim("c_t", p.id, p.id, "office", "duke", 0,
                                     "told_by", 100, "own"))
         elif src == "band_crossed":
             # ⚠ REV 1 PLANTED A TUPLE THE WRITER NEVER PRODUCES, AND SO TESTED ITSELF. It wrote
@@ -2172,18 +2265,18 @@ def test_w5_q_has_a_producer_across_all_four_sources():
             floors_by_kind = w.fixtures.get("band_floors")
             kind = next(k for k in floors_by_kind if k != "body")
             top = max(floors_by_kind[kind].values())
-            w.sites["s_q3"] = S.Site("s_q3", here, kind, top + 5, [])
-            S.SeasonDriver(w).matter()
+            w.sites["s_q3"] = Site("s_q3", here, kind, top + 5, [])
+            SeasonDriver(w).matter()
             assert w.crossings, "the fixture no longer crosses a floor -- Q3 has nothing to read"
             assert w.crossings[0][0] in w.sites, (
                 "a crossing is keyed on something that is not a site; the writer changed shape")
         elif src == "need":
-            pr = S.Proposition("pr_t", "OUGHT", "rec_writ", "it should stand", True, 0)
+            pr = Proposition("pr_t", "OUGHT", "rec_writ", "it should stand", True, 0)
             w.propositions[pr.id] = pr
-            w.add_tenure(S.Tenure("t_t", p.id, pr.id, "commit", since=0))
+            w.add_tenure(Tenure("t_t", p.id, pr.id, "commit", since=0))
         else:
             pytest.fail(f"the roster grew a source this test does not exercise: {src!r}")
-        qs = S.questions_for(w, p)
+        qs = questions_for(w, p)
         seen[src] = [q.source for q in qs]
         assert src in seen[src], f"source {src!r} produced no question: {seen}"
     assert len(seen) == 4, seen
@@ -2202,21 +2295,23 @@ def test_w5_f2s_third_term_cannot_change_any_decision():
     candidate-dependent the test goes red and the finding is retired by evidence."""
     w = P.tiny_world()
     p = w.persons["p_mid"]
-    pr = S.Proposition("pr_u", "OUGHT", "rec_writ", "x", True, 0)
+    pr = Proposition("pr_u", "OUGHT", "rec_writ", "x", True, 0)
     w.propositions[pr.id] = pr
-    w.add_tenure(S.Tenure("t_u", p.id, pr.id, "commit", since=0))
-    q = S.questions_for(w, p)[0]
-    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-    ch = S.make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}")
+    w.add_tenure(Tenure("t_u", p.id, pr.id, "commit", since=0))
+    q = questions_for(w, p)[0]
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    ch = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}")
     # `W17`: scenes, so flatten to the interactions inside them.
-    picks = {s: [a.verb for sc in ch(p, v, S.Sensation(s), lambda: 3) for a in sc.acts]
+    picks = {s: [a.verb for sc in ch(p, v, Sensation(s), lambda: 3) for a in sc.acts]
              for s in (0, 500, 1000, 10 ** 6)}
     distinct = {tuple(x) for x in picks.values()}
     assert len(distinct) == 1, (
         f"urgency moved the decision: {picks}. If that is now true the third term is no longer "
         "inert and this finding about §F2 should be retired — but check it is candidate-DEPENDENT "
         "and not merely numeric noise before doing so.")
-    assert S.urgency(1000, w.fixtures) != S.urgency(0, w.fixtures), (
+    # Only the inequality is asserted, so any pair that differs would serve.
+    # [JUSTIFIED: two far-apart inputs, to prove `urgency` reads its argument at all]
+    assert urgency(1000, w.fixtures) != urgency(0, w.fixtures), (
         "urgency returns a constant, which would make this test vacuous — it must actually vary "
         "with subsistence for the inertness claim to be about §F2 rather than about a stub")
 
@@ -2228,7 +2323,16 @@ def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
     #353 `:634`: `sense()` is "the ONE non-decision function permitted a `World`". V2 §F3 broke it
     by giving `budget` a World; PLAN §3.3's smaller amendment is what this checks held."""
     import ast as ast_
-    tree = ast_.parse(files.SHAPE_PY.read_text())
+    # ⚠ RE-POINTED TO THE MODEL SET, step 5 of the decomposition. This parsed `files.SHAPE_PY`
+    # alone, so the thirteen functions that moved to `queries/world_q.py` left its corpus in the
+    # same commit that added a module whose docstring cites THIS TEST as what keeps its one-way
+    # rule "checkable by signature rather than by intention". That sentence was false when
+    # written and is made true here rather than softened — the same repair, and the same reason,
+    # as `_model_modules()`'s own docstring records for step 4.
+    _mods = _model_modules()
+    # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- as `test_h115` carries]
+    assert len(_mods) >= 8, f"model set collapsed to {len(_mods)} — this walk would prove nothing"
+    trees = {m.name: ast_.parse(m.read_text()) for m in _mods}
 
     def named(ann) -> str:
         """The type an annotation NAMES, however it is spelled.
@@ -2257,21 +2361,22 @@ def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
     # signatures rather than from a name list, so a new person-side function is covered the day
     # it is written (G2 — forbid the shape, never enumerate the words).
     offenders = []
-    for node in ast_.walk(tree):
-        if not isinstance(node, (ast_.FunctionDef, ast_.AsyncFunctionDef)):
-            continue
-        args = [a for a in node.args.args if a.arg not in ("self", "cls")]
-        if not args or named(args[0].annotation) != "Person":
-            continue
-        takes_world = [a.arg for a in args if named(a.annotation) == "World"]
-        if takes_world and node.name != "sense":
-            offenders.append((node.name, node.lineno, takes_world))
+    for _fname, tree in trees.items():
+        for node in ast_.walk(tree):
+            if not isinstance(node, (ast_.FunctionDef, ast_.AsyncFunctionDef)):
+                continue
+            args = [a for a in node.args.args if a.arg not in ("self", "cls")]
+            if not args or named(args[0].annotation) != "Person":
+                continue
+            takes_world = [a.arg for a in args if named(a.annotation) == "World"]
+            if takes_world and node.name != "sense":
+                offenders.append((_fname, node.name, node.lineno, takes_world))
     assert not offenders, (
         "a person-side function takes a World, and #353 :634 permits exactly one:\n  "
-        + "\n  ".join(f"{n} at shape.py:{ln} takes {w}" for n, ln, w in offenders))
+        + "\n  ".join(f"{n} at {f}:{ln} takes {w}" for f, n, ln, w in offenders))
     # And the control: the AST walk must actually be finding person-side functions, or it proves
     # nothing by finding no offenders among zero candidates (§0.1 point 2).
-    found = [n.name for n in ast_.walk(tree)
+    found = [n.name for tree in trees.values() for n in ast_.walk(tree)
              if isinstance(n, ast_.FunctionDef)
              and [a for a in n.args.args if a.arg not in ("self", "cls")]
              and named([a for a in n.args.args if a.arg not in ("self", "cls")][0].annotation)
@@ -2288,6 +2393,140 @@ def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
         "signatures, so this guard would miss a real regression in the file's own style")
 
 
+def test_decision_module_never_names_world():
+    """AX-2 (`architecture/meta/01_AXIOMS.md`): *"A person decides from what they hold, and what
+    they hold may be false. There is no view of world truth available inside a decision — not
+    capped, not filtered: absent."* `season.decision` is where step 7 of the decomposition
+    (ED-IN-0203) put the AX-2 island `04_CODE_ARCHITECTURE.md` §A.2 calls `decision/`, and
+    §A.3 row 2 forces it: *"in one class, a person-side function calls a resolver-side one with
+    no import to scan"* is exactly the shape a hidden `World` reference would take if this module
+    boundary were only a convention.
+
+    ⚠ WHY THIS TEST EXISTS AND DID NOT BEFORE: `04_CODE_ARCHITECTURE.md:1046` claims *"`decision/`
+    is a directory from its first commit. The isolation scan matches by path, so a `choose`
+    drafted inside `loop/` and moved later would have been green while violating AX-2."* That
+    sentence asserts an ENFORCEMENT MECHANISM — "the isolation scan" — and no such scan existed
+    anywhere in this tree before this test. `test_w5_sense_is_still_the_only_world_taking_non_...`
+    (above) checks SIGNATURES for a `World`-typed parameter, package-wide; it does not check
+    IMPORTS, and it would not catch a `decision.py` that imported `World` and never annotated a
+    parameter with it (e.g. reading a module-level `_WORLD` singleton, or constructing one). A
+    false claim of enforcement is worse than none, because it stops the next reader from checking
+    (`ARCHITECTURE.md` S47).
+
+    ⚠ AND THIS DOCSTRING ONCE COMMITTED THAT VERY FAULT. CORRECTED 2026-09-09 (ED-IN-0206). It
+    said this test "is what makes 04:1046's claim true rather than aspirational." IT DOES NOT.
+    04:1046's mechanism is a scan BY PATH over a `decision/` DIRECTORY, and its stated purpose is
+    to catch *"a `choose` drafted inside `loop/` and moved later"*. This walks the AST of the one
+    file `decision.py`, so code drafted elsewhere and never moved is never scanned — it is
+    structurally blind to the exact failure 04:1046 names. What it DOES enforce, and all of it:
+    nothing already inside `decision.py` names a `World` or imports a module holding one, plus
+    (a2) nothing it imports TAKES one. `decision/` is still a FILE, not a directory, and the path
+    scan does not exist. Layer-1 conformance is ED-IN-0206, not this test.
+
+    TWO CHECKS, MATCHING WHAT AX-2 ACTUALLY FORBIDS:
+      (a) no `Import`/`ImportFrom` in `decision.py` resolves to `state.world`, `queries` (either
+          `world_q` or `readers`), `loop`, `seam`, `combat_seam` or `shape`.
+      (a2) NO IMPORTED NAME TAKES A `World`, WHATEVER MODULE IT CAME FROM. ⚠ (a) ALONE WAS NOT
+          ENOUGH AND ITS FIRST DRAFT CLAIMED IT WAS — it called its six modules "the six places a
+          `World` (or a function that takes one) could be smuggled in from", which is false, and a
+          read-only critic constructed the seventh from the module `decision.py` already imports:
+          `from .epistemic import observers_for` would have been GREEN while handing the decision
+          island `observers_for(w: "World", ...)`. That is exactly the route `04:171` row 2 names —
+          *"a person-side function calls a resolver-side one with no import to scan"* — reaching it
+          through an import that IS scanned and simply was not on the list. (a2) resolves each
+          imported name and reads its real signature, so it DERIVES the forbidden set from what a
+          function takes rather than enumerating module names, and no new module can open the hole.
+      (b) no bare `Name`, `Attribute` attribute, or string `Constant` in `decision.py` equals
+          `"World"` — catching a `World` referenced without an import (impossible today, since (a)
+          already forbids importing it, but a decorator, a `globals()` lookup, or a future
+          relaxation of (a) could still reach a name called `World` without an import naming it),
+          and a quoted forward-reference annotation (`w: "World"`), which is `shape.py`'s own
+          dominant annotation style (nine signatures) and the exact spelling that defeated the
+          first version of the sibling AST proof above."""
+    import ast as ast_
+    src = inspect.getsource(decision)
+    tree = ast_.parse(src)
+
+    FORBIDDEN_MODULES = ("state.world", "queries", "loop", "seam", "combat_seam", "shape")
+
+    def _forbidden_import(modname: str) -> bool:
+        return any(modname == m or modname.startswith(m + ".") for m in FORBIDDEN_MODULES)
+
+    bad_imports = []
+    for node in ast_.walk(tree):
+        if isinstance(node, ast_.Import):
+            for alias in node.names:
+                if _forbidden_import(alias.name):
+                    bad_imports.append((node.lineno, alias.name))
+        elif isinstance(node, ast_.ImportFrom):
+            # relative imports (`from .state.world import World`) carry the dotted tail in
+            # `.module`; `level > 0` with `module is None` is a bare `from . import X` and is
+            # never one of the forbidden names by itself.
+            if node.module and _forbidden_import(node.module):
+                bad_imports.append((node.lineno, node.module))
+    assert not bad_imports, (
+        f"decision.py imports from a forbidden module (AX-2): {bad_imports}")
+
+    # (a2) -- the derived half. An allowed module may still export a World-taking function, so
+    # read every imported name's actual signature instead of trusting its address.
+    world_takers, inspected = [], 0
+    for node in ast_.walk(tree):
+        if not isinstance(node, ast_.ImportFrom) or node.module is None:
+            continue
+        src_mod = sys.modules.get(f"engine.season.{node.module}")
+        if src_mod is None:
+            continue
+        for alias in node.names:
+            obj = getattr(src_mod, alias.name, None)
+            if not callable(obj):
+                continue
+            try:
+                params = inspect.signature(obj).parameters
+            except (TypeError, ValueError):
+                continue
+            inspected += 1
+            for pname, param in params.items():
+                ann = param.annotation
+                if ann is inspect.Parameter.empty:
+                    continue
+                # ⚠ COMPARE BY TOKEN, NOT BY EQUALITY, AND THE FIRST DRAFT OF THIS CHECK GOT IT
+                # WRONG IN THE ONE WAY THAT MATTERS: it tested `text == "World"`, which is FALSE
+                # for every module carrying `from __future__ import annotations` -- `epistemic.py`
+                # does, so a source annotation already written `w: "World"` reaches here as the
+                # string `"'World'"`, quotes and all. The check passed on the exact plant it was
+                # written to catch. A word-boundary search reads the token instead of the spelling,
+                # and also catches `Optional[World]` and `list["World"]`.
+                text = ann if isinstance(ann, str) else getattr(ann, "__name__", repr(ann))
+                if re.search(r"\bWorld\b", text):
+                    world_takers.append((node.lineno, node.module, alias.name, pname))
+    assert inspected >= 5, (
+        f"the World-taking-import check inspected only {inspected} signatures; it has stopped "
+        "resolving decision.py's imports and is passing vacuously (§0.1 pt 2)")
+    assert not world_takers, (
+        "decision.py imports a function that TAKES a World, which is AX-2's substance rather "
+        f"than its spelling: {world_takers}")
+
+    bad_names = []
+    for node in ast_.walk(tree):
+        if isinstance(node, ast_.Name) and node.id == "World":
+            bad_names.append((node.lineno, "Name", "World"))
+        elif isinstance(node, ast_.Attribute) and node.attr == "World":
+            bad_names.append((node.lineno, "Attribute", "World"))
+        elif isinstance(node, ast_.Constant) and node.value == "World":
+            bad_names.append((node.lineno, "Constant", "World"))
+    assert not bad_names, (
+        f"decision.py names `World` (AX-2 forbids it entirely, not just as an import): {bad_names}")
+
+    # The control: this file's own moved bodies reference `World` heavily IN PROSE (docstrings
+    # explaining why they do NOT take one), so a walk that found zero `World`-shaped AST nodes
+    # while still containing the substring "World" many times over would prove the walk is
+    # inspecting something other than real code — confirm the substring is present (in strings
+    # the checks above correctly ignore) so an empty result above is not a vacuous one.
+    assert src.count("World") >= 5, (
+        "decision.py's source no longer mentions World anywhere, even in prose — either the "
+        "module changed unrecognisably or this control itself needs re-deriving")
+
+
 def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_printed():
     """PLAN `W5`'s third proof: *"the `alignment` table swept at three points with every flipped
     verdict printed"*. `H-66` is the row; `rosters.yaml` holds the default.
@@ -2299,7 +2538,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     asks for in the unflattering direction too."""
     affected = ["P31", "P36", "P11", "P12"]
     table = {}
-    saved = S.ALIGNMENT
+    saved = decision.ALIGNMENT
 
     def fresh(pid):
         # ⚠ `run_probe` MEMOISES IN `_VERDICTS`, so calling it in a loop returns the FIRST run's
@@ -2310,21 +2549,21 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
         return R.run_probe(pid)["verdict"]
 
     try:
-        for point in S.ALIGNMENT_SWEEP:
-            S.ALIGNMENT = S.alignment_at(point)
+        for point in ALIGNMENT_SWEEP:
+            decision.ALIGNMENT = alignment_at(point)
             table[point] = {pid: fresh(pid) for pid in affected}
     finally:
-        S.ALIGNMENT = saved
+        decision.ALIGNMENT = saved
         for pid in affected:
             fresh(pid)                           # restore the committed verdicts
 
     base = table["declared"]
-    flips = {pid: {pt: table[pt][pid] for pt in S.ALIGNMENT_SWEEP}
+    flips = {pid: {pt: table[pt][pid] for pt in ALIGNMENT_SWEEP}
              for pid in affected
-             if len({table[pt][pid] for pt in S.ALIGNMENT_SWEEP}) > 1}
-    print(f"\n  H-66 alignment sweep over {S.ALIGNMENT_SWEEP}:")
+             if len({table[pt][pid] for pt in ALIGNMENT_SWEEP}) > 1}
+    print(f"\n  H-66 alignment sweep over {ALIGNMENT_SWEEP}:")
     for pid in affected:
-        row = " · ".join(f"{pt}={table[pt][pid]}" for pt in S.ALIGNMENT_SWEEP)
+        row = " · ".join(f"{pt}={table[pt][pid]}" for pt in ALIGNMENT_SWEEP)
         print(f"    {pid}: {row}{'   <-- FLIPPED' if pid in flips else ''}")
     print(f"  {len(flips)} of {len(affected)} verdicts move across the sweep."
           + ("  No verdict rests on an invented magnitude." if not flips else
@@ -2354,16 +2593,16 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     # the SAME SIDE OF ZERO as the conviction, which a name-ordered tie cannot fake.
     w = P.tiny_world()
     p = w.persons["p_mid"]
-    q = S.Question("q:sgn", "need", ("rec_writ",))
-    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-    saved2 = S.ALIGNMENT
+    q = Question("q:sgn", "need", ("rec_writ",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    saved2 = decision.ALIGNMENT
     try:
-        S.ALIGNMENT = S.alignment_at("sign_only")
-        ch = S.make_chooser(w.fixtures, lambda a, b, c: "x")
+        decision.ALIGNMENT = alignment_at("sign_only")
+        ch = make_chooser(w.fixtures, lambda a, b, c: "x")
         for sign in (0.9, -0.9):
             p.convictions = {"Precedent": sign}
-            picked = ch(p, v, S.Sensation(0), lambda: 1)[0].acts[0].verb
-            cell = S.align(picked, "Precedent")
+            picked = ch(p, v, Sensation(0), lambda: 1)[0].acts[0].verb
+            cell = align(picked, "Precedent")
             assert cell * sign >= 0, (
                 f"at Precedent={sign} the person chose {picked!r}, whose Precedent alignment is "
                 f"{cell} — the pick is on the WRONG side of zero, so the sweep's agreement with "
@@ -2372,7 +2611,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
                 f"at Precedent={sign} the person chose {picked!r}, which the table does not "
                 "score at all — the pick was decided entirely by the name tiebreak")
     finally:
-        S.ALIGNMENT = saved2
+        decision.ALIGNMENT = saved2
         for pid in affected:
             fresh(pid)
 
@@ -2386,23 +2625,30 @@ def test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner():
     its subject existed was invisible to exactly the three readers the docstring listed, unless
     some unrelated code happened to read `w.tenures` first. It passed only because the fixture
     creates persons before tenures. This plants the reverse order, which is §0.1 point 2."""
-    w = S.World(7)
-    w.add_tenure(S.Tenure("t_early", "p_late", "off_x", "hold", since=0))   # subject first…
+    # [JUSTIFIED: an arbitrary world seed for a structural test that never reads a draw]
+    w = World(7)
+    w.add_tenure(Tenure("t_early", "p_late", "off_x", "hold", since=0))   # subject first…
     assert w._unowned, "the plant did not land in _unowned — the ordering is not being tested"
-    w.persons["p_late"] = S.Person("p_late", "Late")                     # …person second
+    w.persons["p_late"] = Person("p_late", "Late")                     # …person second
     p = w.persons["p_late"]
     assert not p.tenures, "the fixture is not reproducing the defect; nothing to rehome"
     fx = w.fixtures
-    base = S.Query.budget(S.Person("p_ctl", "Ctl"), S.View("p_ctl", [], 12),
+    # The same View length 12 appears on both sides of the `>` below, so it cancels and the
+    # comparison measures rehoming alone. Pre-existing; surfaced by step 7's rename.
+    # [JUSTIFIED: control-matched instrument parameter, identical on both sides of the comparison]
+    base = decision.budget(Person("p_ctl", "Ctl"), View("p_ctl", [], 12),
                           fx.get("scene_budget"), fx)
     w._rehome()
     assert [t.id for t in p.tenures] == ["t_early"], (
         "the Tenure never reached its owner — `budget` would read zero offices for a person the "
         "world agrees holds one")
-    assert S.Query.budget(p, S.View(p.id, [], 12), fx.get("scene_budget"), fx) > base, (
+    # The matched half of the control above: same View length, so the two budgets differ only by
+    # the rehoming under test. Pre-existing; surfaced by step 7's rename.
+    # [JUSTIFIED: matched half of the control pair immediately above]
+    assert decision.budget(p, View(p.id, [], 12), fx.get("scene_budget"), fx) > base, (
         "rehoming did not change what `budget` reads, so the office is still invisible to it")
     # and the barrier does it, so no caller has to remember.
-    src = _code_only(inspect.getsource(S.SeasonDriver.deliberate))
+    src = _code_only(inspect.getsource(SeasonDriver.deliberate))
     assert "_rehome" in src, (
         "DELIBERATE does not rehome — every person-side reader is back to depending on whether "
         "something else read `w.tenures` first")
@@ -2422,9 +2668,9 @@ def test_w5_the_reporting_guards_are_actually_called():
 
     This is the caller. It asserts the SHAPE of each report and prints the current numbers, so a
     row naming a field that does not exist stays visible instead of being rediscovered."""
-    absent_field = S.matrix_rows_without_a_field()
+    absent_field = matrix_rows_without_a_field()
     assert set(absent_field) == {"absent", "unmodelled"}, absent_field
-    no_producer = S.rows_without_a_producer()
+    no_producer = rows_without_a_producer()
     assert isinstance(no_producer, dict)
     print(f"\n  matrix rows naming a field their kind does not have: {len(absent_field['absent'])}")
     for pair in absent_field["absent"]:
@@ -2434,7 +2680,7 @@ def test_w5_the_reporting_guards_are_actually_called():
 
     # The two W5 fields are the falsifier: they WERE in `absent` and the fix removed them, so if
     # either regresses out of `Person` this list grows and the assertion below names it.
-    fields = {f.name for f in dataclasses.fields(S.Person)}
+    fields = {f.name for f in dataclasses.fields(Person)}
     assert {"body", "travel_leg", "tenures"} <= fields, sorted(fields)
     assert ("Person", "body") not in absent_field["absent"], (
         "`(Person, body)` is back in the absent list — the field it names has gone again")
@@ -2458,24 +2704,24 @@ def test_w5_every_new_assumption_rows_sweep_is_actually_executed():
         # grateful for.
         return tuple(sorted((ax, tuple(sorted(row.items()))) for ax, row in tbl.items()))
 
-    tables = {pt: canon(S.alignment_at(pt)) for pt in S.ALIGNMENT_SWEEP}
+    tables = {pt: canon(alignment_at(pt)) for pt in ALIGNMENT_SWEEP}
     assert len(set(tables.values())) == 3, (
         f"two of H-66's three sweep points produce the same table — an arm that is not an arm: "
-        f"{ {pt: (t == tables[S.ALIGNMENT_SWEEP[0]]) for pt, t in tables.items()} }")
+        f"{ {pt: (t == tables[ALIGNMENT_SWEEP[0]]) for pt, t in tables.items()} }")
 
     # H-53 — the View-builder rule. Each rule must be able to select a DIFFERENT set of ids, or
     # `recent` is not a control, it is the only rule.
-    p = S.Person("p_v", "V")
+    p = Person("p_v", "V")
     for n in range(6):
-        p.ledger.append(S.Claim(f"c{n}", p.id, f"s{n % 3}", "grade", n, n, "firsthand", n, "own"))
-    q = S.Question("q_v", "need", ("s0",))
-    got = {rule: tuple(S.view_ids(p, q, 3, rule)) for rule in sorted(S.VIEW_BUILDER_RULES)}
+        p.ledger.append(Claim(f"c{n}", p.id, f"s{n % 3}", "grade", n, n, "firsthand", n, "own"))
+    q = Question("q_v", "need", ("s0",))
+    got = {rule: tuple(view_ids(p, q, 3, rule)) for rule in sorted(VIEW_BUILDER_RULES)}
     assert len(set(got.values())) >= 2, (
         f"every view-builder rule returned the same ids: {got} — H-53's sweep cannot move a "
         "verdict, so declaring it proves nothing")
-    assert set(rows["H-53"]["sweep"]) == set(S.VIEW_BUILDER_RULES), (
+    assert set(rows["H-53"]["sweep"]) == set(VIEW_BUILDER_RULES), (
         f"H-53's declared sweep and the roster have drifted: {rows['H-53']['sweep']} vs "
-        f"{sorted(S.VIEW_BUILDER_RULES)}")
+        f"{sorted(VIEW_BUILDER_RULES)}")
 
     # H-70 — the budget floor. The row declares a floor of 1; exercise the case that REACHES it,
     # which the direction test does not (it stops at 2).
@@ -2484,7 +2730,11 @@ def test_w5_every_new_assumption_rows_sweep_is_actually_executed():
     fx = w.fixtures
     pp.body = 0
     pp.travel_leg = ["a"] * 20
-    assert S.Query.budget(pp, S.View(pp.id, [], 12), fx.get("scene_budget"), fx) == 1, (
+    # Same View length as the control pair above, kept identical so this floor test and that
+    # comparison share one instrument. The assertion is on `max(1, b)`, which is independent of
+    # the View's length. Pre-existing; surfaced by step 7's rename.
+    # [JUSTIFIED: same instrument as the control pair above; the floor assertion ignores it]
+    assert decision.budget(pp, View(pp.id, [], 12), fx.get("scene_budget"), fx) == 1, (
         "the floor of 1 never fires — `max(1, b)` is unreachable, so H-70's stated floor is "
         "declared and untested")
 
@@ -2510,14 +2760,14 @@ def test_w17_the_budget_bounds_scenes_and_the_interaction_bound_is_separate():
         def choose(p, v, s, ask_budget):
             if p.id != "p_king":
                 return []
-            return [S.Scene(f"s{i}", p.id,
+            return [Scene(f"s{i}", p.id,
                             [P.Act_(w, p, "speak", key=f"{i}.{j}") for j in range(per)])
                     for i in range(n)]
         return choose
 
     # ---- over budget ON SCENES ----
-    with pytest.raises(S.Forbidden) as over:
-        S.SeasonDriver(_w()).season(scenes(b + 1, 1), None, P.SUBSIST)
+    with pytest.raises(Forbidden) as over:
+        SeasonDriver(_w()).season(scenes(b + 1, 1), None, P.SUBSIST)
     # THE PROPERTY, not the message (G3). `ShapeGap` stores `where`, so the two refusals are
     # distinguishable by their LAW rather than by a word in their prose — and a body that still
     # counted acts would print the word "scenes" just as happily.
@@ -2525,16 +2775,16 @@ def test_w17_the_budget_bounds_scenes_and_the_interaction_bound_is_separate():
     assert "scene" in str(over.value).lower(), f"the message lost its unit: {over.value}"
 
     # ---- and the SAME NUMBER of interactions, packed into a lawful number of scenes, PASSES ----
-    S.SeasonDriver(_w()).season(scenes(b, cap), None, P.SUBSIST)      # must not raise
+    SeasonDriver(_w()).season(scenes(b, cap), None, P.SUBSIST)      # must not raise
     assert b * cap > b + 1, (
         f"the fixture cannot demonstrate the ruling: {b} scenes x {cap} interactions is not more "
         f"than the {b + 1} acts the first arm refused, so 'more interactions, fewer scenes' is "
         "not being shown")
 
     # ---- too many interactions IN ONE scene: a DIFFERENT refusal, with a different law ----
-    with pytest.raises(S.Ungraded) as many:
-        S.SeasonDriver(_w()).season(scenes(1, cap + 1), None, P.SUBSIST)
-    assert isinstance(many.value, S.Ungraded) and not isinstance(over.value, S.Ungraded), (
+    with pytest.raises(Ungraded) as many:
+        SeasonDriver(_w()).season(scenes(1, cap + 1), None, P.SUBSIST)
+    assert isinstance(many.value, Ungraded) and not isinstance(over.value, Ungraded), (
         f"the two refusals are the same KIND ({type(over.value).__name__} / "
         f"{type(many.value).__name__}); a swept harness bound is `Ungraded` and a law is not")
     assert "interactions" in str(many.value), many.value
@@ -2551,14 +2801,14 @@ def test_w17_the_interaction_bound_flips_across_its_sweep_and_the_flip_is_printe
         w = _w()
         w.fixtures = w.fixtures.sweep("interactions_per_scene", bound)
         def choose(p, v, s, ask_budget):
-            return ([S.Scene("s0", p.id, [P.Act_(w, p, "speak", key=str(j)) for j in range(4)])]
+            return ([Scene("s0", p.id, [P.Act_(w, p, "speak", key=str(j)) for j in range(4)])]
                     if p.id == "p_king" else [])
         try:
-            S.SeasonDriver(w).season(choose, None, P.SUBSIST)
+            SeasonDriver(w).season(choose, None, P.SUBSIST)
             return "ACCEPTED"
-        except S.Ungraded as e:
+        except Ungraded as e:
             return "REFUSED" if "interactions" in str(e) else f"REFUSED-OTHER: {e}"
-        except S.ShapeGap as e:
+        except ShapeGap as e:
             return f"REFUSED-OTHER: {type(e).__name__}: {e}"
 
     got = {pt: run_at(None if pt == "unbounded" else pt) for pt in (1, 3, "unbounded")}
@@ -2594,23 +2844,23 @@ def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
     w = _w()
     fx = w.fixtures
     p = next(iter(w.persons.values()))
-    pr = S.Proposition("pr_pk", "OUGHT", "rec_writ", "x", True, 0)
+    pr = Proposition("pr_pk", "OUGHT", "rec_writ", "x", True, 0)
     w.propositions[pr.id] = pr
-    w.add_tenure(S.Tenure("t_pk", p.id, pr.id, "commit", since=0))
+    w.add_tenure(Tenure("t_pk", p.id, pr.id, "commit", since=0))
     # ⚠ A MULTI-REFERENT QUESTION, DELIBERATELY. With ONE referent every candidate shares a
     # subject, so `by_subject` is a no-op and is indistinguishable from `greedy` — correctly, but
     # then the sweep cannot tell the two arms apart and would report a real rule as inert. The
     # produced Q4 question carries one referent, so this builds a wider one.
-    assert len(S.questions_for(w, p)[0].referents) == 1, "the fixture changed; re-check the setup"
-    q = S.Question("q_pack", "need", ("rec_writ", "S", "p_low"))
-    v = S.View(p.id, [], fx.get("view_k"), q)
+    assert len(questions_for(w, p)[0].referents) == 1, "the fixture changed; re-check the setup"
+    q = Question("q_pack", "need", ("rec_writ", "S", "p_low"))
+    v = View(p.id, [], fx.get("view_k"), q)
     mint = lambda a, b, c: f"{a}:{b}:{c}"
 
     # ---- H-78: the rule changes how many interactions a season produces. ----
     counts, shapes, grouping = {}, {}, {}
-    for rule in sorted(S.SCENE_PACKING_RULES):
+    for rule in sorted(SCENE_PACKING_RULES):
         f2 = fx.sweep("scene_packing_rule", rule)
-        scenes = S.make_chooser(f2, mint)(p, v, S.Sensation(0), lambda: 5)
+        scenes = make_chooser(f2, mint)(p, v, Sensation(0), lambda: 5)
         counts[rule] = sum(len(sc.acts) for sc in scenes)
         shapes[rule] = [len(sc.acts) for sc in scenes]
         # ⚠ THE GROUPING, NOT THE SHAPE. `by_subject` and `greedy` produce the same SHAPE
@@ -2630,7 +2880,7 @@ def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
 
     # ---- H-77: `extended` is set, so the cost sweep can move the budget. ----
     f_greedy = fx.sweep("scene_packing_rule", "greedy")
-    scenes = S.make_chooser(f_greedy, mint)(p, v, S.Sensation(0), lambda: 5)
+    scenes = make_chooser(f_greedy, mint)(p, v, Sensation(0), lambda: 5)
     multi = [sc for sc in scenes if len(sc.acts) > 1]
     assert multi, f"no scene carries more than one interaction: {shapes} — `extended` can never " \
                   "be True and H-77's sweep is inert whatever the row says"
@@ -2813,7 +3063,7 @@ def test_w9_check3_every_fixture_read_resolves_to_a_register_site():
     # `reads` accumulates on it, so every earlier test in the session contributes — the first
     # version passed alone and failed in the suite, reporting other tests' fixtures as artifact
     # 2's fills. Snapshot and diff.
-    before = dict(S.DEFAULT_FIXTURES.reads)
+    before = dict(DEFAULT_FIXTURES.reads)
     w = HL.run(seasons=2, seed=0)["world"]
     read = sorted(k for k, n in w.fixtures.reads.items() if n > before.get(k, 0))
     assert read, "the run read no fixtures at all — this check cannot observe anything"
@@ -2831,9 +3081,9 @@ def test_w9_check3_every_fixture_read_resolves_to_a_register_site():
 def test_w9_check4_no_effect_lambda_and_no_roster():
     """§6.3 check 4: *`resolve` was called with no `effect` lambda, and `opening_set` with no
     roster.* Asserted over the SIGNATURES, so a caller cannot smuggle either back in."""
-    assert "roster" not in inspect.signature(S.Query.opening_set).parameters
-    assert "effect" not in inspect.signature(S.SeasonDriver.resolve).parameters
-    assert "effect" not in inspect.signature(S.SeasonDriver._fold).parameters
+    assert "roster" not in inspect.signature(opening_set).parameters
+    assert "effect" not in inspect.signature(SeasonDriver.resolve).parameters
+    assert "effect" not in inspect.signature(SeasonDriver._fold).parameters
     src = _code_only(files.HEADLESS_PY.read_text())
     assert "effect" not in src and "roster" not in src, (
         "headless.py mentions an effect or a roster — artifact 2 must not author either")
@@ -2861,14 +3111,14 @@ def test_w9_check4b_she_returned_at_most_budget_scenes():
     # width of 1 the packer returns at most `n_scenes` scenes by construction. It observed
     # nothing. `deliberate` is where the two bounds are enforced, so the falsifier plants a
     # violation there and requires the raise.
-    w2 = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("interactions_per_scene", 1))
+    w2 = HL.build_world(0, DEFAULT_FIXTURES.sweep("interactions_per_scene", 1))
 
     def over(p, v, s, ask_budget):
-        return ([S.Scene("s0", p.id, [P.Act_(w2, p, "speak", key=str(j)) for j in range(2)])]
+        return ([Scene("s0", p.id, [P.Act_(w2, p, "speak", key=str(j)) for j in range(2)])]
                 if p.id == HL.CARIN else [])
 
-    with pytest.raises(S.Ungraded) as caught:
-        S.SeasonDriver(w2).season(over, None, HL.subsistence)
+    with pytest.raises(Ungraded) as caught:
+        SeasonDriver(w2).season(over, None, HL.subsistence)
     assert "interactions" in str(caught.value), caught.value
 
 
@@ -2924,7 +3174,7 @@ def test_w9_check5_every_declared_exercises_verb_runs_or_is_recorded_not_assesse
     ran, unassessed, non_verb = [], [], []
     for r in rows:
         for token in r["exercises"]:
-            row = S.VERB_TABLE.get(token)
+            row = VERB_TABLE.get(token)
             if row is None:
                 # ⚠ THIS BRANCH SAID `continue  # checked below` AND NOTHING BELOW CHECKED THEM,
                 # so every row whose `exercises:` names only an H-id or an Event kind vanished
@@ -2972,10 +3222,10 @@ def _w4_run(seasons: int, seed: int = 0, condition: int | None = None):
     w = HL.build_world(seed)
     if condition is not None:
         list(w.sites.values())[0].condition = condition
-    d = S.SeasonDriver(w)
-    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     for _ in range(seasons):
-        d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+        d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                  None, HL.subsistence)
     return w
 
@@ -2995,7 +3245,7 @@ def test_w4_a_band_crossing_walks_back_to_the_wear_that_caused_it():
     crossings = [e for e in w.log if e.kind == "condition.band_crossed"]
     assert crossings, "no band edge was crossed — the fixture no longer reaches a floor"
     for c in crossings:
-        assert len(c.causes) == 1 and c.causes[0] != S.ROOT, (c.kind, c.causes)
+        assert len(c.causes) == 1 and c.causes[0] != ROOT, (c.kind, c.causes)
         ante = by_id.get(c.causes[0])
         assert ante is not None and ante.kind == "condition.worn", (
             f"a crossing's antecedent is {ante.kind if ante else None!r}, not the wear")
@@ -3015,7 +3265,7 @@ def test_w4_root_belongs_only_to_the_seed_and_a_clocks_genuine_first_emission():
     clock; it is a thing a witness deposited, and the deposit has an Event."""
     for seasons in (1, 2, 3, 4):
         w = _w4_run(seasons)
-        rooted = [e for e in w.log if list(e.causes) == [S.ROOT]]
+        rooted = [e for e in w.log if list(e.causes) == [ROOT]]
         kinds = sorted({e.kind for e in rooted})
         assert kinds == ["condition.worn"], (
             f"{seasons} season(s): {kinds} carry [ROOT]. Only a licensed clock's GENUINE FIRST "
@@ -3036,7 +3286,7 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
     on a row whose `emits:` Part D declares. Five were fixed; the sixth is `H-86`."""
     from ..harness import headless as HL
     w = HL.build_world(0)
-    w.step = S.Step.MATTER
+    w.step = Step.MATTER
     site = list(w.sites.values())[0]
 
     with pytest.raises(Forbidden, match="emitted nothing"):
@@ -3045,7 +3295,7 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
     with pytest.raises(Forbidden, match="does not declare"):
         w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
                 record_kind="Site", fieldname="condition", driver="Event",
-                emits="site.exploded", subject=site.id, causes=[S.ROOT])
+                emits="site.exploded", subject=site.id, causes=[ROOT])
     # S19.4's own guard, in `Event.__post_init__` — NOT a second copy in `write()`. The first
     # version of `W4` re-implemented it there, which is §8's rule broken one constructor apart.
     with pytest.raises(Forbidden, match="causes="):
@@ -3060,8 +3310,8 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
     # `headless.build_world` creates NO Records, so `rec` was unconditionally `None` and the write
     # never ran. Deleting the exemption from `write()` left all four `w4` tests green. A Record is
     # built here rather than hoped for. Found by the `W4` adversarial pass.
-    assert "Record.ttl" in S.roster("conditional_emission_rows")
-    rec = S.Record("rec_w4", "S", "writ", ttl=2)
+    assert "Record.ttl" in roster("conditional_emission_rows")
+    rec = Record("rec_w4", "S", "writ", ttl=2)
     w.records[rec.id] = rec
     w.write("ttl", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
             record_kind="Record", fieldname="ttl", driver="Event")
@@ -3073,13 +3323,13 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
     with pytest.raises(Forbidden, match="does not declare"):
         w.write("ttl", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
                 record_kind="Record", fieldname="ttl", driver="Event",
-                emits="record.vanished", subject=rec.id, causes=[S.ROOT])
+                emits="record.vanished", subject=rec.id, causes=[ROOT])
     # AND `subject=` IS MANDATORY WHEN EMITTING — the trace-label fallback was the value that
     # made every site's wear emit under the subject `"condition"`.
     with pytest.raises(Forbidden, match="no `subject="):
         w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
                 record_kind="Site", fieldname="condition", driver="Event",
-                emits="condition.worn", causes=[S.ROOT])
+                emits="condition.worn", causes=[ROOT])
 
 
 def test_w4_a_claims_decay_walks_back_to_the_act_that_was_witnessed():
@@ -3118,10 +3368,10 @@ def test_w4_a_refused_attempt_names_the_attempt_not_the_campaign_seed():
     `Act` with an obstacle is built here directly. Found by the `W4` adversarial pass."""
     from ..harness import headless as HL
     w = HL.build_world(0)
-    d = S.SeasonDriver(w)
+    d = SeasonDriver(w)
     pid = next(iter(w.persons))
     mult = w.fixtures.get("obstacle_refusal_multiple")
-    a = S.Act(id="act_refused", actor=pid, verb="work")
+    a = Act(id="act_refused", actor=pid, verb="work")
     a.obstacle, a.pool = mult * 10 + 1, 1        # Ob > multiple x Pool -> S27.4 refuses
     d.matter([])
     out = d.resolve([a], contest_max_depth=2)
@@ -3147,11 +3397,11 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
     from collections import Counter
     seen = {}
     for rate in (0, 5, 20):
-        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("claim_decay_per_season", rate))
-        d = S.SeasonDriver(w)
-        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        w = HL.build_world(0, DEFAULT_FIXTURES.sweep("claim_decay_per_season", rate))
+        d = SeasonDriver(w)
+        mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(3):
-            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                      None, HL.subsistence)
         confs = [c.confidence for p in w.persons.values() for c in p.ledger]
         seen[rate] = (Counter(e.kind for e in w.log)["claim.decayed"], min(confs), max(confs))
@@ -3171,12 +3421,12 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
 
 def _w6_run(mode: str, seasons: int = 3, seed: int = 0):
     from ..harness import headless as HL
-    w = HL.build_world(seed, S.DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
-    d = S.SeasonDriver(w)
-    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    w = HL.build_world(seed, DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     dep = 0
     for _ in range(seasons):
-        dep += d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+        dep += d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                         None, HL.subsistence)["deposits"]
     return w, dep
 
@@ -3211,9 +3461,9 @@ def test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls():
     # ⚠ `==`, NOT `>=`. The cap fix (`if` -> `while`: one deposit can mint several claims, so a
     # single pop left the ledger at 203 against `L = 200`) had NO FALSIFIER, because `>=` passes
     # 203 exactly as it passes 200. One character. Found by the `W6` adversarial pass.
-    assert max(got["total"][2]) == S.DEFAULT_FIXTURES.get("ledger_cap"), (
+    assert max(got["total"][2]) == DEFAULT_FIXTURES.get("ledger_cap"), (
         f"the control arm's fullest ledger is {max(got['total'][2])}, not exactly the "
-        f"`L = {S.DEFAULT_FIXTURES.get('ledger_cap')}` cap. Above it, the cap is not a cap; below "
+        f"`L = {DEFAULT_FIXTURES.get('ledger_cap')}` cap. Above it, the cap is not a cap; below "
         "it, the flood this item exists to bound has gone away and the item should be re-argued")
 
 
@@ -3223,10 +3473,10 @@ def test_w6_an_unrecognised_fan_out_mode_refuses_rather_than_falling_back():
     which is the failure mode that makes a sweep worse than no sweep."""
     from ..harness import headless as HL
     w = HL.build_world(0)
-    e = next(iter(w.log), None) or S.Event(S.H(w.world_seed, 0, "x", "t"), "speech.made", "x",
-                                           [], [S.ROOT], 0)
-    with pytest.raises(S.Unspecified, match="not one of"):
-        S.observers_for(w, e, "everyone_obviously", list(w.persons))
+    e = next(iter(w.log), None) or Event(H(w.world_seed, 0, "x", "t"), "speech.made", "x",
+                                           [], [ROOT], 0)
+    with pytest.raises(Unspecified, match="not one of"):
+        observers_for(w, e, "everyone_obviously", list(w.persons))
 
 
 def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
@@ -3240,22 +3490,22 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     # CONSTRUCTION, because the map is built by iterating the roster and raising on a missing
     # function; the failure it named raises at IMPORT, collecting as an error in all 126 tests
     # rather than as a failure here. Found by the `W6` adversarial pass.
-    meanings = S._ROSTERS["witness_channel_predicates"]["predicates"]
-    assert set(meanings) == set(S.WITNESS_CHANNELS), (
+    meanings = _ROSTERS["witness_channel_predicates"]["predicates"]
+    assert set(meanings) == set(WITNESS_CHANNELS), (
         f"a channel is named without a stated meaning, or vice versa: "
-        f"{set(meanings) ^ set(S.WITNESS_CHANNELS)}")
+        f"{set(meanings) ^ set(WITNESS_CHANNELS)}")
     # AND WHICH CHANNELS CAN ACTUALLY ADMIT ANYONE, WHICH IS THE THING THE FIRST VERSION ASSERTED
     # BY IMPLICATION AND NEVER MEASURED. Two of the five admit nobody in the world the fold can
     # currently drive, and that is published rather than left for a reader to discover.
     from ..harness import headless as HL
     w = HL.build_world(0)
-    d = S.SeasonDriver(w)
-    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     for _ in range(2):
-        d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()), None, HL.subsistence)
+        d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()), None, HL.subsistence)
     everyone = list(w.persons)
     fires = {c: sum(1 for e in w.log if any(fn(w, e, pid) for pid in everyone))
-             for c, fn in S.CHANNEL_PREDICATES.items()}
+             for c, fn in CHANNEL_PREDICATES.items()}
     print(f"\n  W6 — events on which each channel admits at least one person: {fires}")
     assert fires["co_located"], "the presence channel admits nobody — it is broken closed"
     inert = sorted(c for c, n in fires.items() if not n)
@@ -3299,23 +3549,23 @@ def _r7_witness_claims(w) -> dict:
 
 def _r7_run(mode: str, seasons: int = 2, seed: int = 0):
     from ..harness import headless as HL
-    w = HL.build_world(seed, S.DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
-    d = S.SeasonDriver(w)
-    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    w = HL.build_world(seed, DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     dep = 0
     for _ in range(seasons):
-        dep += d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+        dep += d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                         None, HL.subsistence)["deposits"]
     return w, d, dep
 
 
 def test_r7_the_shipped_default_is_not_the_echo_model():
     """The flip itself, asserted against the roster rather than against a literal here."""
-    assert S.DEFAULT_FIXTURES.get("fan_out_mode") != "total", (
+    assert DEFAULT_FIXTURES.get("fan_out_mode") != "total", (
         "the shipped fan-out is `total`, which is `R7`'s echo model at the deposit layer: every "
         "person holds every Event, so nothing is hideable and there is no absence, secret, lie or "
         "rumour. `R7` ruled the architecture model — *legitimacy falls where the news has reached*")
-    assert S.DEFAULT_FIXTURES.get("fan_out_mode") in ("presence_only", "all_five"), (
+    assert DEFAULT_FIXTURES.get("fan_out_mode") in ("presence_only", "all_five"), (
         "the default left `H-33`'s declared sweep. The channel list is an arm set and step 1 "
         "forbids editing it; a fourth point needs the register moved first")
 
@@ -3338,7 +3588,7 @@ def test_r7_two_persons_hold_different_things_and_at_total_they_cannot():
         "channel is being consulted on the control arm or a non-witness deposit has leaked into "
         f"`_r7_witness_claims` — it filters on the logged Event kinds {sorted({e.kind for e in ctl.log})}")
 
-    w, _, dep = _r7_run(S.DEFAULT_FIXTURES.get("fan_out_mode"))
+    w, _, dep = _r7_run(DEFAULT_FIXTURES.get("fan_out_mode"))
     sets = _r7_witness_claims(w)
     ps = sorted(sets)
     differ = [(a, b, len(sets[a] ^ sets[b]))
@@ -3392,8 +3642,8 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
         # Comparable with `test_w6_h33s_declared_sweep_runs_and_the_deposit_count_falls` above.
         # [GROUNDED: three seasons is `W6`'s own H-33 sweep length]
         w, d, dep = _r7_run(mode, seasons=3)
-        w.step = S.Step.DELIBERATE
-        qs = sum(len(S.questions_for(w, p)) for p in w.persons.values())
+        w.step = Step.DELIBERATE
+        qs = sum(len(questions_for(w, p)) for p in w.persons.values())
         got[mode] = (dep, sorted(len(p.ledger) for p in w.persons.values()), qs,
                      sorted({(a.actor, a.verb) for a in getattr(d, "resolved", [])}))
     print("\n  M-6 — (deposits, ledgers, questions, acts) by arm:")
@@ -3403,10 +3653,10 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # LINK 1 — the fan. It must actually bite, or nothing below is about the narrowing.
     assert got["all_five"][0] * 5 < got["total"][0], (
         f"the shipped arm deposits within 5x of `total`: {got}. Then the narrowing is cosmetic")
-    assert max(got["total"][1]) == S.DEFAULT_FIXTURES.get("ledger_cap"), (
+    assert max(got["total"][1]) == DEFAULT_FIXTURES.get("ledger_cap"), (
         f"the control's fullest ledger is {max(got['total'][1])}, not the cap — the flood this "
         "flip relieves has gone away on its own and the item should be re-argued")
-    assert max(got["all_five"][1]) < S.DEFAULT_FIXTURES.get("ledger_cap"), (
+    assert max(got["all_five"][1]) < DEFAULT_FIXTURES.get("ledger_cap"), (
         f"the shipped arm still pins a ledger at the cap: {got['all_five'][1]}")
 
     # LINK 2 — claims to questions. THIS is where `presence_only` pays and `all_five` does not,
@@ -3448,16 +3698,16 @@ def test_governance_scale_is_a_rung_kind_and_is_crossed_with_the_stratum():
     with three corpus cases that wanted it, and `H-21` completes it: *"a faction's treasury is
     matter at the rung or office that holds it."* Governance above the person is a PERSON HOLDING
     AN OFFICE acting at a rung."""
-    scales = {r.scale for r in S.VERB_TABLE.values()}
-    assert scales <= set(S.RUNG_KINDS), (
-        f"a verb's scale is not a rung kind: {sorted(scales - set(S.RUNG_KINDS))}")
-    assert "faction" not in S.RUNG_KINDS, (
+    scales = {r.scale for r in VERB_TABLE.values()}
+    assert scales <= set(RUNG_KINDS), (
+        f"a verb's scale is not a rung kind: {sorted(scales - set(RUNG_KINDS))}")
+    assert "faction" not in RUNG_KINDS, (
         "`faction` has become a rung kind. `ARCHITECTURE_V2.md:93` REFUSES a faction acting as an "
         "actor at `L1`; if that has been overturned, this test is the wrong place to find out")
     # THE AXES ARE GENUINELY CROSSED: one stratum spans several scales, and one scale spans
     # several strata. Either alone would mean `scale` is just `stratum` under another name.
     by_stratum, by_scale = {}, {}
-    for v, r in S.VERB_TABLE.items():
+    for v, r in VERB_TABLE.items():
         by_stratum.setdefault(r.stratum, set()).add(r.scale)
         by_scale.setdefault(r.scale, set()).add(r.stratum)
     assert any(len(v) > 1 for v in by_stratum.values()), (
@@ -3484,7 +3734,7 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
     `chronicle`, two of `W6`'s five witness channels, could never fire: both need a binding
     decision, and no binding decision could happen."""
     w = P.tiny_world()
-    d = S.SeasonDriver(w)
+    d = SeasonDriver(w)
     duke = "p_high"
     assert any(t.subject == duke and t.object == "off_duke" and t.live for t in w.tenures)
     # ⚠ A HARNESS FIXTURE, AND A REAL GAP IT EXPOSES. Part E requires *"the office's CONFERRAL
@@ -3507,11 +3757,11 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
         # eligibility gate while claiming to test the slice. `off_dicastery` is unheld, which is
         # exactly what `confer`'s 1-per-object precondition requires.
         acts = [
-            S.Act(id="g_confer", actor=duke, verb="confer",
+            Act(id="g_confer", actor=duke, verb="confer",
                   payload={"office": "off_dicastery", "to": "p_mid"}),
-            S.Act(id="g_convene", actor=duke, verb="convene",
+            Act(id="g_convene", actor=duke, verb="convene",
                   payload={"venue": "S", "when": w.tick + 1}),
-            S.Act(id="g_dispatch", actor=duke, verb="dispatch",
+            Act(id="g_dispatch", actor=duke, verb="dispatch",
                   payload={"subject": "p_low"}),
         ]
         made.extend(acts)
@@ -3529,10 +3779,10 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
     assert "order.given" in kinds, f"`dispatch` gave no order: {sorted(kinds)}"
     # AND THE SCALE IS CARRIED, not merely declared: each of these reaches a rung above the person.
     for v in ("confer", "convene"):
-        assert S.VERB_TABLE[v].scale == "settlement", S.VERB_TABLE[v].scale
-    assert S.VERB_TABLE["dispatch"].scale == "territory"
+        assert VERB_TABLE[v].scale == "settlement", VERB_TABLE[v].scale
+    assert VERB_TABLE["dispatch"].scale == "territory"
     print(f"\n  governance slice — emitted {sorted(kinds)}; "
-          f"{len(S.resolvable_verbs())} of {len(S.VERB_TABLE)} verbs now execute")
+          f"{len(resolvable_verbs())} of {len(VERB_TABLE)} verbs now execute")
 
 
 def _seat(w, person, office_id, post, rung, remit=("issue", "revoke"), first=False,
@@ -3546,8 +3796,8 @@ def _seat(w, person, office_id, post, rung, remit=("issue", "revoke"), first=Fal
     # `faction` defaults to Crown here because the governance fixtures model the REALM ladder
     # Jordan ruled on (king / duke / clerk), which is the Crown's. A test that needs a different
     # belonging passes one; `Office` refuses anything off the roster either way (`H-99`).
-    w.offices[office_id] = S.Office(office_id, post, rung, list(remit), faction=faction)
-    ten = S.Tenure(f"t_{office_id}_{person}", person, office_id, "hold", 0)
+    w.offices[office_id] = Office(office_id, post, rung, list(remit), faction=faction)
+    ten = Tenure(f"t_{office_id}_{person}", person, office_id, "hold", 0)
     w.add_tenure(ten)
     if first:
         # ⚠ THROUGH THE OWNER, NOT THROUGH `w.tenures`, WHICH IS A READ-ONLY VIEW (S15.1, `W5`).
@@ -3578,27 +3828,27 @@ def test_the_title_ladder_is_total_over_the_rungs_and_rank_is_the_rung_ordinal()
     here and live in `_req_revoke`. Adding `Steward: duchy` made an office posted `Steward` a
     title, flipping its revocation rule, with the whole suite green. Found by the governance-canon
     pass; `values:` is deleted and this reads the mapping the code reads."""
-    domains = dict(S.TITLE_DOMAINS)
+    domains = dict(TITLE_DOMAINS)
     assert domains and all(domains.values()), (
         f"a title governs no rung: {[t for t, d in domains.items() if not d]}")
-    assert set(domains.values()) == set(S.RUNG_KINDS), (
+    assert set(domains.values()) == set(RUNG_KINDS), (
         f"the ladder is not total — rungs with no title: "
-        f"{sorted(set(S.RUNG_KINDS) - set(domains.values()))}")
+        f"{sorted(set(RUNG_KINDS) - set(domains.values()))}")
     # rank IS the rung ordinal, in both directions
     for ttl, dom in domains.items():
-        assert S.title_rank(ttl) == list(S.RUNG_KINDS).index(dom), (ttl, dom)
-    assert S.title_rank("King") > S.title_rank("Duke") > S.title_rank("Count") \
-        > S.title_rank("Lord") > S.title_rank("Mayor") > S.title_rank("Individual")
-    assert S.title_domain("Dicastery") is None and S.title_rank("Dicastery") == -1, (
+        assert title_rank(ttl) == list(RUNG_KINDS).index(dom), (ttl, dom)
+    assert title_rank("King") > title_rank("Duke") > title_rank("Count") \
+        > title_rank("Lord") > title_rank("Mayor") > title_rank("Individual")
+    assert title_domain("Dicastery") is None and title_rank("Dicastery") == -1, (
         "a non-title post reads as a rank; then an ordinary office confers governing authority")
     # ⚠ AND THE MAPPING MUST REFUSE WHEN ABSENT, NOT DEFAULT. `title_domain` read
     # `_ROSTERS.get("titles") or {}`, so deleting the roster returned `None` for every post and
     # `_req_revoke` fell back to purview-for-everything — a guard failing OPEN into the exact
     # behaviour Jordan's fourth message forbids. `roster_map` is the single owner of the refusal.
-    with pytest.raises(S.Unspecified):
-        S.roster_map("titles_that_do_not_exist", "domains")
-    with pytest.raises(S.Unspecified):
-        S.roster_map("titles", "a_key_that_is_not_there")
+    with pytest.raises(Unspecified):
+        roster_map("titles_that_do_not_exist", "domains")
+    with pytest.raises(Unspecified):
+        roster_map("titles", "a_key_that_is_not_there")
 
 
 def test_purview_is_containment_and_stops_at_the_holders_own_domain():
@@ -3621,20 +3871,20 @@ def test_purview_is_containment_and_stops_at_the_holders_own_domain():
     assert w.offices["off_duke"].post == "Duke" and w.offices["off_duke"].rung == "D"
     assert w.rungs["D"].kind == "duchy" and w.rungs["R"].kind == "realm"
     for inside in ("D", "S", "Hh"):
-        assert S.under_purview(w, duke, inside), (
+        assert under_purview(w, duke, inside), (
             f"{inside} ({w.rungs[inside].kind}) is inside the duchy and is not under the duke")
-    assert not S.under_purview(w, duke, "R"), (
+    assert not under_purview(w, duke, "R"), (
         "the REALM is under the duke's purview — purview is reaching upward, so a duke could act "
         "on the king's domain")
-    assert not S.under_purview(w, "p_low", "S"), (
+    assert not under_purview(w, "p_low", "S"), (
         "a person holding no title has purview; then governing authority is not a title at all")
 
     # ⚠ THE RANK CONJUNCT, MADE OBSERVABLE. An ORDINARY office is not a title, so seating someone
     # on one at the duchy confers no purview over anything inside it. Without this case the title
     # check in `under_purview` is decorative and the suite cannot tell.
     _seat(w, "p_mid", "off_clerk", "Dicastery", "D")
-    assert S.title_domain("Dicastery") is None, "the fixture stopped being a non-title"
-    assert not S.under_purview(w, "p_mid", "S"), (
+    assert title_domain("Dicastery") is None, "the fixture stopped being a non-title"
+    assert not under_purview(w, "p_mid", "S"), (
         "an ORDINARY office at the duchy confers purview over the settlement inside it — then "
         "rank is not part of the rule and any office-holder governs everything beneath them")
 
@@ -3644,15 +3894,15 @@ def test_purview_is_containment_and_stops_at_the_holders_own_domain():
     w2 = P.tiny_world()
     _seat(w2, "p_high", "off_king_cluster", "King", None, first=True)
     for inside in ("D", "S", "Hh"):
-        assert S.under_purview(w2, "p_high", inside), (
+        assert under_purview(w2, "p_high", inside), (
             f"the duke lost purview over {inside} by ALSO being made a King with a null rung — "
             "the seat lookup is order-dependent and stops on the first title it meets")
     # and a second, non-null title must ADD purview rather than replace it
     w3 = P.tiny_world()
-    w3.rungs["P2"] = S.Rung("P2", "province")
-    w3.add_tenure(S.Tenure("t_p2", "P2", "R", "contain", 0))
+    w3.rungs["P2"] = Rung("P2", "province")
+    w3.add_tenure(Tenure("t_p2", "P2", "R", "contain", 0))
     _seat(w3, "p_high", "off_count", "Count", "P2", first=True)
-    assert S.under_purview(w3, "p_high", "P2") and S.under_purview(w3, "p_high", "S"), (
+    assert under_purview(w3, "p_high", "P2") and under_purview(w3, "p_high", "S"), (
         "holding a county elsewhere cost the duke his duchy (or the reverse) — purview is a "
         "DISJUNCTION over every title held, not a lookup of one seat")
 
@@ -3662,7 +3912,7 @@ def test_purview_is_containment_and_stops_at_the_holders_own_domain():
     # Tenure rather than as a field. Term-matching where the concept was meant, which is this
     # repository's signature error. The concept check: purview and holdings must be able to
     # DISAGREE, and here they do — the duke governs the settlement and owns none of it.
-    assert S.under_purview(w, duke, "S") and not S.in_holdings(w, duke, "S"), (
+    assert under_purview(w, duke, "S") and not in_holdings(w, duke, "S"), (
         "governing authority and holdings answer alike here, so the two are one relation wearing "
         "two names and `H-90`'s distinction is not modelled")
     assert not hasattr(w, "sovereign"), (
@@ -3692,21 +3942,21 @@ def test_revoking_a_title_needs_holdings_and_revoking_an_office_needs_purview():
     w.offices["off_duke"].revocation = "the crown's writ (harness fixture)"
     king, duke_office = "p_king", "off_duke"
     _seat(w, king, "off_king", "King", "R")
-    assert S.title_domain(w.offices[duke_office].post) is not None, "the target is not a title"
-    act = S.Act(id="k1", actor=king, verb="revoke", payload={"office": duke_office})
+    assert title_domain(w.offices[duke_office].post) is not None, "the target is not a title"
+    act = Act(id="k1", actor=king, verb="revoke", payload={"office": duke_office})
 
     # THE DISCRIMINATOR: he HAS the governing authority, and it is not enough.
-    assert S.under_purview(w, king, "D") and S.highest_title_rank(w, king) > S.title_rank("Duke"), (
+    assert under_purview(w, king, "D") and highest_title_rank(w, king) > title_rank("Duke"), (
         "the king has no authority over the duchy in this world, so the negative below is vacuous "
         "— it would pass under the purview-only rule this ruling forbids")
-    assert not S.in_holdings(w, king, "D")
-    assert not S.REQUIRES_PREDICATES["revoke"](w, act), (
+    assert not in_holdings(w, king, "D")
+    assert not REQUIRES_PREDICATES["revoke"](w, act), (
         "the king can revoke the duke's TITLE without holding the duchy — purview is standing in "
         "for holdings, which is the reading this ruling forbids")
     # THE POSITIVE: the same act, once the duchy is in his holdings.
-    w.add_tenure(S.Tenure("t_land", king, "D", "hold", 0))
-    assert S.in_holdings(w, king, "D") and not S.in_holdings(w, king, "S")
-    assert S.REQUIRES_PREDICATES["revoke"](w, act), (
+    w.add_tenure(Tenure("t_land", king, "D", "hold", 0))
+    assert in_holdings(w, king, "D") and not in_holdings(w, king, "S")
+    assert REQUIRES_PREDICATES["revoke"](w, act), (
         "the duchy is in the king's holdings and he still cannot revoke the title")
 
     # ⚠ AND HOLDINGS ALONE MUST NOT BE ENOUGH EITHER — the mirror defect. The first conjunction
@@ -3721,16 +3971,16 @@ def test_revoking_a_title_needs_holdings_and_revoking_an_office_needs_purview():
     # three concepts in one world, and it is what makes the purview term load-bearing.
     w4 = P.tiny_world()
     w4.offices["off_duke"].revocation = "the crown's writ (harness fixture)"
-    w4.rungs["R2"] = S.Rung("R2", "realm")
+    w4.rungs["R2"] = Rung("R2", "realm")
     _seat(w4, "p_mid", "off_foreign_king", "King", "R2")
-    w4.add_tenure(S.Tenure("t_foreign_land", "p_mid", "D", "hold", 0))
-    assert S.in_holdings(w4, "p_mid", "D"), "the fixture does not hold the duchy; the case is moot"
-    assert S.highest_title_rank(w4, "p_mid") > S.title_rank("Duke"), (
+    w4.add_tenure(Tenure("t_foreign_land", "p_mid", "D", "hold", 0))
+    assert in_holdings(w4, "p_mid", "D"), "the fixture does not hold the duchy; the case is moot"
+    assert highest_title_rank(w4, "p_mid") > title_rank("Duke"), (
         "the foreign king does not outrank the duke, so RANK would refuse him and the purview "
         "term would again decide nothing — the same defect this case exists to close")
-    assert not S.under_purview(w4, "p_mid", "D"), "the foreign king governs the duchy after all"
-    assert not S.REQUIRES_PREDICATES["revoke"](
-        w4, S.Act(id="c1", actor="p_mid", verb="revoke", payload={"office": "off_duke"})), (
+    assert not under_purview(w4, "p_mid", "D"), "the foreign king governs the duchy after all"
+    assert not REQUIRES_PREDICATES["revoke"](
+        w4, Act(id="c1", actor="p_mid", verb="revoke", payload={"office": "off_duke"})), (
         "a foreign king unmade a Duke by owning his duchy — holdings is standing in for governing "
         "authority, which is the same conflation in the opposite direction")
 
@@ -3740,21 +3990,21 @@ def test_revoking_a_title_needs_holdings_and_revoking_an_office_needs_purview():
     # higher, never equal.
     w5 = P.tiny_world()
     w5.offices["off_duke"].revocation = "the crown's writ (harness fixture)"
-    w5.add_tenure(S.Tenure("t_selfland", "p_high", "D", "hold", 0))
-    assert S.under_purview(w5, "p_high", "D") and S.in_holdings(w5, "p_high", "D")
-    assert not S.REQUIRES_PREDICATES["revoke"](
-        w5, S.Act(id="s1", actor="p_high", verb="revoke", payload={"office": "off_duke"})), (
+    w5.add_tenure(Tenure("t_selfland", "p_high", "D", "hold", 0))
+    assert under_purview(w5, "p_high", "D") and in_holdings(w5, "p_high", "D")
+    assert not REQUIRES_PREDICATES["revoke"](
+        w5, Act(id="s1", actor="p_high", verb="revoke", payload={"office": "off_duke"})), (
         "the duke revoked his own title; equal rank is not excluded and the ladder decides nothing")
 
     # AND AN ORDINARY OFFICE TAKES THE OTHER RULE: purview, no holding required.
     w2 = P.tiny_world()
     w2.offices["off_dicastery"].revocation = "the duke's writ (harness fixture)"
     w2.offices["off_dicastery"].rung = "S"          # a settlement inside the duchy
-    w2.add_tenure(S.Tenure("t_dic", "p_mid", "off_dicastery", "hold", 0))
-    assert S.title_domain(w2.offices["off_dicastery"].post) is None, "the target IS a title"
-    assert not S.in_holdings(w2, "p_high", "S"), "the duke holds the settlement; the test is moot"
-    assert S.REQUIRES_PREDICATES["revoke"](
-        w2, S.Act(id="d1", actor="p_high", verb="revoke",
+    w2.add_tenure(Tenure("t_dic", "p_mid", "off_dicastery", "hold", 0))
+    assert title_domain(w2.offices["off_dicastery"].post) is None, "the target IS a title"
+    assert not in_holdings(w2, "p_high", "S"), "the duke holds the settlement; the test is moot"
+    assert REQUIRES_PREDICATES["revoke"](
+        w2, Act(id="d1", actor="p_high", verb="revoke",
                   payload={"office": "off_dicastery"})), (
         "the duke cannot revoke an ordinary office in his own duchy — the holdings rule has "
         "leaked onto offices, where the ruling asks only for purview")
@@ -3777,13 +4027,13 @@ def test_the_revocation_branch_executes_in_the_fold_and_not_only_as_a_predicate(
     w = P.tiny_world()
     w.offices["off_dicastery"].revocation = "the duke's writ (harness fixture)"
     w.offices["off_dicastery"].rung = "S"
-    w.add_tenure(S.Tenure("t_dic", "p_mid", "off_dicastery", "hold", 0))
+    w.add_tenure(Tenure("t_dic", "p_mid", "off_dicastery", "hold", 0))
     w.offices["off_duke"].remit_acts = list(w.offices["off_duke"].remit_acts) + ["revoke"]
-    act = S.Act(id="f1", actor="p_high", verb="revoke", payload={"office": "off_dicastery"})
+    act = Act(id="f1", actor="p_high", verb="revoke", payload={"office": "off_dicastery"})
     before = [t.id for t in w.tenures if t.kind == "hold" and t.object == "off_dicastery" and t.live]
     assert before, "the fixture office is unheld; the fold would have nothing to close"
-    w.step = S.Step.RESOLVE
-    events = S.SeasonDriver(w).resolve([act])
+    w.step = Step.RESOLVE
+    events = SeasonDriver(w).resolve([act])
     kinds = [e.kind for e in events]
     assert "attempt.refused" not in kinds, (
         f"the fold refused a revocation whose preconditions all hold: {kinds}")
@@ -3846,10 +4096,10 @@ def _ten_seasons(w, seasons=10, verbs=None):
     and a store movement was attributed to one of them by reading. Suppressing one verb re-runs
     the identical world with one variable removed, which is the only way to say which moved it
     (§0.1 point 4). `None` means the full set, so the measured arm is unchanged."""
-    d = S.SeasonDriver(w)
-    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = S.make_chooser(w.fixtures, mint,
-                        verbs=S.resolvable_verbs() if verbs is None else verbs)
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    ch = make_chooser(w.fixtures, mint,
+                        verbs=resolvable_verbs() if verbs is None else verbs)
     minted = []
     def spy(p, v, sc, ask):
         out = ch(p, v, sc, ask)
@@ -3874,8 +4124,8 @@ def test_w8_matter_draws_before_it_produces_which_is_353s_stated_order():
     Asserted on the EMITTED ORDER rather than on the source, because the source is what a reader
     checks and the log is what ran."""
     w = P.tiny_world()
-    d = S.SeasonDriver(w)
-    w.step = S.Step.MATTER
+    d = SeasonDriver(w)
+    w.step = Step.MATTER
     evs = d.matter([])
     order = [(e.kind, e.subject) for e in evs if e.kind in ("stores.changed", "yield.taken")]
     assert order, f"MATTER emitted no economy events at all: {[e.kind for e in evs]}"
@@ -3900,10 +4150,10 @@ def test_w8_a_worn_site_produces_less_and_a_dead_one_produces_nothing():
         w = P.tiny_world()
         for st in w.sites.values():
             st.condition = cond
-        d = S.SeasonDriver(w); w.step = S.Step.MATTER
+        d = SeasonDriver(w); w.step = Step.MATTER
         d.matter([])
         return sum(getattr(w.rungs["S"], "yield").values())
-    full = produced(w0 := S.DEFAULT_FIXTURES.get("condition_scale"))
+    full = produced(w0 := DEFAULT_FIXTURES.get("condition_scale"))
     half = produced(w0 // 2)
     dead = produced(0)
     assert full > half > 0, f"a worn site did not produce less: full={full} half={half}"
@@ -3919,17 +4169,17 @@ def test_w8_the_none_arm_is_a_real_control_and_the_loader_refuses_it_as_a_defaul
     refuses an all-empty table: an economy with no source would otherwise pass every structural
     test in this file while meaning nothing, which is the dead-carrier defect one noun along."""
     w = P.tiny_world()
-    d = S.SeasonDriver(w); w.step = S.Step.MATTER
-    saved = dict(S.SITE_YIELD)
+    d = SeasonDriver(w); w.step = Step.MATTER
+    saved = dict(SITE_YIELD)
     try:
-        for k in S.SITE_YIELD:
-            S.SITE_YIELD[k] = {}
+        for k in SITE_YIELD:
+            SITE_YIELD[k] = {}
         d.matter([])
         assert not getattr(w.rungs["S"], "yield"), (
             "the `none` arm still produced; then the control cannot break the claim")
     finally:
-        S.SITE_YIELD.clear(); S.SITE_YIELD.update(saved)
-    assert sum(len(v) for v in S.SITE_YIELD.values()), "the restore lost the declared table"
+        SITE_YIELD.clear(); SITE_YIELD.update(saved)
+    assert sum(len(v) for v in SITE_YIELD.values()), "the restore lost the declared table"
 
 
 def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
@@ -3971,7 +4221,7 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
       * `move` IS NOT A CAUSE, and the plausible mechanism for it is refuted rather than
         dismissed: an extra eater seated at `S` would draw 2 per season (grain's subsistence
         weight), which is the right order of magnitude for the retracted number. Measured:
-        `Query.presence(w, "S")` is exactly `['p_high']` in every season of every arm, and
+        `world_q.presence(w, "S")` is exactly `['p_high']` in every season of every arm, and
         suppressing `move` leaves the settlement at **356** — unchanged.
 
         ⚠ **NARROWED 2026-09-07 BY `R7`, AND THE LAST CLAUSE IS THE ONE THAT WENT.** Off `total`
@@ -4013,8 +4263,8 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
         f"NONE of {len(minted)} minted acts carries an operand beyond `subject` — `H-94` has "
         "re-opened and `transfer` is back to being refused for want of a `kind` it cannot carry")
     carried = {k for a in minted for k in (a.payload or {})}
-    assert carried <= set(S.REQUIRES_OPERANDS) | {"subject"}, (
-        f"a minted act carries {sorted(carried - set(S.REQUIRES_OPERANDS) - {'subject'})}, which "
+    assert carried <= set(REQUIRES_OPERANDS) | {"subject"}, (
+        f"a minted act carries {sorted(carried - set(REQUIRES_OPERANDS) - {'subject'})}, which "
         "is outside the closed operand vocabulary — coining an operand is filling `H-94` by "
         "keyword argument, which is what the roster exists to refuse")
     # AND `changes` IS STILL EMPTY, which is the OTHER half and is `H-63`, not this item: Part E's
@@ -4036,14 +4286,14 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
                   if a.verb == "transfer"
                   and (a.payload or {}).get("from") == "S"
                   and (a.payload or {}).get("to") != "S"
-                  and any(S.H(w.world_seed, t, a.actor, f"transfer.made:{a.id}") in ids
+                  and any(H(w.world_seed, t, a.actor, f"transfer.made:{a.id}") in ids
                           for t in range(len(hist) + 1)))
     # ASSERT THAT IT ASSERTED (§0.1 point 2): with nothing drained the equality below is 0 == 0
     # and observes nothing at all.
     assert drained > 0, (
         "no granted `transfer` moved grain OUT of `S`, so the two equalities below are vacuous "
         "and this run can no longer say what moved the settlement's larder")
-    no_transfer, _, _ = _ten_seasons(P.tiny_world(), verbs=S.resolvable_verbs() - {"transfer"})
+    no_transfer, _, _ = _ten_seasons(P.tiny_world(), verbs=resolvable_verbs() - {"transfer"})
     assert no_transfer[-1]["S"].get("grain", 0) - settle[-1] == drained, (
         f"the settlement ends at {settle[-1]} and at "
         f"{no_transfer[-1]['S'].get('grain', 0)} with `transfer` suppressed, a difference of "
@@ -4060,21 +4310,21 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     #     all_five no_move 357    1       |  358 - 1 = 357  ✔
     # **`transfer` is still the SOLE PROXIMATE CAUSE of the larder — the end state is the baseline
     # minus that arm's own drain, exactly, in all four cells.** And the mechanism the docstring
-    # refutes is still refuted: `Query.presence(w, "S")` is `('p_high',)` in every season of every
+    # refutes is still refuted: `world_q.presence(w, "S")` is `('p_high',)` in every season of every
     # arm, measured, so no extra eater is seated and `move` moves nothing by subsistence.
     # WHAT IS NEW is the CHANNEL by which suppressing `move` changes the number at all: it frees
     # scene budget, so different transfers are granted (3 out of `S` with `move` live, 1 without).
     # That is competition for slots, not a second economy — so the assertion moves from "the
     # number does not change" (which was true of one arm by accident) to "whatever the number is,
     # `transfer` accounts for all of it", which is the claim the docstring actually makes.
-    no_move, _, no_move_d = _ten_seasons(P.tiny_world(), verbs=S.resolvable_verbs() - {"move"})
+    no_move, _, no_move_d = _ten_seasons(P.tiny_world(), verbs=resolvable_verbs() - {"move"})
     nm_ids = {e.id for e in no_move_d.w.log}
     nm_drained = sum(int((a.payload or {}).get("amount", 0))
                      for a in no_move_d.resolved
                      if a.verb == "transfer"
                      and (a.payload or {}).get("from") == "S"
                      and (a.payload or {}).get("to") != "S"
-                     and any(S.H(no_move_d.w.world_seed, t, a.actor, f"transfer.made:{a.id}")
+                     and any(H(no_move_d.w.world_seed, t, a.actor, f"transfer.made:{a.id}")
                              in nm_ids for t in range(len(hist) + 1)))
     assert no_transfer[-1]["S"].get("grain", 0) - no_move[-1]["S"].get("grain", 0) == nm_drained, (
         f"with `move` suppressed the settlement ends at {no_move[-1]['S'].get('grain', 0)} against "
@@ -4085,8 +4335,8 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
         "the docstring rather than re-pinning this number")
     # AND THE MECHANISM THE DOCSTRING REFUTES STAYS REFUTED, asserted rather than recited: an extra
     # eater at `S` would draw 2 a season, which is the order of magnitude of every delta here.
-    assert {tuple(sorted(S.Query.presence(no_move_d.w, "S")))} == {("p_high",)}, (
-        f"presence at `S` is {sorted(S.Query.presence(no_move_d.w, 'S'))}, not just `p_high` — "
+    assert {tuple(sorted(world_q.presence(no_move_d.w, "S")))} == {("p_high",)}, (
+        f"presence at `S` is {sorted(world_q.presence(no_move_d.w, 'S'))}, not just `p_high` — "
         "`move` HAS seated a second eater and the subsistence mechanism the docstring rules out "
         "is live after all — which would make the budget-competition account above wrong, not "
         "merely incomplete")
@@ -4105,8 +4355,8 @@ def test_w8_work_emits_a_success_while_repairing_nothing():
     w = P.tiny_world()
     site = w.sites["site_seam"]
     before = site.condition
-    d = S.SeasonDriver(w); w.step = S.Step.RESOLVE
-    evs = d.resolve([S.Act(id="wk", actor="p_low", verb="work", payload={"site": site.id})])
+    d = SeasonDriver(w); w.step = Step.RESOLVE
+    evs = d.resolve([Act(id="wk", actor="p_low", verb="work", payload={"site": site.id})])
     assert [e.kind for e in evs] == ["site.worked"], [e.kind for e in evs]
     assert site.condition == before, (
         f"`work` moved condition {before} -> {site.condition} from an act declaring no delta; "
@@ -4136,18 +4386,18 @@ def test_no_person_can_choose_a_governance_verb_and_h71_is_why():
     # is the one governance verb a person can choose, and it is not in this slice (it has no
     # predicate and no effect). Scoping to the remit-only rows is what makes the assertion about
     # `H-71` rather than about `binding_decision`.
-    gov = [v for v, r in S.VERB_TABLE.items()
+    gov = [v for v, r in VERB_TABLE.items()
            if r.stratum == "binding_decision"
            and all(alt.startswith("remit:") for alt in r.eligibility)]
     assert len(gov) >= 7, f"only {len(gov)} remit-only governance verbs; the roster has moved"
-    offered = [v for v in gov if S.person_side_eligible(duke, S.VERB_TABLE[v])]
+    offered = [v for v in gov if person_side_eligible(duke, VERB_TABLE[v])]
     assert not offered, (
         f"a person can now choose {offered} — `H-71` has closed, and the governance slice's claim "
         "that its verbs 'run' is finally true of a deliberating person rather than only of the "
         "fold. Re-read the slice's note and this test's docstring together before deleting either")
     # AND THE FOUR ARE IN THE FOLD'S SET, which is the half that DOES work — the two facts
     # together are the honest statement of where the slice stands.
-    assert {"confer", "revoke", "dispatch", "convene"} <= S.resolvable_verbs(), (
+    assert {"confer", "revoke", "dispatch", "convene"} <= resolvable_verbs(), (
         "the fold can no longer execute the governance verbs; the slice has regressed")
 
 
@@ -4171,19 +4421,19 @@ def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
     # same trap the slice test fell into. The conferral basis is a harness fixture; Part E requires
     # an office to HAVE one and neither fixture office does.
     w.offices["off_dicastery"].conferral = "the duke's remit (harness fixture)"
-    d = S.SeasonDriver(w)
+    d = SeasonDriver(w)
     d.matter([])
-    out = d.resolve([S.Act(id="g_conf", actor=duke, verb="confer",
+    out = d.resolve([Act(id="g_conf", actor=duke, verb="confer",
                            payload={"office": "off_dicastery", "to": "p_mid"})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "tenure.opened"), None)
     assert e is not None, (
         f"the fold emitted {[x.kind for x in out]} — no `tenure.closed` to test the channels with")
     everyone = list(w.persons)
-    assert any(S.CHANNEL_PREDICATES["chronicle"](w, e, pid) for pid in everyone), (
+    assert any(CHANNEL_PREDICATES["chronicle"](w, e, pid) for pid in everyone), (
         "`chronicle` does not fire on a binding decision's emission — then it can never fire at "
         "all, and `all_five` is permanently a measurement of fewer channels than it names")
-    remit = [pid for pid in everyone if S.CHANNEL_PREDICATES["post_remit"](w, e, pid)]
+    remit = [pid for pid in everyone if CHANNEL_PREDICATES["post_remit"](w, e, pid)]
     assert remit == [duke], (
         f"`post_remit` admits {remit}; it should admit exactly the holder of an office whose "
         "remit covers the verb that emitted this kind")
@@ -4231,13 +4481,13 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
         # The maturation COUNT is not ceiling-bounded and still discriminates in every arm --
         # 15/21 at `none` and `actor`, 27/36 at `total` -- and that claim is now EXECUTED in every
         # arm below rather than asserted in this comment (§0.1 point 3).
-        w = HL.build_world(0, S.DEFAULT_FIXTURES
+        w = HL.build_world(0, DEFAULT_FIXTURES
                            .sweep("record_stages_default", n)
                            .sweep("observation_deposit_mode", "none"))
-        d = S.SeasonDriver(w)
-        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        d = SeasonDriver(w)
+        mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(7):
-            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                      None, HL.subsistence)
         by_id = {e.id: e for e in w.log}
 
@@ -4262,13 +4512,13 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     for arm in ("actor", "total"):
         seen = {}
         for n in (3, 6):
-            w = HL.build_world(0, S.DEFAULT_FIXTURES
+            w = HL.build_world(0, DEFAULT_FIXTURES
                                .sweep("record_stages_default", n)
                                .sweep("observation_deposit_mode", arm))
-            d = S.SeasonDriver(w)
-            mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+            d = SeasonDriver(w)
+            mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
             for _ in range(7):
-                d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                          None, HL.subsistence)
             seen[n] = sum(1 for e in w.log if e.kind == "term.matured")
         matured[f"{arm}:3"], matured[f"{arm}:6"] = seen[3], seen[6]
@@ -4301,12 +4551,12 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
 
     # H-79 — the claim subject. `per_change` must change WHAT a ledger holds.
     subjects = {}
-    for rule in sorted(S.CLAIM_SUBJECT_RULES):
-        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("claim_subject_rule", rule))
-        d = S.SeasonDriver(w)
-        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    for rule in sorted(CLAIM_SUBJECT_RULES):
+        w = HL.build_world(0, DEFAULT_FIXTURES.sweep("claim_subject_rule", rule))
+        d = SeasonDriver(w)
+        mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(2):
-            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                      None, HL.subsistence)
         subjects[rule] = len({c.subject for c in w.persons[HL.BAILIFF].ledger})
     moved["H-79 distinct claim subjects in the bailiff's ledger"] = subjects
@@ -4316,7 +4566,7 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
     # every band is a fraction of the scale; a move would mean a band edge is read as an absolute.
     hashes = {}
     for scale in (100, 1000, 10000):
-        fx = S.DEFAULT_FIXTURES.sweep("condition_scale", scale)
+        fx = DEFAULT_FIXTURES.sweep("condition_scale", scale)
         fx = fx.sweep("band_floors", {k: {kk: vv * scale // 1000 for kk, vv in v.items()}
                                       for k, v in fx.get("band_floors").items()})
         fx = fx.sweep("wear_per_season", {k: max(1, v * scale // 1000)
@@ -4332,10 +4582,10 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
         # changing a getter's source while a co-varying quantity still writes the old one.
         for p in w.persons.values():
             p.body = scale
-        d = S.SeasonDriver(w)
-        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        d = SeasonDriver(w)
+        mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(2):
-            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                      None, HL.subsistence)
         hashes[scale] = len(w.log)
     moved["H-06 events by condition_scale"] = hashes
@@ -4757,14 +5007,14 @@ def test_a_duplicate_yaml_key_is_refused_rather_than_silently_resolved():
     # has no reader, so THAT instance lost transcribed text and not behaviour. See below.
     import pytest as _pt
     with _pt.raises(ValueError, match="duplicate key"):
-        S.load_yaml("verbs:\n  - verb: x\n    note: a\n    note: b\n")
+        load_yaml("verbs:\n  - verb: x\n    note: a\n    note: b\n")
     # ⚠ AND THE SCOPE OF THAT PARTICULAR LOSS, STATED ACCURATELY RATHER THAN AT ITS MOST ALARMING:
     # `writes_note` is NOT a field of `VerbRow`, so nothing in the fold ever read either cell. What
     # was lost was TRANSCRIBED TEXT IN THE CAPTURE — bad in the file whose purpose is fidelity to
     # Part E, and not a behaviour change. The guard is still worth its existence, because the same
     # class DID change behaviour once at the row level (two `(Office, exists)` rows, gate behaviour
     # depending on file order). Asserted on the FILE, which is where the defect was.
-    vt = S.load_yaml(S.VERB_TABLE_YAML.read_text())
+    vt = load_yaml(VERB_TABLE_YAML.read_text())
     rows = {r["verb"]: r for r in (vt["verbs"] if isinstance(vt, dict) else vt)}
     for verb, cell in (("issue", "a Dispensation is not a state write"),
                        ("petition", "a Petition is created, not written")):
@@ -4772,8 +5022,8 @@ def test_a_duplicate_yaml_key_is_refused_rather_than_silently_resolved():
         assert cell in note, f"{verb}: Part E's transcribed cell is missing from `writes_note`"
         assert "W3, ON THE W2 AUDIT" in note, f"{verb}: the audit correction was lost instead"
     # every data file the instrument owns loads under the strict reader
-    for f in (S.WRITE_MATRIX_YAML, S.ROSTERS_YAML, S.VERB_TABLE_YAML):
-        S.load_yaml(f.read_text())
+    for f in (WRITE_MATRIX_YAML, ROSTERS_YAML, VERB_TABLE_YAML):
+        load_yaml(f.read_text())
 
 
 def test_w10_every_declared_token_resolves_and_every_binding_is_live():
@@ -4814,8 +5064,8 @@ def test_w10_every_declared_token_resolves_and_every_binding_is_live():
         for sha, row in rows.items():
             for tok in row.get("exercises") or []:
                 got = EX.resolve(tok, probes={p: R.run_probe(p) for p in P.PROBES},
-                                 verb_table=S.VERB_TABLE, resolvable=S.resolvable_verbs(),
-                                 register=reg, matrix=S.MATRIX)
+                                 verb_table=VERB_TABLE, resolvable=resolvable_verbs(),
+                                 register=reg, matrix=MATRIX)
                 if not got.get("bound"):
                     unbound_tokens.append(f"{cid} declares {tok!r}: {got['detail']}")
     assert not unbound_tokens, "declared token(s) name nothing:\n  " + "\n  ".join(unbound_tokens)
@@ -4825,8 +5075,8 @@ def test_the_binding_guard_sees_all_four_ways_a_token_can_name_nothing():
     """§0.1 pt 2, and the reason the guard moved off the message strings: it must observe every
     branch, INCLUDING the Event-kind one it used to miss entirely. One plant per shape."""
     reg = R._register()
-    kw = dict(probes={}, verb_table=S.VERB_TABLE, resolvable=S.resolvable_verbs(),
-              register=reg, matrix=S.MATRIX)
+    kw = dict(probes={}, verb_table=VERB_TABLE, resolvable=resolvable_verbs(),
+              register=reg, matrix=MATRIX)
     for token, shape in (("probe:P_NOT_A_PROBE", "probe"),
                          ("H-999", "hole"),
                          ("no.such.event.kind", "kind"),
@@ -4939,7 +5189,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `tell` and `transfer` were among its "seven that execute" and both are always REFUSED.
     ever = {v for r in live for v in r["executed"]}
     refused_only = {v for r in live for v in r["refused"]} - ever
-    foldable_all = set(S.resolvable_verbs())
+    foldable_all = set(resolvable_verbs())
     # ⚠ THE CROSS-CHECK THAT CAUGHT A FALSE POSITIVE IN THIS VERY MEASUREMENT, kept as a guard.
     # `corpus_run` first attributed an execution by EMISSION KIND, and `forge` and `create_record`
     # both emit `record.created` (as `confer` and `revoke` both emit `tenure.closed`) — so `forge`
@@ -5076,12 +5326,12 @@ def test_the_seam_calls_personal_combat_rather_than_naming_it():
     call — on a scope note that ruling overrides. The seam calls now, and these are the properties
     that make the call honest rather than merely present."""
     from .. import combat_seam as C
-    w = P.tiny_world(); w.step = S.Step.RESOLVE
+    w = P.tiny_world(); w.step = Step.RESOLVE
     if C.engine() is None:                     # a NAMED gap, never a silent skip
         assert C.load_error(), "the engine is unavailable and the seam reports no reason"
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
 
-    out = S.contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
+    out = contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
     assert out["status"] == "RESOLVED" and out["module"] == "personal_combat", out
     assert out["resolver"] == "d_sigma", (
         "the seam is not using the resolver `module_contracts.yaml` declares for this prize")
@@ -5089,7 +5339,7 @@ def test_the_seam_calls_personal_combat_rather_than_naming_it():
     # ⚠ DETERMINISM, WHICH IS THE WHOLE REASON THE SEED IS DERIVED FROM THE WORLD'S CLOCK.
     # `wrapper.fight`'s own note says to pass `random.Random(seed)`; an unseeded call would make
     # every campaign unreproducible, which `W11` and `test_w9_check1` both rest on.
-    again = S.contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
+    again = contest(w, "S", "the body", ["p_low", "p_mid"], 0, 2, ["act1"])
     assert again["result"] == out["result"] and again["seed"] == out["seed"], (
         "the same contest in the same world gave a different answer — the seam is not seeded "
         "from the world clock and the instrument is no longer reproducible")
@@ -5219,32 +5469,32 @@ def test_h99_the_office_carries_its_three_canon_axes_and_a_misseating_refuses():
     canon"*; *"systems/factions ... near-canon but superseded by anything in world."* The name that
     broke this rule once is `Ministry of the Peninsula`, and it must stay out by DATA."""
     # 1 — the three axes exist and resolve, and SCALE is not among them by design.
-    assert S.FACTIONS and S.BODY_FACTION and S.BODY_FUNCTION
-    assert S.office_faction("Cardinal of Justice", None) == "Church of Solmund"
-    assert S.ROLE_TEMPLATE_OF["Church of Solmund"] == "ecclesiastical"
-    assert "Judicial" in S.BODY_FUNCTION["Cardinal of Justice"]
-    assert not (set(S.BODY_FACTION) & set(S.RUNG_KINDS)), (
+    assert FACTIONS and BODY_FACTION and BODY_FUNCTION
+    assert office_faction("Cardinal of Justice", None) == "Church of Solmund"
+    assert ROLE_TEMPLATE_OF["Church of Solmund"] == "ecclesiastical"
+    assert "Judicial" in BODY_FUNCTION["Cardinal of Justice"]
+    assert not (set(BODY_FACTION) & set(RUNG_KINDS)), (
         "a body is being used as a rung; an office's scale is its SEAT, not its organ")
 
     # 2 — THE MUTATION. Every canonical body, declared under a faction that is not its own,
     #     must refuse. Without this the derivation is decorative.
     checked = 0
-    for body, owner in S.BODY_FACTION.items():
-        for other in S.FACTIONS:
+    for body, owner in BODY_FACTION.items():
+        for other in FACTIONS:
             if other == owner:
                 continue
-            with pytest.raises(S.Forbidden):
-                S.office_faction(body, other)
+            with pytest.raises(Forbidden):
+                office_faction(body, other)
             checked += 1
     assert checked >= 16 * 7, f"only {checked} mis-seatings were tried"
 
     # 3 — the two ways an office can name nothing at all.
-    with pytest.raises(S.Unspecified):
-        S.office_faction(None, None)
-    with pytest.raises(S.Unspecified):
-        S.office_faction("Ministry of Silly Walks", None)
-    with pytest.raises(S.Unspecified):
-        S.office_faction(None, "Niflhel")
+    with pytest.raises(Unspecified):
+        office_faction(None, None)
+    with pytest.raises(Unspecified):
+        office_faction("Ministry of Silly Walks", None)
+    with pytest.raises(Unspecified):
+        office_faction(None, "Niflhel")
 
     # 4 — THE PRECEDENCE RULING, AS DATA. Three names that a reasonable reader would have
     #     included and canon excludes. Each was in a draft of this roster or in circulation.
@@ -5254,12 +5504,12 @@ def test_h99_the_office_carries_its_three_canon_axes_and_a_misseating_refuses():
         ("People's Revolution", "the pre-ED-061 name for Restoration Movement"),
         ("Niflhel", "dissolved — worldbuilding_v30.md §3.2, §10"),
     ]:
-        assert excluded not in S.FACTIONS, f"{excluded!r} is a member: {why}"
-    assert "Restoration Movement" in S.FACTIONS and "Schoenland" in S.FACTIONS
+        assert excluded not in FACTIONS, f"{excluded!r} is a member: {why}"
+    assert "Restoration Movement" in FACTIONS and "Schoenland" in FACTIONS
 
     # 5 — the two factions with no role template RAISE rather than defaulting (§42.2 polarity).
     for f in ("Guilds", "Schoenland"):
-        assert f in S.FACTIONS and f not in S.ROLE_TEMPLATE_OF, (
+        assert f in FACTIONS and f not in ROLE_TEMPLATE_OF, (
             f"{f} has a role template; §4's player-eligible column does not list it, so one was "
             "invented — the fabrication the precedence ruling exists to stop")
 
@@ -5267,7 +5517,7 @@ def test_h99_the_office_carries_its_three_canon_axes_and_a_misseating_refuses():
     from ..harness import corpus_run as C
     for cid, sc in C.RESCALES.items():
         off = sc.get("office") or {}
-        assert S.office_faction(off.get("body"), off.get("faction")) in S.FACTIONS, cid
+        assert office_faction(off.get("body"), off.get("faction")) in FACTIONS, cid
     with pytest.raises(SystemExit):
         C._check_office("mutant.yaml", {"post": "X", "why": "y",
                                         "body": "Cardinal of Justice", "faction": "Crown"})
@@ -5298,11 +5548,11 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     from ..harness import run_cases as R
     from collections import Counter
 
-    case = next(c for c in R.load_cases("NPC") if str(c.get("scale")) in set(S.RUNG_KINDS))
+    case = next(c for c in R.load_cases("NPC") if str(c.get("scale")) in set(RUNG_KINDS))
     w = C.build_at(case, 0)
-    d = S.SeasonDriver(w)
-    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs())
     for _ in range(3):
         d.season(ch, question=None, subsistence=C.P.SUBSIST)
 
@@ -5319,7 +5569,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     landed = [sc.occasion for sc in d.scenes.values()
               if getattr(sc.occasion, "source", None) == "claim_landed"]
     assert landed, "no claim_landed question formed — the transport never reached anybody"
-    walked = [x for q in landed for x in S.occasioned_by(w, q)]
+    walked = [x for q in landed for x in occasioned_by(w, q)]
     assert walked, "every claim_landed question walked back to nothing"
     assert all(x in ids for x in walked), "the walk returned an id that is not in the log"
 
@@ -5327,7 +5577,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     #     A standing ambition has no antecedent Event; `ID-5`'s polarity forbids inventing one.
     for q in (sc.occasion for sc in d.scenes.values()):
         if getattr(q, "source", None) == "need":
-            assert S.occasioned_by(w, q) == [], "a `need` question was given a fabricated cause"
+            assert occasioned_by(w, q) == [], "a `need` question was given a fabricated cause"
 
     # 4 — A TELLING'S DEPOSIT IS ABOUT WHAT WAS TOLD, NEVER ABOUT THE TELLER. This is the clause
     #     that makes the listener's Q2 reachable, and the one that was inverted.
@@ -5336,10 +5586,10 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     checked = 0
     for e in told:
         act = d.act_of.get(e.id)
-        refs = S.act_refs(act)
+        refs = act_refs(act)
         if not refs:
             continue
-        subs = S.claim_subjects(e, w.fixtures.get("claim_subject_rule"), refs)
+        subs = claim_subjects(e, w.fixtures.get("claim_subject_rule"), refs)
         assert act.actor not in subs or act.actor in refs, (
             f"a telling deposited a claim about the teller {act.actor!r}: {subs} — §F1's Q2 can "
             "never fire on it for the listener, which is what made `R3` zero")
@@ -5358,7 +5608,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
         if act is None:
             continue
         sc = d.scenes.get(getattr(act, "scene", None) or "")
-        allowed = {act.id} | set(S.occasioned_by(w, getattr(sc, "occasion", None)))
+        allowed = {act.id} | set(occasioned_by(w, getattr(sc, "occasion", None)))
         assert set(e.causes) <= allowed, (
             f"{e.kind} cites {sorted(set(e.causes) - allowed)}, which is neither its act nor an "
             "antecedent of its occasion — causes[] is being padded, and a padded causes[] scores "
@@ -5375,7 +5625,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # 6 — THE CONTROL, so a green clause 5 is not just the detector answering true to anything.
     #     A world with no acts cannot propagate, and the same call must say so.
     w2 = C.build_at(case, 0)
-    assert not C._r3_propagates(w2, S.SeasonDriver(w2)), (
+    assert not C._r3_propagates(w2, SeasonDriver(w2)), (
         "`_r3_propagates` returned true on a world where nobody has acted — it is not measuring "
         "propagation")
 
@@ -5435,9 +5685,9 @@ def test_id16_the_sign_column_is_shape_validated_and_the_gate_can_fail():
 def _wa_own_eligible_with_a_precondition() -> list:
     """Every row `W-A`'s scope covers: `own` among its eligibility alternatives, and a `requires:`
     that is not one of the no-precondition markers. Derived from the table, never listed (`G2`)."""
-    return sorted(v for v, r in S.VERB_TABLE.items()
+    return sorted(v for v, r in VERB_TABLE.items()
                   if "own" in r.eligibility_kinds()
-                  and (r.requires or "").strip() not in S.NO_PRECONDITION)
+                  and (r.requires or "").strip() not in NO_PRECONDITION)
 
 
 def test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both():
@@ -5460,8 +5710,8 @@ def test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both():
     check used a non-empty `requires_typed_note:` as the proxy for "declared" -- and deleting the
     cell while leaving the note behind passed. The distinction this test exists to draw is between
     a deliberate refusal and a row nobody typed, and only the file can tell them apart."""
-    both = [v for v, r in S.VERB_TABLE.items()
-            if r.requires_typed is not None and v in S.REQUIRES_PREDICATES]
+    both = [v for v, r in VERB_TABLE.items()
+            if r.requires_typed is not None and v in REQUIRES_PREDICATES]
     assert not both, (
         f"{both} carry a typed `requires_typed:` cell AND a `REQUIRES_PREDICATES` entry. Two "
         "readings of one cell is how a conjunct gets dropped in one of them; delete the "
@@ -5474,20 +5724,20 @@ def test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both():
     assert checked >= 8, f"only {checked} own-eligible rows carry a precondition: {scope}"
     import yaml as _yaml
     declared = {r["verb"] for r in
-                _yaml.safe_load(S.VERB_TABLE_YAML.read_text())["verbs"]
+                _yaml.safe_load(VERB_TABLE_YAML.read_text())["verbs"]
                 if "requires_typed" in r}
     assert declared, "no row declares `requires_typed:` -- the file the check reads has moved"
     uncovered = [v for v in scope if v not in declared]
     assert not uncovered, (
         f"{uncovered} are `own`-eligible with a prose `requires:` and carry neither a typed cell "
         "nor an explicit `requires_typed: none` with a reason. Type it, or say why it cannot be")
-    typed = sum(1 for r in S.VERB_TABLE.values() if r.requires_typed is not None)
+    typed = sum(1 for r in VERB_TABLE.values() if r.requires_typed is not None)
     # ⚠ PRINTED FROM THE TABLE, NEVER TYPED INTO A COMMENT. `G11`: a number with no adjacent
     # command is a defect, and every count this file has hand-carried has eventually been wrong.
-    print(f"\n  typed {typed} of {len(S.VERB_TABLE)}; "
+    print(f"\n  typed {typed} of {len(VERB_TABLE)}; "
           f"uncovered own-eligible: {uncovered}  "
           f"(own-eligible with a precondition: {checked}; "
-          f"declared `none`: {sorted(v for v in scope if S.VERB_TABLE[v].requires_typed is None)})")
+          f"declared `none`: {sorted(v for v in scope if VERB_TABLE[v].requires_typed is None)})")
 
 
 def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_forms():
@@ -5504,13 +5754,13 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     for all nine typed verbs, and this test goes RED on both halves at once (the UNKNOWN loop
     first). Unmutated it is GREEN. That mutation is the exact softening §F1 forbids, so the test
     can observe the failure it excludes."""
-    empty = S.LedgerReader([])
+    empty = LedgerReader([])
     w0 = P.tiny_world()
     p0 = w0.persons["p_low"]
     subj = "a_subject_nobody_has_a_claim_about"
-    q0 = S.Question("q:wa_empty", "need", (subj,))
+    q0 = Question("q:wa_empty", "need", (subj,))
     forms, checked = set(), 0
-    for verb, row in sorted(S.VERB_TABLE.items()):
+    for verb, row in sorted(VERB_TABLE.items()):
         if row.requires_typed is None:
             continue
         req = row.requires_typed.requirement
@@ -5521,13 +5771,13 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
         # item 7 asks about the GIVER's. `operands_for` derives each operand separately and
         # `binding_of` is the one shape both readers build, so this now exercises the binding the
         # fold will see.
-        ops = S.operands_for(p0, row, q0, subj, w0.fixtures)
+        ops = operands_for(p0, row, q0, subj, w0.fixtures)
         assert ops is not None, (
             f"{verb}: no Candidate could be formed at all, so this arm cannot observe whether an "
             "empty ledger reads UNKNOWN")
-        b = S.binding_of(p0.id, ops)
-        v = S.evaluate(row.requires_typed, empty, b)
-        assert v.value is S.UNKNOWN, (
+        b = binding_of(p0.id, ops)
+        v = evaluate(row.requires_typed, empty, b)
+        assert v.value is UNKNOWN, (
             f"{verb}: an EMPTY ledger produced {v.value!r} rather than UNKNOWN. A person holding "
             "no claims would then be treated as holding a claim that the requirement fails, "
             "which is the softening to 'requires holds' §F1 spends two paragraphs forbidding")
@@ -5540,11 +5790,11 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     w = P.tiny_world()
     p = w.persons["p_low"]
     assert not p.ledger, "the fixture person now holds claims; this arm needs an empty ledger"
-    q = S.Question("q:wa_asym", "need", ("Hh",))
-    cands = S.Query.opening_set(p, S.View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)
+    q = Question("q:wa_asym", "need", ("Hh",))
+    cands = decision.opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)
     offered = {c.verb for c in cands}
-    typed_own = {v for v, r in S.VERB_TABLE.items()
-                 if r.requires_typed is not None and S.person_side_eligible(p, r)}
+    typed_own = {v for v, r in VERB_TABLE.items()
+                 if r.requires_typed is not None and person_side_eligible(p, r)}
     assert typed_own <= offered, (
         f"{sorted(typed_own - offered)} were filtered out of the option set by a person who holds "
         "NO claims at all. Clause 4 is KNOWN-FALSE, not 'unproven'")
@@ -5576,11 +5826,11 @@ def test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it():
     committed run artifacts move."""
     w = P.tiny_world()
     p = w.persons["p_low"]
-    q = S.Question("q:wa_contra", "need", ("Hh",))
-    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+    q = Question("q:wa_contra", "need", ("Hh",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
 
     def offered():
-        return {(c.verb, c.subject) for c in S.Query.opening_set(p, v, q, w.fixtures)}
+        return {(c.verb, c.subject) for c in decision.opening_set(p, v, q, w.fixtures)}
 
     base = offered()
     assert ("transfer", "Hh") in base, (
@@ -5598,7 +5848,7 @@ def test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it():
         # `contain` Tenure -- so it is what `from` binds to. Before `W-C` the subject was pushed
         # onto `from` by `binding_from`, which happened to give the same answer HERE and the wrong
         # one everywhere the referent is not your own hearth.
-        p.ledger.append(S.Claim("c_wa", p.id, "Hh", "stores:grain", value, 1,
+        p.ledger.append(Claim("c_wa", p.id, "Hh", "stores:grain", value, 1,
                                 "firsthand", 100, "own"))
         return offered()
 
@@ -5644,25 +5894,25 @@ def test_wa_the_fold_and_the_person_read_the_same_cell_with_opposite_polarities(
     `_fold` raises `InstrumentDefect: a 'transfer' reached its effect with no 'from' operand` at
     the `kinds ==` line. Unmutated it is GREEN. §0.1 point 2, closed rather than disclosed."""
     w = P.tiny_world()
-    row = S.VERB_TABLE["transfer"]
+    row = VERB_TABLE["transfer"]
     p = w.persons["p_low"]
     # The person's reading: UNKNOWN, so NOT contradicted. The operands are the Candidate's own --
     # `from` is `containing_rung_of(p_low)`, not the subject -- so this is the binding the fold will see.
-    ops = S.operands_for(p, row, S.Question("q:wa_pol", "need", ("Hh",)), "Hh", w.fixtures)
-    assert not S.belief_contradicts(p, row, "Hh", ops), (
+    ops = operands_for(p, row, Question("q:wa_pol", "need", ("Hh",)), "Hh", w.fixtures)
+    assert not belief_contradicts(p, row, "Hh", ops), (
         "a person holding no claim about `Hh` was treated as knowing `transfer` fails")
     # The fold's reading of the same cell, on an act with no operands: UNKNOWN, so REFUSED.
-    a = S.Act(id="wa_t", actor="p_low", verb="transfer", payload={"subject": "Hh"})
-    verdict = S.evaluate(row.requires_typed, S.WorldReader(w, a.actor), S.binding_from_act(a))
-    assert verdict.value is S.UNKNOWN, verdict
-    d = S.SeasonDriver(w)
-    w.step = S.Step.RESOLVE
+    a = Act(id="wa_t", actor="p_low", verb="transfer", payload={"subject": "Hh"})
+    verdict = evaluate(row.requires_typed, WorldReader(w, a.actor), binding_from_act(a))
+    assert verdict.value is UNKNOWN, verdict
+    d = SeasonDriver(w)
+    w.step = Step.RESOLVE
     kinds = [e.kind for e in d._fold(w, a)]
     assert kinds == ["transfer.refused"], (
         f"an operand-less `transfer` emitted {kinds}. UNKNOWN must refuse in the fold; admitting "
         "it would move grain the act never named -- `H-94` filled by accident")
     # And the reads are on the Verdict.
-    assert all(isinstance(o, S.Observation) for o in verdict.observed)
+    assert all(isinstance(o, Observation) for o in verdict.observed)
     # ⚠ **THIS ASSERTION WAS INVERTED BY `W-B` AND THE INVERSION IS THE POINT, NOT A RELAXATION.**
     # It read `assert not any(hasattr(e, "observed") for e in ev)` -- *"an Event grew an
     # `observed` field, that is `W-B` and this item must not have built it"* -- and it was `W-A`'s
@@ -5671,7 +5921,7 @@ def test_wa_the_fold_and_the_person_read_the_same_cell_with_opposite_polarities(
     # `LedgerReader`. So the guard is not deleted: it now asserts the field EXISTS and CARRIES THE
     # SAME READS THE VERDICT DID, which is the property that would break if `W-B` were reverted
     # halfway -- a field added and never populated is the dead carrier from the other direction.
-    ev = d._fold(w, S.Act(id="wa_t2", actor="p_low", verb="transfer", payload={"subject": "Hh"}))
+    ev = d._fold(w, Act(id="wa_t2", actor="p_low", verb="transfer", payload={"subject": "Hh"}))
     assert all(hasattr(e, "observed") for e in ev), (
         "an Event lost its `observed` field -- `W-B` attaches the fold's reads to every Event an "
         "act emits, and a missing field means the carrier was reverted")
@@ -5708,15 +5958,15 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
     operand default (`site` bound to any fixture site) -- the operand-less act is admitted again
     and this test goes RED on the first assertion. Unmutated it is GREEN."""
     w = P.tiny_world()
-    d = S.SeasonDriver(w)
-    w.step = S.Step.RESOLVE
-    bare = [e.kind for e in d._fold(w, S.Act(id="wa_w0", actor="p_low", verb="work"))]
+    d = SeasonDriver(w)
+    w.step = Step.RESOLVE
+    bare = [e.kind for e in d._fold(w, Act(id="wa_w0", actor="p_low", verb="work"))]
     assert bare == ["work.unavailable"], (
         f"a `work` naming no site emitted {bare}. It cannot have checked a condition against a "
         "floor, because it was never told whose condition")
     # AND IT STILL ADMITS A NAMED, WORKABLE SITE -- otherwise the refusal above is not the
     # polarity rule, it is the verb being broken (§0.1 point 2: the control the first arm needs).
-    ok = [e.kind for e in d._fold(w, S.Act(id="wa_w1", actor="p_low", verb="work",
+    ok = [e.kind for e in d._fold(w, Act(id="wa_w1", actor="p_low", verb="work",
                                            payload={"site": "site_harbour"}))]
     assert ok == ["site.worked"], f"a workable site was refused: {ok}"
     # AND IT REFUSES A SITE BELOW EVERY FLOOR, which is the failure §12.1's gate exists to
@@ -5724,7 +5974,7 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
     site = w.sites["site_harbour"]
     kept, site.condition = site.condition, 0
     try:
-        dead = [e.kind for e in d._fold(w, S.Act(id="wa_w2", actor="p_low", verb="work",
+        dead = [e.kind for e in d._fold(w, Act(id="wa_w2", actor="p_low", verb="work",
                                                  payload={"site": site.id}))]
         assert dead == ["work.unavailable"], f"a site at condition 0 was worked: {dead}"
     finally:
@@ -5741,7 +5991,7 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
     assert min(fl.values()) <= seam.condition < max(fl.values()), (
         "the fixture no longer places `site_seam` between its loosest and strictest floor, so "
         "this pin no longer discriminates the three readings -- re-choose the site")
-    workable = [e.kind for e in d._fold(w, S.Act(id="wa_w3", actor="p_low", verb="work",
+    workable = [e.kind for e in d._fold(w, Act(id="wa_w3", actor="p_low", verb="work",
                                                  payload={"site": seam.id}))]
     assert workable == ["site.worked"], (
         f"a seam at condition {seam.condition} was refused ({workable}); surface_gleaning's "
@@ -5769,24 +6019,24 @@ def _wc_corpus_pass():
     if getattr(_wc_corpus_pass, "_memo", None) is not None:
         return _wc_corpus_pass._memo
     from collections import Counter
-    first = len(S.TRACE.rows)
+    first = len(TRACE.rows)
     executed, refused, holes, endpoints = Counter(), Counter(), [], Counter()
     for case in [c for lane in ("NPC", "ARC") for c in R.load_cases(lane)]:
         case = C.apply_rescale(case)
-        if str(case.get("scale")) not in set(S.RUNG_KINDS):
+        if str(case.get("scale")) not in set(RUNG_KINDS):
             continue
         n = C.seasons_for(case)
         w = C.build_at(case, 0)
-        d = S.SeasonDriver(w)
+        d = SeasonDriver(w)
         mint = (lambda ww: lambda pid, verb, subj:
-                S.H(ww.world_seed, ww.tick, pid, f"act:{verb}:{subj}"))(w)
-        ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+                H(ww.world_seed, ww.tick, pid, f"act:{verb}:{subj}"))(w)
+        ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs())
         for _ in range(n):
             d.season(ch, question=None, subsistence=P.SUBSIST,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
         ids = {e.id for e in w.log}
         for a in d.resolved:
-            row = S.VERB_TABLE.get(a.verb)
+            row = VERB_TABLE.get(a.verb)
             if row is None:
                 continue
             if a.verb == "transfer":
@@ -5794,20 +6044,20 @@ def _wc_corpus_pass():
                 endpoints["self" if pay.get("from") == pay.get("to") else "across"] += 1
             for t in range(n + 1):
                 for k in (row.emits or ()):
-                    if S.H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
+                    if H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
                         executed[a.verb] += 1
                 for k in (row.emits_on_refusal or ()):
-                    if S.H(w.world_seed, t, a.actor, f"{k}:{a.id}") not in ids:
+                    if H(w.world_seed, t, a.actor, f"{k}:{a.id}") not in ids:
                         continue
                     refused[a.verb] += 1
                     req = row.requires_typed
                     if req is None:
                         continue
-                    b = S.binding_from_act(a)
+                    b = binding_from_act(a)
                     missing = [o for o in req.operands() if b.get(o) is None]
                     if missing:
                         holes.append((case["id"], a.verb, missing))
-    notes = [r for r in S.TRACE.rows[first:] if r.channel == "NOTE" and "H-94" in r.what]
+    notes = [r for r in TRACE.rows[first:] if r.channel == "NOTE" and "H-94" in r.what]
     _wc_corpus_pass._memo = (executed, refused, holes, notes, endpoints)
     return _wc_corpus_pass._memo
 
@@ -5949,24 +6199,24 @@ def test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing():
     the laundering the sweep exists to exclude: a declared sweep point that the code cannot see."""
     seen = {}
     for amount in (0, 1, 3):
-        fx = S.DEFAULT_FIXTURES.sweep("default_transfer_amount", amount)
+        fx = DEFAULT_FIXTURES.sweep("default_transfer_amount", amount)
         w = P.tiny_world(fx)
         p = w.persons["p_low"]
-        q = S.Question("q:wc_sweep", "need", ("S",))
-        v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-        c = next((c for c in S.Query.opening_set(p, v, q, w.fixtures) if c.verb == "transfer"),
+        q = Question("q:wc_sweep", "need", ("S",))
+        v = View(p.id, [], w.fixtures.get("view_k"), q)
+        c = next((c for c in decision.opening_set(p, v, q, w.fixtures) if c.verb == "transfer"),
                  None)
         assert c is not None, f"no `transfer` Candidate at amount={amount}"
         assert c.operands.get("amount") == amount, (
             f"the Candidate carries amount={c.operands.get('amount')!r} at sweep point {amount} "
             "-- the fixture is not reaching the derivation and the sweep would be laundering")
         mint = lambda pid, verb, subj: f"wc:{amount}:{verb}"
-        acts = [a for sc in S.pack_scenes(p, [c], 5, w.fixtures, mint, occasion=q)
+        acts = [a for sc in pack_scenes(p, [c], 5, w.fixtures, mint, occasion=q)
                 for a in sc.acts]
         assert len(acts) == 1, acts
         before = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
-        d = S.SeasonDriver(w)
-        w.step = S.Step.RESOLVE
+        d = SeasonDriver(w)
+        w.step = Step.RESOLVE
         kinds = [e.kind for e in d._fold(w, acts[0])]
         after = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
         # ⚠ ZERO-VALUED KEYS ARE NOT MOVEMENT, AND THIS ARM WAS COUPLED TO THE KIND FIXTURE UNTIL
@@ -6038,28 +6288,28 @@ def test_wc_the_store_kind_sweep_runs_all_three_arms_and_an_unstocked_kind_refus
     sweep permits."""
     seen = {}
     for kind in ("grain", "salt", "coin"):
-        fx = S.DEFAULT_FIXTURES.sweep("default_store_kind", kind)
+        fx = DEFAULT_FIXTURES.sweep("default_store_kind", kind)
         w = P.tiny_world(fx)
         # A SECOND STOCKED KIND, so the two live arms are distinguishable. Without it `salt` and
         # `coin` would both refuse and the sweep would have two arms wearing three names.
         w.rungs["Hh"].stores = dict(w.rungs["Hh"].stores or {}, salt=5)
         p = w.persons["p_low"]
-        q = S.Question("q:wc_kind_sweep", "need", ("S",))
-        v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-        c = next((c for c in S.Query.opening_set(p, v, q, w.fixtures) if c.verb == "transfer"),
+        q = Question("q:wc_kind_sweep", "need", ("S",))
+        v = View(p.id, [], w.fixtures.get("view_k"), q)
+        c = next((c for c in decision.opening_set(p, v, q, w.fixtures) if c.verb == "transfer"),
                  None)
         assert c is not None, f"no `transfer` Candidate at kind={kind}"
         assert c.operands.get("kind") == kind, (
             f"the Candidate carries kind={c.operands.get('kind')!r} at sweep point {kind!r} -- "
             "the fixture is not reaching the derivation and the sweep would be laundering")
         mint = lambda pid, verb, subj: f"wc:kind:{kind}:{verb}"
-        acts = [a for sc in S.pack_scenes(p, [c], 5, w.fixtures, mint, occasion=q)
+        acts = [a for sc in pack_scenes(p, [c], 5, w.fixtures, mint, occasion=q)
                 for a in sc.acts]
         assert len(acts) == 1, acts
         norm = lambda st: {k: val for k, val in st.items() if val}
         before = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
-        d = S.SeasonDriver(w)
-        w.step = S.Step.RESOLVE
+        d = SeasonDriver(w)
+        w.step = Step.RESOLVE
         emitted = [e.kind for e in d._fold(w, acts[0])]
         after = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
         moved = {r: (before[r].get(kind), after[r].get(kind))
@@ -6117,21 +6367,21 @@ def test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived():
     end."""
     w = P.tiny_world()
     p = w.persons["p_low"]
-    q = S.Question("q:wc_decline", "need", ("S",))
-    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-    base = {(c.verb, c.subject) for c in S.Query.opening_set(p, v, q, w.fixtures)}
+    q = Question("q:wc_decline", "need", ("S",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    base = {(c.verb, c.subject) for c in decision.opening_set(p, v, q, w.fixtures)}
     assert ("transfer", "S") in base, (
         "`transfer x S` was never offered, so removing it proves nothing")
-    assert S.containing_rung_of(p) == "Hh", (
-        f"the fixture person sits in {S.containing_rung_of(p)!r}; this test needs a containment "
+    assert containing_rung_of(p) == "Hh", (
+        f"the fixture person sits in {containing_rung_of(p)!r}; this test needs a containment "
         "to take away")
 
-    first = len(S.TRACE.rows)
+    first = len(TRACE.rows)
     for t in p.tenures:                      # they are nowhere: every containment closed
         if t.kind == "contain" and t.live:
             t.until = w.tick
-    assert S.containing_rung_of(p) is None
-    after = {(c.verb, c.subject) for c in S.Query.opening_set(p, v, q, w.fixtures)}
+    assert containing_rung_of(p) is None
+    after = {(c.verb, c.subject) for c in decision.opening_set(p, v, q, w.fixtures)}
 
     assert ("transfer", "S") not in after, (
         "a person with no live containment was still offered `transfer`. `hearth(giver)` has "
@@ -6139,7 +6389,7 @@ def test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived():
     assert base - after == {("transfer", "S")}, (
         f"the decline removed {sorted(base - after)} -- more than the one Candidate whose "
         "operands it cannot bind. A derivation that declines everything is not a derivation")
-    notes = [r for r in S.TRACE.rows[first:] if r.channel == "NOTE" and "H-94" in r.what]
+    notes = [r for r in TRACE.rows[first:] if r.channel == "NOTE" and "H-94" in r.what]
     assert notes and all("'from'" in r.what for r in notes), (
         f"the decline was silent, or named the wrong operand: {[r.what for r in notes]}. "
         "`TRACE.note` is what makes a decline COUNTABLE rather than inferred from an absence")
@@ -6167,8 +6417,8 @@ def test_wc_the_fold_binds_what_the_person_bound():
     GREEN."""
     w = P.tiny_world()
     p = w.persons["p_low"]
-    q = S.Question("q:wc_agree", "need", ("S", "Hh"))
-    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
+    q = Question("q:wc_agree", "need", ("S", "Hh"))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
     # ⚠ THE WALK IS OVER TYPED VERBS AND THE SCOPE IS DECLARED RATHER THAN HIDDEN. An UNTYPED
     # verb's two bindings DO differ -- the person's is `{actor}` and the fold's is
     # `{actor, subject}`, because `_payload_of` always writes the subject and an untyped verb
@@ -6180,7 +6430,7 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # payload directly. The true statement is stronger -- FOR AN UNTYPED VERB THE FOLD BUILDS NO
     # BINDING, so there is nothing for the divergence to be read by -- and it is asserted below
     # rather than argued, because the old reason was an argument nobody could check.
-    all_typed = {vb for vb, r in S.VERB_TABLE.items() if r.requires_typed is not None}
+    all_typed = {vb for vb, r in VERB_TABLE.items() if r.requires_typed is not None}
     # THE DECLARED EXCLUSION LIST, EMPTY TODAY AND NAMED SO IT CANNOT GROW SILENTLY. A typed verb
     # belongs here only when something OTHER than this equality keeps it out of a person's option
     # set -- `person_side_eligible` declining its only `eligibility:` alternative, say. The walk
@@ -6188,8 +6438,8 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # drop out of the option set while this test stayed green and the claim "walked over every
     # typed verb" stayed published.
     WALK_EXCLUDES: frozenset = frozenset()
-    cands = [c for c in S.Query.opening_set(p, v, q, w.fixtures)
-             if S.VERB_TABLE[c.verb].requires_typed is not None]
+    cands = [c for c in decision.opening_set(p, v, q, w.fixtures)
+             if VERB_TABLE[c.verb].requires_typed is not None]
     assert {c.verb for c in cands} == all_typed - WALK_EXCLUDES, (
         f"the walk reached {sorted({c.verb for c in cands})} and the grammar's typed verbs are "
         f"{sorted(all_typed - WALK_EXCLUDES)}. This equality is what licenses the sentence "
@@ -6198,15 +6448,15 @@ def test_wc_the_fold_binds_what_the_person_bound():
     mint = lambda pid, verb, subj: f"wc:agree:{verb}:{subj}"
     checked = 0
     for c in cands:
-        act = [a for sc in S.pack_scenes(p, [c], 5, w.fixtures, mint, occasion=q)
+        act = [a for sc in pack_scenes(p, [c], 5, w.fixtures, mint, occasion=q)
                for a in sc.acts][0]
-        person = S.binding_of(p.id, c.operands)
-        fold = S.binding_from_act(act)
+        person = binding_of(p.id, c.operands)
+        fold = binding_from_act(act)
         assert person == fold, (
             f"{c.verb} x {c.subject}: the person bound {person} and the fold binds {fold}. One "
             "declaration read twice must be ONE binding read twice")
         # AND THE BINDING IS NOT VACUOUSLY EQUAL: every operand the cell names is actually there.
-        for o in S.VERB_TABLE[c.verb].requires_typed.operands():
+        for o in VERB_TABLE[c.verb].requires_typed.operands():
             assert fold.get(o) is not None, (
                 f"{c.verb} x {c.subject}: the cell binds {o!r} and the act carries nothing for "
                 "it -- the two agree only because both are empty")
@@ -6221,7 +6471,7 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # a reader while this test's scope note silently stops covering it, so the structure is what
     # is pinned rather than a sentence about it.
     import ast as _ast
-    _fold_fn = next(n for n in _ast.walk(_ast.parse(files.SHAPE_PY.read_text()))
+    _fold_fn = next(n for n in _ast.walk(_ast.parse(files.DRIVER_PY.read_text()))
                     if isinstance(n, _ast.FunctionDef) and n.name == "_fold")
     _calls = [n for n in _ast.walk(_fold_fn)
               if isinstance(n, _ast.Call) and getattr(n.func, "id", "") == "evaluate"]
@@ -6288,15 +6538,25 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
     `create_record` then carries `kind="grain"`, every record made by the loop becomes a record of
     grain, and the second assertion goes RED. Both run."""
     import re as _re
-    src = files.SHAPE_PY.read_text()
-    names = "|".join(sorted(_re.escape(o) for o in S.REQUIRES_OPERANDS) + ["harm"])
+    # ⚠ RE-POINTED TO THE MODEL SET, step 5 of the decomposition, and this guard is the sharpest
+    # case of the narrowing: it read `files.SHAPE_PY` alone, and step 5 moved ALL TEN `_eff_*` out
+    # of that file — including `_eff_transfer`, `_eff_create_record`, `_eff_utter` and `_eff_kill`,
+    # the four this test's own docstring names. It would have gone on passing over a corpus that
+    # no longer contained the family it polices, and `used == EXEMPT` would have stayed green
+    # because `_payload_of` happens to have stayed behind. A gate that cannot see its subject is
+    # §0.1 point 2's absent assertion, not a weak one.
+    mods = _model_modules()
+    # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- as `test_h115` carries]
+    assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this scan would pass vacuously"
+    names = "|".join(sorted(_re.escape(o) for o in REQUIRES_OPERANDS) + ["harm"])
     pattern = _re.compile(r'\.(?:get|setdefault)\(\s*["\'](' + names + r')["\']\s*,')
     # ⚠ THE ATTRIBUTION MATCHED A COLUMN-0 `def` ONLY, so a default inside a METHOD was reported
     # against the previous top-level function -- a true violation named at the wrong site, which
     # is how a reader dismisses it. Nearest preceding `def` at ANY indentation now.
-    heads = [(m2.start(), m2.group(1))
-             for m2 in _re.finditer(r"^[ \t]*def[ \t]+(\w+)", src, _re.M)]
-    def _enclosing(pos: int) -> str:
+    def _heads(src: str):
+        return [(m2.start(), m2.group(1))
+                for m2 in _re.finditer(r"^[ \t]*def[ \t]+(\w+)", src, _re.M)]
+    def _enclosing(heads, pos: int) -> str:
         return next((n for start, n in reversed(heads) if start < pos), "<module>")
     # THE DECLARED CARVE-OUTS, both `(operand, function)` and both with their reason. A carve-out
     # that stops matching anything is asserted below, so a stale one cannot sit here hiding a
@@ -6322,17 +6582,20 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
         ("subject", "_payload_of"),
     }
     offenders, used = [], set()
-    for m in pattern.finditer(src):
-        line = src.count("\n", 0, m.start()) + 1
-        head = _enclosing(m.start())
-        if (m.group(1), head) in EXEMPT:
-            used.add((m.group(1), head))
-            continue
-        offenders.append((line, head, m.group(1)))
+    for mod in mods:
+        src = mod.read_text()
+        heads = _heads(src)
+        for m in pattern.finditer(src):
+            line = src.count("\n", 0, m.start()) + 1
+            head = _enclosing(heads, m.start())
+            if (m.group(1), head) in EXEMPT:
+                used.add((m.group(1), head))
+                continue
+            offenders.append((mod.name, line, head, m.group(1)))
     assert not offenders, (
         "an operand is silently defaulted in a body — §0.05 puts a value the engine uses in a "
         "data file or in `DEFAULT_FIXTURES` with a register row:\n  "
-        + "\n  ".join(f"shape.py:{ln} in {fn}() defaults {op!r}" for ln, fn, op in offenders))
+        + "\n  ".join(f"{f}:{ln} in {fn}() defaults {op!r}" for f, ln, fn, op in offenders))
     # AND THE SCAN IS NOT VACUOUS: the pattern must be able to find the legitimate hits, and
     # EVERY declared carve-out must still match something. A carve-out nothing uses is a licence
     # sitting open for whatever lands on that name next.
@@ -6354,8 +6617,12 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
             "scope — either the scope note is stale or correct code is about to redden")
     # AND THE ATTRIBUTION FINDS A METHOD, which is the half that was broken: `_enclosing` must
     # name an indented `def` rather than the nearest top-level one.
-    _m = _re.search(r"^[ \t]+def[ \t]+(\w+)", src, _re.M)
-    assert _m and _enclosing(_m.end()) == _m.group(1), (
+    # ⚠ `src`/`heads` are now per-module, so this arm names the file it probes rather than
+    # inheriting whatever the scan loop happened to leave bound — a loop variable read after the
+    # loop is exactly the kind of accident a re-point introduces.
+    _src = files.DRIVER_PY.read_text()
+    _m = _re.search(r"^[ \t]+def[ \t]+(\w+)", _src, _re.M)
+    assert _m and _enclosing(_heads(_src), _m.end()) == _m.group(1), (
         "`_enclosing` cannot see an indented `def`, so a default inside a method would be "
         "reported against the previous top-level function")
 
@@ -6364,10 +6631,10 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
     # no operands at all, so a computed `create_record` can never acquire one.
     w = P.tiny_world()
     p = w.persons["p_low"]
-    q = S.Question("q:wc_collide", "need", ("Hh",))
-    v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-    untyped = [c for c in S.Query.opening_set(p, v, q, w.fixtures)
-               if S.VERB_TABLE[c.verb].requires_typed is None]
+    q = Question("q:wc_collide", "need", ("Hh",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    untyped = [c for c in decision.opening_set(p, v, q, w.fixtures)
+               if VERB_TABLE[c.verb].requires_typed is None]
     assert any(c.verb == "create_record" for c in untyped), (
         "`create_record` is no longer an untyped verb in the option set; re-derive this arm")
     assert all(c.operands == {} for c in untyped), (
@@ -6394,12 +6661,12 @@ def test_wc_an_operand_defaults_cell_still_refuses_at_load():
     MUTATION (run 2026-09-04): re-add `operand_defaults: dict = field(default_factory=dict)` to
     `TypedRequires` and pass `cell.get("operand_defaults")` through `build_typed_requires` -- the
     cell loads clean and this goes RED. Unmutated it is GREEN."""
-    live = S.VERB_TABLE["transfer"].requires_typed
+    live = VERB_TABLE["transfer"].requires_typed
     assert not hasattr(live, "operand_defaults"), (
         "`TypedRequires.operand_defaults` is back. The fold would fill the person's operands "
         "again, invisibly, and `H-94`'s one-owner half re-opens")
     with pytest.raises(SystemExit) as e:
-        S.build_typed_requires("a_test_verb", {"form": "own_ledger", "of": "subject",
+        build_typed_requires("a_test_verb", {"form": "own_ledger", "of": "subject",
                                                "operand_defaults": {"kind": "grain"}})
     assert "operand_defaults" in str(e.value), str(e.value)
 
@@ -6434,29 +6701,29 @@ def test_wc_the_matter_kind_comes_from_the_question_before_it_comes_from_the_fix
     it says."""
     w = P.tiny_world()
     p = w.persons["p_low"]
-    row = S.VERB_TABLE["transfer"]
+    row = VERB_TABLE["transfer"]
 
-    p.ledger.append(S.Claim("c_kind", p.id, "Hh", "stores:salt", 4, 0, "firsthand", 100, "own"))
-    q = S.Question("q:wc_kind", "claim_landed", ("Hh",), "c_kind")
-    ops = S.operands_for(p, row, q, "Hh", w.fixtures)
+    p.ledger.append(Claim("c_kind", p.id, "Hh", "stores:salt", 4, 0, "firsthand", 100, "own"))
+    q = Question("q:wc_kind", "claim_landed", ("Hh",), "c_kind")
+    ops = operands_for(p, row, q, "Hh", w.fixtures)
     assert ops["kind"] == "salt", (
         f"the person deliberating about a claim on `stores:salt` carried kind={ops['kind']!r}. "
         "The fixture is the stand-in for a kind nobody names, not an override of one somebody "
         "does")
 
     # THE CONTROL: a claim that names no matter kind leaves the fixture standing.
-    p.ledger.append(S.Claim("c_other", p.id, "Hh", "condition", 4, 0, "firsthand", 100, "own"))
-    q2 = S.Question("q:wc_kind2", "claim_landed", ("Hh",), "c_other")
-    ops2 = S.operands_for(p, row, q2, "Hh", w.fixtures)
+    p.ledger.append(Claim("c_other", p.id, "Hh", "condition", 4, 0, "firsthand", 100, "own"))
+    q2 = Question("q:wc_kind2", "claim_landed", ("Hh",), "c_other")
+    ops2 = operands_for(p, row, q2, "Hh", w.fixtures)
     assert ops2["kind"] == w.fixtures.get("default_store_kind"), (
         f"a claim about `condition` supplied kind={ops2['kind']!r}. The derivation fires on the "
         "PRESENCE of a claim rather than on its naming a store, which is not a derivation")
 
     # AND A QUESTION ABOUT NOTHING IN THE LEDGER FALLS BACK TOO -- the ordinary case, and the one
     # the whole corpus takes.
-    q3 = S.Question("q:wc_kind3", "need", ("Hh",), "prop_x")
-    assert S.operands_for(p, row, q3, "Hh", w.fixtures)["kind"] == "grain"
-    assert S.store_kind_of(p, q3) is None
+    q3 = Question("q:wc_kind3", "need", ("Hh",), "prop_x")
+    assert operands_for(p, row, q3, "Hh", w.fixtures)["kind"] == "grain"
+    assert store_kind_of(p, q3) is None
 
 
 # ===========================================================================
@@ -6478,7 +6745,7 @@ def test_wc_the_matter_kind_comes_from_the_question_before_it_comes_from_the_fix
 def _wb_world(mode: str, grain: int = 0):
     """`tiny_world` with `Hh`'s granary set, and one deposit mode. `grain=0` is the arm that can
     produce a FALSE: `stores(Hh, grain) = 0` against `amount = 1`."""
-    w = P.tiny_world(S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode))
+    w = P.tiny_world(DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode))
     w.rungs["Hh"].stores["grain"] = grain
     return w
 
@@ -6486,18 +6753,18 @@ def _wb_world(mode: str, grain: int = 0):
 def _wb_fold_one(w, verb="transfer", actor="p_low", subject="S"):
     """One act through the fold, WITNESSED. Returns `(driver, events)`."""
     p = w.persons[actor]
-    row = S.VERB_TABLE[verb]
-    q = S.Question("q:wb", "need", (subject,), "prop")
-    ops = S.operands_for(p, row, q, subject, w.fixtures)
+    row = VERB_TABLE[verb]
+    q = Question("q:wb", "need", (subject,), "prop")
+    ops = operands_for(p, row, q, subject, w.fixtures)
     assert ops is not None, f"{verb} formed no operands — the fixture changed, not the item"
-    d = S.SeasonDriver(w)
-    w.step = S.Step.RESOLVE
-    a = S.Act(id=f"wb_{verb}", actor=actor, verb=verb, payload=dict(ops))
+    d = SeasonDriver(w)
+    w.step = Step.RESOLVE
+    a = Act(id=f"wb_{verb}", actor=actor, verb=verb, payload=dict(ops))
     evs = d._fold(w, a)
     for e in evs:
         w.log.append(e)
         d.act_of[e.id] = a
-    w.step = S.Step.WITNESS
+    w.step = Step.WITNESS
     d.witness(evs)
     return d, evs, ops, row, q
 
@@ -6531,7 +6798,7 @@ def test_wb_the_fold_attaches_the_verdicts_reads_to_every_event_the_act_emits():
     assert [e.kind for e in evs] == ["transfer.refused"], [e.kind for e in evs]
     obs = evs[0].observed
     assert obs, "the refusal carried no reads — `Event.observed` is not reaching the Event"
-    assert all(isinstance(o, S.Observation) for o in obs), obs
+    assert all(isinstance(o, Observation) for o in obs), obs
     assert (obs[0].subject, obs[0].predicate, obs[0].value) == ("Hh", "stores:grain", 0), obs
 
     # THE SUCCESS — the same cell, a stocked granary. A success carries its reads too.
@@ -6547,16 +6814,16 @@ def test_wb_the_fold_attaches_the_verdicts_reads_to_every_event_the_act_emits():
     # one. Written the naive way first and the mutation below stayed GREEN, which is §0.1 point 2
     # arriving as a fact rather than as a principle.
     w3 = _wb_world("none", grain=8)
-    p3, d3 = w3.persons["p_low"], S.SeasonDriver(w3)
-    w3.step = S.Step.RESOLVE
-    q3 = S.Question("q:wb3", "need", ("S",), "prop")
-    typed_ops = S.operands_for(p3, S.VERB_TABLE["transfer"], q3, "S", w3.fixtures)
-    typed = d3._fold(w3, S.Act(id="wb_pre", actor="p_low", verb="transfer",
+    p3, d3 = w3.persons["p_low"], SeasonDriver(w3)
+    w3.step = Step.RESOLVE
+    q3 = Question("q:wb3", "need", ("S",), "prop")
+    typed_ops = operands_for(p3, VERB_TABLE["transfer"], q3, "S", w3.fixtures)
+    typed = d3._fold(w3, Act(id="wb_pre", actor="p_low", verb="transfer",
                                payload=dict(typed_ops)))
     assert typed and typed[0].observed, (
         "the priming act read nothing, so the leak this asserts against cannot happen and the "
         "assertion below is vacuous")
-    untyped = d3._fold(w3, S.Act(id="wb_cr", actor="p_low", verb="create_record",
+    untyped = d3._fold(w3, Act(id="wb_cr", actor="p_low", verb="create_record",
                                  payload={"subject": "S"}))
     assert untyped, "create_record emitted nothing — the fixture changed"
     assert all(e.observed == () for e in untyped), (
@@ -6610,16 +6877,16 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     the event-kind namespace, `LedgerReader.read` finds nothing, and it goes RED the same way.
     Restored, GREEN."""
     w = _wb_world("actor", grain=0)
-    p, row = w.persons["p_low"], S.VERB_TABLE["transfer"]
-    q = S.Question("q:wb", "need", ("S",), "prop")
-    ops = S.operands_for(p, row, q, "S", w.fixtures)
+    p, row = w.persons["p_low"], VERB_TABLE["transfer"]
+    q = Question("q:wb", "need", ("S",), "prop")
+    ops = operands_for(p, row, q, "S", w.fixtures)
 
     # ---- CONTROL: nothing in the ledger, so nothing is contradicted.
-    assert not S.belief_contradicts(p, row, "S", ops), (
+    assert not belief_contradicts(p, row, "S", ops), (
         "a person holding no claim about `Hh` was treated as knowing `transfer` fails — §F1's "
         "asymmetry is gone and this test can no longer observe what it is for")
-    w.step = S.Step.DELIBERATE
-    before = S.Query.opening_set(p, S.Query.assemble(p, q, w.fixtures.get("view_k")), q,
+    w.step = Step.DELIBERATE
+    before = decision.opening_set(p, decision.assemble(p, q, w.fixtures.get("view_k")), q,
                                  w.fixtures)
     assert any(c.verb == "transfer" for c in before), (
         "no `transfer` Candidate formed even before the deposit — the control is broken, not the "
@@ -6636,16 +6903,16 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     assert landed[0].holder == p.id and landed[0].visibility == "own", landed[0]
 
     # ---- THE READ: the same cell, the person's own ledger, and it is FALSE.
-    v = S.evaluate(row.requires_typed, S.LedgerReader(p.ledger), S.binding_of(p.id, ops))
+    v = evaluate(row.requires_typed, LedgerReader(p.ledger), binding_of(p.id, ops))
     assert v.value is False, (
         f"the deposited claim evaluated {v.value!r}, not False. `LedgerReader.read` returns the "
         "stored value verbatim, so `0 >= 1` is the whole mechanism — a non-False here means the "
         "claim is not in the vocabulary the cell reads")
-    assert S.belief_contradicts(p, row, "S", ops)
+    assert belief_contradicts(p, row, "S", ops)
 
     # ---- THE DECISION: clause 4 drops it.
-    w.step = S.Step.DELIBERATE
-    after = S.Query.opening_set(p, S.Query.assemble(p, q, w.fixtures.get("view_k")), q,
+    w.step = Step.DELIBERATE
+    after = decision.opening_set(p, decision.assemble(p, q, w.fixtures.get("view_k")), q,
                                 w.fixtures)
     assert not any(c.verb == "transfer" for c in after), (
         f"the `transfer` Candidate survived a claim that makes its requirement known-false: "
@@ -6679,18 +6946,18 @@ def test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own
     3 `condition = UNKNOWN` claims and 3 `contain.path:* = UNKNOWN` claims land, and this goes RED
     on the second assertion. Restored, GREEN."""
     from ..harness import headless as HL
-    w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "total"))
-    d = S.SeasonDriver(w)
-    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    w = HL.build_world(0, DEFAULT_FIXTURES.sweep("observation_deposit_mode", "total"))
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     for _ in range(3):
-        d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+        d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                  None, HL.subsistence)
-    unknown = [(e.kind, o.predicate) for e in w.log for o in e.observed if o.value is S.UNKNOWN]
+    unknown = [(e.kind, o.predicate) for e in w.log for o in e.observed if o.value is UNKNOWN]
     assert unknown, (
         "the run produced NO unreadable observation, so this scan cannot observe the deposit it "
         "excludes — the world builder changed, not the rule")
     deposited = [(c.subject, c.predicate) for p in w.persons.values() for c in p.ledger
-                 if c.value is S.UNKNOWN]
+                 if c.value is UNKNOWN]
     assert not deposited, (
         f"{len(deposited)} UNKNOWN claim(s) reached a ledger, e.g. {deposited[:5]}. A read the "
         "world could not answer is the INSTRUMENT'S gap, and depositing it is `H-94`'s false "
@@ -6733,21 +7000,21 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     from ..harness import headless as HL
 
     def grammar_claims(mode):
-        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode))
-        d = S.SeasonDriver(w)
-        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        w = HL.build_world(0, DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode))
+        d = SeasonDriver(w)
+        mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         ever = {}
         for _ in range(3):
-            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                      None, HL.subsistence)
             for p in w.persons.values():
                 for c in p.ledger:
-                    if str(c.predicate).partition(":")[0] in S.REQUIRES_STEMS:
+                    if str(c.predicate).partition(":")[0] in REQUIRES_STEMS:
                         ever[c.id] = (c.subject, c.predicate, c.value)
         total = sum(len(p.ledger) for p in w.persons.values())
         end = [(c.subject, c.predicate, c.value)
                for p in w.persons.values() for c in p.ledger
-               if str(c.predicate).partition(":")[0] in S.REQUIRES_STEMS]
+               if str(c.predicate).partition(":")[0] in REQUIRES_STEMS]
         return total, sorted(ever.values()), end
 
     held, none_arm, none_end = grammar_claims("none")
@@ -6818,15 +7085,15 @@ def test_wb_a_read_computed_from_the_ledger_is_never_deposited_into_it():
     from ..harness import run_cases as R
     case = next(c for c in R.load_cases("NPC") if c["id"] == "NPC-088")
     w = C.build_at(case, 0)
-    w.fixtures = S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "actor")
-    d = S.SeasonDriver(w)
-    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+    w.fixtures = DEFAULT_FIXTURES.sweep("observation_deposit_mode", "actor")
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs())
     for _ in range(3):
         d.season(ch, question=None, subsistence=C.P.SUBSIST,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
     produced = [o for e in w.log for o in e.observed
-                if o.predicate == "claim.held" and o.value is not S.UNKNOWN]
+                if o.predicate == "claim.held" and o.value is not UNKNOWN]
     assert produced, (
         "the run produced NO depositable `claim.held` read, so this exclusion cannot be observed "
         "here — the world builder changed, not the rule")
@@ -6842,21 +7109,21 @@ def test_wb_a_read_computed_from_the_ledger_is_never_deposited_into_it():
     # subject `WorldReader` ALREADY answers True for would make the flip below unobservable.
     pid = "p_a"
     victim = w.persons[pid]
-    wr = S.WorldReader(w, pid)
+    wr = WorldReader(w, pid)
     subj = next((r for r in w.rungs if wr.read(r, "claim.held") is False), None)
     assert subj is not None, (
         "every rung is already the subject of a claim this person holds, so planting one cannot "
         "flip `WorldReader` and this half would pass vacuously")
     before_world = wr.read(subj, "claim.held")
     assert before_world is False, before_world
-    victim.ledger.append(S.Claim("planted", pid, subj, "claim.held", False, w.tick,
+    victim.ledger.append(Claim("planted", pid, subj, "claim.held", False, w.tick,
                                  "firsthand", 100, "own"))
-    assert S.LedgerReader(victim.ledger).read(subj, "claim.held") is False, (
+    assert LedgerReader(victim.ledger).read(subj, "claim.held") is False, (
         "the planted claim is not what `LedgerReader` answers with — the plant is wrong, not the "
         "rule")
-    assert S.WorldReader(w, pid).read(subj, "claim.held") is True, (
+    assert WorldReader(w, pid).read(subj, "claim.held") is True, (
         f"planting `({subj}, claim.held, False)` left `WorldReader` at "
-        f"{S.WorldReader(w, pid).read(subj, 'claim.held')!r} (it was {before_world!r} before). "
+        f"{WorldReader(w, pid).read(subj, 'claim.held')!r} (it was {before_world!r} before). "
         "`WorldReader.read` no longer answers `claim.held` from ledger membership, so the reason "
         "for the exclusion has changed and `LEDGER_DERIVED_STEMS` must be re-derived rather than "
         "kept")
@@ -6884,14 +7151,14 @@ def test_wb_two_reads_of_one_cell_in_one_barrier_deposit_exactly_one_claim():
     two `stores:grain` claims land, tied on `(when, confidence)`, and this goes RED on the count.
     Restored, GREEN."""
     w = _wb_world("actor", grain=8)
-    p, row = w.persons["p_low"], S.VERB_TABLE["transfer"]
-    q = S.Question("q:wb", "need", ("S",), "prop")
-    ops = S.operands_for(p, row, q, "S", w.fixtures)
-    d = S.SeasonDriver(w)
-    w.step = S.Step.RESOLVE
+    p, row = w.persons["p_low"], VERB_TABLE["transfer"]
+    q = Question("q:wb", "need", ("S",), "prop")
+    ops = operands_for(p, row, q, "S", w.fixtures)
+    d = SeasonDriver(w)
+    w.step = Step.RESOLVE
     evs = []
     for n in (1, 2):
-        a = S.Act(id=f"wb_dedup_{n}", actor="p_low", verb="transfer", payload=dict(ops))
+        a = Act(id=f"wb_dedup_{n}", actor="p_low", verb="transfer", payload=dict(ops))
         out = d._fold(w, a)
         for e in out:
             w.log.append(e)
@@ -6904,7 +7171,7 @@ def test_wb_two_reads_of_one_cell_in_one_barrier_deposit_exactly_one_claim():
     assert len({r[2] for r in reads if r[:2] == ("Hh", "stores:grain")}) == 2, (
         f"both reads returned the same value: {reads}. `_eff_transfer` no longer mutates "
         "`Rung.stores` during RESOLVE, so the same-tick collision this pins cannot arise")
-    w.step = S.Step.WITNESS
+    w.step = Step.WITNESS
     d.witness(evs)
     landed = [(c.subject, c.predicate, c.value, c.when, c.confidence) for c in p.ledger
               if c.predicate == "stores:grain"]
@@ -6916,7 +7183,7 @@ def test_wb_two_reads_of_one_cell_in_one_barrier_deposit_exactly_one_claim():
         f"the surviving read is {landed[0][2]}, not the first one the fan reached. Which read "
         "survives is stated at the deposit site; changing it is a decision, not a detail")
     ties = [(c.subject, c.predicate, c.when, c.confidence) for c in p.ledger
-            if str(c.predicate).partition(":")[0] in S.REQUIRES_STEMS]
+            if str(c.predicate).partition(":")[0] in REQUIRES_STEMS]
     assert ties, "no grammar-vocabulary claim landed at all, so the sweep below is vacuous"
     dup = [k for k in set(ties) if ties.count(k) > 1]
     assert not dup, (
@@ -6939,11 +7206,11 @@ def test_wb_the_carrier_moves_the_seeded_hash():
     from ..harness import headless as HL
     hashes = []
     for strip in (False, True):
-        w = HL.build_world(0, S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
-        d = S.SeasonDriver(w)
-        mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+        w = HL.build_world(0, DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
+        d = SeasonDriver(w)
+        mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(2):
-            d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                      None, HL.subsistence)
         carried = sum(len(e.observed) for e in w.log)
         if strip:
@@ -7003,55 +7270,55 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
 
     def drops(fx):
         hits = []
-        original = S.belief_contradicts
+        original = decision.belief_contradicts
         def counted(p_, row, subject, operands):
             out = original(p_, row, subject, operands)
             if out:
                 hits.append((row.verb, subject))
             return out
-        S.belief_contradicts = counted
+        decision.belief_contradicts = counted
         try:
             w = C.build_at(case, 0)
             w.fixtures = fx
-            d = S.SeasonDriver(w)
-            mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-            ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+            d = SeasonDriver(w)
+            mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+            ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs())
             for _ in range(C.seasons_for(case)):
                 d.season(ch, question=None, subsistence=C.P.SUBSIST,
                          contest_max_depth=w.fixtures.get("contest_max_depth"))
         finally:
-            S.belief_contradicts = original
+            decision.belief_contradicts = original
         return hits, w
 
-    control, _wc = drops(S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
-    live, wl = drops(S.DEFAULT_FIXTURES)
+    control, _wc = drops(DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
+    live, wl = drops(DEFAULT_FIXTURES)
 
     # ---- THE SECOND SHAPE, IN A DIFFERENT WORLD AND A DIFFERENT `requires` FORM.
     from ..harness import headless as HL
 
     def hl_drops(fx):
         hits = []
-        original = S.belief_contradicts
+        original = decision.belief_contradicts
         def counted(p_, row, subject, operands):
             out = original(p_, row, subject, operands)
             if out:
                 hits.append((row.verb, subject))
             return out
-        S.belief_contradicts = counted
+        decision.belief_contradicts = counted
         try:
             w = HL.build_world(0, fx)
-            d = S.SeasonDriver(w)
-            mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+            d = SeasonDriver(w)
+            mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
             acts = []
             for _ in range(3):
-                acts.append(d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                acts.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                                      None, HL.subsistence)["acts"])
         finally:
-            S.belief_contradicts = original
+            decision.belief_contradicts = original
         return hits, acts
 
-    hl_control, hl_acts_none = hl_drops(S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
-    hl_live, hl_acts_live = hl_drops(S.DEFAULT_FIXTURES)
+    hl_control, hl_acts_none = hl_drops(DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
+    hl_live, hl_acts_live = hl_drops(DEFAULT_FIXTURES)
     print(f"\n  W-B — §F1 clause-4 drops on ARC-01: none={control} shipped={live}"
           f"\n  W-B — §F1 clause-4 drops on headless NPC-088: none={hl_control} shipped={hl_live}"
           f"   acts/season {hl_acts_none} -> {hl_acts_live}")
@@ -7159,13 +7426,13 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
     for mode in ("none", "actor", "total"):
         seen, ids = {}, {}
         for rate in (0, 5, 20):
-            fx = (S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode)
+            fx = (DEFAULT_FIXTURES.sweep("observation_deposit_mode", mode)
                   .sweep("claim_decay_per_season", rate))
             w = HL.build_world(0, fx)
-            d = S.SeasonDriver(w)
-            mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+            d = SeasonDriver(w)
+            mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
             for _ in range(3):
-                d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
+                d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                          None, HL.subsistence)
             confs = [c.confidence for p in w.persons.values() for c in p.ledger]
             ev = Counter(e.kind for e in w.log)
@@ -7344,7 +7611,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     A9 = _wd_arm9()
     from ..harness import corpus_run as C
     case = C.apply_rescale(next(c for c in R.load_cases("NPC") if c["id"] == "NPC-088"))
-    base = S.DEFAULT_FIXTURES.sweep("scene_budget", 2).sweep("interactions_per_scene", 1)
+    base = DEFAULT_FIXTURES.sweep("scene_budget", 2).sweep("interactions_per_scene", 1)
 
     got, windows, bad_windows = {}, 0, 0
     for mode in ("none", "actor", "total"):
@@ -7374,7 +7641,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
         "nothing to be true of and this test is not checking confound 1 at all")
     assert bad_windows == 0, (
         f"{bad_windows} of {windows} scored lookahead slots sit at the fork's OWN tick or "
-        "earlier. DELIBERATE is a parallel map over a frozen world (shape.py:4204-4221), so those "
+        "earlier. DELIBERATE is a parallel map over a frozen world (engine/season/loop/driver.py::SeasonDriver.deliberate), so those "
         "slots cannot differ and counting them inflates reconvergence — the exact defect the "
         "NO-LIVE-WINDOW exclusion exists to prevent")
     assert all(g["genuine"] > 0 for g in got.values()), (
@@ -7432,7 +7699,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     #     divergence in general, it destroys it specifically at the shipped `actor` arm.
     #
     # ⭐⭐ (c) AND THE ZERO IS DIAGNOSED, WHICH RETIRES THE ARM QUESTION RATHER THAN ANSWERING IT.
-    #     A fork reaches a later decision by exactly ONE route: §F1 clause 4 (`shape.py:627`,
+    #     A fork reaches a later decision by exactly ONE route: §F1 clause 4 (`engine/season/epistemic.py::belief_contradicts`,
     #     `belief_contradicts`). `wd_extra.corpus_drops` counts that population over the same 89
     #     worlds. At `observation_deposit_mode: actor`:
     #
@@ -7579,7 +7846,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
         f"the one differing line is not the fingerprint: {diff[0]}")
 
     case = C.apply_rescale(next(c for c in R.load_cases("NPC") if c["id"] == "NPC-088"))
-    base = S.DEFAULT_FIXTURES.sweep("scene_budget", 2).sweep("interactions_per_scene", 1)
+    base = DEFAULT_FIXTURES.sweep("scene_budget", 2).sweep("interactions_per_scene", 1)
     got = {}
     for mode in ("none", "actor", "total"):
         fx = base.sweep("observation_deposit_mode", mode)
@@ -7653,11 +7920,11 @@ def _we_bands(model="scene_fraction", ids=range(24)):
     seen = {}
     for i in ids:
         w = P.tiny_world()
-        w.step = S.Step.RESOLVE
+        w.step = Step.RESOLVE
         w.fixtures = w.fixtures.sweep("wound_harm_model", model)
         before = w.persons["p_mid"].body
-        d = S.SeasonDriver(w)
-        act = S.Act(id=f"we{i}", actor="p_low", verb="kill / wound",
+        d = SeasonDriver(w)
+        act = Act(id=f"we{i}", actor="p_low", verb="kill / wound",
                     payload={"subject": "p_mid"})
         evs = d.resolve([act], w.fixtures.get("contest_max_depth"))
         deg = evs[0].degree if evs else None
@@ -7695,11 +7962,11 @@ def test_we_a_contested_acts_consequence_differs_by_degree():
     seen = _we_bands()
     # ⚠ ASSERT THAT IT ASSERTED (§0.1 point 2). A search over act ids that happened to find only
     # one band would otherwise "pass" three vacuous comparisons.
-    assert set(seen) == set(S.COMBAT_BANDS), (
-        f"the search reached {sorted(seen)} of {list(S.COMBAT_BANDS)} over 24 act ids. Every "
+    assert set(seen) == set(COMBAT_BANDS), (
+        f"the search reached {sorted(seen)} of {list(COMBAT_BANDS)} over 24 act ids. Every "
         "assertion below compares bands, so a missing band makes them absent rather than weak")
 
-    felled, wounded, untouched = (seen[S.FELLED], seen[S.WOUNDED], seen[S.UNTOUCHED])
+    felled, wounded, untouched = (seen[FELLED], seen[WOUNDED], seen[UNTOUCHED])
     # FELLED -- the kill. The subject leaves the world and every tenure naming them closes (§15.3,
     # "a plague that kills the praefect ends his tenure THROUGH THE DEATH").
     assert felled["alive"] is False and felled["kinds"] == ["person.died"], felled
@@ -7718,24 +7985,24 @@ def test_we_a_contested_acts_consequence_differs_by_degree():
 
     # ── THE CONTROL. `total` re-runs the pre-`W-E` magnitude and collapses two bands into one. ──
     ctl = _we_bands(model="total")
-    assert set(ctl) == set(S.COMBAT_BANDS), ctl
-    assert ctl[S.WOUNDED]["alive"] is False, (
+    assert set(ctl) == set(COMBAT_BANDS), ctl
+    assert ctl[WOUNDED]["alive"] is False, (
         "the control arm no longer reproduces the defect: under `wound_harm_model=total` the "
         "harm is the whole body, so a WOUND must kill exactly as a FELLING does. If this passes "
         "with the subject alive, the arm has stopped being the code as it stood and the "
         "measurement above has no baseline")
-    assert (ctl[S.FELLED]["alive"], ctl[S.WOUNDED]["alive"]) == (False, False)
+    assert (ctl[FELLED]["alive"], ctl[WOUNDED]["alive"]) == (False, False)
     # ⚠ AND THE CONTROL ARM IS VISIBLY WRONG, WHICH IS WHY IT IS A CONTROL AND NOT A CANDIDATE:
     # it deletes the person and still reports `body.changed`, i.e. a success report for something
     # that did not happen (`ID-9`) -- the defect class the degree-keyed `emits:` exists to end.
-    assert ctl[S.WOUNDED]["kinds"] == ["body.changed"], ctl[S.WOUNDED]
+    assert ctl[WOUNDED]["kinds"] == ["body.changed"], ctl[WOUNDED]
 
     # ── THE SECOND CONTROL. `none` isolates the WRITE SET from the VALUE. ──
     ctl2 = _we_bands(model="none")
-    assert ctl2[S.WOUNDED]["kinds"] == ["kill.refused"], (
+    assert ctl2[WOUNDED]["kinds"] == ["kill.refused"], (
         f"with no harm model a wound writes nothing, so the fold's own write-nothing guard must "
-        f"emit the REFUSAL rather than the success; got {ctl2[S.WOUNDED]}")
-    assert ctl2[S.WOUNDED]["body_after"] == ctl2[S.WOUNDED]["body_before"], ctl2[S.WOUNDED]
+        f"emit the REFUSAL rather than the success; got {ctl2[WOUNDED]}")
+    assert ctl2[WOUNDED]["body_after"] == ctl2[WOUNDED]["body_before"], ctl2[WOUNDED]
 
     print(f"\n  W-E — kill / wound, tiny_world, 24 act ids, seed as tiny_world sets it:"
           f"\n    scene_fraction {[(k, v['kinds'], v['alive'], v['body_after']) for k, v in sorted(seen.items())]}"
@@ -7760,11 +8027,11 @@ def test_we_event_degree_is_assigned_and_stays_none_where_nothing_graded_it():
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
     seen = _we_bands()
     for band, got in seen.items():
-        assert band in S.COMBAT_BANDS and got["degrees"] == {band}, (band, got)
+        assert band in COMBAT_BANDS and got["degrees"] == {band}, (band, got)
     # THE UNCONTESTED PATH. `speak` declares no `contests:`, so nothing graded it.
-    w = _w(); w.step = S.Step.RESOLVE
-    d = S.SeasonDriver(w)
-    evs = d.resolve([S.Act(id="we_sp", actor="p_low", verb="speak")], 2)
+    w = _w(); w.step = Step.RESOLVE
+    d = SeasonDriver(w)
+    evs = d.resolve([Act(id="we_sp", actor="p_low", verb="speak")], 2)
     assert evs and all(e.degree is None for e in evs), [(e.kind, e.degree) for e in evs]
 
 
@@ -7780,19 +8047,19 @@ def test_we_emits_at_has_a_caller_and_the_band_selects_the_kind():
     from .. import combat_seam as C
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
-    row = S.VERB_TABLE["kill / wound"]
+    row = VERB_TABLE["kill / wound"]
     union = set(row.emits)
     assert len(union) >= 3, f"the union is no longer bigger than a branch ({union}); re-derive"
     seen = _we_bands()
-    assert set(seen) == set(S.COMBAT_BANDS), sorted(seen)
+    assert set(seen) == set(COMBAT_BANDS), sorted(seen)
     for band, got in seen.items():
         declared = set(row.emits_at(band))
         assert set(got["kinds"]) == declared, (band, got["kinds"], sorted(declared))
         assert set(got["kinds"]) != union, (
             f"{band} emitted the flat union {sorted(union)} -- `emits_at` is not being consulted")
     # THE ONE THAT WAS ACTIVELY FALSE: nobody was hurt and the world was told a man died.
-    assert "person.died" not in seen[S.UNTOUCHED]["kinds"], seen[S.UNTOUCHED]
-    assert "person.died" not in seen[S.WOUNDED]["kinds"], seen[S.WOUNDED]
+    assert "person.died" not in seen[UNTOUCHED]["kinds"], seen[UNTOUCHED]
+    assert "person.died" not in seen[WOUNDED]["kinds"], seen[WOUNDED]
 
 
 def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
@@ -7815,8 +8082,8 @@ def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
     Nothing in the tracer produces a `net`; the branch is a READER WITH NO PRODUCER and is
     recorded on `H-98`. `test_we_only_a_verb_that_declares_contests_can_be_graded_today` is
     where that is measured rather than asserted."""
-    lad = S.degree_ladder()
-    assert lad is not None, f"the tree's degree ladder is unavailable: {S.ladder_error()}"
+    lad = degree_ladder()
+    assert lad is not None, f"the tree's degree ladder is unavailable: {ladder_error()}"
     from engine.autoload.dice_engine import DEGREE_LABEL, Degree, degree_from_net
     assert lad[0] is degree_from_net and lad[1] is DEGREE_LABEL, (
         "`degree_of` is holding something other than the tree's own ladder -- a copy of a single "
@@ -7829,21 +8096,23 @@ def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
     checked = 0
     for net, ob in ((5, 2), (5.0, 2.0), (3, 2), (2.999, 0), (2, 2), (2.5, 2), (2.0, 2.0),
                     (1, 2), (1.9, 2.0), (-1, 0), (0, 0), (0.5, 0), (3, 0), (0, 3)):
-        assert S.degree_of({"net": net, "ob": ob}) == DEGREE_LABEL[degree_from_net(net, ob)]
+        assert degree_of({"net": net, "ob": ob}) == DEGREE_LABEL[degree_from_net(net, ob)]
         checked += 1
     assert checked == 14, checked
 
     # 3. FOLLOW THE OWNER. Replace the RESOLVED ladder and every band must move with it.
-    saved = S._LADDER
+    saved = seam._LADDER
     try:
-        S._LADDER = (lambda net, ob, **k: Degree.FAILURE, DEGREE_LABEL)
-        moved = {S.degree_of({"net": n, "ob": o}) for n, o in ((5, 2), (3, 2), (2.5, 2), (1, 2))}
+        seam._LADDER = (lambda net, ob, **k: Degree.FAILURE, DEGREE_LABEL)
+        # A replaced ladder that collapses all four to one band is then observable.
+        # [JUSTIFIED: four (net, ob) pairs spanning the ladder's four bands]
+        moved = {degree_of({"net": n, "ob": o}) for n, o in ((5, 2), (3, 2), (2.5, 2), (1, 2))}
         assert moved == {"Failure"}, (
             f"replacing the ladder changed nothing ({moved}) -- `degree_of` is answering from a "
             "band table of its own, which is the second resolver S27.2 refuses")
     finally:
-        S._LADDER = saved
-    assert S.degree_of({"net": 5, "ob": 2}) == "Overwhelming", "the ladder was not restored"
+        seam._LADDER = saved
+    assert degree_of({"net": 5, "ob": 2}) == "Overwhelming", "the ladder was not restored"
 
 
 def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
@@ -7862,22 +8131,24 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     AND THE LADDER BRANCH HAS NO PRODUCER. `degree_from_net` reads `net - ob`; nothing in this
     tracer produces a `net`. The scan below is the falsifier for that sentence -- if a roll ever
     lands here, it goes red and the claim has to be rewritten rather than quietly outlived."""
-    contested = {v: r.contests for v, r in S.VERB_TABLE.items() if r.contests}
+    contested = {v: r.contests for v, r in VERB_TABLE.items() if r.contests}
     assert contested == {"kill / wound": "the body"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set")
-    assert len(S.VERB_TABLE) == 32, len(S.VERB_TABLE)
+    # Pins the roster against silent growth; CLAUDE.md quotes the same 32.
+    # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
+    assert len(VERB_TABLE) == 32, len(VERB_TABLE)
 
-    prizes = S.roster_map("contest_subsystems", "prizes")
+    prizes = roster_map("contest_subsystems", "prizes")
     assert prizes["the body"] == "personal_combat"
     # THE SEAM CALLS personal_combat AND REFUSES THE OTHER TWO, BY NAME. Executed, not read.
-    w = _w(); w.step = S.Step.RESOLVE
+    w = _w(); w.step = Step.RESOLVE
     refused = {}
     for prize, sub in sorted(prizes.items()):
         if sub == "personal_combat":
             continue
         with pytest.raises(Unspecified) as ei:
-            S.contest(w, "S", prize, ["p_low", "p_mid"], 0, 2, ["a1"])
+            contest(w, "S", prize, ["p_low", "p_mid"], 0, 2, ["a1"])
         refused[prize] = sub
         assert sub in str(ei.value), (prize, str(ei.value)[:160])
     assert set(refused) == {"a field", "a proposition", "a standing"}, refused
@@ -7944,24 +8215,24 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     from .. import combat_seam as C
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
-    w = _w(); w.step = S.Step.RESOLVE
-    raw = S.contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we0"])
+    w = _w(); w.step = Step.RESOLVE
+    raw = contest(w, "R", "the body", ["p_low", "p_mid"], 0, 2, ["we0"])
     assert raw["wound_state"]["p_low"]["felled"] is True, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["felled"] is False, raw["wound_state"]
     assert raw["wound_state"]["p_mid"]["wounds"] > 0, raw["wound_state"]
-    assert S.combat_degree(raw, "p_mid") == S.WOUNDED
-    assert S.combat_degree(raw, "p_low") == S.FELLED, (
+    assert combat_degree(raw, "p_mid") == WOUNDED
+    assert combat_degree(raw, "p_low") == FELLED, (
         "the two readings must actually differ on this case, or the assertion below is vacuous")
 
-    w2 = _w(); w2.step = S.Step.RESOLVE
-    d = S.SeasonDriver(w2)
-    evs = d.resolve([S.Act(id="we0", actor="p_low", verb="kill / wound",
+    w2 = _w(); w2.step = Step.RESOLVE
+    d = SeasonDriver(w2)
+    evs = d.resolve([Act(id="we0", actor="p_low", verb="kill / wound",
                            payload={"subject": "p_mid"})], 2)
     assert [e.kind for e in evs] == ["body.changed"], [(e.kind, e.degree) for e in evs]
     assert "p_mid" in w2.persons, (
         "the subject was deleted by a fight the ACTOR lost -- the band is being read off the "
         "loser, which is the defect `verb_table.yaml`'s `writes_source:` cell used to specify")
-    assert evs[0].degree == S.WOUNDED
+    assert evs[0].degree == WOUNDED
 
 
 def test_r8_4_document_key_fires_for_a_non_author_holding_the_changed_record():
@@ -7984,9 +8255,9 @@ def test_r8_4_document_key_fires_for_a_non_author_holding_the_changed_record():
     """
     w = P.tiny_world()
     author, holder, bystander = "p_low", "p_other", "p_mid"
-    d = S.SeasonDriver(w)
+    d = SeasonDriver(w)
     d.matter([])
-    out = d.resolve([S.Act(id="r_mk", actor=author, verb="create_record", payload={})],
+    out = d.resolve([Act(id="r_mk", actor=author, verb="create_record", payload={})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "record.created"), None)
     assert e is not None, f"the fold emitted {[x.kind for x in out]} — no `record.created`"
@@ -7998,7 +8269,7 @@ def test_r8_4_document_key_fires_for_a_non_author_holding_the_changed_record():
         f"the fold wrote no record into `changes[]` (got {[c.subject for c in e.changes]}) — the "
         "operand the repair reads does not exist and every assertion below would be vacuous")
 
-    doc = S.CHANNEL_PREDICATES["document_key"]
+    doc = CHANNEL_PREDICATES["document_key"]
     # ⚠ THE AUTHOR'S OWN CASE, WHICH HAD NO FALSIFIER UNTIL THE ADVERSARIAL PASS ASKED FOR ONE.
     # `_eff_create_record` mints the maker's `hold` in the SAME fold call that emits
     # `record.created`, and `Tenure.live` is `until is None`, so the hold is live immediately.
@@ -8023,7 +8294,7 @@ def test_r8_4_document_key_fires_for_a_non_author_holding_the_changed_record():
     for t in w.tenures:
         if t.kind == "hold" and t.object == rec and t.live:
             t.until = w.tick
-    w.add_tenure(S.Tenure("t_hold_rec", holder, rec, "hold", since=w.tick))
+    w.add_tenure(Tenure("t_hold_rec", holder, rec, "hold", since=w.tick))
     assert doc(w, e, holder), (
         "`document_key` still does not fire for a non-author holding the record this act CHANGED. "
         "That is the pre-`R8.4` predicate: it is reading `e.subject` (the actor) rather than "
@@ -8054,11 +8325,11 @@ def test_r8_4_document_key_reaches_a_non_author_through_a_store():
     """
     w = P.tiny_world()
     actor, witness, uninvolved = "p_other", "p_low", "p_mid"
-    w.add_tenure(S.Tenure("t_src", actor, "S", "hold", since=0))
-    w.add_tenure(S.Tenure("t_dst", witness, "Hh", "hold", since=0))
-    d = S.SeasonDriver(w)
+    w.add_tenure(Tenure("t_src", actor, "S", "hold", since=0))
+    w.add_tenure(Tenure("t_dst", witness, "Hh", "hold", since=0))
+    d = SeasonDriver(w)
     d.matter([])
-    out = d.resolve([S.Act(id="tr1", actor=actor, verb="transfer",
+    out = d.resolve([Act(id="tr1", actor=actor, verb="transfer",
                            payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 3})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "transfer.made"), None)
@@ -8069,7 +8340,7 @@ def test_r8_4_document_key_reaches_a_non_author_through_a_store():
         f"`transfer.made` carries subject={e.subject!r} changes={[c.subject for c in e.changes]} — "
         "if the changes stop naming both rungs this test is no longer exercising the reach it claims")
 
-    doc = S.CHANNEL_PREDICATES["document_key"]
+    doc = CHANNEL_PREDICATES["document_key"]
     assert doc(w, e, witness), (
         "`document_key` does not admit the holder of the rung this act WROTE TO. Then `R5`'s "
         "bureaucratic channel is still unreachable for anyone but an actor, and the `R8.4` repair "

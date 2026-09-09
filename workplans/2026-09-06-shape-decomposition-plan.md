@@ -1,6 +1,12 @@
 # `engine/season/shape.py` — DECOMPOSITION PLAN (12 modules, 10 steps)
 
-## Status: **PROPOSED. Reference under §0.05 — delete this file and the game behaves identically.**
+## Status: **SUPERSEDED FOR STEPS 7–10 AND 0a by `workplans/2026-09-09-shape-decomposition-plan-v2.md` (2026-09-09).** This file remains the record of steps 0b–6 and is still reference under §0.05.
+
+> ⚠ **Rows 1–6 of §1's table are HISTORY, NOT INSTRUCTIONS**, and four of this document's forward-looking
+> claims are wrong against the tree as it stands: `sense`'s placement contradicts `04:116`/`:133`/`:158`;
+> the step-7 artifact grep is a verified false negative; step 9's flat `loop.py` is shadowed by the
+> `loop/` package; and `pack_scenes` is missing from §0's rebind list. v2 §0 tabulates all seven with
+> their measurements. **Do not execute steps 7–10 from this file.**
 ## Lane: IN. Recorded 2026-09-06, ED-IN-0203. Adjudicated read-only; zero escalations.
 
 > ### ⚠ THE TREE THIS PLANS DOES NOT EXIST ON `main`.
@@ -60,12 +66,33 @@ it is at `:1476`. Nothing noticed, because nothing reads them.
 
 ## 1 · The module suite
 
-**Flat files in `engine/season/`, NOT subdirectories**, for three concrete reasons: `_HERE`-relative
-paths (`:290, 449, 1407, 4912, 6505, 6600`) stay valid; `test_jordan_no_definition_is_hardcoded_in_a_body`
-discovers its corpus by `HERE.glob("*.py")` and would **silently stop scanning** a subdirectory; and
-`SOURCE_353_TEXT` returns `""` when its path is wrong (`:4913`), which makes `names_a_verb` charge
-every invented verb to the design (`:5832`) — the exact mis-attribution it exists to prevent,
-silently. Directories can come later, once both glob-based guards are made recursive.
+⚠ **THE "FLAT FILES, NOT SUBDIRECTORIES" RULING IS RETRACTED (2026-09-08, step 5). It was reversed
+in practice five times before it was reversed on paper** — `data/`, `harness/`, `state/` at steps
+0b–4, and `queries/`, `loop/` at step 5 — and PR #381 flagged that the text still read as if it
+held. A plan that describes a tree nobody has built for four steps is worse than a silent one,
+because the next reader takes it for the ruling and finds the tree in violation of it.
+
+It is retracted rather than merely overtaken, because **all three of its reasons are closed**, and
+the ruling that replaces it is older and higher: `architecture/meta/04_CODE_ARCHITECTURE.md` §A.2
+names **nine modules — `state/ data/ queries/ decision/ loop/ seam/ manifest/ port/ tests/`** — and
+that is LAYER 1, ratified 2026-09-05 (ED-IN-0204). The three hazards:
+
+  1. `_HERE`-relative paths — **gone.** `data/files.py` is the ONE anchor (step 0b) and the only
+     module permitted to name its own location; a subdirectory costs one constant there, not 29.
+  2. `HERE.glob("*.py")` silently skipping a subdirectory — **closed.** `files.package_modules()`
+     is `rglob`, and its docstring records that a flat glob "would silently drop eight of them".
+     Step 4 re-pointed the Jordan guard onto `_model_modules()`, which is derived from it, so the
+     five modules added at step 5 were scanned with no edit to any test. Measured at step 5: the
+     four source-scanning gates hold 21 / 41 / 20 / 0 sites before and after.
+  3. `SOURCE_353_TEXT` returning `""` on a wrong path — **same anchor.** It reads
+     `files.SOURCE_353_MD`, which is checked at import.
+
+**The layer table below still reads `queries.py`, `predicates.py`, `effects.py` as flat files.** The
+modules that landed are `queries/world_q.py`, `queries/readers.py`, `loop/predicates.py`,
+`loop/effects.py` — the layer assignments are unchanged **except `LedgerReader`, which moved layer
+as well as address** (3 → 7, `requires` → `queries/readers.py`, on step 3's recorded adjudication;
+the placement table below records the override, and the layer table still files it under
+`requires.py`, which is the older of the two and is the one that is wrong).
 
 | layer | module | owns |
 |---|---|---|
@@ -81,7 +108,7 @@ silently. Directories can come later, once both glob-based guards are made recur
 | 7 | `queries.py` | `WorldReader`, the eleven World-first statics of `Query` (`:3053-3171`), `questions_for`, `occasioned_by` |
 | 8 | `predicates.py` — governance | `REQUIRES_PREDICATES`, `requires_predicate`, `in_holdings`, `under_purview`, `titles_held`, `highest_title_rank`, `_req_confer`, `_req_revoke`, `_req_dispatch`, `_req_convene` |
 | 8 | `effects.py` | `EFFECTS`, `effect_for`, `_operand`, the ten `_eff_*` |
-| 9 | `epistemic.py` | `belief_contradicts`, `act_refs`, `claim_subjects`, `_event_place`, the five `_ch_*`, `CHANNEL_PREDICATES`, `observers_for`, and the deposit body at `:6323-6423` as one function |
+| 9 | `epistemic.py` | `belief_contradicts`, `act_refs`, `claim_subjects`, `_event_place`, the five `_ch_*`, `CHANNEL_PREDICATES` **with its `for` loop and its `del`**, `observers_for`. ⚠ **THE DEPOSIT BODY IS STRUCK FROM THIS ROW (2026-09-09, step 6), BECAUSE THIS DOCUMENT'S OWN §3 FORBIDS IT** — *"the four barrier bodies may move … ONLY AS THE SAME METHODS … so `inspect.getsource(S.SeasonDriver.witness)` keeps resolving to a real body"*. Three tests read that source, and an independent read-only inventory sharpened what each would do: `test_d2_witness_does_not_lie_about_its_driver` (`:146`) asserts `driver="Event"` is IN it, and all three of `witness`'s `driver="Event"` sites are inside the deposit body — so that one breaks **loudly**; `test_d9b_eviction_ranks_on_the_product_not_lexicographically` (`:288`, assertion at `:320`) pins the eviction comparator string inside `witness`; and `test_witness_writes_no_belief_and_no_conviction` (`:720`) is a NEGATIVE assertion scoped to `witness`'s own source, so it would keep passing while **silently ceasing to cover the claim-writing code it exists to police** — the dangerous one, and the class this project has now hit three times. `witness` also holds **3 of `shape.py`'s 12 `write` call sites**, and `test_w2` reads `files.SHAPE_PY`/`files.PROBES_PY` by fixed path — and those three sites are the ONLY source of `("Person", "claim_ledger")` coverage in that scan, so extracting the body would silently delete that pair from the gate's corpus, which is the failure this project has now hit three times. A row instructing a later session to do what §3 forbids is worse than a silent one. |
 | 10 | `decision.py` — AX-2's island | `_load_alignment`, `ALIGNMENT*`, `alignment_at`, `align`, `stance_toward`, `urgency`, `make_chooser`, `person_side_eligible`, `containing_rung_of`, `store_kind_of`, `_derive_operand`, `operands_for`, `_REFERENT_OPERANDS`, `agreement`, `standing_of`, `_payload_of`, `pack_scenes`, `view_ids`, `body_band_penalty`, `aggregate_questions`, and the four person-side statics (`budget`, `opening_set`, `assemble`, `entrenchment`) as module functions. ⚠ `sense` was in this row until **2026-09-09** and is **moved to `loop.py`** — it takes a `World`, and `04:133` gives `decision/` **NO World in scope**; see the corrected row in §1's *placements a lazy pass would get wrong* |
 | 11 | `seam.py` | `ContestError`, `contest_subsystem`, `_LADDER`, **`_LADDER_ERROR`**, `degree_ladder`, `ladder_error`, `Resolution`, `combat_degree`, `degree_of`, `contest` |
 | 11 | `combat_seam.py` *(exists)* | as today |
@@ -147,7 +174,7 @@ this table to have become complete.
 | symbol | tempting | ruled | decided by |
 |---|---|---|---|
 | `WorldReader` (`:1128`) | grammar | `queries` | calls `Query.parent_of`/`presence` and reads `World._STATE_COLLECTIONS` at call time; the grammar must stay reader-agnostic |
-| `LedgerReader` (`:1287`) | epistemic | `requires` | needs only `UNKNOWN`; both consumers sit above it |
+| `LedgerReader` (`:1287`) | epistemic | ~~`requires`~~ → **`queries/readers.py`** | ⚠ **OVERRULED at step 3 and executed at step 5.** The step-3 note left in `shape.py` is the adjudication: *"they are READERS, `queries/` territory at a later step, and the grammar they serve asks only `reader.read(subject, predicate)`; moving a reader into the grammar module would give the grammar an opinion about where its answers come from."* It travels with `WorldReader`. |
 | `title_domain`, `title_rank` (`:4636`) | governance | `data` | pure roster reads, and `Office.__post_init__` needs them below the resolver |
 | `matrix_rows_without_a_field` (`:1903`) | data | `carriers` | its `globals()` lookup must run where the classes are defined; `data` cannot import `carriers` |
 | `MATRIX_REFUSAL_LAW` (`:1968`) | data | `world` | its only reader is the gate (`:2804`) |
@@ -155,11 +182,9 @@ this table to have become complete.
 | `sense` (`:4550`) | `decision` | **`loop`** | ⚠ **CORRECTED 2026-09-09.** This row read *ruled: `decision`*, *"the guard whitelists the NAME inside the scanned file; it must stay where the guard scans"* — **and that reasoning is inverted.** `sense(p: Person, w: World, subsistence)` (`engine/season/shape.py:1923` on `main`) **takes a `World`**, and Layer 1 places it: `04:133` types `decision/` as *"AX-2's island … **NO World in scope**"*, `04:570` as *"does not import `state/`, `world_q` or `loop/`"*, while `04:116` says *"`sense()` called by the loop, never by the decision"* and `04:158` gives `loop/deliberate` *"Calls `sense()`, builds `View`, calls `choose` per person"*. The whitelist at `test_season_shape.py:2267` — `if takes_world and node.name != "sense"` — is **why the misplacement would have gone UNDETECTED, not a warrant for it**: a guard that exempts a name by name reports nothing wherever that name lives. **A whitelist is not a placement warrant.** Found by the adversarial pass on `workplans/2026-09-09-r-execution-plan.md`, which had inherited this row's verdict into its own step 7 |
 | the alignment block | verbs | `decision`, **whole** | the sweep rebinds `ALIGNMENT` and `align` reads it through its own globals; splitting makes the H-66 sweep a fake control |
 | `stratum_of`, `resolvable_verbs` | verbs | `loop` | read `Act`, `REQUIRES_PREDICATES`, `EFFECTS` — all above `verbs` |
-| the person-side `Query` statics | keep `Query` whole | `decision`, as functions | `04:116` splits the families by module. Cost: **56 call sites** across 5 files; a mechanical rename |
+| the person-side `Query` statics | keep `Query` whole | `decision`, as functions | `04:116` splits the families by module. ⚠ **A "PRICE CORRECTION" POSTED HERE ON 2026-09-08 IS ITSELF RETRACTED THE SAME DAY.** It read 67 person-side and 73 world-first and called the plan's 56 wrong. **The plan is not wrong; the basis differed** — 56 is `.py` matching lines under `engine/season/`, and my figures were repo-wide lines including comments and docstrings. 73 reproduces on no basis at all. Re-measured repo-wide over `.py`, all three bases: world-first **72 occurrences / 71 lines / 54 CALLS**, person-side **68 / 65 / 47**. Step 7's real bill is **47 calls**. A count published as a correction to someone else's count, on a basis nobody stated, is `§0.1` pt 5's recorded error arriving a second time. Neither was paid at step 5: the eleven moved to `queries/world_q.py` as module functions and `shape.Query` binds them as `staticmethod`s, so `Query.parent_of is world_q.parent_of` and all 73 sites resolve to the moved bodies unmodified. Step 7 pays the 67 when the class goes. |
 
-**Genuinely ambiguous, left to the implementer:** the ledger eviction (`:6429-6446`). `04:149` gives
-`state/ledgers` "the eviction comparator", which makes it `epistemic.py`'s; `test_season_shape.py:265`
-pins it inside `witness`. **Whichever moves, the other moves in the same commit.**
+~~**Genuinely ambiguous, left to the implementer:** the ledger eviction.~~ **RESOLVED 2026-09-09 at step 6, and it was not a close call once both sides were checked against the tree.** `04:149` gives `state/ledgers` *"the eviction comparator"*, which argued for `epistemic.py`; against that, §3 of this document rules that a barrier body moves only as the same method, and the pin is real — `test_d9b_eviction_ranks_on_the_product_not_lexicographically` (`test_season_shape.py:288`, assertion at `:320`) asserts `"c.confidence * (c.when" in inspect.getsource(S.SeasonDriver.witness)`, with a comment saying in terms *"the LIVE comparator is the one measured above, not a copy of it in this file"*. **The eviction stays in `witness`, and so does the deposit body** — the plan's own "whichever moves, the other moves in the same commit" is honoured by neither moving. `04:149` is satisfied when the driver itself reaches `loop/` at step 9, which is where a ledger sub-store can own a comparator without de-sourcing a barrier.
 
 ---
 
@@ -211,11 +236,14 @@ and `trace_log.py` records no caller file or line, so `TRACE.txt` is invariant t
 | **2** | `data.py`, `fixtures.py` — moved as one block so load order is unchanged | `len(data.MATRIX)`, `len(data._ROSTERS)` match |
 | **3** | `requires.py`, `verbs.py` — decorator registry and consumer together | the loader still refuses a planted eighth form |
 | **4** | `carriers.py`, then `world.py` | `test_h118_content_hash_folds_*` green; the `SystemExit` count re-pointed to the model set and still 28 |
-| **5** | `queries.py`, `predicates.py`, `effects.py` | `EFFECTS` and `REQUIRES_PREDICATES` keys diffed identical |
-| **6** | `epistemic.py` — **coordinate with the R8 work, do not do it for them** | `test_wb_*` green with `S.belief_contradicts` re-pointed |
+| **5** ✅ **LANDED 2026-09-08** | `queries/world_q.py`, `queries/readers.py`, `loop/predicates.py`, `loop/effects.py`; `shape.py` 4,153 → 3,121 | `EFFECTS` and `REQUIRES_PREDICATES` keys diffed identical AND the same dict objects (`S.EFFECTS is effects.EFFECTS`); 996 body lines moved with 7 novel, all declared; `report.py` reproduced all eight artifacts byte-identically |
+| **6** ✅ **LANDED 2026-09-09** | `epistemic.py`; `shape.py` 3,124 → 2,803 | `test_wb_*` **9 passed** with `S.belief_contradicts` re-pointed — and the rebind proven by MUTATION, not by argument: plant `from .epistemic import belief_contradicts` (UNALIASED — `as _bc` alone passes, and that near-miss is the point) in `opening_set` and the clause-4 test goes RED with `shipped=[]` while acts/season still move `[7,7,7] → [7,6,6]`, so the GAME is unchanged and only the instrument goes blind. 322 body lines moved, **1 novel**. `CHANNEL_PREDICATES` rebuilds all five channels in the new namespace |
 | **7** | `decision.py` — the 56 `Query.<person static>` call sites renamed in the same commit. ⚠ **AND `test_season_shape.py:2231` IS RE-POINTED TO THE MODEL SET IN THIS COMMIT, not deferred to step 10 (added 2026-09-09).** That AST test parses `files.SHAPE_PY` **alone** (`:2231`) and asserts `"budget" in found and "opening_set" in found` (`:2280`); **both symbols move at this step** (`shape.py:515`, `:561`), so the test goes **RED at step 7** and, repaired the lazy way, then scans no `decision/` code at all — the guard-blinding recurrence §0 already names. Keep its `>= 5` vacuity floor (`:2279`) and its planted string-annotation probe | ⚠ the `grep 'import.*\(world\|queries\)' decision.py` → 0 artifact is **DECORATIVE and is demoted (2026-09-09)**: it is case-sensitive and order-dependent, so `from ..state.world import World` and `from ..state.carriers import Person` both pass it. The real artifact is the re-pointed AST test above, red on a planted `def planted(p: Person, w: "World")` in `decision/`; H-66 sweep green |
 | **8** | `seam.py`; `combat_seam.py` imports `decision.body_band_penalty` and `ids.H` dotted — **the cycle ends here**. ⚠ **TWO PATH-KEYED CONSTANTS MOVE IN THIS COMMIT (added 2026-09-09).** `tests/valoria/test_engine_does_not_import_systems.py`'s `PATH_SEAM_ALLOWED` (`:220`) is keyed on the path relative to `engine/`, and `test_the_one_declared_path_seam_is_still_the_only_one` asserts **exact set equality** — `assert set(offenders) == PATH_SEAM_ALLOWED` (`:404-424`) — so the member `season/combat_seam.py` must be renamed to `season/seam/combat_seam.py` **or the test is red**. That is a rename inside a shrink-only set, not a widening. And `files.COMBAT_SEAM_PY = PACKAGE_DIR / "combat_seam.py"` (`engine/season/data/files.py:134`) goes stale in the same commit | ladder test green with `S._LADDER` re-pointed; the `probes.py` spy re-pointed; `pytest tests/valoria/test_engine_does_not_import_systems.py -q` green **after** the rename |
-| **9** | `loop.py`; `shape.py` becomes a pure facade | every `inspect.getsource` test green unchanged |
+| **9** ✅ **LANDED 2026-09-09** | `loop/driver.py` — NOT `loop.py`, which `season.loop` (a package since step 5) shadows; `shape.py` 1,788 → 489, a pure facade | `SeasonDriver`'s `ast` span byte-identical to HEAD at 1,145 lines; every `inspect.getsource` test green unchanged |
+| **10** ✅ **LANDED 2026-09-09** | `shape.py` DELETED; 219 names rewritten from a map parsed out of the facade's own imports | `import engine.season.shape` → `ModuleNotFoundError`; artifacts byte-identical; PROBE FLIPS 0 |
+
+⚠ **STEPS 7-10 LANDED AND THIS TABLE'S PREDICTIONS FOR THEM ARE SUPERSEDED BY `workplans/2026-09-09-shape-decomposition-plan-v2.md`.** Two of the warnings above did not fire, for a reason worth keeping: step 8 built `seam.py` as a FLAT module and did **not** move `combat_seam.py`, so `PATH_SEAM_ALLOWED` was never touched and `test_engine_does_not_import_systems` stayed green — the rename that row demands was avoided rather than performed. What DID need a co-edit was `test_import_cycle_game_state_npe.py`, which this table never names: dissolving the `combat_seam ↔ shape` cycle took its pinned count 4 → 3.
 | **10** | re-point the eleven source-scanning tests from `"shape.py"` to the model set; delete the facade; reconcile `CURRENT.md`'s "11 modules" | `grep -rn 'import shape\|from shape' engine/ tests/` → 0 |
 
 **Against PLAN item 1.6.** The split **subsumes 1.6's import half** (step 0b is it) and depends on

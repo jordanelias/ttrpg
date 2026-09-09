@@ -256,15 +256,16 @@ def emit(rep: dict, trace_rows: list) -> None:
         (RUNS / f"UNMAPPED_{kind}.md").write_text("\n".join(out))
 
     # THE DISCLOSURE S320 PROMISED AND REV 4 NEVER DELIVERED.
-    from .. import shape as _s
-    used = sorted(_s.ASSUMPTIONS_USED)
+    from ..data.matrix import ASSUMPTIONS_USED, PARTITION_ASSUMED
+    from ..data.fixtures import DEFAULT_FIXTURES
+    used = sorted(ASSUMPTIONS_USED)
     out = ["# THE INSTRUMENT'S OWN ASSUMPTIONS — what it had to supply to run at all", "",
            "**§42.2.1's inject-declare-name pattern, applied to SCHEMA ROWS rather than to",
            "numbers.** Without these the loop cannot complete one season, so refusing them would",
            "mean measuring nothing; asserting them silently would be the invention §42.3 names.",
-           "", f"**{len(used)} of {len(_s.PARTITION_ASSUMED)} declared assumptions were actually",
+           "", f"**{len(used)} of {len(PARTITION_ASSUMED)} declared assumptions were actually",
            "exercised by this run.**", ""]
-    if not _s.PARTITION_ASSUMED:
+    if not PARTITION_ASSUMED:
         # ⚠ ZERO HERE IS A MEASUREMENT, NOT AN ABSENCE, AND A READER OF THIS FILE CANNOT TELL
         # THE TWO APART UNLESS IT SAYS SO. The dict held three rows until `W2`; §D2's DR-3 now
         # states all three, so the instrument no longer has to assume them. `W2` first published
@@ -281,13 +282,13 @@ def emit(rep: dict, trace_rows: list) -> None:
                 "> which is `CLAUDE.md` §0.1 point 2. If any future run has to assume a row, it",
                 "> appears in the table below.", ""]
     out += ["| row | social | why | exercised |", "|---|---|---|---|"]
-    for k, (social, why) in sorted(_s.PARTITION_ASSUMED.items()):
+    for k, (social, why) in sorted(PARTITION_ASSUMED.items()):
         out.append(f"| `({k[0]}, {k[1]})` | {social} | {why} | {'yes' if k in used else 'no'} |")
     out += ["", "## Harness fixtures — every number this instrument used", "",
             "| fixture | value | in chain? |", "|---|---|---|"]
     inchain = {"entrenchment_seasons": "yes — §15.2",
                "obstacle_refusal_multiple": "yes — §27.4"}
-    for k, v in _s.DEFAULT_FIXTURES._v.items():
+    for k, v in DEFAULT_FIXTURES._v.items():
         out.append(f"| `{k}` | `{v}` | {inchain.get(k, 'no — a harness fixture')} |")
     (RUNS / "ASSUMPTIONS.md").write_text("\n".join(out))
     print(f"wrote UNMAPPED_NPC.md, UNMAPPED_ARC.md, ASSUMPTIONS.md ({len(used)} exercised)")

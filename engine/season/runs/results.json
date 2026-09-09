@@ -9397,7 +9397,7 @@
   "P28": {
    "id": "P28",
    "verdict": "PASS",
-   "detail": "PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. There is no signature in the Query surface (15 functions) that takes one person and returns another's ledger. Absence is the refusal here, not a guard",
+   "detail": "PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. There is no signature in the decision surface (18 functions) that takes one person and returns another's ledger. Absence is the refusal here, not a guard",
    "kind": null,
    "section": "S20",
    "title": "a ledger is unreadable by anyone else",

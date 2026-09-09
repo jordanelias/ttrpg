@@ -891,7 +891,7 @@ a porter will "fix".
    and siblings): `engine/season/*.py` signals refusal by `raise` **167 times** — 128 of them in
    `shape.py`, as `Unspecified` 43, `Forbidden` 42, `SystemExit` 28, `Ungraded` 6, and 9 more across
    five other types. Against that, **exactly one** site returns a typed result
-   (`shape.py:6726`, `return ContestError(...)`). The package carries 18 `except` clauses, 4 of them
+   (`engine/season/seam.py::contest`, `return ContestError(...)`). The package carries 18 `except` clauses, 4 of them
    in `shape.py`. ⚠ An earlier draft of this paragraph said "two typed results" and "7 except
    clauses"; both came from substring greps and neither reproduces — the corrected figures are above
    and the conclusion is strengthened, not weakened, by them.

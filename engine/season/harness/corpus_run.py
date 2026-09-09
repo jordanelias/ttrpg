@@ -45,7 +45,18 @@ from __future__ import annotations
 import sys
 from collections import Counter
 
-from .. import shape as S
+from .. import decision
+from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
+from ..data.matrix import Step
+from ..data.rosters import CONVICTION_AXES, RUNG_KINDS, load_yaml
+from ..data.verbs import VERB_TABLE
+from ..decision import align, make_chooser
+from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
+from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..queries.world_q import questions_for
+from ..state.carriers import Act, Event, Office, Person, Proposition, Rung, Site, Tenure
+from ..state.ids import H, ROOT
+from ..state.world import World
 from ..data import files
 from . import probes as P
 from . import run_cases as R
@@ -63,7 +74,7 @@ def endings() -> dict:
     it — so a deadline that the corpus says forces the ending reached no world."""
     if not _ENDINGS.exists():
         return {}
-    d = S.load_yaml(_ENDINGS.read_text())
+    d = load_yaml(_ENDINGS.read_text())
     rows = d.get("cases") if isinstance(d, dict) else d
     return {r["id"]: r for r in (rows or []) if isinstance(r, dict) and r.get("id")}
 
@@ -137,10 +148,10 @@ def _check_office(where: str, off) -> None:
     # later at world-build. Building a throwaway Office means every rule the class enforces --
     # present and future -- applies at LOAD, before any world exists.
     try:
-        S.Office("probe:" + where, str(off["post"]), None,
+        Office("probe:" + where, str(off["post"]), None,
                  list(off.get("remit") or []),
                  body=off.get("body"), faction=off.get("faction"))
-    except (S.Unspecified, S.Forbidden, S.Unowned) as e:
+    except (Unspecified, Forbidden, Unowned) as e:
         raise SystemExit(f"{where}: {e}") from None
 
 
@@ -166,7 +177,7 @@ def seasons_for(case: dict) -> int:
     return min(int(n), MAX_SEASONS) if isinstance(n, int) and n > 0 else DEFAULT_SEASONS
 
 
-def build_at(case: dict, seed: int = 0) -> S.World:
+def build_at(case: dict, seed: int = 0) -> World:
     """A world for THIS case: the containment chain down to its `scale`, three people who are
     themselves `person` rungs, a site per producing kind, a motive, and — where the corpus says the
     ending is forced by a threshold — a Date coming due, which is `questions_for`'s Q1.
@@ -178,8 +189,8 @@ def build_at(case: dict, seed: int = 0) -> S.World:
     convictions therefore forced identical rankings in every world. Seeding from the id makes them
     differ per case, reproducibly, and takes the axis names from the roster rather than a body."""
     scale = str(case.get("scale"))
-    w = S.World(seed, S.DEFAULT_FIXTURES)
-    order = list(S.RUNG_KINDS)
+    w = World(seed, DEFAULT_FIXTURES)
+    order = list(RUNG_KINDS)
     chain = order[order.index(scale):] if scale in order else []
     # ⚠ NO SYNTHETIC `person`-KIND RUNG. Rev 1 minted `r_person` for a `scale: person` case AND
     # made each of the three people a `person` rung contained in it — a person inside a person.
@@ -190,29 +201,30 @@ def build_at(case: dict, seed: int = 0) -> S.World:
     chain = [k for k in chain if k != "person"]
     ids = {k: f"r_{k}" for k in chain}
     for k in chain:
-        w.rungs[ids[k]] = S.Rung(ids[k], k)
+        w.rungs[ids[k]] = Rung(ids[k], k)
     for lower, upper in zip(chain, chain[1:]):
-        w.add_tenure(S.Tenure(f"t_{lower}_in_{upper}", ids[lower], ids[upper], "contain", 0))
-    for kind in sorted(S.SITE_YIELD):
-        if S.SITE_YIELD[kind]:
-            w.sites[f"s_{kind}"] = S.Site(f"s_{kind}", ids[chain[0]], kind,
+        w.add_tenure(Tenure(f"t_{lower}_in_{upper}", ids[lower], ids[upper], "contain", 0))
+    for kind in sorted(SITE_YIELD):
+        if SITE_YIELD[kind]:
+            w.sites[f"s_{kind}"] = Site(f"s_{kind}", ids[chain[0]], kind,
                                           condition=w.fixtures.get("condition_scale"))
-    axes = sorted(S.CONVICTION_AXES)
+    axes = sorted(CONVICTION_AXES)
     for n, pid in enumerate(("p_a", "p_b", "p_c")):
-        w.persons[pid] = S.Person(pid, pid)
+        w.persons[pid] = Person(pid, pid)
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
         # this, `move` is refused everywhere. ⚠ THE STATED REASON IS NOW STALE AND THE FIXTURE
         # IS NOT: `_req_move` was retired by `W-A` and the typed cell short-circuits on an
         # unbound `to` BEFORE it reads `w.rungs` at all, so the mechanism named here no longer
         # runs. The seat is still required — `Query.presence` and the contain-path read both need
         # it — but a reader should not be told a retired predicate is why.
-        w.rungs[pid] = S.Rung(pid, "person")
+        w.rungs[pid] = Rung(pid, "person")
         # The parent is the deepest NON-person rung, which after the filter above is `chain[0]`.
         # A case scaled at `person` therefore seats its people in the `hearth` -- the next rung up
         # -- rather than in a person-shaped container, which is what the ladder actually says.
         if chain:
-            w.add_tenure(S.Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
-        pick = int(S.H(seed, 0, str(case.get("id")), f"axis:{pid}"), 16) % len(axes)
+            w.add_tenure(Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
+        # [JUSTIFIED: radix for parsing H()'s blake2b hexdigest -- same as combat_seam.py:153]
+        pick = int(H(seed, 0, str(case.get("id")), f"axis:{pid}"), 16) % len(axes)
         w.persons[pid].convictions = {axes[pick]: 0.9}
     # ⚠ `W28`: THE CASE MAY SEAT ITS OWN ACTOR ON AN OFFICE. A re-scaled case carries
     # `office: {post, remit, why}` — `post` names the office the prose names, `remit` the acts it
@@ -227,7 +239,7 @@ def build_at(case: dict, seed: int = 0) -> S.World:
     off = case.get("office")
     if isinstance(off, dict) and off.get("post"):
         oid = f"off_{case.get('id', 'x')}"
-        w.offices[oid] = S.Office(oid, str(off["post"]), ids[chain[0]],
+        w.offices[oid] = Office(oid, str(off["post"]), ids[chain[0]],
                                   # ⚠ NO SILENT FILTER. Rev 1 wrote
                                   # `[a for a in ... if a in S.REMIT_ACTS]`, dropping an
                                   # unrecognised remit act on the floor -- a quiet default sitting
@@ -235,11 +247,11 @@ def build_at(case: dict, seed: int = 0) -> S.World:
                                   # never fire. Pass them through and let the constructor refuse.
                                   list(off.get("remit") or []),
                                   body=off.get("body"), faction=off.get("faction"))
-        w.add_tenure(S.Tenure(f"t_{oid}", "p_a", oid, "hold", 0))
-    prop = S.Proposition("prop_x", "OUGHT", ids[chain[0]], "a standing ambition", True, 0)
+        w.add_tenure(Tenure(f"t_{oid}", "p_a", oid, "hold", 0))
+    prop = Proposition("prop_x", "OUGHT", ids[chain[0]], "a standing ambition", True, 0)
     w.propositions[prop.id] = prop
     for pid in ("p_a", "p_b", "p_c"):
-        w.add_tenure(S.Tenure(f"t_{pid}_commits", pid, prop.id, "commit", 0))
+        w.add_tenure(Tenure(f"t_{pid}_commits", pid, prop.id, "commit", 0))
     if (ENDINGS.get(str(case.get("id"))) or {}).get("forced_by_threshold"):
         # Q1: a Date coming due, with a DocketItem naming a matter. The corpus says this case's
         # ending is forced by a threshold; a world with no deadline cannot represent that at all.
@@ -300,12 +312,12 @@ def _r3_propagates(w, driver) -> bool:
     # uses. One index, built once -- the first draft of this nested four loops and was O(n^4).
     emitter: dict = {}
     for a in acts:
-        row = S.VERB_TABLE.get(a.verb)
+        row = VERB_TABLE.get(a.verb)
         if row is None:
             continue
         for k in tuple(row.emits or ()) + tuple(row.emits_on_refusal or ()):
             for t in range(w.tick + 2):
-                emitter[S.H(w.world_seed, t, a.actor, f"{k}:{a.id}")] = a.actor
+                emitter[H(w.world_seed, t, a.actor, f"{k}:{a.id}")] = a.actor
     for e in w.log:
         mine = emitter.get(e.id)
         if mine is None:
@@ -333,14 +345,14 @@ def _span_status(case: dict) -> str:
 def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     case = apply_rescale(case)
     scale, cid = str(case.get("scale")), case["id"]
-    if scale not in set(S.RUNG_KINDS):
+    if scale not in set(RUNG_KINDS):
         return dict(id=cid, scale=scale, status="UNREPRESENTABLE", executed=[], refused=[],
                     seasons=0, why=f"`scale: {scale}` is not a rung kind", checks={})
     n = seasons_for(case)
     w = build_at(case, seed)
-    d = S.SeasonDriver(w)
-    mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs())
     try:
         for _ in range(n):
             # `H-87` -- S39.3 gives the contest depth cap NO DEFAULT, so an uncapped call raised
@@ -349,14 +361,14 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
             # is the one registered number (§0.05).
             d.season(ch, question=None, subsistence=P.SUBSIST,
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
-    except S.InstrumentDefect as e:
+    except InstrumentDefect as e:
         # ⚠ THE TWO BUCKETS ARE SHAPE'S OWN, NOT A SECOND TAXONOMY (§8). `shape.py` states why the
         # split matters: a call-site bug landing in the design column *"corrupts the measurement in
         # the direction that flatters it"*. Rev 1 merged them and labelled the merged bucket
         # "an INSTRUMENT defect", which mis-attributes every design gap the fold can raise.
         return dict(id=cid, scale=scale, status="INSTRUMENT-DEFECT", executed=[], refused=[],
                     seasons=n, why=f"{type(e).__name__}: {e}", checks={"R1": False})
-    except (S.ShapeGap, S.Unspecified, S.Forbidden, S.NoProducer) as e:
+    except (ShapeGap, Unspecified, Forbidden, NoProducer) as e:
         return dict(id=cid, scale=scale, status="DESIGN-GAP", executed=[], refused=[],
                     seasons=n, why=f"{type(e).__name__}: {e}", checks={"R1": False})
     # EXECUTION, ATTRIBUTED TO THE ACT — not to any verb that shares an emission kind.
@@ -375,23 +387,23 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     ids = {e.id for e in w.log}
     ok_v, no_v = set(), set()
     for a in getattr(d, "resolved", []):
-        row = S.VERB_TABLE.get(a.verb)
+        row = VERB_TABLE.get(a.verb)
         if row is None:
             continue
         for t in range(n + 1):
             for k in (row.emits or ()):
-                if S.H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
+                if H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
                     ok_v.add(a.verb)
             for k in (row.emits_on_refusal or ()):
-                if S.H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
+                if H(w.world_seed, t, a.actor, f"{k}:{a.id}") in ids:
                     no_v.add(a.verb)
     ok, no = sorted(ok_v), sorted(no_v)
     # ---- `W18`: §6.1's R1/R3/R4/R5 and §6.2's A1, computed. R2/A2/A3 are NOT-COMPUTABLE.
-    before = dict(S.DEFAULT_FIXTURES.reads)
+    before = dict(DEFAULT_FIXTURES.reads)
     w2 = build_at(case, seed)
-    d2 = S.SeasonDriver(w2)
-    mint2 = lambda pid, verb, subj: S.H(w2.world_seed, w2.tick, pid, f"act:{verb}:{subj}")
-    ch2 = S.make_chooser(w2.fixtures, mint2, verbs=S.resolvable_verbs())
+    d2 = SeasonDriver(w2)
+    mint2 = lambda pid, verb, subj: H(w2.world_seed, w2.tick, pid, f"act:{verb}:{subj}")
+    ch2 = make_chooser(w2.fixtures, mint2, verbs=resolvable_verbs())
     try:
         for _ in range(n):
             # ⚠ THE SAME FIXTURE, ON BOTH CALL SITES. A cap on the measured run and not the R4
@@ -436,18 +448,18 @@ def planted_control(seed: int = 0) -> tuple:
     false -> true; without it the instrument has shown only that it can print a number.
 
     Returns `(before, after)`."""
-    case = next(c for c in R.load_cases("NPC") if str(c.get("scale")) in set(S.RUNG_KINDS))
+    case = next(c for c in R.load_cases("NPC") if str(c.get("scale")) in set(RUNG_KINDS))
     w = build_at(case, seed)
-    d = S.SeasonDriver(w)
+    d = SeasonDriver(w)
     before = _r3_propagates(w, d)
     # Two acts, two actors, the second caused by the first. Hand-built: the point is to prove the
     # DETECTOR works, not that the loop produces one -- the loop producing one is `W24`/`W25`.
-    a1 = S.Act(id="ctl_a", actor="p_a", verb="speak")
-    a2 = S.Act(id="ctl_b", actor="p_b", verb="speak")
+    a1 = Act(id="ctl_a", actor="p_a", verb="speak")
+    a2 = Act(id="ctl_b", actor="p_b", verb="speak")
     d.resolved.extend([a1, a2])
-    k = S.VERB_TABLE["speak"].emits[0]
-    e1 = S.Event(S.H(w.world_seed, 0, "p_a", f"{k}:{a1.id}"), k, "p_a", [], [S.ROOT], 0)
-    e2 = S.Event(S.H(w.world_seed, 0, "p_b", f"{k}:{a2.id}"), k, "p_b", [], [e1.id], 0)
+    k = VERB_TABLE["speak"].emits[0]
+    e1 = Event(H(w.world_seed, 0, "p_a", f"{k}:{a1.id}"), k, "p_a", [], [ROOT], 0)
+    e2 = Event(H(w.world_seed, 0, "p_b", f"{k}:{a2.id}"), k, "p_b", [], [e1.id], 0)
     w.log.extend([e1, e2])
     return before, _r3_propagates(w, d)
 
@@ -473,15 +485,15 @@ def main(seed: int = 0) -> int:
     # saying WHY they agree (`H-97`).
     sep = []
     for c in R.load_cases("NPC") + R.load_cases("ARC"):
-        if str(c.get("scale")) not in set(S.RUNG_KINDS):
+        if str(c.get("scale")) not in set(RUNG_KINDS):
             continue
-        w2 = build_at(c, seed); w2.step = S.Step.DELIBERATE
+        w2 = build_at(c, seed); w2.step = Step.DELIBERATE
         pr = w2.persons["p_a"]
-        qs = S.questions_for(w2, pr)
-        vw = S.Query.assemble(pr, qs[0] if qs else None, w2.fixtures.get("view_k"))
-        cd = S.Query.opening_set(pr, vw, qs[0], w2.fixtures) if qs else []
-        nz = sum(1 for x in cd if any(float(pr.convictions.get(a, 0.0)) * S.align(x.verb, a)
-                                      for a in S.CONVICTION_AXES))
+        qs = questions_for(w2, pr)
+        vw = decision.assemble(pr, qs[0] if qs else None, w2.fixtures.get("view_k"))
+        cd = decision.opening_set(pr, vw, qs[0], w2.fixtures) if qs else []
+        nz = sum(1 for x in cd if any(float(pr.convictions.get(a, 0.0)) * align(x.verb, a)
+                                      for a in CONVICTION_AXES))
         sep.append((nz, len(cd)))
     if sep:
         tot = sep[0][1]
@@ -500,10 +512,10 @@ def main(seed: int = 0) -> int:
     print(f"  DISTINCT EXECUTED SETS   {len(sigs)}")
     ever = sorted({v for r in live for v in r["executed"]})
     tried = sorted({v for r in live for v in r["refused"]})
-    foldable = set(S.resolvable_verbs())
-    print(f"\nVERBS THAT EXECUTED : {len(ever)} of {len(S.VERB_TABLE)} — {ever}")
+    foldable = set(resolvable_verbs())
+    print(f"\nVERBS THAT EXECUTED : {len(ever)} of {len(VERB_TABLE)} — {ever}")
     print(f"VERBS ONLY REFUSED  : {len(set(tried) - set(ever))} — {sorted(set(tried) - set(ever))}")
-    print(f"\nWHERE THE {len(S.VERB_TABLE)} GO: {len(set(S.VERB_TABLE) - foldable)} have no "
+    print(f"\nWHERE THE {len(VERB_TABLE)} GO: {len(set(VERB_TABLE) - foldable)} have no "
           f"predicate/effect · {len(foldable - set(ever) - set(tried))} foldable but never even "
           f"attempted ({sorted(foldable - set(ever) - set(tried))}) · "
           f"{len(set(tried) - set(ever))} attempted and always refused · {len(ever)} executed")

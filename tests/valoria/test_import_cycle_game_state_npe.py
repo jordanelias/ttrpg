@@ -53,29 +53,32 @@ def test_game_state_npe_cycle_is_gone():
         )
 
 
-def test_exactly_four_cycles_remain_and_they_are_the_expected_families():
-    """FOUR since 2026-09-07, and the two new ones are NOT NEW CYCLES — they are two cycles this
-    detector could not see until `engine/season/` was decomposed (ED-IN-0203).
+def test_exactly_three_cycles_remain_and_they_are_the_expected_families():
+    """THREE since step 8 of the decomposition (ED-IN-0203; renamed from `..._four_...`), and the
+    drop is a DISSOLUTION, not a fix reached for here. `engine.season.combat_seam` <->
+    `engine.season.shape` is GONE: step 8 moved `body_band_penalty` (already in `decision.py`
+    since step 7) into `combat_seam.py`'s own module-level imports and re-pointed its
+    `S.H(...)` call to `.state.ids.H` directly, in the same change that carved `contest_subsystem`
+    .. `contest` out of `shape.py` into `engine/season/seam.py`. The two deferred
+    `from . import shape as S` imports (`combat_seam.py:122,137` at the time) were the cycle's
+    only two edges; `combat_seam.py` names neither `shape` nor `seam` any more.
 
-    ⚠ THE CLAIM THAT THEY PRE-EXIST IS MEASURED, NOT ASSERTED, because the whole value of this
-    count is that a rise means a real regression. Run against the tree at `2f13271` — the
-    commit immediately before the decomposition — this file's own `_real_cycles()` returns
-    **2 cycles and ZERO season cycles**, while `engine/season/combat_seam.py` already carried
-    `import shape as S` and `shape.py` already carried `import combat_seam` at what is now
-    `:6741`. The relationships were identical; the SPELLING was a bare name, which
-    `_resolve_internal` cannot bind to an internal module, so the edge was dropped. The
-    decomposition converted every intra-package import to a relative one, and the edges appeared.
-    **A deferred or bare-named import hides a cycle from an instrument; it does not remove it**
-    (`CLAUDE.md` §3 says the same thing about the interpreter, one level down).
+    ⚠ THE CLAIM THAT THAT CYCLE PRE-EXISTED IS HISTORICAL AND STAYS, because the value of THIS
+    count is that a RISE means a real regression, and the history explains why the count ever hit
+    four. Run against the tree at `2f13271` — the commit immediately before the `engine/season/`
+    decomposition — this file's own `_real_cycles()` returned **2 cycles and ZERO season cycles**,
+    while `combat_seam.py` already carried `import shape as S` and `shape.py` already carried
+    `import combat_seam` at what was then `:6741`. The relationships were identical; the SPELLING
+    was a bare name, which `_resolve_internal` cannot bind to an internal module, so the edge was
+    dropped. The decomposition converted every intra-package import to a relative one, and TWO
+    edges appeared where the detector had previously seen none. **A deferred or bare-named import
+    hides a cycle from an instrument; it does not remove it** (`CLAUDE.md` §3 says the same thing
+    about the interpreter, one level down). Step 8 is the first of the two to close for real,
+    by construction — not by the detector going blind again.
 
-    Both are SHRINK-ONLY, on the `PATH_SEAM_ALLOWED` discipline: each carries its reason and the
-    point at which it goes, and removing one means deleting its entry in the same commit.
-
-      * `engine.season.combat_seam` <-> `engine.season.shape` — A REAL DEFERRED CYCLE. Both edges
-        are function-local (`combat_seam:122,137`, `shape`'s `contest` fallback). It dissolves at
-        step 8 of the decomposition plan, where `body_band_penalty` lands below the seam and the
-        seam stops needing `shape` at all. Not fixed here because doing step 8 out of order to
-        green a gate is how a split loses its ordering.
+    The one remaining season cycle is still SHRINK-ONLY, on the `PATH_SEAM_ALLOWED` discipline: it
+    carries its reason and the point at which it goes, and removing it means deleting its entry in
+    the same commit.
 
       * `engine.season.harness.exercises` <-> `engine.season.harness.run_cases` — **NOT A RUNTIME
         CYCLE AT ALL, and this entry exists to say so rather than to excuse it.** `run_cases`
@@ -90,8 +93,8 @@ def test_exactly_four_cycles_remain_and_they_are_the_expected_families():
         change would move edges — and possibly orphan/CLI verdicts — well outside this lane. It
         belongs in its own change, with its own before/after.
 
-    THE ORIGINAL NOTE, unchanged — TWO, not three: the mass-battle port DELETED one, which is
-    worth stating as a result.
+    THE ORIGINAL NOTE, unchanged — the mass-battle port deleted one cycle before any of this, which
+    is worth stating as a result.
 
     Through 2026-08-23 there were three: the social_contest family, the canon mass-battle family,
     and `systems.mass_battle.sim.massbattle <-> systems.mass_battle.sim.units`. That third one was
@@ -105,9 +108,9 @@ def test_exactly_four_cycles_remain_and_they_are_the_expected_families():
     result this repository usually only claims in prose.
     """
     cycles = _real_cycles()
-    assert len(cycles) == 4, (
-        f"expected exactly 4 remaining cycles (contest + the canon MB family + the two declared "
-        f"engine.season ones), got {len(cycles)}: {cycles}"
+    assert len(cycles) == 3, (
+        f"expected exactly 3 remaining cycles (contest + the canon MB family + the one declared "
+        f"engine.season one), got {len(cycles)}: {cycles}"
     )
 
     def _matches(cyc, prefix):
@@ -115,11 +118,9 @@ def test_exactly_four_cycles_remain_and_they_are_the_expected_families():
 
     contest = [c for c in cycles if _matches(c, 'systems.social_contest.sim.contest')]
     mb_canon = [c for c in cycles if _matches(c, 'systems.mass_battle.sim')]
-    # The two declared season cycles, matched by their EXACT member sets rather than by a prefix.
-    # A prefix match would silently absorb a THIRD season cycle a later carving step introduces,
-    # which is the one thing this count exists to catch.
-    seam_shape = [c for c in cycles
-                  if set(c) == {'engine.season.combat_seam', 'engine.season.shape'}]
+    # The one remaining declared season cycle, matched by its EXACT member set rather than by a
+    # prefix. A prefix match would silently absorb a SECOND season cycle a later carving step
+    # introduces, which is the one thing this count exists to catch.
     harness_main = [c for c in cycles
                     if set(c) == {'engine.season.harness.exercises',
                                   'engine.season.harness.run_cases'}]
@@ -136,16 +137,15 @@ def test_exactly_four_cycles_remain_and_they_are_the_expected_families():
     for family_name, family in (
         ('social_contest.contest', contest),
         ('systems.mass_battle.sim', mb_canon),
-        ('engine.season combat_seam<->shape', seam_shape),
         ('engine.season harness __main__ edge', harness_main),
     ):
         checked += 1
         assert len(family) == 1, f"{family_name}: expected exactly one cycle, found {family}"
     # assert-that-asserted (CLAUDE.md §0.1 point 2): confirm every named family was actually
     # looked up, not skipped by an early return.
-    assert checked == 4
+    assert checked == 3
 
     # No family is a partial/renamed match of another — the union covers every cycle found, so a
-    # fifth cycle cannot hide behind a family that matched two.
-    accounted = contest + mb_canon + seam_shape + harness_main
-    assert len(accounted) == len(cycles) == 4
+    # fourth cycle cannot hide behind a family that matched two.
+    accounted = contest + mb_canon + harness_main
+    assert len(accounted) == len(cycles) == 3

@@ -235,7 +235,7 @@ DEFAULT_FIXTURES = Fixtures(
     # to establish, the ranking is the reverse of the one chosen here.
     #
     # ⭐⭐ AND THE ZERO IS NOW DIAGNOSED, WHICH DISSOLVES THE CHOICE RATHER THAN SETTLING IT.
-    # A fork can change a later decision by exactly ONE route: §F1 clause 4 (`shape.py:627`,
+    # A fork can change a later decision by exactly ONE route: §F1 clause 4 (`engine/season/epistemic.py::belief_contradicts`,
     # `belief_contradicts`) -- a claim in the actor's own ledger contradicts a candidate's
     # precondition, so the candidate is DROPPED. `wd_extra.corpus_drops` counts that population
     # over the same 89 worlds. Measured at `observation_deposit_mode: actor`:

@@ -147,7 +147,7 @@ rows:
     statement: "decisions affect subsequent decisions"
     status: not_met
     measured: >-
-      The loop was CLOSED by a theorem, not a bug — `Query.opening_set` never consults world
+      The loop was CLOSED by a theorem, not a bug — `decision.opening_set` never consults world
       state, so the only channel a decision has into a later decision is a ledger claim, and
       `belief_contradicts` could read no claim the corpus deposits. W-A/W-B opened it; the
       measured effect is ~4% later-decision divergence against 100% world divergence.
@@ -164,12 +164,11 @@ rows:
       (`engine/season/state/carriers.py::Scene`, moved there at step 4 of the decomposition; this
       citation read `shape.py:2289` and named a file that no longer holds the class) and
       `deliberate` packs each person's choices into scenes and
-      stamps every act with its scene id (`a.scene = sc.id`, `shape.py:5727`); `W17` LANDED
+      stamps every act with its scene id (`a.scene = sc.id`, `engine/season/loop/driver.py::SeasonDriver.deliberate`); `W17` LANDED
       2026-09-02 (`architecture/PLAN.md:1216`, `:1315`). What is missing is a scene-granular TICK.
-      `SeasonDriver.season` (`shape.py:6470`) calls `self.deliberate(...)` once
-      (`shape.py:6477`), then `self.resolve(acts, ...)` once (`shape.py:6478`), then
-      `self.witness(...)` once (`shape.py:6482`), then increments `w.tick` once
-      (`shape.py:6484`) — every scene for every person in the season is flattened into one
+      `SeasonDriver.season` (`engine/season/loop/driver.py`) calls `self.deliberate(...)` once, then
+      `self.resolve(acts, ...)` once, then `self.witness(...)` once, then increments `w.tick`
+      once — every scene for every person in the season is flattened into one
       `acts` list before RESOLVE ever runs, so nothing that happens in one scene can reach a
       later scene within the same season; the boundary that exists is season-to-season, not
       scene-to-scene.
@@ -214,11 +213,12 @@ rows:
       `Person` carries `convictions` against a `conviction_axes` roster with an alignment
       matrix, and a zero matrix is refused at load (PLAN §W5's dead-carrier guardrail). AMBITION
       is not fieldless: a person's motive is expressed as a `commit` Tenure to an OUGHT
-      Proposition (`engine/season/headless.py:81`, `S.Tenure(..., "commit", ...)` to
-      `prop_einhir`), and `shape.py`'s Q4 source (`"Q4 -- \`need\`"`, `shape.py:3929-3936`) reads
+      Proposition (`engine/season/harness/headless.py::build_world`, `S.Tenure(..., "commit", ...)` to
+      `prop_einhir`), and the Q4 source (`"Q4 -- \`need\`"`,
+      `engine/season/queries/world_q.py::questions_for`, moved there at step 5) reads
       exactly that live `commit`-to-OUGHT tenure as a standing question every season — that IS
       the ambition mechanism, and it is why Carin acts in a quiet season. What's missing is a
-      READ over it (no `ambitions(p)` query anywhere in `shape.py`) and a real cast per case
+      READ over it (no `ambitions(p)` query anywhere in the package) and a real cast per case
       (`W27`, `architecture/PLAN.md:1583`) rather than one shared OUGHT for all 143 corpus worlds.
       Convictions separately barely discriminate: only 2–7 of 22 candidates carry a nonzero
       score; the rest tie and are ordered alphabetically.
@@ -257,7 +257,7 @@ rows:
     status: partial
     measured: >-
       NON-OMNISCIENCE HOLDS, structurally (see R-07). NON-RATIONALITY DOES NOT EXIST: the chooser
-      takes the top-ranked candidate deterministically — `shape.py:3508` sorts on
+      takes the top-ranked candidate deterministically — `engine/season/decision.py::make_chooser` sorts on
       `(-score, verb, subject)`, so a tie breaks ALPHABETICALLY BY VERB — and only 2–7 of 22
       candidates carry a nonzero conviction score, so most choices are settled by verb name rather
       than by anything about the person. There is no mechanism by which a person declines the
@@ -270,8 +270,8 @@ rows:
       here rather than carried. (1) It described the CANDIDATE tie as broken by "an undeclared
       content-hash tiebreak". It is not; it is alphabetical, and the row's own `measure:` command
       prints that. The content hash is the WITHIN-SOURCE QUESTION tiebreak (`q.id`,
-      `shape.py:3958`), a different mechanism. (2) That question tiebreak is ALREADY DISPOSED:
-      `shape.py:3939-3956` records it closing at §0 step 4 on `H-54`'s precedent with
+      `engine/season/decision.py::make_chooser`), a different mechanism. (2) That question tiebreak is ALREADY DISPOSED:
+      `engine/season/decision.py::make_chooser` records it closing at §0 step 4 on `H-54`'s precedent with
       `needs_jordan` FALSE. Re-surfacing it as open is the ED-IN-0185 failure CLAUDE.md §0's five
       tests exist to prevent, and PR #368's body made the same error first. What remains open here
       is not a ruling but BUILD WORK: W26 and `H-62`.

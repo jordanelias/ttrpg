@@ -412,8 +412,11 @@ rosters:
       because a binding decision is the design's own category for an act whose effect is
       institutional rather than private.
     # ⚠ THE NAMES ARE NOT REPEATED HERE. `witness_channels` above is the one place the five are
-    # named; this row carries only what each one MEANS, and `shape.py` reads the names from there
-    # and the meanings from here. The first version listed all five again in a `values:` key, so a
+    # named; this row carries only what each one MEANS. The names are loaded by `data/rosters.py`
+    # (`WITNESS_CHANNELS`) and read by `epistemic.py` -- which built `CHANNEL_PREDICATES` from them
+    # and picks the `all_five` arm with them; this said `shape.py` until step 6 of the decomposition
+    # moved that reader out. ⚠ This file is MECHANISM under `CLAUDE.md` §0.05 -- code opens it at
+    # runtime -- so a stale reader named here is worse than one in a design doc. The first version listed all five again in a `values:` key, so a
     # definition lived twice in one file and a test had to guard that the two copies agreed —
     # guarding a duplicate is the shape §8 asks you not to create. Found by the `W6` adversarial
     # pass.

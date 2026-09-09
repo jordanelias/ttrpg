@@ -37,10 +37,66 @@ _REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
-from engine.season import shape as S                    # noqa: E402
+from engine.season.data.verbs import VERB_TABLE
+from engine.season.loop.driver import resolvable_verbs
+
+# ⚠ `S` IS A COMPATIBILITY SHIM, NOT THE FACADE COMING BACK (step 10, ED-IN-0203).
+# `engine/season/shape.py` was DELETED at step 10; seventeen files in this frozen sweep tree do
+# `from sweep_core import S` and read ~35 names off it. Rewriting all seventeen would be a large
+# edit to a set of instruments whose committed outputs are the record of a finished measurement,
+# so the alias is rebuilt here, over the real owner modules, instead.
+#
+# ⚠ READS ONLY. Assigning through this object rebinds THE SHIM, never the owner, so a spy
+# installed as `S.<name> = ...` would be a silent no-op. The three chains that do that
+# (`pack_scenes`, `belief_contradicts`, `questions_for`) name their owner module directly --
+# `PS` (= `season.decision`) since steps 7-8, and `DRV` (= `season.loop.driver`) since step 10.
+# Do not add a fourth without giving it the same treatment.
+import types as _types
+from engine.season import decision as _dec, epistemic as _epi, seam as _seam
+from engine.season.data import fixtures as _fx, matrix as _mx, requires as _req, rosters as _ros, verbs as _vb
+from engine.season.loop import driver as _drv
+from engine.season.queries import readers as _rd, world_q as _wq
+from engine.season import gaps as _gaps
+from engine.season.state import carriers as _car, ids as _ids, world as _wld
+
+S = _types.ModuleType("sweep_core.S")
+S.__doc__ = "read-only aggregate over season's owner modules; see the note in sweep_core.py"
+for _m in (_gaps, _ids, _car, _wld, _ros, _mx, _req, _vb, _fx, _wq, _rd, _epi, _dec, _seam, _drv):
+    for _k in dir(_m):
+        if not _k.startswith("__"):
+            setattr(S, _k, getattr(_m, _k))
+del _m, _k
+
+DRV = _drv                                              # for rebinds whose reader lives in the loop
 from engine.season.harness import corpus_run as C       # noqa: E402
 from engine.season.harness import run_cases as R        # noqa: E402
 from engine.season import combat_seam as CS             # noqa: E402
+from engine.season import decision as PS                # noqa: E402
+
+# ⚠ `PS` IS THE ONE ALIAS THE STEP-7 DECOMPOSITION ADDS HERE (ED-IN-0203). `pack_scenes` moved
+# from `shape.py` to `season.decision` at step 7, together with its sole bare-name caller
+# (`make_chooser`). `make_chooser` now resolves `pack_scenes` in `decision`'s OWN globals at call
+# time, not `shape`'s -- so a rebind of `S.pack_scenes` (this module's `shape` alias) is a no-op
+# on it. `arm9_forking.py` and `arm9_subj.py` install a spy/fake by rebinding the module attribute
+# around a scoped run (`_REAL_PACK = S.pack_scenes` / `S.pack_scenes = packed` / restore); both are
+# re-pointed to `PS.pack_scenes` in the same commit that adds this alias, so the rebind reaches the
+# function `make_chooser` actually calls.
+#
+# ⚠ SO ARE `arm7_flexibility.py` AND `wd_acceptance.py`, AND THE FIRST DRAFT OF THIS PARAGRAPH SAID
+# OTHERWISE ON A FALSE PREMISE. It read: *"`arm7_flexibility.py` ... is DELIBERATELY left
+# unrepointed -- nothing imports that file, so it cannot fail the suite"*, and cited §0.1 pt 5 to
+# license leaving it. Both halves were wrong. `sweep.py:19` imports `arm7_flexibility` and runs it
+# at `:111`; `wd_acceptance` is imported by SIX files (`wd_chunk`, `wd_collect`, `wd_ipc1`,
+# `wd_cells`, `wd_subj`, `wd_extra`). The premise came from the decomposition plan's §2.3, was
+# repeated by the step-7 brief and by the commit message, and no one ran `rg 'import arm7'` until a
+# read-only critic did. Reproduce with: `rg -n 'import (arm7_flexibility|wd_acceptance)'`.
+#
+# AND THE CITATION WAS A MISREADING. §0.1 pt 5 governs whether a pattern defect earns A GUARD; it
+# is not a licence to leave an instrument you just broke returning a wrong number. Its own text is
+# *"Delete it, or accept the defect and write nothing"* -- and the draft wrote eleven lines while
+# leaving the arm live in the runner. An unrepointed `arm7` reports all four branches identical
+# because `take_kth` becomes an inert context manager: a FABRICATED NULL, which is precisely the
+# §0.1 pt 4 failure ("a number without a control is not a measurement -- in either direction").
 
 # `CLAUDE.md` §0.1 pt 5 / G1: declared with its reason, never a bare literal in a body.
 LADDER_C = ("Overwhelming", "Success", "Partial", "Failure")
@@ -57,11 +113,11 @@ KW = "kill / wound"
 def contested_verbs() -> dict:
     """Every verb declaring `contests:`. Measured from the table, so a second one appearing
     later shows up here rather than silently falling outside a hardcoded name."""
-    return {v: r for v, r in S.VERB_TABLE.items() if getattr(r, "contests", "")}
+    return {v: r for v, r in VERB_TABLE.items() if getattr(r, "contests", "")}
 
 
 def foldable() -> set:
-    return set(S.resolvable_verbs())
+    return set(resolvable_verbs())
 
 
 class Log:

@@ -18,9 +18,11 @@ from __future__ import annotations
 
 import re
 
-from .. import shape as S
+from ..data.matrix import MATRIX
+from ..data.verbs import VERB_TABLE
+from ..loop.driver import resolvable_verbs
 from ..data import files
-from ..shape import ShapeGap
+from ..gaps import ShapeGap
 from ..trace_log import TRACE
 from . import exercises as EX
 from . import probes as P
@@ -236,9 +238,9 @@ def grade(case: dict) -> dict:
         if not tokens:
             unmapped.append(entry)              # NOBODY AUTHORED ONE -- a fact about authoring
             continue
-        parts = [EX.resolve(t, probes=_probe_view(), verb_table=S.VERB_TABLE,
-                            resolvable=S.resolvable_verbs(), register=_register(),
-                            matrix=S.MATRIX)
+        parts = [EX.resolve(t, probes=_probe_view(), verb_table=VERB_TABLE,
+                            resolvable=resolvable_verbs(), register=_register(),
+                            matrix=MATRIX)
                  for t in tokens]
         entry["resolved"] = parts
         # The row's verdict is the WORST of its declarations. A row resting on four things is

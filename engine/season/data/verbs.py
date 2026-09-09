@@ -17,13 +17,26 @@ hand-written `effect` lambda, and A LAMBDA PER ACT IS A SECOND RESOLVER."*
 module's docstring for the ordering constraint this creates and how it is satisfied structurally
 by THIS module's own import of `requires`, below, rather than by file position.
 
-⚠ `align()` ITSELF DOES NOT MOVE. It is the per-call reader (`decision/` territory, a later
-step) and this module is the table it reads; `shape.py` imports `ALIGNMENT`/
-`ALIGNMENT_DEFAULT_CELL` back from here for it. THIS IS WHY A SWEEP STILL WORKS AFTER THE MOVE:
-`test_tracer_is_honest.py` rebinds `S.ALIGNMENT` (`shape`'s own namespace, not this module's)
-between sweep points, and `align()` -- defined in `shape.py` -- reads the global `ALIGNMENT` of
-the module it is DEFINED IN, which is `shape.py`'s own, populated by the `from .data.verbs
-import ALIGNMENT` below. The rebind and the read share a namespace because `align` never left it.
+⚠ CORRECTED, step 7 of the decomposition: this paragraph used to say `align()` ITSELF DOES NOT
+MOVE, present tense, true when written (step 3) and false now. `align()` moved to
+`season.decision` at step 7, together with the rest of `decision/`'s person-side surface, and
+THIS module is still the table it reads -- `decision.py` imports `ALIGNMENT`/
+`ALIGNMENT_DEFAULT_CELL` from here, the same names `shape.py` re-exports back from `decision.py`
+so `S.ALIGNMENT` keeps resolving. THE SWEEP STILL WORKS, BUT THE NAMESPACE THAT MAKES IT WORK
+MOVED WITH THE READER: `test_season_shape.py`'s
+`test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_printed` now rebinds
+`decision.ALIGNMENT` (not `S.ALIGNMENT`, which would be a no-op on it since step 7), and
+`align()` -- defined in `decision.py` now -- reads the global `ALIGNMENT` of the module it is
+DEFINED IN, which is `decision.py`'s own, populated by the `from .data.verbs import ALIGNMENT`
+in THAT file. The rule this paragraph exists to state is unchanged even though the address moved:
+the rebind and the read still share a namespace, because that namespace is wherever `align` is
+DEFINED, not wherever it happens to have been defined last (§4's "write the rule, not the
+address" — the exact correction `shape.py`'s own S23/S30 breadcrumb records making twice already).
+⚠ THE ORIGINAL SENTENCE ALSO NAMED THE WRONG TEST FILE (`test_tracer_is_honest.py`, under
+`proposals/2026-08-31-shape-tracer/`, which does not mention `ALIGNMENT` at all) -- a
+pre-existing inaccuracy this correction does not repeat, found while fixing the move claim rather
+than by a separate pass, and left as a `not this step's declared scope` note rather than chased
+further: nothing else in this docstring depended on it.
 
 ⚠ `VERB_TABLE` IS ASSIGNED TWICE, VERBATIM, AND ONLY THE SECOND ASSIGNMENT EVER RUNS. The
 forward declaration below (`VERB_TABLE: dict = {}`) carries a comment from a PRIOR layout of

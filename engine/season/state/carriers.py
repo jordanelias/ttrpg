@@ -4,7 +4,8 @@ Extracted from `shape.py` at step 4 of the decomposition (ED-IN-0203), a PURE MO
 `StateChange`, `Event`, `Claim`, `Sensation`, `View`, `Question`, `Candidate`, `Scene`, `Act`,
 `Person`, `Site`, `Record`, `Proposition`, `Office`, `Rung` -- and `matrix_rows_without_a_field`,
 which is not a carrier and is here for a reason given below. `shape.py` re-exports every name, so
-`from ..shape import Person` and `S.Person` keep resolving exactly as before.
+importers name this module directly (`from ..state.carriers import Person`). The `shape.py`
+facade that used to re-export these was deleted at step 10 of the decomposition.
 
 ⚠ WHY `matrix_rows_without_a_field` IS IN THIS MODULE AND NOT IN `data/`. It answers *does this
 matrix row's `fieldname` name a real field of its `record_kind`* by looking the KIND UP AS A NAME

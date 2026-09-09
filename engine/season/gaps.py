@@ -1,6 +1,7 @@
 """The gap taxonomy. Extracted from `shape.py` (step 1 of the shape.py decomposition,
 ED-IN-0203) with no behaviour change: every symbol here is re-exported by `shape.py` so
-`from ..shape import Forbidden` and `S.Unspecified` keep resolving exactly as before.
+importers name this module directly (`from ..gaps import Forbidden`). The `shape.py` facade
+that used to re-export these was deleted at step 10 of the decomposition.
 
 `InstrumentDefect` is deliberately NOT a subclass of `ShapeGap` -- see its own docstring.
 Every `ShapeGap.__init__` writes a `TRACE.gap` row; that write is preserved verbatim below.

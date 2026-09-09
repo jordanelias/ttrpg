@@ -29,15 +29,16 @@ def run(log: Log) -> dict:
     log("MEASURE", f"`resolvable_verbs()` = {len(fold)} of {len(S.VERB_TABLE)} verbs",
         "the chooser draws candidates from this set only; a verb outside it can never be proposed")
     row = S.VERB_TABLE[KW]
-    from engine.season import shape as _S
-    has_eff = KW in getattr(_S, "EFFECTS", {})
+    # step 10: the `shape` facade is deleted; `EFFECTS` is `season.loop.effects`'s own table.
+    from engine.season.loop import effects as _E
+    has_eff = KW in getattr(_E, "EFFECTS", {})
     log("MEASURE", f"is {KW!r} in it? {KW in fold}")
     log("WHY-NOT", f"and the reason is NOT what an earlier draft of this arm said. "
-                   f"{KW!r} HAS an effect ({has_eff}, `_eff_kill` at shape.py:3847) and its "
+                   f"{KW!r} HAS an effect ({has_eff}, `_eff_kill` in `loop/effects.py`) and its "
                    f"`requires: {row.requires!r}` is in `NO_PRECONDITION`, so both the predicate "
                    f"and effect gates PASS.",
         "the exclusion comes from the THIRD gate — `contested = bool(row.contests)` at "
-        "shape.py:2336 — whose own comment says so. The distinction matters because a reader "
+        "`loop/driver.py::resolvable_verbs` — whose own comment says so. The distinction matters because a reader "
         "acting on 'add a predicate and an effect' would change nothing: what excludes this verb "
         "is precisely that it is CONTESTED, i.e. the fold defers it to the seam by design. "
         "Corrected after the adversarial pass.")
