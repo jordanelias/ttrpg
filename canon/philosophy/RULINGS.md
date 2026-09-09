@@ -1397,3 +1397,47 @@ same thread, not more threads* — and not as anything being drawn out.
 
 *Applied:* §2.1 (stated first, before the dual role), §9.3 (Threads row), §5.5 (caution at the
 analogy).
+
+### R-18 — The two roles are coprimordial
+
+> "the substrate is as it is because the conditions of possibility along those three axes are as they
+> are. they're coprimordial"
+
+**This closes what R-2 left unsaid.** R-2 ruled that threads are **both** the substrate and the
+condition of possibility. It did not say how the two roles stand to each other, and the suite had
+quietly been reading the substrate role as the basic one with the conditioning role laid over it.
+
+**Neither is the ground of the other and neither came first.** They are equally original. The
+substrate's being what it is and the conditions' being what they are is **one fact**, not two with a
+direction between them.
+
+*(The term is Heidegger's* gleichursprünglich *— equiprimordial — used as he uses it: for structures
+that belong together without one being derivable from the other. Recorded here as a borrowing per
+§0.3's rule, alongside "the world worlds" from R-12; neither is yet in the lineage table, which is
+outstanding.)*
+
+**Note what this does not touch.** R-10 settled the relation between *threads and rendering* — threads
+compose beings, beings have consciousness, rendering occurs due to conscious beings. R-18 settles the
+relation between the two roles *within* threads. Different questions, and both now answered.
+
+*Applied:* §2.1, §9.3 (Threads row).
+
+### R-19 — Threads are spooled, and their grounding always withdraws
+
+> "they're spooled, and their grounding is radically opaque and always withdrawing from any capture by
+> human rationality as per ein sof"
+
+**The second half is what the suite had understated.** §1.1's charter said the ground is
+epistemically inaccessible, which reads as a **fixed boundary** — a line one might in principle
+arrive at and find closed. The ruling says something stronger and more specific: the grounding is
+**always withdrawing** from any capture by human rationality. A receding limit, not a wall.
+
+So §1.1's charter is a **consequence** of this rather than a premise sitting alongside it, and the
+apophatic lineage is doing real work rather than decorating: this is what *Ein Sof* names.
+
+*(Recorded without gloss. Whether "withdrawing" is compatible with §1.5's refusal of responsiveness to
+the ground is not something to settle by inference — the same trap as "tending", where the editor
+wrote a ruling into action-language and had to be corrected. If §1.5 needs a note, it needs a
+ruling.)*
+
+*Applied:* §2.1.

@@ -31,6 +31,30 @@ pulled and what was not well-posed. And **its identity across time is that being
 is what lets §7.1 speak of "the configuration's own resting shape" having moved: after a permanent set
 it is the same configuration, differently organized, because it is the same being.
 
+**How the two roles stand to each other: coprimordially.** *(Ruled 2026-09-09.)*
+
+> **The substrate is as it is because the conditions of possibility along those three axes are as
+> they are. They're coprimordial.**
+
+So the doublet is not a dependence running one way. Neither role is the ground of the other and
+neither came first; they are equally original, and the substrate's being what it is and the
+conditions' being what they are is **one fact**, not two with a direction between them. This is what
+R-2's "both" left unsaid.
+
+*(The term is Heidegger's* gleichursprünglich *— equiprimordial — and is used as he uses it: for
+structures that belong together without one being derivable from the other. §0.3 records the
+borrowing.)*
+
+**And what grounds them is not available.** *(Ruled 2026-09-09.)*
+
+> **They're spooled, and their grounding is radically opaque and always withdrawing from any capture
+> by human rationality, as per Ein Sof.**
+
+Two things in that, and the second is the one the suite had understated. Threads are **spooled**
+(§4.1). And their grounding is not merely *unknown* — it is **always withdrawing** from capture. Not a
+fixed boundary one might one day arrive at, but a receding one. §1.1's charter is the consequence of
+this, not an assumption alongside it.
+
 **In what sense threads condition rendering.** *(Ruled 2026-09-09.)* The chain is:
 
 > **Threads comprise beings. Beings have consciousness. Rendering occurs due to conscious beings.**
