@@ -1340,3 +1340,13 @@ is gained is **more of the same thread**, not more threads — which is precisel
 struck the old §5.5 for missing. Two analogies now sit in §5.5, doing different jobs: the **window**
 for reach (stand nearer, see further outside the band) and the **extendable item** for imbrication
 (pull, and there is more of it than you had).
+
+**R-13 addendum — the colour-range analogy.**
+
+> "like being able to see 40% to 60% range of colour then slowly extending range and being able to
+> see 10% to 90%"
+
+Clearer than the window for the point that matters, and it fixes what the window leaves loose:
+**the band widens in both directions** from where ordinary human sensing sits. Reach is not a
+direction one presses further along; it is a span opening out. §5.5 carries both, the window for the
+vantage and the colour range for the band.

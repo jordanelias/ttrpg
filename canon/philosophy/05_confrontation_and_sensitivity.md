@@ -187,6 +187,13 @@ because it enlarges what can get in. Nothing in the model lets a practitioner gr
 > normal band you can sense.**
 >
 > *"It's like looking out a window, and the closer you get to it the more you can see out of it."*
+>
+> *"Like being able to see 40% to 60% range of colour then slowly extending range and being able to
+> see 10% to 90%."*
+
+**The second is the clearer statement of the band**, and it fixes what the first leaves loose: the
+range **widens in both directions** from where ordinary human sensing sits. Reach is not a direction
+one presses further along. It is a span opening out.
 
 **Practitioners are not tied to more threads.** *(Ruled 2026-09-09.)* Sensitivity is not a standing
 extent of connection and it does not make anyone a larger part of the weave. What changes is **how
