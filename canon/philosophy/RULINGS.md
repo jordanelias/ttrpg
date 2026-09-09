@@ -1046,3 +1046,43 @@ collapsed claim), §2.5, §9.1.
 *Applied for R-5/R-6:* §2.5 (rewritten, with the closure argument now resting on a stated claim),
 §9.1, §9.3, `README.md`. **S-28 in the round-2 substance list is closed by R-5; S-21 is closed by its
 corollary.**
+
+### R-8 — Rendering is an ability of consciousness, and nothing precedes it
+
+> "rendering is something that consciousness does. there is nothing prior to that as it is a
+> foundational originary premise"
+
+> "rendering is the ability for consciousness to interpret phenomena as meaningful"
+
+**This retracts R-7's framing on the same day it was written, and a second attempt after it.** R-7
+had rendering "incumbent upon the world being given to consciousness" — a giving that preceded it.
+The next draft dressed the same idea up as "one fact stated from two sides". **Both put something
+before rendering.** Nothing is before rendering. It is the foundational, originary premise.
+
+**What survives from R-7, and it is only this:** *given* is a plain word, nothing esoteric is meant by
+it, and no abstract noun is coined from it (R-6 stands).
+
+**The definition, in the author's terms:** rendering is **the ability for consciousness to interpret
+phenomena as meaningful**. Consciousness does it, and does not decide to — which restricts its
+deliberateness and nothing else.
+
+⚠ **A pattern in my own edits, recorded because it is now four for four.** Each of R-1, R-2, R-7 and
+R-8 corrected the same move: taking a plain statement of the author's and building a construction on
+top of it — a staged dependency, an identity claim, a two-sided fact, a denial that rendering does
+anything. Each construction then generated conflicts that a later audit surfaced as defects in the
+framework. **They were defects in my elaboration.** The instruction that follows for any session
+after this one: where the author states something plainly, write it plainly and stop.
+
+### R-9 — What *meaningful* means
+
+> "meaningful = the thing isn't just there ontically without any understanding or comprehension or
+> recognition"
+
+Its ordinary weight, and no more. The contrast is with a thing merely being there — present without
+anything understanding, comprehending or recognising it. That difference is what rendering makes, and
+it is why §9.1 reserves *ontological* for this register rather than for a deeper stratum of things.
+
+*Applied:* §3.1.
+
+*Applied for R-8:* §3.1 (opening rewritten, the two struck drafts recorded in place), §3.3, §2.5,
+§9.1.

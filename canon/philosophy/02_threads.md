@@ -106,22 +106,21 @@ triad is the least developed of the three.
 **First, what the closure argument rests on**, because the suite had been leaning on a word instead
 of a claim. *(Ruled 2026-09-09.)*
 
-> **The world is given to consciousness** — phenomena can exist as phenomena for consciousness at
-> all. Nothing esoteric is meant by that beyond the plain word. It is foundational, it is what
-> phenomenology studies, and **rendering the world as meaningful is incumbent upon it** (§3.1).
+> **Rendering is what consciousness does, and nothing is prior to it** — it is a foundational,
+> originary premise (§3.1). That the world is given to consciousness, and that consciousness renders
+> it, are one fact from two sides. Nothing esoteric is meant by *given* beyond the plain word.
 
-*(No abstract noun for this, deliberately. The nominalized form is a translator's word, it puts the
-whole relation in the passive voice, and §9.2 forbids coining where the plain word serves. The plain
-word is **given**.)*
+*(No abstract noun for it, deliberately. The nominalized form is a translator's word, it puts the
+whole relation in the passive voice, and §9.2 forbids coining where the plain word serves.)*
 
 **Why these three, and the list is closed.** *(Ruled 2026-09-07.)* They are the **moments of
 constitution**: *that* something is given (actuality), *when* it is given (temporality), and *as what*
-it is given (intelligibility). Exhaustiveness follows from **what it is for anything to be received at
-all**, rather than being stipulated: any reception has a *that*, a *when* and an *as-what*, and there
-is nothing else a reception has — so there is no fourth moment for a fourth axis to occupy.
+it is given (intelligibility). Exhaustiveness follows from **what it is for anything to be rendered at
+all**, rather than being stipulated: any taking-as has a *that*, a *when* and an *as-what*, and there
+is nothing else a taking-as has — so there is no fourth moment for a fourth axis to occupy.
 
 *(This is also the answer to the objection that "where" is missing. A configuration's place is not a
-moment of its being received; it is a relation among configurations — its imbrication (§3.5).
+moment of its being rendered; it is a relation among configurations — its imbrication (§3.5).
 "Region", "vicinity" and "margin" throughout the suite are imbrication-neighbourhoods, not positions
 in a space the substrate has.)*
 

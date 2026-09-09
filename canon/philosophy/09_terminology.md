@@ -28,15 +28,13 @@ correctness without addressing it.
 reification outright — was available and was not taken.
 
 **The three tiers.** Reserve *ontological* for the disclosure register — rendering,
-the world's being given to consciousness, layer 2, the being-held of a configuration — and call
-thread-constitution **substrate**.
+layer 2, the being-held of a configuration — and call thread-constitution **substrate**.
 Then:
 
 - **Ontical** — the rendered world: particular beings, facts, everyday experience as given.
 - **Substrate** — thread-constitution: what things are woven from, and what operations act upon. Deep,
   normally inapparent, and *ontic*.
-- **Ontological** — the register of the giving itself: that the world is given to consciousness at
-  all, that there is rendering, that a
+- **Ontological** — the register of rendering itself: that there is rendering at all, that a
   configuration is held rather than given, that the world is disclosed as world.
 
 On this scoping, **thread sensitivity has two components that the source suite ran together as one

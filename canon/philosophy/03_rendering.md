@@ -8,26 +8,27 @@
 
 ## §3.1 Rendering as constitutive process
 
-**Rendering is the always-already occurring interpretation of things *as* something.** Not a
-mechanism external to consciousness, and not a cosmic process running independently of it.
+**Rendering is the ability for consciousness to interpret phenomena as meaningful.** *(Ruled
+2026-09-09.)* It is something consciousness does, and **nothing is prior to it** — it is a
+foundational, originary premise. Not a mechanism external to consciousness, and not a cosmic process
+running independently of it.
 
-**And it rests on something prior, which is not esoteric and needs no special word.** *(Ruled
-2026-09-09.)* Rendering the world as meaningful **is incumbent upon the world being given to
-consciousness** — upon phenomena being able to exist as phenomena for consciousness at all. That is
-the plain sense of *given*, and it is what phenomenology studies. Rendering is not that giving; it is
-what takes what is given *as* something.
+**And *meaningful* carries its ordinary weight:** the thing is not just there **ontically**, without
+any understanding, comprehension or recognition of it. *(Ruled 2026-09-09.)* That is the difference
+rendering makes, and it is why §9.1 reserves *ontological* for this register.
 
-**It is a process, and it is not undertaken.** *(Ruled 2026-09-09: "'taking as' is literally a
+⚠ *Two drafts of this paragraph on the same day are struck. One had rendering "incumbent upon the
+world being given", as though a giving preceded it; the other dressed that up as one fact from two
+sides. Both put something before rendering. Nothing is before rendering, and the plain word* given
+*carries everything that was wanted.*
+
+**Consciousness does it, and does not decide to.** *(Ruled 2026-09-09: "'taking as' is literally a
 phenomenological process whereby a consciousness renders phenomena into something meaningful as a
-thing.")* Those are two claims and only the second is a restriction. No one performs rendering,
-begins it, or could decline it — and it is nonetheless something occurring, an act of consciousness
-in the sense that consciousness *is* this taking-as. To render is to interpret something as
-something.
-
-**What the not-undertaken clause does not mean.** An earlier draft of this paragraph read "the force
-is in the as-structure, not in any work performed", which denies rendering does anything at all.
-That was an over-reading and is struck. **Involuntary is not inert.** A process that occurs
-always-already still occurs, and what it does is take-as.
+thing.")* One cannot begin rendering, hold it off, or decline it. That restricts its
+**deliberateness** and nothing else — it does not make it inert. A draft of this section once read
+"the force is in the as-structure, not in any work performed", which denies rendering does anything
+at all; that is struck. **To render is to interpret something as something**, and the interpreting is
+consciousness's.
 
 **And rendering does not configure. Spooling configures (§4.1).** This is the restriction that does
 hold, and it is narrower than the struck one. **Rendering *is* the taking-as** — not something that
@@ -93,9 +94,8 @@ being invoked.
 
 **The passive stratum is pre-predicative.** It registers affect, intensity, salience and trace
 without composing them into a determinate presentation of an object. It is not outside rendering —
-if it were, some of what is given to consciousness would never be taken as anything at all, and the
-claim that rendering is how the world becomes meaningful would hold only of part of it. It is
-rendering's lower register.
+if it were, consciousness would have a second way of meeting the world alongside rendering, and
+rendering would not be the originary premise §3.1 makes it. It is rendering's lower register.
 
 **Two things follow immediately, and both matter elsewhere.**
 
