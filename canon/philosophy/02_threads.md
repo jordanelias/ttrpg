@@ -103,10 +103,27 @@ The source suite named this dimension in every list and never characterized it i
 stated here for completeness, and the framework should be aware that the third member of its central
 triad is the least developed of the three.
 
+**First, what the closure argument rests on**, because the suite had been leaning on a word instead
+of a claim. *(Ruled 2026-09-09.)*
+
+> **How consciousness is able to receive phenomena is foundational** — it is what phenomenology
+> studies, and it is what this framework is about. Rendering is that receiving: the taking-as *is*
+> how the world comes to consciousness at all (§3.1).
+
+*(The abstract noun for this is deliberately absent. It is a translator's word, it puts the whole
+relation in the passive voice, and §9.2 forbids coining where a plain phrase serves. Say **how the
+world comes to consciousness**, or **how a phenomenon is received**.)*
+
 **Why these three, and the list is closed.** *(Ruled 2026-09-07.)* They are the **moments of
 constitution**: *that* something is given (actuality), *when* it is given (temporality), and *as what*
-it is given (intelligibility). Exhaustiveness follows from the structure of givenness rather than
-being stipulated — there is no fourth moment for a fourth axis to occupy.
+it is given (intelligibility). Exhaustiveness follows from **what it is for anything to be received at
+all**, rather than being stipulated: any reception has a *that*, a *when* and an *as-what*, and there
+is nothing else a reception has — so there is no fourth moment for a fourth axis to occupy.
+
+*(This is also the answer to the objection that "where" is missing. A configuration's place is not a
+moment of its being received; it is a relation among configurations — its imbrication (§3.5).
+"Region", "vicinity" and "margin" throughout the suite are imbrication-neighbourhoods, not positions
+in a space the substrate has.)*
 
 **And the *how* is spooling.** That is what the list appeared to be missing, and it is not a
 dimension. The three moments are moments of what is constituted; spooling (§4.1) is the manner in

@@ -57,7 +57,7 @@ and denies to itself. So this suite states the *limit* first and reaches the gro
 from it. The ground is not the first thing known; it is the last thing inferred.
 
 **Rendering cannot be filed under either heading.** Threads are simultaneously constituting and
-constituted; rendering is therefore both a mode of being and a mode of givenness. That doubleness is
+constituted; rendering is therefore both a way of being and a way the world comes to consciousness. That doubleness is
 the framework's central thesis, not a filing problem to be solved by choosing a drawer. It gets its
 own place, after threads and before the beings that threads compose.
 

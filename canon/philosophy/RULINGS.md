@@ -975,3 +975,44 @@ no longer *incoherent*, but it is still not the ruled one. Reconciling them is o
 
 Batch 8 paraphrased this in a preamble and never quoted it. It is the ruling that retracted the
 pure yield-point model and set up E-1 through E-4.
+
+---
+
+## 2026-09-09 — Batch 11: what the closure argument rests on, and a word retired
+
+### R-5 — How consciousness receives phenomena is foundational
+
+> "givenness: how consciousness is able to receive phenomena, basically. it's foundational.
+> phenomenology is the study of how the world is given to consciousness"
+
+**What this settles.** §2.5 closes the list of moments with "exhaustiveness follows from the structure
+of givenness", and a read-only audit scored that **not supported** on the ground that the structure is
+"invoked, never stated independently of the list". The audit was right that the suite never said what
+it was appealing to. It was wrong that there was nothing there.
+
+**So the repair is to state it, not to weaken the claim.** Any reception of a phenomenon has a *that*,
+a *when* and an *as-what*, and there is nothing else a reception has. That is why the list closes.
+
+**And it answers the "where" objection in the same move.** A configuration's place is not a moment of
+its being received; it is a relation among configurations — its imbrication (§3.5). "Region",
+"vicinity" and "margin" throughout the suite are imbrication-neighbourhoods, not positions in a space
+the substrate has. *(That reading is mine; the ruling above is what licenses it.)*
+
+### R-6 — "Givenness" is retired
+
+> "givenness is a bad term. I hate it"
+
+**Retired from the live suite**, and the four uses are gone: `02_threads.md:108`,
+`09_terminology.md:31` and `:37`, `README.md:60`. Nothing replaces it — under §9.2 a coined or
+translated noun is a pointer to context that does not survive a session boundary, and this one also
+puts the whole relation in the passive voice, which D-9 objected to in a different place for the same
+reason.
+
+**Say instead:** *how the world comes to consciousness*, or *how a phenomenon is received*. §2.5 now
+carries a note saying so, so the next session does not re-coin it.
+
+*(This file keeps its two historical uses at the D-4 entry and the Batch 6 summary. It is append-only,
+and a retired word in a dated record is not a defect — it is what the record is for.)*
+
+*Applied:* §2.5 (rewritten, with the closure argument now resting on a stated claim), §9.1, §9.3,
+`README.md`. **S-28 in the round-2 substance list is closed by R-5; S-21 is closed by its corollary.**
