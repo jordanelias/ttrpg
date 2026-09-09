@@ -147,7 +147,7 @@ rows:
     statement: "decisions affect subsequent decisions"
     status: not_met
     measured: >-
-      The loop was CLOSED by a theorem, not a bug — `Query.opening_set` never consults world
+      The loop was CLOSED by a theorem, not a bug — `decision.opening_set` never consults world
       state, so the only channel a decision has into a later decision is a ledger claim, and
       `belief_contradicts` could read no claim the corpus deposits. W-A/W-B opened it; the
       measured effect is ~4% later-decision divergence against 100% world divergence.

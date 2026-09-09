@@ -1,5 +1,260 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⏳ PRODUCED 2026-09-09, NOT YET COMMITTED — decomposition STEP 7: `decision.py`. `shape.py` 2,813 → 2,066, `decision.py` 872 new (ED-IN-0203)
+
+**Producer session only — a read-only critic reviews this next, per the plan's relay (§6). Nothing
+below is committed or pushed.** Written against `workplans/2026-09-09-shape-decomposition-plan-v2.md`
+§2, with line numbers re-derived by `ast` at HEAD `d4858c27` (the plan's own table was pinned to
+`e03abff2`, ten lines stale at `:935`).
+
+**What moved, as a pure line-slice, script-verified byte-identical against `git show
+d4858c27:engine/season/shape.py` at the declared ranges (not hand-copied):** the four former
+`Query` person-side statics — `budget`, `opening_set`, `assemble`, `entrenchment` — dedented 4
+spaces with the `@staticmethod` line dropped and nothing else changed (verified against
+`textwrap.dedent` of the same block); and seventeen top-level names — `align`, `stance_toward`,
+`urgency`, `make_chooser`, `person_side_eligible`, `containing_rung_of`, `store_kind_of`,
+`_derive_operand`, `_REFERENT_OPERANDS` (+ its comment block), `operands_for`, `agreement`,
+`standing_of`, `_payload_of`, `pack_scenes`, `aggregate_questions`, `view_ids`,
+`body_band_penalty`. `class Query` (eleven `world_q` staticmethod bindings + the four statics) is
+DELETED WHOLE. `sense()` stays in `shape.py` (step 9's, not this step's — `04:116`). The one
+declared non-identical line: `make_chooser`'s inner `Query.opening_set(` → bare `opening_set(`,
+since both now live in the same module.
+
+**⚠ ZERO GAME YIELD.** `register.py --requirements` reads **6 `not_met` · 3 `partial`** before and
+after (`python -m engine.season.harness.register --requirements`). Unchanged, per §0.2.
+
+### Two import-list corrections the plan's own AST-verification demand caught
+
+The plan's §2.2 import list was wrong in one place and incomplete in another — both found by
+actually resolving every free name in the moved bodies with `ast`, not by trusting the list:
+
+1. **`ELIGIBILITY_KINDS` is in `.data.verbs`, not `.data.rosters`.** The plan named the wrong
+   owner (`ELIGIBILITY_KINDS = roster("eligibility_kinds")` lives at
+   `engine/season/data/verbs.py:55`). Importing it from `.data.rosters` as the plan wrote it raises
+   `ImportError` at module load — immediately, for every caller — which is the loud failure mode,
+   not the step-5 kind that hid until a byte-compare.
+2. **`Claim` was missing from `.state.carriers`.** `agreement()`'s signature reads `list[Claim]`
+   twice, bare (not a forward-ref string). Added; reported per the step-5 `Forbidden` lesson the
+   plan itself cites (an annotation-only reference is still a reference).
+
+**Deliberately NOT added, though AST also finds them referenced:** `Fixtures` and `VerbRow`. Both
+appear ONLY as quoted forward-reference strings (`"Fixtures"`, `"VerbRow"`) in every occurrence —
+never bare, never constructed, never `isinstance`-checked — which was already true inside
+`shape.py`, where both names were already resolvable. The plan's omission of these two is correct,
+not an oversight, and is recorded here so the next reader doesn't re-add them on a shallower AST
+pass that doesn't distinguish quoted from bare annotations.
+
+### The rebind hazard step 6 predicted, closed here — measured, not merely re-pointed
+
+Step 6's handoff (above) measured the hazard and named the count precisely: **`ALIGNMENT`,
+`belief_contradicts` and `pack_scenes`** are each rebound by the test suite (and, for the latter
+two, by frozen `proposals/2026-09-04-degree-sweep/` snapshots) by assigning `S.<name> = ...`, which
+works only because the reader (`align`, `opening_set`, `make_chooser`) resolves the name in the
+SAME module's globals at call time. Moving all three readers here without re-pointing the rebind
+sites would turn every one into a silent no-op on the facade's stale copy — step 6's own
+docstring named this "arriving [at step 7] rather than here."
+
+**Closed, not just predicted, and the actual site count differs from every prior citation of it:**
+
+| name | sites actually touched in this commit | to |
+|---|---|---|
+| `ALIGNMENT` | **6** — `test_season_shape.py`, both READS (`saved = S.ALIGNMENT` ×2) and all four WRITES | `decision.ALIGNMENT` |
+| `belief_contradicts` | **6** — same shape, reads + writes, in the two `test_wb_clause_four_...` closures | `decision.belief_contradicts` |
+| `pack_scenes` | **3 sites × 2 files** (`arm9_forking.py:60,115,119` and the byte-identical twin lines in `arm9_subj.py`) | via **one new alias**, `PS = engine.season.decision`, added to `sweep_core.py` and imported by both arms |
+
+⚠ Every prior citation of the `ALIGNMENT`/`belief_contradicts` site counts (step 6's own "4 lines" /
+"eight assignment lines... four... four", and the plan's "test:2354, :2357, :2401, :2415") counted
+only the WRITE lines. The READ lines (`saved = S.ALIGNMENT` / `original = S.belief_contradicts`)
+also had to move — a read-only rebind capture is harmless before the plan is executed, but leaving
+it as `S.<name>` while the writes moved to `decision.<name>` would restore the WRONG module's
+attribute in the `finally:` block, silently leaking a rebound value across tests. All 6+6 are now
+symmetric. **`arm7_flexibility.py:66,:69,:82,:90`** and **`wd_acceptance.py:283,:288,:401,:405`**
+are left exactly as the plan said to leave them — nothing imports either file, so they cannot fail
+the suite, and both would mismeasure only on a re-run. Recorded, not fixed (§0.1 pt 5).
+
+**`sweep_core.py`'s new alias, verified live, not just imported:** `PS.pack_scenes = spy` followed
+by a real `make_chooser(...)` call confirms the spy fires — the rebind reaches the function
+`make_chooser` actually calls, not merely a name that resolves.
+
+### The hazard the plan missed, measured before editing (not after)
+
+`test_a_hand_raised_gap_is_never_labelled_construction` (`test:788`ish) scans each
+`by="construction"` probe's own source for `w.write|Query\.|contest\(|sense\(|...`. Renaming
+`probes.py`'s ~50 `Query.` tokens could turn a probe that only matched via the `Query\.`
+alternative into a false offender. **Measured before touching `probes.py`, by AST-extracting every
+`by="construction"` probe's source from the pre-edit file and re-running the test's own
+`_code_only` + regex logic against it: 0 of 78 construction-labelled probes (of 122 total) depend
+SOLELY on the `Query\.` alternative** — every one that raises a typed gap also independently
+matches another alternative (most commonly `fixtures` or `View(`). The rename was therefore safe
+either way; `world_q\.` and `decision\.` were added to the alternation anyway (add-only, `Query\.`
+left in place as harmless dead weight) so the test keeps measuring the same property rather than
+merely happening to still pass.
+
+### Call-site renames — measured both sides, `rg -o` (expression count, not `rg -c` line count)
+
+```
+world-first (11 names) Query.<x>(  ->  world_q.<x>(   BEFORE 48 (shape.py 2, probes.py 35, test 11, corpus_run 0)  ->  AFTER 0
+person-side (4 names)  Query.<x>(  ->  decision.<x>(   BEFORE 45 (shape.py 3, probes.py 16, test 24, corpus_run 2) ->  AFTER 2 (both prose, in decision.py's and shape.py's own docstrings describing this move)
+```
+
+⚠ The plan's own per-file breakdown ("test 22, probes 15") undercounts by exactly the number of
+lines carrying TWO matches (`test_season_shape.py:6679,:6705` each have `Query.opening_set(` and
+`Query.assemble(` on one line; `probes.py:580` likewise) — an `rg -c` (matching-LINE count) was
+cited where the total was computed by `rg -o` (matching-EXPRESSION count). Both bases are
+reproducible; only one matches "45 call expressions". Non-call sites also fixed: `test:31`/
+`probes.py:36` (removed `Query` from import lists), `test`'s two `S.Query.opening_set` sites (both
+→ `S.opening_set`, one spelling, both instances), `test`'s `inspect.signature(Query.budget)` →
+`decision.budget`, `probes.py:455`'s `_i.signature(Query.opening_set)` → `decision.opening_set`,
+and `probes.py`'s P28 (`dir(Query)` → `decision`'s own public functions — see below).
+
+### The one declared artifact diff — P28's detail string, `dir(Query)` has no replacement that means the same thing by accident
+
+`dir(Query)` gave 15 names (11 world-first + 4 person-side). `class Query` is gone, so P28
+(`probes.py`) now computes "the public names of `decision`" as `inspect.isfunction` +
+`__module__ == decision.__name__`, filtering out decision's own imports (`TRACE`, `ALIGNMENT`,
+`belief_contradicts`, the gap classes, etc.) — **18 functions** (21 moved names − 3 private:
+`_derive_operand`, `_payload_of`, `_REFERENT_OPERANDS` [not a function anyway]). This is narrower
+than the old 15-name surface (world-first functions are gone from it) and, on reflection, more
+correct for what P28 actually asserts — a person-side function can't read another's ledger, and a
+world-first function was never a candidate for that claim in the first place.
+
+```
+runs/results.json  _probes.P28.detail:  "...Query surface (15 functions)..."  ->  "...decision surface (18 functions)..."
+```
+
+Produced by `python -m engine.season.harness.report`; `git status --short engine/season/runs/`
+shows **only** `results.json` touched (`git diff` confirms the one-field diff above, nothing else
+in the file moved). `python -m engine.season.harness.delta HEAD` → `PROBE FLIPS 0` (it compares
+verdicts only, so P28 staying `PASS` prints exactly this regardless — the detail diff had to be
+read by hand, per the plan's own warning about `delta.py`'s blind spot).
+
+### shape.py: the breadcrumb corrections — plan said fix TWO false sentences; a third was found
+
+1. The step-3 breadcrumb at (old) `:227`: *"`align()` (below, unmoved) still sees a sweep's rebind
+   of `S.ALIGNMENT`"* — `align` moved this step; corrected in place, forward-referencing
+   `decision.py`'s docstring.
+2. The step-6 breadcrumb (old `:934-964`, the belief_contradicts rebind note): *"ITS ONE BARE-NAME
+   CALLER IS `Query.opening_set` BELOW"* — present tense, now false; rewritten past-tense, recording
+   that the hazard it predicted is now closed rather than merely restating the prediction.
+3. **Not in the plan's list, found while deleting the moved range:** a SEPARATE step-3 breadcrumb
+   (old `:539-541`, immediately above `align`'s old position) said *"`align()`, directly below, did
+   NOT move — it is the per-call reader (`decision/` territory, a later step)"*. Also now false for
+   the same reason. Corrected.
+4. **Not in `shape.py` at all — found by grepping `align` package-wide after the other three, not
+   by a targeted search:** `engine/season/data/verbs.py`'s own module docstring made the identical
+   claim in its own words (*"`align()` ITSELF DOES NOT MOVE... `align()` -- defined in `shape.py`
+   -- reads the global `ALIGNMENT` of the module it is DEFINED IN, which is `shape.py`'s own"*).
+   Corrected the same way, and in fixing it a FIFTH, pre-existing and unrelated inaccuracy surfaced
+   in the same sentence: it named `test_tracer_is_honest.py` (a frozen file under
+   `proposals/2026-08-31-shape-tracer/`) as the rebind site, and that file contains no mention of
+   `ALIGNMENT` at all — the real site is `test_season_shape.py`'s
+   `test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_printed`, which is what
+   the correction now cites. That fifth inaccuracy predates this step and is unrelated to the
+   decomposition; not chased further, since nothing else in the docstring depended on it, and
+   flagged here rather than silently carried forward.
+
+   This is exactly the kind of stale claim §0.1 pt 3 exists to catch by NAMING the falsifier rather
+   than trusting a fixed list — the plan named two sentences to fix and a full sweep found four
+   (three in `shape.py`, one outside it), the fourth of which then exposed a fifth, unrelated one.
+
+`class Query`'s section header (the old `S17 -- QUERY` banner) and the class body are replaced by
+one breadcrumb explaining the whole move (naming all 21 symbols, citing `04_CODE_ARCHITECTURE.md`
+SA.3 row 2 and SE.1). `from . import decision` + a 21-name re-export block added at the facade's
+usual position (after the `.epistemic` import), in the file's existing `# noqa: F401` style.
+
+### Home-claim sweep — file-scoped, both spellings, verified against `__module__` at runtime
+
+`hole_register.yaml`: **22 sites** corrected (13 `shape.<symbol>` home-claims + 9 legacy
+`Query.<symbol>` home-claims the sweep's literal two spellings don't cover but are the same
+staleness under the old class name — e.g. `owner: "Query.budget and the W6 witness channels"` →
+`decision.budget`). `requirements.yaml`: 1 (`Query.opening_set` → `decision.opening_set`; the
+numbered `shape.py:NNNN` line citations in the same file are for `SeasonDriver` methods that do not
+move until step 9 and are out of this step's declared scope — left alone, now additionally stale by
+line number as a pure side effect of `shape.py` shrinking, which is step 10's declared cleanup, not
+this step's). `rosters.yaml`, `CLAUDE.md`, `CURRENT.md`: 0 hits for the 21 symbols. `architecture/`:
+1 (`PLAN.md`'s `N5` table row, a live/unclosed defect description, not inside a `>` blockquote or a
+`LANDED` block — `Query.judging_set` → `world_q.judging_set`, with the correction dated inline).
+**Judgment call, not in the letter of the brief:** PLAN.md's several `>`-blockquoted historical
+adversarial-pass narratives (`:785,:807,:916,:1222,:1572`) and `architecture/meta/HANDOFF_NEXT.md`'s
+dated 2026-09-04 finding also name `Query.<x>` — treated as frozen historical record, same
+disposition as `PLAN.md`'s `LANDED` blocks, and NOT edited, because revising a quoted past-tense
+finding to use a name that didn't exist when the finding was written is the failure mode the
+LANDED-block exception exists to prevent. Every `site:`/`owner:` update above was verified against
+the symbol's actual `__module__` at runtime (`getattr(decision, n).__module__`), never by grep.
+
+### Instruments — all eight, verbatim
+
+```
+1  pytest engine/season/tests -q                              187 passed
+2  pytest tests/valoria -q                                    1779 passed, 23 skipped, 15 xfailed
+3  headless NPC-088, 2 seasons, seed 0                         ee0383bf3f4606e56b80cd07c0284f0a  (unchanged)
+4  report.py; git status runs/                                 only results.json; diff is the one P28.detail field
+5  delta.py HEAD                                                PROBE FLIPS 0
+6  register.py --requirements                                  6 not_met · 3 partial (unchanged)
+7  getattr(shape, n) is getattr(decision, n), all 21           True for all 21
+8  strip comments+strings, grep \bQuery\b, engine/season/**    0
+```
+
+### Falsifiers — all five reproduced, planted then reverted
+
+```
+a  S.ALIGNMENT left unrebound             -> RED at the uniform-control assertion (P31 passed under uniform)
+b  S.belief_contradicts left unrebound    -> RED, "the SHIPPED default dropped no Candidate at all" (shipped=[])
+c  UNALIASED `from .epistemic import belief_contradicts` planted as the literal first line inside
+   `decision.opening_set`'s body            -> RED, "the SHIPPED default dropped no Candidate at all"
+                                              (shipped=[]) — the local import shadows the module global
+                                              the rebind writes to, exactly the step-6 lesson (only the
+                                              UNALIASED plant was run; the aliased `as _bc` form that step
+                                              6 already showed incorrectly PASSES was not re-run here)
+d  `from .state.world import World`       -> RED, new AX-2 test names the import
+   `def _x(p: Person, w: "World")`        -> RED on BOTH the new AX-2 test (Constant "World") AND the
+                                              pre-existing test_w5_sense_is_still_the_only_world_taking_...
+e  arm9_forking.py/arm9_subj.py reverted to HEAD (S.pack_scenes, no PS alias), sweep_core.py reverted
+   to HEAD, then `pytest -k test_wd_`     -> RED, both test_wd_ tests: 0 genuine forks in every mode.
+                                              GREEN after restoring the fix — the arm edit is load-bearing,
+                                              not vacuous (this is itself the finding §0.1 pt 2 asks for)
+```
+
+### Deviations from the brief, in one place
+
+- `.data.verbs` gets `ELIGIBILITY_KINDS` instead of `.data.rosters` (plan named wrong owner; §above).
+- `.state.carriers` gets `Claim` added (plan omission; §above).
+- Rebind site counts: 6+6, not 4+4 (reads included; §above).
+- Two more stale breadcrumb sentences fixed beyond the plan's declared two, one of them outside
+  `shape.py` entirely (`engine/season/data/verbs.py`'s own docstring; §above).
+- Home-claim sweep extended past the letter (`shape.py`/`shape.<symbol>`) to the legacy `Query.<symbol>`
+  spelling in `hole_register.yaml`/`requirements.yaml`/`architecture/PLAN.md`, on the reasoning that
+  it is the identical staleness under the pre-move name; PLAN.md's blockquoted historical sections
+  were NOT swept, on the LANDED-block precedent (§above) — a critic may disagree with either call.
+- This handoff entry itself: the brief did not ask for one, but CLAUDE.md §2 asks every session to
+  capture next actions in its lane's handoff, and Section H named this file in the sweep; adding a
+  new dated entry (rather than editing history inside the step-5/6 entries above) is the resolution.
+- **Cosmetic pass, not requested, not load-bearing:** deleting seventeen bodies plus a class left
+  runs of 3-21 consecutive blank lines in `shape.py` where the surrounding blank-line padding of
+  each deleted item accumulated. Collapsed every run of 4+ newlines to the file's own existing
+  2-blank-line convention (`re.sub(r'\n{4,}', '\n\n\n', src)` — a global, mechanical, whitespace-only
+  transform; re-verified byte-identity of all 17 items + 4 statics and the content hash afterward,
+  both unchanged, as they must be for a change touching only blank lines). `decision.py` got the
+  same treatment for one 5-blank-line seam left by the assembly script between its docstring and
+  its imports (now 1 blank line, matching `epistemic.py`'s own style). `shape.py` is **2,066** lines
+  after this pass, not the 2,105 an earlier `wc -l` in this same session reported before it — cited
+  here so the number in the header above and any earlier verbal report of "2,105" both resolve
+  against this note rather than reading as two different steps' hands. Pre-existing blank-line runs
+  in `test_season_shape.py` (present at HEAD, not introduced by this step) were left alone —
+  not this step's mess to clean.
+
+### What I did not check
+
+- Did not re-verify the `references/canonical_sources.yaml` / `mechanics_index.yaml` machine indices
+  for a `shape.py` home-claim on any of the 21 symbols — not named in the brief's sweep list, and a
+  grep found no hits, but I did not load-and-parse those YAMLs the way I did `hole_register.yaml`.
+- Did not sweep `dashboard/` or any other generated/published surface for a stale symbol location.
+- Did not attempt a line-number reconciliation of `requirements.yaml`'s `shape.py:NNNN` citations for
+  code that does not move until step 9 — explicitly out of this step's declared scope, flagged above.
+
+**Next: step 8, `engine/season/seam.py`.** Strictly serial per plan §6 — do not start it on an
+unreconciled base; wait for this step's critic pass.
+
 ## ⭐ DONE 2026-09-09 — decomposition STEP 6: `epistemic.py`. `shape.py` 3,124 → 2,803 (ED-IN-0203)
 
 **Carries on #383's step 5.** Both ends of one channel move together: `belief_contradicts` (§F1

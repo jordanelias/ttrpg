@@ -41,6 +41,19 @@ from engine.season import shape as S                    # noqa: E402
 from engine.season.harness import corpus_run as C       # noqa: E402
 from engine.season.harness import run_cases as R        # noqa: E402
 from engine.season import combat_seam as CS             # noqa: E402
+from engine.season import decision as PS                # noqa: E402
+
+# ⚠ `PS` IS THE ONE ALIAS THE STEP-7 DECOMPOSITION ADDS HERE (ED-IN-0203). `pack_scenes` moved
+# from `shape.py` to `season.decision` at step 7, together with its sole bare-name caller
+# (`make_chooser`). `make_chooser` now resolves `pack_scenes` in `decision`'s OWN globals at call
+# time, not `shape`'s -- so a rebind of `S.pack_scenes` (this module's `shape` alias) is a no-op
+# on it. `arm9_forking.py` and `arm9_subj.py` install a spy/fake by rebinding the module attribute
+# around a scoped run (`_REAL_PACK = S.pack_scenes` / `S.pack_scenes = packed` / restore); both are
+# re-pointed to `PS.pack_scenes` in the same commit that adds this alias, so the rebind reaches the
+# function `make_chooser` actually calls. `arm7_flexibility.py` does the identical thing and is
+# DELIBERATELY left unrepointed -- nothing imports that file, so it cannot fail the suite, and it
+# is recorded rather than fixed (CLAUDE.md §0.1 pt 5's load-bearing predicate: a defect with no
+# cost is evidence the artifact needs no guard, not evidence it needs a fix).
 
 # `CLAUDE.md` §0.1 pt 5 / G1: declared with its reason, never a bare literal in a body.
 LADDER_C = ("Overwhelming", "Success", "Partial", "Failure")

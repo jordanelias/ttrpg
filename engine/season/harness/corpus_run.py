@@ -45,6 +45,7 @@ from __future__ import annotations
 import sys
 from collections import Counter
 
+from .. import decision
 from .. import shape as S
 from ..data import files
 from . import probes as P
@@ -478,8 +479,8 @@ def main(seed: int = 0) -> int:
         w2 = build_at(c, seed); w2.step = S.Step.DELIBERATE
         pr = w2.persons["p_a"]
         qs = S.questions_for(w2, pr)
-        vw = S.Query.assemble(pr, qs[0] if qs else None, w2.fixtures.get("view_k"))
-        cd = S.Query.opening_set(pr, vw, qs[0], w2.fixtures) if qs else []
+        vw = decision.assemble(pr, qs[0] if qs else None, w2.fixtures.get("view_k"))
+        cd = decision.opening_set(pr, vw, qs[0], w2.fixtures) if qs else []
         nz = sum(1 for x in cd if any(float(pr.convictions.get(a, 0.0)) * S.align(x.verb, a)
                                       for a in S.CONVICTION_AXES))
         sep.append((nz, len(cd)))

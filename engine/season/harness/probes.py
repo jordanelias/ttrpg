@@ -30,10 +30,12 @@ from __future__ import annotations
 
 from typing import Any, Callable, Optional
 
+from .. import decision
+from ..queries import world_q
 from ..shape import (
     CLAIM_SOURCES, Candidate, Claim, Collision, ContestError, DEFAULT_FIXTURES, Event,
     Fixtures, Forbidden, H, NoProducer, Office, Person, VERB_TABLE,
-    Proposition, Query, Question, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver,
+    Proposition, Question, Record, ROOT, RUNG_KINDS, Rung, STRATA, SeasonDriver,
     ShapeGap, questions_for, make_chooser, Scene, Sensation, resolvable_verbs, standing_of, body_band_penalty,
     Site, StateChange, Step, Tenure, Ungraded, Unowned, Unspecified, View, World,
     CHANNEL_PREDICATES, WITNESS_CHANNELS, WriteClass, contest, expect_refusal,
@@ -102,7 +104,7 @@ def tiny_world(fixtures: Fixtures = DEFAULT_FIXTURES) -> World:
 # shape. No in-chain document supplies one; this is a harness fixture and is named as such.
 def SUBSIST(p: Person, w: World) -> int:
     scale = w.fixtures.get("condition_scale")
-    home = Query.parent_of(w, p.id)
+    home = world_q.parent_of(w, p.id)
     if home is None or home not in w.rungs:
         return 0
     return min(scale, sum(w.rungs[home].stores.values()) * scale // max(1, p.weight))
@@ -306,7 +308,7 @@ def p4():
     k = w.fixtures.get("view_k")
     p.ledger += [Claim("c1", p.id, "p_high", "is_loyal", True, 0, "firsthand", 100, "own"),
                  Claim("c2", p.id, "p_high", "is_loyal", False, 0, "told_by", 100, "own")]
-    v = Query.assemble(p, _Q, k)
+    v = decision.assemble(p, _Q, k)
     assert set(v.claim_ids) == {"c1", "c2"}
     return ("PASS: the View carries both, holding IDS not references, and nothing person-side "
             "can tell them apart. A false conclusion is indistinguishable from a true one TO THE "
@@ -356,7 +358,7 @@ def p7():
             record_kind="Person", fieldname="scar", driver="Act")
     assert scars == {"Mercy": 1}
     # The ROW is lawful and the write lands. What the axis needs is L3 clause 1's registry.
-    Query.single_holder_counter(w, "p_mid", "Mercy", registry=set())
+    world_q.single_holder_counter(w, "p_mid", "Mercy", registry=set())
     return "UNREACHABLE"
 
 
@@ -426,11 +428,11 @@ def p11():
     p = w.persons["p_low"]
     q = Question("q:p11", "need", ("rec_writ",))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
-    before = {c.verb for c in Query.opening_set(p, v, q, w.fixtures)}
+    before = {c.verb for c in decision.opening_set(p, v, q, w.fixtures)}
     # `capability` at zero, and at zero for EVERY key the person has -- rev 2 set one key and
     # could not have observed a gate on a different one (§0.1 point 2).
     p.capability = {k: 0 for k in (list(p.capability) or ["copying"])}
-    after = {c.verb for c in Query.opening_set(p, v, q, w.fixtures)}
+    after = {c.verb for c in decision.opening_set(p, v, q, w.fixtures)}
     assert before == after and before, (
         f"rank 0 changed the option set: {sorted(before ^ after)}")
     return (f"PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now "
@@ -449,16 +451,16 @@ def p12():
     p = w.persons["p_low"]
     q = Question("q:p12", "need", ("rec_writ", "S"))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
-    got = Query.opening_set(p, v, q, w.fixtures)
+    got = decision.opening_set(p, v, q, w.fixtures)
     assert all(isinstance(c, Candidate) for c in got) and not any(isinstance(c, Act) for c in got)
     # THE PROPERTY, not the type: no parameter of `opening_set` may be an authored option list.
-    params = list(_i.signature(Query.opening_set).parameters)
+    params = list(_i.signature(decision.opening_set).parameters)
     assert "roster" not in params, f"`opening_set` still takes a roster: {params}"
     # and it must be derived from the TABLE -- every verb it returns is a table row, and the set
     # MOVES when the table's eligibility does, which an authored list cannot do.
     assert got and all(c.verb in VERB_TABLE for c in got)
     q2 = Question("q:p12b", "need", ("rec_writ",))
-    assert len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q2), q2,
+    assert len(decision.opening_set(p, View(p.id, [], w.fixtures.get("view_k"), q2), q2,
                                 w.fixtures)) < len(got), (
         "the option set did not shrink with the question's referents -- it is not computed from q")
     return (f"PASS BY CONSTRUCTION. `opening_set{tuple(params)}` -- THE ROSTER PARAMETER IS GONE, "
@@ -533,7 +535,7 @@ def p15():
     total = observers_for(w, e, "total", everyone)
     narrow = observers_for(w, e, "presence_only", everyone)
     five = observers_for(w, e, "all_five", everyone)
-    room = [x for x in Query.presence(w, "Hh") if x in everyone]
+    room = [x for x in world_q.presence(w, "Hh") if x in everyone]
     assert len(room) >= 2, "the fixture no longer puts two people in one rung; the test below is vacuous"
     assert set(total) == set(everyone), "the control arm is not the specified behaviour"
     # BOTH DIRECTIONS. A channel must ADMIT the co-located, not merely exclude somebody.
@@ -577,7 +579,7 @@ def p16():
     a, b = w.persons["p_low"], w.persons["p_mid"]
     a.ledger.append(Claim("ca", a.id, "p_high", "is_traitor", True, 0, "told_by", 100, "own"))
     b.ledger.append(Claim("cb", b.id, "p_high", "is_traitor", False, 0, "firsthand", 100, "own"))
-    assert Query.assemble(a, _Q, k).claim_ids != Query.assemble(b, _Q, k).claim_ids
+    assert decision.assemble(a, _Q, k).claim_ids != decision.assemble(b, _Q, k).claim_ids
     return ("PASS: legitimacy is PER-KNOWER and flips at TELLING speed, not at a global write. "
             "There is no signature by which either could read the other's ledger")
 
@@ -592,7 +594,7 @@ def p17():
     # LARGEST SINGLE BLOCKER (18 cases) and it was the instrument MEASURING AGAINST THE DESIGN,
     # which S0.1 point 4 rules is no more acceptable than flattering it. What is genuinely
     # missing is narrower, and it is what now raises: the closed registry.
-    Query.single_holder_counter(w, "p_low", "suspicion", registry=set())
+    world_q.single_holder_counter(w, "p_low", "suspicion", registry=set())
     return "UNREACHABLE"
 
 
@@ -603,12 +605,12 @@ def p18():
     site = w.sites["site_harbour"]
     floors = w.fixtures.get("band_floors")[site.kind]
     _seed_near_floor(w, site)      # a harness fixture; see the helper for why. The loop stays.
-    before = Query.verbs(w, site, floors)
+    before = world_q.verbs(w, site, floors)
     n = 0
     mine = lambda: [c for c in w.crossings if c[0] == site.id]
     while not mine() and n < 400:
         _run(w); n += 1
-    after = Query.verbs(w, site, floors)
+    after = world_q.verbs(w, site, floors)
     assert mine(), "no band edge was crossed at the site under test"
     sid, verb, was, now, eid = mine()[0]
     ev = next(e for e in w.log if e.id == eid)
@@ -769,7 +771,7 @@ def p25():
        tests="harm suffered over several seasons must be able to close off options")
 def p26():
     w = tiny_world()
-    Query.single_holder_counter(w, "p_low", "harm_borne", registry=set())
+    world_q.single_holder_counter(w, "p_low", "harm_borne", registry=set())
     return "UNREACHABLE"
 
 
@@ -781,7 +783,7 @@ def p27():
     a.ledger.append(Claim("c_ord", a.id, b.id, "complied", True, 0, "told_by", 100, "own"))
     b.ledger.append(Claim("c_tru", b.id, b.id, "complied", False, 0, "firsthand", 100, "own"))
     k = w.fixtures.get("view_k")
-    assert Query.assemble(a, _Q, k).claim_ids == ["c_ord"]
+    assert decision.assemble(a, _Q, k).claim_ids == ["c_ord"]
     return ("PASS: the superior's ledger says complied, the subordinate's says not, and neither "
             "can read the other's. Only investigation closes the gap")
 
@@ -791,12 +793,22 @@ def p27():
 def p28():
     w = tiny_world()
     p = w.persons["p_low"]
-    v = Query.assemble(p, _Q, w.fixtures.get("view_k"))
+    v = decision.assemble(p, _Q, w.fixtures.get("view_k"))
     assert v.holder == p.id
-    person_side = [n for n in dir(Query) if not n.startswith("_")]
+    # ⚠ CHANGED, step 7: `class Query` is gone, and with it `dir(Query)`'s 15 names (11 world-first
+    # + 4 person-side). The replacement is narrower and more accurate for what this probe actually
+    # asserts -- ONLY a person-side function could even be a candidate for "takes one person,
+    # returns another's ledger" (a world-first function takes no `Person` first at all), so the
+    # surface to search is `decision`'s own public functions, not `world_q`'s too. `inspect` is
+    # imported locally, matching this file's existing convention (see `p12`'s `_i`).
+    import inspect as _insp
+    person_side = [n for n in dir(decision) if not n.startswith("_")
+                   and _insp.isfunction(getattr(decision, n))
+                   and getattr(decision, n).__module__ == decision.__name__]
     return ("PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. "
-            f"There is no signature in the Query surface ({len(person_side)} functions) that takes "
-            "one person and returns another's ledger. Absence is the refusal here, not a guard")
+            f"There is no signature in the decision surface ({len(person_side)} functions) that "
+            "takes one person and returns another's ledger. Absence is the refusal here, not a "
+            "guard")
 
 
 @probe("P29", "a person travels between rungs", "S22.3", by="no-signature",
@@ -866,7 +878,7 @@ def p32():
     seq = []
     for band in [floors[0] + 1] + [f - 1 for f in floors]:
         p.body = band
-        seq.append((band, body_band_penalty(p, fx), Query.budget(p, v, k, fx)))
+        seq.append((band, body_band_penalty(p, fx), decision.budget(p, v, k, fx)))
     penalties = [n for _b, n, _q in seq]
     budgets = [q for _b, _n, q in seq]
     assert penalties == sorted(penalties), f"the narrowing is not ordered: {seq}"
@@ -941,7 +953,7 @@ def p36():
     # want of a predicate, and the two are no longer the same set (W3). Without it the person
     # forms the full computed set, picks one of the twenty, and the SEASON HALTS -- which is a
     # true finding about the specification and a different one from what this probe tests.
-    offered = len(Query.opening_set(p, View(p.id, [], w.fixtures.get("view_k"),
+    offered = len(decision.opening_set(p, View(p.id, [], w.fixtures.get("view_k"),
                                            Question("q:p36", "need", ("rec_writ",))),
                                     Question("q:p36", "need", ("rec_writ",)), w.fixtures))
     d = _run_d(w, chooser(w, only=p.id, verbs=resolvable_verbs()))
@@ -972,8 +984,8 @@ def f1():
     w.propositions[prop.id] = prop
     w.add_tenure(Tenure("tc1", "p_low", prop.id, "commit", since=0))
     w.add_tenure(Tenure("tc2", "p_king", prop.id, "commit", since=0))
-    edges = [t for t in Query.lateral(w, "faction", "commit") if t.object == prop.id]
-    n = Query.commit_count_guard(w, edges, "membership")
+    edges = [t for t in world_q.lateral(w, "faction", "commit") if t.object == prop.id]
+    n = world_q.commit_count_guard(w, edges, "membership")
     try:
         prop.value = False
     except Exception:
@@ -994,15 +1006,15 @@ def f2():
     prop = Proposition("prop_dead", "OUGHT", "realm", "a dead cause", True, 0)
     w.propositions[prop.id] = prop
     w.add_tenure(Tenure("th_dead", prop.id, "S", "hold", since=0))
-    assert not [t for t in Query.lateral(w, "faction", "commit") if t.object == prop.id]
+    assert not [t for t in world_q.lateral(w, "faction", "commit") if t.object == prop.id]
     w.step = Step.RESOLVE
-    old = Query.hold_force(w, "S")
+    old = world_q.hold_force(w, "S")
     w.write("Tenure", WriteClass.ACTS, lambda: setattr(old, "until", w.tick),
             record_kind="Tenure", fieldname="until", driver="Act")
     w.write("Tenure", WriteClass.ACTS,
             lambda: w.add_tenure(Tenure("th_new", "p_high", "S", "hold", since=w.tick)),
             record_kind="Tenure", fieldname="since", driver="Act")
-    assert Query.hold_force(w, "S").subject == "p_high"
+    assert world_q.hold_force(w, "S").subject == "p_high"
     return ("PASS: `confer` on an object whose holder-Proposition has ZERO live commit edges was "
             "eligible, and THE SUCCESSFUL CONFER wrote `until` -- an ACT, in the ACTS class, via "
             "the 1-per-object cardinality. S54 item 20's REFUSED half (write `until` when the "
@@ -1028,7 +1040,7 @@ def f3():
 def f4():
     w = tiny_world()
     off = w.offices["off_duke"]
-    holder = Query.hold_force(w, off.id)
+    holder = world_q.hold_force(w, off.id)
     assert holder is not None and holder.subject == "p_high"
     assert not hasattr(off, "holder") and not hasattr(off, "held_by")
     return ("PASS: WHO HOLDS AN OFFICE IS NOT A FIELD ON THE OFFICE -- it is a `hold` Tenure owned "
@@ -1046,7 +1058,7 @@ def f5():
     scope = ["p_low", "p_king"]   # p_king sits under the realm, outside S's subtree
     w.dispensations["disp1"] = dict(id="disp1", issuer=off.id, proposition="prop_x",
                                     scope=scope, terms=[])
-    sub = Query.descendants(w, "S")
+    sub = world_q.descendants(w, "S")
     outside = [s for s in scope if s not in sub]
     assert all(s in w.persons for s in scope) and outside
     return (f"PASS: `rung? = null`, and SCOPE ENUMERATES EXECUTORS, NOT PLACES -- {outside} are "
@@ -1099,7 +1111,7 @@ def f7():
        tests="the body a matter reaches must be able to decide it")
 def f8():
     w = tiny_world()
-    Query.judging_set(w, "D")
+    world_q.judging_set(w, "D")
     return "UNREACHABLE"
 
 
@@ -1134,7 +1146,7 @@ def f10():
     # the draw reads, so the fixture tracks the economy instead of restating a number.
     def seeded():
         ww = tiny_world()
-        _eaters = len(Query.presence(ww, "Hh"))
+        _eaters = len(world_q.presence(ww, "Hh"))
         _drawn = SUBSISTENCE_WEIGHTS.get("grain", 0) * _eaters
         assert not [s_ for s_ in ww.sites.values() if s_.rung == "Hh"], (
             "the hearth has acquired a site and now PRODUCES grain; this seed assumes the draw is "
@@ -1207,14 +1219,14 @@ def f11():
 def f12():
     w = tiny_world()
     w.step = Step.RESOLVE
-    t = Query.hold_force(w, "off_duke")
+    t = world_q.hold_force(w, "off_duke")
     w.write("Tenure", WriteClass.ACTS, lambda: setattr(t, "until", w.tick),
             record_kind="Tenure", fieldname="until", driver="Act")
     w.write("Tenure", WriteClass.ACTS,
             lambda: w.add_tenure(Tenure("t_new", "p_mid", "off_duke", "hold", since=w.tick)),
             record_kind="Tenure", fieldname="since", driver="Act")
-    assert not t.live and Query.hold_force(w, "off_duke").subject == "p_mid"
-    ent = Query.entrenchment(w.persons["p_mid"], 30, w.fixtures.get("condition_scale"),
+    assert not t.live and world_q.hold_force(w, "off_duke").subject == "p_mid"
+    ent = decision.entrenchment(w.persons["p_mid"], 30, w.fixtures.get("condition_scale"),
                              w.fixtures.get("entrenchment_seasons"))
     return (f"PASS: confer and revoke are ACTS, in the ACTS class, at RESOLVE. The revoked row was "
             f"NOT DELETED -- `until` makes it a HISTORICAL CLAIM SUBJECT, which is what "
@@ -1243,7 +1255,7 @@ def f14():
     w.propositions[prop.id] = prop
     w.add_tenure(Tenure("e1", "p_low", prop.id, "commit", since=0))
     w.add_tenure(Tenure("e2", "p_mid", prop.id, "commit", since=0, until=1))
-    Query.commit_count_guard(w, [t for t in w.tenures if t.kind == "commit"], "held_ever")
+    world_q.commit_count_guard(w, [t for t in w.tenures if t.kind == "commit"], "held_ever")
     return "UNREACHABLE"
 
 
@@ -1385,10 +1397,10 @@ def w1():
     scale = w.fixtures.get("condition_scale")
     site = w.sites["site_harbour"]
     floors = w.fixtures.get("band_floors")[site.kind]
-    assert "bulk_shipping" in Query.verbs(w, site, floors)
+    assert "bulk_shipping" in world_q.verbs(w, site, floors)
     _seed_near_floor(w, site)      # a harness fixture; see the helper for why. The loop stays.
     n = 0
-    while "bulk_shipping" in Query.verbs(w, site, floors) and n < 200:
+    while "bulk_shipping" in world_q.verbs(w, site, floors) and n < 200:
         _run(w); n += 1
     assert n < 200
     return (f"PASS: wear at MATTER dropped condition below the floor in {n} seasons and the verb "
@@ -1527,7 +1539,7 @@ def w10():
        tests="a character must be able to eat from the stores of the place they live in")
 def w11():
     w = tiny_world()
-    parent = Query.parent_of(w, "p_low")
+    parent = world_q.parent_of(w, "p_low")
     assert parent == "Hh" and w.rungs[parent].stores.get("grain", 0) > 0
     return ("PASS: a `person`-kind rung draws from its CONTAINING rung's stores -- lawful as an "
             "R-1 ON-DEMAND READ OF THE PARENT, not a cross-rung write. But it means MATTER IS NOT "
@@ -1767,11 +1779,11 @@ def a9():
        tests="a place must be able to know something summed over everything inside it")
 def a10():
     w = tiny_world()
-    total = Query.r1_aggregate(w, "S", lambda rid: w.rungs[rid].stores.get("grain", 0)
+    total = world_q.r1_aggregate(w, "S", lambda rid: w.rungs[rid].stores.get("grain", 0)
                                if rid in w.rungs else 0)
     w.add_tenure(Tenure("t_dead", "Gone", "S", "contain", since=0, until=0))
     w.rungs["Gone"] = Rung("Gone", "hearth", stores={"grain": 999})
-    after = Query.r1_aggregate(w, "S", lambda rid: w.rungs[rid].stores.get("grain", 0)
+    after = world_q.r1_aggregate(w, "S", lambda rid: w.rungs[rid].stores.get("grain", 0)
                                if rid in w.rungs else 0)
     assert total == 8 and after == 8
     return (f"PASS: an R-1 ON-DEMAND aggregate over the CONTAINMENT SUBTREE = {total}. Nothing "
@@ -1927,7 +1939,7 @@ def a23():
     w = tiny_world()
     edges = [Tenure("x1", "p_low", "prop", "commit", since=0),
              Tenure("x2", "p_mid", "prop", "commit", since=0, until=1)]
-    Query.commit_count_guard(w, edges, "revocations_ever")
+    world_q.commit_count_guard(w, edges, "revocations_ever")
     return "UNREACHABLE"
 
 
@@ -1938,8 +1950,8 @@ def a24():
     kinds = {r.kind for r in w.rungs.values()}
     assert kinds <= set(RUNG_KINDS) and len({type(r) for r in w.rungs.values()}) == 1
     # the SAME r1_aggregate runs at a hearth and at the realm
-    at_hearth = Query.r1_aggregate(w, "Hh", lambda r: 1)
-    at_realm = Query.r1_aggregate(w, "R", lambda r: 1)
+    at_hearth = world_q.r1_aggregate(w, "Hh", lambda r: 1)
+    at_realm = world_q.r1_aggregate(w, "R", lambda r: 1)
     assert at_realm > at_hearth
     return (f"PASS: {len(kinds)} kinds observed, ONE type, and the SAME aggregate ran at a hearth "
             f"({at_hearth} descendants) and at the realm ({at_realm}) with no second code path. "
@@ -1956,8 +1968,8 @@ def a25():
     # assertion could not fail on the property it claimed. A tie that genuinely leaves the
     # subtree is added here, and the assertion is on the crossing itself.
     w.add_tenure(Tenure("t_far", "p_low", "p_king", "tie", since=0))
-    sub = Query.descendants(w, "S")
-    lat = Query.lateral(w, "ties", "tie")
+    sub = world_q.descendants(w, "S")
+    lat = world_q.lateral(w, "ties", "tie")
     crossing = [t for t in lat if (t.subject in sub) != (t.object in sub)]
     assert "p_king" not in sub and crossing, (sub, lat)
     return (f"PASS: R-1's subtree over `S` is {sorted(sub)} and EXCLUDES the King, while "
@@ -1972,7 +1984,7 @@ def a25():
 def a26():
     w = tiny_world()
     w.add_tenure(Tenure("t_cyc", "R", "Hh", "contain", since=0))
-    got = Query.descendants(w, "S")
+    got = world_q.descendants(w, "S")
     assert isinstance(got, list)
     return (f"PASS: a deliberate cycle (R contained by Hh) returned {len(got)} descendants and did "
             "not hang. ITERATIVE, WITH A VISITED SET, NEVER RECURSION -- the reference graph is "
@@ -2103,7 +2115,7 @@ def a31b():
         site = w.sites["site_harbour"]
         floors = w.fixtures.get("band_floors")[site.kind]
         n = 0
-        while "bulk_shipping" in Query.verbs(w, site, floors) and n < 500:
+        while "bulk_shipping" in world_q.verbs(w, site, floors) and n < 500:
             _run(w); n += 1
         out.append((rate, n))
     seasons = [n for _, n in out]
@@ -2274,7 +2286,7 @@ def p40():
     w = tiny_world()
     w.add_tenure(Tenure("ob1", "p_mid", "off_duke", "oblige", since=0))
     w.add_tenure(Tenure("ob2", "p_mid", "off_dicastery", "oblige", since=0))
-    obligations = [t for t in Query.lateral(w, "duty", "oblige") if t.subject == "p_mid"]
+    obligations = [t for t in world_q.lateral(w, "duty", "oblige") if t.subject == "p_mid"]
     assert len(obligations) == 2
     b = w.fixtures.get("scene_budget")
     return (f"PASS-STRUCTURALLY: `oblige` is MANY per person, so two incompatible duties coexist "
@@ -2306,7 +2318,7 @@ def f20():
     w.propositions[treaty.id] = treaty
     w.add_tenure(Tenure("c_a", "p_king", treaty.id, "commit", since=0))
     w.add_tenure(Tenure("c_b", "p_high", treaty.id, "commit", since=0))
-    bound = [t.subject for t in Query.lateral(w, "treaty", "commit") if t.object == treaty.id]
+    bound = [t.subject for t in world_q.lateral(w, "treaty", "commit") if t.object == treaty.id]
     assert set(bound) == {"p_king", "p_high"}
     return ("PASS-STRUCTURALLY, AND THE STRUCTURE IS THE FINDING: a treaty is a Proposition plus "
             "`commit` edges -- THE SAME OBJECT AS A FACTION (S14.2). It is IMMUTABLE, it OUTLIVES "
@@ -2321,7 +2333,7 @@ def f20():
        tests="a character sitting on a collective body must be able to have their individual position registered distinctly from the body's decision")
 def f21():
     w = tiny_world()
-    Query.judging_set(w, "D")
+    world_q.judging_set(w, "D")
     return "UNREACHABLE"
 
 
@@ -2474,7 +2486,7 @@ def p43():
     # The CLAUSE 2 case, kept distinct from P17's clause 1 case. This one really does cross
     # holders, and it is the shape the head calls "worse than the field L3 banned, because the
     # banned field could at least go down".
-    Query.aggregate_guard(w, "cohort_unrest", per_person_tally=True)
+    world_q.aggregate_guard(w, "cohort_unrest", per_person_tally=True)
     return "UNREACHABLE"
 
 
@@ -2486,16 +2498,16 @@ def p42():
     p = w.persons["p_mid"]
     fx, k = w.fixtures, w.fixtures.get("scene_budget")
     v = View(p.id, [], fx.get("view_k"))
-    base = Query.budget(p, v, k, fx)
+    base = decision.budget(p, v, k, fx)
     w.add_tenure(Tenure("t_p42", p.id, "off_x", "hold", since=0))
-    with_office = Query.budget(p, v, k, fx)
+    with_office = decision.budget(p, v, k, fx)
     p.tenures = [t for t in p.tenures if t.id != "t_p42"]
     floors = sorted(fx.get("band_floors")["body"].values(), reverse=True)
     p.body = floors[-1] - 1
-    wounded = Query.budget(p, v, k, fx)
+    wounded = decision.budget(p, v, k, fx)
     p.body = 1000
     p.travel_leg = ["a", "b"]
-    travelled = Query.budget(p, v, k, fx)
+    travelled = decision.budget(p, v, k, fx)
     assert with_office > base > wounded and base > travelled, (
         base, with_office, wounded, travelled)
     return (f"PASS BY CONSTRUCTION: {base} at rest · {with_office} holding an office · {wounded} "

@@ -47,7 +47,7 @@ itself a property of the fixture, not a fixed fact about the design.
 from __future__ import annotations
 import collections, itertools
 import sweep_core as K
-from sweep_core import S, C, R, Log
+from sweep_core import S, C, R, Log, PS
 
 LOOKAHEAD = 3        # `CLAUDE.md` §0.1 pt 5 / G1: declared with its reason.
 LOOKAHEAD_WHY = ("Jordan's number: 'to the tune of three different mechanical decisions later "
@@ -57,7 +57,7 @@ MAX_ALT_WHY = ("the ranked list holds up to 7; probing the top 3 alternatives be
                "one keeps the run tractable and covers the candidates a person's own score "
                "actually separates -- 2..7 of 22 carry a nonzero score, the rest tie")
 
-_REAL_PACK = S.pack_scenes
+_REAL_PACK = PS.pack_scenes
 
 
 class recorder:
@@ -112,11 +112,11 @@ class recorder:
             scenes = _r(p, use, budget, fx, mint, occasion=occasion)
             rec.in_budget.append(sum(len(sc.acts) for sc in scenes))
             return scenes
-        S.pack_scenes = packed
+        PS.pack_scenes = packed
         return self
 
     def __exit__(self, *a):
-        S.pack_scenes = _REAL_PACK
+        PS.pack_scenes = _REAL_PACK
         return False
 
 

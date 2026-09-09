@@ -22,13 +22,15 @@ from pathlib import Path
 
 import pytest
 
+from .. import decision
 from .. import shape as S
 from ..data import files
 from ..data import verbs as VERBS
 from ..harness import probes as P
 from ..harness import run_cases as R
+from ..queries import world_q
 from ..shape import (
-    Event, Fixtures, Forbidden, Person, Proposition, Query, Rung, Site,
+    Event, Fixtures, Forbidden, Person, Proposition, Rung, Site,
     Step, Tenure, Unspecified, View, World, WriteClass,
 )
 
@@ -190,7 +192,7 @@ def test_d5_the_budget_is_the_persons_choice_not_an_engine_truncation():
     """DEFECT 5. S26 types budget as (Person, View) -> int with NO World, so `choose` can ask
     its own. Rev 1 gave it a World and then SILENTLY DISCARDED the tail -- an engine deciding
     a person's options, which is L1."""
-    sig = inspect.signature(Query.budget)
+    sig = inspect.signature(decision.budget)
     assert "w" not in sig.parameters and "world" not in sig.parameters
     w = _w()
     def over(p, v, s, ask_budget):
@@ -696,15 +698,15 @@ def test_r1_aggregates_over_live_edges_only():
     that walks them is monotone -- a ratchet built out of 'structural' edges."""
     w = _w()
     f = lambda r: w.rungs[r].stores.get("grain", 0) if r in w.rungs else 0
-    base = Query.r1_aggregate(w, "S", f)
+    base = world_q.r1_aggregate(w, "S", f)
     w.rungs["Ghost"] = Rung("Ghost", "hearth", stores={"grain": 500})
     w.add_tenure(Tenure("t_end", "Ghost", "S", "contain", since=0, until=0))
-    assert Query.r1_aggregate(w, "S", f) == base
+    assert world_q.r1_aggregate(w, "S", f) == base
 
 
 def test_the_ratchet_guard_detects_rather_than_trusting_a_flag():
     with pytest.raises(Forbidden):
-        Query.commit_count_guard(_w(), [Tenure("a", "p", "o", "commit", since=0, until=1)], "ever")
+        world_q.commit_count_guard(_w(), [Tenure("a", "p", "o", "commit", since=0, until=1)], "ever")
 
 
 def test_a_cache_cannot_be_built_inside_a_parallel_map():
@@ -726,7 +728,7 @@ def test_hold_cardinality_is_one_per_object():
     w = _w()
     w.add_tenure(Tenure("t_dup", "p_mid", "off_duke", "hold", since=0))
     with pytest.raises(Forbidden):
-        Query.hold_force(w, "off_duke")
+        world_q.hold_force(w, "off_duke")
 
 
 def test_the_partition_seam_is_bounded_by_causation_not_by_the_column():
@@ -790,8 +792,18 @@ def test_a_hand_raised_gap_is_never_labelled_construction():
             continue
         body = _code_only(inspect.getsource(spec["fn"]))
         raises = re.search(r"\braise (Forbidden|Unspecified|NoProducer|Collision|Unowned)\(", body)
-        calls = re.search(r"(w\.write|Query\.|contest\(|sense\(|_run\(|Event\(|cache_at_barrier"
-                          r"|boot\(|setattr\(|Rung\(|View\(|fixtures)", body)
+        # ⚠ `world_q\.` / `decision\.` ADDED, step 7: the `Query\.` alternative alone stopped
+        # matching once every `Query.<name>(` call site in `probes.py` was renamed to
+        # `world_q.<name>(` / `decision.<name>(` (`class Query` no longer exists). MEASURED before
+        # editing (step-7 producer, per the decomposition plan's own hazard note): zero
+        # `by="construction"` probes depended SOLELY on the `Query\.` alternative to avoid being
+        # flagged here -- every one that raises a typed gap also independently matches another
+        # alternative (most commonly `fixtures` or `View(`). `Query\.` is kept rather than removed:
+        # it is dead weight now, not a hazard, and removing a working alternative for no reason
+        # would be an unforced edit.
+        calls = re.search(r"(w\.write|Query\.|world_q\.|decision\.|contest\(|sense\(|_run\("
+                          r"|Event\(|cache_at_barrier|boot\(|setattr\(|Rung\(|View\(|fixtures)",
+                          body)
         if raises and not calls:
             offenders.append(pid)
     assert not offenders, offenders
@@ -1083,27 +1095,27 @@ def test_w5_budget_moves_with_the_persons_own_state_in_the_ruled_directions():
     p = next(iter(w.persons.values()))
     v = S.View(p.id, [], fx.get("view_k"))
     k = fx.get("scene_budget")
-    base = S.Query.budget(p, v, k, fx)
+    base = S.decision.budget(p, v, k, fx)
 
     # office: a live `hold` Tenure the person OWNS. Routed through add_tenure, so the store is
     # the person's own — which is the whole reason budget can read it with no World.
     w.add_tenure(S.Tenure("t_b1", p.id, "off_x", "hold", since=0))
-    assert S.Query.budget(p, v, k, fx) > base, "holding an office did not raise the budget"
+    assert S.decision.budget(p, v, k, fx) > base, "holding an office did not raise the budget"
     p.tenures = [t for t in p.tenures if t.id != "t_b1"]
 
     # body: falling a band. `band_floors["body"]` is the table the SITE gate already uses.
     floors = sorted(fx.get("band_floors")["body"].values(), reverse=True)
     p.body, was = floors[0] - 1, p.body
-    assert S.Query.budget(p, v, k, fx) < base, "falling a body band did not lower the budget"
-    lower = S.Query.budget(p, v, k, fx)
+    assert S.decision.budget(p, v, k, fx) < base, "falling a body band did not lower the budget"
+    lower = S.decision.budget(p, v, k, fx)
     p.body = floors[-1] - 1
-    assert S.Query.budget(p, v, k, fx) < lower, "the narrowing is not monotone across bands"
-    assert S.Query.budget(p, v, k, fx) >= 1, "a dying person must still get one scene, not zero"
+    assert S.decision.budget(p, v, k, fx) < lower, "the narrowing is not monotone across bands"
+    assert S.decision.budget(p, v, k, fx) >= 1, "a dying person must still get one scene, not zero"
     p.body = was
 
     # travel: a leg spent this season.
     p.travel_leg = ["leg_a"]
-    assert S.Query.budget(p, v, k, fx) < base, "a travel leg did not lower the budget"
+    assert S.decision.budget(p, v, k, fx) < base, "a travel leg did not lower the budget"
 
 
 def test_r3_the_dead_code_is_reached():
@@ -1151,11 +1163,11 @@ def test_r4_l3_clause_1_is_permitted_and_clause_2_is_refused():
     more acceptable than flattering it."""
     w = _w()
     with pytest.raises(Unspecified) as e:
-        Query.single_holder_counter(w, "p_low", "suspicion", registry=set())
+        world_q.single_holder_counter(w, "p_low", "suspicion", registry=set())
     assert "closed" in str(e.value)                      # the registry is the real gap
-    assert Query.single_holder_counter(w, "p_low", "x", registry={"x"}) == 0
+    assert world_q.single_holder_counter(w, "p_low", "x", registry={"x"}) == 0
     with pytest.raises(Forbidden):
-        Query.aggregate_guard(w, "cohort_unrest", per_person_tally=True)
+        world_q.aggregate_guard(w, "cohort_unrest", per_person_tally=True)
 
 
 def test_r4_the_l1_actor_identity_is_checked():
@@ -2125,7 +2137,7 @@ def test_w5_opening_set_has_no_roster_and_is_computed_from_the_table():
 
     Tests the PROPERTY as well as the name (G3) — a parameter renamed `options` would satisfy the
     name test and be the same defect — by checking the set MOVES with the verb table."""
-    params = list(inspect.signature(S.Query.opening_set).parameters)
+    params = list(inspect.signature(S.opening_set).parameters)
     assert "roster" not in params, f"the roster survived: {params}"
     # ⚠ `["p","v","q"]` -> `["p","v","q","fx"]`, `W-C`, AND THE PROPERTY THIS PINS IS UNCHANGED.
     # `D2` is that NO AUTHORED OPTION LIST reaches here. `Fixtures` is the params registry -- flat
@@ -2144,7 +2156,7 @@ def test_w5_opening_set_has_no_roster_and_is_computed_from_the_table():
     p = w.persons["p_mid"]
     q = S.Question("q:t", "need", ("rec_writ", "S"))
     v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-    got = S.Query.opening_set(p, v, q, w.fixtures)
+    got = S.decision.opening_set(p, v, q, w.fixtures)
     assert got, "the computed set is empty — nothing is derivable and the roster is only absent"
     assert all(c.verb in S.VERB_TABLE for c in got)
 
@@ -2152,7 +2164,7 @@ def test_w5_opening_set_has_no_roster_and_is_computed_from_the_table():
     victim = sorted({c.verb for c in got})[0]
     saved = S.VERB_TABLE.pop(victim)
     try:
-        after = {c.verb for c in S.Query.opening_set(p, v, q, w.fixtures)}
+        after = {c.verb for c in S.decision.opening_set(p, v, q, w.fixtures)}
     finally:
         S.VERB_TABLE[victim] = saved
     assert victim not in after, (
@@ -2328,6 +2340,83 @@ def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
         "signatures, so this guard would miss a real regression in the file's own style")
 
 
+def test_decision_module_never_names_world():
+    """AX-2 (`architecture/meta/01_AXIOMS.md`): *"A person decides from what they hold, and what
+    they hold may be false. There is no view of world truth available inside a decision — not
+    capped, not filtered: absent."* `season.decision` is where step 7 of the decomposition
+    (ED-IN-0203) put the AX-2 island `04_CODE_ARCHITECTURE.md` §A.2 calls `decision/`, and
+    §A.3 row 2 forces it: *"in one class, a person-side function calls a resolver-side one with
+    no import to scan"* is exactly the shape a hidden `World` reference would take if this module
+    boundary were only a convention.
+
+    ⚠ WHY THIS TEST EXISTS AND DID NOT BEFORE: `04_CODE_ARCHITECTURE.md:1046` claims *"`decision/`
+    is a directory from its first commit. The isolation scan matches by path, so a `choose`
+    drafted inside `loop/` and moved later would have been green while violating AX-2."* That
+    sentence asserts an ENFORCEMENT MECHANISM — "the isolation scan" — and no such scan existed
+    anywhere in this tree before this test. `test_w5_sense_is_still_the_only_world_taking_non_...`
+    (above) checks SIGNATURES for a `World`-typed parameter, package-wide; it does not check
+    IMPORTS, and it would not catch a `decision.py` that imported `World` and never annotated a
+    parameter with it (e.g. reading a module-level `_WORLD` singleton, or constructing one). A
+    false claim of enforcement is worse than none, because it stops the next reader from checking
+    (`ARCHITECTURE.md` S47, quoted in `shape.py`'s own module docstring) — this test is what makes
+    04:1046's claim true rather than aspirational.
+
+    TWO CHECKS, MATCHING WHAT AX-2 ACTUALLY FORBIDS:
+      (a) no `Import`/`ImportFrom` in `decision.py` resolves to `state.world`, `queries` (either
+          `world_q` or `readers`), `loop`, `seam`, `combat_seam` or `shape` — the six places a
+          `World` (or a function that takes one) could be smuggled in from.
+      (b) no bare `Name`, `Attribute` attribute, or string `Constant` in `decision.py` equals
+          `"World"` — catching a `World` referenced without an import (impossible today, since (a)
+          already forbids importing it, but a decorator, a `globals()` lookup, or a future
+          relaxation of (a) could still reach a name called `World` without an import naming it),
+          and a quoted forward-reference annotation (`w: "World"`), which is `shape.py`'s own
+          dominant annotation style (nine signatures) and the exact spelling that defeated the
+          first version of the sibling AST proof above."""
+    import ast as ast_
+    src = inspect.getsource(decision)
+    tree = ast_.parse(src)
+
+    FORBIDDEN_MODULES = ("state.world", "queries", "loop", "seam", "combat_seam", "shape")
+
+    def _forbidden_import(modname: str) -> bool:
+        return any(modname == m or modname.startswith(m + ".") for m in FORBIDDEN_MODULES)
+
+    bad_imports = []
+    for node in ast_.walk(tree):
+        if isinstance(node, ast_.Import):
+            for alias in node.names:
+                if _forbidden_import(alias.name):
+                    bad_imports.append((node.lineno, alias.name))
+        elif isinstance(node, ast_.ImportFrom):
+            # relative imports (`from .state.world import World`) carry the dotted tail in
+            # `.module`; `level > 0` with `module is None` is a bare `from . import X` and is
+            # never one of the forbidden names by itself.
+            if node.module and _forbidden_import(node.module):
+                bad_imports.append((node.lineno, node.module))
+    assert not bad_imports, (
+        f"decision.py imports from a forbidden module (AX-2): {bad_imports}")
+
+    bad_names = []
+    for node in ast_.walk(tree):
+        if isinstance(node, ast_.Name) and node.id == "World":
+            bad_names.append((node.lineno, "Name", "World"))
+        elif isinstance(node, ast_.Attribute) and node.attr == "World":
+            bad_names.append((node.lineno, "Attribute", "World"))
+        elif isinstance(node, ast_.Constant) and node.value == "World":
+            bad_names.append((node.lineno, "Constant", "World"))
+    assert not bad_names, (
+        f"decision.py names `World` (AX-2 forbids it entirely, not just as an import): {bad_names}")
+
+    # The control: this file's own moved bodies reference `World` heavily IN PROSE (docstrings
+    # explaining why they do NOT take one), so a walk that found zero `World`-shaped AST nodes
+    # while still containing the substring "World" many times over would prove the walk is
+    # inspecting something other than real code — confirm the substring is present (in strings
+    # the checks above correctly ignore) so an empty result above is not a vacuous one.
+    assert src.count("World") >= 5, (
+        "decision.py's source no longer mentions World anywhere, even in prose — either the "
+        "module changed unrecognisably or this control itself needs re-deriving")
+
+
 def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_printed():
     """PLAN `W5`'s third proof: *"the `alignment` table swept at three points with every flipped
     verdict printed"*. `H-66` is the row; `rosters.yaml` holds the default.
@@ -2339,7 +2428,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     asks for in the unflattering direction too."""
     affected = ["P31", "P36", "P11", "P12"]
     table = {}
-    saved = S.ALIGNMENT
+    saved = decision.ALIGNMENT
 
     def fresh(pid):
         # ⚠ `run_probe` MEMOISES IN `_VERDICTS`, so calling it in a loop returns the FIRST run's
@@ -2351,10 +2440,10 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
 
     try:
         for point in S.ALIGNMENT_SWEEP:
-            S.ALIGNMENT = S.alignment_at(point)
+            decision.ALIGNMENT = S.alignment_at(point)
             table[point] = {pid: fresh(pid) for pid in affected}
     finally:
-        S.ALIGNMENT = saved
+        decision.ALIGNMENT = saved
         for pid in affected:
             fresh(pid)                           # restore the committed verdicts
 
@@ -2396,9 +2485,9 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     p = w.persons["p_mid"]
     q = S.Question("q:sgn", "need", ("rec_writ",))
     v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-    saved2 = S.ALIGNMENT
+    saved2 = decision.ALIGNMENT
     try:
-        S.ALIGNMENT = S.alignment_at("sign_only")
+        decision.ALIGNMENT = S.alignment_at("sign_only")
         ch = S.make_chooser(w.fixtures, lambda a, b, c: "x")
         for sign in (0.9, -0.9):
             p.convictions = {"Precedent": sign}
@@ -2412,7 +2501,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
                 f"at Precedent={sign} the person chose {picked!r}, which the table does not "
                 "score at all — the pick was decided entirely by the name tiebreak")
     finally:
-        S.ALIGNMENT = saved2
+        decision.ALIGNMENT = saved2
         for pid in affected:
             fresh(pid)
 
@@ -2433,13 +2522,13 @@ def test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner():
     p = w.persons["p_late"]
     assert not p.tenures, "the fixture is not reproducing the defect; nothing to rehome"
     fx = w.fixtures
-    base = S.Query.budget(S.Person("p_ctl", "Ctl"), S.View("p_ctl", [], 12),
+    base = S.decision.budget(S.Person("p_ctl", "Ctl"), S.View("p_ctl", [], 12),
                           fx.get("scene_budget"), fx)
     w._rehome()
     assert [t.id for t in p.tenures] == ["t_early"], (
         "the Tenure never reached its owner — `budget` would read zero offices for a person the "
         "world agrees holds one")
-    assert S.Query.budget(p, S.View(p.id, [], 12), fx.get("scene_budget"), fx) > base, (
+    assert S.decision.budget(p, S.View(p.id, [], 12), fx.get("scene_budget"), fx) > base, (
         "rehoming did not change what `budget` reads, so the office is still invisible to it")
     # and the barrier does it, so no caller has to remember.
     src = _code_only(inspect.getsource(S.SeasonDriver.deliberate))
@@ -2524,7 +2613,7 @@ def test_w5_every_new_assumption_rows_sweep_is_actually_executed():
     fx = w.fixtures
     pp.body = 0
     pp.travel_leg = ["a"] * 20
-    assert S.Query.budget(pp, S.View(pp.id, [], 12), fx.get("scene_budget"), fx) == 1, (
+    assert S.decision.budget(pp, S.View(pp.id, [], 12), fx.get("scene_budget"), fx) == 1, (
         "the floor of 1 never fires — `max(1, b)` is unreachable, so H-70's stated floor is "
         "declared and untested")
 
@@ -2871,7 +2960,7 @@ def test_w9_check3_every_fixture_read_resolves_to_a_register_site():
 def test_w9_check4_no_effect_lambda_and_no_roster():
     """§6.3 check 4: *`resolve` was called with no `effect` lambda, and `opening_set` with no
     roster.* Asserted over the SIGNATURES, so a caller cannot smuggle either back in."""
-    assert "roster" not in inspect.signature(S.Query.opening_set).parameters
+    assert "roster" not in inspect.signature(S.opening_set).parameters
     assert "effect" not in inspect.signature(S.SeasonDriver.resolve).parameters
     assert "effect" not in inspect.signature(S.SeasonDriver._fold).parameters
     src = _code_only(files.HEADLESS_PY.read_text())
@@ -4011,7 +4100,7 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
       * `move` IS NOT A CAUSE, and the plausible mechanism for it is refuted rather than
         dismissed: an extra eater seated at `S` would draw 2 per season (grain's subsistence
         weight), which is the right order of magnitude for the retracted number. Measured:
-        `Query.presence(w, "S")` is exactly `['p_high']` in every season of every arm, and
+        `world_q.presence(w, "S")` is exactly `['p_high']` in every season of every arm, and
         suppressing `move` leaves the settlement at **356** — unchanged.
 
         ⚠ **NARROWED 2026-09-07 BY `R7`, AND THE LAST CLAUSE IS THE ONE THAT WENT.** Off `total`
@@ -4100,7 +4189,7 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     #     all_five no_move 357    1       |  358 - 1 = 357  ✔
     # **`transfer` is still the SOLE PROXIMATE CAUSE of the larder — the end state is the baseline
     # minus that arm's own drain, exactly, in all four cells.** And the mechanism the docstring
-    # refutes is still refuted: `Query.presence(w, "S")` is `('p_high',)` in every season of every
+    # refutes is still refuted: `world_q.presence(w, "S")` is `('p_high',)` in every season of every
     # arm, measured, so no extra eater is seated and `move` moves nothing by subsistence.
     # WHAT IS NEW is the CHANNEL by which suppressing `move` changes the number at all: it frees
     # scene budget, so different transfers are granted (3 out of `S` with `move` live, 1 without).
@@ -4125,8 +4214,8 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
         "the docstring rather than re-pinning this number")
     # AND THE MECHANISM THE DOCSTRING REFUTES STAYS REFUTED, asserted rather than recited: an extra
     # eater at `S` would draw 2 a season, which is the order of magnitude of every delta here.
-    assert {tuple(sorted(S.Query.presence(no_move_d.w, "S")))} == {("p_high",)}, (
-        f"presence at `S` is {sorted(S.Query.presence(no_move_d.w, 'S'))}, not just `p_high` — "
+    assert {tuple(sorted(S.world_q.presence(no_move_d.w, "S")))} == {("p_high",)}, (
+        f"presence at `S` is {sorted(S.world_q.presence(no_move_d.w, 'S'))}, not just `p_high` — "
         "`move` HAS seated a second eater and the subsistence mechanism the docstring rules out "
         "is live after all — which would make the budget-competition account above wrong, not "
         "merely incomplete")
@@ -5581,7 +5670,7 @@ def test_wa_an_empty_ledger_is_unknown_for_every_form_and_the_candidate_still_fo
     p = w.persons["p_low"]
     assert not p.ledger, "the fixture person now holds claims; this arm needs an empty ledger"
     q = S.Question("q:wa_asym", "need", ("Hh",))
-    cands = S.Query.opening_set(p, S.View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)
+    cands = S.decision.opening_set(p, S.View(p.id, [], w.fixtures.get("view_k"), q), q, w.fixtures)
     offered = {c.verb for c in cands}
     typed_own = {v for v, r in S.VERB_TABLE.items()
                  if r.requires_typed is not None and S.person_side_eligible(p, r)}
@@ -5620,7 +5709,7 @@ def test_wa_a_planted_claim_removes_transfer_and_a_larger_one_leaves_it():
     v = S.View(p.id, [], w.fixtures.get("view_k"), q)
 
     def offered():
-        return {(c.verb, c.subject) for c in S.Query.opening_set(p, v, q, w.fixtures)}
+        return {(c.verb, c.subject) for c in S.decision.opening_set(p, v, q, w.fixtures)}
 
     base = offered()
     assert ("transfer", "Hh") in base, (
@@ -5994,7 +6083,7 @@ def test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing():
         p = w.persons["p_low"]
         q = S.Question("q:wc_sweep", "need", ("S",))
         v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-        c = next((c for c in S.Query.opening_set(p, v, q, w.fixtures) if c.verb == "transfer"),
+        c = next((c for c in S.decision.opening_set(p, v, q, w.fixtures) if c.verb == "transfer"),
                  None)
         assert c is not None, f"no `transfer` Candidate at amount={amount}"
         assert c.operands.get("amount") == amount, (
@@ -6086,7 +6175,7 @@ def test_wc_the_store_kind_sweep_runs_all_three_arms_and_an_unstocked_kind_refus
         p = w.persons["p_low"]
         q = S.Question("q:wc_kind_sweep", "need", ("S",))
         v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-        c = next((c for c in S.Query.opening_set(p, v, q, w.fixtures) if c.verb == "transfer"),
+        c = next((c for c in S.decision.opening_set(p, v, q, w.fixtures) if c.verb == "transfer"),
                  None)
         assert c is not None, f"no `transfer` Candidate at kind={kind}"
         assert c.operands.get("kind") == kind, (
@@ -6159,7 +6248,7 @@ def test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived():
     p = w.persons["p_low"]
     q = S.Question("q:wc_decline", "need", ("S",))
     v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-    base = {(c.verb, c.subject) for c in S.Query.opening_set(p, v, q, w.fixtures)}
+    base = {(c.verb, c.subject) for c in S.decision.opening_set(p, v, q, w.fixtures)}
     assert ("transfer", "S") in base, (
         "`transfer x S` was never offered, so removing it proves nothing")
     assert S.containing_rung_of(p) == "Hh", (
@@ -6171,7 +6260,7 @@ def test_wc_a_candidate_declines_when_its_hearth_cannot_be_derived():
         if t.kind == "contain" and t.live:
             t.until = w.tick
     assert S.containing_rung_of(p) is None
-    after = {(c.verb, c.subject) for c in S.Query.opening_set(p, v, q, w.fixtures)}
+    after = {(c.verb, c.subject) for c in S.decision.opening_set(p, v, q, w.fixtures)}
 
     assert ("transfer", "S") not in after, (
         "a person with no live containment was still offered `transfer`. `hearth(giver)` has "
@@ -6228,7 +6317,7 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # drop out of the option set while this test stayed green and the claim "walked over every
     # typed verb" stayed published.
     WALK_EXCLUDES: frozenset = frozenset()
-    cands = [c for c in S.Query.opening_set(p, v, q, w.fixtures)
+    cands = [c for c in S.decision.opening_set(p, v, q, w.fixtures)
              if S.VERB_TABLE[c.verb].requires_typed is not None]
     assert {c.verb for c in cands} == all_typed - WALK_EXCLUDES, (
         f"the walk reached {sorted({c.verb for c in cands})} and the grammar's typed verbs are "
@@ -6423,7 +6512,7 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
     p = w.persons["p_low"]
     q = S.Question("q:wc_collide", "need", ("Hh",))
     v = S.View(p.id, [], w.fixtures.get("view_k"), q)
-    untyped = [c for c in S.Query.opening_set(p, v, q, w.fixtures)
+    untyped = [c for c in S.decision.opening_set(p, v, q, w.fixtures)
                if S.VERB_TABLE[c.verb].requires_typed is None]
     assert any(c.verb == "create_record" for c in untyped), (
         "`create_record` is no longer an untyped verb in the option set; re-derive this arm")
@@ -6676,7 +6765,7 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
         "a person holding no claim about `Hh` was treated as knowing `transfer` fails — §F1's "
         "asymmetry is gone and this test can no longer observe what it is for")
     w.step = S.Step.DELIBERATE
-    before = S.Query.opening_set(p, S.Query.assemble(p, q, w.fixtures.get("view_k")), q,
+    before = S.decision.opening_set(p, S.decision.assemble(p, q, w.fixtures.get("view_k")), q,
                                  w.fixtures)
     assert any(c.verb == "transfer" for c in before), (
         "no `transfer` Candidate formed even before the deposit — the control is broken, not the "
@@ -6702,7 +6791,7 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
 
     # ---- THE DECISION: clause 4 drops it.
     w.step = S.Step.DELIBERATE
-    after = S.Query.opening_set(p, S.Query.assemble(p, q, w.fixtures.get("view_k")), q,
+    after = S.decision.opening_set(p, S.decision.assemble(p, q, w.fixtures.get("view_k")), q,
                                 w.fixtures)
     assert not any(c.verb == "transfer" for c in after), (
         f"the `transfer` Candidate survived a claim that makes its requirement known-false: "
@@ -7060,13 +7149,13 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
 
     def drops(fx):
         hits = []
-        original = S.belief_contradicts
+        original = decision.belief_contradicts
         def counted(p_, row, subject, operands):
             out = original(p_, row, subject, operands)
             if out:
                 hits.append((row.verb, subject))
             return out
-        S.belief_contradicts = counted
+        decision.belief_contradicts = counted
         try:
             w = C.build_at(case, 0)
             w.fixtures = fx
@@ -7077,7 +7166,7 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
                 d.season(ch, question=None, subsistence=C.P.SUBSIST,
                          contest_max_depth=w.fixtures.get("contest_max_depth"))
         finally:
-            S.belief_contradicts = original
+            decision.belief_contradicts = original
         return hits, w
 
     control, _wc = drops(S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
@@ -7088,13 +7177,13 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
 
     def hl_drops(fx):
         hits = []
-        original = S.belief_contradicts
+        original = decision.belief_contradicts
         def counted(p_, row, subject, operands):
             out = original(p_, row, subject, operands)
             if out:
                 hits.append((row.verb, subject))
             return out
-        S.belief_contradicts = counted
+        decision.belief_contradicts = counted
         try:
             w = HL.build_world(0, fx)
             d = S.SeasonDriver(w)
@@ -7104,7 +7193,7 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
                 acts.append(d.season(S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs()),
                                      None, HL.subsistence)["acts"])
         finally:
-            S.belief_contradicts = original
+            decision.belief_contradicts = original
         return hits, acts
 
     hl_control, hl_acts_none = hl_drops(S.DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
