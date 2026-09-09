@@ -1,5 +1,156 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⭐ DONE 2026-09-09 — decomposition STEP 6: `epistemic.py`. `shape.py` 3,124 → 2,803 (ED-IN-0203)
+
+**Carries on #383's step 5.** Both ends of one channel move together: `belief_contradicts` (§F1
+clause 4), `act_refs` and `claim_subjects` (what a deposit is ABOUT), and the whole
+witness-channel end — `_event_place`, the five `_ch_*`, `CHANNEL_PREDICATES` **with its `for`
+loop and its `del`**, and `observers_for`. `shape.py` re-exports all eleven; **322 body lines
+moved, 1 novel**, the single declared `Query.presence` → `world_q.presence` rewrite.
+
+**⚠ ZERO GAME YIELD.** `register.py --requirements` reads **6 `not_met` · 3 `partial`** before and
+after. Unchanged, which is the only reading of progress §0.2 accepts.
+
+### THE HAZARD THIS STEP EXISTED TO NOT TRIP, AND THE ONE IT HANDS TO STEP 7
+
+Plan §0 item 1 names `S.belief_contradicts` as a rebind hazard: *"split the owner from the reader
+and each rebind becomes a silent no-op on a copied binding."* **Six sites rebind it** — four in
+`test_wb_clause_four_fires_...`, two in the frozen `proposals/2026-09-04-degree-sweep/
+wd_acceptance.py`. Measured before cutting:
+
+```
+bare-name callers of belief_contradicts, whole package:  ONE — shape.py:433, inside Query.opening_set
+every other caller:                                      S.belief_contradicts(...), an attribute read
+```
+
+`opening_set` stays in `shape.py` until step 7 and resolves the name in **`shape.py`'s** globals at
+call time, so the rebinds still land. **Verified by execution, not by that sentence:** the nine
+`test_wb_*` pass, and `S.Query.opening_set.__globals__['belief_contradicts'] is
+epistemic.belief_contradicts`.
+
+⚠ **AND THE HAZARD IS REAL AT STEP 7 — DEMONSTRATED, NOT PREDICTED.** Plant the exact defect step 7
+would introduce (`from .epistemic import belief_contradicts as _bc` inside `opening_set`) and:
+
+```
+clause-4 test  ->  FAILED at :7118      shipped=[]   <- the counter never fires
+acts/season    ->  [7,7,7] -> [7,6,6]                <- the drops still HAPPEN
+```
+
+**The game behaves identically and only the instrument goes blind.** That is the whole meaning of
+*silent* here, and it is why the mutation is worth more than the warning. The falsifier is not
+vacuous and says so itself: `assert live, "…or the deposit no longer reaches belief_contradicts"`.
+
+**When `opening_set` moves at step 7, either move the six rebinds to the new owner or keep
+`opening_set` reading the name through a module whose global the rebinds write.**
+
+### `CHANNEL_PREDICATES` MOVED AS A BLOCK BECAUSE IT IS NOT AN ASSIGNMENT
+
+⚠ **My first pre-flight scan did not see it.** I enumerated top-level `FunctionDef`/`ClassDef`/
+`Assign` nodes — and `CHANNEL_PREDICATES` is `= {}` **plus a `for` loop plus a `del`**, three
+statements, of which my selector saw one. The loop is the part that matters: it asks the DEFINING
+module's `globals()` for `_ch_<name>` per roster channel and raises on a miss.
+
+```
+EVERY top-level statement type in shape.py:  FunctionDef 38 · ImportFrom 19 · ClassDef 4 · Import 3
+                                             AnnAssign 3 · Assign 2 · For 1 · Delete 1 · Expr 1
+the two a def/class/assign selector drops:   For 1428-1436   Delete 1437   <- both CHANNEL_PREDICATES'
+```
+
+Caught by re-running the scan over **every** top-level node instead of a filtered set. **This is
+step 5's defect in a new spelling** — there the scan covered three of four groups, here it covered
+one of three statements — and the general form is the one worth carrying: *a scan that enumerates
+node types you thought of cannot report the ones you did not.* Enumerate everything, then filter.
+
+### NO GATE NARROWED, AND THIS TIME THE MEASUREMENT COULD HAVE SAID SO
+
+Step 5's narrowing claim was overturned because the measurement was invariant by construction. The
+question to ask is **"which gates read a hardcoded path, and did the moved code leave their
+corpus"**. Twelve tests reference a fixed source constant; the ones whose *assertions* use one:
+
+| gate | corpus | verdict |
+|---|---|---|
+| `test_w2_every_write_call_site_names_a_pair_on_the_matrix` | `SHAPE_PY` + `PROBES_PY` | **12 write sites before, 12 after; `epistemic.py` has 0** — nothing left |
+| `test_d10c_the_obstacle_refusal_gate_exists` | `SHAPE_CODE` | positive assertion; subject is in `SeasonDriver`, stays |
+| `test_wc_the_fold_binds_what_the_person_bound` | `SHAPE_PY` | parses for `_fold`, stays |
+| `test_r3_the_band_floors_are_swept` | `PROBES_CODE` | untouched |
+
+The seven re-pointed at step 5 are derived (`_model_modules()` / `_model_code()`) and **picked up
+`epistemic.py` with nothing edited** — model set 24, `epistemic.py` in it.
+
+### THE DEPOSIT BODY IS STRUCK FROM THE PLAN RATHER THAN QUIETLY SKIPPED
+
+The plan's §1 table gives `epistemic.py` *"the deposit body … as one function"*. **This document's
+own §3 forbids it**: barrier bodies move *"ONLY AS THE SAME METHODS … so
+`inspect.getsource(S.SeasonDriver.witness)` keeps resolving to a real body"*. Checked rather than
+taken on trust, and an **independent read-only inventory** sharpened each reason past what I had:
+
+| test reading `getsource(witness)` | what extraction does to it |
+|---|---|
+| `test_d2_witness_does_not_lie_about_its_driver` (`:146`) | asserts `driver="Event"` is IN the source — and **all three** of `witness`'s `driver="Event"` sites are inside the deposit body. Breaks **loudly** |
+| `test_d9b_eviction_ranks_on_the_product_not_lexicographically` (`:288`, assert `:320`) | pins `"c.confidence * (c.when"` inside `witness`, commented *"the LIVE comparator … not a copy of it in this file"* |
+| `test_witness_writes_no_belief_and_no_conviction` (`:720`) | a **NEGATIVE** assertion scoped to `witness`'s own source: it would **keep passing while silently ceasing to cover the claim-writing code it exists to police.** The dangerous one, and I had not identified it |
+
+And `test_w2`'s corpus loss is more specific than "3 of 12 write sites": those three
+`w.write("claim_ledger", …, record_kind="Person", fieldname="claim_ledger")` calls are the **only
+source of the `("Person", "claim_ledger")` pair** in that scan, so extraction deletes that pair
+from the gate's coverage silently.
+
+**The plan's own "genuinely ambiguous" eviction question resolves the same way: neither moves.**
+Its *"whichever moves, the other moves in the same commit"* is honoured by neither moving, and
+`04:149`'s `state/ledgers` comparator is satisfiable at step 9, when the driver itself reaches
+`loop/` and a ledger sub-store can own a comparator without de-sourcing a barrier. **A plan row
+instructing a later session to do what the plan forbids is worse than a silent one**, so the row
+is struck, not merely unexecuted.
+
+### SEVEN HOME CLAIMS, FOUND WITH BOTH SELECTORS THIS TIME
+
+Step 5 missed eight by matching the literal `shape.py` and by being line-scoped over YAML block
+scalars. This sweep ran **both spellings** (`shape.py … <symbol>` and `shape.<symbol>`) **over file
+text, not lines**, and every new home was verified against `__module__`:
+
+| where | now |
+|---|---|
+| `hole_register:365`, `:637` | `site: shape.observers_for` → `epistemic.py` |
+| `hole_register:909` | `Fixtures`→`data/fixtures.py` (step 3), `claim_subjects`→`epistemic.py` |
+| `hole_register:814` | `belief_contradicts` → `epistemic.py` |
+| `hole_register:1350`, `:1353` | `claim_subjects`→`epistemic.py`; the WITNESS deposit stays |
+| `hole_register:1713` | `shape.py::belief_contradicts` → `epistemic.py::belief_contradicts` |
+
+**Deliberately NOT changed, with the reason:** `hole_register:2448`'s *"wrapping
+`shape.belief_contradicts` to count drops"* is prose describing a MECHANISM, and it stays accurate
+— that rebind path is exactly what the six sites do and what still works. `:368`/`:640`/`:1078` are
+frozen `cite:` findings. The `shape.py:NNNN` line citations remain plan §5 debt for step 10.
+
+### WHAT WAS VERIFIED
+
+- **content hash `ee0383bf3f4606e56b80cd07c0284f0a`** — unchanged after the carve and after each
+  repair; measured again after restoring the planted mutation.
+- **`report.py` reproduced all eight artifacts byte-identically** (`git status engine/season/runs/`
+  empty); **`delta.py HEAD`: `PROBE FLIPS 0`**, gap events 66 → 66.
+- **`pytest engine/season/tests`: 186 passed** · **`test_wb_*`: 9 passed** · the mutation arm RED.
+- **`test_engine_does_not_import_systems.py`: 17 passed** — no new cycle; the two declared
+  `sys.path` seams are still the only two.
+- **identity: 11/11 re-exports are the SAME object**; all five `CHANNEL_PREDICATES` values report
+  `__module__ == engine.season.epistemic`.
+- **symbol check against `HEAD`: 218 top-level names, 218 resolve, 0 missing.**
+- **unbound-name pre-flight on the finished module: NONE** — and it caught a `TRACE` import the moved
+  code never uses, removed rather than shipped. ⚠ **It did NOT catch a second one, and the independent
+  inventory did:** `Claim` was imported and used nowhere but inside a `law=` STRING. My check for that
+  counted occurrences of the name in the file text, which cannot tell code from prose — the same
+  selector weakness as the two above, a third time in one session. The check that works is an AST one:
+  a name bound by an import and appearing in no `Name` or `Attribute` node, minus those appearing in a
+  string annotation. Run that way, the three that remain (`Event`, `VerbRow`, `World`) are all genuine
+  string-annotation uses.
+⚠ **AND THE LINE COUNT WAS WRONG BY ONE IN FOUR PLACES BEFORE IT WAS COMMITTED.** I wrote
+  2,804 from `len(src.split("\\n"))`, which over-counts a newline-terminated file by one; every
+  other figure in this ledger row is `wc -l`. **3,124 → 2,803.** `ED-IN-0203` already carries two
+  line-count corrections and this is a THIRD, by a new mechanism — those two were the same
+  instrument read at the wrong TIME, this one is two instruments read at the same time. The rule
+  that covers both: **one instrument, named, for a series of numbers that will be compared.**
+- module counts corrected **with the basis stated this time**: `CLAUDE.md` §3 and `CURRENT.md` read
+  **26** = `.py` excluding `test_*` and `__init__.py` = 18 model + 8 `harness/`. The 25 they held
+  was correct on that same basis before this step.
+
 ## ⭐ DONE 2026-09-08 — decomposition STEP 5: `queries/` + `loop/`. `shape.py` 4,153 → 3,121 (ED-IN-0203)
 
 **Carries on #381, which named steps 5–11 as what remains.** Step 5 is the whole of that step and
