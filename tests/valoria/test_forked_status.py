@@ -33,7 +33,7 @@ def test_a_forked_target_is_recognised():
 def test_a_live_path_is_not_forked():
     """The discriminator must not fire on ordinary alias rows, or every relocation becomes a
     tombstone and the gate stops checking that moved files actually arrived."""
-    assert bdc._is_forked('systems/_architecture/derived_stats_v30.md') is False
+    assert bdc._is_forked('systems/_architecture/reference/derived_stats_v30.md') is False
     assert bdc._is_forked(None) is False
     assert bdc._is_forked('') is False
 

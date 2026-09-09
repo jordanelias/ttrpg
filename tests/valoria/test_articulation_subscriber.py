@@ -5,7 +5,7 @@ item 1 (scene.accord_echo)).
 
 `TickScheduler.subscribe` (engine/substrate/keys.py:447) had ZERO callers anywhere in the corpus
 before this. `subscribe_all` is the first — it registers a per-invocation stub-wire callback for
-every §3.1 trigger type_id (systems/articulation/articulation_layer_v30.md §3.1: the original
+every §3.1 trigger type_id (systems/articulation/reference/articulation_layer_v30.md §3.1: the original
 10-row table at lines 77-92, rows #11/#12 added Wave 3 ED-IN-0004, row #13 added Wave 3 OI-03) and
 renders nothing (the render layer stays ED-IN-0073's docket).
 
@@ -51,8 +51,8 @@ from engine.substrate.keys import (
     Visibility,
 )
 
-REGISTRY_PATH = "systems/_architecture/key_type_registry_v30.md"
-ARTICULATION_DOC_PATH = "systems/articulation/articulation_layer_v30.md"
+REGISTRY_PATH = "systems/_architecture/reference/key_type_registry_v30.md"
+ARTICULATION_DOC_PATH = "systems/articulation/reference/articulation_layer_v30.md"
 _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 

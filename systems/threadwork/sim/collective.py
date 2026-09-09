@@ -1,7 +1,7 @@
 """
 systems/threadwork/sim/collective.py — Collective Thread operations (multi-practitioner)
 
-Canon source: systems/threadwork/threadwork_v30.md §2.5 Collective Operations
+Canon source: systems/threadwork/reference/threadwork_v30.md §2.5 Collective Operations
 
 Implements:
   - attempt_collective_operation: §2.5 procedure. All practitioners Leap

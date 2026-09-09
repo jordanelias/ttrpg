@@ -1,7 +1,7 @@
 """
 systems/threadwork/sim/opposing.py — Opposing Thread operations + Knot Strain interaction
 
-Canon source: systems/threadwork/threadwork_v30.md §2.6
+Canon source: systems/threadwork/reference/threadwork_v30.md §2.6
 
 Implements:
   - resolve_opposing_operations: §2.6 6-row resolution table (Meets/Partial/

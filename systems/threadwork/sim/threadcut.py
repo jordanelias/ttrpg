@@ -1,7 +1,7 @@
 """
 systems/threadwork/sim/threadcut.py — Threadcut beings (P-06)
 
-Canon source: systems/threadwork/threadwork_v30.md Part 6
+Canon source: systems/threadwork/reference/threadwork_v30.md Part 6
 
 Implements:
   - is_threadcut: registry check

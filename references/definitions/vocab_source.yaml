@@ -415,14 +415,14 @@ registers:
         abbreviations: []
         category: mechanic
         note: NPC-attached attitude state toward another entity. Drives behaviour-tree branching. Canonical
-          in systems/npcs/npc_behavior_v30.md; no separate first-class doc. Mode D cascade-terminal —
+          in systems/npcs/reference/npc_behavior_v30.md; no separate first-class doc. Mode D cascade-terminal —
           391 chains. Added to glossary 2026-04-30 (PP-691).
       domain_action:
         canonical: Domain Action
         abbreviations: []
         category: mechanic
         note: Faction-level strategic action resolved at scale-transition phase. Unit of strategic-layer
-          decision. Canonical in systems/_architecture/scale_transitions_v30.md + designs/provincial/faction_layer_v30.md;
+          decision. Canonical in systems/_architecture/reference/scale_transitions_v30.md + designs/provincial/faction_layer_v30.md;
           no separate first-class doc. Mode D cascade-terminal — 346 chains. Added to glossary 2026-04-30
           (PP-691).
     thread_operations:
@@ -817,7 +817,7 @@ registers:
       authority: PP-232
       residual_count: 5
       residual_at_audit: '2026-04-30'
-      residual_concentration: systems/mass_battle/mass_battle_v30.md (2) + engine/params/mass_combat.md
+      residual_concentration: systems/mass_battle/reference/mass_battle_v30.md (2) + engine/params/mass_combat.md
         (2) + designs/provincial/peninsular_strain_v30.md (1)
     - term: Thread Depth
       canonical_full: Thread Depth
@@ -868,8 +868,8 @@ registers:
       authority: ED-781
       residual_count: 6
       residual_at_audit: '2026-04-30'
-      residual_concentration: systems/_architecture/conflict_architecture_proposal.md (3) + canon/03_canonical_timeline.md
-        (1) + systems/_architecture/campaign_architecture_v30.md (1) + systems/factions/faction_layer_v30.md
+      residual_concentration: systems/_architecture/reference/conflict_architecture_proposal.md (3) + canon/03_canonical_timeline.md
+        (1) + systems/_architecture/reference/campaign_architecture_v30.md (1) + systems/factions/reference/faction_layer_v30.md
         (1)
     - term: Niflhel (as faction)
       canonical_full: Niflhel (faction-context only — place-references retained)
@@ -881,7 +881,7 @@ registers:
       authority: ED-764
       residual_count: 23
       residual_at_audit: '2026-04-30'
-      residual_concentration: systems/_architecture/conflict_architecture_proposal.md (5) + systems/factions/faction_layer_v30.md
+      residual_concentration: systems/_architecture/reference/conflict_architecture_proposal.md (5) + systems/factions/reference/faction_layer_v30.md
         (5)
     - term: GM (bare)
       canonical_full: Game Master
@@ -894,7 +894,7 @@ registers:
       authority: PP-691 (formal censure); session-log P1 directive
       residual_count: 29
       residual_at_audit: '2026-04-30'
-      residual_concentration: systems/npcs/npc_behavior_v30.md (5) + engine/params/core.md (4) + systems/factions/faction_layer_v30.md
+      residual_concentration: systems/npcs/reference/npc_behavior_v30.md (5) + engine/params/core.md (4) + systems/factions/reference/faction_layer_v30.md
         (3); diffuse — 14 docs total
     - term: Conviction Track (contest-context)
       canonical_full: Persuasion Track
@@ -905,7 +905,7 @@ registers:
       authority: vocabulary audit — silo isolation directive
       residual_count: 89
       residual_at_audit: '2026-05-08'
-      residual_concentration: engine/params/contest.md (FIXED) + systems/social_contest/social_contest_v30.md
+      residual_concentration: engine/params/contest.md (FIXED) + systems/social_contest/reference/social_contest_v30.md
         (FIXED) + 87 remaining files
     - term: Conviction Track (territory-context)
       canonical_full: Piety Track (PT)
@@ -941,7 +941,7 @@ registers:
       authority: vocabulary audit — silo isolation directive
       residual_count: 5
       residual_at_audit: '2026-05-08'
-      residual_concentration: engine/params/contest.md (FIXED) + systems/social_contest/social_contest_v30.md
+      residual_concentration: engine/params/contest.md (FIXED) + systems/social_contest/reference/social_contest_v30.md
         (FIXED) + infill/v2 files pending
   synonym_registry:
     register: synonym

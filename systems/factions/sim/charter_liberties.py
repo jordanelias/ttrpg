@@ -1,7 +1,7 @@
 """
 systems/factions/sim/charter_liberties.py — Hafenmark Charter of Liberties
 
-Canon source: systems/factions/faction_canon_v30.md §6
+Canon source: systems/factions/reference/faction_canon_v30.md §6
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 
 Dependencies:
@@ -29,4 +29,4 @@ def attempt_charter(world: GameState):
         'systems.factions.sim.charter_liberties',
         'attempt_charter(world: GameState) -> CharterResult',
         reason='Pass 2l armature stub, implementation pending against canonical source '
-               '(systems/factions/faction_canon_v30.md §6); OI-17, ED-IN-0091 plan §2.2')
+               '(systems/factions/reference/faction_canon_v30.md §6); OI-17, ED-IN-0091 plan §2.2')

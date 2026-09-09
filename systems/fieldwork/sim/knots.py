@@ -1,7 +1,7 @@
 """
 systems/fieldwork/sim/knots.py — Knot lifecycle — formation, sustaining, rupture
 
-Canon source: systems/fieldwork/knots_v30.md (Pass 2g synthesis 2026-05-17)
+Canon source: systems/fieldwork/reference/knots_v30.md (Pass 2g synthesis 2026-05-17)
 
 Implements:
   - form_knot: §3.1 prerequisites + §3.2 procedure

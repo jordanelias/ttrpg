@@ -4,19 +4,19 @@ Status: [RATIFIED — Key & Echo armature v1, ED-IN-0018, 2026-07-07; §5 fork d
 Jordan's consolidated "ratify all" pass, ED-IN-0026, same date]
 
 Canon sources (implemented 1:1 where ratified, flag-gated where PROPOSED):
-  - systems/_architecture/key_substrate_v30.md
+  - systems/_architecture/reference/key_substrate_v30.md
       §2.1 universal Key schema · §2.2 field semantics · §2.3 validation
       invariants 1-8 · §2.5 canonical 4-axis set · §4.1 single update rule
       (steps 1-2, 5-6 subset; steps 3-4 observer/armature NOT implemented,
       blocked on ORD-3 — see module docstring of engine.substrate).
-  - systems/_architecture/key_type_registry_v30.md
+  - systems/_architecture/reference/key_type_registry_v30.md
       §1 type format (required/optional payload fields, defaults) · §2-§8 the
       55-type roster. AUTHORED here; COOKED to engine/engine_params/key_types.json
       by tools/export_key_types.py, and that JSON is what runtime loads
       (ED-IN-0136). The two are pinned identical by a blocking round-trip gate
       plus test_key_substrate.py::test_json_and_markdown_registries_are_identical,
       so this is one roster with two representations, not two sources.
-  - systems/_architecture/propagation_spec_v1.md
+  - systems/_architecture/reference/propagation_spec_v1.md
       §1 O.4/SSI-1..4 (sub_step_index = append-order tiebreak ONLY; the
       re-entrancy meter `cascade_depth` lives on the tick-scoped scheduler and
       is NEVER a field on the logged Key) · §4.2 Level-B termination guard
@@ -185,7 +185,7 @@ class TypeRegistry:
     """Loader/validator for the Key-type registry, from JSON or from the authored markdown.
 
     THE SOURCE OF TRUTH IS STILL AUTHORED IN MARKDOWN
-    (`systems/_architecture/key_type_registry_v30.md`) — that is where a human edits a type and
+    (`systems/_architecture/reference/key_type_registry_v30.md`) — that is where a human edits a type and
     where review happens. What changed (ED-IN-0136) is what CODE reads: `tools/export_key_types.py`
     cooks that markdown into `engine/engine_params/key_types.json` and callers load the JSON.
 

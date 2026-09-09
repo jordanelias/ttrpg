@@ -12,7 +12,7 @@ forever.
 This is CLAUDE.md §0.1 point 1's read/write asymmetry class, and it was born
 broken rather than broken by drift — the reader never had a `world` parameter to
 pass. Both functions are currently campaign-unreachable (no importer: see
-`systems/settlements/settlements_flow_skeleton_v1.md`), so this test is also the
+`systems/settlements/reference/settlements_flow_skeleton_v1.md`), so this test is also the
 first thing that has ever executed the pair together.
 
 FALSIFIER. `test_a_world_write_is_visible_to_a_world_read` fails against the

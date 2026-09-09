@@ -1,7 +1,7 @@
 """
 systems/fieldwork/sim/investigation.py — Investigation systems — NPE, Interface, Dialogue Lattice, Response Matrix
 
-Canon source: systems/fieldwork/investigation_systems_v30.md
+Canon source: systems/fieldwork/reference/investigation_systems_v30.md
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17; STUB-WIRED 2026-07-29, OI-02,
          ED-IN-0091 plan §2.2/§3 Wave 1 stage 3]
 

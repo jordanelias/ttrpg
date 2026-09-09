@@ -174,7 +174,7 @@ def test_no_contracted_unit_is_evacuated(part):
 
 def test_contract_guard_can_fail():
     """POSITIVE CONTROL: plant a contracted path in the evacuate set and require a complaint."""
-    planted = ep.contract_guard({'systems/mass_battle/mass_battle_v30.md'})
+    planted = ep.contract_guard({'systems/mass_battle/reference/mass_battle_v30.md'})
     assert planted, 'the contract guard did not object to evacuating a contracted doc'
 
 
@@ -364,7 +364,7 @@ def test_keep_set_doc_cutoff_matches_the_tool():
     So: any ISO date the doc presents as THE audit cutoff must equal `AUDIT_CUTOFF`. The doc is free
     to mention other dates (ledger entries, incident dates); only the ones marked as the cutoff bind.
     """
-    doc = os.path.join(HERE, '..', '..', 'systems', '_architecture', 'repository_keep_set_v1.md')
+    doc = os.path.join(HERE, '..', '..', 'systems', '_architecture', 'reference', 'repository_keep_set_v1.md')
     with open(doc, encoding='utf-8') as fh:
         text = fh.read()
 

@@ -1,7 +1,7 @@
 """
 sim/peninsular/rs_track.py — Rendering Stability world-track
 
-Canon source: systems/threadwork/threadwork_v30.md Part 5
+Canon source: systems/threadwork/reference/threadwork_v30.md Part 5
 Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
 
 Dependencies:
@@ -30,4 +30,4 @@ def apply_rs_delta(delta: int, source: str, world: GameState):
         'systems.overview.sim.rs_track',
         'apply_rs_delta(delta: int, source: str, world: GameState) -> int',
         reason='Pass 2l armature stub, implementation pending against canonical source '
-               '(systems/threadwork/threadwork_v30.md Part 5); OI-17, ED-IN-0091 plan §2.2')
+               '(systems/threadwork/reference/threadwork_v30.md Part 5); OI-17, ED-IN-0091 plan §2.2')

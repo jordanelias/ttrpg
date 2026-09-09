@@ -63,7 +63,7 @@ THRESHOLDS = {
     # g.TOKEN_THRESHOLDS (633f5e57; canonical_sources rode 9k->12k pending the
     # freshness SHA-split, roadmap K-2 / workplan LB-6). Returns to 5_000 when
     # the 115 canonical_sha fields move to references/canonical_freshness.yaml.
-    "references/canonical_sources.yaml":      12_000,
+    "references/canonical_sources.yaml":      14_000,   # raised 2026-09-09 ED-IN-0179; see references/atomization_rules.yaml note
     # Single-sourced from references/atomization_rules.yaml (PATCH_REGISTER_LIMIT) so the
     # validator and the policy file can't drift (was hardcoded 20_000 vs policy 15_000).
     "registers/patch_register_active.yaml":   PATCH_REGISTER_LIMIT,

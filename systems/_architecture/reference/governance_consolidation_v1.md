@@ -7,7 +7,7 @@ against the **pre-existing built substrate** the earlier work was blind to. It c
 one decision surface and one execution order:
 
 1. the comparative-governance **44 proposals** (`designs/audit/2026-07-09-comparative-governance-research/`) → **12 authored** into canon as PROPOSED (PR #119);
-2. the **governance-ripple substrate** (`designs/architecture/governance_ripple_substrate_v1.md`);
+2. the **governance-ripple substrate** (`systems/_architecture/reference/governance_ripple_substrate_v1.md`);
 3. the **58-card grounded deck** (`designs/audit/2026-07-11-grounded-event-card-deck/`);
 4. the **pessimist NERS audit** (`designs/audit/2026-07-11-comparative-governance-pessimist-ners-audit/`);
 5. the **7-seed settlement-season stress test** + its verification layer (`designs/audit/2026-07-12-settlement-season-stress-sim/`);

@@ -61,7 +61,7 @@ you were not aiming.**
 
 ## §1.3 Two scales, one continuous game
 
-`systems/_architecture/videogame_mode_spec.md` §0: strategic and personal run **simultaneously**,
+`systems/_architecture/reference/videogame_mode_spec.md` §0: strategic and personal run **simultaneously**,
 joined by zoom rather than a mode switch. Mandatory triggers pull the player down; Domain Echo pushes
 outcomes back up. No session boundaries, no GM adjudication, no `GameMode` enum.
 

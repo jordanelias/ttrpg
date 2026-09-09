@@ -31,7 +31,7 @@ THE MASS-BATTLE TREES -- RULED 2026-08-03 (J2), REGISTERED 2026-08-04 as ED-MB-0
   deletion list: CARRY union LEAVE does not partition the tree, and the neither-set -- .github/,
   .githooks/, .claude/, tools/, tests/valoria/, most of references/, research/, skills/, CLAUDE.md,
   CURRENT.md, HANDOFF.md -- would be DELETED, taking the enforcement tier and the shipping gate with
-  it. The authored keep-set is systems/_architecture/repository_keep_set_v1.md.
+  it. The authored keep-set is systems/_architecture/reference/repository_keep_set_v1.md.
 
 Usage:
     python3 tools/build_fork.py --out /path/to/fork      # assemble + verify

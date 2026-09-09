@@ -59,7 +59,7 @@ meet it, that is a `gap` record (prose vs code), NOT a formula to harvest as liv
 ```yaml
 - id: H5-041                      # YOUR lane prefix + zero-padded counter
   name: Parliamentary Territorial Transfer
-  source: systems/factions/parliamentary_transfer_v30.md:30      # path:line you OPENED
+  source: systems/factions/reference/parliamentary_transfer_v30.md:30      # path:line you OPENED
   system: parliament-politics     # exactly ONE from the system roster
   touches: [territory-world, faction-strategy]                   # 0..3 secondary
   slice: mechanic                 # exactly ONE from the slice set

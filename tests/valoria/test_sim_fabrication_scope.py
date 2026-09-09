@@ -84,7 +84,7 @@ def test_a_basename_heuristic_would_still_see_none_of_it():
     ('engine/tests/test_pipeline_reach.py', False),  # the oracle's own tests, excluded on purpose
     ('tools/ci_sim_fabrication_check.py', False),    # validators are not reference code
     ('deprecated/tools/old_sim.py', False),          # archival, never gated
-    ('systems/mass_battle/mass_battle_v30.md', False),
+    ('systems/mass_battle/reference/mass_battle_v30.md', False),
 ])
 def test_predicate_boundaries(path, expected):
     assert _load().is_sim_file(path) is expected

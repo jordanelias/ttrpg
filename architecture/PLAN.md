@@ -1270,7 +1270,7 @@ holes have live owners outside the chain — among them a **margin-based degree 
 single owner for every scale of the game by a 2026-08-14 Jordan ruling**
 (`engine/autoload/dice_engine.py::degree_from_net`), a **closed four-item `ethical_axis` roster** and
 a registered `personal_track` kind (`references/descriptor_registry.yaml`), a **`## Status: CANONICAL`
-13×4 Conviction→axis matrix** (`systems/characters/conviction_axis_matrix_v30.md`), a **live
+13×4 Conviction→axis matrix** (`systems/characters/reference/conviction_axis_matrix_v30.md`), a **live
 adjudicator taxonomy with a Panel decision rule** (`systems/social_contest/`, ED-137/ED-1057), and a
 `Visibility` block with an enforced three-shape invariant (`engine/substrate/keys.py`).
 

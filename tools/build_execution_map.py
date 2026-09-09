@@ -31,7 +31,7 @@ SOURCES (nothing is invented; every row traces to a file):
   references/module_contracts.yaml        — Key IN -> resolver -> OUT, owned state, gates,
                                             plus `wiring:` build/godot/port_rank/parity
   references/key_graph.json               — producers + consumers per Key type
-  systems/_architecture/key_type_registry_v30.md — Key payload/scale/permanence
+  systems/_architecture/reference/key_type_registry_v30.md — Key payload/scale/permanence
 
 Usage:
     python3 tools/build_execution_map.py            # write both artifacts

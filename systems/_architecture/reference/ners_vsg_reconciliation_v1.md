@@ -1,6 +1,6 @@
 # NERS-Review / VSG Reconciliation (v1) — merging the harness-verification empirical branch with the generation-methodology design branch
 
-## Status: ALL SIX ITEMS RULED (D1–D5: ED-IN-0046; D6+B1: ED-IN-0047; B2+B12: direct Jordan ruling 2026-07-13) — 2026-07-13 · Lane: IN (cross-cutting SE, FA) · Extends `governance_consolidation_v1.md` (now itself updated to record D1–D6) and folds `generation_sourcebook_v1.md`'s blocker register into one surface. B12's ruling landed as its own document, `designs/territory/scale_hierarchy_v1.md`, which overrules `valoria_political_hierarchy_v30.md` (PP-726) §1/§2.3. See §5 for the full, three-times-updated ruling record.
+## Status: ALL SIX ITEMS RULED (D1–D5: ED-IN-0046; D6+B1: ED-IN-0047; B2+B12: direct Jordan ruling 2026-07-13) — 2026-07-13 · Lane: IN (cross-cutting SE, FA) · Extends `governance_consolidation_v1.md` (now itself updated to record D1–D6) and folds `generation_sourcebook_v1.md`'s blocker register into one surface. B12's ruling landed as its own document, `systems/settlements/reference/scale_hierarchy_v1.md`, which overrules `valoria_political_hierarchy_v30.md` (PP-726) §1/§2.3. See §5 for the full, three-times-updated ruling record.
 
 **What this is.** Two independent PRs landed on `main` within the same session window and were never
 cross-read against each other:
@@ -17,7 +17,7 @@ cross-read against each other:
   **VSG v1**, a proposed 15-paradigm generator, plus a grounding sourcebook proposing parallel faction
   and territory generator stacks and a 10-item blocker register (B1–B10).
 
-Both branches independently converge on **`designs/architecture/governance_consolidation_v1.md`**
+Both branches independently converge on **`systems/_architecture/reference/governance_consolidation_v1.md`**
 (D1–D5 decisions, E1–E7 extensions) as their shared ancestor — PR#127's harness README cites its
 reconciliation memo verbatim as the grounding mandate; VSG's death-spiral invariant is a direct port of
 its E1. Neither branch, however, ever read the other's actual output. **This document is that read.**
@@ -91,7 +91,7 @@ existed; new items continue each series.
 | B9 | ~~Geography YAML `settlements:` block stale 36-scheme~~ **RESOLVED 2026-07-13** ("reconcile all geography stuff with bias towards recency") — full 37-settlement migration against `settlement_layer_v30.md`'s already-current table, cross-verified against the already-correct `settlement_adjacency:` block. See §5 item 3. | resolved |
 | B10 | VSG depends on `governance_consolidation_v1 §6` D1–D6 | **RESOLVED** — all of D1–D6 now ruled |
 | **B11** | `engine_clock` unauthored (`doc: null` in `module_contracts.yaml`, per CLAUDE.md §6) blocks more than previously scoped: it's the sole blocker on Part 41's Relay Tier/Beacon Network — "the single strongest new-state case in the corpus" per the NERS review — and by extension on VSG ever generating a cross-settlement Territory-scale mechanic that actually fires at runtime. | `pr119_proactive_governance_menus.py`: `relay_tier_temporal_dependency` → `contingent_on_unauthored_engine_clock`, **100/100**. **Still open** — B12's resolution (below) doesn't touch this. |
-| **B12** | ~~Naming collision, unconfirmed either way~~ **RESOLVED 2026-07-13, Jordan RULED directly**: not a collision — the sourcebook's Territory/Province stack and Part 41's Territory scale name the same real tier. Full ruling: `designs/territory/scale_hierarchy_v1.md`, which explicitly overrules `valoria_political_hierarchy_v30.md` (PP-726) §1/§2.3. See §5 item 4. | resolved |
+| **B12** | ~~Naming collision, unconfirmed either way~~ **RESOLVED 2026-07-13, Jordan RULED directly**: not a collision — the sourcebook's Territory/Province stack and Part 41's Territory scale name the same real tier. Full ruling: `systems/settlements/reference/scale_hierarchy_v1.md`, which explicitly overrules `valoria_political_hierarchy_v30.md` (PP-726) §1/§2.3. See §5 item 4. | resolved |
 
 ---
 
@@ -223,7 +223,7 @@ this document's own recommendation and drew no objection.
    (local/provincial/national) as independent, people-holding rather than territory-holding; settlement/
    territory/province independence and cross-scale claiming (e.g. RM claiming one settlement directly);
    and two chain-bypassing authorities (the monarch, Parliament). Full ruling + propagation scope:
-   `designs/territory/scale_hierarchy_v1.md`. `valoria_political_hierarchy_v30.md` (PP-726) §1/§2.3 now
+   `systems/settlements/reference/scale_hierarchy_v1.md`. `valoria_political_hierarchy_v30.md` (PP-726) §1/§2.3 now
    carry a supersession banner; the mechanical rewrite (§2.1/§2.4/§2.5, the R/F-series sourcebook
    stacks) is tracked, unexecuted follow-on authoring — see that doc's §6.
 5. **The held-back item (Phase 6), now partially resolved.** B12's resolution (item 4) confirms Part

@@ -29,7 +29,7 @@ from engine.substrate import (
 )
 
 ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
-REGISTRY_PATH = "systems/_architecture/key_type_registry_v30.md"
+REGISTRY_PATH = "systems/_architecture/reference/key_type_registry_v30.md"
 
 
 @pytest.fixture(scope="module")

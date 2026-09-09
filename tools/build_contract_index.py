@@ -3,7 +3,7 @@
 
 WHY THIS EXISTS. Everything needed to review the engine's spine already exists, and none of it is
 readable by a human in one sitting. `references/module_contracts.yaml` is ~1,570 lines of authored
-YAML; `systems/_architecture/key_type_registry_v30.md` is 1,295 lines of prose-flavoured registry;
+YAML; `systems/_architecture/reference/key_type_registry_v30.md` is 1,295 lines of prose-flavoured registry;
 `references/key_graph.json` is 62 KB of machine-readable join. A reviewer who wants to ask "what
 actually produces `state.succession`, who listens, and where does the chain break" has to hold
 three formats in their head at once. So the review does not happen, and the gaps the join already
@@ -68,7 +68,7 @@ import ci_common  # noqa: E402
 ROOT = ci_common.REPO
 GRAPH = os.path.join(ROOT, 'references', 'key_graph.json')
 CONTRACTS = os.path.join(ROOT, 'references', 'module_contracts.yaml')
-REGISTRY = os.path.join(ROOT, 'systems', '_architecture', 'key_type_registry_v30.md')
+REGISTRY = os.path.join(ROOT, 'systems', '_architecture', 'reference', 'key_type_registry_v30.md')
 SOURCES = os.path.join(ROOT, 'references', 'canonical_sources.yaml')
 ADJUDICATOR = os.path.join(ROOT, 'skills', 'valoria-module-adjudicator', 'scripts',
                            'contract_adjudicator.py')
@@ -78,7 +78,7 @@ OUT_MODULES = os.path.join(ROOT, 'references', 'CONTRACT_INDEX.md')
 
 BANNER = ('> **GENERATED** by `tools/build_contract_index.py`. Do not hand-edit — every fact below '
           'is rendered from a source file and a hand-edit is silently discarded on the next build.\n'
-          '> Fix a fact at its source: keys in `systems/_architecture/key_type_registry_v30.md`, '
+          '> Fix a fact at its source: keys in `systems/_architecture/reference/key_type_registry_v30.md`, '
           'edges and owned state in `references/module_contracts.yaml`, build status in '
           'the same file\'s `wiring:` facts.')
 
@@ -269,7 +269,7 @@ def render_keys(graph, contracts) -> str:
 
     L = [f'# Valoria — Key Index ({len(real)} key types)', '', BANNER, '']
     L += ['**Sources joined:** `references/key_graph.json` (generated) ← '
-          '`systems/_architecture/key_type_registry_v30.md` + `references/module_contracts.yaml`. '
+          '`systems/_architecture/reference/key_type_registry_v30.md` + `references/module_contracts.yaml`. '
           'Module-level companion: [CONTRACT_INDEX.md](CONTRACT_INDEX.md).', '']
     L += ['A blank cell means **not declared**, which is not the same claim as "none". '
           'Producer/consumer sets are the **union** of both authored views; the `agreement` column '

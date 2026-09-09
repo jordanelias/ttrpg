@@ -150,11 +150,17 @@ def _resolve_doc(root, doc_rel):
         # a DIRECTORY-valued doc (e.g. personal_combat -> systems/combat/combat_engine_v1/): the
         # design lives across the dir's .md files — concatenate them so prose matching sees the
         # whole corpus, not a spurious 'missing'. (Only personal_combat uses this today.)
-        mds = sorted(f for f in os.listdir(p) if f.endswith('.md'))
+        # ED-IN-0179 (2026-09-09): design prose inside a code directory moved to its
+        # `reference/` subfolder, so a top-level listdir now returns nothing. Look in both,
+        # which keeps this working for a directory whose docs have not moved.
+        mds = sorted(os.path.join(p, f) for f in os.listdir(p) if f.endswith('.md'))
+        _ref = os.path.join(p, 'reference')
+        if os.path.isdir(_ref):
+            mds += sorted(os.path.join(_ref, f) for f in os.listdir(_ref) if f.endswith('.md'))
         if mds:
             parts = []
             for f in mds:
-                with open(os.path.join(p, f), encoding='utf-8', errors='replace') as fh:
+                with open(f, encoding='utf-8', errors='replace') as fh:
                     parts.append(fh.read())
             return _tags.strip('\n\n'.join(parts)), 'declared-dir'
     if bdc is not None:
