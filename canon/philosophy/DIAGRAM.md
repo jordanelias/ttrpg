@@ -103,7 +103,7 @@ flowchart TD
     M --> O
     N --> L
     O --> L
-    J -->|"displacement ÷ your own magnitude"| L
+    J -->|"how much it costs: OPEN<br/>see §6.8"| L
     D --> K
 
     style O stroke-width:3px
@@ -116,8 +116,8 @@ flowchart TD
   with a held shape *consists in*, and the benefit is what being imbricated with a released one
   consists in.
 - **The edge into L is divided, not doubled.** A manipulative working's displacement is a fixed
-  quantity, and what it is a fraction of is the practitioner (§6.8). A larger vessel is not tougher;
-  the same load is simply less of it.
+  quantity. **What decides how much it costs the practitioner is now open** — the account that stood
+  here was retracted 2026-09-09 (§6.8).
 
 ------
 
@@ -310,7 +310,7 @@ flowchart TB
     EQ -.-> OPS
     HU --> LEAP --> OPS --> KN
     OPS --> STRAIN
-    OPS -->|"manipulative work only,<br/>÷ the practitioner's magnitude"| DR
+    OPS -->|"manipulative work only"| DR
     STRAIN --> GAP --> LOCK
     TC --> STRAIN
     ABS --> TS --> BAR

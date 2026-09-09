@@ -232,18 +232,13 @@ So the two claims that appeared to be in conflict are not:
   the passive stratum (§3.3), which requires no reach to operate. Sensitivity was never needed to
   *have* the first encounter; it is what the encounters build, by altering how one is tied in.
 
-**And the identity above has a consequence outside confrontation entirely.** If being able to hold
-oneself among threads is the same accomplishment as perceiving them, then a practitioner of deep reach
-is a **larger configuration** — more extensively tied into the weave. §6.8 rules that operational cost
-is the working's displacement *relative to the practitioner*, so magnitude divides it. Sensitivity
-therefore makes deliberate threadwork cheaper at the same time as it makes confrontation worse.
-
-**Those are not in tension, and the difference between them is the whole point.** A confrontation
-arrives unbidden, and reach governs how much of it gets in (§5.4). An operation is performed through
-an imbrication one entered, and magnitude governs what fraction of oneself its displacement amounts
-to. **Sensitivity makes you better at doing and worse at being done to.** The profile that suffers
-both halves at once is the practitioner of great reach standing somewhere dangerous — which is the
-Warden, and it is why that role is the exposed one in a way no amount of skill resolves.
+> ⚠ **RETRACTED 2026-09-09.** A passage stood here deriving, from §5.5's identity, that a
+> practitioner of deep reach is a **larger configuration** and therefore pays less for deliberate
+> threadwork — *"sensitivity makes you better at doing and worse at being done to"*. It rested
+> entirely on §6.8's cost account, which the author has since said was answered under a
+> misunderstanding. **The identity in §5.5 is ruled and stands; that consequence was mine and is
+> withdrawn.** Whether a practitioner's reach bears on what a working costs them is now open — see
+> §6.8.
 
 ## §5.6 The epistemic barrier
 

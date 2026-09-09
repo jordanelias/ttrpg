@@ -1195,3 +1195,57 @@ ends, because what is described is not a mechanism inside the world but the way 
 
 *Applied:* §3.4 (opening rewritten; the configuration-space gloss struck in place; action-language
 swept), §9.3 (new *Equilibrium* row; the futural-potential-legible row corrected).
+
+---
+
+## 2026-09-09 — Batch 13: C-3 RETRACTED, and what that says about the option format
+
+### The retraction
+
+> "C-3: it was nonsense so I had no idea that's what I apparently ruled. I thought you were saying
+> that the scale of the working changed the cost."
+
+**C-3 is withdrawn. It was never a ruling.** On 2026-09-08 I asked whether the practitioner's own
+magnitude divides the cost of a working, offered three lettered options, and recorded *"2b I think but
+expand upon it"* as a decision. The label was mine. It did not carry to the author the meaning it
+carried to me — he took the question to be about **the scale of the working**, which is a different
+question with a different answer.
+
+**A selection made under a misreading is not a ruling.** Everything derived from C-3 is struck:
+
+- cost measured *relative to the practitioner* rather than by the working alone;
+- *"no toughness term, and there was never a place to put one"*;
+- **magnitude is imbrication**, and therefore that thread sensitivity makes a practitioner a larger
+  vessel;
+- *"sensitivity makes you better at doing and worse at being done to"*;
+- the Einhir lattice as **a larger vessel rather than a stronger tool**, and the reading that made
+  §7.5 and §8.1 one mechanism.
+
+*Struck at:* §6.8 (the whole subsection, replaced by a retraction notice and a statement of what is
+now open), §5.5 (the consequence paragraph), §8.3 (the lattice reading), `DIAGRAM.md` (three edges and
+a caption). The round-2 diagram's `U-42`, `U-47` and `U-48` are void.
+
+**What survives, because it was ruled separately:** D-5's **type × scale** — the scale of the working
+bears on the cost — and §6.6's direction test, which decides whether there is an operational cost at
+all. Neither depends on C-3.
+
+**What is now open:** whether anything about the *practitioner* bears on what a working costs them.
+Not to be filled in by inference.
+
+### What this says about the format, which matters more than the ruling
+
+**Three of the entries in this file were answered by letter from lists I wrote** — E-2, E-3, E-4 —
+and they already carry a marker saying the wording is mine. C-3 is the same shape and the
+misunderstanding is now confirmed. So the marker was right and too weak: it recorded that the
+*wording* was the editor's without recording that **the author may not have read the option to mean
+what the editor meant by it.**
+
+⚠ **Standing instruction for any session after this one.** A lettered option is not a safe way to
+take a ruling on anything structural. If the author's answer arrives as a letter, **write back what
+you are about to record, in a sentence, in plain words, and get that confirmed** before applying it.
+The cost of not doing so here was a subsection of §6.8, a passage in §5.5, two paragraphs of §8.3,
+four diagram elements, and two rounds of audit findings built on top of them.
+
+This is the fifth instance of one pattern: R-1, R-2, R-7, R-8 and now C-3. The first four were the
+editor building on a plain statement. This one is the editor **manufacturing** a statement and the
+author consenting to a label. It is the worse failure of the two.

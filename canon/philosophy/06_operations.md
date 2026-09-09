@@ -316,45 +316,33 @@ mending the carrier reaches the floor. The ruling settles that the floor is mova
 self-mending as the hard case; the mechanism above is why those two facts belong together. Reject it
 and the ruling stands.)*
 
-### How large the cost is — you are the vessel
+### How large the cost is — RETRACTED, and open
 
-**The operational cost scales with the working relative to the practitioner, not with the working
-alone.** *(Ruled 2026-09-08.)* D-5 already gave the operational term as **type × scale**; this settles
-what *scale* is measured against. A displacement is a quantity, and what it is a fraction **of** is the
-configuration bearing it. The same working therefore costs a small being more.
+> ⚠ **RETRACTED 2026-09-09.** Everything this subsection asserted rested on a ruling the author has
+> since said was answered under a misunderstanding: *"it was nonsense so I had no idea that's what I
+> apparently ruled. I thought you were saying that the scale of the working changed the cost."*
+>
+> The question I put offered three options and the author chose one by letter. The label was mine,
+> and it did not carry to the reader the meaning it carried to me. **A selection made under a
+> misreading is not a ruling**, so C-3 is withdrawn and everything derived from it goes with it:
+>
+> - that cost is measured *relative to the practitioner* rather than by the working alone;
+> - that there is "no toughness term, and there was never a place to put one";
+> - that **magnitude is imbrication**, and therefore that thread sensitivity makes a practitioner a
+>   bigger vessel;
+> - that sensitivity is accordingly *"better at doing and worse at being done to"*;
+> - that the Einhir lattice was **a larger vessel rather than a stronger tool** (§8.3).
+>
+> None of that was ruled. All of it was mine.
 
-**Why the framework has to read it this way.** Cost here is not damage absorbed, which is what the
-alternative quietly assumes. It is the practitioner's own configuration being moved out of its
-equilibrium — the constitutive account above. A configuration moved a fixed distance has been moved
-further *as a proportion of itself* the smaller it is. Nothing about the practitioner's fortitude
-enters. There is no toughness term, and there was never a place to put one.
+**What survives, because it was ruled separately and earlier:** D-5 gives the operational term as
+**type × scale**. So the *scale of the working* bears on the cost, and the *direction* of the working
+decides whether there is an operational cost at all (§6.6). Neither of those depends on C-3.
 
-**Four things follow, and they collapse several separate-looking facts into one.**
-
-- **Scale is dangerous because a person is small.** Not because large workings are intrinsically
-  harder — a manipulation of a province is the same *kind* of act as a manipulation of a cup. What
-  makes the first lethal is that one person is the denominator.
-- **The Einhir lattice was a larger vessel, not a stronger tool.** This is the reading that makes
-  §7.5 and §8.1 one mechanism rather than two. A lattice binds many configurations into a single
-  imbricated whole, so a provincial working's displacement is divided across a civilization and each
-  participant bears a survivable fraction. It let them do what no person could — and it is also
-  exactly why the failure was civilizational: when the shape being held is manipulative, what the
-  lattice distributes is **strain**, and everything it was spread across is what tore.
-- **Magnitude is imbrication, and imbrication is sensitivity.** §5.5 rules that being able to perceive
-  threads and being able to hold oneself among threads are one accomplishment. A being tied more
-  extensively into the weave *is* a larger configuration. So **thread sensitivity is what makes a
-  practitioner a bigger vessel**, and it divides the cost of everything they deliberately do.
-- **Which produces a clean asymmetry across the two channels, and it is not a contradiction.**
-  Sensitivity makes the **confrontation** channel worse — greater reach converts more of an unbidden
-  encounter into stress that actually arrives (§5.4). It makes the **operational** channel better —
-  greater magnitude divides the displacement of a working you chose to perform. *Sensitivity makes
-  you better at doing and worse at being done to.* The one profile that gets both halves at once is a
-  highly sensitive person standing somewhere dangerous, which is the Warden, and §6.8 had already
-  derived that they are the exposed case for environmental rather than operational reasons.
-
-*(Derived, not ruled: the identification of magnitude with imbrication via §5.5, and the two-channel
-asymmetry that follows. The ruling settles relative magnitude; what magnitude consists in is the
-framework's own answer, and §5.5 is the only candidate it offers.)*
+**What is now open:** whether anything about the *practitioner* bears on the cost — whether beings
+differ in what a given working costs them, and if so in virtue of what. The framework has no answer,
+and the previous answer was mine rather than the author's. Do not fill this in by inference; it is
+exactly the gap that produced the retraction.
 
 ### The confrontation channel
 

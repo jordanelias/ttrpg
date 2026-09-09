@@ -89,18 +89,15 @@ generationally maintained lattice binding practitioners and place-threads to the
 environment, social organization, cultural memory and collective rendering. **The network was not
 separate from the civilization; it was threaded through its constitutive ground.**
 
-**What the lattice was for, in the terms §6.8 now supplies: it was a larger vessel, not a stronger
-tool.** Operational cost is a working's displacement *relative to the configuration bearing it*
-(§6.8), so the limit on what one person can hold is a limit of magnitude rather than of skill. A
-lattice binds many configurations into one imbricated whole, and a provincial working's displacement
-is then divided across a civilization — each participant carrying a survivable fraction of something
-no individual could have borne. That is the achievement, and it is a real one.
-
-**It is also, exactly and without a second mechanism, why the failure was civilizational.** A vessel
-divides whatever it is given. Where the shape being held stands off the attractor, what the lattice
-distributes is **strain** (§7.5) — and everything it was spread across is then everything that can
-tear. The same property that made the Einhir capable is the property that made their collapse
-comprehensive. Nothing was miscalculated about the sharing; the sharing worked.
+> ⚠ **RETRACTED 2026-09-09.** Two paragraphs stood here reading the lattice as **a larger vessel
+> rather than a stronger tool** — dividing a provincial working's displacement across a civilization,
+> which then made the collapse civilizational by the same property. It was built on §6.8's cost
+> account, which the author has since said was answered under a misunderstanding, and it is
+> withdrawn.
+>
+> **What the lattice was and what it did are not affected.** §8.3 above stands, and §8.4's cascade
+> follows from the knots regardless of why the lattice was built. What is no longer claimed is that
+> its purpose was to *divide a cost across bearers*.
 
 ## §8.4 Cascading collapse
 
