@@ -413,7 +413,7 @@ rows:
     site:      ""
     sweep:     []
     unblocks:  "2"
-    cite:      "PLAN §3.1 called this test 2 (IRRELEVANT) AND THE LABEL IS CORRECTED to a declared DEFERRAL -- CLAUDE.md §0 test 2 is \"its subject was retired, evacuated or never built\", and a narrowing to a deferred subsystem reachable at the seam (#353 :1403-1409) is none of those. #353 :1931-1933 VERBATIM: \"The twelve named argument faults and the stasis ladder ... were scoped out by a declared narrowing (the three deferred subsystems are out of scope except at the seam). A declared scoping is not a drop.\" THE BEHAVIOUR IS UNCHANGED and it is H-23's exactly: nothing is injected and the row's cases are REFUSAL-BLOCKED, NOT FREED. PLAN §2.4 and §5.4 still credit them as freed; that is the same asymmetry §2.2 indicts, and it is corrected in PLAN §3.5's table."
+    cite:      "PLAN §3.1 called this test 2 (IRRELEVANT) AND THE LABEL IS CORRECTED to a declared DEFERRAL -- CLAUDE.md §0 test 2 is \"its subject was retired or never built\", and a narrowing to a deferred subsystem reachable at the seam (#353 :1403-1409) is none of those. #353 :1931-1933 VERBATIM: \"The twelve named argument faults and the stasis ladder ... were scoped out by a declared narrowing (the three deferred subsystems are out of scope except at the seam). A declared scoping is not a drop.\" THE BEHAVIOUR IS UNCHANGED and it is H-23's exactly: nothing is injected and the row's cases are REFUSAL-BLOCKED, NOT FREED. PLAN §2.4 and §5.4 still credit them as freed; that is the same asymmetry §2.2 indicts, and it is corrected in PLAN §3.5's table."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent**"
   - id:        H-38
     tier:      1
