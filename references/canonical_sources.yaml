@@ -218,10 +218,10 @@ systems:
 # superseded documents as canonical. Their content lives in the philosophy suite.
   leap_mechanism:
     design_doc: canon/philosophy/06_operations.md
-    canonical_sha__canon__philosophy__06_operations_md: "c24a140c91b8b82c00e3cae4f6589513e3c94a27"
+    canonical_sha__canon__philosophy__06_operations_md: "3e085481ea021080e3d59ce00f01a6ca5d7c96d3"
   self_rendering:
     design_doc: canon/philosophy/04_being_persistence.md
-    canonical_sha__canon__philosophy__04_being_persistence_md: "95776c3bfbe1c39290f0bff40849aec5fc58e303"
+    canonical_sha__canon__philosophy__04_being_persistence_md: "81801ff020c2b87cc8d17f865377a5bd7602815b"
 
 # ────────────────────────────────────────────────────────────────────────
 # All 17 full_stack systems mapped. sim_gate('full_stack') will pass after a

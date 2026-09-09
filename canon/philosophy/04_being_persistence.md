@@ -67,7 +67,7 @@ determinate.** That is §3.1's "what rendering produces is the world as world" t
 
 **It does not make rendering an activity, and the distinction matters.** Rendering is not something a
 being *does*; it is the always-already occurring interpretation of things *as* something. The force in
-this chain is in the as-structure, not in any work performed. **Spooling configures; rendering
+this chain is in the as-structure, and taking-as is a process (§3.1). **Spooling configures; rendering
 takes-as.** Where earlier drafts said rendering "actualizes" or "performs work," they gave rendering an
 agency it does not have and quietly borrowed spooling's role for it.
 

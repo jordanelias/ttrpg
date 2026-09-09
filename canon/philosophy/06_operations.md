@@ -59,22 +59,40 @@ locatable in shared reality.
 reality" — which would include layer 1, and layer 1 demonstrably continues. That formulation is
 struck; this one is canonical.)*
 
-**Why suspension is necessary — derived, not posited.** Rendering presents the thread-substrate *as
-world*: as beings, facts, experience. Presenting-as-world is what rendering **is**, not one of several
-things it might do. Therefore rendering never presents threads *as threads*: substrate-qua-substrate
-is not among its deliverables — not filtered out, simply not delivered. Therefore access to
-threads-as-threads requires that presentation-as-world not be occurring for those threads.
+**Why suspension is necessary.** A finite ordinary human **takes what is given as world** — as
+beings, as facts, as experience. That is the *as* one lives under. And while one is taking things
+that way, threads are not what one is taking them as. Access to threads *as threads* therefore
+requires that one **stop taking them as world**.
 
-This is entailed by §3.1 alone, and it replaces the source suite's account, which had layer 2
-operating a *filter* that screens the substrate out "as noise." A filter is a further mechanism with
-nothing behind it, and it is not idle: it was the premise that made sensitivity a perception of a
-hidden layer of entities rather than a change in the mode of apprehension. The derived version
-supports the latter, which is what §5.5 and §9.1 also require.
+⚠ **Two corrections here, both mine.** *(2026-09-09.)*
+
+**The direction was reversed.** An earlier draft had "rendering *presents* the thread-substrate as
+world", which makes rendering an agent delivering a world to a recipient — the agency error in
+another costume — and quietly restores the veil the suite denies (§3.1): something presenting you a
+world *instead of* threads. There is no presenter. **One takes phenomena as something**; that taking
+is the rendering.
+
+**And the necessity was over-derived.** The draft claimed that taking things as world is what
+rendering **is**. Under the ruling that **rendering *is* the taking-as**, that is false: taking
+things as world is one *as* among others, and taking them as threads is another. Nothing about
+rendering as such excludes threads from what can be taken as something.
+
+**What the necessity actually rests on is the ruled criterion, which needs no supplement:** an
+operation is threadwork that requires **going beyond oneself as a finite ordinary human** (§6.1,
+D-6). The human *as*-world is the rendering of a finite ordinary human. Going beyond that is
+precisely a change in what one takes things as, and the Leap is that change. The derivation was
+redundant as well as false.
+
+What survives from it, and is worth keeping, is the rejection of the source suite's account: layer 2
+does not operate a *filter* screening the substrate out "as noise". A filter is a further mechanism
+with nothing behind it, and it made sensitivity a perception of a hidden layer of entities rather
+than a change in the mode of apprehension — which §5.5 rejects. The Leap changes the *as*; it does
+not lift a veil.
 
 **Why suspending *self*-rendering suspends *world*-rendering.** The two targets are joined by one
 premise: world-rendering is rendering *for a worldly standpoint*, and the practitioner has that
 standpoint by positing themselves as a being in the world. Suspend the self-positing and the
-standpoint from which threads are presented-as-world lapses. Meanwhile others' rendering continues to
+standpoint from which one takes threads as world lapses. Meanwhile others' rendering continues to
 hold the practitioner as a being in the world — which is exactly why they remain locatable while
 suspended.
 

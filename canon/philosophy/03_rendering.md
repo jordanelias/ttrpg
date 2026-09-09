@@ -12,15 +12,25 @@
 the world is given — not a mechanism external to consciousness, and not a cosmic process running
 independently of it.
 
-**It is not an activity undertaken.** No one performs it, begins it, or could decline it. It is
-occurring, as an act of consciousness in the sense that consciousness *is* this taking-as, not in the
-sense that a subject does it. To render is to interpret something as something.
+**It is a process, and it is not undertaken.** *(Ruled 2026-09-09: "'taking as' is literally a
+phenomenological process whereby a consciousness renders phenomena into something meaningful as a
+thing.")* Those are two claims and only the second is a restriction. No one performs rendering,
+begins it, or could decline it — and it is nonetheless something occurring, an act of consciousness
+in the sense that consciousness *is* this taking-as. To render is to interpret something as
+something.
 
-**And rendering does not configure. Spooling configures (§4.1).** What rendering does is take-as — and
-being taken-as is a determination on the intelligibility axis, which by co-movement is a determination
-across all three (§4.2). The force is in the as-structure, not in any work performed. Formulations
-that have rendering "actualizing," "performing work," or "maintaining" a configuration give it an
-agency it does not have, and borrow spooling's role for it.
+**What the not-undertaken clause does not mean.** An earlier draft of this paragraph read "the force
+is in the as-structure, not in any work performed", which denies rendering does anything at all.
+That was an over-reading and is struck. **Involuntary is not inert.** A process that occurs
+always-already still occurs, and what it does is take-as.
+
+**And rendering does not configure. Spooling configures (§4.1).** This is the restriction that does
+hold, and it is narrower than the struck one. **Rendering *is* the taking-as** — not something that
+performs a taking-as — and being taken-as is
+a determination on the intelligibility axis, which by co-movement is a determination across all three
+(§4.2). Formulations that have rendering "actualizing" or "maintaining" a configuration borrow
+spooling's role for it. Formulations that have it *holding* a configuration against environmental
+force do not: that is what layer 2's taking-oneself-as-human is, and it is a process (§4.3).
 
 Because threads are constitutive ground and condition of possibility simultaneously (§2.1), rendering
 is **not a subjective overlay on an independent objective world**. What rendering produces is the

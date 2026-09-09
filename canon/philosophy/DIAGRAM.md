@@ -12,7 +12,8 @@ node or edge is the framework's own inference rather than a ruling, the note und
 ## 1. The stack — what configures, what takes-as
 
 The single most important distinction in the framework, and the one most easily got wrong:
-**spooling configures; rendering takes-as.** Rendering is not an activity performed on anything.
+**spooling configures; rendering *is* the taking-as.** Not an activity undertaken, and not something
+that performs a taking-as — it is one. It is a process nonetheless.
 
 ```mermaid
 flowchart TD
@@ -79,7 +80,7 @@ practitioner is joined to is either being held against the draw or handed back t
 flowchart TD
     A["practitioner, at rest<br/>layer 2 holding them as human"]
     B["<b>the Leap</b><br/>suspend taking-oneself-as-human<br/>layer 1 continues · outward facing persists residually<br/><i>no intrinsic cost — D-5</i>"]
-    C["threads presentable <i>as threads</i><br/>because presentation-as-world has lapsed"]
+    C["threads taken <i>as threads</i><br/>because one is no longer<br/>taking them as world"]
     D["<b>imbrication</b><br/>practitioner and target joined<br/>during the working"]
     E{"direction of the working<br/>relative to the futural-potential-legible"}
     F["<b>restorative</b><br/>toward the equilibrium<br/>configurations already tend to"]

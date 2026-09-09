@@ -823,3 +823,90 @@ civilizational for the same reason it was capable).
 
 *Nothing is left open in the cost model.* The §6.8 material that DIAGRAM marked provisional is now
 ruled.
+
+---
+
+## 2026-09-09 — Batch 10: two corrections, and two rulings that were never recorded
+
+### R-1 — Taking-as is a process
+
+> "'taking as' is literally a phenomenological process whereby a consciousness renders phenomena into
+> something meaningful as a thing"
+
+**What this corrects, and it is my error rather than the suite's.** The 2026-09-07 ruling read
+*"rendering isn't an **active** thing so much as it always already is occurring **as an act of
+consciousness** where you render ie interpret things as something."* I glossed that as **"the force is
+in the as-structure, not in any work performed"** and wrote it into `03_rendering.md:21`,
+`04_being_persistence.md:70` and twice into this file.
+
+That over-reads the ruling. **Not voluntary is not the same as not a process.** The ruling denies that
+a subject *undertakes* rendering; it does not deny that rendering *does* anything. It says the
+opposite — it is an act of consciousness, and consciousness is this taking-as.
+
+**Two of the four structural conflicts in the round-2 register were manufactured by that gloss and
+are now withdrawn:**
+
+- **H-2 / S-2 — "a taking-as cannot resist a force".** The premise was mine. A process can hold a
+  configuration against environmental thread-forces; §6.8's cost model and §4.3's outward facing need
+  nothing further. **Withdrawn.**
+- **H-1 / S-3 — determination versus movement.** A process determines *by* occurring, so the two
+  senses were never rivals. Co-movement stated as change and the §4.2 chain stated as determination
+  are one claim. **Withdrawn.**
+
+*Applied:* `03_rendering.md:21` and `04_being_persistence.md:70` — the "no work performed" clause is
+struck. What survives, and is what the ruling actually said: rendering is not *undertaken*, and it
+does not **configure** — spooling does that. Those two are intact and were never in question.
+
+### R-2 — Threads are both conditions of possibility and the substrate
+
+> "threads are both conditions of possibility and the substrate"
+
+**The dilemma is refused.** The suite treated this as either/or: own the reification, or withdraw
+"condition of possibility" from §2.1. The answer is **both**, which is what `02_threads.md:24-37`
+already says the framework does — the empirico-transcendental doublet, held rather than resolved.
+§2.1's "**The framework should state it**" is correct and the ruling states it.
+
+⚠ **This supersedes `RULINGS.md:154-155`** — "The alternative, owning the reification, was available
+and **not taken**." It was taken. That sentence is retired.
+
+**S-4 / B-6 / B-10 withdrawn as a dilemma**, and one consequence survives as a plain correction:
+`09_terminology.md:35-36`'s "**Deep**, normally inapparent" and `:42`'s "ontic access to a **deep
+layer**" describe a hidden stratum behind the given, which `03_rendering.md:27-29` denies and
+`06_operations.md:70-72` explicitly rejects. Being a condition of possibility does not make threads
+*hidden*; it makes them what the given is given *as*. That wording is a defect independent of the
+ruling.
+
+*Consequence for the lineage (S-24):* the suite holds Foucault's doublet deliberately, against his
+diagnosis that it is unstable. That is a position, and §0.3 should record it as a disagreement with
+him rather than borrowing his term unnamed.
+
+---
+
+### Recorded late — two rulings from 2026-09-07 that never reached this file
+
+Both were given in session and applied to the suite; **neither was written down here.** That omission
+is what let a later session read this file's silence as the author's silence, and escalate a question
+already answered.
+
+**R-3 — the constitutive cost of an operation.** Verbatim:
+
+> "performing the leap and so on is suspending your sense of self as humanly so that you can interact
+> with the world beyond humanly 'limits' and it's this act of altering your own self rendering to
+> allow your configuration to manipulate other configurations, which means that through imbrication
+> and suspended self rendering that your manipulation of another configuration out of equilibrium is
+> working the threads of your own configuration out of equilibrium"
+
+This is the origin of §6.8's "constitutive account" and of `DIAGRAM.md`'s node J, both of which carry
+it. **§6.8's own operational channel does not**: it still runs the source suite's force-resistance
+mechanism (an inbound force through the knot that layer 2 must resist). Under R-1 that mechanism is
+no longer *incoherent*, but it is still not the ruled one. Reconciling them is outstanding.
+
+**R-4 — Coherence is elastic then plastic.** Verbatim:
+
+> "Coherence is more elasticity and then plasticity--I still want there to be accumulation, and I want
+> there to be the opportunity for configurations to heal towards original equilibrium over time if
+> they haven't suffered 'plastic' changes. Plus repeated exposure is supposed to increase your thread
+> sensitivity, so this particular mechanism needs to be discussed more"
+
+Batch 8 paraphrased this in a preamble and never quoted it. It is the ruling that retracted the
+pure yield-point model and set up E-1 through E-4.
