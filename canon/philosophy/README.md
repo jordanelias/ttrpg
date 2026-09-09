@@ -33,7 +33,7 @@ suite's own resources decided them, and marking the remainder for a decision tha
 | 8 | `08_history.md` | The Calamity, Solmund, the Church, the betrayal — as worked cases of the mechanism |
 | 9 | `09_terminology.md` | The ontical/ontological question, and the vocabulary |
 | 10 | `10_constraints.md` | P-01…P-15, regenerated against the new section numbers |
-| — | `RULINGS.md` | **The author's decisions, verbatim.** Each ruling in his own words, what it displaced, where it was applied. The live record |
+| — | `RULINGS.md` | **The author's decisions.** What each ruling displaced and where it was applied. The live record. ⚠ **Not verbatim throughout** — 24 of 47 entries quote the author; the rest are the editor's summary and are marked as such inline |
 | — | `DECISIONS.md` | The questions as originally posed. Superseded by `RULINGS.md`; kept for the context each question was asked in |
 | — | `DISCUSSION_SUPPLEMENT.md` | Every finding, every resolution with its authority, the method and what would falsify it |
 | — | `DIAGRAM.md` | **Eight diagrams of the system.** The stack, layer profiles, an operation end to end, what strains, Coherence, emergence, damage, and everything at once |

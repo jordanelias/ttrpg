@@ -5,15 +5,33 @@
 > superseded; `DISCUSSION_SUPPLEMENT.md` remains accurate on what the review found, but not on what is
 > open.
 >
-> **Reading it:** each entry gives the ruling in the author's own words, what it displaced, the
-> consequences drawn, and where it was applied. Entries marked *struck* record proposals from the
-> review that the author rejected — kept so they do not creep back in.
+> **Reading it:** each entry gives the ruling, what it displaced, the consequences drawn, and where it
+> was applied. Entries marked *struck* record proposals from the review that the author rejected —
+> kept so they do not creep back in.
+>
+> ⚠ **Not every entry carries the author's words, and until 2026-09-09 this header claimed they all
+> did.** Of 47 ruling entries, **24 quote the author verbatim and 23 do not.** Twenty of those
+> twenty-three now carry an inline marker saying so. The distinction matters more than it looks:
+>
+> - **Quoted entries** can be checked against the author.
+> - **Unquoted entries** are the *editor's summary* of a decision the author made — in several cases
+>   the editor's own option label, which the author selected by letter. They can only be checked
+>   against the editor, which is no check at all.
+>
+> This is not hypothetical. `RULINGS.md` recorded "the force is in the as-structure, not in work
+> performed" as though it were the author's ruling on rendering; it was the editor's gloss, and it was
+> wrong. A later read-only audit trusted this file, inherited the error, and surfaced it as an
+> irresolvable conflict. **Where an entry is marked, treat its phrasing as unverified.**
 >
 > **Two things remain open by deliberate refusal**, and are not gaps: what is owed *to* a being outside
-> the moral register, and whether Solmund understood what was being made of him.
+> the moral register, and whether Solmund understood what was being made of him. *(The second is
+> recorded as a refusal here and as "answerable in principle" at §8.9 and in this file's own Batch 6
+> commentary. No ruling establishes the refusal; that inconsistency is unresolved.)*
 
 
-Append-only. Each entry records the ruling in the author's own terms, what it changed, and where.
+Append-only. Each entry records a ruling, what it changed, and where — in the author's own words
+where those were captured, and in the editor's summary where they were not. Corrections are made
+by adding a marker above the affected text, never by rewriting it.
 
 ---
 
@@ -28,6 +46,8 @@ Append-only. Each entry records the ruling in the author's own terms, what it ch
 ## 2026-09-07 — Batch 1: the foundational cluster  ·  **APPLIED**
 
 ### D-0 — Co-movement is general
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
+
 **Ruled: general.** "To move one is, necessarily and inescapably, to move all" holds for **any**
 movement of a thread by any process, not only for deliberate practitioner manipulation — as the
 source text itself says, calling it a fact about the nature of threads.
@@ -117,6 +137,8 @@ configurations of their time did not tend toward.
 
 ## 2026-09-07 — Batch 2: practitioner mechanics
 
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
+
 **D-5 — the Leap's danger.** Ruled: **environment × duration, plus type × scale.** Not inherent, not
 absent. All four contradictory source claims come out true together. *Applied:* §6.8.
 
@@ -141,6 +163,8 @@ location; the Church's terror is structurally accurate about what an operation i
 growth is in capacity for **threads** while capacity for **surfeit** stays constitutively fixed. That
 split is what preserves §5.3's finitude pivot; if surfeit-capacity also grows, §5.3 needs rewriting.
 
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
+
 **D-8a — temporal depth.** Ruled: **only spooling yields depth.** Rendering displaces without
 accumulating. Threadcut beings never settle; every moment costs what the first cost. Immortality as
 unremitting labour. Also grounds orphan decay. *Applied:* §4.5, §4.7.
@@ -149,10 +173,18 @@ unremitting labour. Also grounds orphan decay. *Applied:* §4.5, §4.7.
 
 ## 2026-09-07 — Batch 3: presentation, the ground, and the Church
 
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
+
 **D-4 — the ontological register.** Ruled: **re-scope to three tiers** — ontical (the rendered world),
 substrate (thread-constitution: deep, normally inapparent, ontic), ontological (the register of
 givenness: that there is rendering at all, that a configuration is held rather than given). The
 alternative, owning the reification, was available and not taken. *Applied:* §9.1, §9.3.
+
+> ⚠ **SUPERSEDED 2026-09-09 by R-2.** "Not taken" is false: the author ruled that threads are
+> **both** conditions of possibility and the substrate, which is owning it. This sentence is one of
+> the two places where an unquoted editor's summary was later contradicted by the author directly.
+
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
 
 **D-9 — who contracts.** Ruled: **originary and uncaused.** Nothing performs it; asking what did is
 malformed, of a kind with asking what preceded time. Must be stated rather than left in the passive
@@ -185,6 +217,8 @@ sincere and the error still does what it does.
 
 *Applied:* §8.7 (new subsection), §8.8 (doctrine derived), §8.10 (open question closed).
 
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
+
 **D-12 — Providence.** Ruled: **kept for mode 2, retired from the tendency.** The imported foresight
 is now deliberate — it sits on an accident that survivors named, not on a structure the framework
 claims. *Applied:* §4.6, §9.2, §9.3.
@@ -192,6 +226,8 @@ claims. *Applied:* §4.6, §9.2, §9.3.
 ---
 
 ## 2026-09-07 — Batch 4: finitude, Solmund's end, the lineage
+
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
 
 **D-7 follow-up — the threads/surfeit split is rejected.** Ruled: **one undivided capacity.** The
 editor's proposed split (capacity for threads grows, capacity for surfeit fixed) is **not** the
@@ -208,14 +244,20 @@ meets far more before being overwhelmed, and when overwhelmed meets it at magnit
 unmade someone lesser. Sensitivity buys altitude, not immunity. *Applied:* §5.3 (restated), §5.5
 (restated).
 
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
+
 **D-8b — what ended Solmund.** Ruled: **he ceased the work.** No external cause required. Threadcut
 persistence is undiminished cost forever (§4.5); he stopped, and his rendering collapsed because
 nothing else held it. *Applied:* §8.7.
+
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
 
 **D-8c — did he strain reality?** Ruled: **yes, and it is unrecorded.** The marks are in the record
 and are misread, not missing — absorbed into the Calamity's aftermath, or attributed to him as miracle
 rather than as cost. A being in whose vicinity reality behaves strangely works miracles, if you have
 already decided that is what he is. *Applied:* §8.7, §7.5 (Solmund named as the worked example).
+
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
 
 **D-11 — the lineage.** Ruled: **name all three.** Derrida, Kant, and Freud/Jentsch. The alternative —
 scrubbing the borrowed vocabulary at roughly twenty sites — was available and not taken. *Applied:*
@@ -225,9 +267,13 @@ scrubbing the borrowed vocabulary at roughly twenty sites — was available and 
 
 ## 2026-09-07 — Batch 5: the barrier, the passive stratum, singularity, and how surfeit is met
 
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
+
 **B-5 — the epistemic barrier.** Ruled: **non-sensitives retain thread-level knowledge; it stays
 inert.** They do not forget. The constraint that required instability contradicted the section it
 cited and is rewritten. *Applied:* §5.6, §10 (P-08).
+
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
 
 **B-15 — the passive stratum.** Ruled: **name it as one stratum of rendering.** Pre-predicative,
 registering affect, intensity and trace without composing them into an object. Houses the four
@@ -311,14 +357,20 @@ axis, which is why it produces tension and, at magnitude, tears.
 drifting practitioner cannot register disjunction — corrected: what degrades is retention/protention,
 a Coherence matter, not disjunction), §9.3, §0.4, supplement C-9.
 
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
+
 **Temporal Disjunction vs Coherence's temporal facet.** Ruled: **two distinct effects.** A
 configuration can be badly disjoined while whoever pulled it stays intact; a practitioner can be deep
 in drift without having disjoined anything. Neither converts into the other. *Applied:* §2.7, §7.4.
+
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
 
 **Who has Coherence.** Ruled: **everyone.** It is layer-2 integrity and everyone has layer 2.
 Practitioners are distinguished by **spending** it. This is why drift propagates to family and
 community — they have the same thing to lose, and knots carry the load to it. For someone who never
 operates and never stands near what exceeds, the variable is simply quiet. *Applied:* §4.3, §9.3.
+
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
 
 **Why three dimensions.** Ruled: **the moments of constitution — and the *how* is spooling.** That,
 when, as-what; exhaustiveness follows from the structure of givenness, and there is no fourth moment
@@ -495,6 +547,8 @@ exists"). A Locked Zone would be one with no one to fail to render it.
 
 ## 2026-09-07 — Batch 7: what is owed, Gaps, one encounter, Mending at scale
 
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
+
 **What is owed to a being outside the moral register.** Ruled: **leave it unsettled.** Communities will
 answer differently and that disagreement is material. Remains the framework's one item open by
 deliberate refusal, alongside Solmund's intent.
@@ -511,6 +565,8 @@ senses, and they are one thing: **a Gap is an absence where the fabric requires 
 **Not a Locked Zone.** A Gap is an absence; a Locked Zone is a region where becoming has been
 precluded. A large Gap will produce one around itself — configurations at the edge of an absence have
 nothing to tend toward across it — but a small Gap need not lock anything. *Applied:* §8.4a (new), §9.3.
+
+> ⚠ *Editor's wording — no words of the author are recorded for this entry.*
 
 **One confrontation, gated by reach.** Ruled: **depends on the person's reach**, and the consequence
 inverts the intuitive expectation.
@@ -671,6 +727,9 @@ asymmetry is deliberate and is written into §7.1 with a note not to smooth it.
 ### E-2 — Sensitivity gain is independent of plastic set
 
 > **Independent — exposure teaches, stress deforms.**
+>
+> ⚠ *The author selected this option; the label quoted is the editor's, from a list the
+> editor wrote.*
 
 Sensitivity accrues from being present to the substrate's workings whether or not any threshold was
 crossed. It is not the plastic set under another description, and not a component of it. Sensitivity
@@ -684,6 +743,9 @@ exposure worse. Written into §5.4.
 ### E-3 — No work hardening; only the resting point moves
 
 > **Unchanged — only the zero-point moves.**
+>
+> ⚠ *The author selected this option; the label quoted is the editor's, from a list the
+> editor wrote.*
 
 Elastic range is a constant of the being. Permanent set relocates where "rest" sits without altering
 how far the being can be stretched from it and still return.
@@ -695,6 +757,9 @@ no more fragile: constant range from a further-out resting point reaches deeper.
 ### E-4 — No creep; only events deform
 
 > **No — only events deform.**
+>
+> ⚠ *The author selected this option; the label quoted is the editor's, from a list the
+> editor wrote.*
 
 A load held below the threshold leaves nothing behind, however long it is held. Living beside a Gap,
 inside a Warden zone or within a Locked Zone does not slowly reconfigure anyone.
