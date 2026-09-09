@@ -2579,12 +2579,18 @@ def test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner():
     p = w.persons["p_late"]
     assert not p.tenures, "the fixture is not reproducing the defect; nothing to rehome"
     fx = w.fixtures
+    # The same View length 12 appears on both sides of the `>` below, so it cancels and the
+    # comparison measures rehoming alone. Pre-existing; surfaced by step 7's rename.
+    # [JUSTIFIED: control-matched instrument parameter, identical on both sides of the comparison]
     base = S.decision.budget(S.Person("p_ctl", "Ctl"), S.View("p_ctl", [], 12),
                           fx.get("scene_budget"), fx)
     w._rehome()
     assert [t.id for t in p.tenures] == ["t_early"], (
         "the Tenure never reached its owner — `budget` would read zero offices for a person the "
         "world agrees holds one")
+    # The matched half of the control above: same View length, so the two budgets differ only by
+    # the rehoming under test. Pre-existing; surfaced by step 7's rename.
+    # [JUSTIFIED: matched half of the control pair immediately above]
     assert S.decision.budget(p, S.View(p.id, [], 12), fx.get("scene_budget"), fx) > base, (
         "rehoming did not change what `budget` reads, so the office is still invisible to it")
     # and the barrier does it, so no caller has to remember.
@@ -2670,6 +2676,10 @@ def test_w5_every_new_assumption_rows_sweep_is_actually_executed():
     fx = w.fixtures
     pp.body = 0
     pp.travel_leg = ["a"] * 20
+    # Same View length as the control pair above, kept identical so this floor test and that
+    # comparison share one instrument. The assertion is on `max(1, b)`, which is independent of
+    # the View's length. Pre-existing; surfaced by step 7's rename.
+    # [JUSTIFIED: same instrument as the control pair above; the floor assertion ignores it]
     assert S.decision.budget(pp, S.View(pp.id, [], 12), fx.get("scene_budget"), fx) == 1, (
         "the floor of 1 never fires — `max(1, b)` is unreachable, so H-70's stated floor is "
         "declared and untested")

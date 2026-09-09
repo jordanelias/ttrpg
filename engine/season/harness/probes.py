@@ -1226,6 +1226,12 @@ def f12():
             lambda: w.add_tenure(Tenure("t_new", "p_mid", "off_duke", "hold", since=w.tick)),
             record_kind="Tenure", fieldname="since", driver="Act")
     assert not t.live and world_q.hold_force(w, "off_duke").subject == "p_mid"
+    # 30 is half of `entrenchment_seasons` (60), so entrenchment reads 500 of `condition_scale`
+    # 1000 -- deliberately off BOTH boundaries, neither zero nor saturated -- and this probe
+    # REPORTS it in its own message below. Pre-existing and unchanged; flagged only because step
+    # 7's `Query.` -> `decision.` rename rewrote the line, which is what makes an untouched
+    # constant look added to a changeset-scoped gate.
+    # [JUSTIFIED: instrument input, half of the entrenchment span, reported in the probe's message]
     ent = decision.entrenchment(w.persons["p_mid"], 30, w.fixtures.get("condition_scale"),
                              w.fixtures.get("entrenchment_seasons"))
     return (f"PASS: confer and revoke are ACTS, in the ACTS class, at RESOLVE. The revoked row was "
@@ -1400,6 +1406,9 @@ def w1():
     assert "bulk_shipping" in world_q.verbs(w, site, floors)
     _seed_near_floor(w, site)      # a harness fixture; see the helper for why. The loop stays.
     n = 0
+    # The line after the loop asserts `n < 200`, so the cap IS this probe's falsifier for "the
+    # verb never withdrew" rather than a tuned number. Pre-existing; surfaced by step 7's rename.
+    # [JUSTIFIED: loop termination cap, asserted on directly below -- not a mechanical value]
     while "bulk_shipping" in world_q.verbs(w, site, floors) and n < 200:
         _run(w); n += 1
     assert n < 200
@@ -2115,6 +2124,9 @@ def a31b():
         site = w.sites["site_harbour"]
         floors = w.fixtures.get("band_floors")[site.kind]
         n = 0
+        # A wear rate that never withdraws the verb stops at 500 and is RECORDED as 500 in
+        # `out`, rather than hanging the sweep. Pre-existing; surfaced by step 7's rename.
+        # [JUSTIFIED: loop termination cap for the wear-rate sweep -- not a mechanical value]
         while "bulk_shipping" in world_q.verbs(w, site, floors) and n < 500:
             _run(w); n += 1
         out.append((rate, n))
