@@ -19,7 +19,7 @@ and each rebind becomes a silent no-op on a copied binding."* **Six sites rebind
 wd_acceptance.py`. Measured before cutting:
 
 ```
-bare-name callers of belief_contradicts, whole package:  ONE — shape.py:433, inside Query.opening_set
+bare-name callers of belief_contradicts, whole package:  ONE — shape.py:437, inside Query.opening_set
 every other caller:                                      S.belief_contradicts(...), an attribute read
 ```
 
@@ -28,8 +28,26 @@ call time, so the rebinds still land. **Verified by execution, not by that sente
 `test_wb_*` pass, and `S.Query.opening_set.__globals__['belief_contradicts'] is
 epistemic.belief_contradicts`.
 
-⚠ **AND THE HAZARD IS REAL AT STEP 7 — DEMONSTRATED, NOT PREDICTED.** Plant the exact defect step 7
-would introduce (`from .epistemic import belief_contradicts as _bc` inside `opening_set`) and:
+⚠ **AND THE HAZARD IS REAL AT STEP 7 — DEMONSTRATED, NOT PREDICTED. ⚠⚠ THE FIRST WRITING OF THIS
+RECIPE WAS NOT REPRODUCIBLE AND WOULD HAVE TAUGHT THE NEXT SESSION THE OPPOSITE.** It said *"plant
+`from .epistemic import belief_contradicts as _bc` inside `opening_set`"*. That is half of what I
+actually planted, and the half that does nothing: `from X import Y as Z` binds **`Z`**, so the call
+at `shape.py:437` stays a global lookup and the rebind is still seen. An independent critic caught
+it; both arms then measured rather than argued:
+
+```
+A  from .epistemic import belief_contradicts as _bc   ->  1 passed    <- the recipe as I wrote it
+B  from .epistemic import belief_contradicts          ->  1 FAILED    <- the reproducible one
+```
+
+**Use B.** Unaliased, the import binds the name LOCALLY and shadows the module global the six sites
+rebind. The `as _bc` form bites only when the call site is swapped to `_bc(...)` too, which is what
+my original run did and my note omitted. **A is worth keeping precisely because it passes** — it is
+the near-miss that makes this hazard subtle, and a session that plants A, sees green and concludes
+the hazard was overstated is the failure this correction exists to prevent (§0.1 pt 3, in the
+direction that costs most).
+
+With B:
 
 ```
 clause-4 test  ->  FAILED at :7118      shipped=[]   <- the counter never fires
@@ -69,7 +87,7 @@ corpus"**. Twelve tests reference a fixed source constant; the ones whose *asser
 
 | gate | corpus | verdict |
 |---|---|---|
-| `test_w2_every_write_call_site_names_a_pair_on_the_matrix` | `SHAPE_PY` + `PROBES_PY` | **12 write sites before, 12 after; `epistemic.py` has 0** — nothing left |
+| `test_w2_every_write_call_site_names_a_pair_on_the_matrix` | `SHAPE_PY` + `PROBES_PY` | **`shape.py` 12 before and 12 after; `epistemic.py` has 0** — nothing left. ⚠ The CORPUS is **32** (12 + `probes.py`'s 20); a first writing gave the file-scoped 12 as the corpus figure. Conclusion unaffected; the number was not |
 | `test_d10c_the_obstacle_refusal_gate_exists` | `SHAPE_CODE` | positive assertion; subject is in `SeasonDriver`, stays |
 | `test_wc_the_fold_binds_what_the_person_bound` | `SHAPE_PY` | parses for `_fold`, stays |
 | `test_r3_the_band_floors_are_swept` | `PROBES_CODE` | untouched |
@@ -121,6 +139,21 @@ text, not lines**, and every new home was verified against `__module__`:
 — that rebind path is exactly what the six sites do and what still works. `:368`/`:640`/`:1078` are
 frozen `cite:` findings. The `shape.py:NNNN` line citations remain plan §5 debt for step 10.
 
+⚠ **AND THE SWEEP'S SCOPE WAS NARROWER THAN "both selectors, file-scoped" IMPLIES.** It ran over six
+files — the two `engine/season/` registers, `CLAUDE.md`, `CURRENT.md`, this handoff and the plan —
+and **not over `architecture/`**, where a critic found `architecture/PLAN.md:948`
+(*"`shape.observers_for` is the reader"*). **Ruled rather than left dangling:** it sits inside a
+frozen `> ### LANDED 2026-09-02` block (`PLAN.md:943`), so it is the same bucket as
+`hole_register:368`/`:640`/`:1078` — a record of what was true at that run — and it stays. What was
+wrong was not the disposition but the claim that the tree was clean under a sweep that never
+reached that tree. **A selector is only as good as the paths you point it at, which is the third
+distinct spelling of that same lesson this session.**
+
+**One real fix outside the register, found the same way:** `engine/season/rosters.yaml:415` said
+*"`shape.py` reads the names from there and the meanings from here"*. The reader is
+`epistemic.py:385`/`:408` since this step. ⚠ That file is **MECHANISM** under §0.05 — code opens it
+at runtime — so a stale reader named there is worse than one in a design doc.
+
 ### WHAT WAS VERIFIED
 
 - **content hash `ee0383bf3f4606e56b80cd07c0284f0a`** — unchanged after the carve and after each
@@ -133,6 +166,13 @@ frozen `cite:` findings. The `shape.py:NNNN` line citations remain plan §5 debt
 - **identity: 11/11 re-exports are the SAME object**; all five `CHANNEL_PREDICATES` values report
   `__module__ == engine.season.epistemic`.
 - **symbol check against `HEAD`: 218 top-level names, 218 resolve, 0 missing.**
+- ⚠ **the string-annotation set is FOUR, not three.** `from __future__ import annotations` is on, so
+  `Person` is a string annotation too; the "three that appear in no `Name` node" was an artifact of
+  the AST instrument rather than a fact about the runtime. `Event`, `VerbRow`, `World`, `Person`.
+- ⚠ **"322 body lines moved, 1 novel" is a DIFF claim with no in-tree instrument.** It was measured
+  in-session against `git show HEAD:…` and a later reader cannot reproduce it from the tree alone.
+  The *behavioural* half is instrumented (hash, `PROBE FLIPS 0`, byte-identical `runs/`, 186 tests);
+  the *textual* purity claim is not, and should not be read as though it were.
 - **unbound-name pre-flight on the finished module: NONE** — and it caught a `TRACE` import the moved
   code never uses, removed rather than shipped. ⚠ **It did NOT catch a second one, and the independent
   inventory did:** `Claim` was imported and used nowhere but inside a `law=` STRING. My check for that
