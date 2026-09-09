@@ -8,9 +8,14 @@
 
 ## §3.1 Rendering as constitutive process
 
-**Rendering is the always-already occurring interpretation of things *as* something.** It is the way
-the world is given — not a mechanism external to consciousness, and not a cosmic process running
-independently of it.
+**Rendering is the always-already occurring interpretation of things *as* something.** Not a
+mechanism external to consciousness, and not a cosmic process running independently of it.
+
+**And it rests on something prior, which is not esoteric and needs no special word.** *(Ruled
+2026-09-09.)* Rendering the world as meaningful **is incumbent upon the world being given to
+consciousness** — upon phenomena being able to exist as phenomena for consciousness at all. That is
+the plain sense of *given*, and it is what phenomenology studies. Rendering is not that giving; it is
+what takes what is given *as* something.
 
 **It is a process, and it is not undertaken.** *(Ruled 2026-09-09: "'taking as' is literally a
 phenomenological process whereby a consciousness renders phenomena into something meaningful as a
@@ -88,8 +93,9 @@ being invoked.
 
 **The passive stratum is pre-predicative.** It registers affect, intensity, salience and trace
 without composing them into a determinate presentation of an object. It is not outside rendering —
-if it were, the claim that rendering is the way the world is given would be false. It is rendering's
-lower register.
+if it were, some of what is given to consciousness would never be taken as anything at all, and the
+claim that rendering is how the world becomes meaningful would hold only of part of it. It is
+rendering's lower register.
 
 **Two things follow immediately, and both matter elsewhere.**
 

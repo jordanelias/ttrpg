@@ -106,13 +106,13 @@ triad is the least developed of the three.
 **First, what the closure argument rests on**, because the suite had been leaning on a word instead
 of a claim. *(Ruled 2026-09-09.)*
 
-> **How consciousness is able to receive phenomena is foundational** — it is what phenomenology
-> studies, and it is what this framework is about. Rendering is that receiving: the taking-as *is*
-> how the world comes to consciousness at all (§3.1).
+> **The world is given to consciousness** — phenomena can exist as phenomena for consciousness at
+> all. Nothing esoteric is meant by that beyond the plain word. It is foundational, it is what
+> phenomenology studies, and **rendering the world as meaningful is incumbent upon it** (§3.1).
 
-*(The abstract noun for this is deliberately absent. It is a translator's word, it puts the whole
-relation in the passive voice, and §9.2 forbids coining where a plain phrase serves. Say **how the
-world comes to consciousness**, or **how a phenomenon is received**.)*
+*(No abstract noun for this, deliberately. The nominalized form is a translator's word, it puts the
+whole relation in the passive voice, and §9.2 forbids coining where the plain word serves. The plain
+word is **given**.)*
 
 **Why these three, and the list is closed.** *(Ruled 2026-09-07.)* They are the **moments of
 constitution**: *that* something is given (actuality), *when* it is given (temporality), and *as what*

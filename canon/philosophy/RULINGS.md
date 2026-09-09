@@ -1014,5 +1014,35 @@ carries a note saying so, so the next session does not re-coin it.
 *(This file keeps its two historical uses at the D-4 entry and the Batch 6 summary. It is append-only,
 and a retired word in a dated record is not a defect — it is what the record is for.)*
 
-*Applied:* §2.5 (rewritten, with the closure argument now resting on a stated claim), §9.1, §9.3,
-`README.md`. **S-28 in the round-2 substance list is closed by R-5; S-21 is closed by its corollary.**
+### R-7 — Rendering rests on the giving; it is not the giving
+
+> "there is no esoteric definition beyond 'given'. it is just the very process of rendering the world
+> as meaningful is incumbent upon the world being given to consciousness, ie phenomena can exist as
+> phenomena for consciousness"
+
+**A conflation of mine, corrected within the hour of making it.** R-5's first application said
+"rendering is that receiving", and §3.1 had said since the reorganization that rendering "is the way
+the world is given". Both make rendering *the giving*. It is not. **Two things, in order:**
+
+1. **The world is given to consciousness** — phenomena can exist as phenomena for consciousness at
+   all. The plain word carries this; nothing esoteric is meant.
+2. **Rendering takes what is given *as* something**, and is **incumbent upon** the first.
+
+**Why the difference is load-bearing and not a nicety.** Collapse them and rendering becomes the
+source of there being anything for consciousness — which is the agency error a third time, now at the
+foundation rather than in the mechanics. It would also make the passive stratum incoherent: something
+can be given and registered without yet being taken as any determinate thing, which is exactly what
+§3.3 describes.
+
+**And it is the honest form of R-2.** Threads are both the substrate and the condition of
+possibility; the condition-of-possibility half *is* this — threads are what is given, and rendering
+runs on that.
+
+*Applied:* §3.1 (rewritten), §3.3 (its defence of the passive stratum no longer rests on the
+collapsed claim), §2.5, §9.1.
+
+---
+
+*Applied for R-5/R-6:* §2.5 (rewritten, with the closure argument now resting on a stated claim),
+§9.1, §9.3, `README.md`. **S-28 in the round-2 substance list is closed by R-5; S-21 is closed by its
+corollary.**
