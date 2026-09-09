@@ -2,7 +2,7 @@
 
 Seven views of one structure. Each is a different cut, not a different system.
 
-**Nothing here is provisional any more.** The elastic/plastic model of Coherence was ruled
+**Two things here are still open, and are marked in place.** The elastic/plastic model of Coherence was ruled
 2026-09-07 and the constitutive cost model on 2026-09-08; both views are drawn as settled. Where a
 node or edge is the framework's own inference rather than a ruling, the note under that view says so
 — see `RULINGS.md` for which is which.
@@ -31,7 +31,7 @@ flowchart TD
     CFG --> REND
     REND --> DET
     DET --> CO
-    CO -->|"so rendering moves threads<br/>without doing any work"| CFG
+    CO -->|"so rendering determines threads<br/>— a process, not a configuring"| CFG
 ```
 
 **Read the loop.** A configuration is rendered; being rendered is a determination; determinations

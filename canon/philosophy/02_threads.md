@@ -174,8 +174,11 @@ something was.
 **It is local.** Only what was pulled is disjoined, and only relative to what was not. No global
 mismatch opens between how things are and how anyone recalls them.
 
-Because every operation moves the temporal dimension along with the others (§2.6), every operation
-produces some disjunction. The degree varies with how far the configuration is taken out of its
+Because every operation moves the temporal dimension along with the others (§2.6), **every operation
+that holds a configuration off its becoming produces some disjunction.** *(Scoped 2026-09-09. Moving
+along a becoming is not pulling out of one, and a restorative operation restarts a becoming rather
+than arresting it — so on this section's own definition it produces none. P-11 already carried this
+scope; §2.7 did not.)* The degree varies with how far the configuration is taken out of its
 becoming: an operation whose target configuration differs mainly in actuality displaces it slightly; a direct temporal pull
 displaces it severely.
 

@@ -325,7 +325,7 @@ configuration bearing it. The same working therefore costs a small being more.
 
 **Why the framework has to read it this way.** Cost here is not damage absorbed, which is what the
 alternative quietly assumes. It is the practitioner's own configuration being moved out of its
-equilibrium (§6.8, the constitutive account). A configuration moved a fixed distance has been moved
+equilibrium — the constitutive account above. A configuration moved a fixed distance has been moved
 further *as a proportion of itself* the smaller it is. Nothing about the practitioner's fortitude
 enters. There is no toughness term, and there was never a place to put one.
 
