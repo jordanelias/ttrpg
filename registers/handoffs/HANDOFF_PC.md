@@ -1046,3 +1046,15 @@ THEN combat's bands migrate to the owner's ladder.** Migrating the bands against
 That derivation is genuine new mechanism, not a re-siting, and it is what makes guandao reach
 47.5% *on its own merits*. It is the last declared HOLD in
 `tests/valoria/test_degree_ladder_single_owner.py`. The ceiling that stood in its way is gone.
+
+### 2026-09-09 — carried out of the CLAUDE.md rewrite (ED-IN-0179, PR #384)
+
+- **Combat Pool is defined three different ways** and nothing reconciles them. The definitions live in
+  the prose param head, `references/module_contracts.yaml`, and the A18 census; a third source that
+  once held a fourth definition has been retired, but the collision survives its retirement. This was
+  a live open item in the old CLAUDE.md §5 and was evicted as a state fact, not a rule — §0.05 puts it
+  here rather than in Layer 0. **Do not bind Godot resource fields to these keys while it stands.**
+  Resolving it is a PC-lane call: pick the definition, change the code, and let the prose follow.
+  Sources: `references/module_contracts.yaml`; `systems/combat/reference/`'s param head; the A18
+  census. Established by PP-247; the retired fourth source was `references/values_master.yaml`.
+  Evicted from CLAUDE.md §5 by the 2026-09-09 rewrite as a state fact rather than a rule.

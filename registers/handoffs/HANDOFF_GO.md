@@ -51,3 +51,14 @@ task here — the skeleton is illustrative, not buildable (covers 1/27 modules, 
 - **Gate-0 preconditions** — KeyStore v2 (valoria-game frozen since 05-04), spine base
   classes, RNG service, K8 performance verdict. None executed. Also tracked at
   `decision_queue.md` item 11.
+
+### 2026-09-09 — carried out of the CLAUDE.md rewrite (ED-IN-0179, PR #384)
+
+- **ED-1050's residual is still open: key-log parity is known-red.** The port↔oracle rule itself
+  survives in CLAUDE.md §6 — a port never corrects its oracle in place — but the *state* did not, and
+  it is this: RESIST, GAP_EXPOSURE and the gap-game logic have not been re-exported to the weapon and
+  strike modules on the `.gd` side. Parity is red for that reason and no other. Re-export, then
+  re-check; do not hand-edit the port to close the gap, which is the exact defect ED-1050 recorded.
+  Sources: ED-1050 (resolved 2026-06-30) and its residual; `godot/godot_conversion_strategy_v1.md`;
+  the oracle is `systems/combat/combat_engine_v1/config.py`. Evicted from CLAUDE.md §6 by the
+  2026-09-09 rewrite as a state fact rather than a rule.

@@ -192,7 +192,10 @@ lane_ids:
     # recommendation. next_free bumped 12->13.
     FI: { name: "Field investigation", next_free: 9 }   # no reservation held; allocate at next_free as normal. Narrative: id_reservations_history.md#fi
     # ED-FI-0003 allocated 2026-07-07 (status open): ed_options OPT-6 (knots propagation completion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
-    SC: { name: "Social contest",      next_free: 37 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    SC: { name: "Social contest",      next_free: 38 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    # ED-SC-0037 allocated 2026-09-09 (status open, NEEDS_JORDAN): which provider resolves a
+    # social contest until proceedings lands -- interim dice now vs. wait. The one call in the
+    # R-execution plan that survived all five of CLAUDE.md section 0's tests. next_free 37 -> 38.
     # ED-SC-0036 allocated 2026-09-07 (status open, NOT needs_jordan): the stress suite run against
     # the proceedings subsystem -- 38 executable tests, 23 inventions, 8 mechanical decisions, 35
     # findings of which 15 new; two independent read-only critics killed two of them, overturned a

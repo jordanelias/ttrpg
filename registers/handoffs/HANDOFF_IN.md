@@ -6202,3 +6202,18 @@ the propositions to test are *more scenes than budget* and *more interactions th
    NPC-088, end to end**.
 2. `W10` declared routing, beside the path. `W13` the arc lane (14 refusal-only, 8 mixed).
 3. **Nothing is waiting on a ruling.** `H-36` remains held back for objection only.
+
+### 2026-09-09 — carried out of the CLAUDE.md rewrite (ED-IN-0179, PR #384)
+
+- **`tools/canon_coverage_check.py` awaits an inclusion decision.** It is wired to a CI job but its
+  disposition was explicitly left to Jordan rather than settled by a session, so it is neither
+  confirmed-live nor retirable. Decide it: include it in the blocking tier, leave it report-only, or
+  retire it under §0.1 pt 5's predicate.
+  Sources: `references/ci_checks_registry.yaml`'s row for it; `.github/workflows/valoria-ci.yml`.
+  Evicted from CLAUDE.md §8 by the 2026-09-09 rewrite (ED-IN-0179, PR #384).
+- ⚠ **The line above this section — "Nothing is waiting on a ruling" — is no longer true.**
+  `ED-SC-0037` is a live `needs_jordan` escalation (which provider resolves a social contest until
+  proceedings lands). It is SC-lane, but it gates `U1`, the root unit of the R-execution plan, so it
+  blocks the milestone path this lane owns. Read the row before planning R-work.
+  Sources: `registers/editorial_ledger_sc.jsonl` (ED-SC-0037, filed 2026-09-09); the governing
+  ruling is ED-SC-0033; the unit is `workplans/2026-09-09-r-execution-plan.md` §11.0 and U1.
