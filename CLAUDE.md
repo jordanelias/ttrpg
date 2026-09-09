@@ -162,8 +162,12 @@ the game work. our design documents in .MD are reference and information only."*
 **The test to apply:** *if this document were deleted, would the game behave differently?* If no, it
 is reference. If yes, the mechanism is in the wrong place and belongs in code.
 
-**THE LAYERS (RULED 2026-09-09 by Jordan). This is the canonical definition; nothing else may spell
-one "Layer".**
+**THE LAYERS (RULED 2026-09-09 by Jordan). This is the canonical definition of a GOVERNANCE layer,
+and no other governance scheme may be spelled "Layer".** It does not claim the word outright and must
+not be read as licensing a sweep: `godot/godot_architecture_specification.md` numbers four *runtime*
+layers (Content / Conflict / Resolution / Progression), colliding numerically on 1 and 2, and
+`systems/ui/` uses "Layer 3" for a UI tier. Those are unrelated senses in their own documents and stay.
+The rule binds anything that governs HOW WORK IS DONE — one scheme, these numbers.
 
 | | | binds |
 |---|---|---|
