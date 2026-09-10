@@ -70,7 +70,10 @@ del _m, _k
 DRV = _drv                                              # for rebinds whose reader lives in the loop
 from engine.season.harness import corpus_run as C       # noqa: E402
 from engine.season.harness import run_cases as R        # noqa: E402
-from engine.season import combat_seam as CS             # noqa: E402
+from engine.season.seam.wrappers import combat as CS   # noqa: E402
+# ⚠ `combat_seam.py` MOVED to `seam/wrappers/combat.py` at unit L2 (ED-IN-0206): `04:135` and
+# §A.2's `seam/wrappers/*` row put one wrapper per deferred subsystem there. The alias `CS` is
+# unchanged, so every arm reading `CS.<name>` is unaffected.
 from engine.season.decision import choose as PS_CHOOSE    # noqa: E402
 from engine.season.decision import options as PS_OPTIONS  # noqa: E402
 

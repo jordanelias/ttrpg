@@ -157,7 +157,12 @@ def decision_modules() -> tuple:
     §0.1 pt 2)."""
     return tuple(sorted(DECISION_DIR.rglob("*.py"),
                         key=lambda p: p.relative_to(DECISION_DIR).as_posix()))
-COMBAT_SEAM_PY = PACKAGE_DIR / "combat_seam.py"
+SEAM_DIR = PACKAGE_DIR / "seam"
+# ⚠ THE WRAPPER MOVED UNDER `seam/wrappers/` (L2, ED-IN-0206). `04:135` and §A.2's
+# `seam/wrappers/*` row put one wrapper per deferred subsystem there; it sat at the package root
+# because the step-8 plan read D5's COST as a reason not to perform the rename. The declared
+# `sys.path` seam in `tests/valoria/test_engine_does_not_import_systems.py` is renamed with it.
+COMBAT_SEAM_PY = SEAM_DIR / "wrappers" / "combat.py"
 TRACE_LOG_PY = PACKAGE_DIR / "trace_log.py"
 TEST_PY = TESTS_DIR / "test_season_shape.py"
 

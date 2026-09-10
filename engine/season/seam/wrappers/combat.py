@@ -67,9 +67,9 @@ import random
 import sys
 from typing import Any, Optional
 
-from .data import files
-from .decision import body_band_penalty
-from .state.ids import H
+from ...data import files
+from ...decision import body_band_penalty
+from ...state.ids import H
 
 # ⚠ THE SILENT ONE, AND IT IS NAMED HERE BECAUSE ITS FAILURE IS GREEN. This used to climb four
 # `parents[...]` levels from this module's own location -- a depth that is a fact about where this

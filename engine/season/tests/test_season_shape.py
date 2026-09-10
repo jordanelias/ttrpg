@@ -5334,7 +5334,7 @@ def test_the_seam_calls_personal_combat_rather_than_naming_it():
     Before this, `contest()` resolved the subsystem by name and then REFUSED — a pointer, not a
     call — on a scope note that ruling overrides. The seam calls now, and these are the properties
     that make the call honest rather than merely present."""
-    from .. import combat_seam as C
+    from ..seam.wrappers import combat as C
     w = P.tiny_world(); w.step = Step.RESOLVE
     if C.engine() is None:                     # a NAMED gap, never a silent skip
         assert C.load_error(), "the engine is unavailable and the seam reports no reason"
@@ -5383,7 +5383,7 @@ def test_the_combat_seam_derives_one_field_and_it_decides_something():
     ⚠ THE SECOND ASSERTION IS THE ONE THAT MATTERS. A derivation that reaches the engine and
     changes no outcome would be decoration — the `uniform` arm of its own sweep. Condition has to
     move the result, or the seam is passing a constant."""
-    from .. import combat_seam as C
+    from ..seam.wrappers import combat as C
     w = P.tiny_world()
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
@@ -7964,7 +7964,7 @@ def test_we_a_contested_acts_consequence_differs_by_degree():
     MUTATION (run 2026-09-04): revert `_fold`'s `_pairs = row.writes_at(_degree)` to
     `writes_at(None)` and this raises `Unspecified` on the first act; revert the emission line to
     `row.emits` and the `Untouched` assertion goes red with `person.died` in its kinds."""
-    from .. import combat_seam as C
+    from ..seam.wrappers import combat as C
     if C.engine() is None:                      # a NAMED gap, never a silent skip
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
 
@@ -8031,7 +8031,7 @@ def test_we_event_degree_is_assigned_and_stays_none_where_nothing_graded_it():
 
     MUTATION (run 2026-09-04): drop `degree=_degree` from `_fold`'s `ev(...)` and the first
     assertion goes red; stamp a degree unconditionally and the second does."""
-    from .. import combat_seam as C
+    from ..seam.wrappers import combat as C
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
     seen = _we_bands()
@@ -8053,7 +8053,7 @@ def test_we_emits_at_has_a_caller_and_the_band_selects_the_kind():
 
     FALSIFIER: revert `_fold`'s `_declared = row.emits_at(_degree)` to `row.emits` and the union
     assertion below goes red naming the extra kinds."""
-    from .. import combat_seam as C
+    from ..seam.wrappers import combat as C
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
     row = VERB_TABLE["kill / wound"]
@@ -8110,9 +8110,9 @@ def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
     assert checked == 14, checked
 
     # 3. FOLLOW THE OWNER. Replace the RESOLVED ladder and every band must move with it.
-    saved = seam._LADDER
+    saved = seam.ladder._LADDER
     try:
-        seam._LADDER = (lambda net, ob, **k: Degree.FAILURE, DEGREE_LABEL)
+        seam.ladder._LADDER = (lambda net, ob, **k: Degree.FAILURE, DEGREE_LABEL)
         # A replaced ladder that collapses all four to one band is then observable.
         # [JUSTIFIED: four (net, ob) pairs spanning the ladder's four bands]
         moved = {degree_of({"net": n, "ob": o}) for n, o in ((5, 2), (3, 2), (2.5, 2), (1, 2))}
@@ -8120,7 +8120,7 @@ def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
             f"replacing the ladder changed nothing ({moved}) -- `degree_of` is answering from a "
             "band table of its own, which is the second resolver S27.2 refuses")
     finally:
-        seam._LADDER = saved
+        seam.ladder._LADDER = saved
     assert degree_of({"net": 5, "ob": 2}) == "Overwhelming", "the ladder was not restored"
 
 
@@ -8221,7 +8221,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
 
     MUTATION (run 2026-09-04): change `combat_degree`'s subject lookup to the loser (the party
     that is not `result["winner"]`) and this goes red -- `p_mid` is deleted by a fight he won."""
-    from .. import combat_seam as C
+    from ..seam.wrappers import combat as C
     if C.engine() is None:
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
     w = _w(); w.step = Step.RESOLVE
