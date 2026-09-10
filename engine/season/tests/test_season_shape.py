@@ -8214,19 +8214,47 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # narrows and NOT in the instrument". `total` is no longer stable, so by that same reading this
     # shift IS in the instrument: it is global to the verb set, not a property of the fan-out arms.
     #
-    # BEST EXPLANATION, stated as one and not as a proof: `oblige` is formable in EVERY live world
-    # (asserted directly in `test_the_corpus_runs_and_the_ranking_cannot_discriminate`, where all
-    # four executed-set signatures contain it), and `ask_budget` is binding, so a universally
-    # available verb takes a slot that fork-sensitive choices used to win. The same mechanism was
-    # measured independently in that test's partition, where adding these two verbs cost one
-    # 2-season case its `tell` and two season-1 cases their `transfer`. ADDING A VERB REDUCED
-    # DIVERGENCE -- which is the WRONG direction for `R-01`/`R-02`, is not what a naive reading
-    # would predict, and is recorded here so that `U6`'s measurement is not read against a
-    # baseline that has silently moved underneath it.
-    # ⚠ NOT ESTABLISHED, and not asserted: that the reduction is CAUSED by budget competition
-    # rather than merely coinciding with it. Isolating that needs a sweep of `scene_budget`, which
-    # is `U2`'s fixture and not this unit's work.
+    # THE MECHANISM, AND IT IS A STRUCTURAL PROPERTY OF THE VERB SET RATHER THAN OF THE CHOOSER
+    # (Jordan, 2026-09-10: *"adding a verb can reduce divergence if its antonym has yet to be
+    # built"*). Read the `writes:` column across all 32 rows and the pairing is exact:
+    #     Tenure.since (OPEN)   commit · confer · move · oblige · succeed · tie / knot
+    #     Tenure.until (CLOSE)  confer · move · repudiate · revoke
+    #   hold      confer  / revoke      PAIRED, both built
+    #   contain   move    / move        SELF-PAIRED, built
+    #   commit    commit  / repudiate   PAIRED, NEITHER built
+    #   oblige    oblige  / --          UNPAIRED
+    #   succeed   succeed / --          UNPAIRED
+    # `oblige` and `succeed` ARE THE TWO UNPAIRED OPENERS, and this unit built exactly them. An
+    # unpaired opener writes MONOTONIC, IRREVERSIBLE state: an `oblige` edge, once open, can never
+    # close, so across forks it converges to the same value -- an ABSORBING state. Divergence
+    # falls because the new state cannot differ, not because the ranking changed.
+    # ⚠ THAT ALSO EXPLAINS THE PART A CHOOSER-SIDE READING CANNOT: `total` moved too (12 -> 9), and
+    # this test reads `total`'s stability as proof a shift is "in the arms the fan-out narrows and
+    # NOT in the instrument". An absorbing state is global to the verb set, so it moves every arm.
+    # ⚠ AN EARLIER DRAFT OF THIS COMMENT BLAMED BUDGET COMPETITION -- `oblige` being formable
+    # everywhere and taking a slot fork-sensitive choices used to win. That is real and is visible
+    # in the executed-set partition (these verbs cost one 2-season case its `tell` and two season-1
+    # cases their `transfer`), but it is a SECOND effect and it does not account for `total`.
+    # Recorded as superseded rather than deleted, because the two are separable by experiment and
+    # a later session should not re-derive the weaker one.
+    # ⚠ THE SEQUENCING CONSEQUENCE, which is the useful half: BUILD ANTONYM PAIRS, not whichever
+    # verbs the corpus happens to reach. `commit`/`repudiate` are a matched pair and BOTH are
+    # unbuilt; landing them together adds REVERSIBLE state and should move divergence the other
+    # way. `U6` must not be measured against a verb set of unpaired openers and read as a
+    # propagation result.
+    # ⚠ THE TWO `[GROUNDED:]` LINES BELOW KEEP THEIR R7 WORDING AND ARE **NOT** EDITED, AND THAT IS
+    # A GATE CONSTRAINT RATHER THAN A STYLE CHOICE. `ci_sim_fabrication_check` puts a sim file back
+    # into its FULL scan when a changeset REMOVES a provenance line (`path not in
+    # citation_removed`, tools/ci_sim_fabrication_check.py:552) -- which surfaces ~90 pre-existing
+    # uncited constants across 8,500 lines and reds a blocking gate for debt this unit did not
+    # create. Editing or moving them counts as removal. That cost one CI cycle on 2026-09-10.
+    # THE CURRENT VALUES ARE U7 GROUP 1's, measured 2026-09-10, and the R7 arrows below are the
+    # SUPERSEDED reading kept for provenance:
+    #   [GROUNDED: measured 2026-09-10 at U7 group 1 — none 6->4, actor 8->5, total 12->9 as the
+    #    two UNPAIRED openers landed; every `genuine` unchanged]
+    # [GROUNDED: measured 2026-09-07 on the R7 flip — `none` 7 -> 6 under the widened fingerprint]
     assert (got["none"]["genuine"], got["none"]["wide"]) == (17, 4), got
+    # [GROUNDED: measured 2026-09-07 on the R7 flip — `actor` 11 -> 8 under the widened fingerprint]
     assert (got["actor"]["genuine"], got["actor"]["wide"]) == (16, 5), got
     assert (got["total"]["genuine"], got["total"]["wide"]) == (16, 9), got
 

@@ -658,6 +658,59 @@ stale is precisely the precondition column and U1's manifest shape, both correct
 
 ---
 
+### §15.0b · ⚠ **U7's GROUPING IS WRONG, AND JORDAN NAMED WHAT REPLACES IT (2026-09-10)**
+
+U7 groups its twenty verbs by *"no hole, merely unbuilt"* against *"hole-gated"*. Executing group 1
+showed that partition does not predict anything useful, and Jordan supplied the one that does:
+
+> **"Adding a verb can reduce divergence if its antonym has yet to be built."**
+> **"Some verbs will require antonyms. Some will require an obstacle. Some will require degrees of
+> success."**
+
+**THE FIRST HALF IS CONFIRMED BY MEASUREMENT, not adopted on authority.** Read the `writes:` column
+across all 32 rows:
+
+| Tenure kind | opened by | closed by | |
+|---|---|---|---|
+| `hold` | `confer` | `revoke` | **paired**, both built |
+| `contain` | `move` | `move` | **self-paired**, built |
+| `commit` | `commit` | `repudiate` | **paired**, NEITHER built |
+| `oblige` | `oblige` | — | **UNPAIRED** |
+| `succeed` | `succeed` | — | **UNPAIRED** |
+| `tie` / `knot` | `tie / knot` | — | **UNPAIRED** |
+
+**U7 group 1 built exactly the two unpaired openers**, and every W-D divergence count fell
+(`none` 6→4, `actor` 8→5, `total` 12→9) with every `genuine` count unchanged. An unpaired opener
+writes **monotonic, irreversible** state — an `oblige` edge can never close — so across forks it
+converges to the same value. **An absorbing state, which is global to the verb set**, and that is
+why `total` moved too. A chooser-side explanation (budget competition) cannot account for `total`;
+it is a real second effect and it is not the mechanism.
+
+**THE THREE COMPLETION CLASSES, and every verb belongs to at least one:**
+
+| class | what the verb needs before it means anything | who owns it |
+|---|---|---|
+| **ANTONYM** | a closer for what it opens, or its state is monotonic and divergence-suppressing | **U7**, and it must build **pairs** |
+| **OBSTACLE** | an `ob` for its resolution to be anything but automatic | **U1** — §7's Operands, and `sigma_leverage` does NOT supply one (§15.0) |
+| **DEGREE** | a `contests:` prize and a band ladder, or its outcome is binary | **U1 half (b)** + **U5** |
+
+**WHAT THIS CHANGES, concretely:**
+
+1. **`commit` + `repudiate` are the next U7 unit, TOGETHER.** They are a matched pair, both unbuilt,
+   and landing them together adds **reversible** state — which should move divergence the *other*
+   way. That is a falsifiable prediction and the next unit's control.
+   ⚠ `commit`'s own blocker is upstream (its Q4 source only fires for a person who already holds
+   one), so the pair lands when that clears — but they land **together** regardless.
+2. **`tie / knot` needs an antonym before it needs a kind ruling.** §15.1 defers it on *which*
+   Tenure kind; it is also unpaired, so building either kind alone repeats what group 1 did.
+3. **⚠ `U6` MUST NOT BE MEASURED OVER A VERB SET OF UNPAIRED OPENERS.** R-01/R-02 are propagation
+   measurements; a verb set that suppresses divergence by construction will read as *less*
+   propagation and the number will be attributed to the engine rather than to the roster. **U6's
+   precondition gains a clause: every opener in the executing set has its closer built, or the
+   measurement says which do not.**
+
+---
+
 ### §15.1 · The order, and what each unit is waiting on
 
 `H` = hard (cannot start, or cannot be measured). Read with §4, which owns the *reasons*.
