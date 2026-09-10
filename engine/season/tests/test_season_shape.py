@@ -1915,6 +1915,7 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
 
     # AND THE CONTROL: the shipped table loads. Without this the two arms above would pass on a
     # loader that refused everything.
+    # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
     assert len(VERBS._load_verb_table()) == 37
 
 
@@ -5631,6 +5632,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     by_sig = {}
     for r in live:
         by_sig.setdefault(tuple(r["executed"]), []).append(r)
+    # [GROUNDED: measured 2026-09-10 over the 89 live corpus cases, `corpus_run` at seed 0 -- 16 distinct executed sets; 2 before the six, 10 with them conviction-inert, 5 at `uniform`]
     assert len(by_sig) == 16, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived")
     # WHAT IS FIXED AND WHAT VARIES, ASSERTED EXACTLY IN BOTH DIRECTIONS — the count alone would
@@ -7286,6 +7288,7 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # moved is the denominator, not the mechanism. `thread_read` is the sixth and does not form:
     # it carries no typed cell (`H-85`, Thread Sensitivity has no operand) and is therefore not in
     # `resolvable_verbs()` at all.
+    # [GROUNDED: measured 2026-09-10 -- 22 -> 27 Candidates when five of the six investigation acts became resolvable; the DELTA of one is the property, the absolute pair is the denominator]
     assert (len(before), len(after)) == (27, 26), (
         f"the absolute counts moved to {(len(before), len(after))}. They are quoted on `H-122` "
         "and the delta alone does not reproduce them — re-derive the row rather than the line")
@@ -8187,6 +8190,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     # separately in
     # `test_wb_clause_four_fires_…`, because "the old drop vanished" is what a regression looks
     # like and had to be ruled out rather than assumed).
+    # [GROUNDED: measured 2026-09-10, NPC-088 slice, seed 0, 4 seasons at 2 slots -- 14 of 18 genuine forks diverge at the shipped arm, recovering the 0 of 16 pinned on 2026-09-07]
     assert got["actor"]["diverged"] == 14, (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
@@ -8205,11 +8209,13 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     # over the `A9.MAX_ALT` window in the control too, so the arms now share `inert` 9. That is
     # the denominator asymmetry the docstring above insists on asserting rather than hiding, and
     # it has gone away rather than been papered over.
+    # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- 18 genuine forks in every arm, 0 divergences at the control]
     assert (got["none"]["genuine"], got["none"]["diverged"]) == (18, 0), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 — 18 genuine forks, 14 divergences at the shipped arm]
     assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (18, 14), got
+    # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- 5 of 18 at the `total` deposit arm]
     assert (got["total"]["genuine"], got["total"]["diverged"]) == (18, 5), got
     # AND THE TWO LAYERS ARE SEPARATED. Every genuine fork changes the act/event stream — that was
     # already true BEFORE `W-B` and is not the finding. The finding is the DECISION count above.
@@ -8377,6 +8383,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # but it is a guess, not a measurement, and the assertion below pins the number rather than
     # the explanation. The property the docstring names still holds: `none` verbonly 0 and `none`
     # wide > 0, so the channel is narrower and not closed.
+    # [GROUNDED: measured 2026-09-10, same slice -- 14 VERB-SET divergences at the shipped arm, recovering the 0 pinned on the 2026-09-07 R7 flip]
     assert got["actor"]["verbonly"] == 14, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
@@ -8388,6 +8395,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     assert (got["none"]["genuine"], got["none"]["wide"]) == (18, 2), got
     # [GROUNDED: measured 2026-09-07 on the R7 flip — `actor` 11 -> 8 under the widened fingerprint]
     assert (got["actor"]["genuine"], got["actor"]["wide"]) == (18, 14), got
+    # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     assert (got["total"]["genuine"], got["total"]["wide"]) == (18, 5), got
 
 
