@@ -31,7 +31,7 @@ from __future__ import annotations
 from typing import Any, Callable, Optional
 
 from .. import decision
-from ..queries import world_q
+from ..queries import person_q, world_q
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures, SUBSISTENCE_WEIGHTS
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import CLAIM_SOURCES, RUNG_KINDS, STRATA, WITNESS_CHANNELS, roster, table
@@ -41,7 +41,8 @@ from ..epistemic import CHANNEL_PREDICATES, observers_for
 from ..gaps import (
     Collision, Forbidden, NoProducer, ShapeGap, Ungraded, Unowned, Unspecified, expect_refusal,
 )
-from ..loop.driver import SeasonDriver, resolvable_verbs, sense
+from ..loop.deliberate import sense
+from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.world_q import questions_for
 from ..seam import ContestError, contest
 from ..state.carriers import (
@@ -810,10 +811,25 @@ def p28():
     # returns another's ledger" (a world-first function takes no `Person` first at all), so the
     # surface to search is `decision`'s own public functions, not `world_q`'s too. `inspect` is
     # imported locally, matching this file's existing convention (see `p12`'s `_i`).
+    #
+    # ⚠ CHANGED AGAIN, UNIT L1 (ED-IN-0206), AND THE OLD FORM WENT SILENTLY VACUOUS. It read
+    # `__module__ == decision.__name__`, which was exact while `decision` was one flat module and
+    # matches NOTHING now that it is a package: a member's functions carry
+    # `engine.season.decision.choose`, not `engine.season.decision`. The count printed 0 and the
+    # verdict stayed PASS -- a PASS-BY-ABSENCE over an EMPTY surface, which is `CLAUDE.md` §0.1
+    # pt 2 exactly: the assertion could no longer observe the failure it excludes. Caught by
+    # `report.py`'s byte comparison of `runs/`, the same instrument that caught step 5's unbound
+    # `Forbidden`. The prefix test is depth-independent, so a further split cannot reopen it, and
+    # the floor below is what makes "no such signature" a measurement rather than an empty search.
     import inspect as _insp
+    _pkg = decision.__name__
     person_side = [n for n in dir(decision) if not n.startswith("_")
                    and _insp.isfunction(getattr(decision, n))
-                   and getattr(decision, n).__module__ == decision.__name__]
+                   and (getattr(decision, n).__module__ or "").startswith(_pkg)]
+    assert len(person_side) >= 10, (
+        f"the decision surface resolved to {len(person_side)} function(s) ({sorted(person_side)}); "
+        "this probe's PASS is BY ABSENCE over that surface, so an empty or truncated one makes the "
+        "verdict vacuous rather than true (§0.1 pt 2)")
     return ("PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. "
             f"There is no signature in the decision surface ({len(person_side)} functions) that "
             "takes one person and returns another's ledger. Absence is the refusal here, not a "
@@ -1241,7 +1257,7 @@ def f12():
     # 7's `Query.` -> `decision.` rename rewrote the line, which is what makes an untouched
     # constant look added to a changeset-scoped gate.
     # [JUSTIFIED: instrument input, half of the entrenchment span, reported in the probe's message]
-    ent = decision.entrenchment(w.persons["p_mid"], 30, w.fixtures.get("condition_scale"),
+    ent = person_q.entrenchment(w.persons["p_mid"], 30, w.fixtures.get("condition_scale"),
                              w.fixtures.get("entrenchment_seasons"))
     return (f"PASS: confer and revoke are ACTS, in the ACTS class, at RESOLVE. The revoked row was "
             f"NOT DELETED -- `until` makes it a HISTORICAL CLAIM SUBJECT, which is what "
@@ -2479,7 +2495,13 @@ def a39():
     # step 9: `SeasonDriver.resolve` -- the caller this spy exists to observe -- moved to
     # `loop/driver.py`, and it calls `contest(...)` BARE, so the rebind has to land in the module
     # the call resolves in. Left on `shape` it would be a no-op and `captured` would be empty.
-    from ..loop import driver as _s
+    # ⚠ THE SPY MOVES WITH ITS SUBJECT (L5, ED-IN-0206). `SeasonDriver.resolve` calls
+    # `contest(...)` BARE, so the rebind must land in the module the call resolves in -- and
+    # `resolve`'s body left `driver.py` for `loop/resolve.py` at L5. Left on `driver`,
+    # `_s.contest = spy` is a no-op, `captured` comes back EMPTY, and this probe grades
+    # INSTRUMENT-ERROR. The read-capture on the next line moves with the writes, for the
+    # reason step 7 recorded: a restore into a module that never held the value still passes.
+    from ..loop import resolve as _s
     real, captured = _s.contest, {}
     def spy(w_, rung, prize, claimants, depth, max_depth, causes, extension=None):
         captured["causes"] = list(causes)

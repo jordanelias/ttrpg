@@ -55,13 +55,17 @@ import types as _types
 from engine.season import decision as _dec, epistemic as _epi, seam as _seam
 from engine.season.data import fixtures as _fx, matrix as _mx, requires as _req, rosters as _ros, verbs as _vb
 from engine.season.loop import driver as _drv
-from engine.season.queries import readers as _rd, world_q as _wq
+from engine.season.queries import cache as _qc, person_q as _pq, world_q as _wq  # noqa: E402
+# ⚠ `queries/readers.py` IS GONE (unit L3, ED-IN-0206). `WorldReader` moved into `world_q` and
+# `LedgerReader` into the new `person_q`, split by the source each asks -- the call
+# `queries/__init__.py` had framed and deferred until `person_q` existed. `_rd` is dropped and
+# both new modules join the aggregate below, so every name `S.<x>` resolved before still does.
 from engine.season import gaps as _gaps
 from engine.season.state import carriers as _car, ids as _ids, world as _wld
 
 S = _types.ModuleType("sweep_core.S")
 S.__doc__ = "read-only aggregate over season's owner modules; see the note in sweep_core.py"
-for _m in (_gaps, _ids, _car, _wld, _ros, _mx, _req, _vb, _fx, _wq, _rd, _epi, _dec, _seam, _drv):
+for _m in (_gaps, _ids, _car, _wld, _ros, _mx, _req, _vb, _fx, _wq, _pq, _qc, _epi, _dec, _seam, _drv):
     for _k in dir(_m):
         if not _k.startswith("__"):
             setattr(S, _k, getattr(_m, _k))
@@ -70,10 +74,25 @@ del _m, _k
 DRV = _drv                                              # for rebinds whose reader lives in the loop
 from engine.season.harness import corpus_run as C       # noqa: E402
 from engine.season.harness import run_cases as R        # noqa: E402
-from engine.season import combat_seam as CS             # noqa: E402
-from engine.season import decision as PS                # noqa: E402
+from engine.season.seam.wrappers import combat as CS   # noqa: E402
+# ⚠ `combat_seam.py` MOVED to `seam/wrappers/combat.py` at unit L2 (ED-IN-0206): `04:135` and
+# §A.2's `seam/wrappers/*` row put one wrapper per deferred subsystem there. The alias `CS` is
+# unchanged, so every arm reading `CS.<name>` is unaffected.
+from engine.season.decision import choose as PS_CHOOSE    # noqa: E402
+from engine.season.decision import options as PS_OPTIONS  # noqa: E402
 
-# ⚠ `PS` IS THE ONE ALIAS THE STEP-7 DECOMPOSITION ADDS HERE (ED-IN-0203). `pack_scenes` moved
+# ⚠ TWO ALIASES, AND THE SPLIT IS THE WHOLE POINT (L1, ED-IN-0206). `season.decision` IS A PACKAGE
+# as of unit L1: `04_CODE_ARCHITECTURE.md:1046` requires a DIRECTORY so the AX-2 isolation scan can
+# match by path. A bare name resolves in ITS OWN module's globals, so an alias that names the
+# PACKAGE reaches neither reader: `make_chooser` calls `pack_scenes` bare and lives in
+# `decision/choose.py`; `opening_set` reads `belief_contradicts` bare and lives in
+# `decision/options.py`. `PS` was one alias for one flat module and is replaced by `PS_CHOOSE` and
+# `PS_OPTIONS`, each named for the module it IS -- rebinding the package would not raise, it would
+# report every branch identical, which is the fabricated null `CLAUDE.md` §0.1 pt 4 calls the worse
+# direction. The paragraph below is the step-7 record and still explains WHY a rebind must reach
+# the reader's own namespace.
+#
+# ⚠ `PS` WAS THE ONE ALIAS THE STEP-7 DECOMPOSITION ADDED HERE (ED-IN-0203). `pack_scenes` moved
 # from `shape.py` to `season.decision` at step 7, together with its sole bare-name caller
 # (`make_chooser`). `make_chooser` now resolves `pack_scenes` in `decision`'s OWN globals at call
 # time, not `shape`'s -- so a rebind of `S.pack_scenes` (this module's `shape` alias) is a no-op

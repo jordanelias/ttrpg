@@ -217,7 +217,7 @@ def test_this_check_can_observe_its_own_failure(tmp_path):
 #: converted for the identical reason the first entry gives: dotted-path loading would give
 #: `wrapper`/`combatant` a second identity in a process that also loads them flat, which the
 #: balance workbench does. Still shrink-only: converting either one deletes its entry.
-PATH_SEAM_ALLOWED = {'cross_scale/combat_bridge.py', 'season/combat_seam.py'}
+PATH_SEAM_ALLOWED = {'cross_scale/combat_bridge.py', 'season/seam/wrappers/combat.py'}
 
 
 def _chain_hits(expr, assigned, names_re):
