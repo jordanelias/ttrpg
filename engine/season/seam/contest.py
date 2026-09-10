@@ -18,8 +18,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Callable, Optional
-from ..data import files
-from ..data.rosters import roster_map
 from ..gaps import Forbidden, Unspecified
 from ..manifest import resolve as manifest_resolve
 from ..state.world import World

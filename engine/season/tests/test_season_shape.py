@@ -2638,6 +2638,55 @@ def test_a_misspelled_manifest_row_fails_at_boot_naming_the_row():
         "misspelled row still fails at FIRST CALL -- which is the mode 04:1031's done-condition "
         "replaces, and every arm above would pass over it")
 
+    # ARM 5 -- ⚠ AND ARM 4 IS NOT ENOUGH EITHER, WHICH THE FABLE GATE ON ARC 1 FOUND. It proves
+    # `World.boot()` validates the rows; it cannot see that **nothing on a run path calls
+    # `World.boot()`** -- `headless`, `corpus_run` and `run_cases` never boot a world, so the
+    # behaviour existed and did not EXECUTE (`CLAUDE.md` §0.2). `SeasonDriver.__init__` is the one
+    # place every run passes, and this arm watches a REAL construction rather than a boot.
+    seen_run = []
+    saved_resolve = _reg.resolve
+    try:
+        _reg.resolve = lambda role, key: seen_run.append((role, key)) or saved_resolve(role, key)
+        SeasonDriver(_w())
+    finally:
+        _reg.resolve = saved_resolve
+    assert seen_run, (
+        "constructing a SeasonDriver resolved NO manifest row. `04:1031` wants a misspelled row to "
+        "fail AT BOOT, and a check only `World.boot()` runs is a check no run performs -- the "
+        "first-call failure mode is still what a real season gets")
+
+
+def test_every_contested_verbs_prize_is_in_the_subsystem_roster():
+    """§B.13 invariant 9 (`04:467`): **contest prizes ⊆ the subsystem roster.**
+
+    ⚠ THE HALF OF A MANIFEST ROW `check_rows()` DOES NOT COVER, found by the Fable gate on Arc 1.
+    `check_rows` validates every roster row's PROVIDER; a verb declaring a MISSPELLED prize is the
+    key side, and it loads clean, boots clean, and reaches the seam's generic refusal at first call
+    **naming no row** -- the exact failure mode `04:1031`'s done-condition replaces, surviving where
+    nobody looked.
+
+    ⚠ AND THE CHECK LIVES IN `manifest/` WHILE ITS ENFORCEMENT LIVES HERE, WHICH IS A DECLARED
+    COMPROMISE RATHER THAN A PLACEMENT. `04:467` is one of §B.13's TWELVE LOADER invariants and
+    `04:131` gives `data/` "the ONE loader" -- which is unbuilt. Raising from the manifest would
+    make the seam the loader; this test is the caller until the loader exists, and it should MOVE
+    when it does.
+
+    Two arms, because the first alone passes on an empty table."""
+    from ..manifest.registry import unclaimed_contest_prizes
+    from ..data.verbs import VERB_TABLE
+
+    contested = [v for v, r in VERB_TABLE.items() if getattr(r, "contests", None)]
+    assert contested, (
+        "no verb in the table declares `contests:`, so this check has nothing to be about and "
+        "passes vacuously (§0.1 pt 2). If that is genuinely the state, this test is the thing to "
+        "re-derive, not the thing to trust")
+
+    unclaimed = unclaimed_contest_prizes()
+    assert not unclaimed, (
+        f"verb(s) declare a `contests:` prize no `contest_subsystems` row claims: {unclaimed}. "
+        "04:467 -- contest prizes are a SUBSET of the subsystem roster. Unchecked, each of these "
+        "resolves to None at first call and the seam refuses generically, naming no row")
+
 
 def test_person_q_cannot_reach_the_world_side():
     """§A.3 row 2, and it is the row's PROPERTY rather than its file count.

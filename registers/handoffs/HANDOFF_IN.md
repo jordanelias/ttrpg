@@ -1,5 +1,70 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⭐ DONE 2026-09-10 — ARC 1: Layer-1 MODULE-BOUNDARY conformance for `engine/season/` (ED-IN-0206)
+
+**Landed `f16db12..fc74fec` on `claude/fable-5.1-review-plan-luvo21`, PR #386, All Gates Green.**
+Six units, L0–L5, executing Arc 1 of `workplans/2026-09-09-layer1-conformance-plan.md` (+ `_part2.md`).
+
+**What exists now that did not:** `decision/` (four members per `04:133`), `seam/` (contest · ladder ·
+wrappers/combat — D5's rename **performed**), `queries/person_q` + `queries/cache`, `manifest/`, and
+`loop/`'s six steps. `04 §A.2`'s ninth, `port/`, is absent **by decision**: PART E grades it *beside,
+from step 3* and Gate-0 is blocked on ED-1051.
+
+⚠ **THE GRADE IS MODULE-BOUNDARY, NOT `04`'s "STRUCTURAL".** The directories and their members
+conform; the §A.2 table's **row content** does not. Measured: `state/` has no `gate`/`log`/`ledgers`
+owners, `data/` has no ONE loader, `queries/cache` holds one of three named indexes, `loop/calendar`
+emits nothing and `loop/census` writes nothing against their rows, `tests/` has no *"two licensed
+guards"*. A first writing of `CURRENT.md` said "STRUCTURAL conformance is DONE" — `04:74` defines
+STRUCTURAL as *"the defect has no spelling"*, which is exactly what is still missing. Corrected.
+
+**Zero game yield, and it is the declared result.** Content hash `ee0383bf3f4606e56b80cd07c0284f0a`
+and requirements 6 `not_met` / 3 `partial` unchanged at every unit; `Sim Reference Regression` and
+`Golden Modes Byte-Exact` green in CI, which is the campaign-level confirmation.
+
+### The two defects Arc 1 SHIPPED, found by a Fable read-only gate and fixed in the same push
+
+1. **A rebind went silent — the fabricated null the arc claimed to be hunting.**
+   `proposals/2026-09-04-degree-sweep/wd_extra.py` rebound `DRV.questions_for` (`DRV` = `loop.driver`)
+   while L5 moved `deliberate`'s body — the only bare reader — to `loop/deliberate.py`. `driver.py`
+   still carried a **dead import** of the name, so the assignment kept succeeding and reached
+   nothing: `qsrc`/`qlead`/`qmulti` report **zero**. It is the sibling of the A39 spy the same unit
+   *did* move, on the same module. Spy re-pointed, dead import deleted.
+2. **"The failure moves to boot" did not execute.** L4 wired `manifest.check_rows()` into
+   `World.boot()`, which **nothing on a run path calls** — `headless`, `corpus_run` and `run_cases`
+   never boot a world. A misspelled row still failed at FIRST CALL in every real season. Now
+   validated in `SeasonDriver.__init__`, the one place every run passes, with ARM 5 watching a real
+   construction. `check_roles` stays on `World.boot` because it needs `w.manifest`, which is **empty
+   in every real run** — worth knowing before anyone wires it further.
+   ⚠ And that wiring cost 3.5× on the suite (~170s → >600s) because `resolve` re-read and re-parsed
+   `module_contracts.yaml` per row per driver. Cached per process; 190 tests in 149s.
+
+### Open, and named rather than left to be re-found
+
+- **Arc 2 (G1–G4) is the write discipline and it is unbuilt entirely**: no `Receipt` anywhere while
+  `04 §B.9` types `Event.changes[]` as `Receipt[]`; no `actor`/`via`/`NotYours`/`NoOpReceipt`; the
+  gate is a method on `World`, not the `state/gate` §A.2 names; `Event.subject` exists against
+  `04:175`/`:402`. ⚠ **Arc 2 WILL move output** — two of five `StateChange` construction sites are
+  outside the gate (`loop/matter.py`, `loop/resolve.py`), and §B.9 makes those fail at append. The
+  content hash stops being the control at G1; each G-unit needs its own declared before/after.
+- **`04:467` (§B.13 invariant 9) has no loader.** `manifest.unclaimed_contest_prizes()` +
+  `test_every_contested_verbs_prize_is_in_the_subsystem_roster` hold it until `data/`'s ONE loader
+  exists, and **should move there when it does**.
+- **`loop/deliberate.py` diverges from its own §A.2 row** — `w._rehome()` mutates the tenure store
+  during a barrier that owns nothing. Either it moves to MATTER or the row is amended: a Layer-1
+  question, recorded at the site.
+- **`decision/` imports `..state.carriers`** against `04:570`'s *"does not import `state/`"*. The
+  AX-2 scan narrows deliberately to `state.world` (types, not the store) — recorded now, nowhere
+  before.
+- **Arc 3 (the R-work, U1–U10) is another session's**, Jordan-directed. It inherits **G3** rather
+  than re-landing `Act.via` and the gate's Tenure branch, which R-plan U9 also specifies.
+
+_Sources: ED-IN-0206 and ED-IN-0203 (`registers/editorial_ledger_in.jsonl`); ED-SC-0037
+(`registers/editorial_ledger_sc.jsonl`, ruled); `workplans/2026-09-09-layer1-conformance-plan.md`
+and `_part2.md`; `architecture/meta/04_CODE_ARCHITECTURE.md` §A.1/§A.2/§A.3, §B.9, §B.13, §C.2, §C.3,
+§C.5, PART E._
+
+---
+
 ## ⭐ DONE 2026-09-09, MERGED IN PR #383 — decomposition STEP 8: `seam.py`. `shape.py` 2,075 → 1,788, `seam.py` 372 new (ED-IN-0203)
 
 > ⚠ **HEADER CORRECTED.** This section and the STEP 7 section below both read `⏳ PRODUCED … NOT YET

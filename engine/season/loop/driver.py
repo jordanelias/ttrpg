@@ -1,26 +1,25 @@
-"""`engine/season/loop/driver.py` -- THE SEASON LOOP ITSELF. Step 9 of the decomposition.
+"""`season.loop.driver` -- `SeasonDriver` and `season()`.
 
-`SeasonDriver` and the five module-level functions the loop uses around it: `stratum_of`,
-`resolvable_verbs`, `as_scenes`, `sense`, `names_a_verb`, and the #353 source reader
-(`_S353_CACHE`/`SOURCE_353_TEXT`) that `names_a_verb` asks.
+`04_CODE_ARCHITECTURE.md` §A.2:134 -- *"loop/  driver + six steps. The driver is the ONLY constructor
+of write tokens."* This module is the DRIVER half. The six steps are `loop/{calendar,matter,
+deliberate,resolve,witness,census}.py` and are **bound onto the class at the foot of this file**, not
+delegated to -- `SeasonDriver.witness` IS `witness.witness`, so `inspect.getsource` reaches the real
+body and the eight tests that read a step's source keep working. See the note above the bindings.
 
-⚠ THIS IS `loop/driver.py`, NOT `loop.py`. `engine/season/loop/` has been a PACKAGE since step 5
-(`effects.py`, `predicates.py`), so a sibling `loop.py` would be shadowed by it and never import.
+⚠ **THIS DOCSTRING WAS STALE THE MOMENT L5 LANDED AND SAID SO FOR A DAY.** It listed `stratum_of`,
+`as_scenes`, `sense`, `names_a_verb` and `SOURCE_353_TEXT` as living here -- they moved to
+`resolve.py` and `deliberate.py` in L5's second cut, to break a real `driver <-> deliberate <->
+resolve` import cycle -- and it still promised that *"shape.py re-exports every name below … until
+the facade is deleted at step 10"*, of a file step 10 deleted. `resolvable_verbs` is the one module
+function that stayed, because its callers are all outside `loop/`.
 
-⚠ `sense()` IS HERE AND NOT IN `decision.py`, WHICH IS WHERE THE FIRST PLAN PUT IT.
-`04_CODE_ARCHITECTURE.md:116` is explicit -- *"`sense()` called by the loop, never by the
-decision"* -- and `:133` enumerates `decision/`'s four members without it. It takes a `World`,
-and `decision.py` is the one module forbidden to name one (AX-2), so filing it there would have
-violated the axiom in the same commit that created the island. `:158` grants `loop/deliberate`
-the frozen World *"for `sense` only"*, which is this module.
-
-WHOLE BODIES, NO DELEGATION. An earlier plan proposed leaving module functions in `shape.py` that
-delegate here. Three tests read `SeasonDriver.witness`'s own source (`inspect.getsource`), one of
-them a NEGATIVE assertion, so a delegating stub would fail two and silently vacate the third --
-it would keep passing while covering nothing.
-
-`shape.py` re-exports every name below, so `S.<name>` and the harness keep resolving until the
-facade is deleted at step 10.
+⚠ **THE IMPORT LIST BELOW IS WIDER THAN THIS MODULE USES**, and that is load-bearing rather than
+untidy: `proposals/2026-09-04-degree-sweep/sweep_core.py` builds a read-only `S` aggregate over the
+package's owner modules so a frozen measurement's `S.<name>` keeps resolving. ⚠ It is ALSO how a dead
+import can make a rebind silent -- `questions_for` sat here unused, so
+`wd_extra.py`'s `DRV.questions_for = qspy` went on succeeding while reaching nothing after
+`deliberate` moved. Found by the Fable gate on Arc 1; the name is gone and the spy names
+`loop.deliberate`. **A name kept here for the aggregate must not also be a name something rebinds.**
 """
 from __future__ import annotations
 
@@ -54,7 +53,7 @@ from ..queries import cache, world_q
 from ..queries.person_q import entrenchment
 from ..queries.person_q import LedgerReader
 from ..queries.world_q import WorldReader
-from ..queries.world_q import occasioned_by, questions_for
+from ..queries.world_q import occasioned_by
 from ..loop.effects import EFFECTS, effect_for
 from ..loop.predicates import REQUIRES_PREDICATES, requires_predicate
 from .. import decision
@@ -165,6 +164,21 @@ class SeasonDriver:
 
     def __init__(self, w: World):
         self.w = w
+        # ⚠ **THE MANIFEST'S ROWS ARE VALIDATED HERE, BECAUSE THIS IS THE ONE PLACE EVERY RUN
+        # PASSES.** `04:1031`'s done-condition is *"a misspelled manifest row fails at boot naming
+        # the row"*, and unit L4 built `manifest.check_rows()` for it and wired it into
+        # `World.boot()` -- which NOTHING ON A RUN PATH CALLS. `headless`, `corpus_run` and
+        # `run_cases` never boot a world; only two probes and three tests do. So the behaviour
+        # existed and did not EXECUTE, which `CLAUDE.md` §0.2 says is not done. Found by the Fable
+        # gate on Arc 1.
+        #
+        # ⚠ IT IS `check_rows()` AND NOT `check_roles()`, AND THE SPLIT IS FORCED RATHER THAN
+        # CHOSEN. `check_roles` needs `w.manifest`, which is populated by exactly one probe and is
+        # EMPTY in every real run -- calling it here would raise `NoProducer` on every season.
+        # `check_rows` validates the REGISTRY, needs no manifest, and is the half `04:1031` names.
+        # The roles half stays on `World.boot()` for the callers that have a manifest to check.
+        from ..manifest import check_rows
+        check_rows()
         # OBSERVATION ONLY, and the distinction matters. Six probes used the removed `effect` hook
         # to record which acts reached RESOLVE and in what order. That is a thing to WATCH, not a
         # thing to DECIDE, and giving it back as a resolver parameter is how the second resolver

@@ -20,6 +20,30 @@ from ..gaps import NoProducer, Unspecified
 # providers; adding a role is a data edit plus one row in this map, and the map exists so
 # `resolve` does not branch on a role's name. Two entries today because there is one seam.
 _ROLE_ROSTERS = {"contest": ("contest_subsystems", "prizes")}
+# ⚠ ONE ENTRY TODAY, because there is one seam. (A first writing of the line above said
+# "two entries today" beside a dict of one -- a count written from memory next to the thing
+# it counts.)
+
+
+# ---------------------------------------------------------------------------
+# ⚠ THE CONTRACTS FILE IS READ AND PARSED **ONCE PER PROCESS**, AND THE CACHE IS A BUG FIX RATHER
+# THAN AN OPTIMISATION. `check_rows()` runs on every `SeasonDriver` construction (that is where
+# `04:1031`'s "at boot" actually reaches a run), and it resolves every row; each `resolve` was
+# re-reading and re-parsing `references/module_contracts.yaml` from disk. The corpus builds many
+# drivers, and the season suite went from ~170s to over 600s -- measured, on the commit that wired
+# it. A per-process cache is safe because the file is repository content that cannot change under a
+# running season; a test that needs it re-read clears `_CONTRACTS_CACHE`.
+# ---------------------------------------------------------------------------
+_CONTRACTS_CACHE: list = []
+
+
+def _contracts() -> list:
+    """`references/module_contracts.yaml`'s `modules:` list, parsed once."""
+    if not _CONTRACTS_CACHE:
+        import yaml as _y
+        text = files.MODULE_CONTRACTS_YAML.read_text()
+        _CONTRACTS_CACHE.append((_y.safe_load(text) or {}).get("modules") or [])
+    return _CONTRACTS_CACHE[0]
 
 
 def resolve(role: str, key: Any) -> Optional[dict]:
@@ -43,11 +67,10 @@ def resolve(role: str, key: Any) -> Optional[dict]:
     name = roster_map(roster, column).get(str(key))
     if name is None:
         return None
-    import yaml as _y
     contracts = files.MODULE_CONTRACTS_YAML
     if not contracts.exists():
         return dict(module=name, resolver="unknown", doc="module_contracts.yaml not found")
-    for m in (_y.safe_load(contracts.read_text()) or {}).get("modules") or []:
+    for m in _contracts():
         if m.get("module") == name:
             # ⚠ THE PYTHON, NOT THE MARKDOWN. Jordan, 2026-09-02: *"we aren't using the .md or
             # anything for those systems. those are super outdated."* The contracts file carries
@@ -100,3 +123,32 @@ def check_rows() -> list:
             resolve(role, key)
             checked.append((role, key))
     return checked
+
+
+def unclaimed_contest_prizes() -> list:
+    """§B.13 invariant 9 (`04:467`): **every verb's `contests:` prize is in the subsystem roster.**
+
+    ⚠ **THIS IS THE OTHER HALF OF A MANIFEST ROW AND `check_rows()` DOES NOT COVER IT.** `check_rows`
+    validates every roster row's PROVIDER -- that the module it names is one the contracts file
+    declares. It says nothing about the KEY side: a verb declaring `contests: the bodyy` loads
+    clean, boots clean, and at first call `resolve` returns `None` (a real answer, for a prize no row
+    claims), so the seam falls through to its generic refusal, **naming no row.** That is the
+    first-call failure mode `04:1031` replaces, surviving in the half nobody checked. Found by the
+    Fable gate on Arc 1.
+
+    Returned rather than raised, and deliberately: `04:467`'s invariant belongs to the LOADER
+    (§B.13's twelve), and `data/`'s one loader is itself unbuilt -- `04:131`. Wiring a raise here
+    would put a data invariant in the manifest and make the seam the loader. The list is what a
+    caller asserts on, and `test_every_contested_verbs_prize_is_in_the_subsystem_roster` is that
+    caller until the loader exists."""
+    from ..data.verbs import VERB_TABLE
+    claimed = set(roster_map(*_ROLE_ROSTERS["contest"]))
+    out = []
+    for verb, row in VERB_TABLE.items():
+        prizes = getattr(row, "contests", None)
+        if not prizes:
+            continue
+        for p in ([prizes] if isinstance(prizes, str) else list(prizes)):
+            if str(p) not in claimed:
+                out.append((verb, str(p)))
+    return out

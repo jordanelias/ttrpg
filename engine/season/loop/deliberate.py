@@ -12,6 +12,21 @@ decomposition (ED-IN-0203) refused to delegate. Step 5 established the technique
 row 3 replaces the parameter with an unforgeable token type minted only by the driver; until
 that lands, this step passes `WriteClass` exactly as it did inside the class. Unit L5
 delivers the MODULE boundary `04 §A.2:134` requires; the write discipline is Arc 2.
+
+⚠ **THE §A.2 ROW QUOTED ABOVE IS NOT WHAT THIS BODY DOES, AND SAYING SO IS THE POINT.** The row reads
+*"owns nothing; calls `sense()`, builds a `View`, calls `choose` per person; reads a frozen `World`,
+**for `sense` only**; token: none."* Measured against the body:
+
+- it calls `w._rehome()`, which MUTATES the tenure store, during DELIBERATE -- a barrier that owns
+  nothing and holds no token;
+- it reads `w.fixtures` and calls `questions_for(w, p)`, a `world_q` read that is not `sense`;
+- it sets `w.step` and `w._in_parallel_map`, and writes `self.scenes` and `a.scene`.
+
+None of that is L5's doing -- the body is unchanged from when it was a method on `SeasonDriver` --
+but the module boundary is what makes the divergence checkable, so it is recorded here rather than
+left for a reader to find under a header that reads like conformance. **The `_rehome()` call is the
+one that matters**: either it moves to the MATTER barrier or the row is amended. That is a Layer-1
+question, not this unit's. Found by the Fable gate on Arc 1 and filed under `ED-IN-0206`.
 """
 
 from __future__ import annotations
