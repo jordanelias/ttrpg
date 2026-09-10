@@ -3787,7 +3787,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   for a cohesive update of all skills plus a gap scan. A 3-agent parallel audit of all 15 live
   skills against CLAUDE.md's current architecture found: three skills independently pointed P1/P2
   findings at the FROZEN flat `registers/editorial_ledger.jsonl` instead of the live lane-split files
-  (`valoria-mechanic-audit`, `valoria-module-adjudicator`, `valoria-resolution-diagnostic` —
+  (`valoria-mechanic-audit`, `valoria-module-adjudicator`, `ners` —
   ED-IN-0044); `valoria-compiler` had four independent breaks including a nonexistent gate field
   and an orphaned `compilation/` output path (ED-IN-0044); and `valoria-combat-simulator`'s
   bundled script was a fully superseded parallel implementation (a frozen 9-weapon 2026-03-31

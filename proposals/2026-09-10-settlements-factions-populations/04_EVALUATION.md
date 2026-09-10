@@ -2,7 +2,7 @@
 
 ## Status: **PROPOSED (2026-09-10). HELD BACK IN FULL** — see `00_INDEX.md`.
 
-**Method.** `skills/valoria-resolution-diagnostic/SKILL.md:36-64` — one cut, four times; **a PASS is
+**Method.** `skills/ners/SKILL.md:36-64` — one cut, four times; **a PASS is
 licensed by a named failed attack, not by an absent finding**; and **E is scored last, as a ratio
 against what N and R found**, never as an independent axis, because alone it is satisfiable by
 amputation (`CLAUDE.md` §0.06).
