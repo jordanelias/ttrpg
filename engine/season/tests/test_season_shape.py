@@ -8256,6 +8256,10 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     assert (got["none"]["genuine"], got["none"]["wide"]) == (17, 4), got
     # [GROUNDED: measured 2026-09-07 on the R7 flip — `actor` 11 -> 8 under the widened fingerprint]
     assert (got["actor"]["genuine"], got["actor"]["wide"]) == (16, 5), got
+    # `total` never carried a marker of its own -- it was unchanged, so ungated. It moved at U7
+    # group 1, and its moving is the load-bearing part: this arm is the CONTROL, so a shift here
+    # is in the INSTRUMENT (the verb set) rather than in the arms the fan-out narrows.
+    # [GROUNDED: measured 2026-09-10 at U7 group 1 — `total` 12 -> 9, two unpaired openers]
     assert (got["total"]["genuine"], got["total"]["wide"]) == (16, 9), got
 
 
