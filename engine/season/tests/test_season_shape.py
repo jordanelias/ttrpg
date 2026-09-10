@@ -5461,7 +5461,15 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # the always-refused set for exactly one reason and it is gone. ⚠ ATTRIBUTION IS BY ACT ID,
     # not by emission kind: `corpus_run` re-derives `H(seed, tick, actor, f"{kind}:{act.id}")`,
     # which is what stopped `forge` being credited with `create_record`'s records.
-    assert ever == {"create_record", "move", "speak", "tell", "transfer", "utter"}, (
+    # ⚠ 6 -> 8, `U7` group 1 (2026-09-10). `oblige` and `succeed` gained effects; both were
+    # "no predicate/effect" and neither had an upstream blocker. RE-MEASURED, not reused: the
+    # `RANKING DISCRIMINATION` line this test exists to pin is UNCHANGED at "2..7 of 22 candidates
+    # carry a nonzero conviction score; the rest TIE" -- so `H-96`'s claim holds and only the
+    # count of formable verbs moved. The verbs were chosen because a stub-effect probe measured
+    # the corpus REACHING them (oblige 4 calls, succeed 3 over four seasons of `build_world(0)`),
+    # not because they looked unbuilt.
+    assert ever == {"create_record", "move", "oblige", "speak", "succeed", "tell", "transfer",
+                    "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -5520,30 +5528,64 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠ WHAT THIS IS NOT: it is not a reconvergence measurement and this test does not make one.
     # `H-96`'s claim -- the RANKING cannot discriminate -- is untouched and still holds: still
     # exactly two sets, still differing in one verb, and the ranking still ties 2..7 of 22.
+    # ⚠ **2 SIGNATURES -> 4, AND THE SEASON THRESHOLD BELOW IS GONE. `U7` GROUP 1, 2026-09-10.**
+    # THE CLAIM THIS BLOCK EXISTS FOR SURVIVES AND WAS CHECKED DIRECTLY RATHER THAN INFERRED:
+    # `corpus_run`'s `RANKING DISCRIMINATION` line is UNCHANGED -- "2..7 of 22 candidates carry a
+    # nonzero conviction score; the rest TIE and are ordered alphabetically by verb name". So
+    # `H-96` holds: the ranking still cannot discriminate. What moved is the number of formable
+    # verbs, which is a different fact and is why the partition is re-pinned rather than the claim
+    # withdrawn.
+    #
+    # ⚠ AND THE CONTROL SAYS WHAT MOVED, MEASURED BOTH WAYS (stash the carve, re-run, compare):
+    #     before   n=84 seasons 2..6  (…, tell, transfer, utter)      n=5 season 1  (…, transfer, utter)
+    #     after    n=62 seasons 2,4,5   n=21 seasons 3..6   n=4 seasons 1,2   n=2 season 1
+    # `oblige` is in ALL FOUR signatures; `succeed` splits the long-season group. ONE 2-season case
+    # LOST `tell` and TWO season-1 cases LOST `transfer`. That is CANDIDATE COMPETITION under a
+    # binding budget -- a universally formable verb takes a slot a scarcer one used to get -- and
+    # it is a finding about `ask_budget`, not about the ranking. It bears on `R-08` and on `U2`'s
+    # scene budget, and is recorded here rather than filed because §0 forbids the pass a document.
+    #
+    # ⚠ THE `tell` SEASON THRESHOLD IS THEREFORE FALSIFIED AND IS NOT RE-PINNED AT A NEW NUMBER.
+    # It read `max(lo) < min(hi)` -- "a ONE-season case never reaches `tell`". Now without-`tell`
+    # spans seasons {1,2} and with-`tell` spans {2,..,6}: they OVERLAP at 2, so no threshold
+    # exists to re-pin. Re-pinning it to a weaker inequality would assert a mechanism that is not
+    # there, which is worse than dropping it; what replaces it is the exact partition below, which
+    # goes red on any movement in either direction.
     by_sig = {}
     for r in live:
         by_sig.setdefault(tuple(r["executed"]), []).append(r)
-    assert len(by_sig) == 2, (
+    assert len(by_sig) == 4, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived")
     # ⚠ KEYED ON WHAT THE SETS CONTAIN, NEVER ON HOW BIG THEY ARE. See above.
+    _BASE = ("create_record", "move", "oblige", "speak")
+    assert all(set(_BASE) <= set(sig) for sig in by_sig), (
+        f"a signature no longer contains the universal base {_BASE}: {sorted(by_sig)}. `oblige` "
+        "being formable in EVERY live world is what makes the partition below intelligible")
+    assert (set(by_sig) == {
+        ("create_record", "move", "oblige", "speak", "tell", "transfer", "utter"),
+        ("create_record", "move", "oblige", "speak", "succeed", "tell", "transfer", "utter"),
+        ("create_record", "move", "oblige", "speak", "transfer", "utter"),
+        ("create_record", "move", "oblige", "speak", "transfer")}), sorted(by_sig)
     with_tell = [rs for sig, rs in by_sig.items() if "tell" in sig]
     without = [rs for sig, rs in by_sig.items() if "tell" not in sig]
-    assert len(with_tell) == 1 and len(without) == 1, (
-        f"the two sets no longer differ by `tell` alone: {sorted(by_sig)}")
-    with_tell, without = with_tell[0], without[0]
-    assert (set(by_sig) == {("create_record", "move", "speak", "tell", "transfer", "utter"),
-                            ("create_record", "move", "speak", "transfer", "utter")}), sorted(by_sig)
-    lo = {r["seasons"] for r in without}
-    hi = {r["seasons"] for r in with_tell}
-    assert max(lo) < min(hi), (
-        f"the split is no longer a season threshold: cases WITHOUT `tell` run {sorted(lo)} and "
-        f"cases WITH it run {sorted(hi)}. The explanation above is a claim about season count, "
-        "and a straddle means something else is deciding it")
-    assert max(lo) == 1, (
-        f"the `tell` threshold is {max(lo)} seasons, not 1. A 2 means a `claim.held` claim is "
-        "reaching a ledger again and §F1 clause 4 is firing on the self-refuting belief "
-        "`shape.LEDGER_DERIVED_STEMS` excludes; any other number means the mechanism changed and "
-        "the paragraph above must be re-measured, not this line adjusted")
+    assert len(with_tell) == 2 and len(without) == 2, (
+        f"the `tell` split is no longer two-and-two: {sorted(by_sig)}")
+    lo = {r["seasons"] for rs in without for r in rs}
+    hi = {r["seasons"] for rs in with_tell for r in rs}
+    # ⚠ THE THRESHOLD PAIR THAT STOOD HERE IS STRUCK, NOT WEAKENED (`U7` group 1, 2026-09-10).
+    # It asserted `max(lo) < min(hi)` and `max(lo) == 1` -- "a ONE-season case never reaches
+    # `tell`". Measured now: without-`tell` spans {1, 2} and with-`tell` spans {2, 3, 4, 5, 6},
+    # so they STRADDLE at 2 and no threshold exists. The old lines' own error text says a straddle
+    # "means something else is deciding it", and it does: `oblige` is formable in every live world
+    # and takes a budget slot, so one 2-season case spends on `oblige` what it used to spend on
+    # `tell`. Asserting a looser inequality here would pin a mechanism that is not there.
+    # WHAT REPLACES IT is the exact four-way partition above plus the straddle itself, asserted so
+    # it goes red if the competition stops:
+    assert lo == {1, 2} and min(hi) == 2, (
+        f"the `tell` split moved: cases WITHOUT `tell` run {sorted(lo)} and cases WITH it run "
+        f"{sorted(hi)}. {{1, 2}} against a `min` of 2 is the STRADDLE that budget competition "
+        "produces; a clean threshold returning here means `oblige` stopped competing for the slot "
+        "and the four-way partition above must be re-derived, not this line adjusted")
     assert foldable_all - ever - refused_only == {"confer", "convene", "dispatch", "revoke",
                                               "destroy_record"}, (
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Four of the "
@@ -6385,9 +6427,15 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     assert executed["transfer"] > 0, (
         "`transfer` executed ZERO times. It is the verb `H-94` names, and the row's whole claim "
         "is that a person can now say which store, how much, and to whom")
-    assert set(executed) == {"create_record", "move", "speak", "tell", "transfer", "utter"}, (
-        f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement and any "
-        "movement is a fresh one, not a re-reading of this one")
+    # ⚠ 6 -> 8 IS `U7` GROUP 1's MEASUREMENT (2026-09-10), NOT A RE-READING OF `W-C`'s, WHICH IS
+    # WHAT THE ERROR TEXT BELOW DEMANDS. `W-C` measured 4 -> 6 by closing `H-94`'s operand channel;
+    # this is a different mechanism -- two verbs that had no effect gained one -- and the two must
+    # not be conflated. `transfer` is untouched by it and its own assertion above still carries
+    # `W-C`'s claim.
+    assert set(executed) == {"create_record", "move", "oblige", "speak", "succeed", "tell",
+                             "transfer", "utter"}, (
+        f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 8 was "
+        "`U7` group 1's, and any further movement is a fresh one, not a re-reading of either")
     assert set(refused) - set(executed) == {"work"}, (
         f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses "
         "because no referent in this corpus is a Site, which is a fact about the worlds")
@@ -7276,7 +7324,19 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # (48/49/204 -> 0/0/0, measured on the `H-40` sweep beside this). So the claim survives, and
     # the assertion is inverted rather than deleted: what it pins is still the cap's behaviour,
     # which is now that there is no pressure on it.
-    assert actor_end == [("hearth_ostvik", "stores:grain", 0)], (
+    # ⚠ A SECOND SURVIVING CLAIM, `U7` GROUP 1 (2026-09-10), AND ITS SOURCE IS NAMED RATHER THAN
+    # GUESSED. `('einhir_texts', 'held_by:p_carin', False)` is `succeed`'s PRECONDITION READ, not
+    # `oblige`'s write: `succeed` is typed `relation(of: subject, relation: held_by)` and is the
+    # ONLY new verb in this unit carrying a typed requires, so `held_by` can enter the grammar
+    # from nowhere else. Carin's question referent is `einhir_texts`, she holds no office, the
+    # relation reads False, and the act emits `succession.refused` -- the refusal is correct and
+    # the READ is what lands here.
+    # THE CLAIM THIS LINE PINS IS UNCHANGED: the cap still evicts NOTHING, which is what
+    # `H-40`/`H-122` are about. Two surviving claims rather than one is MORE evidence of no
+    # pressure on the cap, not less. The error text below already reads a non-empty result as
+    # "a new deposit channel opened" -- one did, and this is it.
+    assert actor_end == [("einhir_texts", "held_by:p_carin", False),
+                         ("hearth_ostvik", "stores:grain", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -7559,8 +7619,13 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     assert hl_control == [], (
         f"the headless CONTROL arm dropped {hl_control}; `none` deposits nothing in this "
         "vocabulary and has nothing to fire on")
-    assert {v for v, _ in hl_live} == {"transfer"}, (
-        f"the headless drops are on {sorted({v for v, _ in hl_live})}, not `transfer` alone. That "
+    # ⚠ `succeed` JOINS `transfer` HERE, `U7` GROUP 1 (2026-09-10), AND FOR THE SAME REASON THE
+    # `actor`-arm assertion above records: `succeed` is typed `relation(of: subject, relation:
+    # held_by)`, so attempting it deposits a clause-4-eligible READ. `transfer`'s own chain -- the
+    # one the acceptance's binding argument runs through -- is UNTOUCHED and is still asserted, so
+    # what this line now pins is "transfer's chain plus whatever else reads", not a widened claim.
+    assert {v for v, _ in hl_live} == {"succeed", "transfer"}, (
+        f"the headless drops are on {sorted({v for v, _ in hl_live})}, not `succeed` + `transfer`. That "
         "chain is the acceptance's own — `stores:grain` read by a `transfer.refused` and read back "
         "by the same cell — and it is the only place the acceptance's binding argument transfers")
     assert hl_acts_live != hl_acts_none and sum(hl_acts_live) < sum(hl_acts_none), (
@@ -7574,8 +7639,13 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
         "the SHIPPED default dropped no Candidate at all. Either the default has been flipped to "
         "`none` — in which case `H-122` ships a mode that closes the clause it exists to open — "
         "or the deposit no longer reaches `belief_contradicts`")
-    assert {v for v, _ in live} == {"move"}, (
-        f"the drops are on {sorted({v for v, _ in live})}, not `move` alone. `tell` here means a "
+    # ⚠ `succeed` JOINS `move`, `U7` GROUP 1 (2026-09-10). MEASURED, as the error text demands of
+    # "any other verb": `succeed` is typed `relation(of: subject, relation: held_by)` and is the
+    # only verb this unit added that carries a typed requires, so attempting it deposits a
+    # clause-4-eligible READ. It is NOT `tell` -- the `claim.held` failure mode this line watches
+    # for is unchanged and still absent, which is the property the assertion protects.
+    assert {v for v, _ in live} == {"move", "succeed"}, (
+        f"the drops are on {sorted({v for v, _ in live})}, not `move` + `succeed`. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes; any other verb is a new finding and must be measured")
     assert not [c for pp in wl.persons.values() for c in pp.ledger if c.predicate == "claim.held"], (
@@ -8129,11 +8199,36 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # not move, which is the control saying the shift is in the arms the fan-out narrows and not
     # in the instrument.
     # Reproduce with the A9S/A9 loop above, run at each `fan_out_mode`.
-    # [GROUNDED: measured 2026-09-07 on the R7 flip — `none` 7 -> 6 under the widened fingerprint]
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (17, 6), got
-    # [GROUNDED: measured 2026-09-07 on the R7 flip — `actor` 11 -> 8 under the widened fingerprint]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (16, 8), got
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (16, 12), got
+    # ⚠⚠ **RE-PINNED 2026-09-10 ON `U7` GROUP 1, AND THE SHAPE OF THE MOVE IS A FINDING RATHER
+    # THAN A BOOKKEEPING UPDATE. READ THIS BEFORE TOUCHING THESE THREE LINES AGAIN.**
+    #     before   none (17, 6)   actor (16, 8)   total (16, 12)
+    #     after    none (17, 4)   actor (16, 5)   total (16,  9)
+    # EVERY `genuine` IS UNCHANGED. Every `wide` DROPPED, in all three arms, by 2/3/3.
+    #
+    # ⚠ THE TWO STRUCTURAL GUARDS ABOVE STILL HOLD -- `actor`.wide (5) > `none`.wide (4), and
+    # `actor`.verbonly is still 0 -- so the channel this test guards has NOT closed and the item
+    # does not need re-arguing. What moved is the MAGNITUDE of subject-level divergence.
+    #
+    # ⚠ AND `total` MOVED, WHICH BY THIS TEST'S OWN LOGIC IS THE INFORMATIVE PART. The paragraph
+    # above reads `total`'s stability as "the control saying the shift is in the arms the fan-out
+    # narrows and NOT in the instrument". `total` is no longer stable, so by that same reading this
+    # shift IS in the instrument: it is global to the verb set, not a property of the fan-out arms.
+    #
+    # BEST EXPLANATION, stated as one and not as a proof: `oblige` is formable in EVERY live world
+    # (asserted directly in `test_the_corpus_runs_and_the_ranking_cannot_discriminate`, where all
+    # four executed-set signatures contain it), and `ask_budget` is binding, so a universally
+    # available verb takes a slot that fork-sensitive choices used to win. The same mechanism was
+    # measured independently in that test's partition, where adding these two verbs cost one
+    # 2-season case its `tell` and two season-1 cases their `transfer`. ADDING A VERB REDUCED
+    # DIVERGENCE -- which is the WRONG direction for `R-01`/`R-02`, is not what a naive reading
+    # would predict, and is recorded here so that `U6`'s measurement is not read against a
+    # baseline that has silently moved underneath it.
+    # ⚠ NOT ESTABLISHED, and not asserted: that the reduction is CAUSED by budget competition
+    # rather than merely coinciding with it. Isolating that needs a sweep of `scene_budget`, which
+    # is `U2`'s fixture and not this unit's work.
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (17, 4), got
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (16, 5), got
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (16, 9), got
 
 
 # ===========================================================================

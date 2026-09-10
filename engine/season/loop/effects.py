@@ -125,6 +125,71 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     return {"tenure.opened": [nt.id], "tenure.closed": closed}
 
 
+def _open_tenure(w: "World", subject: str, obj: str, kind: str) -> list:
+    """Open one Tenure of `kind` from `subject` to `obj`, idempotently. Returns the ids touched.
+
+    ⚠ ONE OWNER FOR AN OPERATION SEVERAL VERBS SHARE. `oblige` and `succeed` both carry
+    `writes: ['Tenure.since']` and both mean *open an edge of my own kind* -- the same situation
+    `_operand`'s docstring catalogues as "same situation, four verbs, three answers" and fixes by
+    making one owner. This is that owner for the OPENING half, and `commit` joins it when its
+    upstream blocker clears.
+
+    ⚠ IT DOES NOT CLOSE ANYTHING, WHICH IS WHY `_eff_confer` DOES NOT ROUTE THROUGH IT. Conferral
+    is open-and-close on one row -- a post has one holder -- while a duty and an heir designation
+    are additive: a person may be obliged to several things at once. Two operations that share a
+    `writes:` column are not one operation, and folding them together would be shape divergence
+    rather than reuse. `_eff_confer` is deliberately left alone.
+
+    ⚠ RE-OPENING A LIVE EDGE RETURNS `[]`, WHICH THE FOLD READS AS A REFUSAL, and that is correct
+    rather than an error: acting on a duty you already hold changes nothing in the world, so the
+    row's `emits_on_refusal` is the honest Event. Both verbs here carry an EMPTY refusal column in
+    Part E, so the no-op emits nothing at all -- and this effect does not invent a kind to fill
+    that, because inventing one would author a design call inside an effect body."""
+    for t in w.tenures:
+        if t.kind == kind and t.subject == subject and t.object == obj and t.live:
+            return []
+    nt = Tenure(H(w.world_seed, w.tick, subject, f"{kind}:{obj}"),
+                subject, obj, kind, w.tick)
+    w.add_tenure(nt)
+    return [nt.id]
+
+
+@effect_for("oblige")
+def _eff_oblige(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
+    """The actor takes on a duty toward the act's subject: an `oblige` Tenure opens. `U7` group 1.
+
+    ⚠ NO PRECONDITION, AND THAT IS PART E's CELL RATHER THAN AN OMISSION. `requires: —`, so the
+    verb passes `resolvable_verbs`' first gate outright; the `subject` still arrives because
+    `_REFERENT_OPERANDS` admits it and the question supplies it (`PLAN.md:1493` -- "the question's
+    referent as target", naming this verb).
+
+    ⚠ MEASURED BEFORE IT WAS WRITTEN, not after: a stub-effect probe over four seasons of
+    `build_world(0)` reached this effect 4 times, so the corpus forms the act. That is what
+    licenses building it ahead of the eleven verbs whose blocker is upstream of the effect."""
+    return _open_tenure(w, a.actor, _operand(a, "subject"), "oblige")
+
+
+@effect_for("succeed")
+def _eff_succeed(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
+    """Designates an heir: a `succeed` Tenure opens from the HEIR to the office. `U7` group 1.
+
+    ⚠ THE EDGE IS OWNED BY THE HEIR, NOT THE OFFICE. `Tenure` is "owned by its SUBJECT (S15.1)",
+    so an edge meaning *this person is heir to that office* takes the heir as `subject` and the
+    office as `object` -- the orientation `_eff_confer` already uses for `hold`. Writing it the
+    other way round would make an office the holder of a person.
+
+    ⚠ THE ACTOR'S OWN HOLD IS THE PRECONDITION AND THE FOLD HAS ALREADY CHECKED IT. The row is
+    typed `relation(of: subject, relation: held_by)` -- *the actor holds the office or estate whose
+    heir is being designated* -- so re-checking it here would be a second reader of one rule (§8).
+
+    ⚠ DESIGNATION IS NOT SUCCESSION. This opens the edge and stops. Whether the heir ever takes the
+    post is `confer`'s, next season, by somebody with the conferral basis -- the same `L5` boundary
+    `_eff_convene` states for a date: a declaration may not produce the outcome it declares.
+    #353 `:371`, `:542` name `succeed` as a Tenure kind and `transmission` as the mechanism, and
+    the mechanism is not this effect's."""
+    return _open_tenure(w, _operand(a, "to"), _operand(a, "subject"), "succeed")
+
+
 @effect_for("revoke")
 def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     """Unseats an office: the live `hold` closes. The mirror of `confer`, which is why the two are

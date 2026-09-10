@@ -199,9 +199,20 @@ rows:
       of play required in a season
     status: not_met
     measured: >-
-      6 of 32 verbs execute in the corpus (create_record, move, speak, tell, transfer, utter).
-      20 carry no predicate and no effect, 5 are foldable but never attempted, 1 (`work`) is
-      attempted and always refused. 1 of 32 declares `contests:`.
+      8 of 32 verbs execute in the corpus (create_record, move, oblige, speak, succeed, tell,
+      transfer, utter) — `oblige` and `succeed` gained effects at `U7` group 1, 2026-09-10, and
+      were chosen because a stub-effect probe measured the corpus REACHING them rather than
+      because they looked unbuilt. 18 carry no predicate and no effect, 5 are foldable but never
+      attempted, 1 (`work`) is attempted and always refused. 1 of 32 declares `contests:`.
+      ⚠ THE VERB COUNT IS NOT THE ONLY THING THAT MOVED, AND THE OTHER HALF IS THE INTERESTING
+      ONE. `DISTINCT EXECUTED SETS` went 2 -> 4, but the `W-D` subject-level divergence counts
+      FELL in all three fan-out arms (none 6->4, actor 8->5, total 9 from 12) with every `genuine`
+      count unchanged. `oblige` is formable in EVERY live world, and `ask_budget` is binding, so a
+      universally available verb takes a slot fork-sensitive choices used to win — measured
+      independently in the executed-set partition, where these two verbs cost one 2-season case
+      its `tell` and two season-1 cases their `transfer`. ADDING A VERB REDUCED DIVERGENCE, which
+      is the wrong direction for R-01/R-02 and must not be read as noise when `U6` measures.
+      Whether budget competition CAUSES it is unestablished and needs a `scene_budget` sweep (U2).
     measure: "python -m engine.season.harness.corpus_run  # 'WHERE THE 32 GO' line"
     blocks: [W10-core, H-65, H-94]
 
