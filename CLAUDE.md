@@ -397,6 +397,12 @@ numbers from it**). Everything removed is at its fork ref; every old path resolv
 - **ID systems.** `PP-NNN` patches (`registers/patch_register_active.yaml`), `ED-NNN` editorial items
   (`registers/editorial_ledger.jsonl`), `LB-NN` workplan lane-blocks. `references/id_reservations.yaml`
   is the allocation source of truth — read `next_free`, allocate, bump, co-commit; never max+1.
+  ⚠ **Discipline, not a lock — renumbering does not escape a collision**, because every live session
+  renumbers to the same `next_free`: concurrent IN-lane sessions collided on 2026-09-10, and rows that
+  renumbered to `next_free` collided *again* (that file's `IN:` row; ED-IN-0209/0210/0211). If another
+  session may be allocating in your lane, land the `next_free` bump on `main` before anything cites the
+  number — that narrows the window, it does not close it. The structural fix,
+  `wiring_status.auto_allocation`, is specified and PARKED in the same file.
   **Two ED formats coexist:** the flat `ED-NNNN` sequence is **FROZEN** (no new allocations, permanently
   valid for existing citations); all NEW EDs use lane-tagged `ED-<LANE>-NNNN` (e.g. `ED-MB-0001`),
   zero-padded to 4 digits. Lanes:
