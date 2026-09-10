@@ -541,7 +541,8 @@ Run the unit tests locally: `pip install pyyaml pytest numpy && python -m pytest
 | Finding inert/inconsistent mechanics | `valoria-mechanic-audit` |
 | Philosophy (**P-01..P-15**) compliance | `valoria-canon-guard` |
 | Key IN → resolver → OUT contract closure | `valoria-module-adjudicator` |
-| **A NERS pass** on any design object — dominant options, false N-lines — plus rolling-engine resolver stress | `ners`, which owns the **method**; the four **definitions** are §0.06 |
+| **A NERS pass** on any design object — dominant options, false N-lines | `ners`, which owns the **method**; the four **definitions** are §0.06 |
+| Stressing anything that resolves by a **draw** — σ-leverage, μ-shift vs Ob-shift, fractional pool/Ob, sub-1D floor | `resolution-diagnostic` (Phases 0–6, P-i…P-v). Its output is **evidence**, not a verdict: carry the findings back into a `ners` pass |
 | **Layer placement** — which layer does this bind, is prose being made a mechanism, does a proposed guard earn its existence, are you reaching under Layer 0 | `layer-conformance` (Lens A), which owns the **method**; the **definitions** are the layer table above, §0.05 and §0.1 pt 5 |
 | **Code-architecture / Layer-1 conformance** — does the code conform to `architecture/`, and at what enforcement grade | `layer-conformance` (Lens B), which reads `architecture/meta/04_CODE_ARCHITECTURE.md` at the row, quotes it with its line, and copies no table, grade definition or count out of it |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |

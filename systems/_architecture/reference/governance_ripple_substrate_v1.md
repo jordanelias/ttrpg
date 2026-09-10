@@ -496,8 +496,8 @@ test, is the difference between a substrate and a wish.
 A mechanic that "reads well" but has no legal Key IN → resolver → OUT shape is not implementable. This
 section binds every arc of the loop to `references/module_contracts.yaml` (the IN→resolver→OUT registry,
 governed by `valoria-module-adjudicator`), the fixed resolver enum, the Key Type Registry vocabulary, and
-— for anything that resolves via a draw — the resolution diagnostic (`ners`,
-NERS resolver-stress P-i…P-v). **Verified against the actual contracts this pass, not asserted.** Two
+— for anything that resolves via a draw — the resolution diagnostic (`resolution-diagnostic`,
+resolver-stress P-i…P-v, whose findings feed a `ners` pass). **Verified against the actual contracts this pass, not asserted.** Two
 findings up front, both favorable: the standing bridge needs *no new Key type*, and the card branches need
 *no new resolver*.
 
@@ -516,17 +516,19 @@ findings up front, both favorable: the standing bridge needs *no new Key type*, 
 
 ### §14.2 · Resolution diagnostic on the event-deck draw (the one NEW engine)
 
-`ners` §"new engine" rule: *a card/deck draw / weighted-event table is diagnosed
-against P-i…P-v directly and surfaced for ratification.* Running it on the Π-weighted draw
+The `resolution-diagnostic` skill treats a bespoke draw as a **P-v finding** — it supplies no
+separate rule for a new engine. What follows is this document's own choice: score the Π-weighted
+draw against P-i…P-v directly and surface it for ratification, rather than file it as P-v and stop.
+Running that on the Π-weighted draw
 (`weight = base + Π-scaling + tag-modifiers`, band-gated 0–2 / 3–7 / 8–10):
 
 | Property | Verdict | Reasoning |
 |---|---|---|
 | **P-i legible odds** | **PASS (band) / PARTIAL (card)** | Π legibly maps to the family band (the player reads high Π → Crisis). The *specific* card is tag-weighted — legible only if active tag-weights are surfaced in the UI (a tooltip). Mitigation: surface the draw-weight contributors. |
-| **P-ii uniform leverage** | **PASS** | A weighted-event table has **no pool / no √N term** — exempt from the flat-shift `1/√N` trap by the diagnostic's own scope rule (a no-pool resolver has no √N). A tag's draw-weight contribution is uniform across Π. |
+| **P-ii uniform leverage** | **PASS** | A weighted-event table has **no pool / no √N term** — exempt from the flat-shift `1/√N` trap because the trap is a pool-scaling artefact and there is no pool here. (The diagnostic states no scope rule of its own for this; the exemption is on the arithmetic.) A tag's draw-weight contribution is uniform across Π. |
 | **P-iii bounded + monotonic** | **⚠ FINDING** | The band thresholds are **discrete cliffs** — Π 7→8 flips the draw from the Intrigue band to the Crisis band, a continuous input crossing a discrete boundary that jumps the outcome class (the ED-884-class concern). **Ruling needed:** intended dramatic threshold, or soften with a transition band (7–8: both bands draw, Crisis-weighted). |
 | **P-iv graded, recoverable** | **PASS** | The draw is a *selection*, not a fragile binary; the card's *resolution* is graded through `d_sigma` (FAIL_FLOOR .97 — ≥3% residual even at overmatch). No irreversible bare-binary on the draw. |
-| **P-v right engine** | **PASS** | A weighted-event table is the correct shape for *event selection* (not a dice pool, not a skill contest). Tag `[NEW ENGINE — surface for canon ratification]` per the diagnostic. |
+| **P-v right engine** | **PASS** | A weighted-event table is the correct shape for *event selection* (not a dice pool, not a skill contest). Tag `[NEW ENGINE — surface for canon ratification]` — a tag this document defines, not one the diagnostic supplies. |
 
 **Net:** the deck draw is compliant on four of five properties; the single **P-iii band-cliff finding** is the
 one thing that must be ruled (intended vs softened) before the draw is ratified as a canonical engine. This
@@ -553,7 +555,7 @@ violate the registry's own visible-findings rule.
 Every card in the generated deck (and every mechanic anywhere in this program) is **not compliant until**
 it carries, explicitly: (a) its **owning module** + **resolver** from the enum; (b) **registry-valid Key
 types** for everything it emits/consumes, with any gap surfaced as a finding; (c) for any card that
-resolves via a **draw** (the deck draw, or a `dice_pool` branch), a **resolution-diagnostic P-i…P-v verdict**.
+resolves via a **draw** (the deck draw, or a `dice_pool` branch), a **resolution-diagnostic P-i…P-v evidence pass, carried into a `ners` verdict** — the diagnostic issues no verdict of its own.
 A dedicated **architecture-compliance pass** runs over the surviving deck to attach exactly these three
 things per card — a card with a real impact but no legal IN→resolver→OUT shape is a design sketch, not an
 implementable mechanic, and is held until shaped. This section is the gate that gets applied to it.

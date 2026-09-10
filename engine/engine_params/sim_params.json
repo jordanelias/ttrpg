@@ -4003,7 +4003,7 @@
       "kind": "scalar",
       "module": "social_contest",
       "file": "systems/social_contest/sim/contest/resolver.py",
-      "note": "de-saturation floor (diagnostic Lesson 6): a hostile/off-axis reception can't zero",
+      "note": "[JUSTIFIED: de-saturation floor; 0.15 is a fitted seed, citation: null]",
       "citation": null,
       "citation_grade": null
     },
