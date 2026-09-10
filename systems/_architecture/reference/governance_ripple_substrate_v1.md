@@ -553,7 +553,7 @@ violate the registry's own visible-findings rule.
 Every card in the generated deck (and every mechanic anywhere in this program) is **not compliant until**
 it carries, explicitly: (a) its **owning module** + **resolver** from the enum; (b) **registry-valid Key
 types** for everything it emits/consumes, with any gap surfaced as a finding; (c) for any card that
-resolves via a **draw** (the deck draw, or a `dice_pool` branch), a **resolution-diagnostic P-i…P-v verdict**.
+resolves via a **draw** (the deck draw, or a `dice_pool` branch), a **resolution-diagnostic P-i…P-v evidence pass, carried into a `ners` verdict** — the diagnostic issues no verdict of its own.
 A dedicated **architecture-compliance pass** runs over the surviving deck to attach exactly these three
 things per card — a card with a real impact but no legal IN→resolver→OUT shape is a design sketch, not an
 implementable mechanic, and is held until shaped. This section is the gate that gets applied to it.
