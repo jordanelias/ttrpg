@@ -1,5 +1,127 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⏸ ARC 2 / G1 — HELD 2026-09-10. A real game defect found, RULED, implemented, measured, and BACKED OUT on one unexplained number (ED-IN-0206)
+
+**Nothing from this section is in the tree. The working tree is at Arc 1's head `5f5be4d`, content
+hash `ee0383bf3f4606e56b80cd07c0284f0a`, All Gates Green.** This is the record so the next session
+does not re-derive the pre-flight.
+
+### THE DEFECT G1's PRE-FLIGHT FOUND, and it is game code rather than apparatus
+
+`04 §B.9` requires that **no Event report a write the gate did not apply** — *"only the gate mints a
+Receipt; the log's append asserts every receipt id is in the gate's minted set for this tick."*
+Looking for violations found one, in MATTER's term maturation:
+
+- `loop/matter.py`'s maturation block emitted `term.matured` carrying
+  `StateChange(rid, "set", "MATTER", "stages", label)` and **applied no write at all.** Nothing in
+  the package mutates `rec.stages` — `matter.py` reads it (`list(rec.stages)`), `probes.py` reads
+  it, and that is every occurrence. **The Event reported a state change that did not happen**, which
+  is `ID-9`'s worked example, live.
+- It also named the **wrong row**. `write_matrix.yaml`'s `(Record, stages)` is
+  `steps: [RES]`, `class: ACTS`, `emits: record.staged`, `by: "D7 — §13.1: terms are act-declared,
+  never MATTER-advanced"`. A MATTER-step Event claimed a change to the one field the matrix forbids
+  MATTER from touching.
+- The row it *should* use, `(Record, matured)` — `steps: [MAT]`, `class: MATTER`,
+  `emits: term.matured` — **named a field that existed nowhere on the carrier.** (`probes.py` writes
+  it anyway via `setattr`, creating an undeclared instance attribute, because the gate's `apply` is
+  a caller-supplied lambda.)
+- Nothing in the loop ever emits `record.staged`.
+
+### ⭐ RULED by Jordan, 2026-09-10: **add `Record.matured`, write it at MATTER**
+
+Of three costed options — add the field and write it; make the Event carry no change; move
+maturation to RESOLVE as act-declared — Jordan took the first: the matrix row is the game and the
+field should exist.
+
+### WHAT WAS BUILT AND MEASURED, then reverted
+
+`Record.matured: bool = False`; the maturation routed through `w.write(..., record_kind="Record",
+fieldname="matured", emits="term.matured", subject=rid, causes=[prior])`, letting **the gate emit**
+and retrieving the Event through `w._emitted_by_write` — which is this file's own precedent
+(`claim.decayed`, `condition.worn`) and `04 §C.2`'s contract, not an invention.
+
+Every delta measured against a stashed control:
+
+| | before | after |
+|---|---|---|
+| NPC-088 content hash | `ee0383bf…` | `b20dad27…` |
+| `term.matured` events | 1 | 1 |
+| `claim.deposited` events | 40 | **41** |
+| `p_carin`'s ledger | 21 | **22** |
+| DISTINCT claim rows, all persons | 18 | 18 |
+| `runs/` artifacts | — | **byte-identical** |
+| `delta.py` | — | **PROBE FLIPS 0** |
+
+The extra deposit is explained: the maturation Event **now reaches WITNESS**, where before it was
+appended straight to `w.log` and bypassed the emission path entirely. Same claim content, one more
+holder.
+
+### ⛔ THE BLOCKER — one number I could not explain, and it is a control
+
+`test_w9_h80s_zero_control_is_executed_not_merely_described` measures the maturation chain's depth
+by stage count, in the `observation_deposit_mode="none"` **control arm**:
+
+```
+before   {0: 0, 3: 6, 6: 7}      assertion: matured[3] < matured[6]   PASSES
+after    {0: 0, 3: 7, 6: 7}                                            FAILS
+```
+
+The 3-stage chain gained a link, and the shape of the gain is the clue:
+
+```
+before   term.matured x3 -> record.created -> proposition.uttered -> record.created   (6)
+after    term.matured x3 -> record.created -> term.matured -> term.matured -> ...     (7)
+```
+
+**Ruled OUT by measurement:** the gate write itself is clean — one Event, one change, correct
+subject and field, no second emission (checked directly on a sweep world). So the lengthening comes
+from how a now-witnessed maturation re-enters the causal graph, **and no measurement establishes
+that**. `H-80`'s discriminator is load-bearing on a milestone claim, and this is its control arm.
+
+Four tests red under the change: `test_w9_h80s_zero_control…`, `test_wb_clause_four_fires…`,
+`test_wd_a_fork_changes…`, `test_wd_the_decision_fingerprint…`.
+
+**BACKED OUT rather than committed.** Not a retreat from the ruling — the ruling stands and the
+implementation works. What was missing is the attack on the result, and shipping a change whose
+causal effect cannot be stated is the one thing this arc has been enforcing against.
+
+### WHAT THE NEXT SESSION NEEDS TO DECIDE
+
+Either the longer chain is **correct** — an Event that really happened now participates in the arc,
+and `H-80`'s pin is stale and should be re-derived with that reason recorded — or **`causes[]` for a
+gate-emitted maturation must differ** from the `[prior]` that the hand-built Event passed. Measure
+which before re-landing. The pinned numbers in that test's docstring (`none` {0:0,3:6,6:7} · `actor`
+{0:0,3:7,6:7} · `total` {0:0,3:7,6:7}) are the baseline to compare against.
+
+### THE REST OF G1's PRE-FLIGHT, so it is not re-derived
+
+- **`Receipt` does not exist** anywhere in the package (`grep` → 0) while `04 §B.9` types
+  `Event.changes[]` as `Receipt[]`. What exists is `StateChange := (subject, mode, driver, field?,
+  delta?, spec?)` against `Receipt := (id minted BY THE GATE, kind, field, subject id, before,
+  after)`.
+- **There is no `append` to assert in.** `w.log` is a plain `list[Event]` (`state/world.py:160`) and
+  `World` has **no `append` method** — so §B.9's *"the log's append asserts"* has no owner. `04
+  §A.2`'s `state/log` row is unbuilt, which is the same finding as `state/gate`.
+- **Five `StateChange` construction sites; two are outside the gate.** `loop/matter.py` (the
+  defect above) and `loop/resolve.py`, which builds its receipts **after** calling `w.write` rather
+  than receiving them from it. §C.2's signature is `gate.write(...) -> Receipt`; making the gate
+  return one is the shape that fixes `resolve` without an assertion.
+- **The content hash stops being the control at G1.** Arc 1 could use it because a pure move must
+  not move it; Arc 2 changes behaviour by design. **Each G-unit needs its own declared before/after**
+  — the table above is the template.
+- Sequence unchanged: **G1** `Receipt` + `state/gate` + the append assertion → **G2** the unforgeable
+  token (`04:198`: **ONE** `Token := (write_class, tick)`, four VALUES, and `04:206` grades the
+  "only the driver mints" invariant MECHANICAL — a `Token(` source scan, not a runtime failure) →
+  **G3** AX-4 clause 2 + `Act.via`, which also closes `H-108` and which **R-plan U9 also specifies**
+  (amendment 5: G3 owns it, U9 cites it) → **G4** `NoOpReceipt`.
+
+_Sources: `write_matrix.yaml` `(Record, matured)` and `(Record, stages)` rows;
+`engine/season/loop/matter.py`; `engine/season/state/carriers.py::Record`;
+`engine/season/state/world.py::World.write`; `engine/season/tests/test_season_shape.py::test_w9_h80s_zero_control_is_executed_not_merely_described`;
+`architecture/meta/04_CODE_ARCHITECTURE.md` §A.2, §B.9, §C.2; Jordan's ruling, 2026-09-10._
+
+---
+
 ## ⭐ DONE 2026-09-10 — ARC 1: Layer-1 MODULE-BOUNDARY conformance for `engine/season/` (ED-IN-0206)
 
 **Landed `f16db12..fc74fec` on `claude/fable-5.1-review-plan-luvo21`, PR #386, All Gates Green.**
