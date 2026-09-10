@@ -658,6 +658,78 @@ stale is precisely the precondition column and U1's manifest shape, both correct
 
 ---
 
+### §15.0d · ⚖️ **THE FABLE ADJUDICATION — §15.0 IS MORE OVERTURNED THAN UPHELD (ED-IN-0208)**
+
+A read-only Fable node adjudicated §15.0–§15.0c against Layer 1 on Jordan's instruction. **Read this
+before §15.0 below: five of its load-bearing claims do not survive, and two of the overturns say the
+tree had already decided what §15.0 re-opened.** Three were re-verified by hand here before writing.
+
+#### OVERTURNED — and the first two matter most
+
+| §15.0 claimed | Layer 1 says | verified |
+|---|---|---|
+| **the six antonym closers are NEW ROWS** | **ONE GENERIC `release` VERB**, `eligibility: own`, generic over kind — `04:183` row 14, `04:945` row 15 (*"the loader asserts its domain equals `tenure_kinds \ {contain}`"*), `04:119`, `:345`, `:363`. `01:1121-1136` refuses the per-verb framing **by name**: *"Asking which verb ends an `oblige` is the wrong question… one sentence rather than four verbs."* `HANDOFF_NEXT.md:54` already files it as a **DATA defect**: *"Fix the table, and do not re-open the design."* | ✅ re-read `04:183`, `04:945` |
+| **`requires_typed` is not a counterparty test** | **It is the counterparty test the design has.** Form 1 `existence(of: to, kind: Person)` is exactly *"the object of an `oblige` must be an entity"* — checked **by path** at load (`data/requires.py:538-582`) and evaluated **in the fold** (`loop/resolve.py:185-187`), which is where §15.0a says the check belongs. **F8 was a missing CELL, not a missing COLUMN**: `oblige` has `requires: —` and no typed cell | ✅ |
+| **the missing `counterparty:` field is the schema gap** | **NON-FINDING.** Layer 1 has three homes, all per-operand: `Act.refs`/`payload` (`04:395`), `requires_typed` forms 1 and 5, and PART D row 13 + typed ids (`04:193-195`, unbuilt — an Arc-2/step-0 gap ED-IN-0206 already records). What actually let the fiat through: `oblige`'s empty cell, the operand aliasing, and untyped ids | ✅ |
+| **"only the prose prevents `comply` answering a `dispatch`"** | **`comply` has `requires_typed: none` and no predicate, so the fold RAISES** (`resolve.py:189-200`). The prose is not the blocker | |
+| **the Dispensation four are "a complete cycle, the strongest place to build"** | Written as **prose only**: all three responses carry `requires_typed: none`, there is no dispensation operand (`rosters.yaml:873-876`), `writes:` is *"per the term's own row"* with the nine terms **unspecified** (`04:1077` F.15 — *"`issue` produces a document nobody can comply with"*), and `refract`'s side is `absent`. **Blocked on F.15 and H-94, both unruled.** Not the strongest place | |
+
+#### SOFTENED
+
+- **"writes state" ⟂ "is an interaction"** — true of the **table's `writes:` column**, false of the architecture: `tell` *does* write, INTERIOR state at barrier 4 under a different token (`04:117` AX-3, `04:160`). ⚠ And **"interaction" is a coinage that collides with Layer 1's**: `04:396` types `Scene := (…, interactions : Act[])`, so in `04`'s vocabulary **every Act is an interaction**, `oblige` included. That fails `CLAUDE.md` §4's idempotent-meaning test — do not reuse the word this way.
+- **Axis 3's "who resists" column CONFLICTS with `04` for all six groups.** `04:669` and `01:353-369` T-g: *"obstruction and scarcity need no verb."* The other party's resistance is **their own later act** — `tell` → the hearer's `refract`; `issue`/`establish` → their `evade / defy`; `petition`/`carry` → the body's `determine`; `levy` → scarcity; `succeed` → rivals contest the **seat at conferral**, a different verb. That is AX-1 + ED-SC-0035 applied.
+- **"No corpus act can name two distinct parties"** — too strong. Actor + subject *are* two parties. What cannot form is a **THREE-PLACE** act (actor, office, heir) — which is precisely what broke `succeed`.
+- **`hold` "paired, built"** — only the T-o path is built; T-m is why *"a person cannot resign an office"* (`HANDOFF_NEXT.md:54`).
+- **U1 upstream of U7** — true for `contests:` rows, false for uncontested verbs whose counterparty is an operand and whose obstacle is scarcity.
+
+#### UPHELD
+
+The false denominator (31 + a placeholder for 6 = **37**, and the placeholder can never execute); `PLAN.md:101`'s *"unnamed"* being stale; F7's self-loop and `04:177`'s holder-owned orientation; the operand aliasing itself; `succeed`'s non-empty refusal column; the `act.refused` zero; **the counterparty check belongs in the fold** (`04:579`); `commit`+`repudiate` landing together.
+⚠ **Two of my own citations were wrong**: `_eff_transfer` is at `effects.py:406`, not `:504`; `_eff_move` at `:163`, not `:253`. Only `_eff_confer:112` resolved.
+
+#### TWO NEW HIGH FINDINGS
+
+1. **⚠ THE `Petition`/`Dispensation` CARRIER CONFLICT IS REAL AND UNRECORDED.** `04:180` row 11 rules them **kinds of `Record`**; `write_matrix.yaml:224` and `:112` carry them as their **own kinds**, and `carry`'s typed cell is `kind: Petition`. **ED-IN-0206 does not list this among its non-conformances and no plan carries an item for it.** It is the precondition for the `rescind` and `withdraw` closers, and it changes five rows. ✅ verified by hand.
+2. **⚠ `HANDOFF_NEXT.md:55` POINTS THE INVESTIGATION REPAIR AT A MODEL LAYER 1 REFUSES.** It names *"#359's discovery model — a contest of capability against **secrecy**, emitting a Degree"*. `#359` declares `secrecy : Clamped<0,5>` (`proposals/2026-09-03-governance-corpus-rebuild/03-design-v2.md:740`), a stored scalar — and **`01_AXIOMS.md:1001-1002` refuses exactly that**: *"`secrecy` needs no representation at all, because under `AX-2` a claim nobody witnessed is simply unknown and secrecy is the **empty observer set**."* ✅ verified (Fable cited `04`; it is `01`). **The canon doc supplies what #359 does not, in a form `04` accepts:** `fieldwork_v30.md:353-355`'s **Concealment Ob is another person's act, present or absent** — the empty-observer-set model with a live counterparty and no stored scalar.
+
+#### THE FORK: A THIRD OPTION NEITHER I NOR THE ROW POSED
+
+**UNDECIDABLE-AS-POSED.** Both (a) and (b) presuppose a buildable `comply`, and F.15 + the operand famine mean it is buildable for **neither** channel today — **the fork is downstream of F.15.**
+
+> **(c) `dispatch` needs no response verb at all.** The response to an order is **the ordinary act it asks for**, performed by the dispatched member — `holonic:433` §11.1: *"pool(act by remit) = capability of the dispatched establishment member(s) actually performing it."* `effects.py:87-89` and ED-SC-0035 lean this way.
+
+**What it actually turns on: DOES AN ORDER CARRY TERMS?** If yes, `dispatch` is `issue` at person scale and (a) follows. If no, (c) follows and there is no response verb to be one or two. **That is the question for Jordan — not "is `comply` one verb or two".**
+
+#### THE SIX: BUILDABLE FROM CANON, AND WHAT MUST BE INVENTED
+
+Per Jordan's ruling, sourced from `investigation_systems_v30.md` / `fieldwork_v30.md`. **Supplied per act** — pool attribute, precondition/depth gate, the shared degree→outcome table (`fieldwork_v30.md:302-309`), reliability tag: Examine (Cognition, Verified) · Interview (Attunement via the Lattice, Testimonial) · Research (Recall, Documentary) · Surveil (Cognition, Observational, +2 Exposure) · Thread-Read (Spirit, TS≥30, Thread-verified, Coherence −1) · Reconstruct (Recall, own degree table `:276-281`, Derived).
+
+**Must be invented or adjudicated — the real deliverable:**
+1. **Every `writes:` cell.** No matrix row exists for Evidence Track, Exposure, Disposition or Case Board, so the loader refuses the rows. Under `04` three are **not fields at all**: Evidence Track is a count over held Claims; Exposure as a per-territory meter is a Rung social aggregate **forbidden at `04:237`**; Case Board is a View. Disposition maps to `tie`.
+2. **The degree → claim-confidence path.** WITNESS mints every claim at `confidence_default=100`; nothing turns a Partial finding into a low-confidence claim, and Reconstruct's *"conclusion is wrong at Failure"* needs a claim whose **value is false**.
+3. **New `requires` stems** (TS, Disposition, institutional access) — `REQUIRES_STEMS` is closed and refuses an unknown stem at load. A grammar change.
+4. **Interview's collapse** of a seven-gate utterance lattice to one resolution — licensed by `rosters.yaml:458-463`.
+
+**Interview is a VERB ROW, not proceedings — DECIDED-BY-TREE.** `investigation_systems_v30.md:229/:233` partitions the Lattice (exploratory) from the Social Contest (adversarial); escalation is a *transition to* a contest, i.e. a downstream second act. ED-SC-0033's twelve games include **interrogation**, not interview; ED-FI-0004 merged Interview into the **Lattice**, not into contests.
+
+**⚠ AND THE SIX ARE NOT BLOCKED ON U1 — they need a DIFFERENT seam.** `rosters.yaml:482` types investigation *"ITS OWN KIND — not a contest"* and `:505-508` forbids giving them a prize: *"Giving them a prize so the existing machinery can grade them is **scripting drift**."* They need the **shared ladder** (`04:122` T-k) and a provider under a **NEW manifest role** — `manifest/registry.py:22` has exactly one role, `"contest"`. U1's σ-leverage wrapper and manifest plumbing are reusable upstream; U1's contest-specific half is not on their path.
+⚠ **Which indicts U1 half (b):** it plans `contests:` on `tell`/`speak` — the same *"give it a prize so the machinery grades it"* move `rosters.yaml:505-508` refuses for investigation.
+
+#### THE LOGIC CHECK — SEVEN STEPS THAT DO NOT FOLLOW
+
+The derivation *"a real interaction has a counterparty, an obstacle and a degree, and the antonym is the fourth face"* smuggles in more than the ruling says:
+1. **"Some / some / some" → "necessarily all three."** Jordan's second ruling is **partitive**. §15.0's own axis-3 table then lists eight verbs *"legitimately needing none"* — internally inconsistent.
+2. **"mechanisms OR interactions" → interactions only.** The first disjunct was dropped. `work` → wear, `utter` → a Proposition: a mechanism with no second party, and not a fiat.
+3. **"another entity" → "a counterparty that resists at RESOLVE."** The other entity is already the `subject`/`to` operand; the leap to *obstacle* imports a resolution model `04` reserves for `contests:` and refuses elsewhere.
+4. **"undone by ANOTHER party's act" inverts T-m** — `01:1127`: the OWNER ends what they own; T-o is the seat exception.
+5. **"a fiat cannot fail on the world's terms"** — the fold's refusals *are* that; `oblige`'s empty refusal column is a **row defect under invariant 4**, not a category.
+6. **"a fiat is monotonic, which is why divergence fell"** — a causal claim with **no control** (§0.1 pt 4); the named falsifier (`commit`+`repudiate` moving it the other way) is unrun. A hypothesis.
+7. **A fourth counterparty shape breaks "necessarily":** the six's counterparty is the **concealer — optional, found by presence at the scene**, named nowhere on the act.
+
+**What survives:** F7 and F8 are real; the fold is the right site for the check; the counterparty half of the ruling is real **and spellable with existing forms**; the antonym half is real **and already spelled by `release`**.
+
+---
+
 ### §15.0 · ⭐ **THE VERB TABLE, MEASURED ON THREE AXES — and the ruling that reorders U7 (ED-IN-0207)**
 
 Measured from `verb_table.yaml` and the loaded `VERB_TABLE`, 2026-09-10. **The ledger row is
