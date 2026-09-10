@@ -39,6 +39,17 @@ rows:
   need: Corroborating or refuting his claim must be possible for a third party through independent fieldwork,
     not only by taking his word for it.
   exercises:
-  - the six investigation acts
-  from: 'Corroboration by INDEPENDENT fieldwork is precisely the six investigation acts. Part E carries
-    them with `requires: per act` and supplies no predicate for any, so the fold cannot execute them.'
+  - examine
+  - interview
+  - research
+  from: 'Corroboration by INDEPENDENT fieldwork is precisely the investigation acts, and canon names
+    which of them CORROBORATE: `fieldwork_v30.md` §4.3 tags Examine `Verified`, Interview `Testimonial`
+    and Research `Documentary`, all three usable as "Contest corroboration". ⚠ THIS ROW DECLARED THE
+    SINGLE TOKEN `the six investigation acts` UNTIL 2026-09-10 (ED-FI-0009): Part E carried them as one
+    row with `requires: per act` and no predicate, so the fold could not execute it. Split into six rows
+    with typed preconditions, all three are resolvable -- which is the sense in which this log reports
+    them as executing: the FOLD can carry them. ⚠ TWO SENSES, AND THEY DIVERGE ON `examine`: over the 89
+    corpus worlds `interview` and `research` are actually executed and `examine` never is, because it
+    binds `exists:Site` and no question these worlds raise refers to a site -- the same fact that keeps
+    `work` refused. Declared anyway: a token may name a real thing that is not yet REACHED, and that is
+    the instrument working rather than an authoring error.'

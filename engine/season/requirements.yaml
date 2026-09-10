@@ -125,7 +125,11 @@ scales:
     in_loop:   false
     note: >-
       Six investigation acts exist in `verb_table.yaml` and NONE declares `contests:` — so
-      investigation is not ungraded, it is UNGRADEABLE. Two composition roles
+      investigation is not ungraded, it is UNGRADEABLE. ⚠ THE FIRST CLAUSE WAS FALSE UNTIL
+      2026-09-10 AND IS NOW TRUE: one row spelled `"the six investigation acts"` stood for six,
+      and ED-FI-0009 split it into `examine` · `interview` · `research` · `surveil` ·
+      `thread_read` · `reconstruct`. The second clause is unchanged and is a RULING, not an
+      omission — see `rosters.yaml:505-508`. Two composition roles
       (`scene_resolver.fieldwork`, `scene_resolver.investigation`) target this subsystem, which is
       why it is in the R04-pending ceiling.
 
@@ -140,6 +144,31 @@ rows:
       forking exercise measured 2,403 forks with 100% reconvergence, and after W-A/W-B the
       later-decision divergence is only ~4%. Propagation is structurally present and
       behaviourally near-absent.
+      ⚠ **THE LAST SENTENCE IS NO LONGER TRUE OF THE MEASURED SLICE, AND THE CORPUS-SCALE RATE
+      HAS NOT BEEN RE-RUN — BOTH HALVES ARE STATED (ED-FI-0009, 2026-09-10).** The channel a
+      decision reaches a later decision by is §F1 clause 4, and `W-D`'s own diagnosis recorded why
+      the rate was ~4%: *"§F1 clause 4 has exactly ONE reachable instance in the corpus"* — every
+      drop in every cell was `move` refusing on a `contain.path` belief. Splitting the verb-table
+      row `"the six investigation acts"` into the six acts canon names gave the grammar four more
+      live cells (`exists:Site` · `exists:Person` · `exists:Record` · `exists:Rung`). MEASURED
+      over the same 89 worlds at the shipped default by ONE script run on both sides, clause-4
+      drops by verb: **25, all `move`, before; 1,491 raw after** — `examine` 387 · `restore` 387 ·
+      `research` 379 · `interview` 306 · `move` 18 · `surveil` 14. ⚠ **387 OF THOSE CANNOT MOVE A
+      DECISION, SO THE FIGURE THIS ROW IS ABOUT IS 1,104 IN FIVE VERBS.** `restore` is not in
+      `resolvable_verbs()` (it writes `Site.condition` with no `EFFECTS` entry) and `choose.py`
+      applies the `verbs=` filter AFTER `opening_set` returns, so clause 4 drops a Candidate that
+      was never going to be offered. Measured too: `examine` and `restore` fire on the IDENTICAL
+      EIGHT SUBJECTS — same cell shape, so one belief counted under two verbs. The better statement
+      of the change is the PREDICATE count: clause 4 went from ONE reachable predicate
+      (`contain.path`) to FIVE (`+ exists:Site` · `exists:Record` · `exists:Person` ·
+      `exists:Rung`). ⚠ THE FIRST
+      WRITING OF THIS ROW SAID 13, QUOTED FROM A TEST DOCSTRING RATHER THAN MEASURED, WHICH PUT A
+      QUOTED NUMBER AND A MEASURED ONE IN THE SAME RATIO — the asymmetry §0.1 pt 4 names. `move`
+      itself FELL, 25 -> 18, which the quoted figure had reported as a rise. On the pinned NPC-088 2-slot slice the shipped
+      arm went from **0 of 16 forks diverging to 14 of 18**. ⚠ WHAT IS NOT MEASURED: the
+      corpus-scale fork rate (the 62/1467 figure), which needs the chunked `wd_chunk.py` run and
+      was not re-run here. So the ~4% above is stale in an unknown direction and the status stays
+      `not_met` on the instrument that set it, not on the slice that moved.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [W-F, H-111, H-116]
 
@@ -151,6 +180,11 @@ rows:
       state, so the only channel a decision has into a later decision is a ledger claim, and
       `belief_contradicts` could read no claim the corpus deposits. W-A/W-B opened it; the
       measured effect is ~4% later-decision divergence against 100% world divergence.
+      ⚠ RE-MEASURED IN PART, ED-FI-0009 — see R-01, which carries the numbers and the exact scope
+      of what was and was not re-run. In short: the clause the channel runs through had one
+      reachable producer and now has six, and the pinned slice went 0/16 -> 14/18. The
+      corpus-scale rate is not re-run, so this row's `~4%` stands as the last corpus-scale
+      figure and its status is unchanged.
     measure: "python proposals/2026-09-04-degree-sweep/wd_acceptance.py  # fork-and-follow, both arms"
     blocks: [W-F, H-111]
 
@@ -199,10 +233,30 @@ rows:
       of play required in a season
     status: not_met
     measured: >-
-      6 of 32 verbs execute in the corpus (create_record, move, speak, tell, transfer, utter).
-      20 carry no predicate and no effect, 5 are foldable but never attempted, 1 (`work`) is
-      attempted and always refused. 1 of 32 declares `contests:`.
-    measure: "python -m engine.season.harness.corpus_run  # 'WHERE THE 32 GO' line"
+      **10 of 37 verbs execute in the corpus** (create_record, interview, move, reconstruct,
+      research, speak, surveil, tell, transfer, utter). 20 carry no predicate and no effect,
+      5 are foldable but never attempted (the governance verbs, `H-71`), and 2 are attempted and
+      always refused (`work` and `examine`, both because no question these worlds raise refers to
+      a Site). 1 of 37 declares `contests:`.
+      ⚠ **32 -> 37 IS A CORRECTION, NOT GROWTH** (ED-FI-0009, 2026-09-10). The row spelled
+      `"the six investigation acts"` was ONE row standing for six acts canon names
+      (`investigation_systems_v30.md:217`), carrying `requires: "per act"` — a cell deferring to
+      acts the table did not have — so the fold could not evaluate it and `runs/CASELOG_NPC.md`
+      reported it as a blocker on two cases. Split into six rows with typed preconditions built
+      from the EXISTING closed grammar (no new form, operand or stem), four execute, one is
+      always refused, and `thread_read` is not resolvable at all: it requires Thread Sensitivity
+      >= 30, which the closed `requires_operands` roster has no name for (`H-85`).
+      ⚠ WHAT THE SPLIT DID **NOT** BUILD, said here because a verb row is not a mechanism:
+      `fieldwork_v30.md:302-309` grades all six on four bands and NOTHING RESOLVES A BAND. Their
+      `emits:` is flat. `rosters.yaml:482` types investigation's seam UNRULED and `:487-491` rules
+      that writing a plausible IN/OUT for it *"would be inventing the architecture rather than
+      recording it"*; `:505-508` forbids the near escape of giving them a prize. ⚠ AND THAT BLANK
+      IS ALREADY CLOSED, WHICH ED-FI-0009 FILED AS A JORDAN QUESTION AND WITHDREW THE SAME DAY:
+      `workplans/2026-09-06-season-loop-execution-plan.md:647` ran it through §0's five tests four
+      days earlier and closed it at test 3 — *"NOT A SEAM. The loop IS the mechanism"*, attaching
+      RESOLVE → WITNESS, out = *"Claims graded by degree; Failure emits `finding.none` and deposits
+      nothing"*, **work item 4.5**. What is missing is a degree PRODUCER, which is work.
+    measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 37 today, and was '32' in this cell until ED-FI-0009 made the count honest"
     blocks: [W10-core, H-65, H-94]
 
   - id: R-06
@@ -285,5 +339,16 @@ rows:
       ladder is a reader with no producer. The only randomness in the package is the seeded
       `Random` `combat_seam.py` hands to `systems/combat/`. No act has ever resolved at a degree
       of success in a corpus run; the contest seam is wired and unreached.
+      ⚠ UNCHANGED BY ED-FI-0009, DELIBERATELY, AND THE SIX ARE WHERE THIS ROW NOW POINTS. They
+      are the acts canon grades on four bands (`fieldwork_v30.md:302-309`) and they are the
+      obvious first producer of a margin the one ladder could read. They ship UNGRADED because
+      the producer does not exist. ⚠ THE FIRST WRITING OF THIS PARAGRAPH SAID BUILDING IT MEANT
+      WRITING INVESTIGATION'S SEAM AND PUT THAT TO JORDAN. It does not and it is not a Jordan
+      question: `workplans/2026-09-06-season-loop-execution-plan.md:647` already closed that blank
+      at §0 test 3 — investigation is NOT a seam, the loop IS the mechanism, and the degree
+      producer is **work item 4.5**, attaching RESOLVE → WITNESS. This row moves when 4.5 is built;
+      its own blockers are `W27`'s cast (no attribute values on any person), the absent Depth
+      carrier, and §27.4's refusal to route an uncontested attempt to an `Ob = 0` roll. The scan
+      above is still green because nothing here rolls.
     measure: "python -m pytest engine/season/tests -k ladder_is_the_trees_own"
     blocks: [W23, H-98]

@@ -5,10 +5,50 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 is the index; see it for cross-lane/global items.
 
 No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonical heads:
-`designs/scene/fieldwork_v30.md` (+ co-files), `designs/scene/fieldwork_bg_v30.md`,
-`designs/scene/investigation_systems_v30.md`.
+`systems/fieldwork/reference/fieldwork_v30.md` (+ co-files),
+`systems/fieldwork/reference/fieldwork_bg_v30.md`,
+`systems/fieldwork/reference/investigation_systems_v30.md`. (The `designs/` tree was dissolved; every
+old path resolves through `references/restructure_ledger.md` via `tools/pathres.py`.)
 
 ## Pending
+
+- **ED-FI-0009 (open, `needs_jordan: FALSE`, 2026-09-10) — THE SIX INVESTIGATION ACTS ARE ROWS, AND
+  WHAT IS LEFT IS WORK ITEM 4.5, NOT A RULING.** Jordan: *"'the six investigation acts' is not a verb"* and *"you must
+  ensure you build the six from investigation systems"*. `engine/season/verb_table.yaml`'s single
+  placeholder row is now `examine` · `interview` · `research` · `surveil` · `thread_read` ·
+  `reconstruct`, each with a typed `requires` built from the existing closed grammar. Measured:
+  verbs 32 -> 37, resolvable 12 -> 17, **executing in the corpus 6 -> 10**, distinct corpus
+  behaviours 2 -> 16 (of which the six alone carry 2 -> 10 and the new `alignment` cells 10 -> 16),
+  §F1 clause-4 drops **25** (all `move`) -> **1,104 decision-affecting across five verbs** (1,491
+  raw, less `restore`'s 387 — `restore` is not in `resolvable_verbs()`, so those cannot move a
+  decision), both sides measured by one script over the same 89 worlds (`move` itself falls,
+  25 -> 18). NPC-086 moved
+  BLOCKED -> DEGRADED; NPC-010 lost one of three blockers.
+  **What is NOT built:** nothing resolves a DEGREE for an investigation act, so their `emits:` is
+  flat while `fieldwork_v30.md` §4.2 grades all six on four bands.
+  ⚠ **I FILED THAT AS A JORDAN QUESTION AND WITHDREW IT THE SAME DAY.** All four parts are answered
+  inside the tree, and an adversarial pass on the delivered work found the first two:
+  - **the seam** — `workplans/2026-09-06-season-loop-execution-plan.md:647` ran this blank through
+    §0's five tests four days earlier and closed it at test 3: *"NOT A SEAM. The loop IS the
+    mechanism"*, attaching RESOLVE → WITNESS, out = *"Claims graded by degree; Failure emits
+    `finding.none` and deposits nothing"*, **work item 4.5**. The six rows already ship that
+    refusal half verbatim.
+  - **the attribute gate** — my *"canon contradicts canon"* was an equivocation.
+    `fieldwork_v30.md:76` is the *Perception gates* paragraph and governs DEPTH ACCESS (its
+    examples are the Depth-1/Depth-2 gates at `:34-35`; Depth 0's gate is *None*). `#353 §9.2`
+    forbids gating a VERB. Compatible.
+  - **Exposure** — answered by precedent at `01_AXIOMS.md:1001-1002`: *"secrecy is the empty
+    observer set."* Conspicuousness is the size of the observer set, which WITNESS already
+    computes. `04:237` is not the blocker; it is why a per-territory meter was the wrong shape.
+  **Next actions — work, not a ruling.** Item 4.5, the degree producer at RESOLVE → WITNESS. Its
+  own blockers: no attribute values on any corpus person (`W27`'s cast), no Depth carrier, and
+  §27.4's refusal to route an uncontested attempt to an `Ob = 0` roll. Then: `examine` stays
+  refused until some question source names a Site (`H-04`); the Dialogue Lattice replaces the
+  `interview` row rather than sitting beside it (ED-FI-0004).
+- **Housekeeping, unowned:** `workplans/2026-09-09-r-execution-plan_part2.md` is ~30k tokens against
+  `compliance_check`'s 15k cap — a pre-existing WARN that this session added ~1.2k to. §4's remedy
+  is a `_part3` in reading order.
+
 
 - **ED-FI-0004 (RESOLVED 2026-07-08) — pessimist-audit FI verdicts EXECUTED** (FI-lane follow-up to
   ED-IN-0027). **Interview MERGE:** the `fieldwork_v30 §4.2` bare-roll Interview object is annotated as

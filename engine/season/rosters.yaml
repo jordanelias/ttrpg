@@ -1007,6 +1007,28 @@ tables:
       cannot leave a silently dead cell over here.
     cells:
       Precedent:
+        # ED-FI-0009 — FIVE of the six investigation acts. ⚠ `thread_read` CARRIED THREE CELLS AND
+        # THEY WERE DEAD: it has no typed cell (Thread Sensitivity has no operand, `H-85`), so it is
+        # not in `resolvable_verbs()` and `opening_set` can never form a Candidate for it. A weight
+        # on an option nobody can form is what `data/verbs.py`'s own loader refusal calls out one
+        # case over, and inventing three numbers for it was worse than leaving it out. Removed.
+        # ⚠ THE ALTERNATIVE TO THESE CELLS IS NOT "NO
+        # INVENTED NUMBER", IT IS "THE ALPHABET DECIDES", and that was measured before they were
+        # written: with all six at the sparse default the corpus's `tell` threshold STRADDLED
+        # (cases without `tell` ran 1-2 seasons, cases with it 2-6) because six zero-scoring verbs
+        # sort ahead of `tell` on the name tiebreak and take its scene. A weight with a reason is
+        # strictly better than an ordering with none. `H-66` is the row that makes the weights
+        # lawful and `sweep: [declared, uniform, sign_only]` is what tests whether they matter.
+        # ⚠ AND THE SWEEP WAS RUN RATHER THAN CITED, because these weights were written AFTER the
+        # corpus outcome was observed. Distinct corpus behaviours over 89 live cases: **2** before
+        # the six · **10** with the six at the sparse 0.0 default · **16** with these cells ·
+        # **5** at `uniform` (every cell in the whole table equal). So these cells carry 6 of the
+        # 14-point movement and the pre-existing table carries the rest; neither number is the
+        # other's, and the `tell` straddle they were written to address was already present at the
+        # conviction-inert point, so it is the SIX's doing and not theirs.
+        research:        0.8    # consulting the archive IS the procedural act, investigation-side
+        reconstruct:     0.5    # a Finding is what a record gets made of
+        surveil:        -0.4    # watching without leave is outside the procedure, not part of it
         determine:       1.0    # the licensed judgement made by the holder licensed to make it
         create_record:   0.9    # the record IS the precedent; making one is the procedural act
         open_case:       0.8
@@ -1016,6 +1038,13 @@ tables:
         refract:        -0.8    # H-36 receiver-side: a deliberate re-telling, i.e. distortion
         repudiate:      -0.6
       self_preservation:
+        # ED-FI-0009. Three of these four are PRICED BY CANON rather than judged: `fieldwork_v30`
+        # §4.2 charges Surveil +2 Exposure ("conspicuous activity"), Thread-Read +1 and fires
+        # co-movement, and gives Reconstruct no cost at all ("no new information gathered").
+        reconstruct:     0.5    # synthesis is done alone and costs nothing outward
+        research:        0.2    # an archive is the safe way to learn something
+        interview:      -0.3    # asking shows the person what you want to know
+        surveil:        -0.8    # +2 Exposure; the most conspicuous of the six
         commit:         -1.0    # a `commit` is a standing obligation; it is the least safe act
         utter:          -0.9    # uttering a Proposition binds the utterer to it
         speak:          -0.4
@@ -1024,6 +1053,13 @@ tables:
         move:            0.3    # leaving is the cheapest safety there is
         evade / defy:    0.8
       suspicion:
+        # ED-FI-0009. `open_case` sits at 0.9 — "suspicion above a threshold reaches for the
+        # case" — and `surveil` is the same reach without the institution behind it.
+        surveil:         0.9    # watching someone IS suspicion acting
+        examine:         0.6    # looking for what you were not shown
+        research:        0.4
+        reconstruct:     0.3
+        interview:       0.2    # suspicion still asks; asking is the least covert of the six
         open_case:       0.9    # P37's shape: suspicion above a threshold reaches for the case
         revoke:          0.8
         destroy_record:  0.3
@@ -1031,6 +1067,10 @@ tables:
         tie / knot:     -0.7    # binding yourself to someone you distrust
         confer:         -0.8
       harm_borne:
+        # ED-FI-0009. `petition` sits at 0.6 as "the redress route, and the one a low-standing
+        # person still has"; these are the routes that find out what happened first.
+        interview:       0.4    # the witness route, next to `petition`
+        examine:         0.3    # the trace of what was done
         kill / wound:    0.9
         repudiate:       0.8
         petition:        0.6    # the redress route, and the one a low-standing person still has
