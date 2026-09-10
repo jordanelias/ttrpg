@@ -618,6 +618,14 @@ it EXECUTED Arc 1.** Merged into this lane at `61f687e`; measured here after the
 | `register --requirements` | **6 `not_met` · 3 `partial`** — unchanged, which is Arc 1's own declared success condition |
 | `ED-SC-0037` | **`status: ruled`, `needs_jordan: false`** — the flip is on `main` |
 
+⚠ **THE HASH AND TEST-COUNT ROWS ARE ARC 1's RESULT AND ARE NO LONGER THE TREE'S (2026-09-10).**
+`ED-FI-0009` landed the six investigation acts after this table was written and moved both;
+`register --requirements` still reads 6 `not_met` · 3 `partial`. The table stays as Arc 1's record —
+*unchanged* was Arc 1's declared success condition and it held — but **a unit must not control against
+it. The live baseline has one owner: part 1's §3 · ENTRY STATE**, and this note deliberately does not
+copy the values across the split. It is here because §15 is the section a session opens first, and
+part 1's correction does not reach a reader who opens part 2 directly.
+
 **WHAT THIS UNBLOCKS, and it is most of the arc.** L1–L5 are merged, so the Arc-1 rows of §15.1's
 table are satisfied: **U1** (needs `seam/` + `manifest/`), **U2** (needs `loop/`'s six steps),
 **U3** (needs `decision/` as a directory) and **U4** (same) are all **UNBLOCKED**. ⚠ **Arc 2 is NOT

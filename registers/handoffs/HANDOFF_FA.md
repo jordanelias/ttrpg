@@ -4,9 +4,14 @@ Lane-scoped continuity for the `FA` (faction actions) lane, per the `ED-<LANE>-N
 (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. Root `HANDOFF.md` is the
 index; see it for cross-lane/global items.
 
-No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonical heads:
-`designs/provincial/faction_canon_v30.md`, `faction_layer_v30.md`, `faction_behavior_v30.md`,
-`faction_state_authoring_v30.md` (overview: `designs/factions/faction_systems_overview_v30.md`).
+No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonical heads, all under
+`systems/factions/reference/`: `faction_canon_v30.md`, `faction_layer_v30.md`,
+`faction_behavior_v30.md`, `faction_state_authoring_v30.md` and `faction_politics_v30.md` (overview:
+`faction_systems_overview_v30.md`). (The `designs/` tree was dissolved; every old path resolves through
+`references/restructure_ledger.md` via `tools/pathres.py`. This line named `designs/provincial/…` and
+`designs/factions/…` until 2026-09-10, and omitted `faction_politics_v30.md`, which `CURRENT.md`'s
+Faction row has carried as CANONICAL since 2026-07-08, ED-IN-0016 — repaired against that row, which is
+the authority on which head is live.)
 
 ## SUSPENDED — the `score/2` obstacle derivation (M1 juncture 1, Half B). Flagged 2026-08-21 by Jordan for later systems work.
 

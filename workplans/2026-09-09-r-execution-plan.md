@@ -131,6 +131,13 @@ CONTENT HASH: ee0383bf3f4606e56b80cd07c0284f0a
 The hash `ee0383bf3f4606e56b80cd07c0284f0a` is confirmed at `main` `f41f20a1`. Every "the hash does not
 move" control in §6 is measured against that string.
 
+⚠ **THAT STRING IS SPENT — `ED-FI-0009` moved it on 2026-09-10. DO NOT CONTROL AGAINST IT.** The
+artifact above stays as the record it is (a real run at `f41f20a1`); the live baseline, with both
+sides and the commands, is **§3 · ENTRY STATE**, which owns it. This paragraph deliberately does not
+restate the numbers — a figure carried in two sections rots in two sections independently, which is the
+duplicated-stamp class `ED-IN-0147`/`ED-IN-0189` record and `CURRENT.md`'s own one-line stamp note
+exists to prevent.
+
 ---
 
 ## §2 · CORRECTIONS TO THE PLANNER
@@ -423,13 +430,26 @@ is.
 **The instrument baseline, re-run 2026-09-10 rather than inherited** — a unit returning otherwise has
 broken something rather than revealed a miscount:
 
-| observable | value |
-|---|---|
-| `headless --case NPC-088 --seasons 2 --seed 0` | `CONTENT HASH: ee0383bf3f4606e56b80cd07c0284f0a` · `verbs the fold can execute: 12 of 32` |
-| `pytest engine/season/tests -q` | **187 passed** |
-| `register --requirements` | **6 `not_met` · 3 `partial`** |
-| `compliance_check --check-only` | 0 errors · 98 warnings (this file is one of them, §13) |
-| `broken_dependency_checker.py` | *"All dependencies verified. No broken links found."* |
+⚠ **THAT SENTENCE BECAME A TRAP ON 2026-09-10, AND THIS SECTION IS THE ONE PLACE THE BASELINE IS
+STATED — every other surface points here and carries no copy** (`HANDOFF.md`,
+`registers/handoffs/HANDOFF_IN.md`, and §1 of this file, whose `ee0383bf…` artifact is a record of a
+real run at `f41f20a1` and is not a control). `ED-FI-0009` landed the six investigation acts, so a
+unit running these instruments today **correctly** gets a different answer, and under the sentence
+above would conclude it had broken something when it had merely measured the tree. **Re-pin against
+the RIGHT-HAND column before using any control in this plan:**
+
+| observable | at `f41f20a1` (as this table was written) | at `5a35084` — **LIVE, re-run 2026-09-10** |
+|---|---|---|
+| `headless --case NPC-088 --seasons 2 --seed 0` | `CONTENT HASH: ee0383bf3f4606e56b80cd07c0284f0a` · `verbs the fold can execute: 12 of 32` | **`CONTENT HASH: 58e71beb4e73a079963102bf04be0d1c`** · **`17 of 37`** |
+| `pytest engine/season/tests -q` | **187 passed** | **191 passed** |
+| `register --requirements` | **6 `not_met` · 3 `partial`** | **6 `not_met` · 3 `partial`** — unmoved |
+| `compliance_check --check-only` | 0 errors · 98 warnings (this file is one of them, §13) | 0 errors · **114** warnings |
+| `broken_dependency_checker.py` | *"All dependencies verified. No broken links found."* | unchanged |
+
+**Moving those numbers was correct** — the six acts are behaviour, and `CLAUDE.md` §7 expects an
+output-moving change to move the goldens. What was missing was this row of the table. A unit whose
+control is *"the hash does not move"* and which measures against the spent string reads its own
+inherited drift as its result.
 
 ⚠ **`pytest` and `numpy` are not installed in a fresh container** (`pip install pyyaml pytest numpy`),
 and every season entry point is `python -m engine.season.harness.<x>` — the flat

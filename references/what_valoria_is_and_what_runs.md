@@ -189,6 +189,17 @@ W30), which is a different claim from zero and must not be re-stated as zero. Re
 143 cases, 54 UNREPRESENTABLE (faction 44, world 10), 6 of 32 verbs executed, DISTINCT EXECUTED
 SETS 2 over 89 worlds, R3 30/30 NPC and 54/59 ARC with the planted control firing.
 
+⚠ **RE-MEASURED 2026-09-10 at `main` `5a35084`, and four of those five numbers have moved — this is
+the re-run the header asks for, not a rewrite of the 2026-09-06 record.** The command is now
+`python -m engine.season.harness.corpus_run` (the flat path above no longer exists). It prints: 143
+cases · 54 UNREPRESENTABLE (faction 44, world 10) — **unchanged**; **10 of 37 verbs executed**;
+**DISTINCT EXECUTED SETS 16** over 89 worlds; **R3 22/30 NPC and 34/59 ARC**, planted control still
+firing. `ED-FI-0009` (the six investigation acts) is what moved them. ⚠ **THE R3 FALL IS A MEASURED
+BEHAVIOURAL CHANGE, NOT A COUNTING ARTIFACT** — 28 cases went R3 true → false and none the other way,
+by displacement rather than by the detector going blind; the attribution, with the falsifier, is in
+`engine/season/requirements.yaml`'s `R-01` row, which owns it. **NOT-COMPUTABLE for RUNS and ENDS is
+unchanged**, so this paragraph's own correction still stands.
+
 Corpus run: 122 probes at **63 PASS / 59 GAP**; **46 NPC cases** (6 BLOCKED, 2 DEGRADED, 38
 NOT-ASSESSED) and **97 ARC cases**, all NOT-ASSESSED. ⚠ NOT-ASSESSED is defined by the caselog as
 *nobody authored an `exercises:` overlay* — **a fact about authoring, not a verdict on the design** —

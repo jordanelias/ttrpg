@@ -5,8 +5,11 @@ Lane-scoped continuity for the `SE` (settlements) lane, per the `ED-<LANE>-NNNN`
 index; see it for cross-lane/global items.
 
 No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonical head:
-`designs/territory/settlement_layer_v30.md` (+ `settlement_adjacency_v30.md`,
-`territory_temperaments_v30.md`, `designs/world/geography_v30.md`).
+`systems/settlements/reference/settlement_layer_v30.md` (+ `settlement_adjacency_v30.md`,
+`territory_temperaments_v30.md`, `systems/world/reference/geography_v30.md`). (The `designs/` tree was
+dissolved; every old path resolves through `references/restructure_ledger.md` via `tools/pathres.py`.
+This line named `designs/territory/…` until 2026-09-10 — repaired against `CURRENT.md`'s Settlement
+row, which is the authority on which head is live.)
 
 ## Pending
 

@@ -17,6 +17,10 @@ commits, 50 files. `engine/season/` now has **`decision/`** (budget·choose·opt
 `cache`** (`readers.py` deleted) and **`loop/`'s six steps**. Content hash **unchanged**
 (`ee0383bf…`), **190 season tests pass** (was 187), requirements still **6 `not_met` / 3 `partial`**
 — exactly what a pure structural arc should read. **`ED-SC-0037` is now `ruled`.**
+⚠ **THOSE ARE ARC 1's NUMBERS AND THEY ARE NO LONGER THE TREE'S.** `ED-FI-0009` landed after them and
+moved the hash and the test count (`register --requirements` still reads 6/3). The live values are in
+`workplans/2026-09-09-r-execution-plan.md` **§3 · ENTRY STATE**, their single owner — deliberately not
+restated here, because a figure copied into the continuity index rots independently of its subject.
 
 - ✅ **UNBLOCKED: U1, U2, U3, U4** — every Arc-1 precondition they named is merged.
 - ⛔ **U9 is the arc's only structural blocker left.** It needs `Act.via` from **G3**, and **Arc 2 is
@@ -129,9 +133,9 @@ after #383 merged — the failure their own method rule names (*measure at the m
 **Where the detail lives:** `workplans/2026-09-09-r-execution-plan.md` **§15** — the Arc-3 order with
 what each unit waits on, the antagonist's five-head charter (adherence · fidelity · logical correctness
 · factuality · Layer-1 compliance, ruled by Jordan 2026-09-10), per-unit tiering and the end-of-arc
-gate. §3 carries the re-measured entry state and the instrument baseline
-(`CONTENT HASH ee0383bf3f4606e56b80cd07c0284f0a` · **187** season tests · **6 `not_met` / 3 `partial`**,
-all re-run 2026-09-10, not inherited).
+gate. **§3 is the SINGLE OWNER of the instrument baseline — read it there, and do not copy it back
+here.** ⚠ The triple this line used to restate (`ee0383bf…` · 187 season tests · 6/3) is spent:
+`ED-FI-0009` moved the hash and the test count, and §3 now carries both sides with the command.
 
 ⚠ **`registers/handoffs/HANDOFF_IN.md`'s top two sections still read `⏳ PRODUCED … NOT YET COMMITTED`
 for decomposition steps 7 and 8, both of which merged in #383.** PR #386 corrects both headers; it is

@@ -139,7 +139,7 @@ rows:
     statement: "decisions must propagate"
     status: not_met
     measured: >-
-      R3 (cross-person propagation) passes 30/30 NPC and 54/59 ARC on the cases that are
+      R3 (cross-person propagation) passes **22/30 NPC and 34/59 ARC** on the cases that are
       representable, and the planted-edge control fires — so the DETECTOR works. But the
       forking exercise measured 2,403 forks with 100% reconvergence, and after W-A/W-B the
       later-decision divergence is only ~4%. Propagation is structurally present and
@@ -169,6 +169,28 @@ rows:
       corpus-scale fork rate (the 62/1467 figure), which needs the chunked `wd_chunk.py` run and
       was not re-run here. So the ~4% above is stale in an unknown direction and the status stays
       `not_met` on the instrument that set it, not on the slice that moved.
+      ⚠ **AND THE OPENING R3 FIGURES MOVED TOO — THEY READ 30/30 NPC AND 54/59 ARC UNTIL
+      ED-FI-0009. THE FALL IS A MEASURED BEHAVIOURAL CHANGE, NOT A STALE LINE (measured
+      2026-09-10, and it is why the two numbers at the top of this row now read 22/30 and
+      34/59).** The same command on both sides of that commit —
+      `python -m engine.season.harness.corpus_run`, at `b154ce8` (before) and `5a35084` (after)
+      — moves **28 cases from R3 true to R3 false and none the other way**, 8 NPC and 20 ARC.
+      **It is displacement, not a blind instrument, and that was the falsifier this claim
+      needed**: on four sampled flipped cases the emitter index `_r3_propagates` builds still
+      attributes every Event it did before — `indexed` tracks `acts` exactly on both sides — and
+      the cause-edge population does not collapse, while the cross-person subset goes to **zero
+      in all four**: `ARC-45` acts 42→42 · edges 12→10 · **cross 12→0**; `ARC-R16` 42→42 ·
+      12→12 · **12→0**; `NPC-008` 42→46 · 12→15 · **12→0**; `NPC-020` 42→42 · 12→14 · **12→0**.
+      (One of the four edge counts falls; the other three hold or grow. The claim is that the
+      population SURVIVES, not that it is monotone.) Every flipped case LOST no verb and GAINED
+      `reconstruct`/`surveil`. So the six acts did not blind the detector; they displaced the act
+      that used to be caused by another person's act — which is this row's own subject, measured
+      moving in the adverse direction while §F1 clause 4 moved in the favourable one. Both are
+      true and neither cancels the other.
+      ⚠ **NOTHING IS ESCALATED AND NO GUARD IS MINTED.** The remedy is already this row's own
+      `blocks:` entry `W-F` (cross-person transmission), so there is no ruling to ask for
+      (`CLAUDE.md` §0, gate 5); and pinning an R3 count in a test would pin a number the build is
+      supposed to move, which is §7's uncontrolled path. What this row owed was the measurement.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [W-F, H-111, H-116]
 
