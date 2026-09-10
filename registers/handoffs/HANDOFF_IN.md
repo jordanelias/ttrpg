@@ -52,9 +52,28 @@ Every delta measured against a stashed control:
 | `runs/` artifacts | — | **byte-identical** |
 | `delta.py` | — | **PROBE FLIPS 0** |
 
-The extra deposit is explained: the maturation Event **now reaches WITNESS**, where before it was
-appended straight to `w.log` and bypassed the emission path entirely. Same claim content, one more
-holder.
+⚠ **THE EXPLANATION FIRST WRITTEN HERE WAS FALSE, AND IT IS CORRECTED RATHER THAN QUIETLY REPLACED.**
+It read: *"the maturation Event **now reaches WITNESS**, where before it was appended straight to
+`w.log` and bypassed the emission path entirely."* **The original code did `w.log.append(ev);
+emitted.append(ev)`, `season()` calls `witness(matter_events + events)`, and `emitted` IS
+`matter_events` — so the maturation Event was ALWAYS witnessed.** One `git show origin/main` of the
+block refutes it, and the claim was written without running it.
+
+**THE REAL MECHANISM, measured on ARC-01 across three arms:** the Event's IDENTITY and folded
+content changed — id from `H(…, f"matured:{label}")` to the gate's `H(…, f"emit:{emits}#{draw}")`,
+and `changes[0]` from `("stages", label)` to `("matured", None)`. `World.content_hash` folds
+`subject|mode|driver|field|delta`, so **the content hash moves — and the hash is what an undeclared
+tiebreak uses to decide which question a person answers.** Different question → different act →
+different world. `travel.blocked` went 4 → 3 → 1 across the variants, and it is `travel.blocked`
+that deposits the `contain.path` belief §F1 clause 4 fires on.
+
+**TWO HYPOTHESES WERE TESTED AND BOTH ARE WRONG, recorded so they are not re-run:**
+- *Eviction*: ledgers hit the 200 cap (199/200/199) under the first variant, so crowding looked
+  causal. Under "write it, don't witness it" they sit at **192/192/191 — below the cap — and clause
+  4 is still `[]`**. Not eviction.
+- *Witnessing*: Jordan ruled "write it, don't witness it" on the false premise above. Implemented and
+  measured: **clause 4 stays `[]`.** The ruling does not restore it, because witnessing was never
+  what broke it.
 
 ### ⛔ THE BLOCKER — one number I could not explain, and it is a control
 
