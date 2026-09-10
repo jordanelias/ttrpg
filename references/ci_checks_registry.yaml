@@ -505,9 +505,9 @@ advisory_only:
     role: "GitHub > memory; investigate don't guess; bootstrap before game-state work."
     notes: "Backed by CLAUDE.md §2/§8 and the .githooks/ local tier. (Previously read 'largely backed by Level 4 hooks' — those hooks were evacuated 2026-08-05 and the claim outlived them.)"
 
-  - locus: skill descriptions (valoria-mechanic-audit, valoria-simulator [RETIRED 2026-08-21, ED-IN-0194])
+  - locus: "skill descriptions (roster lives in CLAUDE.md §9)"
     level: 2
-    role: "Mode/workflow guidance."
+    role: "Mode/workflow guidance. Read by a session, never by CI: level 2 is a locus, not an enforcement claim. The roster lives once, in §9 — this row lists no members (ED-IN-0209)."
 
 # ── Drift-detection notes ────────────────────────────────────────────────────
 # - When ci-yml adds or removes a tool invocation, update this file in the same commit.

@@ -89,6 +89,22 @@ BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0036-0039 RES
 
 <a id="in"></a>
 
+**ED-IN-0209 allocated 2026-09-10** (next_free 209 -> 210), **RENUMBERED TWICE ON MERGE: 0207 -> 0208
+-> 0209.** Two same-lane collisions on one branch, back to back — the case the `ED-<LANE>` tag does
+*not* prevent by construction, and the same failure class recorded below at ED-IN-0031, 0032,
+0044/0045, 0048/0049/0050, 0148 and 0152. PR #390 took 0207 while this branch was open; PR #393 —
+itself renumbered 0207 -> 0208 by a third concurrent session for the same reason — then took 0208
+before this branch could merge. ⚠ **The second hit is the informative one: renumbering to
+`next_free` does not make an id safe, because every concurrent session renumbers to the same
+`next_free`.** Recorded as evidence; no guard is proposed here (§0.1 pt 5 — the subject is this
+repository's process, not the game). The work: the
+`layer-conformance` skill —
+`skills/layer-conformance/SKILL.md`, one skill with two lenses (layer PLACEMENT, and Layer-1
+CONFORMANCE of code against `architecture/meta/04_CODE_ARCHITECTURE.md`), owning the METHOD while
+`CLAUDE.md`'s layer table and `architecture/` keep the definitions. Wired into `CLAUDE.md` §9's
+routing table. Filed here and not on the lane row for the reason the 0203 entry below already
+gives: that row is at its 600-char cap. See `registers/editorial_ledger_in.jsonl`.
+
 **ED-IN-0203 allocated 2026-09-07** (next_free 203 -> 204), moved here rather than onto the lane
 row because that row sits at 598 of its 600-char cap — any append breaks
 `test_narrative_does_not_creep_back_into_the_state_file`, exactly as it did to the 0170/0171
