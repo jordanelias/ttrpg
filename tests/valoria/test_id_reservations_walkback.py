@@ -183,7 +183,19 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # honours clause (2) but leaves R-09 waiting on an unbuilt subsystem. The entry is in
     # registers/editorial_ledger_sc.jsonl; nothing about it is decided. Same
     # update-the-pin-and-say-so path this test's own failure message asks for.
-    released = {'SC': 38, 'FA': 39, 'WR': 10, 'SE': 51}
+    # PIN UPDATED 2026-09-10: SE 51 -> 52. ED-SE-0051 allocated, and it is the same rarer kind as
+    # ED-SC-0037 above: a `needs_jordan: true` row carrying the ONE design call in
+    # proposals/2026-09-10-settlements-factions-populations/ that survived all five of CLAUDE.md
+    # §0's tests -- whether the demographic loop is bounded by MATTER ALONE (a fed hearth's envelope
+    # grows until it cannot feed itself, and dearth thins it; Malthusian waves the player damps only
+    # with grain; costs nothing new) or by MATTER PLUS HEARTH CAPACITY (a hearth_capacity fixture per
+    # site_kind, which makes founding-and-building the player's throttle; costs one fixture table and
+    # one conjunct). Layer 1 §25 licenses the clock and names no bound, so the architecture test
+    # leans matter-only on cost alone -- which is why it is an escalation and not an engineering
+    # call. The entry is in registers/editorial_ledger_se.jsonl; the proposal set it comes from is
+    # PROPOSED and HELD BACK FROM RATIFICATION-ON-MERGE IN FULL, and nothing about it is decided.
+    # Same update-the-pin-and-say-so path this test's own failure message asks for.
+    released = {'SC': 38, 'FA': 39, 'WR': 10, 'SE': 52}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (
