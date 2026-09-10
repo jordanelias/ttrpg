@@ -183,7 +183,35 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # honours clause (2) but leaves R-09 waiting on an unbuilt subsystem. The entry is in
     # registers/editorial_ledger_sc.jsonl; nothing about it is decided. Same
     # update-the-pin-and-say-so path this test's own failure message asks for.
-    released = {'SC': 38, 'FA': 39, 'WR': 10, 'SE': 51}
+    # PIN UPDATED 2026-09-10: SE 51 -> 52. ED-SE-0051 allocated, and it is the same rarer kind as
+    # ED-SC-0037 above: a `needs_jordan: true` row carrying the ONE design call in
+    # proposals/2026-09-10-settlements-factions-populations/ that survived all five of CLAUDE.md
+    # §0's tests -- whether the demographic loop is bounded by MATTER ALONE (a fed hearth's envelope
+    # grows until it cannot feed itself, and dearth thins it; Malthusian waves the player damps only
+    # with grain; costs nothing new) or by MATTER PLUS HEARTH CAPACITY (a hearth_capacity fixture per
+    # site_kind, which makes founding-and-building the player's throttle; costs one fixture table and
+    # one conjunct). Layer 1 §25 licenses the clock and names no bound, so the architecture test
+    # leans matter-only on cost alone -- which is why it is an escalation and not an engineering
+    # call. The entry is in registers/editorial_ledger_se.jsonl; the proposal set it comes from is
+    # PROPOSED and HELD BACK FROM RATIFICATION-ON-MERGE IN FULL, and nothing about it is decided.
+    # Same update-the-pin-and-say-so path this test's own failure message asks for.
+    #
+    # PIN UPDATED 2026-09-10: WR 10 -> 11, resolved alongside the SE bump above at the merge of
+    # PR #388 -- two lanes advancing independently, which is exactly the collision the lane-tagged
+    # namespace exists to make harmless, so the resolution is the UNION and neither note is dropped.
+    # ED-WR-0010 allocated: the threadwork PRACTICAL APPLICATIONS docs
+    # (systems/threadwork/reference/threadwork_applications{,_part2}.md), which carry the uploaded
+    # Unreality Suite's applied corpus -- combat, proceedings, command, investigation, factions, the
+    # twelve civilian sectors, the strategic layer, presentation -- into this repo's subsystems and
+    # re-price it against canon/philosophy/. Like the two rows above it is `needs_jordan: true`, and
+    # like them it is PROPOSED and HELD BACK FROM RATIFICATION-ON-MERGE IN FULL: what needs Jordan is
+    # ADOPTION, plus whether threadwork_v30.md Part 3 is edited in place or superseded. Nothing in
+    # the docs escalates a design question. The pricing is the one thing that did not transfer --
+    # the suite denominated every catalogue in a 10-0 depleting Coherence track that RULINGS.md
+    # replaced, and systems/threadwork/sim/coherence.py is still the replaced shape -- so costs are
+    # given as bands and CURRENT.md's Threadwork row is annotated rather than moved. No code changed.
+    # Same update-the-pin-and-say-so path this test's own failure message asks for.
+    released = {'SC': 38, 'FA': 39, 'WR': 11, 'SE': 52}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

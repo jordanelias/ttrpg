@@ -9,10 +9,12 @@ experiment it was the instrument for. Read this file, and your lane's, yourself.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
-## 📋 2026-09-10 — the blocking-rulings queue measured (ED-IN-0207, all lanes)
+## 📋 2026-09-10 — the blocking-rulings queue measured (ED-IN-0208, all lanes)
 
 **`workplans/2026-09-10-unblocking-strategy.md`** — Jordan asked for a strategy to unblock as much work
-as possible. **Not one of the 151 `needs_jordan` rows is cited by `engine/season/requirements.yaml`,
+as possible. Counts are pinned at `916a0be` (151 flagged / 105 open); the merged tree is 153 / 106, the two
+additions being `ED-SE-0051` and `ED-WR-0010`, both filed today with PRs #391 and #388. **Not one of the
+151 `needs_jordan` rows is cited by `engine/season/requirements.yaml`,
 `engine/season/hole_register.yaml` or the R-execution plan**, all three of which do cite EDs (the control);
 seven of the eight they do cite carry `needs_jordan: false` and `ED-061` carries no such field. **Of the
 six *holes* the NINE block on, exactly one is a genuine ruling, and its own row says it unblocks nothing** —

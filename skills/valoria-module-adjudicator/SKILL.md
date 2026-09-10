@@ -24,7 +24,7 @@ description: >
 
 **Naming note (collision guard):** "armature" is a canonical term (Conviction armature, `armature_position`, Faction Meta-Armature — key_substrate §8.2). This instrument is therefore the *adjudicator*, never "the armature." It audits modules that *use* the Conviction armature; it does not modify that system.
 
-**Relationship to sibling skills.** `valoria-mechanic-audit` checks a system's *internal* consistency; `valoria-resolution-diagnostic` checks *resolution and balance fitness under stress* (NERS verdict on behavior); `valoria-vector-audit` checks the *corpus* (vocabulary, isolates). This skill checks the *seams*: whether each system honors its wrapper contract and whether the contracts compose into one closed, scale-coherent graph. Run mechanic-audit first on an unverified system; run this when the question is "do the modules wire together, in all directions and at all scales."
+**Relationship to sibling skills.** `valoria-mechanic-audit` checks a system's *internal* consistency; `ners` checks *design fitness under the cut test* (the NERS verdict on behaviour) and `resolution-diagnostic` checks *resolution fitness under stress* for anything that rolls; `valoria-vector-audit` checks the *corpus* (vocabulary, isolates). This skill checks the *seams*: whether each system honors its wrapper contract and whether the contracts compose into one closed, scale-coherent graph. Run mechanic-audit first on an unverified system; run this when the question is "do the modules wire together, in all directions and at all scales."
 
 ---
 
@@ -56,11 +56,9 @@ Contract record (one per module, in `references/module_contracts.yaml`):
 | `emits[]` | `{type, terminal: bool}` | `terminal: true` = deliberately unconsumed (e.g., telemetry) |
 | `state[]` | `{name, bucket: pool·derived_value·track·clock, writable: bool}` | derived_stats §1/§11/§14 buckets |
 | `transitions[]` | `{via: "scale_transitions §3.x …" or "§5 Domain Echo"}` | required when any edge crosses scales |
-| `loops[]` | `{with: module, damper: …, cap: …}` or `[OPEN — Jordan]` | resolution-diagnostic Lesson 5 discipline at graph level |
+| `loops[]` | `{with: module, damper: …, cap: …}` or `[OPEN — Jordan]` | the `resolution-diagnostic` loop rule (its Phase 4: a defect is **both undamped and unbounded**) applied at graph level |
 | `status` | `extracted · stub` | `stub` = pointer only; **no edges may be invented for a stub** |
 | `sources[]` | `[READ:]-grade citations for every extracted edge | honest-findings discipline |
-
-**The quantity buckets are not interchangeable with the resolution-diagnostic's three categories.** That skill's continuous-resource / discrete-accumulator / base-parameter taxonomy classifies *behavior under stress*; the four buckets here (derived_stats) classify *write legality*. A quantity carries both classifications; conflating them produces false findings in both skills.
 
 ---
 
@@ -99,7 +97,7 @@ Exit 1 on any violation; warnings alone exit 0. Fixture suite at `tests/contract
 | A4 orphan emission: non-terminal emit with zero consumers | warning | dead-letter outputs; **F3 surfaces here** as a missing-emit gap note |
 | A5 derived-write guard: `bucket: derived_value` + `writable: true` | violation | **F1 class** — direct aggregate writes (route to substrate; derived_stats §11) |
 | A6 cross-scale edge where neither endpoint module declares any `transitions` entry | violation | out-of-band scale crossings (module-level existence check; whether the cited handoff fits *this* edge is J2's question) |
-| A7 module-graph cycle lacking a `loops[]` damper/cap annotation | violation | undamped+unbounded loops at graph level (Lesson 5) |
+| A7 module-graph cycle lacking a `loops[]` damper/cap annotation | violation | undamped+unbounded loops at graph level (`resolution-diagnostic` Phase 4) |
 | A8 extracted module's `doc` absent from canonical_sources | violation (W-DOC warning when doc is an explicit `[GAP]`) | contracts detached from canon |
 | A9 registry self-check: §9 declared family counts vs parsed type_ids | warning | registry-internal drift (the 37-vs-38 / section-vs-prefix housing finding, 2026-06-09) |
 | A10 gate well-formedness + ownership: each `gates[]` entry has when/then/source and either `on:` (a quantity the module owns as `state[]`) or `reads:` (cross-module/unowned); ids globally unique | violation | a system's threshold gating a quantity it does not own, or a malformed/duplicate gate |
@@ -142,14 +140,14 @@ ALL-DIRECTIONS COVERAGE (the six directions — CLAUDE.md §0.06):
 NERS MAPPING: S — scale transitions + clean inter-module interaction; R — complete,
 error-free wiring; N/E — no redundant edges or types (J3). A passing lint is
 necessary, not sufficient, for NERS; behavioral compliance stays with
-valoria-resolution-diagnostic.
+ners.
 ```
 
 Output: the adjudication verdict is **edits to `references/module_contracts.yaml` and to the module under review**, plus at most one paragraph in the commit message. ⚠ **Two things that stood in this line were REMOVED 2026-08-20.** (1) It wrote a verdict document into `designs/audit/<YYYY-MM-DD>-module-adjudication/` — a tree dissolved 2026-07-19, and CLAUDE.md §0 now forbids the adversarial pass from creating documents at all. (2) It ordered P1/P2 canonical-gap findings appended to `registers/editorial_ledger_<lane>.jsonl` unconditionally — the T3 carrier CLAUDE.md §0.3 measures. **Per §0: fix the finding in this commit, or drop it.** Append at most one row, and only if it requires a human decision (`needs_jordan: true`); `references/id_reservations.yaml`'s Collision Guard protocol governs the allocation when you do (read `next_free`, form the entry, bump, co-commit — see `valoria-editorial-register`'s ID Law section). Derived views (flowchart, state graph, flattened pipeline map) are still generated by `scripts/contract_flowchart.py --contracts ... --registry ... --outdir ...` — generated artifacts, never hand-edited — but write them where the caller asks, not into a new audit directory.
 
 ## STAGE 4 — ENFORCE & RE-TEST
 
-1. Remediation routes through the owning canon mechanism: unregistered type → registry §10 extension process (Class-B vetting); derived-write → derived_stats §11 conversion; missing handoff → scale_transitions §3 amendment proposal; unannotated loop → damper/cap design (Lesson 5). Mechanical-tier calls need bottom-up + top-down anchors, logged, Jordan-vetoable; creative-layer items escalate.
+1. Remediation routes through the owning canon mechanism: unregistered type → registry §10 extension process (Class-B vetting); derived-write → derived_stats §11 conversion; missing handoff → scale_transitions §3 amendment proposal; unannotated loop → damper/cap design (`resolution-diagnostic` Phase 4). Mechanical-tier calls need bottom-up + top-down anchors, logged, Jordan-vetoable; creative-layer items escalate.
 2. Update `references/module_contracts.yaml`; re-run the assessor until violations = 0 or each residual is `[OPEN — Jordan]`.
 3. **Standing hook proposals** (per architecture `<migration_and_growth>`; proposed, not built — building requires tests + spectrum-table + PI updates in the same change):
    - Level 3: pre-commit grep cross-checking emit-type literals in `designs/**` against parsed registry type_ids (the 2026-06-09 R2 candidate).

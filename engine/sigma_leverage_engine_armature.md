@@ -41,7 +41,7 @@ The reason a *portable armature* exists at all: the resolution mechanism is **co
 | Changes when | Almost never (it's math). | Per system, per design pass, per Jordan decision. |
 | Combat instance | §C (the engine) | §F (combat levers, gating, the **blocked** resolution structure) |
 
-**Thesis.** Any Valoria system that (a) resolves on a d10 success-pool and (b) applies modifiers can drive resolution through this engine. Under the continuous engine (canonical for Godot), the engine guarantees the modifier's *probability impact is the same whether the pool is 2D or 18D* (exact at all pools incl. 1D) — which is precisely the architectural fix for the small-pool / non-uniform-impact defect class the `valoria-resolution-diagnostic` skill exists to find (its √N small-pool insight is *why* this engine was built; see §E). *Caveat: this is a continuous-engine identity. Under literal discrete success-counting the modifier's impact is lumpy at small pools — canon ED-836 flags bare 1–7D as "shaky" — so a discrete-resolved port needs its own small-pool handling (clock/aggregate, per the diagnostic). Godot resolves continuously, so it holds there.*
+**Thesis.** Any Valoria system that (a) resolves on a d10 success-pool and (b) applies modifiers can drive resolution through this engine. Under the continuous engine (canonical for Godot), the engine guarantees the modifier's *probability impact is the same whether the pool is 2D or 18D* (exact at all pools incl. 1D) — which is precisely the architectural fix for the small-pool / non-uniform-impact defect class the `ners` skill exists to find (its √N small-pool insight is *why* this engine was built; see §E). *Caveat: this is a continuous-engine identity. Under literal discrete success-counting the modifier's impact is lumpy at small pools — canon ED-836 flags bare 1–7D as "shaky" — so a discrete-resolved port needs its own small-pool handling (clock/aggregate, per the diagnostic). Godot resolves continuously, so it holds there.*
 
 ---
 
@@ -116,7 +116,7 @@ Spread across pools = **0.0pp** (Φ(0.7)−0.5 = 25.8pp), and now **TN-exact** a
 | 0.75 (Strong) | +27.3pp | +25.6pp |
 | 1.00 (Major) | **+34.1pp** | +30.9pp |
 
-*Soft cap (M_MAX = 1.5):* `0.5σ→0.482 · 1.0σ→0.874 · 2.0σ→1.305 · 3.0σ→1.446`; saturates to ±1.5σ. No hard clamp (which would be a threshold cliff — NERS Lesson 6; `tanh` is smooth, slope 1 at 0, so small modifiers apply ~fully). Marginal value falls off **steeply**, though — per added *major* (50% base): +30.9 / +9.5 / +2.2 / +0.5 pp; past ~2 stacked advantages the next is nearly worthless (intended Lesson-5 bound, but the player cannot easily intuit it — F4).
+*Soft cap (M_MAX = 1.5):* `0.5σ→0.482 · 1.0σ→0.874 · 2.0σ→1.305 · 3.0σ→1.446`; saturates to ±1.5σ. No hard clamp (which would be a threshold cliff; `tanh` is smooth, slope 1 at 0, so small modifiers apply ~fully — soft-cap saturation is the design, not a ceiling). Marginal value falls off **steeply**, though — per added *major* (50% base): +30.9 / +9.5 / +2.2 / +0.5 pp; past ~2 stacked advantages the next is nearly worthless (an intended bound, but the player cannot easily intuit it — a P-i legibility finding).
 
 *No foreclosure (the F2 property):* a fully saturated adverse stack caps at −1.5σ → at a 50% baseline the disadvantaged side floors at **Φ(−1.5) = 6.7%**, never 0%. Maximum single-direction swing = Φ(1.5)−0.5 = **43.3pp**, uniform across pool. (The handoff's "~9% / ~43pp": 43pp confirmed; the floor at a *50% baseline* is 6.7% — "~9%" is a specific non-50% engagement baseline, not the general floor.)
 
@@ -154,12 +154,12 @@ So a faction (TN6) or thread (TN8) port inherits exact uniformity with no extra 
 
 The engine is portable; *porting* is still per-system design work. Four steps, each grounded:
 
-1. **Locate the resolution.** Identify where the system rolls a d10 pool for an outcome (vs deterministic accounting or a clock — most Valoria systems are composites; see the three-category model in the `valoria-resolution-diagnostic` skill). The engine drives the *dice-resolved* component only.
+1. **Locate the resolution.** Identify where the system rolls a d10 pool for an outcome (vs deterministic accounting or a clock — most Valoria systems are composites). The engine drives the *dice-resolved* component only.
 2. **Enumerate and classify modifiers.** Every existing modifier becomes a δσ contributor at a level. Ground each: the level must be justified bottom-up (what the modifier currently does) and top-down (real precedent or published design). v31 ±1 Ob → Moderate, ±2 → Strong is the migration anchor.
 3. **Define state-gating.** Specify which contributors are live in which engagement/interaction states (this both shrinks the per-decision load — Elegance — and bounds the σ-sum feeding the cap). Combat's table (§F) is the template.
 4. **Decide level-surfacing.** Players never see σ. Decide how the system shows advantage levels in its UI.
 
-**Why this is the right kernel for the small-pool problem.** The `valoria-resolution-diagnostic` skill's core finding is that the d10 engine "does its worst work at small pools" because a flat die's marginal value scales with 1/√N. Its **Lesson 2** ("continuous resources and base parameters take uniform-*impact* steps") and **Lesson 3** (keep dice off small-pool, load-bearing, binary decisions) are exactly what this engine implements *architecturally*: σ-leverage delivers uniform *impact* (not uniform *form*) and decouples the outcome from raw pool size. **This armature is the realized form of that skill's prescribed fix.** Conversely, the skill's discipline applies in reverse — porting the engine is itself a mechanic that must pass NERS/Omega (§H); do not bolt it onto systems that don't have the defect (see §G).
+**Why this is the right kernel for the small-pool problem.** The `ners` skill's core finding is that the d10 engine "does its worst work at small pools" because a flat die's marginal value scales with 1/√N. Its rule that advantage must take uniform-*impact* steps (the `resolution-diagnostic` skill's §2) and that a small-pool, load-bearing, binary decision should not be settled by a bare draw (its P-iv) are exactly what this engine implements *architecturally*: σ-leverage delivers uniform *impact* (not uniform *form*) and decouples the outcome from raw pool size. **This armature is the realized form of that skill's prescribed fix.** Conversely, the skill's discipline applies in reverse — porting the engine is itself a mechanic that must pass NERS/Omega (§H); do not bolt it onto systems that don't have the defect (see §G).
 
 ---
 
@@ -191,10 +191,10 @@ The engine was extracted *from* the combat work; combat is therefore the first (
 
 ## §G — Candidate ports (NOT performed; flagged for per-system work + Jordan)
 
-These are **candidates only.** I have not read these systems' canonical docs this session, so nothing below is a port — each requires (a) fetching the target's canon, (b) the §E methodology, (c) Jordan's per-system design decision and Omega vetting. Listed worst-defect-first per the `valoria-resolution-diagnostic` initial hypotheses:
+These are **candidates only.** I have not read these systems' canonical docs this session, so nothing below is a port — each requires (a) fetching the target's canon, (b) the §E methodology, (c) Jordan's per-system design decision and Omega vetting. Listed worst-defect-first per the `ners` initial hypotheses:
 
 - **Faction action layer — strong candidate.** The diagnostic's worked example rates it *non-compliant*: bare faction stat (1–7D) rolled for pivotal, irreversible outcomes (seizure, vote) — a fragile small-pool binary, routine exposure. σ-leverage is the named architectural fix (decouple impact from the 2D pool). **Likely highest-value port.** Requires faction-layer canon + Jordan.
-- **Personal combat (non-duel) / mass battle** — possible, where small pools meet load-bearing rolls; the diagnostic flagged the flat −1D wound at the 5D floor (Lesson 2 candidate). Requires the respective canon.
+- **Personal combat (non-duel) / mass battle** — possible, where small pools meet load-bearing rolls; the diagnostic flagged the flat −1D wound at the 5D floor (a uniform-impact candidate). Requires the respective canon.
 - **Social contest — likely does NOT need it.** Pools already 5–18D and the system is rated healthy; applying the engine here would be over-engineering (fails NERS-N/E). Listed to mark the boundary, not to port.
 
 **Do not** treat §G as a backlog of approved ports. It is a map of where the defect the engine fixes is *likely* present (faction) vs absent (social).

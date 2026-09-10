@@ -3,7 +3,9 @@
 ## Status: PROPOSED
 
 **Lane:** IN · **Author:** session of 2026-09-10 · **Governs:** nothing. Reference under `CLAUDE.md` §0.05.
-**Supersedes:** nothing. **Record:** `ED-IN-0207`. **Cites:** `ED-IN-0204` (ratified 2026-09-05), `ED-1094`, `workplans/return_to_game_queue.yaml` §S8.
+**Supersedes:** nothing. **Record:** `ED-IN-0208` — ⚠ **renumbered from `ED-IN-0207` at merge.** PR #390
+took 0207 on `main` while this branch was open; per `CLAUDE.md` §4 the later-merging side renumbers, and
+that is this one. **Cites:** `ED-IN-0204` (ratified 2026-09-05), `ED-1094`, `workplans/return_to_game_queue.yaml` §S8.
 
 ---
 
@@ -35,9 +37,13 @@ Three measurements, each reproducible from the command given:
    yet. **Each building item must set its rows' grades as it lands.**"* The fifteen are discharged by the
    items that build what they are missing, not by a pass over them.
 
-The strategic consequence: **stop treating the `needs_jordan` ledger as the blockage.** It is stock —
-151 rows, 72% of them filed in a single month (2026-07), none filed since 2026-08-17, and none reaching
-the game. But the corrected reading of item 3 also removes the obvious replacement: **the hole register is
+The strategic consequence: **stop treating the `needs_jordan` ledger as the blockage.** It is mostly stock —
+151 rows at `916a0be`, 72% of them filed in one month (2026-07) — and none of it reaches the game.
+⚠ **It is not entirely stock:** merging `main` into this branch brought **two rows filed today**
+(`ED-SE-0051`, `ED-WR-0010`, from PRs #391 and #388), taking the queue to **153 / 106 open**. Both are
+genuine escalations that would survive §0's five tests, which is the flow working as intended — but the
+draft's *"nothing has entered since 2026-08-17"* was true of `916a0be` and is **false of the merged
+tree**, and is corrected here rather than left standing. But the corrected reading of item 3 also removes the obvious replacement: **the hole register is
 not a queue to work either.** Its `absent` rows close when the thing they are missing gets built. So the
 unblocking work is neither queue — it is **executing what is already ruled**, and **re-measuring the
 blockers that are asserted rather than observed.** Those are §4's M1 and M2, in that order.
@@ -69,8 +75,10 @@ An id's effective state is its **last** row, because the ledgers are append-only
 two `partial` rows go to class 1; `ED-IN-0059` sits in class 2 and is the one row there whose status does
 not by itself close it.
 
-**Filing dates: 2026-06 → 14 · 2026-07 → 108 · 2026-08 → 29 · 2026-09 → 0.**
-Nothing has been added to this queue in twenty-four days, and 72% of it was filed in one month.
+**Filing dates at `916a0be`: 2026-06 → 14 · 2026-07 → 108 · 2026-08 → 29 · 2026-09 → 0.**
+72% of the queue was filed in one month. ⚠ **On the merged tree the last bucket is 2, not 0** —
+`ED-SE-0051` and `ED-WR-0010`, both 2026-09-10, arriving with PRs #391 and #388 while this branch was
+open; totals become **1,261 rows / 1,244 ids / 153 flagged / 106 open**. Both belong in class 1.
 
 `return_to_game_queue.yaml` §S8 measured **109 open** on 2026-08-19 against **105** today; its open count
 reproduces to within four rows. ⚠ **Its 48 does not "move" to 46 — the two numbers are different
@@ -85,8 +93,10 @@ silently would have hidden that A, C and B alone already partition the 105. **Pr
 back, but C's 32 → 23 and B's 14 → 5 have no such story and this document does not supply one.
 
 **Reproduce these with:** last-row-per-id over `registers/editorial_ledger*.jsonl`, reading each row's
-`needs_jordan`, `status` and `date`. Row totals are **1,256 rows / 1,240 distinct ids at `916a0be`**;
-this session's own `ED-IN-0207` makes it 1,257 on the working tree.
+`needs_jordan`, `status` and `date`. **Every count in this document is pinned at `916a0be`: 1,256 rows /
+1,240 distinct ids / 151 flagged / 105 open.** On the merged tree — `main` at `461809d` plus this
+session's own two rows — it is **1,261 / 1,244 / 153 / 106**. The partition in §5 is stated at the pin;
+the two new rows are class 1 and take it to 25/153.
 
 ### 1.2 The hole register
 
@@ -134,8 +144,8 @@ lists them), so "zero `needs_jordan` ids" is a measurement, not an artifact of c
 | §0.2 grade | bookkeeping | ⚠ **also not execution-bound.** `CLAUDE.md` §3: `hole_register.yaml` is *"mechanism for the grader, reference for the game"* |
 
 Queue A is not worthless — it holds a genuine escalation channel and about twenty live design questions.
-But it is **stock with no flow**: nothing has entered it since 2026-08-17, and nothing in it reaches the
-season loop. Draining it buys a shorter list and Jordan's attention back. It does not move R-01..R-09.
+It is **mostly stock**: two rows entered on 2026-09-10 and the twenty-four days before that saw none, and
+nothing in it reaches the season loop. Draining it buys a shorter list and Jordan's attention back. It does not move R-01..R-09.
 
 Queue B is where the game's *unanswered questions* are recorded. It is **not** a work queue either, and an
 earlier draft of this document treated it as one. `architecture/PLAN.md:689-694` — Layer 1, and the item
@@ -421,6 +431,11 @@ recommendation.
 | **10** | `ED-IN-0147`'s four held items — **SS5-SS7 disposition · Crown Mil 4.0 vs 5.0 · the PP citation universe · MB J2** | `ED-IN-0147` | H2 is not a judgment call: `ED-809` settled it at 5.0 and the code contradicts it | 327 citations across 176 files (H1); an anti-fabrication gate that half-exists (H3) |
 | **11** | Adopt the **doctrine amendments** to `CLAUDE.md` §0/§0.1, and keep or end structurally independent adversarial review? | docket **D6**/**D7** | **keep adversarial review.** `D7`'s own evidence is from 2026-08-19 (`ED-SC-0028`, `ED-IN-0159` §8, `ED-MB-0061` G19); the fresh evidence is **this document** — a read-only critic overturned four of its conclusions, including its #1-ranked move and both of its proposed closures | the only items that reduce **generation** rather than stock |
 
+**Two arrived today and are not ranked above**, because they landed on `main` while this document was
+being written: **`ED-SE-0051`** — *"the bound on the demographic loop: matter only, or matter plus hearth
+capacity?"* (PR #391) — and **`ED-WR-0010`**, the threadwork applications proposal, `PROPOSED` and held
+back from ratification-on-merge in full (PR #388). Both are class 1 by inspection.
+
 **Blocking nothing, answer at leisure:** `H-111` (does a refusal propagate as news — *"both answers run"*),
 the eleven authorial rows of class 3, `ED-IN-0148`(b) and `ED-IN-0149`'s nine Tier-3 items.
 
@@ -496,6 +511,6 @@ C's and B's movement since 2026-08-19 has no explanation here.
 overturn was re-derived against the tree by the author before being applied; none was taken on the
 critic's word. Two of its findings were **not** adopted: its arithmetic objection to class 2's
 `MB 15 · PC 15 · IN 9` (the breakdown reproduces — `ED-IN-0127` is in class 1, and the ninth IN row is
-`ED-IN-0059` at `proposed`), and its reading that `ED-IN-0207` breaches §0's one-row cap (that cap governs
+`ED-IN-0059` at `proposed`), and its reading that `ED-IN-0208` breaches §0's one-row cap (that cap governs
 the **adversarial pass**; this work was requested by Jordan, and §0 names `workplans/` as outside the
 gate). Both disagreements are recorded rather than resolved silently.

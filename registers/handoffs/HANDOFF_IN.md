@@ -2,17 +2,23 @@
 
 ## 📋 2026-09-10 — the `needs_jordan` queue measured, and three of this pass's own conclusions retracted
 
-**Artifact: `workplans/2026-09-10-unblocking-strategy.md` (PROPOSED, reference under §0.05), `ED-IN-0207`.**
+**Artifact: `workplans/2026-09-10-unblocking-strategy.md` (PROPOSED, reference under §0.05), `ED-IN-0208`**
+— ⚠ renumbered from `ED-IN-0207` at merge, which PR #390 took on `main` first (`CLAUDE.md` §4: the
+later-merging side renumbers).
 Jordan asked for a comprehensive strategy to unblock as much work as possible. Nothing was closed, flipped
 or deleted. A read-only `valoria-critic` pass on the first draft overturned four of its conclusions; every
 overturn was re-derived against the tree before being applied, and the corrected document is what landed.
 
 ### The measurements that survived the attack
 
-1. **151 distinct `needs_jordan` ids** by LAST row per id across the 14 `registers/editorial_ledger*.jsonl`
-   files (1,256 rows / 1,240 ids at `916a0be`). 105 `open`; **46 not `open` yet still flagged** — 43
-   `resolved`/`ratified`/`executed`, 2 `partial`, 1 `proposed`. Filed 2026-06 → 14 · **2026-07 → 108** ·
-   2026-08 → 29 · **2026-09 → 0**; nothing has entered since 2026-08-17.
+1. **151 distinct `needs_jordan` ids** by LAST row per id across `registers/editorial_ledger*.jsonl`
+   (1,256 rows / 1,240 ids **at `916a0be`** — every count in this section is pinned there). 105 `open`;
+   **46 not `open` yet still flagged** — 43 `resolved`/`ratified`/`executed`, 2 `partial`, 1 `proposed`.
+   Filed 2026-06 → 14 · **2026-07 → 108** · 2026-08 → 29 · 2026-09 → 0.
+   ⚠ **On the merged tree it is 1,261 / 1,244 / 153 / 106**: `ED-SE-0051` (PR #391) and `ED-WR-0010`
+   (PR #388) were filed 2026-09-10 while this branch was open. Both are genuine escalations and both are
+   class 1. The draft's *"nothing has entered since 2026-08-17"* was true of the pin and is false of the
+   merged tree.
    ⚠ `S8`'s 48 does **not** move to 46 — S8 computed *raw − open*, which today still gives 153 − 105 = 48.
    The instrument changed, not the tree.
 2. **Not one of the 151 is cited by any instrument that measures the game.** `requirements.yaml`,
@@ -4079,7 +4085,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   for a cohesive update of all skills plus a gap scan. A 3-agent parallel audit of all 15 live
   skills against CLAUDE.md's current architecture found: three skills independently pointed P1/P2
   findings at the FROZEN flat `registers/editorial_ledger.jsonl` instead of the live lane-split files
-  (`valoria-mechanic-audit`, `valoria-module-adjudicator`, `valoria-resolution-diagnostic` —
+  (`valoria-mechanic-audit`, `valoria-module-adjudicator`, `ners` —
   ED-IN-0044); `valoria-compiler` had four independent breaks including a nonexistent gate field
   and an orphaned `compilation/` output path (ED-IN-0044); and `valoria-combat-simulator`'s
   bundled script was a fully superseded parallel implementation (a frozen 9-weapon 2026-03-31

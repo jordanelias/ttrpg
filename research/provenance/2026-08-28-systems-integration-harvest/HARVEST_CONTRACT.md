@@ -50,7 +50,7 @@ Jordan ruling 2026-08-25, ED-IN-0196). μ=0.40, σ=0.800 per die. Continuous: `n
     0 <= margin < 1  Partial
     margin <  0      Failure
 
-⚠ Older prose across this corpus — including `skills/valoria-resolution-diagnostic/SKILL.md:91` and
+⚠ Older prose across this corpus — including `skills/ners/SKILL.md:91` and
 `engine/engine_params/params_tables.yaml` — quotes a RETRACTED ladder keyed on `net ≥ 2·Ob`. If you
 meet it, that is a `gap` record (prose vs code), NOT a formula to harvest as live.
 
