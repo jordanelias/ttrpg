@@ -1,6 +1,202 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
-## ⏳ PRODUCED 2026-09-09, NOT YET COMMITTED — decomposition STEP 8: `seam.py`. `shape.py` 2,075 → 1,788, `seam.py` 372 new (ED-IN-0203)
+## ⏸ ARC 2 / G1 — HELD 2026-09-10. A real game defect found, RULED, implemented, measured, and BACKED OUT on one unexplained number (ED-IN-0206)
+
+**Nothing from this section is in the tree. The working tree is at Arc 1's head `5f5be4d`, content
+hash `ee0383bf3f4606e56b80cd07c0284f0a`, All Gates Green.** This is the record so the next session
+does not re-derive the pre-flight.
+
+### THE DEFECT G1's PRE-FLIGHT FOUND, and it is game code rather than apparatus
+
+`04 §B.9` requires that **no Event report a write the gate did not apply** — *"only the gate mints a
+Receipt; the log's append asserts every receipt id is in the gate's minted set for this tick."*
+Looking for violations found one, in MATTER's term maturation:
+
+- `loop/matter.py`'s maturation block emitted `term.matured` carrying
+  `StateChange(rid, "set", "MATTER", "stages", label)` and **applied no write at all.** Nothing in
+  the package mutates `rec.stages` — `matter.py` reads it (`list(rec.stages)`), `probes.py` reads
+  it, and that is every occurrence. **The Event reported a state change that did not happen**, which
+  is `ID-9`'s worked example, live.
+- It also named the **wrong row**. `write_matrix.yaml`'s `(Record, stages)` is
+  `steps: [RES]`, `class: ACTS`, `emits: record.staged`, `by: "D7 — §13.1: terms are act-declared,
+  never MATTER-advanced"`. A MATTER-step Event claimed a change to the one field the matrix forbids
+  MATTER from touching.
+- The row it *should* use, `(Record, matured)` — `steps: [MAT]`, `class: MATTER`,
+  `emits: term.matured` — **named a field that existed nowhere on the carrier.** (`probes.py` writes
+  it anyway via `setattr`, creating an undeclared instance attribute, because the gate's `apply` is
+  a caller-supplied lambda.)
+- Nothing in the loop ever emits `record.staged`.
+
+### ⭐ RULED by Jordan, 2026-09-10: **add `Record.matured`, write it at MATTER**
+
+Of three costed options — add the field and write it; make the Event carry no change; move
+maturation to RESOLVE as act-declared — Jordan took the first: the matrix row is the game and the
+field should exist.
+
+### WHAT WAS BUILT AND MEASURED, then reverted
+
+`Record.matured: bool = False`; the maturation routed through `w.write(..., record_kind="Record",
+fieldname="matured", emits="term.matured", subject=rid, causes=[prior])`, letting **the gate emit**
+and retrieving the Event through `w._emitted_by_write` — which is this file's own precedent
+(`claim.decayed`, `condition.worn`) and `04 §C.2`'s contract, not an invention.
+
+Every delta measured against a stashed control:
+
+| | before | after |
+|---|---|---|
+| NPC-088 content hash | `ee0383bf…` | `b20dad27…` |
+| `term.matured` events | 1 | 1 |
+| `claim.deposited` events | 40 | **41** |
+| `p_carin`'s ledger | 21 | **22** |
+| DISTINCT claim rows, all persons | 18 | 18 |
+| `runs/` artifacts | — | **byte-identical** |
+| `delta.py` | — | **PROBE FLIPS 0** |
+
+The extra deposit is explained: the maturation Event **now reaches WITNESS**, where before it was
+appended straight to `w.log` and bypassed the emission path entirely. Same claim content, one more
+holder.
+
+### ⛔ THE BLOCKER — one number I could not explain, and it is a control
+
+`test_w9_h80s_zero_control_is_executed_not_merely_described` measures the maturation chain's depth
+by stage count, in the `observation_deposit_mode="none"` **control arm**:
+
+```
+before   {0: 0, 3: 6, 6: 7}      assertion: matured[3] < matured[6]   PASSES
+after    {0: 0, 3: 7, 6: 7}                                            FAILS
+```
+
+The 3-stage chain gained a link, and the shape of the gain is the clue:
+
+```
+before   term.matured x3 -> record.created -> proposition.uttered -> record.created   (6)
+after    term.matured x3 -> record.created -> term.matured -> term.matured -> ...     (7)
+```
+
+**Ruled OUT by measurement:** the gate write itself is clean — one Event, one change, correct
+subject and field, no second emission (checked directly on a sweep world). So the lengthening comes
+from how a now-witnessed maturation re-enters the causal graph, **and no measurement establishes
+that**. `H-80`'s discriminator is load-bearing on a milestone claim, and this is its control arm.
+
+Four tests red under the change: `test_w9_h80s_zero_control…`, `test_wb_clause_four_fires…`,
+`test_wd_a_fork_changes…`, `test_wd_the_decision_fingerprint…`.
+
+**BACKED OUT rather than committed.** Not a retreat from the ruling — the ruling stands and the
+implementation works. What was missing is the attack on the result, and shipping a change whose
+causal effect cannot be stated is the one thing this arc has been enforcing against.
+
+### WHAT THE NEXT SESSION NEEDS TO DECIDE
+
+Either the longer chain is **correct** — an Event that really happened now participates in the arc,
+and `H-80`'s pin is stale and should be re-derived with that reason recorded — or **`causes[]` for a
+gate-emitted maturation must differ** from the `[prior]` that the hand-built Event passed. Measure
+which before re-landing. The pinned numbers in that test's docstring (`none` {0:0,3:6,6:7} · `actor`
+{0:0,3:7,6:7} · `total` {0:0,3:7,6:7}) are the baseline to compare against.
+
+### THE REST OF G1's PRE-FLIGHT, so it is not re-derived
+
+- **`Receipt` does not exist** anywhere in the package (`grep` → 0) while `04 §B.9` types
+  `Event.changes[]` as `Receipt[]`. What exists is `StateChange := (subject, mode, driver, field?,
+  delta?, spec?)` against `Receipt := (id minted BY THE GATE, kind, field, subject id, before,
+  after)`.
+- **There is no `append` to assert in.** `w.log` is a plain `list[Event]` (`state/world.py:160`) and
+  `World` has **no `append` method** — so §B.9's *"the log's append asserts"* has no owner. `04
+  §A.2`'s `state/log` row is unbuilt, which is the same finding as `state/gate`.
+- **Five `StateChange` construction sites; two are outside the gate.** `loop/matter.py` (the
+  defect above) and `loop/resolve.py`, which builds its receipts **after** calling `w.write` rather
+  than receiving them from it. §C.2's signature is `gate.write(...) -> Receipt`; making the gate
+  return one is the shape that fixes `resolve` without an assertion.
+- **The content hash stops being the control at G1.** Arc 1 could use it because a pure move must
+  not move it; Arc 2 changes behaviour by design. **Each G-unit needs its own declared before/after**
+  — the table above is the template.
+- Sequence unchanged: **G1** `Receipt` + `state/gate` + the append assertion → **G2** the unforgeable
+  token (`04:198`: **ONE** `Token := (write_class, tick)`, four VALUES, and `04:206` grades the
+  "only the driver mints" invariant MECHANICAL — a `Token(` source scan, not a runtime failure) →
+  **G3** AX-4 clause 2 + `Act.via`, which also closes `H-108` and which **R-plan U9 also specifies**
+  (amendment 5: G3 owns it, U9 cites it) → **G4** `NoOpReceipt`.
+
+_Sources: `write_matrix.yaml` `(Record, matured)` and `(Record, stages)` rows;
+`engine/season/loop/matter.py`; `engine/season/state/carriers.py::Record`;
+`engine/season/state/world.py::World.write`; `engine/season/tests/test_season_shape.py::test_w9_h80s_zero_control_is_executed_not_merely_described`;
+`architecture/meta/04_CODE_ARCHITECTURE.md` §A.2, §B.9, §C.2; Jordan's ruling, 2026-09-10._
+
+---
+
+## ⭐ DONE 2026-09-10 — ARC 1: Layer-1 MODULE-BOUNDARY conformance for `engine/season/` (ED-IN-0206)
+
+**Landed `f16db12..fc74fec` on `claude/fable-5.1-review-plan-luvo21`, PR #386, All Gates Green.**
+Six units, L0–L5, executing Arc 1 of `workplans/2026-09-09-layer1-conformance-plan.md` (+ `_part2.md`).
+
+**What exists now that did not:** `decision/` (four members per `04:133`), `seam/` (contest · ladder ·
+wrappers/combat — D5's rename **performed**), `queries/person_q` + `queries/cache`, `manifest/`, and
+`loop/`'s six steps. `04 §A.2`'s ninth, `port/`, is absent **by decision**: PART E grades it *beside,
+from step 3* and Gate-0 is blocked on ED-1051.
+
+⚠ **THE GRADE IS MODULE-BOUNDARY, NOT `04`'s "STRUCTURAL".** The directories and their members
+conform; the §A.2 table's **row content** does not. Measured: `state/` has no `gate`/`log`/`ledgers`
+owners, `data/` has no ONE loader, `queries/cache` holds one of three named indexes, `loop/calendar`
+emits nothing and `loop/census` writes nothing against their rows, `tests/` has no *"two licensed
+guards"*. A first writing of `CURRENT.md` said "STRUCTURAL conformance is DONE" — `04:74` defines
+STRUCTURAL as *"the defect has no spelling"*, which is exactly what is still missing. Corrected.
+
+**Zero game yield, and it is the declared result.** Content hash `ee0383bf3f4606e56b80cd07c0284f0a`
+and requirements 6 `not_met` / 3 `partial` unchanged at every unit; `Sim Reference Regression` and
+`Golden Modes Byte-Exact` green in CI, which is the campaign-level confirmation.
+
+### The two defects Arc 1 SHIPPED, found by a Fable read-only gate and fixed in the same push
+
+1. **A rebind went silent — the fabricated null the arc claimed to be hunting.**
+   `proposals/2026-09-04-degree-sweep/wd_extra.py` rebound `DRV.questions_for` (`DRV` = `loop.driver`)
+   while L5 moved `deliberate`'s body — the only bare reader — to `loop/deliberate.py`. `driver.py`
+   still carried a **dead import** of the name, so the assignment kept succeeding and reached
+   nothing: `qsrc`/`qlead`/`qmulti` report **zero**. It is the sibling of the A39 spy the same unit
+   *did* move, on the same module. Spy re-pointed, dead import deleted.
+2. **"The failure moves to boot" did not execute.** L4 wired `manifest.check_rows()` into
+   `World.boot()`, which **nothing on a run path calls** — `headless`, `corpus_run` and `run_cases`
+   never boot a world. A misspelled row still failed at FIRST CALL in every real season. Now
+   validated in `SeasonDriver.__init__`, the one place every run passes, with ARM 5 watching a real
+   construction. `check_roles` stays on `World.boot` because it needs `w.manifest`, which is **empty
+   in every real run** — worth knowing before anyone wires it further.
+   ⚠ And that wiring cost 3.5× on the suite (~170s → >600s) because `resolve` re-read and re-parsed
+   `module_contracts.yaml` per row per driver. Cached per process; 190 tests in 149s.
+
+### Open, and named rather than left to be re-found
+
+- **Arc 2 (G1–G4) is the write discipline and it is unbuilt entirely**: no `Receipt` anywhere while
+  `04 §B.9` types `Event.changes[]` as `Receipt[]`; no `actor`/`via`/`NotYours`/`NoOpReceipt`; the
+  gate is a method on `World`, not the `state/gate` §A.2 names; `Event.subject` exists against
+  `04:175`/`:402`. ⚠ **Arc 2 WILL move output** — two of five `StateChange` construction sites are
+  outside the gate (`loop/matter.py`, `loop/resolve.py`), and §B.9 makes those fail at append. The
+  content hash stops being the control at G1; each G-unit needs its own declared before/after.
+- **`04:467` (§B.13 invariant 9) has no loader.** `manifest.unclaimed_contest_prizes()` +
+  `test_every_contested_verbs_prize_is_in_the_subsystem_roster` hold it until `data/`'s ONE loader
+  exists, and **should move there when it does**.
+- **`loop/deliberate.py` diverges from its own §A.2 row** — `w._rehome()` mutates the tenure store
+  during a barrier that owns nothing. Either it moves to MATTER or the row is amended: a Layer-1
+  question, recorded at the site.
+- **`decision/` imports `..state.carriers`** against `04:570`'s *"does not import `state/`"*. The
+  AX-2 scan narrows deliberately to `state.world` (types, not the store) — recorded now, nowhere
+  before.
+- **Arc 3 (the R-work, U1–U10) is another session's**, Jordan-directed. It inherits **G3** rather
+  than re-landing `Act.via` and the gate's Tenure branch, which R-plan U9 also specifies.
+
+_Sources: ED-IN-0206 and ED-IN-0203 (`registers/editorial_ledger_in.jsonl`); ED-SC-0037
+(`registers/editorial_ledger_sc.jsonl`, ruled); `workplans/2026-09-09-layer1-conformance-plan.md`
+and `_part2.md`; `architecture/meta/04_CODE_ARCHITECTURE.md` §A.1/§A.2/§A.3, §B.9, §B.13, §C.2, §C.3,
+§C.5, PART E._
+
+---
+
+## ⭐ DONE 2026-09-09, MERGED IN PR #383 — decomposition STEP 8: `seam.py`. `shape.py` 2,075 → 1,788, `seam.py` 372 new (ED-IN-0203)
+
+> ⚠ **HEADER CORRECTED.** This section and the STEP 7 section below both read `⏳ PRODUCED … NOT YET
+> COMMITTED` after PR #383 merged, so the first 430 lines of this file told a cold session that landed
+> work was uncommitted. Steps 5–10 all shipped in `c3b51e3`; `shape.py` is deleted. The bodies below
+> are the producer sessions' own records and are left as written — only the two headers were wrong.
+> ⚠ **AND STEP 8's PLACEMENT WAS SUPERSEDED BEFORE IT LANDED:** `seam.py` is a FILE and
+> `combat_seam.py` did not move, against `architecture/meta/04_CODE_ARCHITECTURE.md` §A.2 and the
+> D2/D5 corrections PR #384 had already merged. Filed as ED-IN-0206; the repair is unit L2 of
+> `workplans/2026-09-09-layer1-conformance-plan.md`.
 
 **Producer session only — a read-only critic reviews this next, per the plan's relay (§6). Nothing
 below is committed or pushed.** Written against the step-8 brief handed down from
@@ -175,7 +371,7 @@ an unreconciled base; wait for this step's critic pass. A39's spy (`probes.py:24
 target `seam.contest` **only when** `SeasonDriver.resolve` itself moves to `loop/driver.py` at that
 step — moving one without the other is exactly falsifier (d) above.
 
-## ⏳ PRODUCED 2026-09-09, NOT YET COMMITTED — decomposition STEP 7: `decision.py`. `shape.py` 2,813 → 2,066, `decision.py` 872 new (ED-IN-0203)
+## ⭐ DONE 2026-09-09, MERGED IN PR #383 — decomposition STEP 7: `decision.py`. `shape.py` 2,813 → 2,066, `decision.py` 872 new (ED-IN-0203)
 
 **Producer session only — a read-only critic reviews this next, per the plan's relay (§6). Nothing
 below is committed or pushed.** Written against `workplans/2026-09-09-shape-decomposition-plan-v2.md`
@@ -3787,7 +3983,7 @@ CI gates, canon-currency reconciliation) that doesn't belong to any one subsyste
   for a cohesive update of all skills plus a gap scan. A 3-agent parallel audit of all 15 live
   skills against CLAUDE.md's current architecture found: three skills independently pointed P1/P2
   findings at the FROZEN flat `registers/editorial_ledger.jsonl` instead of the live lane-split files
-  (`valoria-mechanic-audit`, `valoria-module-adjudicator`, `valoria-resolution-diagnostic` —
+  (`valoria-mechanic-audit`, `valoria-module-adjudicator`, `ners` —
   ED-IN-0044); `valoria-compiler` had four independent breaks including a nonexistent gate field
   and an orphaned `compilation/` output path (ED-IN-0044); and `valoria-combat-simulator`'s
   bundled script was a fully superseded parallel implementation (a frozen 9-weapon 2026-03-31

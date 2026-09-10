@@ -1,8 +1,13 @@
 # THREADWORK — PRACTICAL APPLICATIONS BY SUBSYSTEM · PART 2
-## Status: PROPOSED
+## Status: **PROPOSED — REFERENCE ONLY. HELD BACK FROM RATIFICATION-ON-MERGE IN FULL.**
 ## Date: 2026-09-10
 ## Lane: WR · ED-WR-0010
 ## Part 2 of 2 — continues `threadwork_applications.md`, whose §1 states the four rules every cost band here prices against.
+
+> ⚠ **MERGING THIS DID NOT RATIFY IT.** Part 1's status block applies in full to this part:
+> nothing here is canon or settled, `CURRENT.md`'s Threadwork row is annotated rather than
+> moved, and adoption is what the lane row named above holds open. Reference in the
+> §0.05 sense regardless — the code is the mechanism.
 
 ---
 

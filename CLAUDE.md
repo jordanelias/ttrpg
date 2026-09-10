@@ -182,7 +182,7 @@ ALL DIRECTIONS  top-down · bottom-up · vertical · diagonal · lateral · hori
 
 **The method** — how a pass is run and what keeps it honest (a PASS is licensed by a **named failed
 attack**, not by an absent finding; withholding is symmetric; the pass fires on itself) — lives in
-**`skills/valoria-resolution-diagnostic/SKILL.md`**, its single owner. This subsection owns the
+**`skills/ners/SKILL.md`**, its single owner. This subsection owns the
 **definitions**: do not restate the method here or the definitions there.
 
 ### 0.1 Measurement discipline — five checks, each with an artifact (ED-MB-0042)
@@ -541,7 +541,7 @@ Run the unit tests locally: `pip install pyyaml pytest numpy && python -m pytest
 | Finding inert/inconsistent mechanics | `valoria-mechanic-audit` |
 | Philosophy (**P-01..P-15**) compliance | `valoria-canon-guard` |
 | Key IN → resolver → OUT contract closure | `valoria-module-adjudicator` |
-| **A NERS pass** on any design object — dominant options, false N-lines — plus rolling-engine resolver stress | `valoria-resolution-diagnostic`, which owns the **method**; the four **definitions** are §0.06 |
+| **A NERS pass** on any design object — dominant options, false N-lines — plus rolling-engine resolver stress | `ners`, which owns the **method**; the four **definitions** are §0.06 |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
 | Structural-debt corpus scan | `valoria-vector-audit` |
 | Splitting an oversized doc; index/infill hygiene | `valoria-chunker`; the size cap is enforced by `tools/compliance_check.py` (§4 — nothing enforces the pair rule) |

@@ -1,8 +1,23 @@
 # THREADWORK — PRACTICAL APPLICATIONS BY SUBSYSTEM
-## Status: PROPOSED
+## Status: **PROPOSED — REFERENCE ONLY. HELD BACK FROM RATIFICATION-ON-MERGE IN FULL.**
 ## Date: 2026-09-10
 ## Lane: WR · ED-WR-0010
 ## Part 1 of 2 — `threadwork_applications_part2.md` continues at §6.
+
+> ⚠ **MERGING THIS DID NOT RATIFY IT.** `CLAUDE.md` §2 (ED-1094) makes merge ratify a PROPOSED
+> document by default; this is the loud exception that rule requires. Nothing here is canon,
+> nothing here is settled, and no `## Status:` line elsewhere in the tree was flipped on its
+> account. `CURRENT.md`'s Threadwork row is **annotated, not moved** — the canonical head is
+> still `threadwork_v30.md`.
+>
+> **What needs the author:** whether this is adopted, and whether `threadwork_v30.md` Part 3 is
+> edited in place or superseded by a new head. The lane row named above carries
+> `needs_jordan: true` for exactly those two, and for nothing else.
+>
+> **And it is reference in the §0.05 sense regardless of adoption:** the code is the mechanism,
+> and if this document were deleted the game would behave identically. Cite it for intent,
+> vocabulary and the record of what was carried across — never as the reason a behaviour is
+> correct.
 
 **What this is.** What threadwork *does* in each subsystem, as usable design material: what a
 practitioner can attempt, what it costs, what it leaves behind for someone else to find, and what
