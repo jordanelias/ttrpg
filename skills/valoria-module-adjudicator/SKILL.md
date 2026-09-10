@@ -24,7 +24,7 @@ description: >
 
 **Naming note (collision guard):** "armature" is a canonical term (Conviction armature, `armature_position`, Faction Meta-Armature — key_substrate §8.2). This instrument is therefore the *adjudicator*, never "the armature." It audits modules that *use* the Conviction armature; it does not modify that system.
 
-**Relationship to sibling skills.** `valoria-mechanic-audit` checks a system's *internal* consistency; `ners` checks *resolution and balance fitness under stress* (NERS verdict on behavior); `valoria-vector-audit` checks the *corpus* (vocabulary, isolates). This skill checks the *seams*: whether each system honors its wrapper contract and whether the contracts compose into one closed, scale-coherent graph. Run mechanic-audit first on an unverified system; run this when the question is "do the modules wire together, in all directions and at all scales."
+**Relationship to sibling skills.** `valoria-mechanic-audit` checks a system's *internal* consistency; `ners` checks *design fitness under the cut test* (the NERS verdict on behaviour) and `resolution-diagnostic` checks *resolution fitness under stress* for anything that rolls; `valoria-vector-audit` checks the *corpus* (vocabulary, isolates). This skill checks the *seams*: whether each system honors its wrapper contract and whether the contracts compose into one closed, scale-coherent graph. Run mechanic-audit first on an unverified system; run this when the question is "do the modules wire together, in all directions and at all scales."
 
 ---
 

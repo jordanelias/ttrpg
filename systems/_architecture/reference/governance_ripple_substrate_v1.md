@@ -496,8 +496,8 @@ test, is the difference between a substrate and a wish.
 A mechanic that "reads well" but has no legal Key IN → resolver → OUT shape is not implementable. This
 section binds every arc of the loop to `references/module_contracts.yaml` (the IN→resolver→OUT registry,
 governed by `valoria-module-adjudicator`), the fixed resolver enum, the Key Type Registry vocabulary, and
-— for anything that resolves via a draw — the resolution diagnostic (`ners`,
-NERS resolver-stress P-i…P-v). **Verified against the actual contracts this pass, not asserted.** Two
+— for anything that resolves via a draw — the resolution diagnostic (`resolution-diagnostic`,
+resolver-stress P-i…P-v, whose findings feed a `ners` pass). **Verified against the actual contracts this pass, not asserted.** Two
 findings up front, both favorable: the standing bridge needs *no new Key type*, and the card branches need
 *no new resolver*.
 
@@ -516,7 +516,7 @@ findings up front, both favorable: the standing bridge needs *no new Key type*, 
 
 ### §14.2 · Resolution diagnostic on the event-deck draw (the one NEW engine)
 
-`ners` §"new engine" rule: *a card/deck draw / weighted-event table is diagnosed
+`resolution-diagnostic` rule for a new engine: *a card/deck draw / weighted-event table is diagnosed
 against P-i…P-v directly and surfaced for ratification.* Running it on the Π-weighted draw
 (`weight = base + Π-scaling + tag-modifiers`, band-gated 0–2 / 3–7 / 8–10):
 
