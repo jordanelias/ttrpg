@@ -2268,9 +2268,9 @@ Recorded so a later session does not re-open them — the ED-IN-0185 failure `CL
 ## §13 · SIZE — measured, and over the convention's threshold
 
 **Measured, not estimated — RE-MEASURED 2026-09-10 after the Arc-3 amendments, the adversarial
-reconcile, and the U3a revert:** **2,718 lines**, **51,972 tokens** at `tools/ci_common.py::tokens` — the repo's single
+reconcile, and the U3a revert:** **2,745 lines**, **52,449 tokens** at `tools/ci_common.py::tokens` — the repo's single
 owner of that estimate, characters ÷ 4. ⚠ **Say which character count**: Python `len()` gives
-**207,891** and `wc -c` gives **210,693 bytes**, and the gap is this file's own `§`, `⚠`, `→` and `≥`. `tokens()` divides the first.
+**209,799** and `wc -c` gives **212,634 bytes**, and the gap is this file's own `§`, `⚠`, `→` and `≥`. `tokens()` divides the first.
 Both are true of their own basis, which is the failure mode `CLAUDE.md` §0.1 names and which PR #383
 paid for once already (*"One instrument, named, for numbers that get compared."*).
 
@@ -2296,9 +2296,9 @@ shipping it as one part is a deliberate choice, not an oversight. ⚠ **After th
 file is over 60% longer than that peer** (37.7k against 23.2k tokens), so the choice is weaker than it
 was and the split below is closer than it was. Say so rather than re-asserting the earlier comparison.
 
-⚠ **AND THE SPLIT IS NOW OVERDUE AT 52.0k — say so rather than re-asserting the comparison a fourth
-time.** This is **124% longer** than its closest peer (`workplans/2026-09-06-season-loop-execution-plan.md`,
-23.2k) — the successive measurements read 60%, 85%, 112%, 120%, now 124%. **Split at the §6/§7 boundary
+⚠ **AND THE SPLIT IS NOW OVERDUE AT 52.4k — say so rather than re-asserting the comparison a fourth
+time.** This is **126% longer** than its closest peer (`workplans/2026-09-06-season-loop-execution-plan.md`,
+23.2k) — the successive measurements read 60%, 85%, 112%, 120%, 124%, now 126%. **Split at the §6/§7 boundary
 before adding another section.** The convention is still `WARNING`-level and still not a
 blocking gate, and the choice to ship one part is still deliberate — but it is weaker at every
 re-measurement, and the next session to add a section here should split first.
@@ -2601,10 +2601,37 @@ its own instruction.
 > **So `commit`'s blocker is not a missing effect. It is that no question source hands a Proposition
 > subject to a person who does not already hold one** — a hole of the `W31(b)` *"lands only when its
 > row moves"* kind. Writing the effect cannot move it, which is why the effect is not on `main`.
-> **A session that writes the other fourteen effects first will pay six golden re-records and still
-> execute nothing.** ⚠ **Re-check each of the remaining 14 against this shape before writing it:**
-> the question is not *does it have an effect* but *can any corpus person be asked a question whose
-> subject this verb's `requires_typed` will bind*.
+> ⚠ **AND THAT RE-CHECK WAS THEN RUN, WHICH OVERTURNS THE SENTENCE ABOVE. `commit` IS THE EXCEPTION,
+> NOT THE PATTERN — AND `PLAN.md` SENT THIS PLAN AT PRECISELY THE ONE VERB IN ITS GROUP THAT DOES NOT
+> WORK.**
+>
+> A throwaway diagnostic — stub effects registered in-process for all 14, `build_world(0)` driven four
+> seasons, **nothing written to disk** — measures which verbs the fold actually **reaches**:
+>
+> | outcome | verbs |
+> |---|---|
+> | **REACHED — the corpus forms the act and calls the effect** | **`forge` (4 calls) · `oblige` (4) · `succeed` (3) · `tie / knot` (3) · `petition` (2)** |
+> | resolvable with an effect, but never reached | `carry` · `commit` · `repudiate` · `restore` |
+> | **not resolvable even WITH an effect** — no `requires_typed`, no predicate | `determine` · `establish` · `exchange` · `levy` · `open_case` |
+>
+> Operands arriving: `subject` for `forge`/`oblige`/`petition`/`tie / knot`; `subject` **and** `to`
+> for `succeed`.
+>
+> **So five of group 1 need ONLY AN EFFECT BODY, and they are startable on `main` today.** Four of the
+> five carry `requires: —` (no precondition), so they pass the first gate outright; `succeed` is typed
+> on a `held_by` relation the world satisfies. `PLAN.md` `W31(a)`'s *"no hole, merely unbuilt"* is
+> **correct for these five and wrong for `commit`** — and this plan's *"`commit` first"* instruction,
+> inherited from `PLAN.md:1649-1651`, aimed the first unit at the single group-1 row whose blocker is
+> upstream. **Do `forge`, `oblige`, `petition`, `tie / knot`, `succeed` first; they execute.**
+>
+> ⚠ **The six golden re-records will still happen, and THIS time they are the intended trade.** A
+> group that makes five verbs **execute** is exactly what U7's acceptance asks for and what §0.2 calls
+> done; re-recording for that is a stated, intended re-pin. Re-recording for one refusal event was
+> not. **State the re-pin in the commit, per §0.1, and record the flips with `report && delta`.**
+>
+> ⚠ **`carry`'s blocker is named and is a DEPENDENCY, not a hole:** it needs `Existence(subject,
+> Petition)` and only `petition` writes `Petition.exists` — so `carry` becomes reachable **after
+> `petition` executes**, within the same group. Sequence `petition` before `carry`.
 
 ⚠ **U7 gp 1-2's *"touches no module Arc 1 moves"* WAS TOO STRONG, and the qualifier is measured.**
 `ED-IN-0206` item (6) — the row this plan cites throughout — reads *"`loop/` IS driver + effects +

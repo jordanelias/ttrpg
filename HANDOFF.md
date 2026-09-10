@@ -52,7 +52,20 @@ non-goals all stand. **What changed is everything around them**, and a session t
   not the `W31(a)` row the plan files it under. Landing it cost **6 red goldens** to buy **one
   refusal event** and executed nothing — the re-record trade §0.1 refuses. **Before writing any of
   the remaining 14 effects, ask whether a corpus person can be asked a question whose subject that
-  verb's `requires_typed` will bind.** Full measurements: the plan's §15.1 box.
+  verb's `requires_typed` will bind.**
+  ✅ **THAT CHECK WAS RUN, AND IT MAKES FIVE VERBS STARTABLE TODAY.** A stub-effect diagnostic
+  (in-process, nothing written) over four seasons of `build_world(0)` measures which verbs the fold
+  actually REACHES: **`forge` (4 calls) · `oblige` (4) · `succeed` (3) · `tie / knot` (3) ·
+  `petition` (2)** — the corpus forms the act and calls the effect, so **only the effect BODY is
+  missing.** Four of the five carry `requires: —`; `succeed` is typed on a relation the world
+  satisfies. `carry`/`commit`/`repudiate`/`restore` are resolvable but never reached
+  (`carry` becomes reachable **after `petition` executes** — sequence it second). And
+  `determine`/`establish`/`exchange`/`levy`/`open_case` are **not resolvable even with an effect**:
+  they need the typing decision first.
+  ⚠ **So `PLAN.md`'s *"commit first"* aimed at the one group-1 verb whose blocker is upstream.
+  Start with the five that execute.** The six golden re-records recur — and there they are the
+  INTENDED trade, because five verbs executing is what U7's acceptance asks for. State the re-pin.
+  Full measurements: the plan's §15.1 box.
   ⚠ **A `U3a` was carved as a second startable unit, landed, and REVERTED the same session.** It put
   the 13×4 table in `rosters.yaml` as a carrier nothing reads. `04:124` binds `data/` to raise on a
   **declared-but-unread** row and names `table` explicitly; `01_AXIOMS.md` ID-13 calls such a thing
