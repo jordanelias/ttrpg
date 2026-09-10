@@ -1347,7 +1347,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
             # P-L Linear Law: casualties to X scale with the ENEMY's engaged strength in
             # contact (frontage-capped); DAMAGE_BY_DEGREE retained as per-soldier exchange
             # quality. Numbers-in-contact lives ONLY here under Lanchester (the run_battle
-            # opp_frac post-scaler is skipped) — one variable, one role (Lesson 1).
+            # opp_frac post-scaler is skipped) — one variable, one role (role-conflation, Phase 3d).
             # [v2 Stage D, ED-MB-0013] Pass the continuous engaged frontage width (OBB front-overlap)
             # when the FIELD_MOVEMENT contact path recorded it; p.get(...) is None on the grid/OFF path
             # (whose pairs carry no *_front key) -> _lanchester_strength falls back to the legacy integer

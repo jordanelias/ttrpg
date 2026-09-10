@@ -500,7 +500,7 @@ This composes with §3.7 strain decay (decay is unchanged by distance; sustained
 
 ## §7 Defection Cascade [B1.2 — BUILT 2026-06-09, ED-1000; sim-tuning pending]
 
-When a sworn-bond or liege-vassal edge breaks (§3.8) or ruptures (§3.9), the break can **cascade** along the relational graph: edges shared with the broken-edge parties strain or sever in turn, producing the ROTK-signature multi-officer defection. The cascade is a positive feedback loop, held bounded by three dampers plus a hard cap (loop-safety L-DEFECT; resolution-diagnostic Lesson 5 — no loop both undamped and unbounded).
+When a sworn-bond or liege-vassal edge breaks (§3.8) or ruptures (§3.9), the break can **cascade** along the relational graph: edges shared with the broken-edge parties strain or sever in turn, producing the ROTK-signature multi-officer defection. The cascade is a positive feedback loop, held bounded by three dampers plus a hard cap (loop-safety L-DEFECT; the `resolution-diagnostic` Phase 4 rule — no loop both undamped and unbounded).
 
 **Trigger.** A sworn-bond or liege-vassal edge breaks at strain capacity (§3.8) or ruptures (§3.9).
 
@@ -514,7 +514,7 @@ When a sworn-bond or liege-vassal edge breaks (§3.8) or ruptures (§3.9), the b
 
 **Tier-3+ (rare cap).** A tier-3 ring fires only if tier-2 produced **3+ further breaks**; beyond tier-3 the cascade cannot self-propagate (hard cap). With finite membership and hop-attenuation, total cascade depth is bounded.
 
-**Loop-safety verdict.** Gain: Fragility (+1/break, cap +3, −1/s decay). Dampers: hop-attenuation (½/hop), Fragility decay (−1/s), Suppress (−1/check). Bound: tier-3 cap + finite membership. Net per-cycle gain < 1 ⇒ damped; reach and depth finite ⇒ bounded ⇒ **passes Lesson 5**. `[NEEDS TESTING — SIM-DEFECT (Lane C): the magnitudes (½/hop, Fragility +1/cap +3, sever-DC coupling, tier-3 trigger = 3, Suppress −1) are illustrative; the per-cycle-gain bound is a design argument, not yet sim-measured. Confirm termination and tune magnitudes before treating them as load-bearing.]`
+**Loop-safety verdict.** Gain: Fragility (+1/break, cap +3, −1/s decay). Dampers: hop-attenuation (½/hop), Fragility decay (−1/s), Suppress (−1/check). Bound: tier-3 cap + finite membership. Net per-cycle gain < 1 ⇒ damped; reach and depth finite ⇒ bounded ⇒ **passes the Phase 4 loop rule**. `[NEEDS TESTING — SIM-DEFECT (Lane C): the magnitudes (½/hop, Fragility +1/cap +3, sever-DC coupling, tier-3 trigger = 3, Suppress −1) are illustrative; the per-cycle-gain bound is a design argument, not yet sim-measured. Confirm termination and tune magnitudes before treating them as load-bearing.]`
 
 **Worked target case.** The Niflhel-strike scar (`faction_politics §2.6`): Niflhel dissolution now produces a tier-laddered defection cascade across officers with sworn-bonds or patron-ties to Niflhel-aligned figures — hop-attenuated from the dissolution locus, brakeable by a surviving holder's Suppress — replacing the prior clean-dissolution placeholder.
 
