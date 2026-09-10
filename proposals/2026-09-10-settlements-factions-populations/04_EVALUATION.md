@@ -30,19 +30,22 @@ at its new locus and holds — but a builder following the set's line numbers op
 | `driver.py:1371-1383` (CENSUS writes nothing) | `census.py:25-37` |
 | `driver.py:651-655` (the actor check) | `deliberate.py:152-156` |
 | `driver.py:856-865` (a verb with no effect raises) | `resolve.py:233-242` |
-| `driver.py:319` · `:343-348` | `matter.py:46-50` · `driver.py:207-217` |
+| `driver.py:319` · `:343-348` | `matter.py:46-50` · `matter.py:76-78` |
 | `decision.py:165, 890` | `budget.py:56-60`, `options.py:35-104` |
 | `decision.py:183, 228` (clause 3) | `options.py:48, 93` |
 | `decision.py:208-214` (clause 4 polarity) | `options.py:73-79` |
 | `decision.py:298-302` (`urgency` inert) | `choose.py:52-55` |
-| `world_q.py:217-221` (Q3) | `world_q.py:219-223` |
+| `world_q.py:217-221` (Q3) | `world_q.py:219-223` — and **the +2 shift is the whole file**: Q2 `:176, 195-197` → `:178, 196-199`; `lateral` `:126-130` → `:128-132`; `commit_count_guard` `:116-124` → `:118-126`; `single_holder_counter` `:89-114` → `:91-116`; `presence` `:152-154` → `:154-156` |
 | `rosters.yaml`, `verb_table.yaml`, `write_matrix.yaml`, `hole_register.yaml` | `engine/season/<name>.yaml`, not `engine/season/data/` |
 
-**Q3 is the one relocation that is also a change.** `world_q.py:201-223` now keys a crossing on the
-site's rung and admits **everyone present there** — `if who == p.id or (at is not None and p.id in
-presence(w, at))`. P1 proposes that broadcast as work it does not specify; on this tree it is done.
-What is not done is P1's other half: the referent is still `(what,)`, a verb name, so `opening_set`
-forms nothing from it.
+**Q3 is the one relocation that is also a change, and it does not reach P1.** `world_q.py:219-223`
+now admits everyone present at a crossing — `if who == p.id or (at is not None and p.id in
+presence(w, at))`. But `at` comes from `w.sites.get(who)`, and **P1 appends person-keyed crossings**
+`(p.id, verb, before, after, ev.id)`, for which `w.sites.get(<a person id>)` is `None`. The second
+disjunct collapses and only `who == p.id` fires. **So the broadcast is live for site crossings and
+dead for P1's**, and both of P1's halves are still open: the referent is `(what,)`, a verb name, and
+nobody but the crossing person is asked. The tree's own comment at `world_q.py:203-208` records this
+same site-id-against-person-id confusion as a defect it already shipped once.
 
 ---
 
@@ -55,8 +58,8 @@ seven is *how far each is from an execution artifact*, and the distances are ver
 | | verdict | the execution step that is the whole difference |
 |---|---|---|
 | **P1** | `paper` — buildable | a declared collapse rule for a per-kind shortfall, then a test on `p.body` with a control arm that can actually be fed |
-| **P2** | `paper` — buildable, unobservable | `W29`; the falsifier needs `3 × band_seasons` seasons and `MAX_SEASONS` is 6 |
-| **P3** | `paper` — **two writes are refused by the gate** | two matrix step edits the proposal does not declare |
+| **P2** | `paper` — buildable, unobservable through the corpus | `W29`; the falsifier needs `3 × band_seasons` seasons and `corpus_run.py:65` clamps a case at 6 |
+| **P3** | `paper` — **two writes are refused by the gate, and its one demand kind is authored-only** | matrix step edits *and* a driver the social gate accepts; neither is declared |
 | **P4** | `paper` — **refuses at load** | three table corrections before either verb can be attempted |
 | **P5** | `paper` — one object refuses at load | `EFFECTS["commit"]`; the loop needs a primitive the set correctly declines to smuggle |
 | **P6** | `paper` | `EFFECTS["repudiate"]`; the cost it claims is unreachable by any computed act |
@@ -69,8 +72,10 @@ so as a whole.** P5 declares its own loop unreachable and prices the repair hone
 the same class of claim — a superior notices a defection, an issuer notices defiance — and neither
 declares it. The mechanism is one theorem: a claim enters a person's question set only if its subject
 is that person or an object of one of their live tenures (`world_q.py:178, 196-199`), and **a person id
-enters that set only through a live `tie`, `knot`, `oblige` or `succeed`** — none of which has an
-effect. `EFFECTS` registers exactly ten verbs (`effects.py:91-406`: confer, revoke, convene, move,
+enters that set only through a live `tie`, `knot` or `oblige`** — none of which has an effect.
+(`succeed` looks like a fourth and is not: a Tenure is filed under its subject and only when that
+subject is a person, `world.py:257`, and `succeed`'s subject is a Rung, so it lands in `_unowned` and
+never appears in anyone's `p.tenures`.) `EFFECTS` registers exactly ten verbs (`effects.py:91-406`: confer, revoke, convene, move,
 work, create_record, destroy_record, kill/wound, utter, transfer). So no computed act can put a person
 id where another person's questions would find it. **Every "an NPC notices and responds" claim in
 P5–P7 is unreachable for the same reason, at the same line.**
@@ -246,17 +251,21 @@ does not name.
 
 **R-VARIETY — nil, and not a defect.** P1 is a clock.
 
-**R-WORLD — hooks are thrown.** `body.changed` and `condition.band_crossed` are MATTER emissions and
-reach WITNESS (`matter.py:273`). The emission chain constructs. The *story* does not: **"a hamlet
-empties itself" needs `move` with `to ≠ home`**, and `to` binds the question's referent
-(`options.py:271-273, 343`), which is the person's own hearth — so the formed act is a move to where
-they already stand.
+**R-WORLD — hooks are thrown, and one is borrowed.** `body.changed` and `condition.band_crossed` are
+MATTER emissions and reach WITNESS (`matter.py:273`). ⚠ **`condition.band_crossed` is not on
+`(Person, body)`'s emission column** — that row declares `body.changed · person.died`
+(`write_matrix.yaml:167`) and the crossing kind belongs to `(Site, condition)` (`:321`). P1 constructs
+the Event by hand on the `matter.py:248-252` precedent, which bypasses the undeclared-kind refusal at
+`world.py:275-291`, so it works — by borrowing another row's column, unremarked.
+The emission chain constructs. The *story* does not: **"a hamlet empties itself" needs `move` with
+`to ≠ home`**, and `to` binds the question's referent (`options.py:310`), which is the person's own
+containing rung — so the formed act is a move to where they already stand.
 
 **R-CHOICE — findings.** Seat: a person at a short hearth. Intent: *stop my body falling.*
 
 | act | gain | cost |
 |---|---|---|
-| `transfer(from=Hh, to=Hh)` | **none** — `from` binds the actor's own hearth (`options.py:270`), `to` binds the referent, the same hearth | 1 scene |
+| `transfer(from=Hh, to=Hh)` | **none** — `from` binds the actor's own containing rung (`options.py:316-317`), `to` binds the referent (`:310`), the same rung | 1 scene |
 | `speak(Hh)` | a claim in hearth-mates' ledgers — they are hungry too | 1 scene |
 | `move(to=Hh)` | none | 1 scene |
 | do nothing | none | 0 |
@@ -381,10 +390,15 @@ two ticks in one formula, declared and defended on the `matter.py:136-141` prece
 
 ### N — six directions
 
-**NARROWED to one member.** Top-down holds: `dispatch` is `remit:dispatch`-eligible with a live
-predicate (`verb_table.yaml:183`; `predicates.py:261-265`), so its refusal is producible. Bottom-up is
-asserted — a crowd producing a spokesman needs `carry`, which does not execute. Vertical holds. The
-rest route through verbs that do not execute.
+**NARROWED to one member, and that member is authored-only.** `dispatch` has a live predicate
+(`predicates.py:261-265`), so its refusal is *producible* — but its eligibility is the single
+alternative `["remit:dispatch"]` (`verb_table.yaml:183`), and `remit:` is declined person-side
+(`options.py:163-169`). **No person can form a `dispatch` candidate in any world.** That is the same
+`H-71` mechanism that kills `revoke`, `issue` and `levy` elsewhere in this evaluation, and
+`hole_register.yaml:804` measures it: *"9 of 32 verbs cannot be formed person-side — 8 remit-ONLY, plus
+`levy`."* So P3 stands under §7's theorem exactly as P5 does, and unlike P5 it does not say so.
+Bottom-up is asserted — a crowd producing a spokesman needs `carry`, which does not execute. Vertical
+holds. The rest route through verbs that do not execute.
 
 **Restated N-line:** *cut P3 and a refused `dispatch` at a rung with an envelope can never produce a
 person.*
@@ -396,8 +410,8 @@ person.*
 | member | verdict |
 |---|---|
 | `dispatch.refused` | **survives, ambiguously.** The same kind is emitted on ineligibility (`resolve.py:159`) and on precondition failure (`:201-206`), and the untyped path leaves `observed=()` — so CENSUS cannot tell a King without the remit from a King naming nobody |
-| `levy.refused` | **disqualifier 2 — no producer.** `levy` has prose `requires`, no typed cell, no predicate, so the fold raises `Unspecified` at `resolve.py:189-200`. P3's own falsifier asserts an Event the fold cannot emit |
-| `petition` at an empty rung | **disqualifier 2, twice.** `petition` writes `Petition.exists` with no effect, so it raises; and `emits_on_refusal: []` (`verb_table.yaml:384`) — there is no refusal kind to read |
+| `levy.refused` | **disqualifier 2 — no producer, and it dies twice.** Its eligibility is `["remit:issue", "presence:<rung>"]` (`verb_table.yaml:334`) and **both alternatives decline person-side** (`options.py:163-168`), so no candidate forms and the fold is never reached; were it reached, `levy` has no typed cell and no predicate and would raise `Unspecified` at `resolve.py:189-200`. P3's falsifier asserts an Event that cannot be emitted |
+| `petition` at an empty rung | **disqualifier 2.** `petition` writes `Petition.exists` with no effect, so it raises. And `emits_on_refusal: []` (`verb_table.yaml:384`) means it has **no refusal kind of its own** — the fold falls back to the generic `act.refused` (`resolve.py:206`), which fires for every refused verb in the table, so CENSUS reading it would mint on any refusal anywhere |
 | a Named operand | **disqualifier 2.** Nothing resolves a subject *inside* a cohort; a cohort is one id (`carriers.py:348-351`) |
 
 So `incomplete: {have: n, target: 9}` has **n ≤ 1**, and that one is ambiguous. The roster is a name
@@ -421,7 +435,16 @@ steps**:
 
 `F.30` requires exactly these three writes in the same CENSUS write, so the collision is Layer 1's
 matrix against Layer 1's `F.30` — but **P3 inherits it unnamed**, declares no matrix edit, and its
-compliance table has no gate row for either write. This is P3's real cost and it is unpriced.
+compliance table has no gate row for either write.
+
+⚠ **And a matrix step edit would not be enough.** The second gate is step-independent:
+`world.py:352-357` raises on `social and driver != "Act"` whatever the step column says, and **both
+rows are `social: true`**. A CENSUS write is driven by the loop — `04_CODE_ARCHITECTURE.md:161` gives
+`loop/census` the MATTER token — not by an act. So admitting CEN on those rows leaves the write still
+refused. `driver` is a caller-supplied string nothing validates, so an implementer *could* pass
+`driver="Act"` at a barrier where no act occurred; that is the shape of the real cost, and it is a
+larger thing to ask for than a step column. **This is P3's actual price and nothing in the set names
+it.**
 
 Two smaller signature faults: the mint draws *"the parent rung's marks"* and `Rung` has no `marks`
 (`carriers.py:510-511`); and de-individuation folds any person with no `hold`, no `knot`, no live
@@ -455,7 +478,8 @@ one unwitnessable Event.**
    with `have: 1`.
 2. **Mint the demanded subject's id**, not a fresh hash, wherever the act named one. One change closes
    the demand loop.
-3. Declare the two matrix step edits. They are the proposal's real price.
+3. Price the gate honestly: the step edits are necessary and **not sufficient**, because both rows are
+   `social: true` and the CENSUS driver is not an act. Say what the write is driven by.
 4. Scope de-individuation to persons whose `(Person, exists)` was written at CENSUS, and define the
    band the weight returns to.
 5. Delete *"the parent rung's marks"*.
@@ -481,25 +505,31 @@ an address and a succession pointer — not a holding.*
 
 Neither `(Rung, exists)` nor `(Site, exists)` has any other producer, and the attack that `work` or
 `restore` supply growth fails as the proposal says: those move `condition`, never existence. The
-objects are necessary. **As transcribed they fail three times before anything runs:**
+objects are necessary. **As transcribed they fail three times — once at load, twice at the point of
+use:**
 
-1. **`requires_typed: {form: amount, …}`.** `requires_forms` is closed at seven —
+1. **`requires_typed: {form: amount, …}` — this is the load refusal.** `data/requires.py:549-554`
+   raises `SystemExit` on a form outside `REQUIRES_FORMS`, and `requires_forms` is closed at seven —
    `[existence, scalar_threshold, contain_path, cardinality, relation, own_ledger, basis]`
    (`rosters.yaml:911`). **`amount` is not a form; it is an operand.** The cell P4 wants already exists,
    as `transfer`'s: `scalar_threshold · of: from · scalar: stores · key: kind · threshold: amount`
    (`verb_table.yaml:517-523`). The set's own §3.2 notes the forms are closed at seven and calls a new
    one a grammar addition; P4 uses an eighth without noticing.
 2. **`kind: timber|ore`.** Disjunction is **deliberately absent** — `rosters.yaml:906-907` says so in
-   terms, and calls a combinator no cell uses the dead carrier `ID-13` refuses.
+   terms, and calls a combinator no cell uses the dead carrier `ID-13` refuses. No loader check
+   enforces it; the cell would simply mean something no reader implements.
 3. **`eligibility: [presence:<rung>]` alone.** The `presence:` placeholder is declined at the fold
-   (`resolve.py:73-88`) and person-side (`options.py:124-129`), so **nobody can attempt either verb.**
+   (`resolve.py:73-88`) and person-side (`options.py:166-168`), so **nobody can attempt either verb.**
    `work` shows the shipped pattern: `["own", "presence:<site>"]` (`verb_table.yaml:542`).
 
-**And loader invariant 2 does not exist.** P4 claims it *satisfies* an invariant — *every matrix row
-with RES has ≥1 producing verb* — that today two rows violate. `verbs.py:225-304` checks writes against
-the matrix, `capability`, `scale` and `stratum`, and nothing else; the invariant appears nowhere in
-`engine/season/**/*.py`. P4's own `[GAP]` about whether it fires resolves as: **it does not exist.**
-P4 is a first producer, not the repair of a firing gate.
+**Loader invariant 2 is declared and not implemented, and the violation is far larger than P4 says.**
+The rule — *every matrix row with `RES` has ≥1 producing verb* — is real, and P4 cites it correctly at
+`04_CODE_ARCHITECTURE.md:457`. What does not exist is any code that checks it: `verbs.py:204-304`
+checks duplicate verb names, an untyped cell with no note, degree/emits band agreement, invariant 12
+in both directions, `writes ⊆ MATRIX`, eligibility kinds, `scale` and `stratum` — and no producer
+check. P4's own `[GAP]` about whether it fires resolves as **it cannot fire**, so P4 is a first
+producer rather than the repair of a firing gate. And the scale: `hole_register.yaml:717` measures
+**eleven** RES rows with no producing verb, six of them `Person` interior. P4 supplies two of eleven.
 
 ### E
 
@@ -507,8 +537,11 @@ P4 is a first producer, not the repair of a firing gate.
 LOOP row. Out: nothing. Verbs **+2**, −0. Vocabulary +7, −0.
 
 **The denominator:** an authored stake amount; `initial`; and `site_kinds` closed at
-`[harbour, seam, body]` with a required row in three tables (`fixtures.py:106-152`) — so `build` can
-build the probe's three kinds and **each new buildable kind costs three table rows.**
+`[harbour, seam, body]` with a **required** row in two tables — `wear_per_season` and `band_floors`,
+which raise on a missing kind (`fixtures.py:110-123`) — plus `site_yield`, checked only in the reverse
+direction (`:125-129`), so a kind with no yield row loads and silently yields nothing
+(`matter.py:188`). **Two required rows per new buildable kind, and one that fails quietly** — and the
+quiet one is the one that matters.
 
 **E-LEGIBILITY — pass.** *Grain in, a hearth out.*
 
@@ -550,12 +583,20 @@ Diagonal and the `presence` direction are uncarried until the eligibility cell i
 
 ### Repairs
 
-1. Replace `form: amount` with `transfer`'s `scalar_threshold` cell — a substitution, not an addition.
+1. Replace `form: amount` with `transfer`'s `scalar_threshold` cell. **This loads and does not finish
+   the job:** `options.py:320-322` binds `amount` to the single global `default_transfer_amount` and
+   `kind` to `store_kind_of(...) or default_store_kind`, so the founding stake becomes a transfer's
+   default. The authored stake this evaluation charges to P4's denominator has no person-side channel —
+   that is `H-94`'s remainder, and it is the substitution's real price.
 2. Delete `timber|ore`; bind one `kind` from the referent, or ship two rows.
 3. `eligibility: ["own", "presence:<rung>"]` — one word.
 4. Take the `(Rung, exists) · [RES, CEN]` edit **P3 also needs** and de-found at CENSUS on zero presence
    and zero envelope, returning the stake to the parent. One edit closes P4's `AX-6` gap and P3's mint.
-5. Write `Rung.transmission` when opening `succeed`, or drop the edge.
+5. **`Rung.transmission` cannot be written as things stand** — `write_matrix.yaml` carries exactly five
+   `Rung` rows (`dates`, `envelope`, `exists`, `stores`, `yield`) and no `transmission`, so declaring it
+   in `found`'s `writes:` fails the load at `verbs.py:275-279` and writing it through the gate raises
+   `Unspecified` at `world.py:321-324`. The field is on the class (`carriers.py:510-511, :523`) with no
+   row behind it. Either add the matrix row, or drop the `succeed` edge and say the pointer is unset.
 
 ---
 

@@ -15,11 +15,15 @@ is one mechanism rather than three.
 A claim reaches a person's question set through **Q2**, which admits it only if
 `c.subject == p.id or c.subject in mine`, where `mine = {t.object for t in p.tenures if t.live}`
 (`world_q.py:178, 196-199`). So a claim **about a person** is invisible unless that person is already
-the *object* of one of the reader's live tenures — a `tie`, `knot`, `oblige` or `succeed`.
+the *object* of one of the reader's live tenures — a `tie`, `knot` or `oblige`.
 
 **None of those verbs has an effect.** `EFFECTS` registers ten: `confer`, `revoke`, `convene`, `move`,
 `work`, `create_record`, `destroy_record`, `kill / wound`, `utter`, `transfer` (`effects.py:91-406`).
 A verb with a `writes:` row and no effect raises `Unspecified` at `resolve.py:233-242`.
+
+`succeed` looks like a fourth route and is not: a Tenure is filed under its **subject**, and only when
+that subject is a person (`world.py:257`; `:157-159` — *"the store is the SUBJECT'S"*). `succeed`'s
+subject is a Rung, so it lands in `_unowned` and never appears in anyone's `p.tenures`.
 
 > **No computed act can place a person's id where another person's questions would find it.**
 
@@ -102,8 +106,9 @@ barrier — never `[ROOT]`*. But the share is a ratio and **both terms move by o
 (which executes), `person.died`, P3's mints. The falsifier's clause *every rise coincides with a
 `commitment.made`* **fails on a world where a committed person moves in**, which is reachable today.
 The `person.died` clause shows the proposal half-knows this. Separately, *"crossed a floor since the
-last barrier"* needs the previous barrier's share, and caches are discarded at WITNESS
-(`witness.py:36`) — so it must be reconstructed by undoing the commitment Events, which is unspecified.
+last barrier"* needs the previous barrier's share, and caches are discarded at **three** barriers —
+`matter.py:35`, `resolve.py:359` and `witness.py:36` — so it must be reconstructed by undoing the
+commitment Events, which is unspecified.
 
 **R-VARIETY — one line of play.** The recruiter's acts all execute; no follower can follow.
 
@@ -234,10 +239,17 @@ closed roster; `existence` is already read as *an object of a named class*; and 
 SCOPING IS A CHOICE AND IS DECLARED: the prose is INDEFINITE (a Petition) and this reads it as the
 petition being carried, which is the act's `subject`."*
 
-So the tree has already made P7's move once, declared it, and given its reason — and `carry`'s prose is
-*indefinite* where `comply`'s is *definite*, which is the easier case. **P7's move is not an overturn
-at all: it is the application of a precedent the refusal failed to cite.** That is `CLAUDE.md` §0
-test 4, and it is a stronger footing than P7's own §0.05 argument.
+So the tree has already made P7's move once, declared it, and given its reason — on the *harder*
+indefinite reading.
+
+**And the exact case is shipped four rows above the refusal.** `commit` (`verb_table.yaml:101-105`)
+carries `{form: existence, of: subject, kind: Proposition}` with the note *"Definite article: the one
+the act commits to, which is the act's `subject`."* `comply`'s prose is definite in the same way, and
+its refusal sits in the same file below a cell that already reads a definite article exactly as P7
+proposes.
+
+**P7's move is not an overturn at all: it is the application of a precedent the refusal failed to
+cite** — `CLAUDE.md` §0 test 4, and a stronger footing than P7's own §0.05 argument.
 
 One point of care: `rosters.yaml:873-876` reserves the coinage to *"the ruling `H-94` is waiting for"*.
 `H-94`'s structural half **closed 2026-09-04** (`hole_register.yaml:1094-1118`) and other rows still
@@ -400,9 +412,9 @@ failed, and they are why the corresponding verdicts are passes.
 |---|---|
 | The set is `paper` | any execution artifact — a green test naming a proposal's falsifier, run against `engine/season/` |
 | P4 refuses at load | a `requires_forms` entry for `amount`, or a cell of an existing form that carries the stake |
-| P3's mint is refused | a matrix edit admitting CENSUS on `(Rung, exists)` and `(Tenure, since)` |
+| P3's mint is refused | a matrix edit admitting CENSUS on those two rows **and** something that satisfies `world.py:352`'s `driver == "Act"` on two `social: true` rows — the step column alone does not do it |
 | P5's band row refuses | `band_floors` ceasing to validate its outer key against `site_kinds` |
-| The Q2 theorem | an effect for `tie`, `knot`, `oblige` or `succeed` — after which a person id can reach another's questions and P6's and P7's noticing claims become reachable |
+| The Q2 theorem | an effect for `tie`, `knot` or `oblige` — after which a person id can reach another's questions and P6's and P7's noticing claims become reachable. **Not `succeed`**, whose subject is a Rung |
 | `revoke` unformable | `H-71` closed, **and** `office` derivable person-side |
 | Five objects have no reader | a resolver that consults `population()`, `faction_value`, `faction_q.resolve` or `suspicion` |
 | P7's typed cell holds | an in-chain document ruling that `carry`'s indefinite-to-subject reading was itself wrong |
