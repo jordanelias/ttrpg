@@ -52,8 +52,8 @@ from .data.requires import binding_of, evaluate
 from .data.rosters import CLAIM_SUBJECT_RULES, WITNESS_CHANNELS
 from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
-from .queries import world_q
-from .queries.readers import LedgerReader
+from .queries import cache, world_q
+from .queries.person_q import LedgerReader
 from .state.carriers import Event, Person
 from .state.world import World
 
@@ -252,7 +252,7 @@ def _ch_co_located(w, e, pid) -> bool:
     place = _event_place(w, e)
     if place is None:
         return False
-    index = w.cache_at_barrier("presence", lambda: {r: world_q.presence(w, r) for r in w.rungs})
+    index = cache.presence_index(w)
     return pid in index.get(place, ())
 
 

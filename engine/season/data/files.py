@@ -132,10 +132,61 @@ def subsystem_sim_dir(name: str) -> Path:
 # ---------------------------------------------------------------------------
 LOOP_DIR = PACKAGE_DIR / "loop"
 # The season loop itself, extracted from `shape.py` at step 9. Source-scanning guards that
-# used to read `SHAPE_PY` for `SeasonDriver` code read this instead -- `shape.py` is a facade
-# with no bodies left in it, so a scan pointed there passes by finding nothing.
+# used to read `SHAPE_PY` for `SeasonDriver` code read this instead -- `shape.py` was deleted at
+# step 10, so a scan pointed there fails to open a file rather than passing by finding nothing.
 DRIVER_PY = LOOP_DIR / "driver.py"
-COMBAT_SEAM_PY = PACKAGE_DIR / "combat_seam.py"
+
+
+def loop_modules() -> tuple:
+    """EVERY `.py` UNDER `loop/`, DISCOVERED. The season loop's source corpus.
+
+    ⚠ **THIS EXISTS BECAUSE `DRIVER_PY` ALONE STOPPED BEING THE LOOP AT UNIT L5 (ED-IN-0206).**
+    `04_CODE_ARCHITECTURE.md` §A.2:134 makes `loop/` *"driver + six steps"*, so the six step bodies
+    left `driver.py` for their own modules -- and six guards read `files.DRIVER_PY` BY FIXED PATH.
+    Four went loudly red on the move and one, `test_w2`'s write-call-site walk, would have NARROWED
+    IN SILENCE: its only floor is `assert pairs`, which `probes.py` satisfies on its own, so it
+    would have reported clean over every write site the six steps took with them. That is the fourth
+    recurrence of one defect in this package (steps 2, 4, 5, now), and the fix is the same one
+    `package_modules` states above: **compute the corpus, never list it.**
+
+    A caller that scans this for a property must also pin a FLOOR or a SUPERSET, because a
+    discovery that stops matching passes by finding nothing (`CLAUDE.md` §0.1 pt 2)."""
+    return tuple(sorted(LOOP_DIR.rglob("*.py"),
+                        key=lambda p: p.relative_to(LOOP_DIR).as_posix()))
+
+
+def loop_source() -> str:
+    """Every `loop/` module's text, concatenated in path order -- for the guards that grep the
+    season loop for a literal rather than walking it."""
+    return "\n".join(p.read_text(encoding="utf-8") for p in loop_modules())
+
+# ---------------------------------------------------------------------------
+# AX-2's ISLAND, AND THE ONLY DIRECTORY IN THIS PACKAGE WHOSE SHAPE IS AN ENFORCEMENT MECHANISM
+# RATHER THAN A FILING CHOICE. `04_CODE_ARCHITECTURE.md:1046`: *"`decision/` is a directory from its
+# first commit. The isolation scan matches BY PATH, so a `choose` drafted inside `loop/` and moved
+# later would have been green while violating AX-2."* The scan that sentence names reads this
+# anchor, and it reads the DIRECTORY rather than a file list -- a member added tomorrow is scanned
+# by existing, which is `package_modules`'s own lesson one directory down.
+# ---------------------------------------------------------------------------
+DECISION_DIR = PACKAGE_DIR / "decision"
+
+
+def decision_modules() -> tuple:
+    """EVERY `.py` under `decision/`, discovered. The AX-2 scan's corpus.
+
+    ⚠ Recursive and derived, for the reason `package_modules` states above it: three guards in this
+    package were first written against a filename tuple and each went blind when a module was added.
+    A caller must also assert a FLOOR on the length -- `04_CODE_ARCHITECTURE.md` §A.2:133 names four
+    members, so a scan that finds fewer has stopped matching and is passing vacuously (`CLAUDE.md`
+    §0.1 pt 2)."""
+    return tuple(sorted(DECISION_DIR.rglob("*.py"),
+                        key=lambda p: p.relative_to(DECISION_DIR).as_posix()))
+SEAM_DIR = PACKAGE_DIR / "seam"
+# ⚠ THE WRAPPER MOVED UNDER `seam/wrappers/` (L2, ED-IN-0206). `04:135` and §A.2's
+# `seam/wrappers/*` row put one wrapper per deferred subsystem there; it sat at the package root
+# because the step-8 plan read D5's COST as a reason not to perform the rename. The declared
+# `sys.path` seam in `tests/valoria/test_engine_does_not_import_systems.py` is renamed with it.
+COMBAT_SEAM_PY = SEAM_DIR / "wrappers" / "combat.py"
 TRACE_LOG_PY = PACKAGE_DIR / "trace_log.py"
 TEST_PY = TESTS_DIR / "test_season_shape.py"
 

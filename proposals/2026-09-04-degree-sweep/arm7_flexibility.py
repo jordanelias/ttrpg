@@ -29,7 +29,7 @@ result.
 from __future__ import annotations
 import collections, itertools
 import sweep_core as K
-from sweep_core import S, C, R, Log, PS
+from sweep_core import S, C, R, Log, PS_CHOOSE, PS_OPTIONS
 
 DEPTH = 3          # `CLAUDE.md` §0.1 pt 5 / G1: declared with its reason.
 DEPTH_WHY = "Jordan's ask: alternative outcomes 'at a depth of three'."
@@ -37,7 +37,7 @@ K_BRANCH = 4       # four alternatives per decision point, matching the four-ban
 K_WHY = ("four, to match the arity of the degree ladder Jordan named, so the choice tree and the "
          "degree tree are the same width and their flexibility numbers are comparable")
 
-_REAL_PACK = PS.pack_scenes
+_REAL_PACK = PS_CHOOSE.pack_scenes
 
 
 class take_kth:
@@ -63,23 +63,23 @@ class take_kth:
                 i = _k % len(ranked)
                 ranked = list(ranked[i:i + 1])
             return _r(p, ranked, budget, fx, mint, occasion=occasion)
-        PS.pack_scenes = packed
+        PS_CHOOSE.pack_scenes = packed
         return self
     def __exit__(self, *a):
-        PS.pack_scenes = _REAL_PACK
+        PS_CHOOSE.pack_scenes = _REAL_PACK
         return False
 
 
 def budget_binding(case: dict, seed: int = 0) -> dict:
     """ARM 7c -- is the act budget ever binding? If not, the person never triages (§26.3)."""
     seen = []
-    real = PS.pack_scenes
+    real = PS_CHOOSE.pack_scenes
     def spy(p, ranked, budget, fx, mint, occasion=None):
         out = real(p, ranked, budget, fx, mint, occasion=occasion)
         seen.append((len(ranked), budget, sum(len(getattr(sc, "acts", []) or []) for sc in out)
                      if isinstance(out, list) else None))
         return out
-    PS.pack_scenes = spy
+    PS_CHOOSE.pack_scenes = spy
     try:
         w = C.build_at(case, seed); d = S.SeasonDriver(w)
         mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
@@ -87,7 +87,7 @@ def budget_binding(case: dict, seed: int = 0) -> dict:
         d.season(ch, question=None, subsistence=K.C.P.SUBSIST)
         acts = len(getattr(d, "resolved", []))
     finally:
-        PS.pack_scenes = real
+        PS_CHOOSE.pack_scenes = real
     ranked = [x[0] for x in seen]
     return dict(case=case["id"], deliberations=len(seen), ranked_sizes=ranked,
                 acts_resolved=acts,

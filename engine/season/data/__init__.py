@@ -9,9 +9,9 @@ sentence "importing `season.data` loads every registry" true. Two independent ad
 found what that cost, and the second MEASURED it:
 
   * Seven modules import `files` for PATHS ONLY — `harness/{delta,register,report,corpus_run,
-    exercises,run_cases}.py` and `combat_seam.py`. Eager loading made every one of them parse two
+    exercises,run_cases}.py` and `seam/wrappers/combat.py`. Eager loading made every one of them parse two
     YAML registries at import and able to `SystemExit`. `delta.py` is a git+JSON differ. And
-    `combat_seam.py` exists to DEGRADE to a named gap, which an exit at import defeats.
+    `seam/wrappers/combat.py` exists to DEGRADE to a named gap, which an exit at import defeats.
   * It removed the loaders' last external patch point, silently and FAIL-OPEN. Before:
     setting `files.WRITE_MATRIX_YAML` to a bad path then importing raised
     `SystemExit: write_matrix.yaml not found at ...`. After: the import succeeded and read the

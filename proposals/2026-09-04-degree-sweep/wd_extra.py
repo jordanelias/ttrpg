@@ -32,9 +32,17 @@ sys.path.insert(0, str(Path(__file__).parent))
 import wd_acceptance as W
 import arm9_forking as A9
 from sweep_core import S, DRV
+# ⚠ THE SPY MUST NAME THE MODULE THE READER LIVES IN, AND UNTIL THIS LINE IT DID NOT.
+# `questions_for` is read BARE inside `deliberate`, and at unit L5 (ED-IN-0206) `deliberate`'s
+# body left `driver.py` for `loop/deliberate.py` -- so it resolves in THAT module's globals now.
+# `DRV.questions_for = qspy` went on succeeding (driver.py still carried a dead import of the
+# name) and reached nothing: `qsrc`, `qlead` and `qmulti` below came back ZERO, which is a
+# FABRICATED NULL -- the direction `CLAUDE.md` §0.1 pt 4 calls the worse of the two. Found by the
+# Fable gate on Arc 1; it is the sibling of the A39 spy that arc DID move, on the same module.
+from engine.season.loop import deliberate as DLB   # noqa: E402
 from engine.season.trace_log import TRACE
 
-_REAL_QF = DRV.questions_for
+_REAL_QF = DLB.questions_for
 
 
 def corpus_drops(mode: str, slots: str = "narrow"):
@@ -72,12 +80,12 @@ def corpus_drops(mode: str, slots: str = "narrow"):
         # the change must reproduce the committed 0 / 37 / 123 drops and 123-of-123
         # true-when-recorded exactly. They do.
         TRACE.rows.clear()
-        DRV.questions_for = qspy
+        DLB.questions_for = qspy
         try:
             (_r, drops, deps) = W._instrumented(
                 lambda: A9._run(case, W.SEED, W.SEASONS, fixtures=fx))
         finally:
-            DRV.questions_for = _REAL_QF
+            DLB.questions_for = _REAL_QF
         w = W._WORLDS[-1]
         kinds.update(e.kind for e in w.log)
         by_cid = {d["cid"]: d for d in deps}
