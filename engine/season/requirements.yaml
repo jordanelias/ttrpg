@@ -151,9 +151,12 @@ rows:
       drop in every cell was `move` refusing on a `contain.path` belief. Splitting the verb-table
       row `"the six investigation acts"` into the six acts canon names gave the grammar four more
       live cells (`exists:Site` · `exists:Person` · `exists:Record` · `exists:Rung`). MEASURED
-      over the same 89 worlds at the shipped default, clause-4 drops by verb: **13, all `move`,
-      before; 1,491 across six verbs after** — `examine` 387 · `restore` 387 · `research` 379 ·
-      `interview` 306 · `move` 18 · `surveil` 14. On the pinned NPC-088 2-slot slice the shipped
+      over the same 89 worlds at the shipped default by ONE script run on both sides, clause-4
+      drops by verb: **25, all `move`, before; 1,491 across six verbs after** — `examine` 387 ·
+      `restore` 387 · `research` 379 · `interview` 306 · `move` 18 · `surveil` 14. ⚠ THE FIRST
+      WRITING OF THIS ROW SAID 13, QUOTED FROM A TEST DOCSTRING RATHER THAN MEASURED, WHICH PUT A
+      QUOTED NUMBER AND A MEASURED ONE IN THE SAME RATIO — the asymmetry §0.1 pt 4 names. `move`
+      itself FELL, 25 -> 18, which the quoted figure had reported as a rise. On the pinned NPC-088 2-slot slice the shipped
       arm went from **0 of 16 forks diverging to 14 of 18**. ⚠ WHAT IS NOT MEASURED: the
       corpus-scale fork rate (the 62/1467 figure), which needs the chunked `wd_chunk.py` run and
       was not re-run here. So the ~4% above is stale in an unknown direction and the status stays

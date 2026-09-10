@@ -7706,8 +7706,18 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # *"The defect this exposes is that §F1 clause 4 has exactly ONE reachable instance in the
     # corpus; that is a producer hole and is where the work goes."* Measured over the same 89
     # worlds at the shipped default, drops by verb: BEFORE `examine` 0 · `research` 0 ·
-    # `interview` 0 · `surveil` 0 · `restore` 0 · `move` 13. AFTER: `examine` 387 · `restore` 387
-    # · `research` 379 · `interview` 306 · `move` 18 · `surveil` 14 — **1,491 in six verbs.**
+    # `interview` 0 · `surveil` 0 · `restore` 0 · **`move` 25**. AFTER: `examine` 387 ·
+    # `restore` 387 · `research` 379 · `interview` 306 · `move` 18 · `surveil` 14 — **1,491 in
+    # six verbs.**
+    # ⚠ **THE BEFORE FIGURE IS 25 BECAUSE IT WAS MEASURED; THE FIRST WRITING OF THIS BLOCK SAID
+    # 13 AND HAD QUOTED IT FROM THIS TEST'S OWN DOCSTRING.** Both sides are now produced by ONE
+    # script over the same 89 worlds — run at `d59c3e1` in a throwaway worktree and again on this
+    # commit — which is the control §0.1 pt 4 requires and which a quoted number is not. ⚠ AND THE
+    # TREE CARRIES TWO OTHER FIGURES FOR THE SAME QUANTITY, WHICH ARE NOT RECONCILED HERE AND ARE
+    # NAMED SO NOBODY READS 25 AS SUPERSEDING THEM: this docstring's own `13` (86 worlds, an
+    # earlier instrument) and `test_wd_a_fork_…`'s corpus table, which reads `0` at the shipped
+    # `all_five` × `actor` cell via `wd_extra.corpus_drops`. Three instruments, three answers;
+    # only the 25/1,491 pair is like-for-like.
     # `transfer` keeps its chain here and `restore` is the one worth naming: it is a verb that
     # CANNOT EXECUTE, dropping because a failed `examine` deposited `exists:Site -> 0` and
     # `restore` reads the same predicate. One person's failed look teaches them not to try to
@@ -7732,9 +7742,14 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # ⚠ ARC-01's OWN DROPS ARE NOW `examine` / `research` / `restore` / `interview` AND CARRY NO
     # `move`, WHICH IS A FACT ABOUT THIS CASE AND NOT A LOST CHANNEL — checked rather than
     # assumed, because "the old drop disappeared" is exactly what a regression looks like.
-    # Corpus-wide `move` drops went 13 -> 18 over the same 89 worlds and `travel.blocked` still
-    # fires; what changed on ARC-01 is which candidates form, not whether `move`'s belief channel
-    # exists. `tell` remains the tell-tale below for the retracted `claim.held` defect.
+    # ⚠ CORPUS-WIDE `move` DROPS WENT **25 -> 18**, A FALL OF SEVEN, AND THE FIRST WRITING OF
+    # THIS LINE SAID `13 -> 18` — A RISE — BECAUSE IT QUOTED A DOCSTRING INSTEAD OF MEASURING.
+    # The conclusion survives the correction and is narrower than it was: `move`'s belief channel
+    # is NOT lost (18 firings, and `travel.blocked` still fires), but it did SHRINK, and what
+    # changed on ARC-01 is which candidates form rather than whether the channel exists. The fall
+    # is UNDIAGNOSED: five more resolvable verbs compete for the same scene budget, so fewer
+    # `move` Candidates are formed to be dropped is the obvious route — obvious is not measured,
+    # and it is not asserted anywhere. `tell` remains the tell-tale below for the retracted `claim.held` defect.
     assert {v for v, _ in live} == {"examine", "research", "restore", "interview"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
@@ -8140,15 +8155,18 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     # could not be folded — into the six acts canon names gave the grammar four new live cells
     # (`exists:Site` · `exists:Person` · `exists:Record` · `exists:Rung`), and clause 4 now has
     # something to fire on besides `move`. Measured over the same 89 worlds at the shipped
-    # default, drops by verb: **13, all `move`, BEFORE; 1,491 in six verbs AFTER** — `examine` 387
-    # · `restore` 387 · `research` 379 · `interview` 306 · `move` 18 · `surveil` 14.
+    # default, drops by verb: **25, all `move`, BEFORE; 1,491 in six verbs AFTER** — `examine` 387
+    # · `restore` 387 · `research` 379 · `interview` 306 · `move` 18 · `surveil` 14. Both sides
+    # measured by one script over the same 89 worlds (see `test_wb_clause_four_fires_…`, which
+    # carries the correction and names the two other, unreconciled figures the tree holds).
     #
     # ⚠ **AND THIS IS NOT A RE-ARGUMENT FOR THE ARM.** Everything above about `all_five` stands
     # unamended: the arm was never chosen on this metric, the non-monotonicity was real, and the
     # zero was diagnosed rather than explained away. What changed is the thing the diagnosis
     # NAMED as the real defect, and the acceptance came back with it — which is the diagnosis
-    # being confirmed, not overturned. `move` did not lose its channel to make room: it went 13 ->
-    # 18 corpus-wide, and ARC-01's own drops merely stopped including it (checked separately in
+    # being confirmed, not overturned. `move` did not lose its channel to make room, but it did
+    # SHRINK: **25 -> 18** corpus-wide, and ARC-01's own drops stopped including it (checked
+    # separately in
     # `test_wb_clause_four_fires_…`, because "the old drop vanished" is what a regression looks
     # like and had to be ruled out rather than assumed).
     assert got["actor"]["diverged"] == 14, (
@@ -8314,7 +8332,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # diagnosis named: §F1 clause 4 had exactly one reachable instance (`move` on
     # `contain.path`), and the six investigation acts gave it four more grammar cells to fire on
     # (`exists:Site` · `exists:Person` · `exists:Record` · `exists:Rung`). Corpus-wide clause-4
-    # drops went 13 (all `move`) to 1,491 across six verbs.
+    # drops went **25** (all `move`) to 1,491 across six verbs, both sides measured by one
+    # script over the same 89 worlds.
     # ⚠ `wide` AND `verbonly` ARE NOW EQUAL AT BOTH LIVE ARMS — 14/14 at `actor`, 5/5 at `total` —
     # while the control keeps the split at 2/0. That is worth naming rather than reading as a
     # tidier result. The widened fingerprint distinguishes forks that change WHAT a person deliberates

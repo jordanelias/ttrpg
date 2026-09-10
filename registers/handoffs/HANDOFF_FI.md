@@ -18,7 +18,8 @@ old path resolves through `references/restructure_ledger.md` via `tools/pathres.
   placeholder row is now `examine` · `interview` · `research` · `surveil` · `thread_read` ·
   `reconstruct`, each with a typed `requires` built from the existing closed grammar. Measured:
   verbs 32 -> 37, resolvable 12 -> 17, **executing in the corpus 6 -> 10**, distinct corpus
-  behaviours 2 -> 16, §F1 clause-4 drops 13 (all `move`) -> 1,491 across six verbs. NPC-086 moved
+  behaviours 2 -> 16, §F1 clause-4 drops **25** (all `move`) -> 1,491 across six verbs, both sides
+  measured by one script over the same 89 worlds (`move` itself falls, 25 -> 18). NPC-086 moved
   BLOCKED -> DEGRADED; NPC-010 lost one of three blockers.
   **What is NOT built and why:** nothing resolves a DEGREE for an investigation act, so their
   `emits:` is flat while `fieldwork_v30.md:302-309` grades all six on four bands.

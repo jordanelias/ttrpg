@@ -1385,9 +1385,21 @@ closed roster has no name for, which is `H-85` and is a citation rather than a n
 | resolvable by the fold | 12 | **17** |
 | **executing in the corpus** | 6 | **10** |
 | distinct corpus behaviours, 89 live cases | 2 | **16** |
-| §F1 clause-4 drops, 89 worlds, shipped default | **13, every one `move`** | **1,491 across six verbs** |
+| §F1 clause-4 drops, 89 worlds, shipped default | **25, every one `move`** | **1,491 across six verbs** |
 | `W-D` acceptance, NPC-088 2-slot slice | 0 of 16 forks diverged | **14 of 18** |
 | corpus cases | NPC-086 `BLOCKED`, NPC-010 3 blockers | NPC-086 **`DEGRADED`**, NPC-010 2 |
+
+⚠ **THE CLAUSE-4 `before` FIGURE IS 25 BECAUSE IT WAS MEASURED, AND THE FIRST WRITING OF THIS
+TABLE SAID 13.** The 13 was quoted from `test_wb_clause_four_fires_…`'s docstring, which put a
+QUOTED number and a MEASURED one on either side of one ratio — the asymmetry §0.1 pt 4 names, in
+the headline of this section. Both sides are now one script (a wrapper on `belief_contradicts`
+over all 89 corpus worlds at `DEFAULT_FIXTURES`), run at `d59c3e1` in a throwaway worktree and
+again on the commit. Two consequences: the ratio is smaller than published, and `move` itself
+**FELL, 25 -> 18**, where the quoted figure had it rising. The channel is not lost — 18 firings,
+and `travel.blocked` still fires — but the fall is real and is UNDIAGNOSED. ⚠ The tree carries two
+further figures for this same quantity, unreconciled: the docstring's 13 (86 worlds, an earlier
+instrument) and `test_wd_a_fork_…`'s corpus table, which reads **0** at the shipped cell via
+`wd_extra.corpus_drops`. Three instruments, three answers; only the 25/1,491 pair is like-for-like.
 
 The clause-4 line is the one that matters, because the tree had already written down what it would
 take: *"The defect this exposes is that §F1 clause 4 has exactly ONE reachable instance in the
