@@ -89,6 +89,13 @@ BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0036-0039 RES
 
 <a id="in"></a>
 
+**ED-IN-0207 allocated 2026-09-10** (next_free 207 -> 208): the `layer-conformance` skill —
+`skills/layer-conformance/SKILL.md`, one skill with two lenses (layer PLACEMENT, and Layer-1
+CONFORMANCE of code against `architecture/meta/04_CODE_ARCHITECTURE.md`), owning the METHOD while
+`CLAUDE.md`'s layer table and `architecture/` keep the definitions. Wired into `CLAUDE.md` §9's
+routing table. Filed here and not on the lane row for the reason the 0203 entry below already
+gives: that row is at its 600-char cap. See `registers/editorial_ledger_in.jsonl`.
+
 **ED-IN-0203 allocated 2026-09-07** (next_free 203 -> 204), moved here rather than onto the lane
 row because that row sits at 598 of its 600-char cap — any append breaks
 `test_narrative_does_not_creep_back_into_the_state_file`, exactly as it did to the 0170/0171

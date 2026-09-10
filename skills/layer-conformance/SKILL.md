@@ -13,8 +13,10 @@ description: >
   bodies; grading each finding STRUCTURAL / MECHANICAL / CONVENTION per that document's own §0; and
   reading BOTH halves of a §A.2 row, because a directory count reported as row conformance is the
   defect this repo has already shipped and corrected once. The DEFINITIONS live with their owners —
-  CLAUDE.md's layer table and `architecture/` — and this skill deliberately restates neither; it owns
-  the METHOD, exactly as `ners` owns the NERS method while CLAUDE.md §0.06 owns the NERS definitions.
+  CLAUDE.md's layer table and `architecture/` — and this skill owns the METHOD, exactly as `ners` owns
+  the NERS method while CLAUDE.md §0.06 owns the NERS definitions. It copies no table, no grade
+  definition and no count from either owner; where it does reproduce a CLAUDE.md PROHIBITION it carries
+  that rule's failure clause with it, deliberately and for the reason stated inside.
   Its output is EDITS to the thing under review plus at most one paragraph in a commit message: it
   creates no directory, no findings file, and no guard whose subject is apparatus.
   ALWAYS use for: "code architecture compliance", "is this Layer-1 compliant", "layer conformance",
@@ -32,7 +34,7 @@ description: >
 
 # LAYER CONFORMANCE
 
-## What this skill owns, and what it must never restate
+## What this skill owns, and what it copies
 
 **It owns the METHOD.** The content it checks against is owned elsewhere and is read there, every
 time, at the row:
@@ -46,11 +48,23 @@ time, at the row:
 | how a fan-out is run and what makes a critic independent | **`CLAUDE.md` §10** |
 
 This is the split `ners` already uses: that skill owns the NERS method and `CLAUDE.md` §0.06 owns the
-four definitions, and neither restates the other. **The reason is not tidiness.** A spec row copied
-into a skill rots away from its source silently, and the next session reads the copy — which is the
-same failure `CURRENT.md`'s own stamp records having made twice with a test count. So this file cites
-`04` by section and line and **never reproduces a row**. When a line number here does not land on what
-it says it does, the line number is stale and the document is not: re-locate the row by its §-number.
+four definitions.
+
+**What this file copies, and what it refuses to copy — the line is drawn at what can rot.**
+
+- **It never copies a SPEC ROW, a TABLE, a GRADE DEFINITION or a COUNT.** Those it cites by § and
+  line, because a copy rots away from its source silently and the next session reads the copy. That is
+  the failure `CURRENT.md`'s season-loop row records having made **twice** with a test count
+  (`CURRENT.md:34`, *"this row has carried a stale one twice"*).
+- **It does reproduce a `CLAUDE.md` PROHIBITION together with that rule's failure clause** — see WHAT
+  THIS PASS MAY NOT PRODUCE. That is deliberate and precedented:
+  `workplans/2026-09-09-layer1-conformance-plan_part2.md` §13 made the same call on the same reasoning,
+  which is `CLAUDE.md`'s own — *with no context between sessions, the clause naming what goes wrong is
+  what stops the rule being re-litigated.* A bare pointer to a prohibition is the thing that gets
+  skipped; the failure clause is the part that does the work.
+
+When a line number here does not land on what it says it does, the line number is stale and the
+document is not: re-locate the row by its §-number.
 
 **This skill is apparatus, and it declares its own bound.** It mints no guard, adds no CI check,
 produces no document, and cannot be satisfied by writing. Everything it asks for is either an edit to
@@ -90,25 +104,27 @@ Ask **who the artifact constrains**, not what it is about. A document about the 
 session how to work binds the agent; a registry about process that code opens at runtime binds the
 game.
 
-- binds **the agent** — how a session works, what may be built, what counts as done → **Layer 0**
-- binds **how code is written** → **Layer 1** (`architecture/`)
-- binds **the game** → **Layer 2** (the game code)
+**Read the three rows in `CLAUDE.md`'s layer table — they are not copied here**, because a copied
+governance table is the one thing this file must not be the second home of. What the table gives you
+is a *binds* column; the method is to find which one your artifact is in, and the question that
+settles it is the one above.
 
 ⚠ **A file's directory does not settle this, and two live examples prove it.**
-`engine/season/hole_register.yaml` sits with the game code and is read by the corpus grader, not by
-the loop — mechanism for the grader, reference for the game. `engine/season/data/rosters.py`,
-`verbs.py` and `matrix.py` sit in the same tree and *are* opened by the loop at runtime. Same
-directory, opposite answers. **Resolve it by finding the reader**, with `rg` over the tree, and name
-the reader in the sentence that reports the answer.
+`engine/season/hole_register.yaml` sits with the game code and its readers are
+`harness/register.py:69` and `harness/run_cases.py:214` — **two** grading modules, neither of them
+under `loop/` — so it is mechanism for the grader and reference for the game.
+`engine/season/data/rosters.py`, `verbs.py` and `matrix.py` sit in the same tree and *are* opened by
+the loop at runtime. Same directory, opposite answers. **Resolve it by finding the reader**, with `rg`
+over the tree, and name the reader in the sentence that reports the answer.
 
 ### A2 · Is this claiming to be a mechanism?
 
 Run `CLAUDE.md` §0.05's test verbatim: **if this document were deleted, would the game behave
-differently?** Read §0.05's table for the graded cases rather than reasoning from the sentence.
+differently?** §0.05's table owns **the graded cases** and is not reproduced here — open it and find
+yours rather than reasoning from the one-sentence test. What follows is the **disposition** for each,
+which is the part this skill owns. Three outcomes, and the middle one is where sessions go wrong:
 
-Three placement outcomes, and the middle one is where sessions go wrong:
-
-| what you found | disposition |
+| the case, as §0.05 grades it | disposition |
 |---|---|
 | prose describing behaviour the code already implements | **reference.** Correct it if wrong; never cite it as the reason a behaviour is correct |
 | prose stating a formula, threshold or band that **nothing in the code reads** | **the mechanism is in the wrong place.** The value belongs in a typed artifact under `engine/engine_params/` behind an exporter's blocking `--check`, or in a single Python owner. Moving it is the fix; annotating it is not |
@@ -194,17 +210,26 @@ and close it with its citation.
 # LENS B · LAYER-1 CONFORMANCE
 
 Runs only on **Layer-2 code against a Layer-1 row**. Seven steps, in order. **B0–B3 are how you read
-a row; B4–B6 are how a verdict goes wrong once you have one.** Each of B1–B6 carries a defect this
-tree has already shipped and corrected, with the measurement rather than as advice.
+a row; B4–B6 are how a verdict goes wrong once you have one.** **B1–B5 each carry a defect this tree
+has already shipped and corrected, with its measurement rather than as advice**; **B6 is the rule those
+failures produced** and is the one step here stated as a rule rather than as an incident.
 
 ### B0 · Locate the governing row, and read it there
 
 **First, which Layer-1 surface governs this code?** `architecture/meta/04_CODE_ARCHITECTURE.md` says
 in its own Status line that the game code it governs is `engine/season/`. For code elsewhere the
-governing surface is a different member of `architecture/` — `CURRENT.md`'s Layer-1 row lists them —
-and for container and reach-in hygiene across `engine/` and `systems/*/sim/` it is
-`systems/_architecture/reference/holonic_container_doctrine_v1.md`, which already has a checker
-(`tools/ci_module_shape_check.py`). **Do not grade code against a spec that does not claim it.**
+governing surface is a different member of `architecture/` — `CURRENT.md`'s Layer-1 row lists them,
+and `architecture/holonic_ARCHITECTURE.md` is the Layer-1 holonic member.
+
+⚠ **Container and reach-in hygiene across `engine/` and `systems/*/sim/` is governed by
+`systems/_architecture/reference/holonic_container_doctrine_v1.md`, and that document is NOT Layer 1.**
+It is CANONICAL (ratified 2026-07-02, ED-1083/ED-1094) and it lives under `systems/`, not
+`architecture/` — a legitimate governing surface reached by a different route, already enforced by
+`tools/ci_module_shape_check.py`. Grade against it by all means; do not report the result as a
+Layer-1 verdict. **A1 decides a document's layer by who it binds, and that rule applies to the specs
+this lens reads as much as to the code it reads them against.**
+
+**Do not grade code against a spec that does not claim it.**
 
 For `engine/season/`, then: `04` is RATIFIED and it is the row-level authority. Open it. Find the
 §-numbered row that decides the question. Quote it in your finding with its § and its line, and
@@ -245,10 +270,11 @@ members, say **module-boundary**, and say which columns you did not read.
 
 ### B2 · Grade the finding with `04`'s own three grades, and never inflate
 
-`04 §0` defines them and states one per invariant, separately for Python and GDScript where they
-differ. Read the table at `04:72-76`. In one line each: **STRUCTURAL** means the defect has no
-spelling; **MECHANICAL** means exactly one path exists and it refuses, and one named test or scan sees
-a bypass; **CONVENTION** means a reader notices, stated as such and never dressed up.
+**The three grades are `STRUCTURAL`, `MECHANICAL` and `CONVENTION`, and their definitions are at
+`04:72-76` — read them there.** They are a table, so they are not restated here; what follows is the
+operational test for choosing between them, which is the part this skill owns. `04 §0` states a grade
+per invariant, separately for Python and GDScript wherever they differ, so a finding that spans both
+carries two grades.
 
 ⚠ **A claim of STRUCTURAL that is actually MECHANICAL is a named defect class** — *a guard that cannot
 observe what it guards* — and this repo has committed it about its own conformance work. `04:74`
@@ -269,7 +295,9 @@ A module boundary exists so that a property is checkable **by path** rather than
 > `choose` drafted inside `loop/` and moved later would have been green while violating AX-2."*
 
 **The recurring defect is a scan narrower than the claim it is offered as proof of**, and it has
-recurred at four separate steps of this repo's decomposition work. Its signatures:
+recurred **four times in this package — decomposition steps 2, 4 and 5, and again at Arc-1 unit L5**,
+which is conformance work rather than a fourth decomposition step (`engine/season/data/files.py:148-149`
+counts them). Its signatures:
 
 - an **AST walk over one file** offered as proof of a property over a **directory**;
 - a scan pointed at a **module constant** (`files.DRIVER_PY`) that silently narrows when the symbol it
@@ -299,7 +327,7 @@ disagreement has three resolutions and picking the wrong one ships a defect eith
 | what you found | disposition |
 |---|---|
 | **the code is wrong** — the spec row is unambiguous and the code does something else | **change the code.** This is the default and it is where the great majority land. It is not an escalation: `04` already decided it |
-| **the claim about the spec is wrong** — a finding, a ledger row or a plan asserts what the row says, and the row says otherwise | **verify the row before acting on the finding.** `ED-IN-0206` item (2) asserted that four person-side symbols belonged in `queries/person_q`. `04:133` names **two of them verbatim** as `decision/`'s own members (`opening_set`, `budget`), a **third by adjudication** (`assemble` is question assembly, and `questions` is the member named), and **only the fourth** (`entrenchment`) actually moved — so acting on the finding as written would have **broken** conformance rather than restored it. ⚠ The row's own first correction over-claimed here too, saying *three verbatim*; it was corrected again to two-plus-one. **Count the verbatim ones and the adjudicated ones separately** |
+| **the claim about the spec is wrong** — a finding, a ledger row or a plan asserts what the row says, and the row says otherwise | **verify the row before acting on the finding.** `ED-IN-0206` item (2) asserted that four person-side symbols belonged in `queries/person_q`. `04:133` names **two of them verbatim** as `decision/`'s own members (`opening_set`, `budget`), a **third by adjudication** (`assemble` is question assembly, and `questions` is the member named), and **only the fourth** (`entrenchment`) actually moved — so acting on the finding as written would have **broken** conformance rather than restored it. ⚠ The row's own first correction over-claimed here too — its words are *"04:133 names all three as decision/'s OWN members"* — and it was corrected again to two-plus-one. **Count the verbatim ones and the adjudicated ones separately** |
 | **the spec is internally ambiguous** — two rows of `04` decide the same symbol differently | **name the ambiguity at the site and pick with the reason stated.** `budget` is the live example: `04:133` lists it as a `decision/` member while §A.2's table lists it in `decision/`'s **may read** column. Do not report a clean read of a row that has two, and do not escalate it — §0's test 5 closes it |
 
 ⚠ **Never resolve a disagreement by declaring the prose authoritative.** And never resolve it by
@@ -315,9 +343,19 @@ executes"*, and it flags **step 1 as the one deliverable there that writing can 
 > **The worked failure, measured in this tree.** Arc 1 moved a misspelled-manifest-row failure *"from
 > first call to boot"* — which is the whole of the constraint at `04:1031` — by wiring
 > `manifest.check_rows()` into `World.boot()`. **Nothing on a run path calls `World.boot()`**: the
-> headless runner, the corpus run and the case runner never boot a world; two probes and three tests
-> do. So a misspelled row still failed at first call in every real season. The fix was to validate in
-> `SeasonDriver.__init__`, the one place every run passes, with a probe watching a real construction.
+> headless runner, the corpus run and the case runner never boot a world. Five call sites do, and they
+> resolve to **one probe function and two test functions** — `probes.py::a19` (two calls),
+> `test_season_shape.py::test_a_missing_provider_is_a_boot_failure` (two) and
+> `::test_a_misspelled_manifest_row_fails_at_boot_naming_the_row` (one). So a misspelled row still
+> failed at first call in every real season. The fix was to validate in `SeasonDriver.__init__`, the
+> one place every run passes, with a probe watching a real construction.
+>
+> ⚠ **And this paragraph shipped B6's own defect once, which is why it is worth keeping.** ED-IN-0206
+> and `loop/driver.py:171` both phrase the callers as *"two probes and three tests"* — the **call-site**
+> count wearing an entity count's clothes. `rg -n '\.boot\(' -g '*.py' engine/season` returns **11
+> hits, and only 5 are calls**: the other six are comments and assertion strings that spell
+> `World.boot()` while calling nothing. **That is the whole lesson twice over** — resolve each hit to
+> its enclosing `def`, and never let a text count stand in for a call count.
 
 **So: before claiming a check is enforced, find its callers and name them.** `rg` for the function,
 list every call site, and say which of them a real run reaches. A conformance check reachable only
@@ -329,7 +367,10 @@ Four failures in this repo's decomposition arc were **a sufficient check reporte
 one**. The rule is mechanical: whatever you counted, the sentence that reports the number says what
 was searched and what was not.
 
-- *"`Receipt` does not exist"* → *"`rg -n 'Receipt' engine/season --include=*.py` returns 0."*
+- *"`Receipt` does not exist"* → *"`rg -n Receipt -g '*.py' engine/season` returns 0."* ⚠ Run the
+  command you are about to quote. An earlier writing of this very line quoted `rg … --include=*.py`,
+  which is GNU grep's flag and makes `rg` exit with `unrecognized flag`; a scope sentence citing a
+  command that does not run is worse than no scope sentence.
 - *"no code opens these docs"* → say whether you grepped inline `open(...)` only, or also module
   constants, because that exact narrowing has shipped here.
 - *"the tests are green"* → name the suite and the count, and say what it cannot observe.
@@ -340,6 +381,11 @@ rejection with an argument and no measurement is not a rejection.
 ---
 
 ## THE PASS — four stages, and none may be merged
+
+**Origin, cited rather than absorbed:** this pass is
+`workplans/2026-09-09-layer1-conformance-plan_part2.md` §9–§13, generalized off that plan's arcs. That
+document remains the binding statement of the method **for its own units**; this file is the durable
+owner once those arcs close, and the two must not drift — if you change one, say so in the other.
 
 `CLAUDE.md` §10 owns the mechanics: a relay, not a dialogue; subagents are stateless and isolated;
 independence is made **structural** by `.claude/agents/valoria-critic.md`, whose `tools: Read, Grep,
@@ -375,8 +421,13 @@ Report the scope examined, the primitives read, and the attack that failed.
 Layer-1 conformance work is a **pure move plus the co-edits its own hazards name**. Zero game yield is
 the expected result and is declared, not apologised for.
 
-Run the standing instrument set after **every** unit. Its owner is `engine/season/__init__.py` and the
-`MEASURED-BY` field of the governing ED row; where this and those disagree, they win. As of writing:
+Run the standing instrument set after **every** unit. ⚠ **No single file owns this list, and saying one
+did would be the defect B1 is about.** `engine/season/__init__.py:20-27` owns the six season entry
+points (and note it spells `register --counts`, not `--requirements`); the governing ED row's
+`MEASURED-BY` field owns which of them evidenced that row; the repo-wide gates come from
+`tools/valoria_local.py`. The list below is **assembled here from those three** and is therefore the
+thing most likely to be stale in this file — re-derive it from them rather than trusting it. As of
+writing:
 
 ```
 pip install pyyaml pytest numpy                                  # fresh container only
@@ -395,9 +446,13 @@ miscount.** Revert it and say so.
 ⚠ **Three things that are NOT controls, each for a different reason:**
 
 - **`register --requirements`** never compares a `status:` to a measurement — its counts are
-  hand-edited YAML and cannot move unless somebody edits the file. It is a **tripwire that nobody
-  edited the board**, which is a much smaller claim. A doc-derived count offered as evidence is
-  §0.05's own worked example of a non-mechanism.
+  hand-edited YAML and cannot move unless somebody edits the file, so a doc-derived count offered as
+  evidence is §0.05's own worked example of a non-mechanism. ⚠ **It is not merely an edit tripwire,
+  though, and calling it only that undersells it:** `harness/register.py:636-676` refuses a `status:`
+  outside the enum, a row with no `measure:`, a `-k` that selects no real test, a `python <path>` that
+  does not exist or has no `__main__`, and a `met`/`partial` row with an empty `measured:`. That is a
+  **liveness check on the board** — it fails when an acceptance stops being runnable. What it still
+  cannot do is tell you the behaviour happened.
 - **`python -m pytest engine/tests`** is byte-identical to a season-package change **by construction**
   — those campaign goldens never import `engine.season`. Running it is a fake control.
 - **The tests you wrote for the thing you built** encode your model of it, not the system.
@@ -408,9 +463,11 @@ regeneration `PROBE FLIPS 0` is true by construction and cannot fail.
 
 ⚠ **A pure rename defeats the anti-fabrication gate's changeset scoping**: a constant untouched for
 weeks arrives looking new because the rename rewrote its line. Reproduce CI's own view before pushing
-with the `GITHUB_EVENT_NAME` invocation above, put a `# [JUSTIFIED: ...]` marker **complete on the line
-directly above the code** (prose first, marker last), and **measure the reason** — a false citation on
-an anti-fabrication gate is worse than the red it fixes.
+with the `GITHUB_EVENT_NAME` invocation above, and put a `# [JUSTIFIED: ...]` marker **complete on one
+line**. The gate (`tools/ci_sim_fabrication_check.py:253`) accepts it on the code's own line or the
+line directly above, but a reason spanning two lines stays red — so put the prose first and the marker
+last. And **measure the reason**: a false citation on an anti-fabrication gate is worse than the red
+it fixes.
 
 ---
 
@@ -427,9 +484,10 @@ re-litigated.
 2. **No guard whose subject is another guard**, no grader over the gate list, no test that the
    blocking tier's membership is honest. A guard is licensed here only when its subject is Layer-2
    game code against a ratified axiom — see **A3**.
-3. **No `needs_jordan` row for anything `04` already decides.** Run §0's five tests and expect closure
-   at test 3. A genuine escalation is a live design choice where two defensible options lead to
-   materially different games, or where the answer would overwrite ratified canon.
+3. **No `needs_jordan` row for anything `04` already decides.** Run §0's five tests; a Lens-B item
+   closes at test 3 (`04` decided it), a Lens-A placement item at test 3 or 5. A genuine escalation
+   is a live design choice where two defensible options lead to materially different games, or where
+   the answer would overwrite ratified canon.
 4. **No skipped, disabled or weakened test to reach green.** Where a conformance fix reddens rows, the
    fix is to declare their basis, not to soften the check.
 5. **No status flip as acceptance.** A `## Status:` line is not an execution artifact; a `state:`

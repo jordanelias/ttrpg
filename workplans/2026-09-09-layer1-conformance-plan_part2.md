@@ -7,6 +7,14 @@
 
 ## §9 · THE METHOD — AGONIST → ANTAGONIST, BINDING ON EVERY UNIT
 
+> ⚠ **A DURABLE OWNER NOW EXISTS FOR THIS METHOD, AND THIS SECTION IS NOT IT (ED-IN-0207).**
+> `skills/layer-conformance/SKILL.md` generalizes §9–§13 off this plan's arcs and is where a later
+> session — one with no L0–G4 units in front of it — should read the method. **This section stays as
+> the binding statement for THIS PLAN'S units**, because a unit in flight must not have its method
+> move out from under it. The two must not drift: change one and say so in the other. Recorded here
+> rather than by deleting §9, because the skill was written FROM this section and a reader who meets
+> only the successor cannot tell what it succeeded.
+
 **`CLAUDE.md` §10 owns the mechanics** — a relay not a dialogue, and independence made structural by
 `.claude/agents/valoria-critic.md`'s `tools: Read, Grep, Glob`. Read it there rather than here; a first
 writing restated both paragraphs. **The one thing worth adding is what the critic is handed:** its
