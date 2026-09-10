@@ -87,6 +87,33 @@ BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0036-0039 RES
 
 ## IN — Infrastructure / cross-cutting
 
+**2026-09-10 — ED-IN-0207/0208 collided WITHIN the lane; the later-merging side renumbered to
+0209/0210.** Same failure class as the ED-IN-0031/0032, ED-IN-0033/0034 and ED-IN-0044/0045
+collisions recorded further down, and resolved the same way.
+
+`main` allocated **ED-IN-0207** to the σ-leverage resolution-diagnostic skill split (PR #390) and
+**ED-IN-0208** to the blocking-rulings measurement (PR #393). Concurrently, branch
+`claude/workplan-orientation-u1-u10-e13l6x` allocated **ED-IN-0207** to Jordan's verb-table rulings
+of 2026-09-10 and **ED-IN-0208** to the Fable adjudication of that row. Both sessions read
+`next_free: 207`; neither saw the other's bump. `main` merged first and its ids are cited in merged
+PR titles, so they keep 0207/0208 and the branch's two rows became **ED-IN-0209** (verb-table
+rulings) and **ED-IN-0210** (the Fable adjudication). No content changed on either side; the
+branch's citations in `workplans/2026-09-09-r-execution-plan_part2.md` and `ED-FI-0009` were
+rewritten in the same merge, and `next_free` went 209 → **211**.
+
+⚠ **The lane tag did its job and this is what it does NOT cover.** `ED-<LANE>-NNNN` makes
+CROSS-lane collision impossible by construction. WITHIN a lane the allocation protocol — read
+`next_free`, allocate, bump, co-commit — is still discipline alone, and two concurrent sessions in
+one lane can still both read the same value. The file header says so; this is the worked instance.
+
+⚠ **A separate pre-existing defect was observed during the same merge and NOT repaired:** `main`
+carries **two rows both numbered ED-IN-0208** (a measurement row and a correction row, both dated
+2026-09-10), alongside the long-standing `ED-IN-0149` × 3. Renumbering an already-merged, already-
+cited row is not a merge-resolution call; the tree's own precedent for that shape is ED-IN-0195,
+*"split out 2026-08-21 from a duplicate ED-IN-0194 row whose needs_jordan CONFLICTED with its
+twin"*. Recorded here so the next allocator sees it rather than rediscovering it.
+
+
 <a id="in"></a>
 
 **ED-IN-0203 allocated 2026-09-07** (next_free 203 -> 204), moved here rather than onto the lane

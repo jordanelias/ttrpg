@@ -139,6 +139,37 @@ not re-fixed here, to keep one edit per defect.
 
 ---
 
+---
+
+## 📋 2026-09-10 — the blocking-rulings queue measured (ED-IN-0208, all lanes)
+
+**`workplans/2026-09-10-unblocking-strategy.md`** — Jordan asked for a strategy to unblock as much work
+as possible. Counts are pinned at `916a0be` (151 flagged / 105 open); the merged tree is 153 / 106, the two
+additions being `ED-SE-0051` and `ED-WR-0010`, both filed today with PRs #391 and #388. **Not one of the
+151 `needs_jordan` rows is cited by `engine/season/requirements.yaml`,
+`engine/season/hole_register.yaml` or the R-execution plan**, all three of which do cite EDs (the control);
+seven of the eight they do cite carry `needs_jordan: false` and `ED-061` carries no such field. **Of the
+six *holes* the NINE block on, exactly one is a genuine ruling, and its own row says it unblocks nothing** —
+but `blocks:` also names eight W-items this pass does not speak for.
+
+⚠ **Neither queue is the work.** `architecture/PLAN.md:689-694` forbids closing the hole register's
+fifteen `G6` rows by ladder — they discharge *"by construction"* as `W2`/`W3`/`W5` land, and *"each
+building item must set its rows' grades as it lands."* So the strategy's first move is **executing what is
+already ruled** (the SC retirement wave, the `engine_clock` emitter), second is **re-measuring blockers
+that are asserted rather than observed**.
+
+**One correction other lanes need:** Arc 2 / G1 is **not** waiting on a ruling (`requirements.yaml` R-08's
+`disposition`, PR #384).
+
+⚠ **Three claims in the first draft were overturned by a read-only critic and are retracted:** `ED-1051`'s
+`[ASSUMPTION]` count is **11/27, not 1** (a `yaml.safe_load` strips the comments carrying the grade);
+**`ED-SC-0005` is NOT closable** — `resolver.py:300` adds a live `+1D` pool die — and **`ED-SC-0003`'s
+collision DOES reproduce** (`glossary.md:114` calls it *"unresolved"*, `module_contracts.yaml:448` marks it
+`[OPEN — Jordan]`). **All three of SC Stage 4's "HARD" blockers stand.**
+
+**Nothing was closed or flipped.** §6 of the strategy is the eleven-question decision sheet — the whole
+human ask. Per-lane detail in `registers/handoffs/HANDOFF_IN.md`.
+
 ## ⚠ CURRENT — 2026-09-06, PR #373 · the proceedings subsystem owns all social contests (SC lane)
 
 **A from-scratch proceedings subsystem exists at `proposals/2026-09-05-proceedings-subsystem/`, PROPOSED

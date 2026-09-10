@@ -178,7 +178,7 @@ systems:
     canonical_sha__systems___architecture__scale_transitions_v30_md: "c5a3d35697c1e5c2622c6720e232536c6fb4af18"
   faction_layer:
     design_doc: systems/factions/reference/faction_layer_v30.md
-    canonical_sha__systems__factions__reference__faction_layer_v30_md: "2b24f59e0bc464e48e909606263b7b599bcca883"
+    canonical_sha__systems__factions__reference__faction_layer_v30_md: "bc7dba951c6fd9c85e5f2a4e329f784168839c0a"
     canonical_sha__systems__factions__faction_layer_v30_md: "2b24f59e0bc464e48e909606263b7b599bcca883"
     canonical_sha__designs__provincial__faction_layer_v30_md: "2b24f59e0bc464e48e909606263b7b599bcca883"
   military_layer:
@@ -418,7 +418,7 @@ systems:
 
   npc_relational_graph:
     design_doc: systems/npcs/reference/npc_relational_graph_v30.md
-    canonical_sha__systems__npcs__reference__npc_relational_graph_v30_md: "65b5b65f2075a9ae737d9c2b4e17db9476714d7b"
+    canonical_sha__systems__npcs__reference__npc_relational_graph_v30_md: "22da504326c11c7d2035775c3665a3b6aeca1648"
     canonical_sha__systems__npcs__npc_relational_graph_v30_md: "65b5b65f2075a9ae737d9c2b4e17db9476714d7b"
     pp: PP-724
     status: provisional

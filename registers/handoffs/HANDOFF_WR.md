@@ -6,6 +6,46 @@ index; see it for cross-lane/global items.
 
 ## Pending
 
+- **ED-WR-0010 (PROPOSED 2026-09-10) — threadwork practical applications, by subsystem.**
+  Two new docs: `systems/threadwork/reference/threadwork_applications.md` (§1 the four operating
+  rules · §2 personal combat · §3 proceedings, negotiation and trial · §4 command, terrain and the
+  theatre · §5 investigation and forensics) and `..._part2.md` (§6 faction politics and domain
+  actions · §7 the twelve civilian sectors and the eight institutions they require · §8 the
+  strategic layer · §9 presentation and UI · §10 the prohibitions · §11 the carry-across record).
+
+  **What needs Jordan:** adoption, and whether `threadwork_v30.md` Part 3 is edited in place or
+  superseded by a new head. `CURRENT.md`'s Threadwork row is annotated and **not moved**. Nothing
+  here escalates a design question.
+
+  **The one thing that did not transfer, and it blocks the numbers.** The suite priced every
+  catalogue against a 10→0 depleting Coherence track, and `RULINGS.md` replaced that quantity —
+  Coherence is a **distance** with two quantities that have different remedies, and the same file
+  hands the consequence to code by name. `systems/threadwork/sim/coherence.py` is still the
+  replaced shape: one clamped integer, freely recovered, reset at zero, with no direction gate, no
+  environment condition on recovery and no resilience term. **Costs in these docs are therefore
+  given as bands, and none of them price correctly until that module carries the ruled model.**
+
+  ⛔ **PICK THIS UP NEXT — cross-lane (IN / WR).** `systems/threadwork/sim/rendering.py`'s
+  `apply_rs_strain` and `check_calamity_threshold` are **wired stubs**, and they are the one place
+  the personal scale and the strategic scale meet: threadwork → substrate tension → incursions →
+  Accord → mandatory faction action. Turmoil and MS (`systems/overview/sim/ms_track.py`) are
+  already live and ticking underneath them. §8.1 names it the highest-value piece of unbuilt
+  threadwork in the tree.
+
+  **Six things dropped from the suite, each with a canonical reason** (§11 has the table): the
+  aligned/opposed *binary* — there are three directions and the third, destructive, is what it had
+  no room for, so **harm is not free**; *"threadwork suits war better than peace"*, which rested
+  entirely on destruction being free (the reverse holds — the largest free surface is medicine);
+  **Loosening** as a fourth operation and the operation table's *"primary aim"* column, both
+  **foregrounding**, which the framework forbids outright; a separate subject-side damage track,
+  unnecessary because everyone has Coherence; a third practitioner axis built on absorption, whose
+  slot is real and whose occupant is now **resilience**; and word alienation as a model of the
+  barrier, kept as texture only.
+
+  **NO CODE CHANGED.** Jordan directed the deliverable as design prose, and confirmed the ask was
+  the practical applications rather than the zip's philosophy — the repo's philosophy is the
+  current and correct one.
+
 - **ED-WR-0007 (RESOLVED 2026-07-08) — pessimist-audit WR verdicts EXECUTED** (Scene Slate + threadwork;
   WR-lane follow-up to ED-IN-0027). `player_agency_v30 §4`: Step 6 → "Territorial Texture" (Thread-phenomenon
   clause CUT → Step 2b; NPC-arrival MERGED → Step 5); Step 7 Ambient DISTILLED → Step-6 backfill; Witness-Mode

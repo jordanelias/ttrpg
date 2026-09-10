@@ -246,7 +246,7 @@ def adjudicate(contracts: dict, registry_md: str, sources_text: str):
                     annotated = True
         if not annotated:
             V(f"A7: cycle {sorted(scc)} carries no loops[] damper/cap "
-              f"annotation (Lesson 5)")
+              f"annotation (undamped AND unbounded is the defect; diagnostic Phase 4)")
 
     # A8 — doc anchored in canonical_sources
     for m in modules:
