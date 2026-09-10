@@ -110,6 +110,30 @@ No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonica
 
 ## Next actions
 
+- **2026-09-10 — the settlements/factions/populations proposal set is landed as PROPOSED and HELD
+  BACK FROM RATIFICATION-ON-MERGE IN FULL** (`proposals/2026-09-10-settlements-factions-populations/`,
+  six documents; ED-1094 exception stated in that set's `00_INDEX.md`). Nothing in it flips a
+  `## Status:` line, closes an ED row, moves a `CURRENT.md` row, or changes code on merge. **Start at
+  `05_COLLISIONS_AND_RESIDUE.md` §6** — the 2026-09-06 rulings were found late and move three things
+  in the set.
+  - **`ED-SE-0051` is the one open escalation** (`needs_jordan: true`): whether the demographic loop
+    is bounded by **matter alone** (Malthusian waves; costs nothing new) or **matter plus hearth
+    capacity** (a `hearth_capacity` fixture per `site_kind`; makes founding-and-building the player's
+    throttle). Layer 1 §25 licenses the clock and names no bound. Both arms priced in
+    `05_COLLISIONS_AND_RESIDUE.md` §4; both ship with P1 as the `−` term either way.
+  - **The set's own named hole is `H-62`, and Jordan's R7 calls it first-rank:** no verb in
+    `verb_table.yaml` writes any `Person` interior field, so convictions cannot move and `choose`
+    scores against a constant. **None of P1–P7 fills it** — that is stated as a gap, and it is the
+    honest place for the next SE session to start. The *shape* is already supplied by the
+    `Degree`-keyed `writes` column; what is missing is which verbs write which axis at which degree.
+  - **Two written refusals would have to be overturned** if the set is adopted: `driver.py:431-436`
+    (starvation) for P1, and `verb_table.yaml:117` (`{form: existence, of: subject, kind: Record}`
+    for `comply`) for P7. Both are named in `00_INDEX.md`'s held-back list item 4; neither is slipped
+    in, and P7 does **not** coin an operand — `rosters.yaml:873-876` reserves that to the `H-94`
+    ruling.
+  - **Every number in the set is `assumption`-grade** with a named site and a three-point sweep
+    (`ID-6`). No proposal there proposes a value.
+
 - **D1–D6 all RULED 2026-07-13 (ED-IN-0046/0047)** — `governance_consolidation_v1.md §6` and
   `ners_vsg_reconciliation_v1.md` are both updated with the full ruling record. SE-lane concrete
   effect: §1.3a's D3 gate is cleared (Compact = a recurring `Debt` subtype — E3's subsistence

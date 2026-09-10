@@ -1,5 +1,5 @@
 ---
-name: valoria-resolution-diagnostic
+name: ners
 description: >
   THE NERS PASS — the repo's cut test on any design object, mechanism or suite, plus the
   rolling-engine stress diagnostic that feeds it. NERS is not four scores. It is ONE operation
