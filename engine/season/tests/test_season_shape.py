@@ -5650,7 +5650,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ranking OUT of the decision.
     lo = {r["seasons"] for r in live if "tell" not in r["executed"]}
     hi = {r["seasons"] for r in live if "tell" in r["executed"]}
-    assert min(hi) == 2 and 1 not in hi, (
+    # ⚠ ONE CLAUSE, NOT TWO: `min(hi) == 2` ENTAILS `1 not in hi`. The first writing conjoined
+    # them, which is a property presented as two and observes nothing the first does not.
+    assert min(hi) == 2, (
         f"a {min(hi)}-season case reached `tell`. A 1 means the mechanism changed: a one-season "
         "case has no previous season's WITNESS to have deposited the claim `tell` reads, and the "
         "paragraph above must be re-measured rather than this line adjusted")
@@ -7707,8 +7709,23 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # corpus; that is a producer hole and is where the work goes."* Measured over the same 89
     # worlds at the shipped default, drops by verb: BEFORE `examine` 0 · `research` 0 ·
     # `interview` 0 · `surveil` 0 · `restore` 0 · **`move` 25**. AFTER: `examine` 387 ·
-    # `restore` 387 · `research` 379 · `interview` 306 · `move` 18 · `surveil` 14 — **1,491 in
-    # six verbs.**
+    # `restore` 387 · `research` 379 · `interview` 306 · `move` 18 · `surveil` 14 — 1,491 raw.
+    # ⚠⚠ **AND 387 OF THOSE 1,491 CANNOT MOVE A DECISION, SO THE HONEST FIGURE IS 1,104 IN FIVE
+    # VERBS.** `restore` is NOT in `resolvable_verbs()` — it writes `Site.condition` and has no
+    # `EFFECTS` entry, which its own cell says (`verb_table.yaml`: *"the chooser never offers it
+    # to the fold at all"*) — and `choose.py` applies the `verbs=` filter AFTER `opening_set`
+    # returns, so clause 4 evaluates `restore` and then the Candidate is discarded anyway.
+    # Dropping something that was never going to be offered changes nothing any person does.
+    # ⚠ WORSE FOR THE HEADLINE, AND MEASURED: `examine` and `restore` fire on the **IDENTICAL
+    # EIGHT SUBJECTS**. Their typed cells are byte-identical in shape (`existence` of a `Site`
+    # plus `present_at`), so that is ONE belief counted under two verbs, not two findings. The
+    # first writing of this block called `restore` *the best evidence in the set* — *"one
+    # person's failed look teaches them not to try to mend the thing"* — and that sentence is
+    # WITHDRAWN: the belief forms, and nothing acts on it.
+    # ⚠ WHAT SURVIVES IS STILL THE POINT OF THE ITEM: 25 -> 1,104 decision-affecting drops, and
+    # the predicates driving them go from ONE (`contain.path`) to FIVE (`+ exists:Site` ·
+    # `exists:Record` · `exists:Person` · `exists:Rung`). The monoculture is what broke; the
+    # breadth is four new predicates, not six new verbs.
     # ⚠ **THE BEFORE FIGURE IS 25 BECAUSE IT WAS MEASURED; THE FIRST WRITING OF THIS BLOCK SAID
     # 13 AND HAD QUOTED IT FROM THIS TEST'S OWN DOCSTRING.** Both sides are now produced by ONE
     # script over the same 89 worlds — run at `d59c3e1` in a throwaway worktree and again on this
@@ -8155,7 +8172,8 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     # could not be folded — into the six acts canon names gave the grammar four new live cells
     # (`exists:Site` · `exists:Person` · `exists:Record` · `exists:Rung`), and clause 4 now has
     # something to fire on besides `move`. Measured over the same 89 worlds at the shipped
-    # default, drops by verb: **25, all `move`, BEFORE; 1,491 in six verbs AFTER** — `examine` 387
+    # default, drops by verb: **25, all `move`, BEFORE; 1,104 DECISION-AFFECTING in five verbs
+    # AFTER** (1,491 raw, less `restore`'s 387, which cannot move a decision) — `examine` 387
     # · `restore` 387 · `research` 379 · `interview` 306 · `move` 18 · `surveil` 14. Both sides
     # measured by one script over the same 89 worlds (see `test_wb_clause_four_fires_…`, which
     # carries the correction and names the two other, unreconciled figures the tree holds).
@@ -8332,8 +8350,9 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # diagnosis named: §F1 clause 4 had exactly one reachable instance (`move` on
     # `contain.path`), and the six investigation acts gave it four more grammar cells to fire on
     # (`exists:Site` · `exists:Person` · `exists:Record` · `exists:Rung`). Corpus-wide clause-4
-    # drops went **25** (all `move`) to 1,491 across six verbs, both sides measured by one
-    # script over the same 89 worlds.
+    # drops went **25** (all `move`) to **1,104 decision-affecting** across five verbs (1,491
+    # raw; `restore`'s 387 are on a verb `resolvable_verbs()` never offers), both sides measured
+    # by one script over the same 89 worlds.
     # ⚠ `wide` AND `verbonly` ARE NOW EQUAL AT BOTH LIVE ARMS — 14/14 at `actor`, 5/5 at `total` —
     # while the control keeps the split at 2/0. That is worth naming rather than reading as a
     # tidier result. The widened fingerprint distinguishes forks that change WHAT a person deliberates
@@ -8341,6 +8360,16 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # divergence is now also a verb-set one, because the verb whose Candidate clause 4 drops IS
     # the one bound to that subject. The control still shows the split (wide 2, verbonly 0), which
     # is what keeps the two measures distinguishable at all.
+    # ⚠ AND THE `alignment` SWEEP IS RUN RATHER THAN CITED, because the weights that partly drive
+    # these numbers were written AFTER the corpus outcome was observed, which is the shape §0.1
+    # pt 4 refuses to take on trust. Distinct corpus behaviours over the 89 live cases, measured:
+    #   before the six .................................  2
+    #   the six, conviction-inert (sparse default 0.0) . 10   <- world-driven; the six bind or do not
+    #   the six, weighted cells (SHIPPED) ..............  16   <- the weights add six
+    #   `uniform` — EVERY cell equal, whole table .......  5   <- the control for the table itself
+    # So the weights are load-bearing and so is the rest of the table, and neither number is the
+    # other's. ⚠ THE `tell` STRADDLE IS NOT THE WEIGHTS' DOING: `lo == {1, 2}` already held at the
+    # conviction-inert point, so the pin below was relaxed on the SIX, not on invented numbers.
     # ⚠ AND THE CONTROL'S OWN `wide` FELL, 6 -> 2, WHICH IS NOT DIAGNOSED HERE AND IS SAID SO.
     # `none` deposits nothing, so its subject-level divergence comes from `questions_for` Q2 ->
     # `q.referents` -> `opening_set` clause 3 and not from any belief. Five more resolvable verbs

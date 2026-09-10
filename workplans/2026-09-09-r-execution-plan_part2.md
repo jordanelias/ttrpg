@@ -1384,8 +1384,9 @@ closed roster has no name for, which is `H-85` and is a citation rather than a n
 | verb-table rows | 32 (a placeholder counted as one verb) | **37** |
 | resolvable by the fold | 12 | **17** |
 | **executing in the corpus** | 6 | **10** |
-| distinct corpus behaviours, 89 live cases | 2 | **16** |
-| §F1 clause-4 drops, 89 worlds, shipped default | **25, every one `move`** | **1,491 across six verbs** |
+| distinct corpus behaviours, 89 live cases | 2 | **16** — the six alone carry 2 → 10, the new `alignment` cells 10 → 16 |
+| §F1 clause-4 drops, 89 worlds, shipped default | **25, every one `move`** | **1,104 decision-affecting, five verbs** (1,491 raw) |
+| — predicates clause 4 can fire on | **1** (`contain.path`) | **5** (`+ exists:Site · Record · Person · Rung`) |
 | `W-D` acceptance, NPC-088 2-slot slice | 0 of 16 forks diverged | **14 of 18** |
 | corpus cases | NPC-086 `BLOCKED`, NPC-010 3 blockers | NPC-086 **`DEGRADED`**, NPC-010 2 |
 
@@ -1404,22 +1405,45 @@ instrument) and `test_wd_a_fork_…`'s corpus table, which reads **0** at the sh
 The clause-4 line is the one that matters, because the tree had already written down what it would
 take: *"The defect this exposes is that §F1 clause 4 has exactly ONE reachable instance in the
 corpus; that is a producer hole and is where the work goes."* The six gave the grammar four more
-live cells — `exists:Site` · `exists:Person` · `exists:Record` · `exists:Rung` — and `restore`, a
-verb that **cannot execute**, now drops on beliefs a failed `examine` deposited: one person's failed
-look teaches them not to try to mend the thing. That is cross-**verb** propagation through a shared
-grammar cell, which one verb refusing on its own belief could never have shown.
+live cells — `exists:Site` · `exists:Person` · `exists:Record` · `exists:Rung`.
 
-### What it did NOT build, and why that is a ruling and not a gap I left
+⚠⚠ **AND THE FIRST WRITING OF THIS PARAGRAPH PICKED THE ONE EXAMPLE THAT IS FALSE, WHICH IS WHY THE
+TABLE ABOVE NOW CARRIES TWO NUMBERS.** It read: *"`restore`, a verb that cannot execute, now drops
+on beliefs a failed `examine` deposited: one person's failed look teaches them not to try to mend
+the thing."* The belief is real; the behaviour is not. `restore` is not in `resolvable_verbs()`, and
+`choose.py` applies the `verbs=` filter **after** `opening_set` returns — so clause 4 drops a
+Candidate that was never going to be offered, and nothing any person does changes. **387 of the
+1,491 are inert; the decision-affecting figure is 1,104 across five verbs.** Measured further:
+`examine` and `restore` fire on the **identical eight subjects**, because their cells are the same
+shape — one belief counted under two verbs, not two findings. The sentence is withdrawn.
+
+**What survives is the predicate row, and it is the better claim anyway**: clause 4 could fire on
+ONE predicate before (`contain.path`, via `move`) and can fire on FIVE now. The monoculture is what
+broke. Counting verbs overstated the breadth; counting predicates does not.
+
+### What it did NOT build — and the escalation I filed for it, withdrawn the same day
 
 Nothing resolves a **degree** for an investigation act, so their `emits:` is flat — while
-`fieldwork_v30.md:302-309` grades every one of them on four bands. `rosters.yaml:481` types
+`fieldwork_v30.md` §4.2 grades every one of them on four bands. `rosters.yaml:482` types
 investigation's seam `UNRULED | UNRULED | UNRULED — ITS OWN KIND, not a contest`, and `:487-491`
 rules what a session may do about that: *"the blanks are Jordan questions, not session guesses:
 writing a plausible IN/OUT for a mode nobody has ruled would be inventing the architecture rather
-than recording it, and the seam is precisely the thing that must not be invented."* `:505-508`
-closes the near escape. ED-FI-0009 carries the four questions that are one question — the seam, the
-pool (where `fieldwork_v30.md:76` and `#353 §9.2` **contradict each other outright** on whether an
-attribute may gate), the obstacle, and where Exposure lands given `04:237`.
+than recording it, and the seam is precisely the thing that must not be invented."*
+
+I filed ED-FI-0009 as four questions that are one question, `needs_jordan: true`. **All four are
+answered inside the tree and the flag is withdrawn.** §0: *"`needs_jordan` means Jordan is the only
+person who can answer this, not nobody got around to it."*
+
+| I asked | the tree already answered |
+|---|---|
+| what is investigation's seam? | `workplans/2026-09-06-season-loop-execution-plan.md:647` ran this blank through the same five tests four days earlier and closed it at **test 3**: *"NOT A SEAM. The loop IS the mechanism"* — RESOLVE → WITNESS, out = *"Claims graded by degree; Failure emits `finding.none` and deposits nothing"*, **work item 4.5**. The six rows already ship that refusal half verbatim. I cited `rosters.yaml`'s seam table and never asked who else had cited it. |
+| may `capability` gate, since canon contradicts canon? | **An equivocation, withdrawn.** `fieldwork_v30.md:76` is the *Perception gates* paragraph and governs **depth access** — its examples are the Depth-1/Depth-2 gates from the table at `:34-35`, and Depth 0's gate is *None*. Canon does not say a low-Cognition character cannot Examine; it says they cannot reach Hidden content by examining. `#353 §9.2` forbids gating a **verb**. Compatible. **Test 5.** |
+| what supplies the obstacle? | Follows the first: the producer is item 4.5. The GM-set Evidence-Track threshold is answered by the engine's own premise — *"There is no GM — the engine resolves everything."* **Test 5.** |
+| where does Exposure land, given `04:237`? | **Test 4, by precedent.** `01_AXIOMS.md:1001-1002`: *"secrecy needs no representation at all … secrecy is the **empty observer set**."* Conspicuousness is that quantity with the sign reversed — the **size** of the observer set, which WITNESS already computes per Event. `04:237` is not the obstruction; it is why a per-territory meter was the wrong shape. |
+
+**What is left is work, not a ruling: item 4.5**, a degree producer at RESOLVE → WITNESS. Its own
+blockers are `W27`'s cast (no attribute values on any person), the absent Depth carrier, and
+`§27.4`'s refusal to route an uncontested attempt to an `Ob = 0` roll.
 
 ### How the scope was cut, which is the method working
 

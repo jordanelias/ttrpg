@@ -152,8 +152,16 @@ rows:
       row `"the six investigation acts"` into the six acts canon names gave the grammar four more
       live cells (`exists:Site` · `exists:Person` · `exists:Record` · `exists:Rung`). MEASURED
       over the same 89 worlds at the shipped default by ONE script run on both sides, clause-4
-      drops by verb: **25, all `move`, before; 1,491 across six verbs after** — `examine` 387 ·
-      `restore` 387 · `research` 379 · `interview` 306 · `move` 18 · `surveil` 14. ⚠ THE FIRST
+      drops by verb: **25, all `move`, before; 1,491 raw after** — `examine` 387 · `restore` 387 ·
+      `research` 379 · `interview` 306 · `move` 18 · `surveil` 14. ⚠ **387 OF THOSE CANNOT MOVE A
+      DECISION, SO THE FIGURE THIS ROW IS ABOUT IS 1,104 IN FIVE VERBS.** `restore` is not in
+      `resolvable_verbs()` (it writes `Site.condition` with no `EFFECTS` entry) and `choose.py`
+      applies the `verbs=` filter AFTER `opening_set` returns, so clause 4 drops a Candidate that
+      was never going to be offered. Measured too: `examine` and `restore` fire on the IDENTICAL
+      EIGHT SUBJECTS — same cell shape, so one belief counted under two verbs. The better statement
+      of the change is the PREDICATE count: clause 4 went from ONE reachable predicate
+      (`contain.path`) to FIVE (`+ exists:Site` · `exists:Record` · `exists:Person` ·
+      `exists:Rung`). ⚠ THE FIRST
       WRITING OF THIS ROW SAID 13, QUOTED FROM A TEST DOCSTRING RATHER THAN MEASURED, WHICH PUT A
       QUOTED NUMBER AND A MEASURED ONE IN THE SAME RATIO — the asymmetry §0.1 pt 4 names. `move`
       itself FELL, 25 -> 18, which the quoted figure had reported as a rise. On the pinned NPC-088 2-slot slice the shipped
@@ -240,11 +248,15 @@ rows:
       >= 30, which the closed `requires_operands` roster has no name for (`H-85`).
       ⚠ WHAT THE SPLIT DID **NOT** BUILD, said here because a verb row is not a mechanism:
       `fieldwork_v30.md:302-309` grades all six on four bands and NOTHING RESOLVES A BAND. Their
-      `emits:` is flat. `rosters.yaml:481` types investigation's seam UNRULED and `:487-491` rules
+      `emits:` is flat. `rosters.yaml:482` types investigation's seam UNRULED and `:487-491` rules
       that writing a plausible IN/OUT for it *"would be inventing the architecture rather than
-      recording it"*; `:505-508` forbids the near escape of giving them a prize. ED-FI-0009 is
-      the ruling request.
-    measure: "python -m engine.season.harness.corpus_run  # 'WHERE THE 32 GO' line"
+      recording it"*; `:505-508` forbids the near escape of giving them a prize. ⚠ AND THAT BLANK
+      IS ALREADY CLOSED, WHICH ED-FI-0009 FILED AS A JORDAN QUESTION AND WITHDREW THE SAME DAY:
+      `workplans/2026-09-06-season-loop-execution-plan.md:647` ran it through §0's five tests four
+      days earlier and closed it at test 3 — *"NOT A SEAM. The loop IS the mechanism"*, attaching
+      RESOLVE → WITNESS, out = *"Claims graded by degree; Failure emits `finding.none` and deposits
+      nothing"*, **work item 4.5**. What is missing is a degree PRODUCER, which is work.
+    measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 37 today, and was '32' in this cell until ED-FI-0009 made the count honest"
     blocks: [W10-core, H-65, H-94]
 
   - id: R-06
@@ -330,8 +342,13 @@ rows:
       ⚠ UNCHANGED BY ED-FI-0009, DELIBERATELY, AND THE SIX ARE WHERE THIS ROW NOW POINTS. They
       are the acts canon grades on four bands (`fieldwork_v30.md:302-309`) and they are the
       obvious first producer of a margin the one ladder could read. They ship UNGRADED because
-      building the producer means writing investigation's seam, which `rosters.yaml:487-491` puts
-      to Jordan rather than to a session. ED-FI-0009 is that request; this row moves when it is
-      answered, and the scan above is still green because nothing here rolls.
+      the producer does not exist. ⚠ THE FIRST WRITING OF THIS PARAGRAPH SAID BUILDING IT MEANT
+      WRITING INVESTIGATION'S SEAM AND PUT THAT TO JORDAN. It does not and it is not a Jordan
+      question: `workplans/2026-09-06-season-loop-execution-plan.md:647` already closed that blank
+      at §0 test 3 — investigation is NOT a seam, the loop IS the mechanism, and the degree
+      producer is **work item 4.5**, attaching RESOLVE → WITNESS. This row moves when 4.5 is built;
+      its own blockers are `W27`'s cast (no attribute values on any person), the absent Depth
+      carrier, and §27.4's refusal to route an uncontested attempt to an `Ob = 0` roll. The scan
+      above is still green because nothing here rolls.
     measure: "python -m pytest engine/season/tests -k ladder_is_the_trees_own"
     blocks: [W23, H-98]
