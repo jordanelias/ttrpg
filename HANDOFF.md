@@ -9,6 +9,24 @@ experiment it was the instrument for. Read this file, and your lane's, yourself.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
+## 📋 2026-09-10 — the blocking-rulings queue measured (ED-IN-0207, all lanes)
+
+**`workplans/2026-09-10-unblocking-strategy.md`** — Jordan asked for a strategy to unblock as much work
+as possible. The measurement says the `needs_jordan` queue is **not** the blockage: **not one of its 151
+rows is cited by `engine/season/requirements.yaml`, `engine/season/hole_register.yaml` or the R-execution
+plan**, all three of which do cite EDs (the control). What blocks the game is the **hole register**, where
+`register.py --check` fails `G6` on fifteen `absent` rows because §0's five-test ladder was never run on
+them — and **of the six holes the NINE block on, exactly one is a genuine ruling, and its own row says it
+unblocks nothing.**
+
+**Corrections other lanes need:** Arc 2 / G1 is **not** waiting on a ruling (`requirements.yaml` R-08's
+`disposition`, PR #384). `ED-1051`'s counts are stale — 9/27 `doc:null` and 1/27 `[ASSUMPTION]`, not 11
+and 13. **`ED-SC-0005`, one of SC Stage 4's three "HARD" blockers, asks Jordan to cap a bonus-die stack
+that does not exist** — the four channels resolve as δσ under a tanh soft cap. `ED-SC-0004` is real.
+
+**Nothing was closed or flipped.** §6 of the strategy is the eleven-question decision sheet — the whole
+human ask. Per-lane detail in `registers/handoffs/HANDOFF_IN.md`.
+
 ## ⚠ CURRENT — 2026-09-06, PR #373 · the proceedings subsystem owns all social contests (SC lane)
 
 **A from-scratch proceedings subsystem exists at `proposals/2026-09-05-proceedings-subsystem/`, PROPOSED
