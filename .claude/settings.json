@@ -30,7 +30,8 @@
       "Bash(find *)",
       "Bash(head *)",
       "Bash(tail *)",
-      "Bash(diff *)"
+      "Bash(diff *)",
+      "mcp__github__pull_request_read"
     ]
   },
   "hooks": {
