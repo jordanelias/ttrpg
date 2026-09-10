@@ -2537,6 +2537,80 @@ def test_decision_package_never_names_world_anywhere_under_it():
         "changed unrecognisably or this control needs re-deriving")
 
 
+def test_a_misspelled_manifest_row_fails_at_boot_naming_the_row():
+    """`04_CODE_ARCHITECTURE.md:1031`, build step 10's done-condition, verbatim: **"a misspelled
+    manifest row fails at boot naming the row."** §A.2:136 gives role->provider rows their own
+    module and Stage 2 §D.4 (`04:125`) types it -- *"the seam names a role; a manifest row names the
+    provider; resolved at boot."*
+
+    ⚠ BEFORE UNIT L4 THE FAILURE CAME AT FIRST CALL, NOT AT BOOT, and the difference is the whole of
+    §D.4: a bad row surfaced when some act happened to reach the seam, which may be three seasons
+    in, or never in a corpus that does not contest anything. `World.boot` now runs
+    `manifest.check_rows()`, which resolves every row of every declared role once.
+
+    THREE ARMS, because two of them are what stop this passing vacuously:
+      1. a misspelled provider raises AT BOOT, and the message NAMES the row -- both the key and the
+         module it wrongly points at, since a failure that says only "bad row" fails the
+         done-condition's second half;
+      2. the sweep is NOT EMPTY -- `check_rows` returns what it checked, and a validator that
+         resolved nothing has reported clean over an unexamined registry (`CLAUDE.md` §0.1 pt 2);
+      3. the real registry boots clean, so arm 1 is a measurement rather than a tautology."""
+    from ..manifest import check_rows, resolve
+    from ..manifest import registry as _reg
+    from ..data import rosters as _ros
+    from ..state.world import World
+
+    checked = check_rows()
+    assert checked, (
+        "manifest.check_rows() resolved NO rows. Every assertion about a misspelled row is then "
+        "vacuous -- the roster is empty, or the role map lost its entry (§0.1 pt 2)")
+
+    real = _ros.roster_map("contest_subsystems", "prizes")
+    assert real, "the contest_subsystems roster is empty; arm 1 below would prove nothing"
+
+    # ARM 1 -- a row naming a module no contract declares.
+    saved = _reg.roster_map
+    try:
+        _reg.roster_map = lambda r, c: dict(real, **{"a fabricated prize": "no_such_subsystem"})
+        try:
+            check_rows()
+        except Exception as exc:                      # noqa: BLE001 -- the type is asserted below
+            text = str(exc)
+            assert type(exc).__name__ == "Unspecified", (
+                f"a misspelled row raised {type(exc).__name__}, not the typed refusal")
+            assert "a fabricated prize" in text and "no_such_subsystem" in text, (
+                "the boot failure does not NAME the row -- 04:1031 requires the row, not just the "
+                f"fact of one: {text!r}")
+        else:
+            raise AssertionError(
+                "a manifest row naming a module no contract declares booted CLEAN. That is the "
+                "first-call failure mode §D.4 replaces: the dispatch target is invented and the "
+                "run finds out whenever some act happens to reach the seam")
+    finally:
+        _reg.roster_map = saved
+
+    # ARM 3 -- and the real registry still boots.
+    assert check_rows() == checked
+
+    # ARM 4 -- ⚠ THE WIRING, AND THE FIRST VERSION OF THIS TEST DID NOT HAVE IT. Arms 1-3 call
+    # `check_rows()` directly, so they stay GREEN if `World.boot` stops calling it -- measured, by
+    # deleting the call and re-running: 1 passed. A test of a check that cannot see whether anything
+    # RUNS the check is §0.1 pt 2 in one line, and "resolved at boot" is the half §D.4 is about.
+    seen = []
+    saved_resolve = _reg.resolve
+    try:
+        _reg.resolve = lambda role, key: seen.append((role, key)) or saved_resolve(role, key)
+        w = World.__new__(World)
+        w.manifest = {"contest": "seam.contest_resolver"}
+        w.boot(("contest",))
+    finally:
+        _reg.resolve = saved_resolve
+    assert seen, (
+        "World.boot() resolved NO manifest row. `check_rows()` works and nothing calls it, so a "
+        "misspelled row still fails at FIRST CALL -- which is the mode 04:1031's done-condition "
+        "replaces, and every arm above would pass over it")
+
+
 def test_person_q_cannot_reach_the_world_side():
     """§A.3 row 2, and it is the row's PROPERTY rather than its file count.
 

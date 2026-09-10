@@ -570,9 +570,16 @@ class World:
     # -- S43: resolution AT BOOT, by string. A missing provider is a STARTUP FAILURE WITH A
     # NAME IN IT, not a null three seasons into a campaign.
     def boot(self, required_roles: tuple[str, ...]) -> None:
-        missing = [r for r in required_roles if r not in self.manifest]
-        if missing:
-            raise NoProducer(
-                f"role(s) {missing} have no provider in the manifest", "S43",
-                needs="a registry row naming a role and its provider",
-                law="S43 -- the engine names the ROLE; the registry names the MODULE; RESOLUTION HAPPENS BY STRING AT BOOT. A missing provider is a startup failure with a name in it. THE MANIFEST IS THE SEAM; A PATH LITERAL IN A BODY IS NOT")
+        """⚠ THE RULE MOVED AND THE METHOD STAYED, WHICH IS THE POINT (L4, ED-IN-0206).
+
+        `04 §A.2:136` gives role->provider resolution its own module, `manifest/`, and the scan and
+        the `NoProducer` raise sat inline here -- on a STORE, which owns rows and not seams. They
+        live in `manifest.check_roles` now and this delegates, because every caller holds a `World`
+        rather than a manifest and changing that would be a wider edit than the rule needs.
+
+        `check_rows()` is the other half of `04:1031`'s done-condition -- *"a misspelled manifest
+        row fails at boot naming the row"* -- and it runs HERE rather than at import, so a reader
+        of one name does not pay for `module_contracts.yaml`."""
+        from ..manifest import check_roles, check_rows
+        check_roles(self.manifest, required_roles)
+        check_rows()

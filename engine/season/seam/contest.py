@@ -21,6 +21,7 @@ from typing import Any, Callable, Optional
 from ..data import files
 from ..data.rosters import roster_map
 from ..gaps import Forbidden, Unspecified
+from ..manifest import resolve as manifest_resolve
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -44,41 +45,19 @@ class ContestError:
 # ===========================================================================
 
 def contest_subsystem(prize: Any) -> Optional[dict]:
-    """Which subsystem owns a contest for this prize, from `rosters.yaml` crossed with
-    `references/module_contracts.yaml`.
+    """Which subsystem owns a contest for this prize.
 
-    Neither half is invented here: the PRIZE is what Part E's `contests:` column carries, and the
-    SUBSYSTEM is a module the contracts file already declares with a doc and a resolver. Returns
-    `None` for a prize no roster row claims -- which is a real answer, not a failure, and leaves
-    the generic refusal below it intact."""
-    name = roster_map("contest_subsystems", "prizes").get(str(prize))
-    if name is None:
-        return None
-    import yaml as _y
-    contracts = files.MODULE_CONTRACTS_YAML
-    if not contracts.exists():
-        return dict(module=name, resolver="unknown", doc="module_contracts.yaml not found")
-    for m in (_y.safe_load(contracts.read_text()) or {}).get("modules") or []:
-        if m.get("module") == name:
-            # ⚠ THE PYTHON, NOT THE MARKDOWN. Jordan, 2026-09-02: *"we aren't using the .md or
-            # anything for those systems. those are super outdated."* The contracts file carries
-            # both a `doc:` (markdown) and a `sim_module:` (the live Python) for these three, and
-            # the first version of this refusal printed the `doc:` — so it pointed a reader at a
-            # file its owner calls superseded, which is the stale-pointer defect this chain keeps
-            # finding in other people's work. `sim_module` first, and where the contract has none
-            # the tree is asked directly rather than falling back to the markdown.
-            where = m.get("sim_module") or ""
-            if not where:
-                guess = files.subsystem_sim_dir(name)
-                where = (f"systems/{name}/sim/" if guess.is_dir()
-                         else f"(no `sim_module:` in module_contracts.yaml; "
-                              f"`doc:` is {m.get('doc')!r} and is out of date)")
-            return dict(module=name, resolver=m.get("resolver") or "undeclared", doc=where)
-    raise Unspecified(
-        f"`contest_subsystems` maps {prize!r} to {name!r}, which is in no module contract", "S39",
-        needs="a module named in references/module_contracts.yaml",
-        law="the roster may only name a subsystem the contracts file declares -- otherwise the "
-            "dispatch target is invented")
+    ⚠ **THE CROSSING MOVED TO `manifest/` AT UNIT L4 (ED-IN-0206) AND THIS IS NOW THE SEAM ASKING
+    IT.** `04 §C.5`'s pseudocode spells the call the seam makes as
+    `provider = manifest.resolve("contest", prizes[prize])`, and §A.2:136 gives role->provider rows
+    their own module; the `rosters.yaml` x `module_contracts.yaml` crossing sat here, resolved at
+    FIRST CALL rather than at boot. Behaviour is unchanged for every caller: `None` for a prize no
+    roster row claims -- a real answer, not a failure, leaving the generic refusal below intact --
+    and a raise for a row naming a module no contract declares.
+
+    The wrapper is kept rather than inlined at the call sites because the seam's own vocabulary is
+    *"which subsystem owns a contest for this prize"*, and `resolve`'s is *"role, key"*."""
+    return manifest_resolve("contest", prize)
 
 
 @dataclass
