@@ -41,7 +41,8 @@ from ..epistemic import CHANNEL_PREDICATES, observers_for
 from ..gaps import (
     Collision, Forbidden, NoProducer, ShapeGap, Ungraded, Unowned, Unspecified, expect_refusal,
 )
-from ..loop.driver import SeasonDriver, resolvable_verbs, sense
+from ..loop.deliberate import sense
+from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.world_q import questions_for
 from ..seam import ContestError, contest
 from ..state.carriers import (
@@ -2494,7 +2495,13 @@ def a39():
     # step 9: `SeasonDriver.resolve` -- the caller this spy exists to observe -- moved to
     # `loop/driver.py`, and it calls `contest(...)` BARE, so the rebind has to land in the module
     # the call resolves in. Left on `shape` it would be a no-op and `captured` would be empty.
-    from ..loop import driver as _s
+    # ⚠ THE SPY MOVES WITH ITS SUBJECT (L5, ED-IN-0206). `SeasonDriver.resolve` calls
+    # `contest(...)` BARE, so the rebind must land in the module the call resolves in -- and
+    # `resolve`'s body left `driver.py` for `loop/resolve.py` at L5. Left on `driver`,
+    # `_s.contest = spy` is a no-op, `captured` comes back EMPTY, and this probe grades
+    # INSTRUMENT-ERROR. The read-capture on the next line moves with the writes, for the
+    # reason step 7 recorded: a restore into a module that never held the value still passes.
+    from ..loop import resolve as _s
     real, captured = _s.contest, {}
     def spy(w_, rung, prize, claimants, depth, max_depth, causes, extension=None):
         captured["causes"] = list(causes)

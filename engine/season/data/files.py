@@ -136,6 +136,30 @@ LOOP_DIR = PACKAGE_DIR / "loop"
 # step 10, so a scan pointed there fails to open a file rather than passing by finding nothing.
 DRIVER_PY = LOOP_DIR / "driver.py"
 
+
+def loop_modules() -> tuple:
+    """EVERY `.py` UNDER `loop/`, DISCOVERED. The season loop's source corpus.
+
+    ⚠ **THIS EXISTS BECAUSE `DRIVER_PY` ALONE STOPPED BEING THE LOOP AT UNIT L5 (ED-IN-0206).**
+    `04_CODE_ARCHITECTURE.md` §A.2:134 makes `loop/` *"driver + six steps"*, so the six step bodies
+    left `driver.py` for their own modules -- and six guards read `files.DRIVER_PY` BY FIXED PATH.
+    Four went loudly red on the move and one, `test_w2`'s write-call-site walk, would have NARROWED
+    IN SILENCE: its only floor is `assert pairs`, which `probes.py` satisfies on its own, so it
+    would have reported clean over every write site the six steps took with them. That is the fourth
+    recurrence of one defect in this package (steps 2, 4, 5, now), and the fix is the same one
+    `package_modules` states above: **compute the corpus, never list it.**
+
+    A caller that scans this for a property must also pin a FLOOR or a SUPERSET, because a
+    discovery that stops matching passes by finding nothing (`CLAUDE.md` §0.1 pt 2)."""
+    return tuple(sorted(LOOP_DIR.rglob("*.py"),
+                        key=lambda p: p.relative_to(LOOP_DIR).as_posix()))
+
+
+def loop_source() -> str:
+    """Every `loop/` module's text, concatenated in path order -- for the guards that grep the
+    season loop for a literal rather than walking it."""
+    return "\n".join(p.read_text(encoding="utf-8") for p in loop_modules())
+
 # ---------------------------------------------------------------------------
 # AX-2's ISLAND, AND THE ONLY DIRECTORY IN THIS PACKAGE WHOSE SHAPE IS AN ENFORCEMENT MECHANISM
 # RATHER THAN A FILING CHOICE. `04_CODE_ARCHITECTURE.md:1046`: *"`decision/` is a directory from its

@@ -46,7 +46,8 @@ from ..epistemic import (
     CHANNEL_PREDICATES, act_refs, belief_contradicts, claim_subjects, observers_for,
 )
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Ungraded, Unspecified
-from ..loop.driver import SeasonDriver, resolvable_verbs, sense
+from ..loop.deliberate import sense
+from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..loop.predicates import REQUIRES_PREDICATES, highest_title_rank, in_holdings, under_purview
 from ..queries import world_q
 from ..queries.person_q import LedgerReader
@@ -70,7 +71,10 @@ from ..gaps import Forbidden, Unspecified
 from ..state.carriers import Event, Person, Proposition, Rung, Site, Tenure, View
 from ..state.world import World
 
-SHAPE_SRC = files.DRIVER_PY.read_text()   # step 9: the loop moved; `shape.py` is a facade now
+# ⚠ L5: THE LOOP IS `loop/`, NOT `driver.py`. Six step bodies left the driver for their own
+# modules (`04 §A.2:134`), so a scan pointed at `DRIVER_PY` alone reads a fraction of the season
+# loop and passes on what it can no longer see. Derived, never listed -- `files.loop_modules()`.
+SHAPE_SRC = files.loop_source()
 PROBES_SRC = files.PROBES_PY.read_text()
 # `Fixtures`/`DEFAULT_FIXTURES` moved to `season.data.fixtures` in step 3 of the decomposition
 # (ED-IN-0203, a PURE MOVE) -- a fixed source string, alongside `SHAPE_SRC`/`PROBES_SRC` above,
@@ -1770,8 +1774,32 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     ⚠ Sites whose `record_kind`/`fieldname` are not literals are reported as a HOLE IN THIS CHECK
     rather than skipped: a walk that silently ignores what it cannot read is a walk that reports
     `clean` over an unknown number of unchecked writes."""
-    pairs, dynamic = _write_call_sites(files.DRIVER_PY, files.PROBES_PY)
+    pairs, dynamic = _write_call_sites(*files.loop_modules(), files.PROBES_PY)
     assert pairs, "the AST walk found no write call sites at all -- the walk is broken"
+    # ⚠ THE SUPERSET PIN, AND A COUNT WOULD NOT DO. `assert pairs` is satisfied by `probes.py`'s
+    # sites ALONE, so before L5 re-pointed this walk at `files.loop_modules()` a move of the six
+    # step bodies out of `driver.py` would have taken their write sites out of the corpus and left
+    # this reporting clean over them -- the fourth recurrence of that defect in this package (steps
+    # 2, 4, 5). The pin is a SUPERSET rather than a length because a lost pair and a gained pair
+    # cancel in a count; every pair the corpus held when L5 landed must still be found.
+    # ⚠ MEASURED, NOT WRITTEN FROM MEMORY. A first draft of this pin listed eleven pairs and six of
+    # them were wrong -- `(Rung, exists)`, `(Rung, dates)`, `(Site, exists)` and `(Person, weight)`
+    # are not in the corpus at all, and four real ones were missing. Derived by running the walk.
+    _PAIRS_AT_L5 = {
+        ("Claim", "confidence"), ("Date", "fired"), ("DocketItem", "matter"),
+        ("Person", "claim_ledger"), ("Person", "convictions"), ("Person", "exists"),
+        ("Person", "scar"), ("Person", "stance"), ("Record", "matured"),
+        ("Record", "stages"), ("Record", "ttl"), ("Rung", "envelope"),
+        ("Rung", "stores"), ("Rung", "yield"), ("Site", "condition"),
+        ("Tenure", "since"), ("Tenure", "until"),
+    }
+    _found = set(pairs)
+    _lost = {p for p in _PAIRS_AT_L5 if p not in _found}
+    assert not _lost, (
+        f"write call sites that this walk found when unit L5 pinned them are GONE: {sorted(_lost)}. "
+        "Either the code moved out of the scanned corpus -- in which case re-point the corpus, not "
+        "this pin -- or a write was deleted. A shrinking scan that still passes is the silent "
+        "narrowing this pin exists to make loud (§0.1 pt 2).")
     # W3: THE FOLD'S WRITE IS GENERIC BY CONSTRUCTION -- `_apply_write` passes the pair as
     # variables, because one `resolve` serving 32 verbs cannot name a literal. Its coverage did
     # not vanish, it MOVED AND GOT STRONGER: `_load_verb_table` checks every `writes:` of every
@@ -1784,7 +1812,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     # property is *"this call is inside `_apply_write`"*, and the AST answers it exactly. `G3`:
     # assert the property, never the proxy. Found while reconciling the governance-slice pass.
     import ast as _ast
-    _tree = _ast.parse(files.DRIVER_PY.read_text())
+    _tree = _ast.parse(files.LOOP_DIR.joinpath("resolve.py").read_text())
     fold_span = next(((n.lineno, n.end_lineno) for n in _ast.walk(_tree)
                       if isinstance(n, _ast.FunctionDef) and n.name == "_apply_write"), None)
     assert fold_span, "`_apply_write` is gone; the fold's declared exemption names nothing"
@@ -6628,7 +6656,7 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # a reader while this test's scope note silently stops covering it, so the structure is what
     # is pinned rather than a sentence about it.
     import ast as _ast
-    _fold_fn = next(n for n in _ast.walk(_ast.parse(files.DRIVER_PY.read_text()))
+    _fold_fn = next(n for n in _ast.walk(_ast.parse(files.LOOP_DIR.joinpath("resolve.py").read_text()))
                     if isinstance(n, _ast.FunctionDef) and n.name == "_fold")
     _calls = [n for n in _ast.walk(_fold_fn)
               if isinstance(n, _ast.Call) and getattr(n.func, "id", "") == "evaluate"]
@@ -6777,7 +6805,7 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
     # ⚠ `src`/`heads` are now per-module, so this arm names the file it probes rather than
     # inheriting whatever the scan loop happened to leave bound — a loop variable read after the
     # loop is exactly the kind of accident a re-point introduces.
-    _src = files.DRIVER_PY.read_text()
+    _src = files.loop_source()
     _m = _re.search(r"^[ \t]+def[ \t]+(\w+)", _src, _re.M)
     assert _m and _enclosing(_heads(_src), _m.end()) == _m.group(1), (
         "`_enclosing` cannot see an indented `def`, so a default inside a method would be "
