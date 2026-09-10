@@ -28,8 +28,7 @@ handoff to whoever runs Arc 3 (§8), and the method and fix-on-error rule bindin
 
 **Everything in §6 and §7 is engineering against a written spec.** `04_CODE_ARCHITECTURE.md` is
 RATIFIED (ED-IN-0204) and already decided every item. **No unit here is an escalation** — §0's five
-tests close all of them at test 3 (answered by a design document). Do not open a `needs_jordan` row
-for anything in §6 or §7.
+tests close all of them at test 3.
 
 ---
 
@@ -246,11 +245,13 @@ superseded **in place**, name `04:127-139` and `04:1046` as what replaces them, 
 rename is performed rather than avoided. **Do not delete either document.** Precedent for the form:
 v1 §4's own `⚠ STEPS 7-10 LANDED…` note.
 
-**Artifact:** the sentence is **reworded**, not struck through — `~~does **not** move~~` still
-matches a grep, so the artifact is `rg -n "does \*\*not\*\* move"
-workplans/2026-09-09-shape-decomposition-plan-v2.md` → **0** *and* the superseding citation present on
-the same row. Marking a row superseded means its claim no longer reads as live guidance, which a
-strikethrough a session skims past does not achieve.
+**Artifact — CORRECTED DURING EXECUTION.** A first writing demanded
+`rg -n "does \*\*not\*\* move" …v2.md` → **0**. Wrong artifact: this repo's idiom, used throughout
+#383, is to **quote the struck claim and refute it**, since a reader who meets only the correction
+cannot tell what was corrected — deleting the words to satisfy a grep makes the document worse to pass
+a check. **The artifact is: every struck placement directive sits inside a `⚠ SUPERSEDED` block naming
+its replacement `04` line and its repair unit, and the Status header carries the same warning.**
+`rg -c SUPERSEDED …v2.md` → 3.
 **Tier:** `haiku` for the edit, `sonnet` to verify the two files agree afterwards.
 
 ### L1 · `decision.py` → `decision/` — the one unit with a spec-mandated *first commit*
@@ -800,9 +801,8 @@ the content hash plus the 187-test season suite.
    blocking tier's membership is honest (`CLAUDE.md` §0.1 pt 5). Every guard named in §6 and §7 is
    either a re-point of an existing one or is licensed because its subject is Layer-2 game code
    against a ratified axiom.
-3. **No `needs_jordan` row for anything in §6 or §7.** All of it is decided by
-   `04_CODE_ARCHITECTURE.md`. Before flagging anything, run §0's five tests and expect it to close at
-   test 3.
+3. **No `needs_jordan` row for anything in §6 or §7** — all decided by `04_CODE_ARCHITECTURE.md`. Run
+   §0's five tests first and expect closure at test 3.
 4. **No skipped, disabled or weakened test to reach green** — G3 in particular will red three verb
    rows and the fix is to declare their basis, not to soften the check.
 5. **No status flip as acceptance.** `register.py`'s requirements check (`harness/register.py:627`,

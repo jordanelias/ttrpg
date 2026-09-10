@@ -1,6 +1,7 @@
 # `engine/season/shape.py` — DECOMPOSITION PLAN v2 (steps 7–10, executable)
 
 ## Status: **PROPOSED. Reference under §0.05 — delete this file and the game behaves identically.**
+## ⚠ **TWO PLACEMENT ROWS ARE SUPERSEDED (2026-09-10):** §2's flat `decision.py` and §3's *"`combat_seam.py` does not move"*. Both contradict `architecture/meta/04_CODE_ARCHITECTURE.md` §A.2 / `04:1046`, RATIFIED 2026-09-05, and both were already corrected on `main` by `2026-09-09-r-execution-plan.md` §6 U0 (rows **D2** and **D5**) five hours before the steps that followed them merged. **The symbol inventories in both sections are correct and still the owner; only the destinations were wrong.** Repairs: units **L1** and **L2** of `workplans/2026-09-09-layer1-conformance-plan.md`. Gap filed as **ED-IN-0206**.
 ## Lane: IN, ED-IN-0203. Supersedes `workplans/2026-09-06-shape-decomposition-plan.md` for steps 7–10 and 0a.
 
 **Why a v2 rather than an edit.** v1 was written 2026-09-06 against a 6,771-line `shape.py`. Six
@@ -69,7 +70,17 @@ that cannot fail the suite and would mismeasure on re-run.
 
 ## 2 · Step 7 — `engine/season/decision.py`
 
-**Flat file at the package root**, precedent `epistemic.py`. Layer 10.
+⚠ **SUPERSEDED AS A PLACEMENT, 2026-09-10 — the step landed and the placement was already wrong when
+it did.** This row read *"**Flat file at the package root**, precedent `epistemic.py`"*. `decision/` is
+one of `architecture/meta/04_CODE_ARCHITECTURE.md` §A.2's nine modules (`04:133`) and **`04:1046`
+requires it to be a DIRECTORY FROM ITS FIRST COMMIT** — *"the isolation scan matches by path, so a
+`choose` drafted inside `loop/` and moved later would have been green while violating AX-2."* Layer 1
+was RATIFIED 2026-09-05 (ED-IN-0204), and
+`workplans/2026-09-09-r-execution-plan.md` §6 U0 row **D2** had put that correction on `main` at
+`cb28ec9`, **five hours before this step merged at `c3b51e3`**. `epistemic.py` is not a precedent for it
+— `epistemic` is not one of the nine. **The repair is unit L1 of
+`workplans/2026-09-09-layer1-conformance-plan.md`**, and the gap is filed as **ED-IN-0206**. Everything
+below about WHICH SYMBOLS move is unaffected and still correct; only the destination's shape was.
 
 ### 2.1 Moves (`shape.py` line, HEAD `e03abff2`)
 
@@ -199,8 +210,21 @@ three rebinds and the arm edit.
 
 ## 3 · Step 8 — `engine/season/seam.py`
 
-`combat_seam.py` does **not** move: moving it edits `PATH_SEAM_ALLOWED`
-(`test_engine_does_not_import_systems.py:220`) and `files.py:134` for zero yield.
+⚠ **SUPERSEDED, 2026-09-10, AND THIS ROW IS THE ONE THAT COST SOMETHING.** It read
+*"`combat_seam.py` does **not** move: moving it edits `PATH_SEAM_ALLOWED`
+(`test_engine_does_not_import_systems.py:220`) and `files.py:134` for zero yield."* **That is the
+R-plan's D5 inverted — the cost read as the reason.** D5 (`2026-09-09-r-execution-plan.md` §6 U0)
+prices the same edit as *"a rename inside a shrink-only set, not a widening"* and schedules it **in step
+8's own commit**; it was on `main` at `cb28ec9` five hours before this step merged. `04:135` and the
+§A.2 table's `seam/wrappers/*` row put a wrapper **under `seam/wrappers/`**, and `seam/` itself is a
+DIRECTORY on the nine-module list. `v1:246` records the outcome plainly: *"the rename that row demands
+was avoided rather than performed."*
+
+**Repair: unit L2 of `workplans/2026-09-09-layer1-conformance-plan.md`** — `seam/contest.py` +
+`seam/ladder.py` + `seam/wrappers/combat.py`, with the `PATH_SEAM_ALLOWED` member and
+`files.COMBAT_SEAM_PY` renamed in the same commit. ⚠ **And the yield is not zero, which is why this
+premise was wrong twice over:** `04:1046`'s by-path scan is the enforcement mechanism for AX-2, and a
+flat file cannot be scanned by path. **The symbol list below is unaffected and still correct.**
 
 **Moves:** `ContestError` :1268 · `contest_subsystem` :2525 · the S39.4 block :2563-2616 · `_LADDER`
 :2618 · **`_LADDER_ERROR` :2619** · `degree_ladder` :2622 *with its `global` and its root insert
