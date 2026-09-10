@@ -36,11 +36,20 @@ non-goals all stand. **What changed is everything around them**, and a session t
   costed, wearing the ruled module's name. `net_boost` is the σ layer.
   ⚠ **`ED-SC-0037` still reads `open` / `needs_jordan: true` on `main`; PR #386 flips it.** U1 half (b)
   is unblocked when that merges — **do not flip the row from another lane.**
-- **What is startable on `main` today is ONE unit and a half, not two.** **U7 groups 1–2** (15 of the
-  20 verbs — `verb_table.yaml` plus *appends* to `loop/{predicates,effects}.py`, which register through
-  a decorator into a module-level dict the fold reads at a single line L5 relocates). And **U3a** —
-  the 13 convictions and the transcribed 13×4 table as **carriers nothing reads yet**, byte-identity
-  as the control.
+- **What is startable on `main` today is EXACTLY ONE unit: U7 groups 1–2** (15 of the 20 verbs —
+  `verb_table.yaml` plus *appends* to `loop/{predicates,effects}.py`, which register through a
+  decorator into a module-level dict the fold reads at a single line L5 relocates). Measured
+  2026-09-10: **10 of the 15 need `requires_typed`, 14 need an effect, and ZERO need a write-matrix
+  row** — all 40 pairs already exist, so that file is untouched. ⚠ `destroy_record` is **already
+  resolvable and already effected**: its blocker is candidate formation, not wiring, so U7's count of
+  20 is off by at least one and off by a different KIND of work.
+  ⚠ **A `U3a` was carved as a second startable unit, landed, and REVERTED the same session.** It put
+  the 13×4 table in `rosters.yaml` as a carrier nothing reads. `04:124` binds `data/` to raise on a
+  **declared-but-unread** row and names `table` explicitly; `01_AXIOMS.md` ID-13 calls such a thing
+  *"a mechanism that does not exist, wearing a schema's clothes"*; and `rosters.yaml:69-73` records
+  this very file DELETING two rosters for exactly that. Worse, its byte-identity control was **fake by
+  the plan's own criterion** — a table nothing reads is byte-invariant *by construction*, which §14's
+  `F13` rejects in those words. **The 52 cells land with their reader, in U3, after L1.**
   ⚠ **U3 AS WRITTEN CANNOT BE EXECUTED, and it bills itself *"data only, preconditions: none"*.**
   `decision.py::make_chooser` scores `Σ_axis p.convictions[ax] · align(verb, ax)` — keyed **by axis** —
   so the 13 convictions reach no decision unless that module projects them, and **that module is L1's**.

@@ -2267,10 +2267,10 @@ Recorded so a later session does not re-open them — the ED-IN-0185 failure `CL
 
 ## §13 · SIZE — measured, and over the convention's threshold
 
-**Measured, not estimated — RE-MEASURED 2026-09-10 after the Arc-3 amendments AND the adversarial
-reconcile:** **2,613 lines**, **49,260 tokens** at `tools/ci_common.py::tokens` — the repo's single
+**Measured, not estimated — RE-MEASURED 2026-09-10 after the Arc-3 amendments, the adversarial
+reconcile, and the U3a revert:** **2,676 lines**, **51,152 tokens** at `tools/ci_common.py::tokens` — the repo's single
 owner of that estimate, characters ÷ 4. ⚠ **Say which character count**: Python `len()` gives
-**197,042** and `wc -c` gives **199,724 bytes**, and the gap is this file's own `§`, `⚠`, `→` and `≥`. `tokens()` divides the first.
+**204,608** and `wc -c` gives **207,366 bytes**, and the gap is this file's own `§`, `⚠`, `→` and `≥`. `tokens()` divides the first.
 Both are true of their own basis, which is the failure mode `CLAUDE.md` §0.1 names and which PR #383
 paid for once already (*"One instrument, named, for numbers that get compared."*).
 
@@ -2296,9 +2296,10 @@ shipping it as one part is a deliberate choice, not an oversight. ⚠ **After th
 file is over 60% longer than that peer** (37.7k against 23.2k tokens), so the choice is weaker than it
 was and the split below is closer than it was. Say so rather than re-asserting the earlier comparison.
 
-⚠ **AND THE SPLIT IS NOW OVERDUE AT 49.2k — say so rather than re-asserting the comparison a fourth
-time.** This is **112% longer** than its closest peer (`workplans/2026-09-06-season-loop-execution-plan.md`,
-23.2k) — the successive measurements read 60%, then 85%, now 112%. The convention is still `WARNING`-level and still not a
+⚠ **AND THE SPLIT IS NOW OVERDUE AT 51.2k — say so rather than re-asserting the comparison a fourth
+time.** This is **120% longer** than its closest peer (`workplans/2026-09-06-season-loop-execution-plan.md`,
+23.2k) — the successive measurements read 60%, 85%, 112%, now 120%. **Split at the §6/§7 boundary
+before adding another section.** The convention is still `WARNING`-level and still not a
 blocking gate, and the choice to ship one part is still deliberate — but it is weaker at every
 re-measurement, and the next session to add a section here should split first.
 
@@ -2438,8 +2439,8 @@ its own instruction.
 
 | unit | starts when | why not sooner |
 |---|---|---|
-| **U3a** · the 13 + the 13×4, as carriers nothing reads | **now, on `main`** | `rosters.yaml` only, which `ED-IN-0206` lists among the **5 of 9 conforming** modules. **Byte-identity is the control** |
-| **U3b** · the axis swap + the projection in the score | **L1 merged** | see the box below — this is NOT what U3 says, and U3 is wrong |
+| ~~**U3a** · the 13×4 as a carrier nothing reads~~ | ~~now, on `main`~~ | **STRUCK 2026-09-10 — BUILT, LANDED, REVERTED.** A declared-but-unread table is what `04:124` binds `data/` to raise on, and its byte-identity control was **fake by this document's own `F13` criterion** (identical *by construction*). See the box below |
+| **U3** · the table + the swap + the projection, ONE unit | **L1 merged** | the table may not be separated from its reader (`04:124`), and the swap is what resolves the `Precedent` two-sense collision. Nothing in U3 is startable on `main` |
 | **U7 gp 1-2** · 15 of the 20 verbs | **now, on `main`**, with one qualifier measured | `verb_table.yaml`, plus **appends** to `loop/{predicates,effects}.py` |
 | **U1** · R-09 producer + R-05b | **L2 + L4 merged**, and half (b) also on **ED-SC-0037 flipped** (PR #386) | its file is a `seam/wrappers/*` row and its dispatch *is* `manifest.resolve` (§11.0, U1) |
 | **U2** · R-03 scene tick | **L5 merged** | it reshapes `season()` into rounds; L5 splits that same body into six modules |
@@ -2488,13 +2489,75 @@ its own instruction.
 > **PP-684**, the matrix's own authority; `PP-687` is the axis-space substrate it projects **onto**
 > (that doc's §1 says so), and the descriptor registry's `PP-687` attribution is what propagated the slip.
 >
+> ### ⚠⚠ **U3a WAS BUILT, LANDED, AND THEN REVERTED — 2026-09-10. THERE IS NO "CARRIER WITH NO READER" HALF OF U3, AND THE SPLIT BELOW IS AMENDED TO SAY SO.**
+>
+> The split as first written landed the 52 projection cells as **a table nothing reads**, with
+> **byte-identity as the control**. It was executed (`a8184b9`), every instrument came back green —
+> hash stationary, `runs/` byte-identical, `PROBE FLIPS 0`, 187 passed — and **it was reverted on two
+> findings, one from a read-only critic and one worse one found while checking that critic's work.**
+>
+> **(1) A DECLARED-BUT-UNREAD TABLE IS THE ONE THING RATIFIED LAYER 1 BINDS `data/` TO RAISE ON.**
+> `04:124` — the ID-12 · ID-5 · ID-13 row, whose module is `data/` — reads *"every roster, **table**,
+> fixture, matrix and verb row read at load by one loader that cross-validates and raises on any
+> absence or **any declared-but-unread row**"*. `01_AXIOMS.md` ID-13 states it: ***"A DECLARED FIELD
+> MUST REACH A READER, OR IT IS NOT DECLARED … not a weak mechanism — it is a mechanism that does not
+> exist, wearing a schema's clothes."*** `04:1157`: *"the fix `ID-13` licenses is a reader **or
+> removal**, not a hole row."* **And `rosters.yaml` has already done this to itself:** its header
+> (`:69-73`) records `governance_modes` and `power_bases` **DELETED** — *"They were not wrong; they
+> were UNREAD"* — and `:907` calls an unused combinator *"the dead carrier `ID-13` refuses"*. The unit
+> proposed to add, to that exact file, the thing that file deletes.
+>
+> ⚠ **And the licensing analogy this plan used was false.** It read *"a carrier with no reader, the
+> same shape as U1 half (a)'s producer with no caller."* **Not the same shape.** `04:125` licenses the
+> manifest provider explicitly — *"the seam names a role; a manifest row names the provider, **resolved
+> at boot**"* — so that provider **is read, at boot**; it is merely **unexercised** by a corpus verb.
+> An unread table is **unreachable**. The analogy substituted *unexercised* for *unreachable*.
+>
+> **(2) THE BYTE-IDENTITY CONTROL WAS A FAKE CONTROL BY THIS DOCUMENT'S OWN CRITERION — and this
+> finding is worse than the first, because the first would have left the unit merely non-conformant
+> while this one leaves it UNCONTROLLED.** §14's `F13` row, written into this file two commits before
+> U3a was built, rejects `pytest engine/tests` as a control on the ground that both arms are
+> ***"identical by construction — `CLAUDE.md` §7 (ED-MB-0066) names this a fake control."***
+> **A table nothing reads is byte-invariant BY CONSTRUCTION.** The hash could not have moved, so the
+> arm could not have failed, so it measured nothing. U3a's commit message asserted the opposite in
+> terms — *"a carrier with no reader is byte-invariant, and that is what makes this control a
+> measurement rather than a tautology"* — which is the criterion **exactly inverted**. Recorded in
+> full rather than quietly corrected, because the inversion was written by the same session that had
+> just written the rule.
+>
+> **THE CONSEQUENCE: THE 52 CELLS LAND IN U3b, IN THE SAME COMMIT AS THEIR READER.** That is how all
+> three tables that already exist live — `alignment`→`data/verbs.py:318`,
+> `band_floors`/`site_yield`→`data/fixtures.py:108,124` — so it composes on the existing primitive
+> instead of special-casing this one. U3b's own control (`report && delta`, hash MOVES, flips named)
+> is a real one. **Nothing is lost by waiting: U3b was already blocked on L1.**
+>
+> **SEVEN FINDINGS THE REVERTED CARVE PRODUCED. U3b INHERITS THEM; DO NOT RE-DERIVE THEM.**
+>
+> | # | finding, verified |
+> |---|---|
+> | **a** | **The 52 cells are exact.** Parsed programmatically from `conviction_axis_matrix_v30.md` §2 `:26-38` and re-verified by an independent re-parse: **52/52, every sign.** Row order matches both the document and `descriptor_registry.yaml:239-251`, so a derived row set aligns by name **and** by position. Column order matches `keys.py:59`. The table is **DENSE — 52 of 52 declared** |
+> | **b** | **Do not mint a `convictions:` roster.** `engine/substrate/descriptors.py:155` reads *"THIS IS THE ONLY CONVICTION ROSTER IN THE ENGINE"*, and `:175` is `CONVICTIONS = tuple(_DATA['conviction_roster']['names'])` — the same registry a local copy would transcribe. **Derive from that owner** (U5's `ladder_bands` shape) |
+> | **c** | ⚠ **But derive ON FIRST USE, NOT AT IMPORT.** `data/files.py:110-114` states the package rule — every reach out of the package loads *"BY PATH AND ON FIRST USE … deferred so the tracer still runs where the tree is absent, degrading to a NAMED gap rather than an ImportError at import"* — and both live reaches (`seam.py:205`, `test_season_shape.py:8087`) are inside function bodies. `engine/substrate/descriptors.py:41-49` does a bare `open()` **at module scope**, so an at-import derive turns a missing cooked artifact into an `ImportError` for the whole season package. **U5's precedent targets `engine.autoload` and does not cover this** |
+> | **d** | **`Precedent` will carry two senses in one file until the swap.** It is a CONVICTION (a projection row key) and an AXIS (`rosters.yaml:171`, and an `alignment` row key). That is the `exposure` collision `conviction_axes`' own note forbids at `:161-163` **with a loader refusal**. U3b's swap resolves it — `Precedent` leaves the axis sense — so **the swap and the table must land together**, which is a second reason not to split them |
+> | **e** | **`default_cell` is unreachable on a dense table**, and `H-46` is graded `absent` with `default: "none"` (`hole_register.yaml:527-528`). `register.py::rule_R3` refuses a default on an `absent` row but quantifies over **register rows**, so it cannot see a table injecting one. Annotate it or omit it; do not let it read as an injected default |
+> | **f** | **Cite PP-684, and get the locator right.** The matrix's authority is `PP-684` (its own `:3`, `:5`, `:16`). ⚠ The reverted carve said the `PP-687` slip came from `descriptor_registry.yaml`'s `map.conviction_axis` row — **it does not: that row (`:259`) carries no PP at all.** `PP-687` is on the **adjacent** `axis.*` row (`:258`), where it is arguably correct, since `:16` makes PP-687 the axis space the matrix projects **onto** |
+> | **g** | **The source contradicts itself about its own status** — `## Status: CANONICAL` (`:6`) against `**Status:** PROVISIONAL` (`:9`), plus PROVISIONAL at `:2`, `:230`, `:250`, and a live revision protocol at `:236`. **`CURRENT.md` indexes no row for it at all.** Under §0.05 it is reference either way, but say *transcribed from a provisional source* rather than *canonical* |
+>
+> **What the reverted carve does NOT establish, stated so it is not claimed:** the critic had no Bash
+> and re-derived **none** of the five instrument results; it verified the cells and attacked the
+> inertness claim by grep. Four of its attacks **failed and are recorded as failures** — no generic
+> `tables:` iteration exists (`_TABLES` has four sites, all in `data/rosters.py`), `keys:` is
+> validated by nothing, no test asserts a table count, and `rule_R2` correctly does not fire on an
+> `absent` row. **The inertness was real. It was the licence that was wrong, not the fact.**
+
 > **THE SPLIT, and §6's U3 body is amended to it before either half is built:**
-> **U3a** — land `convictions` (13) and `tables.conviction_projection` (transcribed) as **new rosters
-> nothing reads yet**; leave `conviction_axes` and `alignment` untouched. **Control: byte-identity, the
-> hash does not move** — a carrier with no reader, the same shape as U1 half (a)'s producer with no
-> caller. **U3b** — after L1: the axis swap, alignment's 27 cells re-authored onto the ethical four,
+> ~~**U3a** — land the table as a carrier nothing reads, control byte-identity~~ — **STRUCK, see the box
+> above. There is no U3a.** **U3 IS ONE UNIT AND IT IS BLOCKED ON L1:** the 52 projection cells, the
+> axis swap, alignment's 27 cells re-authored onto the ethical four,
 > `headless.py`/`corpus_run.py` re-seeded **by conviction**, and the projection wired into
-> `make_chooser`. **Hash MOVES**, recorded via `report && delta`.
+> `make_chooser` — **all in one commit, because the table and its reader may not be separated
+> (`04:124`) and the swap is what resolves finding (d).** **Hash MOVES**, recorded via
+> `report && delta`, every flip named.
 >
 > ⚠ **A read-only critic attacked this and reported U3 startable** — its `H3-H`, reasoning that
 > `rosters.yaml` sits in a conforming module and no Arc-1 unit moves it. **That is true and it is not
