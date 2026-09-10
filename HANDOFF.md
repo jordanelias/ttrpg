@@ -25,13 +25,30 @@ non-goals all stand. **What changed is everything around them**, and a session t
   on PR #386, OPEN, not on `main`**: `ARC 1` Layer-1 structure (L0–L5) → `ARC 2` the gate contract
   (G1–G4) → **`ARC 3` = U1–U10**. Zero game yield is the *expected* result of Arcs 1 and 2.
 - **The one escalation is RULED.** Jordan, 2026-09-09: *"we have the sigma leverage d10 resolver in
-  engine to use"* — so U1's interim contest provider is `engine/autoload/sigma_leverage.py`, not a
-  generic dice roll, and ED-SC-0033's *"the obstacle has a single owner"* is honoured rather than
-  accepted as a cost. ⚠ **`ED-SC-0037` still reads `open` / `needs_jordan: true` on `main`; PR #386
-  flips it.** U1 half (b) is unblocked when that merges — **do not flip the row from another lane.**
-- **What is startable on `main` today, and it is only two things:** **U3** (R-06a — the 13 convictions
-  and the 13×4 projection table, `rosters.yaml`, data only) and **U7 groups 1–2** (15 of the 20 verbs —
-  `verb_table.yaml` plus `loop/{predicates,effects}.py`). Neither touches a module Arc 1 moves.
+  engine to use"* — U1's interim contest provider is `engine/autoload/sigma_leverage.py`.
+  ⚠ **Two things about it are counter-intuitive and a session will get them wrong without reading
+  §11.0.** (1) **`sigma_leverage` does NOT own the obstacle** — `eff_ob` *consumes* `base_ob` and is
+  *"DISPLAY ONLY (not the resolution value)"* by its own docstring; the tree's live composition
+  (`systems/social_contest/sim/contest/resolver.py:307`) has the **caller** supply it. **The seam still
+  derives one**, so ED-SC-0033 clause (3) is a live tension `interim: true` carries, not a cost the
+  ruling dissolved. (2) **Import `roll_net` AND `net_boost`.** `roll_net` alone is a back-compat shim
+  over `dice_engine.roll_pool` that drops the `ob` argument — i.e. the bare pool roll the escalation
+  costed, wearing the ruled module's name. `net_boost` is the σ layer.
+  ⚠ **`ED-SC-0037` still reads `open` / `needs_jordan: true` on `main`; PR #386 flips it.** U1 half (b)
+  is unblocked when that merges — **do not flip the row from another lane.**
+- **What is startable on `main` today is ONE unit and a half, not two.** **U7 groups 1–2** (15 of the
+  20 verbs — `verb_table.yaml` plus *appends* to `loop/{predicates,effects}.py`, which register through
+  a decorator into a module-level dict the fold reads at a single line L5 relocates). And **U3a** —
+  the 13 convictions and the transcribed 13×4 table as **carriers nothing reads yet**, byte-identity
+  as the control.
+  ⚠ **U3 AS WRITTEN CANNOT BE EXECUTED, and it bills itself *"data only, preconditions: none"*.**
+  `decision.py::make_chooser` scores `Σ_axis p.convictions[ax] · align(verb, ax)` — keyed **by axis** —
+  so the 13 convictions reach no decision unless that module projects them, and **that module is L1's**.
+  Worse, the axis swap **zeroes every person**: `harness/headless.py:92-94` seeds Carin, the Bailiff and
+  the Warden by the *old* axis names, which share **nothing** with the four ethical axes, so every score
+  goes to 0, the ranking collapses to the alphabetical tiebreak and the hash moves with no test naming
+  why. **U3b — the swap, the 27 re-authored alignment cells (not 128; that is the sparse key space), the
+  re-seeded harnesses and the projection — waits on L1.**
   Everything else waits on L1/L2/L4/L5 or on G3's `Act.via`.
 
 ⚠ **One inherited claim is RETRACTED, measured 2026-09-10:** both plans say `engine/season/requirements.yaml`
