@@ -810,10 +810,25 @@ def p28():
     # returns another's ledger" (a world-first function takes no `Person` first at all), so the
     # surface to search is `decision`'s own public functions, not `world_q`'s too. `inspect` is
     # imported locally, matching this file's existing convention (see `p12`'s `_i`).
+    #
+    # ⚠ CHANGED AGAIN, UNIT L1 (ED-IN-0206), AND THE OLD FORM WENT SILENTLY VACUOUS. It read
+    # `__module__ == decision.__name__`, which was exact while `decision` was one flat module and
+    # matches NOTHING now that it is a package: a member's functions carry
+    # `engine.season.decision.choose`, not `engine.season.decision`. The count printed 0 and the
+    # verdict stayed PASS -- a PASS-BY-ABSENCE over an EMPTY surface, which is `CLAUDE.md` §0.1
+    # pt 2 exactly: the assertion could no longer observe the failure it excludes. Caught by
+    # `report.py`'s byte comparison of `runs/`, the same instrument that caught step 5's unbound
+    # `Forbidden`. The prefix test is depth-independent, so a further split cannot reopen it, and
+    # the floor below is what makes "no such signature" a measurement rather than an empty search.
     import inspect as _insp
+    _pkg = decision.__name__
     person_side = [n for n in dir(decision) if not n.startswith("_")
                    and _insp.isfunction(getattr(decision, n))
-                   and getattr(decision, n).__module__ == decision.__name__]
+                   and (getattr(decision, n).__module__ or "").startswith(_pkg)]
+    assert len(person_side) >= 10, (
+        f"the decision surface resolved to {len(person_side)} function(s) ({sorted(person_side)}); "
+        "this probe's PASS is BY ABSENCE over that surface, so an empty or truncated one makes the "
+        "verdict vacuous rather than true (§0.1 pt 2)")
     return ("PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. "
             f"There is no signature in the decision surface ({len(person_side)} functions) that "
             "takes one person and returns another's ledger. Absence is the refusal here, not a "

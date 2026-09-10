@@ -71,9 +71,21 @@ DRV = _drv                                              # for rebinds whose read
 from engine.season.harness import corpus_run as C       # noqa: E402
 from engine.season.harness import run_cases as R        # noqa: E402
 from engine.season import combat_seam as CS             # noqa: E402
-from engine.season import decision as PS                # noqa: E402
+from engine.season.decision import choose as PS_CHOOSE    # noqa: E402
+from engine.season.decision import options as PS_OPTIONS  # noqa: E402
 
-# ⚠ `PS` IS THE ONE ALIAS THE STEP-7 DECOMPOSITION ADDS HERE (ED-IN-0203). `pack_scenes` moved
+# ⚠ TWO ALIASES, AND THE SPLIT IS THE WHOLE POINT (L1, ED-IN-0206). `season.decision` IS A PACKAGE
+# as of unit L1: `04_CODE_ARCHITECTURE.md:1046` requires a DIRECTORY so the AX-2 isolation scan can
+# match by path. A bare name resolves in ITS OWN module's globals, so an alias that names the
+# PACKAGE reaches neither reader: `make_chooser` calls `pack_scenes` bare and lives in
+# `decision/choose.py`; `opening_set` reads `belief_contradicts` bare and lives in
+# `decision/options.py`. `PS` was one alias for one flat module and is replaced by `PS_CHOOSE` and
+# `PS_OPTIONS`, each named for the module it IS -- rebinding the package would not raise, it would
+# report every branch identical, which is the fabricated null `CLAUDE.md` §0.1 pt 4 calls the worse
+# direction. The paragraph below is the step-7 record and still explains WHY a rebind must reach
+# the reader's own namespace.
+#
+# ⚠ `PS` WAS THE ONE ALIAS THE STEP-7 DECOMPOSITION ADDED HERE (ED-IN-0203). `pack_scenes` moved
 # from `shape.py` to `season.decision` at step 7, together with its sole bare-name caller
 # (`make_chooser`). `make_chooser` now resolves `pack_scenes` in `decision`'s OWN globals at call
 # time, not `shape`'s -- so a rebind of `S.pack_scenes` (this module's `shape` alias) is a no-op

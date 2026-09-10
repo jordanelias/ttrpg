@@ -2393,138 +2393,147 @@ def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
         "signatures, so this guard would miss a real regression in the file's own style")
 
 
-def test_decision_module_never_names_world():
+def test_decision_package_never_names_world_anywhere_under_it():
     """AX-2 (`architecture/meta/01_AXIOMS.md`): *"A person decides from what they hold, and what
-    they hold may be false. There is no view of world truth available inside a decision — not
-    capped, not filtered: absent."* `season.decision` is where step 7 of the decomposition
-    (ED-IN-0203) put the AX-2 island `04_CODE_ARCHITECTURE.md` §A.2 calls `decision/`, and
-    §A.3 row 2 forces it: *"in one class, a person-side function calls a resolver-side one with
-    no import to scan"* is exactly the shape a hidden `World` reference would take if this module
-    boundary were only a convention.
+    they hold may be false. There is no view of world truth available inside a decision -- not
+    capped, not filtered: absent."*
 
-    ⚠ WHY THIS TEST EXISTS AND DID NOT BEFORE: `04_CODE_ARCHITECTURE.md:1046` claims *"`decision/`
-    is a directory from its first commit. The isolation scan matches by path, so a `choose`
-    drafted inside `loop/` and moved later would have been green while violating AX-2."* That
-    sentence asserts an ENFORCEMENT MECHANISM — "the isolation scan" — and no such scan existed
-    anywhere in this tree before this test. `test_w5_sense_is_still_the_only_world_taking_non_...`
-    (above) checks SIGNATURES for a `World`-typed parameter, package-wide; it does not check
-    IMPORTS, and it would not catch a `decision.py` that imported `World` and never annotated a
-    parameter with it (e.g. reading a module-level `_WORLD` singleton, or constructing one). A
-    false claim of enforcement is worse than none, because it stops the next reader from checking
-    (`ARCHITECTURE.md` S47).
+    ⚠ **THIS IS THE BY-PATH SCAN `04_CODE_ARCHITECTURE.md:1046` NAMES, AND IT DID NOT EXIST UNTIL
+    UNIT L1.** That line reads: *"`decision/` is a directory from its first commit. The isolation
+    scan matches BY PATH, so a `choose` drafted inside `loop/` and moved later would have been green
+    while violating AX-2."* Step 7 of the decomposition (ED-IN-0203) shipped a FLAT `decision.py`
+    and this test walked the AST of that one file. Its own docstring said so, having been corrected
+    once already for overclaiming: *"04:1046's mechanism is a scan BY PATH over a `decision/`
+    DIRECTORY ... this walks the AST of the one file `decision.py`, so code drafted elsewhere and
+    never moved is never scanned -- it is structurally blind to the exact failure 04:1046 names."*
+    The gap was filed as ED-IN-0206 and `decision/` is a package now, so the scan is what the
+    ratified line says: **every `.py` under the directory, discovered and never listed**
+    (`files.decision_modules()`), with a FLOOR on the count so a flattening or a glob that stops
+    matching cannot pass by finding nothing.
 
-    ⚠ AND THIS DOCSTRING ONCE COMMITTED THAT VERY FAULT. CORRECTED 2026-09-09 (ED-IN-0206). It
-    said this test "is what makes 04:1046's claim true rather than aspirational." IT DOES NOT.
-    04:1046's mechanism is a scan BY PATH over a `decision/` DIRECTORY, and its stated purpose is
-    to catch *"a `choose` drafted inside `loop/` and moved later"*. This walks the AST of the one
-    file `decision.py`, so code drafted elsewhere and never moved is never scanned — it is
-    structurally blind to the exact failure 04:1046 names. What it DOES enforce, and all of it:
-    nothing already inside `decision.py` names a `World` or imports a module holding one, plus
-    (a2) nothing it imports TAKES one. `decision/` is still a FILE, not a directory, and the path
-    scan does not exist. Layer-1 conformance is ED-IN-0206, not this test.
+    THREE CHECKS, MATCHING WHAT AX-2 ACTUALLY FORBIDS. Each runs over every scanned file:
+      (a) no import resolves to `state.world`, `queries` (either `world_q` or `readers`), `loop`,
+          `seam`, `combat_seam` or `shape`. ⚠ RESOLVED TO AN ABSOLUTE MODULE NAME FIRST, from the
+          scanned file's own package and the import's `level`, because `decision/` sits one
+          directory deeper than the old flat module: `from ..data.verbs import X` carries
+          `module="data.verbs"` at level 2 and a tail-match against the forbidden list would be
+          reading a name relative to the wrong base. And the imported NAMES are tested too, not
+          only the module: `from ..state import world` names no forbidden module and hands the
+          island one anyway. `shape` is kept in the list although the module was deleted at step
+          10 -- forbidding a name that cannot resolve costs nothing and the entry documents that it
+          may not come back here.
+      (a2) NO IMPORTED NAME TAKES A `World`, WHATEVER MODULE IT CAME FROM. ⚠ (a) ALONE IS NOT
+          ENOUGH and its first draft claimed it was -- it called its six modules "the six places a
+          `World` could be smuggled in from", which is false, and a read-only critic constructed
+          the seventh from a module the island legitimately imports: `from ..epistemic import
+          observers_for` would have been GREEN while handing it `observers_for(w: "World", ...)`.
+          That is `04:171` row 2's route -- *"a person-side function calls a resolver-side one with
+          no import to scan"* -- reaching it through an import that IS scanned and simply was not
+          listed. (a2) resolves each imported name and reads its real signature, so the forbidden
+          set is DERIVED from what a function takes. ⚠ COMPARED BY TOKEN, NOT BY EQUALITY: a first
+          version tested `text == "World"`, which is FALSE for every module carrying `from
+          __future__ import annotations` -- `epistemic.py` does, so `w: "World"` arrives as the
+          string `"'World'"`, quotes included, and the check passed on the exact plant it was written
+          to catch. A word-boundary search reads the token, and also catches `Optional[World]`.
+      (b) no bare `Name`, `Attribute` attribute, or string `Constant` equals `"World"` -- catching a
+          `World` referenced without an import, and a quoted forward-reference annotation
+          (`w: "World"`), which is this package's dominant annotation style.
 
-    TWO CHECKS, MATCHING WHAT AX-2 ACTUALLY FORBIDS:
-      (a) no `Import`/`ImportFrom` in `decision.py` resolves to `state.world`, `queries` (either
-          `world_q` or `readers`), `loop`, `seam`, `combat_seam` or `shape`.
-      (a2) NO IMPORTED NAME TAKES A `World`, WHATEVER MODULE IT CAME FROM. ⚠ (a) ALONE WAS NOT
-          ENOUGH AND ITS FIRST DRAFT CLAIMED IT WAS — it called its six modules "the six places a
-          `World` (or a function that takes one) could be smuggled in from", which is false, and a
-          read-only critic constructed the seventh from the module `decision.py` already imports:
-          `from .epistemic import observers_for` would have been GREEN while handing the decision
-          island `observers_for(w: "World", ...)`. That is exactly the route `04:171` row 2 names —
-          *"a person-side function calls a resolver-side one with no import to scan"* — reaching it
-          through an import that IS scanned and simply was not on the list. (a2) resolves each
-          imported name and reads its real signature, so it DERIVES the forbidden set from what a
-          function takes rather than enumerating module names, and no new module can open the hole.
-      (b) no bare `Name`, `Attribute` attribute, or string `Constant` in `decision.py` equals
-          `"World"` — catching a `World` referenced without an import (impossible today, since (a)
-          already forbids importing it, but a decorator, a `globals()` lookup, or a future
-          relaxation of (a) could still reach a name called `World` without an import naming it),
-          and a quoted forward-reference annotation (`w: "World"`), which is `shape.py`'s own
-          dominant annotation style (nine signatures) and the exact spelling that defeated the
-          first version of the sibling AST proof above."""
+    ⚠ **INTRA-PACKAGE IMPORTS ARE NOT SIGNATURE-CHECKED, AND THAT IS SOUND RATHER THAN AN OVERSIGHT.**
+    `from .options import opening_set` inside `choose.py` resolves to a module this same scan covers
+    under (a) and (b), so it cannot be holding a `World` to pass on. Stated because a silent skip
+    that happens to be safe reads identically to one that is not."""
     import ast as ast_
-    src = inspect.getsource(decision)
-    tree = ast_.parse(src)
 
-    FORBIDDEN_MODULES = ("state.world", "queries", "loop", "seam", "combat_seam", "shape")
+    mods = files.decision_modules()
+    # ⚠ THE FLOOR, AND IT IS THE POINT OF THE REWRITE. §A.2:133 names four members; with
+    # `__init__.py` that is five files. A scan that finds fewer has stopped matching -- a flattened
+    # package, a renamed directory, a glob that lost its recursion -- and every assertion below
+    # would pass over the shortfall in silence (`CLAUDE.md` §0.1 pt 2).
+    assert len(mods) >= 5, (
+        f"the AX-2 by-path scan found only {len(mods)} file(s) under {files.DECISION_DIR}: "
+        f"{[p.name for p in mods]}. §A.2:133 names four members plus __init__. Either the package "
+        "was flattened -- which is the ED-IN-0206 violation this scan exists to prevent -- or the "
+        "discovery broke, and in both cases the checks below are vacuous.")
 
-    def _forbidden_import(modname: str) -> bool:
-        return any(modname == m or modname.startswith(m + ".") for m in FORBIDDEN_MODULES)
+    FORBIDDEN = ("state.world", "queries", "loop", "seam", "combat_seam", "shape")
+    PKG = "engine.season"
 
-    bad_imports = []
-    for node in ast_.walk(tree):
-        if isinstance(node, ast_.Import):
-            for alias in node.names:
-                if _forbidden_import(alias.name):
-                    bad_imports.append((node.lineno, alias.name))
-        elif isinstance(node, ast_.ImportFrom):
-            # relative imports (`from .state.world import World`) carry the dotted tail in
-            # `.module`; `level > 0` with `module is None` is a bare `from . import X` and is
-            # never one of the forbidden names by itself.
-            if node.module and _forbidden_import(node.module):
-                bad_imports.append((node.lineno, node.module))
-    assert not bad_imports, (
-        f"decision.py imports from a forbidden module (AX-2): {bad_imports}")
+    def _absolute(path, node):
+        """The dotted module an `ImportFrom` names, resolved from the SCANNED FILE's own package."""
+        rel = path.relative_to(files.PACKAGE_DIR).parts[:-1]        # ('decision',) for a member
+        own = (PKG,) + rel
+        if node.level == 0:
+            return node.module or ""
+        base = own[:len(own) - (node.level - 1)] or (PKG,)
+        return ".".join(base) + (("." + node.module) if node.module else "")
 
-    # (a2) -- the derived half. An allowed module may still export a World-taking function, so
-    # read every imported name's actual signature instead of trusting its address.
-    world_takers, inspected = [], 0
-    for node in ast_.walk(tree):
-        if not isinstance(node, ast_.ImportFrom) or node.module is None:
-            continue
-        src_mod = sys.modules.get(f"engine.season.{node.module}")
-        if src_mod is None:
-            continue
-        for alias in node.names:
-            obj = getattr(src_mod, alias.name, None)
-            if not callable(obj):
-                continue
-            try:
-                params = inspect.signature(obj).parameters
-            except (TypeError, ValueError):
-                continue
-            inspected += 1
-            for pname, param in params.items():
-                ann = param.annotation
-                if ann is inspect.Parameter.empty:
+    def _is_forbidden(dotted):
+        tail = dotted[len(PKG) + 1:] if dotted.startswith(PKG + ".") else dotted
+        return any(tail == f or tail.startswith(f + ".") for f in FORBIDDEN)
+
+    bad_imports, world_takers, bad_names, inspected, world_prose = [], [], [], 0, 0
+    for path in mods:
+        src = path.read_text(encoding="utf-8")
+        world_prose += src.count("World")
+        tree = ast_.parse(src)
+        for node in ast_.walk(tree):
+            if isinstance(node, ast_.Import):
+                for alias in node.names:
+                    if _is_forbidden(alias.name):
+                        bad_imports.append((path.name, node.lineno, alias.name))
+            elif isinstance(node, ast_.ImportFrom):
+                dotted = _absolute(path, node)
+                if _is_forbidden(dotted):
+                    bad_imports.append((path.name, node.lineno, dotted))
+                for alias in node.names:
+                    if dotted and _is_forbidden(f"{dotted}.{alias.name}"):
+                        bad_imports.append((path.name, node.lineno, f"{dotted}.{alias.name}"))
+                # (a2) -- the derived half
+                src_mod = sys.modules.get(dotted)
+                if src_mod is None:
                     continue
-                # ⚠ COMPARE BY TOKEN, NOT BY EQUALITY, AND THE FIRST DRAFT OF THIS CHECK GOT IT
-                # WRONG IN THE ONE WAY THAT MATTERS: it tested `text == "World"`, which is FALSE
-                # for every module carrying `from __future__ import annotations` -- `epistemic.py`
-                # does, so a source annotation already written `w: "World"` reaches here as the
-                # string `"'World'"`, quotes and all. The check passed on the exact plant it was
-                # written to catch. A word-boundary search reads the token instead of the spelling,
-                # and also catches `Optional[World]` and `list["World"]`.
-                text = ann if isinstance(ann, str) else getattr(ann, "__name__", repr(ann))
-                if re.search(r"\bWorld\b", text):
-                    world_takers.append((node.lineno, node.module, alias.name, pname))
+                for alias in node.names:
+                    obj = getattr(src_mod, alias.name, None)
+                    if not callable(obj):
+                        continue
+                    try:
+                        params = inspect.signature(obj).parameters
+                    except (TypeError, ValueError):
+                        continue
+                    inspected += 1
+                    for pname, param in params.items():
+                        ann = param.annotation
+                        if ann is inspect.Parameter.empty:
+                            continue
+                        text = ann if isinstance(ann, str) else getattr(ann, "__name__", repr(ann))
+                        if re.search(r"\bWorld\b", text):
+                            world_takers.append((path.name, node.lineno, dotted, alias.name, pname))
+            elif isinstance(node, ast_.Name) and node.id == "World":
+                bad_names.append((path.name, node.lineno, "Name"))
+            elif isinstance(node, ast_.Attribute) and node.attr == "World":
+                bad_names.append((path.name, node.lineno, "Attribute"))
+            elif isinstance(node, ast_.Constant) and node.value == "World":
+                bad_names.append((path.name, node.lineno, "Constant"))
+
+    assert not bad_imports, (
+        f"a file under decision/ imports from a forbidden module (AX-2): {bad_imports}")
     assert inspected >= 5, (
-        f"the World-taking-import check inspected only {inspected} signatures; it has stopped "
-        "resolving decision.py's imports and is passing vacuously (§0.1 pt 2)")
+        f"the World-taking-import check inspected only {inspected} signatures across "
+        f"{len(mods)} files; it has stopped resolving decision/'s imports and is passing "
+        "vacuously (§0.1 pt 2)")
     assert not world_takers, (
-        "decision.py imports a function that TAKES a World, which is AX-2's substance rather "
-        f"than its spelling: {world_takers}")
-
-    bad_names = []
-    for node in ast_.walk(tree):
-        if isinstance(node, ast_.Name) and node.id == "World":
-            bad_names.append((node.lineno, "Name", "World"))
-        elif isinstance(node, ast_.Attribute) and node.attr == "World":
-            bad_names.append((node.lineno, "Attribute", "World"))
-        elif isinstance(node, ast_.Constant) and node.value == "World":
-            bad_names.append((node.lineno, "Constant", "World"))
+        "a file under decision/ imports a function that TAKES a World, which is AX-2's substance "
+        f"rather than its spelling: {world_takers}")
     assert not bad_names, (
-        f"decision.py names `World` (AX-2 forbids it entirely, not just as an import): {bad_names}")
-
-    # The control: this file's own moved bodies reference `World` heavily IN PROSE (docstrings
-    # explaining why they do NOT take one), so a walk that found zero `World`-shaped AST nodes
-    # while still containing the substring "World" many times over would prove the walk is
-    # inspecting something other than real code — confirm the substring is present (in strings
-    # the checks above correctly ignore) so an empty result above is not a vacuous one.
-    assert src.count("World") >= 5, (
-        "decision.py's source no longer mentions World anywhere, even in prose — either the "
-        "module changed unrecognisably or this control itself needs re-deriving")
+        f"a file under decision/ names `World` (AX-2 forbids it entirely, not just as an "
+        f"import): {bad_names}")
+    # The control: these bodies reference `World` heavily IN PROSE (docstrings explaining why they
+    # do NOT take one), so zero `World`-shaped AST nodes alongside zero occurrences of the substring
+    # would prove the walk is inspecting something other than real source.
+    assert world_prose >= 5, (
+        "decision/'s sources no longer mention World anywhere, even in prose -- either the package "
+        "changed unrecognisably or this control needs re-deriving")
 
 
 def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_printed():
@@ -2538,7 +2547,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     asks for in the unflattering direction too."""
     affected = ["P31", "P36", "P11", "P12"]
     table = {}
-    saved = decision.ALIGNMENT
+    saved = decision.choose.ALIGNMENT
 
     def fresh(pid):
         # ⚠ `run_probe` MEMOISES IN `_VERDICTS`, so calling it in a loop returns the FIRST run's
@@ -2550,10 +2559,10 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
 
     try:
         for point in ALIGNMENT_SWEEP:
-            decision.ALIGNMENT = alignment_at(point)
+            decision.choose.ALIGNMENT = alignment_at(point)
             table[point] = {pid: fresh(pid) for pid in affected}
     finally:
-        decision.ALIGNMENT = saved
+        decision.choose.ALIGNMENT = saved
         for pid in affected:
             fresh(pid)                           # restore the committed verdicts
 
@@ -2595,9 +2604,9 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     p = w.persons["p_mid"]
     q = Question("q:sgn", "need", ("rec_writ",))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
-    saved2 = decision.ALIGNMENT
+    saved2 = decision.choose.ALIGNMENT
     try:
-        decision.ALIGNMENT = alignment_at("sign_only")
+        decision.choose.ALIGNMENT = alignment_at("sign_only")
         ch = make_chooser(w.fixtures, lambda a, b, c: "x")
         for sign in (0.9, -0.9):
             p.convictions = {"Precedent": sign}
@@ -2611,7 +2620,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
                 f"at Precedent={sign} the person chose {picked!r}, which the table does not "
                 "score at all — the pick was decided entirely by the name tiebreak")
     finally:
-        decision.ALIGNMENT = saved2
+        decision.choose.ALIGNMENT = saved2
         for pid in affected:
             fresh(pid)
 
@@ -7270,13 +7279,13 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
 
     def drops(fx):
         hits = []
-        original = decision.belief_contradicts
+        original = decision.options.belief_contradicts
         def counted(p_, row, subject, operands):
             out = original(p_, row, subject, operands)
             if out:
                 hits.append((row.verb, subject))
             return out
-        decision.belief_contradicts = counted
+        decision.options.belief_contradicts = counted
         try:
             w = C.build_at(case, 0)
             w.fixtures = fx
@@ -7287,7 +7296,7 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
                 d.season(ch, question=None, subsistence=C.P.SUBSIST,
                          contest_max_depth=w.fixtures.get("contest_max_depth"))
         finally:
-            decision.belief_contradicts = original
+            decision.options.belief_contradicts = original
         return hits, w
 
     control, _wc = drops(DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
@@ -7298,13 +7307,13 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
 
     def hl_drops(fx):
         hits = []
-        original = decision.belief_contradicts
+        original = decision.options.belief_contradicts
         def counted(p_, row, subject, operands):
             out = original(p_, row, subject, operands)
             if out:
                 hits.append((row.verb, subject))
             return out
-        decision.belief_contradicts = counted
+        decision.options.belief_contradicts = counted
         try:
             w = HL.build_world(0, fx)
             d = SeasonDriver(w)
@@ -7314,7 +7323,7 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
                 acts.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
                                      None, HL.subsistence)["acts"])
         finally:
-            decision.belief_contradicts = original
+            decision.options.belief_contradicts = original
         return hits, acts
 
     hl_control, hl_acts_none = hl_drops(DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))

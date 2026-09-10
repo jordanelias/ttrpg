@@ -132,9 +132,31 @@ def subsystem_sim_dir(name: str) -> Path:
 # ---------------------------------------------------------------------------
 LOOP_DIR = PACKAGE_DIR / "loop"
 # The season loop itself, extracted from `shape.py` at step 9. Source-scanning guards that
-# used to read `SHAPE_PY` for `SeasonDriver` code read this instead -- `shape.py` is a facade
-# with no bodies left in it, so a scan pointed there passes by finding nothing.
+# used to read `SHAPE_PY` for `SeasonDriver` code read this instead -- `shape.py` was deleted at
+# step 10, so a scan pointed there fails to open a file rather than passing by finding nothing.
 DRIVER_PY = LOOP_DIR / "driver.py"
+
+# ---------------------------------------------------------------------------
+# AX-2's ISLAND, AND THE ONLY DIRECTORY IN THIS PACKAGE WHOSE SHAPE IS AN ENFORCEMENT MECHANISM
+# RATHER THAN A FILING CHOICE. `04_CODE_ARCHITECTURE.md:1046`: *"`decision/` is a directory from its
+# first commit. The isolation scan matches BY PATH, so a `choose` drafted inside `loop/` and moved
+# later would have been green while violating AX-2."* The scan that sentence names reads this
+# anchor, and it reads the DIRECTORY rather than a file list -- a member added tomorrow is scanned
+# by existing, which is `package_modules`'s own lesson one directory down.
+# ---------------------------------------------------------------------------
+DECISION_DIR = PACKAGE_DIR / "decision"
+
+
+def decision_modules() -> tuple:
+    """EVERY `.py` under `decision/`, discovered. The AX-2 scan's corpus.
+
+    ⚠ Recursive and derived, for the reason `package_modules` states above it: three guards in this
+    package were first written against a filename tuple and each went blind when a module was added.
+    A caller must also assert a FLOOR on the length -- `04_CODE_ARCHITECTURE.md` §A.2:133 names four
+    members, so a scan that finds fewer has stopped matching and is passing vacuously (`CLAUDE.md`
+    §0.1 pt 2)."""
+    return tuple(sorted(DECISION_DIR.rglob("*.py"),
+                        key=lambda p: p.relative_to(DECISION_DIR).as_posix()))
 COMBAT_SEAM_PY = PACKAGE_DIR / "combat_seam.py"
 TRACE_LOG_PY = PACKAGE_DIR / "trace_log.py"
 TEST_PY = TESTS_DIR / "test_season_shape.py"

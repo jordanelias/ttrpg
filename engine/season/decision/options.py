@@ -1,170 +1,35 @@
-"""`season.decision` -- AX-2's island: what a PERSON forms, wants and can afford, with no
-`World` in scope. Layer 10, precedent `epistemic.py`.
+"""`decision/` -- the `opening_set` member of `04_CODE_ARCHITECTURE.md` §A.2:133, and its helpers.
 
-EXTRACTED, step 7 of the decomposition (a PURE MOVE but for one call site, named below).
-`04_CODE_ARCHITECTURE.md` SA.2 names this module `decision/` and types it: *"owns: nothing.
-Returns `Scene[]`. may read: `PersonInterior`, `View`, `Sensation`, `budget`, `Question[]`, the
-table's declarations. token: none."* SA.3 row 2 is why the split is BY MODULE and not by first
-parameter: *"in one class, a person-side function calls a resolver-side one with no import to
-scan."* SE.1 is sharper still: *"`decision/` is a directory from its first commit. The isolation
-scan matches by path, so a `choose` drafted inside `loop/` and moved later would have been green
-while violating AX-2."* (`04_CODE_ARCHITECTURE.md:1046`) -- which is exactly why this file exists
-as a flat module rather than as a claim, and why this step adds an AST test rather than trusting
-this docstring.
+⚠ **THE FILE IS `options.py` AND THE MEMBER IS `opening_set`, DELIBERATELY.** §A.2:133 names four
+members; a module named `opening_set.py` beside a function named `opening_set` makes
+`decision.opening_set` ambiguous -- `__init__.py`'s re-export shadows the submodule -- and the
+rebind surface needs the MODULE by name. "Option set" is the tree's own existing phrase for what
+this returns, so the filename is idiomatic rather than coined (`CLAUDE.md` §4).
 
-WHAT MOVED HERE, all as a pure line-slice of `shape.py` at HEAD `d4858c27`:
-  * `Query.budget`, `Query.opening_set`, `Query.assemble`, `Query.entrenchment` -- the four
-    PERSON-SIDE statics, now MODULE FUNCTIONS. Their eleven WORLD-side siblings did not move with
-    them: they were already bindings to `season.queries.world_q` (step 5), and every call site
-    renames to `world_q.<name>` directly (see `shape.py`'s breadcrumb). `class Query` itself is
-    DELETED -- it survived as a call-site facade for exactly one step. ⚠ THE FIRST DRAFT OF THIS
-    SENTENCE ATTRIBUTED A QUOTATION TO `04_CODE_ARCHITECTURE.md` §A.3 ROW 2 THAT IS NOT IN THAT
-    DOCUMENT, OR ANYWHERE UNDER `architecture/`. The words quoted ("the class survives one more
-    step only as the call-site facade; it goes at step 7") were `shape.py`'s OWN step-5 breadcrumb
-    -- this repository quoting itself and crediting the spec. §A.3 row 2 actually reads: *"one
-    `Query` class holding both families | two modules; the second cannot import the first | T-f.
-    In one class, a person-side function calls a resolver-side one with no import to scan."* That
-    row licenses the SPLIT and says nothing about a facade or a step number. Falsifier:
-    `rg -n "call-site facade" architecture/` returns nothing.
-  * Seventeen top-level names: `align`, `stance_toward`, `urgency`, `make_chooser`,
-    `person_side_eligible`, `containing_rung_of`, `store_kind_of`, `_derive_operand`,
-    `_REFERENT_OPERANDS` (with its preceding comment block), `operands_for`, `agreement`,
-    `standing_of`, `_payload_of`, `pack_scenes`, `aggregate_questions`, `view_ids`,
-    `body_band_penalty`.
+`opening_set` and its operand machinery (`operands_for`, `_derive_operand`, `_REFERENT_OPERANDS`,
+`containing_rung_of`, `store_kind_of`), the eligibility predicate, and the two agreement/standing
+readers.
 
-WHAT DID NOT MOVE HERE, against an earlier plan's placement: `sense()` stays in `shape.py` today
-and moves to `loop/driver.py` at step 9, not here -- `04_CODE_ARCHITECTURE.md:116` is explicit
-that `sense()` is *"called by the loop, never by the decision"*, and SA.2's `decision/` row lists
-four members with no `sense` among them. Filing it here would put a `World`-taking function inside
-the one module `AX-2` forbids from naming `World` at all. The alignment table's LOADER
-(`_load_alignment`/`ALIGNMENT_SWEEP`/`alignment_at`) also stays out -- it has lived in
-`season.data.verbs` since step 3; only the per-call READER (`align`, below) is decision-side.
+⚠ `entrenchment` SITS HERE PROVISIONALLY AND L3 RE-ADJUDICATES IT. Three functions in the old
+`decision.py` self-declared as person-side Queries via `TRACE.query(..., "person")`: `budget`,
+`opening_set` and `entrenchment`. The first two are named by §A.2:133 as `decision/` MEMBERS and
+therefore cannot move to `queries/person_q` -- which is why `ED-IN-0206` item (2) is wrong about
+them. `entrenchment` is the only one of the three that §A.2:133 does not name, so it is the only
+real `queries/person_q` candidate in this file, and L3 owns that call.
 
-THE ONE DECLARED EDIT INSIDE A MOVED BODY: `make_chooser`'s inner `choose()` called
-`Query.opening_set(...)` because `opening_set` was, at the time, a sibling staticmethod on the same
-class. It moves to this module in the SAME step as `opening_set` itself, so the bare name
-`opening_set(...)` resolves in this module's own globals -- the only line in this file that is not
-a byte-identical slice of `shape.py`.
-
-THE REBIND HAZARD THIS STEP CLOSES. `shape.py`'s own breadcrumb (written at step 6, forward-looking)
-warned that `ALIGNMENT`, `belief_contradicts` and `pack_scenes` are each rebound by the test suite
-(and, for the latter two, by frozen `proposals/2026-09-04-degree-sweep/` snapshots) by assigning
-`S.<name> = ...` -- a rebind that works only because the READER (`align`, `opening_set`,
-`make_chooser`) resolves the name in the SAME module's globals at call time. Moving all three
-readers here, in the same commit as the corresponding test/arm re-points (`decision.ALIGNMENT`,
-`decision.belief_contradicts`, one alias in `sweep_core.py` for `pack_scenes`), is what keeps every
-rebind live rather than turning it into a silent no-op on the facade's stale copy.
-
-⚠ "EVERY" IS EXACT, AND THE FIRST DRAFT OF THIS COMMIT MADE IT FALSE WHILE ASSERTING IT. Two more
-files rebind these names -- `arm7_flexibility.py` (`pack_scenes`, 6 sites) and `wd_acceptance.py`
-(`belief_contradicts`, 5) -- and the plan, the step brief and the commit message all said "nothing
-imports either, so they cannot fail the suite". That premise is false on disk: `sweep.py:19`
-imports and runs `arm7_flexibility`, and six files import `wd_acceptance`. Both are re-pointed
-here. An unrepointed arm does not fail; it reports every branch identical, which is a fabricated
-null and worse than a failure (§0.1 pt 4).
-
-AX-2, ENFORCED HERE FOR REAL: this module may not import `state.world`, `queries.*`, `loop.*`,
-`seam`, `combat_seam` or `shape`, and may not name `World` anywhere -- not as an import, not as a
-bare name, not as a string constant. `test_decision_module_never_names_world` (added this step,
-`engine/season/tests/test_season_shape.py`) is an AST pass that checks exactly that, because
-`04_CODE_ARCHITECTURE.md:1046`'s "isolation scan matches by path" describes a scan that, before
-this test, did not exist for this module -- a directory boundary is a promise; this is the check.
-
-Imported at the top of `shape.py` (`from . import decision` + a re-export block) so every bare use
-of a moved name further down that file keeps resolving, and so `S.<name>` keeps resolving for the
-harness and tests: a re-export, not a second definition.
+AX-2 binds every file under `decision/`: no `World`, as an import, a name, an attribute or a
+string. Enforced BY PATH over this directory (`04:1046`).
 """
 
 from __future__ import annotations
 
-from typing import Any, Callable, Optional
-
-from .data.rosters import (
-    CONVICTION_AXES, PERSON_PREDICATES, QUESTION_AGGREGATION, SCENE_PACKING_RULES,
-    VIEW_BUILDER_RULES,
-)
-from .data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL, ELIGIBILITY_KINDS, VERB_TABLE
-from .epistemic import belief_contradicts
-from .gaps import Forbidden, InstrumentDefect, Unspecified
-from .state.carriers import Act, Candidate, Claim, Person, Question, Scene, Sensation, View
-from .trace_log import TRACE
-
-# ⚠ TWO DEVIATIONS FROM THE DECOMPOSITION PLAN'S DECLARED IMPORT LIST, BOTH FOUND BY THE AST
-# VERIFICATION THE PLAN ITSELF DEMANDED, NEITHER A JUDGMENT CALL:
-#
-# 1. `ELIGIBILITY_KINDS` IS IN `.data.verbs`, NOT `.data.rosters` -- the plan named the wrong
-#    owner. `person_side_eligible()` reads it (`if kind not in ELIGIBILITY_KINDS`), and importing
-#    it from `.data.rosters` as written raises `ImportError` at module load, immediately, for
-#    every caller -- the loud failure mode, not the step-5 kind that hides until a byte-compare.
-#    Verified against the actual definition site, which is `engine/season/data/verbs.py`'s
-#    `ELIGIBILITY_KINDS = roster("eligibility_kinds")` -- located by `rg -n "^ELIGIBILITY_KINDS"`
-#    and deliberately cited WITHOUT a line number, because the first draft of this comment said
-#    `:55` and the assignment is at `:68`, in a file this same commit edits (CLAUDE.md §3: "a LINE
-#    citation into a file being decomposed is wrong twice over"). It is *sourced* from the rosters file's
-#    `eligibility_kinds` table but the module-level NAME lives in `verbs`, because `verbs.py` is
-#    what checks a verb row's `eligible:` cell against it.
-#
-# 2. `Claim` IS ADDED to `.state.carriers`, absent from the plan's list. `agreement()`'s signature
-#    reads `list[Claim]` twice, bare (not a forward-ref string) -- the same AST pass that confirmed
-#    every other name below is needed found this one unimported. This is the step-5 `Forbidden`
-#    lesson again: an annotation-only reference is still a reference, and `from __future__ import
-#    annotations` makes a missing one a silent hole rather than an `ImportError`, since nothing in
-#    this tree currently calls `typing.get_type_hints` on a season module. Fixed anyway rather than
-#    left as a known dangling annotation.
-#
-# `Fixtures` and `VerbRow` are the converse case and are DELIBERATELY absent (the plan is right to
-# omit them): every occurrence of either in the moved bodies is a QUOTED forward-reference string
-# (`"Fixtures"`, `"VerbRow"`), never a bare name, never constructed, never the subject of
-# `isinstance`. That is the same quoting the moved bodies used even inside `shape.py`, where both
-# names WERE already resolvable -- so the quoting was never about deferred resolution, it is how
-# this file's original author marked "an opaque handle whose class identity this function does not
-# need". Importing them here would add two names AST proves are dead weight.
-
-
-def budget(p: Person, v: View, k: int, fx: "Fixtures") -> int:
-    """S26 / `H-28`: `budget : (Person, View) -> int`, PERSON-SIDE, NO WORLD. Returns SCENE
-    ACTIONS, per Jordan's 2026-09-02 ruling.
-
-    ⚠ REV 4 IS THE FIRST VERSION THAT READS ITS OWN ARGUMENTS. Rev 3's docstring disclosed,
-    honestly, that it "RETURNS THE INJECTED FIXTURE AND IGNORES `p` AND `v`" -- functionally
-    the FIELD S26.3 forbids. The reason it gave was a collision it called unresolved: S26
-    types it with no `World`, S26.3 says it varies by office, condition and distance, and all
-    three looked resolver-side.
-
-    **They were never resolver-side; the STORE was in the wrong place.** #353 `:730` gives
-    Person "every Tenure whose subject they are", so office-holding is the person's own state;
-    `(Person, body)` and `(Person, travel_leg)` are Part D rows on Person. W5 moved the tenure
-    store onto its subject (see `_TenureView`) and added the two fields, and the collision
-    dissolved with no signature change. That is PLAN §3.3's SMALLER AMENDMENT, and taking it
-    is what lets `:634`'s "the ONE non-decision function permitted a `World`" stay true --
-    V2 §F3 took the larger one and made `budget` a second such function.
-
-        budget = base + office_bonus x (own live `hold` Tenures)
-                      - condition_penalty(own body band)
-                      - distance_penalty(own travel legs)
-
-    `condition_penalty` COUNTS BANDS on the `band_floors["body"]` table the site gate already
-    uses -- `H-38` closed with "`Site.condition` is the model", so this spends that closure
-    rather than inventing a second band scheme. Floor of 1: a wounded duke gets fewer scenes,
-    and a dying one still gets one, because a budget of 0 would delete the person from the
-    season silently rather than narrowing them (S26.3's triage is the point).
-
-    `k` remains the injected base so the sweep site is unchanged. The two modifier magnitudes
-    are fixtures (`H-70`); the DIRECTIONS are #353 `:912-913` and are not open.
-
-    ⚠ `fx` IS NOT A WORLD, and the distinction is the one L2 actually draws. A `World` is other
-    people's state -- persons, rungs, sites, the tenure store -- and reading it person-side is
-    what L2 forbids. `Fixtures` is the PARAMS REGISTRY: flat numbers, no entity, identical for
-    every person in the season, and #353 §22 assigns them to `params` precisely so they are
-    not world state. `k` was already one of them, handed in by the driver; `fx` generalises
-    that rather than widening it. The AST proof below tests for a `World` ANNOTATION, so it
-    would catch a real regression here and correctly passes this."""
-    TRACE.query("budget", "person")
-    offices = sum(1 for t in p.tenures if t.kind == "hold" and t.live)
-    b = k + offices * fx.get("budget_office_bonus")
-    b -= body_band_penalty(p, fx)
-    b -= len(p.travel_leg) * fx.get("budget_leg_penalty")
-    return max(1, b)
+from typing import Optional
+from ..data.rosters import PERSON_PREDICATES
+from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE
+from ..epistemic import belief_contradicts
+from ..gaps import Forbidden
+from ..state.carriers import Candidate, Claim, Person, Question, View
+from ..trace_log import TRACE
 
 
 def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candidate]:
@@ -239,120 +104,9 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     return out
 
 
-def assemble(p: Person, question: Any, k: int, rule: str = "recent") -> View:
-    # ⚠ W5 REMOVED A `NoProducer` HERE, AND THE REMOVAL IS THE DISCHARGE OF §61, NOT A
-    # SOFTENING OF IT. It read: "`assemble(person, question)` and `view(person, question)`
-    # are UNSATISFIABLE; DELIBERATE HAS NO DECLARED ENTRY POINT." That was TRUE while nothing
-    # produced `q`. `questions_for()` produces it from four sources, so `question is None` no
-    # longer means "the design has no producer" -- it means THIS PERSON HAS NO QUESTION THIS
-    # SEASON, which is an ordinary state (a quiet season, nothing due, no standing commit) and
-    # not a hole. Such a person forms no candidates and does nothing, which is correct.
-    # A WRONG TYPE STILL RAISES, below: silently accepting one would let a caller's leftover
-    # string sit where a Question belongs and read as "no question", which is how a discharged
-    # hole comes back as a silent no-op.
-    if question is not None and not isinstance(question, Question):
-        # `InstrumentDefect`, not `Forbidden`: a caller passing the wrong TYPE is a bug in the
-        # caller, not a hole in #353, and filing it as a GAP would put it in the column that
-        # measures the design. Same lesson as `_TenureView`.
-        raise InstrumentDefect(
-            f"assemble() was given a {type(question).__name__}, not a Question. Pass a "
-            "Question from questions_for(), or None for a person with no question this "
-            "season. §F1's `q` has a producer now (`H-04`); accepting any object here would "
-            "make a stale injected fixture indistinguishable from an absent question.")
-    return View(p.id, view_ids(p, question, k, rule), k, question)
-
-
 def entrenchment(p: Person, seasons_held: int, scale: int, span: int) -> int:
     TRACE.query("entrenchment", "person")
     return min(scale, (seasons_held * scale) // span)
-
-
-def align(verb: str, axis: str) -> float:
-    """§F2's `alignment(c.verb, axis)`. Sparse: an unlisted pair reads the table's own declared
-    `default_cell`, never a literal here."""
-    return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
-
-
-def stance_toward(p: Person, referent: str) -> float:
-    """§F2's second term, from `p`'s OWN stance rows. #353 `:333`: `(referent, valence -5..+5,
-    weight 0..5)`. Valence times weight, summed over the rows naming this referent -- weight is
-    what `:333` supplies it for, and dropping it would make a 5-weight conviction and a 0-weight
-    one count alike."""
-    total = 0.0
-    for row in p.stance:
-        if len(row) >= 3 and row[0] == referent:
-            total += float(row[1]) * float(row[2])
-    return total
-
-
-def urgency(subsistence: int, fx: "Fixtures") -> float:
-    """§F2's third term. NO IN-CHAIN FORMULA -- `H-73`, `assumption`, swept.
-
-    ⚠ AND IT CANNOT CHANGE ANY DECISION, WHICH IS A DEFECT IN §F2 RATHER THAN IN THIS FUNCTION.
-    §F2's score is
-
-        score(c) = SIGMA_axis conviction[axis] * alignment(c.verb, axis)
-                 + stance_toward(c.subject)
-                 + urgency(sensation.subsistence)
-
-    and the third term HAS NO `c` IN IT. It is added identically to every candidate, so it cannot
-    move the ranking, cannot change which candidates survive `ask_budget()`, and cannot change the
-    order they are returned in. `choose` returns "the top ask_budget() candidates, ORDERED by
-    score", so a term constant across candidates is INERT BY CONSTRUCTION -- it is the dead-carrier
-    shape #353 `:739-744` names, arriving in the scoring function instead of in a field.
-
-    Kept and computed anyway, faithfully, because deleting it would hide the finding: the sweep
-    (`H-73`) reports that NO verdict moves across three urgency scales, and that null result IS
-    the measurement. `test_w5_f2_third_term_is_inert` is the falsifier."""
-    return float(subsistence) / float(fx.get("condition_scale"))
-
-
-def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
-                 verbs: Optional[frozenset] = None) -> Callable[..., list[Act]]:
-    """§F2's decision policy as a FACTORY, so `choose(p, view, sensation, ask_budget)` keeps the
-    FOUR-parameter signature §26 states while still reaching its params.
-
-    `H-03` is the row: "grade: assumption. THE SHAPE IS RULED (§3 L1, §9, §26); only the weighting
-    is open", so §G's discipline applies to the weights and not to this structure.
-
-    Four properties, and each is checked by a test rather than asserted here:
-      1. EVERY INPUT IS PERSON-SIDE -- `convictions`, `stance`, the View, the two Sensation
-         scalars. No World, no resolver-side Query. L2 by parameter list.
-      2. It CONSUMES `convictions` and `stance`, which #353 declares as fields and no formula in
-         the chain reads -- a carrier nothing consumes is dead state (§22.1's own complaint).
-      3. THE PERSON TRIAGES. `ask_budget()` is asked, not imposed; the engine never truncates.
-      4. A lookup on one's own interior is indistinguishable from a deliberation at this
-         boundary, and the design does not claim otherwise (§F2 property 4).
-
-    ⚠ `mint` IS HERE BECAUSE §F2 TYPES `choose -> Act[]` AND GIVES THE PERSON NO WAY TO MINT ONE.
-    An `Act` needs an id, and §33 derives every id from the world seed and the tick -- "unique per
-    DRAW, not per operation" -- so a person-side function cannot produce one. That is a real gap
-    between §F1's `-> Candidate[]` and §F2's `-> Act[]` and it is registered (`H-74`), not filled:
-    the barrier passes a minter closed over the seed and tick, which are the CLOCK, not anybody's
-    interior. Same shape as `fx`, and the AST proof still sees no `World`."""
-    def choose(p: Person, v: View, s: Sensation, ask_budget) -> list[Act]:
-        q = getattr(v, "question", None)
-        if q is None:
-            return []
-        cands = opening_set(p, v, q, fx)
-        if verbs is not None:
-            cands = [c for c in cands if c.verb in verbs]
-        u = urgency(s.subsistence, fx)
-        def score(c: Candidate) -> float:
-            return (sum(float(p.convictions.get(ax, 0.0)) * align(c.verb, ax)
-                        for ax in CONVICTION_AXES)
-                    + stance_toward(p, c.subject or "")
-                    + u)
-        # Deterministic: score DESC, then verb then subject, so a tie cannot depend on dict order.
-        ranked = sorted(cands, key=lambda c: (-score(c), c.verb, c.subject or ""))
-        # §26.3: the PERSON triages. The slice is the person's own choice of what to leave
-        # undone, taken against a budget they ASKED for -- not an engine truncating a tail.
-        # `W17`: the budgeted unit is the SCENE, so the slice is over scenes and each carries up
-        # to `interactions_per_scene` of the ranked candidates. The default policy fills scenes
-        # greedily in score order -- a person spends a scene on their best option and whatever
-        # else it can carry, which is what "1-3 mechanical interactions" describes.
-        return pack_scenes(p, ranked, ask_budget(), fx, mint, occasion=q)
-    return choose
 
 
 def person_side_eligible(p: Person, row: "VerbRow") -> bool:
@@ -589,6 +343,8 @@ def _derive_operand(p: Person, name: str, q: "Question", subject, fx: "Fixtures"
 # roster-exempt: MECHANISM, and under the guard's own threshold besides. These are two members of
 # `rosters.yaml: requires_operands` singled out by the argument above -- the roster is still the
 # declaration of WHAT AN OPERAND MAY BE; this names which two the person answers with the referent.
+
+
 _REFERENT_OPERANDS = ("subject", "to")
 
 
@@ -711,180 +467,3 @@ def standing_of(p: Person, fx: "Fixtures") -> int:
     own = [c for c in p.ledger if c.subject == p.id and c.source == "firsthand"]
     _agree, dis, paired = agreement(told, own)
     return scale if paired == 0 else (dis * scale) // paired
-
-
-def _payload_of(c: "Candidate") -> Optional[dict]:
-    """WHAT A COMPUTED ACT CARRIES: its subject, and the operands its verb's cell names.
-
-    ⚠ `subject` STAYS EVEN WHEN NO CELL BINDS IT, because it is not only an operand. `act_refs`
-    reads it to say what an act NAMES, `claim_subjects` reads it to say what a deposit is ABOUT,
-    and `tell` -- whose `writes:` is empty by design -- has nothing else that knows what was told.
-    Dropping it for a verb whose requirement happens not to mention `subject` would break the
-    causal graph for the one verb the corpus most relies on."""
-    d = dict(c.operands or {})
-    if c.subject:
-        d.setdefault("subject", c.subject)
-    return d or None
-
-
-def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
-                occasion: Optional["Question"] = None) -> list:
-    """`H-78`: WHICH interactions share one scene. `H-76` says how many; this says which.
-
-    ⚠ THIS WAS A COMMENT IN `make_chooser` UNTIL THE `W17` ADVERSARIAL PASS READ IT -- "the
-    default policy fills scenes greedily in score order", with no row, no alternative and no
-    sweep. That is `H-53`'s defect one level up, and `H-53`'s own row names the shape: the
-    instrument answering a WHICH question the specification left open, inside a slice.
-
-    `greedy` is that behaviour declared and kept as the control. `one_per_scene` is the pre-ruling
-    accounting. `by_subject` groups the interactions that share a subject, which is what
-    `player_agency_v30.md` §6.3's "one scene opportunity pursued" describes -- an opportunity is
-    an opportunity to do something ABOUT something."""
-    rule = fx.get("scene_packing_rule")
-    if rule not in SCENE_PACKING_RULES:
-        raise Unspecified(
-            f"scene-packing rule {rule!r} is not in the roster", "H-78",
-            needs=f"one of {sorted(SCENE_PACKING_RULES)}",
-            law="H-78 -- nothing in the chain says WHICH interactions share a scene, so a rule "
-                "outside the roster is a fourth answer nobody declared")
-    per = fx.get("interactions_per_scene")
-    width = 1 if rule == "one_per_scene" else (len(ranked) if per is None else per)
-
-    def scene(n: int, chunk: list) -> "Scene":
-        # ⚠ `occasion=` IS NOT DECORATION. `choose` already holds the question — it refuses to
-        # produce anything without one — and dropping it here is what left the act with no route
-        # back to what raised it (`N3`).
-        return Scene(mint(p.id, "scene", str(n)), p.id,
-                     # ⚠ THE CANDIDATE'S SUBJECT REACHES THE ACT, AND IT USED NOT TO. This read
-                     # `Act(mint(...), p.id, c.verb)` — three arguments — so `opening_set`
-                     # computed a subject from the question's referents, `mint` folded it into the
-                     # act's ID, and the act itself carried NOTHING. `_req_tell` reads
-                     # `payload["subject"]` and got `None`, so `tell` was attempted and refused in
-                     # every world in the corpus; `_eff_tell` had no target either.
-                     #
-                     # ⚠ THAT WAS HALF OF `H-94` AND `W-C` CLOSED THE OTHER HALF. The
-                     # Candidate carries `operands` now, derived person-side from the actor's own
-                     # Tenures, the question's referent and two fixtures, so
-                     # `stores(hearth(giver), kind) >= amount` has a `from`, a `kind` and an
-                     # `amount` -- and the act CARRIES them, which is what makes the fold bind
-                     # what the person bound. The subject is written first and the operands over
-                     # it, so a cell that binds the referent under its own name (`to`, `site`)
-                     # cannot disagree with `subject` about which thing that is.
-                     [Act(mint(p.id, c.verb, c.subject or ""), p.id, c.verb,
-                          payload=_payload_of(c)) for c in chunk],
-                     # `H-77`: a scene carrying more than one interaction is the EXTENDED one.
-                     # This is what `extended` MEANS, and until W17's adversarial pass nothing
-                     # ever set it -- so `Scene.cost` returned 1 unconditionally, H-77's sweep
-                     # could not move any verdict, and the row passed R2 while being
-                     # unexecutable. That is the laundering R2 exists to stop, in the row that
-                     # was added the same day the rule was written.
-                     extended=len(chunk) > 1, occasion=occasion)
-
-    # ⚠ THE BOUND IS THE COST, NOT THE SCENE COUNT, and getting that wrong made the DEFAULT
-    # chooser overspend by construction: once `extended` was actually set, five greedy scenes
-    # cost ten against a budget of five and every season using `make_chooser` refused itself.
-    # Found by running the corpus after `H-77` stopped being inert -- the row and the packer are
-    # the same mechanism seen from two sides, and fixing one without the other is what broke it.
-    ext = fx.get("extended_scene_cost")
-
-    def take(chunks) -> list:
-        out, left = [], n_scenes
-        for chunk in chunks:
-            if left <= 0:
-                break
-            # An extension the person cannot afford is taken as a PLAIN scene rather than
-            # skipped: they still pursue the opportunity, with less in it. Skipping would be the
-            # engine deciding what they leave undone, which is L1.
-            if len(chunk) > 1 and ext > left:
-                chunk = chunk[:1]
-            cost = ext if len(chunk) > 1 else 1
-            out.append(scene(len(out), chunk))
-            left -= cost
-        return out
-
-    if rule == "by_subject":
-        seen: dict = {}
-        for c in ranked:
-            seen.setdefault(c.subject or "", []).append(c)
-        chunks = [seen[subj][start:start + width]
-                  for subj in sorted(seen)
-                  for start in range(0, len(seen[subj]), width)]
-    else:
-        chunks = [ranked[i:i + width] for i in range(0, len(ranked), width)]
-    return take(chunks)
-
-
-def aggregate_questions(qs: list, rule: str):
-    """`H-54`: how many of a person's questions reach `assemble` in one season.
-
-    #353 says NOTHING about this and the instrument answered it silently as `qs[0]` for four
-    revisions. `first` preserves that answer as a declared, swept default; `all` and
-    `one_per_source` are the alternatives the sweep compares it against. Returns ONE question,
-    because `assemble(person, question)` takes one -- the rules differ in WHICH, and in how many
-    are folded into it, which is exactly what is open."""
-    if rule not in QUESTION_AGGREGATION:
-        raise Unspecified(
-            f"question-aggregation rule {rule!r} is not in the roster", "H-54",
-            needs=f"one of {list(QUESTION_AGGREGATION)}",
-            law="H-54 -- nothing in #353 says how many questions a person forms per season, so a "
-                "rule outside the roster is a fourth answer nobody declared")
-    if not qs:
-        return None
-    if rule == "first":
-        return qs[0]
-    if rule == "one_per_source":
-        seen, keep = set(), []
-        for q in qs:
-            if q.source not in seen:
-                seen.add(q.source); keep.append(q)
-        qs = keep
-    # `all` and `one_per_source` widen the REFERENTS rather than the question count, because
-    # `assemble` takes one question. The person brings everything they are being asked about.
-    refs = tuple(sorted({r for q in qs for r in q.referents}))
-    return Question(f"q:agg:{rule}:{qs[0].id}", qs[0].source, refs, qs[0].about)
-
-
-def view_ids(p: Person, q: Any, k: int, rule: str) -> list:
-    """§18's "at most K claim ids from the holder's OWN ledger -- BUILT, not filtered". `H-53`.
-
-    ⚠ #353 SUPPLIES K AND NEVER SUPPLIES WHICH K, and "built, not filtered" says what a View is
-    NOT. `H-09` gives `K = 12`; nothing in the chain says which twelve of a 200-claim ledger a
-    person brings to a question, and taking the last k -- which every revision before `W5` did
-    silently -- is an invention. The rules are `rosters.yaml: view_builder_rules`, `recent` is the
-    default because it is the incumbent and a sweep needs an honest control, NOT because it is
-    argued for.
-
-    PERSON-SIDE: it reads `p.ledger` and the question's own referents. No World."""
-    if rule not in VIEW_BUILDER_RULES:
-        raise Unspecified(
-            f"view-builder rule {rule!r} is not in the view_builder_rules roster", "H-53",
-            needs=f"one of {sorted(VIEW_BUILDER_RULES)}",
-            law="§18 -- 'at most K ids ... BUILT, not filtered'. WHICH K is `H-53` and is open; "
-                "a rule not on the roster is a fourth answer nobody declared")
-    if rule == "highest_confidence":
-        ranked = sorted(p.ledger, key=lambda c: (-c.confidence, c.id))
-        return [c.id for c in ranked[:k]]
-    if rule == "question_relevant":
-        refs = set(getattr(q, "referents", ()) or ())
-        near = [c for c in p.ledger if c.subject in refs]
-        rest = [c for c in p.ledger if c.subject not in refs]
-        # Relevant first, then the incumbent order for the remainder -- a person brings what the
-        # question is about AND whatever else is freshest, rather than only the former.
-        return [c.id for c in near[-k:]] + [c.id for c in rest[-(k - min(len(near), k)):]] \
-            if k > len(near) else [c.id for c in near[-k:]]
-    return [c.id for c in p.ledger][-k:]
-
-
-def body_band_penalty(p: Person, fx: "Fixtures") -> int:
-    """How many bands `p`'s body has fallen below the top, on `band_floors["body"]`.
-
-    PERSON-SIDE: it reads `p.body` and a params table, never a World. `H-38` closed with *"the
-    answer is YES -- `Site.condition` is the model"*, and this is that closure SPENT: the same
-    floors table, the same "a band is a floor you are at or above" reading, one kind lower. A
-    second band scheme would have been the invention `H-38` was closed to avoid.
-
-    Returns 0 at full operations and rises by one per band crossed, so the order is FIXED and
-    the narrowing is monotone -- which is the property `P32` names."""
-    floors = fx.get("band_floors")["body"]
-    # Descending, so "the top band" is unambiguous and the count is the number of floors passed.
-    return sum(1 for f in sorted(floors.values(), reverse=True) if p.body < f)
