@@ -658,6 +658,85 @@ stale is precisely the precondition column and U1's manifest shape, both correct
 
 ---
 
+### §15.0 · ⭐ **THE VERB TABLE, MEASURED ON THREE AXES — and the ruling that reorders U7 (ED-IN-0207)**
+
+Measured from `verb_table.yaml` and the loaded `VERB_TABLE`, 2026-09-10. **The ledger row is
+`ED-IN-0207`; this section is its working.**
+
+⚠ **FIRST, THE DENOMINATOR IS FALSE. `len(VERB_TABLE) == 32` COUNTS A PLACEHOLDER AS A VERB.**
+`verb_table.yaml:490` carries **`"the six investigation acts"`** as one row — `requires: "per act"`,
+`writes: []`, loaded as a real key. Its own `requires_typed_note` admits it: *"the cell defers to six
+acts the table does not carry as rows."* **31 real verbs + 1 placeholder for 6 unwritten rows = 37**,
+and the placeholder **can never execute**, so it permanently inflates every ratio. Asserted at
+`corpus_run.py:516`, `probes.py:988`, `test_season_shape.py:8374` and R-05's `measured:` line — **every
+"of 32" in this plan and in `requirements.yaml` is wrong, including the ones this arc quoted.**
+Layer 1 already named the repair (`HANDOFF_NEXT.md:55` item 2b: *"split into six rows with writes;
+#359's discovery model — a contest of capability against secrecy, emitting a Degree — is the shape"*),
+and ⚠ `PLAN.md:101`'s premise for grading them `assumption` — *"they are **unnamed**… nothing to
+inject"* — **is stale**: they are named in a CANONICAL doc, `investigation_systems_v30.md:217`/`:427`
+— **Examine · Interview · Research · Surveil · Thread-Read · Reconstruct**.
+
+#### AXIS 1 — pairing: what can be undone
+
+| kind | opened by | closed by | |
+|---|---|---|---|
+| `hold` | `confer` | `revoke` | paired, built |
+| `contain` | `move` | `move` | self-paired, built |
+| `commit` | `commit` | `repudiate` | paired, **neither built** |
+| `oblige` · `succeed` · `tie`/`knot` | each by its own verb | — | **unpaired** |
+| `Record.exists` | `create_record` · `forge` · `open_case` | `destroy_record` | paired 3:1 |
+| `Site.condition` | `work` degrades | `restore` repairs | paired |
+| `Rung.stores` | `transfer` · `levy` · `exchange` | conserved | self-paired |
+| `Office.exists` · `Petition.exists` · `Dispensation.exists` | `establish` · `petition` · `issue` | **nothing** | **unpaired** |
+| `Proposition.exists` | `utter` | — | **deliberately** — §14 makes it immutable |
+
+**Seven unpaired creators, six closers named by Jordan** (`ED-IN-0207` ruling 2): `waive`, `deposed`,
+`fray / loosen`, `rescind`, `withdraw`/`deny`, `abolish` / `dissolve`. **All are NEW rows.**
+
+#### AXIS 2 — mechanism/action vs relationship, and they are ORTHOGONAL
+
+| class | verbs |
+|---|---|
+| establishes/ends a RELATION (`Tenure`) | `commit` `confer` `oblige` `succeed` `tie / knot` `repudiate` `revoke` `move` `determine` |
+| acts on MATTER or a thing's state | `transfer` `levy` `exchange` `work` `restore` `create_record` `forge` `open_case` `destroy_record` `establish` `issue` `utter` `petition` `carry` `convene` `kill / wound` |
+| writes NOTHING — pure emission | `speak` `tell` `dispatch` `comply` `evade / defy` `refract` `the six investigation acts` |
+
+⚠ **"Writes state" and "is an interaction" are INDEPENDENT.** `tell` writes nothing yet is a genuine
+interaction — it moves a claim into another's ledger. `oblige` writes state and is **not** one. That
+orthogonality is why a fiat passes a green suite: the test was on the wrong axis.
+
+#### AXIS 3 — obstacle + degrees, and the two complete cycles already in the table
+
+**Declared today: ONE.** `kill / wound` → `contests: "the body"`, the only `contests:` row.
+
+⭐ **`issue → comply / evade / defy / refract` IS A COMPLETE INTERACTION CYCLE, ALREADY WRITTEN.** All
+three responses require *"a claim of the dispensation's terms is in the actor's own ledger"* and emit
+`compliance.given` / `compliance.withheld` / `terms.distorted`. **All four are unbuilt, and U7 files
+them last as "group 3".** The investigation six are the second such family (#359's capability against
+secrecy), de-scoped entirely as "group 4".
+
+**Where an obstacle and degrees are structurally required** — ⚠ **this column is a READING, not a
+declaration: nothing in `verb_table.yaml` names a counterparty, and that missing field is arguably the
+schema gap the whole ruling implies**: `tell`/`speak` (the hearer), `evade / defy`/`refract` (the
+issuer's authority — `refract` is degrees *by definition*), `levy` (the levied), `succeed` (rival
+claimants), `petition`/`carry` (the receiving body), `establish`/`issue` (those bound).
+**Legitimately needing none** — one party, own resources: `create_record` `utter` `work` `restore`
+`move` `commit` `repudiate` `destroy_record`.
+
+#### WHAT THIS REORDERS
+
+1. **The Dispensation four are the strongest place in the table to build, and U7 ranks them last.**
+   They fail none of the three tests structurally.
+2. **`commit` + `repudiate` land TOGETHER** — the one matched pair both unbuilt; reversible state
+   should move divergence the *other* way, which is a falsifiable prediction and the unit's control.
+3. **U1 is upstream of U7** (§15.0a).
+4. ⚠ **The `dispatch`/`comply` fork is OPEN and is `ED-IN-0207`'s `needs_jordan`.** `comply` keys on a
+   **claim in the ledger**, which `dispatch`'s `order.given` already deposits — so the response family
+   is anchored to the *artifact* when its mechanism is the *claim*. Either `comply/evade/refract`
+   answer both channels, or `dispatch` needs its own obey/disobey pair.
+
+---
+
 ### §15.0a · ⭐ **THE RULING THAT SUBSUMES §15.0b AND §15.0c (Jordan, 2026-09-10)**
 
 > **"Verbs invoke mechanisms or interactions between a character and another entity/character.
