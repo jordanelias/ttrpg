@@ -2268,9 +2268,9 @@ Recorded so a later session does not re-open them — the ED-IN-0185 failure `CL
 ## §13 · SIZE — measured, and over the convention's threshold
 
 **Measured, not estimated — RE-MEASURED 2026-09-10 after the Arc-3 amendments, the adversarial
-reconcile, and the U3a revert:** **2,676 lines**, **51,152 tokens** at `tools/ci_common.py::tokens` — the repo's single
+reconcile, and the U3a revert:** **2,718 lines**, **51,972 tokens** at `tools/ci_common.py::tokens` — the repo's single
 owner of that estimate, characters ÷ 4. ⚠ **Say which character count**: Python `len()` gives
-**204,608** and `wc -c` gives **207,366 bytes**, and the gap is this file's own `§`, `⚠`, `→` and `≥`. `tokens()` divides the first.
+**207,891** and `wc -c` gives **210,693 bytes**, and the gap is this file's own `§`, `⚠`, `→` and `≥`. `tokens()` divides the first.
 Both are true of their own basis, which is the failure mode `CLAUDE.md` §0.1 names and which PR #383
 paid for once already (*"One instrument, named, for numbers that get compared."*).
 
@@ -2296,9 +2296,9 @@ shipping it as one part is a deliberate choice, not an oversight. ⚠ **After th
 file is over 60% longer than that peer** (37.7k against 23.2k tokens), so the choice is weaker than it
 was and the split below is closer than it was. Say so rather than re-asserting the earlier comparison.
 
-⚠ **AND THE SPLIT IS NOW OVERDUE AT 51.2k — say so rather than re-asserting the comparison a fourth
-time.** This is **120% longer** than its closest peer (`workplans/2026-09-06-season-loop-execution-plan.md`,
-23.2k) — the successive measurements read 60%, 85%, 112%, now 120%. **Split at the §6/§7 boundary
+⚠ **AND THE SPLIT IS NOW OVERDUE AT 52.0k — say so rather than re-asserting the comparison a fourth
+time.** This is **124% longer** than its closest peer (`workplans/2026-09-06-season-loop-execution-plan.md`,
+23.2k) — the successive measurements read 60%, 85%, 112%, 120%, now 124%. **Split at the §6/§7 boundary
 before adding another section.** The convention is still `WARNING`-level and still not a
 blocking gate, and the choice to ship one part is still deliberate — but it is weaker at every
 re-measurement, and the next session to add a section here should split first.
@@ -2563,6 +2563,48 @@ its own instruction.
 > `rosters.yaml` sits in a conforming module and no Arc-1 unit moves it. **That is true and it is not
 > the question**; the critic did not open `make_chooser`'s score or the harness seeding. Recorded rather
 > than dropped, because a later session will find that verdict and needs to know its scope.
+
+> ### ⚠ **U7's `commit` WAS BUILT AND REVERTED, 2026-09-10 — AND IT IS IN THE WRONG GROUP.**
+>
+> `PLAN.md` `W31(a)` files `commit` under *"no hole, merely unbuilt"*, and this plan does **`commit`
+> first** on its own reasoning: *"`Q4` (a live `commit` to an OUGHT) is the only question source that
+> fires in a quiet season, and no verb can create one — every world seeds it by hand."* An effect was
+> written (`@effect_for("commit")`, opening a `commit` Tenure actor→Proposition on `_eff_confer`'s
+> pattern) and **reverted**. What it bought and what it cost, both measured:
+>
+> | | |
+> |---|---|
+> | `resolvable_verbs()` | **12 → 13** — the verb leaves *"19 have no predicate/effect"* |
+> | `corpus_run` | `commit` moves to **"attempted and always refused"**, joining `work` |
+> | executed set | **unchanged, 6 of 32.** U7's acceptance — *"the executed set gains the verb in ≥1 world"* — **NOT MET** |
+> | content hash | **MOVES**, `ee0383bf…` → `2fa92709…` |
+> | `delta HEAD` | **PROBE FLIPS 0**; probes 122→122; gap events 66→66; **+1 CLAIM, +1 EVENT, +1 WRITE** — one refusal, corpus-wide |
+> | `pytest engine/season/tests` | **6 FAILED**, 181 passed |
+>
+> **Reverted on the trade, not on a defect in the effect.** Six pinned-golden tests
+> (`test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this`, the two W-B
+> clause tests, the two W-D fork tests, and the ranking-discrimination test) go red because adding a
+> verb to the resolvable set changes candidate sets corpus-wide and shifts the fork measurements.
+> **Re-pinning six goldens to purchase one refusal event, for a unit whose own acceptance is unmet,
+> is the trade `CLAUDE.md` §0.1 refuses** — a golden re-record must be intended and stated, and
+> "the verb is now visibly refused" does not earn it. §0.2: done means it runs, and it does not run.
+>
+> **⚠ AND THE DIAGNOSIS IS THE REAL FINDING: `commit` IS A `W31(b)` ROW, NOT A `W31(a)` ROW.**
+> Measured, not inferred — a spy on `EFFECTS["commit"]` over two seasons of `build_world(0)` records
+> **ZERO calls**, while the log carries one `commitment.refused`. **The refusal happens in the fold,
+> upstream of the effect**, at the typed `requires`. The cause is visible in the world: NPC-088 holds
+> **exactly one Proposition** (`prop_einhir`) and **exactly one live `commit`** — Carin's, to that
+> same Proposition. Q4 reads a person's *own* live commit-to-OUGHT, so the only person it fires for
+> is the one person for whom a new commitment changes nothing; the other two never receive a question
+> whose subject is a Proposition, and `operands_for` binds `subject` from the question.
+>
+> **So `commit`'s blocker is not a missing effect. It is that no question source hands a Proposition
+> subject to a person who does not already hold one** — a hole of the `W31(b)` *"lands only when its
+> row moves"* kind. Writing the effect cannot move it, which is why the effect is not on `main`.
+> **A session that writes the other fourteen effects first will pay six golden re-records and still
+> execute nothing.** ⚠ **Re-check each of the remaining 14 against this shape before writing it:**
+> the question is not *does it have an effect* but *can any corpus person be asked a question whose
+> subject this verb's `requires_typed` will bind*.
 
 ⚠ **U7 gp 1-2's *"touches no module Arc 1 moves"* WAS TOO STRONG, and the qualifier is measured.**
 `ED-IN-0206` item (6) — the row this plan cites throughout — reads *"`loop/` IS driver + effects +

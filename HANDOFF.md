@@ -43,6 +43,16 @@ non-goals all stand. **What changed is everything around them**, and a session t
   row** — all 40 pairs already exist, so that file is untouched. ⚠ `destroy_record` is **already
   resolvable and already effected**: its blocker is candidate formation, not wiring, so U7's count of
   20 is off by at least one and off by a different KIND of work.
+  ⚠ **AND `commit` — the verb the plan says to do FIRST — was built and REVERTED the same session.**
+  The effect is correct and never runs: a spy records **zero calls** while the log carries one
+  `commitment.refused`, so the fold refuses **upstream**, at the typed `requires`. NPC-088 holds one
+  Proposition and one live `commit` — Carin's, to that same one — and Q4 reads a person's *own*
+  commit, so the only person it fires for is the one for whom committing changes nothing. **The
+  blocker is a question-source hole, not a missing effect**, which makes `commit` a `W31(b)` row and
+  not the `W31(a)` row the plan files it under. Landing it cost **6 red goldens** to buy **one
+  refusal event** and executed nothing — the re-record trade §0.1 refuses. **Before writing any of
+  the remaining 14 effects, ask whether a corpus person can be asked a question whose subject that
+  verb's `requires_typed` will bind.** Full measurements: the plan's §15.1 box.
   ⚠ **A `U3a` was carved as a second startable unit, landed, and REVERTED the same session.** It put
   the 13×4 table in `rosters.yaml` as a carrier nothing reads. `04:124` binds `data/` to raise on a
   **declared-but-unread** row and names `table` explicitly; `01_AXIOMS.md` ID-13 calls such a thing
