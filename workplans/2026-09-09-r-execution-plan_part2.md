@@ -658,7 +658,7 @@ stale is precisely the precondition column and U1's manifest shape, both correct
 
 ---
 
-### §15.0d · ⚖️ **THE FABLE ADJUDICATION — §15.0 IS MORE OVERTURNED THAN UPHELD (ED-IN-0210)**
+### §15.0d · ⚖️ **THE FABLE ADJUDICATION — §15.0 IS MORE OVERTURNED THAN UPHELD (ED-IN-0211)**
 
 A read-only Fable node adjudicated §15.0–§15.0c against Layer 1 on Jordan's instruction. **Read this
 before §15.0 below: five of its load-bearing claims do not survive, and two of the overturns say the
@@ -730,10 +730,10 @@ The derivation *"a real interaction has a counterparty, an obstacle and a degree
 
 ---
 
-### §15.0 · ⭐ **THE VERB TABLE, MEASURED ON THREE AXES — and the ruling that reorders U7 (ED-IN-0209)**
+### §15.0 · ⭐ **THE VERB TABLE, MEASURED ON THREE AXES — and the ruling that reorders U7 (ED-IN-0210)**
 
 Measured from `verb_table.yaml` and the loaded `VERB_TABLE`, 2026-09-10. **The ledger row is
-`ED-IN-0209`; this section is its working.**
+`ED-IN-0210`; this section is its working.**
 
 ⚠ **FIRST, THE DENOMINATOR IS FALSE. `len(VERB_TABLE) == 32` COUNTS A PLACEHOLDER AS A VERB.**
 `verb_table.yaml:490` carries **`"the six investigation acts"`** as one row — `requires: "per act"`,
@@ -764,7 +764,7 @@ inject"* — **is stale**: they are named in a CANONICAL doc, `investigation_sys
 | `Office.exists` · `Petition.exists` · `Dispensation.exists` | `establish` · `petition` · `issue` | **nothing** | **unpaired** |
 | `Proposition.exists` | `utter` | — | **deliberately** — §14 makes it immutable |
 
-**Seven unpaired creators, six closers named by Jordan** (`ED-IN-0209` ruling 2): `waive`, `deposed`,
+**Seven unpaired creators, six closers named by Jordan** (`ED-IN-0210` ruling 2): `waive`, `deposed`,
 `fray / loosen`, `rescind`, `withdraw`/`deny`, `abolish` / `dissolve`. **All are NEW rows.**
 
 #### AXIS 2 — mechanism/action vs relationship, and they are ORTHOGONAL
@@ -804,7 +804,7 @@ claimants), `petition`/`carry` (the receiving body), `establish`/`issue` (those 
 2. **`commit` + `repudiate` land TOGETHER** — the one matched pair both unbuilt; reversible state
    should move divergence the *other* way, which is a falsifiable prediction and the unit's control.
 3. **U1 is upstream of U7** (§15.0a).
-4. ⚠ **The `dispatch`/`comply` fork is OPEN and is `ED-IN-0209`'s `needs_jordan`.** `comply` keys on a
+4. ⚠ **The `dispatch`/`comply` fork is OPEN and is `ED-IN-0210`'s `needs_jordan`.** `comply` keys on a
    **claim in the ledger**, which `dispatch`'s `order.given` already deposits — so the response family
    is anchored to the *artifact* when its mechanism is the *claim*. Either `comply/evade/refract`
    answer both channels, or `dispatch` needs its own obey/disobey pair.
@@ -1361,14 +1361,17 @@ leave R-01/R-02 `not_met`.** Both prior plans carry that clause and it is not op
 
 ---
 
-> ⚠ **ED-IN-0207 AND ED-IN-0208 IN THIS DOCUMENT WERE RENUMBERED TO ED-IN-0209 AND ED-IN-0210 ON
+> ⚠ **ED-IN-0207 AND ED-IN-0208 IN THIS DOCUMENT WERE RENUMBERED TWICE, ENDING AT ED-IN-0210 AND ED-IN-0211, ON
 > MERGE (2026-09-10).** `main` had independently allocated both ids to different subjects — the
 > σ-leverage skill split (PR #390) and the blocking-rulings measurement (PR #393) — while this
 > branch allocated them to Jordan's verb-table rulings and the Fable adjudication. Both sessions
 > read `next_free: 207` and neither saw the other's bump. `main`'s rows are published and cited in
 > merged PR titles, so they keep the ids and these moved. A lane tag makes CROSS-lane collision
 > impossible by construction; **within** a lane the allocation protocol is still discipline alone,
-> and this is what that costs.
+> and this is what that costs. ⚠ **IT HAPPENED TWICE.** The first renumber moved these rows to
+> 0209/0210; `main` then merged PR #392, which had allocated **0209** to the layer-conformance
+> skill, so they moved again to 0210/0211. The rule held both times and that is the point — the
+> LATER-MERGING side moves, so a published id never shifts under a citation already aimed at it.
 
 ## §15.0e — THE SIX, BUILT. What landed, what it moved, and what it did not build.
 
@@ -1380,7 +1383,7 @@ that is not a verb"*, then *"you must ensure you build the six from investigatio
 `verb_table.yaml`'s one row is now six, named by canon at `investigation_systems_v30.md:217` —
 **`examine` · `interview` · `research` · `surveil` · `thread_read` · `reconstruct`**. Each carries a
 typed `requires` built from the **existing** closed grammar: no new `requires_form`, no new
-`requires_operand`, no new predicate stem. ⚠ That contradicts my own `ED-IN-0210`, which said the
+`requires_operand`, no new predicate stem. ⚠ That contradicts my own `ED-IN-0211`, which said the
 build needed *"new requires stems (a grammar change)"*. It did not: `existence` (`exists:<Kind>`),
 `relation` (`present_at`) and `own_ledger` (`claim.held`) cover five of the six, and the sixth —
 `thread_read` — carries `requires_typed: none` under the loader's own reason (c), an operand the

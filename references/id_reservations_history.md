@@ -99,7 +99,19 @@ of 2026-09-10 and **ED-IN-0208** to the Fable adjudication of that row. Both ses
 PR titles, so they keep 0207/0208 and the branch's two rows became **ED-IN-0209** (verb-table
 rulings) and **ED-IN-0210** (the Fable adjudication). No content changed on either side; the
 branch's citations in `workplans/2026-09-09-r-execution-plan_part2.md` and `ED-FI-0009` were
-rewritten in the same merge, and `next_free` went 209 → **211**.
+rewritten in the same merge.
+
+⚠ **AND IT HAPPENED A SECOND TIME, HOURS LATER, WHICH IS THE PART WORTH KEEPING.** While that merge
+was being verified, `main` advanced again: PR #392 (the layer-conformance skill) allocated
+**ED-IN-0209** — the id the branch's first row had just been renumbered *to*. The same rule applied
+again and the two rows moved once more, to **ED-IN-0210** (verb-table rulings) and **ED-IN-0211**
+(the Fable adjudication). `next_free` → **212**.
+
+**Two collisions in one day, in one lane, is the argument FOR the rule rather than against it.** The
+later-merging side moves, every time. A published id therefore never shifts under a citation already
+aimed at it, and the cost falls entirely on the branch that has not landed yet — which is the side
+that can still cheaply rewrite its own references. The alternative, letting whoever wrote it first
+keep the number, would require rewriting citations on `main`.
 
 ⚠ **The lane tag did its job and this is what it does NOT cover.** `ED-<LANE>-NNNN` makes
 CROSS-lane collision impossible by construction. WITHIN a lane the allocation protocol — read
@@ -115,6 +127,22 @@ twin"*. Recorded here so the next allocator sees it rather than rediscovering it
 
 
 <a id="in"></a>
+
+**ED-IN-0209 allocated 2026-09-10** (next_free 209 -> 210), **RENUMBERED TWICE ON MERGE: 0207 -> 0208
+-> 0209.** Two same-lane collisions on one branch, back to back — the case the `ED-<LANE>` tag does
+*not* prevent by construction, and the same failure class recorded below at ED-IN-0031, 0032,
+0044/0045, 0048/0049/0050, 0148 and 0152. PR #390 took 0207 while this branch was open; PR #393 —
+itself renumbered 0207 -> 0208 by a third concurrent session for the same reason — then took 0208
+before this branch could merge. ⚠ **The second hit is the informative one: renumbering to
+`next_free` does not make an id safe, because every concurrent session renumbers to the same
+`next_free`.** Recorded as evidence; no guard is proposed here (§0.1 pt 5 — the subject is this
+repository's process, not the game). The work: the
+`layer-conformance` skill —
+`skills/layer-conformance/SKILL.md`, one skill with two lenses (layer PLACEMENT, and Layer-1
+CONFORMANCE of code against `architecture/meta/04_CODE_ARCHITECTURE.md`), owning the METHOD while
+`CLAUDE.md`'s layer table and `architecture/` keep the definitions. Wired into `CLAUDE.md` §9's
+routing table. Filed here and not on the lane row for the reason the 0203 entry below already
+gives: that row is at its 600-char cap. See `registers/editorial_ledger_in.jsonl`.
 
 **ED-IN-0203 allocated 2026-09-07** (next_free 203 -> 204), moved here rather than onto the lane
 row because that row sits at 598 of its 600-char cap — any append breaks

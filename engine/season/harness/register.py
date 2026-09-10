@@ -5,8 +5,9 @@ THAT NOTHING READ. Not one of its 32 rows carried the `site:`, `sweep:` or `cite
 §G4 defines; its self-reported counts (39 holes · 8 ruled · 13 assumption · 12 absent · 1 mixed)
 do not reproduce from its own rows; and it could not report that TWENTY-TWO holes had no row at
 all. By `CLAUDE.md` §0.05's test -- *would the game behave differently if this document were
-deleted?* -- it was reference. `hole_register.yaml` is the object; this module is the only thing
-that reads it.
+deleted?* -- it was reference. `hole_register.yaml` is the object; this module reads it, and so
+does `run_cases.py:214` (`_register()`, to grade a case's `exercises:`). An earlier wording of this
+line claimed sole readership and was wrong -- `rg -n HOLE_REGISTER_YAML engine/season` returns both.
 
 WHAT THIS MODULE IS FOR, STATED SO IT IS NOT MISTAKEN FOR A REPOSITORY GUARD. It lives inside the
 instrument directory and nowhere else (`PLAN.md` §7, guardrail `G9`). It grades no repository
