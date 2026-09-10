@@ -346,28 +346,61 @@ retyped, on loader invariant 7's precedent.
 
 ## §3 · ENTRY STATE
 
-**`main` = `f41f20a1`.** `engine/season/` holds `__init__.py`, `shape.py` (4,153), `combat_seam.py`
-(189), `gaps.py`, `trace_log.py`, `data/`, `state/`, `harness/`, `tests/`, **`cases/`** (5 YAML at its
-root plus `chain/` and `exercises/`) and **`runs/`** (the committed artifacts `report.py` re-records
-and `delta.py` compares), and four YAML files: `rosters.yaml` (1,036),
-`verb_table.yaml` (555), `write_matrix.yaml` (372), `hole_register.yaml` (2,746), plus
-`requirements.yaml` (289) and `ENDINGS_CLASSIFIED.yaml`. ⚠ `cases/` and `runs/` were omitted from the
-first draft's two listings of this tree, one of which said *"and nothing else"* — and `runs/` is what
-every *"the hash does not move"* control in §6 is compared against, so the omission was not cosmetic.
+⚠ **RE-STATED 2026-09-10 (amendment 1 of `workplans/2026-09-09-layer1-conformance-plan.md` §8). The
+tree this section described no longer exists.** It was written with PR #383 open, describing a `main`
+that held `shape.py` at 4,153 lines. #383 merged as `c3b51e3` and executed decomposition steps 5-10 —
+**including step 10, which §5 below had deferred** — so `shape.py` is **gone**. The `[#383]` marker
+discipline the preamble sets up is **retired with it**: it marked statements about an open branch that
+is now `main`, and a marker whose referent has merged reads as a live caveat to a cold session.
 
-**`shape.py` opens three registries at runtime** and never `hole_register.yaml` — so under §0.05 the
-register is mechanism for the corpus grader and **reference for the game**.
+**`main` = `8b79440`.** Measured 2026-09-10, in this container, not read off a prior document.
 
-**Nine rows, today:** R-01, R-02, R-03, R-04, R-05, R-09 `not_met`; R-06, R-07, R-08 `partial`.
-Verified against `requirements.yaml`. **`register.py --requirements` is an index, not a gate** — it
-validates status vocabulary, non-empty `measured:`, that a `-k` selects a real test, and that a
-`python X.py` exists and contains `__main__` (`register.py:648-672`). It never compares `status:` to a
-measurement, so **no `status:` flip in `requirements.yaml` is acceptance for anything in this plan**
-(`CLAUDE.md` §0.2). The `measure:` line is.
+`engine/season/` holds seven root modules — `__init__.py` (37), `combat_seam.py` (193),
+`decision.py` (890), `epistemic.py` (423), `gaps.py` (118), `seam.py` (372), `trace_log.py` (116) —
+eight directories — `cases/` (5 YAML at its root plus `chain/` and `exercises/`), `data/`, `harness/`,
+`loop/` (`driver.py` 1,402 · `effects.py` 452 · `predicates.py` 296), `queries/` (`world_q.py` 335 ·
+`readers.py` 158), `runs/` (the committed artifacts `report.py` re-records and `delta.py` compares),
+`state/`, `tests/` — and six YAML: `rosters.yaml` (1,039), `verb_table.yaml` (555),
+`write_matrix.yaml` (372), `hole_register.yaml` (2,746), `requirements.yaml` (289),
+`ENDINGS_CLASSIFIED.yaml` (224).
 
-**[#383]** adds `queries/{world_q,readers}.py`, `loop/{predicates,effects}.py`, `epistemic.py` and takes
-`shape.py` to 2,803. It creates **no** `decision/`, **no** `seam/`, **no** `loop/driver.py`,
-**no** `queries/person_q.py`.
+**`data/files.py:99-101` opens the three runtime registries** — `write_matrix.yaml`, `rosters.yaml`,
+`verb_table.yaml` — and never `hole_register.yaml`, so under §0.05 the register stays mechanism for the
+corpus grader and **reference for the game**. The claim moved off `shape.py` to its real owner; the
+property is unchanged.
+
+**⚠ AND THE TREE IS NOT LAYER-1 CONFORMANT — which is what makes Arcs 1 and 2 this plan's real
+precondition (§5).** Against `04 §A.2:127-139`'s nine modules: `state/` · `data/` · `loop/` ·
+`queries/` · `tests/` are directories; **`decision.py` and `seam.py` are FILES**; **`manifest/` and
+`port/` are ABSENT**. `queries/` has no `person_q` and no `cache`; `loop/` is driver + effects +
+predicates, not driver + six steps; `Receipt` does not exist and the write class is still a
+**parameter**. Filed as `ED-IN-0206`, and re-measured — undercounted and overcounted both — in
+`workplans/2026-09-09-layer1-conformance-plan.md` §3. **Four root modules sit outside the nine:**
+`epistemic.py`, `gaps.py`, `trace_log.py`, `combat_seam.py`.
+
+**Nine rows, today:** R-01, R-02, R-03, R-04, R-05, R-09 `not_met`; R-06, R-07, R-08 `partial` —
+observed, `python -m engine.season.harness.register --requirements`, 2026-09-10.
+**`register.py --requirements` is an index, not a gate** — it validates status vocabulary, non-empty
+`measured:`, that a `-k` selects a real test, and that a `python X.py` exists and contains `__main__`
+(`register.py:648-672`). It never compares `status:` to a measurement, so **no `status:` flip in
+`requirements.yaml` is acceptance for anything in this plan** (`CLAUDE.md` §0.2). The `measure:` line
+is.
+
+**The instrument baseline, re-run 2026-09-10 rather than inherited** — a unit returning otherwise has
+broken something rather than revealed a miscount:
+
+| observable | value |
+|---|---|
+| `headless --case NPC-088 --seasons 2 --seed 0` | `CONTENT HASH: ee0383bf3f4606e56b80cd07c0284f0a` · `verbs the fold can execute: 12 of 32` |
+| `pytest engine/season/tests -q` | **187 passed** |
+| `register --requirements` | **6 `not_met` · 3 `partial`** |
+| `compliance_check --check-only` | 0 errors · 98 warnings (this file is one of them, §13) |
+| `broken_dependency_checker.py` | *"All dependencies verified. No broken links found."* |
+
+⚠ **`pytest` and `numpy` are not installed in a fresh container** (`pip install pyyaml pytest numpy`),
+and every season entry point is `python -m engine.season.harness.<x>` — the flat
+`python engine/season/harness/report.py` spelling raises `ImportError: attempted relative import with
+no known parent package`.
 
 ---
 
@@ -455,26 +488,61 @@ authoring.
 
 ## §5 · COORDINATION STANCE
 
-Steps 7, 8 and 9 of the decomposition — **owned by `workplans/2026-09-06-shape-decomposition-plan.md`
-§4, which this document cites rather than restates (U0)** — are pure moves of exactly the modules
-R-07/R-08/R-09 land in.
-Landing R-work in `shape.py` first and moving it a step later edits the same lines twice and re-runs the
-guard-blinding recurrence, which has now been measured three times (steps 2, 4, 5 — PR #383's body
-records step 5's: *"Three gates read `files.SHAPE_PY` alone and did narrow"*).
+⚠ **REWRITTEN 2026-09-10 (amendment 2 of `workplans/2026-09-09-layer1-conformance-plan.md` §8). What
+stood here is spent, and it overshot its own stance in one direction and undershot it in another.**
 
-Landing it **after** the carve puts each mechanism in its Layer-1 directory from its first commit, which
-`04 §E.1:1046-1047` requires **for `decision/` and for nothing else** — the rule is scoped, and `seam/`
-and `manifest/` are directories on `04 §A.2`'s nine-module list instead:
+What it said: *"merge #383; run steps 7 → 8 → 9 as three serial pure-move PRs; start R-work at U1 in
+`seam/`"*, with step 10 *"deferred to the end of the arc"* and one standing rule —
+*"NO NEW SYMBOL IS RE-EXPORTED THROUGH `shape.py`"*.
 
-> **`decision/` is a directory from its first commit.** The isolation scan matches by path, so a
-> `choose` drafted inside `loop/` and moved later **would have been green while violating AX-2.**
+**What happened.** #383 ran steps 5 through **10**. `shape.py` does not exist, so the re-export rule is
+satisfied **vacuously** and is struck rather than carried as live guidance about a file that is gone.
+U10's tail — *"THEN step 10"* — is likewise already done. **But steps 7 and 8 executed the
+SUPERSEDED placement**: they shipped flat `decision.py` and `seam.py`, and left `combat_seam.py` at the
+package root, where `04 §A.2:133/:135` name **directories** and `04:1046` requires `decision/` to be one
+*from its first commit*. §2's D2 and D5 — this document's own corrections — were already on `main`
+(`cb28ec9`, #384) when the carve landed at `c3b51e3`. The assessment is
+`workplans/2026-09-09-layer1-conformance-plan.md` §2; the gap is `ED-IN-0206`.
 
-**So: merge #383; run steps 7 → 8 → 9 as three serial pure-move PRs; start R-work at U1 in `seam/`.**
-Step 10 (facade deletion, re-pointing the source-scanning tests) is **deferred to the end of the arc** —
-large, mechanical, and no R-unit needs it — under one rule binding from U1 onward:
+**So the stance this section argued for still holds, and it is now owed one layer down.** The argument
+was: *land R-work in its Layer-1 directory from its first commit, because landing it in `shape.py` and
+moving it a step later edits the same lines twice and re-runs the guard-blinding recurrence.* That
+recurrence has now been measured at steps 2, 4 and 5. The identical argument applies to
+`seam.py`: **U1 lands `manifest/`, a provider and a dispatch. Landing them in a flat `seam.py` that has
+to become `seam/` anyway pays §2's plan-selection defect a second time.**
 
-> **NO NEW SYMBOL IS RE-EXPORTED THROUGH `shape.py`.** Tests import new names from their owning module,
-> so the facade only shrinks.
+### THE ORDER — U1–U10 IS **ARC 3**, AND ARCS 1 AND 2 ARE ITS PRECONDITION
+
+`workplans/2026-09-09-layer1-conformance-plan.md` (PROPOSED, **PR #386, open — not on `main` as of
+2026-09-10**) sequences three arcs on Jordan's ruled depth, *"structure now, gate contract next"*:
+
+```
+ARC 1  Layer-1 STRUCTURE   L0 → L1 → L2 → (L3 ∥ L4) → L5     zero game yield, declared
+ARC 2  the GATE CONTRACT   G1 → G2 → G3 → G4                  zero game yield, declared
+ARC 3  the R-WORK          U1 … U10, THIS DOCUMENT            game yield
+```
+
+**This document is the single owner of Arc 3.** It does not restate Arcs 1 and 2 (`CLAUDE.md` §8 —
+every rule lives once); it names only what Arc 3 *takes* from them:
+
+| Arc 3 needs | built by | why it is hard, not merely tidier |
+|---|---|---|
+| `manifest/` with `resolve(role, module)` and a boot-time failure | **L4** | U1's dispatch **is** `manifest.resolve("contest", …)` — `04 §C.5:682`, `04:1031`. There is nothing to register a provider *in* until L4 lands |
+| `seam/` as a directory with `wrappers/` under it | **L2** | U1's provider is a `seam/wrappers/*` row (`04:164`). At a flat `seam.py` it has no lawful home — see U1's amended file path |
+| `decision/` as a directory | **L1** | U4 lands the sampler in it, and `04:1046`'s first-commit rule is about exactly that: a mechanism drafted outside `decision/` and moved later **is green while violating AX-2** |
+| `Act.via` | **G3** | `H-108`, and §4 records it as a **hard** blocker for R-04 / U9. Arc 2's one point of contact with this graph |
+| `loop/` as driver + six steps | **L5** | U2 reshapes `season()` into rounds. Reshaping a 1,402-line `driver.py` that is about to be split into six modules edits the same lines twice |
+
+⚠ **THE ONE ORDERING THAT IS SOFT, AND SAYING SO IS NOT PERMISSION.** U3 (data only, `rosters.yaml`)
+and U7 groups 1–2 (verb rows, predicates, effects) touch **no** module Arc 1 moves. They are startable
+on `main` today and are the correct parallel lane if Arc 1 is in flight. **Everything else waits**, and
+a session that starts U1 against a flat `seam.py` to "save a rebase" has chosen to pay the
+guard-blinding cost a fourth time.
+
+⚠ **AND ARC 3 MAY NOT SILENTLY ABSORB ARC 1's WORK.** If a session reaches U1 with `manifest/` and
+`seam/` still unbuilt, the answer is **to run L2 and L4 as their own units under their own plan**, not
+to build a manifest inside U1 and call it R-work. `CLAUDE.md` §0.2 grades a juncture on behaviour that
+executes; it does not license folding a structural arc into a game unit to make one commit look bigger.
 
 ---
 
@@ -483,86 +551,102 @@ large, mechanical, and no R-unit needs it — under one rule binding from U1 onw
 Each unit states: **preconditions · files and symbols · new-file shape · new data rows · acceptance
 (command + observable) · falsifier · control · hash.**
 
-### U0 · Decomposition steps 7, 8, 9 — PURE MOVES
+### U0 · Decomposition steps 7, 8, 9 — **DONE. RETIRED 2026-09-10; DO NOT RUN IT.**
 
-**Rows advanced: none. Zero game yield, stated.** Licensed as a precondition, not as progress.
+⚠ **Amendment 2 of `workplans/2026-09-09-layer1-conformance-plan.md` §8.** This unit sequenced
+decomposition steps 7-9 as three serial pure-move PRs and cited
+`workplans/2026-09-06-shape-decomposition-plan.md` as their owner. **PR #383 (`c3b51e3`) ran steps 5
+through 10.** `shape.py` does not exist. Every precondition this unit stated — *"`wc -l
+engine/season/shape.py` reads 2,803"*, the seven deltas D1-D7, the per-step acceptance — is spent, and
+the three `[UNVERIFIED]` falsifier outcomes §1 flagged for steps 7/8/9 are closed by that merge, not by
+this document.
 
-⚠ **THIS UNIT CITES; IT DOES NOT RESTATE. The single owner of decomposition steps 7-10 is
-`workplans/2026-09-06-shape-decomposition-plan.md`** — its §1 module suite, its §1 *"placements a lazy
-pass would get wrong"* table, and its §4 migration order. **Read it for what moves.** The first draft
-of this section restated ~126 lines of it — symbol inventories, per-step artifacts — with **zero**
-citations of it; two documents describing one migration drift, and `CLAUDE.md` §8's *every rule lives
-once* forbids the second copy. What follows is **only what the R-work found that the owner did not
-have**, and **three of the five have been written back into the owner rather than kept here.**
+**Its execution controls HELD, and that is a real result worth keeping**: ten steps of pure move with a
+stationary content hash (`ee0383bf3f4606e56b80cd07c0284f0a`, re-observed 2026-09-10), byte-identical
+`runs/` artifacts, and `PROBE FLIPS 0`. **What did not hold is placement** — steps 7 and 8 shipped flat
+`decision.py` and `seam.py` against `04 §A.2:133/:135` and `04:1046`, and this document's own D2 and D5
+were already on `main` when they landed. §5 records the assessment; `ED-IN-0206` files the gap.
 
-**Preconditions.** PR #383 merged to `main`. Checkable: `git ls-tree origin/main engine/season/` lists
-`loop/`, `queries/` and `epistemic.py`, and `wc -l engine/season/shape.py` reads **2,803**.
+**What replaces it as U1's precondition: ARCS 1 AND 2**, owned by
+`workplans/2026-09-09-layer1-conformance-plan.md` §6-§7 (PROPOSED, PR #386 — **open, not on `main`**).
+§5's table above names which unit needs which. **Read that file for what moves; do not restate it here
+and do not re-derive its units** — two documents describing one migration drift, which is the defect
+this unit's own preamble charged its predecessor with.
 
-| # | delta | where it now lives |
-|---|---|---|
-| **D1** | **The owner's `shape.py:NNNN` do not resolve here.** Its banner scopes every citation to PR #371 at `480cb43`, a **6,771**-line file; `main` `f41f20a1` is **4,153**, and every line number in *this* document is against `main`. Cross-read by `::symbol`, which is what the owner's own step 0a exists to establish | here |
-| **D2** | **`decision/`, `seam/`, `manifest/` are DIRECTORIES**; the owner's table names flat `decision.py` / `seam.py` / `loop.py`. It predates `architecture/`'s ratification (2026-09-05, ED-IN-0204). `04 §A.2:127-139` names the nine, five of which are these plus `loop/` and `queries/`; PR #383 already shipped `loop/` and `queries/` as directories. **`decision/` must additionally be one FROM ITS FIRST COMMIT** — `04 §E.1:1046-1047`, which names `decision/` and nothing else; `seam/` and `manifest/` are directories on `§A.2`'s list, a weaker warrant. **Where the owner says `loop.py`, read `loop/driver.py`** | here |
-| **D3** | **`sense` moves at STEP 9 into `loop/`, not at step 7 into `decision/`** — it takes a `World` (`shape.py:1923`) and `04:133`/`:116`/`:158` place it in the loop. ⚠ **The defect was the OWNER'S**, whose `:155` ruled `decision` on the reasoning *"the guard whitelists the NAME … it must stay where the guard scans"* — inverted, since the whitelist (`test_season_shape.py:2267`) is why the violation goes **undetected**. **A whitelist is not a placement warrant** | **fixed at source**: owner `:85`, `:88`, `:155` |
-| **D4** | **Step 7 re-points `test_season_shape.py:2231` in its own commit.** It parses `files.SHAPE_PY` alone and asserts `"budget" in found and "opening_set" in found` (`:2280`) — **both move at step 7** (`shape.py:515`, `:561`), so it is RED there and, repaired lazily, scans no `decision/` code. The owner's step-7 artifact (`grep 'import.*\(world\|queries\)'`) is **decorative** — case-sensitive and order-dependent, blind to `from ..state.world import World` | **fixed at source**: owner §4 step 7 |
-| **D5** | **Step 8 renames a `PATH_SEAM_ALLOWED` member and `files.COMBAT_SEAM_PY` in its own commit.** The set is path-keyed and asserted by **exact equality** (`:404-424`); after the move the offender is `season/seam/combat_seam.py`. A rename **inside** a shrink-only set, not a widening. **Step 8's "17 passed" is false without it** | **fixed at source**: owner §4 step 8 |
-| **D6** | **The instrument is three commands and the order is load-bearing.** `delta.py:8-12`: *"THIS COMPARISON IS VACUOUS UNLESS YOU REGENERATE `results.json` FIRST … `PROBE FLIPS 0` is TRUE BY CONSTRUCTION rather than measured. It cannot fail."* So **`report` before `delta`**. And every entry point is `python -m engine.season.harness.<x>` since ED-IN-0203; the owner's flat `python engine/season/<x>.py` spellings no longer run | here |
-| **D7** | **Step 9 also writes the D-45 AST falsifier** — exactly one assignment to `w.tick` in `loop/driver.py` (`04 PART D row 45`, `:979`). The owner's step-9 artifact is `inspect.getsource` greenness, which a second tick site survives | here |
-
-**Acceptance — verbatim, after EVERY step:**
-
-```
-python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0
-python -m engine.season.harness.report && python -m engine.season.harness.delta HEAD
-python -m pytest engine/season/tests -q
-python -m pytest tests/valoria/test_engine_does_not_import_systems.py -q
-```
-
-**Expected observable:** `CONTENT HASH: ee0383bf3f4606e56b80cd07c0284f0a`; `PROBE FLIPS 0`;
-**186 passed** and **17 passed** — both observed on `main` this session (§1), so a step returning
-fewer has broken something rather than revealed a miscount.
-
-**Control.** The **headless content hash plus the 186-test season suite**, above. ⚠ **NOT
-`python -m pytest engine/tests -q`, which the first draft named here and in U1.** Those campaign
-goldens are byte-identical to a season-package move **by construction**, not by measurement:
-`engine/tests` never imports `engine.season`. `CLAUDE.md` §7 names that shape a **fake control**
-(ED-MB-0066).
-
-⚠ **AND THE FALSIFIER THE FIRST DRAFT NAMED FOR THE SEASON/CAMPAIGN SEPARATION DOES NOT EXIST.** It
-wrote `test_engine_does_not_import_systems.py::test_importing_engine_pulls_in_no_subsystem`;
-`grep -c "def test_importing_engine_pulls_in_no_subsystem"` returns **0**. The name survives only in
-that file's docstring (`:24`), and `CLAUDE.md` §3 reproduces the same wrong name. The real function is
-`test_importing_every_engine_module_pulls_in_no_subsystem` (`:358`), **and it asserts a different
-thing** — that no module under `engine/` loads a file under `systems/` (`:376-392`), silent on
-`engine.season` versus `mc_v18`. **The separation is real and VERIFIED BY INSPECTION:** the only file
-outside `engine/season/` referencing `engine.season` anywhere in the tree is
-`tests/valoria/test_import_cycle_game_state_npe.py`, and `engine/mc_v18.py` composes through
-`sim.peninsular.season`, a different module. Reproduce:
-`grep -rln "engine\.season" --include=*.py . | grep -v "^./engine/season/"`. Nothing guards it and,
-per `CLAUDE.md` §0.1 pt 5, nothing should — the arc is not load-bearing on it.
-
-**Hash: does not move.** A pure move that moves it is not a pure move.
+⚠ **The rule this unit carried — *"NO NEW SYMBOL IS RE-EXPORTED THROUGH `shape.py`"* — is STRUCK**, not
+inherited. It is satisfied vacuously by a file that no longer exists, and a vacuous rule read cold by a
+later session is a claim about a live constraint.
 
 ---
 
 ### U1 · R-09's producer + R-05b minimal — ONE UNIT
 
 **Rows.** R-09 `not_met` → `partial` (§7 says why not `met`). R-05 stays `not_met`; its measured line
-moves from *"1 of 32 declares `contests:`"* to *"3 of 32"*.
+moves from *"1 of 32 declares `contests:`"* to *"3 of 32"*. ⚠ **Verify the 1 before quoting the 3** —
+re-observed 2026-09-10: `verb_table.yaml:254` is still the only `contests:` row (`kill / wound` →
+`the body`).
 
-⚠ **THE SECOND HALF OF THIS UNIT IS GATED ON §11.0'S ESCALATION AND MAY NOT BE LANDED BEFORE IT IS
-RULED.** Half (a) — the provider, `manifest/`, the dispatch, the fixtures, with no verb calling them —
-is unblocked and lands first. Half (b) — `contests:` on `tell`/`speak`, the prize rows acquiring
-`provider: "dice"`, the third-gate amendment firing — routes social contests through a generic pool
-roll, which is what §11.0 puts to Jordan. **Do not read this unit's acceptance as reachable today.**
+⚠ **AMENDMENTS 3 AND 4 OF `workplans/2026-09-09-layer1-conformance-plan.md` §8 — THE GATE ON HALF (b)
+IS LIFTED, AND THE PROVIDER IS NOT THE ONE THIS UNIT PROPOSED.**
 
-**Preconditions.** U0 steps 8 **and 9** merged. ⚠ **CORRECTED — this read *"step 8"* and was
-internally inconsistent with its own file list**, which changes `loop/driver.py::resolve` (the RNG
-construction, below) and asserts a `random.Random` site set containing `loop/driver.py`; that module
-exists only after **step 9**. Checkable: `engine/season/seam/__init__.py` and
-`engine/season/loop/driver.py` both exist, and
-`python -c "from engine.season.seam import contest, degree_of"` succeeds.
+What stood here: *"the second half of this unit is gated on §11.0's escalation and may not be landed
+before it is ruled … half (b) routes social contests through a generic pool roll."* **Jordan ruled it,
+2026-09-09**, and ruled a third option neither §11.0 costed — verbatim:
 
-**New file — `engine/season/seam/dice_seam.py`.** Full intended shape:
+> **"we have the sigma leverage d10 resolver in engine to use"**
+
+**So the interim contest provider is `engine/autoload/sigma_leverage.py`, not a bare pool-vs-fixture
+roll**, and half (b)'s cost — the one that made this an escalation — is answered rather than accepted:
+`sigma_leverage` **already owns the obstacle model** (`eff_ob:169`, `effective_ob:180`,
+`sigma_space_ob_shift:160`, verified 2026-09-10), so the seam derives no obstacle and ED-SC-0033
+clause (3), *"THE OBSTACLE HAS A SINGLE OWNER"*, is honoured. §11.0 is rewritten as the recorded ruling.
+
+⚠ **THE LEDGER FLIP IS NOT ON `main` YET AND THIS UNIT MUST NOT PRE-EMPT IT.** `ED-SC-0037` reads
+`status: open`, `needs_jordan: true` in `registers/editorial_ledger_sc.jsonl:37` on `main` at
+`8b79440` (checked 2026-09-10). **PR #386 flips it in the same commit that lands the conformance
+plan** (`CLAUDE.md` §2 / ED-1094). Half (b) is unblocked **when that merges**, not when this paragraph
+is read. Do not flip the row from this lane — a second edit to the same JSONL line is a merge collision
+and a double-count of one ruling.
+
+**The two halves are unchanged in shape and still land in this order.** Half (a) — the provider,
+the `manifest/` row, the dispatch, the fixtures, **with no verb calling them** — is byte-invariant and
+is the only arm in this unit that can fail for the right reason. Half (b) — `contests:` on
+`tell`/`speak`, the prize rows acquiring a `provider:`, the third-gate amendment firing — moves the
+hash.
+
+**Preconditions — RE-STATED. U0 is retired; Arc 1 is the precondition.**
+
+| needs | from | checkable |
+|---|---|---|
+| `seam/` is a directory with `wrappers/` under it | **L2** | `engine/season/seam/__init__.py` exists and `python -c "from engine.season.seam import contest, degree_of"` succeeds |
+| `manifest/` exists and fails at boot on a bad row | **L4** | `python -c "from engine.season.manifest import resolve"` succeeds; a misspelled role raises **at load**, naming the row |
+| `loop/driver.py` owns the RNG construction | already true on `main` | `engine/season/loop/driver.py` exists (1,402 lines, 2026-09-10) |
+
+⚠ **The old precondition — *"U0 steps 8 and 9 merged"* — is spent** (§5). Its own correction, that the
+unit's file list needs step **9** and not step 8, is preserved above as the `loop/driver.py` row and is
+already satisfied on `main`.
+
+**New file — `engine/season/seam/wrappers/sigma.py`.** ⚠ **PATH CORRECTED FROM
+`engine/season/seam/dice_seam.py`, and the correction is this document's own citation turned on
+itself.** The docstring below cites `04 §A.2:164` — the `seam/wrappers/*` row — as the module's
+warrant, and then placed the file at `seam/`'s root, where `04 §A.2:135` puts `contest()` and the
+ladder. **A wrapper claiming the `wrappers/*` row belongs under `wrappers/`**, beside
+`seam/wrappers/combat.py`, which is where L2 moves `combat_seam.py`. Rename `dice_seam` → `sigma`
+throughout this unit; the module name now says which resolver it wraps, which is what
+`04 §A.2:135`'s *"one wrapper per deferred subsystem"* names them by.
+
+⚠ **AND ONE PLACEMENT QUESTION U1 MUST ADJUDICATE RATHER THAN ASSUME, WITH ITS CITATION.**
+`04 §A.2:135` reads *"one wrapper per **deferred subsystem**"*, and `sigma_leverage` is **not** a
+deferred subsystem — it is an in-engine resolver under `engine/autoload/`. Two readings, and the unit
+records which it took and why: **(i)** it is a wrapper by role — it writes nothing, reads the
+projection, returns a margin, holds no token, which is exactly `04:164`'s row, and `wrappers/` is
+therefore its home; **(ii)** `§A.2`'s enumeration is short by one and the finding goes on the ledger.
+**Reading (i) is what this unit takes** — the `04:164` row is a *contract*, and a module satisfying it
+in every column is that row whatever supplies the margin — but a session that lands the file must put
+the reason at the site, per L3's rule that a symbol with no citation has not been adjudicated.
+
+**Full intended shape** (the docstring below is otherwise unchanged; read `dice_seam` as `sigma` and
+`roll_pool` as `sigma_leverage.roll_net` throughout — §7 carries the operand argument):
 
 ```python
 """THE DICE PROVIDER — the seam's wrapper around the tree's ONE die rule.
@@ -595,11 +679,11 @@ from __future__ import annotations
 import random
 from typing import Any, Optional
 
-from engine.autoload.dice_engine import roll_pool
+from engine.autoload.sigma_leverage import roll_net      # RULED, ED-SC-0037
 from ..manifest import provider
 
 
-@provider("contest", "dice")
+@provider("contest", "sigma_leverage")
 def resolve(w: Any, claimants: list[str], causes: list[str], prize: Any, *,
             verb: str, subject: Optional[str], rng: random.Random) -> dict:
     """Roll for one contested act. Returns net/ob, NEVER a band.
@@ -609,7 +693,8 @@ def resolve(w: Any, claimants: list[str], causes: list[str], prize: Any, *,
     """
 ```
 
-**What it may import:** `engine.autoload.dice_engine`, `..manifest`, `..data.fixtures`, and the
+**What it may import:** `engine.autoload.sigma_leverage` (the margin), `engine.autoload.dice_engine`
+(the ladder only, via `seam/ladder`), `..manifest`, `..data.fixtures`, and the
 `state/` carrier types **for reading only**. **What it may not:** anything under `systems/`; anything
 under `..decision`; anything that mints a write token.
 
@@ -680,20 +765,23 @@ prize → module string. It becomes prize → row:
         cite:     "H-88; the seam already calls it (combat_seam.py:130)"
       "a standing":
         module:   "social_contest"
-        provider: "dice"          # ⚠ HELD — SEE §11.0. NOT SETTLED BY THIS PLAN.
+        provider: "sigma_leverage"     # RULED 2026-09-09, ED-SC-0037. NOT `dice`.
         interim:  true
-        cite:     "⚠ THIS ROW IS THE ONE ESCALATION IN THIS PLAN (§11.0) AND MUST NOT BE LANDED
-                   BEFORE IT IS RULED. ED-SC-0033 (2026-09-06) rules that (2) the two contest
-                   prizes that map to social_contest REPOINT TO THE PROCEEDINGS PROVIDER, and that
-                   (3) THE OBSTACLE HAS A SINGLE OWNER. An interim `dice` provider derives its own
-                   `ob` in-seam, which is a second obstacle site for social contests under a
-                   ruling that named one owner. If Jordan rules for the interim, this row is A ROW
-                   CHANGE when proceedings lands, not a code change (02 §D.4)."
+        cite:     "JORDAN, 2026-09-09, VERBATIM: 'we have the sigma leverage d10 resolver in engine
+                   to use.' A third option neither of the row's two costed. ED-SC-0033 (2026-09-06)
+                   rules that (2) the two contest prizes that map to social_contest REPOINT TO THE
+                   PROCEEDINGS PROVIDER, and that (3) THE OBSTACLE HAS A SINGLE OWNER. Clause (3)
+                   is HONOURED rather than accepted as a cost: engine/autoload/sigma_leverage.py
+                   already owns the obstacle model (eff_ob:169, effective_ob:180,
+                   sigma_space_ob_shift:160), so the seam derives NO obstacle. Clause (2) is
+                   intact -- `interim: true` is live and this row is A ROW CHANGE when proceedings
+                   lands, not a code change (02 section D.4). ⚠ LAND ONLY AFTER PR #386 FLIPS
+                   ED-SC-0037 to `ruled`; on `main` at 8b79440 it is still `open`."
       "a proposition":
         module:   "social_contest"
-        provider: "dice"          # ⚠ HELD — SEE §11.0.
+        provider: "sigma_leverage"     # RULED 2026-09-09, ED-SC-0037.
         interim:  true
-        cite:     "as `a standing`. HELD on the same ruling."
+        cite:     "as `a standing`. Same ruling, same clause-(3) argument."
       "a field":
         module:   "mass_battle"
         cite:     "no provider. Refuses by name as today; sides need faction_q.resolve (04 §C.5.1),
@@ -787,7 +875,7 @@ question rather than adding a fourth.
 
 **Falsifier for the amendment specifically:** with `tell`/`speak` declaring `contests:` and the
 `dice` provider **unregistered**, `resolvable_verbs()` must still exclude them — i.e. delete the
-`@provider("contest", "dice")` registration and R-05's executing count falls to 4. That is the red-before arm;
+`@provider("contest", "sigma_leverage")` registration and R-05's executing count falls to 4. That is the red-before arm;
 green-after is 6.
 
 **Changed — `loop/driver.py::resolve`:** constructs the RNG and passes it down. See §7.
@@ -797,34 +885,38 @@ green-after is 6.
 ```
 python -m engine.season.harness.corpus_run
 python -m engine.season.harness.corpus_run 7
-python -m pytest engine/season/tests -q -k dice_seam
+python -m pytest engine/season/tests -q -k sigma_seam
 ```
 
 **Expected observable.** `corpus_run` prints a **new** line
 `DEGREES RESOLVED: {Overwhelming: n, Success: n, Partial: n, Failure: n}` with **≥3 nonzero** over the
 89 worlds at seed 0, and a **different** histogram at seed 7. R-09's `measure:` is re-pointed to
-`python -m pytest engine/season/tests -k 'dice_seam_is_the_only_producer or ladder_is_the_trees_own'`.
+`python -m pytest engine/season/tests -k 'sigma_seam_is_the_only_producer or ladder_is_the_trees_own'`.
 
 **Falsifier.** The existing producer scan
 (`test_season_shape.py:7887-7897`, inside `test_we_only_a_verb_that_declares_contests_can_be_graded_today`
-at `:7849`) is **rewritten** to assert the producer set is exactly `{seam/dice_seam.py}` — the
-`\bnet\b\s*=|roll_pool|\bsuccesses\b` regex unchanged, `_code_only_lines` (`:7900`) unchanged, the
+at `:7849`) is **rewritten** to assert the producer set is exactly `{seam/wrappers/sigma.py}` — the
+regex gains `roll_net` (`\bnet\b\s*=|roll_pool|roll_net|\bsuccesses\b`), ⚠ **a widening that must be
+re-measured on the whole package before it is trusted: a regex that admits a new spelling can turn a
+second producer green by admitting it too**, `_code_only_lines` (`:7900`) unchanged, the
 corpus still `files.package_modules()`. **Red today** (the set is empty and the assertion is
 `assert not producers`), **green after**, **red again on any second site**. In the same commit,
 `:7866`'s `assert contested == {"kill / wound": "the body"}` becomes the three-verb set, and
 `:7872` moves to the row schema.
 
 Plus, per §2.5: an AST count of `random.Random` construction sites over
-`files.package_modules()` minus `tests/` returns exactly **`{loop/driver.py, seam/combat_seam.py}`**
-— ⚠ **`seam/`-prefixed, because step 8 moved that file**, and a set written against the pre-step-8
-path is red on arrival.
+`files.package_modules()` minus `tests/` returns exactly **`{loop/driver.py, seam/wrappers/combat.py}`**
+— ⚠ **`seam/wrappers/`-prefixed, because L2 moves that file there** (this read `seam/combat_seam.py`,
+which was step 8's destination under the superseded flat placement, §5). A set written against either
+earlier path is red on arrival, and the correct move is to re-derive it by `ast` at the merge (§9
+rule 5), not to copy it from here.
 Plus `test_w9_check1_the_run_is_reproducible` (`:2652`) green: two runs of one seed are hash-identical.
 Plus seed 0 and seed 7 degree histograms differ — **if they do not, the RNG is not seeded from the run
 seed**, which is the failure a same-seed determinism test cannot see.
 
 **Controls — three, and (a) is the strong one.**
 
-- **(a) BYTE-IDENTITY, PRODUCER-WITH-NO-CALLER.** Land `dice_seam.py`, `manifest/`, the dispatch and
+- **(a) BYTE-IDENTITY, PRODUCER-WITH-NO-CALLER.** Land `seam/wrappers/sigma.py`, the `manifest/` row, the dispatch and
   the fixtures **with `contests:` NOT yet declared on `tell`/`speak`**. The headless hash must
   still read `ee0383bf3f4606e56b80cd07c0284f0a`. **A producer no verb calls is byte-invariant.** This
   separates *"the roll exists"* from *"the roll is called"*, and it is the only arm in this unit that
@@ -1425,12 +1517,39 @@ that is the control, stated as a hash claim.
 
 ---
 
-### U10 · Second measurement, status flips, THEN step 10
+### U10 · Second measurement, and the status flips — **the step-10 tail is DONE**
 
 Repeat U6's instrument after U7/U8/U9. Flip `status:` **only on the numbers U6 and U10 printed** — a
-`status:` flip is never acceptance (§3). Then run decomposition **step 10**: delete the `shape.py`
-facade and re-point the source-scanning tests. `files.SHAPE_PY` (`data/files.py:133`) is deleted with
-it, so any survivor raises `NameError`, **which is the good case** (§9 rule 3).
+`status:` flip is never acceptance (§3).
+
+⚠ **The tail — *"then run decomposition step 10: delete the `shape.py` facade"* — is STRUCK. PR #383
+ran it** (§5). `shape.py` and `files.SHAPE_PY` are gone; the source-scanning tests were re-pointed in
+that commit. A session reaching U10 and looking for a facade to delete will find none, and that is the
+finished state, not a missing step.
+
+**What U10 must actually close, and it is bookkeeping with one real item in it:**
+
+1. **The `measured:` line of every row U1-U9 moved**, against the instrument output, never against a
+   document. `CLAUDE.md` §0.2: a juncture is done when the behaviour executes.
+2. ⚠ **THE *"11 DANGLING `shape.py:NNNN` CITATIONS IN `requirements.yaml`"* ITEM IS ALREADY DONE, AND
+   THE CLAIM IS RETRACTED HERE RATHER THAN CARRIED.** §2.11 of this document found 11, and
+   `workplans/2026-09-09-layer1-conformance-plan.md` §8 repeats them as *"now gone entirely, so all 11
+   are dangling"* and assigns the conversion to Arc 3. **Measured 2026-09-10 over the whole file:
+   `grep -c 'shape\.py:[0-9]' engine/season/requirements.yaml` returns **1**, and `grep -n 'shape\.'`
+   returns that same single line — `:165`, which is a HISTORICAL NOTE correctly recording a citation
+   that *was* wrong and has been fixed** (*"this citation read `shape.py:2289` and named a file that no
+   longer holds the class"*). The file now carries **9 `::symbol` citations**, among them
+   `engine/season/decision.py::make_chooser`, `engine/season/loop/driver.py::SeasonDriver.deliberate`
+   and `engine/season/queries/world_q.py::questions_for`. **The decomposition converted them as it
+   went.** There is nothing for U10 to convert. ⚠ **Both plans inherited a count neither re-measured
+   after #383 merged**, which is §9 rule 5 — *measure at the merge, not at the commit you are standing
+   on* — failing on the plans themselves.
+3. ⚠ **`workplans/workplan_v6_progress.yaml` is stamped `as_of: c75c561 / 2026-08-19`** and is the
+   hand-edited board `tools/m1_acceptance.py`'s row 4 counts — which is why that row reads DOC-DERIVED
+   and why `CLAUDE.md` §0.2 refuses it as evidence. **Reconcile it against what actually ran.**
+   ⚠ **And do not green a row by editing the board** — that is the trap the row's own output warns
+   about, and the conformance plan assigns the reconcile to the end of Arc 1, so check whether it has
+   already been done before touching it.
 
 ---
 
@@ -1822,66 +1941,83 @@ are ruling-numbered. Design-ruling R8's work has not started, so there is no liv
 
 ## §11 · WHAT NEEDS JORDAN — AFTER THE FIVE TESTS
 
-**ONE escalation. NINE candidates close.** ⚠ **The first draft of this section said *"Every candidate
-closes. ZERO escalations"*, and it reached that count by CLOSING THE ONE LIVE QUESTION ON A QUOTE THAT
-DOES NOT EXIST.** The row read *"ED-SC-0033 … — \"wiring it now wires a retired tree\""*. That string
-appears **nowhere in `registers/editorial_ledger_sc.jsonl`**, and a repo-wide grep found it in exactly
-one file: this one. It was a paraphrase of the ruling's retirement clause, promoted to a quotation, and
-then used to close the escalation it was invented to answer — **the §2.10 defect class this document
-charges the planner with, committed by the document.** It is retracted, the row is below, and the count
-is one.
+**ZERO open escalations, as of 2026-09-09 — and the count reached zero by a RULING, not by an
+argument.** That distinction is the whole history of this section and is kept rather than tidied away.
+
+⚠ **The first draft said *"Every candidate closes. ZERO escalations"*, and it reached that count by
+CLOSING THE ONE LIVE QUESTION ON A QUOTE THAT DOES NOT EXIST** — *"ED-SC-0033 … 'wiring it now wires a
+retired tree'"*, a string found nowhere in `registers/editorial_ledger_sc.jsonl` and, repo-wide, in
+exactly one file: this one. A paraphrase promoted to a quotation, then used to close the escalation it
+was invented to answer. The adversarial pass caught it, the count went to **one**, the row was put to
+Jordan as `ED-SC-0037`, and **Jordan answered it**. The count is zero again for the opposite reason.
+**A session reading this section cold must not conclude the escalation was talked away.**
 
 ---
 
-### §11.0 · **THE ESCALATION — `needs_jordan: true`. May a generic dice roll stand in for a social contest, now?**
+### §11.0 · **RULED 2026-09-09, `ED-SC-0037` — which provider resolves a social contest until proceedings lands**
 
-**Blocks:** U1 half (b), and therefore U5 entirely (U5's precondition is a non-empty `DEGREES RESOLVED`
-line). **Does not block:** U1 half (a), U0, U2, U3, U4, U7, U8.
+⚠ **AMENDMENT 3 OF `workplans/2026-09-09-layer1-conformance-plan.md` §8. This subsection was an OPEN
+ESCALATION and is now a RECORDED RULING.** The two options it costed are preserved below, because the
+ruling is a **third** and its merit is only legible against them.
 
-**WHAT THE RULING ACTUALLY SAYS.** ED-SC-0033 (2026-09-06, `registers/editorial_ledger_sc.jsonl:33`),
-verbatim on the three clauses that bear here:
+**JORDAN, 2026-09-09, VERBATIM:**
 
-> *"WHAT THE RULING SETTLES: (1) the seam dispatches by manifest ROW rather than the hardcoded
-> personal_combat literal at shape.py:6740; (2) the two contest prizes at rosters.yaml:441-446 that map
-> to social_contest **REPOINT to this provider** — the README had recorded that this directory left them
-> untouched because repointing supersedes other work by editing one line, which CLAUDE.md section 2 says
-> must be loud rather than quiet, and the ruling is that loudness; (3) **THE OBSTACLE HAS A SINGLE
-> OWNER**, which dissolves the largest open question in 18_FINDINGS.md …"*
+> **"we have the sigma leverage d10 resolver in engine to use"**
 
-*"this provider"* is **the proceedings subsystem's**, not a dice roll. (The row's own `shape.py:6740`
-and `rosters.yaml:441-446` are stale — §2.15 — but its clauses are not.)
+**THE PROVIDER IS `engine/autoload/sigma_leverage.py`.** Registered through the `manifest/` row L4
+builds; the ladder stays `dice_engine.degree_from_net` (`:227`), its single owner — the composition
+`04 §C.5` spells, with the **margin producer** and the **ladder** each singly owned.
 
-**WHY THIS SURVIVES ALL FIVE OF `CLAUDE.md` §0's TESTS.**
-**(1) Superseded?** No — ED-SC-0033 is 2026-09-06 and is the most recent ruling on the subject.
-**(2) Irrelevant?** No — `a standing` and `a proposition` are exactly the prizes `tell` and `speak`
-take, so U1 cannot avoid them. **(3) Answered by a design document?** No, and the two candidate
-documents point **opposite ways**: `rosters.yaml:514` *"⚠ A CONTEST IS A DISPATCH, NOT A GENERIC ROLL"*
-with Jordan at `:529-530` *"we don't NEED to worry about them at this point in time"*, against
-`04 §C.5`/`08_SEAM.md` PART B, which want a provider resolved by row and are indifferent to which
-provider. **(4) Answered by precedent?** No — the only precedent is `combat_seam`, which wraps a **real
-subsystem that exists**; there is no precedent for a stand-in provider. **(5) Obvious for the
-architecture?** **No, and this is the decisive one:** the interim provider derives its own `ob`
-in-seam (§7, Operands), and ED-SC-0033 clause (3) rules that **the obstacle has a single owner**. So
-the architecturally-obvious move and the ruling disagree, which is precisely the case §0 reserves for
-Jordan. **Two defensible options, materially different games.**
+**Why this is better than either option the row costed, and every clause is checkable:**
+
+| the ruling | verified 2026-09-10 |
+|---|---|
+| `roll_net(pool, tn, rng) -> int` returns a **net**, which *is* a `Margin` — `04 §C.5:683`'s *"the subsystem returns a `Margin`; a subsystem returning a winner has not met the contract"* is satisfied by the **return type**, not by a wrapper's discipline | `engine/autoload/sigma_leverage.py:286`; `roll_net_continuous` at `:299` |
+| **It answers option A's only substantive cost.** A `dice` provider would derive its own `ob` in-seam — an nth obstacle site immediately after ED-SC-0033 clause (3) ruled *"THE OBSTACLE HAS A SINGLE OWNER"*. `sigma_leverage` **already owns the obstacle model**, so the seam derives nothing | `eff_ob:169` · `effective_ob:180` · `sigma_space_ob_shift:160` |
+| **It is not a new `systems/` reach.** `engine/season/seam.py:205` already imports `engine.autoload.dice_engine`; reaching one module further inside `engine/` adds **no** `PATH_SEAM_ALLOWED` entry, because nothing under `systems/` is touched. That set stays shrink-only | `seam.py`, and `tests/valoria/test_engine_does_not_import_systems.py:220` |
+| **It is not the *"generic roll"* `rosters.yaml:514` refuses by name.** It is the canonical d10 resolver the faction layer already rolls through (PR #311) | `rosters.yaml`'s `contest_subsystems` note |
+| **ED-SC-0033 clause (2) is intact.** The two prizes still **repoint** to the proceedings provider when it lands; the `manifest/` row is the repoint site, which is what `manifest/` is for (`02 §D.4`) | U1's prize rows carry `interim: true` |
+
+⚠ **THE FLIP IS NOT ON `main` AND THIS SECTION DOES NOT MAKE IT SO.** `ED-SC-0037` reads
+`status: open`, `needs_jordan: true` at `registers/editorial_ledger_sc.jsonl:37` on `main` `8b79440`
+(checked 2026-09-10). **PR #386 flips it — `status: ruled`, `needs_jordan: false`, Jordan's sentence
+verbatim — in the same commit that lands the conformance plan**, per `CLAUDE.md` §2 / ED-1094. **U1
+half (b) is unblocked when that merges.** Do not flip the row from the Arc-3 lane: one ruling, one
+edit, one lane.
+
+**What the ruling changes in this plan:** U1's provider and file path (see U1); U5's precondition
+becomes reachable; R-09 and R-05b become measurable this arc. **What it does not change:** the
+dependency graph (§4), the roll's placement argument (§7), or the non-goals (§10).
+
+---
+
+<details>
+<summary><b>The two options as they were costed, kept for the record — neither was taken</b></summary>
+
+**Why it survived all five of `CLAUDE.md` §0's tests.** **(1) Superseded?** No — ED-SC-0033 (2026-09-06)
+was the most recent ruling on the subject. **(2) Irrelevant?** No — `a standing` and `a proposition` are
+exactly the prizes `tell` and `speak` take. **(3) Answered by a design document?** No, and the two
+candidates pointed **opposite ways**: `rosters.yaml:514` *"⚠ A CONTEST IS A DISPATCH, NOT A GENERIC
+ROLL"* with Jordan at `:529-530` *"we don't NEED to worry about them at this point in time"*, against
+`04 §C.5`/`08_SEAM.md` PART B, which want a provider resolved by row and are indifferent to which.
+**(4) Precedent?** No — the only precedent is `combat_seam`, which wraps a **real subsystem that
+exists**. **(5) Obvious for the architecture?** No: the architecturally-obvious move and clause (3)
+disagreed. Two defensible options, materially different games — which is precisely the case §0 reserves
+for Jordan, and the reason it was escalated rather than decided here.
 
 | | **A — interim `dice` provider now** | **B — wait for proceedings** |
 |---|---|---|
-| **what happens** | `a standing` / `a proposition` route to `dice_seam`; `tell`/`speak` declare `contests:`; the third gate opens for them | the two prizes keep refusing by name; `tell`/`speak` stay uncontested |
-| **cost** | a **bare pool-vs-fixture roll stands in for a social contest** — the "generic roll" `rosters.yaml:514` refuses in terms; an **nth obstacle site** for social contests, against clause (3)'s single owner; Jordan's *"we don't NEED to worry about them"* is set aside; the corpus goldens re-record against a stand-in model and re-record **again** when proceedings lands | **R-09 stays `not_met`, R-07/U5 stay blocked, R-05b does not move** — no corpus-executing verb can form a contest, because `kill / wound` is untyped and cannot (§4). U1 delivers only half (a): a registered provider nothing calls |
-| **buys** | R-09, R-07 and R-05b all become measurable this arc; the repoint is later **one row**, not a code change (`02 §D.4`) | the first social contest the game ever runs is the one its owner designed; no golden is recorded twice; clause (3) holds |
-| **reversibility** | high **in code** (a row change) and low **in data** (`runs/` is re-recorded under a model that is then replaced) | total |
+| **what happens** | `a standing` / `a proposition` route to a bare pool roll; `tell`/`speak` declare `contests:` | the two prizes keep refusing by name; `tell`/`speak` stay uncontested |
+| **cost** | a bare pool-vs-fixture roll stands in for a social contest; an **nth obstacle site**, against clause (3) | **R-09 stays `not_met`, R-07/U5 stay blocked, R-05b does not move** — U1 delivers only half (a) |
+| **buys** | R-09, R-07, R-05b measurable this arc; the repoint is later **one row** | the first social contest the game runs is the one its owner designed; no golden recorded twice |
 
-**What the plan needs, minimally:** a yes or no on A. If **A**, the prize rows in U1 lose their `HELD`
-markers and U1 half (b) proceeds as written, with the `interim: true` flag and the sweep on
-`obstacle_default` carrying the assumption. If **B**, U1 ships half (a) only, `tell`/`speak` do not gain
-`contests:`, U5 is deferred behind the proceedings subsystem, and **R-09's honest `measured:` line
-becomes *"a producer exists and no corpus verb calls it"*.**
+⚠ **A third option was considered and refused as worse than either**: giving the provider a *new* prize
+outside the closed roster, so nothing collides with the social ruling. That invents a prize to dodge a
+ruling, and loader invariant 9 (`04:467`) would have to be widened to admit it. Recorded so it is not
+re-derived as a compromise. **Jordan's actual third option was better than all three**: it kept the
+prize roster closed AND honoured clause (3), which is what neither A nor B could do.
 
-⚠ **A third option was considered and is NOT offered, because it is worse than either:** giving the
-dice provider a *new* prize outside the closed roster, so nothing collides with the social ruling. That
-invents a prize to dodge a ruling, and loader invariant 9 (`04:467`) would have to be widened to admit
-it. Named here so it is not re-derived as a compromise.
+</details>
 
 ---
 
@@ -1942,12 +2078,16 @@ Recorded so a later session does not re-open them — the ED-IN-0185 failure `CL
 
 ## §13 · SIZE — measured, and over the convention's threshold
 
-**Measured, not estimated — RE-MEASURED after the adversarial pass (§14):** **2,057 lines**,
-**37,869 tokens** at `tools/ci_common.py::tokens` — the repo's single owner of that estimate,
-characters ÷ 4. ⚠ **Say which character count**: Python `len()` gives **151,476** and `wc -c` gives
-**153,303 bytes**, and the gap is this file's own `§`, `⚠`, `→` and `≥`. `tokens()` divides the first.
+**Measured, not estimated — RE-MEASURED 2026-09-10 after the Arc-3 amendments:** **2,332 lines**,
+**42,872 tokens** at `tools/ci_common.py::tokens` — the repo's single owner of that estimate,
+characters ÷ 4. ⚠ **Say which character count**: Python `len()` gives **171,491** and `wc -c` gives
+**173,758 bytes**, and the gap is this file's own `§`, `⚠`, `→` and `≥`. `tokens()` divides the first.
 Both are true of their own basis, which is the failure mode `CLAUDE.md` §0.1 names and which PR #383
 paid for once already (*"One instrument, named, for numbers that get compared."*).
+
+*(Post-adversarial-pass, pre-amendment: 2,057 lines, 37,869 tokens. The Arc-3 amendments added **275
+lines net** — §3, §5, U0, U1's head, §11.0 and U10 were largely REPLACED rather than extended, and U0
+collapsed from 60 lines to 22, which offsets most of §15's 200.)*
 
 *(The pre-pass figures, kept so the delta is checkable: 1,520 lines, 24,868 tokens, `len()` 99,474,
 `wc -c` 100,697. The pass added **537 lines net** — corrections, the §11.0 escalation and §14 — while
@@ -1965,8 +2105,14 @@ shipping it as one part is a deliberate choice, not an oversight. ⚠ **After th
 file is over 60% longer than that peer** (37.7k against 23.2k tokens), so the choice is weaker than it
 was and the split below is closer than it was. Say so rather than re-asserting the earlier comparison.
 
+⚠ **AND THE SPLIT IS CLOSER AGAIN AT 42.7k — say so rather than re-asserting the comparison a third
+time.** This is now **84% longer** than its closest peer (`workplans/2026-09-06-season-loop-execution-plan.md`,
+23.2k), where the last measurement said 60%. The convention is still `WARNING`-level and still not a
+blocking gate, and the choice to ship one part is still deliberate — but it is weaker at every
+re-measurement, and the next session to add a section here should split first.
+
 **Where it splits, when someone does split it.** At the §6/§7 boundary: §1–§6 are verification and
-sequence, §7–§13 are the deep placement argument and the repeatable procedure. `_part2` would open at
+sequence, §7–§15 are the deep placement argument, the repeatable procedure and the Arc-3 method. `_part2` would open at
 §7 and the break is a reading-order break, not a filing one. Do not split at §2 — the corrections are
 what license every citation reproduced downstream of them, and separating them from the units would
 recreate the index+infill shape `CLAUDE.md` §4 retired. **§11.0 goes with `_part1`** — an escalation a
@@ -2055,3 +2201,142 @@ one.**
 `test_degree_ladder_single_owner.py`'s `_PRODUCES_BAND` scan (`:447`) reads raw file text
 **including docstrings**, and flags a file naming ≥2 bands in a produce-shape. **`dice_seam.py`'s
 module docstring must stay band-free.** It is, and U1 now says why.
+
+---
+
+## §15 · ARC 3 — THE ORDER, THE METHOD, AND THE ANTAGONIST'S CHARTER
+
+**Added 2026-09-10.** §1-§14 were written as a standalone plan; `workplans/2026-09-09-layer1-conformance-plan.md`
+(PROPOSED, PR #386) then made U1-U10 **Arc 3** of a three-arc sequence. This section carries what that
+framing adds and **nothing that already lives elsewhere** (`CLAUDE.md` §8). It does not restate the
+dependency graph (§4), the placement argument (§7), the translation procedure (§8), the guard-blinding
+handling (§9) or the non-goals (§10). Those stand.
+
+### §15.1 · The order, and what each unit is waiting on
+
+`H` = hard (cannot start, or cannot be measured). Read with §4, which owns the *reasons*.
+
+```
+   ARC 1 (L0→L1→L2→(L3∥L4)→L5)          ARC 2 (G1→G2→G3→G4)
+        │                                      │
+        │ manifest/ (L4) · seam/wrappers/ (L2)  │ Act.via (G3)
+        │ decision/ (L1) · loop/ six steps (L5) │
+        ▼                                      ▼
+  U1 ──H──▶ U5 ──┐                       U9 ◀──H── U7 groups 1-2
+  U2 ────────────┤                        │
+  U4 ────────────┼──H──▶ U6 ──▶ U7/U8/U9 ─┴──▶ U10
+  U3 ────────────┘        (FIRST                (SECOND
+                        MEASUREMENT)          MEASUREMENT)
+```
+
+| unit | starts when | why not sooner |
+|---|---|---|
+| **U3** · R-06a convictions/axes | **now, on `main`** | data only — `rosters.yaml`. Touches no module Arc 1 moves |
+| **U7 gp 1-2** · 15 of the 20 verbs | **now, on `main`** | `verb_table.yaml` + `loop/{predicates,effects}.py`, which Arc 1 does not restructure |
+| **U1** · R-09 producer + R-05b | **L2 + L4 merged**, and half (b) also on **ED-SC-0037 flipped** (PR #386) | its file is a `seam/wrappers/*` row and its dispatch *is* `manifest.resolve` (§11.0, U1) |
+| **U2** · R-03 scene tick | **L5 merged** | it reshapes `season()` into rounds; L5 splits that same body into six modules |
+| **U4** · R-08 sampling | **L1 merged + U3 landed** | `04:1046` — a sampler drafted outside `decision/` is green while violating AX-2 |
+| **U5** · R-07 stance | **U1 half (b) merged** | its precondition is a non-empty `DEGREES RESOLVED:` line |
+| **U6** · R-01/R-02 first measurement | **U1, U2, U4, U5 merged** | measuring before a producer exists measures the theorem (§4) |
+| **U7 gp 3** · the Dispensation four | the `dispensation` operand row + F.15's nine terms exist as data | §8's worked instance — a prose→code translation, not wiring |
+| **U8** · R-06b ambitions + cast | **W28's `cast:` blocks authored, NPC lane first** | `PLAN.md:1587-1589` |
+| **U9** · R-04 strategic scale | **G3 merged** (`Act.via`) **+ U7 gp 1-2 + U8's NPC lane** | `H-108`; §4 grades it hard |
+| **U10** · second measurement | U7/U8/U9 merged | — |
+| **U7 gp 4** · six investigation acts | — | **de-scoped** (§10) |
+
+⚠ **`Act.via` is the one place Arc 2 touches this graph.** If G3 slips, **U9 slips with it** — do not
+land `via` from the Arc-3 lane to unblock U9. G3 lands it *with* AX-4 clause 2 at the gate, and a
+`via` field with no gate check behind it is a dead carrier, which is the defect `04 §F.20a` names.
+
+### §15.2 · The method — cited, not restated
+
+**`workplans/2026-09-09-layer1-conformance-plan.md` §9 is the single owner of the agonist→antagonist
+method and it binds every Arc-3 unit unchanged**: four stages per unit (**PRE-FLIGHT → CARVE → ATTACK →
+RECONCILE**), none skipped or merged; a relay and not a dialogue, because subagents are stateless and
+the critic's value *is* that it never saw the producer's reasoning; and its five rules — a finding is
+applied or refuted **by measurement**, a pass that finds nothing has not run *and equally must not
+manufacture one*, a falsifier is reproduced **both arms** or it is not a falsifier, a selector is only
+as good as the paths you point it at, and **measure at the merge, not at the commit you are standing
+on.** Read it there. It is not reproduced here.
+
+**Independence is structural, never declared** (`CLAUDE.md` §10). `.claude/agents/valoria-critic.md`
+grants `Read, Grep, Glob` — no `Write`, `Edit` or `Bash` — so a critic dispatched with
+`subagent_type: "valoria-critic"` **cannot write**, whatever its prompt says. A sentence inside a
+prompt saying *"you are read-only"* restricts nothing.
+
+### §15.3 · **THE ANTAGONIST'S CHARTER — five heads, ruled by Jordan 2026-09-10**
+
+Jordan, this session: *"use an agonist-antagonist methodology where the antagonist ensures adherence to
+plan, fidelity to plan instructions, logical correctness, factuality and Layer 1 compliance."*
+
+**This is a widening of the stage-3 brief, and the widening is the point.** The #383 arc's critics were
+briefed to attack the *carve* — and a critic asked only whether the code is right will not ask whether
+the code is the code the plan asked for. #383 shipped a flat `decision.py` and **no stage-3 pass
+objected**, because none of them was pointed at the plan. Every Arc-3 stage-3 dispatch asks all five,
+in this order, and **answers each with a measurement or a citation, never an opinion**:
+
+| # | head | what the critic must produce | the failure it exists to catch |
+|---|---|---|---|
+| **1** | **ADHERENCE TO PLAN** | *Which unit is this, and did it do that unit?* Name every change in the diff **not** in the unit's file list, and every item in the file list **not** in the diff | a unit that quietly widened, or that shipped 2 of a test's 3 breaks and called the suite green (U1's own hazard) |
+| **2** | **FIDELITY TO PLAN INSTRUCTIONS** | Each of the unit's stated falsifiers and controls, **reproduced from its recorded recipe**, both arms, with the outcome | *"adversarially reviewed"* with no artifact. §0.1 pt 3: name the falsifier or you have not attacked the result. Step 6's recipe **did not reproduce** and a session following it would have concluded the hazard was overstated |
+| **3** | **LOGICAL CORRECTNESS** | Does the acceptance **observe** what it claims? Can the assertion see the failure it excludes? Is the control a control, or identical to the arm by construction? | `pytest engine/tests` cited as a control when it never imports `engine.season` — a **fake control** (§0.1 pt 4, ED-MB-0066). And U4's `tau = 0` arm, which validates plumbing and **not the sampler** |
+| **4** | **FACTUALITY** | Open every `file:line`, `::symbol` and quoted string in the commit message against the **working tree at the merge base**. Report each as verified / corrected / unverifiable | this document's own §1 found **19 corrections and 7 material errors** in its planner, then §14 found **a FABRICATED QUOTE used to close its only escalation**. A quotation that is a paraphrase is the recurring defect in this lane |
+| **5** | **LAYER 1 COMPLIANCE** | For every file added or moved: **which of `04 §A.2:127-139`'s nine modules is it in, and which `04` line puts it there?** A file with no citation has not been placed. Check by **path**, not by name | `ED-IN-0206` — ten steps of green instruments read as architectural progress they were not, because no stage asked this question. Head 5 is the direct repair |
+
+**Three rules that keep the charter from becoming theatre:**
+
+- **Heads 1 and 5 are answered against `architecture/` and this file, not against the producer's
+  summary.** A critic handed only the diff cannot answer *"is this the unit?"* — so stage 3's prompt
+  carries the **unit's own section of this document**, verbatim, and nothing about how the diff was
+  produced.
+- **A null head is a finding and must carry its trail.** *"Head 5: examined all four added files
+  against `04 §A.2`; each cites its row; no divergence"* is complete. *"Head 5: fine"* is incompletion
+  wearing a finding's clothes. Symmetrically: **do not mint a Layer-1 objection to fill head 5** —
+  `04` decides these by citation, so a head-5 finding without an `04` line is not a finding.
+- **The output is EDITS, not a document** (`CLAUDE.md` §0). No `audit/` entry, no findings file, no
+  per-unit report. At most **one paragraph in the commit message**, and at most **one ledger row, only
+  if it needs a human decision** — and before flagging one, run §0's five tests and expect it to close
+  at test 3, because `04_CODE_ARCHITECTURE.md` has already decided every structural question Arc 3
+  raises.
+
+### §15.4 · Tiering — per call, and the arithmetic rather than a vibe
+
+Subagents inherit the session model, so an un-annotated fan-out on an Opus session runs Opus
+everywhere (`CLAUDE.md` §10). Set it per call.
+
+| unit | producer | stage-3 critic | why |
+|---|---|---|---|
+| **U3** convictions/axes, **U7 gp 1-2** verb rows | `sonnet` | `sonnet` | bounded table authoring against a declared schema; the loader is the judge |
+| **U1** provider + manifest row + third gate | `opus` | `opus` | the third-gate amendment is a judgment, and being wrong is silent — it moves R-05's count for the wrong reason |
+| **U2** scene tick | `opus` | `opus` | decision 4's skip condition is a **construction**, not a theorem, and its completeness is a claim about the whole read surface |
+| **U4** sampler | `opus` | `opus` | the `tau = 0` discontinuity is exactly the kind of error a cheaper tier reports as a control |
+| **U5** stance, **U8** ambitions/cast | `sonnet` producer · `opus` critic | `opus` | mechanical to build; U5 has **no byte-identity control**, so the critic carries the weight |
+| **U6 / U10** measurements | `sonnet` | `opus` | running the instrument is mechanical; **reading the number is the judgment**, and the falsifier is *"report which channel is still closed and leave both rows `not_met`, honestly"* |
+| **U7 gp 3** Dispensation four | `opus` | `opus` | §8's prose→code translation |
+| **U9** strategic scale | `opus` | `opus` | the scale-vocabulary problem U9 must *state before it writes* |
+| **arc gate** | — | **`fable`**, read-only | `CLAUDE.md` §10 puts `fable` on the audit/guardrail node, never synthesis |
+
+**Do the arithmetic, do not assert the tier**: delegating to a cheaper tier pays only if the delegation
+overhead costs less than the drop saves. And three caching facts bite this pattern — parallel agents
+sharing a prefix **cannot read each other's cache** (fire one, await its first token, then fan out);
+`haiku`'s cache minimum is **4,096 tokens**, the largest on the roster, so a short shared preamble
+**silently never caches** there; and switching model mid-conversation **invalidates the whole cache**,
+so escalate at unit boundaries.
+
+**Parallel write lanes need `isolation: "worktree"`** — one repo, colliding trees otherwise — and
+return **fixed-format summaries**, not raw context. In Arc 3 that is **U3 ∥ U7 gp 1-2** only.
+
+### §15.5 · The end-of-arc gate
+
+One dispatch after U10, `subagent_type: "valoria-critic"`, `model: "fable"`, read-only, carrying the
+arc's commit messages and instrument outputs **and nothing about how they were produced**. It is asked
+the five heads of §15.3 **over the arc rather than over a unit**, plus the one question a per-unit pass
+structurally cannot ask:
+
+> **Did any source-scanning guard silently narrow when a symbol left the file it names?** This has
+> recurred at decomposition steps 2, 4 and 5. **Assume it recurred again and look for it.**
+
+**And the honest exit condition, which is not "the rows are green":** Arc 3 is done when the
+`measured:` line of every row states what an instrument printed, and the `status:` line agrees with it.
+**If reconvergence is still ≥96% at U6, U6's own falsifier governs — report which channel is closed and
+leave R-01/R-02 `not_met`.** Both prior plans carry that clause and it is not optional.

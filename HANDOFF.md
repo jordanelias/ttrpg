@@ -9,6 +9,50 @@ experiment it was the instrument for. Read this file, and your lane's, yourself.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
+## ⚠ CURRENT — 2026-09-10 · U1–U10 is **ARC 3**, and Arcs 1 and 2 are its precondition (IN lane, cross-cutting)
+
+**Read this before starting any R-work.** `workplans/2026-09-09-r-execution-plan.md` is still the
+single owner of units U1–U10 and its §2 corrections, §4 dependency graph, §7 roll placement and §10
+non-goals all stand. **What changed is everything around them**, and a session that opens that file at
+§6 and starts building will build against a tree that no longer exists.
+
+- **The decomposition finished, and finished non-conformant.** PR #383 (`c3b51e3`) ran steps 5–10, so
+  **`shape.py` is gone** and the plan's §3 entry state, its §5 stance and its whole **U0** are spent.
+  Steps 7/8 shipped flat `decision.py` and `seam.py` where `04 §A.2:133/:135` and `04:1046` require
+  directories. Filed as **`ED-IN-0206`**. `manifest/`, `port/`, `queries/person_q`, `queries/cache`,
+  `Receipt` and the unforgeable write token do not exist.
+- **The sequence is now three arcs** — `workplans/2026-09-09-layer1-conformance-plan.md`, **PROPOSED
+  on PR #386, OPEN, not on `main`**: `ARC 1` Layer-1 structure (L0–L5) → `ARC 2` the gate contract
+  (G1–G4) → **`ARC 3` = U1–U10**. Zero game yield is the *expected* result of Arcs 1 and 2.
+- **The one escalation is RULED.** Jordan, 2026-09-09: *"we have the sigma leverage d10 resolver in
+  engine to use"* — so U1's interim contest provider is `engine/autoload/sigma_leverage.py`, not a
+  generic dice roll, and ED-SC-0033's *"the obstacle has a single owner"* is honoured rather than
+  accepted as a cost. ⚠ **`ED-SC-0037` still reads `open` / `needs_jordan: true` on `main`; PR #386
+  flips it.** U1 half (b) is unblocked when that merges — **do not flip the row from another lane.**
+- **What is startable on `main` today, and it is only two things:** **U3** (R-06a — the 13 convictions
+  and the 13×4 projection table, `rosters.yaml`, data only) and **U7 groups 1–2** (15 of the 20 verbs —
+  `verb_table.yaml` plus `loop/{predicates,effects}.py`). Neither touches a module Arc 1 moves.
+  Everything else waits on L1/L2/L4/L5 or on G3's `Act.via`.
+
+⚠ **One inherited claim is RETRACTED, measured 2026-09-10:** both plans say `engine/season/requirements.yaml`
+carries *"11 dangling `shape.py:NNNN` citations"* and assign the conversion to Arc 3. **It carries one
+`shape.py` mention, and that one is a historical note about a citation already fixed**; the file now
+uses 9 `::symbol` citations. The decomposition converted them as it went. Neither plan re-measured
+after #383 merged — the failure their own method rule names (*measure at the merge*).
+
+**Where the detail lives:** `workplans/2026-09-09-r-execution-plan.md` **§15** — the Arc-3 order with
+what each unit waits on, the antagonist's five-head charter (adherence · fidelity · logical correctness
+· factuality · Layer-1 compliance, ruled by Jordan 2026-09-10), per-unit tiering and the end-of-arc
+gate. §3 carries the re-measured entry state and the instrument baseline
+(`CONTENT HASH ee0383bf3f4606e56b80cd07c0284f0a` · **187** season tests · **6 `not_met` / 3 `partial`**,
+all re-run 2026-09-10, not inherited).
+
+⚠ **`registers/handoffs/HANDOFF_IN.md`'s top two sections still read `⏳ PRODUCED … NOT YET COMMITTED`
+for decomposition steps 7 and 8, both of which merged in #383.** PR #386 corrects both headers; it is
+not re-fixed here, to keep one edit per defect.
+
+---
+
 ## ⚠ CURRENT — 2026-09-06, PR #373 · the proceedings subsystem owns all social contests (SC lane)
 
 **A from-scratch proceedings subsystem exists at `proposals/2026-09-05-proceedings-subsystem/`, PROPOSED
