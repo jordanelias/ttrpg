@@ -507,7 +507,7 @@ advisory_only:
 
   - locus: "skill descriptions (roster lives in CLAUDE.md §9)"
     level: 2
-    role: "Mode/workflow guidance. Read by a session, never by CI: level 2 is a locus, not an enforcement claim. The roster lives once, in §9 — this row lists no members (ED-IN-0208)."
+    role: "Mode/workflow guidance. Read by a session, never by CI: level 2 is a locus, not an enforcement claim. The roster lives once, in §9 — this row lists no members (ED-IN-0209)."
 
 # ── Drift-detection notes ────────────────────────────────────────────────────
 # - When ci-yml adds or removes a tool invocation, update this file in the same commit.
