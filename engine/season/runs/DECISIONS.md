@@ -262,7 +262,7 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
 
-### succeed by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
+### work by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
 

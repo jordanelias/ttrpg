@@ -658,6 +658,111 @@ stale is precisely the precondition column and U1's manifest shape, both correct
 
 ---
 
+### §15.0a · ⭐ **THE RULING THAT SUBSUMES §15.0b AND §15.0c (Jordan, 2026-09-10)**
+
+> **"Verbs invoke mechanisms or interactions between a character and another entity/character.
+> They are not fiats."**
+
+**THIS IS THE ROOT OF WHICH F7 AND F8 ARE SYMPTOMS**, and it is why a green 190-test suite could not
+see either. The two effects U7 group 1 built were **fiats**: `_eff_oblige` declared *a duty now
+exists* by writing an edge; `_eff_succeed` declared *this person is heir*. Neither invoked anything
+**between two parties**. So:
+
+- **a fiat needs no counterparty** → nothing checked that `einhir_texts` was an entity, and it is not
+  one (F8);
+- **a fiat needs no two distinct parties** → a `Tenure(X, X)` self-loop read as lawful (F7);
+- **a fiat cannot fail on the world's terms** → the only refusal available was *"the edge is already
+  open"*, which is bookkeeping, not resistance;
+- **a fiat is monotonic** → hence the absorbing state and the fallen divergence counts of §15.0b.
+
+**SO THE THREE COMPLETION CLASSES ARE ONE THING SEEN FROM THREE SIDES.** A verb that is a real
+interaction has, necessarily: a **counterparty** (an entity that is not the actor), an **obstacle**
+(what the counterparty or the world sets against it), and a **degree** (how it went). A verb missing
+all three is not an unbuilt verb — **it is a fiat wearing a verb's clothes**, and wiring it produces
+exactly what this unit produced: state that appears, cannot be resisted, cannot fail, and never ends.
+The antonym is the fourth face: what a fiat cannot do is be **undone by another party's act**.
+
+**WHAT THIS CHANGES FOR U7, and it is not a small amendment:**
+
+1. **THE TWENTY ARE NOT A WIRING BACKLOG.** U7 reads them as verbs that merely lack a predicate and
+   an effect. Most lack a **mechanism**: who the other party is, what they set against it, and how
+   the outcome is graded. That is design work, and it is why the corpus "reaching" a verb is a much
+   weaker licence than this arc treated it as — reachability says a candidate forms, not that an
+   interaction exists to run.
+2. **`requires_typed` IS NOT A COUNTERPARTY TEST.** `oblige` passes the first gate with
+   `requires: —` and no typed cell at all, so nothing in the fold ever asks whether the act has
+   someone to act upon. **A counterparty check belongs in the fold, not in each effect body** — every
+   sibling effect re-implements a partial one (`_eff_confer:112`, `_eff_transfer:504`,
+   `_eff_move:253`), which is the "same situation, four verbs, three answers" defect `_operand`'s own
+   docstring names.
+3. ⚠ **`subject`, `to` AND `site` ARE ONE ALIASED OPERAND** (`decision/options.py:307-312`, all three
+   `return subject`). **No corpus-formed act can name two distinct parties today.** So under this
+   ruling, *no* two-party verb is currently buildable from the corpus — which is a far more useful
+   statement of U7's real blocker than "18 have no predicate/effect", and it was not in the plan.
+   `H-94`'s structural half closed the operand channel; it did not make the operands **distinct**.
+4. **U1 IS UPSTREAM OF U7, NOT PARALLEL TO IT.** The obstacle (U1/§7) and the degree (U1 half (b) +
+   U5) are two of the three faces above. Verbs built before them can only be fiats.
+
+---
+
+### §15.0c · ⚠⚠ **U7 GROUP 1 WAS BUILT, MEASURED, AND REVERTED. TWO HIGH FINDINGS; THE HEADLINE RESULT WAS AN EDGE TO NOTHING.**
+
+`oblige` and `succeed` were carved, the corpus executed them (**6 → 8 of 32**, distinct executed
+sets 2 → 4, `PROBE FLIPS 0`, 190 tests green after six adjudicated re-pins), and a read-only critic
+then broke the carve on two findings that a green suite could not see, **because the unit added no
+test asserting the SHAPE of the edge either effect opens.** Both verified against the tree before
+acting:
+
+> **F7 — `succeed` opens a SELF-LOOP, and the orientation is ruled the other way.**
+> `decision/options.py:307-312` derives `subject`, `to` **and** `site` from the SAME value — the
+> question's referent:
+> ```
+>     if name == "subject": return subject
+>     if name == "to":      return subject
+> ```
+> So for **every corpus-formed `succeed`**, `_operand(a,"to") == _operand(a,"subject")` and the
+> effect builds `Tenure(subject=X, object=X, kind="succeed")` — the heir and the office are the same
+> id. ⚠ **And the docstring argued orientation from S15.1, which decides nothing between the two
+> readings, while the tree rules the axis it did not check:** `04:177` §A.3 row 8 —
+> *"`succeed : Person → Person`, **owned by the holder**"*, forced by `01_AXIOMS.md:1203-1212`
+> (*"succession is a disposition of the holder, not a property of the place"*). Neither reading
+> admits heir → office. The subject was also a **Record id**, which PART D row 13 (`04:943`) grades
+> **STRUCTURAL**: a relation whose subject cannot act. `state/world.py:257` then routed it to
+> `w._unowned` — an edge no person owns and nobody can ever close.
+
+> **F8 — `_open_tenure` opened an edge to an id that names NO ENTITY, and that was the headline.**
+> `einhir_texts` is the **`subject` field of `prop_einhir`**, not an entity: measured, it is in none
+> of `w.persons`, `w.offices`, `w.rungs`, `w.records`, `w.sites` or `w.propositions`. So
+> *"Carin Vedel takes a duty toward the suppressed texts she copies"* — reported as this arc's first
+> emergent result — **was a Tenure pointing at a bare string.** Every sibling effect in the file
+> does the existence check this one omitted: `_eff_confer:112`, `_eff_transfer:504`, `_eff_move:253`.
+> `holonic_ARCHITECTURE.md:541` types the kind `oblige : Person → Person | Office`.
+
+**Nine further findings, all applying to whatever rebuilds this**, in descending order of bite:
+`succeed`'s `emits_on_refusal` is **`["succession.refused"]`, NOT empty** (`verb_table.yaml:471`), so
+the idempotent no-op asserts a failed succession when the designation stands; `oblige`'s empty column
+falls back to the **`act.refused` body literal** (`loop/resolve.py:268`), which
+`hole_register.yaml:2691` records as **emitted 0 times across 89 baselines** — a load-bearing zero
+this unit would silently falsify; the replacement partition assertion pins `min(hi) == 2` where its
+own comment measures `hi == {2,3,4,5,6}` (§0.1 pt 2 — it cannot observe the failure it excludes);
+two sentences inside the edited block still read *"still exactly two sets"* and *"the executed set is
+STILL one"*; `actor_end` is pinned as an **ordered** list the code never sorts; the W-D movement was
+filed in **R-05's** `measured:` when the row that owns that instrument is **R-02** (`:153-154`); and
+`_REFERENT_OPERANDS` was cited as why `subject` reaches `_eff_oblige` when the real owner is
+`decision/choose.py:131-132` (`_payload_of`), because an untyped verb returns `{}` before
+`_REFERENT_OPERANDS` is consulted.
+
+⚠ **The critic could execute nothing** (Read/Grep/Glob only), so every stage-2 number stands
+unverified by it — and it says so. Six of its own attacks **failed and are recorded as failures**,
+including the one that mattered most to this unit: *"striking the season threshold is weakening a
+guard to get green"* — **no**, the measurement genuinely falsifies it and re-pinning it looser would
+have been worse. That adjudication survives and should be reused, not re-argued.
+
+**WHAT SURVIVES THE REVERT:** the reachability measurement (five verbs reached; `oblige` 4 calls,
+`succeed` 3), the six re-pin adjudications, the antonym taxonomy in §15.0b, and the discovery that
+**`subject`/`to`/`site` are one aliased operand** — which is the fact that makes any two-operand verb
+unbuildable today and was not in the plan.
+
 ### §15.0b · ⚠ **U7's GROUPING IS WRONG, AND JORDAN NAMED WHAT REPLACES IT (2026-09-10)**
 
 U7 groups its twenty verbs by *"no hole, merely unbuilt"* against *"hole-gated"*. Executing group 1
@@ -690,7 +795,7 @@ it is a real second effect and it is not the mechanism.
 
 | class | what the verb needs before it means anything | who owns it |
 |---|---|---|
-| **ANTONYM** | a closer for what it opens, or its state is monotonic and divergence-suppressing | **U7**, and it must build **pairs** |
+| **ANTONYM** | a closer for what it opens, or its state is monotonic and divergence-suppressing | **U7**, and it must build **pairs**. ⭐ **JORDAN NAMED THEM, 2026-09-10: `oblige` ↔ `waive`; `succeed` ↔ `deposed`; `tie / knot` ↔ `fray / loosen`.** None of the three closers exists in `verb_table.yaml` today — they are new rows, not unbuilt ones, which is why `grep release` finds nothing and `04:945`'s generic `release` is unbuilt. Each pair lands together |
 | **OBSTACLE** | an `ob` for its resolution to be anything but automatic | **U1** — §7's Operands, and `sigma_leverage` does NOT supply one (§15.0) |
 | **DEGREE** | a `contests:` prize and a band ladder, or its outcome is binary | **U1 half (b)** + **U5** |
 
