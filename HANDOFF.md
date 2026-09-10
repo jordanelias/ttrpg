@@ -9,6 +9,28 @@ experiment it was the instrument for. Read this file, and your lane's, yourself.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
+## ⚠ CURRENT — 2026-09-10 (later) · **ARC 1 HAS LANDED. ARC 3 IS LARGELY UNBLOCKED; ONLY U9 IS NOT.**
+
+**PR #386 merged (`main` `c2de9ee`) and it executed Arc 1 rather than only planning it** — 11
+commits, 50 files. `engine/season/` now has **`decision/`** (budget·choose·options·questions),
+**`seam/`** (contest·ladder·**wrappers/combat.py**), **`manifest/`**, **`queries/person_q` +
+`cache`** (`readers.py` deleted) and **`loop/`'s six steps**. Content hash **unchanged**
+(`ee0383bf…`), **190 season tests pass** (was 187), requirements still **6 `not_met` / 3 `partial`**
+— exactly what a pure structural arc should read. **`ED-SC-0037` is now `ruled`.**
+
+- ✅ **UNBLOCKED: U1, U2, U3, U4** — every Arc-1 precondition they named is merged.
+- ⛔ **U9 is the arc's only structural blocker left.** It needs `Act.via` from **G3**, and **Arc 2 is
+  unbuilt**: `state/` holds only `carriers.py`, `ids.py`, `world.py` — no `gate.py`, no `Receipt`,
+  no token type.
+- ⚠ **U1's `manifest/` design is STALE and must be re-derived before building.** U1 specifies a
+  `PROVIDERS` dict of callables filled by an `@provider` decorator. What shipped is a **descriptor
+  lookup**: `resolve(role, key) -> dict(module, resolver, doc)` read from `module_contracts.yaml`,
+  where **`None` is a deliberate real answer**. `rosters.yaml`'s `prizes` is still the string
+  schema, and the `if _sub["module"] == "personal_combat":` literal survives at
+  **`seam/contest.py:124`**. Full detail: the plan's **§15.0**.
+
+---
+
 ## ⚠ CURRENT — 2026-09-10 · U1–U10 is **ARC 3**, and Arcs 1 and 2 are its precondition (IN lane, cross-cutting)
 
 **Read this before starting any R-work.** `workplans/2026-09-09-r-execution-plan.md` is still the

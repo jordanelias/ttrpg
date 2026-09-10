@@ -2268,9 +2268,9 @@ Recorded so a later session does not re-open them — the ED-IN-0185 failure `CL
 ## §13 · SIZE — measured, and over the convention's threshold
 
 **Measured, not estimated — RE-MEASURED 2026-09-10 after the Arc-3 amendments, the adversarial
-reconcile, and the U3a revert:** **2,795 lines**, **53,494 tokens** at `tools/ci_common.py::tokens` — the repo's single
+reconcile, and the U3a revert:** **2,848 lines**, **54,547 tokens** at `tools/ci_common.py::tokens` — the repo's single
 owner of that estimate, characters ÷ 4. ⚠ **Say which character count**: Python `len()` gives
-**213,976** and `wc -c` gives **216,871 bytes**, and the gap is this file's own `§`, `⚠`, `→` and `≥`. `tokens()` divides the first.
+**218,190** and `wc -c` gives **221,177 bytes**, and the gap is this file's own `§`, `⚠`, `→` and `≥`. `tokens()` divides the first.
 Both are true of their own basis, which is the failure mode `CLAUDE.md` §0.1 names and which PR #383
 paid for once already (*"One instrument, named, for numbers that get compared."*).
 
@@ -2296,7 +2296,7 @@ shipping it as one part is a deliberate choice, not an oversight. ⚠ **After th
 file is over 60% longer than that peer** (37.7k against 23.2k tokens), so the choice is weaker than it
 was and the split below is closer than it was. Say so rather than re-asserting the earlier comparison.
 
-⚠ **AND THE SPLIT IS NOW OVERDUE AT 53.5k — say so rather than re-asserting the comparison a fourth
+⚠ **AND THE SPLIT IS NOW OVERDUE AT 54.5k — say so rather than re-asserting the comparison a fourth
 time.** This is **131% longer** than its closest peer (`workplans/2026-09-06-season-loop-execution-plan.md`,
 23.2k) — the successive measurements read 60%, 85%, 112%, 120%, 124%, 126%, now 131%. **Split at the §6/§7 boundary
 before adding another section.** The convention is still `WARNING`-level and still not a
@@ -2404,6 +2404,59 @@ framing adds and **nothing that already lives elsewhere** (`CLAUDE.md` §8). It 
 dependency graph (§4), the placement argument (§7), the translation procedure (§8), the guard-blinding
 handling (§9) or the non-goals (§10). Those stand.
 
+### §15.0 · ⚠ **ARC 1 HAS LANDED. RE-READ §15.1 THROUGH THIS SECTION — MOST OF ITS BLOCKERS ARE GONE AND ONE OF ITS DESIGNS IS STALE.**
+
+**PR #386 merged 2026-09-10 (`main` `c2de9ee`, 11 commits, 50 files) and it did not stop at a plan —
+it EXECUTED Arc 1.** Merged into this lane at `61f687e`; measured here after the merge:
+
+| | |
+|---|---|
+| `engine/season/` now holds | **`decision/`** (`budget` · `choose` · `options` · `questions`) · **`seam/`** (`contest` · `ladder` · **`wrappers/combat.py`**) · **`manifest/`** (`__init__` · `registry`) · **`queries/`** (+ `person_q` · `cache`; **`readers.py` DELETED**) · **`loop/`** (+ `calendar` · `census` · `deliberate` · `matter` · `resolve` · `witness`) |
+| content hash | `ee0383bf3f4606e56b80cd07c0284f0a` — **unchanged**, as a pure structural arc must be |
+| `pytest engine/season/tests` | **190 passed** (was 187; Arc 1 added three) |
+| `register --requirements` | **6 `not_met` · 3 `partial`** — unchanged, which is Arc 1's own declared success condition |
+| `ED-SC-0037` | **`status: ruled`, `needs_jordan: false`** — the flip is on `main` |
+
+**WHAT THIS UNBLOCKS, and it is most of the arc.** L1–L5 are merged, so the Arc-1 rows of §15.1's
+table are satisfied: **U1** (needs `seam/` + `manifest/`), **U2** (needs `loop/`'s six steps),
+**U3** (needs `decision/` as a directory) and **U4** (same) are all **UNBLOCKED**. ⚠ **Arc 2 is NOT
+built** — `state/` holds only `carriers.py`, `ids.py`, `world.py`: no `gate.py`, no `Receipt`, no
+token type. **So `U9` remains blocked on `G3`/`Act.via`, and that is now the arc's only structural
+blocker.**
+
+⚠ **AND U1's `manifest/` DESIGN IS STALE — READ THIS BEFORE BUILDING IT.** U1 below specifies
+`manifest/` as owning *"`PROVIDERS: dict[tuple[str, str], Callable]`, keyed `(role, module)`, filled
+at import by a `@provider(role, module)` decorator"*. **That is not what shipped.** The real
+`manifest/registry.py` is a **descriptor lookup, not a callable registry**:
+
+- `resolve(role, key) -> Optional[dict]` returns `dict(module=…, resolver=…, doc=…)` read out of
+  `references/module_contracts.yaml` — **not a function to call.** `_ROLE_ROSTERS = {"contest":
+  ("contest_subsystems", "prizes")}` is the whole role map.
+- **`None` is a real answer**, deliberately: an unclaimed prize leaves the seam's generic refusal
+  intact. So U1's third-gate amendment cannot ask `manifest.has(...)`; it asks whether
+  `resolve("contest", row.contests)` is `None`.
+- **`rosters.yaml`'s `prizes` is STILL the string schema** (`"a standing": "social_contest"`), so
+  U1's prize→row schema change is still owed — and it must now fit `resolve`'s lookup, which reads
+  the mapped value as a **module name validated against the contracts file** and raises if the
+  contracts declare no such module. A bare `provider: "sigma_leverage"` will not resolve unless
+  `module_contracts.yaml` declares it.
+- **The `if _sub["module"] == "personal_combat":` literal SURVIVES**, now at
+  **`engine/season/seam/contest.py:124`** — so U1's *"the literal is deleted"* is still real work,
+  and its line citation moves from `shape.py:4122` to that.
+- ✅ **`seam/wrappers/combat.py` exists**, which settles U1's placement adjudication empirically:
+  `seam/wrappers/sigma.py` now has a real sibling rather than an argued one.
+- Arc 1 also shipped `manifest.unclaimed_contest_prizes()` — invariant 9's **key** side, which
+  `check_rows()` does not cover — found by #386's own Fable gate. U1 should assert on it rather
+  than re-deriving the check.
+
+⚠ **Any citation in this document to `queries/readers.py` is dangling — the file is deleted.**
+
+**DO NOT re-plan Arc 3 from scratch on this.** §2's corrections, §4's graph, §7's placement argument
+and §8's procedure are unaffected: they are about the game, not about where a module sits. What is
+stale is precisely the precondition column and U1's manifest shape, both corrected above.
+
+---
+
 ### §15.1 · The order, and what each unit is waiting on
 
 `H` = hard (cannot start, or cannot be measured). Read with §4, which owns the *reasons*.
@@ -2440,16 +2493,16 @@ its own instruction.
 | unit | starts when | why not sooner |
 |---|---|---|
 | ~~**U3a** · the 13×4 as a carrier nothing reads~~ | ~~now, on `main`~~ | **STRUCK 2026-09-10 — BUILT, LANDED, REVERTED.** A declared-but-unread table is what `04:124` binds `data/` to raise on, and its byte-identity control was **fake by this document's own `F13` criterion** (identical *by construction*). See the box below |
-| **U3** · the table + the swap + the projection, ONE unit | **L1 merged** | the table may not be separated from its reader (`04:124`), and the swap is what resolves the `Precedent` two-sense collision. Nothing in U3 is startable on `main` |
+| **U3** · the table + the swap + the projection, ONE unit | ✅ **UNBLOCKED 2026-09-10 — L1 IS MERGED** | the table may not be separated from its reader (`04:124`), and the swap resolves the `Precedent` two-sense collision. **The score now lives in `decision/choose.py`** |
 | **U7 gp 1-2** · 15 of the 20 verbs | **now, on `main`**, with one qualifier measured | `verb_table.yaml`, plus **appends** to `loop/{predicates,effects}.py` |
-| **U1** · R-09 producer + R-05b | **L2 + L4 merged**, and half (b) also on **ED-SC-0037 flipped** (PR #386) | its file is a `seam/wrappers/*` row and its dispatch *is* `manifest.resolve` (§11.0, U1) |
-| **U2** · R-03 scene tick | **L5 merged** | it reshapes `season()` into rounds; L5 splits that same body into six modules |
-| **U4** · R-08 sampling | **L1 merged + U3 landed** | `04:1046` — a sampler drafted outside `decision/` is green while violating AX-2 |
+| **U1** · R-09 producer + R-05b | ✅ **UNBLOCKED 2026-09-10** — L2, L4 merged and ED-SC-0037 is `ruled` | ⚠ but read **§15.0**: the shipped `manifest/` is a descriptor lookup, not the `@provider` registry U1 specifies |
+| **U2** · R-03 scene tick | ✅ **UNBLOCKED** — L5 merged; `loop/` now holds the six steps | reshape `season()` into rounds against `loop/driver.py` + the six, not the old single body |
+| **U4** · R-08 sampling | ✅ **L1 merged** (`decision/` is a directory: `budget`·`choose`·`options`·`questions`); still needs U3 | the sampler lands in `decision/choose.py`, which now satisfies `04:1046` by construction |
 | **U5** · R-07 stance | **U1 half (b) merged** | its precondition is a non-empty `DEGREES RESOLVED:` line |
 | **U6** · R-01/R-02 first measurement | **U1, U2, U4, U5 merged** | measuring before a producer exists measures the theorem (§4) |
 | **U7 gp 3** · the Dispensation four | the `dispensation` operand row + F.15's nine terms exist as data | §8's worked instance — a prose→code translation, not wiring |
 | **U8** · R-06b ambitions + cast | **W28's `cast:` blocks authored, NPC lane first** | `PLAN.md:1587-1589` |
-| **U9** · R-04 strategic scale | **G3 merged** (`Act.via`) **+ U7 gp 1-2 + U8's NPC lane** | `H-108`; §4 grades it hard |
+| **U9** · R-04 strategic scale | ⛔ **STILL BLOCKED — the arc's ONLY structural blocker.** `G3` (`Act.via`) + U7 gp 1-2 + U8's NPC lane. **Arc 2 is unbuilt**: `state/` has no `gate.py`, no `Receipt`, no token | `H-108`; §4 grades it hard |
 | **U10** · second measurement | U7/U8/U9 merged | — |
 | **U7 gp 4** · six investigation acts | — | **de-scoped** (§10) |
 
