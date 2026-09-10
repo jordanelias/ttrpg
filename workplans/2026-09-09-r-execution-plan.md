@@ -2268,9 +2268,9 @@ Recorded so a later session does not re-open them — the ED-IN-0185 failure `CL
 ## §13 · SIZE — measured, and over the convention's threshold
 
 **Measured, not estimated — RE-MEASURED 2026-09-10 after the Arc-3 amendments, the adversarial
-reconcile, and the U3a revert:** **2,745 lines**, **52,449 tokens** at `tools/ci_common.py::tokens` — the repo's single
+reconcile, and the U3a revert:** **2,795 lines**, **53,494 tokens** at `tools/ci_common.py::tokens` — the repo's single
 owner of that estimate, characters ÷ 4. ⚠ **Say which character count**: Python `len()` gives
-**209,799** and `wc -c` gives **212,634 bytes**, and the gap is this file's own `§`, `⚠`, `→` and `≥`. `tokens()` divides the first.
+**213,976** and `wc -c` gives **216,871 bytes**, and the gap is this file's own `§`, `⚠`, `→` and `≥`. `tokens()` divides the first.
 Both are true of their own basis, which is the failure mode `CLAUDE.md` §0.1 names and which PR #383
 paid for once already (*"One instrument, named, for numbers that get compared."*).
 
@@ -2296,9 +2296,9 @@ shipping it as one part is a deliberate choice, not an oversight. ⚠ **After th
 file is over 60% longer than that peer** (37.7k against 23.2k tokens), so the choice is weaker than it
 was and the split below is closer than it was. Say so rather than re-asserting the earlier comparison.
 
-⚠ **AND THE SPLIT IS NOW OVERDUE AT 52.4k — say so rather than re-asserting the comparison a fourth
-time.** This is **126% longer** than its closest peer (`workplans/2026-09-06-season-loop-execution-plan.md`,
-23.2k) — the successive measurements read 60%, 85%, 112%, 120%, 124%, now 126%. **Split at the §6/§7 boundary
+⚠ **AND THE SPLIT IS NOW OVERDUE AT 53.5k — say so rather than re-asserting the comparison a fourth
+time.** This is **131% longer** than its closest peer (`workplans/2026-09-06-season-loop-execution-plan.md`,
+23.2k) — the successive measurements read 60%, 85%, 112%, 120%, 124%, 126%, now 131%. **Split at the §6/§7 boundary
 before adding another section.** The convention is still `WARNING`-level and still not a
 blocking gate, and the choice to ship one part is still deliberate — but it is weaker at every
 re-measurement, and the next session to add a section here should split first.
@@ -2628,6 +2628,56 @@ its own instruction.
 > group that makes five verbs **execute** is exactly what U7's acceptance asks for and what §0.2 calls
 > done; re-recording for that is a stated, intended re-pin. Re-recording for one refusal event was
 > not. **State the re-pin in the commit, per §0.1, and record the flips with `report && delta`.**
+>
+> ### ✅ **AND THEN TWO OF THE FIVE WERE BUILT AND MEASURED — THEY EXECUTE. THE EFFECTS ARE REVERTED; THE MEASUREMENT IS NOT.**
+>
+> `_eff_oblige` and `_eff_succeed` were written (composing on one `_open_tenure` primitive rather
+> than two copies) and run against the full 143-case corpus:
+>
+> | observable | before | after |
+> |---|---|---|
+> | `VERBS THAT EXECUTED` | **6** of 32 | **8** of 32 — gains `oblige`, `succeed` |
+> | `DISTINCT EXECUTED SETS` | **2** | **4** |
+> | `VERBS ONLY REFUSED` | 2 | **1** (`work`) |
+> | `resolvable_verbs()` | 12 | **14** |
+> | headless CONTENT HASH | `ee0383bf…` | `c44b1d96c7d504e9970bfe75ec6e18e5` |
+> | NPC-088 season 1 | acts 6 · events 29 · deposits 19 | **acts 7 · events 31 · deposits 21** |
+>
+> **And the world produced something legible that nobody authored: `duty.taken` — Carin Vedel
+> opens an `oblige` Tenure toward `einhir_texts`**, the suppressed cultural texts NPC-088 exists to
+> copy. The chooser picked it. A new grammar claim `('einhir_texts', 'held_by:p_carin', False)`
+> follows it into the ledger. `succeed` correctly emits `succession.refused` in her world (she
+> holds no office) and executes elsewhere in the corpus.
+>
+> **R-05's `measured:` line moves from *"6 of 32 verbs execute"* to *"8 of 32"* when this lands.**
+>
+> ⚠ **WHY IT IS REVERTED RATHER THAN SHIPPED: SIX TESTS GO RED, AND ONE OF THEM NEEDS A CLAIM
+> REWRITTEN, NOT A NUMBER BUMPED.** Five are honest re-pins of sets that grew by exactly these two
+> verbs. The sixth is not:
+>
+> | # | test | what it needs |
+> |---|---|---|
+> | 1 | `…the_executed_set_is_exactly_this` **`:6154`** | pin 6 → 8. Its own message already says *"4 → 6 was `W-C`'s measurement and ANY MOVEMENT IS A FRESH ONE"* — so the re-pin must be attributed to THIS unit, not re-read as W-C's |
+> | 2 | `…ranking_cannot_discriminate` **`:5230`** | pin 6 → 8 |
+> | 3 | `…ranking_cannot_discriminate` **`:5300`** | ⚠ **NOT A NUMBER.** It asserts `set(by_sig)` is **exactly two** signatures *"differing by `tell` alone"*, split on a season threshold. **There are now four.** The structural claim is FALSIFIED — and falsified in the good direction, since executed-set diversity is what R-01/R-06/R-08 want. The test's own name is a finding (*"the ranking CANNOT discriminate"*), so landing this means **deciding what property it should now protect** and rewriting the claim with the new measurement. That is a judgment call and it is the reason this unit stopped |
+> | 4 | `…control_arm_deposits_no_claim…` **`:7046`** | the `actor` arm now carries `('einhir_texts', 'held_by:p_carin', False)` beside `stores:grain`. The test warns that EMPTY would mean the cap is evicting — a non-empty gain is the good case and must be re-measured, not assumed |
+> | 5 | `…clause_four_fires…` **`:7329`** | headless drops are `{succeed, transfer}`, not `transfer` alone |
+> | 6 | `…report_py_reproduces_every_committed_artifact…` | `report` re-records the eight `runs/` artifacts; `delta HEAD` names every flip and the commit QUOTES it |
+>
+> **The six re-records are the INTENDED trade here** — §0.2 grades a juncture on behaviour that
+> executes, and two verbs executing is that. What must not happen is bumping six numbers at the end
+> of a long session and calling the suite green: `CLAUDE.md` §7 names re-pinning as *"the
+> uncontrolled path"*, and row 3 is a design call wearing an assertion's clothes. **Land all six in
+> one pass, with row 3 argued rather than edited.**
+>
+> **The effect bodies are ~60 lines and regenerate from this box.** `_open_tenure(w, subject, obj,
+> kind)` is the primitive — idempotent, returns touched ids, `[]` on an already-live edge so the
+> fold's write-nothing guard emits the row's refusal. `oblige`: `_open_tenure(w, a.actor,
+> _operand(a, "subject"), "oblige")`. `succeed`: `_open_tenure(w, _operand(a, "to"), _operand(a,
+> "subject"), "succeed")` — **the HEIR is the subject of the edge** (S15.1, an edge is owned by its
+> subject) and the office is the object. ⚠ **Do NOT route `_eff_confer` through it**: conferral is
+> open-and-close on a single-holder row, while duties and designations are additive — same `writes:`
+> column, different operation.
 >
 > ⚠ **`carry`'s blocker is named and is a DEPENDENCY, not a hole:** it needs `Existence(subject,
 > Petition)` and only `petition` writes `Petition.exists` — so `carry` becomes reachable **after

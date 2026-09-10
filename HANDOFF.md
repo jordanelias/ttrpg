@@ -63,8 +63,23 @@ non-goals all stand. **What changed is everything around them**, and a session t
   `determine`/`establish`/`exchange`/`levy`/`open_case` are **not resolvable even with an effect**:
   they need the typing decision first.
   ⚠ **So `PLAN.md`'s *"commit first"* aimed at the one group-1 verb whose blocker is upstream.
-  Start with the five that execute.** The six golden re-records recur — and there they are the
-  INTENDED trade, because five verbs executing is what U7's acceptance asks for. State the re-pin.
+  Start with the five that execute.**
+  ✅ **TWO OF THE FIVE WERE THEN BUILT AND MEASURED, AND THEY EXECUTE.** `oblige` and `succeed`:
+  **executed verbs 6 → 8 of 32**, **distinct executed sets 2 → 4**, only-refused 2 → 1, hash
+  `ee0383bf…` → `c44b1d96c7d504e9970bfe75ec6e18e5`, NPC-088 season 1 acts 6→7 / events 29→31 /
+  deposits 19→21. **The world produced something nobody authored: `duty.taken` — Carin Vedel opens
+  an `oblige` Tenure toward `einhir_texts`, the suppressed texts NPC-088 exists to copy.**
+  **R-05's `measured:` line moves to "8 of 32" when this lands.**
+  ⚠ **THE EFFECTS ARE REVERTED AND THE MEASUREMENT IS NOT.** Six tests go red. Five are honest
+  re-pins of sets that grew by exactly these two verbs. **The sixth is not a number:**
+  `test_the_corpus_runs_and_the_ranking_cannot_discriminate:5300` asserts there are EXACTLY TWO
+  distinct executed-set signatures *"differing by `tell` alone"* — **there are now four**, so the
+  structural claim is falsified, in the good direction. That test's NAME is a finding, so landing
+  it means deciding what property it should now protect. **That is a judgment call, not an edit,
+  and it is why this stopped rather than bumping six numbers and calling the suite green** —
+  `CLAUDE.md` §7 names re-pinning as "the uncontrolled path".
+  **Land all six in one pass. The effect bodies are ~60 lines and regenerate from the plan's §15.1
+  box, which carries the `_open_tenure` primitive and both call sites verbatim.**
   Full measurements: the plan's §15.1 box.
   ⚠ **A `U3a` was carved as a second startable unit, landed, and REVERTED the same session.** It put
   the 13×4 table in `rosters.yaml` as a carrier nothing reads. `04:124` binds `data/` to raise on a
