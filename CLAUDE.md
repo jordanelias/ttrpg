@@ -542,6 +542,8 @@ Run the unit tests locally: `pip install pyyaml pytest numpy && python -m pytest
 | Philosophy (**P-01..P-15**) compliance | `valoria-canon-guard` |
 | Key IN → resolver → OUT contract closure | `valoria-module-adjudicator` |
 | **A NERS pass** on any design object — dominant options, false N-lines — plus rolling-engine resolver stress | `ners`, which owns the **method**; the four **definitions** are §0.06 |
+| **Layer placement** — which layer does this bind, is prose being made a mechanism, does a proposed guard earn its existence, are you reaching under Layer 0 | `layer-conformance` (Lens A), which owns the **method**; the **definitions** are the layer table above, §0.05 and §0.1 pt 5 |
+| **Code-architecture / Layer-1 conformance** — does the code conform to `architecture/`, and at what enforcement grade | `layer-conformance` (Lens B), which reads `architecture/meta/04_CODE_ARCHITECTURE.md` at the row and restates none of it |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
 | Structural-debt corpus scan | `valoria-vector-audit` |
 | Splitting an oversized doc; index/infill hygiene | `valoria-chunker`; the size cap is enforced by `tools/compliance_check.py` (§4 — nothing enforces the pair rule) |
