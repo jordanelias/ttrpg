@@ -183,7 +183,19 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # honours clause (2) but leaves R-09 waiting on an unbuilt subsystem. The entry is in
     # registers/editorial_ledger_sc.jsonl; nothing about it is decided. Same
     # update-the-pin-and-say-so path this test's own failure message asks for.
-    released = {'SC': 38, 'FA': 39, 'WR': 10, 'SE': 51}
+    # PIN UPDATED 2026-09-10: WR 10 -> 11. ED-WR-0010 allocated — the threadwork implementation
+    # design, written against canon/philosophy/ (the live suite, ruled 2026-09-07 and 2026-09-09)
+    # and salvaging the uploaded Unreality Suite of 2026-09-06. It is a `needs_jordan: true` row
+    # and the flag is narrow: the DESIGN escalates nothing — its §7 records five candidates worked
+    # through CLAUDE.md §0's five tests and answered — and what needs Jordan is ADOPTION, plus
+    # whether threadwork_v30.md Part 3 is edited in place or superseded by a new head. The finding
+    # behind it: RULINGS.md ruled Coherence a *distance* with two quantities that have different
+    # remedies, and said in the same breath that a track which depletes cannot model it;
+    # systems/threadwork/sim/coherence.py is that track. No code changed — Jordan directed the
+    # deliverable as design prose. Entry in registers/editorial_ledger_wr.jsonl; CURRENT.md's
+    # Threadwork row is annotated rather than moved. Same update-the-pin-and-say-so path this
+    # test's own failure message asks for.
+    released = {'SC': 38, 'FA': 39, 'WR': 11, 'SE': 51}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (
