@@ -566,8 +566,9 @@ MAY BE CLAIMED, HAVING SURVIVED
 | the design's own falsifier (§8) | HOLDS / HITS | <the family the hits cluster into, or the missing family> |
 | self-audit (§9) | <both sweeps, and what each turned up> | <what an independent reviewer would add> |
 
-REPAIRS (worst first, each a deletion or one object — never a system)
-  <severity> <finding> → <fix>
+REPAIRS (worst first — the one whose absence changes the game most, then the rest;
+        each a deletion or one object, never a system)
+  <finding> → <fix>
 
 GRADE: paper | runs — <the execution artifact, or its absence>
 ```

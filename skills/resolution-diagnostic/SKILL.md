@@ -138,8 +138,8 @@ What is live, and the check that shows it — **run these, do not cite them**:
 
 | claim | how to check it |
 |---|---|
-| fractional Ob is **strictly monotonic** — no integer collapse | `p_success` at one pool for two obstacles a fraction apart must differ. At pool 9: Ob 1.4 → 0.8203, Ob 1.6 → 0.7977 |
-| the degree ladder bands a fractional Ob correctly | `degree_from_net` on a fractional pair: net 1.9 / Ob 1.4 → margin +0.50 → **Partial** |
+| fractional Ob is **strictly monotonic** — no integer collapse | `p_success(1.4, 9, 0.0)` → 0.8203 against `p_success(1.6, 9, 0.0)` → 0.7977. Two obstacles a fraction apart must differ |
+| the degree ladder bands a fractional Ob correctly | `degree_from_net(1.9, 1.4)` → margin +0.50 → **Partial** |
 | the **whole-success-wide Partial window** (`0 ≤ margin < 1`) is what keeps Partial reachable | read the band in `degree_from_net`. Narrow the window to point-equality and Partial stops firing against a fractional Ob — which is why the width is the mechanism, not a rounding allowance |
 
 ## §4 · THE POOL FLOOR IS 1D — AND IT REACHES THE MEAN, NOT ONLY THE VARIANCE
@@ -194,7 +194,7 @@ noise at every pool ≥ 1 and diverges by up to ~10 pp below 1D, so nothing abov
 | **3** | **3a** advantage enters via `levels_to_net_sigma`→`net_boost` and none of §2's three bypasses · **3b** nothing resolves on `eff_ob` · **3c** the fractional-pool and fractional-Ob paths agree with the closed form — **run them; do not read them off §3** · **3d** role conflation on a variable feeding or reading the roll · **3e** advantage reaches the player as a **named level** (minor/moderate/strong/major), not a bare σ float — this is the only phase that can see **P-i** · **3f** an irreversible outcome returns the owner's four bands, not a bare pass/fail — the only phase that can see **P-iv** |
 | **4** | Loops running through the engine's output or gating its input, cross-scale included. Defect = **both undamped and unbounded**. A **damper** is anything that shrinks the loop's gain per pass; a **cap** is a hard bound on the accumulated value. They are two separate checks, and one without the other is not a defect |
 | **5** | **Intent gate.** Deliberate + adequate safeguard → pass. Deliberate without → finding. Accidental or undetermined → finding, `[INTENT UNDETERMINED]`. Do not guess |
-| **6** | Score and triage, worst first, then **carry the findings back to `ners`** — they enter its ledger as evidence and do not short-circuit it. The table below says which axis each one lands on |
+| **6** | Order the findings worst-first — the one whose absence changes the game most, not a score — then **carry them back to `ners`** — they enter its ledger as evidence and do not short-circuit it. The table below says which axis each one lands on |
 
 **Where a finding lands in the NERS pass.** The five properties do not map onto one axis, and posting
 them all to R-COMPLETE loses two of them:
@@ -207,6 +207,9 @@ them all to R-COMPLETE loses two of them:
 
 Carry three things with each finding: the **property name**, the **`file:line`** it was found at,
 and either **the call that reproduces its number** or the words **"by construction, algebra shown"**.
+A finding tagged `[INTENT UNDETERMINED]` (Phase 5) travels **with its tag**, lands on the same axis
+as any other finding of its property, and the tag goes in that row's *what would overturn it* cell —
+it is an unanswered question about intent, never a downgrade of the finding.
 `ners` §6.2 refuses a number with no control, so a finding that arrives without one cannot be banked.
 A property that produced no finding is reported as a **named attack that failed**, not as silence.
 

@@ -179,7 +179,7 @@ def _charge_shock_sigma(defender, def_cells, zone, atom=None, t=None):
     near-zero vs a braced+disciplined+deep defender facing the charge (Waterloo squares),
     catastrophic vs an in-line / shallow / rear-charged / already-shaken defender (Albuera,
     Cannae, Hastings-post-feint). Applied to the defender's offensive net successes -> it
-    fights worse that exchange. Composes with _morale_sigma (one morale channel, Lesson 1).
+    fights worse that exchange. Composes with _morale_sigma (one morale channel; role-conflation, diagnostic Phase 3d).
     [historical anchor: du Picq Battle Studies; Waterloo/Albuera; precedents_warfare §1.1.
      bottom-up: stance/discipline/_defender_depth/octagon zone/morale_start — all engine state.]
     """

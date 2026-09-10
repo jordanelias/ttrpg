@@ -32,10 +32,10 @@ def roll_net(pool):
     return _sigma.roll_net(pool, rng=random)
 
 VALID_KINDS = ("advance", "hard", "shift", "support", "pass", "evidence", "rebut")
-RES_FLOOR = 0.15  # de-saturation floor (diagnostic Lesson 6): a hostile/off-axis reception can't zero
-                  # an advance's resonance, so even an unfavoured appeal keeps minimal viability.
+RES_FLOOR = 0.15  # [JUSTIFIED: de-saturation floor; 0.15 is a fitted seed, citation: null]
+                  # a hostile/off-axis reception can't zero an advance's resonance.
 REBUT_CAP = 3.0   # Fork 3 (PROTOTYPE): max advantage a single rebuttal can erase — bounds the one
-                  # attrition channel so a rebuttal war cannot death-spiral (diagnostic Lesson 5).
+                  # attrition channel, so a rebuttal war is damped and bounded, never a death-spiral.
 MERIT_SCALE = 2.6   # [SEED]
 JITTER = 0.08       # [SEED] irreducible variability in how persuasion lands
 PUBLIC_LEAK = 0.5   # [SEED] public pressure → adjudicator susceptibility
