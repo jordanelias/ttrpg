@@ -50,15 +50,17 @@ from ..state.carriers import (
 from ..state.ids import H, ROOT
 from ..state.world import World
 from ..epistemic import CHANNEL_PREDICATES, act_refs, claim_subjects, observers_for
-from ..queries import world_q
-from ..queries.readers import LedgerReader, WorldReader
+from ..queries import cache, world_q
+from ..queries.person_q import entrenchment
+from ..queries.person_q import LedgerReader
+from ..queries.world_q import WorldReader
 from ..queries.world_q import occasioned_by, questions_for
 from ..loop.effects import EFFECTS, effect_for
 from ..loop.predicates import REQUIRES_PREDICATES, requires_predicate
 from .. import decision
 from ..decision import (
     aggregate_questions, agreement, align, assemble, body_band_penalty, budget,
-    containing_rung_of, entrenchment, make_chooser, opening_set, operands_for, pack_scenes,
+    containing_rung_of, make_chooser, opening_set, operands_for, pack_scenes,
     person_side_eligible, stance_toward, standing_of, store_kind_of, urgency, view_ids,
 )
 from ..seam import (
@@ -1175,7 +1177,7 @@ class SeasonDriver:
         # no predicate by which anyone could be EXCLUDED. The fan-out is therefore total.
         # Seeds the cache `_ch_co_located` reads. Before `W6`'s adversarial pass this was built
         # here and read NOWHERE -- the predicate rebuilt it per (event, person).
-        w.cache_at_barrier("presence", lambda: {r: world_q.presence(w, r) for r in w.rungs})
+        cache.presence_index(w)
         everyone = list(w.persons)
         # `W6` / `H-33`. THE CHANNELS HAVE PREDICATES NOW, and the mode says which are live.
         # `total` is the specified behaviour and the sweep's control; the presence index this

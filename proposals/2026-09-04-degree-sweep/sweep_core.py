@@ -55,13 +55,17 @@ import types as _types
 from engine.season import decision as _dec, epistemic as _epi, seam as _seam
 from engine.season.data import fixtures as _fx, matrix as _mx, requires as _req, rosters as _ros, verbs as _vb
 from engine.season.loop import driver as _drv
-from engine.season.queries import readers as _rd, world_q as _wq
+from engine.season.queries import cache as _qc, person_q as _pq, world_q as _wq  # noqa: E402
+# ⚠ `queries/readers.py` IS GONE (unit L3, ED-IN-0206). `WorldReader` moved into `world_q` and
+# `LedgerReader` into the new `person_q`, split by the source each asks -- the call
+# `queries/__init__.py` had framed and deferred until `person_q` existed. `_rd` is dropped and
+# both new modules join the aggregate below, so every name `S.<x>` resolved before still does.
 from engine.season import gaps as _gaps
 from engine.season.state import carriers as _car, ids as _ids, world as _wld
 
 S = _types.ModuleType("sweep_core.S")
 S.__doc__ = "read-only aggregate over season's owner modules; see the note in sweep_core.py"
-for _m in (_gaps, _ids, _car, _wld, _ros, _mx, _req, _vb, _fx, _wq, _rd, _epi, _dec, _seam, _drv):
+for _m in (_gaps, _ids, _car, _wld, _ros, _mx, _req, _vb, _fx, _wq, _pq, _qc, _epi, _dec, _seam, _drv):
     for _k in dir(_m):
         if not _k.startswith("__"):
             setattr(S, _k, getattr(_m, _k))

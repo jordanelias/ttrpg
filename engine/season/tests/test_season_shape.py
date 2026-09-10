@@ -49,7 +49,8 @@ from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Ungraded, 
 from ..loop.driver import SeasonDriver, resolvable_verbs, sense
 from ..loop.predicates import REQUIRES_PREDICATES, highest_title_rank, in_holdings, under_purview
 from ..queries import world_q
-from ..queries.readers import LedgerReader, WorldReader
+from ..queries.person_q import LedgerReader
+from ..queries.world_q import WorldReader
 from ..queries.world_q import occasioned_by, questions_for
 from ..seam import combat_degree, contest, degree_ladder, degree_of, ladder_error
 from ..state.carriers import (
@@ -2534,6 +2535,79 @@ def test_decision_package_never_names_world_anywhere_under_it():
     assert world_prose >= 5, (
         "decision/'s sources no longer mention World anywhere, even in prose -- either the package "
         "changed unrecognisably or this control needs re-deriving")
+
+
+def test_person_q_cannot_reach_the_world_side():
+    """§A.3 row 2, and it is the row's PROPERTY rather than its file count.
+
+    `04_CODE_ARCHITECTURE.md:171`: the chain had *"one `Query` class holding both families"*; this
+    design has *"two modules; the second cannot import the first"*, forced by **T-f** -- *"in one
+    class, a person-side function calls a resolver-side one with no import to scan."* Splitting by
+    module is what makes the property checkable BY IMPORT, and **nothing checked it** until unit L3
+    (ED-IN-0206) created `queries/person_q.py`. A directory that satisfies §A.2's file list while
+    `person_q` quietly imports `world_q` has met the letter and lost the axiom.
+
+    The scan is by path over `queries/person_q.py` and by resolution, not by spelling: an absolute
+    import (`engine.season.queries.world_q`) and a relative one (`from . import world_q`) are the
+    same violation and both are caught, because the level is resolved against the file's own package
+    first -- the same correction the AX-2 scan needed when `decision/` gained a directory.
+
+    ⚠ THE FLOOR IS PART OF THE CHECK. A scan over a file that does not exist, or one that resolves
+    no imports at all, passes by finding nothing (`CLAUDE.md` §0.1 pt 2), so the module must be
+    present and must contain at least one function."""
+    import ast as ast_
+
+    path = files.PACKAGE_DIR / "queries" / "person_q.py"
+    assert path.exists(), (
+        f"{path} does not exist. §A.1's AX-2 row and §A.2's table both name `queries/person_q` as "
+        "the asker-first Query family's home; without the module this scan is vacuous and §A.3 "
+        "row 2's property is unenforced.")
+    tree = ast_.parse(path.read_text(encoding="utf-8"))
+
+    # ⚠ `state.world` -- THE STORE -- NOT `state` WHOLESALE, AND A FIRST VERSION OF THIS LIST GOT IT
+    # WRONG IN THE DIRECTION THAT LOOKS SAFER. `from ..state.carriers import Person` is a TYPE
+    # reference, and `decision/` -- the stricter island, which may not name a `World` at all -- makes
+    # exactly that import: its own AX-2 scan forbids `state.world` and permits the carriers. A list
+    # that forbade `state` outright would have reddened on the annotation this module needs to say
+    # what it reads, which is the opposite of §A.2's *"may read a `PersonInterior` snapshot only"*.
+    # `queries.world_q` covers `WorldReader`, which moved there at L3 with the rest of the
+    # World-first family; there is no `queries.readers` to forbid any more.
+    FORBIDDEN = ("state.world", "queries.world_q", "loop", "seam", "decision")
+    PKG = "engine.season"
+
+    def _absolute(node):
+        own = (PKG, "queries")
+        if node.level == 0:
+            return node.module or ""
+        base = own[:len(own) - (node.level - 1)] or (PKG,)
+        return ".".join(base) + (("." + node.module) if node.module else "")
+
+    def _forbidden(dotted):
+        tail = dotted[len(PKG) + 1:] if dotted.startswith(PKG + ".") else dotted
+        return any(tail == f or tail.startswith(f + ".") for f in FORBIDDEN)
+
+    bad, functions = [], 0
+    for node in ast_.walk(tree):
+        if isinstance(node, ast_.Import):
+            for alias in node.names:
+                if _forbidden(alias.name):
+                    bad.append((node.lineno, alias.name))
+        elif isinstance(node, ast_.ImportFrom):
+            dotted = _absolute(node)
+            if _forbidden(dotted):
+                bad.append((node.lineno, dotted))
+            for alias in node.names:
+                if dotted and _forbidden(f"{dotted}.{alias.name}"):
+                    bad.append((node.lineno, f"{dotted}.{alias.name}"))
+        elif isinstance(node, ast_.FunctionDef):
+            functions += 1
+
+    assert functions >= 1, (
+        "queries/person_q.py defines no function; the scan below has nothing to be about and "
+        "passes vacuously (§0.1 pt 2)")
+    assert not bad, (
+        "queries/person_q.py reaches the resolver side, which is exactly what §A.3 row 2 splits "
+        f"the two families BY MODULE to prevent (T-f): {bad}")
 
 
 def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_printed():

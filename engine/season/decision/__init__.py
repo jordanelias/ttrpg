@@ -9,7 +9,13 @@ budget.   NO World in scope."*
 
     questions.py   assemble · aggregate_questions · view_ids
     options.py     THE `opening_set` MEMBER -- opening_set and its operand machinery,
-                   person_side_eligible, agreement, standing_of, entrenchment
+                   person_side_eligible, agreement, standing_of
+
+⚠ `entrenchment` LEFT AT UNIT L3, to `queries/person_q.py`. It was the only one of the four symbols
+`ED-IN-0206` item (2) named that `04:133` does NOT list as a `decision/` member, and it is
+person-first in signature and self-declares as a person Query at its own first statement. `budget`,
+`opening_set` and `assemble` stay: `04:133` names them here, so moving them would break conformance
+rather than restore it.
     choose.py      make_chooser · align · stance_toward · urgency · pack_scenes
     budget.py      budget · body_band_penalty
 
@@ -84,7 +90,7 @@ unchanged and still governs: *owns nothing, returns `Scene[]`, may read `PersonI
 from .budget import body_band_penalty, budget
 from .choose import align, make_chooser, pack_scenes, stance_toward, urgency
 from .options import (
-    agreement, containing_rung_of, entrenchment, operands_for, opening_set,
+    agreement, containing_rung_of, operands_for, opening_set,
     person_side_eligible, standing_of, store_kind_of,
 )
 from .questions import aggregate_questions, assemble, view_ids

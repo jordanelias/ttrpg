@@ -104,11 +104,6 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     return out
 
 
-def entrenchment(p: Person, seasons_held: int, scale: int, span: int) -> int:
-    TRACE.query("entrenchment", "person")
-    return min(scale, (seasons_held * scale) // span)
-
-
 def person_side_eligible(p: Person, row: "VerbRow") -> bool:
     """§F1 clause 2, PERSON-SIDE. `own | remit | hold | presence`, NEVER `capability`.
 

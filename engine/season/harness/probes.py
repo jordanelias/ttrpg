@@ -31,7 +31,7 @@ from __future__ import annotations
 from typing import Any, Callable, Optional
 
 from .. import decision
-from ..queries import world_q
+from ..queries import person_q, world_q
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures, SUBSISTENCE_WEIGHTS
 from ..data.matrix import Step, WriteClass
 from ..data.rosters import CLAIM_SOURCES, RUNG_KINDS, STRATA, WITNESS_CHANNELS, roster, table
@@ -1256,7 +1256,7 @@ def f12():
     # 7's `Query.` -> `decision.` rename rewrote the line, which is what makes an untouched
     # constant look added to a changeset-scoped gate.
     # [JUSTIFIED: instrument input, half of the entrenchment span, reported in the probe's message]
-    ent = decision.entrenchment(w.persons["p_mid"], 30, w.fixtures.get("condition_scale"),
+    ent = person_q.entrenchment(w.persons["p_mid"], 30, w.fixtures.get("condition_scale"),
                              w.fixtures.get("entrenchment_seasons"))
     return (f"PASS: confer and revoke are ACTS, in the ACTS class, at RESOLVE. The revoked row was "
             f"NOT DELETED -- `until` makes it a HISTORICAL CLAIM SUBJECT, which is what "
