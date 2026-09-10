@@ -487,19 +487,145 @@ verbs:
     writes_note: "— (deposits at WITNESS, not here)"
     refusal_note: "W3: added. §E2 -- 'failure emits, never raises'. This verb has a `requires` and had no refusal channel, so a failed precondition produced no Event, no witness and no arc. Refusal condition: the teller holds no claim on the subject"
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
-  - verb:        "the six investigation acts"
+  # ===========================================================================================
+  # THE SIX INVESTIGATION ACTS, AS SIX ROWS. Jordan, 2026-09-10: *"'the six investigation acts'
+  # is a massive issue: that is not a verb"*, and *"you must ensure you build the six from
+  # investigation systems"*.
+  #
+  # WHAT THEY REPLACE. One row spelled `"the six investigation acts"`, `requires: "per act"`,
+  # `requires_typed: none`, `grade: assumption`. It named no act, so nothing could form one; the
+  # corpus prints its blocker verbatim -- `engine/season/runs/CASELOG_NPC.md:64`:
+  # *"'the six investigation acts' is on the table and the fold cannot execute it: needs a
+  # `requires:` predicate"*. THE SIX ARE NAMED IN CANON, not coined here:
+  # `systems/fieldwork/reference/investigation_systems_v30.md:217` -- *Examine, Interview,
+  # Research, Surveil, Thread-Read, Reconstruct. No new action vocabulary.*
+  #
+  # ⚠ THE SPLIT REMOVES THE ONLY REASON THE UNTYPED CELL WAS LAWFUL, WHICH IS WHY EACH ROW
+  # CARRIES A TYPED ONE. `data/verbs.py:239-248` admits three reasons for `requires_typed: none`,
+  # and the placeholder used reason (b), *a `per act` cell* -- the cell deferred to six acts the
+  # table did not carry. Once the acts ARE rows there is nothing left to defer to, so five of the
+  # six are typed here and the sixth carries reason (c), an operand the closed roster has no name
+  # for. NOTHING IN THE GRAMMAR IS EXTENDED: every clause below uses an existing form
+  # (`rosters.yaml: requires_forms`), an existing operand (`requires_operands`) and an existing
+  # predicate stem (`data/requires.py: REQUIRES_STEMS`). No new form, no new operand, no new stem.
+  #
+  # ⚠ AND `emits:` IS FLAT, NOT DEGREE-KEYED, WHICH IS THE HALF THIS COMMIT DOES NOT BUILD.
+  # `fieldwork_v30.md:302-309` grades every one of these acts on four bands (Failure's false
+  # lead, Partial's incomplete detail, Success's reliable one, Overwhelming's bonus revelation)
+  # and NOTHING HERE CAN RESOLVE A BAND. `rosters.yaml:481` types investigation's seam
+  # `UNRULED | UNRULED | UNRULED -- ITS OWN KIND, not a contest`, and `:487-491` rules what a
+  # session may do about that: *"the blanks are Jordan questions, not session guesses: writing a
+  # plausible IN/OUT for a mode nobody has ruled would be inventing the architecture rather than
+  # recording it, and the seam is precisely the thing that must not be invented."* `:505-508`
+  # closes the near escape: *"INVESTIGATION MUST NOT BE MADE A CONTEST TO BECOME GRADEABLE …
+  # Giving them a prize so the existing machinery can grade them is scripting drift."* So these
+  # rows declare no `contests:`, no obstacle column and no roll; the degree waits on the ruling,
+  # filed as ED-FI-0009. A degree-keyed `emits:` with nothing to key it on would raise
+  # `Unspecified` at the first fold (`VerbRow.emits_at`), which is a hole wearing a mechanism.
+  #
+  # ⚠ ONE READING RUNS THROUGH ALL SIX AND IS STATED ONCE HERE. §F.24a's grammar has no
+  # disjunction (`rosters.yaml: requires_forms` -- *"Disjunction is deliberately absent"*), so an
+  # act whose canon cell names several kinds of object must bind ONE. The split used is canon's
+  # own, from the reliability table at `fieldwork_v30.md:315-322`: Examine (physical) is tagged
+  # `Verified` and Research (archival) `Documentary`, so the physical carrier is `Site` and the
+  # documentary one is `Record`. Interview questions a person; Surveil watches a place. That is a
+  # reading of two canon tables, not a transcription of one, and it is graded as such below.
+  # ===========================================================================================
+  - verb:        "examine"
     stratum:     "contested_physical"
-    eligibility: ["own"]
-    requires:    "per act"
-    requires_typed: none
-    requires_typed_note: "§E3 `:433` — *per act*. There is no precondition here to type: the cell defers to six acts the table does not carry as rows. Typing it would mean inventing six preconditions, which is what §42.2.1 forbids."
+    stratum_note: "§27's strata are a RESOLUTION-ORDER band over what an act touches, and they are not the `contests:` column -- these six declare no prize (see the block comment). The placeholder filed all six under `contested_physical`; canon splits them, because `fieldwork_v30.md:353-355` makes concealment an opposing party's act at a PLACE, which reaches Examine, Surveil and Thread-Read and does not reach a conversation or a private synthesis."
+    eligibility: ["own", "presence:<site>"]
+    requires:    "the site exists and the actor is present at it"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        site
+          kind:      Site
+        - form:      relation
+          of:        site
+          relation:  present_at
+    requires_typed_note: "`fieldwork_v30.md:293` -- *Examine · Cognition · Study physical evidence, architecture, documents, objects*. The two clauses are `restore`'s, and for its reason: a physical trace is somewhere, and you have to be there to study it. `Site` rather than `Record` per the block comment's reading of `:315-322`."
     writes:      []
+    writes_note: "— (a finding is a Claim, minted at WITNESS from the Event; `04:237` forbids a social aggregate on a Rung, and `fieldwork_v30.md:256`'s Evidence Track is a COUNT over what the investigator holds, not a meter anybody writes)"
     emits:       ["finding.made"]
     emits_on_refusal: ["finding.none"]
-    grade:       "assumption"
-    writes_note: "— (they produce claims at WITNESS)"
-    eligibility_note: "eligibility NEVER consults office (T9)"
-    source:      "ARCHITECTURE_V2.md §E3, transcribed"
+    grade:       "ruled"
+    source:      "systems/fieldwork/reference/investigation_systems_v30.md:217 names the six; systems/fieldwork/reference/fieldwork_v30.md:293 (§4.2) and :317 (§4.3) carry this row's content"
+  - verb:        "interview"
+    stratum:     "social"
+    eligibility: ["own"]
+    requires:    "the person questioned exists"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      Person
+    requires_typed_note: "`fieldwork_v30.md:294` -- *Interview · Attunement · Question a witness, informant, or subject*. ⚠ THE PRECONDITION CANON WOULD PREFER IS UNASKABLE BY CONSTRUCTION, and that is worth stating rather than leaving as a thin cell: a witness is someone who HOLDS a claim on the matter, and `04 §B.2`'s corrected `F8` carve-out admits a resolver-side ledger read for THE ACTOR'S OWN ledger and no other -- *'a Query taking a ledger and an asker who is not its holder still does not exist'*. So `own_ledger` cannot be pointed at the person being questioned, and existence is the strongest clause the grammar admits here. ⚠ A SECOND CONSEQUENCE, NAMED SO IT IS NOT DISCOVERED AS A SURPRISE: `questions_for`'s Q2 can raise a question whose referent is the asker themselves (`world_q.py:198` -- `c.subject == p.id`), so this cell admits an act whose subject is its actor. Excluding it needs a negation the closed seven forms do not carry, and `rosters.yaml: requires_forms` rules an eighth form *'a design change, not a table edit'*."
+    writes:      []
+    writes_note: "— (as `examine`)"
+    emits:       ["finding.made"]
+    emits_on_refusal: ["finding.none"]
+    grade:       "ruled"
+    source:      "investigation_systems_v30.md:217; fieldwork_v30.md:294 (§4.2), :318 (§4.3). ⚠ THE SINGLE-ROLL INTERVIEW IS RETIRING AND THIS ROW IS ITS BASELINE, NOT A SECOND SPEC: `fieldwork_v30.md:300` (ED-FI-0004, 2026-07-08) folds it into the Dialogue Lattice -- *'the richer object wins'* -- and retains the bare-roll row as *the current mechanical baseline* only until ED-921 and ED-IN-0016 EP-8 settle. This row is that baseline; when the Lattice is built it replaces this row rather than sitting beside it."
+  - verb:        "research"
+    stratum:     "uncontested_material"
+    eligibility: ["own", "presence:<site>"]
+    requires:    "the record consulted exists"
+    requires_typed:
+      form:      existence
+      of:        subject
+      kind:      Record
+    requires_typed_note: "`fieldwork_v30.md:295` -- *Research · Recall · Consult archives, oral histories, institutional records, Einhir documents*, tagged `Documentary` at :319. `Record` is the documentary carrier per the block comment. Presence is on the eligibility disjunction rather than in the cell: canon gates Buried research on *institutional access* (:295), which is a `remit`/`hold` question this table has no operand for, and `own` alone already admits."
+    writes:      []
+    writes_note: "— (as `examine`)"
+    emits:       ["finding.made"]
+    emits_on_refusal: ["finding.none"]
+    grade:       "ruled"
+    source:      "investigation_systems_v30.md:217; fieldwork_v30.md:295 (§4.2), :319 (§4.3)"
+  - verb:        "surveil"
+    stratum:     "contested_physical"
+    eligibility: ["own", "presence:<rung>"]
+    requires:    "the place watched exists and the actor is present at it"
+    requires_typed:
+      all:
+        - form:      existence
+          of:        subject
+          kind:      Rung
+        - form:      relation
+          of:        subject
+          relation:  present_at
+    requires_typed_note: "`fieldwork_v30.md:296` -- *Surveil · Cognition · Observe a location, person, or faction operation over extended time*. `Rung` is the loop's carrier for a place and for what happens in it, so one clause covers the location and the operation; the person case is `interview`'s and `examine`'s. `present_at` answers over a Rung directly (`world_q.py:448`), so no second stem is needed. ⚠ CANON'S OTHER HALF OF THIS ROW HAS NO HOME: *+2 Exposure (conspicuous activity)*. Exposure is tracked per territory (`fieldwork_v30.md:261`) and `04:237` forbids ANY social aggregate on a `Rung` -- *no norms, unrest, legitimacy, reputation, discipline*. It is not written here and not invented elsewhere; ED-FI-0009 carries it."
+    writes:      []
+    writes_note: "— (as `examine`; and see the Exposure note above, which is the one canon effect of this act that has no carrier at all)"
+    emits:       ["finding.made"]
+    emits_on_refusal: ["finding.none"]
+    grade:       "ruled"
+    source:      "investigation_systems_v30.md:217; fieldwork_v30.md:296 (§4.2), :320 (§4.3)"
+  - verb:        "thread_read"
+    stratum:     "contested_physical"
+    eligibility: ["own", "presence:<site>"]
+    requires:    "Thread Sensitivity >= 30"
+    requires_typed: none
+    requires_typed_note: "REASON (c) OF THE THREE `data/verbs.py:239-248` ADMITS -- an operand the closed `requires_operands` roster has no name for -- AND IT IS ALREADY REGISTERED, so this is a citation and not a new hole. `hole_register.yaml` H-85: Thread Sensitivity is what #353 §9.2 calls *'the only class-shaped gate in the design'*, and §9.2 *specifies NO carrier, NO roster of what it gates, and NO predicate*. `fieldwork_v30.md:297` requires TS >= 30 for this act and :34 gates Depth 4 on the same number. Typing it would mean coining an operand, which `rosters.yaml: requires_operands` calls *'filling H-94 by keyword argument, which is the ruling H-94 is waiting for and not a table edit'*. ⚠ THE CONSEQUENCE IS STATED PLAINLY: with no typed cell and no `REQUIRES_PREDICATES` entry this verb is NOT in `resolvable_verbs()`, so it is a row that exists and cannot yet be attempted. That is what canon says of a character below the gate (`:76` -- *'Characters below the gate cannot attempt the action'*), and it is the honest state rather than a stand-in threshold."
+    writes:      []
+    writes_note: "— (as `examine`)"
+    emits:       ["finding.made"]
+    emits_on_refusal: ["finding.none"]
+    grade:       "ruled"
+    source:      "investigation_systems_v30.md:217; fieldwork_v30.md:297 (§4.2), :321 (§4.3), §4.5 :341-347. ⚠ P-01 CO-MOVEMENT AND THE COHERENCE COST (§4.5 :344-346) ARE NOT EXPRESSED HERE and are not silently dropped: they are threadwork effects with no carrier in this loop, carried on ED-FI-0009 with the Exposure gap"
+  - verb:        "reconstruct"
+    stratum:     "uncontested_material"
+    eligibility: ["own"]
+    requires:    "the actor holds a claim on the subject"
+    requires_typed:
+      form:      own_ledger
+      of:        subject
+    requires_typed_note: "`fieldwork_v30.md:298` -- *Reconstruct · Recall · Assemble existing evidence into a coherent picture. No new information gathered — this action synthesises.* The precondition is that there IS assembled evidence, and `fieldwork_v30.md:256`'s Evidence Track is a count over what the investigator holds -- which in this loop is the actor's own ledger, the one ledger `04 §B.2`'s F8 carve-out lets the fold read. Same form and same cell shape as `tell`. ⚠ WHAT THIS CELL DOES NOT CARRY IS THE OBSTACLE, AND CANON GIVES ONE: `Ob = (threshold − current progress), min 1` (:298), where the threshold is 3 / 5 / 8 by investigation scope (:260) chosen at opening BY A GM (:264) -- a role this engine does not have. A `Question` carries `(id, source, referents, about)` and no scope, so there is nothing to read a threshold off; picking one is §42.2.1's invented number. ED-FI-0009."
+    writes:      []
+    writes_note: "— (as `examine`. ⚠ AND CANON WANTS MORE THAN A CLAIM HERE: :277 makes a FAILED Reconstruct produce a plausible but WRONG conclusion the player acts on. A Claim carries `value` and `confidence` (`state/carriers.py:121-131`), so the carrier exists -- what is missing is the degree that would decide which to mint, which is the same ruling)"
+    emits:       ["finding.made"]
+    emits_on_refusal: ["finding.none"]
+    grade:       "ruled"
+    source:      "investigation_systems_v30.md:217; fieldwork_v30.md:298 (§4.2), :266-280 (§4.1), :322 (§4.3)"
   - verb:        "tie / knot"
     stratum:     "social"
     eligibility: ["own"]

@@ -743,7 +743,9 @@ and the placeholder **can never execute**, so it permanently inflates every rati
 `corpus_run.py:516`, `probes.py:988`, `test_season_shape.py:8374` and R-05's `measured:` line — **every
 "of 32" in this plan and in `requirements.yaml` is wrong, including the ones this arc quoted.**
 Layer 1 already named the repair (`HANDOFF_NEXT.md:55` item 2b: *"split into six rows with writes;
-#359's discovery model — a contest of capability against secrecy, emitting a Degree — is the shape"*),
+#359's discovery model — a contest of capability against secrecy, emitting a Degree — is the shape"*
+— ⚠ **the split is DONE (§15.0e); the second clause is what ED-FI-0009 puts to Jordan, and
+`rosters.yaml:505-508` refuses the "contest" half of it by name**),
 and ⚠ `PLAN.md:101`'s premise for grading them `assumption` — *"they are **unnamed**… nothing to
 inject"* — **is stale**: they are named in a CANONICAL doc, `investigation_systems_v30.md:217`/`:427`
 — **Examine · Interview · Research · Surveil · Thread-Read · Reconstruct**.
@@ -1014,7 +1016,7 @@ its own instruction.
 | **U8** · R-06b ambitions + cast | **W28's `cast:` blocks authored, NPC lane first** | `PLAN.md:1587-1589` |
 | **U9** · R-04 strategic scale | ⛔ **STILL BLOCKED — the arc's ONLY structural blocker.** `G3` (`Act.via`) + U7 gp 1-2 + U8's NPC lane. **Arc 2 is unbuilt**: `state/` has no `gate.py`, no `Receipt`, no token | `H-108`; §4 grades it hard |
 | **U10** · second measurement | U7/U8/U9 merged | — |
-| **U7 gp 4** · six investigation acts | — | **de-scoped** (§10) |
+| **U7 gp 4** · six investigation acts | — | ✅ **BUILT 2026-09-10, ED-FI-0009** — §15.0e. De-scoped no longer; the DEGREE half is the ruling request |
 
 > ### ⚠ **U3 CANNOT BE EXECUTED AS SPECIFIED, AND THIS WAS FOUND BY PRE-FLIGHT — STAGE 1 DOING ITS JOB.**
 >
@@ -1356,3 +1358,70 @@ structurally cannot ask:
 `measured:` line of every row states what an instrument printed, and the `status:` line agrees with it.
 **If reconvergence is still ≥96% at U6, U6's own falsifier governs — report which channel is closed and
 leave R-01/R-02 `not_met`.** Both prior plans carry that clause and it is not optional.
+
+---
+
+## §15.0e — THE SIX, BUILT. What landed, what it moved, and what it did not build.
+
+**`ED-FI-0009`, 2026-09-10.** Jordan, in order: *"'the six investigation acts' is a massive issue:
+that is not a verb"*, then *"you must ensure you build the six from investigation systems"*.
+
+### What landed
+
+`verb_table.yaml`'s one row is now six, named by canon at `investigation_systems_v30.md:217` —
+**`examine` · `interview` · `research` · `surveil` · `thread_read` · `reconstruct`**. Each carries a
+typed `requires` built from the **existing** closed grammar: no new `requires_form`, no new
+`requires_operand`, no new predicate stem. ⚠ That contradicts my own `ED-IN-0208`, which said the
+build needed *"new requires stems (a grammar change)"*. It did not: `existence` (`exists:<Kind>`),
+`relation` (`present_at`) and `own_ledger` (`claim.held`) cover five of the six, and the sixth —
+`thread_read` — carries `requires_typed: none` under the loader's own reason (c), an operand the
+closed roster has no name for, which is `H-85` and is a citation rather than a new hole.
+
+### What it moved, measured
+
+| | before | after |
+|---|---|---|
+| verb-table rows | 32 (a placeholder counted as one verb) | **37** |
+| resolvable by the fold | 12 | **17** |
+| **executing in the corpus** | 6 | **10** |
+| distinct corpus behaviours, 89 live cases | 2 | **16** |
+| §F1 clause-4 drops, 89 worlds, shipped default | **13, every one `move`** | **1,491 across six verbs** |
+| `W-D` acceptance, NPC-088 2-slot slice | 0 of 16 forks diverged | **14 of 18** |
+| corpus cases | NPC-086 `BLOCKED`, NPC-010 3 blockers | NPC-086 **`DEGRADED`**, NPC-010 2 |
+
+The clause-4 line is the one that matters, because the tree had already written down what it would
+take: *"The defect this exposes is that §F1 clause 4 has exactly ONE reachable instance in the
+corpus; that is a producer hole and is where the work goes."* The six gave the grammar four more
+live cells — `exists:Site` · `exists:Person` · `exists:Record` · `exists:Rung` — and `restore`, a
+verb that **cannot execute**, now drops on beliefs a failed `examine` deposited: one person's failed
+look teaches them not to try to mend the thing. That is cross-**verb** propagation through a shared
+grammar cell, which one verb refusing on its own belief could never have shown.
+
+### What it did NOT build, and why that is a ruling and not a gap I left
+
+Nothing resolves a **degree** for an investigation act, so their `emits:` is flat — while
+`fieldwork_v30.md:302-309` grades every one of them on four bands. `rosters.yaml:481` types
+investigation's seam `UNRULED | UNRULED | UNRULED — ITS OWN KIND, not a contest`, and `:487-491`
+rules what a session may do about that: *"the blanks are Jordan questions, not session guesses:
+writing a plausible IN/OUT for a mode nobody has ruled would be inventing the architecture rather
+than recording it, and the seam is precisely the thing that must not be invented."* `:505-508`
+closes the near escape. ED-FI-0009 carries the four questions that are one question — the seam, the
+pool (where `fieldwork_v30.md:76` and `#353 §9.2` **contradict each other outright** on whether an
+attribute may gate), the obstacle, and where Exposure lands given `04:237`.
+
+### How the scope was cut, which is the method working
+
+The first carve was larger: an `obstacle:` column on the verb row, a `seam/attempt.py` producing a
+margin from `roll_pool`, a branch in `loop/resolve.py`, `Person.capability` read for a pool and
+gating a derived depth. A read-only critic (`.claude/agents/valoria-critic.md`, structurally
+Read/Grep/Glob) **overturned four of those five** against surfaces I had not cited —
+`rosters.yaml:481/:487-491/:505-508`, `#353 §9.2`'s explicit *"if you find yourself writing
+`if capability < N` inside an option set, you are re-implementing a gate the design deleted on
+purpose"*, and `§27.4`'s *"an uncontested attempt routes to a gate, never to an `Ob = 0` roll"*. It
+also killed the depth derivation on its own terms: canon predicates depth on the **content dug for**,
+not on the digger, so *"depth = the deepest gate the actor passes"* would have made raising an
+attribute **raise** the obstacle. Every overturn was re-verified at source before the carve was cut
+back. Two of its findings were kept as work rather than as notes: loader invariant 12 was **one-sided**
+(it read `writes:` and never `emits:`, so the six's exact shape loaded clean and raised mid-corpus),
+and the six landed **conviction-inert**, which was measured to displace `tell` by the alphabet before
+weighted `alignment` cells replaced it.

@@ -5,10 +5,32 @@ namespace (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. 
 is the index; see it for cross-lane/global items.
 
 No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonical heads:
-`designs/scene/fieldwork_v30.md` (+ co-files), `designs/scene/fieldwork_bg_v30.md`,
-`designs/scene/investigation_systems_v30.md`.
+`systems/fieldwork/reference/fieldwork_v30.md` (+ co-files),
+`systems/fieldwork/reference/fieldwork_bg_v30.md`,
+`systems/fieldwork/reference/investigation_systems_v30.md`. (The `designs/` tree was dissolved; every
+old path resolves through `references/restructure_ledger.md` via `tools/pathres.py`.)
 
 ## Pending
+
+- **ED-FI-0009 (open, `needs_jordan: true`, 2026-09-10) — THE SIX INVESTIGATION ACTS ARE ROWS, AND
+  THE DEGREE IS THE RULING.** Jordan: *"'the six investigation acts' is not a verb"* and *"you must
+  ensure you build the six from investigation systems"*. `engine/season/verb_table.yaml`'s single
+  placeholder row is now `examine` · `interview` · `research` · `surveil` · `thread_read` ·
+  `reconstruct`, each with a typed `requires` built from the existing closed grammar. Measured:
+  verbs 32 -> 37, resolvable 12 -> 17, **executing in the corpus 6 -> 10**, distinct corpus
+  behaviours 2 -> 16, §F1 clause-4 drops 13 (all `move`) -> 1,491 across six verbs. NPC-086 moved
+  BLOCKED -> DEGRADED; NPC-010 lost one of three blockers.
+  **What is NOT built and why:** nothing resolves a DEGREE for an investigation act, so their
+  `emits:` is flat while `fieldwork_v30.md:302-309` grades all six on four bands.
+  `engine/season/rosters.yaml:481` types investigation's seam UNRULED and `:487-491` rules that
+  writing an IN/OUT for an unruled mode is inventing the architecture; `:505-508` forbids giving
+  them a prize instead. The ruling request carries four questions that are one question — the seam,
+  the pool (and whether `Person.capability` may gate, where `fieldwork_v30.md:76` and `#353 §9.2`
+  contradict each other outright), the obstacle, and where Exposure lands given `04:237`.
+  **Next actions once ruled:** the margin producer closes `H-98`'s second half and moves R-09;
+  `examine` stays refused until some question source names a Site (`H-04`'s territory); the
+  Dialogue Lattice replaces the `interview` row rather than sitting beside it (ED-FI-0004).
+
 
 - **ED-FI-0004 (RESOLVED 2026-07-08) — pessimist-audit FI verdicts EXECUTED** (FI-lane follow-up to
   ED-IN-0027). **Interview MERGE:** the `fieldwork_v30 §4.2` bare-roll Interview object is annotated as

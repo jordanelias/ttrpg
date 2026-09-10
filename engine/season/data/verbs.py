@@ -267,6 +267,28 @@ def _load_verb_table() -> dict:
             raise SystemExit(
                 f"verb_table.yaml: {name!r} has a degree-keyed `writes:` and no `contests:`. "
                 "Nothing resolves a degree for it, so no branch could ever be selected.")
+        # ⚠ **INVARIANT 12 WAS ONE-SIDED AND THE OTHER SIDE IS THE SAME DEFECT.** The four checks
+        # above read `writes:` only, so a row with a FLAT `writes:` (`[]` included), a DEGREE-KEYED
+        # `emits:` and no `contests:` LOADED CLEAN and then raised `Unspecified` at the first act
+        # that folded it -- `emits_at(None)` has nowhere to look. That is precisely what invariant
+        # 12 exists to make unwritable, escaping through the column it did not read.
+        # ⚠ FOUND BY BUILDING THE SIX INVESTIGATION ACTS (ED-FI-0009), WHOSE `writes:` IS `[]` BY
+        # DESIGN -- a finding is a Claim minted at WITNESS, not a typed write -- so they are the
+        # exact shape that slips through: keying their `emits:` on a Degree would have been
+        # accepted at load and would have failed per-act, mid-corpus, as a design gap rather than
+        # as the table defect it is. They ship with a FLAT `emits:` because nothing grades an
+        # investigation act yet; this check is what makes that a decision rather than a habit.
+        if emits_by_degree and not row.contests:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} has a degree-keyed `emits:` and no `contests:`. "
+                "Nothing resolves a degree for it, so no branch could ever be reported -- and "
+                "unlike the `writes:` case this used to load clean and raise at the first fold.")
+        if row.contests and not emits_by_degree:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `contests: {row.contests}` and a FLAT "
+                "`emits:`. Its emissions must be keyed by Degree for the same reason its writes "
+                "are: a flat list reports the SAME outcome whichever way the contest went, which "
+                "is `ID-9` -- a wound emitting `person.died`.")
         # EVERY `writes:` MUST BE A PART D ROW. Checked AT LOAD, not at the first act that uses
         # it: a verb naming an unmarked cell is a defect in the table, and finding it when some
         # case happens to exercise that verb makes it look like a defect in the case.

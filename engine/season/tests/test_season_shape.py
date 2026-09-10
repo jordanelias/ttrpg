@@ -629,14 +629,24 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     started answering a DIFFERENT, smaller question (load-time raises in `shape.py` only) while
     the assertion kept reading as the whole-instrument count. Summed across the three files that
     now hold a `_load_*` this test's own docstring names, so a raise MOVED still counts and a raise
-    QUIETLY DROPPED during a future move still flips this to a number other than 28."""
+    QUIETLY DROPPED during a future move still flips this to a number other than 28.
+
+    ⚠ 28 -> 30, ED-FI-0009, 2026-09-10, AND BOTH ARE LOAD-TIME — which is the question this test
+    forces its author to answer. `_load_verb_table`'s invariant 12 was ONE-SIDED: it tested the
+    `writes:` column for a degree source in both directions and never tested `emits:`, so a row
+    with a flat `writes:`, a degree-keyed `emits:` and no `contests:` LOADED CLEAN and then raised
+    `Unspecified` at the first act that folded it. That is the same defect invariant 12 exists to
+    make unwritable, arriving as a per-case DESIGN-GAP mid-corpus instead of as a table refusal at
+    import. The two new raises close the symmetry, they fire while `verb_table.yaml` is being read,
+    and the run-time side is unchanged. Falsifier:
+    `test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on`."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 28, (
-        f"{total} load-time exits across the model set, expected 28. Per file: "
+    assert total == 30, (
+        f"{total} load-time exits across the model set, expected 30. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -1853,6 +1863,59 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
         + "\nEither the row is missing from Part D, or the site is writing a field the design "
           "does not have. Rule the row first, then add it -- the reverse order invents the thing "
           "the rule prevents.")
+
+
+def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
+    """**THE FALSIFIER FOR THE HALF OF INVARIANT 12 THAT DID NOT EXIST** (§0.1 pt 3, ED-FI-0009).
+
+    #358 rev.2 invariant 12 checks BOTH directions of the `writes:` column: a contested verb with
+    a flat list is the `kill / wound` defect, and an uncontested verb with a degree map is a verb
+    claiming an outcome it never resolves. It read `writes:` ONLY. A row with a flat `writes:`, a
+    degree-keyed `emits:` and no `contests:` therefore LOADED CLEAN and raised `Unspecified` at
+    the first act that folded it — the same defect, escaping through the column the check did not
+    read, and arriving as a per-case DESIGN-GAP mid-corpus instead of as a table refusal at load.
+
+    ⚠ IT IS REACHABLE RATHER THAN HYPOTHETICAL, WHICH IS WHY IT IS FIXED RATHER THAN NOTED. The
+    six investigation acts write `[]` by design — a finding is a Claim minted at WITNESS, not a
+    typed write — so they are exactly the shape that slips through, and `fieldwork_v30.md:302-309`
+    grades every one of them on four bands. Keying their `emits:` before anything can resolve a
+    band would have been accepted at load.
+
+    MUTATION: delete either arm below and the corresponding half of this test goes green-to-red.
+    Both are asserted, because a one-sided check is what this closes."""
+    import copy as _copy, yaml as _yaml
+    import unittest.mock as _mock
+    src = _yaml.safe_load((REG.REGISTER.parent / "verb_table.yaml").read_text())
+
+    def loads(mutate):
+        doc = _copy.deepcopy(src)
+        mutate(doc)
+        with _mock.patch.object(VERBS, "VERB_TABLE_YAML") as fake:
+            fake.exists.return_value = True
+            fake.read_text.return_value = _yaml.safe_dump(doc)
+            with pytest.raises(SystemExit) as e:
+                VERBS._load_verb_table()
+        return str(e.value)
+
+    # ARM 1 — a degree-keyed `emits:` on a verb nothing grades. `examine` is the live shape:
+    # flat `writes: []`, no `contests:`.
+    def key_the_emits(doc):
+        row = next(r for r in doc["verbs"] if r["verb"] == "examine")
+        row["emits"] = {"Success": ["finding.made"], "Failure": ["finding.none"]}
+    msg = loads(key_the_emits)
+    assert "degree-keyed `emits:`" in msg and "examine" in msg, msg
+
+    # ARM 2 — the converse, which the `writes:` half has always refused: a contested verb whose
+    # emissions are flat reports the same outcome whichever way the contest went (`ID-9`).
+    def flatten_the_emits(doc):
+        row = next(r for r in doc["verbs"] if r["verb"] == "kill / wound")
+        row["emits"] = ["person.died"]
+    msg = loads(flatten_the_emits)
+    assert "FLAT" in msg and "kill / wound" in msg, msg
+
+    # AND THE CONTROL: the shipped table loads. Without this the two arms above would pass on a
+    # loader that refused everything.
+    assert len(VERBS._load_verb_table()) == 37
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -5461,7 +5524,22 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # the always-refused set for exactly one reason and it is gone. ⚠ ATTRIBUTION IS BY ACT ID,
     # not by emission kind: `corpus_run` re-derives `H(seed, tick, actor, f"{kind}:{act.id}")`,
     # which is what stopped `forge` being credited with `create_record`'s records.
-    assert ever == {"create_record", "move", "speak", "tell", "transfer", "utter"}, (
+    # ⚠ 6 -> 10, ED-FI-0009 (2026-09-10), AND IT IS THE FIRST TIME THIS SET GREW BY ADDING VERBS
+    # RATHER THAN BY UNBLOCKING ONES ALREADY IN THE TABLE. The row spelled
+    # `"the six investigation acts"` was ONE row standing for six acts canon names, carrying
+    # `requires: "per act"` — a cell that deferred to acts the table did not have — so the fold
+    # could not evaluate it and `runs/CASELOG_NPC.md:64` reported it as a blocker. Split into six
+    # rows, each with a typed cell built from the EXISTING closed grammar (no new form, operand or
+    # stem), four of them execute: `interview` (`exists:Person`), `research` (`exists:Record`),
+    # `surveil` (`exists:Rung` and `present_at`) and `reconstruct` (`own_ledger`).
+    # ⚠ THE TWO THAT DO NOT ARE NOT FAILURES AND ARE NAMED SO NOBODY READS SILENCE INTO THEM.
+    # `examine` binds `exists:Site` and NO QUESTION THESE WORLDS PRODUCE REFERS TO A SITE — the
+    # identical fact that keeps `work` refused two paragraphs above, and a fact about these
+    # WORLDS rather than about the row. `thread_read` requires Thread Sensitivity >= 30, which
+    # `requires_operands` has no name for (`H-85`), so it carries no typed cell and is not in
+    # `resolvable_verbs()` at all — which is what canon says of a character below the gate.
+    assert ever == {"create_record", "interview", "move", "reconstruct", "research", "speak",
+                    "surveil", "tell", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -5481,10 +5559,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # rungs and claims, never about sites), not about the pipeline: the operand channel exists and
     # the corpus has nothing to put in it. `H-94` is closed; what `work` is waiting on is a
     # question source that names a site, which is `H-04`'s territory.
-    assert refused_only == {"work"}, (
+    # ⚠ ONE -> TWO, ED-FI-0009, AND THE SECOND ARRIVAL CONFIRMS THE FIRST'S DIAGNOSIS RATHER THAN
+    # ADDING A SECOND HOLE. `examine` binds `site` -> `exists:Site` on the question's referent and
+    # refuses for the reason stated immediately above, reached from a different chain and a
+    # different operand. Two verbs, one fact about these worlds: their questions are about rungs,
+    # records, persons and claims, and never about a site. The other five investigation acts are
+    # not here — four execute and `thread_read` is not resolvable at all (`H-85`).
+    assert refused_only == {"work", "examine"}, (
         f"the always-refused set moved to {sorted(refused_only)}. `move` and `transfer` left it "
         "when `W-C` closed `H-94`'s structural half — the Candidate carries operands now — and "
-        "`work` stayed for a reason about the corpus's questions rather than about the channel")
+        "`work` and `examine` stay for a reason about the corpus's questions rather than about "
+        "the channel")
 
     # `H-96` — the ranking cannot discriminate, which is WHY one executed set survives worlds that
     # genuinely differ. This is the load-bearing assertion; the identical set alone proves nothing.
@@ -5520,30 +5605,59 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠ WHAT THIS IS NOT: it is not a reconvergence measurement and this test does not make one.
     # `H-96`'s claim -- the RANKING cannot discriminate -- is untouched and still holds: still
     # exactly two sets, still differing in one verb, and the ranking still ties 2..7 of 22.
+    # ⚠ **2 -> 16, ED-FI-0009 (2026-09-10), AND THE PARAGRAPHS ABOVE ARE NOW HISTORY RATHER THAN
+    # THE MEASUREMENT.** They are kept because the retraction they record is worth keeping; what
+    # they DESCRIBE — two executed sets differing by `tell` alone, split on a season threshold —
+    # stopped being true when the six investigation acts became rows a person can choose. Two
+    # things changed at once and both are stated rather than folded together:
+    #
+    #   1. THE WORLDS DISCRIMINATE, which they could not before. Four of the six bind against
+    #      something a world either has or has not — `interview` needs a Person referent,
+    #      `research` a Record, `surveil` a Rung, `reconstruct` a claim already in the actor's own
+    #      ledger — so a case's world now shows in its behaviour. That is world-driven divergence,
+    #      not ranking-driven, and it is what took 2 -> 10.
+    #   2. THE CONVICTIONS DISCRIMINATE OVER THEM, which took 10 -> 16 in the same commit. The six
+    #      landed conviction-inert (`alignment`'s sparse default is 0.0), and the measurement said
+    #      so out loud: six zero-scoring verbs sort ahead of `tell` on the NAME tiebreak and took
+    #      its scene, so a property nobody had touched moved. Weighted cells with reasons replaced
+    #      the alphabet; `rosters.yaml: alignment` carries them and `H-66` is the row.
+    #
+    # ⚠ AND `H-96` ITSELF IS UNTOUCHED, WHICH IS THE DISTINCTION THIS TEST EXISTS TO HOLD. Its
+    # claim is that the RANKING cannot discriminate — 2..7 of 22 candidates carry a nonzero score
+    # and the rest tie. Nothing here changed the scoring function, the axes, or the corpus's
+    # convictions. What changed is that there are now more verbs for it to be applied TO. A
+    # behaviour count is not a ranking measurement, and reading this 16 as `H-96` closing would be
+    # exactly the laundering the row was re-derived to stop.
     by_sig = {}
     for r in live:
         by_sig.setdefault(tuple(r["executed"]), []).append(r)
-    assert len(by_sig) == 2, (
+    assert len(by_sig) == 16, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived")
-    # ⚠ KEYED ON WHAT THE SETS CONTAIN, NEVER ON HOW BIG THEY ARE. See above.
-    with_tell = [rs for sig, rs in by_sig.items() if "tell" in sig]
-    without = [rs for sig, rs in by_sig.items() if "tell" not in sig]
-    assert len(with_tell) == 1 and len(without) == 1, (
-        f"the two sets no longer differ by `tell` alone: {sorted(by_sig)}")
-    with_tell, without = with_tell[0], without[0]
-    assert (set(by_sig) == {("create_record", "move", "speak", "tell", "transfer", "utter"),
-                            ("create_record", "move", "speak", "transfer", "utter")}), sorted(by_sig)
-    lo = {r["seasons"] for r in without}
-    hi = {r["seasons"] for r in with_tell}
-    assert max(lo) < min(hi), (
-        f"the split is no longer a season threshold: cases WITHOUT `tell` run {sorted(lo)} and "
-        f"cases WITH it run {sorted(hi)}. The explanation above is a claim about season count, "
-        "and a straddle means something else is deciding it")
-    assert max(lo) == 1, (
-        f"the `tell` threshold is {max(lo)} seasons, not 1. A 2 means a `claim.held` claim is "
-        "reaching a ledger again and §F1 clause 4 is firing on the self-refuting belief "
-        "`shape.LEDGER_DERIVED_STEMS` excludes; any other number means the mechanism changed and "
-        "the paragraph above must be re-measured, not this line adjusted")
+    # WHAT IS FIXED AND WHAT VARIES, ASSERTED EXACTLY IN BOTH DIRECTIONS — the count alone would
+    # pass on sixteen arbitrary sets. Two verbs execute in EVERY live case and eight vary.
+    universal = set.intersection(*(set(r["executed"]) for r in live))
+    varying = set().union(*(set(r["executed"]) for r in live)) - universal
+    assert universal == {"create_record", "move"}, sorted(universal)
+    assert varying == {"interview", "reconstruct", "research", "speak", "surveil", "tell",
+                       "transfer", "utter"}, sorted(varying)
+    # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
+    # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
+    # that is the mechanism the retraction above restored and it is asserted below. What no longer
+    # holds is the converse: at two seasons a case may or may not reach it, because season count
+    # is no longer the only thing competing for the scene. A suspicious person now surveils
+    # (`suspicion: 0.9`) rather than tells (`suspicion: -0.5`), which is the scoring function
+    # doing its job, not a regression in it. Pinning `max(lo) < min(hi)` again would pin the
+    # ranking OUT of the decision.
+    lo = {r["seasons"] for r in live if "tell" not in r["executed"]}
+    hi = {r["seasons"] for r in live if "tell" in r["executed"]}
+    assert min(hi) == 2 and 1 not in hi, (
+        f"a {min(hi)}-season case reached `tell`. A 1 means the mechanism changed: a one-season "
+        "case has no previous season's WITNESS to have deposited the claim `tell` reads, and the "
+        "paragraph above must be re-measured rather than this line adjusted")
+    assert lo == {1, 2}, (
+        f"cases WITHOUT `tell` run {sorted(lo)} seasons. A value above 2 means something other "
+        "than the scene budget is keeping longer cases off it; {1} alone means the six stopped "
+        "competing for the scene and the conviction weights have gone inert again")
     assert foldable_all - ever - refused_only == {"confer", "convene", "dispatch", "revoke",
                                               "destroy_record"}, (
         f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Four of the "
@@ -6385,12 +6499,21 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     assert executed["transfer"] > 0, (
         "`transfer` executed ZERO times. It is the verb `H-94` names, and the row's whole claim "
         "is that a person can now say which store, how much, and to whom")
-    assert set(executed) == {"create_record", "move", "speak", "tell", "transfer", "utter"}, (
-        f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement and any "
-        "movement is a fresh one, not a re-reading of this one")
-    assert set(refused) - set(executed) == {"work"}, (
-        f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` refuses "
-        "because no referent in this corpus is a Site, which is a fact about the worlds")
+    # ⚠ 6 -> 10, ED-FI-0009. The four additions are the investigation acts whose typed cell binds
+    # against something these worlds actually contain; `_wc_corpus_pass`'s subject is the OPERAND
+    # channel, and their arrival is evidence for it rather than noise in it — each of the four
+    # binds `subject` from the question's referent by the same route `transfer` binds `to`.
+    assert set(executed) == {"create_record", "interview", "move", "reconstruct", "research",
+                             "speak", "surveil", "tell", "transfer", "utter"}, (
+        f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
+        "ED-FI-0009's, and any further movement is a fresh one, not a re-reading of either")
+    # ⚠ `examine` JOINED `work`, FOR `work`'s EXACT REASON, and that is the strongest single piece
+    # of evidence this corpus offers about its own worlds: two verbs from two different chains,
+    # binding two different operands (`site` and `subject`), both refuse because NO REFERENT THESE
+    # WORLDS PRODUCE IS A SITE. It is one fact about the corpus reported twice, not two holes.
+    assert set(refused) - set(executed) == {"work", "examine"}, (
+        f"the always-refused set is {sorted(set(refused) - set(executed))}. `work` and `examine` "
+        "refuse because no referent in this corpus is a Site, which is a fact about the worlds")
     # ⚠ AND THE HONEST READING OF "IT EXECUTES", MEASURED RATHER THAN ASSUMED — and the first
     # writing of this arm ASSUMED, from one sampled case, that every corpus transfer was a
     # SELF-transfer, and was wrong. Measured over the whole corpus: 650 of 723 have `from == to`
@@ -7156,7 +7279,12 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     assert len(after) == len(before) - 1, (
         f"{len(before)} -> {len(after)} candidates. Exactly one Candidate should go — a larger "
         "drop means the deposit contradicted a verb this test did not plant a belief about")
-    assert (len(before), len(after)) == (22, 21), (
+    # ⚠ 22 -> 27, ED-FI-0009: five of the six investigation acts are resolvable and form here.
+    # THE DELTA ABOVE IS THE PROPERTY AND IT IS UNCHANGED — exactly one Candidate goes — so what
+    # moved is the denominator, not the mechanism. `thread_read` is the sixth and does not form:
+    # it carries no typed cell (`H-85`, Thread Sensitivity has no operand) and is therefore not in
+    # `resolvable_verbs()` at all.
+    assert (len(before), len(after)) == (27, 26), (
         f"the absolute counts moved to {(len(before), len(after))}. They are quoted on `H-122` "
         "and the delta alone does not reproduce them — re-derive the row rather than the line")
 
@@ -7276,7 +7404,21 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # (48/49/204 -> 0/0/0, measured on the `H-40` sweep beside this). So the claim survives, and
     # the assertion is inverted rather than deleted: what it pins is still the cap's behaviour,
     # which is now that there is no pressure on it.
-    assert actor_end == [("hearth_ostvik", "stores:grain", 0)], (
+    # ⚠ ONE -> EIGHT, ED-FI-0009, AND THE PIN IS THE CAP'S BEHAVIOUR RATHER THAN THE COUNT. The
+    # investigation acts read `exists:<Kind>` on the question's referent, so the grammar
+    # vocabulary now has SEVEN more live cells in this world than `stores:grain` alone. Every one
+    # of them still SURVIVES to the end of the run, which is the property this line pins: the cap
+    # is under no pressure at the shipped fan-out. Two entries in the list are the same
+    # `(subject, predicate, value)` because they were deposited by different Events into different
+    # ledgers, and `end` is a per-person list rather than a set.
+    assert actor_end == [("einhir_texts", "exists:Site", 0),
+                         ("einhir_texts", "exists:Record", 0),
+                         ("hearth_ostvik", "stores:grain", 0),
+                         ("rec:6bf46a143f347c12", "exists:Site", 0),
+                         ("rec:6bf46a143f347c12", "exists:Record", 1),
+                         ("rec:6bf46a143f347c12", "exists:Person", 0),
+                         ("rec:6bf46a143f347c12", "exists:Rung", 0),
+                         ("rec:6bf46a143f347c12", "exists:Record", 1)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -7559,10 +7701,23 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     assert hl_control == [], (
         f"the headless CONTROL arm dropped {hl_control}; `none` deposits nothing in this "
         "vocabulary and has nothing to fire on")
-    assert {v for v, _ in hl_live} == {"transfer"}, (
-        f"the headless drops are on {sorted({v for v, _ in hl_live})}, not `transfer` alone. That "
-        "chain is the acceptance's own — `stores:grain` read by a `transfer.refused` and read back "
-        "by the same cell — and it is the only place the acceptance's binding argument transfers")
+    # ⚠ **THE MONOCULTURE IS GONE, ED-FI-0009 (2026-09-10), AND THAT IS THIS ITEM'S OWN NAMED
+    # DEFECT CLOSING RATHER THAN A PIN DRIFTING.** `test_wd_a_fork_…`'s diagnosis (c) reads:
+    # *"The defect this exposes is that §F1 clause 4 has exactly ONE reachable instance in the
+    # corpus; that is a producer hole and is where the work goes."* Measured over the same 89
+    # worlds at the shipped default, drops by verb: BEFORE `examine` 0 · `research` 0 ·
+    # `interview` 0 · `surveil` 0 · `restore` 0 · `move` 13. AFTER: `examine` 387 · `restore` 387
+    # · `research` 379 · `interview` 306 · `move` 18 · `surveil` 14 — **1,491 in six verbs.**
+    # `transfer` keeps its chain here and `restore` is the one worth naming: it is a verb that
+    # CANNOT EXECUTE, dropping because a failed `examine` deposited `exists:Site -> 0` and
+    # `restore` reads the same predicate. One person's failed look teaches them not to try to
+    # mend the thing — cross-VERB propagation through a shared grammar cell, which is what §F1
+    # clause 4 is for and what one verb refusing on its own belief could never show.
+    assert {v for v, _ in hl_live} == {"transfer", "examine", "interview", "restore"}, (
+        f"the headless drops are on {sorted({v for v, _ in hl_live})}. `transfer` must stay — "
+        "that chain is the acceptance's own, `stores:grain` read by a `transfer.refused` and read "
+        "back by the same cell, and it is the only place the acceptance's binding argument "
+        "transfers. The other three are the `exists:` cells the investigation acts opened")
     assert hl_acts_live != hl_acts_none and sum(hl_acts_live) < sum(hl_acts_none), (
         f"acts per season are {hl_acts_none} at the control and {hl_acts_live} at the shipped "
         "default. Clause 4 dropped Candidates and no act disappeared, which cannot both be true")
@@ -7574,8 +7729,14 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
         "the SHIPPED default dropped no Candidate at all. Either the default has been flipped to "
         "`none` — in which case `H-122` ships a mode that closes the clause it exists to open — "
         "or the deposit no longer reaches `belief_contradicts`")
-    assert {v for v, _ in live} == {"move"}, (
-        f"the drops are on {sorted({v for v, _ in live})}, not `move` alone. `tell` here means a "
+    # ⚠ ARC-01's OWN DROPS ARE NOW `examine` / `research` / `restore` / `interview` AND CARRY NO
+    # `move`, WHICH IS A FACT ABOUT THIS CASE AND NOT A LOST CHANNEL — checked rather than
+    # assumed, because "the old drop disappeared" is exactly what a regression looks like.
+    # Corpus-wide `move` drops went 13 -> 18 over the same 89 worlds and `travel.blocked` still
+    # fires; what changed on ARC-01 is which candidates form, not whether `move`'s belief channel
+    # exists. `tell` remains the tell-tale below for the retracted `claim.held` defect.
+    assert {v for v, _ in live} == {"examine", "research", "restore", "interview"}, (
+        f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes; any other verb is a new finding and must be measured")
     assert not [c for pp in wl.persons.values() for c in pp.ledger if c.predicate == "claim.held"], (
@@ -7971,11 +8132,30 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     #
     # So: `all_five` stands, the number is recorded, and the assertion below PINS THE LOSS so it
     # cannot drift back into a claim that the acceptance still holds at the shipped configuration.
-    assert got["actor"]["diverged"] == 0, (
+    #
+    # ✅✅ **THE LOSS IS RECOVERED — 0 -> 14 of 18 — AND THE LINE ABOVE SAID WHAT WOULD DO IT.
+    # ED-FI-0009, 2026-09-10.** *"The defect this exposes is that §F1 clause 4 has exactly ONE
+    # reachable instance in the corpus; that is a producer hole and is where the work goes."* The
+    # work went there. Splitting `"the six investigation acts"` — one row that named no act and
+    # could not be folded — into the six acts canon names gave the grammar four new live cells
+    # (`exists:Site` · `exists:Person` · `exists:Record` · `exists:Rung`), and clause 4 now has
+    # something to fire on besides `move`. Measured over the same 89 worlds at the shipped
+    # default, drops by verb: **13, all `move`, BEFORE; 1,491 in six verbs AFTER** — `examine` 387
+    # · `restore` 387 · `research` 379 · `interview` 306 · `move` 18 · `surveil` 14.
+    #
+    # ⚠ **AND THIS IS NOT A RE-ARGUMENT FOR THE ARM.** Everything above about `all_five` stands
+    # unamended: the arm was never chosen on this metric, the non-monotonicity was real, and the
+    # zero was diagnosed rather than explained away. What changed is the thing the diagnosis
+    # NAMED as the real defect, and the acceptance came back with it — which is the diagnosis
+    # being confirmed, not overturned. `move` did not lose its channel to make room: it went 13 ->
+    # 18 corpus-wide, and ARC-01's own drops merely stopped including it (checked separately in
+    # `test_wb_clause_four_fires_…`, because "the old drop vanished" is what a regression looks
+    # like and had to be ruled out rather than assumed).
+    assert got["actor"]["diverged"] == 14, (
         f"the shipped default diverged {got['actor']['diverged']} times of "
-        f"{got['actor']['genuine']}: {got}. That is BETTER than the pinned state and the pin is "
-        "what must move — `W-D`'s acceptance was lost at `all_five` on 2026-09-07 and this line "
-        "is the record of it. If it is back, say what restored it")
+        f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
+        "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
+        "`move`; a 0 means they are gone again and a different number means the population moved")
     # AND THE PROPERTY STILL EXISTS SOMEWHERE, which is what stops the zero above reading as
     # "§F1 clause 4 is dead". At `observation_deposit_mode: total` the same slice still diverges.
     assert got["total"]["diverged"] > 0, (
@@ -7983,11 +8163,18 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
         "deposit mode, and §F1 clause 4 is unreachable rather than merely quiet at the shipped "
         "arm — which is a different and much larger finding than the one recorded above")
     # PINNED, so a mechanism change is visible rather than merely allowed.
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (17, 0), got
+    # ⚠ THE DENOMINATORS MOVED TOO AND THEY MOVED THE SAME WAY IN ALL THREE ARMS — 17/16/16 -> 18
+    # everywhere. `INERT-BY-CONSTRUCTION` used to be 10/11/11, because only the live arms dropped
+    # a Candidate and so shrank the packer's take `L`; with five more resolvable verbs the take is
+    # over the `A9.MAX_ALT` window in the control too, so the arms now share `inert` 9. That is
+    # the denominator asymmetry the docstring above insists on asserting rather than hiding, and
+    # it has gone away rather than been papered over.
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (18, 0), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (16, 0), got
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (16, 4), got
+    # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 — 18 genuine forks, 14 divergences at the shipped arm]
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (18, 14), got
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (18, 5), got
     # AND THE TWO LAYERS ARE SEPARATED. Every genuine fork changes the act/event stream — that was
     # already true BEFORE `W-B` and is not the finding. The finding is the DECISION count above.
     assert all(g["acts_differ"] == g["genuine"] and g["hash_differ"] == g["genuine"]
@@ -8121,19 +8308,38 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
         f"the shipped default no longer adds SUBJECT-level divergence over the control: {got}. "
         "That is the half of this channel that survived `R7`; if it has gone too, `W-B` reaches "
         "no decision at all at the shipped arm and the item must be re-argued rather than re-pinned")
-    assert got["actor"]["verbonly"] == 0, (
-        f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences again: {got}. "
-        "That is BETTER than the pinned state — this line records a loss taken on 2026-09-07 with "
-        "the `R7` fan-out flip, not a property. Say what restored it")
-    # RE-PINNED 2026-09-07 ON THE `R7` FLIP: `none` 7 -> 6 and `actor` 11 -> 8. `total`'s 12 does
-    # not move, which is the control saying the shift is in the arms the fan-out narrows and not
-    # in the instrument.
+    # ✅ **0 -> 14, ED-FI-0009, 2026-09-10 — THE VERB-SET HALF IS BACK, AND THE TWO HALVES HAVE
+    # CONVERGED.** This test's guard is *"if `actor` ever stops adding VERB-SET changes on top of
+    # it, `W-B` has stopped reaching a decision"*, and what restored it is what the sibling test's
+    # diagnosis named: §F1 clause 4 had exactly one reachable instance (`move` on
+    # `contain.path`), and the six investigation acts gave it four more grammar cells to fire on
+    # (`exists:Site` · `exists:Person` · `exists:Record` · `exists:Rung`). Corpus-wide clause-4
+    # drops went 13 (all `move`) to 1,491 across six verbs.
+    # ⚠ `wide` AND `verbonly` ARE NOW EQUAL AT BOTH LIVE ARMS — 14/14 at `actor`, 5/5 at `total` —
+    # while the control keeps the split at 2/0. That is worth naming rather than reading as a
+    # tidier result. The widened fingerprint distinguishes forks that change WHAT a person deliberates
+    # about from forks that change WHICH VERBS they consider; at the live arms every subject-level
+    # divergence is now also a verb-set one, because the verb whose Candidate clause 4 drops IS
+    # the one bound to that subject. The control still shows the split (wide 2, verbonly 0), which
+    # is what keeps the two measures distinguishable at all.
+    # ⚠ AND THE CONTROL'S OWN `wide` FELL, 6 -> 2, WHICH IS NOT DIAGNOSED HERE AND IS SAID SO.
+    # `none` deposits nothing, so its subject-level divergence comes from `questions_for` Q2 ->
+    # `q.referents` -> `opening_set` clause 3 and not from any belief. Five more resolvable verbs
+    # change which alternative a fork reaches within `A9.MAX_ALT`, and that is the likely route —
+    # but it is a guess, not a measurement, and the assertion below pins the number rather than
+    # the explanation. The property the docstring names still holds: `none` verbonly 0 and `none`
+    # wide > 0, so the channel is narrower and not closed.
+    assert got["actor"]["verbonly"] == 14, (
+        f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
+        "means the clause-4 producers the six investigation acts opened are gone again and the "
+        "2026-09-07 loss is back; any other number means the population moved and must be "
+        "re-derived rather than adjusted here")
     # Reproduce with the A9S/A9 loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 on the R7 flip — `none` 7 -> 6 under the widened fingerprint]
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (17, 6), got
-    # [GROUNDED: measured 2026-09-07 on the R7 flip — `actor` 11 -> 8 under the widened fingerprint]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (16, 8), got
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (16, 12), got
+    # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 — 18 genuine forks in every arm]
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (18, 2), got
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (18, 14), got
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (18, 5), got
 
 
 # ===========================================================================
@@ -8350,13 +8556,21 @@ def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
 
 
 def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
-    """PER VERB, MEASURED RATHER THAN CLAIMED -- and the answer is ONE of thirty-two.
+    """PER VERB, MEASURED RATHER THAN CLAIMED -- and the answer is ONE of thirty-seven.
 
-    A degree exists only where something RESOLVES a contest. 31 of the 32 rows in
+    A degree exists only where something RESOLVES a contest. 36 of the 37 rows in
     `verb_table.yaml` declare no `contests:` at all, so no degree is even ASKABLE for them: they
     are not ungraded, they are ungradeable, and a degree wired onto one would be a number with no
-    producer. `speak`, `tell`, `utter`, `petition` and `the six investigation acts` -- the
-    person-to-person verbs a degree would matter most for -- are all in that 31.
+    producer. `speak`, `tell`, `utter`, `petition` and the six investigation acts -- the
+    person-to-person verbs a degree would matter most for -- are all in that 36.
+
+    ⚠ 32 -> 37 AND THE CLAIM IS UNCHANGED IN KIND, WHICH IS WHY THIS IS A REWRITE AND NOT A
+    RELAXATION. The row spelled `"the six investigation acts"` was ONE row standing for SIX acts
+    canon names (`investigation_systems_v30.md:217`), so the roster always described 37 verbs and
+    counted 32. Splitting it (ED-FI-0009) makes the count honest. Both properties this test
+    exists for survive the split UNTOUCHED and are asserted below, not weakened: the six declare
+    no `contests:` -- `rosters.yaml:505-508` rules that giving them a prize so the existing
+    machinery can grade them is scripting drift -- and nothing produces a margin.
 
     THE THREE PRIZES THAT ARE NOT `the body` ROUTE TO SUBSYSTEMS THE SEAM DOES NOT CALL, and that
     is a RULING rather than an omission. Jordan, 2026-09-02: *"we don't NEED to worry about them
@@ -8369,9 +8583,15 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     assert contested == {"kill / wound": "the body"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set")
-    # Pins the roster against silent growth; CLAUDE.md quotes the same 32.
+    # Pins the roster against silent growth.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 32, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 37, len(VERB_TABLE)
+    # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
+    # count could not express: a table carrying the placeholder passed `== 32` while no act in it
+    # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.
+    assert {"examine", "interview", "research", "surveil", "thread_read",
+            "reconstruct"} <= set(VERB_TABLE), sorted(VERB_TABLE)
+    assert "the six investigation acts" not in VERB_TABLE
 
     prizes = roster_map("contest_subsystems", "prizes")
     assert prizes["the body"] == "personal_combat"

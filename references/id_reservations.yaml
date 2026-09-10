@@ -190,7 +190,7 @@ lane_ids:
     # below the proposed reference too) and needs its own roster-wide re-verification before landing, not a
     # third redesign-and-reverify cycle rushed through in the same session. See ledger entry for the full
     # recommendation. next_free bumped 12->13.
-    FI: { name: "Field investigation", next_free: 9 }   # no reservation held; allocate at next_free as normal. Narrative: id_reservations_history.md#fi
+    FI: { name: "Field investigation", next_free: 10 }   # no reservation held; allocate at next_free as normal. ED-FI-0009 allocated 2026-09-10 (the six investigation acts built as six verb rows; the seam/pool/obstacle/exposure ruling request). Narrative: id_reservations_history.md#fi
     # ED-FI-0003 allocated 2026-07-07 (status open): ed_options OPT-6 (knots propagation completion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
     SC: { name: "Social contest",      next_free: 38 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
     # ED-SC-0037 allocated 2026-09-09 (status open, NEEDS_JORDAN): which provider resolves a

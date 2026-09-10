@@ -53,15 +53,15 @@ corpus in the direction that flattered it.
 | His activity must be able to persist across seasons completely unwitnessed, and be discoverable later exactly as it would have been discovered earlier -- not silently resolved off-screen the | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 | *(1 row(s) marked `UNCLEAR:` by the case source)* | — | SOURCE-UNCLEAR | the source says it does not know |
 
-## NPC-086 — Joren Bergvall  ·  **BLOCKED**
-*person · 7 rows, 3 core · blockers: the six investigation acts*
+## NPC-086 — Joren Bergvall  ·  **DEGRADED**
+*person · 7 rows, 3 core · blockers: none*
 *ends when:* never explicitly stated; presumably when the conspiracy narrative is durably dispelled or the data is destroyed or discredited.
 
 | need | rests on | verdict | why |
 |---|---|---|---|
 | **[core]** A technical specialist's field data must be able to exist as a persistent evidence object with its own scope and quality, independent of any single Contest roll -- something that can be exam | `create_record` · `H-22` | PASS | 'create_record' executes · H-22: ruled |
 | **[core]** Presenting his evidence to a political audience must be able to change what that audience believes about the cause of the sea-route blockage, and that changed belief must persist and spread  | `tell` · `H-79` | **ASSUMED** | 'tell' executes · H-79: assumption -- rests on an injected default |
-| **[core]** Corroborating or refuting his claim must be possible for a third party through independent fieldwork, not only by taking his word for it. | `the six investigation acts` | **GAP** | 'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate |
+| **[core]** Corroborating or refuting his claim must be possible for a third party through independent fieldwork, not only by taking his word for it. | `examine` · `interview` · `research` | PASS | 'examine' executes · 'interview' executes · 'research' executes |
 | A Guild employee below faction-leadership rank must be reachable by a scene opportunity through his technical output becoming relevant to a player, not only through his faction leadership's  | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 | His findings must be able to be suppressed, altered, or bought before reaching a political audience, by an actor with an interest in the conspiracy narrative persisting. | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 | His personal risk for holding or publishing this data must be trackable as politically motivated, distinct from the Church-heresy detection machinery that governs most other exposure risk in | — | UNMAPPED | nobody has authored an `exercises:` for this row |
@@ -99,14 +99,14 @@ corpus in the direction that flattered it.
 | Her overt institutional rank and her covert rank must be able to move independently -- advancement or disgrace in one must not automatically imply the same in the other. | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 
 ## NPC-010 — Dalla Virke  ·  **BLOCKED**
-*person · 8 rows, 4 core · blockers: H-84, kill / wound, the six investigation acts*
+*person · 8 rows, 4 core · blockers: H-84, kill / wound*
 *ends when:* never explicitly named; presumably her exposure or recall event, or indefinite continuation.
 
 | need | rests on | verdict | why |
 |---|---|---|---|
 | **[core]** A non-faction, non-institutional actor must be able to hold and trade a resource (information, trust, access) that no faction's own action economy owns or produces -- a market that exists ou | `transfer` · `H-84` | **GAP** | 'transfer' executes · H-84: absent |
 | **[core]** Information she sells must be able to be true, false, or fabricated, with the buyer unable to distinguish which in advance, and her incentive to fabricate must rise specifically when honest  | `H-79` · `probe:P31` | **ASSUMED** | H-79: assumption -- rests on an injected default · P31: PASS |
-| **[core]** She must be discoverable, killable, buyable, or turnable by an outside actor as four textually distinct outcomes with different consequences for her network, not variations on one generic 'r | `kill / wound` · `the six investigation acts` · `tell` | **GAP** | 'kill / wound' is on the table and the fold cannot execute it: needs an effect · 'the six investigation acts' is on the table and the fold cannot execute it: ne |
+| **[core]** She must be discoverable, killable, buyable, or turnable by an outside actor as four textually distinct outcomes with different consequences for her network, not variations on one generic 'r | `kill / wound` · `surveil` · `interview` · `tell` | **GAP** | 'kill / wound' is on the table and the fold cannot execute it: needs an effect · 'surveil' executes · 'interview' executes · 'tell' executes |
 | **[core]** Her personal judgment about a specific past transaction (vetting goods as safe and legitimate) must be able to be wrong in a way that is discoverable later and attributable specifically to h | `H-22` · `H-79` | **ASSUMED** | H-22: ruled · H-79: assumption -- rests on an injected default |
 | A revelation that damages her standing with one party (a partner learning she shields certain clients from her own family's operations) must be able to threaten her position with a different | — | UNMAPPED | nobody has authored an `exercises:` for this row |
 | Her removal (replacement by someone with no local relationships) must be able to collapse benefits that other, unrelated actors were quietly relying on, in the same season, as a single casca | — | UNMAPPED | nobody has authored an `exercises:` for this row |

@@ -479,15 +479,13 @@
    "name": "Joren Bergvall",
    "scale": "person",
    "source": "NPC1.yaml",
-   "verdict": "BLOCKED",
+   "verdict": "DEGRADED",
    "rows": 7,
    "core": 3,
    "core_routed": 3,
    "core_unmapped": 0,
-   "core_blocked": 1,
-   "blockers": [
-    "the six investigation acts"
-   ],
+   "core_blocked": 0,
+   "blockers": [],
    "unbound": [],
    "routed": [
     {
@@ -564,20 +562,34 @@
      "hardness": "core",
      "probe": null,
      "exercises": [
-      "the six investigation acts"
+      "examine",
+      "interview",
+      "research"
      ],
      "resolved": [
       {
-       "ok": false,
+       "ok": true,
        "bound": true,
        "kind": "verb",
-       "detail": "'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate"
+       "detail": "'examine' executes"
+      },
+      {
+       "ok": true,
+       "bound": true,
+       "kind": "verb",
+       "detail": "'interview' executes"
+      },
+      {
+       "ok": true,
+       "bound": true,
+       "kind": "verb",
+       "detail": "'research' executes"
       }
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate",
+      "verdict": "PASS",
+      "detail": "'examine' executes \u00b7 'interview' executes \u00b7 'research' executes",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -983,8 +995,7 @@
    "core_blocked": 2,
    "blockers": [
     "H-84",
-    "kill / wound",
-    "the six investigation acts"
+    "kill / wound"
    ],
    "unbound": [],
    "routed": [
@@ -1065,7 +1076,8 @@
      "probe": null,
      "exercises": [
       "kill / wound",
-      "the six investigation acts",
+      "surveil",
+      "interview",
       "tell"
      ],
      "resolved": [
@@ -1076,10 +1088,16 @@
        "detail": "'kill / wound' is on the table and the fold cannot execute it: needs an effect"
       },
       {
-       "ok": false,
+       "ok": true,
        "bound": true,
        "kind": "verb",
-       "detail": "'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate"
+       "detail": "'surveil' executes"
+      },
+      {
+       "ok": true,
+       "bound": true,
+       "kind": "verb",
+       "detail": "'interview' executes"
       },
       {
        "ok": true,
@@ -1091,7 +1109,7 @@
      "unbound": [],
      "verdict": {
       "verdict": "GAP",
-      "detail": "'kill / wound' is on the table and the fold cannot execute it: needs an effect \u00b7 'the six investigation acts' is on the table and the fold cannot execute it: needs a `requires:` predicate \u00b7 'tell' executes",
+      "detail": "'kill / wound' is on the table and the fold cannot execute it: needs an effect \u00b7 'surveil' executes \u00b7 'interview' executes \u00b7 'tell' executes",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -9219,7 +9237,7 @@
   "P11": {
    "id": "P11",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 22 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
+   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 27 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
    "kind": null,
    "section": "S9.2",
    "title": "capability gates no verb",
@@ -9229,7 +9247,7 @@
   "P12": {
    "id": "P12",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 44 candidates over 22 verbs, every one a verb-table row",
+   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 54 candidates over 27 verbs, every one a verb-table row",
    "kind": null,
    "section": "S17",
    "title": "opening_set returns Candidate[], not Act[]",
@@ -9485,7 +9503,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 22 candidates were OFFERED from the computed option set and only 12 of 32 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'move', 'speak', 'tell', 'transfer', 'utter', 'work'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 27 candidates were OFFERED from the computed option set and only 17 of 37 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'examine', 'interview', 'move', 'reconstruct', 'research', 'speak'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -11027,10 +11045,10 @@
   "DECISION": 665,
   "QUERY": 6023,
   "NOTE": 471,
-  "WRITE": 10394,
-  "EVENT": 10360,
+  "WRITE": 10390,
+  "EVENT": 10359,
   "ACT": 75,
-  "CLAIM": 1023,
+  "CLAIM": 1022,
   "GAP": 66
  },
  "_corpus_defects": [

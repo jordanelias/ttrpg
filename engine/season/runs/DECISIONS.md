@@ -262,19 +262,19 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
 
-### work by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
+### examine by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
 
-### transfer names a side that is no rung  ·  `E3/S27.1`  ·  taken 1x
-- **chose:** change nothing, so the fold emits the refusal  (1x)
-- *not taken:* move the giver's side anyway (matter leaves the world)
+### research by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
+- **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
+- *not taken:* raise (no Event, no witness, no arc)
 
-### transfer wrote nothing  ·  `E3`  ·  taken 1x
-- **chose:** emit the refusal, not the success  (1x)
-- *not taken:* emit `emits:` anyway (publishes an event for a state change that did not happen)
+### reconstruct by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
+- **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
+- *not taken:* raise (no Event, no witness, no arc)
 
-### tell by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
+### interview by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
 
