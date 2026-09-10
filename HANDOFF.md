@@ -12,17 +12,26 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 ## 📋 2026-09-10 — the blocking-rulings queue measured (ED-IN-0207, all lanes)
 
 **`workplans/2026-09-10-unblocking-strategy.md`** — Jordan asked for a strategy to unblock as much work
-as possible. The measurement says the `needs_jordan` queue is **not** the blockage: **not one of its 151
-rows is cited by `engine/season/requirements.yaml`, `engine/season/hole_register.yaml` or the R-execution
-plan**, all three of which do cite EDs (the control). What blocks the game is the **hole register**, where
-`register.py --check` fails `G6` on fifteen `absent` rows because §0's five-test ladder was never run on
-them — and **of the six holes the NINE block on, exactly one is a genuine ruling, and its own row says it
-unblocks nothing.**
+as possible. **Not one of the 151 `needs_jordan` rows is cited by `engine/season/requirements.yaml`,
+`engine/season/hole_register.yaml` or the R-execution plan**, all three of which do cite EDs (the control);
+seven of the eight they do cite carry `needs_jordan: false` and `ED-061` carries no such field. **Of the
+six *holes* the NINE block on, exactly one is a genuine ruling, and its own row says it unblocks nothing** —
+but `blocks:` also names eight W-items this pass does not speak for.
 
-**Corrections other lanes need:** Arc 2 / G1 is **not** waiting on a ruling (`requirements.yaml` R-08's
-`disposition`, PR #384). `ED-1051`'s counts are stale — 9/27 `doc:null` and 1/27 `[ASSUMPTION]`, not 11
-and 13. **`ED-SC-0005`, one of SC Stage 4's three "HARD" blockers, asks Jordan to cap a bonus-die stack
-that does not exist** — the four channels resolve as δσ under a tanh soft cap. `ED-SC-0004` is real.
+⚠ **Neither queue is the work.** `architecture/PLAN.md:689-694` forbids closing the hole register's
+fifteen `G6` rows by ladder — they discharge *"by construction"* as `W2`/`W3`/`W5` land, and *"each
+building item must set its rows' grades as it lands."* So the strategy's first move is **executing what is
+already ruled** (the SC retirement wave, the `engine_clock` emitter), second is **re-measuring blockers
+that are asserted rather than observed**.
+
+**One correction other lanes need:** Arc 2 / G1 is **not** waiting on a ruling (`requirements.yaml` R-08's
+`disposition`, PR #384).
+
+⚠ **Three claims in the first draft were overturned by a read-only critic and are retracted:** `ED-1051`'s
+`[ASSUMPTION]` count is **11/27, not 1** (a `yaml.safe_load` strips the comments carrying the grade);
+**`ED-SC-0005` is NOT closable** — `resolver.py:300` adds a live `+1D` pool die — and **`ED-SC-0003`'s
+collision DOES reproduce** (`glossary.md:114` calls it *"unresolved"*, `module_contracts.yaml:448` marks it
+`[OPEN — Jordan]`). **All three of SC Stage 4's "HARD" blockers stand.**
 
 **Nothing was closed or flipped.** §6 of the strategy is the eleven-question decision sheet — the whole
 human ask. Per-lane detail in `registers/handoffs/HANDOFF_IN.md`.

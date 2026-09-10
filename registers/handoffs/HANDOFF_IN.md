@@ -1,87 +1,81 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
-## 📋 2026-09-10 — the `needs_jordan` queue measured, and the finding is that it is not the blockage
+## 📋 2026-09-10 — the `needs_jordan` queue measured, and three of this pass's own conclusions retracted
 
-**Artifact: `workplans/2026-09-10-unblocking-strategy.md` (PROPOSED, reference under §0.05).**
-Jordan asked for a comprehensive strategy to unblock as much work as possible. Nothing was closed,
-flipped or deleted — the deliverable is the strategy plus the measurement under it.
+**Artifact: `workplans/2026-09-10-unblocking-strategy.md` (PROPOSED, reference under §0.05), `ED-IN-0207`.**
+Jordan asked for a comprehensive strategy to unblock as much work as possible. Nothing was closed, flipped
+or deleted. A read-only `valoria-critic` pass on the first draft overturned four of its conclusions; every
+overturn was re-derived against the tree before being applied, and the corrected document is what landed.
 
-### The three measurements a later session should not re-derive
+### The measurements that survived the attack
 
 1. **151 distinct `needs_jordan` ids** by LAST row per id across the 14 `registers/editorial_ledger*.jsonl`
-   files (1,256 rows, 1,240 ids). 105 `open`; **46 carry the flag on a terminal row**. Filed
-   2026-06 → 14 · **2026-07 → 108** · 2026-08 → 29 · **2026-09 → 0**. Nothing has entered the queue
-   since 2026-08-17.
+   files (1,256 rows / 1,240 ids at `916a0be`). 105 `open`; **46 not `open` yet still flagged** — 43
+   `resolved`/`ratified`/`executed`, 2 `partial`, 1 `proposed`. Filed 2026-06 → 14 · **2026-07 → 108** ·
+   2026-08 → 29 · **2026-09 → 0**; nothing has entered since 2026-08-17.
+   ⚠ `S8`'s 48 does **not** move to 46 — S8 computed *raw − open*, which today still gives 153 − 105 = 48.
+   The instrument changed, not the tree.
 2. **Not one of the 151 is cited by any instrument that measures the game.** `requirements.yaml`,
    `hole_register.yaml` and `workplans/2026-09-09-r-execution-plan.md` cite eight EDs between them —
    `ED-061`, `ED-IN-0185`, `ED-IN-0202`, `ED-IN-0203`, `ED-IN-0204`, `ED-IN-0205`, `ED-MB-0066`,
-   `ED-SC-0033` — and **every one is `needs_jordan: false`.** The control matters: those files *do*
-   cite EDs, so the zero is a measurement and not an artifact of citation-free files.
-3. **The blockage is the hole register, and its ladder was never run.**
-   `python -m engine.season.harness.register --check` fails `G6` on **fifteen** `absent` rows —
-   H-41, H-43, H-44, H-45, H-47, H-48, H-49, H-50, H-51, H-52, H-56, H-57, H-58, H-59, H-61 —
-   meaning §0's five tests were never run on them. `--counts`: 113 rows, absent 34 · assumption 45 ·
-   measured 16 · ruled 18; **zero absent rows carry a usable `default:` and zero name a `site:`**;
-   and the `owner:` column almost never says Jordan — it says *the resolver (Part E)*, *the design*,
-   *unassigned*, or a module path.
+   `ED-SC-0033`. **Seven carry `needs_jordan: false`; `ED-061` carries no such field**, so that one is
+   absence, not a recorded false. The control matters: those files *do* cite EDs.
+3. **Of the six *holes* the NINE block on, exactly one is a genuine ruling** — `H-111`, whose own
+   `unblocks:` reads *"nothing — both answers run"*. `H-116` is `measured`, `H-65`/`H-94` `assumption`
+   (and `H-94`'s cite records it **CLOSED 2026-09-04 by `W-C`** while `R-05`'s `blocks:` still names it),
+   `H-98` records a Jordan ruling of 2026-09-03. ⚠ `H-62` records a **document**, not a ruling, and its
+   cite still ends *"a human decides"*. ⚠ **`blocks:` also names eight W-items** — `W-F`, `W10`,
+   `W10-core`, `W13`, `W17`, `W23`, `W26`, `W27` — which this pass does not characterize.
+4. **The partition, exhaustive, 151:** escalate **23** · terminal-flag **39** (MB 15 · PC 15 · IN 9) ·
+   authorial **11** · superseded by `ED-IN-0204` **39** · subject-retired **10** · hand-pass **29**. The 39
+   superseded include a 23-row batch of 2026-07-09 (`ED-FA-0018`, `ED-FA-0027`–`0034`, `ED-SE-0031`–`0044`)
+   proposing mechanics into a design layer `ED-IN-0204` did not retain.
 
-### ⚠ Three of the four "live blockers" in this session's own category-D listing do not survive the tree
+### ⚠ RETRACTED — three claims from the first draft, and one correction that stands
 
-- **The content-hash tiebreak is not a ruling.** `engine/season/requirements.yaml`'s `R-08`
-  `disposition:` — landed by **PR #384 (`cb28ec9`)**, a different session — already says so:
-  the candidate tie is *alphabetical*; the question tiebreak is *already disposed* on `H-54`'s
-  precedent with `needs_jordan` FALSE; *"What remains open here is not a ruling but BUILD WORK:
-  W26 and `H-62`."* **G1 is not waiting on Jordan.** Whether `§F1` clause 4's corpus firing is a
-  property or an accident is §0 test 5's to answer, and it has an obvious engineering answer.
-- **The `systems/social_contest/` retirement wave is ruled and unexecuted**, not blocked.
-- **`ED-1051`'s own numbers are stale.** `references/module_contracts.yaml` today: **9/27 `doc:null`**
-  (it claims 11) and **1/27 `[ASSUMPTION]`** (it claims 13). And `workplan_v6_progress.yaml:85`
-  already says of it: *"the work is not blocked, the paperwork is."*
-
-### Of the six holes the NINE block on, exactly one is a genuine ruling
-
-`H-62`, `H-65`, `H-94`, `H-98`, `H-111`, `H-116`. `H-116` is graded `measured`; `H-65` and `H-94`
-`assumption` (and `H-94`'s own `cite:` records it **CLOSED 2026-09-04 by `W-C`** while it is still
-named in `R-05`'s `blocks:`); `H-62`'s shape was supplied 2026-09-03 and `H-98` was narrowed by a
-Jordan ruling of the same day — both are build work. **`H-111` is the only ruling, and its own
-`unblocks:` reads *"nothing — both answers run."***
-
-### The queue partitions six ways, exhaustively, 151
-
-escalate **23** · terminal-flag **39** (MB 15 · PC 15 · IN 9) · authorial **11** ·
-superseded by `ED-IN-0204` **39** · subject-retired **10** · hand-pass **29**.
-The 39 superseded include a 23-row batch filed **2026-07-09** (`ED-FA-0018`, `ED-FA-0027`–`0034`,
-`ED-SE-0031`–`0044`) proposing mechanics into a design layer `ED-IN-0204` did not retain.
-
-⚠ **The predicates nominate; they never close.** Three rows citing only dead paths are live anyway
-(`ED-IN-0147`, `ED-SC-0005`, `ED-SE-0002`), and two terminal-flagged rows hold real questions in
-prose (`ED-IN-0127`'s per-directory veto, `ED-MB-0045`'s six-lens findings).
-
-### One SC Stage-4 "HARD" blocker is demonstrably not a ruling
-
-`workplan_v6_progress.yaml:60` calls Stage 4 blocked HARD on `ED-SC-0003`/`0004`/`0005`.
-**`ED-SC-0005` asks Jordan to cap a bonus-DIE stack that does not exist**: the four channels
-(Recall/Corroborate/Prep/Findings) are implemented as **δσ under a tanh soft cap** —
-`systems/social_contest/sim/contest/armature.py:62`, `resolver.py:7`, `primitives.py:293`,
-`engine/autoload/sigma_leverage.py` `M_MAX = 1.5` / `soft_cap`. ⚠ The board's hedge at `:61` reaches
-the right answer by the wrong argument: a die count and a σ soft cap are **different quantities**.
-The row closes because the channel is σ, not because 1.5 is the cap. **`ED-SC-0003` is a second
-candidate** (`clock_registry_v30.md:60` and `:87` carry the two names distinctly; the third surface
-it cites, `params/bg/core.md`, is `FORKED`). **`ED-SC-0004` is real and stays.**
+- **The hole register is NOT the work queue.** The draft ranked *"run §0's five-test ladder over `G6`'s
+  fifteen"* as move 1. **`architecture/PLAN.md:689-694` forbids it**: those rows discharge *"by
+  construction"* at `W2`/`W3`/`W5`, and *"closing them by ladder would be inventing closures for holes
+  whose answer is a table nobody has built yet. Each building item must set its rows' grades as it lands."*
+  The draft cited `PLAN.md` §2.6's *"nobody ever ran that ladder"* without reading `:664`, where **`W1` ran
+  it on 2026-09-02** (`G6` 34 → 22). ⚠ Also: **`G6` fails only on an EMPTY `cite:`** (`register.py:240-243`),
+  so any string turns it green, and `valoria-ci.yml:376` runs `--requirements`, **not `--check`**.
+- **`ED-1051`'s `[ASSUMPTION]` count is 11/27, not 1.** A measurement defect, not a finding: the grade is a
+  YAML **comment** on each `resolver:` line and `yaml.safe_load` strips comments. `workplan_v6_progress.yaml:53`
+  says *"the `[ASSUMPTION]` grade **11 of 27 resolvers already carry**"*. The `doc: null` half stands at
+  **9/27** against its claimed 11. ⚠ And `:148`/`:149`/`:180` show **Gate-0 IS blocked on `ED-1051`**; only
+  the `engine_clock` emitter is not.
+- **`ED-SC-0005` is NOT closable, and `ED-SC-0003`'s collision DOES reproduce. All three of SC Stage 4's
+  "HARD" blockers stand.** `resolver.py:300` adds a live integer pool die (`CR4_PRIMARY_GENRE_POOL_BONUS
+  = 1.0  # +1D`, `rhetoric.py:206`), `armature.py:70` says so in as many words, and `primitives.py:295`'s
+  `CORROB` tuple is a third ladder again. **The real finding is that the four channels ride three different
+  ladders — an §0.06-S defect — so the ladder question precedes the cap value.** For `ED-SC-0003`:
+  `glossary.md:114` calls the collision *"unresolved"* and `module_contracts.yaml:448` marks it
+  `[OPEN — Jordan]`; the draft tested a document the row never cites. The one real finding there is that the
+  row's pin drifted — `glossary.md:84` → `:114`.
+- **STANDS: Arc 2 / G1 is not waiting on a ruling.** `requirements.yaml`'s `R-08` `disposition`, landed by
+  **PR #384 (`cb28ec9`)**, a different session: the candidate tie is *alphabetical*, the question tiebreak
+  is *already disposed* on `H-54`'s precedent with `needs_jordan` FALSE, and *"what remains open here is not
+  a ruling but BUILD WORK: W26 and `H-62`."*
 
 ### Next actions, in order
 
-1. **M2 — re-measure every named blocker before treating it as one.** Cheapest, highest ratio; three
-   of the six R-blocking holes are already answered inside their own rows.
-2. **M1 — run §0's five-test ladder on G6's fifteen.** Observable: `register.py --check` prints a
-   smaller `G6` list. Do **not** fan this out fifteen ways — `H-47`/`H-48`/`H-50` share one subject.
-3. **M4 — drain classes 2, 4, 5 with a citation per row**, never by grep alone (`S8`'s rule).
-4. **M3 — execute the ruled-and-unexecuted**, starting with the SC retirement wave.
+1. **M1 — execute what is ruled and unexecuted.** The `systems/social_contest/` retirement wave (ruled
+   2026-09-06; 47 files, 20+ inbound sites, `isolation: worktree`); `ED-IN-0204`'s consequence for the
+   FA/SE/WR design surfaces; the `engine_clock` emitter, which *"needs no ruling"*.
+2. **M2 — re-measure every named blocker**, including the eight W-items, by re-running each row's own
+   `measure:` command. Where there is no command, that is the finding.
+3. **M3 — grade-as-you-build.** Not a pass over `G6`; a discipline on `W2`/`W3`/`W5` and successors.
+4. **M4 — drain classes 2, 4, 5 with a citation per row**, never by grep alone. Two rows this pass proposed
+   to close both survived attack; treat that as the standing prior.
 5. **M5 — the eleven-question decision sheet** in §6 of the strategy is the whole human ask.
 
-**Not done here, deliberately:** no row was closed, no flag flipped, no guard written, no tool built.
-§0.1 pt 5's predicate forbids a guard over ledger prose, and `ED-1094` at merge is the enforcement.
+**Not done here, deliberately:** no row closed, no flag flipped, no guard written, no tool built.
+§0.1 pt 5's predicate forbids a guard over ledger prose; `ED-1094` at merge is the enforcement.
 
+**Two traps worth carrying:** `yaml.safe_load` strips comments, so any count of a grade written as a
+comment reads zero — check raw text. And a closure argued from one channel of a multi-channel mechanism is
+not a closure.
 
 ## ⏸ ARC 2 / G1 — HELD 2026-09-10. A real game defect found, RULED, implemented, measured, and BACKED OUT on one unexplained number (ED-IN-0206)
 
