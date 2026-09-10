@@ -339,8 +339,8 @@ reader*. **The vacancy case R6 names is not addressed by anything here.**
 ### §6.4 · The other five, in brief
 
 - **R1** closes `F.32` — the war survives its declarer through the seat, and the inheritor gains
-  **standing in a peace negotiation, not an automatic exit.** `04_EVALUATION.md` §C.6 carries the
-  correction; **Layer 1's `F.32` row at `04_CODE:1136` is unswept.**
+  **standing in a peace negotiation, not an automatic exit.** **Layer 1's `F.32` row at
+  `04_CODE:1136` is unswept.**
 - **R4 · THE WORLD MUST CHURN** — *"Lands on `F.20` — the world only decays. `Rung.exists` and
   `Site.exists` have zero producers."* **This is a direct Jordan ruling on P4's exact subject**, and P4
   executes routes (1) *churn by NPC action* and (2) *churn by matter* of the four it names. §1 row 16

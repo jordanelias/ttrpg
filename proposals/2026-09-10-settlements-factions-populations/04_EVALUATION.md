@@ -1,444 +1,604 @@
 # Part C — evaluation
 
-## Status: **PROPOSED (2026-09-10). HELD BACK IN FULL** — see `00_INDEX.md`.
+## Status: **PROPOSED (2026-09-10). HELD BACK IN FULL** — see `00_INDEX.md`. Continues in `04_EVALUATION_part2.md`.
 
-**Method.** `skills/ners/SKILL.md:36-64` — one cut, four times; **a PASS is
-licensed by a named failed attack, not by an absent finding**; and **E is scored last, as a ratio
-against what N and R found**, never as an independent axis, because alone it is satisfiable by
-amputation (`CLAUDE.md` §0.06).
+**Instrument.** `skills/ners/SKILL.md`, run in full: §2's N-line ledger and its three verdicts, §3's
+five disqualifiers, the meta-rule at `:137-144`, §4's C1–C5, §5's ratio with the §5.1 denominator and
+the §5.2 watchlist, §6's four R tests with the per-seat gain/cost tables, §7's six-direction coverage
+plus *pauses correctly* and *calculations consistent in methodology*, §8 against the set's own declared
+disciplines, and §9's self-audit. Instrument B is not run: no proposal in the set resolves by a draw.
 
-**The six directions N is tested from**, since §0.06 requires all of them: *top-down* (realm → hearth)
-· *bottom-up* (hearth → realm) · *vertical* (zoom) · *diagonal* (a national faction claims one
-settlement — the ratified §5.2 case) · *lateral* (settlement ↔ settlement) · *horizontal* (faction ↔
-faction at one tier). An N-line holding in one direction is **narrowed, not passing**.
-
-**R is scored in both halves**, including the half with no player in it, plus completeness — a
-mechanism breaking at its extremes fails R.
+**Every locus below is the tree at `ccc3f2a`.** The set was authored against `8b79440` and
+`ED-IN-0203`/`ED-IN-0206` landed between the two, so the proposals' own `driver.py:<N>` and
+`decision.py:<N>` citations resolve to nothing. The content survived the move and is re-verified at its
+new home; the map is in §0.
 
 ---
 
-## C.1 · P1 · Dearth reaches the body
+## §0 · Where the code the set argues from actually lives
 
-**N.** *Top-down:* cut it, and a realm-scale `levy` that empties a hearth's larder has no consequence a
-person could notice — the extraction-invariance chain (SE-2) becomes unspellable. **Dies.**
-*Bottom-up:* a hearth's hunger never becomes a question, so nothing at the hearth reaches the
-settlement except by an authored act. **Dies.** *Vertical:* the body-band penalty in `budget()` already
-exists; without P1 it reads a constant, so **a wounded duke and a starving duke are
-indistinguishable.** **Dies.** *Diagonal:* a Restoration cell recruiting in a starving hamlet has
-nobody with a question to recruit. **Dies.** *Lateral:* two settlements on one river, one fed and one
-not, are identical. **Dies.** *Horizontal:* a faction whose members starve and one whose members do not
-have equal `faction_value`, because P5's weight sum is blind to it. **Dies.**
-**The attack that failed:** *"P1 is redundant with `urgency()`."* No — `urgency` cannot move a ranking
-(`decision.py:298-302`, *"INERT BY CONSTRUCTION"*); P1 works through **questions and budget**, both of
-which move choices. **PASS in all six**, with the residual that the *number* of scenes a hungry person
-loses is a swept fixture.
+`engine/season/loop/driver.py` is **260 lines** and binds six step modules at `:241-253`.
+`decision.py` is a package. Nothing below is a change of substance — every relocated claim was re-read
+at its new locus and holds — but a builder following the set's line numbers opens the wrong file.
 
-**R.** *Player half:* a governor can starve a town or feed it and see the difference in **who
-petitions**; the strategy (spend grain or spend scenes) is real; customisation is nil — P1 is not a
-knob; felt impact is direct, since your `transfer` is the thing that ends `body.changed`.
-*The half with no player in it:* a rung whose Site wore below `fishing 100` (`rosters.yaml:969`) yields
-less → shortfall → its people's bodies fall → questions → `move`, which executes. **A hamlet empties
-itself with nobody watching**, and the story is a `causes[]` chain rather than a script.
-*Completeness at the extremes:* a rung with stores exactly 0 and 200 weight — every eater's body falls
-by the same deficit share; body floors at 0 and the death cascade fires through §15.3. ⚠ **But a cohort
-at weight 1 whose `mortality` rounds to 0 never dies — a completeness defect.** The CEN weight
-decrement must floor at one death when body is 0, or singletons are immortal to hunger. **Named, not
-waved past.**
+| the set cites | the content is now at |
+|---|---|
+| `driver.py:415-436` (the larder draw) | `matter.py:145-166` |
+| `driver.py:425` (`wt * len(eaters)`) | **`matter.py:155`**, verbatim |
+| `driver.py:431-436` (starvation refused) | `matter.py:161-166` |
+| `driver.py:413` · `:418` · `:406-411` · `:458-460` · `:485-490` | `matter.py:143` · `:148` · `:136-141` · `:188-190` · `:215-220` |
+| `driver.py:1371-1383` (CENSUS writes nothing) | `census.py:25-37` |
+| `driver.py:651-655` (the actor check) | `deliberate.py:152-156` |
+| `driver.py:856-865` (a verb with no effect raises) | `resolve.py:233-242` |
+| `driver.py:319` · `:343-348` | `matter.py:46-50` · `matter.py:76-78` |
+| `decision.py:165, 890` | `budget.py:56-60`, `options.py:35-104` |
+| `decision.py:183, 228` (clause 3) | `options.py:48, 93` |
+| `decision.py:208-214` (clause 4 polarity) | `options.py:73-79` |
+| `decision.py:298-302` (`urgency` inert) | `choose.py:52-55` |
+| `world_q.py:217-221` (Q3) | `world_q.py:219-223` — and **the +2 shift is the whole file**: Q2 `:176, 195-197` → `:178, 196-199`; `lateral` `:126-130` → `:128-132`; `commit_count_guard` `:116-124` → `:118-126`; `single_holder_counter` `:89-114` → `:91-116`; `presence` `:152-154` → `:154-156` |
+| `rosters.yaml`, `verb_table.yaml`, `write_matrix.yaml`, `hole_register.yaml` | `engine/season/<name>.yaml`, not `engine/season/data/` |
 
-**S.** Integrates on rows that exist; `causes[]` chains to `stores.changed`; **pauses correctly** — the
-write is at MATTER, and the world is frozen before DELIBERATE. It **fixes an S defect**: the two
-arithmetics for subsistence (`01_PRIMITIVE_BASE.md` §3.2). One residual S issue, declared: a cohort's
-death lands at CENSUS while a singleton's lands at MATTER — **two timings for one quantity**, a
-consequence of declining a matrix edit, and swept.
-
-**E, as a ratio.** What N and R found is carried by one new write site, one arithmetic fix, one
-referent fix and two fixtures. Nothing is removable without losing a direction. The player intuits it:
-*no grain, fewer scenes, then a funeral.* **High relative to N and R — nothing here is overhead.**
-
-**Gameplay, in concrete seasons.** S1: the levy takes 40 grain. S2: `stores.changed`, then
-`body.changed` ×3 at the hearth, one crossing `limited 500` → Carin's budget is 4 rather than 5, and
-her question is about the hearth; she `petition`s. S3: the mayor's ledger holds the petition claim, if
-it was carried. **The decision that gets harder:** *levy or don't* — it now costs bodies you will hear
-about. **What gets easier and should not:** nothing found; a lord who never levies is not rewarded,
-only unblamed.
-
-**Emergent narrative, traced through the mechanism.** `levy.taken(R)` → `stores.changed(Hh)` →
-`body.changed(p_low)` → `condition.band_crossed(p_low, limited)` → Q3 for `p_low`, referent `Hh` →
-`speak`/`petition` → witnessed → a claim in `p_mid`'s ledger → Q2 → `p_mid` acts. **Four links, two
-persons, no authoring** — the standard Reading 09 §1.3 sets. **Met.**
-
-**Cost.** *Forbids:* a world where named persons cannot die of hunger. *Makes unspellable:* "a famine
-that raises unrest" — there is no unrest. *Corpus:* none broken; ARC cases with `person.died` endings
-gain a second cause of death a `causes[]` walk can distinguish. *Convergence:* **P1 is damping, and
-alone it makes season 40 resemble season 30** — which is exactly why P2 must follow it.
+**Q3 is the one relocation that is also a change, and it does not reach P1.** `world_q.py:219-223`
+now admits everyone present at a crossing — `if who == p.id or (at is not None and p.id in
+presence(w, at))`. But `at` comes from `w.sites.get(who)`, and **P1 appends person-keyed crossings**
+`(p.id, verb, before, after, ev.id)`, for which `w.sites.get(<a person id>)` is `None`. The second
+disjunct collapses and only `who == p.id` fires. **So the broadcast is live for site crossings and
+dead for P1's**, and both of P1's halves are still open: the referent is `(what,)`, a verb name, and
+nobody but the crossing person is asked. The tree's own comment at `world_q.py:203-208` records this
+same site-id-against-person-id confusion as a defect it already shipped once.
 
 ---
 
-## C.2 · P2 · The bodies clock
+## §1 · The verdict
 
-**N.** *Top-down:* a realm with no growth has no reason to found, levy or tax differently across forty
-seasons. **Dies.** *Bottom-up:* a hearth that cannot grow cannot become a community, so P4's kind
-ladder has nothing to climb. **Dies.** *Vertical:* zoom out and every settlement's `population()` is a
-world-gen constant forever — `W_s` never moves, so **§5.1's "number of people" is static**. **Dies.**
-*Diagonal:* a national faction claiming a growing town and a shrinking one are equivalent bets.
-**Dies.** *Lateral:* migration by `move` between two settlements has a source and a sink only if one
-grows. **Dies.** *Horizontal:* two factions' `faction_value` diverge over time only if their held
-people multiply. **Dies.**
-**The attack that failed:** *"P4 alone supplies growth — more Sites."* No: Sites yield **matter**, not
-weight; without P2, nothing new ever holds a `commit`. **PASS, six directions.** Residual: the *rate*
-is a fixture, and a rate of 0 (the control arm) removes P2 with no error — **which is the correct null
-arm, not a false N-line.**
+**The set is `paper` in all seven proposals, and two of the seven do not load.** Under `CLAUDE.md`
+§0.2 nothing here is done, and that is the honest grade for a design document; what distinguishes the
+seven is *how far each is from an execution artifact*, and the distances are very different.
 
-**R.** *Player:* strategy across the long game — feed a town now for a levy in twelve seasons; **the
-Banished trap** (a boom you did not plan for) becomes a real emergent hazard; customisation none.
-*No player:* a fed hamlet doubles, outgrows its larder, and P1 thins it — **a Malthusian wave nobody
-scripted**, witnessed as `envelope.changed` by persons present, as a fact rather than a mood.
-*Completeness:* an envelope of all zeros stays zero — no immaculate birth, since `births ∝
-envelope[grown]`. ⚠ Integer counts at small N need a declared rounding rule: `floor` starves small
-hearths, `round` can double them — `assumption`, swept. ⚠ **And the period is longer than
-`MAX_SEASONS` today** (`H-33`), so **P2 is unobservable until `W29`** — a completeness gate, not a
-design flaw, and stated as such.
+| | verdict | the execution step that is the whole difference |
+|---|---|---|
+| **P1** | `paper` — buildable | a declared collapse rule for a per-kind shortfall, then a test on `p.body` with a control arm that can actually be fed |
+| **P2** | `paper` — buildable, unobservable through the corpus | `W29`; the falsifier needs `3 × band_seasons` seasons and `corpus_run.py:65` clamps a case at 6 |
+| **P3** | `paper` — **two writes are refused by the gate, and its one demand kind is authored-only** | matrix step edits *and* a driver the social gate accepts; neither is declared |
+| **P4** | `paper` — **refuses at load** | three table corrections before either verb can be attempted |
+| **P5** | `paper` — one object refuses at load | `EFFECTS["commit"]`; the loop needs a primitive the set correctly declines to smuggle |
+| **P6** | `paper` | `EFFECTS["repudiate"]`; the cost it claims is unreachable by any computed act |
+| **P7** | `paper` | `EFFECTS["issue"]` plus a writes-cell edit; compliance is unreachable until `H-84` or `H-71` |
 
-**S.** The envelope eats through P1's draw — **one arithmetic**. Bodies-before-larders honours §25's
-order. It pauses correctly, at MATTER, before the freeze. ⚠ **One S hazard, named:** `population()`
-counts envelope **plus** persons, so a season in which P3 mints 40 and CENSUS decrements 40 must net to
-zero **across the barrier** — the reconciliation and the mint must be one write, or the Query
-double-counts for one step.
+**Three findings outrank everything else in the set.**
 
-**E.** Three fixtures, one roster, one pass, one Query, against six N directions. The player intuits
-*fed towns grow, and then they are hungry* from one number they can see at a venue, since
-`envelope.changed` is witnessable. **High.**
+**One — the political half cannot be reached by a person's own deliberation, and the set does not say
+so as a whole.** P5 declares its own loop unreachable and prices the repair honestly. P6 and P7 make
+the same class of claim — a superior notices a defection, an issuer notices defiance — and neither
+declares it. The mechanism is one theorem: a claim enters a person's question set only if its subject
+is that person or an object of one of their live tenures (`world_q.py:178, 196-199`), and **a person id
+enters that set only through a live `tie`, `knot` or `oblige`** — none of which has an effect.
+(`succeed` looks like a fourth and is not: a Tenure is filed under its subject and only when that
+subject is a person, `world.py:257`, and `succeed`'s subject is a Rung, so it lands in `_unowned` and
+never appears in anyone's `p.tenures`.) `EFFECTS` registers exactly ten verbs (`effects.py:91-406`: confer, revoke, convene, move,
+work, create_record, destroy_record, kill/wound, utter, transfer). So no computed act can put a person
+id where another person's questions would find it. **Every "an NPC notices and responds" claim in
+P5–P7 is unreachable for the same reason, at the same line.**
 
-**Gameplay.** Seasons 1 to `band_seasons`: nothing visible but `envelope.changed` Events. Season
-`band_seasons + 1`: the grown band jumps, the larder draw jumps, and `short` appears at a hearth that
-was fine. **The decision that gets harder:** *found or feed* — P4's stake competes with the mouths.
-**What gets easier and should not:** a lord who levies hands (P3) from a booming town pays nothing
-visible until the wave passes. **The delay is the point** (it is Banished's whole lesson) — and it is
-also where a player can exploit ignorance. **Named.**
+**Two — five objects across the set have no reader, and three of them are counted as contributions.**
+`population()` (P2), `faction_value` and `faction_q.resolve` (P5), and `suspicion` (P7). Under `ID-13`
+each is the defect the set itself files against `Sensation.standing` in `01_PRIMITIVE_BASE.md` §2. P2
+and P5 mark theirs `[GAP: no consumer]` and still count them in *Adds* and in "New primitive? None";
+P7 marks nothing, and asserts a reader that cannot see it — `stance_toward` reads `p.stance` rows and
+never the ledger (`choose.py:40-49`).
 
-**Emergent narrative.** `envelope.changed(S)` chains to itself; at the crossing season
-`stores.changed(S)` → P1's `body.changed` for the **individuated** persons at S, so the crowd's hunger
-reaches the named → their questions. The story *"the town grew until the harbour silted"* is a
-`causes[]` walk from a `condition.worn` Event through yield to bodies. **Nobody scripted it. Met.**
+**Three — the set adds vocabulary and deletes almost nothing, which is the meta-rule's own test.**
+*A fix that adds a system has failed*; the remediation standard is *three edits, two of them deletions,
+and the vocabulary got shorter.* Counted across seven proposals: **two verb rows, six effects, three
+rosters, roughly twelve fixtures, five Queries, one Record kind, one `band_floors` row, seven LOOP
+rows — and one deletion**, a refusal comment at `matter.py:161-166`. Vocabulary is longer by more
+than twenty names. Three of the five Queries are the dead carriers above. The one true collapse the
+set contains — Dispensation folded into `Record` — is the only move that shortens anything, and it is
+narrated rather than spelled.
 
-**Cost.** *Forbids:* a static-population campaign — though the control arm restores it. *Makes
-unspellable:* a **chosen** birth ("we married; a child") — birth is envelope weight, not a `create`,
-and from-scratch's *"Producer: birth… all acts"* (`04_hearth_and_community.md:155`) is refused, and
-named in `05_` §2 row 3. *Corpus:* none broken; **every golden hash re-records**, because envelope
-Events enter the log. *Convergence:* **this is the anti-convergence term** — and it is the one that can
-spiral if P1 is absent, which is why its `LOOP` row's `default:` names P1 first.
-
----
-
-## C.3 · P3 · Individuation is a refusal
-
-**N.** *Top-down:* a King who `dispatch`es a bailiff to a hamlet with no persons gets
-`dispatch.refused` and nothing else, forever. **Dies.** *Bottom-up:* a crowd at weight 200 that cannot
-produce a spokesman cannot `carry` a petition. **Dies.** *Vertical:* **the seam between the statistical
-and the named is exactly this**; cut it and the game is elite-only — ideal-v2's named cost
-(`01_ARCHITECTURE.md:573-579`). **Dies.** *Diagonal:* a national faction "claiming a settlement" (§5.2)
-needs someone there to commit. **Dies.** *Lateral:* a settlement sending settlers (P4 at a distance)
-needs a founder minted from its envelope. **Dies.** *Horizontal:* two factions recruiting in one town
-compete for the same grown band. **Dies.**
-**The attack that failed:** *"`W27`'s authored cast makes runtime individuation unnecessary."*
-`W27` builds the cast **the case names**; it cannot mint the smuggler the praefect fines in season 4.
-**PASS.**
-
-**R.** *Player:* naming someone is now something you *do*, by acting on "a smuggler"; conscription is a
-real strategic act with a visible cost, the grown band; customisation of the minted person is nil —
-capability is empty, a named residual against `F.6`. *No player:* the world's cast grows **exactly
-where acts happened and nowhere else** — a bailiff's `dispatch` populates the road he uses.
-*Completeness:* an empty grown band refuses (§42.2); a demand for weight greater than the band refuses
-**whole**, with no partial mint, declared. ⚠ **De-individuation of a person the *player* is looking at**
-— ideal-v2's "view assembly" generation trigger (`02:960-961`) must count as a rememberer, **or the
-protagonist's contact vanishes between seasons.** Named as a rule P3 must carry.
-
-**S.** Shares `(Person, exists)` at CEN with `W27`; one mint; `F.30` satisfied in the same write.
-`W29`'s tenure cache is a **hard** prerequisite — an 11-actor case already exceeds the ceiling.
-
-**E.** A roster and a CENSUS body. The player intuits *if you act on a crowd, someone steps out of it.*
-**High.** The nine-member target roster is the only overhead, and it is **marked incomplete rather than
-invented**.
-
-**Gameplay.** S1: `levy` for 40 hands → `levy.refused`, nobody to take. CENSUS: a cohort
-`Person(weight=40)` at the settlement, contained. ⚠ Who *holds* the levied cohort is `oblige` — which
-has no effect today (`W31(a)`); `hold` would be wrong. S2: the cohort has five scenes and a question if
-anything landed. **The decision that gets harder:** levy hands from a town you will need to feed.
-**Easier and should not be:** a player can farm individuation by spamming `dispatch` at empty rungs —
-bounded by scenes and refusals, and `03_VERBS_AND_LOOPS.md` §C.3:136-144 rules that a season spent that
-way **is the mechanism, not an exploit**.
-
-**Emergent narrative. ⚠ CORRECTED BY THE ADVERSARIAL PASS — the first draft's trace was impossible.**
-It read: *"`levy(R→S)` → `levy.refused` → `person.individuated(crowd_1, weight 40)` → the crowd's Q2
-fires on a claim about the levy → `speak` → … **Met.**"* **The crowd's Q2 cannot fire on the levy,
-ever.**
-
-The season is `matter → deliberate → resolve → log → witness → census` (`driver.py:1391-1399`). WITNESS
-deposits at `:1249-1252`, iterating persons who exist **then**; CENSUS runs after it (`:1399`). **A
-Person minted in `census()` therefore has an empty ledger for the season that demanded them**, and Q2
-additionally requires `c.when == w.tick - 1` (`world_q.py:194-197`).
-
-> **⚠ AND THE COROLLARY IS GENERAL, AND THIS SET STATED THE OPPOSITE IN THREE PLACES: EVERY EVENT
-> EMITTED AT CENSUS IS UNWITNESSABLE**, because WITNESS takes `matter_events + events` and has already
-> returned (`driver.py:1398`). That reaches **P3's `person.individuated` / `individuation.refused`**,
-> **P2's CENSUS reconciliation emission** — against §C.2's *"`envelope.changed` is witnessable"*, which
-> is true only of the MATTER writes — and **P5's crossing "computed at the RESOLVE barrier's end and at
-> CENSUS"**, whose CENSUS half nobody can witness.
-
-**The honest trace:** `levy(R→S)` → `levy.refused` → at CENSUS, `person.individuated(crowd_1, weight
-40)`. **The cohort's first possible question is `t+2`, and only via a fresh deposit** — someone must
-`tell` them, or an act they witness must land. The conscripted-cohort-becomes-the-revolt story is
-**available at two seasons' remove, not at one**, and the set should not have claimed the shorter chain.
-**Repair, and it costs nothing:** move every emission a proposal wants witnessed into the MATTER step or
-into `resolve`'s returned event list.
-
-**Cost.** *Forbids:* a persistent cast unconnected to acts — de-individuation prunes it. *Makes
-unspellable:* "a child is born and grows up" as an individual arc; the envelope carries children, and
-individuals appear by demand. *Corpus:* cases whose `who_acts` names a person the loop must invent
-mid-run become runnable; none broken. *Convergence:* neutral — **P3 is the bridge** between P2's growth
-and P5's politics.
+**What the set is, stated plainly.** It is a correct and unusually well-grounded reading of what the
+substrate lacks, carrying four substrate proposals that would work once their table cells are right,
+and three political proposals that are **a substrate for politics rather than politics** — three
+authored verbs whose execution can be tested, one Query that computes, and one typed cell on a sound
+precedent. That is worth having. It is not what the set's own index claims.
 
 ---
 
-## C.4 · P4 · Founding and building
+## §2 · The set read together
 
-**N.** *Top-down:* a Duke cannot plant a colony — SE-9(a)'s lawful half — without a founding act.
-**Dies.** *Bottom-up:* a grown hearth cannot split, and its second son has nowhere to go. **Dies.**
-*Vertical:* zoom in and any settlement's Sites are world-gen forever; zoom out and no settlement's
-yield ever rises. **Dies.** *Diagonal:* the Restoration founding a community at a settlement it does
-not hold — the §5.2 cross-scale claim's **physical** form — is impossible. **Dies.** *Lateral:* two
-towns, one building a harbour, are identical. **Dies.** *Horizontal:* two factions' `holdings` grow
-only by conferral; **a faction cannot make a holding.** **Dies.**
-**The attack that failed:** *"`work`/`restore` supply growth."* They move `condition`, never existence;
-**a razed site cannot be rebuilt.** **PASS.**
+### 2.1 The loop register does not close where the set says it does
 
-**R.** *Player:* **the first true management act** — where to build, and with what. The method choice is
-the stake's *source* (`from` your own hearth, or a Guild member's via `exchange`), which is Goldenfurt's
-`Develop: funding=guild` in Layer 1 vocabulary: the counterparty's `hold`/`oblige` edges **are** the
-"standing claimant". Customisation of settlements begins here — a harbour town and a mining town differ
-by their Site set. *No player:* an NPC with an `OUGHT` about their hearth and enough grain founds, and
-**Q4 fires every quiet season** (`world_q.py:223-231`), so the world builds without the player.
-*Completeness:* founding at a rung with no parent (a realm) is refused by `presence`; building on a Site
-kind with `site_yield = {}` (`body`) is allowed, yields nothing, and is still **a place with a purpose**,
-since `band_floors.body` gates verbs. ⚠ **An extreme not handled:** a hearth founded with weight 1 (the
-founder) and no envelope share has an empty envelope, so P2 gives it no births. ideal-v2 says it is
-*"initialised from its parent Rung's"* (`02:1057`). `assumption`; sweep
-`[none, a fixed share, proportional to weight moved]`.
+`00_INDEX.md` claims four amplifying loops, three damping, and that every `+` names an existing `−`.
+Against the tree:
 
-**S.** Two-sided stores writes preserve conservation; the stratum is `uncontested_material`, so it folds
-after `movement` and `binding_decision`; `causes[]` runs from `rung.founded` back to the act. **The Rung
-closer is CONVENTION and is said to be.**
+| loop | sign | bound | holds? |
+|---|---|---|---|
+| P2 · births | `+` | P1's `fed_ratio` | **yes** — at steady state `fed_ratio → yield/draw` and births fall toward zero. A real Malthusian bound |
+| P3 · individuation | `+` | scene budget · the grown band · de-individuation | yes, and P2-fed |
+| P4 · sites → yield → stakes → sites | `+` | wear (`rosters.yaml:698-701`) | **for Sites only.** Wear closes a *Site*. **Nothing closes a Rung**, so the rung count has no bound at all |
+| P5 · commitment | `+` | — | declared dead by the proposal itself |
+| P1 · dearth | `−` | — | yes, and it is the set's only live damping term |
+| P6 · repudiation | `−` | — | unreachable: no computed `revoke` (`H-71`), no person-subject route into a question |
+| P7 · defiance | `−` | — | unreachable, same two reasons |
 
-**E.** Two rows, two effects. The player intuits *grain in, a hearth out.* **High.** The ruin-not-closer
-choice is the only argued residual.
+**Three live `+`, all substrate. One live `−`, and it is starvation.** Nothing political damps
+anything by a person's own choice, because no political candidate forms. The set ships amplifiers
+whose only computed damping is hunger and wear.
 
-**Gameplay.** S1: `found` with 20 grain → a hearth. S2: it draws subsistence and yields nothing, having
-no Site. S3: `build` a seam with timber. S4: `yield.taken` ore. **The decision that gets harder:** the
-founding stake against the mouths (P2). **Easier and should not be:** a player can chain-found to
-multiply `presence` slots — each costs a scene and a stake, so not an exploit under §C.3.
+### 2.2 Three denominators for one population — an S-methodology defect
 
-**Emergent narrative.** The colony story: `found` → `move` (settlers, P3-minted) → `site.built` →
-`yield.taken` → `stores.changed` → a `levy` from the realm now has a new target → `levy.refused` or
-`levy.taken` → the colony's question. **Met.**
+*Calculations consistent in methodology* is a NERS test, not an adjective, and one quantity is computed
+three ways across the set:
 
-**Cost.** *Forbids:* `Prosperity` and `FacilityTier` as **stats** — they are Site sets, i.e. a Query.
-*Makes unspellable:* "the town develops" as a single stat pump; `Develop` is gone as a verb and returns
-as a hundred `build`s. *Corpus:* the fixed 37-settlement registry is untouched — hearths only.
-*Convergence:* an amplifying term bounded by wear, and **a world where every Site is built and worn to
-equilibrium is the convergence risk** — `season_factor`'s distribution (`H-26`, a constant today) is the
-real anti-stall lever, and it is Layer 1's own named blocker (`holonic:856`).
+| | who is counted |
+|---|---|
+| `mouths(r)` (P1) | named eaters **+ the envelope** at `r` |
+| `population(w, r)` (P2) | envelope + persons over `descendants` |
+| `commit_share` denominator (P5) | persons over `descendants`, **envelope excluded** — `presence` returns persons only (`world_q.py:154-156`) |
 
----
+The envelope eats, is counted as a mouth, and cannot revolt. P5's exclusion has Layer 1 behind it —
+§10.3, the envelope does not act — but **P5 never says it chose it**, and the consequence is a
+denominator no player can see: a town of three named persons and two hundred envelope "turns" at two
+commitments.
 
-## C.5 · P5 · Commit share and the faction view
+### 2.3 Three death sites for one class
 
-**N.** *Top-down:* a King's dispensation to a settlement whose people are committed against him lands on
-executors who defy, and without the share nobody can *see* that it will. **Dies** — the resolver cannot,
-and Reading 09 says the mayor **should not**, but the **world** must, for bands to emit. *Bottom-up:* a
-hamlet's commitments never sum to anything a Duke could lose. **Dies.** *Vertical:* §5.1's *"number of
-people and weight of their positions"* has no arithmetic. **Dies.** *Diagonal:* a national faction
-claiming a settlement (§5.2) **is** a commit share crossing a band at that rung — **the ratified
-mechanic has no other spelling.** **Dies.** *Lateral:* a proposition spreading town to town by `tell`
-has no measure of where it has taken. **Dies.** *Horizontal:* two factions' relative strength is a
-scoreboard nobody can compute. **Dies.**
-**The attack that failed:** *"`members(faction)` is enough; the share is decoration."* `members` is a
-**set**; the share is a **ratio at a rung**, which is what §5.2 and Reading 09 both require. **PASS.**
+A singleton dies at MATTER on `(Person, exists)`; a cohort shrinks at CENSUS on `(Person, weight)`; the
+envelope dies at MATTER on `(Rung, envelope)`. `Person` is one class by construction
+(`carriers.py:348`), and P1 takes the CENSUS path explicitly to avoid a one-line matrix edit. Calling
+it swept does not cure a methodology split — **the sweep's own `MAT` arm is the fix.**
 
-**R.** *Player:* strategy is now recruitment by scenes — `utter`, `speak`, `tell` — and **the player
-cannot read the number**, which is `AX-2` and also the game (Reading 09 §2.2). Customisation of
-factions: the proposition's `subject`/`predicate`/`value` **is** the faction's identity, authored by an
-`utter`. *No player:* NPC factions form because someone with an `OUGHT` (`W27`'s `one_line`) speaks in a
-hungry town, and the crossing changes who may act. *Completeness:* zero persons at the rung → the share
-is **undefined and raises**, not 0; a person committed to *both* incompatible propositions counts in
-`num` — a live contradiction (`09:15-16`), declared. ⚠ **A cohort at weight 200 commits as one mind.**
-That is `F.19`'s unsolved half — the "construal spread", ideal-v2's `K = 3` View — and P5 **inherits**
-it. **Named as the largest residual in the set.**
+### 2.4 One fixture name, two index sets
 
-**S.** The view resolver is the one Layer 1 named and the code lacks, so filling it is **convergence,
-not friction**. `commit_count_guard` guards the sum. The band fires at the barrier and **pauses
-correctly** — no person reads it mid-map. ⚠ **S hazard:** two blends for one quantity would return if
-anyone re-added `q_s`; `05_` §2 row 4's ruling is that L and PS are **two Queries** blended only at a
-consumer.
+`mortality[band]` is indexed by **body-condition band** in P1 (the only band a cohort Person has,
+`rosters.yaml:973-976`) and by **age band** in P2. `CLAUDE.md` §4 requires a term to yield the same
+meaning read cold in a later session. This one does not.
 
-**E.** Two Queries, one effect, one view, one band row. The player intuits *recruit, and the town turns*
-from what they can see: who committed **in front of them**. **High.**
+### 2.5 A per-kind shortfall collapsed to a scalar, twice, undeclared
 
-**Gameplay.** S1: the rival `utter`s `OUGHT(S, holder, Y)`. S2: three persons present `commit` — three
-scenes. S3: the share at S crosses `third` → `commit_share.band_crossed`, witnessed by those present →
-the mayor, **if present**, holds a *claim that a crossing happened*, not the number. **The decision that
-gets harder:** for the mayor — `revoke` or `open_case` on rumour, or feed the town (P1) and starve the
-recruitment. **Easier and should not be:** under `fan_out_mode=total` the mayor would hold every
-commitment — but the ruled default is `all_five` (R7, `fixtures.py:200-207`), so no.
+`short` is `dict[kind → int]` (`matter.py:158-159`) — the loop is over the weights registry, per matter
+kind. `Person.body` is one `int` (`carriers.py:367`). P1's `deficit_p = short × weight(p) / mouths(r)`
+and P2's `fed_ratio = 1 − short/draw` both need a dict-to-scalar rule and neither declares one. The
+set's own `§3.2` discipline forbids exactly the fungible summing the collapse would perform.
 
-**Emergent narrative.** The civil war: *"ENOUGH NAMED PEOPLE, EACH CHOOSING, IN A SEASON"* (`09:71-72`)
-— **P5 is the count of them, and the crossing is the moment**; the `causes[]` walk runs crossing →
-commitments → claims → tellings → the utterance. **Nobody scripted it. Met.**
+**And the shipped fixture makes this immediate rather than theoretical.** In `tiny_world` no rung holds
+salt (`probes.py:72-73`), so `short` is non-empty at every rung every season today. Under P1 as
+written, every hearth-dweller and the King lose body every season, and P1's stated control arm —
+*"stores ≥ draw → no `body.changed`"* — is unreachable on the corpus fixture.
 
-**Cost.** *Forbids:* any stored L/PS/Order/unrest — the whole `registry.py:74-79` block, already inert.
-*Makes unspellable:* "the town is 60% loyal" **as a fact a governor knows**; he knows what he was told.
-*Corpus:* the 47 faction-scale cases become **behaviourally** representable once re-scaled (`W28`) —
-this is their behaviour. *Convergence:* amplifying, bounded by scenes, presence, repudiation and decay;
-a world where everyone commits to one proposition converges — **and that world is a realm at peace,
-which is a legitimate ending.**
+### 2.6 Everything emitted at CENSUS is unwitnessable
+
+WITNESS runs before CENSUS (`driver.py:215-216`), so P2's envelope reconciliation and P3's
+`person.individuated` / `individuation.refused` are emitted where nobody can perceive them. The repair
+is **not** free: Layer 1 puts individuation at CENSUS by design (`04_CODE_ARCHITECTURE.md:161`,
+`holonic:1019`), so moving the emission is an amendment, not a relocation.
+
+### 2.7 What `H-62` does to the political half
+
+`choose` scores `Σ convictions × alignment + stance_toward + urgency` (`choose.py:105-109`). No verb
+writes `convictions` or `stance` (`hole_register.yaml:715-717`), and `urgency` is inert by construction
+(`choose.py:52-55`). **Every person's preference order over `(verb, subject)` is a world-gen constant**,
+and what varies season to season is only which candidates the question machinery hands them. Given
+that: nobody's own scoring can make them betray a commitment, no NPC repudiation can arise from a
+changed conviction, and a compliance contest is a lookup on a fixed vector. R7 calls `H-62` first-rank
+and unavoidable; the set names it as a hole and then makes claims that require it closed.
 
 ---
 
-## C.6 · P6 · Forswearing costs
+## §3 · P1 · Dearth reaches the body
 
-**N.** *Top-down:* a King whose Duke defects can do nothing unless the defection **reaches** him; cut P6
-and defection is free and invisible. **Dies.** *Bottom-up:* a hearth's head cannot leave a faction at
-all today, since there is no effect. **Dies.** *Vertical and diagonal:* a settlement "becoming
-independent" (§5.2) **is** its people's commits moving (`holonic:575-576`) — no `repudiate`, no
-independence. **Dies.** *Lateral and horizontal:* factions cannot lose members. **Dies.**
-**The attack that failed:** *"`revoke` alone models expulsion."* Expulsion is the **superior's** act; P6
-is the **subject's** act, and `T-m` says both must exist. **PASS.**
+### N — six directions
 
-**R.** *Player:* switching sides is a real, priced choice — **priced in exposure and history, not in a
-number that can be farmed back**; customisation none. *No player:* an NPC whose scoring now ranks the
-rival's `OUGHT` higher repudiates in a quiet season (Q4) — **factions bleed without a script.**
-*Completeness:* repudiating a proposition you never committed to is refused. ⚠ Repudiating the **war**
-declaration (`10_FACTIONS` §2) is peace by the declarer, and P6 does not reach the case where the
-declarer is dead.
+**NARROWED.** Today `short` is a `TRACE.note` (`matter.py:158-166`); `budget()` reads `p.body`
+(`budget.py:58, 73-75`) and only `_eff_kill` writes it (`effects.py:357-371`). The step *a shortfall
+reaches a person's state* has no carrier without P1, and N holds there.
 
-⚠ **CORRECTED — an earlier draft of this row said *"`F.32`'s gap stands: the declarer's death leaves a
-war nobody can end"*, and a Jordan ruling falsifies it.** `references/design_rulings_2026-09-06.md`
-**R1** rules: *"war supersedes the character, typically, but if the casus belli is purely based upon the
-character running it, then the inheritors of that war will have justification in negotiating its end."*
-The reading recorded there is that **the war is uttered THROUGH THE SEAT, so it survives its declarer
-and the successor inherits standing (`T-o`)** — and that this **closes `F.32`**, *"the last surviving
-escalation before this ruling."* **So `F.32` is ruled, not open.** What remains true is narrower and is
-a bookkeeping fact rather than a design gap: **Layer 1's own `F.32` row is unswept** — `04_CODE:1136`
-still reads *"the declarer dies and the war can be ended by nobody"* and still calls for *"an edge
-subjected to the seat's holder"*. P6 neither implements R1 nor is blocked by it; **the row wants the
-sweep, and the ruling wants a `commit` subjected through the seat, which is a proposal this set does
-not make.**
+| direction | verdict |
+|---|---|
+| top-down | **narrowed** — stated over `levy`, which has a prose `requires`, no typed cell and no predicate, so the fold raises `Unspecified` (`resolve.py:189-200`). Narrowed to `transfer`, the one executing extraction |
+| bottom-up | **narrowed** — the question reaches those present; beyond the hearth it needs a further act by a further person |
+| vertical | **holds** — `budget.py:58` subtracts `body_band_penalty` |
+| diagonal | **narrowed to expressible** — a cell recruiting in a starving hamlet needs `commit` candidates no uncommitted person can form |
+| lateral | **holds** |
+| horizontal | carried by P5, which does not carry it |
 
-**S.** One effect; the closer half of `commit` (`ID-14`). Pauses correctly. **Consistent in methodology
-with `revoke`** — both write `until`.
+**Restated N-line:** *cut P1 and a shortfall at a rung can never change what a person present there may
+choose, or is asked about. Everything beyond that hearth is a further act by a further person.*
 
-**E.** One effect and one Query. **The highest ratio in the set.**
+### False N-lines — none, and one claim that is false as filed
 
-**Gameplay.** The Duke repudiates the King's proposition in S3; in S4 the bailiff who saw it `tell`s the
-King, spending a scene; in S5 the King's `opening_set` offers `revoke` — **if** the duchy is in his
-holdings (`predicates.py:63-67`), which it may not be. *"A King with authority but not holdings cannot
-unmake a Duke — a structural stalemate, free"* (`09:32`). **The decision that gets harder:** defect **in
-front of whom**.
+Every added object survives its walk. What does not survive is the claim that P1 *"makes `SUBSIST` and
+the larder one arithmetic"*. P1 edits the larder only. `SUBSIST` (`probes.py:115-120`) still sums
+`stores.values()` fungibly and divides by `p.weight`, ignoring `subsistence_weight`. After P1 the
+larder honours both terms and `SUBSIST` honours one: **two methodologies remain, and P1 unifies the
+two it touches.**
 
-**Emergent narrative.** That stalemate **is** the story, and it is `T-g`'s obstruction-without-a-verb at
-faction scale. **Met.**
+### The meta-rule, per object
 
-**Cost.** *Forbids:* Demotion Magnitude tables, Coup Counters, "Dishonored" states, "Standing 0 in the
-new faction". *Makes unspellable:* a **quantified** loyalty — `Tenure.degree` exists
-(`carriers.py:58`) and P6 leaves it alone; from-scratch's *"degree of commitment"* would use it, and
-that is a separate proposal not made here. *Convergence:* damping.
+The body write argues its way out — one site on an existing row, and it **deletes** a refusal comment.
+The `len → Σ weight` change is an edit. The Q3 referent branch argues out as an edit to an existing
+consumer, but **its specification lives only in an annotation**: the *Adds* bullet says the referent
+becomes the containing rung id and carries no code, while the annotation admits a second
+under-specification and does not close it. **The cohort CENSUS decrement does not argue out** — it is a
+second death path for one class, taken to avoid a one-line matrix edit, and the meta-rule prefers the
+edit.
+
+### E — scored last, as a ratio
+
+**E-OVERHEAD.** In: one write site, one branch, one arithmetic change, two fixtures, one LOOP row. Out:
+one refusal comment. Verbs ±0. Vocabulary +4, −0 — **longer**.
+
+**The denominator.** Two authored fixtures, and one hidden term that is the real cost: the dict→scalar
+collapse above. The *value* of `k` is Jordan's; **the form is not** — as specified, `deficit_p`
+multiplies a per-kind dict by a scalar.
+
+**E-LEGIBILITY: pass, with a residual.** *No grain, fewer scenes, then a funeral* is predictable in
+shape — monotone body loss, band-counted budget. The residual: a **salt-only** shortfall producing a
+funeral is not intuitable from "no grain" until the collapse rule is declared.
+
+**§5.2 watchlist.** The unification of the larder and `SUBSIST` is *incomplete* rather than
+over-distilled; the collapse of per-kind shortfall to one body scalar is **kept at LOW confidence** —
+it may be right, and nothing in the set argues for it.
+
+### R
+
+**R-COMPLETE — findings.** The dict→int signature. A contradiction inside P1: `body == 0` writes
+`(Person, exists)` with no weight guard while a cohort's weight decrements at CENSUS, so a cohort at
+body 0 is ruled two ways. `round(weight × mortality)` is 0 for any `weight < 1/(2·mortality)`, not only
+weight 1. And the Q3 branch changes the referent for **site** crossings too — `world_q.py:223` builds
+one `Question` shape for both — moving every existing corpus question that source produces, which P1
+does not name.
+
+**R-VARIETY — nil, and not a defect.** P1 is a clock.
+
+**R-WORLD — hooks are thrown, and one is borrowed.** `body.changed` and `condition.band_crossed` are
+MATTER emissions and reach WITNESS (`matter.py:273`). ⚠ **`condition.band_crossed` is not on
+`(Person, body)`'s emission column** — that row declares `body.changed · person.died`
+(`write_matrix.yaml:167`) and the crossing kind belongs to `(Site, condition)` (`:321`). P1 constructs
+the Event by hand on the `matter.py:248-252` precedent, which bypasses the undeclared-kind refusal at
+`world.py:275-291`, so it works — by borrowing another row's column, unremarked.
+The emission chain constructs. The *story* does not: **"a hamlet empties itself" needs `move` with
+`to ≠ home`**, and `to` binds the question's referent (`options.py:310`), which is the person's own
+containing rung — so the formed act is a move to where they already stand.
+
+**R-CHOICE — findings.** Seat: a person at a short hearth. Intent: *stop my body falling.*
+
+| act | gain | cost |
+|---|---|---|
+| `transfer(from=Hh, to=Hh)` | **none** — `from` binds the actor's own containing rung (`options.py:316-317`), `to` binds the referent (`:310`), the same rung | 1 scene |
+| `speak(Hh)` | a claim in hearth-mates' ledgers — they are hungry too | 1 scene |
+| `move(to=Hh)` | none | 1 scene |
+| do nothing | none | 0 |
+
+**No row reaches the intent.** And the fed lord who could feed them needs a question whose referent is
+that hearth; P1 gives him none, because he is not present there. The advertised choice — *spend grain
+or spend scenes* — is on neither seat's table. Upper bound, per §6.2; and the act economy is the
+denominator, per §6.3.
+
+### S
+
+| direction | carrier |
+|---|---|
+| top-down | `matter.py:148-173` + the P1 write; `transfer` executes, `levy` raises |
+| bottom-up | the Q3 branch, for those present only |
+| vertical | `budget.py:58` — carried |
+| diagonal | uncarried — delivers blind |
+| lateral | state differs; no seam reads across |
+| horizontal | P5's, uncarried |
+
+**Pauses correctly: pass** — the write is at MATTER before the freeze, read at DELIBERATE.
+**Methodology: fails twice** — `SUBSIST` against the larder, and singleton death at MAT against cohort
+death at CEN.
+
+### Repairs, worst first
+
+1. Take the matrix edit P1 declines — `(Person, weight) · [MAT, CEN]` — and put cohort death in the same
+   `body == 0` rule. **Deletes** the CENSUS path: one class, one death site.
+2. Declare `k` per matter kind, or declare the collapse. One fixture shape.
+3. Move the Q3 branch out of the annotation and into the specification, and state that site-crossing
+   referents move with it.
+4. Restate the unification as a limit: the larder is one arithmetic; `SUBSIST` is a second until deleted.
 
 ---
 
-## C.7 · P7 · A dispensation is a document
+## §4 · P2 · The bodies clock
 
-**N.** *Top-down:* **the entire downward mechanism** (`F.15`) — cut it and nothing above a settlement can
-*ask* anything of it. **Dies.** *Bottom-up:* a governor cannot defy what was never issued. **Dies.**
-*Vertical:* §3's governance cascade (RATIFIED) has no executable content. **Dies.** *Diagonal:*
-Parliament and the Crown "bypassing the chain" (§5.3) **is** an `issue` whose executors are anywhere —
-**the scope-enumerates-executors rule IS the bypass.** **Dies.** *Lateral:* a writ carried from one town
-to the next is `H-84`. **Dies.** *Horizontal:* the Church's excommunication (Reading 09 §3) is the same
-verb. **Dies.**
-**The attack that failed:** *"`dispatch` (order.given) covers it."* `dispatch` names a **person** and has
-**no terms**; a Directive has terms and executors. **PASS.**
+### N — six directions
 
-**R.** *Player:* **the vise NPC-083 asks for** — comply, bargain or defy — where the up-tier cost is
-*what the issuer learns* and the down-tier cost is what compliance *is* (`extract → transfer` from the
-town's larder → P1). Customisation: the terms roster **is** the governance vocabulary. *No player:* an
-NPC King with an `OUGHT` about revenue issues; an NPC governor with convictions defies; the King's ledger
-fills; he revokes — **or doesn't, because he lacks the holding.** *Completeness:* a dispensation whose
-executor died — the Record persists, `comply` refuses for want of an actor. ⚠ A **forged** writ:
-`forge`'s row exists, its effect does not, and `forgery_quality` is on the Record with
-`[GAP: no reader established]`. ⚠ **The "Sack" fork (ED-FA-0013c) is a term this roster cannot seed** —
-it needs Jordan and is left there.
+**NARROWED.** Top-down holds: the envelope today is a `W9` literal that never moves
+(`probes.py:1553`), so without P2 nothing about a rung's population changes across forty seasons.
+Bottom-up is **asserted** — nothing in P2–P4 promotes a rung's *kind*, so "a hearth grows into a
+community" has no carrier. Vertical is **false in that direction**: it rests on `population()`, which
+nothing reads, and a loss nothing observes is not a loss. Diagonal, lateral and horizontal route
+through individuated persons committing or moving, and the envelope never commits.
 
-**S.** **Collapses an unmodelled dict kind into `Record`** — fewer shapes, not more. Suspicion becomes
-one ledger, and **the two competing accountability instruments (ED-FA-0021 and G606) become one Query.**
-Pauses correctly: the compliance contest is per executor at RESOLVE, ordered by the fold. ⚠ **S
-residual:** `bargain` = `petition` + `carry` + a Date + `determine`, and it is **blocked on
-`H-32`/`W26`** until the sitting decides.
+**Restated N-line:** *cut P2 and the count a rung's larder must feed changes only by `move` and by
+death, and P3's grown band is a constant forever.*
 
-**E.** One Record kind, one roster, effects for verbs that exist. The player intuits *a writ is paper;
-paper can be lost, burned, forged, or ignored.* **High.**
+### False N-line — `population()`
 
-**Gameplay.** S1: the Crown `issue`s `extract 40 grain` to the mayor; the bailiff `carry`s it, spending
-a scene (`W24`). S2: the mayor holds the claim; `comply` → `transfer` from the town's larder (→ P1), or
-`defy` → `compliance.withheld`. S3: the bailiff `tell`s the Crown. S4: `revoke` enters the Crown's
-candidates. **The decision that gets harder:** defy, and in front of whom; comply, and starve whom.
-**Easier and should not be:** with no mandatory Directive, a lazy Crown NPC issues nothing. Layer 1 says
-**that is the game** — but the cost is that NPC-083's *"a Directive response is owed every season"*
-(`NPC2.yaml:128`) becomes *"owed whenever one was issued"*, **which is a change to the case's
-expectation.** Named.
+**Disqualifier 2's mirror: no reader.** The proposal writes `[GAP: no consumer]` and says it is *named
+rather than shipped* — and then stands it in *Adds*, counts it in "New primitive? None… one Query", and
+lists it in the index. §3.1's second evasion, *it costs no code*, is refused: it is authored, named and
+counted. Under `ID-13` it is a dead carrier of exactly the kind the set files against
+`Sensation.standing`. **Delete it from *Adds*;** it is a one-line `r1_aggregate` on the day a consumer
+exists.
 
-**Emergent narrative.** *"A mayor excommunicated and ignored is a mayor who is fine"* (`09:154-155`) —
-the same mechanism yields *"a writ nobody carried was never defied"*. **Met.**
+**Watchlist (§5.2).** `envelope_bands` is **kept at MEDIUM confidence** — P2 could run on positional
+bands with a `fertile_band` index, and the only named read is `envelope[grown]`; what the roster
+protects is the design's ability to say *which band reproduces*, on the `strata` precedent
+(`rosters.yaml:121-129`).
 
-**Cost.** *Forbids:* the Directive as a clock; `suspicion` as a field; the PA priority tree. *Makes
-unspellable:* "the Crown always presses" — it presses when a person spends a scene. *Corpus:* NPC-083's
-third and fifth needs are met; **its seventh — self-adjusting pressure — is not met by P7 and is
-refused** (`05_` §1 row 1). *Convergence:* damping.
+### E
+
+**E-OVERHEAD.** In: one roster of three names, **four** fixtures, one MATTER pass, one Query, one
+reconciliation write, one LOOP row. Out: nothing. Vocabulary +9, −0.
+
+P2 declares **three** fixtures and uses four — `k′` appears in the deaths formula and is never
+declared.
+
+**The denominator:** an authored band inventory plus four authored rates; the same undeclared
+dict-to-scalar collapse as P1, here in `fed_ratio`; and, if `E-1` lands on the capacity arm, a fifth
+table.
+
+**E-LEGIBILITY — partial.** *Fed towns grow, then they are hungry* is legible only if the player sees
+`envelope.changed`; expression is unbudgeted, and the CENSUS reconciliation emission is unwitnessable.
+
+### R
+
+**R-COMPLETE — findings.**
+
+- `fed_ratio` is undefined over kinds.
+- **Bound (ii) is misfiled.** `mortality[elder] = 1.0` caps a *lifespan* at `bands × band_seasons`; it
+  does not bound a *population*. If `fertility × (seasons in grown) × survival > 1` the envelope grows
+  until bound (i) bites. Bound (i) is the real one and it holds.
+- **Co-location is never stated.** The larder is per rung (`matter.py:148-150`) and `presence()` is
+  direct containment (`world_q.py:154-156`). `W9` puts the envelope on the settlement while
+  `tiny_world`'s persons are at the hearth (`probes.py:103-106, 1552-1553`). P2 never says which rung
+  kind carries an envelope — so a settlement envelope eats the settlement's stores alone, P2's own
+  "203 mouths" arm never arises, and an envelope at a rung with no stores starves at `fed_ratio = 0`
+  while the hearths below it are full.
+
+**R-WORLD — envelope waves are emergent and witnessable at MATTER.** Hooks are thrown. The link from
+the crowd's hunger to a named person depends on the co-location rule above.
+
+**R-CHOICE — not scorable**, and the precondition is named: the seat P2 offers is *found or feed*, and
+`found` does not load.
+
+### S
+
+Top-down reaches the envelope only through `fed_ratio`, which is P1's. Bottom-up is carried by
+`mouths(r)`. Vertical has a carrier with no reader. **Lateral is uncarried and the proposal says
+otherwise**: `move` moves a `Person` (`effects.py:162-199`), never envelope weight, so *"migration is
+`move`"* is false for the unnamed.
+
+**Pauses correctly: pass.** **Methodology: pass with a note** — bodies-before-larders honours
+`holonic:846`; `fed_ratio` is last season's while the draw is this season's, which is one quantity at
+two ticks in one formula, declared and defended on the `matter.py:136-141` precedent.
+
+### Repairs
+
+1. Delete `population()` from *Adds*.
+2. State the co-location rule — *the envelope lives at the rung whose stores it eats* — as a load check.
+3. Declare `k′`; declare the collapse rule shared with P1.
+4. Re-file bound (ii) as a lifespan cap and let bound (i) carry the population.
+5. Rename `mortality[band]` against P1's.
 
 ---
 
-## C.8 · The set, read together
+## §5 · P3 · Individuation is a refusal
 
-Three things are true of the seven that are not true of any one:
+### N — six directions
 
-1. **The amplifying loops all bound each other.** P2 is bounded by P1; P3 by scenes and P2's grown band;
-   P4 by wear; P5 by scenes, presence, P6 and decay. **No `+` row's `default:` cell names a fixture
-   nobody has measured** — each names an existing mechanism. That matters because `G13`'s clause 3 is a
-   presence check that would accept `"TBD"` (`register.py:329-333`).
-2. **The set's weakest axis is expression, and it is unbudgeted.** `08_ch5` §8.2's Tale-Spin finding —
-   *"tracking interior state and expressing it as legible drama are different problems, and every
-   precedent that solves expression does so by narrowing scope, never generally"* — applies directly:
-   P2's envelope Events and P5's crossings are **tracked**, and nothing in this set expresses them
-   beyond the log. **Named as the set's one unbudgeted line item**, rather than discovered later.
-⚠ **AND A MEASURED CONTROL THIS SET CITES EIGHT LINES OF AND STOPS IMMEDIATELY BEFORE.** `04_` and
-`03_` both cite `engine/season/data/fixtures.py:200-207` for `fan_out_mode = all_five`. **That comment
-block continues, and the continuation is adverse to P5, P6 and P7's central property**
-(`fixtures.py:221-235`): *"**THE COST IS LARGER THAN THE REASON, AND THIS COMMENT FIRST SAID THE
-OPPOSITE**… `W-D`, 89 worlds, 1,467 genuine forks… `all_five` (SHIPPED) **0 of 1467**… **Zero of 1,467
-is not noise.** At the shipped arm a fork NEVER changes a later decision."* The diagnosis at `:237-265`
-sharpens rather than rescues it: *"Every clause-4 drop in the entire corpus… is the verb `move`
-refusing on a `contain.path:<person>` belief… **the real defect it exposes is that §F1 clause 4 has
-exactly ONE reachable instance in the corpus.**"* **Nothing in P1–P7 adds a second.**
-P6's *"forswear unnoticed… that is the epistemic game"* and P7's *"a writ nobody carried was never
-defied"* are claims that **knowledge changes outcomes**, made against a tree whose only measurement of
-that property reads **zero**. It does not refute them — P7's differentiation runs through **clause 3**
-(referents), not clause 4, and is untested — but the set should have cited `:221-269` and said which
-clause each epistemic claim runs through. **Recorded here because it is the strongest adverse evidence
-against this set's own thesis, and it was found by the critic and not by the author.**
+**NARROWED to one member, and that member is authored-only.** `dispatch` has a live predicate
+(`predicates.py:261-265`), so its refusal is *producible* — but its eligibility is the single
+alternative `["remit:dispatch"]` (`verb_table.yaml:183`), and `remit:` is declined person-side
+(`options.py:163-169`). **No person can form a `dispatch` candidate in any world.** That is the same
+`H-71` mechanism that kills `revoke`, `issue` and `levy` elsewhere in this evaluation, and
+`hole_register.yaml:804` measures it: *"9 of 32 verbs cannot be formed person-side — 8 remit-ONLY, plus
+`levy`."* So P3 stands under §7's theorem exactly as P5 does, and unlike P5 it does not say so.
+Bottom-up is asserted — a crowd producing a spokesman needs `carry`, which does not execute. Vertical
+holds. The rest route through verbs that do not execute.
 
-3. **Four of NPC-083's seven `season_requires` are met, two are met in vocabulary only, and one is
-   refused with its price.** ⚠ **The first draft scored it "six of seven met" and the adversarial pass
-   overturned that on the set's own disclosures.** **Need 3** (`NPC2.yaml:107-109`) asks for a directive
-   answerable comply/negotiate/defy *"with **repeated defiance accumulating toward a threshold that
-   eventually forces a reckoning**"* — and P7 refuses exactly that second half (*"no threshold recalls
-   anyone; a person with the remit **chooses** `revoke`"*), by **the same `T-b` argument used to refuse
-   need 7**. **Need 2** (method choice) is met in vocabulary only: its re-expression ends *"effects for
-   `exchange` and `levy` are `W31`"* — unbuilt, and not proposed here, which under §0.2 is not met.
-   That is the honest score against the only settlement-scale case the corpus has.
+**Restated N-line:** *cut P3 and a refused `dispatch` at a rung with an envelope can never produce a
+person.*
+
+### False N-lines — three of the four roster members
+
+`demand_kinds` is proposed with four members. Walked one by one:
+
+| member | verdict |
+|---|---|
+| `dispatch.refused` | **survives, ambiguously.** The same kind is emitted on ineligibility (`resolve.py:159`) and on precondition failure (`:201-206`), and the untyped path leaves `observed=()` — so CENSUS cannot tell a King without the remit from a King naming nobody |
+| `levy.refused` | **disqualifier 2 — no producer, and it dies twice.** Its eligibility is `["remit:issue", "presence:<rung>"]` (`verb_table.yaml:334`) and **both alternatives decline person-side** (`options.py:163-168`), so no candidate forms and the fold is never reached; were it reached, `levy` has no typed cell and no predicate and would raise `Unspecified` at `resolve.py:189-200`. P3's falsifier asserts an Event that cannot be emitted |
+| `petition` at an empty rung | **disqualifier 2.** `petition` writes `Petition.exists` with no effect, so it raises. And `emits_on_refusal: []` (`verb_table.yaml:384`) means it has **no refusal kind of its own** — the fold falls back to the generic `act.refused` (`resolve.py:206`), which fires for every refused verb in the table, so CENSUS reading it would mint on any refusal anywhere |
+| a Named operand | **disqualifier 2.** Nothing resolves a subject *inside* a cohort; a cohort is one id (`carriers.py:348-351`) |
+
+So `incomplete: {have: n, target: 9}` has **n ≤ 1**, and that one is ambiguous. The roster is a name
+for an unshipped composition — §3.1's first evasion — and survives only as a one-member roster.
+
+**And the mint does not satisfy the demand that caused it.** The demanded subject
+(`predicates.py:264-265`) is not the id P3 mints, which is `H(seed, tick, r, "individuated:" + event.id)`.
+A repeated `dispatch` to the same absent name mints a **new stranger every season** until the grown
+band is spent.
+
+### The gate refuses two of the mint's three writes
+
+P3 says it is *"a CENSUS body on rows that already exist"*. That is true of the rows and **false of the
+steps**:
+
+| write | steps | social | at CENSUS |
+|---|---|---|---|
+| `(Person, exists)` | `[MAT, RES, CEN]` | false | **admitted** |
+| `(Rung, exists)` — the person-rung | `[RES]` | true | **`Forbidden`** (`world.py:326-343`) |
+| `(Tenure, since)` — the `contain` edge | `[RES]` | true | **`Forbidden`**, and again at `:351-357` because the driver is not an `Act` |
+
+`F.30` requires exactly these three writes in the same CENSUS write, so the collision is Layer 1's
+matrix against Layer 1's `F.30` — but **P3 inherits it unnamed**, declares no matrix edit, and its
+compliance table has no gate row for either write.
+
+⚠ **And a matrix step edit would not be enough.** The second gate is step-independent:
+`world.py:352-357` raises on `social and driver != "Act"` whatever the step column says, and **both
+rows are `social: true`**. A CENSUS write is driven by the loop — `04_CODE_ARCHITECTURE.md:161` gives
+`loop/census` the MATTER token — not by an act. So admitting CEN on those rows leaves the write still
+refused. `driver` is a caller-supplied string nothing validates, so an implementer *could* pass
+`driver="Act"` at a barrier where no act occurred; that is the shape of the real cost, and it is a
+larger thing to ask for than a step column. **This is P3's actual price and nothing in the set names
+it.**
+
+Two smaller signature faults: the mint draws *"the parent rung's marks"* and `Rung` has no `marks`
+(`carriers.py:510-511`); and de-individuation folds any person with no `hold`, no `knot`, no live
+Petition and no mention in another's ledger — **which on `tiny_world` is four of the five persons after
+one quiet season**, leaving only the office-holder. The weight returns to an envelope that is `[]` at
+every corpus rung, to an unspecified index.
+
+### E
+
+**E-OVERHEAD.** In: one roster (four declared, ≤1 live), one CENSUS body, one closer, **two undeclared
+matrix step edits**, one LOOP row. Out: nothing. Vocabulary +4, −0.
+
+**E-LEGIBILITY — fail.** The offered intuition is *act on a crowd and someone steps out of it*. The
+outcome as specified is an anonymous id at an unspecified rung, and your dispatch refuses again next
+season. The intuition contradicts the outcome shape.
+
+### R
+
+**R-WORLD — a dead seat.** A minted person has empty capability, an empty ledger (WITNESS precedes
+CENSUS), no `commit` and no `hold`. `questions_for` yields nothing for them — Q1 needs a Date holder,
+Q2 an own claim, Q3 presence at a crossing, Q4 a commitment — and under P3's own closer they fold at
+the next CENSUS unless someone's ledger names them. **They exist for one season, ask nothing, and emit
+one unwitnessable Event.**
+
+**R-CHOICE — findings.** Seat: a governor. Intent: forty hands. `levy` raises; `oblige` has no effect;
+`dispatch` repeated is one scene each and mints a stranger each time — dominant and pathological.
+
+### Repairs
+
+1. Delete `levy.refused`, `petition` and the Named operand from `demand_kinds`; ship `{dispatch.refused}`
+   with `have: 1`.
+2. **Mint the demanded subject's id**, not a fresh hash, wherever the act named one. One change closes
+   the demand loop.
+3. Price the gate honestly: the step edits are necessary and **not sufficient**, because both rows are
+   `social: true` and the CENSUS driver is not an act. Say what the write is driven by.
+4. Scope de-individuation to persons whose `(Person, exists)` was written at CENSUS, and define the
+   band the weight returns to.
+5. Delete *"the parent rung's marks"*.
+
+---
+
+## §6 · P4 · Founding and building
+
+### N — six directions
+
+**NARROWED, and it is the strongest N in the set.** The warrant is `R4` verbatim — *the world only
+decays; `Rung.exists` and `Site.exists` have zero producers* — so P4 is ruled work rather than an
+inference. Top-down is narrowed to `hearth` with `SE-9(a)` held. Bottom-up holds given a person with a
+stake. Vertical holds. Lateral holds.
+
+**Horizontal is false.** `found` writes `contain` and `succeed` and never `hold`, so after P4 a faction
+still cannot make a holding.
+
+**Restated N-line:** *cut P4 and no hearth and no Site is ever created after world-gen. A founder gains
+an address and a succession pointer — not a holding.*
+
+### False N-lines — none. But the rows do not load.
+
+Neither `(Rung, exists)` nor `(Site, exists)` has any other producer, and the attack that `work` or
+`restore` supply growth fails as the proposal says: those move `condition`, never existence. The
+objects are necessary. **As transcribed they fail three times — once at load, twice at the point of
+use:**
+
+1. **`requires_typed: {form: amount, …}` — this is the load refusal.** `data/requires.py:549-554`
+   raises `SystemExit` on a form outside `REQUIRES_FORMS`, and `requires_forms` is closed at seven —
+   `[existence, scalar_threshold, contain_path, cardinality, relation, own_ledger, basis]`
+   (`rosters.yaml:911`). **`amount` is not a form; it is an operand.** The cell P4 wants already exists,
+   as `transfer`'s: `scalar_threshold · of: from · scalar: stores · key: kind · threshold: amount`
+   (`verb_table.yaml:517-523`). The set's own §3.2 notes the forms are closed at seven and calls a new
+   one a grammar addition; P4 uses an eighth without noticing.
+2. **`kind: timber|ore`.** Disjunction is **deliberately absent** — `rosters.yaml:906-907` says so in
+   terms, and calls a combinator no cell uses the dead carrier `ID-13` refuses. No loader check
+   enforces it; the cell would simply mean something no reader implements.
+3. **`eligibility: [presence:<rung>]` alone.** The `presence:` placeholder is declined at the fold
+   (`resolve.py:73-88`) and person-side (`options.py:166-168`), so **nobody can attempt either verb.**
+   `work` shows the shipped pattern: `["own", "presence:<site>"]` (`verb_table.yaml:542`).
+
+**Loader invariant 2 is declared and not implemented, and the violation is far larger than P4 says.**
+The rule — *every matrix row with `RES` has ≥1 producing verb* — is real, and P4 cites it correctly at
+`04_CODE_ARCHITECTURE.md:457`. What does not exist is any code that checks it: `verbs.py:204-304`
+checks duplicate verb names, an untyped cell with no note, degree/emits band agreement, invariant 12
+in both directions, `writes ⊆ MATRIX`, eligibility kinds, `scale` and `stratum` — and no producer
+check. P4's own `[GAP]` about whether it fires resolves as **it cannot fire**, so P4 is a first
+producer rather than the repair of a firing gate. And the scale: `hole_register.yaml:717` measures
+**eleven** RES rows with no producing verb, six of them `Person` interior. P4 supplies two of eleven.
+
+### E
+
+**E-OVERHEAD.** In: two verb rows, two effects, one undeclared fixture (`condition = initial`), one
+LOOP row. Out: nothing. Verbs **+2**, −0. Vocabulary +7, −0.
+
+**The denominator:** an authored stake amount; `initial`; and `site_kinds` closed at
+`[harbour, seam, body]` with a **required** row in two tables — `wear_per_season` and `band_floors`,
+which raise on a missing kind (`fixtures.py:110-123`) — plus `site_yield`, checked only in the reverse
+direction (`:125-129`), so a kind with no yield row loads and silently yields nothing
+(`matter.py:188`). **Two required rows per new buildable kind, and one that fails quietly** — and the
+quiet one is the one that matters.
+
+**E-LEGIBILITY — pass.** *Grain in, a hearth out.*
+
+### R
+
+**R-VARIETY — real, and it is the first management choice in the set:** where to found, and what to
+build.
+
+**R-CHOICE.** Seat: a hearth-head with grain. Intent: *grow.*
+
+| act | gain | cost |
+|---|---|---|
+| `found` | an address, a presence slot, a succession pointer — **and no yield without a Site** | 1 scene + the stake |
+| `build` | a Site, and therefore yield | 1 scene + timber |
+
+`build` dominates `found` for yield; `found` is worth a scene only for the slot it opens. That is a
+real trade rather than a defect, and chain-founding is priced per scene.
+
+**The Rung closer — sharpened.** P4 argues an empty hearth constrains nothing and grades the absence
+CONVENTION. The grade is honestly said; **the argument under it is false.** `AX-6`'s defect is *a state
+nobody can end* (`01_AXIOMS.md:394`) and no verb ends a Rung. Worse, the empty hearth **holds the
+stake** in its `stores`: no eater draws there, and nobody present can `transfer` it out, because `from`
+binds the actor's own containing rung. It is a **grain tomb** in an economy whose only source is yield.
+And `w.rungs` grows monotonically while `sorted(w.rungs)` is walked every MATTER.
+
+**Conservation — softened.** P4's regrade of `AX-4` to CONVENTION is right about `F10`, which weighs
+its own probe season and never runs `found`. But P4's falsifier asserts *grain conserved across the
+world*, and that **is** the named test the MECHANICAL grade requires. The compliance row was not
+brought into line with the falsifier below it. Shippable; the grade is MECHANICAL on landing.
+
+### S
+
+**Pauses correctly: pass** — `uncontested_material` folds after `movement` and `binding_decision`.
+**Methodology: pass** — `build` debits one side as a lawful consumption sink; `found` is two-sided.
+Diagonal and the `presence` direction are uncarried until the eligibility cell is fixed.
+
+**One half-write:** `holonic:371` makes `Rung.transmission` the field holding the `succeed` Tenure's id
+(`carriers.py:523`). P4 writes the Tenure and never the field, so the pointer stays `None`.
+
+### Repairs
+
+1. Replace `form: amount` with `transfer`'s `scalar_threshold` cell. **This loads and does not finish
+   the job:** `options.py:320-322` binds `amount` to the single global `default_transfer_amount` and
+   `kind` to `store_kind_of(...) or default_store_kind`, so the founding stake becomes a transfer's
+   default. The authored stake this evaluation charges to P4's denominator has no person-side channel —
+   that is `H-94`'s remainder, and it is the substitution's real price.
+2. Delete `timber|ore`; bind one `kind` from the referent, or ship two rows.
+3. `eligibility: ["own", "presence:<rung>"]` — one word.
+4. Take the `(Rung, exists) · [RES, CEN]` edit **P3 also needs** and de-found at CENSUS on zero presence
+   and zero envelope, returning the stake to the parent. One edit closes P4's `AX-6` gap and P3's mint.
+5. **`Rung.transmission` cannot be written as things stand** — `write_matrix.yaml` carries exactly five
+   `Rung` rows (`dates`, `envelope`, `exists`, `stores`, `yield`) and no `transmission`, so declaring it
+   in `found`'s `writes:` fails the load at `verbs.py:275-279` and writing it through the gate raises
+   `Unspecified` at `world.py:321-324`. The field is on the class (`carriers.py:510-511, :523`) with no
+   row behind it. Either add the matrix row, or drop the `succeed` edge and say the pointer is unset.
+
+---
+
+*Continues in `04_EVALUATION_part2.md` — P5, P6, P7, the substrate/politics seam, and what would
+overturn each verdict.*

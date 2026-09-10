@@ -18,6 +18,8 @@ approach, and are compliant with **Layer 1** (`architecture/`, RATIFIED ED-IN-02
 each for how it fits the game and what it does to gameplay and emergent narrative. Goldenfurt was
 added as a reference mid-session.
 
+⚠ **The code moved under this set.** `ED-IN-0203`/`ED-IN-0206` split `engine/season/loop/driver.py` into per-step modules and `decision.py` into a package the day before it was written, so **every `driver.py:<line>` and `decision.py:<line>` citation in these files resolves to nothing.** The content survived the move intact and is re-verified at its new home; the map from old locus to new is `04_EVALUATION.md` §0, and every citation in Part C is against the current tree.
+
 **How it was produced.** A read-only Fable 5.1 pass developed and evaluated the proposals against the
 working tree, briefed from five independent read-only harvests (the settlements corpus, the factions
 corpus, the population question, the research corpus, the machine-read registries) and a sixth over
@@ -39,7 +41,8 @@ it was itself *"Produced by a read-only Fable 5.1 synthesis."*
 | `01_PRIMITIVE_BASE.md` | **Part A** — what the settlement / faction / population primitives actually are in the code today, what is declared-but-dead and under which defect class, and eight corrections to the brief that produced this set |
 | `02_PROPOSALS_SUBSTRATE.md` | **Part B, P1–P4** — dearth reaches the body · the bodies clock · individuation is a refusal · founding and building |
 | `03_PROPOSALS_POLITICS.md` | **Part B, P5–P7** — the commit share and the faction view · forswearing costs · a dispensation is a document |
-| `04_EVALUATION.md` | **Part C** — NERS per §0.06's definitions, gameplay impact in concrete seasons, emergent narrative traced through the mechanism, and cost stated as Layer 1 states costs |
+| `04_EVALUATION.md` | **Part C (1 of 2)** — the NERS pass, run against `skills/ners/SKILL.md` in full: the verdict, **the map from the set's dead `driver.py`/`decision.py` citations to where that code now lives**, the set read together, and P1–P4 |
+| `04_EVALUATION_part2.md` | **Part C (2 of 2)** — P5–P7, the theorem that governs all three, the substrate/politics seam, what survived with the attacks that failed, and what would overturn each verdict |
 | `05_COLLISIONS_AND_RESIDUE.md` | **Part D** — the Goldenfurt collision table resolved mechanic by mechanic · ratified rulings in conflict · the `Field`/`Gauge` adjudication · the one genuine escalation · what could not be established · **§6, the rulings of 2026-09-06 and the hole they expose** · the loop register as it would stand · the adversarial pass |
 
 > ### ⚠ **READ `05_` §6 BEFORE ANY OTHER PART OF THIS SET.**
@@ -80,16 +83,20 @@ eligibility kind, a step, a write class or a `Sensation` scalar.**
 
 | | proposal | starts from | adds | loop |
 |---|---|---|---|---|
-| **P1** | **Dearth reaches the body** — the subsistence shortfall writes `(Person, body)` and emits | `write_matrix.yaml:161-167`; `driver.py:415-436` computes the shortfall and discards it | one write site on an existing row; two arithmetic fixes | **−** damping |
-| **P2** | **The bodies clock** — ageing, births and deaths move `Rung.envelope` at MATTER | the `(Rung, envelope)` row; `holonic:401-406`; `driver.py:413` *"BODIES… STILL NOT BUILT"* | one roster (`envelope_bands`), three fixtures, one MATTER pass, one Query | **+** bounded by P1 |
-| **P3** | **Individuation is a refusal** — `person.demanded` and the CENSUS mint | `driver.py:1371-1383`; `F.1`; `H-51`; `F.30` | one roster (`demand_kinds`), a CENSUS body on rows that exist | **+** bounded by scenes and the grown band |
+| **P1** | **Dearth reaches the body** — the subsistence shortfall writes `(Person, body)` and emits | `write_matrix.yaml:161-167`; `matter.py:145-166` computes the shortfall and discards it | one write site on an existing row; two arithmetic fixes | **−** damping |
+| **P2** | **The bodies clock** — ageing, births and deaths move `Rung.envelope` at MATTER | the `(Rung, envelope)` row; `holonic:401-406`; `matter.py:143` *"BODIES… STILL NOT BUILT"* | one roster (`envelope_bands`), three fixtures, one MATTER pass, one Query | **+** bounded by P1 |
+| **P3** | **Individuation is a refusal** — `person.demanded` and the CENSUS mint | `census.py:25-37`; `F.1`; `H-51`; `F.30` | one roster (`demand_kinds`), a CENSUS body on rows that exist | **+** bounded by scenes and the grown band |
 | **P4** | **Founding and building** — `found` writes `(Rung, exists)`, `build` writes `(Site, exists)` | two existence rows with **no producer**; `F.20` *"the world only decays"* | two verb rows, two effects | **+** bounded by wear |
 | **P5** | **Risk of revolt is a Query** — `commit_share`, the `commit` effect, the faction view | `09_WORKED_EXAMPLES.md:89-91` and `:174` *"not computed anywhere"*; `world_q.py:53-124` | two Queries, one effect, the resolver Layer 1 named and the code lacks | **+** bounded by scenes, presence, repudiation, decay |
 | **P6** | **Forswearing costs** — `repudiate`'s effect, as `commit`'s declared closer | `verb_table.yaml:402-412`, which writes `Tenure.until` and raises | one effect | **−** damping |
 | **P7** | **A dispensation is a document** — `issue` produces a Record; compliance is a contest per executor | `F.15` *"the entire downward mechanism has no executable content"* | one `Record` kind, one roster of terms, effects for verbs that exist | **−** damping |
 
-**Four amplifying loops, three damping, and every `+` names an existing `−` as its bound.** That is
-the point of the set. `ID-16` states the hole it fills: *"A model in which every loop is negative
+**Four amplifying loops, three damping — and against the executing tree that is not what the register
+comes to.** `04_EVALUATION.md` §2.1 works it through: **three live `+`, all of them substrate, and one
+live `−`, which is starvation.** P5's `+` is declared dead by P5 itself; P6's and P7's `−` are
+unreachable, because no computed act can put a person's id where another person's questions would find
+it (`04_EVALUATION_part2.md` §7); and P4's `+` is bounded by wear, which closes a **Site** — nothing
+closes a Rung. The ambition below is the right one and the set does not yet meet it. `ID-16` states the hole it fills: *"A model in which every loop is negative
 CONVERGES — season 40 resembles season 30 — and convergence is not a design goal, it is what happens
 when a design has no other ideas"*, and *"this design is made almost entirely of refusals… and every
 one of them is a damping term."* Measured against the live register, that is exactly right:
