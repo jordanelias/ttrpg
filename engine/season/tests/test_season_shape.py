@@ -3475,7 +3475,8 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     # the reading this line's number could otherwise invite.
     # ⚠ AND THE FOUR-SEASON ARM MOVES WITH IT, 5 -> 10, which is the same mechanism twice over.
     # [GROUNDED: measured 2026-09-11 under `U2`, `build_world(0)` -- longest chain 6 Events at the published two seasons and 10 at four, with `redeposits` still 1]
-    assert d_pub == 6, (
+    # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written at MATTER through the gate -- the published two-season chain reads 5. The gate-emitted maturation carries `(matured, None)` where the hand-built Event carried `(stages, label)`, so a link that used to chain through a `stages` change no longer does; 5 is well above the floor of 3 this clause names, and W9 check 2 asks for at least FOUR]
+    assert d_pub == 5, (
         f"the published two-season run reaches {d_pub}, not the 6 that `scene_budget` rounds of "
         "deposit-and-decay produce over two seasons. With `redeposits == 1` still holding, a "
         "different number means the ROUND COUNT changed or a clock started chaining; below 3, "
@@ -4202,8 +4203,16 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # that the narrowing is ATTRIBUTABLE, and `presence_only < all_five` is what carries that now.
     # `total`'s own figure is no longer an upper bound on anything, because its ledgers are pinned
     # at the cap and it is losing deposits the narrow arms keep.
+    # ⚠ G1a MOVES ALL THREE ARMS AND THE RELATION INVERTS BACK. Measured 2026-09-11 with the
+    # maturation routed through the gate: `total` 33 · `all_five` 25 · `presence_only` ?, where
+    # `U3` read 16 / 18 / 16. The control's figure TRIPLES because a matured Record is now a real
+    # write with a real emission, and `total` fans every emission to everyone. The narrow arms
+    # rise less. So the `U3` inversion was a property of a smaller emission stream, not a durable
+    # one, and the ASSERTION RETURNS TO ITS ORIGINAL DIRECTION rather than being pinned to the
+    # inversion: what this pair is for is that the narrowing is ATTRIBUTABLE, and it is.
     # [GROUNDED: measured 2026-09-11 under `U3`, `_r7_run`, three seasons -- questions 16 / 18 / 16 at `total` / `all_five` / `presence_only`; the shipped arm is above BOTH others for the first time]
-    assert got["all_five"][2] >= got["total"][2], (
+    # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written through the gate -- `total` rises to 33 and `all_five` to 25, so the control is above the shipped arm again]
+    assert got["all_five"][2] <= got["total"][2], (
         f"the shipped arm raises {got['all_five'][2]} questions against `total`'s "
         f"{got['total'][2]}, i.e. FEWER. Under `U3` it has been raising more; a fall back below "
         "the control means the projection has gone sparse again or a deposit channel has closed. "
@@ -5181,12 +5190,46 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # unchanged. ⚠ THIS IS THE CONTROL THAT STOPPED ARC 2 / G1 (`HANDOFF_IN.md`), so the new
     # baseline is stated here for the session that re-lands `Record.matured`: it is 10 now,
     # not the `{3:6, 6:7}` that section records or the 12 `U2` left.
+    # ⚠⚠⚠ **THIS CLAUSE IS THE ONE THAT STOPPED ARC 2 / G1, AND THE QUESTION `HANDOFF_IN.md`
+    # LEFT OPEN IS ANSWERED HERE BY MEASUREMENT RATHER THAN RE-PINNED AWAY.**
+    # That section recorded `Record.matured` implemented, measured and BACKED OUT on this number,
+    # and set the next session a fork: *"Either the longer chain is CORRECT — an Event that really
+    # happened now participates in the arc, and `H-80`'s pin is stale — or `causes[]` for a
+    # gate-emitted maturation must differ from the `[prior]` the hand-built Event passed. Measure
+    # which before re-landing."*
+    #
+    # **IT IS THE FIRST, AND TWO INDEPENDENT FACTS SAY SO.**
+    # (1) THE DEPTH CLAUSE HAD ALREADY STOPPED DISCRIMINATING BEFORE `Record.matured` EXISTED.
+    #     `HANDOFF_IN`'s baseline was `{3: 6, 6: 7}` and the worry was the 3-arm gaining a link to
+    #     reach `{3: 7, 6: 7}`. At HEAD, with `U2` and `U3` landed and NO maturation change, this
+    #     read `{3: 10, 6: 10}` — dead level, for reasons that have nothing to do with the gate.
+    #     A discriminator that was already gone cannot be broken by this unit.
+    # (2) WHAT KILLED IT IS VISIBLE IN THE CHAIN ITSELF, walked at both arms:
+    #       3 stages: term.matured <- record.created <- record.created <- proposition.uttered
+    #                 <- term.matured <- record.created <- term.matured x3 <- ...      depth 13
+    #       6 stages: the same shape, one link shorter                                  depth 12
+    #     The deepest maturation chain is MIXED — it runs through `record.created` and
+    #     `proposition.uttered`, which are ACT-driven — so its length is set by the act mix and not
+    #     by the stage count. This test's own comment records the same failure happening once
+    #     before, when `W4` gave the wear and decay clocks real `causes[]` and the GLOBAL maximum
+    #     went blind; narrowing to maturations bought time, and the mixing has now reached them.
+    # **THE LIVE DISCRIMINATOR IS THE COUNT, IT STILL WORKS, AND IT IS ALREADY ASSERTED BELOW:**
+    # 35 maturations at 3 stages against 47 at 6. `H-80`'s claim — that more stages make a longer
+    # clock — holds on the quantity that is not ceiling-bounded.
+    # ⚠ SO THE DEPTH IS PINNED AS A MEASUREMENT AND NOT AS A DISCRIMINATOR, and the inequality is
+    # NOT restored: `depths[3] > depths[6]` today (13 > 12), which is BACKWARDS for a discriminator
+    # and unremarkable for a number the act mix sets. Restoring `depths[6] > depths[3]` would be
+    # asserting a relation the mechanism no longer produces.
     # [GROUNDED: measured 2026-09-11 under `U3` -- maturation depths {0: 0, 3: 10, 6: 10}; the arms remain equal and the ceiling falls from 12 with the denser ranking]
-    assert depths[3] == depths[6] == 10, (
-        f"the maturation depth ceiling moved: {depths}. It saturated at 12 in every arm under "
-        "`U2`; a DIFFERENT number means the chain length or the round count changed, and a "
-        "3-stage arm below the 6-stage one means the clause discriminates again and should be "
-        "restored to `depths[6] > depths[3]`")
+    # [GROUNDED: measured 2026-09-11 with `Record.matured` written at MATTER through the gate -- depths {0: 0, 3: 13, 6: 12} and maturation counts 35 vs 47; the deepest chain at both arms runs through `record.created` and `proposition.uttered`, so its length is act-driven]
+    assert (depths[3], depths[6]) == (13, 12), (
+        f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
+        "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
+        "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
+        "⚠ IF `depths[6]` EXCEEDS `depths[3]` AGAIN, do not simply re-pin: the depth clause would "
+        "be discriminating once more and that is a finding worth the comment above being rewritten "
+        "for — walk the deepest chain at both arms and check whether it has stopped running "
+        "through `record.created` and `proposition.uttered`.")
     # ⚠⚠ **AND *SATURATED* IS EXECUTED RATHER THAN ASSERTED, WHICH IS THE ONE CONTROL THAT
     # SEPARATES IT FROM *MERELY EQUAL*.** The paragraph above says the depth clause is
     # *"ceiling-bounded by the season count"*. Nobody had ever raised the season count to see
@@ -5232,7 +5275,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     assert mats5, "nothing matured over five seasons — the ceiling control has no chain to measure"
     # [GROUNDED: measured 2026-09-11 under `U2`, `build_world(0)`, 5 seasons, `observation_deposit_mode: none` -- the longest maturation chain reads 9, below the 12 the seven-season arm reads above; neither is a chosen quantity]
     # [GROUNDED: re-measured 2026-09-11 under `U3` -- the five-season chain reads 8 against the seven-season arm's 10; the RELATION this clause tests (the ceiling rises with the season count, so the two stage arms are saturated rather than coincidentally equal) is unchanged, and both figures fall together because the denser ranking forms fewer `create_record` chains]
-    assert max(depth5(e) for e in mats5) == 8 < depths[3], (
+    # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written through the gate -- the five-season chain reads 9 against the seven-season arm's 13; the RELATION (the ceiling rises with the season count) is unchanged and is what this clause is for]
+    assert max(depth5(e) for e in mats5) == 9 < depths[3], (
         f"the longest maturation chain over FIVE seasons is {max(depth5(e) for e in mats5)}, not "
         "the 9 measured under `U2`, or it is not below the seven-season figure above. The ceiling "
         "MOVING with the season count is what makes the 3-stage and 6-stage arms saturated there "
@@ -6196,7 +6240,9 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # is authored canon (`conviction_axis_matrix_v30.md` §3 argues all 52 cells) and is NOT
     # re-calibrated here. `ED-IN-0213` carries it as the one question this unit escalates.
     # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 143 corpus cases, control from a worktree at a85bd45 -- distinct executed sets 40 -> 27, R3 84 -> 83, universal {reconstruct} -> {utter}, `release` 15 -> 2 worlds]
-    assert len(by_sig) == 27, (
+    # ⚠ 27 -> 25 under G1a, and the direction is the same one `U3` moved: the ruled `Record.matured` write (G1a): the gate-emitted maturation carries `(matured, None)` where the hand-built Event carried `(stages, label)`, which moves the Event's id and its folded content, and the content hash is what an undeclared tiebreak uses to pick which question a person answers.
+    # [GROUNDED: measured 2026-09-11 with `Record.matured` written through the gate -- distinct executed sets 25 over the same 89 live worlds, from 27 under `U3`]
+    assert len(by_sig) == 25, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -8165,14 +8211,22 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # for — eight held, none evicted — is untouched; had the count fallen, the cap would be
     # evicting again and that is the failure the message below describes.
     # [GROUNDED: re-measured 2026-09-11 under `U3` -- the same eight claims, two of them transposed by the act mix; count and membership unchanged]
+    # ⚠ 8 -> 11 CLAIMS UNDER G1a, AND MORE SURVIVING IS THE OPPOSITE OF THE FAILURE THIS PIN
+    # GUARDS. The message below names EMPTY as the danger — the cap evicting again. A matured
+    # Record is now a real write with a real emission, so more Events reach WITNESS and more
+    # grammar-vocabulary claims land and hold. The ledgers are further from the cap, not nearer.
+    # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written through the gate -- eleven grammar-vocabulary claims held at the end of the `actor` run, none evicted, from eight under `U3`]
     assert actor_end == [("einhir_texts", "exists:Record", 0),
                          ("rec:6bf46a143f347c12", "exists:Record", 1),
                          ("hearth_ostvik", "stores:grain", 0),
                          ("rec:6bf46a143f347c12", "exists:Record", 1),
-                         ("rec:ef6355957628cb28", "exists:Record", 1),
-                         ("p_carin", "exists:Record", 0),
-                         ("p_carin", "exists:Site", 0),
-                         ("rec:ef6355957628cb28", "exists:Record", 1)], (
+                         ("rec:6bf46a143f347c12", "exists:Person", 0),
+                         ("rec:6bf46a143f347c12", "exists:Site", 0),
+                         ("einhir_texts", "exists:Site", 0),
+                         ("rec:6bf46a143f347c12", "exists:Record", 1),
+                         ("rec:6efb4e464fbcf4ac", "exists:Record", 1),
+                         ("rec:6efb4e464fbcf4ac", "exists:Rung", 0),
+                         ("p_carin", "exists:Record", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -8534,7 +8588,11 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # (`restore` drops on a belief a failed `examine` deposited, and cannot execute at all), so it
     # no longer rests on the ARC-01 arm alone.
     # [GROUNDED: measured 2026-09-11, `build_world(0)`, 3 seasons, shipped fixtures -- 18 §F1 clause-4 drops on {examine, research, restore, transfer}, against 2 on {transfer} at d0165b5 and 5 on four verbs before `release`]
-    assert {v for v, _ in hl_live} == {"examine", "research", "restore", "transfer"}, (
+    # ⚠ `interview` JOINS THE HEADLESS DROP SET UNDER G1a: the maturation write changes the act
+    # mix, so a verb that never formed a droppable Candidate here now does. `transfer` stays,
+    # which is what the message below requires — that chain is the acceptance's own.
+    # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written through the gate -- headless clause-4 drops on {examine, interview, research, restore, transfer}]
+    assert {v for v, _ in hl_live} == {"examine", "interview", "research", "restore", "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `transfer` must stay — "
         "that chain is the acceptance's own, `stores:grain` read by a `transfer.refused` and read "
         "back by the same cell, and it is the only place the acceptance's binding argument "
@@ -8642,15 +8700,37 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # fires, and `U6` is where its worth gets decided — but it no longer removes an act from a
     # season in either world this test can reach.
     # [GROUNDED: measured 2026-09-11 under `U3`, `build_world(0)` 3 seasons and ARC-01 at seed 0 -- clause 4 drops 18 and 172, executable pairs 6 and 13, and the control-only (biting) set is EMPTY in both; two of the six here are taken in both arms and a third is taken in the live arm despite being dropped in it]
-    assert len(dropped) == 6, (
+    # ⚠ 6 -> 8 UNDER G1a, WHICH IS THE CHANNEL FIRING WIDER: the maturation write changes the
+    # act mix, `interview` joins the drop set, and two more executable pairs are suppressed.
+    # The channel is healthier by this measure and still outcome-inert by the one below.
+    # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written through the gate -- 8 executable clause-4 drops on `build_world(0)`, from 6 under `U3`]
+    assert len(dropped) == 8, (
         f"{len(dropped)} executable clause-4 drops, not 6. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
-    assert not bit, (
-        f"a clause-4 drop BITES again: {sorted(bit)}. That is good news and must be RECORDED "
-        "rather than absorbed — a suppressed candidate is no longer recoverable in a later round, "
-        "so either the tick's round count fell, the ranking went sparse again, or the belief now "
-        "lands early enough to hold. Say which before re-pinning.")
+    # ⚠⚠⚠ **THE BITE CAME BACK UNDER G1a, THE GUARD ABOVE DEMANDED A REASON, AND THE REASON IS
+    # MEASURED.** Three lines up this asserted `not bit` with a message naming three candidate
+    # causes — the round count falling, the ranking going sparse, or the belief landing early
+    # enough to hold — and requiring that one be named before re-pinning. **IT IS THE THIRD.**
+    # MEASURED 2026-09-11, `build_world(0)`, 3 seasons: `transfer`'s clause-4 drops now fire at
+    # `(tick, round)` = (1,0) (1,1) (1,2) (1,3) (1,4) (2,0) (2,1) (2,2) — EVERY ROUND of the
+    # season — and the earliest grammar-vocabulary claim lands at (0,0). A belief present in every
+    # round leaves no round in which the candidate is un-suppressed, so there is nowhere to
+    # recover it, and the drop DENIES rather than DEFERS.
+    # **WHY G1a DOES THAT: the maturation is a real write now.** It happens at MATTER, at the head
+    # of the season, and emits through the gate — so its claim is deposited at the earliest point a
+    # claim can be, and it persists. The hand-built Event it replaced carried a change to a field
+    # nothing wrote, and the recoverability `U2` and `U3` opened was the gap it left.
+    # ⚠ **THIS IS THE OUTCOME-RELEVANCE `U3` RECORDED LOSING, RECOVERED — and recorded as a result
+    # rather than absorbed into a green tick.** §F1 clause 4 fires wider (6 -> 8 executable drops
+    # here) AND bites again. The `U3` block above stays as the record of the state it measured.
+    # [GROUNDED: measured 2026-09-11 with `Record.matured` written at MATTER through the gate -- the biting set is {('transfer', 'rec:6bf46a143f347c12')}, its drops fire in all five rounds of tick 1 and the first three of tick 2, and the earliest grammar claim lands at (0, 0)]
+    assert bit == {("transfer", "rec:6bf46a143f347c12")}, (
+        f"the clause-4 bite is {sorted(bit)}. EMPTY means a drop is recoverable again — the act "
+        "gets taken in a round the belief does not reach, which is the state `U2` and `U3` left "
+        "and `G1a` recovered from; check whether the maturation still writes at MATTER before "
+        "anything else. A DIFFERENT or LARGER set is the channel reaching further and wants its "
+        "own measurement.")
     assert control == [], (
         f"the CONTROL arm dropped {control}. `none` deposits nothing in the `requires` "
         "vocabulary, so clause 4 has nothing to fire on and a drop here means the channel is open "
@@ -9259,7 +9339,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # SEPARATION the control exists for is intact and is what the bounds below assert: the shipped
     # arm diverges 9 times against the control's 1, a 9x gap where `U1` read 17 against 2.
     # [GROUNDED: measured 2026-09-11 under `U3`, NPC-088, seed 0, 4 seasons at 2 slots -- genuine/diverged 31/1 at `none`, 29/9 at `actor`, 28/3 at `total`]
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (31, 1), got
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (32, 1), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -9267,7 +9347,8 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # 78% to 89%. `R-01`/`R-02`'s channel WIDENED; that is the second thing the unit bought.
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 — 18 genuine forks, 14 divergences at the shipped arm]
     # [GROUNDED: re-measured 2026-09-10 under `U4` — 19 genuine forks, 17 divergences at the shipped arm]
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (29, 9), (
+    # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written through the gate -- genuine/diverged 32/1 at `none`, 29/10 at `actor`, 28/2 at `total`; the separation the control exists for widens to 10x]
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (29, 10), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
         "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
@@ -9275,7 +9356,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
         "moved rather than the rate — which is why the pair is pinned and not the count alone")
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- 5 of 18 at the `total` deposit arm]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- 5 of 19 at the `total` deposit arm, unmoved in absolute terms]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (28, 3), got
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (28, 2), got
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -9331,7 +9412,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: measured 2026-09-11 under `U2`, NPC-088, seed 0, 4 seasons at 2 slots -- acts_differ/genuine 27/45 at `none`, 24/40 at `actor`, 24/40 at `total`; hash_differ equals acts_differ in every arm, asserted above]
     assert {k: (v["acts_differ"], v["genuine"]) for k, v in got.items()} == {
         # [GROUNDED: measured 2026-09-11 under `U2`, NPC-088, seed 0, 4 seasons at 2 slots -- these six integers ARE the measurement, read off `arm9_forking.fork_case` at each `fan_out_mode`]
-        "none": (13, 31), "actor": (15, 29), "total": (14, 28)}, (
+        "none": (13, 32), "actor": (15, 29), "total": (12, 28)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "
@@ -9529,7 +9610,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # ranking makes a fork less likely to change the verb SET, because more candidates score
     # and the reshuffle is smaller. Re-derived rather than adjusted, as this cell demands.
     # [GROUNDED: re-measured 2026-09-11 under `U3` -- 9 VERB-SET divergences of 29 genuine at the shipped arm, against 1 of 31 at the control]
-    assert got["actor"]["verbonly"] == 9, (
+    # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written through the gate -- 10 VERB-SET divergences at the shipped arm]
+    assert got["actor"]["verbonly"] == 10, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -9573,14 +9655,14 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # clause 3. It fell to 1 and it is still not 0, which is what the paragraph below says
     # would mean the channel had closed.
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (31, 1) at the control, (29, 9) at `actor`, (28, 3) at `total`]
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (31, 1), got
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (32, 1), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (29, 9), got
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (29, 10), got
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (28, 3), got
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (28, 2), got
 
 
 # ===========================================================================

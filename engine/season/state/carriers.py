@@ -421,6 +421,20 @@ class Record:
     subject_matter: Any = None
     ttl: Optional[int] = None
     stages: list[tuple] = field(default_factory=list)
+    # ⚠⚠ **RULED BY JORDAN, 2026-09-10: "add `Record.matured`, write it at MATTER".** Of three
+    # costed options — add the field and write it; make the Event carry no change; move maturation
+    # to RESOLVE as act-declared — he took the first, on the grounds that THE MATRIX ROW IS THE
+    # GAME and the field should exist. `write_matrix.yaml`'s `(Record, matured)` row has named this
+    # field since it was written: `steps: [MAT]`, `class: MATTER`, `emits: term.matured`,
+    # `by: "D7 — MATTER matures a term the act declared; causes[] names that act"`.
+    # ⚠ **WHAT IT REPAIRS IS `ID-9` LIVE, NOT A TIDINESS.** `loop/matter.py` emitted `term.matured`
+    # carrying `StateChange(rid, "set", "MATTER", "stages", label)` and applied NO WRITE — nothing
+    # in the package mutated `rec.stages`; `matter.py` and `probes.py` only read it. An Event
+    # reported a state change that did not happen, which is ID-9's own worked example. It also
+    # named the WRONG ROW: `(Record, stages)` is `steps: [RES]`, `class: ACTS`, *"terms are
+    # act-declared, never MATTER-advanced"* — a MATTER-step Event claiming a change to the one
+    # field the matrix forbids MATTER to touch.
+    matured: bool = False
 
 
 @dataclass(frozen=True)
