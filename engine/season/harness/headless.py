@@ -148,7 +148,10 @@ def main() -> int:
     r = run(a.seasons, a.seed)
     print(f"{a.case} · {a.seasons} season(s) · seed {a.seed}")
     for n, s in enumerate(r["seasons"]):
-        print(f"  season {n}: acts={s['acts']} events={s['events']} deposits={s['deposits']}")
+        # `rounds` since `U2`: a ticked season and a one-pass one are indistinguishable in this
+        # line without it. See `SeasonDriver.season`'s return for why no Event carries a round.
+        print(f"  season {n}: rounds={s['rounds']} acts={s['acts']} events={s['events']} "
+              f"deposits={s['deposits']}")
     if a.log:
         for e in r["world"].log:
             print(f"    {e.kind:22} {e.subject:12} causes={e.causes}")

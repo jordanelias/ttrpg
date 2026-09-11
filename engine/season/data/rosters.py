@@ -193,6 +193,11 @@ TENURE_KINDS = roster("tenure_kinds")
 # exclusion is a single member so drift would be cheap; the moment it is not, two code sites would
 # have to move together and only one of them is guarded. Found by the `release` adversarial pass.
 RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain"}
+# `U1`: verb -> the capability key its contested roll draws dice from. A MAPPING inside a roster
+# row, read through `roster_map` so an absent roster refuses rather than defaulting to `{}` -- the
+# polarity that function exists to hold. A verb with no row falls through to `pool_default` inside
+# the wrapper, which is the `assumption` grade's own reading (`08 §3`) and not a refusal.
+VERB_CAPABILITY = roster_map("verb_capability", "values")
 RUNG_KINDS = roster("rung_kinds", ordered=True)
 REMIT_ACTS = roster("remit_acts")
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)

@@ -307,7 +307,7 @@ verbs:
       Wounded:      ["Person.body"]
       Untouched:    []
     writes_grade: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer. ⚠ EXECUTED 2026-09-04 (`W-E`): all three branches now run end to end through `SeasonDriver.resolve` -> `contest()` -> `combat_seam` -> `wrapper.fight`, and their consequences differ -- Felled deletes the subject and emits `person.died`, Wounded leaves them alive with a lower body and emits `body.changed`, Untouched writes nothing and emits `contest.undecided`. Falsifier: `test_we_a_contested_acts_consequence_differs_by_degree`."
-    writes_source: "combat_seam.resolve -> wound_state[THE ACT'S SUBJECT]: felled | wounds. ⚠ CORRECTED 2026-09-04 BY `W-E`, AND THE OLD CELL SAID `wound_state[loser]`, WHICH WOULD KILL THE WRONG PERSON. This verb's writes land on `payload[\"subject\"]` (`_eff_kill`), so if the ACTOR is the one felled, reading `[loser]` selects the `Felled` branch and the fold deletes the TARGET -- who is standing. The band is read off the person the writes land on. `health_remaining`/`health_full` are still read, but for the MAGNITUDE (`wound_harm_model`, `H-125`), not for the band."
+    writes_source: "combat_seam.resolve -> wound_state[THE ACT'S SUBJECT]: felled | wounds. ⚠ CORRECTED 2026-09-04 BY `W-E`, AND THE OLD CELL SAID `wound_state[loser]`, WHICH WOULD KILL THE WRONG PERSON. This verb's writes land on `payload[\"subject\"]` (`_eff_kill`), so if the ACTOR is the one felled, reading `[loser]` selects the `Felled` branch and the fold deletes the TARGET -- who is standing. The band is read off the person the writes land on. `health_remaining`/`health_full` are still read, but for the MAGNITUDE (`wound_harm_model`, `H-123`), not for the band."
     # ⚠ `emits:` IS DEGREE-KEYED TOO, AND THE FLAT VERSION WAS A LIVE `ID-9` DEFECT.
     # This read `["person.died"]` for every band. With the bands above that means A WOUND EMITS
     # `person.died` -- a success report for something that did not happen, in the verb whose own
@@ -501,8 +501,41 @@ verbs:
       form:      own_ledger
       of:        subject
     requires_typed_note: "§E3 `:417` — *the teller holds a claim on the subject*. §F.24a form 6's first named cell, and the one the `F8` carve-out was written for. This is `_req_tell` verbatim: `any(c.subject == subj for c in teller.ledger)`, with the ledger reached through a reader that can name no other person's."
-    writes:      []
-    emits:       ["news.told"]
+    contests:    "a standing"
+    writes:
+      Overwhelming: []
+      Success:      []
+      Partial:      []
+      Failure:      []
+    emits:
+      Overwhelming: ["news.told"]
+      Success:      ["news.told"]
+      Partial:      ["news.told"]
+      Failure:      ["news.untold"]
+    contests_note: >-
+      ⚠ `U1` / R-09. THE PRIZE IS `a standing`, WHICH IS ALREADY ROSTERED -- loader invariant 9
+      (`04:467`) requires a verb's prize to be in the subsystem roster, and inventing a prize to
+      dodge a ruling was considered and refused as worse than either option ED-SC-0037 costed.
+      ⚠ THIS INTRODUCES NO NEW EVENT KIND, WHICH IS THE LOAD-BEARING PROPERTY AND IT IS CHECKABLE
+      BY READING THE ROW. `news.told` and `news.untold` were BOTH already declared here -- one on
+      `emits:`, one on `emits_on_refusal:` -- so the degree-keyed column redistributes kinds the row
+      already had. Do NOT cite loader invariant 7 as what admits them: `04 §F.20b:1084` records
+      that the derived Event-kind roster is SPECIFIED AND UNBUILT, so nothing admits them and
+      nothing has to.
+      ⚠ `writes:` IS `[]` AT EVERY BAND AND THAT IS LAWFUL RATHER THAN A HOLE. `04 §C.4:630-634`
+      rules that a `Failure: []` is the only place in this architecture where writing nothing is
+      correct, and that it is correct because the act still EMITS -- which is the difference
+      between a refusal, where the precondition failed and no contest occurred, and a loss, where
+      the contest occurred and went against you. A telling deposits at WITNESS, not here, which is
+      what this row's own `writes_note` has always said.
+      ⚠⚠ AND `speak` DID NOT GET ONE, WHICH `U1`'s PLAN EXPECTED IT TO. That plan names `tell` AND
+      `speak`, on the ground that both carry `requires_typed`, form `own_ledger`. Measured against
+      this table: `speak`'s `requires` is an em-dash and it carries NO typed cell. An untyped verb
+      yields an empty operand bag from `operands_for`, so a computed `speak` would reach the seam
+      with ONE claimant -- the exact ground `kill / wound` is excluded on, and the third gate in
+      `resolvable_verbs()` refuses it for that reason rather than by name. Typing `speak`'s
+      precondition would be INVENTING one, because §E3 gives it none. So R-05's count moves 1 -> 2
+      rather than 1 -> 3, and the third is owed to whoever rules a precondition for `speak`.
     emits_on_refusal: ["news.untold"]
     grade:       "ruled"
     writes_note: "— (deposits at WITNESS, not here)"

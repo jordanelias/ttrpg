@@ -3646,7 +3646,8 @@ def _w4_run(seasons: int, seed: int = 0, condition: int | None = None):
     for _ in range(seasons):
         d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                 None, HL.subsistence)
+                 None, HL.subsistence,
+                 contest_max_depth=w.fixtures.get("contest_max_depth"))
     return w
 
 
@@ -3823,7 +3824,8 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
         for _ in range(3):
             d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                     None, HL.subsistence)
+                     None, HL.subsistence,
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
         confs = [c.confidence for p in w.persons.values() for c in p.ledger]
         seen[rate] = (Counter(e.kind for e in w.log)["claim.decayed"], min(confs), max(confs))
     print(f"\n  H-40 sweep — (decay events, min confidence, max) by rate: {seen}")
@@ -3849,7 +3851,8 @@ def _w6_run(mode: str, seasons: int = 3, seed: int = 0):
     for _ in range(seasons):
         dep += d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                        None, HL.subsistence)["deposits"]
+                        None, HL.subsistence,
+                        contest_max_depth=w.fixtures.get("contest_max_depth"))["deposits"]
     return w, dep
 
 
@@ -3925,7 +3928,8 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     for _ in range(2):
         d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
-                     draw=draw_factory(w.world_seed, lambda: w.tick)), None, HL.subsistence)
+                     draw=draw_factory(w.world_seed, lambda: w.tick)), None, HL.subsistence,
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     everyone = list(w.persons)
     fires = {c: sum(1 for e in w.log if any(fn(w, e, pid) for pid in everyone))
              for c, fn in CHANNEL_PREDICATES.items()}
@@ -4015,7 +4019,8 @@ def _r7_run(mode: str, seasons: int = 2, seed: int = 0):
     for _ in range(seasons):
         dep += d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                        None, HL.subsistence)["deposits"]
+                        None, HL.subsistence,
+                        contest_max_depth=w.fixtures.get("contest_max_depth"))["deposits"]
     return w, d, dep
 
 
@@ -4144,7 +4149,28 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # ⚠ WHAT SURVIVES AND IS STILL ASSERTED: both narrow arms thin the link and the CONTROL does
     # not, which is what makes the thinning attributable to the narrowing at all. Pinned as a
     # relation rather than as three numbers, so a fixture that grows does not read as a finding.
+    # ⚠⚠ **THE REASON CAME BACK UNDER `U1`, WHICH IS THE FINDING THE ASSERTION BELOW ASKED FOR IN
+    # AS MANY WORDS.** It read *"If `all_five` is above `presence_only` again the reason is BACK
+    # and `H-33` should say so"*. It is. Measured 2026-09-11 with the σ-leverage provider, same
+    # `_r7_run`, three seasons:
+    #
+    #                      questions   under `U2`
+    #     total                18          19
+    #     all_five (shipped)   17          16
+    #     presence_only        16          16
+    #
+    # The shipped arm is now strictly BETWEEN the control and the narrowest arm, where under `U2`
+    # it sat level with the narrowest. **The mechanism is `tell` becoming gradeable**: a failing
+    # telling deposits `news.untold` instead of `news.told` x3, which moves which claims land and
+    # therefore which Q2 questions exist — and `all_five`'s extra channels catch one deposit that
+    # `presence_only`'s co-location predicate does not.
+    # ⚠ **THE MARGIN IS ONE QUESTION AND THAT IS SAID RATHER THAN ROUNDED UP.** One is a real
+    # separation at a set-level count over three persons, but it is a thin basis for a default,
+    # and `H-33` records it as a reason that has returned at that size rather than as a reason
+    # restored to its original strength. The pin below stays a RELATION for the same reason the
+    # block above gives: a fixture that grows must not read as a finding.
     # [GROUNDED: measured 2026-09-11 under `U2`, `_r7_run`, three seasons -- questions raised 19 / 16 / 16 at `total` / `presence_only` / `all_five`; the two narrow arms are equal and the control is above both]
+    # [GROUNDED: measured 2026-09-11 under `U1`, `_r7_run`, three seasons -- questions raised 18 / 16 / 17 at `total` / `presence_only` / `all_five`; the shipped arm is strictly between the other two and `H-33`'s stated reason is back at a margin of one]
     assert got["all_five"][2] < got["total"][2], (
         f"the shipped arm raises {got['all_five'][2]} questions against `total`'s "
         f"{got['total'][2]}. If they are EQUAL again the narrowing has stopped costing anything "
@@ -4154,12 +4180,12 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
         f"`presence_only` raises as many questions as `total` ({got}) — then the narrowing costs "
         "nothing at this link in either arm and the thinning measured above is not attributable "
         "to it")
-    assert got["all_five"][2] == got["presence_only"][2], (
-        f"the two narrow arms differ at the claim→question link: `all_five` "
-        f"{got['all_five'][2]}, `presence_only` {got['presence_only'][2]}. They were equal under "
-        "`U2` on 2026-09-11, which is what took away the default's stated reason. If `all_five` "
-        "is above `presence_only` again the reason is BACK and `H-33` should say so; if it is "
-        "below, the shipped arm is now the worse of the two at this link and that is a finding")
+    assert got["all_five"][2] > got["presence_only"][2], (
+        f"the shipped arm no longer preserves more of the question stream than the narrowest: "
+        f"`all_five` {got['all_five'][2]}, `presence_only` {got['presence_only'][2]}. EQUAL is "
+        "the `U2` state, where `H-33`'s stated reason for the default was gone and the row said "
+        "so; BELOW means the shipped arm is the worse of the two at this link, which is a "
+        "finding and not a re-pin. Either way `H-33` is where it goes.")
 
     # LINK 3 — questions to acts.
     #
@@ -4622,7 +4648,10 @@ def _ten_seasons(w, seasons=10, verbs=None):
         return out
     hist = []
     for _ in range(seasons):
-        d.season(spy, question=None, subsistence=P.SUBSIST)
+        # `H-87`: the CALLER supplies the depth cap. This ran uncapped until `U1` gave `tell` a
+        # `contests:`; ten seasons of this world now reach a contest.
+        d.season(spy, question=None, subsistence=P.SUBSIST,
+                 contest_max_depth=w.fixtures.get("contest_max_depth"))
         hist.append({r: dict(w.rungs[r].stores) for r in w.rungs})
     return hist, minted, d
 
@@ -4804,9 +4833,27 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
                           for t in range(len(hist) + 1)))
     # ASSERT THAT IT ASSERTED (§0.1 point 2): with nothing drained the equality below is 0 == 0
     # and observes nothing at all.
-    assert drained > 0, (
-        "no granted `transfer` moved grain OUT of `S`, so the two equalities below are vacuous "
-        "and this run can no longer say what moved the settlement's larder")
+    # ⚠⚠ **THE FULL ARM DRAINS NOTHING UNDER `U1`, AND THE "ASSERT IT ASSERTED" GUARD MOVES TO
+    # THE TEST RATHER THAN BEING WEAKENED.** This read `assert drained > 0` with the message *"the
+    # two equalities below are vacuous and this run can no longer say what moved the settlement's
+    # larder"*. It fired. MEASURED 2026-09-11, `tiny_world`, ten seasons, against a worktree at
+    # `2ebab0c`:
+    #
+    #                        `tell` acts   news.told/untold   transfers   out of S   GRANTED
+    #     pre-`U1`                32           32 /  0           12           5         5
+    #     `U1`                    25            5 / 20            7           2         0
+    #
+    # `tell` is graded now and 20 of its 25 attempts fail, which moves the belief stream and with
+    # it which transfers are even formed. The two that still leave `S` are not granted.
+    # ⚠ **BUT THE CHANNEL IS NOT CLOSED, WHICH IS WHY THIS IS A MOVED GUARD AND NOT A DELETED
+    # CLAIM: the `no_move` arm below still drains 2.** So the attribution IS still exercised with a
+    # non-zero drain inside this test, just not in the full arm. The guard therefore asks what it
+    # always meant — *did this run observe a drain at all* — over both arms instead of one.
+    # ⚠ AND THE EQUALITIES ARE NOT VACUOUS AT ZERO EITHER. At `drained == 0` the first reads
+    # `no_transfer_end == settle_end`, which still goes red if ANYTHING other than `transfer`
+    # moved the larder — the confound this whole block exists to exclude. What is lost at zero is
+    # only the ability to see the drain's MAGNITUDE attributed, and the `no_move` arm supplies it.
+    # [GROUNDED: measured 2026-09-11 under `U1`, `tiny_world`, ten seasons, control from a worktree at 2ebab0c -- full-arm granted out-of-S drain 5 -> 0 while the `no_move` arm still drains 2; `tell` 32 -> 25 acts of which 20 now fail]
     no_transfer, _, _ = _ten_seasons(P.tiny_world(), verbs=resolvable_verbs() - {"transfer"})
     assert no_transfer[-1]["S"].get("grain", 0) - settle[-1] == drained, (
         f"the settlement ends at {settle[-1]} and at "
@@ -4847,6 +4894,19 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
         f"{nm_drained} grain actually carried out. `transfer` no longer accounts for the whole "
         "movement, so something else HAS become a cause of the settlement's larder — re-attribute "
         "the docstring rather than re-pinning this number")
+    # ⚠ **ASSERT THAT IT ASSERTED (§0.1 pt 2), OVER BOTH ARMS.** This guard sat on the full arm
+    # alone as `assert drained > 0` and fired under `U1`, where that arm's granted out-of-`S`
+    # drain went 5 -> 0. Both equalities above are still exclusions at zero — they go red if
+    # anything but `transfer` moved the larder — but with NO arm draining, neither could observe
+    # a magnitude and the block would be attributing nothing to nothing. One positive drain
+    # somewhere is what keeps the attribution a measurement.
+    # [GROUNDED: measured 2026-09-11 under `U1`, `tiny_world`, ten seasons -- full arm drains 0, `no_move` arm drains 2, and the attribution holds exactly in both cells]
+    assert drained + nm_drained > 0, (
+        f"NO arm of this test moved grain out of `S` (full {drained}, no-move {nm_drained}). The "
+        "two equalities above still exclude a second cause, but nothing here observes a drain's "
+        "magnitude any more, so this run cannot say what moved the settlement's larder. Look at "
+        "why `transfer` stopped being granted before re-pinning: under `U1` it was `tell`'s "
+        "degree changing the belief stream that forms transfer Candidates.")
     # AND THE MECHANISM THE DOCSTRING REFUTES STAYS REFUTED, asserted rather than recited: an extra
     # eater at `S` would draw 2 a season, which is the order of magnitude of every delta here.
     assert {tuple(sorted(world_q.presence(no_move_d.w, "S")))} == {("p_high",)}, (
@@ -5003,7 +5063,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
         for _ in range(7):
             d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                     None, HL.subsistence)
+                     None, HL.subsistence,
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
         by_id = {e.id: e for e in w.log}
 
         def depth(e, seen=()):
@@ -5035,7 +5096,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
             for _ in range(7):
                 d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                         None, HL.subsistence)
+                         None, HL.subsistence,
+                         contest_max_depth=w.fixtures.get("contest_max_depth"))
             seen[n] = sum(1 for e in w.log if e.kind == "term.matured")
         matured[f"{arm}:3"], matured[f"{arm}:6"] = seen[3], seen[6]
         assert seen[3] < seen[6], (
@@ -5118,7 +5180,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     mint5 = lambda pid, verb, subj: H(w5.world_seed, w5.tick, pid, f"act:{verb}:{subj}")
     for _ in range(5):
         d5.season(make_chooser(w5.fixtures, mint5, verbs=resolvable_verbs(),
-                  draw=draw_factory(w5.world_seed, lambda: w5.tick)), None, HL.subsistence)
+                  draw=draw_factory(w5.world_seed, lambda: w5.tick)), None, HL.subsistence,
+                  contest_max_depth=w5.fixtures.get("contest_max_depth"))
     by5 = {e.id: e for e in w5.log}
 
     def depth5(e, seen=()):
@@ -5157,7 +5220,8 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
         for _ in range(2):
             d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                     None, HL.subsistence)
+                     None, HL.subsistence,
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
         subjects[rule] = len({c.subject for c in w.persons[HL.BAILIFF].ledger})
     moved["H-79 distinct claim subjects in the bailiff's ledger"] = subjects
     assert subjects["actor"] < subjects["per_change"], subjects
@@ -5187,7 +5251,8 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
         for _ in range(2):
             d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                     None, HL.subsistence)
+                     None, HL.subsistence,
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
         hashes[scale] = len(w.log)
     moved["H-06 events by condition_scale"] = hashes
     assert len(set(hashes.values())) == 1, (
@@ -6043,9 +6108,37 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # did not exist. The band `U4`'s temperature sweep covers is 11 points wide; this is three
     # times it.
     # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 143 corpus cases, control from a worktree at 11ec43c -- distinct executed sets 10 -> 14, R3 55 -> 50, `release` executes in 15 of the 89 live worlds]
+    # ⚠⚠ **38 -> 40, `U1` / R-09 (2026-09-11), AND THE VARIETY FIGURE IS THE LESS INTERESTING
+    # HALF OF THIS ARM.** Both arms at seed 0 over the same 143 cases, control from a worktree at
+    # `2ebab0c` (`U2` landed, the σ-leverage provider not):
+    #
+    #     distinct executed sets   38  ->  40
+    #     R3 cross-person          84  ->  84   of 143   (UNMOVED)
+    #     universal executed set   {}  ->  {reconstruct}
+    #     `tell` worlds            73  ->  79       `speak`    79 -> 73
+    #     `research`               35  ->  39       `release`  18 -> 15
+    #
+    # `tell` is graded now, so a telling that FAILS still executes and still occupies a scene —
+    # which is why `tell` reaches SIX more worlds while depositing less. Two more distinct
+    # signatures follow from the act mix moving, not from any new verb.
+    # ⚠ **AND THE UNIVERSAL SET COMES BACK, WHICH IS A LOSS IN THE DIRECTION `U2` BOUGHT.** `U2`'s
+    # headline was that the universal set went EMPTY — *nothing is guaranteed a scene in every
+    # world any more* — and `U1` puts `reconstruct` back into all 89 live worlds. It is reported
+    # rather than netted off against the +2: one verb regaining universality is between-world
+    # variety lost, and it is not what R-09 asked for. The mechanism is the same one: `tell`
+    # failing frees ranking positions that `reconstruct`, the highest-scoring candidate in this
+    # corpus, takes everywhere.
+    # ⚠ R3 IS THE CONTROL THAT SAYS THIS IS THE ACT MIX AND NOT THE CHANNEL: cross-person
+    # propagation is unmoved at 84 of 143 across both arms. `U1` changed what people do, not
+    # whether what one person does reaches another.
     # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 143 corpus cases, control from a worktree at d0165b5 -- distinct executed sets 14 -> 38, R3 50 -> 84, universal {create_record} -> {}, `research` 15 -> 35 worlds and `interview` 14 -> 25]
-    assert len(by_sig) == 38, (
-        f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived")
+    # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 143 corpus cases, control from a worktree at 2ebab0c -- distinct executed sets 38 -> 40, R3 84 -> 84 UNMOVED, universal {} -> {reconstruct}, `tell` 73 -> 79 worlds and `speak` 79 -> 73]
+    assert len(by_sig) == 40, (
+        f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
+        "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
+        "which unit moved it and in which direction before re-pinning, and check the universal "
+        "set in the same breath: variety can rise while a verb regains universality, which is "
+        "what `U1` did.")
     # WHAT IS FIXED AND WHAT VARIES, ASSERTED EXACTLY IN BOTH DIRECTIONS — the count alone would
     # pass on fourteen arbitrary sets. ONE verb executes in every live case and ten vary.
     universal = set.intersection(*(set(r["executed"]) for r in live))
@@ -6082,8 +6175,24 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # outcome and not a design invariant"* — so the assertion is re-measured rather than adjusted,
     # which is what that sentence instructs. An EMPTY intersection is asserted exactly, because
     # `>= 0` would observe nothing and the day something becomes universal again is a finding.
-    assert universal == set(), sorted(universal)
-    assert varying == {"create_record", "interview", "move", "reconstruct", "release", "research",
+    # ⚠⚠ **THAT DAY IS `U1`, 2026-09-11, AND IT IS RECORDED AS THE FINDING THIS LINE ASKED FOR
+    # RATHER THAN AS A RE-PIN.** `reconstruct` is back in all 89 live worlds. Same 89 worlds,
+    # control from a worktree at `2ebab0c`:
+    #   reconstruct 88 -> **89** · transfer 83 -> 86 · create_record 80 -> 80 · tell 73 -> 79 ·
+    #   utter 74 -> 75 · speak 79 -> 73 · move 71 -> 70 · surveil 71 -> 70 · research 35 -> 39 ·
+    #   interview 25 -> 24 · release 18 -> 15
+    # THE MECHANISM IS `tell` BECOMING GRADEABLE. A telling that FAILS still executes and still
+    # occupies a scene, so `tell` reaches six more worlds while depositing less; the ranking
+    # positions that shifts free go to the corpus's highest-scoring candidate, which is
+    # `reconstruct`, in every world at once.
+    # ⚠ **THIS IS A LOSS IN THE DIRECTION `U2` BOUGHT AND IT IS NOT NETTED OFF AGAINST `U1`'s +2
+    # DISTINCT SETS.** `U2`'s headline was that nothing is guaranteed a scene in every world any
+    # more; one verb has taken that back. It is between-world variety lost, it is not what R-09
+    # asked for, and the honest statement is that `U1` bought two signatures and paid one
+    # universal verb for them.
+    # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 89 live corpus worlds, control from a worktree at 2ebab0c -- universal {} -> {reconstruct}, `reconstruct` 88 -> 89 worlds, `tell` 73 -> 79, `speak` 79 -> 73]
+    assert universal == {"reconstruct"}, sorted(universal)
+    assert varying == {"create_record", "interview", "move", "release", "research",
                        "speak", "surveil", "tell", "transfer", "utter"}, sorted(varying)
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -6367,7 +6476,8 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick))
     for _ in range(3):
-        d.season(ch, question=None, subsistence=C.P.SUBSIST)
+        d.season(ch, question=None, subsistence=C.P.SUBSIST,
+                 contest_max_depth=w.fixtures.get("contest_max_depth"))
 
     # 1 — EVERY ACT THAT CAME THROUGH DELIBERATE NAMES ITS SCENE, and every scene its occasion.
     #     A bare Act built by hand has neither and is not asserted over.
@@ -6413,6 +6523,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # [GROUNDED: measured 2026-09-11 over the 27 NPC rung cases at seed 0, 3 seasons -- 81 `news.told` Events across 26 of 27 cases; NPC-088 alone produces none]
     told_cases = 0
     checked = 0
+    attempt_cases = 0
     for other in R.load_cases("NPC"):
         if str(other.get("scale")) not in set(RUNG_KINDS):
             continue
@@ -6422,9 +6533,18 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
         ch4 = make_chooser(w4.fixtures, mint4, verbs=resolvable_verbs(),
                            draw=draw_factory(w4.world_seed, lambda: w4.tick))
         for _ in range(3):
-            d4.season(ch4, question=None, subsistence=C.P.SUBSIST)
+            d4.season(ch4, question=None, subsistence=C.P.SUBSIST,
+                     contest_max_depth=w4.fixtures.get("contest_max_depth"))
+        # ⚠⚠ **`U1` SPLIT "A TELLING HAPPENED" FROM "A TELLING SUCCEEDED", AND THIS LINE COUNTED
+        # ONLY THE SECOND.** `tell` declares `contests: "a standing"` now, so a telling is GRADED:
+        # it emits `news.told` x3 at a passing degree and `news.untold` at Failure. A case where
+        # every telling failed used to be unrepresentable and now reads, to a `news.told` count,
+        # as a case that told nothing — which is the collapse this guard exists to catch, reported
+        # for a lane where the transport is fine.
         told = [e for e in w4.log if e.kind == "news.told"]
+        attempts = told + [e for e in w4.log if e.kind == "news.untold"]
         told_cases += bool(told)
+        attempt_cases += bool(attempts)
         for e in told:
             act = d4.act_of.get(e.id)
             refs = act_refs(act)
@@ -6447,12 +6567,30 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     # observe a 24-case collapse of the telling transport — the failure mode this guard exists for.
     # `>= 20` of 27 keeps six cases of headroom for the draw to move the act mix (the reason the
     # exact 26 is not pinned) while still going red on anything that could be called a collapse.
+    # ⚠⚠ **AND UNDER `U1` IT COUNTS ATTEMPTS, NOT SUCCESSES, WHICH IS THE SUBJECT IT ALWAYS HAD.**
+    # "The telling transport collapsed" and "tellings are now failing their roll" are different
+    # failures and this guard is for the first. MEASURED 2026-09-11 over the 27 NPC rung cases at
+    # seed 0, 3 seasons: **26 cases still produce a telling — the same 26 as before `U1`** — while
+    # only 15 produce a SUCCESSFUL one. Counting `news.told` alone would have read that as a
+    # collapse from 26 to 15 and sent a reader to look at a transport that never moved.
     # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- 26 of the 27 NPC rung cases produce a telling and this sits six below it, which is headroom for the sampled order to move the act mix and none for the transport failing]
-    assert told_cases >= 20, (
-        f"only {told_cases} of the 27 NPC rung cases produced a telling — 26 did on 2026-09-11. "
-        "The floor leaves room for the sampled order to move the act mix and none for the "
-        "transport failing: below it, clause 4 is measuring a lane in which little is told "
-        "rather than a property of tellings, and the transport is what to look at first")
+    # [JUSTIFIED: a COLLAPSE FLOOR over a lane count, not a game value -- SUPERSEDES the line above under `U1`: it counts telling ATTEMPTS (`news.told` or `news.untold`) rather than successes, because grading `tell` split the two. Still 26 of 27, still six below]
+    assert attempt_cases >= 20, (
+        f"only {attempt_cases} of the 27 NPC rung cases produced a telling at all — 26 did on "
+        "2026-09-11, before and after `U1`. This counts `news.told` AND `news.untold`, so a "
+        "failing roll cannot trip it: below the floor the act mix has stopped producing tellings "
+        "or the transport is gone, and the transport is what to look at first")
+    # ⚠ **AND THE SUCCESS COUNT GETS ITS OWN FLOOR, BECAUSE THE LOOP BODY ABOVE ONLY RUNS ON
+    # `news.told`.** §0.1 pt 2: an assertion must be able to observe the failure it excludes, and
+    # every referent check above is inside `for e in told`. If tellings stopped succeeding
+    # entirely those checks would assert nothing while `attempt_cases` stayed green.
+    # [GROUNDED: measured 2026-09-11 under `U1`, 27 NPC rung cases at seed 0, 3 seasons -- 15 cases produce a `news.told`, 26 produce a `news.untold`; 20 `news.told` Events against 75 `news.untold`, a 21% success rate at `pool_default=2` / `obstacle_default=2`]
+    assert told_cases >= 8, (
+        f"only {told_cases} of the 27 NPC rung cases produced a SUCCESSFUL telling — 15 did on "
+        "2026-09-11 under `U1`. The referent checks above run only on `news.told`, so this is "
+        "what keeps them from asserting nothing. A fall here is the σ roll getting harder, not "
+        "the transport breaking: look at `H-126` (`pool_default`) and `H-127` (`obstacle_default`) "
+        "before anything in `witness`.")
     assert checked >= 1, "no telling carried a referent, so clause 4 asserted nothing"
 
     # 4a — AND IT CITES NOTHING ELSE. ⚠ THIS IS THE CLAUSE A CRITIC ASKED FOR AND THE FIRST
@@ -7442,7 +7580,7 @@ def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_e
         # ⚠ `("harm", "_eff_kill")` STOOD HERE UNTIL 2026-09-04 AND IS RETIRED WITH ITS SUBJECT,
         # NOT WIDENED. `W-E` deleted the default: the severity of a wound is now READ off the
         # personal-combat scene (`Resolution.result["wound_state"]`) under a swept fixture
-        # (`wound_harm_model`, `H-125`), so nothing in `_eff_kill` defaults an operand any more
+        # (`wound_harm_model`, `H-123`), so nothing in `_eff_kill` defaults an operand any more
         # and the carve-out had nothing left to license.
         # ⚠ AND IT ALMOST SURVIVED ON A DOCSTRING. `W-E`'s first rewrite of `_eff_kill` QUOTED the
         # deleted line verbatim while explaining it; this scan reads raw source, so the carve-out
@@ -7840,7 +7978,8 @@ def test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own
     for _ in range(3):
         d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                 None, HL.subsistence)
+                 None, HL.subsistence,
+                 contest_max_depth=w.fixtures.get("contest_max_depth"))
     unknown = [(e.kind, o.predicate) for e in w.log for o in e.observed if o.value is UNKNOWN]
     assert unknown, (
         "the run produced NO unreadable observation, so this scan cannot observe the deposit it "
@@ -7896,7 +8035,8 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
         for _ in range(3):
             d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                     None, HL.subsistence)
+                     None, HL.subsistence,
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
             for p in w.persons.values():
                 for c in p.ledger:
                     if str(c.predicate).partition(":")[0] in REQUIRES_STEMS:
@@ -8128,7 +8268,8 @@ def test_wb_the_carrier_moves_the_seeded_hash():
         for _ in range(2):
             d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                     None, HL.subsistence)
+                     None, HL.subsistence,
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
         carried = sum(len(e.observed) for e in w.log)
         if strip:
             for e in w.log:
@@ -8231,7 +8372,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
             for _ in range(3):
                 acts.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                                     None, HL.subsistence)["acts"])
+                                     None, HL.subsistence,
+                                     contest_max_depth=w.fixtures.get("contest_max_depth"))["acts"])
             # ⚠ THE SEQUENCE, NOT ONLY THE COUNT. See the composition assertion below: with a
             # fuller verb pool a dropped Candidate is BACKFILLED, so the count stops discriminating
             # while the acts still differ. `(actor, verb, subject)` is the same fingerprint
@@ -8397,6 +8539,17 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # unreachable or later reversed, which would mean the clause is being counted somewhere the
     # fold does not read.
     # [GROUNDED: measured 2026-09-11 under `U2`, `build_world(0)`, 3 seasons -- 18 clause-4 drops, 16 of them on verbs the fold can execute, and the pairs taken at the control and not at the shipped default are a non-empty proper subset]
+    # ⚠ **AND THE MAGNITUDE IS PINNED BESIDE THE EXISTENTIAL, BECAUSE `assert bit` IS SATISFIED BY
+    # ANY NON-EMPTY SET AND THE SET IS A SINGLETON.** At one element, the difference between "the
+    # clause bites" and "the clause has stopped biting" is one pair, and a bare truthiness check
+    # cannot report which pair or how close to zero it is running. The pin names it.
+    # [GROUNDED: measured 2026-09-11 under `U2`, `build_world(0)`, 3 seasons -- 18 clause-4 drops, 6 of them on verbs the fold can execute, and exactly ONE of those six is taken at the control and not at the shipped default: `('transfer', 'rec:ef6355957628cb28')`]
+    assert len(bit) == 1 and len(dropped) == 6, (
+        f"the clause-4 bite moved: {len(bit)} biting pairs of {len(dropped)} executable drops "
+        f"(was 1 of 6), biting set {sorted(bit)}. At a singleton this is one pair away from zero, "
+        "so a move here is worth reading before it is re-pinned: a LARGER set is the clause "
+        "reaching further and is good news to record; a smaller one is `assert bit` about to go "
+        "red and the channel about to close.")
     assert bit, (
         f"NOT ONE of the {len(dropped)} executable pairs clause 4 dropped is taken at the control "
         f"and missing from the shipped arm: dropped={sorted(dropped)}. Then no drop removed an "
@@ -8433,11 +8586,34 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # form as well as HOW MANY, and nothing here separates the two. What it does establish is that
     # the fall was not `move`'s channel closing, which is the reading the paragraph above was
     # written to prevent. `tell` remains the tell-tale for the retracted `claim.held` defect.
+    # ⚠⚠ **`surveil` LEAVES THE SET UNDER `U1`, AND THE CAUSE IS TRACED RATHER THAN INFERRED.**
+    # `U1` gives `tell` a `contests:` and therefore a DEGREE, so a telling that fails now emits
+    # `news.untold` instead of `news.told` x3. Fewer `news.told` claims land, and the belief that
+    # was contradicting `surveil`'s `present_at` clause stops arriving.
+    # MEASURED IN TWO ARMS ONE COMMIT APART — a git worktree at `2ebab0c` (pre-`U1`) against the
+    # working tree, same case, same seed, same fixtures, nothing else differing:
+    #
+    #                      drop verbs                              drops  events  news.told  news.untold
+    #   pre-`U1` 2ebab0c   examine move research restore surveil     80    1684       6           0
+    #   `U1`     shipped   examine move research restore             69    1740       2           3
+    #
+    # And the link itself, not just the totals: at `2ebab0c`, `surveil`'s clause-4 drops fire 5
+    # times, every one of them on `p_c`, whose ledger carries `news.told` and `present_at:p_c`;
+    # under `U1` they fire ZERO times. `surveil` executes in NEITHER arm (0 acts), so what changed
+    # is which candidates are suppressed, not which run.
+    # ⚠ **THIS IS A COST AND IT IS REPORTED RATHER THAN NETTED OFF.** Grading a verb narrows the
+    # deposit stream that feeds §F1 clause 4, so the suppression channel reaches one fewer verb
+    # and 11 fewer candidates here. That is not what R-09 asked for; it is what asking for a
+    # degree on a verb that deposits beliefs costs. The channel is not lost — four verbs and 69
+    # drops — and the control still reads 0, which is the property this block exists for.
     # [GROUNDED: measured 2026-09-11 under `U2`, ARC-01 at seed 0 -- clause-4 drops on {examine, move, research, restore, surveil}; under the one-pass loop the same case dropped {examine, research, restore, interview}]
-    assert {v for v, _ in live} == {"examine", "move", "research", "restore", "surveil"}, (
+    # [GROUNDED: measured 2026-09-11 under `U1`, ARC-01 at seed 0, against a `2ebab0c` worktree as the pre-`U1` arm -- clause-4 drops on {examine, move, research, restore}, 69 of them, where the pre-`U1` arm dropped {examine, move, research, restore, surveil}, 80 of them]
+    assert {v for v, _ in live} == {"examine", "move", "research", "restore"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
-        "`LEDGER_DERIVED_STEMS` excludes; any other verb is a new finding and must be measured")
+        "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "
+        "suppressing `news.told` — check `U1`'s prize row and `sigma_leverage`. Any other verb is "
+        "a new finding and must be measured.")
     assert not [c for pp in wl.persons.values() for c in pp.ledger if c.predicate == "claim.held"], (
         "a `claim.held` claim is in a ledger at the end of the run")
 
@@ -8528,7 +8704,8 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
             for _ in range(3):
                 d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
-                         None, HL.subsistence)
+                         None, HL.subsistence,
+                         contest_max_depth=w.fixtures.get("contest_max_depth"))
             confs = [c.confidence for p in w.persons.values() for c in p.ledger]
             ev = Counter(e.kind for e in w.log)
             occ = sum(len(p.ledger) for p in w.persons.values())
@@ -9020,6 +9197,22 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
         "later round — so this is a majority rather than the equality it was under one pass. "
         "Below half, the probe is mostly forking people into acts they were going to take anyway "
         "and the reconvergence figures are measuring the recovery rather than the channel")
+    # ⚠ **AND THE MAGNITUDES ARE PINNED, BECAUSE THE BOUND ABOVE IS A PROPERTY AND NOT A
+    # MEASUREMENT.** `2 x acts_differ > genuine` is satisfied by anything from 23 to 45 at `none`,
+    # so on its own it cannot see the recoverability rate move — and that rate IS the finding this
+    # block reports (*roughly two in five forks leave the act stream identical*). The two live
+    # side by side for the reason the `W-D` block 200 lines above states of its own pair: the
+    # bound runs first and says WHICH property broke, the pin says that a number moved. Same
+    # convention, same file.
+    # [GROUNDED: measured 2026-09-11 under `U2`, NPC-088, seed 0, 4 seasons at 2 slots -- acts_differ/genuine 27/45 at `none`, 24/40 at `actor`, 24/40 at `total`; hash_differ equals acts_differ in every arm, asserted above]
+    assert {k: (v["acts_differ"], v["genuine"]) for k, v in got.items()} == {
+        # [GROUNDED: measured 2026-09-11 under `U2`, NPC-088, seed 0, 4 seasons at 2 slots -- these six integers ARE the measurement, read off `arm9_forking.fork_case` at each `fan_out_mode`]
+        "none": (27, 45), "actor": (24, 40), "total": (24, 40)}, (
+        f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
+        "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
+        "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "
+        "gives back and every rate in this block is read against it. Say in the commit which way "
+        "it moved and why before changing these numbers.")
 
 
 def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_percent_under_it():
@@ -9466,13 +9659,20 @@ def test_we_the_ladder_is_the_trees_own_and_not_a_copy_of_it():
 
 
 def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
-    """PER VERB, MEASURED RATHER THAN CLAIMED -- and the answer is ONE of thirty-seven.
+    """PER VERB, MEASURED RATHER THAN CLAIMED -- and the answer is TWO of thirty-eight.
 
-    A degree exists only where something RESOLVES a contest. 36 of the 37 rows in
+    A degree exists only where something RESOLVES a contest. 36 of the 38 rows in
     `verb_table.yaml` declare no `contests:` at all, so no degree is even ASKABLE for them: they
     are not ungraded, they are ungradeable, and a degree wired onto one would be a number with no
-    producer. `speak`, `tell`, `utter`, `petition` and the six investigation acts -- the
-    person-to-person verbs a degree would matter most for -- are all in that 36.
+    producer.
+
+    ⚠⚠ **THIS DOCSTRING READ *ONE of thirty-seven* AND LISTED `tell` AMONG THE UNGRADEABLE, AND
+    `U1` MADE BOTH FALSE.** `tell` declares `contests: "a standing"` (ED-SC-0037), which routes to
+    the `sigma_leverage` provider, so it is the second gradeable verb. `speak`, `utter`,
+    `petition` and the six investigation acts remain in the 36 -- and `speak` is the case that
+    shows the rule still bites rather than having been relaxed: `U1` could not give it a
+    `contests:` because it is untyped and its `requires:` is `--`, which is why R-05's contested
+    count moves 1 -> 2 and not the 1 -> 3 the plan projected.
 
     ⚠ 32 -> 37 AND THE CLAIM IS UNCHANGED IN KIND, WHICH IS WHY THIS IS A REWRITE AND NOT A
     RELAXATION. The row spelled `"the six investigation acts"` was ONE row standing for SIX acts
@@ -9482,17 +9682,33 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     no `contests:` -- `rosters.yaml:505-508` rules that giving them a prize so the existing
     machinery can grade them is scripting drift -- and nothing produces a margin.
 
-    THE THREE PRIZES THAT ARE NOT `the body` ROUTE TO SUBSYSTEMS THE SEAM DOES NOT CALL, and that
-    is a RULING rather than an omission. Jordan, 2026-09-02: *"we don't NEED to worry about them
-    at this point in time."* The seam names the subsystem and refuses, which this test executes.
+    ⚠ **ONE PRIZE NOW ROUTES TO A SUBSYSTEM THE SEAM DOES NOT CALL, NOT THREE.** That sentence
+    read *THE THREE PRIZES THAT ARE NOT `the body`*, resting on Jordan's 2026-09-02 *"we don't
+    NEED to worry about them at this point in time."* `U1` spends his 2026-09-09 ruling instead --
+    *"we have the sigma leverage d10 resolver in engine to use"* -- so `a standing` and
+    `a proposition` acquire a provider and only `a field` still refuses, needing `faction_q.resolve`
+    (R-04/U9). The refusal is asserted below on the field that decides it, `provider:`, rather
+    than on the module name, which after `U1` no longer predicts whether anything runs.
 
-    AND THE LADDER BRANCH HAS NO PRODUCER. `degree_from_net` reads `net - ob`; nothing in this
-    tracer produces a `net`. The scan below is the falsifier for that sentence -- if a roll ever
-    lands here, it goes red and the claim has to be rewritten rather than quietly outlived."""
+    ⚠⚠ **AND THE LADDER BRANCH HAS A PRODUCER.** That sentence read *nothing in this tracer
+    produces a `net`*, and the scan at the foot of this test was its falsifier, written to go red
+    and force a rewrite rather than be quietly outlived. `U1` is what turned it red:
+    `seam/wrappers/sigma.py` composes `roll_net(pool) + net_boost(lev, pool)`. The scan is
+    rewritten to a SET EQUALITY on exactly one owner, which is the stronger claim -- see the
+    comment at the scan for why an inverted `assert producers` would have been weaker."""
+    # ⚠⚠ **TWO OF THIRTY-EIGHT SINCE `U1`, AND `tell` IS THE SECOND** (ED-SC-0037; `verb_table.yaml`
+    # `tell.contests: "a standing"`). The docstring's *ONE of thirty-seven* and its list of
+    # person-to-person verbs *all in that 36* were both true when written and are both false now,
+    # and they are rewritten above rather than left to be discovered here.
+    # ⚠ **THE PROPERTY THIS PIN GUARDS IS UNCHANGED: a degree is askable only where something
+    # resolves a contest.** What moved is the SIZE of that set, not the rule. `speak` is the case
+    # that shows the rule still bites — `U1` could not give it a `contests:` because it is untyped
+    # and its `requires:` is `—`, so R-05's contested count moves 1 -> 2 and not the plan's 1 -> 3.
     contested = {v: r.contests for v, r in VERB_TABLE.items() if r.contests}
-    assert contested == {"kill / wound": "the body"}, (
+    assert contested == {"kill / wound": "the body", "tell": "a standing"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
-        "can be graded today is scoped to this set")
+        "can be graded today is scoped to this set. A THIRD entry is a real widening and wants "
+        "its own measurement; losing `tell` means `U1`'s prize row or its verb row has gone.")
     # Pins the roster against silent growth.
     # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11, AND THE PROPERTY THIS TEST GUARDS IS
     # UNTOUCHED BY IT: `release` declares NO `contests:`, so the contested set asserted two lines
@@ -9507,33 +9723,74 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
             "reconstruct"} <= set(VERB_TABLE), sorted(VERB_TABLE)
     assert "the six investigation acts" not in VERB_TABLE
 
+    # ⚠⚠ **A PRIZE IS A ROW SINCE `U1`, NOT A MODULE STRING, AND THE TWO FIELDS ARE DIFFERENT
+    # QUESTIONS.** `module:` is WHOSE prize it is — what the seam names when it refuses, checked
+    # against `references/module_contracts.yaml`. `provider:` is WHAT RUNS IT. They diverge the
+    # moment an interim resolver stands in for an unbuilt subsystem, which is exactly `a standing`
+    # and `a proposition`: module `social_contest`, provider `sigma_leverage`, `interim: true`.
     prizes = roster_map("contest_subsystems", "prizes")
-    assert prizes["the body"] == "personal_combat"
-    # THE SEAM CALLS personal_combat AND REFUSES THE OTHER TWO, BY NAME. Executed, not read.
+    assert prizes["the body"]["module"] == "personal_combat"
+    assert prizes["the body"]["provider"] == "personal_combat"
+    # ⚠ **"THE SEAM REFUSES THE OTHER THREE" WAS TRUE BEFORE `U1` AND IS FALSE NOW — ONE REFUSES.**
+    # A prize refuses exactly when its row carries NO `provider:`, which is `a field` alone
+    # (`mass_battle` needs `faction_q.resolve`, i.e. R-04/U9). The loop is rewritten to split on
+    # the field that decides it rather than on the module name, because after `U1` the module name
+    # no longer predicts whether anything runs.
     w = _w(); w.step = Step.RESOLVE
     refused = {}
-    for prize, sub in sorted(prizes.items()):
-        if sub == "personal_combat":
+    for prize, row in sorted(prizes.items()):
+        if row.get("provider"):
             continue
         with pytest.raises(Unspecified) as ei:
             contest(w, "S", prize, ["p_low", "p_mid"], 0, 2, ["a1"])
-        refused[prize] = sub
-        assert sub in str(ei.value), (prize, str(ei.value)[:160])
-    assert set(refused) == {"a field", "a proposition", "a standing"}, refused
+        refused[prize] = row["module"]
+        # [JUSTIFIED: `160` truncates an assertion MESSAGE so a failure prints readably; it is a display bound on a string, not a mechanical constant. The same slice length is used on the sibling assertions in this file]
+        assert row["module"] in str(ei.value), (prize, str(ei.value)[:160])
+    # [GROUNDED: measured 2026-09-11 under `U1` -- of the four prize rows, `a field` alone carries no `provider:` and is the only one the seam still refuses by name]
+    assert set(refused) == {"a field"}, (
+        f"the refusing prizes are {sorted(refused)}. `a field` alone has no provider — it needs "
+        "`faction_q.resolve` (R-04/U9). If `a standing` or `a proposition` is refusing again, "
+        "`U1`'s `sigma_leverage` provider has stopped registering; if `a field` has stopped "
+        "refusing, something has been wired without a row saying so.")
 
-    # NOTHING PRODUCES A MARGIN. The only `net` in the instrument is `degree_of`'s own read of
-    # one, so the ladder branch is a reader with no producer (recorded on `H-98`).
-    producers = []
+    # ⚠⚠ **THE LADDER BRANCH HAS A PRODUCER NOW, AND THIS SCAN IS WHAT SAID SO.** It asserted
+    # `not producers` with the message *"`W-E` published `the ladder branch has no producer` … that
+    # sentence is now false and must be rewritten rather than left standing"*, and `U1` is the
+    # commit that made it false: `seam/wrappers/sigma.py` composes `roll_net(pool) +
+    # net_boost(lev, pool)`, which is the tree's own σ-leverage composition
+    # (`systems/social_contest/sim/contest/resolver.py:302`) and the resolver Jordan named
+    # (ED-SC-0037). The scan is REWRITTEN as its own message instructs, not deleted.
+    #
+    # ⚠ **SET-EQUALITY, SO IT IS STILL A ONE-OWNER GUARD.** *Nothing produces a margin* becomes
+    # *exactly one module does*. It is red today if a second site appears, which is the property
+    # `S27.2` protects — a second resolver is this architecture's highest-value refusal — and it
+    # would have been green on any number of producers had it stayed `assert not producers`
+    # inverted to `assert producers`.
+    #
+    # ⚠ **AND THE KEY IS THE REPO-RELATIVE PATH, NOT `f.name`.** The scan recorded hits as
+    # `f"{f.name}:{i}"` — a BASENAME — so a set-equality against a path could never match, and a
+    # second `sigma.py` anywhere in the package would be indistinguishable from the first. That is
+    # §15.3 head 5's *check by path, not by name* applied to the guard that proves this unit, and
+    # it is fixed in the same commit that first needs it.
+    #
+    # ⚠ THE REGEX GAINS `roll_net` AND `net_boost`, AND THE HAZARD IS A FALSE POSITIVE RATHER THAN
+    # A FALSE NEGATIVE: under a set-equality a widened pattern can only ADD producers, i.e. turn
+    # this RED. `roll_net` also substring-matches `roll_net_continuous`, which is why the whole
+    # package is re-scanned rather than the one file trusted.
+    # [GROUNDED: measured 2026-09-11 over `files.package_modules()` minus the test module -- the margin-producing lines are exactly the two in `seam/wrappers/sigma.py`]
+    producers = set()
     for f in files.package_modules():
         if f == files.TEST_PY:
             continue
         for i, line in enumerate(_code_only_lines(f), 1):
-            if re.search(r"\bnet\b\s*=|roll_pool|\bsuccesses\b", line):
-                producers.append(f"{f.name}:{i} {line.strip()[:90]}")
-    assert not producers, (
-        "something now produces a margin. `W-E` published `the ladder branch has no producer` "
-        "and recorded it on `H-98`; that sentence is now false and must be rewritten rather "
-        "than left standing:\n  " + "\n  ".join(producers))
+            if re.search(r"\bnet\b\s*=|roll_pool|roll_net|net_boost|\bsuccesses\b", line):
+                producers.add(f.relative_to(files.PACKAGE_DIR).as_posix())
+    assert producers == {"seam/wrappers/sigma.py"}, (
+        f"the margin producers are {sorted(producers)}. Exactly one module may produce a margin — "
+        "`S27.2` names a second resolver as this architecture's highest-value refusal, and the "
+        "ladder reads `degree_from_net`, which is a single owner on the other side. An EMPTY set "
+        "means `U1`'s provider is gone and `H-98`'s `the ladder branch has no producer` is true "
+        "again; anything else is a second producer and must be adjudicated before it lands")
 
 
 def _code_only_lines(path: Path) -> list:
@@ -9721,11 +9978,14 @@ def test_r8_4_document_key_reaches_a_non_author_through_a_store():
 # `U2` / `R-03` — THE SCENE TICK. R-03 reads *seasons must tick scene-by-scene, so what occurs
 # after one scene can impact the next scene*, and before this a season was ONE PASS: every scene
 # for every person was flattened into one `acts` list before RESOLVE ran, so the only boundary
-# was season-to-season. These four tests are the unit's acceptance and its three falsifiers.
+# was season-to-season. These FIVE tests are the unit's acceptance (a), its control, and its
+# three falsifiers (b), (c), (d). ⚠ IT SHIPPED WITH FOUR AND THIS LINE SAID FOUR: falsifier
+# (b) was cited twice in `loop/deliberate.py` and never written. See
+# `test_u2_the_inputs_fingerprint_is_complete_for_the_skip_it_licenses`.
 # ---------------------------------------------------------------------------
 
 
-def _u2_bailiff_sets(plant: bool):
+def _u2_bailiff_sets(plant: bool, at_round: int = 0, stamp: bool = True):
     """`p_bailiff`'s candidate set, per round, over one season. Returns `{round: (verbs...)}`.
 
     The instrument wraps `opening_set` and records what it returned, which is the only way to see
@@ -9759,11 +10019,12 @@ def _u2_bailiff_sets(plant: bool):
 
     def witness_then_plant(self, events):
         n = real_witness(self, events)
-        if plant and self.round == 0:
+        if plant and self.round == at_round:
             b = w.persons[HL.BAILIFF]
             b.ledger.append(Claim(
                 H(w.world_seed, w.tick, HL.BAILIFF, "plant:u2"), HL.BAILIFF,
-                "hearth_ostvik", "stores:grain", 0, w.tick, "told_by", 100, "own", self.round))
+                "hearth_ostvik", "stores:grain", 0, w.tick, "told_by", 100, "own",
+                self.round if stamp else 0))
         return n
 
     CH.opening_set = watched
@@ -9771,7 +10032,8 @@ def _u2_bailiff_sets(plant: bool):
     try:
         d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                               draw=draw_factory(w.world_seed, lambda: w.tick)),
-                 None, HL.subsistence)
+                 None, HL.subsistence,
+                 contest_max_depth=w.fixtures.get("contest_max_depth"))
     finally:
         CH.opening_set = original
         SeasonDriver.witness = real_witness
@@ -9797,11 +10059,19 @@ def test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_s
     control = _u2_bailiff_sets(plant=False)
     planted = _u2_bailiff_sets(plant=True)
     # ⚠ THE OBSERVABLE IS SHARPER THAN THE PLAN'S *"the set differs"*, AND MEASURING IT IS WHAT
-    # SHARPENED IT. `p_bailiff` raises NO question in this world under any of §F1's four sources —
-    # no Date names them, no crossing reaches them, they hold no `commit` to an OUGHT — so
-    # `choose` returns before `opening_set` is ever called and they form no candidates at all.
-    # That makes the control arm EMPTY, which is a stronger baseline than a differing set: the
-    # plant does not shift a deliberation, it CAUSES one.
+    # SHARPENED IT. UNPLANTED, `p_bailiff` raises no question in this world under any of §F1's
+    # four sources — Q1 no Date names them, Q3 no crossing reaches them, Q4 they hold no `commit`
+    # to an OUGHT, and Q2 nothing has landed in their ledger — so `choose` returns before
+    # `opening_set` is ever called and they form no candidates at all. That makes the control arm
+    # EMPTY, which is a stronger baseline than a differing set: the plant does not shift a
+    # deliberation, it CAUSES one.
+    # ⚠⚠ **"UNPLANTED" IS LOAD-BEARING AND THIS COMMENT DROPPED IT.** It read that `p_bailiff`
+    # raises no question under any of the four, unqualified — which contradicts the very next
+    # assertion, since the plant works THROUGH Q2, one of those four. Q2 is not dark for them;
+    # it is EMPTY until something lands. MEASURED 2026-09-11, `build_world(0)`, 2 seasons,
+    # unplanted: `p_bailiff` raises 0 questions from any source, while `p_carin` raises 45
+    # (35 `claim_landed`, 10 `need`). So the control is a real silence in a world that is
+    # otherwise producing questions, not a world where questions cannot be raised.
     assert control == {}, (
         f"`p_bailiff` formed candidates without the plant, in rounds {sorted(control)}. The "
         "control arm is supposed to be a person with no question at all; if they have one, this "
@@ -9819,6 +10089,45 @@ def test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_s
         "lands at the END of round 0, so a round-0 deliberation means it is reaching them before "
         "it was deposited and the two arms are not the same experiment")
     assert all(r > 0 for r in planted), sorted(planted)
+
+    # ⚠⚠ **AND THE SECOND PLANT IS WHAT MAKES `Claim.round` OBSERVABLE — THE FIRST ONE DOES NOT.**
+    # This test's own docstring claimed the round STAMP was the mechanism, and the round-0 plant
+    # cannot show it: `p_bailiff` last deliberated at `(tick, 0)`, the plant is stamped
+    # `round = 0`, and `(tick, 0) >= (tick, 0)` is TRUE whether or not the field exists. Delete
+    # `Claim.round`, default every claim to 0, and the clauses above still pass. Found by this
+    # unit's adversarial pass, and it matters because `Claim.round` is the ONLY carrier field the
+    # unit adds and the sole declared reason the content hash moved.
+    # ⚠ A PLANT AT ROUND 2 IS A DIFFERENT ORDER RELATION. The bailiff deliberates every round in
+    # the control (they form no candidates, but `choose` is called and `_deliberated_at` advances),
+    # so by round 3 their `since` is `(tick, 2)`. An unstamped claim would read `(tick, 0)`, sort
+    # STRICTLY BEFORE that, and never be seen — Q2 dead inside the season, which is the exact shape
+    # of the bug the `tick - 1` fix closed across seasons.
+    late = _u2_bailiff_sets(plant=True, at_round=2)
+    assert late, (
+        "a claim landing at the end of ROUND 2 reached nobody. `questions_for`'s `since` is the "
+        "pair `(tick, round)` and `witness` stamps the round it deposited in; if this is empty "
+        "while the round-0 plant works, the STAMP is what is missing — a deposit later in the "
+        "season is sorting as older than the deliberation that should see it, and Q2 is dead "
+        "inside a season exactly as it was once dead across seasons")
+    assert all(r > 2 for r in late), (
+        f"`p_bailiff` deliberated at rounds {sorted(late)} on a plant that lands at the end of "
+        "round 2. A round at or below 2 means the claim is reaching them before it was deposited")
+
+    # ⚠⚠ **AND THE UNSTAMPED ARM, WHICH IS THE FALSIFIER RATHER THAN THE RESULT.** The same plant,
+    # landing at the same round, carrying `round = 0` instead of the round it landed in. It must
+    # reach NOBODY: `since` is `(tick, 2)` by round 3, `(tick, 0)` sorts strictly before it, and
+    # Q2 never fires. That is the whole of what `Claim.round` buys, and without this arm the test
+    # could not tell the field's presence from its absence — the clause above passes identically
+    # either way at a round-0 plant, which is how the first writing of this test came to claim a
+    # mechanism it could not observe (§0.1 pt 2).
+    # [GROUNDED: measured 2026-09-11, `build_world(0)`, one season -- a plant stamped `round = 2` reaches `p_bailiff` at rounds 3 and 4; the same plant stamped `0` reaches them in no round at all]
+    unstamped = _u2_bailiff_sets(plant=True, at_round=2, stamp=False)
+    assert unstamped == {}, (
+        f"a claim deposited at round 2 but stamped `round = 0` reached `p_bailiff` at rounds "
+        f"{sorted(unstamped)}. Then `questions_for`'s `since` is not comparing the PAIR, and "
+        "`Claim.round` is carrying nothing: a deposit's position inside the season would be "
+        "invisible and a later round's claim would sort as older than the deliberation that "
+        "should see it — Q2 dead inside a season, exactly as it was once dead across seasons")
 
 
 def test_u2_the_one_round_arm_reproduces_the_pre_tick_loop():
@@ -9848,13 +10157,126 @@ def test_u2_the_one_round_arm_reproduces_the_pre_tick_loop():
     for _ in range(2):
         d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                               draw=draw_factory(w.world_seed, lambda: w.tick)),
-                 None, HL.subsistence)
+                 None, HL.subsistence,
+                 contest_max_depth=w.fixtures.get("contest_max_depth"))
     # [GROUNDED: measured 2026-09-11 against the pre-tick loop at d0165b5, `build_world(0)`, 2 seasons, `scene_budget=1` -- the act and Event-kind multisets are identical and the content hash differs by the `Claim.round` field alone]
     kinds = dict(sorted(Counter(e.kind for e in w.log).items()))
     # [GROUNDED: measured 2026-09-11 against the pre-tick loop at d0165b5, `build_world(0)`, 2 seasons at `scene_budget=1` -- this Event-kind multiset is the one-pass loop's, reproduced by the rounds loop rather than asserted]
     assert kinds == {"claim.decayed": 6, "claim.deposited": 18, "condition.worn": 2,
                      "finding.made": 2, "record.created": 2, "term.matured": 1}, kinds
     assert d.resolved, "the one-round arm resolved nothing — the control has no behaviour in it"
+
+
+# [JUSTIFIED: `(0, 1, 7, 13)` are RNG SEEDS and `2` a season count -- the arms of the sweep, not values the design supplies. Four seeds because one world's fingerprint behaviour is not a property; 13 is included because it is the only one of the four where the skip path fires at all]
+def _u2_fingerprint_implication(drop=None, seeds=(0, 1, 7, 13), seasons=2):
+    """Every slot where `choose` ran, as `(driver's own fingerprint, candidate key set)`.
+
+    Returns `(pairs_checked, violations)` where a violation is two slots for ONE person in ONE
+    tick that share a fingerprint and do not share a candidate set. `drop` removes one term from
+    the fingerprint tuple, which is the mutation arm.
+
+    ⚠ THE FINGERPRINT IS THE ONE THE DRIVER COMPUTED, RECORDED THROUGH THE PATCH, AND THE FIRST
+    WRITING OF THIS HELPER RECOMPUTED IT. It called `questions_for(w, p)` with no `since`, so the
+    Q2 floor differed and the two arms were not the same experiment — `CLAUDE.md` §0.1 pt 1. It
+    read 2 violations on the SHIPPED fingerprint that way; recording the driver's own return reads
+    0. A confounded arm looks exactly like evidence."""
+    import collections
+    from ..loop import deliberate as DL
+    from ..harness import headless as HL
+
+    real = DL._inputs_fingerprint
+    last = {}
+
+    def fp_fn(p, qs, s):
+        t = real(p, qs, s)
+        if drop is not None:
+            t = tuple(v for i, v in enumerate(t) if i != drop)
+        last[p.id] = t
+        return t
+
+    DL._inputs_fingerprint = fp_fn
+    seen, violations, checked = collections.defaultdict(dict), [], 0
+    try:
+        for seed in seeds:
+            w = HL.build_world(seed)
+            d = SeasonDriver(w)
+            mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+            box = {}
+
+            def wrap(inner):
+                def f(p, verbs, sn, ask_budget):
+                    got = inner(p, verbs, sn, ask_budget)
+                    box[(w.tick, d.round, p.id)] = (last[p.id], frozenset(
+                        (a.verb, DL._subject_of(a))
+                        for sc in got for a in getattr(sc, "acts", [])))
+                    return got
+                return f
+
+            for _ in range(seasons):
+                d.season(wrap(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                                           draw=draw_factory(w.world_seed, lambda: w.tick))),
+                         None, HL.subsistence,
+                         contest_max_depth=w.fixtures.get("contest_max_depth"))
+            for (tick, rnd, pid), (fp, cands) in sorted(box.items()):
+                bucket = seen[(seed, tick, pid)]
+                if fp in bucket:
+                    checked += 1
+                    if bucket[fp] != cands:
+                        violations.append((seed, tick, pid, rnd))
+                else:
+                    bucket[fp] = cands
+    finally:
+        DL._inputs_fingerprint = real
+    return checked, violations
+
+
+def test_u2_the_inputs_fingerprint_is_complete_for_the_skip_it_licenses():
+    """**U2's FALSIFIER (b), AND IT DID NOT EXIST WHILE TWO SITES CITED IT.**
+    `loop/deliberate.py` named this test at its skip condition and again in
+    `_inputs_fingerprint`'s docstring — *"That the list is COMPLETE is a claim about the code as
+    it stands, and U2's falsifier (b) is what tests it"* — and the unit shipped four U2 tests,
+    none of them this one. `CLAUDE.md` §0.1 pt 3: a result claim carries, in the same commit, the
+    test that would have shown it wrong. A cited falsifier that does not exist is the same defect
+    wearing the fix's clothes.
+
+    **THE CLAIM UNDER TEST IS AN IMPLICATION, NOT A LIST.** The skip rests on
+    *fingerprint equal ⟹ candidate set equal*: a person whose six terms have not moved would
+    re-derive the identical set, so the driver releases the next of what they already chose. If
+    the enumeration is incomplete, some world change moves the set while the fingerprint stands
+    still and that person is silently served a stale queue. This asserts the implication directly
+    over every slot where `choose` ran, which is testable at far more slots than the skip itself
+    fires at — MEASURED, the skip path fires 1 time in 120 `(person, round)` slots across these
+    four seeds, so a test that waited for it would be near-vacuous.
+
+    ⚠ **THE MUTATION ARM IS WHAT MAKES THIS AN ASSERTION RATHER THAN AN ABSENT ONE** (§0.1 pt 2).
+    Dropping `q_ids` breaks the implication; if it did not, the check could not observe the
+    failure it excludes.
+
+    ⚠⚠ **AND THE HONEST LIMIT IS STATED RATHER THAN LEFT FOR A READER TO ASSUME: ONLY TERM 0 IS
+    FALSIFIED HERE.** Measured 2026-09-11 over seeds 0/1/7/13, 2 seasons: dropping term 0 (`q_ids`)
+    gives 5 violations; dropping ANY of terms 1-5 (`subsistence`, `tenures`, `ledger`, `body`,
+    `travel_leg`) gives 0. Those five are not thereby shown redundant — this fixture never moves
+    one of them without also moving `q_ids`, which is a property of a three-person world with one
+    active actor, not of the enumeration. What this test establishes is that the implication HOLDS
+    and that it CAN break; five of the six terms remain unfalsified until a world exercises them."""
+    checked, violations = _u2_fingerprint_implication()
+    # [GROUNDED: measured 2026-09-11, seeds 0/1/7/13 at 2 seasons -- 64 equal-fingerprint pairs, 0 implication violations; the floor below is set under that measurement with headroom, not at it]
+    assert checked >= 24, (
+        f"only {checked} equal-fingerprint pairs were compared (measured 64 on 2026-09-11). The "
+        "implication is being asserted over too few slots to mean anything — either the worlds "
+        "stopped producing repeated fingerprints or the wrapper stopped recording.")
+    assert not violations, (
+        f"the fingerprint is INCOMPLETE: {len(violations)} slots share a fingerprint with an "
+        f"earlier slot in the same tick and produce a DIFFERENT candidate set — {violations[:4]}. "
+        "Every such slot is a person the skip would serve a stale queue. Find what `opening_set` "
+        "or `questions_for` reads that `_inputs_fingerprint` does not, and add the term.")
+    # THE MUTATION ARM. Term 0 is `q_ids`, the whole of `questions_for`'s output.
+    mchecked, mviol = _u2_fingerprint_implication(drop=0)
+    assert mviol, (
+        f"dropping `q_ids` from the fingerprint left the implication INTACT over {mchecked} pairs. "
+        "Then this test cannot observe the failure it excludes and its pass above is vacuous — "
+        "§0.1 pt 2. Either the worlds no longer vary their question sets or the patch is not "
+        "reaching the driver's fingerprint.")
 
 
 def test_u2_two_acts_by_one_person_on_one_subject_in_two_rounds_have_distinct_ids():
@@ -9881,7 +10303,8 @@ def test_u2_two_acts_by_one_person_on_one_subject_in_two_rounds_have_distinct_id
         ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                           draw=draw_factory(w.world_seed, lambda: w.tick))
         for _ in range(3):
-            d.season(ch, question=None, subsistence=C.P.SUBSIST)
+            d.season(ch, question=None, subsistence=C.P.SUBSIST,
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
         dup_acts = [i for i, n in Counter(a.id for a in d.resolved).items() if n > 1]
         dup_evs = [i for i, n in Counter(e.id for e in w.log).items() if n > 1]
         assert not dup_acts, (

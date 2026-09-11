@@ -139,7 +139,12 @@ def _run(case: dict, seed: int, seasons: int, fork_at: int = -1, take: int = 0,
     try:
         with rec:
             for _ in range(seasons):
-                d.season(ch, question=None, subsistence=K.C.P.SUBSIST)
+                # `H-87`: the CALLER supplies the depth cap (S39.3 gives it no default). This ran
+                # uncapped while nothing it reached contested; `U1` gave `tell` a `contests:`, and
+                # the `except BaseException` below would SWALLOW the refusal into `ok=False` --
+                # measured, one fork silently left the population that way (`genuine` 45 -> 44).
+                d.season(ch, question=None, subsistence=K.C.P.SUBSIST,
+                         contest_max_depth=w.fixtures.get("contest_max_depth"))
     except BaseException as e:
         return dict(ok=False, why=f"{type(e).__name__}: {e}", decisions=[], in_budget=[], acts=[])
     # THE DECISION TRACE: what each deliberation had available, and what it took.
@@ -272,7 +277,10 @@ def claim_channel(sample: int = 8, seasons: int = 3, seed: int = 0) -> dict:
         ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs(),
                         draw=S.draw_factory(w.world_seed, lambda: w.tick))
         for _ in range(seasons):
-            d.season(ch, question=None, subsistence=K.C.P.SUBSIST)
+            # `H-87`: the caller supplies the cap. See `fork_case` above for why this is not
+            # optional since `U1`.
+            d.season(ch, question=None, subsistence=K.C.P.SUBSIST,
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
         for p in w.persons.values():
             for c in p.ledger:
                 n += 1; preds[c.predicate] += 1

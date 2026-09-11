@@ -23,7 +23,7 @@ value: `engine/autoload/sigma_leverage.py`, interim, repointed when the proceedi
 This unit lands the signature, the crossing and the boot-time failure only.
 """
 
-from .registry import check_rows, check_roles, resolve
+from .registry import PROVIDERS, call, check_rows, check_roles, has, provider, resolve
 
 __all__ = sorted(
     _n for _n, _v in list(globals().items())

@@ -67,6 +67,25 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
     w._rehome()
     acts: list[Act] = []
     k_view = w.fixtures.get("view_k")
+    # ⚠⚠ `scene_budget` HAS TWO READERS SINCE `U2` AND THEY READ IT AS TWO DIFFERENT QUANTITIES.
+    # Here it is the BASE a person's own budget starts from, before `H-70`'s office/condition/leg
+    # modifiers — `H-10`'s declared `site:`. In `driver.py::season` it is the COUNT OF ROUNDS. The
+    # register row now names both; a session changing one must decide whether it means the other.
+    # ⚠ **AND THE PAIR IMPOSES A CEILING THE DESIGN DOES NOT: a person can hold more budget than
+    # the season has slots to release.** Releasable = `rounds x scenes_per_round` =
+    # `scene_budget x scenes_per_round`, which is 5 x 1 = 5 at the shipped fixtures, while
+    # `budget()` returns `scene_budget + budget_office_bonus x live holds - penalties`. One live
+    # `hold` gives 6 against a ceiling of 5, so an office-holder's sixth scene is UNSPENDABLE —
+    # measured directly: planting one live `hold` on `p_carin` moves her budget 5 -> 6 and leaves
+    # the releasable count at 5. S26.3 says the budget varies BY OFFICE, so this silently denies
+    # what the design grants, and the one-pass loop did not (it packed the whole budget in one
+    # call). ⚠ IT IS LATENT, NOT LIVE, AND THAT IS WHY NOTHING IS RESHAPED HERE: measured over the
+    # whole corpus, 0 of 143 cases carry an `office.post` — the only source of a live `hold` —
+    # so all 258 persons in the 86 buildable worlds have zero holds and budget exactly 5. The
+    # ceiling binds nothing that runs. It becomes live the day a case seats an office-holder, and
+    # the fix is a design call with three defensible shapes (more rounds / denser rounds / a
+    # fixed slate of scene-slots that office cannot widen), which is why it is declared here
+    # rather than decided on a case that does not exist.
     k_budget = w.fixtures.get("scene_budget")
     q_rule = w.fixtures.get("question_aggregation_rule")
     per_round = w.fixtures.get("scenes_per_round")
@@ -113,7 +132,10 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # ASSUMED — see `_inputs_fingerprint`, which lists every input `questions_for`,
         # `person_side_eligible`, `belief_contradicts` and `budget` read, and says which one each
         # term covers. If that list is incomplete the skip is wrong, which is what U2's falsifier
-        # (b) tests.
+        # (b) tests — `test_u2_the_inputs_fingerprint_is_complete_for_the_skip_it_licenses`,
+        # which asserts *fingerprint equal => candidate set equal* and carries the mutation arm
+        # that proves it can fire. ⚠ IT WAS CITED HERE BEFORE IT EXISTED; see that test's own
+        # docstring for what is and is not falsified (term 0 only, in this fixture).
         # -------------------------------------------------------------------
         fp = _inputs_fingerprint(p, qs, s)
         queue = self._queued.get(p.id) or []
@@ -123,11 +145,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
             # counts scenes and the interaction bound is a SEPARATE check. A bare `Act` is one
             # scene carrying one interaction -- which is exactly the pre-ruling semantics, so
             # every caller that returns Acts keeps its meaning and the change is additive.
-            queue = _drop_what_was_already_done(
-                as_scenes(produced, p.id, w), self._taken.get(p.id) or set())
-            _qualify_by_round(queue, w, self.round)
-            self._inputs[p.id] = fp
-            self._deliberated_at[p.id] = (w.tick, self.round)
+            chosen = as_scenes(produced, p.id, w)
             # ⚠⚠ **BOTH CALLER-CONTRACT CHECKS MOVED INSIDE THIS BRANCH, AND THAT IS A SCOPE
             # CORRECTION RATHER THAN A RELAXATION.** They ask *did `choose` return more than it was
             # given*, which is a question about a RETURN VALUE — so they belong where the return
@@ -138,12 +156,24 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
             # Measured: it fired on `p_b` in the NPC lane on the first corpus run under the tick.
             # The release loop below is what enforces the remainder, and it does so by DEFERRING
             # rather than refusing, which is the only reading that leaves the person's triage intact.
-            spent = sum(sc.cost(ext) for sc in queue)
+            #
+            # ⚠⚠ **AND THEY READ `chosen`, WHICH IS WHAT `choose` RETURNED, NOT THE FILTERED QUEUE.
+            # THE FIRST WRITING FILTERED FIRST AND MEASURED SECOND, AND BOTH CHECKS WENT BLIND.**
+            # A `choose` returning ten scenes against a remainder of three PASSED whenever
+            # `_drop_what_was_already_done` happened to drop seven — the S26.3 guard unable to
+            # observe the caller-contract violation it exists to exclude (§0.1 pt 2). The
+            # interaction check was worse: the filter rewrites `sc.acts` in place, so a scene
+            # carrying five interactions against a bound of three read TWO after three were
+            # dropped and passed. And the `Forbidden` message counted post-filter scenes, so the
+            # accusation misstated what the person returned — the same class of defect as the
+            # `budget_left=-10` artifact recorded forty lines below. Found by this unit's
+            # adversarial pass. The filter runs AFTER both, on a return already judged.
+            spent = sum(sc.cost(ext) for sc in chosen)
             # S26.3: the engine does NOT truncate. Any cap applied here would be AN ENGINE
             # DECIDING A PERSON'S OPTIONS, which is L1. Over-budget is the CALLER'S defect.
             if spent > b:
                 raise Forbidden(
-                    f"{p.id} returned {len(queue)} scenes costing {spent} against a budget of "
+                    f"{p.id} returned {len(chosen)} scenes costing {spent} against a budget of "
                     f"{b} scene actions", "S26.3",
                     needs="`choose` is bounded by budget(person, view) -- the PERSON chooses what to leave undone",
                     law="S26.3, re-stated in scenes per Jordan's 2026-09-02 ruling -- at one scene NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1. ⚠ THE UNIT MATTERS: eight INTERACTIONS across five scenes is LAWFUL and was refused before the ruling")
@@ -152,7 +182,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
             # interactions than the swept bound". Folding them into one check would make the
             # ruling's whole distinction unobservable.
             cap = w.fixtures.get("interactions_per_scene")
-            for sc in (queue if cap is not None else ()):
+            for sc in (chosen if cap is not None else ()):
                 if len(sc.acts) > cap:
                     # ⚠ `Ungraded`, NOT `Forbidden`. `Forbidden`'s own docstring is "a law
                     # forbids what the case requires", and this bound is a SWEPT HARNESS
@@ -165,6 +195,10 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
                         f"of {cap}", "S26.3",
                         needs="a scene carries 1-3 verb applications; the bound is swept, not constant",
                         law="`H-76`, `assumption`. `player_agency_v30.md` §6.3 -- 'A scene contains 1-3 mechanical interactions' -- which is CANONICAL but pre-#337, so under CLAUDE.md §0.05 it is REFERENCE and this is a swept default, not a rule of the design. Jordan ruled the UNIT and the NUMBER of scenes; he did not rule this")
+            queue = _drop_what_was_already_done(chosen, self._realised.get(p.id) or set())
+            _qualify_by_round(queue, w, self.round)
+            self._inputs[p.id] = fp
+            self._deliberated_at[p.id] = (w.tick, self.round)
         scenes = queue
         # ⚠ THE TRACE IS PER-SCENE, AND THE UNITS MUST NOT BE MIXED. It read
         # `TRACE.act(p.id, a.verb, b - i - 1)` where `b` is a SCENE budget and `i` enumerated
@@ -178,9 +212,12 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # this round, and only while their season remainder covers the cost. The rest stays
         # queued for the next round; a scene they cannot afford stays queued rather than being
         # trimmed, because the affordability is a fact about the season and not about the scene.
-        # ⚠ AT `scenes_per_round = 5` (the sweep's control arm) a person's whole season is
-        # released in round 0 and every later round finds `queue` empty and `b` zero, which IS
-        # the one-pass loop — reproduced through this code rather than around it.
+        # ⚠ THE ONE-PASS ARM IS `scene_budget = 1`, NOT `scenes_per_round = 5`, AND THIS COMMENT
+        # SAID THE SECOND. Five releases a person's whole season in round 0 only when their triage
+        # spends the whole remainder; one that leaves budget UNSPENT empties its queue with
+        # remainder left and is asked again in a later round, which the one-pass loop could not do
+        # (`build_world(0)`, 2 seasons: `claim.deposited` 50 -> 53). The arm that reproduces the
+        # pre-`U2` multisets exactly is the one-ROUND arm. See `H-124`.
         # -------------------------------------------------------------------
         produced = []
         left = b
@@ -193,7 +230,10 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
             left -= cost
             released += 1
             self._spent[p.id] = self._spent.get(p.id, 0) + cost
-            self._taken.setdefault(p.id, set()).update(
+            # ⚠ THE RELEASE RECORDS WHAT WAS *ATTEMPTED*; `season()` PROMOTES ONLY WHAT WAS
+            # *REALISED*. See `_drop_what_was_already_done` and `SeasonDriver.season` for why a
+            # refused attempt must not bar its own retry.
+            self._attempted.setdefault(p.id, set()).update(
                 (a.verb, _subject_of(a)) for a in sc.acts if _subject_of(a))
             # ⚠ THE SCENE IS REGISTERED AND THE ACT IS STAMPED WITH IT. Season-local, beside
             # `resolved`, and for the same reason: the fold needs to ask what occasioned an
@@ -271,6 +311,19 @@ def _drop_what_was_already_done(scenes: list, taken: set) -> list:
     a second scene spent on an identical `(verb, subject)`, which the pre-tick loop could not
     express at all.
 
+    ⚠⚠ **`taken` IS WHAT WAS *REALISED*, NOT WHAT WAS *ATTEMPTED*, AND THE FIRST WRITING GOT THAT
+    BACKWARDS IN THE ONE DIRECTION THAT MATTERS.** It recorded the pair at RELEASE, before RESOLVE,
+    so an act ATTEMPTED AND REFUSED in round 0 was barred for the rest of the season — including
+    when a later round's world made its precondition TRUE. That is the single most natural instance
+    of *what occurs after one scene can impact the next scene*, and the filter forbade it: a person
+    who tried to release a tenure they did not yet hold could never try again once they did.
+    `SeasonDriver.season` now promotes a pair into this set only after the fold has run and only
+    when the act's Event was not one of its row's `emits_on_refusal` kinds. A failed attempt costs
+    the scene-action — the budget is spent either way — and leaves the opportunity open.
+    ⚠ THE TWO SETS ARE KEPT SEPARATE AND BOTH ARE LIVE: `_attempted` is what the release wrote and
+    is what the budget was spent on; `_realised` is what this filter reads. Collapsing them was the
+    defect.
+
     ⚠ AND THE KEY IS `(verb, subject)`, NOT `verb`. A person may write two records about two
     different things in one season; what they may not do is write the same record twice.
 
@@ -322,18 +375,28 @@ def _qualify_by_round(scenes: list, w: World, r: int) -> None:
     `scene_budget = 1` arm reproduces its Event multiset exactly. Only a re-deliberation — the case
     that could not arise before — is qualified.
 
-    ⚠ **RE-DERIVED, NOT RE-HASHED.** The new purpose is the original purpose plus `:r{n}`, so a
-    reader can see what the id is of; hashing the previous id would have made it opaque.
+    ⚠ **RE-DERIVED, NOT RE-HASHED, AND THE FIRST WRITING SAID SO WHILE DOING THE OPPOSITE FOR THE
+    SCENE.** The new purpose is the original purpose plus `:r{n}`, so a reader can see what the id
+    is of; hashing the previous id would have made it opaque. The ACT branch always did that; the
+    SCENE branch spelled `f"scene:{sc.id}:r{r}"` over an id that is already a digest — the exact
+    opacity the sentence rejects, four lines under the sentence. Found by this unit's adversarial
+    pass. The scene is now derived from `(actor, index, round)`, which is `pack_scenes`'s own
+    purpose shape with the round added.
     `04 PART D row 35` allows exactly this: `H(seed, tick, subject, purpose)`, *no counter, no
     service*, with `purpose` uniqueness a CONVENTION — and the round is what makes this one
     unique."""
     if r == 0:
         return
-    for sc in scenes:
+    for n, sc in enumerate(scenes):
         for a in sc.acts:
             a.id = H(w.world_seed, w.tick, a.actor,
                      f"act:{a.verb}:{_subject_of(a)}:r{r}")
-        sc.id = H(w.world_seed, w.tick, sc.actor, f"scene:{sc.id}:r{r}")
+        # ⚠ THE SCENE IS RE-DERIVED FROM `(actor, index, round)`, WHICH IS `pack_scenes`'s OWN
+        # PURPOSE SHAPE PLUS THE ROUND — not `f"scene:{sc.id}:r{r}"`, which was what the first
+        # writing did and which the paragraph above calls out as the thing it rejected. `sc.id` is
+        # ALREADY a digest at this point, so embedding it makes the purpose opaque: a reader can no
+        # longer see what the id is of, which is the only reason the act branch re-derives.
+        sc.id = H(w.world_seed, w.tick, sc.actor, f"scene:{n}:r{r}")
 
 
 def _inputs_fingerprint(p: Person, qs: list, s: Sensation) -> tuple:
@@ -348,7 +411,12 @@ def _inputs_fingerprint(p: Person, qs: list, s: Sensation) -> tuple:
     ⚠ **ENUMERATED FROM THE READERS, NOT FROM MEMORY, AND EACH TERM NAMES THE ONE IT COVERS.**
     U2's design note calls the enumeration *a CONSTRUCTION, not a theorem*: what is provable is the
     converse — with these equal, `opening_set` is identical by construction. That the list is
-    COMPLETE is a claim about the code as it stands, and U2's falsifier (b) is what tests it.
+    COMPLETE is a claim about the code as it stands, and U2's falsifier (b) —
+    `test_u2_the_inputs_fingerprint_is_complete_for_the_skip_it_licenses` — is what tests it.
+    ⚠ MEASURED 2026-09-11, seeds 0/1/7/13 at 2 seasons: the implication holds over 64
+    equal-fingerprint pairs, and dropping `q_ids` breaks it (5 violations). Dropping any of
+    the other five terms breaks NOTHING in that fixture — they are declared-and-unfalsified,
+    not shown redundant, because no world there moves one without also moving `q_ids`.
 
       * `q_ids`      — `questions_for`'s whole output. Covers Q1 (`w.dates` / `w.docket`), Q2 (a
                        claim LANDING, which is why it is computed with `since`), Q3 (`w.crossings`

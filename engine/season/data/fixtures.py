@@ -336,6 +336,28 @@ DEFAULT_FIXTURES = Fixtures(
     # [canonical: architecture/holonic_ARCHITECTURE.md §15.2 -- `entrenchment(h, H) = min(1, seasons_held / 60)`, verbatim at :556 under the §15.2 heading at :553. THE 60 IS IN-CHAIN, which is why this label is `canonical` where its neighbours are `JUSTIFIED`]
     entrenchment_seasons=60,
     # S27.4: "an attempt at Ob > 2 x Pool is refused, and the season is spent."
+    # `U1` / `H-126` / `H-127`. THE TWO OPERANDS OF A CONTESTED ROLL THAT NOTHING ELSE SUPPLIES.
+    #
+    # ⚠ `pool_default` IS WHAT `capability` WOULD SUPPLY AND DOES NOT. `03 §A.2` rules the
+    # mechanism — *"Rank supplies dice and gates nothing"* — and `Person.capability` is the store
+    # it would come from, with exactly one writer in the tree, which ZEROES it. So every corpus
+    # person derives this number, the roll varies by SEED and FIXTURE rather than by PERSON, and
+    # R-09 reads `partial` rather than `met` until capability is written. `08 §3`'s `assumption`
+    # row is what licenses injecting it at all: *inject the default, declare the site, sweep three
+    # points* — the grade that REFUSES is `absent`, and this is not one.
+    #
+    # ⚠ `obstacle_default` IS THE STAND-IN FOR A SUBJECT WITH NO SCORE TO HALVE. Jordan's
+    # 2026-08-14 ruling gives an opposed obstacle as *"their corresponding score/2 plus whatever
+    # specific modifiers exist for them in that instance"*, which reads off a PERSON; a record, a
+    # rung or a proposition has no such score, and this stands in there. **NO "Base Ob by scale"**
+    # (Jordan, 2026-09-05) — the scale of the thing is not the obstacle.
+    # ⚠ AND IT IS REGISTERED AS AN nth SITE IN A FAMILY THE TREE RECORDS AS DISAGREEING, not as a
+    # single owner arriving: ED-SC-0033 clause (3) names the PROCEEDINGS SUBSYSTEM as the
+    # obstacle's owner, and `interim: true` on the prize row is what carries that tension.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-126 -- `site: Fixtures pool_default`, graded `assumption`; `capability` is the declared source and is empty on every corpus person, so the magnitude is injected and swept]
+    pool_default=2,
+    # [JUSTIFIED: engine/season/hole_register.yaml H-127 -- `site: Fixtures obstacle_default`, graded `assumption`; the ruled derivation is `score/2` and reads off a PERSON, so a non-person subject takes this injected and swept stand-in]
+    obstacle_default=2,
     obstacle_refusal_multiple=2,
     # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
     # coefficients" and "the obstacle floor" to params; the params document proposes NO
@@ -390,7 +412,7 @@ DEFAULT_FIXTURES = Fixtures(
     # them again and they spend it — where the one-pass loop simply lost it. THE CONTROL IS THE
     # `scene_budget = 1` ARM (one round), which reproduces the pre-tick Event multiset exactly.
     # [JUSTIFIED: engine/season/hole_register.yaml H-124 -- `site: Fixtures scenes_per_round`, graded `assumption`; Jordan ruled the unit, the per-season count and that the tick is scene-granular, and supplied no number for the round, so this is injected, declared and swept 1 / 2 / 5]
-    scenes_per_round=1,                # `H-124`, swept 1 / 2 / 5 (5 is the one-pass control)
+    scenes_per_round=1,                # `H-124`, swept 1 / 2 / 5; the control is `scene_budget = 1`
     claim_subject_rule="both",         # `H-79`, swept actor / per_change / both
     # `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. #353 §28 says WITNESS
     # deposits and never says whether the deposit may carry the reads, or to whom; the arms are
@@ -439,12 +461,20 @@ DEFAULT_FIXTURES = Fixtures(
     # `stores >= 0` admits every giver: a run at this point shows how much of the transfer
     # behaviour rests on the default rather than on the world.
     default_transfer_amount=1,         # `H-94`, swept 0 / 1 / 3
-    # `W-E` / `H-125`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
+    # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,
     # which is what `H-114` measured the cost of (`harm` defaulted to the whole body, so a fold at
     # `Wounded` deleted the person). The default introduces NO CONSTANT: it scales the body by the
     # health fraction the ENGINE computed. `total` is the CONTROL and is the code exactly as it
     # stood before `W-E`. Injection site: this line, read by `_eff_kill`.
-    wound_harm_model="scene_fraction",  # `H-125`, swept scene_fraction / total / none
+    # ⚠ THE ROW IS `H-123` AND SEVEN CITATIONS SAID `H-125`, WHICH IS A ROW THAT HAS NEVER
+    # EXISTED. Corrected 2026-09-11 across `fixtures.py` x2, `loop/effects.py` x3,
+    # `verb_table.yaml`, `rosters.yaml` and `test_season_shape.py`. A reader following the
+    # old id found nothing and would have concluded this fixture was unregistered — the
+    # exact failure `W9` check 3 exists to prevent, arriving through a typo rather than
+    # through a missing row. `tools/validate_ed_citations.py` covers `ED-` ids only, so no
+    # gate saw it; `corpus_run`'s R5 passed throughout because it matches on the fixture
+    # KEY in a `site:`, never on the id a comment cites.
+    wound_harm_model="scene_fraction",  # `H-123`, swept scene_fraction / total / none
 )

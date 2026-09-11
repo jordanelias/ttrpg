@@ -2592,9 +2592,14 @@ def a39():
     # reason step 7 recorded: a restore into a module that never held the value still passes.
     from ..loop import resolve as _s
     real, captured = _s.contest, {}
-    def spy(w_, rung, prize, claimants, depth, max_depth, causes, extension=None):
+    # ⚠ `**kw` AND NOT A FIXED TAIL, AND `U1` IS WHY. `contest()` gained three keyword-only
+    # parameters — `verb`, `subject`, `rng` — so a spy spelling the signature positionally raises
+    # `TypeError` on the first call and the probe grades INSTRUMENT-ERROR. A spy exists to OBSERVE
+    # one argument and must not re-declare the rest; forwarding opaquely is what keeps it from
+    # going stale every time the thing it watches grows a parameter.
+    def spy(w_, rung, prize, claimants, depth, max_depth, causes, extension=None, **kw):
         captured["causes"] = list(causes)
-        return real(w_, rung, prize, claimants, depth, max_depth, causes, extension)
+        return real(w_, rung, prize, claimants, depth, max_depth, causes, extension, **kw)
     _s.contest = spy
     try:
         _run(w, choose, contest_max_depth=3)

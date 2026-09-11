@@ -117,8 +117,42 @@ def resolvable_verbs() -> frozenset:
         # DESIGN-GAP. Admitting the verb here is `H-80`'s item, not this one, and the corpus
         # measures the difference: at the shipped fixtures no contested act arises from the loop,
         # which is why closing the seam moved ZERO bytes of the run artifacts.
+        #
+        # ⚠⚠ **`U1` REPLACED `not contested` WITH A MANIFEST-DERIVED TEST, AND WITHOUT THAT
+        # AMENDMENT `U1`'s OBSERVABLE COULD NOT OCCUR.** The bare refusal is the right answer to
+        # the question *can the seam return* only while the answer is no for everything. The moment
+        # a verb declares `contests:` on a prize a provider IS registered for, refusing it here
+        # would drop it out of every chooser's candidate set — every corpus driver narrows to this
+        # set — so the unit would move R-05's executing count DOWN and its controls would pass
+        # trivially.
+        #
+        # THE TWO CLAUSES ARE THE GATE'S OWN GROUNDS, READ FORWARD:
+        #   * **a provider is registered for the prize.** `manifest.has(role, module)` asks the
+        #     CODE, not the data — a roster row may name a module the contracts file declares and
+        #     nothing may have registered a callable for it, which is `mass_battle` today. This is
+        #     the same resolution-by-declaration the rest of the unit is built on, and it keeps one
+        #     owner for the question rather than adding a fourth.
+        #   * **the verb is typed.** The paragraph above is the reason and it is unchanged:
+        #     `operands_for` returns `{}` for an untyped row, so a computed contested act would
+        #     reach the seam with ONE claimant and every case producing one would become a
+        #     whole-case DESIGN-GAP.
+        # `kill / wound` still fails the second clause — its `requires` is `—` — which is what
+        # keeps Jordan's *"you can't just kill or wound imo."* true. Admitting it is `H-80`'s item.
+        #
+        # ⚠ FALSIFIER FOR THE AMENDMENT SPECIFICALLY: delete the `@provider("contest",
+        # "sigma_leverage")` registration from `seam/wrappers/sigma.py` and any verb contesting a
+        # `sigma_leverage` prize drops back out of this set — the first clause going false with the
+        # data unchanged, which is the whole point of asking the code.
         contested = bool(row.contests)
-        if gated and effected and not contested:
+        resolvable_contest = False
+        if contested:
+            from ..data.rosters import roster_map
+            from ..manifest import has as _provider_registered
+            _row = roster_map("contest_subsystems", "prizes").get(str(row.contests))
+            _mod = _row.get("provider") if isinstance(_row, dict) else _row
+            resolvable_contest = (bool(_mod) and _provider_registered("contest", _mod)
+                                  and row.requires_typed is not None)
+        if gated and effected and (not contested or resolvable_contest):
             out.add(v)
     return frozenset(out)
 
@@ -219,11 +253,15 @@ class SeasonDriver:
         # person, as of their last deliberation. Unchanged ⇒ their candidate set is identical by
         # construction, so the driver releases their next chosen scene rather than re-deriving it.
         self._inputs: dict = {}
-        # `(verb, subject)` pairs each person has already spent a scene-action on this season.
-        # See `deliberate._drop_what_was_already_done` for why the loop owns this and what it is
-        # reconstructing: the one-pass loop consumed a ranking POSITIONALLY and could not offer
-        # the same opportunity twice; the tick re-derives the ranking each round and can.
-        self._taken: dict = {}
+        # ⚠ TWO SETS, AND THE SPLIT IS THE WHOLE OF A DEFECT THIS UNIT'S ADVERSARIAL PASS FOUND.
+        # `_attempted` is what the release wrote — the `(verb, subject)` pairs a person spent a
+        # scene-action on this season, whatever came of them. `_realised` is that set MINUS the
+        # ones the fold refused, and it is what `_drop_what_was_already_done` reads. Recording the
+        # attempt directly barred a refused act from ever being retried, including in a later round
+        # whose world had made its precondition true — which is the exact channel R-03 exists to
+        # open, closed by the filter meant to protect the season's variety.
+        self._attempted: dict = {}
+        self._realised: dict = {}
 
 
 
@@ -266,15 +304,45 @@ class SeasonDriver:
         whole channel R-03 asks for. MATTER's events are seasonal, so they join round 0's fan-out
         and no other — carrying them into every round would deposit one wear five times.
 
-        ⚠ **AND THE ONE-ROUND ARM IS THE CONTROL.** `H-124`'s `scenes_per_round = 5` gives every
-        person their whole season in round 0 and finds them spent in rounds 1..4, which IS the
-        one-pass loop — reproduced THROUGH this code path rather than by skipping it."""
+        ⚠ **THE CONTROL IS THE `scene_budget = 1` ARM, AND THE FIRST WRITING OF THIS DOCSTRING
+        NAMED THE WRONG ONE.** It read that `H-124`'s `scenes_per_round = 5` gives every person
+        their whole season in round 0 and finds them spent in rounds 1..4, which IS the one-pass
+        loop. Measured at `build_world(0)`, 2 seasons, it is not: `claim.deposited` 50 -> 53,
+        `claim.decayed` 21 -> 24, `finding.made` 2 -> 3. A person whose triage leaves budget
+        UNSPENT empties their queue with remainder left, so a later round asks them again and they
+        spend it — where the one-pass loop simply lost it. What DOES reproduce the pre-tick season
+        is ONE ROUND: at `scene_budget = 1` the act multiset and the Event-kind multiset are
+        identical to the pre-`U2` run, and the content hash moves only by `Claim` gaining `round`.
+        That arm is the one-pass loop reproduced THROUGH this code path rather than around it."""
         w = self.w
+        # ⚠⚠ **THE DEPTH CAP IS THE CALLER'S AND THE DRIVER MUST NOT FILL IT IN. `U2` ADDED A
+        # FALLBACK HERE AND IT WAS WRONG; THE REGISTER ROW IS WHAT OVERTURNED IT.**
+        # The fallback read `contest_max_depth = w.fixtures.get("contest_max_depth")` when the
+        # caller passed none, argued from §8's *the rule lives once*, and reasoned that `H-87` is a
+        # declared, sited, swept row rather than an invented number — so reading it here could not
+        # be the default S39.3 refuses. **`H-87` says otherwise, in its own fields.** Its `owner:`
+        # is *"the harness (the caller of `resolve`), per S39.3"* and its `site:` is *"Fixtures
+        # contest_max_depth — read by `headless.run` AND PASSED TO `SeasonDriver.season` for every
+        # RESOLVE"*. The row names the call site as the reading place and the driver as the
+        # receiver. A driver that reads it is not obeying the row, it is relocating it.
+        # ⚠ AND S39.3's REFUSAL IS ABOUT A DECIDER, NOT ONLY ABOUT A NUMBER. `H-87`'s cite: *"That
+        # refusal is CORRECT and it is the design working; what was missing is a caller who
+        # decided."* Filling the cap in here means no caller ever decides again — the refusal
+        # becomes unreachable and the guard that proves it
+        # (`test_d9c_max_depth_has_no_default_anywhere`) goes green on a design that no longer
+        # holds. §8 does not apply: reading one registry row from several call sites is not
+        # re-implementing a rule, and the row's `site:` is where it is read.
+        # ⚠ THE COST IS REAL AND WAS THE REASON FOR THE FALLBACK, SO IT IS PAID RATHER THAN
+        # ARGUED AWAY: once `U1` gave `tell` a `contests:`, every caller whose world can reach a
+        # contest needed a cap. MEASURED 2026-09-11: removing the fallback took the suite from 8
+        # failures to 17, and the seventeen resolve to SEVENTEEN CALLERS THAT HAD NOT DECIDED.
+        # Each now passes `contest_max_depth=<world>.fixtures.get("contest_max_depth")`, which is
+        # exactly the shape `H-87`'s `site:` describes.
         w.draw = 0                 # S33: the draw ordinal is per-TICK, so replay is exact
         # `U2`: season-local. See `__init__` for why these four reset and the three above it do not.
         self.round = 0
         self._queued, self._spent, self._deliberated_at = {}, {}, {}
-        self._inputs, self._taken = {}, {}
+        self._inputs, self._attempted, self._realised = {}, {}, {}
         self.calendar()
         matter_events = self.matter(actorless)
         rounds = int(w.fixtures.get("scene_budget"))
@@ -287,6 +355,33 @@ class SeasonDriver:
             w.frozen = True
             acts = self.deliberate(choose, question, subsistence)
             events = self.resolve(acts, contest_max_depth)
+            # ⚠⚠ **WHAT WAS REALISED, AS OPPOSED TO WHAT WAS ATTEMPTED — AND IT CAN ONLY BE KNOWN
+            # HERE, AFTER THE FOLD.** `deliberate` records an attempt at RELEASE, because that is
+            # when the scene-action is spent and the budget does not care how it went. Whether the
+            # act DID anything is the fold's answer, and `_drop_what_was_already_done` must read the
+            # second: an act attempted and REFUSED in round 0 must be retryable in round 3, because
+            # a later round's world may have made its precondition true. That is R-03's own channel,
+            # and recording the attempt directly closed it.
+            # ⚠ A REFUSAL IS THE ROW'S OWN `emits_on_refusal` KIND, WHICH IS THE ONLY DECLARATION
+            # OF WHAT A REFUSAL LOOKS LIKE (§E2: *failure emits, never raises*). An act that emitted
+            # nothing at all — eligibility declined before the fold reached the table — is not
+            # promoted either, for the same reason: nothing happened.
+            _refused_acts = set()
+            _acted = set()
+            for e in events:
+                a = self.act_of.get(e.id)
+                if a is None:
+                    continue
+                _row = VERB_TABLE.get(a.verb)
+                if _row is not None and e.kind in (_row.emits_on_refusal or ()):
+                    _refused_acts.add(a.id)
+                else:
+                    _acted.add(a.id)
+            for a in acts:
+                if a.id in _acted and a.id not in _refused_acts:
+                    _subj = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
+                    if _subj:
+                        self._realised.setdefault(a.actor, set()).add((a.verb, _subj))
             for e in events:
                 w.log.append(e)              # S19.5 -- ONE LOG, NOT TWO
                 TRACE.event(e.id, e.kind, e.causes)
@@ -298,7 +393,18 @@ class SeasonDriver:
             n_events += len(events)
         self.census()
         w.tick += 1
-        return dict(acts=n_acts, events=n_events,
+        # ⚠ `rounds` IS REPORTED BECAUSE THE TICK IS OTHERWISE INVISIBLE IN EVERY ARTIFACT `U2`
+        # PRODUCES. The unit reshaped a season into R rounds and no observable said so: the
+        # summary read `acts/events/deposits`, all of which a one-pass season also produces, and
+        # `--log` prints `(kind, subject, causes)` per Event. A reader could not tell a ticked
+        # season from a flat one by looking at the output, which is §0.2's *something ran it*
+        # missing its *something*.
+        # ⚠ AND NO EVENT CARRIES A ROUND, WHICH IS WHY THIS IS A SEASON-LEVEL FIGURE AND NOT A
+        # COLUMN IN `--log`. `D-21` keeps the round index a DRIVER LOCAL; `Claim.round` is the one
+        # carrier field `U2` added, because a claim's round is read by `questions_for`'s `since`.
+        # Stamping Events too would be a second carrier for a fact nothing reads — the dead-carrier
+        # defect — so the artifact reports the COUNT of rounds the season ran and stops there.
+        return dict(acts=n_acts, events=n_events, rounds=rounds,
                     deposits=deposits, hash=w.content_hash())
 
 # ---------------------------------------------------------------------------

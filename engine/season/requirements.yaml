@@ -247,9 +247,17 @@ rows:
       **THE ACCEPTANCE, EXECUTED:**
       `test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_same_season`
       plants one claim in `p_bailiff`'s ledger at the end of round 0, about a rung they hold a
-      live `contain` Tenure toward. `p_bailiff` raises no question under any of §F1's four sources
-      in that world, so the control arm forms NO candidates in any round — the plant does not
-      shift a deliberation, it CAUSES one, in a later round of the same season. That is the
+      live `contain` Tenure toward. UNPLANTED, `p_bailiff` raises no question in that world under
+      any of §F1's four sources — Q1 no Date names them, Q3 no crossing reaches them, Q4 no
+      `commit` to an OUGHT, and Q2 nothing has landed yet — so the control arm forms NO candidates
+      in any round; the plant does not shift a deliberation, it CAUSES one, in a later round of
+      the same season. ⚠ **"UNPLANTED" IS LOAD-BEARING AND AN EARLIER WRITING OF THIS PARAGRAPH
+      DROPPED IT**, leaving a sentence that contradicts the acceptance it introduces: the plant
+      works THROUGH Q2, which is one of the four. Q2 is not dark for `p_bailiff`; it is EMPTY
+      until something lands, which is exactly why they are the right control. MEASURED
+      2026-09-11, `build_world(0)`, 2 seasons, unplanted: `p_bailiff` raises 0 questions from any
+      source while `p_carin` raises 45 (35 `claim_landed`, 10 `need`) — a real silence in a world
+      that is producing questions, not a world where none can be raised. That is the
       channel R-03 names, and before `U2` no mechanism could carry it.
       **WHAT IT BOUGHT, MEASURED AGAINST A CONTROL** (both arms seed 0 over the same 143 corpus
       cases, the control run from a worktree at the commit before it): **R3 cross-person
@@ -294,7 +302,13 @@ rows:
       release, research, speak, surveil, tell, transfer, utter). 20 carry no predicate and no
       effect, 5 are foldable but never attempted (the governance verbs, `H-71`), and 2 are
       attempted and always refused (`work` and `examine`, both because no question these worlds
-      raise refers to a Site). 1 of 38 declares `contests:`.
+      raise refers to a Site).
+      ⚠ **2 of 38 DECLARE `contests:`, NOT 1 — `U1`, 2026-09-11.** `tell` gained
+      `contests: "a standing"` (ED-SC-0037), routing to the σ-leverage provider, so it joins
+      `kill / wound`. **THE PLAN PROJECTED 1 -> 3 AND THE THIRD IS NOT AVAILABLE**: `speak` cannot
+      take a `contests:` because it is untyped and its `requires:` cell is `--`, so grading it
+      would be a degree with nothing to grade against. That is a correction to the plan's
+      arithmetic, made here rather than absorbed silently, and it is why this line reads 2.
       ⚠ **32 -> 37 IS A CORRECTION, NOT GROWTH** (ED-FI-0009, 2026-09-10). The row spelled
       `"the six investigation acts"` was ONE row standing for six acts canon names
       (`investigation_systems_v30.md:217`), carrying `requires: "per act"` — a cell deferring to
@@ -457,23 +471,39 @@ rows:
 
   - id: R-09
     statement: "chains of events within a scene are probabilistic, not deterministic"
-    status: not_met
+    status: partial
     measured: >-
-      THERE IS NO ROLL ANYWHERE IN THE LOOP. A test scans every non-test module for `net =` /
-      `roll_pool` / `successes` with comments stripped and asserts the set is EMPTY — the degree
-      ladder is a reader with no producer. The only randomness in the package is the seeded
-      `Random` `combat_seam.py` hands to `systems/combat/`. No act has ever resolved at a degree
-      of success in a corpus run; the contest seam is wired and unreached.
-      ⚠ UNCHANGED BY ED-FI-0009, DELIBERATELY, AND THE SIX ARE WHERE THIS ROW NOW POINTS. They
-      are the acts canon grades on four bands (`fieldwork_v30.md:302-309`) and they are the
-      obvious first producer of a margin the one ladder could read. They ship UNGRADED because
-      the producer does not exist. ⚠ THE FIRST WRITING OF THIS PARAGRAPH SAID BUILDING IT MEANT
-      WRITING INVESTIGATION'S SEAM AND PUT THAT TO JORDAN. It does not and it is not a Jordan
-      question: `workplans/2026-09-06-season-loop-execution-plan.md:647` already closed that blank
-      at §0 test 3 — investigation is NOT a seam, the loop IS the mechanism, and the degree
-      producer is **work item 4.5**, attaching RESOLVE → WITNESS. This row moves when 4.5 is built;
-      its own blockers are `W27`'s cast (no attribute values on any person), the absent Depth
-      carrier, and §27.4's refusal to route an uncontested attempt to an `Ob = 0` roll. The scan
-      above is still green because nothing here rolls.
-    measure: "python -m pytest engine/season/tests -k ladder_is_the_trees_own"
+      **A ROLL EXISTS AND IT REACHES THE GAME. `U1` / ED-SC-0037, 2026-09-11.**
+      `engine/season/seam/wrappers/sigma.py` is the σ-leverage provider Jordan named --
+      *"we have the sigma leverage d10 resolver in engine to use"* -- registered against
+      `(contest, sigma_leverage)` and reached through `manifest.resolve`, never a literal in the
+      seam. It composes the tree's own line, `systems/social_contest/sim/contest/resolver.py:302`:
+      `net = roll_net(pool, rng=rng) + net_boost(lev, pool)`. BOTH names matter: `roll_net` alone
+      is `roll_pool` minus the obstacle, i.e. the bare pool roll ED-SC-0037 costed wearing the
+      ruled module's name; `net_boost` is the μ-shift ED-884/ED-934 ruled.
+      **EXECUTED, NOT DECLARED.** `tell` declares `contests: "a standing"`, which routes here, so a
+      telling is now GRADED: measured over the 27 NPC rung cases at seed 0, 3 seasons, **20
+      `news.told` against 75 `news.untold`** -- a 21% success rate, and 26 of 27 cases produce a
+      telling. The outcome moves with the seed: `build_world(0)` reads Failure 53 / Partial 16 /
+      Success 2 and seed 7 reads 59 / 11 / 5.
+      **WHY `partial` AND NOT `met`, STATED RATHER THAN LEFT TO BE FOUND.** R-09 asks that chains
+      be probabilistic; what is probabilistic today is the ROLL, not the CHAIN, and it varies by
+      SEED and FIXTURE rather than by PERSON. `Person.capability` is empty on every corpus person
+      -- one writer, and it zeroes it -- so `_pool_of` returns `pool_default` for everybody and
+      `_obstacle_of` returns `obstacle_default` for every non-person subject. `lev` is 0.0 with no
+      producer, stated as zero because a fabricated leverage would be a number nobody chose. It
+      varies by person the day capability is written, which is character development and out of
+      this arc (`W27`'s cast, 0 of 143 cases).
+      ⚠ **AND THE ROW IT REPLACES WAS TRUE WHEN WRITTEN.** It read *"THERE IS NO ROLL ANYWHERE IN
+      THE LOOP"*, resting on a scan that asserted NO module produces a margin. That scan is now a
+      SET EQUALITY on exactly one owner rather than an emptiness claim -- `S27.2` names a second
+      resolver as this architecture's highest-value refusal, so *exactly one* is the stronger
+      guard and it is red the day a second appears.
+      ⚠ **WHAT THE ROLL COST, REPORTED RATHER THAN NETTED OFF.** Grading a verb that deposits
+      beliefs narrows the deposit stream: §F1 clause 4's suppression channel lost one verb and 11
+      candidates on ARC-01 (`surveil`, 80 drops -> 69), and the corpus universal executed set came
+      back from `{}` to `{reconstruct}`, which is between-world variety `U2` had bought. Distinct
+      executed sets rose 38 -> 40 and R3 cross-person propagation was UNMOVED at 84 of 143 -- so
+      `U1` changed what people do, not whether what one does reaches another.
+    measure: "python -m pytest engine/season/tests -k 'we_only_a_verb or u1_' ; python -m engine.season.harness.headless --seasons 2 --seed 0"
     blocks: [W23, H-98]

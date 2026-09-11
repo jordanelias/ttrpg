@@ -334,7 +334,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     standing. No constant is introduced by the default arm -- a fraction needs none, which is
     exactly why it is the default and the other two arms are the sweep.
 
-    THE THREE ARMS (`wound_harm_model`, registered at `H-125`, injected at `DEFAULT_FIXTURES`):
+    THE THREE ARMS (`wound_harm_model`, registered at `H-123`, injected at `DEFAULT_FIXTURES`):
       `scene_fraction`  body <- body x health_remaining / health_full. The scene decides.
       `total`           any wound is lethal. ⚠ THIS IS THE CONTROL AND IT IS THE BEHAVIOUR THIS
                         FUNCTION HAD BEFORE `W-E` (`harm` defaulting to full body), so the arm
@@ -378,7 +378,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     model = w.fixtures.get("wound_harm_model")
     if model not in WOUND_HARM_MODELS:
         raise Unspecified(
-            f"wound-harm model {model!r} is not in the roster", "H-125",
+            f"wound-harm model {model!r} is not in the roster", "H-123",
             needs=f"one of {sorted(WOUND_HARM_MODELS)}",
             law="`observers_for`'s precedent and its reason -- *an unrecognised mode silently "
                 "falling back would make every measurement of this sweep read the control*")
@@ -395,7 +395,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
         left = int(st.get("health_remaining") or 0)
         if full <= 0:
             raise Unspecified(
-                f"the scene reports no health scale for {who!r} ({st!r})", "S39.4/H-125",
+                f"the scene reports no health scale for {who!r} ({st!r})", "S39.4/H-123",
                 needs="`health_full` on the subject's wound state",
                 law="the magnitude is READ from the scene; a scene that carries none cannot be "
                     "read, and choosing a number here is what this arm exists not to do")

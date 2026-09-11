@@ -69,6 +69,10 @@ from typing import Any, Optional
 
 from ...data import files
 from ...decision import body_band_penalty
+# ⚠ THE LEAF, NOT THE PACKAGE. `...manifest` re-exports from `registry.py`, which imports
+# THIS module to register it — importing the package here closes that loop and the cycle
+# guard counts it. `manifest/providers.py` imports nothing and is safe to reach from here.
+from ...manifest.providers import provider
 from ...state.ids import H
 
 # ⚠ THE SILENT ONE, AND IT IS NAMED HERE BECAUSE ITS FAILURE IS GREEN. This used to climb four
@@ -128,12 +132,29 @@ def derive_party(person: Any, fx: Any, label: str) -> Any:
     return combatant.Combatant(label, end=max(1, default_end - bands))
 
 
-def resolve(w: Any, claimants: list, causes: list, prize: Any) -> dict:
+@provider("contest", "personal_combat")
+def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
+            verb: str = "", subject: Optional[str] = None,
+            rng: Optional[random.Random] = None) -> dict:
     """CALL the personal-combat engine. Returns what it said; decides nothing itself.
 
     The RNG is seeded from the WORLD's own clock and the causing act, so a contest is reproducible
     exactly as every other draw in this instrument is (`S33`: *unique per DRAW, not per
     operation*). `wrapper.fight`'s own note says to pass `random.Random(seed)` for determinism.
+
+    ⚠ **`U1` ADDED `@provider` AND THREE KEYWORD PARAMETERS, AND THE SEED IS DELIBERATELY UNCHANGED.**
+    ED-SC-0033 clause (1) rules that *"the seam dispatches by manifest ROW rather than the hardcoded
+    personal_combat literal"*, so this function is now reached by lookup rather than by an `if`; the
+    keywords are the second provider's signature, which the seam calls uniformly.
+    ⚠ **AND `rng` IS ACCEPTED AND NOT USED HERE, WHICH IS A DELIBERATE NON-CHANGE.** `04 §C.12`'s
+    rejection 4 wants the generator constructed by the driver, and `seam/wrappers/sigma.py` is built
+    that way. This module already derives its own seed from `H(world_seed, tick, a_id,
+    f"contest:{prize}:{causes[0]}")` — a DIFFERENT string from the driver's, with a different third
+    argument — so consuming the driver's `rng` here would re-seed every existing `kill / wound`
+    result and silently re-record the goldens under cover of a refactor. `04 PART D row 35` needs
+    `purpose` UNIQUENESS, not one spelling across providers, and forcing one costs a golden re-record
+    for nothing. The parameter is in the signature because the SEAM's call is uniform; whose seed a
+    provider uses is the provider's.
     """
     eng = engine()
     if eng is None:

@@ -438,8 +438,12 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
         status = "RUNS-UNDECLARED"
     else:
         status = "RUNS-ALONE-UNDECLARED" if ok else "NO-EXECUTION"
+    # `U1` / R-09: the bands the seam's provider resolved in this case. An Event carries a
+    # `degree` only when the fold took the CONTEST branch and `degree_of` read one off the
+    # subsystem's own result — so this is a count of rolls that happened, not of acts attempted.
+    degrees = Counter(str(e.degree) for e in w.log if getattr(e, "degree", None))
     return dict(id=cid, scale=scale, status=status, executed=ok, refused=no, seasons=n,
-                why="", checks=checks)
+                why="", checks=checks, degrees=dict(degrees))
 
 
 def planted_control(seed: int = 0) -> tuple:
@@ -512,6 +516,18 @@ def main(seed: int = 0) -> int:
     print(f"\n  DISTINCT WORLDS RUN      {len(live)} (scales {sorted({r['scale'] for r in live})}, "
           f"season counts {sorted({r['seasons'] for r in live})})")
     print(f"  DISTINCT EXECUTED SETS   {len(sigs)}")
+    # ⚠⚠ `U1` / R-09: THE BANDS THE SEAM ACTUALLY RESOLVED, AND THIS LINE IS THE MILESTONE'S OWN
+    # OBSERVABLE. Before `U1` nothing in this instrument produced a margin, so `degree_of` was a
+    # reader with no producer (`H-98`) and this histogram was necessarily empty. It is not a count
+    # of contested ACTS — an act whose precondition fails never reaches the seam — but of rolls
+    # that completed and were graded through `degree_from_net`, the tree's single ladder.
+    # ⚠ AND IT MUST MOVE WITH THE RUN SEED. If the histogram at `corpus_run 7` matches this one,
+    # the generator is not being constructed from the run seed and a same-seed determinism test
+    # cannot see it — which is why the acceptance runs two seeds rather than one twice.
+    _deg = Counter()
+    for r in live:
+        _deg.update(r.get("degrees") or {})
+    print(f"  DEGREES RESOLVED         {dict(sorted(_deg.items())) or '{} — no contest completed'}")
     ever = sorted({v for r in live for v in r["executed"]})
     tried = sorted({v for r in live for v in r["refused"]})
     foldable = set(resolvable_verbs())

@@ -133,13 +133,45 @@ def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
     lands is the one question in this unit a ruling could change.**
 
     ⚠ **ONE CLAUSE OF THE UNIT'S SPEC IS NOT MET, AND IT IS DECLARED RATHER THAN QUIETLY DROPPED.**
-    `U4` says *"the draw `purpose` includes the round (U2)"*. **U2 is unbuilt** — `SeasonDriver.season`
-    still runs DELIBERATE once per season, so there is no round index to include and a literal
-    reading would put a constant in every purpose. The purpose is therefore
-    `choice:<verb>:<subject>`, seeded per `(world_seed, tick, person)` by the factory. **What this
-    costs the day U2 lands:** a person deliberating twice inside one tick would draw the IDENTICAL
-    stream in both rounds, because `tick` has not advanced — so `U2` must add its round to this
-    purpose in the same commit that adds rounds, or the second round is a replay of the first.
+    `U4` says *"the draw `purpose` includes the round (U2)"*. The purpose is instead
+    `choice:<verb>:<subject>`, seeded per `(world_seed, tick, person)` by the factory.
+    ⚠⚠ **THE REASON THIS PARAGRAPH GIVES FOR THAT IS NOT THE ONE IT GAVE FIRST, AND THE FIRST ONE
+    IS NOW FALSE.** It read *"U2 is unbuilt — `SeasonDriver.season` still runs DELIBERATE once per
+    season, so there is no round index to include"*, and closed by requiring `U2` to add the round
+    *"in the same commit that adds rounds, or the second round is a replay of the first"*. `U2`
+    landed 2026-09-11: `season()` runs DELIBERATE `scene_budget` times, `SeasonDriver.round` is the
+    index, and `_qualify_by_round` already re-derives act and scene ids through it. The clause is
+    still unmet, for two reasons that replace the stale one, and NEITHER is "there is no round".
+
+    **(1) STRUCTURAL — THE ROUND CANNOT REACH THIS FUNCTION, AND IT IS THE SAME TENSION AS CLAUSE
+    2 ABOVE.** The round is state on the DRIVER; the chooser is built by the CALLER (clause 2's
+    finding), so the driver cannot key a draw it never constructs. The only other route is to hand
+    `choose` the round, and `choose`'s four-parameter signature is pinned as a source string by
+    `test_choose_receives_no_world`, which `U4` insists must not change. A caller holding both CAN
+    close over `d.round` when it builds the draw, which is exactly how the arm below was measured —
+    but that is a harness reaching past the engine, not the engine meeting the clause.
+
+    **(2) DESIGN — IT CONTRADICTS THE KEYED-NOISE PROPERTY THIS FUNCTION IS BUILT ON**, one axis
+    along from the defect the `⚠⚠` block below records recovering from. The round makes a
+    candidate's noise a property of WHEN IT WAS REACHED; the whole argument for keying on
+    `(verb, subject)` is that it must be a property OF THAT CANDIDATE, so that two arms of an
+    experiment differ by what differed and not by a reshuffle. Under a scene tick a candidate that
+    lost round 0 keeps its margin in rounds 1..4, which is a person whose TASTE is stable across a
+    season while their OPTIONS move — and the options do move: what they have already realised is
+    removed by `_drop_what_was_already_done`, so the later rounds are them continuing down the list,
+    never repeating it. MEASURED, `build_world(0)`, 2 seasons, tick 1: `p_carin`'s round-2 ranking
+    is `research · reconstruct · create_record · move · work · release · examine`, round 3 is the
+    same order minus `research`, round 4 the same minus `release · examine`. The "replay" the stale
+    sentence feared does not occur; what occurs is continuation, which is what R-03 asked for.
+
+    ⚠ **AND THE CLAUSE IS NOT INERT, WHICH IS WHY THIS IS A DECISION AND NOT A SHRUG.** Arm: wrap
+    the caller's draw as `orig(pid, f"{purpose}:r{d.round}")`. `build_world(0)`, 2 seasons, against
+    the shipped arm: events 113 -> 114, `release.refused` 0 -> 1, `finding.none` 3 -> 4,
+    `claim.deposited` 62 -> 63, `travel.blocked` 3 -> 1, content hash `7d64c569..` -> `8886d0aa..`;
+    acts 20 in both. So a reader may not conclude from "unmet" that it would change nothing.
+    TAKEN UNDER `CLAUDE.md` §0's fifth step — 1..4 are silent, one option is clearly right for the
+    code — rather than escalated: reasons (1) and (2) point the same way and no ruling overwrites a
+    design call whose two defensible options are "unreachable" and "self-contradicting".
     ⚠ AND THE ADJACENT PRIMITIVE IS NAMED RATHER THAN IGNORED: the tree already owns a per-tick
     draw ordinal, `state/world.py::World.new_draw` (*"`S33`'s draw ordinal. Reset at the start of
     every tick by `season()`"*), and `harness/probes.py`'s own header argues the general case — *"A

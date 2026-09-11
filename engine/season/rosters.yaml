@@ -359,7 +359,7 @@ rosters:
 
   wound_harm_models:
     source: "`W-E`. #353's Part E `writes:` column names the CELL and never the VALUE, and no in-chain document says how much body a wound costs. `H-114` measured what the instrument did instead: `harm` defaulted to the person's whole body, so a fold at degree `Wounded` DELETED THE PERSON."
-    cite: "H-125"
+    cite: "H-123"
     note: >-
       HOW MUCH BODY A WOUND COSTS, WHEN THE SCENE SAYS THE SUBJECT BLED AND DID NOT GO DOWN.
       `scene_fraction` is the DEFAULT and it introduces no constant: the body is scaled by the
@@ -510,6 +510,31 @@ rosters:
   # Nothing below declares a seam that does not exist. Declaring one would be the dead-carrier
   # defect this file names elsewhere — a carrier built before its reader.
 
+  verb_capability:
+    source: >-
+      `03 §A.2` -- *"Rank supplies dice and gates nothing"* -- and `#353 §9.2`, quoted live in the
+      tree: *"`capability` supplies dice and GATES NOTHING"*. The verb names a capability; the
+      capability supplies the dice; nothing about it makes a verb unavailable.
+    row: H-126
+    note: >-
+      ⚠ THE MAPPING IS INJECTED AND THE MECHANISM IS NOT. That a contested act draws dice from the
+      actor's capability is the design's; WHICH capability key each verb draws on is stated
+      nowhere, so this table is an `assumption` row before it is a lookup -- `08 §3`'s
+      inject-declare-sweep, and never a refusal of the whole corpus for a missing key.
+      ⚠ A VERB WITH NO ROW HERE IS NOT AN ERROR. `seam/wrappers/sigma.py::_pool_of` falls through
+      to `pool_default`, which is the `assumption` grade's own polarity: `absent` refuses, and this
+      is not one. The table is therefore OPEN in the sense that matters -- adding a contested verb
+      does not require adding a row before the seam will run it.
+      ⚠ AND IT IS INERT ON EVERY CORPUS PERSON TODAY, WHICH IS SAID HERE SO NOBODY READS THE ROWS AS
+      DOING WORK: `Person.capability` has exactly one writer and it ZEROES the dict, so every
+      derivation lands on `pool_default` and the roll varies by SEED and FIXTURE rather than by
+      PERSON. That is why R-09 reads `partial` after `U1` and not `met`.
+    sweep: [declared, uniform, absent]
+    keys: [verb_table]
+    values:
+      tell:  "copying"
+      speak: "copying"
+
   contest_subsystems:
     source: "`references/module_contracts.yaml` names `personal_combat`, `mass_battle` and `social_contest` as modules with real docs and real resolvers. `ARCHITECTURE_V2.md:394` declares `contests: <prize>` — *if set, routes to the seam at RESOLVE (§39)*."
     cite: "H-88"
@@ -539,11 +564,52 @@ rosters:
       this proposal chain is in scope), so the seam names the subsystem and its resolver and
       REFUSES — which is a far more useful refusal than a generic one, and makes the remaining
       work visible per subsystem rather than as one undifferentiated hole.
+    # ⚠⚠ **`U1` TURNED EACH PRIZE FROM A MODULE STRING INTO A ROW, AND THE SECOND FIELD IS THE
+    # REASON.** `module:` is WHOSE prize it is — the subsystem that owns the contest, which is what
+    # `references/module_contracts.yaml` is checked against and what the seam names when it refuses.
+    # `provider:` is WHAT ACTUALLY RUNS IT, which is a different question the moment an interim
+    # resolver stands in for a subsystem that has not been built. Collapsing them, as the string
+    # form did, makes *this prize belongs to social_contest* and *this prize is rolled by
+    # sigma_leverage* the same sentence — and they are not.
+    # ⚠ `interim: true` IS WHAT CARRIES ED-SC-0033 CLAUSE (2), which rules that the two prizes
+    # mapping to `social_contest` REPOINT to the proceedings provider when it lands. With the two
+    # fields split, that repoint is ONE FIELD ON A ROW rather than a code change (`02 §D.4`), which
+    # is what a manifest is for.
     prizes:
-      "the body":       "personal_combat"
-      "a field":        "mass_battle"
-      "a standing":     "social_contest"
-      "a proposition":  "social_contest"
+      "the body":
+        module:   "personal_combat"
+        provider: "personal_combat"
+        cite:     "H-88; the seam already calls it (seam/wrappers/combat.py)"
+      "a field":
+        module:   "mass_battle"
+        cite: >-
+          NO PROVIDER, AND THE ABSENCE IS THE ROW. It refuses by name exactly as it did under the
+          string form: sides need `faction_q.resolve` (`04 §C.5.1`), which is R-04/U9. A row with a
+          `module:` and no `provider:` is the shape that says *somebody owns this and nothing can
+          run it yet*, which the string form could not express at all.
+      "a standing":
+        module:   "social_contest"
+        provider: "sigma_leverage"
+        interim:  true
+        cite: >-
+          JORDAN, 2026-09-09, VERBATIM: "we have the sigma leverage d10 resolver in engine to use."
+          A third option neither of ED-SC-0037's two costed, and the row is `status: ruled`.
+          ⚠ ED-SC-0033 (2026-09-06) rules that (2) the two contest prizes mapping to
+          `social_contest` REPOINT TO THE PROCEEDINGS PROVIDER -- "this provider" there means THE
+          PROCEEDINGS SUBSYSTEM'S, not this row -- and that (3) THE OBSTACLE HAS A SINGLE OWNER.
+          ⚠⚠ CLAUSE (3) IS NOT HONOURED BY THIS ROW AND MUST NOT BE REPORTED AS HONOURED.
+          `sigma_leverage` does NOT own the obstacle: `eff_ob` CONSUMES a `base_ob` and is
+          "DISPLAY ONLY (not the resolution value)" by its own docstring, `effective_ob` is a pure
+          arg-order alias of it, and the tree's live composition has the CALLER supply `base_ob`.
+          The seam still derives one -- an nth obstacle site, registered at `H-127` -- and clause
+          (3)'s named owner is the proceedings subsystem. THAT TENSION IS WHAT `interim: true`
+          CARRIES; it is not resolved here. Clause (2) is intact: this is A ROW CHANGE when
+          proceedings lands, not a code change (`02 §D.4`).
+      "a proposition":
+        module:   "social_contest"
+        provider: "sigma_leverage"
+        interim:  true
+        cite:     "as `a standing`. Same ruling, same clause-(3) tension, same repoint."
     values: []
 
   titles:
