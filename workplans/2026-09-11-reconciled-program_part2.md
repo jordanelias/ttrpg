@@ -67,9 +67,44 @@ deterministic extraction, and its 4,096-token cache floor makes the fan-out no c
 **not earlier** than 1, which closes the 17 SC rows whose subject this retires · **not later** it is the
 repo's standing "ruled and unexecuted" instance and touches no engine-spine file.
 
-**INSTRUCTION.** (a) **Relocate the one live rule before deleting anything**:
-`systems/social_contest/sim/contest/degree_extension.py`'s demote-only rule becomes the `veto` on the
-interim provider in `engine/season/seam/wrappers/sigma.py`. (b) `git rm -r systems/social_contest/` —
+⚠⚠ **STEP (a) AS FIRST WRITTEN IS WRONG. PRE-FLIGHT RUN 2026-09-11, AGAINST THE CODE RATHER THAN THE
+PLAN, AND IT OVERTURNS THE PREMISE.** Four measurements:
+
+1. **`seam/ladder.py` HAS NO `veto` PARAMETER.** `degree_of(result, subject)` at `:138` is the whole
+   signature. The `degree(margin, veto?) -> Degree` on `ladder.py:2` is a **docstring quoting `04`'s
+   spec**, not a built thing — so `04:681-682`'s `veto=provider.veto` shape is specified and unbuilt.
+   Relocating the rule "as a veto" would first require building a Layer-1 parameter, which is a unit,
+   not a step.
+2. **THE SEASON LOOP NEVER REACHES THE RULE.** `rg 'PoolDesaturation|degree_extension|BandExtension'
+   engine/season/` returns **zero**. So moving it onto the game path does not PRESERVE a behaviour —
+   it **ADDS** one, and would move the content hash. That is a behaviour change wearing a
+   relocation's clothes, which is the `U3a` failure this tree already reverted once.
+3. **`engine/autoload/sigma_leverage.py` DOES NOT IMPORT IT** — comment-only, at `:114` and `:339`,
+   both recording that `ED-SC-0032` moved the rule OUT of the engine deliberately, on Jordan's
+   2026-08-15 ruling that a subsystem's band modification belongs to the subsystem. A grep that
+   counts those comments as consumers is term-matching, not reachability.
+4. **THE REAL BLAST RADIUS IS SIX IMPORTING FILES, AND NONE OF THEM IS THE GAME:**
+   `engine/tests/test_sigma_leverage_parity.py:52` · `tests/valoria/test_band_extension_seam.py:133` ·
+   `tests/valoria/test_balance_oracle_arms.py:65-66` · `tests/valoria/test_degree_ladder_single_owner.py:138` ·
+   **`tools/balance_oracle.py:153-154`** · `proposals/2026-09-04-degree-sweep/arm5_social.py:55`.
+
+**SO THE RULE IS NOT LIVE ON THE GAME PATH; IT IS LIVE ON THE MEASUREMENT PATH, AND THAT CHANGES WHAT
+THIS POSITION RISKS.** Deleting `systems/social_contest/` does not orphan a game rule. It orphans an
+arm of **`tools/balance_oracle.py`** — the campaign-level balance instrument `CLAUDE.md` §7 designates
+for balance questions — plus the σ-leverage parity test. Losing an instrument quietly is worse than
+losing a rule loudly, because the next balance claim is then made with no control (§0.1 pt 4).
+
+**INSTRUCTION — step (a), corrected.** Decide the rule's HOME before deleting, and the choice is not
+between "engine" and "subsystem" but between three: (i) it belongs to **proceedings**, the ruled owner
+of all social contests, and therefore waits for position 22 — in which case this position must NOT
+delete `degree_extension.py` and the retirement is partial; (ii) it is a **general de-saturation** and
+returns to `dice_engine` as a `BandExtension` the ladder already types, which contradicts Jordan's
+2026-08-15 ruling and needs his word; (iii) it dies with the kernel and `balance_oracle`'s social arm
+dies with it, which must be **stated in the commit**, not discovered later by a balance question that
+returns nothing. ⚠ **(i) is the reading this document takes**, because ED-SC-0033 named proceedings
+the owner and nothing has transferred the rule yet. Under (i), step (b)'s `git rm` is scoped to
+everything EXCEPT `degree_extension.py`, and the file moves at position 22.
+(b) `git rm -r systems/social_contest/` — under reading (i), **less `degree_extension.py`** —
 **28 tracked files** (`git ls-files`): 21 `.py` and 7 `.md`. ⚠ **Do not use a `find` count.** The
 directory reads 46 or 47 depending on `__pycache__` churn, which is why ED-SC-0033's "47" and an
 earlier draft of this document's "46" disagree while nothing was edited. A number that moves when
