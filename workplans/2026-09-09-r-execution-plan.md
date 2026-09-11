@@ -1584,15 +1584,25 @@ no `exercises:` is VISIBLY unauthored."* Both halves support the claim as made.*
 
 **Rows.** R-04's `unrepresentable scales:` line — 54 of 143 today (44 faction, 10 world).
 
-**Preconditions.** ⚠ **AMENDED 2026-09-10 — `Act.via` IS G3's, NOT THIS UNIT'S.** **G3 merged**
-(Arc 2: AX-4 clause 2 at the gate, which lands `Act.via` **with** the `NotYours` check behind it),
-plus U7 groups 1–2 (`levy`, `oblige`, `commit`, `establish`, `succeed` execute) and U8's NPC-lane cast.
+**Preconditions.** ⚠ **AMENDED 2026-09-10 — `Act.via` IS G3's, NOT THIS UNIT'S.** **U9 CANNOT
+START UNTIL G3 HAS MERGED** (Arc 2: AX-4 clause 2 at the gate, which lands `Act.via` **with** the
+`NotYours` check behind it), U7 groups 1–2 execute (`levy`, `oblige`, `commit`, `establish`,
+`succeed`) and U8's NPC-lane cast exists.
+⚠ **THIS LINE READ "G3 merged" AND WAS MISREAD AS A STATUS, WHICH IS THE §4 WORD-CHOICE FAILURE
+THIS REPO NAMES** — *idempotent in meaning*: a later reader must land on the writer's meaning, and
+a bolded past participle in a list of preconditions does not carry "is required to have merged".
+**G3 HAS NOT MERGED. NOTHING OF ARC 2 EXISTS** — verified 2026-09-11 against `origin/main` at
+`5a35084` and against the repository's full PR history: there is no `state/gate`, no `Receipt`, no
+`NoOpReceipt`, no `Act.via`, and no pull request for any of G1-G4. Arc 1 (L0-L5) HAS landed
+(`decision/`, `loop/`, `manifest/`, `seam/`, `state/` are directories on `main`); Arc 2 has not
+been started.
 ⚠ **U7 gp 1-2's edge is SOFT** (`§4:475`, *"R-05a → R-04 — SOFT"*); **U8's and G3's are HARD.**
 
 **Files.**
 
-- ~~`state/carriers.py::Act` gains `via: Optional[str] = None`~~ — **STRUCK 2026-09-10. `Act.via` is
-  LANDED BY G3; U9 CONSUMES IT.** `H-108` (`hole_register.yaml:1470`) is real and the field is still
+- ~~`state/carriers.py::Act` gains `via: Optional[str] = None`~~ — **STRUCK 2026-09-10. `Act.via`
+  IS TO BE LANDED BY G3, WHICH HAS NOT RUN; U9 CONSUMES IT WHEN IT HAS.** (The struck text read
+  "is LANDED BY G3", past tense for an unbuilt unit — see the precondition note above.) `H-108` (`hole_register.yaml:1470`) is real and the field is still
   needed, but a `via` field with no gate check behind it is a **dead carrier** — the inert-consequence
   defect `04 §F.20a` names — and `04 §C.2`'s F3 block makes the check and the field one contract.
   §15.1 forbids landing it from the Arc-3 lane; this file list said the opposite, and **three surfaces
