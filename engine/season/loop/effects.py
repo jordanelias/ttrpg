@@ -1,7 +1,8 @@
 """`season.loop.effects` — the resolver's BODY. One effect per verb that writes.
 
 EXTRACTED, step 5 of the decomposition (a PURE MOVE). `EFFECTS`, its decorator, the ONE operand
-reader (`_operand`) and the ten `_eff_*` move together and must: §8's *"THE OWNER OF THE RULE, AND
+reader (`_operand`) and the eleven `_eff_*` (ten until `release`, 2026-09-11) move together and
+must: §8's *"THE OWNER OF THE RULE, AND
 THREE EFFECTS HAD THEIR OWN COPY"* is about `_operand` specifically, and the decorator-filled
 table has to be defined where the decorated functions are or it is empty when the fold reads it.
 
@@ -22,7 +23,7 @@ and it is §47's failure exactly: a false claim of enforcement stops the next re
 
 from __future__ import annotations
 
-from ..data.rosters import FELLED, WOUND_HARM_MODELS
+from ..data.rosters import FELLED, RELEASABLE_KINDS, WOUND_HARM_MODELS
 from ..gaps import InstrumentDefect, Unspecified
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.ids import H
@@ -123,6 +124,36 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     # fabricated-`person.died` class committed inside the fix for it. The mapping's empty entry is
     # dropped by `_apply_write`.
     return {"tenure.opened": [nt.id], "tenure.closed": closed}
+
+
+@effect_for("release")
+def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
+    """`04 §A.3` row 14's generic closer: the actor ends a live edge they own.
+
+    THE MIRROR OF EVERY OPENER AT ONCE, which is the point -- `04 §A.3` row 14 replaces *four
+    closing verbs missing* with one, so `oblige`, `commit`, `tie`, `knot`, `succeed` and `hold`
+    all end here rather than growing an antonym apiece. `01_AXIOMS.md:1121-1136` refuses the
+    per-verb framing by name: *"Asking which verb ends an `oblige` is the wrong question… one
+    sentence rather than four verbs."*
+
+    ⚠ **A PERSON CAN NOW RESIGN AN OFFICE, AND THAT WAS A `T-m` VIOLATION IN THE TABLE, NOT THE
+    DESIGN.** `hold` was closable only by `revoke`, which is `remit:revoke` -- so a seat could be
+    taken from someone and never laid down. `architecture/meta/HANDOFF_NEXT.md` §2a: *"The design
+    says a person may resign; the verb table does not let them. Fix the table, and do not re-open
+    the design."* `hold` is in the domain for exactly this reason.
+
+    ⚠ NO `w.write` HERE. An effect MUTATES AND RETURNS THE IDS IT TOUCHED; the fold calls it inside
+    the gate's `apply()` for the row's `writes:`. Returning an empty list is how the fold learns
+    nothing was closed, and that is what emits `release.refused` -- so the refusal channel is the
+    return value, not a raise (§E2: *failure emits, never raises*)."""
+    subj = _operand(a, "subject")
+    touched = []
+    for t in w.tenures:
+        if (t.subject == a.actor and t.object == subj
+                and t.kind in RELEASABLE_KINDS and t.live):
+            t.until = w.tick
+            touched.append(t.id)
+    return touched
 
 
 @effect_for("revoke")
@@ -303,7 +334,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     standing. No constant is introduced by the default arm -- a fraction needs none, which is
     exactly why it is the default and the other two arms are the sweep.
 
-    THE THREE ARMS (`wound_harm_model`, registered at `H-125`, injected at `DEFAULT_FIXTURES`):
+    THE THREE ARMS (`wound_harm_model`, registered at `H-123`, injected at `DEFAULT_FIXTURES`):
       `scene_fraction`  body <- body x health_remaining / health_full. The scene decides.
       `total`           any wound is lethal. ⚠ THIS IS THE CONTROL AND IT IS THE BEHAVIOUR THIS
                         FUNCTION HAD BEFORE `W-E` (`harm` defaulting to full body), so the arm
@@ -347,7 +378,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     model = w.fixtures.get("wound_harm_model")
     if model not in WOUND_HARM_MODELS:
         raise Unspecified(
-            f"wound-harm model {model!r} is not in the roster", "H-125",
+            f"wound-harm model {model!r} is not in the roster", "H-123",
             needs=f"one of {sorted(WOUND_HARM_MODELS)}",
             law="`observers_for`'s precedent and its reason -- *an unrecognised mode silently "
                 "falling back would make every measurement of this sweep read the control*")
@@ -364,7 +395,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
         left = int(st.get("health_remaining") or 0)
         if full <= 0:
             raise Unspecified(
-                f"the scene reports no health scale for {who!r} ({st!r})", "S39.4/H-125",
+                f"the scene reports no health scale for {who!r} ({st!r})", "S39.4/H-123",
                 needs="`health_full` on the subject's wound state",
                 law="the magnitude is READ from the scene; a scene that carries none cannot be "
                     "read, and choosing a number here is what this arm exists not to do")

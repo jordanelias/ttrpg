@@ -28,10 +28,13 @@ exercised by this run.**
 | `view_k` | `12` | no — a harness fixture |
 | `wear_per_season` | `{'harbour': 10, 'seam': 10, 'body': 10}` | no — a harness fixture |
 | `confidence_default` | `100` | no — a harness fixture |
+| `choice_temperature` | `0.1` | no — a harness fixture |
 | `claim_decay_per_season` | `5` | no — a harness fixture |
 | `fan_out_mode` | `all_five` | no — a harness fixture |
 | `contest_max_depth` | `2` | no — a harness fixture |
 | `entrenchment_seasons` | `60` | yes — §15.2 |
+| `pool_default` | `2` | no — a harness fixture |
+| `obstacle_default` | `2` | no — a harness fixture |
 | `obstacle_refusal_multiple` | `2` | yes — §27.4 |
 | `band_floors` | `{'harbour': {'bulk_shipping': 800, 'fishing': 100}, 'seam': {'deep_mining': 700, 'surface_gleaning': 50}, 'body': {'full_operations': 800, 'limited': 500, 'withdrawal_only': 100}}` | no — a harness fixture |
 | `season_factor` | `1.0` | no — a harness fixture |
@@ -40,6 +43,7 @@ exercised by this run.**
 | `interactions_per_scene` | `3` | no — a harness fixture |
 | `extended_scene_cost` | `2` | no — a harness fixture |
 | `scene_packing_rule` | `greedy` | no — a harness fixture |
+| `scenes_per_round` | `1` | no — a harness fixture |
 | `claim_subject_rule` | `both` | no — a harness fixture |
 | `observation_deposit_mode` | `actor` | no — a harness fixture |
 | `record_stages_default` | `3` | no — a harness fixture |

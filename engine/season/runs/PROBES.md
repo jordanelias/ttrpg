@@ -20,7 +20,7 @@ checking.* So every probe declares its provenance:
 
 **Of 59 PROBES that did not pass, 30 were raised BY THE SHAPE ITSELF and 23 exist only because THERE IS NO SIGNATURE TO CALL.**
 
-> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 66 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 59 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
+> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 86 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 59 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -285,9 +285,9 @@ either** — they are listed individually below and should be discounted accordi
 **law:** S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT
 
 ### `A36` — a person's act order is the order it resolves in  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
-**what:** verb 'buy_grain' is on no row of the verb table
+**what:** verb 'spend_treasury' is on no row of the verb table
 
-**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'buy_grain' as a verb. This is the CALLER'S invention and the gap is the caller's
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'spend_treasury' as a verb. This is the CALLER'S invention and the gap is the caller's
 **law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `A4` — two runs of the same seed produce the same log AND the same hash  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
@@ -381,9 +381,9 @@ either** — they are listed individually below and should be discounted accordi
 **law:** S61 -- NOTHING IS DECIDED AT A SITTING. T5's 'filtered at a rung' runs straight through it, and S10.2's 'arrangements, not choices' cannot be confirmed until it is
 
 ### `F9` — petition spray  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
-**what:** verb 'petition2' is on no row of the verb table
+**what:** verb 'petition0' is on no row of the verb table
 
-**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'petition2' as a verb. This is the CALLER'S invention and the gap is the caller's
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'petition0' as a verb. This is the CALLER'S invention and the gap is the caller's
 **law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `P17` — hidden exposure accumulates across seasons  ·  **UNSPECIFIED**  ·  `S22.4`  ·  by `probe-model`
@@ -399,9 +399,9 @@ either** — they are listed individually below and should be discounted accordi
 **law:** L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say
 
 ### `P2` — the scene budget is ~5 and the PERSON chooses what to leave undone  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
-**what:** verb 'v4' is on no row of the verb table
+**what:** verb 'v0' is on no row of the verb table
 
-**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'v4' as a verb. This is the CALLER'S invention and the gap is the caller's
+**needs:** NOTHING FROM THE DESIGN -- #353 does not name 'v0' as a verb. This is the CALLER'S invention and the gap is the caller's
 **law:** §E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver §27.2 forbids. ⚠ CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)
 
 ### `P25` — a storm ends a tenure  ·  **FORBIDDEN**  ·  `S15.3`  ·  by `construction`

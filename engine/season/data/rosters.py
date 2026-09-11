@@ -181,11 +181,41 @@ def table_meta(name: str) -> dict:
 
 
 TENURE_KINDS = roster("tenure_kinds")
+# `release`'s domain, DERIVED ONCE. `04_CODE_ARCHITECTURE.md` PART D row 15 states it as
+# `tenure_kinds \ {contain}`, and `verb_table.yaml` DECLARES the same set as a column so the
+# loader has something to disagree with -- declaration there, derivation here, and loader
+# invariant 6 compares them. `contain` is the one kind whose end is a MOVE rather than a release:
+# `_eff_move` closes the old leg and opens the new one, so a releasable `contain` would let a
+# person leave a place for nowhere.
+# ⚠ IT LIVES BESIDE `TENURE_KINDS` BECAUSE THE DERIVATION MUST LIVE ONCE (§8). It was written
+# twice -- once in `data/verbs.py`'s loader and once in `loop/predicates.py` -- and the
+# declared-there/derived-here argument is satisfied by ONE derivation, not two. Today the
+# exclusion is a single member so drift would be cheap; the moment it is not, two code sites would
+# have to move together and only one of them is guarded. Found by the `release` adversarial pass.
+RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain"}
+# `U1`: verb -> the capability key its contested roll draws dice from. A MAPPING inside a roster
+# row, read through `roster_map` so an absent roster refuses rather than defaulting to `{}` -- the
+# polarity that function exists to hold. A verb with no row falls through to `pool_default` inside
+# the wrapper, which is the `assumption` grade's own reading (`08 §3`) and not a refusal.
+VERB_CAPABILITY = roster_map("verb_capability", "values")
 RUNG_KINDS = roster("rung_kinds", ordered=True)
 REMIT_ACTS = roster("remit_acts")
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)
 CLAIM_SOURCES = roster("claim_sources")
 STRATA = roster("strata", ordered=True)
+# ⚠⚠ **READ FROM THE LEAF, NOT FROM `rosters.yaml`, AND THIS IS THE ONE ROSTER THAT WORKS THAT
+# WAY.** Every other name here comes from `rosters.yaml` because Jordan ruled definitions must not
+# be hardcoded and that file is the season package's definition surface. The thirteen Convictions
+# already HAVE an owner one layer out — `references/descriptor_registry.yaml:conviction_roster`,
+# exported by `tools/export_descriptors.py` behind a blocking `--check`, read by
+# `engine.substrate.descriptors` — and `tests/valoria/test_conviction_roster_single_owner.py`
+# records what a second copy costs: three incompatible rosters shipped simultaneously and silently
+# disabled ED-912 §6.1's Conviction Scar for as long as both modules existed. Copying them into
+# `rosters.yaml` would have been a fourth, in a file that guard does not scan.
+# ⚠ THE ROW STILL EXISTS IN `rosters.yaml` and carries the source and the note; what it does not
+# carry is `values:`. A reader looking for the definition is sent one hop, which is the correct
+# number of hops when the definition is owned elsewhere.
+from engine.substrate.descriptors import CONVICTIONS  # noqa: E402  (the single owner's leaf)
 CONVICTION_AXES = roster("conviction_axes")
 QUESTION_SOURCES = roster("question_sources", ordered=True)
 PERSON_PREDICATES = roster("person_predicates")

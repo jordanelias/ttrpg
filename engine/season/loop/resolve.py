@@ -15,6 +15,8 @@ delivers the MODULE boundary `04 §A.2:134` requires; the write discipline is Ar
 """
 
 from __future__ import annotations
+
+import random
 from ..data import files
 from ..gaps import InstrumentDefect
 from ..data.rosters import STRATA
@@ -29,7 +31,7 @@ from ..loop.predicates import REQUIRES_PREDICATES
 from ..queries.world_q import WorldReader, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
-from ..state.ids import H
+from ..state.ids import draw_factory, H
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -427,10 +429,35 @@ def resolve(self, acts: list[Act],
             #   d.resolve([Act("k","p_low","kill / wound",payload={"subject":"p_mid"})], 2)
             _target = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
             _parties = [a.actor] + ([_target] if _target and _target != a.actor else [])
+            # ⚠⚠ **`U1`: THE DRIVER CONSTRUCTS THE GENERATOR, AND `04 §C.12`'s REJECTION 4 IS
+            # LOAD-BEARING FOR THE FIRST TIME.** That rejection reads, verbatim: *"When R-09's
+            # producer is built … **its generator must be constructed by the driver from the run
+            # seed and passed down exactly as `World` is.** This is the one rejection that is not
+            # yet load-bearing, because no roll exists yet."* It exists now, and this line is where
+            # it stops being a sentence.
+            # ⚠ *"THREADED LIKE `World`"* MEANS PASSED BY PARAMETER RATHER THAN REACHABLE BY A
+            # GLOBAL NAME — not one continuous stream, and the two readings diverge. `04 PART D
+            # row 35` settles it: `H(seed, tick, subject, purpose)`, *no counter, no service*, with
+            # `purpose` uniqueness a CONVENTION. A single stream threaded through the season would
+            # make every roll depend on the count of prior draws, so adding one contested verb
+            # would move every other verb's outcome.
+            # ⚠ AND `purpose` IS PROVIDER-SPECIFIC BY DESIGN. `seam/wrappers/combat.py` derives its
+            # own seed from `f"contest:{prize}:{causes[0]}"` with `claimants[0]` as the subject, and
+            # it IGNORES this generator for exactly that reason: consuming it would re-seed every
+            # existing `kill / wound` result and silently re-record the goldens under cover of a
+            # refactor. Row 35 needs purpose UNIQUENESS, not one spelling across providers.
+            # ⚠ THROUGH `draw_factory`, THE OWNER, AND IT IS THE SAME STREAM. This wrote
+            # `random.Random(int(H(w.world_seed, w.tick, a.actor, purpose), 16))` by hand, which is
+            # `draw_factory`'s inner `draw` character for character with the same four arguments —
+            # so routing through the owner moves NO golden, and keeping the copy bought nothing.
+            # The purpose stays `roll:<prize>:<act id>`: `04 PART D row 35` needs purpose
+            # UNIQUENESS, not one spelling across providers, and that is what is preserved here.
+            _rng = draw_factory(w.world_seed, lambda: w.tick)(
+                a.actor, f"roll:{_contests[0]}:{a.id}")
             r = contest(w, rung=(a.payload if isinstance(a.payload, str) else None) or "R",
                         prize=_contests[0],
                         claimants=_parties, depth=0, max_depth=contest_max_depth,
-                        causes=[a.id])
+                        causes=[a.id], verb=a.verb, subject=_target, rng=_rng)
             if isinstance(r, ContestError):
                 TRACE.note(f"contest returned {r}", "S39.3")
                 continue

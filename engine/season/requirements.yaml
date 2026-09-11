@@ -139,7 +139,7 @@ rows:
     statement: "decisions must propagate"
     status: not_met
     measured: >-
-      R3 (cross-person propagation) passes 30/30 NPC and 54/59 ARC on the cases that are
+      R3 (cross-person propagation) passes **22/30 NPC and 34/59 ARC** on the cases that are
       representable, and the planted-edge control fires — so the DETECTOR works. But the
       forking exercise measured 2,403 forks with 100% reconvergence, and after W-A/W-B the
       later-decision divergence is only ~4%. Propagation is structurally present and
@@ -169,6 +169,28 @@ rows:
       corpus-scale fork rate (the 62/1467 figure), which needs the chunked `wd_chunk.py` run and
       was not re-run here. So the ~4% above is stale in an unknown direction and the status stays
       `not_met` on the instrument that set it, not on the slice that moved.
+      ⚠ **AND THE OPENING R3 FIGURES MOVED TOO — THEY READ 30/30 NPC AND 54/59 ARC UNTIL
+      ED-FI-0009. THE FALL IS A MEASURED BEHAVIOURAL CHANGE, NOT A STALE LINE (measured
+      2026-09-10, and it is why the two numbers at the top of this row now read 22/30 and
+      34/59).** The same command on both sides of that commit —
+      `python -m engine.season.harness.corpus_run`, at `b154ce8` (before) and `5a35084` (after)
+      — moves **28 cases from R3 true to R3 false and none the other way**, 8 NPC and 20 ARC.
+      **It is displacement, not a blind instrument, and that was the falsifier this claim
+      needed**: on four sampled flipped cases the emitter index `_r3_propagates` builds still
+      attributes every Event it did before — `indexed` tracks `acts` exactly on both sides — and
+      the cause-edge population does not collapse, while the cross-person subset goes to **zero
+      in all four**: `ARC-45` acts 42→42 · edges 12→10 · **cross 12→0**; `ARC-R16` 42→42 ·
+      12→12 · **12→0**; `NPC-008` 42→46 · 12→15 · **12→0**; `NPC-020` 42→42 · 12→14 · **12→0**.
+      (One of the four edge counts falls; the other three hold or grow. The claim is that the
+      population SURVIVES, not that it is monotone.) Every flipped case LOST no verb and GAINED
+      `reconstruct`/`surveil`. So the six acts did not blind the detector; they displaced the act
+      that used to be caused by another person's act — which is this row's own subject, measured
+      moving in the adverse direction while §F1 clause 4 moved in the favourable one. Both are
+      true and neither cancels the other.
+      ⚠ **NOTHING IS ESCALATED AND NO GUARD IS MINTED.** The remedy is already this row's own
+      `blocks:` entry `W-F` (cross-person transmission), so there is no ruling to ask for
+      (`CLAUDE.md` §0, gate 5); and pinning an R3 count in a test would pin a number the build is
+      supposed to move, which is §7's uncontrolled path. What this row owed was the measurement.
     measure: "python -m engine.season.harness.corpus_run  # check R3 rows + the planted control"
     blocks: [W-F, H-111, H-116]
 
@@ -192,7 +214,7 @@ rows:
     statement: >-
       seasons must tick scene-by-scene, so what occurs after one scene can impact the next
       scene
-    status: not_met
+    status: met
     measured: >-
       The scene container EXISTS and is not what's missing: `Scene` is a dataclass
       (`engine/season/state/carriers.py::Scene`, moved there at step 4 of the decomposition; this
@@ -214,7 +236,50 @@ rows:
       of a season scales with the CAST rather than with the PLAYERS. The actorless channel
       (`SeasonDriver.matter`) already exists for the no-scene case, and both channels converge at
       `witness` into one log (S19.5).
-    measure: "python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0"
+      ⚠⚠ **MET 2026-09-11 BY `U2`, AND THE FLIP IS ON AN EXECUTION RATHER THAN A DOCUMENT
+      (`CLAUDE.md` §0.2).** `SeasonDriver.season` is now
+      `calendar -> matter -> for r in range(R): freeze -> deliberate -> resolve -> log -> witness`,
+      with `R = scene_budget`. CALENDAR and MATTER stay once per season (AX-5's three motions are
+      seasonal, `01_AXIOMS.md:151`; a docket forming five times a season is a fourth clock,
+      `04 §C.1:504` + D-17/D-21), `w.tick` advances once (D-45), and the round index is a DRIVER
+      LOCAL — `Claim.round` is the only carrier field the unit adds, and it is a different thing:
+      WHEN a claim landed, which `questions_for(w, p, since=(tick, round))` reads.
+      **THE ACCEPTANCE, EXECUTED:**
+      `test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_same_season`
+      plants one claim in `p_bailiff`'s ledger at the end of round 0, about a rung they hold a
+      live `contain` Tenure toward. UNPLANTED, `p_bailiff` raises no question in that world under
+      any of §F1's four sources — Q1 no Date names them, Q3 no crossing reaches them, Q4 no
+      `commit` to an OUGHT, and Q2 nothing has landed yet — so the control arm forms NO candidates
+      in any round; the plant does not shift a deliberation, it CAUSES one, in a later round of
+      the same season. ⚠ **"UNPLANTED" IS LOAD-BEARING AND AN EARLIER WRITING OF THIS PARAGRAPH
+      DROPPED IT**, leaving a sentence that contradicts the acceptance it introduces: the plant
+      works THROUGH Q2, which is one of the four. Q2 is not dark for `p_bailiff`; it is EMPTY
+      until something lands, which is exactly why they are the right control. MEASURED
+      2026-09-11, `build_world(0)`, 2 seasons, unplanted: `p_bailiff` raises 0 questions from any
+      source while `p_carin` raises 45 (35 `claim_landed`, 10 `need`) — a real silence in a world
+      that is producing questions, not a world where none can be raised. That is the
+      channel R-03 names, and before `U2` no mechanism could carry it.
+      **WHAT IT BOUGHT, MEASURED AGAINST A CONTROL** (both arms seed 0 over the same 143 corpus
+      cases, the control run from a worktree at the commit before it): **R3 cross-person
+      propagation 50 -> 84 of 143**, distinct executed sets **14 -> 38**, the universal executed
+      set collapses from `{create_record}` to EMPTY (nothing is guaranteed a scene in every world
+      any more), and the two rarest verbs more than double their reach (`research` 15 -> 35 worlds,
+      `interview` 14 -> 25). R3 is R-01/R-02's own channel and this is the largest single move it
+      has made.
+      **THE CONTROL IS REAL AND IS THE `scene_budget = 1` ARM**, where the season is ONE round: the
+      rounds loop, the queue, the fingerprint and the release all run and reproduce the pre-tick
+      `(actor, verb, subject)` act multiset and Event-kind multiset EXACTLY. The content hash moves,
+      by `Claim` gaining a field and for no other reason, which is why the test asserts the
+      multisets and not the hash.
+      ⚠ **AND TWO THINGS THE UNIT COST, REPORTED RATHER THAN NETTED OFF.** (1) In the `headless`
+      world the verb mix NARROWS, 10 verbs to 6 over two seasons: a person re-ranks each round and
+      takes the top of a fresh ranking, so they reach less deep into it than one `pack_scenes` call
+      over the whole season did. That is local to a three-person world — corpus-wide the same 11
+      verbs execute and the rare ones reach MORE worlds. (2) People now spend scene-actions their
+      own packing used to strand: a person whose queue empties with budget left is asked again,
+      where the one-pass loop simply lost the remainder. Roughly 6% more deposits in the headless
+      world. Neither is what R-03 asked for and both are consequences of it.
+    measure: "python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0  # and `pytest engine/season/tests -q -k test_u2_`, which is what §0.2 accepts"
     blocks: [W17]
 
   - id: R-04
@@ -233,11 +298,17 @@ rows:
       of play required in a season
     status: not_met
     measured: >-
-      **10 of 37 verbs execute in the corpus** (create_record, interview, move, reconstruct,
-      research, speak, surveil, tell, transfer, utter). 20 carry no predicate and no effect,
-      5 are foldable but never attempted (the governance verbs, `H-71`), and 2 are attempted and
-      always refused (`work` and `examine`, both because no question these worlds raise refers to
-      a Site). 1 of 37 declares `contests:`.
+      **11 of 38 verbs execute in the corpus** (create_record, interview, move, reconstruct,
+      release, research, speak, surveil, tell, transfer, utter). 20 carry no predicate and no
+      effect, 5 are foldable but never attempted (the governance verbs, `H-71`), and 2 are
+      attempted and always refused (`work` and `examine`, both because no question these worlds
+      raise refers to a Site).
+      ⚠ **2 of 38 DECLARE `contests:`, NOT 1 — `U1`, 2026-09-11.** `tell` gained
+      `contests: "a standing"` (ED-SC-0037), routing to the σ-leverage provider, so it joins
+      `kill / wound`. **THE PLAN PROJECTED 1 -> 3 AND THE THIRD IS NOT AVAILABLE**: `speak` cannot
+      take a `contests:` because it is untyped and its `requires:` cell is `--`, so grading it
+      would be a degree with nothing to grade against. That is a correction to the plan's
+      arithmetic, made here rather than absorbed silently, and it is why this line reads 2.
       ⚠ **32 -> 37 IS A CORRECTION, NOT GROWTH** (ED-FI-0009, 2026-09-10). The row spelled
       `"the six investigation acts"` was ONE row standing for six acts canon names
       (`investigation_systems_v30.md:217`), carrying `requires: "per act"` — a cell deferring to
@@ -246,6 +317,47 @@ rows:
       from the EXISTING closed grammar (no new form, operand or stem), four execute, one is
       always refused, and `thread_read` is not resolvable at all: it requires Thread Sensitivity
       >= 30, which the closed `requires_operands` roster has no name for (`H-85`).
+      ⚠ **37 -> 38 AND 10 -> 11 EXECUTE, `release` (2026-09-11).** `04_CODE_ARCHITECTURE.md`
+      §A.3 row 14 names it — *four closing verbs missing → one `release` verb, eligibility `own`,
+      generic over kind* — and `architecture/meta/HANDOFF_NEXT.md` §2a rules the repair: *"The
+      design says a person may resign; the verb table does not let them. Fix the table, and do not
+      re-open the design."* It is the ANTONYM half of the table: `oblige`, `commit`, `tie`, `knot`,
+      `succeed` and `hold` all end through it, so a seat can now be laid down rather than only
+      taken away by `revoke`. The loader asserts its `domain:` equals `tenure_kinds \ {contain}`
+      (invariant 6, PART D row 15), so an eighth tenure kind without a closer fails the load.
+      ⚠ **WHAT IT IS AND IS NOT, MEASURED AGAINST A CONTROL RATHER THAN ASSERTED.** Both arms at
+      seed 0 over the same 143 corpus cases, the control from a worktree at the commit before it:
+      distinct executed sets **10 -> 14** (it recovers most of what `U4` spent), `release` executes
+      in **15 of the 89** live worlds, and the `chronicle` witness channel — which admitted nobody
+      in any world the fold could drive — **fires for the first time**, on a `tenure.closed`.
+      R3 moves **55 -> 50 of 143**, which is a cost and is reported rather than netted off; it sits
+      inside the band temperature alone covers (`U4`'s sweep moved R3 56·55·59·59·48 with the verb
+      set held fixed), so this instrument cannot separate the two and says so.
+      ⚠ **AND IT IS MOSTLY A REFUSAL, FOR A STRUCTURAL REASON.** Over the 27 NPC rung cases at
+      seed 0, 3 seasons: taken 164 times, 6 edges closed, 158 refusals — 96.3%.
+      `belief_contradicts` evaluates `row.requires_typed` and its own docstring states the polarity
+      (`engine/season/epistemic.py:84-87`): *"AN UNTYPED VERB IS NOT CONTRADICTED.
+      `evaluate(None, ...)` is UNKNOWN, and UNKNOWN is not False."* `release` declares
+      `requires_typed: none`, so §F1 clause 4 CAN NEVER FIRE ON IT, in any world, for any claim —
+      no belief could suppress the candidate however the corpus were seeded. ⚠ THIS CELL ONCE READ
+      *"the same reason `work` refuses 177 of 177"* AND THAT WAS WRONG IN KIND: `work` carries a
+      typed `scalar_threshold` cell and its clause-4 channel is live and measured (`restore`, on
+      the same cell, drops 387 times). Same surface number, two different mechanisms. A refusal is
+      a first-class outcome here (`verb_table.yaml:13-16` — *"`emits_on_refusal` IS THE SCARCITY
+      CHANNEL AND IT IS LOAD-BEARING"*), so the ratio is licensed; what it is not is evidence the
+      verb is exercised. Typing the cell is what would change it, and the row's own note says so:
+      *"IF AN `any` COMBINATOR IS EVER RULED, THIS CELL IS THE FIRST THING TO TYPE."* The verb is
+      BUILT and barely EXERCISED.
+      ⚠ **THE 164 / 6 / 158 TRIPLE HAS NO INSTRUMENT IN THE TREE, AND THAT IS SAID RATHER THAN
+      IMPLIED.** `corpus_run` prints `VERBS THAT EXECUTED` and `VERBS ONLY REFUSED` as SETS, not as
+      per-verb counts, so no committed command reproduces these three numbers. They were measured
+      by a one-off script and the recipe is given so anyone can rebuild it: load `run_cases`'s NPC
+      lane, keep the cases whose `scale` is in `rung_kinds` (27 of them), `corpus_run.build_at(case,
+      0)`, three seasons through `SeasonDriver.season` with `make_chooser(..., verbs=resolvable_verbs(),
+      draw=draw_factory(...))`, then count `driver.resolved` by verb and `world.log` by kind. What
+      IS instrumented, and is what the claim rests on, is the pair of assertions in
+      `test_season_shape.py`: `release` in the executed set over the 143-case corpus, and 15 of the
+      89 live worlds. The triple is context for those, not evidence beyond them.
       ⚠ WHAT THE SPLIT DID **NOT** BUILD, said here because a verb row is not a mechanism:
       `fieldwork_v30.md:302-309` grades all six on four bands and NOTHING RESOLVES A BAND. Their
       `emits:` is flat. `rosters.yaml:482` types investigation's seam UNRULED and `:487-491` rules
@@ -256,7 +368,7 @@ rows:
       days earlier and closed it at test 3 — *"NOT A SEAM. The loop IS the mechanism"*, attaching
       RESOLVE → WITNESS, out = *"Claims graded by degree; Failure emits `finding.none` and deposits
       nothing"*, **work item 4.5**. What is missing is a degree PRODUCER, which is work.
-    measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 37 today, and was '32' in this cell until ED-FI-0009 made the count honest"
+    measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 38 today; it was '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [W10-core, H-65, H-94]
 
   - id: R-06
@@ -275,7 +387,28 @@ rows:
       READ over it (no `ambitions(p)` query anywhere in the package) and a real cast per case
       (`W27`, `architecture/PLAN.md:1583`) rather than one shared OUGHT for all 143 corpus worlds.
       Convictions separately barely discriminate: only 2–7 of 22 candidates carry a nonzero
-      score; the rest tie and are ordered alphabetically.
+      score and the rest tie. ⚠ THE SECOND HALF OF THAT SENTENCE READ *"and are ordered
+      alphabetically"* AND IS FALSE SINCE `U4` (2026-09-10): tied candidates are ordered by a
+      per-person seeded draw (`decision/choose.py::_sample_order`), not by verb name.
+      ⚠⚠ **AND THE DISCRIMINATION HALF IS LARGELY CLOSED BY `U3` (2026-09-11), MEASURED AGAINST A
+      CONTROL.** Both arms at seed 0 over the same 86 buildable corpus worlds, control from a
+      worktree at `a85bd45`: candidates carrying a nonzero conviction score move
+      **7..11 of 28 -> 16..22 of 28**, mean **7.79 -> 21.84**. `U3` separates the thirteen
+      CONVICTIONS from the four ethical AXES — `conviction_axes` had been holding one conviction
+      (`Precedent`) beside three ad-hoc scalars so that §F2's `conviction[axis]` had something to
+      look up — and projects between them through `conviction_axis_matrix_v30.md` §2's 13x4. A
+      conviction now scores a verb on all four axes instead of through one sparse block.
+      ⚠ **THE ROW STAYS `partial` FOR TWO REASONS, AND NEITHER IS THE ONE IT USED TO GIVE.**
+      (1) `ambitions(p)` still does not exist and the cast is still one shared OUGHT across 143
+      worlds — `U8`'s, unchanged. (2) A NEW ONE `U3` itself created: the thirteen convictions are
+      CORRELATED, so people are now well-differentiated from their own alternatives and poorly
+      differentiated from each other. Measured off `CONVICTION_PROJECTION`: the mean conviction
+      vector is (traditional +0.285, sacred +0.215, hierarchical +0.200, instrumental -0.062) and
+      NINE OF THIRTEEN convictions lie within 60° of it; distinct executed sets over 89 live
+      worlds fall **40 -> 27**. Seeding 1-3 convictions per #353 §14 instead of one raised
+      distinct axis directions 13 -> 80 of 86 and did not recover the executed sets. Whether the
+      matrix should be re-centred is `ED-IN-0214`, and it is Jordan's: re-calibrating overwrites
+      52 cells that document argues individually.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [W27, H-62]
 
@@ -316,6 +449,29 @@ rows:
       candidates carry a nonzero conviction score, so most choices are settled by verb name rather
       than by anything about the person. There is no mechanism by which a person declines the
       optimum, and no mechanism by which inclination breaks a tie.
+      ⚠ **THE LAST SENTENCE IS FALSE AS OF `U4` (2026-09-10), AND THE ROW STAYS `partial` ANYWAY —
+      because the two halves it names came apart.** *A person declines the optimum*: **BUILT.** The
+      order is sampled, `softmax(score / choice_temperature)` via Gumbel, in
+      `engine/season/decision/choose.py::_sample_order`, so the top-ranked candidate is likely and
+      no longer certain. Falsifier:
+      `test_u4_the_choice_is_sampling_and_the_argmax_is_its_zero_temperature_control` — twenty
+      seeds over ONE person and view yield >=2 distinct top acts, while the identical arm at
+      `choice_temperature = 0` collapses to exactly one, so the spread is the sampler's and not the
+      fixture's. *Inclination breaks a tie*: **STILL NOT BUILT**, and it cannot be while the
+      alignment table is sparse (`H-96`'s ranking half · `H-66` · `U3`). A tie is now broken by the
+      DRAW, which is not the person — it is the absence of a reason, not a reason of theirs. That
+      is the whole of why this row does not go `met`.
+      ⚠ WHAT `U4` ACTUALLY REMOVED, measured with a control: the ALPHABET deciding a triage. One
+      ruled verb (`release`, `04 §A.3` row 14) under a name sorting EARLY executed in 18 corpus
+      cases and displaced 71 acts (`utter` x56); the SAME verb, predicate and effect under a name
+      sorting LAST executed in 5 and displaced 2. After `U4` the pair reads 13 vs 14 and 22 vs 25 —
+      the gap collapses into noise. ⚠ AND THE COST IS RECORDED WITH IT: between-world variety falls
+      monotonically with temperature (distinct executed sets, 89 live cases: tau=0 -> 16 · 0.1 -> 10
+      · 0.25 -> 8 · 0.5 -> 7 · 1.0 -> 7), which is the opposite of what `U4`'s plan predicted, so
+      the shipped `0.1` is the LEAST arm that removes the defect rather than a tuned one.
+      ⚠ THE CITATION ABOVE IS STALE and is kept as written with the correction attached:
+      `decision.py` became the DIRECTORY `decision/` at Arc 1 (`ED-IN-0206`), so the sort lives at
+      `decision/choose.py::make_chooser`.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' + tie ordering"
     blocks: [W26, H-62]
     needs_jordan: false
@@ -332,23 +488,39 @@ rows:
 
   - id: R-09
     statement: "chains of events within a scene are probabilistic, not deterministic"
-    status: not_met
+    status: partial
     measured: >-
-      THERE IS NO ROLL ANYWHERE IN THE LOOP. A test scans every non-test module for `net =` /
-      `roll_pool` / `successes` with comments stripped and asserts the set is EMPTY — the degree
-      ladder is a reader with no producer. The only randomness in the package is the seeded
-      `Random` `combat_seam.py` hands to `systems/combat/`. No act has ever resolved at a degree
-      of success in a corpus run; the contest seam is wired and unreached.
-      ⚠ UNCHANGED BY ED-FI-0009, DELIBERATELY, AND THE SIX ARE WHERE THIS ROW NOW POINTS. They
-      are the acts canon grades on four bands (`fieldwork_v30.md:302-309`) and they are the
-      obvious first producer of a margin the one ladder could read. They ship UNGRADED because
-      the producer does not exist. ⚠ THE FIRST WRITING OF THIS PARAGRAPH SAID BUILDING IT MEANT
-      WRITING INVESTIGATION'S SEAM AND PUT THAT TO JORDAN. It does not and it is not a Jordan
-      question: `workplans/2026-09-06-season-loop-execution-plan.md:647` already closed that blank
-      at §0 test 3 — investigation is NOT a seam, the loop IS the mechanism, and the degree
-      producer is **work item 4.5**, attaching RESOLVE → WITNESS. This row moves when 4.5 is built;
-      its own blockers are `W27`'s cast (no attribute values on any person), the absent Depth
-      carrier, and §27.4's refusal to route an uncontested attempt to an `Ob = 0` roll. The scan
-      above is still green because nothing here rolls.
-    measure: "python -m pytest engine/season/tests -k ladder_is_the_trees_own"
+      **A ROLL EXISTS AND IT REACHES THE GAME. `U1` / ED-SC-0037, 2026-09-11.**
+      `engine/season/seam/wrappers/sigma.py` is the σ-leverage provider Jordan named --
+      *"we have the sigma leverage d10 resolver in engine to use"* -- registered against
+      `(contest, sigma_leverage)` and reached through `manifest.resolve`, never a literal in the
+      seam. It composes the tree's own line, `systems/social_contest/sim/contest/resolver.py:302`:
+      `net = roll_net(pool, rng=rng) + net_boost(lev, pool)`. BOTH names matter: `roll_net` alone
+      is `roll_pool` minus the obstacle, i.e. the bare pool roll ED-SC-0037 costed wearing the
+      ruled module's name; `net_boost` is the μ-shift ED-884/ED-934 ruled.
+      **EXECUTED, NOT DECLARED.** `tell` declares `contests: "a standing"`, which routes here, so a
+      telling is now GRADED: measured over the 27 NPC rung cases at seed 0, 3 seasons, **20
+      `news.told` against 75 `news.untold`** -- a 21% success rate, and 26 of 27 cases produce a
+      telling. The outcome moves with the seed: `build_world(0)` reads Failure 53 / Partial 16 /
+      Success 2 and seed 7 reads 59 / 11 / 5.
+      **WHY `partial` AND NOT `met`, STATED RATHER THAN LEFT TO BE FOUND.** R-09 asks that chains
+      be probabilistic; what is probabilistic today is the ROLL, not the CHAIN, and it varies by
+      SEED and FIXTURE rather than by PERSON. `Person.capability` is empty on every corpus person
+      -- one writer, and it zeroes it -- so `_pool_of` returns `pool_default` for everybody and
+      `_obstacle_of` returns `obstacle_default` for every non-person subject. `lev` is 0.0 with no
+      producer, stated as zero because a fabricated leverage would be a number nobody chose. It
+      varies by person the day capability is written, which is character development and out of
+      this arc (`W27`'s cast, 0 of 143 cases).
+      ⚠ **AND THE ROW IT REPLACES WAS TRUE WHEN WRITTEN.** It read *"THERE IS NO ROLL ANYWHERE IN
+      THE LOOP"*, resting on a scan that asserted NO module produces a margin. That scan is now a
+      SET EQUALITY on exactly one owner rather than an emptiness claim -- `S27.2` names a second
+      resolver as this architecture's highest-value refusal, so *exactly one* is the stronger
+      guard and it is red the day a second appears.
+      ⚠ **WHAT THE ROLL COST, REPORTED RATHER THAN NETTED OFF.** Grading a verb that deposits
+      beliefs narrows the deposit stream: §F1 clause 4's suppression channel lost one verb and 11
+      candidates on ARC-01 (`surveil`, 80 drops -> 69), and the corpus universal executed set came
+      back from `{}` to `{reconstruct}`, which is between-world variety `U2` had bought. Distinct
+      executed sets rose 38 -> 40 and R3 cross-person propagation was UNMOVED at 84 of 143 -- so
+      `U1` changed what people do, not whether what one does reaches another.
+    measure: "python -m pytest engine/season/tests -k 'we_only_a_verb or u1_' ; python -m engine.season.harness.headless --seasons 2 --seed 0"
     blocks: [W23, H-98]

@@ -33,8 +33,12 @@ step modules import them the same way -- `resolve` reads both tables and neither
 
 ⚠ THIS FILE IMPORTS NEITHER MODULE — the same reason `season/state/__init__.py` and
 `season/data/__init__.py` both give at length, and for `effects` a sharper one: importing it runs
-TEN `@effect_for` registrations, so an eager package import would make anything wanting one name
-from `loop` build the whole effect table. (This said "thirteen" when it shipped; there are ten
-`_eff_*`, which `effects.py`, `shape.py` and the plan all state correctly. A count written from
-memory beside three correct copies of it.)
+ELEVEN `@effect_for` registrations, so an eager package import would make anything wanting one name
+from `loop` build the whole effect table. (This said "thirteen" when it shipped; there were ten
+`_eff_*`, which `effects.py`, `shape.py` and the plan all stated correctly. A count written from
+memory beside three correct copies of it. ⚠ AND IT HAPPENED AGAIN, ON THIS LINE, ON 2026-09-11:
+`release` made eleven and both this sentence and `effects.py`'s still read ten — a count written
+from memory beside the paragraph recording the last count written from memory. Found by the
+`release` adversarial pass. The lesson the first parenthesis drew is the right one and the repair
+is the same; what neither buys is a guarantee, because the carrier is prose.)
 """

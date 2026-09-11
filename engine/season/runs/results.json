@@ -9107,7 +9107,7 @@
   "P1": {
    "id": "P1",
    "verdict": "PASS",
-   "detail": "PASS: a postless person produced an Act that reached RESOLVE and emitted an Event (speech.made), whose `causes[]` names the act. The season emitted 7 Events in total -- the rest are the world's licensed clocks (`W4`), and none of them is hers",
+   "detail": "PASS: a postless person produced an Act that reached RESOLVE and emitted an Event (speech.made), whose `causes[]` names the act. The season emitted 11 Events in total -- the rest are the world's licensed clocks (`W4`), and none of them is hers",
    "kind": null,
    "section": "S3-L1",
    "title": "a person holding no office acts",
@@ -9117,11 +9117,11 @@
   "P2": {
    "id": "P2",
    "verdict": "GAP",
-   "detail": "verb 'v4' is on no row of the verb table",
+   "detail": "verb 'v0' is on no row of the verb table",
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "the scene budget is ~5 and the PERSON chooses what to leave undone",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v4' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v0' as a verb. This is the CALLER'S invention and the gap is the caller's",
    "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "a character must be able to take several distinct actions in one season and choose what to leave undone"
@@ -9237,7 +9237,7 @@
   "P11": {
    "id": "P11",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 27 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
+   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 28 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
    "kind": null,
    "section": "S9.2",
    "title": "capability gates no verb",
@@ -9247,7 +9247,7 @@
   "P12": {
    "id": "P12",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 54 candidates over 27 verbs, every one a verb-table row",
+   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 56 candidates over 28 verbs, every one a verb-table row",
    "kind": null,
    "section": "S17",
    "title": "opening_set returns Candidate[], not Act[]",
@@ -9415,7 +9415,7 @@
   "P28": {
    "id": "P28",
    "verdict": "PASS",
-   "detail": "PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. There is no signature in the decision surface (17 functions) that takes one person and returns another's ledger. Absence is the refusal here, not a guard",
+   "detail": "PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. There is no signature in the decision surface (18 functions) that takes one person and returns another's ledger. Absence is the refusal here, not a guard",
    "kind": null,
    "section": "S20",
    "title": "a ledger is unreadable by anyone else",
@@ -9449,7 +9449,7 @@
   "P31": {
    "id": "P31",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION: 'create_record' at Precedent +0.9, 'evade / defy' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
+   "detail": "PASS BY CONSTRUCTION: 'tie / knot' at Precedent +0.9, 'evade / defy' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
    "kind": null,
    "section": "S9",
    "title": "a hidden motive biases every decision",
@@ -9503,7 +9503,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 27 candidates were OFFERED from the computed option set and only 17 of 37 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'examine', 'interview', 'move', 'reconstruct', 'research', 'speak'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 28 candidates were OFFERED from the computed option set and only 18 of 38 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'surveil', 'utter', 'work'] -- 5 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -9601,11 +9601,11 @@
   "F9": {
    "id": "F9",
    "verdict": "GAP",
-   "detail": "verb 'petition2' is on no row of the verb table",
+   "detail": "verb 'petition0' is on no row of the verb table",
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "petition spray",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'petition2' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'petition0' as a verb. This is the CALLER'S invention and the gap is the caller's",
    "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "a character must be able to spend a whole season putting the same matter to many people"
@@ -9613,7 +9613,7 @@
   "F10": {
    "id": "F10",
    "verdict": "PASS",
-   "detail": "PASS: granted=1, refused=1, larder=0 (never negative), total store mass 113 == the no-act control's 113. THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
+   "detail": "PASS: granted=1, refused=9, larder=0 (never negative), total store mass 113 == the no-act control's 113. THE SECOND CLAIMANT ON AN EMPTIED LARDER GOT A DIFFERENT EVENT. Petitions never closed each other; the matter closed AT RESOLVE BY SCARCITY. S54 item 7's precondition is what makes this true rather than minting",
    "kind": null,
    "section": "S54.1",
    "title": "a matter closes by scarcity, not by cancelling",
@@ -9919,7 +9919,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (feb6c4b20ba5...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (617cb200737b...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10181,7 +10181,7 @@
   "A28": {
    "id": "A28",
    "verdict": "PASS",
-   "detail": "PASS over 127 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 4 causes name an ACT and 118 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
+   "detail": "PASS over 263 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 20 causes name an ACT and 238 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
    "kind": null,
    "section": "S19.1",
    "title": "the log's invariants hold",
@@ -10281,11 +10281,11 @@
   "A36": {
    "id": "A36",
    "verdict": "GAP",
-   "detail": "verb 'buy_grain' is on no row of the verb table",
+   "detail": "verb 'spend_treasury' is on no row of the verb table",
    "kind": "UNSPECIFIED",
    "section": "S27/E2",
    "title": "a person's act order is the order it resolves in",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'buy_grain' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'spend_treasury' as a verb. This is the CALLER'S invention and the gap is the caller's",
    "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "by": "construction",
    "tests": "what a character does first must be able to close off what they could have done after"
@@ -10446,9 +10446,9 @@
  "_gaps": [
   {
    "kind": "UNSPECIFIED",
-   "what": "verb 'v4' is on no row of the verb table",
+   "what": "verb 'v0' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v4' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'v0' as a verb. This is the CALLER'S invention and the gap is the caller's",
    "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "case": "probe:P2",
    "expected": false
@@ -10461,6 +10461,186 @@
    "law": "S26.3, re-stated in scenes per Jordan's 2026-09-02 ruling -- at one scene NOBODY EVER CHOOSES WHAT TO LEAVE UNDONE; the budget exists to create triage. An engine that silently discards the tail has made the choice instead of the person, which is L1. \u26a0 THE UNIT MATTERS: eight INTERACTIONS across five scenes is LAWFUL and was refused before the ruling",
    "case": "probe:P2x",
    "expected": false
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
+  },
+  {
+   "kind": "FORBIDDEN",
+   "what": "choose() reached for world state 'persons' through its View",
+   "where": "S3-L2",
+   "needs": "a person decides from their own claims; world truth enters only via sense()",
+   "law": "L2 -- choose never receives a World. NOT BY DISCIPLINE -- BY TYPE",
+   "case": "probe:P3",
+   "expected": true
   },
   {
    "kind": "FORBIDDEN",
@@ -10644,9 +10824,9 @@
   },
   {
    "kind": "UNSPECIFIED",
-   "what": "verb 'petition2' is on no row of the verb table",
+   "what": "verb 'petition0' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'petition2' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'petition0' as a verb. This is the CALLER'S invention and the gap is the caller's",
    "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "case": "probe:F9",
    "expected": false
@@ -10968,9 +11148,9 @@
   },
   {
    "kind": "UNSPECIFIED",
-   "what": "verb 'buy_grain' is on no row of the verb table",
+   "what": "verb 'spend_treasury' is on no row of the verb table",
    "where": "S27/E2",
-   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'buy_grain' as a verb. This is the CALLER'S invention and the gap is the caller's",
+   "needs": "NOTHING FROM THE DESIGN -- #353 does not name 'spend_treasury' as a verb. This is the CALLER'S invention and the gap is the caller's",
    "law": "\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids. \u26a0 CHARGED TO THE INSTRUMENT, NOT THE DESIGN (register row H-64)",
    "case": "probe:A36",
    "expected": false
@@ -11040,16 +11220,16 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 1932,
-  "BARRIER": 655,
-  "DECISION": 665,
-  "QUERY": 6023,
-  "NOTE": 471,
-  "WRITE": 10390,
-  "EVENT": 10359,
-  "ACT": 75,
-  "CLAIM": 1022,
-  "GAP": 66
+  "STEP": 5580,
+  "BARRIER": 1871,
+  "DECISION": 1887,
+  "QUERY": 22749,
+  "NOTE": 483,
+  "WRITE": 10556,
+  "EVENT": 10554,
+  "ACT": 95,
+  "CLAIM": 1114,
+  "GAP": 86
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

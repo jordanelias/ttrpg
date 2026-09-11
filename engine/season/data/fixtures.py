@@ -188,6 +188,45 @@ DEFAULT_FIXTURES = Fixtures(
     wear_per_season=WEAR_RATES,
     # S20: Claim.confidence. Rev 1 hardcoded 1, which degenerated the eviction comparator.
     confidence_default=100,
+    # `U4` / `H-96`. THE TEMPERATURE OF THE TRIAGE — how far a person's choice of what to leave
+    # undone departs from the top of their own ranking. `0` is the pre-U4 behaviour exactly
+    # (argmax, ties alphabetical by verb name) and is kept as the CONTROL; the shipped value
+    # samples the order by `softmax(score / tau)`.
+    #
+    # ⚠ THE MAGNITUDE IS INJECTED AND THE SHAPE IS NOT. R-08's statement is Jordan's — *"decisions
+    # must not be omniscient and perfectly rational — characters make choices based on their own
+    # inclinations"* — so THAT the choice is sampled is ruled; how sharply is a number no document
+    # supplies.
+    #
+    # ⚠ AND `0.1` IS CHOSEN ON A SWEEP, NOT ASSERTED. Two earlier writings of this comment argued a
+    # value a priori (`1.0`, *"the one value that adds no second scale factor"*), which is the shape
+    # §0.1 pt 4 refuses: a number with no control. What decides it is one analytic fact plus one
+    # measurement.
+    #
+    # THE ANALYTIC FACT — and it is why the value is a FLOOR question, not a tuning one. For TIED
+    # candidates `score/tau` is equal whatever tau is, so their order is decided by the draw ALONE
+    # at any nonzero temperature. The alphabetical tie-break this unit exists to remove is therefore
+    # dead at 0.1 exactly as it is at 1.0, BY CONSTRUCTION rather than by degree. Nothing is bought
+    # by going hotter.
+    #
+    # THE MEASUREMENT — and it says something IS bought by going colder. Sweeping the shipped
+    # corpus, 89 live cases at seed 0, distinct executed sets: **tau=0 -> 16 · 0.1 -> 10 ·
+    # 0.25 -> 8 · 0.5 -> 7 · 1.0 -> 7**. Between-world variety falls MONOTONICALLY with temperature,
+    # because a hotter draw makes every world sample the same broad mixture. So the right value is
+    # the LEAST one that removes the defect, and that is the smallest we sweep above zero.
+    #
+    # WHAT THIS MEANS IN PLAY, stated because the arithmetic hides it: the conviction spread is
+    # **1.62** across a person's candidates, so at 0.1 a scored candidate beats a lower-scored one
+    # essentially always, and where the table says NOTHING — 15 to 20 of 22 candidates, which is
+    # `H-96`'s own pair of numbers subtracted (*"with 22 candidates … the conviction term can
+    # separate only 2 to 7 of the 22"*) rather than a third measurement —
+    # chance decides. *Inclinations are decisive where they exist; the draw decides where they do
+    # not.* That is a closer reading of Jordan's *"characters make choices based on their own
+    # inclinations"* than a hot temperature, which would override the inclinations it is supposed
+    # to express. ⚠ RE-DERIVE THIS IF `U3` LANDS: a denser alignment table means fewer ties, which
+    # moves what tau is doing.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-96 -- `site: Fixtures choice_temperature`, graded `measured`; the alphabetical tie-break is the measured defect and this is the injected magnitude of its remedy, swept 0 / 0.1 / 0.25 / 0.5 / 1.0, the row's own `sweep:`]
+    choice_temperature=0.1,
     # `W4` / `H-40`, THE THIRD LICENSED CLOCK (#353 `:864`). #353 licenses confidence decay at
     # MATTER and gives NO RATE, so this is an INJECTED DEFAULT with a `site:` and a three-point
     # sweep on the register, exactly as `H-09` treats the confidence default beside it. It is a
@@ -297,6 +336,28 @@ DEFAULT_FIXTURES = Fixtures(
     # [canonical: architecture/holonic_ARCHITECTURE.md §15.2 -- `entrenchment(h, H) = min(1, seasons_held / 60)`, verbatim at :556 under the §15.2 heading at :553. THE 60 IS IN-CHAIN, which is why this label is `canonical` where its neighbours are `JUSTIFIED`]
     entrenchment_seasons=60,
     # S27.4: "an attempt at Ob > 2 x Pool is refused, and the season is spent."
+    # `U1` / `H-126` / `H-127`. THE TWO OPERANDS OF A CONTESTED ROLL THAT NOTHING ELSE SUPPLIES.
+    #
+    # ⚠ `pool_default` IS WHAT `capability` WOULD SUPPLY AND DOES NOT. `03 §A.2` rules the
+    # mechanism — *"Rank supplies dice and gates nothing"* — and `Person.capability` is the store
+    # it would come from, with exactly one writer in the tree, which ZEROES it. So every corpus
+    # person derives this number, the roll varies by SEED and FIXTURE rather than by PERSON, and
+    # R-09 reads `partial` rather than `met` until capability is written. `08 §3`'s `assumption`
+    # row is what licenses injecting it at all: *inject the default, declare the site, sweep three
+    # points* — the grade that REFUSES is `absent`, and this is not one.
+    #
+    # ⚠ `obstacle_default` IS THE STAND-IN FOR A SUBJECT WITH NO SCORE TO HALVE. Jordan's
+    # 2026-08-14 ruling gives an opposed obstacle as *"their corresponding score/2 plus whatever
+    # specific modifiers exist for them in that instance"*, which reads off a PERSON; a record, a
+    # rung or a proposition has no such score, and this stands in there. **NO "Base Ob by scale"**
+    # (Jordan, 2026-09-05) — the scale of the thing is not the obstacle.
+    # ⚠ AND IT IS REGISTERED AS AN nth SITE IN A FAMILY THE TREE RECORDS AS DISAGREEING, not as a
+    # single owner arriving: ED-SC-0033 clause (3) names the PROCEEDINGS SUBSYSTEM as the
+    # obstacle's owner, and `interim: true` on the prize row is what carries that tension.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-126 -- `site: Fixtures pool_default`, graded `assumption`; `capability` is the declared source and is empty on every corpus person, so the magnitude is injected and swept]
+    pool_default=2,
+    # [JUSTIFIED: engine/season/hole_register.yaml H-127 -- `site: Fixtures obstacle_default`, graded `assumption`; the ruled derivation is `score/2` and reads off a PERSON, so a non-person subject takes this injected and swept stand-in]
+    obstacle_default=2,
     obstacle_refusal_multiple=2,
     # S12.1 gates verbs on `condition` against per-kind band FLOORS. S22 assigns "band
     # coefficients" and "the obstacle floor" to params; the params document proposes NO
@@ -331,6 +392,27 @@ DEFAULT_FIXTURES = Fixtures(
     interactions_per_scene=3,          # `H-76`, swept 1 / 3 / unbounded
     extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
     scene_packing_rule="greedy",       # `H-78`, swept greedy / one_per_scene / by_subject
+    # `U2` / `H-124`. HOW MANY OF THE FIVE A PERSON MAY SPEND IN ONE ROUND of the scene tick.
+    #
+    # ⚠ THIS IS NOT `scene_budget` UNDER A SECOND NAME. `scene_budget` is 5 and is the season's
+    # total, RULED (Jordan, 2026-09-02: *"5 scenes for a character to play per season"*). This is
+    # how those five are SPREAD across the season, and nothing rules it.
+    #
+    # ⚠ AND IT BOUNDS THE DRIVER, NOT THE PERSON. The person still chooses against their whole
+    # season remainder — `pack_scenes` takes that as its COST budget, so an extended scene
+    # (`extended_scene_cost` = 2) is still affordable — and the driver releases this many of the
+    # scenes they chose per round. Nothing is discarded, only deferred, so S26.3's *the engine
+    # never truncates* is untouched. Making this the person's bound instead would have trimmed
+    # every extended chunk to one interaction and driven `H-77`'s sweep inert.
+    #
+    # ⚠ `5` IS A REAL ARM AND NOT A CONTROL, AND THE FIRST WRITING OF THIS COMMENT SAID OTHERWISE.
+    # It called the 5 arm "the one-pass loop". Measured at `build_world(0)`, 2 seasons, it is not:
+    # `claim.deposited` 50 -> 53, `claim.decayed` 21 -> 24, `finding.made` 2 -> 3. A person whose
+    # triage leaves budget UNSPENT empties their queue with remainder left, so a later round asks
+    # them again and they spend it — where the one-pass loop simply lost it. THE CONTROL IS THE
+    # `scene_budget = 1` ARM (one round), which reproduces the pre-tick Event multiset exactly.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-124 -- `site: Fixtures scenes_per_round`, graded `assumption`; Jordan ruled the unit, the per-season count and that the tick is scene-granular, and supplied no number for the round, so this is injected, declared and swept 1 / 2 / 5]
+    scenes_per_round=1,                # `H-124`, swept 1 / 2 / 5; the control is `scene_budget = 1`
     claim_subject_rule="both",         # `H-79`, swept actor / per_change / both
     # `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. #353 §28 says WITNESS
     # deposits and never says whether the deposit may carry the reads, or to whom; the arms are
@@ -379,12 +461,20 @@ DEFAULT_FIXTURES = Fixtures(
     # `stores >= 0` admits every giver: a run at this point shows how much of the transfer
     # behaviour rests on the default rather than on the world.
     default_transfer_amount=1,         # `H-94`, swept 0 / 1 / 3
-    # `W-E` / `H-125`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
+    # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,
     # which is what `H-114` measured the cost of (`harm` defaulted to the whole body, so a fold at
     # `Wounded` deleted the person). The default introduces NO CONSTANT: it scales the body by the
     # health fraction the ENGINE computed. `total` is the CONTROL and is the code exactly as it
     # stood before `W-E`. Injection site: this line, read by `_eff_kill`.
-    wound_harm_model="scene_fraction",  # `H-125`, swept scene_fraction / total / none
+    # ⚠ THE ROW IS `H-123` AND SEVEN CITATIONS SAID `H-125`, WHICH IS A ROW THAT HAS NEVER
+    # EXISTED. Corrected 2026-09-11 across `fixtures.py` x2, `loop/effects.py` x3,
+    # `verb_table.yaml`, `rosters.yaml` and `test_season_shape.py`. A reader following the
+    # old id found nothing and would have concluded this fixture was unregistered — the
+    # exact failure `W9` check 3 exists to prevent, arriving through a typo rather than
+    # through a missing row. `tools/validate_ed_citations.py` covers `ED-` ids only, so no
+    # gate saw it; `corpus_run`'s R5 passed throughout because it matches on the fixture
+    # KEY in a `site:`, never on the id a comment cites.
+    wound_harm_model="scene_fraction",  # `H-123`, swept scene_fraction / total / none
 )

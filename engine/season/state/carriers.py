@@ -119,7 +119,23 @@ class Event:
 
 @dataclass
 class Claim:
-    """S20. Lives in the HOLDER'S OWN ledger."""
+    """S20. Lives in the HOLDER'S OWN ledger.
+
+    ⚠ `round` IS THE ONLY CARRIER FIELD `U2` ADDS, AND THE ONLY ONE IT MAY ADD. The scene tick
+    subdivides a season into rounds, and §F1's Q2 asks for *a claim LANDING in the holder's ledger*
+    — which was readable off `when` alone while a season was one pass, and is not once a season is
+    several. `when` still says WHICH SEASON and is what eviction and decay read
+    (`p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))`); `round` says WHICH ROUND WITHIN
+    it, so `questions_for(w, p, since=(tick, round))` can ask *since I last deliberated* rather
+    than *since last season*.
+    ⚠ IT DEFAULTS TO `0` AND EVERY EXISTING CONSTRUCTION IS POSITIONAL, so a Claim built anywhere
+    that predates the tick reads as round 0 — which is exactly what a claim from the one-pass loop
+    WAS. The generalisation is therefore exact at `R = 1`: `since == (tick - 1, 0)` selects the
+    same claims `c.when == w.tick - 1` did.
+    ⚠ AND NO OTHER CARRIER GETS ONE (`D-21`, and U2's falsifier (d)). The round index is a DRIVER
+    LOCAL — `SeasonDriver.round` — because it is a fact about where the loop is, not about any
+    thing in the world. A `round` on `Act` or `Event` would make it world state and put a fourth
+    clock in the model."""
     id: str
     holder: str
     subject: str
@@ -129,6 +145,7 @@ class Claim:
     source: str
     confidence: int
     visibility: str
+    round: int = 0
 
 
 
@@ -404,6 +421,39 @@ class Record:
     subject_matter: Any = None
     ttl: Optional[int] = None
     stages: list[tuple] = field(default_factory=list)
+    # ⚠⚠ **RULED BY JORDAN, 2026-09-10: "add `Record.matured`, write it at MATTER".** Of three
+    # costed options — add the field and write it; make the Event carry no change; move maturation
+    # to RESOLVE as act-declared — he took the first, on the grounds that THE MATRIX ROW IS THE
+    # GAME and the field should exist. `write_matrix.yaml`'s `(Record, matured)` row has named this
+    # field since it was written: `steps: [MAT]`, `class: MATTER`, `emits: term.matured`,
+    # `by: "D7 — MATTER matures a term the act declared; causes[] names that act"`.
+    # ⚠ **WHAT IT REPAIRS IS `ID-9` LIVE, NOT A TIDINESS.** `loop/matter.py` emitted `term.matured`
+    # carrying `StateChange(rid, "set", "MATTER", "stages", label)` and applied NO WRITE — nothing
+    # in the package mutated `rec.stages`; `matter.py` and `probes.py` only read it. An Event
+    # reported a state change that did not happen, which is ID-9's own worked example. It also
+    # named the WRONG ROW: `(Record, stages)` is `steps: [RES]`, `class: ACTS`, *"terms are
+    # act-declared, never MATTER-advanced"* — a MATTER-step Event claiming a change to the one
+    # field the matrix forbids MATTER to touch.
+    matured: bool = False
+
+
+def subject_of(a: "Act") -> str:
+    """The act's subject, or `""`. THE ONE READ, beside the carrier it reads.
+
+    ⚠ `isinstance(..., dict)` AND NOT `a.payload or {}`, because a hand-built probe Act may carry a
+    STRING payload. `loop/effects.py::_operand` guards the same way and for the same reason; it is
+    a DIFFERENT rule (it raises on any missing named operand) and is deliberately not folded here.
+
+    ⚠⚠ **IT LIVES HERE BECAUSE THREE CALLERS HAD IT AND TWO OF THEM DISAGREED — IN THE COMMIT THAT
+    CREATED THEM.** `loop/deliberate.py` returned `""` for a subject-less act; `loop/driver.py` and
+    `loop/predicates.py` each inlined
+    `(a.payload or {}).get("subject") if isinstance(a.payload, dict) else None` and returned
+    `None`. `""` and `None` are both falsy, so nothing broke and nothing would have — until a
+    caller wrote `subj is None` or put the result in a set beside a `""`. `carriers` is the leaf
+    all three already reach, and neither `deliberate` nor `predicates` imports the other, so this
+    is the only home that costs no new edge."""
+    d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
+    return d.get("subject") or ""
 
 
 @dataclass(frozen=True)

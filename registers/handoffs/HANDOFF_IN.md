@@ -130,9 +130,16 @@ not a closure.
 
 ## ⏸ ARC 2 / G1 — HELD 2026-09-10. A real game defect found, RULED, implemented, measured, and BACKED OUT on one unexplained number (ED-IN-0206)
 
-**Nothing from this section is in the tree. The working tree is at Arc 1's head `5f5be4d`, content
-hash `ee0383bf3f4606e56b80cd07c0284f0a`, All Gates Green.** This is the record so the next session
-does not re-derive the pre-flight.
+**Nothing from this section is in the tree.** This is the record so the next session does not
+re-derive the pre-flight.
+
+⚠ **THE TREE-STATE SENTENCE THAT STOOD HERE IS CORRECTED, NOT DELETED (2026-09-10).** It read *"The
+working tree is at Arc 1's head `5f5be4d`, content hash `ee0383bf3f4606e56b80cd07c0284f0a`, All Gates
+Green"* — a **present-tense** claim, true when written and false now: `main` is `5a35084` and
+`ED-FI-0009` moved the hash. **The live baseline has ONE owner,
+`workplans/2026-09-09-r-execution-plan.md` §3 · ENTRY STATE, and this section deliberately does not
+carry a second copy of the number.** Everything below this line is a record of a measurement at its own
+commit and stays as written.
 
 ### THE DEFECT G1's PRE-FLIGHT FOUND, and it is game code rather than apparatus
 

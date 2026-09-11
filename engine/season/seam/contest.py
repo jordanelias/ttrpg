@@ -73,8 +73,18 @@ class Resolution:
 
 def contest(w: World, rung: str, prize: Any, claimants: list[str],
             depth: int, max_depth: int, causes: list[str],
-            extension: Optional[Callable[[str], bool]] = None):
+            extension: Optional[Callable[[str], bool]] = None,
+            *, verb: str = "", subject: Optional[str] = None,
+            rng: Optional[Any] = None):
     """S39. EVERY ARGUMENT IS LOAD-BEARING. Attaches at EXACTLY ONE PLACE -- RESOLVE.
+
+    ⚠ `U1` ADDED THREE KEYWORD-ONLY PARAMETERS AND CHANGED NO EXISTING CALL. `verb` and `subject`
+    are what a provider needs to derive a pool and an obstacle from the act rather than from the
+    prize; `rng` is the generator `04 §C.12`'s rejection 4 requires the DRIVER to construct — *"its
+    generator must be constructed by the driver from the run seed and passed down exactly as
+    `World` is"* — which that rejection records as *"the one rejection that is not yet
+    load-bearing, because no roll exists yet."* It exists now. All three default, so a caller that
+    does not contest passes nothing and reads as it always did.
 
     REV 2. Rev 1 was THE SECOND RESOLVER -- S27.2's highest-value refusal, broken inside the
     seam. It hardcoded `band = "Partial"` with no margin, no pool and no obstacle; it guarded
@@ -119,11 +129,31 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
         # ⚠ THE SEAM CALLS NOW. Jordan, 2026-09-02: *"kill / wound points towards a seam that
         # should be calling in the personal combat system."* This block used to resolve the
         # subsystem by name and then REFUSE — a pointer, not a call — on a scope note that ruling
-        # overrides. `combat_seam` is the IN-side, built on `engine/cross_scale/combat_bridge.py`'s
+        # overrides. The wrappers are the IN-side, built on `engine/cross_scale/combat_bridge.py`'s
         # precedent rather than a new pattern.
-        if _sub["module"] == "personal_combat":
-            from .wrappers import combat as combat_seam
-            out = combat_seam.resolve(w, claimants, causes, prize)
+        #
+        # ⚠⚠ **`U1` DELETED `if _sub["module"] == "personal_combat":` AND ED-SC-0033 RULES EXACTLY
+        # THAT**, in these words: *"(1) the seam dispatches by manifest ROW rather than the
+        # hardcoded personal_combat literal"*. A literal here is a SECOND REGISTRY, and it disagrees
+        # with the first the day a row moves — the failure `04:1031`'s *"a misspelled manifest row
+        # fails at boot naming the row"* exists to make impossible, surviving in the half that was
+        # still a branch. `manifest.call` returns the provider a module registered with
+        # `@provider(role, module)`, or `None`.
+        # ⚠ **`None` IS A REAL ANSWER AND IS WHY THIS IS BYTE-INVARIANT TODAY.** `mass_battle` and
+        # `social_contest` name modules nothing has registered, so they fall through to the refusal
+        # below exactly as they did under the literal — the seam names the subsystem and its
+        # resolver rather than reporting one undifferentiated hole. `proposals/…/08_SEAM.md` PART B
+        # is titled *THE MANIFEST ROW, AND WHY THIS DESIGN REFUSES THE `if`-BRANCH* and registers
+        # the `if` as a shim; this is the shim coming out.
+        from ..manifest import call as _provider_for
+        # ⚠ THE `provider:` FIELD, NOT THE `module:`. A prize names WHOSE contest it is and,
+        # separately, WHAT RUNS IT — `a standing` belongs to `social_contest` and is rolled by
+        # `sigma_leverage` until the proceedings subsystem lands (ED-SC-0033 clause 2,
+        # `interim: true`). Looking the callable up by `module:` would make the interim resolver
+        # unreachable and the repoint a code change.
+        _run = _provider_for("contest", _sub.get("provider"))
+        if _run is not None:
+            out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng)
             if out.get("status") == "RESOLVED":
                 TRACE.decision(f"contest for {prize!r} dispatched", "S39",
                                chose=f"called {out['module']} (resolver {out['resolver']})",

@@ -48,14 +48,14 @@ from collections import Counter
 from .. import decision
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.matrix import Step
-from ..data.rosters import CONVICTION_AXES, RUNG_KINDS, load_yaml
+from ..data.rosters import CONVICTIONS, CONVICTION_AXES, RUNG_KINDS, load_yaml
 from ..data.verbs import VERB_TABLE
 from ..decision import align, make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.world_q import questions_for
 from ..state.carriers import Act, Event, Office, Person, Proposition, Rung, Site, Tenure
-from ..state.ids import H, ROOT
+from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 from ..data import files
 from . import probes as P
@@ -208,7 +208,11 @@ def build_at(case: dict, seed: int = 0) -> World:
         if SITE_YIELD[kind]:
             w.sites[f"s_{kind}"] = Site(f"s_{kind}", ids[chain[0]], kind,
                                           condition=w.fixtures.get("condition_scale"))
-    axes = sorted(CONVICTION_AXES)
+    # `U3`: a person holds weights over the THIRTEEN CONVICTIONS, not over the four axes.
+    # Seeding from `CONVICTION_AXES` was correct while that roster WAS the conviction set;
+    # after the swap it would hand every person a weight on `hierarchical`, which is a
+    # basis vector and not something anybody believes.
+    convictions = sorted(CONVICTIONS)
     for n, pid in enumerate(("p_a", "p_b", "p_c")):
         w.persons[pid] = Person(pid, pid)
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
@@ -224,8 +228,33 @@ def build_at(case: dict, seed: int = 0) -> World:
         if chain:
             w.add_tenure(Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
         # [JUSTIFIED: radix for parsing H()'s blake2b hexdigest -- same as combat_seam.py:153]
-        pick = int(H(seed, 0, str(case.get("id")), f"axis:{pid}"), 16) % len(axes)
-        w.persons[pid].convictions = {axes[pick]: 0.9}
+        # ⚠ THE PURPOSE STRING STAYS `axis:` THOUGH IT NOW PICKS A CONVICTION. Changing it would
+        # re-draw every person in the corpus and move every golden for a reason that is a rename,
+        # not a behaviour — `04 PART D row 35` cares about purpose UNIQUENESS, not spelling. The
+        # SET it indexes changed from 4 to 13, which moves the draw on its own and is `U3`'s.
+        # ⚠⚠ **ONE TO THREE CONVICTIONS, NOT ONE, AND #353 §14 IS WHERE THE RANGE COMES FROM:**
+        # *"`convictions` | weights over the closed 13 | **1–3 primary + distributed**"*. Seeding
+        # exactly one was the harness's simplification and it was load-bearing in the wrong
+        # direction. MEASURED 2026-09-11 over 86 corpus-shaped seeds, counting DISTINCT axis
+        # directions the projection produces: **1 conviction -> 13 · 2 -> 66 · 3 -> 80.** With one,
+        # the count is capped at the size of the roster by construction, and worse than that
+        # suggests: 9 of the 13 convictions point within 60° of a common direction
+        # (`traditional+ sacred+ hierarchical+ instrumental-`), so a single-conviction person is
+        # one of about five characters however the draw falls. Two or three COMBINE into vectors
+        # that are genuinely apart.
+        # ⚠ THE COUNT ITSELF IS DRAWN, so cases differ in how many things their people care about
+        # rather than all holding exactly N. Weights descend 0.9 / 0.5 / 0.3: "primary" is §14's
+        # own word for the first, and the rest are the "distributed" remainder.
+        # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as combat_seam.py:153. The `3` is #353 §14's own upper bound: "1-3 primary + distributed"]
+        n_conv = 1 + int(H(seed, 0, str(case.get("id")), f"axis:{pid}:n"), 16) % 3
+        # [JUSTIFIED: a DESCENDING ladder, not three chosen magnitudes -- #353 §14 distinguishes the "primary" conviction from the "distributed" remainder and supplies no numbers. What the corpus needs is that the first outweighs the rest; 0.9 matches the single-conviction weight this replaced, so a 1-conviction case is unchanged by the ladder]
+        chosen_c, weights = {}, (0.9, 0.5, 0.3)
+        for k in range(n_conv):
+            purpose = f"axis:{pid}" if k == 0 else f"axis:{pid}:{k}"
+            # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as combat_seam.py:153]
+            pick = int(H(seed, 0, str(case.get("id")), purpose), 16) % len(convictions)
+            chosen_c.setdefault(convictions[pick], weights[k])
+        w.persons[pid].convictions = chosen_c
     # ⚠ `W28`: THE CASE MAY SEAT ITS OWN ACTOR ON AN OFFICE. A re-scaled case carries
     # `office: {post, remit, why}` — `post` names the office the prose names, `remit` the acts it
     # carries, and `why` records the DERIVATION, because that is what makes this authoring rather
@@ -352,7 +381,8 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     w = build_at(case, seed)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs())
+    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                      draw=draw_factory(w.world_seed, lambda: w.tick))
     try:
         for _ in range(n):
             # `H-87` -- S39.3 gives the contest depth cap NO DEFAULT, so an uncapped call raised
@@ -403,7 +433,8 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     w2 = build_at(case, seed)
     d2 = SeasonDriver(w2)
     mint2 = lambda pid, verb, subj: H(w2.world_seed, w2.tick, pid, f"act:{verb}:{subj}")
-    ch2 = make_chooser(w2.fixtures, mint2, verbs=resolvable_verbs())
+    ch2 = make_chooser(w2.fixtures, mint2, verbs=resolvable_verbs(),
+                       draw=draw_factory(w2.world_seed, lambda: w2.tick))
     try:
         for _ in range(n):
             # ⚠ THE SAME FIXTURE, ON BOTH CALL SITES. A cap on the measured run and not the R4
@@ -436,8 +467,12 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
         status = "RUNS-UNDECLARED"
     else:
         status = "RUNS-ALONE-UNDECLARED" if ok else "NO-EXECUTION"
+    # `U1` / R-09: the bands the seam's provider resolved in this case. An Event carries a
+    # `degree` only when the fold took the CONTEST branch and `degree_of` read one off the
+    # subsystem's own result — so this is a count of rolls that happened, not of acts attempted.
+    degrees = Counter(str(e.degree) for e in w.log if getattr(e, "degree", None))
     return dict(id=cid, scale=scale, status=status, executed=ok, refused=no, seasons=n,
-                why="", checks=checks)
+                why="", checks=checks, degrees=dict(degrees))
 
 
 def planted_control(seed: int = 0) -> tuple:
@@ -492,14 +527,20 @@ def main(seed: int = 0) -> int:
         qs = questions_for(w2, pr)
         vw = decision.assemble(pr, qs[0] if qs else None, w2.fixtures.get("view_k"))
         cd = decision.opening_set(pr, vw, qs[0], w2.fixtures) if qs else []
-        nz = sum(1 for x in cd if any(float(pr.convictions.get(a, 0.0)) * align(x.verb, a)
-                                      for a in CONVICTION_AXES))
+        # ⚠ `U3`: THROUGH THE PROJECTION, AND VIA `decision.project` RATHER THAN A SECOND COPY
+        # OF IT. This read `pr.convictions.get(a)` for each AXIS `a`, which was correct while the
+        # conviction dict was keyed by axis; after the swap that lookup misses on every person and
+        # this line would report a flat `0 of N` — a measurement silently reading zero, which is
+        # the failure mode `H-97` exists to report on. `make_chooser` scores the same way (§8: the
+        # rule lives once), so this instrument and the thing it measures cannot drift apart.
+        axis_w = decision.project(pr)
+        nz = sum(1 for x in cd if any(axis_w[a] * align(x.verb, a) for a in CONVICTION_AXES))
         sep.append((nz, len(cd)))
     if sep:
         tot = sep[0][1]
         print(f"\n  RANKING DISCRIMINATION   {min(n for n, _ in sep)}..{max(n for n, _ in sep)} of "
-              f"{tot} candidates carry a nonzero conviction score; the rest TIE and are ordered "
-              f"alphabetically by verb name")
+              f"{tot} candidates carry a nonzero conviction score; the rest TIE and the tie is "
+              f"broken BY THE DRAW (U4/H-96), not by the verb's name")
     # ⚠ A CASE THAT EXECUTED, WHATEVER ITS BAR STATUS. `W18` renamed the statuses (`RAN` became
     # `RUNS-UNDECLARED` / `RUNS-ALONE-UNDECLARED`), and this filter still named the old ones — so
     # the verb counts went to 0 of 32 the moment the bar landed, silently, because an empty set has
@@ -510,6 +551,18 @@ def main(seed: int = 0) -> int:
     print(f"\n  DISTINCT WORLDS RUN      {len(live)} (scales {sorted({r['scale'] for r in live})}, "
           f"season counts {sorted({r['seasons'] for r in live})})")
     print(f"  DISTINCT EXECUTED SETS   {len(sigs)}")
+    # ⚠⚠ `U1` / R-09: THE BANDS THE SEAM ACTUALLY RESOLVED, AND THIS LINE IS THE MILESTONE'S OWN
+    # OBSERVABLE. Before `U1` nothing in this instrument produced a margin, so `degree_of` was a
+    # reader with no producer (`H-98`) and this histogram was necessarily empty. It is not a count
+    # of contested ACTS — an act whose precondition fails never reaches the seam — but of rolls
+    # that completed and were graded through `degree_from_net`, the tree's single ladder.
+    # ⚠ AND IT MUST MOVE WITH THE RUN SEED. If the histogram at `corpus_run 7` matches this one,
+    # the generator is not being constructed from the run seed and a same-seed determinism test
+    # cannot see it — which is why the acceptance runs two seeds rather than one twice.
+    _deg = Counter()
+    for r in live:
+        _deg.update(r.get("degrees") or {})
+    print(f"  DEGREES RESOLVED         {dict(sorted(_deg.items())) or '{} — no contest completed'}")
     ever = sorted({v for r in live for v in r["executed"]})
     tried = sorted({v for r in live for v in r["refused"]})
     foldable = set(resolvable_verbs())

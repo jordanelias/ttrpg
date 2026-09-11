@@ -45,6 +45,15 @@ Filed as **ED-IN-0206**; this is unit **L2** of
 # whether the loop has one resolver, and a package that hid it would make that probe read PASS over
 # an empty list.
 # ---------------------------------------------------------------------------
+# ⚠⚠ **IMPORTING `wrappers` IS WHAT REGISTERS THE PROVIDERS, AND LEAVING IT OUT IS A SILENT
+# WRONG ANSWER RATHER THAN AN ERROR.** The wrapper modules carry `@provider(role, module)`; nothing
+# runs those decorators unless the package is imported. `manifest.has(...)` then answers False,
+# `resolvable_verbs()`'s third gate drops every contesting verb, and the season runs a smaller verb
+# set with no exception anywhere. MEASURED while making this cut: with the import missing,
+# `resolvable_verbs()` returned 17 instead of 18 and `tell` executed ZERO times in `tiny_world`
+# where it had executed 32 — no error, no refusal, no `news.untold`, just a verb quietly gone.
+# `tests/valoria/test_season_providers_are_registered.py` is the falsifier.
+from . import wrappers as _wrappers   # noqa: F401
 from .contest import ContestError, Resolution, contest, contest_subsystem
 from .ladder import combat_degree, degree_ladder, degree_of, ladder_error
 

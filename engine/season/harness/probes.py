@@ -48,7 +48,7 @@ from ..seam import ContestError, contest
 from ..state.carriers import (
     Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View,
 )
-from ..state.ids import H, ROOT
+from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -122,6 +122,63 @@ def SUBSIST(p: Person, w: World) -> int:
 
 def NOCHOOSE(p, v, s, ask_budget):
     return []
+
+
+def once(choose):
+    """`U2`: A `choose` THAT SUBMITS ITS ACTS ONCE PER SEASON RATHER THAN ONCE PER ROUND.
+
+    ⚠ **THE SCENE TICK CALLS `choose` ONCE PER ROUND, AND A PROBE'S `choose` IS A FIXED LAMBDA.**
+    Before `U2` a season was one pass, so a probe could return a hardcoded list and know it would
+    be asked exactly once. Under the tick a person with budget left over is asked again, the fixed
+    lambda returns the same list against a SMALLER remainder, and `deliberate` refuses it as a
+    caller defect -- correctly, because `ask_budget()` was handed to it and ignored. Measured:
+    `A37` returned three scenes costing 3 against a remainder of 2 and reported GAP.
+
+    ⚠ **THIS IS NOT A SUPPRESSION OF THE TICK, AND THE DISTINCTION IS WHICH QUESTION THE PROBE IS
+    ANSWERING.** A probe whose subject is the FOLD -- stratum ordering, the Ob>2xPool gate, what a
+    scene may carry -- is answering *what does the engine do with this set of acts*, and the answer
+    must not depend on how many times it is asked for the set. A probe whose subject IS the tick
+    does not use this.
+
+    ⚠ **PER PERSON, NOT PER CALL, AND `F10` IS WHY.** A single flag fires on whichever person the
+    driver happens to reach first and silences everyone else — which in `F10` would leave ONE
+    claimant on the contested larder and delete the scarcity the probe exists to measure.
+
+    ⚠ AND IT IS PER DRIVER, NOT PER SEASON, which is the same thing for every probe here: they run
+    one season. A probe running several would need the set cleared at the season boundary, and none
+    does.
+
+    ⚠ **PAIR IT WITH `_one_pass` WHERE THE PROBE NEEDS ITS ACTS IN ONE `resolve`.** On its own this
+    leaves the later rounds returning nothing, and a `choose` returning nothing REPLACES the
+    person's queue with nothing — which is the right semantics (a person who re-deliberates and
+    chooses nothing does nothing) and which would strand the acts `A37` needs resolved together.
+    `_one_pass` releases them all in round 0, so by the time this returns `[]` the queue is
+    already empty and there is nothing to strand."""
+    fired: set = set()
+
+    def choose_once(p, v, s, ask_budget):
+        if p.id in fired:
+            return []
+        out = choose(p, v, s, ask_budget)
+        if out:
+            fired.add(p.id)
+        return out
+    return choose_once
+
+
+def _one_pass(w: World) -> World:
+    """`U2`: RELEASE EVERYTHING A PERSON CHOSE IN ROUND 0. Returns the same world, fixtures swept.
+
+    ⚠ A probe whose claim needs several acts to reach ONE `resolve` — `A37`'s stratum ordering is
+    the clear case — cannot observe it under `scenes_per_round = 1`, where each round resolves one
+    act and the ordering is trivial by construction. This sweeps the RELEASE bound, not the budget:
+    `scene_budget` is untouched, so `ask_budget()` and every measurement resting on it are what
+    they were.
+
+    ⚠ IT IS NOT `scene_budget = 1`, WHICH IS THE TICK'S OWN CONTROL ARM: that shrinks the budget
+    too and would change what these probes measure."""
+    w.fixtures = w.fixtures.sweep("scenes_per_round", w.fixtures.get("scene_budget"))
+    return w
 
 
 def _run_d(w: World, choose=NOCHOOSE, n: int = 1, **kw):
@@ -203,7 +260,8 @@ def chooser(w, only=None, verbs=None):
     ⚠ IT DOES NOT TAKE A ROSTER, and it cannot: `opening_set` computes from the verb table now.
     A probe that wants a verb in the set must put the verb in `verb_table.yaml`."""
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    inner = make_chooser(w.fixtures, mint, verbs=verbs)
+    inner = make_chooser(w.fixtures, mint, verbs=verbs,
+                         draw=draw_factory(w.world_seed, lambda: w.tick))
     def choose(p, v, s, ask_budget):
         return inner(p, v, s, ask_budget) if (only is None or p.id == only) else []
     return choose
@@ -265,7 +323,8 @@ def p2x():
        by="construction",
        tests="a character must be able to do several things inside one scene without spending a second scene action")
 def p2y():
-    w = tiny_world()
+    # `U2`: ONE PASS — the claim counts every interaction the person's `b` scenes carry.
+    w = _one_pass(tiny_world())
     cap = w.fixtures.get("interactions_per_scene")
     counted = {}
     def choose(p, v, s, ask_budget):
@@ -277,7 +336,8 @@ def p2y():
         return [Scene(f"s{i}", p.id,
                       [Act_(w, p, "speak", key=f"{i}.{j}") for j in range(cap)])
                 for i in range(b)]
-    d = _run_d(w, choose)
+    # `U2`: one submitted set. The claim is what a SCENE may carry, not how often the tick asks.
+    d = _run_d(w, once(choose))
     n = len([a for a in d.resolved if a.actor == "p_king"])
     assert n == counted["b"] * cap, (n, counted, cap)
     return (f"PASS BY CONSTRUCTION: {n} interactions across {counted['b']} scenes, at "
@@ -691,7 +751,15 @@ def p21():
     d = _run_d(w, lambda p, v, s, ask_budget:
                [Act_(w, p, "speak")] if p.weight > 1 else [])
     acted = [a.actor for a in d.resolved]
-    assert acted == ["crowd_1"], acted
+    # ⚠ A SET, NOT A LIST, AND `U2` IS WHY THE DISTINCTION BECAME VISIBLE. This probe's claim is
+    # that a cohort goes through the SAME `choose` and the SAME resolver as anyone else -- a claim
+    # about WHO acts. The list equality additionally pinned HOW MANY TIMES, which was an artifact
+    # of `choose` being called once per season: under the scene tick this lambda returns one act
+    # whatever the round, so a person with budget left is asked again and acts again. That is
+    # lawful and is not this probe's subject. `_one_pass` does not help here -- the `choose`
+    # spends 1 of a budget of 5, so the remainder survives any schedule.
+    assert acted, "nobody acted — the cohort did not reach the resolver at all"
+    assert set(acted) == {"crowd_1"}, acted
     return ("PASS: ONE CLASS. A cohort IS a Person at weight>1, it went through the SAME `choose` "
             "and the SAME resolver, and there is no conversion operation because THERE IS NO "
             "SECOND TYPE TO CONVERT TO")
@@ -872,7 +940,8 @@ def p31():
     # `create_record` and `destroy_record` sit at opposite signs on `Precedent` in the alignment
     # table, so a conviction on that axis has somewhere to move the ranking TO. Rev 2 could not
     # test this: it scored an authored roster of three verbs the table does not carry.
-    inner = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}")
+    inner = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}",
+                         draw=draw_factory(w.world_seed, lambda: w.tick))
     p.convictions = {"Precedent": 0.9}
     # `W17`: `choose` returns SCENES now, so the pick is the first interaction of
     # the first scene. The default policy fills scenes in score order, so that is
@@ -1199,7 +1268,16 @@ def f10():
     _run(w, choose)
     granted = [e for e in w.log if e.kind == "transfer.made"]
     refused = [e for e in w.log if e.kind == "transfer.refused"]
-    assert len(granted) == 1 and len(refused) == 1 and hearth.stores["grain"] >= 0, (
+    # ⚠ `len(refused) == 1` BECAME `>= 1` UNDER `U2`, AND THE PROPERTY IS UNTOUCHED. This probe's
+    # claim is that a matter closes BY SCARCITY rather than by cancelling: ONE claimant is granted,
+    # every other is REFUSED WITH A DIFFERENT EVENT, and the larder never goes negative. The count
+    # of refusals was an artifact of `choose` being called once per season. Under the scene tick
+    # this lambda returns the same transfer whatever the round, so two people with budget left are
+    # asked again and refused again — which is the same fact observed more times, not a weaker one.
+    # ⚠ THE HALF THAT CARRIES THE CLAIM IS `granted == 1`, AND IT IS STILL EXACT: a second grant
+    # would be the larder minting grain, which is precisely what this probe exists to refuse. The
+    # conservation clause below is the other half and is exact in both directions.
+    assert len(granted) == 1 and len(refused) >= 1 and hearth.stores["grain"] >= 0, (
         f"granted={[e.kind for e in granted]} refused={[e.kind for e in refused]}")
     # ⚠ CONSERVATION, WITH A CONTROL, ADDED BY THE `W-C` ADVERSARIAL PASS -- AND THIS PROBE WAS
     # SITTING ON THE FAILURE IT COULD NOT OBSERVE (§0.1 point 2). Its pre-`W-C` payload named
@@ -1672,7 +1750,14 @@ def a5():
     # ARM 1 -- REPRODUCIBILITY, through the real fold. The act array is shuffled before entry
     # and S32 rest 3's content-derived canonicalization restores one order, so two runs agree.
     def run_fold(reverse: bool) -> tuple[int, str]:
-        w = tiny_world()
+        # ⚠ `U2`: ONE PASS, AND IT IS §0.1 pt 1 RATHER THAN CONVENIENCE. `choose` slices
+        # `[:ask_budget()]`, and under the scene tick `ask_budget()` is the REMAINDER -- so a
+        # re-deliberated person is handed a SHORTER prefix of `order`, and a prefix of the forward
+        # list is not the same SET as a prefix of the reversed one. The two arms would then be
+        # different experiments and the fixed point would differ for a reason that has nothing to
+        # do with summation order, which is the exact defect rev 3 of this probe recorded itself
+        # committing. Measured when it happened: 893 -> 905 in one arm and not the other.
+        w = _one_pass(tiny_world())
         site = w.sites["site_harbour"]
         order = list(reversed(deltas)) if reverse else deltas
         def choose(p, v, s, ask_budget):
@@ -2266,12 +2351,20 @@ def w13():
 def p37():
     w = tiny_world()
     p = w.persons["p_high"]
-    p.convictions = {"suspicion": 0.9}
+    # ⚠ `U3`: `suspicion` was a name the OLD four-name `conviction_axes` roster carried and is
+    # not one of the thirteen convictions. `Order` — "procedural correctness, rule-following" —
+    # is the conviction the old `suspicion` cells were actually pricing (that block's own two
+    # strongest cells were `open_case: 0.9` and `surveil: 0.9`, the reach for the institution and
+    # the reach without it). The NAME is incidental to this probe, which reads the dict directly
+    # and never goes through `make_chooser`; it is corrected so the corpus does not seed a
+    # conviction nobody can hold.
+    # [JUSTIFIED: 0.9 is a single strong conviction, the same magnitude this probe used before `U3` under the retired name `suspicion`; P37 branches on `> 0.5` so any value above the threshold shows the same property, and the NUMBER is not what it observes]
+    p.convictions = {"Order": 0.9}
     chosen = []
     def choose(q, v, s, ask_budget):
         if q.id != p.id:
             return []
-        verb = "purge" if q.convictions.get("suspicion", 0) > 0.5 else "tolerate"
+        verb = "purge" if q.convictions.get("Order", 0) > 0.5 else "tolerate"
         chosen.append(verb)
         return [Act_(w, q, verb)]
     _run(w, choose)
@@ -2385,7 +2478,9 @@ def f21():
        by="construction",
        tests="movement, binding decisions and social acts must be able to resolve in a fixed order relative to each other")
 def a37():
-    w = tiny_world()
+    # `U2`: ONE PASS, because the claim is the ORDER of several acts inside one `resolve` — under
+    # the shipped `scenes_per_round = 1` each round resolves one act and the ordering is trivial.
+    w = _one_pass(tiny_world())
     seen = []
     def choose(p, v, s, ask_budget):
         if p.id != "p_low":
@@ -2398,7 +2493,8 @@ def a37():
         return [Act_(w, p, "speak", key="s4", stratum=4),
                 Act_(w, p, "speak", key="s1", stratum=1),
                 Act_(w, p, "speak", key="s0", stratum=0)]
-    seen.extend((a.stratum, a.verb) for a in _run_d(w, choose).resolved)
+    # `U2`: the subject is the fold's stratum ORDERING over one submitted set. See `once`.
+    seen.extend((a.stratum, a.verb) for a in _run_d(w, once(choose)).resolved)
     assert [x[0] for x in seen] == sorted(x[0] for x in seen), seen
     return (f"PASS: submitted reversed, resolved {seen}. S27's FIVE STRATA -- {list(STRATA)} -- "
             "order the fold BEFORE the content-derived key breaks ties within a stratum. Rev 2 "
@@ -2411,7 +2507,8 @@ def a37():
        by="construction",
        tests="an attempt far beyond a character's ability must be refused rather than rolled")
 def a38():
-    w = tiny_world()
+    # `U2`: ONE PASS — the refused act and the surviving one must reach the same `resolve`.
+    w = _one_pass(tiny_world())
     mult = w.fixtures.get("obstacle_refusal_multiple")
     kinds = []
     def choose(p, v, s, ask_budget):
@@ -2422,7 +2519,7 @@ def a38():
         # verb with two keys tests it and invents nothing.
         return [Act_(w, p, "speak", key="hopeless", obstacle=mult * 5 + 1, pool=5),
                 Act_(w, p, "speak", key="hard", obstacle=mult * 5, pool=5)]
-    _run(w, choose)
+    _run(w, once(choose))   # `U2`: one submitted pair; the subject is §27.4's gate. See `once`.
     kinds = [e.kind for e in w.log]
     # W3: the old `effect` lambda emitted `did.{verb}`; the fold emits the TABLE's `emits`, so
     # the surviving act produces `speech.made`. The property is unchanged: ONE refusal, ONE
@@ -2503,9 +2600,14 @@ def a39():
     # reason step 7 recorded: a restore into a module that never held the value still passes.
     from ..loop import resolve as _s
     real, captured = _s.contest, {}
-    def spy(w_, rung, prize, claimants, depth, max_depth, causes, extension=None):
+    # ⚠ `**kw` AND NOT A FIXED TAIL, AND `U1` IS WHY. `contest()` gained three keyword-only
+    # parameters — `verb`, `subject`, `rng` — so a spy spelling the signature positionally raises
+    # `TypeError` on the first call and the probe grades INSTRUMENT-ERROR. A spy exists to OBSERVE
+    # one argument and must not re-declare the rest; forwarding opaquely is what keeps it from
+    # going stale every time the thing it watches grows a parameter.
+    def spy(w_, rung, prize, claimants, depth, max_depth, causes, extension=None, **kw):
         captured["causes"] = list(causes)
-        return real(w_, rung, prize, claimants, depth, max_depth, causes, extension)
+        return real(w_, rung, prize, claimants, depth, max_depth, causes, extension, **kw)
     _s.contest = spy
     try:
         _run(w, choose, contest_max_depth=3)

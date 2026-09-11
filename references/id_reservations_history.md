@@ -128,6 +128,27 @@ twin"*. Recorded here so the next allocator sees it rather than rediscovering it
 
 <a id="in"></a>
 
+**ED-IN-0214 allocated 2026-09-11 ON MERGE** (next_free 214 -> 215), **BECAUSE THE RENUMBER
+DIRECTLY ABOVE LANDED ON A FOURTH COLLISION — AND THE ENTRY THAT MADE IT PREDICTED THIS IN ITS OWN
+TEXT.** PR #396 renumbered 0212 -> 0213 to avoid PR #395's spine row. Between that renumber and
+#396's merge, #395 allocated **0213** for its own second row (the conviction-matrix escalation) and
+bumped its branch `next_free` to 214. So #396 merged holding 0213 and #395 arrived holding 0213.
+Resolved on the same standing precedent, applied one step further: **the later-MERGING side
+renumbers**, #396 merged first, so #395's row became **ED-IN-0214** and `next_free` went to 215.
+Nothing merged was rewritten, on either pass.
+
+⚠ **THE MITIGATION REPRODUCED THE DEFECT IT WAS MITIGATING, AND THAT IS THE FINDING.** The entry
+above says, of the three collisions before it: *"renumbering to `next_free` does not make an id
+safe, because every concurrent session renumbers to the same `next_free`."* Its own renumber is the
+fourth instance of exactly that — it moved to `next_free` while a concurrent branch was moving to
+the same `next_free`, which is the stated failure with one extra hop. **This is no longer a rate
+argument.** Four collisions in two days, and the fourth was produced by the repair for the third;
+the sub-block device the entry above declines to propose is the only one of the options on the
+table that closes this by construction rather than by two sessions happening not to allocate in the
+same window. Still not filed as a proposal here — §0.1 pt 5 wants a subject before a mechanism, and
+this file is evidence rather than the place to rule — but the evidence is now that the incumbent
+mitigation has a demonstrated failure mode, not merely an argued one.
+
 **ED-IN-0213 allocated 2026-09-11** (next_free 213 -> 214), **RENUMBERED 0212 -> 0213 BEFORE EITHER
 BRANCH MERGED.** The verification-cadence ruling (`CLAUDE.md` §0.4 — the full suite is a close step,
 not an inner loop) was filed as the IN-lane id **0212**, which **PR #395** (`claude/repo-workplans-state-xk44q2`)

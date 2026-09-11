@@ -156,7 +156,7 @@ def presence(w: World, rung_id: str) -> list[str]:
             and t.subject in w.persons]
 
 
-def questions_for(w: World, p: Person) -> list[Question]:
+def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
     """§F1's `q` producer -- FOUR sources, resolver-side, at the DELIBERATE barrier.
 
     ⚠ THIS CLOSES `H-04` AND §61's `NoProducer`, which between them blocked every NPC case: with
@@ -172,7 +172,20 @@ def questions_for(w: World, p: Person) -> list[Question]:
     IN ORDER, because a budget-bounded person answers the earlier ones first.
 
     Resolver-side by construction: it takes a `World`. §F1 says all four are "already produced by
-    the loop" -- no new step, no new carrier, no clock -- and that is what this reads."""
+    the loop" -- no new step, no new carrier, no clock -- and that is what this reads.
+
+    ⚠ `since` IS `U2`'s ONE ADDITION AND IT GENERALISES Q2 EXACTLY. §F1 Q2 is *a claim LANDING in
+    the holder's ledger*, and while a season was ONE PASS "landing" could be read off `when` alone:
+    the previous season's WITNESS stamped `when = tick - 1` and DELIBERATE read it at `tick`. Once
+    a season is several rounds, a claim can land in round 1 and be new to a person deliberating in
+    round 2 of the SAME tick, which `when` cannot express. `since` is the driver-owned
+    `(tick, round)` of that person's LAST deliberation, and `Claim.round` is the field that makes
+    the pair comparable.
+    ⚠ THE DEFAULT REPRODUCES THE OLD READING BIT FOR BIT, WHICH IS WHY THIS IS A GENERALISATION
+    AND NOT A CHANGE. `since=None` means `(w.tick - 1, 0)`; every claim carries `when <= tick - 1`
+    at DELIBERATE, because WITNESS stamps `when = t` and the tick advances after it -- so
+    `(c.when, c.round) >= (tick - 1, 0)` selects exactly the claims `c.when == w.tick - 1` did.
+    The one-round arm of `H-124`'s sweep is the executed control for that claim."""
     TRACE.query("questions_for", "resolver")
     out: list[Question] = []
     mine = {t.object for t in p.tenures if t.live}
@@ -193,9 +206,11 @@ def questions_for(w: World, p: Person) -> list[Question]:
     # stamped `when = t` and DELIBERATE reads it at `t + 1`. Testing `c.when == w.tick` therefore
     # matched nothing, ever — Q2 was dead for every person in every season, which is half of why
     # nothing propagated. Found by running `headless.py` and reading the ledgers.
-    landed = w.tick - 1
+    # `U2`: the boundary is *since this person last deliberated*, which is the season boundary
+    # when nothing else is supplied. See the docstring for why the two readings coincide at R = 1.
+    floor = since if since is not None else (w.tick - 1, 0)
     for c in p.ledger:
-        if c.when == landed and (c.subject == p.id or c.subject in mine):
+        if (c.when, c.round) >= floor and (c.subject == p.id or c.subject in mine):
             out.append(Question(f"q:claim:{c.id}", "claim_landed", (c.subject,), c.id))
 
     # Q3 -- a Sensation band change: `subsistence` crossing a floor since last season. The

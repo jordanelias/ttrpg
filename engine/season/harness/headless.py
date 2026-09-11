@@ -30,11 +30,12 @@ from __future__ import annotations
 import argparse
 
 from ..data.fixtures import DEFAULT_FIXTURES
+from ..data.convictions import conviction as _conv
 from ..data.verbs import VERB_TABLE
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Person, Proposition, Rung, Site, Tenure
-from ..state.ids import H
+from ..state.ids import H, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -89,9 +90,40 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     # `Precedent -> create_record: 0.9` is what puts `create_record` first in her ranking every
     # season, and therefore what starts the causal chain check 2 measures. A different Carin
     # produces a different season, which is the point of her having convictions at all.
-    w.persons[CARIN].convictions = {"Precedent": 0.9, "self_preservation": 0.3}
-    w.persons[BAILIFF].convictions = {"suspicion": 0.8, "Precedent": 0.4}
-    w.persons[WARDEN].convictions = {"Precedent": 0.6}
+    # ⚠ `U3`: THESE ARE CONVICTIONS NOW, AND TWO OF THE OLD THREE NAMES WERE NEVER CONVICTIONS.
+    # The line read `{"Precedent": 0.9, "self_preservation": 0.3}` / `{"suspicion": 0.8, ...}` /
+    # `{"Precedent": 0.6}` — `Precedent` IS one of the thirteen and survives unchanged, while
+    # `self_preservation` and `suspicion` were ad-hoc scalars the old four-name roster carried and
+    # are not things a person can believe. They are replaced by the conviction each was standing
+    # in for, at the same weight, so the three people keep the characters the docstring above
+    # describes:
+    #   * `self_preservation` -> `Utility`  — "effectiveness, results, instrumental judgment"
+    #     (`conviction_taxonomy_v30.md` §2). The old cells priced it as caution about exposure and
+    #     cost, which is the instrumental reading.
+    #   * `suspicion`        -> `Order`     — "procedural correctness, rule-following". The old
+    #     `suspicion` block's own cells were `open_case: 0.9` and `surveil: 0.9`, i.e. the reach
+    #     for the institution and the reach without it; the bailiff is the procedural one.
+    # ⚠ THIS IS A SUBSTITUTION AND IT IS DECLARED AS ONE. Nothing in canon maps the three retired
+    # names onto the thirteen; the mapping above is argued from the old cells' own reasons and is
+    # this harness's choice, not a reading of `conviction_axis_matrix_v30.md`. `H-46` stays open.
+    # ⚠⚠ **EACH NAME IS LOOKED UP IN THE OWNER RATHER THAN TYPED, AND THE GUARD THAT FORCED THIS
+    # IS RIGHT EVEN THOUGH ITS FIRST READING OF THESE LINES WAS NOT.**
+    # `tests/valoria/test_conviction_roster_single_owner.py` fails on any literal holding TWO OR
+    # MORE canonical conviction names, because three incompatible rosters once shipped at the same
+    # time and silently disabled ED-912 §6.1's Conviction Scar. `{"Precedent": 0.9, "Utility": 0.3}`
+    # is two canonical names in one dict, so it read as a roster fragment — and the distinction
+    # between a ROSTER (an enumeration that can drift out of step with the owner) and a REFERENCE
+    # (a choice of one member) is not one an AST scan can draw.
+    # `_conv` draws it by CONSTRUCTION rather than by argument: one name per call, each checked
+    # against `CONVICTIONS`, which IS `engine.substrate.descriptors.CONVICTIONS` — the same object,
+    # not a copy. A rename in `references/descriptor_registry.yaml` now raises here by name instead
+    # of silently seeding a conviction nobody holds, which is strictly more than the literals did.
+    # [JUSTIFIED: these five weights are AUTHORED CHARACTER, not a mechanical constant -- #353 §14 types convictions as "weights over the closed 13 | 1-3 primary + distributed" and supplies no magnitudes. Carin at Precedent 0.9 is what the docstring above explains starts her causal chain; the rest are her, the bailiff and the warden being three different people. `H-46` is the row and it is open]
+    w.persons[CARIN].convictions = {_conv("Precedent"): 0.9, _conv("Utility"): 0.3}
+    # [JUSTIFIED: as the line above -- authored character under `H-46`, not a mechanical constant. The bailiff is procedural-first (Order 0.8) and the warden holds one conviction weakly, which is what makes the three people three]
+    w.persons[BAILIFF].convictions = {_conv("Order"): 0.8, _conv("Precedent"): 0.4}
+    # [JUSTIFIED: as above -- one conviction, held weakly; the warden is the least opinionated of the three by design]
+    w.persons[WARDEN].convictions = {_conv("Precedent"): 0.6}
     return w
 
 
@@ -126,7 +158,8 @@ def run(seasons: int = 2, seed: int = 0) -> dict:
         # `H-87`: the contest depth cap is the CALLER's to supply (S39.3 refuses a default), and
         # artifact 2 never had to decide until Part E's `contests:` column became real and the
         # seam started firing on `kill / wound`.
-        out.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+        out.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                                         draw=draw_factory(w.world_seed, lambda: w.tick)),
                             None, subsistence,
                             contest_max_depth=w.fixtures.get("contest_max_depth")))
     return dict(seasons=out, hash=w.content_hash(), world=w,
@@ -147,7 +180,10 @@ def main() -> int:
     r = run(a.seasons, a.seed)
     print(f"{a.case} · {a.seasons} season(s) · seed {a.seed}")
     for n, s in enumerate(r["seasons"]):
-        print(f"  season {n}: acts={s['acts']} events={s['events']} deposits={s['deposits']}")
+        # `rounds` since `U2`: a ticked season and a one-pass one are indistinguishable in this
+        # line without it. See `SeasonDriver.season`'s return for why no Event carries a round.
+        print(f"  season {n}: rounds={s['rounds']} acts={s['acts']} events={s['events']} "
+              f"deposits={s['deposits']}")
     if a.log:
         for e in r["world"].log:
             print(f"    {e.kind:22} {e.subject:12} causes={e.causes}")

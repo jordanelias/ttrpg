@@ -83,7 +83,8 @@ def budget_binding(case: dict, seed: int = 0) -> dict:
     try:
         w = C.build_at(case, seed); d = S.SeasonDriver(w)
         mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-        ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+        ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs(),
+                        draw=S.draw_factory(w.world_seed, lambda: w.tick))
         d.season(ch, question=None, subsistence=K.C.P.SUBSIST)
         acts = len(getattr(d, "resolved", []))
     finally:
@@ -116,7 +117,8 @@ def run_case_path(case: dict, ks: tuple, seed: int = 0) -> dict:
     w = C.build_at(case, seed)
     d = S.SeasonDriver(w)
     mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+    ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs(),
+                        draw=S.draw_factory(w.world_seed, lambda: w.tick))
     try:
         for k in ks:
             with take_kth(k):

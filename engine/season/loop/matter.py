@@ -20,7 +20,7 @@ from typing import Optional
 from ..data.fixtures import SITE_YIELD
 from ..data.matrix import Step, WriteClass
 from ..queries import world_q
-from ..state.carriers import Event, StateChange
+from ..state.carriers import Event
 from ..state.ids import H, ROOT
 from ..trace_log import TRACE
 
@@ -82,12 +82,31 @@ def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
             # provenance and adds a link rather than restating one.
             prior = next((e.id for e in reversed(w.log)
                           if any(c.subject == rid for c in e.changes)), wound_by)
-            ev = Event(H(w.world_seed, w.tick, rid, f"matured:{label}"),
-                       "term.matured", rid,
-                       [StateChange(rid, "set", "MATTER", "stages", label)],
-                       [prior], w.tick)
-            w.log.append(ev); emitted.append(ev)
-            TRACE.event(ev.id, ev.kind, ev.causes)
+            # ⚠⚠ **THROUGH THE GATE, RULED BY JORDAN 2026-09-10, AND WHAT IT REPLACES WAS `ID-9`
+            # LIVE.** This built the Event by hand and appended it:
+            #     Event(H(..., f"matured:{label}"), "term.matured", rid,
+            #           [StateChange(rid, "set", "MATTER", "stages", label)], [prior], w.tick)
+            # — an Event REPORTING A CHANGE THAT DID NOT HAPPEN. Nothing in the package mutated
+            # `rec.stages`; `matter.py` read it (`list(rec.stages)`) and `probes.py` read it, and
+            # that was every occurrence. Worse, `(Record, stages)` is `steps: [RES]`, `class: ACTS`,
+            # *"terms are act-declared, never MATTER-advanced"* — so a MATTER-step Event claimed a
+            # change to the one field the matrix forbids MATTER to touch. The row it SHOULD name,
+            # `(Record, matured)`, named a field that existed nowhere on the carrier.
+            # ⚠ THE GATE EMITS, AND THAT IS THIS FILE'S OWN PRECEDENT RATHER THAN AN INVENTION:
+            # `claim.decayed` (:131) and `stores.changed` (:169) already route this way, `H-12` is
+            # `ruled` that *"MATTER emits an Event per write so crossings have an antecedent"*, and
+            # `04 §C.2` has the gate apply the write and emit. A hand-built Event beside a gate that
+            # emits is a second emitter.
+            # ⚠ NO `emitted.append` AND NO `TRACE.event` HERE, AND BOTH OMISSIONS ARE LOAD-BEARING.
+            # The gate traces (`world.py:461`) and buffers, and this function DRAINS the buffer at
+            # its end (`emitted.extend(w._emitted_by_write)`), so appending here would put the
+            # maturation in `emitted` TWICE — once by hand and once by the drain — and WITNESS fans
+            # out whatever it is given. The hand-built version had to do both because it never
+            # crossed the gate.
+            w.write("matured", WriteClass.MATTER,
+                    lambda rec=rec: setattr(rec, "matured", True),
+                    record_kind="Record", fieldname="matured", driver="Event",
+                    emits="term.matured", subject=rid, causes=[prior])
 
     # -- CLAIM CONFIDENCE DECAY (`W4` / `H-40`) --------------------------
     # THE THIRD LICENSED CLOCK (#353 `:864`), and until now the only one of the three with no

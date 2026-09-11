@@ -1,4 +1,4 @@
-"""`season.loop.predicates` — the four `requires:` cells the grammar does not type.
+"""`season.loop.predicates` — the five `requires:` cells the grammar does not type.
 
 EXTRACTED, step 5 of the decomposition (a PURE MOVE but for two call sites, named below). The
 registry and its decorator travel with the functions they register, which is the rule step 3
@@ -6,7 +6,7 @@ established for `REQUIREMENT_TYPES` and step 5 applies unchanged: **a decorator-
 in the module that defines the decorated things**, or the table is empty at the moment the loader
 reads it.
 
-WHY FOUR AND NOT EIGHT. `W-A` retired `_req_transfer`, `_req_tell`, `_req_move` and `_req_work` on
+WHY FIVE AND NOT EIGHT. `W-A` retired `_req_transfer`, `_req_tell`, `_req_move` and `_req_work` on
 2026-09-04 — each is a TYPED CELL in `verb_table.yaml` now, read by `evaluate()`. §8's rule is
 that a rule lives once, and a verb carrying both a typed cell and a predicate here would be two
 readings of one prose cell; that is exactly how `_req_confer` came to drop a disjunct and
@@ -24,8 +24,9 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import title_domain, title_rank
+from ..data.rosters import RELEASABLE_KINDS, title_domain, title_rank
 from ..queries import world_q
+from ..state.carriers import subject_of
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -189,6 +190,34 @@ def _req_confer(w: "World", a: "Act") -> bool:
         t.kind == "commit" and t.subject == holder and t.live for t in w.tenures)
 
 
+@requires_predicate("release")
+def _req_release(w: "World", a: "Act") -> bool:
+    """`04 §A.3` row 14: *one `release` verb, eligibility `own`, generic over kind*. Part E:
+    *"a live tenure of a releasable kind, owned by the actor, toward the subject"*.
+
+    THREE CLAUSES, AND THE FIRST IS THE ONE THE DESIGN IS ABOUT. `t.subject == a.actor` is
+    eligibility `own` made real: `_eligible` returns True for every `own` verb without looking at
+    anything (*"every person may attempt their own acts"*), so a verb whose whole point is that it
+    acts on WHAT THE ACTOR HOLDS must check ownership in its precondition or it is a licence to
+    close other people's edges. `_req_revoke` learned this the hard way one column along.
+
+    ⚠ THIS CANNOT FABRICATE, AND THAT IS STRUCTURAL RATHER THAN CAREFUL. `_eff_oblige` was reverted
+    (F8, `ED-IN-0211`) for opening a Tenure to `einhir_texts`, a bare string naming no entity,
+    because an OPENER takes an id and asserts a relation into existence. A CLOSER scans relations
+    that already exist: a subject naming nothing matches no Tenure, the effect touches nothing, and
+    the fold emits `release.refused`. There is no path here that mints a fact about a thing nobody
+    named -- which is why the antonym half of Jordan's ruling is buildable today while the opener
+    half waits on distinct operands (`decision/options.py:307-312`).
+
+    ⚠ `contain` IS EXCLUDED BY THE ROSTER, NOT BY A LITERAL HERE. See `RELEASABLE_KINDS`."""
+    subj = subject_of(a)
+    if not subj:
+        return False
+    return any(t.subject == a.actor and t.object == subj
+               and t.kind in RELEASABLE_KINDS and t.live
+               for t in w.tenures)
+
+
 @requires_predicate("revoke")
 def _req_revoke(w: "World", a: "Act") -> bool:
     """Part E: *"the office's **revocation basis**, and a live `hold` exists"*.
@@ -289,8 +318,18 @@ def _req_convene(w: "World", a: "Act") -> bool:
 # `test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both` is the guard that
 # fails on a recurrence.
 #
-# THE FOUR THAT REMAIN -- `confer`, `revoke`, `dispatch`, `convene` -- are `remit:`-eligible, not
-# `own`-eligible, and `W-A`'s scope is the `own` rows. Two of them need grammar forms with no
+# THE FIVE THAT REMAIN. Four -- `confer`, `revoke`, `dispatch`, `convene` -- are `remit:`-eligible,
+# not `own`-eligible, and `W-A`'s scope is the `own` rows. Two of them need grammar forms with no
 # `own` cell (`cardinality`, `basis`) and `confer` needs a DISJUNCTION, which no `own` cell has
 # and which is therefore not built (`ID-13`: a combinator nothing uses is a dead carrier).
+# ⚠ THE FIFTH IS `release` (2026-09-11) AND IT IS AN `own` ROW, WHICH THIS PARAGRAPH ONCE SAID
+# COULD NOT HAPPEN. `W-A`'s scope IS the `own` rows, and a predicate on one would ordinarily be a
+# cell somebody failed to type. It is not here, and the reason is the same DISJUNCTION that keeps
+# `confer` out: `release`'s domain is a SET of six tenure kinds, `data/requires.py` carries `all`
+# and no `any`, and §F.24a form 1 `existence` takes ONE `kind:` -- so `all` of the six would mean
+# *a live edge of every kind at once*, which is the opposite requirement, and one `existence`
+# would silently narrow the verb to one kind. Adding `any` is a GRAMMAR CHANGE (`REQUIRES_STEMS`
+# is closed) and `04 §A.3` row 14 asks for a verb, not a form. The verb row states the same thing
+# at its `requires_typed_note:` and closes with the condition under which this stops being true:
+# *"IF AN `any` COMBINATOR IS EVER RULED, THIS CELL IS THE FIRST THING TO TYPE."*
 # ---------------------------------------------------------------------------

@@ -60,7 +60,9 @@ from ..gaps import Forbidden, Unspecified
 from .matrix import MATRIX
 from .requires import TypedRequires, build_typed_requires
 from .rosters import (
-    CONVICTION_AXES, RUNG_KINDS, STRATA, load_yaml, roster, table, table_meta,
+    CONVICTION_AXES, CONVICTIONS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, load_yaml, roster,
+    table,
+    table_meta,
 )
 
 VERB_TABLE_YAML = files.VERB_TABLE_YAML
@@ -207,6 +209,7 @@ def _load_verb_table() -> dict:
         raise SystemExit(f"verb_table.yaml not found at {VERB_TABLE_YAML}")
     doc = load_yaml(VERB_TABLE_YAML.read_text())
     out = {}
+    _release_domain: frozenset = frozenset()
     for r in doc["verbs"]:
         name = r["verb"]
         if name in out:
@@ -246,6 +249,8 @@ def _load_verb_table() -> dict:
                 f"verb_table.yaml: {name!r} declares `requires_typed: none` and no "
                 "`requires_typed_note:`. An untyped cell with no reason is indistinguishable "
                 "from one nobody typed, which is the state W-A exists to end.")
+        if name == "release":
+            _release_domain = frozenset(r.get("domain") or ())
         # The two keyed columns must agree on their band set, or a band writes with nothing to
         # report or reports with nothing written.
         if by_degree and emits_by_degree and set(by_degree) != set(emits_by_degree):
@@ -323,11 +328,134 @@ def _load_verb_table() -> dict:
             raise SystemExit(f"verb_table.yaml: {name!r} has stratum {row.stratum!r}, which is "
                              f"not one of rosters.yaml's {list(STRATA)}")
         out[name] = row
+    # -----------------------------------------------------------------------
+    # LOADER INVARIANT 6 (`04_CODE_ARCHITECTURE.md` PART D row 15, MECHANICAL at load):
+    # *"`release` generic; the loader asserts its domain equals `tenure_kinds \ {contain}`"*.
+    #
+    # ⚠⚠ **IT RUNS AFTER THE LOOP, AND THAT IS THE WHOLE OF THE DIFFERENCE BETWEEN A CHECK AND A
+    # CHECK THAT CAN OBSERVE ITS OWN SUBJECT'S ABSENCE.** The first writing sat INSIDE the row
+    # loop behind `if name == "release"`, so deleting or renaming the row meant the check never
+    # executed: the load succeeded and the vocabulary was open-without-close again, which is the
+    # exact state row 15 grades MECHANICAL at load. §0.1 pt 2 applied one notch too narrowly — the
+    # branch could see a wrong domain and not a missing verb. Found by the unit's own adversarial
+    # pass. The tests would have caught the deletion (`len(VERB_TABLE) == 38`, the executed-set
+    # pins), but the tests are not the load and the row's grade claims the load.
+    #
+    # ⚠ THE ASSERTION IS AGAINST THE ROSTER, WHICH IS WHY THE COLUMN IS DECLARED AND NOT DERIVED.
+    # `contain` is excluded because it is the one Tenure kind whose subject may be a Rung (PART D
+    # row 13) and whose end is a MOVE, not a release -- `_eff_move` closes the old leg and opens
+    # the new one, so a releasable `contain` would let a person leave a place for nowhere. Every
+    # other kind is an edge a person opened and must be able to end (T-m).
+    #
+    # This is the check `open-without-close in the vocabulary` names: add an eighth tenure kind to
+    # `rosters.yaml` and forget its closer, and the load fails HERE rather than shipping a relation
+    # nothing can end.
+    #
+    # ⚠ ROW 15 HAS A SECOND HALF THIS DOES NOT IMPLEMENT, NAMED SO NOBODY READS THE CHECK'S NAME
+    # AS COVERING IT: `04:464-465` states invariant 6 as two conjuncts, the domain AND *"every
+    # kind's OPENER set is declared too"*. Only the first is here. The second is
+    # `architecture/meta/HANDOFF_NEXT.md` item 1e and is open.
+    if "release" not in out:
+        raise SystemExit(
+            "verb_table.yaml: no `release` row. Loader invariant 6 (04 PART D row 15) is the "
+            "check that `tenure_kinds \\ {contain}` all have a closer, and without the verb "
+            "every one of them is an edge that can be opened and never ended -- the "
+            "open-without-close state T-m refuses. Removing the verb is a design change and "
+            "`architecture/meta/HANDOFF_NEXT.md` §2a rules against re-opening it.")
+    # ⚠ `RELEASABLE_KINDS` AND NOT A SECOND `frozenset(TENURE_KINDS) - {"contain"}`. The
+    # derivation lives once, in `data/rosters.py` beside the roster it reads; this is the
+    # comparison against the verb table's DECLARED column, which is the whole point of the column.
+    if _release_domain != RELEASABLE_KINDS:
+        raise SystemExit(
+            f"verb_table.yaml: `release` declares domain {sorted(_release_domain)}, and "
+            f"`tenure_kinds \\ {{contain}}` is {sorted(RELEASABLE_KINDS)}. Loader invariant 6 "
+            "(04 PART D row 15) requires them equal: a kind in the roster and not in this "
+            "domain is an edge that can be opened and never closed, and a kind here and "
+            "not in the roster is a closer for a relation that does not exist.")
     return out
 
 VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
 
 VERB_TABLE = _load_verb_table()
+
+def _check_sparse_table(name: str, cells: dict, rows: "set|tuple", row_what: str,
+                        cols: "set|tuple", col_what: str, row_law: str, col_law: str) -> dict:
+    """THE THREE CHECKS A ROSTER-KEYED SPARSE TABLE NEEDS, IN ONE PLACE.
+
+    `alignment` (axis x verb) and `conviction_projection` (conviction x axis) are the same KIND of
+    object — a mapping whose outer key names a roster member, whose inner keys name another
+    roster's members, that may be sparse and may not be uniformly zero. Each check exists because
+    the corresponding failure is SILENT: a cell on an unrostered outer key is never read and never
+    reported; an inner key naming nothing is a weight on an option nobody can form; and an all-zero
+    table makes the whole mechanism inert while passing every test, which is the dead-carrier defect
+    #353 `:739-744` names.
+
+    ⚠⚠ THE TWO LOADERS HAD THIS CHECK-FOR-CHECK, AND `_load_projection`'s DOCSTRING SAID SO — *"the
+    exact shape `_load_alignment` uses one table over -- the rule lives once in kind, not in copy"*.
+    Writing that down is not the same as doing it: §8 says the rule lives once, full stop, and a
+    fourth check or a change to the all-zero test would otherwise have to be made twice to stay in
+    step. The LAW STRINGS stay per-caller, because what a violation means differs by table."""
+    for outer, row in cells.items():
+        if outer not in rows:
+            raise Forbidden(
+                f"{name} names {row_what} {outer!r}, which is not in the roster", "rosters.yaml",
+                needs=f"add it to the roster, or drop the row", law=row_law)
+        unknown = sorted(set(row) - set(cols))
+        if unknown:
+            raise Forbidden(
+                f"{name}[{outer}] names {len(unknown)} {col_what}(s) outside the roster: {unknown}",
+                "rosters.yaml",
+                needs="spell it as the roster spells it, or drop the cell", law=col_law)
+    if not any(val for row in cells.values() for val in row.values()):
+        raise Forbidden(
+            f"the {name} table is all zeroes", "rosters.yaml",
+            needs="a default with at least one non-zero weight",
+            law="PLAN §W5 -- 'a zero matrix makes convictions inert, which is the dead-carrier "
+                "defect #353 `:739-744` names, and it would pass every test while meaning nothing'")
+    return cells
+
+
+def _load_projection() -> dict:
+    """`tables.conviction_projection`, the 13x4 that maps a person's convictions into axis space.
+
+    ⚠⚠ **THIS TABLE EXISTS BECAUSE `conviction_axes` USED TO DO TWO JOBS AND COULD DO NEITHER
+    WELL.** Before `U3` the roster held four names -- `Precedent`, `self_preservation`,
+    `suspicion`, `harm_borne` -- one of which is a CONVICTION and three of which are ad-hoc
+    scalars, and §F2's `conviction[axis]` looked a person's weight up in that one index set.
+    `conviction_axes`'s own note called the conflation out and predicted this repair: *"THIRTEEN
+    convictions projecting onto FOUR axes through a 13x4 matrix ... It is the likeliest thing to
+    change when `H-46` closes."* It changed here, and `H-46` did NOT close -- Jordan, 2026-09-02:
+    *"convictions roster and axes etc may be modified in future."*
+
+    THREE CHECKS, each for a failure that would otherwise be SILENT, and each the exact shape
+    `_load_alignment` uses one table over -- the rule lives once in kind, not in copy:
+      * a conviction outside the roster is a row nobody projects FROM;
+      * an axis outside the roster is a column nobody scores WITH;
+      * an all-zero matrix makes every person's convictions project to the zero vector, which is
+        `uniform`'s control arm shipped as the default -- the dead-carrier defect, one table along.
+
+    ⚠ IT DOES NOT CHECK THAT ALL 13 x 4 CELLS ARE PRESENT. Sparse is lawful here exactly as it is
+    for `alignment`: an unlisted pair reads `default_cell`. What is checked is that every cell
+    NAMED is nameable."""
+    cells = table("conviction_projection")
+    return _check_sparse_table(
+        "conviction_projection", cells, CONVICTIONS, "conviction", CONVICTION_AXES, "axis",
+        row_law=("§F2 -- a person's convictions are weights over the roster. A projection row for a "
+                 "conviction nobody can hold is read by nothing"),
+        col_law=("engine/substrate/keys.py::AXES single-owns the four names; a fifth is one edit "
+                 "there and a refusal here, never two rosters drifting apart"))
+
+
+CONVICTION_PROJECTION = _load_projection()
+# ⚠ NO `PROJECTION_DECLARED` HERE, AND ITS ABSENCE IS DELIBERATE. `ALIGNMENT_DECLARED` below
+# exists because `ALIGNMENT` is REBOUND by `alignment_at()`'s sweep, so every arm must be
+# built from an immutable baseline rather than from the previous arm. The projection has a
+# declared `sweep:` on its row and NO `projection_at()` yet, so a frozen copy here would be a
+# second 13x4 in memory that a reader assumes is wired to something because its sibling is.
+# It comes back in the commit that adds the sweep, the way `ALIGNMENT_DECLARED` arrived with
+# `ALIGNMENT_SWEEP`.
+PROJECTION_DEFAULT_CELL = float(table_meta("conviction_projection").get("default_cell", 0.0))
+
 
 def _load_alignment() -> dict:
     """§F2's `alignment(c.verb, axis)`, from `rosters.yaml`, with THREE load-time checks.
@@ -339,29 +467,12 @@ def _load_alignment() -> dict:
     describes. All three raise HERE rather than producing a plausible score later."""
     cells = table("alignment")
     verbs = set(VERB_TABLE)
-    for axis, row in cells.items():
-        if axis not in CONVICTION_AXES:
-            raise Forbidden(
-                f"alignment names axis {axis!r}, which is not in the conviction_axes roster",
-                "rosters.yaml",
-                needs="add the axis to conviction_axes, or drop the row",
-                law="§F2 -- `conviction[axis] * alignment(verb, axis)` sums over the ROSTER. A "
-                    "cell on an unrostered axis is never read and never reported")
-        unknown = sorted(set(row) - verbs)
-        if unknown:
-            raise Forbidden(
-                f"alignment[{axis}] names {len(unknown)} verb(s) no verb table row carries: {unknown}",
-                "rosters.yaml",
-                needs="spell the verb exactly as verb_table.yaml spells it, or drop the cell",
-                law="§E2 -- the verb table is the roster of verbs. A cell keyed on a verb that "
-                    "does not exist is a weight on an option nobody can ever form")
-    if not any(v for row in cells.values() for v in row.values()):
-        raise Forbidden(
-            "the alignment table is all zeroes", "rosters.yaml",
-            needs="a default with at least one non-zero weight",
-            law="PLAN §W5 -- 'a zero matrix makes convictions inert, which is the dead-carrier "
-                "defect #353 `:739-744` names, and it would pass every test while meaning nothing'")
-    return cells
+    return _check_sparse_table(
+        "alignment", cells, CONVICTION_AXES, "axis", verbs, "verb",
+        row_law=("§F2 -- `conviction[axis] * alignment(verb, axis)` sums over the ROSTER. A cell on "
+                 "an unrostered axis is never read and never reported"),
+        col_law=("§E2 -- the verb table is the roster of verbs. A cell keyed on a verb that does "
+                 "not exist is a weight on an option nobody can ever form"))
 
 ALIGNMENT = _load_alignment()
 
