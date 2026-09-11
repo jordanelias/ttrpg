@@ -1,6 +1,6 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
-## ⏱ 2026-09-11 — verification cadence ruled: the suite is a CLOSE step (`ED-IN-0212`)
+## ⏱ 2026-09-11 — verification cadence ruled: the suite is a CLOSE step (`ED-IN-0213`)
 
 **Jordan:** *"figure out a far better work pattern with Claude.md or whatever so you don't run this shit
 after every edit."* Measured before acting; `CLAUDE.md` **§0.4** is the new rule and its owner.
@@ -17,6 +17,18 @@ edited too — the rule does not survive against the "verify at every stage" rea
 
 **No guard was built, deliberately.** A cadence rule's subject is this repo's PROCESS — exactly §0.1
 pt 5's excluded class. §0.4 binds a reader.
+
+⚠ **THIRD WITHIN-LANE ID COLLISION IN TWO DAYS.** This row was filed as the IN-lane id **0212**, which **PR #395**
+(`claude/repo-workplans-state-xk44q2`) had already allocated for *"ONE SPINE FOR EVERYTHING THAT
+REMAINS"* — both branches read `next_free: 212` off `main` and neither had merged. Renumbered here to
+**`ED-IN-0213`** on this file's own precedent (*the later-merging side renumbers*; #395 opened 8 hours
+earlier, is green and is `mergeable_state: clean`), caught **before** either merged, so no merged ledger
+line is rewritten. `next_free` is **214**. The 0207/0208→0210/0211 pair was 2026-09-10; this is the
+next one. **The lane-tag scheme makes cross-lane collision impossible by construction and does nothing
+for same-lane**, which is now the live failure mode — `next_free` is read off `main` and two concurrent
+IN-lane branches always read the same number. Worth a ruling on whether IN should hand out reserved
+sub-blocks per session the way MB/PC/SC/FA/WR/SE blocks once did; **not proposed here**, because it is
+a process-apparatus change and §0.1 pt 5 wants a subject before a mechanism.
 
 ### Left for a later session (measured, not guessed — do not re-derive)
 
