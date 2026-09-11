@@ -188,6 +188,45 @@ DEFAULT_FIXTURES = Fixtures(
     wear_per_season=WEAR_RATES,
     # S20: Claim.confidence. Rev 1 hardcoded 1, which degenerated the eviction comparator.
     confidence_default=100,
+    # `U4` / `H-96`. THE TEMPERATURE OF THE TRIAGE — how far a person's choice of what to leave
+    # undone departs from the top of their own ranking. `0` is the pre-U4 behaviour exactly
+    # (argmax, ties alphabetical by verb name) and is kept as the CONTROL; the shipped value
+    # samples the order by `softmax(score / tau)`.
+    #
+    # ⚠ THE MAGNITUDE IS INJECTED AND THE SHAPE IS NOT. R-08's statement is Jordan's — *"decisions
+    # must not be omniscient and perfectly rational — characters make choices based on their own
+    # inclinations"* — so THAT the choice is sampled is ruled; how sharply is a number no document
+    # supplies.
+    #
+    # ⚠ AND `0.1` IS CHOSEN ON A SWEEP, NOT ASSERTED. Two earlier writings of this comment argued a
+    # value a priori (`1.0`, *"the one value that adds no second scale factor"*), which is the shape
+    # §0.1 pt 4 refuses: a number with no control. What decides it is one analytic fact plus one
+    # measurement.
+    #
+    # THE ANALYTIC FACT — and it is why the value is a FLOOR question, not a tuning one. For TIED
+    # candidates `score/tau` is equal whatever tau is, so their order is decided by the draw ALONE
+    # at any nonzero temperature. The alphabetical tie-break this unit exists to remove is therefore
+    # dead at 0.1 exactly as it is at 1.0, BY CONSTRUCTION rather than by degree. Nothing is bought
+    # by going hotter.
+    #
+    # THE MEASUREMENT — and it says something IS bought by going colder. Sweeping the shipped
+    # corpus, 89 live cases at seed 0, distinct executed sets: **tau=0 -> 16 · 0.1 -> 10 ·
+    # 0.25 -> 8 · 0.5 -> 7 · 1.0 -> 7**. Between-world variety falls MONOTONICALLY with temperature,
+    # because a hotter draw makes every world sample the same broad mixture. So the right value is
+    # the LEAST one that removes the defect, and that is the smallest we sweep above zero.
+    #
+    # WHAT THIS MEANS IN PLAY, stated because the arithmetic hides it: the conviction spread is
+    # **1.62** across a person's candidates, so at 0.1 a scored candidate beats a lower-scored one
+    # essentially always, and where the table says NOTHING — 15 to 20 of 22 candidates, which is
+    # `H-96`'s own pair of numbers subtracted (*"with 22 candidates … the conviction term can
+    # separate only 2 to 7 of the 22"*) rather than a third measurement —
+    # chance decides. *Inclinations are decisive where they exist; the draw decides where they do
+    # not.* That is a closer reading of Jordan's *"characters make choices based on their own
+    # inclinations"* than a hot temperature, which would override the inclinations it is supposed
+    # to express. ⚠ RE-DERIVE THIS IF `U3` LANDS: a denser alignment table means fewer ties, which
+    # moves what tau is doing.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-96 -- `site: Fixtures choice_temperature`, graded `measured`; the alphabetical tie-break is the measured defect and this is the injected magnitude of its remedy, swept 0 / 0.1 / 0.25 / 0.5 / 1.0, the row's own `sweep:`]
+    choice_temperature=0.1,
     # `W4` / `H-40`, THE THIRD LICENSED CLOCK (#353 `:864`). #353 licenses confidence decay at
     # MATTER and gives NO RATE, so this is an INJECTED DEFAULT with a `site:` and a three-point
     # sweep on the register, exactly as `H-09` treats the confidence default beside it. It is a

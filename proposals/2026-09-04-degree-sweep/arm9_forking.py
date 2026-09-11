@@ -133,7 +133,8 @@ def _run(case: dict, seed: int, seasons: int, fork_at: int = -1, take: int = 0,
         w.fixtures = fixtures
     d = S.SeasonDriver(w)
     mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+    ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs(),
+                        draw=S.draw_factory(w.world_seed, lambda: w.tick))
     rec = recorder(fork_at, take, w, fork_slot)
     try:
         with rec:
@@ -268,7 +269,8 @@ def claim_channel(sample: int = 8, seasons: int = 3, seed: int = 0) -> dict:
     for case in cs:
         w = C.build_at(case, seed); d = S.SeasonDriver(w)
         mint = lambda pid, verb, subj: S.H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-        ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs())
+        ch = S.make_chooser(w.fixtures, mint, verbs=S.resolvable_verbs(),
+                        draw=S.draw_factory(w.world_seed, lambda: w.tick))
         for _ in range(seasons):
             d.season(ch, question=None, subsistence=K.C.P.SUBSIST)
         for p in w.persons.values():

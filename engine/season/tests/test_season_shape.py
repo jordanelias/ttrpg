@@ -57,7 +57,7 @@ from ..seam import combat_degree, contest, degree_ladder, degree_of, ladder_erro
 from ..state.carriers import (
     Act, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View, matrix_rows_without_a_field,
 )
-from ..state.ids import H, ROOT
+from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
 from ..data import files
@@ -2393,7 +2393,8 @@ def test_w5_f2s_third_term_cannot_change_any_decision():
     w.add_tenure(Tenure("t_u", p.id, pr.id, "commit", since=0))
     q = questions_for(w, p)[0]
     v = View(p.id, [], w.fixtures.get("view_k"), q)
-    ch = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}")
+    ch = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}",
+                         draw=draw_factory(w.world_seed, lambda: w.tick))
     # `W17`: scenes, so flatten to the interactions inside them.
     picks = {s: [a.verb for sc in ch(p, v, Sensation(s), lambda: 3) for a in sc.acts]
              for s in (0, 500, 1000, 10 ** 6)}
@@ -2407,6 +2408,64 @@ def test_w5_f2s_third_term_cannot_change_any_decision():
     assert urgency(1000, w.fixtures) != urgency(0, w.fixtures), (
         "urgency returns a constant, which would make this test vacuous — it must actually vary "
         "with subsistence for the inertness claim to be about §F2 rather than about a stub")
+
+
+def test_u4_the_choice_is_sampling_and_the_argmax_is_its_zero_temperature_control():
+    """`U4` / `H-96` — THE UNIT'S OWN ACCEPTANCE, and it did not exist until this test.
+
+    ⚠ **`U4`'s acceptance line is `pytest -q -k 'sampling or w5_sense'`, and `-k sampling`
+    COLLECTED NOTHING.** The unit shipped a sampler whose central property no test asserted: the
+    suite went green on re-derived corpus counts, none of which observe *"the same person and view
+    yields more than one top act"* directly. A unit whose own named acceptance selects zero tests
+    has not been accepted. This is that test, named so the selector reaches it.
+
+    THE PROPERTY, from `U4` verbatim: *"The same person and view over 20 seeds yields >=2 distinct
+    top acts"*. The person, the view, the question and the candidate set are held IDENTICAL; only
+    the world seed feeding the draw moves. Under the pre-`U4` argmax that yields exactly ONE act
+    at every seed, because `sorted(..., key=(-score, c.verb, c.subject))` cannot see a seed.
+
+    ⚠ THE CONTROL IS THE SAME ARM WITH ONE VARIABLE REMOVED, which is the thing `CLAUDE.md` §0.1
+    pt 4 asks for and the thing `U4`'s own `tau = 0` byte-identity arm does NOT give: that arm
+    validates the plumbing (the draw is threaded, nothing else moved) and exercises the OLD code
+    path, so it cannot witness the sampler. Here `tau = 0` is run over the SAME twenty seeds and
+    must collapse to one act — so the two assertions together say the spread is the sampler's and
+    not the fixture's."""
+    w = P.tiny_world()
+    p = w.persons["p_mid"]
+    pr = Proposition("pr_s", "OUGHT", "rec_writ", "x", True, 0)
+    w.propositions[pr.id] = pr
+    w.add_tenure(Tenure("t_s", p.id, pr.id, "commit", since=0))
+    q = questions_for(w, p)[0]
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    mint = lambda a, b, c: f"{a}:{b}:{c}"
+
+    def tops(fx, seeds):
+        out = []
+        for sd in seeds:
+            ch = make_chooser(fx, mint, draw=draw_factory(sd, lambda: 0))
+            scenes = ch(p, v, Sensation(0), lambda: 3)
+            acts = [a.verb for sc in scenes for a in sc.acts]
+            out.append(acts[0] if acts else None)
+        return out
+
+    # [JUSTIFIED: twenty seeds is `U4`'s own stated arm ("over 20 seeds"); the range is arbitrary and only its SIZE is load-bearing]
+    seeds = range(20)
+    sampled = tops(w.fixtures, seeds)
+    assert sampled.count(None) == 0, (
+        f"the fixture produced no act at some seed: {sampled}. Then this test is measuring an "
+        "empty candidate set and not the sampler")
+    assert len(set(sampled)) >= 2, (
+        f"twenty seeds yielded ONE top act: {set(sampled)}. `U4`'s whole claim is that the choice "
+        "is sampled rather than taken at the argmax, so a single act across twenty independent "
+        "draws means the draw is not reaching the ranking — check `_sample_order`'s `tau` and "
+        "that a `draw` is actually threaded to `make_chooser`")
+
+    # THE CONTROL — the identical arm at `choice_temperature = 0`, where the draw is short-circuited.
+    argmax = tops(w.fixtures.sweep("choice_temperature", 0), seeds)
+    assert len(set(argmax)) == 1, (
+        f"the argmax control spread across seeds too: {set(argmax)}. Then the spread above is NOT "
+        "attributable to the sampler — some other part of this fixture reads the seed, and both "
+        "numbers are confounded until it is found")
 
 
 def test_w5_sense_is_still_the_only_world_taking_non_decision_function():
@@ -2896,7 +2955,8 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     saved2 = decision.choose.ALIGNMENT
     try:
         decision.choose.ALIGNMENT = alignment_at("sign_only")
-        ch = make_chooser(w.fixtures, lambda a, b, c: "x")
+        ch = make_chooser(w.fixtures, lambda a, b, c: "x",
+                         draw=draw_factory(w.world_seed, lambda: w.tick))
         for sign in (0.9, -0.9):
             p.convictions = {"Precedent": sign}
             picked = ch(p, v, Sensation(0), lambda: 1)[0].acts[0].verb
@@ -3157,7 +3217,9 @@ def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
     # ---- H-78: the rule changes how many interactions a season produces. ----
     counts, shapes, grouping = {}, {}, {}
     for rule in sorted(SCENE_PACKING_RULES):
-        f2 = fx.sweep("scene_packing_rule", rule)
+        # `U4`: tau=0 is the ARGMAX control. These arms measure PACKING, so the choice must
+        # not be sampled or the shape they compare moves for a reason they do not name.
+        f2 = fx.sweep("scene_packing_rule", rule).sweep("choice_temperature", 0)
         scenes = make_chooser(f2, mint)(p, v, Sensation(0), lambda: 5)
         counts[rule] = sum(len(sc.acts) for sc in scenes)
         shapes[rule] = [len(sc.acts) for sc in scenes]
@@ -3177,7 +3239,7 @@ def test_w17_the_packing_rule_and_the_extended_cost_are_both_live():
         f"{ {r: g for r, g in grouping.items()} }")
 
     # ---- H-77: `extended` is set, so the cost sweep can move the budget. ----
-    f_greedy = fx.sweep("scene_packing_rule", "greedy")
+    f_greedy = fx.sweep("scene_packing_rule", "greedy").sweep("choice_temperature", 0)
     scenes = make_chooser(f_greedy, mint)(p, v, Sensation(0), lambda: 5)
     multi = [sc for sc in scenes if len(sc.acts) > 1]
     assert multi, f"no scene carries more than one interaction: {shapes} — `extended` can never " \
@@ -3523,7 +3585,8 @@ def _w4_run(seasons: int, seed: int = 0, condition: int | None = None):
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     for _ in range(seasons):
-        d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+        d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                  None, HL.subsistence)
     return w
 
@@ -3699,7 +3762,8 @@ def test_w4_h40s_declared_sweep_is_executed_and_its_zero_arm_does_not_fabricate(
         d = SeasonDriver(w)
         mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(3):
-            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                      None, HL.subsistence)
         confs = [c.confidence for p in w.persons.values() for c in p.ledger]
         seen[rate] = (Counter(e.kind for e in w.log)["claim.decayed"], min(confs), max(confs))
@@ -3724,7 +3788,8 @@ def _w6_run(mode: str, seasons: int = 3, seed: int = 0):
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     dep = 0
     for _ in range(seasons):
-        dep += d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+        dep += d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                         None, HL.subsistence)["deposits"]
     return w, dep
 
@@ -3800,7 +3865,8 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     for _ in range(2):
-        d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()), None, HL.subsistence)
+        d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)), None, HL.subsistence)
     everyone = list(w.persons)
     fires = {c: sum(1 for e in w.log if any(fn(w, e, pid) for pid in everyone))
              for c, fn in CHANNEL_PREDICATES.items()}
@@ -3852,7 +3918,8 @@ def _r7_run(mode: str, seasons: int = 2, seed: int = 0):
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     dep = 0
     for _ in range(seasons):
-        dep += d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+        dep += d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                         None, HL.subsistence)["deposits"]
     return w, d, dep
 
@@ -4397,7 +4464,8 @@ def _ten_seasons(w, seasons=10, verbs=None):
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     ch = make_chooser(w.fixtures, mint,
-                        verbs=resolvable_verbs() if verbs is None else verbs)
+                        verbs=resolvable_verbs() if verbs is None else verbs,
+                        draw=draw_factory(w.world_seed, lambda: w.tick))
     minted = []
     def spy(p, v, sc, ask):
         out = ch(p, v, sc, ask)
@@ -4785,7 +4853,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
         d = SeasonDriver(w)
         mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(7):
-            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                      None, HL.subsistence)
         by_id = {e.id: e for e in w.log}
 
@@ -4816,7 +4885,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
             d = SeasonDriver(w)
             mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
             for _ in range(7):
-                d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+                d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                          None, HL.subsistence)
             seen[n] = sum(1 for e in w.log if e.kind == "term.matured")
         matured[f"{arm}:3"], matured[f"{arm}:6"] = seen[3], seen[6]
@@ -4854,7 +4924,8 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
         d = SeasonDriver(w)
         mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(2):
-            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                      None, HL.subsistence)
         subjects[rule] = len({c.subject for c in w.persons[HL.BAILIFF].ledger})
     moved["H-79 distinct claim subjects in the bailiff's ledger"] = subjects
@@ -4883,7 +4954,8 @@ def test_w9_the_sweeps_the_register_declares_are_executed():
         d = SeasonDriver(w)
         mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(2):
-            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                      None, HL.subsistence)
         hashes[scale] = len(w.log)
     moved["H-06 events by condition_scale"] = hashes
@@ -5632,16 +5704,62 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     by_sig = {}
     for r in live:
         by_sig.setdefault(tuple(r["executed"]), []).append(r)
+    # ⚠⚠ **16 -> 10, `U4` (2026-09-10), AND THE FALL IS THE UNIT'S OWN MEASURED COST — NOT A
+    # REGRESSION SMUGGLED THROUGH A RE-PIN.** `U4` replaced the tie-break: tied candidates were
+    # ordered `(-score, c.verb, c.subject)`, i.e. ALPHABETICALLY BY VERB NAME, and are now ordered
+    # by a per-person seeded draw (`decision/choose.py::_sample_order`). MEASURED, five-point sweep
+    # over the 89 live cases at seed 0: **tau=0 -> 16 · 0.1 -> 10 · 0.25 -> 8 · 0.5 -> 7 · 1.0 -> 7**.
+    # The count falls MONOTONICALLY with temperature, and `U4`'s own plan predicted the opposite
+    # (*"`DISTINCT EXECUTED SETS` rises from 2"*). That prediction is FALSIFIED and the reason is
+    # legible: with an argmax each world executes its own top-k, so worlds differ by their
+    # convictions; with a draw each world eventually samples a broad, similar mixture, so the SETS
+    # converge even as the SEQUENCES diverge. This metric is set-level and cannot see the second.
+    # ⚠ THE TRADE IS NOT FREE AND IS NOT HIDDEN: `R3` (cross-person propagation) moves the other
+    # way across the same sweep — 56 · 55 · 59 · 59 · 48 — so temperature is not free in either
+    # direction. `0.1` is the shipped value because the defect dies at ANY nonzero temperature (for
+    # tied candidates `score/tau` is equal, so the draw alone orders them — by construction, not by
+    # degree), while variety falls monotonically as it rises. The least nonzero arm is therefore
+    # the right one, and it keeps 10 of the 16.
+    #
+    # ⚠ **AND `H-96` IS STILL NOT CLOSED, WHICH IS THE DISTINCTION THE PARAGRAPH ABOVE EXISTS TO
+    # HOLD, NOW LOAD-BEARING IN A SECOND WAY.** `H-96` has two halves. The RANKING half — *2..7 of
+    # 22 candidates carry a nonzero score and the rest tie* — is UNTOUCHED: nothing here changed the
+    # scoring function, the axes, or the corpus's convictions, and `corpus_run` still prints the
+    # same discrimination line. What `U4` closed is the OTHER half, the tie-BREAK. Reading this 10
+    # as `H-96` closing would be the same laundering the row was re-derived to stop.
+    # ⚠ THE FALSIFIER FOR THE HALF THAT DID CLOSE, run 2026-09-10 and reproducible: add one ruled
+    # verb (`release`, `04 §A.3` row 14), then run the SAME verb, predicate and effect again under
+    # a name that sorts LAST. At tau=0 the early name executed in **18** cases and displaced **71**
+    # acts (`utter` x56); the late name executed in **5** and displaced **2** — a 3.6x and 35x gap
+    # produced by LETTERS ALONE. At tau=0.25 the same pair reads **13 vs 14** executions and
+    # **22 vs 25** displacements: the gap inverts and collapses into noise. That is what this unit
+    # bought, and it is why the number above may be spent rather than merely moved.
     # [GROUNDED: measured 2026-09-10 over the 89 live corpus cases, `corpus_run` at seed 0 -- 16 distinct executed sets; 2 before the six, 10 with them conviction-inert, 5 at `uniform`]
-    assert len(by_sig) == 16, (
+    # [GROUNDED: measured 2026-09-10 over the 89 live corpus cases, `corpus_run` at seed 0 -- 10 distinct executed sets at the shipped `choice_temperature=0.1`; the five-point sweep and the rename control are in the comment above, and `H-96`'s `sweep:` carries the arms]
+    assert len(by_sig) == 10, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived")
     # WHAT IS FIXED AND WHAT VARIES, ASSERTED EXACTLY IN BOTH DIRECTIONS — the count alone would
     # pass on sixteen arbitrary sets. Two verbs execute in EVERY live case and eight vary.
     universal = set.intersection(*(set(r["executed"]) for r in live))
     varying = set().union(*(set(r["executed"]) for r in live)) - universal
-    assert universal == {"create_record", "move"}, sorted(universal)
-    assert varying == {"interview", "reconstruct", "research", "speak", "surveil", "tell",
-                       "transfer", "utter"}, sorted(varying)
+    # ⚠⚠ **`U4` MOVED BOTH SETS, AND THE SHAPE OF THE MOVE IS THE EVIDENCE FOR WHY THE DISTINCT
+    # COUNT FELL.** Under the argmax, `create_record` and `move` won a scene in every one of the 89
+    # live cases and `transfer` did not. Under a sampled order NOTHING is guaranteed a scene, so
+    # the intersection collapses to whatever the draw never denied — measured at seed 0:
+    #   create_record 89 · transfer 89 · move 88 · speak 88 · utter 88 · reconstruct 84 ·
+    #   tell 83 · surveil 82 · research 17 · interview 13   (of 89)
+    # ⚠ READ THAT COLUMN BEFORE READING THE SETS: seven verbs now run in 84-89 of 89 worlds. The
+    # worlds have not become identical — they have become identical IN THE SET, differing by which
+    # one or two near-universal verbs happened to miss a scene. That is precisely why `len(by_sig)`
+    # fell 16 -> 10 above, and it is why a SET-level metric understates what sampling did: the
+    # sequences diverge while the sets converge. The two 89s are not a claim that those verbs are
+    # special; they are the verbs the draw did not deny anywhere at this seed, and they would move under
+    # another. THE ASSERTION IS THEREFORE THE MEASUREMENT, not a property — if it moves, re-measure
+    # rather than adjust, because a universal set of size one is a sampling outcome and not a
+    # design invariant.
+    assert universal == {"create_record", "transfer"}, sorted(universal)
+    assert varying == {"interview", "move", "reconstruct", "research", "speak",
+                       "surveil", "tell", "utter"}, sorted(varying)
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
     # that is the mechanism the retraction above restored and it is asserted below. What no longer
@@ -5904,7 +6022,8 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
     w = C.build_at(case, 0)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs())
+    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick))
     for _ in range(3):
         d.season(ch, question=None, subsistence=C.P.SUBSIST)
 
@@ -6382,7 +6501,8 @@ def _wc_corpus_pass():
         d = SeasonDriver(w)
         mint = (lambda ww: lambda pid, verb, subj:
                 H(ww.world_seed, ww.tick, pid, f"act:{verb}:{subj}"))(w)
-        ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs())
+        ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick))
         for _ in range(n):
             d.season(ch, question=None, subsistence=P.SUBSIST,
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
@@ -7317,7 +7437,8 @@ def test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     for _ in range(3):
-        d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+        d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                  None, HL.subsistence)
     unknown = [(e.kind, o.predicate) for e in w.log for o in e.observed if o.value is UNKNOWN]
     assert unknown, (
@@ -7372,7 +7493,8 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
         mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         ever = {}
         for _ in range(3):
-            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                      None, HL.subsistence)
             for p in w.persons.values():
                 for c in p.ledger:
@@ -7469,7 +7591,8 @@ def test_wb_a_read_computed_from_the_ledger_is_never_deposited_into_it():
     w.fixtures = DEFAULT_FIXTURES.sweep("observation_deposit_mode", "actor")
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs())
+    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick))
     for _ in range(3):
         d.season(ch, question=None, subsistence=C.P.SUBSIST,
                  contest_max_depth=w.fixtures.get("contest_max_depth"))
@@ -7591,7 +7714,8 @@ def test_wb_the_carrier_moves_the_seeded_hash():
         d = SeasonDriver(w)
         mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
         for _ in range(2):
-            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+            d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                      None, HL.subsistence)
         carried = sum(len(e.observed) for e in w.log)
         if strip:
@@ -7663,7 +7787,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
             w.fixtures = fx
             d = SeasonDriver(w)
             mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-            ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs())
+            ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick))
             for _ in range(C.seasons_for(case)):
                 d.season(ch, question=None, subsistence=C.P.SUBSIST,
                          contest_max_depth=w.fixtures.get("contest_max_depth"))
@@ -7692,7 +7817,8 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
             mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
             acts = []
             for _ in range(3):
-                acts.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+                acts.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                                      None, HL.subsistence)["acts"])
         finally:
             decision.options.belief_contradicts = original
@@ -7862,7 +7988,8 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
             d = SeasonDriver(w)
             mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
             for _ in range(3):
-                d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+                d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                     draw=draw_factory(w.world_seed, lambda: w.tick)),
                          None, HL.subsistence)
             confs = [c.confidence for p in w.persons.values() for c in p.ledger]
             ev = Counter(e.kind for e in w.log)
@@ -7941,7 +8068,7 @@ def _wd_arm9():
     return A9
 
 
-def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_the_control():
+def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_at_the_control():
     """**`W-D`'s ACCEPTANCE, PINNED ON A DETERMINISTIC SLICE.**
 
     THE QUESTION. The forking exercise (`runs/arm9.json`, seed 0, 4 seasons, 89 worlds) flipped
@@ -7951,9 +8078,21 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     — and `belief_contradicts` could read no claim the corpus deposited (`H-116`). `W-B` opened
     that channel. **Does a fork now change one of the next three decisions?**
 
-    THE ANSWER, AND IT IS PINNED HERE ON ONE CASE: **yes at `actor` and at `total`, never at
-    `none`.** NPC-088, seed 0, 4 seasons, at 2 slots — genuine forks / DIVERGED are
-    **17/0 at `none`, 16/2 at `actor`, 16/4 at `total`**.
+    THE ANSWER, AND IT IS PINNED HERE ON ONE CASE: **yes at `actor` and at `total`, and far less
+    often at `none`.** NPC-088, seed 0, 4 seasons, at 2 slots — genuine forks / DIVERGED are
+    **19/1 at `none`, 19/17 at `actor`, 19/5 at `total`**.
+
+    ⚠⚠ **THE WORD IN THIS TEST'S NAME WAS `never` UNTIL `U4` (2026-09-10) AND IT IS RETRACTED, NOT
+    RE-PINNED.** The `none` arm read 0 and the headline called that a property of the control. It
+    was not: it was the verb-only fingerprint being unable to SEE a subject-only change, plus an
+    argmax unable to turn one into a verb change — two instrument limits reading as an invariant,
+    and this test's own sister (`test_wd_the_decision_fingerprint_…`) already measured **510
+    subject-only changes at this same arm**. `U4`'s sampled tie-break keys each candidate's draw on
+    `(verb, subject)`, so a fork that changes a candidate's subject re-draws it and can promote a
+    different verb; the control moved 0 -> 1. What the control actually controls is narrower and is
+    argued in full at the negative-control block in the body: **§F1 clause 4 cannot fire** there.
+    The name changed with the claim, because a name that asserts a retracted number is a false
+    claim a reader meets before the docstring. `hole_register.yaml` carries the new name too.
 
     ⚠ THE FIXTURE POINT IS NARROWED BY `MAX_ALT`, NOT CHOSEN — BUT NOT TO ONE CELL, AND THE FIRST
     WRITING OF THIS PARAGRAPH SAID IT WAS. `H-117` measured that at `DEFAULT_FIXTURES` (5 x 3 = 15
@@ -8037,7 +8176,16 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
         moves at all** on this slice (0 / 2 / 4, `nolive` 9). Recorded because it is the mutation
         that looks like it should fire and does not: with three persons per tick and a lookahead
         of 3, a same-tick successor rarely changes which slots fill the window. A mutation that
-        does not kill is evidence about the mutation, not about the guard."""
+        does not kill is evidence about the mutation, not about the guard.
+
+    ⚠ **EVERY OTHER FIGURE IN THIS DOCSTRING IS THE 2026-09-04 / 09-07 RECORD AND IS KEPT AS ONE.**
+    The mutation outcomes, the cell survey, the denominators `17 / 16 / 16` and the `(16, 2)` pin
+    quoted inside MUTATION 1 are what those runs produced under the argmax, and they are what makes
+    the mutations checkable against the code of that day. They are NOT the live numbers. The live
+    numbers are the assertions in the body — `(19, 1)`, `(19, 17)`, `(19, 5)` — each carrying its
+    own `[GROUNDED:]` line with the date it was re-measured. Read the body for what is true now and
+    this docstring for what was tried; re-running a mutation against today's tree will move the
+    counts and that is not the mutation failing."""
     A9 = _wd_arm9()
     from ..harness import corpus_run as C
     case = C.apply_rescale(next(c for c in R.load_cases("NPC") if c["id"] == "NPC-088"))
@@ -8081,12 +8229,53 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
         "an alternative outside the real budget (`H-117`)")
 
     # THE NEGATIVE CONTROL — the single most important number in `W-D`.
-    assert got["none"]["diverged"] == 0, (
+    #
+    # ⚠⚠ **ITS STATED PREMISE WAS FALSE BEFORE `U4` TOUCHED IT, AND THIS TEST'S OWN SISTER IS THE
+    # REFUTATION.** The assertion read `== 0` and justified itself with *"the candidate set must be
+    # invariant with respect to everything that happens"*. It is not invariant and never was:
+    # `test_wd_the_decision_fingerprint_…` measures **510 SUBJECT-ONLY changes at this same `none`
+    # arm** and calls that its whole finding — a fork changes what a person deliberates ABOUT
+    # through `questions_for` Q2 -> `q.referents` -> `opening_set` clause 3, with no deposit at all.
+    # What `none` actually controls is NARROWER and is the thing worth controlling: **§F1 clause 4
+    # cannot fire**, because no claim lands in the `requires` vocabulary to contradict a
+    # precondition. The `0` was never a measurement of invariance; it was the verb-only fingerprint
+    # being unable to SEE a subject-only change, plus an argmax unable to turn one into a verb
+    # change. Two instrument limits, reading as a property.
+    #
+    # ⚠ `U4` REMOVED THE SECOND LIMIT, WHICH IS WHY THIS MOVED 0 -> 1. Under a sampled order each
+    # candidate's draw is keyed on `(verb, subject)`, so a fork that changes a candidate's SUBJECT
+    # re-draws it and can promote a different verb. MEASURED, and the alternative was tried: keying
+    # the draw on the VERB ALONE returns this number to 0 — and closes the Q2 channel outright,
+    # `wide` 1 -> **0**, which is the failure the sister test names in as many words (*"If `none`
+    # ever reports 0 divergences under the widened fingerprint, the Q2 channel has closed"*). So
+    # the disjointness of the two channels was an ARTIFACT of the argmax, and no sampler that keeps
+    # the Q2 channel open can preserve it.
+    #
+    # ⚠ THE GUARD IS THEREFORE THE SEPARATION, NOT THE ZERO. `W-B`'s channel must remain the flood
+    # and Q2's the trickle; if they converged, a deposit would have stopped mattering to a decision
+    # and every rate in `W-D` would again be confounded. Stated as a ratio, so that what it names is
+    # a relation between two channels rather than either channel's magnitude.
+    # ⚠⚠ **AND THE BOUND IS A DIAGNOSIS, NOT A NOISE MARGIN — THE EARLIER TAG HERE CLAIMED IT WAS
+    # THE SECOND AND THAT WAS FALSE IN THIS FILE.** It read *"the bound is set one above it so
+    # sampling noise does not flip the gate"*, which cannot be true while `(got["none"]["genuine"],
+    # got["none"]["diverged"]) == (19, 1)` is asserted exactly, 140 lines below: this test tolerates
+    # no noise at all in this number, and a second divergence at the control fails it either way.
+    # What the two bounds here BUY is order and diagnosis — they run first and say WHICH property
+    # broke (a third channel into `opening_set`; the channels converging), where the exact pin can
+    # only say that a number moved. That is worth keeping and is a different claim from the one the
+    # tag made, so the tag is corrected rather than the assertion deleted.
+    # [JUSTIFIED: a CEILING on a trickle, not a game value -- the Q2 channel measures 1 at this slice and the bound sits one above it so the failure message names a THIRD channel rather than a second Q2 fork; the magnitude itself is pinned exactly below]
+    assert got["none"]["diverged"] <= 2, (
         f"the CONTROL arm diverged {got['none']['diverged']} times of {got['none']['genuine']}. "
-        "`none` deposits nothing in the `requires` vocabulary, so §F1 clause 4 cannot fire and "
-        "the candidate set must be invariant with respect to everything that happens. A "
-        "divergence here means some channel other than `W-B`'s reaches `opening_set`, and every "
-        "other figure in `W-D` is confounded until it is found")
+        "`none` deposits nothing in the `requires` vocabulary, so §F1 clause 4 cannot fire; what "  # [JUSTIFIED: the `4` here is §F1's CLAUSE NUMBER inside a message string, not a mechanical constant -- the gate scans line text and cannot tell a citation from a magnitude]
+        "remains reachable is ONLY the Q2 world-state channel, which is a trickle. More than a "
+        "couple means some third channel reaches `opening_set`, and every other figure in `W-D` "
+        "is confounded until it is found")
+    # [JUSTIFIED: a SEPARATION RATIO, not a game value -- measured 17 vs 1 (17x); 4x is a wide floor chosen so the guard fires on the channels converging and not on the population moving. The `1` is a zero-guard on the denominator]
+    assert got["actor"]["diverged"] >= 4 * max(got["none"]["diverged"], 1), (
+        f"`W-B`'s channel is no longer dominant over the control's: {got}. The negative control "
+        "is only a control while a deposit matters MORE to a later decision than the Q2 channel "
+        "does; at parity the `actor` figures stop being attributable to `W-B` at all")
     # ⛔⛔ THE ACCEPTANCE ASSERTED `got["actor"]["diverged"] > 0` AND IT FIRED ON THE `R7` FAN-OUT
     # FLIP (2026-09-07). **THIS IS THE ONE PLACE THE FLIP COSTS SOMETHING, AND IT IS RECORDED AS A
     # LOSS RATHER THAN RE-PINNED AS A FACT.** Measured, same slice, same seed, both variables:
@@ -8190,12 +8379,24 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     # separately in
     # `test_wb_clause_four_fires_…`, because "the old drop vanished" is what a regression looks
     # like and had to be ruled out rather than assumed).
+    # ⚠⚠ **14 of 18 -> 17 of 19, `U4` (2026-09-10), AND THE MOVE IS IN THE GOOD DIRECTION.** The
+    # sampled tie-break changed the act a fork's person takes, so the fork population itself shifted
+    # (18 genuine -> 19) and the share that reaches a LATER decision rose from 78% to **89%**. That
+    # is `R-01`/`R-02`'s own channel widening, and it is the second thing U4 bought after the
+    # alphabetical tie-break died. It is recorded as a re-derivation and not as an adjustment: this
+    # number is the acceptance `W-D` lost on 2026-09-07 and recovered on 2026-09-10, so it may only
+    # move with a reason, and the reason is in `decision/choose.py::_sample_order`.
     # [GROUNDED: measured 2026-09-10, NPC-088 slice, seed 0, 4 seasons at 2 slots -- 14 of 18 genuine forks diverge at the shipped arm, recovering the 0 of 16 pinned on 2026-09-07]
-    assert got["actor"]["diverged"] == 14, (
-        f"the shipped default diverged {got['actor']['diverged']} times of "
-        f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
-        "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
-        "`move`; a 0 means they are gone again and a different number means the population moved")
+    # [GROUNDED: measured 2026-09-10, NPC-088 slice, seed 0, 4 seasons at 2 slots -- 17 of 19 genuine forks diverge at the shipped arm (`choice_temperature=0.1`), up from 14 of 18 at the argmax]
+    # ⚠ THE COUNT IS ASSERTED ONCE, AND NOT HERE. An earlier writing of this block asserted
+    # `got["actor"]["diverged"] == 17` at this point and then again as `== (19, 17)` twenty lines
+    # below — the SAME claim twice, so the first could not fail on any state the second would pass
+    # (§0.1 pt 2: an assertion that cannot observe a failure the file does not already exclude is
+    # not a weak test but an absent one). What belongs at this point is the PROPERTY the paragraphs
+    # above argue for, and it is asserted already: the dominance ratio against the negative control,
+    # which survives a legitimate re-pin. The count is pinned WITH ITS DENOMINATOR below, where a
+    # moved population and a moved rate are distinguishable; the diagnosis this duplicate carried
+    # moved down with it rather than being dropped.
     # AND THE PROPERTY STILL EXISTS SOMEWHERE, which is what stops the zero above reading as
     # "§F1 clause 4 is dead". At `observation_deposit_mode: total` the same slice still diverges.
     assert got["total"]["diverged"] > 0, (
@@ -8210,13 +8411,24 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_
     # the denominator asymmetry the docstring above insists on asserting rather than hiding, and
     # it has gone away rather than been papered over.
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- 18 genuine forks in every arm, 0 divergences at the control]
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (18, 0), got
+    # [GROUNDED: re-measured 2026-09-10 under `U4` -- 19 genuine forks in every arm, 1 divergence at the control (the Q2 trickle, see the negative-control block above)]
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (19, 1), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
+    # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
+    # so the fork population shifted (18 -> 19) and the share reaching a LATER decision rose from
+    # 78% to 89%. `R-01`/`R-02`'s channel WIDENED; that is the second thing the unit bought.
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 — 18 genuine forks, 14 divergences at the shipped arm]
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (18, 14), got
+    # [GROUNDED: re-measured 2026-09-10 under `U4` — 19 genuine forks, 17 divergences at the shipped arm]
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (19, 17), (
+        f"the shipped default diverged {got['actor']['diverged']} times of "
+        f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
+        "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
+        "`move`; a 0 means they are gone again, and a moved DENOMINATOR means the fork population "
+        "moved rather than the rate — which is why the pair is pinned and not the count alone")
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- 5 of 18 at the `total` deposit arm]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (18, 5), got
+    # [GROUNDED: re-measured 2026-09-10 under `U4` -- 5 of 19 at the `total` deposit arm, unmoved in absolute terms]
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (19, 5), got
     # AND THE TWO LAYERS ARE SEPARATED. Every genuine fork changes the act/event stream — that was
     # already true BEFORE `W-B` and is not the finding. The finding is the DECISION count above.
     assert all(g["acts_differ"] == g["genuine"] and g["hash_differ"] == g["genuine"]
@@ -8327,11 +8539,20 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     print(f"\n  W-D.5 — NPC-088, 2 slots, seed 0, 4 seasons — DIVERGED by fingerprint: {got}")
     assert all(g["genuine"] > 0 for g in got.values()), got
     # THE FINDING: the control is NOT 100% once a decision includes what it is ABOUT.
-    assert got["none"]["verbonly"] == 0 and got["none"]["wide"] > 0, (
-        f"the control arm reads {got['none']}. Verb-only 0 and (verb, subject) > 0 is the whole "
-        "finding: a fork changes what a person deliberates ABOUT even with no `W-B` deposit at "
-        "all, through `questions_for` Q2 -> `q.referents` -> `opening_set` clause 3. If the "
-        "second number is now 0, that channel has closed and `W-D`'s reading must be rewritten")
+    # ⚠⚠ **THE DISJOINTNESS HALF IS RETIRED BY `U4`, AND THE CHANNEL HALF IS WHAT THIS GUARDS.**
+    # This read `verbonly == 0 and wide > 0` — the two channels reaching a decision at different
+    # resolutions and never the same one. MEASURED under a sampled order: `none` reads
+    # `wide 1, verbonly 1`. The `verbonly == 0` half was an ARGMAX ARTIFACT: a subject-only change
+    # could not promote a different verb while the top of the ranking was fixed, and it can once
+    # the order is drawn. The falsifier was run — keying the draw on the verb alone restores
+    # `verbonly 0` AND drives `wide` to **0**, i.e. it buys the disjointness back by closing the
+    # very channel this test exists to observe. So `wide > 0` is the half that carries the finding
+    # and it is asserted alone; `verbonly` is now reported rather than pinned to zero.
+    assert got["none"]["wide"] > 0, (
+        f"the control arm reads {got['none']}. `wide` > 0 is the whole finding: a fork changes "
+        "what a person deliberates ABOUT even with no `W-B` deposit at all, through "
+        "`questions_for` Q2 -> `q.referents` -> `opening_set` clause 3. If it is 0 that channel "
+        "has closed and `W-D`'s reading must be rewritten")
     # AND `W-B` ADDS ON TOP OF IT rather than being the only channel — HALF OF WHICH SURVIVED THE
     # `R7` FAN-OUT FLIP AND HALF OF WHICH DID NOT, which is the sharpest statement of that flip's
     # one cost. Measured, same slice, both fan-out arms:
@@ -8343,7 +8564,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # changes on top of it, `W-B` has stopped reaching a decision"* — and it has, at this
     # resolution, on this 16-fork slice. It is recorded rather than relaxed, and the arm is not
     # re-chosen on it: see the reasoning at
-    # `test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_the_control`,
+    # `test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_at_the_control`,
     # where the same loss is pinned and `H-54`'s hash-ordering result is why 16 forks cannot
     # overturn `19_PLAN.md` step 1's choice of arm.
     assert got["actor"]["wide"] > got["none"]["wide"], (
@@ -8359,9 +8580,17 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # drops went **25** (all `move`) to **1,104 decision-affecting** across five verbs (1,491
     # raw; `restore`'s 387 are on a verb `resolvable_verbs()` never offers), both sides measured
     # by one script over the same 89 worlds.
-    # ⚠ `wide` AND `verbonly` ARE NOW EQUAL AT BOTH LIVE ARMS — 14/14 at `actor`, 5/5 at `total` —
-    # while the control keeps the split at 2/0. That is worth naming rather than reading as a
-    # tidier result. The widened fingerprint distinguishes forks that change WHAT a person deliberates
+    # ⚠ `wide` AND `verbonly` ARE NOW EQUAL AT BOTH LIVE ARMS — 17/17 at `actor`, 5/5 at `total`
+    # (14/14 and 5/5 before `U4`) — while the control keeps the split at 1/0. That is worth naming
+    # rather than reading as a tidier result.
+    # ⚠⚠ **AND THE CONTROL'S SPLIT NEARLY DIED IN THE BUILDING OF `U4`, WHICH IS WHY THE SAMPLER IS
+    # KEYED THE WAY IT IS.** The first `_sample_order` took ONE noise stream per person and consumed
+    # it down the ranked list, so adding or removing a single candidate shifted every assignment
+    # after it — and this control read `wide 0, verbonly 0`, i.e. the residual Q2 channel appeared
+    # to have closed. It had not: the reshuffle was swamping the fork's own signal. Keying the draw
+    # on `(verb, subject)` so a candidate's noise is a property OF THAT CANDIDATE restored it to
+    # `wide 1, verbonly 0`. THIS ASSERTION IS WHAT CAUGHT THAT, and a session that had re-pinned it
+    # to 0 would have shipped a sampler whose experiments could not attribute anything. The widened fingerprint distinguishes forks that change WHAT a person deliberates
     # about from forks that change WHICH VERBS they consider; at the live arms every subject-level
     # divergence is now also a verb-set one, because the verb whose Candidate clause 4 drops IS
     # the one bound to that subject. The control still shows the split (wide 2, verbonly 0), which
@@ -8371,7 +8600,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # pt 4 refuses to take on trust. Distinct corpus behaviours over the 89 live cases, measured:
     #   before the six .................................  2
     #   the six, conviction-inert (sparse default 0.0) . 10   <- world-driven; the six bind or do not
-    #   the six, weighted cells (SHIPPED) ..............  16   <- the weights add six
+    #   the six, weighted cells, ARGMAX ................  16   <- the weights add six
+    #   the six, weighted cells, SHIPPED (`U4`, tau=0.1)  10   <- the draw converges the SETS
     #   `uniform` — EVERY cell equal, whole table .......  5   <- the control for the table itself
     # So the weights are load-bearing and so is the rest of the table, and neither number is the
     # other's. ⚠ THE `tell` STRADDLE IS NOT THE WEIGHTS' DOING: `lo == {1, 2}` already held at the
@@ -8381,22 +8611,37 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # `q.referents` -> `opening_set` clause 3 and not from any belief. Five more resolvable verbs
     # change which alternative a fork reaches within `A9.MAX_ALT`, and that is the likely route —
     # but it is a guess, not a measurement, and the assertion below pins the number rather than
-    # the explanation. The property the docstring names still holds: `none` verbonly 0 and `none`
-    # wide > 0, so the channel is narrower and not closed.
+    # the explanation. The property the docstring names still holds: `none`
+    # wide > 0, so the channel is narrower and not closed. ⚠ THE `none verbonly 0` HALF OF THAT
+    # SENTENCE IS RETIRED BY `U4` — see the block above the `wide` assertion: the disjointness it
+    # asserted was an argmax artifact, and keying the draw on the verb alone buys it back only by
+    # driving `none wide` to 0, i.e. by closing the very channel this test exists to observe.
+    # ⚠ 14 -> 17 UNDER `U4`, ON A POPULATION THAT ALSO MOVED (18 -> 19 genuine forks). The sampled
+    # tie-break changes which act a fork's person takes, so numerator and denominator shift
+    # together; the share goes 78% -> 89%. Re-derived rather than adjusted, as this cell demands.
     # [GROUNDED: measured 2026-09-10, same slice -- 14 VERB-SET divergences at the shipped arm, recovering the 0 pinned on the 2026-09-07 R7 flip]
-    assert got["actor"]["verbonly"] == 14, (
+    # [GROUNDED: re-measured 2026-09-10 under `U4` -- 17 VERB-SET divergences of 19 at the shipped arm; 14 of 18 at the argmax immediately before]
+    assert got["actor"]["verbonly"] == 17, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
         "re-derived rather than adjusted here")
     # Reproduce with the A9S/A9 loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 on the R7 flip — `none` 7 -> 6 under the widened fingerprint]
+    # ⚠ ALL THREE PAIRS RE-DERIVED UNDER `U4` (2026-09-10). The genuine-fork population is 19 in
+    # every arm (was 18) because the sampled tie-break changes which act a fork's person takes, so
+    # a different set of slots carries a real alternative within `A9.MAX_ALT`. The control's `wide`
+    # falls 2 -> 1 and the shipped arm's rises 14 -> 17: the Q2 trickle narrows while `W-B`'s flood
+    # widens, which is the separation the negative-control block above now guards as a ratio.
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 — 18 genuine forks in every arm]
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (18, 2), got
     # [GROUNDED: measured 2026-09-07 on the R7 flip — `actor` 11 -> 8 under the widened fingerprint]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (18, 14), got
+    # [GROUNDED: re-measured 2026-09-10 under `U4` — 19 genuine forks in every arm; control wide 1]
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (19, 1), got
+    # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (19, 17), got
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (18, 5), got
+    # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (19, 5), got
 
 
 # ===========================================================================

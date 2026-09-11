@@ -55,7 +55,7 @@ from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, U
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.world_q import questions_for
 from ..state.carriers import Act, Event, Office, Person, Proposition, Rung, Site, Tenure
-from ..state.ids import H, ROOT
+from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 from ..data import files
 from . import probes as P
@@ -352,7 +352,8 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     w = build_at(case, seed)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs())
+    ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                      draw=draw_factory(w.world_seed, lambda: w.tick))
     try:
         for _ in range(n):
             # `H-87` -- S39.3 gives the contest depth cap NO DEFAULT, so an uncapped call raised
@@ -403,7 +404,8 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     w2 = build_at(case, seed)
     d2 = SeasonDriver(w2)
     mint2 = lambda pid, verb, subj: H(w2.world_seed, w2.tick, pid, f"act:{verb}:{subj}")
-    ch2 = make_chooser(w2.fixtures, mint2, verbs=resolvable_verbs())
+    ch2 = make_chooser(w2.fixtures, mint2, verbs=resolvable_verbs(),
+                       draw=draw_factory(w2.world_seed, lambda: w2.tick))
     try:
         for _ in range(n):
             # ⚠ THE SAME FIXTURE, ON BOTH CALL SITES. A cap on the measured run and not the R4
@@ -498,8 +500,8 @@ def main(seed: int = 0) -> int:
     if sep:
         tot = sep[0][1]
         print(f"\n  RANKING DISCRIMINATION   {min(n for n, _ in sep)}..{max(n for n, _ in sep)} of "
-              f"{tot} candidates carry a nonzero conviction score; the rest TIE and are ordered "
-              f"alphabetically by verb name")
+              f"{tot} candidates carry a nonzero conviction score; the rest TIE and the tie is "
+              f"broken BY THE DRAW (U4/H-96), not by the verb's name")
     # ⚠ A CASE THAT EXECUTED, WHATEVER ITS BAR STATUS. `W18` renamed the statuses (`RAN` became
     # `RUNS-UNDECLARED` / `RUNS-ALONE-UNDECLARED`), and this filter still named the old ones — so
     # the verb counts went to 0 of 32 the moment the bar landed, silently, because an empty set has

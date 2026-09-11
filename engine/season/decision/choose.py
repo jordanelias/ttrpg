@@ -23,7 +23,8 @@ string. Enforced BY PATH over this directory (`04:1046`).
 
 from __future__ import annotations
 
-from typing import Callable, Optional
+import math as _math
+from typing import Any, Callable, Optional
 from ..data.rosters import CONVICTION_AXES, SCENE_PACKING_RULES
 from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
 from ..gaps import Unspecified
@@ -71,8 +72,129 @@ def urgency(subsistence: int, fx: "Fixtures") -> float:
     return float(subsistence) / float(fx.get("condition_scale"))
 
 
+def _sample_order(ranked: list, score, p: Person, fx: "Fixtures", draw) -> list:
+    """`U4` / `H-96`: the triage stops being decided by the SPELLING of a verb.
+
+    THE DEFECT, MEASURED WITH A CONTROL (2026-09-10). `H-96` records that only a handful of
+    candidates carry a nonzero conviction score and that the triage is *"decided, for most
+    candidates, BY ALPHABETICAL ORDER OF THE VERB'S NAME"* (`hole_register.yaml`, H-96's `hole:`).
+    ⚠ THE SHORTER PHRASING *"the rest TIE and are ordered alphabetically by verb name"* IS NOT
+    H-96's and was attributed to it in the first writing of this docstring — it is
+    `requirements.yaml`'s R-08 and this plan's own §6. A paraphrase inside quotation marks, pointed
+    at the wrong row; corrected rather than dropped, because mis-sourcing a quote is the recurring
+    defect this lane's §14 names.
+
+    WHAT THE DEFECT COST, measured by adding one ruled verb (`release`, `04 §A.3` row 14) and then
+    running the SAME verb, predicate and effect again under a name that sorts last: the
+    early-sorting name executed in **18** corpus cases and displaced 71 acts (`utter` ×56); the
+    late-sorting one executed in **5** and displaced **2**. Same mechanism, same world, same seed —
+    only the letters differed. ⚠ **THAT PAIR WAS MEASURED IN-SESSION AND IS NOT REPRODUCIBLE FROM
+    THIS TREE**, because `release` is not in `verb_table.yaml`: it is a separate unit, held behind
+    this one. To re-run it, add the verb and diff the corpus's executed sets against a rename of it.
+    Said plainly rather than left to read as a standing artifact (§0.1 pt 3). A design in which adding a correct verb makes the world
+    do LESS, because of where its name falls in the alphabet, has its triage in the wrong place.
+
+    THE FIX IS PLACKETT-LUCE VIA GUMBEL, and it is one line of arithmetic for a reason. Adding
+    `-log(-log(u))` to `score/tau` and sorting descending samples an ORDER without replacement
+    whose probabilities are `softmax(score/tau)` — so this generalises the old ranking rather than
+    replacing it: as `tau -> 0` the score term dominates and the order converges on the score
+    order, with the residual ties broken by the DRAW instead of by the alphabet. An ORDER is what
+    is needed, not a pick: `pack_scenes` takes the ranked list and slices it by budget, so a
+    chooser that sampled a single winner would leave the rest of the triage alphabetical.
+
+    ⚠ `tau == 0` SHORT-CIRCUITS TO THE OLD PATH, AND THE ARM VALIDATES THE PLUMBING RATHER THAN
+    THE SAMPLER. The zero-temperature limit of a softmax over TIED scores is uniform over the tied
+    set, not the alphabetical order — so byte-identity at `tau = 0` needs this discontinuous case,
+    and that case then exercises the OLD code. Stated plainly because both prior plans named the
+    `tau = 0` arm as the sampler's control and neither noticed: it controls that the draw is
+    threaded, the signature is unchanged and nothing else moved. The sampler's own falsifier is
+    the rename control above, re-run.
+
+    ⚠ NO SILENT FALLBACK. A missing `draw` at `tau > 0` RAISES rather than quietly returning the
+    alphabetical order: that would be S42.2.1's *"a silent default does not fail; it answers,
+    plausibly and wrongly, forever"* — and it would answer with the exact defect this exists to
+    remove, while every instrument reported the sampler as live.
+
+    ⚠⚠ **A SECOND CLAUSE IS NOT MET: THE DRAW IS NOT CONSTRUCTED BY THE DRIVER.** `U4` lists
+    `loop/driver.py` as the file that *"constructs and passes `draw`"*, and `04:861-862` says of an
+    RNG *"its generator must be constructed by the driver from the run seed and passed down exactly
+    as `World` is"*. It is instead built at every CALL SITE (`harness/headless.py`,
+    `harness/corpus_run.py` x2, `harness/probes.py` x2, the degree-sweep arms, and the tests).
+    **The structural reason: the driver never constructs the chooser.** `SeasonDriver.season(choose,
+    ...)` RECEIVES an already-built one, so the only way the driver could own the draw is to hand it
+    to `choose` — and `choose`'s four-parameter signature is pinned as a source string by
+    `test_choose_receives_no_world`, which `U4` itself insists must not change. The two clauses of
+    the spec are in tension and this took the one that a test enforces.
+    ⚠ SCOPE, STATED SO IT IS NOT OVERREAD: `04:858-860` scopes that sentence to **R-09's** producer
+    (*"chains of events within a scene are probabilistic"*), which is unbuilt; this is R-08's
+    chooser. But `04:862-863` gives its reason as *"so the roll is not built the idiomatic way first
+    and retrofitted after"*, which is exactly the hazard here, and `U4`'s file list asked for the
+    driver independently of `04`. **Whether a driver-owned generator is required before R-09's roll
+    lands is the one question in this unit a ruling could change.**
+
+    ⚠ **ONE CLAUSE OF THE UNIT'S SPEC IS NOT MET, AND IT IS DECLARED RATHER THAN QUIETLY DROPPED.**
+    `U4` says *"the draw `purpose` includes the round (U2)"*. **U2 is unbuilt** — `SeasonDriver.season`
+    still runs DELIBERATE once per season, so there is no round index to include and a literal
+    reading would put a constant in every purpose. The purpose is therefore
+    `choice:<verb>:<subject>`, seeded per `(world_seed, tick, person)` by the factory. **What this
+    costs the day U2 lands:** a person deliberating twice inside one tick would draw the IDENTICAL
+    stream in both rounds, because `tick` has not advanced — so `U2` must add its round to this
+    purpose in the same commit that adds rounds, or the second round is a replay of the first.
+    ⚠ AND THE ADJACENT PRIMITIVE IS NAMED RATHER THAN IGNORED: the tree already owns a per-tick
+    draw ordinal, `state/world.py::World.new_draw` (*"`S33`'s draw ordinal. Reset at the start of
+    every tick by `season()`"*), and `harness/probes.py`'s own header argues the general case — *"A
+    CONTENT-DERIVED draw was the second attempt and it collides whenever two draws in one tick are
+    alike."* It is NOT used here for two reasons, both structural: it is a method on `World`, which
+    `AX-2` bars from `decision/` by path (`04:1046`), and an ORDINAL would destroy the
+    candidate-keyed replay this function depends on — the noise must be a property of the candidate,
+    not of the order it was reached in. Recorded here because a declaration that a mechanism is
+    missing, made without naming the adjacent one, is the defect this lane keeps finding."""
+    tau = float(fx.get("choice_temperature"))
+    if tau == 0 or len(ranked) < 2:
+        return ranked
+    if draw is None:
+        raise Unspecified(
+            "the choice draw", "H-96",
+            needs=f"`make_chooser(fx, mint, verbs, draw)` with a draw at choice_temperature={tau}",
+            law="U4/H-96 -- at a nonzero temperature the order is SAMPLED, and a chooser built "
+                "without a draw would silently fall back to the alphabetical tie-break this "
+                "replaces, reporting a sampler that is not running")
+    keyed = []
+    for c in ranked:
+        # ⚠⚠ THE NOISE IS KEYED BY THE CANDIDATE, NOT DRAWN IN LIST ORDER, AND THE DIFFERENCE IS
+        # WHAT MAKES A FORK ATTRIBUTABLE. The first version took ONE stream per person and consumed
+        # it down `ranked` — so adding, removing or reordering a single candidate shifted the
+        # noise-to-candidate assignment WHOLESALE, and every downstream difference between two arms
+        # of an experiment was the reshuffle rather than the thing under test. `W-D` measures
+        # exactly that: whether a forked decision changes a LATER one. With a positional stream the
+        # fork's own signal is swamped by its side effect on the draw, and the control arm's
+        # residual channel read 0 where it had read 2. Keying on `(verb, subject)` makes a
+        # candidate's noise a property OF THAT CANDIDATE: identical candidates get identical draws
+        # in both arms, so what differs between them is what actually differed.
+        # ⚠ It is also the only form in which the `tau = 0` control means anything, because it is
+        # the only form where a candidate's treatment does not depend on its neighbours.
+        # ⚠ ONE STREAM PER CANDIDATE, AND THE RETRY ADVANCES IT. The first version re-called
+        # `draw(...)` inside the loop with a CONSTANT purpose, which re-seeds an identical
+        # `Random` and returns the identical value — an infinite loop wearing a retry's clothes,
+        # on the one input (`u == 0.0`) the loop exists to handle. Found by this unit's own
+        # adversarial pass rather than in play, because `random()` returns exactly 0.0 about
+        # once in 2^53 draws: a guard that cannot do its job is not a weak guard but an absent
+        # one (`CLAUDE.md` §0.1 pt 2), and a hang is the worst shape for one.
+        rng = draw(p.id, f"choice:{c.verb}:{c.subject or '-'}")
+        u = rng.random()
+        while u <= 0.0:                   # `random()` is [0,1); log(0) is the one unusable draw
+            u = rng.random()              # SAME stream, so it advances and can terminate
+        g = -_math.log(-_math.log(u))
+        # the trailing two terms are a STABLE TOTAL ORDER for exact float ties, which continuous
+        # noise makes measure-zero; they are not the tie-break -- `g` is.
+        keyed.append((-(score(c) / tau + g), c.verb, c.subject or "", c))
+    keyed.sort(key=lambda t: t[:3])
+    return [t[3] for t in keyed]
+
+
 def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
-                 verbs: Optional[frozenset] = None) -> Callable[..., list[Act]]:
+                 verbs: Optional[frozenset] = None,
+                 draw: Optional[Callable[[str, str], Any]] = None) -> Callable[..., list[Act]]:
     """§F2's decision policy as a FACTORY, so `choose(p, view, sensation, ask_budget)` keeps the
     FOUR-parameter signature §26 states while still reaching its params.
 
@@ -109,6 +231,7 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
                     + u)
         # Deterministic: score DESC, then verb then subject, so a tie cannot depend on dict order.
         ranked = sorted(cands, key=lambda c: (-score(c), c.verb, c.subject or ""))
+        ranked = _sample_order(ranked, score, p, fx, draw)
         # §26.3: the PERSON triages. The slice is the person's own choice of what to leave
         # undone, taken against a budget they ASKED for -- not an engine truncating a tail.
         # `W17`: the budgeted unit is the SCENE, so the slice is over scenes and each carries up

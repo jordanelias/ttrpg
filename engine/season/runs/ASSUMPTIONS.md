@@ -28,6 +28,7 @@ exercised by this run.**
 | `view_k` | `12` | no — a harness fixture |
 | `wear_per_season` | `{'harbour': 10, 'seam': 10, 'body': 10}` | no — a harness fixture |
 | `confidence_default` | `100` | no — a harness fixture |
+| `choice_temperature` | `0.1` | no — a harness fixture |
 | `claim_decay_per_season` | `5` | no — a harness fixture |
 | `fan_out_mode` | `all_five` | no — a harness fixture |
 | `contest_max_depth` | `2` | no — a harness fixture |

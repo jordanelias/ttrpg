@@ -34,7 +34,7 @@ from ..data.verbs import VERB_TABLE
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Person, Proposition, Rung, Site, Tenure
-from ..state.ids import H
+from ..state.ids import H, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -126,7 +126,8 @@ def run(seasons: int = 2, seed: int = 0) -> dict:
         # `H-87`: the contest depth cap is the CALLER's to supply (S39.3 refuses a default), and
         # artifact 2 never had to decide until Part E's `contests:` column became real and the
         # seam started firing on `kill / wound`.
-        out.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs()),
+        out.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                                         draw=draw_factory(w.world_seed, lambda: w.tick)),
                             None, subsistence,
                             contest_max_depth=w.fixtures.get("contest_max_depth")))
     return dict(seasons=out, hash=w.content_hash(), world=w,

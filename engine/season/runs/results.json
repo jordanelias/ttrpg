@@ -9449,7 +9449,7 @@
   "P31": {
    "id": "P31",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION: 'create_record' at Precedent +0.9, 'evade / defy' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
+   "detail": "PASS BY CONSTRUCTION: 'research' at Precedent +0.9, 'refract' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
    "kind": null,
    "section": "S9",
    "title": "a hidden motive biases every decision",
@@ -9503,7 +9503,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 27 candidates were OFFERED from the computed option set and only 17 of 37 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['create_record', 'examine', 'interview', 'move', 'reconstruct', 'research', 'speak'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 27 candidates were OFFERED from the computed option set and only 17 of 37 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'reconstruct', 'research', 'speak', 'surveil', 'transfer', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -11042,10 +11042,10 @@
  "_trace_counts": {
   "STEP": 1932,
   "BARRIER": 655,
-  "DECISION": 665,
+  "DECISION": 666,
   "QUERY": 6023,
   "NOTE": 471,
-  "WRITE": 10390,
+  "WRITE": 10391,
   "EVENT": 10359,
   "ACT": 75,
   "CLAIM": 1022,

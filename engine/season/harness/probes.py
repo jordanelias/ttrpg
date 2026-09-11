@@ -48,7 +48,7 @@ from ..seam import ContestError, contest
 from ..state.carriers import (
     Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View,
 )
-from ..state.ids import H, ROOT
+from ..state.ids import H, ROOT, draw_factory
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -203,7 +203,8 @@ def chooser(w, only=None, verbs=None):
     ⚠ IT DOES NOT TAKE A ROSTER, and it cannot: `opening_set` computes from the verb table now.
     A probe that wants a verb in the set must put the verb in `verb_table.yaml`."""
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
-    inner = make_chooser(w.fixtures, mint, verbs=verbs)
+    inner = make_chooser(w.fixtures, mint, verbs=verbs,
+                         draw=draw_factory(w.world_seed, lambda: w.tick))
     def choose(p, v, s, ask_budget):
         return inner(p, v, s, ask_budget) if (only is None or p.id == only) else []
     return choose
@@ -872,7 +873,8 @@ def p31():
     # `create_record` and `destroy_record` sit at opposite signs on `Precedent` in the alignment
     # table, so a conviction on that axis has somewhere to move the ranking TO. Rev 2 could not
     # test this: it scored an authored roster of three verbs the table does not carry.
-    inner = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}")
+    inner = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}",
+                         draw=draw_factory(w.world_seed, lambda: w.tick))
     p.convictions = {"Precedent": 0.9}
     # `W17`: `choose` returns SCENES now, so the pick is the first interaction of
     # the first scene. The default policy fills scenes in score order, so that is

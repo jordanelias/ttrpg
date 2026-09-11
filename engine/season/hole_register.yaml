@@ -1239,8 +1239,8 @@ rows:
     owner:     "the alignment table (H-66) and §F2's scoring function"
     grade:     "measured"
     default:   ""
-    site:      "corpus_run.py — RANKING DISCRIMINATION 2..7 of 22 candidates carry a nonzero conviction score, over 86 worlds"
-    sweep:     []
+    site:      "corpus_run.py — RANKING DISCRIMINATION, the count of candidates carrying a nonzero conviction score, over the runnable worlds · AND `Fixtures choice_temperature`, the injected magnitude of the remedy (U4): the order is sampled by `softmax(score / choice_temperature)` in `decision/choose.py::_sample_order`, with `0` the pre-U4 argmax kept as the control"
+    sweep:     [0, 0.1, 0.25, 0.5, 1.0]
     unblocks:  "every act any person ever chooses"
     cite:      "FOUND BY RUNNING THE WHOLE CORPUS, at Jordan's direction. Command: `python corpus_run.py`. ⚠ THIS ROW REPLACES A HEADLINE ITS OWN ADVERSARIAL PASS OVERTURNED, AND THE RETRACTION IS THE USEFUL PART. Rev 1 published *the rung ladder decides nothing about behaviour — three worlds produce ONE verb set*, graded `measured`. It was a THEOREM ABOUT THE FIXTURE: `build_at` hung every person, the Proposition, the convictions and the sites on the deepest rung, so `scale` varied only the count of rungs ABOVE the actors — and `View.__slots__` is `(holder, claim_ids, question)` with `__getattr__` raising, so L2 closes by TYPE the only channel through which a rung could reach a verb choice. The outcome was fixed before the run, by a ruled refusal plus an identical fixture. §0.1 pt 4: the control arm was the same arm. ⚠ REV 2 MAKES THE WORLDS GENUINELY DIFFER — convictions seeded per case id over the `conviction_axes` roster, season counts read from `temporal.span_seasons` (1..6), a Date where `ENDINGS_CLASSIFIED.yaml` says the ending is forced by a threshold — AND THE EXECUTED SET IS STILL ONE. This row is why: with 22 candidates and 15 slots the triage is real, but the conviction term can separate only 2 to 7 of the 22, so the surviving set barely moves and its order is mostly alphabetical. ⚠ IT IS `H-66` ARRIVING AS A BEHAVIOUR: that row grades the alignment table `assumption` and sweeps it `declared / uniform / sign_only`, and the `uniform` arm is described as the CONTROL that makes convictions unable to discriminate at all. The measured state is much closer to `uniform` than to `declared`, not because the weights are wrong but because the table is SPARSE."
     source:    "corpus run, Jordan-directed 2026-09-02"
@@ -2707,7 +2707,7 @@ rows:
       is the only contesting verb and `resolvable_verbs()`, the set `make_chooser` is given,
       excludes it (intersection empty), so the probe was left unedited and 0 of 89 cases failed in
       any arm. FALSIFIERS:
-      `test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_never_at_the_control` and
+      `test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_at_the_control` and
       `test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_percent_under_it`,
       both on NPC-088 as a deterministic slice — the full sweep is NOT gated and that is stated in
       both docstrings. Mutations run 2026-09-04: forcing every arm to `none` reds the first;

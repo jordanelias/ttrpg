@@ -338,6 +338,29 @@ rows:
       candidates carry a nonzero conviction score, so most choices are settled by verb name rather
       than by anything about the person. There is no mechanism by which a person declines the
       optimum, and no mechanism by which inclination breaks a tie.
+      ⚠ **THE LAST SENTENCE IS FALSE AS OF `U4` (2026-09-10), AND THE ROW STAYS `partial` ANYWAY —
+      because the two halves it names came apart.** *A person declines the optimum*: **BUILT.** The
+      order is sampled, `softmax(score / choice_temperature)` via Gumbel, in
+      `engine/season/decision/choose.py::_sample_order`, so the top-ranked candidate is likely and
+      no longer certain. Falsifier:
+      `test_u4_the_choice_is_sampling_and_the_argmax_is_its_zero_temperature_control` — twenty
+      seeds over ONE person and view yield >=2 distinct top acts, while the identical arm at
+      `choice_temperature = 0` collapses to exactly one, so the spread is the sampler's and not the
+      fixture's. *Inclination breaks a tie*: **STILL NOT BUILT**, and it cannot be while the
+      alignment table is sparse (`H-96`'s ranking half · `H-66` · `U3`). A tie is now broken by the
+      DRAW, which is not the person — it is the absence of a reason, not a reason of theirs. That
+      is the whole of why this row does not go `met`.
+      ⚠ WHAT `U4` ACTUALLY REMOVED, measured with a control: the ALPHABET deciding a triage. One
+      ruled verb (`release`, `04 §A.3` row 14) under a name sorting EARLY executed in 18 corpus
+      cases and displaced 71 acts (`utter` x56); the SAME verb, predicate and effect under a name
+      sorting LAST executed in 5 and displaced 2. After `U4` the pair reads 13 vs 14 and 22 vs 25 —
+      the gap collapses into noise. ⚠ AND THE COST IS RECORDED WITH IT: between-world variety falls
+      monotonically with temperature (distinct executed sets, 89 live cases: tau=0 -> 16 · 0.1 -> 10
+      · 0.25 -> 8 · 0.5 -> 7 · 1.0 -> 7), which is the opposite of what `U4`'s plan predicted, so
+      the shipped `0.1` is the LEAST arm that removes the defect rather than a tuned one.
+      ⚠ THE CITATION ABOVE IS STALE and is kept as written with the correction attached:
+      `decision.py` became the DIRECTORY `decision/` at Arc 1 (`ED-IN-0206`), so the sort lives at
+      `decision/choose.py::make_chooser`.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' + tie ordering"
     blocks: [W26, H-62]
     needs_jordan: false
