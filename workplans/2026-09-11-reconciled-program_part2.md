@@ -67,44 +67,71 @@ deterministic extraction, and its 4,096-token cache floor makes the fan-out no c
 **not earlier** than 1, which closes the 17 SC rows whose subject this retires · **not later** it is the
 repo's standing "ruled and unexecuted" instance and touches no engine-spine file.
 
-⚠⚠ **STEP (a) AS FIRST WRITTEN IS WRONG. PRE-FLIGHT RUN 2026-09-11, AGAINST THE CODE RATHER THAN THE
-PLAN, AND IT OVERTURNS THE PREMISE.** Four measurements:
+⚠⚠ **THIS POSITION HAS NOW BEEN GOT WRONG TWICE, IN THE SAME SHAPE, AND THE SECOND TIME IS RECORDED
+HERE BECAUSE IT IS THE MORE INSTRUCTIVE ONE.** A pre-flight censused **imports** of
+`degree_extension.py`, found six, none under `engine/season/`, and concluded the rule was "live on the
+measurement path, not the game path". **A read-only antagonist broke that in one move: THE ENGINE DOES
+NOT IMPORT THIS PACKAGE, IT BINDS IT BY STRING** — which is the mechanism `CLAUDE.md` §3 states
+outright (*"the engine still depends on subsystems, resolved by string at first call, so one is swapped
+by editing a registry row"*). An import census cannot see a registry row. Verified on disk:
 
-1. **`seam/ladder.py` HAS NO `veto` PARAMETER.** `degree_of(result, subject)` at `:138` is the whole
-   signature. The `degree(margin, veto?) -> Degree` on `ladder.py:2` is a **docstring quoting `04`'s
-   spec**, not a built thing — so `04:681-682`'s `veto=provider.veto` shape is specified and unbuilt.
-   Relocating the rule "as a veto" would first require building a Layer-1 parameter, which is a unit,
-   not a step.
-2. **THE SEASON LOOP NEVER REACHES THE RULE.** `rg 'PoolDesaturation|degree_extension|BandExtension'
-   engine/season/` returns **zero**. So moving it onto the game path does not PRESERVE a behaviour —
-   it **ADDS** one, and would move the content hash. That is a behaviour change wearing a
-   relocation's clothes, which is the `U3a` failure this tree already reverted once.
-3. **`engine/autoload/sigma_leverage.py` DOES NOT IMPORT IT** — comment-only, at `:114` and `:339`,
-   both recording that `ED-SC-0032` moved the rule OUT of the engine deliberately, on Jordan's
-   2026-08-15 ruling that a subsystem's band modification belongs to the subsystem. A grep that
-   counts those comments as consumers is term-matching, not reachability.
-4. **THE REAL BLAST RADIUS IS SIX IMPORTING FILES, AND NONE OF THEM IS THE GAME:**
-   `engine/tests/test_sigma_leverage_parity.py:52` · `tests/valoria/test_band_extension_seam.py:133` ·
-   `tests/valoria/test_balance_oracle_arms.py:65-66` · `tests/valoria/test_degree_ladder_single_owner.py:138` ·
-   **`tools/balance_oracle.py:153-154`** · `proposals/2026-09-04-degree-sweep/arm5_social.py:55`.
+| the chain | evidence |
+|---|---|
+| **seven** roles target `systems.social_contest` | `engine/engine_params/composition.json` — `contest_side.a/.b`, `scene_builder.contest`, `scene_resolver.contest`, `parliamentary_motion`, `parliamentary_vote`, `parliamentary_vote_declaration` |
+| resolved dynamically | `engine/substrate/composition.py:67` — `getattr(importlib.import_module(mod_name), attr)` |
+| called by the cross-scale dispatcher | `engine/cross_scale/scene_dispatch.py:288-289` (`composition.require('scene_builder.contest')`), `:337,:339` (`contest_side.a/b`) |
+| run by the campaign driver | `engine/mc_v18.py` → `scene_dispatch.run_scene_phase` |
+| and the rule rides it | `contest/__init__.py` → `resolver.py:26` imports `CONTEST_DEGREE_EXTENSION`, applied at `resolver.py:307-308` — `degree_from_net(net, base_ob, extension=self.degree_extension, pool=pool)` |
 
-**SO THE RULE IS NOT LIVE ON THE GAME PATH; IT IS LIVE ON THE MEASUREMENT PATH, AND THAT CHANGES WHAT
-THIS POSITION RISKS.** Deleting `systems/social_contest/` does not orphan a game rule. It orphans an
-arm of **`tools/balance_oracle.py`** — the campaign-level balance instrument `CLAUDE.md` §7 designates
-for balance questions — plus the σ-leverage parity test. Losing an instrument quietly is worse than
-losing a rule loudly, because the next balance claim is then made with no control (§0.1 pt 4).
+**So the rule IS reached from the campaign driver.** Three further corrections follow from that:
 
-**INSTRUCTION — step (a), corrected.** Decide the rule's HOME before deleting, and the choice is not
-between "engine" and "subsystem" but between three: (i) it belongs to **proceedings**, the ruled owner
-of all social contests, and therefore waits for position 22 — in which case this position must NOT
-delete `degree_extension.py` and the retirement is partial; (ii) it is a **general de-saturation** and
-returns to `dice_engine` as a `BandExtension` the ladder already types, which contradicts Jordan's
-2026-08-15 ruling and needs his word; (iii) it dies with the kernel and `balance_oracle`'s social arm
-dies with it, which must be **stated in the commit**, not discovered later by a balance question that
-returns nothing. ⚠ **(i) is the reading this document takes**, because ED-SC-0033 named proceedings
-the owner and nothing has transferred the rule yet. Under (i), step (b)'s `git rm` is scoped to
-everything EXCEPT `degree_extension.py`, and the file moves at position 22.
-(b) `git rm -r systems/social_contest/` — under reading (i), **less `degree_extension.py`** —
+1. **The veto is NOT unbuilt.** `engine/autoload/dice_engine.py:227-228` is
+   `degree_from_net(net, ob, extension: "BandExtension | None" = None, **context)`, with the
+   demote-only constraint structural in its body. `seam/ladder.py:164` simply calls it with **two
+   positional arguments** and does not forward the extension. That is a pass-through on an existing
+   primitive — a step, not a unit. The pre-flight's own option (ii) called it *"a `BandExtension` the
+   ladder already types"* twelve lines later, contradicting itself.
+2. **But it is unreachable AT THIS SEAM regardless**, and this is the real structural blocker:
+   `04:684`'s shape takes the veto **from the provider**, and the season's provider for both contest
+   prizes is `sigma_leverage` — engine-side, `interim: true`. `seam/wrappers/sigma.py:55-58` states
+   *"THIS MODULE IMPORTS NOTHING FROM `systems/` AND INSERTS NO `sys.path`"*, and `PATH_SEAM_ALLOWED`
+   is shrink-only. An engine-side provider cannot carry a subsystem's veto. The shape opens when the
+   **proceedings** provider lands (position 22), not when a parameter is added.
+3. **The sharper statement of what the season loop does today:** `sigma.py:28` reproduces
+   `resolver.py:302`'s `net = roll_net(pool) + net_boost(lev, pool)` — the line immediately **above**
+   `:307`, where the extension is applied. The loop reaches the rule's site and stops one line short.
+   That is not "never reaches the rule".
+
+⚠ **AND ED-SC-0033 DOES NOT NAME THIS RULE.** Its three clauses are the seam dispatching by manifest
+row, the two contest prizes repointing, and *the obstacle* having a single owner — a different
+quantity from the band extension. Reading proceedings as the rule's owner substitutes *"owns the
+activity"* for *"owns this rule"*. Jordan's order is also scoped to **orphaned** code, and per the
+chain above this file is not orphaned. The home question is therefore open under §0 test 5, **not
+settled by the ruling**, and this document does not settle it either.
+
+⚠ **"Losing the instrument quietly" was wrong too.** `tools/balance_oracle.py:152-154` are bare
+unguarded function-local imports, so a `git rm` breaks its default invocation outright — but
+`tests/valoria/test_balance_oracle_arms.py:65-66` and `:88-89` import the same modules **inside the
+blocking pytest gate**, so the loss reddens the shipping gate. Loud, not silent.
+
+**INSTRUCTION — step (b) is what is mis-scoped, not step (a).** `git rm -r systems/social_contest/`
+deletes `parliamentary_vote.py` and `parliamentary_stay.py` too, and three composition roles bind
+those to `engine/cross_scale/parliamentary_bridge.py` and two `systems/factions/` modules. Carving out
+`degree_extension.py` would protect the one file least at risk while deleting six live bindings.
+**ED-SC-0033's own row says this in advance** — *"more than twenty inbound reference sites OUTSIDE it
+… several machine-read by blocking gates. So a bare `git rm` turns validators red. RULED HERE,
+EXECUTED ELSEWHERE."* Re-derive the deletion set **from the composition roles**: retire what is
+genuinely orphaned (`contest_legacy_stub.py`, anything no role and no caller reaches) and leave every
+role-bound module until the proceedings provider exists to take its row over — which is exactly what
+ED-SC-0033 clause (2) already describes as a ROW change rather than a code change.
+
+**Two consumers the import census also missed, of different kinds:**
+`engine/engine_params/sim_params.json:3851` carries a row whose `file` is `degree_extension.py`,
+generated by `tools/export_sim_params.py` — the typed layer that crosses into the port, and the one
+consumer that is **mechanism** under §0.05 rather than test or tool. And
+`tests/valoria/test_degree_ladder_single_owner.py:162` hardcodes the **path string** as a registry key,
+which repointing an import does not fix.
+(b) ~~`git rm -r systems/social_contest/`~~ — **re-derive from the composition roles, per above** —
 **28 tracked files** (`git ls-files`): 21 `.py` and 7 `.md`. ⚠ **Do not use a `find` count.** The
 directory reads 46 or 47 depending on `__pycache__` churn, which is why ED-SC-0033's "47" and an
 earlier draft of this document's "46" disagree while nothing was edited. A number that moves when
