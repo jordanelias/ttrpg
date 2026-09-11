@@ -56,7 +56,7 @@ all RATIFIED. **279 of the 376 proposal files are untouched since 2026-09-01.**
 |---|---|
 | **LIVE** | the spine (ORDER, positions 2–15) · r-execution-plan +`_part2` (CONTENT of U5–U10 only) · layer1-conformance-plan +`_part2` (Arc 2 content; Arc 1 SPENT) · unblocking-strategy (analysis; M1–M6 unexecuted) · `proposals/2026-09-05-proceedings-subsystem/` · `proposals/2026-09-10-settlements-factions-populations/` · the MB/PC proposals (dormant, retained lanes) |
 | **SPENT** | both shape-decomposition plans · season-loop-execution-plan (record only — `requirements.yaml:367` and `verb_table.yaml:578` cite its `:647` closure) · post-adoption §4 · `_session_provenance/` (73 files) · the 08-18..08-24 legacy plans |
-| **SUPERSEDED BY `architecture/`** | greenfield v1+v2 · valoria-from-scratch · ideal · ideal-v2 · unified-code-shape · shape-tracer · holonic-architecture · throughlines · integration · authoritative-architecture · arc-reachability · play-space-coverage · pr350-archive-recovery · governance-corpus-rebuild. **Each names its own successor in its own status line** |
+| **SUPERSEDED BY `architecture/`** | greenfield v1+v2 · valoria-from-scratch · ideal · ideal-v2 · unified-code-shape · shape-tracer · holonic-architecture · throughlines · integration · authoritative-architecture · arc-reachability · play-space-coverage · pr350-archive-recovery · governance-corpus-rebuild. ⚠ **MOST name their own successor, not all — the antagonist pass sampled three and broke the claim on all three.** `2026-08-31-throughlines.md:3` names no successor at all; `governance-corpus-rebuild/README.md` has no `## Status:` line to name one in; and `2026-09-01-holonic-architecture/README.md` names its successor in a callout rather than a status line — **and that callout says the opposite**: *"Read this document first — it is still where the architecture is argued"*, with *"Parts I–VI here are RIGHT and the successor inherits them whole."* That one is superseded **as a build target only**; its reading instruction stands. §7 item 2's hold-back rests on self-declaration, so it does not cover these three |
 | **DEAD** | `workplans/README.md` — its enforcing tool `ci_workplan_pointer_check.py` was retired in culling wave 2 and zero `POINTER_*.md` exist |
 | **SPENT + DEAD, and it says so itself** | `return_to_game_queue.yaml` — its own header reads *"⛔ SUPERSEDED 2026-08-19. DO NOT RESUME THIS QUEUE."* ⚠ **But its replacement pointer is itself stale**: *"WHAT TO READ INSTEAD: the SessionStart banner"* (retired; §0.3 forbids rebuilding one) *"then … CLAUDE.md §0.2. Your work is the current M1 juncture"* (the retired board). Its `jordan_docket` D1/D3/D5/D6/D7 and held H1–H4 are SPENT; **H5 and H6 survive** |
 | **SUPERSEDED IN SUBSTANCE, RECORD NOT FLIPPED** | `workplan_v6_progress.yaml` — **6 of its 7 M1 junctures target layers ED-IN-0204 did not retain**; only j4 (PC R3) is in a retained system. Yet `CLAUDE.md:95-96` binds session work to *"an open M1 juncture"*, §9 calls `m1_acceptance.py --summary` *"the only reading §0.2 accepts"*, and that tool reads this board. **`valoria_master_workplan_v6.md`** — superseded by `architecture/PLAN.md` + `requirements.yaml` |
@@ -78,8 +78,9 @@ be loud **and** rare. Four in seven days is the exception becoming the rule.
 
 ## 2. THE QUEUE — 108 open, ~97 closable, ~11 real
 
-Measured across 14 `registers/editorial_ledger*.jsonl`: **1,268 rows · 158 `needs_jordan: true` ·
-108 of those `status: open`.** `ED-IN-0208` pinned 151/105 on 2026-09-10, so **the queue grew by 7
+Measured across 14 `registers/editorial_ledger*.jsonl`: **1,269 rows · 158 `needs_jordan: true` ·
+108 of those `status: open`, spread over exactly 8 files** — which is why position 1's instruction
+says eight. `ED-IN-0208` pinned 151/105 on 2026-09-10, so **the queue grew by 7
 flagged and 3 open in the week that measured it, and nothing was closed.**
 
 ### 2.1 The closures, by test (`CLAUDE.md` §0's ladder)
@@ -89,9 +90,9 @@ flagged and 3 open in the week that measured it, and nothing was closed.**
 | **1 superseded** | 23 | `ED-FA-0018/0027-0034`, `ED-SE-0031-0044` | ED-IN-0204 Decision 1 — every row's `Target:` is a layer no longer retained |
 | **1** | 6 | `ED-FA-0010/0013c/0014/0015/0016/0035` | same |
 | **1** | 9 | `ED-SE-0002/0013/0014/0015/0017/0045/0046/0047/0048` | same; `engine/season` reads no geography file at all |
-| **1** | 4 | `ED-IN-0030/0048/0049/0050` | the scale bridge is Layer 1 now — `04 §B.7:330` |
+| **1** | 3 | `ED-IN-0030/0049/0050` | the scale bridge is Layer 1 now — `04 §B.7:330`. ⚠ **`ED-IN-0048` was swept into this batch and does not belong**: its subject is a `canonical_sources.yaml` registration gap for `conviction_track` / "Piety Track", not scale transitions. It shares a filing date with its neighbours and nothing else. It closes under **ED-SC-0033** with the rest of the SC cluster, and the antagonist pass caught it using position 1's own falsifier |
 | **1** | 8 | `ED-IN-0062/0070/0066/0073/0148/0151` + 2 REMEDIATION | dockets over the evacuated `designs/audit/` tree and the transitional 27-module driver |
-| **1** | 4 | `ED-1051`, `ED-1043`, `ED-MB-0065`, `ED-IN-0123/0124` | port target is `port/` from the season loop (`04:137`); the 08-24 port settled which MB tree is canon **by execution** |
+| **1** | 5 | `ED-1051`, `ED-1043`, `ED-MB-0065`, `ED-IN-0123`, `ED-IN-0124` | port target is `port/` from the season loop (`04:137`); the 08-24 port settled which MB tree is canon **by execution** |
 | **1 via ED-SC-0033** | 17 | `ED-SC-0003/0004/0005/0015/0016/0017/0019/0020/0021/0023/0024/0025/0026/0027/0028/0029/0030` + docket D5 | every one is a question about the retired kernel |
 | **2 irrelevant** | 10 | `ED-IN-0069/0085/0086/0092/0103/0156/0158/0042/0195`, `ED-MB-0009` | subjects retired — `dashboard_data.py`, `handoff_atomize.py`, `.claude/wf_*.js`, the thirteen `CLAUDE.md` figures |
 | **3 doc-answered** | 3 | **`ED-IN-0113 §A` / docket D1**, `ED-IN-0159`, `ED-PC-0056` | see 2.2 |
@@ -134,10 +135,10 @@ Detail per position — INSTRUCTION, LAYER, COMPLIANCE CLAUSE, OBSERVABLE/FALSIF
 | 2 | **RET-SC** | IN/SC | execute the ruled `systems/social_contest/` retirement; relocate the demote-only rule first | — |
 | 3 | **G1a** | IN | act store · `Receipt` · `state/gate` · `log.append` assertion · the ruled `Record.matured` write | — |
 | 4 | **G1b** | IN | delete `Event.subject`; read the actor through `causes[] → state/acts` | — |
-| 5 | **G2** | IN | one `Token`, minted in `loop/driver` only; **42** `.write(` sites | — |
+| 5 | **G2** | IN | one `Token`, minted in `loop/driver` only; **33** gate sites; and the `_rehome()` route the scan cannot see | — |
 | 6 | **G3** | IN | `NotYours` at the gate · `Act.via` · purview through `via.scope` | — |
 | 7 | **G4** | IN | `NoOpReceipt`; the effect contract finalised; 11 effects rewritten once | — |
-| 8 | **H-98** | IN/PC | the combat seam returns a `Margin`, not a winner; the fourth band gets a producer | — |
+| 8 | **H-98** | IN/PC | the **general** ladder branch's producer, and the wound-count band edges. ⚠ **RESCOPED by the antagonist pass** — see `_part2` | — |
 | 9 | **PC-SURRENDER** | PC | promote §11.4 Yield/Disengage into `combat_engine_v1/` | — |
 | 10 | **U5 / R-07** | IN | `stance_delta`; `Person.stance` written; `stance.moved` | — |
 | 11 | **U6** | IN | the first R-01/R-02 measurement | — |
@@ -186,7 +187,7 @@ picked, and the cost of serialising is stated rather than hidden.
 |---|---|---|
 | 1 ∥ 3–7 | ledger JSONL vs `engine/season/state` — no shared file | 1 first: one session, and it makes §5 readable |
 | 2 ∥ 3–7 | `systems/`, registries, `tests/valoria` vs `engine/season/{state,loop}`; the only shared file is `seam/wrappers/sigma.py`, which no G-unit touches | 2 first: ruled and unexecuted for five days |
-| 4 ∥ 5–7 | the spine says so (`:61`) | 4 first, so its hash move rides G1a's |
+| ~~4 ∥ 5–7~~ **NOT order-free** | ⚠ **This row claimed order-freedom on the spine's authority (`:61`) rather than on a file census, and it is the one row where the files collide.** G1b rewrites `state/world.py`'s content hash and `loop/witness.py`'s whole `actor` mode; G2 rewrites gate call sites in **both** — and they meet inside one signature, `world.py:295`'s `def write(..., subject=None)`, whose `subject` parameter G1b deletes and whose write class G2 replaces. `isolation: worktree` does not help: it defers a shared-file edit to the merge | **4 → 5 is a hard serial edge.** Every other row in this table carries a file census; this one now does too |
 | 8, 9 ∥ 3–7 | wrappers hold no token (`04:164`); `combat_engine_v1` is outside `04`'s scope | after G4, so their Events land once on the finished contract |
 | 12 ∥ 13 ∥ 14 | disjoint but for `verb_table.yaml` (12 and 14 both edit it) | 12 → 13 → 14; 12 first because 14's contested closers reuse its degree-keyed rows |
 | 18 ∥ 13–17 | `world_q.judging_set`, `arrangements.yaml`, the stress re-host touch none of their files | 18 immediately before 19, which consumes it |
@@ -198,13 +199,29 @@ If any pair is actually run concurrently, use `isolation: worktree` (`CLAUDE.md`
 
 ## 5. THE RULING BATCH — what actually needs Jordan
 
-Ten items, ordered by what each unblocks. Each is answerable without reading a plan.
+Eleven items, ordered by what each unblocks. Each is answerable without reading a plan.
 
+0. **THE UNDECLARED CONTENT-HASH TIEBREAK — and this one is needed before position 3.**
+   ⚠ **Added by the antagonist pass, which caught the first draft taking one of a pair and dropping
+   the other.** `HANDOFF.md:256-257` names *"Two rulings wanted: the undeclared content-hash tiebreak
+   that decides which question a person answers, and `H-111`"*. The draft took `H-111` (item 9) and
+   said nothing about its sibling. That matters more here than anywhere, because **positions 3, 4, 5,
+   6, 7, 20 and 22 all use hash stationarity or a named hash move as their control**, and `ED-IN-0206`
+   records that the clause-4 corpus demonstration *"rests on one act selected by an undeclared
+   content-hash tiebreak, so ANY change that moves the hash can extinguish it."* A control whose
+   discriminator is a documented undeclared tiebreak is not a control (§0.1 pt 4).
+   **Does this need you at all, or does §0 test 5 answer it — declare the incumbent tiebreak at the
+   site and record it, rather than rule on it?** The tree has applied that remedy twice already
+   (`H-54`, `H-122`). If test 5 answers it, it is position 3's first pre-flight step and not yours.
 1. **ED-IN-0214 — the conviction matrix.** Nine of thirteen convictions point within 60° of one mean
    vector, so convictions differentiate a person's own options well and *different people* badly.
    Re-centring overwrites 52 cells that `conviction_axis_matrix_v30.md` §3 argues individually.
    **Re-centre, or keep the authored matrix?** Answer before position 11 — a later *yes* invalidates
    U6's number.
+   ⚠ **And a *yes* has no position to land in**, which the antagonist pass caught: arm (b) is a
+   52-cell re-authoring that moves measured behaviour (distinct executed sets 40 → 27 on the same 89
+   worlds when U3 landed). A *yes* returns to the sequencer and inserts **14a · MATRIX-RECENTRE**
+   immediately before position 11, so its hash move lands before the measurement rather than after.
 2. **ED-IN-0210's fork — is `comply` one verb or two?** Does an `issue`d dispensation and a
    `dispatch`ed order get answered by the same `comply`/`evade`/`refract` keyed on the ledger claim
    **(A)**, or does `dispatch` need its own obey/disobey pair **(B)**? Evidence leans A. Unblocks 19b.
@@ -237,8 +254,8 @@ Ten items, ordered by what each unblocks. Each is answerable without reading a p
 - `[GAP: PART E step 12 (parallel DELIBERATE map) and D-41a's permutation falsifier — beside the critical path; no R-row moves on them]`
 - `[GAP: the FA lane beyond OLD-DRIVER — superseded at step B; its subject is expressed by position 20's faction queries, not by systems/factions/]`
 - `[GAP: proceedings PHASE 1/3/4 — position 22 covers the provider critical path only]`
-- `[GAP: any GDScript grade — every compliance clause here is the Python grade; `04 §0:88-92` requires both where they differ, and no position targets GDScript before 26]`
-- `[GAP: the 143-case count — results.json gives 46 NPC + 97 ARC, but a grep over cases/ finds 100 `id:` lines and chain/*.yaml does not parse with plain PyYAML. Position 13 must use the harness loader's count, not either of these]`
+- `[GAP: any GDScript grade — every compliance clause here is the Python grade; `04:79-80` states the Python and GDScript grades separately wherever they differ, and no position targets GDScript before 26]`
+- `[GAP: the 143-case count — `len()` over results.json gives 46 NPC + 97 ARC, but a grep over cases/ finds 100 `id:` lines and chain/*.yaml does not parse with plain PyYAML. An antagonist re-derived ARC as 59 by grepping `"id": "ARC` and was wrong — the structural count is 97 — which is itself the evidence that this figure needs one owner. Position 13 must use the harness loader's count, not any of these]`
 - `[GAP: tools/m1_acceptance.py rows 1 and 4 — a Layer-0 board reader; §0.1 pt 5 forbids re-tooling it, and the CLAUDE.md sentence binding to it rides at position 1]`
 - `[GAP: 2026-08-15-character-and-faction-stats-and-progression.md — ownership UNRESOLVED since PR #370 closed unmerged; §5 item 7 is the only live question in it]`
 
@@ -246,8 +263,9 @@ Ten items, ordered by what each unblocks. Each is answerable without reading a p
 
 ## 7. HELD BACK FROM RATIFICATION-ON-MERGE (`CLAUDE.md` §2, ED-1094)
 
-Merging this PR ratifies **the order in §3 and the supersession verdict in §1**. Four things are
-explicitly held back and must not be read as ratified by the merge:
+Merging this PR ratifies **the order in §3 and the supersession verdict in §1**. Six things are
+explicitly held back and must not be read as ratified by the merge — items 5 and 6 were added by the
+antagonist pass, which found two departures the first draft made silently:
 
 1. **The ~97 queue closures of §2.1 are NOT applied.** They are position 1's commit. Each asserts a
    question is dead; bundling 97 such assertions into a planning PR is the anti-pattern §2 names.
@@ -260,10 +278,37 @@ explicitly held back and must not be read as ratified by the merge:
    them *"unscheduled by design"* (its §7.3). Jordan asked for everything sequenced, so they are
    sequenced — after the second measurement, where zero-yield contract work is hash-stable by
    construction. If the spine's non-scheduling was deliberate beyond its stated reason, this reverts.
+5. ⚠ **Position 19b schedules `U7-disp`, which the spine placed OFF-spine — a second undeclared
+   departure, caught by the antagonist pass.** Spine `:57`: *"**genuinely Jordan's** … **Do not
+   schedule it until ruled.**"* Its §7.2 makes that placement conditional, returning the node to the
+   spine *"between positions 10 and 11"* only **if** the fork turns out not to be genuinely Jordan's.
+   §5 item 2 here affirms that it **is** genuinely Jordan's — which under the spine's own condition
+   keeps it off-spine, and 19b contradicts that. It is given a position because Jordan asked for
+   everything sequenced, and it is marked conditional on the ruling in both §3 and `_part2`. If the
+   spine's placement governs, 19b reverts to off-spine and nothing else in the order moves.
+6. ⚠ **`build_at`'s consumption of the `cast:` blocks moved from U8 to position 13**, which is a
+   CONTENT move made by a document that claims to own only ORDER. The spine gives W28-cast *"author
+   the `cast:` blocks"* and U8 *"`ambitions(p)` and `build_at` from the cast"*. Position 13 takes the
+   reader on `04:124`'s no-unread-row grounds, and position 17 no longer claims it. Held back because
+   the r-execution plan owns U8's content, not this file.
 
-**Five agent claims overturned by the author against the tree**, recorded so they are not re-derived:
-the `## Status: PROPOSED` count (**200 repo-wide / 162 in scope**, not 129, 133 or 168 — the regex
-must tolerate bold); the spine's **33** `.write(` sites (an `ast` walk gives **42**, twenty of them in
-`harness/probes.py`); ED-SC-0033's **47** files under `systems/social_contest/` (**46** today);
-`H-83`'s *"no reader"* (`stratum_of` is live at `loop/resolve.py:588`, called from `:373`); and
-`ED-IN-0208`'s headline (§2.3).
+**Three agent claims overturned by the author against the tree**, recorded so they are not
+re-derived: the `## Status: PROPOSED` count (**200 repo-wide / 162 in scope**, not 129, 133 or 168 —
+the regex must tolerate bold); `H-83`'s *"no reader"* (`stratum_of` is live at `loop/resolve.py:588`,
+called from `:373`); and `ED-IN-0208`'s headline (§2.3).
+
+⚠ **AND TWO OF THE AUTHOR'S OWN OVERTURNS WERE THEMSELVES OVERTURNED BY THE ANTAGONIST PASS. Both are
+recorded here rather than quietly corrected, because both are instances of named defect classes this
+repo has paid for before.**
+
+- **The spine's "33 `.write(` call sites" was RIGHT.** An `ast` walk counting `Call → Attribute →
+  attr == "write"` returns 42, and the author reported that as an overturn. **Nine of the 42 have
+  receiver `TRACE`** — `trace_log.py:116`, a different object with a different method — and **33 have
+  receiver `w`**, the gate. Counting two APIs as one because they share a method name is
+  term-matching on the name rather than the mechanism, which is the failure `CLAUDE.md` §8 records
+  `pathres.resolve()` committing at scale. G2's scope is **33 gate sites**; whether the 9 tracer
+  calls ride along is a separate question its pre-flight answers.
+- **ED-SC-0033's "47 files" was not wrong, and neither was the author's "46" — both are unstable.**
+  `systems/social_contest/` reads 46 or 47 on `find` depending on `__pycache__` churn. The number
+  that means anything to a `git rm -r` is **28 tracked** (`git ls-files`), of which 21 are `.py` and
+  7 `.md`. A count that moves when nobody edits anything was never a measurement (§0.1 pt 4).

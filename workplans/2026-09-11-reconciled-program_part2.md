@@ -31,9 +31,22 @@ and append the closing citation **in the row's own text** — ED-IN-0204 Decisio
 closures, ED-SC-0033 for the 17 SC rows and docket D5, `CLAUDE.md` §0/§0.05 for ED-IN-0113/D1. The 10
 authorial rows get `needs_jordan: false` and an authorial note, **not** closure. Ride-alongs, one line
 each, same commit: `return_to_game_queue.yaml`'s stale *"WHAT TO READ INSTEAD"* → `CLAUDE.md` §1 +
-`HANDOFF.md`; strike `HANDOFF.md:463-469`'s *"THE STEP TO TAKE: S7"*; `CLAUDE.md:95-96`'s *"traces to
-an open M1 juncture"* → an R-row of `requirements.yaml` or a position here. **Do not touch
+`HANDOFF.md`; strike `HANDOFF.md:463-469`'s *"THE STEP TO TAKE: S7"*. **Do not touch
 `tools/m1_acceptance.py`** — §0.1 pt 5 forbids re-tooling a board reader.
+
+⚠ **THE `CLAUDE.md:95-96` EDIT IS REMOVED FROM THIS POSITION — the antagonist pass was right and the
+finding is worth keeping in full.** The first draft rode along an edit repointing *"traces to an open
+M1 juncture"* at *"an R-row of `requirements.yaml` **or a position here**"*. Three things wrong with
+it. (1) It is a **Layer-0 governance change** to RULED text whose rationale is attached at
+`CLAUDE.md:100-101` (*"without the first the literal reading tells a session to refuse Jordan"*),
+bundled as "one line" inside a 97-row closure commit — exactly what §2 forbids. (2) The moment
+`CLAUDE.md` points at *a position here*, **this workplan constrains what a session may work on** and
+becomes Layer-0 content living in `workplans/` — under Lens A1 the layer follows who the output
+constrains, and part 1 §0's *"delete it and the game behaves identically"* becomes the wrong test:
+delete it and a session can no longer tell what its work is. (3) That is a working instance of the
+T3 channel §0.3 names — findings → a surface → the surface defines the next session's work — with
+`workplans/` as the surface. **If the M1-juncture binding needs repointing, it points at
+`requirements.yaml`'s R-rows, which code reads, and it is Jordan's edit to make, not a ride-along.**
 
 **LAYER 0** — it binds the agent's queue. Lens B does not run.
 **COMPLIANCE.** `CLAUDE.md` §0: *"**Escalate only what survives all five.**"* and *"clearing the
@@ -57,7 +70,11 @@ repo's standing "ruled and unexecuted" instance and touches no engine-spine file
 **INSTRUCTION.** (a) **Relocate the one live rule before deleting anything**:
 `systems/social_contest/sim/contest/degree_extension.py`'s demote-only rule becomes the `veto` on the
 interim provider in `engine/season/seam/wrappers/sigma.py`. (b) `git rm -r systems/social_contest/` —
-**46 files** today, not the 47 ED-SC-0033 states; recount at execution. (c) Write the `FORK:` row in
+**28 tracked files** (`git ls-files`): 21 `.py` and 7 `.md`. ⚠ **Do not use a `find` count.** The
+directory reads 46 or 47 depending on `__pycache__` churn, which is why ED-SC-0033's "47" and an
+earlier draft of this document's "46" disagree while nothing was edited. A number that moves when
+nobody changes anything was never a measurement (§0.1 pt 4); `git ls-files` is what the command acts
+on. (c) Write the `FORK:` row in
 `references/restructure_ledger.md`. (d) Repoint every inbound site: `module_contracts.yaml`,
 `canonical_sources.yaml`, `descriptor_registry.yaml`, `lane_assignments.yaml`,
 `ci_checks_registry.yaml`, three `skills/` files. **Keep the logical name** — `rosters.yaml`'s prize
@@ -124,12 +141,27 @@ passing suite does not see it.
 token's class.
 
 **INSTRUCTION.** `WriteClass` is today an enum passed as a parameter. Add `Token`, constructed in
-`loop/driver.py` only; `gate.write` takes it. **Rewrite the call sites, counted by `ast`, not text:
-42** — `harness/probes.py` 20 · `state/world.py` 9 · `loop/matter.py` 6 · `loop/witness.py` 3 ·
-`loop/calendar.py` 2 · `loop/resolve.py` 2. ✗ **The spine's "33 `.write(` call sites" does not
-reproduce**; this unit's pre-flight owns the number. `loop/deliberate` and `seam/wrappers/*` receive
-no token. Add the AST scan for `Token(` construction outside the driver, with an asserted floor on
-what it inspected.
+`loop/driver.py` only; `gate.write` takes it. **Rewrite the 33 gate call sites** —
+`harness/probes.py` 20 · `loop/matter.py` 6 · `loop/witness.py` 3 · `loop/calendar.py` 2 ·
+`loop/resolve.py` 2. Reproduce with: `ast` walk over `engine/season/**/*.py` minus `tests/`, keeping
+`Call` nodes whose `func` is an `Attribute` with `attr == "write"`, **grouped by receiver** — 33 have
+receiver `w`, 9 have receiver `TRACE`. ⚠ **Those 9 are `trace_log.py`'s tracer, a different object,
+and are NOT gate sites.** The spine's 33 was right; an earlier draft of this document reported 42 as
+an overturn and was wrong (part 1 §7). Whether the tracer calls ride along is this unit's pre-flight
+call, not a rewrite it inherits.
+
+⚠ **AND THE SCAN CANNOT SEE THE ONE CALL THAT MATTERS MOST.** `loop/deliberate.py:67` calls
+`w._rehome()`, which **mutates the tenure store during DELIBERATE — a barrier that owns nothing and
+holds no token.** It is not a `.write(` site, so a `Token(`-construction scan lands green with the
+violation intact, which is the property G2 exists to make impossible. `deliberate.py:20-29` records it
+and rules it out of scope for the unit that found it: *"either it moves to the MATTER barrier or the
+row is amended. That is a Layer-1 question, not this unit's. Found by the Fable gate on Arc 1 and
+filed under `ED-IN-0206`."* **It is this unit's.** Disposition it in the pre-flight: move the call to
+MATTER, or amend the `04` row and say which.
+
+Add the AST scan for `Token(` construction outside the driver, with an asserted floor on what it
+inspected — and a second assertion that DELIBERATE mutates no store **by any route**, not only through
+`gate.write`.
 **LAYER 2** (the scan is a Layer-1 script and is licensed: its subject is Layer-2 code against `04:206`).
 **COMPLIANCE.** `04:199` — *"`Token      := (write_class, tick)                 -- constructed by
 loop/driver and NOWHERE ELSE`"*. `04:206` — *"| only the driver mints a Token | MECHANICAL — a test
@@ -147,10 +179,14 @@ fixed signature, and the tier drop pays because the handoff is the `ast`-derived
 are rewritten exactly once here.
 
 **INSTRUCTION.** `Act` gains `via: Optional[SeatId]`. In `state/gate.py`, for a Tenure write, admit the
-four declared bases and otherwise raise. Re-point `loop/resolve.py`'s `_eligible` `remit:` branch,
+declared bases and otherwise raise. Re-point `loop/resolve.py`'s `_eligible` `remit:` branch,
 `under_purview`, `_req_revoke` and `_req_confer` from the actor's own `hold` tenures to `via.scope`.
 **Expect three live violations** — `revoke`, `confer` and `kill / wound` all write another's edge;
-declare each as `T-o`-with-`via` or under its own basis. **Do not weaken the check to keep them
+declare each as `T-o`-with-`via` or under its own basis.
+⚠ **AND A FOURTH CASE THE FIRST DRAFT MISSED, added by the antagonist pass:** a **conferral-basis
+opener** matches none of `§C.2`'s four admitted bases. `04_VERBS.md:352-357` files this as *"an `IN`-lane
+defect this design reveals rather than causes"*, and position 19's `determine` needs it. Write it here
+or it is written twice — this position is the only place the F3 branch is authored. **Do not weaken the check to keep them
 green**: every hand-built `Act` in probes and tests that writes another's tenure without a seat goes
 red and is fixed by giving it a seat.
 **LAYER 2.**
@@ -186,25 +222,48 @@ Event, not a success.
 **TIER.** `opus`/`opus`. The 11 rewrites are judgment, not transcription — each decides what its
 `change` is.
 
-### 8 · H-98 — the combat seam returns a `Margin`
-**not earlier** order-free against Arc 2 (wrappers hold no token), placed after G4 so its Events land
-once on the finished contract · **not later** U5's `_eff_kill` Wounded branch reads a degree with no
-producer.
+### 8 · H-98 — the general ladder branch's producer, and the wound-count band edges
+⚠ **RESCOPED BY THE ANTAGONIST PASS. The first draft of this position was wrong on every branch, and
+the way it was wrong is worth keeping:** it read *"the wrapper returns ±1/0 and throws away what it
+computed"* out of `seam/wrappers/combat.py:43-47` — a docstring recording a claim that had **already
+been struck** — and attributed it to the seam wrapper. That sentence is about `wrapper.fight` **inside
+`combat_engine_v1`**, a different object. Term-matching the word *wrapper* across two objects is the
+same failure as counting `TRACE.write` and `w.write` as one API (part 1 §7).
 
-**INSTRUCTION.** Per the hole's own Jordan ruling of 2026-09-03 — *"kill/wound degrees should be
-directly taken from scene combat"* — `seam/wrappers/combat.py` returns a `Margin` read off the
-engine's WoundTracker instead of discarding it, and `seam/ladder.py` gains the producer its fourth
-band waits on.
+**not earlier** order-free against Arc 2 (wrappers hold no token), placed after G4 so its Events land
+once on the finished contract · **not later** the non-combat contested verbs need a graded producer.
+
+**WHAT IS ALREADY BUILT, and must not be rebuilt.** `seam/wrappers/combat.py:203-208` already returns
+`wound_state` per party (`felled`, `wounds`, `max_wounds`, `health_remaining`, `health_full`), and its
+own comment names it *"THE DEGREE SOURCE. A caller reads severity from here; it does not map it from
+`winner`, which carries none."* `seam/ladder.py:151-152` already grades it: `if "wound_state" in
+result: return combat_degree(result, subject)`.
+
+**AND THE "FOURTH BAND" IS FORBIDDEN, not missing.** `ladder.py:81-82`: *"⚠ A FOURTH BAND (decisive vs
+narrow) HAS NO SOURCE IN THE DATA and is NOT invented — that is the whole of what survives in `H-98`
+after the 2026-09-03 ruling."* The first draft cited that ruling as its warrant while proposing the
+thing the ruling removed.
+
+**INSTRUCTION — the two things actually absent.** (a) **The general ladder branch has no producer.**
+`HANDOFF.md:239-240`: *"there is no roll anywhere in the instrument, so the general ladder branch has
+no producer. `H-98` stays `absent` on purpose."* `ladder.py:153` takes that branch on `"net" in result
+and "ob" in result` — which U1's σ-leverage provider now supplies for `tell`. Extend it to the other
+contested non-combat verbs as they gain `contests:` rows, so the branch has a producer for each.
+(b) **The wound-count band edges**, which `combat.py:56-61` names as all that is left of `H-98`: which
+wound counts sit in which band — an edge over a real quantity, not an invented correspondence.
 **LAYER 2.**
-**COMPLIANCE.** `04:692` — *"| the degree | the subsystem returns a `Margin`; **a subsystem returning a
-winner has not met the contract** — a type assertion |"*. The wrapper returns ±1/0 today, so it is in
-breach of a ratified row.
-**OBSERVABLE.** `corpus_run`'s degree histogram for `kill / wound` is non-empty for the first time;
-H-98's grade moves `absent → measured` **in the landing commit**. Hash: no `kill` executes in the
-corpus today, so expect stationary — and say so rather than leaving it implied.
-**FALSIFIER.** A wrapper returning `+1` for a fight the tracker reports as *felled* is a winner, not a
-margin. Assert the type.
-**TIER.** `sonnet` producer against a ruled source, `opus` critic.
+**COMPLIANCE.** `04:164` — *"| `seam/wrappers/*` | **nothing, ever** | the projection | a `Margin` |
+**none** |"*. ⚠ The `04:692` "a subsystem returning a winner has not met the contract" clause the first
+draft cited **does not bind here**: the combat wrapper already returns the quantity, so quoting it
+against this position asserted a breach that does not exist.
+**OBSERVABLE.** `corpus_run`'s degree histogram is non-empty for a **non-combat** contested verb whose
+`contests:` row this position wires. For combat, the histogram is already reachable — do not claim it
+as new. H-98's grade moves only for the half actually closed, and the commit says which half.
+**FALSIFIER.** A band edge that discriminates on a quantity the tracker does not return; or a fourth
+band re-introduced under another name, which `ladder.py:131-132` calls *"the mapping that ruling
+removed."*
+**TIER.** `sonnet` producer against a ruled source, `opus` critic — the first draft of this position
+is the evidence that the critic is doing the work here.
 
 ### 9 · PC-SURRENDER
 **not earlier** same lane and files as 8 · **not later** it is the only PC item with a live spec and no
@@ -251,8 +310,17 @@ built, or the measurement says which do not.
 **LAYER 2 measurement.** Lens B does not run.
 **COMPLIANCE.** `CLAUDE.md` §0.1 pt 4 — *"**A number without a control is not a measurement — in
 either direction.**"* The only control this instrument yields is the `none ≥ default` arm; say so.
-**OBSERVABLE.** Reconvergence **< 100 %** at `2x3`, with the cells committed. R-01/R-02 flip on the
-printed number or not at all.
+**OBSERVABLE.** Reconvergence **< 96 %** at `2x3`, with the cells committed. R-01/R-02 flip on the
+printed number or not at all. ⚠ **The first draft wrote `< 100 %` here against a falsifier of `≥ 96 %`
+— an overlap of four points in which the same result both passed and failed**, which is §0.1 pt 2's
+assertion that cannot observe the failure it excludes. The content owner's threshold is unambiguous
+(`r-execution-plan_part2.md:1367-1368`: *"If reconvergence is still ≥96% at U6, U6's own falsifier
+governs"*) and the draft had silently loosened it.
+⚠ **Declare the prior before running.** `HANDOFF.md:241-243` records this cell at **100.00 %, zero
+divergences** — *"the acceptance is CELL-DEPENDENT and the cheaper cell fails it. 95.77% at `2 x 1`;
+100.00%, zero divergences, at `2 x 3` … Do not quote 95.77% without the cell."* So `2x3` is the cell
+that has never read below the bar. The number that lands is read against that prior, not against
+nothing.
 **FALSIFIER.** Reconvergence ≥ 96 % ⇒ report which channel is closed and leave both `not_met`. Do not
 re-pin.
 **TIER.** `sonnet` runs it; **`opus` reads the number** — the judgment is attributing the result to the
@@ -271,10 +339,16 @@ shape.
 
 **13 — INSTRUCTION.** `rg '^\s*cast:' engine/season/cases/` returns **0**. The reader does not exist
 either: `harness/corpus_run.py::build_at` seats three people and reads no `cast:`. **The reader lands
-in the same commit as the first block** — `04:124` requires *"every roster, table, fixture, matrix and
-verb row read at load by **one** loader that cross-validates and raises on any absence or any
-declared-but-unread row"*, and a `cast:` nobody reads is exactly that. Schema: `who_acts`, `one_line`,
-`knowledge`; entries naming a player get `WAITS-ON-PLAYER`. NPC lane (46) first.
+in the same commit as the first block.** The principle is `04:124`'s — *"every roster, table, fixture,
+matrix and verb row read at load by **one** loader that cross-validates and raises on any absence or
+any declared-but-unread row"* — ⚠ **cited as an ANALOGY, not as the row this position must satisfy**,
+which the antagonist pass was right to insist on: `04:124`'s own "where it lives" column is `data/`,
+and a `cast:` block under `cases/` read by `harness/` is neither a `data/` closed set nor one of `04`'s
+nine modules. `skills/layer-conformance` B0: *"Do not grade code against a spec that does not claim
+it."* What actually binds is `01_AXIOMS.md` ID-13 — *"a mechanism that does not exist, wearing a
+schema's clothes"* — the rule that reverted `U3a` for putting a table in `rosters.yaml` that nothing
+read. Schema: `who_acts`, `one_line`, `knowledge`; entries naming a player get `WAITS-ON-PLAYER`. NPC
+lane (46) first. **This position owns `build_at`'s `cast:` consumption**; position 17 does not.
 **LAYER.** The blocks are Layer-2 **content**; the reader is Layer-2 apparatus in `harness/`, which is
 none of `04`'s nine modules. Lens B runs on the reader only.
 **CONTROL.** With `cast:` absent, `build_at` still seats three and the tallies are unchanged.
@@ -327,9 +401,14 @@ read the old holder.
 
 ### 17 · U8 · 18 · PROC-A · 19 · U7-remit · 19b · U7-disp
 **17 — INSTRUCTION.** `queries/person_q.py::ambitions(p)` over live `commit` edges to OUGHT
-Propositions; `build_at` consumes the cast.
-**COMPLIANCE.** `04:152` — `queries/person_q` reads **nothing** and returns *"a `PersonInterior`
-snapshot only"*; AX-2 splits the two Query families **by module**, not by first parameter.
+Propositions. ⚠ **`build_at`'s consumption of `cast:` belongs to position 13, not here** — one symbol
+was assigned to two positions four apart in the first draft, which is §8's *every rule lives once*
+failing on the plan itself. Part 1 §7 item 6 holds the move back, because U8's content belongs to the
+r-execution plan.
+**COMPLIANCE.** `04:152` — the row's columns are `owns (writes) | may read`: `queries/person_q`
+**writes** nothing and **may read** *"a `PersonInterior` snapshot only"*. (The first draft inverted
+the two and said it "returns" the snapshot; the table says neither.) AX-2 splits the two Query
+families **by module**, not by first parameter.
 **FALSIFIER.** The existing `sense`-is-the-only-World-taker test goes red if `ambitions` takes a `World`.
 **TIER.** `sonnet`/`opus`.
 
@@ -339,9 +418,10 @@ Re-host its 28 tests against `engine.season` as `engine/season/tests` cases, eac
 declared absence. (b) `world_q.judging_set(w, venue, matter)`. (c) `convene` corrected. (d)
 `arrangements.yaml` plus its loader, through the ONE loader, unknown keys refused. Step 3 (`release`)
 is already done.
-**COMPLIANCE.** `04:325-327` deletes `judging_set_rule` from `Rung` and makes the judging set *a Query
-over seats*; `04:131` puts every closed set and the ONE loader in `data/`; `04:468` — *"**unknown keys
-rejected — a `scale:` key fails the load**"*.
+**COMPLIANCE.** `04:176` — *"| 7 | `Rung.judging_set_rule` | **deleted**; the judging set is a Query
+over seats | §D.2's NEVER — *decision-shaped state on a container* |"* (the first draft cited
+`:325-327`, which is a table header); `04:131` puts every closed set and the ONE loader in `data/`;
+`04:468` — *"**unknown keys rejected — a `scale:` key fails the load**"*.
 **OBSERVABLE.** Removing a seat's remit empties the judging set; a purview walk one rung up still finds
 it. A thirteenth arrangement loads with no code change; a fifteenth key fails naming the row.
 **FALSIFIER.** A stress test passing against a tracer-era fixture rather than a real `World`.
@@ -353,13 +433,29 @@ the G4 contract. `establish`'s third write is removed — establishment is a Que
 with zero authored acts needs somebody to have put the matter before the room, and no step did that.**
 **COMPLIANCE.** `04:120` AX-1 — `Act.actor : PersonId` and nothing else has that type; `resolve` has no
 institution parameter; **a seat enters through `Act.via`.** Plus `04:330` as at position 6.
-**OBSERVABLE.** A bench member determines a heard matter; determining an unheard one emits
-`determine.unheard`; an unseated actor emits `determine.unseated`. A `levy` executes with `Act.via` set.
+**OBSERVABLE.** ⚠ **Corrected by the antagonist pass.** The first draft copied `12_BUILD_ORDER.md:19`'s
+step-7 artifact verbatim — *"determining an unheard one emits `determine.unheard`"* — and **that event
+no longer exists**: `04_VERBS.md:379` struck the `heard` conjunct because *"no act in this design
+writes a `heard` relation, so the conjunct had no producer"*, `:381-384` registered the loss as
+`P-23`, and the corrected row's `emits_on_refusal` is `["determine.refused", "determine.unseated"]`.
+A position whose observable waits on a deleted event cannot be closed by execution (§0.2).
+The live artifact is `21_RECONCILIATION.md:575`: **a determination opens the disposal Tenure on its
+subject via the seat; below quorum, `determine.refused`.** Plus: a `levy` executes with `Act.via` set.
 **FALSIFIER.** Any of the five executing with `via=None`.
+⚠ **AND THIS POSITION NEEDS A GATE CLAUSE IT CANNOT ADD ITSELF.** `04_VERBS.md:352-357` records that a
+**conferral-basis opener matches none of `§C.2`'s four admitted bases** — *"So does `confer`, today,
+which is an `IN`-lane defect this design reveals rather than causes."* A determination that opens a
+Tenure on another's subject needs that fourth case, and position 6 is the only place the gate's F3
+branch is written (*"the purview readers are rewritten exactly once here"*). It lands at position 6
+or it is written twice.
 **TIER.** `opus`/`opus`.
 
-**19b — CONDITIONAL ON ED-IN-0210.** Under arm (A) the three verbs key on the actor's ledger claim of
-the terms and answer both channels; under (B) `dispatch` gets its own obey/disobey pair.
+**19b — CONDITIONAL ON ED-IN-0210.** ⚠ **This position is a declared departure from the spine**, which
+put `U7-disp` off-spine with *"**Do not schedule it until ruled**"* and made the reversion slot
+*"between positions 10 and 11"*. It is given a position because Jordan asked for everything
+sequenced; part 1 §7 item 5 records the departure and what reverts it. Under arm (A) the three verbs
+key on the actor's ledger claim of the terms and answer both channels; under (B) `dispatch` gets its
+own obey/disobey pair.
 **COMPLIANCE.** `04:230`'s carve-out, which is exact and is not a widening: **the fold may ask the
 actor's own ledger, through the `PersonInterior` snapshot the act carries, and no other.** A Query
 taking a ledger and an asker who is not its holder still does not exist.
@@ -373,9 +469,11 @@ which of the two problems it solves — the eight `rung_kinds` admit neither `fa
 Re-scale the 44 faction cases with a `why:` each; rule the 10 world cases as ≥ 2 realm rungs under §0
 test 5. H-101 is expressed as `superiors`/`subordinates` over `contain` + seats, **not as a field**.
 Settlements P5 is `faction_q.resolve` and rides here.
-**COMPLIANCE.** `04:277-284` — a `Faction` is *"built at a barrier, handed on, dropped at the next"* and
-**NEVER** a member of `World`, a field of its own, an `Act.actor`, a `contest` claimant or a `hold`
-subject. And `Faction.holdings` is a Query that **reads** members' holds and cannot write one.
+**COMPLIANCE.** `04:285` — *"`faction_q.resolve(w, prop) -> Faction      -- built at a barrier, handed
+on, dropped at the next`"*, with `:286`'s `NEVER:` list — never a member of `World`, a field of its
+own, an `Act.actor`, a `contest` claimant or a `hold` subject. And `Faction.holdings` is a Query that
+**reads** members' holds and cannot write one. (The first draft cited `:277-284`, which is the prose
+and the type body and contains neither quoted string.)
 **OBSERVABLE.** `corpus_run` reports no unrepresentable scales; ≥ 1 faction-scale ARC ends.
 **CONTROL.** Person, settlement and realm case hashes do not move.
 **FALSIFIER.** The permuted-`rung_kinds` run `04` specifies — a real one. A `rg` for `superior|liege|rank`
@@ -391,8 +489,15 @@ refuses an empty one; it cannot refuse a wrong one, so the critic must.
 **TIER.** `sonnet` runs, `opus` reads.
 
 **22 — INSTRUCTION.** The proceedings provider, with the amendment its own reconciliation records:
-**M-7 fails at the 1D floor** and the σ-reach remedy is refuted, so take the other — an obstacle
-ceiling or a pool floor above 1D, injected and swept. `speak` with four bands; `proceedings.run`
+**M-7 fails at the 1D floor** (`p_success` 0.0006 at Ob 3, 0.0000 above) and the σ-reach remedy is
+refuted. ⚠ **The content owner leaves two remedies open — *"the obstacle needs a ceiling — remedy (b),
+or a pool floor above 1D"* — and the first draft passed that fork through as "take the other", which
+names two things.** Dispositioned here under §0 test 5, because this document was asked to
+orchestrate: **take the obstacle ceiling.** It is the remedy the design's own `06_RESOLUTION.md`
+§B.3a already names as (b), and the two are not interchangeable games — a ceiling caps how hard a
+matter can get, while a pool floor raises every participant's competence, which is a statement about
+people rather than about matters. The **value** is injected and swept, not chosen here. If Jordan
+prefers the floor, that is a §5 item and it displaces this clause only. `speak` with four bands; `proceedings.run`
 registered as a provider; the prize rows repoint from `sigma_leverage` and drop `interim: true` —
 **a row change, not a code change**, which is what ED-SC-0033 clause (2) bought. The seam's own
 obstacle site is deleted: clause (3)'s single owner.
