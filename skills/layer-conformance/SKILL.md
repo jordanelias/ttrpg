@@ -430,11 +430,11 @@ thing most likely to be stale in this file — re-derive it from them rather tha
 writing:
 
 ```
-pip install pyyaml pytest numpy                                  # fresh container only
+pip install pyyaml pytest numpy pytest-xdist                     # fresh container only
 python3 -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0
 python3 -m engine.season.harness.report && python3 -m engine.season.harness.delta HEAD
 python3 -m pytest engine/season/tests -q
-python3 -m pytest tests/valoria -q
+python3 -m pytest tests/valoria -q -n auto     # ONCE, at the close — CLAUDE.md §0.4
 python3 -m engine.season.harness.register --requirements
 python3 tools/valoria_local.py
 GITHUB_EVENT_NAME=pull_request GITHUB_BASE_REF=main python3 tools/ci_sim_fabrication_check.py

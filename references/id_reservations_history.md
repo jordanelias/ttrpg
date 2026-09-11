@@ -128,6 +128,25 @@ twin"*. Recorded here so the next allocator sees it rather than rediscovering it
 
 <a id="in"></a>
 
+**ED-IN-0213 allocated 2026-09-11** (next_free 213 -> 214), **RENUMBERED 0212 -> 0213 BEFORE EITHER
+BRANCH MERGED.** The verification-cadence ruling (`CLAUDE.md` §0.4 — the full suite is a close step,
+not an inner loop) was filed as the IN-lane id **0212**, which **PR #395** (`claude/repo-workplans-state-xk44q2`)
+had already taken for *"ONE SPINE FOR EVERYTHING THAT REMAINS"*. Both branches read `next_free: 212`
+off `main`; neither had merged. Renumbered on the standing precedent — *the later-merging side
+renumbers* — with #395 keeping 0212 on the ordinary grounds: opened ~8 hours earlier, CI green,
+`mergeable_state: clean`. **Caught before either merged, so no merged ledger line was rewritten** —
+which is the only materially better version of this event than the three below it.
+
+⚠ **This is the third within-lane IN collision in two days** (0207→0208→0209 on 2026-09-10, then
+0212→0213). The entry below already names why: *renumbering to `next_free` does not make an id safe,
+because every concurrent session renumbers to the same `next_free`.* That remains true and this event
+is one more instance of it, not a new diagnosis. **The lane tag makes CROSS-lane collision impossible
+by construction and does nothing for SAME-lane**, and IN is the lane every cross-cutting session
+lands in — so IN collides at a rate the other eight lanes do not. A per-session reserved sub-block
+(the device MB/PC/SC/FA/WR/SE blocks once used) would close it by construction rather than by
+discipline. **Not proposed, and deliberately so:** it is process apparatus, and §0.1 pt 5 wants a
+subject before a mechanism — recorded here as evidence for whoever rules on it.
+
 **ED-IN-0209 allocated 2026-09-10** (next_free 209 -> 210), **RENUMBERED TWICE ON MERGE: 0207 -> 0208
 -> 0209.** Two same-lane collisions on one branch, back to back — the case the `ED-<LANE>` tag does
 *not* prevent by construction, and the same failure class recorded below at ED-IN-0031, 0032,
