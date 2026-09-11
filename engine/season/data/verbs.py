@@ -378,6 +378,43 @@ VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the
 
 VERB_TABLE = _load_verb_table()
 
+def _check_sparse_table(name: str, cells: dict, rows: "set|tuple", row_what: str,
+                        cols: "set|tuple", col_what: str, row_law: str, col_law: str) -> dict:
+    """THE THREE CHECKS A ROSTER-KEYED SPARSE TABLE NEEDS, IN ONE PLACE.
+
+    `alignment` (axis x verb) and `conviction_projection` (conviction x axis) are the same KIND of
+    object — a mapping whose outer key names a roster member, whose inner keys name another
+    roster's members, that may be sparse and may not be uniformly zero. Each check exists because
+    the corresponding failure is SILENT: a cell on an unrostered outer key is never read and never
+    reported; an inner key naming nothing is a weight on an option nobody can form; and an all-zero
+    table makes the whole mechanism inert while passing every test, which is the dead-carrier defect
+    #353 `:739-744` names.
+
+    ⚠⚠ THE TWO LOADERS HAD THIS CHECK-FOR-CHECK, AND `_load_projection`'s DOCSTRING SAID SO — *"the
+    exact shape `_load_alignment` uses one table over -- the rule lives once in kind, not in copy"*.
+    Writing that down is not the same as doing it: §8 says the rule lives once, full stop, and a
+    fourth check or a change to the all-zero test would otherwise have to be made twice to stay in
+    step. The LAW STRINGS stay per-caller, because what a violation means differs by table."""
+    for outer, row in cells.items():
+        if outer not in rows:
+            raise Forbidden(
+                f"{name} names {row_what} {outer!r}, which is not in the roster", "rosters.yaml",
+                needs=f"add it to the roster, or drop the row", law=row_law)
+        unknown = sorted(set(row) - set(cols))
+        if unknown:
+            raise Forbidden(
+                f"{name}[{outer}] names {len(unknown)} {col_what}(s) outside the roster: {unknown}",
+                "rosters.yaml",
+                needs="spell it as the roster spells it, or drop the cell", law=col_law)
+    if not any(val for row in cells.values() for val in row.values()):
+        raise Forbidden(
+            f"the {name} table is all zeroes", "rosters.yaml",
+            needs="a default with at least one non-zero weight",
+            law="PLAN §W5 -- 'a zero matrix makes convictions inert, which is the dead-carrier "
+                "defect #353 `:739-744` names, and it would pass every test while meaning nothing'")
+    return cells
+
+
 def _load_projection() -> dict:
     """`tables.conviction_projection`, the 13x4 that maps a person's convictions into axis space.
 
@@ -401,33 +438,22 @@ def _load_projection() -> dict:
     for `alignment`: an unlisted pair reads `default_cell`. What is checked is that every cell
     NAMED is nameable."""
     cells = table("conviction_projection")
-    for conv, row in cells.items():
-        if conv not in CONVICTIONS:
-            raise Forbidden(
-                f"conviction_projection names {conv!r}, which is not in the convictions roster",
-                "rosters.yaml",
-                needs="add it to `convictions`, or drop the row",
-                law="§F2 -- a person's convictions are weights over the roster. A projection row "
-                    "for a conviction nobody can hold is read by nothing")
-        unknown = sorted(set(row) - set(CONVICTION_AXES))
-        if unknown:
-            raise Forbidden(
-                f"conviction_projection[{conv}] names axis/axes outside the roster: {unknown}",
-                "rosters.yaml",
-                needs="spell the axis as `conviction_axes` spells it, or drop the cell",
-                law="engine/substrate/keys.py::AXES single-owns the four names; a fifth is one "
-                    "edit there and a refusal here, never two rosters drifting apart")
-    if not any(v for row in cells.values() for v in row.values()):
-        raise Forbidden(
-            "the conviction_projection table is all zeroes", "rosters.yaml",
-            needs="a default with at least one non-zero weight",
-            law="every person's convictions would project to the zero vector, which is the "
-                "`uniform` control arm shipped as the default -- inert, and green on every test")
-    return cells
+    return _check_sparse_table(
+        "conviction_projection", cells, CONVICTIONS, "conviction", CONVICTION_AXES, "axis",
+        row_law=("§F2 -- a person's convictions are weights over the roster. A projection row for a "
+                 "conviction nobody can hold is read by nothing"),
+        col_law=("engine/substrate/keys.py::AXES single-owns the four names; a fifth is one edit "
+                 "there and a refusal here, never two rosters drifting apart"))
 
 
 CONVICTION_PROJECTION = _load_projection()
-PROJECTION_DECLARED = {c: dict(row) for c, row in CONVICTION_PROJECTION.items()}
+# ⚠ NO `PROJECTION_DECLARED` HERE, AND ITS ABSENCE IS DELIBERATE. `ALIGNMENT_DECLARED` below
+# exists because `ALIGNMENT` is REBOUND by `alignment_at()`'s sweep, so every arm must be
+# built from an immutable baseline rather than from the previous arm. The projection has a
+# declared `sweep:` on its row and NO `projection_at()` yet, so a frozen copy here would be a
+# second 13x4 in memory that a reader assumes is wired to something because its sibling is.
+# It comes back in the commit that adds the sweep, the way `ALIGNMENT_DECLARED` arrived with
+# `ALIGNMENT_SWEEP`.
 PROJECTION_DEFAULT_CELL = float(table_meta("conviction_projection").get("default_cell", 0.0))
 
 
@@ -441,29 +467,12 @@ def _load_alignment() -> dict:
     describes. All three raise HERE rather than producing a plausible score later."""
     cells = table("alignment")
     verbs = set(VERB_TABLE)
-    for axis, row in cells.items():
-        if axis not in CONVICTION_AXES:
-            raise Forbidden(
-                f"alignment names axis {axis!r}, which is not in the conviction_axes roster",
-                "rosters.yaml",
-                needs="add the axis to conviction_axes, or drop the row",
-                law="§F2 -- `conviction[axis] * alignment(verb, axis)` sums over the ROSTER. A "
-                    "cell on an unrostered axis is never read and never reported")
-        unknown = sorted(set(row) - verbs)
-        if unknown:
-            raise Forbidden(
-                f"alignment[{axis}] names {len(unknown)} verb(s) no verb table row carries: {unknown}",
-                "rosters.yaml",
-                needs="spell the verb exactly as verb_table.yaml spells it, or drop the cell",
-                law="§E2 -- the verb table is the roster of verbs. A cell keyed on a verb that "
-                    "does not exist is a weight on an option nobody can ever form")
-    if not any(v for row in cells.values() for v in row.values()):
-        raise Forbidden(
-            "the alignment table is all zeroes", "rosters.yaml",
-            needs="a default with at least one non-zero weight",
-            law="PLAN §W5 -- 'a zero matrix makes convictions inert, which is the dead-carrier "
-                "defect #353 `:739-744` names, and it would pass every test while meaning nothing'")
-    return cells
+    return _check_sparse_table(
+        "alignment", cells, CONVICTION_AXES, "axis", verbs, "verb",
+        row_law=("§F2 -- `conviction[axis] * alignment(verb, axis)` sums over the ROSTER. A cell on "
+                 "an unrostered axis is never read and never reported"),
+        col_law=("§E2 -- the verb table is the roster of verbs. A cell keyed on a verb that does "
+                 "not exist is a weight on an option nobody can ever form"))
 
 ALIGNMENT = _load_alignment()
 

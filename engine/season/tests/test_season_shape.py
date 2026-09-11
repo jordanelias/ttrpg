@@ -6238,7 +6238,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # directions at 13 by construction; seeding 1-3 takes that to 80 of 86 and the executed-set
     # count barely moves (28 -> 27). The remaining cause is the matrix's own centre of mass, which
     # is authored canon (`conviction_axis_matrix_v30.md` §3 argues all 52 cells) and is NOT
-    # re-calibrated here. `ED-IN-0213` carries it as the one question this unit escalates.
+    # re-calibrated here. `ED-IN-0214` carries it as the one question this unit escalates.
     # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 143 corpus cases, control from a worktree at a85bd45 -- distinct executed sets 40 -> 27, R3 84 -> 83, universal {reconstruct} -> {utter}, `release` 15 -> 2 worlds]
     # ⚠ 27 -> 25 under G1a, and the direction is the same one `U3` moved: the ruled `Record.matured` write (G1a): the gate-emitted maturation carries `(matured, None)` where the hand-built Event carried `(stages, label)`, which moves the Event's id and its folded content, and the content hash is what an undeclared tiebreak uses to pick which question a person answers.
     # [GROUNDED: measured 2026-09-11 with `Record.matured` written through the gate -- distinct executed sets 25 over the same 89 live worlds, from 27 under `U3`]

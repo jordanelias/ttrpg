@@ -26,6 +26,7 @@ from typing import Optional
 
 from ..data.rosters import RELEASABLE_KINDS, title_domain, title_rank
 from ..queries import world_q
+from ..state.carriers import subject_of
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -209,7 +210,7 @@ def _req_release(w: "World", a: "Act") -> bool:
     half waits on distinct operands (`decision/options.py:307-312`).
 
     ⚠ `contain` IS EXCLUDED BY THE ROSTER, NOT BY A LITERAL HERE. See `RELEASABLE_KINDS`."""
-    subj = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
+    subj = subject_of(a)
     if not subj:
         return False
     return any(t.subject == a.actor and t.object == subj

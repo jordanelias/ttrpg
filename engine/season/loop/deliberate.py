@@ -32,7 +32,7 @@ question, not this unit's. Found by the Fable gate on Arc 1 and filed under `ED-
 from __future__ import annotations
 from ..decision import standing_of
 from ..gaps import InstrumentDefect
-from ..state.carriers import Scene, Sensation
+from ..state.carriers import Scene, Sensation, subject_of as _subject_of
 from ..state.ids import H
 
 from typing import Any, Callable
@@ -233,8 +233,6 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
             # ⚠ THE RELEASE RECORDS WHAT WAS *ATTEMPTED*; `season()` PROMOTES ONLY WHAT WAS
             # *REALISED*. See `_drop_what_was_already_done` and `SeasonDriver.season` for why a
             # refused attempt must not bar its own retry.
-            self._attempted.setdefault(p.id, set()).update(
-                (a.verb, _subject_of(a)) for a in sc.acts if _subject_of(a))
             # ⚠ THE SCENE IS REGISTERED AND THE ACT IS STAMPED WITH IT. Season-local, beside
             # `resolved`, and for the same reason: the fold needs to ask what occasioned an
             # act, and nothing else in the loop knows. Without this the Scene is built,
@@ -275,13 +273,6 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
 # to `loop/deliberate` *"for `sense` only"* both name THIS step by name.
 # ---------------------------------------------------------------------------
 
-def _subject_of(a) -> str:
-    """The act's subject, or `""`. ⚠ `isinstance(..., dict)` AND NOT `a.payload or {}`, because a
-    hand-built probe Act may carry a STRING payload — `_operand` in `loop/effects.py` guards it the
-    same way and for the same reason. Caught by `test_no_probe_errors`, which ran fourteen probes
-    through this line and reported `'str' object has no attribute 'get'` from six of them."""
-    d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
-    return d.get("subject") or ""
 
 
 def _drop_what_was_already_done(scenes: list, taken: set) -> list:
@@ -320,9 +311,10 @@ def _drop_what_was_already_done(scenes: list, taken: set) -> list:
     `SeasonDriver.season` now promotes a pair into this set only after the fold has run and only
     when the act's Event was not one of its row's `emits_on_refusal` kinds. A failed attempt costs
     the scene-action — the budget is spent either way — and leaves the opportunity open.
-    ⚠ THE TWO SETS ARE KEPT SEPARATE AND BOTH ARE LIVE: `_attempted` is what the release wrote and
-    is what the budget was spent on; `_realised` is what this filter reads. Collapsing them was the
-    defect.
+    ⚠ THIS FILTER READS `_realised` AND NOTHING ELSE. A sibling `_attempted` set was written every
+    round beside it, and this line used to say both were live; a `/simplify` pass found nothing ever
+    read it and it is gone. The DISTINCTION it named is still the point — the budget is spent on the
+    attempt, the retry is barred only by the realisation — but one set expresses it.
 
     ⚠ AND THE KEY IS `(verb, subject)`, NOT `verb`. A person may write two records about two
     different things in one season; what they may not do is write the same record twice.

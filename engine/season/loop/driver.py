@@ -44,7 +44,7 @@ from ..gaps import (
 )
 from ..state.carriers import (
     Act, Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene,
-    Sensation, Site, StateChange, Tenure, View,
+    Sensation, Site, StateChange, Tenure, View, subject_of,
 )
 from ..state.ids import H, ROOT
 from ..state.world import World
@@ -146,10 +146,14 @@ def resolvable_verbs() -> frozenset:
         contested = bool(row.contests)
         resolvable_contest = False
         if contested:
-            from ..data.rosters import roster_map
-            from ..manifest import has as _provider_registered
-            _row = roster_map("contest_subsystems", "prizes").get(str(row.contests))
-            _mod = _row.get("provider") if isinstance(_row, dict) else _row
+            # ⚠ THROUGH `manifest.resolve`, NOT BY RE-READING THE ROSTER. This planted the literals
+            # `"contest_subsystems"` / `"prizes"` here and re-implemented the row unwrap, which
+            # `registry.py`'s own comment forbids in as many words — *"THE ROLE NAMES ARE DATA, NOT
+            # A LITERAL HERE ... the map exists so `resolve` does not branch on a role's name."*
+            # Two readings of one row's `provider:` is how a role added to `_ROLE_ROSTERS`, or a new
+            # case in the row shape, silently stops reaching the verb set.
+            from ..manifest import has as _provider_registered, resolve as _resolve_row
+            _mod = (_resolve_row("contest", row.contests) or {}).get("provider")
             resolvable_contest = (bool(_mod) and _provider_registered("contest", _mod)
                                   and row.requires_typed is not None)
         if gated and effected and (not contested or resolvable_contest):
@@ -253,14 +257,20 @@ class SeasonDriver:
         # person, as of their last deliberation. Unchanged ⇒ their candidate set is identical by
         # construction, so the driver releases their next chosen scene rather than re-deriving it.
         self._inputs: dict = {}
-        # ⚠ TWO SETS, AND THE SPLIT IS THE WHOLE OF A DEFECT THIS UNIT'S ADVERSARIAL PASS FOUND.
-        # `_attempted` is what the release wrote — the `(verb, subject)` pairs a person spent a
-        # scene-action on this season, whatever came of them. `_realised` is that set MINUS the
-        # ones the fold refused, and it is what `_drop_what_was_already_done` reads. Recording the
-        # attempt directly barred a refused act from ever being retried, including in a later round
-        # whose world had made its precondition true — which is the exact channel R-03 exists to
-        # open, closed by the filter meant to protect the season's variety.
-        self._attempted: dict = {}
+        # ⚠ WHAT `_drop_what_was_already_done` READS, AND IT IS THE REALISED SET RATHER THAN THE
+        # ATTEMPTED ONE — which is the whole of a defect this unit's adversarial pass found. A pair
+        # enters here only after the fold has run and only when the act's Event was not one of its
+        # row's `emits_on_refusal` kinds. Recording the ATTEMPT instead barred a refused act from
+        # ever being retried, including in a later round whose world had made its precondition
+        # true — the exact channel R-03 exists to open, closed by the filter meant to protect the
+        # season's variety.
+        # ⚠⚠ **THERE WAS A SECOND SET, `_attempted`, AND IT WAS WRITTEN EVERY ROUND AND READ BY
+        # NOTHING.** Its comment claimed both were live; a `/simplify` pass proved otherwise. The
+        # split it described is real and survives — it is the difference between what the budget
+        # was spent on and what may be retried — but only ONE side of it was ever consulted, so
+        # keeping the other was carrying a set the code did not use behind a comment that said it
+        # did. Deleted; if the attempted set is ever genuinely needed, it comes back with its
+        # reader in the same commit.
         self._realised: dict = {}
 
 
@@ -342,7 +352,7 @@ class SeasonDriver:
         # `U2`: season-local. See `__init__` for why these four reset and the three above it do not.
         self.round = 0
         self._queued, self._spent, self._deliberated_at = {}, {}, {}
-        self._inputs, self._attempted, self._realised = {}, {}, {}
+        self._inputs, self._realised = {}, {}
         self.calendar()
         matter_events = self.matter(actorless)
         rounds = int(w.fixtures.get("scene_budget"))
@@ -379,7 +389,7 @@ class SeasonDriver:
                     _acted.add(a.id)
             for a in acts:
                 if a.id in _acted and a.id not in _refused_acts:
-                    _subj = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
+                    _subj = subject_of(a)
                     if _subj:
                         self._realised.setdefault(a.actor, set()).add((a.verb, _subj))
             for e in events:

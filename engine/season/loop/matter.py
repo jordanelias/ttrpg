@@ -20,7 +20,7 @@ from typing import Optional
 from ..data.fixtures import SITE_YIELD
 from ..data.matrix import Step, WriteClass
 from ..queries import world_q
-from ..state.carriers import Event, StateChange
+from ..state.carriers import Event
 from ..state.ids import H, ROOT
 from ..trace_log import TRACE
 

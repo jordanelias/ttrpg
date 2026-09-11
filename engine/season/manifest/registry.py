@@ -129,6 +129,18 @@ def resolve(role: str, key: Any) -> Optional[dict]:
     row = roster_map(roster, column).get(str(key))
     if row is None:
         return None
+    # ⚠⚠ **A NON-DICT ROW IS A MODULE WITH NO PROVIDER, AND SAYING SO IS THE FIX — NOT DELETING
+    # THE BRANCH.** A `/simplify` pass read this as a dead compatibility shim, on the grounds that
+    # all four shipped rows are dicts. They are; the branch is still live, because
+    # `test_a_misspelled_manifest_row_fails_at_boot_naming_the_row` PLANTS a bare string
+    # (`{"a fabricated prize": "no_such_subsystem"}`) as its misspelled-row arm, and deleting the
+    # branch turned that boot refusal from a typed `Unspecified` naming the row into a raw
+    # `AttributeError`. The suite caught it; the reasoning that it was unreachable did not.
+    # ⚠ WHAT *WAS* WRONG IS THE SECOND READ, AND IT IS FIXED BELOW: it spelled
+    # `row.get("provider") if isinstance(row, dict) else row`, so a string row returned the MODULE
+    # as the PROVIDER — the one confusion `U1` added the `provider:` field to end. A string names
+    # WHOSE prize it is and nothing about what runs it, so the provider is `None` and the row
+    # refuses downstream like any other row with no provider.
     name = row.get("module") if isinstance(row, dict) else row
     if name is None:
         raise Unspecified(
@@ -136,7 +148,7 @@ def resolve(role: str, key: Any) -> Optional[dict]:
             needs="a `module:` naming the subsystem that owns the prize",
             law="a prize row names WHOSE contest it is before it names what runs it; a row with a "
                 "provider and no module says a thing can be rolled without saying what it is")
-    provider_name = row.get("provider") if isinstance(row, dict) else row
+    provider_name = row.get("provider") if isinstance(row, dict) else None
     contracts = files.MODULE_CONTRACTS_YAML
     if not contracts.exists():
         return dict(module=name, provider=provider_name, resolver="unknown",

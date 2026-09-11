@@ -437,6 +437,25 @@ class Record:
     matured: bool = False
 
 
+def subject_of(a: "Act") -> str:
+    """The act's subject, or `""`. THE ONE READ, beside the carrier it reads.
+
+    ⚠ `isinstance(..., dict)` AND NOT `a.payload or {}`, because a hand-built probe Act may carry a
+    STRING payload. `loop/effects.py::_operand` guards the same way and for the same reason; it is
+    a DIFFERENT rule (it raises on any missing named operand) and is deliberately not folded here.
+
+    ⚠⚠ **IT LIVES HERE BECAUSE THREE CALLERS HAD IT AND TWO OF THEM DISAGREED — IN THE COMMIT THAT
+    CREATED THEM.** `loop/deliberate.py` returned `""` for a subject-less act; `loop/driver.py` and
+    `loop/predicates.py` each inlined
+    `(a.payload or {}).get("subject") if isinstance(a.payload, dict) else None` and returned
+    `None`. `""` and `None` are both falsy, so nothing broke and nothing would have — until a
+    caller wrote `subj is None` or put the result in a set beside a `""`. `carriers` is the leaf
+    all three already reach, and neither `deliberate` nor `predicates` imports the other, so this
+    is the only home that costs no new edge."""
+    d = a.payload if isinstance(getattr(a, "payload", None), dict) else {}
+    return d.get("subject") or ""
+
+
 @dataclass(frozen=True)
 class Proposition:
     """S14. IDENTITY-BEARING AND IMMUTABLE. Fixed at utterance, never destroyed.

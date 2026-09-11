@@ -31,7 +31,7 @@ from ..loop.predicates import REQUIRES_PREDICATES
 from ..queries.world_q import WorldReader, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
-from ..state.ids import H
+from ..state.ids import draw_factory, H
 from ..state.world import World
 from ..trace_log import TRACE
 
@@ -446,9 +446,14 @@ def resolve(self, acts: list[Act],
             # it IGNORES this generator for exactly that reason: consuming it would re-seed every
             # existing `kill / wound` result and silently re-record the goldens under cover of a
             # refactor. Row 35 needs purpose UNIQUENESS, not one spelling across providers.
-            _rng = random.Random(
-                # [JUSTIFIED: the `16` is `int()`'s RADIX -- `H` returns a hex digest and this parses it base-16. Not a magnitude, not a game value, and nothing about it is chooseable]
-                int(H(w.world_seed, w.tick, a.actor, f"roll:{_contests[0]}:{a.id}"), 16))
+            # ⚠ THROUGH `draw_factory`, THE OWNER, AND IT IS THE SAME STREAM. This wrote
+            # `random.Random(int(H(w.world_seed, w.tick, a.actor, purpose), 16))` by hand, which is
+            # `draw_factory`'s inner `draw` character for character with the same four arguments —
+            # so routing through the owner moves NO golden, and keeping the copy bought nothing.
+            # The purpose stays `roll:<prize>:<act id>`: `04 PART D row 35` needs purpose
+            # UNIQUENESS, not one spelling across providers, and that is what is preserved here.
+            _rng = draw_factory(w.world_seed, lambda: w.tick)(
+                a.actor, f"roll:{_contests[0]}:{a.id}")
             r = contest(w, rung=(a.payload if isinstance(a.payload, str) else None) or "R",
                         prize=_contests[0],
                         claimants=_parties, depth=0, max_depth=contest_max_depth,

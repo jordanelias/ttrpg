@@ -72,6 +72,21 @@ from ...manifest.providers import provider
 from engine.autoload.sigma_leverage import net_boost, roll_net
 
 
+def _capability(entity: Any, verb: str):
+    """What `entity` brings to `verb`'s capability key, or `None` if it brings nothing.
+
+    ⚠ ONE READ, TWO CALLERS, AND THEY HAD IT TWICE. `_pool_of` and `_obstacle_of` each mapped the
+    verb through `VERB_CAPABILITY`, guarded a missing key, and guarded a missing entry — the same
+    three steps, differing only in WHOSE dict they read and what default they fall to. Those
+    differences are the callers'; the read is not. Returning `None` rather than a default is what
+    keeps it that way: the pool falls to `pool_default` and the obstacle to `obstacle_default`, and
+    neither is this function's to know."""
+    key = VERB_CAPABILITY.get(verb)
+    if not key:
+        return None
+    return (getattr(entity, "capability", None) or {}).get(key)
+
+
 def _pool_of(person: Any, verb: str, fx: Any) -> int:
     """Dice, from what the actor genuinely has. `03 §A.2` — *"Rank supplies dice and gates nothing"*.
 
@@ -83,8 +98,7 @@ def _pool_of(person: Any, verb: str, fx: Any) -> int:
     ⚠ `08 §3` GIVES THE POLARITY: an `assumption` grade means *inject the default, declare the site,
     sweep three points* — never refuse the whole corpus for a missing key. `absent` is the grade
     that refuses, and this is not one."""
-    key = VERB_CAPABILITY.get(verb)
-    have = (getattr(person, "capability", None) or {}).get(key) if key else None
+    have = _capability(person, verb)
     return int(have if have is not None else fx.get("pool_default"))
 
 
@@ -102,8 +116,7 @@ def _obstacle_of(w: Any, subject: Optional[str], verb: str, fx: Any) -> float:
     single owner arriving: `H-127` carries that, and ED-SC-0033 clause (3) names the proceedings
     subsystem as the owner this defers to."""
     if subject and subject in getattr(w, "persons", {}):
-        key = VERB_CAPABILITY.get(verb)
-        have = (w.persons[subject].capability or {}).get(key) if key else None
+        have = _capability(w.persons[subject], verb)
         if have is not None:
             return float(have) / 2.0
     return float(fx.get("obstacle_default"))
