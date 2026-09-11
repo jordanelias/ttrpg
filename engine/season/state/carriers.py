@@ -119,7 +119,23 @@ class Event:
 
 @dataclass
 class Claim:
-    """S20. Lives in the HOLDER'S OWN ledger."""
+    """S20. Lives in the HOLDER'S OWN ledger.
+
+    ⚠ `round` IS THE ONLY CARRIER FIELD `U2` ADDS, AND THE ONLY ONE IT MAY ADD. The scene tick
+    subdivides a season into rounds, and §F1's Q2 asks for *a claim LANDING in the holder's ledger*
+    — which was readable off `when` alone while a season was one pass, and is not once a season is
+    several. `when` still says WHICH SEASON and is what eviction and decay read
+    (`p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))`); `round` says WHICH ROUND WITHIN
+    it, so `questions_for(w, p, since=(tick, round))` can ask *since I last deliberated* rather
+    than *since last season*.
+    ⚠ IT DEFAULTS TO `0` AND EVERY EXISTING CONSTRUCTION IS POSITIONAL, so a Claim built anywhere
+    that predates the tick reads as round 0 — which is exactly what a claim from the one-pass loop
+    WAS. The generalisation is therefore exact at `R = 1`: `since == (tick - 1, 0)` selects the
+    same claims `c.when == w.tick - 1` did.
+    ⚠ AND NO OTHER CARRIER GETS ONE (`D-21`, and U2's falsifier (d)). The round index is a DRIVER
+    LOCAL — `SeasonDriver.round` — because it is a fact about where the loop is, not about any
+    thing in the world. A `round` on `Act` or `Event` would make it world state and put a fourth
+    clock in the model."""
     id: str
     holder: str
     subject: str
@@ -129,6 +145,7 @@ class Claim:
     source: str
     confidence: int
     visibility: str
+    round: int = 0
 
 
 

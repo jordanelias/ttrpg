@@ -370,6 +370,27 @@ DEFAULT_FIXTURES = Fixtures(
     interactions_per_scene=3,          # `H-76`, swept 1 / 3 / unbounded
     extended_scene_cost=2,             # `H-77`, swept 1 / 2 / 3
     scene_packing_rule="greedy",       # `H-78`, swept greedy / one_per_scene / by_subject
+    # `U2` / `H-124`. HOW MANY OF THE FIVE A PERSON MAY SPEND IN ONE ROUND of the scene tick.
+    #
+    # ⚠ THIS IS NOT `scene_budget` UNDER A SECOND NAME. `scene_budget` is 5 and is the season's
+    # total, RULED (Jordan, 2026-09-02: *"5 scenes for a character to play per season"*). This is
+    # how those five are SPREAD across the season, and nothing rules it.
+    #
+    # ⚠ AND IT BOUNDS THE DRIVER, NOT THE PERSON. The person still chooses against their whole
+    # season remainder — `pack_scenes` takes that as its COST budget, so an extended scene
+    # (`extended_scene_cost` = 2) is still affordable — and the driver releases this many of the
+    # scenes they chose per round. Nothing is discarded, only deferred, so S26.3's *the engine
+    # never truncates* is untouched. Making this the person's bound instead would have trimmed
+    # every extended chunk to one interaction and driven `H-77`'s sweep inert.
+    #
+    # ⚠ `5` IS A REAL ARM AND NOT A CONTROL, AND THE FIRST WRITING OF THIS COMMENT SAID OTHERWISE.
+    # It called the 5 arm "the one-pass loop". Measured at `build_world(0)`, 2 seasons, it is not:
+    # `claim.deposited` 50 -> 53, `claim.decayed` 21 -> 24, `finding.made` 2 -> 3. A person whose
+    # triage leaves budget UNSPENT empties their queue with remainder left, so a later round asks
+    # them again and they spend it — where the one-pass loop simply lost it. THE CONTROL IS THE
+    # `scene_budget = 1` ARM (one round), which reproduces the pre-tick Event multiset exactly.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-124 -- `site: Fixtures scenes_per_round`, graded `assumption`; Jordan ruled the unit, the per-season count and that the tick is scene-granular, and supplied no number for the round, so this is injected, declared and swept 1 / 2 / 5]
+    scenes_per_round=1,                # `H-124`, swept 1 / 2 / 5 (5 is the one-pass control)
     claim_subject_rule="both",         # `H-79`, swept actor / per_change / both
     # `W-B` / `H-122`. WHO RECEIVES A CLAIM MINTED FROM WHAT THE FOLD READ. #353 §28 says WITNESS
     # deposits and never says whether the deposit may carry the reads, or to whom; the arms are

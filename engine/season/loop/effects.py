@@ -1,7 +1,8 @@
 """`season.loop.effects` — the resolver's BODY. One effect per verb that writes.
 
 EXTRACTED, step 5 of the decomposition (a PURE MOVE). `EFFECTS`, its decorator, the ONE operand
-reader (`_operand`) and the ten `_eff_*` move together and must: §8's *"THE OWNER OF THE RULE, AND
+reader (`_operand`) and the eleven `_eff_*` (ten until `release`, 2026-09-11) move together and
+must: §8's *"THE OWNER OF THE RULE, AND
 THREE EFFECTS HAD THEIR OWN COPY"* is about `_operand` specifically, and the decorator-filled
 table has to be defined where the decorated functions are or it is empty when the fold reads it.
 
@@ -22,12 +23,11 @@ and it is §47's failure exactly: a false claim of enforcement stops the next re
 
 from __future__ import annotations
 
-from ..data.rosters import FELLED, WOUND_HARM_MODELS
+from ..data.rosters import FELLED, RELEASABLE_KINDS, WOUND_HARM_MODELS
 from ..gaps import InstrumentDefect, Unspecified
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.ids import H
 from ..trace_log import TRACE
-from .predicates import RELEASABLE_KINDS
 
 
 # ---------------------------------------------------------------------------

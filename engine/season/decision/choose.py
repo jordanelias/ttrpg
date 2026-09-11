@@ -238,6 +238,11 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # to `interactions_per_scene` of the ranked candidates. The default policy fills scenes
         # greedily in score order -- a person spends a scene on their best option and whatever
         # else it can carry, which is what "1-3 mechanical interactions" describes.
+        # `U2`: `ask_budget()` is the person's SEASON REMAINDER, not one round's allowance. The
+        # person chooses the whole of what they will do with the season they have left; the driver
+        # releases `scenes_per_round` of it per round (`H-124`). Nothing is discarded, so S26.3's
+        # *the engine never truncates* is untouched -- what the round bounds is WHEN a chosen scene
+        # runs, not WHETHER.
         return pack_scenes(p, ranked, ask_budget(), fx, mint, occasion=q)
     return choose
 
@@ -268,7 +273,16 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
     `greedy` is that behaviour declared and kept as the control. `one_per_scene` is the pre-ruling
     accounting. `by_subject` groups the interactions that share a subject, which is what
     `player_agency_v30.md` §6.3's "one scene opportunity pursued" describes -- an opportunity is
-    an opportunity to do something ABOUT something."""
+    an opportunity to do something ABOUT something.
+
+    ⚠ `n_scenes` IS A COST BUDGET AND NOT A SCENE COUNT, WHICH IS WHY `U2`'s ROUND BOUND IS NOT
+    HERE. `take()` spends it, and an extended scene costs `extended_scene_cost` (2) against a
+    plain one's 1. The scene tick bounds how many of a person's chosen scenes RUN in one round,
+    and that is a scheduling fact the driver owns (`SeasonDriver.deliberate`, `H-124`) -- not a
+    second bound on the person's triage. Putting it here as a count of 1 would make every extended
+    chunk cost 2 > 1 and be trimmed to a single interaction, so no extended scene could form,
+    `Scene.cost` would return 1 unconditionally, and `H-77`'s three-point sweep would go INERT --
+    the exact shape that row records itself recovering from."""
     rule = fx.get("scene_packing_rule")
     if rule not in SCENE_PACKING_RULES:
         raise Unspecified(

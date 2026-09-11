@@ -127,7 +127,14 @@ def witness(self, events: list[Event]) -> int:
         for n, subj in enumerate(claim_subjects(e, claim_rule, act_refs(self.act_of.get(e.id)))):
             cid = (e.id if via_knot and n == 0
                    else H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}"))
-            c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own")
+            # ⚠ `self.round` IS THE LAST ARGUMENT AND `U2` IS WHY. §F1 Q2 is *a claim LANDING in
+            # the holder's ledger*, and a season is now several rounds: a claim deposited in round
+            # 3 is NEW to a person who last deliberated in round 3, and `when` alone cannot say so
+            # because it is the same tick. `questions_for(w, p, since=(tick, round))` compares the
+            # pair. Unstamped, every claim would read `round = 0` and a later round's deposit would
+            # sort BEFORE the deliberation that should see it — Q2 dead inside the season, which is
+            # the exact shape of the bug that kept Q2 dead across seasons before the `tick - 1` fix.
+            c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.round)
             # `W4`. THE DEPOSIT EMITS, AND THAT IS WHAT GIVES A DECAY AN ANTECEDENT.
             # Part D declares `claim.deposited` on this row and NOTHING EMITTED IT, so a
             # claim entered the world uncaused — and every later `claim.decayed` would have
@@ -208,7 +215,8 @@ def witness(self, events: list[Event]) -> int:
                 # two reads OF ONE EVENT; it spans the pass now and is still strictly
                 # increasing, so no two ids collide.
                 oc = Claim(H(w.world_seed, w.tick, pid, f"obs:{e.id}:{len(seen_obs)}"),
-                           pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own")
+                           pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own",
+                           self.round)   # `U2`: see the deposit above
                 w.write("claim_ledger", WriteClass.INTERIOR,
                         lambda p=p, c=oc: p.ledger.append(c),
                         record_kind="Person", fieldname="claim_ledger", driver="Event",

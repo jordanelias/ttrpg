@@ -214,7 +214,7 @@ rows:
     statement: >-
       seasons must tick scene-by-scene, so what occurs after one scene can impact the next
       scene
-    status: not_met
+    status: met
     measured: >-
       The scene container EXISTS and is not what's missing: `Scene` is a dataclass
       (`engine/season/state/carriers.py::Scene`, moved there at step 4 of the decomposition; this
@@ -236,7 +236,42 @@ rows:
       of a season scales with the CAST rather than with the PLAYERS. The actorless channel
       (`SeasonDriver.matter`) already exists for the no-scene case, and both channels converge at
       `witness` into one log (S19.5).
-    measure: "python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0"
+      ⚠⚠ **MET 2026-09-11 BY `U2`, AND THE FLIP IS ON AN EXECUTION RATHER THAN A DOCUMENT
+      (`CLAUDE.md` §0.2).** `SeasonDriver.season` is now
+      `calendar -> matter -> for r in range(R): freeze -> deliberate -> resolve -> log -> witness`,
+      with `R = scene_budget`. CALENDAR and MATTER stay once per season (AX-5's three motions are
+      seasonal, `01_AXIOMS.md:151`; a docket forming five times a season is a fourth clock,
+      `04 §C.1:504` + D-17/D-21), `w.tick` advances once (D-45), and the round index is a DRIVER
+      LOCAL — `Claim.round` is the only carrier field the unit adds, and it is a different thing:
+      WHEN a claim landed, which `questions_for(w, p, since=(tick, round))` reads.
+      **THE ACCEPTANCE, EXECUTED:**
+      `test_u2_a_deposit_in_one_round_changes_a_later_rounds_candidate_set_in_the_same_season`
+      plants one claim in `p_bailiff`'s ledger at the end of round 0, about a rung they hold a
+      live `contain` Tenure toward. `p_bailiff` raises no question under any of §F1's four sources
+      in that world, so the control arm forms NO candidates in any round — the plant does not
+      shift a deliberation, it CAUSES one, in a later round of the same season. That is the
+      channel R-03 names, and before `U2` no mechanism could carry it.
+      **WHAT IT BOUGHT, MEASURED AGAINST A CONTROL** (both arms seed 0 over the same 143 corpus
+      cases, the control run from a worktree at the commit before it): **R3 cross-person
+      propagation 50 -> 84 of 143**, distinct executed sets **14 -> 38**, the universal executed
+      set collapses from `{create_record}` to EMPTY (nothing is guaranteed a scene in every world
+      any more), and the two rarest verbs more than double their reach (`research` 15 -> 35 worlds,
+      `interview` 14 -> 25). R3 is R-01/R-02's own channel and this is the largest single move it
+      has made.
+      **THE CONTROL IS REAL AND IS THE `scene_budget = 1` ARM**, where the season is ONE round: the
+      rounds loop, the queue, the fingerprint and the release all run and reproduce the pre-tick
+      `(actor, verb, subject)` act multiset and Event-kind multiset EXACTLY. The content hash moves,
+      by `Claim` gaining a field and for no other reason, which is why the test asserts the
+      multisets and not the hash.
+      ⚠ **AND TWO THINGS THE UNIT COST, REPORTED RATHER THAN NETTED OFF.** (1) In the `headless`
+      world the verb mix NARROWS, 10 verbs to 6 over two seasons: a person re-ranks each round and
+      takes the top of a fresh ranking, so they reach less deep into it than one `pack_scenes` call
+      over the whole season did. That is local to a three-person world — corpus-wide the same 11
+      verbs execute and the rare ones reach MORE worlds. (2) People now spend scene-actions their
+      own packing used to strand: a person whose queue empties with budget left is asked again,
+      where the one-pass loop simply lost the remainder. Roughly 6% more deposits in the headless
+      world. Neither is what R-03 asked for and both are consequences of it.
+    measure: "python -m engine.season.harness.headless --case NPC-088 --seasons 2 --seed 0  # and `pytest engine/season/tests -q -k test_u2_`, which is what §0.2 accepts"
     blocks: [W17]
 
   - id: R-04
@@ -284,14 +319,31 @@ rows:
       R3 moves **55 -> 50 of 143**, which is a cost and is reported rather than netted off; it sits
       inside the band temperature alone covers (`U4`'s sweep moved R3 56·55·59·59·48 with the verb
       set held fixed), so this instrument cannot separate the two and says so.
-      ⚠ **AND IT IS MOSTLY A REFUSAL.** Over the 27 NPC rung cases at seed 0, 3 seasons: taken 164
-      times, 6 edges closed, 158 refusals — 96.3%. That is in line with this instrument rather than
-      anomalous in it (`work` refuses 177 of 177 in the same run) and it is the shape §F1's
-      EPISTEMIC candidate filter produces: no claim these worlds deposit ever says *you hold no
-      tenure toward that*, so the person attempts and the world declines. A person-side pre-filter
-      on their own tenures would fix the ratio and would be special-casing one verb, which is the
-      scripting drift `CLAUDE.md` §10 forbids; the honest reading is that the verb is BUILT and
-      barely EXERCISED.
+      ⚠ **AND IT IS MOSTLY A REFUSAL, FOR A STRUCTURAL REASON.** Over the 27 NPC rung cases at
+      seed 0, 3 seasons: taken 164 times, 6 edges closed, 158 refusals — 96.3%.
+      `belief_contradicts` evaluates `row.requires_typed` and its own docstring states the polarity
+      (`engine/season/epistemic.py:84-87`): *"AN UNTYPED VERB IS NOT CONTRADICTED.
+      `evaluate(None, ...)` is UNKNOWN, and UNKNOWN is not False."* `release` declares
+      `requires_typed: none`, so §F1 clause 4 CAN NEVER FIRE ON IT, in any world, for any claim —
+      no belief could suppress the candidate however the corpus were seeded. ⚠ THIS CELL ONCE READ
+      *"the same reason `work` refuses 177 of 177"* AND THAT WAS WRONG IN KIND: `work` carries a
+      typed `scalar_threshold` cell and its clause-4 channel is live and measured (`restore`, on
+      the same cell, drops 387 times). Same surface number, two different mechanisms. A refusal is
+      a first-class outcome here (`verb_table.yaml:13-16` — *"`emits_on_refusal` IS THE SCARCITY
+      CHANNEL AND IT IS LOAD-BEARING"*), so the ratio is licensed; what it is not is evidence the
+      verb is exercised. Typing the cell is what would change it, and the row's own note says so:
+      *"IF AN `any` COMBINATOR IS EVER RULED, THIS CELL IS THE FIRST THING TO TYPE."* The verb is
+      BUILT and barely EXERCISED.
+      ⚠ **THE 164 / 6 / 158 TRIPLE HAS NO INSTRUMENT IN THE TREE, AND THAT IS SAID RATHER THAN
+      IMPLIED.** `corpus_run` prints `VERBS THAT EXECUTED` and `VERBS ONLY REFUSED` as SETS, not as
+      per-verb counts, so no committed command reproduces these three numbers. They were measured
+      by a one-off script and the recipe is given so anyone can rebuild it: load `run_cases`'s NPC
+      lane, keep the cases whose `scale` is in `rung_kinds` (27 of them), `corpus_run.build_at(case,
+      0)`, three seasons through `SeasonDriver.season` with `make_chooser(..., verbs=resolvable_verbs(),
+      draw=draw_factory(...))`, then count `driver.resolved` by verb and `world.log` by kind. What
+      IS instrumented, and is what the claim rests on, is the pair of assertions in
+      `test_season_shape.py`: `release` in the executed set over the 143-case corpus, and 15 of the
+      89 live worlds. The triple is context for those, not evidence beyond them.
       ⚠ WHAT THE SPLIT DID **NOT** BUILD, said here because a verb row is not a mechanism:
       `fieldwork_v30.md:302-309` grades all six on four bands and NOTHING RESOLVES A BAND. Their
       `emits:` is flat. `rosters.yaml:482` types investigation's seam UNRULED and `:487-491` rules

@@ -60,7 +60,8 @@ from ..gaps import Forbidden, Unspecified
 from .matrix import MATRIX
 from .requires import TypedRequires, build_typed_requires
 from .rosters import (
-    CONVICTION_AXES, RUNG_KINDS, STRATA, TENURE_KINDS, load_yaml, roster, table, table_meta,
+    CONVICTION_AXES, RELEASABLE_KINDS, RUNG_KINDS, STRATA, load_yaml, roster, table,
+    table_meta,
 )
 
 VERB_TABLE_YAML = files.VERB_TABLE_YAML
@@ -207,6 +208,7 @@ def _load_verb_table() -> dict:
         raise SystemExit(f"verb_table.yaml not found at {VERB_TABLE_YAML}")
     doc = load_yaml(VERB_TABLE_YAML.read_text())
     out = {}
+    _release_domain: frozenset = frozenset()
     for r in doc["verbs"]:
         name = r["verb"]
         if name in out:
@@ -246,28 +248,8 @@ def _load_verb_table() -> dict:
                 f"verb_table.yaml: {name!r} declares `requires_typed: none` and no "
                 "`requires_typed_note:`. An untyped cell with no reason is indistinguishable "
                 "from one nobody typed, which is the state W-A exists to end.")
-        # LOADER INVARIANT 6 (`04_CODE_ARCHITECTURE.md` PART D row 15, MECHANICAL at load):
-        # *"`release` generic; the loader asserts its domain equals `tenure_kinds \ {contain}`"*.
-        #
-        # ⚠ THE ASSERTION IS AGAINST THE ROSTER, WHICH IS WHY THE COLUMN IS DECLARED AND NOT
-        # DERIVED. `contain` is excluded because it is the one Tenure kind whose subject may be a
-        # Rung (PART D row 13) and whose end is a MOVE, not a release -- `_eff_move` closes the old
-        # leg and opens the new one, so a releasable `contain` would let a person leave a place for
-        # nowhere. Every other kind is an edge a person opened and must be able to end (T-m).
-        #
-        # This is the check `open-without-close in the vocabulary` names: add an eighth tenure kind
-        # to `rosters.yaml` and forget its closer, and the load fails HERE rather than shipping a
-        # relation nothing can end.
         if name == "release":
-            declared = frozenset(r.get("domain") or ())
-            expected = frozenset(TENURE_KINDS) - {"contain"}
-            if declared != expected:
-                raise SystemExit(
-                    f"verb_table.yaml: `release` declares domain {sorted(declared)}, and "
-                    f"`tenure_kinds \\ {{contain}}` is {sorted(expected)}. Loader invariant 6 "
-                    "(04 PART D row 15) requires them equal: a kind in the roster and not in this "
-                    "domain is an edge that can be opened and never closed, and a kind here and "
-                    "not in the roster is a closer for a relation that does not exist.")
+            _release_domain = frozenset(r.get("domain") or ())
         # The two keyed columns must agree on their band set, or a band writes with nothing to
         # report or reports with nothing written.
         if by_degree and emits_by_degree and set(by_degree) != set(emits_by_degree):
@@ -345,6 +327,50 @@ def _load_verb_table() -> dict:
             raise SystemExit(f"verb_table.yaml: {name!r} has stratum {row.stratum!r}, which is "
                              f"not one of rosters.yaml's {list(STRATA)}")
         out[name] = row
+    # -----------------------------------------------------------------------
+    # LOADER INVARIANT 6 (`04_CODE_ARCHITECTURE.md` PART D row 15, MECHANICAL at load):
+    # *"`release` generic; the loader asserts its domain equals `tenure_kinds \ {contain}`"*.
+    #
+    # ⚠⚠ **IT RUNS AFTER THE LOOP, AND THAT IS THE WHOLE OF THE DIFFERENCE BETWEEN A CHECK AND A
+    # CHECK THAT CAN OBSERVE ITS OWN SUBJECT'S ABSENCE.** The first writing sat INSIDE the row
+    # loop behind `if name == "release"`, so deleting or renaming the row meant the check never
+    # executed: the load succeeded and the vocabulary was open-without-close again, which is the
+    # exact state row 15 grades MECHANICAL at load. §0.1 pt 2 applied one notch too narrowly — the
+    # branch could see a wrong domain and not a missing verb. Found by the unit's own adversarial
+    # pass. The tests would have caught the deletion (`len(VERB_TABLE) == 38`, the executed-set
+    # pins), but the tests are not the load and the row's grade claims the load.
+    #
+    # ⚠ THE ASSERTION IS AGAINST THE ROSTER, WHICH IS WHY THE COLUMN IS DECLARED AND NOT DERIVED.
+    # `contain` is excluded because it is the one Tenure kind whose subject may be a Rung (PART D
+    # row 13) and whose end is a MOVE, not a release -- `_eff_move` closes the old leg and opens
+    # the new one, so a releasable `contain` would let a person leave a place for nowhere. Every
+    # other kind is an edge a person opened and must be able to end (T-m).
+    #
+    # This is the check `open-without-close in the vocabulary` names: add an eighth tenure kind to
+    # `rosters.yaml` and forget its closer, and the load fails HERE rather than shipping a relation
+    # nothing can end.
+    #
+    # ⚠ ROW 15 HAS A SECOND HALF THIS DOES NOT IMPLEMENT, NAMED SO NOBODY READS THE CHECK'S NAME
+    # AS COVERING IT: `04:464-465` states invariant 6 as two conjuncts, the domain AND *"every
+    # kind's OPENER set is declared too"*. Only the first is here. The second is
+    # `architecture/meta/HANDOFF_NEXT.md` item 1e and is open.
+    if "release" not in out:
+        raise SystemExit(
+            "verb_table.yaml: no `release` row. Loader invariant 6 (04 PART D row 15) is the "
+            "check that `tenure_kinds \\ {contain}` all have a closer, and without the verb "
+            "every one of them is an edge that can be opened and never ended -- the "
+            "open-without-close state T-m refuses. Removing the verb is a design change and "
+            "`architecture/meta/HANDOFF_NEXT.md` §2a rules against re-opening it.")
+    # ⚠ `RELEASABLE_KINDS` AND NOT A SECOND `frozenset(TENURE_KINDS) - {"contain"}`. The
+    # derivation lives once, in `data/rosters.py` beside the roster it reads; this is the
+    # comparison against the verb table's DECLARED column, which is the whole point of the column.
+    if _release_domain != RELEASABLE_KINDS:
+        raise SystemExit(
+            f"verb_table.yaml: `release` declares domain {sorted(_release_domain)}, and "
+            f"`tenure_kinds \\ {{contain}}` is {sorted(RELEASABLE_KINDS)}. Loader invariant 6 "
+            "(04 PART D row 15) requires them equal: a kind in the roster and not in this "
+            "domain is an edge that can be opened and never closed, and a kind here and "
+            "not in the roster is a closer for a relation that does not exist.")
     return out
 
 VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block

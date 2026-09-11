@@ -192,6 +192,38 @@ class SeasonDriver:
         self.scenes: dict = {}
         # Event id -> the Act that emitted it. See the note at the `_fold` call site.
         self.act_of: dict = {}
+        # ---------------------------------------------------------------------
+        # `U2` / `R-03` — THE SCENE TICK'S OWN STATE, AND ALL OF IT LIVES HERE.
+        #
+        # ⚠ `D-21`: THE ROUND INDEX IS A DRIVER LOCAL, NEVER A CARRIER FIELD. `Claim.round` is the
+        # single exception and it is a different thing — a fact about WHEN a claim landed, which a
+        # later deliberation reads. Everything below is a fact about where the LOOP is, and a
+        # `round` on `Act`, `Event` or `World` would make it world state and put a fourth clock in
+        # the model. U2's falsifier (d) is the AST scan that holds this.
+        #
+        # ⚠ SEASON-LOCAL, UNLIKE `resolved` / `scenes` / `act_of` ABOVE, and the asymmetry is the
+        # point rather than an oversight: those three are the fold's cumulative record and R3
+        # depends on them crossing seasons, while a scene budget, a queue of chosen-but-unrun
+        # scenes and a "when did this person last deliberate" stamp all reset at the season
+        # boundary by definition. `season()` clears them.
+        # ---------------------------------------------------------------------
+        self.round: int = 0
+        # Scenes a person CHOSE and the driver has not released yet. The person's own triage,
+        # held rather than re-asked — see `deliberate` for why re-asking is the defect.
+        self._queued: dict = {}
+        # Scene-action COST each person has spent this season, against `budget(p, v, ...)`.
+        self._spent: dict = {}
+        # `(tick, round)` of each person's last deliberation — `questions_for`'s `since`.
+        self._deliberated_at: dict = {}
+        # The fingerprint of everything `questions_for` and `person_side_eligible` read for a
+        # person, as of their last deliberation. Unchanged ⇒ their candidate set is identical by
+        # construction, so the driver releases their next chosen scene rather than re-deriving it.
+        self._inputs: dict = {}
+        # `(verb, subject)` pairs each person has already spent a scene-action on this season.
+        # See `deliberate._drop_what_was_already_done` for why the loop owns this and what it is
+        # reconstructing: the one-pass loop consumed a ranking POSITIONALLY and could not offer
+        # the same opportunity twice; the tick re-derives the ranking each round and can.
+        self._taken: dict = {}
 
 
 
@@ -203,19 +235,70 @@ class SeasonDriver:
     def season(self, choose, question, subsistence,
                actorless: Optional[list[Event]] = None,
                contest_max_depth: Optional[int] = None) -> dict:
+        """`U2` / `R-03`: **a season is R ROUNDS, and MATTER and CALENDAR are not among them.**
+
+        R-03 reads *seasons must tick scene-by-scene, so what occurs after one scene can impact
+        the next scene*. Before this, DELIBERATE ran once, RESOLVE once and WITNESS once — every
+        scene for every person was flattened into ONE `acts` list before RESOLVE ever ran, so
+        nothing that happened in one scene could reach a later scene inside the same season. The
+        only boundary was season-to-season.
+
+        ⚠ **MATTER AND CALENDAR STAY ONCE PER SEASON, AND THAT IS A LAYER-1 CONSTRAINT RATHER THAN
+        A PERFORMANCE CHOICE.** `01_AXIOMS.md:151` names AX-5's three motions — *"MATTER, BODIES,
+        AND THE FADING OF MEMORY"* — as seasonal, and `04 §C.1:504`'s barrier 1 with D-17/D-21 make
+        a docket that formed five times a season A FOURTH CLOCK. **Rounds subdivide ACTS, not
+        matter.** So the wear, the decay and the calendar tick once and the scene tick runs inside
+        them.
+
+        ⚠ **`w.tick` ADVANCES ONCE (D-45, `04:979`), AND `w.draw` RESETS ONCE.** The round is not a
+        tick: ids stay derived from `(seed, tick, subject, purpose)` and the round enters through
+        `purpose`, which is what `04 PART D row 35` requires of a new draw (*no counter, no
+        service*). U2's falsifier (d) is an AST scan for exactly one assignment to `w.tick` in this
+        module.
+
+        ⚠ **THE FREEZE IS PER ROUND.** S26.2 freezes the world from the end of MATTER to the start
+        of RESOLVE, and RESOLVE thaws it (`resolve.py`, `w.frozen = False`). With one pass that was
+        one freeze; with R rounds each round re-freezes before its DELIBERATE, which is the same
+        rule applied R times rather than a second rule.
+
+        ⚠ **WITNESS RUNS PER ROUND AND MATTER'S EVENTS ARE WITNESSED ONCE.** A deposit that only
+        landed at the end of the season could not reach a later round's deliberation, which is the
+        whole channel R-03 asks for. MATTER's events are seasonal, so they join round 0's fan-out
+        and no other — carrying them into every round would deposit one wear five times.
+
+        ⚠ **AND THE ONE-ROUND ARM IS THE CONTROL.** `H-124`'s `scenes_per_round = 5` gives every
+        person their whole season in round 0 and finds them spent in rounds 1..4, which IS the
+        one-pass loop — reproduced THROUGH this code path rather than by skipping it."""
         w = self.w
         w.draw = 0                 # S33: the draw ordinal is per-TICK, so replay is exact
+        # `U2`: season-local. See `__init__` for why these four reset and the three above it do not.
+        self.round = 0
+        self._queued, self._spent, self._deliberated_at = {}, {}, {}
+        self._inputs, self._taken = {}, {}
         self.calendar()
         matter_events = self.matter(actorless)
-        acts = self.deliberate(choose, question, subsistence)
-        events = self.resolve(acts, contest_max_depth)
-        for e in events:
-            w.log.append(e)                  # S19.5 -- ONE LOG, NOT TWO
-            TRACE.event(e.id, e.kind, e.causes)
-        deposits = self.witness(matter_events + events)
+        rounds = int(w.fixtures.get("scene_budget"))
+        n_acts, n_events, deposits = 0, len(matter_events), 0
+        pending_matter = list(matter_events)
+        for r in range(rounds):
+            self.round = r
+            # S26.2 again, not a second rule: RESOLVE thaws, so each round re-freezes before its
+            # own DELIBERATE. MATTER did the first one.
+            w.frozen = True
+            acts = self.deliberate(choose, question, subsistence)
+            events = self.resolve(acts, contest_max_depth)
+            for e in events:
+                w.log.append(e)              # S19.5 -- ONE LOG, NOT TWO
+                TRACE.event(e.id, e.kind, e.causes)
+            # MATTER's events are seasonal and join the FIRST round's fan-out only; the alternative
+            # deposits one wear once per round, which is the fourth clock this docstring refuses.
+            deposits += self.witness(pending_matter + events)
+            pending_matter = []
+            n_acts += len(acts)
+            n_events += len(events)
         self.census()
         w.tick += 1
-        return dict(acts=len(acts), events=len(events) + len(matter_events),
+        return dict(acts=n_acts, events=n_events,
                     deposits=deposits, hash=w.content_hash())
 
 # ---------------------------------------------------------------------------

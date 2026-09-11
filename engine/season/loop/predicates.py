@@ -1,4 +1,4 @@
-"""`season.loop.predicates` — the four `requires:` cells the grammar does not type.
+"""`season.loop.predicates` — the five `requires:` cells the grammar does not type.
 
 EXTRACTED, step 5 of the decomposition (a PURE MOVE but for two call sites, named below). The
 registry and its decorator travel with the functions they register, which is the rule step 3
@@ -6,7 +6,7 @@ established for `REQUIREMENT_TYPES` and step 5 applies unchanged: **a decorator-
 in the module that defines the decorated things**, or the table is empty at the moment the loader
 reads it.
 
-WHY FOUR AND NOT EIGHT. `W-A` retired `_req_transfer`, `_req_tell`, `_req_move` and `_req_work` on
+WHY FIVE AND NOT EIGHT. `W-A` retired `_req_transfer`, `_req_tell`, `_req_move` and `_req_work` on
 2026-09-04 — each is a TYPED CELL in `verb_table.yaml` now, read by `evaluate()`. §8's rule is
 that a rule lives once, and a verb carrying both a typed cell and a predicate here would be two
 readings of one prose cell; that is exactly how `_req_confer` came to drop a disjunct and
@@ -24,14 +24,8 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import TENURE_KINDS, title_domain, title_rank
+from ..data.rosters import RELEASABLE_KINDS, title_domain, title_rank
 from ..queries import world_q
-
-# `release`'s domain, DERIVED from the roster the loader asserts the verb table's `domain:` column
-# against (`data/verbs.py`, loader invariant 6 / `04` PART D row 15). Derived HERE and declared
-# THERE on purpose: the declaration is what gives the load-time check something to disagree with,
-# and this is the reader, so the two can never drift without the load failing first.
-RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain"}
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -323,8 +317,18 @@ def _req_convene(w: "World", a: "Act") -> bool:
 # `test_wa_one_owner_a_verb_has_a_typed_cell_or_a_predicate_and_never_both` is the guard that
 # fails on a recurrence.
 #
-# THE FOUR THAT REMAIN -- `confer`, `revoke`, `dispatch`, `convene` -- are `remit:`-eligible, not
-# `own`-eligible, and `W-A`'s scope is the `own` rows. Two of them need grammar forms with no
+# THE FIVE THAT REMAIN. Four -- `confer`, `revoke`, `dispatch`, `convene` -- are `remit:`-eligible,
+# not `own`-eligible, and `W-A`'s scope is the `own` rows. Two of them need grammar forms with no
 # `own` cell (`cardinality`, `basis`) and `confer` needs a DISJUNCTION, which no `own` cell has
 # and which is therefore not built (`ID-13`: a combinator nothing uses is a dead carrier).
+# ⚠ THE FIFTH IS `release` (2026-09-11) AND IT IS AN `own` ROW, WHICH THIS PARAGRAPH ONCE SAID
+# COULD NOT HAPPEN. `W-A`'s scope IS the `own` rows, and a predicate on one would ordinarily be a
+# cell somebody failed to type. It is not here, and the reason is the same DISJUNCTION that keeps
+# `confer` out: `release`'s domain is a SET of six tenure kinds, `data/requires.py` carries `all`
+# and no `any`, and §F.24a form 1 `existence` takes ONE `kind:` -- so `all` of the six would mean
+# *a live edge of every kind at once*, which is the opposite requirement, and one `existence`
+# would silently narrow the verb to one kind. Adding `any` is a GRAMMAR CHANGE (`REQUIRES_STEMS`
+# is closed) and `04 §A.3` row 14 asks for a verb, not a form. The verb row states the same thing
+# at its `requires_typed_note:` and closes with the condition under which this stops being true:
+# *"IF AN `any` COMBINATOR IS EVER RULED, THIS CELL IS THE FIRST THING TO TYPE."*
 # ---------------------------------------------------------------------------

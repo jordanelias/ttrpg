@@ -181,6 +181,18 @@ def table_meta(name: str) -> dict:
 
 
 TENURE_KINDS = roster("tenure_kinds")
+# `release`'s domain, DERIVED ONCE. `04_CODE_ARCHITECTURE.md` PART D row 15 states it as
+# `tenure_kinds \ {contain}`, and `verb_table.yaml` DECLARES the same set as a column so the
+# loader has something to disagree with -- declaration there, derivation here, and loader
+# invariant 6 compares them. `contain` is the one kind whose end is a MOVE rather than a release:
+# `_eff_move` closes the old leg and opens the new one, so a releasable `contain` would let a
+# person leave a place for nowhere.
+# ⚠ IT LIVES BESIDE `TENURE_KINDS` BECAUSE THE DERIVATION MUST LIVE ONCE (§8). It was written
+# twice -- once in `data/verbs.py`'s loader and once in `loop/predicates.py` -- and the
+# declared-there/derived-here argument is satisfied by ONE derivation, not two. Today the
+# exclusion is a single member so drift would be cheap; the moment it is not, two code sites would
+# have to move together and only one of them is guarded. Found by the `release` adversarial pass.
+RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain"}
 RUNG_KINDS = roster("rung_kinds", ordered=True)
 REMIT_ACTS = roster("remit_acts")
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)
