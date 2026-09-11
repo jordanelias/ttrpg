@@ -389,9 +389,26 @@ rows:
       Convictions separately barely discriminate: only 2–7 of 22 candidates carry a nonzero
       score and the rest tie. ⚠ THE SECOND HALF OF THAT SENTENCE READ *"and are ordered
       alphabetically"* AND IS FALSE SINCE `U4` (2026-09-10): tied candidates are ordered by a
-      per-person seeded draw (`decision/choose.py::_sample_order`), not by verb name. The
-      DISCRIMINATION half is untouched and is what keeps this row `partial` — the table is sparse,
-      which is `H-66` arriving as a behaviour, and `U3` is the unit that would close it.
+      per-person seeded draw (`decision/choose.py::_sample_order`), not by verb name.
+      ⚠⚠ **AND THE DISCRIMINATION HALF IS LARGELY CLOSED BY `U3` (2026-09-11), MEASURED AGAINST A
+      CONTROL.** Both arms at seed 0 over the same 86 buildable corpus worlds, control from a
+      worktree at `a85bd45`: candidates carrying a nonzero conviction score move
+      **7..11 of 28 -> 16..22 of 28**, mean **7.79 -> 21.84**. `U3` separates the thirteen
+      CONVICTIONS from the four ethical AXES — `conviction_axes` had been holding one conviction
+      (`Precedent`) beside three ad-hoc scalars so that §F2's `conviction[axis]` had something to
+      look up — and projects between them through `conviction_axis_matrix_v30.md` §2's 13x4. A
+      conviction now scores a verb on all four axes instead of through one sparse block.
+      ⚠ **THE ROW STAYS `partial` FOR TWO REASONS, AND NEITHER IS THE ONE IT USED TO GIVE.**
+      (1) `ambitions(p)` still does not exist and the cast is still one shared OUGHT across 143
+      worlds — `U8`'s, unchanged. (2) A NEW ONE `U3` itself created: the thirteen convictions are
+      CORRELATED, so people are now well-differentiated from their own alternatives and poorly
+      differentiated from each other. Measured off `CONVICTION_PROJECTION`: the mean conviction
+      vector is (traditional +0.285, sacred +0.215, hierarchical +0.200, instrumental -0.062) and
+      NINE OF THIRTEEN convictions lie within 60° of it; distinct executed sets over 89 live
+      worlds fall **40 -> 27**. Seeding 1-3 convictions per #353 §14 instead of one raised
+      distinct axis directions 13 -> 80 of 86 and did not recover the executed sets. Whether the
+      matrix should be re-centred is `ED-IN-0213`, and it is Jordan's: re-calibrating overwrites
+      52 cells that document argues individually.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [W27, H-62]
 

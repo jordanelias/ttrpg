@@ -9415,7 +9415,7 @@
   "P28": {
    "id": "P28",
    "verdict": "PASS",
-   "detail": "PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. There is no signature in the decision surface (17 functions) that takes one person and returns another's ledger. Absence is the refusal here, not a guard",
+   "detail": "PASS-BY-ABSENCE: `assemble` takes THE ASKER and builds from the asker's own ledger. There is no signature in the decision surface (18 functions) that takes one person and returns another's ledger. Absence is the refusal here, not a guard",
    "kind": null,
    "section": "S20",
    "title": "a ledger is unreadable by anyone else",
@@ -9449,7 +9449,7 @@
   "P31": {
    "id": "P31",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION: 'research' at Precedent +0.9, 'refract' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
+   "detail": "PASS BY CONSTRUCTION: 'tie / knot' at Precedent +0.9, 'evade / defy' at -0.9. The motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO branch in the resolver and nothing stored about the bias -- nobody, the holder and his superiors included, has a signature that reads it out. \u26a0 THE MAGNITUDES ARE `H-66`'s declared default and are swept; the SIGN structure is what this observes",
    "kind": null,
    "section": "S9",
    "title": "a hidden motive biases every decision",

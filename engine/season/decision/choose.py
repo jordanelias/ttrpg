@@ -26,7 +26,8 @@ from __future__ import annotations
 import math as _math
 from typing import Any, Callable, Optional
 from ..data.rosters import CONVICTION_AXES, SCENE_PACKING_RULES
-from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
+from ..data.verbs import (ALIGNMENT, ALIGNMENT_DEFAULT_CELL, CONVICTION_PROJECTION,
+                         PROJECTION_DEFAULT_CELL)
 from ..gaps import Unspecified
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
 from .options import opening_set
@@ -36,6 +37,41 @@ def align(verb: str, axis: str) -> float:
     """§F2's `alignment(c.verb, axis)`. Sparse: an unlisted pair reads the table's own declared
     `default_cell`, never a literal here."""
     return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
+
+
+def project(p: Person) -> dict:
+    """A person's thirteen conviction weights, in the four-axis basis. `U3` / R-06a.
+
+    ⚠⚠ **§F2's `conviction[axis]` IS COMPUTED NOW, NOT LOOKED UP, AND THE FORMULA IS UNCHANGED IN
+    SHAPE.** V2 §F2 spells `score(c) = Σ_axis conviction[axis] · alignment(c.verb, axis)` and that
+    indexing only works if a person's convictions are KEYED BY AXIS — which is what
+    `conviction_axes` used to be forced to be, holding `Precedent` (a conviction) beside
+    `self_preservation`, `suspicion` and `harm_borne` (three ad-hoc scalars) so the lookup had
+    something to hit. `conviction_axes`'s own note named the conflation and predicted the repair.
+    So:
+
+        conviction[axis]  :=  Σ_conv  p.convictions[conv] · projection[conv][axis]
+
+    and `Σ_axis` above is untouched. A person holds weights over the THIRTEEN; the projection is
+    the only thing that knows about axes.
+
+    ⚠ **THE MATRIX IS READ, NOT INVENTED** — `conviction_axis_matrix_v30.md` §2, with a per-cell
+    rationale in its §3. That is the difference between this table and `alignment`, whose own note
+    says of its cells *"a reason is not a citation"*. They multiply together, so which of the two
+    is argued and which is cited is worth being able to see.
+
+    ⚠ **A CONVICTION THE MATRIX DOES NOT LIST PROJECTS TO NOTHING, AND THAT IS THE SPARSE DEFAULT
+    RATHER THAN A SILENT DROP.** `PROJECTION_DEFAULT_CELL` is the declared 0.0; the loader has
+    already refused any conviction name outside the roster, so an unlisted pair here is a cell the
+    data chose to leave sparse, not a typo that got through."""
+    out = {ax: 0.0 for ax in CONVICTION_AXES}
+    for conv, w in (p.convictions or {}).items():
+        row = CONVICTION_PROJECTION.get(conv)
+        if row is None:
+            continue
+        for ax in CONVICTION_AXES:
+            out[ax] += float(w) * float(row.get(ax, PROJECTION_DEFAULT_CELL))
+    return out
 
 
 def stance_toward(p: Person, referent: str) -> float:
@@ -256,9 +292,13 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         if verbs is not None:
             cands = [c for c in cands if c.verb in verbs]
         u = urgency(s.subsistence, fx)
+        # `U3`: the person's convictions are weights over the THIRTEEN, so they are projected
+        # into the four-axis basis once per deliberation rather than looked up per candidate.
+        # Hoisted out of `score` deliberately: it does not depend on `c`, and computing it inside
+        # would run it once per candidate for an identical answer.
+        axis_w = project(p)
         def score(c: Candidate) -> float:
-            return (sum(float(p.convictions.get(ax, 0.0)) * align(c.verb, ax)
-                        for ax in CONVICTION_AXES)
+            return (sum(axis_w[ax] * align(c.verb, ax) for ax in CONVICTION_AXES)
                     + stance_toward(p, c.subject or "")
                     + u)
         # Deterministic: score DESC, then verb then subject, so a tie cannot depend on dict order.

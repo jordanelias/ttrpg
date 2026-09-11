@@ -2351,12 +2351,20 @@ def w13():
 def p37():
     w = tiny_world()
     p = w.persons["p_high"]
-    p.convictions = {"suspicion": 0.9}
+    # ⚠ `U3`: `suspicion` was a name the OLD four-name `conviction_axes` roster carried and is
+    # not one of the thirteen convictions. `Order` — "procedural correctness, rule-following" —
+    # is the conviction the old `suspicion` cells were actually pricing (that block's own two
+    # strongest cells were `open_case: 0.9` and `surveil: 0.9`, the reach for the institution and
+    # the reach without it). The NAME is incidental to this probe, which reads the dict directly
+    # and never goes through `make_chooser`; it is corrected so the corpus does not seed a
+    # conviction nobody can hold.
+    # [JUSTIFIED: 0.9 is a single strong conviction, the same magnitude this probe used before `U3` under the retired name `suspicion`; P37 branches on `> 0.5` so any value above the threshold shows the same property, and the NUMBER is not what it observes]
+    p.convictions = {"Order": 0.9}
     chosen = []
     def choose(q, v, s, ask_budget):
         if q.id != p.id:
             return []
-        verb = "purge" if q.convictions.get("suspicion", 0) > 0.5 else "tolerate"
+        verb = "purge" if q.convictions.get("Order", 0) > 0.5 else "tolerate"
         chosen.append(verb)
         return [Act_(w, q, verb)]
     _run(w, choose)

@@ -48,7 +48,7 @@ from collections import Counter
 from .. import decision
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.matrix import Step
-from ..data.rosters import CONVICTION_AXES, RUNG_KINDS, load_yaml
+from ..data.rosters import CONVICTIONS, CONVICTION_AXES, RUNG_KINDS, load_yaml
 from ..data.verbs import VERB_TABLE
 from ..decision import align, make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
@@ -208,7 +208,11 @@ def build_at(case: dict, seed: int = 0) -> World:
         if SITE_YIELD[kind]:
             w.sites[f"s_{kind}"] = Site(f"s_{kind}", ids[chain[0]], kind,
                                           condition=w.fixtures.get("condition_scale"))
-    axes = sorted(CONVICTION_AXES)
+    # `U3`: a person holds weights over the THIRTEEN CONVICTIONS, not over the four axes.
+    # Seeding from `CONVICTION_AXES` was correct while that roster WAS the conviction set;
+    # after the swap it would hand every person a weight on `hierarchical`, which is a
+    # basis vector and not something anybody believes.
+    convictions = sorted(CONVICTIONS)
     for n, pid in enumerate(("p_a", "p_b", "p_c")):
         w.persons[pid] = Person(pid, pid)
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
@@ -224,8 +228,33 @@ def build_at(case: dict, seed: int = 0) -> World:
         if chain:
             w.add_tenure(Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
         # [JUSTIFIED: radix for parsing H()'s blake2b hexdigest -- same as combat_seam.py:153]
-        pick = int(H(seed, 0, str(case.get("id")), f"axis:{pid}"), 16) % len(axes)
-        w.persons[pid].convictions = {axes[pick]: 0.9}
+        # ⚠ THE PURPOSE STRING STAYS `axis:` THOUGH IT NOW PICKS A CONVICTION. Changing it would
+        # re-draw every person in the corpus and move every golden for a reason that is a rename,
+        # not a behaviour — `04 PART D row 35` cares about purpose UNIQUENESS, not spelling. The
+        # SET it indexes changed from 4 to 13, which moves the draw on its own and is `U3`'s.
+        # ⚠⚠ **ONE TO THREE CONVICTIONS, NOT ONE, AND #353 §14 IS WHERE THE RANGE COMES FROM:**
+        # *"`convictions` | weights over the closed 13 | **1–3 primary + distributed**"*. Seeding
+        # exactly one was the harness's simplification and it was load-bearing in the wrong
+        # direction. MEASURED 2026-09-11 over 86 corpus-shaped seeds, counting DISTINCT axis
+        # directions the projection produces: **1 conviction -> 13 · 2 -> 66 · 3 -> 80.** With one,
+        # the count is capped at the size of the roster by construction, and worse than that
+        # suggests: 9 of the 13 convictions point within 60° of a common direction
+        # (`traditional+ sacred+ hierarchical+ instrumental-`), so a single-conviction person is
+        # one of about five characters however the draw falls. Two or three COMBINE into vectors
+        # that are genuinely apart.
+        # ⚠ THE COUNT ITSELF IS DRAWN, so cases differ in how many things their people care about
+        # rather than all holding exactly N. Weights descend 0.9 / 0.5 / 0.3: "primary" is §14's
+        # own word for the first, and the rest are the "distributed" remainder.
+        # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as combat_seam.py:153. The `3` is #353 §14's own upper bound: "1-3 primary + distributed"]
+        n_conv = 1 + int(H(seed, 0, str(case.get("id")), f"axis:{pid}:n"), 16) % 3
+        # [JUSTIFIED: a DESCENDING ladder, not three chosen magnitudes -- #353 §14 distinguishes the "primary" conviction from the "distributed" remainder and supplies no numbers. What the corpus needs is that the first outweighs the rest; 0.9 matches the single-conviction weight this replaced, so a 1-conviction case is unchanged by the ladder]
+        chosen_c, weights = {}, (0.9, 0.5, 0.3)
+        for k in range(n_conv):
+            purpose = f"axis:{pid}" if k == 0 else f"axis:{pid}:{k}"
+            # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as combat_seam.py:153]
+            pick = int(H(seed, 0, str(case.get("id")), purpose), 16) % len(convictions)
+            chosen_c.setdefault(convictions[pick], weights[k])
+        w.persons[pid].convictions = chosen_c
     # ⚠ `W28`: THE CASE MAY SEAT ITS OWN ACTOR ON AN OFFICE. A re-scaled case carries
     # `office: {post, remit, why}` — `post` names the office the prose names, `remit` the acts it
     # carries, and `why` records the DERIVATION, because that is what makes this authoring rather
@@ -498,8 +527,14 @@ def main(seed: int = 0) -> int:
         qs = questions_for(w2, pr)
         vw = decision.assemble(pr, qs[0] if qs else None, w2.fixtures.get("view_k"))
         cd = decision.opening_set(pr, vw, qs[0], w2.fixtures) if qs else []
-        nz = sum(1 for x in cd if any(float(pr.convictions.get(a, 0.0)) * align(x.verb, a)
-                                      for a in CONVICTION_AXES))
+        # ⚠ `U3`: THROUGH THE PROJECTION, AND VIA `decision.project` RATHER THAN A SECOND COPY
+        # OF IT. This read `pr.convictions.get(a)` for each AXIS `a`, which was correct while the
+        # conviction dict was keyed by axis; after the swap that lookup misses on every person and
+        # this line would report a flat `0 of N` — a measurement silently reading zero, which is
+        # the failure mode `H-97` exists to report on. `make_chooser` scores the same way (§8: the
+        # rule lives once), so this instrument and the thing it measures cannot drift apart.
+        axis_w = decision.project(pr)
+        nz = sum(1 for x in cd if any(axis_w[a] * align(x.verb, a) for a in CONVICTION_AXES))
         sep.append((nz, len(cd)))
     if sep:
         tot = sep[0][1]

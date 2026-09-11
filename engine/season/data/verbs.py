@@ -60,7 +60,8 @@ from ..gaps import Forbidden, Unspecified
 from .matrix import MATRIX
 from .requires import TypedRequires, build_typed_requires
 from .rosters import (
-    CONVICTION_AXES, RELEASABLE_KINDS, RUNG_KINDS, STRATA, load_yaml, roster, table,
+    CONVICTION_AXES, CONVICTIONS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, load_yaml, roster,
+    table,
     table_meta,
 )
 
@@ -376,6 +377,59 @@ def _load_verb_table() -> dict:
 VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
 
 VERB_TABLE = _load_verb_table()
+
+def _load_projection() -> dict:
+    """`tables.conviction_projection`, the 13x4 that maps a person's convictions into axis space.
+
+    ⚠⚠ **THIS TABLE EXISTS BECAUSE `conviction_axes` USED TO DO TWO JOBS AND COULD DO NEITHER
+    WELL.** Before `U3` the roster held four names -- `Precedent`, `self_preservation`,
+    `suspicion`, `harm_borne` -- one of which is a CONVICTION and three of which are ad-hoc
+    scalars, and §F2's `conviction[axis]` looked a person's weight up in that one index set.
+    `conviction_axes`'s own note called the conflation out and predicted this repair: *"THIRTEEN
+    convictions projecting onto FOUR axes through a 13x4 matrix ... It is the likeliest thing to
+    change when `H-46` closes."* It changed here, and `H-46` did NOT close -- Jordan, 2026-09-02:
+    *"convictions roster and axes etc may be modified in future."*
+
+    THREE CHECKS, each for a failure that would otherwise be SILENT, and each the exact shape
+    `_load_alignment` uses one table over -- the rule lives once in kind, not in copy:
+      * a conviction outside the roster is a row nobody projects FROM;
+      * an axis outside the roster is a column nobody scores WITH;
+      * an all-zero matrix makes every person's convictions project to the zero vector, which is
+        `uniform`'s control arm shipped as the default -- the dead-carrier defect, one table along.
+
+    ⚠ IT DOES NOT CHECK THAT ALL 13 x 4 CELLS ARE PRESENT. Sparse is lawful here exactly as it is
+    for `alignment`: an unlisted pair reads `default_cell`. What is checked is that every cell
+    NAMED is nameable."""
+    cells = table("conviction_projection")
+    for conv, row in cells.items():
+        if conv not in CONVICTIONS:
+            raise Forbidden(
+                f"conviction_projection names {conv!r}, which is not in the convictions roster",
+                "rosters.yaml",
+                needs="add it to `convictions`, or drop the row",
+                law="§F2 -- a person's convictions are weights over the roster. A projection row "
+                    "for a conviction nobody can hold is read by nothing")
+        unknown = sorted(set(row) - set(CONVICTION_AXES))
+        if unknown:
+            raise Forbidden(
+                f"conviction_projection[{conv}] names axis/axes outside the roster: {unknown}",
+                "rosters.yaml",
+                needs="spell the axis as `conviction_axes` spells it, or drop the cell",
+                law="engine/substrate/keys.py::AXES single-owns the four names; a fifth is one "
+                    "edit there and a refusal here, never two rosters drifting apart")
+    if not any(v for row in cells.values() for v in row.values()):
+        raise Forbidden(
+            "the conviction_projection table is all zeroes", "rosters.yaml",
+            needs="a default with at least one non-zero weight",
+            law="every person's convictions would project to the zero vector, which is the "
+                "`uniform` control arm shipped as the default -- inert, and green on every test")
+    return cells
+
+
+CONVICTION_PROJECTION = _load_projection()
+PROJECTION_DECLARED = {c: dict(row) for c, row in CONVICTION_PROJECTION.items()}
+PROJECTION_DEFAULT_CELL = float(table_meta("conviction_projection").get("default_cell", 0.0))
+
 
 def _load_alignment() -> dict:
     """§F2's `alignment(c.verb, axis)`, from `rosters.yaml`, with THREE load-time checks.

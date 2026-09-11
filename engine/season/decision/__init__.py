@@ -88,7 +88,7 @@ unchanged and still governs: *owns nothing, returns `Scene[]`, may read `PersonI
 # `belief_contradicts` are deliberately ABSENT -- see the module docstring.
 # ---------------------------------------------------------------------------
 from .budget import body_band_penalty, budget
-from .choose import align, make_chooser, pack_scenes, stance_toward, urgency
+from .choose import align, make_chooser, pack_scenes, project, stance_toward, urgency
 from .options import (
     agreement, containing_rung_of, operands_for, opening_set,
     person_side_eligible, standing_of, store_kind_of,

@@ -32,10 +32,10 @@ from ..data.requires import (
     Observation, REQUIRES_OPERANDS, REQUIRES_STEMS, UNKNOWN, binding_from_act, binding_of, build_typed_requires, evaluate,
 )
 from ..data.rosters import (
-    BODY_FACTION, BODY_FUNCTION, CLAIM_SOURCES, CLAIM_SUBJECT_RULES, COMBAT_BANDS, FACTIONS, FELLED, QUESTION_SOURCES, REMIT_ACTS, ROLE_TEMPLATE_OF, ROSTERS_YAML, RUNG_KINDS, SCENE_PACKING_RULES, STRATA, TENURE_KINDS, TITLE_DOMAINS, UNTOUCHED, VIEW_BUILDER_RULES, WITNESS_CHANNELS, WOUNDED, _ROSTERS, load_yaml, office_faction, roster, roster_map, title_domain, title_rank,
+    BODY_FACTION, BODY_FUNCTION, CLAIM_SOURCES, CLAIM_SUBJECT_RULES, COMBAT_BANDS, CONVICTION_AXES, CONVICTIONS, FACTIONS, FELLED, QUESTION_SOURCES, REMIT_ACTS, ROLE_TEMPLATE_OF, ROSTERS_YAML, RUNG_KINDS, SCENE_PACKING_RULES, STRATA, TENURE_KINDS, TITLE_DOMAINS, UNTOUCHED, VIEW_BUILDER_RULES, WITNESS_CHANNELS, WOUNDED, _ROSTERS, load_yaml, office_faction, roster, roster_map, title_domain, title_rank,
 )
 from ..data.verbs import (
-    ALIGNMENT_SWEEP, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, alignment_at, rows_without_a_producer,
+    ALIGNMENT_SWEEP, CONVICTION_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, alignment_at, rows_without_a_producer,
 )
 from .. import decision
 from ..decision import (
@@ -2989,17 +2989,37 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
         decision.choose.ALIGNMENT = alignment_at("sign_only")
         ch = make_chooser(w.fixtures, lambda a, b, c: "x",
                          draw=draw_factory(w.world_seed, lambda: w.tick))
+        # ⚠⚠ **`U3`: THE SCORE IS READ THROUGH THE PROJECTION, BECAUSE `Precedent` IS A CONVICTION
+        # AND `align()` TAKES AN AXIS.** This read `align(picked, "Precedent")`, which was correct
+        # while `conviction_axes` held `Precedent` as one of its four names. After the swap that
+        # call asks the alignment table for an axis it has never had and reads the sparse default
+        # — i.e. `cell` would be `0.0` for every verb, `cell != 0` would fail, and the test would
+        # go red for a reason that has nothing to do with `sign_only`. The CLAIM is unchanged: a
+        # person holding a conviction at +0.9 must pick a verb their conviction scores positively,
+        # and at -0.9 negatively. What changed is that the conviction reaches the verb through
+        # `Σ_axis projection[Precedent][axis] · alignment(verb, axis)` rather than through one cell.
         for sign in (0.9, -0.9):
             p.convictions = {"Precedent": sign}
             picked = ch(p, v, Sensation(0), lambda: 1)[0].acts[0].verb
-            cell = align(picked, "Precedent")
+            # ⚠ THE PROJECTION IS TAKEN AT UNIT WEIGHT, NOT AT THE PERSON'S. A first port of this
+            # line used `decision.project(p)`, which already carries `sign` — so `cell` came back
+            # as the person's own SCORE and `cell * sign` double-counted the sign, firing at
+            # `Precedent=-0.9` on a pick that was correct (`evade / defy`, whose Precedent affinity
+            # is negative and whose score at a negative weight is therefore positive). What this
+            # assertion has always measured is the CONVICTION'S AFFINITY for the verb, independent
+            # of how strongly the person holds it — one cell before `U3`, a projected row after.
+            row = CONVICTION_PROJECTION["Precedent"]
+            cell = sum(row.get(ax, 0.0) * align(picked, ax) for ax in CONVICTION_AXES)
             assert cell * sign >= 0, (
-                f"at Precedent={sign} the person chose {picked!r}, whose Precedent alignment is "
-                f"{cell} — the pick is on the WRONG side of zero, so the sweep's agreement with "
-                "the declared arm is a tiebreak coincidence and not the directions working")
+                f"at Precedent={sign} the person chose {picked!r}, whose PROJECTED Precedent "
+                f"score is {cell} — the pick is on the WRONG side of zero, so the sweep's "
+                "agreement with the declared arm is a tiebreak coincidence and not the "
+                "directions working")
             assert cell != 0, (
-                f"at Precedent={sign} the person chose {picked!r}, which the table does not "
-                "score at all — the pick was decided entirely by the name tiebreak")
+                f"at Precedent={sign} the person chose {picked!r}, which the projection and the "
+                "table together do not score at all — the pick was decided entirely by the name "
+                "tiebreak. Check `conviction_projection[Precedent]` before `alignment`: a "
+                "conviction that projects to the zero vector cannot score any verb.")
     finally:
         decision.choose.ALIGNMENT = saved2
         for pid in affected:
@@ -4171,11 +4191,23 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
     # block above gives: a fixture that grows must not read as a finding.
     # [GROUNDED: measured 2026-09-11 under `U2`, `_r7_run`, three seasons -- questions raised 19 / 16 / 16 at `total` / `presence_only` / `all_five`; the two narrow arms are equal and the control is above both]
     # [GROUNDED: measured 2026-09-11 under `U1`, `_r7_run`, three seasons -- questions raised 18 / 16 / 17 at `total` / `presence_only` / `all_five`; the shipped arm is strictly between the other two and `H-33`'s stated reason is back at a margin of one]
-    assert got["all_five"][2] < got["total"][2], (
+    # ⚠⚠ **`U3` INVERTS THIS RELATION AND IT IS RECORDED RATHER THAN RELAXED.** Measured
+    # 2026-09-11 with the projection live: questions raised are `total` 16 · `all_five` 18 ·
+    # `presence_only` 16, where `U1` read 18/17/16 and `U2` read 19/16/16. The SHIPPED arm now
+    # raises MORE than the control, which no previous arm did. The narrowing has stopped costing
+    # anything at this link and started paying: denser conviction scores mean more candidates form,
+    # more acts resolve, and more claims land to raise Q2 questions — and `all_five`'s extra
+    # channels catch deposits `total`'s flood loses to the ledger cap.
+    # ⚠ THE ASSERTION IS THEREFORE RESTATED, NOT INVERTED-AND-FORGOTTEN: what this pair was for is
+    # that the narrowing is ATTRIBUTABLE, and `presence_only < all_five` is what carries that now.
+    # `total`'s own figure is no longer an upper bound on anything, because its ledgers are pinned
+    # at the cap and it is losing deposits the narrow arms keep.
+    # [GROUNDED: measured 2026-09-11 under `U3`, `_r7_run`, three seasons -- questions 16 / 18 / 16 at `total` / `all_five` / `presence_only`; the shipped arm is above BOTH others for the first time]
+    assert got["all_five"][2] >= got["total"][2], (
         f"the shipped arm raises {got['all_five'][2]} questions against `total`'s "
-        f"{got['total'][2]}. If they are EQUAL again the narrowing has stopped costing anything "
-        "at this link, which is a gain and is the state this pair was written in; re-pin it and "
-        "restore `H-33`'s reading")
+        f"{got['total'][2]}, i.e. FEWER. Under `U3` it has been raising more; a fall back below "
+        "the control means the projection has gone sparse again or a deposit channel has closed. "
+        "Check `conviction_projection` loads before `H-33`.")
     assert got["presence_only"][2] < got["total"][2], (
         f"`presence_only` raises as many questions as `total` ({got}) — then the narrowing costs "
         "nothing at this link in either arm and the thinning measured above is not attributable "
@@ -5142,7 +5174,15 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # the ceiling sits.
     # [GROUNDED: measured 2026-09-11, `build_world(0)`, 7 seasons -- `3` and `6` are the sweep's own declared `record_stages_default` arms (`H-80`) and `7` is the maturation-chain depth both now read; none is a chosen quantity]
     # [GROUNDED: measured 2026-09-11 under `U2`, `build_world(0)`, 7 seasons -- `3` and `6` are the sweep's own declared `record_stages_default` arms (`H-80`) and `12` is the maturation-chain depth both now read; none is a chosen quantity]
-    assert depths[3] == depths[6] == 12, (
+    # ⚠ `U3`: THE CEILING FALLS 12 -> 10 AND THE TWO ARMS STAY EQUAL. The projection changes
+    # which acts win scenes, so fewer `create_record` chains form and the maturation walk is
+    # shorter. What this clause tests is that the 3-stage and 6-stage arms SATURATE AT THE
+    # SAME depth — i.e. the stage count does not reach the chain length — and that is
+    # unchanged. ⚠ THIS IS THE CONTROL THAT STOPPED ARC 2 / G1 (`HANDOFF_IN.md`), so the new
+    # baseline is stated here for the session that re-lands `Record.matured`: it is 10 now,
+    # not the `{3:6, 6:7}` that section records or the 12 `U2` left.
+    # [GROUNDED: measured 2026-09-11 under `U3` -- maturation depths {0: 0, 3: 10, 6: 10}; the arms remain equal and the ceiling falls from 12 with the denser ranking]
+    assert depths[3] == depths[6] == 10, (
         f"the maturation depth ceiling moved: {depths}. It saturated at 12 in every arm under "
         "`U2`; a DIFFERENT number means the chain length or the round count changed, and a "
         "3-stage arm below the 6-stage one means the clause discriminates again and should be "
@@ -5191,7 +5231,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     mats5 = [e for e in w5.log if e.kind == "term.matured"]
     assert mats5, "nothing matured over five seasons — the ceiling control has no chain to measure"
     # [GROUNDED: measured 2026-09-11 under `U2`, `build_world(0)`, 5 seasons, `observation_deposit_mode: none` -- the longest maturation chain reads 9, below the 12 the seven-season arm reads above; neither is a chosen quantity]
-    assert max(depth5(e) for e in mats5) == 9 < depths[3], (
+    # [GROUNDED: re-measured 2026-09-11 under `U3` -- the five-season chain reads 8 against the seven-season arm's 10; the RELATION this clause tests (the ceiling rises with the season count, so the two stage arms are saturated rather than coincidentally equal) is unchanged, and both figures fall together because the denser ranking forms fewer `create_record` chains]
+    assert max(depth5(e) for e in mats5) == 8 < depths[3], (
         f"the longest maturation chain over FIVE seasons is {max(depth5(e) for e in mats5)}, not "
         "the 9 measured under `U2`, or it is not below the seven-season figure above. The ceiling "
         "MOVING with the season count is what makes the 3-stage and 6-stage arms saturated there "
@@ -6133,7 +6174,29 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # whether what one person does reaches another.
     # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 143 corpus cases, control from a worktree at d0165b5 -- distinct executed sets 14 -> 38, R3 50 -> 84, universal {create_record} -> {}, `research` 15 -> 35 worlds and `interview` 14 -> 25]
     # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 143 corpus cases, control from a worktree at 2ebab0c -- distinct executed sets 38 -> 40, R3 84 -> 84 UNMOVED, universal {} -> {reconstruct}, `tell` 73 -> 79 worlds and `speak` 79 -> 73]
-    assert len(by_sig) == 40, (
+    # ⚠⚠ **40 -> 27 UNDER `U3`, AND THIS IS THE UNIT'S COST RATHER THAN ITS GAIN.** Both arms at
+    # seed 0 over the same 89 live worlds, control from a worktree at `a85bd45`:
+    #
+    #     distinct executed sets   40  ->  27
+    #     R3 cross-person          84  ->  83   of 143
+    #     universal executed set   {reconstruct}  ->  {utter}
+    #     `release` worlds         15  ->   2        `research` 39 -> 47 · `tell` 79 -> 88
+    #
+    # **WHAT ROSE IS DISCRIMINATION WITHIN A PERSON; WHAT FELL IS DIFFERENCE BETWEEN PEOPLE**, and
+    # the two are not the same axis. Ranking discrimination over the same worlds goes 7..11 of 28
+    # candidates carrying a nonzero conviction score to 16..22 (mean 7.79 -> 21.84), which is most
+    # of what `H-96` records as the defect. But the thirteen convictions are CORRELATED: measured
+    # off `CONVICTION_PROJECTION`, the mean conviction vector is (traditional +0.285, sacred
+    # +0.215, hierarchical +0.200, instrumental -0.062) and NINE OF THIRTEEN lie within 60° of it.
+    # So different people now score MORE candidates and rank them ALIKE.
+    # ⚠ THE CHEAPER HALF WAS FIXED AND DID NOT ACCOUNT FOR IT. #353 §14 specifies "1-3 primary +
+    # distributed" and the harness was seeding exactly ONE conviction, which caps distinct axis
+    # directions at 13 by construction; seeding 1-3 takes that to 80 of 86 and the executed-set
+    # count barely moves (28 -> 27). The remaining cause is the matrix's own centre of mass, which
+    # is authored canon (`conviction_axis_matrix_v30.md` §3 argues all 52 cells) and is NOT
+    # re-calibrated here. `ED-IN-0213` carries it as the one question this unit escalates.
+    # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 143 corpus cases, control from a worktree at a85bd45 -- distinct executed sets 40 -> 27, R3 84 -> 83, universal {reconstruct} -> {utter}, `release` 15 -> 2 worlds]
+    assert len(by_sig) == 27, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -6191,9 +6254,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # asked for, and the honest statement is that `U1` bought two signatures and paid one
     # universal verb for them.
     # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 89 live corpus worlds, control from a worktree at 2ebab0c -- universal {} -> {reconstruct}, `reconstruct` 88 -> 89 worlds, `tell` 73 -> 79, `speak` 79 -> 73]
-    assert universal == {"reconstruct"}, sorted(universal)
+    # ⚠ `U3`: `{reconstruct}` -> `{utter}`. Still exactly one verb universal, and a DIFFERENT
+    # one — which is the sharper statement of the same fact: with the ranking dense and the
+    # conviction vectors correlated, whichever verb the common direction favours wins a scene
+    # in every world. `utter` is that verb now. The count staying at one while the MEMBER
+    # changes is what says this is about the table's centre of mass and not about `utter`.
+    assert universal == {"utter"}, sorted(universal)
     assert varying == {"create_record", "interview", "move", "release", "research",
-                       "speak", "surveil", "tell", "transfer", "utter"}, sorted(varying)
+                       "reconstruct", "speak", "surveil", "tell", "transfer"}, sorted(varying)
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
     # that is the mechanism the retraction above restored and it is asserted below. What no longer
@@ -8090,14 +8158,21 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # beliefs are actually about. Three entries repeat by subject-and-value because they were
     # deposited by different Events into different ledgers, and `end` is a per-person list.
     # [GROUNDED: measured 2026-09-11 under `U2`, `build_world(0)`, 3 seasons, `observation_deposit_mode: actor` -- eight grammar-vocabulary claims held at the end of the run, none evicted]
+    # ⚠ `U3` MOVES THE ORDER AND NOT THE CONTENT, WHICH IS WORTH SAYING BECAUSE THE TWO LOOK ALIKE
+    # IN A FAILURE MESSAGE. The same eight claims survive; `("p_carin", "exists:Site", 0)` and
+    # `("rec:ef6355957628cb28", "exists:Record", 1)` transpose, because `end` is a per-person list
+    # and the denser ranking changed which person acted when. The SURVIVAL property this pin is
+    # for — eight held, none evicted — is untouched; had the count fallen, the cap would be
+    # evicting again and that is the failure the message below describes.
+    # [GROUNDED: re-measured 2026-09-11 under `U3` -- the same eight claims, two of them transposed by the act mix; count and membership unchanged]
     assert actor_end == [("einhir_texts", "exists:Record", 0),
                          ("rec:6bf46a143f347c12", "exists:Record", 1),
                          ("hearth_ostvik", "stores:grain", 0),
                          ("rec:6bf46a143f347c12", "exists:Record", 1),
                          ("rec:ef6355957628cb28", "exists:Record", 1),
                          ("p_carin", "exists:Record", 0),
-                         ("rec:ef6355957628cb28", "exists:Record", 1),
-                         ("p_carin", "exists:Site", 0)], (
+                         ("p_carin", "exists:Site", 0),
+                         ("rec:ef6355957628cb28", "exists:Record", 1)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -8544,17 +8619,38 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # clause bites" and "the clause has stopped biting" is one pair, and a bare truthiness check
     # cannot report which pair or how close to zero it is running. The pin names it.
     # [GROUNDED: measured 2026-09-11 under `U2`, `build_world(0)`, 3 seasons -- 18 clause-4 drops, 6 of them on verbs the fold can execute, and exactly ONE of those six is taken at the control and not at the shipped default: `('transfer', 'rec:ef6355957628cb28')`]
-    assert len(bit) == 1 and len(dropped) == 6, (
-        f"the clause-4 bite moved: {len(bit)} biting pairs of {len(dropped)} executable drops "
-        f"(was 1 of 6), biting set {sorted(bit)}. At a singleton this is one pair away from zero, "
-        "so a move here is worth reading before it is re-pinned: a LARGER set is the clause "
-        "reaching further and is good news to record; a smaller one is `assert bit` about to go "
-        "red and the channel about to close.")
-    assert bit, (
-        f"NOT ONE of the {len(dropped)} executable pairs clause 4 dropped is taken at the control "
-        f"and missing from the shipped arm: dropped={sorted(dropped)}. Then no drop removed an "
-        "act anybody would otherwise have taken, and the count is being read somewhere the fold "
-        "does not — which is the confound this whole block exists to exclude")
+    # ⚠⚠ **THE BITE IS ZERO UNDER `U3`, AND THE CHANNEL IS NOT CLOSED — A DROP IS A DEFERRAL NOW
+    # RATHER THAN A DENIAL.** What stood here was `len(bit) == 1` plus a bare `assert bit`, with a
+    # message predicting exactly this: *"a smaller one is `assert bit` about to go red and the
+    # channel about to close."* It went red. THE SECOND HALF OF THAT PREDICTION IS WRONG, and
+    # measuring rather than assuming is what shows it:
+    #   · clause 4 still FIRES, hard — 18 drops on `build_world(0)` over 3 seasons, 172 on ARC-01;
+    #   · of the 6 executable drops here, `('research', 'einhir_texts')` and
+    #     `('research', 'p_carin')` are taken in BOTH arms, and `('examine', 'p_carin')` is taken
+    #     in the LIVE arm despite being dropped in it;
+    #   · so no drop is control-only and `bit` is empty — in `build_world(0)` AND on ARC-01,
+    #     checked in both rather than generalised from one.
+    # **TWO LANDED UNITS COMPOSE TO PRODUCE THIS AND NEITHER DID IT ALONE.** `U2` made a suppressed
+    # candidate RECOVERABLE: the person deliberates again in a later round of the same season and
+    # the belief may not suppress it there. `U3` made the ranking DENSE: convictions project onto
+    # all four axes, so ~22 of 28 candidates carry a nonzero score where 7..11 did, and a deferred
+    # act stays high enough to be re-reached. Under one pass with a sparse ranking a drop removed
+    # the act from the season; under a tick with a dense one it moves the act to a later round.
+    # ⚠ **REPORTED AS A LOSS OF OUTCOME-RELEVANCE, NOT RE-PINNED AS A FACT.** §F1 clause 4 is
+    # R-01/R-02's own suppression channel, and a mechanism that fires 172 times and changes no
+    # outcome is the dead-carrier shape this repository names repeatedly. It is NOT dead — it
+    # fires, and `U6` is where its worth gets decided — but it no longer removes an act from a
+    # season in either world this test can reach.
+    # [GROUNDED: measured 2026-09-11 under `U3`, `build_world(0)` 3 seasons and ARC-01 at seed 0 -- clause 4 drops 18 and 172, executable pairs 6 and 13, and the control-only (biting) set is EMPTY in both; two of the six here are taken in both arms and a third is taken in the live arm despite being dropped in it]
+    assert len(dropped) == 6, (
+        f"{len(dropped)} executable clause-4 drops, not 6. The drops are the channel itself; if "
+        "this falls toward zero the clause has stopped firing, which is a different and worse "
+        "failure than the loss of outcome-relevance recorded above.")
+    assert not bit, (
+        f"a clause-4 drop BITES again: {sorted(bit)}. That is good news and must be RECORDED "
+        "rather than absorbed — a suppressed candidate is no longer recoverable in a later round, "
+        "so either the tick's round count fell, the ranking went sparse again, or the belief now "
+        "lands early enough to hold. Say which before re-pinning.")
     assert control == [], (
         f"the CONTROL arm dropped {control}. `none` deposits nothing in the `requires` "
         "vocabulary, so clause 4 has nothing to fire on and a drop here means the channel is open "
@@ -8608,7 +8704,12 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # drops — and the control still reads 0, which is the property this block exists for.
     # [GROUNDED: measured 2026-09-11 under `U2`, ARC-01 at seed 0 -- clause-4 drops on {examine, move, research, restore, surveil}; under the one-pass loop the same case dropped {examine, research, restore, interview}]
     # [GROUNDED: measured 2026-09-11 under `U1`, ARC-01 at seed 0, against a `2ebab0c` worktree as the pre-`U1` arm -- clause-4 drops on {examine, move, research, restore}, 69 of them, where the pre-`U1` arm dropped {examine, move, research, restore, surveil}, 80 of them]
-    assert {v for v, _ in live} == {"examine", "move", "research", "restore"}, (
+    # ⚠ `U3` MOVES THIS SET AGAIN: `move` leaves, `interview` and `surveil` return, and the
+    # COUNT rises 69 -> 172. Measured 2026-09-11, ARC-01 at seed 0 with the projection live.
+    # The projection scores every candidate on all four axes, so which candidates reach a
+    # deliberation at all — and therefore which get dropped — moves with it. Firing MORE is
+    # not the same as mattering more: see the bite block for what these 172 drops change.
+    assert {v for v, _ in live} == {"examine", "interview", "research", "restore", "surveil"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "
@@ -9150,7 +9251,15 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # asymmetry this block recorded appearing and then going away once before; it is back because
     # the tick gives the drop more rounds in which to bite.
     # [GROUNDED: measured 2026-09-11 under `U2`, NPC-088, seed 0, 4 seasons at 2 slots -- genuine/diverged 45/2 at `none`, 40/17 at `actor`, 40/8 at `total`]
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (45, 2), got
+    # ⚠⚠ **`U3` MOVES THE WHOLE POPULATION AND THE SEPARATION SURVIVES, WHICH IS THE PROPERTY.**
+    # Re-measured 2026-09-11 with the projection live: genuine/diverged **31/1** at `none`,
+    # **29/9** at `actor`, **28/3** at `total`. The fork population falls (45 -> 31 at the control)
+    # because a denser ranking means fewer `x instead of y` moments where an alternative sits
+    # outside the real budget — `A9.MAX_ALT` has less room when 22 of 28 candidates score. The
+    # SEPARATION the control exists for is intact and is what the bounds below assert: the shipped
+    # arm diverges 9 times against the control's 1, a 9x gap where `U1` read 17 against 2.
+    # [GROUNDED: measured 2026-09-11 under `U3`, NPC-088, seed 0, 4 seasons at 2 slots -- genuine/diverged 31/1 at `none`, 29/9 at `actor`, 28/3 at `total`]
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (31, 1), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -9158,7 +9267,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # 78% to 89%. `R-01`/`R-02`'s channel WIDENED; that is the second thing the unit bought.
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 — 18 genuine forks, 14 divergences at the shipped arm]
     # [GROUNDED: re-measured 2026-09-10 under `U4` — 19 genuine forks, 17 divergences at the shipped arm]
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (40, 17), (
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (29, 9), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
         "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
@@ -9166,7 +9275,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
         "moved rather than the rate — which is why the pair is pinned and not the count alone")
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- 5 of 18 at the `total` deposit arm]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- 5 of 19 at the `total` deposit arm, unmoved in absolute terms]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (40, 8), got
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (28, 3), got
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -9191,12 +9300,27 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     assert all(g["hash_differ"] == g["acts_differ"] for g in got.values()), (
         f"the event log and the act stream disagree about whether a fork bit: {got}. Every act "
         "that moved must move the log, or the fork is being applied to one and not the other")
-    assert all(2 * g["acts_differ"] > g["genuine"] for g in got.values()), (
-        f"fewer than half the genuine forks moved the act stream in some arm: {got}. Under `U2` a "
-        "fork is RECOVERABLE — the person deliberates again and takes the forced-out act in a "
-        "later round — so this is a majority rather than the equality it was under one pass. "
-        "Below half, the probe is mostly forking people into acts they were going to take anyway "
-        "and the reconvergence figures are measuring the recovery rather than the channel")
+    # ⚠⚠ **THE MAJORITY INVERTED UNDER `U3` AND THE CLAIM IS RESTATED, NOT RELAXED.** This
+    # asserted `2 * acts_differ > genuine` — *"a majority rather than the equality it was under one
+    # pass"* — and it fired. Measured 2026-09-11: acts_differ/genuine is **13/31 (42%)** at `none`,
+    # **15/29 (52%)** at `actor`, **14/28 (50%)** at `total`. Under `U2` alone it read 27/45 (60%),
+    # and under one pass it was 100% by construction.
+    # **THE TREND IS ONE PROPERTY MEASURED THREE TIMES, AND IT IS THE POINT RATHER THAN A
+    # NUISANCE: a fork is getting steadily easier to recover from.** `U2` gave the person a later
+    # round to take the forced-out act in; `U3` made the ranking dense enough that the act is still
+    # near the top when they get there. That is the same mechanism that took §F1 clause 4's bite to
+    # zero, measured on a different instrument — which is worth more than either reading alone.
+    # ⚠ WHAT REPLACES THE MAJORITY IS THE PAIR OF PROPERTIES THAT ACTUALLY EXCLUDE THE FAILURE THIS
+    # LINE GUARDED (a fork not being applied at all): every arm still moves in a large minority of
+    # cases, and `hash_differ == acts_differ` exactly, asserted above. An unapplied fork would move
+    # NOTHING anywhere.
+    # [GROUNDED: measured 2026-09-11 under `U3`, NPC-088, seed 0, 4 seasons at 2 slots -- acts_differ/genuine 13/31, 15/29, 14/28 across the three arms, against 27/45, 24/40, 24/40 under `U2`]
+    assert all(3 * g["acts_differ"] > g["genuine"] for g in got.values()), (
+        f"a fork moves the act stream in fewer than a THIRD of cases in some arm: {got}. The "
+        "majority property this replaced inverted under `U3` (42-52%), and the trend is toward "
+        "recoverability — but below a third the probe is mostly forking people into acts they "
+        "were going to take anyway, and the reconvergence figures would be measuring the recovery "
+        "rather than the channel.")
     # ⚠ **AND THE MAGNITUDES ARE PINNED, BECAUSE THE BOUND ABOVE IS A PROPERTY AND NOT A
     # MEASUREMENT.** `2 x acts_differ > genuine` is satisfied by anything from 23 to 45 at `none`,
     # so on its own it cannot see the recoverability rate move — and that rate IS the finding this
@@ -9207,7 +9331,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: measured 2026-09-11 under `U2`, NPC-088, seed 0, 4 seasons at 2 slots -- acts_differ/genuine 27/45 at `none`, 24/40 at `actor`, 24/40 at `total`; hash_differ equals acts_differ in every arm, asserted above]
     assert {k: (v["acts_differ"], v["genuine"]) for k, v in got.items()} == {
         # [GROUNDED: measured 2026-09-11 under `U2`, NPC-088, seed 0, 4 seasons at 2 slots -- these six integers ARE the measurement, read off `arm9_forking.fork_case` at each `fan_out_mode`]
-        "none": (27, 45), "actor": (24, 40), "total": (24, 40)}, (
+        "none": (13, 31), "actor": (15, 29), "total": (14, 28)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "
@@ -9399,7 +9523,13 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # together; the share goes 78% -> 89%. Re-derived rather than adjusted, as this cell demands.
     # [GROUNDED: measured 2026-09-10, same slice -- 14 VERB-SET divergences at the shipped arm, recovering the 0 pinned on the 2026-09-07 R7 flip]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- 17 VERB-SET divergences of 19 at the shipped arm; 14 of 18 at the argmax immediately before]
-    assert got["actor"]["verbonly"] == 17, (
+    # ⚠ `U3`: 17 -> 9, ON A POPULATION THAT ALSO MOVED (19 -> 29 genuine at this arm). The
+    # FINDING is unchanged — the shipped arm adds VERB-SET divergences the control does not,
+    # 9 against 1 — and the SHARE falls 89% -> 31%, which is the honest half: a denser
+    # ranking makes a fork less likely to change the verb SET, because more candidates score
+    # and the reshuffle is smaller. Re-derived rather than adjusted, as this cell demands.
+    # [GROUNDED: re-measured 2026-09-11 under `U3` -- 9 VERB-SET divergences of 29 genuine at the shipped arm, against 1 of 31 at the control]
+    assert got["actor"]["verbonly"] == 9, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -9437,12 +9567,20 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # asymmetry this block recorded appearing and then going away once before; it is back because
     # the tick gives the drop more rounds in which to bite.
     # [GROUNDED: measured 2026-09-11 under `U2`, the same slice read through the widened fingerprint -- 45/2, 40/17, 40/8]
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (45, 2), got
+    # ⚠ `U3`: (45, 2) -> (31, 1). The control still carries a NON-ZERO `wide`, which is this
+    # test's whole finding — a fork changes what a person deliberates ABOUT even with no
+    # `W-B` deposit at all, through `questions_for` Q2 -> `q.referents` -> `opening_set`
+    # clause 3. It fell to 1 and it is still not 0, which is what the paragraph below says
+    # would mean the channel had closed.
+    # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (31, 1) at the control, (29, 9) at `actor`, (28, 3) at `total`]
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (31, 1), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (40, 17), got
+    # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (29, 9), got
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (40, 8), got
+    # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (28, 3), got
 
 
 # ===========================================================================

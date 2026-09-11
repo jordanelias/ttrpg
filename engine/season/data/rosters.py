@@ -203,6 +203,19 @@ REMIT_ACTS = roster("remit_acts")
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)
 CLAIM_SOURCES = roster("claim_sources")
 STRATA = roster("strata", ordered=True)
+# ⚠⚠ **READ FROM THE LEAF, NOT FROM `rosters.yaml`, AND THIS IS THE ONE ROSTER THAT WORKS THAT
+# WAY.** Every other name here comes from `rosters.yaml` because Jordan ruled definitions must not
+# be hardcoded and that file is the season package's definition surface. The thirteen Convictions
+# already HAVE an owner one layer out — `references/descriptor_registry.yaml:conviction_roster`,
+# exported by `tools/export_descriptors.py` behind a blocking `--check`, read by
+# `engine.substrate.descriptors` — and `tests/valoria/test_conviction_roster_single_owner.py`
+# records what a second copy costs: three incompatible rosters shipped simultaneously and silently
+# disabled ED-912 §6.1's Conviction Scar for as long as both modules existed. Copying them into
+# `rosters.yaml` would have been a fourth, in a file that guard does not scan.
+# ⚠ THE ROW STILL EXISTS IN `rosters.yaml` and carries the source and the note; what it does not
+# carry is `values:`. A reader looking for the definition is sent one hop, which is the correct
+# number of hops when the definition is owned elsewhere.
+from engine.substrate.descriptors import CONVICTIONS  # noqa: E402  (the single owner's leaf)
 CONVICTION_AXES = roster("conviction_axes")
 QUESTION_SOURCES = roster("question_sources", ordered=True)
 PERSON_PREDICATES = roster("person_predicates")
