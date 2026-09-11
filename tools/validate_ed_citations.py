@@ -145,25 +145,23 @@ SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 # with a ceiling of 10 and 10 findings, one changeset could FIX an existing finding and ADD a
 # brand-new open-ED-as-basis claim, keep the count at 10, and pass both the gate and its own test.
 # `git mv`ing a doc from canon/ (blocking) into systems/ laundered the same way. Nothing pinned
-# WHICH findings were deferred. Now nothing but these five exact (path, id) pairs is ever
+# WHICH findings were deferred. Now nothing but the exact (path, id) pairs listed below is ever
 # deferred; anything else is a build failure wherever it appears.
+# ⚠ THE COUNT IS NOT RESTATED HERE, DELIBERATELY. This sentence read "these five exact pairs" and
+# went stale the moment a pair was removed (2026-09-11, ED-IN-0215): prose re-pinning a number the
+# data below already carries. Same failure as CLAUDE.md:345 ("a duplicated date rots independently
+# of its subject") and CURRENT.md:34 ("this row has carried a stale one twice"). Read the set.
 BURN_DOWN_PREFIXES = ('systems/',)  # engine/params/ evacuated 2026-08-05
 BURN_DOWN_ALLOW = frozenset({
-    # ⬇ DEBT PAID 2026-09-11 (ED-IN-0215 position 1). The pair
-    # ('systems/_architecture/reference/decision_policy_v1.md', 'ED-IN-0113') is REMOVED, not
-    # deferred: ED-IN-0113 is closed, so citing it is no longer an open-ED-as-basis finding. That
-    # row was filed as "the one artifact only Jordan can author, and the reason the 94-item
-    # needs_jordan queue cannot drain" — and `decision_policy_v1.md`, the document that exists to
-    # answer it, was the thing citing it. Jordan authored the answer as CLAUDE.md §0 and §0.05;
-    # nobody had closed the row. Found by this test, which is the ratchet doing its job downward.
+    # A pair leaves this set only when its ED closes — the narrative belongs to that ED's ledger
+    # row and the commit that paid it, not here. Last removal: ED-IN-0113 (ED-IN-0215, 2026-09-11).
     ('systems/_architecture/reference/key_type_registry_v30.md', 'ED-IN-0014'),
     ('systems/_architecture/reference/key_type_registry_v30.md', 'ED-IN-0091'),
     ('systems/articulation/reference/articulation_layer_v30.md', 'ED-IN-0004'),
     ('systems/articulation/reference/articulation_layer_v30.md', 'ED-IN-0091'),
 })
-BURN_DOWN_MAX = 9  # occurrences across those 4 pairs. 10 across 5 pairs, measured 2026-08-01;
-                   # lowered to 9 on 2026-09-11 when ED-IN-0113 closed. A test pins it BOTH ways,
-                   # so this may only ever move down as debt is paid — never up to admit new debt.
+BURN_DOWN_MAX = 9  # occurrences across the pairs above. A test pins it BOTH ways, so it may only
+                   # ever move DOWN as debt is paid — never up to admit new debt.
 
 # Editorial-archive locations (the ED universe is the active JSONL + these).
 #
