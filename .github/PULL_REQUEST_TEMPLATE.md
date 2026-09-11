@@ -12,7 +12,7 @@
 - [ ] **Ratify-on-merge done in THIS PR:** any doc/doctrine/ledger entry this PR lands as `PROPOSED`/`provisional` has its `## Status:` line, ED `status`/`needs_jordan`, and `CURRENT.md` row flipped **in this same change** — not left for an unprompted follow-up.
 - [ ] **Held-back items called out loudly ABOVE:** anything needing separate explicit sign-off beyond ordinary merge review is named prominently in this body as *held back* (never bundled silently into routine work).
 - [ ] **Currency:** `CURRENT.md` / relevant index rows updated; no new drift introduced (`python tools/currency_consistency_check.py`).
-- [ ] **Green locally:** `python tools/valoria_local.py --staged` and `python -m pytest tests/valoria -q` pass.
+- [ ] **Green locally:** `python tools/valoria_local.py --staged` and `python -m pytest tests/valoria -q -n auto` pass. (`-n auto` is what CI runs — same 1817 tests, ~2m36 rather than 9m01. Run the full suite ONCE, at the close: `CLAUDE.md` §0.4.)
 
 ## Repository-state impact (optional)
 <!-- If this PR moves a review_baseline.yaml ceiling or adds/retires an apparatus, note it:

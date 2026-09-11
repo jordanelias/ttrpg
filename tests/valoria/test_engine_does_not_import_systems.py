@@ -48,6 +48,8 @@ import ast
 import os
 import re
 
+import pytest
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 ENGINE = REPO / 'engine'
 
@@ -392,6 +394,13 @@ def test_importing_every_engine_module_pulls_in_no_subsystem():
     )
 
 
+# RUNTIME, NOT IMPORTANCE (pytest.ini). Measured 2026-09-11: 78.8s — the single most expensive test
+# in tests/valoria, and under `-n auto` the one that SET the floor: deselecting every other marked
+# test left the wall clock at 2m27 against 2m36 unfiltered, because xdist distributes by test and
+# this one pinned a worker for 79s. It stays in the shipping gate (CI runs unfiltered, and
+# test_pytest_marker_discipline.py guarantees that); the mark only frees the inner loop. CLAUDE.md
+# §0.4 is the cadence this serves.
+@pytest.mark.slow
 def test_the_one_declared_path_seam_is_still_the_only_one():
     """`combat_bridge` reaches into `systems/` by `sys.path` + bare name. That is a real seam and it
     is DECLARED here rather than left invisible — the ratchet's own rule is that a seam which cannot

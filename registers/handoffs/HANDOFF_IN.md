@@ -1,5 +1,38 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## ⏱ 2026-09-11 — verification cadence ruled: the suite is a CLOSE step (`ED-IN-0212`)
+
+**Jordan:** *"figure out a far better work pattern with Claude.md or whatever so you don't run this shit
+after every edit."* Measured before acting; `CLAUDE.md` **§0.4** is the new rule and its owner.
+
+**The defect was one documented line, not a slow suite.** §8 documented the SERIAL command (**9m01s**)
+while `.github/workflows/valoria-ci.yml:343/365` has always installed `pytest-xdist` and run `-n auto`
+(**2m36s**). **1817 tests collected either way** — `-n auto` is a scheduler, not a filter. `conftest.py`
+was already built for xdist. Every session obeying §8 paid 3.5× for CI's verdict. Fixed in §8.
+
+**The rule (§0.4):** full suite ONCE, after the last edit, before the commit · mid-session run the one
+FILE covering your edit · never re-run to re-confirm a green you hold · a red close run re-runs only the
+FAILING FILE. §0's adversarial-pass bullet and close-the-loop bullet and §9's routing line were all
+edited too — the rule does not survive against the "verify at every stage" reading otherwise.
+
+**No guard was built, deliberately.** A cadence rule's subject is this repo's PROCESS — exactly §0.1
+pt 5's excluded class. §0.4 binds a reader.
+
+### Left for a later session (measured, not guessed — do not re-derive)
+
+- **The fast lane is still mostly decorative.** `-m "not slow"` bought **9 seconds** (2m27 vs 2m36). One
+  unmarked test set the floor — `test_engine_does_not_import_systems.py::test_the_one_declared_path_seam_is_still_the_only_one`,
+  78.8s — and is marked `slow` now. **The next floors CANNOT be fixed by marking:** conftest's
+  session-scoped `generated_layer` (~27s) and `test_contract_index`'s module-scoped `docs` (~19s) are
+  SHARED fixtures; the cost returns the moment any consumer is selected. Making the fast lane genuinely
+  fast means making those fixtures cheaper or lazier, which is real work and was not this task.
+- ⚠ **A shallow checkout fails 2 tests on arrival** — `test_forked_status.py`, `FORK row names
+  'c451bcb', which is not a commit in this repo`. **`main` is not red** (clean tree, `.git/shallow`
+  present, 67 commits reachable). §0.4 carries the `cat .git/shallow` check. Worth deciding whether
+  those two should skip when `.git/shallow` exists rather than fail — **not done here**, because it
+  changes a gate's behaviour and is not what Jordan asked for.
+
+
 ## 📋 2026-09-10 — the `needs_jordan` queue measured, and three of this pass's own conclusions retracted
 
 **Artifact: `workplans/2026-09-10-unblocking-strategy.md` (PROPOSED, reference under §0.05), `ED-IN-0208`**

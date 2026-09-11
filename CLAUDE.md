@@ -50,8 +50,12 @@ mechanics).
 - **Adversarial pass at every stage that gates a result.** After you draft canon, a number or a fix,
   *try to break it*: verify provenance by hand against the cited `PP-NNN`/`ED-NNN`, run the relevant
   `tools/` validator, and for a judgment call put a genuinely independent critic on it (structural
-  independence, read-only, §10). Never report a result you have not attacked — the anti-fabrication gate
-  is leaky and `tools/validate_ed_citations.py` covers ED only, so PP provenance is unvalidated.
+  independence, read-only, §10). ⚠ **"Every stage" governs WHAT you attack, never HOW OFTEN you re-run
+  the shipping gate.** The pass attacks *the result in front of you* — its provenance, its setup, its
+  falsifier (§0.1) — with the narrowest instrument that can observe the failure. Re-running
+  `pytest tests/valoria` is not that instrument and is not an adversarial pass; the cadence is §0.4.
+  Never report a result you have not attacked — the anti-fabrication gate is leaky and
+  `tools/validate_ed_citations.py` covers ED only, so PP provenance is unvalidated.
 
   **The pass is a STAGE, not a DELIVERABLE.** Its output is **edits to the thing under review, and at
   most one paragraph in the commit message.** It creates no directory and no document. It may append
@@ -98,11 +102,12 @@ mechanics).
   carve-outs are deliberate: without the first the literal reading tells a session to **refuse Jordan**
   (a ruling request traces to no juncture); the second covers a red `main`, which blocks everything and
   traces to nothing.
-- **Close the loop, honestly.** Run `pytest tests/valoria` + the lane's validator, commit in the
-  `[scope]` format citing the `PP/ED`, capture next actions in your lane's `HANDOFF_<LANE>.md`. If a
-  check failed or a step was skipped, say so — a green claim you did not verify is worse than a red one
-  you did. **There is no SessionStart banner and you may not build one** (§0.3); orient from §1 and
-  `HANDOFF.md`.
+- **Close the loop, honestly — and close it ONCE (§0.4).** At the close, not before: run
+  `python -m pytest tests/valoria -q -n auto` + the lane's validator, commit in the `[scope]` format
+  citing the `PP/ED`, capture next actions in your lane's `HANDOFF_<LANE>.md`. **The full suite is a
+  close step; mid-session you run the one file covering your edit.** If a check failed or a step was
+  skipped, say so — a green claim you did not verify is worse than a red one you did. **There is no
+  SessionStart banner and you may not build one** (§0.3); orient from §1 and `HANDOFF.md`.
 
 ### 0.05 CODE IS THE MECHANISM. PROSE IS REFERENCE. (RULED by Jordan)
 
@@ -280,6 +285,54 @@ and §0's max-effort selection term aim the freed capacity at **T2** and the gam
 running under the reduced banner still wrote apparatus and no game — **T1 fell and the freed capacity
 still went to apparatus, which says T2 had not moved. Do not build a replacement banner**; a session
 orients from §1 and `HANDOFF.md`. If the diagnosis needs re-testing, **test T2**.
+
+### 0.4 VERIFICATION CADENCE — the suite is a CLOSE step, not an inner loop (RULED by Jordan)
+
+Verbatim: *"figure out a far better work pattern with Claude.md or whatever so you don't run this shit
+after every edit"* — against *"8 minutes here, 2 minutes there, constant bitching about 1778 lines."*
+
+**Measured 2026-09-11 on this tree, 4 cores. Collection is 1817 tests either way — `-n auto` runs the
+SAME gate, not a subset:**
+
+| what you run | wall clock |
+|---|---|
+| `python -m pytest tests/valoria -q` — what this file used to document | **9m 01s** |
+| `python -m pytest tests/valoria -q -n auto` — what CI has run all along | **2m 36s** |
+| one file, `python -m pytest tests/valoria/test_<x>.py -q` | **seconds** |
+
+The 3.5× was paid for nothing: **this file documented the serial command while
+`.github/workflows/valoria-ci.yml` ran the parallel one**, and `tests/valoria/conftest.py` was already
+built for xdist (its `generated_layer` gate is an atomic cross-worker lock). A session obeying §8 paid
+six and a half minutes a run to reach a verdict CI reached in two and a half.
+
+**The rule — five clauses, and clause 1 is the one that was missing:**
+
+1. **The full suite runs ONCE PER COMMIT: after that commit's last edit, immediately before it.** It
+   is a SHIPPING gate (§0.1), so the unit is the thing being shipped — a session landing two commits
+   runs it twice, once per commit, and a session landing one runs it once. Run it after an individual
+   *edit* and it returns no information the close run would not.
+2. **Mid-session, run only the file covering what you touched.** If you cannot name that file, finding
+   it out is the cheaper move — it costs seconds against nine minutes.
+3. **Never re-run to re-confirm a green you already hold.** Green, plus more edits, is not a reason to
+   re-run before the close.
+4. **A red close run re-runs the FAILING FILE ONLY while you fix it.** The full suite comes back once,
+   when you believe you are done. Red is not a licence to loop the gate.
+5. **`tools/valoria_local.py --staged` does not run pytest and never has** (so local-green ≠ CI-green,
+   §8). It is cheap; run it freely. The expensive thing is pytest, and only pytest.
+
+**This governs EVERY pytest gate, not just `tests/valoria`.** `engine/season/tests` (CI runs it
+`-q -n auto` too) and `engine/tests` are the same kind of object and take the same cadence: at the
+close, once, and only the ones your change can reach. A change touching no `engine/season/` file does
+not need that suite at all — "run everything, just in case" is the habit this section exists to end.
+
+⚠ **Learn your container's known-red BEFORE you debug it.** A **shallow** checkout (§2) cannot reach the
+commits the `FORK:` rows name, so `tests/valoria/test_forked_status.py` fails two tests on arrival —
+`FORK row names '<sha>', which is not a commit in this repo`. That is the clone, not `main`. One
+`cat .git/shallow` settles it. A session that debugs this is debugging its container.
+
+**This binds a reader, not a program, and NO GUARD MAY BE BUILT FOR IT.** Its subject is this
+repository's process, which is exactly what §0.1 pt 5's predicate excludes: a cadence checker would be
+the apparatus that rule exists to forbid. The enforcement is that you read it.
 
 ---
 
@@ -527,7 +580,18 @@ re-implement a rule.** Known live violations, treated as bugs rather than propag
 - **The dependency-free primitives** (repo root, the nine-lane roster, token estimate, id regexes) are
   owned by `tools/ci_common.py`, which forwards to nothing else. Reuse it; do not re-derive them.
 
-Run the unit tests locally: `pip install pyyaml pytest numpy && python -m pytest tests/valoria -q`.
+Run the unit tests locally — **install `pytest-xdist` and pass `-n auto`, exactly as CI does**:
+
+```sh
+pip install pyyaml pytest numpy pytest-xdist
+python -m pytest tests/valoria -q -n auto      # the gate: ~2m36s. Serial, it is 9m01s.
+python -m pytest tests/valoria/test_<x>.py -q  # the inner loop: seconds. This is the mid-session run.
+```
+
+Same 1817 tests collected either way — `-n auto` is a scheduler, not a filter, and it is what
+`.github/workflows/valoria-ci.yml` has always run. **Omitting `-n auto` is how a session pays 3.5× for
+the same verdict; omitting `pytest-xdist` from the install is why it got omitted.** The cadence that
+decides WHEN each of these runs is §0.4 — the full gate is a close step, not an inner loop.
 
 ---
 
@@ -556,8 +620,9 @@ Run the unit tests locally: `pip install pyyaml pytest numpy && python -m pytest
 
 **General routing:** currency via `CURRENT.md` → `HANDOFF.md` + your lane's
 `registers/handoffs/HANDOFF_<LANE>.md` → the subsystem head and its `## Status:` line → change the
-working tree → run the relevant `tools/` validator and `pytest tests/valoria` → commit with `[scope]`
-and any `PP-NNN`/`ED-NNN`.
+working tree → run the relevant `tools/` validator and, **once at the close (§0.4)**,
+`python -m pytest tests/valoria -q -n auto` → commit with `[scope]` and any `PP-NNN`/`ED-NNN`.
+Mid-session the pytest step is the single file covering your edit, never the full suite.
 
 ---
 
