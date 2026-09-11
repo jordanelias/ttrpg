@@ -301,9 +301,19 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
             return (sum(axis_w[ax] * align(c.verb, ax) for ax in CONVICTION_AXES)
                     + stance_toward(p, c.subject or "")
                     + u)
-        # Deterministic: score DESC, then verb then subject, so a tie cannot depend on dict order.
-        ranked = sorted(cands, key=lambda c: (-score(c), c.verb, c.subject or ""))
-        ranked = _sample_order(ranked, score, p, fx, draw)
+        # ⚠ SCORED ONCE, NOT TWICE. `score` was passed to `_sample_order` and re-invoked there for
+        # every candidate it had just been invoked for in this sort key — measured by a `/simplify`
+        # profile as `align()` running 637,324 times for 78,858 candidates across a 143-case corpus
+        # run, almost exactly 2x one pass. The scores are IDENTICAL either way (`score` is pure in
+        # `c` given the closure), so this is the same ranking computed half as often, not a
+        # different one.
+        _scores = {id(c): score(c) for c in cands}
+        ranked = sorted(cands, key=lambda c: (-_scores[id(c)], c.verb, c.subject or ""))
+        # ⚠ KEYED ON `id(c)` AND THAT IS SAFE HERE, NARROWLY: `cands` holds every Candidate alive
+        # for the whole of this call, so no id can be recycled underneath the dict. A Candidate is
+        # not guaranteed hashable and `(verb, subject)` is not guaranteed unique, so neither is a
+        # key this can use.
+        ranked = _sample_order(ranked, lambda c: _scores[id(c)], p, fx, draw)
         # §26.3: the PERSON triages. The slice is the person's own choice of what to leave
         # undone, taken against a budget they ASKED for -- not an engine truncating a tail.
         # `W17`: the budgeted unit is the SCENE, so the slice is over scenes and each carries up
