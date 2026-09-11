@@ -149,13 +149,21 @@ SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 # deferred; anything else is a build failure wherever it appears.
 BURN_DOWN_PREFIXES = ('systems/',)  # engine/params/ evacuated 2026-08-05
 BURN_DOWN_ALLOW = frozenset({
-    ('systems/_architecture/reference/decision_policy_v1.md', 'ED-IN-0113'),
+    # ⬇ DEBT PAID 2026-09-11 (ED-IN-0215 position 1). The pair
+    # ('systems/_architecture/reference/decision_policy_v1.md', 'ED-IN-0113') is REMOVED, not
+    # deferred: ED-IN-0113 is closed, so citing it is no longer an open-ED-as-basis finding. That
+    # row was filed as "the one artifact only Jordan can author, and the reason the 94-item
+    # needs_jordan queue cannot drain" — and `decision_policy_v1.md`, the document that exists to
+    # answer it, was the thing citing it. Jordan authored the answer as CLAUDE.md §0 and §0.05;
+    # nobody had closed the row. Found by this test, which is the ratchet doing its job downward.
     ('systems/_architecture/reference/key_type_registry_v30.md', 'ED-IN-0014'),
     ('systems/_architecture/reference/key_type_registry_v30.md', 'ED-IN-0091'),
     ('systems/articulation/reference/articulation_layer_v30.md', 'ED-IN-0004'),
     ('systems/articulation/reference/articulation_layer_v30.md', 'ED-IN-0091'),
 })
-BURN_DOWN_MAX = 10  # occurrences across those 5 pairs; measured 2026-08-01, a test pins it both ways
+BURN_DOWN_MAX = 9  # occurrences across those 4 pairs. 10 across 5 pairs, measured 2026-08-01;
+                   # lowered to 9 on 2026-09-11 when ED-IN-0113 closed. A test pins it BOTH ways,
+                   # so this may only ever move down as debt is paid — never up to admit new debt.
 
 # Editorial-archive locations (the ED universe is the active JSONL + these).
 #
