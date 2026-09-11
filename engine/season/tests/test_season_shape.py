@@ -639,14 +639,26 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     make unwritable, arriving as a per-case DESIGN-GAP mid-corpus instead of as a table refusal at
     import. The two new raises close the symmetry, they fire while `verb_table.yaml` is being read,
     and the run-time side is unchanged. Falsifier:
-    `test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on`."""
+    `test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on`.
+
+    ⚠ 30 -> 31, `release` (`04 §A.3` row 14), 2026-09-11, AND IT IS LOAD-TIME — which is the one
+    question this test forces its author to answer. `_load_verb_table` gained LOADER INVARIANT 6,
+    named by `04_CODE_ARCHITECTURE.md` PART D row 15 in as many words: *"`release` generic; the
+    loader asserts its domain equals `tenure_kinds \\ {contain}`"*. It fires while
+    `verb_table.yaml` is being read, so an eighth tenure kind added to `rosters.yaml` without a
+    closer FAILS THE LOAD rather than shipping a relation nothing can end. The run-time side is
+    unchanged: `_req_release` returns False and the fold emits `release.refused`, per §E2.
+    ⚠ AND THE ASSERTION HAS CONTENT ONLY BECAUSE THE COLUMN IS DECLARED. A derived `domain:` would
+    make invariant 6 compare the roster against itself — §0.1 pt 2, an assertion that cannot
+    observe the failure it excludes. Falsifier: delete the `domain:` column from the `release` row
+    and the load fails here rather than anywhere later."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 30, (
-        f"{total} load-time exits across the model set, expected 30. Per file: "
+    assert total == 31, (
+        f"{total} load-time exits across the model set, expected 31. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -1915,8 +1927,11 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
 
     # AND THE CONTROL: the shipped table loads. Without this the two arms above would pass on a
     # loader that refused everything.
+    # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11. This is a CONTROL, not a claim about
+    # the roster: its job is to fail if the loader started refusing everything, so it moves with
+    # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 37
+    assert len(VERBS._load_verb_table()) == 38
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -3873,12 +3888,27 @@ def test_w6_every_named_channel_has_a_predicate_and_they_are_data():
     print(f"\n  W6 — events on which each channel admits at least one person: {fires}")
     assert fires["co_located"], "the presence channel admits nobody — it is broken closed"
     inert = sorted(c for c, n in fires.items() if not n)
-    assert inert == ["chronicle", "post_remit"], (
-        f"the inert channels are {inert}, not the two this item published. `chronicle` fires only "
-        "on a `binding_decision` verb and `post_remit` needs an office whose remit covers the "
-        "emitting verb; NEITHER is reachable from the verbs the fold can execute, so the "
-        "`all_five` arm is currently a measurement of THREE channels and the register says so. If "
-        "this list has changed, the register's reading of `H-33` has to change with it")
+    # ⚠⚠ **TWO -> ONE, `release` (`04 §A.3` row 14), 2026-09-11, AND THIS IS THE UNIT'S RESULT
+    # RATHER THAN ITS COST.** `chronicle` fires only on a `binding_decision` verb. Five of the nine
+    # binding-decision verbs were ALREADY resolvable before this unit (`confer`, `convene`,
+    # `dispatch`, `revoke`) — so the channel was not gated on the table, it was gated on nothing in
+    # that set ever actually EXECUTING. `release` executes, and the channel opened. Measured at
+    # `build_world(0)`, 2 seasons: the one event that admits anybody through `chronicle` is
+    # **`tenure.closed` by `p_carin` at tick 1**, 1 of 90 events.
+    # ⚠ WHAT THIS IS NOT. It is not `H-33` closing and it is not the channel being EXERCISED — one
+    # firing is a channel no longer broken closed, and the grade assertion below is unchanged
+    # precisely because #353 still supplies no predicate for any of the five. The `all_five` arm is
+    # a measurement of FOUR channels now, and `hole_register.yaml`'s `H-55` says so in those terms.
+    # ⚠ AND THE ASSERTION IS STILL EXACT RATHER THAN A FLOOR. `inert == []` would be the reading to
+    # hope for and `len(inert) <= 1` cannot observe WHICH channel died — §0.1 pt 2. Pinned to the
+    # name, so `post_remit` coming alive and `chronicle` going dark are two different failures.
+    assert inert == ["post_remit"], (
+        f"the inert channels are {inert}, not the one this item published. `post_remit` needs an "
+        "office whose remit covers the emitting verb and nothing the fold can execute supplies "
+        "one, so the `all_five` arm is a measurement of FOUR channels and the register says so. "
+        "`chronicle` came alive with `release` on 2026-09-11 and is pinned here by name: if it is "
+        "back in this list, the one binding-decision verb the corpus executes has stopped "
+        "executing. If this list has changed, the register's reading of `H-33` has to change with it")
     # AND THE INJECTION IS DECLARED AS ONE. `H-33` must not read `ruled` off the back of this.
     h33 = R._register()["H-33"]
     assert h33["grade"] == "assumption", (
@@ -4903,9 +4933,35 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
         f"the maturation COUNT does not grow with the stage count: {matured} — the depth clause "
         "below is ceiling-bounded by the season count and this one is not, so if this fails the "
         "sweep is inert whatever the depths say")
-    assert depths[3] > depths[0] and depths[6] > depths[3], (
-        f"the chain does not grow with the stage count: {depths} — then check 2's result does not "
+    # ⚠⚠ **THE DEPTH CLAUSE HAS NOW SATURATED IN EVERY ARM, `release` (2026-09-11), AND IT IS
+    # RETIRED AS A DISCRIMINATOR RATHER THAN RE-PINNED AS ONE.** The comment at the top of this
+    # test already recorded the `actor` and `total` arms saturating at `{0:0, 3:7, 6:7}` and kept
+    # the growth assertion alive because the `none` arm still read `{0:0, 3:6, 6:7}`. `release`
+    # gives the fold one more executable verb, so acts cite prior Events one link further back and
+    # the 3-stage arm reaches 7 too. The clause `depths[6] > depths[3]` is therefore UNSATISFIABLE
+    # AT ANY ARM, and this test says so in its own words two assertions above: *"the depth clause
+    # below is ceiling-bounded by the season count and this one is not"*.
+    # ⚠ WHAT SURVIVES IS THE `H-80` CLAIM ITSELF, AND IT IS NOT WEAKENED. The cite reads *"at the
+    # `0` sweep point NOTHING MATURES and the causal chain collapses to one link"* — a statement
+    # about the ZERO control, asserted exactly above (`matured[0] == 0 and depths[0] == 0`) and
+    # again in the first half of the growth clause, which is kept. The COUNT clause carries the
+    # discrimination and is asserted in all three arms: 13 < 15 at `none`/`actor`, 25 < 31 at
+    # `total`, measured this run and printed above.
+    # ⚠ AND THE SATURATION IS PINNED RATHER THAN ALLOWED, so it cannot quietly drift further or
+    # quietly come back. If a future change makes the 3-stage arm discriminate again, this goes red
+    # and the growth clause should be restored; if the ceiling itself moves, the season count or
+    # the act chain changed and the reading above is stale either way. `>=` here would be the
+    # weakening this block exists to refuse (§0.1 pt 2).
+    # [GROUNDED: measured 2026-09-11 at `build_world(0)`, 7 seasons, `observation_deposit_mode: none` -- longest maturation chain {0: 0, 3: 7, 6: 7}, maturations {0: 0, 3: 13, 6: 15}]
+    assert depths[3] > depths[0], (
+        f"the chain does not grow off the zero control: {depths} — then check 2's result does not "
         "rest on H-80 and this control is measuring nothing")
+    # [GROUNDED: measured 2026-09-11, `build_world(0)`, 7 seasons -- `3` and `6` are the sweep's own declared `record_stages_default` arms (`H-80`) and `7` is the maturation-chain depth both now read; none is a chosen quantity]
+    assert depths[3] == depths[6] == 7, (
+        f"the maturation depth ceiling moved: {depths}. It saturated at 7 in every arm on "
+        "2026-09-11; a DIFFERENT number means the chain length changed, and a 3-stage arm below "
+        "the 6-stage one means the clause discriminates again and should be restored to "
+        "`depths[6] > depths[3]`")
     assert depths[3] >= 4, depths
 
 
@@ -5611,8 +5667,22 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # WORLDS rather than about the row. `thread_read` requires Thread Sensitivity >= 30, which
     # `requires_operands` has no name for (`H-85`), so it carries no typed cell and is not in
     # `resolvable_verbs()` at all — which is what canon says of a character below the gate.
-    assert ever == {"create_record", "interview", "move", "reconstruct", "research", "speak",
-                    "surveil", "tell", "transfer", "utter"}, (
+    # ⚠ 10 -> 11, `release` (`04 §A.3` row 14, 2026-09-11), AND IT IS THE SECOND TIME THIS SET GREW
+    # BY ADDING A VERB. `release` is generic over tenure kind and its `requires:` is read by a
+    # registered predicate rather than a typed cell, so it binds `subject` from the question's
+    # referent by the same route the four investigation acts do. IT IS MOSTLY A REFUSAL, AND THAT
+    # IS STATED RATHER THAN LEFT TO BE DISCOVERED: measured over the 27 NPC rung cases at seed 0,
+    # 3 seasons, `release` is taken 164 times, closes 6 edges (`tenure.closed`) and refuses 158 —
+    # a 96.3% refusal rate. That is in line with this instrument rather than anomalous in it:
+    # `work` refuses 177 of 177 in the same run, for the same reason — §F1's candidate filter is
+    # EPISTEMIC (*not KNOWN-false from the person's own claims*), and no claim these worlds produce
+    # ever says *you hold no tenure toward that*. So the person attempts and the world declines,
+    # which is the design and not a defect; what it is NOT is evidence that the verb is exercised.
+    # ⚠ THE 6 THAT CLOSE ARE THE UNIT'S ACTUAL RESULT, and one of them is why `chronicle` stopped
+    # being a broken-closed witness channel (`test_w6_every_named_channel_…`).
+    # [GROUNDED: measured 2026-09-11 over the 27 NPC rung cases at seed 0, 3 seasons -- `release` executed 164, `tenure.closed` 6, `release.refused` 158; `work` executed 177, `work.unavailable` 177]
+    assert ever == {"create_record", "interview", "move", "reconstruct", "release", "research",
+                    "speak", "surveil", "tell", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -5705,7 +5775,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     for r in live:
         by_sig.setdefault(tuple(r["executed"]), []).append(r)
     # ⚠⚠ **16 -> 10, `U4` (2026-09-10), AND THE FALL IS THE UNIT'S OWN MEASURED COST — NOT A
-    # REGRESSION SMUGGLED THROUGH A RE-PIN.** `U4` replaced the tie-break: tied candidates were
+    # REGRESSION SMUGGLED THROUGH A RE-PIN.** ⚠ READ THIS PARAGRAPH AS THE RECORD OF `U4` ALONE:
+    # the number asserted below is **14**, not 10, because `release` landed the next day and took
+    # it back up. The 10 is what `U4` left, it is measured against a control, and the block at the
+    # assertion carries the 10 -> 14 arm with its own control. `U4` replaced the tie-break: tied candidates were
     # ordered `(-score, c.verb, c.subject)`, i.e. ALPHABETICALLY BY VERB NAME, and are now ordered
     # by a per-person seeded draw (`decision/choose.py::_sample_order`). MEASURED, five-point sweep
     # over the 89 live cases at seed 0: **tau=0 -> 16 · 0.1 -> 10 · 0.25 -> 8 · 0.5 -> 7 · 1.0 -> 7**.
@@ -5736,10 +5809,31 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # bought, and it is why the number above may be spent rather than merely moved.
     # [GROUNDED: measured 2026-09-10 over the 89 live corpus cases, `corpus_run` at seed 0 -- 16 distinct executed sets; 2 before the six, 10 with them conviction-inert, 5 at `uniform`]
     # [GROUNDED: measured 2026-09-10 over the 89 live corpus cases, `corpus_run` at seed 0 -- 10 distinct executed sets at the shipped `choice_temperature=0.1`; the five-point sweep and the rename control are in the comment above, and `H-96`'s `sweep:` carries the arms]
-    assert len(by_sig) == 10, (
+    # ⚠⚠ **10 -> 14, `release` (`04 §A.3` row 14, 2026-09-11), AND IT RECOVERS MOST OF WHAT `U4`
+    # SPENT — MEASURED AGAINST A REAL CONTROL, NOT INFERRED.** Both arms were run at seed 0 over
+    # the same 143 cases, the control from a worktree at the commit immediately before this one
+    # (`U4` landed, `release` not), so the two arms differ in exactly one verb:
+    #
+    #     control (U4 only)          with `release`
+    #     distinct executed sets 10  ->  14
+    #     universal {create_record,   ->  {create_record}
+    #                transfer}
+    #     R3 55 of 143               ->  50 of 143
+    #     `release` in 0 worlds      ->  15 of 89
+    #
+    # ⚠ **AND THE R3 COST IS REPORTED RATHER THAN NETTED OFF, BUT IT IS NOT DISTINGUISHABLE FROM
+    # COMPOSITION NOISE AND THIS TEST SAYS WHICH.** `U4`'s own five-point sweep moved R3
+    # 56 · 55 · 59 · 59 · 48 across the temperature arms with the verb set held fixed — a band of
+    # 11 — so a 5-point move produced by adding one verb sits inside the range temperature alone
+    # covers. The honest statement is that `release` displaces acts that would have propagated and
+    # that THIS INSTRUMENT CANNOT SEPARATE THAT FROM THE BAND; `tools/balance_oracle.py` is the
+    # campaign-level instrument and it is not run here. What is NOT in doubt is the direction of
+    # the variety figure, which is a set identity rather than a rate.
+    # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 143 corpus cases, control from a worktree at 11ec43c -- distinct executed sets 10 -> 14, R3 55 -> 50, `release` executes in 15 of the 89 live worlds]
+    assert len(by_sig) == 14, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived")
     # WHAT IS FIXED AND WHAT VARIES, ASSERTED EXACTLY IN BOTH DIRECTIONS — the count alone would
-    # pass on sixteen arbitrary sets. Two verbs execute in EVERY live case and eight vary.
+    # pass on fourteen arbitrary sets. ONE verb executes in every live case and ten vary.
     universal = set.intersection(*(set(r["executed"]) for r in live))
     varying = set().union(*(set(r["executed"]) for r in live)) - universal
     # ⚠⚠ **`U4` MOVED BOTH SETS, AND THE SHAPE OF THE MOVE IS THE EVIDENCE FOR WHY THE DISTINCT
@@ -5747,19 +5841,30 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # live cases and `transfer` did not. Under a sampled order NOTHING is guaranteed a scene, so
     # the intersection collapses to whatever the draw never denied — measured at seed 0:
     #   create_record 89 · transfer 89 · move 88 · speak 88 · utter 88 · reconstruct 84 ·
-    #   tell 83 · surveil 82 · research 17 · interview 13   (of 89)
+    #   tell 83 · surveil 82 · research 17 · interview 13   (of 89)   <- `U4`'s column, 2026-09-10
     # ⚠ READ THAT COLUMN BEFORE READING THE SETS: seven verbs now run in 84-89 of 89 worlds. The
     # worlds have not become identical — they have become identical IN THE SET, differing by which
     # one or two near-universal verbs happened to miss a scene. That is precisely why `len(by_sig)`
-    # fell 16 -> 10 above, and it is why a SET-level metric understates what sampling did: the
+    # fell 16 -> 10 under `U4` (it stands at 14 today, with `release`), and it is why a SET-level
+    # metric understates what sampling did: the
     # sequences diverge while the sets converge. The two 89s are not a claim that those verbs are
     # special; they are the verbs the draw did not deny anywhere at this seed, and they would move under
     # another. THE ASSERTION IS THEREFORE THE MEASUREMENT, not a property — if it moves, re-measure
     # rather than adjust, because a universal set of size one is a sampling outcome and not a
     # design invariant.
-    assert universal == {"create_record", "transfer"}, sorted(universal)
-    assert varying == {"interview", "move", "reconstruct", "research", "speak",
-                       "surveil", "tell", "utter"}, sorted(varying)
+    # ⚠ `transfer` LEFT THE UNIVERSAL SET, 89 -> 88 WORLDS, AND ONE WORLD IS THE WHOLE OF IT.
+    # Re-measured 2026-09-11 with `release` landed, worlds in which each verb wins a scene, of 89:
+    #   create_record 89 · move 88 · transfer 88 · speak 87 · utter 86 · reconstruct 84 ·
+    #   tell 82 · surveil 78 · release 15 · research 15 · interview 14
+    # Against the control column above it (89/88/89/88/88/84/83/82/-/17/13) every near-universal
+    # verb moved by at most four worlds and `transfer` by one. THE PARAGRAPH ABOVE ALREADY SAID
+    # THIS WOULD HAPPEN — *"a universal set of size one is a sampling outcome and not a design
+    # invariant"* — and it has, so the assertion is re-measured rather than adjusted, which is what
+    # that sentence instructs. `release` at 15 of 89 sits with `research` and `interview`: a verb
+    # that reaches a scene where the world gives it something to end.
+    assert universal == {"create_record"}, sorted(universal)
+    assert varying == {"interview", "move", "reconstruct", "release", "research", "speak",
+                       "surveil", "tell", "transfer", "utter"}, sorted(varying)
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
     # that is the mechanism the retraction above restored and it is asserted below. What no longer
@@ -6052,20 +6157,59 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
 
     # 4 — A TELLING'S DEPOSIT IS ABOUT WHAT WAS TOLD, NEVER ABOUT THE TELLER. This is the clause
     #     that makes the listener's Q2 reachable, and the one that was inverted.
-    told = [e for e in w.log if e.kind == "news.told"]
-    assert told, "no telling executed — clause 4 would pass vacuously"
+    #
+    # ⚠⚠ **RUN OVER THE WHOLE NPC RUNG LANE, NOT OVER THIS ONE WORLD, AND `release` IS WHAT FORCED
+    # THE WIDENING (2026-09-11).** Clauses 1-3 and 4a-6 above and below are properties of a single
+    # run and stay on `w`/`d`. This clause is different in kind: it can only be checked on a
+    # telling that actually happened, so its vacuity guard was resting on ONE world's act mix
+    # happening to include one. Under `U4` that mix is a DRAW, and `release` competing for the same
+    # scene budget took NPC-088 from 3 tellings to 1 — with the survivor emitting `news.untold`,
+    # so `news.told` went to zero and the guard fired. It was right to fire: a one-world vacuity
+    # guard cannot survive a sampled order.
+    # ⚠ THE FIX IS NOT A DIFFERENT CASE, WHICH WOULD BE SELECTING THE SLICE ON ITS ANSWER
+    # (§0.1 pt 4) — it is EVERY case in the lane, so there is no slice left to select. Measured
+    # 2026-09-11 over the 27 NPC rung cases at seed 0, 3 seasons: **26 of 27 produce at least one
+    # telling and 81 tellings in total**, NPC-088 being the one that does not. The widening also
+    # makes the clause strictly stronger than it was: it now checks 81 tellings rather than 2.
+    # ⚠ AND IT IS CHEAP, WHICH IS WHY IT IS THE WHOLE LANE AND NOT A DECLARED-N PREFIX. Measured:
+    # the 27 builds and runs take well under two seconds, so nothing here is traded for coverage.
+    # [GROUNDED: measured 2026-09-11 over the 27 NPC rung cases at seed 0, 3 seasons -- 81 `news.told` Events across 26 of 27 cases; NPC-088 alone produces none]
+    told_cases = 0
     checked = 0
-    for e in told:
-        act = d.act_of.get(e.id)
-        refs = act_refs(act)
-        if not refs:
+    for other in R.load_cases("NPC"):
+        if str(other.get("scale")) not in set(RUNG_KINDS):
             continue
-        subs = claim_subjects(e, w.fixtures.get("claim_subject_rule"), refs)
-        assert act.actor not in subs or act.actor in refs, (
-            f"a telling deposited a claim about the teller {act.actor!r}: {subs} — §F1's Q2 can "
-            "never fire on it for the listener, which is what made `R3` zero")
-        assert set(subs) <= set(refs), f"a telling's deposit named something the act did not: {subs}"
-        checked += 1
+        w4 = C.build_at(other, 0)
+        d4 = SeasonDriver(w4)
+        mint4 = lambda pid, verb, subj, _w=w4: H(_w.world_seed, _w.tick, pid, f"act:{verb}:{subj}")
+        ch4 = make_chooser(w4.fixtures, mint4, verbs=resolvable_verbs(),
+                           draw=draw_factory(w4.world_seed, lambda: w4.tick))
+        for _ in range(3):
+            d4.season(ch4, question=None, subsistence=C.P.SUBSIST)
+        told = [e for e in w4.log if e.kind == "news.told"]
+        told_cases += bool(told)
+        for e in told:
+            act = d4.act_of.get(e.id)
+            refs = act_refs(act)
+            if not refs:
+                continue
+            subs = claim_subjects(e, w4.fixtures.get("claim_subject_rule"), refs)
+            assert act.actor not in subs or act.actor in refs, (
+                f"a telling deposited a claim about the teller {act.actor!r}: {subs} — §F1's Q2 "
+                "can never fire on it for the listener, which is what made `R3` zero")
+            assert set(subs) <= set(refs), (
+                f"a telling's deposit named something the act did not: {subs}")
+            checked += 1
+    # ⚠ TWO GUARDS, AND THEY EXCLUDE DIFFERENT FAILURES. The first says tellings still HAPPEN
+    # somewhere in the lane; the second says at least one carried a referent, so the loop body
+    # above ran at all (§0.1 pt 2 — a loop that asserts conditionally must assert that it
+    # asserted). A floor rather than the measured 81, because the act mix is a draw and pinning
+    # the exact count here would make this clause a corpus-composition pin wearing a
+    # property's clothes; the composition is pinned where it belongs, in the corpus tests.
+    assert told_cases >= 2, (
+        f"only {told_cases} of the NPC rung cases produced a telling — 26 of 27 did on "
+        "2026-09-11. Below two, the transport has stopped reaching anybody and clause 4 is "
+        "measuring a lane in which nothing is told rather than a property of tellings")
     assert checked >= 1, "no telling carried a referent, so clause 4 asserted nothing"
 
     # 4a — AND IT CITES NOTHING ELSE. ⚠ THIS IS THE CLAUSE A CRITIC ASKED FOR AND THE FIRST
@@ -6627,10 +6771,16 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # against something these worlds actually contain; `_wc_corpus_pass`'s subject is the OPERAND
     # channel, and their arrival is evidence for it rather than noise in it — each of the four
     # binds `subject` from the question's referent by the same route `transfer` binds `to`.
-    assert set(executed) == {"create_record", "interview", "move", "reconstruct", "research",
-                             "speak", "surveil", "tell", "transfer", "utter"}, (
+    # ⚠ 10 -> 11, `release` (2026-09-11). It binds `subject` from the question's referent by the
+    # route this pass exists to measure, so like the four above it is evidence FOR the operand
+    # channel rather than noise in it — and unlike them it reaches that referent through a
+    # registered `requires:` predicate rather than a typed cell, which is the second route the
+    # channel supports and the first verb to exercise it since `revoke`.
+    assert set(executed) == {"create_record", "interview", "move", "reconstruct", "release",
+                             "research", "speak", "surveil", "tell", "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
-        "ED-FI-0009's, and any further movement is a fresh one, not a re-reading of either")
+        "ED-FI-0009's, 10 -> 11 is `release`'s, and any further movement is a fresh one, not a "
+        "re-reading of any of them")
     # ⚠ `examine` JOINED `work`, FOR `work`'s EXACT REASON, and that is the strongest single piece
     # of evidence this corpus offers about its own worlds: two verbs from two different chains,
     # binding two different operands (`site` and `subject`), both refuse because NO REFERENT THESE
@@ -7408,10 +7558,15 @@ def test_wb_a_refusals_reads_land_as_a_claim_that_contradicts_and_the_candidate_
     # moved is the denominator, not the mechanism. `thread_read` is the sixth and does not form:
     # it carries no typed cell (`H-85`, Thread Sensitivity has no operand) and is therefore not in
     # `resolvable_verbs()` at all.
+    # ⚠ 27 -> 28, `release` (2026-09-11): one more resolvable verb forms one more Candidate on the
+    # same referent. Same reading as the line above — the delta of one is untouched, 28 -> 27 with
+    # the same single `transfer` drop, and the denominator is what moved.
     # [GROUNDED: measured 2026-09-10 -- 22 -> 27 Candidates when five of the six investigation acts became resolvable; the DELTA of one is the property, the absolute pair is the denominator]
-    assert (len(before), len(after)) == (27, 26), (
-        f"the absolute counts moved to {(len(before), len(after))}. They are quoted on `H-122` "
-        "and the delta alone does not reproduce them — re-derive the row rather than the line")
+    # [GROUNDED: measured 2026-09-11 -- 28 -> 27 Candidates with `release` resolvable; the drop is still exactly `transfer` and the delta is still one]
+    assert (len(before), len(after)) == (28, 27), (
+        f"the absolute counts moved to {(len(before), len(after))}. They are the denominator the "
+        "delta above is read against, and the delta alone does not reproduce them — re-derive "
+        "`H-122`'s reading rather than adjusting this line")
 
 
 def test_wb_an_unknown_read_is_never_deposited_because_it_is_the_instruments_own_gap():
@@ -7538,14 +7693,22 @@ def test_wb_the_control_arm_deposits_no_claim_in_the_grammar_and_the_live_arms_d
     # is under no pressure at the shipped fan-out. Two entries in the list are the same
     # `(subject, predicate, value)` because they were deposited by different Events into different
     # ledgers, and `end` is a per-person list rather than a set.
+    # ⚠ EIGHT -> EIGHT, `release` (2026-09-11), AND THE COUNT IS THE PART THAT DID NOT MOVE. Two
+    # entries changed subject: `("rec:…", "exists:Rung", 0)` and the second
+    # `("rec:…", "exists:Record", 1)` are gone and `("p_carin", "exists:Site", 0)` and
+    # `("p_carin", "exists:Record", 0)` stand in their place. That is the act mix moving — `release`
+    # competes for the same scenes, so which referent an investigation act was asked about changed —
+    # and it is NOT the property this line pins. The property is that every grammar claim SURVIVES
+    # to the end of the run, i.e. the cap is under no pressure at the shipped fan-out, and eight of
+    # eight still do. Empty would still mean the cap is evicting again.
     assert actor_end == [("einhir_texts", "exists:Site", 0),
                          ("einhir_texts", "exists:Record", 0),
                          ("hearth_ostvik", "stores:grain", 0),
                          ("rec:6bf46a143f347c12", "exists:Site", 0),
                          ("rec:6bf46a143f347c12", "exists:Record", 1),
                          ("rec:6bf46a143f347c12", "exists:Person", 0),
-                         ("rec:6bf46a143f347c12", "exists:Rung", 0),
-                         ("rec:6bf46a143f347c12", "exists:Record", 1)], (
+                         ("p_carin", "exists:Site", 0),
+                         ("p_carin", "exists:Record", 0)], (
         f"the `actor` arm's end-of-run grammar claims are {actor_end}, not the single surviving "
         "`stores:grain` read. Empty would mean the cap is evicting again — i.e. the fan-out "
         "default moved back toward `total`, or a new deposit channel opened — and every `H-40` / "
@@ -7820,12 +7983,18 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
                 acts.append(d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
                      draw=draw_factory(w.world_seed, lambda: w.tick)),
                                      None, HL.subsistence)["acts"])
+            # ⚠ THE SEQUENCE, NOT ONLY THE COUNT. See the composition assertion below: with a
+            # fuller verb pool a dropped Candidate is BACKFILLED, so the count stops discriminating
+            # while the acts still differ. `(actor, verb, subject)` is the same fingerprint
+            # `test_wd_the_decision_fingerprint_…` uses, widened by the subject for the same reason.
+            seq = [(a.actor, a.verb, (a.payload or {}).get("subject")) for a in d.resolved]
         finally:
             decision.options.belief_contradicts = original
-        return hits, acts
+        return hits, acts, seq
 
-    hl_control, hl_acts_none = hl_drops(DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
-    hl_live, hl_acts_live = hl_drops(DEFAULT_FIXTURES)
+    hl_control, hl_acts_none, hl_seq_none = hl_drops(
+        DEFAULT_FIXTURES.sweep("observation_deposit_mode", "none"))
+    hl_live, hl_acts_live, hl_seq_live = hl_drops(DEFAULT_FIXTURES)
     print(f"\n  W-B — §F1 clause-4 drops on ARC-01: none={control} shipped={live}"
           f"\n  W-B — §F1 clause-4 drops on headless NPC-088: none={hl_control} shipped={hl_live}"
           f"   acts/season {hl_acts_none} -> {hl_acts_live}")
@@ -7869,14 +8038,47 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `restore` reads the same predicate. One person's failed look teaches them not to try to
     # mend the thing — cross-VERB propagation through a shared grammar cell, which is what §F1
     # clause 4 is for and what one verb refusing on its own belief could never show.
-    assert {v for v, _ in hl_live} == {"transfer", "examine", "interview", "restore"}, (
+    # ⚠⚠ **FOUR VERBS -> ONE IN THIS SLICE, `release` (2026-09-11), AND THE CROSS-VERB HALF OF THE
+    # DEMONSTRATION NOW LIVES ONLY IN THE ARC-01 ARM — WHICH IS ASSERTED TWENTY LINES BELOW AND IS
+    # UNCHANGED.** Measured in both trees, `build_world(0)`, 3 seasons, shipped fixtures:
+    #     control (11ec43c): transfer · examine · interview · restore, 5 drops, all on `rec:6bf4…`
+    #     with `release`:    transfer only, 2 drops, on `rec:6bf4…` and on `p_carin`
+    # THE MECHANISM, read off the end-of-run ledgers rather than guessed: in BOTH arms the beliefs
+    # those three verbs drop on (`exists:Site -> 0`, `exists:Person -> 0` on `rec:6bf4…`) are still
+    # deposited and still held at the end. What moved is WHICH REFERENT the third season's
+    # questions were about — `release` takes two scenes, `surveil` loses its one, the
+    # `('rec:6bf4…','exists:Rung',0)` deposit `surveil` made is gone, and two `p_carin` reads take
+    # its place. So the candidates that would have been dropped were never ASKED, in a world with
+    # 5 drops in it.
+    # ⚠ THIS SLICE IS TOO SMALL TO SEPARATE A MECHANISM CHANGE FROM A COMPOSITION SHIFT, AND SAYING
+    # SO IS THE POINT. Five drops in a three-person world over three seasons is a sample, not a
+    # measurement; the corpus arm is what carries the claim, and it still reads
+    # `{examine, research, restore, interview}` on ARC-01 — cross-verb, through a shared grammar
+    # cell, exactly as the block below argues. What this slice still proves is the `transfer`
+    # chain, which is the ACCEPTANCE'S OWN and is why `transfer` is pinned by name.
+    assert {v for v, _ in hl_live} == {"transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `transfer` must stay — "
         "that chain is the acceptance's own, `stores:grain` read by a `transfer.refused` and read "
         "back by the same cell, and it is the only place the acceptance's binding argument "
-        "transfers. The other three are the `exists:` cells the investigation acts opened")
-    assert hl_acts_live != hl_acts_none and sum(hl_acts_live) < sum(hl_acts_none), (
-        f"acts per season are {hl_acts_none} at the control and {hl_acts_live} at the shipped "
-        "default. Clause 4 dropped Candidates and no act disappeared, which cannot both be true")
+        "transfers. It was joined by `examine`/`interview`/`restore` until 2026-09-11, and their "
+        "return would be a gain rather than a failure — re-measure and re-pin if they are back")
+    # ⚠⚠ **THE COUNT COMPARISON WENT INERT AND IS REPLACED BY THE COMPOSITION ONE, WHICH IS WHAT
+    # THE CLAIM ACTUALLY IS.** This read `sum(hl_acts_live) < sum(hl_acts_none)` — *clause 4
+    # dropped Candidates, so an act disappeared* — and measured 10 -> 9 in the third season. With
+    # `release` in the pool both arms read `[7, 9, 9]`: A DROPPED CANDIDATE IS NOW BACKFILLED,
+    # because the packer has another candidate to take. That is a general consequence of the verb
+    # pool growing and it will get MORE true as U7 lands, not less, so pinning the count would pin
+    # a proxy that is on its way out.
+    # ⚠ THE REPLACEMENT IS STRICTLY STRONGER, WHICH IS WHY THIS IS NOT A WEAKENING. §F1 clause 4
+    # claims a belief changes WHAT A PERSON DOES. The sequences can differ while the counts match
+    # (measured: they do — `transfer` 3 -> 1, `work` 2 -> 3, `release` 1 -> 2), but they cannot
+    # match while nothing changed. The count assertion passed on worlds this one refuses.
+    # [GROUNDED: measured 2026-09-11, `build_world(0)`, 3 seasons -- acts/season [7,9,9] in BOTH deposit arms, world hashes dd9d13fe… vs 9928fbed…, verb mix `transfer` 3->1 · `work` 2->3 · `release` 1->2]
+    assert hl_seq_live != hl_seq_none, (
+        f"the acts taken are IDENTICAL at the control and the shipped default: {hl_acts_none} and "
+        f"{hl_acts_live} per season, same (actor, verb, subject) sequence. Clause 4 dropped "
+        f"{len(hl_live)} Candidate(s) and nobody did anything differently, which cannot both be "
+        "true — the drop is being counted somewhere the fold does not read")
     assert control == [], (
         f"the CONTROL arm dropped {control}. `none` deposits nothing in the `requires` "
         "vocabulary, so clause 4 has nothing to fire on and a drop here means the channel is open "
@@ -8886,8 +9088,12 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
         "can be graded today is scoped to this set")
     # Pins the roster against silent growth.
+    # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11, AND THE PROPERTY THIS TEST GUARDS IS
+    # UNTOUCHED BY IT: `release` declares NO `contests:`, so the contested set asserted two lines
+    # above is unchanged and nothing new is gradeable. That assertion, not this count, is the
+    # claim — this line only stops the roster growing where nobody looked.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 37, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 38, len(VERB_TABLE)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.

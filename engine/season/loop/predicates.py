@@ -24,8 +24,14 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import title_domain, title_rank
+from ..data.rosters import TENURE_KINDS, title_domain, title_rank
 from ..queries import world_q
+
+# `release`'s domain, DERIVED from the roster the loader asserts the verb table's `domain:` column
+# against (`data/verbs.py`, loader invariant 6 / `04` PART D row 15). Derived HERE and declared
+# THERE on purpose: the declaration is what gives the load-time check something to disagree with,
+# and this is the reader, so the two can never drift without the load failing first.
+RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain"}
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -187,6 +193,34 @@ def _req_confer(w: "World", a: "Act") -> bool:
                    if t.kind == "hold" and t.object == obj and t.live), None)
     return holder is not None and not any(
         t.kind == "commit" and t.subject == holder and t.live for t in w.tenures)
+
+
+@requires_predicate("release")
+def _req_release(w: "World", a: "Act") -> bool:
+    """`04 §A.3` row 14: *one `release` verb, eligibility `own`, generic over kind*. Part E:
+    *"a live tenure of a releasable kind, owned by the actor, toward the subject"*.
+
+    THREE CLAUSES, AND THE FIRST IS THE ONE THE DESIGN IS ABOUT. `t.subject == a.actor` is
+    eligibility `own` made real: `_eligible` returns True for every `own` verb without looking at
+    anything (*"every person may attempt their own acts"*), so a verb whose whole point is that it
+    acts on WHAT THE ACTOR HOLDS must check ownership in its precondition or it is a licence to
+    close other people's edges. `_req_revoke` learned this the hard way one column along.
+
+    ⚠ THIS CANNOT FABRICATE, AND THAT IS STRUCTURAL RATHER THAN CAREFUL. `_eff_oblige` was reverted
+    (F8, `ED-IN-0211`) for opening a Tenure to `einhir_texts`, a bare string naming no entity,
+    because an OPENER takes an id and asserts a relation into existence. A CLOSER scans relations
+    that already exist: a subject naming nothing matches no Tenure, the effect touches nothing, and
+    the fold emits `release.refused`. There is no path here that mints a fact about a thing nobody
+    named -- which is why the antonym half of Jordan's ruling is buildable today while the opener
+    half waits on distinct operands (`decision/options.py:307-312`).
+
+    ⚠ `contain` IS EXCLUDED BY THE ROSTER, NOT BY A LITERAL HERE. See `RELEASABLE_KINDS`."""
+    subj = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
+    if not subj:
+        return False
+    return any(t.subject == a.actor and t.object == subj
+               and t.kind in RELEASABLE_KINDS and t.live
+               for t in w.tenures)
 
 
 @requires_predicate("revoke")

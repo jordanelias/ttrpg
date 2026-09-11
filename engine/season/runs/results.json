@@ -9237,7 +9237,7 @@
   "P11": {
    "id": "P11",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 27 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
+   "detail": "PASS BY CONSTRUCTION, and it is a stronger pass than rev 2's: the option set is now COMPUTED from the verb table, so this observes that zeroing capability removes none of the 28 verbs it computes. Rev 2 compared a caller's authored roster with itself, which no capability gate could have changed either. `capability` appears in no clause of \u00a7F1 and the eligibility roster FORBIDS it as a fifth kind",
    "kind": null,
    "section": "S9.2",
    "title": "capability gates no verb",
@@ -9247,7 +9247,7 @@
   "P12": {
    "id": "P12",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 54 candidates over 27 verbs, every one a verb-table row",
+   "detail": "PASS BY CONSTRUCTION. `opening_set('p', 'v', 'q', 'fx')` -- THE ROSTER PARAMETER IS GONE, which is `D2` entire. Rev 2 was PARTIAL and said why: the type was right and the property the type protects was not, because S61 left `q` with no producer so there was nothing to compute from. `questions_for()` is that producer. 56 candidates over 28 verbs, every one a verb-table row",
    "kind": null,
    "section": "S17",
    "title": "opening_set returns Candidate[], not Act[]",
@@ -9503,7 +9503,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 27 candidates were OFFERED from the computed option set and only 17 of 37 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'reconstruct', 'research', 'speak', 'surveil', 'transfer', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 28 candidates were OFFERED from the computed option set and only 18 of 38 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'release', 'research', 'speak', 'surveil', 'transfer', 'utter'] -- 7 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",

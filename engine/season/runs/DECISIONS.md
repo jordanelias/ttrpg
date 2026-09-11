@@ -262,6 +262,10 @@ it did not take. A decision nobody records is a decision nobody can audit.
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
 
+### release by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
+- **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
+- *not taken:* raise (no Event, no witness, no arc)
+
 ### surveil by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
 - **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
 - *not taken:* raise (no Event, no witness, no arc)
@@ -277,10 +281,6 @@ it did not take. A decision nobody records is a decision nobody can audit.
 ### transfer wrote nothing  ·  `E3`  ·  taken 1x
 - **chose:** emit the refusal, not the success  (1x)
 - *not taken:* emit `emits:` anyway (publishes an event for a state change that did not happen)
-
-### reconstruct by p_mid: precondition unmet  ·  `E2/S27.1`  ·  taken 1x
-- **chose:** emit the refusal -- scarcity falls out of the fold  (1x)
-- *not taken:* raise (no Event, no witness, no arc)
 
 ### fan-out over 13 events  ·  `S28/S61`  ·  taken 1x
 - **chose:** mode=all_five over 5 persons (H-33 arm; `all_five` is the ruled default since 2026-09-07, R7)  (1x)

@@ -60,7 +60,7 @@ from ..gaps import Forbidden, Unspecified
 from .matrix import MATRIX
 from .requires import TypedRequires, build_typed_requires
 from .rosters import (
-    CONVICTION_AXES, RUNG_KINDS, STRATA, load_yaml, roster, table, table_meta,
+    CONVICTION_AXES, RUNG_KINDS, STRATA, TENURE_KINDS, load_yaml, roster, table, table_meta,
 )
 
 VERB_TABLE_YAML = files.VERB_TABLE_YAML
@@ -246,6 +246,28 @@ def _load_verb_table() -> dict:
                 f"verb_table.yaml: {name!r} declares `requires_typed: none` and no "
                 "`requires_typed_note:`. An untyped cell with no reason is indistinguishable "
                 "from one nobody typed, which is the state W-A exists to end.")
+        # LOADER INVARIANT 6 (`04_CODE_ARCHITECTURE.md` PART D row 15, MECHANICAL at load):
+        # *"`release` generic; the loader asserts its domain equals `tenure_kinds \ {contain}`"*.
+        #
+        # ⚠ THE ASSERTION IS AGAINST THE ROSTER, WHICH IS WHY THE COLUMN IS DECLARED AND NOT
+        # DERIVED. `contain` is excluded because it is the one Tenure kind whose subject may be a
+        # Rung (PART D row 13) and whose end is a MOVE, not a release -- `_eff_move` closes the old
+        # leg and opens the new one, so a releasable `contain` would let a person leave a place for
+        # nowhere. Every other kind is an edge a person opened and must be able to end (T-m).
+        #
+        # This is the check `open-without-close in the vocabulary` names: add an eighth tenure kind
+        # to `rosters.yaml` and forget its closer, and the load fails HERE rather than shipping a
+        # relation nothing can end.
+        if name == "release":
+            declared = frozenset(r.get("domain") or ())
+            expected = frozenset(TENURE_KINDS) - {"contain"}
+            if declared != expected:
+                raise SystemExit(
+                    f"verb_table.yaml: `release` declares domain {sorted(declared)}, and "
+                    f"`tenure_kinds \\ {{contain}}` is {sorted(expected)}. Loader invariant 6 "
+                    "(04 PART D row 15) requires them equal: a kind in the roster and not in this "
+                    "domain is an edge that can be opened and never closed, and a kind here and "
+                    "not in the roster is a closer for a relation that does not exist.")
         # The two keyed columns must agree on their band set, or a band writes with nothing to
         # report or reports with nothing written.
         if by_degree and emits_by_degree and set(by_degree) != set(emits_by_degree):

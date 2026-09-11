@@ -27,6 +27,7 @@ from ..gaps import InstrumentDefect, Unspecified
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.ids import H
 from ..trace_log import TRACE
+from .predicates import RELEASABLE_KINDS
 
 
 # ---------------------------------------------------------------------------
@@ -123,6 +124,36 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     # fabricated-`person.died` class committed inside the fix for it. The mapping's empty entry is
     # dropped by `_apply_write`.
     return {"tenure.opened": [nt.id], "tenure.closed": closed}
+
+
+@effect_for("release")
+def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
+    """`04 §A.3` row 14's generic closer: the actor ends a live edge they own.
+
+    THE MIRROR OF EVERY OPENER AT ONCE, which is the point -- `04 §A.3` row 14 replaces *four
+    closing verbs missing* with one, so `oblige`, `commit`, `tie`, `knot`, `succeed` and `hold`
+    all end here rather than growing an antonym apiece. `01_AXIOMS.md:1121-1136` refuses the
+    per-verb framing by name: *"Asking which verb ends an `oblige` is the wrong question… one
+    sentence rather than four verbs."*
+
+    ⚠ **A PERSON CAN NOW RESIGN AN OFFICE, AND THAT WAS A `T-m` VIOLATION IN THE TABLE, NOT THE
+    DESIGN.** `hold` was closable only by `revoke`, which is `remit:revoke` -- so a seat could be
+    taken from someone and never laid down. `architecture/meta/HANDOFF_NEXT.md` §2a: *"The design
+    says a person may resign; the verb table does not let them. Fix the table, and do not re-open
+    the design."* `hold` is in the domain for exactly this reason.
+
+    ⚠ NO `w.write` HERE. An effect MUTATES AND RETURNS THE IDS IT TOUCHED; the fold calls it inside
+    the gate's `apply()` for the row's `writes:`. Returning an empty list is how the fold learns
+    nothing was closed, and that is what emits `release.refused` -- so the refusal channel is the
+    return value, not a raise (§E2: *failure emits, never raises*)."""
+    subj = _operand(a, "subject")
+    touched = []
+    for t in w.tenures:
+        if (t.subject == a.actor and t.object == subj
+                and t.kind in RELEASABLE_KINDS and t.live):
+            t.until = w.tick
+            touched.append(t.id)
+    return touched
 
 
 @effect_for("revoke")

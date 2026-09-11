@@ -255,11 +255,11 @@ rows:
       of play required in a season
     status: not_met
     measured: >-
-      **10 of 37 verbs execute in the corpus** (create_record, interview, move, reconstruct,
-      research, speak, surveil, tell, transfer, utter). 20 carry no predicate and no effect,
-      5 are foldable but never attempted (the governance verbs, `H-71`), and 2 are attempted and
-      always refused (`work` and `examine`, both because no question these worlds raise refers to
-      a Site). 1 of 37 declares `contests:`.
+      **11 of 38 verbs execute in the corpus** (create_record, interview, move, reconstruct,
+      release, research, speak, surveil, tell, transfer, utter). 20 carry no predicate and no
+      effect, 5 are foldable but never attempted (the governance verbs, `H-71`), and 2 are
+      attempted and always refused (`work` and `examine`, both because no question these worlds
+      raise refers to a Site). 1 of 38 declares `contests:`.
       ⚠ **32 -> 37 IS A CORRECTION, NOT GROWTH** (ED-FI-0009, 2026-09-10). The row spelled
       `"the six investigation acts"` was ONE row standing for six acts canon names
       (`investigation_systems_v30.md:217`), carrying `requires: "per act"` — a cell deferring to
@@ -268,6 +268,30 @@ rows:
       from the EXISTING closed grammar (no new form, operand or stem), four execute, one is
       always refused, and `thread_read` is not resolvable at all: it requires Thread Sensitivity
       >= 30, which the closed `requires_operands` roster has no name for (`H-85`).
+      ⚠ **37 -> 38 AND 10 -> 11 EXECUTE, `release` (2026-09-11).** `04_CODE_ARCHITECTURE.md`
+      §A.3 row 14 names it — *four closing verbs missing → one `release` verb, eligibility `own`,
+      generic over kind* — and `architecture/meta/HANDOFF_NEXT.md` §2a rules the repair: *"The
+      design says a person may resign; the verb table does not let them. Fix the table, and do not
+      re-open the design."* It is the ANTONYM half of the table: `oblige`, `commit`, `tie`, `knot`,
+      `succeed` and `hold` all end through it, so a seat can now be laid down rather than only
+      taken away by `revoke`. The loader asserts its `domain:` equals `tenure_kinds \ {contain}`
+      (invariant 6, PART D row 15), so an eighth tenure kind without a closer fails the load.
+      ⚠ **WHAT IT IS AND IS NOT, MEASURED AGAINST A CONTROL RATHER THAN ASSERTED.** Both arms at
+      seed 0 over the same 143 corpus cases, the control from a worktree at the commit before it:
+      distinct executed sets **10 -> 14** (it recovers most of what `U4` spent), `release` executes
+      in **15 of the 89** live worlds, and the `chronicle` witness channel — which admitted nobody
+      in any world the fold could drive — **fires for the first time**, on a `tenure.closed`.
+      R3 moves **55 -> 50 of 143**, which is a cost and is reported rather than netted off; it sits
+      inside the band temperature alone covers (`U4`'s sweep moved R3 56·55·59·59·48 with the verb
+      set held fixed), so this instrument cannot separate the two and says so.
+      ⚠ **AND IT IS MOSTLY A REFUSAL.** Over the 27 NPC rung cases at seed 0, 3 seasons: taken 164
+      times, 6 edges closed, 158 refusals — 96.3%. That is in line with this instrument rather than
+      anomalous in it (`work` refuses 177 of 177 in the same run) and it is the shape §F1's
+      EPISTEMIC candidate filter produces: no claim these worlds deposit ever says *you hold no
+      tenure toward that*, so the person attempts and the world declines. A person-side pre-filter
+      on their own tenures would fix the ratio and would be special-casing one verb, which is the
+      scripting drift `CLAUDE.md` §10 forbids; the honest reading is that the verb is BUILT and
+      barely EXERCISED.
       ⚠ WHAT THE SPLIT DID **NOT** BUILD, said here because a verb row is not a mechanism:
       `fieldwork_v30.md:302-309` grades all six on four bands and NOTHING RESOLVES A BAND. Their
       `emits:` is flat. `rosters.yaml:482` types investigation's seam UNRULED and `:487-491` rules
@@ -278,7 +302,7 @@ rows:
       days earlier and closed it at test 3 — *"NOT A SEAM. The loop IS the mechanism"*, attaching
       RESOLVE → WITNESS, out = *"Claims graded by degree; Failure emits `finding.none` and deposits
       nothing"*, **work item 4.5**. What is missing is a degree PRODUCER, which is work.
-    measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 37 today, and was '32' in this cell until ED-FI-0009 made the count honest"
+    measure: "python -m engine.season.harness.corpus_run  # the 'WHERE THE <n> GO' line, which prints len(VERB_TABLE) -- 38 today; it was '32' until ED-FI-0009 made the count honest and '37' until `release` landed"
     blocks: [W10-core, H-65, H-94]
 
   - id: R-06
@@ -297,7 +321,11 @@ rows:
       READ over it (no `ambitions(p)` query anywhere in the package) and a real cast per case
       (`W27`, `architecture/PLAN.md:1583`) rather than one shared OUGHT for all 143 corpus worlds.
       Convictions separately barely discriminate: only 2–7 of 22 candidates carry a nonzero
-      score; the rest tie and are ordered alphabetically.
+      score and the rest tie. ⚠ THE SECOND HALF OF THAT SENTENCE READ *"and are ordered
+      alphabetically"* AND IS FALSE SINCE `U4` (2026-09-10): tied candidates are ordered by a
+      per-person seeded draw (`decision/choose.py::_sample_order`), not by verb name. The
+      DISCRIMINATION half is untouched and is what keeps this row `partial` — the table is sparse,
+      which is `H-66` arriving as a behaviour, and `U3` is the unit that would close it.
     measure: "python -m engine.season.harness.corpus_run  # 'RANKING DISCRIMINATION' line"
     blocks: [W27, H-62]
 
