@@ -1,5 +1,63 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## 📐 2026-09-12 — four research documents NERS-audited as Valoria candidates (`ED-IN-0217`, PR #399)
+
+**PROPOSED, HELD BACK FROM RATIFICATION-ON-MERGE IN FULL.** Nothing ratified, no head moved, no
+`CURRENT.md` row, no code. Set: `proposals/2026-09-12-emergent-narrative-primitives/`.
+
+**THE ONE THING A COLD SESSION NEEDS FROM THIS, and it is measured rather than argued.**
+
+> **No question source ever produces another person as a referent, so no candidate ever carries one
+> as a subject.**
+
+Q1's referents are docket matters, Q2's reach set is live-tenure objects (rungs, offices,
+propositions), Q3 a site band, Q4 a proposition; a candidate takes its subject from its question
+(`decision/options.py:93,102`). Instrumenting `opening_set` across the corpus run:
+**177,170 candidates formed · 17,400 carry a person id · every one is the asker naming themselves ·
+ZERO name anyone else.** The 17,400 are the control — the detector sees person ids arriving.
+
+**Three consequences, and they reorder the standing backlog:**
+
+1. ⚠ **`W-F` / `U5` AS SPECIFIED IS A PRODUCER WITH NO CONSUMER.** It writes a stance row
+   `(referent = actor, …)` onto a contested act's subject (`r-execution-plan.md:1336`);
+   `stance_toward(p, c.subject)` reads those rows against a candidate's subject
+   (`decision/choose.py:302`); **a candidate's subject is never another actor.** The rows would
+   accumulate unread. **Do not land `W-F` expecting `R-07`/`R-08` to move until a person-referent
+   route exists.**
+2. ⚠ **`tie / knot`'s missing effect is NOT the reach bottleneck.** It binds its Tenure to the act's
+   subject — a question referent — so even with an effect it opens edges to rungs and propositions,
+   never to persons. An earlier draft of the proposal set had this the other way round and says so.
+3. **`H-71` is genuinely separate**, and closing it is necessary but not sufficient: its verbs'
+   subjects are offices, and 0 of 143 cases carry an `office.post`.
+
+**And two corrections other lanes need, both verified first-hand:**
+
+- ⚠ **`H-113`'s claim that `emits_by_degree` has zero callers is STALE and false.**
+  `engine/season/data/verbs.py:151-170` `emits_at(degree)` and `:172-204` `writes_at(degree)` are
+  live readers that **raise** on a contested verb folded with no degree, or with an undeclared band.
+  The degree-keyed interior-write machinery is implemented and defended, not merely declared.
+- ⚠ **`engine/season/verb_table.yaml:711` carries a rule ratified Layer 1 supersedes.** It reads
+  `requires_note: "stored once, on the lower id (§15.1)"`; `04_CODE_ARCHITECTURE.md:178` row 9 —
+  one of the *"fifteen differences from the chain"* — rules **two directed edges**, forced by
+  `01_AXIOMS.md` §E.1.3 (*"whether you can walk away from a bond would depend on an id comparison"*).
+  Nothing executes a note, so this is not a misbehaving mechanism — it is a superseded instruction
+  sitting where whoever writes the effect will read it. **Correct it in the same change as the
+  effect.**
+
+**PC lane, observation only:** `H-119`'s `UPSET_FLOOR` contradiction (the reported winner is the
+**felled** fighter in 6.06% of 300 seeded fights) is answerable by precedent — Jordan's 2026-09-04
+ruling — by having the seam accept `wound_state`. The constant is Jordan's (ED-PC-0036) and the set
+does not propose removing it.
+
+**No new `needs_jordan` row.** Two candidates tested against `CLAUDE.md` §0's five gates and closed.
+One open **design call** is surfaced inside the set's P5 — *the sign of a `Failure` interior write* —
+and attaches to `W-F`, which Jordan already owns.
+
+**Suite at the close:** 1778 passed, 2 failed — both `test_forked_status.py`, the shallow-checkout
+known-red §0.4 documents; `.git/shallow` has two entries and the diff touches no `FORK:` row.
+
+---
+
 ## ⏱ 2026-09-11 — verification cadence ruled: the suite is a CLOSE step (`ED-IN-0213`)
 
 **Jordan:** *"figure out a far better work pattern with Claude.md or whatever so you don't run this shit
