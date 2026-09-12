@@ -176,9 +176,23 @@ declared module list. It also carries seven `[FIXED:]` entries, four independent
 `[SELF-AUTHORED — bias risk]` tag, and it states its own yield honestly as *"one new design, one new
 mechanism, one repair, one specification, one partial repair."*
 
-**7.6 · What is NOT adopted.** Its five composed proposals are designs for *other games* — a valley with
-eight stewards, a city-state of thirty holders, a multiplayer migration map. They are not Valoria and are
-not proposed for it. What transfers is **M6**, **Objection 1**, and the corroboration in 7.1.
+**7.6 · Its five composed proposals were first dismissed as "designs for other games", and that was
+wrong.** A valley of eight stewards and a city-state of thirty holders are indeed not Valoria — but
+*"is this our game?"* is a **framing** test, not a merits one, and it is the same error this whole v2
+exists to correct, one level further out. Mined properly, every one of the five carries something:
+
+| composition | what it carries | landed as |
+|---|---|---|
+| **P1** the steward's reasons | **named intermediaries over an anonymous cohort** — and `Person.weight` already unifies the two in one class (S9.1), with probe `P21` having a cohort **`speak`**. Also: a *distribution of small authored costs* beats one scheduled catastrophe, which is the real argument for a modal complication band | **proposal 13**; refinement to **6** |
+| **P2** the slow rumour | **provenance as the interface** — a belief shown as its *chain of sources* rather than a magnitude. This discharges §C.11 **without a meter**, and it is the shaping answer proposal 1 was missing. Plus a **dated stale display**, nearly free since reads are already stale and `Claim.when` exists | refinement to **1** |
+| **P3** writ of inquiry | beyond the writ itself: **costs are relational, not material** (*"a writ served on a loyal delegate costs loyalty"*) — which is the only pricing available in a design with no currency and no stored magnitudes. And **symmetry as the anti-degenerate device**: rivals serve writs against you | **proposal 11**; refinement to **2** |
+| **P4** successors | ⭐ **curation as an act** — *Thousand Year Old Vampire*'s rule that keeping one memory forces dropping another and the erasure stays legible. Valoria's eviction is `sort` + `pop(0)` with **no author**, which is an `AX-1` gap that hid behind the salience refusal | **proposal 12** |
+| **P5** word of a good valley | **population moving on belief rather than true state** — and `move` already executes 650× with its destination bound from the question's referent, so this is proposal 8's clause with a *place*-referent. Also its Objection 4, which derives `AX-1` from outside | refinement to **8**; §S.2 |
+
+**What is genuinely not adopted** is the *packaging*: five named games with scales, turn counts and
+benchmarks of their own. **The mechanisms inside them transferred almost entirely**, and the dismissal cost
+a proposal (12) that repairs an axiom gap and another (13) whose carrier has been sitting unused since S9
+was written.
 
 ---
 

@@ -511,6 +511,101 @@ a provenance chain is intuitable in a way a loyalty bar is not.
 **Falsifier.** Across ten sessions, what fraction of writs return nothing? **Below about a third, the
 patterns are too loose and the record is being confirmed rather than interrogated.**
 
+---
+
+## 12 · CURATION AS AN ACT — the player chooses what is forgotten, and the erasure stays legible
+
+### *threads the salience refusal instead of violating it, and makes forgetting AX-1-conformant for the first time*
+
+**AGONIST.** A ledger has a cap. When it overflows, `loop/witness.py:245-248` sorts and pops:
+
+```python
+p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))
+… p.ledger.pop(0)
+```
+
+*"EVICTION RANKS ON `confidence_live × recency` ONLY, NEVER SALIENCE."* The comparator is right and
+`03_WHAT_SURVIVES_R2.md` §5 upholds the refusal behind it: an engine ranking memories by importance is a
+narrator deciding what matters.
+
+⚠ **But notice what the refusal does not cover.** Today a person forgets **and nobody did it.** Eviction
+is a world motion with no author — the one shape `AX-1` exists to refuse — and it slipped through because
+it was only ever examined as *"is this salience-ranked?"* rather than *"whose act is this?"*
+
+**The proposal, borrowed from *Thousand Year Old Vampire* by way of an outside integration document:
+when the ledger is full, keeping a new claim is an act that requires dropping an old one, the person
+chooses which, and the erasure stays legible.** Not a ranking — **a decision**, with an author, at a cost.
+
+**ANTAGONIST.** Three attacks. Two are the interesting ones.
+
+1. **"This is salience-ranked memory wearing a hat."** — **Fails, and the distinction is exact.** The
+   refusal is of *the engine* ranking by importance. Here **a person** decides, from what they hold, at a
+   moment they chose. `07_DYNAMICS.md`'s own reason — *"a narrator deciding what matters"* — does not
+   reach a character deciding what to keep. That is characterisation, which is what the refusal's residual
+   already conceded.
+2. **"Then the player micromanages eviction two hundred times a season."** — ⚠ **Lands, and bounds the
+   proposal.** It cannot fire at every overflow. The lawful form is that it fires **when the person is
+   already deliberating** — a question about what to keep, raised at the cap, answered with the budget
+   they already spend. Otherwise it is a chore.
+3. **"An NPC cannot choose, so the cap still needs a default."** — **Lands.** The comparator remains, as
+   the default for everyone not deliberating. This proposal adds an *author where one is available*; it
+   does not remove the fallback.
+
+**RECONCILIATION.** At the cap, a **question** — *what do you let go?* — answered as an act by whoever is
+deliberating, with the comparator as the default otherwise, and the dropped claim's absence recorded
+rather than silent.
+
+**Grounds:** nothing `G` refuses it — and it *repairs* an `AX-1` gap. `I` throughout.
+**`I` cost:** one question source, one effect body, and one line kept where a claim used to be.
+**What it buys.** **R-CHOICE** — *"he loses the town by being forgotten"* becomes a thing a person **did**,
+not a thing that happened to them. **R-WORLD** — a rival's forgetting is a hook: what did they choose to
+let go, and who benefits? And **E-LEGIBILITY** — the erasure is visible, which is the one form of
+persistence that shows the player the shape of a character's attention.
+
+---
+
+## 13 · THE POPULACE AS A WEIGHTED PERSON — named intermediaries over an anonymous cohort
+
+### *the shape every management title in the corpus uses, and Valoria's carrier vocabulary already unifies it*
+
+**AGONIST.** Every settlement game in the corpus resolves one question: how does a player govern many
+people without addressing each one? The corpus's answer is **an anonymous population plus a hard-capped
+tier of named intermediaries** — Banished's cohort with nobody named, Knights of Honor II's capped court
+with nobody modelled below it, and the composition of the two that no surveyed title has.
+
+**Valoria does not need a new object for this, and that is the finding.** `state/carriers.py:365`:
+
+> *"S9. **A COHORT IS A PERSON AT `weight > 1`. ONE CLASS (S9.1).**"*
+
+`weight` is a field with a floor of 1 (`:399-400` raises below it), and probe **P21** — *"a cohort and a
+named person are one type"*, `by="construction"` — has a cohort **`speak`**. So a crowd is an actor in
+the same class as a duke, by construction, and every measured world has **3 persons, every one at weight
+1.** The mechanism is built and has never been used.
+
+**ANTAGONIST.** Two attacks; both land and together they are the proposal's real content.
+
+1. **"A weighted Person that acts is a crowd deciding — that is `AX-1`."** — ⚠ **Fails, and the axiom is
+   the reason this works.** `AX-1` refuses *an institution, a container or an engine* as the subject of a
+   decision. A cohort at `weight > 1` is **a Person**, in one class, and S9.1 says so deliberately: the
+   design chose to make a crowd an actor rather than an aggregate. This is `AX-1`-native and it is *why*
+   the carrier is shaped this way.
+2. **"Then what does a cohort's interior mean?"** — **Lands, and it is the open question.** A cohort holds
+   one ledger, one stance, one set of convictions — *the beliefs of a crowd as a single knower*. That is
+   a real design call: it makes a village's opinion a thing that can be told, be wrong, and decay, and it
+   makes it **one** thing rather than a distribution. Cheap, coherent, and a choice rather than a default.
+
+**RECONCILIATION.** Populate a world with a few named persons at `weight 1` and a small number of cohorts
+at `weight > 1`, and let the existing grammar run over both.
+
+**Grounds:** `I` throughout — the class, the field and the floor all exist.
+**`I` cost:** a world-build change. **No carrier, no verb, no axiom.**
+**What it buys.** **Scale without micromanagement**, which is the corpus's central management finding and
+which Valoria has no answer to at 3 persons. **R-WORLD** — a cohort that holds beliefs can be lied to,
+can refuse, and can move (`move` executes 650×). And it is the substrate proposals 5 and 12 need: a
+bodies clock with nobody in it moves nothing, and a crowd that forgets is a village losing its memory of
+a grievance.
+
+
 ## §S · THE SET AT A GLANCE
 
 | | proposal | grounds | `I` cost | waits on |
@@ -526,8 +621,59 @@ patterns are too loose and the record is being confirmed rather than interrogate
 | **9** | founding | `G` licenses (`R4`) | one verb | nothing |
 | **10** | casus belli as a `Record` | `I` ×2 | one effect body | nothing |
 | **11** | **the writ — sifting as a player's verb** | `I` throughout; nothing `G` or `A` in the path | a pattern deck, a matcher, `determine`'s effect body | **1** (jointly specified) |
+| **12** | **curation as an act** — the person chooses what is forgotten | `I`; and it **repairs** an `AX-1` gap | one question source, one effect body | **13** helps |
+| **13** | **the populace as a weighted Person** | `I`; the class, field and floor all exist | a world-build change | nothing |
 
-**Not one of the eleven requires revising a `G`.** Five are *licensed and unbuilt* — a ratified line already
+---
+
+### §S.1 · FOUR REFINEMENTS TO PROPOSALS ALREADY IN THE SET
+
+Mined from the same outside document's five composed designs. None is a proposal; each changes how one
+above should be built.
+
+**→ Proposal 1 gets its shaping answer: PROVENANCE AS THE INTERFACE.** The unanswered question in
+proposal 1 was *what shape* a record takes, given that the one record shown to work is a graph read at a
+glance rather than prose. The answer offered: **display a belief as its chain of sources, not as a
+magnitude** — so the affordance the player reaches for is the chain. That discharges §C.11's obligation
+*without a meter*, which is what `ED-IN-0011` forbids, and it is a shape rather than a wall of lines.
+Its sibling instrument, **a dated stale display**, is nearly free here: reads are already stale by default
+and `Claim.when` exists; nothing timestamps what it shows. ⚠ **The third instrument — salience-ranked
+unprompted reporting — Valoria must refuse**, per `03_WHAT_SURVIVES_R2.md` §5, and saying so is the
+honest half of adopting the other two.
+
+**→ Proposal 2 gets its pricing: COSTS ARE RELATIONAL, NOT MATERIAL.** *"A writ served on a loyal delegate
+costs loyalty."* Valoria has no currency and R7 refuses stored magnitudes, so the only pricing available is
+in **stance and in what others come to hold** — which is not a workaround but the design's native answer
+to cost. And the paired anti-degenerate device: **rivals serve writs against you**, so declining to act is
+not free. The general form — *make the instrument symmetric and its cost relational* — applies to every
+act in the set.
+
+**→ Proposal 6 gets a better argument than "more hooks".** The outside document's P1 replaced a scheduled
+coup with **continuous small refusals**, and states why: one scheduled catastrophe *"reads as scripted
+doom"*, while a distribution of small legible costs is individually survivable and cumulatively legible.
+Valoria's problem is the mirror image — at **74% Failure** most acts produce a refusal and nothing follows.
+So the case for a modal complication band is not merely volume: **it is small authored costs instead of
+one big unauthored event.** Its paired requirement: *"the override must cost something durable"*, or the
+intermediaries are decorative.
+
+**→ Proposal 8 generalises from persons to PLACES.** Its P5 moves population on *reputation in transit* —
+what a household believes about a valley, not its true state. Valoria's `move` executes **650 times** with
+its destination bound from **the question's referent**, so *a person moves to what they were asked about*.
+If what they are asked about is **a claim they hold about a place**, migration-by-belief is nearly there —
+and it is the same clause as proposal 8, with a place-referent rather than a person-referent. Worth
+specifying together.
+
+---
+
+### §S.2 · ONE CORROBORATION OF `AX-1` FROM OUTSIDE
+
+The outside document's own Objection 4 says of its weakest design: *"**P5's weakest joint is not the peace
+trap; it is that nobody in it can be blamed**"* — its households are not persons, so attribution has
+nothing to attach to. **That is `AX-1` derived independently, by someone analysing a different game and
+never having read this tree.** `03_WHAT_SURVIVES_R2.md` §1 argues `AX-1` earns its place; this is the
+first evidence for it that did not come from inside the design.
+
+**Not one of the thirteen requires revising a `G`.** Five are *licensed and unbuilt* — a ratified line already
 asks for them. Three need no new object. One is a question for Jordan. **The refusals that do hold are in
 `03_WHAT_SURVIVES_R2.md`, each argued rather than cited, as `R2` requires.**
 

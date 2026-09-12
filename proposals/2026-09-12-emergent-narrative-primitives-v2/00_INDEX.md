@@ -91,14 +91,18 @@ item was a clause. Full statements in `01_THE_TEN.md`.
 | **9** | **Founding** — `Rung.exists` has no producer, and `R4` asked for one | map variation across playthroughs; NPC-founded settlements | one verb; the matrix row is declared |
 | **10** | **Casus belli as a `Record`** | a war with a reason others can be told about, forged, or destroyed | `succeed`/`forge` declared |
 | **11** | **The writ — sifting as a player's verb** | serve a pattern against the record and get back perishable evidence; **your rivals serve them against you** | a pattern deck + a matcher; `causes[]`, `open_case` and `Record` are already there |
+| **12** | **Curation as an act** — the person chooses what is forgotten | *"he loses the town by being forgotten"* becomes a thing someone **did**. ⚠ Repairs an `AX-1` gap: eviction today has **no author** | one question source, one effect body |
+| **13** | **The populace as a weighted Person** | scale without micromanagement — a crowd that holds beliefs, can be lied to, can refuse, can move | a world-build change; `Person.weight` and S9.1's one class already exist |
 
-**Five of the eleven are licensed-and-unbuilt**, meaning a ratified line already *asks* for them. Three need
+**Five of the thirteen are licensed-and-unbuilt**, meaning a ratified line already *asks* for them. Three need
 no new object at all. **None requires revising a G.**
 
-⚠ **Proposal 11 came from outside this session** — an eighth document integrating the two narrative sources
+⚠ **Proposals 11, 12 and 13 came from outside this session** — an eighth document integrating the two narrative sources
 with the twenty-game frame, adjudicated in `04_PROVENANCE.md` §7. Seven of its nine modules are items this
-session reached independently or things the tree already ships, which is corroboration; **one was new**, and
-it is 11. That document also supplies **the serious objection to proposal 1** — the record's *form* is
+session reached independently or things the tree already ships, which is corroboration; **three were new** —
+11, 12 and 13. Its five *composed designs* were first set aside as "games other than this one", which was a
+framing test rather than a merits one; mined properly they yielded 12, 13 and four refinements
+(`01_THE_TEN.md` §S.1). That document also supplies **the serious objection to proposal 1** — the record's *form* is
 unproven, and the one record shown to work is a graph read at a glance rather than prose — which is carried
 into proposal 1 rather than deflected, along with its falsification stub. **That stub is the first thing to
 build, before any design in this set.**
