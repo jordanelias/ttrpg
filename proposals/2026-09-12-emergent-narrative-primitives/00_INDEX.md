@@ -81,8 +81,8 @@ has a disposition, and no person has a competence**, simultaneously and for one 
 | **P3** | **The deposit stamps the act, not the channel** — one argument at `loop/witness.py:121` | **one argument** | nothing | hearsay becomes separable from testimony; breaks a measured `utter`-over-`tell` dominance |
 | **P4** | **`UPSET_FLOOR` — let the seam accept `wound_state`** | a deletion | — | an attribution contradiction measured at **6.06%**. ⚠ **PC lane; observation only** |
 | **P5** | **The warrant for `W-F`'s magnitudes** — narrowed to two directions, with one **design call** surfaced | prose | `W-F` | converts *invented* into *warranted*, and no further |
-| **P6** | **`tell` carries the claim it already requires** — the declared half `OwnLedger` names at `data/requires.py:317-319`: *"a liar and a mistaken witness both pass it, and the distortion lands at the receiver's WITNESS deposit"* | **two edits**, no new field | nothing | a belief false **because someone said so**, attenuating with distance. `R-07`, `R-08` |
-| **M1–M4** | Measurements handed over — the unreachable band · `standing_of` as `H-116` at a second site · two engines disagreeing about a sub-season timestep · `choice_temperature`'s control arm disputed between two surfaces | — | — | no ruling; no one-object repair |
+| **P6** | **A telling about a person deposits in the namespace `standing_of` already reads** — `tell`'s precondition reads the teller's claim and the deposit discards it. `epistemic.py:82-83` names this as `H-116`'s open other half: *"WITNESS depositing claims in that namespace — is not this item"* | one branch at the deposit + a second Observation; no new field, no roster change | nothing | gives `standing_of` its **producer** — it returns a constant for every person in every world today. `R-07` |
+| **M1–M4** | Measurements handed over — the unreachable band · `standing_of` as `H-116` at a second site · two engines disagreeing about a sub-season timestep · `choice_temperature`'s disputed control arm | — | — | no ruling; no one-object repair |
 | **§R** | **The one thing to refuse** — salience-ranked memory | — | — | — |
 
 **Nothing in this set adds a system.** Five of six proposals are a clause, an argument, an effect
@@ -91,14 +91,16 @@ remediation standard `skills/ners/SKILL.md` sets — *"a few edits, most of them
 vocabulary shorter"* — is met, and where it is not met the item is filed as a measurement rather than
 dressed as a repair.
 
-**`P1`, `P3` and `P6` compose, and that is where the set's value concentrates.** `P1` makes a person
-formable-about; `P3` puts a **speaker** in a claim's `source`; `P6` puts **content, truth-value and
-attenuation** in its `predicate`, `value` and `confidence`. Together they make a claim acquired from
-another person **carry** *who said it, what they said, whether it is true, and how far it has
-travelled*. Part D §3 `A9` records that the corpus finds that shape in **two of twenty titles**; this
-tree has the carrier for all of it and a producer for none of it. ⚠ **Carry, not act on** — a speaker
-in `source` has no reader (`M2`), and `witness.py:121` stamps only `firsthand`, never `told_by`. A
-consumer is a fourth object and is not proposed.
+**Belief-with-provenance is the shape the corpus finds rarest — 2 of 20 titles — and this tree has every
+carrier for it and a producer for none.** `P1` makes a person formable-about; `P3` puts a **speaker** in a
+claim's `source`; `P6` puts the **content of what was said** in its `predicate` and `value`.
+
+⚠ **`P6` is the one with a consumer already written and already starved.** `standing_of`
+(`decision/options.py:444-465`) pairs told-against-own claims **by predicate** over `person_predicates`,
+and returns maximum gap for every person in every world because `witness.py` never stamps `told_by`, so
+`paired == 0` **by construction**. `epistemic.py:82-83` names the missing half in its own words —
+*"`H-116`'s other half — WITNESS depositing claims in that namespace — is not this item"* — and `P6` is
+that half.
 
 ---
 
@@ -156,6 +158,8 @@ build_world(0)            3 persons · 0 live `hold` tenures · stance [] · cap
 [computed, exact]         pool 2 vs Ob 2 → 74% / 19% / 7% / 0%; max margin +2, band needs ≥3
 matrix_rows_without_a_field()
                           13 declared rows with no field — 6 absent, 7 unmodelled
+25 worlds driven, full spans   4,499 claims deposited, ALL `firsthand` · 0 `told_by` ·
+                          standing_of == max gap for 75 of 75 persons
 verb_table × EFFECTS      11 run · 5 foldable and never attempted · 2 always refused ·
                           20 with no effect body
 ```

@@ -341,137 +341,117 @@ instrument in the tree can grade a stance magnitude, and this document does not 
 
 ---
 
-## P6 · `tell` SHOULD CARRY THE CLAIM IT ALREADY REQUIRES
+## P6 · A TELLING ABOUT A PERSON SHOULD DEPOSIT IN THE NAMESPACE `standing_of` ALREADY READS
 
-### *one payload field and one deposit branch · the seam where a telling loses its content*
+### *`H-116`'s other half, which the tree names and leaves open*
 
-**AGONIST.** `tell`'s precondition and its effect disagree about whether a telling has content, and
-the precondition is the one that is right.
+**AGONIST.** `tell`'s precondition and its effect disagree about whether a telling has content, and the
+precondition is right. The verb requires the teller to **hold a claim on the subject**
+(`verb_table.yaml:499`; `_req_tell`: `any(c.subject == subj for c in teller.ledger)`). The deposit then
+discards what they held — `Claim(cid, pid, subj, e.kind, True, …, conf, …)` (`loop/witness.py:137`) takes
+`predicate` from the **event kind** and `value` from a hard-coded **`True`**.
 
-The verb requires the teller to **hold a claim on the subject** — `verb_table.yaml:499`, and
-`_req_tell` verbatim: `any(c.subject == subj for c in teller.ledger)`. So at the moment of speaking,
-the teller demonstrably holds `(subject, predicate, value, confidence)`. The verb then declares
-`writes: []` at every degree and emits `news.told` (`:505-513`), and the witness layer deposits, at
-`loop/witness.py:137`:
+**`OwnLedger` names the owed half, at the predicate that does the reading** (`data/requires.py:317-319`):
+
+> ⚠ *"IT READS WHETHER THE CLAIM IS HELD, NEVER WHETHER IT IS TRUE, which is the whole of `T3`. A liar
+> and a mistaken witness both pass it, and **the distortion lands at the receiver's WITNESS deposit**."*
+
+**And there is a live consumer already written for it, currently returning a constant.**
+`standing_of` (`decision/options.py:444-465`) computes S18.2's second scalar as
 
 ```python
-c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.round)
+told = [c for c in p.ledger if c.subject == p.id and c.source == "told_by"]
+own  = [c for c in p.ledger if c.subject == p.id and c.source == "firsthand"]
+_agree, dis, paired = agreement(told, own)
+return scale if paired == 0 else (dis * scale) // paired
 ```
 
-Three of the claim's fields are filled from the *event* rather than from the *claim the verb just
-required*:
+It pairs **by predicate**, over the `person_predicates` roster — `heritage · grade · church_standing ·
+office · residence` — and `witness.py` **never stamps `told_by`** (verified by grep over the module), so
+`told` is empty **by construction** and `paired == 0` in every run. The function returns maximum gap for
+every person in every world.
 
-| field | filled with | what the teller actually held |
-|---|---|---|
-| `predicate` | `e.kind` → the string `news.told` | `is_traitor`, `grade`, `complied` — the thing asserted |
-| `value` | hard-coded `True` | the teller's assertion, which may be false |
-| `confidence` | `confidence_default`, read once per barrier (`:75`) | the teller's own confidence, already decayed by age |
+⚠ **THE TREE EXPLICITLY NAMES THIS PROPOSAL AND LEAVES IT OPEN.** `epistemic.py:76-83`, on `H-116`:
 
-**So the precondition reads the claim and the effect discards it.** What propagates is *that a telling
-happened, about B, and it is true*. `epistemic.py:180-182` rules deliberately that the **subject**
-travels — *"A claim minted from a telling is about WHAT WAS TOLD; the teller is not the news"* — and
-the subject is the only part that does.
+> *"over 4,800 deposited claims the two vocabularies were DISJOINT and zero claims were falsy… The
+> predicate is **DERIVED from the form** now… so there is **one namespace and the write side has a name to
+> aim at**. **`H-116`'s other half — WITNESS depositing claims in that namespace — is not this item.**"*
 
-**The carrier needs no change.** `Claim.predicate` is `str` and `Claim.value` is `Any`
-(`state/carriers.py:142-143`) — free-typed, deliberately.
+**That other half is this proposal**, and the repair shape has a precedent in the same defect class
+(`W-A`): derive the deposited predicate from the form rather than from the event kind, so both sides
+share one namespace.
 
-**And the harness already constructs exactly the claims this would produce, as its own specification
-of required behaviour:**
+**The proposal.** At `witness.py:137`, when the witnessed event is a telling whose subject is a Person and
+the teller's held claim carries a predicate in `person_predicates`, deposit **that predicate and that
+value**, with `source = "told_by"`. Otherwise the existing event-kind deposit stands unchanged.
+`told_by` is already a declared `claim_sources` value (`rosters.yaml:119`) — no roster change.
 
-| probe | `tests=` | what it hand-builds |
-|---|---|---|
-| **P4** `S3-L2` | *"a character must be able to believe something false and act on it as if true"* | `("p_high", "is_loyal", True, "firsthand")` **and** `("p_high", "is_loyal", False, "told_by")` |
-| **P16** `S20` | *"how a character is seen must be able to differ between people who know different things"* | `is_traitor True/told_by` against `is_traitor False/firsthand`; returns *"legitimacy is PER-KNOWER and **flips at TELLING speed**"* |
-| **P22-class** | a false report of compliance | `complied True/told_by` against `complied False/firsthand` |
+**ANTAGONIST.** Four attacks. Three are constraints the proposal must satisfy; one is a real limit.
 
-⚠ **Every one of those probes is graded `by="construction"`.** They pass by building the ledger by
-hand. **No telling in the running loop can produce any of them** — a telling produces
-`news.told / True / 100`. P16's PASS text asserts that legitimacy *"flips at TELLING speed"*; the
-ledger it asserts it on is one no telling could write. `CLAUDE.md` §0.1 pt 2 — *an assertion must be
-able to observe the failure it excludes* — is the rule that makes this a finding rather than a
-preference.
+1. **"`Event` has no payload, so the teller's claim cannot reach the deposit."** — **A constraint, and it
+   binds.** S19.3 omits actor, target and `stat_deltas`, each a decision, with the bar for a fourth
+   stated where the last was added (`state/carriers.py:91-102`). **No field may be added.** The carry
+   must ride `Event.observed`, which is *"what the fold READ"*, *"the same triple a `Claim` carries"*,
+   threaded through every requirement form's `check()` and already riding onto the Event
+   (`resolve.py:155,174`).
+2. **"The Observation `OwnLedger` records is excluded from the deposit."** — **A constraint, and it is
+   narrower than it looks.** `claim.held` is the sole member of `LEDGER_DERIVED_STEMS`
+   (`requires.py:525`) and the deposit skips it (`witness.py:207-208`) because *"the deposit falsifies
+   its own content"* — storing `(X, "claim.held", False)` makes that read True. **The prohibition is on
+   that STEM**, not on ledger-sourced content: `(B, "grade", "churl")` is not self-falsifying. So
+   `OwnLedger.check` must record a **second** Observation carrying the held claim's own predicate and
+   value, and keep the `claim.held` bool — dropping it regresses `belief_contradicts` to a documented bug
+   (`tests/test_season_shape.py:6073-6077`), and the guard itself is defended by a mutation test
+   (`:8264`).
+3. **"A content predicate is outside `LedgerReader`'s vocabulary, so the claim will be inert — `H-116`
+   again."** — ⚠ **This attack failed, and it is the one that nearly sank the proposal.** It is true of
+   `belief_contradicts`, which evaluates `requires_typed` against `LedgerReader`'s eight **structural**
+   stems (`witness.py:163-171`). It is **false of the consumer this proposal targets**: `standing_of`
+   pairs on `person_predicates`, a **content** vocabulary, and `REQUIRES_STEMS` never enters. **So no
+   grammar change is needed and the closed eight-stem roster is not in the path.** Scoping the deposit to
+   `person_predicates` is what keeps it out.
+4. **"Then it moves one starved scalar, not the world."** — **This lands, and it is the honest size.**
+   `M2` records that `standing_of`'s revival needs **three** producers; this supplies **one**, the
+   deposit side. `Sensation`'s second scalar stops being a constant; whether anything acts on the
+   resulting gap is a further question.
 
-⚠ **AND THE TREE ALREADY SPECIFIES THIS, AT THE PREDICATE THAT DOES THE READING.** `OwnLedger` —
-§F.24a form 6, the form `tell`'s precondition takes — says so in its own docstring
-(`data/requires.py:317-319`):
+**RECONCILIATION.** Proposed, with its scope set by the three constraints and its gain by the fourth
+attack.
 
-> ⚠ **IT READS WHETHER THE CLAIM IS HELD, NEVER WHETHER IT IS TRUE, which is the whole of `T3`.**
-> A liar and a mistaken witness both pass it, and **the distortion lands at the receiver's WITNESS
-> deposit** — `_req_tell`'s own docstring said so and this preserves it exactly.
+- **Scope.** Tellings only, subject a Person, predicate in `person_predicates`, `source = "told_by"`.
+  Every other deposit is untouched, so the blast radius is one branch.
+- **Route.** `OwnLedger.check` records a second Observation with the held claim's predicate and value;
+  the deposit reads it for this case. **No new field, no roster change, no `Event` change, and
+  `claim.held` keeps being recorded.**
+- **`tell` keeps `writes: []`** — `epistemic.py:107` is right that a telling changes nothing; this is the
+  epistemic seam, not the write matrix.
+- **Attenuation is NOT claimed here.** `conf` at the deposit is the barrier fixture; deriving it from the
+  teller's confidence is a change on a shared path affecting every observation. Named, not bundled.
+- **Falsifier and control, run this session rather than argued.** 25 corpus worlds driven through their
+  full season spans, all 25 completing without error:
 
-**So this is not a new idea. It is the declared half that was never built**, and the site the design
-names for it is the deposit. What follows is therefore a repair, not an addition.
+```
+worlds 25 | seasons completed 25 | errors {} | person-instances 75
+claim sources across all ledgers: {'firsthand': 4499}
+told_by-about-self: 0 | persons with standing_of != max gap: 0
+```
 
-**The proposal, sized against the channel that already exists.** `Event` has **no payload field**, and
-its docstring rules on that deliberately — S19.3 omits actor, target and `stat_deltas`, and the bar for
-adding a field is stated where the last one was added: *"this carries something NO existing field
-holds"* (`state/carriers.py:91-102`). **No field is needed.** `Event.observed` is already *"what the
-fold READ"*, *"the same triple a `Claim` carries"*, it is threaded through every requirement form's
-`check(self, reader, binding, observed)`, and `resolve.py:155,174` rides it onto the Event — *"THE
-VERDICT'S `observed` NOW RIDES ON THE EVENT."*
+  **4,499 deposited claims, every one `firsthand`.** Zero `told_by`, zero `inferred`, zero
+  `firsthand_via_knot`. `standing_of` returns `condition_scale` — the maximum gap — for **75 of 75**
+  person-instances. The 4,499 is the **control** (§0.1 pt 4): the detector sees claims arriving in
+  volume, so the zero is a real zero and not a dead instrument. The falsifier is the same assertion
+  read forward — after `P6`, at least one person's `standing_of` differs from `condition_scale`.
+  ⚠ A first attempt at this measurement swallowed a setup error and reported the same zeros from
+  **0 completed seasons**; that run was a fake control and is not the evidence above.
 
-What `OwnLedger.check` currently records is `_observe(reader, subj, "claim.held", observed)`
-(`requires.py:332-337`) — **a bool**: *that* a claim is held, never *which*. Two edits:
+**What it moves.** `R-07` (`partial`) — *"characters must have memories and feelings and attitudes"*: the
+gap between how a person reads themselves and how they are told they are read becomes a quantity with a
+producer. And it closes **`H-116`'s named other half**, which no other item in this set touches.
 
-| # | site | from | to |
-|---|---|---|---|
-| 1 | `requires.py:336` | observe `claim.held` as a bool | observe the held claim's own `(predicate, value, confidence)` |
-| 2 | `witness.py:137` | `Claim(…, e.kind, True, …, conf, …)` | read `predicate` and `value` off the Event's `observed` for this kind; derive confidence from the observed one |
-
-**`tell` keeps `writes: []`, no carrier changes, no new field, and no new object.**
-
-**ANTAGONIST.** Four attacks. Two land and reshape it; two fail.
-
-1. **"`writes: []` is CORRECT, and `Event` has no payload to put this in."** — Both halves land, and
-   together they reshape the proposal. `epistemic.py:107`: *"THIS EXISTS BECAUSE A TELLING CHANGES
-   NOTHING. `tell` declares `writes: []` — correctly."* And `Event`'s three absent fields are each a
-   ruled decision, with a stated bar against a fourth. **An earlier form of this proposal put the
-   teller's claim in a `news.told` payload: that field does not exist and the type refuses it.** The
-   carry rides `Event.observed`, which exists for exactly this and already reaches the Event, and
-   `tell` keeps `writes: []`.
-2. **"Bystanders would learn the content."** — **This lands, and it exposes a larger absent object.**
-   The five channels are `post_remit, co_located, witness_key, document_key, chronicle`
-   (`rosters.yaml:110`). **None of them is an addressee.** A `tell` has no receiver operand, so under
-   any fan-out mode the people who learn are the people *present or keyed*, never the person told.
-   P6 therefore cannot deliver *"I told you, privately, and only you."* A sixth channel is a separate
-   and larger object and is **not** proposed here.
-3. **"The confidence function is invented — this is `P5`'s defect again."** — **Fails as an
-   objection to the shape, holds against any number.** The write is interior, into the holder's own
-   ledger, which `L3` clause 1 permits in terms. What is unwarranted is a *magnitude*, so no magnitude
-   is proposed: the constraint is `deposited ≤ teller's`, the function is a fixture graded
-   `assumption`, swept, **with a loader that refuses an unregistered arm** — `A5`'s lesson
-   (`04_CONSOLIDATION.md` §3) applied to the dial this proposal introduces.
-4. **"It is a false N-line — `Claim` already carries predicate and value."** — **Fails, and inverts.**
-   Disqualifier 1 asks whether the carrier exists *and the possibility survives the cut*. The carrier
-   exists and is correctly typed; the possibility does not survive, because **nothing produces a
-   content-bearing predicate from an act.** That is disqualifier **2**, no producer — and `P6` is the
-   producer. An object whose carrier is right, whose type is right, whose precondition already reads
-   the source data and whose harness already asserts the result is the opposite of an addition.
-
-**RECONCILIATION.** Proposed at the **emit/deposit seam only**, with three parts and a named residual.
-
-- **The carry.** `news.told`'s payload gains the teller's claim; the deposit branch for that kind
-  reads `predicate` and `value` from it. `tell` keeps `writes: []`.
-- **The attenuation.** Deposited confidence is a function of the teller's, constrained non-increasing,
-  injected as a swept `assumption` fixture with a refusing loader. **No number is proposed.**
-- **The falsifier**, per §0.1 pt 3: a test that runs a telling through the loop and asserts the
-  deposited claim's predicate is **not** `news.told` and its value is the teller's. There is no
-  `by="run"` probe grade — the four are `construction / convention / no-signature / probe-model` — so
-  this belongs in `tests/valoria`, where it can observe the failure. **Its outcome today is RED**, and
-  that is the artifact this proposal rests on.
-- **Residual, stated because it bounds the gain.** Without an addressee channel a telling still
-  reaches the present rather than the told. P6 makes news **content-bearing, falsifiable and
-  attenuating**; it does not make it **directed**. Directedness is `P1`'s axis and a sixth channel's,
-  not this one's.
-
-**What it moves, stated in its narrowed form because the wider claim does not survive.** A person can
-**already** hold a false belief: `LedgerReader` returns the stored value rather than world truth, so a
-stale read is wrong-and-believed today, and `R-08`'s *"decisions must not be omniscient"* is partly
-delivered by that alone. **What P6 adds is narrower and is the part `OwnLedger` names:** a belief that
-is false **because another person asserted it**, and that **weakens with distance from its source**.
-Stale information is the world drifting away from a true reading; a lie is a second party's act. Only
-the second is a hook — someone did it, and someone can be caught. **That** is what this proposal makes
-representable, and the unqualified *"a lie becomes possible"* is an overclaim against stale reads.
+**Residual.** A person can **already** hold a false belief — `LedgerReader` returns the stored value, so
+a stale read is wrong-and-believed. What this adds is narrower and is the part `OwnLedger` names: a
+belief false **because another person asserted it**. Stale information is the world drifting; a lie is a
+second party's act, and only the second is a hook.
 
 ---
 
@@ -562,25 +542,25 @@ through the one field `AX-2` keeps private.
 | **P3** | the deposit stamps the act, not the channel | **one argument** | nothing | hearsay ≠ testimony; breaks the `utter`/`tell` dominance |
 | **P4** | `UPSET_FLOOR` — accept `wound_state` | a deletion | — | an attribution contradiction measured at 6.06%. **PC lane** |
 | **P5** | the warrant for `W-F`'s magnitudes | prose, two directions | `W-F` | converts *invented* into *warranted* for two cells; one **design call** surfaced |
-| **P6** | **`tell` carries the claim it already requires** — the declared half at `requires.py:317-319` | **two edits**, no new field: what `OwnLedger` observes, and what the deposit reads | nothing | a belief false **because someone said so**, attenuating with distance; `R-07`/`R-08`. Makes probes `P4`/`P16`'s `by="construction"` assertions reachable by the loop |
+| **P6** | **a telling about a person deposits in the namespace `standing_of` already reads** — `H-116`'s other half, which `epistemic.py:82-83` names and leaves open | one branch at the deposit + a second Observation; no new field, no roster change | nothing | gives `standing_of` its producer — it returns a constant today. `R-07` |
 | **M1–M4** | measurements handed over | — | — | no ruling, no one-object repair |
 | **§R** | the refusal | — | — | — |
 
 **Ordering, since three of the six now interact.** `P1` first — it is the conformance repair and every
-reach-shaped item waits on it. `P3` and `P6` are independent of `P1` and of each other, and they
-compose: `P3` puts a **speaker** in `source`, `P6` puts **content and attenuation** in `predicate` /
-`value` / `confidence`. Landed together, a claim acquired from another person would **carry** *who said
-it, what they said, whether it is true, and how far it has travelled* — the whole of
-belief-with-provenance, which `04_CONSOLIDATION.md` §3 `A9` records the corpus finds in **two of twenty
-titles**. ⚠ **Carry, not deliver, and the gap is `M2`.** A speaker in `source` has no reader: the
-function that would pair claims about a person, `standing_of`, is starved on two independent axes, and
-`witness.py:121` stamps only `firsthand` / `firsthand_via_knot` — **never `told_by`** — so
-`options.py:461`'s `told` set is empty in every run. The trio makes provenance *present and
-contestable*; a consumer that acts on it is a fourth object and is not proposed here. `P2` after `P1`. `P5` rides `W-F`. `P4` is the PC lane's.
+reach-shaped item waits on it. `P3` and `P6` are independent of `P1` and of each
+other, and together they are the two halves of **belief-with-provenance** — a **speaker** in `source`, and
+the **content** of what was said — which `04_CONSOLIDATION.md` §3 `A9` records the corpus finds in **two
+of twenty titles**.
 
-**Nothing here adds a system, and P6 does not change that.** Five of the six proposals are a clause,
-an argument, an effect body composing on an existing primitive, a deletion, and a payload field read at
-one branch. **No new `needs_jordan` row is filed** (`03_PROVENANCE.md` §6); one genuinely open **design
+⚠ **And `P6` is the half with a consumer, which is why it is ordered ahead of `P3`.** `standing_of`
+(`options.py:444-465`) already pairs told-against-own claims by predicate over `person_predicates` and
+returns a **constant** today, because `witness.py` never stamps `told_by` and `paired == 0` by
+construction. `P6` supplies that producer. `P3`'s speaker, by contrast, still has no reader — `M2` records
+that `standing_of`'s full revival needs three producers, and `P6` is one of them. **Both make provenance
+present and contestable; only `P6` moves a number that something already reads.** `P2` after `P1`. `P5` rides `W-F`. `P4` is the PC lane's.
+
+**Nothing here adds a system.** The six proposals are a clause, an effect body composing on an existing
+primitive, an argument, a deletion, a paragraph of warrant, and one branch at a deposit. **No new `needs_jordan` row is filed** (`03_PROVENANCE.md` §6); one genuinely open **design
 call** is surfaced inside P5 and attaches to a plan Jordan already owns.
 
 **Two named gaps are deliberately NOT proposed**, because each is one object short of a proposal above

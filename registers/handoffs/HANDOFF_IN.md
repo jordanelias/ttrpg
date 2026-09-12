@@ -28,16 +28,36 @@ fills `predicate` from `e.kind` (`news.told`), `value` from a hard-coded `True`,
 transit** — while probes `P4` and `P16` hand-build exactly the claims a telling would need to produce
 and are graded `by="construction"`.
 
-⚠ **AND THE TREE ALREADY SPECIFIES THE REPAIR, at the predicate that does the reading.** `OwnLedger`,
-the form `tell`'s precondition takes, says in its own docstring (`data/requires.py:317-319`): *"IT READS
-WHETHER THE CLAIM IS HELD, NEVER WHETHER IT IS TRUE… A liar and a mistaken witness both pass it, and
-**the distortion lands at the receiver's WITNESS deposit**."* **That half was never built.** `P6` is
-therefore a repair, not an addition, and it needs **no new field**: `Event.observed` is *"what the fold
-READ, the same triple a Claim carries"*, already threaded through every requirement form's `check` and
-already riding onto the Event (`loop/resolve.py:155,174`). What `OwnLedger.check` records today is
-`_observe(reader, subj, "claim.held", observed)` — **a bool**, *that* a claim is held and never *which*.
-⚠ **`Event` has NO payload field and its docstring bars adding one** (`state/carriers.py:91-102`), so any
-proposal routing told content through a payload contradicts the type.
+⚠ **AND THERE IS A LIVE CONSUMER FOR IT, ALREADY WRITTEN AND RETURNING A CONSTANT.** `standing_of`
+(`decision/options.py:444-465`) computes S18.2's second scalar as
+`gap(told_by claims about p, p's own firsthand claims about p)`, pairing **by predicate** over the
+`person_predicates` roster — `heritage · grade · church_standing · office · residence`. **`witness.py`
+never stamps `told_by`** (grep over the module: zero assignments), so `told` is empty **by construction**,
+`paired == 0`, and the function returns maximum gap for every person in every world.
+
+⚠ **THE TREE NAMES THIS AS AN OPEN ITEM IN ITS OWN WORDS.** `epistemic.py:76-83`, on `H-116`: *"over
+4,800 deposited claims the two vocabularies were DISJOINT… The predicate is DERIVED from the form now… so
+there is one namespace and the write side has a name to aim at. **`H-116`'s other half — WITNESS
+depositing claims in that namespace — is not this item.**"* That other half is `P6`. `OwnLedger` says the
+same from the other end (`data/requires.py:317-319`): *"A liar and a mistaken witness both pass it, and
+**the distortion lands at the receiver's WITNESS deposit**."*
+
+**Three constraints any repair must satisfy — each cost a wrong first attempt, so they are recorded:**
+
+1. ⚠ **`Event` has NO payload field and its docstring bars adding one** (`state/carriers.py:91-102`:
+   S19.3's three absences are each a decision; the bar for a fourth is *"carries something NO existing
+   field holds"*). The carry must ride **`Event.observed`** — *"what the fold READ, the same triple a
+   Claim carries"* — which is threaded through every requirement form's `check()` and already rides onto
+   the Event (`loop/resolve.py:155,174`).
+2. ⚠ **`claim.held` is the sole member of `LEDGER_DERIVED_STEMS`** (`data/requires.py:525`) and the
+   deposit **skips that stem** (`loop/witness.py:207-208`) — *"the deposit falsifies its own content."*
+   Defended by a mutation test (`engine/season/tests/test_season_shape.py:8264`), and the bool must keep
+   being recorded or `belief_contradicts` regresses (`:6073-6077`). **The prohibition is on the STEM, not
+   on ledger-sourced content** — `(B, "grade", "churl")` is not self-falsifying.
+3. ⚠ **`LedgerReader`'s vocabulary is eight STRUCTURAL stems** and content predicates are disjoint from it
+   by construction (`witness.py:163-171`) — so a content claim is inert against `belief_contradicts`. **It
+   is NOT inert against `standing_of`**, which pairs on `person_predicates`. Scoping the deposit to that
+   roster is what keeps the closed `REQUIRES_STEMS` grammar out of the path entirely.
 
 **Three corrections other lanes should not re-derive:**
 
