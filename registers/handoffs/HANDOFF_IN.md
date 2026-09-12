@@ -1,5 +1,132 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
+## 📐 2026-09-12 — seven research documents NERS-audited as Valoria candidates (`ED-IN-0217`, PR #399)
+
+**PROPOSED, HELD BACK FROM RATIFICATION-ON-MERGE IN FULL.** Nothing ratified, no head moved, no
+`CURRENT.md` row, no code. Set: `proposals/2026-09-12-emergent-narrative-primitives/`.
+
+**THREE THINGS A COLD SESSION NEEDS, and the first is measured rather than argued.**
+
+⚠ **`P1` — a person-referent route into DELIBERATE — is reached by three independent routes, and one of
+them makes it a CONFORMANCE REPAIR rather than a proposal.** A `Tenure` is owned by its subject
+(`state/carriers.py:378,387-388`); ratified Layer 1 requires a `hold`'s subject to be a **Person**
+(`architecture/meta/04_CODE_ARCHITECTURE.md:181` row 12); a computed act's subject is its question's
+referent (`decision/options.py:307-310`); and no question produces a person. **So ratified Layer 1 is
+unsatisfiable by the running grammar, and the measured *0 live `hold` tenures across 86 worlds* is the
+arithmetic of that, not a thin fixture.**
+
+⚠ **FIVE VERBS ARE BUILT, TESTED AND NEVER REACHED** — `confer`, `revoke`, `convene`,
+`destroy_record`, `kill / wound`. Three of the five unreach because no question names a **person**; the
+two always-refused verbs (`work`, `examine`) unreach because none names a **Site**. Seven of 38 verbs
+are blocked at the grammar rather than at the code. Derived from `verb_table.yaml` × `loop/effects.py` ×
+`requirements.yaml:301-305`; the table is in `06_VALORIA_UNPLOTTED.md` §1.
+
+⚠ **`tell`'s PRECONDITION READS THE TELLER'S CLAIM AND ITS EFFECT DISCARDS IT.** The verb requires the
+teller to hold a claim on the subject (`verb_table.yaml:499`); the deposit at `loop/witness.py:137`
+fills `predicate` from `e.kind` (`news.told`), `value` from a hard-coded `True`, and `confidence` from
+`confidence_default`. So **news carries no content, cannot be false, and does not attenuate in
+transit** — while probes `P4` and `P16` hand-build exactly the claims a telling would need to produce
+and are graded `by="construction"`.
+
+⚠ **AND THERE IS A LIVE CONSUMER FOR IT, ALREADY WRITTEN AND RETURNING A CONSTANT.** `standing_of`
+(`decision/options.py:444-465`) computes S18.2's second scalar as
+`gap(told_by claims about p, p's own firsthand claims about p)`, pairing **by predicate** over the
+`person_predicates` roster — `heritage · grade · church_standing · office · residence`. **`witness.py`
+never stamps `told_by`** (grep over the module: zero assignments), so `told` is empty **by construction**,
+`paired == 0`, and the function returns maximum gap for every person in every world.
+
+⚠ **THE TREE NAMES THIS AS AN OPEN ITEM IN ITS OWN WORDS.** `epistemic.py:76-83`, on `H-116`: *"over
+4,800 deposited claims the two vocabularies were DISJOINT… The predicate is DERIVED from the form now… so
+there is one namespace and the write side has a name to aim at. **`H-116`'s other half — WITNESS
+depositing claims in that namespace — is not this item.**"* That other half is `P6`. `OwnLedger` says the
+same from the other end (`data/requires.py:317-319`): *"A liar and a mistaken witness both pass it, and
+**the distortion lands at the receiver's WITNESS deposit**."*
+
+**Three constraints any repair must satisfy — each cost a wrong first attempt, so they are recorded:**
+
+1. ⚠ **`Event` has NO payload field and its docstring bars adding one** (`state/carriers.py:91-102`:
+   S19.3's three absences are each a decision; the bar for a fourth is *"carries something NO existing
+   field holds"*). The carry must ride **`Event.observed`** — *"what the fold READ, the same triple a
+   Claim carries"* — which is threaded through every requirement form's `check()` and already rides onto
+   the Event (`loop/resolve.py:155,174`).
+2. ⚠ **`claim.held` is the sole member of `LEDGER_DERIVED_STEMS`** (`data/requires.py:525`) and the
+   deposit **skips that stem** (`loop/witness.py:207-208`) — *"the deposit falsifies its own content."*
+   Defended by a mutation test (`engine/season/tests/test_season_shape.py:8264`), and the bool must keep
+   being recorded or `belief_contradicts` regresses (`:6073-6077`). **The prohibition is on the STEM, not
+   on ledger-sourced content** — `(B, "grade", "churl")` is not self-falsifying.
+3. ⚠ **`LedgerReader`'s vocabulary is eight STRUCTURAL stems** and content predicates are disjoint from it
+   by construction (`witness.py:163-171`) — so a content claim is inert against `belief_contradicts`. **It
+   is NOT inert against `standing_of`**, which pairs on `person_predicates`. Scoping the deposit to that
+   roster is what keeps the closed `REQUIRES_STEMS` grammar out of the path entirely.
+
+**Three corrections other lanes should not re-derive:**
+
+- **`forge` DOES NOT EXECUTE.** It declares `writes: [Record.exists, Record.forgery_quality]` and has
+  **no `EFFECTS` entry**, so `effected = not row.writes or v in EFFECTS` (`loop/driver.py:99`) excludes
+  it and `forgery_quality` is never written. With `H-75`'s *"`destroy_record` cannot fire for any
+  actor"*, **both halves of the evidence-fabrication channel are declared and unreachable.**
+- **`T-c` LICENSES AN AUTHORED CLOCK; IT DOES NOT REFUSE ONE.** `01_AXIOMS.md:304-316` states the
+  consequence as the design's best property — a wound clock can be *"bribed, delayed, burned, or
+  killed."* The phrase *"a quantity advancing with no author"* is **`AX-5`** at `:157-158`. A shared
+  loss timer is refused by `T-a`/`L3` (as a self-moving magnitude) or by **`T-b`** (as an expiry that
+  produces an outcome) — never by `T-c`, whose licensed form ships as a `convene`d `Date`.
+- **MATTER MATURES ACT-DECLARED TERMS** (`loop/matter.py:55-109`) — *"the only mechanism in the design
+  by which one season's act reaches into a later one WITHOUT anybody acting again"*, and it stops if the
+  maker is gone. Any claim that this tree has no lagged coupling is false.
+
+**THE ONE THING A COLD SESSION NEEDS FROM THIS, and it is measured rather than argued.**
+
+> **No question source ever produces another person as a referent, so no candidate ever carries one
+> as a subject.**
+
+Q1's referents are docket matters, Q2's reach set is live-tenure objects (rungs, offices,
+propositions), Q3 a site band, Q4 a proposition; a candidate takes its subject from its question
+(`decision/options.py:93,102`). Instrumenting `opening_set` across the corpus run:
+**177,170 candidates formed · 17,400 carry a person id · every one is the asker naming themselves ·
+ZERO name anyone else.** The 17,400 are the control — the detector sees person ids arriving.
+
+**Three consequences, and they reorder the standing backlog:**
+
+1. ⚠ **`W-F` / `U5` AS SPECIFIED IS A PRODUCER WITH NO CONSUMER.** It writes a stance row
+   `(referent = actor, …)` onto a contested act's subject (`r-execution-plan.md:1336`);
+   `stance_toward(p, c.subject)` reads those rows against a candidate's subject
+   (`decision/choose.py:302`); **a candidate's subject is never another actor.** The rows would
+   accumulate unread. **Do not land `W-F` expecting `R-07`/`R-08` to move until a person-referent
+   route exists.**
+2. ⚠ **`tie / knot`'s missing effect is NOT the reach bottleneck.** It binds its Tenure to the act's
+   subject — a question referent — so even with an effect it opens edges to rungs and propositions,
+   never to persons. An earlier draft of the proposal set had this the other way round and says so.
+3. **`H-71` is genuinely separate**, and closing it is necessary but not sufficient: its verbs'
+   subjects are offices, and 0 of 143 cases carry an `office.post`.
+
+**And two corrections other lanes need, both verified first-hand:**
+
+- ⚠ **`H-113`'s claim that `emits_by_degree` has zero callers is STALE and false.**
+  `engine/season/data/verbs.py:151-170` `emits_at(degree)` and `:172-204` `writes_at(degree)` are
+  live readers that **raise** on a contested verb folded with no degree, or with an undeclared band.
+  The degree-keyed interior-write machinery is implemented and defended, not merely declared.
+- ⚠ **`engine/season/verb_table.yaml:711` carries a rule ratified Layer 1 supersedes.** It reads
+  `requires_note: "stored once, on the lower id (§15.1)"`; `04_CODE_ARCHITECTURE.md:178` row 9 —
+  one of the *"fifteen differences from the chain"* — rules **two directed edges**, forced by
+  `01_AXIOMS.md` §E.1.3 (*"whether you can walk away from a bond would depend on an id comparison"*).
+  Nothing executes a note, so this is not a misbehaving mechanism — it is a superseded instruction
+  sitting where whoever writes the effect will read it. **Correct it in the same change as the
+  effect.**
+
+**PC lane, observation only:** `H-119`'s `UPSET_FLOOR` contradiction (the reported winner is the
+**felled** fighter in 6.06% of 300 seeded fights) is answerable by precedent — Jordan's 2026-09-04
+ruling — by having the seam accept `wound_state`. The constant is Jordan's (ED-PC-0036) and the set
+does not propose removing it.
+
+**No new `needs_jordan` row.** Two candidates tested against `CLAUDE.md` §0's five gates and closed.
+One open **design call** is surfaced inside the set's P5 — *the sign of a `Failure` interior write* —
+and attaches to `W-F`, which Jordan already owns.
+
+**Suite at the close:** 1778 passed, 2 failed — both `test_forked_status.py`, the shallow-checkout
+known-red §0.4 documents; `.git/shallow` has two entries and the diff touches no `FORK:` row.
+
+---
+
 ## ⏱ 2026-09-11 — verification cadence ruled: the suite is a CLOSE step (`ED-IN-0213`)
 
 **Jordan:** *"figure out a far better work pattern with Claude.md or whatever so you don't run this shit
