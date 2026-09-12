@@ -93,9 +93,17 @@ item was a clause. Full statements in `01_THE_TEN.md`.
 | **11** | **The writ — sifting as a player's verb** | serve a pattern against the record and get back perishable evidence; **your rivals serve them against you** | a pattern deck + a matcher; `causes[]`, `open_case` and `Record` are already there |
 | **12** | **A telling renews the belief it is about** | *"he loses the town by being forgotten"* becomes true of the running loop — decay is authorless (`AX-5` motion 3) and **renewal becomes an act**. Today a telling renews only `news.told`, which nothing reads | one deposit branch + a second Observation |
 | **13** | **The populace as a weighted Person** | scale without micromanagement — a crowd that holds beliefs, can be lied to, can refuse, can move | a world-build change; `Person.weight` and S9.1's one class already exist |
+| **14** | ⭐ **The information cluster** — *"a ledger is only as reliable as my staffing / documentation / personal involvement"* (Jordan). A **faction sheet, roster and policy list as DOCUMENTS** in the fiction, read at zero cost, with their scope bounded by the seats you have filled | the **top-down surface** the other thirteen assume and none supplies — and the missing **scale bridge**. The sheet is dated, forgeable, expiring and destructible, so the abstraction you govern from is itself contestable | one `subject_matter` shape + a free-read path. **`create_record` and `document_key` already run** |
 
 **Five of the thirteen are licensed-and-unbuilt**, meaning a ratified line already *asks* for them. Three need
 no new object at all. **None requires revising a G.**
+
+⭐ **Proposal 14 is Jordan's, and it reframes three others.** His principle — *"my ledger is only as
+reliable as my staffing/documentation/personal involvement"* — is `Claim.source`, whose roster
+(`rosters.yaml:112-119`) declares **four** ways a person came to hold a claim and whose loop writes **one
+and a half**: measured, **4,499 claims across 25 worlds, every one `firsthand`**. So proposals **12**
+(staffing → `told_by`), **14** (documentation → its own provenance and surface) and **14.1** (which of
+these you have, as a consequence of the seats you filled) are **one object**, not three.
 
 ⚠ **Proposals 11, 12 and 13 came from outside this session** — an eighth document integrating the two narrative sources
 with the twenty-game frame, adjudicated in `04_PROVENANCE.md` §7. Seven of its nine modules are items this

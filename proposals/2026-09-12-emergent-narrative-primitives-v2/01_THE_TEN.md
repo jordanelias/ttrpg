@@ -627,6 +627,181 @@ bodies clock with nobody in it moves nothing, and a crowd that forgets is a vill
 a grievance.
 
 
+---
+
+## 14 · THE INFORMATION CLUSTER — a ledger is as reliable as how it was filled
+
+### *Jordan's principle, and it unifies proposals 12, 14 and 14.1 under one sentence*
+
+> **"My ledger, basically, is only as reliable as my staffing/documentation/personal involvement."**
+
+⭐ **That is `Claim.source`, and all of it is already declared.** `rosters.yaml:112-119` carries
+`claim_sources: [firsthand, told_by, inferred, firsthand_via_knot]` — four ways one person came to hold
+one claim — under Jordan's own 2026-09-02 ruling: *"our understanding of all other words and actions is
+subjective and singular. **Every value here is a way ONE person came to hold ONE claim.**"*
+
+**The loop writes one line of it.** `loop/witness.py:121` — `src = "firsthand_via_knot" if via_knot else
+"firsthand"` — and nothing anywhere writes `told_by` or `inferred` (grep over `loop/` and `epistemic.py`:
+two hits, both on that one line). Measured this session: **4,499 deposited claims across 25 worlds, every
+single one `firsthand`.**
+
+| Jordan's channel | the declared source | written today |
+|---|---|---|
+| **personal involvement** — I was there | `firsthand` | ✅ **the only one** |
+| **staffing** — someone told me | `told_by` | ❌ never stamped → **proposal 12** |
+| **documentation** — a record says so | `document_key` is a live witness *channel*, but a document-sourced claim is stamped `firsthand` like everything else | ❌ no distinct provenance → **proposal 14** below |
+| *(and one the design already distinguishes)* | `firsthand_via_knot` — *I know because of who I am tied to* | ✅ written, and it is **staffing in embryo** |
+
+**So the reliability gradient is not a missing design. It is four declared values with one and a half
+writers**, and the consequence is that every belief in the game is currently maximally reliable however it
+was acquired. `standing_of` returning `condition_scale` for 75 of 75 persons is the same fact seen from
+the consumer side.
+
+**That reframes three items in this set as one object:** 12 gives **staffing** its writer, 14 gives
+**documentation** its own provenance and its surface, 14.1 makes *which of these you have* a consequence of
+the seats you filled — and `firsthand` already works. **Build them together and the sentence above becomes
+a mechanic; build any one alone and it stays an aspiration.**
+
+---
+
+## 14 · THE SHEET IS A DOCUMENT — the abstraction surface, made diegetic
+
+### *Jordan's proposal, 2026-09-12. The surface every other item in this set needs, and three of its four parts already run.*
+
+**AGONIST.** Jordan: *"we still need a surface that allows us to see faction sheet, personnel roster,
+policy tree, etc even if the values available there are derivatives. Otherwise there isn't a surface to
+abstract from to get a top-down perspective… and at the very least we could have this represented within
+a 0-cost action as documents within the game."*
+
+**The problem is real and this set had no answer to it.** A person gets five acts, a twelve-claim `View`
+and no `World`. From inside that there is no way to form a strategic picture at all — which makes the
+design unplayable at any scale above the scene, and `AX-2` forbids the obvious fix.
+
+⭐ **And the second half of the proposal is what makes it lawful rather than a carve-out. A panel and a
+document are not the same object:**
+
+| | a panel | **a document** |
+|---|---|---|
+| who says so | **the engine** — world truth, which `AX-2` calls *"absent"* inside a decision | **a person wrote it.** `AX-1` satisfied natively |
+| when is it true | now, always | **as of when it was made.** Staleness is free, and this tree's reads are already stale by default |
+| can it be wrong | no | **yes** — `Record.forgery_quality` exists |
+| can it be attacked | no | **yes** — `destroy_record`, seizure, concealment; `Record.ttl` expires it |
+
+**So making the abstraction surface diegetic does not dodge the axioms — it satisfies them and gains four
+mechanics on the way.** Manor Lords shows you a panel. Here **somebody had to survey the valley, and
+your rival can burn the survey or hand you a false one.**
+
+**Three of the four parts already execute:**
+
+| the proposal needs | the tree has |
+|---|---|
+| a document object anyone can make | **`create_record`** — `grade: ruled`, `eligibility: ["own"]`, writing `Record.exists` and `Record.stages`, **and it is one of the eleven verbs that run** |
+| learning by holding a document | **`document_key`**, one of the five witness channels — `epistemic.py:259`, pinned by `test_r8_4_document_key_reaches_a_non_author_through_a_store`: *"a `document_key`-only witness learns WHO ACTED"* |
+| a document that can be false, expire, and be destroyed | **`Record.forgery_quality`**, **`Record.ttl`**, **`Record.stages`/`matured`**, `destroy_record` |
+| **a document whose content is an aggregate Query, and a free read** | ⚠ **this is the gap, and it is the whole proposal** |
+
+**And `T-a` permits the content, in its own words.** It forbids an aggregate as a **field** — *"Say cannot
+be a field, never cannot be stored"* — and assigns every aggregate to **Nobody**: *"ownerlessness is the
+licensed state of a **Query**, not a refusal condition."* R7 then names the exact contents of these
+sheets as Queries the design *has*: *"holdings count and military capacity and influence are Queries over
+`hold` and `commit` edges; legitimacy, the leader's standing and populace morale are Queries over
+`stance`/`convictions`."* **A faction sheet is those Queries, resolved at the moment of writing and
+frozen into a `Record`.** §D.11's `Faction` — `(proposition, members, holdings)` — is the sheet's schema,
+already specified.
+
+**ANTAGONIST.** Four attacks. Two land and set the economics; two fail.
+
+1. **"`ED-IN-0011` — never a meter."** — **Fails, on the ruling's own scope.** It binds *"every
+   **anticipation** surface"* and refuses *"no quantized **horizon** ever surfaces."* A roster of who
+   holds what, or a record of what was issued, **forecasts nothing.** Present state and past record are
+   outside it. A sheet showing a *projection* would not be.
+2. **"`AX-2` — the player would see world truth."** — **Fails by construction, and this is the crux.**
+   The sheet shows what **a document says**, and a document is dated, authored, and possibly false. Two
+   players holding two surveys of the same valley disagree. **That is the design's native epistemics, not
+   an exception to them.**
+3. **"A free read breaks the act economy."** — **Lands, and locates the cost.** Reading must be free —
+   `assemble`/`View` already reads a person's own ledger at no cost every DELIBERATE, so free-to-read is
+   the existing pattern. ⭐ **The cost belongs to COMMISSIONING.** Someone spends an act to survey the
+   valley, compile the roster, audit the dispensations. **Free to read, costly to obtain, stale by
+   construction.**
+4. **"Then the player just re-commissions every season and it is a chore."** — **Lands, and bounds it.**
+   The refresh price must be real enough that acting on last year's roster is a live choice — which is
+   the *"do players ever act on a report they know is old?"* test. If refreshing is cheap, this is
+   paperwork.
+
+**RECONCILIATION.** A `Record` whose `subject_matter` is a resolved aggregate Query — a census, a roster
+of seats, a ledger of dispensations, a faction's `(proposition, members, holdings)` — written by an act,
+dated, readable at **zero cost** by anyone holding it, expiring by `ttl`, forgeable, and destructible.
+
+**Grounds:** `I` throughout. `T-a` permits the content (a Query, not a field); `ED-IN-0011` does not reach
+a retrospective sheet; `AX-2` is satisfied *because* the document can be wrong.
+**`I` cost:** one `subject_matter` shape, one free-read path, and the Queries themselves — which R7
+already specifies and `standing_of` already demonstrates.
+
+⭐ **What it buys, and it is more than a window.**
+
+- **The top-down perspective, which nothing else in this set supplies.** Every other proposal assumes a
+  player who can form a strategic picture; this is the only one that lets them.
+- ⭐ **It is the missing SCALE BRIDGE.** v2 scores the vertical and diagonal directions as uncarried. **A
+  `Record` holding an aggregate is how a person at person-scale perceives faction-scale** — the
+  transition with a carrier. `engine/cross_scale/zoom_in_out.py` and `handoff_rules.py` exist and are
+  unreachable from the season loop; this is what a person-side zoom actually *is*.
+- **It answers proposal 1's open shaping question from the other side.** Proposal 1 asks what shape a
+  record takes, given that the one record shown to work is *a graph read at a glance*. **The sheet is that
+  shape** — for present state, where proposal 1 covers causal history. **They are one surface: documents in
+  the fiction, one retrospective and one current.** Specify together.
+- **And it makes the abstraction contestable**, which no management game manages: the roster you govern
+  from is an object your rival can burn, fake, or withhold.
+
+### 14.1 · WHAT THE SHEET CAN CONTAIN IS BOUNDED BY WHO YOU HAVE — Jordan's extension
+
+Jordan, same session: *"If I am part of/head a faction with strong intelligence, then I should have more
+information available about external affairs/parties. If I have strong internal bureaucracy and
+organization, then I should have more information available about internal affairs/parties."*
+
+**This is what makes the surface earned instead of granted, and it needs no new concept — it is
+`Office.remit` doing the job it was defined for.** §D.6: an `Office` *"IS a standing permission attached
+to a **seat**… **It makes ordinary acts eligible where they otherwise are not**, and substitutes the pool
+source."*
+
+**So neither "intelligence" nor "bureaucracy" is a stat. Both are the same Query pointed in two
+directions:**
+
+| | what it is in this vocabulary |
+|---|---|
+| **external intelligence** | the persons committed to you who hold seats whose **remit** covers observation *outside* your holdings, and who are **positioned** where the news is. `surveil` · `research` · `interview` · `reconstruct` — four of the eleven executing verbs |
+| **internal organisation** | the seats you have **established and filled**, whose remit covers *your own* holdings. A Query over `hold` and `commit`, which is R7's named shape |
+
+⚠ **And the lawful form is a set of people, never a visibility number.** Not *"intelligence 7, so you see
+seven things."* Instead: **these three people could have compiled this, one of them did, and here is what
+they wrote** — dated, in their hand, as accurate as they are. An error scaled by the compiler's competence
+and disposition is the same shape the research corpus's own stale-report module specifies.
+
+⭐ **Four things this buys, and the second is the one the design most needs.**
+
+1. **The sheet's *scope* becomes a consequence of your establishment.** A census of your own valley needs
+   someone with a remit over it. A roster of a rival's members needs someone who can `surveil` them.
+   Fill no seats and you govern blind.
+2. ⭐ **It gives `establish` and `confer` a second return, and answers a question this design could not.**
+   Today promoting someone buys you **another five acts you do not control** — a real cost/benefit, but a
+   thin one. Now it also buys you **sight**. *"Why would I fill this seat?"* becomes *"because otherwise I
+   cannot see the border, or my own granaries."* That is the missing motive for the entire personnel
+   layer.
+3. **Information asymmetry between factions becomes emergent rather than authored.** My sheet is better
+   than yours because I built a chancery and you did not — nobody balanced that, and it is exactly R7's
+   *"a ruler can be wrong about their own standing"* with a cause the player chose.
+4. **The same mechanism prices policy reach.** A `Dispensation`'s `scope` **enumerates its executors**, so
+   an organised establishment is *also* how far an order carries. Sight and reach are one apparatus.
+
+**And it is `AX-2`-native rather than an exception to it.** Nobody gets privileged access; what differs is
+**what you were able to find out**. `H-71` — `remit:` unevaluable person-side — is the blocker for all of
+it, which puts this behind the same clause as five other items in this set.
+
+**Residual, stated because it is the live risk.** If the compiling apparatus is cheap, every player builds
+the same chancery and the asymmetry collapses to a tax. The seats must compete with the other things five
+acts a season could buy — which is a tuning question, and Jordan's.
+
+
 ## §S · THE SET AT A GLANCE
 
 | | proposal | grounds | `I` cost | waits on |
@@ -644,6 +819,7 @@ a grievance.
 | **11** | **the writ — sifting as a player's verb** | `I` throughout; nothing `G` or `A` in the path | a pattern deck, a matcher, `determine`'s effect body | **1** (jointly specified) |
 | **12** | **a telling renews the belief it is about** | `I`; `AX-5` governs the forgetting and is untouched | one deposit branch + a second Observation | nothing |
 | **13** | **the populace as a weighted Person** | `I`; the class, field and floor all exist | a world-build change | nothing |
+| **14** | ⭐ **the sheet is a document** — the abstraction surface, made diegetic, with its scope bounded by the seats you have filled | `I`; `T-a` permits a Query's result, `ED-IN-0011` does not reach a retrospective sheet, `AX-2` is *satisfied* because a document can be wrong | one `subject_matter` shape + a free-read path; `create_record` and `document_key` already run | **1** (one surface), `H-71` for scope |
 
 ---
 
@@ -694,7 +870,7 @@ nothing to attach to. **That is `AX-1` derived independently, by someone analysi
 never having read this tree.** `03_WHAT_SURVIVES_R2.md` §1 argues `AX-1` earns its place; this is the
 first evidence for it that did not come from inside the design.
 
-**Not one of the thirteen requires revising a `G`.** Five are *licensed and unbuilt* — a ratified line already
+**Not one of the fourteen requires revising a `G`.** Five are *licensed and unbuilt* — a ratified line already
 asks for them. Three need no new object. One is a question for Jordan. **The refusals that do hold are in
 `03_WHAT_SURVIVES_R2.md`, each argued rather than cited, as `R2` requires.**
 
