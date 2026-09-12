@@ -87,6 +87,23 @@ BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0036-0039 RES
 
 ## IN — Infrastructure / cross-cutting
 
+**2026-09-12 — ED-IN-0216 / 0217 / 0218 allocated, and the state-file comment condensed to fit the lane-row
+cap.** `tests/valoria/test_id_reservations_walkback.py::test_narrative_does_not_creep_back_into_the_state_file`
+caps a lane row at 600 chars; the IN row stood at 593 and the third of these allocations pushed it to 655.
+Per the guard's own instruction the narrative moves here and the row keeps a summary and this pointer —
+the same repair the 2026-07-29 condensation records further down.
+
+- **ED-IN-0216** — master workplan **v7**. Supersedes v6 in authority; v6's *retirement* was attempted,
+  reversed and deferred with its reason (v7 §6), so v6 is still on disk and this is not a `FORK:` row.
+- **ED-IN-0217** — the emergent-narrative proposal suite (`proposals/2026-09-12-emergent-narrative-primitives-v2/`):
+  four research documents NERS-audited as Valoria candidates, 21 false N-lines, and the counterparty
+  finding measured over 177,170 candidates. `proposed`, **held back from ratification-on-merge in full.**
+- **ED-IN-0218** — **Amendment 1 to v7** (filed as its §7): `ED-IN-0210` re-sorted — two of its three
+  rulings are ruled-and-unexecuted **work**, not rulings, so they leave §3.1 for §3.2 — plus the
+  counterparty control (84 candidates / 0 with another person as subject, against 84 / 56, on one authored
+  value at `engine/season/harness/corpus_run.py:280`), the `H-71` rediscovery recorded as one, and the
+  `HANDOFF.md` requirements-figure repair.
+
 **2026-09-10 — ED-IN-0207/0208 collided WITHIN the lane; the later-merging side renumbered to
 0209/0210.** Same failure class as the ED-IN-0031/0032, ED-IN-0033/0034 and ED-IN-0044/0045
 collisions recorded further down, and resolved the same way.

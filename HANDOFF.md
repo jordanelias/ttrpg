@@ -18,7 +18,10 @@ commits, 50 files. `engine/season/` now has **`decision/`** (budget·choose·opt
 (`ee0383bf…`), **190 season tests pass** (was 187), requirements still **6 `not_met` / 3 `partial`**
 — exactly what a pure structural arc should read. **`ED-SC-0037` is now `ruled`.**
 ⚠ **THOSE ARE ARC 1's NUMBERS AND THEY ARE NO LONGER THE TREE'S.** `ED-FI-0009` landed after them and
-moved the hash and the test count (`register --requirements` still reads 6/3). The live values are in
+moved the hash and the test count. ⚠⚠ **AND THE PARENTHETICAL THAT STOOD HERE — *"`register --requirements`
+still reads 6/3"* — IS FALSE AS OF `c275a9b`:** that commit carried both `U2`/R-03 to `met` and R-09 to
+`partial`, so the instrument reads **`met 1 · not_met 4 · partial 4`**. The figure is not restated as a
+number here either — run the command; `engine/season/requirements.yaml` is its owner. The live values are in
 `workplans/2026-09-09-r-execution-plan.md` **§3 · ENTRY STATE**, their single owner — deliberately not
 restated here, because a figure copied into the continuity index rots independently of its subject.
 

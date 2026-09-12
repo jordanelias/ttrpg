@@ -222,6 +222,30 @@ each a hook wound seasons earlier by an act and fired with nobody watching. **R-
 lapse, or break early and pay. And the research suite's own best line, which it could not place:
 *"you can read the year of your own coup off the graph."*
 
+⭐ **AND IT HAS A SECOND HALF THIS PROPOSAL DID NOT KNOW ABOUT: `ED-IN-0210` Ruling 2, Jordan, 2026-09-10.**
+*"a real interaction has a COUNTERPARTY, an OBSTACLE and a DEGREE, and the **ANTONYM is the fourth face**."*
+The ruling names **six closers by name, and not one of them exists in `engine/season/verb_table.yaml`:**
+
+| the relation | the verb that opens it | the closer Jordan named |
+|---|---|---|
+| an obligation | `oblige` | **WAIVE** |
+| a succession | `succeed` | **DEPOSED** |
+| a tie | `tie / knot` | **FRAY / LOOSEN** |
+| a dispensation | `issue` | **RESCIND** |
+| a petition | `petition` | **WITHDRAW / DENY** — *two-sided: the petitioner withdraws, the addressee denies* |
+| an institution | `establish` | **ABOLISH / DISSOLVE** |
+
+`utter` is **deliberately unpaired** — §14 makes a Proposition immutable, so an utterance has no antonym.
+
+**This is the same gap as the `term` field seen from the other side, and the two are one item.** A declared
+term ends a relation **when nobody acts**; an antonym ends it **because somebody acted**. `T-n` licenses the
+first and Jordan's Ruling 2 names the second, and a relation with neither can only be entered — which is
+what *"they are not fiats"* is objecting to. Build the `term` field without the closers and every relation
+still ends only by lapsing; build the closers without `term` and nothing ever lapses.
+
+**Revised `I` cost:** one field, one MATTER branch, one `release`-side read, **and six verb rows whose
+antonym semantics Jordan has already ruled** — so the six need authoring, not deciding.
+
 ---
 
 ## 5 · THE BODIES CLOCK — ageing, births and deaths on `Rung.envelope`
@@ -351,33 +375,71 @@ player reads their own estimate and can be wrong, which §C.11 makes structural 
 
 ---
 
-## 8 · A PERSON-REFERENT ROUTE INTO DELIBERATE
+## 8 · A COUNTERPARTY — and it costs ONE AUTHORED VALUE, measured
 
-### *carried over from v1 unchanged in substance, because it was never the part v1 got wrong*
+### *the execution of `ED-IN-0210` Ruling 1, which Jordan issued on 2026-09-10 and which nothing has run*
 
-**AGONIST.** No question source produces another person as a referent, so no candidate carries one as a
-subject. Measured by instrumenting `opening_set` across the corpus: **177,170 candidates formed · 17,400
-carry a person id · every one is the asker naming themselves · zero name anyone else.**
+⭐ **THIS PROPOSAL WAS RE-MEASURED AFTER IT WAS FIRST WRITTEN, AND THE RESULT IS BETTER THAN THE CLAIM.**
+The first version asked for a clause in `world_q.py`. **No clause is needed.** The route is built,
+it is reachable from a verb that already executes, and what stands in the way is one hand-authored
+argument in the corpus builder.
 
-**And ratified Layer 1 already requires what this supplies.** A `Tenure` is owned by its subject
-(`state/carriers.py:378`, `:387-388`); Layer 1 requires a `hold`'s subject to be **a Person, only**
-(`04_CODE_ARCHITECTURE.md:181` row 12); a computed act's subject is its question's referent
-(`decision/options.py:307-310`). **Layer 1 as ratified is unsatisfiable by the running grammar**, and the
-measured *0 live `hold` tenures across 86 worlds* is that arithmetic.
+**AGONIST — and it is Jordan's own ruling, not an import.** `ED-IN-0210` Ruling 1, 2026-09-10, verbatim:
+*"verbs invoke mechanisms or interactions between a character and another entity/character. **they are not
+fiats.**"* Its consequence, as the row records it: **a real interaction has a COUNTERPARTY, an OBSTACLE and
+a DEGREE, and the ANTONYM is the fourth face.** Measured two days later, across the corpus: **177,170
+candidates formed · 17,400 carry a person id as subject · every one is the asker naming themselves · zero
+name anyone else.** Every act in the game is a fiat against a place or a thing. **Ruling 1 is unexecuted,
+and the measurement is the proof.**
 
-**ANTAGONIST.** The scope is the live question, not the clause. Which claims qualify — *every witnessed
-actor* versus *a narrower predicate* — differs by roughly the size of the cast, and the narrow reading
-should be tried first. **This is `CLAUDE.md` §0's step-5 call and must be argued in the landing commit.**
+**ANTAGONIST.** *"The referent grammar bars it, so this is a schema change dressed as a content gap."*
+**Half right, and the half that is wrong is decisive.** Three of the four question sources do bar it:
 
-**RECONCILIATION.** One clause at `queries/world_q.py:213` admitting a claim whose subject is a Person id.
+| source | referent | can it be a person? |
+|---|---|---|
+| **Q1** `date_due` | the `DocketItem`'s `matter` strings | no |
+| **Q2** `claim_landed` | `(c.subject,)` under the guard `c.subject == p.id or c.subject in mine` | **no — barred by construction.** This is the mechanism behind the 17,400 self-subject figure |
+| **Q3** `band_crossed` | a band name | no |
+| **Q4** `need` | `(prop.subject,)`, and **`Proposition.subject` is an unconstrained `str`** (`state/carriers.py:465`) | **YES, and it always could** |
 
-**Grounds:** `I` throughout — and a Layer-1 conformance gap, not a new idea.
-**`I` cost:** one clause.
-**What it buys.** **Five of the ten proposals above and below wait on it**, and it moves three primitives
-the corpus catalogues from unreachable to expressible: poaching, the delegate as a defection vector, and
-opinion diffusion. **Falsifier, already run and reading the wrong way:** instrument `opening_set` and count
-candidates whose subject is a person other than the asker. **It reads zero now; it must read non-zero
-after.**
+**Q4 is the door, and it was never walked through.** `_eff_utter` (`loop/effects.py:430-432`) already
+**defaults** a Proposition's subject to `a.actor` — a person — so a person-subject Proposition is not
+merely legal, it is what `utter` writes when a payload omits the field. `utter` is one of the eleven verbs
+that execute. And `decision/options.py:307-313` resolves **`subject`, `to` and `site` to that one
+referent**: *"three cell-side names for the one thing the person was asked about."*
+
+**RECONCILIATION — measured, with a control.** Two arms of `corpus_run.build_at` differing in exactly one
+string: `corpus_run.py:280`'s `Proposition("prop_x", "OUGHT", ids[chain[0]], …)`, whose third argument is a
+**rung** id.
+
+| arm | `prop_x.subject` | candidates formed | carrying another person as subject |
+|---|---|---|---|
+| **control** — the corpus as authored | `r_hearth` (a rung) | 84 | **0** |
+| **arm** | `p_a` (a person) | 84 | **56** |
+
+**Same candidate count in both arms** — nothing was added or removed; the *referent* changed. And in the
+arm, **all eleven verbs that execute** are offered with a person as their counterparty —
+`create_record · interview · move · reconstruct · release · research · speak · surveil · tell · transfer ·
+utter` — where in the control not one is. `interview p_a`, `tell p_a`, `surveil p_a`, `create_record about
+p_a`: four of those effect bodies run today.
+
+**Grounds:** `I`, and smaller than `I` usually means — **a corpus-content fact, not a structural bar.**
+**`I` cost:** one authored argument, plus the authoring judgment of *which* Proposition subjects are
+persons in which cases. The second is the real work and it is authorial, not engineering.
+**Falsifier (`CLAUDE.md` §0.1 pt 3):** restore `ids[chain[0]]` and the 56 returns to 0. The control is the
+corpus as it stands, so the number has one (§0.1 pt 4).
+
+⚠ **What this does NOT show, stated because the temptation to overclaim here is large.** Forming a
+candidate is not resolving an act, and 56 candidates is not 56 interactions. It does not show that a
+counterparty *improves* any run — only that the absence of one is content, and that the design Jordan
+ruled for on 2026-09-10 is reachable without touching a carrier, a verb or an axiom.
+
+⚠ **AND THE FIRST VERSION OF THIS PROPOSAL SHOULD BE READ AS A WARNING.** It asked for a clause in
+`world_q.py` and cited a Layer-1 conformance gap (`04_CODE_ARCHITECTURE.md:181` row 12 requires a `hold`'s
+subject to be a Person; 0 live `hold` tenures across 86 worlds). **That gap is real and is a different
+finding.** Attaching it to this proposal made a content gap look like a schema gap, which is the exact
+inversion this whole document set was rewritten to remove — refusing or inflating an idea on the shape of
+the code rather than on what it does.
 
 ---
 
@@ -629,9 +691,9 @@ a grievance.
 
 ---
 
-## 14 · THE INFORMATION CLUSTER — a ledger is as reliable as how it was filled
+## §F · THE INFORMATION CLUSTER — a ledger is as reliable as how it was filled
 
-### *Jordan's principle, and it unifies proposals 12, 14 and 14.1 under one sentence*
+### *Jordan's principle. Not a fifteenth proposal — the frame that makes 12, 14 and 14.1 one object*
 
 > **"My ledger, basically, is only as reliable as my staffing/documentation/personal involvement."**
 

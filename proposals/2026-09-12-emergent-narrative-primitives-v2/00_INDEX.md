@@ -87,7 +87,7 @@ item was a clause. Full statements in `01_THE_TEN.md`.
 | **5** | **The bodies clock** — ageing, births, deaths on `Rung.envelope` | the one compounding quantity the design licenses without an author: boom, bust, an heir of age, an elder dying and a `hold` ending | `census.py` writes nothing today |
 | **6** | **Complication as the modal outcome** | most acts succeed *at a cost* instead of refusing — the hook generator. Measured today: **74% Failure · 19% Partial · 0% Overwhelming** | fixtures are `assumption`; the ladder is Jordan's |
 | **7** | **Intelligence before action** | spend acts to learn a rival's state, then act on what you hold — and be wrong | the investigation verbs already run |
-| **8** | **A person-referent route** (v1's `P1`, kept) | any act directed at another person: court, discredit, poach, audit | one clause |
+| **8** | **A counterparty** — `ED-IN-0210` Ruling 1, executed | any act directed at another person: court, discredit, poach, audit | ⭐ **one authored value, measured: control 84/0 vs arm 84/56** |
 | **9** | **Founding** — `Rung.exists` has no producer, and `R4` asked for one | map variation across playthroughs; NPC-founded settlements | one verb; the matrix row is declared |
 | **10** | **Casus belli as a `Record`** | a war with a reason others can be told about, forged, or destroyed | `succeed`/`forge` declared |
 | **11** | **The writ — sifting as a player's verb** | serve a pattern against the record and get back perishable evidence; **your rivals serve them against you** | a pattern deck + a matcher; `causes[]`, `open_case` and `Record` are already there |
@@ -136,3 +136,12 @@ build, before any design in this set.**
 - **The dice ladder is Jordan's**, ruled 2026-08-14. Proposal 6 proposes the *question*, and the fixtures behind it are his tuning.
 - **No new `needs_jordan` row is filed.** Proposal 6 surfaces one genuine design call — *should complication be the modal band* — and it attaches to fixtures he already owns.
 - **The seven source documents are not in this repository.** They are pinned by SHA-256 in `04_PROVENANCE.md`; every claim *about them* is unverifiable from the tree and marked.
+- **Four of these fourteen are Jordan's, ruled on 2026-09-10, and this suite reached them late.**
+  `ED-IN-0210` carries three rulings and one fork. Proposal 8 **executes Ruling 1**, proposal 4 pairs with
+  **Ruling 2**'s six named closers, and proposals 12 and 14 bear on the fork. The suite claims the
+  measurement and the route; **the design is his and predates the session.** How that was missed is in
+  `04_PROVENANCE.md` §8, with the adjudication against the master workplan that found it.
+- **This suite is not milestone movement.** `CLAUDE.md` §0.2: done means the behaviour runs. The
+  measurements in `04_PROVENANCE.md` §4 run; the proposals do not. What folds into
+  `workplans/valoria_master_workplan_v7.md` is six items, filed there as **§7 · Amendment 1**
+  (`ED-IN-0218`) — and the fourteen proposals are deliberately **not** among them.

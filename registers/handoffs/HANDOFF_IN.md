@@ -6749,3 +6749,44 @@ the propositions to test are *more scenes than budget* and *more interactions th
   blocks the milestone path this lane owns. Read the row before planning R-work.
   Sources: `registers/editorial_ledger_sc.jsonl` (ED-SC-0037, filed 2026-09-09); the governing
   ruling is ED-SC-0033; the unit is `workplans/2026-09-09-r-execution-plan.md` §11.0 and U1.
+
+### 2026-09-12 — the workplan-v7 adjudication (ED-IN-0218, PR #401)
+
+**READ `ED-IN-0210` BEFORE PLANNING ANY SEASON-LOOP WORK.** Its v7 §3.1 summary — *"does an order carry
+terms?"* — understates it by a lot. The row holds **three rulings Jordan issued 2026-09-10 plus one open
+fork**, and **v7 §7.1 re-sorts it**: Rulings 1 and 2 are **ruled and unexecuted**, so they are §3.2 WORK,
+and only the fork stays with Jordan.
+
+1. **Ruling 1 — a real interaction has a COUNTERPARTY, an OBSTACLE and a DEGREE; verbs are not fiats.**
+   Unexecuted, and the route is cheaper than anything in the queue: **one authored argument** at
+   `engine/season/harness/corpus_run.py:280` (a Proposition's subject, today a rung id). Measured with a
+   control: **84 candidates / 0 with another person as subject** against **84 / 56**, same count, and in
+   the arm **all eleven executing verbs** gain a person counterparty. Q4 (`world_q.py:246-251`) is the only
+   question source that can carry a person referent — **Q2's guard `c.subject == p.id or c.subject in mine`
+   bars it by construction** — and `_eff_utter` already defaults a Proposition's subject to the actor.
+   Falsifier: restore `ids[chain[0]]`, the 56 returns to 0.
+2. **Ruling 2 — six antonym closers, none of which exists in `verb_table.yaml`:** `oblige`↔WAIVE ·
+   `succeed`↔DEPOSED · `tie/knot`↔FRAY/LOOSEN · `issue`↔RESCIND · `petition`↔WITHDRAW/DENY ·
+   `establish`↔ABOLISH/DISSOLVE (`utter` deliberately unpaired). Pairs with `T-n`'s unbuilt `Tenure.term`:
+   a term ends a relation when nobody acts, an antonym ends it because somebody did. **One item, two
+   halves** — build either alone and relations stay one-way.
+3. **The fork stays Jordan's** — *are `dispatch` and `comply` two sides of one thing?* ⚠ **And `dispatch` is
+   one of `H-71`'s five unformable verbs**, so a ruling on the fork moves no run until `H-71` closes. Name
+   that when it is put to him; neither surface names the other.
+
+**Two cautions for a cold session:**
+
+- **`H-71` is already carried in four places** (`hole_register.yaml:795` · `requirements.yaml:303` ·
+  this file `:154` · `architecture/PLAN.md:1369`) with a green falsifier. Its five are
+  `{confer, convene, dispatch, revoke, destroy_record}`. **Do not re-derive it** — this session did, with
+  a worse instrument and a wrong membership, and v7 §7.3 records that.
+- **`register --requirements` reads `met 1 · not_met 4 · partial 4`**, not 6/3. The parenthetical in root
+  `HANDOFF.md` asserting otherwise is corrected in this commit. Don't cache the number again — run the
+  command.
+
+**v7's first ask is still unmet:** **OI-05** — the world-gen NPC count and season-tick generation trigger
+— **has no ED.** `ED-WR-0009` and `ED-IN-0095` both name it and both record the *honest deferral* via
+`stubwire`, which is the decision not to invent the number. Filing it is still the first action.
+
+Sources: `workplans/valoria_master_workplan_v7.md` §7 · `registers/editorial_ledger_in.jsonl`
+(ED-IN-0210, ED-IN-0218) · `proposals/2026-09-12-emergent-narrative-primitives-v2/04_PROVENANCE.md` §4, §8.

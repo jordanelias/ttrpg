@@ -86,12 +86,25 @@ $ python -m engine.season.harness.register --requirements
 
 $ verb_table.yaml × loop/effects.py × requirements.yaml:301-305
   11 run · 5 foldable and never attempted · 2 always refused · 20 with no effect body
+  the 5 are {confer, convene, dispatch, revoke, destroy_record} and `H-71` is why
+    -- hole_register.yaml:795 (tier 0, grade absent); falsifier already green,
+       test_no_person_can_choose_a_governance_verb_and_h71_is_why, reddens when H-71 closes
+  ⚠ NOT A FINDING OF THIS SESSION. Carried by requirements.yaml:303, HANDOFF_IN.md:154 and
+    architecture/PLAN.md:1369 before this set was written; re-deriving it added nothing.
 
 $ python -c "from engine.season.state.carriers import matrix_rows_without_a_field as f; print(f())"
   absent      (Office, remit) · (Person, axis_count) · (Person, claim_ledger)
               (Person, coherence) · (Person, scar) · (Proposition, *)
   unmodelled  (Act[], returned) · (ConveningCondition, attached) · (Date, due_at)
               (Date, fired) · (Dispensation, exists) · (DocketItem, matter) · (Petition, exists)
+
+$ THE COUNTERPARTY CONTROL -- two arms of corpus_run.build_at, one string apart
+                                  candidates   another person as subject
+  control  prop_x.subject = r_hearth       84                           0
+  arm      prop_x.subject = p_a            84                          56
+  arm, restricted to the 11 EXECUTING verbs: all 11 offered with a person counterparty
+  control, same restriction:                 none
+  falsifier: restore ids[chain[0]] -> 56 returns to 0
 
 $ 25 corpus worlds driven through full season spans
   seasons completed 25 | errors {} | person-instances 75
@@ -210,3 +223,37 @@ was written.
   rules and are unreachable from the season loop; what they would do once reachable is unassessed.
 - **No `needs_jordan` row is filed.** Two candidates were tested against `CLAUDE.md` §0's five gates and
   closed; the one live design call attaches to fixtures Jordan already owns.
+
+---
+
+## §8 · ADJUDICATION AGAINST THE MASTER WORKPLAN — `ED-IN-0218`
+
+**Done at the end of the session, on Jordan's instruction, against
+`workplans/valoria_master_workplan_v7.md` (CANON, ratified the same day under `ED-IN-0216`).** The result
+is filed as that document's **§7 · Amendment 1**, and the verdict here is the part that belongs with the
+set rather than with the workplan.
+
+**v7 §0's last paragraph did most of the adjudicating and it ruled against most of a fold-in:** *"this
+file states no work item that is not traceable to a milestone row or a ledger row that already exists, and
+it generates nothing — it sorts what the tree already holds."* Of everything this set produced, **six
+items attach to a row v7 already carries and the fourteen proposals do not.** They stay here, in
+`proposals/`, surfaced by location.
+
+| what the session produced | how it scores against v7 |
+|---|---|
+| **the counterparty control** (§4 above) | **the strongest artifact, and it is not this set's idea.** It executes `ED-IN-0210` **Ruling 1**, which Jordan issued on **2026-09-10**, two days before this session, and which nothing had run. The set reached it independently and framed it as a schema proposal; it is a corpus-content fact with a one-value route |
+| **proposal 4's declared terms** | pairs with `ED-IN-0210` **Ruling 2** — six antonym closers Jordan named, none in `verb_table.yaml`. Same defect from the other side |
+| **proposals 12 / 14** | bear on `ED-IN-0210`'s **open fork** (`dispatch` vs `comply`), because `comply`'s precondition is *"a claim of the dispensation's terms is in the actor's own LEDGER"* and is **artifact-agnostic** |
+| **the 25-world claim-source measurement** | the execution reading v7 §1 says R-07 and R-08 do not have — and **less flattering than their `partial`** |
+| **the conviction measurement** | corroborates `ED-IN-0214` and sharpens it: the *question* decides `qs[0]` in 801 of 1,068 deliberations, so re-cutting the matrix does not by itself move the dominant direction |
+| **"five verbs with effect bodies nothing reaches"** | **a rediscovery of `H-71`**, already carried in four places with a green falsifier. Recorded as such in v7 §7.3 |
+| **R-04's document surface** (proposal 14, 14.1) | v7 §4 makes R-04 the gate on retiring the FA tree and never says what its surface would be. This is the first candidate. **Recorded as a pointer; v7 may not schedule it** |
+| **the fourteen proposals as a body** | **not milestone movement.** `CLAUDE.md` §0.2: done means it runs. The measurements run; the proposals do not |
+
+⚠ **THE FINDING THAT INDICTS THE SESSION'S METHOD, and it is the same one this set was rewritten to fix.**
+Four of these fourteen proposals execute or answer `ED-IN-0210` — **a row Jordan ruled on two days
+earlier, which the session never read until the adjudication.** The set's own opening complaint about v1
+is that it audited against the code and missed `R2`, the ruling that governs it. **This session then
+audited against the code and missed `ED-IN-0210`.** Reading the ledger for the fortnight before the work
+is the cheap fix and it was not done. `[BIAS: recency — the tree was read as code and as canon, and the
+ruling channel between them was not read at all]`
