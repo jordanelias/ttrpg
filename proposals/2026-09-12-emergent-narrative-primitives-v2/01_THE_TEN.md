@@ -513,54 +513,75 @@ patterns are too loose and the record is being confirmed rather than interrogate
 
 ---
 
-## 12 · CURATION AS AN ACT — the player chooses what is forgotten, and the erasure stays legible
+## 12 · A TELLING SHOULD RENEW THE BELIEF IT IS ABOUT
 
-### *threads the salience refusal instead of violating it, and makes forgetting AX-1-conformant for the first time*
+### *the authored half of memory, and the reason "he loses the town by being forgotten" is not yet a move*
 
-**AGONIST.** A ledger has a cap. When it overflows, `loop/witness.py:245-248` sorts and pops:
+⚠ **This slot previously held a proposal that forgetting be a player's choice — curation as an act, the
+person picking what to drop. It is withdrawn, on two grounds, and the second is the one that should have
+stopped it at the start.**
 
-```python
-p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))
-… p.ledger.pop(0)
-```
+**Nobody chooses to forget.** Forgetting is not a decision; it is what happens when a memory has degraded
+past retrieval. A prompt asking a person which memory to give up is fiction-breaking whatever its
+mechanics.
 
-*"EVICTION RANKS ON `confidence_live × recency` ONLY, NEVER SALIENCE."* The comparator is right and
-`03_WHAT_SURVIVES_R2.md` §5 upholds the refusal behind it: an engine ranking memories by importance is a
-narrator deciding what matters.
+**And there was no gap to repair.** The withdrawn proposal argued that eviction has *no author* and is
+therefore an `AX-1` hole. `AX-5` licenses it by name:
 
-⚠ **But notice what the refusal does not cover.** Today a person forgets **and nobody did it.** Eviction
-is a world motion with no author — the one shape `AX-1` exists to refuse — and it slipped through because
-it was only ever examined as *"is this salience-ranked?"* rather than *"whose act is this?"*
+> ### **AX-5 · THE WORLD MOVES BY ITSELF IN EXACTLY THREE WAYS: MATTER, BODIES, AND THE FADING OF MEMORY.**
+> *"Nobody wound any of the three, and you cannot bribe silt."*
 
-**The proposal, borrowed from *Thousand Year Old Vampire* by way of an outside integration document:
-when the ledger is full, keeping a new claim is an act that requires dropping an old one, the person
-chooses which, and the erasure stays legible.** Not a ranking — **a decision**, with an author, at a cost.
+**The fading of memory is the third motion.** It is *supposed* to have no author, and the comparator
+`confidence × (when + 1)` is degradation-to-lost expressed exactly: low confidence and old goes first.
+That is shipped and correct.
 
-**ANTAGONIST.** Three attacks. Two are the interesting ones.
+---
 
-1. **"This is salience-ranked memory wearing a hat."** — **Fails, and the distinction is exact.** The
-   refusal is of *the engine* ranking by importance. Here **a person** decides, from what they hold, at a
-   moment they chose. `07_DYNAMICS.md`'s own reason — *"a narrator deciding what matters"* — does not
-   reach a character deciding what to keep. That is characterisation, which is what the refusal's residual
-   already conceded.
-2. **"Then the player micromanages eviction two hundred times a season."** — ⚠ **Lands, and bounds the
-   proposal.** It cannot fire at every overflow. The lawful form is that it fires **when the person is
-   already deliberating** — a question about what to keep, raised at the cap, answered with the budget
-   they already spend. Otherwise it is a chore.
-3. **"An NPC cannot choose, so the cap still needs a default."** — **Lands.** The comparator remains, as
-   the default for everyone not deliberating. This proposal adds an *author where one is available*; it
-   does not remove the fallback.
+**AGONIST — and what the correction exposes.** If forgetting is authorless, the authored half is the
+opposite act, and `07_DYNAMICS.md:171-175` names it:
 
-**RECONCILIATION.** At the cap, a **question** — *what do you let go?* — answered as an act by whoever is
-deliberating, with the comparator as the default otherwise, and the dropped claim's absence recorded
-rather than silent.
+> *"influence is not taken away; **it lapses**. **He loses the town by being forgotten** is not a mechanic
+> anyone wrote — it is what happens when **nobody spends a scene renewing the claim**."*
 
-**Grounds:** nothing `G` refuses it — and it *repairs* an `AX-1` gap. `I` throughout.
-**`I` cost:** one question source, one effect body, and one line kept where a claim used to be.
-**What it buys.** **R-CHOICE** — *"he loses the town by being forgotten"* becomes a thing a person **did**,
-not a thing that happened to them. **R-WORLD** — a rival's forgetting is a hook: what did they choose to
-let go, and who benefits? And **E-LEGIBILITY** — the erasure is visible, which is the one form of
-persistence that shows the player the shape of a character's attention.
+**Renewing a claim is the move, and the channel for it already works.** `LedgerReader.read`
+(`queries/person_q.py:82-88`) selects the maximum `(when, confidence)` for a given
+`(subject, predicate)` — so a **fresher claim about the same thing wins the read.** A telling deposits a
+fresh claim. Being told about something therefore *renews* your belief about it, and `tell` is one of the
+eleven verbs that execute.
+
+⚠ **But the renewal carries the wrong payload, and that is the whole finding.** A telling deposits
+`Claim(subject, predicate = e.kind, value = True, …)` — `predicate` is the **event kind**, `news.told`
+(`loop/witness.py:137`). So a telling renews **`(B, "news.told")`** and never **`(B, "is_loyal")`**. You
+cannot keep a specific belief alive by speaking about it; you can only refresh *that something was said
+about B* — the one predicate nothing reads.
+
+**So `07_DYNAMICS`'s sentence is not yet true of the running loop.** Spending a scene renewing a claim is
+the design's stated counter to lapsing, and today there is no claim it can renew.
+
+**The proposal** is the one v1 reached and v2 dropped from its numbered set: **a telling about a person
+deposits the predicate and value the teller actually holds**, in the namespace `standing_of` already reads
+(`person_predicates`). `OwnLedger` names the owed half at the predicate that does the reading
+(`data/requires.py:317-319`): *"A liar and a mistaken witness both pass it, and **the distortion lands at
+the receiver's WITNESS deposit**."* And `epistemic.py:76-83` calls it an open item in its own words —
+*"`H-116`'s other half — WITNESS depositing claims in that namespace — is not this item."*
+
+**ANTAGONIST.** The three routes that close, and the one that does not, are stated in full at
+`02_THE_RESCORE.md` and in v1's `P6`: no `Event` payload field (S19.3, with a stated bar against a
+fourth); `claim.held` is excluded from the deposit by a tested guard; and a content predicate is inert
+against `belief_contradicts`, whose vocabulary is eight **structural** stems. ⚠ **That third attack fails
+on the consumer that matters** — `standing_of` pairs on `person_predicates`, a **content** vocabulary, so
+`REQUIRES_STEMS` never enters the path and no grammar change is needed.
+
+**RECONCILIATION.** Tellings only, subject a Person, predicate in `person_predicates`, `source = "told_by"`
+— already a declared `claim_sources` value. `tell` keeps `writes: []`.
+
+**Grounds:** `I` throughout. `AX-5` governs the *forgetting* and is untouched.
+**`I` cost:** one deposit branch and a second Observation at `OwnLedger.check`.
+**What it buys.** **It closes the memory loop the design already describes**: decay is authorless
+(`AX-5`), and renewal becomes an act that keeps *a particular belief* alive. A reputation now survives
+only while someone keeps speaking of it — which is `07_DYNAMICS`'s sentence, running. And it is measured:
+**25 worlds, 4,499 deposited claims, every one `firsthand`, zero `told_by`, and `standing_of` at maximum
+gap for 75 of 75 persons.**
 
 ---
 
@@ -621,7 +642,7 @@ a grievance.
 | **9** | founding | `G` licenses (`R4`) | one verb | nothing |
 | **10** | casus belli as a `Record` | `I` ×2 | one effect body | nothing |
 | **11** | **the writ — sifting as a player's verb** | `I` throughout; nothing `G` or `A` in the path | a pattern deck, a matcher, `determine`'s effect body | **1** (jointly specified) |
-| **12** | **curation as an act** — the person chooses what is forgotten | `I`; and it **repairs** an `AX-1` gap | one question source, one effect body | **13** helps |
+| **12** | **a telling renews the belief it is about** | `I`; `AX-5` governs the forgetting and is untouched | one deposit branch + a second Observation | nothing |
 | **13** | **the populace as a weighted Person** | `I`; the class, field and floor all exist | a world-build change | nothing |
 
 ---

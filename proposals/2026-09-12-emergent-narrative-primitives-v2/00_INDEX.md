@@ -91,7 +91,7 @@ item was a clause. Full statements in `01_THE_TEN.md`.
 | **9** | **Founding** — `Rung.exists` has no producer, and `R4` asked for one | map variation across playthroughs; NPC-founded settlements | one verb; the matrix row is declared |
 | **10** | **Casus belli as a `Record`** | a war with a reason others can be told about, forged, or destroyed | `succeed`/`forge` declared |
 | **11** | **The writ — sifting as a player's verb** | serve a pattern against the record and get back perishable evidence; **your rivals serve them against you** | a pattern deck + a matcher; `causes[]`, `open_case` and `Record` are already there |
-| **12** | **Curation as an act** — the person chooses what is forgotten | *"he loses the town by being forgotten"* becomes a thing someone **did**. ⚠ Repairs an `AX-1` gap: eviction today has **no author** | one question source, one effect body |
+| **12** | **A telling renews the belief it is about** | *"he loses the town by being forgotten"* becomes true of the running loop — decay is authorless (`AX-5` motion 3) and **renewal becomes an act**. Today a telling renews only `news.told`, which nothing reads | one deposit branch + a second Observation |
 | **13** | **The populace as a weighted Person** | scale without micromanagement — a crowd that holds beliefs, can be lied to, can refuse, can move | a world-build change; `Person.weight` and S9.1's one class already exist |
 
 **Five of the thirteen are licensed-and-unbuilt**, meaning a ratified line already *asks* for them. Three need
