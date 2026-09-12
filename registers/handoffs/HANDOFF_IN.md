@@ -1,6 +1,61 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
-## 📐 2026-09-12 — seven research documents NERS-audited as Valoria candidates (`ED-IN-0217`, PR #399)
+## 📐 2026-09-12 — the v2 suite, and the ruling a cold session must read first (`ED-IN-0217`, PR #400)
+
+**Set: `proposals/2026-09-12-emergent-narrative-primitives-v2/`.** The v1 set beside it is SUPERSEDED and
+kept as the audit trail.
+
+⚠⚠ **READ `R2` BEFORE AUDITING ANYTHING AGAINST THIS TREE'S RULINGS.**
+`references/design_rulings_2026-09-06.md:37-50` — **"R2 · THE FIVE PROPERTIES — the terminal criteria"**:
+
+> *"you have license to do whatever makes for the best game architecture. your only constraints are making
+> this as dynamic and capable and flexible and emergent and persistent as possible."*
+>
+> **"The ratified refusals become instrumental, not terminal. Each must be justified against these five or
+> changed… The null result — 'examined, this refusal earns its place' — is a real finding, and must be
+> argued rather than deferred to."**
+
+**The v1 set deferred to refusals twenty-seven times and argued none of them.** It cited `R7` from that
+same file four times without ever reading `R2`. **Three grounds, and only one may refuse anything:**
+
+- **G** — a commitment about the game (may refuse; must be *argued* against the five; Jordan's to revise)
+- **A** — architecture: how state is stored or computed. ⚠ **NO VETO.** A player cannot tell a field from a
+  function. R7/`L3`/`carriers.py:579/586` are all `A`.
+- **I** — an implementation fact (*"nothing produces it"*). ⚠ **NOT A REFUSAL** — a cost line.
+
+⚠ **`R7` IS ROUTINELY MISQUOTED BY TRUNCATION, INCLUDING BY THE v1 SET.** Line 169 — *"no magnitude carrier
+is admitted at any scale"* — is the **A**-half. Read `:159-195` whole: it is titled *"NORMATIVE AGGREGATES
+PROPAGATE AT THE SPEED OF NEWS"*, it **names legitimacy, the leader's standing and populace morale as
+Queries the design HAS**, it says *"the reason a magnitude carrier feels necessary is that `H-62` is
+open"*, and it rules *"a ruler can be wrong about their own standing."* **It licenses the standing/approval
+family it is cited to refuse**, and closes with a yield list (propaganda, cover-ups, the intercepted
+dispatch, rumour vs record) that is a proposal set in itself.
+
+**Five claims the v1 set made about this tree that are FALSE — do not re-derive them:**
+
+1. *"There is no step in which a restoring timer could run"* — **MATTER matures act-declared stages** and
+   writes `Record.matured` (`loop/matter.py:55-109`), *"the only mechanism in the design by which one
+   season's act reaches into a later one WITHOUT anybody acting again"*, and it stops if the maker is gone.
+2. *"Salience-ranked selection, anywhere"* — **questions ARE ranked**: a *semantic* source order plus a
+   lexicographic hash tiebreak, deciding `qs[0]` in **801 of 1,068** deliberations
+   (`queries/world_q.py:250-269`, `H-54`). The refusal is scoped to the **ledger comparator**.
+3. *"A fourth clock of any kind"* — **`T-c` LICENSES a wound clock**, *"bribed, delayed, burned, or
+   killed"* (`01_AXIOMS.md:304-316`), and the tree ships one as a `convene`d `Date`.
+4. *"The eight cross-scale handoff rules — the loop implements none of them"* —
+   **`engine/cross_scale/handoff_rules.py` implements all eight** plus the §3.9 table. It is imported only
+   by `mc_v18.py`, never by `engine/season/`: an `I`, not an absence.
+5. *"`forge` and `destroy_record` exist"* as a shipped forgery channel — `forge` has **no `EFFECTS`
+   entry** so it never folds, and `H-75` records `destroy_record` *"CANNOT FIRE FOR ANY ACTOR"*.
+
+**And one citation was wrong with a design consequence:** the chronicle render was killed on *"the
+arc-recognition surface Jordan vetoed"*. The cited lines
+(`audit/2026-07-05-emergent-narrative-engine/narrative_engine_design_v1.md:130-136`) **license** it —
+*"retrospective coherence (chronicle + `causes[]` walk) … recognized backwards as story"* — and veto only
+**arc labels**. `ED-IN-0011` binds **anticipation** surfaces; a retrospective walk forecasts nothing.
+
+---
+
+## 📐 2026-09-12 — v1: seven research documents NERS-audited (`ED-IN-0217`, PR #399, merged)
 
 **PROPOSED, HELD BACK FROM RATIFICATION-ON-MERGE IN FULL.** Nothing ratified, no head moved, no
 `CURRENT.md` row, no code. Set: `proposals/2026-09-12-emergent-narrative-primitives/`.
