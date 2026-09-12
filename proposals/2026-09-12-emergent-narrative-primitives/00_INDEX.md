@@ -81,7 +81,7 @@ has a disposition, and no person has a competence**, simultaneously and for one 
 | **P3** | **The deposit stamps the act, not the channel** — one argument at `loop/witness.py:121` | **one argument** | nothing | hearsay becomes separable from testimony; breaks a measured `utter`-over-`tell` dominance |
 | **P4** | **`UPSET_FLOOR` — let the seam accept `wound_state`** | a deletion | — | an attribution contradiction measured at **6.06%**. ⚠ **PC lane; observation only** |
 | **P5** | **The warrant for `W-F`'s magnitudes** — narrowed to two directions, with one **design call** surfaced | prose | `W-F` | converts *invented* into *warranted*, and no further |
-| **P6** | **`tell` carries the claim it already requires** — the verb's precondition reads the teller's claim and its effect discards it | one payload field, one deposit branch, one swept fixture | nothing | **a lie becomes representable**; news attenuates in transit. `R-07`, `R-08` |
+| **P6** | **`tell` carries the claim it already requires** — the declared half `OwnLedger` names at `data/requires.py:317-319`: *"a liar and a mistaken witness both pass it, and the distortion lands at the receiver's WITNESS deposit"* | **two edits**, no new field | nothing | a belief false **because someone said so**, attenuating with distance. `R-07`, `R-08` |
 | **M1–M4** | Measurements handed over — the unreachable band · `standing_of` as `H-116` at a second site · two engines disagreeing about a sub-season timestep · `choice_temperature`'s control arm disputed between two surfaces | — | — | no ruling; no one-object repair |
 | **§R** | **The one thing to refuse** — salience-ranked memory | — | — | — |
 
@@ -94,9 +94,11 @@ dressed as a repair.
 **`P1`, `P3` and `P6` compose, and that is where the set's value concentrates.** `P1` makes a person
 formable-about; `P3` puts a **speaker** in a claim's `source`; `P6` puts **content, truth-value and
 attenuation** in its `predicate`, `value` and `confidence`. Together they make a claim acquired from
-another person carry *who said it, what they said, whether it is true, and how far it has travelled*.
-Part D §3 `A9` records that the corpus finds that shape in **two of twenty titles**; this tree has the
-carrier for all of it and a producer for none of it.
+another person **carry** *who said it, what they said, whether it is true, and how far it has
+travelled*. Part D §3 `A9` records that the corpus finds that shape in **two of twenty titles**; this
+tree has the carrier for all of it and a producer for none of it. ⚠ **Carry, not act on** — a speaker
+in `source` has no reader (`M2`), and `witness.py:121` stamps only `firsthand`, never `told_by`. A
+consumer is a fourth object and is not proposed.
 
 ---
 

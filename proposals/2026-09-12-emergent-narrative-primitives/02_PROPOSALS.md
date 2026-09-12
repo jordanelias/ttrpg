@@ -391,17 +391,44 @@ ledger it asserts it on is one no telling could write. `CLAUDE.md` §0.1 pt 2 �
 able to observe the failure it excludes* — is the rule that makes this a finding rather than a
 preference.
 
-**The proposal:** put the teller's held claim in the `news.told` payload, and at the deposit branch for
-that event kind read `predicate` and `value` from it instead of from `e.kind` and `True`. Derive the
-deposited confidence from the teller's, constrained to be **non-increasing**.
+⚠ **AND THE TREE ALREADY SPECIFIES THIS, AT THE PREDICATE THAT DOES THE READING.** `OwnLedger` —
+§F.24a form 6, the form `tell`'s precondition takes — says so in its own docstring
+(`data/requires.py:317-319`):
+
+> ⚠ **IT READS WHETHER THE CLAIM IS HELD, NEVER WHETHER IT IS TRUE, which is the whole of `T3`.**
+> A liar and a mistaken witness both pass it, and **the distortion lands at the receiver's WITNESS
+> deposit** — `_req_tell`'s own docstring said so and this preserves it exactly.
+
+**So this is not a new idea. It is the declared half that was never built**, and the site the design
+names for it is the deposit. What follows is therefore a repair, not an addition.
+
+**The proposal, sized against the channel that already exists.** `Event` has **no payload field**, and
+its docstring rules on that deliberately — S19.3 omits actor, target and `stat_deltas`, and the bar for
+adding a field is stated where the last one was added: *"this carries something NO existing field
+holds"* (`state/carriers.py:91-102`). **No field is needed.** `Event.observed` is already *"what the
+fold READ"*, *"the same triple a `Claim` carries"*, it is threaded through every requirement form's
+`check(self, reader, binding, observed)`, and `resolve.py:155,174` rides it onto the Event — *"THE
+VERDICT'S `observed` NOW RIDES ON THE EVENT."*
+
+What `OwnLedger.check` currently records is `_observe(reader, subj, "claim.held", observed)`
+(`requires.py:332-337`) — **a bool**: *that* a claim is held, never *which*. Two edits:
+
+| # | site | from | to |
+|---|---|---|---|
+| 1 | `requires.py:336` | observe `claim.held` as a bool | observe the held claim's own `(predicate, value, confidence)` |
+| 2 | `witness.py:137` | `Claim(…, e.kind, True, …, conf, …)` | read `predicate` and `value` off the Event's `observed` for this kind; derive confidence from the observed one |
+
+**`tell` keeps `writes: []`, no carrier changes, no new field, and no new object.**
 
 **ANTAGONIST.** Four attacks. Two land and reshape it; two fail.
 
-1. **"`writes: []` is CORRECT and this breaks it."** — `epistemic.py:107`: *"THIS EXISTS BECAUSE A
-   TELLING CHANGES NOTHING. `tell` declares `writes: []` — correctly."* **This lands as a constraint
-   and it is the right one.** The carry must not enter the write matrix. It belongs in the **event
-   payload and the deposit branch** — the epistemic seam — leaving `tell` writing nothing, exactly as
-   ruled. The proposal is scoped accordingly.
+1. **"`writes: []` is CORRECT, and `Event` has no payload to put this in."** — Both halves land, and
+   together they reshape the proposal. `epistemic.py:107`: *"THIS EXISTS BECAUSE A TELLING CHANGES
+   NOTHING. `tell` declares `writes: []` — correctly."* And `Event`'s three absent fields are each a
+   ruled decision, with a stated bar against a fourth. **An earlier form of this proposal put the
+   teller's claim in a `news.told` payload: that field does not exist and the type refuses it.** The
+   carry rides `Event.observed`, which exists for exactly this and already reaches the Event, and
+   `tell` keeps `writes: []`.
 2. **"Bystanders would learn the content."** — **This lands, and it exposes a larger absent object.**
    The five channels are `post_remit, co_located, witness_key, document_key, chronicle`
    (`rosters.yaml:110`). **None of them is an addressee.** A `tell` has no receiver operand, so under
@@ -437,10 +464,14 @@ deposited confidence from the teller's, constrained to be **non-increasing**.
   attenuating**; it does not make it **directed**. Directedness is `P1`'s axis and a sixth channel's,
   not this one's.
 
-**What it moves.** `R-07` and `R-08` (`partial`) — a person can hold a false belief acquired from
-another person and act on it, which is `R-08`'s *"decisions must not be omniscient"* at the belief
-layer rather than the sampler layer. It is the one proposal in this set that makes **a lie** a thing
-the engine can represent.
+**What it moves, stated in its narrowed form because the wider claim does not survive.** A person can
+**already** hold a false belief: `LedgerReader` returns the stored value rather than world truth, so a
+stale read is wrong-and-believed today, and `R-08`'s *"decisions must not be omniscient"* is partly
+delivered by that alone. **What P6 adds is narrower and is the part `OwnLedger` names:** a belief that
+is false **because another person asserted it**, and that **weakens with distance from its source**.
+Stale information is the world drifting away from a true reading; a lie is a second party's act. Only
+the second is a hook — someone did it, and someone can be caught. **That** is what this proposal makes
+representable, and the unqualified *"a lie becomes possible"* is an overclaim against stale reads.
 
 ---
 
@@ -531,17 +562,21 @@ through the one field `AX-2` keeps private.
 | **P3** | the deposit stamps the act, not the channel | **one argument** | nothing | hearsay ≠ testimony; breaks the `utter`/`tell` dominance |
 | **P4** | `UPSET_FLOOR` — accept `wound_state` | a deletion | — | an attribution contradiction measured at 6.06%. **PC lane** |
 | **P5** | the warrant for `W-F`'s magnitudes | prose, two directions | `W-F` | converts *invented* into *warranted* for two cells; one **design call** surfaced |
-| **P6** | **`tell` carries the claim it already requires** | one payload field, one deposit branch, one swept fixture | nothing | **a lie becomes representable**; news attenuates; `R-07`/`R-08`. Makes `P4`/`P16`'s `by="construction"` assertions reachable by the loop |
+| **P6** | **`tell` carries the claim it already requires** — the declared half at `requires.py:317-319` | **two edits**, no new field: what `OwnLedger` observes, and what the deposit reads | nothing | a belief false **because someone said so**, attenuating with distance; `R-07`/`R-08`. Makes probes `P4`/`P16`'s `by="construction"` assertions reachable by the loop |
 | **M1–M4** | measurements handed over | — | — | no ruling, no one-object repair |
 | **§R** | the refusal | — | — | — |
 
 **Ordering, since three of the six now interact.** `P1` first — it is the conformance repair and every
 reach-shaped item waits on it. `P3` and `P6` are independent of `P1` and of each other, and they
 compose: `P3` puts a **speaker** in `source`, `P6` puts **content and attenuation** in `predicate` /
-`value` / `confidence`. Landed together, a claim acquired from another person carries *who said it,
-what they said, whether it is true, and how far it has travelled* — which is the whole of
-belief-with-provenance, and `04_CONSOLIDATION.md` §3 `A9` records that the corpus finds it in **two of
-twenty titles**. `P2` after `P1`. `P5` rides `W-F`. `P4` is the PC lane's.
+`value` / `confidence`. Landed together, a claim acquired from another person would **carry** *who said
+it, what they said, whether it is true, and how far it has travelled* — the whole of
+belief-with-provenance, which `04_CONSOLIDATION.md` §3 `A9` records the corpus finds in **two of twenty
+titles**. ⚠ **Carry, not deliver, and the gap is `M2`.** A speaker in `source` has no reader: the
+function that would pair claims about a person, `standing_of`, is starved on two independent axes, and
+`witness.py:121` stamps only `firsthand` / `firsthand_via_knot` — **never `told_by`** — so
+`options.py:461`'s `told` set is empty in every run. The trio makes provenance *present and
+contestable*; a consumer that acts on it is a fourth object and is not proposed here. `P2` after `P1`. `P5` rides `W-F`. `P4` is the PC lane's.
 
 **Nothing here adds a system, and P6 does not change that.** Five of the six proposals are a clause,
 an argument, an effect body composing on an existing primitive, a deletion, and a payload field read at

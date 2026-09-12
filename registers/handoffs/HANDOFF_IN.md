@@ -26,8 +26,18 @@ teller to hold a claim on the subject (`verb_table.yaml:499`); the deposit at `l
 fills `predicate` from `e.kind` (`news.told`), `value` from a hard-coded `True`, and `confidence` from
 `confidence_default`. So **news carries no content, cannot be false, and does not attenuate in
 transit** — while probes `P4` and `P16` hand-build exactly the claims a telling would need to produce
-and are graded `by="construction"`. That is `P6` in the set, and `Claim.predicate`/`value` are already
-`str`/`Any`, so no carrier changes.
+and are graded `by="construction"`.
+
+⚠ **AND THE TREE ALREADY SPECIFIES THE REPAIR, at the predicate that does the reading.** `OwnLedger`,
+the form `tell`'s precondition takes, says in its own docstring (`data/requires.py:317-319`): *"IT READS
+WHETHER THE CLAIM IS HELD, NEVER WHETHER IT IS TRUE… A liar and a mistaken witness both pass it, and
+**the distortion lands at the receiver's WITNESS deposit**."* **That half was never built.** `P6` is
+therefore a repair, not an addition, and it needs **no new field**: `Event.observed` is *"what the fold
+READ, the same triple a Claim carries"*, already threaded through every requirement form's `check` and
+already riding onto the Event (`loop/resolve.py:155,174`). What `OwnLedger.check` records today is
+`_observe(reader, subj, "claim.held", observed)` — **a bool**, *that* a claim is held and never *which*.
+⚠ **`Event` has NO payload field and its docstring bars adding one** (`state/carriers.py:91-102`), so any
+proposal routing told content through a payload contradicts the type.
 
 **Three corrections other lanes should not re-derive:**
 
