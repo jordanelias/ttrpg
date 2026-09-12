@@ -281,7 +281,15 @@ distinctions in it are the point:
 | **PRODUCED, UNREACHED** | the effect is implemented; no candidate ever forms for it | the effect body exists, and the measured count is 0 |
 | **DECLARED / UNPRODUCED** | the **carrier** exists — a dataclass field — and nothing writes it | the field is in `carriers.py`; no `EFFECTS` body writes it |
 | **MATRIX-ONLY** | a `write_matrix.yaml` row names a field that **does not exist** | `matrix_rows_without_a_field()` (`carriers.py:591-624`) reports it. Weaker than DECLARED |
-| **REFUSED** | a ratified line forbids it. Not a cost judgment | the line is quoted, and it refuses *this* object rather than an adjacent one |
+| **REFUSED** | a **design commitment** refuses what the mechanic *does* | the line is quoted, it is Jordan's or a theorem from one, and it refuses *this* object rather than an adjacent one |
+| **REFUSED AS STORED — DERIVED FORM RULED IN** | `R7`/`L3` refuse the **stock**, and R7's next clause admits the same quantity as a **Query** | the distinction is R7's own: *"holdings count and military capacity and influence are **Queries over `hold` and `commit` edges**"* |
+
+⚠ **The second row exists because the first was over-applied, and the correction runs one way: toward
+the design being MORE open than these tables first said.** A ratified line that refuses a *stored
+magnitude* has not refused the *idea* — `01_THE_PASSES.md` §4 sets this out with each refusal's grounds
+marked **D** (a design commitment, Jordan's to revise), **T** (a theorem from one) or **I** (an
+implementation fact, which is **never** a refusal). Where a row below reads *refused as stored*, the
+derived form is a live proposal and not a closed question.
 | **FALSE N-LINE** | the claimed possibility survives the cut, because something ruled in already provides it | per `skills/ners/SKILL.md` §3 — *something already ruled in provides it*. An object nothing provides is ABSENT, not a false N-line |
 | **ABSENT** | no carrier, no writer, and no line refusing one | — |
 | **PAPER** | already proposed in a prior set and graded `paper` | — |
@@ -303,10 +311,10 @@ counted under the verdict they take, with the out-of-scale note kept as a note.
 
 | | primitive | verdict |
 |---|---|---|
-| A1 | spendable political currency | **REFUSED** — a stock is a magnitude carrier (R7) |
+| A1 | spendable political currency | **REFUSED AS STORED — DERIVED FORM RULED IN.** The stock is a magnitude carrier (R7); R7's next clause makes influence *"a Query over `hold` and `commit` edges"*, which is this primitive without the stock. Same treatment as `A2` |
 | A2 | currency whose *supply* is a loyalty function | **REFUSED as a carrier; the shape is ruled in** — R7 makes influence a Query over `hold`/`commit` edges, which is A2's shape without the stock |
-| A3 | currency that is also the victory condition | **REFUSED** — no score exists and a stored campaign aggregate is refused |
-| A4 | approval slope with a punitive tail | **REFUSED twice** — the slope is a stored aggregate (R7); the tail is a threshold producing an outcome (`T-b`) |
+| A3 | currency that is also the victory condition | **TWO GROUNDS, AND ONLY ONE IS A REFUSAL.** A stored campaign aggregate is refused by R7 (**D**); *"no score exists"* is an implementation fact (**I**) and refuses nothing. A derived victory Query is not refused by any line quoted here |
+| A4 | approval slope with a punitive tail | **SPLIT.** The slope is **refused as stored, ruled in as derived** (R7); the tail is **REFUSED** on `T-b` — a threshold producing an outcome. So a derived approval Query whose crossing raises a **Question** is the lawful whole of this primitive |
 | A5 | vote as the resolution mechanism | **FALSE N-LINE** — it executes, in `parliamentary_vote.py` (d10 pool, TN 7), reached from `mc_v18` and tested. ⚠ In the *unjoined* engine |
 | A6 | asymmetry balanced by auction | **ABSENT** — nothing refuses it; it bears on none of the nine requirements |
 
@@ -338,7 +346,7 @@ counted under the verdict they take, with the out-of-scale note kept as a note.
 
 | | primitive | verdict |
 |---|---|---|
-| D1 | tile painting with severable supply | **REFUSED** — a painted colour is a stored aggregate on a Rung (L3) |
+| D1 | tile painting with severable supply | **REFUSED AS STORED** — a painted colour is a stored aggregate on a Rung (L3). Control derived from live `hold` edges over the containment forest is the same primitive without the field |
 | D2 | fill-to-own province nodes | **ABSENT** — `contain` gives an eight-rung ladder, not ownership by completion |
 | D3 | site selection as a durable decision | **DECLARED / UNPRODUCED** — `(Rung, exists)` and `(Site, exists)` are `[RES]` rows emitting `rung.founded`, **with no producing verb**. R4 names four routes to churn; all unbuilt |
 | D4 | claim / casus belli as a legal gate | **ABSENT** |
@@ -348,7 +356,7 @@ counted under the verdict they take, with the out-of-scale note kept as a note.
 
 | | primitive | verdict |
 |---|---|---|
-| E1 | dominance with a gap condition | **REFUSED** — needs a score |
+| E1 | dominance with a gap condition | **REFUSED AS STORED** — the gap needs a score, and a score may be a **Query**. `standing_of` is precisely a gap computed rather than stored (`options.py:444-465`), so the shape is already in the tree |
 | E2 | two scoring modes rewarding opposite investments | **REFUSED BY COMPOSITION** — the suite's own "most portable single rule"; it needs a scored event and R7 forbids the aggregate. Closes at `CLAUDE.md` §0 gate 5, not as a ruling request |
 | E3 | status that gravitates to the centre | **REFUSED — on `L3`/R7, not `AX-3`.** There is no status to gravitate: standing is a **Query** (`design_rulings:172-174`) and `carriers.py:579,586` forbid storing one. `AX-3`'s carve-out governs claim *confidence*, a different quantity |
 | E4 | rented rather than owned position | **PARTLY PRODUCED** — an office is not owned; it is a `hold` Tenure with cardinality 1, and `Query.hold_force` **raises** on a second live hold |
@@ -359,7 +367,7 @@ counted under the verdict they take, with the out-of-scale note kept as a note.
 |---|---|---|
 | F1 | action-point budget | **PRODUCED** — `budget()`: base 5 + office bonus − body-band − travel-leg, floor 1 |
 | F2 | budget derived from a character, decaying with age | **PRODUCED IN SHAPE, FLAT IN VALUE** — the same function; measured **5 for all 258 persons**. Offices are 0, and `body` is written only by `kill / wound` — which includes a *Wounded* branch that leaves the person alive (`effects.py:402`), so the flatness is not "death is the only writer" but that **`kill / wound` never folds in the corpus**: `resolvable_verbs()`' third gate excludes a contested verb whose `subject` operand cannot be bound (`driver.py:100-119`, `H-80`). The suite calls this *"family F's most under-used idea"*; Valoria shipped it first and left it constant |
-| F3 | strict phase order with a periodic extra phase | **PRODUCED for the order, REFUSED for the extra** — six steps in fixed order; a periodic extra phase is a fourth clock |
+| F3 | strict phase order with a periodic extra phase | **PRODUCED for the order; the extra phase is REFUSED only if UNWOUND** — six steps in fixed order. A phase recurring on a hazard nobody set is `AX-5`; a phase convened by a nameable act is `T-c`-licensed, and the tree ships that shape as a `convene`d `Date` |
 | F4 | two clocks | **REFUSED at person scale, PRESENT as two unjoined worlds** — one tick, two granularities; and `mc_v18` |
 
 ### G · Advancement and goal generation
@@ -389,7 +397,7 @@ counted under the verdict they take, with the out-of-scale note kept as a note.
 | ageing cohort | **PAPER** (2026-09-10) — `Rung.envelope` is the carrier, zero writers |
 | temporary withdrawal from the labour force | **DECLARED / UNPRODUCED, not refused** — the step exists. MATTER matures act-declared terms (`matter.py:55-109`) and that is the lawful form an act-wound withdrawal would take, consistent with `C5`. What is missing is the carrier: maturation is implemented for `Record` stages, and `Tenure` has no `term` field (`verb_table.yaml:421`) |
 | housing as the reproduction gate | **OPEN ESCALATION** — `ED-SE-0051`, matter-only vs matter-plus-hearth-capacity. *"Materially different games."* Jordan's |
-| threshold immigration on standing | **REFUSED** — a settlement approval aggregate |
+| threshold immigration on standing | **SPLIT** — the stored settlement aggregate is **refused as stored**; the *threshold producing the migration* is **REFUSED** on `T-b`. A derived standing Query whose crossing raises a Question is lawful |
 | inherited statistics | **ABSENT** — no verb creates a Person |
 
 ### Loyalty, opinion and belief
@@ -408,9 +416,9 @@ counted under the verdict they take, with the out-of-scale note kept as a note.
 
 | primitive | verdict |
 |---|---|
-| **inverse-linked meter triangle** | **REFUSED AT THE STRONGEST GRADE** — three stored global meters. `carriers.py:579`, `:586`, R7. The suite's *"most sophisticated pressure design"* is the tree's most comprehensive refusal |
+| **inverse-linked meter triangle** | **REFUSED AS STORED, AND THE INVERSE LINKAGE IS THE PART WITH NO OBSTACLE.** Three *stored* global meters are refused (`carriers.py:579`, `:586`, R7). ⚠ Three **Queries** whose inputs overlap are inverse-linked by construction and store nothing — so the suite's *"most sophisticated pressure design"* is refused in its bookkeeping and **not** in its mechanism. An earlier revision of this row called it *"the tree's most comprehensive refusal"*, which mistook a storage rule for a design one |
 | one dominant killer, everything routed into it | **FUNNEL PRODUCED, TERMINAL REFUSED** — every act discharges into `Rung.stores` and every person draws from it; **the shortfall emits nothing and decides nothing** |
-| twin-population tension | **REFUSED** — two stored aggregates |
+| twin-population tension | **REFUSED AS STORED** — two stored aggregates. Two population Queries are not refused by any line quoted here; what is genuinely missing is a producer for either (`Rung.envelope` has no writer) |
 | action-point budget | as F1 |
 
 ### Space, logistics and control
@@ -446,9 +454,9 @@ counted under the verdict they take, with the out-of-scale note kept as a note.
 | B | 6 | control mode withholding authorship | **PRODUCED AND BEYOND THE SCALE** — `AX-2` |
 | B | 9 | irreversibility / stakes | **PRODUCED** — death deletes |
 | **C** | 10 | storylet units with preconditions | **FALSE N-LINE** — a verb row *is* one: 38 rows, fold = eligibility → `requires` → `writes` → `emits`, loader refuses an unlisted write |
-| C | 11 | pacing / drama management | **REFUSED** — `T-b`, `AX-5`, and ED-IN-0011's subtract-only ruling |
+| C | 11 | pacing / drama management | **REFUSED IN ITS PUSHED FORM ONLY.** `T-b` refuses a threshold that *produces* an outcome, `AX-5` a motion nobody wound, ED-IN-0011 a director that *adds*. ⚠ Each names a lawful sibling that is shipped or licensed: a band crossing **raises a Question** (`matter.py:260-277` → `world_q.py:234-238`), a clock **wound by `convene`** has handles, and a **subtract-only** director was ratified. Pacing is refused as something done *to* the player, not as a concern |
 | **D** | 12 | surfacing / legibility | ⚠ **SUBSTRATE READY, NO RENDER.** Every write carries `causes=[…]`; nothing reads it out |
-| D | 13 | curation / sifting | **REFUSED ON SALIENCE** — the comparator's signature takes `confidence` and `recency` *and nothing else*, structurally. And **a forgetting emits nothing**, so it cannot be witnessed |
+| D | 13 | curation / sifting | **REFUSED FOR MEMORY RETENTION, NOT FOR SELECTION.** The ledger comparator takes `confidence` and `recency` *and nothing else*, structurally (`04_CODE_ARCHITECTURE.md:972` row 39) — ranking a **memory** by importance is the refusal. ⚠ Ranking a **question** is shipped: `question_sources` order is called *semantic* by its own roster and decides `qs[0]` in 801 of 1,068 deliberations (`world_q.py:250-269`). Separately, **a forgetting emits nothing**, so it cannot be witnessed — an **I**, not a refusal |
 | D | 14 | retelling / discourse | **ABSENT** — no render, no artifact |
 
 **Set D is the weakest and its substrate is the best-prepared.** That is the single most actionable
