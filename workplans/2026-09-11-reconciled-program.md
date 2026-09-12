@@ -1,6 +1,6 @@
 # THE RECONCILED PROGRAM — every live item, in one order, across every lane
 
-## Status: PROPOSED (ED-IN-0215)
+## Status: **RATIFIED 2026-09-12 (ED-IN-0215)** — by the merge of PR #397 under `ED-1094`. ⚠ **SCOPED:** the merge ratifies **§3's ORDER and §1's supersession verdict**, and nothing else. §5's eleven rulings are unanswered, §7's six held-back items are still held, and **§0's claim to be the single owner of the ORDER across all lanes is contested** — `workplans/2026-09-11-arc-sequence-spine.md` positions 2–15 remain independently actionable, and `valoria_master_workplan_v7.md` §6 records that the collision is open and needs a commit rather than a paragraph.
 ## Owner: infrastructure / cross-cutting (IN lane)
 ## Supersedes: nothing outright. It becomes the SINGLE OWNER OF THE ORDER across all lanes,
 ## which `workplans/2026-09-11-arc-sequence-spine.md` (ED-IN-0212) owned for the IN-lane engine

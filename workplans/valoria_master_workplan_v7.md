@@ -1,6 +1,16 @@
 # Valoria — Master Workplan v7 (North-Star master: milestones, the queue sorted by who can answer it, lanes)
 
-## Status: **PROPOSED (ED-IN-0216)** — supersedes `valoria_master_workplan_v6.md` (CANON since 2026-07-05, ED-IN-0009/ED-IN-0011)
+## Status: **CANON — RATIFIED 2026-09-12 (ED-IN-0216)**, by Jordan's merge of PR #397 under `ED-1094`'s ratify-on-merge default. Supersedes `valoria_master_workplan_v6.md` (CANON 2026-07-05 → 2026-09-12, ED-IN-0009/ED-IN-0011)
+
+> **WHAT THE MERGE RATIFIED, AND WHAT IT DID NOT.** `CLAUDE.md` §2: *"Jordan's review-and-merge IS the
+> ratification — flip the `## Status:` line, the ledger `status`/`needs_jordan` fields and `CURRENT.md`
+> in that same merge, not as a later step nobody triggers."* The merge did not carry those flips, so
+> this is that step, triggered. **Ratified: this document as the master workplan** — §1's milestones,
+> §3's sort, §4's lane pointers, §5's governance. **NOT ratified, because the PR body held each back
+> loudly:** v6's **retirement** (deferred — see §6; v6 remains on disk and this supersession is of
+> authority, not of the file), the **ORDER collision** between the reconciled program and the
+> arc-sequence spine (open; a commit closes it, not a paragraph), and every `## Status:` line on the
+> documents §6 marks superseded, none of which moves.
 
 **as_of 2026-09-12**, working tree at `claude/repo-review-work-plans-2ly5xc` (base `main` `2d5ec4e`).
 Every figure below was **measured on this tree at that commit by running the instrument named beside
