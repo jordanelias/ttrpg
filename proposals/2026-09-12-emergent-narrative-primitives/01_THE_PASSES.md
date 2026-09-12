@@ -2,6 +2,16 @@
 
 ## Status: **PROPOSED (2026-09-12, ED-IN-0217). HELD BACK FROM RATIFICATION-ON-MERGE, IN FULL.**
 
+⚠⚠ **SUPERSEDED BY `proposals/2026-09-12-emergent-narrative-primitives-v2/` (same session, same
+`ED-IN-0217`).** This set applied the wrong test: it disposed of mechanics on **architecture rules** and
+**implementation facts** as though those refuse an idea, which they do not — and it never cited **`R2`**,
+the ruling that makes every refusal *instrumental, not terminal* and requires each to be **argued** against
+five terminal properties (`references/design_rulings_2026-09-06.md:37-50`). Its facts are largely sound and
+its citations reproduce; **its verdicts do not follow from them.** Kept as the audit trail. Read
+`…-v2/02_THE_RESCORE.md` for what changed and why, and `…-v2/01_THE_TEN.md` for the set that replaces this
+one.
+
+
 Companion to `00_INDEX.md`. This file carries the evidence; `02_PROPOSALS.md` carries what is
 proposed on it. Nothing here ratifies on merge, closes a row, or moves a `CURRENT.md` row.
 
@@ -163,32 +173,95 @@ the combat engine determines the result and the caller accepts it. See `02_PROPO
 
 ---
 
-## §4 · WHAT VALORIA CANNOT ADOPT AT ANY PRICE
+## §4 · WHAT A RATIFIED LINE REFUSES, AND ON WHAT GROUNDS
 
-Structural refusals, each with the ratified line that refuses it. These are not cost judgments.
-They are recorded here so a later session reading the documents does not reach for them.
+⚠ **This section previously read "WHAT VALORIA CANNOT ADOPT AT ANY PRICE" and asserted "these are not
+cost judgments." Both claims were wrong, and the error has a shape worth naming, because it is the
+easiest one to make in this repository.**
 
-| the primitive | the line that refuses it |
-|---|---|
-| **Any scheduler that makes the world act on a person** — MTTH as a hazard rate, the RimWorld storyteller, the L4D director, PbtA fronts, Façade's beat manager | **`AX-1`**, `architecture/meta/01_AXIOMS.md:71-74` — *"**ONLY A PERSON ACTS.** No institution, no faction, no threshold, no clock, no container, and no engine is ever the subject of a decision. An institution acts *by a named person at a venue*."* And `00_THE_METHOD.md:79` — *"whose act makes this happen? ⚠ **nobody's** → **you have found a narrator. Remove it.**"* |
-| **Any spendable or scored political currency held as a stock**; any stored settlement or faction meter — Approval, Resolve, Impatience, Hostility, legitimacy, unrest | **Jordan, R7**, `references/design_rulings_2026-09-06.md:169` — *"**no magnitude carrier is admitted at any scale. Every aggregate is DERIVED, none is PUSHED.**"* Enforced in code: `state/carriers.py:579` — *"S10.1 — a Rung owns NO social aggregate… EVERY ONE IS A QUERY"*; `:586` — *"L3 — every aggregate is a function, never a field."* |
-| **A threshold that produces an outcome** — RimWorld's mental breaks, Darkest Dungeon's resolve check at 100, Imperator's tyranny tail | **`T-b`**, `01_AXIOMS.md:284-287` — *"**A threshold may change what can be chosen; it may never produce an outcome.** From AX-1… a threshold that produced an outcome would be an actor."* What replaces it ships: a band crossing raises a **Question** (`queries/world_q.py:215-220`) and a person chooses. The axiom records that **19 of 50** surveyed arcs wanted exactly that |
-| **Salience-ranked selection, anywhere** — Ruskin's rule database, salience-based narrative, the sifting program's ranking layer | `architecture/meta/07_DYNAMICS.md:182-184` — *"the correct bound is **who could have perceived this**, never **how important it is**. Bound it by importance and you have built salience-ranked memory, which is a narrator deciding what matters — **the actor the design exists to refuse.**"* Enforced **by signature**: `04_CODE_ARCHITECTURE.md:972` row 39, the comparator takes `confidence` and `recency` *and nothing else* |
-| **Any scheduled decay or recovery of a social quantity** — mood drift, approval decay, relationship cooling, centre-seeking status | **structural by phase membership** — MATTER moves no social quantity, DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven: *"**THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN**"* |
-| **A fourth clock of any kind** — a loss timer, an election clock, a Queen | **`AX-5`**, `01_AXIOMS.md:151-165` — three motions: matter, bodies, the fading of memory. *"Nobody wound any of the three, and you cannot bribe silt."* ⚠ **and the axiom itself flags that the list may be incomplete** — see `03_PROVENANCE.md` §3 |
-| **Auto-allocating labour to zones** (D2's missing rung; D3's work areas) | **`AX-1`** — a zone that allocates persons is a container deciding a person's options. Already cut at `proposals/2026-09-10-…/05_COLLISIONS_AND_RESIDUE.md:157-160` |
-| **Any surfacing of dramatic structure** — progress clocks, tension meters, act labels, countdowns (D1 req. 9) | the NOT-list (`narrative_engine_design_v1.md:117-121`), C2 lint, and `v2:394-402` — *"**never a meter** … no quantized horizon ever surfaces."* **RATIFIED, ED-IN-0011** |
-| **A director that shapes rather than rations** | held back so Jordan would rule it, then **ratified at subtract-only, ED-IN-0011** — and severed against its own reflexivity by fixture F8: *"if forecasting C raises P(C), the loop is live and the build fails"* |
-| **A world-truth readout on the main view** (D3 Directive 2's second test) | `04_CODE_ARCHITECTURE.md:751` §C.11, the explanation contract — *"there is no referee, so the engine inherits the referee's SECOND job"* — and at `:765`, verbatim: *"**The engine owes the ARITHMETIC of what the character already holds, and nothing else.**"* R7 makes it structural rather than a courtesy: *"the player sees their character's **ESTIMATE**, never the true aggregate"* |
-| **Any GM-arbitrated element** | `ARCHITECTURE_V2.md:94` refuses *"a GM / referee adjudicating"*, 3 cases. `CLAUDE.md`'s own head: **there is no GM — the engine resolves everything.** This is why parts of the canonical prose layer cannot simply be lifted: several of its mechanisms name a GM as the resolver |
+**Only Jordan can say *never*.** A ratified line does not close a question; it says **what would have
+to change and who decides**. And `CLAUDE.md` §0.05 is explicit about the direction of authority: *"If
+canon and code disagree, decide and then CHANGE THE CODE — never declare the prose authoritative."*
+**A fact about how the tree is currently written is therefore not a refusal of anything.** It is a
+price. Presenting it as a refusal rejects a mechanic for the convenience of the incumbent
+implementation, which is the opposite of a design judgment.
 
-⚠ **One qualification that keeps two of these honest.** The Churn Engine is a `.md`, and `grep` for
-`light_function|stake_horizon|convergence_candidate|foreclosure_countdown` over every `.py` in the
-tree returns **zero files**. Under `CLAUDE.md` §0.05 it is **reference for game mechanism**. What it
-binds as is **agent instruction** — and a ruled refusal of a build is exactly that. So the
-director and meter refusals bind *a session from building these*; they do not refuse *the game's
-code*, because there is no code. `AX-1`, `T-b` and the salience refusal are different in kind: they
+**So every row below carries its GROUNDS — and the cut that matters is NOT "ruled versus unruled". It
+is whether the commitment is about THE GAME or about THE CODE.** (RULED by Jordan, this session:
+*"Even the design commitments are to be ignored if they are directly attached to code (eg no
+aggregates on a query)."*)
+
+| grounds | what it is | what it may do to a gameplay idea |
+|---|---|---|
+| **G — a commitment about THE GAME** | what the player experiences; whether a narrator exists; what is allowed to act; what the player is shown | **may refuse it.** This is a real design judgment, and it is still **Jordan's to revise** — citing one opens a conversation, it does not close one |
+| **A — a commitment about ARCHITECTURE** | how state is **stored or computed**. R7/`L3`'s *"every aggregate is DERIVED, none is PUSHED"*; `carriers.py:579/586`; a `tie` on the lower id vs two edges; a comparator's signature | ⚠ **NOTHING. NO VETO AT ALL.** **A player cannot tell a field from a function.** Whether Approval ends up a stored number or a computed Query is settled *after* the gameplay question, and may never settle it |
+| **I — an implementation fact** | *"nothing produces it"*, *"no code reads it"*, *"no step exists in which it could run"*, *"0 of N cases carry one"* | ⚠ **NOTHING.** Not a refusal — **a work estimate** |
+
+⚠ **Two of the three grounds cannot refuse anything, and between them they were carrying most of this
+suite's negative verdicts.** The single largest category in the seven documents — spendable political
+currency and settlement/faction meters, and everything derived from them — was refused on **A**. That
+refusal is **void**, and the family returns to be judged on what it does for the game. `§4.1` below
+records what that reopens.
+
+**Five rows in the previous version of this table were wrong.** Each is corrected in place and marked
+⚠. **Every one of the five made the design look more closed than it is.**
+
+| the primitive | grounds | the line, and what it actually refuses |
+|---|---|---|
+| **Any scheduler that makes the world act on a person** — MTTH as a hazard rate, the RimWorld storyteller, the L4D director, PbtA fronts, Façade's beat manager | **G** | **`AX-1`**, `01_AXIOMS.md:71-74` — *"**ONLY A PERSON ACTS.** No institution, no faction, no threshold, no clock, no container, and no engine is ever the subject of a decision."* And `00_THE_METHOD.md:79` — *"whose act makes this happen? ⚠ **nobody's** → **you have found a narrator. Remove it.**"* This refuses what the mechanic **does**, not how it is coded |
+| ⚠⚠ **A spendable political currency, or any settlement/faction meter** — Approval, Resolve, Impatience, Hostility, legitimacy, unrest | **A** — ⚠ **NOT A REFUSAL** | **R7** (`design_rulings_2026-09-06.md:169`) — *"no magnitude carrier is admitted at any scale. **Every aggregate is DERIVED, none is PUSHED**"* — and `carriers.py:579/586` are **architecture**: they rule on where a number LIVES. ⚠ **This row has now been wrong twice, each time less wrong, and the second attempt is instructive.** It first refused the idea outright. It was then narrowed to *"refused as stored; the derived form is ruled in"* — still wrong, because that lets a storage rule shape a gameplay verdict. **The correct verdict is that R7 has nothing to say here.** Approval, Resolve, Impatience, Hostility, legitimacy and unrest are **live candidates to be judged on what they do to play**, and the field-or-function question is downstream of that decision, not upstream of it. **This is the largest reopening in the suite** — see `§4.1` |
+| **A threshold that produces an outcome** — RimWorld's mental breaks, Darkest Dungeon's resolve check at 100, Imperator's tyranny tail | **G** (from `AX-1`) | **`T-b`**, `01_AXIOMS.md:284-287` — *"A threshold may change what can be chosen; it may never produce an outcome… a threshold that produced an outcome would be an actor."* **And the substitute ships:** a band crossing raises a **Question** (`queries/world_q.py:234-238`) and a person chooses. The axiom records **19 of 50** surveyed arcs wanting exactly that |
+| ⚠ **Salience-ranked *memory retention*** — not salience-ranked selection generally | **G** on its reason; **A** on its enforcement | `07_DYNAMICS.md:182-184` — *"the correct bound is **who could have perceived this**, never **how important it is**… a narrator deciding what matters."* ⚠ **The previous row said "salience-ranked selection, ANYWHERE", and that is false of this tree.** Questions **are** ranked before a budget-bounded person answers them: across sources by `rosters.yaml`'s `question_sources` order, *whose own note calls that order **semantic***, and within a source by lexicographic order over content hashes — measured deciding `qs[0]` in **801 of 1,068 deliberations** (`queries/world_q.py:250-269`, `H-54`). What is refused is ranking **a memory** by importance. Ranking **a question** is shipped, and its within-source half is **undeclared**, which is a live hole rather than a design property |
+| ⚠ **Scheduled decay or recovery of a social quantity** — mood drift, approval decay, relationship cooling | **I** — ⚠ **NOT A REFUSAL, and the claim was also FALSE** | ⚠ **The previous row read *"structural by phase membership — THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN"*. There is such a step, and it executes.** MATTER matures act-declared stages at a later tick and writes `Record.matured` (`loop/matter.py:55-109`) — *"the only mechanism in the design by which one season's act reaches into a later one WITHOUT anybody acting again"*, and it **stops if the maker is gone**. So the honest statement is two-part: an **unauthored** drift is refused by `AX-5` (**G**), and an **act-declared** recovery is *licensed*, lawful, and merely **unbuilt for social quantities** — `Tenure` has no `term` field (`verb_table.yaml:421`). This row was the clearest case of an implementation fact wearing a refusal's clothes |
+| ⚠ **An UNWOUND clock** — a hazard rate, a drift nobody set | **G** | **`AX-5`**, `01_AXIOMS.md:151-165`: three world motions — matter, bodies, the fading of memory. *"Nobody wound any of the three, and you cannot bribe silt."* ⚠ **The previous row said "a fourth clock of ANY KIND — a loss timer, an election clock, a Queen", and `T-c` licenses exactly those.** `T-c` (`:304-316`) states the consequence as the design's **best single property**: a wound clock can be *"bribed, delayed, burned, or killed."* **And the licensed form ships:** a `Date` written only by `convene` (`write_matrix.yaml:98`, `loop/effects.py:188`), firing at `loop/calendar.py:31`, raising a Q1 question at `world_q.py:196`. An election clock **with a nameable convener is admissible.** The axiom also flags that its list of three may be incomplete — `03_PROVENANCE.md` §3 |
+| **Auto-allocating labour to zones** (D2's missing rung; D3's work areas) | **G** (from `AX-1`) | a zone that allocates persons is a container deciding a person's options. Already cut at `proposals/2026-09-10-…/05_COLLISIONS_AND_RESIDUE.md:157-160` |
+| **Surfacing dramatic structure in the interface** — progress clocks, tension meters, act labels, countdowns (D1 req. 9) | **G** | the NOT-list (`narrative_engine_design_v1.md:117-121`), C2 lint, `v2:394-402` — *"**never a meter** … no quantized horizon ever surfaces."* **RATIFIED, ED-IN-0011.** Note this refuses a **readout**, not a mechanism: the quantity may exist as a Query and simply never be shown |
+| **A director that shapes rather than rations** | **G** | held back for Jordan, then **ratified at subtract-only, ED-IN-0011** — and severed against its own reflexivity by fixture F8: *"if forecasting C raises P(C), the loop is live and the build fails"* |
+| **A world-truth readout on the main view** (D3 Directive 2's second test) | **G** | `04_CODE_ARCHITECTURE.md:751` §C.11 — *"there is no referee, so the engine inherits the referee's SECOND job"* — and `:765`: *"**The engine owes the ARITHMETIC of what the character already holds, and nothing else.**"* R7: *"the player sees their character's **ESTIMATE**, never the true aggregate"* |
+| **Any GM-arbitrated element** | **G** — the project's premise | `ARCHITECTURE_V2.md:94` refuses *"a GM / referee adjudicating"*, 3 cases; `CLAUDE.md`'s head: **there is no GM — the engine resolves everything.** This is why parts of the canonical prose layer cannot be lifted: several of their mechanisms name a GM as the resolver |
+
+**Tally of the grounds: 9 G · 1 A · 1 I.** Nine rows are genuine design judgments about what a mechanic
+does to the game, and Jordan may revise any of them. **Two rows refuse nothing** — and one of those two
+was the ground for the corpus's single largest family.
+
+---
+
+### §4.1 · WHAT THE VOID DISPOSALS REOPEN
+
+The two rows above that refuse nothing were not doing small work. **R7 was the stated ground for eight
+further disposals in `05_VALORIA_PLOTTED.md` §7**, and those return with it:
+
+| the mechanic | what it was disposed of with | what it is now |
+|---|---|---|
+| **Spendable political currency** (`A1`) | *"a stock is a magnitude carrier"* | **open.** To be judged on whether spending standing to move a decision is a good decision to give a player |
+| **Approval slope with a punitive tail** (`A4`) | *"the slope is a stored aggregate"* | **open on the slope**; the *tail* stays refused on `T-b` (**G**) — a threshold may raise a Question, never produce an outcome |
+| **Currency as the victory condition** (`A3`) | *"no score exists"* | **open.** The disposal was an `I` |
+| **Dominance with a gap condition** (`E1`) | *"needs a score"* | **open** — and `standing_of` already computes a gap, so the shape is present |
+| **Tile painting with severable supply** (`D1`) | *"a stored aggregate on a Rung"* | **open** |
+| **The inverse-linked meter triangle** | *"three stored global meters… the tree's most comprehensive refusal"* | ⚠ **open, and it may be the corpus's strongest single offer.** The suite's own note calls it the documents' *"most sophisticated pressure design"*. Three quantities that move against each other is a **gameplay** proposition; where the three numbers live is not |
+| **Twin-population tension** | *"two stored aggregates"* | **open** |
+| **Threshold immigration on standing** | *"a settlement approval aggregate"* | **open on the standing**; the *threshold firing the migration* stays refused on `T-b` (**G**) |
+| **Scheduled recovery of a social quantity** | *"no step exists in which a restoring timer could run"* | **open, and the claim was false** — MATTER matures act-declared stages (`loop/matter.py:55-109`) |
+
+**Nine mechanics, reopened by correcting the grounds rather than by any new argument.** Each must now
+win or lose on NERS, on emergent narrative, on the decision it gives a player, and on whether it can be
+said in this design's vocabulary — which is the only test that was ever supposed to apply.
+
+⚠ **One qualification that keeps two of the G rows honest.** The Churn Engine is a `.md`, and `grep`
+for `light_function|stake_horizon|convergence_candidate|foreclosure_countdown` over every `.py` in the
+tree returns **zero files**. Under §0.05 it is **reference for game mechanism**; what it binds as is
+**agent instruction**, and a ruled refusal of a build is exactly that. So the director and
+dramatic-structure rows bind *a session from building these*; they do not describe the game's code,
+because there is no code. `AX-1`, `T-b` and the memory-comparator refusal are different in kind — they
 are carried by axioms with theorems, by a comparator signature, and by a `Question` that executes.
+
+**How to read this section, stated because two earlier versions invited the opposite.** A row marked
+**G** is a place where adopting the mechanic means asking Jordan to revise a commitment about the game —
+a real conversation, and sometimes one worth having. A row marked **A** or **I** is **not a refusal**:
+the mechanic is open, and what looks like a wall is either a storage decision that comes later or an
+estimate of work. **The only question this suite should ever have been asking is whether a mechanic
+improves the game.** Where these tables reached for a ratified line instead, they were answering an
+easier question.
 
 ---
 

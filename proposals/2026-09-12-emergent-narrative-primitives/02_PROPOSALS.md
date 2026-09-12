@@ -2,6 +2,16 @@
 
 ## Status: **PROPOSED (2026-09-12, ED-IN-0217). HELD BACK FROM RATIFICATION-ON-MERGE, IN FULL.**
 
+⚠⚠ **SUPERSEDED BY `proposals/2026-09-12-emergent-narrative-primitives-v2/` (same session, same
+`ED-IN-0217`).** This set applied the wrong test: it disposed of mechanics on **architecture rules** and
+**implementation facts** as though those refuse an idea, which they do not — and it never cited **`R2`**,
+the ruling that makes every refusal *instrumental, not terminal* and requires each to be **argued** against
+five terminal properties (`references/design_rulings_2026-09-06.md:37-50`). Its facts are largely sound and
+its citations reproduce; **its verdicts do not follow from them.** Kept as the audit trail. Read
+`…-v2/02_THE_RESCORE.md` for what changed and why, and `…-v2/01_THE_TEN.md` for the set that replaces this
+one.
+
+
 ⚠ **ED-1094 does not apply to this file.** Merging it ratifies nothing. Every entry is a design
 object for Jordan to accept, amend or refuse. Landing this directory changes no `## Status:` line,
 no ledger row, no `CURRENT.md` row and no code.
