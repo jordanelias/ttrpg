@@ -1,4 +1,4 @@
-# The ten — each stated by an agonist, attacked by an antagonist, closed with its residual
+# The set — each stated by an agonist, attacked by an antagonist, closed with its residual
 
 ## Status: **PROPOSED (2026-09-12, ED-IN-0217). HELD BACK FROM RATIFICATION-ON-MERGE, IN FULL.**
 
@@ -54,8 +54,35 @@ it; it is not built.
 **RECONCILIATION.** A **retrospective, per-person, label-free** render over `causes[]`, bounded by what
 that person witnessed.
 
+⚠ **THE OBJECTION THIS PROPOSAL DOES NOT ANSWER, AND IT IS THE SERIOUS ONE.** Supplied by an outside
+integration document (`04_PROVENANCE.md` §7) and adopted here rather than deflected: **the record's premise
+is contradicted by how players treat the records that already exist.** The nearest shipped analogues —
+Dwarf Fortress's legends mode, Tropico's almanac — are, on the research corpus's own accounts, used by a
+minority of players willing to work for it. And the one case where a record demonstrably *functions* is
+Banished's **age pyramid**: a graph, read at a glance, **whose shape is the argument**. That is not prose.
+
+**So the form is unproven, and the argument for it here is analytic** — §C.11 *obliges* the "why", which
+establishes that the engine owes an explanation, **not that a line of templated text is how to pay it.**
+Three consequences, taken rather than argued around:
+
+1. **The record must be shaped, not just written.** A per-person causal walk that renders as a wall of
+   lines fails the same way the almanac does. What the age pyramid has is a **shape the eye reads**; the
+   chronicle needs its equivalent, and finding it is design work this proposal does not contain.
+2. **The discipline is in what is EXCLUDED.** If every write is rendered, nothing is legible. `causes[]` is
+   populated at *every* write, so the raw graph is exactly the undifferentiated log that fails.
+3. **The cheap falsifier, and it precedes the design.** Build the record and a reason table in a stub —
+   no economy, a handful of delegates, refusals, and the record — and **hand one player another player's
+   record.** Can they tell the story of that run from it, unaided? That test costs a fraction of any
+   proposal here and it settles the premise all of them share.
+
+⚠ **And it is a shared premise.** Proposal 11 has nothing to query without this, proposal 2's suspicion
+has nowhere to become visible, and a run's carry-over has nothing to carry. **Integration concentrates
+failure, and this is where it concentrates.** Stated as the cost of the set's coherence rather than
+presented as elegance.
+
 **Grounds:** `G` on the anticipation half (upheld, scoped); `I` on everything else.
-**`I` cost:** a render. No carrier, no verb, no axiom. The data has been accumulating this whole time.
+**`I` cost:** a render — plus the shaping question above, which is real design work and not a line of
+templated text. No carrier, no verb, no axiom; the data has been accumulating this whole time.
 **What it buys.** **R-WORLD becomes legible** — the half of NERS with no player in it currently produces
 hooks that nobody can perceive. A steward who embezzled (proposal 3), a seat that changed hands, a term
 that lapsed (proposal 4): each is a hook *only if someone can find out*. **E-LEGIBILITY**: the design's
@@ -417,6 +444,73 @@ narratively loaded object available here.
 
 ---
 
+---
+
+## 11 · THE WRIT — SIFTING AS A PLAYER'S VERB
+
+### *the one idea an outside document contributed that this session never reached, and its substrate is nearly built*
+
+**AGONIST.** In the research literature a **sifter** is an authoring instrument: a query run over a
+simulation's event log to find fragments shaped like a story, offered to a designer or a writer. **Make it
+an institution inside the fiction and it becomes a player's verb.** A player — or a rival — serves a
+**writ**: a pattern matched against the causal record.
+
+> *a delegate who received a posting shortly after making a gift, and whose district's yields then fell
+> twice*
+
+What comes back is **evidence** — carrying a strength, a believability and a decay — supporting a
+dismissal, a prosecution, a restitution or a public accusation. **Writs cost. Writs can return nothing.
+A writ served on a loyal delegate costs loyalty. And rivals serve them against you, over the same
+record.** An ordinary strategy game's log is inert; here the player's principal instrument against a
+subordinate is *reading the record correctly*, and their rival's principal instrument against them is the
+same.
+
+**Why this belongs in this suite rather than in a research document.** Proposal 1 makes the record
+*readable*. This makes it **playable** — and it is the difference between a chronicle the player consults
+and one they *use*. Without it, proposal 1's ledger has exactly the problem Objection 1 below names: it is
+a thing to look at.
+
+**And the substrate is closer to complete than anything else in this set.** Checked against the tree:
+
+| the writ needs | the tree has |
+|---|---|
+| a causal graph to query | `Event.causes[]` written at **every** write; `queries/world_q.py::occasioned_by` (`:273-352`) already reads it. Its own docstring calls the chain *"the one that is actually the game"* and records it *"built end to end except for this one edge"* (`N3`, measured: 60 act-Events, 0 resolving to a question) |
+| an institution that opens an inquiry | **`open_case`** — `writes: ["Record.exists", "Record.stages"]`, emits `case.opened` / `case.refused`, `requires: "the act DECLARES the stages and their terms"` (`verb_table.yaml:373-382`). ⚠ **And its eligibility is swept with `own` as an arm**: *"`own` is a different game (anyone may open a case), which is why it is swept rather than chosen"* |
+| evidence that can be strong, false and perishable | **`Record`** carries `forgery_quality`, `subject_matter`, `ttl` and `stages` (`state/carriers.py:414-423`); `Claim` carries `source`, `confidence` and `when`, and confidence **decays at MATTER** |
+| a term that ripens | **`Record.matured`** — ruled by Jordan 2026-09-10, *"add `Record.matured`, write it at MATTER"*, on the grounds that *"**THE MATRIX ROW IS THE GAME**"* |
+| someone to adjudicate | **`determine`** — declared, `grade: absent`, `judging_set` **raises**. This is `H-32`/`W7` |
+
+**ANTAGONIST.** Three attacks. One is fatal to the naïve form and names the real design problem.
+
+1. **"A query language is unshippable."** — ⚠ **Lands, and it is the whole difficulty.** The answer is a
+   **pattern deck**: a small set of pre-written patterns with slots the player fills — *this delegate,
+   this district, this window of years* — composed from a fixed set exactly as a storylet is selected
+   rather than authored. **The deck's size is the central unknown**: too few and every session runs the
+   same three writs; too many and it is a language again.
+2. **"The ledger must be prose for a reader and structure for a matcher, and those pull apart."** —
+   **Lands.** It means proposal 1 and this one must be specified **together**, because the writ constrains
+   the record's line format. Building the writ late means rewriting the record.
+3. **"Auditing makes delegates disloyal, so the player never audits and the sub-game deletes itself."** —
+   **Fails, and the failure is the idea's point.** A writ is not maintenance with a downside; it is **a
+   bet with an information payoff**, and **rivals are serving writs against you**, so declining to
+   investigate is not a free strategy.
+
+**RECONCILIATION.** A pattern deck served against the record, returning perishable evidence, available to
+rivals, and specified jointly with proposal 1.
+
+**Grounds:** `I` throughout. Nothing `G` refuses it, and nothing `A` is in the path — it stores no
+aggregate and pushes no magnitude; it *reads* a graph the tree already writes.
+**`I` cost:** the pattern deck (content), a matcher over `causes[]`, and `determine`'s effect body — which
+is `H-32`/`W7`, already the tree's named gap.
+**What it buys.** **R-CHOICE** — *reading the record correctly* becomes a skill, and the decision *"is this
+worth a writ?"* is a real one because it can return nothing. **R-WORLD** — a rival investigating you is a
+hook that needs no author, and `AX-1` is satisfied natively because **a person serves the writ**.
+**S-UP** — a grievance becomes a **prosecution** carried by an accountable party who spends something,
+which is `skills/ners/SKILL.md` §7.1's S-UP test almost word for word. And **E-LEGIBILITY**: evidence with
+a provenance chain is intuitable in a way a loyalty bar is not.
+**Falsifier.** Across ten sessions, what fraction of writs return nothing? **Below about a third, the
+patterns are too loose and the record is being confirmed rather than interrogated.**
+
 ## §S · THE SET AT A GLANCE
 
 | | proposal | grounds | `I` cost | waits on |
@@ -431,7 +525,14 @@ narratively loaded object available here.
 | **8** | a person-referent route | `I` — Layer-1 conformance | one clause | nothing |
 | **9** | founding | `G` licenses (`R4`) | one verb | nothing |
 | **10** | casus belli as a `Record` | `I` ×2 | one effect body | nothing |
+| **11** | **the writ — sifting as a player's verb** | `I` throughout; nothing `G` or `A` in the path | a pattern deck, a matcher, `determine`'s effect body | **1** (jointly specified) |
 
-**Not one of the ten requires revising a `G`.** Five are *licensed and unbuilt* — a ratified line already
+**Not one of the eleven requires revising a `G`.** Five are *licensed and unbuilt* — a ratified line already
 asks for them. Three need no new object. One is a question for Jordan. **The refusals that do hold are in
 `03_WHAT_SURVIVES_R2.md`, each argued rather than cited, as `R2` requires.**
+
+⚠ **Proposals 1 and 11 must be specified together, and 1 carries the suite's single point of failure.**
+The writ constrains the record's line format, so building it late means rewriting the record. And if the
+record's *form* does not work — the objection inside proposal 1 — then 11 has nothing to query, 2's
+suspicion has nowhere to surface, and a carry-over has nothing to carry. **The falsification stub in
+proposal 1 is therefore the first thing to build, before any design in this set.**

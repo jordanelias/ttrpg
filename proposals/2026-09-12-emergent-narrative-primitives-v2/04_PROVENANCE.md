@@ -130,6 +130,58 @@ figure they carry stays `[OPEN — Jordan tuning]`.
 
 ---
 
+## §7 · THE ADJUDICATION OF AN OUTSIDE INTEGRATION DOCUMENT
+
+An eighth document — *"The Third Strand: integrating the emergent-narrative mechanics with the twenty-game
+frame"* (`sha256 02458c7e…`, 78,634 bytes) — was supplied after v2 was written. It integrates the two
+**narrative** documents with the twenty-game consolidation, a seam the earlier seven left open. **It never
+mentions Valoria**, so it cannot be wrong about this tree — only uninformed about it. Adjudicated against
+this session:
+
+**7.1 · Seven of its nine modules are items this session reached independently, or things the tree already
+ships.** That is corroboration, not duplication, and it is the strongest warrant available for the set:
+
+| its module | this session |
+|---|---|
+| **M5** the causal ledger — *"installed by all five proposals… build it alone, first"* | **proposal 1**, ranked first, for the same reason. Also reached independently by **both** read-only critics |
+| **M1** the three-band order, middle band *"roughly 40%"* | **proposal 6** — measured 19% Partial against the corpus's 41–45% |
+| **M2** disposition drift | `H-62`/`W-F`, Jordan's, planned to the YAML |
+| **M3** belief in transit — *source · strength · believability · decay* | **`Claim(subject, predicate, value, when, source, confidence)`** — the carrier already has all four |
+| **M4** the cohort clock | **proposal 5**, and `R4` route (2) |
+| **M7** perishable allegiance | v1's `B2`; Pax Pamir's punished switching |
+| **M8** the stale report — *"nothing anywhere shows the player a stale state"* | ⚠ **Valoria's DEFAULT read is stale.** `LedgerReader` returns the stored value, not world truth — one of three places this tree is *ahead* of the corpus |
+
+**7.2 · One module is genuinely new, and it is now proposal 11.** **M6, the writ** — sifting turned from an
+authoring instrument into a player's verb. Neither this session nor either critic produced it, and its
+substrate turns out to be nearly built: `causes[]` at every write, `occasioned_by` reading it, `open_case`
+declared with `own` in its eligibility **sweep**, `Record` carrying `forgery_quality`/`ttl`/`stages`, and
+`Record.matured` ruled by Jordan on the grounds that *"the matrix row is the game"*.
+
+**7.3 · Its Objection 1 is aimed at this suite's highest-ranked proposal and it lands.** The record's value
+is argued analytically; the one case where a record demonstrably *functions* is a **graph read at a glance**,
+not prose. **Adopted into proposal 1**, together with its falsification stub, which is a better test than
+v2 offered.
+
+**7.4 · Where it repeats this session's own error, one level up.** Its Part 5 grades on a rubric whose
+criterion **C7 "AI dependence"** penalises a proposal *for needing an agent layer* — P1 scores 3 *"because
+it requires an agent layer"*. Under `R2` that is a **cost**, not a quality: the same move as refusing a
+mechanic because the code does not have it, relocated into a scoring column. Its own ranking half-corrects
+for this in prose (*"P3 is deliberately not ranked first… scoring a subsystem on a rubric built for games
+flatters it"*), which is the right instinct applied to one row and not to the criterion.
+
+**7.5 · Its internal arithmetic checks, which v1's did not.** Verified: the fourteen-requirement tally
+(3 occupied / 4 partial / 7 absent) reconciles against its own table; all five grade rows re-sum and fall in
+their stated bands; and the module-to-proposal matrix reconciles cell by cell against each proposal's
+declared module list. It also carries seven `[FIXED:]` entries, four independent objections, and a
+`[SELF-AUTHORED — bias risk]` tag, and it states its own yield honestly as *"one new design, one new
+mechanism, one repair, one specification, one partial repair."*
+
+**7.6 · What is NOT adopted.** Its five composed proposals are designs for *other games* — a valley with
+eight stewards, a city-state of thirty holders, a multiplayer migration map. They are not Valoria and are
+not proposed for it. What transfers is **M6**, **Objection 1**, and the corroboration in 7.1.
+
+---
+
 ## §6 · WHAT v2 DOES NOT ESTABLISH
 
 - **No proposal here has been built, so every one is `paper` as a candidate.** The `I` costs are estimates

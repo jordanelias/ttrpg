@@ -90,9 +90,18 @@ item was a clause. Full statements in `01_THE_TEN.md`.
 | **8** | **A person-referent route** (v1's `P1`, kept) | any act directed at another person: court, discredit, poach, audit | one clause |
 | **9** | **Founding** — `Rung.exists` has no producer, and `R4` asked for one | map variation across playthroughs; NPC-founded settlements | one verb; the matrix row is declared |
 | **10** | **Casus belli as a `Record`** | a war with a reason others can be told about, forged, or destroyed | `succeed`/`forge` declared |
+| **11** | **The writ — sifting as a player's verb** | serve a pattern against the record and get back perishable evidence; **your rivals serve them against you** | a pattern deck + a matcher; `causes[]`, `open_case` and `Record` are already there |
 
-**Five of the ten are licensed-and-unbuilt**, meaning a ratified line already *asks* for them. Three need
+**Five of the eleven are licensed-and-unbuilt**, meaning a ratified line already *asks* for them. Three need
 no new object at all. **None requires revising a G.**
+
+⚠ **Proposal 11 came from outside this session** — an eighth document integrating the two narrative sources
+with the twenty-game frame, adjudicated in `04_PROVENANCE.md` §7. Seven of its nine modules are items this
+session reached independently or things the tree already ships, which is corroboration; **one was new**, and
+it is 11. That document also supplies **the serious objection to proposal 1** — the record's *form* is
+unproven, and the one record shown to work is a graph read at a glance rather than prose — which is carried
+into proposal 1 rather than deflected, along with its falsification stub. **That stub is the first thing to
+build, before any design in this set.**
 
 ---
 
@@ -101,7 +110,7 @@ no new object at all. **None requires revising a G.**
 | file | what it holds |
 |---|---|
 | `00_INDEX.md` | this — `R2`, the `G`/`A`/`I` grounds, the R7 misquotation, the set |
-| `01_THE_TEN.md` | the ten proposals, each **agonist → antagonist → reconciliation**, with grounds and an `I` cost |
+| `01_THE_TEN.md` | the proposals, each **agonist → antagonist → reconciliation**, with grounds and an `I` cost |
 | `02_THE_RESCORE.md` | v1's twenty-seven dispositions and Part E's seventy-six rows re-scored `G`/`A`/`I`, and the tally re-derived counting **only G** |
 | `03_WHAT_SURVIVES_R2.md` | the refusals that hold — each **argued** against the five properties, which is the null result `R2` requires |
 | `04_PROVENANCE.md` | method, the two independent read-only audits, every verification run, and what could not be established |
