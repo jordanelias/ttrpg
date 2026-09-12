@@ -125,6 +125,27 @@ does, over 177,170 candidates — **and non-zero after.**
 game."* P1 is the channel; `W-F` is the reaction; **neither works without the other, and the tree
 currently has the second planned and the first unnamed.**
 
+⚠ **THE STRONGEST WARRANT FOR THIS CLAUSE IS NOT AN ARGUMENT BUT A CONFORMANCE GAP, AND IT IS ENTIRELY
+RATIFIED.** Four steps, each cited, no design judgment between them:
+
+1. **A `Tenure` is owned by its subject.** `state/carriers.py:387-388` quotes the class's own
+   docstring — *"S15 — THE ONE EDGE. Owned by its SUBJECT (S15.1)"* — and `:378`: *"a Person owns every
+   Tenure whose subject they are."*
+2. **A `hold`'s subject must be a Person.** Ratified Layer 1,
+   `architecture/meta/04_CODE_ARCHITECTURE.md:181` row 12: `hold` with a Proposition subject →
+   **"`hold`'s subject is a Person, only"**, reasoned *"an edge whose subject cannot act is not a
+   relation."*
+3. **A computed act's subject is its question's referent.** `decision/options.py:307-310` — `subject`,
+   `to` and `site` are *"three cell-side names for the one thing the person was asked about."*
+4. **No question source produces a person as a referent** — the measurement above.
+
+**Therefore no computed act can create a `hold`, and the measured *0 live `hold` tenures across 86
+worlds* is not a thin fixture but the arithmetic of steps 2 and 4.** Layer 1 already requires a Person
+subject; the running grammar cannot supply one. **P1 is the clause that makes ratified Layer 1
+satisfiable**, which is a stronger claim than the agonist above makes for itself, and it moves this
+proposal from *a good idea* to *a Layer-1/Layer-2 conformance repair* — the one category `CLAUDE.md`
+§0's step-5 gate says to take without escalating.
+
 ---
 
 ## P2 · `tie / knot`'s EFFECT BODY — AS TWO DIRECTED EDGES, WITH ITS NOTE CORRECTED
@@ -320,6 +341,109 @@ instrument in the tree can grade a stance magnitude, and this document does not 
 
 ---
 
+## P6 · `tell` SHOULD CARRY THE CLAIM IT ALREADY REQUIRES
+
+### *one payload field and one deposit branch · the seam where a telling loses its content*
+
+**AGONIST.** `tell`'s precondition and its effect disagree about whether a telling has content, and
+the precondition is the one that is right.
+
+The verb requires the teller to **hold a claim on the subject** — `verb_table.yaml:499`, and
+`_req_tell` verbatim: `any(c.subject == subj for c in teller.ledger)`. So at the moment of speaking,
+the teller demonstrably holds `(subject, predicate, value, confidence)`. The verb then declares
+`writes: []` at every degree and emits `news.told` (`:505-513`), and the witness layer deposits, at
+`loop/witness.py:137`:
+
+```python
+c = Claim(cid, pid, subj, e.kind, True, w.tick, src, conf, "own", self.round)
+```
+
+Three of the claim's fields are filled from the *event* rather than from the *claim the verb just
+required*:
+
+| field | filled with | what the teller actually held |
+|---|---|---|
+| `predicate` | `e.kind` → the string `news.told` | `is_traitor`, `grade`, `complied` — the thing asserted |
+| `value` | hard-coded `True` | the teller's assertion, which may be false |
+| `confidence` | `confidence_default`, read once per barrier (`:75`) | the teller's own confidence, already decayed by age |
+
+**So the precondition reads the claim and the effect discards it.** What propagates is *that a telling
+happened, about B, and it is true*. `epistemic.py:180-182` rules deliberately that the **subject**
+travels — *"A claim minted from a telling is about WHAT WAS TOLD; the teller is not the news"* — and
+the subject is the only part that does.
+
+**The carrier needs no change.** `Claim.predicate` is `str` and `Claim.value` is `Any`
+(`state/carriers.py:142-143`) — free-typed, deliberately.
+
+**And the harness already constructs exactly the claims this would produce, as its own specification
+of required behaviour:**
+
+| probe | `tests=` | what it hand-builds |
+|---|---|---|
+| **P4** `S3-L2` | *"a character must be able to believe something false and act on it as if true"* | `("p_high", "is_loyal", True, "firsthand")` **and** `("p_high", "is_loyal", False, "told_by")` |
+| **P16** `S20` | *"how a character is seen must be able to differ between people who know different things"* | `is_traitor True/told_by` against `is_traitor False/firsthand`; returns *"legitimacy is PER-KNOWER and **flips at TELLING speed**"* |
+| **P22-class** | a false report of compliance | `complied True/told_by` against `complied False/firsthand` |
+
+⚠ **Every one of those probes is graded `by="construction"`.** They pass by building the ledger by
+hand. **No telling in the running loop can produce any of them** — a telling produces
+`news.told / True / 100`. P16's PASS text asserts that legitimacy *"flips at TELLING speed"*; the
+ledger it asserts it on is one no telling could write. `CLAUDE.md` §0.1 pt 2 — *an assertion must be
+able to observe the failure it excludes* — is the rule that makes this a finding rather than a
+preference.
+
+**The proposal:** put the teller's held claim in the `news.told` payload, and at the deposit branch for
+that event kind read `predicate` and `value` from it instead of from `e.kind` and `True`. Derive the
+deposited confidence from the teller's, constrained to be **non-increasing**.
+
+**ANTAGONIST.** Four attacks. Two land and reshape it; two fail.
+
+1. **"`writes: []` is CORRECT and this breaks it."** — `epistemic.py:107`: *"THIS EXISTS BECAUSE A
+   TELLING CHANGES NOTHING. `tell` declares `writes: []` — correctly."* **This lands as a constraint
+   and it is the right one.** The carry must not enter the write matrix. It belongs in the **event
+   payload and the deposit branch** — the epistemic seam — leaving `tell` writing nothing, exactly as
+   ruled. The proposal is scoped accordingly.
+2. **"Bystanders would learn the content."** — **This lands, and it exposes a larger absent object.**
+   The five channels are `post_remit, co_located, witness_key, document_key, chronicle`
+   (`rosters.yaml:110`). **None of them is an addressee.** A `tell` has no receiver operand, so under
+   any fan-out mode the people who learn are the people *present or keyed*, never the person told.
+   P6 therefore cannot deliver *"I told you, privately, and only you."* A sixth channel is a separate
+   and larger object and is **not** proposed here.
+3. **"The confidence function is invented — this is `P5`'s defect again."** — **Fails as an
+   objection to the shape, holds against any number.** The write is interior, into the holder's own
+   ledger, which `L3` clause 1 permits in terms. What is unwarranted is a *magnitude*, so no magnitude
+   is proposed: the constraint is `deposited ≤ teller's`, the function is a fixture graded
+   `assumption`, swept, **with a loader that refuses an unregistered arm** — `A5`'s lesson
+   (`04_CONSOLIDATION.md` §3) applied to the dial this proposal introduces.
+4. **"It is a false N-line — `Claim` already carries predicate and value."** — **Fails, and inverts.**
+   Disqualifier 1 asks whether the carrier exists *and the possibility survives the cut*. The carrier
+   exists and is correctly typed; the possibility does not survive, because **nothing produces a
+   content-bearing predicate from an act.** That is disqualifier **2**, no producer — and `P6` is the
+   producer. An object whose carrier is right, whose type is right, whose precondition already reads
+   the source data and whose harness already asserts the result is the opposite of an addition.
+
+**RECONCILIATION.** Proposed at the **emit/deposit seam only**, with three parts and a named residual.
+
+- **The carry.** `news.told`'s payload gains the teller's claim; the deposit branch for that kind
+  reads `predicate` and `value` from it. `tell` keeps `writes: []`.
+- **The attenuation.** Deposited confidence is a function of the teller's, constrained non-increasing,
+  injected as a swept `assumption` fixture with a refusing loader. **No number is proposed.**
+- **The falsifier**, per §0.1 pt 3: a test that runs a telling through the loop and asserts the
+  deposited claim's predicate is **not** `news.told` and its value is the teller's. There is no
+  `by="run"` probe grade — the four are `construction / convention / no-signature / probe-model` — so
+  this belongs in `tests/valoria`, where it can observe the failure. **Its outcome today is RED**, and
+  that is the artifact this proposal rests on.
+- **Residual, stated because it bounds the gain.** Without an addressee channel a telling still
+  reaches the present rather than the told. P6 makes news **content-bearing, falsifiable and
+  attenuating**; it does not make it **directed**. Directedness is `P1`'s axis and a sixth channel's,
+  not this one's.
+
+**What it moves.** `R-07` and `R-08` (`partial`) — a person can hold a false belief acquired from
+another person and act on it, which is `R-08`'s *"decisions must not be omniscient"* at the belief
+layer rather than the sampler layer. It is the one proposal in this set that makes **a lie** a thing
+the engine can represent.
+
+---
+
 ## §M · MEASUREMENTS HANDED OVER — not proposals
 
 Three results that are load-bearing and that **need no ruling and admit no one-object repair**.
@@ -359,6 +483,18 @@ timestep"* — which `engine/season/` has. ⚠ **This corrects a commissioned pa
 `w.tick` moves once. It is a second **owner** of one clock, and a second **world** — an uncarried
 vertical direction and a §7.3 *calculations consistent in methodology* defect, which is `R-04`.
 
+**M4 · Two surfaces give `choice_temperature`'s control arm two different meanings.**
+`decision/choose.py:141-147` states that the `tau = 0` arm *"SHORT-CIRCUITS TO THE OLD PATH, AND THE
+ARM VALIDATES THE PLUMBING RATHER THAN THE SAMPLER… Stated plainly because both prior plans named the
+`tau = 0` arm as the sampler's control and neither noticed."* `engine/season/hole_register.yaml:1278`
+still describes `0` as *"the pre-U4 argmax kept as the control."* Under §0.05 the code is the
+mechanism, so the register row is the stale surface — but **the two are not interchangeable for
+anyone reading the sweep**, and §0.1 pt 4 makes a control arm that measures the wrong thing a
+measurement defect rather than a documentation one. Related: `Fixtures.get` refuses an unregistered
+**name** (`data/fixtures.py:43-50`), never an out-of-sweep **value**, so unlike `fan_out_mode` this
+dial has no refusing loader on its arm set. Handed over because naming the sampler's true control is a
+`U4` judgment, not a one-line repair.
+
 ---
 
 ## §R · THE ONE THING TO REFUSE
@@ -390,15 +526,30 @@ through the one field `AX-2` keeps private.
 
 | | what it is | size | waits on | moves |
 |---|---|---|---|---|
-| **P1** | a person-referent route into DELIBERATE | **one clause** | nothing | the consumer for `W-F`; `R-01`/`R-02`/`R-07`/`R-08` |
+| **P1** | a person-referent route into DELIBERATE | **one clause** | nothing | the consumer for `W-F`; **makes ratified Layer 1's `hold` satisfiable**; `R-01`/`R-02`/`R-07`/`R-08` |
 | **P2** | `tie / knot`'s effect, as two directed edges, note corrected | one effect body (~60 lines), six re-records | **P1** | `R-05`; the relationship channel |
 | **P3** | the deposit stamps the act, not the channel | **one argument** | nothing | hearsay ≠ testimony; breaks the `utter`/`tell` dominance |
 | **P4** | `UPSET_FLOOR` — accept `wound_state` | a deletion | — | an attribution contradiction measured at 6.06%. **PC lane** |
 | **P5** | the warrant for `W-F`'s magnitudes | prose, two directions | `W-F` | converts *invented* into *warranted* for two cells; one **design call** surfaced |
-| **M1–M3** | measurements handed over | — | — | no ruling, no one-object repair |
+| **P6** | **`tell` carries the claim it already requires** | one payload field, one deposit branch, one swept fixture | nothing | **a lie becomes representable**; news attenuates; `R-07`/`R-08`. Makes `P4`/`P16`'s `by="construction"` assertions reachable by the loop |
+| **M1–M4** | measurements handed over | — | — | no ruling, no one-object repair |
 | **§R** | the refusal | — | — | — |
 
-**Nothing here adds a system.** Four of the five proposals are a clause, an argument, an effect body
-composing on an existing primitive, and a deletion. **No new `needs_jordan` row is filed**
-(`03_PROVENANCE.md` §6); one genuinely open **design call** is surfaced inside P5 and attaches to a
-plan Jordan already owns.
+**Ordering, since three of the six now interact.** `P1` first — it is the conformance repair and every
+reach-shaped item waits on it. `P3` and `P6` are independent of `P1` and of each other, and they
+compose: `P3` puts a **speaker** in `source`, `P6` puts **content and attenuation** in `predicate` /
+`value` / `confidence`. Landed together, a claim acquired from another person carries *who said it,
+what they said, whether it is true, and how far it has travelled* — which is the whole of
+belief-with-provenance, and `04_CONSOLIDATION.md` §3 `A9` records that the corpus finds it in **two of
+twenty titles**. `P2` after `P1`. `P5` rides `W-F`. `P4` is the PC lane's.
+
+**Nothing here adds a system, and P6 does not change that.** Five of the six proposals are a clause,
+an argument, an effect body composing on an existing primitive, a deletion, and a payload field read at
+one branch. **No new `needs_jordan` row is filed** (`03_PROVENANCE.md` §6); one genuinely open **design
+call** is surfaced inside P5 and attaches to a plan Jordan already owns.
+
+**Two named gaps are deliberately NOT proposed**, because each is one object short of a proposal above
+and its shape is decided by that object: an **addressee channel** (a sixth witness channel, so a
+telling reaches the told rather than the present — `P6`'s residual), and a **`Tenure.term`** field
+(`04_CONSOLIDATION.md` §2 `A`, withdrawn to a warrant because `verb_table.yaml:421` already records it
+as a located scope decision).

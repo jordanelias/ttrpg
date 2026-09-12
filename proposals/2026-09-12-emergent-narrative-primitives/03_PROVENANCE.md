@@ -6,12 +6,14 @@
 
 ## §1 · HOW THIS WAS PRODUCED
 
-**Jordan, this session:** read four research documents in the context of each other and of the
-repository as it stands; run an adversarial pessimistic NERS audit of each document's mechanics and
-proposals; have Fable 5.1, read-only, use those findings to interrogate the game; then identify and
-propose the most apt mechanics, curated for gameplay, emergence, applicability, relevancy, immediate
-impact and implications going forward; and pass all of it to Opus to write out in
-agonist–antagonist methodology with fidelity to findings.
+**Jordan, this session, in four instalments.** (1) Read four research documents in the context of each
+other and of the repository as it stands; run an adversarial pessimistic NERS audit of each document's
+mechanics and proposals; have Fable 5.1, read-only, use those findings to interrogate the game; then
+identify and propose the most apt mechanics, curated for gameplay, emergence, applicability,
+relevancy, immediate impact and implications going forward; and pass all of it to Opus to write out in
+agonist–antagonist methodology with fidelity to findings. (2) Three further documents, consolidated
+with the first four. (3) Plot Valoria on every axis the seven documents evaluate games against.
+(4) At the granularity of the clusters, axes and sets of primitives themselves.
 
 **The relay, stated because `CLAUDE.md` §10 rules on it.** §10 reserves the `fable` tier for
 *"read-only audit · planner · orchestrator · guardrail — **NOT** synthesis or artifact
@@ -22,7 +24,10 @@ authorship,"* and requires that independence be **structural rather than declare
 | Repository inventory — resolution layer · season loop · settlements/factions | `sonnet` ×3, parallel | read-only explorers | bounded extraction; no judgment delegated |
 | **NERS audit** of D0+D1 · D2 · D3 | `opus` ×3, parallel | agonist auditors | each ran `skills/ners/SKILL.md` in full against the tree; none saw the others' output |
 | **Interrogation of the game** | `fable` | `.claude/agents/valoria-critic.md` — `tools: Read, Grep, Glob` | **structural**: no Write, no Edit, no Bash. A sentence in a prompt saying "you are read-only" restricts nothing; the agent definition does |
-| Curation and authorship | `opus` (orchestrator) | this document | every decisive claim re-verified by hand against the working tree before being carried |
+| Curation and authorship | `opus` (orchestrator) | Parts A, B, C | every decisive claim re-verified by hand against the working tree before being carried |
+| **Adversarial attack on the consolidation** | `fable` | `valoria-critic` — `Read, Grep, Glob` | **structural**: dispatched with Part D's claims and not the reasoning behind them; seven claims attacked against the tree |
+| **Adversarial attack on the plot** | `fable` | `valoria-critic` | **structural**: same seat, dispatched on correctness, logic, breadth and depth of the primitive ledger |
+| Consolidation, plotting, the reverse ledger, and the rewrite | `opus` (orchestrator) | Parts D, E, F, and the revisions to A and B | each surviving attack verified at `file:line` before being carried; each failed attack discarded |
 
 **Tiering rationale** (§10's downgrade triggers): the inventories are bounded extraction over known
 paths → `sonnet`. The NERS passes weigh competing design considerations against ratified canon and
@@ -197,8 +202,11 @@ stands; presenting the list as never having been questioned does not.
 
 ## §4 · SOURCE TIERS
 
-**The documents.** All four are secondary syntheses over game systems, and three of the four say so
-about themselves. D3 §7.2: *"With the sole exception of Pax Pamir's rulebook, every mechanic here is
+**The documents.** All seven are secondary syntheses over game systems, and four of the seven say so
+about themselves. Two of the seven are **earlier revisions** of documents also supplied in a later
+form; where they differ the later revision governs, being better-sourced (17 provenance tags against
+0, `04_CONSOLIDATION.md` §1). All seven are pinned there by SHA-256 prefix and byte length, since
+none is in this repository and the claims about their relationship are otherwise unverifiable. D3 §7.2: *"With the sole exception of Pax Pamir's rulebook, every mechanic here is
 a player-facing account of a closed system… This is a catalogue of **folk models** — accurate to how
 these systems present themselves, not necessarily to how they are implemented. For design transfer
 that is largely acceptable… It is **not** acceptable for any claim about a specific constant."*

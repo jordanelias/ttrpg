@@ -73,7 +73,7 @@ The carriers are all there. Nothing fills them.
 `skills/ners/SKILL.md` §3: a false N-line is *an object whose claimed lost possibility actually
 survives the cut, because something already ruled in provides it.* The pass is graded on these.
 
-**Twenty-one, across the four documents.** Each row: the primitive · the possibility it claims ·
+**Twenty-seven, across the four documents.** Each row: the primitive · the possibility it claims ·
 the Valoria object that already provides it · which of §3's five disqualifiers fired.
 
 ### 2.1 · From D0/D1 — emergent narrative
@@ -118,9 +118,11 @@ the Valoria object that already provides it · which of §3's five disqualifiers
 | 26 | **Write the half-strength spec first** (Directive 5) | an autonomy setting that can be reduced rather than switched off | `fixtures.py:328` `fan_out_mode` swept `total / all_five / presence_only`; `fixtures.py:229` `choice_temperature` swept `0 / 0.1 / 0.25 / 0.5 / 1.0`; and `observers_for` **refuses an unrecognised mode** so a sweep can never silently read its control. This is `CLAUDE.md` §0.1 pt 4 as shipped code | **1** |
 | 27 | **Skill → satisfaction → output** | a double-reinforcement advancement loop | fails **its own falsifier** before reaching Valoria — the document says it *"is a pure bonus with no opposing pressure, at which point correct play is obvious and the decision evaporates"* — and no satisfaction field exists | **5** |
 
-**Twenty-one free cuts.** Fourteen are free because a ruled Valoria object already provides the
-possibility; five because the cut was already made, by Jordan, with a date; two for want of a
-producer.
+**Twenty-seven free cuts, partitioned by which disqualifier fired.** Sixteen on **1** — the
+carrier already exists, on an object that can also be contested, planted or refuted. Seven on
+**3** — the cut was already made, by Jordan, with a date, and applied. Three on **2** — no producer,
+so the possibility was never reachable. One on **5** — the residue is a flat bonus, and the object
+was the wrapper. No row fires **4** alone.
 
 ---
 

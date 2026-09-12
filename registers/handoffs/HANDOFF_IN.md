@@ -1,9 +1,48 @@
 # Handoff — IN (Infrastructure / Cross-Cutting)
 
-## 📐 2026-09-12 — four research documents NERS-audited as Valoria candidates (`ED-IN-0217`, PR #399)
+## 📐 2026-09-12 — seven research documents NERS-audited as Valoria candidates (`ED-IN-0217`, PR #399)
 
 **PROPOSED, HELD BACK FROM RATIFICATION-ON-MERGE IN FULL.** Nothing ratified, no head moved, no
 `CURRENT.md` row, no code. Set: `proposals/2026-09-12-emergent-narrative-primitives/`.
+
+**THREE THINGS A COLD SESSION NEEDS, and the first is measured rather than argued.**
+
+⚠ **`P1` — a person-referent route into DELIBERATE — is reached by three independent routes, and one of
+them makes it a CONFORMANCE REPAIR rather than a proposal.** A `Tenure` is owned by its subject
+(`state/carriers.py:378,387-388`); ratified Layer 1 requires a `hold`'s subject to be a **Person**
+(`architecture/meta/04_CODE_ARCHITECTURE.md:181` row 12); a computed act's subject is its question's
+referent (`decision/options.py:307-310`); and no question produces a person. **So ratified Layer 1 is
+unsatisfiable by the running grammar, and the measured *0 live `hold` tenures across 86 worlds* is the
+arithmetic of that, not a thin fixture.**
+
+⚠ **FIVE VERBS ARE BUILT, TESTED AND NEVER REACHED** — `confer`, `revoke`, `convene`,
+`destroy_record`, `kill / wound`. Three of the five unreach because no question names a **person**; the
+two always-refused verbs (`work`, `examine`) unreach because none names a **Site**. Seven of 38 verbs
+are blocked at the grammar rather than at the code. Derived from `verb_table.yaml` × `loop/effects.py` ×
+`requirements.yaml:301-305`; the table is in `06_VALORIA_UNPLOTTED.md` §1.
+
+⚠ **`tell`'s PRECONDITION READS THE TELLER'S CLAIM AND ITS EFFECT DISCARDS IT.** The verb requires the
+teller to hold a claim on the subject (`verb_table.yaml:499`); the deposit at `loop/witness.py:137`
+fills `predicate` from `e.kind` (`news.told`), `value` from a hard-coded `True`, and `confidence` from
+`confidence_default`. So **news carries no content, cannot be false, and does not attenuate in
+transit** — while probes `P4` and `P16` hand-build exactly the claims a telling would need to produce
+and are graded `by="construction"`. That is `P6` in the set, and `Claim.predicate`/`value` are already
+`str`/`Any`, so no carrier changes.
+
+**Three corrections other lanes should not re-derive:**
+
+- **`forge` DOES NOT EXECUTE.** It declares `writes: [Record.exists, Record.forgery_quality]` and has
+  **no `EFFECTS` entry**, so `effected = not row.writes or v in EFFECTS` (`loop/driver.py:99`) excludes
+  it and `forgery_quality` is never written. With `H-75`'s *"`destroy_record` cannot fire for any
+  actor"*, **both halves of the evidence-fabrication channel are declared and unreachable.**
+- **`T-c` LICENSES AN AUTHORED CLOCK; IT DOES NOT REFUSE ONE.** `01_AXIOMS.md:304-316` states the
+  consequence as the design's best property — a wound clock can be *"bribed, delayed, burned, or
+  killed."* The phrase *"a quantity advancing with no author"* is **`AX-5`** at `:157-158`. A shared
+  loss timer is refused by `T-a`/`L3` (as a self-moving magnitude) or by **`T-b`** (as an expiry that
+  produces an outcome) — never by `T-c`, whose licensed form ships as a `convene`d `Date`.
+- **MATTER MATURES ACT-DECLARED TERMS** (`loop/matter.py:55-109`) — *"the only mechanism in the design
+  by which one season's act reaches into a later one WITHOUT anybody acting again"*, and it stops if the
+  maker is gone. Any claim that this tree has no lagged coupling is false.
 
 **THE ONE THING A COLD SESSION NEEDS FROM THIS, and it is measured rather than argued.**
 
