@@ -181,6 +181,20 @@ policies:
     on_exceed: "skip"
     note: "Frozen archive of pruned HANDOFF.md narrative (2026-07-08). Grows by archival, not editing."
 
+  # ⚠⚠ THE PARAGRAPH BELOW IS SUPERSEDED BY `ED-IN-0221`, THE SAME DAY, AND IS KEPT BECAUSE ITS
+  # REASONING WAS WRONG IN AN INSTRUCTIVE WAY. It concluded the handoff bulk could not be moved
+  # mechanically and needed adjudication. Jordan's answer — *"why don't you just hive off all closed
+  # IN work into its own document"* … *"tbh it's applicable to all handoffs"* — dissolved it, because
+  # `6c`'s refusal killed PRUNING BY MARKER (delete what a heading calls done), and a lossless MOVE
+  # judged on a unit's BODY is a different operation with none of that failure mode. Nothing is
+  # deleted, so a live item inside finished work is one file-open away instead of lost. DONE: four
+  # lanes split, 99,491 tokens of closed narrative moved, zero lines lost (proved by line-multiset
+  # partition against `git HEAD`). Live sizes now: IN 70,592 · MB 6,982 · PC 14,388 · SC 6,191 —
+  # MB, PC and SC under this cap, IN still over and honestly so, its residue being genuinely
+  # unresolved material. The lesson worth keeping: CUT AT THE FINEST GRANULARITY THE DOCUMENT
+  # ALREADY LABELS. `Pending`/`Decisions`/`Next actions` label every ENTRY, which is why 6c's
+  # section-level finding did not bind them.
+  #
   # ⚠ THIS CAP AND THE ONE BELOW NOW FIRE AS *REAL* SIGNAL, AND WHAT THEY ASK FOR IS ADJUDICATION
   # WORK — NOT A SWEEP (ED-IN-0220, 2026-09-13). Two facts, both measured:
   #
@@ -204,6 +218,12 @@ policies:
     on_exceed: "flag_for_split"
     archive_target_pattern: "registers/handoffs/HANDOFF_archive.md"
     note: "Root continuity index — read every session (CLAUDE.md §2), so keep it thin. Move closed/dated narrative to the archive; lane-owned '## Next actions' content belongs in that lane's registers/handoffs/HANDOFF_<LANE>.md, never here (2026-07-08 second pass: ~9k tokens of lane-specific bullets were fully redundant with content already in the lane files and were dropped, not just moved). on_exceed is flag_for_split (warn-tier in compliance_check.py's CI-mode severity map), not block_commit — HANDOFF.md is written by whichever session is pausing mid-task, and a hard block here would repeat the auto-fix-during-bootstrap destructive-commit failure mode noted above."
+
+  # Per-lane CLOSED narrative (ED-IN-0221, 2026-09-13). MUST stay above the `*.md` glob below —
+  # `_match_rule` is first-match, so the order is the rule.
+  - match: "registers/handoffs/HANDOFF_*_closed.md"
+    on_exceed: "skip"
+    note: "Closed work for one lane, moved VERBATIM out of HANDOFF_<LANE>.md and never read for orientation — the live file carries an index of what moved. Uncapped for the same reason HANDOFF_archive.md is: an archive's size is not a defect, it is the point, and it only ever grows by accretion. A cap here would ask a session to split finished history, which is work with no reader. The thing that must stay small is the LIVE file, and that is the rule below."
 
   - match: "registers/handoffs/*.md"
     max_tokens: 20000
