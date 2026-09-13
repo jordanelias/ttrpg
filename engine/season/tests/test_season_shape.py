@@ -10702,3 +10702,64 @@ def test_a_telling_deposits_what_was_told_and_the_teller_is_not_told_their_own_n
         assert not [c for c in teller.ledger if c.id in forbidden], (
             f"{a.actor} received a `told_by` claim from their OWN telling {e_id}. The teller holds "
             "it firsthand already; a told copy is the self-witness rule `witness` REV 3 removed")
+
+
+def test_the_populated_world_is_not_everybody_in_one_room():
+    """`W27`'s cast, and the defect it exists to end.
+
+    `corpus_run.build_at` seats three unnamed persons in ONE rung, in all 89 runnable worlds —
+    measured 2026-09-13: co-located at tick 0 and at the end, nobody's containing rung ever
+    changes, and 0 of 4,870 acts name another person. Every measurement taken on that corpus
+    inherits it, including the told channel's, which can deposit nothing into a witness who saw
+    everything the teller saw.
+
+    ⚠ THE ASSERTIONS ARE THE CONTROL, NOT THE COUNT. A bare "it builds" would pass on a world
+    that seated all 46 in one building, which is the thing being fixed. So: more than one
+    building is inhabited, the largest holds a minority, and the ladder is genuinely deep.
+
+    ⚠ AND THE CAST IS 46, NOT 143. The NPC lane names PEOPLE; the ARC lane names SITUATIONS
+    ("The Unworked Clause"). The first cut seated all 143 and put 97 events in buildings."""
+    from ..harness import populated as POP
+    from ..harness.run_cases import load_cases
+
+    w = POP.build_realm(0)
+    c = POP.census(w)
+
+    assert c["persons"] == len(load_cases("NPC")), (
+        f"{c['persons']} persons seated against {len(load_cases('NPC'))} NPC cases. One person "
+        "per NPC season loop is the whole specification; ARC cases are situations and are not "
+        "people, which is why the count is the NPC lane's and not the corpus's")
+
+    # THE LADDER IS DEEP. `community` and `hearth` sat unused in every world this repo built.
+    for kind in ("realm", "province", "settlement", "community", "hearth", "person"):
+        assert c["rungs"].get(kind), (
+            f"no {kind!r} rung in the populated world. The §10 ladder is "
+            "`person < hearth < community < settlement < territory < province < duchy < realm` "
+            "and a building IS a `hearth` — a world missing that level seats everybody in the "
+            "settlement, which is the co-location defect this module exists to end")
+
+    # NOT ONE ROOM. Both halves matter: many buildings, and no single building holding most people.
+    assert c["distinct_buildings_inhabited"] > 1, (
+        "every person is in ONE building. That is `build_at`'s defect rebuilt — see this test's "
+        "docstring for what it costs every downstream measurement")
+    assert c["largest_building"] < c["persons"] / 2, (
+        f"the largest building holds {c['largest_building']} of {c['persons']}. A world where "
+        "most of the cast shares a roof is co-located in effect whatever the rung count says")
+
+    # EVERY PERSON WANTS SOMETHING, AND IT IS THEIR OWN CASE'S WANT.
+    assert c["propositions"] == c["persons"], (
+        f"{c['propositions']} propositions for {c['persons']} persons. A person with no live "
+        "`commit` raises no Q4 question, forms no candidate and does not act at all — measured, "
+        "the unseeded world ran a full season with 0 acts by 0 actors")
+    matters = {p.predicate for p in w.propositions.values()}
+    assert len(matters) > c["persons"] / 2, (
+        f"only {len(matters)} distinct wants across {c['persons']} people. The first cut gave "
+        "every person the string 'a standing ambition'; `wants_of` reads the case's own first "
+        "`core` row from `season_requires`, of which the corpus declares 427")
+
+    # AND THE WANT CONCERNS A PERSON — `ED-IN-0210` Ruling 1, verbs are not fiats.
+    about_people = [p for p in w.propositions.values() if p.subject in w.persons]
+    assert len(about_people) == len(w.propositions), (
+        f"{len(w.propositions) - len(about_people)} proposition(s) name something that is not a "
+        "person. Q4 emits `(prop.subject,)` as the referent, so a rung-subject proposition is "
+        "exactly how `build_at` produced a corpus in which no act ever names anybody")

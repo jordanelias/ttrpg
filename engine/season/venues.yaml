@@ -1,0 +1,139 @@
+# THE VENUE CATALOGUE — the buildings inside a settlement, as data.
+#
+# WHY THIS FILE EXISTS. `systems/settlements/valoria_geography_v30.yaml` is canon down to the
+# SETTLEMENT and stops there: 17 provinces, 37 settlements, the adjacency between them. Below a
+# settlement, canon says nothing — there is no cathedral, no barracks, no scriptorium anywhere in
+# the corpus, and `#353 §10`'s ladder has TWO rungs sitting in that gap (`community` and `hearth`,
+# between `settlement` and `person`) which nothing has ever filled.
+#
+# Jordan, 2026-09-13: *"each settlement has places/buildings. we need to build these out for
+# testing"*, and, on the canon question: *"you may still need to invent places for more granular
+# things like a church or barracks or whatever."* So: the province and settlement layers are
+# CANON and are read from the geography file; everything in this file is AUTHORED FOR PLAY and
+# says so. Nothing here overrides a canonical name.
+#
+# ⚠ THIS IS A MECHANISM, NOT REFERENCE (`CLAUDE.md` §0.05). `engine/season/harness/populated.py`
+# opens it at runtime and the rungs it builds come from these rows — delete this file and the
+# populated world has no buildings in it. That is why it lives beside the code that reads it
+# rather than under `systems/`, and why the names below are not duplicated into any design doc.
+#
+# ⚠ WHAT A VENUE IS ON THE LADDER. `rosters.yaml: rung_kinds` is
+# `person < hearth < community < settlement < territory < province < duchy < realm`. A BUILDING is
+# a `hearth` — the rung a person is seated in. A QUARTER is a `community` — a group of buildings
+# inside one settlement. Neither is a new kind: the ladder already had both and the corpus never
+# used either, which is why `corpus_run.build_at` seats every person directly in the settlement
+# and why every person in every world is therefore in the same room as every other.
+
+meta:
+  authority: "AUTHORED FOR PLAY, 2026-09-13 (ED-IN-0223). Not canon, and not a supersession of
+    any canonical name. The province and settlement layers this hangs from ARE canon and are read
+    from `systems/settlements/valoria_geography_v30.yaml`."
+  ladder: "community -> hearth, both from `rosters.yaml: rung_kinds`. No new rung kind."
+  seat_ids: "⚠ EVERY `seats:` ID IS VERIFIED AGAINST THE GEOGRAPHY FILE, AND FOUR WERE WRONG WHEN
+    FIRST WRITTEN. They were guessed from position in the S-NNN sequence — S-022 for Gransol (it is
+    Gelbgrund, a village), S-024 for Himmelenger (Erzbach, a village), S-028 for Sigurdshelm
+    (Halvardshelm), S-016 for Grauwald (Rendstad). Inventing a BUILDING is licensed here; naming the
+    wrong CANONICAL settlement is not, and the difference is the whole reason this note exists. The
+    validator that caught it is `tests/valoria`-side: every id below must resolve in the geography
+    file and its description must match the institution it is claimed for."
+
+# ---------------------------------------------------------------------------
+# QUARTERS — the `community` rung. A settlement's districts.
+#
+# Kept SHORT deliberately. A quarter exists to put two buildings at a distance from each other
+# inside one settlement; inventing a dozen per town would be authoring a map nobody asked for.
+# ---------------------------------------------------------------------------
+quarters:
+  Seat:            [precinct, riverside, close]
+  City:            [precinct, market_quarter]
+  Cathedral-City:  [close, pilgrim_quarter]
+  Fortress-City:   [ward, muster_field]
+  Fortress:        [ward]
+  Town:            [market_quarter, backstreets]
+  Village:         [common]
+
+# ---------------------------------------------------------------------------
+# BUILDINGS — the `hearth` rung. What a person can be seated in.
+#
+# `serves:` is the institution tag an inhabitant of this building would belong to, and it is what
+# assigns a season loop to a place: a loop naming the Church seats its person in a `chapter_house`
+# or `cathedral`, a loop naming the Löwenritter in a `barracks`. A building with `serves: []` is
+# ordinary habitation and takes whoever is left.
+# ---------------------------------------------------------------------------
+buildings:
+  Seat:
+    - {slug: court,        name: "Royal Court",        quarter: precinct,    serves: [Crown, court, Parliament]}
+    - {slug: chancery,     name: "Chancery",           quarter: precinct,    serves: [Crown, Guild]}
+    - {slug: cathedral,    name: "Cathedral",          quarter: close,       serves: [Church]}
+    - {slug: barracks,     name: "Guard Barracks",     quarter: precinct,    serves: ["Löwenritter"]}
+    - {slug: guildhall,    name: "Guildhall",          quarter: riverside,   serves: [Guild]}
+    - {slug: wharf,        name: "River Wharf",        quarter: riverside,   serves: [Guild]}
+    - {slug: market,       name: "Market Hall",        quarter: riverside,   serves: []}
+    - {slug: scriptorium,  name: "Scriptorium",        quarter: close,       serves: [Church, Einhir]}
+    - {slug: townhouse,    name: "Townhouse",          quarter: precinct,    serves: []}
+
+  City:
+    - {slug: hall,         name: "City Hall",          quarter: precinct,       serves: [Crown, Parliament, court]}
+    - {slug: guildhall,    name: "Guildhall",          quarter: market_quarter, serves: [Guild]}
+    - {slug: chapel,       name: "Chapel",             quarter: precinct,       serves: [Church]}
+    - {slug: market,       name: "Market",             quarter: market_quarter, serves: []}
+    - {slug: warehouse,    name: "Warehouse",          quarter: market_quarter, serves: [Guild]}
+    - {slug: townhouse,    name: "Townhouse",          quarter: precinct,       serves: []}
+
+  Cathedral-City:
+    - {slug: cathedral,    name: "Cathedral",          quarter: close,           serves: [Church]}
+    - {slug: chapter_house, name: "Chapter House",     quarter: close,           serves: [Church]}
+    - {slug: scriptorium,  name: "Scriptorium",        quarter: close,           serves: [Church, Einhir]}
+    - {slug: almonry,      name: "Almonry",            quarter: pilgrim_quarter, serves: [Church]}
+    - {slug: hostel,       name: "Pilgrim Hostel",     quarter: pilgrim_quarter, serves: []}
+    - {slug: market,       name: "Pilgrim Market",     quarter: pilgrim_quarter, serves: []}
+
+  Fortress-City:
+    - {slug: barracks,     name: "Barracks",           quarter: ward,        serves: ["Löwenritter", Altonian]}
+    - {slug: muster_yard,  name: "Muster Yard",        quarter: muster_field, serves: ["Löwenritter"]}
+    - {slug: armoury,      name: "Armoury",            quarter: ward,        serves: ["Löwenritter", Guild]}
+    - {slug: keep,         name: "Keep",               quarter: ward,        serves: [Crown, court]}
+    - {slug: chapel,       name: "Garrison Chapel",    quarter: ward,        serves: [Church]}
+    - {slug: quarters,     name: "Officers' Quarters", quarter: muster_field, serves: []}
+
+  Fortress:
+    - {slug: barracks,     name: "Barracks",           quarter: ward, serves: ["Löwenritter", Altonian]}
+    - {slug: armoury,      name: "Armoury",            quarter: ward, serves: [Guild]}
+    - {slug: chapel,       name: "Garrison Chapel",    quarter: ward, serves: [Church]}
+    - {slug: gatehouse,    name: "Gatehouse",          quarter: ward, serves: [Altonian]}
+
+  Town:
+    - {slug: moot_hall,    name: "Moot Hall",          quarter: market_quarter, serves: [Crown, court, Parliament]}
+    - {slug: chapel,       name: "Chapel",             quarter: market_quarter, serves: [Church]}
+    - {slug: guildhall,    name: "Guildhall",          quarter: market_quarter, serves: [Guild]}
+    - {slug: market,       name: "Market",             quarter: market_quarter, serves: []}
+    - {slug: workshop,     name: "Workshop",           quarter: backstreets,    serves: [Guild, Einhir]}
+    - {slug: inn,          name: "Inn",                quarter: backstreets,    serves: []}
+    - {slug: cottage,      name: "Cottage",            quarter: backstreets,    serves: []}
+
+  Village:
+    - {slug: chapel,       name: "Chapel",             quarter: common, serves: [Church]}
+    - {slug: mill,         name: "Mill",               quarter: common, serves: [Guild]}
+    - {slug: croft,        name: "Croft",              quarter: common, serves: []}
+    - {slug: longhouse,    name: "Longhouse",          quarter: common, serves: [Einhir]}
+
+# ---------------------------------------------------------------------------
+# WHERE AN INSTITUTION SITS. A season loop naming an institution seats its person at that
+# institution's seat, in a building whose `serves:` carries the tag.
+#
+# Every settlement id below is CANONICAL, read from the geography file; this table only says which
+# canonical seat an institution answers to. Where canon names the seat itself (the Church at
+# Himmelenger, the Löwenritter at Ehrenfeld) the row repeats canon rather than deciding anything.
+# ---------------------------------------------------------------------------
+seats:
+  Crown:        S-001   # Valorsplatz — "Royal court ... Torben resides here" (geography, T1)
+  court:        S-001
+  Parliament:   S-018   # Gransol — "Hafenmark constitutional capital. Baralta's court. Parliament" (T8)
+  Church:       S-036   # Himmelenger — "Sovereign ecclesiastical city-state. Cathedral" (T9)
+  "Löwenritter": S-014  # Ehrenfeld — "Military headquarters. Löwenritter base" (T14)
+  Hafenmark:    S-018
+  Varfell:      S-031   # Sigurdshelm — "Varfell seat. Vaynard's court" (T12)
+  Guild:        S-006   # Goldenfurt — "Tolled river-ford town; Guild toll" (T2)
+  Altonian:     S-007   # Lowenskyst Fortress — "Primary Altonian chokepoint" (T3)
+  Einhir:       S-026   # Grauwald — "Einhir heritage site" (T4)
+  Schoenland:   S-037
