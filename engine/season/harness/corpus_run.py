@@ -480,10 +480,21 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     sources = Counter(c.source for p_ in w.persons.values() for c in p_.ledger)
     told_holders = sum(1 for p_ in w.persons.values()
                        if any(c.source == "told_by" for c in p_.ledger))
+    # ⚠ THE REDEPOSIT COUNT IS THE ONE THAT CAUGHT A REAL DEFECT, so it is reported rather than
+    # left to a probe. A `told_by` claim whose triple the hearer ALREADY HOLDS firsthand is one
+    # belief stored twice — it tells them nothing and takes a `ledger_cap` slot from a claim that
+    # would have. The first cut of the told channel deposited 180 and **175 were this**; the
+    # corpus is where that is visible, because `build_world(0)` produces none.
+    told_redeposits = 0
+    for p_ in w.persons.values():
+        own = {(c.subject, c.predicate, c.value) for c in p_.ledger if c.source != "told_by"}
+        told_redeposits += sum(1 for c in p_.ledger
+                               if c.source == "told_by"
+                               and (c.subject, c.predicate, c.value) in own)
     return dict(id=cid, scale=scale, status=status, executed=ok, refused=no, seasons=n,
                 why="", checks=checks, degrees=dict(degrees),
                 claim_sources=dict(sources), persons=len(w.persons),
-                told_holders=told_holders)
+                told_holders=told_holders, told_redeposits=told_redeposits)
 
 
 def planted_control(seed: int = 0) -> tuple:

@@ -6242,29 +6242,23 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 143 corpus cases, control from a worktree at a85bd45 -- distinct executed sets 40 -> 27, R3 84 -> 83, universal {reconstruct} -> {utter}, `release` 15 -> 2 worlds]
     # ⚠ 27 -> 25 under G1a, and the direction is the same one `U3` moved: the ruled `Record.matured` write (G1a): the gate-emitted maturation carries `(matured, None)` where the hand-built Event carried `(stages, label)`, which moves the Event's id and its folded content, and the content hash is what an undeclared tiebreak uses to pick which question a person answers.
     # [GROUNDED: measured 2026-09-11 with `Record.matured` written through the gate -- distinct executed sets 25 over the same 89 live worlds, from 27 under `U3`]
-    # ⚠ **25 -> 24 UNDER THE TOLD CHANNEL (2026-09-13), AND THE DIRECTION IS DOWN, WHICH IS THE
-    # LESS WELCOME ONE.** The unit: WITNESS now deposits what a telling CONTAINED, not only that
-    # one happened — `claim_sources`' `told_by`, which nothing had ever written. Both arms at seed
-    # 0 over the same 143 corpus cases, control from this tree with the deposit block removed:
-    #
-    #     distinct executed sets   25  ->  24
-    #     R3 cross-person          86  ->  86   of 143   (UNMOVED)
-    #     universal executed set   {utter}  ->  {utter}  (UNMOVED)
-    #     transfer 82 -> 83 · speak 80 -> 81 · release 2 -> 3 · surveil 67 -> 66 ·
-    #     research 39 -> 38 · interview 20 -> 19        (of 89; the other five verbs unmoved)
-    #
-    # ⚠ **THE UNIVERSAL SET IS UNMOVED, WHICH IS THE CHECK THIS ASSERTION'S OWN MESSAGE ASKS FOR.**
-    # `U1`'s lesson was that a falling distinct count can be a verb regaining universality; that is
-    # NOT what happened here — `utter` was universal before and after, and no verb joined it. The
-    # count fell because a second-hand claim changes which question a person answers next season,
-    # and in one world that moved an act mix onto a signature another world already had.
-    # ⚠ **R3 UNMOVED IS THE HONEST AND SLIGHTLY DEFLATING PART.** A channel whose whole subject is
-    # one person's belief reaching another's ledger moves cross-person propagation by ZERO, and
-    # that is not a measurement error: R3 is scored on the CASE, and the deposits land in worlds
-    # whose R3 already passed. The channel is real (0 -> 180 `told_by` claims, 134 of 267
-    # person-instances holding one); its reach into this metric is not.
-    # [GROUNDED: measured 2026-09-13, both arms at seed 0 over the same 143 corpus cases, control from this tree with the `news.told` deposit block removed -- distinct executed sets 25 -> 24, R3 86 -> 86 UNMOVED, universal {utter} -> {utter} UNMOVED, `told_by` claims 0 -> 180]
-    assert len(by_sig) == 24, (
+    # ⚠ **THE TOLD CHANNEL (2026-09-13, `ED-IN-0222`) DOES NOT MOVE THIS NUMBER, AND THE FIRST
+    # VERSION OF THIS UNIT RE-PINNED IT TO 24 BECAUSE OF A DEFECT RATHER THAN AN EFFECT.**
+    # Recorded because the re-pin was the dangerous half, not the count. WITNESS now deposits what
+    # a telling CONTAINED; the first cut deposited it unconditionally, and measured over the 89
+    # live worlds **175 of its 180 deposits were a triple the hearer ALREADY HELD FIRSTHAND** —
+    # one belief stored twice, which the observation block forbids in those words at `:187-191`,
+    # each copy taking a `ledger_cap` slot from somebody else. THOSE duplicates moved the act mix
+    # and cost a signature. Suppressing an exact-triple redeposit restores this count to 25 and
+    # leaves `told_by` at **8 claims across 7 of 267 person-instances** — the honest size of the
+    # channel in this corpus.
+    # ⚠ **THE SMALL NUMBER IS THE FINDING, NOT A DISAPPOINTMENT.** `corpus_run.build_at` seats all
+    # three persons in ONE rung (`:228-229`), so under `all_five` every observer has already
+    # witnessed everything the teller witnessed and there is nothing left to transmit. A corpus of
+    # co-located omniscient witnesses cannot exercise transmission, which is `W27`'s absent cast
+    # arriving from a new direction rather than a defect in this channel.
+    # [GROUNDED: measured 2026-09-13, both arms at seed 0 over the same 143 corpus cases, control from this tree with the `news.told` deposit block removed -- distinct executed sets 25 -> 25 UNMOVED, `told_by` 0 -> 8, 7 of 267 person-instances. The pre-guard arm read 24 and 180, of which 175 were redeposits.]
+    assert len(by_sig) == 25, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -6272,6 +6266,18 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         "what `U1` did.")
     # WHAT IS FIXED AND WHAT VARIES, ASSERTED EXACTLY IN BOTH DIRECTIONS — the count alone would
     # pass on fourteen arbitrary sets. ONE verb executes in every live case and ten vary.
+    # `ED-IN-0222`. NO TELLING TELLS SOMEBODY WHAT THEY ALREADY SAW, asserted where it is
+    # OBSERVABLE. `build_world(0)` produces no redeposit at all, so the told channel's own test
+    # cannot see this defect; the corpus can, and this test already pays for the corpus run.
+    # The first cut of that channel deposited 180 `told_by` claims of which 175 were redeposits —
+    # one belief stored twice, each taking a `ledger_cap` slot from a claim that would have said
+    # something. Zero is the assertion, not a ceiling: a redeposit is never correct.
+    redeposits = sum(r.get("told_redeposits") or 0 for r in live)
+    assert redeposits == 0, (
+        f"{redeposits} `told_by` claim(s) across the corpus duplicate a triple their holder "
+        "already held firsthand. A telling that transmits nothing still evicts something: see "
+        "the redundancy guard in `loop/witness.py` and `:187-191`'s rule that two claims a "
+        "reader cannot tell apart are one belief stored twice")
     universal = set.intersection(*(set(r["executed"]) for r in live))
     varying = set().union(*(set(r["executed"]) for r in live)) - universal
     # ⚠⚠ **`U4` MOVED BOTH SETS, AND THE SHAPE OF THE MOVE IS THE EVIDENCE FOR WHY THE DISTINCT
@@ -10612,8 +10618,18 @@ def test_a_telling_deposits_what_was_told_and_the_teller_is_not_told_their_own_n
 
     ⚠ THE FALSIFIER IS THE CONTROL, NOT THE COUNT (§0.1 pt 4). A bare `told_by > 0` would pass on
     a deposit that invented its content, so the assertion pairs every `told_by` claim with a claim
-    THE TELLER ACTUALLY HOLDS: same `(subject, predicate, value)`. Deleting the `_held` lookup and
-    minting a claim from the Event instead still gives a non-zero count and reddens this.
+    THE TELLER ACTUALLY HOLDS.
+
+    ⚠⚠ **AND THE MUTATION THIS PARAGRAPH ORIGINALLY NAMED DOES NOT REDDEN IT — THE PROSE CLAIMED
+    A FALSIFIER THE ASSERTION DOES NOT DELIVER, WHICH IS §0.1 pt 2 EXACTLY.** It read *"deleting
+    the `_held` lookup and minting a claim from the Event instead still gives a non-zero count and
+    reddens this"*. It does not: an Event-minted claim is `(subj, "news.told", True)`, and because
+    `tell` writes nothing, `claim_subjects` falls through to `act_refs` and every other witness of
+    that telling holds that exact triple firsthand — so the "somebody else holds it" test passes.
+    The mutation that WAS run used the predicate `"hearsay:" + e.kind`, which nobody holds, and
+    that is a weaker mutation wearing the stronger one's name. Found by an adversarial pass, not by
+    running it. The assertion below is therefore strengthened to name the TELLER specifically
+    rather than "anyone else", which is the claim the prose was making all along.
 
     ⚠ AND THE TELLER IS ASSERTED ABSENT FROM THE RECIPIENTS, because the nearest wrong version of
     this rule is the self-witness rule `witness`'s own REV 3 removed one channel along: a person
@@ -10638,16 +10654,37 @@ def test_a_telling_deposits_what_was_told_and_the_teller_is_not_told_their_own_n
         "corpus that writes one is the hole this closed")
 
     # WHAT WAS TOLD IS WHAT THE TELLER HELD. Not a claim minted from the Event.
-    holders = {pid: {(c.subject, c.predicate, c.value)
-                     for c in p.ledger if c.source != "told_by"}
-               for pid, p in w.persons.items()}
+    # THE TELLER, NAMED. `told:{event}` is in the claim id, so the telling that produced each
+    # deposit is recoverable exactly — no "somebody, anybody" test, which under a co-located fan
+    # is near-tautological.
+    tellers = {}
+    for e_id, a in d.act_of.items():
+        if a.verb == "tell":
+            tellers[e_id] = a.actor
     for pid, c in told:
-        assert any((c.subject, c.predicate, c.value) in held
-                   for other, held in holders.items() if other != pid), (
-            f"{pid} holds a `told_by` claim {(c.subject, c.predicate, c.value)} that NOBODY ELSE "
-            "holds firsthand. A telling transmits a claim its teller already had; a triple with "
-            "no holder was minted rather than transmitted, which is the fabrication the deposit "
-            "reads `LedgerReader.latest_about` to avoid")
+        src_actor = None
+        for e_id, actor in tellers.items():
+            if any(c.id == H(w.world_seed, t, pid, f"told:{e_id}") for t in range(w.tick + 1)):
+                src_actor = actor
+                break
+        assert src_actor is not None, (
+            f"{pid} holds a `told_by` claim {c.id} that no `tell` act in this run produced. A "
+            "told claim's id is minted from the telling's Event; one with no telling behind it "
+            "came from somewhere this test cannot see")
+        teller_holds = {(x.subject, x.predicate, x.value)
+                        for x in w.persons[src_actor].ledger if x.source != "told_by"}
+        assert (c.subject, c.predicate, c.value) in teller_holds, (
+            f"{pid} was told {(c.subject, c.predicate, c.value)} by {src_actor}, who does NOT "
+            "hold that triple firsthand. A telling transmits a claim ITS TELLER already had; "
+            "anything else was minted rather than transmitted, which is the fabrication the "
+            "deposit reads `LedgerReader.latest_about` to avoid")
+        # AND IT TOLD THEM SOMETHING THEY DID NOT ALREADY HAVE.
+        assert len([x for x in w.persons[pid].ledger
+                    if x.source != "told_by" and (x.subject, x.predicate, x.value)
+                    == (c.subject, c.predicate, c.value)]) == 0, (
+            f"{pid} was told {(c.subject, c.predicate, c.value)} they already held firsthand. "
+            "That is one belief stored twice — the defect the observation block forbids — and it "
+            "costs a `ledger_cap` slot. 175 of the first cut's 180 deposits were this")
         assert isinstance(c, Claim) and c.visibility == "own", (
             "a told claim lands in ONE holder's own ledger, like every other claim (§20)")
 

@@ -17,7 +17,7 @@ read out of it — the frozen ED-ledger fragments the blocking citation gate loa
 
 **Status dashboard — RETIRED 2026-08-21 (culling plan v1, waves 1-2).** `dashboard/`, tools/dashboard_data.py, .github/workflows/dashboard.yml, references/audit_registry.jsonl and tools/ci_audit_registry_check.py are all gone; the GitHub Pages site was never enabled, so nothing consumed them. Their content is at `FORK:1e4c6f4` and every path resolves through `references/restructure_ledger.md`. The one signal worth keeping — whether the milestone runs — is `python tools/m1_acceptance.py --summary`, which measures execution instead of aggregating verdicts.
 
-_Last reconciled: 2026-09-13 (IN lane, ED-IN-0222 — the told channel: WITNESS deposits what a telling CONTAINED, so `claim_sources`' `told_by` has a producer for the first time and belief transmission runs. `engine/season/` moved; no head changed and no row below caches a figure it moves. `standing_of` is unmoved and cannot move from this side — `H-116`.)_
+_Last reconciled: 2026-09-13 (IN lane, ED-IN-0222 — the told channel: WITNESS deposits what a telling CONTAINED, so `claim_sources`' `told_by` has a producer for the first time. 8 claims across 7 of 267 person-instances, and the small number IS the finding — the corpus seats every person in one rung, so nobody can be told anything they did not witness. No head changed. `standing_of` is unmoved and cannot move from this side — `H-29`, tier 1.)_
 
 > **This stamp is one line, and stays one line.** It carried a 12,630-character chain of ten nested prior stamps — a changelog inside a Layer 0 file, which `CLAUDE.md` §0.05 forbids. The history is in `git log CURRENT.md` and the registers. Record the date and what moved; do not append to a chain.
 

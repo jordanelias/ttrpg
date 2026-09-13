@@ -244,9 +244,13 @@ def witness(self, events: list[Event]) -> int:
         # divergence `04 §A.2` gives this step the ledger for. `tell` keeps `writes: []`,
         # correctly: a telling changes no cell in the world, it changes what people hold.
         #
-        # ⚠ THE TELLER IS EXCLUDED. They hold the claim already, firsthand, and a `told_by`
-        # copy of one's own telling would be the self-witness rule REV 3 above removed, one
-        # channel along.
+        # ⚠ THE TELLER NEEDS NO SEPARATE EXCLUSION AND HAD ONE, WHICH IS ONE RULE WITH TWO
+        # OWNERS. `pid != _act.actor` stood here; the redundancy guard below SUBSUMES it, because
+        # `_held` is by construction a claim the teller holds, so a teller can never pass "does
+        # the hearer already hold this". Mutation-testing found it: removing the exclusion alone
+        # reddened nothing, which is §0.1 pt 2 saying the second guard could not observe a failure
+        # the first did not already exclude. The condition is kept as the CHEAP one — it skips the
+        # ledger scan for the common case — and is no longer stated as an independent rule.
         #
         # ⚠ CONFIDENCE IS THE TELLER'S OWN, NOT A DEGRADED ONE, AND THAT IS A DEFERRAL RATHER
         # THAN A CHOICE. Nothing in the chain states how much a hearing costs a belief, and
@@ -262,13 +266,39 @@ def witness(self, events: list[Event]) -> int:
         _act = self.act_of.get(e.id)
         if e.kind == "news.told" and _act is not None and pid != _act.actor:
             _teller = w.persons.get(_act.actor)
-            _subj = (_act.payload or {}).get("subject") if isinstance(_act.payload, dict) else None
+            # ⚠ `act_refs`, NOT A SECOND READ OF THE PAYLOAD. The first writing of this block
+            # spelled `(_act.payload or {}).get("subject")` inline -- a copy of `epistemic`'s
+            # own reader (`act_refs`, already imported at the top of this file and already
+            # called forty lines up) that DROPPED its bare-string branch. Two owners of "what
+            # is this act about", disagreeing on an input the tree already contains
+            # (`probes.py` builds string payloads), which is §8 exactly. Caught by an
+            # adversarial pass, not by a test, because no `tell` reaches that branch today --
+            # latent, and latent is still two owners.
+            _refs = act_refs(_act)
+            _subj = _refs[0] if _refs else None
             # `latest_about`, NOT a comparator written here: `LedgerReader` owns *the most
             # recent, then the most confident*, and `tell`'s `requires` cell names no predicate.
             _held = (LedgerReader(_teller.ledger).latest_about(_subj)
                      if _teller is not None and _subj is not None else None)
             if (_held is not None
-                    and str(_held.predicate).partition(":")[0] not in LEDGER_DERIVED_STEMS):
+                    and str(_held.predicate).partition(":")[0] not in LEDGER_DERIVED_STEMS
+                    # ⚠⚠ **A TELLING THAT TELLS SOMEBODY WHAT THEY ALREADY SAW DEPOSITS
+                    # NOTHING, AND WITHOUT THIS LINE THE CHANNEL IS ALMOST ENTIRELY THAT.**
+                    # MEASURED over the 89 corpus worlds before this guard: 180 `told_by`
+                    # claims, of which **175 were a triple the hearer ALREADY HELD
+                    # FIRSTHAND** -- one belief stored twice, which is the defect the
+                    # observation block forbids in those words one screen up, and it
+                    # consumes a `ledger_cap` slot the eviction then takes from somebody
+                    # else. The cause is not the mechanism: `corpus_run.build_at` seats all
+                    # three persons in ONE rung, so under `all_five` every observer already
+                    # witnessed everything the teller witnessed and there is no asymmetry
+                    # left to transmit. The honest figure with this guard is **5**.
+                    # ⚠ EXACT TRIPLE, NOT `(subject, predicate)`. A hearer who holds a
+                    # DIFFERENT value for the same cell is being contradicted, and that is
+                    # the epistemic layer working -- `agreement` pairs precisely those. Only
+                    # a claim a reader could not tell apart is suppressed.
+                    and not any(c.subject == _held.subject and c.predicate == _held.predicate
+                                and c.value == _held.value for c in p.ledger)):
                 seen_told = seen_told_by_pid.setdefault(pid, set())
                 _key = (_held.subject, _held.predicate)
                 if _key not in seen_told:
