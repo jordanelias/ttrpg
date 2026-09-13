@@ -10940,6 +10940,90 @@ def test_the_populated_world_is_not_everybody_in_one_room():
         "the rung-subject defect one level worse — see `build_realm`'s membership block")
 
 
+def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
+    """Offices, titles and holdings — and the one property that makes `leaders` mean anything.
+
+    ⚠ THIS TEST EXISTS BECAUSE THE FIRST CUT OF THE OFFICE BLOCK FAILED IT. It gave every placed
+    person an Office named after their registry `role`, so `leaders(w, f) == members(w, f)` for all
+    eight factions: everybody a leader, nothing scarce, nothing to compete for. Nothing raised —
+    a full set is a perfectly plausible answer — so the defect was visible only by asking whether
+    the two sets DIFFER. That question is this test.
+
+    ⚠⚠ MUTATION-VERIFIED, AND THE RESULT NAMES WHICH ASSERTION IS LOAD-BEARING. Re-seating an
+    office for every placed person and re-running the two guards:
+
+        0 < seats < len(persons)        PASSES  (40 offices, 46 persons) — DOES NOT CATCH IT
+        some faction has leaders < members   FAILS — catches it
+
+    So the count assertion is a floor and not the falsifier: 40 of 46 is a perfectly respectable
+    ratio and is still the defect. Recorded rather than left for a later session to re-derive,
+    because a test suite whose passing assertion is mistaken for the guarding one is `§0.1` pt 2's
+    own failure — an assertion that cannot observe the failure it excludes.
+    """
+    from ..harness.populated import build_realm
+    from ..queries.world_q import members, leaders, sovereign_fraction, conferral_path
+    w = build_realm(seed=0)
+
+    # THE LADDER HAS ITS MIDDLE. `duchy` is a declared `rung_kind` that no world this repo built
+    # had ever instantiated, so `province -> realm` skipped the rung the governance ladder turns on.
+    assert w._office_census["seated"], "no office in a populated world: `leaders` returns nothing"
+    duchies = [r for r in w.rungs.values() if r.kind == "duchy"]
+    assert duchies, "no `duchy` rung — the governance ladder is missing its middle"
+
+    # A SEAT IS SCARCE. Both halves matter: some people hold one, and MOST DO NOT.
+    seats = w._office_census["seated"]
+    assert 0 < seats < len(w.persons), (
+        f"{seats} offices for {len(w.persons)} persons. An office per person is an occupation "
+        "list, not a governance layer — §11 gives an Office `conferral`, `revocation` and "
+        "`upkeep`, none of which a copyist has")
+
+    # LEADERSHIP IS A PROPER SUBSET OF MEMBERSHIP, AND STRICTLY SO SOMEWHERE. Equality everywhere
+    # is the exact defect above; containment alone would not catch it.
+    factions = [k for k in w.propositions if k.startswith("fac_")]
+    assert factions, "no faction Propositions"
+    strict = 0
+    for fid in factions:
+        ms, ls = set(members(w, fid)), set(leaders(w, fid))
+        assert ls <= ms, (
+            f"{w.propositions[fid].subject}: a leader who is not a member. §14.2 reads leadership "
+            "THROUGH membership — an office-holder who never committed is staff")
+        strict += ls < ms
+    assert strict, (
+        "every faction's leaders are exactly its members. That is the office-per-person defect: "
+        "when everyone holds a seat, `leaders` carries no information")
+
+    # A TITLED SEAT SITS AT THE RUNG ITS TITLE GOVERNS, and the walk up from it is what
+    # "the duchy is underneath the Crown" means mechanically (Jordan, 2026-09-13).
+    titled = [o for o in w.offices.values() if o.rung is not None]
+    assert titled, "no office seated at a rung — no title ladder was built"
+    for o in titled:
+        assert o.scope_rung == o.rung, (
+            f"{o.post} is seated at {o.rung} with scope {o.scope_rung}; a titled post's purview is "
+            "the rung it governs (`Office.__post_init__`)")
+        path = conferral_path(w, o.id)
+        assert path and path[0] == o.rung and path[-1] in w.rungs, (
+            f"{o.post}: conferral_path {path} does not start at its own rung and climb")
+    assert any(len(conferral_path(w, o.id)) > 1 for o in titled), (
+        "no titled seat is contained in anything. A duchy that answers to nobody is the "
+        "subordination Jordan's ruling describes, unbuilt")
+
+    # HOLDINGS ARE THE FACTION'S, NOT A PERSON'S — canon states control per province and never
+    # names a holder, so the `hold` subject is a Proposition (§14.2's licensed shape).
+    held = [t for t in w.tenures if t.kind == "hold" and t.live and t.object in w.rungs]
+    assert held, "no faction holds any territory"
+    assert all(t.subject in w.propositions for t in held), (
+        "a RUNG is held by something that is not a faction Proposition. Canon's starting-control "
+        "table names a faction per province and never a person")
+
+    # AND AN UNHELD PROVINCE IS REPORTED, NOT ASSIGNED. `Uncontrolled` is the geography's own value
+    # for a province nobody holds; it must reach `undetermined_count` rather than a plausible owner.
+    frac, undetermined = sovereign_fraction(w, "r_valoria")
+    assert 0.0 < frac < 1.0, (
+        f"sovereign_fraction over the realm is {frac}. Canon gives six factions a share of 17 "
+        "provinces, so neither 0 nor 1 is a reading of this map")
+    assert undetermined > 0, "nothing is undetermined, so the unheld province was given an owner"
+
+
 def test_the_npc_roster_is_read_and_not_merely_shipped():
     """`engine/season/npcs.yaml` is the AUTHORITY for where an NPC lives and what they want, and
     this asserts the loop actually opens it.

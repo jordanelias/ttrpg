@@ -55,6 +55,23 @@
 #            if it concerns directly the identity of a faction can be concerned near-canon but
 #            superseded by anything in world."* Two conditions, both required: it must concern
 #            directly a faction's IDENTITY, and world must not say otherwise.
+#   TIER 2a · `systems/npcs/reference/npc_behavior_v30.md` SUPERSEDES
+#            `systems/factions/reference/faction_politics_v30.md`. ⭐ RULED by Jordan, 2026-09-13,
+#            verbatim: *"NPC behaviour supersedes faction politics."* It was asked because the two
+#            disagree about WHO SITS IN A FACTION'S INNER CIRCLE, by half: politics §1.2c gives
+#            Hafenmark four named and §1.3c gives Varfell five; behaviour §2.16/§2.17 give TWO and
+#            TWO, dropping Almstedt, Feldhaus, Thorvald Hann, Maret Uln and Edeyja, and assigning
+#            two of the survivors different Conviction and Resonant-Style values for the same
+#            people. Both are tier 2, so the tier order could not settle it — which is why it went
+#            to a ruling rather than being resolved by precedence.
+#            ⚠ THE RULING CHANGES NO DATA IN THIS TREE, AND THAT IS THE USEFUL PART.
+#            `references/npc_registry.yaml` — the structured 46-row cast — ALREADY matches
+#            behaviour on every contested cell: two-person councils, the same two people in each,
+#            the same four resonant styles. The one apparent difference is Björn Holdar's
+#            conviction (behaviour `Continuity`, registry `Warden`), and that is the ratified
+#            PP-685 §4 legacy migration the registry documents in its own rows, not a conflict.
+#            So the superseding document and the machine-readable cast agree, and building from
+#            the registry IS building to this ruling. MEASURED 2026-09-13.
 #   TIER 3 · `research/`        — REFERENCE. Verbatim: *"research/ contains useful information to
 #            make everything more robust"*, and *"the research directory will also speak towards
 #            the kind of governance and bureaucratic functions that may be relevant to game too."*

@@ -79,7 +79,12 @@ def test_same_class_groups_and_separates():
     # the same class shouldn't be flagged as a cross-class gap. Two conviction axes
     # are same-class; a conviction axis and a faction are not.
     assert va.same_class('Faith', 'Order') is True          # both conviction
-    assert va.same_class('Crown', 'Church') is True         # both faction
+    # ⭐ RE-PINNED 2026-09-13 on a RULING, not on drift. Jordan: *"the church is Church of
+    # Solmund."* `references/names_index.yaml`'s `world.church` canonical moved from `Church`
+    # to `Church of Solmund` (with `Church` kept as an alias), resolving a §8 collision where
+    # that file and `engine/season/rosters.yaml: factions` single-owned one faction name and
+    # disagreed. This assertion reads the CANONICAL, so it moves with the ruling.
+    assert va.same_class('Crown', 'Church of Solmund') is True   # both faction
     assert va.same_class('Faith', 'Crown') is False         # conviction vs faction
     assert va.same_class('unlisted', 'alsounlisted') is False  # neither in any class
 
@@ -223,15 +228,19 @@ def test_token_classes_sourced_from_names_index_byte_identical():
     # factions: sourced from names_index world.* (token_class: faction) with CUSTOM patterns
     # (negative lookaheads) — roster is order-independent (verified), so checked as a SET.
     FAC_PATS = {
-        'Crown': [r'\bCrown\b(?! Treaty)'], 'Church': [r'\bChurch\b(?! Influence)'],
+        # ⭐ RE-PINNED 2026-09-13 on Jordan's ruling (see `test_same_class_groups_and_separates`).
+        # The KEY is the canonical name and moved; the PATTERN is unchanged, because a bare
+        # "Church" in prose still mentions the faction — which is what a pattern is for.
+        'Crown': [r'\bCrown\b(?! Treaty)'],
+        'Church of Solmund': [r'\bChurch\b(?! Influence)'],
         'Hafenmark': [r'\bHafenmark\b'], 'Varfell': [r'\bVarfell\b'],
         'Löwenritter': [r'L[oö]wenritter'],
         'Restoration Movement': ['Restoration Movement', r'\bRM\b(?![a-z])'],
         'Guilds': [r'\bGuilds?\b'],
     }
     FAC_CTX = {'Crown': [r'\bAlmud\b', r'\bfaction\b', r'\bMandate\b', r'\bTreaty\b', r'\bTorben\b'],
-               'Church': [r'\bArne\b', r'\bCardinal\b', r'\bPiety\b', r'\bHeresy\b', r'\bfaction\b',
-                          r'\bConfessor\b', r'\bdoctrine\b']}
+               'Church of Solmund': [r'\bArne\b', r'\bCardinal\b', r'\bPiety\b', r'\bHeresy\b',
+                                     r'\bfaction\b', r'\bConfessor\b', r'\bdoctrine\b']}
     assert set(va.CLASSES['faction']) == set(FAC_PATS)
     for disp, pats in FAC_PATS.items():
         tok = va.SEED_TOKENS.get(disp)

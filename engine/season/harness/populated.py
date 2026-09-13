@@ -68,10 +68,10 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
-from ..data.rosters import FACTIONS, load_yaml
+from ..data.rosters import FACTIONS, load_yaml, title_domain
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
-from ..state.carriers import Person, Proposition, Rung, Site, Tenure
+from ..state.carriers import Office, Person, Proposition, Rung, Site, Tenure
 from ..state.ids import H, draw_factory
 from ..state.world import World
 from . import probes as P
@@ -234,10 +234,47 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # -- the canonical layers -------------------------------------------------
     realm = "r_valoria"
     w.rungs[realm] = Rung(realm, "realm")
+
+    # ⚠⚠ **THE `duchy` RUNG, WHICH NOTHING HAD EVER INSTANTIATED.** `rung_kinds` declares eight and
+    # every world this repo built used six: provinces hung directly off the realm, so the ladder
+    # `settlement < territory < province < duchy < realm` had a hole in it where the middle of the
+    # governance ladder belongs. Jordan, 2026-09-13: *"the duchy is also underneath the Crown and
+    # subject to it"* — which is a statement about the CONTAINMENT ladder, and is exactly what a
+    # duchy rung between province and realm expresses.
+    #
+    # TWO, AND ONLY TWO, BECAUSE CANON NAMES TWO DUCAL TITLES. `worldbuilding_v30.md:25-26` is
+    # tier 1 and gives *"Duke of Varfell | Magnus Vaynard"* and *"Duchess of Hafenmark | Inga /
+    # Inge"*. The Crown has no duchy — the King governs the realm directly — and the Church holds
+    # one province without a ducal seat, so neither gets one. Inventing a third would be authoring
+    # a polity canon does not name.
+    #
+    # ⚠ THE TENSION IS RECORDED RATHER THAN SMOOTHED. `faction_politics_v30.md:246` frames Vaynard
+    # as *"first among the Jarls, not a monarch"* and calls Varfell a Jarl Confederacy, so "duchy"
+    # is tier 1's lore-form over a structure tier 2 describes differently. Tier 1 wins on identity
+    # and names, which is what this is; the rung is a place on a containment ladder and asserts
+    # nothing about how the Jarls choose him.
+    duchy_of: dict = {}
+    for fac_name in ("Hafenmark", "Varfell"):
+        did = f"duchy_{_slug(fac_name)}"
+        w.rungs[did] = Rung(did, "duchy")
+        w.add_tenure(Tenure(f"t_{did}_in", did, realm, "contain", 0))
+        duchy_of[fac_name] = did
+
     for tid, prov in geo["provinces"].items():
         rid = f"prov_{tid}"
         w.rungs[rid] = Rung(rid, "province")
-        w.add_tenure(Tenure(f"t_{rid}_in", rid, realm, "contain", 0))
+        holder = str(prov.get("faction") or "")
+        # ⚠ A FOREIGN PROVINCE GETS NO PARENT, AND THAT IS THE POINT RATHER THAN A GAP. Schoenland
+        # is on the faction roster and is FOREIGN — `rosters.yaml` records it as not
+        # player-eligible, holding its province and granting or refusing Altonian naval passage —
+        # so a `contain` edge into `r_valoria` would assert it is part of the realm. It is a root
+        # rung instead, which keeps it out of `descendants(realm)` and therefore out of the
+        # realm's `sovereign_fraction`, where counting it would be a canon error wearing a number.
+        # `references/world_initial_state.yaml` makes the same cut from the other side: it carries
+        # 16 territories and deliberately omits T16, Schoenland's.
+        if holder == "Schoenland":
+            continue
+        w.add_tenure(Tenure(f"t_{rid}_in", rid, duchy_of.get(holder, realm), "contain", 0))
     for sid, s in geo["settlements"].items():
         rid = f"set_{_slug(sid)}"
         w.rungs[rid] = Rung(rid, "settlement")
@@ -400,6 +437,126 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         w.add_tenure(Tenure(f"t_{pid}_member", pid, f"fac_{_slug(fac_name)}", "commit", 0))
     # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets.
     w._unplaced_cast = unplaced
+
+    # -- WHAT EACH FACTION HOLDS ------------------------------------------------
+    #
+    # §14.2's closing note is both the licence and the warning: *"A Proposition may be a `hold`
+    # subject and is never destroyed, so a memberless faction leaves territory held by a banner
+    # nobody carries."* That is how canon's holdings attach at all — `geography_v30.md`'s
+    # starting-control table names an owner per PROVINCE and never a person, so the holder has to
+    # be the faction, and a faction IS a Proposition. The declared defect is §54's, not repaired
+    # here.
+    #
+    # ⚠ `Uncontrolled` WRITES NO EDGE, AND THAT IS THE MECHANISM WORKING. It is the geography's own
+    # value for a province nobody holds; `cast.resolve_faction` returns `None` for it, so the
+    # province lands in `sovereign_fraction`'s `undetermined_count` instead of being quietly
+    # assigned to somebody. An unheld province is a fact about the world and a thing to play for.
+    for tid, prov in geo["provinces"].items():
+        held_by = cast.resolve_faction(prov.get("faction"))
+        if held_by is None:
+            continue
+        w.add_tenure(Tenure(f"t_hold_prov_{tid}", f"fac_{_slug(held_by)}",
+                            f"prov_{tid}", "hold", 0))
+
+    # -- WHO GOVERNS: OFFICES AND TITLES ----------------------------------------
+    #
+    # ⭐ RULED by Jordan, 2026-09-13: *"a faction is not just comprised of people but also offices
+    # and titles."* Membership above is the people; this is the other two. Until now a populated
+    # world held **zero offices** — `leaders()` returned nothing for every faction, `remit:`
+    # eligibility matched nobody, and the whole governance surface was reachable in principle and
+    # empty in fact.
+    #
+    # ⚠ **BUILT FROM `references/npc_registry.yaml`'s `role`, NOT FROM THE PROSE TABLES, AND THAT
+    # CHOICE IS WHAT MAKES IT SAFE.** An adversarial pass found `faction_politics_v30.md` §1.2c/
+    # §1.3c and `npc_behavior_v30.md` §2.16/§2.17 disagreeing about Inner Circle membership BY
+    # HALF — four against two for Hafenmark, five against two for Varfell, with two survivors given
+    # different Conviction and Resonant-Style values. ⭐ Jordan ruled it the same day: *"NPC
+    # behaviour supersedes faction politics"* (recorded at `rosters.yaml`'s precedence block as
+    # tier 2a). MEASURED: the registry already matches the superseding document on every contested
+    # cell, so reading `role` per person builds to the ruling and never touches the contested
+    # prose.
+    #
+    # ⚠ `body` IS `None` FOR ALL BUT THE THREE AUTHORED OVERLAYS, AND THAT IS HONEST RATHER THAN
+    # LAZY. §11 makes `rung?` optional and `office_bodies` carries a faction's TOP organs only —
+    # `Ministries` is one row where canon names six ministries, the four Cardinals are there and
+    # the four Dicasteries under them are not, and Hafenmark's Committees and Varfell's Councils
+    # are absent entirely. MEASURED: only 10 of 25 canon-named seats can construct with a body.
+    # An office with a declared FACTION and no body is lawful (`office_faction(None, declared)`)
+    # and says exactly what is known: who they answer to, not which organ they sit in. Expanding
+    # `office_bodies` is a data edit and is the next unit, not this one.
+    #
+    # ⚠ THE THREE OVERLAYS WIN WHERE THEY EXIST. `cases/exercises/{NPC-008,NPC-033,NPC-038}.yaml`
+    # carry an authored `office:` block — post, body-or-faction, and a `remit:` read from the
+    # case's own nouns with the reasoning attached. They are the tree's own worked examples of how
+    # an office is authored, so they are read rather than overridden, and their `body`/`faction` is
+    # taken as-is so a derived faction cannot be forced to disagree with the constructor.
+    #
+    # ⚠ EVERY OTHER OFFICE CARRIES `remit_acts: []`, WHICH IS A DECLARED ABSENCE. Canon states no
+    # per-post remit, and the five remit acts are a CLOSED set whose members gate verbs — inventing
+    # one would silently hand somebody an authority nobody granted. An empty remit is lawful and
+    # grants nothing.
+    from .corpus_run import rescales          # deferred — `data/__init__` records what eager costs
+    overlays = rescales()
+    seated, no_post, occupations, proposed = 0, [], [], []
+    for case in cases:
+        cid = str(case.get("id"))
+        pid = f"p_{_slug(cid)}"
+        r = cast.row(cid)
+        if r is None:
+            continue
+        fac_name, _sub, _raw = cast.faction_of(r)
+        if fac_name is None:
+            continue                          # unplaced above; an office needs a faction (§11)
+        over = (overlays.get(cid) or {}).get("office") or {}
+        title = cast.title_of(r)
+        governs = title_domain(title) if title else None
+        # ⚠⚠ **AN OFFICE IS A SEAT, NOT AN OCCUPATION, AND THE FIRST CUT OF THIS BLOCK CONFLATED
+        # THEM.** It gave every placed person an Office named after their registry `role`, which
+        # made `leaders(w, faction) == members(w, faction)` for all eight factions — everybody a
+        # leader, the word meaning nothing, and no seat scarce enough to be worth competing for.
+        # §11 is the corrective: an Office carries `conferral`, `revocation`, `establishment[]` and
+        # `upkeep`. A copyist and a hedge-school teacher have none of those; they have work.
+        #
+        # THE DISCRIMINATOR IS AUTHORED, NOT INFERRED. `references/npc_registry.yaml` packs a
+        # SUB-ORGANIZATION into its `faction` cell — `Crown (Inner Circle)`, `Hafenmark (Inner
+        # Council)`, `Varfell (Jarl Council)`, `Crown (Ministry)`, `Crown (Royal Family)` — and an
+        # occupation carries none. So: a sub-organization, a title on the governance ladder, or an
+        # authored `office:` overlay. Anything else is a life, and the registry still records what
+        # they do.
+        #
+        # ⚠ `Royal Family` SEATS ONE, AND THAT IS THE MARGINAL CALL SAID OUT LOUD. A lineage is not
+        # an organ, but the three rows it covers are the Heir Apparent, the Widow Regent and a
+        # Princess married into Altonia — succession seats, which is the one thing a `hold` on a
+        # realm-scale office is for. Recorded rather than silently included.
+        if not (over or governs or _sub):
+            occupations.append(cid)
+            continue
+        # A TITLED POST IS THE BARE TITLE, so `title_domain` resolves and `Office.__post_init__`
+        # sets `scope_rung` to the rung it governs. `role` carries the same fact as prose
+        # ("Duke (Varfell Leader)"), which that lookup cannot match.
+        post = str(over.get("post") or (title if governs else r.get("role") or "")).strip()
+        if not post:
+            no_post.append(cid)
+            continue
+        rung = realm if governs == "realm" else duchy_of.get(fac_name) if governs == "duchy" else None
+        oid = f"off_{_slug(cid)}"
+        w.offices[oid] = Office(
+            oid, post, rung, list(over.get("remit") or []),
+            body=over.get("body") if over else None,
+            faction=(over.get("faction") if over else None) or (None if over.get("body") else fac_name),
+        )
+        w.add_tenure(Tenure(f"t_{oid}_hold", pid, oid, "hold", 0))
+        seated += 1
+        # ⚠ A PROPOSED SEAT IS SEATED AND COUNTED AS PROPOSED. The registry marks 35 rows
+        # `canonical` and 11 `proposed`, and the two council members that EXCEED
+        # `npc_behavior_v30.md` §2.16/§2.17's two-per-council — the ruling's superseding
+        # document — are exactly two of the proposed ones (NPC-081, NPC-082, whose `#4` /
+        # `#5` seat numbers YAML ate as comments). Dropping them would discard authored
+        # work; hiding the distinction would let a proposal read as canon a session later.
+        if str(r.get("status")) != "canonical":
+            proposed.append(cid)
+    w._office_census = {"seated": seated, "no_post": no_post,
+                        "occupations": occupations, "proposed_seats": proposed}
 
     # -- WHAT EACH PERSON WANTS, AND WHO IT CONCERNS ----------------------------
     #

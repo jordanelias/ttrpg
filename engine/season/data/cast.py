@@ -40,21 +40,46 @@ from ..gaps import Unspecified
 NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 
 # ---------------------------------------------------------------------------
-# THE ONE ALIAS, AND IT IS A COLLISION BETWEEN TWO REGISTRIES RATHER THAN TWO FACTIONS.
+# ALIASES ARE READ FROM THE REGISTRY THAT OWNS THEM, NOT RETYPED HERE.
 #
-# `references/names_index.yaml` — which feeds the BLOCKING naming gate (`tools/ci_naming_check.py`)
-# — carries `world.church` with `canonical: "Church"` and `token_class: "faction"`.
-# `rosters.yaml: factions` carries `"Church of Solmund"`. Both are canonical, in different
-# registries, for the one organization: `office_bodies` seats the four Cardinals and the Holy See
-# under `Church of Solmund`, and there is exactly one church in the setting.
+# ⭐ RULED by Jordan, 2026-09-13: *"the church is Church of Solmund."* Before that ruling
+# `references/names_index.yaml` — which feeds the naming gate — carried `world.church` with
+# `canonical: "Church"` while `rosters.yaml: factions` carried `"Church of Solmund"`: two
+# registries single-owning one faction name and disagreeing, which is a §8 violation and surfaced
+# the first time executing code read `references/npc_registry.yaml` (which uses the short form).
+# The ruling landed in `names_index.yaml`, where `Church` is now an ALIAS of the canonical name.
 #
-# ⚠ THIS IS A §8 VIOLATION IN THE TREE, NOT A TRANSLATION THIS MODULE INVENTS. Two registries
-# single-own the same name and disagree; `names_index.yaml` additionally has NO entry for
-# `Schoenland`, which `rosters.yaml` does carry. Which spelling wins is a naming ruling, not a
-# loader's call, so this maps the one direction the data actually needs and says out loud that the
-# disagreement is upstream and unresolved. A second entry here would be this module quietly
-# becoming the third owner.
-_REGISTRY_ALIAS = {"Church": "Church of Solmund"}
+# ⚠ SO THIS MODULE DERIVES ITS MAP AND DOES NOT AUTHOR ONE. A literal `{"Church": "Church of
+# Solmund"}` here would have made this the THIRD owner of the same fact — the exact shape the
+# ruling exists to end — and it would go stale silently the next time a faction gains an alias.
+# `alias -> canonical` is built from the `token_class: faction` rows, so a new alias is a data
+# edit in one file (the standing rule at the head of `rosters.yaml`).
+#
+# ⚠ `names_index.yaml` HAS NO `Schoenland` ROW, though `rosters.yaml: factions` carries it. That
+# is a real gap in the naming index rather than anything this loader can fix, and it costs nothing
+# here: a faction with no aliases needs no row to resolve by its own name.
+def _alias_map() -> dict:
+    """`{alias: canonical}` over every `token_class: faction` row in `names_index.yaml`."""
+    global _ALIASES
+    if _ALIASES is None:
+        try:
+            entries = (load_yaml(files.NAMES_INDEX_YAML.read_text(encoding="utf-8"))
+                       or {}).get("entries") or {}
+        except FileNotFoundError:
+            entries = {}
+        out: dict = {}
+        for row_ in entries.values():
+            if not isinstance(row_, dict) or row_.get("token_class") != "faction":
+                continue
+            canon = row_.get("canonical")
+            for alias in (row_.get("aliases") or []):
+                if canon:
+                    out[str(alias)] = str(canon)
+        _ALIASES = out
+    return _ALIASES
+
+
+_ALIASES: Optional[dict] = None
 
 # ⚠ `[^)]*` AND A SEPARATE `tail`, BECAUSE A NON-GREEDY `.*?` SWALLOWS THE CLOSING PAREN.
 # `Crown (Inner Circle) / Löwenritter Liaison` (NPC-035, Theodor Kreutz) parsed to a
@@ -136,10 +161,27 @@ def faction_of(r: dict) -> tuple[Optional[str], Optional[str], str]:
     for candidate in (base, inner):
         if not candidate:
             continue
-        resolved = _REGISTRY_ALIAS.get(candidate, candidate)
+        resolved = _alias_map().get(candidate, candidate)
         if resolved in FACTIONS:
             return resolved, (inner if candidate == base else None), raw
     return None, inner, raw
+
+
+def resolve_faction(name: Optional[str]) -> Optional[str]:
+    """A bare faction name resolved to its canonical roster spelling, or `None`.
+
+    The one owner of *is this string a faction*. `faction_of` reads a registry ROW and has to
+    unpack a packed `faction (sub-organization)` cell; this takes a plain string — the geography
+    file's per-province `faction:` column, for one — and does nothing but alias-resolve and check.
+
+    ⚠ `Uncontrolled` RESOLVES TO `None`, WHICH IS THE ANSWER AND NOT A FAILURE. It is the
+    geography's own value for a province nobody holds, and the caller writes no `hold` edge for it
+    — so the province shows up in `sovereign_fraction`'s `undetermined_count`, which is the
+    mechanism reporting an unheld place rather than a lookup quietly failing."""
+    if not name:
+        return None
+    resolved = _alias_map().get(str(name).strip(), str(name).strip())
+    return resolved if resolved in FACTIONS else None
 
 
 def convictions_of(r: dict) -> dict:

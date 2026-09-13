@@ -268,7 +268,14 @@ entries:
   world.valorsplatz: {canonical: "Valorsplatz", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   # -- factions --
   world.guilds: {canonical: "Guilds", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bGuilds?\b']}
-  world.church: {canonical: "Church", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bChurch\b(?! Influence)'], context: ['\bArne\b', '\bCardinal\b', '\bPiety\b', '\bHeresy\b', '\bfaction\b', '\bConfessor\b', '\bdoctrine\b']}
+  # RULED by Jordan, 2026-09-13: "the church is Church of Solmund." This row said `Church` while
+  # `engine/season/rosters.yaml: factions` said `Church of Solmund`, so two registries single-owned
+  # one faction name and disagreed — a §8 violation that surfaced when `references/npc_registry.yaml`
+  # (which uses the short form) was first read by executing code. `Church` becomes an ALIAS, not a
+  # `legacy:` name: the gate enforces only `legacy` names, so the short form stays lawful prose and
+  # nothing in the corpus is newly flagged. `patterns` is unchanged — a bare "Church" still MENTIONS
+  # the faction, which is what that field is for.
+  world.church: {canonical: "Church of Solmund", aliases: ["Church"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bChurch\b(?! Influence)'], context: ['\bArne\b', '\bCardinal\b', '\bPiety\b', '\bHeresy\b', '\bfaction\b', '\bConfessor\b', '\bdoctrine\b']}
   world.crown: {canonical: "Crown", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bCrown\b(?! Treaty)'], context: ['\bAlmud\b', '\bfaction\b', '\bMandate\b', '\bTreaty\b', '\bTorben\b']}
   world.hafenmark: {canonical: "Hafenmark", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bHafenmark\b']}
   world.uncontrolled: {canonical: "Uncontrolled", aliases: [], legacy: [], category: proper_noun, enforce: warn}
