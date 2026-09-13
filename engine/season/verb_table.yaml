@@ -19,6 +19,17 @@
 # §30's own rule. The loader checks it; a verb naming a pair Part D does not carry raises at load
 # rather than at the first act that uses it.
 #
+# ⚠ `OBSTACLE` IS NOT `OBSTRUCTION`, AND THIS TABLE IS WHERE THE TWO GET CONFUSED (ED-IN-0220).
+# `ED-IN-0210` Ruling 1 — Jordan, 2026-09-10 — says a real interaction has a COUNTERPARTY, an
+# OBSTACLE and a DEGREE. The OBSTACLE is the difficulty this act is resolved against: the `Ob` a
+# pool is thrown at, resolver-side, a number, and a person may BE one. It is what `contests:`
+# routes to. OBSTRUCTION is a different thing entirely — `T-g` in
+# `architecture/meta/01_AXIOMS.md`, where another person's PRIOR act refuses yours, enforced by a
+# precondition like `confer`'s 1-per-object and carried by `emits_on_refusal`. An obstacle is
+# ROLLED AGAINST; an obstruction produces a REFUSAL and no degree at all, and needs no verb, no
+# field and no knowledge of the obstructor. Look for an `obstruct` verb here and you will not find
+# one, by design. Defined at both sites per `CLAUDE.md` §4; `T-g` is the prose home.
+#
 # ELIGIBILITY IS ONE OF FOUR KINDS — `own`, `remit:<act>`, `hold:<object>`, `presence:<rung>` — AND
 # NEVER `capability`. #353 §9.2: "`capability` supplies dice and GATES NOTHING." An office makes an
 # ORDINARY verb eligible; no verb exists only for office-holders, and none carries a modifier.

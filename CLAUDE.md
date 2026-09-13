@@ -437,11 +437,18 @@ numbers from it**). Everything removed is at its fork ref; every old path resolv
 
 ## 4. Conventions
 
-- **Long documents: sequential parts, not index+infill (RULED by Jordan).** A document outgrowing the
-  token cap in `references/atomization_rules.yaml` splits into **`_part2`, `_part3`, … in reading
-  order**. The `*_index.md` + `*_infill.md` pair is **RETIRED as a default**; existing pairs are
-  grandfathered, not a migration target. Nothing enforces the pair rule — it propagated by imitation —
-  but the size cap itself *is* enforced, by `tools/compliance_check.py`.
+- **Long documents: sequential parts, not index+infill (RULED by Jordan).** A document that has become
+  unwieldy to work with splits into **`_part2`, `_part3`, … in reading order**. The
+  `*_index.md` + `*_infill.md` pair is **RETIRED as a default**; existing pairs are grandfathered, not a
+  migration target. **Nothing enforces either half of this — not the pair rule and not a length — and
+  the previous sentence here claiming the cap "*is* enforced" was false** (ED-IN-0220): the general
+  `.md`/`.yaml` caps in `references/atomization_rules.yaml` were advisory, exited 0, and fired on **116
+  files with a median only 40% over**, so they described the tree's ordinary document size rather than
+  flagging an outlier. They are deleted; that file's comment carries the measurement. **When it splits
+  is your judgment**, and the test is whether a reader can work with it — not a number. ⚠ The
+  **explicit per-file** caps in that file are untouched and several ARE blocking (`on_exceed: error` on
+  the patch-register archives, `block_commit` on the session logs); read the rule for the file you are
+  editing rather than assuming either way.
 - **Versioning ≠ currency.** Three orthogonal axes coexist with **no reliable mapping**: filename `_v30`,
   in-file `## Version: vN.N`, and the `v40` generation marker (no file carries `_v40`). **Only
   `CURRENT.md` and a head's `## Status:` line can tell you what is current.** Concrete hazard: `_v30` is
@@ -617,7 +624,7 @@ decides WHEN each of these runs is §0.4 — the full gate is a close step, not 
 | **Code-architecture / Layer-1 conformance** — does the code conform to `architecture/`, and at what enforcement grade | `layer-conformance` (Lens B), which reads `architecture/meta/04_CODE_ARCHITECTURE.md` at the row, quotes it with its line, and copies no table, grade definition or count out of it |
 | Editorial-debt workflow over the JSONL ledger | `valoria-editorial-register` |
 | Structural-debt corpus scan | `valoria-vector-audit` |
-| Splitting an oversized doc; index/infill hygiene | `valoria-chunker`; the size cap is enforced by `tools/compliance_check.py` (§4 — nothing enforces the pair rule) |
+| Splitting an oversized doc; index/infill hygiene | `valoria-chunker`; **nothing enforces a general length cap** (§4 — the advisory `.md`/`.yaml` caps were deleted as uninformative, ED-IN-0220). `tools/compliance_check.py` still enforces the **explicit per-file** rules, some blocking |
 | Assembling a canonical artifact (with canon-guard) | `valoria-compiler` |
 | "Where are we?" / does the milestone run | `python tools/m1_acceptance.py --summary` — the only reading §0.2 accepts. Season loop: `python -m engine.season.harness.register --requirements` |
 | "What's the state of the repo?" | No tool, by design. Read `CURRENT.md`, `HANDOFF.md`, and the tree |

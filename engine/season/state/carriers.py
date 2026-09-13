@@ -80,7 +80,15 @@ class StateChange:
 class Event:
     """S19 -- THE RECORD THAT WAS MISSING. S19.3: three fields are NOT on it and each absence
     is a design decision -- no actor (attribution is a per-witness Claim), no target (observers
-    are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT), no stat_deltas."""
+    are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT), no stat_deltas.
+
+    ⚠ `Event` IS AN ATYPICAL SENSE OF THE WORD -- read it as "the occurrence", NEVER as "the
+    message". Ordinary usage, and every other engine's usage, makes an event a thing someone did
+    to someone; here it is neither, by `T-d` and `T-e`. If you are looking for who did it you want
+    a `Claim`; for who learned of it, `WITNESS`. A reader who brings the ordinary sense looks for
+    the actor field, does not find it, and concludes the carrier is incomplete -- which is the
+    mistake the three absences exist to prevent. Defined at both sites per `CLAUDE.md` §4:
+    `architecture/meta/01_AXIOMS.md` §D.9 is the prose home (ED-IN-0220)."""
     id: str
     kind: str
     subject: str

@@ -9,6 +9,119 @@ experiment it was the instrument for. Read this file, and your lane's, yourself.
 This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint machinery
 (which depended on the retired GitHub-API harness and token budgets).
 
+---
+
+# ⭐ BUILD ORDER — 2026-09-13 · **START HERE IF YOU ARE STARTING A SESSION TO BUILD THE GAME**
+
+**Jordan, 2026-09-13:** *"I want to be able to start a new session and start tackling everything to build
+the game."* This section exists to make that possible in one read. **It is not a banner** (`CLAUDE.md`
+§0.3 forbids building one, and none is generated — you are reading a file you opened yourself), and it
+**generates nothing**: every item below traces to a requirement row in
+`engine/season/requirements.yaml`, a hole in `engine/season/hole_register.yaml`, or a ruling Jordan
+already issued. Nothing here is a finding that became a work item.
+
+**The one thing to internalise first, because it reorders everything:** `CLAUDE.md` §0.2 — **done means
+the behaviour EXECUTES.** Every item below names the artifact that proves it ran. If you find yourself
+authoring a document instead, you are in the loop §0.3 describes.
+
+## The tree's actual state, in five measured facts
+
+| | |
+|---|---|
+| **Only 5 of 38 verbs both execute AND write state** | `create_record · move · release · transfer · utter`. **Six more execute and write nothing** (`interview · reconstruct · research · speak · surveil · tell` — emit-only), and **six have a working effect body that no person can reach** (`confer · convene · destroy_record · revoke` = `H-71`, plus `kill / wound` and `work`). ⚠ The two elevens in `requirements.yaml` R-05 are **different sets** — a coincidence of count, not the same eleven |
+| **No act in the game has a counterparty** | 177,170 candidates formed across the corpus; 17,400 carry a person as subject and **every one is the asker naming themselves**. Zero name anyone else |
+| **Every belief in the game is firsthand** | 25 worlds, 4,499 claims, **all `firsthand`, zero `told_by`**, and `standing_of` returns the maximum gap for **75 of 75** persons. Four `claim_sources` are declared; one and a half are written |
+| **`R-03` is the only requirement that is `met`** | `met 1 · not_met 4 · partial 4`. Run `python -m engine.season.harness.register --requirements` — **do not trust a number written anywhere, including here** |
+| **M1 row 1 is two stubs, and one is now a filed ruling** | `generate_npc` → **`ED-WR-0011`** (Jordan's, filed 2026-09-13). `form_knot` → structural, rides the cross-scale derivation class, needs no ruling |
+
+## The order, cheapest game-moving work first
+
+**1 · THE COUNTERPARTY — one authored value.** ⭐ *Start here. It is the cheapest change in the tree with
+the largest effect, and it executes a ruling Jordan already made.*
+
+`engine/season/harness/corpus_run.py:280` authors `Proposition("prop_x", "OUGHT", ids[chain[0]], …)` —
+the third argument is a **rung** id. Make it a **person** id and every committed person's Q4 question
+refers to a *person*. Measured, with the corpus as the control:
+
+```
+control  prop_x.subject = r_hearth (a rung)   84 candidates ·  0 naming another person
+arm      prop_x.subject = p_a     (a person)  84 candidates · 56 naming another person
+```
+
+Same candidate count — the **referent** changed. In the arm **all eleven executing verbs** are offered
+with a person counterparty (`interview p_a`, `tell p_a`, `surveil p_a`, `create_record about p_a` …).
+Nothing is added: `Proposition.subject` is an unconstrained `str` (`state/carriers.py`),
+`decision/options.py` resolves `subject`/`to`/`site` to that one referent, and `_eff_utter` already
+*defaults* a Proposition's subject to the actor. **Q4 is the only door** — Q2's guard
+`c.subject == p.id or c.subject in mine` bars the others by construction.
+**Traces to:** `ED-IN-0210` Ruling 1 (*"verbs invoke mechanisms or interactions between a character and
+another entity/character. they are not fiats"*), re-sorted to WORK by `ED-IN-0218`.
+**Falsifier:** restore `ids[chain[0]]`; 56 must return to 0.
+**The real work is authorial, not mechanical** — deciding *which* Propositions name persons in which
+cases. That is the deliverable, not the one-line change.
+
+**2 · GIVE `tell` AN EFFECT BODY, SO SOMETHING IS ACTUALLY TOLD.** `tell` executes, declares
+`writes: []`, and has **no entry in `loop/effects.py`** — so the one verb whose entire purpose is
+transmission transmits nothing. That is why there are 4,499 `firsthand` claims and zero `told_by`: a
+witness to a telling learns *that a telling happened* (WITNESS deposits `e.kind`), never *what was
+told*. An effect body that deposits a `told_by` claim in the addressee's ledger is the single change
+that makes belief transmission run.
+**Traces to:** R-07 (`partial` on a prose reading) and `rosters.yaml`'s `claim_sources`.
+**Falsifier:** drive the corpus and count `told_by`. It is 0 of 4,499 today and must be non-zero.
+**Then `standing_of` should stop returning the maximum gap for 75 of 75 persons** — that is the
+consumer-side reading of the same fact, and it is the stronger test.
+
+**3 · CLOSE `H-71` — four verbs with working effect bodies that no person can form.**
+`hole_register.yaml` H-71, **tier 0, `grade: absent`**: §F1 clause 2 says eligibility is evaluated
+person-side and `remit:<act>` cannot be, because the person owns the `hold` Tenure while the **office**
+owns the remit. `person_side_eligible` therefore declines every `remit:` alternative unconditionally, so
+`confer`, `convene`, `dispatch` and `revoke` are unreachable in every world — **including one where the
+actor genuinely holds the office whose remit names the act.** The resolve half was built 2026-09-02 and
+cannot affect any run.
+**Falsifier already in the tree and green:**
+`test_no_person_can_choose_a_governance_verb_and_h71_is_why` — it **reddens** the day this closes, which
+is how you know it worked. ⚠ **Do not re-derive H-71.** It is carried in four places already
+(`hole_register.yaml` · `requirements.yaml` R-05 · `HANDOFF_IN.md` · `architecture/PLAN.md`); a session
+re-derived it on 2026-09-12 with a worse instrument and a wrong membership list.
+
+**4 · THE SIX ANTONYM CLOSERS — semantics already ruled, authoring only.** `ED-IN-0210` Ruling 2:
+`oblige`↔WAIVE · `succeed`↔DEPOSED · `tie/knot`↔FRAY/LOOSEN · `issue`↔RESCIND ·
+`petition`↔WITHDRAW/DENY (two-sided) · `establish`↔ABOLISH/DISSOLVE. **None exists in
+`verb_table.yaml`.** `utter` is deliberately unpaired (§14: a Proposition is immutable).
+**Build it with item 5** — a declared term ends a relation *when nobody acts*; an antonym ends it
+*because somebody did*. Ship either alone and relations stay one-way.
+
+**5 · `Tenure.term` — `T-n`'s unbuilt half.** `verb_table.yaml` records it as unbuilt in its own words;
+Layer 1 spells it `Tenure.term?`. MATTER already matures act-declared stages at a later tick and
+**stops if the maker is gone** — the same branch on a `Tenure` is the whole change. `T-o` constrains it:
+the opening act declares *when*, the **Seat** declares who may end it early.
+
+**6 · THEN the two rulings that are genuinely Jordan's.** Both are filed and neither is startable
+without him: **`ED-WR-0011`** (OI-05 — a closed authored cast, or an open demographic source? ⭐ answer it
+**together with `ED-SE-0051`/E-1**, which is the same question from the settlements side) and
+**`ED-1051`** (the `engine_clock` doc home, which gates M3 entirely).
+
+## What NOT to do, in order of how much time it has cost before
+
+1. **Do not build a guard.** `CLAUDE.md` §0.1 pt 5's predicate: a defect in an artifact load-bearing
+   only on this repository's *process* is evidence the artifact **can be wrong without cost** — delete
+   it or accept it, and **write nothing**. Apparatus outnumbers game, so a session that reads apparatus
+   mints apparatus.
+2. **Do not re-derive a measured hole.** Check `hole_register.yaml` and the requirement row's
+   `measured:` block **first**. Two sessions have now independently "found" `H-71`.
+3. **Do not read the ledger only as code and canon.** Four of fourteen proposals written on 2026-09-12
+   turned out to execute or answer `ED-IN-0210`, ruled **two days earlier**. **Read
+   `registers/editorial_ledger*.jsonl` for the fortnight before you start.**
+4. **Do not run the full pytest suite after each edit** (§0.4). One file mid-session; the full gate
+   **once**, at the close, with `-n auto`.
+5. **Do not cache a requirement count** anywhere, including in this file. Run the instrument.
+
+## Known-red on arrival, so you do not debug your container
+
+`tests/valoria/test_forked_status.py` fails **two** tests on a **shallow** clone — the `FORK:` rows name
+commits the checkout cannot reach. `cat .git/shallow` settles it in one command. Everything else in
+`tests/valoria` is green (**1779 passed**, 2026-09-13).
+
 ## ⚠ CURRENT — 2026-09-10 (later) · **ARC 1 HAS LANDED. ARC 3 IS LARGELY UNBLOCKED; ONLY U9 IS NOT.**
 
 **PR #386 merged (`main` `c2de9ee`) and it executed Arc 1 rather than only planning it** — 11

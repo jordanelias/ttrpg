@@ -211,7 +211,17 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # replaced, and systems/threadwork/sim/coherence.py is still the replaced shape -- so costs are
     # given as bands and CURRENT.md's Threadwork row is annotated rather than moved. No code changed.
     # Same update-the-pin-and-say-so path this test's own failure message asks for.
-    released = {'SC': 38, 'FA': 39, 'WR': 11, 'SE': 52}
+    # PIN UPDATED 2026-09-13: WR 11 -> 12. ED-WR-0011 allocated to file OI-05 AS A RULING -- the
+    # world-gen NPC count and season-tick generation trigger, which until now lived only as a
+    # `reason=` string inside a stubwire call at engine/mc_v18.py:194 and was invisible to every queue
+    # instrument in the repo. workplans/valoria_master_workplan_v7.md §3.1 names filing it "the first
+    # action this document asks for"; it is M1 acceptance row 1's remaining ruling-side blocker,
+    # `status: open`, `needs_jordan: true`, and the entry exists in registers/editorial_ledger_wr.jsonl.
+    # This is the update-the-pin-and-say-so path this test's own failure message prescribes, not a
+    # revert of the walk-back: the frozen pre-walk-back WR pointer was 10 -- ED-IN-0098 'returned'
+    # 0010-0012 per that lane's annotation in references/id_reservations.yaml -- so 12 cannot be
+    # reached by reverting ED-IN-0098.
+    released = {'SC': 38, 'FA': 39, 'WR': 12, 'SE': 52}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (
