@@ -80,6 +80,64 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 
 ---
 
+## ⚠ CURRENT — 2026-09-13 (later), PR #404: the governance layer is BUILT, and two rulings closed two of the three questions below
+
+**Supersedes the "NEXT, IN ORDER" list in the entry directly below — items 1–3 of it are done.**
+
+⭐ **TWO RULINGS BY JORDAN, both recorded where code reads them:**
+  * *"the church is Church of Solmund."* It was a **three**-owner collision, not two:
+    `names_index.yaml` and `proper_noun_registry.yaml` both said `Church`. All three agree now, with
+    `Church` kept as an ALIAS so the gate (which enforces `legacy:` names only) flags nothing and
+    the corpus's 256 occurrences are not a rename backlog. `tools/ci_names_consistency.py` caught
+    the third mirror the moment the index moved. `data/cast.py` DERIVES its alias map from the index
+    rather than carrying a literal — a hardcoded map would have made it the fourth owner.
+  * *"NPC behaviour supersedes faction politics."* Recorded at `rosters.yaml`'s precedence block as
+    **TIER 2a**. ⚠ MEASURED: **it changes no data.** `references/npc_registry.yaml` already matches
+    `npc_behavior_v30.md` §2.16/§2.17 on every contested cell, and the two rows exceeding its
+    two-per-council count are exactly the two marked `status: proposed`. Building from the registry
+    IS building to the ruling.
+
+**BUILT:** 19 offices · 2 `duchy` rungs (a declared `rung_kind` no world had ever instantiated) ·
+16 provinces held via `hold(faction Proposition -> province)` matching canon's starting-control
+table exactly · Schoenland's province deliberately parentless because it is foreign.
+`conferral_path` for Duchess Baralta walks `duchy_hafenmark -> r_valoria`.
+
+⚠ **THE FIRST CUT GAVE EVERY PERSON AN OFFICE** named after their registry `role`, so
+`leaders == members` for all eight factions — nothing scarce, nothing to compete for, and nothing
+raised because a full set is plausible. The discriminator is AUTHORED: the registry packs a
+sub-organization into its `faction` cell and an occupation carries none. Now 19 seats / 21
+occupations, and Guilds, Löwenritter and the Restoration Movement have members, no seats, no land.
+The falsifier is MUTATION-VERIFIED and the mutation names which assertion is load-bearing:
+`0 < seats < persons` PASSES under the defect (40 of 46); only the strict-subset check catches it.
+
+**TWO CORRECTIONS TO THE MASTER WORKPLAN, both from measurement (`§8.2a`, `§8.2b`):**
+  * §8.2's *"WITNESS fans every Event to every person"* is **false of `build_realm`**. `all_five`
+    admits **1,670 of a possible 135,608** observer-slots (1.2%); `co_located` does 97% of it; no
+    channel admits everyone except `chronicle`, once, in 2,948 events. The "~90% identical" figure
+    was ONE PAIR who share a workshop.
+  * ⚠ **AND §8.2a's own first writing was wrong the same way** — it read "zero `told_by`, nothing is
+    ever transmitted, a producer gap" off a ONE-SEASON run. Corrected in place. The channel
+    SATURATES (told 5/18/35 over 1/2/3 seasons; claims 0/7/7) and **the producer never fails**:
+    of 17 tellings that reached a hearer, `_told_content` returned usable content 17 times. The
+    ceiling is (a) **51% of tellings are heard by nobody but the teller** — which `L2` makes
+    unfixable in `options.py`, since a person cannot know who is present before speaking — and
+    (b) 10 of 17 tell somebody what they already hold, correctly suppressed.
+
+**STILL JORDAN'S (one of the original three):** is the faction roster short? Six of the 46 belong to
+`Altonia` (3), `Independent (Southernmost Wardens)` (2) and the dissolved Virke syndicate (1). Your
+precedent — *"Wouldn't it just imply that we don't have enough factions?"* — points at adding names,
+but that is authoring canon. They stay unplaced and counted.
+
+**AND ONE RAISED BY THE BUILD:** should a faction's creed be an `OUGHT`? It ships `HOLDS`, so it
+perturbs no deliberation. As `OUGHT` every member deliberates on it each season with a faction NAME
+as the Q4 referent — `build_at`'s measured rung-subject defect one level worse.
+
+**NEXT, and needing no ruling:** expand `rosters.yaml: office_bodies`. MEASURED: only **10 of 25**
+canon-named seats can construct WITH a body — `Ministries` is one row where canon names six
+ministries, the four Cardinals are present and the four Dicasteries beneath them are not, and
+Hafenmark's Committees and Varfell's Councils are absent entirely. Offices currently carry
+`body=None` with a declared faction, which is lawful and says less than canon knows.
+
 ## ⚠ CURRENT — 2026-09-13, PR #404: a faction becomes buildable and readable, and three items are Jordan's
 
 **The diagnosis, measured rather than argued.** A populated world had a map and no politics in it:
