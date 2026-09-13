@@ -75,8 +75,7 @@ from ..state.carriers import Person, Proposition, Rung, Site, Tenure
 from ..state.ids import H, draw_factory
 from ..state.world import World
 from . import probes as P
-from .corpus_run import seed_convictions
-from .run_cases import load_cases
+from .run_cases import load_cases, seed_convictions, wants_of
 
 GEOGRAPHY = "systems/settlements/valoria_geography_v30.yaml"
 VENUES = "engine/season/venues.yaml"
@@ -140,25 +139,6 @@ def institution_of(case: dict) -> str | None:
     return None
 
 
-def wants_of(case: dict) -> str:
-    """WHAT THIS LOOP WANTS, in the case's own words.
-
-    ⚠ THE CASES CARRY THIS AND THE FIRST CUT OF THIS MODULE IGNORED IT, giving all 143 people the
-    string *"a standing ambition"* -- 143 identical wants, which is `build_at`'s three-identical-
-    people defect re-created at scale. `season_requires` is a list of `{need, why, hardness}` and
-    the corpus declares **427 `core` needs across the 143 cases** (median 7 needs each). The first
-    `core` need is what the case says it cannot do without.
-
-    Falls back through `important` and then to the one-line summary, because a case with no `core`
-    row is a corpus gap and a person with no want does not act at all -- and an ambition invented
-    here would be the fabrication this module refuses everywhere else.
-    """
-    rows = [r for r in (case.get("season_requires") or []) if isinstance(r, dict)]
-    for hardness in ("core", "important", "flavour"):
-        for r in rows:
-            if r.get("hardness") == hardness and r.get("need"):
-                return str(r["need"])
-    return str(case.get("one_line") or case.get("name") or case.get("id"))
 
 
 # ⚠ TITLES ARE NOT NAMES (Jordan, 2026-09-13: *"inge baralta is Duchess baralta etc. so don't

@@ -19,6 +19,8 @@ from __future__ import annotations
 import re
 
 from ..data.matrix import MATRIX
+from ..data.rosters import CONVICTIONS
+from ..state.ids import H
 from ..data.verbs import VERB_TABLE
 from ..loop.driver import resolvable_verbs
 from ..data import files
@@ -26,6 +28,85 @@ from ..gaps import ShapeGap
 from ..trace_log import TRACE
 from . import exercises as EX
 from . import probes as P
+
+
+# ===========================================================================
+# WHAT A CASE SAYS ABOUT THE PERSON IT SEATS. Two derivations, one home.
+#
+# ⚠ THEY LIVED IN TWO DIFFERENT HARNESSES AND THAT WAS THE DEFECT (§8). `wants_of` was in
+# `populated.py` and `seed_convictions` in `corpus_run.py`, so the two instruments that build a
+# world from a case reached across each other to share them -- and `corpus_run` could not read
+# `wants_of` at all without an import cycle. Both are PURE FUNCTIONS OF A CASE DICT, which is what
+# this module already owns (`load_cases`), so this is where they belong and neither harness now
+# imports the other.
+# ===========================================================================
+
+def seed_convictions(seed: int, case_id: str, pid: str) -> dict:
+    """WHAT ONE PERSON BELIEVES, DRAWN FROM THE CASE ID. `{conviction: weight}`, 1-3 entries.
+
+    ⚠ **THE SINGLE OWNER OF THIS DRAW (`CLAUDE.md` §8), AND IT BECAME ONE BY BEING COPIED.**
+    `harness/populated.py` seats 46 people and reproduced this formula verbatim -- the same radix,
+    the same `axis:` purpose strings, the same `(0.9, 0.5, 0.3)` ladder -- which is TWO OWNERS OF
+    WHICH PEOPLE ARE ALIKE. Free to drift, and drifting invisibly: `stance` is empty in these
+    worlds and §F2's `urgency` term carries no conviction, so this draw ALONE orders every
+    candidate, and two copies differing by one weight would give two instruments two different
+    populations while both reported on "the corpus".
+
+    ⚠ THE PURPOSE STRING STAYS `axis:` THOUGH IT PICKS A CONVICTION. Changing it would re-draw
+    every person in the corpus and move every golden for a reason that is a rename, not a
+    behaviour -- `04 PART D row 35` cares about purpose UNIQUENESS, not spelling. The SET it
+    indexes changed from 4 to 13, which moves the draw on its own and is `U3`'s.
+
+    ⚠⚠ **ONE TO THREE CONVICTIONS, NOT ONE, AND #353 §14 IS WHERE THE RANGE COMES FROM:**
+    *"`convictions` | weights over the closed 13 | **1-3 primary + distributed**"*. Seeding exactly
+    one was the harness's simplification and it was load-bearing in the wrong direction. MEASURED
+    2026-09-11 over 86 corpus-shaped seeds, counting DISTINCT axis directions the projection
+    produces: **1 conviction -> 13 · 2 -> 66 · 3 -> 80.** With one, the count is capped at the size
+    of the roster by construction, and worse than that suggests: 9 of the 13 convictions point
+    within 60° of a common direction (`traditional+ sacred+ hierarchical+ instrumental-`), so a
+    single-conviction person is one of about five characters however the draw falls. Two or three
+    COMBINE into vectors that are genuinely apart.
+
+    ⚠ THE COUNT ITSELF IS DRAWN, so cases differ in how many things their people care about rather
+    than all holding exactly N. Weights descend 0.9 / 0.5 / 0.3: "primary" is §14's own word for
+    the first, and the rest are the "distributed" remainder.
+
+    ⚠ `U3`: THE WEIGHTS ARE OVER THE THIRTEEN CONVICTIONS, NOT OVER THE FOUR AXES. Seeding from
+    `CONVICTION_AXES` was correct while that roster WAS the conviction set; after the swap it
+    would hand every person a weight on `hierarchical`, which is a basis vector and not something
+    anybody believes.
+    """
+    convictions = sorted(CONVICTIONS)
+    # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s blake2b hexdigest -- same as combat_seam.py:153. The `3` is #353 §14's own upper bound: "1-3 primary + distributed"]
+    n_conv = 1 + int(H(seed, 0, case_id, f"axis:{pid}:n"), 16) % 3
+    # [JUSTIFIED: a DESCENDING ladder, not three chosen magnitudes -- #353 §14 distinguishes the "primary" conviction from the "distributed" remainder and supplies no numbers. What the corpus needs is that the first outweighs the rest; 0.9 matches the single-conviction weight this replaced, so a 1-conviction case is unchanged by the ladder]
+    chosen, weights = {}, (0.9, 0.5, 0.3)
+    for k in range(n_conv):
+        purpose = f"axis:{pid}" if k == 0 else f"axis:{pid}:{k}"
+        # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as combat_seam.py:153]
+        pick = int(H(seed, 0, case_id, purpose), 16) % len(convictions)
+        chosen.setdefault(convictions[pick], weights[k])
+    return chosen
+
+def wants_of(case: dict) -> str:
+    """WHAT THIS LOOP WANTS, in the case's own words.
+
+    ⚠ THE CASES CARRY THIS AND THE FIRST CUT OF THIS MODULE IGNORED IT, giving all 143 people the
+    string *"a standing ambition"* -- 143 identical wants, which is `build_at`'s three-identical-
+    people defect re-created at scale. `season_requires` is a list of `{need, why, hardness}` and
+    the corpus declares **427 `core` needs across the 143 cases** (median 7 needs each). The first
+    `core` need is what the case says it cannot do without.
+
+    Falls back through `important` and then to the one-line summary, because a case with no `core`
+    row is a corpus gap and a person with no want does not act at all -- and an ambition invented
+    here would be the fabrication this module refuses everywhere else.
+    """
+    rows = [r for r in (case.get("season_requires") or []) if isinstance(r, dict)]
+    for hardness in ("core", "important", "flavour"):
+        for r in rows:
+            if r.get("hardness") == hardness and r.get("need"):
+                return str(r["need"])
+    return str(case.get("one_line") or case.get("name") or case.get("id"))
 
 CHAIN = files.CHAIN_CASES_DIR
 
