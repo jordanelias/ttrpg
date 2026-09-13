@@ -156,6 +156,189 @@ def presence(w: World, rung_id: str) -> list[str]:
             and t.subject in w.persons]
 
 
+# ===========================================================================
+# §14.2 -- THE POLITY QUERIES. "A faction IS a Proposition plus its `commit` edges."
+#
+# §22's `Nobody` row assigns FACTION, LEADERS, PRESENCE, DENSITY and FOOTPRINT to nobody, as
+# Queries stored nowhere, and §17 names each in the resolver-side list. Four of the five had no
+# body. They are written here rather than in a new module because `04 §A.2` types `queries/` as
+# `world_q · person_q · cache` -- a `polity_q.py` would be a fourth member and a conformance
+# defect, and these are world-first reads like every other function in this file.
+#
+# ⚠ THE SEMANTICS ARE NOT TRANSCRIBED, BECAUSE §17 GIVES ONLY `name(w, ...)`. What IS transcribed
+# is the definition each rests on -- §14.2 for membership, §15's cardinality table for the edge
+# kinds, §22.4's three L3 clauses for what an aggregate may compose over. Where the argument list
+# or the denominator is this module's choice, the docstring says so in those words.
+#
+# ⚠ EVERY ONE READS LIVE EDGES ONLY. §22.4 clause 3 REFUSES any aggregate monotone in the ENDED
+# edge set -- `count{commit}` over live AND ended rows is "members ever", which is a ratchet built
+# out of structural edges. `t.live` is not a filter for tidiness; dropping it changes the kind of
+# thing the function is.
+# ===========================================================================
+
+def members(w: World, faction: str) -> list[str]:
+    """Everyone with a LIVE `commit` to this Proposition. §14.2: *"Membership is `commit`."*
+
+    ⚠ THIS IS THE WHOLE OF MEMBERSHIP AND THERE IS NO SECOND ROUTE. Before this, the only way a
+    person belonged to a faction was to hold an Office whose `body` resolved to one -- so a
+    faction had no laity, no rank-and-file and no congregation, and `role_templates` keyed on
+    faction described a population that could not exist. `commit` was already the ruled edge and
+    was carrying only a person's private want."""
+    TRACE.query("members", "resolver")
+    return sorted(t.subject for t in w.tenures
+                  if t.kind == "commit" and t.object == faction and t.live
+                  and t.subject in w.persons)
+
+
+def leaders(w: World, faction: str) -> list[str]:
+    """The members who hold an Office belonging to this faction. §17 · §22's `Nobody` row.
+
+    ⚠ IT IS THE INTERSECTION AND NOT EITHER HALF, which is the claim worth stating: an
+    office-holder who has not committed is staff, not a leader, and a committed member holding no
+    office is a member. Both readings were available and this one is what §14.2 leaves room for --
+    the faction is the Proposition plus its commits, so leadership has to be read THROUGH
+    membership rather than beside it.
+
+    ⚠ `Office.faction` IS DERIVED AT CONSTRUCTION from `body` (`Office.__post_init__`), so this
+    never re-derives it and cannot disagree with the constructor.
+
+    ⚠⚠ TWO IDENTIFIERS NAME ONE FACTION AND THE FIRST WRITING OF THIS FUNCTION COMPARED THEM
+    DIRECTLY, SO IT RETURNED `[]` FOR A WORLD THAT HAD A LEADER IN IT. `members` keys on the
+    PROPOSITION ID (`f_hafen`) because that is what a `commit` edge points at; `Office.faction`
+    carries the FACTION NAME (`Hafenmark`) because that is what `rosters.yaml: factions` holds and
+    what `office_faction` validates against. §14.2 decides which is canonical -- the faction IS
+    the Proposition -- so the Proposition's `subject` is its name, and the translation happens
+    here, once, rather than at every call site. Found by running it, not by reading it: the empty
+    list is a plausible answer for a faction with no office-holders, so no exception fires and no
+    test that only asserts a type would have seen it."""
+    TRACE.query("leaders", "resolver")
+    prop = w.propositions.get(faction)
+    name = prop.subject if prop is not None else faction
+    held = {t.object: t.subject for t in w.tenures if t.kind == "hold" and t.live}
+    inside = set(members(w, faction))
+    return sorted(who for oid, who in held.items()
+                  if who in inside
+                  and oid in w.offices and w.offices[oid].faction == name)
+
+
+def footprint(w: World, faction: str) -> list[str]:
+    """Every rung the faction REACHES: the rungs it holds, plus the rungs its members sit in.
+
+    ⚠ THE UNION IS THIS MODULE'S CHOICE AND THE TWO HALVES ARE DIFFERENT CLAIMS. Holding is
+    title; presence is reach. A faction with members in a city it does not hold has a footprint
+    there and no claim to it, which is the distinction the strategic layer turns on, so collapsing
+    to either half alone would answer a different question. §14.2 names `footprint` beside
+    `presence` and `density` without defining any of the three.
+
+    ⚠ A FACTION HOLDS A RUNG AS THE `hold` SUBJECT, WHICH §15's TABLE TYPES AS `Person -> ...`.
+    §14.2's own closing note is the licence and the warning: *"A Proposition may be a `hold`
+    subject and is never destroyed, so a memberless faction leaves territory held by a banner
+    nobody carries."* That defect is declared there and is not repaired here."""
+    TRACE.query("footprint", "resolver")
+    out = {t.object for t in w.tenures
+           if t.kind == "hold" and t.subject == faction and t.live and t.object in w.rungs}
+    inside = set(members(w, faction))
+    out |= {t.object for t in w.tenures
+            if t.kind == "contain" and t.live and t.subject in inside and t.object in w.rungs}
+    return sorted(out)
+
+
+def density(w: World, rung_id: str, faction: str) -> tuple[int, int]:
+    """`(members of this faction present, persons present)` over the containment subtree.
+
+    An R-1 aggregate: computed on demand over descendants, never received and never stored
+    (§22.4 clause 1's licensed shape). It counts PEOPLE, never anything a person holds inside
+    them -- clause 2 bars a Query that sums a per-person tally across holders, and a headcount is
+    not one.
+
+    ⚠ THE DENOMINATOR IS PERSONS PRESENT, NOT THE FACTION'S TOTAL MEMBERSHIP, so this reads as
+    *"how much of this place is theirs"* rather than *"how much of them is in this place"*. The
+    other denominator is the other question; both are one line, and the caller should say which
+    it means rather than this returning a bare ratio."""
+    TRACE.query("density", "resolver")
+    here = {rung_id, *descendants(w, rung_id)}
+    inside = set(members(w, faction))
+    present = [t.subject for t in w.tenures
+               if t.kind == "contain" and t.live
+               and t.object in here and t.subject in w.persons]
+    return sum(1 for p in present if p in inside), len(present)
+
+
+def sovereign_fraction(w: World, rung_id: str) -> tuple[float, int]:
+    """§17's one Query with a DECLARED return type: `-> (fraction, undetermined_count)`.
+
+    Over the rungs of the subtree: the share held by the single largest holder, and how many are
+    held by nobody. The signature is the architecture's; the denominator -- DETERMINED rungs only,
+    so an unheld rung lowers nothing and is reported separately -- is this module's reading of why
+    §17 bothered to return the second number at all. A fraction over all rungs would make
+    `undetermined_count` derivable and therefore pointless.
+
+    ⚠ `0.0, 0` FOR A SUBTREE OF ONE UNHELD RUNG IS THE HONEST ANSWER AND NOT A FAILURE. Nobody
+    holds anything, so no fraction is sovereign; the caller distinguishes that from a contested
+    subtree by the second number, which is what it is for.
+
+    ⚠ PERSON-KIND RUNGS ARE EXCLUDED, AND THE FIRST WRITING COUNTED THEM. `descendants` walks
+    `contain`, and a person's own rung is contained like everything else, so a realm with four
+    inhabitants reported four more `undetermined` places than it has. Sovereignty is over
+    TERRITORY; counting heads in the denominator makes a populous duchy look less determined than
+    an empty one. The exclusion is this module's reading and is stated rather than silent -- §10's
+    ladder does put `person` on it, and `own` eligibility is "a person governing themselves", so
+    the other reading exists and is simply not what this Query answers."""
+    TRACE.query("sovereign_fraction", "resolver")
+    here = [r for r in [rung_id, *descendants(w, rung_id)]
+            if r in w.rungs and w.rungs[r].kind != "person"]
+    holder_of: dict[str, str] = {}
+    for t in w.tenures:
+        if t.kind == "hold" and t.live and t.object in w.rungs:
+            holder_of[t.object] = t.subject
+    held = [holder_of[r] for r in here if r in holder_of]
+    undetermined = len(here) - len(held)
+    if not held:
+        return 0.0, undetermined
+    top = max(held.count(h) for h in set(held))
+    return top / len(held), undetermined
+
+
+def establishment_of(w: World, office_id: str) -> list[str]:
+    """§11 -- *"the named persons the office employs. Finite, contested, durable."*
+
+    Reads the Office's own field, which §22's ownership table gives to the Office
+    (`establishment[]` is listed there beside `post` and `remit`). It is NOT the holder: §22 is
+    explicit that an Office never owns *who holds it* -- that is a `hold` Tenure owned by the
+    holder -- so this returns staff and `hold_force` returns the seat's occupant.
+
+    ⚠ HOW MANY PERSONS AN OFFICE EMPLOYS IS `H-34`, GRADED `assumption`, AND IS NOT SUPPLIED
+    HERE. This reads whatever the world was built with and invents no default."""
+    TRACE.query("establishment_of", "resolver")
+    off = w.offices.get(office_id)
+    if off is None:
+        return []
+    return [p for p in off.establishment if p in w.persons]
+
+
+def conferral_path(w: World, office_id: str) -> list[str]:
+    """The chain of seats from this office UP to the rung that confers it, by containment.
+
+    §11 gives an Office a `conferral` basis and a `rung?`; §10 gives the ladder. The path is the
+    walk from the office's own rung to the root, which is the same walk `under_purview` makes and
+    is why a Duke seated at the realm would have realm-wide purview.
+
+    ⚠ IT RETURNS RUNGS, NOT OFFICES, AND THAT IS A LIMIT RATHER THAN A CHOICE. `H-101` is graded
+    `absent` and says so in terms: *"NOTHING CAN BE UNDER ANYTHING, AT EITHER INSTITUTIONAL
+    SCALE. `factions` is a flat set of eight names and `Office` has no superior."* Until an
+    Office can name a superior office, the only real chain is the place ladder, and returning
+    rungs says that out loud instead of implying an institutional one exists."""
+    TRACE.query("conferral_path", "resolver")
+    off = w.offices.get(office_id)
+    if off is None or off.rung is None:
+        return []
+    out, cur, seen = [], off.rung, set()
+    while cur is not None and cur not in seen:
+        out.append(cur); seen.add(cur)
+        cur = parent_of(w, cur)
+    return out
+
+
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
     """§F1's `q` producer -- FOUR sources, resolver-side, at the DELIBERATE barrier.
 
