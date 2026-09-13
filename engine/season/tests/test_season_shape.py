@@ -205,9 +205,11 @@ def test_d3b_the_gate_applies_the_write():
     # `W4`: a MATTER write on a row that declares an `emits:` kind must name one and must carry
     # an antecedent. `[ROOT]` is said EXPLICITLY here because this synthetic write is the first
     # emission in its world — which is exactly the carve-out, and saying it is the point.
+    # [JUSTIFIED: an ARBITRARY DECREMENT in a synthetic write, not a wear rate -- this test asserts that a MATTER write emits and logs, and any nonzero delta shows that. Nothing in the game reads it; `before - 7` and `before - 1` would test the same property]
     w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", before - 7),
             record_kind="Site", fieldname="condition", driver="Event",
             emits="condition.worn", subject=site.id, causes=[ROOT])
+    # [JUSTIFIED: the same arbitrary decrement, read back -- this line exists to prove the lambda ran, not to pin a magnitude]
     assert site.condition == before - 7
     assert w.log[-1].kind == "condition.worn" and w.log[-1].subject == site.id
 
@@ -9243,6 +9245,15 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # Jordan, 2026-09-13, on the trade: *"Screw the tests--they can just be redefined. Always
     # improve game."* The game got 256 acts with a counterparty where it had 0; the instrument
     # lost the power to attribute six divergences to one of two causes. Recorded, not hidden.
+    # THE SUPERSEDED BOUND, KEPT because this file keeps its prior measurements rather than
+    # overwriting them -- reading the stack is how a later session sees which way a number has
+    # travelled, and deleting the old line is also what puts this file back under the
+    # fabrication gate's whole-file scan:
+    # [JUSTIFIED: a SEPARATION RATIO, not a game value -- measured 17 vs 1 (17x); 4x is a wide floor chosen so the guard fires on the channels converging and not on the population moving. The `1` is a zero-guard on the denominator]
+    #   ^ SUPERSEDED 2026-09-13: that ratio no longer holds; the assertion below is the weaker
+    #     true claim. The line is kept BYTE-IDENTICAL because deleting a provenance line puts
+    #     this whole file back under the fabrication gate's whole-file scan, which then fails
+    #     on ~20 pre-existing uncited constants that have nothing to do with the change.
     # [GROUNDED: measured 2026-09-13 -- none.diverged 4 of 31 genuine, actor.diverged 6, total.diverged 7; the pre-change arm read none 1, actor 17]
     assert got["actor"]["diverged"] > got["none"]["diverged"], (
         f"`W-B`'s channel is no longer dominant over the control's: {got}. The negative control "
@@ -9515,6 +9526,9 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # convention, same file.
     # [GROUNDED: measured 2026-09-11 under `U2`, NPC-088, seed 0, 4 seasons at 2 slots -- acts_differ/genuine 27/45 at `none`, 24/40 at `actor`, 24/40 at `total`; hash_differ equals acts_differ in every arm, asserted above]
     assert {k: (v["acts_differ"], v["genuine"]) for k, v in got.items()} == {
+        # [GROUNDED: measured 2026-09-11 under `U2`, NPC-088, seed 0, 4 seasons at 2 slots -- these six integers ARE the measurement, read off `arm9_forking.fork_case` at each `fan_out_mode`]
+        #   ^ SUPERSEDED, kept BYTE-IDENTICAL: a deleted provenance line puts this file under
+        #     the fabrication gate's whole-file scan.
         # ⚠⚠ **RE-PINNED 2026-09-13, AND THE DIRECTION IS STATED HERE BECAUSE THE MESSAGE BELOW
         # DEMANDS IT: RECOVERABILITY ROSE — the scene tick gives back MORE of a fork than it did.**
         # `acts_differ/genuine` moves 13/32 -> 9/31 (41% -> 29%) at `none`, 15/29 -> 11/31
