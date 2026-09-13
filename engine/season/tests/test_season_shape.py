@@ -10879,22 +10879,65 @@ def test_the_populated_world_is_not_everybody_in_one_room():
         "most of the cast shares a roof is co-located in effect whatever the rung count says")
 
     # EVERY PERSON WANTS SOMETHING, AND IT IS THEIR OWN CASE'S WANT.
-    assert c["propositions"] == c["persons"], (
-        f"{c['propositions']} propositions for {c['persons']} persons. A person with no live "
+    #
+    # ⚠ SCOPED TO THE WANT-PROPOSITIONS, AND THE RE-SCOPING IS THE POINT RATHER THAN AN EXEMPTION.
+    # This read `propositions == persons` and used the COUNT as a proxy for *every person has a
+    # live `commit`*. That proxy held only while a Proposition could be one thing. §14.2 — *"A
+    # faction IS a Proposition plus its `commit` edges"* — gives the carrier a second job, so the
+    # world now holds one `fac_*` Proposition per faction beside one `prop_*` want per person, and
+    # the count identity is false while the INVARIANT IT STOOD FOR IS UNCHANGED. The invariant is
+    # asserted directly below, which is stronger than the count ever was: a count identity would
+    # have passed had two people shared a want and a third had none.
+    wants = {k: p for k, p in w.propositions.items() if k.startswith("prop_")}
+    factions_held = {k: p for k, p in w.propositions.items() if k.startswith("fac_")}
+    assert len(wants) == c["persons"], (
+        f"{len(wants)} want-propositions for {c['persons']} persons. A person with no live "
         "`commit` raises no Q4 question, forms no candidate and does not act at all — measured, "
         "the unseeded world ran a full season with 0 acts by 0 actors")
-    matters = {p.predicate for p in w.propositions.values()}
+    committed = {t.subject for t in w.tenures
+                 if t.kind == "commit" and t.live and t.object in wants}
+    assert committed == set(w.persons), (
+        f"{len(set(w.persons) - committed)} person(s) hold no live `commit` to a want. This is "
+        "what the old `propositions == persons` count was standing in for, asserted on the edges "
+        "rather than on a total")
+
+    # MEMBERSHIP IS `commit`, AND IT IS A SECOND EDGE ON THE SAME PEOPLE (§14.2 · §15's table,
+    # "this is faction membership"). Not every person belongs: six of the corpus name an
+    # affiliation that is on no roster, and `build_realm` leaves those unplaced rather than
+    # filing them under a plausible neighbour.
+    assert factions_held, "no faction Propositions: `members`/`leaders`/`footprint` return nothing"
+    member_edges = {t.subject for t in w.tenures
+                    if t.kind == "commit" and t.live and t.object in factions_held}
+    assert member_edges, "no `commit` edge points at a faction — membership is unbuilt"
+    assert len(member_edges) + len(w._unplaced_cast) == c["persons"], (
+        f"{len(member_edges)} placed + {len(w._unplaced_cast)} unplaced != {c['persons']} persons. "
+        "Every person is either a member of a rostered faction or explicitly counted as unplaced; "
+        "a person who is neither has been dropped silently")
+
+    matters = {p.predicate for p in wants.values()}
     assert len(matters) > c["persons"] / 2, (
         f"only {len(matters)} distinct wants across {c['persons']} people. The first cut gave "
         "every person the string 'a standing ambition'; `wants_of` reads the case's own first "
         "`core` row from `season_requires`, of which the corpus declares 427")
 
     # AND THE WANT CONCERNS A PERSON — `ED-IN-0210` Ruling 1, verbs are not fiats.
-    about_people = [p for p in w.propositions.values() if p.subject in w.persons]
-    assert len(about_people) == len(w.propositions), (
-        f"{len(w.propositions) - len(about_people)} proposition(s) name something that is not a "
+    # ⚠ QUANTIFIED OVER THE WANTS ONLY, AND A FACTION PROPOSITION IS THE REASON THE DISTINCTION
+    # NOW MATTERS RATHER THAN A LOOPHOLE IN IT. Q4 raises a question from a live `commit` to an
+    # **OUGHT**, emitting `(prop.subject,)` as the referent — so the rule this asserts binds every
+    # Proposition a person can be questioned about. The faction Propositions are `HOLDS`, exactly
+    # so that they carry membership without putting a faction NAME (not a person, not even a rung)
+    # into a referent; `build_realm` records that choice and the design question it leaves open.
+    # If a faction Proposition is ever made OUGHT, it lands in this assertion and must fail here
+    # until its subject is something an act can name.
+    oughts = {k: p for k, p in w.propositions.items() if str(p.mood).upper() == "OUGHT"}
+    about_people = [p for p in oughts.values() if p.subject in w.persons]
+    assert len(about_people) == len(oughts), (
+        f"{len(oughts) - len(about_people)} OUGHT proposition(s) name something that is not a "
         "person. Q4 emits `(prop.subject,)` as the referent, so a rung-subject proposition is "
         "exactly how `build_at` produced a corpus in which no act ever names anybody")
+    assert all(str(p.mood).upper() == "HOLDS" for p in factions_held.values()), (
+        "a faction Proposition is OUGHT. That puts a faction name into a Q4 referent, which is "
+        "the rung-subject defect one level worse — see `build_realm`'s membership block")
 
 
 def test_the_npc_roster_is_read_and_not_merely_shipped():

@@ -66,9 +66,9 @@ from __future__ import annotations
 import sys
 from collections import Counter, defaultdict
 
-from ..data import files
+from ..data import cast, files
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
-from ..data.rosters import load_yaml
+from ..data.rosters import FACTIONS, load_yaml
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Person, Proposition, Rung, Site, Tenure
@@ -324,12 +324,82 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         w.persons[pid] = Person(pid, str(case.get("name") or cid))
         w.rungs[pid] = Rung(pid, "person")
         w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))
-        # ⚠ CALLED, NOT COPIED, AND THE FIRST CUT COPIED IT. `corpus_run.seed_convictions` is the
-        # single owner of this draw (`CLAUDE.md` §8) and this module reproduced it verbatim --
-        # same radix, same `axis:` purpose strings, same `(0.9, 0.5, 0.3)` ladder. That is two
-        # owners of WHICH PEOPLE ARE ALIKE, in the one quantity that orders every candidate in
-        # these worlds. See that function for why the draw is 1-3 and not 1.
-        w.persons[pid].convictions = seed_convictions(seed, cid, pid)
+        # ⚠⚠ AUTHORED, NOT DRAWN — AND THE DRAW REMAINS AS THE NAMED FALLBACK IT ALWAYS WAS.
+        # `references/npc_registry.yaml` carries a weighted conviction vector for all 46 of these
+        # people, cited to canon, using only the canonical thirteen. Nothing that executes had ever
+        # opened it, so `seed_convictions` — a `blake2b(seed, case_id, pid)` draw — was supplying
+        # the one quantity that orders every candidate in these worlds. The contrast is not
+        # cosmetic: Carin Vedel (NPC-088), whose case is hand-copying SUPPRESSED texts, is authored
+        # `Liberty 0.60 / Equity 0.20` and was drawn `Authority 0.90` — the precise opposite of her
+        # own case. Almud Almqvist, the King, is authored `Virtue 0.45 / Authority 0.30` and was
+        # drawn `Faith 0.90`.
+        #
+        # ⚠ THE FALLBACK IS NOT DEAD CODE, AND `ID-13` IS WHY THE DISTINCTION MATTERS. It is
+        # unreachable on TODAY'S data (46 of 46 rows carry convictions, measured) and it is reached
+        # the moment a case is added to the corpus ahead of its registry row — which is the normal
+        # authoring order. A `None` here would seed a person with no convictions at all, and a
+        # person with no convictions scores every candidate identically, which is `uniform`, the
+        # sweep's CONTROL arm, shipped silently as a default.
+        #
+        # ⚠ `seed_convictions` IS STILL THE SINGLE OWNER OF THE DRAW (§8) and is still called
+        # rather than copied. What changed is which source is consulted first.
+        authored = cast.convictions_of(cast.row(cid) or {})
+        w.persons[pid].convictions = authored or seed_convictions(seed, cid, pid)
+
+    # -- WHO BELONGS TO WHAT ----------------------------------------------------
+    #
+    # §14.2, verbatim: **"A faction IS a Proposition plus its `commit` edges."** §15's cardinality
+    # table annotates `commit : Person -> Proposition, many` as **"this is faction membership"**.
+    # The edge was ruled, typed and built; nothing had ever used it for membership, so in every
+    # world this repo has constructed the only way to belong to a faction was to hold an office in
+    # one — no laity, no rank and file, and `role_templates` keyed on a population that could not
+    # exist. `members`, `leaders`, `footprint` and `density` (`queries/world_q.py`) read these
+    # edges and return nothing without them.
+    #
+    # ⚠⚠ **MOOD IS `HOLDS`, NOT `OUGHT`, AND THAT IS A DELIBERATE NARROWING RATHER THAN THE
+    # OBVIOUS READING.** §14 says an OUGHT Proposition is an uttered Belief, and a faction's creed
+    # plainly is one — but Q4 (`world_q.questions_for`) raises a standing question from every live
+    # `commit` to an OUGHT, with `referents = (prop.subject,)`. A faction Proposition's subject is
+    # a faction NAME, which is not a person and not even a rung, so every member would deliberate
+    # each season about a referent naming no entity in the world. That is the defect `build_at`
+    # already demonstrated from the other side: its one Proposition pointed at a RUNG and produced
+    # **0 of 4,870 acts naming another person**, which is why the want-Propositions below point at
+    # a PERSON (ED-IN-0210 Ruling 1 — *"verbs invoke mechanisms or interactions between a character
+    # and another entity/character. they are not fiats."*).
+    #
+    # So membership is written as a FACT (`HOLDS`) and changes no deliberation. Whether a faction's
+    # creed should ALSO stand as an OUGHT its members answer every season is a live design choice
+    # with two defensible answers and materially different games behind them — it is registered
+    # here and NOT taken.
+    #
+    # ⚠ THE PREDICATE IS DELIBERATELY THIN AND THE GAP IS NAMED. `faction_canon_v30.md`'s faction
+    # sheets carry an authored **Mission** per faction (text / objective / beneficiary / aligned +
+    # contradicted categories, `faction_state_authoring_v30.md`). Reading those in is a follow-on;
+    # inventing a creed here would put fabricated canon in the one carrier §14.1 makes IMMUTABLE
+    # and never destroyed.
+    for fac_name in sorted(FACTIONS):
+        fid = f"fac_{_slug(fac_name)}"
+        w.propositions[fid] = Proposition(fid, "HOLDS", fac_name, "is a faction of this world",
+                                          True, 0)
+    unplaced: list = []
+    for case in cases:
+        cid = str(case.get("id"))
+        pid = f"p_{_slug(cid)}"
+        r = cast.row(cid)
+        fac_name, sub, raw = cast.faction_of(r) if r else (None, None, "")
+        if fac_name is None:
+            # ⚠ NOT COERCED TO A NEIGHBOUR. Six of the 46 name an affiliation that is on no
+            # roster — `Altonia` (3), `Independent (Southernmost Wardens)` (2), the dissolved
+            # Virke syndicate (1). Jordan's own precedent on exactly this shape, recorded at
+            # `state/carriers.py`'s Office check: *"Why would requiring a faction on every office
+            # break canon? Wouldn't it just imply that we don't have enough factions?"* Adding a
+            # name to `rosters.yaml: factions` is authoring canon, so these stay unplaced and
+            # counted rather than filed under the nearest plausible banner.
+            unplaced.append((cid, raw))
+            continue
+        w.add_tenure(Tenure(f"t_{pid}_member", pid, f"fac_{_slug(fac_name)}", "commit", 0))
+    # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets.
+    w._unplaced_cast = unplaced
 
     # -- WHAT EACH PERSON WANTS, AND WHO IT CONCERNS ----------------------------
     #
