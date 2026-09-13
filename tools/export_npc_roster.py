@@ -38,12 +38,23 @@ fails only when a row names a case that does not exist, or a place that does not
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
 import yaml
 
-ROOT = Path(__file__).resolve().parents[1]
+# ⚠ THE BOOTSTRAP IS A `sys.path.insert`, NEVER AN ASSIGNMENT, AND THE FIRST CUT OF THIS FILE GOT
+# IT WRONG. It wrote `ROOT = Path(__file__).resolve().parents[1]` -- a fifty-fourth spelling of a
+# primitive `tools/ci_common.py` has owned since plan G7 (ED-IN-0159 §8.1), which is the exact rule
+# `CLAUDE.md` §8 states and which this tool's own commit message quoted. A module cannot import
+# `ci_common` without first knowing where `ci_common` is, so the path insert is legitimate; the
+# derived CONSTANT is not, and `tests/valoria/test_ci_common_primitives.py` is the guard that
+# reddened on it.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from ci_common import REPO, load_yaml  # noqa: E402
+
+ROOT = Path(REPO)
 ROSTER = ROOT / "engine" / "season" / "npcs.yaml"
 
 HEADER = """# THE NPC ROSTER — who exists, where they live, what they want, who it concerns.
@@ -124,7 +135,14 @@ def check() -> int:
     if not ROSTER.exists():
         print(f"[npc-roster ✗] {ROSTER.relative_to(ROOT)} does not exist. Run --build.")
         return 1
-    on_disk = yaml.safe_load(ROSTER.read_text(encoding="utf-8"))
+    # `ci_common.load_yaml`, the intended owner. The residual count of bare loader calls in
+    # `tools/` is pinned by `test_the_bare_yaml_load_residual_can_only_shrink` and may only go
+    # DOWN; this call had no reason to bypass the owner, since the file is on disk and its absence
+    # is already handled two lines up.
+    # ⚠ THE GUARD COUNTS THE LITERAL TOKEN, so naming it even in a COMMENT raises the residual.
+    # That is not a flaw worth fixing: a substring census is the only check that cannot be spelled
+    # around, and the cost is that prose about the rule must avoid writing the rule's own name.
+    on_disk = load_yaml(ROSTER)
     fresh = derive()
     sys.path.insert(0, str(ROOT))
     from engine.season.harness import populated as POP
