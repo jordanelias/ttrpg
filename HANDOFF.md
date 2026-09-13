@@ -116,6 +116,35 @@ without him: **`ED-WR-0011`** (OI-05 — a closed authored cast, or an open demo
    **once**, at the close, with `-n auto`.
 5. **Do not cache a requirement count** anywhere, including in this file. Run the instrument.
 
+## The lane handoffs were split on 2026-09-13 — closed work lives beside them (`ED-IN-0221`)
+
+Jordan: *"why don't you just hive off all closed IN work into its own document"* … *"tbh it's applicable
+to all handoffs"*. Four lanes were split, **verbatim and proved lossless** (the two files' line multisets
+partition the original exactly, checked against `git HEAD`):
+
+| lane | was | live now | closed |
+|---|---|---|---|
+| **IN** | 129,964 | **72,652** | `HANDOFF_IN_closed.md` 59,890 |
+| **MB** | 25,882 | **7,982** | `HANDOFF_MB_closed.md` 19,439 |
+| **PC** | 25,631 | **15,044** | `HANDOFF_PC_closed.md` 11,772 |
+| **SC** | 16,296 | **6,836** | `HANDOFF_SC_closed.md` 10,640 |
+
+Re-derive any of it with **`python tools/verify_handoff_split.py`**, which also re-proves the partition.
+**101,741 tokens of finished narrative left the orientation surfaces**; MB, PC and SC are now under their
+20k cap and IN is honestly still over, its residue being genuinely unresolved material. Each live file
+opens with an **index of what moved**, flagging units that contain imperative language, so a standing
+order inside finished work is one file-open away rather than buried. **Read the live file; never orient
+from a `_closed.md`.**
+
+⚠ **THIS FILE WAS DELIBERATELY NOT SPLIT, and the reason is a false positive worth knowing.** The
+predicate detects *unresolved-item* markers (`needs_jordan`, `[OPEN]`, `HELD`, `BLOCKED`, `TODO`,
+`awaiting`). **Instructional content carries none of those by nature** — it tells you what to do rather
+than tracking an open item — so a dry run classified the build order above as closed and would have moved
+it out. Worse, this file's `## Next actions` mixes dated session narrative with **summaries of Jordan's
+canon rulings** (TN 7, the universal degree bands, one resolver for d10 probability, `DECISIVE_OB` is
+dead). Deciding where a ruling record belongs is a judgment call, not a mechanical move, so it was left
+alone. At ~16.6k this file is still readable, which is what IN at 130k was not.
+
 ## Known-red on arrival, so you do not debug your container
 
 `tests/valoria/test_forked_status.py` fails **two** tests on a **shallow** clone — the `FORK:` rows name
