@@ -11,95 +11,161 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ---
 
-# ⭐ BUILD ORDER — 2026-09-13 · **START HERE IF YOU ARE STARTING A SESSION TO BUILD THE GAME**
+# ⭐ THE WORK ORDER — 2026-09-13 · **THE ONE ORDERED LIST. START HERE.**
 
-**Jordan, 2026-09-13:** *"I want to be able to start a new session and start tackling everything to build
-the game."* This section exists to make that possible in one read. **It is not a banner** (`CLAUDE.md`
-§0.3 forbids building one, and none is generated — you are reading a file you opened yourself), and it
-**generates nothing**: every item below traces to a requirement row in
-`engine/season/requirements.yaml`, a hole in `engine/season/hole_register.yaml`, or a ruling Jordan
-already issued. Nothing here is a finding that became a work item.
+**Jordan, 2026-09-13:** *"sort out all the open items into a legible order"*, after asking since the
+beginning. This section is that list and it is the ONLY thing in this file that claims to be current —
+every other dated section below is marked **WAS CURRENT** and is history. Five sections used to say
+`⚠ CURRENT`, from four different dates; that is what made this file unreadable.
 
-**The one thing to internalise first, because it reorders everything:** `CLAUDE.md` §0.2 — **done means
-the behaviour EXECUTES.** Every item below names the artifact that proves it ran. If you find yourself
-authoring a document instead, you are in the loop §0.3 describes.
+**Two rules that make the list trustworthy rather than merely tidy:**
 
-## The tree's actual state, in five measured facts
+- **Every row names the command that measures it.** Run the command; do not trust a number written
+  here, including mine. Numbers below carry the date they were measured.
+- **`CLAUDE.md` §0.2 — done means the behaviour EXECUTES.** Every row names its falsifier. If you find
+  yourself authoring a document instead, you are in the loop §0.3 describes.
 
-| | |
-|---|---|
-| **Only 5 of 38 verbs both execute AND write state** | `create_record · move · release · transfer · utter`. **Six more execute and write nothing** (`interview · reconstruct · research · speak · surveil · tell` — emit-only), and **six have a working effect body that no person can reach** (`confer · convene · destroy_record · revoke` = `H-71`, plus `kill / wound` and `work`). ⚠ The two elevens in `requirements.yaml` R-05 are **different sets** — a coincidence of count, not the same eleven |
-| **No act in the game has a counterparty** | 177,170 candidates formed across the corpus; 17,400 carry a person as subject and **every one is the asker naming themselves**. Zero name anyone else |
-| **Every belief in the game is firsthand** | 25 worlds, 4,499 claims, **all `firsthand`, zero `told_by`**, and `standing_of` returns the maximum gap for **75 of 75** persons. Four `claim_sources` are declared; one and a half are written |
-| **`R-03` is the only requirement that is `met`** | `met 1 · not_met 4 · partial 4`. Run `python -m engine.season.harness.register --requirements` — **do not trust a number written anywhere, including here** |
-| **M1 row 1 is two stubs, and one is now a filed ruling** | `generate_npc` → **`ED-WR-0011`** (Jordan's, filed 2026-09-13). `form_knot` → structural, rides the cross-scale derivation class, needs no ruling |
+⚠ **THE `measured:` BLOCKS IN `requirements.yaml` ARE STALE IN THE DIRECTION OF UNDERSTATING PROGRESS.**
+Re-measured 2026-09-13 by `python -m engine.season.harness.corpus_run`: R-01's row says R3 passes
+*"22/30 NPC and 34/59 ARC"*; it is **30/30 and 56/59**. R-08's row says candidate ties break
+*"ALPHABETICALLY BY VERB"* with *"only 2–7 of 22"* candidates scoring; the tie is **broken by the draw**
+(U4/H-96) and it is **16..22 of 28**. `PLAN.md`'s `W27` proof bar — *"distinct executed sets > 2 (2
+today)"* — reads **25**. Three items were ranked against those stale rows and two of them moved.
+**Re-run the instrument before you plan against a row.**
 
-## The order, cheapest game-moving work first
+---
 
-**1 · THE COUNTERPARTY — one authored value.** ⭐ *Start here. It is the cheapest change in the tree with
-the largest effect, and it executes a ruling Jordan already made.*
+## §1 · THE CENSUS — how many open items exist, so this order is known to be complete
 
-`engine/season/harness/corpus_run.py:280` authors `Proposition("prop_x", "OUGHT", ids[chain[0]], …)` —
-the third argument is a **rung** id. Make it a **person** id and every committed person's Q4 question
-refers to a *person*. Measured, with the corpus as the control:
+| surface | open | where |
+|---|---|---|
+| requirement rows (**THE NINE**, ruled ED-IN-0204) | **4 `not_met` · 4 `partial`** (1 met) | `engine/season/requirements.yaml` · `register --requirements` |
+| holes | **116 rows** — 44 tier-0, of which **10 are tier-0 `grade: absent`** | `engine/season/hole_register.yaml` |
+| verbs | **20 of 38 have no predicate and no effect**; 5 foldable but never attempted; 2 always refused; **11 execute** | `corpus_run` → `WHERE THE 38 GO` |
+| cases | **54 of 143 unrepresentable** (44 faction, 10 world) | `corpus_run` → `unrepresentable scales:` |
+| `needs_jordan` ledger rows | **37 open**, of which **7 are self-contradictory** (`ED-PC-0015`…`0021`, all `ratified` and still flagged) | `registers/editorial_ledger*.jsonl` — ⚠ **fold to the LATEST row per id**; these are append-only and a naive count reads 41 |
+| M1 junctures on the board | **7: 2 not_started · 1 blocked · 4 in_progress · 0 done** | `workplans/workplan_v6_progress.yaml` — **stale, see §4** |
 
-```
-control  prop_x.subject = r_hearth (a rung)   84 candidates ·  0 naming another person
-arm      prop_x.subject = p_a     (a person)  84 candidates · 56 naming another person
-```
+---
 
-Same candidate count — the **referent** changed. In the arm **all eleven executing verbs** are offered
-with a person counterparty (`interview p_a`, `tell p_a`, `surveil p_a`, `create_record about p_a` …).
-Nothing is added: `Proposition.subject` is an unconstrained `str` (`state/carriers.py`),
-`decision/options.py` resolves `subject`/`to`/`site` to that one referent, and `_eff_utter` already
-*defaults* a Proposition's subject to the actor. **Q4 is the only door** — Q2's guard
-`c.subject == p.id or c.subject in mine` bars the others by construction.
-**Traces to:** `ED-IN-0210` Ruling 1 (*"verbs invoke mechanisms or interactions between a character and
-another entity/character. they are not fiats"*), re-sorted to WORK by `ED-IN-0218`.
-**Falsifier:** restore `ids[chain[0]]`; 56 must return to 0.
-**The real work is authorial, not mechanical** — deciding *which* Propositions name persons in which
-cases. That is the deliverable, not the one-line change.
+## §2 · THE ORDER — do these in this sequence
 
-**2 · GIVE `tell` AN EFFECT BODY, SO SOMETHING IS ACTUALLY TOLD.** `tell` executes, declares
-`writes: []`, and has **no entry in `loop/effects.py`** — so the one verb whose entire purpose is
-transmission transmits nothing. That is why there are 4,499 `firsthand` claims and zero `told_by`: a
-witness to a telling learns *that a telling happened* (WITNESS deposits `e.kind`), never *what was
-told*. An effect body that deposits a `told_by` claim in the addressee's ledger is the single change
-that makes belief transmission run.
-**Traces to:** R-07 (`partial` on a prose reading) and `rosters.yaml`'s `claim_sources`.
-**Falsifier:** drive the corpus and count `told_by`. It is 0 of 4,499 today and must be non-zero.
-**Then `standing_of` should stop returning the maximum gap for 75 of 75 persons** — that is the
-consumer-side reading of the same fact, and it is the stronger test.
+| # | do this | closes | falsifier | size |
+|---|---|---|---|---|
+| **1** | **The counterparty.** `corpus_run.build_at` gives all 143 worlds a rung-subject Proposition and one shared ambition string | R-06 · R-07 · half of `W27` | **acts** naming another person: **0 → 168**, over 27 NPC cases | **S** |
+| **2** | **The cast.** Port `harness/populated.py`'s per-case cast into `build_at` — one named person per case, seated by institution | `W27` · R-06 · R-07 · `A3` | `build_at` seats > 3 named people; `RANKING DISCRIMINATION` moves | **M** |
+| **3** | **`H-71`.** 5 governance verbs have working effect bodies no person can form | R-05 · `H-71` (tier 0) | `test_no_person_can_choose_a_governance_verb_and_h71_is_why` **reddens** | **M** |
+| **4** | **The 20 silent verbs.** 20 of 38 carry no predicate and no effect | R-05 · `H-62` (tier 0) | `WHERE THE 38 GO`: the 20 shrinks | **L** |
+| **5** | **The six antonyms.** `ED-IN-0210` Ruling 2; none of the 9 verbs exists | R-05 · relations that end | the 9 appear in `verb_table.yaml` and execute | **M** |
+| **6** | **`Tenure.term`.** `T-n`'s unbuilt half — `Tenure` has `until`, not `term` | R-05 · relations that lapse | a `Tenure` matures a declared term at a later tick | **M** |
+| **7** | **The strategic layer.** 54 of 143 cases unrepresentable; the loop runs at person/settlement/realm only | R-04 · `W10` · `W13` | `unrepresentable scales:` shrinks below 54 | **XL** |
 
-**3 · CLOSE `H-71` — four verbs with working effect bodies that no person can form.**
-`hole_register.yaml` H-71, **tier 0, `grade: absent`**: §F1 clause 2 says eligibility is evaluated
-person-side and `remit:<act>` cannot be, because the person owns the `hold` Tenure while the **office**
-owns the remit. `person_side_eligible` therefore declines every `remit:` alternative unconditionally, so
-`confer`, `convene`, `dispatch` and `revoke` are unreachable in every world — **including one where the
-actor genuinely holds the office whose remit names the act.** The resolve half was built 2026-09-02 and
-cannot affect any run.
-**Falsifier already in the tree and green:**
-`test_no_person_can_choose_a_governance_verb_and_h71_is_why` — it **reddens** the day this closes, which
-is how you know it worked. ⚠ **Do not re-derive H-71.** It is carried in four places already
-(`hole_register.yaml` · `requirements.yaml` R-05 · `HANDOFF_IN.md` · `architecture/PLAN.md`); a session
-re-derived it on 2026-09-12 with a worse instrument and a wrong membership list.
+### 1 · THE COUNTERPARTY — one authored value, then the authoring
+`engine/season/harness/corpus_run.py:297` — `Proposition("prop_x", "OUGHT", ids[chain[0]], "a standing
+ambition", True, 0)`. The third argument is a **rung** id and the fourth is **one string for all 143
+people**. Make the subject a **person** and every committed person's Q4 question refers to a person.
+**MEASURED 2026-09-13 THROUGH THE SEASON DRIVER, WITH A CONTROL** — 27 NPC cases run end to end in
+both arms:
 
-**4 · THE SIX ANTONYM CLOSERS — semantics already ruled, authoring only.** `ED-IN-0210` Ruling 2:
-`oblige`↔WAIVE · `succeed`↔DEPOSED · `tie/knot`↔FRAY/LOOSEN · `issue`↔RESCIND ·
-`petition`↔WITHDRAW/DENY (two-sided) · `establish`↔ABOLISH/DISSOLVE. **None exists in
-`verb_table.yaml`.** `utter` is deliberately unpaired (§14: a Proposition is immutable).
-**Build it with item 5** — a declared term ends a relation *when nobody acts*; an antonym ends it
-*because somebody did*. Ship either alone and relations stay one-way.
+| arm | acts | naming another person |
+|---|---|---|
+| control — `prop_x.subject` = a **rung** | 443 | **0** |
+| arm — `prop_x.subject` = a **person** | 638 | **168** |
 
-**5 · `Tenure.term` — `T-n`'s unbuilt half.** `verb_table.yaml` records it as unbuilt in its own words;
-Layer 1 spells it `Tenure.term?`. MATTER already matures act-declared stages at a later tick and
-**stops if the maker is gone** — the same branch on a `Tenure` is the whole change. `T-o` constrains it:
-the opening act declares *when*, the **Seat** declares who may end it early.
+⚠ **THE EFFECT IS LARGER THAN THE CLAIM THIS REPLACES.** The previous text said *"same 84 candidates —
+the **referent** changed"*. At the ACT level the count is not the same: **acts rise 44%**, because
+person-subject questions open verbs that were unreachable. The candidate-level figure could not be
+reproduced — reconstructing `assemble`/`opening_set` by hand raises `Ungraded`, and a first attempt
+that appeared to confirm it had silently passed `View=None`. **Use the driver, not a reconstruction.**
 
-**6 · THEN the two rulings that are genuinely Jordan's.** Both are filed and neither is startable
-without him: **`ED-WR-0011`** (OI-05 — a closed authored cast, or an open demographic source? ⭐ answer it
-**together with `ED-SE-0051`/E-1**, which is the same question from the settlements side) and
-**`ED-1051`** (the `engine_clock` doc home, which gates M3 entirely).
+Nothing is added — `Proposition.subject` is an unconstrained `str`, and `decision/options.py` resolves
+`subject`/`to`/`site` to that one referent. **Q4 is the only door**: Q2's guard
+`c.subject == p.id or c.subject in mine` bars the others.
+
+⚠ **19 OF 46 NPC CASES DO NOT BUILD AT ALL** — they are faction-scale and `build_at` refuses them.
+That is R-04 (item 7) reaching into items 1 and 2: whatever the cast work achieves, it reaches 27 of
+46 NPC cases until the re-scale lands. The order below does not currently account for that.
+**Traces to** `ED-IN-0210` Ruling 1 — *"verbs invoke mechanisms or interactions between a character and
+another entity/character. they are not fiats."*
+⚠ **The one-line change is not the deliverable.** Deciding *which* Propositions name persons in which
+cases is. `harness/populated.py` already does this for the 46 NPC cases (`wants_of` reads the case's
+first `core` need; `concerns_of` resolves `who_acts`), which is why item 2 follows immediately.
+
+### 2 · THE CAST — `W27`, narrowed to the NPC lane
+`build_at` still does `for n, pid in enumerate(("p_a", "p_b", "p_c"))` — three anonymous people, same
+rung, all 143 worlds. **Every number in R-01, R-02, R-06 and R-08 was measured on that.** `§0.1 pt 4`:
+a number without a control is not a measurement.
+The machinery exists and is proven: `harness/populated.build_realm` seats **46 named people across 26
+buildings** from `who_acts` and the corpus's own names, and is wired into no gate. The work is porting
+it per-case into `build_at`.
+⚠ **`PLAN.md` makes `W27` depend on `W28` (143 authored `cast:` blocks). That does not bind the 27
+NPC cases that build** — `populated.py` resolves a cast without authored blocks (11 named ties, 15 institutional).
+`W28` remains required for the 97 ARC cases, which name situations, not people.
+⚠ **`PLAN.md`'s stated proof bar is spent**: *"distinct executed sets > 2 (2 today)"* reads **25**.
+Use `RANKING DISCRIMINATION` and the R-06/R-07 rows instead.
+
+### 3 · `H-71` — 5 verbs built and unreachable
+`hole_register.yaml` `H-71`, **tier 0, `grade: absent`**. §F1 clause 2 evaluates eligibility
+person-side; `remit:<act>` cannot be, because the person holds the `hold` Tenure while the **office**
+owns the remit. `person_side_eligible` therefore declines every `remit:` alternative unconditionally,
+so `confer`, `convene`, `destroy_record`, `dispatch` and `revoke` are unreachable **even where the
+actor genuinely holds the office whose remit names the act**. The resolve half was built 2026-09-02 and
+cannot affect any run. Measured today: those five are `foldable but never even attempted`.
+⚠ **Do not re-derive `H-71`.** It is carried in four places already; two sessions have independently
+"found" it, the second with a worse instrument and a wrong membership list.
+
+### 4 · THE 20 SILENT VERBS — R-05's main body
+`WHERE THE 38 GO`, measured 2026-09-13: **20 have no predicate and no effect**, 5 are item 3, 2 are
+always refused (`work`, `examine` — no question these worlds raise refers to a Site), **11 execute**.
+`H-62` (tier 0) supplies the shape: an interior write is a consequence of an outcome, declared in
+`write_matrix.yaml`'s Degree-keyed `writes` column. The column exists; the rows do not.
+
+### 5 · THE SIX ANTONYMS — semantics ruled, authoring only
+`ED-IN-0210` Ruling 2: `oblige`↔WAIVE · `succeed`↔DEPOSED · `tie/knot`↔FRAY/LOOSEN · `issue`↔RESCIND ·
+`petition`↔WITHDRAW/DENY · `establish`↔ABOLISH/DISSOLVE. **Verified absent 2026-09-13: all nine are
+missing from `verb_table.yaml`.** `utter` is deliberately unpaired (§14: a Proposition is immutable).
+**Build with item 6** — a term ends a relation *when nobody acts*; an antonym ends it *because somebody
+did*. Ship either alone and relations stay one-way.
+
+### 6 · `Tenure.term` — `T-n`'s unbuilt half
+**Verified 2026-09-13: `Tenure` carries `(id, subject, object, kind, since, until, degree, payload)` —
+there is no `term`.** `until` is a hard end, not a declared term. MATTER already matures act-declared
+stages at a later tick and stops if the maker is gone; the same branch on a `Tenure` is the change.
+`T-o` constrains it: the opening act declares *when*, the **Seat** declares who may end it early.
+
+### 7 · THE STRATEGIC LAYER — R-04
+**54 of 143 cases unrepresentable**: 44 at faction scale, 10 at world. The loop runs at person,
+settlement and realm only, so the half of the premise that fuses personal with strategic has no
+expression in the head. `W28`'s `world` half is already decided and not escalated (`PLAN.md`: a
+`world` case is ≥2 realm Rungs under a shared container). **XL, and it should follow 1–6, not precede
+them** — a strategic layer over three anonymous people measures nothing.
+
+---
+
+## §3 · GENUINELY JORDAN'S — the only rows that survive `CLAUDE.md` §0's five-step test
+
+| ruling | question | gates |
+|---|---|---|
+| **`ED-WR-0011`** (OI-05) | world-gen cast: a closed authored roster, or an open demographic source? ⭐ **Answer with `ED-SE-0051`/E-1** — the same question from the settlements side | M1 row 1's `generate_npc` stub |
+| **`ED-1051`** | `engine_clock`'s doc home — the temporal spine has `doc: null` | **M3 entirely** |
+
+⚠ **Jordan already answered the cast question for now** (2026-09-13): *"World-gen NPC count, for now, is
+just the 46 NPCs we built. We will return much later."* That unblocks items 1–2 without closing
+`ED-WR-0011`, which is about the *generator*, not this count.
+
+## §4 · NOT WORK — bookkeeping debt, named so it is not mistaken for the list above
+
+1. **37 open `needs_jordan` rows, 7 of them self-contradictory.** `ED-PC-0015`…`ED-PC-0021` are
+   `status: ratified` and still flagged — RBNI rows (ratified, not implemented), so they await a
+   BUILD, not a decision. **PC lane; not this lane's to close** (§4 keeps commits lane-scoped).
+   ⚠ **Count them by folding to the latest row per id.** The ledgers are append-only: `ED-IN-0210`
+   carries a 2026-09-13 row clearing its own flag, and a naive scan reads 41 open and 8 contradictory.
+2. **`workplans/workplan_v6_progress.yaml` is stale and it feeds a gate.** Its 7 junctures describe
+   `.gd` work from the Godot/`mc_v18` era — `DomainActionSystem.gd`, `ChronicleLayerV30.gd`,
+   `GameDirector.gd`. It is the input to the one `m1_acceptance` row that greens by editing a word.
+   Per §0.2 that is a **board defect**, not a work item.
+3. **`harness/populated.py` is wired into no gate.** It builds the better world and nothing runs it in
+   CI. Item 2 is what makes that moot; until then it is an instrument nobody consults.
 
 ## What NOT to do, in order of how much time it has cost before
 
@@ -151,7 +217,9 @@ alone. At ~16.6k this file is still readable, which is what IN at 130k was not.
 commits the checkout cannot reach. `cat .git/shallow` settles it in one command. Everything else in
 `tests/valoria` is green (**1779 passed**, 2026-09-13).
 
-## ⚠ CURRENT — 2026-09-10 (later) · **ARC 1 HAS LANDED. ARC 3 IS LARGELY UNBLOCKED; ONLY U9 IS NOT.**
+## ⚠ WAS CURRENT — 2026-09-10 (later) · ARC 1 HAS LANDED. ARC 3 IS LARGELY UNBLOCKED; ONLY U9 IS NOT.
+
+*History. The live order is THE WORK ORDER at the top of this file.*
 
 **PR #386 merged (`main` `c2de9ee`) and it executed Arc 1 rather than only planning it** — 11
 commits, 50 files. `engine/season/` now has **`decision/`** (budget·choose·options·questions),
@@ -180,7 +248,9 @@ restated here, because a figure copied into the continuity index rots independen
 
 ---
 
-## ⚠ CURRENT — 2026-09-10 · U1–U10 is **ARC 3**, and Arcs 1 and 2 are its precondition (IN lane, cross-cutting)
+## ⚠ WAS CURRENT — 2026-09-10 · U1–U10 is ARC 3, and Arcs 1 and 2 are its precondition (IN lane)
+
+*History. The live order is THE WORK ORDER at the top of this file.*
 
 **Read this before starting any R-work.** `workplans/2026-09-09-r-execution-plan.md` is still the
 single owner of units U1–U10 and its §2 corrections, §4 dependency graph, §7 roll placement and §10
@@ -319,7 +389,9 @@ collision DOES reproduce** (`glossary.md:114` calls it *"unresolved"*, `module_c
 **Nothing was closed or flipped.** §6 of the strategy is the eleven-question decision sheet — the whole
 human ask. Per-lane detail in `registers/handoffs/HANDOFF_IN.md`.
 
-## ⚠ CURRENT — 2026-09-06, PR #373 · the proceedings subsystem owns all social contests (SC lane)
+## ⚠ WAS CURRENT — 2026-09-06, PR #373 · the proceedings subsystem owns all social contests (SC lane)
+
+*History. The live order is THE WORK ORDER at the top of this file.*
 
 **A from-scratch proceedings subsystem exists at `proposals/2026-09-05-proceedings-subsystem/`, PROPOSED
 and HELD BACK IN FULL, and Jordan ruled 2026-09-06 that it owns all social contests.** Twelve games as
@@ -348,7 +420,9 @@ toward the feared thing; pressure is the gap; **the second-person lever stays re
 
 ---
 
-## ⚠ CURRENT — 2026-09-04, PR #368 (read this first; the 2026-08-27 section below is still true of `main`)
+## ⚠ WAS CURRENT — 2026-09-04, PR #368
+
+*History. The live order is THE WORK ORDER at the top of this file. Its own "read this first" is retired with it.*
 
 **The season loop can branch now, and the interesting number is how little.** Forking every
 mechanical decision in the ARC/NPC corpus and following three decisions on: at session start
@@ -408,7 +482,9 @@ top section.** The short version a cold session needs:
 
 ---
 
-## ⚠ CURRENT — 2026-08-27 (read this first)
+## ⚠ WAS CURRENT — 2026-08-27
+
+*History. The live order is THE WORK ORDER at the top of this file.*
 
 **`main` IS GREEN, and so is PR #334's head.** Measured 2026-08-27 at `d7578a6`:
 `pytest tests/valoria -q -n auto` **1772 passed, 23 skipped, 15 xfailed**; `pytest engine/tests`
@@ -683,7 +759,7 @@ carried nothing newer than July, while being **the only section the SessionStart
 Everything struck from it was already recorded in `HANDOFF_IN.md` or the ledgers; nothing was lost,
 and the July narrative is in `git log HANDOFF.md`._
 
-### ▶ THE DELIVERABLE (2026-08-19) — build the game; `done` means it runs
+### 2026-08-19 — build the game; `done` means it runs (history; superseded by THE WORK ORDER above)
 
 **RULED 2026-08-19 by Jordan: "I need to break out of the infrastructure loop in the repository."**
 The doctrine amendments that terminate it are live in `CLAUDE.md` §0, §0.1 pt 5, §0.2, §0.3 — read
@@ -743,7 +819,7 @@ under `.claude/worktrees/` falsely reds a blocking unit test; it fired on four o
 ⚠️ **`valoria-game` CI is not evidence.** Its `GDScript Lint` job reported green on a tree with 97
 compile errors; `find -exec` does not propagate exit status and it never parses GDScript.
 
-### ⭐ READ SECOND (2026-08-18) — `proposals/2026-08-18-next-session-handoff.md`
+### 2026-08-18 — `proposals/2026-08-18-next-session-handoff.md` (history; was "READ SECOND")
 
 The recursion investigation (PR #319) and its Fable-5 adjudication (PR #321) are complete. That
 handoff carries **six unblocked, verified actions that move the game**, the five items held for
