@@ -323,10 +323,13 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))
         # Convictions seeded from the case id, exactly as `build_at` does it and for its stated
         # reason: identical convictions would force identical rankings for everybody.
+        # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s blake2b hexdigest -- same as corpus_run.py:242 and combat_seam.py:153. The `3` is #353 §14's own upper bound: "1-3 primary + distributed"]
         n_conv = 1 + int(H(seed, 0, cid, f"axis:{pid}:n"), 16) % 3
+        # [JUSTIFIED: a DESCENDING ladder, not three chosen magnitudes -- #353 §14 distinguishes the "primary" conviction from the "distributed" remainder and supplies no numbers. Carried verbatim from corpus_run.py:245, its single owner; a second ladder here would be two answers to one question]
         chosen, weights = {}, (0.9, 0.5, 0.3)
         for k in range(n_conv):
             purpose = f"axis:{pid}" if k == 0 else f"axis:{pid}:{k}"
+            # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as corpus_run.py:248]
             pick = int(H(seed, 0, cid, purpose), 16) % len(convictions)
             chosen.setdefault(convictions[pick], weights[k])
         w.persons[pid].convictions = chosen
