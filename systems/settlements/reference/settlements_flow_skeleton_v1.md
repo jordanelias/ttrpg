@@ -31,7 +31,7 @@
 | `apply_strain_shock(strain_delta, affected_territories, world=None)` | `systems/settlements/sim/temperaments.py:151 apply_strain_shock` | `—` (no importer) |
 | `get_faction_aggregate(faction_name)` | `systems/settlements/sim/temperaments.py:172 get_faction_aggregate` | `—` (no importer) |
 | `ledger_add` / `ledger_has` / `ledger_get` / `ledger_sweep` | `systems/settlements/sim/ledger.py:47`, `systems/settlements/sim/ledger.py:61`, `systems/settlements/sim/ledger.py:65`, `systems/settlements/sim/ledger.py:69` | Only via `Settlement.add_tag`/`has_tag`/`tags` (`systems/settlements/sim/registry.py:99-107`) and `succeed_governor`'s `ledger_sweep` call (`systems/settlements/sim/registry.py:206`) — itself uncalled in production; live tag-writers are only `tools/sim_harness/adapters/pr119_governance/*.py` |
-| `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:290 settlements` | `engine/mc_v18.py:315 serialize_world` (end of `run_campaign`) |
+| `serialize_world(world)` settlements branch | `engine/autoload/game_state.py:290 settlements` | `engine/mc_v18.py:334 serialize_world` (end of `run_campaign`) |
 | `restore_world(snapshot)` settlements branch | `engine/autoload/game_state.py:290-292 settlements` | no production caller found (save/restore round-trip exercised only by `engine/tests/test_world_population.py`) |
 
 ## 2. IN
@@ -43,7 +43,7 @@
 | `world` (`GameState`/`World`) | `world-state` | Caller-supplied on every registry/ledger/infrastructure/adjacency entry point | `systems/settlements/sim/registry.py:165 settlement_store` |
 | `settlement_id` / `province_id` / `territory_id` / `sid` | `arg` | Caller-supplied key | e.g. `systems/settlements/sim/registry.py:176 get_settlement` |
 | `echo_ctx['target_settlement']`, `echo['scene_outcome']` | `arg` | Optional fields on a scene's `echo` context block, read at the accord-echo seam | `engine/cross_scale/echo_transport.py:303 echo_ctx`, `:167 declared` |
-| `world.echo_scheduler` (presence) | `flag` | Set on `world` in `run_campaign` when `ECHO_TRANSPORT` is on | `engine/mc_v18.py:251 world.echo_scheduler` |
+| `world.echo_scheduler` (presence) | `flag` | Set on `world` in `run_campaign` when `ECHO_TRANSPORT` is on | `engine/mc_v18.py:270 world.echo_scheduler` |
 | `ACCORD_MAP` / `STARTING_ACCORD` / `STARTING_OWNER` | `param` | `engine/autoload/game_state.py` module constants, used to build `Territory` objects (a separate, uncoordinated source from the geography YAML — see §7) | `engine/autoload/game_state.py:234-244 Territory` |
 | `world.territories[tid].templar` | `world-state` | `Territory` dataclass field, read as a seed for infrastructure Axis-2 backward compat | `systems/settlements/sim/infrastructure.py:130-131 templar_seed` |
 
@@ -53,7 +53,7 @@
 `create_world()` builds `World.territories` from `STARTING_OWNER`/`STARTING_ACCORD`/`STARTING_PT` (`engine/autoload/game_state.py:271-282`), independently calls `populate_from_geography(world)` — resolved as the `world_gen_settlements` composition role — to build `World.settlements` from the geography YAML (`engine/autoload/game_state.py:304 create_world`), which for each sorted `sid` validates `type` against `LEGAL_TYPES` `[gate]` (`systems/settlements/sim/registry.py:254-257`), unpacks `stats` into `(prosperity, defense, order)` `[gate]` (`systems/settlements/sim/registry.py:258`), constructs a `Settlement` and registers it into `world.settlements` (`systems/settlements/sim/registry.py:259-264`).
 
 **S2. Per-season faction/scene phase (no settlement write)**
-`run_campaign`'s season loop calls `run_season` → `_faction_actions_callback` (`engine/mc_v18.py:264-267`, `engine/mc_v18.py:116`), which dispatches faction Domain Actions (`faction_take_action`, reads `ADJACENCY` for target/threat derivation — S2.1) and scene resolution (`scene_dispatch.run_scene_phase` — S2.2).
+`run_campaign`'s season loop calls `run_season` → `_faction_actions_callback` (`engine/mc_v18.py:283-286`, `engine/mc_v18.py:135`), which dispatches faction Domain Actions (`faction_take_action`, reads `ADJACENCY` for target/threat derivation — S2.1) and scene resolution (`scene_dispatch.run_scene_phase` — S2.2).
 
 - **S2.1 Adjacency reads** `[branch]` — `faction_action._conquest_targets`/`_threat_signal` union `ADJACENCY.get(tid, set())` over a faction's held territories to find conquest targets / proximate military threats (`systems/factions/sim/faction_action.py:149`, `systems/factions/sim/faction_action.py:198`).
 - **S2.2 Scene → Domain Echo → settlement write (deferred)** — when `world.echo_scheduler` is set, `echo_transport.emit_scene_echo` runs (`engine/cross_scale/echo_transport.py:362`):
@@ -63,9 +63,9 @@
   - S2.2.4 `[write][emit]` (reachable-but-dormant) `_apply_accord_echo` resolves `echo_ctx['target_settlement']` against `world.settlements` (`:291-293`); on a resolvable settlement it builds a `scene.accord_echo` Key with a `_apply` closure that writes `settlement.order` (clamped `STAT_MIN`/`STAT_MAX`) and queues it via `sched.emit(key, apply=_apply)` (`:309-343`) — the write does NOT land immediately.
 
 **S3. Action→Accounting boundary** `[gate]`
-Still inside `_faction_actions_callback`, after the scene phase: `world.echo_scheduler.accounting_boundary()` applies every queued Key's deferred `apply` (including any queued S2.2.4 settlement-Order write), then `next_tick()` resets the per-tick emission counter (`engine/mc_v18.py:158-161`).
+Still inside `_faction_actions_callback`, after the scene phase: `world.echo_scheduler.accounting_boundary()` applies every queued Key's deferred `apply` (including any queued S2.2.4 settlement-Order write), then `next_tick()` resets the per-tick emission counter (`engine/mc_v18.py:177-180`).
 
-**S4. Season-end accounting** — `systems/overview/sim/accounting.py:95 run_accounting`, called from `run_season` (traced via `engine/mc_v18.py:264-267` comment; body at `systems/overview/sim/accounting.py:95-142`):
+**S4. Season-end accounting** — `systems/overview/sim/accounting.py:95 run_accounting`, called from `run_season` (traced via `engine/mc_v18.py:283-286` comment; body at `systems/overview/sim/accounting.py:95-142`):
   1. `[step]` CI seasonal calc (`:112`) — no settlement touch.
   2. `[step][gate]` MS year-end decay (`:116-117`) — no settlement touch.
   3. `[step]` `check_insurgency_triggers` (`:124`) — reads `ADJACENCY` via `_contiguous_uncontrolled_groups` to group contiguous Uncontrolled territories `[loop]` (`systems/world/sim/insurgency_pipeline.py:116`, `systems/world/sim/insurgency_pipeline.py:133`).
@@ -88,7 +88,7 @@ Two production sites write `Territory.accord` directly, never going through `Set
   - `systems/factions/sim/mass_seizure.py:293` (t.accord = float(starting_accord)) (itself gated by `count_infrastructure`/`seizure_ob_modifier` reads from `systems/settlements/sim/infrastructure.py` at `:158,258`).
 
 **S7. Campaign close — serialization** `[write]`
-`run_campaign` calls `game_state.serialize_world(world)` (`engine/mc_v18.py:307`), which dict-serializes `world.settlements` via each `Settlement.to_dict()` (`engine/autoload/game_state.py:377-378`, `systems/settlements/sim/registry.py:112-133`) and carries `accord_drift_probe_hits` into `CampaignResult` (`engine/mc_v18.py:304`).
+`run_campaign` calls `game_state.serialize_world(world)` (`engine/mc_v18.py:326`), which dict-serializes `world.settlements` via each `Settlement.to_dict()` (`engine/autoload/game_state.py:377-378`, `systems/settlements/sim/registry.py:112-133`) and carries `accord_drift_probe_hits` into `CampaignResult` (`engine/mc_v18.py:323`).
 
 ## 4. OUT
 
@@ -96,11 +96,11 @@ Two production sites write `Territory.accord` directly, never going through `Set
 |---|---|---|---|
 | `world.settlements: dict[sid, Settlement]` | `registry` | `serialize_world`, `province_members`/`province_accord` readers, `echo_transport._apply_accord_echo` | `engine/autoload/game_state.py:290 settlements` |
 | `province_accord(...)` return (`int`) | `arg` | `_probe_province_accord_drift` only, in production | `systems/settlements/sim/registry.py:190 province_accord` |
-| `world.accord_drift_probe_hits` (`int`) | `world-state` | `CampaignResult.accord_drift_probe_hits` | `engine/mc_v18.py:312 accord_drift_probe_hits` |
+| `world.accord_drift_probe_hits` (`int`) | `world-state` | `CampaignResult.accord_drift_probe_hits` | `engine/mc_v18.py:331 accord_drift_probe_hits` |
 | `world.territory_infrastructure[tid]: InfrastructureState` | `registry` | `count_infrastructure`/`seizure_ob_modifier` readers (`mass_seizure.py`), `serialize_world`/`restore_world` | `engine/autoload/game_state.py:290-292 InfrastructureState` |
 | `ADJACENCY[tid]: set[str]` | `key` | `faction_action._conquest_targets`/`_threat_signal`, `insurgency_pipeline._contiguous_uncontrolled_groups` | `systems/settlements/sim/adjacency.py:9 ADJACENCY` |
 | Queued `scene.accord_echo` Key (`settlement.order` delta) | `key` | `TickScheduler` log, applied at `accounting_boundary()` — dormant in a seeded campaign (see §7) | `engine/cross_scale/echo_transport.py:321-335 key` |
-| `CampaignResult.final_state['settlements']` | `arg` | `run_campaign` caller / any downstream telemetry reader | `engine/mc_v18.py:315 final_state` |
+| `CampaignResult.final_state['settlements']` | `arg` | `run_campaign` caller / any downstream telemetry reader | `engine/mc_v18.py:334 final_state` |
 
 ## 5. State touched
 
