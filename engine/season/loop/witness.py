@@ -22,10 +22,53 @@ from ..data.rosters import OBSERVATION_DEPOSIT_MODES, WITNESS_CHANNELS
 from ..epistemic import act_refs, claim_subjects, observers_for
 from ..gaps import Unspecified
 from ..queries import cache
+from ..queries.person_q import LedgerReader
 from ..state.carriers import Claim, Event
 from ..state.ids import H
 from ..trace_log import TRACE
 
+
+
+def _told_content(w, act):
+    """WHAT A TELLING PASSES ON: the teller's own claim about the act's subject, or `None`.
+
+    A FUNCTION OF THE EVENT ALONE, which is the whole reason it is not inlined in the fan loop:
+    the teller and the told-about subject come off the Act, so re-deriving them per HEARER
+    repeats a full `LedgerReader` ledger copy and linear scan for every observer of one telling.
+    `witness` memoises the result per `e.id`.
+
+    ⚠ `act_refs`, NOT A SECOND READ OF THE PAYLOAD. `epistemic` owns "what is this act about"
+    and its reader carries a bare-string branch this file must not re-derive (§8).
+
+    ⚠ `latest_about`, NOT A COMPARATOR WRITTEN HERE. `LedgerReader` owns *the most recent, then
+    the most confident*, and `tell`'s `requires` cell names no predicate to read by.
+
+    ⚠⚠ **THIS READS A LEDGER THAT IS NOT THE DEPOSITING PERSON'S, AND `04_CODE_ARCHITECTURE.md`
+    §B.2:230 SAYS THAT DOES NOT EXIST.** The row is *"the ledger is never read by ANOTHER person |
+    **STRUCTURAL by signature**"*, and its `F8` carve-out is exact: *"the fold may ask the ACTOR'S
+    OWN ledger, through the `PersonInterior` snapshot the act carries, and no other. A Query taking
+    a ledger and an asker who is not its holder still does not exist."* It does now -- this
+    function, called in the WITNESS fan for a HEARER, over the TELLER's live ledger. Measured: it
+    is the only such site in the tree; the other production construction (`epistemic.py:99`) passes
+    the actor's own claims.
+
+    NOT A GAP IN THE ROW, AND NOT DEFENSIBLE AS SHIPPED -- it is a known non-conformance carried
+    deliberately, named here because a `04`-STRUCTURAL row must not go on asserting a property the
+    code has stopped having. **The conformant shape is that the told triple RIDES ON THE ACT**, so
+    WITNESS reads what the telling carried instead of fetching it: either the resolve-side
+    `Observation` channel (`Event.observed`, `W-B`) carrying the claim's own predicate and value
+    rather than today's bare `("claim.held", True)`, or the actor's `PersonInterior` supplying it
+    at option-build time. Both are grammar work in `data/requires.py` or `decision/options.py`, and
+    the second decides at CHOOSE time what a person will say -- a game decision, not a cleanup. So
+    it is not taken in the commit that found it, and this note is the record rather than a ledger
+    row: `CLAUDE.md` §0's five-step test answers it at step 3 (the design document says which shape
+    is right), which makes it work, not an escalation."""
+    teller = w.persons.get(act.actor)
+    refs = act_refs(act)
+    subj = refs[0] if refs else None
+    if teller is None or subj is None:
+        return None
+    return LedgerReader(teller.ledger).latest_about(subj)
 
 
 # -- WITNESS -- barrier 4 -- THE JOIN (S28) -----------------------------
@@ -109,6 +152,17 @@ def witness(self, events: list[Event]) -> int:
     # RESOLVE order -- is kept, which is the answer `LedgerReader`'s strict `>` already gave.
     # This fix removes the TIE, not the answer.
     seen_obs_by_pid: dict = {}
+    # ⚠ WHAT A TELLING CONTAINED, RESOLVED ONCE PER EVENT RATHER THAN ONCE PER HEARER.
+    # `_act`, the teller, the told-about subject and the claim being passed on depend ONLY on
+    # the Event -- never on `pid` -- but the fan loop below is per `(person, event)`, so the
+    # first cut re-derived all four for every observer of the same telling, and
+    # `LedgerReader.__init__` COPIES the teller's whole ledger (`list(claims)`) before
+    # `latest_about` linear-scans it, up to `ledger_cap` = 200. In a three-person corpus world
+    # that is a 2x repeat and invisible. In `harness/populated`'s world it is not: the Church's
+    # 25 cases share one building, so one telling repeated a 200-entry copy-and-scan 25 times.
+    # A plain local dict fixes it. ⚠ NOT `w.cache()` -- `cache_at_barrier` is `Forbidden` inside
+    # `_in_parallel_map` (`state/world.py:474-476`), which is this whole region.
+    told_by_event: dict = {}
     w._in_parallel_map = True
     for pid, e, channel in fan:
         p = w.persons.get(pid)
@@ -222,6 +276,93 @@ def witness(self, events: list[Event]) -> int:
                         record_kind="Person", fieldname="claim_ledger", driver="Event",
                         emits="claim.deposited", subject=oc.id, causes=[e.id])
                 TRACE.claim(pid, e.id, src)
+                deposits += 1
+        # THE TOLD CHANNEL -- `claim_sources`' `told_by`, WHICH NOTHING WROTE.
+        #
+        # ⚠ WHAT WAS TOLD, NOT MERELY THAT A TELLING HAPPENED. The event-kind deposit above
+        # gives a witness `(subject, "news.told", True)` -- they learn a telling OCCURRED. The
+        # content of the telling reached nobody, so `rosters.yaml: claim_sources` declared four
+        # sources and the corpus wrote one: MEASURED over the 89 corpus worlds, 23,855 claims,
+        # every one `firsthand`, and `standing_of` returning the maximum gap for 267 of 267
+        # person-instances because its `told` set is empty by construction. `tell` is the one
+        # verb whose entire purpose is transmission and it transmitted nothing.
+        #
+        # ⚠ THIS IS A WITNESS RULE AND NOT AN EFFECT, AND THE REASON IS `CLAUDE.md` §8. An
+        # effect body would have to recompute WHO HEARD IT, and the fan is this barrier's --
+        # `observers_for` with the mode. A second owner of the observer set is exactly the
+        # divergence `04 §A.2` gives this step the ledger for. `tell` keeps `writes: []`,
+        # correctly: a telling changes no cell in the world, it changes what people hold.
+        #
+        # ⚠ THE TELLER NEEDS NO SEPARATE EXCLUSION AND HAD ONE, WHICH IS ONE RULE WITH TWO
+        # OWNERS. `pid != _act.actor` stood here; the redundancy guard below SUBSUMES it, because
+        # `_held` is by construction a claim the teller holds, so a teller can never pass "does
+        # the hearer already hold this". Mutation-testing found it: removing the exclusion alone
+        # reddened nothing, which is §0.1 pt 2 saying the second guard could not observe a failure
+        # the first did not already exclude. The condition is kept as the CHEAP one — it skips the
+        # ledger scan for the common case — and is no longer stated as an independent rule.
+        #
+        # ⚠ CONFIDENCE IS THE TELLER'S OWN, NOT A DEGRADED ONE, AND THAT IS A DEFERRAL RATHER
+        # THAN A CHOICE. Nothing in the chain states how much a hearing costs a belief, and
+        # `probes.py` builds every hand-written `told_by` claim at full confidence (`:380`,
+        # `:568`, `:650`, `:861`) -- so precedent carries it and inventing a ladder here would
+        # author a number the design has not. The DEGREE already decides the thing the design
+        # DOES state: `Failure` emits `news.untold`, which is not this kind, so a failed
+        # telling transmits nothing.
+        #
+        # ⚠ AND A LEDGER-DERIVED PREDICATE IS STILL NEVER DEPOSITED, for the reason the
+        # observation block gives one screen up: `claim.held` answers from ledger MEMBERSHIP,
+        # so storing it makes its own content true.
+        _act = self.act_of.get(e.id)
+        if e.kind == "news.told" and _act is not None and pid != _act.actor:
+            if e.id not in told_by_event:
+                told_by_event[e.id] = _told_content(w, _act)
+            _held = told_by_event[e.id]
+            _teller = w.persons.get(_act.actor)
+            # ⚠ `act_refs`, NOT A SECOND READ OF THE PAYLOAD. The first writing of this block
+            # spelled `(_act.payload or {}).get("subject")` inline -- a copy of `epistemic`'s
+            # own reader (`act_refs`, already imported at the top of this file and already
+            # called forty lines up) that DROPPED its bare-string branch. Two owners of "what
+            # is this act about", disagreeing on an input the tree already contains
+            # (`probes.py` builds string payloads), which is §8 exactly. Caught by an
+            # adversarial pass, not by a test, because no `tell` reaches that branch today --
+            # latent, and latent is still two owners.
+            if (_held is not None
+                    and str(_held.predicate).partition(":")[0] not in LEDGER_DERIVED_STEMS
+                    # ⚠⚠ **A TELLING THAT TELLS SOMEBODY WHAT THEY ALREADY SAW DEPOSITS
+                    # NOTHING, AND WITHOUT THIS LINE THE CHANNEL IS ALMOST ENTIRELY THAT.**
+                    # MEASURED over the 89 corpus worlds before this guard: 180 `told_by`
+                    # claims, of which **175 were a triple the hearer ALREADY HELD
+                    # FIRSTHAND** -- one belief stored twice, which is the defect the
+                    # observation block forbids in those words one screen up, and it
+                    # consumes a `ledger_cap` slot the eviction then takes from somebody
+                    # else. The cause is not the mechanism: `corpus_run.build_at` seats all
+                    # three persons in ONE rung, so under `all_five` every observer already
+                    # witnessed everything the teller witnessed and there is no asymmetry
+                    # left to transmit. The honest figure with this guard is **5**.
+                    # ⚠ EXACT TRIPLE, NOT `(subject, predicate)`. A hearer who holds a
+                    # DIFFERENT value for the same cell is being contradicted, and that is
+                    # the epistemic layer working -- `agreement` pairs precisely those. Only
+                    # a claim a reader could not tell apart is suppressed.
+                    and not any(c.subject == _held.subject and c.predicate == _held.predicate
+                                and c.value == _held.value for c in p.ledger)):
+                # ⚠ NO SECOND DEDUP SET HERE, AND THE REASON IS THE ONE THAT RETIRED THE TELLER
+                # EXCLUSION TWO SCREENS UP. A `seen_told_by_pid` stood here, mirroring
+                # `seen_obs_by_pid`. But `World.write` applies synchronously (`world.py:408`),
+                # so a deposit made earlier in this barrier is ALREADY in `p.ledger` and the
+                # exact-triple guard above catches it. The set only added cover for a
+                # DIFFERENT-VALUED retelling of one `(subject, predicate)` inside one barrier --
+                # and unlike `seen_obs_by_pid`, which earned its place with a measured 27
+                # differing-value collisions, no such case was ever measured here (the channel
+                # deposits 8 claims across the whole 89-world corpus). Two guards where one
+                # observes the failure is the defect §0.1 pt 2 names.
+                tc = Claim(H(w.world_seed, w.tick, pid, f"told:{e.id}"),
+                           pid, _held.subject, _held.predicate, _held.value, w.tick,
+                           "told_by", _held.confidence, "own", self.round)
+                w.write("claim_ledger", WriteClass.INTERIOR,
+                        lambda p=p, c=tc: p.ledger.append(c),
+                        record_kind="Person", fieldname="claim_ledger", driver="Event",
+                        emits="claim.deposited", subject=tc.id, causes=[e.id])
+                TRACE.claim(pid, e.id, "told_by")
                 deposits += 1
         # ⚠ `while`, NOT `if`. THE CAP WAS NOT A CAP. One deposit can mint SEVERAL claims --
         # `claim_subjects` returns one per `StateChange` under the `per_change` rule -- and a

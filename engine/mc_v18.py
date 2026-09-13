@@ -1,11 +1,30 @@
 """
 sim/mc_v18.py — Top-level strategic simulator runner — orchestrator only
 
+⛔⛔ **SUPERSEDED. `engine/season/` IS THE HEAD.** Jordan ruled it on 2026-09-07 —
+*"#371 EXISTS. `engine/season/` IS THE HEAD. THE DECOMPOSITION WAS DONE ON THE PROTOTYPE"* — and
+`ED-IN-0204` adopted the season loop in full. **Do not build here, and do not close a deferral
+here:** OI-05 was ruled by Jordan on 2026-09-13 (`ED-WR-0011`) and the answer was implemented in
+the HEAD, not in this file. A session that wires a ruling into this module is building on a tree
+the repository has already replaced.
+
+⚠ RETIREMENT IS IN PROGRESS AND IS NOT DONE (`ED-IN-0227`). This module is still IMPORTED and
+still RUNS: 71 live files reference it, and **78 of the 136 test functions in `engine/tests/` —
+57% of CI's blocking `sim-regression` job — import it directly**. Deleting it before that coverage
+is ported would not retire a prototype; it would delete 78 tests of campaign-scale behaviour
+(echo transport, the combat bridge seam, parliamentary transfer, accord drift, pipeline reach).
+The order is PORT, THEN DELETE, and this header is the first step: making the status unambiguous
+wherever a reader lands.
+
+⚠ WHAT ALREADY MOVED OFF IT: `tools/m1_acceptance.py` rows 1-2, the milestone gate's only
+executing rows, probed this file until 2026-09-13 (`ED-IN-0226`). They now probe the head.
+
 Canon source: canon/02_canon_constraints.md §B (GD-1, GD-2, GD-3);
               designs/architecture/campaign_architecture_v30.md (campaign flow).
 Game Design constraints applicable: GD-1, GD-2, GD-3
-Status: [CANONICAL — Phase 2 implementation 2026-05-17;
-                    Deferred Migration Batch 2026-05-20]
+Status: [SUPERSEDED 2026-09-07 by engine/season/ — retirement in progress, ED-IN-0227.
+         Was CANONICAL — Phase 2 implementation 2026-05-17;
+                         Deferred Migration Batch 2026-05-20]
 
 Replaces tests/sim/v17-integration/mc_v17.py (39k monolith).
 Phase 2: faction actions (conquest/muster/govern) + accounting wired in.

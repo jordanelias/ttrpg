@@ -79,10 +79,38 @@ class LedgerReader:
     def __init__(self, claims):
         self._claims = list(claims or [])
 
-    def read(self, subject, predicate: str):
+    def _best(self, match):
+        """THE COMPARATOR, ONCE. *Most recent, then most confident*, over whatever `match` admits.
+
+        ⚠ IT EXISTS BECAUSE THE DOCSTRING BELOW CLAIMED IT ALREADY DID. `latest_about` was added
+        asserting it *"reuses `read`'s comparator rather than restating it"* while carrying its own
+        copy of the identical loop -- a single-owner claim made in the act of breaking it, which is
+        the anti-pattern `ci_common.load_yaml`'s own docstring records against itself
+        (*"a single-owner comment asserting a property the tree lacks is worse than no comment"*).
+        Extracting it makes the sentence true."""
         best = None
         for c in self._claims:
-            if c.subject == subject and c.predicate == predicate:
-                if best is None or (c.when, c.confidence) > (best.when, best.confidence):
-                    best = c
+            if match(c) and (best is None
+                             or (c.when, c.confidence) > (best.when, best.confidence)):
+                best = c
+        return best
+
+    def read(self, subject, predicate: str):
+        best = self._best(lambda c: c.subject == subject and c.predicate == predicate)
         return UNKNOWN if best is None else best.value
+
+    def latest_about(self, subject):
+        """THE ONE CLAIM THIS PERSON WOULD OFFER ABOUT `subject`, or `None` for no claim.
+
+        ⚠ IT RETURNS THE CLAIM, NOT THE VALUE, AND THAT IS THE ONLY DIFFERENCE FROM `read`.
+        A teller transmits a `(subject, predicate, value)` triple; `read` answers a value for a
+        predicate the caller already knows, and a telling does not know one -- `tell`'s `requires`
+        cell is *the teller holds a claim on the subject*, with no predicate in it.
+
+        ⚠ AND IT REUSES `read`'s COMPARATOR RATHER THAN RESTATING IT -- through `_best`, which
+        both methods now call. `CLAUDE.md` §8: the rule lives once. MOST RECENT, THEN MOST
+        CONFIDENT is this class's answer to *a ledger may hold two claims about one thing*, and a
+        second copy of that key anywhere would be a second owner of which belief a person holds --
+        free to drift, and drifting silently, because both orderings agree until the day two
+        claims tie on `when`."""
+        return self._best(lambda c: c.subject == subject)

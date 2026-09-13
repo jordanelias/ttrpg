@@ -60,8 +60,10 @@ from ..state.world import World
 from ..data import files
 from . import probes as P
 from . import run_cases as R
+from .run_cases import seed_convictions, wants_of
 
 # `CLAUDE.md` §0.1 pt 5 / `G1`: declared here with its reason, not a bare literal in a body.
+# [JUSTIFIED: an INSTRUMENT BUDGET, not a rule of the game -- no design document names a season cap. `W6`'s flood is the measurement it is fitted to: the corpus's longest `span_seasons` is 16, and running those costs more than the grading they buy. Lowering it truncates long cases; raising it changes no verdict this instrument reports]
 MAX_SEASONS = 6          # the corpus asks for up to 16; the flood (`W6`) makes that unaffordable
 DEFAULT_SEASONS = 2      # for the 86 cases whose `span_seasons` is prose ("ongoing")
 
@@ -208,11 +210,6 @@ def build_at(case: dict, seed: int = 0) -> World:
         if SITE_YIELD[kind]:
             w.sites[f"s_{kind}"] = Site(f"s_{kind}", ids[chain[0]], kind,
                                           condition=w.fixtures.get("condition_scale"))
-    # `U3`: a person holds weights over the THIRTEEN CONVICTIONS, not over the four axes.
-    # Seeding from `CONVICTION_AXES` was correct while that roster WAS the conviction set;
-    # after the swap it would hand every person a weight on `hierarchical`, which is a
-    # basis vector and not something anybody believes.
-    convictions = sorted(CONVICTIONS)
     for n, pid in enumerate(("p_a", "p_b", "p_c")):
         w.persons[pid] = Person(pid, pid)
         # ⚠ A PERSON IS THE BOTTOM RUNG OF THE LADDER, and `tiny_world` models it that way. Without
@@ -227,34 +224,7 @@ def build_at(case: dict, seed: int = 0) -> World:
         # -- rather than in a person-shaped container, which is what the ladder actually says.
         if chain:
             w.add_tenure(Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
-        # [JUSTIFIED: radix for parsing H()'s blake2b hexdigest -- same as combat_seam.py:153]
-        # ⚠ THE PURPOSE STRING STAYS `axis:` THOUGH IT NOW PICKS A CONVICTION. Changing it would
-        # re-draw every person in the corpus and move every golden for a reason that is a rename,
-        # not a behaviour — `04 PART D row 35` cares about purpose UNIQUENESS, not spelling. The
-        # SET it indexes changed from 4 to 13, which moves the draw on its own and is `U3`'s.
-        # ⚠⚠ **ONE TO THREE CONVICTIONS, NOT ONE, AND #353 §14 IS WHERE THE RANGE COMES FROM:**
-        # *"`convictions` | weights over the closed 13 | **1–3 primary + distributed**"*. Seeding
-        # exactly one was the harness's simplification and it was load-bearing in the wrong
-        # direction. MEASURED 2026-09-11 over 86 corpus-shaped seeds, counting DISTINCT axis
-        # directions the projection produces: **1 conviction -> 13 · 2 -> 66 · 3 -> 80.** With one,
-        # the count is capped at the size of the roster by construction, and worse than that
-        # suggests: 9 of the 13 convictions point within 60° of a common direction
-        # (`traditional+ sacred+ hierarchical+ instrumental-`), so a single-conviction person is
-        # one of about five characters however the draw falls. Two or three COMBINE into vectors
-        # that are genuinely apart.
-        # ⚠ THE COUNT ITSELF IS DRAWN, so cases differ in how many things their people care about
-        # rather than all holding exactly N. Weights descend 0.9 / 0.5 / 0.3: "primary" is §14's
-        # own word for the first, and the rest are the "distributed" remainder.
-        # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as combat_seam.py:153. The `3` is #353 §14's own upper bound: "1-3 primary + distributed"]
-        n_conv = 1 + int(H(seed, 0, str(case.get("id")), f"axis:{pid}:n"), 16) % 3
-        # [JUSTIFIED: a DESCENDING ladder, not three chosen magnitudes -- #353 §14 distinguishes the "primary" conviction from the "distributed" remainder and supplies no numbers. What the corpus needs is that the first outweighs the rest; 0.9 matches the single-conviction weight this replaced, so a 1-conviction case is unchanged by the ladder]
-        chosen_c, weights = {}, (0.9, 0.5, 0.3)
-        for k in range(n_conv):
-            purpose = f"axis:{pid}" if k == 0 else f"axis:{pid}:{k}"
-            # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as combat_seam.py:153]
-            pick = int(H(seed, 0, str(case.get("id")), purpose), 16) % len(convictions)
-            chosen_c.setdefault(convictions[pick], weights[k])
-        w.persons[pid].convictions = chosen_c
+        w.persons[pid].convictions = seed_convictions(seed, str(case.get("id")), pid)
     # ⚠ `W28`: THE CASE MAY SEAT ITS OWN ACTOR ON AN OFFICE. A re-scaled case carries
     # `office: {post, remit, why}` — `post` names the office the prose names, `remit` the acts it
     # carries, and `why` records the DERIVATION, because that is what makes this authoring rather
@@ -277,10 +247,68 @@ def build_at(case: dict, seed: int = 0) -> World:
                                   list(off.get("remit") or []),
                                   body=off.get("body"), faction=off.get("faction"))
         w.add_tenure(Tenure(f"t_{oid}", "p_a", oid, "hold", 0))
-    prop = Proposition("prop_x", "OUGHT", ids[chain[0]], "a standing ambition", True, 0)
-    w.propositions[prop.id] = prop
-    for pid in ("p_a", "p_b", "p_c"):
+    # ⚠⚠ **THE OUGHT NAMES A PERSON, AND THE WANT IS THE CASE'S OWN.** Until 2026-09-13 this was
+    # ONE Proposition for all three people -- `Proposition("prop_x", "OUGHT", ids[chain[0]],
+    # "a standing ambition", ...)` -- whose subject was a **rung** and whose predicate was a single
+    # authored string repeated across all 143 worlds. Both halves were load-bearing and both were
+    # wrong:
+    #
+    #   * `world_q`'s Q4 emits `(prop.subject,)` as the referent, so a RUNG subject means every
+    #     question a committed person raises is about a place. MEASURED through the season driver
+    #     over the 27 NPC cases that build, with the old world as the control:
+    #         control (rung subject)    443 acts,   0 naming another person
+    #         arm     (person subject)  638 acts, 168 naming another person
+    #     Acts rise 44% because person-subject questions open verbs that were unreachable at all.
+    #     Traces to `ED-IN-0210` Ruling 1 (Jordan, 2026-09-10): *"verbs invoke mechanisms or
+    #     interactions between a character and another entity/character. they are not fiats."*
+    #   * one shared predicate gave all 143 cases the same ambition, which is `build_at`'s
+    #     three-identical-people defect in the motive rather than in the cast. `wants_of` reads the
+    #     case's own first `core` row of `season_requires`; the corpus declares 427 of them.
+    #     ⚠⚠ **AND THIS HALF IS BEHAVIOURALLY INERT TODAY — SAID HERE BECAUSE THE FIRST DRAFT OF
+    #     THIS COMMENT CLAIMED BOTH HALVES WERE LOAD-BEARING AND AN ADVERSARIAL PASS REFUTED IT.**
+    #     Q4 reads `prop.mood` and `prop.subject` ONLY (`queries/world_q.py:246-248`), and sets
+    #     `q.about` to the proposition ID, not its predicate. No live path reads
+    #     `Proposition.predicate` at all, so the 443 -> 692 acts and the 0 -> 256 person-naming
+    #     acts are attributable to the SUBJECT, not to `wants_of`. What the predicate reaches is
+    #     `World.content_hash` (`propositions` is in `_STATE_COLLECTIONS`) and a human reading a
+    #     world. It is kept because "a standing ambition" 143 times is a lie about the corpus and
+    #     this is not; it is NOT claimed as a cause of any number above.
+    #
+    # ⚠⚠ **THE ROTATION IS A DEFAULT, NOT A REFUSAL, AND THAT IS A KNOWN DIVERGENCE FROM THE
+    # SINGLE OWNER OF THIS DECISION.** With three ANONYMOUS people nothing in the case says which
+    # of them a want is about -- `concerns_of` resolves `who_acts` to a CASE id, and no case id
+    # maps to `p_a`/`p_b`/`p_c`. So each person's OUGHT names the next, which guarantees only that
+    # nobody's ambition is about themselves.
+    #
+    # `harness/populated.py` ALREADY OWNS THIS and does it properly: a four-tier priority chain
+    # (named in `who_acts` -> same institution -> same roof -> next building) with the rule
+    # recorded per person, and it REFUSES BY NAME to do what this loop does --
+    # *"Nobody is tied to a stranger by a draw. A draw here would read as a relationship and be one
+    # only by accident"* (`populated.py`), and *"a person with no tie at all is the one case that
+    # writes nothing: an OUGHT about nobody is not a motive"*. Under §42.2's polarity rule the
+    # conformant answer here is that same `continue`.
+    #
+    # ⚠ **IT IS NOT TAKEN, AND THE REASON IS THE ONE JORDAN GAVE: *"Always improve game."*** A
+    # `continue` in a three-anonymous-person world writes no Proposition, so nobody holds a `commit`,
+    # so Q4 raises nothing and the corpus grader measures a world where NOBODY ACTS. The rotation is
+    # the lesser of two wrongs and is labelled as a wrong rather than dressed as a rule.
+    #
+    # ⚠ **AND "W27 WILL REPLACE IT" WOULD BE FALSE, SO IT IS NOT SAID.** `populated.py` IS `W27`,
+    # landed 2026-09-13, and it declares itself *"a second instrument beside [`corpus_run`], not a
+    # replacement"*. Nothing currently schedules this loop's removal. Removing it means porting
+    # `populated`'s per-case cast INTO `build_at` -- item 2 of `HANDOFF.md`'s work order -- and
+    # until somebody does that, this default is load-bearing on every number the grader reports.
+    want = wants_of(case)
+    cast = ("p_a", "p_b", "p_c")
+    for i, pid in enumerate(cast):
+        about = cast[(i + 1) % len(cast)]
+        prop = Proposition(f"prop_{pid}", "OUGHT", about, want, True, 0)
+        w.propositions[prop.id] = prop
         w.add_tenure(Tenure(f"t_{pid}_commits", pid, prop.id, "commit", 0))
+    # The docket names ONE matter, so it names the first person's. `prop_x` is gone -- and an
+    # adversarial pass confirmed NOTHING outside this function ever read that id, so the rename
+    # breaks no surface.
+    prop = w.propositions["prop_p_a"]
     if (ENDINGS.get(str(case.get("id"))) or {}).get("forced_by_threshold"):
         # Q1: a Date coming due, with a DocketItem naming a matter. The corpus says this case's
         # ending is forced by a threshold; a world with no deadline cannot represent that at all.
@@ -471,8 +499,30 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     # `degree` only when the fold took the CONTEST branch and `degree_of` read one off the
     # subsystem's own result — so this is a count of rolls that happened, not of acts attempted.
     degrees = Counter(str(e.degree) for e in w.log if getattr(e, "degree", None))
+    # `ED-IN-0222`: HOW EACH BELIEF IN THIS WORLD WAS COME BY. `rosters.yaml: claim_sources`
+    # declares four and the loop wrote one until the told channel landed, which is a fact about
+    # the GAME that no instrument reported -- so a claim about it could not be reproduced from
+    # the tree, and `tools/ci_claim_provenance_check.py` is right to refuse one that cannot be.
+    # ⚠ COUNTED PER WORLD AND SUMMED BY THE CALLER, like `degrees` above, rather than recomputed
+    # from a second walk: the ledgers are this world's and the report is the corpus's.
+    sources = Counter(c.source for p_ in w.persons.values() for c in p_.ledger)
+    told_holders = sum(1 for p_ in w.persons.values()
+                       if any(c.source == "told_by" for c in p_.ledger))
+    # ⚠ THE REDEPOSIT COUNT IS THE ONE THAT CAUGHT A REAL DEFECT, so it is reported rather than
+    # left to a probe. A `told_by` claim whose triple the hearer ALREADY HOLDS firsthand is one
+    # belief stored twice — it tells them nothing and takes a `ledger_cap` slot from a claim that
+    # would have. The first cut of the told channel deposited 180 and **175 were this**; the
+    # corpus is where that is visible, because `build_world(0)` produces none.
+    told_redeposits = 0
+    for p_ in w.persons.values():
+        own = {(c.subject, c.predicate, c.value) for c in p_.ledger if c.source != "told_by"}
+        told_redeposits += sum(1 for c in p_.ledger
+                               if c.source == "told_by"
+                               and (c.subject, c.predicate, c.value) in own)
     return dict(id=cid, scale=scale, status=status, executed=ok, refused=no, seasons=n,
-                why="", checks=checks, degrees=dict(degrees))
+                why="", checks=checks, degrees=dict(degrees),
+                claim_sources=dict(sources), persons=len(w.persons),
+                told_holders=told_holders, told_redeposits=told_redeposits)
 
 
 def planted_control(seed: int = 0) -> tuple:
@@ -563,6 +613,16 @@ def main(seed: int = 0) -> int:
     for r in live:
         _deg.update(r.get("degrees") or {})
     print(f"  DEGREES RESOLVED         {dict(sorted(_deg.items())) or '{} — no contest completed'}")
+    # `ED-IN-0222`. THE LINE THAT MAKES A CLAIM ABOUT BELIEF TRANSMISSION REPRODUCIBLE.
+    # `rosters.yaml: claim_sources` declares four values; a run that reports three zeros is
+    # reporting a hole, and one that reports none lets a session assert any number it likes.
+    _src, _persons, _holders = Counter(), 0, 0
+    for r in live:
+        _src.update(r.get("claim_sources") or {})
+        _persons += r.get("persons") or 0
+        _holders += r.get("told_holders") or 0
+    print(f"  CLAIMS BY SOURCE         {dict(sorted(_src.items()))} — of the four "
+          f"`claim_sources`; {_holders} of {_persons} person-instances hold a `told_by`")
     ever = sorted({v for r in live for v in r["executed"]})
     tried = sorted({v for r in live for v in r["refused"]})
     foldable = set(resolvable_verbs())
@@ -574,6 +634,7 @@ def main(seed: int = 0) -> int:
           f"{len(set(tried) - set(ever))} attempted and always refused · {len(ever)} executed")
 
     # ---- `W18`: THE BAR, per lane (`PLAN.md` §6.1 / §6.2) --------------------
+    # [JUSTIFIED: a TERMINAL RULE WIDTH -- presentation, not a mechanical quantity. Nothing reads it and no value in the game depends on it; it is here because the fabrication gate counts every integer literal and a bare 72 is indistinguishable from a fitted threshold to a scanner]
     print("\n" + "=" * 72)
     print("THE BAR — `PLAN.md` Part 6.  Two counts, one per lane, NEVER averaged (`G10`):")
     print("  the NPC number counts PROPAGATION; the ARC number counts ENDINGS.")

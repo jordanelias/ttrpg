@@ -312,3 +312,65 @@ repo has paid for before.**
   `systems/social_contest/` reads 46 or 47 on `find` depending on `__pycache__` churn. The number
   that means anything to a `git rm -r` is **28 tracked** (`git ls-files`), of which 21 are `.py` and
   7 `.md`. A count that moves when nobody edits anything was never a measurement (§0.1 pt 4).
+
+---
+
+## 8. PROGRESS — 2026-09-13 (appended; the ORDER above is unchanged)
+
+**Recorded here rather than by editing §3, because the sequence is RATIFIED and this session did not
+re-sequence it.** Jordan, 2026-09-13: *"update that ratified workplan."*
+
+### 8.1 · What landed
+
+| | | evidence |
+|---|---|---|
+| **The told channel** — a telling now transmits its CONTENT, not only that it happened | `ED-IN-0222` | `loop/witness.py`; `told_by` claims 0 → 8 corpus-wide |
+| **A populated world** — 46 named NPCs, 37 settlements, 60 quarters, 211 buildings, 26 inhabited | `ED-IN-0223` | `harness/populated.py`, `venues.yaml`, `npcs.yaml`, `tools/export_npc_roster.py` |
+| **The milestone gate re-pointed at the head** — rows 1–2 probed `engine/mc_v18` for six days | `ED-IN-0226` | `tools/m1_acceptance.py` |
+| **`mc_v18` deprecated in place**, shrink-only ratchet, 16 importers, none production | `ED-IN-0227` | `tests/valoria/test_mc_v18_is_deprecated.py` |
+| **⭐ THE COUNTERPARTY** — every person's OUGHT now names a PERSON | `ED-IN-0210` Ruling 1 | `harness/corpus_run.py::build_at` |
+
+**The counterparty change, measured through the season driver over the 27 NPC cases that build:**
+
+```
+control (rung subject)   443 acts     0 naming another person
+shipped (person subject) 692 acts   256 naming another person
+distinct executed sets    25 -> 43        verbs executing  11 -> 13
+```
+
+⚠ **IT IS NOT ONE OF THE 27 POSITIONS.** It is a new item, taken because it was the cheapest change
+in the tree with the largest effect on the game and it executes a ruling Jordan had already made.
+**It is not downstream of Arc 2** (positions 3–7) — it changes world CONSTRUCTION, not an effect, so
+`ED-IN-0212`'s "the gate's signature IS the effect contract" does not reach it. Anything that writes
+a verb's effect still is.
+
+### 8.2 · The two costs it bought, as follow-on items
+
+Neither is scheduled here; both are named so the next session does not rediscover them.
+
+1. **`tell` collapses 57 → 10 executions (82%).** The transmission verb — `ED-IN-0222`'s own subject
+   — fires far less once people have person-subject questions to pursue. Belief transmission got a
+   channel and then lost most of its traffic in the same session.
+2. **`travel.blocked` beliefs 6 → 192 (32×).** Root cause, from an adversarial pass: `build_at` seats
+   all three people as `person`-kind rungs, `contain_ascends` requires **strict** ascent, so two
+   `person` rungs tie and a `move` naming a person **always refuses**. A person-subject question
+   should not mint a `move` candidate targeting a person — that is `decision/options.py`'s
+   `_derive_operand`, and it is the fix, not the Proposition. (`move` still EXECUTES 17 → 73, so this
+   is ledger noise rather than a dead verb.)
+
+### 8.3 · Corrections to this document's own surrounding surfaces
+
+- **§5's ruling batch: `ED-WR-0011` is CLOSED.** `registers/editorial_ledger_wr.jsonl` carries a
+  second row under that id — `status: ruled`, `needs_jordan: false`, *"OI-05 RULED BY JORDAN,
+  2026-09-13 … Season-tick generation = **none**, which is a RULING rather than a deferral."* That is
+  Option A of the two the row itself drafted, i.e. the generator answer. `ED-SE-0051`/E-1 remains open.
+- **`ED-IN-0210` keeps `needs_jordan` deliberately**, for its one live fork (*are `dispatch` and
+  `comply` two sides of one thing?*), which `ED-IN-0211` records as surviving §0's five tests. A
+  close-pass that clears it on "ruled + still flagged" deletes a live escalation — position 1 should
+  skip it by name.
+- **§2's queue figures have no instrument and four surfaces disagree.** 108/158 here (2026-09-11);
+  151/105 then 153/106 in `HANDOFF.md`'s 2026-09-10 section; 41 / 51 / 77 by hand today depending on
+  the predicate; 37 after folding append-only rows to the latest per id. **Position 1 should ship the
+  fold-to-latest script as its instrument**, or the "queue reads ≤ 12" acceptance cannot be checked.
+- **`requirements.yaml` carries FOUR mutually inconsistent R3 figures** (`:142`, `:265`, `:333`,
+  `:524`) with no statement of which is the baseline. Any position measuring propagation trips on this.

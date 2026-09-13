@@ -254,11 +254,39 @@ built encode your model of it, not the system.
 
 - A juncture may **not** be marked done on a document. `python tools/m1_acceptance.py --summary` is the
   instrument; its rows are falsifiable and it refuses to guess. ⚠ **It is not yet uniformly
-  execution-bound:** some rows genuinely execute the engine (a seeded `engine/mc_v18.py` probe, a
-  same-seed content-hash comparison), but **the row aggregating "all junctures execute" counts `state:`
+  execution-bound:** some rows genuinely execute the engine (a seeded 1-season probe of
+  **`engine/season/`, the HEAD**, and a same-seed `World.content_hash()` comparison), but **the row
+  aggregating "all junctures execute" counts `state:`
   strings in `workplans/workplan_v6_progress.yaml`, a hand-edited board** that a few one-word edits
   green. It declares itself DOC-DERIVED in its own output — **treat it as bookkeeping, not evidence.**
   While any row is honestly `partial`/`blocked`, the gate can say NOT-DONE but not DONE.
+
+  ⚠⚠ **THAT PROBE NAMED `engine/mc_v18.py` UNTIL 2026-09-13, AND IT IS A SUPERSEDED TREE
+  (ED-IN-0226).** Jordan ruled on 2026-09-07 that `engine/season/` is the head; this file went on
+  naming the prototype as the milestone's execution artifact for six days, and `tools/m1_acceptance.py`
+  probed it. A gate aimed at the wrong tree is worse than a stale pointer: it answers the question it
+  was built to answer, incorrectly, in the direction that looks like progress — row 1's two failing
+  stubs were deferrals in code nobody intends to ship. **This is the repair §0 prescribes** — *"needing
+  one means Layer 0 was written wrong, and the repair is to EDIT THIS FILE"* — made here rather than
+  routed around.
+
+  ⚠ **AND `mc_v18` IS NOW DEPRECATED IN PLACE (ED-IN-0227).** The sentence that stood here said it
+  was *"NOT retired: 71 live files still reference it, including the composition spine and a blocking
+  round-trip export"*, and every part of that is wrong. MEASURED by AST, 2026-09-13: **223 files
+  mention the name and exactly 16 IMPORT it — none of them production code.** No module under
+  `engine/` outside its own tests, nothing under `systems/`, and the composition spine is not among
+  them: `composition.json` and `module_contracts.yaml` name it only in `needed_by:` DOCUMENTATION
+  fields, which say who consumes a role, never what a role resolves to. The prototype is a consumer
+  of the engine, never a dependency of it, which is why deprecating it in place cost nothing at
+  runtime. The 71 was a grep of mentions read as a dependency count — the same substitution this
+  section is about, made one paragraph below the correction. Deletion was measured and REFUSED on its
+  cost: **78 of the 136 test functions in `engine/tests/` — 57% of CI's blocking `sim-regression`
+  job — import it**, so deleting the prototype would delete 78 tests of campaign-scale behaviour.
+  It is deprecated WHERE IT SITS (§1 forbids a `deprecated/` tree), and the mechanism is a
+  shrink-only ratchet: `tests/valoria/test_mc_v18_is_deprecated.py` fails on a NEW importer and
+  fails on a roster line whose module no longer imports it, so every migration step is a visible
+  diff. **Nothing new is built there.** Whether the existing sixteen ever move is a separate
+  decision nobody has taken.
 - "Authoring the design doc" is **not** the deliverable for a juncture that has running code: verify the
   code against the sim and record the contract; the doc may follow verified behaviour.
 - **A juncture done in code and open on the board is a BOARD defect, not a work item.**
