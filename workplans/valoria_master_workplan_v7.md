@@ -825,6 +825,43 @@ fan-out is. Three consequences, each of which had been read as a separate proble
 3. **A social-contest game in which nobody can be deceived, surprised or informed** is a deeper hole
    than the 20 silent verbs of `R-05`. It is not on the reconciled program's 27 positions.
 
+### 8.2a · ⚠ CORRECTION TO §8.2, MEASURED 2026-09-13 ON THE FULL CAST — the premise is wrong and half the conclusion survives
+
+§8.2 says *"`fan_out_mode` is `all_five` and WITNESS fans every Event to every person, so
+co-location was never what made the corpus omniscient — the fan-out is."* **That is false of
+`build_realm`, and it was generalised from one pair.** The instrument §8.2 correctly says did not
+exist — a ledger-overlap count — now does. Both arms, `build_realm(seed=0)`, one season:
+
+| | §8.2's reading (8 persons) | the full cast (46 persons) |
+|---|---|---|
+| mean pairwise ledger overlap | **8.7%** | **19.0%** |
+| ledger size min / median / max | 9 / 11 / 17 | 10 / 21 / **83** |
+| `all_five` observer-slots | 84 | **1,670**, against **135,608** at `total` |
+
+**The fan-out is already narrow — 1.2% of total.** Per-channel admission over all 2,948 events:
+`co_located` admits on 414 events (1,626 admissions, **97% of the whole fan**), `witness_key` on
+414 (414), `document_key` on 73 (73), `chronicle` on **1**, `post_remit` on **0**. **No channel
+admits every person on any event except `chronicle`, once.** So co-location is doing exactly the
+work §8.2 says it is not doing, and the ~90% figure is Carin Vedel and Uwe Askeland — who
+`npcs.yaml` seats in the SAME BUILDING (`b_s_026_workshop`, both Einhir). Two people in one room
+holding near-identical ledgers is the co-location predicate working.
+
+**THE HALF THAT SURVIVES IS THE IMPORTANT HALF, AND IT IS SHARPER FOR LOSING THE WRONG CAUSE:**
+**every claim in the world is `firsthand` — 2,386 of 2,386, zero `told_by`.** Knowledge IS local
+and nothing is ever TRANSMITTED. That is a producer gap in the told channel, not a consequence of
+omniscience, so §8.2's derived consequence 1 (*"a witness who already saw everything cannot be told
+anything"*) does not hold as stated: witnesses share ~19% of each other's claims and have ample
+ignorance to be told about. Consequence 3 (*"nobody can be deceived, surprised or informed"*) keeps
+its **informed** half on the `told_by` zero and loses its stated cause.
+
+⚠ **NO ARM IS FLIPPED AND NO DEFAULT MOVES.** `R7` (`ED-IN-0205`) excluded `total` and is SILENT
+between `presence_only` and `all_five`; `H-33` stays `assumption` because #353 supplies no
+predicate for any channel. This corrects a measurement, not a decision.
+
+Reproduce: `build_realm(seed=0)`, `run(seasons=1, w=w)`, then compare
+`epistemic.observers_for(w, e, mode, everyone)` summed over `w.log` for the three modes, and count
+pairwise `(subject, predicate, value)` overlap across `w.persons[*].ledger`.
+
 **No work item is opened here** — §0 forbids this document generating one. What is recorded is that
 `R-07`'s `measured:` block states a structural property and omits the behavioural one, and that the
 instrument for the behavioural half is a ledger-overlap count, which did not exist before today.
