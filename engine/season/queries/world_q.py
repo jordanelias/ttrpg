@@ -299,6 +299,43 @@ def sovereign_fraction(w: World, rung_id: str) -> tuple[float, int]:
     return top / len(held), undetermined
 
 
+def provinces_of(w: World, rung_id: str) -> dict:
+    """`{faction Proposition id: [territory ids]}` — the provinces that EXIST right now.
+
+    ⭐ `systems/settlements/reference/scale_hierarchy_v1.md` §2, **RATIFIED, direct Jordan ruling
+    2026-07-13**: *"Provinces are only formed if the same faction holds the constituent
+    territories … territories are the fixed geographic units; a province is an emergent aggregation
+    that exists only while its constituent territories share a common faction holder."* It replaces
+    PP-726 §2.3's fracturing state-machine: *"A province isn't a container that sometimes breaks —
+    it's a name for 'these territories, right now, cohering under one faction.'"*
+
+    ⚠⚠ SO A PROVINCE IS A QUERY AND NOT A RUNG, AND THAT IS THE RULING ARRIVING AT THE SAME PLACE
+    §22 DOES FROM THE OTHER SIDE. §22.1's reason for giving every aggregate to Nobody — *"if the
+    aggregate is a function it cannot go stale, and it cannot be initialised and then forgotten"* —
+    is exactly what an existence-conditional province needs: the moment a territory changes hands
+    the province it was part of stops existing, and nothing has to be told. `province` stays a
+    declared `rung_kind` (the ladder names it, and `contain_ascends` permits `territory -> duchy`
+    directly), and `build_realm` builds none.
+
+    ⚠ NO MINIMUM SIZE IS IMPOSED, BECAUSE CANON STATES NONE. A single territory held alone comes
+    back as a group of one. Jordan's title note — a Count governs ONE province, a Lord may govern
+    several territories *"that have not been assembled into a province"* — implies a threshold
+    exists without giving it, so the caller decides and this does not invent one.
+
+    ⚠ LIVE `hold` EDGES ONLY, like every aggregate here (§22.4 clause 3)."""
+    TRACE.query("provinces_of", "resolver")
+    here = {r for r in descendants(w, rung_id)
+            if r in w.rungs and w.rungs[r].kind == "territory"}
+    holder_of: dict[str, str] = {}
+    for t in w.tenures:
+        if t.kind == "hold" and t.live and t.subject in w.propositions and t.object in here:
+            holder_of[t.object] = t.subject
+    out: dict = {}
+    for terr, holder in sorted(holder_of.items()):
+        out.setdefault(holder, []).append(terr)
+    return out
+
+
 def establishment_of(w: World, office_id: str) -> list[str]:
     """§11 -- *"the named persons the office employs. Finite, contested, durable."*
 

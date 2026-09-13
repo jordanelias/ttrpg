@@ -235,38 +235,56 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     realm = "r_valoria"
     w.rungs[realm] = Rung(realm, "realm")
 
-    # ⚠⚠ **THE `duchy` RUNG, WHICH NOTHING HAD EVER INSTANTIATED.** `rung_kinds` declares eight and
-    # every world this repo built used six: provinces hung directly off the realm, so the ladder
-    # `settlement < territory < province < duchy < realm` had a hole in it where the middle of the
-    # governance ladder belongs. Jordan, 2026-09-13: *"the duchy is also underneath the Crown and
-    # subject to it"* — which is a statement about the CONTAINMENT ladder, and is exactly what a
-    # duchy rung between province and realm expresses.
+    # ⚠⚠ **THE TIER THESE 17 ROWS BELONG TO IS `territory`, NOT `province`, AND THAT IS A RATIFIED
+    # RULING THIS MODULE WAS ON THE WRONG SIDE OF.** `systems/settlements/reference/scale_hierarchy_v1.md`
+    # — **Status: RATIFIED, direct Jordan ruling 2026-07-13** — states the ladder verbatim:
     #
-    # TWO, AND ONLY TWO, BECAUSE CANON NAMES TWO DUCAL TITLES. `worldbuilding_v30.md:25-26` is
-    # tier 1 and gives *"Duke of Varfell | Magnus Vaynard"* and *"Duchess of Hafenmark | Inga /
-    # Inge"*. The Crown has no duchy — the King governs the realm directly — and the Church holds
-    # one province without a ducal seat, so neither gets one. Inventing a third would be authoring
-    # a polity canon does not name.
+    #     "People in one place comprise settlements comprise territories comprise provinces
+    #      comprise duchies comprise country."
     #
-    # ⚠ THE TENSION IS RECORDED RATHER THAN SMOOTHED. `faction_politics_v30.md:246` frames Vaynard
-    # as *"first among the Jarls, not a monarch"* and calls Varfell a Jarl Confederacy, so "duchy"
-    # is tier 1's lore-form over a structure tier 2 describes differently. Tier 1 wins on identity
-    # and names, which is what this is; the rung is a place on a containment ladder and asserts
-    # nothing about how the Jarls choose him.
+    # A TERRITORY IS THE FIXED UNIT HOLDING MULTIPLE SETTLEMENTS, which is exactly what each of
+    # geography's 17 rows is (`settlements: [S-001, ...]`). Its `provinces:` key and `# PROVINCES
+    # (17)` banner are the label the ruling superseded — and the `T` PREFIX ON EVERY ID WAS RIGHT ALL
+    # ALONG. `references/world_initial_state.yaml` calls the same rows *"the 16 territory ids"*, so
+    # the two canon files disagreed on the noun and the ruling settles it. §6 of that document lists
+    # the propagation as *"tracked, not yet executed … nothing below needs further Jordan input, it
+    # needs authoring"*, which is why the stale label survived to here.
+    #
+    # ⚠⚠ **AND A PROVINCE IS NOT A CONTAINER AT ALL.** §2: *"Provinces are only formed if the same
+    # faction holds the constituent territories … a province is an emergent aggregation that exists
+    # only while its constituent territories share a common faction holder."* So it is a QUERY, never
+    # a rung this builds — `queries/world_q.provinces_of`. That is the §22 shape arrived at from the
+    # other direction: an aggregate that cannot go stale because there is nothing to initialise.
+    # `contain_ascends` permits `territory -> duchy` directly (checked: the parent need only be
+    # strictly above), so the ladder skipping a conditional tier is legal by construction.
+    #
+    # **THREE DUCHIES, NOT TWO.** The ruling carries PP-726's duchy tier unchanged: *"3 duchies,
+    # unchanged ownership: Almud/Valorsmark, Baralta/Hafenmark, Vaynard/Varfell."* A first writing of
+    # this block built two and reasoned that *"the Crown has no duchy — the King governs the realm
+    # directly"*, which canon contradicts outright: the Crown's duchy is **Valorsmark**, and Almud
+    # holds the realm seat AS WELL, which §5.3 makes the point of him — *"the rulers of a nation are
+    # an exception in that they are able to influence duchies/provinces/territories/settlements
+    # outside their direct chain of control."*
+    #
+    # ⚠ THE TENSION OVER VARFELL IS RECORDED RATHER THAN SMOOTHED. `faction_politics_v30.md:246`
+    # frames Vaynard as *"first among the Jarls, not a monarch"*; tier-1 `worldbuilding_v30.md:25`
+    # says *"Duke of Varfell"*. The rung is a place on a containment ladder and asserts nothing about
+    # how the Jarls choose him.
     duchy_of: dict = {}
-    for fac_name in ("Hafenmark", "Varfell"):
-        did = f"duchy_{_slug(fac_name)}"
+    for fac_name, duchy_name in (("Crown", "Valorsmark"), ("Hafenmark", "Hafenmark"),
+                                 ("Varfell", "Varfell")):
+        did = f"duchy_{_slug(duchy_name)}"
         w.rungs[did] = Rung(did, "duchy")
         w.add_tenure(Tenure(f"t_{did}_in", did, realm, "contain", 0))
         duchy_of[fac_name] = did
 
-    for tid, prov in geo["provinces"].items():
-        rid = f"prov_{tid}"
-        w.rungs[rid] = Rung(rid, "province")
-        holder = str(prov.get("faction") or "")
-        # ⚠ A FOREIGN PROVINCE GETS NO PARENT, AND THAT IS THE POINT RATHER THAN A GAP. Schoenland
+    for tid, terr in geo["provinces"].items():          # geography's stale key; the rows are territories
+        rid = f"terr_{tid}"
+        w.rungs[rid] = Rung(rid, "territory")
+        holder = str(terr.get("faction") or "")
+        # ⚠ A FOREIGN TERRITORY GETS NO PARENT, AND THAT IS THE POINT RATHER THAN A GAP. Schoenland
         # is on the faction roster and is FOREIGN — `rosters.yaml` records it as not
-        # player-eligible, holding its province and granting or refusing Altonian naval passage —
+        # player-eligible, holding its territory and granting or refusing Altonian naval passage —
         # so a `contain` edge into `r_valoria` would assert it is part of the realm. It is a root
         # rung instead, which keeps it out of `descendants(realm)` and therefore out of the
         # realm's `sovereign_fraction`, where counting it would be a canon error wearing a number.
@@ -274,11 +292,13 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         # 16 territories and deliberately omits T16, Schoenland's.
         if holder == "Schoenland":
             continue
+        # The Church holds one territory and is not a duchy; an unheld territory has no duchy
+        # either. Both hang off the realm, which the ladder permits.
         w.add_tenure(Tenure(f"t_{rid}_in", rid, duchy_of.get(holder, realm), "contain", 0))
     for sid, s in geo["settlements"].items():
         rid = f"set_{_slug(sid)}"
         w.rungs[rid] = Rung(rid, "settlement")
-        w.add_tenure(Tenure(f"t_{rid}_in", rid, f"prov_{s['territory']}", "contain", 0))
+        w.add_tenure(Tenure(f"t_{rid}_in", rid, f"terr_{s['territory']}", "contain", 0))
 
     # -- the authored layers: quarters, then buildings -------------------------
     # ⚠ A SETTLEMENT WITH NO VENUE ROW WOULD SILENTLY HOLD NOBODY, so an unknown type RAISES
@@ -451,12 +471,12 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # value for a province nobody holds; `cast.resolve_faction` returns `None` for it, so the
     # province lands in `sovereign_fraction`'s `undetermined_count` instead of being quietly
     # assigned to somebody. An unheld province is a fact about the world and a thing to play for.
-    for tid, prov in geo["provinces"].items():
-        held_by = cast.resolve_faction(prov.get("faction"))
+    for tid, terr in geo["provinces"].items():
+        held_by = cast.resolve_faction(terr.get("faction"))
         if held_by is None:
             continue
-        w.add_tenure(Tenure(f"t_hold_prov_{tid}", f"fac_{_slug(held_by)}",
-                            f"prov_{tid}", "hold", 0))
+        w.add_tenure(Tenure(f"t_hold_terr_{tid}", f"fac_{_slug(held_by)}",
+                            f"terr_{tid}", "hold", 0))
 
     # -- WHO GOVERNS: OFFICES AND TITLES ----------------------------------------
     #

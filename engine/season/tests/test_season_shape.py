@@ -10863,7 +10863,16 @@ def test_the_populated_world_is_not_everybody_in_one_room():
         "people, which is why the count is the NPC lane's and not the corpus's")
 
     # THE LADDER IS DEEP. `community` and `hearth` sat unused in every world this repo built.
-    for kind in ("realm", "province", "settlement", "community", "hearth", "person"):
+    #
+    # ⚠ `territory`, NOT `province`, AND THE SWAP IS A CONFORMANCE FIX RATHER THAN A RELAXATION.
+    # `systems/settlements/reference/scale_hierarchy_v1.md` §1 is RATIFIED (direct Jordan ruling,
+    # 2026-07-13): *"settlements comprise territories comprise provinces comprise duchies comprise
+    # country."* A TERRITORY is the fixed unit holding multiple settlements, which is what each of
+    # geography's 17 rows is; its `provinces:` key is the label the ruling superseded. And §2 makes
+    # a province an EMERGENT AGGREGATION — *"only formed if the same faction holds the constituent
+    # territories"* — so no world builds one and `queries/world_q.provinces_of` computes it.
+    # Asserting a `province` rung here would pin the mislabel the ruling exists to remove.
+    for kind in ("realm", "duchy", "territory", "settlement", "community", "hearth", "person"):
         assert c["rungs"].get(kind), (
             f"no {kind!r} rung in the populated world. The §10 ladder is "
             "`person < hearth < community < settlement < territory < province < duchy < realm` "
@@ -10961,7 +10970,8 @@ def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
     own failure — an assertion that cannot observe the failure it excludes.
     """
     from ..harness.populated import build_realm
-    from ..queries.world_q import members, leaders, sovereign_fraction, conferral_path
+    from ..queries.world_q import (members, leaders, sovereign_fraction, conferral_path,
+                                   provinces_of)
     w = build_realm(seed=0)
 
     # THE LADDER HAS ITS MIDDLE. `duchy` is a declared `rung_kind` that no world this repo built
@@ -11015,8 +11025,35 @@ def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
         "a RUNG is held by something that is not a faction Proposition. Canon's starting-control "
         "table names a faction per province and never a person")
 
-    # AND AN UNHELD PROVINCE IS REPORTED, NOT ASSIGNED. `Uncontrolled` is the geography's own value
-    # for a province nobody holds; it must reach `undetermined_count` rather than a plausible owner.
+    # A PROVINCE IS COMPUTED, NEVER BUILT (`scale_hierarchy_v1.md` §2, RATIFIED).
+    assert not [r for r in w.rungs.values() if r.kind == "province"], (
+        "a `province` rung was built. §2 makes a province an EMERGENT AGGREGATION that exists only "
+        "while its territories share a holder — a stored one goes stale the moment land changes "
+        "hands, which is the §22.1 defect the ruling independently arrives at")
+    pv = provinces_of(w, "r_valoria")
+    assert pv, "no province is computed over the realm, so no faction coheres anywhere"
+    assert all(t in w.rungs and w.rungs[t].kind == "territory" for ts in pv.values() for t in ts), (
+        "a computed province contains something that is not a territory")
+    assert all(f in w.propositions for f in pv), (
+        "a province is keyed on something that is not a faction Proposition — §2 groups territories "
+        "by their common FACTION holder")
+    # It must also be able to SPLIT. Re-holding one of a faction's territories under another banner
+    # has to break the aggregation, or the Query is reporting containment rather than coherence.
+    victim = max(pv.items(), key=lambda kv: len(kv[1]))
+    other = next(f for f in pv if f != victim[0])
+    before = len(provinces_of(w, "r_valoria")[victim[0]])
+    for t in w.tenures:
+        if t.kind == "hold" and t.live and t.object == victim[1][0]:
+            t.subject = other
+            break
+    after = provinces_of(w, "r_valoria")
+    assert len(after[victim[0]]) == before - 1, (
+        "moving one territory to another holder did not shrink the province it left. §2's province "
+        "is existence-conditional on a COMMON holder; a Query that does not track that is reading "
+        "the containment tree")
+
+    # AND AN UNHELD TERRITORY IS REPORTED, NOT ASSIGNED. `Uncontrolled` is the geography's own value
+    # for a territory nobody holds; it must reach `undetermined_count` rather than a plausible owner.
     frac, undetermined = sovereign_fraction(w, "r_valoria")
     assert 0.0 < frac < 1.0, (
         f"sovereign_fraction over the realm is {frac}. Canon gives six factions a share of 17 "
