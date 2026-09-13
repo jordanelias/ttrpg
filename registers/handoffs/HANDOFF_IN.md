@@ -97,10 +97,25 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
     two-per-council count are exactly the two marked `status: proposed`. Building from the registry
     IS building to the ruling.
 
-**BUILT:** 19 offices · 2 `duchy` rungs (a declared `rung_kind` no world had ever instantiated) ·
-16 provinces held via `hold(faction Proposition -> province)` matching canon's starting-control
-table exactly · Schoenland's province deliberately parentless because it is foreign.
-`conferral_path` for Duchess Baralta walks `duchy_hafenmark -> r_valoria`.
+**BUILT:** 19 offices · **3 `duchy` rungs** · **17 `territory` rungs** (both were declared
+`rung_kinds` no world had ever instantiated) · 16 territories held via
+`hold(faction Proposition -> territory)` matching canon's starting-control table exactly ·
+Schoenland's territory deliberately parentless because it is foreign. `conferral_path` for Duchess
+Baralta walks `duchy_hafenmark -> r_valoria`.
+
+⚠ **CORRECTED WITHIN THE SESSION AGAINST A RATIFIED RULING — an earlier version of this entry said
+"2 duchy rungs" and "16 provinces", and both were wrong.**
+`systems/settlements/reference/scale_hierarchy_v1.md` (RATIFIED, direct Jordan ruling 2026-07-13) is
+the hierarchy: *"settlements comprise territories comprise provinces comprise duchies comprise
+country."* Three corrections followed: geography's 17 rows are TERRITORIES (its `provinces:` key is
+the superseded label; the `T` prefix was always right, and `world_initial_state.yaml` calls them
+territories); there are THREE duchies, the Crown's being **Valorsmark** (a first cut reasoned "the
+Crown has no duchy" and canon contradicts it); and **a province is an EMERGENT AGGREGATION, not a
+container** — *"only formed if the same faction holds the constituent territories"* — so
+`queries/world_q.provinces_of` computes it and no world builds one. That is §22.1's "an aggregate
+that cannot go stale" arrived at independently by a settlements ruling, which is worth knowing.
+§6 of that ruling lists its own propagation as "tracked, not yet executed"; PP-726 and the
+generation sourcebook are still owed it.
 
 ⚠ **THE FIRST CUT GAVE EVERY PERSON AN OFFICE** named after their registry `role`, so
 `leaders == members` for all eight factions — nothing scarce, nothing to compete for, and nothing
