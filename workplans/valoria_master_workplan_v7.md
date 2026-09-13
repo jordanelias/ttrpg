@@ -2,6 +2,11 @@
 
 ## Status: **CANON — RATIFIED 2026-09-12 (ED-IN-0216)**, by Jordan's merge of PR #397 under `ED-1094`'s ratify-on-merge default. Supersedes `valoria_master_workplan_v6.md` (CANON 2026-07-05 → 2026-09-12, ED-IN-0009/ED-IN-0011)
 
+> **AMENDED 2026-09-12 — `ED-IN-0218`, §7.** Six items, each attached to a row this document already
+> carries. The one that changes the sort: **`ED-IN-0210` holds three rulings plus a fork, and two of the
+> rulings are unexecuted WORK** — §7.1 moves them to §3.2 and leaves only the fork in §3.1. §7.2 is the
+> execution artifact behind that move.
+
 > **WHAT THE MERGE RATIFIED, AND WHAT IT DID NOT.** `CLAUDE.md` §2: *"Jordan's review-and-merge IS the
 > ratification — flip the `## Status:` line, the ledger `status`/`needs_jordan` fields and `CURRENT.md`
 > in that same merge, not as a later step nobody triggers."* The merge did not carry those flips, so
@@ -317,7 +322,7 @@ where the tree already holds a standing objection to a row, it is named in the r
 | **ED-MB-0008** | Two live ranged/volley Damage-Reduction tables, ~2× apart for the same armour band, neither marked superseded. Which governs? | volley resolution is undetermined for an importer or a player |
 | **ED-IN-0030** | The phantom "debt scene": `scale_transitions_v30` §4.3.2 cites a mechanic that exists nowhere. **Author it, or strike the reference?** | FA/political doc integrity |
 | **ED-WR-0008** | The P-25 Scale-based Mending Stability override table was **truncated at authoring** — header plus the label `Object`, zero data rows, no revision ever had them. Supply the values, or strike the override? | threadwork scale-override behaviour is unspecified |
-| **ED-IN-0210** | The open fork Jordan raised alongside his 2026-09-10 verb-table rulings: **does an order carry terms?** ⚠ Row is `status: ruled` — the rulings landed; the fork did not. | `workplans/2026-09-11-arc-sequence-spine.md:57` calls this *"the one remaining node that survives all five of §0's tests. Do not schedule it until ruled."* An earlier draft of this document dropped it entirely, because its `status` filter was `open` |
+| **ED-IN-0210** | The open fork Jordan raised alongside his 2026-09-10 verb-table rulings: **does an order carry terms?** ⚠ Row is `status: ruled` — the rulings landed; the fork did not. ⚠⚠ **AMENDED, §7.1: "the rulings" are THREE, and two of them are unexecuted work now routed to §3.2 — only the fork belongs here.** And `dispatch`, the fork's own subject, is one of `H-71`'s five unformable verbs (§7.3), so a ruling on it moves no run until `H-71` closes | `workplans/2026-09-11-arc-sequence-spine.md:57` calls this *"the one remaining node that survives all five of §0's tests. Do not schedule it until ruled."* An earlier draft of this document dropped it entirely, because its `status` filter was `open` |
 | **ED-885** | `canonical_sources.yaml:579` cites ED-885 for the 2026-05-30 F-RESID migration; ED-885 was never written. **Confirm ED-874, or name the real ID.** | ⚠ **Provenance only, not code.** That line is a `#` comment, stripped by every YAML parser before a consumer sees it — an earlier draft called it a machine-read registry, which is wrong in kind |
 
 > ⚠ **ED-885 is one sentence of Jordan's memory and nothing else.** A critic proposed closing it by
@@ -359,6 +364,13 @@ fields (Disposition, Bonds, TS) read off an aggregate strategic World. `scene_di
 docstring already names this context-derivation class for combat and contest actor derivation.
 **Closing the class closes OI-07**; it needs no ruling and should be filed against the cross-scale work
 rather than as a Knots item.
+
+**Plus, from §7.1 and routed here by this document's own amendment:** **`ED-IN-0210` Ruling 1** (a real
+interaction carries a counterparty — §7.2 measures the cost at one authored value in
+`corpus_run.py:280`, control 84/**0** against arm 84/**56**) and **Ruling 2** (the six named antonym
+closers, none of which exists in `engine/season/verb_table.yaml`). Both were **ruled by Jordan on
+2026-09-10**; neither needs a ruling, and neither is executed. They are the two rows in this bucket with
+a Jordan decision already behind them.
 
 ### §3.2a · HELD — overturned within the last day; re-derive before routing (3 rows)
 
@@ -640,3 +652,126 @@ tree holds two master workplans, `CURRENT.md` names v7, and v6 is reference.
 > working exactly as specified — an assertion that can observe the failure it excludes — and
 > `broken_dependency_checker`'s blocking status is what stopped a red `main`. Neither is apparatus for
 > its own sake; both are load-bearing on a real change.
+
+---
+
+## §7 · AMENDMENT 1 — 2026-09-12, `ED-IN-0218`
+
+**What this amendment may contain is fixed by §0's last paragraph**, which is the rule that made most
+of a proposed fold-in inadmissible and is quoted here because it did the work: *"this file states no
+work item that is not traceable to a milestone row or a ledger row that already exists, and it
+generates nothing — it sorts what the tree already holds."* A design session ran against this document
+on the day it was ratified. It produced fourteen proposals, one controlled execution artifact, and four
+measurements. **Six items below are admissible because each attaches to a row this document already
+carries. The fourteen proposals are not among them** — they live in `proposals/` under `ED-IN-0217`
+(`proposed`, held back from ratification in full), surfaced by location per `CLAUDE.md` §3, and a
+proposal directory is not a ledger row.
+
+### 7.1 · `ED-IN-0210` is mis-sorted, and the correction moves work OUT of §3.1
+
+§3.1 carries `ED-IN-0210` as one row summarised *"does an order carry terms?"*. **The row holds three
+rulings Jordan issued on 2026-09-10 and one open fork.** §3.1's own qualifier says the closing session
+owes each row its citation; this is that citation, and it splits the row:
+
+| Half | What it is | Bucket |
+|---|---|---|
+| **Ruling 1** — *"verbs invoke mechanisms or interactions between a character and another entity/character. they are not fiats."* Consequence: a real interaction has a **counterparty**, an **obstacle** and a **degree** | **RULED and UNEXECUTED.** No candidate in any corpus world carries another person as its subject | **§3.2 — WORK** |
+| **Ruling 2** — the antonym roster: `oblige`↔WAIVE · `succeed`↔DEPOSED · `tie/knot`↔FRAY/LOOSEN · `issue`↔RESCIND · `petition`↔WITHDRAW/DENY · `establish`↔ABOLISH/DISSOLVE (`utter` deliberately unpaired, §14 propositions immutable) | **RULED and UNEXECUTED.** None of the six closers exists in `engine/season/verb_table.yaml` | **§3.2 — WORK** |
+| **Ruling 3** — "the six investigation acts" is not a verb; `len(VERB_TABLE) == 32` was a false denominator | **EXECUTED** by `ED-FI-0009` | closed |
+| **The fork** — *"are `dispatch` and `comply` two sides of one thing?"* | genuinely open; two defensible answers | **§3.1 — stays** |
+
+**This is the only direction a re-sort may move in.** §3.2a records the opposite move — a live question
+routed to an agent — as the defect that section exists to prevent. Moving an **already-ruled** half out
+of the ruling bucket is the sort working: the agent executes what Jordan already decided.
+
+### 7.2 · Ruling 1 costs one authored value, and that is an execution artifact, not an argument
+
+Two arms differing in exactly one string — `engine/season/harness/corpus_run.py:280`'s
+`Proposition("prop_x", "OUGHT", ids[chain[0]], …)`, whose third argument is a **rung** id:
+
+| Arm | `prop_x.subject` | Candidates formed | Carrying another person as subject |
+|---|---|---|---|
+| **control** — the corpus as authored | `r_hearth` (a rung) | 84 | **0** |
+| **arm** | `p_a` (a person) | 84 | **56** |
+
+Same candidate count in both arms — nothing was added or removed; the **referent** changed. In the arm
+**all eleven verbs that execute** (`create_record · interview · move · reconstruct · release · research ·
+speak · surveil · tell · transfer · utter`) are offered with a person as their counterparty; in the
+control, none is. The mechanism is already built and needs nothing:
+
+- `questions_for`'s **Q4** (`queries/world_q.py:246-251`) emits `(prop.subject,)` as the referent of a
+  live `commit` to an OUGHT Proposition, and `Proposition.subject` is an unconstrained `str`
+  (`state/carriers.py:465`);
+- `decision/options.py:307-313` resolves **`subject`, `to` and `site` to that same referent** — *"three
+  cell-side names for the one thing the person was asked about"*;
+- `_eff_utter` (`loop/effects.py:430-432`) already **defaults** a Proposition's subject to `a.actor`, a
+  person — so a person-subject Proposition is not merely legal, it is what `utter` writes when a payload
+  omits the field.
+
+**Falsifier (§0.1 pt 3):** set the third argument back to `ids[chain[0]]` and the 56 returns to 0. The
+control is the corpus as it stands, so the number has one (§0.1 pt 4).
+
+⚠ **What this does NOT show.** Forming a candidate is not resolving an act. It also does not show that a
+counterparty *improves* any run — only that the absence of one is a **corpus-content** fact, not a
+structural bar. Q1 (matter strings), Q2 and Q3 (band names) cannot produce another person: **Q2's guard
+`c.subject == p.id or c.subject in mine` bars it by construction**, which is the mechanism behind the
+17,400-of-177,170 self-subject figure. **Q4 is the only door and it was never walked through.**
+
+### 7.3 · R-05 — the session's "five unreachable verbs" is a rediscovery of `H-71`, and its membership was wrong
+
+Recorded because a wrong list is worse than no list. The session reported five verbs with working effect
+bodies that no question can reach, as a blocker class this document does not carry. **All of it was
+already carried**, in four places: `engine/season/hole_register.yaml:795` (`H-71`, tier 0,
+`grade: absent`), R-05's own `measured:` block at `engine/season/requirements.yaml:303` (*"5 are foldable
+but never attempted (the governance verbs, `H-71`)"*), `registers/handoffs/HANDOFF_IN.md:154`, and
+`architecture/PLAN.md:1369` as blocker class B. It also has a green falsifier that reddens the day the
+hole closes — `test_no_person_can_choose_a_governance_verb_and_h71_is_why`.
+
+**The true membership is `{confer, convene, dispatch, revoke, destroy_record}`**
+(`engine/season/tests/test_season_shape.py:6348-6351`). The session's list substituted `kill / wound`
+for `dispatch`; `kill / wound` is one of the two verbs that **declare `contests:`**, not one of the
+never-attempted. Nothing is added to §3.2 for this. The instrument was right and the session
+re-derived it worse.
+
+**One linkage is new and neither surface names the other:** **`dispatch` is in `H-71`'s five AND is the
+subject of `ED-IN-0210`'s open fork.** A ruling on the fork therefore lands on a verb that no person
+can form, so answering it changes no run until `H-71` closes — which is the same relationship §1 records
+between M1 row 1 and OI-05, and it belongs in the fork's row when it is put to Jordan.
+
+### 7.4 · R-07 and R-08 — the execution reading §1 says those rows do not have
+
+§1 warns that `register --requirements` counts a hand-written string and that R-09's `partial` *"moved
+with a validated prose reading, not with a green test."* Two of the four `partial` rows now have an
+execution reading, and it is **less flattering than the status**. Twenty-five corpus worlds driven
+through full season spans: **25/25 seasons completed, no errors, 75 person-instances, 4,499 claims
+deposited — every single one `source: firsthand`, zero `told_by`** — and `standing_of` returns the
+maximum gap for **75 of 75** persons. `rosters.yaml:112-119` declares four `claim_sources`; the corpus
+exercises one. The transmission machinery is built and nothing in any world runs it.
+
+⚠ The first attempt at this run reported the same zeros from **0 completed seasons** — a swallowed setup
+error, i.e. a fake control. It is recorded rather than replaced, per §0.1 pt 4.
+
+### 7.5 · R-04 has no candidate surface named in this tree, and now has one under proposal
+
+§4's FA lane makes R-04 (`not_met`) the gate on retiring the FA design tree, and neither §1 nor §4 says
+what R-04's **surface** would be. Jordan specified one in the session that wrote this amendment: the
+faction sheet, personnel roster and policy tree as **in-game documents read at zero cost**, with reach
+scaled by the reader's intelligence and bureaucracy, and *"my ledger is only as reliable as my
+staffing, documentation and personal involvement."* That is a pointer, not a schedule — it sits in
+`proposals/2026-09-12-emergent-narrative-primitives-v2/01_THE_TEN.md` under `ED-IN-0217`, `proposed`,
+held back from ratification in full. **This document does not schedule it and may not**; §3.3's
+precedent is the shape — content and authorial calls do not become queue rows by being written down.
+
+### 7.6 · Two verifications against this document's own claims
+
+| §3.1's claim | Verified |
+|---|---|
+| **OI-05** is *"a ruling Jordan owns that was never filed as an ED … filing it is the first action this document asks for"* | **HOLDS.** `ED-WR-0009` and `ED-IN-0095` both name OI-05, and both record the **honest deferral** — *"the disposition is a PERMANENT honest deferral via `engine.substrate.stubwire`, not a wire-up"* — which is the decision *not* to invent the number. The number itself is unfiled and unruled. The first ask stands unmet |
+| **ED-IN-0214**, the conviction matrix's dominant common direction | **CORROBORATED, and the dominant direction is downstream of the matrix as well as in it.** Conviction separates only 2–7 of 22 candidates, and the question decides `qs[0]` in **801 of 1,068** deliberations. Re-cutting the matrix does not by itself move that: the *question* is doing the choosing |
+
+⚠ **One §1 complaint is itself now stale.** §1 flags *"`CURRENT.md:34` and `HANDOFF.md` both still read
+'6 `not_met` / 3 `partial`'."* `CURRENT.md:34` was repaired before this amendment and in the better way
+— the cached count is **deleted**, the instrument named as its owner, and the old figure kept only as
+dated history. `HANDOFF.md` genuinely carried the stale claim in a parenthetical asserting the
+instrument *"still reads 6/3"*, and that is corrected in this commit by the same method: no number, name
+the owner.

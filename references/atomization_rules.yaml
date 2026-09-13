@@ -181,6 +181,24 @@ policies:
     on_exceed: "skip"
     note: "Frozen archive of pruned HANDOFF.md narrative (2026-07-08). Grows by archival, not editing."
 
+  # ⚠ THIS CAP AND THE ONE BELOW NOW FIRE AS *REAL* SIGNAL, AND WHAT THEY ASK FOR IS ADJUDICATION
+  # WORK — NOT A SWEEP (ED-IN-0220, 2026-09-13). Two facts, both measured:
+  #
+  #   1. Deleting the uninformative `.md`/`.yaml` catch-alls below took the gate's advisory output
+  #      from 116 warnings to 8. These two rules are among the 8, so they are no longer buried and a
+  #      session that sees them should act on them. HANDOFF.md ~16.6k/4k; HANDOFF_IN.md ~130k/20k.
+  #   2. THE OBVIOUS FIX IS THE ONE THAT WAS ALREADY TRIED AND REFUSED, and the reason binds whoever
+  #      tries it next. `HANDOFF.md`'s own "Next actions" records step 6c ("slim the handoffs") as
+  #      NOT RUN: its premise that ">=75% of HANDOFF_IN.md is narrative about completed work"
+  #      measured at 21% corpus-wide, "and that 21% cannot be swept either: 12 of 17 sections marked
+  #      [DONE]/[RULED]/EXECUTED carry open, held or needs_jordan items inside them", as does
+  #      HANDOFF_archive.md itself. "The disposition markers in this corpus do not mean what they
+  #      say. Pruning it is adjudication work, not a culling wave."
+  #
+  # SO: the threshold is NOT raised and the rule is NOT set to skip. Either move would convert a
+  # standing request for adjudication into a silence, and the adjudication is real work with a real
+  # hazard — burying a `needs_jordan` item inside a section marked done. Whoever takes it reads each
+  # section for live items BEFORE moving it, and moves rather than deletes.
   - match: "HANDOFF.md"
     max_tokens: 4000
     on_exceed: "flag_for_split"
@@ -461,12 +479,37 @@ policies:
     on_exceed: "flag_unknown_pattern"
 
   # ────────────────────────────────────────────────────────────
-  # CATCH-ALL — flag any unrecognized file above safe size
+  # CATCH-ALL — MEASURED INTO SILENCE 2026-09-13 (ED-IN-0220)
   # ────────────────────────────────────────────────────────────
+  #
+  # ⚠ THE `max_tokens` ON BOTH CATCH-ALLS IS DELETED, DELIBERATELY, AND THE RULES STAY SO THE
+  # MATCH IS STILL DOCUMENTED. Their job was to "flag any unrecognized file above safe size" —
+  # an OUTLIER alarm. MEASURED on the working tree the day they were removed:
+  #
+  #     116 violators · min 10,125 · median 20,941 · max 196,463 tokens
+  #     17 above 40k · 4 above 100k · and all 116 of the gate's warnings were this one rule
+  #
+  # A median only 40% over the threshold means these were not identifying outliers, they were
+  # describing the tree's ordinary document size. An alarm whose normal state is 116 firings
+  # carries no information, and it was the ENTIRE advisory output of the compliance gate, so any
+  # other warning arrived buried in it.
+  #
+  # CLAUDE.md §0.1 pt 5's predicate is the authority: a defect in an artifact load-bearing only on
+  # this repository's PROCESS — not on the game, the exported params, the port, or a Jordan
+  # decision — is "evidence the artifact can be wrong without cost. Delete it, or accept the defect
+  # and write nothing." These caps gated nothing (advisory, exit 0), so the predicate says delete.
+  #
+  # WHAT SURVIVES, AND IT IS THE PART THAT WAS ALWAYS THE REAL RULE: CLAUDE.md §4's convention that
+  # a long document splits into `_part2`, `_part3`, … IN READING ORDER. That is a judgment a session
+  # makes when a document becomes unwieldy to work with, which is what it always was — §4 used to
+  # claim the cap "is enforced", and it never was.
+  #
+  # NOT TOUCHED: every EXPLICIT per-file cap above, including the blocking ones
+  # (`on_exceed: error` on the patch-register archives, `block_commit` on the session logs). Those
+  # name a specific file for a specific reason and several of them are load-bearing. This deletion
+  # is scoped to the two rules that fired on everything because they matched everything.
   - match: "**/*.md"
-    max_tokens: 15000
     on_exceed: "flag_unknown_pattern"
 
   - match: "**/*.yaml"
-    max_tokens: 10000
     on_exceed: "flag_unknown_pattern"

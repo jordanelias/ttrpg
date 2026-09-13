@@ -368,6 +368,20 @@ claimed — it needs no read at all — and it is `emits_on_refusal` doing the w
 **This is the worked example of what "emergent" means here** — and it is a proof that the axioms
 carry weight, because obstruction is a mechanic the design never implements and always has.
 
+⚠ **`OBSTRUCTION` AND `OBSTACLE` ARE TWO DIFFERENT THINGS AND SHARE ONLY A ROOT** — added 2026-09-13
+(ED-IN-0220), because the two were asked about as one and nothing in the tree distinguished them:
+
+| | what it is | where it lives | who produces it |
+|---|---|---|---|
+| **obstacle** | the **difficulty one act is resolved against** — the `Ob` a pool is thrown at, and the middle face of `ED-IN-0210` Ruling 1's *counterparty · obstacle · degree* | resolver-side, in the draw | the **situation**; it is a number, and a person can be one |
+| **obstruction** | **another person's prior act refusing yours** — `T-g` above, where `confer`'s 1-per-object precondition declines the second conferral and `emits_on_refusal` carries it | nowhere; it is not a field and not a verb | a **person**, and they need not know you exist |
+
+**An obstacle is rolled against. An obstruction is not rolled against at all** — it produces a refusal,
+not a degree, and the actor learns of it only through the refusal's Event. Conflating them is how a
+session ends up looking for an `obstruct` verb, or for an `Ob` contribution from a rival's Tenure, and
+finds neither. **`T-g`'s whole point is that the second of these needs no mechanism**; Ruling 1's point is
+that the first needs three, and one of them — the counterparty — is unbuilt.
+
 ### **T-h · A faction is not a thing that acts; it is what people are committed to.**
 > **From AX-1.** If a faction cannot act, it cannot be an actor-shaped object. What remains that can
 > carry its identity across time is an utterance — a `Proposition` — plus the edges of the people
@@ -984,6 +998,19 @@ special clause: such a count has no owner.
 > certain to its actor, an Event is neutral, a Claim is one person's version. **Collapsing any two of
 > them deletes a mechanism** — collapse Act and Event and attribution becomes certain; collapse Event
 > and Claim and everyone witnesses identically.
+
+⚠ **`Event` IS USED IN AN ATYPICAL SENSE, AND IT IS THE ATYPICAL PART THAT IS LOAD-BEARING** — added
+2026-09-13 (ED-IN-0220), because the question *"does `Event` have an uncommon definition?"* was asked
+cold and the answer was not written anywhere. **Ordinary usage, and every other engine's usage, makes an
+event a thing that someone did to someone** — an actor, a target, a payload. Here it is **none of those**:
+an `Event` is *what happened*, full stop. `T-d` removes the actor and `T-e` removes the target, and
+neither is an omission to be fixed later — **attribution is a per-witness `Claim`, and recipiency is
+computed at WITNESS from presence.** An emitter declares no recipient.
+
+**So read `Event` as "the occurrence" and never as "the message".** A session that reads the ordinary
+sense will look for the actor field, not find it, and conclude the carrier is incomplete — which is
+exactly the mistake the three absent fields exist to prevent. If you want to know who did it, you are
+asking a `Claim`; if you want to know who learned of it, you are asking `WITNESS`.
 
 ⚠ **AND THE WORD IS RESERVED — added 2026-09-03, before a loader reads either sense.** `Claim` here is
 **epistemic**: what one person concluded. An independent design (#359) uses the same token for a

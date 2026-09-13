@@ -87,12 +87,33 @@ item was a clause. Full statements in `01_THE_TEN.md`.
 | **5** | **The bodies clock** — ageing, births, deaths on `Rung.envelope` | the one compounding quantity the design licenses without an author: boom, bust, an heir of age, an elder dying and a `hold` ending | `census.py` writes nothing today |
 | **6** | **Complication as the modal outcome** | most acts succeed *at a cost* instead of refusing — the hook generator. Measured today: **74% Failure · 19% Partial · 0% Overwhelming** | fixtures are `assumption`; the ladder is Jordan's |
 | **7** | **Intelligence before action** | spend acts to learn a rival's state, then act on what you hold — and be wrong | the investigation verbs already run |
-| **8** | **A person-referent route** (v1's `P1`, kept) | any act directed at another person: court, discredit, poach, audit | one clause |
+| **8** | **A counterparty** — `ED-IN-0210` Ruling 1, executed | any act directed at another person: court, discredit, poach, audit | ⭐ **one authored value, measured: control 84/0 vs arm 84/56** |
 | **9** | **Founding** — `Rung.exists` has no producer, and `R4` asked for one | map variation across playthroughs; NPC-founded settlements | one verb; the matrix row is declared |
 | **10** | **Casus belli as a `Record`** | a war with a reason others can be told about, forged, or destroyed | `succeed`/`forge` declared |
+| **11** | **The writ — sifting as a player's verb** | serve a pattern against the record and get back perishable evidence; **your rivals serve them against you** | a pattern deck + a matcher; `causes[]`, `open_case` and `Record` are already there |
+| **12** | **A telling renews the belief it is about** | *"he loses the town by being forgotten"* becomes true of the running loop — decay is authorless (`AX-5` motion 3) and **renewal becomes an act**. Today a telling renews only `news.told`, which nothing reads | one deposit branch + a second Observation |
+| **13** | **The populace as a weighted Person** | scale without micromanagement — a crowd that holds beliefs, can be lied to, can refuse, can move | a world-build change; `Person.weight` and S9.1's one class already exist |
+| **14** | ⭐ **The information cluster** — *"a ledger is only as reliable as my staffing / documentation / personal involvement"* (Jordan). A **faction sheet, roster and policy list as DOCUMENTS** in the fiction, read at zero cost, with their scope bounded by the seats you have filled | the **top-down surface** the other thirteen assume and none supplies — and the missing **scale bridge**. The sheet is dated, forgeable, expiring and destructible, so the abstraction you govern from is itself contestable | one `subject_matter` shape + a free-read path. **`create_record` and `document_key` already run** |
 
-**Five of the ten are licensed-and-unbuilt**, meaning a ratified line already *asks* for them. Three need
+**Five of the thirteen are licensed-and-unbuilt**, meaning a ratified line already *asks* for them. Three need
 no new object at all. **None requires revising a G.**
+
+⭐ **Proposal 14 is Jordan's, and it reframes three others.** His principle — *"my ledger is only as
+reliable as my staffing/documentation/personal involvement"* — is `Claim.source`, whose roster
+(`rosters.yaml:112-119`) declares **four** ways a person came to hold a claim and whose loop writes **one
+and a half**: measured, **4,499 claims across 25 worlds, every one `firsthand`**. So proposals **12**
+(staffing → `told_by`), **14** (documentation → its own provenance and surface) and **14.1** (which of
+these you have, as a consequence of the seats you filled) are **one object**, not three.
+
+⚠ **Proposals 11, 12 and 13 came from outside this session** — an eighth document integrating the two narrative sources
+with the twenty-game frame, adjudicated in `04_PROVENANCE.md` §7. Seven of its nine modules are items this
+session reached independently or things the tree already ships, which is corroboration; **three were new** —
+11, 12 and 13. Its five *composed designs* were first set aside as "games other than this one", which was a
+framing test rather than a merits one; mined properly they yielded 12, 13 and four refinements
+(`01_THE_TEN.md` §S.1). That document also supplies **the serious objection to proposal 1** — the record's *form* is
+unproven, and the one record shown to work is a graph read at a glance rather than prose — which is carried
+into proposal 1 rather than deflected, along with its falsification stub. **That stub is the first thing to
+build, before any design in this set.**
 
 ---
 
@@ -101,7 +122,7 @@ no new object at all. **None requires revising a G.**
 | file | what it holds |
 |---|---|
 | `00_INDEX.md` | this — `R2`, the `G`/`A`/`I` grounds, the R7 misquotation, the set |
-| `01_THE_TEN.md` | the ten proposals, each **agonist → antagonist → reconciliation**, with grounds and an `I` cost |
+| `01_THE_TEN.md` | the proposals, each **agonist → antagonist → reconciliation**, with grounds and an `I` cost |
 | `02_THE_RESCORE.md` | v1's twenty-seven dispositions and Part E's seventy-six rows re-scored `G`/`A`/`I`, and the tally re-derived counting **only G** |
 | `03_WHAT_SURVIVES_R2.md` | the refusals that hold — each **argued** against the five properties, which is the null result `R2` requires |
 | `04_PROVENANCE.md` | method, the two independent read-only audits, every verification run, and what could not be established |
@@ -115,3 +136,12 @@ no new object at all. **None requires revising a G.**
 - **The dice ladder is Jordan's**, ruled 2026-08-14. Proposal 6 proposes the *question*, and the fixtures behind it are his tuning.
 - **No new `needs_jordan` row is filed.** Proposal 6 surfaces one genuine design call — *should complication be the modal band* — and it attaches to fixtures he already owns.
 - **The seven source documents are not in this repository.** They are pinned by SHA-256 in `04_PROVENANCE.md`; every claim *about them* is unverifiable from the tree and marked.
+- **Four of these fourteen are Jordan's, ruled on 2026-09-10, and this suite reached them late.**
+  `ED-IN-0210` carries three rulings and one fork. Proposal 8 **executes Ruling 1**, proposal 4 pairs with
+  **Ruling 2**'s six named closers, and proposals 12 and 14 bear on the fork. The suite claims the
+  measurement and the route; **the design is his and predates the session.** How that was missed is in
+  `04_PROVENANCE.md` §8, with the adjudication against the master workplan that found it.
+- **This suite is not milestone movement.** `CLAUDE.md` §0.2: done means the behaviour runs. The
+  measurements in `04_PROVENANCE.md` §4 run; the proposals do not. What folds into
+  `workplans/valoria_master_workplan_v7.md` is six items, filed there as **§7 · Amendment 1**
+  (`ED-IN-0218`) — and the fourteen proposals are deliberately **not** among them.
