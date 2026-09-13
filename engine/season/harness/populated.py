@@ -67,6 +67,7 @@ from .run_cases import load_cases
 
 GEOGRAPHY = "systems/settlements/valoria_geography_v30.yaml"
 VENUES = "engine/season/venues.yaml"
+ROSTER = "engine/season/npcs.yaml"
 
 
 def _repo_root():
@@ -205,12 +206,23 @@ def concerns_of(case: dict, by_name: dict) -> tuple:
     return None, None
 
 
-def build_realm(seed: int = 0, cap: int | None = None) -> World:
+def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True) -> World:
     """The whole map, its buildings, and one person per season loop.
 
     `cap` limits the cast for a fast run; `None` seats every case. The cap is a PARAMETER and never
     a hidden default -- a run that quietly seated twenty people while reporting on a hundred and
     forty-three would be the confounded arm `CLAUDE.md` §0.1 pt 1 exists to refuse.
+
+    `from_roster` reads `engine/season/npcs.yaml` for each person's home, want and tie. That file is
+    the AUTHORITY once it exists; the matchers below are how it was first derived and are not
+    consulted at runtime while it is present. `False` forces the derivation and is what
+    `tools/export_npc_roster.py` calls to regenerate -- the one caller that must not read the file
+    it is about to write.
+
+    ⚠ THE ROSTER IS READ, NOT MERELY SHIPPED. `04 §A.2:124` binds `data/` to RAISE on a
+    declared-but-unread row and `01_AXIOMS.md` ID-13 calls such a thing *"a mechanism that does not
+    exist, wearing a schema's clothes"*. A roster the loop did not open would be exactly that, and
+    the tree has deleted two rosters on that criterion already (`rosters.yaml:69-73`).
     """
     geo, ven = _load(GEOGRAPHY), _load(VENUES)
     w = World(seed, DEFAULT_FIXTURES)
@@ -275,6 +287,12 @@ def build_realm(seed: int = 0, cap: int | None = None) -> World:
     cases = list(load_cases("NPC"))
     if cap is not None:
         cases = cases[:cap]
+    roster = None
+    if from_roster:
+        try:
+            roster = {r["case"]: r for r in (_load(ROSTER).get("npcs") or [])}
+        except FileNotFoundError:
+            roster = None
     seats = ven["seats"]
     # The unaffiliated are spread over every `serves: []` building on the map, in settlement order,
     # so an unaffiliated life is somewhere ordinary and NOT all in one place.
@@ -285,9 +303,12 @@ def build_realm(seed: int = 0, cap: int | None = None) -> World:
     for case in cases:
         cid = str(case.get("id"))
         pid = f"p_{_slug(cid)}"
-        inst = institution_of(case)
+        row = (roster or {}).get(cid)
+        inst = row.get("institution") if row else institution_of(case)
         home = None
-        if inst is not None:
+        if row and row.get("home") in w.rungs:
+            home = row["home"]
+        if home is None and inst is not None:
             sid = seats.get(inst)
             if sid is not None:
                 for bid, b in buildings_at[sid]:
@@ -355,6 +376,18 @@ def build_realm(seed: int = 0, cap: int | None = None) -> World:
         cid = str(case.get("id"))
         pid = f"p_{_slug(cid)}"
         about = None
+        row = (roster or {}).get(cid)
+        if row and row.get("concerns"):
+            cand = f"p_{_slug(str(row['concerns']))}"
+            if cand in w.persons and cand != pid:
+                about, why = cand, "roster"
+        if about is not None:
+            ties[why] += 1
+            prop_id = f"prop_{_slug(cid)}"
+            w.propositions[prop_id] = Proposition(
+                prop_id, "OUGHT", about, str(row.get("want") or wants_of(case)), True, 0)
+            w.add_tenure(Tenure(f"t_{prop_id}_commit", pid, prop_id, "commit", 0))
+            continue
         named, inst = concerns_of(case, by_name)
         if named is not None:
             cand = f"p_{_slug(named)}"

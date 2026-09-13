@@ -10763,3 +10763,67 @@ def test_the_populated_world_is_not_everybody_in_one_room():
         f"{len(w.propositions) - len(about_people)} proposition(s) name something that is not a "
         "person. Q4 emits `(prop.subject,)` as the referent, so a rung-subject proposition is "
         "exactly how `build_at` produced a corpus in which no act ever names anybody")
+
+
+def test_the_npc_roster_is_read_and_not_merely_shipped():
+    """`engine/season/npcs.yaml` is the AUTHORITY for where an NPC lives and what they want, and
+    this asserts the loop actually opens it.
+
+    ⚠ THE FAILURE THIS EXCLUDES IS A FILE NOBODY READS. `04 §A.2:124` binds `data/` to raise on a
+    declared-but-unread row; `01_AXIOMS.md` ID-13 calls such a thing *"a mechanism that does not
+    exist, wearing a schema's clothes"*; and `rosters.yaml:69-73` records this very file deleting
+    two rosters on exactly that criterion. A roster shipped beside a harness that still derives
+    everything by regex would be a snapshot with a schema, not an authority — and it would LOOK
+    correct, because the derivation produced it.
+
+    So the test plants a change the derivation cannot produce and requires the world to honour it:
+    a home the matchers would never choose. If `build_realm` is re-deriving, the planted home is
+    discarded and this reddens."""
+    import yaml as _yaml
+    from pathlib import Path
+
+    from ..harness import populated as POP
+
+    roster_path = Path(POP._repo_root()) / POP.ROSTER
+    assert roster_path.exists(), (
+        f"{POP.ROSTER} is missing. Regenerate with `python tools/export_npc_roster.py --build`; "
+        "the harness falls back to deriving, so its absence is silent at runtime and is exactly "
+        "why it is asserted here")
+
+    data = _yaml.safe_load(roster_path.read_text(encoding="utf-8"))
+    rows = data["npcs"]
+    assert len(rows) == len(POP.load_cases("NPC")), (
+        f"the roster holds {len(rows)} NPCs against {len(POP.load_cases('NPC'))} NPC cases. "
+        "Every NPC traces to a case and no row may be authored without one")
+
+    # THE PLANT. A home no matcher would pick for this person, applied in memory only.
+    w0 = POP.build_realm(0)
+    victim = rows[0]["case"]
+    pid = f"p_{POP._slug(victim)}"
+    homes = [r.kind for r in w0.rungs.values()]
+    assert "hearth" in homes
+    elsewhere = sorted(k for k, r in w0.rungs.items()
+                       if r.kind == "hearth" and k != _home_of(w0, pid))
+    planted = elsewhere[-1]
+
+    import copy
+    doctored = copy.deepcopy(data)
+    doctored["npcs"][0]["home"] = planted
+    original = roster_path.read_text(encoding="utf-8")
+    try:
+        roster_path.write_text(_yaml.safe_dump(doctored, sort_keys=False, allow_unicode=True),
+                               encoding="utf-8")
+        w1 = POP.build_realm(0)
+        assert _home_of(w1, pid) == planted, (
+            f"{victim} was seated at {_home_of(w1, pid)!r} after the roster said {planted!r}. "
+            "`build_realm` is re-deriving rather than reading — the roster is then a file nobody "
+            "opens, and correcting one NPC by hand would silently do nothing")
+    finally:
+        roster_path.write_text(original, encoding="utf-8")
+
+
+def _home_of(w, pid):
+    for t in w.tenures:
+        if t.kind == "contain" and t.live and t.subject == pid:
+            return t.object
+    return None
