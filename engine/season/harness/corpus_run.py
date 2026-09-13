@@ -471,8 +471,19 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     # `degree` only when the fold took the CONTEST branch and `degree_of` read one off the
     # subsystem's own result — so this is a count of rolls that happened, not of acts attempted.
     degrees = Counter(str(e.degree) for e in w.log if getattr(e, "degree", None))
+    # `ED-IN-0222`: HOW EACH BELIEF IN THIS WORLD WAS COME BY. `rosters.yaml: claim_sources`
+    # declares four and the loop wrote one until the told channel landed, which is a fact about
+    # the GAME that no instrument reported -- so a claim about it could not be reproduced from
+    # the tree, and `tools/ci_claim_provenance_check.py` is right to refuse one that cannot be.
+    # ⚠ COUNTED PER WORLD AND SUMMED BY THE CALLER, like `degrees` above, rather than recomputed
+    # from a second walk: the ledgers are this world's and the report is the corpus's.
+    sources = Counter(c.source for p_ in w.persons.values() for c in p_.ledger)
+    told_holders = sum(1 for p_ in w.persons.values()
+                       if any(c.source == "told_by" for c in p_.ledger))
     return dict(id=cid, scale=scale, status=status, executed=ok, refused=no, seasons=n,
-                why="", checks=checks, degrees=dict(degrees))
+                why="", checks=checks, degrees=dict(degrees),
+                claim_sources=dict(sources), persons=len(w.persons),
+                told_holders=told_holders)
 
 
 def planted_control(seed: int = 0) -> tuple:
@@ -563,6 +574,16 @@ def main(seed: int = 0) -> int:
     for r in live:
         _deg.update(r.get("degrees") or {})
     print(f"  DEGREES RESOLVED         {dict(sorted(_deg.items())) or '{} — no contest completed'}")
+    # `ED-IN-0222`. THE LINE THAT MAKES A CLAIM ABOUT BELIEF TRANSMISSION REPRODUCIBLE.
+    # `rosters.yaml: claim_sources` declares four values; a run that reports three zeros is
+    # reporting a hole, and one that reports none lets a session assert any number it likes.
+    _src, _persons, _holders = Counter(), 0, 0
+    for r in live:
+        _src.update(r.get("claim_sources") or {})
+        _persons += r.get("persons") or 0
+        _holders += r.get("told_holders") or 0
+    print(f"  CLAIMS BY SOURCE         {dict(sorted(_src.items()))} — of the four "
+          f"`claim_sources`; {_holders} of {_persons} person-instances hold a `told_by`")
     ever = sorted({v for r in live for v in r["executed"]})
     tried = sorted({v for r in live for v in r["refused"]})
     foldable = set(resolvable_verbs())
