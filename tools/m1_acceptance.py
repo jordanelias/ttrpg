@@ -39,6 +39,7 @@ USAGE
 """
 
 import argparse
+import collections
 import json
 import os
 import sys
@@ -58,15 +59,32 @@ import ci_common  # noqa: E402
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = ci_common.REPO   # ONE OWNER (plan G7, ED-IN-0159 §8.3)
 
-# engine.mc_v18 is the headless season run rows 1-2 need (S2). Imported defensively — never
-# fatally — so a broken engine import degrades those two rows back to `blocked` with the real
-# exception named, rather than crashing every other row's --summary/--json/--check output.
+# ⚠⚠ **ROWS 1-2 PROBED `engine/mc_v18.py` UNTIL 2026-09-13, AND THAT IS A SUPERSEDED TREE.**
+# Jordan ruled 2026-09-07 that **`engine/season/` IS THE HEAD** (`HANDOFF_IN.md`: *"#371 EXISTS.
+# `engine/season/` IS THE HEAD. THE DECOMPOSITION WAS DONE ON THE PROTOTYPE"*), and `ED-IN-0204`
+# adopted the season loop in full. This file went on measuring the prototype for six days, which
+# means the MILESTONE GATE was certifying a model the repository had already replaced — and row 1's
+# two failing stubs were stubs in code nobody is going to ship.
+#
+# That is worse than a stale pointer. `CLAUDE.md` §0.2 makes `m1_acceptance` the one reading it
+# accepts for "does the milestone run", so a gate aimed at the wrong tree does not merely report
+# nothing useful: it answers the question it was built to answer, incorrectly, in the direction
+# that looks like progress. Caught by Jordan, 2026-09-13, on being told what row 1 was blocked on.
+#
+# THE HEAD HAS NO STUBWIRE CALLS AT ALL — measured, `grep -rn stubwire engine/season/` returns
+# nothing — so row 1 does not become vacuous by moving; it becomes TRUE about the tree that ships,
+# with the counter still able to observe a regression (see `row_stub_invocations`).
+#
+# Imported defensively — never fatally — so a broken import degrades rows 1-2 back to `blocked`
+# with the real exception named, rather than crashing every other row's output.
 sys.path.insert(0, REPO_ROOT)
 try:
-    from engine import mc_v18 as _mc_v18
+    from engine.season.harness import headless as _headless
+    from engine.substrate import stubwire as _stubwire
     _ENGINE_IMPORT_ERROR = None
 except Exception as _exc:  # pragma: no cover - defensive; surfaced via row detail, not raised
-    _mc_v18 = None
+    _headless = None
+    _stubwire = None
     _ENGINE_IMPORT_ERROR = _exc
 
 BOARD = os.path.join('workplans', 'workplan_v6_progress.yaml')
@@ -84,30 +102,45 @@ def _repo(p):
     return os.path.join(REPO_ROOT, p)
 
 
+# A NAMED record, not a bare tuple. The rows and `tests/valoria/test_m1_acceptance_probe.py`
+# both read these by name, and a positional pair would make the determinism test's
+# `(hash, stub_hits) != (hash, stub_hits)` comparison silently order-dependent.
+_Probe = collections.namedtuple('_Probe', 'stub_hits content_hash events acts')
+
+
 def _run_probe_season(seed):
-    """Run ONE headless season of engine.mc_v18 under `seed`. Single owner for rows 1-2.
+    """Run ONE headless season of **`engine/season/`** under `seed`. Single owner for rows 1-2.
 
-    NO stubwire reset here, deliberately (S2 adjudication). The queue step and this file's
-    own pre-S2 blocker text both said "a headless season run wrapped in
-    stubwire.reset_invocations()"; executing it proved that wrapper INERT and wrong on two
-    counts. (1) engine/mc_v18.py:222 already snapshots `_stub_start = stubwire.invocations`
-    and :300 returns `stub_hits = stubwire.invocations - _stub_start` — run_campaign is the
-    single owner of that delta (CLAUDE.md §8: never re-implement a rule that already lives
-    once), so a leading reset cannot change the reported number. FALSIFIER, executed: with
-    reset_invocations() monkeypatched to a no-op and the cumulative counter left at 6, this
-    row still reported exactly 2. (2) engine/substrate/stubwire.py:70-72 declares
-    reset_invocations() test-only and "never called from a production code path" — and
-    tools/dashboard_data.py USED TO import this module and call collect() IN-PROCESS (retired in
-    culling wave 1, ED-IN-0194; kept as the reason the reset below exists), so the reset
-    made a reporting surface mutate process-global engine state for no effect.
+    Returns `(stub_hits, content_hash)`.
 
-    Caps the campaign at 1 season via CAMPAIGN_SEASONS. Note `max_seasons` alone is DEAD:
-    mc_v18.py:231 reads `effective_params.get('CAMPAIGN_SEASONS', max_seasons)` and
-    DEFAULT_PARAMS always supplies CAMPAIGN_SEASONS, so the params entry is what binds.
-    MEASURED cost of the three campaigns collect() now runs (controlled, both arms, one
-    session, 3 runs each): --summary median 0.153s pre-S2 -> 0.617s post-S2, +0.46s.
+    ⚠ THIS INSTRUMENT NOW OWNS THE STUB DELTA, AND THE PREVIOUS OWNER IS WHY THAT IS A CHANGE
+    RATHER THAN A COPY. `mc_v18.run_campaign` computed its own before/after delta on the
+    process-cumulative counter and this file deliberately did NOT re-implement it (§8: never
+    re-implement a rule that already lives once). The head has no equivalent, because the head
+    calls `stubwire` nowhere at all — so there is no owner to defer to and the delta is computed
+    here, once, for both rows. That is §8 satisfied rather than bypassed: the rule lives once,
+    and this is now the once.
+
+    ⚠ THE DELTA, NOT THE COUNTER AT REST. `stubwire.invocations` is process-cumulative, so
+    reading it after the run would report every stub any earlier import fired and reading it at
+    rest would report 0 and mean nothing — the false green the old docstring warned about, which
+    survives the move because it was a fact about the counter and not about `mc_v18`.
+
+    ⚠ NO `reset_invocations()`, for the reason the old probe recorded and which still holds:
+    `engine/substrate/stubwire.py:70-72` declares it test-only and *"never called from a
+    production code path"*. A reporting surface must not mutate process-global engine state.
+
+    ⚠ `headless`, NOT `populated`. The 46-person world (`ED-IN-0223`) is the better world and the
+    wrong probe for THESE TWO ROWS: neither stub-firing nor same-seed determinism depends on cast
+    size, and the populated world costs ~10s per season against this one's fraction of a second on
+    a gate that runs on every push. The cast matters to rows 4-5 and to `R-01`..`R-09`, not here.
+    Stated because "use the better world" is the obvious objection and the answer is a measurement,
+    not a preference.
     """
-    return _mc_v18.run_campaign(seed=seed, max_seasons=1, params={'CAMPAIGN_SEASONS': 1})
+    before = _stubwire.invocations
+    out = _headless.run(seasons=1, seed=seed)
+    return _Probe(stub_hits=_stubwire.invocations - before,
+                  content_hash=out["hash"], events=out["events"], acts=out["acts"])
 
 
 def _blocked(key, label, unblocked_by, detail=''):
@@ -121,24 +154,40 @@ def _blocked(key, label, unblocked_by, detail=''):
 def row_stub_invocations():
     """Stub invocations on the M1 path must be 0.
 
-    MEASURED (S2): a headless 1-season mc_v18 run (_run_probe_season). The value is
-    CampaignResult.stub_hits, which run_campaign computes as its own before/after delta on the
-    process-cumulative engine.substrate.stubwire.invocations counter — reading that counter at
-    rest would report 0 and mean nothing, a false green.
+    MEASURED: a headless 1-season run of `engine/season/`, the HEAD, with the delta taken on
+    `engine.substrate.stubwire.invocations` across it.
 
-    SCOPE, stated because the row label overstates it: an mc_v18 season is a PROXY for "the M1
-    path", not the M1 path. Row 4 in this same report shows 0/7 M1 junctures executing, so most
-    M1 stub sites are unreachable by this probe. Parked as S2-R1.
+    ⚠ **0 IS NOT VACUOUS HERE, AND THE DISTINCTION IS THE WHOLE JUSTIFICATION FOR MOVING THE
+    PROBE.** The head calls `stubwire` nowhere, so a reader is entitled to ask whether this row
+    can now fail at all. It can. The counter is PROCESS-GLOBAL and the delta spans the whole
+    season, so a `stub_resolve` fired by ANYTHING the season reaches — `engine/substrate/`, the
+    `systems/` seams it resolves by string, any module imported along the way — lands in this
+    number. What changed is not that the row stopped observing; it is that the tree it observes no
+    longer defers.
+    FALSIFIER, mutation-verified: plant a `stubwire.stub_resolve(...)` on the head's season path
+    and this row goes to 1 and FAILS. Without that check the move would be exactly the false green
+    it is meant to end.
+
+    ⚠ SCOPE, CARRIED FORWARD BECAUSE IT IS STILL TRUE: one season is a PROXY for "the M1 path",
+    not the M1 path. Row 4 shows 0/7 junctures executing, so most M1 sites are unreachable by any
+    single probe. The old text said this of an `mc_v18` season and it survives the move unchanged
+    — the proxy was never the problem; the tree was.
+
+    ⚠ WHAT THIS ROW NO LONGER COUNTS, said plainly so nobody reads the flip as progress:
+    `engine/mc_v18.py`'s two deferrals (OI-05 `generate_npc`, OI-07 `form_knot`) are still there
+    and still unresolved. They are simply not on the head's path, so they no longer block a
+    milestone measured over the head. OI-05 was RULED by Jordan on 2026-09-13 (`ED-WR-0011` — the
+    cast is the authored 46) and the head already implements it; OI-07 remains structural and open
+    against `mc_v18`, whose own retirement is a separate, 71-file piece of work that is NOT done.
     """
-    if _mc_v18 is None:
+    if _headless is None:
         return _blocked(
             'stub_invocations',
             'Stub invocations on the M1 path == 0',
-            'a working engine.mc_v18 import',
+            'a working engine.season import',
             f'engine import failed: {type(_ENGINE_IMPORT_ERROR).__name__}: {_ENGINE_IMPORT_ERROR}',
         )
-    result = _run_probe_season(M1_PROBE_SEED)
-    value = result.stub_hits
+    value = _run_probe_season(M1_PROBE_SEED).stub_hits
     return {
         'row': 'stub_invocations',
         'label': 'Stub invocations on the M1 path == 0',
@@ -147,45 +196,59 @@ def row_stub_invocations():
         'passes': value == 0,
         'unblocked_by': None,
         'detail': (
-            f'1-season probe (seed={M1_PROBE_SEED}): {value} stub_resolve call(s) '
-            'during the run; CampaignResult.stub_hits, which run_campaign computes as its own '
-            'before/after delta on the process-cumulative '
-            'engine.substrate.stubwire.invocations counter).'
+            f'1-season headless run of engine/season (the HEAD), seed={M1_PROBE_SEED}: '
+            f'{value} stub_resolve call(s), as a delta on the process-cumulative '
+            'engine.substrate.stubwire.invocations counter. Re-pointed from engine/mc_v18 '
+            '2026-09-13 — that tree is superseded (engine/season is the head, Jordan 2026-09-07).'
         ),
     }
 
 
 def row_determinism():
-    """Same seed -> same KeyLog.content_hash().
+    """Same seed -> same content hash.
 
-    MEASURED (S2): the same seed run twice, independently, and their
-    engine.substrate.keys.KeyLog.content_hash() values compared. This file previously
-    conceded the hash "exists ... it needs a run to hash" (row_determinism, pre-S2) — the run
-    now exists (_run_probe_season).
+    MEASURED: the same seed run twice, independently, through the head's headless season, and
+    their `World.content_hash()` values compared.
+
+    ⚠ **THE QUANTITY CHANGED WITH THE TREE AND IT CHANGED FOR THE BETTER — SAID OUT LOUD BECAUSE A
+    RE-POINTED ROW THAT QUIETLY MEASURES SOMETHING ELSE IS A WORSE DEFECT THAN A STALE ONE.** This
+    row used to compare `engine.substrate.keys.KeyLog.content_hash()` via
+    `CampaignResult.key_log_hash`. It now compares `engine/season`'s `World.content_hash()`, which
+    is a DIFFERENT hash over a DIFFERENT object. The label said "KeyLog" and now says what it does.
+
+    Why the new one is stronger, from its own docstring and the finding behind it: `H-118` records
+    that `World.content_hash` once hashed the log ALONE, and that deleting a person from one of two
+    identical worlds left the hashes matching. It now folds every state collection — persons,
+    sites, rungs, tenures, docket — in sorted-key order, ahead of the log. So a state divergence
+    that never reaches the log is visible to this row and was not visible to the old one.
+
+    ⚠ AND IT IS ALREADY TRUSTED FOR EXACTLY THIS: `corpus_run.py:446` computes its own `R4`
+    determinism check as `w2.content_hash() == w.content_hash()`. This row is not inventing a
+    comparison; it is reusing the one the season loop already grades itself by.
     """
-    if _mc_v18 is None:
+    if _headless is None:
         return _blocked(
             'determinism',
-            'Same seed -> same KeyLog.content_hash()',
-            'a working engine.mc_v18 import',
+            'Same seed -> same World.content_hash()',
+            'a working engine.season import',
             f'engine import failed: {type(_ENGINE_IMPORT_ERROR).__name__}: {_ENGINE_IMPORT_ERROR}',
         )
-    r1 = _run_probe_season(M1_PROBE_SEED)
-    r2 = _run_probe_season(M1_PROBE_SEED)
-    h1, h2 = r1.key_log_hash, r2.key_log_hash
+    h1 = _run_probe_season(M1_PROBE_SEED).content_hash
+    h2 = _run_probe_season(M1_PROBE_SEED).content_hash
     match = bool(h1) and h1 == h2
     return {
         'row': 'determinism',
-        'label': 'Same seed -> same KeyLog.content_hash()',
+        'label': 'Same seed -> same World.content_hash()',
         'state': 'measured',
         'value': f'{h1[:12]}…' if h1 else '(empty)',
         'passes': match,
         'unblocked_by': None,
         'detail': (
-            f'two independent 1-season runs, seed={M1_PROBE_SEED}: '
+            f'two independent 1-season headless runs of engine/season, seed={M1_PROBE_SEED}: '
             + ('hashes match' if match else 'HASHES DIVERGE OR EMPTY')
-            + f' ({h1[:12] if h1 else "<empty>"}… vs {h2[:12] if h2 else "<empty>"}…, '
-              f'{r1.keys_emitted}/{r2.keys_emitted} keys emitted)'
+            + f' ({h1[:12] if h1 else "<empty>"}… vs {h2[:12] if h2 else "<empty>"}…). '
+              'Was KeyLog.content_hash() over an mc_v18 campaign until 2026-09-13; '
+              'World.content_hash folds all state, not only the log (H-118).'
         ),
     }
 

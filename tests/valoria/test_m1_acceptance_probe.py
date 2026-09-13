@@ -4,7 +4,15 @@ ED-IN-0112, tools/m1_acceptance.py).
 WHAT THESE TESTS ARE FOR. Before S2, `row_stub_invocations` and `row_determinism` were
 unconditionally `blocked` — the module docstring said the "headless season run" that would
 unblock them "does not exist". S2 pointed both rows at `engine.mc_v18.run_campaign`, which
-already existed. These tests pin that the two rows are now genuinely `measured` (not merely
+already existed.
+
+⚠ **RE-POINTED 2026-09-13 AT `engine/season/`, THE HEAD.** `mc_v18` is the superseded prototype
+(Jordan, 2026-09-07: *"engine/season/ IS THE HEAD"*), so for six days this gate certified a model
+the repository had already replaced. These tests move with it: what they pin is unchanged in
+KIND — the rows are genuinely `measured`, and reproducible under a fixed seed — and changed in
+SUBJECT, from `CampaignResult` fields to the head's `World.content_hash()`.
+
+These tests pin that the two rows are genuinely `measured` (not merely
 returning a plausible-looking dict), and that the measurement is REPRODUCIBLE under the tool's
 own fixed probe seed — CLAUDE.md §0.1 point 4 ("a number without a control is not a
 measurement"): the control here is running the SAME seed twice and requiring the SAME answer,
@@ -12,9 +20,9 @@ which is exactly what `row_determinism` itself measures and what
 `test_stub_invocations_reproducible_under_the_fixed_probe_seed` below re-checks independently
 for the other row.
 
-Deliberately NOT pinned: the literal stub-call count. `row_stub_invocations()['value'] == 2`
-is true today and would be a maintenance tax that teaches nothing if the season path's stub
-sites change count (see engine/mc_v18.py's OI-05/OI-07 stub_resolve calls). What must never
+Deliberately NOT pinned: the literal stub-call count. It read 2 against `mc_v18` (its OI-05 and
+OI-07 deferrals) and reads 0 against the head, which calls `stubwire` nowhere; pinning either
+would be a maintenance tax that teaches nothing. What must never
 change is that the row is MEASURED (not blocked) and that repeated probes under the same seed
 AGREE — the relation, not the number (mirrors test_scope_ratchet.py's stated policy).
 """
@@ -30,12 +38,25 @@ import m1_acceptance as m1  # noqa: E402
 
 
 def test_engine_probe_import_succeeded():
-    """Falsifier for every test below: if engine.mc_v18 failed to import, both rows would
+    """Falsifier for every test below: if the head's harness failed to import, both rows would
     silently read as `blocked` again (a real green from a real run vs. a defensive fallback
     are otherwise indistinguishable from the outside) -- this asserts the live path was taken."""
-    assert m1._mc_v18 is not None, (
-        f'engine.mc_v18 import failed: {m1._ENGINE_IMPORT_ERROR!r} -- rows 1-2 fell back to '
-        f'blocked; the tests below would be validating the fallback, not the S2 measurement'
+    assert m1._headless is not None and m1._stubwire is not None, (
+        f'engine.season harness import failed: {m1._ENGINE_IMPORT_ERROR!r} -- rows 1-2 fell back '
+        f'to blocked; the tests below would be validating the fallback, not the measurement'
+    )
+
+
+def test_the_probe_runs_the_head_and_not_the_superseded_prototype():
+    """THE POINT OF THE 2026-09-13 RE-POINT, ASSERTED RATHER THAN TRUSTED TO A COMMENT.
+
+    `engine/mc_v18.py` is the superseded campaign driver; `engine/season/` is the head. A gate
+    aimed at the wrong tree does not report nothing — it answers the milestone question
+    incorrectly, in the direction that looks like progress, which is how this survived six days.
+    So the import is asserted by MODULE PATH, which cannot be satisfied by a comment."""
+    assert m1._headless.__name__.startswith('engine.season.'), m1._headless.__name__
+    assert not hasattr(m1, '_mc_v18'), (
+        'm1_acceptance still holds an mc_v18 handle; rows 1-2 must probe the head only'
     )
 
 
@@ -76,8 +97,8 @@ def test_probe_season_hash_matches_across_independent_helper_calls():
     test that owner directly rather than only through one caller)."""
     r1 = m1._run_probe_season(m1.M1_PROBE_SEED)
     r2 = m1._run_probe_season(m1.M1_PROBE_SEED)
-    assert r1.key_log_hash == r2.key_log_hash
-    assert r1.key_log_hash != ''
+    assert r1.content_hash == r2.content_hash
+    assert r1.content_hash != ''
     assert r1.stub_hits == r2.stub_hits
 
 
@@ -91,11 +112,11 @@ def test_a_different_seed_can_diverge_from_the_probe_seed():
     # BOTH producing the exact same hash as the fixed-seed probe while differing by only the
     # seed would mean content_hash() is not keyed on campaign content -- assert that did NOT
     # happen, which is the property this row's whole design depends on.
-    assert (fixed.key_log_hash, fixed.stub_hits) != (other.key_log_hash, other.stub_hits) or \
-        fixed.keys_emitted == 0, (
-        'seed 20260819 and 20260820 produced identical (hash, stub_hits) -- either both '
-        'campaigns are no-ops (keys_emitted == 0, checked above) or content_hash() is not '
-        'actually sensitive to what the campaign did, which would make row_determinism vacuous'
+    assert (fixed.content_hash, fixed.stub_hits) != (other.content_hash, other.stub_hits) or \
+        fixed.events == 0, (
+        'two different seeds produced identical (hash, stub_hits) -- either both seasons are '
+        'no-ops (events == 0, checked here) or content_hash() is not actually sensitive to what '
+        'the season did, which would make row_determinism vacuous'
     )
 
 

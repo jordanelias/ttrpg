@@ -254,11 +254,22 @@ built encode your model of it, not the system.
 
 - A juncture may **not** be marked done on a document. `python tools/m1_acceptance.py --summary` is the
   instrument; its rows are falsifiable and it refuses to guess. ⚠ **It is not yet uniformly
-  execution-bound:** some rows genuinely execute the engine (a seeded `engine/mc_v18.py` probe, a
-  same-seed content-hash comparison), but **the row aggregating "all junctures execute" counts `state:`
+  execution-bound:** some rows genuinely execute the engine (a seeded 1-season probe of
+  **`engine/season/`, the HEAD**, and a same-seed `World.content_hash()` comparison), but **the row
+  aggregating "all junctures execute" counts `state:`
   strings in `workplans/workplan_v6_progress.yaml`, a hand-edited board** that a few one-word edits
   green. It declares itself DOC-DERIVED in its own output — **treat it as bookkeeping, not evidence.**
   While any row is honestly `partial`/`blocked`, the gate can say NOT-DONE but not DONE.
+
+  ⚠⚠ **THAT PROBE NAMED `engine/mc_v18.py` UNTIL 2026-09-13, AND IT IS A SUPERSEDED TREE
+  (ED-IN-0226).** Jordan ruled on 2026-09-07 that `engine/season/` is the head; this file went on
+  naming the prototype as the milestone's execution artifact for six days, and `tools/m1_acceptance.py`
+  probed it. A gate aimed at the wrong tree is worse than a stale pointer: it answers the question it
+  was built to answer, incorrectly, in the direction that looks like progress — row 1's two failing
+  stubs were deferrals in code nobody intends to ship. **This is the repair §0 prescribes** — *"needing
+  one means Layer 0 was written wrong, and the repair is to EDIT THIS FILE"* — made here rather than
+  routed around. `mc_v18` itself is NOT retired: 71 live files still reference it, including the
+  composition spine and a blocking round-trip export, and that retirement is its own piece of work.
 - "Authoring the design doc" is **not** the deliverable for a juncture that has running code: verify the
   code against the sim and record the contract; the doc may follow verified behaviour.
 - **A juncture done in code and open on the board is a BOARD defect, not a work item.**
