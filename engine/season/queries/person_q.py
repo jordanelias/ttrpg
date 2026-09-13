@@ -86,3 +86,23 @@ class LedgerReader:
                 if best is None or (c.when, c.confidence) > (best.when, best.confidence):
                     best = c
         return UNKNOWN if best is None else best.value
+
+    def latest_about(self, subject):
+        """THE ONE CLAIM THIS PERSON WOULD OFFER ABOUT `subject`, or `None` for no claim.
+
+        ⚠ IT RETURNS THE CLAIM, NOT THE VALUE, AND THAT IS THE ONLY DIFFERENCE FROM `read`.
+        A teller transmits a `(subject, predicate, value)` triple; `read` answers a value for a
+        predicate the caller already knows, and a telling does not know one -- `tell`'s `requires`
+        cell is *the teller holds a claim on the subject*, with no predicate in it.
+
+        ⚠ AND IT REUSES `read`'s COMPARATOR RATHER THAN RESTATING IT. `CLAUDE.md` §8: the rule
+        lives once. MOST RECENT, THEN MOST CONFIDENT is this class's answer to *a ledger may hold
+        two claims about one thing*, and a second copy of that key in `witness` would be a second
+        owner of which belief a person holds -- free to drift, and drifting silently, because both
+        orderings agree until the day two claims tie on `when`."""
+        best = None
+        for c in self._claims:
+            if c.subject == subject:
+                if best is None or (c.when, c.confidence) > (best.when, best.confidence):
+                    best = c
+        return best

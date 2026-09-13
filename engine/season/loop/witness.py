@@ -22,6 +22,7 @@ from ..data.rosters import OBSERVATION_DEPOSIT_MODES, WITNESS_CHANNELS
 from ..epistemic import act_refs, claim_subjects, observers_for
 from ..gaps import Unspecified
 from ..queries import cache
+from ..queries.person_q import LedgerReader
 from ..state.carriers import Claim, Event
 from ..state.ids import H
 from ..trace_log import TRACE
@@ -109,6 +110,10 @@ def witness(self, events: list[Event]) -> int:
     # RESOLVE order -- is kept, which is the answer `LedgerReader`'s strict `>` already gave.
     # This fix removes the TIE, not the answer.
     seen_obs_by_pid: dict = {}
+    # Same scope and same reason as `seen_obs_by_pid` above, for the told channel
+    # below: `LedgerReader` matches on `(subject, predicate)`, so two tellings of one
+    # thing in one barrier are one belief stored twice.
+    seen_told_by_pid: dict = {}
     w._in_parallel_map = True
     for pid, e, channel in fan:
         p = w.persons.get(pid)
@@ -223,6 +228,60 @@ def witness(self, events: list[Event]) -> int:
                         emits="claim.deposited", subject=oc.id, causes=[e.id])
                 TRACE.claim(pid, e.id, src)
                 deposits += 1
+        # THE TOLD CHANNEL -- `claim_sources`' `told_by`, WHICH NOTHING WROTE.
+        #
+        # ⚠ WHAT WAS TOLD, NOT MERELY THAT A TELLING HAPPENED. The event-kind deposit above
+        # gives a witness `(subject, "news.told", True)` -- they learn a telling OCCURRED. The
+        # content of the telling reached nobody, so `rosters.yaml: claim_sources` declared four
+        # sources and the corpus wrote one: MEASURED over the 89 corpus worlds, 23,855 claims,
+        # every one `firsthand`, and `standing_of` returning the maximum gap for 267 of 267
+        # person-instances because its `told` set is empty by construction. `tell` is the one
+        # verb whose entire purpose is transmission and it transmitted nothing.
+        #
+        # ⚠ THIS IS A WITNESS RULE AND NOT AN EFFECT, AND THE REASON IS `CLAUDE.md` §8. An
+        # effect body would have to recompute WHO HEARD IT, and the fan is this barrier's --
+        # `observers_for` with the mode. A second owner of the observer set is exactly the
+        # divergence `04 §A.2` gives this step the ledger for. `tell` keeps `writes: []`,
+        # correctly: a telling changes no cell in the world, it changes what people hold.
+        #
+        # ⚠ THE TELLER IS EXCLUDED. They hold the claim already, firsthand, and a `told_by`
+        # copy of one's own telling would be the self-witness rule REV 3 above removed, one
+        # channel along.
+        #
+        # ⚠ CONFIDENCE IS THE TELLER'S OWN, NOT A DEGRADED ONE, AND THAT IS A DEFERRAL RATHER
+        # THAN A CHOICE. Nothing in the chain states how much a hearing costs a belief, and
+        # `probes.py` builds every hand-written `told_by` claim at full confidence (`:380`,
+        # `:568`, `:650`, `:861`) -- so precedent carries it and inventing a ladder here would
+        # author a number the design has not. The DEGREE already decides the thing the design
+        # DOES state: `Failure` emits `news.untold`, which is not this kind, so a failed
+        # telling transmits nothing.
+        #
+        # ⚠ AND A LEDGER-DERIVED PREDICATE IS STILL NEVER DEPOSITED, for the reason the
+        # observation block gives one screen up: `claim.held` answers from ledger MEMBERSHIP,
+        # so storing it makes its own content true.
+        _act = self.act_of.get(e.id)
+        if e.kind == "news.told" and _act is not None and pid != _act.actor:
+            _teller = w.persons.get(_act.actor)
+            _subj = (_act.payload or {}).get("subject") if isinstance(_act.payload, dict) else None
+            # `latest_about`, NOT a comparator written here: `LedgerReader` owns *the most
+            # recent, then the most confident*, and `tell`'s `requires` cell names no predicate.
+            _held = (LedgerReader(_teller.ledger).latest_about(_subj)
+                     if _teller is not None and _subj is not None else None)
+            if (_held is not None
+                    and str(_held.predicate).partition(":")[0] not in LEDGER_DERIVED_STEMS):
+                seen_told = seen_told_by_pid.setdefault(pid, set())
+                _key = (_held.subject, _held.predicate)
+                if _key not in seen_told:
+                    seen_told.add(_key)
+                    tc = Claim(H(w.world_seed, w.tick, pid, f"told:{e.id}"),
+                               pid, _held.subject, _held.predicate, _held.value, w.tick,
+                               "told_by", _held.confidence, "own", self.round)
+                    w.write("claim_ledger", WriteClass.INTERIOR,
+                            lambda p=p, c=tc: p.ledger.append(c),
+                            record_kind="Person", fieldname="claim_ledger", driver="Event",
+                            emits="claim.deposited", subject=tc.id, causes=[e.id])
+                    TRACE.claim(pid, e.id, "told_by")
+                    deposits += 1
         # ⚠ `while`, NOT `if`. THE CAP WAS NOT A CAP. One deposit can mint SEVERAL claims --
         # `claim_subjects` returns one per `StateChange` under the `per_change` rule -- and a
         # single `if` pops exactly one, so the ledger settled at 203 against `L = 200`. A cap

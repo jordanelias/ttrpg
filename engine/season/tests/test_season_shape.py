@@ -6242,7 +6242,29 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # [GROUNDED: measured 2026-09-11, both arms at seed 0 over the same 143 corpus cases, control from a worktree at a85bd45 -- distinct executed sets 40 -> 27, R3 84 -> 83, universal {reconstruct} -> {utter}, `release` 15 -> 2 worlds]
     # ⚠ 27 -> 25 under G1a, and the direction is the same one `U3` moved: the ruled `Record.matured` write (G1a): the gate-emitted maturation carries `(matured, None)` where the hand-built Event carried `(stages, label)`, which moves the Event's id and its folded content, and the content hash is what an undeclared tiebreak uses to pick which question a person answers.
     # [GROUNDED: measured 2026-09-11 with `Record.matured` written through the gate -- distinct executed sets 25 over the same 89 live worlds, from 27 under `U3`]
-    assert len(by_sig) == 25, (
+    # ⚠ **25 -> 24 UNDER THE TOLD CHANNEL (2026-09-13), AND THE DIRECTION IS DOWN, WHICH IS THE
+    # LESS WELCOME ONE.** The unit: WITNESS now deposits what a telling CONTAINED, not only that
+    # one happened — `claim_sources`' `told_by`, which nothing had ever written. Both arms at seed
+    # 0 over the same 143 corpus cases, control from this tree with the deposit block removed:
+    #
+    #     distinct executed sets   25  ->  24
+    #     R3 cross-person          86  ->  86   of 143   (UNMOVED)
+    #     universal executed set   {utter}  ->  {utter}  (UNMOVED)
+    #     transfer 82 -> 83 · speak 80 -> 81 · release 2 -> 3 · surveil 67 -> 66 ·
+    #     research 39 -> 38 · interview 20 -> 19        (of 89; the other five verbs unmoved)
+    #
+    # ⚠ **THE UNIVERSAL SET IS UNMOVED, WHICH IS THE CHECK THIS ASSERTION'S OWN MESSAGE ASKS FOR.**
+    # `U1`'s lesson was that a falling distinct count can be a verb regaining universality; that is
+    # NOT what happened here — `utter` was universal before and after, and no verb joined it. The
+    # count fell because a second-hand claim changes which question a person answers next season,
+    # and in one world that moved an act mix onto a signature another world already had.
+    # ⚠ **R3 UNMOVED IS THE HONEST AND SLIGHTLY DEFLATING PART.** A channel whose whole subject is
+    # one person's belief reaching another's ledger moves cross-person propagation by ZERO, and
+    # that is not a measurement error: R3 is scored on the CASE, and the deposits land in worlds
+    # whose R3 already passed. The channel is real (0 -> 180 `told_by` claims, 134 of 267
+    # person-instances holding one); its reach into this metric is not.
+    # [GROUNDED: measured 2026-09-13, both arms at seed 0 over the same 143 corpus cases, control from this tree with the `news.told` deposit block removed -- distinct executed sets 25 -> 24, R3 86 -> 86 UNMOVED, universal {utter} -> {utter} UNMOVED, `told_by` claims 0 -> 180]
+    assert len(by_sig) == 24, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -10580,3 +10602,66 @@ def test_u2_the_round_index_is_a_driver_local_and_no_carrier_but_claim_has_one()
         f"{len(ticks)} assignments to `.tick` in loop/driver.py. The season advances the clock "
         "ONCE (D-45); a round that advanced it would be a tick, and the scene tick's whole claim "
         "is that it is not one")
+
+
+def test_a_telling_deposits_what_was_told_and_the_teller_is_not_told_their_own_news():
+    """THE TOLD CHANNEL — `rosters.yaml: claim_sources` declared four sources and the loop wrote
+    one. `tell` is the verb whose entire purpose is transmission and, until this landed, a witness
+    to a telling learned only `(subject, "news.told", True)` — THAT a telling happened, never what
+    was told. Measured before: 23,855 claims over the 89 corpus worlds, every one `firsthand`.
+
+    ⚠ THE FALSIFIER IS THE CONTROL, NOT THE COUNT (§0.1 pt 4). A bare `told_by > 0` would pass on
+    a deposit that invented its content, so the assertion pairs every `told_by` claim with a claim
+    THE TELLER ACTUALLY HOLDS: same `(subject, predicate, value)`. Deleting the `_held` lookup and
+    minting a claim from the Event instead still gives a non-zero count and reddens this.
+
+    ⚠ AND THE TELLER IS ASSERTED ABSENT FROM THE RECIPIENTS, because the nearest wrong version of
+    this rule is the self-witness rule `witness`'s own REV 3 removed one channel along: a person
+    holding a `told_by` copy of their own telling has been told the news by themselves."""
+    from ..harness import headless as HL
+    from ..state.carriers import Claim
+
+    w = HL.build_world(0)
+    d = SeasonDriver(w)
+    mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
+    for _ in range(4):
+        d.season(make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
+                              draw=draw_factory(w.world_seed, lambda: w.tick)),
+                 question=None, subsistence=P.SUBSIST,
+                 contest_max_depth=w.fixtures.get("contest_max_depth"))
+
+    told = [(pid, c) for pid, p in w.persons.items() for c in p.ledger if c.source == "told_by"]
+    assert told, (
+        "no `told_by` claim reached any ledger over four seasons of `build_world(0)`. Either no "
+        "`tell` succeeded — check `news.told` against `news.untold`, the degree decides it — or "
+        "the deposit in `loop/witness.py` stopped firing. `claim_sources` has four values and a "
+        "corpus that writes one is the hole this closed")
+
+    # WHAT WAS TOLD IS WHAT THE TELLER HELD. Not a claim minted from the Event.
+    holders = {pid: {(c.subject, c.predicate, c.value)
+                     for c in p.ledger if c.source != "told_by"}
+               for pid, p in w.persons.items()}
+    for pid, c in told:
+        assert any((c.subject, c.predicate, c.value) in held
+                   for other, held in holders.items() if other != pid), (
+            f"{pid} holds a `told_by` claim {(c.subject, c.predicate, c.value)} that NOBODY ELSE "
+            "holds firsthand. A telling transmits a claim its teller already had; a triple with "
+            "no holder was minted rather than transmitted, which is the fabrication the deposit "
+            "reads `LedgerReader.latest_about` to avoid")
+        assert isinstance(c, Claim) and c.visibility == "own", (
+            "a told claim lands in ONE holder's own ledger, like every other claim (§20)")
+
+    # THE TELLER IS NEVER AMONG THE TOLD, for their own telling.
+    for e_id, a in d.act_of.items():
+        if a.verb != "tell":
+            continue
+        teller = w.persons.get(a.actor)
+        if teller is None:
+            continue
+        # THE ID IS THE LINK. A told claim is minted `H(seed, tick, holder, f"told:{event}")`,
+        # so the claim the teller WOULD hold from their own telling is computable exactly, at
+        # every tick it could have been deposited — no heuristic on the ledger.
+        forbidden = {H(w.world_seed, t, a.actor, f"told:{e_id}") for t in range(w.tick + 1)}
+        assert not [c for c in teller.ledger if c.id in forbidden], (
+            f"{a.actor} received a `told_by` claim from their OWN telling {e_id}. The teller holds "
+            "it firsthand already; a told copy is the self-witness rule `witness` REV 3 removed")
