@@ -80,6 +80,86 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 
 ---
 
+## ⚠ CURRENT — 2026-09-13, PR #404: a faction becomes buildable and readable, and three items are Jordan's
+
+**The diagnosis, measured rather than argued.** A populated world had a map and no politics in it:
+`build_realm(seed=0)` seated 46 people in 366 rungs with **0 offices, 0 `hold` edges, 0 claims,
+0 stance rows**, and every settlement's `stores` empty. Topology without qualities. Two causes,
+both of them things the tree had already specified and never built:
+
+  * **§17 names 26 Queries; SEVEN existed.** `presence`, `verbs`, `judging_set`, `hold_force`,
+    `assemble`, `opening_set`, `entrenchment`. §22's `Nobody` row assigns *faction, leaders,
+    presence, density, footprint, norm, reputation, needs, sovereignty* to nobody as Queries
+    stored nowhere — so L3 bans the stored aggregate and the function meant to replace it was
+    never written. A settlement's prosperity has no field **and** no function. That is the whole
+    of the legibility problem, and it is 27% built.
+  * **`commit` was never used for membership.** §15's cardinality table types it
+    `Person → Proposition, many` and annotates it verbatim **"this is faction membership"**;
+    §14.2 is the definition — **"A faction IS a Proposition plus its `commit` edges."** In every
+    world this repo had built, `commit` carried a private want and nothing else, so the only route
+    into a faction was to hold an office in one: no laity, no rank and file, and `role_templates`
+    keyed on a population that could not exist.
+
+**LANDED (PR #404, green: season 200 passed, `tests/valoria` 1784 passed + the 2 known
+shallow-checkout reds).** Six §17 Queries in `queries/world_q.py` — `members` · `leaders` ·
+`footprint` · `density` · `sovereign_fraction` · `establishment_of` · `conferral_path`, live edges
+only per §22.4 clause 3. `data/cast.py`, the one reader of `references/npc_registry.yaml`.
+`build_realm` seats a `HOLDS` Proposition per faction and a `commit` edge per member: 40 of 46
+placed, `density(realm, Crown)` reads 11 of 46.
+
+**⚠ THE FIND WORTH CARRYING FORWARD: `references/npc_registry.yaml` WAS READ BY NOTHING THAT
+EXECUTES.** 46 rows, ids an **exact 1:1 match with `load_cases("NPC")`** (zero symmetric
+difference), every row carrying an authored `faction` and `role`, 31 a `territory`, 30 `goals`,
+7 a `title`, and all 81 weighted conviction entries naming one of the canonical thirteen.
+Meanwhile `seed_convictions` drew every person's convictions from `blake2b(seed, case_id, pid)`,
+so **R-06 was measured against an invention**: Carin Vedel, whose case is hand-copying SUPPRESSED
+texts, is authored `Liberty 0.60` and was drawn `Authority 0.90`.
+
+**NEXT, IN ORDER, AND NONE OF IT NEEDS A RULING:**
+
+1. **Expand `rosters.yaml: office_bodies`.** MEASURED: only **10 of 25** canon-named seats can
+   construct as an `Office` — `Ministries` is one roster row where canon names six ministries, the
+   four Cardinals are present but the four Dicasteries beneath them are not, and Hafenmark's
+   Parliamentary Committees and Varfell's Councils are absent entirely. Tier-2 sourced, and world
+   is silent on the sub-organs, so `role_templates` is the precedent.
+2. **Seat the offices and the title ladder**, then `hold` edges for holdings from
+   `geography_v30.md`'s faction-granular starting-control table — a faction Proposition may be a
+   `hold` subject (§14.2), which is how Crown's six territories attach. `leaders` and
+   `sovereign_fraction` return nothing until this lands.
+3. **Build `duchy` and `territory` rungs.** Both are declared `rung_kinds` that no world has ever
+   instantiated; the geography file goes settlement → province directly.
+4. A transcription of the four Standing 0–7 ladders and six sub-ladders is at
+   `offices_draft.yaml` in this session's scratchpad — **not** in the tree. Adversarially
+   verified: 19/22 citations correct, **zero fabrications**, zero tier violations, the Niflhel
+   ladder correctly excluded as struck by `CR-STRIKE-2026-04-19`. It will need re-deriving.
+
+**⚠ THREE ITEMS SURVIVED ALL FIVE OF §0's TESTS AND ARE JORDAN'S:**
+
+  * **Two tier-2 documents disagree on Inner Circle membership by half.**
+    `faction_politics_v30.md` §1.2c/§1.3c gives Hafenmark 4 named and Varfell 5;
+    `npc_behavior_v30.md` §2.16–§2.17 gives 2 and 2, dropping Almstedt, Feldhaus, Thorvald Hann,
+    Maret Uln and Edeyja, and giving Holdar and Stenskald different Conviction/Resonant-Style
+    values for the same people. Same tier, so precedence does not settle it. It decides who is in
+    the room when Hafenmark votes. **No office is seated until it is answered.**
+  * **Six of the 46 cast belong to a faction on no roster** — `Altonia` (3),
+    `Independent (Southernmost Wardens)` (2), the dissolved Virke syndicate (1). Jordan's own
+    precedent is *"Wouldn't it just imply that we don't have enough factions?"*, but adding a
+    name to `rosters.yaml: factions` is authoring canon. They are left unplaced and counted.
+  * **Should a faction's creed be an `OUGHT`?** It ships as `HOLDS` and changes no deliberation.
+    As `OUGHT` it raises a standing Q4 question each season for every member — with a faction
+    NAME as the referent, which is `build_at`'s measured rung-subject defect one level worse.
+
+**TWO CANON-DATA DEFECTS, REPORTED AND NOT REPAIRED** (`cast.defects()` computes them from the
+file rather than remembering them):
+
+  * `npc_registry.yaml` NPC-081 `faction: Hafenmark (Inner Council #4)` and NPC-082
+    `Varfell (Jarl Council #5)` are **unquoted**, so YAML eats `#4)` / `#5)` as comments and the
+    seat numbers are destroyed on load. Plausible-looking and wrong.
+  * **Two registries single-own one faction name and disagree.** `references/names_index.yaml`
+    (which feeds the BLOCKING naming gate) canonicalises the church as `Church`;
+    `rosters.yaml: factions` says `Church of Solmund`; and names_index has no `Schoenland` entry
+    at all. A §8 violation upstream of both.
+
 ## 📐 2026-09-12 — v1: seven research documents NERS-audited (`ED-IN-0217`, PR #399, merged)
 
 **PROPOSED, HELD BACK FROM RATIFICATION-ON-MERGE IN FULL.** Nothing ratified, no head moved, no
