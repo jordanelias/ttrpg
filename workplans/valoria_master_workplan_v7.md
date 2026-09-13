@@ -775,3 +775,100 @@ precedent is the shape — content and authorial calls do not become queue rows 
 dated history. `HANDOFF.md` genuinely carried the stale claim in a parenthetical asserting the
 instrument *"still reads 6/3"*, and that is corrected in this commit by the same method: no number, name
 the owner.
+
+---
+
+## §8 · AMENDMENT 2 — 2026-09-13
+
+**Admissible under §0's last paragraph on the same test Amendment 1 applied**: every item below
+attaches to a milestone row or a ledger row this document already carries, and nothing here is
+generated. Five changes landed; one measurement reframes a requirement row; the rest are corrections
+to claims other surfaces were making.
+
+### 8.1 · What executed (`CLAUDE.md` §0.2 — a run, not a document)
+
+| | ledger | artifact |
+|---|---|---|
+| The told channel — a telling transmits its CONTENT, not only that it happened | `ED-IN-0222` | `loop/witness.py`; `told_by` 0 → 8 corpus-wide |
+| A populated world — 46 named NPCs, 37 settlements, 60 quarters, 211 buildings | `ED-IN-0223` | `harness/populated.py`, `venues.yaml`, `npcs.yaml` |
+| The milestone gate re-pointed at the head — it probed `engine/mc_v18` for six days | `ED-IN-0226` | `tools/m1_acceptance.py` rows 1–2 |
+| `mc_v18` deprecated in place; shrink-only ratchet; 16 importers, none production | `ED-IN-0227` | `tests/valoria/test_mc_v18_is_deprecated.py` |
+| **Every person's OUGHT names a PERSON** | `ED-IN-0210` Ruling 1 | `harness/corpus_run.py::build_at` |
+
+The last, measured through the season driver over the 27 NPC cases that build, both arms at seed 0:
+**443 acts / 0 naming another person → 692 acts / 256.** Distinct executed sets **25 → 43**; verbs that
+execute at all **11 → 13**.
+
+### 8.2 · ⭐ THE MEASUREMENT THAT REFRAMES `R-07`, and it is the most important thing here
+
+`R-07` reads *"IMPERFECT KNOWLEDGE IS STRUCTURAL AND HOLDS"* — `choose` receives no `World`, a `View`
+is capped, `LedgerReader` answers from the person's own ledger. **All of that is true of the CODE and
+near-vacuous in BEHAVIOUR**, which the row does not say and which nothing had measured. Eight named
+NPCs, six different buildings, three settlements, one season:
+
+```
+Carin Vedel     14 distinct (subject, predicate, value) triples
+Uwe Askeland    15
+shared by both  13          ~90% identical
+claim sources across all eight ledgers:  {firsthand: 151}   zero told_by
+```
+
+**Nobody in this world is meaningfully ignorant of anything.** `fan_out_mode` is `all_five` and WITNESS
+fans every Event to every person, so co-location was never what made the corpus omniscient — the
+fan-out is. Three consequences, each of which had been read as a separate problem:
+
+1. **`ED-IN-0222`'s told channel is not underused because `tell` is weak.** A witness who already saw
+   everything cannot be told anything. The 8 `told_by` claims are the honest ceiling of the channel at
+   this fan-out, not a defect in the deposit.
+2. **`tell` collapsing 57 → 10 executions under §8.1's change is the same fact**, seen from the verb
+   side: transmission has no ignorance to act on, so it loses to verbs that do something.
+3. **A social-contest game in which nobody can be deceived, surprised or informed** is a deeper hole
+   than the 20 silent verbs of `R-05`. It is not on the reconciled program's 27 positions.
+
+**No work item is opened here** — §0 forbids this document generating one. What is recorded is that
+`R-07`'s `measured:` block states a structural property and omits the behavioural one, and that the
+instrument for the behavioural half is a ledger-overlap count, which did not exist before today.
+
+### 8.3 · The two costs §8.1's change bought, named so they are not rediscovered
+
+- **`travel.blocked` beliefs 6 → 192.** Root cause: `build_at` seats people as `person`-kind rungs,
+  `contain_ascends` requires **strict** ascent, so two `person` rungs tie and a `move` naming a person
+  always refuses. The fix is in `decision/options.py::_derive_operand` — a person-subject question
+  should not mint a `move` candidate targeting a person — not in the Proposition. `move` still
+  EXECUTES 17 → 73, so this is ledger noise, not a dead verb.
+- **`work` 28 → 11.**
+
+### 8.4 · Corrections to rows this document and its siblings carry
+
+- **`ED-WR-0011` (OI-05) is CLOSED, not open.** A second ledger row carries `status: ruled`,
+  `needs_jordan: false` — Option A, *"Season-tick generation = **none**, which is a RULING rather than
+  a deferral."* §3's "who can answer it" sort should not list it. `ED-SE-0051`/E-1 stays open.
+- **`ED-IN-0210` keeps `needs_jordan` DELIBERATELY**, for its one live fork (*are `dispatch` and
+  `comply` two sides of one thing?*), which `ED-IN-0211` records as surviving `CLAUDE.md` §0's five
+  tests. Any close-pass clearing rows on "ruled + still flagged" must skip it by name or it deletes a
+  live escalation. This bears directly on Amendment 1 §7.1, which re-sorted the same row.
+- **The antonym closers are NOT six new verbs.** `ED-IN-0211` (closed) adjudicated `ED-IN-0210`
+  Ruling 2: *"they are not six rows"*, *"the antonym half is real and **already spelled by
+  `release`**"*; `01_AXIOMS.md`: *"CLOSURE IS NOT A VERB."* `release` exists, is `grade: ruled`, covers
+  `[hold, commit, oblige, succeed, tie, knot]` and executes. The residue is **three**:
+  `issue`↔RESCIND · `petition`↔WITHDRAW/DENY · `establish`↔ABOLISH.
+- **`Person.beliefs` is a field nothing writes and nothing reads** — empty for all 46 NPCs. `H-62`/
+  ID-13. The epistemic layer is the `ledger` alone; `convictions` are VALUES (what is right), not
+  beliefs, and `#353 §9.3` calls conflating them *"the single most dangerous collision in the design."*
+- **`requirements.yaml` carries four mutually inconsistent R3 figures** (`:142`, `:265`, `:333`,
+  `:524`) with no statement of which is the baseline.
+- **The `needs_jordan` queue has no instrument** and four surfaces give four answers (108/158 ·
+  151/105 · 41/51/77 · 37 after folding append-only rows to the latest per id). The reconciled
+  program's position 1 should ship the fold-to-latest script, or its *"the queue reads ≤ 12"*
+  acceptance cannot be checked.
+
+### 8.5 · Milestone read, against §1's execution-bound rows
+
+`register --requirements` reads **1 `met` · 4 `not_met` · 4 `partial`**, unmoved by this session — the
+counterparty change moves numbers inside `R-01`/`R-02`/`R-06`, not a row to `met`.
+
+⚠ **AND THE THING §1 DOES NOT HAVE A ROW FOR: there is no player.** Grepped 2026-09-13 — the word
+appears in `engine/season/` **only inside citations to `player_agency_v30.md`**. No player seat, no
+input path, no turn boundary at which a human acts. The loop is 100% autonomous, which is correct for
+`R`'s no-player half and means the milestone set describes a world simulation and never says who plays
+it. Recorded as an observation; opening a row is Jordan's, not this document's.
