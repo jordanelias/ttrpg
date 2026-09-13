@@ -6266,6 +6266,7 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # question about somebody rather than about a place -- which opens verbs that were
     # unreachable and lets two worlds differ in WHO they act on, not only in what they do.
     # Variety rose because the worlds stopped being the same world. 25 -> 43.
+    # [GROUNDED: measured 2026-09-13 through the season driver, both arms at seed 0 over the same cases, after `build_at` gave each person a person-subject Proposition -- distinct executed sets over the live worlds: 25 -> 43. The mechanism and direction are in the block above this line.]
     assert len(by_sig) == 43, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
@@ -9431,6 +9432,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # (one case's fork stops being genuine when its people act on each other) and the control
     # rises 1 -> 4, because Q4's person referent runs in the control arm too. See the `diverged`
     # block in the fork test above for why both arms moved and what that costs attribution.]
+    # [GROUNDED: measured 2026-09-13 through the season driver, both arms at seed 0 over the same cases, after `build_at` gave each person a person-subject Proposition -- W-D control arm: genuine 32 -> 31, diverged 1 -> 4. The mechanism and direction are in the block above this line.]
     assert (got["none"]["genuine"], got["none"]["diverged"]) == (31, 4), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
@@ -9446,6 +9448,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # because more worlds now have a fork that reaches a later decision at all, and the rate
     # fell because the CONTROL rose (1 -> 4) toward the shipped arm. Absolute divergence is up
     # in both arms. See the separation block in this file for what that costs attribution.]
+    # [GROUNDED: measured 2026-09-13 through the season driver, both arms at seed 0 over the same cases, after `build_at` gave each person a person-subject Proposition -- W-D shipped arm: genuine 29 -> 31, diverged 10 -> 6. The mechanism and direction are in the block above this line.]
     assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (31, 6), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
@@ -9458,6 +9461,7 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # population 28 -> 31, divergences 2 -> 7. `total` fans every event to everybody, so it had
     # the LEAST headroom before and gains the most here: with each person's OUGHT naming another
     # person, a fork changes who is acted on even where everyone already saw everything.]
+    # [GROUNDED: measured 2026-09-13 through the season driver, both arms at seed 0 over the same cases, after `build_at` gave each person a person-subject Proposition -- W-D total arm: genuine 28 -> 31, diverged 2 -> 7. The mechanism and direction are in the block above this line.]
     assert (got["total"]["genuine"], got["total"]["diverged"]) == (31, 7), got
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
@@ -9748,6 +9752,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # DIFFERENCE between the arms. Absolute divergence went UP in both. Read this cell as
     # *clause 4's marginal contribution ON TOP OF the Q4 referent*, which is a smaller and
     # honester quantity than what it measured before.
+    # [GROUNDED: measured 2026-09-13 through the season driver, both arms at seed 0 over the same cases, after `build_at` gave each person a person-subject Proposition -- fingerprint VERB-SET divergences at the shipped arm: 10 -> 6. The mechanism and direction are in the block above this line.]
     assert got["actor"]["verbonly"] == 6, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
@@ -9797,6 +9802,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # (one case's fork stops being genuine when its people act on each other) and the control
     # rises 1 -> 4, because Q4's person referent runs in the control arm too. See the `wide`
     # block in the fork test above for why both arms moved and what that costs attribution.]
+    # [GROUNDED: measured 2026-09-13 through the season driver, both arms at seed 0 over the same cases, after `build_at` gave each person a person-subject Proposition -- fingerprint control arm: 32/1 -> 31/4. The mechanism and direction are in the block above this line.]
     assert (got["none"]["genuine"], got["none"]["wide"]) == (31, 4), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
@@ -9806,6 +9812,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # because more worlds now have a fork that reaches a later decision at all, and the rate
     # fell because the CONTROL rose (1 -> 4) toward the shipped arm. Absolute divergence is up
     # in both arms. See the separation block in this file for what that costs attribution.]
+    # [GROUNDED: measured 2026-09-13 through the season driver, both arms at seed 0 over the same cases, after `build_at` gave each person a person-subject Proposition -- fingerprint shipped arm: 29/10 -> 31/6. The mechanism and direction are in the block above this line.]
     assert (got["actor"]["genuine"], got["actor"]["wide"]) == (31, 6), got
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
@@ -9814,6 +9821,7 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # population 28 -> 31, divergences 2 -> 7. `total` fans every event to everybody, so it had
     # the LEAST headroom before and gains the most here: with each person's OUGHT naming another
     # person, a fork changes who is acted on even where everyone already saw everything.]
+    # [GROUNDED: measured 2026-09-13 through the season driver, both arms at seed 0 over the same cases, after `build_at` gave each person a person-subject Proposition -- fingerprint total arm: 28/2 -> 31/7. The mechanism and direction are in the block above this line.]
     assert (got["total"]["genuine"], got["total"]["wide"]) == (31, 7), got
 
 
