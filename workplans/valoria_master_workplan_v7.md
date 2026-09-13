@@ -846,13 +846,84 @@ work §8.2 says it is not doing, and the ~90% figure is Carin Vedel and Uwe Aske
 `npcs.yaml` seats in the SAME BUILDING (`b_s_026_workshop`, both Einhir). Two people in one room
 holding near-identical ledgers is the co-location predicate working.
 
-**THE HALF THAT SURVIVES IS THE IMPORTANT HALF, AND IT IS SHARPER FOR LOSING THE WRONG CAUSE:**
-**every claim in the world is `firsthand` — 2,386 of 2,386, zero `told_by`.** Knowledge IS local
-and nothing is ever TRANSMITTED. That is a producer gap in the told channel, not a consequence of
-omniscience, so §8.2's derived consequence 1 (*"a witness who already saw everything cannot be told
-anything"*) does not hold as stated: witnesses share ~19% of each other's claims and have ample
-ignorance to be told about. Consequence 3 (*"nobody can be deceived, surprised or informed"*) keeps
-its **informed** half on the `told_by` zero and loses its stated cause.
+**THE HALF THAT SURVIVES IS THE IMPORTANT HALF:** transmission is ~0.1% of what anyone knows.
+§8.2's derived consequence 1 (*"a witness who already saw everything cannot be told anything"*)
+does not hold as stated — witnesses share only ~19% of each other's claims and have ample ignorance
+to be told about — so the told channel's ceiling has some other cause. §8.2b finds it.
+
+⚠ **SELF-CORRECTION, SAME DAY, BEFORE ANYONE ELSE HAD TO FIND IT.** The paragraph above first read
+*"every claim in the world is `firsthand` — 2,386 of 2,386, zero `told_by` … nothing is ever
+TRANSMITTED … that is a producer gap."* **All three clauses were a ONE-SEASON artifact, and this
+section had just finished correcting §8.2 for generalising from too small a sample.** The season
+curve, `build_realm(seed=0)`:
+
+| seasons | `news.told` | `told_by` claims |
+|---|---|---|
+| 1 | 5 | **0** |
+| 2 | 18 | **7** |
+| 3 | 35 | **7** |
+
+The channel is not dead; it SATURATES. And it is not a producer gap — see §8.2b, which measures the
+producer directly and finds it never fails.
+
+### 8.2b · Why the told channel saturates — measured at the deposit site, and it is not the producer
+
+`ED-IN-0222` built the told channel and `loop/witness.py`'s deposit has three conditions: the
+teller must hold content about the act's subject, the predicate must not be ledger-derived, and the
+hearer must not already hold the exact triple. Instrumenting `_told_content` over
+`build_realm(seed=0)`, three seasons:
+
+```
+news.told events                                        35
+  heard by NOBODY but the teller                        18   (51%)
+  hearer-count distribution            {0:18, 2:2, 3:5, 7:10}
+tellings that reached a hearer                          17
+  _told_content returned no content                      0
+  predicate excluded as ledger-derived                   0
+  usable content                                        17   (100%)
+  suppressed: hearer ALREADY HELD the exact triple       10
+  deposited                                              7
+```
+
+**THE PRODUCER NEVER FAILS.** All 17 tellings that reached a hearer had content to pass on. The
+ceiling is set by two things downstream of it:
+
+1. **HALF OF ALL COMMUNICATION IS INTO AN EMPTY ROOM.** 18 of 35 tellings — and 26 of 52
+   `speech.made` — are witnessed by nobody but the speaker. This is not a bug and it is not
+   fixable in `options.py`: **`L2` forbids `choose` from receiving a `World`**, so a person cannot
+   know who is present before deciding to speak. The design buys its epistemic discipline with a
+   population that talks to itself half the time, and that trade had not been measured.
+2. **10 OF THE 17 HEARD TELLINGS TELL SOMEBODY WHAT THEY ALREADY HOLD** and are correctly
+   suppressed — the exact-triple guard `ED-IN-0222` added, doing its job.
+
+⚠ **AND THE MOST-TRANSMITTED NEWS IN THIS WORLD IS A NULL RESULT.** Of the 17 usable payloads,
+**9 are `finding.none`** — *"I looked and found nothing"* — against 4 `release.refused` and one each
+of `proposition.uttered`, `term.matured`, `travel.moved`, `record.created`. `_told_content` passes
+on the teller's `latest_about(subject)`, so what gets told is whatever the teller most recently
+witnessed, not what is worth saying. **Choosing WHAT to say is a game decision that nothing makes**,
+and `witness.py`'s own docstring already names the conformant shape for it (the told triple riding
+on the Act, via `Event.observed` or `PersonInterior` at option-build time) and calls it *"a game
+decision, not a cleanup."*
+
+**No work item is opened here either**, and no default moves. What is recorded is that the told
+channel's ceiling has three named causes with numbers against each, where §8.2 gave one cause that
+does not hold.
+
+⚠ **NO GUARD IS MINTED FOR ANY OF THESE FIGURES, DELIBERATELY.** They move the moment the cast, the
+venues or the verb table move, so a test pinning "51% of tellings have no hearer" would be a guard
+whose subject is a measurement — `CLAUDE.md` §0.1 pt 5's predicate excludes exactly that. §0.1 pt 3
+is satisfied by the reproduction instead:
+
+```python
+import engine.season.loop.witness as WIT
+calls = []; _o = WIT._told_content
+WIT._told_content = lambda w, a: (lambda r: (calls.append(r.predicate if r else None), r)[1])(_o(w, a))
+from engine.season.harness.populated import build_realm, run
+w = build_realm(seed=0); run(seasons=3, seed=0, w=w)
+# len(calls) = tellings that reached a hearer; the told_by claims are
+# [c for p in w.persons.values() for c in p.ledger if c.source == "told_by"]
+# empty-room count: observers_for(w, e, "all_five", sorted(w.persons)) minus e.subject, per news.told
+```
 
 ⚠ **NO ARM IS FLIPPED AND NO DEFAULT MOVES.** `R7` (`ED-IN-0205`) excluded `total` and is SILENT
 between `presence_only` and `all_five`; `H-33` stays `assumption` because #353 supplies no
