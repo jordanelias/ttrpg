@@ -963,6 +963,24 @@ rosters:
       "Riskbreakers": "Löwenritter"
       # --- Guilds · worldbuilding_v30.md §5.1, §5.3 ---
       "Guild": "Guilds"
+      # --- LEADERSHIP bodies · npc_behavior_v30.md §2.15-§2.17 (TIER 2a, the superseding doc) ---
+      # ⚠ THESE THREE ARE A DIFFERENT KIND OF ORGAN FROM THE SIXTEEN ABOVE, AND THE DIFFERENCE IS
+      # STATED RATHER THAN BLURRED. World names ADMINISTRATIVE organs — a ministry executes, a
+      # rectorate judges. These are the leader's INNER COUNCIL: who is in the room when the faction
+      # decides. World does not name them, `npc_behavior_v30.md` does, and Jordan ruled it superior
+      # to `faction_politics_v30.md` on 2026-09-13 — which matters here, because politics §1.2c/
+      # §1.3c gives these councils four and five members where behaviour gives two and two.
+      # ⚠ ONLY THREE ARE ADDED, AND THE RESTRAINT IS THIS FILE'S OWN PRECEDENT. `faction_politics_v30`
+      # PART 7 names 22 more organs with quoted jurisdictions — six Crown ministries, six Hafenmark
+      # committees, four Church dicasteries, five Varfell councils. NOT ONE IS READ by anything that
+      # builds a world: `build_realm` takes an office's body from the sub-organization
+      # `references/npc_registry.yaml` packs into its `faction` cell, and these three are what it
+      # contains. Adding the other 22 would repeat `governance_modes` and `power_bases`, deleted from
+      # this file for exactly that — "not wrong; UNREAD", and §0.1 pt 5 forbids apparatus that is
+      # load-bearing on nothing. They go in the day a seat needs one.
+      "Inner Circle": "Crown"
+      "Inner Council": "Hafenmark"
+      "Jarl Council": "Varfell"
     function:
       # --- Crown / realm government · worldbuilding_v30.md §6.1 ---
       "Imperial Court": "Advisory. Informal power arena."
@@ -984,6 +1002,14 @@ rosters:
       "Riskbreakers": "Extralegal infiltration. Loyal to Valoria the concept, not institutions."
       # --- Guilds · worldbuilding_v30.md §5.1, §5.3 ---
       "Guild": "Burgher status: Guild Masters and Free Masters qualify for political participation."
+      # ⚠ THE FUNCTION CELLS BELOW ARE COMPOSITIONAL, NOT PORTFOLIOS, AND THAT IS SAID HERE BECAUSE
+      # THE NOTE ABOVE PROMISES QUOTED Function/Portfolio CELLS. Canon gives these three no portfolio
+      # — `npc_behavior_v30.md` §2.15-§2.17 are tables of Role/Name/Conviction, and
+      # `faction_canon_v30.md` §10 describes them by WHO IS IN THEM. So what is quoted is that, and
+      # a reader is told it is that rather than left to assume a jurisdiction was dropped.
+      "Inner Circle": "Inner Circle (5 named NPCs per npc_behavior §2.15) + Specialty Branches. The Crown leader's standing council."
+      "Inner Council": "Inner Council (2 named per npc_behavior §2.16). The Duchess's standing council; §1.2c names four and is SUPERSEDED (Jordan, 2026-09-13)."
+      "Jarl Council": "Jarl Council (2 named per npc_behavior §2.17). The Jarl Assembly's standing seats; §1.3c names five and is SUPERSEDED (Jordan, 2026-09-13)."
 
   requires_operands:
     source: "`W-A`. The names a `requires_typed` cell may bind, closed."

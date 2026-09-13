@@ -68,7 +68,7 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
-from ..data.rosters import FACTIONS, load_yaml, title_domain
+from ..data.rosters import BODY_FACTION, FACTIONS, load_yaml, title_domain
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Office, Person, Proposition, Rung, Site, Tenure
@@ -539,11 +539,20 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
             no_post.append(cid)
             continue
         rung = realm if governs == "realm" else duchy_of.get(fac_name) if governs == "duchy" else None
+        # ⚠ THE SUB-ORGANIZATION BECOMES THE `body` WHERE IT NAMES ONE, AND THE GAIN IS THE
+        # CONSTRUCTOR'S CROSS-CHECK, NOT THE FIELD. With a body, `office_faction` DERIVES the
+        # faction and refuses a body/faction mismatch; with `body=None` the faction is taken on the
+        # caller's word. So a Crown person whose row said `Hafenmark (Inner Council)` now raises
+        # instead of seating quietly. EXACT MATCH, not substring: `Inner Circle / Löwenritter
+        # Liaison` (NPC-035) and `dual-loyalty: Crown Inner Circle agent…` (NPC-034) resolve to
+        # nothing and keep `body=None`, which is honest — each names two allegiances and canon has
+        # no organ for either shape.
+        body = over.get("body") if over else (_sub if _sub in BODY_FACTION else None)
         oid = f"off_{_slug(cid)}"
         w.offices[oid] = Office(
             oid, post, rung, list(over.get("remit") or []),
-            body=over.get("body") if over else None,
-            faction=(over.get("faction") if over else None) or (None if over.get("body") else fac_name),
+            body=body,
+            faction=(over.get("faction") if over else None) or (None if body else fac_name),
         )
         w.add_tenure(Tenure(f"t_{oid}_hold", pid, oid, "hold", 0))
         seated += 1
