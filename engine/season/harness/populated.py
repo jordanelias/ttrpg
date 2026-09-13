@@ -66,16 +66,16 @@ from __future__ import annotations
 import sys
 from collections import Counter, defaultdict
 
-import yaml
-
+from ..data import files
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
-from ..data.rosters import CONVICTIONS, RUNG_KINDS
+from ..data.rosters import load_yaml
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Person, Proposition, Rung, Site, Tenure
 from ..state.ids import H, draw_factory
 from ..state.world import World
 from . import probes as P
+from .corpus_run import seed_convictions
 from .run_cases import load_cases
 
 GEOGRAPHY = "systems/settlements/valoria_geography_v30.yaml"
@@ -83,14 +83,19 @@ VENUES = "engine/season/venues.yaml"
 ROSTER = "engine/season/npcs.yaml"
 
 
-def _repo_root():
-    from pathlib import Path
-    return Path(__file__).resolve().parents[3]
-
-
 def _load(rel):
-    with open(_repo_root() / rel, encoding="utf-8") as fh:
-        return yaml.safe_load(fh)
+    """A repo-relative YAML file, through the package's OWN anchor and its OWN reader.
+
+    ⚠ NEITHER HALF IS A STYLE CHOICE AND THE FIRST CUT GOT BOTH WRONG. It carried a private
+    `_repo_root()` climbing three `.parent`s -- a thirtieth anchor in a package whose
+    `data/files.py` exists to hold the only one, and whose docstring makes that a CHECKABLE
+    property (*"`grep -rln <the dunder> season/` must print this file and nothing else"*), with
+    `combat_seam.py` as the worked case for why a wrong anchor fails SILENTLY. And it called
+    `yaml.safe_load` directly, which keeps the LAST of two identical keys without a word --
+    the defect `data/rosters.load_yaml` was written to refuse, and `venues.yaml` is exactly the
+    shape that hides one (a settlement type listed twice would lose its first building set).
+    """
+    return load_yaml((files.REPO_ROOT / rel).read_text(encoding="utf-8"))
 
 
 def _slug(text: str) -> str:
@@ -226,11 +231,17 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     a hidden default -- a run that quietly seated twenty people while reporting on a hundred and
     forty-three would be the confounded arm `CLAUDE.md` §0.1 pt 1 exists to refuse.
 
-    `from_roster` reads `engine/season/npcs.yaml` for each person's home, want and tie. That file is
-    the AUTHORITY once it exists; the matchers below are how it was first derived and are not
-    consulted at runtime while it is present. `False` forces the derivation and is what
-    `tools/export_npc_roster.py` calls to regenerate -- the one caller that must not read the file
-    it is about to write.
+    `from_roster` reads `engine/season/npcs.yaml` for each person's institution, home, want and
+    the SUBJECT of their tie. That file is the AUTHORITY on those four fields once it exists.
+    `False` forces the derivation and is what `tools/export_npc_roster.py` calls to regenerate --
+    the one caller that must not read the file it is about to write.
+
+    ⚠ "THE MATCHERS ARE NOT CONSULTED AT RUNTIME" IS WHAT THE FIRST CUT OF THIS DOCSTRING SAID
+    AND IT WAS NOT TRUE. `institution_of` runs over EVERY case on every build, roster or not,
+    because the institution index the `institution` tie-rule pools over is built from the cases;
+    and `concerns_of` runs for any row whose `concerns` cell is blank. What the roster actually
+    buys is that a row it HAS FILLED is never re-derived -- which is the guarantee that matters
+    (a hand correction survives) and is narrower than the sentence it replaces.
 
     ⚠ THE ROSTER IS READ, NOT MERELY SHIPPED. `04 §A.2:124` binds `data/` to RAISE on a
     declared-but-unread row and `01_AXIOMS.md` ID-13 calls such a thing *"a mechanism that does not
@@ -311,7 +322,6 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # so an unaffiliated life is somewhere ordinary and NOT all in one place.
     commons = [(sid, bid) for sid in geo["settlements"]
                for bid, b in buildings_at[sid] if not b["serves"]]
-    convictions = sorted(CONVICTIONS)
     n_common = 0
     for case in cases:
         cid = str(case.get("id"))
@@ -334,18 +344,12 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         w.persons[pid] = Person(pid, str(case.get("name") or cid))
         w.rungs[pid] = Rung(pid, "person")
         w.add_tenure(Tenure(f"t_{pid}_in", pid, home, "contain", 0))
-        # Convictions seeded from the case id, exactly as `build_at` does it and for its stated
-        # reason: identical convictions would force identical rankings for everybody.
-        # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s blake2b hexdigest -- same as corpus_run.py:242 and combat_seam.py:153. The `3` is #353 §14's own upper bound: "1-3 primary + distributed"]
-        n_conv = 1 + int(H(seed, 0, cid, f"axis:{pid}:n"), 16) % 3
-        # [JUSTIFIED: a DESCENDING ladder, not three chosen magnitudes -- #353 §14 distinguishes the "primary" conviction from the "distributed" remainder and supplies no numbers. Carried verbatim from corpus_run.py:245, its single owner; a second ladder here would be two answers to one question]
-        chosen, weights = {}, (0.9, 0.5, 0.3)
-        for k in range(n_conv):
-            purpose = f"axis:{pid}" if k == 0 else f"axis:{pid}:{k}"
-            # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as corpus_run.py:248]
-            pick = int(H(seed, 0, cid, purpose), 16) % len(convictions)
-            chosen.setdefault(convictions[pick], weights[k])
-        w.persons[pid].convictions = chosen
+        # ⚠ CALLED, NOT COPIED, AND THE FIRST CUT COPIED IT. `corpus_run.seed_convictions` is the
+        # single owner of this draw (`CLAUDE.md` §8) and this module reproduced it verbatim --
+        # same radix, same `axis:` purpose strings, same `(0.9, 0.5, 0.3)` ladder. That is two
+        # owners of WHICH PEOPLE ARE ALIKE, in the one quantity that orders every candidate in
+        # these worlds. See that function for why the draw is 1-3 and not 1.
+        w.persons[pid].convictions = seed_convictions(seed, cid, pid)
 
     # -- WHAT EACH PERSON WANTS, AND WHO IT CONCERNS ----------------------------
     #
@@ -388,46 +392,59 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
             at_institution[inst].append(f"p_{_slug(str(case.get('id')))}")
 
     ties = Counter()
+    tie_of: dict = {}
     for n, case in enumerate(cases):
         cid = str(case.get("id"))
         pid = f"p_{_slug(cid)}"
-        about = None
         row = (roster or {}).get(cid)
+        # ⚠ THE ROSTER'S `want` APPLIES ON EVERY BRANCH, AND THE FIRST CUT APPLIED IT ON ONE.
+        # It read `row["want"]` inside the roster-tie branch alone, so a hand-corrected want was
+        # DISCARDED for any row whose `concerns` was blank -- the file being the authority on one
+        # field and not on the next, which is exactly the silent-drift the roster exists to end.
+        # (It is a no-op on today's data, because every roster `want` was exported from
+        # `wants_of`. It stops being one the first time somebody edits a row, which is the point.)
+        want = str(row["want"]) if row and row.get("want") else wants_of(case)
+        about = why = None
         if row and row.get("concerns"):
             cand = f"p_{_slug(str(row['concerns']))}"
             if cand in w.persons and cand != pid:
                 about, why = cand, "roster"
-        if about is not None:
-            ties[why] += 1
-            prop_id = f"prop_{_slug(cid)}"
-            w.propositions[prop_id] = Proposition(
-                prop_id, "OUGHT", about, str(row.get("want") or wants_of(case)), True, 0)
-            w.add_tenure(Tenure(f"t_{prop_id}_commit", pid, prop_id, "commit", 0))
+        if about is None:
+            named, inst = concerns_of(case, by_name)
+            if named is not None:
+                cand = f"p_{_slug(named)}"
+                if cand in w.persons and cand != pid:
+                    about, why = cand, "named"
+            if about is None and inst is not None:
+                pool = [q for q in at_institution.get(inst, []) if q != pid and q in w.persons]
+                if pool:
+                    about, why = pool[n % len(pool)], "institution"
+            if about is None:
+                mates = [q for q in by_home.get(home_of.get(pid, ""), []) if q != pid]
+                if mates:
+                    about, why = mates[n % len(mates)], "roof"
+            if about is None:
+                nxt = homes[(homes.index(home_of[pid]) + 1) % len(homes)] if homes else None
+                pool = [q for q in by_home.get(nxt, []) if q != pid]
+                if pool:
+                    about, why = pool[n % len(pool)], "neighbour"
+        # ⚠ ONE WRITE, AFTER THE WHOLE CHAIN. The roster branch used to carry its own copy of the
+        # Proposition and the `commit` Tenure and then `continue`, so the two paths were free to
+        # disagree about what a tie WRITES -- and they did, on `want`, above. A person with no tie
+        # at all is the one case that writes nothing: an OUGHT about nobody is not a motive.
+        if about is None:
             continue
-        named, inst = concerns_of(case, by_name)
-        if named is not None:
-            cand = f"p_{_slug(named)}"
-            if cand in w.persons and cand != pid:
-                about, why = cand, "named"
-        if about is None and inst is not None:
-            pool = [q for q in at_institution.get(inst, []) if q != pid and q in w.persons]
-            if pool:
-                about, why = pool[n % len(pool)], "institution"
-        if about is None:
-            mates = [q for q in by_home.get(home_of.get(pid, ""), []) if q != pid]
-            if mates:
-                about, why = mates[n % len(mates)], "roof"
-        if about is None:
-            nxt = homes[(homes.index(home_of[pid]) + 1) % len(homes)] if homes else None
-            pool = [q for q in by_home.get(nxt, []) if q != pid]
-            if not pool:
-                continue
-            about, why = pool[n % len(pool)], "neighbour"
         ties[why] += 1
+        tie_of[cid] = why
         prop_id = f"prop_{_slug(cid)}"
-        w.propositions[prop_id] = Proposition(prop_id, "OUGHT", about, wants_of(case), True, 0)
+        w.propositions[prop_id] = Proposition(prop_id, "OUGHT", about, want, True, 0)
         w.add_tenure(Tenure(f"t_{prop_id}_commit", pid, prop_id, "commit", 0))
     w._tie_census = dict(ties)   # reported by `census`, never read by the loop
+    # WHICH RULE CHOSE EACH TIE, per case. Read by `tools/export_npc_roster.py` to fill the
+    # roster's `tie` column -- provenance a human needs to tell a real tie (`named`) from a
+    # filler one (`neighbour`) before correcting a row -- and by its `--check` round-trip. The
+    # loop never reads it; the exporter is why it is not a field nothing reads.
+    w._tie_of = tie_of
     return w
 
 
@@ -444,9 +461,13 @@ def census(w: World) -> dict:
             "largest_building": max(Counter(where.values()).values()) if where else 0}
 
 
-def run(seasons: int = 1, seed: int = 0, cap: int | None = None) -> dict:
-    """Build it and tick it. Returns the census plus what the season did."""
-    w = build_realm(seed, cap)
+def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None = None) -> dict:
+    """Build it and tick it. Returns the census plus what the season did.
+
+    `w` takes a world ALREADY BUILT, for a caller that wants to report on the build before the
+    season runs -- `main` below is the one, and without this it built the whole realm twice
+    (~10s each) to print a census it then discarded."""
+    w = build_realm(seed, cap) if w is None else w
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
     ch = make_chooser(w.fixtures, mint, verbs=resolvable_verbs(),
@@ -479,7 +500,7 @@ def main(argv=None) -> int:
     print(f"  buildings inhabited  {c['distinct_buildings_inhabited']}"
           f"   (largest holds {c['largest_building']})")
     print(f"  sites                {c['sites']}")
-    out = run(seasons, 0, cap)
+    out = run(seasons, 0, cap, w=w)
     print(f"\n  after {seasons} season(s): {out['acts']} acts by {out['actors']} actors")
     print(f"  act subjects         {out['act_subjects']}")
     print(f"  claims by source     {out['claim_sources']}")

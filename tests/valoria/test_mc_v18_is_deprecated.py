@@ -89,7 +89,20 @@ def _imports_mc_v18(path):
     return False
 
 
+_SCANNED = None
+
+
 def _scan():
+    """EVERY `.py` IN THE TREE, AST-PARSED -- ONCE PER PROCESS, NOT ONCE PER TEST.
+
+    ⚠ MEMOISED BECAUSE THREE TESTS BELOW ASK THE SAME QUESTION and this is a whole-repository walk
+    that parses every Python file in it. Unmemoised it ran three times on the blocking shipping
+    gate for one answer that cannot change between them -- the tests do not write, and a scan is a
+    pure function of the tree. `CLAUDE.md` §0.4 is about not paying for a verdict twice; this is
+    the same arithmetic inside one file."""
+    global _SCANNED
+    if _SCANNED is not None:
+        return _SCANNED
     found = set()
     for base, dirs, files in os.walk(REPO_ROOT):
         dirs[:] = [d for d in dirs if d not in {'.git', '__pycache__', 'node_modules'}]
@@ -102,6 +115,7 @@ def _scan():
                 continue
             if _imports_mc_v18(full):
                 found.add(rel)
+    _SCANNED = found
     return found
 
 

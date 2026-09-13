@@ -105,13 +105,18 @@ def _repo(p):
 # A NAMED record, not a bare tuple. The rows and `tests/valoria/test_m1_acceptance_probe.py`
 # both read these by name, and a positional pair would make the determinism test's
 # `(hash, stub_hits) != (hash, stub_hits)` comparison silently order-dependent.
-_Probe = collections.namedtuple('_Probe', 'stub_hits content_hash events acts')
+# ⚠ `events` IS HERE FOR THE FALSIFIER AND `acts` WAS HERE FOR NOTHING. The determinism row's
+# test asserts that two seeds differ in `(hash, stub_hits)` *or* that the season was a no-op, and
+# `events == 0` is how it tells those apart -- a field with a named reader. `acts` had none, in
+# this file or in the test, so it was a third number the probe computed and carried for a reader
+# that does not exist.
+_Probe = collections.namedtuple('_Probe', 'stub_hits content_hash events')
 
 
 def _run_probe_season(seed):
     """Run ONE headless season of **`engine/season/`** under `seed`. Single owner for rows 1-2.
 
-    Returns `(stub_hits, content_hash)`.
+    Returns a `_Probe`: `(stub_hits, content_hash, events)`.
 
     ⚠ THIS INSTRUMENT NOW OWNS THE STUB DELTA, AND THE PREVIOUS OWNER IS WHY THAT IS A CHANGE
     RATHER THAN A COPY. `mc_v18.run_campaign` computed its own before/after delta on the
@@ -140,7 +145,7 @@ def _run_probe_season(seed):
     before = _stubwire.invocations
     out = _headless.run(seasons=1, seed=seed)
     return _Probe(stub_hits=_stubwire.invocations - before,
-                  content_hash=out["hash"], events=out["events"], acts=out["acts"])
+                  content_hash=out["hash"], events=out["events"])
 
 
 def _blocked(key, label, unblocked_by, detail=''):

@@ -10780,11 +10780,14 @@ def test_the_npc_roster_is_read_and_not_merely_shipped():
     a home the matchers would never choose. If `build_realm` is re-deriving, the planted home is
     discarded and this reddens."""
     import yaml as _yaml
-    from pathlib import Path
 
+    from ..data import files
     from ..harness import populated as POP
 
-    roster_path = Path(POP._repo_root()) / POP.ROSTER
+    # `files.REPO_ROOT`, the package's ONE anchor, not a private one in the harness. `populated`
+    # carried a `_repo_root()` of its own until this commit and this test read it; both are gone,
+    # which is the point of `data/files.py`'s docstring (one anchor, checkable by grep).
+    roster_path = files.REPO_ROOT / POP.ROSTER
     assert roster_path.exists(), (
         f"{POP.ROSTER} is missing. Regenerate with `python tools/export_npc_roster.py --build`; "
         "the harness falls back to deriving, so its absence is silent at runtime and is exactly "

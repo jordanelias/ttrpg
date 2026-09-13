@@ -37,6 +37,7 @@ npcs:
     (copying a text) that the engine tracks as ongoing work-in-progress with a start and an end, not only
     as a single instantaneous action.
   concerns: NPC-004
+  tie: institution
 - case: NPC-087
   name: Uwe Askeland
   institution: Einhir
@@ -44,6 +45,7 @@ npcs:
   want: A person with no office must be able to run a recurring, location-bound activity whose ongoing
     existence -- not any single completed task -- is itself the thing at stake.
   concerns: NPC-038
+  tie: institution
 - case: NPC-086
   name: Joren Bergvall
   institution: Guild
@@ -52,6 +54,7 @@ npcs:
     its own scope and quality, independent of any single Contest roll -- something that can be examined,
     copied, corroborated, or suppressed as an artifact.
   concerns: NPC-010
+  tie: institution
 - case: NPC-075
   name: Orm
   institution: null
@@ -60,6 +63,7 @@ npcs:
     in the world's substrate) must be represented as a real season-to-season choice, including the possibility
     that he stops, burns out, or dies at it.
   concerns: NPC-012
+  tie: neighbour
 - case: NPC-005
   name: Sigrid Torsvald
   institution: Crown
@@ -67,6 +71,7 @@ npcs:
   want: An act she performs must be able to leave no attributable trace back to her, her order, or her
     Crown when it succeeds cleanly -- full deniability as an achievable outcome, not merely a stated intention.
   concerns: NPC-050
+  tie: roof
 - case: NPC-010
   name: Dalla Virke
   institution: Guild
@@ -75,6 +80,7 @@ npcs:
     trust, access) that no faction's own action economy owns or produces -- a market that exists outside
     every faction's resource pools.
   concerns: NPC-007
+  tie: institution
 - case: NPC-012
   name: Rikard Solberg
   institution: null
@@ -83,6 +89,7 @@ npcs:
     he makes in that office, in one consistent direction, without him or his superiors recognizing the
     pattern.
   concerns: NPC-020
+  tie: neighbour
 - case: NPC-002
   name: Maret Uln
   institution: null
@@ -91,6 +98,7 @@ npcs:
     a persistent personal resource whose cost scales with the scale and type of operation performed, distinct
     from whether the operation succeeded.
   concerns: NPC-070
+  tie: neighbour
 - case: NPC-004
   name: Sæmund Haelgrund
   institution: Church
@@ -99,6 +107,7 @@ npcs:
     cannot distinguish from a correct one, and the holder must be able to act on it as true until later
     evidence or events contradict it.
   concerns: NPC-038
+  tie: named
 - case: NPC-033
   name: Kolbrun Thale
   institution: Löwenritter
@@ -107,6 +116,7 @@ npcs:
     of informal, deniable actors, such that removing that one office-holder severs the institution's access
     rather than merely weakening it.
   concerns: NPC-020
+  tie: named
 - case: NPC-083
   name: Hedda Kronvald
   institution: Crown
@@ -115,6 +125,7 @@ npcs:
     administrative actions such that doing everything the settlement needs in one season is structurally
     impossible.
   concerns: NPC-050
+  tie: institution
 - case: NPC-008
   name: Peder Almstedt
   institution: Parliament
@@ -123,6 +134,7 @@ npcs:
     itself functions strictly harder to accomplish, purely by holding the office, without an explicit
     hostile action or spent resource each time.
   concerns: NPC-050
+  tie: named
 - case: NPC-038
   name: Arnlod Olafsson
   institution: Church
@@ -131,6 +143,7 @@ npcs:
     approval, or authorization is a formal precondition for that branch's members to act above a defined
     severity or target-importance threshold.
   concerns: NPC-021
+  tie: named
 - case: NPC-013
   name: Aldric Tormann
   institution: Church
@@ -139,6 +152,7 @@ npcs:
     faction-wide resource, with the improvement scaling by how many subordinate territories the office
     applies it to.
   concerns: NPC-021
+  tie: named
 - case: NPC-007
   name: Annika Feldhaus
   institution: Guild
@@ -147,6 +161,7 @@ npcs:
     expense of a second faction stat every season, as her default behavior rather than a one-time choice
     offered to the player.
   concerns: NPC-010
+  tie: named
 - case: NPC-071
   name: Torvi Heljason
   institution: Hafenmark
@@ -155,6 +170,7 @@ npcs:
     itself exposing her to personal consequence -- advising truthfully must be a protected kind of exchange,
     distinct from ordinary conversation.
   concerns: NPC-050
+  tie: named
 - case: NPC-034
   name: Gustav Linder
   institution: Church
@@ -163,6 +179,7 @@ npcs:
     conduit through which a SECOND institution's authority -- to which he actually answers -- can legally
     act inside the first institution's territory; without him, that authority does not exist there procedurally.
   concerns: NPC-021
+  tie: named
 - case: NPC-020
   name: Almud Almqvist
   institution: null
@@ -171,6 +188,7 @@ npcs:
     and only be able to substantively address a subset of them, with the unaddressed ones compounding
     rather than pausing.
   concerns: NPC-071
+  tie: neighbour
 - case: NPC-021
   name: Arne Himlensendt
   institution: null
@@ -179,6 +197,7 @@ npcs:
     presented facts, with a real chance his private conviction cracks while he continues performing his
     public role unchanged.
   concerns: NPC-001
+  tie: neighbour
 - case: NPC-050
   name: Inge Baralta
   institution: Crown
@@ -188,6 +207,7 @@ npcs:
     threshold — are simultaneously true, so years of preparation can sit inert waiting on someone else's
     failure.
   concerns: NPC-083
+  tie: roof
 - case: NPC-052
   name: Magnus Vaynard
   institution: null
@@ -196,6 +216,7 @@ npcs:
     to advance his own capability while simultaneously risking a personal transformation he cannot fully
     control, checked probabilistically each time he uses it.
   concerns: NPC-021
+  tie: neighbour
 - case: NPC-070
   name: Lisbeth Ehrenwall
   institution: null
@@ -204,6 +225,7 @@ npcs:
     that loyalty across several internal stages, driven by accumulating evidence of the ruler's failures,
     with no single season's evidence sufficient by itself to flip the institution against him.
   concerns: NPC-052
+  tie: neighbour
 - case: NPC-003
   name: Yrsa Vossen
   institution: null
@@ -213,6 +235,7 @@ npcs:
     at all, with that authority measured through relational and reputational quantities rather than a
     rank she occupies.
   concerns: NPC-073
+  tie: neighbour
 - case: NPC-032
   name: Lenneth Almqvist
   institution: null
@@ -221,6 +244,7 @@ npcs:
     no independent action economy of her own, so that everything she wants to achieve routes entirely
     through influencing a different person's decisions.
   concerns: NPC-003
+  tie: neighbour
 - case: NPC-031
   name: Torben Almqvist
   institution: court
@@ -229,6 +253,7 @@ npcs:
     eventual alignment is determined by which external party successfully builds a relationship with him
     first, within a bounded time window.
   concerns: NPC-030
+  tie: institution
 - case: NPC-030
   name: Elske Almqvist
   institution: court
@@ -237,6 +262,7 @@ npcs:
     to make another character's every relevant decision legible as being driven by concern for her specific
     safety.
   concerns: NPC-009
+  tie: institution
 - case: NPC-001
   name: Edeyja
   institution: null
@@ -245,6 +271,7 @@ npcs:
     her work's urgency to anyone who cannot already perceive what she perceives, regardless of how clearly
     or urgently she tries.
   concerns: NPC-032
+  tie: neighbour
 - case: NPC-006
   name: Halvar Brandt
   institution: Löwenritter
@@ -253,6 +280,7 @@ npcs:
     individual position registered within that body's collective output, not merely exist as an unaffiliated
     title.
   concerns: NPC-070
+  tie: named
 - case: NPC-009
   name: Gerik Strand
   institution: court
@@ -261,6 +289,7 @@ npcs:
     with performing, an unusually large volume of tasks nominally belonging to other roles around him,
     trackable as a standing condition rather than a one-time act.
   concerns: NPC-005
+  tie: institution
 - case: NPC-011
   name: Alexios Laskaris
   institution: Altonian
@@ -269,6 +298,7 @@ npcs:
     enter Crown territory as a recognized, non-hostile visitor with distinct standing from an ordinary
     foreign national, and must be able to leave again, repeatedly, across multiple seasons.
   concerns: NPC-082
+  tie: neighbour
 - case: NPC-035
   name: Theodor Kreutz
   institution: Löwenritter
@@ -277,6 +307,7 @@ npcs:
     one named individual rather than to the institution he nominally serves, such that a change in who
     holds that individual's position could, in principle, put his allegiance in question.
   concerns: NPC-033
+  tie: institution
 - case: NPC-036
   name: Wilhelm Voss
   institution: Crown
@@ -285,6 +316,7 @@ npcs:
     record -- the post itself must be able to affect what the Crown can materially do in a season, even
     in the total absence of an authored personal arc.
   concerns: NPC-083
+  tie: institution
 - case: NPC-037
   name: Annalie Reichard
   institution: Church
@@ -294,6 +326,7 @@ npcs:
     affiliation taking full effect on how she participates in play, not leaving her split between two
     institutional identities.
   concerns: NPC-005
+  tie: institution
 - case: NPC-039
   name: Magnus Klapp
   institution: Church
@@ -302,6 +335,7 @@ npcs:
     seat, trackable as a status distinct from either already holding that seat or having no claim to it
     at all.
   concerns: NPC-040
+  tie: institution
 - case: NPC-040
   name: Osten Jarnstal
   institution: Church
@@ -309,6 +343,7 @@ npcs:
   want: A Church figure must be able to be a standing candidate for a specific named virtue-seat, distinct
     from actually holding that seat.
   concerns: NPC-041
+  tie: institution
 - case: NPC-041
   name: Aldric Hann
   institution: Church
@@ -317,6 +352,7 @@ npcs:
     public-facing mode distinct from a contrasting non-visible mode, with the visible mode carrying its
     own distinct exposure profile compared to underground movement activity.
   concerns: NPC-003
+  tie: named
 - case: NPC-072
   name: Olaf Geirson
   institution: Löwenritter
@@ -325,6 +361,7 @@ npcs:
     command authority that materially affects that faction's military capability or action, distinct from
     an ordinary council seat with no command function.
   concerns: NPC-071
+  tie: institution
 - case: NPC-073
   name: Björn Holdar
   institution: null
@@ -332,6 +369,7 @@ npcs:
   want: A named seat on a faction's ruling council must be able to cast a distinct position on faction-wide
     policy decisions, separate from the seat-holder's regional/local authority.
   concerns: NPC-074
+  tie: named
 - case: NPC-074
   name: Ingrid Stenskald
   institution: null
@@ -340,6 +378,7 @@ npcs:
     faction policy that carries different weight or subject-matter authority than a territorial lord's
     seat on the same council.
   concerns: NPC-073
+  tie: named
 - case: NPC-080
   name: Vidar Haldorsen
   institution: null
@@ -348,6 +387,7 @@ npcs:
     he can detect a specific category of harm his own actions cause, such that he completes tasks with
     a real ongoing cost he is structurally incapable of noticing, through no fault of will or character.
   concerns: NPC-074
+  tie: neighbour
 - case: NPC-081
   name: Uta Falkenrath
   institution: null
@@ -355,6 +395,7 @@ npcs:
   want: A polity's highest office must be able to become vacant through its sitting holder's fall (defeat,
     death, removal), triggering a competition among multiple named candidates for succession.
   concerns: NPC-010
+  tie: neighbour
 - case: NPC-082
   name: Njal Torberg
   institution: null
@@ -363,6 +404,7 @@ npcs:
     whichever specific leader currently pursues it, such that the leader's material successes do not automatically
     preserve that loyalty if his conduct diverges from the cause.
   concerns: NPC-090
+  tie: neighbour
 - case: NPC-084
   name: Frieda Kessler
   institution: null
@@ -372,6 +414,7 @@ npcs:
     one the faction's standard action uses -- without that opposition being invisible or automatically
     overridden.
   concerns: NPC-035
+  tie: neighbour
 - case: NPC-085
   name: Nessa Grindvold
   institution: court
@@ -380,6 +423,7 @@ npcs:
     regulatory action, with a distinct procedural venue where that challenge can be contested rather than
     resolved automatically by whichever side has more raw power.
   concerns: NPC-030
+  tie: institution
 - case: NPC-089
   name: Zoe Palaiologina
   institution: null
@@ -389,6 +433,7 @@ npcs:
     assertive pressure action, and outright invasion -- each carrying different costs and different threshold
     conditions for the more severe response.
   concerns: NPC-084
+  tie: neighbour
 - case: NPC-090
   name: Stephanos Doukas
   institution: null
@@ -397,3 +442,4 @@ npcs:
     treaty whose terms constrain what either side's trade officials can unilaterally change, such that
     violating or renegotiating it is a distinguishable act from ordinary commerce.
   concerns: NPC-089
+  tie: neighbour

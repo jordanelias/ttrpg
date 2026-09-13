@@ -85,13 +85,25 @@ HEADER = """# THE NPC ROSTER — who exists, where they live, what they want, wh
 """
 
 
-def derive() -> dict:
-    """The roster as the matchers see it. One place, called by `--build` and by `--check`."""
+def derive() -> tuple:
+    """`(roster, world)` as THE MATCHERS see it. One place, called by `--build` and by `--check`.
+
+    ⚠ `from_roster=False`, AND THE FIRST CUT OMITTED IT, WHICH MADE `--check` VACUOUS. It called
+    `build_realm(0)`, whose default READS `npcs.yaml` -- so the "derivation" this compares the
+    roster against was built FROM that same roster, and every row agreed with itself by
+    construction. A round-trip that cannot report drift is not a weak check but an absent one
+    (`CLAUDE.md` §0.1 pt 2), and it is the half of this tool that makes the roster a mechanism
+    rather than a snapshot. `build_realm`'s own docstring already named this caller as *"the one
+    caller that must not read the file it is about to write"*; the call did not obey it.
+
+    ⚠ IT RETURNS THE WORLD TOO, because `check` needs the same one to validate `home` and
+    `concerns` against and building a second costs a full realm (~10s) to reproduce a value it is
+    already holding.
+    """
     sys.path.insert(0, str(ROOT))
     from engine.season.harness import populated as POP
 
-    w = POP.build_realm(0)
-    geo, ven = POP._load(POP.GEOGRAPHY), POP._load(POP.VENUES)
+    w = POP.build_realm(0, from_roster=False)
     home_of, name_of = {}, {}
     for t in w.tenures:
         if t.kind == "contain" and t.live and t.subject in w.persons:
@@ -116,15 +128,19 @@ def derive() -> dict:
             "home": home_of.get(pid),
             "want": prop.predicate if prop is not None else None,
             "concerns": concerns,
+            # WHICH RULE CHOSE `concerns`. `build_realm` records it per case; this is the only
+            # reader, and `--check`'s drift comparison below is the second -- which is what keeps
+            # the column from being the field nothing reads that `01_AXIOMS.md` ID-13 forbids.
+            "tie": w._tie_of.get(cid),
         })
-    return {"meta": {"source": "engine/season/cases/NPC*.yaml",
-                     "generator": "tools/export_npc_roster.py",
-                     "count": len(rows)},
-            "npcs": rows}
+    return ({"meta": {"source": "engine/season/cases/NPC*.yaml",
+                      "generator": "tools/export_npc_roster.py",
+                      "count": len(rows)},
+             "npcs": rows}, w)
 
 
 def build() -> int:
-    data = derive()
+    data, _ = derive()
     body = yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=100)
     ROSTER.write_text(HEADER + "\n" + body, encoding="utf-8")
     print(f"[npc-roster] wrote {ROSTER.relative_to(ROOT)} — {data['meta']['count']} NPCs")
@@ -143,11 +159,10 @@ def check() -> int:
     # That is not a flaw worth fixing: a substring census is the only check that cannot be spelled
     # around, and the cost is that prose about the rule must avoid writing the rule's own name.
     on_disk = load_yaml(ROSTER)
-    fresh = derive()
+    fresh, w = derive()
     sys.path.insert(0, str(ROOT))
     from engine.season.harness import populated as POP
     cases = {str(c.get("id")) for c in POP.load_cases("NPC")}
-    w = POP.build_realm(0)
 
     hard = []
     for row in on_disk.get("npcs") or []:
@@ -165,7 +180,7 @@ def check() -> int:
         if old is None:
             drift.append(f"{r['case']}: in the corpus, absent from the roster")
             continue
-        for k in ("home", "institution", "concerns"):
+        for k in ("home", "institution", "concerns", "tie"):
             if old.get(k) != r.get(k):
                 drift.append(f"{r['case']}.{k}: roster {old.get(k)!r} vs derived {r.get(k)!r}")
 
