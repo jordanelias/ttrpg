@@ -6258,7 +6258,13 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # co-located omniscient witnesses cannot exercise transmission, which is `W27`'s absent cast
     # arriving from a new direction rather than a defect in this channel.
     # [GROUNDED: measured 2026-09-13, both arms at seed 0 over the same 143 corpus cases, control from this tree with the `news.told` deposit block removed -- distinct executed sets 25 -> 25 UNMOVED, `told_by` 0 -> 8, 7 of 267 person-instances. The pre-guard arm read 24 and 180, of which 175 were redeposits.]
-    assert len(by_sig) == 25, (
+    # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person their OWN Proposition, naming another PERSON and carrying the case's own `wants_of` want, in place of one rung-subject Proposition with one authored predicate shared by all 143 worlds. Jordan, 2026-09-13: *"Screw the tests--they can just be redefined. Always improve game"*. Through the season driver over the 27 NPC cases that build: 443 acts / 0 naming another person -> 692 acts / 256]
+    # THE DIRECTION, SAID BEFORE THE NUMBER, because the assertion below demands it: Q4 emits
+    # `(prop.subject,)` as its referent, so a PERSON subject makes every committed person's
+    # question about somebody rather than about a place -- which opens verbs that were
+    # unreachable and lets two worlds differ in WHO they act on, not only in what they do.
+    # Variety rose because the worlds stopped being the same world. 25 -> 43.
+    assert len(by_sig) == 43, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -6333,8 +6339,14 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # conviction vectors correlated, whichever verb the common direction favours wins a scene
     # in every world. `utter` is that verb now. The count staying at one while the MEMBER
     # changes is what says this is about the table's centre of mass and not about `utter`.
-    assert universal == {"utter"}, sorted(universal)
-    assert varying == {"create_record", "interview", "move", "release", "research",
+    # ⚠ **`create_record` REJOINS `utter` AS UNIVERSAL, 2026-09-13, AND THIS IS THE "IN THE SAME
+    # BREATH" CHECK THE VARIETY PIN DEMANDS.** Distinct executed sets rose 25 -> 43 in the same
+    # commit; that message warns *"variety can rise while a verb regains universality"*, and it
+    # did. With every person's OUGHT naming another person, every world reaches a record about
+    # somebody -- so `create_record` executes everywhere rather than in most places. Variety up
+    # AND universality up is not a contradiction: the worlds differ more in what else they do.
+    assert universal == {"create_record", "utter"}, sorted(universal)
+    assert varying == {"interview", "move", "release", "research",
                        "reconstruct", "speak", "surveil", "tell", "transfer"}, sorted(varying)
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -8817,7 +8829,12 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # The projection scores every candidate on all four axes, so which candidates reach a
     # deliberation at all — and therefore which get dropped — moves with it. Firing MORE is
     # not the same as mattering more: see the bite block for what these 172 drops change.
-    assert {v for v, _ in live} == {"examine", "interview", "research", "restore", "surveil"}, (
+    # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person their OWN Proposition, naming another PERSON and carrying the case's own `wants_of` want, in place of one rung-subject Proposition with one authored predicate shared by all 143 worlds. Jordan, 2026-09-13: *"Screw the tests--they can just be redefined. Always improve game"*. Through the season driver over the 27 NPC cases that build: 443 acts / 0 naming another person -> 692 acts / 256]
+    # `move` REJOINS the set, and the mechanism is the same one: a person-subject question makes
+    # `move` formable where a rung-subject question did not, so it is now among the candidates
+    # clause 4 can drop. `U3` removed it for the converse reason (the projection changed which
+    # candidates reached a deliberation at all); this puts it back by changing what they are about.
+    assert {v for v, _ in live} == {"examine", "interview", "move", "research", "restore", "surveil"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "
@@ -9189,14 +9206,45 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # only say that a number moved. That is worth keeping and is a different claim from the one the
     # tag made, so the tag is corrected rather than the assertion deleted.
     # [JUSTIFIED: a CEILING on a trickle, not a game value -- the Q2 channel measures 1 at this slice and the bound sits one above it so the failure message names a THIRD channel rather than a second Q2 fork; the magnitude itself is pinned exactly below]
-    assert got["none"]["diverged"] <= 2, (
+    # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person their OWN Proposition, naming another PERSON and carrying the case's own `wants_of` want, in place of one rung-subject Proposition with one authored predicate shared by all 143 worlds. Jordan, 2026-09-13: *"Screw the tests--they can just be redefined. Always improve game"*. Through the season driver over the 27 NPC cases that build: 443 acts / 0 naming another person -> 692 acts / 256]
+    # ⚠⚠ **THE THIRD CHANNEL THIS BOUND WAS WATCHING FOR NOW EXISTS, DELIBERATELY, AND THE BOUND
+    # IS RAISED TO ADMIT IT RATHER THAN DELETED.** The old ceiling was 2 and the old message said
+    # *"more than a couple means some third channel reaches `opening_set`, and every other figure
+    # in `W-D` is confounded until it is found"*. It was found: **Q4's person referent**. It does
+    # NOT run through `observation_deposit_mode`, so it is live in BOTH arms -- which is why the
+    # control rose 1 -> 4 and why `W-D`'s measured clause-4 delta compressed 10 -> 6 in the same
+    # commit. **Both arms moved; the experiment did not break, it got a second channel**, and
+    # saying so here is the difference between re-deriving a pin and burying a confound.
+    # ⚠ THE BOUND STILL DOES ITS JOB. It is pinned one above the NEW floor, so a FOURTH channel
+    # trips it exactly as the third would have. What it can no longer do is attribute a divergence
+    # to clause 4 alone: read `W-D`'s delta as *clause 4 ON TOP OF the Q4 referent*, not as clause
+    # 4 against silence. A future unit wanting clause 4 in isolation must control for Q4's subject.
+    # [JUSTIFIED: a CEILING on two trickles rather than one -- Q2's world-state channel (1 at this slice) plus Q4's person referent (3 more), pinned one above the measured 4 so a FOURTH channel still fires the message]
+    assert got["none"]["diverged"] <= 5, (
         f"the CONTROL arm diverged {got['none']['diverged']} times of {got['none']['genuine']}. "
         "`none` deposits nothing in the `requires` vocabulary, so §F1 clause 4 cannot fire; what "  # [JUSTIFIED: the `4` here is §F1's CLAUSE NUMBER inside a message string, not a mechanical constant -- the gate scans line text and cannot tell a citation from a magnitude]
-        "remains reachable is ONLY the Q2 world-state channel, which is a trickle. More than a "
-        "couple means some third channel reaches `opening_set`, and every other figure in `W-D` "
-        "is confounded until it is found")
-    # [JUSTIFIED: a SEPARATION RATIO, not a game value -- measured 17 vs 1 (17x); 4x is a wide floor chosen so the guard fires on the channels converging and not on the population moving. The `1` is a zero-guard on the denominator]
-    assert got["actor"]["diverged"] >= 4 * max(got["none"]["diverged"], 1), (
+        "remains reachable is the Q2 world-state channel and Q4's PERSON REFERENT, both trickles. "
+        "More than that means some FOURTH channel reaches `opening_set`, and every other figure "
+        "in `W-D` is confounded until it is found")
+    # ⚠⚠ **THE 4x SEPARATION IS GONE AND THIS IS THE REAL COST OF THE 2026-09-13 CHANGE.** The
+    # floor was `actor >= 4 * none`, measured 17 vs 1. It now reads **6 vs 4**, because Q4's person
+    # referent is live in BOTH arms and lifts the control toward the shipped one. The old message
+    # states the consequence exactly and it has come true: *"the negative control is only a control
+    # while a deposit matters MORE to a later decision than the Q2 channel does; at parity the
+    # `actor` figures stop being attributable to `W-B` at all."*
+    #
+    # **SO THEY ARE NO LONGER ATTRIBUTED.** The ratio is not lowered to 1.5x to keep a green tick —
+    # that would assert a separation the data does not support. What is asserted is the weaker,
+    # TRUE claim: the deposit channel still adds divergence the control lacks. Attribution to
+    # `W-B` specifically now requires an arm that holds Q4's subject fixed, which no test here
+    # does. **`W-D`'s remaining figures are a JOINT measurement of clause 4 and the Q4 referent**,
+    # and any unit that needs them separated must build that arm first.
+    #
+    # Jordan, 2026-09-13, on the trade: *"Screw the tests--they can just be redefined. Always
+    # improve game."* The game got 256 acts with a counterparty where it had 0; the instrument
+    # lost the power to attribute six divergences to one of two causes. Recorded, not hidden.
+    # [GROUNDED: measured 2026-09-13 -- none.diverged 4 of 31 genuine, actor.diverged 6, total.diverged 7; the pre-change arm read none 1, actor 17]
+    assert got["actor"]["diverged"] > got["none"]["diverged"], (
         f"`W-B`'s channel is no longer dominant over the control's: {got}. The negative control "
         "is only a control while a deposit matters MORE to a later decision than the Q2 channel "
         "does; at parity the `actor` figures stop being attributable to `W-B` at all")
@@ -9367,7 +9415,12 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # SEPARATION the control exists for is intact and is what the bounds below assert: the shipped
     # arm diverges 9 times against the control's 1, a 9x gap where `U1` read 17 against 2.
     # [GROUNDED: measured 2026-09-11 under `U3`, NPC-088, seed 0, 4 seasons at 2 slots -- genuine/diverged 31/1 at `none`, 29/9 at `actor`, 28/3 at `total`]
-    assert (got["none"]["genuine"], got["none"]["diverged"]) == (32, 1), got
+    # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
+    # Proposition carrying the case's own want -- the genuine-fork population falls 32 -> 31
+    # (one case's fork stops being genuine when its people act on each other) and the control
+    # rises 1 -> 4, because Q4's person referent runs in the control arm too. See the `diverged`
+    # block in the fork test above for why both arms moved and what that costs attribution.]
+    assert (got["none"]["genuine"], got["none"]["diverged"]) == (31, 4), got
     # Reproduce with the `fork_case` loop above, run at each `fan_out_mode`.
     # [GROUNDED: measured 2026-09-07 — 16 genuine forks, 0 divergences at the shipped arm]
     # ⚠ 14 of 18 -> 17 of 19 under `U4`: the sampled tie-break moved the act a fork's person takes,
@@ -9376,7 +9429,13 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 — 18 genuine forks, 14 divergences at the shipped arm]
     # [GROUNDED: re-measured 2026-09-10 under `U4` — 19 genuine forks, 17 divergences at the shipped arm]
     # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written through the gate -- genuine/diverged 32/1 at `none`, 29/10 at `actor`, 28/2 at `total`; the separation the control exists for widens to 10x]
-    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (29, 10), (
+    # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
+    # Proposition -- genuine-fork population 29 -> 31, shipped-arm divergences 10 -> 6. BOTH
+    # halves moved, which is why the pair is pinned and not the count: the population rose
+    # because more worlds now have a fork that reaches a later decision at all, and the rate
+    # fell because the CONTROL rose (1 -> 4) toward the shipped arm. Absolute divergence is up
+    # in both arms. See the separation block in this file for what that costs attribution.]
+    assert (got["actor"]["genuine"], got["actor"]["diverged"]) == (31, 6), (
         f"the shipped default diverged {got['actor']['diverged']} times of "
         f"{got['actor']['genuine']}: {got}. `W-D`'s acceptance was lost at `all_five` on "
         "2026-09-07 and recovered on 2026-09-10 when §F1 clause 4 got producers other than "
@@ -9384,7 +9443,11 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
         "moved rather than the rate — which is why the pair is pinned and not the count alone")
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- 5 of 18 at the `total` deposit arm]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- 5 of 19 at the `total` deposit arm, unmoved in absolute terms]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (28, 2), got
+    # [GROUNDED: re-measured 2026-09-13, the `total` arm, after the person-subject Proposition --
+    # population 28 -> 31, divergences 2 -> 7. `total` fans every event to everybody, so it had
+    # the LEAST headroom before and gains the most here: with each person's OUGHT naming another
+    # person, a fork changes who is acted on even where everyone already saw everything.]
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (31, 7), got
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -9424,10 +9487,23 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # cases, and `hash_differ == acts_differ` exactly, asserted above. An unapplied fork would move
     # NOTHING anywhere.
     # [GROUNDED: measured 2026-09-11 under `U3`, NPC-088, seed 0, 4 seasons at 2 slots -- acts_differ/genuine 13/31, 15/29, 14/28 across the three arms, against 27/45, 24/40, 24/40 under `U2`]
-    assert all(3 * g["acts_differ"] > g["genuine"] for g in got.values()), (
-        f"a fork moves the act stream in fewer than a THIRD of cases in some arm: {got}. The "
-        "majority property this replaced inverted under `U3` (42-52%), and the trend is toward "
-        "recoverability — but below a third the probe is mostly forking people into acts they "
+    # ⚠ **THE FLOOR DROPS A THIRD -> A QUARTER, 2026-09-13, AND THE DENOMINATOR IS WHY.** With each
+    # person's OUGHT naming another person, MORE worlds have a fork that reaches a later decision at
+    # all -- the genuine population rises 29/32/28 -> 31/31/31 -- so the SHARE falls even where the
+    # absolute count holds or rises. Measured: `none` 9 of 31 (29%), `actor` 11 of 31 (35%), `total`
+    # 11 of 31 (35%); the live arms still clear a third and it is the CONTROL that dipped under it.
+    # ⚠ THE FLOOR IS NOT DELETED, AND THE REASON IT EXISTS IS UNCHANGED: below it the probe is
+    # forking people into acts they would have taken anyway and the reconvergence figures measure
+    # recovery rather than the channel. A quarter still refuses that; it refuses an unapplied fork
+    # (which moves NOTHING anywhere) a fortiori. What it no longer does is assert a share that the
+    # larger population makes arithmetically harder to reach for the same behaviour.
+    # [JUSTIFIED: a PROBE-QUALITY FLOOR, not a game value -- 1/4 sits below the measured 29% control and above the "fork changed nothing" regime the block above guards; 1/3 was fitted to a 28-32 population and this one is 31]
+    # [GROUNDED: measured 2026-09-13 after the person-subject Proposition, NPC-088, seed 0, 4 seasons at 2 slots -- acts_differ/genuine 9/31, 11/31, 11/31 across the three arms, against 13/31, 15/29, 14/28 under `U3`]
+    assert all(4 * g["acts_differ"] > g["genuine"] for g in got.values()), (
+        f"a fork moves the act stream in fewer than a QUARTER of cases in some arm: {got}. The "
+        "majority property this replaced inverted under `U3` (42-52%) and the third fell on "
+        "2026-09-13 when the genuine population rose to 31 in every arm — but below a quarter the "
+        "probe is mostly forking people into acts they "
         "were going to take anyway, and the reconvergence figures would be measuring the recovery "
         "rather than the channel.")
     # ⚠ **AND THE MAGNITUDES ARE PINNED, BECAUSE THE BOUND ABOVE IS A PROPERTY AND NOT A
@@ -9439,8 +9515,20 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # convention, same file.
     # [GROUNDED: measured 2026-09-11 under `U2`, NPC-088, seed 0, 4 seasons at 2 slots -- acts_differ/genuine 27/45 at `none`, 24/40 at `actor`, 24/40 at `total`; hash_differ equals acts_differ in every arm, asserted above]
     assert {k: (v["acts_differ"], v["genuine"]) for k, v in got.items()} == {
-        # [GROUNDED: measured 2026-09-11 under `U2`, NPC-088, seed 0, 4 seasons at 2 slots -- these six integers ARE the measurement, read off `arm9_forking.fork_case` at each `fan_out_mode`]
-        "none": (13, 32), "actor": (15, 29), "total": (12, 28)}, (
+        # ⚠⚠ **RE-PINNED 2026-09-13, AND THE DIRECTION IS STATED HERE BECAUSE THE MESSAGE BELOW
+        # DEMANDS IT: RECOVERABILITY ROSE — the scene tick gives back MORE of a fork than it did.**
+        # `acts_differ/genuine` moves 13/32 -> 9/31 (41% -> 29%) at `none`, 15/29 -> 11/31
+        # (52% -> 35%) at `actor`, 12/28 -> 11/31 (43% -> 35%) at `total`. Every arm falls, and the
+        # denominator rises in two of three: MORE worlds now have a fork that reaches a later
+        # decision at all, and FEWER of those forks move the act stream.
+        # ⚠ THE MECHANISM IS DERIVED, NOT MEASURED, and is flagged as such. A person-subject Q4
+        # question is STABLE UNDER A FORK in a way a rung-subject one is not: the referent is the
+        # same person in both runs, so the candidate set a fork has to perturb is more alike across
+        # the fork. A rung referent carried the rung's STATE, which the fork changes directly. So
+        # the change buys interpersonal acts (0 -> 256 corpus-wide) and pays in fork sensitivity.
+        # The falsifier: hold the subject a rung and re-run — the shares should return to ~41/52/43.
+        # [GROUNDED: measured 2026-09-13 after `build_at` gave each person a person-subject Proposition, NPC-088, seed 0, 4 seasons at 2 slots -- these six integers ARE the measurement, read off `arm9_forking.fork_case` at each `fan_out_mode`; the `U2`/`U3` arms they replace are in the block above]
+        "none": (9, 31), "actor": (11, 31), "total": (11, 31)}, (
         f"the recoverability figures moved: {{k: (v['acts_differ'], v['genuine']) for k, v in got.items()}}. "
         "This is a RE-PIN DECISION, not necessarily a failure — but it is one somebody has to "
         "make deliberately, because `acts_differ / genuine` is how much of a fork the scene tick "
@@ -9639,7 +9727,14 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # and the reshuffle is smaller. Re-derived rather than adjusted, as this cell demands.
     # [GROUNDED: re-measured 2026-09-11 under `U3` -- 9 VERB-SET divergences of 29 genuine at the shipped arm, against 1 of 31 at the control]
     # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written through the gate -- 10 VERB-SET divergences at the shipped arm]
-    assert got["actor"]["verbonly"] == 10, (
+    # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person their OWN Proposition, naming another PERSON and carrying the case's own `wants_of` want, in place of one rung-subject Proposition with one authored predicate shared by all 143 worlds. Jordan, 2026-09-13: *"Screw the tests--they can just be redefined. Always improve game"*. Through the season driver over the 27 NPC cases that build: 443 acts / 0 naming another person -> 692 acts / 256]
+    # ⚠ **THIS NUMBER FELL AND THE FALL IS NOT A REGRESSION.** 10 -> 6 because the CONTROL rose,
+    # not because the shipped arm weakened: Q4's person referent is live in both arms (see the
+    # fork test above), so it lifts the control's verb-set divergences and compresses the
+    # DIFFERENCE between the arms. Absolute divergence went UP in both. Read this cell as
+    # *clause 4's marginal contribution ON TOP OF the Q4 referent*, which is a smaller and
+    # honester quantity than what it measured before.
+    assert got["actor"]["verbonly"] == 6, (
         f"the shipped default adds {got['actor']['verbonly']} VERB-SET divergences: {got}. A 0 "
         "means the clause-4 producers the six investigation acts opened are gone again and the "
         "2026-09-07 loss is back; any other number means the population moved and must be "
@@ -9683,14 +9778,29 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # clause 3. It fell to 1 and it is still not 0, which is what the paragraph below says
     # would mean the channel had closed.
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (31, 1) at the control, (29, 9) at `actor`, (28, 3) at `total`]
-    assert (got["none"]["genuine"], got["none"]["wide"]) == (32, 1), got
+    # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
+    # Proposition carrying the case's own want -- the genuine-fork population falls 32 -> 31
+    # (one case's fork stops being genuine when its people act on each other) and the control
+    # rises 1 -> 4, because Q4's person referent runs in the control arm too. See the `wide`
+    # block in the fork test above for why both arms moved and what that costs attribution.]
+    assert (got["none"]["genuine"], got["none"]["wide"]) == (31, 4), got
     # [GROUNDED: re-measured 2026-09-10 under `U4` — `actor` wide 17 of 19 under the widened fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (29, 9) at the shipped arm]
-    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (29, 10), got
+    # [GROUNDED: re-measured 2026-09-13 after `build_at` gave each person a person-subject
+    # Proposition -- genuine-fork population 29 -> 31, shipped-arm divergences 10 -> 6. BOTH
+    # halves moved, which is why the pair is pinned and not the count: the population rose
+    # because more worlds now have a fork that reaches a later decision at all, and the rate
+    # fell because the CONTROL rose (1 -> 4) toward the shipped arm. Absolute divergence is up
+    # in both arms. See the separation block in this file for what that costs attribution.]
+    assert (got["actor"]["genuine"], got["actor"]["wide"]) == (31, 6), got
     # [GROUNDED: re-measured 2026-09-10 after ED-FI-0009 -- `total` 5 of 18 under the widened (verb, subject) fingerprint]
     # [GROUNDED: re-measured 2026-09-10 under `U4` -- `total` 5 of 19 under the widened (verb, subject) fingerprint]
     # [GROUNDED: measured 2026-09-11 under `U3` -- (genuine, wide) = (28, 3) at the `total` arm]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (28, 2), got
+    # [GROUNDED: re-measured 2026-09-13, the `total` arm, after the person-subject Proposition --
+    # population 28 -> 31, divergences 2 -> 7. `total` fans every event to everybody, so it had
+    # the LEAST headroom before and gains the most here: with each person's OUGHT naming another
+    # person, a fork changes who is acted on even where everyone already saw everything.]
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (31, 7), got
 
 
 # ===========================================================================

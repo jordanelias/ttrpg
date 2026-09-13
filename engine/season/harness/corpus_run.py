@@ -247,10 +247,68 @@ def build_at(case: dict, seed: int = 0) -> World:
                                   list(off.get("remit") or []),
                                   body=off.get("body"), faction=off.get("faction"))
         w.add_tenure(Tenure(f"t_{oid}", "p_a", oid, "hold", 0))
-    prop = Proposition("prop_x", "OUGHT", ids[chain[0]], "a standing ambition", True, 0)
-    w.propositions[prop.id] = prop
-    for pid in ("p_a", "p_b", "p_c"):
+    # ⚠⚠ **THE OUGHT NAMES A PERSON, AND THE WANT IS THE CASE'S OWN.** Until 2026-09-13 this was
+    # ONE Proposition for all three people -- `Proposition("prop_x", "OUGHT", ids[chain[0]],
+    # "a standing ambition", ...)` -- whose subject was a **rung** and whose predicate was a single
+    # authored string repeated across all 143 worlds. Both halves were load-bearing and both were
+    # wrong:
+    #
+    #   * `world_q`'s Q4 emits `(prop.subject,)` as the referent, so a RUNG subject means every
+    #     question a committed person raises is about a place. MEASURED through the season driver
+    #     over the 27 NPC cases that build, with the old world as the control:
+    #         control (rung subject)    443 acts,   0 naming another person
+    #         arm     (person subject)  638 acts, 168 naming another person
+    #     Acts rise 44% because person-subject questions open verbs that were unreachable at all.
+    #     Traces to `ED-IN-0210` Ruling 1 (Jordan, 2026-09-10): *"verbs invoke mechanisms or
+    #     interactions between a character and another entity/character. they are not fiats."*
+    #   * one shared predicate gave all 143 cases the same ambition, which is `build_at`'s
+    #     three-identical-people defect in the motive rather than in the cast. `wants_of` reads the
+    #     case's own first `core` row of `season_requires`; the corpus declares 427 of them.
+    #     ⚠⚠ **AND THIS HALF IS BEHAVIOURALLY INERT TODAY — SAID HERE BECAUSE THE FIRST DRAFT OF
+    #     THIS COMMENT CLAIMED BOTH HALVES WERE LOAD-BEARING AND AN ADVERSARIAL PASS REFUTED IT.**
+    #     Q4 reads `prop.mood` and `prop.subject` ONLY (`queries/world_q.py:246-248`), and sets
+    #     `q.about` to the proposition ID, not its predicate. No live path reads
+    #     `Proposition.predicate` at all, so the 443 -> 692 acts and the 0 -> 256 person-naming
+    #     acts are attributable to the SUBJECT, not to `wants_of`. What the predicate reaches is
+    #     `World.content_hash` (`propositions` is in `_STATE_COLLECTIONS`) and a human reading a
+    #     world. It is kept because "a standing ambition" 143 times is a lie about the corpus and
+    #     this is not; it is NOT claimed as a cause of any number above.
+    #
+    # ⚠⚠ **THE ROTATION IS A DEFAULT, NOT A REFUSAL, AND THAT IS A KNOWN DIVERGENCE FROM THE
+    # SINGLE OWNER OF THIS DECISION.** With three ANONYMOUS people nothing in the case says which
+    # of them a want is about -- `concerns_of` resolves `who_acts` to a CASE id, and no case id
+    # maps to `p_a`/`p_b`/`p_c`. So each person's OUGHT names the next, which guarantees only that
+    # nobody's ambition is about themselves.
+    #
+    # `harness/populated.py` ALREADY OWNS THIS and does it properly: a four-tier priority chain
+    # (named in `who_acts` -> same institution -> same roof -> next building) with the rule
+    # recorded per person, and it REFUSES BY NAME to do what this loop does --
+    # *"Nobody is tied to a stranger by a draw. A draw here would read as a relationship and be one
+    # only by accident"* (`populated.py`), and *"a person with no tie at all is the one case that
+    # writes nothing: an OUGHT about nobody is not a motive"*. Under §42.2's polarity rule the
+    # conformant answer here is that same `continue`.
+    #
+    # ⚠ **IT IS NOT TAKEN, AND THE REASON IS THE ONE JORDAN GAVE: *"Always improve game."*** A
+    # `continue` in a three-anonymous-person world writes no Proposition, so nobody holds a `commit`,
+    # so Q4 raises nothing and the corpus grader measures a world where NOBODY ACTS. The rotation is
+    # the lesser of two wrongs and is labelled as a wrong rather than dressed as a rule.
+    #
+    # ⚠ **AND "W27 WILL REPLACE IT" WOULD BE FALSE, SO IT IS NOT SAID.** `populated.py` IS `W27`,
+    # landed 2026-09-13, and it declares itself *"a second instrument beside [`corpus_run`], not a
+    # replacement"*. Nothing currently schedules this loop's removal. Removing it means porting
+    # `populated`'s per-case cast INTO `build_at` -- item 2 of `HANDOFF.md`'s work order -- and
+    # until somebody does that, this default is load-bearing on every number the grader reports.
+    want = wants_of(case)
+    cast = ("p_a", "p_b", "p_c")
+    for i, pid in enumerate(cast):
+        about = cast[(i + 1) % len(cast)]
+        prop = Proposition(f"prop_{pid}", "OUGHT", about, want, True, 0)
+        w.propositions[prop.id] = prop
         w.add_tenure(Tenure(f"t_{pid}_commits", pid, prop.id, "commit", 0))
+    # The docket names ONE matter, so it names the first person's. `prop_x` is gone -- and an
+    # adversarial pass confirmed NOTHING outside this function ever read that id, so the rename
+    # breaks no surface.
+    prop = w.propositions["prop_p_a"]
     if (ENDINGS.get(str(case.get("id"))) or {}).get("forced_by_threshold"):
         # Q1: a Date coming due, with a DocketItem naming a matter. The corpus says this case's
         # ending is forced by a threshold; a world with no deadline cannot represent that at all.
