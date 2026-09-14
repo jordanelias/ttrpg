@@ -272,9 +272,32 @@ def row_key_log_closure():
 
     PARTIAL today: module_contracts.yaml declares each module's key IN/OUT, so an
     emitted type with no declared consumer is statically visible. That is a real
-    finding and worth surfacing now. It is NOT the full row — the full row is
-    measured over an actual season KeyLog, where a contract-declared consumer that
-    never fires is also a defect and static analysis cannot see it.
+    finding and worth surfacing now. It is NOT the full row — the full row would also
+    catch a contract-declared consumer that never FIRES, which static analysis cannot see.
+
+    ⚠⚠ **AND THE RUNTIME HALF IS NOT REACHABLE BY RUNNING THE HEAD, WHICH THIS ROW USED TO
+    IMPLY IT WAS.** Its `unblocked_by` read *"a season KeyLog"* — as though running
+    `engine/season/` for long enough would produce one. It does not. MEASURED 2026-09-14:
+
+      * `engine/season/` contains **no KeyLog and no `engine.substrate.keys` import** — the two
+        mentions of the module are a docstring and a comment. A 2-season headless run emits
+        **119 `Event`s across 11 kinds** (`claim.deposited`, `news.told`, `proposition.uttered`,
+        …) into `World.log`, and **zero Keys**.
+      * **0 of the 17 Key-EMITTING modules in `module_contracts.yaml` live under
+        `engine/season/`.** They sit in `engine/autoload/` (2), `systems/*/sim/` (7), or declare
+        `sim_module: none` (7).
+
+    So a season of the ratified head exercises **none** of the emitters this row is about. The
+    Key bus and the season loop are two different carriers, and whether the head should ever
+    adopt Keys is a design question nobody has taken.
+
+    ⚠ **THIS IS ED-IN-0226's REPAIR APPLIED ONE ROW ALONG.** That entry re-pointed rows 1-2 off
+    `mc_v18` because *"a gate aimed at the wrong tree does not report nothing — it answers the
+    question it was built to answer, INCORRECTLY, in the direction that looks like progress."* An
+    `unblocked_by` naming an artifact the head cannot produce is the same error in the other
+    direction: it sends the next session to run seasons until a KeyLog appears, and none will.
+    The row stays PARTIAL — that part was always honest — and now says what would actually
+    move it.
     """
     path = _repo(CONTRACTS)
     if not os.path.exists(path):
@@ -335,11 +358,13 @@ def row_key_log_closure():
         'value': len(strict),
         'value_effective': len(effective),
         # Never True from static analysis alone: a contract-declared consumer that never
-        # fires at runtime is a dead seam this pass cannot see. Only a season KeyLog can —
-        # and a wildcard consumer is exactly the case where "declared" says least about
-        # "fires", which is the argument for measuring this over a real KeyLog.
+        # fires at runtime is a dead seam this pass cannot see, and a wildcard consumer is
+        # exactly the case where "declared" says least about "fires". What this pass cannot
+        # do, running the HEAD also cannot do — see the docstring's measurement.
         'passes': None,
-        'unblocked_by': 'a season KeyLog (a declared — especially wildcard — consumer may never fire)',
+        'unblocked_by': ('a run that exercises the Key bus — NOT a season of the head: 0 of the '
+                         '17 emitting modules live under engine/season/, which emits Events and '
+                         'no Keys (measured 2026-09-14)'),
         'detail': (
             f"{len(emitted)} emitted · {len(terminal)} declared terminal · "
             f"{len(strict)} unconsumed by name"

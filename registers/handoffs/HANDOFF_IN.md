@@ -4016,3 +4016,53 @@ with this session's changes stashed.
 costs neither test any strength. NOT taken here: it changes test concurrency and belongs in its own
 diff, not bundled into one about invariants. `with_mtime=False` is the WRONG fix — it would stop
 detecting a rewrite with identical bytes, which is what that test is for.
+
+---
+
+## 2026-09-14 (later still) — M1's remaining two rows, characterised precisely
+
+**Row 5 is MEASURED and passes** (above). That leaves rows 3 and 4, and **neither can be moved
+from this repository by writing code here.** Both were investigated rather than assumed.
+
+### Row 4 (FAIL, 0/7) — where the seven junctures actually live
+
+| # | juncture | lane | why it cannot close here |
+|---|---|---|---|
+| 1 | Strategic decision | FA | half A landed 2026-08-21; **half B SUSPENDED by Jordan** |
+| 2 | Domain action | IN | `DomainActionSystem.gd` — **`jordanelias/valoria-game`, not attached** |
+| 3 | Social contest | SC | **HARD-blocked** on ED-SC-0003/0004/0005, all `needs_jordan: true` |
+| 4 | Personal combat | PC | **the only one actionable here** — R3 U-series, a lane arc |
+| 5 | Thread operation | WR | both items are document edits (§0.2: prose cannot close a juncture); tail is Jordan-gated |
+| 6 | Season close | IN | `GameDirector.gd` emitter — **valoria-game** |
+| 7 | Articulation render | IN | `ArticulationLayerV30.gd` trigger arms — **valoria-game** |
+
+**Three of seven are in the implementation repo, two are Jordan-gated, one is Jordan-suspended.**
+So row 4's 0/7 is not neglect — it is an accurate reading of where the work sits. ⚠ And **do not
+green it by editing the board**: §0.2 names that as the thing this row's DOC-DERIVED label exists
+to prevent. Junctures 6 and 7 are both explicitly marked *"running-code increment, no ruling"* —
+they are the cheapest real M1 movement available, in **valoria-game**.
+
+### Row 3 (PARTIAL) — its `unblocked_by` pointed at an artifact the head cannot produce
+
+It read *"a season KeyLog"*, implying that running `engine/season/` long enough yields one.
+**MEASURED — it does not:**
+
+* `engine/season/` holds **no KeyLog and no `engine.substrate.keys` import** (the two mentions are
+  a docstring and a comment). A 2-season headless run emits **119 `Event`s across 11 kinds** into
+  `World.log` and **zero Keys**.
+* **0 of the 17 Key-emitting modules in `module_contracts.yaml` live under `engine/season/`** —
+  they are in `engine/autoload/` (2), `systems/*/sim/` (7), or `sim_module: none` (7).
+
+The Key bus and the season loop are **two different carriers**. Whether the head should ever adopt
+Keys is a design question nobody has taken.
+
+⚠ **This is ED-IN-0226's repair one row along.** That entry re-pointed rows 1–2 off `mc_v18`
+because *"a gate aimed at the wrong tree answers the question it was built to answer, INCORRECTLY,
+in the direction that looks like progress."* An `unblocked_by` naming an unreachable artifact is
+the same error inverted — it would send the next session to run seasons until a KeyLog appeared,
+and none ever will. The row **stays PARTIAL** (that was always honest); only the pointer changed.
+
+### So M1 reads, honestly
+
+`2 PASS · 1 PASS (new) · 1 PARTIAL (correctly) · 1 FAIL (blocked elsewhere)` → **NOT MET**, and
+the single failing row is blocked on Jordan's rulings and on a repository this session cannot see.
