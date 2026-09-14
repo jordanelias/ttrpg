@@ -396,7 +396,7 @@
       "kind": "scalar",
       "module": "engine.season",
       "file": "engine/season/data/cast.py",
-      "note": "[ED-IN-0228] Jordan's ruled scale; the definition of the unit, not a tunable",
+      "note": "[JUSTIFIED: Jordan's ruled 0-100 scale, ED-IN-0228 — the unit's definition, not a tunable]",
       "citation": "ED-IN-0228",
       "citation_grade": "source"
     },
@@ -407,7 +407,7 @@
       "kind": "scalar",
       "module": "engine.season",
       "file": "engine/season/data/cast.py",
-      "note": "[ED-IN-0228] [JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning]",
+      "note": "[JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning; ED-IN-0228]",
       "citation": "ED-IN-0228",
       "citation_grade": "source"
     },

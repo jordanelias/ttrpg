@@ -145,6 +145,22 @@ twin"*. Recorded here so the next allocator sees it rather than rediscovering it
 
 <a id="in"></a>
 
+**ED-IN-0228 and ED-IN-0229 allocated 2026-09-14**, next_free 228 -> 230, both `status: landed`,
+both `needs_jordan: false`. Moved here from the `IN:` lane row the same day, because two summaries
+took that row from 528 to 694 characters against a 600 cap —
+`test_narrative_does_not_creep_back_into_the_state_file` caught it, which is the guard doing
+exactly the job its docstring describes. The lane row keeps a one-line summary and this pointer.
+
+* **ED-IN-0228** — a faction's creed is an `OUGHT` subjected on its authored LEADER (never on the
+  faction name, which Q4 would put into every member's deliberation as a referent naming no
+  entity), and membership is weighted by a 0-100 loyalty carried on `Person.stance`, where
+  `decision/choose.py::stance_toward` reads it. Jordan ruling, three parts. The loyalty is
+  deliberately NOT on `Tenure.degree`: measured, nothing in `engine/season/` reads that field.
+* **ED-IN-0229** — the four ethical axes had two unreconciled owners. `engine/substrate/keys.py`
+  held a tuple literal and `engine/season/rosters.yaml: conviction_axes` held a `values:` list,
+  while the roster's own note claimed a loader refusal that did not exist. Both now resolve to
+  `references/descriptor_registry.yaml: axis_roster`, on the `conviction_roster` precedent.
+
 **ED-IN-0214 allocated 2026-09-11 ON MERGE** (next_free 214 -> 215), **BECAUSE THE RENUMBER
 DIRECTLY ABOVE LANDED ON A FOURTH COLLISION — AND THE ENTRY THAT MADE IT PREDICTED THIS IN ITS OWN
 TEXT.** PR #396 renumbered 0212 -> 0213 to avoid PR #395's spine row. Between that renumber and

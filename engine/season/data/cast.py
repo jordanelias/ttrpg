@@ -241,6 +241,25 @@ def defects() -> list[str]:
 # ⭐ RULED by Jordan, 2026-09-13: *"Loyalty can be invented. Just do it on a scale of 0-100."* The
 # SCALE is his; the SHAPE is read off canon rather than drawn, because a varying quantity makes a
 # better game than a constant and canon supplies the material for one.
+#
+# ⚠ **THERE IS A SECOND LOYALTY IN THE TREE AND IT IS NOT THIS ONE — SAID HERE SO NOBODY HAS TO
+# REDISCOVER IT COLD.** `systems/world/sim/npe.py:70` declares `LOYALTY_MIN = 0` / `LOYALTY_MAX = 3`
+# for a generated NPC's `affiliation_loyalty`. `tools/link_values_pointers.py` links both to the
+# same `ppt.loyalty` pointer, which is how this was found — by the link map, not by reading.
+#
+# They are not two ladders for one quantity (`CLAUDE.md` §0.06's S test), and the reason is
+# structural rather than a judgment call. MEASURED by AST 2026-09-14: `npe` has exactly ONE
+# importer in the whole tree, `systems/overview/sim/accounting.py`, and nothing under `engine/`
+# names `affiliation_loyalty` at all — so the two never meet at runtime, which
+# `test_importing_every_engine_module_pulls_in_no_subsystem` enforces from the other side. `npe`
+# is in the superseded tree; Jordan's 0-100 ruling is newer and names this scale explicitly.
+#
+# **So: do not reconcile them, and do not read `npe`'s 0-3 as a prior bound on this one.** If the
+# season engine ever needs an affiliation strength, it comes from here. The note exists because a
+# later session meeting `LOYALTY_MAX = 3` with no memory of this repo would otherwise read a
+# contradiction where there is a supersession — the exact failure `CLAUDE.md` §4 records under
+# `evacuate`, where a cold reading of one word escalated a non-existent blocker across five
+# surfaces.
 LOYALTY_SCALE = 100   # [JUSTIFIED: Jordan's ruled 0-100 scale, ED-IN-0228 — the unit's definition, not a tunable]
 # Orthogonal ethics: neither aligned with the creed nor against it. DERIVED from the scale and
 # not written as a second number — the cosine's `[-1,+1]` maps onto `[0, LOYALTY_SCALE]`, so
