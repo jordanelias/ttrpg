@@ -10930,23 +10930,49 @@ def test_the_populated_world_is_not_everybody_in_one_room():
         "`core` row from `season_requires`, of which the corpus declares 427")
 
     # AND THE WANT CONCERNS A PERSON — `ED-IN-0210` Ruling 1, verbs are not fiats.
-    # ⚠ QUANTIFIED OVER THE WANTS ONLY, AND A FACTION PROPOSITION IS THE REASON THE DISTINCTION
-    # NOW MATTERS RATHER THAN A LOOPHOLE IN IT. Q4 raises a question from a live `commit` to an
-    # **OUGHT**, emitting `(prop.subject,)` as the referent — so the rule this asserts binds every
-    # Proposition a person can be questioned about. The faction Propositions are `HOLDS`, exactly
-    # so that they carry membership without putting a faction NAME (not a person, not even a rung)
-    # into a referent; `build_realm` records that choice and the design question it leaves open.
-    # If a faction Proposition is ever made OUGHT, it lands in this assertion and must fail here
-    # until its subject is something an act can name.
+    # ⚠ QUANTIFIED OVER EVERY OUGHT, AND THE FACTION CREEDS ARE NOW INSIDE THE QUANTIFIER RATHER
+    # THAN EXEMPT FROM IT. Q4 raises a question from a live `commit` to an **OUGHT**, emitting
+    # `(prop.subject,)` as the referent, so this rule binds every Proposition a person can be
+    # questioned about. Until 2026-09-14 the faction Propositions were `HOLDS` and a second
+    # assertion here pinned them that way; Jordan ruled the creed an OUGHT (*"Faction creed as an
+    # ought: sure"*), so the pin is gone and the creeds are held to the SAME rule as the wants —
+    # which is the stronger statement, not the weaker one. A creed subjected on a faction NAME
+    # lands in this assertion and fails here.
     oughts = {k: p for k, p in w.propositions.items() if str(p.mood).upper() == "OUGHT"}
     about_people = [p for p in oughts.values() if p.subject in w.persons]
     assert len(about_people) == len(oughts), (
         f"{len(oughts) - len(about_people)} OUGHT proposition(s) name something that is not a "
         "person. Q4 emits `(prop.subject,)` as the referent, so a rung-subject proposition is "
         "exactly how `build_at` produced a corpus in which no act ever names anybody")
-    assert all(str(p.mood).upper() == "HOLDS" for p in factions_held.values()), (
-        "a faction Proposition is OUGHT. That puts a faction name into a Q4 referent, which is "
-        "the rung-subject defect one level worse — see `build_realm`'s membership block")
+
+    # THE CREED IS AN OUGHT ABOUT THE FACTION'S OWN LEADER, AND THE LOYALTY REACHES A READER.
+    # ⚠ BOTH HALVES ARE LOAD-BEARING AND THE SECOND IS THE ONE THAT WOULD HAVE ROTTED SILENTLY.
+    # A creed nobody is differently loyal to is a constant, and a loyalty written to a field
+    # `decision/choose.py` does not read is the deleted-`conferrer` defect (`carriers.py:48`).
+    # `stance_toward` sums `valence * weight` over a person's OWN rows, so the falsifier for
+    # "the loyalty is live" is that the rows exist, name the creed's subject, and DIFFER.
+    creeds = {k: p for k, p in factions_held.items() if str(p.mood).upper() == "OUGHT"}
+    assert creeds, (
+        "no faction Proposition is an OUGHT. Jordan ruled the creed an OUGHT on 2026-09-13; with "
+        "every faction back at HOLDS no member has a standing question about their faction at all")
+    leaders_named = {p.subject for p in creeds.values()}
+    for fid, prop in creeds.items():
+        want = POP.cast.faction_leader(prop.value)
+        assert want and prop.subject == f"p_{POP._slug(want)}", (
+            f"{fid}'s creed names {prop.subject}, but `rosters.yaml: faction_leaders.by_faction` "
+            f"names {want} for {prop.value}. The creed's referent is the authored leader or it is "
+            "invented canon")
+        assert prop.scope, f"{fid}'s creed carries no `role_template` in `scope` — it has no content"
+    weights = [row[1] * row[2] for p in w.persons.values() for row in p.stance
+               if row[0] in leaders_named]
+    assert len(weights) > c["persons"] / 2, (
+        f"only {len(weights)} loyalty stance rows across {c['persons']} people. Every member of a "
+        "faction with a creed carries one; far fewer means the membership loop stopped writing "
+        "them and `stance_toward` reads nothing")
+    assert min(weights) < 0 < max(weights), (
+        f"loyalty stance rows run {min(weights)}..{max(weights)} — all one sign. `cast.loyalty` "
+        "puts 50 at INDIFFERENT, not at average, so a faction with no opposed members means the "
+        "projection collapsed and every member is being read as aligned")
 
 
 def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():

@@ -236,3 +236,95 @@ def defects() -> list[str]:
         if fac is None:
             out.append(f"{cid}: faction {raw!r} resolves to no name on `rosters.yaml: factions`")
     return out
+
+
+# ⭐ RULED by Jordan, 2026-09-13: *"Loyalty can be invented. Just do it on a scale of 0-100."* The
+# SCALE is his; the SHAPE is read off canon rather than drawn, because a varying quantity makes a
+# better game than a constant and canon supplies the material for one.
+LOYALTY_SCALE = 100   # [JUSTIFIED: Jordan's ruled 0-100 scale, ED-IN-0228 — the unit's definition, not a tunable]
+# Orthogonal ethics: neither aligned with the creed nor against it. DERIVED from the scale and
+# not written as a second number — the cosine's `[-1,+1]` maps onto `[0, LOYALTY_SCALE]`, so
+# indifference is its midpoint by construction and cannot drift out of step with the scale.
+LOYALTY_INDIFFERENT = LOYALTY_SCALE // 2
+
+
+def faction_leader(faction: Optional[str]) -> Optional[str]:
+    """The case id of the faction's authored leader, or `None` where canon names none."""
+    from .rosters import roster_map
+    return (roster_map("faction_leaders", "by_faction") or {}).get(str(faction or ""))
+
+
+def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
+    """How far this person's own ethics run with their faction's, `0..100`. `None` if unmeasurable.
+
+    **50 IS INDIFFERENT, NOT AVERAGE.** The measure is the cosine between two positions in the
+    four-axis ethical space — the person's, and their faction's role template's — mapped from
+    `[-1, +1]` onto `[0, 100]`. So `100` is a person whose values point exactly where the faction
+    expects, `50` is orthogonal (the creed is simply not about anything they care about), and `0`
+    is someone whose ethics point the opposite way. A member at `0` is not a bad member; they are
+    an opposed one, which is a thing a political game should be able to represent.
+
+    ⚠⚠ **IT IS COMPUTED IN AXIS SPACE, AND THE FIRST WRITING COMPUTED IT OVER THE THIRTEEN.** That
+    version returned **0 for 14 of 35 placed people — including Inge Baralta, who LEADS Hafenmark,
+    and Magnus Vaynard, who leads Varfell.** The cause is sparsity, not disloyalty: a person holds
+    1–3 of the thirteen and a template names 5, so two can share no vocabulary at all and score a
+    bare zero. Projecting first asks *do these two point the same way ethically* instead of *do
+    they happen to use the same words* — which is what `key_substrate_v30.md` §2.4 says the axis
+    space is FOR: *"used by armature dot-products to produce per-observer interpretation."* After
+    the fix the spread is 2–100 with no zeros, and the low end is legible: Kolbrun Thale, the
+    Crown's Spymaster, reads 2.
+
+    ⚠ **A LEADER MAY SCORE LOW AND THAT IS CANON, NOT A BUG.** `faction_canon_v30.md` §4 on the two
+    factions sharing `military-order`: *"their differentiation comes from Mission, leader
+    Convictions, and stat profile, not role template."* Vaynard reads 3 against the order he leads
+    because his authored `Utility` pulls hard on the instrumental axis where `military-order`
+    expects `Honor`. A pragmatist at the head of a traditionalist order is a situation.
+
+    ⚠ **`None` FOR A FACTION WITH NO TEMPLATE, NEVER A DEFAULT.** `Guilds` and `Schoenland` have no
+    `role_template`, no expected convictions and no authored leader — so there is nothing to be
+    loyal TO, and inventing a midpoint would put a number where canon has a silence (§42.2's
+    polarity rule)."""
+    import math
+    from .convictions import to_axes
+    from .rosters import ROLE_TEMPLATE_OF, table
+    template = ROLE_TEMPLATE_OF.get(str(faction or ""))
+    if template is None:
+        return None
+    mine = to_axes(convictions_of(r))
+    theirs = to_axes((table("role_template_convictions") or {}).get(template) or {})
+    dot = sum(mine.get(a, 0.0) * theirs.get(a, 0.0) for a in set(mine) | set(theirs))
+    na = math.sqrt(sum(v * v for v in mine.values()))
+    nb = math.sqrt(sum(v * v for v in theirs.values()))
+    if not na or not nb:
+        return None                       # a person with no convictions has no ethics to compare
+    cosine = max(-1.0, min(1.0, dot / (na * nb)))
+    return round(LOYALTY_INDIFFERENT * (cosine + 1))
+
+
+# #353 `:333` types a stance row `(referent, valence -5..+5, weight 0..5)`, and `decision/choose.py
+# ::stance_toward` sums `valence * weight` over the rows naming a candidate's subject. Five is that
+# type's own bound, read off the row rather than chosen here.
+STANCE_VALENCE_SCALE = 5   # [JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning; ED-IN-0228]
+
+
+def stance_from_loyalty(value: Optional[int]) -> Optional[tuple]:
+    """A stance row's `(valence, weight)` from a `0..100` loyalty. `None` where loyalty is `None`.
+
+    **THE TRANSLATION IS A REFLECTION ABOUT INDIFFERENCE, NOT A RESCALE.** Loyalty is a magnitude
+    on one side of `LOYALTY_INDIFFERENT`; a stance row is a SIGN and a MAGNITUDE. So the sign comes
+    from which side of 50 the person sits and the weight from how far, which is why a member at 50
+    gets `(+1, 0)` — a row that sums to zero, indistinguishable in `stance_toward` from having no
+    row at all. That is the honest encoding of *"the creed is not about anything they care about"*,
+    and it means the indifferent member is not quietly given a small positive push.
+
+    ⚠ **EVERY CONSTANT HERE IS DERIVED AND NONE IS CHOSEN.** The divisor is
+    `LOYALTY_INDIFFERENT / STANCE_VALENCE_SCALE`, so the widest possible departure from
+    indifference (50 points) maps to the widest weight the row type permits (5) by construction.
+    Re-scale loyalty and the mapping follows; there is no second number to keep in step. The `min`
+    is a belt against a loyalty outside `0..100` reaching here, not a clamp doing real work."""
+    if value is None:
+        return None
+    offset = int(value) - LOYALTY_INDIFFERENT
+    per_step = LOYALTY_INDIFFERENT / STANCE_VALENCE_SCALE
+    weight = min(STANCE_VALENCE_SCALE, round(abs(offset) / per_step))
+    return (1 if offset >= 0 else -1, weight)

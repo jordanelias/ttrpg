@@ -914,6 +914,40 @@ rosters:
       "Löwenritter": military-order
       "Restoration Movement": reformist
 
+  faction_leaders:
+    source: >-
+      systems/factions/reference/faction_state_authoring_v30.md — each faction block's own `leader:`
+      field (crown :44 `almud`, church_of_solmund :92 `cardinal_himlensendt`, hafenmark :144
+      `baralta`, varfell :193 `vaynard`, restoration_movement :248 `yrsa_vossen`, lowenritter :302
+      `ehrenwall`). TIER 2, and it survives because `systems/world/` names no competing leader.
+    row: H-99
+    note: >-
+      ⚠ **WHY A FACTION NEEDS A PERSON AT ALL: Q4's REFERENT.** ⭐ Jordan ruled 2026-09-13 that a
+      faction's creed is an `OUGHT`. `world_q.questions_for`'s Q4 raises a standing question from
+      every live `commit` to an OUGHT and emits `(prop.subject,)` as the referent — and a faction
+      NAME is not a person and not even a rung, so a creed subject-ed on the faction would put a
+      non-entity into every member's deliberation. That is `build_at`'s measured rung-subject defect
+      one level worse: its one rung-subject Proposition produced **0 of 4,870 acts naming another
+      person**, which `ED-IN-0210` Ruling 1 exists to correct (*"verbs invoke mechanisms or
+      interactions between a character and another entity/character. they are not fiats."*).
+      So the creed is subject-ed on the faction's LEADER, who is a person an act can name.
+      ⚠ **THE SLUGS WERE VERIFIED AGAINST THE CAST, NOT ASSUMED.** Each authored slug resolves to
+      exactly one of the 46 registry rows, checked by surname match: `cardinal_himlensendt` is Arne
+      Himlensendt (NPC-021) and `ehrenwall` is Lisbeth Ehrenwall (NPC-070) — neither spelling
+      appears in the roster the way the faction file writes it, which is why this is a transcribed
+      mapping and not a runtime string match.
+      ⚠ **SIX OF EIGHT, AND THE SAME TWO ARE MISSING AS EVERYWHERE ELSE.** `Guilds` and
+      `Schoenland` have no authored leader — and no `role_template`, and no expected-conviction
+      vector. That is consistent rather than coincidental: a faction canon gives no head and no
+      expectations has no creed to commit to, and this file does not invent one for it.
+    by_faction:
+      "Crown": "NPC-020"                    # Almud Almqvist
+      "Church of Solmund": "NPC-021"        # Arne Himlensendt
+      "Hafenmark": "NPC-050"                # Inge Baralta
+      "Varfell": "NPC-052"                  # Magnus Vaynard
+      "Restoration Movement": "NPC-003"     # Yrsa Vossen
+      "Löwenritter": "NPC-070"              # Lisbeth Ehrenwall
+
   office_bodies:
     source: "`systems/world/reference/worldbuilding_v30.md` §6.1 (Court Parliament and Governance), §3.1 (Church Four-Cardinal structure), §4.1 (Löwenritter internal structure), §5.1 (Guild structure)."
     row: H-99
@@ -1120,6 +1154,73 @@ tables:
         full_operations: 800
         limited:         500
         withdrawal_only: 100
+
+  role_template_convictions:
+    source: >-
+      systems/factions/reference/faction_canon_v30.md §4 "Role Templates and Expected Convictions"
+      (per PP-686 §3.3.1, over the PP-684 13-Conviction taxonomy). TIER 2 — near-canon, and it
+      survives because `systems/world/` has no competing concept, the same standing `role_templates`
+      itself has.
+    row: H-99
+    default_cell: 0.0
+    keys: [role_templates, convictions]
+    note: >-
+      ⚠ **WHAT A FACTION EXPECTS OF ITS MEMBERS, WHICH IS NOT THE SAME AS WHAT ANY MEMBER HOLDS.**
+      `conviction_projection` maps a PERSON's thirteen weights into the four ethical axes; this maps
+      a ROLE TEMPLATE's expectations onto the same thirteen. The two multiply against each other
+      nowhere — they are different objects with one shared vocabulary, and the vocabulary is the
+      canonical thirteen in both cases, read from the single owner.
+      ⚠ **TRANSCRIBED, NOT INVENTED.** Every cell is §4's own table. The weights are the document's
+      and each row sums to 1.00 there; nothing is normalised, rounded or filled in here, and a
+      template's unlisted convictions read `default_cell` (0.0) rather than being assigned a share.
+      ⚠ **SIX TEMPLATES, AND TWO FACTIONS HAVE NONE.** `role_templates.by_faction` covers Crown,
+      Church of Solmund, Hafenmark, Varfell, Löwenritter and Restoration Movement. `Guilds` and
+      `Schoenland` are absent from §4's player-eligible column and get no row — the same deliberate
+      gap `role_templates` already records, and inventing `mercantile-procedural` for the Guilds is
+      exactly the fabrication the source-precedence ruling exists to stop.
+      ⚠ `intelligence-diplomatic` IS UNCLAIMED BY ANY FACTION and is transcribed anyway, because
+      §4 carries it and `role_templates` already lists it as a member no faction holds.
+      ⚠ **VARFELL AND LÖWENRITTER SHARE `military-order`, WHICH IS CANON.** §4: *"their
+      differentiation comes from Mission, leader Convictions, and stat profile, not role template."*
+      So the two factions have the SAME expectation vector and differ in who actually holds what —
+      which is precisely the quantity `cast.loyalty` measures.
+    cells:
+      sovereign:
+        Virtue:     0.30
+        Authority:  0.30
+        Honor:      0.20
+        Faith:      0.10
+        Warden:     0.10
+      ecclesiastical:
+        Faith:      0.40
+        Authority:  0.20
+        Scholastic: 0.20
+        Precedent:  0.10
+        Virtue:     0.10
+      mercantile-procedural:
+        Order:      0.35
+        Utility:    0.25
+        Scholastic: 0.20
+        Liberty:    0.10
+        Equity:     0.10
+      intelligence-diplomatic:
+        Scholastic: 0.30
+        Utility:    0.30
+        Authority:  0.20
+        Precedent:  0.10
+        Identity:   0.10
+      reformist:
+        Equity:     0.30
+        Liberty:    0.25
+        Community:  0.20
+        Virtue:     0.15
+        Scholastic: 0.10
+      military-order:
+        Honor:      0.30
+        Authority:  0.25
+        Virtue:     0.15
+        Identity:   0.15
+        Order:      0.15
 
   conviction_projection:
     source: >-

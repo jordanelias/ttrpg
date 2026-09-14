@@ -68,7 +68,8 @@ from collections import Counter, defaultdict
 
 from ..data import cast, files
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
-from ..data.rosters import BODY_FACTION, FACTIONS, load_yaml, title_domain
+from ..data.rosters import (BODY_FACTION, FACTIONS, ROLE_TEMPLATE_OF, load_yaml,
+                            title_domain)
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Office, Person, Proposition, Rung, Site, Tenure
@@ -413,31 +414,44 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # exist. `members`, `leaders`, `footprint` and `density` (`queries/world_q.py`) read these
     # edges and return nothing without them.
     #
-    # ⚠⚠ **MOOD IS `HOLDS`, NOT `OUGHT`, AND THAT IS A DELIBERATE NARROWING RATHER THAN THE
-    # OBVIOUS READING.** §14 says an OUGHT Proposition is an uttered Belief, and a faction's creed
-    # plainly is one — but Q4 (`world_q.questions_for`) raises a standing question from every live
-    # `commit` to an OUGHT, with `referents = (prop.subject,)`. A faction Proposition's subject is
-    # a faction NAME, which is not a person and not even a rung, so every member would deliberate
-    # each season about a referent naming no entity in the world. That is the defect `build_at`
-    # already demonstrated from the other side: its one Proposition pointed at a RUNG and produced
-    # **0 of 4,870 acts naming another person**, which is why the want-Propositions below point at
-    # a PERSON (ED-IN-0210 Ruling 1 — *"verbs invoke mechanisms or interactions between a character
-    # and another entity/character. they are not fiats."*).
+    # ⚠⚠ **MOOD IS `OUGHT` AND THE SUBJECT IS A PERSON — RULED by Jordan, 2026-09-13: *"Faction
+    # creed as an ought: sure. Weight it by their loyalty tho."*** This block previously wrote
+    # `HOLDS` and registered the OUGHT as a live design choice it declined to take. The choice was
+    # put to Jordan and taken; what follows is the reason the narrowing existed and how the ruling
+    # clears it, because the hazard it named is real and is what constrains the SHAPE of the creed.
     #
-    # So membership is written as a FACT (`HOLDS`) and changes no deliberation. Whether a faction's
-    # creed should ALSO stand as an OUGHT its members answer every season is a live design choice
-    # with two defensible answers and materially different games behind them — it is registered
-    # here and NOT taken.
+    # Q4 (`world_q.questions_for`) raises a standing question from every live `commit` to an OUGHT,
+    # with `referents = (prop.subject,)`, and `decision/options.py`'s clause 3 is
+    # `subject in referents(q)` — so a Proposition's subject becomes the SUBJECT OF EVERY CANDIDATE
+    # it generates. Subject the creed on a faction NAME and all eight factions' members deliberate
+    # each season about a string naming no entity in the world. That is the defect `build_at`
+    # demonstrated from the other side: its one Proposition pointed at a RUNG and produced **0 of
+    # 4,870 acts naming another person** (ED-IN-0210 Ruling 1 — *"verbs invoke mechanisms or
+    # interactions between a character and another entity/character. they are not fiats."*).
     #
-    # ⚠ THE PREDICATE IS DELIBERATELY THIN AND THE GAP IS NAMED. `faction_canon_v30.md`'s faction
-    # sheets carry an authored **Mission** per faction (text / objective / beneficiary / aligned +
-    # contradicted categories, `faction_state_authoring_v30.md`). Reading those in is a follow-on;
-    # inventing a creed here would put fabricated canon in the one carrier §14.1 makes IMMUTABLE
-    # and never destroyed.
+    # So the creed is subjected on **the faction's authored leader**, a person id, and its
+    # CONTENT is the `role_template` — `scope` carries the template name and `value` the faction's.
+    # Neither is invented: the leader comes from `rosters.yaml: faction_leaders.by_faction` and the
+    # template from `role_templates.by_faction`, both transcribed from `faction_canon_v30.md` §4.
+    # This is what the earlier note meant by refusing to invent a creed *"in the one carrier §14.1
+    # makes IMMUTABLE"*: the Proposition names canon's own two handles and no authored sentence.
+    #
+    # ⚠ **A FACTION WITH NO LEADER AND NO TEMPLATE KEEPS `HOLDS`, AND THAT IS THE SILENCE SHOWING
+    # THROUGH RATHER THAN A FALLBACK.** `Guilds` and `Schoenland` have neither in canon, so there
+    # is no creed to utter and nothing to be loyal to — `cast.loyalty` returns `None` for both for
+    # the same reason. `members()` reads a `commit` edge's KIND and OBJECT, never the Proposition's
+    # mood, so membership in those two is unaffected; what they lack is a standing question.
     for fac_name in sorted(FACTIONS):
         fid = f"fac_{_slug(fac_name)}"
-        w.propositions[fid] = Proposition(fid, "HOLDS", fac_name, "is a faction of this world",
-                                          True, 0)
+        lead_cid = cast.faction_leader(fac_name)
+        lead_pid = f"p_{_slug(lead_cid)}" if lead_cid else None
+        template = ROLE_TEMPLATE_OF.get(fac_name)
+        if template is None or lead_pid not in w.persons:
+            w.propositions[fid] = Proposition(fid, "HOLDS", fac_name,
+                                              "is a faction of this world", True, 0)
+            continue
+        w.propositions[fid] = Proposition(fid, "OUGHT", lead_pid, "carries the creed of",
+                                          fac_name, 0, scope=template)
     unplaced: list = []
     for case in cases:
         cid = str(case.get("id"))
@@ -454,7 +468,82 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
             # counted rather than filed under the nearest plausible banner.
             unplaced.append((cid, raw))
             continue
-        w.add_tenure(Tenure(f"t_{pid}_member", pid, f"fac_{_slug(fac_name)}", "commit", 0))
+        fid = f"fac_{_slug(fac_name)}"
+        w.add_tenure(Tenure(f"t_{pid}_member", pid, fid, "commit", 0))
+        # -- AND WHAT THAT MEMBERSHIP IS WORTH TO THEM --------------------------
+        #
+        # ⭐ Jordan, 2026-09-13: *"The faction one is factored by loyalty."* The `commit` edge says
+        # a person belongs; it cannot say how much they mean it, and a faction whose members all
+        # pull equally hard is not a political game. So the creed's referent — the leader — gets a
+        # STANCE ROW weighted by `cast.loyalty`, and `decision/choose.py::stance_toward` is what
+        # reads it: `valence * weight` summed over the rows naming a candidate's subject, added to
+        # every candidate the creed's own Q4 question generates.
+        #
+        # ⚠⚠ **THE LOYALTY DOES NOT GO ON `Tenure.degree`, WHICH IS WHERE IT OBVIOUSLY BELONGS AND
+        # WHERE IT WOULD HAVE DIED.** `degree` is declared on `Tenure` (`state/carriers.py:58`) and
+        # MEASURED 2026-09-14 by grep across `engine/season/`: **nothing reads it.** Every `.degree`
+        # in the tree is an `Event`'s or a contest's. Writing loyalty there would reproduce exactly
+        # the defect the field two lines above it was DELETED for — `carriers.py:48` on `conferrer`:
+        # *"It occurred EXACTLY ONCE in the whole tracer — this line — and reached no reader, which
+        # by `ID-13` is not a weak field but one that does not exist, wearing a schema's clothes."*
+        # A stance row has a reader, so the loyalty changes what people do; on `degree` it would
+        # have changed a repr.
+        #
+        # ⚠ **NO ROW WHERE THERE IS NO CREED, AND NO ROW AT ZERO WEIGHT EITHER.** `stance_from_loyalty`
+        # returns `None` for the two template-less factions and `(+1, 0)` at exact indifference,
+        # which `stance_toward` sums to the same nothing as an absent row — so an indifferent member
+        # is not quietly given a push. The row is appended for it anyway, because `census` counting
+        # rows is how a zero-weight member stays visible.
+        # ⚠⚠ **THIS TABLE IS THE BASELINE, NOT A REGRESSION CHECK — RULED by Jordan, 2026-09-14:
+        # *"whatever you run for the first time IS the baseline since this is new stuff."*** No
+        # suite in this tree encodes what a populated world SHOULD do, so none of them could have
+        # validated the creed; what validates it is the control arm, and what a first honest run
+        # buys is a recorded starting point for the next change to move against. It is deliberately
+        # NOT pinned as a golden — a number nobody has argued is correct would be a guard that has
+        # not earned its existence (`CLAUDE.md` §0.1 pt 5). The PINNED claims are structural and
+        # live in `test_the_populated_world_is_not_everybody_in_one_room`.
+        #
+        # ⚠ **AND THE ANSWER DEPENDS ON A FIXTURE NOBODY HAS RULED ON.** Control arm = the same
+        # build with `cast.faction_leader`
+        # stubbed to `None`, so all eight factions fall back to `HOLDS` and no stance row is
+        # written; two seasons each.
+        #
+        #     creed  rule    seed   acts   other   self   not-a-person   told_by
+        #     ----------------------------------------------------------------------
+        #     no     first      0    831     175    300            356         7
+        #     yes    first      0    814     157    345            312         8
+        #     no     first      1    804     183    337            284         8
+        #     yes    first      1    800     176    327            297         7
+        #     no     all        0    747     272    161            314        10
+        #     yes    all        0    665     400    116            149         0
+        #     no     all        1    737     270    148            319         8
+        #     yes    all        1    653     385    128            140        14
+        #
+        # Under `all` the creed does what it was ruled for: acts naming ANOTHER PERSON rise 47%
+        # (seed 0) and 43% (seed 1). Under `first`, the incumbent default, they move the WRONG WAY
+        # on both seeds, -10% and -4%. BOTH signs replicate, so each is the creed and not the seed
+        # — which is what makes the inversion a finding rather than a wobble.
+        #
+        # THE CAUSE IS A STRING PREFIX, AND IT IS `H-54`'s ROW, NOT A NEW ONE. `question_sources`
+        # puts `need` LAST, so a creed never displaces a date or a landed claim — but the person's
+        # OWN want is also a `need`, and `questions_for` breaks a within-source tie on `q.id`.
+        # `q:need:fac_…` sorts before `q:need:prop_…`, so under `first` **every member's faction
+        # creed silently outranks their personal ambition, decided by the spelling of an id.**
+        # That is exactly the undeclared tiebreak `W-D` measured (*"WHICH QUESTION A PERSON ANSWERS
+        # IS SETTLED BY LEXICOGRAPHIC ORDER OVER HASHES"*) and `H-54` owns. Disposition follows
+        # `W-D`'s, which is precedent on the identical shape (`CLAUDE.md` §0 step 4): DECLARED and
+        # LEFT ALONE — renaming these ids to win the sort would be gaming an undeclared tiebreak,
+        # and flipping `question_aggregation_rule` is a design edit to a hole whose own roster note
+        # says `first` is kept *"as the sweep's control — not because it is argued for"*.
+        # `needs_jordan` is FALSE for the same reason it is on `W-D`.
+        #
+        # ⚠ AND ONE NUMBER THE CONTROL KILLED: at seed 0 alone, `told_by` fell 10 -> 0 under the
+        # creed, which reads as the second-hand channel collapsing. At seed 1 it ROSE, 8 -> 14. It
+        # is noise at this corpus size and is NOT reported as an effect (§0.1 pt 4).
+        prop = w.propositions[fid]
+        st = cast.stance_from_loyalty(cast.loyalty(r, fac_name))
+        if st is not None and str(prop.mood).upper() == "OUGHT":
+            w.persons[pid].stance.append((prop.subject, st[0], st[1]))
     # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets.
     w._unplaced_cast = unplaced
 
@@ -724,8 +813,63 @@ def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None
     return out
 
 
+def creed_sweep(seasons: int = 2, seeds: tuple = (0, 1)) -> list:
+    """`ED-IN-0228`'s instrument: does the faction creed change what people do, against a control?
+
+    ⚠ **THE CONTROL ARM IS THE POINT AND IT IS BUILT BY REMOVING THE CAUSE, NOT BY EDITING THE
+    RESULT.** `cast.faction_leader` is stubbed to `None` for the build, so every faction falls
+    through `build_realm`'s own `template is None or lead_pid not in w.persons` branch to `HOLDS`,
+    no creed is uttered and no stance row is written — the world this repository had before the
+    ruling, produced by the same code path rather than by a second builder that could drift from
+    it. Everything else (seed, cast, map, offices, holdings, wants) is identical between arms.
+
+    ⚠ **AND IT SWEEPS `question_aggregation_rule`, WHICH IS WHY IT HAS TWO AXES INSTEAD OF ONE.**
+    The creed's effect INVERTS across that fixture, and a single-arm run would have reported
+    whichever sign the incumbent default happened to give. `H-54` owns the fixture; the reason the
+    sign flips is the `q.id` tiebreak written out in `build_realm`'s membership block.
+
+    Returns one row per (creed, rule, seed); `main --creed-sweep` prints them."""
+    from ..data import cast as _cast
+    rows = []
+    for creed in (False, True):
+        for rule in ("first", "all"):
+            for seed in seeds:
+                real = _cast.faction_leader
+                if not creed:
+                    _cast.faction_leader = lambda _f: None
+                try:
+                    w = build_realm(seed)
+                finally:
+                    _cast.faction_leader = real
+                w.fixtures._v["question_aggregation_rule"] = rule
+                out = run(seasons, seed, None, w=w)
+                subj = out["act_subjects"]
+                rows.append({
+                    "creed": creed, "rule": rule, "seed": seed, "acts": out["acts"],
+                    "other": subj.get("another person", 0), "self": subj.get("self", 0),
+                    "not_a_person": subj.get("not a person", 0),
+                    "told_by": out["claim_sources"].get("told_by", 0),
+                    "stance_rows": sum(len(p.stance) for p in w.persons.values()),
+                    "creeds": sum(1 for p in w.propositions.values()
+                                  if p.id.startswith("fac_") and str(p.mood).upper() == "OUGHT"),
+                })
+    return rows
+
+
 def main(argv=None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
+    if "--creed-sweep" in argv:
+        argv.remove("--creed-sweep")
+        n = int(argv[0]) if argv and argv[0].isdigit() else 2
+        hdr = (f"{'creed':<6} {'rule':<6} {'seed':>4} {'acts':>6} {'other':>6} {'self':>6} "
+               f"{'thing':>6} {'told':>5} {'stance':>7} {'creeds':>7}")
+        print(f"THE CREED, AGAINST A CONTROL — {n} season(s) per arm (ED-IN-0228)")
+        print(hdr); print("-" * len(hdr))
+        for r in creed_sweep(n):
+            print(f"{('yes' if r['creed'] else 'no'):<6} {r['rule']:<6} {r['seed']:>4} "
+                  f"{r['acts']:>6} {r['other']:>6} {r['self']:>6} {r['not_a_person']:>6} "
+                  f"{r['told_by']:>5} {r['stance_rows']:>7} {r['creeds']:>7}")
+        return 0
     seasons = int(argv[0]) if argv and argv[0].isdigit() else 1
     cap = int(argv[1]) if len(argv) > 1 and argv[1].isdigit() else None
     w = build_realm(0, cap)
