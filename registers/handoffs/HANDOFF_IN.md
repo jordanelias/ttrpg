@@ -4012,10 +4012,31 @@ sees the concurrent restore as a write.
 any test in that suite shifts the distribution**. Confirmed pre-existing — reproduces identically
 with this session's changes stashed.
 
-**The fix is `@pytest.mark.xdist_group(...)` on both tests**, which pins them to one worker and
-costs neither test any strength. NOT taken here: it changes test concurrency and belongs in its own
-diff, not bundled into one about invariants. `with_mtime=False` is the WRONG fix — it would stop
-detecting a rewrite with identical bytes, which is what that test is for.
+⚠ **TWO CANDIDATE FIXES WERE TRIED AND BOTH ARE WRONG. Recorded so the next session does not
+spend the same rounds.**
+
+1. **`@pytest.mark.xdist_group(...)` on both tests — INERT.** `xdist_group` is honoured only under
+   `--dist loadgroup`; plain `-n auto` uses `--dist load` and ignores it entirely. It would look
+   like a fix and change nothing unless CI's invocation changed too.
+2. **Restoring `st_mtime_ns` in the sibling's `finally` — INCOMPLETE, and it was implemented,
+   tested and reverted.** The sibling genuinely does leave mtimes moved (it restores bytes
+   conditionally and never restores mtime), so this fixes a real smaller gap. It does NOT fix the
+   race: the failure narrows to **`runs/results.json` alone**, written by `report.py:303` while the
+   sibling runs, and the observer can sample DURING that window. A restore at the end cannot close
+   a window that opens in the middle.
+
+**So the only real fix is mutual exclusion**, and the repo already owns the pattern:
+`tests/valoria/conftest.py::generated_layer` uses an `O_CREAT | O_EXCL` atomic lock in xdist's
+shared base temp dir, explicitly with **no `filelock` dependency** because CI installs only
+`pyyaml pytest numpy pytest-xdist` — the same constraint that rules out Hypothesis. That fixture is
+a *build-once* gate though, not a mutex; the w15 case needs spin-wait-and-release, which is more
+machinery. ⚠ `with_mtime=False` remains the WRONG fix in any case — it would stop detecting a
+rewrite with identical bytes, which is the one thing that test exists for.
+
+**NOT taken, deliberately.** This is apparatus: pre-existing, green on CI today, blocking no
+milestone, and tracing to no open M1 juncture — which `CLAUDE.md` §0's scope rule says is not this
+session's work. Three rounds went into it before that was acknowledged; §0.3's apparatus-drift
+warning is exactly this shape.
 
 ---
 
