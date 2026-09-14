@@ -45,7 +45,6 @@ INVARIANTS = (
     "claim_not_from_the_future",
     "body_in_range",
     "stance_row_shape",
-    "ought_names_an_entity",
     "office_singly_held",
 )
 
@@ -188,20 +187,38 @@ def stance_row_shape(w) -> list:
     return bad
 
 
-def ought_names_an_entity(w) -> list:
-    """Every OUGHT Proposition's subject names something an act can be about.
-
-    NOT ENFORCED ON WRITE: `Proposition` is a frozen dataclass with a `str` subject and no
-    validation. This is `ED-IN-0210` Ruling 1 as a run-time predicate — *"verbs invoke mechanisms
-    or interactions between a character and another entity/character. they are not fiats."* Q4
-    emits `(prop.subject,)` as a question's referent and `options.py` clause 3 is
-    `subject in referents(q)`, so a subject naming nothing produces candidates about nothing.
-    `build_at` shipped exactly that and measured **0 of 4,870 acts naming another person**."""
-    ents = _entities(w)
-    return [f"ought_names_an_entity: {pid!r} is an OUGHT whose subject {p.subject!r} "
-            f"names no entity in the world"
-            for pid, p in sorted(w.propositions.items())
-            if str(p.mood).upper() == "OUGHT" and p.subject not in ents]
+# ⚠⚠ **`ought_names_an_entity` WAS THE NINTH PREDICATE AND IT IS DELETED. IT WAS WRONG, AND WHAT
+# IT MISLABELLED AS A DEFECT IS THE PROBE WORLD'S ENTIRE MOTIVE.**
+#
+# It asserted that every OUGHT Proposition's subject must name an entity, citing `ED-IN-0210`
+# Ruling 1 (*"verbs invoke mechanisms or interactions between a character and another
+# entity/character"*) and `build_at`'s measured **0 of 4,870 acts naming another person**. It
+# fired 40 times across 24 headless seeds, on `headless.py`'s `prop_einhir` — subject
+# `einhir_texts`, a bare string — and on the Propositions the loop mints from it.
+#
+# **MEASURED, and this is the number that settled it:** patch `loop/deliberate.questions_for` to
+# drop any `need` question whose referent names no entity — the narrowest repair that would have
+# satisfied the predicate — and **acts go to 0 on every seed tested** (45, 40, 38, 37, 42, 41 →
+# 0, 0, 0, 0, 0, 0), with 120 questions dropped. `headless.py` says why in its own comment:
+# *"Q4 is the only reason she acts."* Carin's standing ambition is `the Einhir texts should
+# survive` — a belief about a THING, deliberately — and the whole probe world hangs off it.
+#
+# So the corpus supports a topic-subjected Proposition and the predicate forbade it. What
+# `ED-IN-0210` and F8 actually forbid is narrower and is still checked: F8 reverted `_eff_oblige`
+# for **opening a Tenure** to a non-entity, which is `tenure_referent` above, and `build_at`'s
+# defect was a Proposition subjected on a RUNG — an entity of the wrong KIND, not a topic.
+#
+# ⚠ **IT IS DELETED RATHER THAN DEMOTED TO A WARNING, ON THIS MODULE'S OWN RULE.** A predicate
+# kept as "declared × 24, new × 16" would be a permanent non-zero that trains the next reader to
+# skim the report — and a sweep nobody reads is worse than one that does not exist. The
+# `DECLARED` map went with it: its only entry existed to excuse this predicate.
+#
+# ⚠ **THIS IS THE SECOND TIME THIS MODULE OVER-FIRED, WHICH IS THE POINT WORTH CARRYING FORWARD.**
+# First `_entities` omitted `w.records` and invented 136 violations; then this predicate
+# criminalised the probe world's motive. Both were caught by measuring what the "fix" would cost
+# rather than by re-reading the predicate. **An invariant sweep must be falsified against the
+# ENGINE, not only against a mutated world:** a mutation proves a predicate CAN fire, and only an
+# experiment on the real loop proves it SHOULD.
 
 
 def office_singly_held(w) -> list:
@@ -229,28 +246,16 @@ def violations(w) -> list:
     return out
 
 
-#: (invariant, offending id) -> the citation that declares it. A KNOWN condition, not a pass.
+#: (invariant, offending id) -> the citation that declares it. A KNOWN violation, never a
+#: silenced one: `sweep` routes a declared hit to `declared` rather than dropping it, so the count
+#: stays visible, and every entry must cite a register row.
 #:
-#: ⚠⚠ **A DECLARED EXCEPTION MUST CARRY A CITATION, AND THAT IS WHAT KEEPS THIS FROM BECOMING A
-#: RUG.** The one entry below is `headless.py`'s `prop_einhir` — `Proposition("prop_einhir",
-#: "OUGHT", "einhir_texts", ...)`, whose subject is a bare string naming no entity. This sweep
-#: FOUND it independently, from the predicate, which is the strongest evidence available that the
-#: predicate observes something real; the tree had already found it by hand and filed it as **F8 /
-#: `ED-IN-0211`**, the finding that got `_eff_oblige` REVERTED for *"opening a Tenure to
-#: `einhir_texts`, a bare string naming no entity"*.
-#:
-#: ⚠ **AND THE FIXTURE STAYS, WHICH IS WHY THIS LIST EXISTS AT ALL.** The obvious way to green
-#: this row is to point Carin's want at a person, the way `populated.py` already points every
-#: want. That would be wrong: `predicates.py`'s `_req_release` is built ON this case — a closer
-#: is safe *because* a subject naming nothing matches no Tenure — and
-#: `test_season_shape.py:8262` pins `("einhir_texts", "exists:Record", 0)` as the premise of that
-#: argument. Deleting the fixture would delete the negative case that makes the opener/closer
-#: asymmetry demonstrable. So it is declared, with its citation, and counted separately forever.
-DECLARED = {
-    ("ought_names_an_entity", "prop_einhir"):
-        "F8 / ED-IN-0211 — headless.py's authored fixture; the negative case `_req_release` is "
-        "built on. See predicates.py:205 and test_season_shape.py:8262.",
-}
+#: ⚠ **EMPTY, AND THAT IS A RESULT RATHER THAN AN UNUSED FEATURE.** Its one entry excused
+#: `ought_names_an_entity` on `prop_einhir`. That predicate is deleted (see above) because the
+#: thing it flagged is the probe world's designed motive, so the exception it needed went with it.
+#: The mechanism stays because the next real declared exception should not have to reinvent it —
+#: and because an empty map is the honest state when every predicate reports clean on its own.
+DECLARED = {}
 
 
 def _declared_for(message: str):

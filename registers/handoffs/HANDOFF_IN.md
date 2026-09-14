@@ -3963,11 +3963,34 @@ like a discovery. The entity set is now enumerated from `World.__init__` and pin
 
 The **populated** world sweeps **0 new violations across 4 seeds**.
 
-### Not yet done on this
+### ⚠ CORRECTED SAME DAY — the 16 were NOT a defect, and the predicate was deleted
 
-* **Root-cause the 16** — find what mints `prop:<hash>` with an inherited subject. Not started.
-* **Wire `tools/m1_acceptance.py::row_invariant_violations` from BLOCKED to MEASURED.** The
-  instrument exists and `sweep()` returns what the row needs; the row still reports `blocked`.
+**Root-caused, and it reversed the finding.** `loop/effects.py::_eff_utter` mints a Proposition
+with `subject = d.get("subject") or a.actor`, and that subject arrives from the Q4 referent — so
+the loop does copy `einhir_texts` into new permanent Propositions. Bounded, measured: **1–3 per
+world, plateauing**, not a leak (props grow 2→13 over 8 seasons while the bad count stays at 2).
+
+**Then the repair was costed, and that is what settled it.** Patching
+`loop/deliberate.questions_for` to drop any `need` question whose referent names no entity — the
+narrowest fix that would satisfy the predicate — takes **acts to 0 on every seed** (45/40/38/37/42/41
+→ all zero, 120 questions dropped). `headless.py` says why in its own comment: *"Q4 is the only
+reason she acts."* **Carin's entire motive is a `commit` to an OUGHT about a THING**, and the
+predicate criminalised it.
+
+So `ought_names_an_entity` is **deleted**, not demoted: a permanent non-zero trains the next reader
+to skim the report. What `ED-IN-0210` and F8 actually forbid is narrower and is still checked —
+F8 reverted `_eff_oblige` for **opening a Tenure** to a non-entity, which is `tenure_referent`;
+`build_at`'s defect was a Proposition on a RUNG, an entity of the wrong KIND, not a topic.
+`DECLARED` is empty as a result, and kept, because the next real exception should not reinvent it.
+
+⚠ **THE LESSON, WHICH IS THE DURABLE PART.** This module over-fired **twice** — `_entities` missing
+`w.records` invented 136 violations, then this predicate outlawed the probe world's motive. Both
+were caught by measuring what the FIX would cost, never by re-reading the predicate. **A mutation
+proves a predicate CAN fire; only an experiment against the real loop proves it SHOULD.**
+
+**Row 5 is now MEASURED and PASSES** — 24 headless seeds × 4 seasons × 8 invariants = 192 checks,
+0 violations, on both the headless and populated worlds. `m1_acceptance`'s header table, row
+docstring and closing note were all corrected; the footer had gone on saying "row 5 stays blocked".
 * ⚠ Row 5's `unblocked_by` string names **Hypothesis**, which this tree cannot have: CI installs
   only `pyyaml pytest numpy pytest-xdist`, so a new third-party import in a blocking-gate test file
   collect-errors the job. `test_dice_engine_properties.py` hit this first and set the precedent —

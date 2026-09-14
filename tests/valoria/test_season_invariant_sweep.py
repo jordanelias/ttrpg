@@ -22,8 +22,7 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, REPO_ROOT)
 
 from engine.season.harness import headless, invariants as I   # noqa: E402
-from engine.season.state.carriers import (                    # noqa: E402
-    Claim, Event, Office, Proposition, Tenure)
+from engine.season.state.carriers import Claim, Event, Office, Tenure  # noqa: E402
 
 SWEEP_SEEDS = 12          # headless is ~0.13s/season measured; 12 seeds keeps this a unit test
 PROBE_SEED = 20260819     # the fixed-seed convention tools/m1_acceptance.py uses
@@ -45,23 +44,34 @@ def test_the_sweep_examines_every_invariant_on_every_seed():
         "checks than it claims is the shape `checked` exists to make visible")
 
 
-def test_every_declared_exception_carries_a_citation_and_still_fires():
+def test_every_declared_exception_carries_a_citation():
     """A declared exception is a KNOWN violation, never a silenced one.
 
-    Both halves matter. The citation stops `DECLARED` becoming a rug — an entry with no `ED-`/`F`
-    reference is someone quieting a finding. And the predicate must still FIRE on the declared
-    case: `sweep` routes it to `declared` rather than dropping it, so the count stays visible.
+    ⚠ **`DECLARED` IS EMPTY TODAY AND THIS TEST STILL EARNS ITS PLACE**, because what it guards is
+    the moment somebody ADDS one. Its single entry used to excuse `ought_names_an_entity` on
+    `prop_einhir`; that predicate was deleted once the measurement showed it criminalised the probe
+    world's only motive, so the exception went with it. The citation rule is what stops the map
+    coming back as a place to put findings nobody wants to fix.
     """
-    assert I.DECLARED, "DECLARED is empty — headless.py's prop_einhir should still be in it"
     for (inv, ident), cite in I.DECLARED.items():
         assert inv in I.INVARIANTS, f"{inv!r} declares an exception to no known invariant"
-        assert "ED-" in cite or "F8" in cite, (
+        assert "ED-" in cite or "F" in cite, (
             f"the exception for {ident!r} cites nothing. A declared exception without a register "
-            "reference is a silenced finding")
+            "reference is a silenced finding, which is the one thing this map must not become")
+
+
+def test_the_engine_is_clean_under_the_sweep():
+    """The earned null (`CLAUDE.md` honest-findings): zero, with the trail that produced it.
+
+    ⚠ **THIS ASSERTS THE ENGINE, NOT THE INSTRUMENT**, and it is the assertion the mutation tests
+    cannot make. They prove each predicate CAN fire; this one says that on a real season, across
+    seeds, none of them DOES. A regression in the loop lands here."""
     r = I.sweep(lambda s: _world(s), range(SWEEP_SEEDS))
-    assert r["declared"], (
-        "no declared violation fired. prop_einhir is an authored fixture in headless.py, so it is "
-        "present every run — an empty `declared` means the predicate stopped seeing it")
+    assert not r["violations"], (
+        f"{len(r['violations'])} invariant violation(s) over {SWEEP_SEEDS} seeds:\n  "
+        + "\n  ".join(r["violations"][:20]))
+    assert not r["declared"], (
+        f"a declared exception fired but DECLARED is {I.DECLARED!r} — the two have drifted")
 
 
 def test_the_entity_set_covers_every_world_collection_a_tenure_can_name():
@@ -116,9 +126,6 @@ def _break_body_in_range(w):
 def _break_stance_row_shape(w):
     next(iter(w.persons.values())).stance.append(("p_carin", 99, 99))
 
-def _break_ought_names_an_entity(w):
-    w.propositions["mut_ought"] = Proposition("mut_ought", "OUGHT", "no_such_thing", "x", True, 0)
-
 def _break_office_singly_held(w):
     w.offices["mut_seat"] = Office("mut_seat", "Probe Seat", None, ["issue"], faction="Crown")
     w.add_tenure(Tenure("mut_hold_a", "p_carin", "mut_seat", "hold", 0))
@@ -133,7 +140,6 @@ MUTATIONS = [
     ("claim_not_from_the_future", _break_claim_not_from_the_future),
     ("body_in_range", _break_body_in_range),
     ("stance_row_shape", _break_stance_row_shape),
-    ("ought_names_an_entity", _break_ought_names_an_entity),
     ("office_singly_held", _break_office_singly_held),
 ]
 
