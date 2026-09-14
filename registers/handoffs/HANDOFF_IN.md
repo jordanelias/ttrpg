@@ -3924,3 +3924,72 @@ taking it means editing that line deliberately rather than loosening a bound by 
   canon: **Jordan's.**
 - **M1 row 5's N-seed invariant sweep** is still the single highest-leverage unbuilt instrument
   (it unblocks M2 entirely). Not started.
+
+---
+
+## 2026-09-14 (later) — M1 row 5 has an instrument, and it found something on its second seed
+
+**`engine/season/harness/invariants.py`** — the single owner of the season's RUN-TIME invariants,
+nine predicates, each mutation-verified in `tests/valoria/test_season_invariant_sweep.py`.
+
+⚠ **THE SELECTION RULE IS THE DESIGN.** A predicate earns a row only if **nothing enforces it on
+write**. `World.add_tenure` already refuses an off-roster `kind` and a non-ascending `contain`, so
+asserting either would be `pytest.approx` on an exactness claim — §0.1 pt 2's "not a weak test but
+an absent one". Every predicate was checked against its constructor before being written.
+
+⚠⚠ **THE FIRST WRITING REPORTED 176 VIOLATIONS ACROSS 24 SEEDS AND 136 WERE MANUFACTURED BY MY OWN
+PREDICATE.** `_entities` omitted `w.records`, so every legitimate `hold` on a deed read as a
+dangling reference. **An invariant sweep's characteristic failure is not missing a defect; it is
+inventing a hundred**, because a slightly-too-narrow predicate fires on every healthy row and looks
+like a discovery. The entity set is now enumerated from `World.__init__` and pinned by
+`test_the_entity_set_covers_every_world_collection_a_tenure_can_name`.
+
+### What survived, and the half that is new
+
+40 violations across 24 headless seeds, all `ought_names_an_entity`, and they **split**:
+
+* **24 are `prop_einhir`** — `headless.py`'s authored fixture, subject `einhir_texts`, a bare
+  string naming no entity. Already filed by hand as **F8 / ED-IN-0211**, the finding that got
+  `_eff_oblige` reverted. **The sweep rediscovered it independently from the predicate**, which is
+  the strongest available evidence the predicate observes something real. It is in `DECLARED` with
+  its citation — and the fixture STAYS: `predicates.py::_req_release` is built on it (a closer is
+  safe *because* a subject naming nothing matches no Tenure) and `test_season_shape.py:8262` pins
+  `("einhir_texts", "exists:Record", 0)` as that argument's premise.
+* **16 are NEW and are a different defect.** The loop **mints fresh OUGHT Propositions at runtime**
+  (`prop:<hash>`, not the authored `prop_einhir`) that inherit `einhir_texts` as their subject. F8
+  reverted an *effect* that opened a Tenure to it; something else is still **propagating the bad
+  subject into new Propositions**. It first appears at **seed 2** — a single-seed check would have
+  missed it entirely, which is the whole argument for the N-seed row.
+
+The **populated** world sweeps **0 new violations across 4 seeds**.
+
+### Not yet done on this
+
+* **Root-cause the 16** — find what mints `prop:<hash>` with an inherited subject. Not started.
+* **Wire `tools/m1_acceptance.py::row_invariant_violations` from BLOCKED to MEASURED.** The
+  instrument exists and `sweep()` returns what the row needs; the row still reports `blocked`.
+* ⚠ Row 5's `unblocked_by` string names **Hypothesis**, which this tree cannot have: CI installs
+  only `pyyaml pytest numpy pytest-xdist`, so a new third-party import in a blocking-gate test file
+  collect-errors the job. `test_dice_engine_properties.py` hit this first and set the precedent —
+  the property-testing METHOD without the dependency. The row's wording should be corrected when it
+  is wired, not satisfied literally.
+
+### ⚠ A LATENT RED ON A BLOCKING CI JOB, found in passing — NOT fixed here
+
+`engine/season/tests/test_season_shape.py::test_w15_the_run_cases_entrypoint_writes_nothing` fails
+**deterministically, 3 runs of 3**, when it lands on a different xdist worker from its sibling
+`test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte`.
+
+**Mechanism:** the sibling runs the emitter, then restores the committed bytes in a `finally` — and
+restoring bytes **changes mtime**. The writes-nothing test fingerprints `with_mtime=True`, so it
+sees the concurrent restore as a write.
+
+**It is live on CI**, which runs `python -m pytest engine/season/tests -q -n auto` (`valoria-ci.yml`
+:370). It passes today only because the two tests happen to land on one worker; **adding or removing
+any test in that suite shifts the distribution**. Confirmed pre-existing — reproduces identically
+with this session's changes stashed.
+
+**The fix is `@pytest.mark.xdist_group(...)` on both tests**, which pins them to one worker and
+costs neither test any strength. NOT taken here: it changes test concurrency and belongs in its own
+diff, not bundled into one about invariants. `with_mtime=False` is the WRONG fix — it would stop
+detecting a rewrite with identical bytes, which is what that test is for.

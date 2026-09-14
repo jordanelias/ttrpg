@@ -459,13 +459,25 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         r = cast.row(cid)
         fac_name, sub, raw = cast.faction_of(r) if r else (None, None, "")
         if fac_name is None:
-            # ⚠ NOT COERCED TO A NEIGHBOUR. Six of the 46 name an affiliation that is on no
-            # roster — `Altonia` (3), `Independent (Southernmost Wardens)` (2), the dissolved
-            # Virke syndicate (1). Jordan's own precedent on exactly this shape, recorded at
-            # `state/carriers.py`'s Office check: *"Why would requiring a faction on every office
-            # break canon? Wouldn't it just imply that we don't have enough factions?"* Adding a
-            # name to `rosters.yaml: factions` is authoring canon, so these stay unplaced and
-            # counted rather than filed under the nearest plausible banner.
+            # ⭐ **UNPLACED IS A CORRECT OUTCOME, NOT A PENDING ONE — RULED by Jordan,
+            # 2026-09-14: *"Not everyone has to belong to a faction."*** This was carried as an
+            # open question for two days; it is closed, and it is closed in the direction that
+            # makes the branch below RIGHT rather than tolerated. Six of the 46 name an
+            # affiliation on no roster — `Altonia` (3), `Independent (Southernmost Wardens)` (2),
+            # the dissolved Virke syndicate (1) — and they stay unaffiliated.
+            #
+            # ⚠ SO DO NOT "FIX" THIS BY GROWING THE ROSTER. The earlier reading pointed the other
+            # way, on Jordan's precedent at `state/carriers.py`'s Office check (*"Wouldn't it just
+            # imply that we don't have enough factions?"*), and a later session could reasonably
+            # re-derive that and add three faction names. It would be wrong: that precedent is
+            # about an OFFICE, which is a seat inside a faction and cannot exist without one. A
+            # PERSON is not a seat. An unaffiliated person is a person, and a world where everyone
+            # carries a banner has no room for someone who does not.
+            #
+            # They are still COUNTED rather than dropped — `census` reports `_unplaced_cast`, and
+            # `test_the_populated_world_is_not_everybody_in_one_room` asserts
+            # `placed + unplaced == persons`, so a person lost to a resolution bug is still
+            # distinguishable from a person who belongs to nobody.
             unplaced.append((cid, raw))
             continue
         fid = f"fac_{_slug(fac_name)}"
