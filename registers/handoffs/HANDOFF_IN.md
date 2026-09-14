@@ -3836,3 +3836,91 @@ and only the fork stays with Jordan.
 
 Sources: `workplans/valoria_master_workplan_v7.md` §7 · `registers/editorial_ledger_in.jsonl`
 (ED-IN-0210, ED-IN-0218) · `proposals/2026-09-12-emergent-narrative-primitives-v2/04_PROVENANCE.md` §4, §8.
+
+---
+
+## 2026-09-14 — the creed lands, and the axes turn out to have had two owners
+
+**Both on `claude/game-engine-schema-dtb06d` (PR #404). `ED-IN-0228` and `ED-IN-0229`.**
+
+### 1. A faction's creed is an OUGHT about its leader, weighted by loyalty (ED-IN-0228)
+
+Jordan ruled it in three parts (*"Faction creed as an ought: sure. Weight it by their loyalty
+tho"* · *"Loyalty can be invented. Just do it on a scale of 0-100"* · *"The faction one is factored
+by loyalty"*). `harness/populated.py` had registered the OUGHT as a design choice it declined to
+take; it is taken.
+
+- The creed's **subject is the faction's authored leader**, not the faction name, because Q4 turns
+  `prop.subject` into the subject of every Candidate it generates. Both handles come from
+  `rosters.yaml` (`faction_leaders.by_faction`, `role_templates.by_faction`), transcribed from
+  `faction_canon_v30.md` §4. Nothing is invented.
+- **Guilds and Schoenland keep `HOLDS`** — canon gives them no leader and no template, so there is
+  nothing to be loyal to. `members()` reads kind+object, never mood, so membership is unaffected.
+- **Loyalty does NOT live on `Tenure.degree`.** That was the plan until it was measured: nothing in
+  `engine/season/` reads that field. It would have been the `conferrer` defect again
+  (`state/carriers.py:48`, ID-13). It lives on `Person.stance`, which `choose.py::stance_toward`
+  reads.
+
+⚠ **THE NUMBERS ARE A BASELINE, NOT A GATE — RULED by Jordan, 2026-09-14:** *"whatever you run for
+the first time IS the baseline since this is new stuff."* Nothing in `tests/valoria` or
+`engine/season/tests` encodes what a populated world SHOULD do, so no suite could have validated
+the creed; the control arm does. They are deliberately not pinned as a golden (§0.1 pt 5 — a number
+nobody has argued is correct is a guard that has not earned its existence). The pinned claims are
+structural instead, in `test_the_populated_world_is_not_everybody_in_one_room`, and all four
+mutations were verified.
+
+Instrument, in-tree and re-runnable: `python -m engine.season.harness.populated --creed-sweep 2`.
+
+⚠ **THE EFFECT INVERTS ACROSS `question_aggregation_rule`, AND THE CAUSE IS A STRING PREFIX.** Under
+`all`, acts naming another person rise +47% / +43% across two seeds. Under `first` — the incumbent
+default — they fall 10% / 4%. A member's own want is also a `need`, and `questions_for` breaks a
+within-source tie on `q.id`: `q:need:fac_…` sorts before `q:need:prop_…`, so the faction creed
+outranks the personal ambition on an undeclared tiebreak. **That is `H-54`'s row, not a new one**;
+disposition follows `W-D`'s on the identical shape — declared and left alone. Renaming the ids to
+win the sort would be gaming the tiebreak; flipping the fixture is a design edit to a hole whose
+own roster note says `first` is kept *"as the sweep's control — not because it is argued for"*.
+
+### 2. The four ethical axes had two owners and no refusal between them (ED-IN-0229)
+
+Jordan: *"NPC roster, Convictions, Ethical Axes are all things I want to be able to dynamically
+edit going forward."* Of the three, **only the axes could not be edited in one place**, and the
+file that said otherwise was wrong.
+
+`keys.py:59` held a tuple literal; `rosters.yaml: conviction_axes` held a `values:` list; the
+roster's note asserted *"a fifth axis or a rename is one edit there and a loader refusal here
+rather than two rosters drifting apart."* **Measured by AST: exactly one module imports `AXES`, and
+it is `engine/substrate/__init__.py` re-exporting it.** Nothing under `engine/season/` read it. Both
+arms run — a fifth axis in `keys.py` alone leaves `choose.py` scoring over four in silence; one in
+the roster alone leaves the season engine scoring over five while `keys.py` invariant 6 rejects
+every Key naming it.
+
+Fixed on the `conviction_roster` precedent (§0 step 4, not a new decision): `axis_roster` in
+`references/descriptor_registry.yaml`, validated as `_conviction_roster` is, read once as
+`descriptors.AXES`. `from_descriptor:` is new in `roster()` and is why the row was not simply
+deleted — a direct import would skip the `forbidden: [exposure]` bar (#353 `:1897`).
+
+**The 2026-09-02 scope ruling is NOT overridden.** `ROLES`, `SCALES` and `PERMANENCE_VALUES` are
+untouched and stay literals in `keys.py`.
+
+### Editing these three, as of today
+
+| | edit here | then |
+|---|---|---|
+| **NPC roster** | `references/npc_registry.yaml` | nothing — read at runtime |
+| **Convictions** | `references/descriptor_registry.yaml: conviction_roster.names` | `python tools/export_descriptors.py --build` |
+| **Conviction→axis matrix** | `engine/season/rosters.yaml: tables.conviction_projection` | nothing |
+| **Ethical axes** | `references/descriptor_registry.yaml: axis_roster.names` | `python tools/export_descriptors.py --build` |
+
+A fifth axis is now one edit that both readers see — executed with `prudential`, then reverted.
+`key_substrate_v30.md` §2.4 permits one as a Class B extension but defers it; **no such ruling has
+been taken**, and `test_axis_roster_single_owner.py` pins the count at 4 with that citation, so
+taking it means editing that line deliberately rather than loosening a bound by accident.
+
+### Still open
+
+- **The faction roster is short.** 6 of 46 cast members name an affiliation on no roster — Altonia
+  (3), Independent/Southernmost Wardens (2), the dissolved Virke syndicate (1). They are counted
+  `unplaced`, never coerced to a neighbour. Adding a name to `rosters.yaml: factions` is authoring
+  canon: **Jordan's.**
+- **M1 row 5's N-seed invariant sweep** is still the single highest-leverage unbuilt instrument
+  (it unblocks M2 entirely). Not started.
