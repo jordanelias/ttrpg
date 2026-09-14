@@ -124,6 +124,30 @@ def _conviction_roster(reg):
     return {'source': block.get('source'), 'count': len(names), 'names': names}
 
 
+def _axis_roster(reg):
+    """The 4 ethical axes, from the registry. The SOLE machine-readable statement of the name set.
+
+    Validated exactly as `_conviction_roster` is, and for the same reason one level up: this set
+    is what `engine/substrate/keys.py` validates a Key's axis names against AND what
+    `engine/season/decision/choose.py` sums a candidate's score over. Before 2026-09-14 each held
+    its own literal and nothing compared them, so the two could disagree in silence.
+    """
+    block = reg.get('axis_roster') or {}
+    names = [n for n in (block.get('names') or []) if isinstance(n, str)]
+    if not names:
+        raise SystemExit('descriptor_registry.yaml: axis_roster.names is missing or empty. '
+                         'It is the single owner of the ethical-axis set; the Key substrate and '
+                         'the season engine both read it.')
+    declared = block.get('count')
+    if declared is not None and int(declared) != len(names):
+        raise SystemExit(f'descriptor_registry.yaml: axis_roster declares count={declared} '
+                         f'but lists {len(names)} names.')
+    if len(set(names)) != len(names):
+        raise SystemExit('descriptor_registry.yaml: axis_roster.names contains duplicates.')
+    return {'source': block.get('source'), 'count': len(names),
+            'scale': block.get('scale'), 'names': names}
+
+
 def build():
     reg = ci_common.load_yaml(SRC, default=None)
     if not reg:
@@ -167,6 +191,11 @@ def build():
         # own roster in the absence of one code could read — and the disagreement was costing a
         # ratified mechanic (a Close-Knot-break Scar that silently never landed).
         'conviction_roster': _conviction_roster(reg),
+        # THE ETHICAL-AXIS ROSTER, centralized 2026-09-14 (ED-IN-0229). Same move as the line
+        # above and after the same class of defect: `keys.py::AXES` and `rosters.yaml:
+        # conviction_axes` each held a literal and NOTHING compared them, while the roster's own
+        # note claimed a refusal that did not exist.
+        'axis_roster': _axis_roster(reg),
         'faction_stats': faction,
         'faction_field_map': FACTION_KEY_TO_FIELD,
         'settlement_stats': _section(reg, 'settlement_stats'),

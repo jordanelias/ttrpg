@@ -102,13 +102,33 @@ def roster(name: str, ordered: bool = False):
             needs="add the roster to the data file; do not inline it here",
             law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES; "
                 "returning an empty set would make every membership test silently false")
-    if "values" not in r:
+    # `from_descriptor:` — THE ROW POINTS AT THE SINGLE OWNER INSTEAD OF COPYING IT (ED-IN-0229).
+    # A roster whose definition belongs to `references/descriptor_registry.yaml` names the block
+    # and carries no `values:`, so there is exactly one place to edit and no second list to drift.
+    # This is the `conviction_roster` shape made general: that row was handled by importing
+    # `CONVICTIONS` directly, which works but SKIPS the `forbidden:` bar below — and that bar is
+    # load-bearing on `conviction_axes` (#353 `:1897`, the Exposure collision). Routing through
+    # here keeps the data-side bar on a pointed-at roster, which a direct import could not.
+    if "from_descriptor" in r:
+        from engine.substrate import descriptors as _desc
+        block = getattr(_desc, "_DATA", {}).get(r["from_descriptor"])
+        if not block or not block.get("names"):
+            raise Unspecified(
+                f"roster {name!r} points at descriptor block {r['from_descriptor']!r}, which is "
+                f"absent or has no `names`", "references/descriptor_registry.yaml",
+                needs=f"add {r['from_descriptor']}.names, then "
+                      "`python tools/export_descriptors.py --build`",
+                law="ED-IN-0229 -- a pointed-at roster REFUSES when its owner is missing. Falling "
+                    "back to a local literal is how the two axis lists drifted in the first place")
+        vals = list(block["names"])
+    elif "values" not in r:
         raise Unspecified(
             f"{name!r} is not a roster -- it has no `values:`", "rosters.yaml",
             needs="read a MAPPING with table(), a SET with roster()",
             law="rosters.yaml -- a roster is a SET and a table is a MAPPING. Reading one with the "
                 "other's function raises, so the two shapes cannot be confused at a call site")
-    vals = r["values"]
+    else:
+        vals = r["values"]
     # A roster may FORBID a member by name. `conviction_axes` forbids `exposure` bare, because
     # #353 `:1897` names it as three senses of one word; a data edit that added it would
     # otherwise reintroduce the collision silently, which is the whole failure mode this file

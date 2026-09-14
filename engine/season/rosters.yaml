@@ -219,10 +219,26 @@ rosters:
       ⚠ `exposure` IS FORBIDDEN AS A BARE AXIS NAME and the loader RAISES on it — #353 `:1897`
       names "The Exposure collision — three senses of one word, including a need scalar and a
       per-person tally". Spell the sense you mean.
-      ⚠ THE NAMES ARE `engine/substrate/keys.py::AXES`'s, EXACTLY, and that is deliberate: the
-      engine substrate already single-owns this tuple, so a fifth axis or a rename is one edit
-      there and a loader refusal here rather than two rosters drifting apart.
-    values: [hierarchical, sacred, instrumental, traditional]
+      ⚠⚠ **THE `values:` LIST IS GONE AND THAT IS THE REPAIR, NOT A REGRESSION (2026-09-14,
+      ED-IN-0229).** This row used to carry its own literal copy and claimed, right here, that
+      *"the engine substrate already single-owns this tuple, so a fifth axis or a rename is one
+      edit there and a loader refusal here rather than two rosters drifting apart"*. **That
+      refusal did not exist.** MEASURED by AST across the whole tree: exactly ONE module imports
+      `engine/substrate/keys.py::AXES` — `engine/substrate/__init__.py`, re-exporting it — and
+      NOTHING under `engine/season/` reads it. So the two literals could disagree in either
+      direction in silence: a fifth axis in `keys.py` alone left `decision/choose.py` scoring on
+      four, and a fifth here alone left the season engine scoring on five while `keys.py`
+      invariant 6 rejected every Key that named it. Two failures, opposite directions, neither
+      side able to see the other. A note asserting a guard that is not there is worse than no
+      note, because it is trusted.
+      ⚠ **`from_descriptor:` IS THE FIX AND IT IS THE `conviction_roster` PRECEDENT.** The 13
+      Convictions were literals in two subsystems until 2026-08-24, when nine-vs-eight-vs-thirteen
+      was found to have silently disabled a ratified mechanic; the roster moved to
+      `references/descriptor_registry.yaml` with `engine/substrate/descriptors.py` as the one
+      code-side reader. The axes are the same object one level up and get the same treatment.
+      `keys.py::AXES` now reads that leaf too, so a fifth axis or a rename is genuinely ONE edit —
+      `axis_roster.names` — and both readers see it.
+    from_descriptor: axis_roster
 
   question_sources:
     source: "ARCHITECTURE_V2.md §F1 (Q1–Q3) · PLAN.md `W5` (Q4 `need`)"

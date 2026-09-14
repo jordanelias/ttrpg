@@ -43,6 +43,17 @@
       "Honor"
     ]
   },
+  "axis_roster": {
+    "source": "systems/_architecture/reference/key_substrate_v30.md \u00a72.4 / conviction_axis_matrix_v30.md / PP-687",
+    "count": 4,
+    "scale": "[-1,+1] basis",
+    "names": [
+      "hierarchical",
+      "sacred",
+      "instrumental",
+      "traditional"
+    ]
+  },
   "faction_stats": {
     "fac.influence": {
       "name": "Influence",
