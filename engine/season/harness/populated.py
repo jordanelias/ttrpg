@@ -63,10 +63,13 @@ by `corpus_run` exactly as before, and only the *design question* is dropped.
 
 from __future__ import annotations
 
+import re
 import sys
 from collections import Counter, defaultdict
 
 from ..data import cast, files
+from ..queries.world_q import home_of as home_of_q
+from ..gaps import Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, ROLE_TEMPLATE_OF, load_yaml,
                             title_domain)
@@ -121,21 +124,58 @@ def _slug(text: str) -> str:
 # before `Crown`, because a knightly order is a Crown body and the barracks is the better answer
 # than the court. Re-ordering this list moves people, which is a game change, which is why it is
 # stated rather than sorted.
-INSTITUTIONS = ["Löwenritter", "Einhir", "Altonian", "Schoenland", "Parliament",
-                "Hafenmark", "Varfell", "Guild", "Church", "court", "Crown"]
+_INST_CACHE = None
+
+
+def _mentions(candidate: str, text: str) -> bool:
+    """Does `text` name `candidate` as a whole word? The one owner of this file's match rule.
+
+    Written out three times before 2026-09-15 (`institution_of`, and both loops in `concerns_of`).
+    A change to the boundary rule — a hyphenated title like `Warden-Chief` is already on the
+    `TITLES` roster and does not word-match cleanly — had to be found and made three times, with a
+    reviewer re-verifying each copy rather than reading one function."""
+    return re.search(r"\b" + re.escape(candidate) + r"\b", text) is not None
+
+
+def _institutions() -> list:
+    """The institution match order, from `venues.yaml: seat_precedence`. ONE owner.
+
+    ⚠⚠ THIS WAS A SECOND LITERAL AND NOTHING COMPARED THE TWO. It re-typed the eleven `seats:`
+    keys of `venues.yaml` in a different order, inside this file, four days after ED-IN-0229 fixed
+    exactly that shape for the ethical axes. A seat added to `venues.yaml` was never matched; a
+    seat removed sent its people to `commons` with no signal — failing silently in both
+    directions.
+    ⚠ THE REFUSAL IS THE POINT, not the de-duplication: a precedence list that has drifted from
+    the seats it orders is a world built on a matcher that cannot see part of its own map."""
+    global _INST_CACHE
+    if _INST_CACHE is not None:
+        return _INST_CACHE
+    ven = _load(VENUES)
+    order = list(ven.get("seat_precedence") or [])
+    seats = set(ven.get("seats") or {})
+    if set(order) != seats:
+        raise Unspecified(
+            f"venues.yaml: seat_precedence and seats disagree — "
+            f"only in precedence: {sorted(set(order) - seats)}; "
+            f"only in seats: {sorted(seats - set(order))}",
+            "engine/season/venues.yaml",
+            needs="every `seats:` key ordered exactly once in `seat_precedence`",
+            law="ED-IN-0229 — two literals of one set with no refusal between them is how the "
+                "ethical axes drifted; a seat nobody ordered is a seat nobody is ever matched to")
+    _INST_CACHE = order
+    return order
 
 
 def institution_of(case: dict) -> str | None:
     """The institution this loop answers to, or `None` for an unaffiliated life."""
     import json
-    import re
     blob = " ".join([str(case.get("name", "")), str(case.get("one_line", "")),
                      json.dumps(case.get("season_requires", ""), ensure_ascii=False),
                      json.dumps(case.get("who_acts", ""), ensure_ascii=False),
                      json.dumps(case.get("knowledge", ""), ensure_ascii=False),
                      json.dumps(case.get("ends_when", ""), ensure_ascii=False)])
-    for inst in INSTITUTIONS:
-        if re.search(r"\b" + re.escape(inst) + r"\b", blob):
+    for inst in _institutions():
+        if _mentions(inst, blob):
             return inst
     return None
 
@@ -158,7 +198,6 @@ TITLES = ("Duchess", "Duke", "Baron", "Baroness", "Count", "Countess", "Bishop",
 def surname_index(cases: list) -> dict:
     """`surname -> [case_id, ...]`, titles removed. A surname may be SHARED -- `Almqvist` is four
     NPC cases, which is a family and not a collision to resolve away."""
-    import re
     out: dict = defaultdict(list)
     for c in cases:
         toks = [t for t in re.split(r"\s+", str(c.get("name", "")).strip())
@@ -187,11 +226,10 @@ def concerns_of(case: dict, by_name: dict) -> tuple:
     of 143. So self-exclusion is done by id afterwards rather than by skipping the first entry,
     which is what a reader would assume and what would silently mis-tie 105 cases.
     """
-    import re
     acts = [str(x) for x in (case.get("who_acts") or [])]
     for entry in acts:
         for nm, cids in by_name.items():
-            if re.search(r"\b" + re.escape(nm) + r"\b", entry):
+            if _mentions(nm, entry):
                 # A shared surname is a FAMILY (`Almqvist` is four cases). The tie lands on the
                 # first by id and the ambiguity is real rather than resolved -- which of four
                 # siblings *"his family"* means is not answerable from the corpus.
@@ -199,8 +237,8 @@ def concerns_of(case: dict, by_name: dict) -> tuple:
                     if cid != case.get("id"):
                         return cid, None
     for entry in acts:
-        for inst in INSTITUTIONS:
-            if re.search(r"\b" + re.escape(inst) + r"\b", entry):
+        for inst in _institutions():
+            if _mentions(inst, entry):
                 return None, inst
     return None, None
 
@@ -752,19 +790,21 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
                 cand = f"p_{_slug(named)}"
                 if cand in w.persons and cand != pid:
                     about, why = cand, "named"
-            if about is None and inst is not None:
-                pool = [q for q in at_institution.get(inst, []) if q != pid and q in w.persons]
+            # ⚠ ONE LOOP, NOT THREE NEAR-COPIES — and they HAD drifted before this was folded
+            # (2026-09-15): the institution branch carried an extra `q in w.persons` guard the
+            # other two lacked, which is the copies starting to disagree. The guard is now applied
+            # to every tier, which is what each branch meant; a change to the pick rule (the
+            # modulo, or a fifth tier) is one edit.
+            nxt = homes[(homes.index(home_of[pid]) + 1) % len(homes)] if homes else None
+            tiers = ((at_institution.get(inst, []) if inst is not None else [], "institution"),
+                     (by_home.get(home_of.get(pid, ""), []), "roof"),
+                     (by_home.get(nxt, []), "neighbour"))
+            for candidates, tag in tiers:
+                if about is not None:
+                    break
+                pool = [q for q in candidates if q != pid and q in w.persons]
                 if pool:
-                    about, why = pool[n % len(pool)], "institution"
-            if about is None:
-                mates = [q for q in by_home.get(home_of.get(pid, ""), []) if q != pid]
-                if mates:
-                    about, why = mates[n % len(mates)], "roof"
-            if about is None:
-                nxt = homes[(homes.index(home_of[pid]) + 1) % len(homes)] if homes else None
-                pool = [q for q in by_home.get(nxt, []) if q != pid]
-                if pool:
-                    about, why = pool[n % len(pool)], "neighbour"
+                    about, why = pool[n % len(pool)], tag
         # ⚠ ONE WRITE, AFTER THE WHOLE CHAIN. The roster branch used to carry its own copy of the
         # Proposition and the `commit` Tenure and then `continue`, so the two paths were free to
         # disagree about what a tie WRITES -- and they did, on `want`, above. A person with no tie
@@ -788,10 +828,9 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
 def census(w: World) -> dict:
     """What was built, counted from the world rather than from the inputs."""
     kinds = Counter(r.kind for r in w.rungs.values())
-    where = {}
-    for t in w.tenures:
-        if t.kind == "contain" and t.live and t.subject in w.persons:
-            where[t.subject] = t.object
+    # §8: `world_q.home_of` owns "where is everyone"; this used to roll its own copy, and so did
+    # three other sites (see that query's docstring).
+    where = home_of_q(w)
     return {"rungs": dict(kinds), "persons": len(w.persons), "sites": len(w.sites),
             "ties": getattr(w, "_tie_census", {}), "propositions": len(w.propositions),
             "distinct_buildings_inhabited": len(set(where.values())),

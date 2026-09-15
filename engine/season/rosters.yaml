@@ -187,7 +187,14 @@ rosters:
     # reader, fed by the one exporter, from the one owner at
     # `references/descriptor_registry.yaml:conviction_roster`. This row carries the SOURCE and the
     # NOTE, which is what a roster row is for when the values live somewhere better.
-    values: []
+    # ⚠ `from_descriptor:`, NOT `values: []` (2026-09-15). This row carried an EMPTY list
+    # while the real thirteen arrived by a separate direct import in `data/rosters.py`, so
+    # `roster("convictions")` returned `frozenset()` — the "membership test silently false"
+    # outcome `roster()`'s own refusal text forbids, in the file whose header promises the
+    # opposite. `from_descriptor` is the mechanism ED-IN-0229 built; this is the row that
+    # motivated it, finally migrated. It also puts the data-side `forbidden:` bar within
+    # reach of this roster, which a direct import cannot do.
+    from_descriptor: conviction_roster
 
   conviction_axes:
     source: >-

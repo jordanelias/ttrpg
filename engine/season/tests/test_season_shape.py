@@ -10796,7 +10796,12 @@ def test_a_telling_deposits_what_was_told_and_the_teller_is_not_told_their_own_n
     for pid, c in told:
         src_actor = None
         for e_id, actor in tellers.items():
-            if any(c.id == H(w.world_seed, t, pid, f"told:{e_id}") for t in range(w.tick + 1)):
+            # `c.when` IS the tick the id was minted with (`loop/witness.py` stamps both from
+            # `w.tick` in one construction), so the claim's own field answers exactly what a
+            # sweep over every tick was guessing at. The `forbidden` set below keeps its range,
+            # and that is not an oversight: it names ids the teller must NOT hold, and a claim
+            # that does not exist has no `.when` to read.
+            if c.id == H(w.world_seed, c.when, pid, f"told:{e_id}"):
                 src_actor = actor
                 break
         assert src_actor is not None, (

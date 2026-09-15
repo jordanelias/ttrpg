@@ -148,6 +148,28 @@ def judging_set(w: World, rung_id: str) -> list[str]:
     raise Unspecified("judging_set_rule", "S61", needs="who decides at a sitting",
                       law="S61 -- NOTHING IS DECIDED AT A SITTING. T5's 'filtered at a rung' runs straight through it, and S10.2's 'arrangements, not choices' cannot be confirmed until it is")
 
+def home_of(w: World) -> dict:
+    """`{person id: containing rung id}` for every person with a live `contain` edge.
+
+    ⚠ **THE INVERSE OF `presence`, AND IT EXISTS BECAUSE FOUR SITES HAD ROLLED IT BY HAND.**
+    `presence(w, rung)` answers *who is here*; this answers *where is everyone*, which is the
+    question `harness/populated.py` (twice — the `by_home`/`home_of` index and `census`),
+    `tools/export_npc_roster.py` and `engine/season/tests/test_season_shape.py` were each
+    computing with their own copy of `t.kind == "contain" and t.live and t.subject in w.persons`.
+    That is load-bearing rather than cosmetic: `export_npc_roster.py --check` detects drift by
+    comparing ITS notion of home against the builder's, so the two agreeing by coincidence is the
+    whole point of the check, and `census`'s `largest_building` is asserted in the suite. A change
+    to what counts as home — a dead tenure, a person with two contain edges — had to land in four
+    places with nothing to catch a miss (§8, and the §0.1 pt 5 pattern-defect signature).
+
+    ⚠ LAST WRITE WINS on a person with more than one live `contain`, which `World.add_tenure`
+    does not forbid. That is the incumbent behaviour of every site this replaces, preserved
+    deliberately rather than quietly tightened here."""
+    TRACE.query("home_of", "resolver")
+    return {t.subject: t.object for t in w.tenures
+            if t.kind == "contain" and t.live and t.subject in w.persons}
+
+
 def presence(w: World, rung_id: str) -> list[str]:
     """S28 -- the PRESENCE INDEX the global fan-out reads."""
     TRACE.query("presence", "resolver")

@@ -34,14 +34,40 @@ def _world(seed=PROBE_SEED, seasons=1):
 
 # ── the sweep itself ────────────────────────────────────────────────────────────────────────
 
-def test_the_sweep_examines_every_invariant_on_every_seed():
-    """`checked` is the anti-vacuity term: zero violations must be a result, not an empty loop."""
+def test_the_sweep_reports_rows_examined_not_predicates_offered():
+    """The anti-vacuity term must count what was LOOKED AT, not what was on offer.
+
+    ⚠⚠ THE OLD TERM COULD NOT SEE ITS OWN FAILURE, which is why this test changed shape. `sweep`
+    reported `checked += len(INVARIANTS)` — 8 per seed whether or not a single row existed to
+    inspect. Measured: the `headless` world has **0 Offices and 0 stance rows**, so two of the
+    eight predicates quantified over empty collections and reported clean forever while `checked`
+    cheerfully said 8. `examined` counts rows and `unexercised` names the carriers with none, so
+    "clean" and "never asked" are now different answers.
+    """
     r = I.sweep(lambda s: _world(s), range(SWEEP_SEEDS))
     assert r["seeds"] == SWEEP_SEEDS
-    assert r["checked"] == SWEEP_SEEDS * len(I.INVARIANTS), (
-        f"{r['checked']} checks over {r['seeds']} seeds, expected "
-        f"{SWEEP_SEEDS * len(I.INVARIANTS)}. A sweep reporting no violations while running fewer "
-        "checks than it claims is the shape `checked` exists to make visible")
+    assert set(r["examined"]) == set(I.carrier_census_keys()), (
+        "the census lost or gained a carrier without the roster moving")
+    assert r["examined"]["events"] > 0 and r["examined"]["tenures"] > 0, (
+        f"the sweep examined {r['examined']} — a run with no events or no tenures inspected "
+        "nothing, and a zero-violation result from it means nothing")
+    # headless carries no Office and no stance row: the sweep must SAY so rather than imply cover.
+    assert "offices" in r["unexercised"] and "stance_rows" in r["unexercised"], (
+        f"headless unexercised={r['unexercised']}; it builds no Office and no stance row, so if "
+        "those are no longer reported unexercised the census has stopped telling the truth")
+
+
+def test_a_carrier_with_no_rows_is_reported_rather_than_counted_as_clean():
+    """The falsifier for the vacuity fix: a sweep over a world with nothing in it must not read
+    as a pass. Every carrier comes back unexercised, and `violations` is empty — which is exactly
+    the combination a caller must be able to tell apart from a real clean run."""
+    from engine.season.state.world import World
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    r = I.sweep(lambda s: World(world_seed=s, fixtures=DEFAULT_FIXTURES), range(2))
+    assert not r["violations"], "an empty world cannot violate anything"
+    assert set(r["unexercised"]) == set(I.carrier_census_keys()), (
+        f"an empty world reported {r['unexercised']} unexercised; every carrier is empty, so "
+        "every one must be named — otherwise a zero here is indistinguishable from a clean sweep")
 
 
 def test_every_declared_exception_carries_a_citation():

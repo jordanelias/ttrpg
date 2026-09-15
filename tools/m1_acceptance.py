@@ -83,11 +83,13 @@ sys.path.insert(0, REPO_ROOT)
 try:
     from engine.season.harness import headless as _headless
     from engine.season.harness import invariants as _invariants
+    from engine.season.harness import populated as _populated
     from engine.substrate import stubwire as _stubwire
     _ENGINE_IMPORT_ERROR = None
 except Exception as _exc:  # pragma: no cover - defensive; surfaced via row detail, not raised
     _headless = None
     _invariants = None
+    _populated = None
     _stubwire = None
     _ENGINE_IMPORT_ERROR = _exc
 
@@ -95,6 +97,11 @@ except Exception as _exc:  # pragma: no cover - defensive; surfaced via row deta
 #: which keeps a gate humans run interactively honest without making it a chore.
 M1_SWEEP_SEEDS = 24
 M1_SWEEP_SEASONS = 4
+#: The populated world costs ~0.6s to build + ~2.6s/season against headless's 0.13s,
+#: so it is swept narrow and deep rather than wide. It is NOT optional — it is the only
+#: world that exercises Offices and stance rows at all.
+M1_POP_SEEDS = 2
+M1_POP_SEASONS = 1
 
 BOARD = os.path.join('workplans', 'workplan_v6_progress.yaml')
 CONTRACTS = os.path.join('references', 'module_contracts.yaml')
@@ -192,7 +199,10 @@ def row_stub_invocations():
     and still unresolved. They are simply not on the head's path, so they no longer block a
     milestone measured over the head. OI-05 was RULED by Jordan on 2026-09-13 (`ED-WR-0011` — the
     cast is the authored 46) and the head already implements it; OI-07 remains structural and open
-    against `mc_v18`, whose own retirement is a separate, 71-file piece of work that is NOT done.
+    against `mc_v18`, whose own retirement is a separate piece of work that is NOT done —
+    sized by `tests/valoria/test_mc_v18_is_deprecated.py::ALLOWED_IMPORTERS`, the AST scan that owns
+    the importer set, never by a number restated here (the `71` that stood in this line was a grep
+    of mentions read as a dependency count; `ED-IN-0227` is the correction).
     """
     if _headless is None:
         return _blocked(
@@ -461,25 +471,44 @@ def row_invariant_violations():
             f'engine import failed: {type(_ENGINE_IMPORT_ERROR).__name__}: '
             f'{_ENGINE_IMPORT_ERROR}',
         )
-    seeds = range(M1_SWEEP_SEEDS)
     r = _invariants.sweep(
-        lambda s: _headless.run(seasons=M1_SWEEP_SEASONS, seed=s)['world'], seeds)
-    value = len(r['violations'])
+        lambda s: _headless.run(seasons=M1_SWEEP_SEASONS, seed=s)['world'],
+        range(M1_SWEEP_SEEDS))
+
+    # ⚠⚠ BOTH WORLDS, AND THE SECOND ONE IS WHY THIS ROW WAS PARTLY VACUOUS UNTIL 2026-09-15.
+    # `headless` seats three people and builds NO Office and NO stance row, so
+    # `office_singly_held` and `stance_row_shape` quantified over collections empty by
+    # construction and reported clean forever. The populated world is the only one that carries
+    # either, so it is swept too — narrow (2 seeds x 1 season) because it costs ~3.2s a seed
+    # against headless's 0.13s, but swept.
+    def _pop(seed):
+        w = _populated.build_realm(seed)
+        _populated.run(M1_POP_SEASONS, seed, None, w=w)
+        return w
+    p = _invariants.sweep(_pop, range(M1_POP_SEEDS))
+
+    examined = {k: r['examined'].get(k, 0) + p['examined'].get(k, 0)
+                for k in set(r['examined']) | set(p['examined'])}
+    unexercised = sorted(k for k, n in examined.items() if n == 0)
+    value = len(r['violations']) + len(p['violations'])
+    declared = r['declared'] + p['declared']
     return {
         'row': 'invariant_violations',
         'label': 'N seeds, zero invariant violations',
         'state': 'measured',
         'value': value,
-        'passes': value == 0,
+        # ⚠ A CARRIER WITH ZERO ROWS IS AN UNASKED QUESTION, NOT A PASS. The row fails while any
+        # predicate had nothing to look at, because "0 violations over 0 offices" is not evidence
+        # about offices — it is the absence of evidence wearing a green tick.
+        'passes': value == 0 and not unexercised,
         'unblocked_by': None,
         'detail': (
-            f"{r['seeds']} headless seeds x {M1_SWEEP_SEASONS} seasons, "
-            f"{len(_invariants.INVARIANTS)} invariants = {r['checked']} checks: "
-            f"{value} violation(s)"
-            + (f", plus {len(r['declared'])} declared (see invariants.DECLARED)"
-               if r['declared'] else '')
-            + '. `checked` is reported because a zero that examined nothing is '
-              'indistinguishable from a clean run (§0.1 pt 2).'
+            f"{r['seeds']} headless seeds x {M1_SWEEP_SEASONS} seasons + {p['seeds']} populated "
+            f"x {M1_POP_SEASONS}, {len(_invariants.INVARIANTS)} invariants: {value} violation(s) "
+            f"over {examined} rows"
+            + (f"; UNEXERCISED carriers: {unexercised} — those predicates had nothing to inspect"
+               if unexercised else "; every carrier exercised")
+            + (f"; plus {len(declared)} declared (see invariants.DECLARED)" if declared else '')
         ),
     }
 

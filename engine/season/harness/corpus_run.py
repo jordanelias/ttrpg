@@ -308,7 +308,10 @@ def build_at(case: dict, seed: int = 0) -> World:
     # The docket names ONE matter, so it names the first person's. `prop_x` is gone -- and an
     # adversarial pass confirmed NOTHING outside this function ever read that id, so the rename
     # breaks no surface.
-    prop = w.propositions["prop_p_a"]
+    # Derived, not re-typed: `"prop_p_a"` was a hand-written copy of the `f"prop_{pid}"` rule
+    # three lines above, so the id format had to stay in sync by eye and a change to `cast`'s
+    # order or contents would have silently pointed this at the wrong person.
+    prop = w.propositions[f"prop_{cast[0]}"]
     if (ENDINGS.get(str(case.get("id"))) or {}).get("forced_by_threshold"):
         # Q1: a Date coming due, with a DocketItem naming a matter. The corpus says this case's
         # ending is forced by a threshold; a world with no deadline cannot represent that at all.
@@ -505,20 +508,29 @@ def run_case(case: dict, seed: int = 0, lane: str = "NPC") -> dict:
     # the tree, and `tools/ci_claim_provenance_check.py` is right to refuse one that cannot be.
     # ⚠ COUNTED PER WORLD AND SUMMED BY THE CALLER, like `degrees` above, rather than recomputed
     # from a second walk: the ledgers are this world's and the report is the corpus's.
-    sources = Counter(c.source for p_ in w.persons.values() for c in p_.ledger)
-    told_holders = sum(1 for p_ in w.persons.values()
-                       if any(c.source == "told_by" for c in p_.ledger))
+    # ⚠ ONE WALK OVER THE LEDGERS, NOT THREE. `sources`, `told_holders` and `told_redeposits`
+    # were three independent `for p_ in w.persons.values(): for c in p_.ledger` passes over the
+    # same pairs, run once per corpus case (up to 143 a run). The redeposit count still needs
+    # `own` complete before it can test membership, so it keeps its own second pass over THAT
+    # person's ledger — which is per-person and bounded by `ledger_cap`, not a third world walk.
+    sources, told_holders, told_redeposits = Counter(), 0, 0
+    for p_ in w.persons.values():
+        own, told_here, holds_told = set(), [], False
+        for c in p_.ledger:
+            sources[c.source] += 1
+            if c.source == "told_by":
+                holds_told = True
+                told_here.append(c)
+            else:
+                own.add((c.subject, c.predicate, c.value))
+        told_holders += 1 if holds_told else 0
+        told_redeposits += sum(1 for c in told_here
+                               if (c.subject, c.predicate, c.value) in own)
     # ⚠ THE REDEPOSIT COUNT IS THE ONE THAT CAUGHT A REAL DEFECT, so it is reported rather than
     # left to a probe. A `told_by` claim whose triple the hearer ALREADY HOLDS firsthand is one
     # belief stored twice — it tells them nothing and takes a `ledger_cap` slot from a claim that
     # would have. The first cut of the told channel deposited 180 and **175 were this**; the
     # corpus is where that is visible, because `build_world(0)` produces none.
-    told_redeposits = 0
-    for p_ in w.persons.values():
-        own = {(c.subject, c.predicate, c.value) for c in p_.ledger if c.source != "told_by"}
-        told_redeposits += sum(1 for c in p_.ledger
-                               if c.source == "told_by"
-                               and (c.subject, c.predicate, c.value) in own)
     return dict(id=cid, scale=scale, status=status, executed=ok, refused=no, seasons=n,
                 why="", checks=checks, degrees=dict(degrees),
                 claim_sources=dict(sources), persons=len(w.persons),

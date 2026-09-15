@@ -30,6 +30,7 @@ decide what a non-empty list means.
 """
 from __future__ import annotations
 
+import inspect as _inspect
 from collections import Counter
 
 # §F2's stance row is `(referent, valence -5..+5, weight 0..5)` (#353 `:333`). The bound is the
@@ -72,36 +73,36 @@ def _entities(w) -> set:
 
 
 def _all_tenures(w) -> list:
-    """Every Tenure in the world, however it is stored.
+    """Every Tenure in the world. `World.tenures` is the single owner; this only names it.
 
-    ⚠ BOTH STORES, AND THAT IS NOT DEFENSIVE — IT IS WHERE A MISS WOULD HIDE. `W5` moved Tenures
-    onto their SUBJECT (`Person.tenures`), because `Tenure`'s own docstring says the subject owns
-    it; a Tenure whose subject is not a person (`contain : Rung -> Rung` is most of them) has no
-    person to live on and goes to `World._unowned`. A sweep reading only `w.tenures` would examine
-    the person-owned half and report zero violations for the other, which is the sham-clear this
-    module exists to avoid."""
-    seen, out = set(), []
-    for t in list(getattr(w, "tenures", []) or []) + list(getattr(w, "_unowned", []) or []):
-        if id(t) not in seen:
-            seen.add(id(t))
-            out.append(t)
-    return out
+    ⚠⚠ **THIS FUNCTION USED TO MERGE THE TWO STORES BY HAND, AND THE COMMENT JUSTIFYING THAT WAS
+    FALSE.** It read `list(w.tenures) + list(w._unowned)` with an `id()`-keyed dedup, and claimed
+    *"a sweep reading only `w.tenures` would examine the person-owned half and report zero
+    violations for the other"*. `World.tenures` (`state/world.py:186-194`) already calls
+    `_rehome()` and then extends with `self._unowned` — so the hand-merge double-added every
+    unowned Tenure and survived **only** because of the dedup pass, which is direct evidence the
+    duplication was never checked against the property it was working around. §8: the rule lives
+    once, and it already lived in `World`.
+
+    Kept as a named function rather than inlined because three predicates share it and
+    `violations()` computes it once for all of them."""
+    return list(w.tenures)
 
 
-def tenure_interval(w) -> list:
+def tenure_interval(w, tenures=None) -> list:
     """An ended Tenure ended no earlier than it began.
 
     NOT ENFORCED ON WRITE: `add_tenure` checks `kind` and ladder ascent and never looks at
     `since`/`until`, and `until` is set by whatever ends the tenure, long after the write. A
     negative interval makes `live` and every `since`-ordered read disagree about what happened."""
     bad = []
-    for t in _all_tenures(w):
+    for t in (_all_tenures(w) if tenures is None else tenures):
         if t.until is not None and t.until < t.since:
             bad.append(f"tenure_interval: {t.id!r} ends at {t.until} but began at {t.since}")
     return bad
 
 
-def tenure_referent(w) -> list:
+def tenure_referent(w, tenures=None) -> list:
     """A live Tenure names things that exist on both ends.
 
     NOT ENFORCED ON WRITE: `add_tenure` indexes `self.rungs[...]` only inside the `contain`
@@ -109,7 +110,7 @@ def tenure_referent(w) -> list:
     nothing is accepted in silence. That is how `leaders()` can read an office nobody has and
     return a plausible empty list — the defect shape this repository has already met twice."""
     ents, bad = _entities(w), []
-    for t in _all_tenures(w):
+    for t in (_all_tenures(w) if tenures is None else tenures):
         if not t.live:
             continue
         for end, who in (("subject", t.subject), ("object", t.object)):
@@ -221,14 +222,14 @@ def stance_row_shape(w) -> list:
 # experiment on the real loop proves it SHOULD.
 
 
-def office_singly_held(w) -> list:
+def office_singly_held(w, tenures=None) -> list:
     """No Office is held by two people at once.
 
     NOT ENFORCED ON WRITE: nothing looks at the other `hold` edges when one is added. §11 makes
     an Office a SEAT — it has `conferral`, `revocation` and an upkeep — and a seat two people
     occupy is the scarcity defect this repository has already shipped once, where every person
     got an office and `leaders() == members()` for all eight factions."""
-    held = Counter(t.object for t in _all_tenures(w)
+    held = Counter(t.object for t in (_all_tenures(w) if tenures is None else tenures)
                    if t.kind == "hold" and t.live and t.object in w.offices)
     return [f"office_singly_held: office {oid!r} is held by {n} people at once"
             for oid, n in sorted(held.items()) if n > 1]
@@ -237,12 +238,46 @@ def office_singly_held(w) -> list:
 #: id -> predicate. The roster above fixes the order; this is the dispatch.
 CHECKS = {name: globals()[name] for name in INVARIANTS}
 
+#: Which predicates accept the shared Tenure list `violations()` builds once per world.
+_TAKES_TENURES = {name: "tenures" in _inspect.signature(fn).parameters
+                  for name, fn in CHECKS.items()}
+
+
+def carrier_census(w) -> dict:
+    """How many ROWS each predicate actually had to look at. The anti-vacuity term.
+
+    ⚠⚠ **`checked` USED TO COUNT PREDICATES OFFERED, WHICH CANNOT SEE THE FAILURE IT EXISTS FOR.**
+    `sweep` reported `checked += len(INVARIANTS)` — 8 per seed, whether or not any of the eight
+    had a single row to inspect. MEASURED 2026-09-15: the `headless` world the milestone gate
+    sweeps contains **0 Offices and 0 stance rows**, so `office_singly_held` and
+    `stance_row_shape` quantified over collections that are EMPTY BY CONSTRUCTION and reported
+    clean forever. A count of predicates offered says "8 checks ran"; a count of rows says
+    "offices: 0", which is the difference between a clean result and an unasked question.
+
+    That is the ED-MB-0042 shape this module's own header disclaims, reproduced inside the term
+    written to prevent it — so the term now counts the thing it claimed to."""
+    return {
+        "tenures": len(_all_tenures(w)),
+        "events": len(w.log),
+        "claims": sum(len(p.ledger) for p in w.persons.values()),
+        "persons": len(w.persons),
+        "stance_rows": sum(len(p.stance) for p in w.persons.values()),
+        "offices": len(w.offices),
+        "propositions": len(w.propositions),
+    }
+
 
 def violations(w) -> list:
-    """Every invariant violation in `w`, in `INVARIANTS` order. Empty is the healthy answer."""
+    """Every invariant violation in `w`, in `INVARIANTS` order. Empty is the healthy answer.
+
+    The shared Tenure list is built ONCE here and handed to the three predicates that read it,
+    rather than each rebuilding it — `violations` runs once per seed and the gate sweeps 24, so
+    the hand-rebuild was 72 full walks where 24 do."""
+    tenures = _all_tenures(w)
     out = []
     for name in INVARIANTS:
-        out.extend(CHECKS[name](w))
+        fn = CHECKS[name]
+        out.extend(fn(w, tenures) if _TAKES_TENURES.get(name) else fn(w))
     return out
 
 
@@ -270,23 +305,37 @@ def _declared_for(message: str):
 def sweep(build, seeds) -> dict:
     """Run `build(seed)` for each seed and collect violations.
 
-    `build` returns a finished World. Returns
-    `{"seeds": n, "checked": n_invariants_run, "violations": [...], "declared": [...],
-    "by_seed": {...}}`, where `violations` is the NEW ones and `declared` the ones `DECLARED`
-    already cites. A caller gates on `violations`; `declared` is reported, never silently dropped.
+    `build` returns a finished World. Returns `{"seeds", "examined", "unexercised",
+    "violations", "declared", "by_seed"}`, where `violations` is the NEW ones and `declared` the
+    ones `DECLARED` already cites. A caller gates on `violations`; `declared` is reported, never
+    silently dropped.
+
+    ⚠⚠ **`unexercised` IS THE HONEST HALF AND IT IS WHY THIS RETURNS A CENSUS AT ALL.** It names
+    every carrier the sweep never saw a single row of, so a caller can tell "clean" from "never
+    asked". A world with `offices: 0` proves nothing about `office_singly_held`, and the previous
+    `checked` term — predicates OFFERED, not rows READ — reported 8 checks either way.
 
     ⚠ **`checked` EXISTS SO A ZERO CANNOT MEAN "LOOKED AT NOTHING".** `CLAUDE.md` §0.1 pt 2: a
     loop that asserts conditionally must assert that it asserted. A sweep over an empty seed list,
     or one whose builder silently returned a bare World, reports `violations: []` — which is
     indistinguishable from a clean run unless the caller can also see how much work happened."""
     seeds = list(seeds)
-    by_seed, checked, new, declared = {}, 0, [], []
+    by_seed, new, declared = {}, [], []
+    examined = {k: 0 for k in carrier_census_keys()}
     for s in seeds:
-        v = violations(build(s))
-        checked += len(INVARIANTS)
+        w = build(s)
+        for k, n in carrier_census(w).items():
+            examined[k] += n
+        v = violations(w)
         if v:
             by_seed[s] = v
         for m in v:
             (declared if _declared_for(m) else new).append(f"seed {s}: {m}")
-    return {"seeds": len(seeds), "checked": checked,
+    return {"seeds": len(seeds), "examined": examined,
+            "unexercised": sorted(k for k, n in examined.items() if n == 0),
             "violations": new, "declared": declared, "by_seed": by_seed}
+
+
+def carrier_census_keys() -> tuple:
+    """The census keys, fixed so a sweep over zero seeds still reports every carrier as 0."""
+    return ("tenures", "events", "claims", "persons", "stance_rows", "offices", "propositions")
