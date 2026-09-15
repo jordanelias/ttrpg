@@ -125,6 +125,20 @@ buildings:
 # canonical seat an institution answers to. Where canon names the seat itself (the Church at
 # Himmelenger, the Löwenritter at Ehrenfeld) the row repeats canon rather than deciding anything.
 # ---------------------------------------------------------------------------
+# ⚠⚠ THE MATCH ORDER IS SEMANTIC AND IT LIVES HERE, BESIDE THE SEATS IT ORDERS (2026-09-15).
+# `harness/populated.py` matches a case's prose against these names and takes the FIRST hit, so the
+# more specific institution must come first — `Löwenritter` before `Crown`, because a knightly
+# order is a Crown body and the barracks is the better answer than the court. Re-ordering this list
+# MOVES PEOPLE, which is a game change.
+#
+# It used to be a second Python literal in `populated.py` re-typing these same eleven keys in a
+# different order, with nothing comparing the two — which is ED-IN-0229's defect (two literals, no
+# refusal between them) one directory over. `populated.py` now reads this list and REFUSES if it
+# and `seats:` disagree in either direction, so adding a seat without ordering it is an error
+# rather than a silent never-match.
+seat_precedence: ["Löwenritter", "Einhir", "Altonian", "Schoenland", "Parliament",
+                  "Hafenmark", "Varfell", "Guild", "Church", "court", "Crown"]
+
 seats:
   Crown:        S-001   # Valorsplatz — "Royal court ... Torben resides here" (geography, T1)
   court:        S-001

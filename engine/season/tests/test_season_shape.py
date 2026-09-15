@@ -10796,7 +10796,12 @@ def test_a_telling_deposits_what_was_told_and_the_teller_is_not_told_their_own_n
     for pid, c in told:
         src_actor = None
         for e_id, actor in tellers.items():
-            if any(c.id == H(w.world_seed, t, pid, f"told:{e_id}") for t in range(w.tick + 1)):
+            # `c.when` IS the tick the id was minted with (`loop/witness.py` stamps both from
+            # `w.tick` in one construction), so the claim's own field answers exactly what a
+            # sweep over every tick was guessing at. The `forbidden` set below keeps its range,
+            # and that is not an oversight: it names ids the teller must NOT hold, and a claim
+            # that does not exist has no `.when` to read.
+            if c.id == H(w.world_seed, c.when, pid, f"told:{e_id}"):
                 src_actor = actor
                 break
         assert src_actor is not None, (
@@ -10863,7 +10868,16 @@ def test_the_populated_world_is_not_everybody_in_one_room():
         "people, which is why the count is the NPC lane's and not the corpus's")
 
     # THE LADDER IS DEEP. `community` and `hearth` sat unused in every world this repo built.
-    for kind in ("realm", "province", "settlement", "community", "hearth", "person"):
+    #
+    # ⚠ `territory`, NOT `province`, AND THE SWAP IS A CONFORMANCE FIX RATHER THAN A RELAXATION.
+    # `systems/settlements/reference/scale_hierarchy_v1.md` §1 is RATIFIED (direct Jordan ruling,
+    # 2026-07-13): *"settlements comprise territories comprise provinces comprise duchies comprise
+    # country."* A TERRITORY is the fixed unit holding multiple settlements, which is what each of
+    # geography's 17 rows is; its `provinces:` key is the label the ruling superseded. And §2 makes
+    # a province an EMERGENT AGGREGATION — *"only formed if the same faction holds the constituent
+    # territories"* — so no world builds one and `queries/world_q.provinces_of` computes it.
+    # Asserting a `province` rung here would pin the mislabel the ruling exists to remove.
+    for kind in ("realm", "duchy", "territory", "settlement", "community", "hearth", "person"):
         assert c["rungs"].get(kind), (
             f"no {kind!r} rung in the populated world. The §10 ladder is "
             "`person < hearth < community < settlement < territory < province < duchy < realm` "
@@ -10879,22 +10893,203 @@ def test_the_populated_world_is_not_everybody_in_one_room():
         "most of the cast shares a roof is co-located in effect whatever the rung count says")
 
     # EVERY PERSON WANTS SOMETHING, AND IT IS THEIR OWN CASE'S WANT.
-    assert c["propositions"] == c["persons"], (
-        f"{c['propositions']} propositions for {c['persons']} persons. A person with no live "
+    #
+    # ⚠ SCOPED TO THE WANT-PROPOSITIONS, AND THE RE-SCOPING IS THE POINT RATHER THAN AN EXEMPTION.
+    # This read `propositions == persons` and used the COUNT as a proxy for *every person has a
+    # live `commit`*. That proxy held only while a Proposition could be one thing. §14.2 — *"A
+    # faction IS a Proposition plus its `commit` edges"* — gives the carrier a second job, so the
+    # world now holds one `fac_*` Proposition per faction beside one `prop_*` want per person, and
+    # the count identity is false while the INVARIANT IT STOOD FOR IS UNCHANGED. The invariant is
+    # asserted directly below, which is stronger than the count ever was: a count identity would
+    # have passed had two people shared a want and a third had none.
+    wants = {k: p for k, p in w.propositions.items() if k.startswith("prop_")}
+    factions_held = {k: p for k, p in w.propositions.items() if k.startswith("fac_")}
+    assert len(wants) == c["persons"], (
+        f"{len(wants)} want-propositions for {c['persons']} persons. A person with no live "
         "`commit` raises no Q4 question, forms no candidate and does not act at all — measured, "
         "the unseeded world ran a full season with 0 acts by 0 actors")
-    matters = {p.predicate for p in w.propositions.values()}
+    committed = {t.subject for t in w.tenures
+                 if t.kind == "commit" and t.live and t.object in wants}
+    assert committed == set(w.persons), (
+        f"{len(set(w.persons) - committed)} person(s) hold no live `commit` to a want. This is "
+        "what the old `propositions == persons` count was standing in for, asserted on the edges "
+        "rather than on a total")
+
+    # MEMBERSHIP IS `commit`, AND IT IS A SECOND EDGE ON THE SAME PEOPLE (§14.2 · §15's table,
+    # "this is faction membership"). Not every person belongs: six of the corpus name an
+    # affiliation that is on no roster, and `build_realm` leaves those unplaced rather than
+    # filing them under a plausible neighbour.
+    assert factions_held, "no faction Propositions: `members`/`leaders`/`footprint` return nothing"
+    member_edges = {t.subject for t in w.tenures
+                    if t.kind == "commit" and t.live and t.object in factions_held}
+    assert member_edges, "no `commit` edge points at a faction — membership is unbuilt"
+    assert len(member_edges) + len(w._unplaced_cast) == c["persons"], (
+        f"{len(member_edges)} placed + {len(w._unplaced_cast)} unplaced != {c['persons']} persons. "
+        "Every person is either a member of a rostered faction or explicitly counted as unplaced; "
+        "a person who is neither has been dropped silently")
+
+    matters = {p.predicate for p in wants.values()}
     assert len(matters) > c["persons"] / 2, (
         f"only {len(matters)} distinct wants across {c['persons']} people. The first cut gave "
         "every person the string 'a standing ambition'; `wants_of` reads the case's own first "
         "`core` row from `season_requires`, of which the corpus declares 427")
 
     # AND THE WANT CONCERNS A PERSON — `ED-IN-0210` Ruling 1, verbs are not fiats.
-    about_people = [p for p in w.propositions.values() if p.subject in w.persons]
-    assert len(about_people) == len(w.propositions), (
-        f"{len(w.propositions) - len(about_people)} proposition(s) name something that is not a "
+    # ⚠ QUANTIFIED OVER EVERY OUGHT, AND THE FACTION CREEDS ARE NOW INSIDE THE QUANTIFIER RATHER
+    # THAN EXEMPT FROM IT. Q4 raises a question from a live `commit` to an **OUGHT**, emitting
+    # `(prop.subject,)` as the referent, so this rule binds every Proposition a person can be
+    # questioned about. Until 2026-09-14 the faction Propositions were `HOLDS` and a second
+    # assertion here pinned them that way; Jordan ruled the creed an OUGHT (*"Faction creed as an
+    # ought: sure"*), so the pin is gone and the creeds are held to the SAME rule as the wants —
+    # which is the stronger statement, not the weaker one. A creed subjected on a faction NAME
+    # lands in this assertion and fails here.
+    oughts = {k: p for k, p in w.propositions.items() if str(p.mood).upper() == "OUGHT"}
+    about_people = [p for p in oughts.values() if p.subject in w.persons]
+    assert len(about_people) == len(oughts), (
+        f"{len(oughts) - len(about_people)} OUGHT proposition(s) name something that is not a "
         "person. Q4 emits `(prop.subject,)` as the referent, so a rung-subject proposition is "
         "exactly how `build_at` produced a corpus in which no act ever names anybody")
+
+    # THE CREED IS AN OUGHT ABOUT THE FACTION'S OWN LEADER, AND THE LOYALTY REACHES A READER.
+    # ⚠ BOTH HALVES ARE LOAD-BEARING AND THE SECOND IS THE ONE THAT WOULD HAVE ROTTED SILENTLY.
+    # A creed nobody is differently loyal to is a constant, and a loyalty written to a field
+    # `decision/choose.py` does not read is the deleted-`conferrer` defect (`carriers.py:48`).
+    # `stance_toward` sums `valence * weight` over a person's OWN rows, so the falsifier for
+    # "the loyalty is live" is that the rows exist, name the creed's subject, and DIFFER.
+    creeds = {k: p for k, p in factions_held.items() if str(p.mood).upper() == "OUGHT"}
+    assert creeds, (
+        "no faction Proposition is an OUGHT. Jordan ruled the creed an OUGHT on 2026-09-13; with "
+        "every faction back at HOLDS no member has a standing question about their faction at all")
+    leaders_named = {p.subject for p in creeds.values()}
+    for fid, prop in creeds.items():
+        want = POP.cast.faction_leader(prop.value)
+        assert want and prop.subject == f"p_{POP._slug(want)}", (
+            f"{fid}'s creed names {prop.subject}, but `rosters.yaml: faction_leaders.by_faction` "
+            f"names {want} for {prop.value}. The creed's referent is the authored leader or it is "
+            "invented canon")
+        assert prop.scope, f"{fid}'s creed carries no `role_template` in `scope` — it has no content"
+    weights = [row[1] * row[2] for p in w.persons.values() for row in p.stance
+               if row[0] in leaders_named]
+    assert len(weights) > c["persons"] / 2, (
+        f"only {len(weights)} loyalty stance rows across {c['persons']} people. Every member of a "
+        "faction with a creed carries one; far fewer means the membership loop stopped writing "
+        "them and `stance_toward` reads nothing")
+    assert min(weights) < 0 < max(weights), (
+        f"loyalty stance rows run {min(weights)}..{max(weights)} — all one sign. `cast.loyalty` "
+        "puts 50 at INDIFFERENT, not at average, so a faction with no opposed members means the "
+        "projection collapsed and every member is being read as aligned")
+
+
+def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
+    """Offices, titles and holdings — and the one property that makes `leaders` mean anything.
+
+    ⚠ THIS TEST EXISTS BECAUSE THE FIRST CUT OF THE OFFICE BLOCK FAILED IT. It gave every placed
+    person an Office named after their registry `role`, so `leaders(w, f) == members(w, f)` for all
+    eight factions: everybody a leader, nothing scarce, nothing to compete for. Nothing raised —
+    a full set is a perfectly plausible answer — so the defect was visible only by asking whether
+    the two sets DIFFER. That question is this test.
+
+    ⚠⚠ MUTATION-VERIFIED, AND THE RESULT NAMES WHICH ASSERTION IS LOAD-BEARING. Re-seating an
+    office for every placed person and re-running the two guards:
+
+        0 < seats < len(persons)        PASSES  (40 offices, 46 persons) — DOES NOT CATCH IT
+        some faction has leaders < members   FAILS — catches it
+
+    So the count assertion is a floor and not the falsifier: 40 of 46 is a perfectly respectable
+    ratio and is still the defect. Recorded rather than left for a later session to re-derive,
+    because a test suite whose passing assertion is mistaken for the guarding one is `§0.1` pt 2's
+    own failure — an assertion that cannot observe the failure it excludes.
+    """
+    from ..harness.populated import build_realm
+    from ..queries.world_q import (members, leaders, sovereign_fraction, conferral_path,
+                                   provinces_of)
+    w = build_realm(seed=0)
+
+    # THE LADDER HAS ITS MIDDLE. `duchy` is a declared `rung_kind` that no world this repo built
+    # had ever instantiated, so `province -> realm` skipped the rung the governance ladder turns on.
+    assert w._office_census["seated"], "no office in a populated world: `leaders` returns nothing"
+    duchies = [r for r in w.rungs.values() if r.kind == "duchy"]
+    assert duchies, "no `duchy` rung — the governance ladder is missing its middle"
+
+    # A SEAT IS SCARCE. Both halves matter: some people hold one, and MOST DO NOT.
+    seats = w._office_census["seated"]
+    assert 0 < seats < len(w.persons), (
+        f"{seats} offices for {len(w.persons)} persons. An office per person is an occupation "
+        "list, not a governance layer — §11 gives an Office `conferral`, `revocation` and "
+        "`upkeep`, none of which a copyist has")
+
+    # LEADERSHIP IS A PROPER SUBSET OF MEMBERSHIP, AND STRICTLY SO SOMEWHERE. Equality everywhere
+    # is the exact defect above; containment alone would not catch it.
+    factions = [k for k in w.propositions if k.startswith("fac_")]
+    assert factions, "no faction Propositions"
+    strict = 0
+    for fid in factions:
+        ms, ls = set(members(w, fid)), set(leaders(w, fid))
+        assert ls <= ms, (
+            f"{w.propositions[fid].subject}: a leader who is not a member. §14.2 reads leadership "
+            "THROUGH membership — an office-holder who never committed is staff")
+        strict += ls < ms
+    assert strict, (
+        "every faction's leaders are exactly its members. That is the office-per-person defect: "
+        "when everyone holds a seat, `leaders` carries no information")
+
+    # A TITLED SEAT SITS AT THE RUNG ITS TITLE GOVERNS, and the walk up from it is what
+    # "the duchy is underneath the Crown" means mechanically (Jordan, 2026-09-13).
+    titled = [o for o in w.offices.values() if o.rung is not None]
+    assert titled, "no office seated at a rung — no title ladder was built"
+    for o in titled:
+        assert o.scope_rung == o.rung, (
+            f"{o.post} is seated at {o.rung} with scope {o.scope_rung}; a titled post's purview is "
+            "the rung it governs (`Office.__post_init__`)")
+        path = conferral_path(w, o.id)
+        assert path and path[0] == o.rung and path[-1] in w.rungs, (
+            f"{o.post}: conferral_path {path} does not start at its own rung and climb")
+    assert any(len(conferral_path(w, o.id)) > 1 for o in titled), (
+        "no titled seat is contained in anything. A duchy that answers to nobody is the "
+        "subordination Jordan's ruling describes, unbuilt")
+
+    # HOLDINGS ARE THE FACTION'S, NOT A PERSON'S — canon states control per province and never
+    # names a holder, so the `hold` subject is a Proposition (§14.2's licensed shape).
+    held = [t for t in w.tenures if t.kind == "hold" and t.live and t.object in w.rungs]
+    assert held, "no faction holds any territory"
+    assert all(t.subject in w.propositions for t in held), (
+        "a RUNG is held by something that is not a faction Proposition. Canon's starting-control "
+        "table names a faction per province and never a person")
+
+    # A PROVINCE IS COMPUTED, NEVER BUILT (`scale_hierarchy_v1.md` §2, RATIFIED).
+    assert not [r for r in w.rungs.values() if r.kind == "province"], (
+        "a `province` rung was built. §2 makes a province an EMERGENT AGGREGATION that exists only "
+        "while its territories share a holder — a stored one goes stale the moment land changes "
+        "hands, which is the §22.1 defect the ruling independently arrives at")
+    pv = provinces_of(w, "r_valoria")
+    assert pv, "no province is computed over the realm, so no faction coheres anywhere"
+    assert all(t in w.rungs and w.rungs[t].kind == "territory" for ts in pv.values() for t in ts), (
+        "a computed province contains something that is not a territory")
+    assert all(f in w.propositions for f in pv), (
+        "a province is keyed on something that is not a faction Proposition — §2 groups territories "
+        "by their common FACTION holder")
+    # It must also be able to SPLIT. Re-holding one of a faction's territories under another banner
+    # has to break the aggregation, or the Query is reporting containment rather than coherence.
+    victim = max(pv.items(), key=lambda kv: len(kv[1]))
+    other = next(f for f in pv if f != victim[0])
+    before = len(provinces_of(w, "r_valoria")[victim[0]])
+    for t in w.tenures:
+        if t.kind == "hold" and t.live and t.object == victim[1][0]:
+            t.subject = other
+            break
+    after = provinces_of(w, "r_valoria")
+    assert len(after[victim[0]]) == before - 1, (
+        "moving one territory to another holder did not shrink the province it left. §2's province "
+        "is existence-conditional on a COMMON holder; a Query that does not track that is reading "
+        "the containment tree")
+
+    # AND AN UNHELD TERRITORY IS REPORTED, NOT ASSIGNED. `Uncontrolled` is the geography's own value
+    # for a territory nobody holds; it must reach `undetermined_count` rather than a plausible owner.
+    frac, undetermined = sovereign_fraction(w, "r_valoria")
+    assert 0.0 < frac < 1.0, (
+        f"sovereign_fraction over the realm is {frac}. Canon gives six factions a share of 17 "
+        "provinces, so neither 0 nor 1 is a reading of this map")
+    assert undetermined > 0, "nothing is undetermined, so the unheld province was given an owner"
 
 
 def test_the_npc_roster_is_read_and_not_merely_shipped():

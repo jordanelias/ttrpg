@@ -48,3 +48,33 @@ def conviction(name: str) -> str:
             f"{name!r} is not a canonical Conviction", "descriptor_registry.yaml",
             needs=f"one of {sorted(CONVICTIONS)}",
             law=str(exc)) from exc
+
+
+def to_axes(weights: dict) -> dict:
+    """A weighted conviction map, projected into the four ethical axes. THE ONE OWNER.
+
+    `Σ_conv weight[conv] · projection[conv][axis]`, over `references/descriptor_registry.yaml`'s
+    thirteen and `rosters.yaml: tables.conviction_projection`'s 13×4.
+
+    ⚠ IT TAKES A DICT, NOT A `Person`, AND THAT IS WHY IT IS HERE RATHER THAN IN `decision/`.
+    `decision.choose.project` was the only projector and its signature is `Person -> dict`, so a
+    caller wanting to project anything ELSE — a role template's EXPECTED conviction vector, say —
+    had to re-derive the loop. Two owners of *convictions → axes* is `§8` exactly. `project` now
+    calls this, so the rule lives once and the Person-shaped convenience stays where it was.
+
+    ⚠ IT LIVES IN `data/`, NOT `decision/`, BECAUSE OF THE IMPORT ARROW. `decision/` already imports
+    `data/`; the reverse would be a cycle, and `data.cast` needs this to weigh a person against
+    their faction's expectations.
+
+    ⚠ A CONVICTION THE MATRIX DOES NOT LIST PROJECTS TO NOTHING — the sparse default, not a silent
+    drop: the roster check has already refused any name outside the canonical thirteen."""
+    from .rosters import CONVICTION_AXES
+    from .verbs import CONVICTION_PROJECTION, PROJECTION_DEFAULT_CELL
+    out = {ax: 0.0 for ax in CONVICTION_AXES}
+    for conv, w in (weights or {}).items():
+        row = CONVICTION_PROJECTION.get(conv)
+        if row is None:
+            continue
+        for ax in CONVICTION_AXES:
+            out[ax] += float(w) * float(row.get(ax, PROJECTION_DEFAULT_CELL))
+    return out

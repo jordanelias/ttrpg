@@ -336,8 +336,13 @@ factions:
     added_via_triage: true
     entry_note: "vector-audit faction-class member (CLASSES['faction']); classification pending Jordan confirmation — ED-IN-0082"
   church:
-    canonical: "Church"
-    aliases: []
+    # ⭐ RULED by Jordan, 2026-09-13: "the church is Church of Solmund." Kept in step with
+    # `references/names_index.yaml`, which is authoritative and which `tools/ci_names_consistency.py`
+    # enforces this mirror against — the gate caught this row the moment the index moved, which is
+    # the gate working. `Church` becomes an alias, not a deprecation: the short form stays lawful
+    # prose and the 256 occurrences below are not a rename backlog.
+    canonical: "Church of Solmund"
+    aliases: ["Church"]
     source: "systems/world/reference/geography_v30.md"
     occurrences_count: 256
     files_count: 12

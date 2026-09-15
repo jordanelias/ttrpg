@@ -174,6 +174,23 @@ def assert_faction_roster_is_covered(implemented_fields):
 # twin; the rest are gone, and a caller passing one now raises instead of silently scoring zero.
 CONVICTIONS = tuple(_DATA['conviction_roster']['names'])
 
+# ---------------------------------------------------------------------------
+# ETHICAL AXES — centralized 2026-09-14 (ED-IN-0229). THE ONLY AXIS ROSTER IN THE ENGINE.
+# ---------------------------------------------------------------------------
+# `keys.py::AXES` held one literal and `engine/season/rosters.yaml: conviction_axes` held another,
+# and NOTHING compared them — while the roster's own note claimed "a fifth axis or a rename is one
+# edit there and a loader refusal here rather than two rosters drifting apart". MEASURED by AST on
+# 2026-09-14: exactly one module in the tree imports `AXES`, and it is `engine/substrate/__init__`
+# re-exporting it. Nothing under `engine/season/` reads it. So the two literals could disagree in
+# either direction with no refusal on either side — a fifth axis in `keys.py` alone left the season
+# engine scoring on four, and one in the roster alone left `keys.py` invariant 6 rejecting every
+# Key that named it.
+#
+# This is the CONVICTIONS move above, applied one level up, and it is the tree's own precedent for
+# this exact object rather than a new decision.
+AXES = tuple(_DATA['axis_roster']['names'])
+AXIS_SCALE = _DATA['axis_roster'].get('scale', '')
+
 # ⚠ THERE IS NO ALIAS MAP, AND ITS REMOVAL IS THE POINT (corrected 2026-08-24, same day it was
 # added, by an adversarial pass). This module briefly carried
 # `CONVICTION_ALIASES = {'Reason': 'Scholastic', 'Autonomy': 'Liberty'}`, justified in a comment as

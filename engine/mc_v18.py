@@ -9,8 +9,8 @@ the HEAD, not in this file. A session that wires a ruling into this module is bu
 the repository has already replaced.
 
 ⚠ RETIREMENT IS IN PROGRESS AND IS NOT DONE (`ED-IN-0227`). This module is still IMPORTED and
-still RUNS: 71 live files reference it, and **78 of the 136 test functions in `engine/tests/` —
-57% of CI's blocking `sim-regression` job — import it directly**. Deleting it before that coverage
+still RUNS. ⚠ ITS IMPORTER COUNT IS OWNED BY `test_mc_v18_is_deprecated.py::ALLOWED_IMPORTERS`
+(a `71` here was a grep of MENTIONS — ED-IN-0227). **78 of 136 `engine/tests/` functions import it**. Deleting it before that coverage
 is ported would not retire a prototype; it would delete 78 tests of campaign-scale behaviour
 (echo transport, the combat bridge seam, parliamentary transfer, accord drift, pipeline reach).
 The order is PORT, THEN DELETE, and this header is the first step: making the status unambiguous

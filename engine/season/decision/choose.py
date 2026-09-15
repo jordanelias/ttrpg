@@ -64,14 +64,13 @@ def project(p: Person) -> dict:
     RATHER THAN A SILENT DROP.** `PROJECTION_DEFAULT_CELL` is the declared 0.0; the loader has
     already refused any conviction name outside the roster, so an unlisted pair here is a cell the
     data chose to leave sparse, not a typo that got through."""
-    out = {ax: 0.0 for ax in CONVICTION_AXES}
-    for conv, w in (p.convictions or {}).items():
-        row = CONVICTION_PROJECTION.get(conv)
-        if row is None:
-            continue
-        for ax in CONVICTION_AXES:
-            out[ax] += float(w) * float(row.get(ax, PROJECTION_DEFAULT_CELL))
-    return out
+    # ⚠ DELEGATED, NOT DUPLICATED. `data.convictions.to_axes` is the one owner of
+    # *convictions → axes*, because a second caller appeared that does not have a `Person`:
+    # `data.cast.loyalty` projects a ROLE TEMPLATE's expected-conviction vector through the same
+    # 13×4. Keeping the loop here as well would be two owners of one rule (§8), and the two would
+    # be free to disagree about the sparse default.
+    from ..data.convictions import to_axes
+    return to_axes(p.convictions)
 
 
 def stance_toward(p: Person, referent: str) -> float:

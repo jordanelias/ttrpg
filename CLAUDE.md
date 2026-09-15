@@ -597,7 +597,8 @@ modules are stubs" line is stale — grep for the stubs rather than believing ei
 - **Local tier — advisory accelerators.** One-time per clone: `git config core.hooksPath .githooks`.
   `.githooks/pre-commit` runs the SAME validators on staged files via
   `python tools/valoria_local.py --staged`. `.claude/settings.json` wires two PreToolUse hooks — the
-  naming nudge (`tools/hook_naming_guard.py`) on writes and a search-sweep guard
+  naming guard (`tools/hook_naming_guard.py`, which `sys.exit(2)`s — it BLOCKS, it does not
+  suggest; this read *nudge* until 2026-09-15 and understated a live gate) on writes and a search-sweep guard
   (`tools/hook_md_sweep_guard.py`) on Grep/Glob; SessionStart and Stop are empty arrays, deliberately
   (§0.3). Not every blocking CI gate runs locally — `tools/compliance_check.py`'s size caps are CI-side,
   so **local-green ≠ compliance-green**. `git commit --no-verify` bypasses local; CI still enforces.
