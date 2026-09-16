@@ -220,7 +220,7 @@ and the failure is measured rather than asserted — `tests/valoria/test_j2_mass
 The two trees share no code, so any result measured on one is a result about that tree alone (§3g).
 
 **`npcs` — a doc-only folder.** Zero `.py`; the whole NPC implementation lives in the world subsystem —
-`systems/world/sim/npe.py:353 simulate_npc_actions` (live every season) and `systems/world/sim/npe.py:226 generate_npc`
+`systems/world/sim/npe.py:364 simulate_npc_actions` (live every season) and `systems/world/sim/npe.py:237 generate_npc`
 (never called); the engine-core AI shell is a pair of typed no-ops, `engine/autoload/npc_ai.py:33 select_action`. The
 folder owns neither the code nor, since a 2026-07-29 repoint, the doc of its own primary contract, and the currency
 authority still heads at the demoted doc — `CURRENT.md:40 npc_behavior_v30` (§3e).
@@ -266,7 +266,7 @@ undocumented by the contract — `engine/mc_v18.py:303-313 run_campaign` (§3b, 
 **`world` — world-gen, insurgency, NPC ecology, miracles, restoration.** Owns the `World` lifecycle and two genuinely
 live per-season pipelines — `systems/world/sim/insurgency_pipeline.py:139 check_insurgency_triggers`. Its contract
 coverage is inverted: the one module with a contract entry never executes, and the two modules carrying all of this
-subsystem's measured execution have no contract at all — `systems/world/sim/npe.py:353 simulate_npc_actions` (§3e).
+subsystem's measured execution have no contract at all — `systems/world/sim/npe.py:364 simulate_npc_actions` (§3e).
 ## 3. Gap kinds, and the cross-lane rows
 
 **This is not a complete register and does not claim to be.** Per-subsystem gap rows live in each skeleton's
@@ -292,7 +292,7 @@ the social-contest scene branch's `except Exception` swallow and its unreachable
 | a | The combat dispatch branch is dead at the *trigger*, not the wiring: no live trigger queues a `combat` scene, so neither the bridge nor the legacy engine is reachable, independent of the flag | combat, `_architecture` | `engine/cross_scale/scene_dispatch.py:77 evaluate_triggers` |
 | a | The knot-strain-on-opposing-operations path is dead at **both** ends — the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` |
 | a | The world save/restore **read** direction is test-only: the write half runs every campaign, the read half has no production caller | characters, world, settlements | `engine/autoload/game_state.py:425 restore_world` |
-| a | NPC generation is fully implemented with no call site at world-gen or season-tick; a test pins the campaign NPC count at zero | world, npcs | `systems/world/sim/npe.py:226 generate_npc` |
+| a | NPC generation is fully implemented with no call site at world-gen or season-tick; a test pins the campaign NPC count at zero | world, npcs | `systems/world/sim/npe.py:237 generate_npc` |
 | b | The ratified per-settlement Mandate/Treasury pipeline has no step in the accounting cascade — recorded in the module's own port-blocking note | overview, settlements | `systems/overview/sim/accounting.py:11-13 run_accounting` |
 | c | Both engine-core NPC-AI entry points are unconditional no-ops with no production caller — the engine core's sole orphan | npcs, `_architecture` | `engine/autoload/npc_ai.py:33 select_action` |
 | c | The RS-track write is a no-op whose one call site sits behind an organically dormant branch — wired, never landing | overview, `_architecture` | `systems/overview/sim/rs_track.py:28 apply_rs_delta` |

@@ -34,7 +34,7 @@ enter/exit them: `engine/mc_v18.py`, `engine/autoload/game_state.py`, `systems/f
 | `TickScheduler.drain_tick` | `engine/substrate/keys.py:551 drain_tick` | — (no production caller; only `tests/valoria/test_key_substrate.py:336` etc.) |
 | `TickScheduler.accounting_boundary` | `engine/substrate/keys.py:594 accounting_boundary` | `engine/mc_v18.py:179` |
 | `TickScheduler.next_tick` | `engine/substrate/keys.py:606 next_tick` | `engine/mc_v18.py:180` |
-| `canon_buckets.canonical_accord` | `engine/substrate/canon_buckets.py:38 canonical_accord` | `engine/autoload/game_state.py:35` (re-export); `systems/overview/sim/accounting.py:88`; `systems/world/sim/npe.py:200` |
+| `canon_buckets.canonical_accord` | `engine/substrate/canon_buckets.py:38 canonical_accord` | `engine/autoload/game_state.py:35` (re-export); `systems/overview/sim/accounting.py:88`; `systems/world/sim/npe.py:211` |
 | `stubwire.stub_resolve` | `engine/substrate/stubwire.py:64 stub_resolve` | `engine/cross_scale/articulation.py:141`; `engine/cross_scale/scene_dispatch.py:368`; `engine/mc_v18.py:205`; `systems/overview/sim/rs_track.py:29` (representative sample — dozens of call sites corpus-wide) |
 | `domain_echo.compute_domain_echo` | `engine/cross_scale/domain_echo.py:79 compute_domain_echo` | `engine/cross_scale/echo_transport.py:411` (inside `emit_scene_echo`, def at `:360`) |
 | `domain_echo.compute_accord_echo` | `engine/cross_scale/domain_echo.py:128 compute_accord_echo` | `engine/cross_scale/echo_transport.py:460` (inside `emit_scene_echo`, def at `:360`) |

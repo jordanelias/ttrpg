@@ -12,14 +12,15 @@ was written), then exercise the disagreement-disclosure mechanism BOTH on a real
 disagreement ("Thread Fatigue" — names vs quantity_registry, see the pin below) AND on a
 controlled synthetic conflict (monkeypatch, for the multi-resolver shape not present live).
 
-One residual pointer-COLLISION is pinned as a KNOWN LIMITATION (WS1 antagonist finding ED-IN-0057,
-narrowed by ED-IN-0058): the "Influence" STRING collision — the attribute alias shadows the
-faction-stat fac.influence's canonical *name*, so the string resolves to the attribute. But the
-two limitations checkpoint 1 disclosed have since been CLOSED and the tests below now assert the
-FIXES, not the limitations: fac.influence is reachable by its bare KEY, all-section structural keys
-(fac./set./prac./terr./agg.) resolve, and collisions() surfaces the residual string ambiguity (see
-test_influence_string_collision_KNOWN_LIMITATION_but_key_now_reachable). Pinning the residual keeps
-a green test from silently certifying the shadowed string as fully correct.
+The "Influence" STRING collision (ED-IN-0057, narrowed by ED-IN-0058) was pinned here as a KNOWN
+LIMITATION and is CLOSED as of 2026-09-16: the shadowing alias is removed from both registries, so
+resolve("Influence") returns fac.influence. `test_the_influence_string_collision_is_CLOSED_and_
+resolves_to_the_faction_stat` asserts the fix where it used to assert the defect, and is renamed so
+the old name cannot be grepped as still-open. Every limitation checkpoint 1 disclosed is now closed:
+fac.influence resolves by name AND by bare key, and all-section structural keys resolve.
+What collisions() still reports is "legitimacy" -> {fac.legitimacy, set.legitimacy} — two real
+quantities at two scales, recorded rather than merged, and pinned below so a green suite cannot
+quietly certify it as resolved.
 """
 import os
 import sys

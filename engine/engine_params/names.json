@@ -3,7 +3,7 @@
   "schema_version": 1,
   "source": "references/names_index.yaml",
   "registry_version": 3,
-  "count": 113,
+  "count": 115,
   "canonical": {
     "agg.body": "Body",
     "agg.mind": "Mind",
@@ -34,6 +34,7 @@
     "conv.reason": "Reason",
     "fac.influence": "Influence",
     "fac.intel": "Intel",
+    "fac.legitimacy": "Legitimacy",
     "fac.military": "Military",
     "fac.stability": "Stability",
     "fac.wealth": "Wealth",
@@ -50,6 +51,7 @@
     "ppt.evidence": "Evidence",
     "ppt.loyalty": "Loyalty",
     "set.defense": "Defense",
+    "set.facility_tier": "Facility Tier",
     "set.legitimacy": "Legitimacy",
     "set.order": "Order",
     "set.popular_support": "Popular Support",
@@ -134,6 +136,8 @@
     "Ehrenwall": "Grandmaster Ehrenwall",
     "Einhir Lore": "Einhir",
     "Elske": "Princess Elske Almqvist",
+    "FacilityTier": "Facility Tier",
+    "FacilityTier_s": "Facility Tier",
     "Feldhaus": "Annika Feldhaus",
     "Forgetting Check": "Forgetting",
     "Haelgrund": "Sæmund Haelgrund",
@@ -150,6 +154,7 @@
     "Olafsson": "Cardinal Arnlod Olafsson",
     "Perception": "Attunement",
     "Presence": "Charisma",
+    "RM": "Restoration Movement",
     "Reasoning": "Acuity",
     "Restoration": "Restoration Movement",
     "Riskbreaker Exposure": "Riskbreaker",
@@ -228,6 +233,10 @@
     ]
   },
   "ambiguous": {
+    "Legitimacy": [
+      "fac.legitimacy",
+      "set.legitimacy"
+    ],
     "Order": [
       "conv.order",
       "set.order"

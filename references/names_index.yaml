@@ -155,6 +155,14 @@ entries:
   fac.military:   {canonical: Military,  aliases: [], legacy: [], category: faction_stat, enforce: warn}
   fac.intel:      {canonical: Intel,     aliases: [], legacy: [], category: faction_stat, enforce: warn}
   fac.stability:  {canonical: Stability, aliases: [], legacy: [], category: faction_stat, enforce: warn}
+  # ADDED 2026-09-16, and it had been missing since the ruling that created it. Jordan ruled on
+  # 2026-08-23 that Legitimacy IS a base faction stat; `descriptor_registry.yaml` gained the row,
+  # THIS FILE DID NOT, and `ci_names_consistency.py:88` iterates `names.entries()` so it checks
+  # index -> registry and never registry -> index. The cost was silent: `Legitimacy` collides with
+  # `set.legitimacy` exactly as `Stability` collides with `mech.stability`, but with no row here
+  # the collision was invisible to `tools/export_names.py`, so `engine/substrate/names.py`
+  # RESOLVED the string to the settlement stat instead of refusing it. It refuses now.
+  fac.legitimacy: {canonical: Legitimacy, aliases: [], legacy: [], category: faction_stat, enforce: warn}
 
   # ── SETTLEMENT STATS (mirror: descriptor_registry.yaml settlement_stats) ──────
   set.legitimacy:      {canonical: Legitimacy,      aliases: [], legacy: [], category: settlement_stat, enforce: warn}
@@ -162,6 +170,11 @@ entries:
   set.prosperity:      {canonical: Prosperity,      aliases: [], legacy: [], category: settlement_stat, enforce: warn}
   set.defense:         {canonical: Defense,         aliases: [], legacy: [], category: settlement_stat, enforce: warn}
   set.order:           {canonical: Order,           aliases: [], legacy: [], category: settlement_stat, enforce: warn}
+  # ADDED 2026-09-16, found the moment `ci_names_consistency.py` learned to check the OTHER
+  # direction -- the second instance of the same gap as `fac.legitimacy` above. Declared in
+  # `descriptor_registry.yaml:173` since 2026-07-08 (ED-IN-0029 D5 residual) and never mirrored
+  # here. Its two aliases are transcribed from that row, not invented.
+  set.facility_tier:   {canonical: Facility Tier,   aliases: [FacilityTier, FacilityTier_s], legacy: [], category: settlement_stat, enforce: warn}
 
   # ── PROPER-NOUN NAMING INVARIANT (mirror: proper_noun_registry.yaml) ──────────
   # block-tier: this is the hard gate ci_naming_check enforces. The deprecated name
@@ -301,7 +314,7 @@ entries:
   world.lowenritter: {canonical: "Löwenritter", aliases: ["Lions"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['L[oö]wenritter']}
   world.wardens: {canonical: "Wardens", aliases: ["Warden"], legacy: [], category: proper_noun, enforce: warn}
   # -- organizations --
-  world.restoration_movement: {canonical: "Restoration Movement", aliases: ["Restoration", "Movement"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['Restoration Movement', '\bRM\b(?![a-z])']}
+  world.restoration_movement: {canonical: "Restoration Movement", aliases: ["Restoration", "Movement", "RM"], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['Restoration Movement', '\bRM\b(?![a-z])']}
   # -- realms --
   world.altonia: {canonical: "Altonia", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.valoria: {canonical: "Valoria", aliases: ["Average Valorian", "Stable Valoria", "Unstable Valoria", "Valorian", "Valnese"], legacy: [], category: proper_noun, enforce: warn}

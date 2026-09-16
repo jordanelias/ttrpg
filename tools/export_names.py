@@ -21,12 +21,13 @@ leaf it is importable from `engine/` AND from `systems/` without either naming t
 refuses is the shape that makes a term NON-IDEMPOTENT -- one string that a later session, reading
 it cold, can resolve two ways:
 
-THREE ARE REFUSED -- a `SystemExit` here reds a blocking gate at authoring time rather than
+FOUR ARE REFUSED -- a `SystemExit` here reds a blocking gate at authoring time rather than
 surfacing as a wrong faction in a generated NPC:
 
   · an alias that maps to two different canonicals      -- resolution is a coin flip
   · an alias that is also somebody's canonical name     -- the name means itself and something else
   · a legacy tag that is also a live alias              -- deprecation that resolves anyway
+  · a legacy tag that is another row's canonical name   -- a live name refused as deprecated
 
 THE FOURTH IS RECORDED, NOT REFUSED, and the asymmetry is the honest part. Two entries claiming one
 display string is real here and not a typo: `Order` is a Conviction AND a settlement stat,
@@ -36,7 +37,8 @@ one -- `descriptors.json`'s `unimplemented` precedent, which records a gap where
 reads it instead of in a docstring nothing opens.
 
 §4's rule (ED-IN-0179) is that a word read cold in a later session must yield the SAME meaning.
-These four are that rule with a falsifier.
+These five are that rule with a falsifier -- see `tests/valoria/test_names_chain.py`, which plants
+each one and asserts the refusal.
 
 Usage:
     python3 tools/export_names.py           # write the artifact
@@ -127,6 +129,17 @@ def build():
         _fail(f'{both} are declared BOTH legacy and alias. A legacy tag is meant to stop '
               f'resolving; an alias resolves. Pick one per tag.')
 
+    # (5) a legacy tag that is another row's CANONICAL name. Added 2026-09-16 -- an antagonist pass
+    # found it as the unguarded fourth member of the family the three above enumerate, and the leaf
+    # makes it bite: `names.py` tests LEGACY before CANONICAL, so a legacy tag colliding with a live
+    # canonical would make `canonical_for()` RAISE on a name that is perfectly current. Nothing
+    # triggers it today (the eight legacy tags collide with nothing), which is why it is cheap now.
+    shadowed = sorted(t for t in legacy if t in owner_of_canonical)
+    if shadowed:
+        _fail(f'{shadowed} are declared LEGACY while also being another entry\'s canonical name. '
+              f'engine/substrate/names.py checks legacy before canonical, so this would refuse a '
+              f'live name as deprecated. Rename the legacy tag, or retire the row that claims it.')
+
     return {
         '_generated': 'tools/export_names.py — do not hand-edit; edit references/names_index.yaml',
         'schema_version': 1,
@@ -159,7 +172,7 @@ def main(argv):
         classes = ', '.join(f'{k}={len(v)}' for k, v in d['by_class'].items())
         amb = len(d['ambiguous'])
         print(f'[names] OK — {d["count"]} names, {len(d["aliases"])} aliases, '
-              f'3 idempotence checks passed, {amb} display collision(s) recorded ({classes}).')
+              f'4 idempotence checks passed, {amb} display collision(s) recorded ({classes}).')
         return 0
     with open(OUT, 'w', encoding='utf-8') as fh:
         fh.write(text)

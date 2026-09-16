@@ -104,6 +104,30 @@ def main():
                 problems.append(f"{key}: index '{canon}' != proper_noun_registry canonical '{proper[seg]}'")
         # else: mechanic/clock/track/substrate — no mirror, intentionally skipped.
 
+    # ⚠ THE OTHER DIRECTION, ADDED 2026-09-16. The loop above iterates `names.entries()`, so it
+    # only ever asked "does every INDEX row have a registry mirror?" -- a descriptor declared in
+    # `descriptor_registry.yaml` with NO index row was invisible to it. That is not hypothetical:
+    # Jordan ruled on 2026-08-23 that Legitimacy is a base faction stat, `descriptor_registry.yaml`
+    # gained `fac.legitimacy`, this file never noticed the index had not, and the gap survived three
+    # weeks in the file whose own header calls itself *"the one place a definition's name lives"*.
+    # It cost a silent wrong value: `Legitimacy` collides with `set.legitimacy`, and with no index
+    # row the collision was invisible to `tools/export_names.py`, so `engine/substrate/names.py`
+    # RESOLVED the string to the settlement stat instead of refusing it.
+    #
+    # Scoped to the four mirrored prefixes only -- `descriptor_registry.yaml` carries blocks
+    # (`by_reference`, `deprecated`, `not_descriptors`, the roster blocks) that are deliberately not
+    # per-key index rows, and quantifying over those would report the file's shape as a defect.
+    for key in sorted(desc):
+        if key.split('.')[0] not in ('attr', 'agg', 'fac', 'set'):
+            continue
+        checked += 1
+        if key not in names.entries():
+            problems.append(
+                f"{key}: declared in descriptor_registry.yaml (name '{desc[key]}') with NO row in "
+                f"names_index.yaml. The index is where a name is single-owned and where "
+                f"tools/export_names.py reads collisions from, so a missing row is a name that "
+                f"resolves silently rather than being refused")
+
     if problems:
         print(f"[NAMES CONSISTENCY VIOLATIONS: {len(problems)}]")
         print("  references/names_index.yaml is authoritative; update the mirror to match "
