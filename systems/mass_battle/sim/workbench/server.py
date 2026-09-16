@@ -14,7 +14,7 @@ ports) with different env. GET /api/mode reports what THIS process is actually r
 
 Endpoints (all JSON except GET /):
   GET  /              -> the single-page app (static/index.html)
-  GET  /api/mode      -> {per_cell, field_movement, pc_node_cohesion} — this process's fixed config
+  GET  /api/mode      -> {per_cell, field_movement, mb_node_cohesion} — this process's fixed config
   GET  /api/presets   -> named scenario presets (mirrors gauge_mb.py's TESTS/CAV_TESTS matchups)
   GET  /api/roster-options -> {shapes, troop_types, roles_by_troop_type, subunit_cap, battlefield_size}
                          — [Stage E] the live registries (geometry.CELL_PATTERN_FN,
@@ -100,7 +100,7 @@ def do_trace(req):
 
 
 def do_mode():
-    return {'per_cell': bool(_cfg.PER_CELL), 'pc_node_cohesion': bool(_cfg.MB_NODE_COHESION),
+    return {'per_cell': bool(_cfg.PER_CELL), 'mb_node_cohesion': bool(_cfg.MB_NODE_COHESION),
             'field_movement': bool(_units.FIELD_MOVEMENT),
             'battlefield_size': _cfg.BATTLEFIELD_SIZE}
 
@@ -167,7 +167,7 @@ def main(port=DEFAULT_PORT):
     m = do_mode()
     print(f"Mass-Battle Workbench -> http://localhost:{port}  (Ctrl-C to stop)")
     print(f"  mode: PER_CELL={m['per_cell']} FIELD_MOVEMENT={m['field_movement']} "
-          f"MB_NODE_COHESION={m['pc_node_cohesion']}  battlefield={m['battlefield_size']}")
+          f"MB_NODE_COHESION={m['mb_node_cohesion']}  battlefield={m['battlefield_size']}")
     try:
         srv.serve_forever()
     except KeyboardInterrupt:

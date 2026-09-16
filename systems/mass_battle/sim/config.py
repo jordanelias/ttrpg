@@ -158,7 +158,7 @@ STAMINA_EXHAUSTED_POOL_PENALTY = -1  # stamina == 0: -1 die
 # morale) — a steady, disciplined body holds toward 30%, a shaken/loose one breaks toward 15%. When its
 # casualty fraction crosses that break-point it routs. Fractional throughout (a random draw + a fractional
 # band + fractional loss fraction), reproducible under the seeded RNG. Gated OFF by default (moves the
-# byte-exact goldens when on — it is NOT inert like the other PC_ flags; the draw is only consumed when on).
+# byte-exact goldens when on — it is NOT inert like the other MB_ flags; the draw is only consumed when on).
 # [ED-MB-0041, 2026-07-25] DEFAULT FLIPPED OFF -> ON, on the casualty scoreboard's evidence.
 # This implements the du Picq 15-30% break band (ED-MB-0031); OFF, the engine's own comment notes that
 # "units grind to ~58% before breaking". Measured across all 20 gauge rows:
