@@ -18,9 +18,8 @@ from __future__ import annotations
 
 from ..data.matrix import Step, WriteClass
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN
-from ..data.rosters import OBSERVATION_DEPOSIT_MODES, WITNESS_CHANNELS
+from ..data.rosters import OBSERVATION_DEPOSIT_MODES, WITNESS_CHANNELS, require_member
 from ..epistemic import act_refs, claim_subjects, observers_for
-from ..gaps import Unspecified
 from ..queries import cache
 from ..queries.person_q import LedgerReader
 from ..state.carriers import Claim, Event
@@ -122,14 +121,15 @@ def witness(self, events: list[Event]) -> int:
     # (§0.1 point 4). Read here rather than inside the loop so the fixture is consulted once
     # per barrier and `Fixtures.reads` counts a barrier, not a deposit.
     obs_mode = w.fixtures.get("observation_deposit_mode")
-    if obs_mode not in OBSERVATION_DEPOSIT_MODES:
-        raise Unspecified(
-            f"observation-deposit mode {obs_mode!r} is not in the roster", "H-122",
-            needs=f"one of {sorted(OBSERVATION_DEPOSIT_MODES)}",
-            law="`observers_for`'s precedent, and for its reason: *'an unrecognised mode "
-                "silently falling back would make every measurement of this sweep read the "
-                "control'*. Here the control is `none`, i.e. depositing nothing, so a silent "
-                "fallback would report `W-B` as having changed nothing")
+    require_member(
+        obs_mode,
+        OBSERVATION_DEPOSIT_MODES,
+        f"observation-deposit mode {obs_mode!r} is not in the roster",
+        "H-122",
+        law="`observers_for`'s precedent, and for its reason: *'an unrecognised mode "
+            "silently falling back would make every measurement of this sweep read the "
+            "control'*. Here the control is `none`, i.e. depositing nothing, so a silent "
+            "fallback would report `W-B` as having changed nothing")
     deposits = 0
     # ⚠ PASS-SCOPED, KEYED BY PERSON -- NOT PER (PERSON, EVENT), WHICH IS WHERE IT WAS BUILT
     # AND WHAT MADE THE DE-DUPLICATION BELOW A CLAIM THE CODE DID NOT DELIVER. `LedgerReader`

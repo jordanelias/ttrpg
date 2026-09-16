@@ -23,7 +23,7 @@ and it is §47's failure exactly: a false claim of enforcement stops the next re
 
 from __future__ import annotations
 
-from ..data.rosters import FELLED, RELEASABLE_KINDS, WOUND_HARM_MODELS
+from ..data.rosters import FELLED, RELEASABLE_KINDS, WOUND_HARM_MODELS, require_member
 from ..gaps import InstrumentDefect, Unspecified
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.ids import H
@@ -376,12 +376,13 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
                 "was the person's whole body, so an act naming no harm killed")
     st = (res.result.get("wound_state") or {}).get(who) or {}
     model = w.fixtures.get("wound_harm_model")
-    if model not in WOUND_HARM_MODELS:
-        raise Unspecified(
-            f"wound-harm model {model!r} is not in the roster", "H-123",
-            needs=f"one of {sorted(WOUND_HARM_MODELS)}",
-            law="`observers_for`'s precedent and its reason -- *an unrecognised mode silently "
-                "falling back would make every measurement of this sweep read the control*")
+    require_member(
+        model,
+        WOUND_HARM_MODELS,
+        f"wound-harm model {model!r} is not in the roster",
+        "H-123",
+        law="`observers_for`'s precedent and its reason -- *an unrecognised mode silently "
+            "falling back would make every measurement of this sweep read the control*")
     if res.degree == FELLED:
         # The scene says this person went down, and the table says that is the kill. The body
         # goes to 0 on every arm: the arms grade a WOUND, and a felling is not one.

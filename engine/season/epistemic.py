@@ -49,7 +49,7 @@ from __future__ import annotations
 from typing import Optional
 
 from .data.requires import binding_of, evaluate
-from .data.rosters import CLAIM_SUBJECT_RULES, FAN_OUT_MODES, WITNESS_CHANNELS
+from .data.rosters import CLAIM_SUBJECT_RULES, FAN_OUT_MODES, WITNESS_CHANNELS, require_member
 from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
 from .queries import cache, world_q
@@ -124,12 +124,13 @@ def claim_subjects(e: "Event", rule: str, refs: Optional[list] = None) -> list:
 
     Order is deterministic and de-duplicated, because a person holding two identical claims about
     one Event would double-count in every eviction comparison."""
-    if rule not in CLAIM_SUBJECT_RULES:
-        raise Unspecified(
-            f"claim-subject rule {rule!r} is not in the roster", "H-79",
-            needs=f"one of {sorted(CLAIM_SUBJECT_RULES)}",
-            law="#353 §20 types `Claim.subject` and never says what a WITNESS deposit's subject "
-                "is; a rule outside the roster is a fourth answer nobody declared")
+    require_member(
+        rule,
+        CLAIM_SUBJECT_RULES,
+        f"claim-subject rule {rule!r} is not in the roster",
+        "H-79",
+        law="#353 §20 types `Claim.subject` and never says what a WITNESS deposit's subject "
+            "is; a rule outside the roster is a fourth answer nobody declared")
     out = [] if rule == "per_change" else [e.subject]
     if rule in ("per_change", "both"):
         for c in e.changes:
@@ -414,13 +415,14 @@ def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
     refusals below are now DIFFERENT failures and that is the point: the first says a caller
     named an arm the sweep does not declare, the second says THE ROSTER GREW AND THIS FUNCTION
     DID NOT -- the data/code drift a single combined check cannot see."""
-    if mode not in FAN_OUT_MODES:
-        raise Unspecified(
-            f"fan-out mode {mode!r} is not one of H-33's declared sweep points", "H-33",
-            needs=f"one of {sorted(FAN_OUT_MODES)}",
-            law="H-33's sweep is declared in `rosters.yaml: fan_out_modes`. A mode outside it "
-                "that fell back to `total` would make every reading of this sweep report the "
-                "control")
+    require_member(
+        mode,
+        FAN_OUT_MODES,
+        f"fan-out mode {mode!r} is not one of H-33's declared sweep points",
+        "H-33",
+        law="H-33's sweep is declared in `rosters.yaml: fan_out_modes`. A mode outside it "
+            "that fell back to `total` would make every reading of this sweep report the "
+            "control")
     if mode == "total":
         return list(everyone)
     if mode == "presence_only":

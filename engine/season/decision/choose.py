@@ -25,7 +25,7 @@ from __future__ import annotations
 
 import math as _math
 from typing import Any, Callable, Optional
-from ..data.rosters import CONVICTION_AXES, SCENE_PACKING_RULES
+from ..data.rosters import CONVICTION_AXES, SCENE_PACKING_RULES, require_member
 from ..data.verbs import (ALIGNMENT, ALIGNMENT_DEFAULT_CELL, CONVICTION_PROJECTION,
                          PROJECTION_DEFAULT_CELL)
 from ..gaps import Unspecified
@@ -365,12 +365,13 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
     `Scene.cost` would return 1 unconditionally, and `H-77`'s three-point sweep would go INERT --
     the exact shape that row records itself recovering from."""
     rule = fx.get("scene_packing_rule")
-    if rule not in SCENE_PACKING_RULES:
-        raise Unspecified(
-            f"scene-packing rule {rule!r} is not in the roster", "H-78",
-            needs=f"one of {sorted(SCENE_PACKING_RULES)}",
-            law="H-78 -- nothing in the chain says WHICH interactions share a scene, so a rule "
-                "outside the roster is a fourth answer nobody declared")
+    require_member(
+        rule,
+        SCENE_PACKING_RULES,
+        f"scene-packing rule {rule!r} is not in the roster",
+        "H-78",
+        law="H-78 -- nothing in the chain says WHICH interactions share a scene, so a rule "
+            "outside the roster is a fourth answer nobody declared")
     per = fx.get("interactions_per_scene")
     width = 1 if rule == "one_per_scene" else (len(ranked) if per is None else per)
 

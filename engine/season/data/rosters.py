@@ -227,6 +227,30 @@ def table(name: str) -> dict:
     return {outer: dict(inner) for outer, inner in (t.get("cells") or {}).items()}
 
 
+def require_member(value, roster, what: str, where: str, law: str, needs: str = "") -> None:
+    """THE ROSTER-MEMBERSHIP REFUSAL, IN ONE PLACE. Ten call sites had it check-for-check.
+
+    The same shape recurred across `epistemic`, `decision/`, `loop/` and this file: test a runtime
+    value against a bound roster, and on a miss raise `Unspecified` naming the hole, the accepted
+    members and the law. `data/verbs._check_sparse_table` made this move already for the two
+    sparse-table loaders and states the split it used -- centralise the mechanical check, leave
+    the LAW STRINGS per-caller "because what a violation means differs by table". Same split here:
+    `what`, `where` and `law` stay the caller's words; the test and the rendering come here.
+
+    ⚠ THE RENDERING IS THE PART THAT WAS WORTH CENTRALISING, and it was not a style difference.
+    An ORDERED roster is a tuple and its order is semantic, so it renders with `list()`; an
+    unordered one is a frozenset and renders `sorted()` so the message is stable. Nine sites chose
+    between those by hand and nine chose correctly -- measured, `QUESTION_AGGREGATION` and
+    `ALIGNMENT_SWEEP` are the tuples and are exactly the two that used `list()`. Nine correct
+    independent guesses is not a rule; this is. A caller needing prose instead passes `needs=`.
+    """
+    if value in roster:
+        return
+    raise Unspecified(
+        what, where, law=law,
+        needs=needs or f"one of {list(roster) if isinstance(roster, tuple) else sorted(roster)}")
+
+
 def table_meta(name: str) -> dict:
     """The table's own declarations -- `default_cell`, `row`, `keys`. Read rather than assumed, so
     a data edit that changes the sparse default cannot leave a stale constant in a body."""
@@ -342,12 +366,14 @@ def office_faction(body: str | None, declared: str | None) -> str:
     (`worldbuilding_v30.md` §8) and canon gives it no organ, so such a case authors `faction`
     directly. That is a real gap in canon, carried as one rather than filled."""
     if body is not None:
-        if body not in BODY_FACTION:
-            raise Unspecified(
-                f"{body!r} is not a canonical body", "rosters.yaml -- office_bodies",
-                needs="name a body from `systems/world/`, or drop `body` and author `faction`",
-                law="Jordan 2026-09-02 -- systems/world is canon for organizations. Inventing a "
-                    "body here would be indistinguishable from canon to the next session")
+        require_member(
+            body,
+            BODY_FACTION,
+            f"{body!r} is not a canonical body",
+            "rosters.yaml -- office_bodies",
+            law="Jordan 2026-09-02 -- systems/world is canon for organizations. Inventing a "
+                "body here would be indistinguishable from canon to the next session",
+            needs="name a body from `systems/world/`, or drop `body` and author `faction`")
         derived = BODY_FACTION[body]
         if declared is not None and declared != derived:
             raise Forbidden(
@@ -363,11 +389,13 @@ def office_faction(body: str | None, declared: str | None) -> str:
             needs="name a canonical body, or the faction directly where canon gives it no organ",
             law="H-99 -- an office belongs to something. §42.2's polarity rule: no evidence of "
                 "belonging is a refusal, never a default faction")
-    if declared not in FACTIONS:
-        raise Unspecified(
-            f"{declared!r} is not a canonical faction", "rosters.yaml -- factions",
-            needs="use a faction named in `systems/world/`",
-            law="Jordan 2026-09-02 -- systems/world is canon for identity and names")
+    require_member(
+        declared,
+        FACTIONS,
+        f"{declared!r} is not a canonical faction",
+        "rosters.yaml -- factions",
+        law="Jordan 2026-09-02 -- systems/world is canon for identity and names",
+        needs="use a faction named in `systems/world/`")
     return declared
 
 
