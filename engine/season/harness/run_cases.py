@@ -84,6 +84,25 @@ def seed_convictions(seed: int, case_id: str, pid: str) -> dict:
     for k in range(n_conv):
         purpose = f"axis:{pid}" if k == 0 else f"axis:{pid}:{k}"
         # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s hex digest -- same as combat_seam.py:153]
+        # ⚠⚠ A REPEATED PICK SILENTLY SHORTENS THE DRAW, AND THE FIX IS DELIBERATELY NOT APPLIED.
+        # `setdefault` is a no-op when the hash lands on a conviction already held, so an intended
+        # 3 becomes a 2 or a 1 and slot `k`'s weight is discarded. MEASURED over the 46 live cases
+        # x 20 seeds: 94 of 920 draws (10.2%) lose one -- 67 of the intended 3s, 27 of the 2s. That
+        # puts a tenth of the corpus back in the regime this docstring says the change exists to
+        # escape, where "a single-conviction person is one of about five characters".
+        #
+        # THE FIX IS SIX LINES -- re-salt the purpose until the pick is not already held, bounded by
+        # the roster size -- AND IT WAS BUILT, RUN AND REVERTED 2026-09-16. It works: the
+        # distribution moves {1:312, 2:373, 3:235} -> {1:283, 2:335, 3:302}, exactly the 94
+        # recovered, and the full suite stays green. It is reverted because it MOVES THE WORLD:
+        # `build_realm(0).content_hash()` goes `e5df63a767a4f38a` -> `9db4676abf6bb53d`, so
+        # `build_realm` reaches this draw rather than being fully covered by the authored roster,
+        # and PR #404's creed-sweep table (+47%/+43% on acts naming another person) was measured
+        # under the current draw and would no longer reproduce.
+        #
+        # RULED by Jordan, 2026-09-16: *"Conviction will be getting overhauled."* The overhaul is
+        # where this belongs -- it re-records whatever it moves, which this change on its own does
+        # not. Take it THEN, not before, and re-run the creed sweep when you do.
         pick = int(H(seed, 0, case_id, purpose), 16) % len(convictions)
         chosen.setdefault(convictions[pick], weights[k])
     return chosen

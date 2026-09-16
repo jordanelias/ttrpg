@@ -1,0 +1,204 @@
+"""M1 row 5 — "N seeds, zero invariant violations" — and the falsifier for every predicate it runs.
+
+`engine/season/harness/invariants.py` is the single owner of what a season must not have done;
+this file is the evidence that each of its predicates can actually OBSERVE the failure it
+excludes (`CLAUDE.md` §0.1 pt 2 — `pytest.approx` on an exactness claim is "not a weak test but
+an absent one"), and §0.1 pt 3's named falsifier for the sweep as a whole.
+
+⚠⚠ **WHY A MUTATION PER PREDICATE RATHER THAN "IT RETURNS [] ON A HEALTHY WORLD".** A sweep that
+reports zero is indistinguishable from a sweep that looks at nothing, and this module's first
+writing proved the failure runs the other way too: an entity set missing `w.records` reported
+**176 violations across 24 seeds**, 136 of them manufactured by the predicate rather than found
+in the engine. So each predicate is broken deliberately here and must fire, and
+`test_the_entity_set_covers_every_world_collection_a_tenure_can_name` pins the set against
+`World`'s own `__init__` so the over-firing direction cannot come back either.
+"""
+import os
+import sys
+
+import pytest
+
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, REPO_ROOT)
+
+from engine.season.harness import headless, invariants as I   # noqa: E402
+from engine.season.state.carriers import Claim, Event, Office, Tenure  # noqa: E402
+
+SWEEP_SEEDS = 12          # headless is ~0.13s/season measured; 12 seeds keeps this a unit test
+PROBE_SEED = 20260819     # the fixed-seed convention tools/m1_acceptance.py uses
+
+
+def _world(seed=PROBE_SEED, seasons=1):
+    return headless.run(seasons=seasons, seed=seed)["world"]
+
+
+# ── the sweep itself ────────────────────────────────────────────────────────────────────────
+
+def test_the_sweep_reports_rows_examined_not_predicates_offered():
+    """The anti-vacuity term must count what was LOOKED AT, not what was on offer.
+
+    ⚠⚠ THE OLD TERM COULD NOT SEE ITS OWN FAILURE, which is why this test changed shape. `sweep`
+    reported `checked += len(INVARIANTS)` — 8 per seed whether or not a single row existed to
+    inspect. Measured: the `headless` world has **0 Offices and 0 stance rows**, so two of the
+    eight predicates quantified over empty collections and reported clean forever while `checked`
+    cheerfully said 8. `examined` counts rows and `unexercised` names the carriers with none, so
+    "clean" and "never asked" are now different answers.
+    """
+    r = I.sweep(lambda s: _world(s), range(SWEEP_SEEDS))
+    assert r["seeds"] == SWEEP_SEEDS
+    assert set(r["examined"]) == set(I.carrier_census_keys()), (
+        "the census lost or gained a carrier without the roster moving")
+    assert r["examined"]["events"] > 0 and r["examined"]["tenures"] > 0, (
+        f"the sweep examined {r['examined']} — a run with no events or no tenures inspected "
+        "nothing, and a zero-violation result from it means nothing")
+    # headless carries no Office and no stance row: the sweep must SAY so rather than imply cover.
+    assert "offices" in r["unexercised"] and "stance_rows" in r["unexercised"], (
+        f"headless unexercised={r['unexercised']}; it builds no Office and no stance row, so if "
+        "those are no longer reported unexercised the census has stopped telling the truth")
+
+
+def test_a_carrier_with_no_rows_is_reported_rather_than_counted_as_clean():
+    """The falsifier for the vacuity fix: a sweep over a world with nothing in it must not read
+    as a pass. Every carrier comes back unexercised, and `violations` is empty — which is exactly
+    the combination a caller must be able to tell apart from a real clean run."""
+    from engine.season.state.world import World
+    from engine.season.data.fixtures import DEFAULT_FIXTURES
+    r = I.sweep(lambda s: World(world_seed=s, fixtures=DEFAULT_FIXTURES), range(2))
+    assert not r["violations"], "an empty world cannot violate anything"
+    assert set(r["unexercised"]) == set(I.carrier_census_keys()), (
+        f"an empty world reported {r['unexercised']} unexercised; every carrier is empty, so "
+        "every one must be named — otherwise a zero here is indistinguishable from a clean sweep")
+
+
+def test_every_declared_exception_carries_a_citation():
+    """A declared exception is a KNOWN violation, never a silenced one.
+
+    ⚠ **`DECLARED` IS EMPTY TODAY AND THIS TEST STILL EARNS ITS PLACE**, because what it guards is
+    the moment somebody ADDS one. Its single entry used to excuse `ought_names_an_entity` on
+    `prop_einhir`; that predicate was deleted once the measurement showed it criminalised the probe
+    world's only motive, so the exception went with it. The citation rule is what stops the map
+    coming back as a place to put findings nobody wants to fix.
+    """
+    for (inv, ident), cite in I.DECLARED.items():
+        assert inv in I.INVARIANTS, f"{inv!r} declares an exception to no known invariant"
+        assert "ED-" in cite or "F" in cite, (
+            f"the exception for {ident!r} cites nothing. A declared exception without a register "
+            "reference is a silenced finding, which is the one thing this map must not become")
+
+
+def test_the_engine_is_clean_under_the_sweep():
+    """The earned null (`CLAUDE.md` honest-findings): zero, with the trail that produced it.
+
+    ⚠ **THIS ASSERTS THE ENGINE, NOT THE INSTRUMENT**, and it is the assertion the mutation tests
+    cannot make. They prove each predicate CAN fire; this one says that on a real season, across
+    seeds, none of them DOES. A regression in the loop lands here."""
+    r = I.sweep(lambda s: _world(s), range(SWEEP_SEEDS))
+    assert not r["violations"], (
+        f"{len(r['violations'])} invariant violation(s) over {SWEEP_SEEDS} seeds:\n  "
+        + "\n  ".join(r["violations"][:20]))
+    assert not r["declared"], (
+        f"a declared exception fired but DECLARED is {I.DECLARED!r} — the two have drifted")
+
+
+def test_the_entity_set_covers_every_world_collection_a_tenure_can_name():
+    """Pinned against `World.__init__`, because the first writing missed `w.records`.
+
+    THE FAILURE THIS EXCLUDES IS OVER-FIRING, which is the opposite direction from the rest of
+    this file and is the one that actually happened: with `records` missing, every legitimate
+    `hold` on a deed read as a dangling reference and the sweep reported 176 violations, 136 of
+    them invented. A collection added to `World` later and not added to `_entities` would do it
+    again, silently, to whatever names the new carrier.
+    """
+    w = _world()
+    named = {"persons", "rungs", "offices", "sites", "records",
+             "propositions", "dates", "petitions", "dispensations"}
+    for coll in named:
+        assert hasattr(w, coll), f"World has no {coll!r} — _entities names a collection that is gone"
+    # Everything a live Tenure actually names in a real run must be inside the set.
+    ents = I._entities(w)
+    for t in I._all_tenures(w):
+        if t.live and t.kind != "contain":
+            assert t.object in ents or t.subject in ents, (
+                f"live {t.kind} {t.id!r} names neither end inside the entity set — the set is "
+                "narrower than the carriers the loop actually uses")
+
+
+# ── one mutation per predicate: each must OBSERVE its own defect ────────────────────────────
+
+def _break_tenure_interval(w):
+    w.add_tenure(Tenure("mut_interval", "p_carin", "p_carin", "oblige", 5, until=2))
+
+def _break_tenure_referent(w):
+    w.add_tenure(Tenure("mut_ref", "p_carin", "nothing_named_this", "hold", 0))
+
+# ⚠ `["ROOT"]`, NOT `[]` — `Event.__post_init__` refuses an empty `causes` (S19.4:
+# "[ROOT] makes the empty list unrepresentable rather than merely discouraged"). The
+# mutation must build a WELL-FORMED Event that violates the invariant under test and
+# nothing else, or it proves the constructor works instead of the predicate.
+def _break_log_ids_unique(w):
+    e = w.log[0]
+    w.log.append(Event(e.id, e.kind, e.subject, [], ["ROOT"], e.emitted_at))
+
+def _break_log_not_from_the_future(w):
+    w.log.append(Event("mut_future", "probe", "p_carin", [], ["ROOT"], w.tick + 9))
+
+def _break_claim_not_from_the_future(w):
+    p = next(iter(w.persons.values()))
+    p.ledger.append(Claim("mut_claim", p.id, p.id, "saw", True, w.tick + 9, "firsthand", 3, "public"))
+
+def _break_body_in_range(w):
+    next(iter(w.persons.values())).body = -1
+
+def _break_stance_row_shape(w):
+    next(iter(w.persons.values())).stance.append(("p_carin", 99, 99))
+
+def _break_office_singly_held(w):
+    w.offices["mut_seat"] = Office("mut_seat", "Probe Seat", None, ["issue"], faction="Crown")
+    w.add_tenure(Tenure("mut_hold_a", "p_carin", "mut_seat", "hold", 0))
+    w.add_tenure(Tenure("mut_hold_b", "p_other", "mut_seat", "hold", 0))
+
+
+MUTATIONS = [
+    ("tenure_interval", _break_tenure_interval),
+    ("tenure_referent", _break_tenure_referent),
+    ("log_ids_unique", _break_log_ids_unique),
+    ("log_not_from_the_future", _break_log_not_from_the_future),
+    ("claim_not_from_the_future", _break_claim_not_from_the_future),
+    ("body_in_range", _break_body_in_range),
+    ("stance_row_shape", _break_stance_row_shape),
+    ("office_singly_held", _break_office_singly_held),
+]
+
+
+def test_every_invariant_has_a_mutation(  ):
+    """No predicate ships without a falsifier, and none is falsified by a stale name."""
+    covered = {name for name, _ in MUTATIONS}
+    assert covered == set(I.INVARIANTS), (
+        f"mutation coverage != the roster. missing: {sorted(set(I.INVARIANTS) - covered)}; "
+        f"stale: {sorted(covered - set(I.INVARIANTS))}")
+
+
+@pytest.mark.parametrize("name,mutate", MUTATIONS, ids=[n for n, _ in MUTATIONS])
+def test_the_predicate_observes_its_own_defect(name, mutate):
+    """Break the world one way; THAT predicate must fire, and it must name the right invariant."""
+    w = _world()
+    before = [v for v in I.CHECKS[name](w)]
+    mutate(w)
+    after = I.CHECKS[name](w)
+    assert len(after) > len(before), (
+        f"{name} did not fire after its own mutation ({len(before)} -> {len(after)}). A predicate "
+        "that cannot observe the defect it names is not a weak check but an absent one")
+    assert all(m.startswith(name + ":") for m in after), (
+        f"{name} produced a message attributed to another invariant: {after}")
+
+
+def test_a_broken_world_reaches_the_sweeps_violation_list():
+    """The predicates firing is not enough — `sweep` must surface them as NEW, not swallow them."""
+    def build(seed):
+        w = _world(seed)
+        _break_body_in_range(w)
+        return w
+    r = I.sweep(build, range(3))
+    assert len(r["violations"]) >= 3, (
+        f"3 broken worlds produced {len(r['violations'])} violations. `sweep` is dropping what the "
+        "predicates found — the path from predicate to report is where a silent zero would hide")

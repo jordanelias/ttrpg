@@ -3,7 +3,7 @@ or is it pure-width (frontage never saturates, deep formations strictly worse)?
 
 Controlled: equal total troops, equal per-cell density (100/cell). Only the aspect
 (narrow-deep vs wide-shallow) differs. If depth = reserve, the deep column should hold
-a capped frontage and NOT lose badly. If pure-width (PC_FRONTAGE_BLEND=0), the wide line
+a capped frontage and NOT lose badly. If pure-width (MB_FRONTAGE_BLEND=0), the wide line
 out-frontages and crushes the deep column.
 """
 import sys, os, random, statistics
@@ -42,7 +42,7 @@ def duel(wa, da, wb, db, n=20, label=''):
 
 if __name__ == '__main__':
     n = int(sys.argv[1]) if len(sys.argv) > 1 else 20
-    print(f"PC_FRONTAGE_BLEND={c.PC_FRONTAGE_BLEND} PC_FRONTAGE_REF={c.PC_FRONTAGE_REF} PC_DEPTH_ROTATE={c.PC_DEPTH_ROTATE} PC_FRONT_RANKS={c.PC_FRONT_RANKS} n={n}", flush=True)
+    print(f"MB_FRONTAGE_BLEND={c.MB_FRONTAGE_BLEND} MB_FRONTAGE_REF={c.MB_FRONTAGE_REF} MB_DEPTH_ROTATE={c.MB_DEPTH_ROTATE} PC_FRONT_RANKS={c.PC_FRONT_RANKS} n={n}", flush=True)
     # equal troops (2400), equal density (100/cell), only aspect differs
     duel(24, 1, 24, 1, n=n, label='control: wide vs wide (mirror)')
     duel(6, 4, 6, 4, n=n, label='control: square vs square (mirror)')

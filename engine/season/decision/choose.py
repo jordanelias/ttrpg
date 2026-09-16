@@ -25,9 +25,11 @@ from __future__ import annotations
 
 import math as _math
 from typing import Any, Callable, Optional
-from ..data.rosters import CONVICTION_AXES, SCENE_PACKING_RULES
-from ..data.verbs import (ALIGNMENT, ALIGNMENT_DEFAULT_CELL, CONVICTION_PROJECTION,
-                         PROJECTION_DEFAULT_CELL)
+from ..data.rosters import CONVICTION_AXES, SCENE_PACKING_RULES, require_member
+# `CONVICTION_PROJECTION` / `PROJECTION_DEFAULT_CELL` were imported here until 2026-09-16 and
+# are not any more: the loop that read the 13x4 moved into `data/convictions.to_axes`, its
+# single owner. Keeping the imports declared a dependency this module no longer has.
+from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
 from ..gaps import Unspecified
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
 from .options import opening_set
@@ -64,14 +66,13 @@ def project(p: Person) -> dict:
     RATHER THAN A SILENT DROP.** `PROJECTION_DEFAULT_CELL` is the declared 0.0; the loader has
     already refused any conviction name outside the roster, so an unlisted pair here is a cell the
     data chose to leave sparse, not a typo that got through."""
-    out = {ax: 0.0 for ax in CONVICTION_AXES}
-    for conv, w in (p.convictions or {}).items():
-        row = CONVICTION_PROJECTION.get(conv)
-        if row is None:
-            continue
-        for ax in CONVICTION_AXES:
-            out[ax] += float(w) * float(row.get(ax, PROJECTION_DEFAULT_CELL))
-    return out
+    # ⚠ DELEGATED, NOT DUPLICATED. `data.convictions.to_axes` is the one owner of
+    # *convictions → axes*, because a second caller appeared that does not have a `Person`:
+    # `data.cast.loyalty` projects a ROLE TEMPLATE's expected-conviction vector through the same
+    # 13×4. Keeping the loop here as well would be two owners of one rule (§8), and the two would
+    # be free to disagree about the sparse default.
+    from ..data.convictions import to_axes
+    return to_axes(p.convictions)
 
 
 def stance_toward(p: Person, referent: str) -> float:
@@ -368,12 +369,13 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
     `Scene.cost` would return 1 unconditionally, and `H-77`'s three-point sweep would go INERT --
     the exact shape that row records itself recovering from."""
     rule = fx.get("scene_packing_rule")
-    if rule not in SCENE_PACKING_RULES:
-        raise Unspecified(
-            f"scene-packing rule {rule!r} is not in the roster", "H-78",
-            needs=f"one of {sorted(SCENE_PACKING_RULES)}",
-            law="H-78 -- nothing in the chain says WHICH interactions share a scene, so a rule "
-                "outside the roster is a fourth answer nobody declared")
+    require_member(
+        rule,
+        SCENE_PACKING_RULES,
+        f"scene-packing rule {rule!r} is not in the roster",
+        "H-78",
+        law="H-78 -- nothing in the chain says WHICH interactions share a scene, so a rule "
+            "outside the roster is a fourth answer nobody declared")
     per = fx.get("interactions_per_scene")
     width = 1 if rule == "one_per_scene" else (len(ranked) if per is None else per)
 

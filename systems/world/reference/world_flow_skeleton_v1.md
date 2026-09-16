@@ -32,10 +32,10 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 | `check_insurgency_promotion(insurgency_id, world)` | `systems/world/sim/insurgency_pipeline.py:199 check_insurgency_promotion` | `systems/overview/sim/accounting.py:132 run_accounting` |
 | `get_insurgencies(world=None)` | `systems/world/sim/insurgency_pipeline.py:258 get_insurgencies` | `systems/overview/sim/accounting.py:131 run_accounting` |
 | `reset_for_world(world=None)` | `systems/world/sim/insurgency_pipeline.py:263 reset_for_world` | — (test helper only) |
-| `generate_npc(faction, role, world, ...)` | `systems/world/sim/npe.py:226 generate_npc` | — (no call site anywhere in production; see §7 gap 3) |
-| `simulate_npc_actions(world)` | `systems/world/sim/npe.py:353 simulate_npc_actions` | `systems/overview/sim/accounting.py:138 run_accounting` |
-| `get_npcs_in_territory(territory_id, world=None)` | `systems/world/sim/npe.py:403 get_npcs_in_territory` | — (no production caller found) |
-| `reset_npcs(world=None)` | `systems/world/sim/npe.py:408 reset_npcs` | — (test helper only) |
+| `generate_npc(faction, role, world, ...)` | `systems/world/sim/npe.py:237 generate_npc` | — (no call site anywhere in production; see §7 gap 3) |
+| `simulate_npc_actions(world)` | `systems/world/sim/npe.py:364 simulate_npc_actions` | `systems/overview/sim/accounting.py:138 run_accounting` |
+| `get_npcs_in_territory(territory_id, world=None)` | `systems/world/sim/npe.py:414 get_npcs_in_territory` | — (no production caller found) |
+| `reset_npcs(world=None)` | `systems/world/sim/npe.py:419 reset_npcs` | — (test helper only) |
 | `trigger_miraculous_event(event_type, world)` | `systems/world/sim/miraculous_event.py:28 trigger_miraculous_event` | — (stub; only reached by `engine/tests/test_pipeline_reach.py:786` stub-wire probe) |
 | `process_rm_pt_decay(world)` | `systems/world/sim/restoration_movement.py:30 process_rm_pt_decay` | — (stub; only reached by `engine/tests/test_pipeline_reach.py:787` stub-wire probe) |
 | `check_rm_emergence_trigger(world)` | `systems/world/sim/restoration_movement.py:38 check_rm_emergence_trigger` | — (stub; not called anywhere, not even by a stub-wire probe) |
@@ -49,16 +49,16 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 | `snapshot: dict` | arg | caller of `restore_world` | `engine/autoload/game_state.py:425 restore_world` |
 | `STARTING_OWNER` / `STARTING_STATS` / `STARTING_ACCORD` / `STARTING_PT` / `STARTING_GARRISON` | registry | AUTHORED tables — `references/world_initial_state.yaml` since plan S5b, cooked by `tools/export_world_initial_state.py` and read by `engine/substrate/world_initial_state.py`; `game_state` re-exports them under the same names | `engine/autoload/game_state.py:53-55 world_initial_state`, `engine/autoload/game_state.py:39-41 world_initial_state` |
 | `world.territories` (dict) | world-state | `World` dataclass | `engine/autoload/game_state.py:2 World.territories` |
-| `Territory.accord` / `.pt` / `.prosperity` / `.owner` | world-state | `Territory` dataclass, read by `insurgency_pipeline`/`npe` | `systems/world/sim/insurgency_pipeline.py:228-239`, `systems/world/sim/npe.py:191-211` |
-| `world.season` | world-state | `World.season` | `systems/world/sim/insurgency_pipeline.py:167`, `systems/world/sim/npe.py:397` |
-| `world.rng` | world-state | `World.rng` | `systems/world/sim/npe.py:242 generate_npc`, `systems/world/sim/npe.py:361 simulate_npc_actions` |
+| `Territory.accord` / `.pt` / `.prosperity` / `.owner` | world-state | `Territory` dataclass, read by `insurgency_pipeline`/`npe` | `systems/world/sim/insurgency_pipeline.py:228-239`, `systems/world/sim/npe.py:202-222` |
+| `world.season` | world-state | `World.season` | `systems/world/sim/insurgency_pipeline.py:167`, `systems/world/sim/npe.py:408` |
+| `world.rng` | world-state | `World.rng` | `systems/world/sim/npe.py:253 generate_npc`, `systems/world/sim/npe.py:372 simulate_npc_actions` |
 | `world.insurgencies` / `world.uncontrolled_streaks` | world-state | `World` dataclass fields | `engine/autoload/game_state.py:235-236` |
 | `world.npcs` / `world.npc_counter` | world-state | `World` dataclass fields | `engine/autoload/game_state.py:235-236` |
 | `ADJACENCY` | registry | peer subsystem (settlements) | `systems/settlements/sim/adjacency.py:9`, consumed at `systems/world/sim/insurgency_pipeline.py:116` |
 | `canonical_accord(float) -> int` | registry (leaf fn) | `engine.substrate.canon_buckets` | `engine/substrate/canon_buckets.py:38`, imported at `systems/world/sim/npe.py:45` |
 | `event_type: str` | arg | caller of `trigger_miraculous_event` | `systems/world/sim/miraculous_event.py:28` |
 | `insurgency_id: str` | arg | caller of `check_insurgency_promotion` | `systems/world/sim/insurgency_pipeline.py:199` |
-| `faction`, `role`, `territory_id`, `rng` (optional overrides) | arg | caller of `generate_npc` | `systems/world/sim/npe.py:226-228` |
+| `faction`, `role`, `territory_id`, `rng` (optional overrides) | arg | caller of `generate_npc` | `systems/world/sim/npe.py:237-239` |
 
 ## 3. Flow
 
@@ -97,12 +97,12 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
       `'extra-parliamentary'` vs `'parliamentary'`; sets `rec.promoted = True`.
       `systems/world/sim/insurgency_pipeline.py:236-248`
   - **S2.4** `[write]` `run_accounting` step 5 calls `simulate_npc_actions(world)`.
-    `systems/overview/sim/accounting.py:138 run_accounting` → `systems/world/sim/npe.py:353 simulate_npc_actions`
+    `systems/overview/sim/accounting.py:138 run_accounting` → `systems/world/sim/npe.py:364 simulate_npc_actions`
     - **S2.4.1** `[loop]` Iterates all NPC pairs within each territory in `world.npcs`.
-      `systems/world/sim/npe.py:367-372`
+      `systems/world/sim/npe.py:378-383`
     - **S2.4.2** `[gate]` `[branch]` `[write]` Pairs sharing a worldview conviction and holding
       adjacent Stance on some issue roll a Volatility check; on pass, both NPCs' `stance` shift
-      toward each other by one step on one shared issue. `systems/world/sim/npe.py:372-393`
+      toward each other by one step on one shared issue. `systems/world/sim/npe.py:383-404`
 - **S3** `[branch, default-off]` `trigger_miraculous_event` is a declared entry point never invoked
   anywhere in the traced season loop; its body is an unconditional `stubwire.stub_resolve` call —
   no gate, no computation. `systems/world/sim/miraculous_event.py:28-33` (§7 gap 1)
@@ -127,7 +127,7 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 | `list[InsurgencyEvent]` | emit | discarded by caller (`accounting.py` comment: "Events list discarded here") | `systems/world/sim/insurgency_pipeline.py:96-99`, `systems/overview/sim/accounting.py:119-124` |
 | `PromotionResult` | emit | discarded by caller's loop | `systems/world/sim/insurgency_pipeline.py:103-107`, `systems/overview/sim/accounting.py:131-132` |
 | `world.insurgencies` / `world.uncontrolled_streaks` mutations | world-state | `serialize_world` → `CampaignResult.final_state`; `mc_v18.insurgencies_formed` telemetry | `engine/autoload/game_state.py:344-348`, `engine/mc_v18.py:317` |
-| `list[NPCAction]` | emit | discarded by caller ("Actions list discarded here") | `systems/world/sim/npe.py:179-183`, `systems/overview/sim/accounting.py:134-138` |
+| `list[NPCAction]` | emit | discarded by caller ("Actions list discarded here") | `systems/world/sim/npe.py:190-194`, `systems/overview/sim/accounting.py:134-138` |
 | `world.npcs` / `world.npc_counter` mutations | world-state | `serialize_world` → `final_state`; `mc_v18.npcs_generated` telemetry | `engine/autoload/game_state.py:349-352`, `engine/mc_v18.py:318` |
 | serialized snapshot `dict` | file/registry | `CampaignResult.final_state`; any save-game caller | `engine/autoload/game_state.py:314`, `engine/autoload/game_state.py:324`, `engine/mc_v18.py:326` |
 | `StubResult` (from `stub_resolve`) | emit | `stubwire.invocations` cumulative counter → `mc_v18` `stub_hits` campaign telemetry | `engine/substrate/stubwire.py:51`, `engine/substrate/stubwire.py:54`, `systems/world/sim/miraculous_event.py:29`, `systems/world/sim/restoration_movement.py:31`, `systems/world/sim/restoration_movement.py:39` |
@@ -139,16 +139,16 @@ anticipated; `find systems/world/sim -type f` returns exactly these 5 files incl
 |---|---|---|---|
 | `World.territories` | W (created) | `engine.autoload.game_state` | `engine/autoload/game_state.py:304-318 create_world` |
 | `World.territories` | R | `systems.world.sim.insurgency_pipeline` | `systems/world/sim/insurgency_pipeline.py:117` |
-| `Territory.accord` | R | `systems.world.sim.insurgency_pipeline`, `systems.world.sim.npe` | `systems/world/sim/insurgency_pipeline.py:228-230`, `systems/world/sim/npe.py:200` |
+| `Territory.accord` | R | `systems.world.sim.insurgency_pipeline`, `systems.world.sim.npe` | `systems/world/sim/insurgency_pipeline.py:228-230`, `systems/world/sim/npe.py:211` |
 | `Territory.pt` | R | `systems.world.sim.insurgency_pipeline` | `systems/world/sim/insurgency_pipeline.py:237-239` |
-| `Territory.prosperity` | R | `systems.world.sim.npe` | `systems/world/sim/npe.py:211-214` |
-| `Territory.owner` | R | `systems.world.sim.npe` | `systems/world/sim/npe.py:207` |
+| `Territory.prosperity` | R | `systems.world.sim.npe` | `systems/world/sim/npe.py:222-225` |
+| `Territory.owner` | R | `systems.world.sim.npe` | `systems/world/sim/npe.py:218` |
 | `World.insurgencies` | RW | `systems.world.sim.insurgency_pipeline` | `systems/world/sim/insurgency_pipeline.py:59`, `systems/world/sim/insurgency_pipeline.py:168-172`, `systems/world/sim/insurgency_pipeline.py:247-248` |
 | `World.uncontrolled_streaks` | RW | `systems.world.sim.insurgency_pipeline` | `systems/world/sim/insurgency_pipeline.py:65`, `systems/world/sim/insurgency_pipeline.py:158`, `systems/world/sim/insurgency_pipeline.py:192-194` |
-| `World.npcs` | RW | `systems.world.sim.npe` | `systems/world/sim/npe.py:112`, `systems/world/sim/npe.py:348-349`, `systems/world/sim/npe.py:366` |
-| `World.npc_counter` | RW | `systems.world.sim.npe` | `systems/world/sim/npe.py:119-120` |
-| `World.season` | R | `systems.world.sim.insurgency_pipeline`, `systems.world.sim.npe` | `systems/world/sim/insurgency_pipeline.py:167`, `systems/world/sim/insurgency_pipeline.py:171`, `systems/world/sim/insurgency_pipeline.py:176`, `systems/world/sim/npe.py:397` |
-| `World.rng` | R | `systems.world.sim.npe` | `systems/world/sim/npe.py:242`, `systems/world/sim/npe.py:361` |
+| `World.npcs` | RW | `systems.world.sim.npe` | `systems/world/sim/npe.py:123`, `systems/world/sim/npe.py:359-360`, `systems/world/sim/npe.py:377` |
+| `World.npc_counter` | RW | `systems.world.sim.npe` | `systems/world/sim/npe.py:130-131` |
+| `World.season` | R | `systems.world.sim.insurgency_pipeline`, `systems.world.sim.npe` | `systems/world/sim/insurgency_pipeline.py:167`, `systems/world/sim/insurgency_pipeline.py:171`, `systems/world/sim/insurgency_pipeline.py:176`, `systems/world/sim/npe.py:408` |
+| `World.rng` | R | `systems.world.sim.npe` | `systems/world/sim/npe.py:253`, `systems/world/sim/npe.py:372` |
 | `World.clocks` | W (created) | `engine.autoload.game_state` | `engine/autoload/game_state.py:304 create_world` |
 | `World.settlements` | W (created, via down-seam) | `engine.autoload.game_state` → `systems.settlements.sim.registry` | `engine/autoload/game_state.py:304-305 create_world` |
 | `Territory.accord` | R | `systems.overview.sim.accounting` | `systems/overview/sim/accounting.py:88 _probe_province_accord_drift` |

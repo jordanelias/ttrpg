@@ -75,6 +75,25 @@ _FIELD_TO_KEY = {v: k for k, v in FACTION_FIELD_MAP.items()}
 UNIMPLEMENTED = _DATA['unimplemented']
 
 
+def block(name: str) -> dict:
+    """One registry block by name, e.g. `block('conviction_roster')`. THE PUBLIC WAY IN.
+
+    ⚠ `engine/season/data/rosters.py`'s `from_descriptor:` pointer reached `_DATA` directly, via
+    `getattr(_desc, "_DATA", {})`. Two things were wrong with that. `_DATA` is underscore-private
+    and carries no compatibility contract, so renaming or wrapping it is a legal refactor here --
+    and the `{}` default turned that refactor into a LIE: every pointed-at roster would raise
+    *"points at descriptor block 'conviction_roster', which is absent or has no `names`"*, sending
+    the next session to edit `references/descriptor_registry.yaml`, which would be perfectly
+    correct and completely unrelated to the actual cause.
+
+    Returning `{}` for an unknown name is deliberate and is NOT that default: the caller's own
+    refusal reads better than one raised from here, because it names the roster that pointed and
+    the exporter to re-run. What this removes is the silent-`{}`-on-RENAME, not the empty answer
+    for a name nobody declared.
+    """
+    return _DATA.get(name) or {}
+
+
 def faction_bounds(field):
     """(floor, ceiling) the REGISTRY declares for a Faction dataclass field, or None if it declares
     none.
@@ -173,6 +192,23 @@ def assert_faction_roster_is_covered(implemented_fields):
 # canonical names. `CONVICTION_ALIASES` below carries the two that have an unambiguous canonical
 # twin; the rest are gone, and a caller passing one now raises instead of silently scoring zero.
 CONVICTIONS = tuple(_DATA['conviction_roster']['names'])
+
+# ---------------------------------------------------------------------------
+# ETHICAL AXES — centralized 2026-09-14 (ED-IN-0230). THE ONLY AXIS ROSTER IN THE ENGINE.
+# ---------------------------------------------------------------------------
+# `keys.py::AXES` held one literal and `engine/season/rosters.yaml: conviction_axes` held another,
+# and NOTHING compared them — while the roster's own note claimed "a fifth axis or a rename is one
+# edit there and a loader refusal here rather than two rosters drifting apart". MEASURED by AST on
+# 2026-09-14: exactly one module in the tree imports `AXES`, and it is `engine/substrate/__init__`
+# re-exporting it. Nothing under `engine/season/` reads it. So the two literals could disagree in
+# either direction with no refusal on either side — a fifth axis in `keys.py` alone left the season
+# engine scoring on four, and one in the roster alone left `keys.py` invariant 6 rejecting every
+# Key that named it.
+#
+# This is the CONVICTIONS move above, applied one level up, and it is the tree's own precedent for
+# this exact object rather than a new decision.
+AXES = tuple(_DATA['axis_roster']['names'])
+AXIS_SCALE = _DATA['axis_roster'].get('scale', '')
 
 # ⚠ THERE IS NO ALIAS MAP, AND ITS REMOVAL IS THE POINT (corrected 2026-08-24, same day it was
 # added, by an adversarial pass). This module briefly carried

@@ -56,6 +56,31 @@ def build():
         _fail('no faction_starting_stats declared.')
 
     factions = sorted(stats)
+
+    # ⚠ EVERY FACTION NAMED HERE MUST BE ONE THE NAMING INDEX KNOWS (added 2026-09-16). This table
+    # is authored by hand and its keys become `world.factions`, so a typo used to mint a faction
+    # that exists nowhere else -- silently, because every other check in this file compares the
+    # table against ITSELF. `engine/engine_params/names.json` is the cooked naming index
+    # (tools/export_names.py); a name resolves if it is canonical OR a declared alias, which is why
+    # `Church` passes while remaining an alias of `Church of Solmund`.
+    #
+    # ⚠ IT VALIDATES, IT DOES NOT RENAME. Rewriting `Church` to the canonical spelling here would
+    # move campaign goldens across the blocking sim-regression job to change a STRING, and this
+    # cluster is internally consistent: `systems/world/sim/npe.py:287` compares a drawn faction
+    # against a territory's owner, both spelled from this table. The register reaches this file as
+    # a refusal, which is the part that was missing -- not as a rename, which buys nothing.
+    names_path = os.path.join(REPO, 'engine', 'engine_params', 'names.json')
+    if os.path.exists(names_path):
+        with open(names_path, encoding='utf-8') as _nf:
+            _names = json.load(_nf)
+        known = set(_names.get('canonical', {}).values()) | set(_names.get('aliases', {}))
+        unknown = sorted(f for f in stats if f not in known)
+        if unknown:
+            _fail(f'faction(s) {unknown} are declared here but are not a canonical name or a '
+                  f'declared alias in references/names_index.yaml. Add the row (or the alias) '
+                  f'there and re-run tools/export_names.py; do not invent a faction in this table, '
+                  f'which is read into world.factions at world build.')
+
     owners_seen = set()
     for tid, row in sorted(territories.items()):
         for field in ('owner', 'accord', 'pt', 'garrison', 'playable', 'prosperity', 'templar'):

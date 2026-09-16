@@ -41,29 +41,29 @@ EPS = 1e-6  # touch-not-overlap tolerance on the reach engagement surface (see _
 
 @pytest.fixture
 def field_path():
-    """Force the live coordinate-field path (FIELD_MOVEMENT=1, PC_NODE_COHESION=1) for the test body,
+    """Force the live coordinate-field path (FIELD_MOVEMENT=1, MB_NODE_COHESION=1) for the test body,
     then restore whatever was ambient. Units built inside the `with`/fixture run on the node path."""
-    saved = [(m, m.FIELD_MOVEMENT, m.PC_NODE_COHESION) for m in (_hu, _orch)]
+    saved = [(m, m.FIELD_MOVEMENT, m.MB_NODE_COHESION) for m in (_hu, _orch)]
     _val._set_movement_path('node')
     try:
         yield
     finally:
         for m, fm, nc in saved:
             m.FIELD_MOVEMENT = fm
-            m.PC_NODE_COHESION = nc
+            m.MB_NODE_COHESION = nc
 
 
 @pytest.fixture
 def grid_path():
-    """Force the frozen grid oracle (FIELD_MOVEMENT=0, PC_NODE_COHESION=0), restore after."""
-    saved = [(m, m.FIELD_MOVEMENT, m.PC_NODE_COHESION) for m in (_hu, _orch)]
+    """Force the frozen grid oracle (FIELD_MOVEMENT=0, MB_NODE_COHESION=0), restore after."""
+    saved = [(m, m.FIELD_MOVEMENT, m.MB_NODE_COHESION) for m in (_hu, _orch)]
     _val._set_movement_path('grid')
     try:
         yield
     finally:
         for m, fm, nc in saved:
             m.FIELD_MOVEMENT = fm
-            m.PC_NODE_COHESION = nc
+            m.MB_NODE_COHESION = nc
 
 
 def _cross_side_boxes(unit_a, unit_b):

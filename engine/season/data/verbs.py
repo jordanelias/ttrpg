@@ -60,7 +60,8 @@ from ..gaps import Forbidden, Unspecified
 from .matrix import MATRIX
 from .requires import TypedRequires, build_typed_requires
 from .rosters import (
-    CONVICTION_AXES, CONVICTIONS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, load_yaml, roster,
+    CONVICTION_AXES, CONVICTIONS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, load_yaml,
+    require_member, roster,
     table,
     table_meta,
 )
@@ -522,11 +523,12 @@ def alignment_at(point: str) -> dict:
     `sign_only` discards the magnitudes and keeps the signs, which separates "the table's
     DIRECTIONS are load-bearing" from "its INVENTED NUMBERS are". Since the numbers are declared
     invented, that separation is the one worth having."""
-    if point not in ALIGNMENT_SWEEP:
-        raise Unspecified(
-            f"{point!r} is not an alignment sweep point", "H-66",
-            needs=f"one of {list(ALIGNMENT_SWEEP)}",
-            law="§G -- declare it, default it, sweep it. A fourth point is a fourth claim")
+    require_member(
+        point,
+        ALIGNMENT_SWEEP,
+        f"{point!r} is not an alignment sweep point",
+        "H-66",
+        law="§G -- declare it, default it, sweep it. A fourth point is a fourth claim")
     # ⚠ EVERY POINT IS BUILT FROM `ALIGNMENT_DECLARED`, NEVER FROM `ALIGNMENT`. A sweep works by
     # rebinding `ALIGNMENT`, so a transform reading the live global transforms whatever the last
     # point left: `alignment_at("sign_only")` after `uniform` returned sign(1.0) == 1.0 — i.e.

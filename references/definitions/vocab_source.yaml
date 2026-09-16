@@ -1574,6 +1574,28 @@ view_headers:
 
     # This file is the source of truth for how mechanical terms may be written.
 
+    # WARNING (2026-09-16): tools/valoria_collator.py DOES NOT EXIST, and this header
+
+    # claimed for months that it enforced this file. The three checks below are a
+
+    # SPECIFICATION of what a collator would do, never a description of what runs.
+
+    # The live readers of the generated alias_registry.yaml are ci_naming_check.py and
+
+    # validate_ed_citations.py, and neither performs them. Nothing under engine/ or
+
+    # systems/ reads this registry at runtime at all. Bearing on ED-IN-0025, the open
+
+    # 7-vs-9 core-attribute split: only ONE side of it is live, since the nine in
+
+    # descriptor_registry.yaml are cooked behind a blocking --check and read at
+
+    # runtime while these seven are enforced by nothing. That does not decide
+
+    # ED-IN-0025, which is a design question with a ledger row, but the two rosters
+
+    # are not peers and a session weighing them should know it.
+
     # The collator (tools/valoria_collator.py) checks every design/params file
 
     # against this registry and flags:

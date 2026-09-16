@@ -76,8 +76,16 @@ milestones:
         label: "Social contest"
         owner: "SC"
         owner_deliverable: "SC Stage 4 (four deliberative games), gated on the P0 docket ED-SC-0003/0004/0005"
-        state: blocked
-        blocked_on: "HARD, on three rulings — VERIFIED 2026-08-19 against the ledgers, not inferred: ED-SC-0003, ED-SC-0004 and ED-SC-0005 are all status=open AND needs_jordan=true in registers/editorial_ledger_sc.jsonl. They are the Piety/Persuasion name collision, the canonical Argue-pool formula, and the bonus-die cap. The third is explicitly 'Jordan's design number'. This row previously read blocked_on: null while carrying that gate in its `next` text — the gate is now where an instrument can see it."
+        state: not_started
+        blocked_on: null   # ⭐ GATE CLEARED 2026-09-15. This read "HARD, on three rulings —
+          # VERIFIED 2026-08-19 ... ED-SC-0003, ED-SC-0004 and ED-SC-0005 are all status=open AND
+          # needs_jordan=true". On their EFFECTIVE (latest) rows all three are now superseded with
+          # needs_jordan false: ED-SC-0004 by ED-IN-0215; ED-SC-0003 by ED-IN-0075 (Piety->Truth,
+          # territorial PT distinct) + ED-SC-0033; ED-SC-0005 because CR6 (social_contest_v30.md:508,
+          # :514, RATIFIED) routes those channels through delta-sigma with a tanh soft cap — they are
+          # not dice — and sigma_leverage.py enforces it (M_MAX=1.5). ⚠ state moves blocked ->
+          # not_started, NOT done: the gate is clear, the work is unstarted. Row 4 of
+          # tools/m1_acceptance.py counts `state: done`, so this changes no gate reading.
         next: "BLOCKED — do not manufacture an increment here. Stage 4 needs ED-SC-0004 first: it chooses the canonical Argue-pool formula and two contradictory implementations are simultaneously live. ⚠ Before treating ED-SC-0005 as a third gate, read ED-SC-0017: it argues the cap is ALREADY ruled by canon and enforced in code (kernel M_MAX=1.5 tanh, sigma_leverage.py:100,137-144), so the docket may be one item shorter than it looks. Six other SC ids are open with needs_jordan false if lane work is wanted."
         evidence: ["ED-SC-0002 resolved 2026-07-08 (composed keying ruling)", "ED-SC-0006/0007 executed 2026-07-08 (PR #95/#96) — contest kernel wired live in mc_v18 campaign (no longer dead-in-campaign) + parliamentary vote/Domain-Echo composition; ECHO_TRANSPORT flipped default ON (Jordan)", "Fable 5 subsystem audit RATIFIED 2026-07-05 (PR #80) sequenced P0→P1→Stage4→calibration", "ED-SC-0012 resolved 2026-07-08 (PR #104) — pessimist subtractive-action audit now fully executed across all 6 lanes (SC was the last outstanding one); 4 audit-residual decision packets (DP-1..DP-4) authored for Jordan, no verdict smuggled in", "Parliamentary Censure wired into campaign loop 2026-07-08 (PR #105) surfaced ED-SC-0015 (total-victory Mandate stacking, −1 vs −2) — filed needs_jordan; PR #117's open-items docket recommends the −1 cap but nothing is ratified yet", "2026-08-06..08 (ED-SC-0017..0030): three-lens pessimistic NERS audit + consolidation programme v2 filed at audit/2026-08-06-social-contest-three-lens-audit/ and proposals/. FINDINGS ONLY — no design text changed, no head moved. Headline: the subsystem carries THREE resolution models under one name; the canonical head's §4 loop has no engine, the kernel's loop has no canonical prose. ED-SC-0020/0021 held for Jordan", "2026-08-14 (PR #311): sigma_leverage.degree — the contest resolution surface — is the second degree site HELD OUT of the unified ladder; its top band is a deliberate pool-aware bar and the ruling flips its net==ob cell"]
       - n: 4

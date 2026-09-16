@@ -64,7 +64,7 @@ def s0_wiring_census():
     ok, missing = mechanics_selftest()
     print(f"mechanics_selftest: ok={ok}  missing={missing}  ({len(MECHANICS)} registered mechanics)")
 
-    field = {"FIELD_MOVEMENT": HU.FIELD_MOVEMENT, "PC_NODE_COHESION": C.PC_NODE_COHESION, "PER_CELL": C.PER_CELL}
+    field = {"FIELD_MOVEMENT": HU.FIELD_MOVEMENT, "MB_NODE_COHESION": C.MB_NODE_COHESION, "PER_CELL": C.PER_CELL}
     grid_oracle_active = not any(field.values())
     print(f"field triad: {field}   -> field-based={all(field.values())}  grid-oracle-active={grid_oracle_active}")
 
@@ -87,15 +87,15 @@ def s0_wiring_census():
 
     # full env-gate roster (beyond MECHANICS): the field vs off-by-default split
     on_flags = {k: flag_val(k) for k in
-                ["FIELD_MOVEMENT", "PC_NODE_COHESION", "PER_CELL", "LANCHESTER_ENABLED", "POOL_QUALITY_MODEL",
+                ["FIELD_MOVEMENT", "MB_NODE_COHESION", "PER_CELL", "LANCHESTER_ENABLED", "POOL_QUALITY_MODEL",
                  "COMMAND_SIGMA_ENABLED", "MORALE_FIX", "SIGMA_HEAD_ENABLED", "VOLLEY_ENABLED", "CASCADING_ENABLED",
-                 "PC_BRACE_ENABLED", "PC_RECOIL_FRONTAL", "PC_BRACE_SETUP_DELAY", "PC_RECOIL_CHARGER_GATE",
-                 "PC_WHEEL", "PC_REFUSE", "PC_VOLLEY_DENSITY_ENABLED", "PC_KITE_ENABLED", "PC_ENVELOP_PATH", "PC_SWEEP"]}
+                 "MB_BRACE_ENABLED", "MB_RECOIL_FRONTAL", "MB_BRACE_SETUP_DELAY", "MB_RECOIL_CHARGER_GATE",
+                 "MB_WHEEL", "MB_REFUSE", "MB_VOLLEY_DENSITY_ENABLED", "MB_KITE_ENABLED", "MB_ENVELOP_PATH", "MB_SWEEP"]}
     off_flags = {k: flag_val(k) for k in
-                 ["PC_FACING_MODEL", "FIELD_CONTACT", "REFORM_CHECK_ENABLED"]}
+                 ["MB_FACING_MODEL", "FIELD_CONTACT", "REFORM_CHECK_ENABLED"]}
     print(f"\nfield gates ON by default   : {on_flags}")
     print(f"gates OFF by default        : {off_flags}")
-    print(f"do-not-enable (unratified)  : PC_FACING_SLEW_BASE={HU.PC_FACING_SLEW_BASE} "
+    print(f"do-not-enable (unratified)  : MB_FACING_SLEW_BASE={HU.MB_FACING_SLEW_BASE} "
           f"(CALIBRATED-DEBT, left OFF deliberately)")
     REPORT["s0"] = dict(selftest_ok=ok, missing=missing, n_mechanics=len(MECHANICS),
                         field=field, field_based=all(field.values()), gates_off_under_field=off,
@@ -174,21 +174,21 @@ def s2_validators():
 # ──────────────────────────────────────────────────────────────────────────────────────────────
 # (flag, scenario, default_env, flipped_env, expectation)  expectation: 'live' | 'inert-ok'
 FLAG_AB = [
-    ("PER_CELL",              "charge_vs_brace", {"PER_CELL": 1}, {"PER_CELL": 0, "PC_NODE_COHESION": 0, "FIELD_MOVEMENT": 0}, "live"),
+    ("PER_CELL",              "charge_vs_brace", {"PER_CELL": 1}, {"PER_CELL": 0, "MB_NODE_COHESION": 0, "FIELD_MOVEMENT": 0}, "live"),
     ("LANCHESTER_ENABLED",    "big_vs_small",    {"LANCHESTER_ENABLED": 1}, {"LANCHESTER_ENABLED": 0}, "live"),
     ("POOL_QUALITY_MODEL",    "big_vs_small",    {"POOL_QUALITY_MODEL": 1}, {"POOL_QUALITY_MODEL": 0}, "live"),
     ("COMMAND_SIGMA_ENABLED", "mirror",          {"POOL_QUALITY_MODEL": 0, "COMMAND_SIGMA_ENABLED": 1},
                                                  {"POOL_QUALITY_MODEL": 0, "COMMAND_SIGMA_ENABLED": 0}, "live"),
     ("MORALE_FIX",            "mirror",          {"MORALE_FIX": 1}, {"MORALE_FIX": 0}, "live"),
     ("SIGMA_HEAD",            "mirror",          {"SIGMA_HEAD": 1}, {"SIGMA_HEAD": 0}, "live"),
-    ("PC_BRACE_ENABLED",      "charge_vs_brace", {"PC_BRACE_ENABLED": 1}, {"PC_BRACE_ENABLED": 0}, "live"),
-    ("PC_RECOIL_FRONTAL",     "charge_vs_brace", {"PC_RECOIL_FRONTAL": 1}, {"PC_RECOIL_FRONTAL": 0}, "live"),
-    ("PC_BRACE_SETUP_DELAY",  "charge_vs_brace", {"PC_BRACE_SETUP_DELAY": 1}, {"PC_BRACE_SETUP_DELAY": 0}, "live"),
-    ("PC_CHARGE_RECOIL",      "charge_vs_brace", {"PC_CHARGE_RECOIL": 6}, {"PC_CHARGE_RECOIL": 0}, "live"),
-    ("PC_WHEEL",              "envelop",         {"PC_WHEEL": 1}, {"PC_WHEEL": 0}, "live"),
-    ("PC_REFUSE",             "envelop",         {"PC_REFUSE": 1}, {"PC_REFUSE": 0}, "live"),
-    ("PC_VOLLEY_DENSITY_ENABLED", "ranged_dense", {"PC_VOLLEY_DENSITY_ENABLED": 1}, {"PC_VOLLEY_DENSITY_ENABLED": 0}, "live"),
-    ("PC_ENVELOP_MOD",        "envelop",         {"PC_ENVELOP_MOD": -1.0}, {"PC_ENVELOP_MOD": 0.0}, "live"),
+    ("MB_BRACE_ENABLED",      "charge_vs_brace", {"MB_BRACE_ENABLED": 1}, {"MB_BRACE_ENABLED": 0}, "live"),
+    ("MB_RECOIL_FRONTAL",     "charge_vs_brace", {"MB_RECOIL_FRONTAL": 1}, {"MB_RECOIL_FRONTAL": 0}, "live"),
+    ("MB_BRACE_SETUP_DELAY",  "charge_vs_brace", {"MB_BRACE_SETUP_DELAY": 1}, {"MB_BRACE_SETUP_DELAY": 0}, "live"),
+    ("MB_CHARGE_RECOIL",      "charge_vs_brace", {"MB_CHARGE_RECOIL": 6}, {"MB_CHARGE_RECOIL": 0}, "live"),
+    ("MB_WHEEL",              "envelop",         {"MB_WHEEL": 1}, {"MB_WHEEL": 0}, "live"),
+    ("MB_REFUSE",             "envelop",         {"MB_REFUSE": 1}, {"MB_REFUSE": 0}, "live"),
+    ("MB_VOLLEY_DENSITY_ENABLED", "ranged_dense", {"MB_VOLLEY_DENSITY_ENABLED": 1}, {"MB_VOLLEY_DENSITY_ENABLED": 0}, "live"),
+    ("MB_ENVELOP_MOD",        "envelop",         {"MB_ENVELOP_MOD": -1.0}, {"MB_ENVELOP_MOD": 0.0}, "live"),
     ("K_LINEAR",              "big_vs_small",    {"K_LINEAR": 12}, {"K_LINEAR": 24}, "live"),
     ("POOL_QUALITY_SCALE",    "mirror",          {"POOL_QUALITY_SCALE": 0.5}, {"POOL_QUALITY_SCALE": 1.0}, "live"),
 ]
@@ -232,10 +232,10 @@ def s4_off_gates():
     print("every probe scenario; a gate is SAFE if no scenario errors or breaks invariants.\n")
     configs = {
         "baseline(field)":        {},
-        "PC_FACING_MODEL=1":      {"PC_FACING_MODEL": 1},
+        "MB_FACING_MODEL=1":      {"MB_FACING_MODEL": 1},
         "FIELD_CONTACT=1":        {"FIELD_CONTACT": 1},
         "REFORM_CHECK_ENABLED=1": {"REFORM_CHECK_ENABLED": 1},
-        "ALL_THREE_ON":           {"PC_FACING_MODEL": 1, "FIELD_CONTACT": 1, "REFORM_CHECK_ENABLED": 1},
+        "ALL_THREE_ON":           {"MB_FACING_MODEL": 1, "FIELD_CONTACT": 1, "REFORM_CHECK_ENABLED": 1},
     }
     rows = {}
     all_ok = True
@@ -257,7 +257,7 @@ def s4_off_gates():
             print(f"         {scn:16} {s}")
         if not safe:
             all_ok = False
-    print(f"\nPC_FACING_SLEW_BASE deliberately NOT activated (config comment: 'NOT ratified -- do not enable').")
+    print(f"\nMB_FACING_SLEW_BASE deliberately NOT activated (config comment: 'NOT ratified -- do not enable').")
     REPORT["s4"] = rows
     return all_ok
 

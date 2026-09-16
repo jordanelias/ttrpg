@@ -1,0 +1,570 @@
+meta:
+  authority: "TRANSCRIBED FROM CANON 2026-09-13. Not authored. Every row cites its source."
+  precedence: "systems/world > systems/factions > (systems/settlements excluded)"
+  generated_by: "manual transcription"
+  note_on_untiered_sources: >-
+    Two files outside the three-tier precedence were consulted for the CASE
+    cross-reference only, per the task's own instruction to resolve case ids
+    via the NPC corpus: systems/npcs/reference/npc_roster_v30.md and (once,
+    for a single first name) systems/npcs/reference/npc_behavior_system_v1.md.
+    Neither is cited as the SOURCE of a ladder/body/seat/title's substantive
+    content unless flagged in that row's note; where npc_roster's own text
+    conflicts with a tier-1/tier-2 claim, both are recorded in `note:`.
+
+ladders:
+  crown:
+    kind: "Valorsmark Monarchy"
+    source: "systems/factions/reference/faction_politics_v30.md:147"
+    tier: 2
+    standings:
+      - {standing: 0, title: "Petitioner (Bittsteller)", source: "systems/factions/reference/faction_politics_v30.md:157"}
+      - {standing: 1, title: "Retainer (Hofmann)", source: "systems/factions/reference/faction_politics_v30.md:158"}
+      - {standing: 2, title: "Crown Agent (Kronagent)", source: "systems/factions/reference/faction_politics_v30.md:159"}
+      - {standing: 3, title: "Banneret (Bannerherr)", source: "systems/factions/reference/faction_politics_v30.md:160"}
+      - {standing: 4, title: "Crown Lieutenant (Kronleutnant)", source: "systems/factions/reference/faction_politics_v30.md:161"}
+      - {standing: 5, title: "Seneschal (Reichsseneschall)", source: "systems/factions/reference/faction_politics_v30.md:162"}
+      - {standing: 6, title: "Inner Prince / Prince of the Realm (Reichsfürst)", source: "systems/factions/reference/faction_politics_v30.md:163"}
+      - {standing: 7, title: "Crown-Adjacent / Regent-Designate (Kronnah / Reichsverweser-designiert)", source: "systems/factions/reference/faction_politics_v30.md:164"}
+    branches:
+      - {name: "Martial (Schwertzweig)", opens: "Löwenritter Knight ladder (Part 2, §2.1)", source: "systems/factions/reference/faction_politics_v30.md:172"}
+      - {name: "Administrative (Stangzweig)", opens: null, source: "systems/factions/reference/faction_politics_v30.md:173"}
+      - {name: "Intelligence (Schattenzweig)", opens: "Riskbreaker ladder (Part 2, §2.2); Niflhel transactional relationships (Part 2, §2.6) — Niflhel is STRUCK per CR-STRIKE-2026-04-19, see unsourced", source: "systems/factions/reference/faction_politics_v30.md:174"}
+
+  hafenmark:
+    kind: "Constitutional Duchy"
+    source: "systems/factions/reference/faction_politics_v30.md:204"
+    tier: 2
+    standings:
+      - {standing: 0, title: "Petitioner (Bittsteller)", source: "systems/factions/reference/faction_politics_v30.md:214"}
+      - {standing: 1, title: "Advocate (Advokat)", source: "systems/factions/reference/faction_politics_v30.md:215"}
+      - {standing: 2, title: "Burgher (Vollbürger)", source: "systems/factions/reference/faction_politics_v30.md:216"}
+      - {standing: 3, title: "Alderman (Ratsherr)", source: "systems/factions/reference/faction_politics_v30.md:217"}
+      - {standing: 4, title: "Parliamentarian (Parlamentsmitglied)", source: "systems/factions/reference/faction_politics_v30.md:218"}
+      - {standing: 5, title: "Parliamentary Chair (Parlamentsvorsitzender)", source: "systems/factions/reference/faction_politics_v30.md:219"}
+      - {standing: 6, title: "Chancellor (Kanzler)", source: "systems/factions/reference/faction_politics_v30.md:220"}
+      - {standing: 7, title: "Prime Parliamentarian / Speaker-Regent (Erster Parlamentarier / Sprecher-Verweser)", source: "systems/factions/reference/faction_politics_v30.md:221"}
+    branches:
+      - {name: "Judicial", opens: null, source: "systems/factions/reference/faction_politics_v30.md:227"}
+      - {name: "Commercial", opens: "Guilds ladder (Part 2, §2.5)", source: "systems/factions/reference/faction_politics_v30.md:228"}
+      - {name: "Martial", opens: "Hafenmark Militia rank ladder (provisional — cites 'ED-640 below', but no ED-640 section exists anywhere in this document — dangling citation, ladder never specified; see unsourced)", source: "systems/factions/reference/faction_politics_v30.md:229"}
+
+  varfell:
+    kind: "Jarl Confederacy"
+    source: "systems/factions/reference/faction_politics_v30.md:242"
+    tier: 2
+    standings:
+      - {standing: 0, title: "Stranger (Fremdling)", source: "systems/factions/reference/faction_politics_v30.md:252"}
+      - {standing: 1, title: "Huscarl (Huskarl)", source: "systems/factions/reference/faction_politics_v30.md:253"}
+      - {standing: 2, title: "Thane (Thegn)", source: "systems/factions/reference/faction_politics_v30.md:254"}
+      - {standing: 3, title: "Lendmann (Lendmann)", source: "systems/factions/reference/faction_politics_v30.md:255"}
+      - {standing: 4, title: "Senior Lendmann / Hersir (Hersir)", source: "systems/factions/reference/faction_politics_v30.md:256"}
+      - {standing: 5, title: "Jarl (Jarl)", source: "systems/factions/reference/faction_politics_v30.md:257"}
+      - {standing: 6, title: "Senior Jarl (Markherr)", source: "systems/factions/reference/faction_politics_v30.md:258"}
+      - {standing: 7, title: "High Thane / Jarl-Regent (Hochjarl)", source: "systems/factions/reference/faction_politics_v30.md:259"}
+    branches:
+      - {name: "Martial", opens: null, source: "systems/factions/reference/faction_politics_v30.md:295"}
+      - {name: "Resource", opens: null, source: "systems/factions/reference/faction_politics_v30.md:296"}
+      - {name: "Cultural", opens: "Warden of the Thread ladder (Part 2, §2.7) if the player has Thread Sensitivity ≥ 30 AND WA ≥ +1", source: "systems/factions/reference/faction_politics_v30.md:297"}
+      - {name: "Warden", opens: "Warden of the Thread ladder (Part 2, §2.7) — the canonical path via Edeyja sponsorship", source: "systems/factions/reference/faction_politics_v30.md:298"}
+      - {name: "Foreign", opens: null, source: "systems/factions/reference/faction_politics_v30.md:299"}
+
+  church:
+    kind: "Church of Solmund"
+    source: "systems/factions/reference/faction_politics_v30.md:313"
+    tier: 2
+    standings:
+      - {standing: 0, title: "Catechumen (Katechumen)", source: "systems/factions/reference/faction_politics_v30.md:325"}
+      - {standing: 1, title: "Lay Confessor (Laibeichtvater)", source: "systems/factions/reference/faction_politics_v30.md:326"}
+      - {standing: 2, title: "Deacon (Diakon)", source: "systems/factions/reference/faction_politics_v30.md:327"}
+      - {standing: 3, title: "Canon (Kanoniker)", source: "systems/factions/reference/faction_politics_v30.md:328"}
+      - {standing: 4, title: "Bishop's Delegate (Bischofslegat)", source: "systems/factions/reference/faction_politics_v30.md:329"}
+      - {standing: 5, title: "Prelate (Prälat)", source: "systems/factions/reference/faction_politics_v30.md:330"}
+      - {standing: 6, title: "Cardinal (Kardinal)", source: "systems/factions/reference/faction_politics_v30.md:331"}
+      - {standing: 7, title: "Confessor-Presumptive (Bekennerpräsident-designiert)", source: "systems/factions/reference/faction_politics_v30.md:332"}
+    branches:
+      - {name: "Fortitude / Military", opens: "Templar ladder (Part 2, §2.4)", source: "systems/factions/reference/faction_politics_v30.md:338"}
+      - {name: "Justice / Judicial", opens: "Inquisitor ladder (Part 2, §2.3)", source: "systems/factions/reference/faction_politics_v30.md:339"}
+      - {name: "Prudence / Economic", opens: null, source: "systems/factions/reference/faction_politics_v30.md:340"}
+      - {name: "Temperance / Knowledge", opens: "Warden of the Thread-adjacent (rare — requires Klapp-specific sponsorship; see §2.7)", source: "systems/factions/reference/faction_politics_v30.md:341"}
+
+sub_ladders:
+  lowenritter_knight_ladder:
+    parent_faction: "Crown"
+    parent_branch: "Martial (Schwertzweig)"
+    caps_at: 7
+    source: "systems/factions/reference/faction_politics_v30.md:381"
+    standings:
+      - {standing: 0, title: "Squire (Knappe)", source: "systems/factions/reference/faction_politics_v30.md:391"}
+      - {standing: 1, title: "Knight (Ritter)", source: "systems/factions/reference/faction_politics_v30.md:392"}
+      - {standing: 2, title: "Knight-Sergeant (Ritterfeldwebel)", source: "systems/factions/reference/faction_politics_v30.md:393"}
+      - {standing: 3, title: "Knight-Commander (Ritterkommandeur)", source: "systems/factions/reference/faction_politics_v30.md:394"}
+      - {standing: 4, title: "Preceptor (Präzeptor)", source: "systems/factions/reference/faction_politics_v30.md:395"}
+      - {standing: 5, title: "Marshal of the Order (Ordensmarschall)", source: "systems/factions/reference/faction_politics_v30.md:396"}
+      - {standing: 6, title: "Grand Master-Designate", source: "systems/factions/reference/faction_politics_v30.md:397"}
+      - {standing: 7, title: "Grand Master (Großmeister)", source: "systems/factions/reference/faction_politics_v30.md:398"}
+
+  riskbreaker_ladder:
+    parent_faction: "Crown (via Löwenritter, Std 3+)"
+    parent_branch: "Intelligence (Schattenzweig)"
+    caps_at: 6
+    source: "systems/factions/reference/faction_politics_v30.md:422"
+    standings:
+      - {standing: 0, title: "Candidate", source: "systems/factions/reference/faction_politics_v30.md:414"}
+      - {standing: 1, title: "Operative (Geheimagent)", source: "systems/factions/reference/faction_politics_v30.md:415"}
+      - {standing: 2, title: "Senior Operative", source: "systems/factions/reference/faction_politics_v30.md:416"}
+      - {standing: 3, title: "Squad-Leader (Truppführer)", source: "systems/factions/reference/faction_politics_v30.md:417"}
+      - {standing: 4, title: "Field-Commander", source: "systems/factions/reference/faction_politics_v30.md:418"}
+      - {standing: 5, title: "Deputy Commander", source: "systems/factions/reference/faction_politics_v30.md:419"}
+      - {standing: 6, title: "Riskbreaker Commander", source: "systems/factions/reference/faction_politics_v30.md:420"}
+
+  inquisitor_ladder:
+    parent_faction: "Church"
+    parent_branch: "Justice / Judicial"
+    caps_at: 5
+    source: "systems/factions/reference/faction_politics_v30.md:521"
+    standings:
+      - {standing: 0, title: "Inquisitor's Scribe", source: "systems/factions/reference/faction_politics_v30.md:514"}
+      - {standing: 1, title: "Junior Inquisitor", source: "systems/factions/reference/faction_politics_v30.md:515"}
+      - {standing: 2, title: "Inquisitor", source: "systems/factions/reference/faction_politics_v30.md:516"}
+      - {standing: 3, title: "Senior Inquisitor", source: "systems/factions/reference/faction_politics_v30.md:517"}
+      - {standing: 4, title: "Inquisitor-General", source: "systems/factions/reference/faction_politics_v30.md:518"}
+      - {standing: 5, title: "Grand Inquisitor", source: "systems/factions/reference/faction_politics_v30.md:519"}
+
+  templar_ladder:
+    parent_faction: "Church"
+    parent_branch: "Fortitude / Military"
+    caps_at: 5
+    source: "systems/factions/reference/faction_politics_v30.md:540"
+    standings:
+      - {standing: 0, title: "Templar Postulant", source: "systems/factions/reference/faction_politics_v30.md:533"}
+      - {standing: 1, title: "Templar", source: "systems/factions/reference/faction_politics_v30.md:534"}
+      - {standing: 2, title: "Templar-Sergeant", source: "systems/factions/reference/faction_politics_v30.md:535"}
+      - {standing: 3, title: "Templar Commander", source: "systems/factions/reference/faction_politics_v30.md:536"}
+      - {standing: 4, title: "Master-Templar", source: "systems/factions/reference/faction_politics_v30.md:537"}
+      - {standing: 5, title: "Grand Master of the Temple", source: "systems/factions/reference/faction_politics_v30.md:538"}
+
+  guild_ladder:
+    parent_faction: "Hafenmark (Commercial branch) and/or independent Guilds-as-faction"
+    parent_branch: "Commercial"
+    caps_at: 6
+    source: "systems/factions/reference/faction_politics_v30.md:546"
+    standings:
+      - {standing: 0, title: "Apprentice", source: "systems/factions/reference/faction_politics_v30.md:554"}
+      - {standing: 1, title: "Journeyman", source: "systems/factions/reference/faction_politics_v30.md:555"}
+      - {standing: 2, title: "Free Master", source: "systems/factions/reference/faction_politics_v30.md:556"}
+      - {standing: 3, title: "Guild Master", source: "systems/factions/reference/faction_politics_v30.md:557"}
+      - {standing: 4, title: "Senior Guild Master", source: "systems/factions/reference/faction_politics_v30.md:558"}
+      - {standing: 5, title: "Comptroller-equivalent", source: "systems/factions/reference/faction_politics_v30.md:559"}
+      - {standing: 6, title: "Grand Guildmaster (if such exists — ED-642, unresolved; canon itself calls Standing 6 'extraordinary and normally omitted')", source: "systems/factions/reference/faction_politics_v30.md:560"}
+
+  warden_of_the_thread_ladder:
+    parent_faction: "Varfell (Warden branch), primarily; Church Temperance branch secondarily; or independent"
+    parent_branch: "Warden"
+    caps_at: 7
+    source: "systems/factions/reference/faction_politics_v30.md:617"
+    standings:
+      - {standing: 0, title: "Thread-Touched", source: "systems/factions/reference/faction_politics_v30.md:627"}
+      - {standing: 1, title: "Apprentice-Warden", source: "systems/factions/reference/faction_politics_v30.md:628"}
+      - {standing: 2, title: "Warden", source: "systems/factions/reference/faction_politics_v30.md:629"}
+      - {standing: 3, title: "Senior Warden", source: "systems/factions/reference/faction_politics_v30.md:630"}
+      - {standing: 4, title: "Warden-Captain", source: "systems/factions/reference/faction_politics_v30.md:631"}
+      - {standing: 5, title: "Warden-Senior (Council)", source: "systems/factions/reference/faction_politics_v30.md:632"}
+      - {standing: 6, title: "Warden-Chief Designate", source: "systems/factions/reference/faction_politics_v30.md:633"}
+      - {standing: 7, title: "Warden-Chief", source: "systems/factions/reference/faction_politics_v30.md:634"}
+
+  # NOTE: faction_politics_v30.md §2.6 (lines 585-613) also specifies a "Niflhel Ladder"
+  # (four arms: Dockworkers, Reckoners, Burned, Quiet; seven positions each). It is
+  # EXCLUDED here — see unsourced: for why.
+
+bodies:
+  # --- Church: Four-Cardinal structure (tier 1) ---
+  - {name: "Fortitude (Military Arm)", faction: "Church", function: "Knights Templar, enforcement, monstrous incursion suppression", source: "systems/world/reference/worldbuilding_v30.md:39", tier: 1}
+  - {name: "Justice (Judicial Arm)", faction: "Church", function: "Inquisitors, Grand Adjudication, heresy investigation, text suppression", source: "systems/world/reference/worldbuilding_v30.md:40", tier: 1}
+  - {name: "Prudence (Economic Arm)", faction: "Church", function: "Tithes, charities, Church land management", source: "systems/world/reference/worldbuilding_v30.md:41", tier: 1}
+  - {name: "Temperance (Knowledge Arm)", faction: "Church", function: "Universities, observatories, monasteries, archives", source: "systems/world/reference/worldbuilding_v30.md:42", tier: 1}
+
+  # --- Church: Dicasteries (Sekreta) (tier 2) ---
+  - {name: "Dicastery for the Defense of the Faith", faction: "Church", function: "Templar deployment; monstrous-incursion response; enforcement", source: "systems/factions/reference/faction_politics_v30.md:963", tier: 2}
+  - {name: "Dicastery for Doctrinal Adjudication", faction: "Church", function: "Inquisition management; Heresy Proceedings", source: "systems/factions/reference/faction_politics_v30.md:964", tier: 2}
+  - {name: "Dicastery for Temporal Affairs", faction: "Church", function: "Church wealth; tithe collection; charities; church land", source: "systems/factions/reference/faction_politics_v30.md:965", tier: 2}
+  - {name: "Dicastery for Doctrine and Archives", faction: "Church", function: "Theological scholarship; archive maintenance; university liaison", source: "systems/factions/reference/faction_politics_v30.md:966", tier: 2}
+
+  # --- Löwenritter internal arms (tier 1) ---
+  - {name: "Lions' Table", faction: "Löwenritter", function: "Military coordination, levy operations, Royal Guard", source: "systems/world/reference/worldbuilding_v30.md:109", tier: 1}
+  - {name: "Lions' Helm", faction: "Löwenritter", function: "Naval affairs [NO MECHANICS — ED-NEW-10: future naval design question]", source: "systems/world/reference/worldbuilding_v30.md:110", tier: 1}
+  - {name: "Knights of the Peace", faction: "Löwenritter", function: "Road patrol, civilian protection, law enforcement", source: "systems/world/reference/worldbuilding_v30.md:111", tier: 1}
+  - {name: "Royal Investigators", faction: "Löwenritter", function: "Investigation, counter-espionage, court prosecution", source: "systems/world/reference/worldbuilding_v30.md:112", tier: 1}
+  - {name: "Riskbreakers", faction: "Löwenritter", function: "Extralegal infiltration. Loyal to Valoria the concept, not institutions.", source: "systems/world/reference/worldbuilding_v30.md:113", tier: 1}
+
+  # --- Crown Ministries (tier 2) ---
+  - {name: "Haushalt", faction: "Crown", function: "Finance", source: "systems/factions/reference/faction_politics_v30.md:173", tier: 2, note: "Gloss taken from the §1.1b specialty-branch table cell 'Haushalt (Finance)'; no MIN-01–06 body text exists anywhere in the corpus beyond this parenthetical — see unsourced."}
+  - {name: "Kriegsamt", faction: "Crown", function: "Ministry of War", source: "systems/factions/reference/faction_politics_v30.md:172", tier: 2}
+  - {name: "Kirchenamt", faction: "Crown", function: null, source: "systems/factions/reference/faction_politics_v30.md:930", tier: 2, note: "Named only, never functionally glossed anywhere in the read corpus. See unsourced."}
+  - {name: "Gerichtsamt", faction: "Crown", function: "Justice", source: "systems/factions/reference/faction_politics_v30.md:173", tier: 2}
+  - {name: "Schattendienst", faction: "Crown", function: "Intelligence", source: "systems/factions/reference/faction_politics_v30.md:174", tier: 2}
+  - {name: "Markamt", faction: "Crown", function: "Lands", source: "systems/factions/reference/faction_politics_v30.md:173", tier: 2}
+  - {name: "Hochschule", faction: "Crown", function: "Manages Crown-sanctioned universities and scholarly credentialing.", source: "systems/factions/reference/faction_politics_v30.md:932", tier: 2}
+
+  # --- Hafenmark Parliamentary Committees (tier 2) ---
+  - {name: "Supreme Judiciary Committee", faction: "Hafenmark", function: "Constitutional interpretation; supervision of Rectorates", source: "systems/factions/reference/faction_politics_v30.md:942", tier: 2}
+  - {name: "Trade & Guild Relations Committee", faction: "Hafenmark", function: "Guild Forum oversight; commercial policy; Guild arbitration (worldbuilding §5.4)", source: "systems/factions/reference/faction_politics_v30.md:943", tier: 2}
+  - {name: "Defense Committee", faction: "Hafenmark", function: "Hafenmark military (defensive); border garrisons; relations with Löwenritter", source: "systems/factions/reference/faction_politics_v30.md:944", tier: 2}
+  - {name: "Foreign Affairs Committee", faction: "Hafenmark", function: "Crown relations, Varfell relations, Altonian diplomacy", source: "systems/factions/reference/faction_politics_v30.md:945", tier: 2}
+  - {name: "Constitutional Review Committee", faction: "Hafenmark", function: "Statutory codification; constitutional emendation proposals", source: "systems/factions/reference/faction_politics_v30.md:946", tier: 2}
+  - {name: "Internal Affairs Committee", faction: "Hafenmark", function: "Civic administration; settlement Order management; Alderman oversight", source: "systems/factions/reference/faction_politics_v30.md:947", tier: 2}
+
+  # --- Varfell Jarl Assembly Councils (tier 2) ---
+  - {name: "Council of the March", faction: "Varfell", function: "Eastern military frontier; Altonian invasion preparation", source: "systems/factions/reference/faction_politics_v30.md:980", tier: 2}
+  - {name: "Council of the Highlands", faction: "Varfell", function: "Western resource territories; timber, metals, trade routes", source: "systems/factions/reference/faction_politics_v30.md:981", tier: 2}
+  - {name: "Council of the Skald", faction: "Varfell", function: "Cultural memory; Einhir oral tradition; lawspeaking", source: "systems/factions/reference/faction_politics_v30.md:982", tier: 2}
+  - {name: "Council of the Warden", faction: "Varfell", function: "Thread-related matters (Path B context); Warden liaison (PP-663: Path C struck; VTM term dropped)", source: "systems/factions/reference/faction_politics_v30.md:983", tier: 2}
+  - {name: "Council of Voices", faction: "Varfell", function: "Diplomacy; Crown and Hafenmark relations; Schoenland border", source: "systems/factions/reference/faction_politics_v30.md:984", tier: 2}
+
+  # --- Court/Parliament general reference bodies (tier 1) ---
+  - {name: "Imperial Court", faction: "Crown", function: "Advisory. Informal power arena.", source: "systems/world/reference/worldbuilding_v30.md:171", tier: 1, note: "Table header is '§6.1 Reference (TTRPG Worldbuilding — Not Mechanics)'; composition given as 'Aristocrats, courtiers, advisors'."}
+  - {name: "Court Parliament", faction: "Crown", function: "Recommends policies, nominates Ministers/Rectorates/Magistrates.", source: "systems/world/reference/worldbuilding_v30.md:172", tier: 1, note: "Composition: 'Landed + distinguished service aristocrats'. This general-reference body is distinct from Hafenmark's own Parliamentary Committee system (faction_politics_v30 §7.2)."}
+  - {name: "Ministries (general)", faction: "Crown", function: "Execute government services.", source: "systems/world/reference/worldbuilding_v30.md:173", tier: 1}
+  - {name: "Rectorates", faction: "Crown", function: "Execute law.", source: "systems/world/reference/worldbuilding_v30.md:174", tier: 1}
+  - {name: "Praefectures", faction: "Crown", function: "Administer regions.", source: "systems/world/reference/worldbuilding_v30.md:175", tier: 1}
+
+seats:
+  # ===== CROWN INNER CIRCLE (§1.1d) =====
+  - post: "Royal Marshal"
+    faction: "Crown"
+    body: null
+    ladder: "crown"
+    standing: 7
+    holder_name: "Wilhelm Voss"
+    case: "NPC-036"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:194"
+    tier: 2
+    note: "Standing 7 is explicit — line 161 (Crown Std 4 row, Mentor column): 'Royal Marshal (Standing 7) directly mentors Crown Lieutenants in the military branch.' Corroborated as Crown Inner Circle in faction_canon_v30.md:527 (tier 2)."
+
+  - post: "Lord Treasurer"
+    faction: "Crown"
+    body: null
+    ladder: "crown"
+    standing: null
+    holder_name: "Annalie Reichard"
+    case: "NPC-037"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:195"
+    tier: 2
+    note: "No explicit numeric Standing given anywhere in the read corpus for this seat. Corroborated: faction_canon_v30.md:528."
+
+  - post: "Spymaster (Schattendienst Minister)"
+    faction: "Crown"
+    body: "Schattendienst"
+    ladder: "crown"
+    standing: null
+    holder_name: "Kolbrun Thale"
+    case: "NPC-033"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:196"
+    tier: 2
+    note: "Corroborated: faction_canon_v30.md:529."
+
+  - post: "Archbishop's Representative"
+    faction: "Crown"
+    body: null
+    ladder: "crown"
+    standing: null
+    holder_name: "Father Gustav Linder"
+    case: "NPC-034"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:197"
+    tier: 2
+    note: "Church Canon (Church Std 3) seconded to Crown by Himlensendt; reports to Himlensendt weekly. Corroborated: faction_canon_v30.md:530."
+
+  - post: "Captain of the Royal Guard / Löwenritter Liaison"
+    faction: "Crown"
+    body: null
+    ladder: "crown"
+    standing: null
+    holder_name: "Theodor Kreutz"
+    case: "NPC-035"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:198"
+    tier: 2
+    note: "Knight-Commander of the Löwenritter, seconded to the Royal Guard. Corroborated: faction_canon_v30.md:531."
+
+  - post: "Lord Steward"
+    faction: "Crown"
+    body: null
+    ladder: null
+    standing: null
+    holder_name: "Gerik Strand"
+    case: "NPC-009"
+    rung_kind: null
+    source: "systems/factions/reference/faction_canon_v30.md:539"
+    tier: 2
+    note: "Not one of the five §1.1d Inner Circle NPCs; named separately in faction_canon_v30 Crown 'Member NPCs' and matches npc_roster_v30.md:113 ('Gerik Strand — Crown Minister (Lord Steward)') and npc_roster_v30.md:311 ('Gerik Strand (Crown — Lord Steward)')."
+
+  - post: "Heir Apparent"
+    faction: "Crown"
+    body: null
+    ladder: "crown"
+    standing: null
+    holder_name: "Torben Almqvist"
+    case: "NPC-031"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:200"
+    tier: 2
+    note: "'Remains the heir apparent; treated as inner-circle-adjacent (not a voting member until Generational Shift — see §8).' Not one of the five Standing-based Inner Circle roles."
+
+  # ===== HAFENMARK INNER CIRCLE (§1.2c) =====
+  - post: "Senior Parliamentary Chair"
+    faction: "Hafenmark"
+    body: "Constitutional Review Committee"
+    ladder: "hafenmark"
+    standing: null
+    holder_name: "Peder Almstedt"
+    case: "NPC-008"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:235"
+    tier: 2
+    note: "CONFLICT: faction_politics_v30.md:235 and faction_politics_v30.md:946 (§7.2, chairs Constitutional Review Committee 'permanently') both place Almstedt as Hafenmark's Senior Parliamentary Chair, citing npc_roster_v30 #8 as the canonical source. But npc_roster_v30.md:102-109 (untiered; the cited source itself) describes NPC #8 as a 'Ministry Bureaucrat' / 'Chief Parliamentary Clerk' — 'The Ministry's operational brain. Places AP-tokens, manages PI recovery' — i.e. staff of the Ministry of the Peninsula (faction_canon_v30 §11: 'institutional infrastructure, not a faction'), and its own summary table (npc_roster_v30.md:176) lists his faction as 'Ministry', not Hafenmark. The two canonical-status documents disagree on which institution this NPC belongs to. Recorded here under the politics-doc characterization since that is the direct source for this governance roster; the conflict is not resolved."
+
+  - post: "Guild Comptroller"
+    faction: "Hafenmark"
+    body: "Trade & Guild Relations Committee"
+    ladder: "hafenmark"
+    standing: null
+    holder_name: "Annika Feldhaus"
+    case: "NPC-007"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:236"
+    tier: 2
+    note: "Dual rank: also holds Guild Ladder Standing 5 ('Comptroller-equivalent', §2.5 line 559) as Master Merchant. Primary npc_roster_v30 role (#7) is 'Guilds Representative', not Hafenmark-specific — politics doc calls this 'secondary role here'."
+
+  - post: "Baralta's Legal Advisor"
+    faction: "Hafenmark"
+    body: null
+    ladder: "hafenmark"
+    standing: null
+    holder_name: "Torvi Heljason"
+    case: "NPC-071"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:237"
+    tier: 2
+    note: "'Sole advisor who may contradict Baralta in private without procedural consequence.' New per ED-635."
+
+  - post: "Military Commander (Hafenmark)"
+    faction: "Hafenmark"
+    body: "Defense Committee"
+    ladder: "hafenmark"
+    standing: null
+    holder_name: "Olaf Geirson"
+    case: "NPC-072"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:238"
+    tier: 2
+    note: "New per ED-636. 'Hafenmark has no offensive army, only border garrisons' — described as more logistician than general."
+
+  # ===== VARFELL INNER CIRCLE (§1.3c) =====
+  - post: "Senior Jarl of the Eastern March"
+    faction: "Varfell"
+    body: "Council of the March"
+    ladder: "varfell"
+    standing: 6
+    holder_name: "Thorvald Hann"
+    case: null
+    rung_kind: "province"
+    source: "systems/factions/reference/faction_politics_v30.md:305"
+    tier: 2
+    note: "CASE UNRESOLVED: the 46-case NPC corpus has no 'Thorvald Hann'. It has NPC-041 'Aldric Hann' — a different, first-name-distinct individual identified elsewhere as Restoration Movement visible leadership (faction_canon_v30.md:360: 'Yrsa Vossen + Aldric Hann'), not this Varfell Senior Jarl. Per the task's disambiguation rule, left null rather than guessed. Standing 6 = the Varfell ladder's own 'Senior Jarl' rank (faction_politics_v30.md:258); rung_kind='province' inferred from that row's obligation 'must manage regional Military ≥ 3' and access 'may convene regional mustering', not from an explicit 'governs a province' statement for this named seat specifically. STALE REFERENCE: faction_politics_v30.md:711 (§3.5 caste table) still lists 'Torben (Sr Jarl West)' for the *Western Highlands* seat — a pre-rename artifact, since §1.3c (line 306) explicitly renamed that seat's holder to Björn Holdar 'to avoid collision with heir Torben Almqvist'. Unrelated to this Eastern March row but recorded here as a general caution about §3.5's currency."
+
+  - post: "Senior Jarl of the Western Highlands"
+    faction: "Varfell"
+    body: "Council of the Highlands"
+    ladder: "varfell"
+    standing: 6
+    holder_name: "Björn Holdar"
+    case: "NPC-073"
+    rung_kind: "province"
+    source: "systems/factions/reference/faction_politics_v30.md:306"
+    tier: 2
+    note: "New per ED-637; 'renamed from initial \"Björn Torben\" to avoid collision with heir Torben Almqvist'. faction_politics_v30.md:713 (§3.5 caste table) still shows the stale 'Torben (Sr Jarl West)' label for this seat — not updated after the §1.3c rename; use §1.3c (this row)."
+
+  - post: "Skald-Chief"
+    faction: "Varfell"
+    body: "Council of the Skald"
+    ladder: null
+    standing: null
+    holder_name: "Ingrid Stenskald"
+    case: "NPC-074"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:307"
+    tier: 2
+    note: "New per ED-638; 'renamed from initial \"Ingrid Ehrenwall\" to avoid collision with canonical Löwenritter Grand Master Ehrenwall'. faction_politics_v30.md:713 (§3.5 caste table) still shows the stale 'Ehrenwall (Skald)' label — not updated after the §1.3c rename; use §1.3c (this row). Hard requirement per canon: 'any Deed-Claim succession in Varfell needs the Skald-Chief's endorsement'."
+
+  - post: "Vaynard's Huscarl Captain"
+    faction: "Varfell"
+    body: "Council of Voices"
+    ladder: null
+    standing: null
+    holder_name: "Maret Uln"
+    case: "NPC-002"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:308"
+    tier: 2
+    note: "Council of Voices chair is given (faction_politics_v30.md:984) only as \"Vaynard's Huscarl Captain (role function)\" — i.e. whoever holds this seat, currently Maret Uln."
+
+  - post: "Warden Liaison"
+    faction: "Varfell"
+    body: "Council of the Warden"
+    ladder: "warden_of_the_thread_ladder"
+    standing: 7
+    holder_name: "Edeyja"
+    case: "NPC-001"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:309"
+    tier: 2
+    note: "Conditional: 'appears in Inner Circle only on Path B, WR ≥ 3'. Technically Warden-Chief (Southernmost), not Varfell — see the separate 'Warden-Chief' seat below (same person)."
+
+  # ===== CHURCH: FOUR CARDINALS =====
+  - post: "Cardinal of Fortitude"
+    faction: "Church"
+    body: "Dicastery for the Defense of the Faith"
+    ladder: "church"
+    standing: 6
+    holder_name: "Osten Jarnstal"
+    case: "NPC-040"
+    rung_kind: null
+    source: "systems/world/reference/worldbuilding_v30.md:39"
+    tier: 1
+    note: "Corroborated tier 2: faction_politics_v30.md:338."
+
+  - post: "Cardinal of Justice"
+    faction: "Church"
+    body: "Dicastery for Doctrinal Adjudication"
+    ladder: "church"
+    standing: 6
+    holder_name: "Arnlod Olafsson"
+    case: "NPC-038"
+    rung_kind: null
+    source: "systems/world/reference/worldbuilding_v30.md:40"
+    tier: 1
+    note: "CONFLICT, resolved per Hard Rule 3 (higher tier wins): tier-1 worldbuilding_v30.md:40 names Arnlod Olafsson as Cardinal of Justice. But tier-2 faction_politics_v30.md:339 hedges — 'Olafsson (canonical; also Haelgrund as Cardinal Justice alternate — npc_roster_v30 #4)' — and tier-2 faction_canon_v30.md:570 states outright 'Cardinal of Justice — Sæmund Haelgrund (Inquisitor; TS 12 unrecognized)', naming Olafsson nowhere in that faction's Cardinal list. The untiered npc_roster_v30.md:56 titles NPC-004 outright '(Cardinal Justice)' with no 'alternate' qualifier. Three canonical-status documents give three different pictures of the same seat. Recorded here as Olafsson per tier precedence; see the separate Haelgrund seat row below and see unsourced."
+
+  - post: "Cardinal of Prudence"
+    faction: "Church"
+    body: "Dicastery for Temporal Affairs"
+    ladder: "church"
+    standing: 6
+    holder_name: "Aldric Tormann"
+    case: "NPC-013"
+    rung_kind: null
+    source: "systems/world/reference/worldbuilding_v30.md:41"
+    tier: 1
+    note: "Corroborated tier 2: faction_politics_v30.md:340 and faction_canon_v30.md:573. Note faction_politics_v30.md:317 (§1.4 intro prose, unrevised) still calls this seat 'Prudence [unnamed]' — stale relative to §1.4b (line 340) in the same document."
+
+  - post: "Cardinal of Temperance"
+    faction: "Church"
+    body: "Dicastery for Doctrine and Archives"
+    ladder: "church"
+    standing: 6
+    holder_name: "Magnus Klapp"
+    case: "NPC-039"
+    rung_kind: null
+    source: "systems/world/reference/worldbuilding_v30.md:42"
+    tier: 1
+    note: "Corroborated tier 2: faction_politics_v30.md:341. faction_canon_v30.md:571 hedges this as a 'candidate', not yet fully confirmed."
+
+  - post: "Cardinal Justice (alternate) / Senior Inquisitor"
+    faction: "Church"
+    body: "Dicastery for Doctrinal Adjudication"
+    ladder: "inquisitor_ladder"
+    standing: null
+    holder_name: "Sæmund Haelgrund"
+    case: "NPC-004"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:339"
+    tier: 2
+    note: "See the CONFLICT note on the 'Cardinal of Justice' (Olafsson) row above. faction_politics_v30 frames Haelgrund only as an 'alternate'; his exact Inquisitor-ladder Standing (§2.3) is never stated numerically anywhere in the read corpus — could be anywhere from Iq-Std 3 (Senior Inquisitor) to Iq-Std 5 (Grand Inquisitor, which IS the Cardinal-of-Justice position per faction_politics_v30.md:521), which is precisely what makes the two claims ('alternate' vs 'the' Cardinal of Justice) hard to reconcile without a ruling."
+
+  # ===== LÖWENRITTER =====
+  - post: "Grand Master (Großmeister)"
+    faction: "Löwenritter"
+    body: "Lions' Table"
+    ladder: "lowenritter_knight_ladder"
+    standing: 7
+    holder_name: "Ehrenwall"
+    case: "NPC-070"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:398"
+    tier: 2
+    note: "Named only 'Ehrenwall' in every tier-1/tier-2 source read (faction_politics_v30.md:385,398; faction_state_authoring_v30.md:302). First name 'Lisbeth' appears only in systems/npcs/reference/npc_behavior_system_v1.md:138 ('Grandmaster Lisbeth Ehrenwall'), which is outside this task's defined precedence (systems/npcs/ is not systems/world/ or systems/factions/). Case NPC-070 ('Lisbeth Ehrenwall') is offered on the strength of that untiered match, not on a world/factions citation."
+
+  # ===== WARDEN OF THE THREAD (independent apex) =====
+  - post: "Warden-Chief"
+    faction: "independent (Southernmost)"
+    body: null
+    ladder: "warden_of_the_thread_ladder"
+    standing: 7
+    holder_name: "Edeyja"
+    case: "NPC-001"
+    rung_kind: null
+    source: "systems/factions/reference/faction_politics_v30.md:634"
+    tier: 2
+    note: "Same person as the 'Warden Liaison' Varfell Inner Circle seat above — Edeyja is independent/Southernmost by primary identity (npc_roster_v30.md:18) and only conditionally seated in Varfell's Inner Circle."
+
+  # ===== RESTORATION MOVEMENT =====
+  - post: "Leader"
+    faction: "Restoration Movement"
+    body: null
+    ladder: null
+    standing: null
+    holder_name: "Yrsa Vossen"
+    case: "NPC-003"
+    rung_kind: null
+    source: "systems/factions/reference/faction_state_authoring_v30.md:248"
+    tier: 2
+    note: "RM has no formal rank ladder in the read corpus — 'nodes_ref: faction_politics_v30 (RM placement TBD per ED-589)' (faction_state_authoring_v30.md:251); 'Multi-root not used — RM ideology rejects hierarchy' (line 255-256). Corroborated: faction_canon_v30.md:360."
+
+  - post: "Visible leadership (secondary)"
+    faction: "Restoration Movement"
+    body: null
+    ladder: null
+    standing: null
+    holder_name: "Aldric Hann"
+    case: "NPC-041"
+    rung_kind: null
+    source: "systems/factions/reference/faction_canon_v30.md:360"
+    tier: 2
+    note: "'Loose collective; no formal hierarchy; Yrsa Vossen + Aldric Hann as visible leadership.' No title beyond this phrase is given for Hann in the read corpus."
+
+titles:
+  - {title: "King", holder_name: "Almud Almqvist", case: "NPC-020", governs: "realm (the Valorian Crown / Almqvist dynasty)", source: "systems/factions/reference/faction_canon_v30.md:404", tier: 2}
+  - {title: "Duke of Varfell", holder_name: "Magnus Vaynard", case: "NPC-052", governs: "duchy (Varfell confederacy)", source: "systems/world/reference/worldbuilding_v30.md:25", tier: 1, note: "faction_politics_v30.md:246 frames Vaynard mechanically as 'first among the Jarls, not a monarch' — the 'Duke' title is the worldbuilding lore-form, not a claim of monarchic rank within the Jarl Confederacy's own ladder."}
+  - {title: "Duchess of Hafenmark", holder_name: "Inge Baralta", case: "NPC-050", governs: "duchy (Hafenmark)", source: "systems/world/reference/worldbuilding_v30.md:26", tier: 1, note: "Spelling unresolved per ED-NEW-03 (worldbuilding_v30.md:26): 'Inga' (lore) vs 'Inge' (design/faction docs, used consistently in faction_politics_v30 and faction_state_authoring_v30). npc_roster case NPC-050 uses 'Inge'."}
+  - {title: "Confessor (formal: Holy See)", holder_name: "Arne Himlensendt", case: "NPC-021", governs: "ecclesiastical institution (Church of Solmund)", source: "systems/world/reference/worldbuilding_v30.md:27", tier: 1, note: "Both terms recommended canonical per ED-NEW-04 (unresolved as P3): 'Holy See' = formal title, 'Confessor' = address. Leader identity corroborated tier 2: faction_canon_v30.md:568, faction_state_authoring_v30.md:92."}
+
+holdings:
+  - {faction: "Crown", territories: ["Valorsplatz (T1)", "Kronmark (T2)", "Lowenskyst (T3)", "Feldmark (T5)", "Stillhelm (T6)", "Ehrenfeld (T14)"], count: 6, source: "systems/world/reference/geography_v30.md:84"}
+  - {faction: "Varfell", territories: ["Grauwald (T4)", "Halvardshelm (T11)", "Sigurdshelm (T12)", "Oastad (T13)"], count: 4, source: "systems/world/reference/geography_v30.md:85"}
+  - {faction: "Hafenmark", territories: ["Rendstad (T7)", "Gransol (T8)", "Spartfell (T10)", "Halvarshelm (T17)"], count: 4, source: "systems/world/reference/geography_v30.md:86"}
+  - {faction: "Church", territories: ["Himmelenger (T9)"], count: 1, source: "systems/world/reference/geography_v30.md:87"}
+  - {faction: "Uncontrolled", territories: ["Askeheim (T15)"], count: 1, source: "systems/world/reference/geography_v30.md:88"}
+  - {faction: "Schoenland", territories: ["Schoenland (T16)"], count: 1, source: "systems/world/reference/geography_v30.md:89"}
+
+unsourced:
+  - "Niflhel Ladder (faction_politics_v30.md §2.6, lines 585-613) is fully specified — four arms (Dockworkers, Reckoners, Burned, Quiet), seven positions each — but Niflhel is STRUCK across all canonical files per CR-STRIKE-2026-04-19 (faction_layer_v30.md:509, tier 2: 'Niflhel — STRUCK... Settlement-broker NPCs do not hold Parliamentary seats and do not vote'; faction_canon_v30.md:389 D6: 'Niflhel — STRUCK across all canonical files'). The strike postdates faction_politics_v30's own expansion date (2026-04-17) by two days. EXCLUDED from sub_ladders here rather than transcribed as live."
+  - "MIN-01 through MIN-06 (the individual rule-text defining each Crown Ministry's Competence/Corruption mechanics) have no body text anywhere in the read corpus — only the six names (Haushalt, Kriegsamt, Kirchenamt, Gerichtsamt, Schattendienst, Markamt) plus incidental parenthetical glosses for four of the six via the §1.1b specialty-branch table. Looked in: faction_politics_v30.md (full text), faction_canon_v30.md (full text), worldbuilding_v30.md (full text)."
+  - "Kirchenamt (one of the six Crown Ministries) has no functional gloss anywhere in the read corpus — named once (faction_politics_v30.md:930) and never again."
+  - "The Ministry of the Peninsula's own internal sub-ladder (Registrar → archivist → settlement clerk, faction_canon_v30.md:362) is not transcribed — per Hard Rule 5 and faction_canon_v30.md:374 ('institutional infrastructure, not a faction')."
+  - "Löwenritter's three 'Marshal of the Order' positions (Western, Eastern, Naval — Ldr-Std 5) are unnamed: 'Lions' Helm though naval is [NO MECHANICS] per worldbuilding §4.1' (faction_politics_v30.md:396)."
+  - "Riskbreaker Recruiter, Operative-Senior, and Riskbreaker Commander (Rb-Std 6) are all explicitly '(TBD)' in faction_politics_v30.md:414-420 — no holder named anywhere in the read corpus."
+  - "Grand Guildmaster (Guild Ladder Gu-Std 6) is conditional/hypothetical — 'if such exists (ED-642)' (faction_politics_v30.md:560) — no ED-642 resolution found and no holder named."
+  - "Senior Justice (Hafenmark Judicial-branch Standing-6 mentor NPC, faction_politics_v30.md:227) and Senior Advocate (Hafenmark Std 0 mentor, faction_politics_v30.md:214) are both unnamed '(TBD)'."
+  - "Hafenmark Militia rank ladder is referenced ('provisional — see ED-640 below', faction_politics_v30.md:229) but no ED-640 section exists anywhere in the document — dangling citation, the ladder itself is never specified."
+  - "Church College of Prelates (Standing 5, five seats — 'Unanimous College of Prelates confirmation (all 5 Prelates at Disposition ≥ 0)', faction_politics_v30.md:330) has no named Prelates anywhere in the read corpus; only the four Standing-6 Cardinals are named."
+  - "Count/Countess and Mayor: per Hard Rule 4, these titles appear only in systems/settlements/** (tier 3, excluded from this transcription) — grep confirms no tier-1 or tier-2 attestation of either title anywhere in systems/world/ or systems/factions/. Omitted from titles: entirely rather than sourced from the excluded tier."
+  - "Restoration Movement has no rank ladder to transcribe: 'nodes_ref: faction_politics_v30 (RM placement TBD per ED-589)' (faction_state_authoring_v30.md:251) and 'RM operates via Presence markers and Community Weaving only; no faction stats' (faction_state_authoring_v30.md:242-243, citing PP-460)."
+  - "Cardinal of Justice identity: unresolved three-way disagreement between worldbuilding_v30.md:40 (tier 1, Olafsson), faction_canon_v30.md:570 (tier 2, Haelgrund, no mention of Olafsson at all), and faction_politics_v30.md:339 (tier 2, Olafsson primary / Haelgrund 'alternate'). This transcription records Olafsson per Hard Rule 3 (tier precedence) but the underlying disagreement is not resolved by that rule alone, since two tier-2 documents also disagree with each other. See the seats: rows for both NPCs."
+  - "Peder Almstedt's institutional home: faction_politics_v30 (tier 2) places him as Hafenmark's Senior Parliamentary Chair and permanent Constitutional Review Committee chair; npc_roster_v30.md (untiered, the source both cite) describes him as staff of the Ministry of the Peninsula, an entity Hard Rule 5 excludes from the faction roster, and its own summary table lists his 'Faction' as 'Ministry', not Hafenmark. Not resolved here."
+  - "faction_politics_v30.md §3.5 (caste-modifier table, lines 700-719) carries two stale post-rename references not updated to match §1.3c: 'Torben (Sr Jarl West)' (line 711, should read Björn Holdar per the §1.3c rename at line 306) and 'Ehrenwall (Skald)' (line 713, should read Ingrid Stenskald per the §1.3c rename at line 307). Both renames are explicit and dated (ED-637, ED-638) in §1.3c; §3.5 was never updated to match."
+  - "Thorvald Hann (Varfell Senior Jarl of the Eastern March) has no matching NPC case. The 46-case corpus's only 'Hann' is NPC-041 Aldric Hann, a different individual (Restoration Movement visible leadership, per faction_canon_v30.md:360) — first names do not match, so per the task's disambiguation rule this is left case: null rather than guessed."
+  - "Löwenritter Grand Master Ehrenwall's first name ('Lisbeth') is not attested in any tier-1 or tier-2 document read for this task — only in systems/npcs/reference/npc_behavior_system_v1.md:138, outside the defined precedence. Recorded with a note rather than silently treated as tier-sourced."
+  - "Rikard Solberg (Schoenland Factor, npc_roster #12) and Dalla Virke (Independent Intelligence Broker, npc_roster #10) are named NPCs with clear roles but no faction_politics_v30 ladder seat, body, or title anywhere in the read corpus — Schoenland and the post-Niflhel intelligence-broker network sit outside the four primary ladders entirely. Not transcribed as seats since no post title is given for either."

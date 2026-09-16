@@ -85,7 +85,39 @@ def _load_rosters() -> tuple:
     if not ROSTERS_YAML.exists():
         raise SystemExit(f"rosters.yaml not found at {ROSTERS_YAML}")
     doc = load_yaml(ROSTERS_YAML.read_text()) or {}
-    return (doc.get("rosters") or {}), (doc.get("tables") or {})
+    rosters = doc.get("rosters") or {}
+    # ⚠ BOTH KEYS IS A DECLARED-BUT-UNREAD `values:`, AND THE CHECK IS AT LOAD FOR A MEASURED
+    # REASON. `04 §B.13` ID-12 puts the loader's cross-validation at load, "not at the first act
+    # that would have hit it", and this rule proves why: it first shipped inside `roster()`, where
+    # it only ever saw rows something CALLED `roster()` on. `convictions` is not one of those --
+    # its runtime route is the direct `CONVICTIONS` import below, so the row that MOTIVATED the
+    # rule was the one row the rule could not reach. Driving the loop with both keys planted on it
+    # ran clean and emitted a content hash; planted on `conviction_axes`, which IS read through
+    # `roster()`, it refused. Here it fires on every row whatever reads it, or nothing does.
+    for _n, _r in rosters.items():
+        if not isinstance(_r, dict):
+            continue
+        # ⚠ ONE RULE OVER EVERY POINTER, NOT ONE PER POINTER. `from_names:` joined
+        # `from_descriptor:` on 2026-09-16; spelling the refusal a second time is how the two
+        # would drift apart, which is the defect this refusal is about.
+        _ptrs = [k for k in ("from_descriptor", "from_names") if k in _r]
+        if len(_ptrs) > 1:
+            raise Unspecified(
+                f"roster {_n!r} carries {len(_ptrs)} owner pointers ({', '.join(_ptrs)})",
+                "rosters.yaml",
+                needs="keep the one that owns these members and delete the rest",
+                law="ED-IN-0230 -- a pointed-at roster has ONE owner. Two pointers is two owners "
+                    "with a read-order tiebreak, which is worse than a copy because it looks "
+                    "single-owned")
+        if _ptrs and "values" in _r:
+            raise Unspecified(
+                f"roster {_n!r} carries BOTH `{_ptrs[0]}:` and `values:`", "rosters.yaml",
+                needs="delete one -- the pointer if this roster owns its members, the `values:` "
+                      "if the owner is the registry it points at",
+                law="ED-IN-0230 -- a pointed-at roster has ONE owner. The pointer wins at read "
+                    "time, so a `values:` beside it is never read and never noticed, which is "
+                    "exactly the second copy the pointer was introduced to prevent")
+    return rosters, (doc.get("tables") or {})
 
 
 _ROSTERS, _TABLES = _load_rosters()
@@ -102,13 +134,65 @@ def roster(name: str, ordered: bool = False):
             needs="add the roster to the data file; do not inline it here",
             law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES; "
                 "returning an empty set would make every membership test silently false")
-    if "values" not in r:
+    # `from_descriptor:` — THE ROW POINTS AT THE SINGLE OWNER INSTEAD OF COPYING IT (ED-IN-0230).
+    # A roster whose definition belongs to `references/descriptor_registry.yaml` names the block
+    # and carries no `values:`, so there is exactly one place to edit and no second list to drift.
+    # This is the `conviction_roster` shape made general: that row was handled by importing
+    # `CONVICTIONS` directly, which works but SKIPS the `forbidden:` bar below — and that bar is
+    # load-bearing on `conviction_axes` (#353 `:1897`, the Exposure collision). Routing through
+    # here keeps the data-side bar on a pointed-at roster, which a direct import could not.
+    if "from_descriptor" in r:
+        # ⚠ THE BOTH-KEYS REFUSAL IS AT LOAD, IN `_load_rosters`, NOT HERE. It lived here first and
+        # could only see rows a caller reached -- see that function for what that missed.
+        from engine.substrate import descriptors as _desc
+        block = _desc.block(r["from_descriptor"])
+        if not block or not block.get("names"):
+            raise Unspecified(
+                f"roster {name!r} points at descriptor block {r['from_descriptor']!r}, which is "
+                f"absent or has no `names`", "references/descriptor_registry.yaml",
+                needs=f"add {r['from_descriptor']}.names, then "
+                      "`python tools/export_descriptors.py --build`",
+                law="ED-IN-0230 -- a pointed-at roster REFUSES when its owner is missing. Falling "
+                    "back to a local literal is how the two axis lists drifted in the first place")
+        vals = list(block["names"])
+    elif "from_names" in r:
+        # `from_names:` — the same pointer aimed at `references/names_index.yaml`, whose rows carry
+        # a `token_class:`. A roster of NAMES (factions, clocks, the npc cast) belongs to the naming
+        # index, not the descriptor registry: `names_index.yaml` has called itself *"the one place a
+        # definition's name lives"* since 2026-06-28, and its canonical/alias pair is what resolves
+        # `Church` to `Church of Solmund`. Pointing here rather than copying is what lets a naming
+        # ruling reach `systems/` — which, MEASURED on 2026-09-16, no register previously did.
+        from engine.substrate import names as _names
+        vals = list(_names.of_class(r["from_names"]))
+        if not vals:
+            raise Unspecified(
+                f"roster {name!r} points at token_class {r['from_names']!r}, which no row in the "
+                f"naming index carries", "references/names_index.yaml",
+                needs=f"set `token_class: {r['from_names']}` on the rows that belong to it, then "
+                      "`python tools/export_names.py`",
+                law="ED-IN-0230 -- a pointed-at roster REFUSES when its owner is empty. Returning "
+                    "an empty set would be the silent-false `rosters.yaml`'s own header forbids")
+    elif "values" not in r:
         raise Unspecified(
             f"{name!r} is not a roster -- it has no `values:`", "rosters.yaml",
             needs="read a MAPPING with table(), a SET with roster()",
             law="rosters.yaml -- a roster is a SET and a table is a MAPPING. Reading one with the "
                 "other's function raises, so the two shapes cannot be confused at a call site")
-    vals = r["values"]
+    else:
+        vals = r["values"]
+        # ⚠ PRESENT BUT EMPTY IS THE SAME DEFECT AS ABSENT, AND THIS FILE'S HEADER ALREADY SAID
+        # SO WITHOUT ENFORCING IT: *"an absent roster is a REFUSAL, never an empty set, because
+        # an empty set silently makes every membership test false and every closed-set guard
+        # vacuous"*. `contest_subsystems` carried `values: []` from its authoring until
+        # 2026-09-16 and `roster()` handed back an empty frozenset for it -- the polarity stated
+        # in prose and not in code. The header is the law; this is the line that applies it.
+        if not vals:
+            raise Unspecified(
+                f"roster {name!r} carries an EMPTY `values:`", "rosters.yaml",
+                needs="give the roster its members, or delete the `values:` key if the row's "
+                      "content is a mapping read with roster_map()",
+                law="rosters.yaml's header -- an empty set makes every membership test silently "
+                    "false, so it REFUSES exactly as an absent roster does")
     # A roster may FORBID a member by name. `conviction_axes` forbids `exposure` bare, because
     # #353 `:1897` names it as three senses of one word; a data edit that added it would
     # otherwise reintroduce the collision silently, which is the whole failure mode this file
@@ -174,6 +258,49 @@ def table(name: str) -> dict:
     return {outer: dict(inner) for outer, inner in (t.get("cells") or {}).items()}
 
 
+def faction_prop_id(name: str) -> str:
+    """`'Crown'` -> `'fac_crown'`. THE ONE OWNER OF THE FACTION-ID RELATION.
+
+    ⚠ IT HAD NO OWNER UNTIL 2026-09-16, AND THAT COST A SILENTLY EMPTY QUERY. `populated.py`
+    formed the id inline as `f"fac_{_slug(fac_name)}"`; `queries/world_q.py: leaders()` recovered
+    the NAME from the other end by reading `Proposition.subject`. That worked while `subject` WAS
+    the faction name -- and then the creed commit made `subject` the LEADER'S PERSON ID for every
+    faction that has a creed, while leaving the name in `value`. One relation, two guesses, and the
+    reader kept reading a field whose meaning had moved underneath it.
+
+    MEASURED at `build_realm(0)` before the repair: `leaders()` returned `[]` for Crown, Church of
+    Solmund, Hafenmark and Varfell -- all four factions that hold seats -- making 19 of 19 occupied
+    offices invisible. It is the §0.1 pt 1 shape exactly: a getter's source changed while its
+    readers went on reading the old one, and the wrong answer (`[]`) is a PLAUSIBLE answer, so
+    nothing raised.
+    """
+    return "fac_" + "".join(c if c.isalnum() else "_" for c in str(name).lower()).strip("_")
+
+
+def require_member(value, roster, what: str, where: str, law: str, needs: str = "") -> None:
+    """THE ROSTER-MEMBERSHIP REFUSAL, IN ONE PLACE. Ten call sites had it check-for-check.
+
+    The same shape recurred across `epistemic`, `decision/`, `loop/` and this file: test a runtime
+    value against a bound roster, and on a miss raise `Unspecified` naming the hole, the accepted
+    members and the law. `data/verbs._check_sparse_table` made this move already for the two
+    sparse-table loaders and states the split it used -- centralise the mechanical check, leave
+    the LAW STRINGS per-caller "because what a violation means differs by table". Same split here:
+    `what`, `where` and `law` stay the caller's words; the test and the rendering come here.
+
+    ⚠ THE RENDERING IS THE PART THAT WAS WORTH CENTRALISING, and it was not a style difference.
+    An ORDERED roster is a tuple and its order is semantic, so it renders with `list()`; an
+    unordered one is a frozenset and renders `sorted()` so the message is stable. Nine sites chose
+    between those by hand and nine chose correctly -- measured, `QUESTION_AGGREGATION` and
+    `ALIGNMENT_SWEEP` are the tuples and are exactly the two that used `list()`. Nine correct
+    independent guesses is not a rule; this is. A caller needing prose instead passes `needs=`.
+    """
+    if value in roster:
+        return
+    raise Unspecified(
+        what, where, law=law,
+        needs=needs or f"one of {list(roster) if isinstance(roster, tuple) else sorted(roster)}")
+
+
 def table_meta(name: str) -> dict:
     """The table's own declarations -- `default_cell`, `row`, `keys`. Read rather than assumed, so
     a data edit that changes the sparse default cannot leave a stale constant in a body."""
@@ -215,6 +342,14 @@ STRATA = roster("strata", ordered=True)
 # ⚠ THE ROW STILL EXISTS IN `rosters.yaml` and carries the source and the note; what it does not
 # carry is `values:`. A reader looking for the definition is sent one hop, which is the correct
 # number of hops when the definition is owned elsewhere.
+# ⚠⚠ AND "THE ONE ROSTER THAT WORKS THAT WAY" IS STALE AS OF 2026-09-15, WHICH IS WHY THE CLAIM IS
+# CORRECTED HERE RATHER THAN LEFT TO READ TRUE. The row was given `from_descriptor: conviction_roster`
+# in that migration, so `roster("convictions")` now resolves through the pointer branch above and
+# returns the SAME thirteen -- measured, the two are set-equal. Two routes, one owner, no second
+# copy: the direct import below is the leaf and the pointer is the data-side route that also gets
+# the `forbidden:` bar. `conviction_axes` on the line after this one has only ever had the pointer.
+# What would be a defect is a THIRD route carrying its own literal, and that is what the guard in
+# `roster()` above now refuses.
 from engine.substrate.descriptors import CONVICTIONS  # noqa: E402  (the single owner's leaf)
 CONVICTION_AXES = roster("conviction_axes")
 QUESTION_SOURCES = roster("question_sources", ordered=True)
@@ -227,6 +362,13 @@ CLAIM_SUBJECT_RULES = roster("claim_subject_rules")
 # like every other roster, and for the reason `TITLE_DOMAINS` records below: an unbound
 # roster is the one whose absence goes unnoticed.
 OBSERVATION_DEPOSIT_MODES = roster("observation_deposit_modes")
+# `H-33`. THE THREE ARMS OF THE FAN-OUT SWEEP, and the SIBLING of the line above -- two switches
+# on one pipeline, and until 2026-09-16 only one of them was data. `observers_for` carried these
+# three names as Python literals in an if/elif/else whose `else` refused correctly, so the closed
+# set was ENFORCED and simply not DEFINED where a definition belongs (Jordan 2026-09-02, quoted
+# at the head of this file). Bound at import for `TITLE_DOMAINS`' reason: an unbound roster is
+# the one whose absence goes unnoticed.
+FAN_OUT_MODES = roster("fan_out_modes")
 # `W-E`. THE THREE BANDS PERSONAL COMBAT CAN DISTINGUISH, and HOW MUCH BODY A WOUND COSTS. Bound
 # here with every other roster rather than beside their reader in the S39 block below, because
 # that is where an absent roster's refusal is guaranteed to fire (`TITLE_DOMAINS`' lesson, above).
@@ -255,6 +397,10 @@ TITLE_DOMAINS = roster_map("titles", "domains")
 # version of these rosters was sourced from the near-canon tier and carried a name that tier
 # itself calls *"institutional infrastructure, not a faction"*.
 FACTIONS = roster("factions")
+
+#: `{proposition id: faction name}`. Derived from the roster, so it cannot disagree with it, and
+#: it is the direction `leaders()` needs: a caller holds `fac_crown` and wants `Crown`.
+FACTION_BY_PROP = {faction_prop_id(f): f for f in FACTIONS}
 BODY_FACTION = roster_map("office_bodies", "faction")
 BODY_FUNCTION = roster_map("office_bodies", "function")
 ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")
@@ -274,12 +420,14 @@ def office_faction(body: str | None, declared: str | None) -> str:
     (`worldbuilding_v30.md` §8) and canon gives it no organ, so such a case authors `faction`
     directly. That is a real gap in canon, carried as one rather than filled."""
     if body is not None:
-        if body not in BODY_FACTION:
-            raise Unspecified(
-                f"{body!r} is not a canonical body", "rosters.yaml -- office_bodies",
-                needs="name a body from `systems/world/`, or drop `body` and author `faction`",
-                law="Jordan 2026-09-02 -- systems/world is canon for organizations. Inventing a "
-                    "body here would be indistinguishable from canon to the next session")
+        require_member(
+            body,
+            BODY_FACTION,
+            f"{body!r} is not a canonical body",
+            "rosters.yaml -- office_bodies",
+            law="Jordan 2026-09-02 -- systems/world is canon for organizations. Inventing a "
+                "body here would be indistinguishable from canon to the next session",
+            needs="name a body from `systems/world/`, or drop `body` and author `faction`")
         derived = BODY_FACTION[body]
         if declared is not None and declared != derived:
             raise Forbidden(
@@ -295,11 +443,13 @@ def office_faction(body: str | None, declared: str | None) -> str:
             needs="name a canonical body, or the faction directly where canon gives it no organ",
             law="H-99 -- an office belongs to something. §42.2's polarity rule: no evidence of "
                 "belonging is a refusal, never a default faction")
-    if declared not in FACTIONS:
-        raise Unspecified(
-            f"{declared!r} is not a canonical faction", "rosters.yaml -- factions",
-            needs="use a faction named in `systems/world/`",
-            law="Jordan 2026-09-02 -- systems/world is canon for identity and names")
+    require_member(
+        declared,
+        FACTIONS,
+        f"{declared!r} is not a canonical faction",
+        "rosters.yaml -- factions",
+        law="Jordan 2026-09-02 -- systems/world is canon for identity and names",
+        needs="use a faction named in `systems/world/`")
     return declared
 
 

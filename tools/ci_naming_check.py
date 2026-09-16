@@ -103,6 +103,11 @@ EXCLUDE = (
     'references/censured_vocabulary.yaml',  # GENERATED view (ED-IN-0078 fold) — lists censured terms by design
     'references/synonym_registry.yaml',     # GENERATED view (ED-IN-0078 fold) — lists legacy synonyms by design
     'dashboard/data.json',                 # generated: embeds the definitions/lexicon incl. legacy names
+    # GENERATED from names_index.yaml by tools/export_names.py, and its `legacy` block is the
+    # deprecated->canonical map BY DESIGN -- the same rationale as the source registry on the
+    # first line of this list. Added 2026-09-16 with the artifact; without it the gate fires on
+    # `"Galbados": "Solmund"`, which is the row that RECORDS the rename, not a use of it.
+    'engine/engine_params/names.json',
     # 'engine/params/bg/institutions.md' RETIRED 2026-08-12 (plan step G2,
     # ED-IN-0159 §1.6) — engine/params/ was EVACUATED 2026-08-05 (ED-IN-0145), so
     # the exclusion excluded nothing. The comment below PREDICTED this exact

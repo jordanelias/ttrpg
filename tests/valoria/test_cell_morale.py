@@ -16,7 +16,7 @@ The model is a two-way loop, not a broadcast:
   MODULATE DOWN    that holistic value pulls its own cells back toward it, discipline-gated (du Picq:
                    men hold because the men beside them hold).
 
-Gated behind `PC_CELL_MORALE`, default **OFF**. It was flipped ON on 2026-07-25 and retracted the same
+Gated behind `MB_CELL_MORALE`, default **OFF**. It was flipped ON on 2026-07-25 and retracted the same
 day — the measurement was confounded by scalar morale writes the cell aggregate shadows (see
 `test_default_is_gated_off` below and `config.py`'s block). An unseeded subunit takes the scalar path
 verbatim, so every aggregate/erosion path below is exercised in both directions.
@@ -221,8 +221,8 @@ def test_default_is_gated_off():
     # — is still NOT done. The flip arrived inside a blanket flags-ON commit with no measurement of its
     # own. That is a deliberate consequence of the ruling (the ruling decides the default; measurement
     # decides the balance), but it must not be mistaken for the measurement having been taken.
-    assert C.PC_CELL_MORALE is True, (
-        "PC_CELL_MORALE must default ON (Jordan, 2026-07-29; ED-MB-0061). The 2026-07-25 retraction "
+    assert C.MB_CELL_MORALE is True, (
+        "MB_CELL_MORALE must default ON (Jordan, 2026-07-29; ED-MB-0061). The 2026-07-25 retraction "
         "recorded above concerned a CONFOUNDED MEASUREMENT, not the flag's correctness — and its named "
         "mechanism is fixed (ED-MB-0058). The honest re-measurement remains outstanding.")
 

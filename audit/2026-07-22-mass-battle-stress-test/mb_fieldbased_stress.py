@@ -3,7 +3,7 @@
 Stress-tests the ACTIVE mass-battle engine (`tests/sim/mass_battle/` — the more-developed,
 formations/collision/Lanchester engine that carries all ED-MB-0001..0007 work; NOT the wired-but-
 thin `systems/mass_battle/sim/massbattle.py` bare port) under the FIELD-BASED configuration:
-FIELD_MOVEMENT=1 / PC_NODE_COHESION=1 / PER_CELL=1 (the live default since ED-1089/ED-MB-0001).
+FIELD_MOVEMENT=1 / MB_NODE_COHESION=1 / PER_CELL=1 (the live default since ED-1089/ED-MB-0001).
 The grid oracle (the byte-exact FIELD_MOVEMENT=0 pins) is DELIBERATELY NOT exercised here.
 
 Directive coverage (Jordan, 2026-07-22):
@@ -17,8 +17,8 @@ Sections:
   S2  Isolation probes   — validators.py per-mechanic goal validators, run field-side.
   S3  Per-flag A/B       — each env gate flipped (subprocess, since flags are import-time);
                            proves each gate is WIRED into outcomes (non-inert) or documented-inert.
-  S4  Off-by-default     — PC_FACING_MODEL / FIELD_CONTACT / REFORM_CHECK_ENABLED turned ON;
-                           re-fuzz for breakage. (PC_FACING_SLEW_BASE left OFF — do-not-enable debt.)
+  S4  Off-by-default     — MB_FACING_MODEL / FIELD_CONTACT / REFORM_CHECK_ENABLED turned ON;
+                           re-fuzz for breakage. (MB_FACING_SLEW_BASE left OFF — do-not-enable debt.)
   S5  Controls           — seed-determinism + order-cancelled mirror symmetry.
 
 Runnable two ways:
@@ -317,5 +317,5 @@ if __name__ == '__main__':
     # full driver lives in run.py — this file is import + runner. Fall through to a smoke report.
     ok, missing = mechanics_selftest()
     print(f"mechanics_selftest ok={ok} missing={missing} n={len(MECHANICS)}")
-    print(f"FIELD_MOVEMENT={HU.FIELD_MOVEMENT} PC_NODE_COHESION={C.PC_NODE_COHESION} PER_CELL={C.PER_CELL}")
+    print(f"FIELD_MOVEMENT={HU.FIELD_MOVEMENT} MB_NODE_COHESION={C.MB_NODE_COHESION} PER_CELL={C.PER_CELL}")
     print(json.dumps(aggregate_fuzz(30, 9000), indent=2, default=str))

@@ -127,10 +127,38 @@ the game work. our design documents in .MD are reference and information only."*
 - **A design document may not be cited as the reason a behaviour is correct.** Cite it for intent,
   history and vocabulary. If canon and code disagree, decide and then CHANGE THE CODE — never declare
   the prose authoritative.
-- **A value the engine uses must live where code reads it** — a typed artifact under
+- **A FACT the engine uses must live where code reads it** — a typed artifact under
   `engine/engine_params/` behind an exporter, or a single Python owner. Constants still defined inside
   `systems/` are the migration backlog; for the live count and citation coverage run
   `python tools/export_sim_params.py --build` and read `engine/engine_params/sim_params.json`.
+
+  ⚠ **THIS SAID *"A VALUE"* UNTIL 2026-09-16 AND THE RULE WAS ALWAYS WIDER (RULED by Jordan).**
+  Verbatim: *"all definitions/terms/etc need to come from code, never prose"*, and *"all .md in
+  `systems` is to be used as reference only for design/coding work, never governance/infrastructure
+  work"*. A term, a roster, a closed set and a bound are facts exactly as a number is. **Four
+  clauses, and they are one rule seen from four sides:**
+  1. **A `.md` is NEVER the authored head of a fact code reads.** The head is YAML or JSON under
+     `references/`, or a single Python owner. Prose describes the fact; it does not hold it.
+  2. **`systems/**/*.md` is design intent ONLY** — never an input to a tool, an exporter, a gate or
+     a registry. A design document a program parses has stopped being reference.
+  3. **Edit the OWNER and re-derive; never hand-edit downstream, and never keep a second copy.**
+     §6 already says this for the port (*"a port never corrects its oracle in place"*); it is the
+     same rule wherever a fact is derived. When two live surfaces disagree, `engine/season/` decides
+     WHICH READING WINS and then that reading is written at the owner — priority is exercised by
+     editing the owner's row, not by holding a copy of it.
+  4. **Scoped to GAME facts.** `CLAUDE.md`, `CURRENT.md`, `HANDOFF.md` and
+     `references/restructure_ledger.md` are process surfaces a program legitimately reads; clause 2
+     does not reach them.
+
+  **§5, §6 and §8 are three instances of this, not three rules.** §5 is the chain that terminates at
+  the port, §6 is its direction of repair, §8 is the same claim about a RULE rather than a value.
+  ⚠ **And a fact whose chain you cannot name is either orphaned or hand-transcribed** — both are
+  live in this tree today, so the test earns its keep: `fac.intel` is declared with ruled bounds and
+  reachable by nothing, and §5 says of the port that every value crossing into Godot is
+  hand-transcribed. **NO TREE-WIDE GUARD IS LICENSED FOR THIS** (§0.1 pt 5): a checker over *"is
+  every fact single-owned"* has the owners themselves as its subject. What is licensed is the
+  exporter's `--check` per chain, the loader's refusal per data family, and reading the chain before
+  you delete or migrate anything.
 - **This does NOT demote `CLAUDE.md`, `CURRENT.md` or `HANDOFF.md`** — agent instruction and continuity,
   governing how a session works, not how the game resolves. Keep maintaining them.
 - **It does not license deleting design docs.** They stay as reference; what changes is what may be
@@ -556,7 +584,7 @@ numbers from it**). Everything removed is at its fork ref; every old path resolv
 
 ## 5. Data → Godot pipeline
 
-**Rule: never take a number for the engine or the port out of prose.** A value the engine uses lives in a
+**Rule: never take a number for the engine or the port out of prose.** *(§0.05, on the one chain that terminates at the port.)* A value the engine uses lives in a
 typed artifact under `engine/engine_params/` behind an exporter with a blocking `--check` round-trip, or
 in a single Python owner (§0.05). `engine/engine_params/params_tables.yaml` is a frozen,
 no-longer-regenerable capture of prose tables — **reference**, and it can hold pre-ruling values: its
@@ -573,7 +601,7 @@ today, the `tools/export_*.py` exporters' `--check` modes for the round-trip.
 
 ## 6. Godot port pipeline
 
-**Rule: a port never corrects its oracle in place (ED-1050).** If port and Python oracle disagree, fix
+**Rule: a port never corrects its oracle in place (ED-1050).** *(§0.05 clause 3, at the port: edit the owner and re-derive.)* If port and Python oracle disagree, fix
 canon via the ledger and re-export — never hand-edit a value into the `.gd` side. And `godot/skeleton/`
 covers a single module, does not compile, and `extends` a spine defined nowhere in the corpus: **never
 present it as a runnable head-start.**
@@ -616,13 +644,14 @@ modules are stubs" line is stale — grep for the stubs rather than believing ei
 - **Local tier — advisory accelerators.** One-time per clone: `git config core.hooksPath .githooks`.
   `.githooks/pre-commit` runs the SAME validators on staged files via
   `python tools/valoria_local.py --staged`. `.claude/settings.json` wires two PreToolUse hooks — the
-  naming nudge (`tools/hook_naming_guard.py`) on writes and a search-sweep guard
+  naming guard (`tools/hook_naming_guard.py`, which `sys.exit(2)`s — it BLOCKS, it does not
+  suggest; this read *nudge* until 2026-09-15 and understated a live gate) on writes and a search-sweep guard
   (`tools/hook_md_sweep_guard.py`) on Grep/Glob; SessionStart and Stop are empty arrays, deliberately
   (§0.3). Not every blocking CI gate runs locally — `tools/compliance_check.py`'s size caps are CI-side,
   so **local-green ≠ compliance-green**. `git commit --no-verify` bypasses local; CI still enforces.
 
 **Intended invariant: every rule lives once, in `tools/`, called by both CI and local hooks. Never
-re-implement a rule.** Known live violations, treated as bugs rather than propagated:
+re-implement a rule.** *(§0.05, with a RULE as the fact rather than a value.)* Known live violations, treated as bugs rather than propagated:
 
 - **`references/restructure_ledger.md` has more than one parser.** `tools/pathres.py` is the intended
   owner; `tools/broken_dependency_checker.py` and two `skills/valoria-vector-audit/` modules parse it

@@ -14,8 +14,8 @@ string. Enforced BY PATH over this directory -- `04:1046` -- by
 from __future__ import annotations
 
 from typing import Any
-from ..data.rosters import QUESTION_AGGREGATION, VIEW_BUILDER_RULES
-from ..gaps import InstrumentDefect, Unspecified
+from ..data.rosters import QUESTION_AGGREGATION, VIEW_BUILDER_RULES, require_member
+from ..gaps import InstrumentDefect
 from ..state.carriers import Person, Question, View
 
 
@@ -50,12 +50,13 @@ def aggregate_questions(qs: list, rule: str):
     `one_per_source` are the alternatives the sweep compares it against. Returns ONE question,
     because `assemble(person, question)` takes one -- the rules differ in WHICH, and in how many
     are folded into it, which is exactly what is open."""
-    if rule not in QUESTION_AGGREGATION:
-        raise Unspecified(
-            f"question-aggregation rule {rule!r} is not in the roster", "H-54",
-            needs=f"one of {list(QUESTION_AGGREGATION)}",
-            law="H-54 -- nothing in #353 says how many questions a person forms per season, so a "
-                "rule outside the roster is a fourth answer nobody declared")
+    require_member(
+        rule,
+        QUESTION_AGGREGATION,
+        f"question-aggregation rule {rule!r} is not in the roster",
+        "H-54",
+        law="H-54 -- nothing in #353 says how many questions a person forms per season, so a "
+            "rule outside the roster is a fourth answer nobody declared")
     if not qs:
         return None
     if rule == "first":
@@ -83,12 +84,13 @@ def view_ids(p: Person, q: Any, k: int, rule: str) -> list:
     argued for.
 
     PERSON-SIDE: it reads `p.ledger` and the question's own referents. No World."""
-    if rule not in VIEW_BUILDER_RULES:
-        raise Unspecified(
-            f"view-builder rule {rule!r} is not in the view_builder_rules roster", "H-53",
-            needs=f"one of {sorted(VIEW_BUILDER_RULES)}",
-            law="§18 -- 'at most K ids ... BUILT, not filtered'. WHICH K is `H-53` and is open; "
-                "a rule not on the roster is a fourth answer nobody declared")
+    require_member(
+        rule,
+        VIEW_BUILDER_RULES,
+        f"view-builder rule {rule!r} is not in the view_builder_rules roster",
+        "H-53",
+        law="§18 -- 'at most K ids ... BUILT, not filtered'. WHICH K is `H-53` and is open; "
+            "a rule not on the roster is a fourth answer nobody declared")
     if rule == "highest_confidence":
         ranked = sorted(p.ledger, key=lambda c: (-c.confidence, c.id))
         return [c.id for c in ranked[:k]]

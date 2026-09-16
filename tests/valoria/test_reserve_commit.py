@@ -5,7 +5,7 @@ A unit held in Reserve "cannot engage" its first turn; it COMMITS at Phase 3 of 
 Phase 3 turn N+1 -> engage Phase 5 turn N+1; NOT delayed to N+2). Modeled at battle-turn granularity in
 run_multi_unit_battle: a reserve pair is benched turn 1 and re-activates at the commit turn.
 
-GATED behind PC_RESERVE_COMMIT (default OFF): the `reserve` instruction stays inert and every pair is
+GATED behind MB_RESERVE_COMMIT (default OFF): the `reserve` instruction stays inert and every pair is
 active from turn 1 (byte-exact; run_multi_unit_battle is not in the bat.py golden battery anyway)."""
 import importlib
 import os
@@ -17,7 +17,7 @@ import pytest  # noqa: E402
 
 
 def _reload(on):
-    os.environ['PC_RESERVE_COMMIT'] = '1' if on else '0'
+    os.environ['MB_RESERVE_COMMIT'] = '1' if on else '0'
     import systems.mass_battle.sim.config as C
     importlib.reload(C)
     import systems.mass_battle.sim.resolution as R
@@ -87,5 +87,5 @@ def test_no_reserve_units_unaffected():
 
 
 def teardown_module(module):
-    os.environ.pop('PC_RESERVE_COMMIT', None)
+    os.environ.pop('MB_RESERVE_COMMIT', None)
     _reload(on=False)

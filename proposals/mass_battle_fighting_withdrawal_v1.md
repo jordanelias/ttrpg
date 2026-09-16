@@ -1,6 +1,6 @@
 # Fighting-Withdrawal / Yield Mechanic — Design Workplan (DG-2)
 
-## Status: BUILT (gated) — the §4 step-1 yield scope shipped in ED-MB-0005 (2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green); the three residuals (emergent auto-entry §2.2, rally exit + pocket exit §2.4) shipped in ED-MB-0024 (2026-07-23; tests/valoria/test_dg2_yield_residuals.py, 10 green) — all GATED OFF (PC_YIELD_EMERGENT / PC_YIELD_RALLY / PC_YIELD_POCKET), byte-exact. HELD for Jordan: the three default-flips, the emergent path's blast-radius measurement pass (§4.3), the deferred erosion-brake, and the D_YIELD/YIELD_POOL_MULT/YIELD_RALLY_MORALE_FRAC/YIELD_POCKET_REACH calibration debt (§5). Live record = registers/handoffs/HANDOFF_MB.md. [## Status: heading added 2026-07-15; updated 2026-07-23, ED-MB-0024]
+## Status: BUILT (gated) — the §4 step-1 yield scope shipped in ED-MB-0005 (2026-07-08; tests/valoria/test_mass_battle_yield.py, 9 green); the three residuals (emergent auto-entry §2.2, rally exit + pocket exit §2.4) shipped in ED-MB-0024 (2026-07-23; tests/valoria/test_dg2_yield_residuals.py, 10 green) — all GATED OFF (MB_YIELD_EMERGENT / MB_YIELD_RALLY / MB_YIELD_POCKET), byte-exact. HELD for Jordan: the three default-flips, the emergent path's blast-radius measurement pass (§4.3), the deferred erosion-brake, and the D_YIELD/YIELD_POOL_MULT/YIELD_RALLY_MORALE_FRAC/YIELD_POCKET_REACH calibration debt (§5). Live record = registers/handoffs/HANDOFF_MB.md. [## Status: heading added 2026-07-15; updated 2026-07-23, ED-MB-0024]
 
 **Status: PROPOSAL — pending Jordan sign-off before implementation.** Not canon yet. Date 2026-07-05.
 Ratified scope for THIS document (Jordan, 2026-07-05): *"Create as workplan"* — i.e. this doc captures
@@ -24,7 +24,7 @@ Every state the mass-battle engine tracks for a fighting body falls into exactly
 - **Routed** — `Unit.derive_rout()` fires (command≤0, or all subunits routed, or `agg_morale()<=0`), and
   the *entire* unit flips `routed=True` **atomically, in one call**: every subunit's combat pool is
   force-zeroed (`Unit.base_combat_pool` / `subunit_combat_pool` both `return 0` the instant `routed` is
-  true), every subunit's facing flips to point away from the enemy (`PC_FACING_ROUT`), and the tick loop
+  true), every subunit's facing flips to point away from the enemy (`MB_FACING_ROUT`), and the tick loop
   that resolves the engagement **breaks immediately** (`run_battle`, `if unit_a.routed or unit_b.routed:
   break`) — no further ticks execute for that engagement pair at all.
 
@@ -51,7 +51,7 @@ band gap; a separate, deeper combat-pool-scaling question (§7) is now the bette
 
 The 2026-07-04 audit's own DG-2 sketch proposed *"converting net-success differential into displacement
 via the existing recoil/knock-back idiom."* A follow-up adversarial pass (2026-07-05) checked this against
-the actual codebase and found **no such displacement primitive exists.** `PC_CHARGE_RECOIL`
+the actual codebase and found **no such displacement primitive exists.** `MB_CHARGE_RECOIL`
 (`config.py`) is purely a **net-success penalty** applied in `resolution.py`'s combat-degree math — it
 never moves a cell. The only literal positional displacement anywhere in the engine is
 `resolve_cross_side_contention`'s one-step shift-back for two cells caught at the exact same coordinate
@@ -89,8 +89,8 @@ existing scenario that never enters it.
 *fighting*, just giving ground — it has not turned its back. This is mechanically load-bearing: since
 `octagon_angle`'s zone gating (GREEN/YELLOW/RED) is a pure function of facing vs. the attacker's position,
 a yielding body that keeps facing the threat stays in its own GREEN/YELLOW arc against a pursuer directly
-in front of it — the RED-zone rear-shock multiplier (`PC_SHOCK_REAR`, ~10x `PC_SHOCK_FRONT`) and the
-`_shaken`-amplifier death-spiral (`PC_SHOCK_SHAKEN_GAIN`) stay capped **unless** the pursuer maneuvers to
+in front of it — the RED-zone rear-shock multiplier (`MB_SHOCK_REAR`, ~10x `MB_SHOCK_FRONT`) and the
+`_shaken`-amplifier death-spiral (`MB_SHOCK_SHAKEN_GAIN`) stay capped **unless** the pursuer maneuvers to
 its flank or rear — which is exactly the mechanical reward this design gives to a wrapping envelopment
 (the wings' whole reason to exist) while NOT collapsing a body that is simply falling back in good order
 under frontal pressure.
@@ -172,7 +172,7 @@ DG-4) without any new code: this composes with already-shipped machinery, it doe
 | Standoff/collision safety while moving | `resolve_toi_and_commit`/`_pair_toi_scale` (TOI substrate) | Reused verbatim |
 | Timed/conditional entry | `Order`/`check_orders` (Stage C) | Reused verbatim |
 | Cumulative-ground bound | ED-MB-0001 §6 path-budget formula | Reused verbatim |
-| Zone-gated shock response | `octagon_angle`/`PC_SHOCK_FRONT`/`PC_SHOCK_REAR`/`PC_SHOCK_SHAKEN_GAIN` | Reused verbatim (facing-preservation is what KEEPS a yielding body in this reused machinery's favorable zone) |
+| Zone-gated shock response | `octagon_angle`/`MB_SHOCK_FRONT`/`MB_SHOCK_REAR`/`MB_SHOCK_SHAKEN_GAIN` | Reused verbatim (facing-preservation is what KEEPS a yielding body in this reused machinery's favorable zone) |
 | Sibling morale coupling | DG-4's `pull_morale`/sibling snapshot | Reused verbatim (no new wiring — inclusion is automatic since `yielding != routed`) |
 | `yielding: bool` state flag | — | **New** (one boolean field, default-inert) |
 | `'yield'` order/instruction | — | **New** (composes the existing Order primitive with a new instruction string) |
@@ -209,7 +209,7 @@ DG-4) without any new code: this composes with already-shipped machinery, it doe
   per-shape table's own logic) or an explicit `calibrated-debt` flag per this repo's provenance
   discipline (§5 of CLAUDE.md / the Track M provenance ledger), not a bare invented number.
 - **The combat-pool malus magnitude while yielding** — same status; needs derivation from a primitive
-  (e.g. tied to the existing brace/shock discount idiom, `PC_SHOCK_HOLD_BRACE=0.35`) or flagged debt.
+  (e.g. tied to the existing brace/shock discount idiom, `MB_SHOCK_HOLD_BRACE=0.35`) or flagged debt.
 - **Whether emergent auto-entry should ever ship as default-ON** — an empirical question (does it help or
   hurt the OTHER 8 currently-failing gauge rows, particularly RC-5's undiagnosed single-subunit rows?),
   not something to decide from the design table.

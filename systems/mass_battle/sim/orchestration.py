@@ -303,7 +303,7 @@ def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     """G-8 Reform: an unengaged unit restores one step of Discipline toward its start,
     gated by the general's Command. Flag-gated default OFF (REFORM_CHECK_ENABLED) to
     preserve the calibrated byte-exact baseline; opt-in for re-baseline, mirroring
-    PER_CELL / PC_NODE_COHESION. Canon Reform also recovers Morale and merges sub-units —
+    PER_CELL / MB_NODE_COHESION. Canon Reform also recovers Morale and merges sub-units —
     not implemented here (separate, morale/lifecycle-touching).
     [ASSUMPTION: cadence — fires per phase-boundary, bounded by discipline_start so a unit
      only recovers what it lost. Canon Reform is once-per-turn (the Reform Phase); the sim's
@@ -397,7 +397,7 @@ def _momentum_speed(atom, contact_abs_cells):
                       + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
             comp_c = (atom.starting_position[1] + or_c
                       + atom.cell_offsets_c.get((orig_r, orig_c), 0))
-            if PC_NODE_COHESION and hasattr(atom, '_node_pos'):
+            if MB_NODE_COHESION and hasattr(atom, '_node_pos'):
                 _pr, _pc = atom._node_pos.get((orig_r, orig_c), (0.0, 0.0))
                 # [migration H] file-bin the column on ON so comp matches the file-binned cells()/contact
                 # cells; OFF = verbatim int(round). FIELD_MOVEMENT/COL_WIDTH via units star-import.
@@ -436,7 +436,7 @@ import os as _sigma_os
                             # to the DEFENDER's morale channel (not the charger's offence — that is the
                             # puncture path, L1733; a charger-offence wiring would double-count it, the
                             # NERS-N/E defect that disabled _envelopment_sigma). [class-B; Jordan-vetoable]
-# PC_CHARGE_TICKS RETIRED 2026-06-01: the shock fires only while a momentum differential exists
+# MB_CHARGE_TICKS RETIRED 2026-06-01: the shock fires only while a momentum differential exists
 # (a_mom>b_mom, L1724); once both bodies lock into stationary melee the differential vanishes and the shock
 # stops EMERGENTLY (du Picq: the moral impulse is spent once the charge stalls). A separate tick counter was
 # redundant apparatus (NERS-E). Window is now emergent from the speed dynamics.
@@ -454,31 +454,31 @@ import os as _sigma_os
 # local superiority rolls the cell up. Fires ONLY where neither wrap nor pocket fired (no double-count) and only
 # in contact (a recessed/refused cell that no one is yet in contact with is not rolled up -- this protects a
 # deliberately thin Cannae centre). Mirror-safe: equal formations have equal depth, so excess <= 0 everywhere.
-PC_ROLLUP_PER_RANK = float(_sigma_os.environ.get('PC_ROLLUP_PER_RANK', '0.4'))  # penalty per rank of depth excess past the margin
-PC_ROLLUP_MARGIN   = float(_sigma_os.environ.get('PC_ROLLUP_MARGIN', '1.0'))    # local depth superiority needed before roll-up bites
-PC_ROLLUP_REACH    = float(_sigma_os.environ.get('PC_ROLLUP_REACH', '1.6'))     # contact distance (~adjacent incl. diagonal) to be rollable
-PC_ROLLUP_CAP      = float(_sigma_os.environ.get('PC_ROLLUP_CAP', '-1.0'))      # floor on the roll-up penalty (octagon RED scale)
+MB_ROLLUP_PER_RANK = float(_sigma_os.environ.get('MB_ROLLUP_PER_RANK', '0.4'))  # penalty per rank of depth excess past the margin
+MB_ROLLUP_MARGIN   = float(_sigma_os.environ.get('MB_ROLLUP_MARGIN', '1.0'))    # local depth superiority needed before roll-up bites
+MB_ROLLUP_REACH    = float(_sigma_os.environ.get('MB_ROLLUP_REACH', '1.6'))     # contact distance (~adjacent incl. diagonal) to be rollable
+MB_ROLLUP_CAP      = float(_sigma_os.environ.get('MB_ROLLUP_CAP', '-1.0'))      # floor on the roll-up penalty (octagon RED scale)
 # A roll-up is a FLANK phenomenon: you concentrate a wing and roll the enemy line up FROM ITS END (Leuthen,
 # Leuctra). The interior of a line is not directly rolled up -- its collapse is a downstream morale consequence.
 # So the roll-up penalty bites only on cells at the defender's lateral extreme; a recessed/penetrated centre
 # (e.g. a Cannae concave) is handled by the pocket, not the roll-up.
-PC_ROLLUP_FLANK_REACH = float(_sigma_os.environ.get('PC_ROLLUP_FLANK_REACH', '1.0'))  # cols from a lateral edge to count as a wing
+MB_ROLLUP_FLANK_REACH = float(_sigma_os.environ.get('MB_ROLLUP_FLANK_REACH', '1.0'))  # cols from a lateral edge to count as a wing
 # A roll-up breaks a still-FORMED but out-massed wing (a deep wing rolling a thinner one by design); it must not
 # mop up a cell already attrited to a single rank -- that cell is already losing on troop count, and penalising it
 # again double-counts attrition. So the defender cell must retain real depth (>= floor) to be rollable.
-PC_ROLLUP_MIN_DEPTH = float(_sigma_os.environ.get('PC_ROLLUP_MIN_DEPTH', '2.0'))  # defender must still have this depth
+MB_ROLLUP_MIN_DEPTH = float(_sigma_os.environ.get('MB_ROLLUP_MIN_DEPTH', '2.0'))  # defender must still have this depth
 
 from systems.mass_battle.sim.percell import *  # P-A stage 3: percell extracted
 import os
-PC_FIXING_FLANK = (os.environ.get("PC_FIXING_FLANK", "1") == "1")
-PC_ENVELOP_SHOCK = (os.environ.get("PC_ENVELOP_SHOCK", "1") == "1")  # B: envelopment moral-shock on a fixed unit struck flank/rear (toggle; default ON)
-PC_VOLLEY_TARGETING = (os.environ.get("PC_VOLLEY_TARGETING", "1") == "1")  # E: atomized archer volley targeting -- an ordered archer fires at + concentrates casualties on its target subunit (toggle; default ON)
+MB_FIXING_FLANK = (os.environ.get("MB_FIXING_FLANK", "1") == "1")
+MB_ENVELOP_SHOCK = (os.environ.get("MB_ENVELOP_SHOCK", "1") == "1")  # B: envelopment moral-shock on a fixed unit struck flank/rear (toggle; default ON)
+MB_VOLLEY_TARGETING = (os.environ.get("MB_VOLLEY_TARGETING", "1") == "1")  # E: atomized archer volley targeting -- an ordered archer fires at + concentrates casualties on its target subunit (toggle; default ON)
 # [partition-invariance fix, 2026-07-08, Jordan-ruled "genuine defect -- fix it"] renormalizes a
 # convergence group -- >=2 of ONE side's atoms simultaneously, independently fully engaging the
 # SAME single opposing atom (e.g. a pinning body plus wings all converging on one Line defender)
 # -- back down to what ONE merged atom of the group's combined troops would contribute. Toggle OFF
 # reproduces the pre-fix (multiplicative-per-attacker) behaviour byte-exact, for ablation/compare.
-PC_CONVERGENCE_NORM = (os.environ.get("PC_CONVERGENCE_NORM", "1") == "1")
+MB_CONVERGENCE_NORM = (os.environ.get("MB_CONVERGENCE_NORM", "1") == "1")
 
 
 def _convergence_scale(unit_a, unit_b, pairs):
@@ -738,7 +738,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
     in so the multi-side shock + encirclement penalty see the whole tick's engagement, not a cascade group;
     None -> computed locally from `pairs` (direct callers / non-cascading path -> identical, same pairs)."""
     dmg_a, dmg_b = 0, 0
-    cell_dmg_a, cell_dmg_b = {}, {}   # [ED-MB-0040] {id(atom): (atom, {abs_cell: dmg})}, PC_CELL_DAMAGE only
+    cell_dmg_a, cell_dmg_b = {}, {}   # [ED-MB-0040] {id(atom): (atom, {abs_cell: dmg})}, MB_CELL_DAMAGE only
     if eng_counts is None:
         eng_counts = count_engagements_per_atom(pairs)
     # [ED-MB-0018 fix, balance-critic A1/A1-gap + arch-critic #1] MULTI-SIDE = the set of DISTINCT octagon
@@ -754,7 +754,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
     # IS the full tick). Only under the octagon-damage flag (it gates the graded multi-side shock below).
     if atom_sides is not None:
         _atom_sides = atom_sides
-    elif PC_OCTAGON_DMG:
+    elif MB_OCTAGON_DMG:
         _atom_sides = _compute_atom_sides(pairs)
     else:
         _atom_sides = {}
@@ -835,7 +835,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
             # instead converge on the SAME single opposing atom (a_conv_scale/b_conv_scale key on
             # (id(atom_a), id(atom_b)), 1.0 -- i.e. absent -- for every non-converging pair, so this
             # is a no-op for the overwhelming majority of pairs, byte-exact).
-            if PC_CONVERGENCE_NORM:
+            if MB_CONVERGENCE_NORM:
                 a_pool_raw *= a_conv_scale.get((id(atom_a), id(atom_b)), 1.0)
                 b_pool_raw *= b_conv_scale.get((id(atom_a), id(atom_b)), 1.0)
         else:
@@ -885,7 +885,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
             # starting_position+cell_offsets on the grid path.
             abs_to_orig = _oriented_abs_map(defender_subunit)
             seen = set()
-            _pc_refuse = PER_CELL and PC_REFUSE
+            _pc_refuse = PER_CELL and MB_REFUSE
             atk_sorted = sorted(set(attacker_cells)) if _pc_refuse else None
             if _pc_refuse:
                 _dcols = [c for (_r, c) in defender_cells]
@@ -931,16 +931,16 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                         _z, _a = octagon_angle(a, d_pos, facing)
                         # (c) FOV blind arc GATES reaction: a threat in the rear blind arc cannot be perceived,
                         # so it cannot pin. Reuses FOV_HALF_DEG; no-op unless the facing model is enabled.
-                        if PC_FACING_MODEL and PC_FACING_FOV_GATE and _a > FOV_HALF_DEG:
+                        if MB_FACING_MODEL and MB_FACING_FOV_GATE and _a > FOV_HALF_DEG:
                             continue
-                        if (((a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2) ** 0.5 <= PC_PIN_REACH
+                        if (((a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2) ** 0.5 <= MB_PIN_REACH
                                 and _a < 45.0):  # [canonical: Jordan design — octagon zones; NOT in mass_battle_v30.md, which contains no octagon model (ED-MB-0041 verified: 0 occurrences)]
                             pinned = True; break
                     worst_mod = 0; worst_ang = 0.0; worst_pos = None
                     for a in _wrappers:
                         zone, ang = octagon_angle(a, d_pos, facing)
-                        if zone == "RED" and PC_ENVELOP_MOD < worst_mod:
-                            worst_mod = PC_ENVELOP_MOD; worst_ang = ang; worst_pos = a
+                        if zone == "RED" and MB_ENVELOP_MOD < worst_mod:
+                            worst_mod = MB_ENVELOP_MOD; worst_ang = ang; worst_pos = a
                     if worst_mod < 0 and (not pinned) and worst_ang <= FOV_HALF_DEG:
                         worst_mod = 0   # refused: free to turn AND can see the threat
                     # A (atomized detached-flank / envelopment of a fixed unit): if no wider-line wrap
@@ -948,7 +948,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                     # with the attacker bearing on its flank/rear arc takes the zone penalty -- independent
                     # of attacker frontage-width. The detachment strikes the flank/rear of a fixed unit.
                     # [canonical: Cannae 216 BC; du Picq -- the unseen attack on a pinned line.]
-                    if worst_mod == 0 and fixed_by_other and PC_FIXING_FLANK:
+                    if worst_mod == 0 and fixed_by_other and MB_FIXING_FLANK:
                         _fz, _fa = octagon_angle(atk_centroid, d_pos, facing)
                         if _fz in ("YELLOW", "RED") and ANGLE_DEF_MOD[_fz] < 0:
                             worst_mod = ANGLE_DEF_MOD[_fz]; worst_ang = _fa
@@ -959,7 +959,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                         # a flank wrap is blunted by ROW depth, a rear wrap by FILE depth -- not the
                         # Y-column. A cell hit along X no longer draws spurious support from y-1.
                         _cd = _support_along_vector(d_pos, worst_pos, _def_cells)
-                        worst_mod *= 1.0 / (1.0 + PC_ENVELOP_DEPTH_RESIST * max(0.0, _cd - 1.0))
+                        worst_mod *= 1.0 / (1.0 + MB_ENVELOP_DEPTH_RESIST * max(0.0, _cd - 1.0))
                     # pocket / gap-trap: only where the WRAP did not already fire (worst_mod==0). The gap-
                     # flanking maniples sit WITHIN the defender's span (not wrappers), so a cell trapped level
                     # between them gets the pocket; a Horseshoe's concave wings are BEYOND the span (wrappers),
@@ -970,10 +970,10 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                         for a in atk_sorted:
                             if abs(a[0] - d_pos[0]) <= 0.5:
                                 _dcol = a[1] - d_pos[1]
-                                if -PC_POCKET_REACH <= _dcol < 0: _hl = True
-                                elif 0 < _dcol <= PC_POCKET_REACH: _hr = True
+                                if -MB_POCKET_REACH <= _dcol < 0: _hl = True
+                                elif 0 < _dcol <= MB_POCKET_REACH: _hr = True
                         if _hl and _hr:
-                            worst_mod = PC_POCKET_MOD
+                            worst_mod = MB_POCKET_MOD
                     # oblique-offense roll-up: fires only where neither wrap nor pocket fired, and the
                     # cell is actually in contact. Depth is measured PARALLEL to the contact vector for
                     # both sides (Jordan); if the nearest attacker's local push-depth out-masses our
@@ -983,21 +983,21 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                     if worst_mod == 0:
                         _cols = [c for (_r, c) in _def_cells]
                         _cmn = min(_cols); _cmx = max(_cols)
-                        _is_wing = ((d_pos[1] - _cmn) <= PC_ROLLUP_FLANK_REACH
-                                    or (_cmx - d_pos[1]) <= PC_ROLLUP_FLANK_REACH)
+                        _is_wing = ((d_pos[1] - _cmn) <= MB_ROLLUP_FLANK_REACH
+                                    or (_cmx - d_pos[1]) <= MB_ROLLUP_FLANK_REACH)
                         _na = None; _nd = 1e9
                         if _is_wing:
                             for a in atk_sorted:
                                 _dd = ((a[0] - d_pos[0]) ** 2 + (a[1] - d_pos[1]) ** 2) ** 0.5
                                 if _dd < _nd:
                                     _nd = _dd; _na = a
-                        if _na is not None and _nd <= PC_ROLLUP_REACH:
+                        if _na is not None and _nd <= MB_ROLLUP_REACH:
                             _ds = _support_along_vector(d_pos, _na, _def_cells)
                             _ap = _support_along_vector(_na, d_pos, _atk_full)
                             _excess = _ap - _ds
-                            if _excess > PC_ROLLUP_MARGIN and _ds >= PC_ROLLUP_MIN_DEPTH:
-                                worst_mod = max(PC_ROLLUP_CAP,
-                                                -PC_ROLLUP_PER_RANK * (_excess - PC_ROLLUP_MARGIN))
+                            if _excess > MB_ROLLUP_MARGIN and _ds >= MB_ROLLUP_MIN_DEPTH:
+                                worst_mod = max(MB_ROLLUP_CAP,
+                                                -MB_ROLLUP_PER_RANK * (_excess - MB_ROLLUP_MARGIN))
                     mods.append(worst_mod)
                 else:
                     zone, _ = octagon_angle(atk_centroid, d_pos, facing)
@@ -1032,7 +1032,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
             octagon facing"). Returns {abs_cell: arc_mod} — 0 (GREEN/front) .. -2 (RED/rear) per ANGLE_DEF_MOD,
             each cell judged against ITS OWN facing, its own local attacker centroid, its own pin/FOV state and
             its own reaction clock. `_octagon_dmg_mod` is the troop-blind MEAN of this map (byte-exact,
-            unchanged); PC_CELL_DAMAGE reads the map itself so casualties land on the cells that are actually
+            unchanged); MB_CELL_DAMAGE reads the map itself so casualties land on the cells that are actually
             exposed instead of being averaged into one subunit scalar and smeared back uniformly."""
             if not defender_cells or not attacker_cells:
                 return {}
@@ -1075,7 +1075,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                         _z2, _a2 = octagon_angle(a, d_pos, facing)
                         # [canonical: Jordan design — octagon zones; NOT in mass_battle_v30.md, which contains no octagon model (ED-MB-0041 verified: 0 occurrences)]
                         if (_a2 < 45.0
-                                and (a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2 <= PC_PIN_REACH ** 2):
+                                and (a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2 <= MB_PIN_REACH ** 2):
                             pinned = True; break
                     can_react = (ang <= FOV_HALF_DEG) and (not pinned)   # must SEE it AND be free to turn
                     if can_react:
@@ -1124,11 +1124,11 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
         #  params/core.md continuous engine + modifier_system_spec.md §2.1/§3.1]
         ns_a = ns_b = 0.0   # legacy-path default so the mechanical trace can read these uniformly
         if SIGMA_HEAD_ENABLED:
-            # [ED-MB-0018] Under PC_OCTAGON_DMG the octagon is a DAMAGE-RECEIVED MULTIPLIER (applied to
+            # [ED-MB-0018] Under MB_OCTAGON_DMG the octagon is a DAMAGE-RECEIVED MULTIPLIER (applied to
             # dmg_a/dmg_b below), NOT a net-successes penalty -- so it is REMOVED from the sigma head here
             # to avoid double-counting. The zone is still read for charge-shock / brace gating below.
-            ns_a = 0.0 if PC_OCTAGON_DMG else a_angle_mod * SIGMA_PER_D     # a_angle_mod<=0 when A flanked
-            ns_b = 0.0 if PC_OCTAGON_DMG else b_angle_mod * SIGMA_PER_D
+            ns_a = 0.0 if MB_OCTAGON_DMG else a_angle_mod * SIGMA_PER_D     # a_angle_mod<=0 when A flanked
+            ns_b = 0.0 if MB_OCTAGON_DMG else b_angle_mod * SIGMA_PER_D
             if PUNCTURE_ENABLED:
                 a_mom = _momentum_speed(atom_a, p["a_cells"])
                 b_mom = _momentum_speed(atom_b, p["b_cells"])
@@ -1153,7 +1153,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                     if a_pen > 0:
                         _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5, -1.5 are the zone-value midpoints re-binning the per-cell-averaged angle_mod to a zone: -0.5=mid(0,-1), -1.5=mid(-1,-2)]
                         ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b, t)
-                    elif PC_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:
+                    elif MB_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:
                         # B (envelopment shock): a subunit FIXED frontally by a separate body and struck on
                         # its flank/rear cannot face the new threat -- the du Picq moral shock of envelopment
                         # fires even WITHOUT a momentum charge (the charge path's gap). Reuses the calibrated
@@ -1166,7 +1166,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                     if b_pen > 0:
                         _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — see the _zb line above]
                         ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)
-                    elif PC_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:
+                    elif MB_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:
                         _za = "YELLOW" if a_angle_mod > -1.5 else "RED"  # [canonical: config.py:65 ANGLE_DEF_MOD zone midpoints — -1.5=mid(YELLOW -1, RED -2)]
                         ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)
                     # Reciprocal charge-recoil (the missing historical term): a charge driven home into a
@@ -1174,14 +1174,14 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                     # Charger = higher-momentum side; recoil scales with the wall's prep (discipline x depth).
                     # Gated by the 'brace' INSTRUCTION -> instruction-less scenarios stay byte-exact. Emergent:
                     # pikes break a cavalry charge, a loose/shallow line is still ridden down.
-                    # [ED-1091, Jordan-approved 2026-07-02] PC_RECOIL_FRONTAL zone-gates the recoil to the
+                    # [ED-1091, Jordan-approved 2026-07-02] MB_RECOIL_FRONTAL zone-gates the recoil to the
                     # wall's frontal (GREEN) octagon zone -- a brace cannot repel what it cannot face
                     # (Burkholder 2007), so a flank/rear charge into a braced wall is no longer wrongly
                     # recoiled (the latent flag mass_battle_gauge_grounding.md §4.3 carried since 2026-06-16;
                     # gauge row C7 deliberately avoided 'brace' because of it). Zone read: the defender's
                     # per-cell-averaged angle_mod, same GREEN midpoint re-binning as the charge-shock above.
                     # [canonical: config.py:65 ANGLE_DEF_MOD GREEN 0/YELLOW -1/RED -2; -0.5=mid(0,-1)]
-                    # [ED-1095, Jordan-ruled 2026-07-02] PC_RECOIL_CHARGER_GATE additionally requires the
+                    # [ED-1095, Jordan-ruled 2026-07-02] MB_RECOIL_CHARGER_GATE additionally requires the
                     # CHARGING atom to actually be cavalry (mounted_archers -- who should never be closing
                     # at all, see T4 -- explicitly excluded) AND the defender's reach >= the charger's reach
                     # (a longer-reaching charger, e.g. a lance, can strike a wall whose weapons can't reach
@@ -1190,7 +1190,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                     # empty -> everyone is REACH_SHORT -> this half of the gate is a no-op". THAT IS FALSE:
                     # ED-MB-0014 populated TROOP_TYPE_REACH with 12 entries. The gate is LIVE and it BITES:
                     # reach_for('infantry')=0.1 < reach_for('cavalry')=0.2, so a braced GENERIC-INFANTRY wall
-                    # fails `reach_for(defender) >= reach_for(charger)` and PC_CHARGE_RECOIL NEVER FIRES.
+                    # fails `reach_for(defender) >= reach_for(charger)` and MB_CHARGE_RECOIL NEVER FIRES.
                     # That silently disabled the Courtrai/Bannockburn/Waterloo braced-wall repel — the
                     # strongest historical anchor in the grounding doc — and is why gauge C2/C6 read
                     # NOT-REPELLED. A brace IS a hedge of set poles, so a braced defender should carry a
@@ -1217,20 +1217,20 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                     if b_mom > a_mom: _b_press.add(id(atom_a))
                     a_charging = (a_mom > b_mom) or (id(atom_b) in _a_press)
                     b_charging = (b_mom > a_mom) or (id(atom_a) in _b_press)
-                    if PC_BRACE_ENABLED:
-                        if (a_charging and _subunit_braced(atom_b, t) and (not PC_RECOIL_FRONTAL or b_angle_mod > -0.5)
-                                and (not PC_RECOIL_CHARGER_GATE or (atom_a.troop_type == 'cavalry'
+                    if MB_BRACE_ENABLED:
+                        if (a_charging and _subunit_braced(atom_b, t) and (not MB_RECOIL_FRONTAL or b_angle_mod > -0.5)
+                                and (not MB_RECOIL_CHARGER_GATE or (atom_a.troop_type == 'cavalry'
                                                                      and reach_for(atom_b.troop_type) >= reach_for(atom_a.troop_type)))):
-                            ns_a -= PC_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b) * SIGMA_PER_D
-                        elif (b_charging and _subunit_braced(atom_a, t) and (not PC_RECOIL_FRONTAL or a_angle_mod > -0.5)
-                                and (not PC_RECOIL_CHARGER_GATE or (atom_b.troop_type == 'cavalry'
+                            ns_a -= MB_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b) * SIGMA_PER_D
+                        elif (b_charging and _subunit_braced(atom_a, t) and (not MB_RECOIL_FRONTAL or a_angle_mod > -0.5)
+                                and (not MB_RECOIL_CHARGER_GATE or (atom_b.troop_type == 'cavalry'
                                                                      and reach_for(atom_a.troop_type) >= reach_for(atom_b.troop_type)))):
-                            ns_b -= PC_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
+                            ns_b -= MB_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
             # [ED-MB-0018 fix, arch-critic #2] The legacy ENCIRCLEMENT_PENALTY fires on the SAME >=2 trigger
             # as the new multi-side damage shock -> under the octagon flag it would DOUBLE-COUNT encirclement
             # (once as an offence/sigma penalty here, once as a defence damage multiplier below). Gate it off
             # so the octagon multi-side shock is the single owner of the multi-engagement effect.
-            if not PC_OCTAGON_DMG:
+            if not MB_OCTAGON_DMG:
                 if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
                 if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if atom_a.unit_type == 'ranged': ns_a += RANGED_MELEE_SIGMA
@@ -1241,12 +1241,12 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                 ns_a += _fatigue_sigma(unit_a, set(c for r, c in p["a_cells"]))
                 ns_b += _fatigue_sigma(unit_b, set(c for r, c in p["b_cells"]))
             # [ED-MB-0036 sweep, 2026-07-24] REMOVED the Increment-6 _envelopment_sigma term. It computed the
-            # wider side's overhang bonus every tick then multiplied by a hardcoded PC_ENVELOP_SIGMA=0.0 (adding
+            # wider side's overhang bonus every tick then multiplied by a hardcoded MB_ENVELOP_SIGMA=0.0 (adding
             # 0.0 to the net -> byte-exact removal), and its unit-level col-grid "wider side" test mis-targets a
             # split envelop army (thin wings read narrower than one enemy line -> it rewarded the DEFENDER).
             # SUPERSEDED: overhang/flank pressure is delivered by the octagon flank multiplier + graded
             # multi-side shock (B6) + the perimeter/orbital-wheel envelopment (ED-MB-0035), not this term.
-            if PC_INTENT_RESOLUTION:
+            if MB_INTENT_RESOLUTION:
                 # [ED-MB-0029] INTENT as an offence/defence commitment (mass_battle_v30 §A Offensive/
                 # Defensive axis). A subunit's own commitment cX (aggressive +1 / balanced 0 / hold,
                 # retreat -1) shifts its OWN offence (cX·INTENT_OFFENSE_D) and the ENEMY's offence against
@@ -1260,7 +1260,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                 cB = STANCE_COMMITMENT.get(atom_b.stance, 0)
                 ns_a += (cA * INTENT_OFFENSE_D + cB * INTENT_DEFENSE_D) * SIGMA_PER_D
                 ns_b += (cB * INTENT_OFFENSE_D + cA * INTENT_DEFENSE_D) * SIGMA_PER_D
-            if PC_FRACTIONAL_POOL:
+            if MB_FRACTIONAL_POOL:
                 # [ED-MB-0032] roll the CONTINUOUS pool without flooring — the σ-boost reads the fractional
                 # pool too (a dead atom's net is forced to 0 below regardless, same as the integer path).
                 _apr = a_pool_raw if not a_dead else 0.0
@@ -1277,15 +1277,15 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
                 b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
         else:
             # === LEGACY POOL-MODIFIER PATH (baseline; advantages modify the pool) ===
-            # [ED-MB-0018] octagon = damage multiplier under PC_OCTAGON_DMG -> not a pool penalty here
-            a_pool = max(1, a_pool + (0 if PC_OCTAGON_DMG else round(a_angle_mod)))
-            b_pool = max(1, b_pool + (0 if PC_OCTAGON_DMG else round(b_angle_mod)))
+            # [ED-MB-0018] octagon = damage multiplier under MB_OCTAGON_DMG -> not a pool penalty here
+            a_pool = max(1, a_pool + (0 if MB_OCTAGON_DMG else round(a_angle_mod)))
+            b_pool = max(1, b_pool + (0 if MB_OCTAGON_DMG else round(b_angle_mod)))
             if PUNCTURE_ENABLED:
                 a_mom = _momentum_speed(atom_a, p["a_cells"])
                 b_mom = _momentum_speed(atom_b, p["b_cells"])
                 if a_mom > b_mom:   a_pool += min(PUNCTURE_CAP, int(a_mom - b_mom))
                 elif b_mom > a_mom: b_pool += min(PUNCTURE_CAP, int(b_mom - a_mom))
-            if not PC_OCTAGON_DMG:   # [ED-MB-0018 fix, arch-critic #2] see the sigma-head gate above — no double-count
+            if not MB_OCTAGON_DMG:   # [ED-MB-0018 fix, arch-critic #2] see the sigma-head gate above — no double-count
                 if eng_counts.get(id(atom_a), 0) >= 2: a_pool = max(1, a_pool - ENCIRCLEMENT_PENALTY)
                 if eng_counts.get(id(atom_b), 0) >= 2: b_pool = max(1, b_pool - ENCIRCLEMENT_PENALTY)
             if atom_a.unit_type == 'ranged': a_pool = max(1, a_pool // 3)
@@ -1309,16 +1309,16 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
         # dedicated per-cell FACING-ARC (`_octagon_dmg_mod`, 0..-2 -> mult = 1 - arc*(RED-1)/2, capped at
         # RED). This is the pure octagon arc (local-centroid, reaction-gated), NOT the legacy
         # `a_angle_mod`/`b_angle_mod` bundle (which also carries wrapper/pocket/roll-up pool penalties and
-        # spuriously reads a wide line's wings as flanked head-on). Under PC_OCTAGON_DMG the legacy pool
+        # spuriously reads a wide line's wings as flanked head-on). Under MB_OCTAGON_DMG the legacy pool
         # angle-penalty is zeroed above, so this multiplier + MULTI-SIDE SHOCK are the single envelopment
         # model. MULTI-SIDE SHOCK: a subunit engaged from >=2 sides has its rank-relief divided AND
         # shock-compromised -> an extra COMPOUNDING factor (1+MULTI_SIDE_SHOCK), not a mere halving.
         # `a_arc`/`b_arc` are each side's own exposure, scaling that side's incoming damage (dmg_a = A's).
         _red = OCTAGON_DMG_MULT["RED"]
         _a_cw = _b_cw = None
-        if PC_OCTAGON_DMG:
+        if MB_OCTAGON_DMG:
             # [ED-MB-0040] One evaluation of the per-cell arcs; the subunit scalar is their MEAN (exactly
-            # what _octagon_dmg_mod returns — byte-exact), and under PC_CELL_DAMAGE the SAME map also
+            # what _octagon_dmg_mod returns — byte-exact), and under MB_CELL_DAMAGE the SAME map also
             # yields the per-cell allocation weights. The pair TOTAL is unchanged either way; the flag only
             # changes WHERE those casualties land (see _cell_damage_weights).
             _a_cm = _octagon_cell_mods(atom_a, list(set(p["a_cells"])), list(set(p["b_cells"])))
@@ -1327,7 +1327,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
             b_arc = sum(_b_cm.values()) / len(_b_cm) if _b_cm else 0.0
             _a_dmg_mult = min(_red, 1.0 - a_arc * (_red - 1.0) / 2.0)
             _b_dmg_mult = min(_red, 1.0 - b_arc * (_red - 1.0) / 2.0)
-            if PC_CELL_DAMAGE:
+            if MB_CELL_DAMAGE:
                 _a_cw = _cell_damage_weights(atom_a, _a_cm, _red)
                 _b_cw = _cell_damage_weights(atom_b, _b_cm, _red)
             # MULTI-SIDE SHOCK, GRADED by the number of DISTINCT sides struck (`_atom_sides` above): the
@@ -1341,7 +1341,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
             if _nb >= 2: _b_dmg_mult *= (1.0 + MULTI_SIDE_SHOCK * (_nb - 1))
         else:
             _a_dmg_mult = _b_dmg_mult = 1   # int 1 (not 1.0): `X * 1` preserves X's exact type -> the
-            #                                 legacy PC_OCTAGON_DMG=0 path stays byte-exact (a float 1.0
+            #                                 legacy MB_OCTAGON_DMG=0 path stays byte-exact (a float 1.0
             #                                 would coerce integer casualties to float and move the digest)
         if LANCHESTER_ENABLED:
             # P-L Linear Law: casualties to X scale with the ENEMY's engaged strength in
@@ -1363,7 +1363,7 @@ def resolve_engagements(unit_a, unit_b, pairs, t=None, conv_scale=None,
             _pair_b = CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr) * _b_dmg_mult
             dmg_a += _pair_a
             dmg_b += _pair_b
-        if PC_CELL_DAMAGE:
+        if MB_CELL_DAMAGE:
             # [ED-MB-0040] Land THIS pair's casualties on the defender's CONTACT CELLS, split by each cell's
             # own exposure weight (troops x its own facing multiplier) — the cell is the primitive. Totals are
             # identical to the aggregate path; only the placement differs.
@@ -1396,7 +1396,7 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
     # resolve_engagements. Otherwise the depth-group split fed each sub-call only its group's pairs, so an
     # encircled body showed 1 face / 1 engagement per call and the multi-side shock (2 sides x1.5, 3 x2.0)
     # + encirclement penalty never fired -- envelopment delivered ~0% at matched density.
-    full_sides = _compute_atom_sides(pairs) if PC_OCTAGON_DMG else {}
+    full_sides = _compute_atom_sides(pairs) if MB_OCTAGON_DMG else {}
     full_eng = count_engagements_per_atom(pairs)
     full_fixers = _compute_front_fixers(pairs)   # [ED-MB-0041 Tier-2] full-tick scope, not per-group
     _expire_charger_latches(unit_a, unit_b, pairs)   # [ED-MB-0041 Tier-2] see the latch note in resolve_engagements
@@ -1483,14 +1483,14 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs, t=None):
         total_dmg_a += result["dmg_a"]
         total_dmg_b += result["dmg_b"]
         total_engagements += result["engagements"]
-        if PC_CELL_DAMAGE:   # [ED-MB-0040] accumulate this sub-phase's cellular placement
+        if MB_CELL_DAMAGE:   # [ED-MB-0040] accumulate this sub-phase's cellular placement
             _merge_cell_damage(total_cell_a, result.get("cell_dmg_a", {}))
             _merge_cell_damage(total_cell_b, result.get("cell_dmg_b", {}))
         for p in active:
             resolved_keys.add((id(p["atom_a"]), id(p["atom_b"])))
             # (ED-MB-0041 Tier-2) The per-sub-phase `_rotate_defender_facing` writes are gone with the
             # dict they wrote into. Engaged cells still turn toward their opponents — via the live
-            # `cell_facing_vec` slew in _node_advance (PC_FACING_ATTENTION), which is what the octagon
+            # `cell_facing_vec` slew in _node_advance (MB_FACING_ATTENTION), which is what the octagon
             # actually reads.
 
     return {"dmg_a": total_dmg_a, "dmg_b": total_dmg_b, "engagements": total_engagements,
@@ -1553,13 +1553,13 @@ def _volley_density_mult(target_unit):
     shallow line takes far fewer hits. 1.0 at the reference line density. Ranged-only path ->
     the melee gauge never reaches it (byte-exact).
     [bottom-up: col_grid density = troops/cell x ranks. historical anchor: massed-formation missile losses.]"""
-    if not PC_VOLLEY_DENSITY_ENABLED:
+    if not MB_VOLLEY_DENSITY_ENABLED:
         return 1.0
     grid = getattr(target_unit, 'col_grid', None)
     if not grid:
         return 1.0
     mean_density = sum(b.density for b in grid) / len(grid)
-    return max(PC_VOLLEY_DENSITY_FLOOR, min(PC_VOLLEY_DENSITY_CAP, mean_density / PC_VOLLEY_DENSITY_REF))
+    return max(MB_VOLLEY_DENSITY_FLOOR, min(MB_VOLLEY_DENSITY_CAP, mean_density / MB_VOLLEY_DENSITY_REF))
 
 def volley_phase(unit_a, unit_b):
     """Phase 2 Volley. Each ranged atom selects nearest in-range enemy atom and fires.
@@ -1588,11 +1588,11 @@ def volley_phase(unit_a, unit_b):
         target_atoms = target_unit.subunits
         # E (atomized archer targeting): an archer ORDERED to a specific or weakest target fires at IT when
         # in range, else the nearest -- so archers can be directed at a flanker / priority unit. Gated by
-        # PC_VOLLEY_TARGETING + an explicit order; default (no order) = nearest (the exact prior logic) ->
+        # MB_VOLLEY_TARGETING + an explicit order; default (no order) = nearest (the exact prior logic) ->
         # byte-exact. The ORDERED portion is concentrated on the target subunit downstream (apply_to_subunit);
         # unordered fire stays faction-spread. [canonical: longbow fire discipline, Crecy/Agincourt; §A.7.]
         _ordered = None
-        if PC_VOLLEY_TARGETING:
+        if MB_VOLLEY_TARGETING:
             _oti = getattr(shooter_atom, 'order_target_idx', None)
             if _oti is not None and _oti < len(target_atoms):
                 _ordered = target_atoms[_oti]
@@ -1701,12 +1701,12 @@ def _draw_friction_cev(unit):
     """[ED-MB-0016, DG-6 resolution] Draw `unit`'s per-battle combat-effectiveness friction factor ONCE.
     Idempotent within a battle: a fresh unit has no `_friction_cev`; once set it is never redrawn (so a
     multi-turn battle's repeated run_battle entries keep the single per-battle draw). M ~ LogNormal(0,
-    PC_FRICTION_SIGMA^2) via exp(gauss) on the seeded `random` stream. PC_FRICTION_CEV off -> 1.0
-    (default-inert, byte-exact). See config.py PC_FRICTION_CEV for the full grounding."""
+    MB_FRICTION_SIGMA^2) via exp(gauss) on the seeded `random` stream. MB_FRICTION_CEV off -> 1.0
+    (default-inert, byte-exact). See config.py MB_FRICTION_CEV for the full grounding."""
     if getattr(unit, '_friction_cev', None) is not None:
         return
-    if PC_FRICTION_CEV and PC_FRICTION_SIGMA > 0.0:
-        unit._friction_cev = math.exp(rngsource.get().gauss(0.0, PC_FRICTION_SIGMA))
+    if MB_FRICTION_CEV and MB_FRICTION_SIGMA > 0.0:
+        unit._friction_cev = math.exp(rngsource.get().gauss(0.0, MB_FRICTION_SIGMA))
     else:
         unit._friction_cev = 1.0
 
@@ -1757,19 +1757,19 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
       {"winner": "A"|"B"|"draw", "turns": int, "phases": int, "tick_in_phase": int}
     """
     # [movement-substrate review 06 — coordinate-field migration] The continuous COORDINATE FIELD requires
-    # the node float path: field-ON stores/emits true floats only via _node_pos (PC_NODE_COHESION). A
+    # the node float path: field-ON stores/emits true floats only via _node_pos (MB_NODE_COHESION). A
     # FIELD-ON / NODE-OFF run would silently half-migrate (legacy integer branch, no floats, but the
     # fractional-speed accumulator active) -> a degenerate integer 'field' run. Enforce the implication at
     # setup so the invalid combination fails loudly instead of producing a corrupt result. No-op when
     # FIELD_MOVEMENT is OFF (byte-exact).
-    assert (not FIELD_MOVEMENT) or PC_NODE_COHESION, \
-        "FIELD_MOVEMENT=1 requires PC_NODE_COHESION=1 (the coordinate field runs on the node float path)"
+    assert (not FIELD_MOVEMENT) or MB_NODE_COHESION, \
+        "FIELD_MOVEMENT=1 requires MB_NODE_COHESION=1 (the coordinate field runs on the node float path)"
     # [ED-MB-0016, DG-6 resolution] Draw each side's per-BATTLE combat-effectiveness (CEV) friction factor
     # ONCE, lazily: the FIRST run_battle entry for a fresh unit draws it; subsequent turns of a multi-turn
     # battle (which re-enter run_battle with persistent unit state) see it already set and do NOT re-draw
     # -- so the shock is drawn once per battle, not per turn (per-turn re-draws would self-average away the
     # very variance this restores). A fresh unit per gauge trial gets a fresh draw. Default-inert: with
-    # PC_FRICTION_CEV off, _draw_friction_cev sets 1.0 (no behaviour change; byte-exact). Uses the seeded
+    # MB_FRICTION_CEV off, _draw_friction_cev sets 1.0 (no behaviour change; byte-exact). Uses the seeded
     # `random` stream so determinism (I2) holds; enabling it shifts the stream (field goldens re-record).
     _draw_friction_cev(unit_a)
     _draw_friction_cev(unit_b)
@@ -1800,8 +1800,8 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             # (file-binned) cells; OFF = verbatim cell_offsets build. Otherwise the == misses on the node
             # path and halted_cells stays empty -> pre-contact halt silently disabled on the field path.
             _atom_a = p["atom_a"]; _atom_b = p["atom_b"]
-            _fld_a = FIELD_MOVEMENT and PC_NODE_COHESION and hasattr(_atom_a, '_node_pos')
-            _fld_b = FIELD_MOVEMENT and PC_NODE_COHESION and hasattr(_atom_b, '_node_pos')
+            _fld_a = FIELD_MOVEMENT and MB_NODE_COHESION and hasattr(_atom_a, '_node_pos')
+            _fld_b = FIELD_MOVEMENT and MB_NODE_COHESION and hasattr(_atom_b, '_node_pos')
             op_a = _oriented(_atom_a)
             for cell in p["a_cells"]:
                 for orig_r, orig_c, or_r, or_c in op_a:
@@ -1860,7 +1860,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # plus escort_offset ROTATED into its current facing frame (not the static spawn-time
         # advance_dir), so screening survives the escorted unit wheeling/enveloping/sweeping.
         def _escort_facing(sub):
-            if PC_NODE_COHESION and getattr(sub, '_node_facing', None) is not None:
+            if MB_NODE_COHESION and getattr(sub, '_node_facing', None) is not None:
                 fr, fc = sub._node_facing
             elif sub.cell_facing_vec:
                 _vecs = list(sub.cell_facing_vec.values())
@@ -2045,15 +2045,15 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                 if PER_CELL and getattr(opp, 'col_grid', None):
                     # Increment 4: depth-aware BLEND. Frontage term (engaged cols / total cols) removes the
                     # reserve-depth penalty; width term (engaged cols / reference frontage) keeps the legitimate
-                    # "a wider front brings more men to bear" effect. PC_FRONTAGE_BLEND in [0,1] trades between them.
+                    # "a wider front brings more men to bear" effect. MB_FRONTAGE_BLEND in [0,1] trades between them.
                     grid = opp.col_grid
                     eng_cols = _engaged_cols(opp, pairs)
                     alive_cols = [b for b in grid if b.alive()]
                     n_alive = len(alive_cols)
                     n_eng = sum(1 for b in alive_cols if b.col in eng_cols)
                     frontage_term = (n_eng / n_alive) if n_alive else 0.0          # depth-neutral
-                    width_term = min(1.0, n_eng / PC_FRONTAGE_REF)                  # more engaged columns = more men
-                    opp_frac = PC_FRONTAGE_BLEND * frontage_term + (1.0 - PC_FRONTAGE_BLEND) * width_term
+                    width_term = min(1.0, n_eng / MB_FRONTAGE_REF)                  # more engaged columns = more men
+                    opp_frac = MB_FRONTAGE_BLEND * frontage_term + (1.0 - MB_FRONTAGE_BLEND) * width_term
                 else:
                     opp_frac = len(opp_cells_contact) / max(1, opp_total)
                 result[dmg_key] = result[dmg_key] * max(0.2, opp_frac)
@@ -2095,11 +2095,11 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
             _ord_a_tot = sum(_d for _su, _d in _ord_a)
             _ord_b_tot = sum(_d for _su, _d in _ord_b)
             # [ED-MB-0040] MELEE casualties land CELLWISE (per-cell facing weights from the resolver) when
-            # PC_CELL_DAMAGE is on; the VOLLEY remainder keeps the aggregate density spread (area fire is not
+            # MB_CELL_DAMAGE is on; the VOLLEY remainder keeps the aggregate density spread (area fire is not
             # a contact-facing exchange, so it has no per-cell arc). Flag OFF -> one combined aggregate call,
             # byte-exact as before.
-            _cda = result.get("cell_dmg_a") if PC_CELL_DAMAGE else None
-            _cdb = result.get("cell_dmg_b") if PC_CELL_DAMAGE else None
+            _cda = result.get("cell_dmg_a") if MB_CELL_DAMAGE else None
+            _cdb = result.get("cell_dmg_b") if MB_CELL_DAMAGE else None
             if _cda:
                 distribute_casualties_cellwise(unit_a, result["dmg_a"], _cda)
                 distribute_casualties(unit_a, (volley_dmg_a - _ord_a_tot) * _sa, pairs)
@@ -2114,7 +2114,7 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
                 apply_to_subunit(unit_a, _su, _d * _sa)
             for _su, _d in _ord_b:
                 apply_to_subunit(unit_b, _su, _d * _sb)
-            if PC_CLOSE_RANKS:
+            if MB_CLOSE_RANKS:
                 # [ED-MB-0028] Cell-level closing-ranks: AFTER both units' casualties are applied (so it
                 # stays simultaneous — neither side's reflow sees the other mid-tick), rear cells step up
                 # to refill the leading ranks toward spawn density, depleting from the back. Re-sync the
@@ -2228,7 +2228,7 @@ def between_turn_recovery(unit):
         # it through the absolute owner FLATTENED all per-cell morale divergence to the mean at
         # every turn boundary. Measured on the own-morale path: cells {1.0, 2.0, 6.0} (eff 5.64)
         # became {5.64, 5.64, 5.64} after one call. Every `build_army` body — i.e. every gauge and
-        # multi-subunit army — is on that path, so under `PC_CELL_MORALE` the feature's entire point
+        # multi-subunit army — is on that path, so under `MB_CELL_MORALE` the feature's entire point
         # (a low-morale corner that persists and spreads) was erased once per turn. That is a LIVE
         # CONFOUND for any cell-morale measurement, and it is the reason the flag could not be
         # honestly re-measured, let alone flipped.
@@ -2248,7 +2248,7 @@ def between_turn_recovery(unit):
     # the turn break -> no active engaged pair). A yielding subunit whose morale has recovered above
     # YIELD_RALLY_MORALE_FRAC of its start reverts to normal combat/stance ("gave ground, pressure
     # relieved, reformed"). Gated OFF -> inert. `pocketed` is cleared alongside (fresh next engagement).
-    if PC_YIELD_RALLY:
+    if MB_YIELD_RALLY:
         for atom in unit.subunits:
             if atom.yielding and not atom.routed and not atom.broken:
                 if atom.eff_morale >= YIELD_RALLY_MORALE_FRAC * atom.eff_morale_start:
@@ -2283,15 +2283,15 @@ def reset_morale_between_battles(unit):
         # the prior battle past its drawn break-point (~15-30% losses) carries BOTH that break-point AND its
         # spawn-based loss fraction into the next battle, so it auto-routs on phase 1 of EVERY later battle
         # with zero new casualties. A rout is a per-BATTLE will-to-fight collapse; both reset at the campaign
-        # boundary. (Only consumed under PC_STOCHASTIC_ROUT; between-battle only -> single-battle goldens inert.)
+        # boundary. (Only consumed under MB_STOCHASTIC_ROUT; between-battle only -> single-battle goldens inert.)
         atom._rout_breakpoint = None
         atom._start_troops = atom.cur_troops
         # [ED-MB-0024, DG-2] pocketed is a live per-tick yield signal — clear it at the battle boundary
-        # (a fresh battle re-derives it during the yield movement pass; inert when PC_YIELD_POCKET is off).
+        # (a fresh battle re-derives it during the yield movement pass; inert when MB_YIELD_POCKET is off).
         atom.pocketed = False
         # [ED-MB-0041 Tier-2] `yielding` is the OTHER half of the DG-2 yield signal and was the one
         # transient here that never got cleared -- every sibling (pocketed, feigned, overextended, the
-        # rout break-point, the reaction clock) was. With PC_YIELD_RALLY off nothing else clears it
+        # rout break-point, the reaction clock) was. With MB_YIELD_RALLY off nothing else clears it
         # either, so a subunit that yielded once stayed flagged as yielding for the remainder of the
         # campaign, carrying its yield-state pool malus into every later battle. Same per-battle
         # transient, same boundary.
@@ -2329,7 +2329,7 @@ def reset_positions(unit, shape, anchor_map):
     [Fix, 2026-07-02, movement audit finding 1.1 / ED-1096] Node-path atoms are now explicitly
     SKIPPED, not silently corrupted. This function writes only starting_position/cell_offsets/
     cell_offsets_c -- the legacy grid fields -- which _node_cells()/cells() never reads once
-    PC_NODE_COHESION is on (node position lives in _node_pos). The old code wrote these fields
+    MB_NODE_COHESION is on (node position lives in _node_pos). The old code wrote these fields
     unconditionally anyway: a harmless no-op for the node path's OWN rendering, but a landmine for
     any OTHER code that reads Subunit.starting_position post-construction expecting it to track a
     node-path atom's live position (it never has) -- most immediately the forthcoming waypoint
@@ -2346,7 +2346,7 @@ def reset_positions(unit, shape, anchor_map):
     start_row = SIDE_A_START_ROW if unit.faction == 'A' else SIDE_B_START_ROW
     fallback_col = anchor_map.get((shape, unit.subunits[0].tier), 10) if unit.subunits else 10
     for atom in unit.subunits:
-        if PC_NODE_COHESION and hasattr(atom, '_node_pos'):
+        if MB_NODE_COHESION and hasattr(atom, '_node_pos'):
             continue
         spawn = getattr(atom, '_spawn_position', None)
         anchor_col = spawn[1] if spawn is not None else fallback_col
@@ -2500,12 +2500,12 @@ def unit_in_reserve(unit):
 
 def resolve_feigned_retreat(pursuer, feigning_unit):
     """Resolve a Feigned Retreat when `pursuer` begins chasing a `feigning_unit`. Inert unless
-    PC_FEIGNED_RETREAT is ON. Two-stage per §A.12: recognise (Command Ob 2) then, if deceived,
+    MB_FEIGNED_RETREAT is ON. Two-stage per §A.12: recognise (Command Ob 2) then, if deceived,
     Discipline Ob 1. On a failed Discipline check the pursuer is marked OVEREXTENDED (its next
     engagement pool is cut by OVEREXTEND_PENALTY — see units.base_combat_pool). Returns a dict
     describing the outcome, or None if the feint did not apply.
     [canonical: PP-256, mass_battle_v30.md §A.12 / §B.4 tactic card — Overextended]"""
-    if not PC_FEIGNED_RETREAT or not getattr(feigning_unit, 'feigned', False):
+    if not MB_FEIGNED_RETREAT or not getattr(feigning_unit, 'feigned', False):
         return None
     if feigned_retreat_recognized(pursuer):
         return {'recognized': True, 'overextended': False}
@@ -2591,7 +2591,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
     # RESERVE_COMMIT_TURN (Phase 3 of the next battle-turn), engaging from that turn on. Gated OFF ->
     # reserve is inert and every pair is active from turn 1 (byte-exact).
     reserve_pairs = {}  # pair_idx -> commit battle-turn
-    if PC_RESERVE_COMMIT:
+    if MB_RESERVE_COMMIT:
         for _pi, (_ai, _bi) in enumerate(pairings):
             if unit_in_reserve(side_a[_ai]) or unit_in_reserve(side_b[_bi]):
                 reserve_pairs[_pi] = RESERVE_COMMIT_TURN
@@ -2800,7 +2800,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                     # Fast unit pursues — track for ongoing pursuit
                     # [canonical: §A.12 L513 — "Pursuit: Fast units only"]
                     # ED-MB-0022: if the "routing" unit is actually feigning (Feigned Retreat, PP-256),
-                    # the pursuer may be deceived and overextend. Inert unless PC_FEIGNED_RETREAT is ON.
+                    # the pursuer may be deceived and overextend. Inert unless MB_FEIGNED_RETREAT is ON.
                     fr = resolve_feigned_retreat(victor, routing)
                     if fr is not None:
                         turn_log.setdefault('feigned_retreats', []).append({
@@ -2868,4 +2868,4 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                          for i, u in enumerate(side_b)},
     }
 
-__all__ = ['_formation_depth', '_subunit_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_morale_between_battles', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']
+__all__ = ['_formation_depth', '_subunit_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'MB_ROLLUP_PER_RANK', 'MB_ROLLUP_MARGIN', 'MB_ROLLUP_REACH', 'MB_ROLLUP_CAP', 'MB_ROLLUP_FLANK_REACH', 'MB_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_morale_between_battles', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']

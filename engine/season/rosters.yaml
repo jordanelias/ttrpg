@@ -55,6 +55,23 @@
 #            if it concerns directly the identity of a faction can be concerned near-canon but
 #            superseded by anything in world."* Two conditions, both required: it must concern
 #            directly a faction's IDENTITY, and world must not say otherwise.
+#   TIER 2a · `systems/npcs/reference/npc_behavior_v30.md` SUPERSEDES
+#            `systems/factions/reference/faction_politics_v30.md`. ⭐ RULED by Jordan, 2026-09-13,
+#            verbatim: *"NPC behaviour supersedes faction politics."* It was asked because the two
+#            disagree about WHO SITS IN A FACTION'S INNER CIRCLE, by half: politics §1.2c gives
+#            Hafenmark four named and §1.3c gives Varfell five; behaviour §2.16/§2.17 give TWO and
+#            TWO, dropping Almstedt, Feldhaus, Thorvald Hann, Maret Uln and Edeyja, and assigning
+#            two of the survivors different Conviction and Resonant-Style values for the same
+#            people. Both are tier 2, so the tier order could not settle it — which is why it went
+#            to a ruling rather than being resolved by precedence.
+#            ⚠ THE RULING CHANGES NO DATA IN THIS TREE, AND THAT IS THE USEFUL PART.
+#            `references/npc_registry.yaml` — the structured 46-row cast — ALREADY matches
+#            behaviour on every contested cell: two-person councils, the same two people in each,
+#            the same four resonant styles. The one apparent difference is Björn Holdar's
+#            conviction (behaviour `Continuity`, registry `Warden`), and that is the ratified
+#            PP-685 §4 legacy migration the registry documents in its own rows, not a conflict.
+#            So the superseding document and the machine-readable cast agree, and building from
+#            the registry IS building to this ruling. MEASURED 2026-09-13.
 #   TIER 3 · `research/`        — REFERENCE. Verbatim: *"research/ contains useful information to
 #            make everything more robust"*, and *"the research directory will also speak towards
 #            the kind of governance and bureaucratic functions that may be relevant to game too."*
@@ -170,7 +187,14 @@ rosters:
     # reader, fed by the one exporter, from the one owner at
     # `references/descriptor_registry.yaml:conviction_roster`. This row carries the SOURCE and the
     # NOTE, which is what a roster row is for when the values live somewhere better.
-    values: []
+    # ⚠ `from_descriptor:`, NOT `values: []` (2026-09-15). This row carried an EMPTY list
+    # while the real thirteen arrived by a separate direct import in `data/rosters.py`, so
+    # `roster("convictions")` returned `frozenset()` — the "membership test silently false"
+    # outcome `roster()`'s own refusal text forbids, in the file whose header promises the
+    # opposite. `from_descriptor` is the mechanism ED-IN-0230 built; this is the row that
+    # motivated it, finally migrated. It also puts the data-side `forbidden:` bar within
+    # reach of this roster, which a direct import cannot do.
+    from_descriptor: conviction_roster
 
   conviction_axes:
     source: >-
@@ -202,10 +226,26 @@ rosters:
       ⚠ `exposure` IS FORBIDDEN AS A BARE AXIS NAME and the loader RAISES on it — #353 `:1897`
       names "The Exposure collision — three senses of one word, including a need scalar and a
       per-person tally". Spell the sense you mean.
-      ⚠ THE NAMES ARE `engine/substrate/keys.py::AXES`'s, EXACTLY, and that is deliberate: the
-      engine substrate already single-owns this tuple, so a fifth axis or a rename is one edit
-      there and a loader refusal here rather than two rosters drifting apart.
-    values: [hierarchical, sacred, instrumental, traditional]
+      ⚠⚠ **THE `values:` LIST IS GONE AND THAT IS THE REPAIR, NOT A REGRESSION (2026-09-14,
+      ED-IN-0230).** This row used to carry its own literal copy and claimed, right here, that
+      *"the engine substrate already single-owns this tuple, so a fifth axis or a rename is one
+      edit there and a loader refusal here rather than two rosters drifting apart"*. **That
+      refusal did not exist.** MEASURED by AST across the whole tree: exactly ONE module imports
+      `engine/substrate/keys.py::AXES` — `engine/substrate/__init__.py`, re-exporting it — and
+      NOTHING under `engine/season/` reads it. So the two literals could disagree in either
+      direction in silence: a fifth axis in `keys.py` alone left `decision/choose.py` scoring on
+      four, and a fifth here alone left the season engine scoring on five while `keys.py`
+      invariant 6 rejected every Key that named it. Two failures, opposite directions, neither
+      side able to see the other. A note asserting a guard that is not there is worse than no
+      note, because it is trusted.
+      ⚠ **`from_descriptor:` IS THE FIX AND IT IS THE `conviction_roster` PRECEDENT.** The 13
+      Convictions were literals in two subsystems until 2026-08-24, when nine-vs-eight-vs-thirteen
+      was found to have silently disabled a ratified mechanic; the roster moved to
+      `references/descriptor_registry.yaml` with `engine/substrate/descriptors.py` as the one
+      code-side reader. The axes are the same object one level up and get the same treatment.
+      `keys.py::AXES` now reads that leaf too, so a fifth axis or a rename is genuinely ONE edit —
+      `axis_roster.names` — and both readers see it.
+    from_descriptor: axis_roster
 
   question_sources:
     source: "ARCHITECTURE_V2.md §F1 (Q1–Q3) · PLAN.md `W5` (Q4 `need`)"
@@ -647,7 +687,7 @@ rosters:
         provider: "sigma_leverage"
         interim:  true
         cite:     "as `a standing`. Same ruling, same clause-(3) tension, same repoint."
-    values: []
+    # NO `values:` — the members ARE the `prizes:` mapping above, read with `roster_map()`. A `values: []` stood here and was a declared-but-unread key (`04 §B.13` ID-12): `roster()` returned an EMPTY frozenset, which is the silent-false this file's own header forbids. Line-neutral edit — 209 citations index this file by line.
 
   titles:
     source: "JORDAN, 2026-09-02, VERBATIM. None of this was in the architecture: `ARCHITECTURE_V2.md` contains no `sovereign`, no `Parliament`, and no title ladder."
@@ -770,9 +810,9 @@ rosters:
       Adding a kind means adding a row here; asking about a kind that has no row RAISES, because
       §42.2.1's worked example is exactly this table: *"a wear table that returns 20 for an
       unregistered site kind does not fail — it answers, plausibly and wrongly, forever."*
-      ⚠ THESE THREE ARE THE INSTRUMENT'S, NOT #353's. #353 names no site kinds; harbour, seam and
-      body are the kinds the probes exercise. That is why the row is `H-07` at `assumption` and
-      not a transcription.
+      ⚠ THESE THREE ARE THE INSTRUMENT'S, NOT #353's, so `H-07` is `assumption`, not transcription.
+      ⚠⚠ `body` IS NOT A SITE. It is `(Person, body)`'s band row, here because `band_floors` keys on
+      THIS roster and `H-38` ruled *"`Site.condition` is the model"* — no second scheme. See `p32`.
     values: [harbour, seam, body]
 
   matter_kinds:
@@ -846,15 +886,15 @@ rosters:
       mechanic *"Olafsson-Broker Exposure (formerly Olafsson-Niflhel)"* and §10 says
       *"post-Niflhel-dissolution"*. A frequency-ranked grep over `systems/world/` returns both at
       ranks that would have carried them in; they are excluded by reading, not by counting.
-      ⚠ `Schoenland` IS A MEMBER AND IS FOREIGN. It holds T16 in the canonical starting-control
-      table and grants or refuses Altonian naval passage (`geography_v30.md`, Invasion Routes). It
-      is not player-eligible and has no `role_template`, which `faction_role_template` records as
-      an absence rather than filling.
+      ⚠ `Schoenland` IS A MEMBER AND IS FOREIGN. Canon gives it T16 and Altonian naval passage
+      (`geography_v30.md`). ⚠ THE TYPED LAYER CARRIES NO T16 ROW AND THAT IS DELIBERATE, NOT A GAP
+      TO FILL: `references/world_initial_state.yaml:44` — *"There is no T16 — the gap is in the
+      source data"* — and `harness/populated.py:331`. No `role_template`; recorded, not filled.
       ⚠ REFERENCE, NOT MECHANISM (§0.05), AND A FACTION STILL NEVER ACTS. `ARCHITECTURE_V2.md:93`
       lists a faction acting among five refusals held under all 143 cases. This roster names what
       an OFFICE BELONGS TO; the actor is always the person holding the office.
-    values: ["Crown", "Church of Solmund", "Hafenmark", "Varfell", "Löwenritter",
-             "Guilds", "Restoration Movement", "Schoenland"]
+    # NO `values:` -- the members ARE `names_index.yaml`'s `token_class: faction` rows, read
+    from_names: faction   # via engine/substrate/names.py. Edit the naming index, not here.
 
   role_templates:
     source: "`systems/factions/reference/faction_canon_v30.md` §4 'Role Templates and Expected Convictions', per PP-686 §3.3.1 over the PP-684 13-Conviction taxonomy."
@@ -896,6 +936,40 @@ rosters:
       "Varfell": military-order
       "Löwenritter": military-order
       "Restoration Movement": reformist
+
+  faction_leaders:
+    source: >-
+      systems/factions/reference/faction_state_authoring_v30.md — each faction block's own `leader:`
+      field (crown :44 `almud`, church_of_solmund :92 `cardinal_himlensendt`, hafenmark :144
+      `baralta`, varfell :193 `vaynard`, restoration_movement :248 `yrsa_vossen`, lowenritter :302
+      `ehrenwall`). TIER 2, and it survives because `systems/world/` names no competing leader.
+    row: H-99
+    note: >-
+      ⚠ **WHY A FACTION NEEDS A PERSON AT ALL: Q4's REFERENT.** ⭐ Jordan ruled 2026-09-13 that a
+      faction's creed is an `OUGHT`. `world_q.questions_for`'s Q4 raises a standing question from
+      every live `commit` to an OUGHT and emits `(prop.subject,)` as the referent — and a faction
+      NAME is not a person and not even a rung, so a creed subject-ed on the faction would put a
+      non-entity into every member's deliberation. That is `build_at`'s measured rung-subject defect
+      one level worse: its one rung-subject Proposition produced **0 of 4,870 acts naming another
+      person**, which `ED-IN-0210` Ruling 1 exists to correct (*"verbs invoke mechanisms or
+      interactions between a character and another entity/character. they are not fiats."*).
+      So the creed is subject-ed on the faction's LEADER, who is a person an act can name.
+      ⚠ **THE SLUGS WERE VERIFIED AGAINST THE CAST, NOT ASSUMED.** Each authored slug resolves to
+      exactly one of the 46 registry rows, checked by surname match: `cardinal_himlensendt` is Arne
+      Himlensendt (NPC-021) and `ehrenwall` is Lisbeth Ehrenwall (NPC-070) — neither spelling
+      appears in the roster the way the faction file writes it, which is why this is a transcribed
+      mapping and not a runtime string match.
+      ⚠ **SIX OF EIGHT, AND THE SAME TWO ARE MISSING AS EVERYWHERE ELSE.** `Guilds` and
+      `Schoenland` have no authored leader — and no `role_template`, and no expected-conviction
+      vector. That is consistent rather than coincidental: a faction canon gives no head and no
+      expectations has no creed to commit to, and this file does not invent one for it.
+    by_faction:
+      "Crown": "NPC-020"                    # Almud Almqvist
+      "Church of Solmund": "NPC-021"        # Arne Himlensendt
+      "Hafenmark": "NPC-050"                # Inge Baralta
+      "Varfell": "NPC-052"                  # Magnus Vaynard
+      "Restoration Movement": "NPC-003"     # Yrsa Vossen
+      "Löwenritter": "NPC-070"              # Lisbeth Ehrenwall
 
   office_bodies:
     source: "`systems/world/reference/worldbuilding_v30.md` §6.1 (Court Parliament and Governance), §3.1 (Church Four-Cardinal structure), §4.1 (Löwenritter internal structure), §5.1 (Guild structure)."
@@ -946,6 +1020,24 @@ rosters:
       "Riskbreakers": "Löwenritter"
       # --- Guilds · worldbuilding_v30.md §5.1, §5.3 ---
       "Guild": "Guilds"
+      # --- LEADERSHIP bodies · npc_behavior_v30.md §2.15-§2.17 (TIER 2a, the superseding doc) ---
+      # ⚠ THESE THREE ARE A DIFFERENT KIND OF ORGAN FROM THE SIXTEEN ABOVE, AND THE DIFFERENCE IS
+      # STATED RATHER THAN BLURRED. World names ADMINISTRATIVE organs — a ministry executes, a
+      # rectorate judges. These are the leader's INNER COUNCIL: who is in the room when the faction
+      # decides. World does not name them, `npc_behavior_v30.md` does, and Jordan ruled it superior
+      # to `faction_politics_v30.md` on 2026-09-13 — which matters here, because politics §1.2c/
+      # §1.3c gives these councils four and five members where behaviour gives two and two.
+      # ⚠ ONLY THREE ARE ADDED, AND THE RESTRAINT IS THIS FILE'S OWN PRECEDENT. `faction_politics_v30`
+      # PART 7 names 22 more organs with quoted jurisdictions — six Crown ministries, six Hafenmark
+      # committees, four Church dicasteries, five Varfell councils. NOT ONE IS READ by anything that
+      # builds a world: `build_realm` takes an office's body from the sub-organization
+      # `references/npc_registry.yaml` packs into its `faction` cell, and these three are what it
+      # contains. Adding the other 22 would repeat `governance_modes` and `power_bases`, deleted from
+      # this file for exactly that — "not wrong; UNREAD", and §0.1 pt 5 forbids apparatus that is
+      # load-bearing on nothing. They go in the day a seat needs one.
+      "Inner Circle": "Crown"
+      "Inner Council": "Hafenmark"
+      "Jarl Council": "Varfell"
     function:
       # --- Crown / realm government · worldbuilding_v30.md §6.1 ---
       "Imperial Court": "Advisory. Informal power arena."
@@ -967,6 +1059,14 @@ rosters:
       "Riskbreakers": "Extralegal infiltration. Loyal to Valoria the concept, not institutions."
       # --- Guilds · worldbuilding_v30.md §5.1, §5.3 ---
       "Guild": "Burgher status: Guild Masters and Free Masters qualify for political participation."
+      # ⚠ THE FUNCTION CELLS BELOW ARE COMPOSITIONAL, NOT PORTFOLIOS, AND THAT IS SAID HERE BECAUSE
+      # THE NOTE ABOVE PROMISES QUOTED Function/Portfolio CELLS. Canon gives these three no portfolio
+      # — `npc_behavior_v30.md` §2.15-§2.17 are tables of Role/Name/Conviction, and
+      # `faction_canon_v30.md` §10 describes them by WHO IS IN THEM. So what is quoted is that, and
+      # a reader is told it is that rather than left to assume a jurisdiction was dropped.
+      "Inner Circle": "Inner Circle (5 named NPCs per npc_behavior §2.15) + Specialty Branches. The Crown leader's standing council."
+      "Inner Council": "Inner Council (2 named per npc_behavior §2.16). The Duchess's standing council; §1.2c names four and is SUPERSEDED (Jordan, 2026-09-13)."
+      "Jarl Council": "Jarl Council (2 named per npc_behavior §2.17). The Jarl Assembly's standing seats; §1.3c names five and is SUPERSEDED (Jordan, 2026-09-13)."
 
   requires_operands:
     source: "`W-A`. The names a `requires_typed` cell may bind, closed."
@@ -1020,6 +1120,26 @@ rosters:
       relation:         [actor, subject, site, from, to]
       own_ledger:       [subject]
       basis:            [subject, from, to]
+
+  fan_out_modes:
+    source: "`H-33`'s declared sweep. The three arm names were PYTHON LITERALS in `epistemic.py::observers_for`'s if/elif/else until 2026-09-16; its `else` already REFUSED an unrecognised mode, so the closed set was enforced — it was simply not data."
+    cite: "H-33"
+    note: >-
+      ⚠ MOVED HERE UNDER JORDAN'S 2026-09-02 RULING, WHICH `data/rosters.py:70-73` quotes:
+      *"I do not want definitions etc to be hardcoded"* … *"these must be easy to modify"* …
+      *"that goes for all"*. Six rosters moved then and this one was missed, which is visible
+      in the asymmetry it left: its SIBLING switch `observation_deposit_modes` is a roster read
+      at `loop/witness.py`, while this one's arms lived in code. Two switches on the same
+      pipeline, one governed as data and one not.
+      ⚠ THIS ROSTER NAMES THE ARMS AND NOTHING ELSE. Which channels each arm selects is
+      BEHAVIOUR and stays in `epistemic.py::observers_for` — `total` short-circuits to everyone,
+      `presence_only` selects `co_located`, `all_five` selects `witness_channels` entire. Moving
+      the dispatch here would make this file carry a rule rather than a definition.
+      ⚠ THE DEFAULT IS NOT HERE EITHER — it is the `fan_out_mode` FIXTURE
+      (`data/fixtures.py`), because a default is a value standing free of the roster, which
+      `04 §B.13`'s own line makes a fixture: *"a number standing free of any roster is a
+      fixture"*. R7 (ED-IN-0205) moved it off `total`; this roster says nothing about that.
+    values: [total, presence_only, all_five]
 
 tables:
 
@@ -1077,6 +1197,73 @@ tables:
         full_operations: 800
         limited:         500
         withdrawal_only: 100
+
+  role_template_convictions:
+    source: >-
+      systems/factions/reference/faction_canon_v30.md §4 "Role Templates and Expected Convictions"
+      (per PP-686 §3.3.1, over the PP-684 13-Conviction taxonomy). TIER 2 — near-canon, and it
+      survives because `systems/world/` has no competing concept, the same standing `role_templates`
+      itself has.
+    row: H-99
+    default_cell: 0.0
+    keys: [role_templates, convictions]
+    note: >-
+      ⚠ **WHAT A FACTION EXPECTS OF ITS MEMBERS, WHICH IS NOT THE SAME AS WHAT ANY MEMBER HOLDS.**
+      `conviction_projection` maps a PERSON's thirteen weights into the four ethical axes; this maps
+      a ROLE TEMPLATE's expectations onto the same thirteen. The two multiply against each other
+      nowhere — they are different objects with one shared vocabulary, and the vocabulary is the
+      canonical thirteen in both cases, read from the single owner.
+      ⚠ **TRANSCRIBED, NOT INVENTED.** Every cell is §4's own table. The weights are the document's
+      and each row sums to 1.00 there; nothing is normalised, rounded or filled in here, and a
+      template's unlisted convictions read `default_cell` (0.0) rather than being assigned a share.
+      ⚠ **SIX TEMPLATES, AND TWO FACTIONS HAVE NONE.** `role_templates.by_faction` covers Crown,
+      Church of Solmund, Hafenmark, Varfell, Löwenritter and Restoration Movement. `Guilds` and
+      `Schoenland` are absent from §4's player-eligible column and get no row — the same deliberate
+      gap `role_templates` already records, and inventing `mercantile-procedural` for the Guilds is
+      exactly the fabrication the source-precedence ruling exists to stop.
+      ⚠ `intelligence-diplomatic` IS UNCLAIMED BY ANY FACTION and is transcribed anyway, because
+      §4 carries it and `role_templates` already lists it as a member no faction holds.
+      ⚠ **VARFELL AND LÖWENRITTER SHARE `military-order`, WHICH IS CANON.** §4: *"their
+      differentiation comes from Mission, leader Convictions, and stat profile, not role template."*
+      So the two factions have the SAME expectation vector and differ in who actually holds what —
+      which is precisely the quantity `cast.loyalty` measures.
+    cells:
+      sovereign:
+        Virtue:     0.30
+        Authority:  0.30
+        Honor:      0.20
+        Faith:      0.10
+        Warden:     0.10
+      ecclesiastical:
+        Faith:      0.40
+        Authority:  0.20
+        Scholastic: 0.20
+        Precedent:  0.10
+        Virtue:     0.10
+      mercantile-procedural:
+        Order:      0.35
+        Utility:    0.25
+        Scholastic: 0.20
+        Liberty:    0.10
+        Equity:     0.10
+      intelligence-diplomatic:
+        Scholastic: 0.30
+        Utility:    0.30
+        Authority:  0.20
+        Precedent:  0.10
+        Identity:   0.10
+      reformist:
+        Equity:     0.30
+        Liberty:    0.25
+        Community:  0.20
+        Virtue:     0.15
+        Scholastic: 0.10
+      military-order:
+        Honor:      0.30
+        Authority:  0.25
+        Virtue:     0.15
+        Identity:   0.15
+        Order:      0.15
 
   conviction_projection:
     source: >-

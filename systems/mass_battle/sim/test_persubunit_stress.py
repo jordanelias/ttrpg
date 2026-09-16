@@ -5,14 +5,14 @@ broken sections, deep over-erosion, stat-spread mixes, the typed constructor) �
 multi-subunit behaviour the single-subunit byte-exact gauge (bat.py) does NOT cover.
 Byte-exactness of the homogeneous gauge is asserted separately by bat.py (its DIGEST line).
 
-Run:  PER_CELL=1 LANCHESTER_ENABLED=1 COMMAND_SIGMA_ENABLED=1 PC_BRACE_ENABLED=1 \
+Run:  PER_CELL=1 LANCHESTER_ENABLED=1 COMMAND_SIGMA_ENABLED=1 MB_BRACE_ENABLED=1 \
       python3 systems/mass_battle/sim/test_persubunit_stress.py
 Exit 0 = all pass.  [canonical: designs/provincial/mass_battle_v30.md §A.4, §A.12, §B.2]
 """
 # Regression for the per-subunit work -- ED entries logged in the ledger.  [canonical: canon/editorial_ledger.jsonl]
 import os, sys
 
-for _k in ('PER_CELL', 'LANCHESTER_ENABLED', 'COMMAND_SIGMA_ENABLED', 'PC_BRACE_ENABLED'):
+for _k in ('PER_CELL', 'LANCHESTER_ENABLED', 'COMMAND_SIGMA_ENABLED', 'MB_BRACE_ENABLED'):
     os.environ.setdefault(_k, '1')
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + '/sim')
 # allow direct in-package run too:

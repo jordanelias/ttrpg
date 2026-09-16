@@ -20,15 +20,15 @@ documented here so the bands below are read honestly:
     into the rear or flank forms NO contact pair, so envelopment emerges only via the
     frontal mass spilling around a fixed defender (the scenario used below).
 
-Run:  PER_CELL=1 FIELD_MOVEMENT=0 PC_NODE_COHESION=0 PYTHONHASHSEED=0 python3 -m systems.mass_battle.sim.validators
+Run:  PER_CELL=1 FIELD_MOVEMENT=0 MB_NODE_COHESION=0 PYTHONHASHSEED=0 python3 -m systems.mass_battle.sim.validators
 
 [movement audit fix-plan step 6, ED-1096/1097] The `Run:` line above now pins FIELD_MOVEMENT/
-PC_NODE_COHESION explicitly rather than leaving them at the ambient default (movement-audit
+MB_NODE_COHESION explicitly rather than leaving them at the ambient default (movement-audit
 finding 1.4: since ED-1089 flipped that default to ON, a bare invocation silently measured the
 DEAD node-path arm for V-ENVELOP/V-SWEEP -- the only two validators here that exercise a movement
 INSTRUCTION ('envelop'/'sweep') rather than a combat mechanic. `_envelop_reach`/`_sweep_disp` below
-now accept an explicit `path` ('grid'|'node') and toggle FIELD_MOVEMENT/PC_NODE_COHESION in-process
-for that measurement (same "toggle in-process" idiom already used for PC_ENVELOP_PATH/PC_SWEEP);
+now accept an explicit `path` ('grid'|'node') and toggle FIELD_MOVEMENT/MB_NODE_COHESION in-process
+for that measurement (same "toggle in-process" idiom already used for MB_ENVELOP_PATH/MB_SWEEP);
 v_envelop/v_sweep report BOTH arms, gating pass/fail on the grid arm (a real, currently-working
 regression test) while the node arm is tracked separately -- see
 tests/valoria/test_mass_battle_maneuvers.py, which lands the node arm as an executable, initially-
@@ -109,8 +109,8 @@ def _attacker_retained(pin, fix, shock, def_stance='hold', def_disc=_DISC,
     engine reads them at call time), so each validator isolates exactly the mechanic it tests
     on identical geometry and seeds. Attacker hp is the apt metric: A and B both reduce the
     FIXED unit's offence, so the effect surfaces as the attacker losing less."""
-    _orch.PC_FIXING_FLANK = fix
-    _orch.PC_ENVELOP_SHOCK = shock
+    _orch.MB_FIXING_FLANK = fix
+    _orch.MB_ENVELOP_SHOCK = shock
     out = []
     for s in range(seeds):
         random.seed(s)
@@ -182,7 +182,7 @@ def v_brace():
     """GOAL (build B guard): a BRACED, disciplined unit RESISTS envelopment shock (the square Ney
     could not break). The shock is conditional on disorder -- not a blanket flank insta-kill -- so
     B's marginal effect on a held+disciplined defender is smaller than on a balanced line.
-    [canonical: Waterloo squares; PC_SHOCK_BRACE_FLOOR calibration -- order and depth absorb the
+    [canonical: Waterloo squares; MB_SHOCK_BRACE_FLOOR calibration -- order and depth absorb the
     moral impulse.]"""
     br_ab = _attacker_retained(pin=True, fix=True, shock=True, def_stance='hold', def_disc=_DISC)
     br_a = _attacker_retained(pin=True, fix=True, shock=False, def_stance='hold', def_disc=_DISC)
@@ -222,25 +222,25 @@ def _set_movement_path(path):
     ED-1089, where they are confirmed dead -- movement audit findings 1.1-1.4). Sets the module-
     level booleans on every module that star-imported its own bound copy and is read at a relevant
     call site: hierarchy.units (Subunit.__post_init__'s _init_node_state gate, advance_cells'
-    early-return) and orchestration (run_battle's FIELD_MOVEMENT=>PC_NODE_COHESION assert, the
+    early-return) and orchestration (run_battle's FIELD_MOVEMENT=>MB_NODE_COHESION assert, the
     pre-contact halt's node/legacy branch). Must be called BEFORE constructing the Subunits being
-    measured -- PC_NODE_COHESION is read once at construction (__post_init__) to decide whether
+    measured -- MB_NODE_COHESION is read once at construction (__post_init__) to decide whether
     node state is initialized at all; flipping it back after construction cannot retroactively
     add node state to an atom built without it."""
     node_on = (path == 'node')
     for mod in (_hu, _orch):
         mod.FIELD_MOVEMENT = node_on
-        mod.PC_NODE_COHESION = node_on
+        mod.MB_NODE_COHESION = node_on
 
 
 def _envelop_reach(path_on, path='grid', seeds=_SEEDS, turns=_TURNS):
     """Per-seed signed (detachment_row - defender_row). Negative => the detachment is BEHIND the
-    defender (its rear, since the defender faces +row). PC_ENVELOP_PATH toggled in-process; the
+    defender (its rear, since the defender faces +row). MB_ENVELOP_PATH toggled in-process; the
     detachment always carries the 'envelop' instruction, so off = the maneuver disabled. `path`
     ('grid'|'node') selects which movement path the constructed Subunits run on -- see
     _set_movement_path."""
     _set_movement_path(path)
-    _orch.PC_ENVELOP_PATH = path_on; _hu.PC_ENVELOP_PATH = path_on  # consumer (advance_cells) now lives in hierarchy.units
+    _orch.MB_ENVELOP_PATH = path_on; _hu.MB_ENVELOP_PATH = path_on  # consumer (advance_cells) now lives in hierarchy.units
     diffs = []
     for s in range(seeds):
         random.seed(s)
@@ -335,10 +335,10 @@ def _archer_pair(target_idx):
 
 
 def _archer_far_loss(target_idx, on, seeds=_SEEDS, turns=6):  # [canonical: validators test-fixture: short far-volley horizon]
-    """Per-seed casualties inflicted on the FAR enemy subunit. PC_VOLLEY_TARGETING toggled in-process.
+    """Per-seed casualties inflicted on the FAR enemy subunit. MB_VOLLEY_TARGETING toggled in-process.
     Asserts the cell==hp invariant every seed -- the split (concentrate ordered / spread the rest) must
     redistribute casualties without creating or destroying any."""
-    _orch.PC_VOLLEY_TARGETING = on
+    _orch.MB_VOLLEY_TARGETING = on
     losses = []
     for s in range(seeds):
         random.seed(s)
@@ -354,7 +354,7 @@ def _archer_far_loss(target_idx, on, seeds=_SEEDS, turns=6):  # [canonical: vali
 
 def v_archer():
     """GOAL (build E): archers ORDERED to a target subunit CONCENTRATE their volley casualties on it.
-    Same scenario and same total fire either way -- only the FLAG differs: with PC_VOLLEY_TARGETING the
+    Same scenario and same total fire either way -- only the FLAG differs: with MB_VOLLEY_TARGETING the
     ordered archers land their casualties on the chosen (far) subunit; without it the order is ignored and
     the fire spreads by engaged density (the prior faction-wide behaviour). Directed fire puts more on the
     target than the spread does, on every seed; the cell==hp invariant is asserted throughout, so the total
@@ -380,12 +380,12 @@ def _attacker_sweep():
 
 
 def _sweep_disp(sweep_on, path='grid', seeds=_SEEDS, turns=_TURNS):
-    """Per-seed lateral column displacement |end_col - start_col| of the sweeping unit's centroid. PC_SWEEP
+    """Per-seed lateral column displacement |end_col - start_col| of the sweeping unit's centroid. MB_SWEEP
     toggled in-process; the unit always carries 'sweep', so off = the maneuver disabled (straight column-local
     advance, which holds the file). `path` ('grid'|'node') selects the movement path -- see
     _set_movement_path."""
     _set_movement_path(path)
-    _orch.PC_SWEEP = sweep_on; _hu.PC_SWEEP = sweep_on  # consumer (advance_cells) lives in hierarchy.units
+    _orch.MB_SWEEP = sweep_on; _hu.MB_SWEEP = sweep_on  # consumer (advance_cells) lives in hierarchy.units
     out = []
     for s in range(seeds):
         random.seed(s)

@@ -38,7 +38,7 @@ def _stochastic_break(atom, loss_frac):
     its resilience, and routs once its casualty fraction (`loss_frac`, passed in by the caller = 1 - survival
     fraction) crosses it. Returns True if the subunit breaks this check. Fractional throughout (random draw +
     fractional band + fractional loss). Reproducible under the seeded RNG; only consumed when
-    PC_STOCHASTIC_ROUT is on (else never called -> byte-exact)."""
+    MB_STOCHASTIC_ROUT is on (else never called -> byte-exact)."""
     bp = getattr(atom, '_rout_breakpoint', None)
     if bp is None:
         resil = _rout_resilience(atom)
@@ -101,7 +101,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
             # malus) do the rest. A sub-D_YIELD subunit is unaffected (routs as today). Gated OFF by default
             # (highest blast radius per §4.3) -> inert/byte-exact. The erosion-BRAKE calibration (whether
             # yielding should also reduce `loss`) stays deferred (needs_jordan) -- state entry only here.
-            if (PC_YIELD_EMERGENT and not atom.yielding and frac < 0.50  # [canonical: mass_battle_v30.md §A.4 — Size<50% trigger, same threshold as the loss line above]
+            if (MB_YIELD_EMERGENT and not atom.yielding and frac < 0.50  # [canonical: mass_battle_v30.md §A.4 — Size<50% trigger, same threshold as the loss line above]
                     and atom.eff_discipline >= D_YIELD and u.command > 0 and atom.unit_type != 'ranged'):
                 atom.yielding = True
             if loss:
@@ -148,7 +148,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
                 # formation is not. Same contagion threshold as the army level, applied one scale down.
                 if not atom.routed and atom.broken_cell_share() >= CELL_BREAK_ROUT_FRAC:
                     atom.routed = True
-            if PC_STOCHASTIC_ROUT and not atom.routed and _stochastic_break(atom, 1.0 - frac):
+            if MB_STOCHASTIC_ROUT and not atom.routed and _stochastic_break(atom, 1.0 - frac):
                 # [Fable-audit A5 fix, 2026-07-24] Materialize OWN morale before the rout punch. Otherwise a
                 # subunit that inherits the shared unit pool (morale=None) writes that pool <=0, and every
                 # sibling — including 0-casualty reserves — reads morale<=0 and routs too, defeating the whole

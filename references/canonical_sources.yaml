@@ -154,7 +154,7 @@ systems:
     canonical_sha__systems__settlements__march_layer_v30_md: "3ddebb61c4014982d933e352b78d43867cbfd4fb"
   mass_combat:
     design_doc: systems/mass_battle/reference/mass_battle_v30.md
-    canonical_sha__systems__mass_battle__reference__mass_battle_v30_md: "11b941d25fa310bfbdf16cf47474f85b2435e6f8"
+    canonical_sha__systems__mass_battle__reference__mass_battle_v30_md: "8813822c2a421ed5e3a2d678a65137d8cac08695"
     canonical_sha__systems__mass_battle__mass_battle_v30_md: "11b941d25fa310bfbdf16cf47474f85b2435e6f8"
     mass_battle_index: systems/mass_battle/reference/mass_battle_v30_index.md
     canonical_sha__systems__mass_battle__reference__mass_battle_v30_index_md: "825afe293412eae82f677b4b322254be4e8b8d1c"
@@ -325,7 +325,7 @@ systems:
     added: '2026-05-01 PP-687 ratification — universal Key substrate'
   key_type_registry:
     design_doc: systems/_architecture/reference/key_type_registry_v30.md
-    canonical_sha__systems___architecture__reference__key_type_registry_v30_md: "897cff539839bf949521ca4d40139c7f470e6211"
+    canonical_sha__systems___architecture__reference__key_type_registry_v30_md: "f9be5efd891aff61c41975d1b8b126ca5b39b1d5"
     canonical_sha__systems___architecture__key_type_registry_v30_md: "897cff539839bf949521ca4d40139c7f470e6211"
     status: canonical
     added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
@@ -467,7 +467,7 @@ systems:
     canonical_sha__designs__provincial__faction_politics_v30_index_md: "d10b44b062fb3f80e3093b4671bf7e7ce96ade68"
   investigation:
     design_doc: systems/fieldwork/reference/investigation_systems_v30.md
-    canonical_sha__systems__fieldwork__reference__investigation_systems_v30_md: "904dee44aa678610b851ac279cfd9c591ce6ed08"
+    canonical_sha__systems__fieldwork__reference__investigation_systems_v30_md: "c7367be9ab092718c872a26db9628c22e4599993"
     canonical_sha__systems__fieldwork__investigation_systems_v30_md: "904dee44aa678610b851ac279cfd9c591ce6ed08"
     index: systems/fieldwork/reference/investigation_systems_v30_index.md
     canonical_sha__systems__fieldwork__reference__investigation_systems_v30_index_md: "802fdc046a83ba929f66482d630d8e4655b7c9a1"

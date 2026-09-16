@@ -1,14 +1,14 @@
-"""Leave-one-out flag ablation on the historical Cannae OOB, with PC_FRICTION_CEV pinned ON.
+"""Leave-one-out flag ablation on the historical Cannae OOB, with MB_FRICTION_CEV pinned ON.
 Baseline = ALL boolean flags ON. Each row turns exactly ONE flag OFF and reports the change in the
 outnumbered side's (Carthage) win-rate, averaged over both deployment sides. A flag whose removal HURTS
 is load-bearing; a flag whose removal HELPS is actively costing the historical result.
 Run: python flag_ablation.py [n]"""
 import os, sys, subprocess, json
 
-ALL = ['PC_CELL_DAMAGE','PC_CLOSE_RANKS','PC_FEIGNED_RETREAT','PC_FRACTIONAL_POOL','PC_FRICTION_CEV',
-       'PC_INTENT_RESOLUTION','PC_RESERVE_COMMIT','PC_STOCHASTIC_ROUT','PC_TROOP_DENSITY_CAP',
-       'PC_YIELD_EMERGENT','PC_YIELD_POCKET','PC_YIELD_RALLY']
-PIN = 'PC_FRICTION_CEV'      # pinned ON in every configuration (Jordan: "if we leave that on")
+ALL = ['MB_CELL_DAMAGE','MB_CLOSE_RANKS','MB_FEIGNED_RETREAT','MB_FRACTIONAL_POOL','MB_FRICTION_CEV',
+       'MB_INTENT_RESOLUTION','MB_RESERVE_COMMIT','MB_STOCHASTIC_ROUT','MB_TROOP_DENSITY_CAP',
+       'MB_YIELD_EMERGENT','MB_YIELD_POCKET','MB_YIELD_RALLY']
+PIN = 'MB_FRICTION_CEV'      # pinned ON in every configuration (Jordan: "if we leave that on")
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 RUNNER = r'''

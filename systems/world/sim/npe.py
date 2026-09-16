@@ -73,6 +73,17 @@ LOYALTY_MAX = 3
 # Faction-controlling-faction default weight
 # [canonical: §Territory Social Ecology — "Controlling faction's ethical
 #  framework is the default for 60% of generated NPCs"]
+# THE PLAYABLE ROSTER IS DERIVED, NOT RETYPED. It was written out twice here, which made this a
+# second owner of a roster `references/world_initial_state.yaml` declares -- and one that MUST
+# agree, because `:287` compares a drawn faction against `controlling`, a territory's owner from
+# that same table. ⚠ ORDER IS LOAD-BEARING: `rng.choice` picks by index, and that exporter records
+# sorting this roster once moving campaign goldens *"without touching a single value"*. The dict is
+# insertion-ordered and its order is asserted there, so this preserves the literal index for index.
+# `'RM'` stays a literal: `hidden_allegiance`, its only consumer, is read by nothing.
+from engine.substrate.world_initial_state import STARTING_STATS as _STARTING_STATS
+
+_PLAYABLE = tuple(_STARTING_STATS)
+
 FACTION_DEFAULT_WEIGHT_PCT = 60
 
 # Conviction taxonomy — READ, NOT DECLARED. Owner is
@@ -253,7 +264,7 @@ def generate_npc(faction: Optional[str], role: Optional[str], world,
     # Tier 1 — archetype
     npc_faction = faction if faction is not None else (
         controlling if rng.randint(1, 100) <= FACTION_DEFAULT_WEIGHT_PCT
-        else rng.choice([f for f in ('Crown', 'Church', 'Hafenmark', 'Varfell') if f != controlling])
+        else rng.choice([f for f in _PLAYABLE if f != controlling])
     )
 
     # Stance per active issue — base 3 (neutral) plus ecology nudges
@@ -323,7 +334,7 @@ def generate_npc(faction: Optional[str], role: Optional[str], world,
                 worldview[0] = rng.choice(alternatives)
         elif flip_choice == 2:
             # Hidden allegiance != affiliation
-            other = [f for f in ('Crown', 'Church', 'Hafenmark', 'Varfell', 'RM') if f != npc_faction]
+            other = [f for f in _PLAYABLE + ('RM',) if f != npc_faction]
             hidden_allegiance = rng.choice(other) if other else None
         elif flip_choice == 3:
             # Compromise becomes 'Nothing'

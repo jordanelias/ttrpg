@@ -3,7 +3,7 @@
 
 Runs `systems/mass_battle/sim/bat.py --check` in THREE modes with the FULL digest-relevant toggle
 vector pinned: the two FIELD_MOVEMENT=1 modes (`unit_field` PER_CELL=0, `cell_field` PER_CELL=1)
-and the §4a cell-morale mode (`cell_legacy_mor1`, FIELD_MOVEMENT=0 PC_CELL_MORALE=1). The docstring
+and the §4a cell-morale mode (`cell_legacy_mor1`, FIELD_MOVEMENT=0 MB_CELL_MORALE=1). The docstring
 said "two" while MODES held three from the moment the fifth golden landed. Complements tests/valoria/test_mass_battle_byte_exact.py,
 which covers only the two LEGACY-LATTICE modes — before this gate existed, both field
 goldens sat red for 5 days undetected (PRs #235/#236 re-recorded the lattice arm only;
@@ -57,43 +57,43 @@ FIELD_PINS = {
     # determinism (empirically hash-order-independent per A1a's runs; pinned anyway)
     'PYTHONHASHSEED': '0',
     # _PINNED_OFF carry-over (lattice dict minus the two field-mode selectors)
-    'FIELD_CONTACT': '0', 'PC_FACING_MODEL': '0', 'CONTACT_REACH': '0.0',
-    'PC_OCTAGON_DMG': '1', 'PC_CELL_MORALE': '0',
+    'FIELD_CONTACT': '0', 'MB_FACING_MODEL': '0', 'CONTACT_REACH': '0.0',
+    'MB_OCTAGON_DMG': '1', 'MB_CELL_MORALE': '0',
     # Group A — unconditional in shared code (digest-relevant in all four modes)
-    'SIGMA_HEAD': '1', 'MORALE_FIX': '1', 'PC_STOCHASTIC_ROUT': '1',
+    'SIGMA_HEAD': '1', 'MORALE_FIX': '1', 'MB_STOCHASTIC_ROUT': '1',
     'ROUT_CASCADE_FRAC': '1.0', 'REFORM_CHECK_ENABLED': '0',
-    'PC_CONVERGENCE_NORM': '1', 'PC_CELL_DAMAGE': '0', 'MULTI_SIDE_SHOCK': '0.5',
+    'MB_CONVERGENCE_NORM': '1', 'MB_CELL_DAMAGE': '0', 'MULTI_SIDE_SHOCK': '0.5',
     'OCTAGON_LOCAL_REACH': '2.0', 'FACING_REACTION_TICKS': '2',
     'LANCHESTER_ENABLED': '1', 'K_LINEAR': '12', 'K_SQUARE': '0.25',
     'LANCHESTER_STRENGTH_REF': '4', 'LANCHESTER_DENSITY_REF': '100',
     'POOL_QUALITY_MODEL': '1', 'POOL_QUALITY_SCALE': '0.5',
-    'PC_VOLLEY_DENSITY_ENABLED': '1', 'PC_VOLLEY_DENSITY_REF': '80',
-    'PC_VOLLEY_DENSITY_FLOOR': '0.5', 'PC_VOLLEY_DENSITY_CAP': '2.0',
+    'MB_VOLLEY_DENSITY_ENABLED': '1', 'MB_VOLLEY_DENSITY_REF': '80',
+    'MB_VOLLEY_DENSITY_FLOOR': '0.5', 'MB_VOLLEY_DENSITY_CAP': '2.0',
     'CASUALTY_SCALE': '4',   # unreachable while LANCHESTER_ENABLED=1; defense-in-depth
     # Group B — PER_CELL-gated (inert in unit_field; pinned uniformly so the dict
     # is mode-agnostic and copy-pasteable)
-    'PC_REFUSE': '1', 'PC_ENVELOP_MOD': '-1.0', 'PC_ENVELOP_DEPTH_RESIST': '0.3',
-    'PC_POCKET_MOD': '-1.0', 'PC_POCKET_REACH': '2', 'PC_FIXING_FLANK': '1',
-    'PC_ROLLUP_PER_RANK': '0.4', 'PC_ROLLUP_MARGIN': '1.0', 'PC_ROLLUP_REACH': '1.6',
-    'PC_ROLLUP_CAP': '-1.0', 'PC_ROLLUP_FLANK_REACH': '1.0', 'PC_ROLLUP_MIN_DEPTH': '2.0',
-    'PC_ENVELOP_SHOCK': '1', 'PC_BRACE_ENABLED': '1', 'PC_RECOIL_FRONTAL': '1',
-    'PC_CHARGE_RECOIL': '6', 'PC_BRACE_SETUP_DELAY': '1', 'PC_RECOIL_CHARGER_GATE': '1',
+    'MB_REFUSE': '1', 'MB_ENVELOP_MOD': '-1.0', 'MB_ENVELOP_DEPTH_RESIST': '0.3',
+    'MB_POCKET_MOD': '-1.0', 'MB_POCKET_REACH': '2', 'MB_FIXING_FLANK': '1',
+    'MB_ROLLUP_PER_RANK': '0.4', 'MB_ROLLUP_MARGIN': '1.0', 'MB_ROLLUP_REACH': '1.6',
+    'MB_ROLLUP_CAP': '-1.0', 'MB_ROLLUP_FLANK_REACH': '1.0', 'MB_ROLLUP_MIN_DEPTH': '2.0',
+    'MB_ENVELOP_SHOCK': '1', 'MB_BRACE_ENABLED': '1', 'MB_RECOIL_FRONTAL': '1',
+    'MB_CHARGE_RECOIL': '6', 'MB_BRACE_SETUP_DELAY': '1', 'MB_RECOIL_CHARGER_GATE': '1',
     # Group C — field/node-gated
-    'PC_ENVELOP_SPEED_MULT': '2.0', 'ENVELOP_STANDOFF': '8.0', 'ENVELOP_ORBIT_CAP': '10',
-    'PC_REACH_FACING_GATE': '1', 'PC_WHEEL': '1', 'PC_ENVELOP_PATH': '1', 'PC_SWEEP': '1',
+    'MB_ENVELOP_SPEED_MULT': '2.0', 'ENVELOP_STANDOFF': '8.0', 'ENVELOP_ORBIT_CAP': '10',
+    'MB_REACH_FACING_GATE': '1', 'MB_WHEEL': '1', 'MB_ENVELOP_PATH': '1', 'MB_SWEEP': '1',
     # Critic-pass additions (2026-07-29): default-inert but REACHABLE at these pins —
     # an ambient flip produces a loud spurious red, so pin them for hermeticity.
-    # (PC_FRICTION_CEV enabling shifts the RNG stream — orchestration.py's own comment;
-    # PC_INTENT_RESOLUTION is live via the battery's stance='hold' rows; PC_CLOSE_RANKS
-    # via the PER_CELL lifecycle; PC_TROOP_DENSITY_CAP via the cavalry rows.)
-    'PC_FRICTION_CEV': '0', 'PC_FRICTION_SIGMA': '1.1', 'PC_FRACTIONAL_POOL': '0',
-    'PC_INTENT_RESOLUTION': '0', 'PC_CLOSE_RANKS': '0', 'PC_TROOP_DENSITY_CAP': '0',
+    # (MB_FRICTION_CEV enabling shifts the RNG stream — orchestration.py's own comment;
+    # MB_INTENT_RESOLUTION is live via the battery's stance='hold' rows; MB_CLOSE_RANKS
+    # via the PER_CELL lifecycle; MB_TROOP_DENSITY_CAP via the cavalry rows.)
+    'MB_FRICTION_CEV': '0', 'MB_FRICTION_SIGMA': '1.1', 'MB_FRACTIONAL_POOL': '0',
+    'MB_INTENT_RESOLUTION': '0', 'MB_CLOSE_RANKS': '0', 'MB_TROOP_DENSITY_CAP': '0',
     # [ED-MB-0059, 2026-07-29] Same-side cell exclusion. Default ON, and STRONGLY digest-moving on
     # the two field modes (it is a no-op on the legacy-lattice modes — the pass lives inside
     # resolve_toi_and_commit, which only runs under FIELD_MOVEMENT). Pinned at its shipped default
     # for the same reason every Group C entry is: an ambient flip must produce a named red here,
     # not a mystery digest mismatch.
-    'PC_CELL_EXCLUSION': '1',
+    'MB_CELL_EXCLUSION': '1',
 }
 
 # [ED-MB-0053 / plan-v2 §4a, 2026-07-29] Renamed from ci_field_golden_check.py: this tool is the
@@ -106,15 +106,15 @@ FIELD_PINS = {
 # mysterious mid-run cancellation, not coverage. What stays in pytest is the cheap half — that
 # bat._mode_key is INJECTIVE over the toggle cube, which is the trap this mode actually walked into.
 MODES = {
-    'unit_field_mor0': {'FIELD_MOVEMENT': '1', 'PC_NODE_COHESION': '1', 'PER_CELL': '0'},
-    'cell_field_mor0': {'FIELD_MOVEMENT': '1', 'PC_NODE_COHESION': '1', 'PER_CELL': '1'},
-    # The §4a fifth mode. The other four all run at PC_CELL_MORALE=0, where the three cell-morale
+    'unit_field_mor0': {'FIELD_MOVEMENT': '1', 'MB_NODE_COHESION': '1', 'PER_CELL': '0'},
+    'cell_field_mor0': {'FIELD_MOVEMENT': '1', 'MB_NODE_COHESION': '1', 'PER_CELL': '1'},
+    # The §4a fifth mode. The other four all run at MB_CELL_MORALE=0, where the three cell-morale
     # maps are EMPTY — so they pin float-order over every per-cell map EXCEPT the three whose
     # desync motivates the ownership work, and "if a digest moves, you changed behaviour" was
     # vacuous over exactly the state B1a is about to refactor. This overrides FIELD_PINS'
-    # PC_CELL_MORALE='0' deliberately; the mode-key assertion below is what makes that safe.
-    'cell_legacy_mor1': {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'PER_CELL': '1',
-                'PC_CELL_MORALE': '1'},
+    # MB_CELL_MORALE='0' deliberately; the mode-key assertion below is what makes that safe.
+    'cell_legacy_mor1': {'FIELD_MOVEMENT': '0', 'MB_NODE_COHESION': '0', 'PER_CELL': '1',
+                'MB_CELL_MORALE': '1'},
 }
 
 

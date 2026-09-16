@@ -3,7 +3,7 @@
 This module exists because of a specific failure, and its job is to make that failure unrepeatable.
 
 `eff_morale` reads the CELLS the moment they are seeded and never falls back to the scalar. So every
-site that assigned `.morale` directly became a **silent no-op** under `PC_CELL_MORALE` — including
+site that assigned `.morale` directly became a **silent no-op** under `MB_CELL_MORALE` — including
 `between_turn_recovery` and `reset_morale_between_battles`. That is what confounded the flag's first
 measurement: its ON arm fought with morale it could never recover, so "the loser breaks earlier" was
 indistinguishable from "the loser never recovers", and the flip was retracted.

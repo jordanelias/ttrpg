@@ -2,11 +2,11 @@
 (Mirrors designs/scene/combat_engine_v1/workbench/server.py's pattern.)
 
 Run:  python systems/mass_battle/sim/workbench/server.py   then open http://localhost:8766
-      A bare run now visualizes the COORDINATE FIELD — FIELD_MOVEMENT/PC_NODE_COHESION default ON
+      A bare run now visualizes the COORDINATE FIELD — FIELD_MOVEMENT/MB_NODE_COHESION default ON
       since the ED-1089 flip (Jordan-ratified 2026-07-02). To visualize the legacy integer-grid
-      oracle instead: FIELD_MOVEMENT=0 PC_NODE_COHESION=0 python systems/mass_battle/sim/workbench/server.py
+      oracle instead: FIELD_MOVEMENT=0 MB_NODE_COHESION=0 python systems/mass_battle/sim/workbench/server.py
 
-IMPORTANT — mode is fixed at process start. PER_CELL / FIELD_MOVEMENT / PC_NODE_COHESION are read
+IMPORTANT — mode is fixed at process start. PER_CELL / FIELD_MOVEMENT / MB_NODE_COHESION are read
 from os.environ once at import time and star-imported into every consumer module as INDEPENDENT
 copies (Python's `from X import *` binds a value, not a live reference) — so there is no way to
 switch modes for a single running server. To compare grid vs field, run two server instances (two
@@ -14,7 +14,7 @@ ports) with different env. GET /api/mode reports what THIS process is actually r
 
 Endpoints (all JSON except GET /):
   GET  /              -> the single-page app (static/index.html)
-  GET  /api/mode      -> {per_cell, field_movement, pc_node_cohesion} — this process's fixed config
+  GET  /api/mode      -> {per_cell, field_movement, mb_node_cohesion} — this process's fixed config
   GET  /api/presets   -> named scenario presets (mirrors gauge_mb.py's TESTS/CAV_TESTS matchups)
   GET  /api/roster-options -> {shapes, troop_types, roles_by_troop_type, subunit_cap, battlefield_size}
                          — [Stage E] the live registries (geometry.CELL_PATTERN_FN,
@@ -100,7 +100,7 @@ def do_trace(req):
 
 
 def do_mode():
-    return {'per_cell': bool(_cfg.PER_CELL), 'pc_node_cohesion': bool(_cfg.PC_NODE_COHESION),
+    return {'per_cell': bool(_cfg.PER_CELL), 'mb_node_cohesion': bool(_cfg.MB_NODE_COHESION),
             'field_movement': bool(_units.FIELD_MOVEMENT),
             'battlefield_size': _cfg.BATTLEFIELD_SIZE}
 
@@ -167,7 +167,7 @@ def main(port=DEFAULT_PORT):
     m = do_mode()
     print(f"Mass-Battle Workbench -> http://localhost:{port}  (Ctrl-C to stop)")
     print(f"  mode: PER_CELL={m['per_cell']} FIELD_MOVEMENT={m['field_movement']} "
-          f"PC_NODE_COHESION={m['pc_node_cohesion']}  battlefield={m['battlefield_size']}")
+          f"MB_NODE_COHESION={m['mb_node_cohesion']}  battlefield={m['battlefield_size']}")
     try:
         srv.serve_forever()
     except KeyboardInterrupt:

@@ -37,11 +37,11 @@ Both are split by the three classes that have DIFFERENT meanings:
   opposing sides          — two armies occupying one square; the cross-side TOI pass has always
                             covered this, so a nonzero count here is a regression in that pass.
 
-Run it with PC_CELL_EXCLUSION=0 and =1 to get the before/after; the pass is a no-op on the grid
+Run it with MB_CELL_EXCLUSION=0 and =1 to get the before/after; the pass is a no-op on the grid
 path, so PER_CELL=1 FIELD_MOVEMENT=1 is required for the numbers to mean anything.
 
-    PER_CELL=1 FIELD_MOVEMENT=1 PC_NODE_COHESION=1 VIZ_SCALE=historical \\
-        PC_CELL_EXCLUSION=0 python3 audit/2026-07-29-scenario-visualization/measure_colocation.py
+    PER_CELL=1 FIELD_MOVEMENT=1 MB_NODE_COHESION=1 VIZ_SCALE=historical \\
+        MB_CELL_EXCLUSION=0 python3 audit/2026-07-29-scenario-visualization/measure_colocation.py
 """
 import collections
 import math
@@ -172,7 +172,7 @@ def measure(ticks=TICKS):
 
 def main():
     out = measure()
-    print(f"[CO-LOCATION] scale={R.SCALE} PC_CELL_EXCLUSION={U.PC_CELL_EXCLUSION} ticks={TICKS}")
+    print(f"[CO-LOCATION] scale={R.SCALE} MB_CELL_EXCLUSION={U.MB_CELL_EXCLUSION} ticks={TICKS}")
     print(f"  cell placements            : {out['placements']:,}")
     for title, key, rate in (('rounded squares (legacy)', 'squares', 'square_rate'),
                              ('body boxes, any overlap', 'bodies', 'body_rate'),

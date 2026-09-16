@@ -67,22 +67,22 @@ BAT_PY = os.path.join(REPO_ROOT, 'tests', 'sim', 'mass_battle', 'bat.py')
 # make this test mean anything: without them, an ambient FIELD_MOVEMENT=1 in the CI runner's own
 # environment would silently make this "OFF-mode" check exercise the field path instead.
 #
-# [ED-1089, 2026-07-02] FIELD_MOVEMENT/PC_NODE_COHESION now DEFAULT ON (Jordan-ratified flip), so
+# [ED-1089, 2026-07-02] FIELD_MOVEMENT/MB_NODE_COHESION now DEFAULT ON (Jordan-ratified flip), so
 # pinning OFF must SET each toggle's byte-exact-OFF value explicitly — the previous env.pop() approach
 # would now leave the flipped ON default in force and silently run this grid-oracle check on the field
 # path against grid digests (exactly the failure mode this test exists to prevent). CONTACT_REACH is a
 # float env; its OFF value is '0.0'.
-_PINNED_OFF = {'FIELD_MOVEMENT': '0', 'PC_NODE_COHESION': '0', 'FIELD_CONTACT': '0',
-               'PC_FACING_MODEL': '0', 'CONTACT_REACH': '0.0',
-               # [ED-MB-0018] PC_OCTAGON_DMG defaults ON and the grid goldens are recorded ON -- pin it
-               # explicitly so an ambient PC_OCTAGON_DMG=0 can't silently check the ON golden against the
+_PINNED_OFF = {'FIELD_MOVEMENT': '0', 'MB_NODE_COHESION': '0', 'FIELD_CONTACT': '0',
+               'MB_FACING_MODEL': '0', 'CONTACT_REACH': '0.0',
+               # [ED-MB-0018] MB_OCTAGON_DMG defaults ON and the grid goldens are recorded ON -- pin it
+               # explicitly so an ambient MB_OCTAGON_DMG=0 can't silently check the ON golden against the
                # legacy path (same defense-in-depth as the other toggles here).
-               'PC_OCTAGON_DMG': '1',
+               'MB_OCTAGON_DMG': '1',
                # [ED-MB-0042, 2026-07-25] Pinned OFF because the DEFAULT is off — the flip to ON was
                # retracted the same day (its measurement was confounded; see config.py at the flag).
                # Pinned explicitly rather than left ambient so that when the flip is re-attempted, the
                # pin has to be changed deliberately and the goldens re-recorded with it.
-               'PC_CELL_MORALE': '0',
+               'MB_CELL_MORALE': '0',
                # [ED-MB-0045 A1b, 2026-07-29] Determinism pin, per the A1a critic pass. The digests
                # are empirically hash-order-independent (A1a's bisect ran every process with a fresh
                # random hash seed and all runs agreed, including reproducing goldens authored on a
@@ -100,9 +100,9 @@ def _run_bat(per_cell, cell_morale=False):
     env = dict(os.environ)
     env.update(_PINNED_OFF)
     env['PER_CELL'] = '1' if per_cell else '0'
-    # [ED-MB-0053 / §4a] _PINNED_OFF pins PC_CELL_MORALE=0; the fifth mode overrides it deliberately.
+    # [ED-MB-0053 / §4a] _PINNED_OFF pins MB_CELL_MORALE=0; the fifth mode overrides it deliberately.
     if cell_morale:
-        env['PC_CELL_MORALE'] = '1'
+        env['MB_CELL_MORALE'] = '1'
     # compute() genuinely takes tens of seconds to ~2 minutes (10 matchups x 24 seeds x up to 20
     # battle-turns of real engine work; 'cell' mode's finer per-subunit granularity runs longest) --
     # this is NOT startup/spawn overhead, it is the battery itself. 300s gives real headroom above the
@@ -154,7 +154,7 @@ def test_byte_exact_cell_mode():
 def test_mode_key_discriminates_every_digest_toggle():
     """The key must separate all three digest-selecting toggles, or a run checks the wrong golden.
 
-    Until 2026-07-29 the key read only PER_CELL and FIELD_MOVEMENT, so a PC_CELL_MORALE=1 run
+    Until 2026-07-29 the key read only PER_CELL and FIELD_MOVEMENT, so a MB_CELL_MORALE=1 run
     reported 'cell' and compared itself against the flag-OFF golden — the ED-1089 shape, one flag
     later. This asserts the key is INJECTIVE over the toggle cube: eight configurations, eight
     distinct names. A weaker test (checking one example) would pass with any two toggles conflated.

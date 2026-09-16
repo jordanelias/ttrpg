@@ -55,7 +55,8 @@ attributes:
     - {key: attr.mind.will,   name: Will,   aliases: [Spirit]}                  # 'spirit move': formerly standalone Spirit; legacy formulas resolve via alias
   social:
     - {key: attr.social.attunement, name: Attunement, aliases: [Perception]}
-    - {key: attr.social.charisma,   name: Charisma,   aliases: [Influence, Presence]}
+    # `Influence` removed 2026-09-16 -- it is `fac.influence`'s canonical name; see names_index.yaml.
+    - {key: attr.social.charisma,   name: Charisma,   aliases: [Presence]}
     - {key: attr.social.bonds,      name: Bonds,      aliases: [Sincerity, Affability]}
 
 # AGGREGATES (W2.8 PLACEHOLDERS) -- computed from category members; NOT yet wired into derived values.
@@ -249,6 +250,41 @@ conviction_roster:
     - Warden       # stewardship of the dependent and the vulnerable
     - Virtue       # cultivation of moral character
     - Honor        # pledged oath, honor-code, reputation as binding
+
+# ----------------------------------------------------------------------------
+# THE FOUR ETHICAL AXES — enumerated here for the same reason the 13 Convictions are, and after
+# the same class of defect. `engine/substrate/keys.py::AXES` and `engine/season/rosters.yaml:
+# conviction_axes` each carried their own literal copy; the roster's note asserted that
+# "a fifth axis or a rename is one edit there and a loader refusal here rather than two rosters
+# drifting apart", and MEASURED 2026-09-14 that refusal did not exist. Exactly one module in the
+# tree imports `AXES` (`engine/substrate/__init__.py`, re-exporting it) and nothing under
+# `engine/season/` reads it — so a fifth axis added to `keys.py` alone left the season engine
+# scoring on four in silence, and one added to the roster alone left the season engine scoring on
+# five while `keys.py` invariant 6 rejected every Key that named it. Two failures, opposite
+# directions, neither side able to see the other.
+#
+# This is the `conviction_roster` shape applied to the object one level up, and it is a PRECEDENT
+# rather than a new decision: nine names in one subsystem, eight in another and thirteen registered
+# is what put the roster here in 2026-08-24, and the disagreement had already disabled a ratified
+# mechanic. `by_reference` below still carries the `axis.*` row for the axis SEMANTICS (poles,
+# scale, source doc); what moves here is the NAME SET, which is what code compares against.
+#
+# ⚠ THE ORDER IS SEMANTIC AND IS `keys.py`'s, EXACTLY. `engine/season/decision/choose.py` sums
+# over this set per candidate; a projection matrix column is keyed by name, so a reorder is safe
+# for scoring and unsafe for anything that zips two axis vectors positionally. Keep it stable.
+#
+# ⚠ A FIFTH AXIS IS PERMITTED BUT DEFERRED. `key_substrate_v30.md` §2.4: *"A 5th axis is permitted
+# as a Class B extension if Stage 10 calibration finds the simplification load-bearing; treat as
+# deferred unless required."* Adding one here is now ONE edit that both readers see.
+axis_roster:
+  source: "systems/_architecture/reference/key_substrate_v30.md §2.4 / conviction_axis_matrix_v30.md / PP-687"
+  count: 4
+  scale: "[-1,+1] basis"
+  names:
+    - hierarchical   # + rank-bearing, status-asserting · - egalitarian, peer-levelling
+    - sacred         # + numinous, oath-binding · - secular, contractually bounded
+    - instrumental   # + end-justifies-means, calculative · - principled, deontological
+    - traditional    # + precedent-respecting, ancestral · - progressive, reformist
 
 # ============================================================================
 # REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).

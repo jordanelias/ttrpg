@@ -33,7 +33,7 @@ def mirror(width, depth, n=30, seed_base=1_000_000):
 
 if __name__ == '__main__':
     n = int(sys.argv[1]) if len(sys.argv) > 1 else 30
-    print(f"PC_FRONTAGE_BLEND={c.PC_FRONTAGE_BLEND} n={n} — perfect mirror should be ~50/50", flush=True)
+    print(f"MB_FRONTAGE_BLEND={c.MB_FRONTAGE_BLEND} n={n} — perfect mirror should be ~50/50", flush=True)
     for w in (2, 4, 6, 12, 18, 24):
         tot_a = tot_b = tot_d = 0
         for sb in (1_000_000, 2_000_000, 3_000_000):
