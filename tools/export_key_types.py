@@ -60,10 +60,25 @@ sys.path.insert(0, REPO)
 from engine.substrate.keys import TypeRegistry  # noqa: E402
 
 # ED-IN-0231 (2026-09-16): the source prose was quarantined to `.designs/` with the rest of the
-# design corpus. The path moved; the relationship did not. This is the shape CLAUDE.md §0.05
-# sanctions — prose is the AUTHORING surface, the typed JSON this emits is the MECHANISM, and the
-# blocking --check round-trip is what keeps them honest. An agent has no reason to read the source;
-# this exporter does.
+# design corpus. The path moved; the relationship did not.
+#
+# ⚠ AND THAT RELATIONSHIP IS A KNOWN GAP, NOT A SANCTIONED SHAPE. An earlier version of this note
+# claimed CLAUDE.md §0.05 sanctions it. THAT WAS FALSE, and false in the direction that grants
+# permission: §0.05 clause 1 says *"a `.md` is NEVER the authored head of a fact code reads — the
+# head is YAML or JSON under `references/`, or a single Python owner."* A markdown file holding 55
+# Key type definitions is exactly what that forbids. Recorded here rather than quietly carried.
+#
+# WHY IT IS NOT MIGRATED, MEASURED 2026-09-16 rather than argued. `engine/season/` — the RULED head
+# — constructs ZERO Keys in a seeded season (positive control: 37 events, hash ff5c5765…), and its
+# import chain opens neither key_types.json nor key_graph.json. Every consumer of this registry
+# lives in the generation the season loop superseded: engine/autoload/, engine/cross_scale/,
+# mc_v18.py and two systems/factions/sim modules. Migrating the head of a registry whose only
+# readers are on their way out would harden the wrong generation. The open question is ED-IN-0227's
+# — whether that spine retires with mc_v18 — and it is Jordan's, not this file's.
+#
+# Contrast the conviction AXES, which took the other road on 2026-09-14 (ED-IN-0230): they left
+# this module for `references/descriptor_registry.yaml: axis_roster`, read through descriptors.py.
+# That is what clause 1 looks like when it is satisfied.
 SOURCE = os.path.join('.designs', 'systems', '_architecture', 'reference', 'key_type_registry_v30.md')
 OUT = os.path.join('engine', 'engine_params', 'key_types.json')
 SCHEMA_VERSION = 1

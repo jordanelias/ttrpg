@@ -36,8 +36,13 @@ def draw_factory(world_seed: int, tick_of):
     than an RNG handed around: a person cannot be given a stream, only a way to derive their own.
 
     ⚠ DETERMINISM IS PRESERVED, AND THAT IS NOT A SIDE NOTE — `m1_acceptance.py` row 2 is
-    *"same seed -> same KeyLog.content_hash()"* and would fail on a wall-clock or process-entropy
-    seed. Two runs of one world draw identical streams because the seed is `(world_seed, tick,
+    *"same seed -> same `World.content_hash()`"* and would fail on a wall-clock or process-entropy
+    seed. (It said `KeyLog.content_hash()` until 2026-09-16. ED-IN-0226 re-pointed that row to
+    `World.content_hash()` on 2026-09-13 — the stronger comparison, since the World hash folds every
+    state collection in sorted-key order ahead of the log. The stale name mattered more than a wrong
+    citation usually does: it implied this tree emits Keys, and MEASURED 2026-09-16 it emits none —
+    a seeded season of `engine/season/` constructs ZERO `Key` objects, positive control 37 events.
+    The Key substrate belongs to the generation this loop superseded.) Two runs of one world draw identical streams because the seed is `(world_seed, tick,
     pid, purpose)` and nothing else. What sampling removes is the ARGMAX, not the replay.
 
     ⚠ `purpose` IS PER DRAW, as `H`'s own contract states. Two different decisions by one person in

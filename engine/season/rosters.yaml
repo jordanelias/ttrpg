@@ -36,8 +36,8 @@
 # rule applied to definitions — an absent roster is a refusal, never an empty set.
 #
 # SCOPE AND SHAPE — BOTH RULED BY JORDAN, 2026-09-02, when this file asked.
-#   * "only this proposal chain is in scope" — so `engine/substrate/keys.py`'s `AXES`, `ROLES`,
-#     `SCALES` and `PERMANENCE_VALUES` are NOT governed by this ruling and are NOT to be moved.
+#   * "only this proposal chain is in scope" — so `keys.py`'s `ROLES`, `SCALES` and
+#     `PERMANENCE_VALUES` are not governed by it. ⚠ `AXES` LEFT ANYWAY, ED-IN-0230 (2026-09-14).
 #     The live engine is outside the chain (PR #337 -> now) and stays that way. A later session
 #     reading the ruling as tree-wide would be widening it; it was asked and answered narrow.
 #   * "one file rosters i think" — ONE FILE, not one per subsystem. If it grows past legibility
@@ -200,8 +200,8 @@ rosters:
     source: >-
       references/descriptor_registry.yaml:258 — the `axis.*` by_reference row, "4 ethical axes
       (hierarchical/sacred/instrumental/traditional)", scale "[-1,+1] basis", sourced to
-      systems/characters/reference/conviction_axis_matrix_v30.md / PP-687. Single-owned in code at
-      engine/substrate/keys.py:59 — `AXES = ("hierarchical", "sacred", "instrumental", "traditional")`.
+      .designs/systems/characters/reference/conviction_axis_matrix_v30.md / PP-687 (quarantined
+      2026-09-16, ED-IN-0231). Owned in code by descriptors.py's `axis_roster` leaf, NOT keys.py.
     open: true
     forbidden: [exposure]
     note: >-
@@ -1411,7 +1411,7 @@ tables:
       # and `opening_set` can never form a Candidate for it. The previous block removed three such
       # cells for that reason and the rule is kept.
       hierarchical:
-        # U3. Deference to legitimate command and rank (`engine/substrate/keys.py:59`).
+        # U3. Deference to legitimate command and rank (`descriptors.py` `axis_roster`).
         # `determine`, `evade / defy` and `surveil` are the old `Precedent` block's own
         # judgments, correctly re-homed: what they were pricing was never procedure in the
         # abstract, it was standing INSIDE OR OUTSIDE an office's leave, which is this axis.
@@ -1437,7 +1437,7 @@ tables:
         # note says a reason is not a citation, but it still has to be a reason.
 
       sacred:
-        # U3. The consecrated and theological (`engine/substrate/keys.py:59`). None of the old
+        # U3. The consecrated and theological (`descriptors.py` `axis_roster`). None of the old
         # four ad-hoc axes named this ground — `Precedent`/`self_preservation`/`suspicion`/
         # `harm_borne` were never asking what was numinous — so this block is freshly read off
         # which verbs carry oath-, rite- or vow-shaped weight, calibrated against the matrix's
@@ -1463,7 +1463,7 @@ tables:
         repudiate:      -0.6    # breaking a live commit breaks the vow itself — the anti-sacred act, not just the anti-social one
 
       instrumental:
-        # U3. Calculative, means-to-ends reasoning (`engine/substrate/keys.py:59`). `reconstruct`,
+        # U3. Calculative, means-to-ends reasoning (`descriptors.py` `axis_roster`). `reconstruct`,
         # `research`, `interview`, `surveil`, `commit`, `utter`, `comply`, `move` and `evade / defy`
         # are the old `self_preservation` block's own judgments, carried over unchanged in
         # direction: what that block was pricing was never safety as its own end, it was the
@@ -1487,7 +1487,7 @@ tables:
         interview:      -0.3    # asking shows the person what you want to know — the hand-revealing cost `research` avoids
 
       traditional:
-        # U3. Ancestral practice and continuity (`engine/substrate/keys.py:59`). `destroy_record`,
+        # U3. Ancestral practice and continuity (`descriptors.py` `axis_roster`). `destroy_record`,
         # `create_record`, `research` and `reconstruct` are the old `Precedent` block's own
         # judgments: `Precedent` the CONVICTION loads at traditional +0.9 in the matrix
         # (`conviction_axis_matrix_v30.md` §3.8) against only +0.3 hierarchical and -0.4
