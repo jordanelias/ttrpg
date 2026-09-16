@@ -810,9 +810,9 @@ rosters:
       Adding a kind means adding a row here; asking about a kind that has no row RAISES, because
       §42.2.1's worked example is exactly this table: *"a wear table that returns 20 for an
       unregistered site kind does not fail — it answers, plausibly and wrongly, forever."*
-      ⚠ THESE THREE ARE THE INSTRUMENT'S, NOT #353's. #353 names no site kinds; harbour, seam and
-      body are the kinds the probes exercise. That is why the row is `H-07` at `assumption` and
-      not a transcription.
+      ⚠ THESE THREE ARE THE INSTRUMENT'S, NOT #353's, so `H-07` is `assumption`, not transcription.
+      ⚠⚠ `body` IS NOT A SITE. It is `(Person, body)`'s band row, here because `band_floors` keys on
+      THIS roster and `H-38` ruled *"`Site.condition` is the model"* — no second scheme. See `p32`.
     values: [harbour, seam, body]
 
   matter_kinds:
