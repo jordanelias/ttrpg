@@ -26,8 +26,10 @@ from __future__ import annotations
 import math as _math
 from typing import Any, Callable, Optional
 from ..data.rosters import CONVICTION_AXES, SCENE_PACKING_RULES, require_member
-from ..data.verbs import (ALIGNMENT, ALIGNMENT_DEFAULT_CELL, CONVICTION_PROJECTION,
-                         PROJECTION_DEFAULT_CELL)
+# `CONVICTION_PROJECTION` / `PROJECTION_DEFAULT_CELL` were imported here until 2026-09-16 and
+# are not any more: the loop that read the 13x4 moved into `data/convictions.to_axes`, its
+# single owner. Keeping the imports declared a dependency this module no longer has.
+from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
 from ..gaps import Unspecified
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
 from .options import opening_set

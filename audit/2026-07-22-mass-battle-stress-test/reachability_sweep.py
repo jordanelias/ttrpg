@@ -37,23 +37,23 @@ import sys
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 SIM = os.path.join(REPO, 'tests', 'sim')
 
-# The gated PC_* booleans (12 of 33 default OFF) plus the load-bearing ones the flag audit flagged.
+# The gated MB_* booleans (12 of 33 default OFF) plus the load-bearing ones the flag audit flagged.
 # Each entry is a single-toggle perturbation from the shipped default.
 TOGGLES = [
-    'PC_CELL_DAMAGE', 'PC_STOCHASTIC_ROUT', 'PC_FRICTION_CEV', 'PC_INTENT_RESOLUTION',
-    'PC_FEIGNED_RETREAT', 'PC_YIELD_EMERGENT', 'PC_YIELD_RALLY', 'PC_YIELD_POCKET',
-    'PC_CLOSE_RANKS', 'PC_RESERVE_COMMIT', 'PC_TROOP_DENSITY_CAP', 'PC_FRACTIONAL_POOL',
-    'PC_WHEEL', 'PC_OCTAGON_DMG', 'PC_BRACE_ENABLED', 'PC_RECOIL_FRONTAL',
-    'PC_RECOIL_CHARGER_GATE', 'PC_ENVELOP_PATH', 'PC_REFUSE', 'PC_ENVELOP_SHOCK',
-    'PC_CONVERGENCE_NORM', 'PC_FACING_MODEL', 'PC_FACING_ATTENTION', 'PC_FACING_ROUT',
-    'PC_DEPTH_ROTATE', 'PC_KITE_ENABLED', 'LANCHESTER_ENABLED', 'SIGMA_HEAD_ENABLED',
+    'MB_CELL_DAMAGE', 'MB_STOCHASTIC_ROUT', 'MB_FRICTION_CEV', 'MB_INTENT_RESOLUTION',
+    'MB_FEIGNED_RETREAT', 'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'MB_YIELD_POCKET',
+    'MB_CLOSE_RANKS', 'MB_RESERVE_COMMIT', 'MB_TROOP_DENSITY_CAP', 'MB_FRACTIONAL_POOL',
+    'MB_WHEEL', 'MB_OCTAGON_DMG', 'MB_BRACE_ENABLED', 'MB_RECOIL_FRONTAL',
+    'MB_RECOIL_CHARGER_GATE', 'MB_ENVELOP_PATH', 'MB_REFUSE', 'MB_ENVELOP_SHOCK',
+    'MB_CONVERGENCE_NORM', 'MB_FACING_MODEL', 'MB_FACING_ATTENTION', 'MB_FACING_ROUT',
+    'MB_DEPTH_ROTATE', 'MB_KITE_ENABLED', 'LANCHESTER_ENABLED', 'SIGMA_HEAD_ENABLED',
     'COMMAND_SIGMA_ENABLED', 'CASCADING_ENABLED', 'SUPPORT_STACK_ENABLED', 'PUNCTURE_ENABLED',
     'TIP_SUPPORT_ENABLED',
 ]
 
 # A few magnitudes the audit named as live levers, swept at their extremes rather than fitted.
 MAGNITUDES = {
-    'PC_CHARGE_RECOIL': ['0', '3', '12', '24'],
+    'MB_CHARGE_RECOIL': ['0', '3', '12', '24'],
     'SIGMA_PER_D': ['0.1', '0.4', '0.8'],
     'K_LINEAR': ['4', '8', '24'],
     'MULTI_SIDE_SHOCK': ['0.0', '0.25', '1.0'],

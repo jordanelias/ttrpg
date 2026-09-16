@@ -309,11 +309,24 @@ def sovereign_fraction(w: World, rung_id: str) -> tuple[float, int]:
 
     ⚠ PERSON-KIND RUNGS ARE EXCLUDED, AND THE FIRST WRITING COUNTED THEM. `descendants` walks
     `contain`, and a person's own rung is contained like everything else, so a realm with four
-    inhabitants reported four more `undetermined` places than it has. Sovereignty is over
-    TERRITORY; counting heads in the denominator makes a populous duchy look less determined than
-    an empty one. The exclusion is this module's reading and is stated rather than silent -- §10's
-    ladder does put `person` on it, and `own` eligibility is "a person governing themselves", so
-    the other reading exists and is simply not what this Query answers."""
+    inhabitants reported four more `undetermined` places than it has. Counting heads in the
+    denominator makes a populous duchy look less determined than an empty one. The exclusion is
+    this module's reading and is stated rather than silent -- §10's ladder does put `person` on it,
+    and `own` eligibility is "a person governing themselves", so the other reading exists and is
+    simply not what this Query answers.
+
+    ⚠⚠ `undetermined_count` IS NOT "UNHELD TERRITORY", AND THIS DOCSTRING USED TO SAY *"sovereignty
+    is over TERRITORY"*, WHICH INVITED EXACTLY THAT READING -- a reviewer made it. EVERY OTHER rung
+    kind in the denominator is GOVERNABLE: `rosters.yaml: titles` declares a title for each, and
+    `TITLE_DOMAINS` is the roster -- `Family Head` governs `hearth`, `Community Leader` governs
+    `community`, `Mayor` governs `settlement`, `Lord` territory, `Duke`/`Duchess` duchy,
+    `King`/`Queen` realm. So an unheld hearth is a governable seat nobody holds, not noise.
+
+    MEASURED at `build_realm(0)`, `r_valoria`: `(0.4, 304)`, and those 304 are
+    `hearth 205 · community 58 · settlement 36 · duchy 3 · territory 1 · realm 1`. That shape is
+    the WORLD's, not this Query's -- the populated world seats 19 offices and none below
+    territory. A caller wanting unheld TERRITORY filters `w.rungs[r].kind` itself; this number is
+    every governable rung in the subtree that nobody holds, which is what §17 asked for."""
     TRACE.query("sovereign_fraction", "resolver")
     here = [r for r in [rung_id, *descendants(w, rung_id)]
             if r in w.rungs and w.rungs[r].kind != "person"]
@@ -352,7 +365,24 @@ def provinces_of(w: World, rung_id: str) -> dict:
     several territories *"that have not been assembled into a province"* — implies a threshold
     exists without giving it, so the caller decides and this does not invent one.
 
-    ⚠ LIVE `hold` EDGES ONLY, like every aggregate here (§22.4 clause 3)."""
+    ⚠ LIVE `hold` EDGES ONLY, like every aggregate here (§22.4 clause 3).
+
+    ⚠⚠ THE ROOT RUNG IS NOT IN ITS OWN SUBTREE HERE, AND IT IS IN `sovereign_fraction`'s. Both
+    docstrings say "the subtree" and they mean different sets -- `descendants(w, rung_id)` versus
+    `[rung_id, *descendants(...)]` -- so `provinces_of(w, 'terr_T1')` is `{}` while
+    `sovereign_fraction(w, 'terr_T1')` is `(1.0, 33)` for the same held territory.
+
+    THE REASON IS WHAT EACH QUESTION IS ABOUT. Sovereignty is a property OF the rung asked about,
+    so its own holder belongs in its own answer. A province is an aggregation of the territories
+    BENEATH one, so the rung asked about is the container and not a member.
+
+    ⚠ AN EARLIER DRAFT OF THIS PARAGRAPH JUSTIFIED IT BY SAYING THE ROOT WOULD OTHERWISE "report a
+    lone territory as a province of one, which the ruling refuses" -- AND THAT IS FLATLY
+    CONTRADICTED EIGHT LINES ABOVE, where this same docstring says *"NO MINIMUM SIZE IS IMPOSED,
+    BECAUSE CANON STATES NONE. A single territory held alone comes back as a group of one."* The
+    code agrees with the older paragraph: the grouping below applies no cardinality filter. Written
+    down because two incompatible readings of one ratified sentence, both in one docstring, is the
+    §4 idempotence trap -- and it was a fresh adversarial read that caught it, not this author."""
     TRACE.query("provinces_of", "resolver")
     here = {r for r in descendants(w, rung_id)
             if r in w.rungs and w.rungs[r].kind == "territory"}

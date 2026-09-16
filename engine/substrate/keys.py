@@ -217,13 +217,20 @@ def _as_flow_list(value: str):
     v = value.strip()
     if not v.startswith("["):
         return None
-    if not v.endswith("]") and "#" in v:
-        head = v.split("#", 1)[0].strip()
-        if head.endswith("]"):
-            v = head
-    if not v.endswith("]"):
+    # ⚠ THE FIRST `]` CLOSES IT, AND THE FIRST WRITING OF THIS TESTED `endswith` INSTEAD. These are
+    # FLAT lists -- no nesting anywhere in the registry -- so the opening bracket is closed by the
+    # first `]`, and everything after it is annotation. `endswith("]")` was true for
+    # `[a, b] # see [foo]`, which skipped the strip entirely and returned
+    # `['a', 'b] # see [foo']` -- the exact shipped-garbage this function exists to stop, and the
+    # registry already writes bracketed annotations in this position (`# [PROVISIONAL] ...`), so
+    # one edit moving the bracket to the end of the line would have reintroduced it.
+    close = v.find("]")
+    if close == -1:
         return None
-    return [x.strip() for x in v[1:-1].split(",") if x.strip()]
+    rest = v[close + 1:].strip()
+    if rest and not rest.startswith("#"):
+        return None          # not a flat flow list -- refuse rather than take the first half
+    return [x.strip() for x in v[1:close].split(",") if x.strip()]
 
 
 class TypeRegistry:
@@ -336,8 +343,8 @@ class TypeRegistry:
                 if not value:
                     entry[field] = []
                     current_list = entry[field]
-                elif _as_flow_list(value) is not None:
-                    entry[field] = _as_flow_list(value)
+                elif (flow := _as_flow_list(value)) is not None:
+                    entry[field] = flow
                     current_list = None
                 else:
                     entry[field] = value

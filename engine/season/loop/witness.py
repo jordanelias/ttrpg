@@ -314,10 +314,13 @@ def witness(self, events: list[Event]) -> int:
         # so storing it makes its own content true.
         _act = self.act_of.get(e.id)
         if e.kind == "news.told" and _act is not None and pid != _act.actor:
+            # A `_teller = w.persons.get(_act.actor)` stood here until 2026-09-16 and was never
+            # read -- a per-(hearer, telling) dict lookup left from the draft that scanned the
+            # teller's ledger inline, before `_told_content` became its one owner. Removed rather
+            # than kept: it read as though the teller were still consulted at this point.
             if e.id not in told_by_event:
                 told_by_event[e.id] = _told_content(w, _act)
             _held = told_by_event[e.id]
-            _teller = w.persons.get(_act.actor)
             # ⚠ `act_refs`, NOT A SECOND READ OF THE PAYLOAD. The first writing of this block
             # spelled `(_act.payload or {}).get("subject")` inline -- a copy of `epistemic`'s
             # own reader (`act_refs`, already imported at the top of this file and already

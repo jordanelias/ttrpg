@@ -1391,7 +1391,16 @@ def _run(module: str):
 def test_w15_the_run_cases_entrypoint_writes_nothing():
     """`report.py` is the sole emitter. Executed, not read: this runs `run_cases.py` as a script
     and fingerprints every file under the proposal before and after. A restored write fails here
-    however it is spelled and wherever under the proposal it lands."""
+    however it is spelled and wherever under the proposal it lands.
+
+    ⚠ IT IS NOT SAFE IN A SHARED xdist POOL WITH ITS OWN SIBLING, and that is a property of what it
+    measures rather than a defect to fix. It fingerprints with MTIME, and
+    `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` WRITES those same files
+    by executing the emitter; on separate workers the two straddle each other and this one reports
+    a write that is the sibling's. CI cannot hit it -- `sim-regression` and the unit suite are
+    SEPARATE JOBS -- and neither can `pytest engine/season/tests -n auto`. It reddens only if
+    somebody runs `engine/season/tests tests/valoria engine/tests` in ONE invocation, which is not
+    a thing the repo asks for. Recorded because it costs a session ten minutes to re-derive."""
     before = _fingerprint(with_mtime=True)
     # Assert that it asserted (CLAUDE.md S0.1 point 2): an empty tree would otherwise let this
     # pass having observed nothing, which is the exact vacuity its sibling test guards against.

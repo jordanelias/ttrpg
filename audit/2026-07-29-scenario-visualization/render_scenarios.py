@@ -150,11 +150,11 @@ def render(ticks=DEFAULT_TICKS, out_dir=None):
     out_dir = out_dir or _HERE
     rows = scenarios()
     manifest = {'flags': {k: getattr(cfg, k) for k in
-                          ('PER_CELL', 'FIELD_MOVEMENT', 'PC_NODE_COHESION', 'PC_CELL_MORALE',
-                           'PC_CELL_DAMAGE', 'PC_OCTAGON_DMG', 'PC_STOCHASTIC_ROUT',
-                           'PC_CLOSE_RANKS', 'PC_INTENT_RESOLUTION', 'PC_FRACTIONAL_POOL',
-                           'PC_FRICTION_CEV', 'PC_YIELD_EMERGENT', 'PC_RESERVE_COMMIT',
-                           'PC_FEIGNED_RETREAT', 'PC_TROOP_DENSITY_CAP')
+                          ('PER_CELL', 'FIELD_MOVEMENT', 'MB_NODE_COHESION', 'MB_CELL_MORALE',
+                           'MB_CELL_DAMAGE', 'MB_OCTAGON_DMG', 'MB_STOCHASTIC_ROUT',
+                           'MB_CLOSE_RANKS', 'MB_INTENT_RESOLUTION', 'MB_FRACTIONAL_POOL',
+                           'MB_FRICTION_CEV', 'MB_YIELD_EMERGENT', 'MB_RESERVE_COMMIT',
+                           'MB_FEIGNED_RETREAT', 'MB_TROOP_DENSITY_CAP')
                           if hasattr(cfg, k)},
                 'ticks': list(ticks), 'seed': SEED, 'scale': SCALE, 'scenarios': {}}
     body = []

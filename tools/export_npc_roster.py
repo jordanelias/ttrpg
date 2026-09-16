@@ -111,6 +111,15 @@ def derive() -> tuple:
     for pid, p in w.persons.items():
         name_of[pid] = p.name
 
+    # ⚠ `concerns` USED TO HAND-INVERT THE SLUG -- `prop.subject[2:].upper().replace("_", "-")` --
+    # and `_slug` is not invertible: it maps EVERY non-alphanumeric to `_`, so a case id carrying a
+    # `.`, a space, or anything but a single hyphen round-trips to a DIFFERENT string. `check()`
+    # then fails hard on it (`"{case}: concerns '...', who is not seated"`, exit 1), reddening a
+    # blocking gate over a case id the corpus may legitimately contain. MEASURED on the 46 live
+    # cases: zero are lossy today, so this is latent -- which is exactly when it is cheap to fix.
+    # The forward map is built once here and read, so nothing is inverted.
+    cid_of_pid = {f"p_{POP._slug(str(c.get('id')))}": str(c.get("id")) for c in POP.load_cases("NPC")}
+
     rows = []
     for case in POP.load_cases("NPC"):
         cid = str(case.get("id"))
@@ -120,7 +129,7 @@ def derive() -> tuple:
         prop = w.propositions.get(f"prop_{POP._slug(cid)}")
         concerns = None
         if prop is not None and prop.subject in w.persons:
-            concerns = prop.subject[2:].upper().replace("_", "-")
+            concerns = cid_of_pid.get(prop.subject)
         rows.append({
             "case": cid,
             "name": name_of[pid],

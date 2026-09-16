@@ -145,7 +145,7 @@ def roster(name: str, ordered: bool = False):
         # ⚠ THE BOTH-KEYS REFUSAL IS AT LOAD, IN `_load_rosters`, NOT HERE. It lived here first and
         # could only see rows a caller reached -- see that function for what that missed.
         from engine.substrate import descriptors as _desc
-        block = getattr(_desc, "_DATA", {}).get(r["from_descriptor"])
+        block = _desc.block(r["from_descriptor"])
         if not block or not block.get("names"):
             raise Unspecified(
                 f"roster {name!r} points at descriptor block {r['from_descriptor']!r}, which is "

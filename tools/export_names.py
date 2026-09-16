@@ -29,7 +29,9 @@ surfacing as a wrong faction in a generated NPC:
   · a legacy tag that is also a live alias              -- deprecation that resolves anyway
   · a legacy tag that is another row's canonical name   -- a live name refused as deprecated
 
-THE FOURTH IS RECORDED, NOT REFUSED, and the asymmetry is the honest part. Two entries claiming one
+THE REMAINING ONE -- check (3) in the body, and the numbering is worth saying out loud because
+the four refused are (1), (2), (4) and (5) -- IS RECORDED, NOT REFUSED, and the asymmetry is the
+honest part. Two entries claiming one
 display string is real here and not a typo: `Order` is a Conviction AND a settlement stat,
 `Stability` is a faction stat AND a mechanic. Refusing would force a merge that deletes a real
 quantity, so they go into an `ambiguous` block and `engine/substrate/names.py` raises on resolving

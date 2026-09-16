@@ -48,7 +48,9 @@ from collections import Counter
 from .. import decision
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.matrix import Step
-from ..data.rosters import CONVICTIONS, CONVICTION_AXES, RUNG_KINDS, load_yaml
+# `CONVICTIONS` dropped 2026-09-16: `seed_convictions` moved to `run_cases.py`, which is its
+# single owner, and nothing here reads the roster any more.
+from ..data.rosters import CONVICTION_AXES, RUNG_KINDS, load_yaml
 from ..data.verbs import VERB_TABLE
 from ..decision import align, make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
@@ -184,7 +186,10 @@ def build_at(case: dict, seed: int = 0) -> World:
     themselves `person` rungs, a site per producing kind, a motive, and — where the corpus says the
     ending is forced by a threshold — a Date coming due, which is `questions_for`'s Q1.
 
-    ⚠ THE CONVICTIONS ARE SEEDED FROM THE CASE ID, over the `conviction_axes` ROSTER. Rev 1 wrote
+    ⚠ THE CONVICTIONS ARE SEEDED FROM THE CASE ID, over the THIRTEEN CONVICTIONS -- not over
+    `conviction_axes`, which this said until 2026-09-16 and which `U3` superseded when the set
+    it indexes went from 4 to 13. The draw itself lives in `run_cases.seed_convictions`, its
+    single owner; this module only calls it. Rev 1 wrote
     three axis names and the weight `0.9` as literals, which is a fill off the register (`G1`) and,
     worse, was the ENTIRE ranking function — `stance` is empty in these worlds and §F2's `urgency`
     term has no `c` in it, so the conviction axis alone orders every candidate. Identical

@@ -75,6 +75,25 @@ _FIELD_TO_KEY = {v: k for k, v in FACTION_FIELD_MAP.items()}
 UNIMPLEMENTED = _DATA['unimplemented']
 
 
+def block(name: str) -> dict:
+    """One registry block by name, e.g. `block('conviction_roster')`. THE PUBLIC WAY IN.
+
+    ⚠ `engine/season/data/rosters.py`'s `from_descriptor:` pointer reached `_DATA` directly, via
+    `getattr(_desc, "_DATA", {})`. Two things were wrong with that. `_DATA` is underscore-private
+    and carries no compatibility contract, so renaming or wrapping it is a legal refactor here --
+    and the `{}` default turned that refactor into a LIE: every pointed-at roster would raise
+    *"points at descriptor block 'conviction_roster', which is absent or has no `names`"*, sending
+    the next session to edit `references/descriptor_registry.yaml`, which would be perfectly
+    correct and completely unrelated to the actual cause.
+
+    Returning `{}` for an unknown name is deliberate and is NOT that default: the caller's own
+    refusal reads better than one raised from here, because it names the roster that pointed and
+    the exporter to re-run. What this removes is the silent-`{}`-on-RENAME, not the empty answer
+    for a name nobody declared.
+    """
+    return _DATA.get(name) or {}
+
+
 def faction_bounds(field):
     """(floor, ceiling) the REGISTRY declares for a Faction dataclass field, or None if it declares
     none.

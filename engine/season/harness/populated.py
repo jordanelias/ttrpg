@@ -762,7 +762,12 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     by_name = surname_index(cases)
     at_institution: dict = defaultdict(list)
     for case in cases:
-        inst = institution_of(case)
+        # ROSTER WINS HERE TOO, as at seating -- and SPELLED THE SAME WAY, which the first cut was
+        # not: `or institution_of(case)` re-derives on a FALSY roster value, and `npcs.yaml` ships
+        # `institution: null` and documents it as *"null for an unaffiliated life"*. That spelling
+        # honoured a hand-set null at seating and silently overrode it here.
+        _row = (roster or {}).get(str(case.get("id")))
+        inst = _row.get("institution") if _row else institution_of(case)
         if inst:
             at_institution[inst].append(f"p_{_slug(str(case.get('id')))}")
 
