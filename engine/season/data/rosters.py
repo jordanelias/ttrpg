@@ -258,6 +258,25 @@ def table(name: str) -> dict:
     return {outer: dict(inner) for outer, inner in (t.get("cells") or {}).items()}
 
 
+def faction_prop_id(name: str) -> str:
+    """`'Crown'` -> `'fac_crown'`. THE ONE OWNER OF THE FACTION-ID RELATION.
+
+    ⚠ IT HAD NO OWNER UNTIL 2026-09-16, AND THAT COST A SILENTLY EMPTY QUERY. `populated.py`
+    formed the id inline as `f"fac_{_slug(fac_name)}"`; `queries/world_q.py: leaders()` recovered
+    the NAME from the other end by reading `Proposition.subject`. That worked while `subject` WAS
+    the faction name -- and then the creed commit made `subject` the LEADER'S PERSON ID for every
+    faction that has a creed, while leaving the name in `value`. One relation, two guesses, and the
+    reader kept reading a field whose meaning had moved underneath it.
+
+    MEASURED at `build_realm(0)` before the repair: `leaders()` returned `[]` for Crown, Church of
+    Solmund, Hafenmark and Varfell -- all four factions that hold seats -- making 19 of 19 occupied
+    offices invisible. It is the §0.1 pt 1 shape exactly: a getter's source changed while its
+    readers went on reading the old one, and the wrong answer (`[]`) is a PLAUSIBLE answer, so
+    nothing raised.
+    """
+    return "fac_" + "".join(c if c.isalnum() else "_" for c in str(name).lower()).strip("_")
+
+
 def require_member(value, roster, what: str, where: str, law: str, needs: str = "") -> None:
     """THE ROSTER-MEMBERSHIP REFUSAL, IN ONE PLACE. Ten call sites had it check-for-check.
 
@@ -378,6 +397,10 @@ TITLE_DOMAINS = roster_map("titles", "domains")
 # version of these rosters was sourced from the near-canon tier and carried a name that tier
 # itself calls *"institutional infrastructure, not a faction"*.
 FACTIONS = roster("factions")
+
+#: `{proposition id: faction name}`. Derived from the roster, so it cannot disagree with it, and
+#: it is the direction `leaders()` needs: a caller holds `fac_crown` and wants `Crown`.
+FACTION_BY_PROP = {faction_prop_id(f): f for f in FACTIONS}
 BODY_FACTION = roster_map("office_bodies", "faction")
 BODY_FUNCTION = roster_map("office_bodies", "function")
 ROLE_TEMPLATE_OF = roster_map("role_templates", "by_faction")

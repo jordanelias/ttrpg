@@ -11033,6 +11033,24 @@ def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
         "every faction's leaders are exactly its members. That is the office-per-person defect: "
         "when everyone holds a seat, `leaders` carries no information")
 
+    # ⚠ AND THE OTHER DIRECTION, WHICH THIS TEST WAS BLIND TO UNTIL 2026-09-16. Every assertion
+    # above is SATISFIED BY THE EMPTY SET -- `ls <= ms` is trivially true and `ls < ms` is how
+    # `strict` gets counted -- so a `leaders()` that returned nothing at all passed, green, while
+    # the world had nineteen seated office-holders in it. It did: the creed commit moved the
+    # faction name off `Proposition.subject`, which is the field `leaders()` read it from, and all
+    # four seat-holding factions went to `[]`. The count is the falsifier the shape assertions
+    # cannot be: every occupied office belongs to exactly one faction and its holder is a member,
+    # so the leaders across all factions must number exactly the occupied offices.
+    occupied = {oid for oid in (t.object for t in w.tenures if t.kind == "hold" and t.live)
+                if oid in w.offices}
+    found = sum(len(set(leaders(w, fid))) for fid in factions)
+    assert found == len(occupied), (
+        f"{found} leaders across {len(factions)} factions, but {len(occupied)} offices are "
+        "occupied. Every occupied office has a holder who committed to its faction, so these are "
+        "the same number -- a shortfall means `leaders()` is failing to translate the faction "
+        "identifier, which returns [] and looks like a faction that simply holds no seats")
+    assert found > 0, "no faction has a leader in a world with occupied offices"
+
     # A TITLED SEAT SITS AT THE RUNG ITS TITLE GOVERNS, and the walk up from it is what
     # "the duchy is underneath the Crown" means mechanically (Jordan, 2026-09-13).
     titled = [o for o in w.offices.values() if o.rung is not None]

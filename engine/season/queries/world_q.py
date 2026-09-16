@@ -31,9 +31,8 @@ from __future__ import annotations
 
 from typing import Callable, Optional
 
-from ..data.rosters import QUESTION_SOURCES
 from ..data.requires import UNKNOWN
-from ..data.rosters import TENURE_KINDS
+from ..data.rosters import FACTION_BY_PROP, QUESTION_SOURCES, TENURE_KINDS
 from ..gaps import Forbidden, Unspecified
 from ..state.carriers import Person, Question, Site, Tenure
 from ..state.ids import ROOT
@@ -224,18 +223,27 @@ def leaders(w: World, faction: str) -> list[str]:
     ⚠ `Office.faction` IS DERIVED AT CONSTRUCTION from `body` (`Office.__post_init__`), so this
     never re-derives it and cannot disagree with the constructor.
 
-    ⚠⚠ TWO IDENTIFIERS NAME ONE FACTION AND THE FIRST WRITING OF THIS FUNCTION COMPARED THEM
-    DIRECTLY, SO IT RETURNED `[]` FOR A WORLD THAT HAD A LEADER IN IT. `members` keys on the
-    PROPOSITION ID (`f_hafen`) because that is what a `commit` edge points at; `Office.faction`
-    carries the FACTION NAME (`Hafenmark`) because that is what `rosters.yaml: factions` holds and
-    what `office_faction` validates against. §14.2 decides which is canonical -- the faction IS
-    the Proposition -- so the Proposition's `subject` is its name, and the translation happens
-    here, once, rather than at every call site. Found by running it, not by reading it: the empty
-    list is a plausible answer for a faction with no office-holders, so no exception fires and no
-    test that only asserts a type would have seen it."""
+    ⚠⚠ TWO IDENTIFIERS NAME ONE FACTION, AND THIS FUNCTION HAS NOW RETURNED `[]` FOR A WORLD WITH
+    LEADERS IN IT TWICE, FOR TWO DIFFERENT REASONS. `members` keys on the PROPOSITION ID
+    (`fac_hafenmark`) because that is what a `commit` edge points at; `Office.faction` carries the
+    FACTION NAME (`Hafenmark`) because that is what `rosters.yaml: factions` holds and what
+    `office_faction` validates against. So a translation is needed, and WHERE IT READS THE NAME
+    FROM is the whole question.
+
+    The first writing compared the two identifiers directly. The second read `Proposition.subject`,
+    which was the faction's name -- until the creed commit made `subject` the LEADER'S PERSON ID
+    for every faction that has a creed and moved the name to `value`, leaving this reader pointed
+    at a field whose meaning had changed underneath it. MEASURED at `build_realm(0)`: `[]` for
+    Crown, Church of Solmund, Hafenmark and Varfell -- all four factions that hold seats -- hiding
+    19 of 19 occupied offices.
+
+    It now reads `FACTION_BY_PROP`, which `data/rosters.py` DERIVES from the roster, so there is no
+    field to guess and no mood to dispatch on. ⚠ BOTH FAILURES WERE INVISIBLE FOR ONE REASON: `[]`
+    is a plausible answer for a faction with no office-holders -- four of the eight genuinely have
+    none -- so nothing raised, and a test asserting `leaders <= members` is satisfied by the empty
+    set. `test_leaders_are_found_for_every_faction_that_holds_a_seat` asserts the non-empty case."""
     TRACE.query("leaders", "resolver")
-    prop = w.propositions.get(faction)
-    name = prop.subject if prop is not None else faction
+    name = FACTION_BY_PROP.get(faction, faction)
     held = {t.object: t.subject for t in w.tenures if t.kind == "hold" and t.live}
     inside = set(members(w, faction))
     return sorted(who for oid, who in held.items()

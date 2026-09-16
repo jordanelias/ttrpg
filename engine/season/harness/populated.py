@@ -71,8 +71,8 @@ from ..data import cast, files
 from ..queries.world_q import home_of as home_of_q
 from ..gaps import Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
-from ..data.rosters import (BODY_FACTION, FACTIONS, ROLE_TEMPLATE_OF, load_yaml,
-                            title_domain)
+from ..data.rosters import (BODY_FACTION, FACTIONS, ROLE_TEMPLATE_OF, faction_prop_id,
+                            load_yaml, title_domain)
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Office, Person, Proposition, Rung, Site, Tenure
@@ -480,7 +480,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # the same reason. `members()` reads a `commit` edge's KIND and OBJECT, never the Proposition's
     # mood, so membership in those two is unaffected; what they lack is a standing question.
     for fac_name in sorted(FACTIONS):
-        fid = f"fac_{_slug(fac_name)}"
+        fid = faction_prop_id(fac_name)   # one owner: data/rosters.py
         lead_cid = cast.faction_leader(fac_name)
         lead_pid = f"p_{_slug(lead_cid)}" if lead_cid else None
         template = ROLE_TEMPLATE_OF.get(fac_name)
@@ -518,7 +518,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
             # distinguishable from a person who belongs to nobody.
             unplaced.append((cid, raw))
             continue
-        fid = f"fac_{_slug(fac_name)}"
+        fid = faction_prop_id(fac_name)   # one owner: data/rosters.py
         w.add_tenure(Tenure(f"t_{pid}_member", pid, fid, "commit", 0))
         # -- AND WHAT THAT MEMBERSHIP IS WORTH TO THEM --------------------------
         #
@@ -892,7 +892,14 @@ def creed_sweep(seasons: int = 2, seeds: tuple = (0, 1)) -> list:
                     w = build_realm(seed)
                 finally:
                     _cast.faction_leader = real
-                w.fixtures._v["question_aggregation_rule"] = rule
+                # ⚠ `.sweep()` RETURNS A NEW `Fixtures`; `_v[...] = rule` MUTATED THE SHARED ONE.
+                # `World.__init__` stores `fixtures` BY REFERENCE and `build_realm` always passes
+                # the module-level `DEFAULT_FIXTURES`, so writing through `_v` left the singleton
+                # carrying the last arm's rule for the rest of the interpreter -- every later
+                # `corpus_run`, `m1_acceptance` row and pytest test in that process silently
+                # grading under `all` instead of the shipped `first`. A sweep that contaminates
+                # the control is §0.1 pt 1's failure inside the instrument built to provide one.
+                w.fixtures = w.fixtures.sweep("question_aggregation_rule", rule)
                 out = run(seasons, seed, None, w=w)
                 subj = out["act_subjects"]
                 rows.append({
