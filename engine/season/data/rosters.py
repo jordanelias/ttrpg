@@ -85,7 +85,25 @@ def _load_rosters() -> tuple:
     if not ROSTERS_YAML.exists():
         raise SystemExit(f"rosters.yaml not found at {ROSTERS_YAML}")
     doc = load_yaml(ROSTERS_YAML.read_text()) or {}
-    return (doc.get("rosters") or {}), (doc.get("tables") or {})
+    rosters = doc.get("rosters") or {}
+    # ⚠ BOTH KEYS IS A DECLARED-BUT-UNREAD `values:`, AND THE CHECK IS AT LOAD FOR A MEASURED
+    # REASON. `04 §B.13` ID-12 puts the loader's cross-validation at load, "not at the first act
+    # that would have hit it", and this rule proves why: it first shipped inside `roster()`, where
+    # it only ever saw rows something CALLED `roster()` on. `convictions` is not one of those --
+    # its runtime route is the direct `CONVICTIONS` import below, so the row that MOTIVATED the
+    # rule was the one row the rule could not reach. Driving the loop with both keys planted on it
+    # ran clean and emitted a content hash; planted on `conviction_axes`, which IS read through
+    # `roster()`, it refused. Here it fires on every row whatever reads it, or nothing does.
+    for _n, _r in rosters.items():
+        if isinstance(_r, dict) and "from_descriptor" in _r and "values" in _r:
+            raise Unspecified(
+                f"roster {_n!r} carries BOTH `from_descriptor:` and `values:`", "rosters.yaml",
+                needs="delete one -- the pointer if this roster owns its members, the `values:` "
+                      "if the owner is the descriptor registry",
+                law="ED-IN-0229 -- a pointed-at roster has ONE owner. `from_descriptor` wins at "
+                    "read time, so a `values:` beside it is never read and never noticed, which "
+                    "is exactly the second copy the pointer was introduced to prevent")
+    return rosters, (doc.get("tables") or {})
 
 
 _ROSTERS, _TABLES = _load_rosters()
@@ -110,18 +128,8 @@ def roster(name: str, ordered: bool = False):
     # load-bearing on `conviction_axes` (#353 `:1897`, the Exposure collision). Routing through
     # here keeps the data-side bar on a pointed-at roster, which a direct import could not.
     if "from_descriptor" in r:
-        # ⚠ BOTH KEYS IS A DECLARED-BUT-UNREAD `values:` (`04 §B.13` ID-12). The pointer branch is
-        # checked FIRST, so a `values:` re-added beside a `from_descriptor:` would never be read
-        # and never complained about -- the silent half of the drift this pointer exists to end.
-        # Refuse rather than prefer one: the row's author gets to say which they meant.
-        if "values" in r:
-            raise Unspecified(
-                f"roster {name!r} carries BOTH `from_descriptor:` and `values:`", "rosters.yaml",
-                needs="delete one -- the pointer if this roster owns its members, the `values:` "
-                      "if the owner is the descriptor registry",
-                law="ED-IN-0229 -- a pointed-at roster has ONE owner. `from_descriptor` is read "
-                    "first, so a `values:` beside it is never read and never noticed, which is "
-                    "exactly the second copy the pointer was introduced to prevent")
+        # ⚠ THE BOTH-KEYS REFUSAL IS AT LOAD, IN `_load_rosters`, NOT HERE. It lived here first and
+        # could only see rows a caller reached -- see that function for what that missed.
         from engine.substrate import descriptors as _desc
         block = getattr(_desc, "_DATA", {}).get(r["from_descriptor"])
         if not block or not block.get("names"):
