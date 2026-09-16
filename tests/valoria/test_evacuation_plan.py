@@ -20,6 +20,7 @@ that stops totality from being vacuously true.
 several; only the order decides. Order-dependence that nothing pins is a latent reordering bug.
 """
 import os
+import re
 import sys
 
 import pytest
@@ -307,12 +308,27 @@ def test_the_parity_oracle_is_not_evacuated():
     tools/gen_sigma_parity_goldens.py regenerates engine/tests/goldens/sigma_leverage_parity.json;
     engine/tests/test_sigma_leverage_parity.py asserts on it. Evacuating the oracle leaves a
     committed generated table with no source.
+
+    REWRITTEN 2026-09-16 (ED-IN-0231), because R-REL-ORACLE was EXECUTED and the old assertions
+    pinned the plan rather than the property. They required the ARCHIVED path to classify
+    `relocate` — true only while the move was pending, and false the moment it happened. The
+    property that actually protects the golden is that whatever the generator loads is KEPT, so
+    that is what this now asserts, read out of the generator rather than restated here. A copy of
+    the path in this test would be one more thing to forget.
     """
-    verdict, rule_id, _ = ep.classify('.audit/2026-06-03-contest-groundup/engine.py')
-    assert verdict == 'relocate', f'the ground-up parity oracle must survive, got {verdict}'
-    dest, _, _ = ep.relocation('.audit/2026-06-03-contest-groundup/engine.py')
-    assert dest.startswith('engine/reference/'), (
-        f'the oracle belongs with the code it validates, not in audit/: {dest}')
+    root = os.path.abspath(os.path.join(HERE, '..', '..'))
+    gen = open(os.path.join(root, 'tools', 'gen_sigma_parity_goldens.py'), encoding='utf-8').read()
+    m = re.search(r"_load_by_path\('_groundup_oracle_ref',\s*\n?\s*os\.path\.join\(REPO_ROOT,\s*(.+?)\)\)",
+                  gen, re.S)
+    assert m, 'could not read the groundup oracle path out of gen_sigma_parity_goldens.py'
+    loaded = '/'.join(p.strip().strip("'\"") for p in m.group(1).split(','))
+    assert os.path.isfile(os.path.join(root, loaded)), f'the generator loads a missing file: {loaded}'
+    verdict, rule_id, _ = ep.classify(loaded)
+    assert verdict == 'keep', (
+        f'the generator loads {loaded}, which the partition would {verdict} '
+        f'({rule_id}) — that leaves a committed generated table with no source')
+    assert not loaded.startswith('.audit/'), (
+        f'a blocking job must not load out of the hidden archive: {loaded}')
 
 
 def test_the_ed_universe_survives_evacuation(part):

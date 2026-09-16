@@ -524,10 +524,19 @@ says where an old path went. Only what those cannot tell you:
   reports. It was renamed from `audit/`, which is a **rename, not a mirror** — `.audit/<x>` where
   `.designs/` prepends — and `tools/ci_claim_provenance_check.py`'s `QUARANTINE_MIRRORS` is the one
   place that difference is written down. §0 forbids the adversarial pass from creating documents,
-  retiring this **as a category**: do not add to it. ⚠ **It is NOT inert and NOT prose-only:** 230
-  files, of which 121 are `.md`, 45 `.py` and 60 `.json`, and `tools/gen_sigma_parity_goldens.py`
-  reads `engine.py` under it to regenerate a golden a blocking CI test asserts on. Hidden from
-  sweeps is not hidden from code.
+  retiring this **as a category**: do not add to it. It holds 230 files — 121 `.md`, 45 `.py`,
+  60 `.json` — so it is not prose-only, but **nothing outside it loads anything inside it any
+  more** (RULED by Jordan, 2026-09-16: *"anything that is being read by engine.py needs to be
+  copied over into a proper location"*). The two live dependencies were **COPIED out**, not moved,
+  because deleting from a historical record destroys evidence:
+  `.audit/2026-06-03-contest-groundup/engine.py` → **`engine/reference/contest-groundup/`**, the
+  home `tools/evacuation_plan.py`'s `R-REL-ORACLE` had already ruled and which this executed; and
+  `reverse_pair_symmetry.py` → **`tests/sim/`**, beside the `gauge_mb` it imports, ending a
+  `sys.path` insert that made a hidden corpus load-bearing on a shipping-gate test. The archived
+  copies are history and are read by nothing. **Keep it that way** — a live dependency on this
+  tree is invisible to anyone searching normally, which is the whole hazard of hiding it. The only
+  code that touches it now is the handful of tools that operate *on* the corpus
+  (`join_audit_workings`, `evacuation_plan`, `pathres`, the vector-audit scripts).
 - **`godot/`** — see §6. **`workplans/`** — master workplan plus the hand-edited board (§0.2).
   **`proposals/`** — unratified proposals, surfaced BY LOCATION.
 

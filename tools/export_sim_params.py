@@ -122,7 +122,22 @@ def _iter_py_files():
             # Skip test files: their fixture constants (GOLDEN_WINNERS, etc.) are not
             # engine params. (Before the sim/ hollow-out these lived under sim/tests/,
             # which was never in SCAN_DIRS; now under engine/tests/ they must stay excluded.)
-            if "tests" in p.parts or p.name.startswith("test_") or "__pycache__" in p.parts or p in seen:
+            #
+            # `engine/reference/` joins them (2026-09-16, ED-IN-0231). It holds FROZEN PARITY
+            # ORACLES — independent reimplementations whose constants are, by construction, COPIES
+            # of canonical values that this export already emits from their real owners. Scanning
+            # them double-counts: the contest-groundup oracle alone added engine.reference.LEVEL,
+            # .M_MAX and .OVERWHELM_SIGMA, all three counted UNCITED, inflating the very backlog
+            # CLAUDE.md §0.05 points readers at.
+            #
+            # It is also a CONSISTENCY fix, not a new exemption. The other parity oracle,
+            # tests/sim/v32-combat-balance, contributes nothing here — excluded by the "tests"
+            # clause above. Both are the same kind of object, and evacuation_plan.py's
+            # R-REL-ORACLE intends them to share one home; they must not have different treatment
+            # depending on which side of that move they are on.
+            rel_parts = p.relative_to(ROOT).parts   # ABSOLUTE parts start ('/', 'home', ...)
+            if ("tests" in p.parts or p.name.startswith("test_") or "__pycache__" in p.parts
+                    or rel_parts[:2] == ("engine", "reference") or p in seen):
                 continue
             seen.add(p)
             yield p

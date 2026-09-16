@@ -4,7 +4,7 @@
  "subject": "engine/autoload/sigma_leverage.py",
  "oracles": {
   "m1": "tests/sim/v32-combat-balance/m1_dice_sigma_core.py",
-  "groundup": ".audit/2026-06-03-contest-groundup/engine.py"
+  "groundup": "engine/reference/contest-groundup/engine.py"
  },
  "note": "Frozen expected values captured from the two reference implementations. The oracles stay in the source repo; this table travels with engine/. Regenerate only when an oracle is re-derived.",
  "rows": [

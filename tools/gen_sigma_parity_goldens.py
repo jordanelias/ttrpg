@@ -98,8 +98,13 @@ def build() -> dict:
     if m1_dir not in sys.path:
         sys.path.insert(0, m1_dir)
     m1 = _load_by_path('_m1_oracle_ref', os.path.join(m1_dir, 'm1_dice_sigma_core.py'))
+    # ED-IN-0231 (2026-09-16): the groundup oracle was COPIED out of the audit archive to
+    # engine/reference/contest-groundup/ — the home evacuation_plan.py's R-REL-ORACLE had
+    # already ruled, with these exact execution steps. A blocking job must
+    # not reach into a hidden historical corpus — that made the archive load-bearing and the
+    # dependency invisible to anyone searching the tree normally.
     gu = _load_by_path('_groundup_oracle_ref',
-                       os.path.join(REPO_ROOT, '.audit', '2026-06-03-contest-groundup', 'engine.py'))
+                       os.path.join(REPO_ROOT, 'engine', 'reference', 'contest-groundup', 'engine.py'))
 
     rows: list[dict] = []
 
@@ -149,7 +154,7 @@ def build() -> dict:
         "subject": "engine/autoload/sigma_leverage.py",
         "oracles": {
             "m1": "tests/sim/v32-combat-balance/m1_dice_sigma_core.py",
-            "groundup": ".audit/2026-06-03-contest-groundup/engine.py",
+            "groundup": "engine/reference/contest-groundup/engine.py",
         },
         "note": ("Frozen expected values captured from the two reference implementations. "
                  "The oracles stay in the source repo; this table travels with engine/. "

@@ -122,9 +122,25 @@ RELOCATE = [
     # frozen reference implementations in one place beside the code they validate.
     # EXECUTION NOTE: the move requires updating gen_sigma_parity_goldens.py's load path in the
     # same commit, then regenerating the golden and confirming it is byte-identical.
-    (lambda p: p == '.audit/2026-06-03-contest-groundup/engine.py',
-     'engine/reference/contest-groundup/', 'R-REL-ORACLE',
-     'frozen parity oracle -- the last executable dependency of kept code on audit/'),
+    # EXECUTED 2026-09-16 (ED-IN-0231). The oracle was COPIED to
+    # engine/reference/contest-groundup/engine.py, gen_sigma_parity_goldens.py repointed at it in
+    # the same commit, and the golden regenerated: ONE line changed (the recorded source path) and
+    # all 1,758 parity rows are byte-identical, which is what the EXECUTION NOTE above demanded.
+    # COPIED, not moved, because `.audit/` is a historical record and deleting from it destroys
+    # evidence; the archived copy is now plain archive, read by nothing.
+    #
+    # The rule is KEPT rather than deleted, and its verdict deliberately flipped from RELOCATE to
+    # KEEP-as-archive: a rule that vanishes takes its reasoning with it, and the next reader
+    # otherwise finds an audit unit with no record of why its engine.py is special. The claim it
+    # carried — "the LAST executable dependency the kept tree has on audit/" — is now TRUE, which
+    # it was not when written: tests/valoria/test_gauge_invariants.py also sys.path-inserted into
+    # the corpus and imported reverse_pair_symmetry from it. That one was copied to tests/sim/,
+    # beside the gauge_mb it imports, in the same change.
+    # (R-REL-ORACLE's entry is GONE from this list because the relocation HAPPENED. The comment
+    # above is kept rather than deleted: a rule that vanishes takes its reasoning with it, and the
+    # next reader would otherwise find an audit unit whose engine.py looks unremarkable. The
+    # archived original now classifies under the ordinary .audit/ rules, which is correct -- it is
+    # history, and nothing reads it.)
     # THE ED UNIVERSE -- R-REL-EDUNIVERSE, EXECUTED AND RETIRED 2026-08-23 (S6/6b).
     #
     # It ruled that the 26 frozen ED-archive fragments under deprecated/archives/editorial/,
@@ -254,9 +270,17 @@ RULES = [
     # Python module imported BY BARE NAME from kept code; deleting one does not fail a test, it
     # stops `pytest tests/valoria` COLLECTING, which is strictly worse and was invisible to both
     # the substring and the constructed-path scans.
-    (lambda p: p == 'tests/sim/gauge_mb.py', 'keep', 'R-IMPORTED-MODULE',
-     'imported as `import gauge_mb` by two KEPT shipping-gate tests (test_gauge_invariants, '
-     'test_morale_write_sweep) -- evacuating it makes the whole suite uncollectable'),
+    # A SET, not an equality, since 2026-09-16 (ED-IN-0231): this is an ENUMERATED exception found
+    # by rehearsal, not a derived rule, so it grows. `reverse_pair_symmetry` joined it when it was
+    # copied out of the audit archive — `test_gauge_invariants` used to sys.path-insert into
+    # `.audit/` and import it from there, which made a hidden historical corpus load-bearing on a
+    # shipping-gate test. It now sits beside the `gauge_mb` it imports. ⚠ NOTE THE IMPORT FORM:
+    # this one is `from reverse_pair_symmetry import ...`, not a bare `import`, so a scan looking
+    # only for `import <name>` would not have found it either.
+    (lambda p: p in ('tests/sim/gauge_mb.py', 'tests/sim/reverse_pair_symmetry.py'),
+     'keep', 'R-IMPORTED-MODULE',
+     'imported by BARE NAME from KEPT shipping-gate tests (test_gauge_invariants, '
+     'test_morale_write_sweep) -- evacuating one makes the whole suite uncollectable'),
     # THE TWO ORCHESTRATOR-SCRIPT `keep` ROWS THAT USED TO SIT HERE ARE RETIRED, 2026-08-23 (S6/6a),
     # BECAUSE BOTH ASSERTED A LOAD-BEARING IMPORT THAT NO LONGER EXISTED.
     #
