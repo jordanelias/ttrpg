@@ -80,6 +80,30 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 
 ---
 
+## 🧭 2026-09-16 — the decision layer interrogated: twelve inputs, one of them live (`ED-IN-0228`)
+
+**Jordan asked to interrogate convictions and conviction axes, and named twelve inputs a decision
+layer must carry.** Proposal at `proposals/2026-09-16-conviction-decision-layer/`
+(`interrogation.md` + `decision_layer_v1.md`), **HELD BACK FROM RATIFICATION-ON-MERGE IN FULL**.
+
+**Two measured failures.** (1) `make_chooser`'s score has three terms and two cannot move a
+decision — `urgency` has no `c` in it (`H-73`) and `Person.stance` is never written (`H-62`), so
+the live decision function is conviction × a sparse alignment table and nothing else. (2) The 13×4
+basis carries fewer independent directions than it has columns. **Run the instrument, do not trust
+a number here:** `python -m engine.season.harness.conviction_spread`, which this pass extended with
+the covariance spectrum, the pairwise axis correlations and a trace self-check.
+
+**Three items are Jordan's** (§5 of the design): the re-framed `ED-IN-0214`; whether caste and
+profession GATE (a fifth eligibility kind, which `rosters.yaml`'s own note says needs a ruling) or
+WEIGHT; and whether to un-merge PP-684 §6's fold of the Ethical Framework into the Conviction set.
+
+⚠ **ONE STANDING ORDER FOR THE NEXT SESSION IN THIS AREA.** `architecture/PLAN.md:723` retires
+`(Person, capability)` and `(Person, marks)` as dead rows. Their deadness has the **same cause** as
+`stance`'s inertness — nothing writes them — and Jordan's inputs (11) and (12) would put both to
+work. **Do not execute that retirement until J2 is ruled.**
+
+---
+
 ## 📐 2026-09-12 — v1: seven research documents NERS-audited (`ED-IN-0217`, PR #399, merged)
 
 **PROPOSED, HELD BACK FROM RATIFICATION-ON-MERGE IN FULL.** Nothing ratified, no head moved, no
