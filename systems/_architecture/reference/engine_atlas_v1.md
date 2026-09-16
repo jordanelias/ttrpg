@@ -104,8 +104,8 @@ three steps — `systems/overview/sim/season.py:48 run_season`, invoked at `engi
     called at `engine/mc_v18.py:177 _faction_actions_callback`.
   - **S7.4 The ACTION→ACCOUNTING boundary.** Every Key emitted during the scene phase was logged *live*
     but its `apply` closure **deferred**; those deferred faction/settlement writes land here, in emission
-    order, and the per-tick counter resets — `engine/substrate/keys.py:594 accounting_boundary` and
-    `engine/substrate/keys.py:606 next_tick`, called at `engine/mc_v18.py:185-188 _faction_actions_callback`.
+    order, and the per-tick counter resets — `engine/substrate/keys.py:626 accounting_boundary` and
+    `engine/substrate/keys.py:638 next_tick`, called at `engine/mc_v18.py:185-188 _faction_actions_callback`.
   - **S7.5 Two honest-deferral markers.** NPC generation and Knot formation have no canonical trigger to
     cite, so the season records a named `stubwire` no-op where each call would go rather than fabricating
     one — `engine/mc_v18.py:213 _faction_actions_callback`, `engine/mc_v18.py:231 _faction_actions_callback`.
@@ -171,13 +171,13 @@ authoritative for them.
 
 **`_architecture` — the Key substrate and the cross-scale bridges.** Owns the engine's single update rule —
 `emit` → termination caps → default-fill → validate-and-append → deferred-apply queue → synchronous subscriber
-notify, `engine/substrate/keys.py:523 emit` — and is the only place deferred world writes land,
-`engine/substrate/keys.py:594 accounting_boundary`. It is the **substrate owner, not the sole emitter**: of the
+notify, `engine/substrate/keys.py:555 emit` — and is the only place deferred world writes land,
+`engine/substrate/keys.py:626 accounting_boundary`. It is the **substrate owner, not the sole emitter**: of the
 four production sites constructing a `Key`, two are here — `engine/cross_scale/echo_transport.py:321 Key`,
 `engine/cross_scale/echo_transport.py:428 Key` — and two are FA-lane, `systems/factions/sim/faction_action.py:385 Key`
 and `systems/factions/sim/parliamentary_transfer.py:226 Key`. Two of its three termination guards are
 structurally unreachable, the queue path they defend having no production caller —
-`engine/substrate/keys.py:538 schedule_emission` (§3a).
+`engine/substrate/keys.py:570 schedule_emission` (§3a).
 
 **`articulation` — the render/trigger/chronicle layer.** Registers 13 trigger callbacks on the scheduler at every
 default boot, each a typed no-op incrementing a counter — `engine/cross_scale/articulation.py:152 subscribe_all`.

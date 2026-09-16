@@ -194,6 +194,38 @@ _YAML_BLOCK = re.compile(r"```yaml\s*\n(?P<body>.*?)\n```", re.DOTALL)
 _TYPE_ID = re.compile(r"[a-z_]+\.[a-z_]+")
 
 
+def _as_flow_list(value: str):
+    """`[a, b]` -> `['a', 'b']`, tolerating a trailing `# comment`; `None` if not a flow list.
+
+    ⚠ THE TRAILING COMMENT IS WHY THIS EXISTS, and it was silently corrupting shipped data. The
+    registry's own convention annotates values with `#` -- `validate_payload` strips exactly that
+    from payload-field strings -- but the flow-list branch tested `value.endswith("]")`, which is
+    FALSE for `[personal, territory, peninsula]   # mirrors scope`. Such a value fell through to
+    the scalar branch and was stored as a STRING, and `apply_defaults` does
+    `list(entry["default_scale_signature"])` -- `list()` of a `str` iterates CHARACTERS.
+
+    OBSERVED before the fix: a Key of type `mechanical.scene_entered` came back with a
+    `scale_signature` of 50 single characters (`['[', 'p', 'e', 'r', ...]`) and
+    `meta.cascade_cluster_event` with 79, not one of them in `SCALES`. Four fields across two types
+    were affected. Latent rather than live -- nothing emits those types today -- but the data was
+    wrong in the shipped artifact, and comment-stripping living in one branch and not the other is
+    §8's "every rule lives once" read from the failure side.
+
+    The strip is SURGICAL: it applies only when removing the comment leaves a well-formed flow
+    list, so no value that parses correctly today can change. A scalar containing `#` is untouched.
+    """
+    v = value.strip()
+    if not v.startswith("["):
+        return None
+    if not v.endswith("]") and "#" in v:
+        head = v.split("#", 1)[0].strip()
+        if head.endswith("]"):
+            v = head
+    if not v.endswith("]"):
+        return None
+    return [x.strip() for x in v[1:-1].split(",") if x.strip()]
+
+
 class TypeRegistry:
     """Loader/validator for the Key-type registry, from JSON or from the authored markdown.
 
@@ -304,8 +336,8 @@ class TypeRegistry:
                 if not value:
                     entry[field] = []
                     current_list = entry[field]
-                elif value.startswith("[") and value.endswith("]"):
-                    entry[field] = [v.strip() for v in value[1:-1].split(",") if v.strip()]
+                elif _as_flow_list(value) is not None:
+                    entry[field] = _as_flow_list(value)
                     current_list = None
                 else:
                     entry[field] = value

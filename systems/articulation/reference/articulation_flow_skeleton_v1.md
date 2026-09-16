@@ -27,7 +27,7 @@
 | `generate_chronicle_entry(event, world)` | `engine/cross_scale/articulation.py:53 generate_chronicle_entry` | — (no call site found anywhere in the tree outside its own definition/docstring) |
 | `subscribe_all(scheduler)` | `engine/cross_scale/articulation.py:152 subscribe_all` | `engine/mc_v18.py:285 subscribe_all` (production); `engine/tests/test_pipeline_reach.py:677 subscribe_all` and `:681 run_campaign` (test reach probes); `tests/valoria/test_articulation_subscriber.py:233 subscribe_all` (unit tests) |
 | `_make_trigger_callback(type_id)` | `engine/cross_scale/articulation.py:133 _make_trigger_callback` | `engine/cross_scale/articulation.py:169 _make_trigger_callback` (inside `subscribe_all`'s loop) |
-| `_on_key(key, scheduler)` (closure returned by `_make_trigger_callback`) | `engine/cross_scale/articulation.py:140 _on_key` | `engine/substrate/keys.py:590 callback` — `TickScheduler._emit_at_depth`'s subscriber-dispatch loop |
+| `_on_key(key, scheduler)` (closure returned by `_make_trigger_callback`) | `engine/cross_scale/articulation.py:140 _on_key` | `engine/substrate/keys.py:622 callback` — `TickScheduler._emit_at_depth`'s subscriber-dispatch loop |
 
 ## 2. IN
 
@@ -39,7 +39,7 @@
 | `scheduler` (`TickScheduler`) | arg | `world.echo_scheduler`, built by `echo_transport.make_scheduler` | `engine/mc_v18.py:285 subscribe_all` |
 | `ECHO_TRANSPORT` (params/env flag; default ON) | flag | `effective_params` / `os.environ` | `engine/mc_v18.py:84-94 _echo_transport_on` (definition; call site `engine/mc_v18.py:268 _echo_transport_on`) |
 | `_TRIGGER_TYPE_IDS` (13-entry roster) | param | hardcoded tuple in this module | `engine/cross_scale/articulation.py:116 _TRIGGER_TYPE_IDS` |
-| `key` (`Key`, the emitted object passed to the callback) | key | `TickScheduler._emit_at_depth`'s subscription loop | `engine/substrate/keys.py:590 callback` |
+| `key` (`Key`, the emitted object passed to the callback) | key | `TickScheduler._emit_at_depth`'s subscription loop | `engine/substrate/keys.py:622 callback` |
 
 ## 3. Flow
 
@@ -55,7 +55,7 @@
       `scheduler.subscriptions`. `engine/cross_scale/articulation.py:168-169 subscribe_all`
 - **S2** `[gate]` For a callback to ever fire, some production code must call
   `scheduler.emit`/`schedule_emission` with a `Key` whose `.type` matches one of the 13 ids.
-  `engine/substrate/keys.py:523 emit`
+  `engine/substrate/keys.py:555 emit`
   - **S2.1** `[branch]` The only production module that constructs and emits real `Key` objects
     anywhere in `engine/` is `echo_transport.py`; it maps `scene_type -> key type` for exactly
     two families (`"contest"`, `"combat"`) and separately builds one `scene.accord_echo` Key.
@@ -69,7 +69,7 @@
     `engine/cross_scale/echo_transport.py:34-37` (no live producer declares `scene_outcome`)
 - **S3** `[emit]` When a matching `Key` IS emitted, `TickScheduler._emit_at_depth` logs it, then
   synchronously calls every callback registered for `key.type`.
-  `engine/substrate/keys.py:589-577 callback`
+  `engine/substrate/keys.py:621-609 callback`
 - **S4** `[emit]` The fired callback (`_on_key`) ignores the `Key`'s contents and returns a typed
   no-op via `stubwire.stub_resolve` — no state is read from or written to `world` or the `Key`.
   `engine/cross_scale/articulation.py:141 stub_resolve`
@@ -85,9 +85,9 @@ No step above reaches `render_protagonist_lens`, `generate_chronicle_entry`, or
 
 | Output | kind | consumer | anchor |
 |---|---|---|---|
-| `StubResult` (frozen, `stub=True`) | return value, discarded by the caller | `TickScheduler._emit_at_depth`'s `callback(key, self)` call does not capture the return value | `engine/cross_scale/articulation.py:141 stub_resolve`, `engine/substrate/keys.py:590 callback` |
+| `StubResult` (frozen, `stub=True`) | return value, discarded by the caller | `TickScheduler._emit_at_depth`'s `callback(key, self)` call does not capture the return value | `engine/cross_scale/articulation.py:141 stub_resolve`, `engine/substrate/keys.py:622 callback` |
 | `stubwire.invocations` delta | telemetry counter | `CampaignResult.stub_hits` | `engine/mc_v18.py:327 stub_hits` |
-| `scheduler.subscriptions[type_id]` list entries | registration side-effect | `engine.substrate.keys.TickScheduler` (owning instance, held on `world.echo_scheduler`) | `engine/cross_scale/articulation.py:169 subscribe_all`, `engine/substrate/keys.py:520 subscribe` |
+| `scheduler.subscriptions[type_id]` list entries | registration side-effect | `engine.substrate.keys.TickScheduler` (owning instance, held on `world.echo_scheduler`) | `engine/cross_scale/articulation.py:169 subscribe_all`, `engine/substrate/keys.py:552 subscribe` |
 
 No `Key`, world-state field, or rendered artifact is ever produced by this module — see §7.
 
@@ -96,7 +96,7 @@ No `Key`, world-state field, or rendered artifact is ever produced by this modul
 | Field | R/W | owning module | anchor |
 |---|---|---|---|
 | `world.echo_scheduler` | R | `engine.mc_v18` / `engine.cross_scale.echo_transport` | `engine/mc_v18.py:285 subscribe_all` |
-| `TickScheduler.subscriptions` | W (append-only, via `.subscribe`) | `engine.substrate.keys` | `engine/substrate/keys.py:520 subscribe` |
+| `TickScheduler.subscriptions` | W (append-only, via `.subscribe`) | `engine.substrate.keys` | `engine/substrate/keys.py:552 subscribe` |
 | `stubwire.invocations` | W | `engine.substrate.stubwire` | `engine/substrate/stubwire.py:61 invocations` |
 
 Articulation owns no field of its own on `world`, `GameState`, or any faction/territory/NPC
@@ -111,7 +111,7 @@ list and the shared stub counter. `render_protagonist_lens`/`generate_chronicle_
 |---|---|---|---|
 | `in` | `engine.mc_v18` (campaign driver) | Calls `subscribe_all` once per campaign, inside the `ECHO_TRANSPORT`-on boot branch | `engine/mc_v18.py:276-277` |
 | `out` | `engine.mc_v18` (campaign driver) | Telemetry only: the campaign reads the `stubwire.invocations` delta this subsystem's fired callbacks contribute to, into `CampaignResult.stub_hits`. No state crosses — the counter is the entire payload | `engine/mc_v18.py:327 stub_hits` |
-| `out` | `engine.substrate.keys.TickScheduler` | `subscribe_all` registers callbacks via the substrate's `.subscribe`; callbacks are later invoked by the substrate's own emission path | `engine/cross_scale/articulation.py:169 subscribe_all`, `engine/substrate/keys.py:589-577 callback` |
+| `out` | `engine.substrate.keys.TickScheduler` | `subscribe_all` registers callbacks via the substrate's `.subscribe`; callbacks are later invoked by the substrate's own emission path | `engine/cross_scale/articulation.py:169 subscribe_all`, `engine/substrate/keys.py:621-609 callback` |
 | `lateral` | `engine.cross_scale.echo_transport` | The sole production module that ever constructs a `Key` of a type articulation subscribes to (`scene.combat_resolved`, `scene.accord_echo`) | `engine/cross_scale/echo_transport.py:99-102`, `:309-311` |
 | `lateral` | `engine.cross_scale.scene_dispatch` | Gates whether `echo_transport` ever receives a populated `ctx['echo']` to build a Key from (default: it does not) | `engine/cross_scale/scene_dispatch.py:55` |
 
@@ -128,4 +128,4 @@ list and the shared stub counter. `render_protagonist_lens`/`generate_chronicle_
 | **`scene.accord_echo`'s one live emission path is organically dormant.** It requires a caller-declared `echo['scene_outcome']`, which no live `scene_dispatch.py`/`parliamentary_bridge.py` caller sets today. | `engine/cross_scale/echo_transport.py:34-37` |
 | **Net: `subscribe_all` wires all 13 callbacks at every default campaign boot, but under default flags none of the 13 can ever fire in a live campaign** — the whole Tier-2 trigger flow is structurally present and dormant, not partially reachable. | Composite of the four rows above; `engine/mc_v18.py:260-277` (default-flag boot path) |
 | **Declared vs. actual `consumes` contract diverges.** `module_contracts.yaml` declares articulation as a universal wildcard reader of the Key stream (`{type: "*", from: engine}`); the actual code subscribes to exactly the 13 explicit ids in `_TRIGGER_TYPE_IDS` and nothing else — no wildcard subscription exists in this module. | `references/module_contracts.yaml:1110-1112`; `engine/cross_scale/articulation.py:116-130 _TRIGGER_TYPE_IDS` |
-| **`subscribe_all` is non-idempotent by construction and unguarded.** A second call on the same scheduler double-registers every callback (`TickScheduler.subscribe` is purely additive); nothing in code enforces the "call exactly once per scheduler lifetime" contract — it is stated only in the docstring. | `engine/cross_scale/articulation.py:163-166 subscribe_all` docstring, `engine/substrate/keys.py:519-507 subscribe` |
+| **`subscribe_all` is non-idempotent by construction and unguarded.** A second call on the same scheduler double-registers every callback (`TickScheduler.subscribe` is purely additive); nothing in code enforces the "call exactly once per scheduler lifetime" contract — it is stated only in the docstring. | `engine/cross_scale/articulation.py:163-166 subscribe_all` docstring, `engine/substrate/keys.py:551-539 subscribe` |
