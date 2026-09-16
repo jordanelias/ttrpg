@@ -208,6 +208,25 @@ experiment?). **Specificity about what to attack, plus an artifact proving it ha
 3. **Name the falsifier, or you have not attacked the result.** A result claim carries, in the same
    commit, the test that would have shown it wrong and that test's outcome. "Adversarially reviewed"
    without an artifact is unfalsifiable.
+
+   ⚠ **"RESULT CLAIM" IS WIDER THAN A NUMBER, AND THE NARROW READING IS WHERE THIS RULE KEPT
+   FAILING TO FIRE** (ED-IN-0228, 2026-09-16). A session applied this rule to its *measurements*
+   and exempted its statements *about the tree*, which do not feel like results: it reported a
+   mechanism absent that was live, a gate firing zero times that fired 1,104, an eligibility route
+   working that no verb row uses, and quoted a file in a dissolved tree. Each was verified — the
+   wrong half of itself. **THE CLAIM AND ITS SUPPORT ARE DIFFERENT OBJECTS; THE SUPPORT IS THE ONE
+   TO CHECK.** Three shapes, each with the observation that must come first:
+
+   | claiming | observe this first |
+   |---|---|
+   | **"X is absent / dead / never fires"** | RUN the thing that would show presence. An absence is the cheapest claim to make and the hardest to see wrong. |
+   | **"X works today"** | Open the CALL SITE, not the declaration. A roster existing is not a roster being used. |
+   | **"as `F` says at `:L`"** | Open `F` at `:L`. A citation you have not opened is not a citation. |
+
+   **NO GUARD MAY BE BUILT FOR THIS.** Its subject is a reader's discipline, which is precisely what
+   pt 5's predicate excludes; like §0.4, the enforcement is that you read it. It is also why this is
+   an amendment to an existing check rather than a sixth one — the rule was already here and its
+   trigger was too narrow, and answering that with more apparatus is §0.3's own failure mode.
 4. **A number without a control is not a measurement — in either direction.** Asymmetric skepticism is a
    bias, not a defence; absence of one failure mode is not presence of correctness.
 5. **Sweep pattern defects; fix one-off defects — but a guard must EARN its existence.** A pattern

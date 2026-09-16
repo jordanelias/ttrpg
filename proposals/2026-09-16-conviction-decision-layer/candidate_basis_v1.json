@@ -1,0 +1,23 @@
+{
+  "_what": "A CANDIDATE 13x4, placed independently of whoever proposed the axes. Scored by `python -m engine.season.harness.conviction_spread --candidate proposals/2026-09-16-conviction-decision-layer/candidate_basis_v1.json`, which always prints the live basis first as the control.",
+  "_provenance": "Placed 2026-09-16 by an agent given only the roster, `conviction_taxonomy_v30.md` §2/§2.1 and the four axis definitions -- never this proposal, the three-tension basis it replaced, or any of the session's reasoning. Circularity was the defect the separation exists to avoid: the earlier basis was placed by the same party that chose its axes, and its corner test was therefore unfalsifiable.",
+  "_disclosed_against_itself": "The placer read `conviction_axis_matrix_v30.md` before placing, as instructed, and reports that its `memory` column correlates r=+0.85 with that document's `traditional` column. It could not separate genuine overlap from anchoring and declined to claim independence. `substantive` correlates only +0.26 with the old `instrumental`, so that axis is measuring something the old matrix does not have.",
+  "_null_finding": "`selfish` is near-inert ACROSS THIS ROSTER and that is a property of the taxonomy, not of the axis: nine of thirteen sit at |value| <= 0.1, five at exactly 0.0, per-axis sd 0.18 against 0.44-0.54 for the others. `conviction_taxonomy_v30.md` §2.3 factored self/other OUT of the Convictions into `orient.self_other` deliberately, so that two actors may share a Conviction vector and differ in whom they serve. The axis measures agents; it does not measure Convictions.",
+  "_not_ratified": "Nothing here is adopted. The axes are Jordan's wording of 2026-09-16; the numbers are one placement, not a canon change, and `conviction_axis_matrix_v30.md` remains the live matrix.",
+  "axes": ["memory", "substantive", "equity", "selfish"],
+  "rows": {
+    "Faith":      {"memory":  0.4, "substantive": -0.3, "equity":  0.2, "selfish": -0.1},
+    "Authority":  {"memory":  0.4, "substantive": -0.2, "equity": -0.3, "selfish":  0.0},
+    "Order":      {"memory":  0.2, "substantive": -0.9, "equity":  0.4, "selfish":  0.0},
+    "Scholastic": {"memory":  0.2, "substantive": -0.5, "equity":  0.4, "selfish":  0.0},
+    "Utility":    {"memory": -0.7, "substantive":  0.9, "equity":  0.0, "selfish":  0.0},
+    "Equity":     {"memory": -0.3, "substantive":  0.6, "equity":  0.9, "selfish": -0.2},
+    "Liberty":    {"memory": -0.3, "substantive":  0.2, "equity":  0.3, "selfish":  0.1},
+    "Precedent":  {"memory":  0.9, "substantive": -0.5, "equity":  0.2, "selfish":  0.0},
+    "Community":  {"memory":  0.3, "substantive":  0.3, "equity": -0.5, "selfish": -0.2},
+    "Identity":   {"memory":  0.5, "substantive":  0.0, "equity": -0.9, "selfish":  0.0},
+    "Warden":     {"memory": -0.3, "substantive":  0.6, "equity": -0.3, "selfish": -0.5},
+    "Virtue":     {"memory":  0.1, "substantive":  0.4, "equity":  0.3, "selfish":  0.2},
+    "Honor":      {"memory":  0.6, "substantive": -0.5, "equity": -0.3, "selfish":  0.1}
+  }
+}
