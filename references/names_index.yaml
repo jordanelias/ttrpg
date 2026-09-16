@@ -132,8 +132,15 @@ entries:
   # separate). token_class clock_track so the 2 existing full-name clock.* aren't pulled.
   clock.ms: {canonical: "MS", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bMS\b(?![A-Za-z])', 'Mending Stability']}
   clock.ci: {canonical: "CI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bCI\b(?![A-Za-z])', 'Church Influence']}
-  clock.ip: {canonical: "IP", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bIP\b(?![A-Za-z])', 'Invasion Pressure']}
-  clock.pi: {canonical: "PI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bPI\b(?![A-Za-z])', 'Political Instability']}
+  # ⚠ CANONICAL SECOND, RIVAL THIRD (2026-09-16). This row carried ONLY 'Invasion Pressure' — which
+  # is not the canonical expansion and is not the recorded rival either. Canon is INSTITUTIONAL
+  # Pressure (`glossary.md`, `alias_registry.yaml`, `name_collision_database.yaml`), and the matcher
+  # missed all 100 of its corpus occurrences while catching 28 of a name no registry blesses. The
+  # rival STAYS: `patterns:` is a matcher list, not a definition, and finding drift is its job.
+  clock.ip: {canonical: "IP", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bIP\b(?![A-Za-z])', 'Institutional Pressure', 'Invasion Pressure']}
+  # ⚠ SAME DEFECT, SAME BLOCK, SAME FIX. Canon is PUBLIC Instability (68 corpus occurrences, missed);
+  # 'Political Instability' has 3 and no registry blesses it. Both matchers, canonical first.
+  clock.pi: {canonical: "PI", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bPI\b(?![A-Za-z])', 'Public Instability', 'Political Instability']}
   clock.ts: {canonical: "TS", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bTS\b(?![A-Za-z])', 'Thread Sensitivity']}
   clock.tcv: {canonical: "TCV", aliases: [], legacy: [], category: clock, token_class: clock, scale: clock, enforce: warn, patterns: ['\bTCV\b']}
 

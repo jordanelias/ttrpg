@@ -266,7 +266,11 @@ def test_token_classes_sourced_from_names_index_byte_identical():
     # clocks (abbreviations): namespaced clock.* (token_class 'clock'); the 2 full-name clock
     # entries are tagged token_class 'clock_full' so the roster stays the 6 abbreviations.
     CLK = {'MS': [r'\bMS\b(?![A-Za-z])', 'Mending Stability'], 'CI': [r'\bCI\b(?![A-Za-z])', 'Church Influence'],
-           'IP': [r'\bIP\b(?![A-Za-z])', 'Invasion Pressure'], 'PI': [r'\bPI\b(?![A-Za-z])', 'Political Instability'],
+           # ⚠ CANONICAL EXPANSION ADDED 2026-09-16 and the rival KEPT. These two rows listed only
+           # the rival, so the matcher missed 100 'Institutional Pressure' and 68 'Public
+           # Instability' occurrences while catching 28 and 3 of names no registry blesses.
+           'IP': [r'\bIP\b(?![A-Za-z])', 'Institutional Pressure', 'Invasion Pressure'],
+           'PI': [r'\bPI\b(?![A-Za-z])', 'Public Instability', 'Political Instability'],
            'TS': [r'\bTS\b(?![A-Za-z])', 'Thread Sensitivity'], 'TCV': [r'\bTCV\b']}
     assert set(va.CLASSES['clock']) == set(CLK)
     for disp, pats in CLK.items():
