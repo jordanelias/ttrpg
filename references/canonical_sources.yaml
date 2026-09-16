@@ -325,7 +325,7 @@ systems:
     added: '2026-05-01 PP-687 ratification — universal Key substrate'
   key_type_registry:
     design_doc: systems/_architecture/reference/key_type_registry_v30.md
-    canonical_sha__systems___architecture__reference__key_type_registry_v30_md: "897cff539839bf949521ca4d40139c7f470e6211"
+    canonical_sha__systems___architecture__reference__key_type_registry_v30_md: "f9be5efd891aff61c41975d1b8b126ca5b39b1d5"
     canonical_sha__systems___architecture__key_type_registry_v30_md: "897cff539839bf949521ca4d40139c7f470e6211"
     status: canonical
     added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
