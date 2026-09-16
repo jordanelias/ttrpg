@@ -37,6 +37,7 @@ count) comes from `corpus_run.py`'s own `RANKING DISCRIMINATION` line and is not
 from __future__ import annotations
 
 import math
+from typing import Optional
 
 from ..data.rosters import CONVICTION_AXES
 from ..data.verbs import CONVICTION_PROJECTION, PROJECTION_DEFAULT_CELL
@@ -92,14 +93,33 @@ def _eigenvalues(a: list) -> list:
     return sorted((w[i][i] for i in range(m)), reverse=True)
 
 
-def spread() -> dict:
-    """`{mean, magnitude, cosines, per_axis_signs, within_60deg, spectrum}` over the matrix."""
-    axes = list(CONVICTION_AXES)
-    # The DECLARED sparse default, not a literal — `decision.project` reads the same constant,
-    # and an instrument that hard-codes `0.0` stops agreeing with the thing it measures the day
-    # the row's `default_cell` moves.
-    rows = {c: [CONVICTION_PROJECTION[c].get(a, PROJECTION_DEFAULT_CELL) for a in axes]
-            for c in CONVICTION_PROJECTION}
+def spread(candidate: Optional[tuple] = None) -> dict:
+    """`{mean, magnitude, cosines, per_axis_signs, within_60deg, spectrum}` over a matrix.
+
+    ⚠ **PARAMETERISED 2026-09-16, AND THE REASON IS THAT THE UNPARAMETERISED VERSION COULD ONLY
+    EVER CONDEMN.** It measured the live table and nothing else, so a session proposing a DIFFERENT
+    basis could measure the thing it wanted to replace and not the thing it wanted to replace it
+    with — which is `CLAUDE.md` §0.1 pt 4's asymmetric skepticism, built into an instrument. A
+    proposal scored by no instrument while its target is scored by one is not a comparison.
+
+    `candidate` is `(axes, rows)` — a list of axis names and `{conviction: {axis: value}}`. Passing
+    `None` measures the LIVE table and is the control: it must reproduce the figures `ED-IN-0214`
+    cites, and `main()` prints both when a candidate is given so the two are never reported alone.
+
+    ⚠ IT SCORES WHAT IT IS HANDED AND JUDGES NOTHING. A candidate basis scoring better here is not
+    thereby right — the spectrum says how many directions a matrix spans, never whether they are
+    the directions the game needs. That question is `ED-IN-0214`'s and Jordan's."""
+    if candidate is not None:
+        axes, raw = candidate
+        axes = list(axes)
+        rows = {c: [float(raw[c].get(a, PROJECTION_DEFAULT_CELL)) for a in axes] for c in raw}
+    else:
+        axes = list(CONVICTION_AXES)
+        # The DECLARED sparse default, not a literal — `decision.project` reads the same constant,
+        # and an instrument that hard-codes `0.0` stops agreeing with the thing it measures the day
+        # the row's `default_cell` moves.
+        rows = {c: [CONVICTION_PROJECTION[c].get(a, PROJECTION_DEFAULT_CELL) for a in axes]
+                for c in CONVICTION_PROJECTION}
     n = len(rows) or 1
     mean = [sum(v[i] for v in rows.values()) / n for i in range(len(axes))]
     mag = math.sqrt(sum(m * m for m in mean))
