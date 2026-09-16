@@ -36,7 +36,9 @@ count) comes from `corpus_run.py`'s own `RANKING DISCRIMINATION` line and is not
 """
 from __future__ import annotations
 
+import json
 import math
+import sys
 from typing import Optional
 
 from ..data.rosters import CONVICTION_AXES
@@ -62,34 +64,62 @@ def _covariance(rows: dict, axes: list) -> list:
 
 
 def _eigenvalues(a: list) -> list:
-    """Descending eigenvalues of a small SYMMETRIC matrix, by cyclic Jacobi rotation.
+    """Descending eigenvalues of a small SYMMETRIC matrix, by CYCLIC Jacobi sweeps.
 
-    ⚠ HAND-ROLLED BECAUSE `numpy` IS NOT A DEPENDENCY OF THIS PACKAGE, and that is a reason to
-    self-check rather than to trust the arithmetic. A symmetric rotation preserves the trace
-    exactly, so `sum(eigenvalues) == trace(input)` is a property this routine cannot satisfy by
-    accident — `spread()` asserts it, which is the falsifier `CLAUDE.md` §0.1 pt 3 asks for on a
-    number this instrument prints. Without it a silently wrong solver would report a plausible
-    effective-dimension figure and nothing would contradict it."""
+    ⚠⚠ **REWRITTEN 2026-09-16 AFTER THE FIRST VERSION WAS FOUND WRONG, AND THE WAY IT WAS WRONG
+    IS THE POINT.** It ran 100 SINGLE rotations, not sweeps, and vouched for itself with a TRACE
+    identity. An orthogonal similarity preserves the trace whether or not the sweep has
+    converged, so the check could not observe the failure it excluded — `CLAUDE.md` §0.1 pt 2
+    exactly, shipped inside a docstring that claimed the opposite ("a solver that has gone wrong
+    cannot satisfy this"). MEASURED on this tree, 200 random symmetric matrices per size:
+
+        k= 4   off-diagonal residual 1.7e-12   non-converged   0/200
+        k= 8   off-diagonal residual 3.5e-10   non-converged   0/200
+        k=12   off-diagonal residual 2.1e-01   non-converged 200/200
+        k=16   off-diagonal residual 1.3e+00   non-converged 200/200
+
+    — and `abs(sum(ev) - trace)` stayed at ~9e-15 in EVERY one of those failures. The four-axis
+    control was never affected, which is why it went unnoticed: the parameterisation exists to
+    score a candidate basis of any width, and a twelve-axis candidate would have printed a
+    participation ratio computed from wrong eigenvalues, silently.
+
+    **THE CHECK IS NOW THE RESIDUAL, WHICH IS THE QUANTITY THAT CAN FAIL.** A converged Jacobi
+    leaves the off-diagonal norm at machine precision; a truncated one does not. The trace
+    identity is kept as a second, independent check — it catches a different error class (a
+    rotation that is not a similarity) — but it is no longer claimed as the falsifier for
+    convergence, because it is blind to it."""
     m = len(a)
     w = [row[:] for row in a]
-    for _ in range(100):
-        off = max(((abs(w[i][j]), i, j) for i in range(m) for j in range(i + 1, m)),
-                  default=(0.0, 0, 0))
-        # A Jacobi sweep on a 4x4 reaches machine precision in a handful of rotations, so this
-        # is the convergence floor. No canonical source governs it and none should.
-        # [JUSTIFIED: float64 convergence tolerance — arithmetic, not a game value]
-        if off[0] < 1e-12:
+
+    def off_norm(x):
+        return math.sqrt(sum(x[i][j] ** 2 for i in range(m) for j in range(m) if i != j))
+
+    # [JUSTIFIED: float64 convergence tolerance and sweep budget — arithmetic, not a game value]
+    tol, max_sweeps = 1e-12, 60
+    for _ in range(max_sweeps):
+        if off_norm(w) < tol:
             break
-        _, p_, q_ = off
-        th = (math.pi / 4 if w[p_][p_] == w[q_][q_]
-              else 0.5 * math.atan2(2 * w[p_][q_], w[p_][p_] - w[q_][q_]))
-        c, s = math.cos(th), math.sin(th)
-        for r in range(m):
-            wp, wq = w[p_][r], w[q_][r]
-            w[p_][r], w[q_][r] = c * wp + s * wq, -s * wp + c * wq
-        for r in range(m):
-            wp, wq = w[r][p_], w[r][q_]
-            w[r][p_], w[r][q_] = c * wp + s * wq, -s * wp + c * wq
+        # A CYCLIC sweep annihilates every off-diagonal pair once. The previous version picked
+        # the largest pair and did that 100 times total, which is not even two sweeps at k=12.
+        for p_ in range(m):
+            for q_ in range(p_ + 1, m):
+                if abs(w[p_][q_]) < tol:
+                    continue
+                th = (math.pi / 4 if w[p_][p_] == w[q_][q_]
+                      else 0.5 * math.atan2(2 * w[p_][q_], w[p_][p_] - w[q_][q_]))
+                c, s_ = math.cos(th), math.sin(th)
+                for r in range(m):
+                    wp, wq = w[p_][r], w[q_][r]
+                    w[p_][r], w[q_][r] = c * wp + s_ * wq, -s_ * wp + c * wq
+                for r in range(m):
+                    wp, wq = w[r][p_], w[r][q_]
+                    w[r][p_], w[r][q_] = c * wp + s_ * wq, -s_ * wp + c * wq
+    residual = off_norm(w)
+    # [JUSTIFIED: float64 residual ceiling — arithmetic, not a game value]
+    if residual > 1e-8:
+        raise AssertionError(
+            f"Jacobi did not converge on a {m}x{m} matrix: off-diagonal residual {residual!r}. "
+            f"The eigenvalues would be wrong and the trace identity would NOT have caught it.")
     return sorted((w[i][i] for i in range(m)), reverse=True)
 
 
@@ -165,9 +195,12 @@ def spread(candidate: Optional[tuple] = None) -> dict:
                               trace=trace, effective_axes=pr, correlations=corr))
 
 
-def main() -> int:
-    s = spread()
-    print(f"CONVICTION SPREAD — {s['total']} convictions over {len(s['axes'])} axes")
+def _report(s: dict, tag: str) -> None:
+    """One basis, printed. Factored out of `main` so the control and a candidate render
+    IDENTICALLY -- two printers would let the two halves of a comparison diverge in format, and
+    a comparison whose sides are formatted differently invites reading a difference that is not
+    in the numbers."""
+    print(f"\n=== {tag} — {s['total']} convictions over {len(s['axes'])} axes ===")
     print("  mean vector   " + "  ".join(f"{a} {s['mean'][a]:+.3f}" for a in s["axes"]))
     print(f"  magnitude     {s['magnitude']:.3f}")
     print("\n  cosine with the mean direction (a variation on the common theme vs a dissent):")
@@ -191,6 +224,39 @@ def main() -> int:
         print(f"    {a:14} x {b:14} r = {r:+.3f}")
     # ⚠ NO VERDICT. Whether this spread is right is `ED-IN-0214`'s question and Jordan's to answer;
     # printing a pass/fail here would be this instrument deciding it.
+
+
+def main(argv: Optional[list] = None) -> int:
+    """`python -m engine.season.harness.conviction_spread [--candidate FILE.json]`.
+
+    ⚠ **THE `--candidate` FLAG EXISTS BECAUSE THE PARAMETER WITHOUT IT WAS A DECLARED-BUT-UNREAD
+    ROW.** `spread(candidate=...)` shipped on 2026-09-16 with no caller anywhere in the tree —
+    the one measurement it was built for was run from an ad-hoc shell script that left nothing
+    behind, so the branch was unreachable by any command and the result was unreproducible. That
+    is `01_AXIOMS.md` ID-13's own prohibition, and this same package's guards exist to prevent it
+    for other artifacts.
+
+    FILE.json is `{"axes": [...], "rows": {"<Conviction>": {"<axis>": value, ...}, ...}}`.
+
+    ⚠ **THE CONTROL IS ALWAYS PRINTED FIRST.** A candidate reported alone is the asymmetry §0.1
+    pt 4 names: the replacement graded while the incumbent is not. The flag cannot suppress it."""
+    argv = list(sys.argv[1:] if argv is None else argv)
+    cand_path = None
+    if "--candidate" in argv:
+        i = argv.index("--candidate")
+        if i + 1 >= len(argv):
+            print("--candidate needs a path to a JSON file", file=sys.stderr)
+            return 2
+        cand_path = argv[i + 1]
+
+    _report(spread(), "CONTROL: the live basis")
+    if cand_path:
+        with open(cand_path, encoding="utf-8") as fh:
+            doc = json.load(fh)
+        _report(spread((doc["axes"], doc["rows"])), f"CANDIDATE: {cand_path}")
+        print("\n⚠ The instrument does not choose between these. It reports how many independent "
+              "directions each\n  basis spans; whether they are the directions the game needs is "
+              "ED-IN-0214's question.")
     return 0
 
 
