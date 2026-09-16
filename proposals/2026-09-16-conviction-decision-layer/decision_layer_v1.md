@@ -7,6 +7,34 @@ establishes the measured state this design answers. **Nothing here is ratified b
 
 ---
 
+---
+
+## §0 WHAT THE ADVERSARIAL PASS OVERTURNED — 2026-09-16, same day
+
+Five structurally read-only critics attacked this document's claims. **Every finding below was
+re-verified by hand against the tree.** The design is left standing with its defects marked rather
+than quietly rewritten: three of its five preference terms are unbuildable as specified, and one
+reproduces the exact defect it was written to repair.
+
+| § | the claim | the defect | verified at |
+|---|---|---|---|
+| §1 | a decision has three stages | **A fourth runs first and dominates.** Question production precedes STANDING, and `question_aggregation_rule="first"` takes `qs[0]` — the question decides **801 of 1,068 deliberations** (ED-IN-0218). A stage-2 attention term cannot bias which question is answered under `first` | `data/fixtures.py`; `queries/world_q.py:159-248` |
+| §2 | office/remit "**works today**" | **FALSE.** `remit:` declines unconditionally (`H-71`), `presence:` declines (`H-33`), `hold:<placeholder>` declines (`H-75`), and the verb table carries **no bare `hold`**. Only `own` admits. The one live channel from office to decision is the **budget bonus** | `decision/options.py:143-169`; `decision/budget.py` |
+| §3.2 | `regard` is written by the witness channels | **WRITE-CLASS VIOLATION.** `(Person, stance)` is `steps: [RES]`, `class: ACTS`, `social: "true"` — **only an act at RESOLVE may write it.** WITNESS-side writing is an unmarked cell | `engine/season/write_matrix.yaml:204-209` |
+| §3.4 | `interest = orientation · scope(c.verb)` | **INERT BY CONSTRUCTION — the defect this term was repairing.** `writes:` cells name record kinds, never rung kinds; the only rung-kind column is `scale:`, on 10 of 38 rows, **none of which executes**, failing loader invariant 10 and slated for deletion. `scope` is undefined for every candidate that forms → constant → `H-73` exactly. **And the sign is inverted**: with orientation ∈ [−1,+1] and scope ascending `person→realm`, a *self-aggrandizing* person scores *wide* acts higher — the opposite of this document's prose | `verb_table.yaml:66-75`; `hole_register.yaml` H-73 |
+| §3.5 | `pursuit` needs a new `Ambition` carrier | **DUPLICATES A LIVE MECHANISM (§8).** A `commit` Tenure to an OUGHT Proposition already mints Q4 — *"that IS the ambition mechanism"*. What is genuinely missing is a **preference term over the live commit** and the four resolution states, not a new object | `requirements.yaml` R-06; `world_q.py:240-248` |
+| §4 | build order starts at `H-62` | **The true first step is `W27` — the cast — plus a person-referent route.** Every writer this design needs is character creation, and *"NOTHING creates or develops a person"*. Measured: 177,170 candidates, 17,400 person-subject, **all of them the asker, zero another person** — so closing `H-62` leaves `regard` with almost nothing to read | `requirements.yaml`; ED-IN-0217; `registers/handoffs/HANDOFF_IN.md` |
+
+⚠ **The §3.4 failure is the instructive one.** This document diagnosed `H-73` — *a term with no `c` in it cannot move a ranking* — and then specified a replacement term whose operand is absent on every executing verb, which makes it constant across candidates, which is `H-73`. Diagnosing a defect is not immunity from it. The check that would have caught it is one grep of the column the term reads.
+
+⚠ **One miscite:** `rank_of` is `title_rank` (`data/rosters.py:315`).
+
+⚠ **A word-choice hazard this document did not catch.** `rosters.yaml`'s question-source roster
+already names the **ambition** source `need`, while Jordan's list uses *needs* for subsistence. Two
+different things, one word, across a session boundary — `CLAUDE.md` §4.
+
+---
+
 ## §1 The shape: a decision already has three stages, and they take different inputs
 
 The mistake to avoid is a twelve-addend sum. Twelve terms in one score is unintuitable, and
@@ -53,7 +81,7 @@ occasions (**stage 3**).
 
 | # | input | mechanism | state |
 |---|---|---|---|
-| 10a | office / remit | `hold` and `remit` Tenures | **works today** |
+| 10a | office / remit | `hold` and `remit` Tenures | ⚠ **CORRECTED (§0): does NOT gate person-side.** The live channel is the budget bonus |
 | 11 | ethnicity / caste | — | needs a ruling (§5 J2) |
 | 12 | job / profession / training | — | needs a ruling (§5 J2) |
 
@@ -147,7 +175,7 @@ interest(p, c)  :=  orientation(p) · scope(c.verb)
 - **`scope(c.verb)`** — the widest rung the verb's declared writes can land on, read off the verb's
   own row. `rosters.yaml:rung_kinds` is already an **ordered** roster (`person · hearth · community
   · settlement · territory · province · duchy · realm`, loaded by `data/rosters.py::RUNG_KINDS` with
-  `ordered=True`), and `rank_of` already reads a title's ordinal in it as *"higher governs wider"*,
+  `ordered=True`), and `title_rank` already reads a title's ordinal in it as *"higher governs wider"*,
   so the ladder this term measures along exists and is single-owned.
 
 ⚠⚠ **THE FIRST DRAFT OF THIS TERM READ THE SUBJECT'S RUNG, AND IT WOULD HAVE RAISED.** It said

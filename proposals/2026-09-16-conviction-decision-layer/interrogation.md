@@ -14,6 +14,36 @@ job/profession/educational background."*
 
 ---
 
+---
+
+## §0.0 WHAT A FIVE-CRITIC ADVERSARIAL PASS OVERTURNED — 2026-09-16, same day
+
+Five structurally read-only critics (`.claude/agents/valoria-critic.md`, Fable tier, dispatched with
+this document's OUTPUT and none of its reasoning) attacked it. **Each finding below was re-verified
+by hand against the tree before being written here.** They are recorded rather than silently
+repaired, because a document that hides what it got wrong teaches the next session nothing.
+
+| # | what this document claimed | what the tree says | where |
+|---|---|---|---|
+| **1** | **(1) ambitions are "absent in code"** | **FALSE.** A person's motive is a `commit` Tenure to an OUGHT Proposition, read as question source **Q4** every season — *"that IS the ambition mechanism"* | `engine/season/requirements.yaml` R-06; `queries/world_q.py:240-248` |
+| **2** | **(4)/(5) memory "fires 0× at the shipped setting"** | **STALE**, and the figure named no command. Re-measured at the shipped default: **1,491 raw clause-4 drops, 1,104 across five verbs** (`examine`, `restore`, …), up from 25 all-`move` | `requirements.yaml` R-01, 2026-09-10 |
+| **3** | **(10) has a "partial route in today, through `hold` and `remit`"** | **FALSE person-side.** `remit:` declines unconditionally (`H-71`), `presence:` declines (`H-33`), `hold:<placeholder>` declines (`H-75`), and the verb table carries **no bare `hold`** — 21 cells are `own`, 5 `own + presence:<site>`, the rest `remit:*`. **Only `own` admits.** No Tenure makes any verb available to a deliberating person in any run | `decision/options.py:143-169`; `verb_table.yaml` eligibility cells |
+| **4** | the decision path has three stages | **INCOMPLETE.** Question production runs first, and `question_aggregation_rule="first"` takes `qs[0]` — **the question decides 801 of 1,068 deliberations** | ED-IN-0218; `data/fixtures.py` |
+
+⚠ **Finding 3 is the load-bearing one and it removes a foundation.** This document's answer to
+*where does obligation enter* was "through offices, and offices are Tenures, and Tenures gate
+verbs." The last link does not exist. Office reaches a person's decision through exactly one live
+channel today — the **budget bonus** per live `hold` (`decision/budget.py`) — which this document
+never modelled. A green falsifier already names the gap:
+`test_no_person_can_choose_a_governance_verb_and_h71_is_why`.
+
+⚠ **Findings 1 and 2 are the same defect in two places: a claim of absence made without running the
+instrument that would have contradicted it.** §0.1 pt 4 — *a number without a control is not a
+measurement, in either direction.* This document applied that rule to the conviction matrix and
+exempted itself.
+
+---
+
 ## §0 Verdict
 
 **Convictions are carrying the entire decision layer alone, and they are not shaped to carry it.**
@@ -250,16 +280,16 @@ So three of the twelve cannot enter the present architecture at all without a ru
 
 | # | Jordan's input | authored where | carrier on `Person` | reaches a decision? | state |
 |---|---|---|---|---|---|
-| 1 | **ambitions** | `player_agency_v30.md` §2 (as "Convictions"); `npc_registry.yaml:goals` | — | no | **absent in code** |
+| 1 | **ambitions** | `player_agency_v30.md` §2 (as "Convictions"); a `commit` Tenure to an OUGHT Proposition | `tenures` | **yes — raises Q4** | ⚠ **CORRECTED (§0.0 #1): the mechanism EXISTS.** What is missing is a *read* over it — no `ambitions(p)` query, and no preference term |
 | 2 | **needs** | `Sensation.subsistence`; `body` | `body` (+ `Sensation`) | term 3 | **inert** (no `c`; `H-73`) |
 | 3 | **fears** | — | — | no | **absent everywhere** |
-| 4 | **memories** | `Person.ledger` (Claims), `claim_sources.told_by` | `ledger` | `opening_set` clause 4 | **live as a gate**, fires 0× at the shipped channel setting |
+| 4 | **memories** | `Person.ledger` (Claims), `claim_sources.told_by` | `ledger` | `opening_set` clause 4 | **live as a gate and it FIRES** — ⚠ **CORRECTED (§0.0 #2):** 1,104 drops across five verbs at the shipped default |
 | 5 | **epistemic** | `engine/season/epistemic.py`, witness channels | `ledger` | same as (4) | same |
 | 6 | **moral values** | `conviction_taxonomy_v30.md` §2 | `convictions` | term 1 | **live — the only one** |
 | 7 | **religious values** | Faith conviction; **Truth** 0–5 (ED-IN-0075), authored per named NPC in `npc_behavior_v30.md` §2 | `convictions` only | Faith, via term 1 | **half** — Truth is authored and has no carrier |
 | 8 | **self vs public** | taxonomy §3; `npc_registry:self_other_initial` | — | no | **authored, unread** (F5) |
 | 9 | **character opinions** | `Person.stance` `(referent, valence, weight)` | `stance` | term 2 | **live but never written** (F1) |
-| 10 | **obligations / duties** | `player_agency_v30.md` §3; Tenure/Office; the deleted Ethical Framework | `tenures` | eligibility `hold`/`remit` | **partial — gates, never weights** |
+| 10 | **obligations / duties** | `player_agency_v30.md` §3; Tenure/Office; the deleted Ethical Framework | `tenures` | ⚠ **CORRECTED (§0.0 #3): NOT eligibility.** `remit`/`presence`/`hold:<placeholder>` all decline | **the one live channel is the BUDGET BONUS per live `hold`** |
 | 11 | **ethnicity / caste** | `faction_politics_v30.md`; `cultural_label` templates | — | no | **prose only** |
 | 12 | **job / profession / education** | `Person.capability`; Scholastic conviction | `capability` | no — ruled to gate nothing | **present, inert** |
 

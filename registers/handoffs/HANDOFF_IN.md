@@ -97,6 +97,32 @@ the covariance spectrum, the pairwise axis correlations and a trace self-check.
 profession GATE (a fifth eligibility kind, which `rosters.yaml`'s own note says needs a ruling) or
 WEIGHT; and whether to un-merge PP-684 §6's fold of the Ethical Framework into the Conviction set.
 
+⚠⚠ **AMENDED SAME DAY BY A FIVE-CRITIC FABLE PASS — READ THE DOCUMENTS' §0 BLOCKS BEFORE THE
+DOCUMENTS.** Four factual errors and two unbuildable terms, each re-verified by hand: ambitions are
+NOT absent (a `commit` Tenure to an OUGHT mints Q4 — `requirements.yaml` R-06); the memory gate does
+NOT fire 0× (R-01: 1,104 drops across five verbs); **no Tenure gates any verb person-side** (only
+`own` admits — `remit`/`presence`/`hold:<placeholder>` all decline, and office reaches a decision
+only through the BUDGET BONUS); and the three-stage model omits the stage that decides **801 of
+1,068 deliberations** (the question, under `aggregation_rule: first`). The chat-only three-tension
+basis is **withdrawn in full** and never reached disk.
+
+⭐ **WHAT THE PASS ADDS, AND IT IS THE ONE THING TO CARRY FORWARD.** Jordan's thirteenth input —
+*how will the other judge me* — is **one mechanism with fears and audience, and none of the three
+exists: a forward model of consequence.** `holonic_ARCHITECTURE.md` makes it load-bearing in its own
+words (*"No reaction inside a season at person scale. You anticipated, or you are late"*) and admits
+the design has not reconciled it; probe A14 raises a `Collision` on exactly that, unruled. Fear
+cannot be a stance row — stance is toward a REFERENT and this setting's fears are CONSEQUENCE
+fears. A fourth omission nobody had named: **bonds**. `knot`/`tie` gate witnessing and the Solidarity
+style *requires* an active Knot, and `choose` reads neither.
+
+⚠ **AND ONE CANON-LEVEL ETHICS FINDING THAT IS JORDAN'S ALONE — NOT ACTED ON.** Southern Einhir
+carry higher baseline Thread Sensitivity **by descent**, while `threadwork_v30.md`, which owns TS,
+has no hereditary model at all and grants TS by exposure and practice. Church doctrine holds the
+Catastrophe was Einhir overreach — so if TS really is higher by descent, **the fiction ratifies the
+persecutor's premise.** The repair is already in the tree and deliberately not taken: Southern
+Einhir is defined territorially and `calamity_radiation_v30.md` already varies TS by distance from
+the epicentre. See ED-IN-0228.
+
 ⚠ **ONE STANDING ORDER FOR THE NEXT SESSION IN THIS AREA.** `architecture/PLAN.md:723` retires
 `(Person, capability)` and `(Person, marks)` as dead rows. Their deadness has the **same cause** as
 `stance`'s inertness — nothing writes them — and Jordan's inputs (11) and (12) would put both to
