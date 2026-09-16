@@ -194,7 +194,7 @@ def assert_faction_roster_is_covered(implemented_fields):
 CONVICTIONS = tuple(_DATA['conviction_roster']['names'])
 
 # ---------------------------------------------------------------------------
-# ETHICAL AXES — centralized 2026-09-14 (ED-IN-0229). THE ONLY AXIS ROSTER IN THE ENGINE.
+# ETHICAL AXES — centralized 2026-09-14 (ED-IN-0230). THE ONLY AXIS ROSTER IN THE ENGINE.
 # ---------------------------------------------------------------------------
 # `keys.py::AXES` held one literal and `engine/season/rosters.yaml: conviction_axes` held another,
 # and NOTHING compared them — while the roster's own note claimed "a fifth axis or a rename is one

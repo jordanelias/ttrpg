@@ -255,7 +255,7 @@ def defects() -> list[str]:
 # contradiction where there is a supersession — the exact failure `CLAUDE.md` §4 records under
 # `evacuate`, where a cold reading of one word escalated a non-existent blocker across five
 # surfaces.
-LOYALTY_SCALE = 100   # [JUSTIFIED: Jordan's ruled 0-100 scale, ED-IN-0228 — the unit's definition, not a tunable]
+LOYALTY_SCALE = 100   # [JUSTIFIED: Jordan's ruled 0-100 scale, ED-IN-0229 — the unit's definition, not a tunable]
 # Orthogonal ethics: neither aligned with the creed nor against it. DERIVED from the scale and
 # not written as a second number — the cosine's `[-1,+1]` maps onto `[0, LOYALTY_SCALE]`, so
 # indifference is its midpoint by construction and cannot drift out of step with the scale.
@@ -318,7 +318,7 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
 # #353 `:333` types a stance row `(referent, valence -5..+5, weight 0..5)`, and `decision/choose.py
 # ::stance_toward` sums `valence * weight` over the rows naming a candidate's subject. Five is that
 # type's own bound, read off the row rather than chosen here.
-STANCE_VALENCE_SCALE = 5   # [JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning; ED-IN-0228]
+STANCE_VALENCE_SCALE = 5   # [JUSTIFIED: #353 `:333` types the row `(referent, valence -5..+5, weight 0..5)` — the type's own bound, not a tuning; ED-IN-0229]
 
 
 def stance_from_loyalty(value: Optional[int]) -> Optional[tuple]:

@@ -191,7 +191,7 @@ rosters:
     # while the real thirteen arrived by a separate direct import in `data/rosters.py`, so
     # `roster("convictions")` returned `frozenset()` — the "membership test silently false"
     # outcome `roster()`'s own refusal text forbids, in the file whose header promises the
-    # opposite. `from_descriptor` is the mechanism ED-IN-0229 built; this is the row that
+    # opposite. `from_descriptor` is the mechanism ED-IN-0230 built; this is the row that
     # motivated it, finally migrated. It also puts the data-side `forbidden:` bar within
     # reach of this roster, which a direct import cannot do.
     from_descriptor: conviction_roster
@@ -227,7 +227,7 @@ rosters:
       names "The Exposure collision — three senses of one word, including a need scalar and a
       per-person tally". Spell the sense you mean.
       ⚠⚠ **THE `values:` LIST IS GONE AND THAT IS THE REPAIR, NOT A REGRESSION (2026-09-14,
-      ED-IN-0229).** This row used to carry its own literal copy and claimed, right here, that
+      ED-IN-0230).** This row used to carry its own literal copy and claimed, right here, that
       *"the engine substrate already single-owns this tuple, so a fifth axis or a rename is one
       edit there and a loader refusal here rather than two rosters drifting apart"*. **That
       refusal did not exist.** MEASURED by AST across the whole tree: exactly ONE module imports

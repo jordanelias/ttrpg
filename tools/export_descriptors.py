@@ -201,7 +201,7 @@ def build():
         # own roster in the absence of one code could read — and the disagreement was costing a
         # ratified mechanic (a Close-Knot-break Scar that silently never landed).
         'conviction_roster': _conviction_roster(reg),
-        # THE ETHICAL-AXIS ROSTER, centralized 2026-09-14 (ED-IN-0229). Same move as the line
+        # THE ETHICAL-AXIS ROSTER, centralized 2026-09-14 (ED-IN-0230). Same move as the line
         # above and after the same class of defect: `keys.py::AXES` and `rosters.yaml:
         # conviction_axes` each held a literal and NOTHING compared them, while the roster's own
         # note claimed a refusal that did not exist.

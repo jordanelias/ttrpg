@@ -56,7 +56,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 # §2.5 canonical Conviction axis set (key_substrate_v30.md §2.4).
-# ⚠ READ FROM THE REGISTRY, NOT DECLARED HERE (2026-09-14, ED-IN-0229). This was a literal tuple,
+# ⚠ READ FROM THE REGISTRY, NOT DECLARED HERE (2026-09-14, ED-IN-0230). This was a literal tuple,
 # and `engine/season/rosters.yaml: conviction_axes` was a second literal, with NOTHING comparing
 # them — while that roster's note asserted a refusal that did not exist. Both now resolve to
 # `references/descriptor_registry.yaml: axis_roster` through `descriptors.py`, which is the same

@@ -106,7 +106,7 @@ def _load_rosters() -> tuple:
                 f"roster {_n!r} carries {len(_ptrs)} owner pointers ({', '.join(_ptrs)})",
                 "rosters.yaml",
                 needs="keep the one that owns these members and delete the rest",
-                law="ED-IN-0229 -- a pointed-at roster has ONE owner. Two pointers is two owners "
+                law="ED-IN-0230 -- a pointed-at roster has ONE owner. Two pointers is two owners "
                     "with a read-order tiebreak, which is worse than a copy because it looks "
                     "single-owned")
         if _ptrs and "values" in _r:
@@ -114,7 +114,7 @@ def _load_rosters() -> tuple:
                 f"roster {_n!r} carries BOTH `{_ptrs[0]}:` and `values:`", "rosters.yaml",
                 needs="delete one -- the pointer if this roster owns its members, the `values:` "
                       "if the owner is the registry it points at",
-                law="ED-IN-0229 -- a pointed-at roster has ONE owner. The pointer wins at read "
+                law="ED-IN-0230 -- a pointed-at roster has ONE owner. The pointer wins at read "
                     "time, so a `values:` beside it is never read and never noticed, which is "
                     "exactly the second copy the pointer was introduced to prevent")
     return rosters, (doc.get("tables") or {})
@@ -134,7 +134,7 @@ def roster(name: str, ordered: bool = False):
             needs="add the roster to the data file; do not inline it here",
             law="Jordan 2026-09-02 -- definitions are not hardcoded. An absent roster REFUSES; "
                 "returning an empty set would make every membership test silently false")
-    # `from_descriptor:` — THE ROW POINTS AT THE SINGLE OWNER INSTEAD OF COPYING IT (ED-IN-0229).
+    # `from_descriptor:` — THE ROW POINTS AT THE SINGLE OWNER INSTEAD OF COPYING IT (ED-IN-0230).
     # A roster whose definition belongs to `references/descriptor_registry.yaml` names the block
     # and carries no `values:`, so there is exactly one place to edit and no second list to drift.
     # This is the `conviction_roster` shape made general: that row was handled by importing
@@ -152,7 +152,7 @@ def roster(name: str, ordered: bool = False):
                 f"absent or has no `names`", "references/descriptor_registry.yaml",
                 needs=f"add {r['from_descriptor']}.names, then "
                       "`python tools/export_descriptors.py --build`",
-                law="ED-IN-0229 -- a pointed-at roster REFUSES when its owner is missing. Falling "
+                law="ED-IN-0230 -- a pointed-at roster REFUSES when its owner is missing. Falling "
                     "back to a local literal is how the two axis lists drifted in the first place")
         vals = list(block["names"])
     elif "from_names" in r:
@@ -170,7 +170,7 @@ def roster(name: str, ordered: bool = False):
                 f"naming index carries", "references/names_index.yaml",
                 needs=f"set `token_class: {r['from_names']}` on the rows that belong to it, then "
                       "`python tools/export_names.py`",
-                law="ED-IN-0229 -- a pointed-at roster REFUSES when its owner is empty. Returning "
+                law="ED-IN-0230 -- a pointed-at roster REFUSES when its owner is empty. Returning "
                     "an empty set would be the silent-false `rosters.yaml`'s own header forbids")
     elif "values" not in r:
         raise Unspecified(

@@ -5,7 +5,7 @@ it protects is game code: `engine/season/decision/choose.py` sums a candidate's 
 once per deliberation, and `engine/substrate/keys.py` invariant 6 rejects any Key naming an axis
 outside it. Both were reading their own literal.
 
-THE DEFECT IT CLOSES, MEASURED RATHER THAN FEARED (2026-09-14, ED-IN-0229). `keys.py::AXES` was a
+THE DEFECT IT CLOSES, MEASURED RATHER THAN FEARED (2026-09-14, ED-IN-0230). `keys.py::AXES` was a
 tuple literal and `engine/season/rosters.yaml: conviction_axes` was a `values:` list, and NOTHING
 compared them — while that roster's own note asserted that *"the engine substrate already
 single-owns this tuple, so a fifth axis or a rename is one edit there and a loader refusal here

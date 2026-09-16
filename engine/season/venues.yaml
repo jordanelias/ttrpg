@@ -132,7 +132,7 @@ buildings:
 # MOVES PEOPLE, which is a game change.
 #
 # It used to be a second Python literal in `populated.py` re-typing these same eleven keys in a
-# different order, with nothing comparing the two — which is ED-IN-0229's defect (two literals, no
+# different order, with nothing comparing the two — which is ED-IN-0230's defect (two literals, no
 # refusal between them) one directory over. `populated.py` now reads this list and REFUSES if it
 # and `seats:` disagree in either direction, so adding a seat without ordering it is an error
 # rather than a silent never-match.

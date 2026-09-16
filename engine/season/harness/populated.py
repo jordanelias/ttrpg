@@ -141,7 +141,7 @@ def _institutions() -> list:
     """The institution match order, from `venues.yaml: seat_precedence`. ONE owner.
 
     ⚠⚠ THIS WAS A SECOND LITERAL AND NOTHING COMPARED THE TWO. It re-typed the eleven `seats:`
-    keys of `venues.yaml` in a different order, inside this file, four days after ED-IN-0229 fixed
+    keys of `venues.yaml` in a different order, inside this file, four days after ED-IN-0230 fixed
     exactly that shape for the ethical axes. A seat added to `venues.yaml` was never matched; a
     seat removed sent its people to `commons` with no signal — failing silently in both
     directions.
@@ -160,7 +160,7 @@ def _institutions() -> list:
             f"only in seats: {sorted(seats - set(order))}",
             "engine/season/venues.yaml",
             needs="every `seats:` key ordered exactly once in `seat_precedence`",
-            law="ED-IN-0229 — two literals of one set with no refusal between them is how the "
+            law="ED-IN-0230 — two literals of one set with no refusal between them is how the "
                 "ethical axes drifted; a seat nobody ordered is a seat nobody is ever matched to")
     _INST_CACHE = order
     return order
@@ -870,7 +870,7 @@ def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None
 
 
 def creed_sweep(seasons: int = 2, seeds: tuple = (0, 1)) -> list:
-    """`ED-IN-0228`'s instrument: does the faction creed change what people do, against a control?
+    """`ED-IN-0229`'s instrument: does the faction creed change what people do, against a control?
 
     ⚠ **THE CONTROL ARM IS THE POINT AND IT IS BUILT BY REMOVING THE CAUSE, NOT BY EDITING THE
     RESULT.** `cast.faction_leader` is stubbed to `None` for the build, so every faction falls
@@ -926,7 +926,7 @@ def main(argv=None) -> int:
         n = int(argv[0]) if argv and argv[0].isdigit() else 2
         hdr = (f"{'creed':<6} {'rule':<6} {'seed':>4} {'acts':>6} {'other':>6} {'self':>6} "
                f"{'thing':>6} {'told':>5} {'stance':>7} {'creeds':>7}")
-        print(f"THE CREED, AGAINST A CONTROL — {n} season(s) per arm (ED-IN-0228)")
+        print(f"THE CREED, AGAINST A CONTROL — {n} season(s) per arm (ED-IN-0229)")
         print(hdr); print("-" * len(hdr))
         for r in creed_sweep(n):
             print(f"{('yes' if r['creed'] else 'no'):<6} {r['rule']:<6} {r['seed']:>4} "

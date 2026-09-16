@@ -105,7 +105,9 @@ def urgency(subsistence: int, fx: "Fixtures") -> float:
 
     Kept and computed anyway, faithfully, because deleting it would hide the finding: the sweep
     (`H-73`) reports that NO verdict moves across three urgency scales, and that null result IS
-    the measurement. `test_w5_f2_third_term_is_inert` is the falsifier."""
+    the measurement. `test_w5_f2s_third_term_cannot_change_any_decision` is the falsifier — corrected 2026-09-16
+    from `test_w5_f2_third_term_is_inert`, a name that has never existed in this tree. A cited
+    falsifier nobody can run is the unfalsifiable claim §0.1 pt 3 forbids, wearing a test's name."""
     return float(subsistence) / float(fx.get("condition_scale"))
 
 
