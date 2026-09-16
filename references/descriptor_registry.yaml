@@ -55,7 +55,8 @@ attributes:
     - {key: attr.mind.will,   name: Will,   aliases: [Spirit]}                  # 'spirit move': formerly standalone Spirit; legacy formulas resolve via alias
   social:
     - {key: attr.social.attunement, name: Attunement, aliases: [Perception]}
-    - {key: attr.social.charisma,   name: Charisma,   aliases: [Influence, Presence]}
+    # `Influence` removed 2026-09-16 -- it is `fac.influence`'s canonical name; see names_index.yaml.
+    - {key: attr.social.charisma,   name: Charisma,   aliases: [Presence]}
     - {key: attr.social.bonds,      name: Bonds,      aliases: [Sincerity, Affability]}
 
 # AGGREGATES (W2.8 PLACEHOLDERS) -- computed from category members; NOT yet wired into derived values.

@@ -95,14 +95,28 @@ def _load_rosters() -> tuple:
     # ran clean and emitted a content hash; planted on `conviction_axes`, which IS read through
     # `roster()`, it refused. Here it fires on every row whatever reads it, or nothing does.
     for _n, _r in rosters.items():
-        if isinstance(_r, dict) and "from_descriptor" in _r and "values" in _r:
+        if not isinstance(_r, dict):
+            continue
+        # ⚠ ONE RULE OVER EVERY POINTER, NOT ONE PER POINTER. `from_names:` joined
+        # `from_descriptor:` on 2026-09-16; spelling the refusal a second time is how the two
+        # would drift apart, which is the defect this refusal is about.
+        _ptrs = [k for k in ("from_descriptor", "from_names") if k in _r]
+        if len(_ptrs) > 1:
             raise Unspecified(
-                f"roster {_n!r} carries BOTH `from_descriptor:` and `values:`", "rosters.yaml",
+                f"roster {_n!r} carries {len(_ptrs)} owner pointers ({', '.join(_ptrs)})",
+                "rosters.yaml",
+                needs="keep the one that owns these members and delete the rest",
+                law="ED-IN-0229 -- a pointed-at roster has ONE owner. Two pointers is two owners "
+                    "with a read-order tiebreak, which is worse than a copy because it looks "
+                    "single-owned")
+        if _ptrs and "values" in _r:
+            raise Unspecified(
+                f"roster {_n!r} carries BOTH `{_ptrs[0]}:` and `values:`", "rosters.yaml",
                 needs="delete one -- the pointer if this roster owns its members, the `values:` "
-                      "if the owner is the descriptor registry",
-                law="ED-IN-0229 -- a pointed-at roster has ONE owner. `from_descriptor` wins at "
-                    "read time, so a `values:` beside it is never read and never noticed, which "
-                    "is exactly the second copy the pointer was introduced to prevent")
+                      "if the owner is the registry it points at",
+                law="ED-IN-0229 -- a pointed-at roster has ONE owner. The pointer wins at read "
+                    "time, so a `values:` beside it is never read and never noticed, which is "
+                    "exactly the second copy the pointer was introduced to prevent")
     return rosters, (doc.get("tables") or {})
 
 
@@ -141,6 +155,23 @@ def roster(name: str, ordered: bool = False):
                 law="ED-IN-0229 -- a pointed-at roster REFUSES when its owner is missing. Falling "
                     "back to a local literal is how the two axis lists drifted in the first place")
         vals = list(block["names"])
+    elif "from_names" in r:
+        # `from_names:` — the same pointer aimed at `references/names_index.yaml`, whose rows carry
+        # a `token_class:`. A roster of NAMES (factions, clocks, the npc cast) belongs to the naming
+        # index, not the descriptor registry: `names_index.yaml` has called itself *"the one place a
+        # definition's name lives"* since 2026-06-28, and its canonical/alias pair is what resolves
+        # `Church` to `Church of Solmund`. Pointing here rather than copying is what lets a naming
+        # ruling reach `systems/` — which, MEASURED on 2026-09-16, no register previously did.
+        from engine.substrate import names as _names
+        vals = list(_names.of_class(r["from_names"]))
+        if not vals:
+            raise Unspecified(
+                f"roster {name!r} points at token_class {r['from_names']!r}, which no row in the "
+                f"naming index carries", "references/names_index.yaml",
+                needs=f"set `token_class: {r['from_names']}` on the rows that belong to it, then "
+                      "`python tools/export_names.py`",
+                law="ED-IN-0229 -- a pointed-at roster REFUSES when its owner is empty. Returning "
+                    "an empty set would be the silent-false `rosters.yaml`'s own header forbids")
     elif "values" not in r:
         raise Unspecified(
             f"{name!r} is not a roster -- it has no `values:`", "rosters.yaml",

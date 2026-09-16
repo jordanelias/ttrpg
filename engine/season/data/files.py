@@ -126,7 +126,11 @@ CLAUDE_MD = REPO_ROOT / "CLAUDE.md"
 # person's convictions from `blake2b(seed, case_id, pid)`. Named here because `files.py` is the one
 # anchor; read through `data/cast.py`, which is the one reader.
 NPC_REGISTRY_YAML = REFERENCES_DIR / "npc_registry.yaml"
-NAMES_INDEX_YAML = REFERENCES_DIR / "names_index.yaml"
+# `names_index.yaml` HAD A CONSTANT HERE AND NO LONGER NEEDS ONE (2026-09-16). `cast.py`
+# opened it directly to build a faction alias map; it now reads `engine/substrate/names.py`,
+# which is fed by `tools/export_names.py`. Nothing under `engine/season/` opens the YAML, so
+# the constant was a declared-but-unread row -- `01_AXIOMS.md` ID-13's "mechanism that does
+# not exist, wearing a schema's clothes". Deleted rather than kept for a caller that is gone.
 
 
 def subsystem_sim_dir(name: str) -> Path:

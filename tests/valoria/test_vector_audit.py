@@ -237,6 +237,15 @@ def test_token_classes_sourced_from_names_index_byte_identical():
         'Löwenritter': [r'L[oö]wenritter'],
         'Restoration Movement': ['Restoration Movement', r'\bRM\b(?![a-z])'],
         'Guilds': [r'\bGuilds?\b'],
+        # ⚠ SCHOENLAND JOINED THE CLASS 2026-09-16, and this line is the roster GROWING, not
+        # drifting. Its `names_index.yaml` row is filed with the PLACES and never carried
+        # `token_class: faction`, so this class saw seven of eight while
+        # `engine/season/rosters.yaml: factions` -- which now DERIVES from the same rows -- carried
+        # it as the eighth. It declares no `patterns:`, so vector_audit falls back to
+        # `[r'\bcanonical\b']`, which is what this expects. The hand-written copy here is
+        # DELIBERATE and stays: it is an independent expectation the derivation is checked
+        # against, so deriving it would delete the test rather than fix it.
+        'Schoenland': [r'\bSchoenland\b'],
     }
     FAC_CTX = {'Crown': [r'\bAlmud\b', r'\bfaction\b', r'\bMandate\b', r'\bTreaty\b', r'\bTorben\b'],
                'Church of Solmund': [r'\bArne\b', r'\bCardinal\b', r'\bPiety\b', r'\bHeresy\b',

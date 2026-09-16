@@ -36,6 +36,7 @@ from typing import Optional
 from . import files
 from .rosters import FACTIONS, load_yaml
 from ..gaps import Unspecified
+from ...substrate import names as _names
 
 NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 
@@ -52,34 +53,28 @@ NPC_REGISTRY_YAML = files.NPC_REGISTRY_YAML
 # ⚠ SO THIS MODULE DERIVES ITS MAP AND DOES NOT AUTHOR ONE. A literal `{"Church": "Church of
 # Solmund"}` here would have made this the THIRD owner of the same fact — the exact shape the
 # ruling exists to end — and it would go stale silently the next time a faction gains an alias.
-# `alias -> canonical` is built from the `token_class: faction` rows, so a new alias is a data
-# edit in one file (the standing rule at the head of `rosters.yaml`).
 #
-# ⚠ `names_index.yaml` HAS NO `Schoenland` ROW, though `rosters.yaml: factions` carries it. That
-# is a real gap in the naming index rather than anything this loader can fix, and it costs nothing
-# here: a faction with no aliases needs no row to resolve by its own name.
-def _alias_map() -> dict:
-    """`{alias: canonical}` over every `token_class: faction` row in `names_index.yaml`."""
-    global _ALIASES
-    if _ALIASES is None:
-        try:
-            entries = (load_yaml(files.NAMES_INDEX_YAML.read_text(encoding="utf-8"))
-                       or {}).get("entries") or {}
-        except FileNotFoundError:
-            entries = {}
-        out: dict = {}
-        for row_ in entries.values():
-            if not isinstance(row_, dict) or row_.get("token_class") != "faction":
-                continue
-            canon = row_.get("canonical")
-            for alias in (row_.get("aliases") or []):
-                if canon:
-                    out[str(alias)] = str(canon)
-        _ALIASES = out
-    return _ALIASES
+# ⚠ IT NO LONGER PARSES `names_index.yaml` ITSELF (2026-09-16). It did, and that made this the
+# SECOND parser of that file — §8's own anti-pattern, the one the tree already carries as a known
+# bug for `restructure_ledger.md`. `engine/substrate/names.py` is the single reader now, fed by
+# `tools/export_names.py` behind a blocking `--check`, and it is a substrate leaf so `systems/`
+# can read the same map instead of spelling faction names.
+#
+# ⚠ THE LOOKUP STAYS LENIENT, DELIBERATELY. `ALIASES.get(x, x)` passes an unrecognised string
+# through; `names.canonical_for()` would RAISE. Those are both right, for different callers: the
+# registry carries 6 of 46 rows this loader cannot resolve and COUNTS them (the refusal is the
+# caller's, downstream), so raising here would turn a counted gap into a crash at import.
+#: `{alias: canonical}` over every `token_class: faction` row, from the naming leaf. Built ONCE at
+#: import, not per call: both readers below run per row (46 cast rows, and the geography file's
+#: per-province `faction:` column), and the lazy `_ALIASES` cache this replaced existed for that
+#: reason. Both operands are import-time constants, so there is nothing to defer.
+#:
+#: Schoenland was invisible here until 2026-09-16: its `names_index.yaml` row is filed with the
+#: PLACES and simply never carried `token_class: faction`, so this map saw seven of eight. The
+#: class is set now and the eighth resolves.
+_ALIAS_MAP = {a: c for a, c in _names.ALIASES.items() if c in _names.FACTIONS}
 
 
-_ALIASES: Optional[dict] = None
 
 # ⚠ `[^)]*` AND A SEPARATE `tail`, BECAUSE A NON-GREEDY `.*?` SWALLOWS THE CLOSING PAREN.
 # `Crown (Inner Circle) / Löwenritter Liaison` (NPC-035, Theodor Kreutz) parsed to a
@@ -161,7 +156,7 @@ def faction_of(r: dict) -> tuple[Optional[str], Optional[str], str]:
     for candidate in (base, inner):
         if not candidate:
             continue
-        resolved = _alias_map().get(candidate, candidate)
+        resolved = _ALIAS_MAP.get(candidate, candidate)
         if resolved in FACTIONS:
             return resolved, (inner if candidate == base else None), raw
     return None, inner, raw
@@ -180,7 +175,7 @@ def resolve_faction(name: Optional[str]) -> Optional[str]:
     mechanism reporting an unheld place rather than a lookup quietly failing."""
     if not name:
         return None
-    resolved = _alias_map().get(str(name).strip(), str(name).strip())
+    resolved = _ALIAS_MAP.get(str(name).strip(), str(name).strip())
     return resolved if resolved in FACTIONS else None
 
 

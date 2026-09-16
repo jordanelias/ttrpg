@@ -158,30 +158,44 @@ def test_resolve_structural_territory_stat_alias_via_descriptor():
     assert result['section'] == 'territory_stats'
 
 
-def test_influence_string_collision_KNOWN_LIMITATION_but_key_now_reachable():
-    # KNOWN LIMITATION (WS1 antagonist finding, ED-IN-0057), now PARTIALLY closed (ED-IN-0058).
-    # The STRING "Influence" is BOTH an alias of attr.social.charisma AND the canonical name of
-    # the faction-stat fac.influence; the attribute wins the string (checked first), so
-    # "Influence" -> attr.social.charisma with no 'disagreement' (the loser is discarded UPSTREAM,
-    # invisible to resolve()). That residual STRING ambiguity is the pointer-collision the WS1
-    # data fold-in must resolve; it is not a facade bug.
+def test_the_influence_string_collision_is_CLOSED_and_resolves_to_the_faction_stat():
+    """ED-IN-0057's KNOWN LIMITATION, closed 2026-09-16. This test asserted the defect; it now
+    asserts the fix, and the rename is deliberate so the old name cannot be grepped as still-open.
+
+    WHAT IT WAS. The string "Influence" was BOTH an alias of `attr.social.charisma` AND the
+    canonical name of the faction stat `fac.influence`. The attribute won the string because it was
+    checked first, so `resolve('Influence')` returned the ATTRIBUTE and the faction stat was
+    reachable only by its bare key. The old test recorded that as *"the pointer-collision the WS1
+    data fold-in must resolve"*.
+
+    HOW IT CLOSED. `Influence` was removed from Charisma's alias list in BOTH registries that
+    carried it (`names_index.yaml` and `descriptor_registry.yaml:58`). MEASURED before removing:
+    every bare `Influence` in the corpus is the roll stat -- `conviction_track_v30.md`'s
+    *"Influence vs Ob 2"* and *"Church Influence vs Ob"* -- none means Charisma, and no code read
+    the alias list. So the alias was shadowing a live canonical name and buying nothing.
+    `tools/export_names.py` now REFUSES this shape at authoring time (an alias that is also another
+    row's canonical), which is what stops it coming back."""
     result = registry.resolve('Influence')
-    assert result['key'] == 'attr.social.charisma'   # the attribute meaning wins the string
-    assert result['disagreement'] == []              # collision invisible to disagreement (upstream)
+    assert result['key'] == 'fac.influence', (
+        "the bare string now resolves to the faction stat that owns it; if this reads "
+        "attr.social.charisma again, the alias was restored in one of the two registries")
+    assert result['section'] == 'faction_stats'
+    assert result['disagreement'] == []
 
-    # PARTIAL FIX (ED-IN-0058): the ENTITY fac.influence is no longer wholly unreachable — it now
-    # resolves by its bare structural key through the descriptor registry, even though its display
-    # name is shadowed. So the faction stat is at least pointer-addressable today.
+    # The key path still works, and always did (ED-IN-0058's partial fix).
     bykey = registry.resolve('fac.influence')
-    assert bykey is not None
-    assert bykey['kind'] == 'descriptor'
-    assert bykey['key'] == 'fac.influence'
-    assert bykey['section'] == 'faction_stats'
+    assert bykey['kind'] == 'descriptor' and bykey['key'] == 'fac.influence'
 
-    # And the reader SURFACES the residual string-collision as the fold-in work-list rather than
-    # hiding it: collisions() reports exactly this ambiguity (and, today, only this one).
+    # The collision is gone from the work-list.
     col = registry.collisions()
-    assert col.get('influence') == ['attr.social.charisma', 'fac.influence']
+    assert 'influence' not in col, f"influence is still reported as colliding: {col.get('influence')}"
+
+    # ⚠ `legitimacy` REMAINS, AND IT IS NOT A REGRESSION -- it collided before this change too.
+    # The old test's parenthetical ("and, today, only this one") was already false when written:
+    # it only ever asserted `col.get('influence')`, so the second entry was never checked.
+    # `fac.legitimacy` (a faction-scale base stat) and `set.legitimacy` (settlement L/PS) are two
+    # real quantities at two scales, the same shape as Order and Stability -- recorded, not merged.
+    assert col.get('legitimacy') == ['fac.legitimacy', 'set.legitimacy']
 
 
 def test_collisions_is_the_foldin_worklist():

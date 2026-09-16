@@ -893,8 +893,8 @@ rosters:
       ⚠ REFERENCE, NOT MECHANISM (§0.05), AND A FACTION STILL NEVER ACTS. `ARCHITECTURE_V2.md:93`
       lists a faction acting among five refusals held under all 143 cases. This roster names what
       an OFFICE BELONGS TO; the actor is always the person holding the office.
-    values: ["Crown", "Church of Solmund", "Hafenmark", "Varfell", "Löwenritter",
-             "Guilds", "Restoration Movement", "Schoenland"]
+    # NO `values:` -- the members ARE `names_index.yaml`'s `token_class: faction` rows, read
+    from_names: faction   # via engine/substrate/names.py. Edit the naming index, not here.
 
   role_templates:
     source: "`systems/factions/reference/faction_canon_v30.md` §4 'Role Templates and Expected Convictions', per PP-686 §3.3.1 over the PP-684 13-Conviction taxonomy."
