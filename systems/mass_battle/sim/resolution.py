@@ -133,9 +133,9 @@ def _brace_setup_ok(atom, t):
     """[ED-1095, Jordan-ruled 2026-07-02] True iff `atom`'s brace has been held continuously since
     a tick strictly before `t` (>=1 full tick of setup). -1 means not currently braced (never true).
     A subunit deployed already braced is stamped 0 at construction (exempt from the delay -- it had
-    time to set up before the battle began). PC_RECOIL_FRONTAL-style safety net: t=None -> caller
+    time to set up before the battle began). MB_RECOIL_FRONTAL-style safety net: t=None -> caller
     didn't pass a tick -> treat as instantaneous (True) so old call sites stay byte-exact."""
-    if t is None or not PC_BRACE_SETUP_DELAY:
+    if t is None or not MB_BRACE_SETUP_DELAY:
         return True
     since = getattr(atom, '_brace_since_tick', 0)
     return since >= 0 and (t - since) >= 1
@@ -144,7 +144,7 @@ def _unit_braced(unit, t=None):
     """True if any subunit carries the 'brace' instruction (the FM brace tactic). Gates the brace
     benefit (charge-resistance) and the reciprocal charge-recoil; INERT for instruction-less units
     (the historical gauge + signature scenarios) -> byte-exact.
-    t=None (default) preserves the old instantaneous check. t given + PC_BRACE_SETUP_DELAY on ->
+    t=None (default) preserves the old instantaneous check. t given + MB_BRACE_SETUP_DELAY on ->
     also requires >=1 full tick since the brace instruction was set (see _brace_setup_ok)."""
     return any('brace' in getattr(su, 'instructions', ()) and _brace_setup_ok(su, t)
                for su in getattr(unit, 'subunits', ()))
@@ -152,7 +152,7 @@ def _unit_braced(unit, t=None):
 def _subunit_braced(atom, t=None):
     """Per-subunit brace (Jordan directive): THIS subunit carries 'brace'. For a single-subunit
     unit this equals _unit_braced(unit) -> byte-exact; for a mixed unit only the braced subunit resists.
-    t=None (default) preserves the old instantaneous check. t given + PC_BRACE_SETUP_DELAY on ->
+    t=None (default) preserves the old instantaneous check. t given + MB_BRACE_SETUP_DELAY on ->
     also requires >=1 full tick since the brace instruction was set (see _brace_setup_ok)."""
     return 'brace' in getattr(atom, 'instructions', ()) and _brace_setup_ok(atom, t)
 
@@ -163,8 +163,8 @@ def _disc_prep(disc):
 
 def _depth_prep(depth):
     """Engaged depth -> preparedness 0..1. SHARED (one source for the depth curve).
-    depth 1 -> 0, depth >= PC_SHOCK_DEPTH_REF -> 1."""
-    ref = PC_SHOCK_DEPTH_REF if PC_SHOCK_DEPTH_REF > 1.0 else 2.0   # [class-B] depth-ref guard
+    depth 1 -> 0, depth >= MB_SHOCK_DEPTH_REF -> 1."""
+    ref = MB_SHOCK_DEPTH_REF if MB_SHOCK_DEPTH_REF > 1.0 else 2.0   # [class-B] depth-ref guard
     return max(0.0, min(1.0, (depth - 1.0) / (ref - 1.0)))
 
 def _wall_prep(unit, contact_cells, atom=None):
@@ -186,25 +186,25 @@ def _charge_shock_sigma(defender, def_cells, zone, atom=None, t=None):
     if not PER_CELL:
         return 0.0
     # facing gate: can the defender face the charge?
-    if zone == "GREEN":   g_face = PC_SHOCK_FRONT      # faced charge mostly absorbed
-    elif zone == "RED":   g_face = PC_SHOCK_REAR       # rear bypass (cannot face it)
+    if zone == "GREEN":   g_face = MB_SHOCK_FRONT      # faced charge mostly absorbed
+    elif zone == "RED":   g_face = MB_SHOCK_REAR       # rear bypass (cannot face it)
     else:                 g_face = 1.0                 # YELLOW flank
     # atom (Jordan directive): per-subunit defender stats; None -> unit. Single-subunit: atom.stance==unit.stance,
     # eff_discipline/eff_morale inherit -> byte-exact. brace gate (multiplicative): hold-stance x discipline x depth.
     _stance = atom.stance if atom is not None else getattr(defender, 'stance', 'balanced')
     _braced = _subunit_braced(atom, t) if atom is not None else _unit_braced(defender, t)
-    b_stance = PC_SHOCK_HOLD_BRACE if (_stance == 'hold' or _braced) else 1.0
+    b_stance = MB_SHOCK_HOLD_BRACE if (_stance == 'hold' or _braced) else 1.0
     disc = atom.eff_discipline if atom is not None else getattr(defender, 'discipline', 5)
-    b_disc = 1.0 - _disc_prep(disc) * (1.0 - PC_SHOCK_DISC_FULL)        # independent disc retention (shared prep curve)
+    b_disc = 1.0 - _disc_prep(disc) * (1.0 - MB_SHOCK_DISC_FULL)        # independent disc retention (shared prep curve)
     depth = _defender_depth(defender, def_cells)
-    b_depth = 1.0 - _depth_prep(depth) * (1.0 - PC_SHOCK_DEPTH_FULL)    # independent depth retention (shared prep curve)
-    g_brace = max(PC_SHOCK_BRACE_FLOOR, min(1.0, b_stance * b_disc * b_depth))
+    b_depth = 1.0 - _depth_prep(depth) * (1.0 - MB_SHOCK_DEPTH_FULL)    # independent depth retention (shared prep curve)
+    g_brace = max(MB_SHOCK_BRACE_FLOOR, min(1.0, b_stance * b_disc * b_depth))
     # shaken amplifier: a wavering defender takes more
     ms = (atom.eff_morale_start if atom is not None else getattr(defender, 'morale_start', 0)) or 0
     _morale = atom.eff_morale if atom is not None else defender.morale
     frac = max(0.0, min(1.0, _morale / ms)) if ms else 1.0
-    a_shaken = 1.0 + PC_SHOCK_SHAKEN_GAIN * (1.0 - frac)
-    return -PC_CHARGE_SIGMA * g_face * g_brace * a_shaken
+    a_shaken = 1.0 + MB_SHOCK_SHAKEN_GAIN * (1.0 - frac)
+    return -MB_CHARGE_SIGMA * g_face * g_brace * a_shaken
 
 def _sigma_softcap(x, m=1.5):                 # [canonical: modifier_system_spec.md §3.1 saturating]
     return m * math.tanh(x / m)

@@ -154,7 +154,7 @@ systems:
     canonical_sha__systems__settlements__march_layer_v30_md: "3ddebb61c4014982d933e352b78d43867cbfd4fb"
   mass_combat:
     design_doc: systems/mass_battle/reference/mass_battle_v30.md
-    canonical_sha__systems__mass_battle__reference__mass_battle_v30_md: "11b941d25fa310bfbdf16cf47474f85b2435e6f8"
+    canonical_sha__systems__mass_battle__reference__mass_battle_v30_md: "8813822c2a421ed5e3a2d678a65137d8cac08695"
     canonical_sha__systems__mass_battle__mass_battle_v30_md: "11b941d25fa310bfbdf16cf47474f85b2435e6f8"
     mass_battle_index: systems/mass_battle/reference/mass_battle_v30_index.md
     canonical_sha__systems__mass_battle__reference__mass_battle_v30_index_md: "825afe293412eae82f677b4b322254be4e8b8d1c"

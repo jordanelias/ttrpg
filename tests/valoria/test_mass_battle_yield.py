@@ -124,11 +124,11 @@ def _movement_toggles():
     session does not touch (out of scope; the node/field path is the live default Jordan watches
     and the only one bearing on the gauge). Force node/field ON regardless of what ran before."""
     saved = {(mod, name): getattr(mod, name) for mod in (_hu, _orch)
-              for name in ('FIELD_MOVEMENT', 'PC_NODE_COHESION')}
+              for name in ('FIELD_MOVEMENT', 'MB_NODE_COHESION')}
     _hu.FIELD_MOVEMENT = True
-    _hu.PC_NODE_COHESION = True
+    _hu.MB_NODE_COHESION = True
     _orch.FIELD_MOVEMENT = True
-    _orch.PC_NODE_COHESION = True
+    _orch.MB_NODE_COHESION = True
     try:
         yield
     finally:

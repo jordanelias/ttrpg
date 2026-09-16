@@ -9,7 +9,7 @@ The reach values feed geometry.obb_front_reach_overlap (contact, Stage B) and re
 (the TOI halt, Stage C). Two measured facts this file pins:
 
   * The reach ADVANTAGE emerges through the already-wired charge-recoil reach gate
-    (PC_RECOIL_CHARGER_GATE: a braced defender whose reach >= the charger's reach repels the charge;
+    (MB_RECOIL_CHARGER_GATE: a braced defender whose reach >= the charger's reach repels the charge;
     a shorter-reach defender does not). Before Stage E every troop shared reach 0.5, so the gate fired
     for everyone; with the differentiated values it is CONDITIONAL — pike (0.3) and spear/heavy_infantry
     (0.2) stop a cavalry lance (0.2), levy (0.1) does not. This is the historically-correct anti-cavalry
@@ -42,14 +42,14 @@ from ._conservation import assert_troop_conservation  # noqa: E402
 
 @pytest.fixture
 def field_path():
-    saved = [(m, m.FIELD_MOVEMENT, m.PC_NODE_COHESION) for m in (_hu, _orch)]
+    saved = [(m, m.FIELD_MOVEMENT, m.MB_NODE_COHESION) for m in (_hu, _orch)]
     _val._set_movement_path('node')
     try:
         yield
     finally:
         for m, fm, nc in saved:
             m.FIELD_MOVEMENT = fm
-            m.PC_NODE_COHESION = nc
+            m.MB_NODE_COHESION = nc
 
 
 # ─── the P-DEC-1 reach map ────────────────────────────────────────────────────

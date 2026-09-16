@@ -264,7 +264,7 @@ def _oriented_abs_map(atom):
     # is the verbatim prior cell_offsets build.
     import systems.mass_battle.sim.hierarchy.units as _u
     amap = {}
-    if _u.FIELD_MOVEMENT and _u.PC_NODE_COHESION and hasattr(atom, '_node_pos'):
+    if _u.FIELD_MOVEMENT and _u.MB_NODE_COHESION and hasattr(atom, '_node_pos'):
         # [Fable-audit B1 fix, 2026-07-24] Iterate the atom's LIVE continuous footprint (_oriented) and
         # SKIP any id absent from _node_pos -- do NOT default a missing key to the origin (0,0). The prior
         # version iterated oriented_pattern(shape,tier) (the LEGACY CELL_PATTERN_FN tier ids) while _node_pos
@@ -340,9 +340,9 @@ def support_engage_frac(atom, contact_abs_cells):
 # `_atom_avg_facing`, had ZERO call sites anywhere in the corpus.
 #
 # The concept it encoded — "an engaged defender's cells pivot to face their attacker" — is LIVE and
-# strictly better implemented by `Subunit.cell_facing_vec` (`hierarchy/units.py`): PC_FACING_ATTENTION
+# strictly better implemented by `Subunit.cell_facing_vec` (`hierarchy/units.py`): MB_FACING_ATTENTION
 # turns each cell toward the committed target, `_slew_facing` gates the turn rate by Discipline
-# (no instant full pivot), PC_FACING_ROUT flips a routed body's facing, and `get_cell_facing` is what
+# (no instant full pivot), MB_FACING_ROUT flips a routed body's facing, and `get_cell_facing` is what
 # `_octagon_cell_mods` / `_cell_facing_for_box` actually read. `dynamic_facings` was the superseded
 # duplicate, not the mechanism.
 #

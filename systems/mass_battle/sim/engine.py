@@ -56,7 +56,7 @@ MECHANICS = {
     "fatigue":            {"fn":"_fatigue_sigma",        "toggle":"PER_CELL",  "source":"engine fatigue model", "status":"WIRED"},
     "defender_depth":     {"fn":"_defender_depth",       "toggle":"PER_CELL",  "source":"Jordan handoff depth-damping", "status":"WIRED"},
     "charge_shock":       {"fn":"_charge_shock_sigma",   "toggle":"PER_CELL",  "source":"mass_battle_v30 §A.8 + du Picq (Phase 3, ratified)", "status":"WIRED"},
-    "envelopment_wrap":   {"fn":"_momentum_speed",       "toggle":"PC_REFUSE", "source":"Cannae/Adrianople (M3 wheel/wrap)", "status":"WIRED"},
+    "envelopment_wrap":   {"fn":"_momentum_speed",       "toggle":"MB_REFUSE", "source":"Cannae/Adrianople (M3 wheel/wrap)", "status":"WIRED"},
     # orchestration / turn structure
     "assign_targets":     {"fn":"assign_targets",        "toggle":None,        "source":"mass_battle_v30 §A.7", "status":"WIRED"},
     "find_contacts":      {"fn":"find_contacts",         "toggle":None,        "source":"mass_battle_v30 §A.7", "status":"WIRED"},

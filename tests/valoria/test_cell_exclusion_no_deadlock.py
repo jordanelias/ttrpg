@@ -50,14 +50,14 @@ from systems.mass_battle.sim.engine import build_unit  # noqa: E402
 def field_path():
     """The exclusion pass lives inside resolve_toi_and_commit, which only runs under FIELD_MOVEMENT;
     on the grid oracle every assertion here would pass vacuously."""
-    saved = [(m, m.FIELD_MOVEMENT, m.PC_NODE_COHESION) for m in (_hu, _orch)]
+    saved = [(m, m.FIELD_MOVEMENT, m.MB_NODE_COHESION) for m in (_hu, _orch)]
     _val._set_movement_path('node')
     try:
         yield
     finally:
         for m, fm, nc in saved:
             m.FIELD_MOVEMENT = fm
-            m.PC_NODE_COHESION = nc
+            m.MB_NODE_COHESION = nc
 
 
 def _mk(name, faction, col):
@@ -76,8 +76,8 @@ def _advance_free(exclusion, ticks=6):
     pass is never reached and the test would pass vacuously. Distance, not absence, is what makes
     this the free-translation case.
     """
-    saved = _hu.PC_CELL_EXCLUSION
-    _hu.PC_CELL_EXCLUSION = exclusion
+    saved = _hu.MB_CELL_EXCLUSION
+    _hu.MB_CELL_EXCLUSION = exclusion
     try:
         import random
         random.seed(20260729)
@@ -100,7 +100,7 @@ def _advance_free(exclusion, ticks=6):
         return {cid: tuple(round(v, 12) for v in pos)
                 for cid, pos in sorted(ua.subunits[0]._node_pos.items())}
     finally:
-        _hu.PC_CELL_EXCLUSION = saved
+        _hu.MB_CELL_EXCLUSION = saved
 
 
 def test_rigid_translation_unaffected_by_exclusion(field_path):
@@ -130,7 +130,7 @@ def test_free_formation_actually_moves(field_path):
 
 
 def test_exclusion_flag_is_pinned_in_the_golden_gate():
-    """PC_CELL_EXCLUSION is strongly digest-moving on both field modes, so an ambient flip must
+    """MB_CELL_EXCLUSION is strongly digest-moving on both field modes, so an ambient flip must
     produce a NAMED red in the golden gate rather than a mystery mismatch."""
     import importlib.util
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -138,8 +138,8 @@ def test_exclusion_flag_is_pinned_in_the_golden_gate():
         'ci_golden_modes_check', os.path.join(root, 'tools', 'ci_golden_modes_check.py'))
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    assert mod.FIELD_PINS.get('PC_CELL_EXCLUSION') == '1', (
-        "PC_CELL_EXCLUSION must be pinned in tools/ci_golden_modes_check.py FIELD_PINS — it moves "
+    assert mod.FIELD_PINS.get('MB_CELL_EXCLUSION') == '1', (
+        "MB_CELL_EXCLUSION must be pinned in tools/ci_golden_modes_check.py FIELD_PINS — it moves "
         "unit_field and cell_field.")
 
 
@@ -148,7 +148,7 @@ def test_exclusion_flag_is_pinned_in_the_golden_gate():
 # A read-only critic showed the two guards above are one edit from vacuous. They kill the planted
 # `s <= 0.0` mutant only by ACCIDENT of this fixture's 8.1-degree bearing, which makes adjacent pairs
 # pre-overlapping; the pass's POSITIVE behaviour is never observed. Two mutants survive them:
-#   (a) delete the entire `if PC_CELL_EXCLUSION:` block in resolve_toi_and_commit
+#   (a) delete the entire `if MB_CELL_EXCLUSION:` block in resolve_toi_and_commit
 #   (b) weaken the filter to `if s is None or s <= 0.5: continue`
 # because the free-space fixture never produces an `s` in (0, 1] at all.
 #
@@ -163,8 +163,8 @@ def _head_on_same_side(exclusion, start_gap=4.0, step=2.0):
     Proposals are set directly rather than driven through _node_advance: the point is to exercise
     resolve_toi_and_commit's same-side pass on a pair that genuinely closes, which ordinary formation
     movement does not produce (cells hold relational slots and never charge each other)."""
-    saved = _hu.PC_CELL_EXCLUSION
-    _hu.PC_CELL_EXCLUSION = exclusion
+    saved = _hu.MB_CELL_EXCLUSION
+    _hu.MB_CELL_EXCLUSION = exclusion
     try:
         import random
         random.seed(20260730)
@@ -189,7 +189,7 @@ def _head_on_same_side(exclusion, start_gap=4.0, step=2.0):
         pa, pb = atom._node_pos[a_id], atom._node_pos[b_id]
         return math.hypot(pa[0] - pb[0], pa[1] - pb[1])
     finally:
-        _hu.PC_CELL_EXCLUSION = saved
+        _hu.MB_CELL_EXCLUSION = saved
 
 
 def test_exclusion_actually_caps_a_closing_same_side_pair(field_path):
@@ -202,7 +202,7 @@ def test_exclusion_actually_caps_a_closing_same_side_pair(field_path):
         f"assertion below has become vacuous (§0.1 point 2).")
     assert on > off + 0.5, (
         f"the same-side exclusion pass did not cap a closing pair: separation {on} with the pass ON "
-        f"vs {off} with it OFF. Either the `if PC_CELL_EXCLUSION:` block is gone, or its filter no "
+        f"vs {off} with it OFF. Either the `if MB_CELL_EXCLUSION:` block is gone, or its filter no "
         f"longer admits the s in (0,1] that this pair produces.")
 
 

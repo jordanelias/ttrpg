@@ -24,8 +24,8 @@ D_YIELD = int(_exch_os.environ.get('D_YIELD', '3'))  # [CALIBRATED-DEBT] reuses 
 # existing disc_mult tier break (hierarchy/units.py's advance_cells: disc>=5 full speed, disc>=3
 # 0.7x, else 0.4x severely degraded) rather than inventing a new threshold -- a subunit needs
 # enough order to give ground at all (the 0.7x tier), not the severely-degraded 0.4x tier.
-YIELD_POOL_MULT = float(_exch_os.environ.get('YIELD_POOL_MULT', str(PC_SHOCK_HOLD_BRACE)))  # [CALIBRATED-DEBT]
-# reuses PC_SHOCK_HOLD_BRACE (0.35, the brace/shock discount idiom) verbatim, exactly as the
+YIELD_POOL_MULT = float(_exch_os.environ.get('YIELD_POOL_MULT', str(MB_SHOCK_HOLD_BRACE)))  # [CALIBRATED-DEBT]
+# reuses MB_SHOCK_HOLD_BRACE (0.35, the brace/shock discount idiom) verbatim, exactly as the
 # proposal doc's §5 suggested -- "traded ground at a cost", a reduced-but-nonzero combat pool.
 
 
@@ -120,16 +120,16 @@ def subunit_combat_pool(unit, atom):
     # `yielding=False` on every Subunit -> inert for every existing scenario.
     # [ED-MB-0024, DG-2 §2.4 pocket exit] A POCKETED yielding body (rearward motion blocked -> holds in
     # place, nowhere left to give ground) fights at FULL pool -- the malus is REMOVED, modeling Cannae's
-    # center pinned and fighting for its life. `pocketed` is only ever set when PC_YIELD_POCKET is on
+    # center pinned and fighting for its life. `pocketed` is only ever set when MB_YIELD_POCKET is on
     # (default OFF) -> this reduces to the plain yield malus for every existing scenario.
     if getattr(atom, 'yield_active', False) and not getattr(atom, 'pocketed', False):
         raw *= YIELD_POOL_MULT
     # [ED-MB-0016, DG-6 resolution] Per-battle combat-effectiveness (CEV) friction: scale this subunit's
     # combat score by its UNIT's once-per-battle LogNormal draw (`_friction_cev`, set by orchestration.
-    # _draw_friction_cev at battle start). 1.0 when PC_FRICTION_CEV is off -> byte-exact. This is the
+    # _draw_friction_cev at battle start). 1.0 when MB_FRICTION_CEV is off -> byte-exact. This is the
     # Dupuy-style CEV multiplier on the whole combat power; the force-independent, once-per-battle
     # variance it injects is what turns a certain (100%) large-advantage outcome into a decisive-but-
-    # uncertain (historically-banded) one. [grounding: config.py PC_FRICTION_CEV]
+    # uncertain (historically-banded) one. [grounding: config.py MB_FRICTION_CEV]
     raw *= getattr(unit, '_friction_cev', 1.0)
     return max(1, math.floor(raw))
 

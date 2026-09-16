@@ -165,7 +165,7 @@ def resolve_cross_side_contention(unit_a, unit_b):
         #
         # REFUTED BY MEASUREMENT: 875 DEEP cross-side body interpenetrations (obb_overlap with
         # penetration depth >= 0.1) over 140 historical-scale snapshots, and independently by
-        # tests/valoria/test_obb_contact_toi.py's two failures under PC_FACING_MODEL=1
+        # tests/valoria/test_obb_contact_toi.py's two failures under MB_FACING_MODEL=1
         # ("opposing cell BODIES interpenetrated after a commit"). The stated mechanism does not hold
         # because the TOI certificate is issued for a heading that _commit_cell_position then
         # REWRITES (see hierarchy/units.py's resolve_toi_and_commit and the ED-MB-0061 fix plan R2).
@@ -186,7 +186,7 @@ def resolve_cross_side_contention(unit_a, unit_b):
                       + su.cell_offsets.get((orig_r, orig_c), 0) * su.advance_dir)
                 ac = (su.starting_position[1] + or_c
                       + su.cell_offsets_c.get((orig_r, orig_c), 0))
-                if PC_NODE_COHESION and hasattr(su, '_node_pos'):
+                if MB_NODE_COHESION and hasattr(su, '_node_pos'):
                     _pr, _pc = su._node_pos.get((orig_r, orig_c), (0.0, 0.0))
                     # [migration H] file-bin the column on ON so the contested-set intersection tests
                     # co-location on the SAME file-cell grid as cells()/find_contacts (the ratified
@@ -232,7 +232,7 @@ def resolve_cross_side_contention(unit_a, unit_b):
                 su.cell_offsets[oc] = su._prev_offsets.get(oc, 0)
                 su.cell_offsets_c[oc] = su._prev_offsets_c.get(oc, 0)
                 su.cell_facing_vec[oc] = su._prev_facings.get(oc, (su.advance_dir, 0))
-                if PC_NODE_COHESION and hasattr(su, '_node_pos'):
+                if MB_NODE_COHESION and hasattr(su, '_node_pos'):
                     su._node_pos[oc] = su._node_prev_pos.get(oc, su._node_pos.get(oc, (0.0, 0.0)))
                 n_resolved += 1
             # Loser that didn't move: nothing to revert. The mover (winner) is
