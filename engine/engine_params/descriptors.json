@@ -146,5 +146,10 @@
       "ceiling": 4
     }
   },
-  "unimplemented": {}
+  "unimplemented": {
+    "fac_intel_multiplier": {
+      "needs": "the per-step multiplier for `intel` in engine.autoload.game_state.MULTS. It is a design number and must be authored, not inferred from a sibling stat -- the five that exist were authored, not derived.",
+      "why_it_matters": "fac.intel is DECLARED (floor 0, ceiling 7) and those bounds are RULED (Jordan 2026-08-23, all six faction stats), so the row cannot be deleted. It is also UNREACHABLE: MULTS carries no 'intel' key, so Faction.adjust('intel', ...) raises KeyError before faction_bounds is consulted. One of six declared stats cannot be moved, and the registry says nothing about it -- the gap was visible only in engine/substrate/descriptors.py's docstring, which no instrument reads."
+    }
+  }
 }

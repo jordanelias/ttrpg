@@ -886,10 +886,10 @@ rosters:
       mechanic *"Olafsson-Broker Exposure (formerly Olafsson-Niflhel)"* and §10 says
       *"post-Niflhel-dissolution"*. A frequency-ranked grep over `systems/world/` returns both at
       ranks that would have carried them in; they are excluded by reading, not by counting.
-      ⚠ `Schoenland` IS A MEMBER AND IS FOREIGN. It holds T16 in the canonical starting-control
-      table and grants or refuses Altonian naval passage (`geography_v30.md`, Invasion Routes). It
-      is not player-eligible and has no `role_template`, which `faction_role_template` records as
-      an absence rather than filling.
+      ⚠ `Schoenland` IS A MEMBER AND IS FOREIGN. Canon gives it T16 and Altonian naval passage
+      (`geography_v30.md`). ⚠ THE TYPED LAYER CARRIES NO T16 ROW AND THAT IS DELIBERATE, NOT A GAP
+      TO FILL: `references/world_initial_state.yaml:44` — *"There is no T16 — the gap is in the
+      source data"* — and `harness/populated.py:331`. No `role_template`; recorded, not filled.
       ⚠ REFERENCE, NOT MECHANISM (§0.05), AND A FACTION STILL NEVER ACTS. `ARCHITECTURE_V2.md:93`
       lists a faction acting among five refusals held under all 143 cases. This roster names what
       an OFFICE BELONGS TO; the actor is always the person holding the office.

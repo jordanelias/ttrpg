@@ -18,9 +18,17 @@ same shape as its four sibling exports: the markdown/YAML stays the AUTHORED, re
 code reads the cooked artifact. Emitting a generated `.py` would put executable code in a directory
 whose whole contract is "typed data the Godot port ingests", and would give the port nothing.
 
-WHAT IT USED TO RECORD, AND WHY THAT SECTION IS NOW EMPTY. This tool does not resolve roster
-disagreements; it RECORDS them in its `unimplemented` block, because each needs a ruling and not a
-value edit. It carried two, and BOTH ARE NOW CLOSED:
+WHAT THE `unimplemented` BLOCK RECORDS. This tool does not resolve roster disagreements; it
+RECORDS them in its `unimplemented` block, because each needs a ruling and not a value edit.
+
+⚠ IT CARRIES ONE AGAIN AS OF 2026-09-16 — `fac_intel_multiplier`. The two below closed and the
+block sat empty, and this docstring read "WHY THAT SECTION IS NOW EMPTY" while something WAS
+outstanding: `fac.intel` is declared with RULED bounds and is unreachable, because
+`engine.autoload.game_state.MULTS` carries no `intel` key. It was visible only in
+`engine/substrate/descriptors.py`'s docstring, which no instrument reads. The row states what it
+needs; see the block itself.
+
+THE TWO IT USED TO CARRY, BOTH NOW CLOSED:
 
   * THE 5-vs-6 GAP — `faction_stats` declared FIVE keys while the Faction dataclass implemented SIX
     fields, with `L` written by 20 of `.adjust()`'s 31 non-test call sites and declared NOWHERE.
@@ -33,7 +41,9 @@ value edit. It carried two, and BOTH ARE NOW CLOSED:
 
 An EMPTY `unimplemented` block is the correct state when nothing is outstanding, and it is not a
 licence to keep it empty: `tests/valoria/test_descriptors_runtime.py` pins the exact expected set,
-so a silent addition fails as loudly as an unauthorised deletion.
+so a silent addition fails as loudly as an unauthorised deletion. ⚠ AND THE EMPTY STATE IS NOT
+EVIDENCE THE REGISTER IS COMPLETE — it was empty for three weeks while `fac.intel` was
+outstanding. The pin catches what enters this block; nothing catches what never reaches it.
 
 Usage:
     python3 tools/export_descriptors.py           # write engine/engine_params/descriptors.json
@@ -210,7 +220,33 @@ def build():
         # An empty register is the correct state when nothing is outstanding. It is NOT a licence to
         # keep it empty: `tests/valoria/test_descriptors_runtime.py` pins the exact expected set, so
         # both an unauthorised deletion AND a silent addition fail there.
+        # ⚠ RE-OPENED 2026-09-16 with `fac_intel_multiplier`. The block was empty and the
+        #   comment above says an empty register is the correct state when nothing is
+        #   outstanding -- something was outstanding and had no row. `engine/substrate/
+        #   descriptors.py` states it in its own docstring: "FIVE OF THE SIX FLOORS ARE
+        #   REACHABLE. `fac.intel` is not: `MULTS` carries no `intel` key, so
+        #   `adjust('intel', ...)` raises `KeyError` before any bound is consulted." The
+        #   registry declares fac.intel floor 0 ceiling 7 and those bounds are RULED
+        #   (Jordan 2026-08-23, all six faction stats), so the row is not deletable -- and
+        #   the multiplier that would make it reachable is a design number nobody has
+        #   stated, so it is not inventable either. That is exactly what this block is for:
+        #   a ratified decision the executable model has not implemented, naming what it
+        #   needs. It was visible only in a docstring, which no instrument reads.
         'unimplemented': {
+            'fac_intel_multiplier': {
+                'needs':
+                    "the per-step multiplier for `intel` in engine.autoload.game_state.MULTS. "
+                    "It is a design number and must be authored, not inferred from a sibling "
+                    "stat -- the five that exist were authored, not derived.",
+                'why_it_matters':
+                    "fac.intel is DECLARED (floor 0, ceiling 7) and those bounds are RULED "
+                    "(Jordan 2026-08-23, all six faction stats), so the row cannot be deleted. "
+                    "It is also UNREACHABLE: MULTS carries no 'intel' key, so "
+                    "Faction.adjust('intel', ...) raises KeyError before faction_bounds is "
+                    "consulted. One of six declared stats cannot be moved, and the registry "
+                    "says nothing about it -- the gap was visible only in "
+                    "engine/substrate/descriptors.py's docstring, which no instrument reads.",
+            },
         },
     }
 

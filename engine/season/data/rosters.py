@@ -110,6 +110,18 @@ def roster(name: str, ordered: bool = False):
     # load-bearing on `conviction_axes` (#353 `:1897`, the Exposure collision). Routing through
     # here keeps the data-side bar on a pointed-at roster, which a direct import could not.
     if "from_descriptor" in r:
+        # ⚠ BOTH KEYS IS A DECLARED-BUT-UNREAD `values:` (`04 §B.13` ID-12). The pointer branch is
+        # checked FIRST, so a `values:` re-added beside a `from_descriptor:` would never be read
+        # and never complained about -- the silent half of the drift this pointer exists to end.
+        # Refuse rather than prefer one: the row's author gets to say which they meant.
+        if "values" in r:
+            raise Unspecified(
+                f"roster {name!r} carries BOTH `from_descriptor:` and `values:`", "rosters.yaml",
+                needs="delete one -- the pointer if this roster owns its members, the `values:` "
+                      "if the owner is the descriptor registry",
+                law="ED-IN-0229 -- a pointed-at roster has ONE owner. `from_descriptor` is read "
+                    "first, so a `values:` beside it is never read and never noticed, which is "
+                    "exactly the second copy the pointer was introduced to prevent")
         from engine.substrate import descriptors as _desc
         block = getattr(_desc, "_DATA", {}).get(r["from_descriptor"])
         if not block or not block.get("names"):
@@ -248,6 +260,14 @@ STRATA = roster("strata", ordered=True)
 # ⚠ THE ROW STILL EXISTS IN `rosters.yaml` and carries the source and the note; what it does not
 # carry is `values:`. A reader looking for the definition is sent one hop, which is the correct
 # number of hops when the definition is owned elsewhere.
+# ⚠⚠ AND "THE ONE ROSTER THAT WORKS THAT WAY" IS STALE AS OF 2026-09-15, WHICH IS WHY THE CLAIM IS
+# CORRECTED HERE RATHER THAN LEFT TO READ TRUE. The row was given `from_descriptor: conviction_roster`
+# in that migration, so `roster("convictions")` now resolves through the pointer branch above and
+# returns the SAME thirteen -- measured, the two are set-equal. Two routes, one owner, no second
+# copy: the direct import below is the leaf and the pointer is the data-side route that also gets
+# the `forbidden:` bar. `conviction_axes` on the line after this one has only ever had the pointer.
+# What would be a defect is a THIRD route carrying its own literal, and that is what the guard in
+# `roster()` above now refuses.
 from engine.substrate.descriptors import CONVICTIONS  # noqa: E402  (the single owner's leaf)
 CONVICTION_AXES = roster("conviction_axes")
 QUESTION_SOURCES = roster("question_sources", ordered=True)
