@@ -49,7 +49,7 @@ from __future__ import annotations
 from typing import Optional
 
 from .data.requires import binding_of, evaluate
-from .data.rosters import CLAIM_SUBJECT_RULES, WITNESS_CHANNELS
+from .data.rosters import CLAIM_SUBJECT_RULES, FAN_OUT_MODES, WITNESS_CHANNELS
 from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
 from .queries import cache, world_q
@@ -406,7 +406,21 @@ def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
 
     `total` is the specified behaviour and the sweep's control. The other two arms are the hole's
     own sweep points. A mode outside the three REFUSES -- an unrecognised mode silently falling
-    back to `total` would make every measurement of this sweep read the control."""
+    back to `total` would make every measurement of this sweep read the control.
+
+    ⚠ THE ARM NAMES ARE DATA (`rosters.yaml: fan_out_modes`), NOT LITERALS HERE. They were
+    literals in the dispatch below until 2026-09-16 -- enforced, because the old `else` refused
+    correctly, but not DEFINED where Jordan's 2026-09-02 ruling puts a definition. The two
+    refusals below are now DIFFERENT failures and that is the point: the first says a caller
+    named an arm the sweep does not declare, the second says THE ROSTER GREW AND THIS FUNCTION
+    DID NOT -- the data/code drift a single combined check cannot see."""
+    if mode not in FAN_OUT_MODES:
+        raise Unspecified(
+            f"fan-out mode {mode!r} is not one of H-33's declared sweep points", "H-33",
+            needs=f"one of {sorted(FAN_OUT_MODES)}",
+            law="H-33's sweep is declared in `rosters.yaml: fan_out_modes`. A mode outside it "
+                "that fell back to `total` would make every reading of this sweep report the "
+                "control")
     if mode == "total":
         return list(everyone)
     if mode == "presence_only":
@@ -415,9 +429,11 @@ def observers_for(w: "World", e: "Event", mode: str, everyone: list) -> list:
         live = tuple(WITNESS_CHANNELS)     # the names live once, in `witness_channels`
     else:
         raise Unspecified(
-            f"fan-out mode {mode!r} is not one of H-33's declared sweep points", "H-33",
-            needs="total | presence_only | all_five",
-            law="H-33's sweep is `total / presence-only / all five`. A mode outside it that fell "
-                "back to `total` would make every reading of this sweep report the control")
+            f"fan-out mode {mode!r} is DECLARED in `fan_out_modes` and this function does not "
+            f"dispatch it", "H-33",
+            needs="give the new arm its channel selection here, beside the other three",
+            law="`04 §B.13` ID-12 -- a declared row that reaches no code is the defect the "
+                "loader's cross-validation exists to catch. A roster may grow; a dispatch that "
+                "silently ignores the growth would run the new arm as whatever fell through")
     return [pid for pid in everyone
             if any(CHANNEL_PREDICATES[c](w, e, pid) for c in live if c in CHANNEL_PREDICATES)]

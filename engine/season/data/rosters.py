@@ -129,6 +129,19 @@ def roster(name: str, ordered: bool = False):
                 "other's function raises, so the two shapes cannot be confused at a call site")
     else:
         vals = r["values"]
+        # ⚠ PRESENT BUT EMPTY IS THE SAME DEFECT AS ABSENT, AND THIS FILE'S HEADER ALREADY SAID
+        # SO WITHOUT ENFORCING IT: *"an absent roster is a REFUSAL, never an empty set, because
+        # an empty set silently makes every membership test false and every closed-set guard
+        # vacuous"*. `contest_subsystems` carried `values: []` from its authoring until
+        # 2026-09-16 and `roster()` handed back an empty frozenset for it -- the polarity stated
+        # in prose and not in code. The header is the law; this is the line that applies it.
+        if not vals:
+            raise Unspecified(
+                f"roster {name!r} carries an EMPTY `values:`", "rosters.yaml",
+                needs="give the roster its members, or delete the `values:` key if the row's "
+                      "content is a mapping read with roster_map()",
+                law="rosters.yaml's header -- an empty set makes every membership test silently "
+                    "false, so it REFUSES exactly as an absent roster does")
     # A roster may FORBID a member by name. `conviction_axes` forbids `exposure` bare, because
     # #353 `:1897` names it as three senses of one word; a data edit that added it would
     # otherwise reintroduce the collision silently, which is the whole failure mode this file
@@ -247,6 +260,13 @@ CLAIM_SUBJECT_RULES = roster("claim_subject_rules")
 # like every other roster, and for the reason `TITLE_DOMAINS` records below: an unbound
 # roster is the one whose absence goes unnoticed.
 OBSERVATION_DEPOSIT_MODES = roster("observation_deposit_modes")
+# `H-33`. THE THREE ARMS OF THE FAN-OUT SWEEP, and the SIBLING of the line above -- two switches
+# on one pipeline, and until 2026-09-16 only one of them was data. `observers_for` carried these
+# three names as Python literals in an if/elif/else whose `else` refused correctly, so the closed
+# set was ENFORCED and simply not DEFINED where a definition belongs (Jordan 2026-09-02, quoted
+# at the head of this file). Bound at import for `TITLE_DOMAINS`' reason: an unbound roster is
+# the one whose absence goes unnoticed.
+FAN_OUT_MODES = roster("fan_out_modes")
 # `W-E`. THE THREE BANDS PERSONAL COMBAT CAN DISTINGUISH, and HOW MUCH BODY A WOUND COSTS. Bound
 # here with every other roster rather than beside their reader in the S39 block below, because
 # that is where an absent roster's refusal is guaranteed to fire (`TITLE_DOMAINS`' lesson, above).

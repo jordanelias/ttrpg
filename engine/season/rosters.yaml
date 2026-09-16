@@ -687,7 +687,7 @@ rosters:
         provider: "sigma_leverage"
         interim:  true
         cite:     "as `a standing`. Same ruling, same clause-(3) tension, same repoint."
-    values: []
+    # NO `values:` — the members ARE the `prizes:` mapping above, read with `roster_map()`. A `values: []` stood here and was a declared-but-unread key (`04 §B.13` ID-12): `roster()` returned an EMPTY frozenset, which is the silent-false this file's own header forbids. Line-neutral edit — 209 citations index this file by line.
 
   titles:
     source: "JORDAN, 2026-09-02, VERBATIM. None of this was in the architecture: `ARCHITECTURE_V2.md` contains no `sovereign`, no `Parliament`, and no title ladder."
@@ -1120,6 +1120,26 @@ rosters:
       relation:         [actor, subject, site, from, to]
       own_ledger:       [subject]
       basis:            [subject, from, to]
+
+  fan_out_modes:
+    source: "`H-33`'s declared sweep. The three arm names were PYTHON LITERALS in `epistemic.py::observers_for`'s if/elif/else until 2026-09-16; its `else` already REFUSED an unrecognised mode, so the closed set was enforced — it was simply not data."
+    cite: "H-33"
+    note: >-
+      ⚠ MOVED HERE UNDER JORDAN'S 2026-09-02 RULING, WHICH `data/rosters.py:70-73` quotes:
+      *"I do not want definitions etc to be hardcoded"* … *"these must be easy to modify"* …
+      *"that goes for all"*. Six rosters moved then and this one was missed, which is visible
+      in the asymmetry it left: its SIBLING switch `observation_deposit_modes` is a roster read
+      at `loop/witness.py`, while this one's arms lived in code. Two switches on the same
+      pipeline, one governed as data and one not.
+      ⚠ THIS ROSTER NAMES THE ARMS AND NOTHING ELSE. Which channels each arm selects is
+      BEHAVIOUR and stays in `epistemic.py::observers_for` — `total` short-circuits to everyone,
+      `presence_only` selects `co_located`, `all_five` selects `witness_channels` entire. Moving
+      the dispatch here would make this file carry a rule rather than a definition.
+      ⚠ THE DEFAULT IS NOT HERE EITHER — it is the `fan_out_mode` FIXTURE
+      (`data/fixtures.py`), because a default is a value standing free of the roster, which
+      `04 §B.13`'s own line makes a fixture: *"a number standing free of any roster is a
+      fixture"*. R7 (ED-IN-0205) moved it off `total`; this roster says nothing about that.
+    values: [total, presence_only, all_five]
 
 tables:
 
