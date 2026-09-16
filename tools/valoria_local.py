@@ -48,6 +48,7 @@ def main(argv):
         ('ci_pp_frozen_check.py',       [],          True),   # PP frozen vocabulary (ED-IN-0190, Jordan 2026-08-14)
         ('ci_naming_check.py',          [mode_flag], True),
         ('ci_names_consistency.py',     [],          True),   # index <-> registry mirrors agree
+        ('ci_design_prose_quarantine.py', [],       True),   # no design prose in systems/ or engine/ (ED-IN-0229)
         ('ci_naming_check.py',          [mode_flag, '--warn'], False),  # report-only naming-drift lint
                                         # (was ci_names_check.py; merged into the block-tier gate 2026-08-23, S6/D2)
         ('ci_co_file_checker.py',       [mode_flag], True),

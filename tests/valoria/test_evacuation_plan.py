@@ -173,9 +173,20 @@ def test_no_contracted_unit_is_evacuated(part):
 
 
 def test_contract_guard_can_fail():
-    """POSITIVE CONTROL: plant a contracted path in the evacuate set and require a complaint."""
-    planted = ep.contract_guard({'systems/mass_battle/reference/mass_battle_v30.md'})
-    assert planted, 'the contract guard did not object to evacuating a contracted doc'
+    """POSITIVE CONTROL: plant a protected path in the evacuate set and require a complaint.
+
+    ED-IN-0229 (2026-09-16): this used to plant a `doc:` target. The design-prose quarantine set
+    every `doc:` field that named a markdown file to null — deliberately — which emptied that half
+    of the guard's universe and would have left this control unable to fire while still reporting
+    green. The planted path is now a quarantined document, which the guard protects explicitly.
+    """
+    planted = ep.contract_guard({'.designs/systems/mass_battle/reference/mass_battle_v30.md'})
+    assert planted, 'the contract guard did not object to evacuating a quarantined design doc'
+    # The other half of the guard must still fire too, or "the control passes" would only mean
+    # "the archive clause works" — a guard that protects one thing and silently stopped protecting
+    # the other reads identically from the outside.
+    planted_sim = ep.contract_guard({'systems/characters/sim/conviction.py'})
+    assert planted_sim, 'the contract guard no longer objects to evacuating a contracted sim module'
 
 
 # --------------------------------------------------------------------------------------
@@ -364,7 +375,7 @@ def test_keep_set_doc_cutoff_matches_the_tool():
     So: any ISO date the doc presents as THE audit cutoff must equal `AUDIT_CUTOFF`. The doc is free
     to mention other dates (ledger entries, incident dates); only the ones marked as the cutoff bind.
     """
-    doc = os.path.join(HERE, '..', '..', 'systems', '_architecture', 'reference', 'repository_keep_set_v1.md')
+    doc = os.path.join(HERE, '..', '..', '.designs', 'systems', '_architecture', 'reference', 'repository_keep_set_v1.md')
     with open(doc, encoding='utf-8') as fh:
         text = fh.read()
 

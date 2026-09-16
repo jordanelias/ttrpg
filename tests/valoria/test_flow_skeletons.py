@@ -1,7 +1,7 @@
 """The subsystem flow skeletons must be TRACED, not recalled.
 
 A flow skeleton (`systems/<x>/<x>_flow_skeleton_v1.md`, format owned by
-`systems/_architecture/reference/subsystem_flow_skeletons_v1.md`) is a structural description of one
+`.designs/systems/_architecture/reference/subsystem_flow_skeletons_v1.md`) is a structural description of one
 subsystem assembled by reading its code. The failure mode that matters is not a typo — it is a
 skeleton that *reads* correct, cites plausible files, and was never traced. Prose cannot
 distinguish the two, and neither can a reviewer skimming it.
@@ -50,7 +50,19 @@ import re
 import pytest
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-SPEC = os.path.join(ROOT, 'systems', '_architecture', 'reference', 'subsystem_flow_skeletons_v1.md')
+SPEC = os.path.join(ROOT, '.designs', 'systems', '_architecture', 'reference', 'subsystem_flow_skeletons_v1.md')
+
+# ED-IN-0229 (2026-09-16): the spec and the skeletons it rosters are quarantined under
+# `.designs/`, which MIRRORS the tree — an archived path is `.designs/` + its original path and
+# nothing else changes. The roster rows inside the spec still name the pre-quarantine paths, and
+# they are left that way on purpose: an archived document is frozen, and rewriting its body to
+# chase a move is how a "historical record" stops being one. The reader resolves instead.
+ARCHIVE = '.designs'
+
+
+def archived(relpath):
+    """Where a path named INSIDE an archived document actually lives now."""
+    return relpath if relpath.startswith(ARCHIVE + '/') else os.path.join(ARCHIVE, relpath)
 
 # The format spec's §2 section contract, in order. A skeleton that drops or reorders one of
 # these has diverged in shape, which is the failure the doctrine calls shape divergence.
@@ -113,7 +125,7 @@ SUBSYSTEM_IDS = [r[0] for r in ROSTER]
 # exactly like originals do — a review found ~178 of them checked by nothing, because this suite
 # was parameterized over the 15-row roster alone. Anchor-bearing files get anchor checks; the
 # roster decides which SUBSYSTEMS exist, not which files are guarded.
-ATLAS = 'systems/_architecture/reference/engine_atlas_v1.md'
+ATLAS = '.designs/systems/_architecture/reference/engine_atlas_v1.md'
 ANCHORED_DOCS = [(r[0], r[1], r[2]) for r in ROSTER] + [('engine_atlas', 'IN', ATLAS)]
 ANCHORED_IDS = SUBSYSTEM_IDS + ['engine_atlas']
 
@@ -128,14 +140,15 @@ def test_roster_parses():
 
 @pytest.mark.parametrize('subsystem,lane,relpath', ROSTER, ids=SUBSYSTEM_IDS)
 def test_every_roster_subsystem_has_a_skeleton(subsystem, lane, relpath):
-    assert os.path.isfile(os.path.join(ROOT, relpath)), \
+    resolved = archived(relpath)
+    assert os.path.isfile(os.path.join(ROOT, resolved)), \
         (f"{subsystem} is on the roster in {os.path.relpath(SPEC, ROOT)} §3 but has no "
-         f"skeleton at {relpath}. Either trace it or remove the roster row.")
+         f"skeleton at {resolved}. Either trace it or remove the roster row.")
 
 
 @pytest.mark.parametrize('subsystem,lane,relpath', ROSTER, ids=SUBSYSTEM_IDS)
 def test_required_sections_present_and_ordered(subsystem, lane, relpath):
-    path = os.path.join(ROOT, relpath)
+    path = os.path.join(ROOT, archived(relpath))
     if not os.path.isfile(path):
         pytest.skip('missing skeleton — reported by test_every_roster_subsystem_has_a_skeleton')
     text = _read(path)
@@ -157,7 +170,7 @@ def test_required_sections_present_and_ordered(subsystem, lane, relpath):
 
 @pytest.mark.parametrize('subsystem,lane,relpath', ROSTER, ids=SUBSYSTEM_IDS)
 def test_skeletons_carry_anchors(subsystem, lane, relpath):
-    path = os.path.join(ROOT, relpath)
+    path = os.path.join(ROOT, archived(relpath))
     if not os.path.isfile(path):
         pytest.skip('missing skeleton — reported by test_every_roster_subsystem_has_a_skeleton')
     anchors = ANCHOR_RE.findall(_read(path))
@@ -225,12 +238,30 @@ from .conftest import _GENERATED_LAYER  # noqa: E402  the single owner of "which
 
 GENERATED_TARGETS = frozenset(a for _builder, arts in _GENERATED_LAYER for a in arts)
 
+# Files whose LINE NUMBERS are not a stable anchor, though their CONTENT is. Checked by symbol,
+# exactly like a generated artifact, because that is the half that stays true.
+#
+# ED-IN-0229 (2026-09-16): `references/canonical_sources.yaml` joined this set when the design-prose
+# quarantine deleted 102 doc pins from it and the file went 584 lines -> 292. Every line-numbered
+# anchor into it was instantly out of range — through no fault of the skeletons, which are archived
+# and frozen. This module's own docstring already named the durable fix ("cite those files by symbol
+# without a line"); this applies it to the one file where the tax actually came due, rather than
+# editing frozen documents to chase a line count.
+LINE_UNSTABLE_TARGETS = frozenset({'references/canonical_sources.yaml'})
+
 
 def _anchor_failures(relpath):
     """Return (failures, checked) for one skeleton. `checked` counts symbol assertions only."""
     failures, checked = [], 0
-    for filepath, start_s, end_s, symbol in ANCHOR_RE.findall(_read(os.path.join(ROOT, relpath))):
+    for filepath, start_s, end_s, symbol in ANCHOR_RE.findall(_read(os.path.join(ROOT, archived(relpath)))):
+        # An anchor written before the quarantine names the pre-quarantine path; the archive
+        # mirrors the tree, so the same prefix rule resolves it (ED-IN-0229). The skeleton's own
+        # text is left alone — an archived document records what was true when it was written.
         target = os.path.join(ROOT, filepath)
+        if not os.path.isfile(target):
+            candidate = os.path.join(ROOT, archived(filepath))
+            if os.path.isfile(candidate):
+                target = candidate
         where = f"{relpath} -> `{filepath}:{start_s}{'-' + end_s if end_s else ''}"
         where += f" {symbol}`" if symbol else "`"
 
@@ -238,7 +269,7 @@ def _anchor_failures(relpath):
             failures.append(f"{where}: file does not exist")
             continue
 
-        if filepath in GENERATED_TARGETS:
+        if filepath in GENERATED_TARGETS or filepath in LINE_UNSTABLE_TARGETS:
             if not symbol:
                 failures.append(
                     f"{where}: {filepath} is REBUILT every run, so a bare line number cites a build "
@@ -295,7 +326,7 @@ def test_anchors_resolve(subsystem, lane, relpath, generated_layer):
     twelve citations in four design docs — a design-surface call, flagged for Jordan rather than
     taken here while fixing a red gate.
     """
-    if not os.path.isfile(os.path.join(ROOT, relpath)):
+    if not os.path.isfile(os.path.join(ROOT, archived(relpath))):
         pytest.skip('missing skeleton — reported by test_every_roster_subsystem_has_a_skeleton')
     failures, _ = _anchor_failures(relpath)
     assert not failures, f"{len(failures)} unresolvable anchor(s):\n  " + "\n  ".join(failures)
@@ -310,11 +341,11 @@ def test_the_suite_actually_checked_symbols(generated_layer):
     total_anchors = 0
     total_symbol_checks = 0
     for _, _, relpath in ROSTER:
-        if not os.path.isfile(os.path.join(ROOT, relpath)):
+        if not os.path.isfile(os.path.join(ROOT, archived(relpath))):
             continue
         _, checked = _anchor_failures(relpath)
         total_symbol_checks += checked
-        total_anchors += len(ANCHOR_RE.findall(_read(os.path.join(ROOT, relpath))))
+        total_anchors += len(ANCHOR_RE.findall(_read(os.path.join(ROOT, archived(relpath)))))
 
     assert total_anchors >= MIN_TOTAL_ANCHORS, (
         f"only {total_anchors} anchors parsed across {len(ROSTER)} skeletons — the regex or the "
@@ -342,7 +373,7 @@ def test_no_unparseable_anchor_lookalikes(subsystem, lane, relpath):
     Without this, malformed anchors degrade silently to unguarded prose instead of failing —
     the worst possible direction for a rot detector to fail in.
     """
-    path = os.path.join(ROOT, relpath)
+    path = os.path.join(ROOT, archived(relpath))
     if not os.path.isfile(path):
         pytest.skip('missing skeleton — reported by test_every_roster_subsystem_has_a_skeleton')
 
@@ -378,7 +409,7 @@ def test_contract_names_resolve_in_the_generated_index(subsystem, lane, relpath)
     contract slot. Both read as citations and neither was checkable until the index gave this
     check something to resolve against.
     """
-    path = os.path.join(ROOT, relpath)
+    path = os.path.join(ROOT, archived(relpath))
     if not os.path.isfile(path):
         pytest.skip('missing skeleton — reported by test_every_roster_subsystem_has_a_skeleton')
     if not os.path.isfile(CONTRACT_INDEX):

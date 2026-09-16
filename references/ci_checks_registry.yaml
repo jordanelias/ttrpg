@@ -218,6 +218,14 @@ ci_checks:
     ci_job: validators
     notes: "Also runs locally via valoria_local.py --staged (blocking)."
 
+  - path: tools/ci_design_prose_quarantine.py
+    level: 5
+    subject: compliance
+    posture: harden
+    role: "Blocking quarantine gate: QUARANTINE means a design document is kept, readable and resolvable, but moved OUT of the game trees and out of the default search path — it is not deleted and not deprecated-in-place. No tracked .md may sit under systems/** or engine/** except engine/season/**; the archive is .designs/, hidden so ripgrep and glob.glob skip it."
+    ci_job: validators
+    notes: "ED-IN-0229 (Jordan, 2026-09-16). Zero is the invariant, not a ratchet — the count was driven to 0 in the same commit. Falsifier: tests/valoria/test_design_prose_quarantine.py. Also runs locally via valoria_local.py (blocking)."
+
   # MERGED 2026-08-23 (S6/D2, ED-IN-0194): tools/ci_names_check.py retired into
   # tools/ci_naming_check.py --warn. One rule -- "an added line must not introduce a deprecated
   # name" -- parameterised by the index's enforce tier, and it had two implementations sharing the

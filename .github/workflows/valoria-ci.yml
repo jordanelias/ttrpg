@@ -122,6 +122,10 @@ jobs:
           v python3 tools/ci_editorial_checker.py
           v python3 tools/ci_pp_frozen_check.py
           v python3 tools/ci_naming_check.py
+          # ED-IN-0229 (Jordan, 2026-09-16): the game trees hold code, not prose. No tracked .md
+          # under systems/** or engine/** except engine/season/**. BLOCKING: measured over #337-#404,
+          # prose was written back into systems/ in ten separate PRs and the rate was rising.
+          v python3 tools/ci_design_prose_quarantine.py
           v python3 tools/ci_names_consistency.py
           v python3 tools/export_engine_params.py --check
           v python3 tools/export_key_types.py --check

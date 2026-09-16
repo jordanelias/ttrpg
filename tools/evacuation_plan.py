@@ -163,6 +163,22 @@ RULES = [
     # the CARRY-union-LEAVE defect: a file with no verdict would be removed under a mirror-image
     # deletion without ever appearing in a plan. Both are KEEP, and for different reasons worth
     # stating separately rather than under one pattern.
+    # ED-IN-0229 (Jordan, 2026-09-16) -- the design-prose quarantine. 230 documents left
+    # `systems/*/reference/` and the root of `engine/` for `.designs/`, and a new top-level tree
+    # matching no rule is the CARRY-union-LEAVE defect this tool exists to refuse: under a
+    # mirror-image deletion the whole archived corpus would be removed without ever appearing in a
+    # plan. It is KEEP, and one rule covers all of it because one reason does.
+    (lambda p: p.startswith('.designs/'), 'keep', 'R-DESIGN-QUARANTINE',
+     "QUARANTINED design prose, and quarantine is not retirement -- these documents are kept, "
+     "readable and resolvable, and were moved only so that an agent sweeping the code trees stops "
+     "ingesting them and reading them as canon (CLAUDE.md 1). The archive MIRRORS the tree: an "
+     "archived path is `.designs/` prefixed onto its original path. Much of it is prose with no "
+     "code pair, which this tool's own docstring already rules KEEP and which IS the spec; the "
+     "rest is superseded design whose replacement is engine/season/. Code still parses some of it "
+     "-- tools/export_key_types.py emits engine/engine_params/key_types.json from the key registry "
+     "under a blocking --check round-trip -- so this is not dead weight even by the strictest "
+     "reading. DELETE NOTHING here on the strength of the word 'archive'"),
+
     (lambda p: p.startswith('architecture/'), 'keep', 'R-ARCH-LAYER1',
      'LAYER 1 -- the code architecture and shape, RATIFIED 2026-09-05. It governs how all coding '
      'is conducted, which is agent instruction (CLAUDE.md 0.05 exempts that class from demotion), '
@@ -795,6 +811,9 @@ def module_import_readers(evac_set: set, retained: list[str]) -> dict:
     return {k: sorted(set(v)) for k, v in hits.items()}
 
 
+ARCHIVE_PREFIX = '.designs/'
+
+
 def contract_guard(evacuating: set[str]) -> list[str]:
     """Nothing that a module contract points at may be evacuated.
 
@@ -819,6 +838,21 @@ def contract_guard(evacuating: set[str]) -> list[str]:
             hits = [e for e in evacuating if e == q or e.startswith(q + '/')]
             if hits:
                 bad.append(f"{c.get('module')}.{field} -> {q} ({len(hits)} file(s) would be evacuated)")
+
+    # ED-IN-0229 (2026-09-16): the quarantined design corpus is never evacuable, and it needs its
+    # own clause rather than riding on `doc:`. Severing the pointers set 17 `doc:` fields to null
+    # — deliberately, since `doc:` is the strongest possible "read this as authority" signal at a
+    # module — and that silently emptied the half of this guard those fields backed. A guard whose
+    # universe has quietly gone empty still returns [] and still reads as PASSING, which is the
+    # exact failure CLAUDE.md §0.1 pt 2 names: an assertion that cannot observe what it excludes.
+    # The protection moved to the partition rule R-DESIGN-QUARANTINE; this makes it assertable.
+    archived = sorted(e for e in evacuating if e.startswith(ARCHIVE_PREFIX))
+    if archived:
+        bad.append(
+            f"{len(archived)} quarantined design document(s) would be evacuated, e.g. "
+            f"{archived[0]} — `{ARCHIVE_PREFIX}` is KEEP under R-DESIGN-QUARANTINE. Quarantine is "
+            f"not retirement: these are kept, readable and resolvable, and code still parses some "
+            f"of them")
     return bad
 
 

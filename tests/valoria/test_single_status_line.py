@@ -10,15 +10,15 @@ gate, while remaining perfectly visible to a human reading the file.
 Found 2026-08-14 by a read-only contradiction hunt. Three of the five instances are genuine
 contradictions, not duplications:
 
-  · `systems/_architecture/reference/derived_stats_v30.md:2,4` — `CANONICAL` and `PROPOSAL — supersedes
+  · `.designs/systems/_architecture/reference/derived_stats_v30.md:2,4` — `CANONICAL` and `PROPOSAL — supersedes
     prior derived_stats_v30.md`. One file, two statuses, the second self-referentially superseding
     the file it appears in. This doc is load-bearing: CURRENT.md names its §14.2 as the Truth-Track
     source of truth, and the combat wound constants resolve through its §4.1.
-  · `systems/factions/reference/faction_canon_v30.md:6,7` — `CANONICAL` and `PROVISIONAL — pending
+  · `.designs/systems/factions/reference/faction_canon_v30.md:6,7` — `CANONICAL` and `PROVISIONAL — pending
     ratification`, where the PROVISIONAL line explicitly redirects per-faction texture authority
     back to four other documents. An ED-1094 ratify-on-merge flip that never happened; the loser is
     not a softer version of the winner, it points somewhere else entirely.
-  · `systems/characters/reference/character_generation_questionnaire_v30.md:2,4` — `CANONICAL` and
+  · `.designs/systems/characters/reference/character_generation_questionnaire_v30.md:2,4` — `CANONICAL` and
     `DESIGN DIRECTION (not yet authored — question set pending)`. Incompatible claims about whether
     canonical content exists at all.
 
@@ -44,17 +44,20 @@ STATUS_RE = re.compile(r'^##\s*Status:', re.M)
 
 # MEASURED 2026-08-14. Shrink this as each is dispositioned; never grow it to make a run pass.
 KNOWN_MULTI_STATUS = {
-    'systems/_architecture/reference/derived_stats_v30.md',            # CONTRADICTION — CANONICAL vs self-superseding PROPOSAL
-    'systems/factions/reference/faction_canon_v30.md',                  # CONTRADICTION — CANONICAL vs PROVISIONAL (ED-1094 flip missed)
-    'systems/characters/reference/character_generation_questionnaire_v30.md',  # CONTRADICTION — CANONICAL vs "not yet authored"
-    'systems/_architecture/reference/scale_transitions_v30.md',          # duplication, dissolved on inspection
-    'systems/_architecture/reference/subsystem_flow_skeletons_v1.md',    # unassessed
+    '.designs/systems/_architecture/reference/derived_stats_v30.md',            # CONTRADICTION — CANONICAL vs self-superseding PROPOSAL
+    '.designs/systems/factions/reference/faction_canon_v30.md',                  # CONTRADICTION — CANONICAL vs PROVISIONAL (ED-1094 flip missed)
+    '.designs/systems/characters/reference/character_generation_questionnaire_v30.md',  # CONTRADICTION — CANONICAL vs "not yet authored"
+    '.designs/systems/_architecture/reference/scale_transitions_v30.md',          # duplication, dissolved on inspection
+    '.designs/systems/_architecture/reference/subsystem_flow_skeletons_v1.md',    # unassessed
 }
 
 
 def _multi_status_docs():
     found = {}
-    root = os.path.join(ROOT, 'systems')
+    # ED-IN-0229: the subsystem corpus lives in the quarantine now — see the note in
+    # tests/valoria/test_ed_citation_scope.py. Scanning `systems/` here would measure nothing
+    # and report clean, which is the failure this guard exists to catch.
+    root = os.path.join(ROOT, '.designs', 'systems')
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = [d for d in dirnames if d != '__pycache__']
         for fn in filenames:
@@ -78,7 +81,10 @@ def test_the_scan_reaches_a_real_corpus():
 
 
 def _iter_status_docs():
-    root = os.path.join(ROOT, 'systems')
+    # ED-IN-0229: the subsystem corpus lives in the quarantine now — see the note in
+    # tests/valoria/test_ed_citation_scope.py. Scanning `systems/` here would measure nothing
+    # and report clean, which is the failure this guard exists to catch.
+    root = os.path.join(ROOT, '.designs', 'systems')
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = [d for d in dirnames if d != '__pycache__']
         for fn in filenames:
@@ -121,9 +127,9 @@ def test_the_three_real_contradictions_are_still_the_named_ones():
     statuses, it was dispositioned and this test points at the record to update.
     """
     found = set(_multi_status_docs())
-    for rel in ('systems/_architecture/reference/derived_stats_v30.md',
-                'systems/factions/reference/faction_canon_v30.md',
-                'systems/characters/reference/character_generation_questionnaire_v30.md'):
+    for rel in ('.designs/systems/_architecture/reference/derived_stats_v30.md',
+                '.designs/systems/factions/reference/faction_canon_v30.md',
+                '.designs/systems/characters/reference/character_generation_questionnaire_v30.md'):
         assert rel in found, (
             f'{rel} no longer carries two Status lines — if it was dispositioned, update '
             f'KNOWN_MULTI_STATUS and this test together and record the disposition.')

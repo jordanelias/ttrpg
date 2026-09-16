@@ -56,8 +56,13 @@ RESERVATIONS = os.path.join(REPO, 'references', 'id_reservations.yaml')
 
 # Doc trees whose headers file work under an ED. `tests/` and `deprecated/` are excluded on
 # purpose: fixtures and frozen history, per the measurement in the module docstring.
+# ED-IN-0229 (2026-09-16): `.designs` carries the quarantined subsystem corpus that used to live
+# under `systems/`. It is listed because a root that silently empties is exactly the drift the
+# floors below exist to catch — the `## Date:` count fell from 40+ to 32 the moment the files
+# moved, and without this the guard would have gone on reporting clean over a corpus it no longer
+# reached. The prose is hidden from agent sweeps, never from the audits that keep its IDs honest.
 DOC_ROOTS = ('audit', 'proposals', 'workplans', 'godot', 'registers/handoffs',
-             'canon', 'systems', 'references')
+             'canon', 'systems', '.designs', 'references')
 
 # HEADER_LINES was 8 and that MISSED THE PLAN OF RECORD (ED-IN-0177, adversarial review).
 # `audit/2026-08-11-code-leanness/01_plan.md` carries its `## Date:` at line 37 — pushed down by an

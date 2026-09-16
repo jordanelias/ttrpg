@@ -387,6 +387,21 @@ and there is nothing left to resume from. There is no `deprecated/` tree — **r
 deleting it and writing a `FORK:` row** in `references/restructure_ledger.md`, which is where surfaces
 still naming paths under it resolve. Do not recreate the directory.
 
+⚠ **ONE EXCEPTION, RULED by Jordan 2026-09-16 (ED-IN-0229): `.designs/`, and QUARANTINE is not
+retirement.** A retired thing is deleted and lives at a fork ref. A **quarantined** document is *kept,
+readable and resolvable* — it is moved out of the code trees and out of the default search path because
+an agent kept sweeping it up and reading it as canon. Jordan, verbatim: *"game code keeps getting
+poisoned by these stray .md files that you are unable to consistently avoid as you are AI, so we have to
+quarantine them somehow so you stop pulling them into your sweeps or read them as canon."* The 230
+design documents that lived under `systems/*/reference/` and at the root of `engine/` are there.
+**The leading dot is the mechanism, not decoration** — ripgrep (so, the agent search tools) and Python's
+`glob.glob` skip dot-directories unless asked; `os.walk`, `Path.rglob` and `git ls-files` do not, so the
+quarantine reduces accidental ingestion rather than preventing it, and every archived file carries an
+`ARCHIVED-NOT-CANON` banner with its original path for the times it is opened anyway. **Do not add to
+it** (new design work goes to `proposals/`), **do not point at it** — `CURRENT.md` names those documents
+by bare filename with no path, deliberately — and **do not read it as authority**: §0.05 already forbids
+that, and this is only the filesystem finally agreeing. This is not a licence for a second such tree.
+
 ---
 
 ## 2. How this repo is worked
@@ -420,10 +435,13 @@ says where an old path went. Only what those cannot tell you:
 - **`systems/`** — design source of truth for `combat`, `social_contest` and `mass_battle`, the three
   retained by ED-IN-0204 Decision 1: *"only the repository's systems for social contests, personal
   combat and mass battles to be retained"*. **One subsystem = one folder = one ID lane = one
-  `CURRENT.md` row = one `HANDOFF_<LANE>.md`.** Each holds its design `.md` at the root and oracle
-  scripts in `sim/`, imported as `systems.<sub>.sim.*`. The rest are superseded by `engine/season/`, kept
-  for two reasons — those `engine/` still resolves into at runtime (retirement gated on the R-04 role
-  work), and those with no Python at all, which stay as prose whose document IS the spec.
+  `CURRENT.md` row = one `HANDOFF_<LANE>.md`.** Each holds oracle scripts in `sim/`, imported as
+  `systems.<sub>.sim.*`. ⚠ **`systems/` HOLDS NO `.md` AT ALL AS OF 2026-09-16 (ED-IN-0229)** — the 226
+  design documents that used to sit at each subsystem root, and latterly under `<sub>/reference/`, are
+  quarantined in `.designs/systems/<sub>/` (§1). `tools/ci_design_prose_quarantine.py` is blocking, and
+  the invariant is **zero, not a ratchet**. The subsystems superseded by `engine/season/` are kept for
+  their Python — the ones `engine/` still resolves into at runtime (retirement gated on the R-04 role
+  work). A subsystem with no Python at all is now an empty lane whose prose is in the archive.
 - **`engine/`** — the executable model (Key substrate, autoload hub, cross-scale, campaign driver,
   `engine/engine_params/` typed exports, `engine/tests/` as CI job `sim-regression`). **`engine/` names
   no subsystem by import**: seams resolve through `engine/substrate/composition.py`, where `engine/`
@@ -459,7 +477,10 @@ says where an old path went. Only what those cannot tell you:
   **`proposals/`** — unratified proposals, surfaced BY LOCATION.
 
 **Trees that were dissolved — do not recreate any of them:** `designs/`, `sim/`, `arcs/`,
-`engine/params/`, `references/values_master.yaml` (auto-extracted and partly wrong — **never lift
+`engine/params/`, `references/values_master.yaml`  ⚠ **`.designs/` is NOT a resurrection of `designs/`**
+— different tree, different contents, different purpose (a hidden read-avoidance quarantine, §1), and
+ruled into existence 2026-09-16. The dissolved `designs/` remains dissolved; its old paths resolve
+through the ledger, now in two hops to the archive. (auto-extracted and partly wrong — **never lift
 numbers from it**). Everything removed is at its fork ref; every old path resolves through
 `references/restructure_ledger.md`.
 
@@ -581,7 +602,7 @@ construction and running it is a fake control. Ledger provenance is advisory —
 fields are unchecked, none pin a generating SHA — so verify a cited `PP-NNN`/`ED-NNN` by hand against its
 `canonical_source`.
 
-**Pointer:** `engine/sim_reference_README.md` orients the reference model; `engine/tests/` is CI job
+**Pointer:** `.designs/engine/sim_reference_README.md` orients the reference model (quarantined 2026-09-16, ED-IN-0229 — read it for orientation, never as authority); `engine/tests/` is CI job
 `sim-regression`. The reference is partly stubbed (`NotImplementedError`) and its own README's "all
 modules are stubs" line is stale — grep for the stubs rather than believing either claim.
 
@@ -717,7 +738,7 @@ used at all — on the *audit/guardrail* node rather than the synthesis one.
    hatch. Escalate at *phase* boundaries, where the cache turns over anyway.
 
 **Orchestration patterns** (doctrine:
-`systems/_architecture/reference/holonic_container_doctrine_v1.md`):
+`.designs/systems/_architecture/holonic_container_doctrine_v1.md`, quarantined 2026-09-16):
 - **Agonist→antagonist is a relay, not a dialogue.** Subagents are stateless and isolated: dispatch the
   producer, capture its output, dispatch the critic WITH that output, reconcile in the orchestrator. For
   audits this is *preferable* — a critic that never saw the producer's reasoning is more independent.

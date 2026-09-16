@@ -365,3 +365,11 @@ ED-FI-0006/0007/0008 allocated 2026-07-13: 2026-07-13 multi-agent audit P1 batch
 BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0009-0012 RESERVED 2026-07-29 for cross-lane EDs the IN code-shape waves file in WR. MEASURED max allocated = ED-WR-0009; unused 0010-0012 (3) returned to the pool, next_free 13 -> 10. Freeze lifted: read next_free, allocate, bump, co-commit as normal. // ED-WR-0008 allocated 2026-07-13: 2026-07-13 multi-agent audit P1 -- P-25 'Scale-based Mending Stability' override table in threadwork_v30 (line 40) truncated to header + 'Object' with zero data rows (original authoring truncation, git-confirmed). Open/needs_jordan; can anchor a WR threadwork batch with the P2 tail. next_free bumped 8->9. // ED-WR-0007 allocated 2026-07-08: pessimist-audit WR Scene-Slate + threadwork work items, execution pending (decision ED-IN-0027). ED-WR-0001 + ED-WR-0002 allocated 2026-07-05: NERS-audit E-5 (peninsular_strain GD-1 sweep) + E-8 (MS/RS name sweep) accepted work items; ED-WR-0003 allocated 2026-07-05: edge-playability §7 item 10 (ambient-fabric window + Appraise Revelation), edge-playability §7 batch (PR #81)
 ```
 
+### 2026-09-16 — IN lane skipped 0228 (ED-IN-0229)
+
+The design-prose quarantine took **ED-IN-0229**, not 0228, although `next_free` read 228. 0228 was
+already claimed by **open PR #405** (*The decision layer interrogated*), unmerged at the time, so
+taking it would have produced the exact within-lane collision CLAUDE.md §4 warns about — two live
+sessions renumbering to the same `next_free`, which happened twice on 2026-09-10 and once again
+after the renumber. Skipping is cheap and a gap is already tolerated in this lane; a collision is
+not. Should #405 never land, 0228 remains a gap.
