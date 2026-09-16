@@ -52,7 +52,7 @@ import pytest
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 SPEC = os.path.join(ROOT, '.designs', 'systems', '_architecture', 'reference', 'subsystem_flow_skeletons_v1.md')
 
-# ED-IN-0229 (2026-09-16): the spec and the skeletons it rosters are quarantined under
+# ED-IN-0231 (2026-09-16): the spec and the skeletons it rosters are quarantined under
 # `.designs/`, which MIRRORS the tree — an archived path is `.designs/` + its original path and
 # nothing else changes. The roster rows inside the spec still name the pre-quarantine paths, and
 # they are left that way on purpose: an archived document is frozen, and rewriting its body to
@@ -241,7 +241,7 @@ GENERATED_TARGETS = frozenset(a for _builder, arts in _GENERATED_LAYER for a in 
 # Files whose LINE NUMBERS are not a stable anchor, though their CONTENT is. Checked by symbol,
 # exactly like a generated artifact, because that is the half that stays true.
 #
-# ED-IN-0229 (2026-09-16): `references/canonical_sources.yaml` joined this set when the design-prose
+# ED-IN-0231 (2026-09-16): `references/canonical_sources.yaml` joined this set when the design-prose
 # quarantine deleted 102 doc pins from it and the file went 584 lines -> 292. Every line-numbered
 # anchor into it was instantly out of range — through no fault of the skeletons, which are archived
 # and frozen. This module's own docstring already named the durable fix ("cite those files by symbol
@@ -255,7 +255,7 @@ def _anchor_failures(relpath):
     failures, checked = [], 0
     for filepath, start_s, end_s, symbol in ANCHOR_RE.findall(_read(os.path.join(ROOT, archived(relpath)))):
         # An anchor written before the quarantine names the pre-quarantine path; the archive
-        # mirrors the tree, so the same prefix rule resolves it (ED-IN-0229). The skeleton's own
+        # mirrors the tree, so the same prefix rule resolves it (ED-IN-0231). The skeleton's own
         # text is left alone — an archived document records what was true when it was written.
         target = os.path.join(ROOT, filepath)
         if not os.path.isfile(target):

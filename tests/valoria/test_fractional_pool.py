@@ -21,7 +21,7 @@ import systems.mass_battle.sim.resolution as R  # noqa: E402
 
 
 def test_default_gated_off():
-    assert C.PC_FRACTIONAL_POOL is True, (
+    assert C.MB_FRACTIONAL_POOL is True, (
         "fractional pool must default ON (Jordan, 2026-07-29; ED-MB-0061). It does move goldens — "
         "that is why the re-base is a planned event, not a reason to keep the mechanic dark. G20.")
 

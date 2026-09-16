@@ -22,7 +22,7 @@ mode currently returns all-draws at the tick cap for every engine config -- a ti
 artifact, not a calibration issue -- so bands are evaluated in multi mode. The engine is
 the live mass_battle package (tests/sim/mass_battle/engine.py), imported directly -- this
 gauge runs against whatever engine config the environment toggles (PER_CELL, FIELD_MOVEMENT,
-PC_NODE_COHESION, ...) select, not a frozen snapshot file.
+MB_NODE_COHESION, ...) select, not a frozen snapshot file.
 
 Grounding + citations index: references/historical/mass_battle_gauge_grounding.md
 """
@@ -113,20 +113,20 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
     # troop_type/speed default to the historical infantry baseline so the original
     # 13 tests construct byte-identically; cavalry rows pass troop_type='cavalry',
     # speed='Fast' by kwargs. Cavalry charge mechanics (charge_pen,
-    # PC_CAVALRY_SPEED_MULT) are PER_CELL=1-gated in the engine; under PER_CELL=0
+    # MB_CAVALRY_SPEED_MULT) are PER_CELL=1-gated in the engine; under PER_CELL=0
     # cavalry == infantry (S1: speed is not yet wired into combat).
     #
     # morale_start / instructions default to leave EVERY pre-existing row byte-exact
     # (morale_start=None -> morale_start==morale; instructions=() -> no brace).
     #   * instructions=('brace',) sets the engine's FM brace tactic on the subunit:
     #     _unit_braced(unit) then fires the grounded reciprocal charge-recoil
-    #     (PC_CHARGE_RECOIL, calibrated vs Courtrai/Swiss/Waterloo) so a frontal
+    #     (MB_CHARGE_RECOIL, calibrated vs Courtrai/Swiss/Waterloo) so a frontal
     #     charge into a prepared wall is REPELLED. Bracing is a deliberate tactic,
     #     NOT an automatic consequence of holding -> the gauge must set it to test
     #     a braced unit (the engine gating is correct game design).
     #   * morale_start>morale expresses a genuinely SHAKEN unit (cohesion eroded
     #     BELOW its start, du Picq): _charge_shock_sigma's shaken-amplifier
-    #     (PC_SHOCK_SHAKEN_GAIN) and _morale_sigma then fire. "Shaken" is RELATIVE
+    #     (MB_SHOCK_SHAKEN_GAIN) and _morale_sigma then fire. "Shaken" is RELATIVE
     #     (a unit that has LOST morale), not a low absolute ceiling -> a shaken line
     #     needs morale<morale_start, which make_unit's old morale_start==morale
     #     could not express.
@@ -339,7 +339,7 @@ CAV_TESTS = [
     # popular cavalry-beats-unprepared-infantry misconception this source debunks.]
     ('C1','Cav vs steady unbraced Line','Arrowhead','Line',dict(CAV),{},35,55,'high'),     # [canonical: mass_battle_gauge_grounding.md §3 — C1 contested frontal, rebaseline]
     # C2: frontal cavalry vs a BRACED wall (hold + disc8 + the 'brace' tactic = square / schiltron /
-    # pike block). The brace instruction fires the grounded reciprocal charge-recoil (PC_CHARGE_RECOIL,
+    # pike block). The brace instruction fires the grounded reciprocal charge-recoil (MB_CHARGE_RECOIL,
     # calibrated vs Courtrai/Swiss/Waterloo): the wall REPELS the charge -- cavalry rarely breaks it.
     # Judged on RAW cavalry win-rate (must be LOW): a repelled charge is a HOLD, not a decisive result,
     # so decisive-split is uninformative here (tiny decisive n) and high draws are EXPECTED (Waterloo
@@ -360,7 +360,7 @@ CAV_TESTS = [
         {'pin_frac':2/3,'wing_troop_type':'cavalry','wing_speed':'Fast'},{},75,95,'low'),    # [canonical: mass_battle_gauge_grounding.md §3 — C4 mounted envelopment]
     # C5: cavalry vs a genuinely SHAKEN line -- morale 2 of a start-6 unit (cohesion eroded 2/3 BELOW
     # start; "shaken" is RELATIVE, du Picq, not a low absolute ceiling). The shaken-amplifier
-    # (PC_SHOCK_SHAKEN_GAIN) + _morale_sigma fire: the wavering line breaks under the charge --
+    # (MB_SHOCK_SHAKEN_GAIN) + _morale_sigma fire: the wavering line breaks under the charge --
     # exploitation + pursuit. Decisive cavalry win; ceiling is NEAR-TOTAL rout: cavalry vs disordered
     # foot was catastrophic (Boddy 2015 dispersed 15,000 disordered French; Hastings post-feint). The
     # Phase-2 ceiling 90 was provisional (set when this row was inert/contested at 45.7); the working

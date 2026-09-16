@@ -567,7 +567,7 @@ Nothing in this chapter qualifies as Class (a).
 
 **4. Discriminator 3 is one verified instance, not a measured class.** The obstacle-derivation
 instance stands. The octagon damage partition does **not**: `OCTAGON_DMG_MULT` is live at
-`systems/mass_battle/sim/config.py:210`, `PC_OCTAGON_DMG` defaults **ON** at `:211`, it executes at
+`systems/mass_battle/sim/config.py:210`, `MB_OCTAGON_DMG` defaults **ON** at `:211`, it executes at
 `orchestration.py:757, 1127-1131, 1233`, and it is golden-pinned ON at
 `tests/valoria/test_mass_battle_byte_exact.py:77-80`. The third instance ("Ruling B at
 `operations.py:48-50`") does not exist — those lines are live TN constants and `Ruling B` appears

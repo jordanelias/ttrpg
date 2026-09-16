@@ -3,7 +3,7 @@ the subunit CENTROID to the nearest enemy cell, and a 3x2 maniple centroid sits 
 front edge, so `enemy_range:3` NEVER fires (measured) while `enemy_range:6` fires reliably at contact. The DG-2 `yielding` primitive already exists —
 "gives ground under pressure but keeps FIGHTING and keeps FACING the threat" — and its entry is
 COMMANDED: an Order whose behavior dict sets {'yielding': True} (check_orders applies it by generic
-setattr). The earlier Cannae runs never issued that order, which is why PC_FEIGNED_RETREAT/yield showed
+setattr). The earlier Cannae runs never issued that order, which is why MB_FEIGNED_RETREAT/yield showed
 +0.0pp. Here the Carthaginian centre advances, makes contact, then is ORDERED to yield — the bait —
 while the African columns + cavalry envelop. Run: python cannae_bait.py [n]"""
 import os, sys, random

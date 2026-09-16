@@ -1,4 +1,4 @@
-"""The game trees hold code, not prose (ED-IN-0229, Jordan 2026-09-16).
+"""The game trees hold code, not prose (ED-IN-0231, Jordan 2026-09-16).
 
 This is the falsifier CLAUDE.md §0.1 pt 3 requires for the quarantine gate:
 put a markdown file back into `systems/` and this test fails.

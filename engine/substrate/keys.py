@@ -55,8 +55,21 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-# §2.5 canonical Conviction axis set (key_substrate_v30.md).
-AXES = ("hierarchical", "sacred", "instrumental", "traditional")
+# §2.5 canonical Conviction axis set (key_substrate_v30.md §2.4).
+# ⚠ READ FROM THE REGISTRY, NOT DECLARED HERE (2026-09-14, ED-IN-0230). This was a literal tuple,
+# and `engine/season/rosters.yaml: conviction_axes` was a second literal, with NOTHING comparing
+# them — while that roster's note asserted a refusal that did not exist. Both now resolve to
+# `references/descriptor_registry.yaml: axis_roster` through `descriptors.py`, which is the same
+# ownership the 13 Convictions were given in 2026-08-24 after the same class of defect.
+#
+# ⚠ THE 2026-09-02 SCOPE RULING IS NOT OVERRIDDEN BY THIS. Jordan ruled that the proposal chain's
+# "definitions are not hardcoded" rule did NOT extend to this file and that `AXES`, `ROLES`,
+# `SCALES` and `PERMANENCE_VALUES` were "NOT to be moved". `ROLES`, `SCALES` and
+# `PERMANENCE_VALUES` are untouched and stay literals here. `AXES` moves on a NEWER and narrower
+# instruction — Jordan, 2026-09-14: *"NPC roster, Convictions, Ethical Axes are all things I want
+# to be able to dynamically edit going forward"* — which names this set specifically. The scope
+# ruling stands for everything it named that Jordan has not since asked to edit.
+from .descriptors import AXES  # noqa: E402  (the single owner's leaf)
 
 # §2.2 target roles (key_substrate_v30.md).
 ROLES = ("subject", "object", "witness", "beneficiary", "bystander")
@@ -181,6 +194,45 @@ _YAML_BLOCK = re.compile(r"```yaml\s*\n(?P<body>.*?)\n```", re.DOTALL)
 _TYPE_ID = re.compile(r"[a-z_]+\.[a-z_]+")
 
 
+def _as_flow_list(value: str):
+    """`[a, b]` -> `['a', 'b']`, tolerating a trailing `# comment`; `None` if not a flow list.
+
+    ⚠ THE TRAILING COMMENT IS WHY THIS EXISTS, and it was silently corrupting shipped data. The
+    registry's own convention annotates values with `#` -- `validate_payload` strips exactly that
+    from payload-field strings -- but the flow-list branch tested `value.endswith("]")`, which is
+    FALSE for `[personal, territory, peninsula]   # mirrors scope`. Such a value fell through to
+    the scalar branch and was stored as a STRING, and `apply_defaults` does
+    `list(entry["default_scale_signature"])` -- `list()` of a `str` iterates CHARACTERS.
+
+    OBSERVED before the fix: a Key of type `mechanical.scene_entered` came back with a
+    `scale_signature` of 50 single characters (`['[', 'p', 'e', 'r', ...]`) and
+    `meta.cascade_cluster_event` with 79, not one of them in `SCALES`. Four fields across two types
+    were affected. Latent rather than live -- nothing emits those types today -- but the data was
+    wrong in the shipped artifact, and comment-stripping living in one branch and not the other is
+    §8's "every rule lives once" read from the failure side.
+
+    The strip is SURGICAL: it applies only when removing the comment leaves a well-formed flow
+    list, so no value that parses correctly today can change. A scalar containing `#` is untouched.
+    """
+    v = value.strip()
+    if not v.startswith("["):
+        return None
+    # ⚠ THE FIRST `]` CLOSES IT, AND THE FIRST WRITING OF THIS TESTED `endswith` INSTEAD. These are
+    # FLAT lists -- no nesting anywhere in the registry -- so the opening bracket is closed by the
+    # first `]`, and everything after it is annotation. `endswith("]")` was true for
+    # `[a, b] # see [foo]`, which skipped the strip entirely and returned
+    # `['a', 'b] # see [foo']` -- the exact shipped-garbage this function exists to stop, and the
+    # registry already writes bracketed annotations in this position (`# [PROVISIONAL] ...`), so
+    # one edit moving the bracket to the end of the line would have reintroduced it.
+    close = v.find("]")
+    if close == -1:
+        return None
+    rest = v[close + 1:].strip()
+    if rest and not rest.startswith("#"):
+        return None          # not a flat flow list -- refuse rather than take the first half
+    return [x.strip() for x in v[1:close].split(",") if x.strip()]
+
+
 class TypeRegistry:
     """Loader/validator for the Key-type registry, from JSON or from the authored markdown.
 
@@ -291,8 +343,8 @@ class TypeRegistry:
                 if not value:
                     entry[field] = []
                     current_list = entry[field]
-                elif value.startswith("[") and value.endswith("]"):
-                    entry[field] = [v.strip() for v in value[1:-1].split(",") if v.strip()]
+                elif (flow := _as_flow_list(value)) is not None:
+                    entry[field] = flow
                     current_list = None
                 else:
                     entry[field] = value

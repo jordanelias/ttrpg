@@ -6,7 +6,7 @@ begins pursuing a *feigning* enemy, two rolls resolve the trap:
   2. if deceived, the pursuer makes a Discipline check Ob 1 — failing it OVEREXTENDS the pursuer,
      cutting its next engagement pool by OVEREXTEND_PENALTY.
 
-The whole tactic is GATED behind PC_FEIGNED_RETREAT (default OFF) so the multi-unit RNG stream is
+The whole tactic is GATED behind MB_FEIGNED_RETREAT (default OFF) so the multi-unit RNG stream is
 unchanged unless explicitly enabled (the flip is needs_jordan).
 
 Convention note (verified, not a bug): the engine's `roll_pool` is the canonical §A net-successes roll
@@ -25,7 +25,7 @@ import pytest  # noqa: E402
 
 
 def _reload(on):
-    os.environ['PC_FEIGNED_RETREAT'] = '1' if on else '0'
+    os.environ['MB_FEIGNED_RETREAT'] = '1' if on else '0'
     import systems.mass_battle.sim.config as C
     importlib.reload(C)
     import systems.mass_battle.sim.resolution as R
@@ -148,5 +148,5 @@ def test_overextended_pool_penalty_applies_only_when_gated_on():
 
 
 def teardown_module(module):
-    os.environ.pop('PC_FEIGNED_RETREAT', None)
+    os.environ.pop('MB_FEIGNED_RETREAT', None)
     _reload(on=False)

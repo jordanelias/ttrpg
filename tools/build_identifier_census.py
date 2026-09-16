@@ -188,7 +188,7 @@ def doc_stems() -> set[str]:
 
 
 def subsystems() -> list[str]:
-    # ED-IN-0229 (2026-09-16): five subsystems — _architecture, articulation, npcs, ui, victory —
+    # ED-IN-0231 (2026-09-16): five subsystems — _architecture, articulation, npcs, ui, victory —
     # held ONLY design prose, so quarantining it removed their `systems/` directory outright. They
     # are still subsystems; they just have no code. Enumerate the union of both trees, or the
     # census silently drops a third of the roster and every count it feeds reads lower for a reason
@@ -203,7 +203,7 @@ def subsystems() -> list[str]:
         # ED-IN-0179 (2026-09-09): design prose moved to `systems/<sub>/reference/`, so a
         # subsystem is no longer detectable by `*.md` at its root. Check both, so this keeps
         # working for any subsystem whose docs have not moved.
-        # ED-IN-0229 (2026-09-16): the prose moved again, to `.designs/systems/<sub>/reference/`,
+        # ED-IN-0231 (2026-09-16): the prose moved again, to `.designs/systems/<sub>/reference/`,
         # so a subsystem is now detectable only there. All three are checked: a subsystem is a
         # subsystem whether its docs sit at its root, under reference/, or in the archive.
         arch = os.path.join(REPO, '.designs', 'systems', name)
@@ -480,7 +480,7 @@ def main(argv=None):
         doc = census_for(sub, built)
         text = _dump(doc)
         out = os.path.join(REPO, 'systems', sub, OUT_NAME)
-        # ED-IN-0229: a code-less subsystem has no `systems/<sub>/` directory any more (its
+        # ED-IN-0231: a code-less subsystem has no `systems/<sub>/` directory any more (its
         # prose is the whole of it, and that is quarantined). The census is an UNTRACKED
         # generated artifact, so creating the directory to hold it costs nothing and keeps the
         # roll-up covering all fifteen subsystems rather than the ten that still have code.

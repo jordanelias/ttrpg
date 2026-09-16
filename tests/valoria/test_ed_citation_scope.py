@@ -48,7 +48,7 @@ def ved():
 def test_the_subsystem_corpus_is_actually_scanned(ved):
     """THE REGRESSION. `systems/` was in SCAN_PREFIXES and yielded nothing for ~13 days."""
     docs = ved.select_docs()
-    # ED-IN-0229 (2026-09-16): the subsystem corpus is quarantined under `.designs/systems/`, so
+    # ED-IN-0231 (2026-09-16): the subsystem corpus is quarantined under `.designs/systems/`, so
     # BOTH addresses count. The regression this guard names — a declared prefix yielding nothing —
     # is exactly what a move can cause, and moving the corpus without moving the guard would have
     # reproduced it: the gate went from 456 findings to 210 the moment the files changed address.

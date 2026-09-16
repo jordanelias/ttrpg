@@ -193,7 +193,7 @@ BIG_CV = 9.0   # [JUSTIFIED: sentinel for "no conservation at any p"; a magnitud
 # (`return loss_frac >= bp`, where bp is drawn in the [ROUT_ONSET_FRAC, ROUT_CAP_FRAC] band). That
 # mechanism landed 2026-07-23 (ED-MB-0031) and defaulted ON 2026-07-25 — one day before the audits —
 # and silently invalidated every exponent this file produces. Measured before the repair: 40/40 melee
-# trajectories routed, fit window 30 ticks of 160. `PC_STOCHASTIC_ROUT` is the flag that owns that
+# trajectories routed, fit window 30 ticks of 160. `MB_STOCHASTIC_ROUT` is the flag that owns that
 # break-point, so the pin is completed by turning it off FOR THE TRAJECTORY WINDOW ONLY — the other
 # three checks are statements about SHIPPED behaviour and keep rout on (check_no_annihilation is
 # literally "the battle ends by rout", which would be vacuous without it).
@@ -225,12 +225,12 @@ def _rout_disabled():
     from config and consults its own module global at call time. Restores unconditionally, so a
     raising body cannot leak a disabled rout into the checks that need it on.
     """
-    prev = _state.PC_STOCHASTIC_ROUT
-    _state.PC_STOCHASTIC_ROUT = False
+    prev = _state.MB_STOCHASTIC_ROUT
+    _state.MB_STOCHASTIC_ROUT = False
     try:
         yield
     finally:
-        _state.PC_STOCHASTIC_ROUT = prev
+        _state.MB_STOCHASTIC_ROUT = prev
 
 
 def _trajectory(big_tier, small_tier, unit_type, stance, diag=None, instructions=()):
@@ -249,12 +249,12 @@ def _trajectory(big_tier, small_tier, unit_type, stance, diag=None, instructions
         # [ED-MB-0049 / plan-v2 A5a] The morale pin, swept onto its single owner.
         #
         # This was `ua.morale = ua.morale_start = NO_ROUT_MORALE`, a BARE absolute write — the exact
-        # silent-no-op class that confounded the retracted PC_CELL_MORALE measurement (ED-MB-0042):
+        # silent-no-op class that confounded the retracted MB_CELL_MORALE measurement (ED-MB-0042):
         # `eff_morale` reads the cells once seeded and never falls back to the scalar, so under the
         # flag this pin would set nothing, bodies would rout mid-signature, and the Lanchester
         # exponent would be fitted on TRUNCATED battles. `Unit.set_morale` is the owner; unseeded
         # (the shipped default) it reduces exactly to `unit.morale = value`, so this is
-        # behaviour-identical at PC_CELL_MORALE=0 and correct at =1.
+        # behaviour-identical at MB_CELL_MORALE=0 and correct at =1.
         #
         # ⚠ CARVE-OUT: `morale_start` stays a BARE write and must. It is non-cellular — there is no
         # `cell_morale_start`, `eff_morale_start` derives from the subunit/unit scalar, and no owner

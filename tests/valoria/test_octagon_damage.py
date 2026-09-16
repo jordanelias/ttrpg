@@ -12,7 +12,7 @@ not a dice-pool penalty. Three requirements, each asserted here:
   (3) multi-side compounding: a subunit engaged from >=2 sides has its rank-relief divided AND
       shock-compromised -> an extra (1+MULTI_SIDE_SHOCK) factor, worse than a mere halving.
 
-The legacy -2-dice path (PC_OCTAGON_DMG=0) is preserved and asserted byte-unchanged by the existing
+The legacy -2-dice path (MB_OCTAGON_DMG=0) is preserved and asserted byte-unchanged by the existing
 bat.py digest + persubunit stress suite; this module exercises only the ON (default) model.
 """
 import os
@@ -26,8 +26,8 @@ import random  # noqa: E402
 import pytest  # noqa: E402
 
 
-_MB_ENV = {'PER_CELL': '1', 'PC_REFUSE': '1', 'LANCHESTER_ENABLED': '1',
-           'PC_OCTAGON_DMG': '1', 'PC_FRACTIONAL_POOL': '1'}
+_MB_ENV = {'PER_CELL': '1', 'MB_REFUSE': '1', 'LANCHESTER_ENABLED': '1',
+           'MB_OCTAGON_DMG': '1', 'MB_FRACTIONAL_POOL': '1'}
 
 
 def _load_mb(**overrides):
@@ -66,7 +66,7 @@ def _mb_modules(**overrides):
     unchanged tree (measured 9, then 8, on two `main` runs of the identical command).
 
     This does NOT claim to fix the flaky pair — those tests have their own coupling through
-    `S.PC_STOCHASTIC_ROUT` / `U.PC_CELL_MORALE`, and this module is only one of several leaking
+    `S.MB_STOCHASTIC_ROUT` / `U.MB_CELL_MORALE`, and this module is only one of several leaking
     into them. It removes THIS module from the set of contributors, which is the part I own.
     """
     saved_env = {k: os.environ.get(k) for k in {**_MB_ENV, **overrides}}
@@ -91,10 +91,10 @@ def mb():
     """Fresh mass_battle modules with the octagon-damage model ON and the per-cell facing path enabled.
     Discrete lattice contact (FIELD_MOVEMENT off) -> deterministic geometry for the isolation asserts.
 
-    [ED-MB-0063 critic finding D] PC_FRACTIONAL_POOL is pinned EXPLICITLY rather than inherited from
+    [ED-MB-0063 critic finding D] MB_FRACTIONAL_POOL is pinned EXPLICITLY rather than inherited from
     the ambient default. It is the flag that flipped this module's verdict before the isolation fix,
     so leaving it ambient was the one gap in a fixture that already pinned four others -- the same
-    reason test_mass_battle_byte_exact.py pins PC_OCTAGON_DMG per mode instead of trusting the default.
+    reason test_mass_battle_byte_exact.py pins MB_OCTAGON_DMG per mode instead of trusting the default.
 
     [ED-MB-0063] Now teardown-safe: see `_mb_modules` for the module-state leak this closes and the
     measurement showing it changed another module's verdict.
@@ -169,7 +169,7 @@ def _arc_pair(orch, contact, seed, t=5):
     00_lessons.md` §"What this corrects" had already classified F2 as a test-premise defect and
     named orig-frame support depth. This module implements that classification.
 
-    `PC_FRACTIONAL_POOL=0` makes the old form pass, which is why a flag bisect fingers it — but
+    `MB_FRACTIONAL_POOL=0` makes the old form pass, which is why a flag bisect fingers it — but
     it is a MASK, not a cause. Flooring sends 3.6 -> 3 and 1.333 -> 1, which at this seed happens
     to keep B's net under A's. The confound is untouched; only its visibility changes. Recording
     that flag as F2's cause would have shipped a wrong diagnosis that reproduced on demand.
@@ -218,14 +218,14 @@ def test_arc_ratio_is_invariant_to_the_fractional_pool_flag(fractional):
     arithmetic, not the isolation.
 
     THIS assertion has content, because it is the specific thing that was false before. F2 was
-    defined by the verdict depending on `PC_FRACTIONAL_POOL`: ON it failed, OFF it passed, and the
+    defined by the verdict depending on `MB_FRACTIONAL_POOL`: ON it failed, OFF it passed, and the
     flag looked like the cause. If the confound is genuinely gone, that dependence must be gone
     too — the ratio has to hold under BOTH settings of the flag, for the same seeds. If someone
     reintroduces a body-orienting difference between the arms, the pools diverge again, flooring
     starts to matter again, and this test goes red on one parameter and not the other. That is a
     failure mode "7 of 12" cannot see at all.
     """
-    with _mb_modules(PC_FRACTIONAL_POOL=fractional) as (orch, contact, _):
+    with _mb_modules(MB_FRACTIONAL_POOL=fractional) as (orch, contact, _):
         _assert_arc_ratio_invariant(orch, contact, fractional)
 
 
@@ -235,11 +235,11 @@ def _assert_arc_ratio_invariant(orch, contact, fractional):
         front, rear = _arc_pair(orch, contact, seed)
         if front > 0:
             assert rear == pytest.approx(2.0 * front), (
-                f'PC_FRACTIONAL_POOL={fractional}, seed {seed}: rear {rear} != 2x front {front} — '
+                f'MB_FRACTIONAL_POOL={fractional}, seed {seed}: rear {rear} != 2x front {front} — '
                 f'the arc ratio still depends on the flag, so the arms are not yet one experiment')
             checked += 1
     assert checked >= 3, (
-        f'PC_FRACTIONAL_POOL={fractional}: only {checked} seeds produced a non-zero frontal '
+        f'MB_FRACTIONAL_POOL={fractional}: only {checked} seeds produced a non-zero frontal '
         f'exchange, so the invariance was not actually observed')
 
 

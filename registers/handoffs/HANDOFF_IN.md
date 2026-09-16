@@ -80,6 +80,221 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 
 ---
 
+## ⚠ ID COLLISION RESOLVED HERE — `ED-IN-0228`, 2026-09-16
+
+PR #405 (the decision layer) and PR #404 (the faction creed) both read `next_free: 228` and both
+allocated it. **#405 merged first and KEEPS `ED-IN-0228`.** #404 renumbered: creed `0228 -> 0229`,
+axis-roster single-owner `0229 -> 0230`, `next_free` now **231**. Both sections below are live; read
+them knowing the creed entry's own text may still say 0228 where it quotes an older commit message.
+This is §4's documented failure mode — *"renumbering does not escape a collision, because every
+live session renumbers to the same `next_free`"* — firing a fifth time in the IN lane. The
+structural fix, `wiring_status.auto_allocation`, is specified and PARKED in `references/id_reservations.yaml`.
+
+---
+
+## 🧭 2026-09-16 — the decision layer interrogated: twelve inputs, one of them live (`ED-IN-0228`)
+
+**Jordan asked to interrogate convictions and conviction axes, and named twelve inputs a decision
+layer must carry.** Proposal at `proposals/2026-09-16-conviction-decision-layer/`
+(`interrogation.md` + `decision_layer_v1.md`), **HELD BACK FROM RATIFICATION-ON-MERGE IN FULL**.
+
+**Two measured failures.** (1) `make_chooser`'s score has three terms and two cannot move a
+decision — `urgency` has no `c` in it (`H-73`) and `Person.stance` is never written (`H-62`), so
+the live decision function is conviction × a sparse alignment table and nothing else. (2) The 13×4
+basis carries fewer independent directions than it has columns. **Run the instrument, do not trust
+a number here:** `python -m engine.season.harness.conviction_spread`, which this pass extended with
+the covariance spectrum, the pairwise axis correlations and a trace self-check.
+
+**Three items are Jordan's** (§5 of the design): the re-framed `ED-IN-0214`; whether caste and
+profession GATE (a fifth eligibility kind, which `rosters.yaml`'s own note says needs a ruling) or
+WEIGHT; and whether to un-merge PP-684 §6's fold of the Ethical Framework into the Conviction set.
+
+⚠⚠ **AMENDED SAME DAY BY A FIVE-CRITIC FABLE PASS — READ THE DOCUMENTS' §0 BLOCKS BEFORE THE
+DOCUMENTS.** Four factual errors and two unbuildable terms, each re-verified by hand: ambitions are
+NOT absent (a `commit` Tenure to an OUGHT mints Q4 — `requirements.yaml` R-06); the memory gate does
+NOT fire 0× (R-01: 1,104 drops across five verbs); **no Tenure gates any verb person-side** (only
+`own` admits — `remit`/`presence`/`hold:<placeholder>` all decline, and office reaches a decision
+only through the BUDGET BONUS); and the three-stage model omits the stage that decides **801 of
+1,068 deliberations** (the question, under `aggregation_rule: first`). The chat-only three-tension
+basis is **withdrawn in full** and never reached disk.
+
+⭐ **WHAT THE PASS ADDS, AND IT IS THE ONE THING TO CARRY FORWARD.** Jordan's thirteenth input —
+*how will the other judge me* — is **one mechanism with fears and audience, and none of the three
+exists: a forward model of consequence.** `holonic_ARCHITECTURE.md` makes it load-bearing in its own
+words (*"No reaction inside a season at person scale. You anticipated, or you are late"*) and admits
+the design has not reconciled it; probe A14 raises a `Collision` on exactly that, unruled. Fear
+cannot be a stance row — stance is toward a REFERENT and this setting's fears are CONSEQUENCE
+fears. A fourth omission nobody had named: **bonds**. `knot`/`tie` gate witnessing and the Solidarity
+style *requires* an active Knot, and `choose` reads neither.
+
+⚠ **AND ONE CANON-LEVEL ETHICS FINDING THAT IS JORDAN'S ALONE — NOT ACTED ON.** Southern Einhir
+carry higher baseline Thread Sensitivity **by descent**, while `threadwork_v30.md`, which owns TS,
+has no hereditary model at all and grants TS by exposure and practice. Church doctrine holds the
+Catastrophe was Einhir overreach — so if TS really is higher by descent, **the fiction ratifies the
+persecutor's premise.** The repair is already in the tree and deliberately not taken: Southern
+Einhir is defined territorially and `calamity_radiation_v30.md` already varies TS by distance from
+the epicentre. See ED-IN-0228.
+
+⚠ **ONE STANDING ORDER FOR THE NEXT SESSION IN THIS AREA.** `architecture/PLAN.md:723` retires
+`(Person, capability)` and `(Person, marks)` as dead rows. Their deadness has the **same cause** as
+`stance`'s inertness — nothing writes them — and Jordan's inputs (11) and (12) would put both to
+work. **Do not execute that retirement until J2 is ruled.**
+
+---
+
+## ⚠ CURRENT — 2026-09-13 (later), PR #404: the governance layer is BUILT, and two rulings closed two of the three questions below
+
+**Supersedes the "NEXT, IN ORDER" list in the entry directly below — items 1–3 of it are done.**
+
+⭐ **TWO RULINGS BY JORDAN, both recorded where code reads them:**
+  * *"the church is Church of Solmund."* It was a **three**-owner collision, not two:
+    `names_index.yaml` and `proper_noun_registry.yaml` both said `Church`. All three agree now, with
+    `Church` kept as an ALIAS so the gate (which enforces `legacy:` names only) flags nothing and
+    the corpus's 256 occurrences are not a rename backlog. `tools/ci_names_consistency.py` caught
+    the third mirror the moment the index moved. `data/cast.py` DERIVES its alias map from the index
+    rather than carrying a literal — a hardcoded map would have made it the fourth owner.
+  * *"NPC behaviour supersedes faction politics."* Recorded at `rosters.yaml`'s precedence block as
+    **TIER 2a**. ⚠ MEASURED: **it changes no data.** `references/npc_registry.yaml` already matches
+    `npc_behavior_v30.md` §2.16/§2.17 on every contested cell, and the two rows exceeding its
+    two-per-council count are exactly the two marked `status: proposed`. Building from the registry
+    IS building to the ruling.
+
+**BUILT:** 19 offices · **3 `duchy` rungs** · **17 `territory` rungs** (both were declared
+`rung_kinds` no world had ever instantiated) · 16 territories held via
+`hold(faction Proposition -> territory)` matching canon's starting-control table exactly ·
+Schoenland's territory deliberately parentless because it is foreign. `conferral_path` for Duchess
+Baralta walks `duchy_hafenmark -> r_valoria`.
+
+⚠ **CORRECTED WITHIN THE SESSION AGAINST A RATIFIED RULING — an earlier version of this entry said
+"2 duchy rungs" and "16 provinces", and both were wrong.**
+`systems/settlements/reference/scale_hierarchy_v1.md` (RATIFIED, direct Jordan ruling 2026-07-13) is
+the hierarchy: *"settlements comprise territories comprise provinces comprise duchies comprise
+country."* Three corrections followed: geography's 17 rows are TERRITORIES (its `provinces:` key is
+the superseded label; the `T` prefix was always right, and `world_initial_state.yaml` calls them
+territories); there are THREE duchies, the Crown's being **Valorsmark** (a first cut reasoned "the
+Crown has no duchy" and canon contradicts it); and **a province is an EMERGENT AGGREGATION, not a
+container** — *"only formed if the same faction holds the constituent territories"* — so
+`queries/world_q.provinces_of` computes it and no world builds one. That is §22.1's "an aggregate
+that cannot go stale" arrived at independently by a settlements ruling, which is worth knowing.
+§6 of that ruling lists its own propagation as "tracked, not yet executed"; PP-726 and the
+generation sourcebook are still owed it.
+
+⚠ **THE FIRST CUT GAVE EVERY PERSON AN OFFICE** named after their registry `role`, so
+`leaders == members` for all eight factions — nothing scarce, nothing to compete for, and nothing
+raised because a full set is plausible. The discriminator is AUTHORED: the registry packs a
+sub-organization into its `faction` cell and an occupation carries none. Now 19 seats / 21
+occupations, and Guilds, Löwenritter and the Restoration Movement have members, no seats, no land.
+The falsifier is MUTATION-VERIFIED and the mutation names which assertion is load-bearing:
+`0 < seats < persons` PASSES under the defect (40 of 46); only the strict-subset check catches it.
+
+**TWO CORRECTIONS TO THE MASTER WORKPLAN, both from measurement (`§8.2a`, `§8.2b`):**
+  * §8.2's *"WITNESS fans every Event to every person"* is **false of `build_realm`**. `all_five`
+    admits **1,670 of a possible 135,608** observer-slots (1.2%); `co_located` does 97% of it; no
+    channel admits everyone except `chronicle`, once, in 2,948 events. The "~90% identical" figure
+    was ONE PAIR who share a workshop.
+  * ⚠ **AND §8.2a's own first writing was wrong the same way** — it read "zero `told_by`, nothing is
+    ever transmitted, a producer gap" off a ONE-SEASON run. Corrected in place. The channel
+    SATURATES (told 5/18/35 over 1/2/3 seasons; claims 0/7/7) and **the producer never fails**:
+    of 17 tellings that reached a hearer, `_told_content` returned usable content 17 times. The
+    ceiling is (a) **51% of tellings are heard by nobody but the teller** — which `L2` makes
+    unfixable in `options.py`, since a person cannot know who is present before speaking — and
+    (b) 10 of 17 tell somebody what they already hold, correctly suppressed.
+
+**STILL JORDAN'S (one of the original three):** is the faction roster short? Six of the 46 belong to
+`Altonia` (3), `Independent (Southernmost Wardens)` (2) and the dissolved Virke syndicate (1). Your
+precedent — *"Wouldn't it just imply that we don't have enough factions?"* — points at adding names,
+but that is authoring canon. They stay unplaced and counted.
+
+**AND ONE RAISED BY THE BUILD:** should a faction's creed be an `OUGHT`? It ships `HOLDS`, so it
+perturbs no deliberation. As `OUGHT` every member deliberates on it each season with a faction NAME
+as the Q4 referent — `build_at`'s measured rung-subject defect one level worse.
+
+**NEXT, and needing no ruling:** expand `rosters.yaml: office_bodies`. MEASURED: only **10 of 25**
+canon-named seats can construct WITH a body — `Ministries` is one row where canon names six
+ministries, the four Cardinals are present and the four Dicasteries beneath them are not, and
+Hafenmark's Committees and Varfell's Councils are absent entirely. Offices currently carry
+`body=None` with a declared faction, which is lawful and says less than canon knows.
+
+## ⚠ CURRENT — 2026-09-13, PR #404: a faction becomes buildable and readable, and three items are Jordan's
+
+**The diagnosis, measured rather than argued.** A populated world had a map and no politics in it:
+`build_realm(seed=0)` seated 46 people in 366 rungs with **0 offices, 0 `hold` edges, 0 claims,
+0 stance rows**, and every settlement's `stores` empty. Topology without qualities. Two causes,
+both of them things the tree had already specified and never built:
+
+  * **§17 names 26 Queries; SEVEN existed.** `presence`, `verbs`, `judging_set`, `hold_force`,
+    `assemble`, `opening_set`, `entrenchment`. §22's `Nobody` row assigns *faction, leaders,
+    presence, density, footprint, norm, reputation, needs, sovereignty* to nobody as Queries
+    stored nowhere — so L3 bans the stored aggregate and the function meant to replace it was
+    never written. A settlement's prosperity has no field **and** no function. That is the whole
+    of the legibility problem, and it is 27% built.
+  * **`commit` was never used for membership.** §15's cardinality table types it
+    `Person → Proposition, many` and annotates it verbatim **"this is faction membership"**;
+    §14.2 is the definition — **"A faction IS a Proposition plus its `commit` edges."** In every
+    world this repo had built, `commit` carried a private want and nothing else, so the only route
+    into a faction was to hold an office in one: no laity, no rank and file, and `role_templates`
+    keyed on a population that could not exist.
+
+**LANDED (PR #404, green: season 200 passed, `tests/valoria` 1784 passed + the 2 known
+shallow-checkout reds).** Six §17 Queries in `queries/world_q.py` — `members` · `leaders` ·
+`footprint` · `density` · `sovereign_fraction` · `establishment_of` · `conferral_path`, live edges
+only per §22.4 clause 3. `data/cast.py`, the one reader of `references/npc_registry.yaml`.
+`build_realm` seats a `HOLDS` Proposition per faction and a `commit` edge per member: 40 of 46
+placed, `density(realm, Crown)` reads 11 of 46.
+
+**⚠ THE FIND WORTH CARRYING FORWARD: `references/npc_registry.yaml` WAS READ BY NOTHING THAT
+EXECUTES.** 46 rows, ids an **exact 1:1 match with `load_cases("NPC")`** (zero symmetric
+difference), every row carrying an authored `faction` and `role`, 31 a `territory`, 30 `goals`,
+7 a `title`, and all 81 weighted conviction entries naming one of the canonical thirteen.
+Meanwhile `seed_convictions` drew every person's convictions from `blake2b(seed, case_id, pid)`,
+so **R-06 was measured against an invention**: Carin Vedel, whose case is hand-copying SUPPRESSED
+texts, is authored `Liberty 0.60` and was drawn `Authority 0.90`.
+
+**NEXT, IN ORDER, AND NONE OF IT NEEDS A RULING:**
+
+1. **Expand `rosters.yaml: office_bodies`.** MEASURED: only **10 of 25** canon-named seats can
+   construct as an `Office` — `Ministries` is one roster row where canon names six ministries, the
+   four Cardinals are present but the four Dicasteries beneath them are not, and Hafenmark's
+   Parliamentary Committees and Varfell's Councils are absent entirely. Tier-2 sourced, and world
+   is silent on the sub-organs, so `role_templates` is the precedent.
+2. **Seat the offices and the title ladder**, then `hold` edges for holdings from
+   `geography_v30.md`'s faction-granular starting-control table — a faction Proposition may be a
+   `hold` subject (§14.2), which is how Crown's six territories attach. `leaders` and
+   `sovereign_fraction` return nothing until this lands.
+3. **Build `duchy` and `territory` rungs.** Both are declared `rung_kinds` that no world has ever
+   instantiated; the geography file goes settlement → province directly.
+4. A transcription of the four Standing 0–7 ladders and six sub-ladders is at
+   `offices_draft.yaml` in this session's scratchpad — **not** in the tree. Adversarially
+   verified: 19/22 citations correct, **zero fabrications**, zero tier violations, the Niflhel
+   ladder correctly excluded as struck by `CR-STRIKE-2026-04-19`. It will need re-deriving.
+
+**⚠ THREE ITEMS SURVIVED ALL FIVE OF §0's TESTS AND ARE JORDAN'S:**
+
+  * **Two tier-2 documents disagree on Inner Circle membership by half.**
+    `faction_politics_v30.md` §1.2c/§1.3c gives Hafenmark 4 named and Varfell 5;
+    `npc_behavior_v30.md` §2.16–§2.17 gives 2 and 2, dropping Almstedt, Feldhaus, Thorvald Hann,
+    Maret Uln and Edeyja, and giving Holdar and Stenskald different Conviction/Resonant-Style
+    values for the same people. Same tier, so precedence does not settle it. It decides who is in
+    the room when Hafenmark votes. **No office is seated until it is answered.**
+  * **Six of the 46 cast belong to a faction on no roster** — `Altonia` (3),
+    `Independent (Southernmost Wardens)` (2), the dissolved Virke syndicate (1). Jordan's own
+    precedent is *"Wouldn't it just imply that we don't have enough factions?"*, but adding a
+    name to `rosters.yaml: factions` is authoring canon. They are left unplaced and counted.
+  * **Should a faction's creed be an `OUGHT`?** It ships as `HOLDS` and changes no deliberation.
+    As `OUGHT` it raises a standing Q4 question each season for every member — with a faction
+    NAME as the referent, which is `build_at`'s measured rung-subject defect one level worse.
+
+**TWO CANON-DATA DEFECTS, REPORTED AND NOT REPAIRED** (`cast.defects()` computes them from the
+file rather than remembering them):
+
+  * `npc_registry.yaml` NPC-081 `faction: Hafenmark (Inner Council #4)` and NPC-082
+    `Varfell (Jarl Council #5)` are **unquoted**, so YAML eats `#4)` / `#5)` as comments and the
+    seat numbers are destroyed on load. Plausible-looking and wrong.
+  * **Two registries single-own one faction name and disagree.** `references/names_index.yaml`
+    (which feeds the BLOCKING naming gate) canonicalises the church as `Church`;
+    `rosters.yaml: factions` says `Church of Solmund`; and names_index has no `Schoenland` entry
+    at all. A §8 violation upstream of both.
+
 ## 📐 2026-09-12 — v1: seven research documents NERS-audited (`ED-IN-0217`, PR #399, merged)
 
 **PROPOSED, HELD BACK FROM RATIFICATION-ON-MERGE IN FULL.** Nothing ratified, no head moved, no
@@ -3683,3 +3898,254 @@ and only the fork stays with Jordan.
 
 Sources: `workplans/valoria_master_workplan_v7.md` §7 · `registers/editorial_ledger_in.jsonl`
 (ED-IN-0210, ED-IN-0218) · `proposals/2026-09-12-emergent-narrative-primitives-v2/04_PROVENANCE.md` §4, §8.
+
+---
+
+## 2026-09-14 — the creed lands, and the axes turn out to have had two owners
+
+**Both on `claude/game-engine-schema-dtb06d` (PR #404). `ED-IN-0228` and `ED-IN-0229`.**
+
+### 1. A faction's creed is an OUGHT about its leader, weighted by loyalty (ED-IN-0228)
+
+Jordan ruled it in three parts (*"Faction creed as an ought: sure. Weight it by their loyalty
+tho"* · *"Loyalty can be invented. Just do it on a scale of 0-100"* · *"The faction one is factored
+by loyalty"*). `harness/populated.py` had registered the OUGHT as a design choice it declined to
+take; it is taken.
+
+- The creed's **subject is the faction's authored leader**, not the faction name, because Q4 turns
+  `prop.subject` into the subject of every Candidate it generates. Both handles come from
+  `rosters.yaml` (`faction_leaders.by_faction`, `role_templates.by_faction`), transcribed from
+  `faction_canon_v30.md` §4. Nothing is invented.
+- **Guilds and Schoenland keep `HOLDS`** — canon gives them no leader and no template, so there is
+  nothing to be loyal to. `members()` reads kind+object, never mood, so membership is unaffected.
+- **Loyalty does NOT live on `Tenure.degree`.** That was the plan until it was measured: nothing in
+  `engine/season/` reads that field. It would have been the `conferrer` defect again
+  (`state/carriers.py:48`, ID-13). It lives on `Person.stance`, which `choose.py::stance_toward`
+  reads.
+
+⚠ **THE NUMBERS ARE A BASELINE, NOT A GATE — RULED by Jordan, 2026-09-14:** *"whatever you run for
+the first time IS the baseline since this is new stuff."* Nothing in `tests/valoria` or
+`engine/season/tests` encodes what a populated world SHOULD do, so no suite could have validated
+the creed; the control arm does. They are deliberately not pinned as a golden (§0.1 pt 5 — a number
+nobody has argued is correct is a guard that has not earned its existence). The pinned claims are
+structural instead, in `test_the_populated_world_is_not_everybody_in_one_room`, and all four
+mutations were verified.
+
+Instrument, in-tree and re-runnable: `python -m engine.season.harness.populated --creed-sweep 2`.
+
+⚠ **THE EFFECT INVERTS ACROSS `question_aggregation_rule`, AND THE CAUSE IS A STRING PREFIX.** Under
+`all`, acts naming another person rise +47% / +43% across two seeds. Under `first` — the incumbent
+default — they fall 10% / 4%. A member's own want is also a `need`, and `questions_for` breaks a
+within-source tie on `q.id`: `q:need:fac_…` sorts before `q:need:prop_…`, so the faction creed
+outranks the personal ambition on an undeclared tiebreak. **That is `H-54`'s row, not a new one**;
+disposition follows `W-D`'s on the identical shape — declared and left alone. Renaming the ids to
+win the sort would be gaming the tiebreak; flipping the fixture is a design edit to a hole whose
+own roster note says `first` is kept *"as the sweep's control — not because it is argued for"*.
+
+### 2. The four ethical axes had two owners and no refusal between them (ED-IN-0229)
+
+Jordan: *"NPC roster, Convictions, Ethical Axes are all things I want to be able to dynamically
+edit going forward."* Of the three, **only the axes could not be edited in one place**, and the
+file that said otherwise was wrong.
+
+`keys.py:59` held a tuple literal; `rosters.yaml: conviction_axes` held a `values:` list; the
+roster's note asserted *"a fifth axis or a rename is one edit there and a loader refusal here
+rather than two rosters drifting apart."* **Measured by AST: exactly one module imports `AXES`, and
+it is `engine/substrate/__init__.py` re-exporting it.** Nothing under `engine/season/` read it. Both
+arms run — a fifth axis in `keys.py` alone leaves `choose.py` scoring over four in silence; one in
+the roster alone leaves the season engine scoring over five while `keys.py` invariant 6 rejects
+every Key naming it.
+
+Fixed on the `conviction_roster` precedent (§0 step 4, not a new decision): `axis_roster` in
+`references/descriptor_registry.yaml`, validated as `_conviction_roster` is, read once as
+`descriptors.AXES`. `from_descriptor:` is new in `roster()` and is why the row was not simply
+deleted — a direct import would skip the `forbidden: [exposure]` bar (#353 `:1897`).
+
+**The 2026-09-02 scope ruling is NOT overridden.** `ROLES`, `SCALES` and `PERMANENCE_VALUES` are
+untouched and stay literals in `keys.py`.
+
+### Editing these three, as of today
+
+| | edit here | then |
+|---|---|---|
+| **NPC roster** | `references/npc_registry.yaml` | nothing — read at runtime |
+| **Convictions** | `references/descriptor_registry.yaml: conviction_roster.names` | `python tools/export_descriptors.py --build` |
+| **Conviction→axis matrix** | `engine/season/rosters.yaml: tables.conviction_projection` | nothing |
+| **Ethical axes** | `references/descriptor_registry.yaml: axis_roster.names` | `python tools/export_descriptors.py --build` |
+
+A fifth axis is now one edit that both readers see — executed with `prudential`, then reverted.
+`key_substrate_v30.md` §2.4 permits one as a Class B extension but defers it; **no such ruling has
+been taken**, and `test_axis_roster_single_owner.py` pins the count at 4 with that citation, so
+taking it means editing that line deliberately rather than loosening a bound by accident.
+
+### Still open
+
+- **The faction roster is short.** 6 of 46 cast members name an affiliation on no roster — Altonia
+  (3), Independent/Southernmost Wardens (2), the dissolved Virke syndicate (1). They are counted
+  `unplaced`, never coerced to a neighbour. Adding a name to `rosters.yaml: factions` is authoring
+  canon: **Jordan's.**
+- **M1 row 5's N-seed invariant sweep** is still the single highest-leverage unbuilt instrument
+  (it unblocks M2 entirely). Not started.
+
+---
+
+## 2026-09-14 (later) — M1 row 5 has an instrument, and it found something on its second seed
+
+**`engine/season/harness/invariants.py`** — the single owner of the season's RUN-TIME invariants,
+nine predicates, each mutation-verified in `tests/valoria/test_season_invariant_sweep.py`.
+
+⚠ **THE SELECTION RULE IS THE DESIGN.** A predicate earns a row only if **nothing enforces it on
+write**. `World.add_tenure` already refuses an off-roster `kind` and a non-ascending `contain`, so
+asserting either would be `pytest.approx` on an exactness claim — §0.1 pt 2's "not a weak test but
+an absent one". Every predicate was checked against its constructor before being written.
+
+⚠⚠ **THE FIRST WRITING REPORTED 176 VIOLATIONS ACROSS 24 SEEDS AND 136 WERE MANUFACTURED BY MY OWN
+PREDICATE.** `_entities` omitted `w.records`, so every legitimate `hold` on a deed read as a
+dangling reference. **An invariant sweep's characteristic failure is not missing a defect; it is
+inventing a hundred**, because a slightly-too-narrow predicate fires on every healthy row and looks
+like a discovery. The entity set is now enumerated from `World.__init__` and pinned by
+`test_the_entity_set_covers_every_world_collection_a_tenure_can_name`.
+
+### What survived, and the half that is new
+
+40 violations across 24 headless seeds, all `ought_names_an_entity`, and they **split**:
+
+* **24 are `prop_einhir`** — `headless.py`'s authored fixture, subject `einhir_texts`, a bare
+  string naming no entity. Already filed by hand as **F8 / ED-IN-0211**, the finding that got
+  `_eff_oblige` reverted. **The sweep rediscovered it independently from the predicate**, which is
+  the strongest available evidence the predicate observes something real. It is in `DECLARED` with
+  its citation — and the fixture STAYS: `predicates.py::_req_release` is built on it (a closer is
+  safe *because* a subject naming nothing matches no Tenure) and `test_season_shape.py:8262` pins
+  `("einhir_texts", "exists:Record", 0)` as that argument's premise.
+* **16 are NEW and are a different defect.** The loop **mints fresh OUGHT Propositions at runtime**
+  (`prop:<hash>`, not the authored `prop_einhir`) that inherit `einhir_texts` as their subject. F8
+  reverted an *effect* that opened a Tenure to it; something else is still **propagating the bad
+  subject into new Propositions**. It first appears at **seed 2** — a single-seed check would have
+  missed it entirely, which is the whole argument for the N-seed row.
+
+The **populated** world sweeps **0 new violations across 4 seeds**.
+
+### ⚠ CORRECTED SAME DAY — the 16 were NOT a defect, and the predicate was deleted
+
+**Root-caused, and it reversed the finding.** `loop/effects.py::_eff_utter` mints a Proposition
+with `subject = d.get("subject") or a.actor`, and that subject arrives from the Q4 referent — so
+the loop does copy `einhir_texts` into new permanent Propositions. Bounded, measured: **1–3 per
+world, plateauing**, not a leak (props grow 2→13 over 8 seasons while the bad count stays at 2).
+
+**Then the repair was costed, and that is what settled it.** Patching
+`loop/deliberate.questions_for` to drop any `need` question whose referent names no entity — the
+narrowest fix that would satisfy the predicate — takes **acts to 0 on every seed** (45/40/38/37/42/41
+→ all zero, 120 questions dropped). `headless.py` says why in its own comment: *"Q4 is the only
+reason she acts."* **Carin's entire motive is a `commit` to an OUGHT about a THING**, and the
+predicate criminalised it.
+
+So `ought_names_an_entity` is **deleted**, not demoted: a permanent non-zero trains the next reader
+to skim the report. What `ED-IN-0210` and F8 actually forbid is narrower and is still checked —
+F8 reverted `_eff_oblige` for **opening a Tenure** to a non-entity, which is `tenure_referent`;
+`build_at`'s defect was a Proposition on a RUNG, an entity of the wrong KIND, not a topic.
+`DECLARED` is empty as a result, and kept, because the next real exception should not reinvent it.
+
+⚠ **THE LESSON, WHICH IS THE DURABLE PART.** This module over-fired **twice** — `_entities` missing
+`w.records` invented 136 violations, then this predicate outlawed the probe world's motive. Both
+were caught by measuring what the FIX would cost, never by re-reading the predicate. **A mutation
+proves a predicate CAN fire; only an experiment against the real loop proves it SHOULD.**
+
+**Row 5 is now MEASURED and PASSES** — 24 headless seeds × 4 seasons × 8 invariants = 192 checks,
+0 violations, on both the headless and populated worlds. `m1_acceptance`'s header table, row
+docstring and closing note were all corrected; the footer had gone on saying "row 5 stays blocked".
+* ⚠ Row 5's `unblocked_by` string names **Hypothesis**, which this tree cannot have: CI installs
+  only `pyyaml pytest numpy pytest-xdist`, so a new third-party import in a blocking-gate test file
+  collect-errors the job. `test_dice_engine_properties.py` hit this first and set the precedent —
+  the property-testing METHOD without the dependency. The row's wording should be corrected when it
+  is wired, not satisfied literally.
+
+### ⚠ A LATENT RED ON A BLOCKING CI JOB, found in passing — NOT fixed here
+
+`engine/season/tests/test_season_shape.py::test_w15_the_run_cases_entrypoint_writes_nothing` fails
+**deterministically, 3 runs of 3**, when it lands on a different xdist worker from its sibling
+`test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte`.
+
+**Mechanism:** the sibling runs the emitter, then restores the committed bytes in a `finally` — and
+restoring bytes **changes mtime**. The writes-nothing test fingerprints `with_mtime=True`, so it
+sees the concurrent restore as a write.
+
+**It is live on CI**, which runs `python -m pytest engine/season/tests -q -n auto` (`valoria-ci.yml`
+:370). It passes today only because the two tests happen to land on one worker; **adding or removing
+any test in that suite shifts the distribution**. Confirmed pre-existing — reproduces identically
+with this session's changes stashed.
+
+⚠ **TWO CANDIDATE FIXES WERE TRIED AND BOTH ARE WRONG. Recorded so the next session does not
+spend the same rounds.**
+
+1. **`@pytest.mark.xdist_group(...)` on both tests — INERT.** `xdist_group` is honoured only under
+   `--dist loadgroup`; plain `-n auto` uses `--dist load` and ignores it entirely. It would look
+   like a fix and change nothing unless CI's invocation changed too.
+2. **Restoring `st_mtime_ns` in the sibling's `finally` — INCOMPLETE, and it was implemented,
+   tested and reverted.** The sibling genuinely does leave mtimes moved (it restores bytes
+   conditionally and never restores mtime), so this fixes a real smaller gap. It does NOT fix the
+   race: the failure narrows to **`runs/results.json` alone**, written by `report.py:303` while the
+   sibling runs, and the observer can sample DURING that window. A restore at the end cannot close
+   a window that opens in the middle.
+
+**So the only real fix is mutual exclusion**, and the repo already owns the pattern:
+`tests/valoria/conftest.py::generated_layer` uses an `O_CREAT | O_EXCL` atomic lock in xdist's
+shared base temp dir, explicitly with **no `filelock` dependency** because CI installs only
+`pyyaml pytest numpy pytest-xdist` — the same constraint that rules out Hypothesis. That fixture is
+a *build-once* gate though, not a mutex; the w15 case needs spin-wait-and-release, which is more
+machinery. ⚠ `with_mtime=False` remains the WRONG fix in any case — it would stop detecting a
+rewrite with identical bytes, which is the one thing that test exists for.
+
+**NOT taken, deliberately.** This is apparatus: pre-existing, green on CI today, blocking no
+milestone, and tracing to no open M1 juncture — which `CLAUDE.md` §0's scope rule says is not this
+session's work. Three rounds went into it before that was acknowledged; §0.3's apparatus-drift
+warning is exactly this shape.
+
+---
+
+## 2026-09-14 (later still) — M1's remaining two rows, characterised precisely
+
+**Row 5 is MEASURED and passes** (above). That leaves rows 3 and 4, and **neither can be moved
+from this repository by writing code here.** Both were investigated rather than assumed.
+
+### Row 4 (FAIL, 0/7) — where the seven junctures actually live
+
+| # | juncture | lane | why it cannot close here |
+|---|---|---|---|
+| 1 | Strategic decision | FA | half A landed 2026-08-21; **half B SUSPENDED by Jordan** |
+| 2 | Domain action | IN | `DomainActionSystem.gd` — **`jordanelias/valoria-game`, not attached** |
+| 3 | Social contest | SC | **HARD-blocked** on ED-SC-0003/0004/0005, all `needs_jordan: true` |
+| 4 | Personal combat | PC | **the only one actionable here** — R3 U-series, a lane arc |
+| 5 | Thread operation | WR | both items are document edits (§0.2: prose cannot close a juncture); tail is Jordan-gated |
+| 6 | Season close | IN | `GameDirector.gd` emitter — **valoria-game** |
+| 7 | Articulation render | IN | `ArticulationLayerV30.gd` trigger arms — **valoria-game** |
+
+**Three of seven are in the implementation repo, two are Jordan-gated, one is Jordan-suspended.**
+So row 4's 0/7 is not neglect — it is an accurate reading of where the work sits. ⚠ And **do not
+green it by editing the board**: §0.2 names that as the thing this row's DOC-DERIVED label exists
+to prevent. Junctures 6 and 7 are both explicitly marked *"running-code increment, no ruling"* —
+they are the cheapest real M1 movement available, in **valoria-game**.
+
+### Row 3 (PARTIAL) — its `unblocked_by` pointed at an artifact the head cannot produce
+
+It read *"a season KeyLog"*, implying that running `engine/season/` long enough yields one.
+**MEASURED — it does not:**
+
+* `engine/season/` holds **no KeyLog and no `engine.substrate.keys` import** (the two mentions are
+  a docstring and a comment). A 2-season headless run emits **119 `Event`s across 11 kinds** into
+  `World.log` and **zero Keys**.
+* **0 of the 17 Key-emitting modules in `module_contracts.yaml` live under `engine/season/`** —
+  they are in `engine/autoload/` (2), `systems/*/sim/` (7), or `sim_module: none` (7).
+
+The Key bus and the season loop are **two different carriers**. Whether the head should ever adopt
+Keys is a design question nobody has taken.
+
+⚠ **This is ED-IN-0226's repair one row along.** That entry re-pointed rows 1–2 off `mc_v18`
+because *"a gate aimed at the wrong tree answers the question it was built to answer, INCORRECTLY,
+in the direction that looks like progress."* An `unblocked_by` naming an unreachable artifact is
+the same error inverted — it would send the next session to run seasons until a KeyLog appeared,
+and none ever will. The row **stays PARTIAL** (that was always honest); only the pointer changed.
+
+### So M1 reads, honestly
+
+`2 PASS · 1 PASS (new) · 1 PARTIAL (correctly) · 1 FAIL (blocked elsewhere)` → **NOT MET**, and
+the single failing row is blocked on Jordan's rulings and on a repository this session cannot see.

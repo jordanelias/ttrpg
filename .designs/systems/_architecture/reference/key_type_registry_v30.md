@@ -1089,7 +1089,7 @@ required_payload_fields:
   - sustained_seasons         # int regime-entry streak
 optional_payload_fields:
   - regime_transition         # bool (refire on regime transition)
-default_scale_signature: [territorial]   # peninsular when abs(similarity) > 0.95 per the trigger-9 spec
+default_scale_signature: [territory]   # `territorial` until 2026-09-16: SCALES names the NOUN (personal, settlement, territory, peninsula), and the adjectival form matched no scale. Visible only once the parser stopped storing this line as a string. Peninsula when abs(similarity) > 0.95 per the trigger-9 spec
 default_permanence: persistent
 default_time_horizon: far
 emitting_systems: [articulation]         # [PROVISIONAL] the trigger-9 evaluator lives in the articulation layer; confirm against the implementation section

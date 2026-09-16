@@ -79,7 +79,12 @@ def test_same_class_groups_and_separates():
     # the same class shouldn't be flagged as a cross-class gap. Two conviction axes
     # are same-class; a conviction axis and a faction are not.
     assert va.same_class('Faith', 'Order') is True          # both conviction
-    assert va.same_class('Crown', 'Church') is True         # both faction
+    # ⭐ RE-PINNED 2026-09-13 on a RULING, not on drift. Jordan: *"the church is Church of
+    # Solmund."* `references/names_index.yaml`'s `world.church` canonical moved from `Church`
+    # to `Church of Solmund` (with `Church` kept as an alias), resolving a §8 collision where
+    # that file and `engine/season/rosters.yaml: factions` single-owned one faction name and
+    # disagreed. This assertion reads the CANONICAL, so it moves with the ruling.
+    assert va.same_class('Crown', 'Church of Solmund') is True   # both faction
     assert va.same_class('Faith', 'Crown') is False         # conviction vs faction
     assert va.same_class('unlisted', 'alsounlisted') is False  # neither in any class
 
@@ -223,15 +228,28 @@ def test_token_classes_sourced_from_names_index_byte_identical():
     # factions: sourced from names_index world.* (token_class: faction) with CUSTOM patterns
     # (negative lookaheads) — roster is order-independent (verified), so checked as a SET.
     FAC_PATS = {
-        'Crown': [r'\bCrown\b(?! Treaty)'], 'Church': [r'\bChurch\b(?! Influence)'],
+        # ⭐ RE-PINNED 2026-09-13 on Jordan's ruling (see `test_same_class_groups_and_separates`).
+        # The KEY is the canonical name and moved; the PATTERN is unchanged, because a bare
+        # "Church" in prose still mentions the faction — which is what a pattern is for.
+        'Crown': [r'\bCrown\b(?! Treaty)'],
+        'Church of Solmund': [r'\bChurch\b(?! Influence)'],
         'Hafenmark': [r'\bHafenmark\b'], 'Varfell': [r'\bVarfell\b'],
         'Löwenritter': [r'L[oö]wenritter'],
         'Restoration Movement': ['Restoration Movement', r'\bRM\b(?![a-z])'],
         'Guilds': [r'\bGuilds?\b'],
+        # ⚠ SCHOENLAND JOINED THE CLASS 2026-09-16, and this line is the roster GROWING, not
+        # drifting. Its `names_index.yaml` row is filed with the PLACES and never carried
+        # `token_class: faction`, so this class saw seven of eight while
+        # `engine/season/rosters.yaml: factions` -- which now DERIVES from the same rows -- carried
+        # it as the eighth. It declares no `patterns:`, so vector_audit falls back to
+        # `[r'\bcanonical\b']`, which is what this expects. The hand-written copy here is
+        # DELIBERATE and stays: it is an independent expectation the derivation is checked
+        # against, so deriving it would delete the test rather than fix it.
+        'Schoenland': [r'\bSchoenland\b'],
     }
     FAC_CTX = {'Crown': [r'\bAlmud\b', r'\bfaction\b', r'\bMandate\b', r'\bTreaty\b', r'\bTorben\b'],
-               'Church': [r'\bArne\b', r'\bCardinal\b', r'\bPiety\b', r'\bHeresy\b', r'\bfaction\b',
-                          r'\bConfessor\b', r'\bdoctrine\b']}
+               'Church of Solmund': [r'\bArne\b', r'\bCardinal\b', r'\bPiety\b', r'\bHeresy\b',
+                                     r'\bfaction\b', r'\bConfessor\b', r'\bdoctrine\b']}
     assert set(va.CLASSES['faction']) == set(FAC_PATS)
     for disp, pats in FAC_PATS.items():
         tok = va.SEED_TOKENS.get(disp)
@@ -257,7 +275,11 @@ def test_token_classes_sourced_from_names_index_byte_identical():
     # clocks (abbreviations): namespaced clock.* (token_class 'clock'); the 2 full-name clock
     # entries are tagged token_class 'clock_full' so the roster stays the 6 abbreviations.
     CLK = {'MS': [r'\bMS\b(?![A-Za-z])', 'Mending Stability'], 'CI': [r'\bCI\b(?![A-Za-z])', 'Church Influence'],
-           'IP': [r'\bIP\b(?![A-Za-z])', 'Invasion Pressure'], 'PI': [r'\bPI\b(?![A-Za-z])', 'Political Instability'],
+           # ⚠ CANONICAL EXPANSION ADDED 2026-09-16 and the rival KEPT. These two rows listed only
+           # the rival, so the matcher missed 100 'Institutional Pressure' and 68 'Public
+           # Instability' occurrences while catching 28 and 3 of names no registry blesses.
+           'IP': [r'\bIP\b(?![A-Za-z])', 'Institutional Pressure', 'Invasion Pressure'],
+           'PI': [r'\bPI\b(?![A-Za-z])', 'Public Instability', 'Political Instability'],
            'TS': [r'\bTS\b(?![A-Za-z])', 'Thread Sensitivity'], 'TCV': [r'\bTCV\b']}
     assert set(va.CLASSES['clock']) == set(CLK)
     for disp, pats in CLK.items():

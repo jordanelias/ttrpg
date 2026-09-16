@@ -89,7 +89,13 @@ Every generated NPC (named or procedural) has five axes:
 - 3 = neutral / unformed
 - 5 = strongly committed / aware
 
-**2. Worldview** — 1–2 core convictions drawn from the existing conviction taxonomy (Faith, Order, Reason, Justice, Survival, Loyalty, Truth, Power). These are the NPC's load-bearing beliefs. Worldview is what the NPC will defend in argument.
+**2. Worldview** — 1–2 core convictions drawn from the canonical Conviction roster. These are the NPC's load-bearing beliefs; Worldview is what the NPC will defend in argument.
+
+> ⚠ **THE ROSTER IS NOT RESTATED HERE, AND THAT IS THE CORRECTION.** This line read *"(Faith, Order, Reason, Justice, Survival, Loyalty, Truth, Power)"* until 2026-09-16 — eight names, of which **only Faith and Order exist**. `Reason`, `Justice`, `Survival`, `Loyalty`, `Truth` and `Power` are in no roster the engine reads; they are an earlier taxonomy that was never swept forward, and an author generating an NPC from this line would have assigned six convictions that do not exist.
+>
+> The roster has exactly one owner — `references/descriptor_registry.yaml: conviction_roster`, cooked by `tools/export_descriptors.py` behind a blocking `--check` and read at runtime through `engine.substrate.descriptors`. It is thirteen. A second copy in prose is how this line went wrong, so this document names the owner instead of carrying a copy that can rot away from it.
+>
+> ⚠ **`Truth` IS A REAL TERM AND IT IS NOT A CONVICTION.** It is the personal metaphysical-stance axis (`CURRENT.md`, ED-IN-0075), which §4's own Truth Gate below uses numerically — *"Truth ≥ 4: orthodox utterances"*. The old line put the same word in both roles ~170 lines apart in one document, so a reader had no signal they were different things. Naming the roster's owner rather than listing it removes the collision at its source.
 
 **3. Affiliation** — Faction membership (0–3 loyalty weight) plus any hidden allegiance (separate field, not player-visible at generation). Loyalty weight determines how faction pressures modulate their behavior.
 

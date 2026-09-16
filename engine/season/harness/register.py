@@ -516,7 +516,7 @@ def verify_citations(reg: dict) -> list:
         for rel in PATH_RE.findall(cite):
             f = REPO / rel
             if not f.exists():
-                # ED-IN-0229 (2026-09-16): the design corpus was quarantined to `.designs/`, which
+                # ED-IN-0231 (2026-09-16): the design corpus was quarantined to `.designs/`, which
                 # MIRRORS the tree -- an archived path is `.designs/` prefixed onto the original.
                 # ⚠ THIS IS NOT COSMETIC. A source this checker cannot open drops out of `found`,
                 # and the quote is then tested only against the sources that DID open -- so a true

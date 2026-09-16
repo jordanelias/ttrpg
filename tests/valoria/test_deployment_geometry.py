@@ -23,14 +23,14 @@ from systems.mass_battle.sim import validators as _val  # noqa: E402
 @pytest.fixture
 def field_path():
     import systems.mass_battle.sim.hierarchy.units as _hu
-    saved = [(m, m.FIELD_MOVEMENT, m.PC_NODE_COHESION) for m in (_hu, _orch)]
+    saved = [(m, m.FIELD_MOVEMENT, m.MB_NODE_COHESION) for m in (_hu, _orch)]
     _val._set_movement_path('node')
     try:
         yield
     finally:
         for m, fm, nc in saved:
             m.FIELD_MOVEMENT = fm
-            m.PC_NODE_COHESION = nc
+            m.MB_NODE_COHESION = nc
 
 
 def _spans(unit):

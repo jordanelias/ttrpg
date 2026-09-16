@@ -12,12 +12,14 @@ WHAT CHANGED (S2, workplans/return_to_game_queue.yaml, ED-IN-0112). The "headles
 that does not exist" this file used to name as the blocker for rows 1-2 DOES exist —
 engine.mc_v18.run_campaign already runs 50-season campaigns in ~2.5s with a deterministic
 KeyLog hash. Rows 1 and 2 were blocked only because nothing pointed this oracle at it; they
-are now MEASURED from a real headless 1-season probe run (`_run_probe_season` below). Row 5
-still needs the full season loop wired through invariant assertions — not attempted here —
-but a first, narrower slice of its "properties over individual engines TODAY, ahead of the
-loop" guidance is now live in tests/valoria/test_dice_engine_properties.py (dice_engine.py's
-Pool Minimum / Die Rule bounds and the degree-ladder margin formula), independent of this
-row's own `state` (still `blocked`, honestly — that file does not touch a season KeyLog).
+are now MEASURED from a real headless 1-season probe run (`_run_probe_season` below). Row 5 is
+MEASURED since 2026-09-14: engine/season/harness/invariants.py sweeps eight run-time
+invariants over 24 headless seeds x 4 seasons. Its narrower forerunner,
+tests/valoria/test_dice_engine_properties.py, stands unchanged at the individual-engine
+level. ⚠ Two of that sweep's predicates over-fired before it was right — one invented 136
+violations, one criminalised the probe world's only motive — and row 5's docstring carries
+that history, because a clean row with no account of how it got clean is the thing this
+file exists not to produce.
 A gate that reports readiness it has not measured is worse than no gate — it is the
 confounded-measurement failure of ED-MB-0042 rebuilt as infrastructure, so every MEASURED
 row below reports its real value, pass or fail, never a guess (CLAUDE.md §0.1 point 4).
@@ -28,8 +30,8 @@ row below reports its real value, pass or fail, never a guess (CLAUDE.md §0.1 p
   2 determinism           YES (S2)           a headless season run (2 seeds)
   3 key_log_closure       PARTIAL            static contract check now; full at run
   4 m1_junctures          YES                the progress board
-  5 invariant_violations  no                 property tests over a season run
-                                              (begun at the individual-engine level — see above)
+  5 invariant_violations  YES                a season-run invariant sweep
+                                              (engine/season/harness/invariants.py, 8 predicates)
 
 USAGE
   python3 tools/m1_acceptance.py --summary
@@ -80,12 +82,26 @@ REPO_ROOT = ci_common.REPO   # ONE OWNER (plan G7, ED-IN-0159 §8.3)
 sys.path.insert(0, REPO_ROOT)
 try:
     from engine.season.harness import headless as _headless
+    from engine.season.harness import invariants as _invariants
+    from engine.season.harness import populated as _populated
     from engine.substrate import stubwire as _stubwire
     _ENGINE_IMPORT_ERROR = None
 except Exception as _exc:  # pragma: no cover - defensive; surfaced via row detail, not raised
     _headless = None
+    _invariants = None
+    _populated = None
     _stubwire = None
     _ENGINE_IMPORT_ERROR = _exc
+
+#: The N of row 5's "N seeds". 24 headless seasons is ~3s measured (0.13s/season),
+#: which keeps a gate humans run interactively honest without making it a chore.
+M1_SWEEP_SEEDS = 24
+M1_SWEEP_SEASONS = 4
+#: The populated world costs ~0.6s to build + ~2.6s/season against headless's 0.13s,
+#: so it is swept narrow and deep rather than wide. It is NOT optional — it is the only
+#: world that exercises Offices and stance rows at all.
+M1_POP_SEEDS = 2
+M1_POP_SEASONS = 1
 
 BOARD = os.path.join('workplans', 'workplan_v6_progress.yaml')
 CONTRACTS = os.path.join('references', 'module_contracts.yaml')
@@ -183,7 +199,10 @@ def row_stub_invocations():
     and still unresolved. They are simply not on the head's path, so they no longer block a
     milestone measured over the head. OI-05 was RULED by Jordan on 2026-09-13 (`ED-WR-0011` — the
     cast is the authored 46) and the head already implements it; OI-07 remains structural and open
-    against `mc_v18`, whose own retirement is a separate, 71-file piece of work that is NOT done.
+    against `mc_v18`, whose own retirement is a separate piece of work that is NOT done —
+    sized by `tests/valoria/test_mc_v18_is_deprecated.py::ALLOWED_IMPORTERS`, the AST scan that owns
+    the importer set, never by a number restated here (the `71` that stood in this line was a grep
+    of mentions read as a dependency count; `ED-IN-0227` is the correction).
     """
     if _headless is None:
         return _blocked(
@@ -263,9 +282,32 @@ def row_key_log_closure():
 
     PARTIAL today: module_contracts.yaml declares each module's key IN/OUT, so an
     emitted type with no declared consumer is statically visible. That is a real
-    finding and worth surfacing now. It is NOT the full row — the full row is
-    measured over an actual season KeyLog, where a contract-declared consumer that
-    never fires is also a defect and static analysis cannot see it.
+    finding and worth surfacing now. It is NOT the full row — the full row would also
+    catch a contract-declared consumer that never FIRES, which static analysis cannot see.
+
+    ⚠⚠ **AND THE RUNTIME HALF IS NOT REACHABLE BY RUNNING THE HEAD, WHICH THIS ROW USED TO
+    IMPLY IT WAS.** Its `unblocked_by` read *"a season KeyLog"* — as though running
+    `engine/season/` for long enough would produce one. It does not. MEASURED 2026-09-14:
+
+      * `engine/season/` contains **no KeyLog and no `engine.substrate.keys` import** — the two
+        mentions of the module are a docstring and a comment. A 2-season headless run emits
+        **119 `Event`s across 11 kinds** (`claim.deposited`, `news.told`, `proposition.uttered`,
+        …) into `World.log`, and **zero Keys**.
+      * **0 of the 17 Key-EMITTING modules in `module_contracts.yaml` live under
+        `engine/season/`.** They sit in `engine/autoload/` (2), `systems/*/sim/` (7), or declare
+        `sim_module: none` (7).
+
+    So a season of the ratified head exercises **none** of the emitters this row is about. The
+    Key bus and the season loop are two different carriers, and whether the head should ever
+    adopt Keys is a design question nobody has taken.
+
+    ⚠ **THIS IS ED-IN-0226's REPAIR APPLIED ONE ROW ALONG.** That entry re-pointed rows 1-2 off
+    `mc_v18` because *"a gate aimed at the wrong tree does not report nothing — it answers the
+    question it was built to answer, INCORRECTLY, in the direction that looks like progress."* An
+    `unblocked_by` naming an artifact the head cannot produce is the same error in the other
+    direction: it sends the next session to run seasons until a KeyLog appears, and none will.
+    The row stays PARTIAL — that part was always honest — and now says what would actually
+    move it.
     """
     path = _repo(CONTRACTS)
     if not os.path.exists(path):
@@ -326,11 +368,13 @@ def row_key_log_closure():
         'value': len(strict),
         'value_effective': len(effective),
         # Never True from static analysis alone: a contract-declared consumer that never
-        # fires at runtime is a dead seam this pass cannot see. Only a season KeyLog can —
-        # and a wildcard consumer is exactly the case where "declared" says least about
-        # "fires", which is the argument for measuring this over a real KeyLog.
+        # fires at runtime is a dead seam this pass cannot see, and a wildcard consumer is
+        # exactly the case where "declared" says least about "fires". What this pass cannot
+        # do, running the HEAD also cannot do — see the docstring's measurement.
         'passes': None,
-        'unblocked_by': 'a season KeyLog (a declared — especially wildcard — consumer may never fire)',
+        'unblocked_by': ('a run that exercises the Key bus — NOT a season of the head: 0 of the '
+                         '17 emitting modules live under engine/season/, which emits Events and '
+                         'no Keys (measured 2026-09-14)'),
         'detail': (
             f"{len(emitted)} emitted · {len(terminal)} declared terminal · "
             f"{len(strict)} unconsumed by name"
@@ -390,23 +434,83 @@ def row_m1_junctures():
 
 
 def row_invariant_violations():
-    """N seeds, zero invariant violations — over a season run. Still `blocked` (S2 did not
-    wire this): the season-loop invariant sweep this row measures is a materially larger
-    lift than rows 1-2 (a per-season assertion battery, not a single probe run + hash
-    compare). A first, narrower step toward it now exists at the individual-engine level —
-    tests/valoria/test_dice_engine_properties.py, seeded property sweeps over
-    engine/autoload/dice_engine.py's Pool Minimum / Die Rule bounds and degree ladder — per
-    this row's own guidance below, "ahead of the loop". That file does not touch a season
-    KeyLog, so it cannot make this row `measured`; it is the beginning this row named, not
-    its completion.
+    """N seeds, zero invariant violations — over a season run. **MEASURED since 2026-09-14.**
+
+    `engine/season/harness/invariants.py` is the battery, single-owned so this row and
+    `tests/valoria/test_season_invariant_sweep.py` run the same predicates (§8). Eight of them,
+    each mutation-verified in that file: break a world exactly one way and that predicate must
+    fire and must attribute the message to itself.
+
+    ⚠ **THE SELECTION RULE, BECAUSE IT IS WHY THERE ARE ONLY EIGHT.** A predicate earns a row
+    only if NOTHING enforces it on write. `World.add_tenure` already refuses an off-roster `kind`
+    and a non-ascending `contain`, so asserting either here would be `pytest.approx` on an
+    exactness claim — §0.1 pt 2's *"not a weak test but an absent one"*.
+
+    ⚠⚠ **THIS ROW'S `unblocked_by` USED TO NAME HYPOTHESIS AND THAT WAS NEVER SATISFIABLE HERE.**
+    CI's `unit-tests` job installs `pyyaml pytest numpy pytest-xdist` and nothing else, so a new
+    third-party import in a blocking-gate test file collect-errors the whole job.
+    `tests/valoria/test_dice_engine_properties.py` hit this first and set the precedent: the
+    property-testing METHOD — many seeds, one invariant, reproducible — without the dependency.
+    The library was how the technique got spelled, never the requirement.
+
+    ⚠⚠ **AND THE SWEEP'S FIRST TWO WRITINGS BOTH OVER-FIRED, WHICH IS THE REAL LESSON AND IS
+    RECORDED SO THIS ROW IS NOT READ AS A CLEAN FIRST TRY.** `_entities` omitted `w.records` and
+    the sweep reported **176 violations across 24 seeds, 136 of them invented** — a legitimate
+    `hold` on a deed read as a dangling reference. Then a ninth predicate,
+    `ought_names_an_entity`, flagged `headless.py`'s `prop_einhir` and everything minted from it;
+    patching Q4 to satisfy it took **acts to 0 on every seed**, because Carin's `commit` to an
+    OUGHT about a THING is the probe world's only motive. Both were caught by measuring what the
+    fix would COST, never by re-reading the predicate. A mutation proves a predicate CAN fire;
+    only an experiment on the real loop proves it SHOULD.
     """
-    return _blocked(
-        'invariant_violations',
-        'N seeds, zero invariant violations',
-        'property-based tests (Hypothesis) over a season run',
-        'properties can be authored against individual engines TODAY, ahead of the loop '
-        '(begun: tests/valoria/test_dice_engine_properties.py)',
-    )
+    if _invariants is None or _headless is None:
+        return _blocked(
+            'invariant_violations',
+            'N seeds, zero invariant violations',
+            'a working engine import',
+            f'engine import failed: {type(_ENGINE_IMPORT_ERROR).__name__}: '
+            f'{_ENGINE_IMPORT_ERROR}',
+        )
+    r = _invariants.sweep(
+        lambda s: _headless.run(seasons=M1_SWEEP_SEASONS, seed=s)['world'],
+        range(M1_SWEEP_SEEDS))
+
+    # ⚠⚠ BOTH WORLDS, AND THE SECOND ONE IS WHY THIS ROW WAS PARTLY VACUOUS UNTIL 2026-09-15.
+    # `headless` seats three people and builds NO Office and NO stance row, so
+    # `office_singly_held` and `stance_row_shape` quantified over collections empty by
+    # construction and reported clean forever. The populated world is the only one that carries
+    # either, so it is swept too — narrow (2 seeds x 1 season) because it costs ~3.2s a seed
+    # against headless's 0.13s, but swept.
+    def _pop(seed):
+        w = _populated.build_realm(seed)
+        _populated.run(M1_POP_SEASONS, seed, None, w=w)
+        return w
+    p = _invariants.sweep(_pop, range(M1_POP_SEEDS))
+
+    examined = {k: r['examined'].get(k, 0) + p['examined'].get(k, 0)
+                for k in set(r['examined']) | set(p['examined'])}
+    unexercised = sorted(k for k, n in examined.items() if n == 0)
+    value = len(r['violations']) + len(p['violations'])
+    declared = r['declared'] + p['declared']
+    return {
+        'row': 'invariant_violations',
+        'label': 'N seeds, zero invariant violations',
+        'state': 'measured',
+        'value': value,
+        # ⚠ A CARRIER WITH ZERO ROWS IS AN UNASKED QUESTION, NOT A PASS. The row fails while any
+        # predicate had nothing to look at, because "0 violations over 0 offices" is not evidence
+        # about offices — it is the absence of evidence wearing a green tick.
+        'passes': value == 0 and not unexercised,
+        'unblocked_by': None,
+        'detail': (
+            f"{r['seeds']} headless seeds x {M1_SWEEP_SEASONS} seasons + {p['seeds']} populated "
+            f"x {M1_POP_SEASONS}, {len(_invariants.INVARIANTS)} invariants: {value} violation(s) "
+            f"over {examined} rows"
+            + (f"; UNEXERCISED carriers: {unexercised} — those predicates had nothing to inspect"
+               if unexercised else "; every carrier exercised")
+            + (f"; plus {len(declared)} declared (see invariants.DECLARED)" if declared else '')
+        ),
+    }
 
 
 ROWS = [
@@ -439,9 +543,9 @@ def collect():
         'measured': len(measured),
         'blocked': len(blocked),
         'failed': len(failed),
-        'note': ('Rows 1-2 now measured from a real headless probe season (S2). Row 3 stays '
-                 'PARTIAL (static contract check only) and row 5 stays blocked (needs a '
-                 'season-run invariant sweep, not yet wired). This gate reports what it '
+        'note': ('Rows 1-2 and 5 are measured from real headless seasons. Row 3 stays PARTIAL '
+                 '(static contract check only, pending a season KeyLog) and row 4 is '
+                 'DOC-DERIVED and says so in its own detail. This gate reports what it '
                  'measured and never guesses the rest.'),
     }
 

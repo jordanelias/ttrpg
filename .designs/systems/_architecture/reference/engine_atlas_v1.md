@@ -112,8 +112,8 @@ three steps — `systems/overview/sim/season.py:48 run_season`, invoked at `engi
     called at `engine/mc_v18.py:177 _faction_actions_callback`.
   - **S7.4 The ACTION→ACCOUNTING boundary.** Every Key emitted during the scene phase was logged *live*
     but its `apply` closure **deferred**; those deferred faction/settlement writes land here, in emission
-    order, and the per-tick counter resets — `engine/substrate/keys.py:581 accounting_boundary` and
-    `engine/substrate/keys.py:593 next_tick`, called at `engine/mc_v18.py:185-188 _faction_actions_callback`.
+    order, and the per-tick counter resets — `engine/substrate/keys.py:633 accounting_boundary` and
+    `engine/substrate/keys.py:645 next_tick`, called at `engine/mc_v18.py:185-188 _faction_actions_callback`.
   - **S7.5 Two honest-deferral markers.** NPC generation and Knot formation have no canonical trigger to
     cite, so the season records a named `stubwire` no-op where each call would go rather than fabricating
     one — `engine/mc_v18.py:213 _faction_actions_callback`, `engine/mc_v18.py:231 _faction_actions_callback`.
@@ -179,13 +179,13 @@ authoritative for them.
 
 **`_architecture` — the Key substrate and the cross-scale bridges.** Owns the engine's single update rule —
 `emit` → termination caps → default-fill → validate-and-append → deferred-apply queue → synchronous subscriber
-notify, `engine/substrate/keys.py:510 emit` — and is the only place deferred world writes land,
-`engine/substrate/keys.py:581 accounting_boundary`. It is the **substrate owner, not the sole emitter**: of the
+notify, `engine/substrate/keys.py:562 emit` — and is the only place deferred world writes land,
+`engine/substrate/keys.py:633 accounting_boundary`. It is the **substrate owner, not the sole emitter**: of the
 four production sites constructing a `Key`, two are here — `engine/cross_scale/echo_transport.py:321 Key`,
 `engine/cross_scale/echo_transport.py:428 Key` — and two are FA-lane, `systems/factions/sim/faction_action.py:385 Key`
 and `systems/factions/sim/parliamentary_transfer.py:226 Key`. Two of its three termination guards are
 structurally unreachable, the queue path they defend having no production caller —
-`engine/substrate/keys.py:525 schedule_emission` (§3a).
+`engine/substrate/keys.py:577 schedule_emission` (§3a).
 
 **`articulation` — the render/trigger/chronicle layer.** Registers 13 trigger callbacks on the scheduler at every
 default boot, each a typed no-op incrementing a counter — `engine/cross_scale/articulation.py:152 subscribe_all`.
@@ -228,7 +228,7 @@ and the failure is measured rather than asserted — `tests/valoria/test_j2_mass
 The two trees share no code, so any result measured on one is a result about that tree alone (§3g).
 
 **`npcs` — a doc-only folder.** Zero `.py`; the whole NPC implementation lives in the world subsystem —
-`systems/world/sim/npe.py:353 simulate_npc_actions` (live every season) and `systems/world/sim/npe.py:226 generate_npc`
+`systems/world/sim/npe.py:364 simulate_npc_actions` (live every season) and `systems/world/sim/npe.py:237 generate_npc`
 (never called); the engine-core AI shell is a pair of typed no-ops, `engine/autoload/npc_ai.py:33 select_action`. The
 folder owns neither the code nor, since a 2026-07-29 repoint, the doc of its own primary contract, and the currency
 authority still heads at the demoted doc — `CURRENT.md:40 npc_behavior_v30` (§3e).
@@ -274,7 +274,7 @@ undocumented by the contract — `engine/mc_v18.py:303-313 run_campaign` (§3b, 
 **`world` — world-gen, insurgency, NPC ecology, miracles, restoration.** Owns the `World` lifecycle and two genuinely
 live per-season pipelines — `systems/world/sim/insurgency_pipeline.py:139 check_insurgency_triggers`. Its contract
 coverage is inverted: the one module with a contract entry never executes, and the two modules carrying all of this
-subsystem's measured execution have no contract at all — `systems/world/sim/npe.py:353 simulate_npc_actions` (§3e).
+subsystem's measured execution have no contract at all — `systems/world/sim/npe.py:364 simulate_npc_actions` (§3e).
 ## 3. Gap kinds, and the cross-lane rows
 
 **This is not a complete register and does not claim to be.** Per-subsystem gap rows live in each skeleton's
@@ -300,7 +300,7 @@ the social-contest scene branch's `except Exception` swallow and its unreachable
 | a | The combat dispatch branch is dead at the *trigger*, not the wiring: no live trigger queues a `combat` scene, so neither the bridge nor the legacy engine is reachable, independent of the flag | combat, `_architecture` | `engine/cross_scale/scene_dispatch.py:77 evaluate_triggers` |
 | a | The knot-strain-on-opposing-operations path is dead at **both** ends — the only non-test caller of `sustain_knot` is itself an orphan | fieldwork, threadwork | `systems/threadwork/sim/opposing.py:103 resolve_opposing_operations` |
 | a | The world save/restore **read** direction is test-only: the write half runs every campaign, the read half has no production caller | characters, world, settlements | `engine/autoload/game_state.py:425 restore_world` |
-| a | NPC generation is fully implemented with no call site at world-gen or season-tick; a test pins the campaign NPC count at zero | world, npcs | `systems/world/sim/npe.py:226 generate_npc` |
+| a | NPC generation is fully implemented with no call site at world-gen or season-tick; a test pins the campaign NPC count at zero | world, npcs | `systems/world/sim/npe.py:237 generate_npc` |
 | b | The ratified per-settlement Mandate/Treasury pipeline has no step in the accounting cascade — recorded in the module's own port-blocking note | overview, settlements | `systems/overview/sim/accounting.py:11-13 run_accounting` |
 | c | Both engine-core NPC-AI entry points are unconditional no-ops with no production caller — the engine core's sole orphan | npcs, `_architecture` | `engine/autoload/npc_ai.py:33 select_action` |
 | c | The RS-track write is a no-op whose one call site sits behind an organically dormant branch — wired, never landing | overview, `_architecture` | `systems/overview/sim/rs_track.py:28 apply_rs_delta` |

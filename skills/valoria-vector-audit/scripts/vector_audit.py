@@ -1089,7 +1089,7 @@ def parse_throughlines_complete(root):
     # rows and the audit reports a smaller graph with no error, which is why
     # test_throughline_graph_extended_by_second_registry_source (and not this function) is what
     # caught the move.
-    # ED-IN-0229 (2026-09-16): quarantined to `.designs/` — the archive mirrors the tree, so the
+    # ED-IN-0231 (2026-09-16): quarantined to `.designs/` — the archive mirrors the tree, so the
     # path takes a prefix and nothing else. Note what the `return []` below would have done if
     # this were missed: this source contributes NO rows, the audit reports a smaller graph, and
     # nothing errors. That silent-shrink is the failure mode the header two paragraphs up names.

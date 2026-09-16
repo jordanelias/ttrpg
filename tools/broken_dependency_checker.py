@@ -92,7 +92,7 @@ def extract_file_refs(content, source_file=""):
 def check_propagation_map(all_files):
     """Check propagation_map.md for broken references.
 
-    REMAP-AWARE since 2026-09-16 (ED-IN-0229). This function used to test bare
+    REMAP-AWARE since 2026-09-16 (ED-IN-0231). This function used to test bare
     membership — `r not in all_files` — while the ledger checks below resolved the
     same shape of reference through references/restructure_ledger.md. That is the
     multi-parser divergence CLAUDE.md §8 names as a bug to fix rather than

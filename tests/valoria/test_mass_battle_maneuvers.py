@@ -3,7 +3,7 @@ paths — the measurement instrument for the movement/pathing audit's fix plan (
 finding 1.4, fix-plan step 6).
 
 Before this file: `validators.py`'s `Run:` docstring pinned only PER_CELL, leaving
-FIELD_MOVEMENT/PC_NODE_COHESION at the ambient default. Since ED-1089 flipped that default ON,
+FIELD_MOVEMENT/MB_NODE_COHESION at the ambient default. Since ED-1089 flipped that default ON,
 every bare invocation of V-ENVELOP/V-SWEEP silently measured the DEAD node-path arm — the two
 maneuver instructions ('envelop'/'sweep') were confirmed (this session) to exist only on the
 legacy grid path — so past "Stage C.4 passed" / "the maneuver works" claims were true only of a
@@ -19,7 +19,7 @@ path nothing runs by default anymore. This file makes both arms explicit and che
     before trusting the green). Now real regression tests, same standing as the grid arm.
 
 Toggled via validators._set_movement_path, which mutates the already-imported module-level
-FIELD_MOVEMENT/PC_NODE_COHESION on hierarchy.units and orchestration at runtime (not the
+FIELD_MOVEMENT/MB_NODE_COHESION on hierarchy.units and orchestration at runtime (not the
 import-time env-var read bat.py relies on) — no subprocess isolation needed, but the toggles ARE
 real process-wide globals, so every test here restores them in a `finally` to avoid leaking node/
 grid state into whatever test runs next in the same pytest session."""
@@ -43,14 +43,14 @@ _CI_SEEDS = 8
 @pytest.fixture(autouse=True)
 def _movement_toggles():
     # PER_CELL is a SEPARATE, additional gate the legacy advance_cells requires for 'envelop'/
-    # 'sweep' to be reachable at all (hierarchy/units.py:897,925: `if PER_CELL and PC_ENVELOP_PATH
-    # ...` / `if PER_CELL and PC_SWEEP ...`) -- distinct from FIELD_MOVEMENT/PC_NODE_COHESION
+    # 'sweep' to be reachable at all (hierarchy/units.py:897,925: `if PER_CELL and MB_ENVELOP_PATH
+    # ...` / `if PER_CELL and MB_SWEEP ...`) -- distinct from FIELD_MOVEMENT/MB_NODE_COHESION
     # (which path), and read from the ambient process env at import time like they are, so it is
     # NOT set just by validators._set_movement_path('grid'). This test process's own pytest
     # environment does not set PER_CELL=1 (unlike validators.py's documented `Run:` line for a
     # manual script invocation), so force it here for the duration of every test in this file.
     #
-    # [2026-07-02 adversarial-review finding, ED-MB-0001] PC_ENVELOP_PATH/PC_SWEEP were missing from
+    # [2026-07-02 adversarial-review finding, ED-MB-0001] MB_ENVELOP_PATH/MB_SWEEP were missing from
     # this save/restore set even though every test here (via v_envelop/v_sweep's on/off comparison)
     # mutates hierarchy.units' copies directly and always leaves them at False when a test function
     # returns (the off-arm runs last) -- contradicting this docstring's own claim to restore
@@ -59,7 +59,7 @@ def _movement_toggles():
     # from whatever ran before it in the same pytest session -- exactly the class of silent-failure
     # this whole audit exists to catch.
     saved = {(mod, name): getattr(mod, name) for mod in (_hu, _orch)
-             for name in ('FIELD_MOVEMENT', 'PC_NODE_COHESION', 'PER_CELL', 'PC_ENVELOP_PATH', 'PC_SWEEP')}
+             for name in ('FIELD_MOVEMENT', 'MB_NODE_COHESION', 'PER_CELL', 'MB_ENVELOP_PATH', 'MB_SWEEP')}
     _hu.PER_CELL = True
     try:
         yield
@@ -113,7 +113,7 @@ def test_envelop_reaches_rear_node():
     """Acceptance: V-ENVELOP on the LIVE default (node/field) path -- the path Jordan actually
     watches in the workbench. Subunit._resolve_maneuver_goal/_envelop_goal (fix-plan step 7) gives
     _node_advance an anchor-level goal, modeled on the legacy per-cell two-state machine, when the
-    'envelop' instruction is active and PC_ENVELOP_PATH is on.
+    'envelop' instruction is active and MB_ENVELOP_PATH is on.
 
     [Gate 4 finding, 2026-07-02, SUPERSEDED -- see below] This passed reliably (16/20 seeds) at the
     moment step 7 landed, with PER_CELL still at its OLD default. Flipping PER_CELL's config default

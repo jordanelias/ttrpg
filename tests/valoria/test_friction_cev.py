@@ -3,7 +3,7 @@ outcome variance (ED-MB-0016).
 
 The melee pool sums N independent dice, so its coefficient of variation collapses as ~1/sqrt(N) — large
 battles become near-deterministic and lopsided matchups resolve 100%/0% where history shows bands. The
-fix (config.PC_FRICTION_CEV) multiplies each side's combat pool by a per-BATTLE, per-side LogNormal
+fix (config.MB_FRICTION_CEV) multiplies each side's combat pool by a per-BATTLE, per-side LogNormal
 combat-effectiveness factor drawn ONCE per battle (Dupuy CEV / Clausewitzian friction), whose variance is
 force-INDEPENDENT — so a large advantage stays decisive-but-uncertain (banded) rather than certain.
 Grounding + calibration: audit/2026-07-22-mass-battle-stress-test/dg6_friction_resolution.md.
@@ -32,31 +32,31 @@ from ._conservation import assert_troop_conservation  # noqa: E402
 
 @pytest.fixture
 def field_path():
-    saved = [(m, m.FIELD_MOVEMENT, m.PC_NODE_COHESION) for m in (_hu, _orch)]
+    saved = [(m, m.FIELD_MOVEMENT, m.MB_NODE_COHESION) for m in (_hu, _orch)]
     _val._set_movement_path('node')
     try:
         yield
     finally:
         for m, fm, nc in saved:
             m.FIELD_MOVEMENT = fm
-            m.PC_NODE_COHESION = nc
+            m.MB_NODE_COHESION = nc
 
 
 @pytest.fixture
 def friction(field_path):
-    """Enable PC_FRICTION_CEV across the modules that read it (config is star-imported), restore after."""
+    """Enable MB_FRICTION_CEV across the modules that read it (config is star-imported), restore after."""
     mods = [_cfg, _exch, _orch]
-    saved = [(m, getattr(m, 'PC_FRICTION_CEV', False), getattr(m, 'PC_FRICTION_SIGMA', 1.1)) for m in mods]
+    saved = [(m, getattr(m, 'MB_FRICTION_CEV', False), getattr(m, 'MB_FRICTION_SIGMA', 1.1)) for m in mods]
     for m in mods:
-        if hasattr(m, 'PC_FRICTION_CEV'):
-            m.PC_FRICTION_CEV = True
+        if hasattr(m, 'MB_FRICTION_CEV'):
+            m.MB_FRICTION_CEV = True
     try:
         yield
     finally:
         for m, cev, sig in saved:
-            if hasattr(m, 'PC_FRICTION_CEV'):
-                m.PC_FRICTION_CEV = cev
-                m.PC_FRICTION_SIGMA = sig
+            if hasattr(m, 'MB_FRICTION_CEV'):
+                m.MB_FRICTION_CEV = cev
+                m.MB_FRICTION_SIGMA = sig
 
 
 def _ratio_winrate(ratio, base, n, seed0=9000):
@@ -80,29 +80,29 @@ def _ratio_winrate(ratio, base, n, seed0=9000):
 # ─── default-inert (byte-exact when off) ─────────────────────────────────────
 
 def test_default_off_is_inert(field_path):
-    """PC_FRICTION_CEV defaults OFF: _draw_friction_cev sets the factor to exactly 1.0 (no pool change),
+    """MB_FRICTION_CEV defaults OFF: _draw_friction_cev sets the factor to exactly 1.0 (no pool change),
     so the mechanism is byte-exact / behaviourless until explicitly enabled."""
     # [ED-MB-0061] The default is now ON (Jordan, 2026-07-29). The INERTNESS claim below is still
     # worth holding — an OFF flag must be a true no-op, which is what makes the flag safe to pin in
     # the grid oracle — so the flag is pinned off explicitly rather than assumed from the default.
-    assert _cfg.PC_FRICTION_CEV is True, (
-        "PC_FRICTION_CEV must default ON (ED-MB-0061). ⚠ Turning it on is also what exposed F1: it "
+    assert _cfg.MB_FRICTION_CEV is True, (
+        "MB_FRICTION_CEV must default ON (ED-MB-0061). ⚠ Turning it on is also what exposed F1: it "
         "confers a large SYSTEMATIC one-sided advantage (mean end-state hp A 0.9910 / B 0.8634 over "
         "the 20 historical rows, 13 of 20 at exactly 1.0000; with it alone off, A 0.8625 / B 0.9390). "
         "That is an open engine defect, not a reason to re-gate the mechanic.")
     # ⚠ Pin it on ORCHESTRATION, not on config. `_draw_friction_cev` reads its own module global,
     # populated by `from systems.mass_battle.sim.config import *` at import time — so every star-importing module
-    # holds its own COPY of the flag and setting `_cfg.PC_FRICTION_CEV` reaches none of them. Caught by
+    # holds its own COPY of the flag and setting `_cfg.MB_FRICTION_CEV` reaches none of them. Caught by
     # this test failing with 5.717 != 1.0 after the config-side pin. It is the F20/§8 multiple-owners
     # problem in miniature, at the flag layer rather than the quantity layer.
-    saved = _orch.PC_FRICTION_CEV
-    _orch.PC_FRICTION_CEV = False
+    saved = _orch.MB_FRICTION_CEV
+    _orch.MB_FRICTION_CEV = False
     try:
         a = build_unit('Line', 3, 'A', 'A', 9)
         _orch._draw_friction_cev(a)
         assert a._friction_cev == 1.0
     finally:
-        _orch.PC_FRICTION_CEV = saved
+        _orch.MB_FRICTION_CEV = saved
 
 
 # ─── drawn ONCE per battle, not per turn ─────────────────────────────────────
@@ -149,12 +149,12 @@ def test_variance_does_not_collapse_at_scale(friction):
     base = 1600   # a large force where attrition has fully self-averaged
     on = _ratio_winrate(2.0, base, n=40)
     for m in (_cfg, _exch, _orch):
-        if hasattr(m, 'PC_FRICTION_CEV'):
-            m.PC_FRICTION_CEV = False
+        if hasattr(m, 'MB_FRICTION_CEV'):
+            m.MB_FRICTION_CEV = False
     off = _ratio_winrate(2.0, base, n=40)
     for m in (_cfg, _exch, _orch):
-        if hasattr(m, 'PC_FRICTION_CEV'):
-            m.PC_FRICTION_CEV = True
+        if hasattr(m, 'MB_FRICTION_CEV'):
+            m.MB_FRICTION_CEV = True
     assert off >= 95.0, f"large-force 2:1 should collapse to ~certain without friction ({off}%) — the DG-6 defect"
     assert on < 90.0, f"friction failed to band the large-force 2:1 ({on}%) — variance collapsed at scale"
     assert off - on >= 10.0, f"friction barely moved the large-force outcome ({off}->{on}%)"
@@ -166,12 +166,12 @@ def test_friction_reduces_decisiveness(friction):
     on = _ratio_winrate(2.0, 400, n=40)
     # turn it off within this test and compare
     for m in (_cfg, _exch, _orch):
-        if hasattr(m, 'PC_FRICTION_CEV'):
-            m.PC_FRICTION_CEV = False
+        if hasattr(m, 'MB_FRICTION_CEV'):
+            m.MB_FRICTION_CEV = False
     off = _ratio_winrate(2.0, 400, n=40)
     for m in (_cfg, _exch, _orch):
-        if hasattr(m, 'PC_FRICTION_CEV'):
-            m.PC_FRICTION_CEV = True
+        if hasattr(m, 'MB_FRICTION_CEV'):
+            m.MB_FRICTION_CEV = True
     assert off > on, f"friction OFF ({off}%) should be MORE decisive than ON ({on}%)"
     assert off >= 90.0, f"baseline 2:1 should be over-decisive ({off}%) — the DG-6 defect"
 

@@ -1,6 +1,6 @@
 """ED-MB-0028 effect probe: does cell-level close-ranks change combat outcomes by sustaining
 front-cell density from the rear? Compares a moderately-deep column vs a wide-shallow line at
-equal troops+density, with PC_CLOSE_RANKS off vs on (subprocess, since the flag is import-time)."""
+equal troops+density, with MB_CLOSE_RANKS off vs on (subprocess, since the flag is import-time)."""
 import os
 import subprocess
 import sys
@@ -31,7 +31,7 @@ def duel(wa, da, wb, db, n):
     return aw,bw,dr
 
 n=int(sys.argv[1])
-print('PC_CLOSE_RANKS=%s' % c.PC_CLOSE_RANKS, flush=True)
+print('MB_CLOSE_RANKS=%s' % c.MB_CLOSE_RANKS, flush=True)
 for (wa,da,wb,db,label) in [(4,3,12,1,'DEEP(4x3) vs WIDE(12x1)'),(3,4,6,2,'DEEP(3x4) vs SEMI(6x2)'),(6,2,6,2,'mirror(6x2)')]:
     a,b,d=duel(wa,da,wb,db,n)
     print('  %-26s A%%=%5.1f B%%=%5.1f D%%=%5.1f' % (label,100*a/n,100*b/n,100*d/n), flush=True)
@@ -41,6 +41,6 @@ if __name__ == '__main__':
     n = sys.argv[1] if len(sys.argv) > 1 else '16'
     runner = RUNNER.replace('__SIM__', repr(_SIM))
     for flag in ('0', '1'):
-        env = dict(os.environ, PC_CLOSE_RANKS=flag)
-        print(f"=== PC_CLOSE_RANKS={flag} ===", flush=True)
+        env = dict(os.environ, MB_CLOSE_RANKS=flag)
+        print(f"=== MB_CLOSE_RANKS={flag} ===", flush=True)
         subprocess.run([sys.executable, '-u', '-c', runner, n], env=env)

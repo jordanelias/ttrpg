@@ -56,7 +56,7 @@ RESERVATIONS = os.path.join(REPO, 'references', 'id_reservations.yaml')
 
 # Doc trees whose headers file work under an ED. `tests/` and `deprecated/` are excluded on
 # purpose: fixtures and frozen history, per the measurement in the module docstring.
-# ED-IN-0229 (2026-09-16): `.designs` carries the quarantined subsystem corpus that used to live
+# ED-IN-0231 (2026-09-16): `.designs` carries the quarantined subsystem corpus that used to live
 # under `systems/`. It is listed because a root that silently empties is exactly the drift the
 # floors below exist to catch — the `## Date:` count fell from 40+ to 32 the moment the files
 # moved, and without this the guard would have gone on reporting clean over a corpus it no longer

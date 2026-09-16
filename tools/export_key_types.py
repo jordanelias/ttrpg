@@ -59,7 +59,7 @@ sys.path.insert(0, REPO)
 
 from engine.substrate.keys import TypeRegistry  # noqa: E402
 
-# ED-IN-0229 (2026-09-16): the source prose was quarantined to `.designs/` with the rest of the
+# ED-IN-0231 (2026-09-16): the source prose was quarantined to `.designs/` with the rest of the
 # design corpus. The path moved; the relationship did not. This is the shape CLAUDE.md §0.05
 # sanctions — prose is the AUTHORING surface, the typed JSON this emits is the MECHANISM, and the
 # blocking --check round-trip is what keeps them honest. An agent has no reason to read the source;

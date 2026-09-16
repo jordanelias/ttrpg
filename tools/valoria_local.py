@@ -48,7 +48,7 @@ def main(argv):
         ('ci_pp_frozen_check.py',       [],          True),   # PP frozen vocabulary (ED-IN-0190, Jordan 2026-08-14)
         ('ci_naming_check.py',          [mode_flag], True),
         ('ci_names_consistency.py',     [],          True),   # index <-> registry mirrors agree
-        ('ci_design_prose_quarantine.py', [],       True),   # no design prose in systems/ or engine/ (ED-IN-0229)
+        ('ci_design_prose_quarantine.py', [],       True),   # no design prose in systems/ or engine/ (ED-IN-0231)
         ('ci_naming_check.py',          [mode_flag, '--warn'], False),  # report-only naming-drift lint
                                         # (was ci_names_check.py; merged into the block-tier gate 2026-08-23, S6/D2)
         ('ci_co_file_checker.py',       [mode_flag], True),
@@ -65,6 +65,7 @@ def main(argv):
         ('export_composition.py',       ['--check'], True),   # composition roles -> the map mc_v18 resolves through (blocking)
         ('export_module_contracts.py',  ['--check'], True),   # module contracts' Key INTERFACE -> the cooked artifact the conformance instrument reads (blocking)
         ('export_world_initial_state.py', ['--check'], True),  # authored opening position -> the artifact game_state reads (blocking)
+        ('export_npc_roster.py',        ['--check'], True),   # authored cases -> engine/season/npcs.yaml, the cast populated.py reads (blocking; wired 2026-09-16, previously run by nothing)
         # MIGRATION-WINDOW gate: retire with engine/params/ (ED-IN-0139). See evacuation_plan R-PARAMS-DUMPED.
         # ED-IN-0142: the register went stale 3x in one session and CI caught it every time,
         # because --check could not fail and this list did not run it. Both fixed.

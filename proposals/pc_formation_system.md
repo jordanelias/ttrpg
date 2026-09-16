@@ -199,7 +199,7 @@ Still open:
 
 **Committed mechanics** (engine `tests/sim/mass_battle/`):
 - Report-grounded taxonomy + `ROLE_SPEC` (role = shape + instruction package) + `mounted_archers` — commit `dd3d7a1b`.
-- **Brace mechanism** — commit `7691eb6a`. The brace instruction (a) engages the charge-shock gate without the hold-stance offense penalty, and (b) adds a reciprocal charge-recoil (`PC_CHARGE_RECOIL`, prep = discipline x depth): a charge into a braced+deep+disciplined wall shatters the charger. Gated by the brace instruction so instruction-less scenarios are byte-exact.
+- **Brace mechanism** — commit `7691eb6a`. The brace instruction (a) engages the charge-shock gate without the hold-stance offense penalty, and (b) adds a reciprocal charge-recoil (`MB_CHARGE_RECOIL`, prep = discipline x depth): a charge into a braced+deep+disciplined wall shatters the charger. Gated by the brace instruction so instruction-less scenarios are byte-exact.
 - **Missile-density coupling** — commit `a6ae38ad`. Volley casualties scale with the target formation's `col_grid` density (`_volley_density_mult`): packed/deep columns bleed more, dispersed/shallow less. Ranged-only path so melee is byte-exact.
 
 **Emergent counter-cycle**, validated on `gauge_mb` (40 seeds, `PER_CELL=1`), no flat bonuses:
@@ -209,7 +209,7 @@ Still open:
 > Validation anchors are restricted to the research report's in-period (pre-firearms) battles. Earlier drafts cited Waterloo/Albuera (historically apt but Napoleonic, outside the report's scope) — corrected to the report's own anchors.
 
 | pike-beats-cavalry (frontal, prepared) | EMERGENT (brace mechanism) | braced+deep+disc 75% / shallow-green ridden down 0% (post arch-fix #1) / braced-vs-inf neutral. Courtrai/Swiss/Hussite. |
-| cavalry-rides-the-shaken | EMERGENT (`PC_SHOCK_SHAKEN_GAIN`) | the same prepared wall, wavering, 75% -> 28%. Hastings (once the wall broke)/Adrianople. |
+| cavalry-rides-the-shaken | EMERGENT (`MB_SHOCK_SHAKEN_GAIN`) | the same prepared wall, wavering, 75% -> 28%. Hastings (once the wall broke)/Adrianople. |
 | cavalry-catches-archers | EMERGENT (`RANGED_MELEE_SIGMA`) | ranged in melee vs cavalry: defender 55% -> 5%. |
 | missiles-attrit-the-dense | WIRED, direction-correct (standoff-compounding = hypothesis, unmeasured pending kiting) | mult Line-t4 1.43 / t2 0.5; dense -0.6pp / shallow +0.5pp ON-vs-OFF. Small in single-engagement (volley is a brief DR-eaten chip); compounds at the standoff/multi-turn scale. Carrhae/Agincourt. |
 
@@ -243,7 +243,7 @@ The durable lesson: code-grounding discipline held; the validation prose needs t
 **Finding.** Kiting is far more expressible than the "missile-engine gap" framing implied; the engine already supplies every piece except a distance-regulation decision:
 - `volley_phase` fires EVERY turn for any ranged atom with an enemy in [VOLLEY_MIN_RANGE=2, VOLLEY_MAX_RANGE=8]; loss already scales with target density (`_volley_density_mult`). Sustained standoff -> cumulative attrition is already supported.
 - `advance_cells` already has a `retreat` stance that reverses the movement vector (~line 573).
-- Cavalry get a speed mult (`PC_CAVALRY_SPEED_MULT`, ~line 526) -> a mounted unit can outpace infantry.
+- Cavalry get a speed mult (`MB_CAVALRY_SPEED_MULT`, ~line 526) -> a mounted unit can outpace infantry.
 - Ranged atoms are already weak in melee (`pool//3` + `RANGED_MELEE_SIGMA`, ~lines 1311/1336) -> a caught kiter dies.
 
 The gap is narrow: ranged units currently CLOSE to melee. Kiting needs them to MAINTAIN the volley band instead, plus mounted_archers need mounted speed.
@@ -251,20 +251,20 @@ The gap is narrow: ranged units currently CLOSE to melee. Kiting needs them to M
 **Build (three coupled changes, all INERT for existing scenarios -> byte-exact):**
 1. **Mounted speed** (`advance_cells` ~526): replace `self.troop_type == 'cavalry'` with a MOUNTED set `{'cavalry','mounted_archers'}` for the speed mult only. `charge_pen` stays cavalry-only (horse archers kite, not shock). No existing gauge unit is mounted_archers -> byte-exact.
 2. **Maintain-range hook** (`advance_cells` ~570, gated on `'kite' in self.instructions and unit_type=='ranged'`): replace the close-toward step with distance regulation vs the nearest enemy cell d:
-   - d < PC_KITE_STANDOFF (too close): step AWAY (retreat vector) -- open the gap.
+   - d < MB_KITE_STANDOFF (too close): step AWAY (retreat vector) -- open the gap.
    - d > VOLLEY_MAX_RANGE (out of range): step TOWARD -- close into band.
    - else: hold column (stay in band, keep volleying).
    Gated on the 'kite' instruction -> only kiters diverge -> byte-exact for all current scenarios.
 3. **Wiring**: mounted_archers units built with `unit_type='ranged'` + `instructions=('kite',...)`. This is the FIRST instruction to actually drive behaviour -- the seed of the instruction-dispatch layer (arch-debt #2). ROLE_SPEC already maps Kite -> GappedLine + ('kite','shoot_move') and mounted_archers -> ['Kite',...] (both currently "blocked on the kiting primitive").
 
-**New constant (class-B, calibrate by measurement):** `PC_KITE_STANDOFF` -- the retreat-trigger distance (initial guess mid-band, ~VOLLEY_MIN_RANGE+1..4; tune so the band holds vs infantry but is lost vs cavalry). `PC_KITE_ENABLED` toggle (inert without the 'kite' instruction regardless).
+**New constant (class-B, calibrate by measurement):** `MB_KITE_STANDOFF` -- the retreat-trigger distance (initial guess mid-band, ~VOLLEY_MIN_RANGE+1..4; tune so the band holds vs infantry but is lost vs cavalry). `MB_KITE_ENABLED` toggle (inert without the 'kite' instruction regardless).
 
 **Expected emergent dynamic + report validation (the acceptance test):**
 - vs slower infantry (Line, Standard): kiter maintains [2,8] -> volleys every turn -> attrition without melee -> kiter wins. Validates Carrhae 53 BC / Hattin 1187 / Mohi 1241 (horse archers shoot heavy infantry apart on open ground).
 - vs cavalry (equal/faster): kiter cannot open the gap -> caught -> melee (pool//3) -> kiter dies. Validates Patay 1429 (cavalry catches unprotected archers).
 - vs combined arms (infantry screening the kiter's targets): screen blocks LOS/approach -> validates the report's screening / combined-arms principle.
 
-**Measurement protocol:** build mounted_archers(ranged, kite, mounted) vs (a) Line infantry, (b) cavalry; trace hp attrition per turn + win rates over max_turns; tune PC_KITE_STANDOFF for the band-held-vs-infantry / band-lost-vs-cavalry split; confirm byte-exact for non-kite scenarios (selftest, signatures 4/4, gauge ON==OFF -- none carry the 'kite' instruction). Then read the three dynamics against the report (in-period anchors only).
+**Measurement protocol:** build mounted_archers(ranged, kite, mounted) vs (a) Line infantry, (b) cavalry; trace hp attrition per turn + win rates over max_turns; tune MB_KITE_STANDOFF for the band-held-vs-infantry / band-lost-vs-cavalry split; confirm byte-exact for non-kite scenarios (selftest, signatures 4/4, gauge ON==OFF -- none carry the 'kite' instruction). Then read the three dynamics against the report (in-period anchors only).
 
 **Out of scope (separate concerns):** dynamic-movement off-grid (a kiter retreating off the battlefield edge -- couples to the dynamic-bounds item); the full instruction-dispatch layer (arch-debt #2) beyond this single 'kite' hook.
 

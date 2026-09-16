@@ -657,6 +657,17 @@ suite's — but it follows from what was ruled.
 > ⚠ **PARTLY SUPERSEDED 2026-09-07** by Batch 8. "No accumulation" is wrong: accumulation is real and
 > permanent. What a track must not model is *depletion* — the quantity that accumulates is a **resting
 > point**, which moves outward and never falls, not a reserve that empties. The rest of the note holds.
+>
+> ⚠⚠ **AND "NEVER FALLS" WAS ITSELF RETRACTED, LATER IN THIS FILE, ON THE SAME DAY.** Batch 8's C-1
+> records Jordan: *"I also never agreed to the notion that you can't move a resting point back"*, and
+> the reply is *"**Retracted.** … it is now struck from every surface. The ratchet is real and it is
+> not absolute."* THIS BANNER IS A SURFACE IT WAS NOT STRUCK FROM — corrected 2026-09-15, found by an
+> antagonist pass over an M1 plan that had quoted these three lines as the threadwork build spec.
+> **Read the whole of Batch 8 before coding a track from this note.** What holds: accumulation is real
+> and depletion is not the model. What does NOT hold: a monotone ratchet. `E-3` keeps the elastic range
+> constant while the resting point relocates, and restorative operations *"can reach the resting point
+> itself — self-directed mending is the named mechanism: difficult, and possible."* Two quantities, two
+> different remedies, which is what `ED-WR-0010` says.
 
 ---
 

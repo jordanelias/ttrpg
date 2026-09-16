@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # decA=50.0 when dec_n==0, any all-draw row (e.g. R3) scored a FALSE pass (10 of 20 bands contain 50),
     # inflating the count. "One rule lives once" (CLAUDE.md §8): the verdict must live only in gauge_mb.run.
     n = int(sys.argv[1]) if len(sys.argv) > 1 else 14
-    flags = f"STOCH_ROUT={c.PC_STOCHASTIC_ROUT} INTENT={c.PC_INTENT_RESOLUTION} CLOSE_RANKS={c.PC_CLOSE_RANKS} FRAC_POOL={c.PC_FRACTIONAL_POOL}"
+    flags = f"STOCH_ROUT={c.MB_STOCHASTIC_ROUT} INTENT={c.MB_INTENT_RESOLUTION} CLOSE_RANKS={c.MB_CLOSE_RANKS} FRAC_POOL={c.MB_FRACTIONAL_POOL}"
     print(f"=== honest gauge (multi, n={n}) — {flags} ===", flush=True)
     tests = g.TESTS + (g.CAV_TESTS if c.PER_CELL else [])
     npass = g.run('multi', tests, n=n)   # prints per-row with the correct flag + guards; returns pass count

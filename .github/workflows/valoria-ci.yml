@@ -122,7 +122,7 @@ jobs:
           v python3 tools/ci_editorial_checker.py
           v python3 tools/ci_pp_frozen_check.py
           v python3 tools/ci_naming_check.py
-          # ED-IN-0229 (Jordan, 2026-09-16): the game trees hold code, not prose. No tracked .md
+          # ED-IN-0231 (Jordan, 2026-09-16): the game trees hold code, not prose. No tracked .md
           # under systems/** or engine/** except engine/season/**. BLOCKING: measured over #337-#404,
           # prose was written back into systems/ in ten separate PRs and the rate was rising.
           v python3 tools/ci_design_prose_quarantine.py
@@ -152,6 +152,19 @@ jobs:
           # by engine/substrate/world_initial_state.py. Blocking: game_state.py no longer carries
           # these tables, so a stale artifact is a world with the wrong owners.
           v python3 tools/export_world_initial_state.py --check
+          # engine/season/cases/NPC*.yaml -> engine/season/npcs.yaml, the authored cast
+          # harness/populated.py reads. Blocking, and WIRED 2026-09-16: --check existed and was
+          # run by NO CI job, no local hook and no test, which is ci_common.py's own
+          # declaring-is-not-having defect in a file that ships game content. Verified passing
+          # before wiring -- 46 NPCs, every row naming a real case, a real place, a seated person.
+          v python3 tools/export_npc_roster.py --check
+          # references/names_index.yaml -> engine/engine_params/names.json, read at import by
+          # engine/substrate/names.py. Blocking, NEW 2026-09-16: it is the first naming register
+          # that reaches executable code, so a stale artifact is the wrong faction in a generated
+          # NPC rather than a drifted document. The exporter refuses the three shapes that make a
+          # name resolve two ways (alias -> two canonicals, alias shadowing a canonical, legacy
+          # tag that is also an alias) and RECORDS the two real display collisions it cannot fix.
+          v python3 tools/export_names.py --check
           # ED-IN-0142: the test register drifted 3x in one session and only the pytest suite
           # noticed, because --check could not fail. Both fixed; this is the CI half.
           # RETIRED culling wave 2 (ED-IN-0194, 2026-08-21): build_test_register.py + its

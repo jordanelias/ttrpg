@@ -95,31 +95,31 @@ PROVENANCE = {
         derives_from="morale-erosion-per-casualty primitive", gauge_rows=("C5",), retire_to="derived"),
 
     # F7 — PC_* shock/fatigue magnitudes: calibrated-to-band debt (representative rows)
-    "PC_CHARGE_SIGMA": Prov(
-        "PC_CHARGE_SIGMA", "0.55", "config.py:94", "calibrated",
+    "MB_CHARGE_SIGMA": Prov(
+        "MB_CHARGE_SIGMA", "0.55", "config.py:94", "calibrated",
         law="du Picq — cavalry weapon is the moral impulse (the SHAPE/gates are kept)",
         derives_from="charge mass x closing velocity primitive (one shock scale)",
         gauge_rows=("C2", "C4", "C5", "C7"), toggle="PER_CELL", retire_to="derived",
         note="comment says 'CAP reached only...'; magnitude is band-fit."),
-    "PC_CHARGE_RECOIL": Prov(
-        "PC_CHARGE_RECOIL", "6", "config.py:108", "calibrated",
+    "MB_CHARGE_RECOIL": Prov(
+        "MB_CHARGE_RECOIL", "6", "config.py:108", "calibrated",
         law="braced-wall-beats-frontal-charge (the gate is kept)",
         derives_from="momentum-derived recoil from the one shock scale",
-        gauge_rows=("C2", "C6"), toggle="PC_BRACE_ENABLED", retire_to="derived",
+        gauge_rows=("C2", "C6"), toggle="MB_BRACE_ENABLED", retire_to="derived",
         note="comment: 'CALIBRATED vs Courtrai/Swiss/Waterloo' — inverse of derivation."),
-    "PC_SHOCK_FRONT": Prov(
-        "PC_SHOCK_FRONT/REAR/HOLD_BRACE/DISC_FULL/DEPTH_FULL/SHAKEN_GAIN", "0.15/1.6/0.35/0.35/0.5/1.0",
+    "MB_SHOCK_FRONT": Prov(
+        "MB_SHOCK_FRONT/REAR/HOLD_BRACE/DISC_FULL/DEPTH_FULL/SHAKEN_GAIN", "0.15/1.6/0.35/0.35/0.5/1.0",
         "config.py:96-103", "calibrated",
         law="front<flank<rear; brace x disc x depth gates — du Picq SHAPES (kept, law-cited)",
         derives_from="one momentum-derived shock scale x the structural ratios",
         gauge_rows=("C2", "C4", "C5", "C7"), toggle="PER_CELL", retire_to="derived",
         note="~9 dials -> collapse to one scale + documented ratios."),
-    "PC_STAM_SIGMA": Prov(
-        "PC_STAM_SIGMA / PC_STAMINA_DRAIN / PC_STAMINA_REST", "1.5/12/5", "config.py:82-85", "calibrated",
+    "MB_STAM_SIGMA": Prov(
+        "MB_STAM_SIGMA / MB_STAMINA_DRAIN / MB_STAMINA_REST", "1.5/12/5", "config.py:82-85", "calibrated",
         law="du Picq — fatigue lowers effectiveness; depth rotates fresh ranks",
         derives_from="contact-cells x drain-per-clash primitive", toggle="PER_CELL", retire_to="derived"),
-    "PC_KITE_STANDOFF": Prov(
-        "PC_KITE_STANDOFF", "5", "config.py:106", "calibrated",
+    "MB_KITE_STANDOFF": Prov(
+        "MB_KITE_STANDOFF", "5", "config.py:106", "calibrated",
         derives_from="volley band geometry (VOLLEY_MIN/MAX_RANGE)", retire_to="derived",
         note="comment: 'Calibrate by measurement' — explicit band-fit."),
 
@@ -156,12 +156,12 @@ PROVENANCE = {
         note="Stage-5 debt; free magnitude, ledger entry CONTACT_FRACTION_DAMAGE_FLOOR. NO canonical doc backs it — do not fabricate one."),
 
     # Facing-physics slew rate surfaced by the coordinate-migration facing cluster (F2, DEFAULT-OFF, not ratified).
-    "PC_FACING_SLEW_BASE": Prov(
-        "PC_FACING_SLEW_BASE", "60", "hierarchy/units.py (_slew_facing)", "calibrated",
+    "MB_FACING_SLEW_BASE": Prov(
+        "MB_FACING_SLEW_BASE", "60", "hierarchy/units.py (_slew_facing)", "calibrated",
         law="anti-hyper-reactivity — a committed body pivots at a bounded, discipline-gated rate rather than snapping facing each tick",
         derives_from="ground vs drill-manual body wheel rate (deg per resolution tick)",
-        gauge_rows=(), toggle="PC_FACING_MODEL", retire_to="derived",
-        note="Stage-5 debt; ungrounded placeholder, F2 ships DEFAULT-OFF and NOT enabled. Ledger entry PC_FACING_SLEW_BASE. NO canonical doc backs it — do not fabricate one."),
+        gauge_rows=(), toggle="MB_FACING_MODEL", retire_to="derived",
+        note="Stage-5 debt; ungrounded placeholder, F2 ships DEFAULT-OFF and NOT enabled. Ledger entry MB_FACING_SLEW_BASE. NO canonical doc backs it — do not fabricate one."),
 
     # Laws that are correctly grounded and must be PRESERVED (academic-law rows; no magnitude here)
     "law.lanchester": Prov(

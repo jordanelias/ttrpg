@@ -42,9 +42,9 @@ def test_default_is_on():
     DECISION, so when the decision is re-made on evidence the test moves with it — and says why, rather
     than being quietly deleted.
     """
-    assert C.PC_STOCHASTIC_ROUT is True, (
+    assert C.MB_STOCHASTIC_ROUT is True, (
         "stochastic rout is ratified ON (ED-MB-0041): OFF leaves the loser at 61-87% casualties against "
-        "the 15-30% band this module tests. Reversible via PC_STOCHASTIC_ROUT=0.")
+        "the 15-30% band this module tests. Reversible via MB_STOCHASTIC_ROUT=0.")
 
 
 def test_band_is_historical():
@@ -90,13 +90,13 @@ def test_break_fires_when_casualties_cross():
 
 
 def _mean_loser_casualties(on, n=16, cells=False):
-    """`cells` controls PC_CELL_MORALE, which must be pinned rather than inherited — see
+    """`cells` controls MB_CELL_MORALE, which must be pinned rather than inherited — see
     test_loser_breaks_near_historical_band and test_per_cell_break_subsumes_the_body_level_one."""
     import systems.mass_battle.sim.hierarchy.units as U
-    prev = S.PC_STOCHASTIC_ROUT
-    prev_cells = U.PC_CELL_MORALE
-    S.PC_STOCHASTIC_ROUT = on
-    U.PC_CELL_MORALE = cells       # read by Subunit.__post_init__ to decide whether to seed cells
+    prev = S.MB_STOCHASTIC_ROUT
+    prev_cells = U.MB_CELL_MORALE
+    S.MB_STOCHASTIC_ROUT = on
+    U.MB_CELL_MORALE = cells       # read by Subunit.__post_init__ to decide whether to seed cells
     try:
         loser = []
         for s in range(n):
@@ -111,14 +111,14 @@ def _mean_loser_casualties(on, n=16, cells=False):
                 loser.append(100 * (a0 - ua.hp) / a0)
         return statistics.mean(loser) if loser else 0.0
     finally:
-        S.PC_STOCHASTIC_ROUT = prev
-        U.PC_CELL_MORALE = prev_cells
+        S.MB_STOCHASTIC_ROUT = prev
+        U.MB_CELL_MORALE = prev_cells
 
 
 def test_loser_breaks_near_historical_band():
     """With the gate ON the loser breaks far earlier than the ~90% grind — into/near the 15-30% band.
 
-    Pinned to PC_CELL_MORALE=OFF, and that pin is the point: this test measures the BODY-LEVEL
+    Pinned to MB_CELL_MORALE=OFF, and that pin is the point: this test measures the BODY-LEVEL
     break-point, and per-cell morale supplies its own break-point one scale down. Were per-cell
     morale on, the OFF arm would already be broken by the cells and this would read as a no-op — see
     test_per_cell_break_subsumes_the_body_level_one, which asserts exactly that and is the reason for
@@ -127,7 +127,7 @@ def test_loser_breaks_near_historical_band():
     [ED-MB-0045 S7, corrected 2026-07-29] This docstring used to describe per-cell morale as "default
     ON since 2026-07-25". **That is false.** The flip was RETRACTED the same day it landed (the
     confounded measurement that produced CLAUDE.md §0.1), and `config.py:100` reads
-    `PC_CELL_MORALE = environ.get('PC_CELL_MORALE', '0') == '1'   # RETRACTED to OFF 2026-07-25`.
+    `MB_CELL_MORALE = environ.get('MB_CELL_MORALE', '0') == '1'   # RETRACTED to OFF 2026-07-25`.
     The pin here therefore matches the shipped default rather than departing from it — which changes
     nothing about the pin's correctness, but the reason given for it was wrong.
     """
@@ -141,21 +141,21 @@ def test_loser_breaks_near_historical_band():
 def test_per_cell_break_subsumes_the_body_level_one():
     """[ED-MB-0042] With cells carrying their own break-points, the body-level flag stops mattering.
 
-    Measured 2026-07-25: with PC_CELL_MORALE ON, the loser reaches ~35.6% casualties with stochastic
+    Measured 2026-07-25: with MB_CELL_MORALE ON, the loser reaches ~35.6% casualties with stochastic
     body-rout OFF and ~36.1% with it ON — no separation at all. The cells break first (each drawing from
     the same 15-30% band, discipline-skewed) and CELL_BREAK_ROUT_FRAC ends the body before the
     subunit-level draw is ever consulted.
 
     This is recorded rather than quietly acted on. Read it for exactly what it measures: a CONDITIONAL
-    about the arm this test pins ON, `PC_CELL_MORALE=1`.
+    about the arm this test pins ON, `MB_CELL_MORALE=1`.
 
-    [ED-MB-0045 S7, corrected 2026-07-29] This paragraph used to conclude that PC_STOCHASTIC_ROUT "is
+    [ED-MB-0045 S7, corrected 2026-07-29] This paragraph used to conclude that MB_STOCHASTIC_ROUT "is
     now inert in the SHIPPED configuration ... so it is a retirement CANDIDATE". **That is false, and
     inverted.** It inherited the same mistaken premise as the docstring above — that per-cell morale
     ships ON. It does not (`config.py:100`, default `'0'`, RETRACTED 2026-07-25). In the SHIPPED
     configuration `atom.cell_morale` is empty, so the entire per-cell break block at
     `core/state.py:137-149` (`check_cell_breaks` / `propagate_cell_breaks` / `cohere_cells` /
-    `CELL_BREAK_ROUT_FRAC`) is skipped, and `PC_STOCHASTIC_ROUT` at `core/state.py:150` — itself
+    `CELL_BREAK_ROUT_FRAC`) is skipped, and `MB_STOCHASTIC_ROUT` at `core/state.py:150` — itself
     defaulted ON (`config.py:167`) — is the ONLY early break-point the engine ships. Far from being a
     retirement candidate, it is the single mechanism keeping shipped battles out of the ~90% grind;
     the subsumption measured below is what WOULD happen if the cell flag were flipped back on, which

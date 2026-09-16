@@ -54,7 +54,7 @@ KNOWN_MULTI_STATUS = {
 
 def _multi_status_docs():
     found = {}
-    # ED-IN-0229: the subsystem corpus lives in the quarantine now — see the note in
+    # ED-IN-0231: the subsystem corpus lives in the quarantine now — see the note in
     # tests/valoria/test_ed_citation_scope.py. Scanning `systems/` here would measure nothing
     # and report clean, which is the failure this guard exists to catch.
     root = os.path.join(ROOT, '.designs', 'systems')
@@ -81,7 +81,7 @@ def test_the_scan_reaches_a_real_corpus():
 
 
 def _iter_status_docs():
-    # ED-IN-0229: the subsystem corpus lives in the quarantine now — see the note in
+    # ED-IN-0231: the subsystem corpus lives in the quarantine now — see the note in
     # tests/valoria/test_ed_citation_scope.py. Scanning `systems/` here would measure nothing
     # and report clean, which is the failure this guard exists to catch.
     root = os.path.join(ROOT, '.designs', 'systems')

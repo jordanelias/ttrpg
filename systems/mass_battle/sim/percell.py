@@ -253,7 +253,7 @@ def apply_to_subunit(unit, subunit, dmg):
 
 def _fatigue_sigma(unit, engaged_cols):
     """Increment 3: fatigue of the engaged front as a delta-sigma. 0 at full stamina, down to
-    -PC_STAM_SIGMA as the fighting columns tire. Density-weighted over the engaged columns.
+    -MB_STAM_SIGMA as the fighting columns tire. Density-weighted over the engaged columns.
     [historical anchor: du Picq — a tiring front loses combat effectiveness; depth that can
      rotate fresh ranks forward sustains it, a thin line that cannot rotate wears out.]"""
     grid = getattr(unit, 'col_grid', None)
@@ -266,10 +266,10 @@ def _fatigue_sigma(unit, engaged_cols):
     if tot <= 0:
         return 0.0
     frac = sum((b.stamina / STAMINA_MAX) * b.density for b in blocks) / tot
-    return PC_STAM_SIGMA * (frac - 1.0)
+    return MB_STAM_SIGMA * (frac - 1.0)
 
 # [ED-MB-0036 sweep, 2026-07-24] _envelopment_sigma (Increment 6) REMOVED — it was dormant at
-# PC_ENVELOP_SIGMA=0.0 and its unit-level col-grid "wider side" overhang test mis-targeted a split envelop
+# MB_ENVELOP_SIGMA=0.0 and its unit-level col-grid "wider side" overhang test mis-targeted a split envelop
 # army. Superseded by the octagon flank multiplier + multi-side shock (B6) + perimeter/orbital-wheel
 # envelopment (ED-MB-0035). Removing the always-zero term is byte-exact (see orchestration.py Increment-6 note).
 
@@ -297,7 +297,7 @@ def update_stamina(unit, pairs):
         if not b.alive():
             continue
         if b.col in eng:
-            drain = PC_STAMINA_DRAIN / (1.0 + PC_DEPTH_ROTATE * (b.depth - 1))  # deeper -> slower drain
+            drain = MB_STAMINA_DRAIN / (1.0 + MB_DEPTH_ROTATE * (b.depth - 1))  # deeper -> slower drain
             b.stamina = max(0.0, b.stamina - drain)
         else:
             # Only GENUINE reserves recover: a column not adjacent to any engaged column (truly behind the
@@ -305,4 +305,4 @@ def update_stamina(unit, pairs):
             # contact set is NOT a reserve and must not spuriously heal (which masked front fatigue).
             adjacent_to_front = any(abs(b.col - ec) <= 1 for ec in eng)
             if joined and not adjacent_to_front:
-                b.stamina = min(float(STAMINA_MAX), b.stamina + PC_STAMINA_REST)
+                b.stamina = min(float(STAMINA_MAX), b.stamina + MB_STAMINA_REST)

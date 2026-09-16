@@ -94,14 +94,14 @@ silently swallowed:
     'section' tag), where before they returned None indistinguishably from "unknown". A
     structural term like "Fort"/"Wealth" therefore routes through the AUTHORITATIVE descriptor
     registry rather than quantity_registry's fuzzy merge.
-  * ALIAS/CANONICAL STRING COLLISION — RESIDUAL, but the entity is reachable and the collision is
-    SURFACED. "Influence" is both an alias of attr.social.charisma AND the canonical name of
-    fac.influence; the attribute wins the string (checked first), so the STRING "Influence" still
-    resolves to attr.social.charisma and no 'disagreement' fires (the loser is discarded upstream).
-    BUT fac.influence is now reachable by its bare KEY (above), so the entity is no longer lost —
-    and collisions() reports the residual string-ambiguity as the precise work-list the WS1 data
-    fold-in must disambiguate (give fac.influence a non-colliding display pointer). Resolving the
-    string itself is a data change (the fold-in), not a precedence fix in this read-only reader.
+  * ALIAS/CANONICAL STRING COLLISION — CLOSED 2026-09-16 (was ED-IN-0057's KNOWN LIMITATION).
+    "Influence" WAS both an alias of attr.social.charisma and the canonical name of fac.influence,
+    and the attribute won the string because it is checked first. The fold-in this paragraph used
+    to await was a DATA change and it has been made: the alias is removed from both registries that
+    carried it (names_index.yaml, descriptor_registry.yaml:58), so resolve("Influence") now returns
+    fac.influence — the faction stat that owns the name. MEASURED before removing: every bare
+    "Influence" in the corpus is the roll stat, none means Charisma. tools/export_names.py now
+    REFUSES an alias that shadows another row's canonical, which is what stops it recurring.
 
 RETURN SHAPE — resolve(term) is either None (no resolver recognizes `term` at all) or:
     {
@@ -389,9 +389,13 @@ def all_known():
 def collisions():
     """DIAGNOSTIC (not resolution): display strings / aliases bound to MORE THAN ONE structural key
     across descriptor_registry.yaml — the un-pointered ambiguities the WS1 data fold-in must resolve.
-    The canonical instance is "influence" -> {attr.social.charisma, fac.influence}: an attribute
-    alias and a faction-stat name collide on one string, so fac.influence is reachable by no display
-    string (only by its bare key). Returns {lowercased term: sorted[keys]} for every term bound to
+    "influence" WAS the canonical instance and is CLOSED (2026-09-16, see resolve()'s note): the
+    shadowing alias is gone and fac.influence owns its display name. What this still reports is
+    "legitimacy" -> {fac.legitimacy, set.legitimacy}, which is a DIFFERENT shape and not a defect to
+    resolve away — two real quantities at two scales, like Order and Stability. The naming index
+    records those three in engine/engine_params/names.json's `ambiguous` block, and
+    engine/substrate/names.py refuses to resolve one rather than guessing.
+    Returns {lowercased term: sorted[keys]} for every term bound to
     >1 key — making the collisions the reader CANNOT auto-resolve VISIBLE (the precise work-list for
     the fold-in) rather than silently swallowed. Keys themselves are unique and excluded."""
     reg = _load_descriptor_reg()

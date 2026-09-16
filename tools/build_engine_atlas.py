@@ -59,7 +59,7 @@ CONTRACTS = os.path.join(ROOT, 'references', 'module_contracts.yaml')
 KEY_GRAPH = os.path.join(ROOT, 'references', 'key_graph.json')
 EXEC_MAP = os.path.join(ROOT, 'references', 'execution_map.json')
 EXEC_TRACE = os.path.join(ROOT, 'references', 'execution_trace.json')
-# ED-IN-0229: the spec prose is quarantined under .designs/ (the archive mirrors the tree).
+# ED-IN-0231: the spec prose is quarantined under .designs/ (the archive mirrors the tree).
 # A builder reading it by explicit path is the sanctioned shape (CLAUDE.md §0.05); what the
 # quarantine stops is an AGENT SWEEP picking it up, not code opening a file it names.
 DESIGNS = os.path.join(ROOT, '.designs', 'systems')

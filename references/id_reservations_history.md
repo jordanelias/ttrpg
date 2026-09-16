@@ -145,6 +145,36 @@ twin"*. Recorded here so the next allocator sees it rather than rediscovering it
 
 <a id="in"></a>
 
+**ED-IN-0228 COLLIDED ACROSS TWO CONCURRENT IN-LANE SESSIONS, 2026-09-16 — the fifth in this lane.**
+PR #405 (the decision layer) and PR #404 (the faction creed) both read `next_free: 228` and both
+allocated it. #405 merged to `main` first, so **`ED-IN-0228` IS THE DECISION LAYER**; #404 renumbered
+on merge — creed `0228 -> 0229`, axis-roster single-owner `0229 -> 0230`, `next_free` 231. 26
+citations were rewritten across 11 files, and `engine/engine_params/sim_params.json` was REBUILT from
+its renumbered sources rather than hand-edited (§0.05 clause 3).
+
+⚠ THIS IS §4's DOCUMENTED FAILURE MODE, NOT A NEW ONE. That section already says renumbering does not
+escape a collision *"because every live session renumbers to the same `next_free`"*, and names the
+structural fix — `wiring_status.auto_allocation` — as specified and PARKED. Four prior within-lane IN
+collisions (2026-09-10/11) motivated that text; this is the fifth, and the first where the two
+sessions were a merged PR and an open one rather than two open branches. The discipline worked
+exactly as far as it can: both sessions read, allocated, bumped and co-committed, and still collided.
+
+**ED-IN-0229 and ED-IN-0230 allocated 2026-09-14**, next_free 228 -> 230, both `status: landed`,
+both `needs_jordan: false`. Moved here from the `IN:` lane row the same day, because two summaries
+took that row from 528 to 694 characters against a 600 cap —
+`test_narrative_does_not_creep_back_into_the_state_file` caught it, which is the guard doing
+exactly the job its docstring describes. The lane row keeps a one-line summary and this pointer.
+
+* **ED-IN-0229** — a faction's creed is an `OUGHT` subjected on its authored LEADER (never on the
+  faction name, which Q4 would put into every member's deliberation as a referent naming no
+  entity), and membership is weighted by a 0-100 loyalty carried on `Person.stance`, where
+  `decision/choose.py::stance_toward` reads it. Jordan ruling, three parts. The loyalty is
+  deliberately NOT on `Tenure.degree`: measured, nothing in `engine/season/` reads that field.
+* **ED-IN-0230** — the four ethical axes had two unreconciled owners. `engine/substrate/keys.py`
+  held a tuple literal and `engine/season/rosters.yaml: conviction_axes` held a `values:` list,
+  while the roster's own note claimed a loader refusal that did not exist. Both now resolve to
+  `references/descriptor_registry.yaml: axis_roster`, on the `conviction_roster` precedent.
+
 **ED-IN-0214 allocated 2026-09-11 ON MERGE** (next_free 214 -> 215), **BECAUSE THE RENUMBER
 DIRECTLY ABOVE LANDED ON A FOURTH COLLISION — AND THE ENTRY THAT MADE IT PREDICTED THIS IN ITS OWN
 TEXT.** PR #396 renumbered 0212 -> 0213 to avoid PR #395's spine row. Between that renumber and
@@ -365,11 +395,21 @@ ED-FI-0006/0007/0008 allocated 2026-07-13: 2026-07-13 multi-agent audit P1 batch
 BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0009-0012 RESERVED 2026-07-29 for cross-lane EDs the IN code-shape waves file in WR. MEASURED max allocated = ED-WR-0009; unused 0010-0012 (3) returned to the pool, next_free 13 -> 10. Freeze lifted: read next_free, allocate, bump, co-commit as normal. // ED-WR-0008 allocated 2026-07-13: 2026-07-13 multi-agent audit P1 -- P-25 'Scale-based Mending Stability' override table in threadwork_v30 (line 40) truncated to header + 'Object' with zero data rows (original authoring truncation, git-confirmed). Open/needs_jordan; can anchor a WR threadwork batch with the P2 tail. next_free bumped 8->9. // ED-WR-0007 allocated 2026-07-08: pessimist-audit WR Scene-Slate + threadwork work items, execution pending (decision ED-IN-0027). ED-WR-0001 + ED-WR-0002 allocated 2026-07-05: NERS-audit E-5 (peninsular_strain GD-1 sweep) + E-8 (MS/RS name sweep) accepted work items; ED-WR-0003 allocated 2026-07-05: edge-playability §7 item 10 (ambient-fabric window + Appraise Revelation), edge-playability §7 batch (PR #81)
 ```
 
-### 2026-09-16 — IN lane skipped 0228 (ED-IN-0229)
+### 2026-09-16 — the 0228 window took a THIRD claimant (ED-IN-0231)
 
-The design-prose quarantine took **ED-IN-0229**, not 0228, although `next_free` read 228. 0228 was
-already claimed by **open PR #405** (*The decision layer interrogated*), unmerged at the time, so
-taking it would have produced the exact within-lane collision CLAUDE.md §4 warns about — two live
-sessions renumbering to the same `next_free`, which happened twice on 2026-09-10 and once again
-after the renumber. Skipping is cheap and a gap is already tolerated in this lane; a collision is
-not. Should #405 never land, 0228 remains a gap.
+The design-prose quarantine (#407) first took **ED-IN-0229**, skipping 0228 on purpose: `next_free`
+read 228, but 0228 was already claimed by the then-open PR #405, and taking it would have produced
+the within-lane collision CLAUDE.md §4 warns about. **It collided one number higher anyway.** While
+#407 was open, #405 landed keeping 0228, and #404 landed having renumbered 0228 -> 0229 and
+0229 -> 0230 — so by the time #407 merged `main`, its 0229 belonged to #404 and it renumbered again,
+to **0231**, with `next_free` at 232.
+
+That is §4's sentence demonstrated rather than quoted: *renumbering to `next_free` does not escape a
+same-lane collision*, because every live session renumbers to the same number. Skipping ahead does
+not escape it either — it only changes which number you land on. Three claimants on one window in
+one day, after the same lane collided twice on 2026-09-10 and once more after that renumber.
+
+What would actually have prevented it is the structural fix the reservations file already specifies
+and PARKS: `wiring_status.auto_allocation`. Until that exists, the only real mitigation is the one
+§4 names — land the `next_free` bump on `main` **before** anything cites the number — which narrows
+the window rather than closing it, and a branch open for hours cannot use it at all.

@@ -94,13 +94,13 @@ fall-through, facing (−0.998, 0.067) vs the (−1, 0) default) but never reach
 ## 2026-07-29 — ED-MB-0053 plan-v2 §4a: the fifth digest mode, and the mode-key extension that had to precede it
 
 **The verification net had a hole over exactly the state B1a is about to refactor.** All four
-digests run at `PC_CELL_MORALE=0`, where `cell_morale` / `cell_start_troops` / `cell_breakpoint` are
+digests run at `MB_CELL_MORALE=0`, where `cell_morale` / `cell_start_troops` / `cell_breakpoint` are
 EMPTY — so they pin float-order over every per-cell map *except* the three whose desync motivates
 the ownership work, and "if a digest moves, you changed behaviour" was vacuous over cell state.
 §4a makes a fifth golden a hard gate on starting B1a; this closes it.
 
 **The key extension was mandatory, not tidy-up.** `bat.py`'s mode key read only `PER_CELL` and
-`FIELD_MOVEMENT`, so a run at `PC_CELL_MORALE=1` returned `'cell'` and checked itself against the
+`FIELD_MOVEMENT`, so a run at `MB_CELL_MORALE=1` returned `'cell'` and checked itself against the
 flag-OFF golden — a different configuration. That is precisely the ED-1089 shape the
 `FIELD_MOVEMENT` clause was added to close, one flag later; recording a fifth mode without
 extending the key would have rebuilt the same trap. Extracted as `bat._mode_key(per_cell,
@@ -109,7 +109,7 @@ field_movement, cell_morale)` so it can be tested in microseconds instead of by 
 **[ED-MB-0062, 2026-08-01] MODE KEYS ARE NOW ABSOLUTE — Jordan's rename-by-distinction ruling.**
 The scheme above was still *relative*: a suffix appeared only when a flag was ON, so absence encoded
 "OFF" **relative to the default at recording time**. `cell` never meant "cell-morale off", it meant
-"cell-morale not mentioned" — so flipping `PC_CELL_MORALE`'s default (which ED-MB-0001's flags-ON
+"cell-morale not mentioned" — so flipping `MB_CELL_MORALE`'s default (which ED-MB-0001's flags-ON
 directive requires) re-points the plain grid run onto the fifth mode's golden and orphans four
 recorded keys. Note the key was **already injective**, so the injectivity pin could not see this.
 Keys now name every axis with its value: `unit`→`unit_grid_mor0`, `cell`→`cell_grid_mor0`,
@@ -142,7 +142,7 @@ eight-configuration toggle cube** (a one-example check would pass with any two t
 and that every recorded `EXPECTED` key is one `_mode_key` can actually emit — mutation-verified by
 deleting the `_cm` clause. `test_mode_selectors_cover_every_out_of_budget_golden_mode` extended to
 an exact-set assertion over the three modes, each selector cross-checked against what its name
-claims, plus: `cell_cm` is the ONLY mode permitted to override the `PC_CELL_MORALE` pin.
+claims, plus: `cell_cm` is the ONLY mode permitted to override the `MB_CELL_MORALE` pin.
 ## 2026-07-29 — ED-MB-0052 plan-v2 §5 C1: per-phase casualty attribution, with conservation as the gate
 
 Every hp loss is now tagged with SOURCE and TICK through the existing `start_trace`/`trace_event`
@@ -239,7 +239,7 @@ trajectory at hp≤25, but `Unit.recalc_size` routs outright at `size==0`, i.e. 
 the floor was **unreachable** and every trajectory ended in annihilation-rout (measured: side B
 routed at ticks 36/35/36 with hp 97.3/97.1/98.9, agg_morale 1e9, troop_total 400 vs a floor of 80).
 
-**Repairs.** `_rout_disabled()` turns `PC_STOCHASTIC_ROUT` off for the trajectory window only (the
+**Repairs.** `_rout_disabled()` turns `MB_STOCHASTIC_ROUT` off for the trajectory window only (the
 other three checks are statements about shipped behaviour and keep rout on — `check_no_annihilation`
 is literally "the battle ends by rout"). Volley scenario → `balanced` + the existing `kite`
 band-seeking primitive, reused verbatim per plan D4 (change the SCENARIO, not `hold` semantics).
@@ -270,7 +270,7 @@ becomes a rubber stamp. Grid golden `unit` byte-exact; no engine `.py` touched.
 ## 2026-07-29 — ED-MB-0049 plan-v2 A5a: lanchester scalar-write sweep + two guard defects found by mutation
 
 `lanchester_signature.py`'s no-rout pin was a BARE `ua.morale = ua.morale_start = NO_ROUT_MORALE` —
-the silent-no-op class that confounded the retracted `PC_CELL_MORALE` flip. Routed onto
+the silent-no-op class that confounded the retracted `MB_CELL_MORALE` flip. Routed onto
 `Unit.set_morale` (unseeded it reduces exactly to `unit.morale = value`, so byte-identical at the
 shipped default); `morale_start` stays bare and non-cellular. File added to the sweep guard's
 `_ENGINE_FILES`. `test_persubunit_stress.py` deliberately NOT chained in front (A5b, G10).
@@ -335,10 +335,10 @@ asserts incidence zero at the shipped bound *with* a non-vacuity check. 3/3 muta
 ## 2026-07-30 — mass_battle: the last unswept absolute-morale write, FILED not fixed (ED-MB-0061)
 
 `test_persubunit_stress.py:191`'s bare `u.morale = 0` is the last unswept absolute-morale write.
-HANDOFF_MB named it as a precondition of the `PC_CELL_MORALE` flip — *"sweep them before the flag
+HANDOFF_MB named it as a precondition of the `MB_CELL_MORALE` flip — *"sweep them before the flag
 flips"* — and it was missed when the flip happened. A bare assignment is a silent no-op once cells
 are seeded (`eff_morale` reads the cells and never falls back to the scalar), so at
-`PC_CELL_MORALE=1` this harness asserts a rout it never caused. **S13 is therefore vacuous at the
+`MB_CELL_MORALE=1` this harness asserts a rout it never caused. **S13 is therefore vacuous at the
 shipped defaults.**
 
 ⚠ **The one-line sweep was made, then REVERTED, and the reason is the point.** Touching that file at

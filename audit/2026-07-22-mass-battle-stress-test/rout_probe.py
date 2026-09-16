@@ -1,5 +1,5 @@
 """ED-MB-0031 stochastic-rout probe. Measures casualty-at-rout + battle length with
-PC_STOCHASTIC_ROUT off vs on. Target (Jordan historical research): the LOSER should break at
+MB_STOCHASTIC_ROUT off vs on. Target (Jordan historical research): the LOSER should break at
 ~15-30% casualties, not grind to ~58%."""
 import os
 import subprocess
@@ -36,7 +36,7 @@ def batch(n, disc_a=5, disc_b=5):
     return wc, lc, statistics.mean(turns), draws
 
 n=int(sys.argv[1])
-print('PC_STOCHASTIC_ROUT=%s ONSET=%s CAP=%s' % (c.PC_STOCHASTIC_ROUT, c.ROUT_ONSET_FRAC, c.ROUT_CAP_FRAC), flush=True)
+print('MB_STOCHASTIC_ROUT=%s ONSET=%s CAP=%s' % (c.MB_STOCHASTIC_ROUT, c.ROUT_ONSET_FRAC, c.ROUT_CAP_FRAC), flush=True)
 wc,lc,t,d = batch(n)
 print('  even (disc5 v disc5): winner_cas=%4.1f%% LOSER_cas=%4.1f%% turns=%4.1f draws=%d' % (wc,lc,t,d), flush=True)
 wc,lc,t,d = batch(n, disc_a=5, disc_b=3)
@@ -47,6 +47,6 @@ if __name__ == '__main__':
     n = sys.argv[1] if len(sys.argv) > 1 else '20'
     runner = RUNNER.replace('__SIM__', repr(_SIM))
     for flag in ('0', '1'):
-        env = dict(os.environ, PC_STOCHASTIC_ROUT=flag)
-        print(f"=== PC_STOCHASTIC_ROUT={flag} ===", flush=True)
+        env = dict(os.environ, MB_STOCHASTIC_ROUT=flag)
+        print(f"=== MB_STOCHASTIC_ROUT={flag} ===", flush=True)
         subprocess.run([sys.executable, '-u', '-c', runner, n], env=env)

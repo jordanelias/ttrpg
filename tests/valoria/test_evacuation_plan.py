@@ -175,7 +175,7 @@ def test_no_contracted_unit_is_evacuated(part):
 def test_contract_guard_can_fail():
     """POSITIVE CONTROL: plant a protected path in the evacuate set and require a complaint.
 
-    ED-IN-0229 (2026-09-16): this used to plant a `doc:` target. The design-prose quarantine set
+    ED-IN-0231 (2026-09-16): this used to plant a `doc:` target. The design-prose quarantine set
     every `doc:` field that named a markdown file to null — deliberately — which emptied that half
     of the guard's universe and would have left this control unable to fire while still reporting
     green. The planted path is now a quarantined document, which the guard protects explicitly.

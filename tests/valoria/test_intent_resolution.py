@@ -23,7 +23,7 @@ from systems.mass_battle.sim.engine import build_army, resolve_battle, SIDE_A_ST
 
 
 def test_default_gated_off():
-    assert C.PC_INTENT_RESOLUTION is True, (
+    assert C.MB_INTENT_RESOLUTION is True, (
         "intent-resolution must default ON (Jordan, 2026-07-29; ED-MB-0061). Byte-exactness is the "
         "oracle's concern and is handled by the re-base, not by leaving the mechanic off. G20.")
 
@@ -72,8 +72,8 @@ def _unit(name, faction, stance):
 
 
 def _mean_holder_casualties(intent_on, n=16):
-    prev_flag = O.PC_INTENT_RESOLUTION
-    O.PC_INTENT_RESOLUTION = intent_on
+    prev_flag = O.MB_INTENT_RESOLUTION
+    O.MB_INTENT_RESOLUTION = intent_on
     try:
         cas = []
         for s in range(n):
@@ -85,7 +85,7 @@ def _mean_holder_casualties(intent_on, n=16):
             cas.append(100 * (a0 - ua.hp) / a0 if a0 else 0)
         return statistics.mean(cas)
     finally:
-        O.PC_INTENT_RESOLUTION = prev_flag
+        O.MB_INTENT_RESOLUTION = prev_flag
 
 
 def test_holder_survives_better_with_intent():
@@ -97,12 +97,12 @@ def test_holder_survives_better_with_intent():
 
 def test_battle_runs_with_intent_on():
     """Smoke: a full battle resolves without error under intent, and conserves the winner field."""
-    prev = O.PC_INTENT_RESOLUTION
-    O.PC_INTENT_RESOLUTION = True
+    prev = O.MB_INTENT_RESOLUTION
+    O.MB_INTENT_RESOLUTION = True
     try:
         random.seed(2_000_123)
         r = resolve_battle(_unit('A', 'A', 'aggressive'), _unit('B', 'B', 'hold'),
                            'Line', 'Line', {}, kind='multi', max_battle_turns=40)
         assert r.get('winner') in ('A', 'B', 'draw')
     finally:
-        O.PC_INTENT_RESOLUTION = prev
+        O.MB_INTENT_RESOLUTION = prev

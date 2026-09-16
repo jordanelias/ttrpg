@@ -122,7 +122,7 @@ PROVENANCE_PATHS = {
 # it is annotated rather than left silent so the next reader does not take it for a live tree.
 PROVENANCE_PREFIXES = ('references/splits/',)
 # Live docs that can make canonical claims.
-# ED-IN-0229 (2026-09-16): `.designs/` carries the quarantined subsystem corpus — 226 documents
+# ED-IN-0231 (2026-09-16): `.designs/` carries the quarantined subsystem corpus — 226 documents
 # that were under `systems/` until the design-prose quarantine. It is DECLARED HERE because a
 # gate that stops scanning a corpus does not report less, it reports CLEAN, and this one went
 # from 456 open-reference findings to 210 the moment the files moved. Hiding prose from agent
@@ -156,7 +156,7 @@ SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 # went stale the moment a pair was removed (2026-09-11, ED-IN-0215): prose re-pinning a number the
 # data below already carries. Same failure as CLAUDE.md:345 ("a duplicated date rots independently
 # of its subject") and CURRENT.md:34 ("this row has carried a stale one twice"). Read the set.
-# ED-IN-0229: the subsystem corpus moved to `.designs/systems/` (design-prose quarantine). The
+# ED-IN-0231: the subsystem corpus moved to `.designs/systems/` (design-prose quarantine). The
 # pairs below moved with it; this prefix has to follow, or four DEFERRED findings become nine
 # build failures the moment the files change address and nothing about the debt has changed.
 BURN_DOWN_PREFIXES = ('systems/', '.designs/systems/')  # engine/params/ evacuated 2026-08-05

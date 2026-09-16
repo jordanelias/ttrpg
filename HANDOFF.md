@@ -213,7 +213,19 @@ them** — a strategic layer over three anonymous people measures nothing.
 | ruling | question | gates |
 |---|---|---|
 | **`ED-1051`** | `engine_clock`'s doc home — the temporal spine has `doc: null`. Reopened 2026-09-11 by an antagonist pass: the closure cited `04:137` for `port/`, and **`engine/season/port/` does not exist** | M3's G0 |
-| **`ED-IN-0210`**'s open fork | **are `dispatch` and `comply` two sides of one thing?** Jordan asked; the row records it as surviving §0's five tests — *"two defensible options lead to materially different games"* | the governance slice's shape |
+
+⚠ **`ED-IN-0210`'s FORK CAME OFF THIS LIST 2026-09-15 — RULED, NOT DROPPED.** Jordan: *"AN ORDER
+CARRIES TERMS LIKE A DISPENSATION … The second option (no response verb) is REJECTED."* The ledger's
+last row for that id reads `status: ruled`, `needs_jordan: false`, `jordan_decision: 2026-09-15`
+(`registers/editorial_ledger_in.jsonl`), and an id's effective status is its LAST row. ⚠ **The
+ruling does not make 19b buildable** — `dispatch` is blocked by `H-71`
+(`engine/season/hole_register.yaml`, `tier: 0`, `grade: absent`, `owner: unassigned`), whose own
+`unblocks:` reads *"9 of 32 verbs cannot be formed person-side — 8 remit-ONLY, plus `levy`"*, so no
+run moves until it closes. ⚠ A handoff elsewhere says FIVE; the register says nine, and the register
+is the surface with the falsifier (`test_no_person_can_choose_a_governance_verb_and_h71_is_why`,
+which goes RED the day the hole closes). Read the register, not the cached figure.
+Neither surface named the other; this note is where they meet.
+`workplans/2026-09-11-reconciled-program.md`'s record defect naming this row is spent with it.
 
 ⚠ **`ED-WR-0011` IS NOT ON THIS LIST AND THIS ENTRY FIRST PUT IT HERE.** The ledger carries a SECOND
 row under that id: `status: ruled`, `needs_jordan: false` — *"OI-05 RULED BY JORDAN, 2026-09-13…

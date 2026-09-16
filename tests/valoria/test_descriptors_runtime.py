@@ -163,10 +163,18 @@ def test_the_attribute_roster_declares_itself_open_until_the_tenth_is_named():
 #: deleting a row and deleting its name here are the same act, done deliberately, in one place.
 #: `per_stat_floors` left at plan S5d (2026-08-22), wired into `Faction.adjust`. `faction_L` left
 #: 2026-08-23: Jordan ruled "Legitimacy is a base", so `fac.legitimacy` is declared in the registry
-#: and bound to the `L` field. The register is EMPTY, which is the correct state when nothing is
+#: and bound to the `L` field. The register went EMPTY, which is the correct state when nothing is
 #: outstanding — and the set comparison below still observes an addition, which is the direction
 #: that matters now.
-EXPECTED_UNIMPLEMENTED = set()
+#: ⚠ 2026-09-16: AND AN ADDITION IS WHAT IT OBSERVED. `fac_intel_multiplier` — `fac.intel` is
+#: declared with bounds Jordan RULED on 2026-08-23 alongside the other five, and is unreachable
+#: because `engine.autoload.game_state.MULTS` carries no `intel` key, so `Faction.adjust('intel',
+#: …)` raises `KeyError` before `faction_bounds` is consulted. Not deletable (the bounds are
+#: ruled) and not inventable (the multiplier is a design number). It had been recorded only in
+#: `engine/substrate/descriptors.py`'s docstring, which no instrument reads — so the register was
+#: empty while something was outstanding, and THAT is the failure this pin cannot see. It catches
+#: what enters the block; nothing catches what never reaches it.
+EXPECTED_UNIMPLEMENTED = {"fac_intel_multiplier"}
 
 
 def test_ratified_but_unimplemented_items_stay_visible():

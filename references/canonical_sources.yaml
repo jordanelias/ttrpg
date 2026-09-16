@@ -274,7 +274,7 @@ systems:
     archived: ".designs/ — design doc quarantined 2026-09-16; see references/restructure_ledger.md. Canon for this system is the code (CLAUDE.md §0.05)."
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "5262629b027ee7aea4c44e1707d8322cef0e833f"
+    canonical_sha__references__module_contracts_yaml: "c3dec6f88b6d23b88ca0b80b857fd722a5894716"
     canonized: "2026-06-10"
     canonized_pass: "v3 schema-2 gates+calcs (commit 4eeabd84; v2.1 4c474c52; seeded cdbd1b50)"
     note: "Module wrapper contracts (schema_version 2, EXTRACTED_STAGE1): 25 extracted + 2 stubs; per-system gates + calculations checked (A10-A12). Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."

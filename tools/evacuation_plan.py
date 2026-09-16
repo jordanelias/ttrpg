@@ -163,7 +163,7 @@ RULES = [
     # the CARRY-union-LEAVE defect: a file with no verdict would be removed under a mirror-image
     # deletion without ever appearing in a plan. Both are KEEP, and for different reasons worth
     # stating separately rather than under one pattern.
-    # ED-IN-0229 (Jordan, 2026-09-16) -- the design-prose quarantine. 230 documents left
+    # ED-IN-0231 (Jordan, 2026-09-16) -- the design-prose quarantine. 230 documents left
     # `systems/*/reference/` and the root of `engine/` for `.designs/`, and a new top-level tree
     # matching no rule is the CARRY-union-LEAVE defect this tool exists to refuse: under a
     # mirror-image deletion the whole archived corpus would be removed without ever appearing in a
@@ -839,7 +839,7 @@ def contract_guard(evacuating: set[str]) -> list[str]:
             if hits:
                 bad.append(f"{c.get('module')}.{field} -> {q} ({len(hits)} file(s) would be evacuated)")
 
-    # ED-IN-0229 (2026-09-16): the quarantined design corpus is never evacuable, and it needs its
+    # ED-IN-0231 (2026-09-16): the quarantined design corpus is never evacuable, and it needs its
     # own clause rather than riding on `doc:`. Severing the pointers set 17 `doc:` fields to null
     # — deliberately, since `doc:` is the strongest possible "read this as authority" signal at a
     # module — and that silently emptied the half of this guard those fields backed. A guard whose

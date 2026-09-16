@@ -18,7 +18,7 @@ owner RETURNS the count so each call site can assert it actually checked somethi
 
 **What the skip's incidence actually is, measured rather than assumed (§1 G1/G12 — existence in
 source is not evidence of rate).** The finding that routed this work predicted the skip would fire
-"almost always" under the shipped `PC_STOCHASTIC_ROUT=1`. Measured 2026-07-29 at shipped defaults, it
+"almost always" under the shipped `MB_STOCHASTIC_ROUT=1`. Measured 2026-07-29 at shipped defaults, it
 does not: the Line-vs-Line matchup used by three of the four files routs **0 of 120 units** across a
 60-seed sweep, and the pike-vs-cavalry matchup **8 of 120**. So the four suites were NOT running
 vacuous — they were one engine-tuning change away from it, with nothing that would have said so. The
@@ -40,7 +40,7 @@ not an intuition):
     routed/broken filter, so a routed subunit's cells keep absorbing their mirrored share; and the
     two post-rout hp paths (`:2504`, `:2566`) live only in `run_multi_turn_battle`, which none of
     the four tests calls.
-  * Measured 2026-07-29 at shipped defaults (`PC_STOCHASTIC_ROUT=1`, `PC_CELL_MORALE=0`), node
+  * Measured 2026-07-29 at shipped defaults (`MB_STOCHASTIC_ROUT=1`, `MB_CELL_MORALE=0`), node
     movement path (AGENT-MEASURED per G12, ad-hoc battery, orchestrator-unreplicated; the
     structural argument above carries the decision independently): a 3:1 lopsided 200-battle
     battery produced 200 routed/broken units, 200 conserving; a 4-ratio × 60-seed

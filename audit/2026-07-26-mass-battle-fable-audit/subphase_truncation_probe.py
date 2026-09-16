@@ -106,7 +106,7 @@ def main():
     bound = c.MAX_SUB_PHASES
     mode_desc = (f"PER_CELL={os.environ.get('PER_CELL','?')} "
                  f"FIELD_MOVEMENT={os.environ.get('FIELD_MOVEMENT','?')} "
-                 f"PC_NODE_COHESION={os.environ.get('PC_NODE_COHESION','?')} "
+                 f"MB_NODE_COHESION={os.environ.get('MB_NODE_COHESION','?')} "
                  f"CASCADING_ENABLED={c.CASCADING_ENABLED}")
     print(f"=== A3 sub-phase truncation probe — {mode_desc} ===", flush=True)
 

@@ -1,5 +1,5 @@
 """ED-MB-0029 intent-as-resolution probe. Same matched-density mirror lines under different stance
-pairings, PC_INTENT_RESOLUTION off vs on (subprocess — flag is import-time). Measures win-split,
+pairings, MB_INTENT_RESOLUTION off vs on (subprocess — flag is import-time). Measures win-split,
 mean casualties (both sides), and battle length (tempo). Expected with intent ON:
   hold vs hold        -> slow grind, low casualties (a standoff)
   aggressive vs aggr. -> fast, bloody
@@ -40,7 +40,7 @@ def duel(sa, sb, n):
     return aw,bw,dr,statistics.mean(acas),statistics.mean(bcas),statistics.mean(turns)
 
 n=int(sys.argv[1])
-print('PC_INTENT_RESOLUTION=%s OFF=%s DEF=%s' % (c.PC_INTENT_RESOLUTION, c.INTENT_OFFENSE_D, c.INTENT_DEFENSE_D), flush=True)
+print('MB_INTENT_RESOLUTION=%s OFF=%s DEF=%s' % (c.MB_INTENT_RESOLUTION, c.INTENT_OFFENSE_D, c.INTENT_DEFENSE_D), flush=True)
 for sa,sb in [('balanced','balanced'),('hold','balanced'),('aggressive','balanced'),('aggressive','aggressive'),('aggressive','hold')]:
     aw,bw,dr,ac,bc,t=duel(sa,sb,n)
     print('  A=%-10s B=%-10s A%%=%5.1f B%%=%5.1f D%%=%5.1f  Acas=%4.1f Bcas=%4.1f  t=%4.1f'
@@ -51,6 +51,6 @@ if __name__ == '__main__':
     n = sys.argv[1] if len(sys.argv) > 1 else '16'
     runner = RUNNER.replace('__SIM__', repr(_SIM))
     for flag in ('0', '1'):
-        env = dict(os.environ, PC_INTENT_RESOLUTION=flag)
-        print(f"=== PC_INTENT_RESOLUTION={flag} ===", flush=True)
+        env = dict(os.environ, MB_INTENT_RESOLUTION=flag)
+        print(f"=== MB_INTENT_RESOLUTION={flag} ===", flush=True)
         subprocess.run([sys.executable, '-u', '-c', runner, n], env=env)

@@ -64,7 +64,7 @@ the calling chain through `systems/factions/sim/faction_action.py` and `engine/m
 | `shape_a`, `shape_b`, `anchor_map` | arg | caller-supplied deployment geometry | `systems/mass_battle/sim/orchestration.py:2364-2421 run_multi_turn_battle` |
 | `pairings`, `shapes_a`, `shapes_b` | arg | caller-supplied multi-unit roster | `systems/mass_battle/sim/orchestration.py:2565-2869 run_multi_unit_battle` |
 | `max_turns` / `max_battle_turns` | param (default) | function signature default | `systems/mass_battle/sim/orchestration.py:1749 run_battle`, `:2358 run_multi_turn_battle` |
-| engine mode toggles read from `os.environ` at import time (`PER_CELL`, `LANCHESTER_ENABLED`, `REFORM_CHECK_ENABLED`, `PC_RESERVE_COMMIT`, and dozens more) | flag | env var, defaulted | `systems/mass_battle/sim/config.py:332 PER_CELL`, `systems/mass_battle/sim/config.py:400 LANCHESTER_ENABLED`, `systems/mass_battle/sim/orchestration.py:294 REFORM_CHECK_ENABLED`, `systems/mass_battle/sim/config.py:248 PC_RESERVE_COMMIT` |
+| engine mode toggles read from `os.environ` at import time (`PER_CELL`, `LANCHESTER_ENABLED`, `REFORM_CHECK_ENABLED`, `MB_RESERVE_COMMIT`, and dozens more) | flag | env var, defaulted | `systems/mass_battle/sim/config.py:332 PER_CELL`, `systems/mass_battle/sim/config.py:400 LANCHESTER_ENABLED`, `systems/mass_battle/sim/orchestration.py:294 REFORM_CHECK_ENABLED`, `systems/mass_battle/sim/config.py:248 MB_RESERVE_COMMIT` |
 | `CASCADING_ENABLED` | flag | hardcoded module constant, not env-read (see §7) | `systems/mass_battle/sim/config.py:143 CASCADING_ENABLED` |
 
 ## 3. Flow
@@ -97,7 +97,7 @@ the return value is consumed):
 
 - **S1** `[gate]` `engine.resolve_battle(*args, kind=..., **kwargs)` routes to one of three orchestrators by `kind` — `'single'` → `run_battle`, `'multi'` → `run_multi_turn_battle`, `'multi_unit'` → `run_multi_unit_battle` — a pure pass-through router, byte-exact to calling the target directly. `systems/mass_battle/sim/engine.py:512-525 resolve_battle`
 - **S2** `orchestration.run_battle(unit_a, unit_b, max_turns)` — one engagement turn, phase-bounded by `TICKS_PER_PHASE`:
-  - **S2.1** `[gate]` `assert (not FIELD_MOVEMENT) or PC_NODE_COHESION` — invalid mode combination fails loudly. `systems/mass_battle/sim/orchestration.py:1758-1759`
+  - **S2.1** `[gate]` `assert (not FIELD_MOVEMENT) or MB_NODE_COHESION` — invalid mode combination fails loudly. `systems/mass_battle/sim/orchestration.py:1758-1759`
   - **S2.2** `_draw_friction_cev` drawn once per unit per battle (lazy, first-entry-only). `systems/mass_battle/sim/orchestration.py:1767-1768`
   - **S2.3** `[loop]` per tick `t` in `1..max_turns`: `[gate]` break if either unit routed. `systems/mass_battle/sim/orchestration.py:1777-1780`
   - **S2.4** `volley_phase(unit_a, unit_b)` — ranged damage accumulated. `systems/mass_battle/sim/orchestration.py:1564 volley_phase`
@@ -123,7 +123,7 @@ the return value is consumed):
   - **S3.2** `[gate]` break if either unit routed after the turn; else `between_turn_recovery` both units. `systems/mass_battle/sim/orchestration.py:2393-2398`
   - **S3.3** loop end: winner derived from routed flags; returns a result dict with per-turn `log`. `systems/mass_battle/sim/orchestration.py:2400-2414`
 - **S4** `orchestration.run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b, anchor_map, max_battle_turns)`:
-  - **S4.1** `[branch]` `[gate]` `PC_RESERVE_COMMIT`: pairs whose unit is in Reserve are benched out of `active_pairs` at start. `systems/mass_battle/sim/orchestration.py:2587-2591`
+  - **S4.1** `[branch]` `[gate]` `MB_RESERVE_COMMIT`: pairs whose unit is in Reserve are benched out of `active_pairs` at start. `systems/mass_battle/sim/orchestration.py:2587-2591`
   - **S4.2** `[loop]` per `battle_turn`: reserve-commit check (benched pairs re-activate at their commit turn). `systems/mass_battle/sim/orchestration.py:2606-2611`
   - **S4.3** pursuit-phase resolution for units already pursuing a routed enemy (`recall_check` gate, else `pursuit_damage`). `systems/mass_battle/sim/orchestration.py:2616-2651`
   - **S4.4** `[loop]` each active pair: `reset_positions` then `run_battle(ua, ub)`. `systems/mass_battle/sim/orchestration.py:2655-2670`

@@ -127,10 +127,38 @@ the game work. our design documents in .MD are reference and information only."*
 - **A design document may not be cited as the reason a behaviour is correct.** Cite it for intent,
   history and vocabulary. If canon and code disagree, decide and then CHANGE THE CODE — never declare
   the prose authoritative.
-- **A value the engine uses must live where code reads it** — a typed artifact under
+- **A FACT the engine uses must live where code reads it** — a typed artifact under
   `engine/engine_params/` behind an exporter, or a single Python owner. Constants still defined inside
   `systems/` are the migration backlog; for the live count and citation coverage run
   `python tools/export_sim_params.py --build` and read `engine/engine_params/sim_params.json`.
+
+  ⚠ **THIS SAID *"A VALUE"* UNTIL 2026-09-16 AND THE RULE WAS ALWAYS WIDER (RULED by Jordan).**
+  Verbatim: *"all definitions/terms/etc need to come from code, never prose"*, and *"all .md in
+  `systems` is to be used as reference only for design/coding work, never governance/infrastructure
+  work"*. A term, a roster, a closed set and a bound are facts exactly as a number is. **Four
+  clauses, and they are one rule seen from four sides:**
+  1. **A `.md` is NEVER the authored head of a fact code reads.** The head is YAML or JSON under
+     `references/`, or a single Python owner. Prose describes the fact; it does not hold it.
+  2. **`systems/**/*.md` is design intent ONLY** — never an input to a tool, an exporter, a gate or
+     a registry. A design document a program parses has stopped being reference.
+  3. **Edit the OWNER and re-derive; never hand-edit downstream, and never keep a second copy.**
+     §6 already says this for the port (*"a port never corrects its oracle in place"*); it is the
+     same rule wherever a fact is derived. When two live surfaces disagree, `engine/season/` decides
+     WHICH READING WINS and then that reading is written at the owner — priority is exercised by
+     editing the owner's row, not by holding a copy of it.
+  4. **Scoped to GAME facts.** `CLAUDE.md`, `CURRENT.md`, `HANDOFF.md` and
+     `references/restructure_ledger.md` are process surfaces a program legitimately reads; clause 2
+     does not reach them.
+
+  **§5, §6 and §8 are three instances of this, not three rules.** §5 is the chain that terminates at
+  the port, §6 is its direction of repair, §8 is the same claim about a RULE rather than a value.
+  ⚠ **And a fact whose chain you cannot name is either orphaned or hand-transcribed** — both are
+  live in this tree today, so the test earns its keep: `fac.intel` is declared with ruled bounds and
+  reachable by nothing, and §5 says of the port that every value crossing into Godot is
+  hand-transcribed. **NO TREE-WIDE GUARD IS LICENSED FOR THIS** (§0.1 pt 5): a checker over *"is
+  every fact single-owned"* has the owners themselves as its subject. What is licensed is the
+  exporter's `--check` per chain, the loader's refusal per data family, and reading the chain before
+  you delete or migrate anything.
 - **This does NOT demote `CLAUDE.md`, `CURRENT.md` or `HANDOFF.md`** — agent instruction and continuity,
   governing how a session works, not how the game resolves. Keep maintaining them.
 - **It does not license deleting design docs.** They stay as reference; what changes is what may be
@@ -208,6 +236,25 @@ experiment?). **Specificity about what to attack, plus an artifact proving it ha
 3. **Name the falsifier, or you have not attacked the result.** A result claim carries, in the same
    commit, the test that would have shown it wrong and that test's outcome. "Adversarially reviewed"
    without an artifact is unfalsifiable.
+
+   ⚠ **"RESULT CLAIM" IS WIDER THAN A NUMBER, AND THE NARROW READING IS WHERE THIS RULE KEPT
+   FAILING TO FIRE** (ED-IN-0228, 2026-09-16). A session applied this rule to its *measurements*
+   and exempted its statements *about the tree*, which do not feel like results: it reported a
+   mechanism absent that was live, a gate firing zero times that fired 1,104, an eligibility route
+   working that no verb row uses, and quoted a file in a dissolved tree. Each was verified — the
+   wrong half of itself. **THE CLAIM AND ITS SUPPORT ARE DIFFERENT OBJECTS; THE SUPPORT IS THE ONE
+   TO CHECK.** Three shapes, each with the observation that must come first:
+
+   | claiming | observe this first |
+   |---|---|
+   | **"X is absent / dead / never fires"** | RUN the thing that would show presence. An absence is the cheapest claim to make and the hardest to see wrong. |
+   | **"X works today"** | Open the CALL SITE, not the declaration. A roster existing is not a roster being used. |
+   | **"as `F` says at `:L`"** | Open `F` at `:L`. A citation you have not opened is not a citation. |
+
+   **NO GUARD MAY BE BUILT FOR THIS.** Its subject is a reader's discipline, which is precisely what
+   pt 5's predicate excludes; like §0.4, the enforcement is that you read it. It is also why this is
+   an amendment to an existing check rather than a sixth one — the rule was already here and its
+   trigger was too narrow, and answering that with more apparatus is §0.3's own failure mode.
 4. **A number without a control is not a measurement — in either direction.** Asymmetric skepticism is a
    bias, not a defence; absence of one failure mode is not presence of correctness.
 5. **Sweep pattern defects; fix one-off defects — but a guard must EARN its existence.** A pattern
@@ -387,7 +434,7 @@ and there is nothing left to resume from. There is no `deprecated/` tree — **r
 deleting it and writing a `FORK:` row** in `references/restructure_ledger.md`, which is where surfaces
 still naming paths under it resolve. Do not recreate the directory.
 
-⚠ **ONE EXCEPTION, RULED by Jordan 2026-09-16 (ED-IN-0229): `.designs/`, and QUARANTINE is not
+⚠ **ONE EXCEPTION, RULED by Jordan 2026-09-16 (ED-IN-0231): `.designs/`, and QUARANTINE is not
 retirement.** A retired thing is deleted and lives at a fork ref. A **quarantined** document is *kept,
 readable and resolvable* — it is moved out of the code trees and out of the default search path because
 an agent kept sweeping it up and reading it as canon. Jordan, verbatim: *"game code keeps getting
@@ -436,7 +483,7 @@ says where an old path went. Only what those cannot tell you:
   retained by ED-IN-0204 Decision 1: *"only the repository's systems for social contests, personal
   combat and mass battles to be retained"*. **One subsystem = one folder = one ID lane = one
   `CURRENT.md` row = one `HANDOFF_<LANE>.md`.** Each holds oracle scripts in `sim/`, imported as
-  `systems.<sub>.sim.*`. ⚠ **`systems/` HOLDS NO `.md` AT ALL AS OF 2026-09-16 (ED-IN-0229)** — the 226
+  `systems.<sub>.sim.*`. ⚠ **`systems/` HOLDS NO `.md` AT ALL AS OF 2026-09-16 (ED-IN-0231)** — the 226
   design documents that used to sit at each subsystem root, and latterly under `<sub>/reference/`, are
   quarantined in `.designs/systems/<sub>/` (§1). `tools/ci_design_prose_quarantine.py` is blocking, and
   the invariant is **zero, not a ratchet**. The subsystems superseded by `engine/season/` are kept for
@@ -558,7 +605,7 @@ numbers from it**). Everything removed is at its fork ref; every old path resolv
 
 ## 5. Data → Godot pipeline
 
-**Rule: never take a number for the engine or the port out of prose.** A value the engine uses lives in a
+**Rule: never take a number for the engine or the port out of prose.** *(§0.05, on the one chain that terminates at the port.)* A value the engine uses lives in a
 typed artifact under `engine/engine_params/` behind an exporter with a blocking `--check` round-trip, or
 in a single Python owner (§0.05). `engine/engine_params/params_tables.yaml` is a frozen,
 no-longer-regenerable capture of prose tables — **reference**, and it can hold pre-ruling values: its
@@ -575,7 +622,7 @@ today, the `tools/export_*.py` exporters' `--check` modes for the round-trip.
 
 ## 6. Godot port pipeline
 
-**Rule: a port never corrects its oracle in place (ED-1050).** If port and Python oracle disagree, fix
+**Rule: a port never corrects its oracle in place (ED-1050).** *(§0.05 clause 3, at the port: edit the owner and re-derive.)* If port and Python oracle disagree, fix
 canon via the ledger and re-export — never hand-edit a value into the `.gd` side. And `godot/skeleton/`
 covers a single module, does not compile, and `extends` a spine defined nowhere in the corpus: **never
 present it as a runnable head-start.**
@@ -602,7 +649,7 @@ construction and running it is a fake control. Ledger provenance is advisory —
 fields are unchecked, none pin a generating SHA — so verify a cited `PP-NNN`/`ED-NNN` by hand against its
 `canonical_source`.
 
-**Pointer:** `.designs/engine/sim_reference_README.md` orients the reference model (quarantined 2026-09-16, ED-IN-0229 — read it for orientation, never as authority); `engine/tests/` is CI job
+**Pointer:** `.designs/engine/sim_reference_README.md` orients the reference model (quarantined 2026-09-16, ED-IN-0231 — read it for orientation, never as authority); `engine/tests/` is CI job
 `sim-regression`. The reference is partly stubbed (`NotImplementedError`) and its own README's "all
 modules are stubs" line is stale — grep for the stubs rather than believing either claim.
 
@@ -618,13 +665,14 @@ modules are stubs" line is stale — grep for the stubs rather than believing ei
 - **Local tier — advisory accelerators.** One-time per clone: `git config core.hooksPath .githooks`.
   `.githooks/pre-commit` runs the SAME validators on staged files via
   `python tools/valoria_local.py --staged`. `.claude/settings.json` wires two PreToolUse hooks — the
-  naming nudge (`tools/hook_naming_guard.py`) on writes and a search-sweep guard
+  naming guard (`tools/hook_naming_guard.py`, which `sys.exit(2)`s — it BLOCKS, it does not
+  suggest; this read *nudge* until 2026-09-15 and understated a live gate) on writes and a search-sweep guard
   (`tools/hook_md_sweep_guard.py`) on Grep/Glob; SessionStart and Stop are empty arrays, deliberately
   (§0.3). Not every blocking CI gate runs locally — `tools/compliance_check.py`'s size caps are CI-side,
   so **local-green ≠ compliance-green**. `git commit --no-verify` bypasses local; CI still enforces.
 
 **Intended invariant: every rule lives once, in `tools/`, called by both CI and local hooks. Never
-re-implement a rule.** Known live violations, treated as bugs rather than propagated:
+re-implement a rule.** *(§0.05, with a RULE as the fact rather than a value.)* Known live violations, treated as bugs rather than propagated:
 
 - **`references/restructure_ledger.md` has more than one parser.** `tools/pathres.py` is the intended
   owner; `tools/broken_dependency_checker.py` and two `skills/valoria-vector-audit/` modules parse it

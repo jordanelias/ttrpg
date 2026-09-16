@@ -26,7 +26,7 @@ ref `cadf9c7`, not here.
 **The flip below was made and then withdrawn the same day. Do not cite its numbers.**
 
 `between_turn_recovery` and `reset_morale_between_battles` both write the morale **scalar**, which
-`eff_morale` stops reading the moment cells are seeded — so with `PC_CELL_MORALE` ON they are **silent
+`eff_morale` stops reading the moment cells are seeded — so with `MB_CELL_MORALE` ON they are **silent
 no-ops**. Verified directly: knock a body's cells to 2.0, call both, and it is still at 2.0. The gauge's
 multi mode runs multi-turn battles and resets morale between them, so **the ON arm fought with morale
 that never recovered and the OFF arm's did.** "The loser breaks earlier" is exactly what a body that
@@ -64,7 +64,7 @@ work, independent of the flip):
 **Blocker for re-flipping** is not another gauge run — it is the scalar-write sweep. Known sites:
 `between_turn_recovery` (unit + atom), `reset_morale_between_battles` (unit + atom), the rout write
 `u.morale = 0.0`, `Unit.erode_morale`, and `core/state.py`'s `atom.morale = atom.eff_morale`.
-## 2026-07-25 — ED-MB-0042 (RETRACTED, see above): PC_CELL_MORALE flipped ON (archived — condensed)
+## 2026-07-25 — ED-MB-0042 (RETRACTED, see above): MB_CELL_MORALE flipped ON (archived — condensed)
 
 The same-day flip, retracted hours later — its ON/OFF arms were not comparable (scalar morale
 writes the cell aggregate shadows). Do not cite its numbers. **Full detail:
@@ -102,13 +102,13 @@ under the register size cap, ED-MB-0053 — nothing dropped, only relocated).
 Cells carry morale; the subunit's morale is the troop-weighted mean of its live cells (derived, not
 stored); the aggregate pulls its own cells back at a discipline-gated rate. **Full detail:
 `tests/coverage_matrix_archive_part2.md`** (moved 2026-07-29, ED-MB-0054).
-## 2026-07-25 — ED-MB-0041: PC_STOCHASTIC_ROUT default flipped ON; contagion magnitude deliberately held
+## 2026-07-25 — ED-MB-0041: MB_STOCHASTIC_ROUT default flipped ON; contagion magnitude deliberately held
 
 **Flipped, on the casualty scoreboard's evidence.** Loser 61-87% → 29-41%, winner 7.8-38% → 3.3-17%,
 casualty realism 0/20 → 2/20 — while **win-share drops 10/20 → 7/20**. The count going down and the flip
 still being right is the whole case for the second scoreboard. The reachability sweep had tested this
 same flag hours earlier, found "passes C4, fails H9", and filed it as a wash; that was the wrong
-instrument. Reversible with `PC_STOCHASTIC_ROUT=0`. Both grid goldens re-recorded (the break band
+instrument. Reversible with `MB_STOCHASTIC_ROUT=0`. Both grid goldens re-recorded (the break band
 changes *when* a subunit routs, so the whole downstream casualty trajectory moves).
 
 **`ROUT_CASCADE_FRAC` left inert at 1.0** despite measuring better: ⅔-of-line gives casualty 5/20 (and
@@ -126,10 +126,10 @@ redefines what a "section" is, so any value chosen now is fitted to a granularit
   1, so no threshold below 1.0 can fire. Inert by construction, not ineffective. An army of one subunit
   has no line to come apart, which is the sharpest argument yet for the per-cell directive: the residual
   30-33% sits on exactly those rows.
-## 2026-07-25 — ED-MB-0041: the new instrument immediately overturns a default (PC_STOCHASTIC_ROUT)
+## 2026-07-25 — ED-MB-0041: the new instrument immediately overturns a default (MB_STOCHASTIC_ROUT)
 
 **The casualty scoreboard's first act was to show that the win-share gauge has been penalising the
-change that makes the engine historically correct.** `PC_STOCHASTIC_ROUT` implements the du Picq
+change that makes the engine historically correct.** `MB_STOCHASTIC_ROUT` implements the du Picq
 15-30% break band (ED-MB-0031) and ships **OFF**; its own code comment says that without it "units
 grind to ~58% before breaking". Measured across all 20 rows:
 
@@ -142,7 +142,7 @@ grind to ~58% before breaking". Measured across all 20 rows:
 
 One flag moves the loser from ~84% to ~31% — from annihilation to a few points outside the band — and
 the win-share gauge scores it as a **three-row regression**. The reachability sweep had already found
-`PC_STOCHASTIC_ROUT=1` "passes C4 and fails H9" and recorded it as a wash; that judgement was made on
+`MB_STOCHASTIC_ROUT=1` "passes C4 and fails H9" and recorded it as a wash; that judgement was made on
 the wrong instrument.
 
 **Root cause of the residual, traced.** `Unit.derive_rout` breaks the army only when **every** subunit
@@ -227,11 +227,11 @@ the register size cap, ED-MB-0048 — nothing was dropped, only relocated).
 - **Reach gate silently disabled the braced-wall repel (biggest live defect).** `orchestration.py`'s comment
   claimed *"TROOP_TYPE_REACH is deliberately empty → this half of the gate is a no-op"*. It has **12 entries**
   (ED-MB-0014). The gate needs `reach_for(defender) >= reach_for(charger)`; `infantry 0.1 < cavalry 0.2`, so
-  `PC_CHARGE_RECOIL` **never fired** for a braced generic-infantry wall — switching off the
+  `MB_CHARGE_RECOIL` **never fired** for a braced generic-infantry wall — switching off the
   Courtrai/Bannockburn/Waterloo anchor and causing C2/C6 NOT-REPELLED. Comment corrected; C2/C6 defenders are
   now **pole-armed** (a brace IS a hedge of set poles; pike 0.3 ≥ 0.2 passes).
   **Measured honestly: 100.0 → 95.0 rawA.** The gate defect is confirmed and fixed, but unblocking it is
-  **NOT sufficient** — the recoil now fires and is simply too weak (`PC_CHARGE_RECOIL=6 × SIGMA_PER_D=0.2`).
+  **NOT sufficient** — the recoil now fires and is simply too weak (`MB_CHARGE_RECOIL=6 × SIGMA_PER_D=0.2`).
   The subagent's counterfactual of 0.0% did NOT reproduce at n=20. Residual gap is a magnitude problem.
 - **C2 ≡ C6 duplicate broken.** They were bit-identical inputs with a fixed seed counted as two passes. C2 is
   now a genuinely DEEP block (3×6), C6 genuinely SHALLOW (6×1), both pole-armed.
@@ -242,7 +242,7 @@ the register size cap, ED-MB-0048 — nothing was dropped, only relocated).
   to pass was to call a value canonical — a direct incentive for the false tags the audit found. It now also
   accepts `[GROUNDED: ]`, `[JUSTIFIED: ]`, `[DECLARED-DIVERGENCE: ]`, `[CALIBRATED-DEBT: ]` with equal force.
 - **False citations corrected** (verified by hand): the 45° octagon boundary cited to `mass_battle_v30.md`
-  (which contains **zero** occurrences of "octagon"); `PC_CAVALRY_SPEED_MULT` cited to a §A.7 that has no
+  (which contains **zero** occurrences of "octagon"); `MB_CAVALRY_SPEED_MULT` cited to a §A.7 that has no
   speed ratios; `K_LINEAR`/`LANCHESTER_STRENGTH_REF` cited to a doc whose §6 explicitly declines to supply
   magnitudes.
 - **Declared divergences** (Jordan 2026-07-24: canon may be broken for tuning — it must be *visible*):
@@ -258,7 +258,7 @@ the register size cap, ED-MB-0048 — nothing was dropped, only relocated).
   shell-inward, and a monolith was near-unbreakable. **This is the upstream cause of BOTH the ED-MB-0038
   granularity workaround and the ED-MB-0039 "engine gap".**
 - **FIX:** `_octagon_cell_mods` = the single owner of the per-cell arc; `_octagon_dmg_mod` = its mean
-  (byte-identical). Gated **`PC_CELL_DAMAGE`** allocates each pair's casualties to defender **cells** by
+  (byte-identical). Gated **`MB_CELL_DAMAGE`** allocates each pair's casualties to defender **cells** by
   (troops × that cell's own facing mult) via `distribute_casualties_cellwise` (overflow-spilling, cells==hp
   holds under annihilation). Pair total unchanged — only placement. Volley keeps the aggregate spread.
 - **Measured:** infantry envelop side-swing **41.0→15.5pp**, side-symmetric avg **43.8→57.8%** (into the
@@ -311,7 +311,7 @@ wiring, and superseded dead-mechanic constant removal.
   rout-morale-discipline lifecycle (ED-1016-1019); a string of bugfixes/wiring closeouts (ED-1020-1027,
   1032) culminating in the formation-drift cell-orphaning fix (ED-1032, first post-baseline digest
   change, Jordan-approved); PP-683 intentionally left unwired (would double-count encirclement lethality
-  already delivered via PC_ENVELOP_SHOCK + Lanchester overlap). Full detail: tests/coverage_matrix_archive.md.
+  already delivered via MB_ENVELOP_SHOCK + Lanchester overlap). Full detail: tests/coverage_matrix_archive.md.
 ## 2026-06-30/07-01 — Re-architecture Stages 1-2 + coordinate-migration DEBT-0/S2/C0-P (archived — condensed)
 - Provenance registry seed (ED-1043); bat.py byte-exact digest gate committed (baseline unit=7be8499b/
   cell=1c5b2851); Stage 1a-1g wrapper/core split complete (byte-exact); Stage 2 standalone equipment/

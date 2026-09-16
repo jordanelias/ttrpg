@@ -18,9 +18,17 @@ same shape as its four sibling exports: the markdown/YAML stays the AUTHORED, re
 code reads the cooked artifact. Emitting a generated `.py` would put executable code in a directory
 whose whole contract is "typed data the Godot port ingests", and would give the port nothing.
 
-WHAT IT USED TO RECORD, AND WHY THAT SECTION IS NOW EMPTY. This tool does not resolve roster
-disagreements; it RECORDS them in its `unimplemented` block, because each needs a ruling and not a
-value edit. It carried two, and BOTH ARE NOW CLOSED:
+WHAT THE `unimplemented` BLOCK RECORDS. This tool does not resolve roster disagreements; it
+RECORDS them in its `unimplemented` block, because each needs a ruling and not a value edit.
+
+⚠ IT CARRIES ONE AGAIN AS OF 2026-09-16 — `fac_intel_multiplier`. The two below closed and the
+block sat empty, and this docstring read "WHY THAT SECTION IS NOW EMPTY" while something WAS
+outstanding: `fac.intel` is declared with RULED bounds and is unreachable, because
+`engine.autoload.game_state.MULTS` carries no `intel` key. It was visible only in
+`engine/substrate/descriptors.py`'s docstring, which no instrument reads. The row states what it
+needs; see the block itself.
+
+THE TWO IT USED TO CARRY, BOTH NOW CLOSED:
 
   * THE 5-vs-6 GAP — `faction_stats` declared FIVE keys while the Faction dataclass implemented SIX
     fields, with `L` written by 20 of `.adjust()`'s 31 non-test call sites and declared NOWHERE.
@@ -33,7 +41,9 @@ value edit. It carried two, and BOTH ARE NOW CLOSED:
 
 An EMPTY `unimplemented` block is the correct state when nothing is outstanding, and it is not a
 licence to keep it empty: `tests/valoria/test_descriptors_runtime.py` pins the exact expected set,
-so a silent addition fails as loudly as an unauthorised deletion.
+so a silent addition fails as loudly as an unauthorised deletion. ⚠ AND THE EMPTY STATE IS NOT
+EVIDENCE THE REGISTER IS COMPLETE — it was empty for three weeks while `fac.intel` was
+outstanding. The pin catches what enters this block; nothing catches what never reaches it.
 
 Usage:
     python3 tools/export_descriptors.py           # write engine/engine_params/descriptors.json
@@ -124,6 +134,30 @@ def _conviction_roster(reg):
     return {'source': block.get('source'), 'count': len(names), 'names': names}
 
 
+def _axis_roster(reg):
+    """The 4 ethical axes, from the registry. The SOLE machine-readable statement of the name set.
+
+    Validated exactly as `_conviction_roster` is, and for the same reason one level up: this set
+    is what `engine/substrate/keys.py` validates a Key's axis names against AND what
+    `engine/season/decision/choose.py` sums a candidate's score over. Before 2026-09-14 each held
+    its own literal and nothing compared them, so the two could disagree in silence.
+    """
+    block = reg.get('axis_roster') or {}
+    names = [n for n in (block.get('names') or []) if isinstance(n, str)]
+    if not names:
+        raise SystemExit('descriptor_registry.yaml: axis_roster.names is missing or empty. '
+                         'It is the single owner of the ethical-axis set; the Key substrate and '
+                         'the season engine both read it.')
+    declared = block.get('count')
+    if declared is not None and int(declared) != len(names):
+        raise SystemExit(f'descriptor_registry.yaml: axis_roster declares count={declared} '
+                         f'but lists {len(names)} names.')
+    if len(set(names)) != len(names):
+        raise SystemExit('descriptor_registry.yaml: axis_roster.names contains duplicates.')
+    return {'source': block.get('source'), 'count': len(names),
+            'scale': block.get('scale'), 'names': names}
+
+
 def build():
     reg = ci_common.load_yaml(SRC, default=None)
     if not reg:
@@ -167,6 +201,11 @@ def build():
         # own roster in the absence of one code could read — and the disagreement was costing a
         # ratified mechanic (a Close-Knot-break Scar that silently never landed).
         'conviction_roster': _conviction_roster(reg),
+        # THE ETHICAL-AXIS ROSTER, centralized 2026-09-14 (ED-IN-0230). Same move as the line
+        # above and after the same class of defect: `keys.py::AXES` and `rosters.yaml:
+        # conviction_axes` each held a literal and NOTHING compared them, while the roster's own
+        # note claimed a refusal that did not exist.
+        'axis_roster': _axis_roster(reg),
         'faction_stats': faction,
         'faction_field_map': FACTION_KEY_TO_FIELD,
         'settlement_stats': _section(reg, 'settlement_stats'),
@@ -181,7 +220,33 @@ def build():
         # An empty register is the correct state when nothing is outstanding. It is NOT a licence to
         # keep it empty: `tests/valoria/test_descriptors_runtime.py` pins the exact expected set, so
         # both an unauthorised deletion AND a silent addition fail there.
+        # ⚠ RE-OPENED 2026-09-16 with `fac_intel_multiplier`. The block was empty and the
+        #   comment above says an empty register is the correct state when nothing is
+        #   outstanding -- something was outstanding and had no row. `engine/substrate/
+        #   descriptors.py` states it in its own docstring: "FIVE OF THE SIX FLOORS ARE
+        #   REACHABLE. `fac.intel` is not: `MULTS` carries no `intel` key, so
+        #   `adjust('intel', ...)` raises `KeyError` before any bound is consulted." The
+        #   registry declares fac.intel floor 0 ceiling 7 and those bounds are RULED
+        #   (Jordan 2026-08-23, all six faction stats), so the row is not deletable -- and
+        #   the multiplier that would make it reachable is a design number nobody has
+        #   stated, so it is not inventable either. That is exactly what this block is for:
+        #   a ratified decision the executable model has not implemented, naming what it
+        #   needs. It was visible only in a docstring, which no instrument reads.
         'unimplemented': {
+            'fac_intel_multiplier': {
+                'needs':
+                    "the per-step multiplier for `intel` in engine.autoload.game_state.MULTS. "
+                    "It is a design number and must be authored, not inferred from a sibling "
+                    "stat -- the five that exist were authored, not derived.",
+                'why_it_matters':
+                    "fac.intel is DECLARED (floor 0, ceiling 7) and those bounds are RULED "
+                    "(Jordan 2026-08-23, all six faction stats), so the row cannot be deleted. "
+                    "It is also UNREACHABLE: MULTS carries no 'intel' key, so "
+                    "Faction.adjust('intel', ...) raises KeyError before faction_bounds is "
+                    "consulted. One of six declared stats cannot be moved, and the registry "
+                    "says nothing about it -- the gap was visible only in "
+                    "engine/substrate/descriptors.py's docstring, which no instrument reads.",
+            },
         },
     }
 

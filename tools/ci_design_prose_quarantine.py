@@ -7,7 +7,7 @@ RULE
     with one exemption: `engine/season/**`, which is live game code and
     whose run reports and case briefs belong beside it.
 
-WHY THIS EXISTS (2026-09-16, ED-IN-0229 — Jordan)
+WHY THIS EXISTS (2026-09-16, ED-IN-0231 — Jordan)
     Verbatim: *"game code keeps getting poisoned by these stray .md files that
     you are unable to consistently avoid as you are AI, so we have to quarantine
     them somehow so you stop pulling them into your sweeps or read them as
