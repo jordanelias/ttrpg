@@ -433,7 +433,7 @@ def check_dead_maintainers(drift):
         base = os.path.join(REPO_ROOT, root)
         for dirpath, dirnames, filenames in os.walk(base):
             rel_dir = os.path.relpath(dirpath, REPO_ROOT).replace(os.sep, '/')
-            if any(part in ('archives', 'deprecated', 'audit') for part in rel_dir.split('/')):
+            if any(part in ('archives', 'deprecated', '.audit') for part in rel_dir.split('/')):
                 dirnames[:] = []
                 continue
             for name in filenames:

@@ -463,7 +463,7 @@ def scan_unregistered_canonical(root, registered_docs):
     for dirpath, dirnames, filenames in os.walk(designs_root):
         rel_dir = os.path.relpath(dirpath, root).replace(os.sep, '/')
         if rel_dir == 'designs':
-            dirnames[:] = [d for d in dirnames if d != 'audit']
+            dirnames[:] = [d for d in dirnames if d != '.audit']
         for fn in sorted(filenames):
             if not fn.endswith('.md'):
                 continue

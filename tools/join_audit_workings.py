@@ -166,7 +166,7 @@ def verify(unit: str, against_sources: bool = True, include_top: bool = False) -
 
 def joined_units() -> list[str]:
     out = []
-    for dirpath, _dirnames, filenames in os.walk(os.path.join(REPO, 'audit')):
+    for dirpath, _dirnames, filenames in os.walk(os.path.join(REPO, '.audit')):
         if JOINED_NAME in filenames:
             out.append(os.path.relpath(dirpath, REPO).replace(os.sep, '/'))
     return sorted(out)
@@ -187,7 +187,7 @@ def main(argv=None):
     if args.list:
         import collections
         counts = collections.Counter()
-        for dirpath, _d, filenames in os.walk(os.path.join(REPO, 'audit')):
+        for dirpath, _d, filenames in os.walk(os.path.join(REPO, '.audit')):
             rel = os.path.relpath(dirpath, REPO).replace(os.sep, '/')
             parts = rel.split('/')
             if len(parts) > 2:

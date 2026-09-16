@@ -86,7 +86,7 @@ mechanics).
   Preserving a dead question is not conservatism; it is how the queue formed.
 
   Why a gate rather than a ban: rows are a real persistence channel across a session boundary, and
-  this repo has no context between sessions. This deletes `audit/` **as a category, not as a cleanup**.
+  this repo has no context between sessions. This deletes `.audit/` **as a category, not as a cleanup**.
   Claim no more than it buys — **the automated loop's gain is below 1; the agent-mediated loop is
   mitigated, not structurally bounded**, since prose channels depend on a session choosing to comply and
   `workplans/` entries and standing orders inside a `skills/<name>/SKILL.md` bypass this gate entirely.
@@ -518,8 +518,16 @@ says where an old path went. Only what those cannot tell you:
 - **`tests/`** — `tests/valoria/` is the pytest unit suite, the only executable tests here. It also holds
   narrative `.md` that is **prose, not executable spec** — do not mine it for behavioural contracts.
   `tests/sim/` is unrelated to the retired `sim/` package.
-- **`audit/`** — the surviving audit corpus. §0 forbids the adversarial pass from creating documents,
-  retiring this **as a category**: do not add to it.
+- **`.audit/`** — the surviving audit corpus, and **HIDDEN since 2026-09-16 (ED-IN-0231, RULED by
+  Jordan)** for the same reason and by the same mechanism as `.designs/` (§1): ripgrep and
+  `glob.glob` skip a dot-directory, so a session hunting a term stops raking in 121 historical audit
+  reports. It was renamed from `audit/`, which is a **rename, not a mirror** — `.audit/<x>` where
+  `.designs/` prepends — and `tools/ci_claim_provenance_check.py`'s `QUARANTINE_MIRRORS` is the one
+  place that difference is written down. §0 forbids the adversarial pass from creating documents,
+  retiring this **as a category**: do not add to it. ⚠ **It is NOT inert and NOT prose-only:** 230
+  files, of which 121 are `.md`, 45 `.py` and 60 `.json`, and `tools/gen_sigma_parity_goldens.py`
+  reads `engine.py` under it to regenerate a golden a blocking CI test asserts on. Hidden from
+  sweeps is not hidden from code.
 - **`godot/`** — see §6. **`workplans/`** — master workplan plus the hand-edited board (§0.2).
   **`proposals/`** — unratified proposals, surfaced BY LOCATION.
 

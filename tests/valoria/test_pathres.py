@@ -39,10 +39,17 @@ def test_a_tree_name_inside_a_longer_word_is_not_a_path_token():
     `skills/valoria-vector-audit/scripts/vector_audit.py` contains the letters `audit/scripts/`.
     An unanchored scan for `audit/…` matched inside it and reported a directory that does not
     exist as a finding. The left lookbehind is the whole fix.
+
+    ⚠ THIS GUARD PROVES LESS THAN IT DID (ED-IN-0231, 2026-09-16). The corpus was renamed
+    `audit/` -> `.audit/`, and `vector-audit/scripts` contains no `.audit` substring, so the
+    original over-match is now impossible by spelling rather than by the anchor. The anchor is
+    still what makes it impossible for any FUTURE root that does collide, which is why this stays
+    — but a green here no longer demonstrates the 2026 defect is fixed. Said out loud rather than
+    left to look like undiminished coverage.
     """
     text = 'see skills/valoria-vector-audit/scripts/vector_audit.py for the run'
     refs = [r.raw for r in pathres.iter_path_refs(text)]
-    assert not any(r.startswith('audit/') for r in refs), (
+    assert not any(r.startswith('.audit/') for r in refs), (
         f'a phantom audit/ token was extracted from a hyphenated word: {refs}')
     assert 'skills/valoria-vector-audit/scripts/vector_audit.py' in refs, \
         'the real reference on that line was lost — the anchor is too strong'
@@ -50,8 +57,8 @@ def test_a_tree_name_inside_a_longer_word_is_not_a_path_token():
 
 def test_a_real_reference_is_still_extracted():
     """Anti-vacuity: an anchor that rejects everything would pass the test above."""
-    refs = [r.raw for r in pathres.iter_path_refs('reads audit/2026-06-03-x/engine.py at boot')]
-    assert 'audit/2026-06-03-x/engine.py' in refs
+    refs = [r.raw for r in pathres.iter_path_refs('reads .audit/2026-06-03-x/engine.py at boot')]
+    assert '.audit/2026-06-03-x/engine.py' in refs
 
 
 def test_a_glob_is_captured_whole():
@@ -67,15 +74,15 @@ def test_a_glob_is_captured_whole():
 def test_a_constructed_path_is_reconstructed():
     """THE ED-IN-0128 DEFECT, verbatim: the parity-oracle load that no substring scan can see."""
     src = ("import os\n"
-           "P = os.path.join(REPO_ROOT, 'audit', '2026-06-03-contest-groundup', 'engine.py')\n")
-    assert 'audit/2026-06-03-contest-groundup/engine.py' in pathres.py_joined_paths(src)
-    assert 'audit/' not in src, 'the fixture must not contain the literal — else it proves nothing'
+           "P = os.path.join(REPO_ROOT, '.audit', '2026-06-03-contest-groundup', 'engine.py')\n")
+    assert '.audit/2026-06-03-contest-groundup/engine.py' in pathres.py_joined_paths(src)
+    assert '.audit/' not in src, 'the fixture must not contain the literal — else it proves nothing'
 
 
 def test_a_non_constant_segment_is_skipped_not_guessed():
     """Guessing a variable's value is the fabrication this repo forbids. A shorter path that still
     matches on its root is the correct degradation."""
-    src = "import os\nP = os.path.join(REPO, 'audit', session_name, 'engine.py')\n"
+    src = "import os\nP = os.path.join(REPO, '.audit', session_name, 'engine.py')\n"
     got = pathres.py_joined_paths(src)
     assert not any('session_name' in g for g in got), f'a variable name was baked into a path: {got}'
 
@@ -166,7 +173,7 @@ def test_same_file_resolves_both_sides():
     ("open('references/x.yaml', 'w')", ('references/x.yaml', 'write')),
     ("open('references/x.yaml', 'a')", ('references/x.yaml', 'write')),
     ("open('references/x.yaml', mode='w')", ('references/x.yaml', 'write')),
-    ("import glob\nglob.glob('audit/**/*.md')", ('audit/**/*.md', 'scan')),
+    ("import glob\nglob.glob('.audit/**/*.md')", ('.audit/**/*.md', 'scan')),
     ("import os\nos.remove('registers/old.jsonl')", ('registers/old.jsonl', 'delete')),
 ])
 def test_io_mode_is_classified(src, expected):

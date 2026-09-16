@@ -90,7 +90,7 @@ CARRY = [
 # ── LEAVE: (path, why) — stated, because a silent omission is indistinguishable from a mistake ──
 LEAVE = [
     ("registers/", "editorial ledgers, patch register, handoffs — process, not game"),
-    ("audit/", "the audit corpus; cite back by repo@SHA"),
+    (".audit/", "the audit corpus; cite back by repo@SHA"),
     ("arcs/", "generated narrative content"),
     ("workplans/", "the progress board"),
     ("dashboard/", "the published status site"),

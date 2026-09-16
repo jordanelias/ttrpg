@@ -99,7 +99,7 @@ def build() -> dict:
         sys.path.insert(0, m1_dir)
     m1 = _load_by_path('_m1_oracle_ref', os.path.join(m1_dir, 'm1_dice_sigma_core.py'))
     gu = _load_by_path('_groundup_oracle_ref',
-                       os.path.join(REPO_ROOT, 'audit', '2026-06-03-contest-groundup', 'engine.py'))
+                       os.path.join(REPO_ROOT, '.audit', '2026-06-03-contest-groundup', 'engine.py'))
 
     rows: list[dict] = []
 
@@ -149,7 +149,7 @@ def build() -> dict:
         "subject": "engine/autoload/sigma_leverage.py",
         "oracles": {
             "m1": "tests/sim/v32-combat-balance/m1_dice_sigma_core.py",
-            "groundup": "audit/2026-06-03-contest-groundup/engine.py",
+            "groundup": ".audit/2026-06-03-contest-groundup/engine.py",
         },
         "note": ("Frozen expected values captured from the two reference implementations. "
                  "The oracles stay in the source repo; this table travels with engine/. "

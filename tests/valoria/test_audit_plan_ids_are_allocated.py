@@ -61,7 +61,7 @@ RESERVATIONS = os.path.join(REPO, 'references', 'id_reservations.yaml')
 # floors below exist to catch — the `## Date:` count fell from 40+ to 32 the moment the files
 # moved, and without this the guard would have gone on reporting clean over a corpus it no longer
 # reached. The prose is hidden from agent sweeps, never from the audits that keep its IDs honest.
-DOC_ROOTS = ('audit', 'proposals', 'workplans', 'godot', 'registers/handoffs',
+DOC_ROOTS = ('.audit', 'proposals', 'workplans', 'godot', 'registers/handoffs',
              'canon', 'systems', '.designs', 'references')
 
 # HEADER_LINES was 8 and that MISSED THE PLAN OF RECORD (ED-IN-0177, adversarial review).
@@ -247,7 +247,7 @@ def test_a_gap_id_is_reported_even_though_it_is_below_next_free():
 
 def test_the_plan_of_record_is_actually_in_scope():
     """HEADER_LINES=8 covered ZERO of this document's id claims. Pin that it is now reachable."""
-    rel = 'audit/2026-08-11-code-leanness/01_plan.md'
+    rel = '.audit/2026-08-11-code-leanness/01_plan.md'
     text = open(os.path.join(REPO, rel), encoding='utf-8').read()
     head = ''.join(text.splitlines(keepends=True)[:HEADER_LINES])
     assert DATE_HEADER_RE.search(head), (

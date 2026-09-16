@@ -59,10 +59,32 @@ SPEC = os.path.join(ROOT, '.designs', 'systems', '_architecture', 'reference', '
 # chase a move is how a "historical record" stops being one. The reader resolves instead.
 ARCHIVE = '.designs'
 
+# The two hidden quarantine trees, as (old_prefix, new_prefix). THEY HAVE DIFFERENT SHAPES:
+# `.designs/` PREPENDS to the original path (documents gathered from several trees), while
+# `.audit/` REPLACES a prefix (that tree was renamed whole). Spelled the same way in
+# `tools/ci_claim_provenance_check.py`; a single "prepend" rule silently yields `.audit/audit/x`,
+# which never exists, so every affected anchor reads as a dead file while looking handled.
+QUARANTINE_MIRRORS = (('', '.designs/'), ('audit/', '.audit/'))
+
 
 def archived(relpath):
-    """Where a path named INSIDE an archived document actually lives now."""
-    return relpath if relpath.startswith(ARCHIVE + '/') else os.path.join(ARCHIVE, relpath)
+    """Where a path named INSIDE an archived document actually lives now.
+
+    Returns the candidate that EXISTS; falling back to the `.designs/` form so a genuinely
+    missing file still produces a readable failure rather than the original path.
+    """
+    if relpath.startswith(('.designs/', '.audit/')):
+        return relpath
+    fallback = None
+    for old, new in QUARANTINE_MIRRORS:
+        if not relpath.startswith(old):
+            continue
+        cand = new + relpath[len(old):]
+        if fallback is None:
+            fallback = cand
+        if os.path.isfile(os.path.join(ROOT, cand)):
+            return cand
+    return fallback if fallback is not None else relpath
 
 # The format spec's §2 section contract, in order. A skeleton that drops or reorders one of
 # these has diverged in shape, which is the failure the doctrine calls shape divergence.

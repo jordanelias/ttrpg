@@ -40,8 +40,11 @@ import pytest
 _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
+# ED-IN-0231 (2026-09-16): the corpus was renamed `audit/` -> `.audit/` so ripgrep skips it. This
+# is a sys.path INSERT, i.e. a live import seam into that tree — more evidence that `.audit/` is
+# not an inert prose archive. Hidden from sweeps, still imported by code.
 _AUDIT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..',
-                                      'audit', '2026-07-22-mass-battle-stress-test'))
+                                      '.audit', '2026-07-22-mass-battle-stress-test'))
 if _AUDIT not in sys.path:
     sys.path.insert(0, _AUDIT)
 

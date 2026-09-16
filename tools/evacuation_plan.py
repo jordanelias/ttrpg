@@ -76,7 +76,7 @@ GENERATED_EXT = ('.png', '.jpg', '.jpeg', '.gif', '.svg', '.pdf', '.html')
 AUDIT_KEEP_OVERRIDE = {
     # Jordan, 2026-08-04: "emergent narrative to be kept but joined appropriately". 46 .md, 175 IN
     # citations, design by subject -- the exact over-capture flagged before the lane rule was ruled.
-    'audit/2026-07-05-emergent-narrative-engine',
+    '.audit/2026-07-05-emergent-narrative-engine',
 }
 
 # proposals/ is per-file: some are load-bearing on kept code, most are not (ED-IN-0127 §6).
@@ -106,7 +106,7 @@ PROPOSALS_KEEP = {
 # Their RENDERED OUTPUT does not travel: R-AUDIT-GEN evacuates it, and it regenerates from the
 # relocated source. (matcher(rel) -> bool, destination-dir, rule-id, reason)
 RELOCATE = [
-    (lambda p: p.startswith('audit/2026-07-29-scenario-visualization/') and p.endswith('.py'),
+    (lambda p: p.startswith('.audit/2026-07-29-scenario-visualization/') and p.endswith('.py'),
      'systems/mass_battle/workbench/', 'R-REL-MBVIZ',
      'MB scenario visualisation + co-location measurement -- subsystem instruments, not audit records'),
     (lambda p: p.startswith('research/diagrams/mass_battle_formations/') and p.endswith('.py'),
@@ -122,7 +122,7 @@ RELOCATE = [
     # frozen reference implementations in one place beside the code they validate.
     # EXECUTION NOTE: the move requires updating gen_sigma_parity_goldens.py's load path in the
     # same commit, then regenerating the golden and confirming it is byte-identical.
-    (lambda p: p == 'audit/2026-06-03-contest-groundup/engine.py',
+    (lambda p: p == '.audit/2026-06-03-contest-groundup/engine.py',
      'engine/reference/contest-groundup/', 'R-REL-ORACLE',
      'frozen parity oracle -- the last executable dependency of kept code on audit/'),
     # THE ED UNIVERSE -- R-REL-EDUNIVERSE, EXECUTED AND RETIRED 2026-08-23 (S6/6b).
@@ -286,7 +286,7 @@ RULES = [
      'stress/session prose under tests/ -- neither executable spec nor canon'),
 
     # ---- audit/: generated output goes, generators stay, then the two-week rule
-    (lambda p: p.startswith('audit/') and p.lower().endswith(GENERATED_EXT), 'evacuate',
+    (lambda p: p.startswith('.audit/') and p.lower().endswith(GENERATED_EXT), 'evacuate',
      'R-AUDIT-GEN',
      'generated artefact -- regenerable output, evacuates at ANY date; its generator is kept by '
      'R-AUDIT-RECENT if the session is inside the window'),
@@ -331,7 +331,7 @@ RULES = [
     (lambda p: _audit_is_recent(p), 'keep', 'R-AUDIT-RECENT',
      f'audit dated on/after {AUDIT_CUTOFF}, DESIGN-subject, unit head -- includes generators '
      f'in-window'),
-    (lambda p: p.startswith('audit/'), 'evacuate', 'R-AUDIT-STALE',
+    (lambda p: p.startswith('.audit/'), 'evacuate', 'R-AUDIT-STALE',
      f'audit older than {AUDIT_CUTOFF}, or undated -- process record, not canon'),
 
     # ---- prose WITH a code pair, WHERE THE CODE HAS SUPERSEDED IT: the prose goes.
@@ -453,7 +453,12 @@ RULES = [
      'repo root: session protocol, currency index, CI config'),
 ]
 
-_AUDIT_DATE = re.compile(r'^audit/(\d{4}-\d{2}-\d{2})')
+# ED-IN-0231 (2026-09-16): the tree was renamed `audit/` -> `.audit/` so ripgrep skips it. This
+# regex is anchored, so it silently matched NOTHING after the rename — every dated unit read as
+# undated, and `_audit_is_recent` returned False for all of them, which flips the whole corpus
+# from KEEP to evacuate. A deletion plan quietly widening to everything is the exact failure
+# this module exists to refuse.
+_AUDIT_DATE = re.compile(r'^\.audit/(\d{4}-\d{2}-\d{2})')
 
 # ---------------------------------------------------------------------------------------------
 # THE SECOND CLAUSE OF THE AUDIT RULING (added 2026-08-04, ED-IN-0140)
@@ -539,7 +544,7 @@ def _audit_is_recent(rel: str) -> bool:
     Deliberately string-compares ISO dates: lexical order is chronological, and it keeps the rule
     free of a `now` that would make a deletion plan depend on its run time.
     """
-    if not rel.startswith('audit/'):
+    if not rel.startswith('.audit/'):
         return False
     m = _AUDIT_DATE.match(rel)
     return bool(m) and m.group(1) >= AUDIT_CUTOFF
