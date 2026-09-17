@@ -43,9 +43,18 @@
 |---|---|---|
 | **1 · how a decision reaches a person** | **Two question sources, not four-plus-one.** `claim_landed` over one Query `reach(w, p)`, plus `need`. Dates and crossings become claims like everything else; `date_due` and `band_crossed` are deleted — **measured at 0 questions each after a populated season.** Purview is a TERM of reach, never a fifth source. | `01` |
 | **2 · how authority descends** | **Two channels, both people-borne, and no broadcast.** THE WRIT: a `Record` of kind `dispensation`, minted by `issue`, physically carried and handed by `give` — verbatim or not at all. THE WORD: a `told_by` claim spread by `tell`, lossy at `Partial`. One deposit rule makes a held document a held belief. **Compliance is the executor's own act**, and **no MATTER write is a function of a document's CONTENT** — ⚠ *not* the stronger "MATTER reads no policy", which `02` measured FALSE against its own spec: `matter.py:65-74` reads `w.records`, the stages and the hold today. | `02` |
-| **3 · how matter reaches people** | **It does not move to them; they draw up the ladder.** One Query `nearest_store(w, rung, kind)`; the shortfall crosses the gate into `Person.body`; bodies cross band floors as sites do; death at 0 reuses the kill cascade. **Matter still moves only by `transfer`.** | `04` |
+| **3 · how matter reaches people** | **It does not move to them; they draw up the ladder.** One Query `nearest_store(w, rung, kind)`; the shortfall crosses the gate into `Person.body`; bodies cross band floors as sites do; death at 0 reuses the kill cascade. **Matter still moves only by `transfer`.** ⚠ The hunger is smaller and worse-placed than round one implied: **138 units a season go unmet against 4,810 produced**, and **24 of the 37 settlements hold 3,120 units with nobody under them at all.** | `04` |
 | **4 · how a seat becomes fillable** | **Bases are VALUES on the seat, read by two predicates, and the content is an authored table.** `conferral ∈ {confer, determine, succeed}` — a set already ratified **twice**, at `ARCH §B.7` and `AX` ID-14. `revocation ∈ {purview, holdings, none}` as conjunct sets. The `is_title` branch and the title helpers go; `confer` also mints a `commission` Record, so the holder BELIEVES his remit. | `03` |
 | **5 · how the object count comes down** | **Net −17 engine objects: 39 removed against 22 added.** ⚠ **Not the −20 the plan projected — three WORSE, and `05` says exactly what the plan miscounted.** Vocabulary 24 terms in against 17 out. Round one's eight proposed Queries are withdrawn. | `05` |
+
+> **The single clearest measure of whether this is NERS-positive, and it is `ARCH`'s own sentence, not
+> ours.** `architecture/meta/04_CODE_ARCHITECTURE.md:1082` files **`F.20`** as one of two gaps that
+> *"block the build outright"*, and states the consequence in six words: **"the world only decays —
+> nothing is ever founded or built."** `04` signs **eight loops, four of them positive** — and **three of
+> those four turn today not at all.** The ration loop, the body loop and the founding loop are what
+> `F.20` names as missing, and `found` is the verb that closes two of `H-41`'s three producerless-
+> existence cells. That is the R-half with no player in it (`CLAUDE.md` §0.06): a world that can only
+> wear down generates no drama when nobody is watching.
 
 ## The documents
 
@@ -79,7 +88,7 @@
 | **`RR-A`** | fold the four response verb rows (`comply`, `evade / defy`, `refract`, `dispatch`) | `ED-IN-0210` **ruled against** *"no response verb"* on 2026-09-15; step 5 may not overwrite a ruling. **Cost measured: one live verb and four dead rows** |
 | **`RR-B`** | **eight** sentences in RATIFIED `architecture/` that this suite makes false — not the four the plan expected | `architecture/` is ratified (`ED-IN-0204`); one limb (`03`'s containment-derived rank) is a **game** change |
 | **`RR-C`** | sequencing: the content work goes AHEAD of positions 3–7 of the ratified 27-position order | the program's ORDER is the ratified scope; step 5 cannot re-order it |
-| **`RR-2`** | *(from round one, untouched)* `ED-SE-0051` — matter only, or matter plus hearth capacity? | the two arms are materially different games. **Gates no build item** |
+| **`RR-2`** | *(from round one, untouched)* `ED-SE-0051` — matter only, or matter plus hearth capacity? | the two arms are materially different games. **Gates no build item.** ⚠ But `04` records that it **destroys round one's decisive ground for the capacity arm**: *matter-only was not a bound* was the argument, and after `nearest_store` lands it IS one. `04` still recommends capacity and still refuses to close it |
 | **`RR-3`** | *(from round one, untouched)* the zoom-trigger table | **still the weakest of the six**, as `03_THE_SURFACE.md` itself measures |
 
 **`RR-1` is CLOSED** at step 2 — *irrelevant*, not answered. With no `in_force` walk and no place-keyed clause there is no site at which two policies collide; two writs naming one executor are two content claims in one ledger, and `agreement` already scores told-against-own. **The collision is the executor's, and his act resolves it.**
@@ -97,7 +106,7 @@ with its subject is not a limit that was reasoned away.
 | **2** | the headline path **does not construct** — `build_realm` builds `province 0` and no `contain` chain names one | **ANSWERED, and hardened.** `01` §0.2 reproduces it; `05` adds pre-flight refusal **S15** — a seat whose `rung` names no Rung has zero purview *silently*, so item 10 must assert every seat's `rung` is in `w.rungs` |
 | **3** | *"the share leaves `r.stores` at MATTER"* contradicts round one's own RULED line | **DIES WITH ITS SUBJECT.** MATTER reads no policy at all in round two, and matter still moves only by `transfer`. The correction was already struck into round one during unification |
 | **4** | **`sit:` cannot create a date** — `(Date, due_at)` is `[RES]`, written only by `convene` | **DIES WITH ITS SUBJECT.** The seven place-keyed cells go, `sit:` among them (`02`'s own supersession line names it), and round one's channel 4 is withdrawn |
-| **5** | **`draw: None` starves**, so the founding-policy inventory was mandatory | **DIES WITH ITS SUBJECT, and the real hunger is re-measured.** No `draw:` clause exists to be `None`. `04` answers the underlying fact instead: **211 hearths starve beside 4,810 units** |
+| **5** | **`draw: None` starves**, so the founding-policy inventory was mandatory | **DIES WITH ITS SUBJECT, and the real hunger is re-measured.** No `draw:` clause exists to be `None`. `04` answers the underlying fact instead, and measures it properly: **211 hearths hold nothing beside 4,810 units, the larder block fires at 26 rungs and writes 0 times, and 138 units a season go unmet** — a 5× surplus world in which nobody can reach the surplus |
 | **6** | the uniformity rule **has no checker**, and there are **no free predicates** | **DIES WITH ITS SUBJECT.** There is no clause roster to be uniform about. ⚠ The finding's *substance* survives as a constraint on `02`'s terms-as-operands, and `05` §B.4 refuses a guard over it on `CLAUDE.md` §0.1 pt 5 grounds — *"if a column matters, give it a reader"* |
 | **7** | **`ceiling = matured/declared`** reads a per-stage maturation `Record.matured: bool` cannot carry | **ANSWERED BY NAME.** `02` §C keeps `matured` whole-record and does not read a per-stage value off it |
 | **8** | the conferral claim's deposit is a **NEW deposit rule**, not a ride on the existing channel | **CONFIRMED AGAINST ITSELF, twice.** `02` and `03` both verify it independently — the deposit's predicate is the **event kind** — and neither claims the free ride |
@@ -128,4 +137,14 @@ E-OVERHEAD verdict is answered with a number that is **worse than projected** �
    `record.forged`, `forge` emits `record.created`, and **no verb emits `record.forged` at all** —
    a writer and a reader that do not meet. `forgery_quality` has neither an `@effect_for` nor a
    reader; it is declared and inert.
-6. **The build order reverses one edge against the plan.** Item 10 depends on item 16, because `in_holdings` is **False for every person over every rung** — all 16 rung-holds are faction-subject.
+6. **Two of `04`'s falsifiers go RED, and both say something.** `MW-11`: the band-crossing predicate is
+   **downward-only**, so **recovery is silent while ruin speaks**. `MW-5`: `withdrawal_only` and death
+   fall in the same season, so only the `halved` arm occupies every band.
+7. **`04` refused one of its own plan's additions and said why.** The plan wanted a `band_floors.person`
+   key; `band_floors["body"]` already exists, `budget.py:64-75` reads it live in the loop, and a
+   `person` key **refuses at load**. Two documents planted that defect independently and both reported
+   the refusal rather than the design.
+8. **One `ARCH` sentence is measured FALSE.** PART D row 5's *"the gate refuses `before == after`"* is
+   not true of the gate — `world.py:408` assigns `before = apply()` and compares nothing. The refusal
+   belongs to the fold and is ACTS-only, which is why `04`'s body write carries its own guard.
+9. **The build order reverses one edge against the plan.** Item 10 depends on item 16, because `in_holdings` is **False for every person over every rung** — all 16 rung-holds are faction-subject.

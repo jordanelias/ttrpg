@@ -1480,3 +1480,415 @@ small place is a weak place — whereas matter-only makes growth something that 
 > producer at all today**, so nothing waits on the answer: *"there is no season-tick generation at
 > all… the cast only shrinks."* **It is answered alongside that row, by whoever reopens generation.**
 > Cost of being wrong: **one Query swapped for a fixture.** It gates one build item and nothing else.
+
+---
+
+# PART B · WHAT THIS ADDS, AND WHAT IT MAKES UNNECESSARY
+
+**The bar:** `AX` **ID-13** (`AX:489`, *"A DECLARED FIELD MUST REACH A READER, OR IT IS NOT
+DECLARED"*) and **ID-12** (`AX:454`, a closed set lives in data). **No new primitive without a row
+here.** And the suite's meta-rule (`skills/ners/SKILL.md`: *a fix that adds a system has failed*):
+every addition names what it removes, in the same section.
+
+## B.1 · ADDED — nine names, each with why it is not a new primitive
+
+| # | added | what | why it is not a new primitive | counted |
+|---|---|---|---|---|
+| 1 | **Query** | `nearest_store(w, rung, kind)` | a walk over `parent_of` (`world_q.py:48`), which **is** the ladder. It replaces "who delivers what to whom" — a family of two content moves, a delivery act and two Queries (`delivered`, `demanded`) round one proposed and this withdraws | **+1** |
+| 2 | **Query** | `ceiling(w, site)` | resolver-side, Nobody's, storing nothing (`AX` **T-a**, `AX:255`). Counted honestly as new: **it is NOT in `holonic §17`'s roster**, unlike `share` and `capacity` | **+1** |
+| 3 | **Query** | `share(w, p, site)` | **already DECLARED** at `holonic:600` under *"`Query` — never stored, always recomputed"*. An implementation, not an addition — round one's own precedent for `capacity` | **0** |
+| 4 | **verb row** | `found` | the **producer two declared write-matrix rows have been waiting for** — `(Rung, exists)` (`write_matrix.yaml:294-300`) and `(Site, exists)` (`:322-328`), both with a step, a class, a `by:` and an emission and **no verb naming either cell**. `H-41` is `absent`; `§F.20` blocks build step 2 on it. **This closes `ID-13` rather than adding to the tree** | **+1** |
+| 5 | **effect bodies** | `@effect_for("found")`, `@effect_for("restore")` | `restore`'s row is `grade: "ruled"` with five full columns and a specified formula (`verb_table.yaml:448-467`); what is missing is the body. Eleven exist; these are the twelfth and thirteenth | **+2** |
+| 6 | **predicate** | `_req_found` | one predicate for one new verb row. `_req_restore` is **not** added: `restore`'s `requires_typed` is already two typed conjuncts evaluated by the existing grammar | **+1** |
+| 7 | **fold widening** | `_apply_write`'s `deltas` out-parameter | **exactly symmetric with the `earned` out-parameter already there** (`resolve.py:311-351`), added for the same class of reason. It stays the fold's single write site; the accumulator at `:523-525` needs no change because it already tests for an int | **+1** |
+| 8 | **MATTER block** | the body write + the `_crossings` call + the `remove_person` call | a new block in an existing step. A reader must hold *"MATTER moves bodies"*, so it is **+1 honestly** — and it edits **zero matrix rows**, adds **zero tables**, **zero Event kinds** and **zero carriers** (§A.4.7) | **+1** |
+| 9 | **helpers, FACTORED not added** | `_crossings(...)` from `matter.py:252-277`; `World.remove_person` from `effects.py:415-418` | each is code **moved to one owner and called twice**. `CLAUDE.md` §8's invariant is that a rule lives once; factoring is that invariant being obeyed, not a new name for a reader to hold | **0** |
+| — | **content, counted 0** (data, not mechanism) | `fixtures.body_step` (injected/declared/swept, `AX` **ID-6**); the `works` row on `record_kinds`; per-family `wear_per_season`/`band_floors`/`site_yield` rows; a `houses` column; `venues.yaml`'s site-kind column | each is a data edit under `AX` **ID-12**, and the loader refuses a missing coordinated row (`fixtures.py:106-123`) | **0** |
+
+**Carriers added: 0. Fields on carriers added: 0. Matrix rows added or edited: 0. Write classes, steps,
+strata, eligibility kinds, tenure kinds, `requires` forms and Event kinds added: 0.**
+
+## B.2 · MADE UNNECESSARY — and every row is a DELETION or a non-addition, never a renaming
+
+| made unnecessary | why it survives the cut |
+|---|---|
+| **`Site.drawers`** *(a field, deleted)* | declared at `carriers.py:418`, **unwritable through the gate** (its matrix row is retired), **0 readers**. §A.6.4 derives `share` from a live edge instead, so the field's only conceivable consumer is gone. `AX` **ID-13** |
+| **`Rung.sites`** *(a field, deleted)* | whitelisted at `carriers.py:568` and *"a BACK-REFERENCE NOTHING MAINTAINS — it is empty for every rung in the corpus"* (`matter.py:198`), with **no `(Rung, sites)` row in `write_matrix.yaml`**, so it cannot be written through the gate at all. `Site.rung` is the maintained side (`matter.py:205-206`). ⚠ **AND THIS IS A DEPARTURE, NOT PURE CONFORMANCE:** `ARCH §B.3` declares `Rung := (id, kind, matter(stores, sites[], records[]), …)`, so **Layer 1 lists `sites[]`**. `AX` **ID-13** licenses the cut **against a ratified declaration**, and saying so is the honest form. It is part of **RR-B**, owned by `05` |
+| **hearth larders** | §A.3. No hearth gains a store. The 4,810 units stay where they are produced |
+| **a delivery move, a delivery act, and round one's `delivered` / `demanded` Queries** | §A.3.4. Neither was built; both are withdrawn |
+| **round one `02` §A.6's two content moves** (commons eaters ascending; DWELLING/PRODUCER fabrics re-keyed to the rung people are in) | §0.3 item 2. **The walk moves the draw, not the fabric.** 74 `venues.yaml`/`populated.py` rows stay untouched and `matter.py:205-206` stays as written |
+| **`band_floors.person`** (the plan's new cell set) | §A.4.3. `band_floors["body"]` exists, is declared to be `(Person, body)`'s, is read live at `budget.py:73`, and a `person` key **refuses at load** |
+| **the `stage` key on `works`**, and any extension to `_eff_work` | §A.6.1. `subject_matter` has no matrix row; progress **is** `Site.condition`; the ceiling does the counting |
+| **a per-stage `Record.matured`** | §A.6.3. The **emission log** carries the count, and `World.last_emission_of` already reads it |
+| **`undertake` · `build` · `repair` · `raze` · `garrison` · `convert` · `capture` · `improve` · `ruin`** *(nine verbs never minted)* | `create_record` does the whole of the opening, holder included; `restore` bounded by `ceiling` is building **and** repairing at different bands; a garrison is `presence` filtered by who is bound; conversion is a new works on a standing fabric with a different kind; capture is `hold` changing hands; a ruin **is** condition 0 |
+| **a build queue, a scheduler, a cooldown, a timer** | `hold`'s 1-per-object plus the `cardinality` conjunct is a **refusal** (`AX` **T-g**); the two stalls are arithmetic (§A.6.6) |
+| **a siege subsystem** | §A.9 — three reads onto three mechanisms that already exist |
+| **`hold : Person → Site`** | §A.10.1 — three expressible things die, and the commons dies with them |
+| **a facility-tier ladder in the head; any `infrastructure_score` or settlement-level `condition`** | the node-keyed average by another name (`holonic:449-451`); and *"no magnitude carrier is admitted at any scale"* (`design_rulings_2026-09-06.md:169`) |
+| **a `Holding{confers:[Capability]}` object, and every "+N to a roll" reading of a built thing** | `eligibility_kinds` is `[own, remit, hold, presence]` and its note reads *"⚠ `capability` IS NOT AND MUST NEVER BE A MEMBER… Adding a fifth kind is a DESIGN CHANGE… and not a table edit"*. **A built thing may supply an OPERAND — a store to spend, a hall to sit in, a site to be present at — never a gate on who may attempt a verb.** This is the most tempting import in the subject and the one that would break the eligibility model |
+| **`regrowth: 0` rows** | already deleted by the pessimistic pass: **no `regrowth` table exists under `engine/` and nothing would read one.** A row nobody reads is `ID-13`'s dead carrier |
+
+## B.3 · WITHDRAWN AND DECLINED — said out loud
+
+| ~~withdrawn~~ | why |
+|---|---|
+| ~~cut `fort_level`~~ · ~~cut `facility_tier`~~ | §A.10.2 — **breakages**, behind a blocking export. Round one `02` §A.3.3 owns the withdrawal |
+| ~~the destroy-cascade licence for the ontology~~ | §0.5 — **unsound**; `holonic:588-589` is about which **Tenures** end, and nothing destroys a `Rung` or a `Site` at all. The refusal rests on **cardinality** |
+| ~~"widening `hold` makes `restore`'s `share` computable"~~ | §A.6.4 — `share` and `draw_share` are declared **Queries** (`holonic:599-600`); `share` was **never a field** |
+| ~~round one `02` §A.7's ground 1 for the capacity arm~~ | §A.11 — **true when written, and made false by this document.** Recorded rather than dropped |
+| ~~`ARCH` PART D row 5 as a MATTER guarantee~~ | §A.1.3 — the gate contains no `before == after` comparison; the refusal is the fold's and is ACTS-only |
+| **declined:** a gate-side no-op check · a `band_floors` key roster · an eighth `requires` form · a `capacity` implementation | each argued in place (§A.1.3, §A.4.3, §A.7.1, §A.11). **The first two are better designs and out of scope**; the third would refuse at load; the fourth is `ED-SE-0051`'s |
+
+## B.4 · THE COUNT, AND WHAT IT COSTS THE SUITE'S NET — stated in the unfavourable unit first
+
+**This document is net POSITIVE on its own: +9 added, −2 removed, net +7 names.** It may be net-positive
+only by pointing at the suite ledger's net, which is `05`'s and is the single owner of the count
+(`CLAUDE.md` §0.1 pt 4 — *"A proposal that reports only the favourable unit fails"*).
+
+> ### ⚠ AND IT SPENDS THREE OF THE SUITE'S NET, WHICH `05` MUST ABSORB OR REPORT.
+>
+> The round-two plan's ADDED table carries `nearest_store`, `found` and `@effect_for("restore")` /
+> `@effect_for("found")` already. **It does NOT carry `ceiling`, `_req_found`, or `_apply_write`'s
+> `deltas`.** Those are three names beyond the plan's ledger, so **the suite's net moves from −20 to
+> −17**, and `05` must print −17 or explain where three went. `share` and `capacity` are **0** on
+> `holonic §17`'s declaration, and `band_floors.person` and the `stage` key were content (0), so
+> declining them buys the count nothing — what it buys is three data edits and two **S** defects
+> avoided.
+>
+> **In the "systems" unit rather than the "names" unit:** in — one walk family, one bound (`ceiling`),
+> one delta channel, one verb; out — nine verbs never minted, a delivery family, a build queue, a
+> siege subsystem, two dead fields, a second band ladder and a second progress ladder. **By that unit
+> it is strongly negative, and by the names unit it is +7.** Both are stated because reporting only
+> the first is the failure mode.
+
+## B.5 · **E**, SCORED LAST AND AS A RATIO — `CLAUDE.md` §0.06
+
+§0.06: *"⚠ **E is never scored as an independent axis**: alone it is satisfiable by amputation, so
+score it **last, as a ratio against what N and R found**."*
+
+**Against what N and R found necessary (§C.4's N-lines and loops):** of the nine added names, **seven
+are N-line carriers whose cut is named and lethal** — `nearest_store` (211 hearths starve beside 4,810
+units), the MATTER body block (a live, wired decision-layer mechanism stays permanently dead),
+`found` (two declared rows keep no producer and `§F.20` stands), the two effect bodies, `ceiling` (no
+bound on a repair, so building and repairing cannot be one act), and `deltas` (no act can raise a
+fabric at all — `H-105`). **Two are conceded as overhead:** `_req_found` (a predicate for a verb,
+unavoidable, but it is still a name) and the `_crossings`/`remove_person` factoring, which is free by
+the count and **costs a reader two indirections in the two functions they most need to read straight
+through** — `matter.py` is read as text by eight tests and `_eff_kill` is the most heavily
+docstringed body in `effects.py`.
+
+> **E PASSES AS A RATIO — 7 of 9 additions are N-line carriers, against 9 verbs, 2 fields, a delivery
+> family, a build queue, a siege subsystem and two second ladders out — AND IT WOULD FAIL IF SCORED
+> ALONE**, because scored alone the cheapest version of this document is "delete the larder step".
+>
+> **The legibility half passes on its own test** — *"allows the player to intuit complex outcomes from
+> simple choices"*: a player reads **half rations hold you steady**, **a fabric climbs to the terms
+> that have ripened**, and **your store is your parent's store**, and all three are one sentence each.
+>
+> ⚠ **FINDINGS, STATED NOT SCORED AROUND.** (1) The three-way coupling of `wear` × `restore` ×
+> `yield-scaled-by-condition` has a steady state **the player cannot compute** — they can intuit
+> direction and not equilibrium. Carried from round one, unrepaired, and the repair is interface-side.
+> (2) **`ceiling` composed with `share` composed with the degree ladder is three multiplications deep**,
+> and a player at a forty-drawer harbour cannot intuit that his Overwhelming season moved 6 of 1000.
+> **That is a real E cost of keeping the commons**, and §A.6.4 keeps the commons anyway, on R.
+
+---
+
+# PART C · THE THREE QUESTIONS
+
+## C.1 · WHO OWNS THIS?
+
+| the thing | owner | **not** |
+|---|---|---|
+| a person's body | **`Person`** (`carriers.py:392`), one writer per write class: MATTER (this document) and ACTS (`_eff_kill`) | never a `Rung` aggregate, never a cohort tally |
+| a person's existence, and every Tenure naming them | **`World.remove_person`** — one owner, two callers | never a caller sequencing three writes (`holonic §15.3`) |
+| where a body draws from | **`nearest_store`** — a Query, Nobody's | never a field, never a route, never a cached `{person: store}` map |
+| an actor's share of a fabric | **`share`** — a Query over a live `contain` edge | never `Site.drawers`, which is deleted; never 1 |
+| how high a fabric may be raised | **`ceiling`** — a Query over the works' `term.matured` emissions | never a field on the `Site`, never a per-stage bool on the `Record` |
+| a fabric's condition | **`Site`**, one writer per write class (`write_matrix.yaml:315-321`, `[MAT, RES]`) | never a `Rung` — `Rung` has no condition field and `__setattr__` raises (`carriers.py:589-597`) |
+| a works in progress, its terms and its ttl | **`Record`** (`carriers.py:422-445`) | never fields on the `Site` — then nobody would be master and MATTER would have no holder to check (`matter.py:73-74`) |
+| who is master of a works | the **`hold` Tenure's subject**, minted by `create_record` (`effects.py:286-289`) | never a field on the Record, and never two at once (`hold_force` **raises**) |
+| a plot, its store, its dates, its records | **`Rung`** (`carriers.py:568-569`) | never a social aggregate (`ARCH §B.3`: `NEVER: any social aggregate`) |
+| the band a body or a fabric is in | **`band_floors`**, ONE table, TWO callers (`_crossings`, `body_band_penalty`) | never two cell sets, never `band_floors.person` |
+| how much a season narrows a narrowed person | **`budget()`** person-side, reading `p.body` and a params table and **no World** | never the crossing, which produces no outcome (`AX` **T-b**) |
+| the delta an act contributes | **`_apply_write`**, the fold's single write site | never `a.payload` — that is intent reassignment, **under RR-P** |
+| `body_step`, the floors, the wear rates, the yields | **`rosters.yaml` / `DEFAULT_FIXTURES`**, each with a hole-register row and a three-point sweep | never a literal in a body (`CLAUDE.md` §0.05) |
+| the order of MATTER's blocks | **`#353 §25`**, quoted and followed at `matter.py:155-160` | never this document, which reorders nothing and only **splits** one loop in two (§A.3.3) |
+
+## C.2 · WHAT CAN CHECK THIS? — `STRUCTURAL | MECHANICAL | CONVENTION`
+
+A claim of STRUCTURAL that is really MECHANICAL is *"a guard that cannot observe what it guards."*
+
+| claim | grade | the checker, named |
+|---|---|---|
+| a body's band ladder is the same table a site's is | **MECHANICAL at load** | `band_floors` declares `keys: [site_kinds]` and `fixtures.py:110-123` validates **both directions**. A second cell set **raises** |
+| a MATTER write on `(Person, body)` emits `body.changed` and nothing else | **MECHANICAL at the write** | `world.py:396-406` refuses a MATTER write that names no declared kind **and** one the row does not declare |
+| a `body.changed` emission has an antecedent that is not `[ROOT]` after season 1 | **MECHANICAL** | `Event.__post_init__` refuses an empty `causes[]` at `S19.4` (`world.py:459-462` declines to re-implement it); `W4`'s `[ROOT]`-count proof is the assertion |
+| **a fed person at full body emits nothing** | ⚠ **CONVENTION today, MECHANICAL only through the caller's own guard** | §A.1.3: the gate has **no** `before == after` check; `matter.py:148-149` and `:186` are hand-written guards. **The gap is named rather than graded away**, and `MW-3` is the test that would catch its absence |
+| the death cascade has exactly one owner | **MECHANICAL, by a source scan** | `MW-6`: grep the four-line tenure sweep and assert **one** site. It is load-bearing on the game (a dangling edge survived a death for a season before this scan's predecessor was fixed) |
+| `hold` never reaches a `Site` | ⚠ **NOTHING today; MECHANICAL once the conjunct lands** | `add_tenure` checks kind (`:242-247`) and `contain` ascent (`:248-256`) and **nothing about object class**. Layer 1 grades it STRUCTURAL (typed) in a typed language this is not. `05` item 16 owns the build step |
+| a fabric's condition cannot be node-keyed onto a place | **STRUCTURAL at the type** | `Rung` has no condition field; `__setattr__` raises; `ARCH §B.4`: the collapse *"cannot be spelled"* |
+| a built thing gains no new carrier | **STRUCTURAL** | there is no class to construct |
+| a new site kind arrives with its wear and band rows | **MECHANICAL at load** | `fixtures.py:106-123`, both directions, raising `Forbidden`/`Ungraded` |
+| no eighth `requires` form is smuggled in | **MECHANICAL at load** | `rosters.yaml:1092-1094` — *"a design change, not a table edit"* |
+| a works with two live Records naming one target is refused | **MECHANICAL** | `ceiling` **raises** (`hold_force`'s precedent), and the `cardinality` conjunct refuses before it can happen |
+| a repair that changed nothing mints no success Event | **MECHANICAL at the fold** | `resolve.py:259-269` reads `changed` and emits `emits_on_refusal`. ⚠ **ACTS-only** — see row 4 |
+| a built kind never regrows unauthored | **MECHANICAL through what already emits** | `wear()` is the only MATTER writer of `(Site, condition)` and `restore`/`work` the only RESOLVE ones, so assert the **SIGN** of every `(Site, condition)` delta **by its step**. ~~a `regrowth: 0` row per kind~~ is struck: no such table exists and nothing would read one |
+| the ceiling bounds the clamp and nothing else | **MECHANICAL** | one expression, `resolve.py:549`. `MW-7` asserts the ceiling is the only new term and that it equals `condition_scale` for every site in a world with no works |
+| a fortification's band is never rendered as fact | **CONVENTION**, and it cannot be made structural here | the renderer does not exist. `ARCH §C.11` is the argument; the check is that a reviewer reads the read list |
+| **the capacity arm of `ED-SE-0051`** | ⚠ **NOT A GRADE — a RULING REQUEST** | this column asks *what construction checks this claim*, and a ruling request has no construction because it has no answer. It is **RR-2**, `needs_jordan: true`, **LAYER 1 SILENT** stated in the row itself |
+| **`body_step`'s value, and the floors'** | ⚠ **NOTHING, and that is the honest word** | both are injected with a three-point sweep and **neither has been measured against anything.** §C.5 names this as the largest unmeasured number the design now depends on. A grade here would be a claim |
+
+## C.3 · WHOSE ACT MAKES IT HAPPEN?
+
+**Every row: what is written, by whose act, read by whom, emitting what. No row is a system depositing
+a thing.**
+
+| what is written | by whose act | read by | emitting |
+|---|---|---|---|
+| `(Rung, stores)` **down**, at the rung the walk found | **nobody** — MATTER, `AX-5` motion 1 | next season's draw; `restore`'s threshold; `nearest_store` | `stores.changed` |
+| `(Rung, stores)` **up** by yield | **nobody** — MATTER, scaled by the site's condition | the same | `yield.taken`, `stores.changed` |
+| `(Rung, stores)` **across** a `contain` edge | **a person**, `transfer`, `own | hold:<store>` | the same | the verb's own emission / `transfer.refused` |
+| `(Person, body)` **down** | **nobody** — MATTER, `AX-5` motion 2, the ration below ½ | `body_band_penalty`; `_crossings`; the death test | `body.changed` |
+| `(Person, body)` **up** | **nobody** — MATTER, the ration above ½ | the same | `body.changed` |
+| a **body band crossing** | **nobody** — and **it produces no outcome** (`L5`) | WITNESS's fan-out → a Claim → a question | `condition.band_crossed`, subject = **the person** |
+| the **narrowing of a season** | **the person**, at DELIBERATE, reading their own body | `ask_budget` (`deliberate.py:116-117`) | — |
+| `(Person, exists)` + every Tenure naming them | **nobody** — MATTER, at body 0 | `presence`, `home_of`, `members`, `leaders`, `footprint`, `hold_force`, `matter.py:73-74` | `person.died` |
+| `(Record, exists)`, `(Record, stages)`, **the maker's `hold`** | **a person**, `create_record`, `own` | `matter.py:73-74`'s holder check; `ceiling` | `record.created` |
+| `(Record, matured)` | **nobody** — the clock the opening act wound, `causes[]` naming that act | `ceiling`, via the emission count | `term.matured` |
+| `(Rung, exists)` + its `contain` edge | **a person**, `found`, `own` + presence in `requires` | `presence`, `parent_of`, `descendants`, `nearest_store`, the larder pass | `rung.founded` / `found.refused` |
+| `(Site, exists)` at condition 0 | **a person**, `found` | `verbs`, `site_yield`'s scaling, `ceiling`, the band predicate, `capacity` | `site.built` / `found.refused` |
+| `(Site, condition)` **up** | **a person**, `restore`, through the summing clamp, **bounded by `ceiling`** | the same four | `site.restored` / `restore.refused` |
+| `(Site, condition)` **down** by wear | **nobody** — MATTER | the same four | `condition.worn` · `condition.band_crossed` |
+| `(Site, condition)` **down** by an attacker | **a person**, through the contest seam, graded to a negative delta | the same four | the contest's own emission |
+| a `hold` changing hands | **a person**, `confer`/`release`/`revoke`/`give`, refused while one is live | `in_holdings`, `hold_force`, `footprint`, `ceiling` | the verb's own emission / its refusal |
+| a works ending unfinished | the **`ttl` the opening act declared** (`T-n`), or **`destroy_record`** by its holder (`T-m`) | `ceiling` — which **freezes where it stood** | the lapse / `record.destroyed` |
+
+## C.4 · THE LOOPS, NAMED AND SIGNED — `AX` **ID-16** (`AX:544-548`)
+
+**ID-16, verbatim:** *"Every feedback path appears in the register with a direction. **A model in which
+every loop is negative CONVERGES** — season 40 resembles season 30 — and convergence is not a design
+goal, it is what happens when a design has no other ideas."*
+
+⚠ **THE TREE'S CURRENT STATE IS THAT DEFECT, MEASURED.** The live register
+(`engine/season/hole_register.yaml`) has **four** `kind: LOOP` rows — `H-102` (`:1383`), `H-103`
+(`:1396`), `H-104` (`:1409`), `H-112` (`:1558`) — and **all four are inside the claims machinery.
+Nothing in the register is about the world.** `H-105` (`:1422`) sits between them and was **re-filed
+`PRODUCER`** precisely because it is not a loop: *"SITE CONDITION IS A SEVERED LOOP, NOT A DAMPING
+ONE… A loop with one arm cut is a RATCHET wearing a loop's clothes."* And `ARCH §F.20` says the same
+thing from the other side: ***"the world only decays — nothing is ever founded or built."***
+
+| id | the cycle | sign | the damping or the bound, named — each a mechanism that already runs or is built here |
+|---|---|---|---|
+| **MW-L−1 · WEAR** | condition ↓ at MATTER → verbs removed → less yield → less to spend → condition ↓ | **−** | the ceiling is **full** for a finished works, so repair is always possible in principle; a fabric at 0 is a ruin on a plot that can be built on again. **The loop has a floor and the floor is re-enterable.** MEASURED: `condition.worn` **74** per season, 1000 → 990 |
+| **MW-L−2 · SUBSISTENCE** | people eat stores → less surplus → fewer people can be seated | **−** | `nearest_store` × `Person.weight` (§A.3). **Built but unreachable today** — MEASURED: the block fires 26 times and writes **0** times |
+| **MW-L−3 · THE BODY LOOP** ⭐ NEW | ration < ½ → body ↓ → band crossed → `body_band_penalty` ↑ → `budget()` ↓ → fewer acts → less `transfer`, less `restore` → less matter reaches you → body ↓ | **−**, and it is the **sharpest negative loop in the design** | **three bounds, none of them a number somebody picked.** (1) `budget()` floors at **1** (`budget.py:62`) — *"a dying one still gets one, because a budget of 0 would delete the person from the season silently rather than narrowing them"*; so a starving person **always retains one act** and the loop is escapable **by acting**. (2) `MW-L+1` is the same write with the sign flipped, so one good season reverses it. (3) It terminates: at body 0 the person is gone, which is `AX-5` motion 2 rather than an unbounded spiral |
+| **MW-L+1 · THE RATION LOOP** ⭐ NEW, **and it is what keeps `MW-L−3` from being `H-105` again** | ration > ½ → body ↑ → band re-crossed upward → penalty ↓ → `budget()` ↑ → more acts → more matter reaches you → body ↑ | **+** | **structural, four ways:** the clamp at `condition_scale` (one `min`, `AX-4`'s one owner); the draw is against a store the world also feeds from, so a fed person's surplus is somebody else's shortfall in `MW-L−2`; wear subtracts from the yield that supplies the ration; and every act comes out of a budget of about five. ⚠ **AND ITS UPWARD CROSSING DOES NOT EMIT TODAY** — `_crossings`' predicate is `before >= floor > after`, **downward only** (`matter.py:262`), so **recovery is silent while ruin speaks.** Named as a limit at `MW-11`, not patched here: the repair is the same predicate in the other direction and it is sibling `01`'s question surface, not this document's |
+| **MW-L+2 · THE WORKS LOOP** | a PRODUCER above its band → `(Rung, yield)` → `(Rung, stores)` → matter for `restore` → condition ↑ → more yield | **+** | **structural, three ways:** wear subtracts **unconditionally at MATTER, before any act's delta**, so the two writers need no commutativity argument; the clamp clamps once (`resolve.py:549`); and **`ceiling` bounds it to the terms that have ripened** — so the amplifying arm cannot outrun the clock the opening act wound. ⚠ **Connected for the first time by §A.6.5's delta channel**; `H-105`'s severed arm is why this loop has never turned |
+| **MW-L+3 · THE SHELTER LOOP** | DWELLINGs above `shelters` → `capacity` → the envelope may grow → more presence → more hands **and more mouths** → more works | **+** | every added body raises the draw against the same larder (`MW-L−2`), and **capacity falls with the fabric**, so the bound tightens as the place wears. **This is `ED-SE-0051`'s subject and it is NOT BUILT** (§A.11); and `ED-WR-0011` (ruled) says the growth arm has **no producer at all** today |
+| **MW-L+4 · THE FOUNDING LOOP** ⭐ NEW | `found` a plot → `found` a fabric → `restore` it above its band → yield → stores → matter for the next works → `found` | **+** | **the act budget** (each `create_record`, `found` and `restore` is one of about five, at one place, and the actor must be present); **the terms** (a works ripens on its own schedule — matter cannot buy time); **the standing bill** (everything already built wears against the same store, so **the more you have built the less you can build** — a bound that **tightens with success**, which no cap does); and **other people** (leave, masters, and whoever is present to break what you raise) |
+| **MW-L−4 · THE NEGLECT LOOP** | a governor stops paying → bands cross → **crossings emit** → witnesses mint claims → his standing falls → he can bind fewer people to keep the wall → fewer keep it | **−** on him, **+** as drama | `claim.decayed` erodes the grievance (`matter.py:147-153`), and `AX` **T-m** (`AX:1154`) means he may always re-court and re-bind, paying acts. **The loop is escapable and the escape costs politics** |
+
+> ### THE DEMONSTRATION THAT THIS DESIGN IS **NOT ALL-NEGATIVE**, WHICH IS WHAT `ID-16` ACTUALLY ASKS FOR
+>
+> **Four of the eight are `+`, and three of the four (`MW-L+1`, `MW-L+2`, `MW-L+4`) do not turn at all
+> today.** `MW-L+2` is severed at `H-105`'s cut arm; `MW-L+4` has no producer at all, which is
+> `ARCH §F.20` verbatim — ***"the world only decays — nothing is ever founded or built"***; and
+> `MW-L+1` does not exist because `(Person, body)`'s MATTER half has no writer. **So `ARCH §F.20` is
+> not a clause this document argues against. It is the exact defect being repaired, stated by the
+> ratified architecture about itself**, and the three items that repair it are §A.6.5's delta channel,
+> §A.7.1's `found` and §A.4.2's signed body write.
+>
+> ⭐ **THE TWO HALVES ARE COUPLED AT THE MECHANISM RATHER THAN BY TUNING**, and this is the property
+> that makes the positives safe without a cap: **every act of `MW-L+2` adds a term to `MW-L−1`** (a
+> raised fabric is a fabric that wears), and **every body `MW-L+1` mends adds a mouth to `MW-L−2`**.
+> The amplifying loops' gain falls monotonically as they grow. **That is a bound that is a property of
+> the arithmetic rather than of a number somebody picked.**
+>
+> ⚠ **THREE HONEST NOTES.** (1) **`ID-16`'s own representation is BLOCKED** — it asks for a cycle
+> enumeration over *what is written* × *what is read* and `H-112` records that the read half cannot be
+> built (*"a DERIVED check that recomputes the cycle set… cannot be built"*). **So this table is a
+> claim about the loops I know of, not a completeness claim.** (2) **The standing/reputation loop is
+> designed and INERT**: `ARCH §F.20a` — no verb writes any `Person` **interior** field — so building
+> visibly cannot move anyone's conviction, and §A.7.2 confirms this document does **not** close it. A
+> body is not a conviction. (3) **The falsifier of the whole table is one grep**: `rung.founded`,
+> `site.built`, `site.restored` and `body.changed` are **all 0** in a measured season. **The design
+> stops being all-negative exactly when those four are nonzero, and that is measurable in one run.**
+
+## C.5 · **GRADE: `paper`** — and exactly what would move it
+
+`CLAUDE.md` §0.2: *"A milestone juncture is done when the behaviour EXECUTES. Not when a document
+exists with a `## Status:` line."* **Nothing designed in this document executes.** The honest ledger of
+what does, MEASURED this session on one season of `build_realm(0)`:
+
+```
+wear                       RUNS            condition.worn 74 ·  1000 -> 990
+larder draw                RUNS AND WRITES NOTHING          fires 26 · writes 0 · 138 units unmet
+yield                      RUNS            yield.taken 37 · stores.changed 37 · 4,810 units at 37 settlements
+site band crossings        RUN, DOWNWARD ONLY, AND FIRE AT PASS 21   w.crossings 0
+a shortfall                RECORDED, NOT ACTED ON           matter.py:184-185
+works Records              RUN             record.created 69, with the maker's hold minted
+a works whose master died  REFUSES TO MATURE                matter.py:73-78 — zero new code
+claim decay                RUNS            claim.deposited 2175 · (claim.decayed 0 in season 1)
+bodies                     NO MATTER WRITER                 body.changed 0 · person.died 0
+body_band_penalty          LIVE, WIRED, AND ZERO FOR ALL 46 PERSONS
+founding / building        ZERO PRODUCERS                   rung.founded 0 · site.built 0
+restore                    NO EFFECT BODY                   site.restored 0 · resolvable_verbs() 18 of 38
+an act's delta             NO CHANNEL AT ALL                site.worked 0 · work.unavailable 38
+a fabric anybody is at     NONE            0 of 74 sites
+a hearth holding matter    NONE            0 of 211
+```
+
+> ### THE FIRST ARTIFACT, AND IT IS ONE COMMIT: **item 3a — `nearest_store` plus the per-eater draw — whose artifact is a `census` before/after on the measured world, moving `larder writes` from 0 to 13 and `unmet subsistence` from 138 to 0.** Nothing is blocked on a ruling, nothing new is authored, and it is measurable in one run.
+>
+> **The artifact that moves the GRADE off `paper` for the second half is `MW-2`'s `rung.founded`** —
+> currently 0 and measurable in one grep — and it is downstream of `record_kinds` (sibling `02`'s) and
+> of the delta channel.
+>
+> ⚠ **AND THE LARGEST UNMEASURED NUMBER THE DESIGN NOW DEPENDS ON IS NAMED RATHER THAN BURIED:**
+> `body_step` against `band_floors["body"]`, both invented, both swept, and **neither measured against
+> anything**. §A.4.6 shows the arithmetic at all three arms and shows that **two of the three arms
+> never occupy the lowest band.** A session that ships `declared` without running `MW-5` has shipped a
+> band nobody can be in.
+>
+> ⚠ **`python -m pytest tests/valoria -q -n auto` was NOT RUN for this document**, because this
+> document changes no code. That is stated rather than implied (`CLAUDE.md` §0's requirement that a
+> skipped step be said aloud). What WAS run is the harness and the measurement recipe at §A.2.1, and
+> the matrix header's own reproduce command at `write_matrix.yaml:41-45`.
+
+## C.6 · RULINGS — what this document decides, escalates, and refuses to escalate
+
+**Decided by `CLAUDE.md` §0's five-step gate, with the step named** (§0's *"needs_jordan IS NOT A
+PARKING SPACE"*):
+
+| decision | step | the citation that closed it |
+|---|---|---|
+| persons cross `band_floors["body"]`, not a new cell set | **4** (precedent) + **5** (the loader refuses it) | `H-38`, quoted at `rosters.yaml:814-815`, `budget.py:64-75` and `hole_register.yaml:793` |
+| the body moves with a **sign**, one fixture, fixed point at half rations | **5** (architecture: a fall-only body is `H-105` again) | `H-105` (`hole_register.yaml:1425-1432`); `AX` **ID-16** |
+| the body write carries its own no-op guard | **4** (precedent, two siblings in the same function) | `matter.py:148-149`, `:186` |
+| the larder pass splits from the yield pass | **5** (forced by the ascent) | `test_season_shape.py:4711`'s emitted-order assertion |
+| death is ONE write at `(Person, exists)`, not three | **4** (precedent) | `holonic §15.3`; `effects.py:312-315` |
+| `ceiling` counts `term.matured` emissions | **5** (there is no per-stage field and the log is a carrier) | `world.py:447-453`; `carriers.py:445` |
+| `ceiling` **raises** on two live works naming one target | **4** (precedent) | `world_q.py:138-145` |
+| `share` = 1 over persons present, swept, with `one` as a breaking control | **5** + `AX` **ID-6** | `holonic:600`; `10_SUPERSEDING.md:1275-1282` |
+| the delta rides on `_apply_write`, **not** on `a.payload` | **5**, and **under RR-P** | `resolve.py:338-346`; `write_matrix.yaml:72-78` |
+| `found` is one verb earning one of two declared rows | **4** (the `{kind: [ids]}` mapping was built for this) | `resolve.py:338-346`, `:252-257` |
+| `found` requires `Record.matured`, not "all terms ripened" | **5** (an eighth form refuses at load) | `rosters.yaml:1092-1094`, `:1114` |
+| the `works` `subject_matter` is `{plan, at}` — no `stage` | **5** | no `(Record, subject_matter)` matrix row exists |
+| `Site.drawers` and `Rung.sites` are deleted | **5**, and `AX` **ID-13** against a ratified `ARCH §B.3` declaration | `carriers.py:418`, `:568`; `matter.py:198` |
+| `Rung.envelope` is KEPT with no production reader | **5** (its consumer is a ruling request, and deleting it would force a re-add) | `ED-SE-0051`; `ARCH §B.3` |
+
+**NOT escalated, and closed with its reason** — because §0 says clearing the queue is session work:
+
+- *"Should the gate refuse a no-op?"* — **closed at step 5 as OUT OF SCOPE, not as answered.** It is a
+  better design; it moves eleven MATTER writes and every golden through MATTER; this document does not
+  need it and may not buy it.
+- *"Should `band_floors` have its own key roster?"* — **closed the same way**, with the residual
+  idempotence hazard named at §A.4.3 and its falsifier at `MW-9`.
+- *"Which eater draws first?"* — **closed at step 5.** `sorted(w.persons)`, deterministic and
+  arbitrary on purpose: a ration order is a policy, and **MATTER reads no policy.**
+- *"What is `body_step`?"* — **not a ruling.** `AX` **ID-6**: injected, declared, swept. §A.4.6 gives
+  the arithmetic and §C.5 names the measurement that is missing.
+
+**ESCALATED — and only what this document's own subject forces:**
+
+- **`ED-SE-0051` / RR-2** stays **OPEN**, `needs_jordan: true`, untouched and **not gating**
+  (§A.11). This document *recommends* the capacity arm, records that it **destroys round one's
+  decisive ground for that recommendation**, and re-argues it on the two that survive. **No row here
+  may be cited as having closed it.** Per `ED-WR-0011` (ruled), the growth arm has no producer today,
+  so it is answered alongside whoever reopens generation.
+- **RR-B** (Layer-1 text this makes false) gains **one sentence from this document**:
+  `ARCH §B.3`'s `Rung := (… matter(stores, sites[], records[]) …)` declares `sites[]`, and §B.2
+  deletes it. Quoted at its `§`, **not edited**. The other three sentences are siblings'. Owner: `05`.
+- **RR-P** is leaned on once, at §A.6.5, and is **stated as unsettled**: the refusal of the
+  payload-mutation route is *under RR-P*.
+- **RR-C** (sequencing ahead of the Arc-2 gate) covers items 3a, 3b and the works items. Owner: `05`;
+  not argued here.
+
+**No other ruling request is raised by this document, and that is deliberate** — `needs_jordan` means
+*"Jordan is the only person who can answer this"*, not *"nobody got around to it."*
+
+---
+
+# PART D · FALSIFIERS — `AX` **ID-11** (`AX:453`), *ship the falsifier with the claim*
+
+**The bar is `CLAUDE.md` §0.1 pt 2: an assertion must be able to OBSERVE the failure it excludes.**
+A test that passes on a world where the mechanism cannot fire is absent, not weak. So every row below
+carries a **control** — an arm on which the assertion must go the other way — and where the control
+would be vacuous the row says so.
+
+## D.0 · Round one's `BW-n` rows, mapped
+
+`BW-2` (matter reaches people) → **`MW-1`**, re-aimed: round one's artifact was *"hearths holding
+matter > 0"* and **this design never gives a hearth a store**, so that artifact would be red forever.
+`BW-8` (`restore` mirrors decay and stops at the ceiling) → **`MW-7`**. `BW-9` (`found` is the
+producer) → **`MW-2`**. `BW-3` (a `hold` on a Site is refused) and `BW-4` (no faction `hold` subject)
+→ **sibling `05` item 16**, not restated. `BW-13` (the two withdrawals) → **`MW-13`**. `BW-5`'s
+re-aimed sign assertion → **`MW-12`**. `BW-1`, `BW-11` (Q3's referent, the upward crossing) →
+**sibling `01`**, with `MW-11` recording the half this document's own positive loop depends on.
+
+## D.1 · The rows
+
+| # | claim | what would show it wrong — **and the control** |
+|---|---|---|
+| **MW-1** | `nearest_store` connects the two halves of the matter economy | `test_an_eater_draws_from_the_nearest_ancestor_store`. **Artifact: on `build_realm(0)` after one season, the larder pass writes `(Rung, stores)` at 13 rungs (today 0) and unmet subsistence falls 138 → 0.** **Control A:** a person seated directly in a stocked rung draws **locally** and the walk terminates at step 0 — so the walk is not merely "always go up". **Control B:** a settlement with **nobody** in its `contain` subtree is **untouched** — 3,120 units stay where they are, which is §A.2.3's ruling as an assertion. ⚠ **Falsified if hearth stores become nonzero**: that would mean something delivered, and nothing may |
+| **MW-2** | `found` is the producer `(Rung, exists)` and `(Site, exists)` have waited for, and `ARCH §F.20` closes | `test_found_is_the_producer_for_rung_exists_and_site_exists`. **Artifact: a `rung.founded` AND a `site.built` Event in a run's log — both 0 today, measurable in one grep.** **Control:** an act whose plan names a rung earns **`rung.founded` only** and the `site.built` pair is gated-but-unearned — which is what proves the `{kind: [ids]}` mapping is doing the work rather than both emissions firing on any change (`resolve.py:338-346`'s own measured defect: *"`confer` onto an unheld office published `tenure.closed` with nothing closed"*) |
+| **MW-3** | a fed person at full body emits nothing | `test_a_fed_person_at_full_body_emits_no_body_changed`. **This is the row §A.1.3 exists for**: the gate has no no-op check, so without the caller's guard **46 fabricated `body.changed` Events fire every season** and WITNESS fans each into every co-located ledger. **Control:** the same world with the guard removed must go RED — a mutation check, because a test that only asserts "0 emissions in a fed world" also passes if the whole block is missing |
+| **MW-4** | the shortfall reaches a body, a band, a budget and a death | driven on the **`site_yield` `none` sweep arm** (`rosters.yaml:1150`), the roster's own declared control, because §A.3.5 measures the populated world as a **surplus** world where the chain cannot fire. Assert, in order: `body.changed` > 0 · body falls by `body_step` · a `condition.band_crossed` whose **subject is a person** · `body_band_penalty` > 0 · `ask_budget` strictly lower than the same person's on the `declared` arm · at body 0, `person.died` and the person absent from `w.persons` and every Tenure naming them closed. **Control: the `declared` arm, where bodies are constant at 1000 and every one of those assertions must go the other way.** ⚠ **Without the control this test passes on a world where the chain never runs** |
+| **MW-5** | every declared body band is occupied for at least one season | `test_every_body_band_is_occupied_before_death`. **IT GOES RED AT THE `declared` ARM AND AT `doubled`, AND THAT IS THE POINT** (§A.4.6): at `body_step = 100` the `withdrawal_only` crossing and death fall in the same season, so the third rung of `body_band_penalty` is never observed in play. **Control: the `halved` arm, where it goes green.** The row exists so the arm is chosen by arithmetic rather than by preference |
+| **MW-6** | the death cascade has exactly one owner | `test_the_tenure_death_cascade_has_exactly_one_site` — a source scan for the four-line sweep, asserting **one** match. **Control:** it must go RED on a tree where `_eff_kill` keeps its own copy, which is the pre-factoring state, so the assertion is checkable by reverting. ⚠ And a behavioural half, because a source scan cannot see semantics: **a `kill / wound` at `Felled` and a MATTER death at body 0 must close the same Tenure set on the same world** |
+| **MW-7** | `ceiling` bounds the clamp and nothing else | `test_ceiling_is_the_only_new_term_in_the_summing_clamp`. **Control, and it is the load-bearing half: on every world that exists today `ceiling` returns `condition_scale` for all 74 sites** — MEASURED, `w.records` holds 69 Records and **none is of kind `works`** — so `resolve.py:549` computes the same number and **no golden moves for this edit alone.** A golden that moves is the falsifier |
+| **MW-8** | `share` keeps the commons | `test_a_commons_closes_collectively_and_a_single_drawer_does_not`: at a 40-person harbour one Overwhelming `restore` moves ~6 of 1000; at a 1-person site it moves a quarter of the headroom. **Control: the `one` sweep arm**, on which the 40-drawer case moves a quarter too — **the commons is deleted and the test must break.** A sweep whose control cannot break the claim is not a control |
+| **MW-9** | `band_floors["body"]` reads the same way for a person and for a `body`-kind Site | `test_band_floors_body_is_read_the_same_by_both_callers`. ⚠ **This row exists because the hazard is live**: `engine/season/harness/headless.py:64` builds `Site("scriptorium", "hearth_ostvik", "body", …)`, so the four cells serve two subjects. Assert that `_crossings` and `body_band_penalty` agree on band membership for the same integer. **If they ever disagree, the borrowed roster key has become two meanings and §A.4.3's residual hazard has bitten** |
+| **MW-10** | `Rung.envelope` is kept **only** as `ED-SE-0051`'s carrier | `test_rung_envelope_has_no_production_reader`, asserting the reader set is exactly `{carriers.py, census.py's docstring, probes.py, tests}`. ⚠ **The falsifier that matters is the other direction:** if a production reader is ever found, the field is **not** a held-open exposure and §A.5's ruling is wrong. And if `ED-SE-0051` is ruled **matter-only**, the field, its matrix row and CENSUS's claim over it become deletable in one commit — **that commit is the artifact that closes this row** |
+| **MW-11** | the ration loop's recovery is visible | `test_an_upward_body_band_crossing_emits`. ⚠ **IT GOES RED**: `_crossings`' predicate is `before >= floor > after`, **downward only** (`matter.py:262`), so **ruin speaks and recovery is silent.** `MW-L+1` is a real loop whose positive arm nobody can witness. **Control: the 74 downward site crossings per season must not change count** when the upward predicate is added. Recorded as a limit; the repair is sibling `01`'s question surface |
+| **MW-12** | nothing regrows unauthored | `test_no_matter_step_site_condition_write_has_a_positive_delta` — assert the **SIGN** of every `(Site, condition)` delta **by its step**: MATTER writes only down (`wear`), RESOLVE only through the fold. ⚠ Re-aimed from round one's `regrowth: 0` row, which is struck: **no `regrowth` table exists and nothing would read one**, and a test over a fixture cell cannot observe the failure it excludes (an unauthored positive delta comes from a **code path**). **If a built kind's condition ever rises with no `restore` in the log, a fortification repairs itself with no author and the design has silently taken the fourth-motion route `AX-5` refuses** |
+| **MW-13** | `fort_level` and `facility_tier` are not free cuts | delete either and show CI green. **PREDICTED RED** at `tools/export_descriptors.py --check` (blocking) and at `systems/settlements/sim/registry.py:97`'s `ap` property. Carried from `BW-13` |
+| **MW-14** | a built world with no player in it eats, starves, stalls, falls, forgets and **asks** | a season in which it emits nothing. **Six channels named, and their dependencies stated rather than banked:** a larder drawing (3a) · a body falling and crossing (3b, and it needs `MW-4`'s empty arm) · a works term ripening with nobody present (**runs today**) · a master's death stopping a works (**runs today**) · a works lapsing at its `ttl` (**runs today**) · a crossing becoming a **question** (⚠ **blocked on sibling `01`'s `H-110` repair AND on a world where a floor is crossed — MEASURED, the first site crossing fires at MATTER pass 21 and CI runs one season**). **Three of six run today; three do not, and the three that do not are the three a player would notice** |
+
+> ### THE ONE CLAIM THIS WHOLE DOCUMENT STANDS OR FALLS ON
+>
+> **That the shortfall's consequence is already built and only its input is missing.** If
+> `body_band_penalty` turns out not to be reached from the live loop, or `(Person, body)`'s MATTER
+> half turns out to be forbidden by something not read here, then §A.4 is not *supplying an input to
+> a wired mechanism* — it is **building a mechanism**, the object count is wrong, and the N-line at
+> §A.4.4 collapses. **The check is two file reads and it was done:** `deliberate.py:116-117` calls
+> `decision.budget`, which subtracts `body_band_penalty` at `budget.py:60`; and
+> `write_matrix.yaml:161-167` is `steps: [MAT, RES]`. **Both were opened this session.**
+
+---
+
+# APPENDIX · CITATION REPAIRS
+
+Every `path:line` above was opened before it was written (`CLAUDE.md` §0.1 pt 3). These were carried
+in from round one or from the round-two plan **wrong**, are corrected silently above, and are recorded
+here. **Two of them change a claim rather than a line number and are marked ⚠⚠.**
+
+| cited as | actual | consequence |
+|---|---|---|
+| ⚠⚠ *"`(Person, body)` is a matrix row **with no writer**"* (round-two plan §2.3; round one `02` §A.6.1's neighbourhood) | **`(Person, body)` has a RES writer: `kill / wound`.** `_eff_kill` sets `p.body` at `effects.py:389`, `:393` and `:403`, and it goes **through the gate** — the effect runs inside `_apply_write`'s `apply()` closure (`resolve.py:327-346`), which `w.write` calls. **The MATTER half is what has no writer** | the loose form invites a session to add a second, ungated body writer. The precise form is what makes §A.4.7's *"not one matrix row is edited"* true |
+| ⚠⚠ *"`band_floors`' `body` key is the SITE kind `body` … **not** a person's body; the proposal must not conflate them"* (round-two plan §2.3) | **The tree says the opposite, in three places**: `rosters.yaml:814-815` (*"`body` IS NOT A SITE. It is `(Person, body)`'s band row"*), `budget.py:64-75` (live person-side reader), `hole_register.yaml:793` (*"the `body` row already existed… rather than adding a second band scheme"*). ⚠ **And BOTH are true at once**: `headless.py:64` builds `Site("scriptorium", "hearth_ostvik", "body", …)`, so one key really does serve two subjects | the plan's `band_floors.person` would be a second ladder **and would refuse at load**. §A.4.3 |
+| `matter.py:50-51` — the `not_implemented` list (round one `02` §A.6.1; round-two plan §3.3) | **`:49-50`.** The `TRACE.decision` call opens at `:46`; `chose=` is `:47`; `alternatives=` is `:48`; `not_implemented=` is `:49-50` | — |
+| *"H-34/H-41 — the two producerless rows `(Rung, exists)`/`(Site, exists)` gain `found`"* (round-two plan §6) | **`H-41` alone.** `hole_register.yaml:462-472` is `H-41`, `kind: "SCHEMA_ROW ×3"`, covering `(Rung, exists)`, `(Office, exists)`, `(Site, exists)`. **`H-34` (`:370-380`) is `kind: "NUMBER"`, `owner: "params"`, `hole: "establishment size per office kind"`** — unrelated | citing `H-34` here would claim a closure over a number nobody has supplied |
+| *"`found` closes `H-41`"* | **closes two of its three cells.** `(Office, exists)` is sibling `03`'s (`establish`/`confer`), so `H-41` stays open at reduced strength | §A.7.2 |
+| ⚠ `ARCH` PART D row 5 — *"the gate now refuses `before == after` at the write"* (round one `02` §A.4.2, §C.2) | **`World.write` contains no such comparison.** `world.py:408` is `before = apply()` and nothing is compared; the emission block at `:441-469` is unconditional once `emits=` is passed. The refusal that exists is the **fold's** (`resolve.py:259-269`), **ACTS-only** | round one cited a Layer-1 sentence as a live MATTER guarantee. §A.1.3, and it is why §A.4.2 carries its own guard |
+| `rosters.yaml:817` — `site_kinds` values (round one `02` §A.2 already repaired this once, to `:816`) | **`:816` is correct**; re-verified. `:809-815` is the note; `:814-815` the `body` clause | the earlier repair holds |
+| `requires.py:252-278` — `ContainPath` (round one `02` §A.3.1) | the class is at **`:254`**; the resolver-side branch it observes is `world_q.py:732-737` | — |
+| `world_q.py:508-517` / `:518` — Q3's presence gate and referent (round one `02` §A.6.2) | **not re-opened by this document.** Q3 is sibling `01`'s subject; the pointer is carried without a line and the claim is carried without the citation, per the rule that an unlineated true claim beats a fabricated line | stated so the omission is visible |
+| `matter.py:164-195` — the larder step (round one `02` §D.15) | the block runs **`:164-192`**; `:193-225` is yield. The shortfall is `:176-185`, the `TRACE.note` closing at `:185`; the gate call is `:188-192` | — |
+| `effects.py:262-290` — `_eff_create_record` (round one `02` §A.4) | the decorator is `:262`, `def` at **`:263`**, the stages comment `:267-271`, the hold mint **`:286-289`** | the hold mint is the load-bearing half and its line was right |
+| `holonic:536` — `hold`'s domain | **`:538`** (`:536` is the table header, `:537` the separator). Re-verified; round one's repair holds | — |
+| `holonic:600` — `share` | **`:599`** `draw_share`, **`:600`** `share` **and** `capacity`, under §17's header at `:591`. Both `share` and `capacity` are declared, which is why both count **0 added** | — |
+
+**Two scope notes, so the appendix is honest about what it does not cover.**
+(1) **Nothing in `engine/autoload/`, `engine/substrate/` or `systems/settlements/` was edited or
+proposed for edit**; §A.10.2's rows are withdrawals, and a session that reads them as licences has
+misread them. (2) **No precedent finding is cited anywhere above.** The one shape round one used — the
+garrison convergence — is not needed by this document's subject, and citing Manor Lords, Banished or
+Heroes of Might and Magic as a precedent finding would be **inventing one**: the precedent companion
+records that the first is *"Absent entirely. Not surveyed, not declared, not cited"* and the second is
+named twice and never surveyed on its own terms.
+
+---
+
+**END — `04_MATTER_AND_WORKS.md`. PROPOSED. HELD BACK IN FULL. NOTHING RATIFIES ON MERGE. Grade: `paper`.**
