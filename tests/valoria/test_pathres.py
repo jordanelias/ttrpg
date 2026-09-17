@@ -128,8 +128,11 @@ def test_a_prefix_that_maps_but_whose_target_is_absent_is_DEAD():
 
 
 def test_a_live_path_needs_no_alias():
-    r = pathres.resolve('engine/substrate/keys.py')
-    assert r.status == pathres.LIVE and r.live_path == 'engine/substrate/keys.py' and not r.hops
+    # The example moved 2026-09-16: this used to cite `engine/substrate/keys.py`, which is now
+    # FORKED (ED-IN-0232) and therefore tests the opposite case. `descriptors.py` is its
+    # sibling in the same package, live, and has no ledger row — the property this pins.
+    r = pathres.resolve('engine/substrate/descriptors.py')
+    assert r.status == pathres.LIVE and r.live_path == 'engine/substrate/descriptors.py' and not r.hops
 
 
 def test_glob_resolution_does_not_use_the_exists_path():

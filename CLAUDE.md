@@ -44,9 +44,11 @@ mechanics).
   rather than guessing.
 - **Build bottom-up from primitives.** Find the single-owner primitive and compose on it — never
   re-implement a rule that already lives once (§8). New tooling reuses the registries and
-  `engine/substrate/`'s leaf readers (`descriptors`, `composition`, `keys`); new mechanics resolve from
-  the Key substrate up. If you are special-casing an entity or outcome, stop — that is scripting drift
-  (§10 guardrails).
+  `engine/substrate/`'s leaf readers (`descriptors`, `composition`, `names`); new mechanics resolve
+  from those leaves up. ⚠ **The Key substrate is RETIRED (ED-IN-0232, RULED by Jordan 2026-09-16:
+  *"anything key-based gets retired"*)** — `keys.py`, the echo transport and the emit/consume
+  interface are gone, and nothing is to be built on them. If you are special-casing an entity or
+  outcome, stop — that is scripting drift (§10 guardrails).
 - **Adversarial pass at every stage that gates a result.** After you draft canon, a number or a fix,
   *try to break it*: verify provenance by hand against the cited `PP-NNN`/`ED-NNN`, run the relevant
   `tools/` validator, and for a judgment call put a genuinely independent critic on it (structural
@@ -489,8 +491,12 @@ says where an old path went. Only what those cannot tell you:
   the invariant is **zero, not a ratchet**. The subsystems superseded by `engine/season/` are kept for
   their Python — the ones `engine/` still resolves into at runtime (retirement gated on the R-04 role
   work). A subsystem with no Python at all is now an empty lane whose prose is in the archive.
-- **`engine/`** — the executable model (Key substrate, autoload hub, cross-scale, campaign driver,
-  `engine/engine_params/` typed exports, `engine/tests/` as CI job `sim-regression`). **`engine/` names
+- **`engine/`** — the executable model (substrate leaf readers, autoload hub, cross-scale, campaign
+  driver, `engine/engine_params/` typed exports, `engine/tests/` as CI job `sim-regression`).
+  ⚠ **The Key substrate that used to head this list is RETIRED (ED-IN-0232).** `engine/substrate/`
+  now holds only leaf readers, and `engine/substrate/__init__.py` re-exports nothing — it was a
+  pure Key re-export, which is why `import engine.substrate.descriptors` used to load the whole
+  substrate on a head that emitted no Keys. **`engine/` names
   no subsystem by import**: seams resolve through `engine/substrate/composition.py`, where `engine/`
   names a ROLE and `references/module_contracts.yaml` names the MODULE. Two `sys.path` seams into
   `systems/` are not imports; both are declared in `PATH_SEAM_ALLOWED`, which is **shrink-only**. The

@@ -46,10 +46,13 @@ claimed and should not be relied on.
 """
 import os
 import re
+import sys
 
 import pytest
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, os.path.join(ROOT, 'tools'))
+import pathres  # noqa: E402  the single owner of "where did this path go" (CLAUDE.md §8)
 SPEC = os.path.join(ROOT, '.designs', 'systems', '_architecture', 'reference', 'subsystem_flow_skeletons_v1.md')
 
 # ED-IN-0231 (2026-09-16): the spec and the skeletons it rosters are quarantined under
@@ -260,6 +263,22 @@ from .conftest import _GENERATED_LAYER  # noqa: E402  the single owner of "which
 
 GENERATED_TARGETS = frozenset(a for _builder, arts in _GENERATED_LAYER for a in arts)
 
+#: The per-subsystem census sidecars, REBUILT by `build_identifier_census.py` exactly like the
+#: `references/identifier_census.json` the layer tuple names — but the tuple names only that one
+#: file, so the sidecars were being line-checked as if authored. Measured 2026-09-16: editing
+#: `references/module_contracts.yaml` re-numbered `systems/ui/_identifier_census.yaml` and broke an
+#: anchor in a frozen skeleton that says nothing wrong.
+#:
+#: They join the LINE-ADVISORY set below rather than `GENERATED_TARGETS`, for the reason that set
+#: records: `GENERATED_TARGETS` REJECTS a bare line number, and one skeleton cites
+#: `systems/ui/_identifier_census.yaml:1-2` — a header citation that is both bare and perfectly
+#: stable. Rejecting it would red a frozen document over a true claim.
+_CENSUS_SIDECARS = frozenset(
+    'systems/%s/_identifier_census.yaml' % _sub
+    for _sub in sorted(os.listdir(os.path.join(ROOT, 'systems')))
+    if os.path.isdir(os.path.join(ROOT, 'systems', _sub))
+)
+
 # Files whose LINE NUMBERS are not a stable anchor, though their CONTENT is. Checked by symbol,
 # exactly like a generated artifact, because that is the half that stays true.
 #
@@ -270,6 +289,103 @@ GENERATED_TARGETS = frozenset(a for _builder, arts in _GENERATED_LAYER for a in 
 # without a line"); this applies it to the one file where the tax actually came due, rather than
 # editing frozen documents to chase a line count.
 LINE_UNSTABLE_TARGETS = frozenset({'references/canonical_sources.yaml'})
+
+# Files the Key-substrate retirement gutted (ED-IN-0232, 2026-09-16). Their line numbers moved by
+# tens to hundreds of lines and EVERY archived anchor into them went out of range at once.
+#
+# ⚠ THESE DO NOT JOIN `LINE_UNSTABLE_TARGETS`, AND THE REASON IS A MEASUREMENT, NOT A PREFERENCE.
+# That set demands a symbol in place of the line, which worked for `canonical_sources.yaml` because
+# every anchor into it carried one. Measured across `.designs/` for the files below: **281 of the
+# 587 anchors are BARE LINE NUMBERS** — 132 into `mc_v18.py` alone. Adding these files to that set
+# would fail all 281 with "cite a symbol", in documents that are ARCHIVED and frozen and therefore
+# cannot be corrected. An unsatisfiable requirement is not a stricter gate; it is a red one.
+#
+# So a bare-line anchor into one of these is recorded as UNVERIFIABLE rather than failed, and a
+# symbolled anchor is still checked by symbol — the half that stays true, which is the durable fix
+# this module's own docstring named. What is lost is real and is stated rather than buried: a line
+# number cited from a frozen archive into live code is a claim nothing can keep true, and 281 of
+# them are now unchecked. What is kept: the file must still resolve (live, archived, or FORKED),
+# and 306 symbol claims are still asserted.
+RETIREMENT_SHIFTED = frozenset({
+    'engine/mc_v18.py',
+    'engine/autoload/engine_clock.py',
+    'engine/cross_scale/scene_dispatch.py',
+    'engine/cross_scale/zoom_in_out.py',
+    'engine/substrate/__init__.py',
+    'systems/factions/sim/faction_action.py',
+    'systems/factions/sim/parliamentary_transfer.py',
+    'references/module_contracts.yaml',
+    'tools/build_execution_map.py',
+    # 39 archived anchors cite this file by line; ED-IN-0232 cut 15 Key-delivery test functions
+    # out of it, so every line below the first cut moved.
+    'engine/tests/test_pipeline_reach.py',
+    # Both carry golden re-pins whose recorded-old-values blocks added lines above every anchor.
+    'engine/tests/test_f7_smoke_oracle.py',
+    'engine/tests/test_mc_v18_regression.py',
+}) | _CENSUS_SIDECARS
+
+# Symbols the Key retirement DELETED (ED-IN-0232). An archived skeleton citing one of these is not
+# stale — it is correct about a tree that no longer exists, which is the same situation a `FORK:`
+# row describes for a whole file. The citation resolves at `FORK:c6e82105`, where the symbol is
+# still there. Listed explicitly, one line each, rather than matched by pattern: a pattern would
+# also swallow a symbol that went missing by accident, which is the failure this test is for.
+#
+# ⚠ FOUR ENTRIES WERE REMOVED FROM THIS SET after an adversarial pass, and the reason is the
+# difference between "explicit" and "narrow". The first cut listed `accounting_boundary`,
+# `next_tick`, `echo_scheduler` and `Key` — none of which is a deleted symbol:
+#   * `accounting_boundary` is LIVE. `engine/autoload/engine_clock.py` still defines
+#     `PHASE_ACCOUNTING_BOUNDARY = "accounting_boundary"`; the boundary was DEMOTED from a call to a
+#     position, not deleted. An archived anchor citing it would have passed its symbol check, and
+#     the skip would have silenced that check for good.
+#   * `next_tick` still occurs as a live token in `engine/autoload/engine_clock.py`, so anchors
+#     citing it resolve on their own.
+#   * `Key` is matched by a raw substring test over the whole file, and every one of these files
+#     contains the word in its own retirement commentary — so the entry did nothing except disarm
+#     any anchor whose symbol leaf is exactly `Key`.
+# `echo_scheduler` was removed in that same correction AND PUT BACK, which is worth recording
+# because the correction was itself half wrong: the token does survive, but ONLY inside four
+# comments that describe its retirement (`scene_dispatch.py:228,:388` and the two golden re-pin
+# notes). Every anchor citing it points at `faction_action.py` or `mc_v18.py`, where the identifier
+# is genuinely gone. A symbol whose last occurrences are prose about its own deletion is retired.
+# Every entry below was grepped across `engine/`, `systems/` and `tools/` and occurs nowhere.
+RETIRED_SYMBOLS = frozenset({
+    'key_log_hash', 'keys_emitted', 'subscribe_all', 'run_parliamentary_scene',
+    'echo_scheduler', '_emit_battle_concluded', '_emit_public_governance_transfer',
+    'KeyLog', 'TickScheduler', 'TypeRegistry', 'EmittedAt', 'emit_scene_echo',
+    'make_scheduler', '_echo_transport_on',
+    '_battle_key_seq', '_parl_key_seq',
+    # the articulation bus subscriber and the one test that exercised it end-to-end
+    'evaluate_articulation_triggers',
+    'test_combat_pair_key_reaches_articulation_subscriber_under_flag_on',
+    # `UNREACHABLE` was a marker word inside `_emit_public_governance_transfer`'s docstring, cited
+    # by the factions skeleton. It went with the function.
+    'UNREACHABLE',
+})
+
+# Generated artifacts the retirement took with their builders (ED-IN-0232). These get no `FORK:`
+# row — they were UNTRACKED, so no ref holds them and a row would promise content that is not
+# there (see the ledger's own note). Their builders ARE forked, which is the stronger provenance:
+# re-run `build_key_graph.py` or `build_contract_index.py` at `c6e82105` and the file comes back.
+RETIRED_GENERATED = frozenset({
+    'references/key_graph.json',
+    'references/KEY_INDEX.md',
+    'references/CONTRACT_INDEX.md',
+})
+
+
+def _is_retired(filepath):
+    """Does the ledger record this exact path as FORKED?
+
+    ⚠ `pathres.resolve` MATCHES DIRECTORY PREFIXES, so it answers FORKED for any invented filename
+    under a forked directory (CLAUDE.md §8 records that hazard by name). Here that is the WANTED
+    behaviour and the narrow one: an anchor cites a real path that was deleted, and the rows written
+    for ED-IN-0232 are exact file rows, not a directory prefix. An anchor citing a path that never
+    existed still fails, because no row covers it.
+    """
+    try:
+        return pathres.resolve(filepath).status == pathres.FORKED
+    except Exception:
+        return False
 
 
 def _anchor_failures(relpath):
@@ -287,8 +403,36 @@ def _anchor_failures(relpath):
         where = f"{relpath} -> `{filepath}:{start_s}{'-' + end_s if end_s else ''}"
         where += f" {symbol}`" if symbol else "`"
 
+        if not os.path.isfile(target) and filepath in RETIRED_GENERATED:
+            continue
+
         if not os.path.isfile(target):
+            # A RETIRED path is resolvable, not broken (CLAUDE.md §1: retiring means deleting and
+            # writing a `FORK:` row). The archived skeleton's own text is left alone — it records
+            # what was true when it was written — and the anchor resolves through the ledger to the
+            # ref that still holds the file. NEITHER the line number NOR the symbol can be checked
+            # against a deleted file, and that is stated rather than silently skipped: this branch
+            # buys resolvability, not currency. `pathres.resolve` is the single owner of the answer
+            # (§8); an unretired missing file still fails below.
+            if _is_retired(filepath):
+                continue
             failures.append(f"{where}: file does not exist")
+            continue
+
+        if filepath in RETIREMENT_SHIFTED:
+            # Line advisory, symbol still binding. See RETIREMENT_SHIFTED for why this is not the
+            # `LINE_UNSTABLE_TARGETS` treatment.
+            if not symbol:
+                continue
+            leaf = symbol.rsplit('.', 1)[-1]
+            if leaf in RETIRED_SYMBOLS:
+                continue
+            checked += 1
+            if leaf not in _read(target):
+                failures.append(
+                    f"{where}: symbol {leaf!r} does not occur anywhere in {filepath}. The line is "
+                    f"advisory for a file the Key retirement re-numbered (ED-IN-0232); the symbol "
+                    f"is not, and this one is absent.")
             continue
 
         if filepath in GENERATED_TARGETS or filepath in LINE_UNSTABLE_TARGETS:
@@ -412,43 +556,62 @@ def test_no_unparseable_anchor_lookalikes(subsystem, lane, relpath):
         + "\n  ".join('`' + b + '`' for b in bad))
 
 
-CONTRACT_INDEX = os.path.join(ROOT, 'references', 'CONTRACT_INDEX.md')
+MODULE_CONTRACTS = os.path.join(ROOT, 'references', 'module_contracts.yaml')
 _CONTRACTS_HEADER_RE = re.compile(r'^\*\*Subsystem:\*\*.*?\*\*Contracts:\*\*(.*)$', re.M)
-_INDEX_MODULE_RE = re.compile(r'^### ([a-z_]+)$', re.M)
+#: ⚠ THE ROSTER MOVED SOURCE 2026-09-16 (ED-IN-0232), and it moved because the old one is gone
+#: rather than because a better one appeared. This read `### <module>` headings out of
+#: `references/CONTRACT_INDEX.md`, the rendered view `tools/build_contract_index.py` generated —
+#: deliberately, so the roster had ONE owner and this test composed on it instead of re-deriving.
+#: Both the tool and its output retired with the Key substrate (half that renderer's job was the
+#: registry<->Key-type join), so the index can never be rebuilt.
+#:
+#: It now reads `module_contracts.yaml` directly. That IS a re-derivation, and CLAUDE.md §8 would
+#: normally object — but the index was itself derived from this file, so with the index gone there
+#: is exactly one owner again and reading it is composing on the owner, not minting a second answer.
+#: The alternative was the `pytest.skip` an adversarial pass caught here: absent index -> skip ->
+#: EVERY parametrized case skipped, and the file's own `len(known) >= 20` anti-vacuity guard
+#: short-circuited with it. A permanently-skipping test is worse than a re-derived roster.
+_YAML_MODULE_RE = re.compile(r'^  - module: ([a-z_]+)\s*$', re.M)
+
+#: Module contracts retired by ruling rather than renamed away. Listed one per line for the same
+#: reason `RETIRED_SYMBOLS` is: a pattern would also swallow a row someone deleted by accident.
+RETIRED_CONTRACTS = frozenset({'articulation_layer'})
 
 
 @pytest.mark.parametrize('subsystem,lane,relpath', ROSTER, ids=SUBSYSTEM_IDS)
 def test_contract_names_resolve_in_the_generated_index(subsystem, lane, relpath):
     """A skeleton's `Contracts:` header must name real module contracts.
 
-    `references/CONTRACT_INDEX.md` (generated by `tools/build_contract_index.py`, ED-IN-0151) is
-    the rendered, always-fresh view of `module_contracts.yaml`. It owns the module roster; this
-    test composes on it rather than re-deriving one, so the two artifacts cannot drift apart in
-    the one place they overlap.
+    `references/module_contracts.yaml` owns the module roster. See the note on `_YAML_MODULE_RE`
+    for why this reads the registry directly rather than the generated index it used until
+    2026-09-16.
 
-    It exists because they already had: at first join, `social_contest`'s header named Python
-    module paths instead of its contract, and four more headers carried a source-file path in the
-    contract slot. Both read as citations and neither was checkable until the index gave this
-    check something to resolve against.
+    It exists because the drift it guards already happened: at first join, `social_contest`'s
+    header named Python module paths instead of its contract, and four more headers carried a
+    source-file path in the contract slot. Both read as citations and neither was checkable until
+    there was a roster to resolve against.
     """
     path = os.path.join(ROOT, archived(relpath))
     if not os.path.isfile(path):
         pytest.skip('missing skeleton — reported by test_every_roster_subsystem_has_a_skeleton')
-    if not os.path.isfile(CONTRACT_INDEX):
-        pytest.skip(f'{os.path.relpath(CONTRACT_INDEX, ROOT)} absent — nothing to resolve against')
 
-    known = set(_INDEX_MODULE_RE.findall(_read(CONTRACT_INDEX)))
+    known = set(_YAML_MODULE_RE.findall(_read(MODULE_CONTRACTS)))
     assert len(known) >= 20, (
-        f"parsed only {len(known)} module headings from CONTRACT_INDEX.md — the heading format "
-        f"changed and this check is now vacuous")
+        f"parsed only {len(known)} `- module:` rows from module_contracts.yaml — the registry "
+        f"shape changed and this check is now vacuous")
 
     m = _CONTRACTS_HEADER_RE.search(_read(path))
     assert m, f"{relpath}: no `**Contracts:**` field in the header block"
     named = re.findall(r'`([^`]+)`', m.group(1))
-    unknown = [n for n in named if n not in known]
+    # A contract RETIRED out of the registry is not a mis-named header. `articulation_layer`'s
+    # `sim_module` was `engine/cross_scale/articulation.py`, the Key-bus subscriber, so the row went
+    # with the substrate (ED-IN-0232) — and the archived skeleton that names it is frozen and
+    # correct about the tree it was written against. This is the same distinction the anchor checker
+    # draws with `RETIRED_SYMBOLS`: gone-by-ruling resolves, gone-by-typo still fails.
+    unknown = [n for n in named if n not in known and n not in RETIRED_CONTRACTS]
     assert not unknown, (
         f"{relpath}: `Contracts:` names {unknown}, which are not module contracts — "
-        f"CONTRACT_INDEX.md has no `### <module>` heading for them. Name the contract "
+        f"module_contracts.yaml has no `- module:` row for them. Name the contract "
         f"(e.g. `social_contest`), not a Python module path or a source file.")
 
 

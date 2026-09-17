@@ -100,27 +100,17 @@ def zoom_out(scene_outcomes: dict, world=None) -> ZoomOutResult:
     """Translate scene outcomes back into BG layer per §4.2.
 
     scene_outcomes accepts:
-      - 'accord_applied': list of dicts (WAVE-2 rename, OI-03 fix 4, ED-IN-0091 plan §3 Wave 2,
-        2026-07-29 — was 'accord_changes'/documented as "queued as Domain Echoes per §5.5"; that
-        was a contract collision at the time — `engine.cross_scale.echo_transport
-        ._apply_accord_echo` wrote the settlement Order change IMMEDIATELY at scene-resolution
-        time, not at Accounting Step 4c, because genuine OF-7 queue-parity would have required
-        registering a new Key type a different lane owned that wave. RESOLVED FOR REAL (not just
-        renamed around) in W3 Handoff item 1, ED-IN-0091 plan §3 Wave 3, 2026-07-29:
-        `scene.accord_echo` is now registered (`key_type_registry_v30.md`) and
-        `_apply_accord_echo` routes the settlement-Order write through `sched.emit(key,
-        apply=...)`, landing at `accounting_boundary()` exactly like 'other_echoes' below. The
-        dict KEY stays 'accord_applied' rather than being renamed to 'accord_queued' — a
-        different lane's file, `engine/tests/test_pipeline_reach.py`, reads this literal key name
-        this wave (see `_apply_accord_echo`'s own docstring for the full reasoning) — but each
-        row's 'applied' boolean now means "a settlement resolved and a Key was queued for
-        Accounting", and the settlement-Order write itself is genuinely deferred, not
-        already-applied.
+      - 'accord_applied': list of dicts (settlement Accord/Order changes per §5.5)
       - 'pc_incapacitated': bool (Stage 1 applies immediately per ED-159)
       - 'contested_figure_wounded': bool (ED-167: +0.15 Ob to commander, ED-PC-0006)
-      - 'other_echoes': list of dicts (faction stat changes per §5, genuinely QUEUED — deferred
-        via the OF-7 Key substrate, `echo_transport.emit_scene_echo`'s `sched.emit(key,
-        apply=...)`, landing at `accounting_boundary()`)
+      - 'other_echoes': list of dicts (faction stat changes per §5)
+
+    ⚠ NO CALLER SUPPLIES ANY OF THESE TODAY (measured 2026-09-16, ED-IN-0232). Both producers
+    were `echo_transport`, which retired with the Key substrate, so the one live call site
+    (`scene_dispatch.run_scene`) passes `{}` and only the empty path executes. The §4.2
+    translation below is KEPT rather than deleted with its producers: it is the scale-transition
+    protocol the spec names, and it is the interface a replacement producer would target. It is
+    also, until then, unexercised — do not read a green suite as evidence that it works.
     """
     notes = []
     domain_echoes = []

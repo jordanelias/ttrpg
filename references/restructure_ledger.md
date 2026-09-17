@@ -2522,3 +2522,59 @@ from `SCAN_PREFIXES`, but `tools/hook_md_sweep_guard.py` blocks by markdown-ness
 |----------|----------|--------|
 | `audit/` | `.audit/` | DONE (2026-09-16, ED-IN-0231 — the audit corpus QUARANTINED behind a leading dot, same mechanism and same ruling as `.designs/`: ripgrep and `glob.glob` skip hidden directories, so a session hunting a term no longer rakes in 121 historical audit reports. MEASURED on the case that prompted it: searching the tree for the DEPRECATED NAME token (the one `references/names_index.yaml` enforces against) returned only the three definitional files; the same search with `--hidden` additionally returned the audit corpus. ⚠ THIS TREE IS NOT INERT — 230 files, only 121 of them markdown; it also holds 45 `.py` and 60 `.json`, and `tools/gen_sigma_parity_goldens.py` reads `engine.py` under it to regenerate a golden a blocking CI test asserts on. Hidden from sweeps is not hidden from code, and nothing here is retired. Directory-prefix row: every path under it resolves through this one row.) |
 | `designs/audit/` | `.audit/` | DONE (2026-09-16, ED-IN-0231 — CHAIN FLATTENED. This prefix already reached the corpus through the `designs/audit/` -> `audit/` row; the `.audit/` rename added a second hop and `tools/broken_dependency_checker.py` resolves ONE (CLAUDE.md §8). Without this row a live ledger citation reads as broken while `pathres` resolves it fine.) |
+
+### The Key substrate retired (2026-09-16, ED-IN-0232)
+
+Jordan, ruling on the question ED-IN-0227 left open: *"Anything key-based gets retired."*
+
+MEASURED FIRST, because the blast radius was not what the mention-count suggested. The bus had exactly
+THREE live emitters and ONE production host: `world.echo_scheduler` was attached in a single place,
+`engine/mc_v18.py`, under the `ECHO_TRANSPORT` flag. Every other emit site read
+`getattr(world, 'echo_scheduler', None)` and no-opped, so outside the prototype campaign the substrate
+was already inert — `engine/season/`, the RULED head, constructed zero Keys and never attached a
+scheduler. Two of the three emitters (`faction_action._emit_battle_concluded`,
+`parliamentary_transfer._emit_public_governance_transfer`) carried no `apply=` and were pure telemetry;
+removing them was verified to leave the seed-42 n=8 win-share byte-identical while `keys_emitted` fell
+180 -> 99. The third (`echo_transport`) carried the two `apply=` deferrals, and those retire with it.
+
+⚠ THE REF IS `c6e82105`, NOT THIS BRANCH'S OWN COMMIT, and the reason is the ED-IN-0145 lesson recorded
+above: a PR branch SHA does not survive a squash merge, so the fork ref must already be an ancestor of
+`main`. `c6e82105` is this PR's base commit on `main` and contains every file below.
+
+| old | new | STATUS |
+|---|---|---|
+| `engine/substrate/keys.py` | `FORK:c6e82105` | FORKED |
+| `engine/cross_scale/echo_transport.py` | `FORK:c6e82105` | FORKED |
+| `engine/cross_scale/articulation.py` | `FORK:c6e82105` | FORKED |
+| `engine/cross_scale/parliamentary_bridge.py` | `FORK:c6e82105` | FORKED |
+| `engine/engine_params/key_types.json` | `FORK:c6e82105` | FORKED |
+| `engine/engine_params/module_contracts.json` | `FORK:c6e82105` | FORKED |
+| `tools/export_key_types.py` | `FORK:c6e82105` | FORKED |
+| `tools/build_key_graph.py` | `FORK:c6e82105` | FORKED |
+| `tools/build_contract_index.py` | `FORK:c6e82105` | FORKED |
+| `tools/contract_runtime_conformance.py` | `FORK:c6e82105` | FORKED |
+| `tools/export_module_contracts.py` | `FORK:c6e82105` | FORKED |
+| `tests/valoria/test_key_substrate.py` | `FORK:c6e82105` | FORKED |
+| `tests/valoria/test_key_graph.py` | `FORK:c6e82105` | FORKED |
+| `tests/valoria/test_articulation_subscriber.py` | `FORK:c6e82105` | FORKED |
+| `tests/valoria/test_battle_concluded_key.py` | `FORK:c6e82105` | FORKED |
+| `tests/valoria/test_public_governance_transfer_key.py` | `FORK:c6e82105` | FORKED |
+| `tests/valoria/test_contract_runtime_conformance.py` | `FORK:c6e82105` | FORKED |
+| `tests/valoria/test_contract_index.py` | `FORK:c6e82105` | FORKED |
+| `tests/valoria/test_module_contracts_artifact.py` | `FORK:c6e82105` | FORKED |
+| `engine/tests/test_echo_transport.py` | `FORK:c6e82105` | FORKED |
+| `engine/tests/test_accord_echo.py` | `FORK:c6e82105` | FORKED |
+| `engine/tests/test_parliamentary_bridge.py` | `FORK:c6e82105` | FORKED |
+| `engine/tests/test_parliamentary_transfer_bridge.py` | `FORK:c6e82105` | FORKED |
+| `tests/valoria/test_faction_l_reconstruction.py` | `FORK:c6e82105` | FORKED |
+| `tests/valoria/_campaign.py` | `FORK:c6e82105` | FORKED |
+
+<!-- THREE RETIRED PATHS GET NO `FORK:` ROW, DELIBERATELY, and the omission is the honest answer
+rather than an oversight. `references/key_graph.json`, `references/KEY_INDEX.md` and
+`references/CONTRACT_INDEX.md` were UNTRACKED generated artifacts (culling wave 5 untracked them;
+`tests/valoria/conftest.py`'s generated_layer fixture built them each run). `git cat-file -e
+c6e82105:<path>` fails for all three, so a `FORK:c6e82105` row would promise content at a ref that
+does not hold it — precisely the unfollowable-provenance defect the ED-IN-0145 paragraph above
+records and `tests/valoria/test_forked_status.py::test_the_fork_rows_name_a_real_ref` checks for.
+Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contract_index.py` at
+`c6e82105` reproduces them exactly, which is the stronger provenance a generated file can have. -->

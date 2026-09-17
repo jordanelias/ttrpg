@@ -11,7 +11,6 @@ WHAT MAKES IT DIFFERENT FROM WHAT ALREADY EXISTS, so this does not duplicate:
   * `references/module_contracts.yaml`'s `wiring:` facts carry build state and port rank per
     module (folded in from the retired `wiring_manifest.yaml`, plan S5c). It has no
     notion of CALL SEQUENCE.
-  * `references/key_graph.json` reconciles producers/consumers across two authored sources.
 This map adds the missing axis: **temporal order**, from `run_campaign` through the season loop
 to the terminal condition, with every other view joined onto it.
 
@@ -30,7 +29,6 @@ SOURCES (nothing is invented; every row traces to a file):
   engine/cross_scale/scene_dispatch.py    — the scene phase
   references/module_contracts.yaml        — Key IN -> resolver -> OUT, owned state, gates,
                                             plus `wiring:` build/godot/port_rank/parity
-  references/key_graph.json               — producers + consumers per Key type
   .designs/systems/_architecture/reference/key_type_registry_v30.md — Key payload/scale/permanence
 
 Usage:
@@ -82,13 +80,6 @@ SPINE = [
     ("boot.flags", "boot", "Resolve per-campaign flags",
      "engine/mc_v18.py", "world.dispatch_combat_bridge = _dispatch_combat_bridge_on(effective_params)",
      [], "DISPATCH_COMBAT_BRIDGE decided ONCE and stashed on `world` (single owner)."),
-    ("boot.substrate", "boot", "Attach the Key substrate",
-     "engine/mc_v18.py", "world.echo_scheduler = echo_transport.make_scheduler(", [],
-     "THE ORCHESTRATOR. TickScheduler + KeyLog. Its PRESENCE is the ECHO_TRANSPORT flag — "
-     "absence means the byte-exact legacy path. `world.key_log` is the log."),
-    ("boot.subscribe", "boot", "Subscribe articulation to the scheduler",
-     "engine/mc_v18.py", "_articulation.subscribe_all(world.echo_scheduler)", ["articulation"],
-     "The only production TickScheduler subscriber wiring."),
 
     ("loop", None, "Season loop — `for _ in range(max_s)`",
      "engine/mc_v18.py", "for _ in range(max_s):", [], "Breaks on `world.winner`."),
@@ -116,35 +107,12 @@ SPINE = [
      "MEASURED 2026-08-03: a whole campaign dispatches 29 slots and ALL 29 are `contest`. "
      "`queue_triggered_scenes` is the only production caller of `queue_scene`, and "
      "`evaluate_triggers` can only emit scene_type=contest. No trigger produces combat."),
-    ("loop.s2.parliament", "loop.s2", "Parliamentary vote (flag-gated on the scheduler)",
-     "engine/mc_v18.py", "parliamentary_bridge.run_parliamentary_scene(world, world.rng)",
-     ["social_contest"], "Resolves on aggregate state; composes a winner Domain Echo."),
-    ("loop.boundary", "loop", "ACCOUNTING_BOUNDARY opens — deferred applies land",
-     "engine/autoload/engine_clock.py", "sched.accounting_boundary()", [],
-     "OF-7. Keys emitted during the scene phase were logged LIVE; their `apply` closures execute "
-     "HERE. NOTE THE RE-PARENTING (ED-IN-0199, 2026-08-27): this step used to be `loop.s2.boundary`, "
-     "a CHILD of the action phase, because both clock calls sat at the tail of mc_v18's action "
-     "callback — so the boundary was crossed before accounting was reached and `next_tick()` left "
-     "the scheduler in _PHASE_ACTION for the whole of accounting. It is a sibling of the phases "
-     "now, which is what it always was in the spec. Output-identical at the move (accounting "
-     "emits no Keys today); see engine_clock.py's docstring."),
-    ("loop.s3", "loop", "ACCOUNTING_BOUNDARY — run_accounting (resolved by role)",
-     "engine/autoload/engine_clock.py", "composition.require('accounting')(world)",
-     ["territorial_piety", "npc_behavior", "faction_state"],
-     "SIX steps, read from the function body (accounting.py:95-142) rather than its summary. An "
-     "earlier version of this note said 'CI calc + MS decay + NPC' and attributed "
-     "`settlement_layer`, which run_accounting never calls -- written from the docstring, not the "
-     "code. In order: (1) apply_seasonal_ci every season [PP-412]; (2) apply_ms_baseline_decay, "
-     "gated by the CALLER on season % SEASONS_PER_YEAR == 0 [PP-255] -- the callee does not check "
-     "cadence; (3) check_insurgency_triggers [GD-3 a-b]; (4) check_insurgency_promotion over a "
-     "SNAPSHOT of the insurgency ids, since promotion mutates the dict; (5) simulate_npc_actions "
-     "[NPE stance drift]; (6) _probe_province_accord_drift, report-only and deliberately last."),
-    ("loop.close", "loop", "Tick closes — next_tick()",
-     "engine/autoload/engine_clock.py", "sched.next_tick()", [],
-     "Resets the per-tick emission counter and returns the scheduler to the ACTION phase. LAST, "
-     "so the Level-B emission cap spans BOTH phases — propagation_spec §4.1's \"Level B's cap "
-     "applies tick-wide, both phases.\" Pre-ED-IN-0199 this ran before accounting, giving each "
-     "phase its own budget."),
+    ("loop.boundary", "loop", "ACCOUNTING_BOUNDARY opens",
+     "engine/autoload/engine_clock.py", "composition.require('accounting')(world)", [],
+     "The boundary is no longer a CALL. It was `sched.accounting_boundary()`, where the Key "
+     "substrate's deferred `apply` closures landed; with the substrate retired (ED-IN-0232) there "
+     "is nothing to drain, so the boundary is simply the point between the action callback and "
+     "accounting's body — which is where propagation_spec §O.1 always put it."),
     ("loop.victory", "loop", "Victory check (GD-1)",
      "engine/mc_v18.py", "results = victory.check_all_factions(world)", ["victory"],
      "Sets `world.winner`, which breaks the loop on the NEXT iteration."),
@@ -155,8 +123,12 @@ SPINE = [
      "Runs when the loop exhausts `max_s` with no victor."),
     ("term.result", "term", "Emit CampaignResult",
      "engine/mc_v18.py", "return CampaignResult(", [],
-     "Carries `key_log_hash` + `keys_emitted` — the parity surface the Godot port compares "
-     "against (strategy Stage 2: Key-log equality is the master parity check)."),
+     "⚠ NO LONGER THE PARITY SURFACE. This note said it carried `key_log_hash` + `keys_emitted` "
+     "and that Key-log equality was the Godot port's master parity check (strategy Stage 2). Both "
+     "fields retired with the Key substrate (ED-IN-0232), so the port has no single hash to compare "
+     "and the remaining fields — winner, battles, scenes, surviving, final_state — are what a "
+     "parity check has to work from. This string is RENDERED INTO references/EXECUTION_MAP.md on "
+     "every suite run, which is why it is corrected rather than left."),
 ]
 
 
@@ -229,7 +201,6 @@ EXECUTING = {'live', 'gated'}
 
 def build():
     contracts = _load_yaml('references/module_contracts.yaml')
-    keygraph = _load_json('references/key_graph.json')
     trace = _load_json('references/execution_trace.json')
 
     adapters = contracts.get('adapters') or {}
@@ -293,8 +264,6 @@ def build():
             "code_exists": _exists(_code_path(name, c, kind)),
             "doc": c.get('doc'),
             "doc_exists": _exists(c.get('doc')),
-            "keys_in": _types(c.get('consumes')),
-            "keys_out": _types(c.get('emits')),
             # CENTRALIZATION: the scalars this module OWNS. A scalar with two owners is the
             # centralization defect the fork exists to remove, so ownership travels with the node.
             "owned_state": _types(c.get('state')),
@@ -302,28 +271,6 @@ def build():
             "gap_notes": bool(c.get('gap_notes')),
             "contract_status": c.get('status'),
             "note": m.get('note') or '',
-        }
-
-    # ---- key rows from the merged graph ----
-    ktypes = keygraph.get('keys') or {}
-    key_rows = {}
-    for kname, k in (ktypes.items() if isinstance(ktypes, dict) else []):
-        if not isinstance(k, dict):
-            continue
-        rec = k.get('reconciliation') or {}
-        payload = k.get('payload') or {}
-        key_rows[kname] = {
-            "type": kname,
-            "producers": k.get('producers') or [],
-            "consumers": k.get('consumers') or [],
-            "permanence": k.get('permanence'),
-            "payload_required": payload.get('required') or [],
-            "producer_status": rec.get('producer_status'),
-            "consumer_status": rec.get('consumer_status'),
-            # A type with no producer cannot fire; with no consumer nothing reacts. Both are
-            # fork work-list entries, so they are counted rather than filtered out.
-            "no_producer": not (k.get('producers') or []),
-            "no_consumer": not (k.get('consumers') or []),
         }
 
     # ---- the spine, with anchor verification ----
@@ -374,14 +321,12 @@ def build():
         "sources": [
             "engine/mc_v18.py", "systems/overview/sim/season.py",
             "engine/cross_scale/scene_dispatch.py", "references/module_contracts.yaml",
-            "references/key_graph.json",
         ],
         "reality_check": {
             "modules_total": len(by_name),
             "adapters_total": len(adapters),
             "units_executing": len(executing),
             "executing": executing,
-            "key_types": len(key_rows),
             "code_paths_declared": sum(1 for r in module_rows.values() if r['code']),
             "code_paths_missing": sorted(n for n, r in module_rows.items()
                                          if r['code'] and r['code_exists'] is False),
@@ -402,7 +347,6 @@ def build():
         },
         "phases": phases,
         "modules": module_rows,
-        "keys": key_rows,
     }
 
 
@@ -415,7 +359,7 @@ def render_md(d):
     rc = d['reality_check']
     A(f"**{rc['units_executing']} of {rc['modules_total'] + rc['adapters_total']} units execute today** "
       f"({rc['modules_total']} modules + {rc['adapters_total']} adapters). "
-      f"{rc['key_types']} Key types registered.\n")
+      "\n")
     A("Every node below is annotated `RUNS` or `does not run`. Nodes that do not run are kept: "
       "for the fork they are the work-list, not noise.\n")
 
@@ -440,37 +384,16 @@ def render_md(d):
         if p['note']:
             A(f"{pad}  <sub>{p['note']}</sub>")
 
-    A("\n## 2. Modules — contract, keys, state, port\n")
-    A("| module | scale | resolver | build | runs | godot | rank | keys in | keys out |")
-    A("|---|---|---|---|---|---|---|---|---|")
+    A("\n## 2. Modules — contract, state, port\n")
+    A("| module | scale | resolver | build | runs | godot | rank |")
+    A("|---|---|---|---|---|---|---|")
     for name in sorted(d['modules'], key=lambda n: (d['modules'][n]['port_rank'] is None,
                                                     d['modules'][n]['port_rank'] or 0, n)):
         m = d['modules'][name]
         A(f"| `{name}` | {', '.join(m['scales'])} | {m['resolver'] or ''} | {m['build'] or ''} | "
-          f"{'✅' if m['executes'] else '—'} | {m['godot'] or ''} | {m['port_rank'] if m['port_rank'] is not None else ''} | "
-          f"{len(m['keys_in'])} | {len(m['keys_out'])} |")
+          f"{'✅' if m['executes'] else '—'} | {m['godot'] or ''} | {m['port_rank'] if m['port_rank'] is not None else ''} |")
 
-    A("\n## 3. Keys — producers, consumers, and the dead ends\n")
-    if d['keys']:
-        live = [k for k, r in d['keys'].items() if not r['no_producer'] and not r['no_consumer']]
-        A(f"**{len(live)} of {len(d['keys'])} key types have both a producer and a consumer.** "
-          f"A type with no producer cannot fire; one with no consumer means nothing reacts. Both "
-          f"are kept below and marked — for the fork they are the work-list.\n")
-        A("| key type | producers | consumers | required payload | gap |")
-        A("|---|---|---|---|---|")
-        for k in sorted(d['keys']):
-            r = d['keys'][k]
-            gap = []
-            if r['no_producer']:
-                gap.append("**no producer**")
-            if r['no_consumer']:
-                gap.append("**no consumer**")
-            A(f"| `{k}` | {', '.join(r['producers']) or '—'} | {', '.join(r['consumers']) or '—'} | "
-              f"{', '.join(r['payload_required']) or '—'} | {' · '.join(gap) or 'ok'} |")
-    else:
-        A("_No key rows resolved from `references/key_graph.json` — check its schema._")
-
-    A("\n## 4. Centralization — owned state per module\n")
+    A("\n## 3. Centralization — owned state per module\n")
     A("The scalars each module's contract declares it OWNS. A scalar appearing under two owners "
       "is the centralization defect the fork exists to remove, so ownership travels with the node "
       "rather than living in a separate register.\n")
@@ -514,7 +437,7 @@ def main(argv):
         fh.write(md)
     rc = d['reality_check']
     print(f"[EXEC-MAP] {len(d['phases'])} phases · {len(d['modules'])} units "
-          f"({rc['units_executing']} executing) · {len(d['keys'])} key types")
+          f"({rc['units_executing']} executing)")
     missing = [p['id'] for p in d['phases'] if not p['anchor_present']]
     if missing:
         print(f"[EXEC-MAP] WARNING anchors not found in source: {missing}")

@@ -123,8 +123,24 @@ _N = 2
 # NOTE: win_share and winners did NOT move on this seed pair; only battles_mean did (34.5 -> 36.0).
 # That is worth stating rather than leaving the reader to diff: at n=2 the share is quantised to
 # 50pp steps, so it is the LEAST sensitive of the three pins and its stability here is not evidence.
-GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
-GOLDEN_WINNERS = {'Crown': 1, 'Varfell': 1}
+# ⚠ RE-PINNED 2026-09-16 (ED-IN-0232) — THE KEY SUBSTRATE RETIRED. Jordan: *"anything key-based
+# gets retired."* This batch ran with ECHO_TRANSPORT defaulting ON, so its golden was recorded with
+# the consequence spine live: the per-season §10 Parliamentary vote and the composed Domain Echo,
+# both gated on `world.echo_scheduler`. With the bus gone the campaign takes what used to be the
+# flag-OFF path and the RNG stream diverges from the first season.
+#
+# THIS IS A RULED MECHANISM CHANGE, NOT DRIFT, and at n=2 it is not a balance signal either way —
+# `tools/balance_oracle.py` at 120 campaigns per arm is the instrument for that and was not run,
+# because the old arm is unreachable from this commit and a control needs two reachable arms.
+# What IS checked is that the move is the predicted one: the sibling f7 oracle (n=8, seed 42)
+# landed exactly on the flag-OFF distribution the tree had already pinned byte-exactly in
+# `test_echo_transport.py`, measured on both arms before anything was deleted.
+#
+# OLD values, preserved (the ECHO_TRANSPORT-on arm, unreachable from this commit on):
+#   GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
+#   GOLDEN_WINNERS   = {'Crown': 1, 'Varfell': 1}
+GOLDEN_WIN_SHARE = {'Crown': 0.0, 'Church': 50.0, 'Hafenmark': 50.0, 'Varfell': 0.0}
+GOLDEN_WINNERS = {'Hafenmark': 1, 'Church': 1}
 # RE-PINNED 2026-08-21, M1 juncture 1: fractional dice pools (ED-IN-0187). `sigma_leverage.roll_net_continuous` no longer rounds its pool, so every sampled value changes and the RNG stream diverges. NOT a balance signal at this n — the control is `tools/balance_oracle.py` at 120 campaigns per arm, where no faction shifts significantly (all |z| < 0.53); see the RE-PINNED block in test_f7_smoke_oracle.py for the table.
 GOLDEN_BATTLES_MEAN = 36.0
 

@@ -277,117 +277,19 @@ def row_determinism():
     }
 
 
-def row_key_log_closure():
-    """Every emitted key has a registered consumer or a declared terminal.
+# ── row_key_log_closure RETIRED 2026-09-16 (ED-IN-0232) ──────────────────────────────────
+# It asked "does every emitted Key have a registered consumer or a declared terminal", and it read
+# `references/module_contracts.yaml`'s `emits:`/`consumes:` blocks to answer. Jordan retired the Key
+# substrate; those blocks went with it, so the row would have computed `sorted(set() - set() -
+# set())` and published **0** — the clean value, derived from nothing.
+#
+# THAT IS THE EXACT FAILURE THIS FILE'S OWN DOCSTRING NAMES, quoting ED-IN-0226: *"a gate aimed at
+# the wrong tree does not report nothing — it answers the question it was built to answer,
+# INCORRECTLY, in the direction that looks like progress."* The row is DELETED rather than left to
+# report a vacuous zero, and rather than re-pointed: there is no Key log to close.
+#
+# Caught by an adversarial pass on the retirement itself, not by the retirement.
 
-    PARTIAL today: module_contracts.yaml declares each module's key IN/OUT, so an
-    emitted type with no declared consumer is statically visible. That is a real
-    finding and worth surfacing now. It is NOT the full row — the full row would also
-    catch a contract-declared consumer that never FIRES, which static analysis cannot see.
-
-    ⚠⚠ **AND THE RUNTIME HALF IS NOT REACHABLE BY RUNNING THE HEAD, WHICH THIS ROW USED TO
-    IMPLY IT WAS.** Its `unblocked_by` read *"a season KeyLog"* — as though running
-    `engine/season/` for long enough would produce one. It does not. MEASURED 2026-09-14:
-
-      * `engine/season/` contains **no KeyLog and no `engine.substrate.keys` import** — the two
-        mentions of the module are a docstring and a comment. A 2-season headless run emits
-        **119 `Event`s across 11 kinds** (`claim.deposited`, `news.told`, `proposition.uttered`,
-        …) into `World.log`, and **zero Keys**.
-      * **0 of the 17 Key-EMITTING modules in `module_contracts.yaml` live under
-        `engine/season/`.** They sit in `engine/autoload/` (2), `systems/*/sim/` (7), or declare
-        `sim_module: none` (7).
-
-    So a season of the ratified head exercises **none** of the emitters this row is about. The
-    Key bus and the season loop are two different carriers, and whether the head should ever
-    adopt Keys is a design question nobody has taken.
-
-    ⚠ **THIS IS ED-IN-0226's REPAIR APPLIED ONE ROW ALONG.** That entry re-pointed rows 1-2 off
-    `mc_v18` because *"a gate aimed at the wrong tree does not report nothing — it answers the
-    question it was built to answer, INCORRECTLY, in the direction that looks like progress."* An
-    `unblocked_by` naming an artifact the head cannot produce is the same error in the other
-    direction: it sends the next session to run seasons until a KeyLog appears, and none will.
-    The row stays PARTIAL — that part was always honest — and now says what would actually
-    move it.
-    """
-    path = _repo(CONTRACTS)
-    if not os.path.exists(path):
-        return _blocked('key_log_closure', 'Every emitted key has a consumer or declared terminal',
-                        'references/module_contracts.yaml', 'contracts file not found')
-    try:
-        with open(path, encoding='utf-8') as fh:
-            data = yaml.safe_load(fh) or {}
-    except Exception as exc:
-        return _blocked('key_log_closure', 'Every emitted key has a consumer or declared terminal',
-                        'a parseable module_contracts.yaml', f'{type(exc).__name__}')
-
-    # Schema (references/module_contracts.yaml, 27 modules):
-    #   emits:    [{type: <id>, terminal: <bool>}]
-    #   consumes: [{type: <id>, from: [<module>, ...]}]
-    # `terminal: true` IS this row's "declared terminal" — the contract already carries
-    # the distinction the acceptance row asks for, so the static half is exact, not a proxy.
-    modules = data.get('modules')
-    if not isinstance(modules, list):
-        return _blocked('key_log_closure', 'Every emitted key has a consumer or declared terminal',
-                        'module_contracts.yaml with a top-level `modules` list',
-                        f'unexpected shape: {type(modules).__name__}')
-
-    emitted, terminal, consumed = set(), set(), set()
-    wildcard_consumers = 0
-    for spec in modules:
-        if not isinstance(spec, dict):
-            continue
-        for e in spec.get('emits') or []:
-            if isinstance(e, dict) and e.get('type'):
-                emitted.add(str(e['type']))
-                if e.get('terminal'):
-                    terminal.add(str(e['type']))
-        for c in spec.get('consumes') or []:
-            if isinstance(c, dict) and c.get('type'):
-                t = str(c['type'])
-                # `- {type: "*", from: engine}` is a QUANTIFIER, not a key name. Two modules
-                # declare it, one commented "universal reader of the full Key stream
-                # (substrate §8.7)". The first version of this row put the literal "*" into
-                # the consumed set and never expanded it, which is the term-vs-concept error:
-                # it reported 2 orphans while the contract says every emit has a consumer.
-                if t == '*':
-                    wildcard_consumers += 1
-                    continue
-                consumed.add(t)
-
-    strict = sorted(emitted - consumed - terminal)          # ignoring wildcards
-    effective = [] if wildcard_consumers else strict         # honouring them
-
-    # BOTH READINGS ARE REPORTED, because neither alone is honest. Honouring the wildcard
-    # makes the row vacuous (always 0 while any universal reader exists); ignoring it
-    # overstates. `value` is the STRICT count — the one that names something a human can
-    # act on — and the detail says plainly that a universal reader exists.
-    return {
-        'row': 'key_log_closure',
-        'label': 'Every emitted key has a consumer or declared terminal',
-        'state': 'partial',
-        'value': len(strict),
-        'value_effective': len(effective),
-        # Never True from static analysis alone: a contract-declared consumer that never
-        # fires at runtime is a dead seam this pass cannot see, and a wildcard consumer is
-        # exactly the case where "declared" says least about "fires". What this pass cannot
-        # do, running the HEAD also cannot do — see the docstring's measurement.
-        'passes': None,
-        'unblocked_by': ('a run that exercises the Key bus — NOT a season of the head: 0 of the '
-                         '17 emitting modules live under engine/season/, which emits Events and '
-                         'no Keys (measured 2026-09-14)'),
-        'detail': (
-            f"{len(emitted)} emitted · {len(terminal)} declared terminal · "
-            f"{len(strict)} unconsumed by name"
-            + (f" ({', '.join(strict[:3])})" if strict else '')
-            + (f"; {wildcard_consumers} module(s) declare a `*` universal-reader consume, "
-               f"under which the static orphan count is {len(effective)}"
-               if wildcard_consumers else '')
-        ),
-        'note_terminal_unused': (
-            'no emit in the corpus sets terminal: true, so the "or declared terminal" '
-            'branch has never been exercised' if not terminal else ''
-        ),
-    }
 
 
 def row_m1_junctures():
@@ -516,7 +418,6 @@ def row_invariant_violations():
 ROWS = [
     row_stub_invocations,
     row_determinism,
-    row_key_log_closure,
     row_m1_junctures,
     row_invariant_violations,
 ]
@@ -543,10 +444,11 @@ def collect():
         'measured': len(measured),
         'blocked': len(blocked),
         'failed': len(failed),
-        'note': ('Rows 1-2 and 5 are measured from real headless seasons. Row 3 stays PARTIAL '
-                 '(static contract check only, pending a season KeyLog) and row 4 is '
-                 'DOC-DERIVED and says so in its own detail. This gate reports what it '
-                 'measured and never guesses the rest.'),
+        'note': ('Rows 1, 2 and 4 are measured from real headless seasons. Row 3 is DOC-DERIVED '
+                 'and says so in its own detail. The old row 3 (key_log_closure) was RETIRED with '
+                 'the Key substrate on 2026-09-16 (ED-IN-0232) rather than left to report a '
+                 'vacuous 0 over an emptied registry. This gate reports what it measured and '
+                 'never guesses the rest.'),
     }
 
 

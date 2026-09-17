@@ -6,6 +6,27 @@ Canon source: systems/factions/reference/parliamentary_transfer_v30.md (CANONICA
 Status: [implemented 2026-05-31 — §1 Pool=Proposer Influence / Ob=Holder Legitimacy + PARL_MAJORITY_OB_BONUS(2),
     §1.2 4-degree outcome, §1.3 protections, §2 four modes, §3 CB sources, §4 vote-wrapped resolution.]
 
+⚠ RETIRED FROM THIS FILE 2026-09-16 (ED-IN-0232, RULED by Jordan: *"anything key-based gets
+retired"*): `_emit_public_governance_transfer`, which built a `da.public_governance` Key and handed
+it to `sched.emit(key)` with no `apply=`. It was one of the Key substrate's three live emitters and
+one of the two that were log-only — it wrote nothing and was gated on `world.echo_scheduler`, which
+only `engine/mc_v18.py` ever attached.
+
+THE FALSIFIER AND ITS OUTCOME, in the commit that removed it (CLAUDE.md §0.1 pt 3). The claim was
+"removing this and its sibling in `faction_action.py` moves no campaign output". It was checked
+WHILE THE BUS WAS STILL LIVE — both emitters removed first, substrate still attached and emitting —
+so the two arms were genuinely different runs rather than identical-by-construction: seed-42 n=8
+win-share stayed byte-identical at {'Crown': 12.5, 'Church': 0.0, 'Hafenmark': 12.5,
+'Varfell': 75.0} while seed-1 `keys_emitted` fell 180 -> 99. Reproduce against `FORK:c6e82105`.
+
+⚠ AND ONE THING THIS FILE LOST THAT IS NOT ABOUT KEYS. `propose_transfer` and
+`derive_transfer_candidate` had exactly one caller — `engine/cross_scale/parliamentary_bridge.py`,
+which retired with the bus because its single entry point returned early without a scheduler. So the
+§§1-4 CB-gated transfer motion below is now UNREACHABLE: the code, the mode table, the CB sources and
+the last-territory floor are all intact and nothing drives them. `engine/season/` carries no
+replacement (its `transfer` verb is an unrelated store-to-store rung move). That is an orphaned
+mechanic, recorded here rather than discovered later; whether it gets a new driver is a design call.
+
 Dependencies:
   - the §10 vote contest (run_parliamentary_vote, Motion, VoteDeclaration) — resolved through
     engine.substrate.composition, NOT imported: references/module_contracts.yaml names the provider
@@ -54,7 +75,6 @@ effects, zero extra `world.rng` draws).
 """
 from __future__ import annotations
 
-import os
 from dataclasses import dataclass, field
 
 from engine.autoload.dice_engine import roll_pool, Degree
@@ -178,73 +198,6 @@ def derive_transfer_candidate(world):
     return initiator, target_territory, mode
 
 
-def _emit_public_governance_transfer(world, initiator, holder, territory_id, deg) -> None:
-    """Emit `da.public_governance` when a Parliamentary Transfer moves a territory.
-
-    WHY THIS EXISTS. `module_contracts.yaml`'s `foundation_gaps.save_replay_premise` is recorded
-    `violated` (it lived in `wiring_manifest.yaml` until plan S5c folded that file in):
-    "the live strategic loop mutates World DIRECTLY (Faction.L, Territory.owner) with no Key
-    trace, so the Key log cannot reconstruct strategic state." MEASURED 2026-08-03 against a
-    seeded campaign, that note is now mostly out of date and the residue is precise:
-
-      * Conquest transfers ARE traced -- `faction_action._emit_battle_concluded` carries
-        `territorial_outcome` + `victor`, and a replay rebuilds them.
-      * Legitimacy IS traced -- `echo_transport` carries `Target.stat_deltas`.
-      * THIS site was the only untraced ownership write. Attributed by instrumenting
-        `Territory.__setattr__` over a 12-season seeded campaign: 8 owner changes from
-        `faction_action`, 1 from here, 0 from `mass_seizure`.
-      * `mass_seizure` was recorded as "did not fire -- untested, not proven clean". RE-MEASURED
-        2026-08-03 and it is stronger than that: UNREACHABLE. Zero production callers (every
-        mention of it in engine/+systems/ is a comment), and no owner write in 40 seeded
-        campaigns. Its gate is not the obstacle -- CI >= 60 is met in 20/20 seeds and CI = 100,
-        the FORCED declaration point where P(declare)=1, is reached in 8/20. FA lane; see
-        module_contracts.yaml's foundation_gaps.save_replay_premise note.
-
-    ENCODING, and its one honest gap. `da.public_governance` is an EXISTING registered type
-    ("Visible administrative or sovereign-role action", consumed by `faction_layer`) and every
-    field used here is already in its registry entry -- `faction_id` / `mission_alignment` /
-    `outcome` required, `target_territory_id` optional. No new type and no unregistered payload
-    field is invented, because a Key type is canon and this is not the place to mint one.
-    What the registry does NOT state is the replay rule a reconstructor needs: *public_governance
-    with a target_territory_id and outcome success means that territory is now owned by
-    faction_id.* That inference is sound for every emitter that exists today (there are two live
-    emitters in the whole substrate) but it is an interpretation, not a declared semantic.
-    Flagged for Jordan rather than settled here -- the alternative is a dedicated
-    `da.territorial_transfer` type, which is a canon addition.
-
-    Safety mirrors `_emit_battle_concluded` exactly: no `apply=`, so the Key is log-only and
-    cannot move a seeded golden; no-ops without a scheduler; wrapped so telemetry can never
-    take down a campaign turn, re-raising only under the explicit opt-in flag.
-    """
-    sched = getattr(world, 'echo_scheduler', None)
-    if sched is None:
-        return
-    try:
-        from engine.substrate.keys import EmittedAt, Key, Target
-
-        seq = getattr(world, '_parl_key_seq', 0)
-        world._parl_key_seq = seq + 1
-        season = int(getattr(world, 'season', 0))
-        key = Key(
-            id=f'da.public_governance.s{season}.n{seq}',
-            type='da.public_governance',
-            emitted_at=EmittedAt(season_index=season),
-            causes=[],
-            scale_signature=['territory'],
-            targets=[Target(actor_id=str(territory_id), role='subject')],
-            payload={
-                'faction_id': initiator,
-                'mission_alignment': 'none',
-                'outcome': 'success',
-                'target_territory_id': str(territory_id),
-            },
-        )
-        sched.emit(key)   # NO apply= -- log-only, byte-exact goldens cannot move
-    except Exception:
-        if os.environ.get('VALORIA_STRICT_KEYS'):
-            raise
-
-
 def propose_transfer(initiator, target_territory, mode, world, *,
                      side_a_allies=None, side_b_allies=None, rng=None) -> TransferResult:
     """§§1-4: propose a Parliamentary Territory Transfer. CB-gated, vote-wrapped, Influence-vs-Legitimacy roll."""
@@ -359,7 +312,6 @@ def propose_transfer(initiator, target_territory, mode, world, *,
             # audit/2026-07-29-code-shape-open-items/04_execution_ledger.md's Wave-2 row for this
             # exact citation, filed rather than silently left unrecorded.
             terr.owner = initiator
-            _emit_public_governance_transfer(world, initiator, holder, target_territory, deg)
         res.status = "transferred"
         res.effects.append(f"territory '{target_territory}' transferred {holder}->{initiator}; Accord set {accord_level}.")
         if deg == Degree.OVERWHELMING:

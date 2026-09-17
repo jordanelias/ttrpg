@@ -49,15 +49,30 @@ def test_vignette_settlement_layer_is_two_sided():
 
 
 def test_vignette_domain_actions_is_one_sided_notional():
+    """⚠ THIS VIGNETTE LOST ITS ROWS ON 2026-09-16 (ED-IN-0232), and the reason is the same one the
+    L2 wiring test records: every row `weave` produced for this module came from
+    `references/module_contracts.yaml`'s `emits:`/`consumes:` blocks — the Key bus's declared
+    interface — which retired with the substrate. `domain_actions` declared six emits and no doc,
+    which is exactly what made it the one-sided vignette; with the emits gone it is one-sided in a
+    duller way: nothing on either side.
+
+    THE FIRST VERSION OF THIS FIX WAS ITSELF VACUOUS, and an adversarial pass caught it: the
+    docstring claimed "the row assertions are DELETED rather than lowered to `>= 0`" and then left
+    two `all(...)` calls over the now-empty `rows` and `cards`, which is `>= 0` by another spelling
+    — CLAUDE.md §0.1 pt 2's named failure, committed in the act of citing it. `weave` appends to
+    both lists only inside its emits / consumes / derivations loops, and `domain_actions` declares
+    none of the three, so both are `[]` forever.
+
+    They are now asserted EMPTY, which is a claim that can fail: give `domain_actions` a
+    `derivations:` block — the one of the three that did not retire — and this reds.
+    """
     eng, has_doc, cards, rows = workbench.weave(_ROOT, 'domain_actions')
     assert eng['node_state'] == 'engine-notional' and eng['doc'] is None and not has_doc
     assert eng['doc_status'] == 'none'
-    assert rows and all(r['state'] == 'silent' for r in rows)   # no doc => all silent
-    # a notional module's cards are shadow-guarded (don't reconcile prose TO a fabricated row)
-    assert cards and all(c['shadow'] and c['class'] == 'notional_shadow' for c in cards)
-    # Finding 4: emits are read from the module's DECLARED contract, so its multiple declared
-    # emits all surface — not just those a known consumer happens to attribute back.
-    assert len(rows) >= 6
+    assert rows == [] and cards == [], (
+        f"`domain_actions` produced {len(rows)} row(s) and {len(cards)} card(s). It declared six "
+        f"emits and nothing else until ED-IN-0232 removed the emits:/consumes: interface; if it "
+        f"has wiring again, restore the state assertions this test used to carry")
 
 
 @pytest.mark.slow
@@ -65,7 +80,9 @@ def test_weave_all_corpus_map():
     """The --all corpus mode weaves every module and surfaces the STRUCTURAL reconciliation map:
     node state, doc status, and the built-but-unspecced set (the reliable, precise signal)."""
     summary = workbench.weave_all(_ROOT)
-    assert len(summary) == 27
+    # 27 -> 26 (2026-09-16, ED-IN-0232): the `articulation_layer` contract row retired with the
+    # Key substrate — its `sim_module` was the bus subscriber `engine/cross_scale/articulation.py`.
+    assert len(summary) == 26
     assert all('node_state' in s and 'doc_status' in s and 'edges' in s for s in summary)
     unspecced = [s['module'] for s in summary
                  if s['node_state'] == 'engine-notional' and s['doc_status'] == 'none']
