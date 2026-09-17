@@ -331,6 +331,32 @@ ED-IN-0139 allocated 2026-08-04: engine/params/ flips KEEP -> EVACUATE in tools/
 ```
 
 
+### 2026-09-17 — ED-IN-0231 / ED-IN-0232 (governance and holdings)
+
+`next_free` 231 -> 233. Both belong to `proposals/2026-09-17-governance-and-holdings/`, PROPOSED and
+HELD BACK IN FULL; nothing ratified on merge.
+
+- **ED-IN-0231 — seats and policy.** Governance at every rung, hearth -> realm. Its spine is a
+  CONFORMANCE DIVISION, which is the finding: most of the seat model is already ratified Layer 1 and
+  merely unbuilt (`architecture/meta/04_CODE_ARCHITECTURE.md` §B.7 ships `Seat`, rejects the
+  `establishment` field, deletes `judging_set_rule`, and carries the MECHANICAL invariant that purview
+  is asked of the seat exercised through `Act.via`). Extensions: policy as a dispensation Record held
+  by its issuer with the seat read from `Act.via`; `in_force(w, rung, clause)` as a nearest-ancestor
+  walk; seven clauses onto the closed seven `requires` forms; a `purview` question source; `H-71`
+  closed person-side from the holder's own ledger. Three field placements were repaired against
+  ratified Layer 1 — `Tenure.conferrer` is deleted, `Tenure.payload` is retired for `term?`, and
+  `Proposition.scope` is already written and read. **`needs_jordan: true` for one fork only:** does a
+  nearer rung's clause or a higher rank win a collision (recommendation: nearest, with a superior's
+  `reach: all` override).
+- **ED-IN-0232 — the player surface and the build order.** One id for two documents because the
+  second is the execution plan for the first three. Records that the interface can only offer what the
+  engine raises a question about (four sources today), carries a pre-flight loader-refusal checklist
+  derived by planting each defect, and states the gate-contract rule: work is downstream of Arc 2 iff
+  it is an `@effect_for` body or writes a Tenure whose subject is not the actor. Nine ruling requests
+  were CLOSED with citations under `CLAUDE.md` §0's five-step gate rather than escalated.
+
+Full text for both: `registers/editorial_ledger_in.jsonl`.
+
 ## IN — the 2026-07-14 duplicate-key repair (ED-IN-0064, finding OBS-IN-1)
 
 <a id="dup-key"></a>
@@ -351,6 +377,30 @@ ED-IN-0139 allocated 2026-08-04: engine/params/ flips KEEP -> EVACUATE in tools/
 ```text
 BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0049-0052 RESERVED 2026-07-29 for cross-lane EDs the IN code-shape waves file in SE. MEASURED max allocated = ED-SE-0049; unused 0050-0052 (3) returned to the pool, next_free 53 -> 50. Freeze lifted: read next_free, allocate, bump, co-commit as normal. // ED-SE-0045..0048 allocated 2026-07-13: 2026-07-13 multi-agent audit P1 batch (designs/audit/2026-07-13-multi-agent-audit/) -- 0045 Prosperity->Treasury x50 vs x10 conflict (settlement_layer SS1.3 L47 vs SS1.8 L169); 0046 Fortress-City/Cathedral-City/Village missing from SS1.2 + base(Type) weight table (W_s uncomputable for the 2 compound types); 0047 SS4.7 Black Markets modifies invalid 'Settlement Wealth'/'Settlement Accord' fields; 0048 settlement_adjacency prose stale (36 settlements/PP-723) vs PP-726-rebuilt geography YAML (37/55). All open/needs_jordan. NOTE: mechanic_audit GAP-02 (Fort Level province->settlement granularity) NOT re-filed -- already ratified + tracked under ED-SE-0006 (open, execution pending); its SS2.2 mass_battle-SSA.4 mis-citation residual folds into ED-SE-0006 execution. next_free bumped 45->49. // ED-SE-0018..0044 allocated 2026-07-09: comparative-governance-research docket round 2 (designs/audit/2026-07-09-comparative-governance-research/) — same batch as the FA-lane note above; 7 authored into governance_play_redesign_v1.md/settlement_layer_v30.md as PROPOSED (ED-SE-0018/0019/0020/0021/0022/0023/0024 — Kokudaka Survey + Encabezamiento locked-extraction substrate, Goningumi cells, Za patron-lapse, Clerk Capacity, Ordenanza Ratification, Seggio Council), rest open/needs_jordan (see registers/editorial_ledger.jsonl and registers/handoffs/HANDOFF_SE.md). next_free bumped 18->45. ED-SE-0007..0017 allocated 2026-07-08 (THIS branch, RENUMBERED +1 from this branch's original ED-SE-0006..0016 -- collided with origin/main's concurrent ED-SE-0006, the coherence-audit Fort-Level bundle below): FA/SE historical-precedent research docket (designs/audit/2026-07-08-fa-se-historical-precedent-research/) — Weberian L/PS derivation table (SE-1, highest priority), dearth chain + grain routes, charter/prescription, entry terms, succession continuity, oversight toolkit, church-state seam, marcher autonomy, Weight-as-Exit, citation-patch CP-2; several needs_jordan forks (0013,0014,0015,0017). ED-SE-0006 allocated 2026-07-08 (origin/main): attribute/value coherence audit (ED-IN-0029) — Fort Level province→settlement inheritance (default: settlement = province value) + Garrison/Local-Economy/Public-Order §9 ratify-vs-[ASSUMPTION]-mark, both OPT-AV-18; decisions ratified, execution pending. ED-SE-0005 allocated 2026-07-08: pessimist-audit SE work items — Trade/Grant prune, Sponsor merge, etc. — execution pending (decision ED-IN-0027). ED-SE-0001 allocated 2026-07-05: NERS-audit E-1 accepted work item (governance_play_redesign path); ED-SE-0002 allocated 2026-07-05: edge-playability §7 item 4 (Accord/Order stacking ruling, needs_jordan), edge-playability §7 batch (PR #81)
 ```
+
+### 2026-09-17 — ED-SE-0052 (the built world)
+
+`next_free` 52 -> 53. `proposals/2026-09-17-governance-and-holdings/02_THE_BUILT_WORLD.md`, PROPOSED
+and HELD BACK IN FULL.
+
+Settlements and their buildings, infrastructure, fortifications and works as the expression of faction
+holdings. A built thing's FABRIC is a `Site` and its ADDRESS is a `Rung`, which NARROWS `ED-IN-0223`'s
+*"A BUILDING is a `hearth`"* rather than overturning it — a building stands on a hearth, and the hearth
+is the plot. Five site families discriminated by which existing table a condition band reaches;
+fortification as an ENCLOSURE `Site` whose condition IS its strength, reading onto three mechanisms
+that already exist, with no siege subsystem. `hold` must NOT reach a `Site` — confirmed, on the ground
+that mandatory single-holdership deletes the commons, and noting that `World.add_tenure` performs no
+object-class check, so the refusal is currently unenforceable and a guard ships rather than being
+asked for. Two free cuts were WITHDRAWN as breakages: `fort_level` has live engine readers behind a
+blocking descriptor export, and `facility_tier` is read by its own registry.
+
+Measured, and it reorders the work: after one season on the populated world 37 settlements hold 4,810
+units of matter and **211 hearths hold none** — every site hangs from a settlement, every person lives
+in a hearth, and the shortfall is clamped away. Recommends `ED-SE-0051`'s **capacity** arm as a
+`capacity(w, rung)` Query over DWELLING sites with a floor, never a fixture; `ED-SE-0051` stays the
+open escalation.
+
+Full text: `registers/editorial_ledger_se.jsonl`.
 
 ## Round-2 block D (ED 1050-1099)
 
