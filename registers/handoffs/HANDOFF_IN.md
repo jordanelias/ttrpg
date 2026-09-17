@@ -32,6 +32,20 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 **Facts, not a queue.** Three items of `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md`
 were RUN. `§7` of that file is the record and `probe_execution_pass.py` beside it re-takes every number.
 
+- **Item 3b LANDED, AT ITS CONTROL ARM (`ED-IN-0247`, `H-125`).** A body finally falls: the
+  shortfall reaches `Person.body` through the gate, `_crossings` is factored for **sites and
+  persons** off the one `band_floors` table, and `World.remove_person` is `_eff_kill`'s cascade with
+  MATTER and RESOLVE as its two callers. EXECUTED at `body_step=10`: bodies fall 30/season, cross
+  800 at season 7, **and `budget` drops 5 → 4 in the same season** (the write reaching the reader).
+  ⚠ **SHIPPED AT `body_step = 0`** because **all 86 buildable corpus worlds hold ZERO stores** while
+  258 persons live in them — any nonzero arm starves every case world and moved 19 tests. Proof it
+  is inert: `TRACE.txt` and `results.json` come back **byte-identical**. ⚠ **NEEDS JORDAN: the
+  magnitude**, and choosing it needs a world that stocks a larder — plus the second question it
+  raises, that **nothing restores a body**, so any nonzero arm is monotone decay at person scale.
+  ⚠ **Two plan claims died:** the morale write-sweep does **not** cover `engine/season` (its root is
+  `systems/mass_battle/sim`), so `Person.body` does *not* inherit that guard for free and none was
+  added; and `LB-3c`'s literal `grep -c "t.until = w.tick" == 1` is wrong — the count is 5 and four
+  are legitimate per-verb closers.
 - **Item 3a LANDED — the larder ladder.** `world_q.nearest_store` + `matter`'s draw per EATER, not
   per rung. Before it, **4,810 units sat at the 37 settlements, 0 at the 211 hearths, every person
   lived in a hearth, and 0 rungs had both eaters and stores** — the subsistence step ran and wrote

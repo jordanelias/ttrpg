@@ -412,11 +412,11 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     # the write the `Felled` branch declares (`Tenure.until`) actually reaching every edge it
     # names. `w.tenures` is owner-first over every person plus `_unowned`, so it is a WIDENING of
     # the same scan and not a second rule.
-    for t in list(w.tenures):
-        if (t.subject == who or t.object == who) and t.live:
-            t.until = w.tick
-    del w.persons[who]
-    return [who]
+    # ⚠ THE CASCADE MOVED TO `World.remove_person` (item 3b) AND THE COMMENT ABOVE IS ITS
+    # PROVENANCE. It is unchanged in behaviour — the same `w.tenures` scan, for the same `W-E`
+    # reason — and it moved because MATTER is now a SECOND way to die (a body reaching 0 from an
+    # empty larder), and two sites closing tenures by hand is how the two drift apart (§8).
+    return w.remove_person(who)
 
 
 @effect_for("utter")

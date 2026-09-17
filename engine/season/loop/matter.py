@@ -27,6 +27,43 @@ from ..trace_log import TRACE
 
 
 # -- MATTER -- barrier 2 -- THE WORLD FREEZES AT ITS END (S25) -----------
+def _crossings(w: "World", subject_id: str, floors: dict, before, after,
+               cause: "str | None") -> list:
+    """S12.1 / L5: A BAND EDGE CROSSING IS AN EMISSION, NOT A WRITE. One rule, two carriers.
+
+    ⚠⚠ FACTORED OUT OF THE SITE LOOP BY ITEM 3b, BECAUSE PERSONS NOW CROSS BANDS TOO. `04
+    §A.3.3` asks for exactly this — *"the crossing block factors into `_crossings(...)` called for
+    sites AND for persons, both reading `band_floors`"* — and the reason is `CLAUDE.md` §8 rather
+    than tidiness: a second copy of *what counts as crossing a floor* would let a site and a body
+    disagree about it, and `band_floors` is one table with a key per kind.
+
+    ⚠ NO NEW BAND TABLE, AND THAT IS `H-38`'s CLOSURE BEING SPENT. `band_floors["body"]` already
+    exists and `decision.budget` already reads it; a `band_floors.person` would have been the
+    second scheme `H-38` closed to avoid. The caller passes the row it wants.
+
+    ⚠ IT EMITS AND WRITES NOTHING. L5: a threshold crossing *"MAY NEVER PRODUCE AN OUTCOME"*. The
+    Event is witnessable and the consequence, if any, is somebody's later act.
+
+    ⚠ THE ANTECEDENT IS THE WRITE THAT CROSSED THE FLOOR (`W4` / `H-12` — *"MATTER emits an Event
+    per write SO CROSSINGS HAVE AN ANTECEDENT"*). Passing `None` roots it at the seed, which is
+    what made the one Event in this barrier that exists to be walked back from walk nowhere."""
+    out: list = []
+    for verb, floor in sorted(floors.items()):
+        if before >= floor > after:
+            ev = Event(id=H(w.world_seed, w.tick, subject_id, f"crossing:{verb}"),
+                       kind="condition.band_crossed", subject=subject_id, changes=[],
+                       causes=[cause] if cause else [ROOT], emitted_at=w.tick)
+            w.log.append(ev)
+            out.append(ev)
+            w.crossings.append((subject_id, verb, before, after, ev.id))
+            TRACE.event(ev.id, ev.kind, ev.causes)
+            TRACE.decision(f"{subject_id} crossed the `{verb}` floor", "S12.1/S3-L5",
+                           chose="EMIT a witnessable Event; write no social row; produce no outcome",
+                           alternatives=["write the consequence directly (L5 forbids: a crossing MAY NEVER PRODUCE AN OUTCOME)",
+                                         "silently drop the verb from the set (then nobody can witness it)"])
+    return out
+
+
 def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
     w = self.w
     w.step = Step.MATTER
@@ -192,6 +229,10 @@ def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
     # ⚠ AND THE RUNNING VIEW IS WHAT MAKES SCARCITY BIND. The writes are deferred to the gate, so
     # without `left` every eater would be shown the FULL larder and two of them could spend the
     # same unit — `loop/effects.py`'s own header names that defect for `transfer`.
+    # `band_floors["body"]` — the SAME table the site gate and `decision.budget` already read.
+    # `H-38` closed with *"`Site.condition` is the model"*, and this spends that closure rather
+    # than minting a `band_floors.person` second scheme.
+    floors_body = (w.fixtures.get("band_floors") or {}).get("body", {})
     draws: dict = {}          # source rung -> {kind: units it gives up}
     short_by_person: dict = {}
     left: dict = {}           # (rung, kind) -> units still unspent this season
@@ -233,6 +274,56 @@ def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
     # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets. It is
     # what makes the shortfall MEASURABLE rather than only traceable, and it is item 3b's input.
     w._subsistence_shortfall = short_by_person
+
+    # -- THE SHORTFALL FALLS A BODY (item 3b) -----------------------------------
+    #
+    # ⚠⚠ `AX-5` NAMES THREE SELF-MOTIONS AND BODIES IS THE ONE WITH NO WRITER. Matter wears,
+    # memory decays, and a body did nothing at all — so an empty larder was a number in a trace
+    # and never a fact about anybody. The write matrix has licensed `(Person, body)` at
+    # `[MAT, RES]` (`social: false`, emitting `body.changed` / `person.died`) the whole time; what
+    # was missing was a producer at MATTER.
+    #
+    # ⚠ IT IS STILL NOT AN OUTCOME, AND L5 IS WHY. A body falling and a band being crossed are
+    # EMISSIONS. Nobody is starved into an act here; the crossing becomes a `Question` through
+    # REACH and the consequence is somebody's own later choice. The one thing that follows
+    # mechanically is death at zero, and that is `(Person, exists)`'s own licensed cell rather
+    # than a social consequence written at MATTER.
+    #
+    # ⚠ THE READ/WRITE ASYMMETRY `CLAUDE.md` §0.1 pt 1 IS ABOUT, AND IT IS WHY THIS WRITES
+    # `w.persons[pid]` RATHER THAN A LOCAL. `decision.budget` reads `p.body` TODAY, through the
+    # `_TenureView`-backed person the world holds. A write landing on a copy — or on a `Person`
+    # the rehome replaced — leaves every reader seeing the full body forever, with every test
+    # still green. `LB-3b` asserts the crossing AND the budget drop for exactly that reason:
+    # either half alone is satisfiable by a write nobody reads.
+    step = w.fixtures.get("body_step")
+    for pid in sorted(short_by_person):
+        person = w.persons.get(pid)
+        if person is None:
+            continue
+        lost = step * sum(short_by_person[pid].values())
+        if lost <= 0:
+            continue                      # the `body_step = 0` control arm: nothing moves
+        was = person.body
+        prior_b = w.last_emission_of("body.changed", pid)
+        _m = len(w._emitted_by_write)
+        w.write("body", WriteClass.MATTER,
+                lambda person=person, lost=lost: setattr(person, "body", max(0, person.body - lost)),
+                record_kind="Person", fieldname="body", driver="Event",
+                emits="body.changed", subject=pid,
+                causes=[prior_b] if prior_b else [ROOT])
+        fell = w._emitted_by_write[_m] if len(w._emitted_by_write) > _m else None
+        emitted.extend(_crossings(w, pid, floors_body, was, person.body,
+                                  fell.id if fell else None))
+        if person.body <= 0:
+            # DEATH THROUGH THE ONE OWNER. `World.remove_person` is `_eff_kill`'s cascade,
+            # factored — the same `w.tenures` scan, so an edge another person owns that NAMES the
+            # dead one closes here too (§15.3, and `W-E`'s measured dangling `tie`).
+            prior_d = w.last_emission_of("person.died", pid)
+            w.write("exists", WriteClass.MATTER,
+                    lambda pid=pid: w.remove_person(pid),
+                    record_kind="Person", fieldname="exists", driver="Event",
+                    emits="person.died", subject=pid,
+                    causes=[prior_d] if prior_d else [ROOT])
 
     for rid in sorted(w.rungs):
         r = w.rungs[rid]
@@ -316,24 +407,8 @@ def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
         # "L5 exactly... THE COUNTER COMPELS SOMEONE TO ACT". Half of L5 was missing and
         # the other half was a filter on "did the number change at all", which wear
         # guarantees. A crossing now fires only on a REAL band edge and EMITS.
-        floors = floors_all.get(s.kind, {})
-        for verb, floor in sorted(floors.items()):
-            if before >= floor > s.condition:
-                # `W4`. THE CROSSING'S ANTECEDENT IS THE WEAR THAT CROSSED THE FLOOR, which is
-                # `H-12`'s whole purpose -- *"MATTER emits an Event per write SO CROSSINGS HAVE
-                # AN ANTECEDENT"*. It read `causes=[ROOT]`, so the one Event in this barrier
-                # that exists to be walked back from was rooted at the seed and walked nowhere.
-                ev = Event(
-                    id=H(w.world_seed, w.tick, s.id, f"crossing:{verb}"),
-                    kind="condition.band_crossed", subject=s.id, changes=[],
-                    causes=[worn_ev.id] if worn_ev else [ROOT], emitted_at=w.tick)
-                w.log.append(ev); emitted.append(ev)
-                w.crossings.append((s.id, verb, before, s.condition, ev.id))
-                TRACE.event(ev.id, ev.kind, ev.causes)
-                TRACE.decision(f"{s.id} crossed the `{verb}` floor", "S12.1/S3-L5",
-                               chose="EMIT a witnessable Event; write no social row; produce no outcome",
-                               alternatives=["write the consequence directly (L5 forbids: a crossing MAY NEVER PRODUCE AN OUTCOME)",
-                                             "silently drop the verb from the set (then nobody can witness it)"])
+        emitted.extend(_crossings(w, s.id, floors_all.get(s.kind, {}), before, s.condition,
+                                  worn_ev.id if worn_ev else None))
     w._in_parallel_map = False
     # ⚠ THE EMISSIONS `write()` MADE ARE PART OF WHAT MATTER PRODUCED, AND LEAVING THEM OUT
     # MADE THEM UNWITNESSABLE. `emitted` is built by hand from explicit `append`s; `W4` moved

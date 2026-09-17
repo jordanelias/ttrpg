@@ -317,6 +317,32 @@ class World:
                 law="holonic §15 -- `hold : Person -> Office | Rung | Record | Proposition`. A "
                     "`hold` on a Site is the class the table excludes and nothing refused")
 
+    def remove_person(self, who: str) -> list:
+        """THE ONE DEATH CASCADE: every live edge naming this person closes, then they are gone.
+
+        ⚠⚠ IT IS FACTORED OUT OF `_eff_kill` BECAUSE IT NOW HAS TWO CALLERS, AND A SECOND COPY IS
+        HOW THE TWO WOULD DRIFT. `kill / wound` at RESOLVE was the only way to die; item 3b gives
+        MATTER a second — a body that reaches 0 from an empty larder — and `(Person, body)` is
+        licensed at **both** steps by the write matrix (`[MAT, RES]`, `social: false`, emitting
+        `body.changed` and `person.died`). Two sites closing tenures by hand is the shape §8 is
+        about: *the rule lives once*.
+
+        ⚠ `self.tenures`, NOT `p.tenures`, AND THAT IS `W-E`'s OWN FINDING CARRIED ACROSS RATHER
+        THAN RE-DERIVED. A Tenure is owned by its SUBJECT (§15.1), so scanning the dead person's
+        own list cannot see an edge ANOTHER person owns that names them as its OBJECT — measured
+        in `tiny_world`: a live `tie` from `p_low` to `p_mid` survived `p_mid`'s death and then
+        DANGLED. §15.3 is explicit that the tenure ends THROUGH the death.
+
+        ⚠ IT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `write`. Both callers are
+        already inside a gated write when they reach here — `_eff_kill` through the fold's
+        `apply()`, MATTER through its own `w.write` — and a nested write is a write inside a
+        write, which the gate refuses."""
+        for t in list(self.tenures):
+            if (t.subject == who or t.object == who) and t.live:
+                t.until = self.tick
+        self.persons.pop(who, None)
+        return [who]
+
     def _rehome(self) -> None:
         """A Tenure added BEFORE its subject existed landed in `_unowned`; move it now.
 

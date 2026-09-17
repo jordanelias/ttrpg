@@ -164,6 +164,52 @@ def main() -> int:
     print(f"  MW-1 · control B — settlements with nobody beneath: {len(untouched)} holding {kept} "
           f"units, {len(moved)} changed   (predicted 3,120 and 0 changed)")
 
+    print("\n--- §7.3d · ITEM 3b, THE BODY WRITE (shipped at its control arm) ---")
+    from engine.season.data.fixtures import DEFAULT_FIXTURES                 # noqa: E402
+    print(f"  shipped `body_step`                          : "
+          f"{DEFAULT_FIXTURES.get('body_step')}   (§7.3d: 0, the control arm — `H-125`)")
+    # WHY it is parked there: the corpus cannot answer for the number.
+    from engine.season.harness.run_cases import load_cases                   # noqa: E402
+    from engine.season.harness.corpus_run import build_at                    # noqa: E402
+    built = stocked = people = 0
+    cases: list = []
+    for kind in ("NPC", "ARC"):
+        try:
+            cases += list(load_cases(kind))
+        except Exception:
+            pass
+    for c in cases:
+        try:
+            cw = build_at(c)
+        except Exception:
+            continue
+        built += 1
+        if sum(sum((r.stores or {}).values()) for r in cw.rungs.values()):
+            stocked += 1
+        people += len(world_q.home_of(cw))
+    print(f"  corpus worlds built {built} · holding ANY stores {stocked} · persons in them "
+          f"{people}   (§7.3d: 86 · 0 · 258)")
+    # AND the mechanism at a live arm: an empty-root world, bodies falling and the budget moving.
+    tw = HP.tiny_world()
+    for rid in ("R", "D", "S", "Hh"):
+        tw.rungs[rid].stores = {}
+    tw.sites.clear()
+    tw.fixtures = tw.fixtures.sweep("body_step", 10)
+    td = SeasonDriver(tw)
+    who, start = "p_low", tw.persons["p_low"].body
+    bud = lambda: budget(tw.persons[who], View(who, [], tw.fixtures.get("view_k")),
+                         tw.fixtures.get("scene_budget"), tw.fixtures)
+    b0, crossed = bud(), None
+    for season in range(1, 40):
+        tw.step = Step.MATTER
+        evs = td.matter([])
+        tw.tick += 1
+        if [e for e in evs if e.kind == "condition.band_crossed" and e.subject == who]:
+            crossed = season
+            break
+    print(f"  at body_step=10: {who} body {start} -> {tw.persons[who].body}, crossed a band at "
+          f"season {crossed}, budget {b0} -> {bud()}   (§7.3d: 1000 -> 790, season 7, 5 -> 4)")
+
     print("\n--- §7.1(b) · THE HOLONIC SURFACE ---")
     import ast
     root = Path(__file__).resolve().parents[2]
