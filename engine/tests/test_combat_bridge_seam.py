@@ -197,5 +197,12 @@ def test_flag_on_is_a_no_op_on_the_currently_reachable_campaign():
     assert off.season == on.season
     assert off.scenes_resolved == on.scenes_resolved
     assert off.stub_hits == on.stub_hits
-    assert off.key_log_hash == on.key_log_hash
-    assert off.keys_emitted == on.keys_emitted
+    assert off.battle_count == on.battle_count
+    assert off.final_state == on.final_state
+    # ⚠ TWO FIELDS DROPPED, TWO ADDED (2026-09-16, ED-IN-0232). `key_log_hash` and `keys_emitted`
+    # were the strongest comparands here — a campaign-wide content hash over every emission — and
+    # they retired with the Key substrate along with the `CampaignResult` fields themselves. Their
+    # replacement is NOT weaker by accident: `final_state` is the serialised world, so comparing it
+    # is a broader equality than the key log ever was. `battle_count` is added because it is the
+    # output the combat branch would actually move if it were ever entered, which is this test's
+    # whole subject.

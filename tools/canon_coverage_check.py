@@ -122,7 +122,7 @@ def declared_canonical_files(systems_dir: str | None = None) -> set[str]:
     files: set[str] = set()
     for dirpath, dirnames, filenames in os.walk(root):
         relroot = os.path.relpath(dirpath, _REPO_ROOT).replace(os.sep, '/')
-        if relroot == 'audit' or relroot.startswith('audit/'):   # dead under systems/, kept harmless
+        if relroot == '.audit' or relroot.startswith('.audit/'):   # dead under systems/, kept harmless
             dirnames[:] = []  # audit corpus is top-level now; unreachable from systems/
             continue
         for fn in filenames:

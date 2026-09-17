@@ -515,8 +515,19 @@ def verify_citations(reg: dict) -> list:
                 found[token] = path
         for rel in PATH_RE.findall(cite):
             f = REPO / rel
-            if f.exists():
-                found[rel] = f
+            if not f.exists():
+                # ED-IN-0231 (2026-09-16): the design corpus was quarantined to `.designs/`, which
+                # MIRRORS the tree -- an archived path is `.designs/` prefixed onto the original.
+                # ⚠ THIS IS NOT COSMETIC. A source this checker cannot open drops out of `found`,
+                # and the quote is then tested only against the sources that DID open -- so a true
+                # citation into a moved document is reported FABRICATED. A move silently converting
+                # honest provenance into a fabrication finding is the worst failure this gate has,
+                # because the report is confident and points at the wrong thing.
+                archived = REPO / ".designs" / rel
+                if archived.exists():
+                    found[rel] = archived
+                continue
+            found[rel] = f
         if LINEREF_RE.search(cite) and SOURCE_353.exists():
             found.setdefault("#353", SOURCE_353)
         return found

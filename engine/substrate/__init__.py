@@ -1,41 +1,17 @@
-"""engine.substrate — executable Key substrate (v1).
+"""engine.substrate — the engine's leaf readers.
 
-Status: [RATIFIED — Key & Echo armature v1, ED-IN-0018, 2026-07-07; §5 fork docket ruled by
-Jordan's consolidated "ratify all" pass, ED-IN-0026, same date]
+Status: [live] — the package holds the single-owner leaves `engine/` resolves through:
+`descriptors` (the axis and conviction rosters, cooked from `references/descriptor_registry.yaml`),
+`names` (cooked from `references/names_index.yaml`), `composition` (the role -> module registry),
+`canon_buckets`, `stubwire` and `world_initial_state`.
 
-The first executable form of the Key substrate specified in
-designs/architecture/key_substrate_v30.md (§2 universal schema, §2.3 invariants,
-§4.1 single update rule) and designs/architecture/propagation_spec_v1.md
-(§1 ordering/SSI discipline, §4 termination guard). Prior to this module the
-Key/emit substrate existed only as design canon plus declared YAML edges in
-references/module_contracts.yaml — no Key class, no emit() path, no key log
-existed anywhere in sim/ (unaddressed-areas audit, cluster C-REACH/C-KEY
-calibration; see designs/audit/2026-07-07-unaddressed-areas-audit/).
+⚠ THIS FILE USED TO BE NOTHING BUT A KEY RE-EXPORT, AND THAT IS WHY IT NOW HOLDS NO CODE.
+Until 2026-09-16 it imported thirteen names from `engine/substrate/keys.py` and re-exported them,
+with one consequence worth recording: `import engine.substrate.descriptors` executed this file, so
+the Key substrate loaded on an import of ANY leaf here. `engine/season/` — the RULED head —
+constructed zero Keys and still paid that import on every run. The substrate retired under
+ED-IN-0232 (Jordan, 2026-09-16: *"anything key-based gets retired"*) and the re-export went with it.
 
-Deliberately NOT implemented here (each blocked on an open fork — see
-systems/_architecture/reference/key_echo_armature_v1.md §5, the consolidated docket):
-  - observer resolution / armature interpretation (§4.1 steps 3-4): ORD-3 is a
-    PROPOSED, unratified ordering rule; implementing compute_observers() before
-    it lands would bake in hash-order nondeterminism.
-  - decay() over the key log (AU-4): OF-3, unspecified.
-  - canonical cap constants: OF-CAP is open — caps are REQUIRED caller
-    parameters, never defaulted, so no fabricated constant enters the repo.
-  - campaign-loop wiring: PR-2 scope (flag-gated), not this module.
+Import the leaf you want: `from engine.substrate import descriptors`. Nothing is re-exported here,
+deliberately — a package __init__ that re-exports is how that accidental dependency formed.
 """
-
-from engine.substrate.keys import (  # noqa: F401
-    AXES,
-    ROLES,
-    SCALES,
-    PERMANENCE_VALUES,
-    TIME_HORIZON_VALUES,
-    EmittedAt,
-    Key,
-    KeyLog,
-    KeyValidationError,
-    Target,
-    TerminationBreach,
-    TickScheduler,
-    TypeRegistry,
-    Visibility,
-)

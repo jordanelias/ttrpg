@@ -331,12 +331,35 @@ ED-IN-0139 allocated 2026-08-04: engine/params/ flips KEEP -> EVACUATE in tools/
 ```
 
 
-### 2026-09-17 — ED-IN-0231 / ED-IN-0232 (governance and holdings)
+### 2026-09-17 — ED-IN-0236 / ED-IN-0237 (governance and holdings) — ~~0231 / 0232~~, RENUMBERED ON MERGE
 
-`next_free` 231 -> 233. Both belong to `proposals/2026-09-17-governance-and-holdings/`, PROPOSED and
-HELD BACK IN FULL; nothing ratified on merge.
+⚠ **THE SIXTH WITHIN-LANE IN COLLISION, AND THE SECOND IN TWO DAYS ON THIS SAME WINDOW.** This pair
+was allocated **ED-IN-0231 / ED-IN-0232** against a `next_free` of 231, read on 2026-09-17. While the
+branch was open, **#407 landed on `main` having taken exactly those two numbers on 2026-09-16** — the
+design-prose quarantine and the Key-substrate retirement — which is the section two below this one,
+where 0231 arrives as the *third* claimant on the 0228 window and nobody had yet seen it. `main` landed
+first, so **`main` keeps 0231 / 0232 and this branch renumbered to 0236 / 0237** on the merge of
+2026-09-17. `next_free` 231 -> **238**.
 
-- **ED-IN-0231 — seats and policy.** Governance at every rung, hearth -> realm. Its spine is a
+**Round two's ED-IN-0233 / 0234 / 0235 did NOT collide** and are unchanged: `main` never allocated past
+0232, and its own `next_free` read 233 — so the two branches' windows abutted exactly rather than
+overlapping there. That is luck, not discipline.
+
+**And it is the worked example of the sentence in `CLAUDE.md` §4 that a session keeps reading as
+advice:** *"renumbering does not escape a collision, because every live session renumbers to the same
+`next_free`."* Both branches read 231 and both bumped — one to 233, one to 236 — and neither reading was
+wrong at the moment it was taken. The structural fix, `wiring_status.auto_allocation`, is specified and
+PARKED in `references/id_reservations.yaml`; until it lands, the only mitigation is the one §4 names:
+**land the `next_free` bump on `main` before anything cites the number**, which narrows the window and
+does not close it. **Any citation of `ED-IN-0231`/`ED-IN-0232` dated 2026-09-17 in this branch's
+history means `ED-IN-0236`/`ED-IN-0237`; before the merge there was no other reading.**
+
+Both belong to `proposals/2026-09-17-governance-and-holdings/`, PROPOSED and
+HELD BACK IN FULL; nothing ratified on merge. **Round two supersedes both in part** — see the
+ED-IN-0233 / 0234 / 0235 section below, and `proposals/2026-09-17-governance-and-holdings-r2/README.md`
+for what survives.
+
+- **ED-IN-0236 — seats and policy** (allocated as ~~ED-IN-0231~~). Governance at every rung, hearth -> realm. Its spine is a
   CONFORMANCE DIVISION, which is the finding: most of the seat model is already ratified Layer 1 and
   merely unbuilt (`architecture/meta/04_CODE_ARCHITECTURE.md` §B.7 ships `Seat`, rejects the
   `establishment` field, deletes `judging_set_rule`, and carries the MECHANICAL invariant that purview
@@ -348,7 +371,7 @@ HELD BACK IN FULL; nothing ratified on merge.
   `Proposition.scope` is already written and read. **`needs_jordan: true` for one fork only:** does a
   nearer rung's clause or a higher rank win a collision (recommendation: nearest, with a superior's
   `reach: all` override).
-- **ED-IN-0232 — the player surface and the build order.** One id for two documents because the
+- **ED-IN-0237 — the player surface and the build order** (allocated as ~~ED-IN-0232~~). One id for two documents because the
   second is the execution plan for the first three. Records that the interface can only offer what the
   engine raises a question about (four sources today), carries a pre-flight loader-refusal checklist
   derived by planting each defect, and states the gate-contract rule: work is downstream of Arc 2 iff
@@ -380,7 +403,7 @@ BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0049-0052 RES
 
 ### 2026-09-17 — ED-IN-0233 / 0234 / 0235 (governance and holdings, ROUND TWO)
 
-`next_free` 233 -> 236. `proposals/2026-09-17-governance-and-holdings-r2/`, PROPOSED and HELD BACK IN
+`next_free` 233 -> 236, then -> **238** when round one renumbered into 236/237 on the merge with `main` (see the section above). **These three ids are unchanged by that collision.** `proposals/2026-09-17-governance-and-holdings-r2/`, PROPOSED and HELD BACK IN
 FULL. Round two exists because round one's own pessimistic steelman NERS pass found four defects that
 were not polish: the headline emergent path **did not construct**, the downward half of its central
 mechanism was **forbidden by `holonic_ARCHITECTURE.md` §37.3**, its net-deletion claim **failed against
@@ -490,3 +513,21 @@ ED-FI-0006/0007/0008 allocated 2026-07-13: 2026-07-13 multi-agent audit P1 batch
 BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0009-0012 RESERVED 2026-07-29 for cross-lane EDs the IN code-shape waves file in WR. MEASURED max allocated = ED-WR-0009; unused 0010-0012 (3) returned to the pool, next_free 13 -> 10. Freeze lifted: read next_free, allocate, bump, co-commit as normal. // ED-WR-0008 allocated 2026-07-13: 2026-07-13 multi-agent audit P1 -- P-25 'Scale-based Mending Stability' override table in threadwork_v30 (line 40) truncated to header + 'Object' with zero data rows (original authoring truncation, git-confirmed). Open/needs_jordan; can anchor a WR threadwork batch with the P2 tail. next_free bumped 8->9. // ED-WR-0007 allocated 2026-07-08: pessimist-audit WR Scene-Slate + threadwork work items, execution pending (decision ED-IN-0027). ED-WR-0001 + ED-WR-0002 allocated 2026-07-05: NERS-audit E-5 (peninsular_strain GD-1 sweep) + E-8 (MS/RS name sweep) accepted work items; ED-WR-0003 allocated 2026-07-05: edge-playability §7 item 10 (ambient-fabric window + Appraise Revelation), edge-playability §7 batch (PR #81)
 ```
 
+### 2026-09-16 — the 0228 window took a THIRD claimant (ED-IN-0231)
+
+The design-prose quarantine (#407) first took **ED-IN-0229**, skipping 0228 on purpose: `next_free`
+read 228, but 0228 was already claimed by the then-open PR #405, and taking it would have produced
+the within-lane collision CLAUDE.md §4 warns about. **It collided one number higher anyway.** While
+#407 was open, #405 landed keeping 0228, and #404 landed having renumbered 0228 -> 0229 and
+0229 -> 0230 — so by the time #407 merged `main`, its 0229 belonged to #404 and it renumbered again,
+to **0231**, with `next_free` at 232.
+
+That is §4's sentence demonstrated rather than quoted: *renumbering to `next_free` does not escape a
+same-lane collision*, because every live session renumbers to the same number. Skipping ahead does
+not escape it either — it only changes which number you land on. Three claimants on one window in
+one day, after the same lane collided twice on 2026-09-10 and once more after that renumber.
+
+What would actually have prevented it is the structural fix the reservations file already specifies
+and PARKS: `wiring_status.auto_allocation`. Until that exists, the only real mitigation is the one
+§4 names — land the `next_free` bump on `main` **before** anything cites the number — which narrows
+the window rather than closing it, and a branch open for hours cannot use it at all.

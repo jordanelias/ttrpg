@@ -122,9 +122,12 @@ jobs:
           v python3 tools/ci_editorial_checker.py
           v python3 tools/ci_pp_frozen_check.py
           v python3 tools/ci_naming_check.py
+          # ED-IN-0231 (Jordan, 2026-09-16): the game trees hold code, not prose. No tracked .md
+          # under systems/** or engine/** except engine/season/**. BLOCKING: measured over #337-#404,
+          # prose was written back into systems/ in ten separate PRs and the rate was rising.
+          v python3 tools/ci_design_prose_quarantine.py
           v python3 tools/ci_names_consistency.py
           v python3 tools/export_engine_params.py --check
-          v python3 tools/export_key_types.py --check
           # ED — the writer half of the ttrpg -> Godot constants bridge. Blocking for the same
           # reason as its two siblings: it is deterministic and has no external pins. Its READER
           # half lives in the jordanelias/valoria-game repo, as a constants-parity checker run by
@@ -139,11 +142,6 @@ jobs:
           # resolves through. Blocking, and it IMPORTS every target at export time, so a broken row
           # reds CI instead of failing a campaign run hours later.
           v python3 tools/export_composition.py --check
-          # references/module_contracts.yaml's emits:/consumes: INTERFACE -> the cooked artifact.
-          # Blocking, and it is what stopped an ELEVENTH independent parser of that registry: the
-          # runtime-conformance instrument reads this instead, and gets the sim_module ->
-          # contract-module binding that nothing owned before.
-          v python3 tools/export_module_contracts.py --check
           # references/world_initial_state.yaml -> the campaign's opening position, read at import
           # by engine/substrate/world_initial_state.py. Blocking: game_state.py no longer carries
           # these tables, so a stale artifact is a world with the wrong owners.
@@ -262,36 +260,6 @@ jobs:
           # point 2, and deleting it would have required striking §0.1 in the same commit.
           w python3 tools/ci_vacuous_assertion_check.py
           exit 0
-
-  contract-conformance:
-    name: Module-Contract Conformance (report-only)
-    runs-on: ubuntu-latest
-    needs: syntax-check
-    timeout-minutes: 5
-    # Report-only: the EXISTING design-side conformance scan (contract_adjudicator A1-A12,
-    # the valoria-module-adjudicator skill's machine checks — reused, not re-implemented;
-    # holonic doctrine ED-1083: conformance is deterministic, make it cheap and standing).
-    # Current tree carries ~21 pre-existing violations / ~64 warnings — the ED-1051 backlog
-    # (doc:null modules, cross-scale edges without transitions, unregistered Key types).
-    # STEP-level continue-on-error (the freshness-gate precedent): the job stays green while
-    # the log carries the standing count — a permanently red X for a known, docketed backlog
-    # trains alarm-blindness. Remove the step flag (blocking) when ED-1051 triage reaches zero.
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install PyYAML
-        run: pip install pyyaml
-      - name: Contracts conform to the Key Type Registry + canonical sources (report-only)
-        continue-on-error: true
-        run: |
-          python3 skills/valoria-module-adjudicator/scripts/contract_adjudicator.py \
-            --contracts references/module_contracts.yaml \
-            --registry  systems/_architecture/reference/key_type_registry_v30.md \
-            --sources   references/canonical_sources.yaml
 
   unit-tests:
     name: Validator Unit Tests

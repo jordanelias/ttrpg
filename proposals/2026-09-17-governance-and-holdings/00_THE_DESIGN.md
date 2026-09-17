@@ -13,7 +13,7 @@
 ## **Strike discipline, stated so it is not mistaken for an omission:** the DEFINING sentence of each
 ## overturned claim is struck in place; its incidental mentions are NOT individually struck, because a
 ## document struck word-by-word is unreadable and this banner is the notice.
-## Lane: `IN` · id: **`ED-IN-0231`**, SHARED with `01_SEATS_AND_POLICY.md`. **This file allocates no id
+## Lane: `IN` · id: **`ED-IN-0236`**, SHARED with `01_SEATS_AND_POLICY.md`. **This file allocates no id
 ## and introduces no claim of its own.** Every sentence below is a sentence one of the four subject
 ## files already argues, measures and ships a falsifier for; what this file adds is *one statement, in
 ## one vocabulary, in reading order*. That is why it takes no id: a document with no new claim has
@@ -501,7 +501,7 @@ English — and each register says so.
 
 | | question | owner of the argument | recommendation |
 |---|---|---|---|
-| **RR-1** | **Policy collision: does the NEARER policy or the HIGHER rank win?** Two defensible options, materially different games — feudal against absolutist. Nothing in the tree decides it, **because no step reads a policy at all** | `01` §C.6 (`ED-IN-0231`, `needs_jordan: true`) | **(a) NEAREST, with a superior's `reach: all` override** — subsidiarity by default, centralism by act. Cost of being wrong: **one comparator line and no data migration** |
+| **RR-1** | **Policy collision: does the NEARER policy or the HIGHER rank win?** Two defensible options, materially different games — feudal against absolutist. Nothing in the tree decides it, **because no step reads a policy at all** | `01` §C.6 (`ED-IN-0236`, `needs_jordan: true`) | **(a) NEAREST, with a superior's `reach: all` override** — subsidiarity by default, centralism by act. Cost of being wrong: **one comparator line and no data migration** |
 | **RR-2** | **`ED-SE-0051` — the bound on the demographic loop: matter only, or matter plus hearth capacity?** Already queued; **Layer 1 is silent**, stated in the row itself | `02` §A.7 | **the CAPACITY arm**, as `capacity(w, rung)` — a Query over DWELLING sites **with a floor**, never a fixture. ⚠ `ED-WR-0011` says the two must be answered **together** |
 | **RR-3** | **The zoom-trigger table: adopt the claim-landing replacement, or keep thirteen authored rows?** | `03` §A.7, §C.3 | **(a) adopt.** ⚠ **The weakest of the three**, and `03` argues both halves: the head is `CANONICAL`, *and* it carries a second contradicting `## Status:` line, sits in the retire set, and holds zero `.py` |
 
@@ -580,4 +580,4 @@ carries the commands.
 ---
 
 **END — `00_THE_DESIGN.md`. PROPOSED. HELD BACK IN FULL. NOTHING RATIFIES ON MERGE. Grade: `paper`.
-No new claim, no new id: `ED-IN-0231`, shared with `01_SEATS_AND_POLICY.md`.**
+No new claim, no new id: `ED-IN-0236`, shared with `01_SEATS_AND_POLICY.md`.**

@@ -13,7 +13,7 @@ WHAT IT DELIBERATELY DOES NOT DO. It does not write flow. An import graph yields
 it does not yield "the read contest feeds the sigma assembly", which is the claim a reader
 actually needs. Nor can it rule whether an absence is a defect or a deliberate deferral. Those
 live in the authored flow skeletons (`systems/<x>/<x>_flow_skeleton_v1.md`) and the authored
-companion (`systems/_architecture/reference/engine_atlas_v1.md`). This tool's job is to render what is
+companion (`.designs/systems/_architecture/reference/engine_atlas_v1.md`). This tool's job is to render what is
 countable and to CHECK what was authored — not to replace it.
 
 COMPOSES, DOES NOT REINVENT (CLAUDE.md section 8). Every input has an existing owner:
@@ -21,7 +21,6 @@ COMPOSES, DOES NOT REINVENT (CLAUDE.md section 8). Every input has an existing o
                                            (`wiring:` facts, folded in from the retired
                                            wiring_manifest.yaml, plan S5c — one source now,
                                            listed once)
-  * `references/key_graph.json`          — the registry<->contracts join (build_key_graph.py)
   * `references/execution_map.json`      — per-module build/executes status
   * `references/execution_trace.json`    — what a SEEDED CAMPAIGN actually called
   * the flow skeletons                   — the authored as-built view
@@ -56,16 +55,19 @@ OUT_MD = os.path.join(ROOT, 'references', 'ENGINE_ATLAS.md')
 OUT_JSON = os.path.join(ROOT, 'references', 'engine_atlas.json')
 
 CONTRACTS = os.path.join(ROOT, 'references', 'module_contracts.yaml')
-KEY_GRAPH = os.path.join(ROOT, 'references', 'key_graph.json')
 EXEC_MAP = os.path.join(ROOT, 'references', 'execution_map.json')
 EXEC_TRACE = os.path.join(ROOT, 'references', 'execution_trace.json')
-SPEC = os.path.join(SYSTEMS, '_architecture', 'reference', 'subsystem_flow_skeletons_v1.md')
+# ED-IN-0231: the spec prose is quarantined under .designs/ (the archive mirrors the tree).
+# A builder reading it by explicit path is the sanctioned shape (CLAUDE.md §0.05); what the
+# quarantine stops is an AGENT SWEEP picking it up, not code opening a file it names.
+DESIGNS = os.path.join(ROOT, '.designs', 'systems')
+SPEC = os.path.join(DESIGNS, '_architecture', 'reference', 'subsystem_flow_skeletons_v1.md')
 
 BANNER = ('> **GENERATED** by `tools/build_engine_atlas.py`. Do not hand-edit — a hand-edit is '
           'silently discarded on the next build.\n>\n'
           '> This is the **countable** half of the atlas. The reading guide, the campaign spine '
           'and the open-decision set are authored in '
-          '[`systems/_architecture/reference/engine_atlas_v1.md`](../systems/_architecture/reference/engine_atlas_v1.md); '
+          '[`.designs/systems/_architecture/reference/engine_atlas_v1.md`](../.designs/systems/_architecture/reference/engine_atlas_v1.md); '
           'the per-subsystem flow is authored in each `systems/<x>/<x>_flow_skeleton_v1.md`. '
           'Nothing here ratifies anything.')
 
@@ -135,10 +137,9 @@ def load_inputs():
         absent.append(os.path.relpath(path, ROOT))
         return fallback
 
-    graph = opt(KEY_GRAPH, {'keys': {}, 'modules': {}})
     emap = opt(EXEC_MAP, {'modules': {}})
     trace = opt(EXEC_TRACE, {'by_subsystem_path': {}})
-    return contracts, graph, emap, trace, absent
+    return contracts, emap, trace, absent
 
 
 # ── derivation ───────────────────────────────────────────────────────────────
@@ -218,7 +219,7 @@ def declared_contracts(subsystem):
     return out
 
 
-def contracts_for(subsystem, contracts, emap, graph, skel):
+def contracts_for(subsystem, contracts, emap, skel):
     """Which module contracts belong to this subsystem — from THREE sources, with provenance.
 
     A single join is not enough and a name-guess is wrong. Measured on the current tree, a
@@ -226,9 +227,8 @@ def contracts_for(subsystem, contracts, emap, graph, skel):
     their own folder (`faction_state`'s `sim_module` is `engine/autoload/game_state.py`) or
     deliberately declare none at all (`mass_battle`'s row is MB-lane-owned).
 
-    So three sources are unioned and each attribution records WHY it was made:
+    So two sources are unioned and each attribution records WHY it was made:
       `code`     — a declared code path under `systems/<subsystem>/`
-      `graph`    — `key_graph.json`'s own `subsystem` attribution
       `authored` — the skeleton's `Contracts:` header, itself guarded to name only real
                    contracts (`test_contract_names_resolve_in_the_generated_index`)
 
@@ -250,9 +250,6 @@ def contracts_for(subsystem, contracts, emap, graph, skel):
         sim = m.get('sim_module')
         if isinstance(sim, str) and sim.startswith(f'systems/{subsystem}/'):
             add(m.get('module'), 'code')
-    for name, rec in (graph.get('modules') or {}).items():
-        if rec.get('subsystem') == subsystem:
-            add(name, 'graph')
     if skel:
         m = re.search(r'\*\*Contracts:\*\*(.*)', skel['text'])
         if m:
@@ -271,17 +268,6 @@ def reachability(subsystem, trace):
         if n:
             phases[phase] = n
     return {'total': sum(phases.values()), 'phases': dict(sorted(phases.items()))}
-
-
-def emits_keys(owned, graph):
-    """Key types these contracts are recorded as producing, per the generated key graph."""
-    out = set()
-    for kt, v in (graph.get('keys') or {}).items():
-        if not v.get('well_formed'):
-            continue
-        if set(v.get('producers') or []) & set(owned):
-            out.add(kt)
-    return sorted(out)
 
 
 SECTION_RE = re.compile(r'^## (\d)\. ', re.M)
@@ -339,17 +325,17 @@ def build_rows():
       * a trace bucket matching no subsystem is reported.
     Nothing here is a hardcoded subsystem list.
     """
-    contracts, graph, emap, trace, absent = load_inputs()
-    nomen = nomenclature_audit(contracts, graph)
+    contracts, emap, trace, absent = load_inputs()
+    nomen = nomenclature_audit(contracts)
     declared = {r['subsystem']: r for r in roster()}
     on_disk = discovered_subsystems()
 
     rows = []
     for sub in on_disk:
         meta = declared.get(sub)
-        skel_rel = meta['skeleton'] if meta else f'systems/{sub}/reference/{sub}_flow_skeleton_v1.md'
+        skel_rel = meta['skeleton'] if meta else f'.designs/systems/{sub}/reference/{sub}_flow_skeleton_v1.md'
         skel = skeleton_facts(skel_rel)
-        owned_src = contracts_for(sub, contracts, emap, graph, skel)
+        owned_src = contracts_for(sub, contracts, emap, skel)
         owned = sorted(owned_src)
         rows.append({
             'subsystem': sub,
@@ -364,7 +350,6 @@ def build_rows():
             'executes_flag': {m: (emap.get('modules', {}).get(m) or {}).get('executes')
                               for m in owned},
             'trace': reachability(sub, trace),
-            'emits': emits_keys(owned, graph),
             'gap_count': (skel or {}).get('gap_count', 0),
             'coverage': coverage(sub, skel),
         })
@@ -391,14 +376,14 @@ SCAN_ROOTS = ('systems', 'engine', 'references', 'registers', 'tools')
 SCAN_EXT = ('.py', '.md', '.yaml', '.yml')
 
 
-def nomenclature_audit(contracts, graph):
+def nomenclature_audit(contracts):
     """Measure whether each canonical identifier can actually be FOUND by searching for it.
 
     A canonical name is only useful as a handle if searching for it returns its references and
-    little else. Key types already satisfy this by construction — `scene.combat_resolved` is
-    dotted and distinctive. Module contract names largely do NOT: `victory`, `audit`, `world` are
-    ordinary words, so the token count is dominated by unrelated prose and identifiers, and a
-    reader who greps one gets noise instead of a region.
+    little else. Module contract names largely are NOT: `victory`, `audit`, `world` are ordinary
+    words, so the token count is dominated by unrelated prose and identifiers, and a reader who
+    greps one gets noise instead of a region. (The counter-example used to be the dotted Key type
+    names, which satisfied this by construction; they retired with the substrate, ED-IN-0232.)
 
     This does not assert a rule; it produces the evidence for one. `occurrences` is the raw count
     of the bare token across the corpus; `qualified` counts uses of a namespaced form
@@ -406,11 +391,9 @@ def nomenclature_audit(contracts, graph):
     A name with a high raw count and no qualified form is un-findable today.
     """
     names = sorted({m.get('module') for m in (contracts.get('modules') or []) if m.get('module')})
-    keys = sorted(k for k, v in (graph.get('keys') or {}).items() if v.get('well_formed'))
 
     counts = {n: 0 for n in names}
     qualified = {n: 0 for n in names}
-    key_counts = {k: 0 for k in keys}
     word = {n: re.compile(r'(?<![A-Za-z0-9_])' + re.escape(n) + r'(?![A-Za-z0-9_])') for n in names}
     qual = {n: re.compile(r'contract:' + re.escape(n)) for n in names}
 
@@ -436,14 +419,9 @@ def nomenclature_audit(contracts, graph):
                     if n in text:
                         counts[n] += len(word[n].findall(text))
                         qualified[n] += len(qual[n].findall(text))
-                for k in keys:
-                    if k in text:
-                        key_counts[k] += text.count(k)
 
     return {
         'contracts': {n: {'occurrences': counts[n], 'qualified': qualified[n]} for n in names},
-        'keys_median_occurrences': sorted(key_counts.values())[len(key_counts) // 2]
-        if key_counts else 0,
         'contracts_median_occurrences': sorted(counts.values())[len(counts) // 2] if counts else 0,
     }
 
@@ -475,7 +453,7 @@ def reached_label(row):
 
 def render(rows, drift, nomen):
     L = ['# Valoria — Engine Atlas (generated)', '', BANNER, '']
-    L += [f'**{len(rows)} subsystems** · sources: `module_contracts.yaml`, `key_graph.json`, '
+    L += [f'**{len(rows)} subsystems** · sources: `module_contracts.yaml`, '
           '`execution_map.json`, `execution_trace.json`, and the authored flow skeletons.', '']
     problems = {k: v for k, v in drift.items() if v}
     L += ['---', '', '## 0. This document\'s own coverage', '']
@@ -506,10 +484,10 @@ def render(rows, drift, nomen):
           '"not in trace" means that run did not call it — not that it is unreachable; the '
           'authored skeleton rules on reachability in principle.', '']
     L += table(
-        ['subsystem', 'lane', '.py', 'contracts', 'reached', 'emits keys', 'gaps', 'flow skeleton'],
+        ['subsystem', 'lane', '.py', 'contracts', 'reached', 'gaps', 'flow skeleton'],
         [[f"`{r['subsystem']}`", r['lane'], r['code_files'],
-          ', '.join(f'[`{c}`](CONTRACT_INDEX.md#{c})' for c in r['contracts']) or '—',
-          reached_label(r), len(r['emits']) or '—', r['gap_count'],
+          ', '.join(f'`{c}`' for c in r['contracts']) or '—',
+          reached_label(r), r['gap_count'],
           f"[skeleton](../{r['skeleton']})"] for r in rows])
 
     L += ['## 2. Declared vs executed', '']
@@ -562,14 +540,14 @@ def render(rows, drift, nomen):
 
     L += ['## 5. Nomenclature — can a canonical name be found by searching for it?', '']
     L += ['A canonical identifier is only a usable handle if searching for it returns its '
-          'references and little else. **Key types satisfy this by construction** — dotted and '
-          'distinctive, median '
-          f"{nomen['keys_median_occurrences']} occurrence(s). **Contract names largely do not**: "
-          'several are ordinary English words, so the count below is dominated by unrelated prose '
-          f"and identifiers (median {nomen['contracts_median_occurrences']}). "
-          'This is evidence for a naming rule, not the rule itself — nothing is enforced here.', '']
+          'references and little else. **Contract names largely are not**: several are ordinary '
+          'English words, so the count below is dominated by unrelated prose and identifiers '
+          f"(median {nomen['contracts_median_occurrences']}). The counter-example used to be the "
+          'dotted Key type names, which satisfied this by construction; they retired with the '
+          'substrate (ED-IN-0232). This is evidence for a naming rule, not the rule itself — '
+          'nothing is enforced here.', '']
     L += ['`qualified` counts uses of a namespaced form (`contract:<name>`), the convention '
-          '`_identifier_census.yaml` already uses with `key:`/`py:`. A name with a high raw count '
+          '`_identifier_census.yaml` already uses with `py:`. A name with a high raw count '
           'and zero qualified uses cannot be located by search today.', '']
     worst = sorted(nomen['contracts'].items(), key=lambda kv: -kv[1]['occurrences'])[:12]
     L += table(['contract', 'bare occurrences', 'qualified uses'],

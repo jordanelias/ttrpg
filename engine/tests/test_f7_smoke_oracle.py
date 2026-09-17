@@ -300,15 +300,44 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 # faction's true delta inside +-3.3pp with |z| <= 0.80. This file's own docstring says it:
 # small-n is a reproducibility pin, NOT balance signal. Do not tune to it, and do not cite
 # this swing as evidence the ruling favoured Varfell.
-GOLDEN_WIN_SHARE = {'Crown': 12.5, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 75.0}
+# ⚠ RE-PINNED 2026-09-16 (ED-IN-0232) — THE KEY SUBSTRATE RETIRED, AND THIS ORACLE MOVED BACK TO A
+# DISTRIBUTION THE TREE ALREADY HELD. Jordan: *"anything key-based gets retired."* The consequence
+# spine this file's golden was recorded under — the per-season §10 Parliamentary vote and the
+# composed Domain Echo — ran only when `world.echo_scheduler` was attached, i.e. under
+# ECHO_TRANSPORT. With the bus gone the campaign takes what used to be the flag-OFF path.
+#
+# ⚠ ONE OF THE FOUR CONSTANTS BELOW HAS PRIOR PROVENANCE. THE OTHER THREE ARE FRESH RE-RECORDS,
+# and saying so is CLAUDE.md §7's requirement, not a caveat. An adversarial pass found the first
+# version of this note claiming "the goldens moved to a distribution the tree already held" as
+# though it covered all four.
+#
+#   GOLDEN_WIN_SHARE       — PRIOR. Exactly `engine/tests/test_echo_transport.py::_GOLDEN_WIN_SHARE`,
+#                            the flag-OFF oracle that file asserted byte-exactly until it retired
+#                            with the bus in this same commit. Measured on the pre-change tree:
+#                            `run_batch(n=8, base_seed=42, params={'ECHO_TRANSPORT': 0})` gave
+#                            {'Crown': 62.5, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 25.0},
+#                            which is what the default now produces. Both arms were recorded before
+#                            anything was deleted, so this one is a predicted move landing where it
+#                            was predicted.
+#   GOLDEN_WINNERS         — FRESH RE-RECORD. No pre-change flag-OFF arm was captured for it.
+#   GOLDEN_BATTLES_MEAN    — FRESH RE-RECORD (35.9 -> 39.1).
+#   GOLDEN_SCENES_RESOLVED — FRESH RE-RECORD (1072 -> 407).
+#
+# ⚠ AND THE CITATION ABOVE CANNOT BE OPENED. `test_echo_transport.py` was deleted in this same
+# commit (§0.1 pt 3's third row: "as `F` says at `:L`" requires opening `F` at `:L`). It is at
+# `FORK:c6e82105`, row in `references/restructure_ledger.md`; that is the only way to read it.
+#
+# OLD values, preserved (the ECHO_TRANSPORT-on arm, unreachable from this commit on):
+#   GOLDEN_WIN_SHARE       = {'Crown': 12.5, 'Church': 0.0, 'Hafenmark': 12.5, 'Varfell': 75.0}
+#   GOLDEN_WINNERS         = {'Crown': 1, 'Hafenmark': 1, 'Varfell': 6}
+#   GOLDEN_BATTLES_MEAN    = 35.9
+#   GOLDEN_SCENES_RESOLVED = 1072
+GOLDEN_WIN_SHARE = {'Crown': 62.5, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 25.0}
 # GOLDEN_WINNERS mirrors _win_share's raw `wins` dict shape: only factions with >=1 win get a key.
-# ⚠ The sentence here used to say "Church/Hafenmark win 0/8 now". That was true of the PREVIOUS
-# pin and false of this one — under the 2026-08-14 reband Church wins 2 of 8 and Hafenmark 0, so
-# Hafenmark alone is absent. Corrected rather than left: a comment explaining the shape of numbers
-# it no longer describes is how the next re-record gets reasoned about wrongly.
-GOLDEN_WINNERS = {'Crown': 1, 'Hafenmark': 1, 'Varfell': 6}
-GOLDEN_BATTLES_MEAN = 35.9
-GOLDEN_SCENES_RESOLVED = 1072  # 975 -> 1072 (ED-SC-0031); 862 -> 858 (fractional pools, 08-21) -> 947 (per-stat floors, 08-22) -> 967 (roster rulings, 08-23)
+# Hafenmark alone is absent — it wins 0 of 8 under this arm, as it did under the 2026-08-14 reband.
+GOLDEN_WINNERS = {'Crown': 5, 'Church': 1, 'Varfell': 2}
+GOLDEN_BATTLES_MEAN = 39.1
+GOLDEN_SCENES_RESOLVED = 407  # 1072 -> 407 (ED-IN-0232 — the §10 vote was bus-gated and stops running; the drop is NOT an independent measurement of the spine's share, it is these two numbers subtracted); 975 -> 1072 (ED-SC-0031); 862 -> 858 (fractional pools, 08-21) -> 947 (per-stat floors, 08-22) -> 967 (roster rulings, 08-23)
 WALL_TIME_CEILING_S = 90.0  # n=8 runs ~16s; generous headroom for CI variance
 
 _CACHE = {}
@@ -410,8 +439,15 @@ def test_f7_hafenmark_elimination_lockout():
     """
     campaigns = _campaigns42()
     hafenmark_wins = sum(1 for r in campaigns if r.winner == 'Hafenmark')
-    assert hafenmark_wins == 1, (
-        f"Hafenmark won {hafenmark_wins} != 1 — trajectory moved; check the MECHANISM assertion "
+    # ⚠ RE-PINNED 1 -> 0 (2026-09-16, ED-IN-0232), and the message below is what decided it rather
+    # than the count. The Key substrate retired, so the campaign runs what used to be the
+    # ECHO_TRANSPORT-off arm; seed 44 — the campaign the 2026-08-27 re-pin was about — no longer
+    # flips to Hafenmark. That is the "shifted RNG stream" half of this assertion's own question,
+    # not the "broken lockout" half: the MECHANISM assertion below runs unchanged and still passes,
+    # which is exactly the distinction it was built to make. 0/8 is also where this pin stood before
+    # ED-SC-0031, so the count is returning to a value this file already recorded.
+    assert hafenmark_wins == 0, (
+        f"Hafenmark won {hafenmark_wins} != 0 — trajectory moved; check the MECHANISM assertion "
         "below before regenerating, since that is the one that distinguishes a broken lockout "
         "from a shifted RNG stream")
 
@@ -433,20 +469,39 @@ def test_f7_hafenmark_elimination_lockout():
     finally:
         _clock.run_tick = _orig
 
-    assert flipped.winner == 'Hafenmark', f"seed 44 no longer flips ({flipped.winner})"
+    # ⚠ TWO PRECONDITIONS HERE INVERTED ON 2026-09-16 (ED-IN-0232), and they inverted TOWARD a
+    # stronger test rather than away from one, which is why they are re-pinned rather than dropped.
+    # Both were bookkeeping about the 2026-08-27 re-pin, not about the lockout: seed 44 was traced
+    # because it was the campaign that had flipped to Hafenmark, and the last line asserted
+    # Hafenmark never reached 0 there — i.e. that the winner was an untouched bystander, so the
+    # loop above was exercising some OTHER faction or nothing at all.
+    #
+    # With the Key bus retired the campaign runs the old flag-OFF arm, and on seed 44 Hafenmark now
+    # reaches 0 and never returns while Church wins. So the faction the loop examines is the one
+    # this test is named for, and the lockout is genuinely under test instead of incidentally so.
+    assert flipped.winner == 'Church', f"seed 44 winner moved ({flipped.winner})"
     assert len(history) >= 50, f"the trace captured {len(history)} seasons — it is not running"
+    checked = 0
     for faction in history[0]:
         counts = [h[faction] for h in history]
         if 0 not in counts:
             continue
+        checked += 1
         after = counts[counts.index(0):]
         assert not any(c > 0 for c in after), (
             f"{faction} reached 0 territories and RECOVERED ({after}) — the one-way lockout is "
             "broken, or an ED-FA-0005 comeback path landed. That is a mechanism change, not a "
             "trajectory shift, and must not be re-pinned away")
-    assert min(h['Hafenmark'] for h in history) > 0, (
-        "Hafenmark DID reach 0 on seed 44 and still won — re-read the loop above, because the "
-        "lockout is then the thing under test rather than an untouched bystander")
+    # §0.1 pt 2: a conditional loop must assert that it asserted. Without this the whole mechanism
+    # check passes silently on a campaign where nobody is ever eliminated — which is exactly the
+    # state seed 44 was in before this commit, and nothing said so.
+    assert checked >= 1, (
+        "no faction reached 0 territories on seed 44, so the lockout loop above asserted nothing. "
+        "Pick a seed that eliminates someone, or the mechanism is untested")
+    assert min(h['Hafenmark'] for h in history) == 0 and flipped.winner != 'Hafenmark', (
+        "Hafenmark no longer reaches 0 on seed 44, so this test is back to checking the lockout on "
+        "a bystander. Re-read the trace and pick a seed where the eliminated faction is the one "
+        "named here")
 
 
 def test_f7_victory_threshold_is_a_dead_param():

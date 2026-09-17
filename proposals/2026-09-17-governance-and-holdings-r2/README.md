@@ -3,7 +3,7 @@
 ## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
 ## Lane: `IN` (cross-cutting), with `SE` for `04`. Ids: **`ED-IN-0233`**, **`ED-IN-0234`**, **`ED-IN-0235`**, **`ED-SE-0053`**.
 ## Grade under `CLAUDE.md` §0.2: **`paper`** for every document. **Nothing in this suite has run.** `05` §A.4 item 1 is the first thing that would.
-## Supersedes: **`../2026-09-17-governance-and-holdings/`** — round one, left standing with banners and struck where overturned. Ledger rows appended for `ED-IN-0231`, `ED-IN-0232` and `ED-SE-0052`.
+## Supersedes: **`../2026-09-17-governance-and-holdings/`** — round one, left standing with banners and struck where overturned. Ledger rows appended for `ED-IN-0236`, `ED-IN-0237` and `ED-SE-0052`.
 ## ⚠ **Written FROM round one's own terminal NERS verdict, not over it.** `../2026-09-17-governance-and-holdings/AUDIT_VERDICT.md` is the input to this suite. The limit it graded hardest — that the policy instrument was a **DEPARTURE** from `holonic_ARCHITECTURE.md` §37.3 rather than an extension of it — is why `02` exists at all. ⚠ **The map of its nine limits to this suite's answers is below, and it is not nine for nine.**
 
 ---

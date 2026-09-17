@@ -1385,7 +1385,7 @@ reader and a removal.**
 | `population()` / `faction_value()` / `character()` with no consumer | a Query with no consumer is a false N-line. **`conferral_path` and `establishment_of` are what that looks like after eighteen months** |
 | `raze` / `build` / `repair` / `convert` / `garrison` as verbs | `restore` + `found` + one Record kind cover them |
 | a latency, distance or speed parameter on the writ | `02` forbids it by construction; **speed is not an axis, control is** |
-| an `audit/` file, or a findings document from the adversarial pass | §0 retires `audit/` as a category |
+| an `.audit/` file, or a findings document from the adversarial pass | §0 retires `.audit/` as a category (~~`audit/`~~ — renamed 2026-09-16, ED-IN-0231) |
 
 **And what IS licensed, so the predicate does not read as a ban.** ⊕ L35's loader refusal (subject: a
 writ a player wrote) · item 7's operand branch with its falsifier (subject: whether an executor is
@@ -1481,7 +1481,7 @@ survivors reach Jordan**, and the standing queue is cleared in §C.5.
   collision is the executor's and is resolved by his act.** Round one graded this its most expensive
   open ruling and gave it a feel-of-the-game table; **the design deleted the question rather than
   answering it**, which is the outcome §0's gate exists to find. Its `needs_jordan` row on
-  `ED-IN-0231` closes with this citation.
+  `ED-IN-0236` closes with this citation.
 
 ### NEW — 4
 
@@ -1900,7 +1900,7 @@ field)` pairs enumerated by script** · `rosters.yaml` `:95-146` `:250-270` `:69
 `workplans/2026-09-11-reconciled-program.md` `:3` and the 27-position table `:134-161` ·
 `_part2.md` positions 6 and 15/16 · `registers/editorial_ledger_in.jsonl:104` (ED-IN-0210, read as
 JSON and quoted in full) · `registers/editorial_ledger_se.jsonl:51` · `references/id_reservations.yaml`
-`:246` (**IN `next_free: 236`**, ED-IN-0231..0235 already allocated) and `:257` (**SE `next_free:
+`:246` (**IN `next_free: 236`**, ED-IN-0236..0235 already allocated) and `:257` (**SE `next_free:
 54`**) · `CLAUDE.md` §0, §0.05, §0.06, §0.1, §0.2, §0.3, §0.4, §4, §7, §8, §10 ·
 `proposals/2026-09-17-governance-and-holdings/04_BUILD_ORDER.md` (§A.1's three tables, carried
 forward) and `AUDIT_VERDICT.md`.

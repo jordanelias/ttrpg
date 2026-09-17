@@ -29,7 +29,7 @@ behavioural question is worse than carrying a dead row.
 
 ⚠ THE MACHINE-READ SET IS DERIVED FROM CODE, NEVER HARDCODED. `machine_read_inputs()` scans
 `tools/`, `engine/`, `systems/`, `skills/` for filenames used in a read context. That matters:
-`systems/_architecture/reference/key_type_registry_v30.md` IS an input (the Key-type schema is authored
+`.designs/systems/_architecture/reference/key_type_registry_v30.md` IS an input (the Key-type schema is authored
 in markdown), so rows about it are CODE, not reference — a hardcoded "all .md are reference"
 rule would have culled the schema of the Key bus.
 
@@ -103,11 +103,20 @@ def code_identifiers(root=None):
     `engine/cross_scale/articulation.py`'s trigger set. They were culled because they name `.md`
     paths and none of `_CODEISH`'s file-shaped patterns.
 
-    A work item can be entirely about code while naming no filename at all — it names the KEY TYPE
-    or the MODULE instead. That vocabulary is derivable rather than guessable, and it is derived
-    ONLY from cooked artifacts plus the directory layout: `engine/engine_params/key_types.json`
-    (the 55 key type ids), `engine/engine_params/composition.json` (the composition role names) and
-    the `systems/<x>/` directory names.
+    A work item can be entirely about code while naming no filename at all — it names the MODULE
+    or (until 2026-09-16) the KEY TYPE instead. That vocabulary is derivable rather than guessable,
+    and it is derived ONLY from cooked artifacts plus the directory layout:
+    `engine/engine_params/composition.json` (the composition role names) and the `systems/<x>/`
+    directory names.
+
+    ⚠ HALF THE VOCABULARY IS GONE AND THE DEFECT THIS FUNCTION EXISTS FOR CAN THEREFORE RECUR.
+    `engine/engine_params/key_types.json` supplied the 55 key type ids and retired with the Key
+    substrate (ED-IN-0232). The lookup below is guarded by an existence check, so it degrades to
+    fewer identifiers rather than crashing — but the reason this function was written (ED-IN-0014
+    and ED-IN-0004 were mis-culled for naming a Key type rather than a filename) names exactly the
+    class of item that is now un-derivable again. The loop entry is KEPT rather than deleted: it
+    costs nothing while the file is absent and it is the one line a reader needs to see to
+    understand what shrank.
 
     ⚠ IT DELIBERATELY DOES NOT PARSE `references/module_contracts.yaml`. An earlier draft did, and
     `tests/valoria/test_engine_params_bridge.py::test_no_new_parser_of_an_authored_surface` caught

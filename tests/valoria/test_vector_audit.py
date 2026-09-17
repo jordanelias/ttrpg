@@ -150,15 +150,20 @@ def test_token_universe_is_expansive_across_entity_classes():
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     defs = va.derive_tokens(__import__('pathlib').Path(root))
     scales = Counter(m.get('scale') for m in defs.values())
-    # every ontology class the expansion added must be non-empty
-    for cls in ('mechanic', 'key', 'primitive', 'value', 'action'):
+    # every ontology class the expansion added must be non-empty.
+    #
+    # ⚠ `'key'` LEFT THIS ROSTER on 2026-09-16 (ED-IN-0232), and so did the `Key:` name assertion
+    # below. Both read the Key type vocabulary out of `references/module_contracts.yaml`'s
+    # emits:/consumes: blocks, which retired with the substrate — so the class is empty by
+    # construction now, not by regression. The other four classes are untouched and still asserted,
+    # which is what keeps this a real check: if `mechanic` or `action` empties out, this still reds.
+    for cls in ('mechanic', 'primitive', 'value', 'action'):
         assert scales.get(cls, 0) > 0, (cls, dict(scales))
     # specific entities the expansion must reach
     names = set(defs)
     assert any('baralta' in n.lower() for n in names)               # consolidated NPC
     assert any(m.get('scale') == 'action' and n == 'Muster' for n, m in defs.items())
     assert 'Löwenritter' in names                                    # faction/order
-    assert any('Key:' in n for n in names)                           # Key schema names
     assert len(defs) > 200                                           # genuinely expansive
 
 
@@ -417,105 +422,36 @@ def test_throughline_graph_extended_by_second_registry_source():
     assert edges(va.build_g_throughline(meta, tokens, extra_rows=None)) == e_base
 
 
-@pytest.mark.slow
-def test_key_propagation_graph_wires_engine_dataflow_and_resolves_key_isolates():
-    """Direction #5 (answers 'why not key propagation too'): build_g_key reads module_contracts.yaml's
-    emit→consume flow — the engine's actual IN→resolver→OUT wiring — as a 5th structural graph. It
-    must (a) connect systems that share a Key (A emits, B consumes), (b) connect a Key-TYPE token to
-    the systems that emit/consume it — which un-isolates Key tokens the design CITATION graph can't
-    see — while (c) leaving a Key with no CONSUMER isolated (a real finding: an orphan/dangling emit —
-    emitted but consumed by nothing — NOT an un-emitted Key; corrected after an adversarial pass),
-    and (d) be deterministic. This is what lets the emit DELETE its old Key-token isolate filter."""
-    import os, json
-    from pathlib import Path
-    root = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    defs = va.derive_tokens(root)
-    design = va.extract_corpus(root, 'L0')[0]
-    tokens, _ = va.curate_tokens(design, defs)
-    g_key = va.build_g_key(root, tokens)
-    assert g_key, 'key graph should be non-empty (module_contracts has emit/consume flow)'
-    names = list(tokens)
-    kdeg = va._degrees(g_key, names)
-    # (a) a system heavily wired in the engine has real key-degree; (b) a wired Key-type token too
-    assert kdeg.get('Faction State', 0) > 5, kdeg.get('Faction State')
-    assert kdeg.get('Key: mechanical.scene_exited', 0) >= 1   # was a filtered "false" isolate before
-    # (d) determinism — identical across two builds
-    canon = lambda g: json.dumps({k: dict(sorted(v.items())) for k, v in sorted(g.items())})
-    assert canon(g_key) == canon(va.build_g_key(root, tokens))
-    # folding key into diagnostics resolves the wired Key-tokens as Mode-H isolates but NOT the
-    # ones with no consumer (orphan/dangling emits stay surfaced — SURFACE-NEVER-CULL).
-    rows = va.parse_throughlines(root)
-    graphs = {'cite': va.build_g_cite(tokens, design),
-              'throughline': va.build_g_throughline(rows, tokens,
-                                                    extra_rows=va.parse_throughlines_complete(root)),
-              'mu': va.build_g_mu(rows, tokens), 'pp': va.build_g_pp(root, tokens), 'key': g_key}
-    degs = {k: va._degrees(graphs[k], names) for k in graphs}
-    iso = {r['token'] for r in va.diagnostics(tokens, graphs, degs)['H_isolates']}
-    assert 'Key: mechanical.scene_exited' not in iso   # resolved by the key graph, not filtered
-    # scene_outcome.battle_concluded was DELETED from systems.mass_battle.sim.emits 2026-07-29 (ED-MB-0010,
-    # plan-v2 E1): it was the family name of scene.battle_concluded, never a Key. Recurrence
-    # guard — if the fabricated emit reappears in module_contracts, its key-degree goes back to
-    # ≥1 and this fails. (Mutation-verified: re-adding the row flips this red.)
-    assert kdeg.get('Key: scene_outcome.battle_concluded', 0) == 0
+# ── RETIRED 2026-09-16 (ED-IN-0232) ────────────────────────────────────────────────────
+# `test_key_propagation_graph_wires_engine_dataflow_and_resolves_key_isolates` stood here. It was
+# direction #5 of the vector audit — `va.build_g_key` read `references/module_contracts.yaml`'s
+# emit -> consume flow as a fifth structural graph, and this pinned that the graph connected
+# systems sharing a Key, un-isolated Key-TYPE tokens the citation graph could not see, and left a
+# dangling emit isolated.
+#
+# Every one of those claims is about the Key bus. Jordan, 2026-09-16: *"anything key-based gets
+# retired"* — the emits:/consumes: blocks came out of the registry, so `build_g_key` now returns an
+# empty graph for the honest reason that there is no Key flow to read. The builder is LEFT IN PLACE
+# rather than deleted with the test: it is a skill's module, not game code, and it degrades to `{}`
+# instead of raising. What is gone is the assertion that it finds something — because it cannot.
 
 
-@pytest.mark.slow
-def test_key_graph_matches_an_independent_rederivation_from_contracts():
-    """§8 DRIFT GUARD (fix #7, rewritten after an adversarial pass). The first cut only subset-checked
-    the 40 system↔system edges against build_graph's graph.json — it EXCLUDED the 128 keytype↔system
-    edges build_g_key exists to compute (a bad _keytype_token → false isolate went unguarded), a subset
-    check can't catch build_g_key going too NARROW (the dangerous drift for an isolate hunter), and it
-    depended on graph.json being co-fresh with module_contracts. This rewrite instead validates
-    build_g_key against an INDEPENDENT re-derivation straight from module_contracts.yaml — ALL edges,
-    EQUALITY (catches both spurious and missing edges), no graph.json dependency. The keytype
-    correspondence is checked by TOKEN NAME (a 'Key: <type>' token ↔ the contract type), independent of
-    _keytype_token's regex, so a regex bug shows up as a diff."""
-    import os
-    import yaml
-    from pathlib import Path
-    from collections import defaultdict
-    root = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    defs = va.derive_tokens(root)
-    design = va.extract_corpus(root, 'L0')[0]
-    tokens, _ = va.curate_tokens(design, defs)
-    lut, norm = va._slug_lookup(tokens)
-    mc = yaml.safe_load((root / 'references' / 'module_contracts.yaml').read_text())
-    # Key-type tokens indexed by the dotted type in their name ('Key: mechanical.scene_exited' → type)
-    keytok_by_type = {}
-    for name in tokens:
-        if name.startswith('Key:'):
-            keytok_by_type[name.split('Key:', 1)[1].strip()] = name
-    emit, cons, modtok = defaultdict(set), defaultdict(set), {}
-    for m in mc.get('modules', []):
-        n = m.get('module')
-        if n and norm(n) in lut:
-            modtok[n] = lut[norm(n)]
-        for e in m.get('emits') or []:
-            if isinstance(e, dict) and e.get('type'):
-                emit[e['type']].add(n)
-        for c in m.get('consumes') or []:
-            if isinstance(c, dict) and c.get('type'):
-                cons[c['type']].add(n)
-    expected = set()
-    for t in set(emit) | set(cons):
-        if t == '*':
-            continue
-        es, cs = emit.get(t, set()), cons.get(t, set())
-        for a in es:                                   # system↔system: emitter × consumer
-            for b in cs:
-                if modtok.get(a) and modtok.get(b) and modtok[a] != modtok[b]:
-                    expected.add(frozenset((modtok[a], modtok[b])))
-        kt = keytok_by_type.get(t)                     # keytype↔system: by NAME, not the regex
-        if kt:
-            for s in es | cs:
-                if modtok.get(s):
-                    expected.add(frozenset((kt, modtok[s])))
-    gk = va.build_g_key(root, tokens)
-    actual = {frozenset((a, b)) for a in gk for b in gk[a] if a != b}
-    spurious = actual - expected      # build_g_key claims an edge the contracts don't support
-    missing = expected - actual       # build_g_key MISSES an edge the contracts declare (→ false isolate)
-    assert not spurious, f"build_g_key has {len(spurious)} edge(s) not in module_contracts: {sorted(tuple(sorted(p)) for p in spurious)[:5]}"
-    assert not missing, f"build_g_key MISSES {len(missing)} contract edge(s) (too narrow → false isolates): {sorted(tuple(sorted(p)) for p in missing)[:5]}"
+# ── ALSO RETIRED 2026-09-16 (ED-IN-0232), AND IT SHOULD HAVE GONE IN THE SAME BREATH AS THE
+#    ROW ABOVE ────────────────────────────────────────────────────────────────────────────────
+# `test_key_graph_matches_an_independent_rederivation_from_contracts` stood here. It validated
+# `build_g_key` against an INDEPENDENT re-derivation straight from `module_contracts.yaml` — all
+# edges, EQUALITY in both directions, so a spurious edge and a missing one both red it.
+#
+# Both sides read the same two keys: the test built `expected` from `emits:`/`consumes:` and
+# `build_g_key` reads the same blocks. With the Key interface retired both sides are the empty
+# set, so `assert not spurious` and `assert not missing` were `assert not set()` — passing on a
+# `_keytype_token` regex bug, a `build_g_key` rewrite, or anything else.
+#
+# ⚠ THE FIRST PASS OF THIS RETIREMENT DELETED THE SIBLING TWENTY LINES ABOVE AND WALKED PAST THIS
+# ONE, leaving a tombstone that stated the reasoning and then failed to apply it. An adversarial
+# pass caught it. Recorded because the near-miss is the lesson: the emptied registry disarms every
+# reader of those two keys, not just the ones with "key" in the test name.
+
 
 
 def test_cascade_mode_d_is_deterministic_across_neighbor_order():

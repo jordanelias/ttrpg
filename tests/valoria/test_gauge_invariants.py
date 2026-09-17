@@ -40,10 +40,11 @@ import pytest
 _SIM = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'sim'))
 if _SIM not in sys.path:
     sys.path.insert(0, _SIM)
-_AUDIT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..',
-                                      'audit', '2026-07-22-mass-battle-stress-test'))
-if _AUDIT not in sys.path:
-    sys.path.insert(0, _AUDIT)
+# ED-IN-0231 (2026-09-16): this used to sys.path-insert `.audit/2026-07-22-mass-battle-stress-test`
+# and import out of the hidden archive. `reverse_pair_symmetry.py` was COPIED to tests/sim/ — beside
+# `gauge_mb`, which it imports — so one path serves both and nothing here depends on the archive.
+# RULED by Jordan: "anything that is being read by engine.py needs to be copied over into a proper
+# location". The archive keeps its copy as history; this test reads the live one.
 
 import gauge_mb as G
 from reverse_pair_symmetry import symmetry, SIGMA_GATE

@@ -6,7 +6,7 @@ WHY THIS EXISTS. `tools/build_execution_map.py` carries a per-phase module list 
 
   * per-FILE transitive imports -> every phase sourced from mc_v18.py returned the same seven
     units. A file's import closure wearing a phase's name.
-  * per-FUNCTION local imports -> `articulation_layer` for those phases and nothing for the rest,
+  * per-FUNCTION local imports -> nothing for most phases,
     because this codebase splits cross-subsystem calls between module-level and function-local
     imports while phase boundaries do not align with function boundaries.
 
@@ -61,7 +61,6 @@ BOUNDARIES = [
     ("engine.autoload.season_manager", "advance_season", "loop.s1"),
     ("systems.factions.sim.faction_action", "faction_take_action", "loop.s2.factions"),
     ("engine.cross_scale.scene_dispatch", "run_scene_phase", "loop.s2.scenes"),
-    ("engine.cross_scale.parliamentary_bridge", "run_parliamentary_scene", "loop.s2.parliament"),
     ("systems.overview.sim.accounting", "run_accounting", "loop.s3"),
     ("engine.autoload.victory", "check_all_factions", "loop.victory"),
 ]

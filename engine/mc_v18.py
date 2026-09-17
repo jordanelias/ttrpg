@@ -81,23 +81,10 @@ DEFAULT_PARAMS = {
 }
 
 
-def _echo_transport_on(effective_params: dict) -> bool:
-    """ECHO_TRANSPORT flag (ED-IN-0028 / ED-SC-0006/0007) — **default ON** (Jordan ratification
-    2026-07-08: "Yes echo transport on"). The consequence spine (per-season §10 Parliamentary vote
-    + composed Domain Echo, sim/cross_scale/parliamentary_bridge.py) is now the baseline campaign.
-    A `params['ECHO_TRANSPORT']` override wins; otherwise the env var (default '1'). Set
-    ECHO_TRANSPORT=0 (or params={'ECHO_TRANSPORT': 0}) for the pre-spine byte-exact regression
-    oracle, still pinned OFF in test_echo_transport.py (the MB FIELD_MOVEMENT/ED-1089 pattern:
-    default flipped, the old path retained as the frozen oracle)."""
-    if 'ECHO_TRANSPORT' in effective_params:
-        return bool(effective_params['ECHO_TRANSPORT'])
-    return os.environ.get('ECHO_TRANSPORT', '1') == '1'
-
-
 def _dispatch_combat_bridge_on(effective_params: dict) -> bool:
-    """DISPATCH_COMBAT_BRIDGE flag (ED-IN-0091, plan §2.2, OI-01) — **default OFF**, mirroring
-    `_echo_transport_on`'s params-override-then-env-var resolution (ED-IN-0028) as the plan's §2.2
-    "find the existing flag pattern... and mirror it; single owner" instruction directs. With the
+    """DISPATCH_COMBAT_BRIDGE flag (ED-IN-0091, plan §2.2, OI-01) — **default OFF**. It resolves
+    a `params` override before the env var; that shape was mirrored from `_echo_transport_on`,
+    which retired with the Key substrate (ED-IN-0232), leaving this the only flag of its kind. With the
     flag off `world.dispatch_combat_bridge` is False and scene_dispatch's combat branch takes the
     UNCHANGED historical path (the deprecated `systems.combat.sim.combat.resolve_combat_round`
     call stays in place — byte-identical to pre-bridge behaviour, per the plan's "ship-flag-off"
@@ -127,8 +114,6 @@ class CampaignResult:
                                      # registry.province_accord and Territory.accord this campaign.
                                      # 0 when nothing diverges; never writes either compared value
                                      # (OI-37/SE routes the actual write-model reconciliation).
-    key_log_hash: str = ""          # ED-IN-0028: sha256 of the campaign's canonical KeyLog ("" when ECHO_TRANSPORT off)
-    keys_emitted: int = 0           # ED-IN-0028: len(world.key_log) — 0 while scenes defer (SC bridge pending)
     final_state: dict = field(default_factory=dict)
 
 
@@ -167,16 +152,6 @@ def _faction_actions_callback(world):
     # sim/cross_scale/scene_dispatch.py GAP notes.
     _report = scene_dispatch.run_scene_phase(world, world.rng)
     world.scenes_resolved += _report["dispatch"]["resolved"]
-
-    # Parliamentary vote (ED-SC-0006/0007, Jordan ruling "wire the canonical Parliamentary vote"):
-    # the faction-scale §10 vote resolves directly on aggregate state, applies the §10 loser Mandate
-    # penalty, and composes a winner Domain Echo (ED-SC-0002 composed keying) through the substrate.
-    # Flag-gated by the scheduler's presence — a no-op when ECHO_TRANSPORT is off.
-    if getattr(world, "echo_scheduler", None) is not None:
-        from engine.cross_scale import parliamentary_bridge
-        _pr = parliamentary_bridge.run_parliamentary_scene(world, world.rng)
-        if _pr.get("resolved"):
-            world.scenes_resolved += 1
 
     # ACTION->ACCOUNTING boundary: MOVED OUT 2026-08-27 (ED-IN-0199) to
     # engine/autoload/engine_clock.py:run_tick. `accounting_boundary()` and `next_tick()` were
@@ -258,31 +233,9 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
     max_s = effective_params.get('CAMPAIGN_SEASONS', max_seasons)
 
     # ED-IN-0091 plan §2.2 (OI-01) — decide the DISPATCH_COMBAT_BRIDGE flag ONCE per campaign and
-    # stash it on `world`, exactly as ECHO_TRANSPORT's decision is stashed via `world.echo_scheduler`
-    # presence below: scene_dispatch reads the world attribute rather than re-deriving the flag
+    # stash it on `world`: scene_dispatch reads the world attribute rather than re-deriving the flag
     # itself (single owner — CLAUDE.md §8), and every call in the season loop sees the same value.
     world.dispatch_combat_bridge = _dispatch_combat_bridge_on(effective_params)
-
-    # ED-IN-0028 — attach the executable Key substrate to the world when ECHO_TRANSPORT is on.
-    # Its presence is the flag the scene phase reads; absence => byte-exact legacy path.
-    if _echo_transport_on(effective_params):
-        from engine.cross_scale import echo_transport
-        world.echo_scheduler = echo_transport.make_scheduler(
-            cascade_depth_max=effective_params.get(
-                'ECHO_CASCADE_DEPTH_MAX', echo_transport.DEFAULT_CASCADE_DEPTH_MAX),
-            emissions_per_tick_max=effective_params.get(
-                'ECHO_EMISSIONS_PER_TICK_MAX', echo_transport.DEFAULT_EMISSIONS_PER_TICK_MAX),
-        )
-        world.key_log = world.echo_scheduler.log
-        world._echo_key_seq = 0
-        # OI-08 (ED-IN-0091 plan §3 Wave 2 item 6) — articulation lane hook, implemented verbatim
-        # per that lane's oracle_requests: subscribe_all is the ONLY production TickScheduler(...)
-        # construction site's paired subscriber wiring (the seam lane itself does not own
-        # mc_v18.py this wave — WORLD lane does). Registers the §3.1 trigger-table type_ids on
-        # this campaign's scheduler; each fired trigger routes to a typed stubwire no-op (the
-        # render layer stays ED-IN-0073's docket, unbuilt).
-        from engine.cross_scale import articulation as _articulation
-        _articulation.subscribe_all(world.echo_scheduler)
 
     for _ in range(max_s):
         if world.winner:
@@ -317,8 +270,6 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
 
     surviving = sum(1 for f in world.factions.values() if len(f.territories) > 0)
 
-    _kl = getattr(world, "key_log", None)
-
     return CampaignResult(
         winner=world.winner,
         season=world.season,
@@ -332,8 +283,6 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
         # the campaign's own total — no before/after delta needed (unlike stub_hits, which reads
         # a process-lifetime-cumulative module counter shared across a batch's campaigns).
         accord_drift_probe_hits=getattr(world, "accord_drift_probe_hits", 0),
-        key_log_hash=_kl.content_hash() if _kl is not None else "",
-        keys_emitted=len(_kl) if _kl is not None else 0,
         final_state=game_state.serialize_world(world),
     )
 

@@ -856,3 +856,627 @@ withdrawal_only: 100}`; `body_band_penalty(p) = |{f : p.body < f}|`. Total famin
 > In the *populated* world at the shipped fixtures it moves **nothing**, because §A.3.5 measures the
 > world as a surplus world — so the hash movement is confined to worlds where the walk runs dry, and
 > a session that expects the populated hash to move is expecting the wrong thing.
+
+---
+
+## A.5 · `Rung.envelope` IS KEPT — and it is kept for a reason, not by omission
+
+`envelope` is a declared field of `Rung`: it is in `_DECLARED` (`carriers.py:568-569`) and is
+initialised to a list in the constructor (`:579`). It has a **matrix row**:
+`write_matrix.yaml:287-293` — `(Rung, envelope)`, `steps: [MAT, CEN]`, `class: "MATTER"`,
+`social: "false"`, `emits: "`envelope.changed`"`. It is named in **ratified Layer 1**:
+`ARCH §B.3`'s `Rung :=` line carries `envelope`. And `loop/census.py`'s own docstring says CENSUS
+*"owns `(Person, exists)` on individuation, `weight`, `envelope`"*.
+
+**And nothing production reads or writes it.** MEASURED by `grep -rn envelope engine/ --include=*.py`:
+the only sites are `carriers.py:569`/`:579` (the declaration), `census.py:1` (the docstring),
+`harness/probes.py:1631-1637` (probe `W9`, which sets `r.envelope = [100, 200, 150, 60]` by hand and
+then writes through the gate to prove the row works), `probes.py:1462` (a `law=` string), and
+`engine/season/tests/test_season_shape.py:1842`/`:3738` (which list it among rows whose producer is
+absent). **CENSUS writes nothing at all**: `census.py:33-38` records
+`chose="demand-driven only; generated nobody"` and states that *"Rev 1 called the gate with an
+`apply` that mutated nothing, which S30.2 calls 'worse than no gate'; the call is gone rather than
+made cosmetic."*
+
+> ### RULED: **`Rung.envelope` IS KEPT, UNWRITTEN, AS `ED-SE-0051`'s CARRIER. THE FIELD IS AN OPEN `ID-13` EXPOSURE AND IT IS HELD OPEN DELIBERATELY, BECAUSE ITS CONSUMER IS A RULING REQUEST AND NOT A MISSING FUNCTION.**
+>
+> `ED-SE-0051` asks *"THE BOUND ON THE DEMOGRAPHIC LOOP: matter only, or matter plus hearth
+> capacity?"* and its own text describes the arm it is bounding: *"P2 ('the bodies clock') as
+> specified is bounded only by the larder — a fed hearth's envelope grows until it cannot feed itself
+> and P1 ('dearth reaches the body') thins it, which is Malthus."* The envelope **is** the thing that
+> would grow. `proposals/2026-09-10-settlements-factions-populations/02_PROPOSALS_SUBSTRATE.md:142-150`
+> is where that arm is specified, and it starts from exactly this row.
+>
+> **So this document builds P1 and does not build P2.** The body write (§A.4.2) **is** *"dearth
+> reaches the body"*; the envelope's growth is the arm `ED-SE-0051` has not ruled. Deleting the field
+> now would delete the ruling request's carrier and force whoever answers it to re-add a field,
+> re-add a matrix row, and re-argue `ARCH §B.3`. **That is the cost of the cut, and it is why the
+> exposure is cheaper than the deletion.**
+>
+> ⚠ **This is the one place this document knowingly keeps a field with no production reader**, and
+> naming it is the honest form: `AX` **ID-13** says such a field *"is not declared"*, and this one is
+> kept anyway, with the reason. The falsifier is `MW-10`: if `ED-SE-0051` is ever ruled **matter-only**,
+> the field, its matrix row and CENSUS's claim over it **all become deletable in one commit**, and
+> that commit is the artifact that closes this exposure.
+>
+> ⚠ **AND `ED-WR-0011` HAS ALREADY NARROWED WHAT THE ENVELOPE COULD MEAN, which matters to whoever
+> answers RR-2.** It is **ruled** (`registers/editorial_ledger_wr.jsonl`, second row, status `ruled`,
+> `needs_jordan: false`), Jordan verbatim: *"World-gen NPC count, for now, is just the 46 NPCs we
+> built. We will return much later."* Its Option A, which the ruling took, reads: *"A CLOSED AUTHORED
+> CAST. World-gen seeds N persons from an authored roster; there is **no season-tick generation at
+> all**. Everyone who will ever matter exists at tick 0 and **the cast only shrinks (AX-5 motion 2,
+> bodies)**."* So **the growth arm of the demographic loop is ruled absent today and the shrink arm is
+> what this document builds.** `ED-SE-0051` is therefore **not gating** — nothing waits on it — and
+> §A.11 says what that does to the recommendation.
+
+---
+
+## A.6 · A `works` IS A `Record` — the full lifecycle
+
+> ### RULED: **THERE IS NO `undertake` VERB, NO `build`, NO `repair`, NO `raze`, NO `garrison`, NO `convert` AND NO BUILD QUEUE. A `works` IS A `Record` KIND WITH ACT-DECLARED STAGES, OPENED BY THE `create_record` THAT ALREADY RUNS. BUILDING AND REPAIRING ARE ONE ACT AT DIFFERENT BANDS.**
+>
+> Carried from round one `02` §A.4, which the pessimistic pass did not break. Cited to `ARCH §A.3`
+> row 11 (*"`Petition`, `Dispensation` … **kinds of `Record`**"*) and `ARCH §B.4`/`§B.5`'s synthesis
+> call that folded two kinds in *"with no new rows"*, extended to `works` on the same grounds;
+> `AX` **ID-12** (`AX:454`) makes the kind a **data row**.
+
+### A.6.1 · The field usage, key by key — every field of `Record` accounted for
+
+`Record` is `carriers.py:422-445`: `id, rung, kind, forgery_quality, subject_matter, ttl, stages,
+matured`.
+
+| field | a `works` uses it as | citation / consequence |
+|---|---|---|
+| `id` | the works' identity. **`hold : Person → Record` names it**, which is how a works has a master | `holonic:538` |
+| `rung` | **where the works is kept** — the rung whose records it is among. Set by `_eff_create_record` from `d.get("rung") or a.actor` (`effects.py:285`). For a works this is the plot's parent or the actor, and **it is NOT the target**: the target is `subject_matter["at"]` | `effects.py:285` |
+| `kind` | `"works"`. A **row** on the NEW `record_kinds` roster (owned by sibling `02`), whose `subject_matter` keys it declares. `_eff_create_record` reads `d.get("kind") or "text"` (`:285`), so **the act names the kind and the default is `text`** | `effects.py:285`; `AX` **ID-12** |
+| `forgery_quality` | **0, and it stays 0 for a works.** A forged works is a forged *plan*, not a forged fabric, and nothing in this document reads it. Named so the field is accounted for rather than silently unused | `carriers.py:428` |
+| `subject_matter` | **`{plan, at}`** — see §A.6.2. Written **once**, inside `(Record, exists)`; there is **no `(Record, subject_matter)` matrix row**, so it cannot be written through the gate afterwards and **must not be mutated** | `write_matrix.yaml` has `Record` rows for `exists`, `matured`, `stages`, `ttl` and **no** `subject_matter` |
+| `ttl` | **the abandonment clock the opening act declares.** `[MAT]`-stepped, decremented every season, and `rosters.yaml:768-784`'s `conditional_emission_rows` names it as the one row whose declared emission (`record.expired`) is **conditional**: *"emitting `record.expired` on every decrement would publish an expiry that has not happened"*. This is `AX` **T-n** (`AX:1165`) exactly — *an end that is not the owner's discretion is declared by the act that opened it* | `carriers.py:430`; `rosters.yaml:782` |
+| `stages` | **the TERMS — time, not progress.** A list of `(due_tick, label, wound_by)`. `[RES]`-stepped, `class: ACTS`, `by: "D7 — §13.1: terms are act-declared, never MATTER-advanced"` | `write_matrix.yaml:266-272`; `matter.py:67-70` |
+| `matured` | **at least one stage has ripened.** A single bool, Jordan-ruled 2026-09-10 and written at MATTER (`carriers.py:432-445`). **It is NOT per stage** — round one's `ceiling` depended on a per-stage reading and that is why §A.6.3 goes to the log instead | `carriers.py:445` |
+
+> ### RULED: **THERE IS NO `stage` KEY, AND THE ROUND-TWO PLAN'S `{plan, at, stage}` BECOMES `{plan, at}`.**
+>
+> The plan specifies a `stage` int in `subject_matter`, *"advanced by `work`"*. **Refused, on three
+> grounds, and the third is decisive.** (1) `subject_matter` has **no matrix row**, so advancing it
+> would be an ungated write on a live carrier — the precise shape `ID-9` refuses (`AX:461`). (2) It
+> would be a **second progress ladder** beside `Site.condition`, which is already the fabric's
+> progress — an **S** defect. (3) **It is unnecessary:** §A.6.3 shows that *progress* is the
+> condition and *permission to progress* is the ceiling, so nothing needs counting. Decided at §0's
+> **step 5**. Cost to the plan: **one content key not added**, and `_eff_work` is not touched at all.
+
+### A.6.2 · The four moments, and exactly one new verb
+
+| # | moment | act | eligibility | requires | writes | emits / on refusal |
+|---|---|---|---|---|---|---|
+| 1 | **DECLARE the works** | **`create_record`** — *exists, RUNS, 69 times a season* | `own` | `—` | `(Record, exists)`, `(Record, stages)`, **and the maker's `hold`** | `record.created` |
+| 2 | **RIPEN a term** | *nobody — the clock act 1 wound* | — | — | `(Record, matured)` at MATTER | **`term.matured`**, one per ripening stage |
+| 2a | **…and it STOPS if the master is gone** | *nobody* | — | — | nothing | nothing, and a `TRACE.note` naming the reason |
+| 3 | **STAKE the plot / RAISE the fabric into being** | **`found`** *(NEW — the one new verb)* | `own`, presence through `requires` | a live `works` naming this target, held by the actor, with `matured` true | `(Rung, exists)` **or** `(Site, exists)` — one earned per act | `rung.founded` / `site.built` / `found.refused` |
+| 4 | **BUILD IT UP** | **`restore`** — *row exists, `grade: "ruled"`, NO effect body* | `own`, `presence:<site>` | the site exists and the actor is present at it | `(Site, condition)`, through the summing clamp, **bounded by `ceiling`** | `site.restored` / `restore.refused` |
+| — | **WEAR** | *nobody* | — | — | `(Site, condition)` down at MATTER | `condition.worn` · `condition.band_crossed` |
+| — | **END IT** | the **`ttl`** act 1 declared (`T-n`), or **`destroy_record`** by its holder (`T-m`, `AX:1154`) | `hold:<record>`, `presence` | — | `(Record, exists)`; every `hold` on it ends (`effects.py:302-305`) | the lapse / `record.destroyed` |
+
+**AND MOMENTS 1 AND 2 ARE ALREADY EXECUTING, WHICH IS THE CHEAPEST THING IN THIS DOCUMENT.**
+`_eff_create_record` (`effects.py:263-290`) takes the stages **from the act** — *"THE STAGES COME FROM
+THE ACT, NOT FROM A DEFAULT"* (`:267-271`) — and, the part that makes the lifecycle close, **mints the
+maker's `hold` in the same act** (`:286-289`): *"S13: possession is a `hold` Tenure owned by the
+holder, never a field on the Record. The maker holds what they made until they part with it."*
+`matter.py:73-78` then looks that holder up and refuses the maturation when there is none, with the
+reason TRACEd verbatim: *"a half-made copy STOPS rather than finishing itself."*
+
+> ### RULED: **A `works` THAT STALLS, IS INHERITED, OR DIES WITH ITS MASTER COSTS **ZERO NEW CODE**, BECAUSE BOTH HALVES OF THAT MECHANISM SHIPPED FOR AN UNRELATED REASON. THIS DOCUMENT SPENDS THEM RATHER THAN BUILDING THEM.**
+>
+> Both were re-opened this session and both are as quoted. `record.created` fires **69 times** in one
+> measured season, each with a `hold` minted. **The best drama generator in the design is already
+> running and has nothing to be about.**
+
+### A.6.3 · `ceiling` — DECIDED, off the emission log
+
+Round one left this open: *"⚠ 2026-09-17 NERS pass: `matured stages` has no carrier. `Record.matured`
+is ONE bool for the whole Record."* **True, and the repair does not need a per-stage field.**
+
+```
+ceiling(w: World, site: Site) -> int
+    # RESOLVER-SIDE. World FIRST. Owned by NOBODY. Stores nothing. AX T-a (:255).
+    live = [r for r in w.records.values()
+            if r.kind == "works"
+            and (r.subject_matter or {}).get("at") == site.id
+            and hold_force(w, r.id) is not None]          # a works with no master is not a bound
+    if len(live) > 1:
+        raise Forbidden(f"{len(live)} live works name {site.id}", "S15",
+                        law="one works per target — hold_force's cardinality reading, one object up")
+    if not live:
+        return w.fixtures.get("condition_scale")           # no works: the fabric may be repaired to full
+    rec = live[0]
+    declared = len(rec.stages)
+    if declared == 0:
+        return w.fixtures.get("condition_scale")           # a works with no terms bounds nothing
+    matured = sum(1 for e in w.log
+                  if e.kind == "term.matured" and e.subject == rec.id)
+    return w.fixtures.get("condition_scale") * min(matured, declared) // declared
+```
+
+| decision | ground |
+|---|---|
+| **the carrier for "how many stages have ripened" is `w.log`** | `term.matured` is emitted **once per ripening stage** (`matter.py:106-109`, inside the per-stage loop `:67`), and the gate gives each emission a **distinct id** via `new_draw()` (`world.py:436-446`, added because *"MATTER's larder draw and its yield credit both write `(Rung, stores)` … in the same season"*). So N stages ripening in one tick produce N Events and the count is exact |
+| **reading the log from a Query is lawful** | `World.last_emission_of` (`world.py:447-453`) already scans `self.log` for a `(kind, subject)` match and is the design's own chaining primitive. This is the same read, counted instead of taken last. §0 **step 4** |
+| **`min(matured, declared)`** | the log is append-only and a Record's `stages` list is act-declared, so a later act could in principle shorten it. The `min` makes the ratio total, and the clamp `max(0, min(ceiling, …))` makes the result total at the call site regardless |
+| **integer division, `scale × n // d`** | `condition` is a fixed-point int on `condition_scale`; multiply before dividing so a 3-of-5 works reads 600 and not 0. Same discipline as `matter.py:207-209`'s `int(base * (condition/scale) * factor)` |
+| **it RAISES on two live works naming one target** | `hold_force`'s precedent, verbatim: *"`hold` is 1 PER OBJECT… S54 item 20's lawful form rests on this cardinality"*, and it **raises** `Forbidden` with code `S15` (`world_q.py:138-145`). A Query that picked one of two would answer *plausibly and wrongly, forever* — `AX` **ID-5** |
+| **the `cardinality` conjunct on `found` is what makes the raise unreachable in practice** | `cardinality` is one of the **closed seven** `requires_forms` (`rosters.yaml:1114`), and its `needs:` is `[subject, from, to]` (`:1119`). So the refusal is a **precondition that emits**, not an exception — `AX` **T-g**'s obstruction (`AX:353`), free |
+
+**Where the ceiling binds.** `resolve.py:538-553` already sums every `(Site, condition)` delta across
+the fold and clamps **once**, `max(0, min(scale, site.condition + total))` at `:549`, with its own
+TRACE recording the refused alternative (*"clamp per delta (arrival-order dependent)"*).
+
+> ### RULED: **THE CEILING IS ONE MORE TERM IN THAT ONE `min`. `scale` BECOMES `ceiling(w, site)`, WHICH RETURNS `scale` WHEN NO WORKS NAMES THE SITE — SO THE EXPRESSION IS UNCHANGED FOR EVERY SITE IN EVERY WORLD TODAY.**
+>
+> One edit, in one expression, in one owner, and the order-independence is untouched because the
+> ceiling is a function of the world and not of the deltas. **And the migration cost is zero for
+> existing worlds**: MEASURED, `w.records` holds 69 Records after one season and **none is of kind
+> `works`** (the kind does not exist), so `ceiling` returns `condition_scale` for all 74 sites and
+> `resolve.py:549` computes the same number it computes today.
+
+**And it makes building and repairing one act at different bands, arithmetically:**
+
+| the same act | reads as | because |
+|---|---|---|
+| `restore` at condition 0, 1 of 5 terms ripened | **raising the first courses** | the ceiling is 200 of 1000 and the fabric climbs toward it |
+| `restore` at 990, 5 of 5 ripened | **repairing wear** | the ceiling is full |
+| `restore` on a slighted fabric, 5 of 5 ripened | **rebuilding** | a finished works can always be repaired to full |
+| `restore` at 200 with 1 of 5 ripened, again | **refused, and the refusal emits** | the delta clamps to the ceiling, nothing changes, and the fold refuses an act whose effect touched nothing (`resolve.py:259-269`) → `restore.refused` (`verb_table.yaml:463`) |
+
+### A.6.4 · `share` — DECIDED, and the commons is what it protects
+
+`restore`'s formula (`verb_table.yaml:465`) is `Δ = +(1 − condition) × f(degree) × share`. Round one
+found the blocker correctly: `share` and `draw_share` are **declared Queries** (`holonic:599-600`)
+with no implementation, and `share` was **never a field** — so the argument that widening `hold` to
+`Site` would make it computable was false.
+
+```
+share(w: World, p: str, site: Site) -> tuple[int, int]     # a RATIO, numerator and denominator
+    # RESOLVER-SIDE. Declared at holonic:600. Returns (1, n) where n = how many stand at the fabric.
+    n = len(presence(w, site.rung))                        # world_q.py:172
+    return (1, max(1, n))
+```
+
+> ### RULED: **AN ACTOR'S SHARE OF A FABRIC IS ONE OVER THE NUMBER OF PERSONS PRESENT AT ITS RUNG. IT IS DERIVED FROM A LIVE EDGE, NEEDS NO FIELD, AND IS THE READING THAT KEEPS THE COMMONS.**
+>
+> **Why not `Site.drawers`.** The field exists (`carriers.py:418`) and is **unwritable through the
+> gate** — `write_matrix.yaml` retires the row — so nothing can maintain it. A `share` read off a
+> list nothing writes is `AX` **ID-13**'s dead carrier. **And this document DELETES the field**
+> (§B.2), which is the object it gives back for the Query it adds.
+>
+> **Why not 1.** `share = 1` is what mandatory single-holdership would give, and
+> `proposals/2026-08-31-ideal/10_SUPERSEDING.md:1275-1279` names what dies: *"**At a commons with
+> many drawers, single-act closure is impossible.** One boat among a harbour's forty moves at most a
+> fortieth of a quarter of the harbour's condition in a maximum-degree season. **Closure is a
+> collective outcome** — many actors, many seasons, crossing a band edge — which is the
+> tragedy-of-the-commons shape the mechanism exists to produce: many rational private acts making
+> everyone's practice worse, including the actor's."* The same passage records the other arm,
+> withdrawn by its own author at `:1280-1282`: at a single-drawer site *"`share = 1`, and one
+> Overwhelming season moves a quarter of the condition."* **Both halves must be read together**, and
+> `share = 1` is the **special** case.
+>
+> **DECLARED, DEFAULTED AND SWEPT**, because the *shape* is ruled and the *reading* is not:
+> `sweep: [presence_reciprocal, holders_reciprocal, one]`, where `one` is a **real control** — it
+> deletes the commons, so a test over a 40-drawer harbour must break under it. A sweep whose control
+> cannot break the claim is not a control (`rosters.yaml:1163-1165`, the same argument for
+> `site_yield`'s `none`). Falsifier `MW-8`.
+>
+> **The arithmetic it reproduces.** At a 40-person harbour with headroom 1000 and a degree factor of
+> ¼: `Δ = 1000 // (4 × 40) = 6` of 1000 in one Overwhelming season. That is
+> `10_SUPERSEDING.md`'s *"a fortieth of a quarter"*, computed rather than asserted.
+>
+> **It costs 0 added objects**, on round one's own precedent for `capacity`: *"`capacity` is already
+> **declared** in the §17 Query roster, so it is an implementation, not an addition."* `share` sits on
+> the line above it (`holonic:600`).
+
+### A.6.5 · `restore`'s body — and the third blocker neither round found
+
+```
+@effect_for("restore")
+def _eff_restore(w, a, res=None) -> dict:
+    site = w.sites.get(_operand(a, "site"))                  # effects.py:59 — _operand, NO fallback
+    if site is None:
+        return {}                                            # the fold emits restore.refused
+    headroom = max(0, ceiling(w, site) - site.condition)
+    num, den = degree_factor(res.degree)                     # the EXISTING ladder, not a new one
+    s_num, s_den = share(w, a.actor, site)
+    delta = (headroom * num * s_num) // (den * s_den)
+    if delta == 0:
+        return {}                                            # nothing to do: refuse, do not report
+    return {"site.restored": [site.id]}, {site.id: delta}    # ids earned, and the DELTA
+```
+
+**Two decisions and one gap:**
+
+| | |
+|---|---|
+| **units** | `(1 − condition)` in the formula is the **headroom fraction**, and `Site.condition` is a fixed-point int on `condition_scale` (`carriers.py:412-413`, `fixtures.py:160`). So `(1 − condition)` reads as `ceiling − condition` in fixed point. Multiply first, divide last; the result is an int delta on the same scale as wear's. **Decided.** |
+| **`f(degree)`** | **the existing degree ladder, not a new one.** `AX` **T-k** (`AX:418`) is *"One resolver, one degree ladder"*. `_eff_kill` reads its magnitude off the `Resolution` the seam returned (`effects.py:383-403`) and `_apply_write` hands every effect that `Resolution` uniformly (`resolve.py:320-326`, *"EVERY EFFECT TAKES THE RESOLUTION, AND UNIFORMLY"*). `restore` reads `res.degree` the same way. **No new ladder is proposed and none may be.** |
+| ⚠ **THE GAP: THE FOLD HAS NO CHANNEL FOR AN ACT'S DELTA AT ALL** | `_apply_write` returns `[StateChange(t, "set", "Act", fld) for t in touched]` (`resolve.py:351`) — `StateChange.delta` is left `None` (the field exists, `carriers.py:75`). The accumulator at `resolve.py:523-525` only collects `ch.delta` when it `isinstance(ch.delta, int)`. **So no act in the tree can contribute a delta, and that is `H-105` in one line:** *"`work` emits `site.worked` while accumulating no delta, which makes site condition a one-way ratchet — wear falls it every season and neither verb that could raise it can. A loop with one arm cut is a RATCHET wearing a loop's clothes"* (`hole_register.yaml:1425-1432`, re-filed `PRODUCER`). |
+
+> ### RULED: **`_apply_write` GAINS A `deltas` OUT-PARAMETER, EXACTLY SYMMETRIC WITH THE `earned` ONE IT ALREADY HAS, AND `_apply_write` STAYS THE FOLD'S SINGLE WRITE SITE. THIS IS +1 AND IT IS COUNTED.**
+>
+> `earned` was added to `_apply_write` for the same class of reason and its comment says so:
+> *"AN EFFECT MAY EARN SOME OF ITS DECLARED KINDS AND NOT OTHERS. A list means *all* of them (the
+> original contract, unchanged); a MAPPING `{kind: [ids]}` names which. Without this the fold emitted
+> EVERY kind in `emits:` the moment anything changed"* (`resolve.py:338-346`). `deltas` is the same
+> shape one field over: the effect may fill it, `_apply_write` puts `delta=deltas.get(id)` on the
+> `StateChange` it returns, and the accumulator at `:523-525` picks it up **with no change** because
+> it already tests for an int.
+>
+> ⚠ **THE ALTERNATIVE IS REFUSED ON THE SUITE'S OWN PRINCIPLE.** The cheap route is for
+> `_eff_restore` to write the delta onto `a.payload` and have `_apply_write` read it back. **That is
+> intent reassignment** — *"any mechanism that rewrites the operands, the verb or the referent of an
+> `Act` after `choose` returned it"* — which is **RR-P**'s third forbidden shape, and the `Act`
+> dataclass is the actor's content with nothing after DELIBERATE writing it
+> (`write_matrix.yaml:72-78`, `(Act[], returned)` is `steps: [DEL]`, *"DELIBERATE writes nothing
+> else"*). **Under RR-P**, and stated as *under RR-P* because RR-P is not settled.
+>
+> ⚠ **What this closes and what it does not.** It closes the **channel**, so `restore` can raise a
+> fabric. It does **not** close `H-105` for `work`: `work`'s row carries no `effect:` formula
+> (`verb_table.yaml:755-770`), so `work` still accumulates nothing and `site.worked` is still a
+> success report for a change that did not happen. **H-105 stays OPEN for `work`, and this document
+> says so rather than claiming the row.**
+
+### A.6.6 · The two stalls, designed honestly in both directions
+
+- **TERM-STALL — you cannot hurry mortar.** Matter and hands are present; no further term has
+  ripened. `ceiling` is where it was, the delta clamps to 0, and **the fold refuses an act whose
+  effect touched nothing** (`resolve.py:259-269`) → `restore.refused`, which is **already on the row**
+  (`verb_table.yaml:463`). It is arithmetic, not a cooldown, and there is no timer anywhere.
+- **MATTER-STALL — a scaffolding standing empty.** Terms have ripened and the store cannot meet the
+  cost. The cost is paid by `transfer` into the works' rung, whose `scalar_threshold` conjunct
+  (`verb_table.yaml:732-739`, `of: from`, `scalar: stores`, `key: kind`, `threshold: amount`) fails,
+  and `transfer`'s refusal fires. MEASURED: `transfer.refused` **16 times** in one season today, so
+  the channel is live. **A fabric sitting visibly below a ceiling it is entitled to reach says so
+  every season somebody tries.**
+
+### A.6.7 · The unfinished `works` — five legible causes, inheritance, sabotage, and a thing standing in the world
+
+**None of the five is an error state, each emits something different, and the emissions are the only
+way anybody learns which.**
+
+| cause | the mechanism, all of it already present | what a witness sees |
+|---|---|---|
+| **nobody has the matter** | `transfer`'s threshold refuses | `transfer.refused` |
+| **nobody has the hands** | no act was spent; `budget()`'s five scenes are the bound and `body_band_penalty` narrows them (§A.4.4) | nothing — and that is correct: **neglect is not an act and must raise no question** |
+| **the terms have not ripened** | `ceiling` frozen | `restore.refused` |
+| **the master is dead** | his Tenures take `until` through `World.remove_person`; the works becomes **unheld**; `matter.py:73-78` refuses to mature it and TRACEs the reason | `person.died`, then **the silence of `term.matured`** |
+| **the master was replaced by somebody who does not care** | a successor simply never takes the `hold`. The works stands; the fabric stands at whatever condition it reached | nothing, and the fabric is the evidence |
+
+**INHERITANCE.** A works is a `Record` and `hold : Person → Record` is a Tenure, so passing mastership
+is **`confer`/`release`/`revoke` on the Record** — verbs that exist, with `_eff_confer`
+(`effects.py:93-126`), `_eff_release` (`:130`) and `_eff_revoke` (`:160`) all shipped. Sibling `02`'s
+`give` (the H-84 verb) is the co-located hand-over. **Nothing new here**, and the cardinality is
+already enforced: `hold_force` **raises** on a second live hold (`world_q.py:138-145`), so there is
+exactly one master at a time and `ceiling` can always name him.
+
+**SABOTAGE.** A rival does not need a verb. Three routes, all existing: (1) take the **plot** — `hold`
+changes hands and the `found`/`restore` eligibility goes with it; (2) `destroy_record` the works
+(`eligibility: ["hold:<record>", "presence"]`), which ends every `hold` on it (`effects.py:302-305`) —
+so **only its own master may abandon it**, which is `AX` **T-m** (`AX:1154`); (3) contest the fabric
+down, which is §A.9's siege reading: a negative `(Site, condition)` delta through the same clamp with
+the sign flipped. **No `raze`, no `slight`, no sabotage verb.**
+
+**AND A RIVAL MAY FINISH WHAT SOMEBODY ELSE BEGAN.** `restore` asks for `own` and presence and **no
+office at all** (`verb_table.yaml:450-451`). So a cathedral begun by one faction and brought to full
+condition by another's mason is a whole political event **with no special case anywhere**: the first
+holds the works Record and therefore sets the ceiling; the second holds nothing, stands there with the
+matter, and raises the fabric inside a ceiling his rival controls. **Neither can finish without the
+other** — the master's `hold` is what makes MATTER advance the terms (`matter.py:73-74`), and the
+mason's presence is what admits the `restore`.
+
+> ### RULED: **AN UNFINISHED WORKS IS A DESIGNED STATE WITH NO ERROR IN IT, AND A HALF-BUILT FABRIC IS AN INDICTMENT OF WHOEVER SHOULD HAVE FINISHED IT — VISIBLE, ATTRIBUTABLE AND CONTESTABLE. NOTHING IN THIS SUBSECTION IS NEW CODE.**
+>
+> ⚠ **And the one thing it needs that does not exist: a question about the fabric.** `Q3`
+> `band_crossed` is the source, its referent is `H-110`'s defect (the referent is the **verb string**,
+> `hole_register.yaml:1533-1544`), and sibling `01` owns the repair. **MEASURED: `w.crossings` is
+> empty in every world any gate executes**, because every site starts at 1000, wear is 10, and the
+> highest floor is `bulk_shipping: 800` — **the first site crossing fires at MATTER pass 21**, while
+> CI runs the populated world for one season and the corpus for at most six. **So the works
+> lifecycle is unaskable-about until `01` lands and until a floor is crossed, and that is a
+> dependency, not a defect of this document.** Stated, not banked.
+
+---
+
+## A.7 · `found` AND `restore` AS THE WORKS' TERMINAL STAGES
+
+### A.7.1 · `found`, completely — one verb, two declared rows, one earned per act
+
+```yaml
+- verb:        "found"
+  stratum:     "uncontested_material"          # rosters.yaml:138-146 — ORDER IS SEMANTIC
+  eligibility: ["own", "presence:<rung>"]      # `own` LEADS. See the refusal note below.
+  requires:    "a live works Record naming this target, held by the actor, whose terms have begun to ripen"
+  requires_typed:
+    all:
+      - form:      existence                   # the works exists, as an OBJECT of a named class
+        of:        subject
+        kind:      Record
+      - form:      scalar_threshold            # `Record.matured` — at least one term has ripened
+        of:        subject
+        scalar:    matured
+        threshold: 1
+        comparator: ">="
+      - form:      cardinality                # one works per target
+        of:        subject
+  writes:      ["Rung.exists", "Site.exists"]  # TWO declared rows; ONE earned per act
+  emits:       ["rung.founded", "site.built"]
+  emits_on_refusal: ["found.refused"]
+  grade:       "assumption"                    # the VERB is this document's; the ROWS are the tree's
+```
+
+```python
+@effect_for("found")
+def _eff_found(w, a, res=None) -> dict:
+    rec = w.records.get(_operand(a, "subject"))
+    if rec is None or rec.kind != "works":
+        return {}
+    plan = (rec.subject_matter or {}).get("plan") or {}
+    at   = (rec.subject_matter or {}).get("at")
+    if plan.get("as") == "rung":
+        rid = f"{at}:{plan['kind']}"                        # deterministic, derived from the plan
+        w.rungs[rid] = Rung(rid, plan["kind"])
+        w.add_tenure(Tenure(H(w.world_seed, w.tick, a.actor, f"contain:{rid}"),
+                            rid, at, "contain", since=w.tick))   # world.py:223 — the ONE writer
+        return {"rung.founded": [rid]}
+    sid = f"{at}:{plan['kind']}"
+    w.sites[sid] = Site(sid, at, plan["kind"], condition=0)       # a fabric begins at NOTHING
+    return {"site.built": [sid]}
+```
+
+| decision | ground |
+|---|---|
+| **ONE verb, two write rows, one earned per act** | `_apply_write`'s `{kind: [ids]}` mapping was built for exactly this and says so: *"AN EFFECT MAY EARN SOME OF ITS DECLARED KINDS AND NOT OTHERS… Without this the fold emitted EVERY kind in `emits:` the moment anything changed — so `confer` onto an unheld office published `tenure.closed` with nothing closed"* (`resolve.py:338-346`). And the effect **runs once, on the first pair** (`:252-257`), with the other pairs still gated for class and Partition. **Two verbs (`found` and `build`) would be two rows, two bodies and two names for one act at two grains — and round one already ruled there is no `build`** |
+| **`own` leads and presence enters through `requires`** | `eligibility: ["presence:<rung>"]` **alone** is declined person-side: `options.py:166-168` TRACEs *"`presence:` eligibility is unevaluable person-side (H-33, the presence index); `<verb>` declines rather than admitting"*. `restore`'s row already carries the fix and states it: *"eligibility is a DISJUNCTION (`own | presence:<site>`) so `own` alone admits, and the precondition is where presence actually binds"* (`verb_table.yaml:460`). **§0 step 4** |
+| **`matured` and not "all terms ripened"** | the closed seven `requires_forms` (`rosters.yaml:1114`) reach a field, not a log count, so *"every declared term has ripened"* **cannot be spelled** without an eighth form — and an eighth form *"REFUSES AT LOAD, because an eighth form is a new thing a precondition can ask and that is a design change, not a table edit"* (`:1092-1094`). `Record.matured` is an existing field read by an existing form. **So the plot is staked when the works BEGINS to ripen and the fabric climbs as the rest ripens** — which is the ceiling's job, and is a better design than gating founding on completion: it puts a visible unfinished thing in the world early, which is the whole point |
+| **`cardinality`, one of the closed seven** | `rosters.yaml:1114`, `needs: [subject, from, to]` (`:1119`). One works per target, as a **refusal that emits** rather than a queue. `rosters.yaml:1095-1098` records that `cardinality` *"has no typed cell today and that is not an omission… this roster records that the grammar has room for"* it — **this is that room being used** |
+| **a new `Site` begins at condition 0** | a fabric that appeared at full condition would make `restore` pointless and would be a built thing nobody built. Condition 0 with a rising ceiling is *"raising the first courses"* (§A.6.3) |
+| **the `contain` edge rides inside `(Rung, exists)`** | precedent: `_eff_create_record` mints the maker's `hold` inside `(Record, exists)` (`effects.py:286-289`), and `holonic §15.3` has a Tenure live and die **through** its object. **No new matrix row.** And `World.add_tenure` enforces the ladder: a `contain` edge that does not strictly ascend `rung_kinds` raises `Forbidden`/`S10` (`world.py:248-256`) — so **founding a hearth under a settlement is legal (strict ascent, not adjacency) and founding a duchy under a hearth is not** |
+| **`grade: "assumption"`** | the two write-matrix rows are `grade`-bearing tree facts with a `by:` (`W2/H-41`); the **verb** is this document's and is graded honestly. `AX` **ID-6** |
+
+### A.7.2 · What `found` closes, and what it leaves open
+
+> ### RULED: **`found` IS THE PRODUCER TWO DECLARED ROWS HAVE BEEN WAITING FOR, AND IT CLOSES `ARCH §F.20` AND **TWO OF `H-41`'s THREE CELLS** — NOT THREE, AND NOT `H-34`.**
+>
+> - **`ARCH §F.20`** — *"no stage names a verb that founds a hearth or builds a site… **the world only
+>   decays — nothing is ever founded or built.** This is what blocks build step 2."* Closed **when a
+>   `rung.founded` and a `site.built` appear in a run's log**, which is `MW-2`'s artifact and is **0
+>   today**, measured.
+> - **`H-41`** (`hole_register.yaml:462-472`) is `kind: "SCHEMA_ROW ×3"`, `grade: "absent"`, and its
+>   `hole:` names **three** cells: *"`(Rung, exists)`, `(Office, exists)`, `(Site, exists)` — founding
+>   a hearth, establishing an office, building a site."* This closes the first and third. **The second
+>   is sibling `03`'s** (`establish`/`confer`), and `H-41` therefore stays **open at reduced strength**.
+> - ⚠ **`H-34` IS NOT PART OF THIS AND THE ROUND-TWO PLAN MIS-CITES IT.** Re-opened:
+>   `hole_register.yaml:370-380` is `H-34`, `kind: "NUMBER"`, `owner: "params"`,
+>   `hole: "establishment size per office kind"`. **It has nothing to do with the existence rows.**
+>   The plan's §6 lists *"H-34/H-41 (the two producerless rows `(Rung, exists)`/`(Site, exists)` gain
+>   `found`)"*; the hole is `H-41` **alone**. Repaired in the APPENDIX.
+>
+> **Left open, and named:** `ARCH §F.18` (upkeep's source) — untouched. `ARCH §F.20a` (**no verb
+> writes any `Person` interior field**) — ⚠ **narrowed but NOT closed by this document:** `(Person,
+> body)` is a Part D row and `social: "false"`, so it is **not** one of `§F.20a`'s six interior rows
+> (`convictions`, `stance`, `scar`, `axis_count`, `coherence`, `beliefs`, all `social: "true"`). A body
+> is not a conviction. **`§F.20a` stands entire**, and the consequence it names stands with it: **a
+> person who builds visibly cannot move anyone's conviction.** `ARCH §F.20b` — untouched. `H-62`
+> (interior writes) — untouched. `H-105` — closed for the **channel**, open for `work` (§A.6.5).
+> `H-110` — sibling `01`'s.
+
+---
+
+## A.8 · THE FIVE SITE FAMILIES — roster rows, and the discriminator IS the rule
+
+Carried from round one `02` §A.2, which the pessimistic pass did not break. **The discriminator is not
+the fiction: it is which column of which EXISTING table the site's condition band reaches.**
+
+| family | kinds (illustrative) | what its condition gates | the reader column | destruction removes |
+|---|---|---|---|---|
+| **PRODUCER** | `croft · field · seam · harbour · mill · quarry` | the rung's `yield` at MATTER | `site_yield[kind]` — **exists**, `rosters.yaml:1146-1173`, scaled by `condition/condition_scale` at `matter.py:207-209` | a source of matter |
+| **VESSEL** | `granary · warehouse · cistern · byre` | how much the rung may **keep** | a bound on `Rung.stores`, an unbounded `dict` today — **the one genuinely absent reader column** | the bound on a surplus, and the surplus |
+| **ENCLOSURE** | `rampart · gate · ditch · tower · keep` | **somebody else's** verb at this rung | `band_floors[kind]` — the mechanism **exists**, `rosters.yaml:1175-1199`; the kind does not | a refusal |
+| **HALL** | `moot_hall · guildhall · minster · chapter_house` | whether a sitting may `convene` here | `band_floors[kind]`, read by `convene`'s `requires` | a venue |
+| **DWELLING** | `cottage · townhouse · longhouse · barracks` | how many persons this rung may address | `capacity(w, rung)` — §A.11, **gated on `ED-SE-0051`** | the shelter |
+
+> ### RULED: **THE FAMILIES ARE ROSTER ROWS, NEVER CARRIERS, AND THE DISCRIMINATOR IS THE RULE: *A KIND THAT REACHES NO NEW COLUMN IS NOT A NEW FAMILY.***
+>
+> A bakery that only produces is a **PRODUCER with a different `site_yield` row**. A gatehouse that
+> both refuses an attacker and quarters a watch is **two Sites** — an ENCLOSURE at the quarter and a
+> DWELLING at a hearth — because it does two things **and they can be lost separately**. Cited to
+> `AX` **ID-12** (`AX:454`, *"A closed set lives in data"*) and to `rosters.yaml:809-812`, whose own
+> note is the refusal that makes the roster safe: *"Adding a kind means adding a row here; asking
+> about a kind that has no row RAISES."*
+>
+> **THE BASELINE IS TWO, NOT THREE, AND THE ROSTER SAYS SO.** `site_kinds` is
+> `[harbour, seam, body]` (`rosters.yaml:816`) and its own note at `:814-815` reads *"⚠⚠ `body` IS NOT
+> A SITE."* **So five families replaces an absence rather than enriching a taxonomy** — and §A.4.3
+> re-opens the `body` row and finds it doing a **second** job that the note does not mention
+> (`headless.py:64` builds a Site of that kind).
+>
+> **WHAT A NEW KIND COSTS, MEASURED AT THE LOADER RATHER THAN ASSERTED.** `fixtures.py:106-123`
+> checks `wear_per_season` and `band_floors` against `site_kinds` **in both directions** — a table
+> keyed past the roster raises `Forbidden`, a roster member with no row raises `Ungraded` (*"a wear
+> table that returns 20 for an unregistered site kind does not fail — it answers, plausibly and
+> wrongly, forever"*). `site_yield` is checked **one way only** (`:124-129`). **So every family lands
+> with a `wear_per_season` row and a `band_floors` row or the world does not load**, and a
+> `site_yield` row is optional. That is `AX` **ID-5** doing work a convention would not.
+>
+> ⚠ **AND EVERY NUMBER IN ALL THREE TABLES IS AN INJECTED DEFAULT WITH A SWEEP.** `site_yield` is
+> `H-93`, `sweep: [declared, uniform, none]`, with its own *"⚠ WHAT A HARBOUR PRODUCES IS INVENTED"*;
+> `band_floors` is `H-08` with *"⚠ THE FLOORS ARE INVENTED"*; `wear_per_season` is `H-07`, all three
+> kinds at **10** against `condition_scale = 1000`. **No claim about pacing is made anywhere in this
+> document, and none is made here.** The wear-to-restore ratio is not a difficulty slider: it sets
+> **where every site in the world sits at rest**, and §C.5 names it as the largest unmeasured number
+> the design now depends on.
+
+---
+
+## A.9 · FORTIFICATION — an `ENCLOSURE` `Site` whose CONDITION IS ITS STRENGTH, and **NO SIEGE SUBSYSTEM**
+
+Carried from round one `02` §A.3, unbroken by the pass. Restated here **only** as the three reads,
+because that is what makes it cost nothing.
+
+> ### RULED: **A FORTIFICATION IS AN `ENCLOSURE`-FAMILY `Site` WHOSE `rung` IS THE QUARTER IT ENCLOSES. ITS CONDITION IS ITS STRENGTH — BANDS, NOT A LEVEL — AND WHAT IT GATES IS SOMEBODY ELSE'S VERB. ONE RAMPART PER QUARTER, SO A BESIEGER PICKS A QUARTER.**
+
+| # | the read | onto what already exists | the cost |
+|---|---|---|---|
+| 1 | **THE BATTLEFIELD, wall intact** | `systems/mass_battle/reference/mass_battle_v30.md:543` already carries the row: `| Walls / fortifications | Defender +3 DR; no flanking; Slow cannot advance |` — an **environmental selector**, a terrain row, not a stat. A provider's IN-side calls `verbs(w, enclosure_site, band_floors[kind])` (`world_q.py:133-136`) at the contested rung and passes that row **iff `mans` is in the returned set**. The seam already receives the rung: `contest(w, rung, prize, claimants, …)` | ⚠ **one read inside a wrapper that does not exist.** `mass_battle` has no registered provider, so **this read has nothing to read yet**, and saying otherwise would be claiming a mechanism |
+| 2 | **THE CHOKEPOINT — a band refusing a `move`** | `move`'s row is `eligibility: ["own"]`, `requires_typed: {form: contain_path, of: actor, to: to}`, `emits_on_refusal: ["travel.blocked"]`. The typed form is evaluated by `ContainPath` (`engine/season/data/requires.py:254`), and the resolver-side answer lives in **ONE** place: `WorldReader.read`'s `contain.path` branch (`world_q.py:732-737`), today a shared-ancestor test. **The reading adds one conjunct in that one branch.** MEASURED: `travel.blocked` fires **23 times** in one season, so the channel is live | ⚠ **the form cannot name the wall as an operand.** `contain_path`'s `needs:` is `[actor, subject, from, to]` (`rosters.yaml:1118`) — **no `site`** — and `requires_forms` is **CLOSED AT SEVEN**. So the enclosure is read by the predicate off the world, never bound as a cell operand. **That is a constraint the roster imposes, not a workaround**, and it is why this costs one branch rather than an eighth form |
+| 3 | **THE SIEGE — a contest grading a NEGATIVE condition delta, and nothing more** | a `contest` at the rung returns a degree the fold grades into a negative `(Site, condition)` delta — **the same channel a repair uses with the sign flipped**, already licensed at `[MAT, RES]`. Several besiegers commute **by construction**: `resolve.py:538-553` sums every delta and clamps **once**, and its own TRACE records the refused alternative (*"clamp per delta (arrival-order dependent)"*) | **no new write class, no new step, no new carrier, no new degree ladder, and no siege object anywhere.** ⚠ And it needs §A.6.5's delta channel, which does not exist — **the same gap, and closing it once closes it for both** |
+
+**A consequence nobody chose, falling out of an ordering that shipped for other reasons.** The strata
+are `[movement, binding_decision, contested_physical, uncontested_material, social]` and *"ORDER IS
+SEMANTIC HERE"* (`rosters.yaml:138-146`). A siege is `contested_physical`; a repair is
+`uncontested_material`. **So a defender cannot patch a breach in the season it opens, and must
+pre-invest.**
+
+**A wall's resistance is not a number, and that is why the row asking for one has no answer.** It is
+the verbs it removes from the attacker, the verbs it grants the defender, and the seasons it takes to
+grade it down through three bands. `AX` **T-g** (`AX:353`, *"Obstruction needs no verb"*) is the
+distinction: an obstacle is rolled against, an obstruction is not rolled against at all. **A wall is
+an obstruction.** And a garrison is not a troop type: it is `presence(w, ward)` filtered by who is
+bound to keep the walk.
+
+**The epistemic half — the band may never be rendered as fact.** A wall's condition is world truth;
+what an attacker holds is a `Claim` about it at a confidence that **already decays**
+(`matter.py:147-153`). The typed predicate is evaluated against `WorldReader` at RESOLVE and against
+`LedgerReader` person-side, and a relation the reader cannot answer returns `UNKNOWN` — *"so an
+unimplemented one refuses rather than admitting"* (`requires.py:50-53`). **So a defender who lets the
+walls rot and tells everyone they are sound is a play the design supports with no new mechanism**, and
+**a fortification's band is rendered as the viewer's own estimate or not at all.**
+
+---
+
+## A.10 · HOLDINGS — what may never be held, and two cuts that stay WITHDRAWN
+
+### A.10.1 · `hold` must not reach a `Site`
+
+> ### RULED: **CONFIRMED, AND ON CARDINALITY PLUS THE COMMONS — NOT ON THE DESTROY CASCADE.**
+>
+> `hold`'s object domain is `Office | Rung | Record | Proposition`, **1 per object** (`holonic:538`);
+> `ARCH` PART D row 14 grades *"a banner holding territory"* **STRUCTURAL (typed)**. **What is held is
+> the RUNG the site keys to, or the `works` Record on it. Never the fabric.**
+>
+> **The ground is that widening it DELETES THE COMMONS.** `hold_force` **raises** on a second live hold
+> (`world_q.py:138-145`), so a held fabric has exactly one holder, `share = 1` everywhere, and
+> §A.6.4's forty-boat harbour stops existing as a category — **and with it the only mechanism in the
+> design that produces collective ruin from rational private acts.**
+>
+> **Three things the refusal keeps, and they cost nothing.** (1) **The fabric outlives its holder's
+> claim** — take the plot and the cathedral does not move, so you have taken it by taking the ground,
+> **one edge changing hands rather than two.** (2) **A works can be held by somebody who does not hold
+> the ground** (§A.6.7's mason and lord). (3) **Nobody holds a wall, and nobody should** — a rampart's
+> rung is the quarter, and a wall is a common thing.
+>
+> **The cost, plainly:** you cannot confiscate a single building. You confiscate its plot, which takes
+> everything on that plot. **That is correct** — a granary and its store move together, because
+> `stores` is a `Rung` field.
+>
+> ⚠ **THE REFUSAL IS UNENFORCEABLE TODAY.** `World.add_tenure` is *"The ONE writer"* (`world.py:223`)
+> and validates **two** things — `t.kind` on `TENURE_KINDS` (`:242-247`) and `contain` ascent
+> (`:248-256`) — and then appends (`:257`). **It checks nothing about the object class of a `hold`**,
+> so `Tenure(p, <a site id>, "hold")` is accepted, and `ARCH` PART D row 14's grade of **STRUCTURAL
+> (typed)** describes a typed language this one is not. **The object-domain conjunct lands as one more
+> conjunct beside the two already there**, and it **earns its existence** under `CLAUDE.md` §0.1 pt 5:
+> a `Tenure` is read at RESOLVE, at MATTER and in six Queries, so it is **load-bearing on the game**;
+> `add_tenure` is already the single writer; it fails on recurrence. **Sibling `05`'s item 16 owns the
+> build step; the argument is round one `02` §A.5.3's and is a pointer, not a restatement.**
+
+### A.10.2 · ⚠ `fort_level` AND `facility_tier` — BOTH CUTS STAY WITHDRAWN AS BREAKAGES
+
+Carried verbatim in force from round one `02` §A.3.3, which **owns** this withdrawal. Not re-argued,
+because re-arguing it is how it got restated in two files; the reasons, in one line each:
+
+| ~~the cut~~ | why it is a breakage |
+|---|---|
+| ~~cut `fort_level`~~ | **WITHDRAWN.** Declared on the **live** `Territory` (`engine/autoload/game_state.py:241`), **derived** from garrison at `:324` under a comment that is the single-owner rule stated in place, round-tripped through the snapshot at `:381` and rebuilt at `:452`, with the rule repeated at the export leaf (`engine/substrate/world_initial_state.py:17-18`); and `terr.fort_level` is an authored descriptor key (`references/descriptor_registry.yaml:94`) cooked into `engine/engine_params/descriptors.json` behind `tools/export_descriptors.py --check`, which is **BLOCKING in CI** |
+| ~~cut `facility_tier`~~ | **WITHDRAWN.** Read live at `systems/settlements/sim/registry.py:97` (the AP property), **set by its own loader** at `:146`, serialised at `:119`, and registered as `set.facility_tier` behind the same blocking export |
+
+> **NEITHER IS CUT BY THIS DOCUMENT, AND THE ENGINE'S `fort_level` ALREADY *IS* THE SHAPE §A.9
+> ARGUES FOR.** A derived quantity with one owner and a comment saying why it is derived is not the
+> defect it was cited as; it is the defect's repair. §A.9 proposes the **head's** representation, in
+> `engine/season/`, where there is none. **A session that deletes either field on this document's
+> authority has misread it.** The deletion may still be defensible on *other* grounds — both sit in
+> trees `ED-IN-0204` Decision 1 superseded. **The stated grounds were false**, and that is what this
+> row records.
+
+---
+
+## A.11 · `ED-SE-0051` — the recommendation, and the ground this document DESTROYS
+
+`ED-SE-0051` is **open**, `needs_jordan: true`, in `registers/editorial_ledger_se.jsonl`: *"E-1 — THE
+BOUND ON THE DEMOGRAPHIC LOOP: matter only, or matter plus hearth capacity?"*, recorded as *"the one
+question in `proposals/2026-09-10-settlements-factions-populations/` that survived all five of
+`CLAUDE.md` §0's tests"*, with **LAYER 1 IS SILENT** stated in the row itself, and gating position 24
+of the ratified order.
+
+> ### RECOMMENDED — **NOT RULED, AND NOT CLOSED HERE: THE CAPACITY ARM, WHERE CAPACITY IS A `capacity(w, rung)` QUERY OVER DWELLING SITES WITH A FLOOR, NEVER A FIXTURE.**
+>
+> ```
+> capacity(w, rung) -> int          # resolver-side, World FIRST, Nobody's. Declared at holonic:600.
+>   = floor_fixture                                        # what a household keeps in a corner
+>   + Σ over DWELLING Sites in this rung's containment subtree
+>       whose condition >= band_floors[kind]["shelters"]
+>     of that kind's declared `houses` count
+> ```
+
+**And the honest part first, because it is the part a later session will need.**
+
+> ### ⚠ THIS DOCUMENT DESTROYS ROUND ONE'S DECISIVE GROUND FOR THE CAPACITY ARM, AND THE RECOMMENDATION MUST BE RE-ARGUED WITHOUT IT.
+>
+> Round one `02` §A.7's ground 1 was marked ⭐ decisive: *"**MATTER-ONLY IS NOT CURRENTLY A BOUND AT
+> ALL.** `matter.py:185` records a shortfall and states in its own comment *recorded, not acted on*,
+> and MEASURED: 0 of 211 hearths hold any matter after a season, so nothing is even being compared.
+> **The choice is not between two bounds; it is between a bound and a TRACE note.**"* **That was true
+> and this document makes it false.** §A.3 connects the draw and §A.4 makes the shortfall reach a
+> body, a band, a budget and a death. **After items 3a and 3b, matter-only IS a bound** — it is
+> `MW-L−2` composed with `MW-L−3`, and it bites. **So the strongest argument for capacity was an
+> argument about an unbuilt engine, and building the engine retires it.**
+>
+> That is recorded rather than quietly dropped, because it is exactly the shape `CLAUDE.md` §0.1 pt 3
+> warns about: a result about the tree, verified at the wrong half of itself. **A session that cites
+> round one's ground 1 after item 3b lands is citing a measurement of a world that no longer exists.**
+
+**The recommendation stands, on the two grounds that survive:**
+
+1. **Capacity-as-a-fixture is the spreadsheet failure mode** — a number per facility kind, authored,
+   never measured, and **unburnable, unholdable, untaxable**. Capacity-as-a-Query-over-live-fabric
+   costs zero new tables beyond one `houses` column on a kind roster that must be authored anyway
+   (§A.8), and it makes the player's building the lever Jordan asked for.
+   `references/design_rulings_2026-09-06.md:169` is the governing line: *"Every aggregate is DERIVED,
+   none is PUSHED."*
+2. ⭐ **It makes decay and growth the same arithmetic.** A village whose crofts have worn below
+   `shelters` **cannot hold the people in it**: capacity falls, and the excess must leave. So the
+   damping term of the growth loop and the meaning of the decay loop are **one number**. Under an
+   authored fixture they are two — and two ladders for one quantity is an **S** defect.
+
+**`AX` T-b compliance** (`AX:284`): capacity bounds CENSUS's *individuation*, which is demand-driven
+only, and **`AX-5`'s own resolution licenses exactly this** (`AX:172-175`, *"So individuation is
+authored: the demand is its author"*). It **changes what may be admitted** and produces no outcome.
+
+**THE FLOOR IS NOT DECORATION, AND AN ATTACK PUT IT THERE.** Attack: *a rung with `capacity == 0` and
+`stores > 0`.* A newly founded hearth has no fabric, so capacity is zero, so **founding is
+self-defeating** and the design fails at its own extreme — **R**'s completeness clause
+(`CLAUDE.md` §0.06, *"a mechanism breaking at its extremes fails"*). The attack succeeded and changed
+the design: the floor is what a household keeps, and the fabrics raise it above that. ⚠ **And §A.7.1
+sharpens the attack**: `found` mints a `Site` at **condition 0**, which is below any `shelters` floor,
+so a newly built cottage houses nobody until it is `restore`d above the band. **The floor is what
+keeps the first season of a new hearth from being a contradiction.**
+
+**The counter-argument, not hidden:** capacity lets a player **opt out** of the demographic game by
+simply not building, where matter-only does not. The answer is that opting out is itself priced — a
+small place is a weak place — whereas matter-only makes growth something that happens *to* the player.
+**The objection is real and is the best case for the other arm.**
+
+> ### RULED, on scope only: **`ED-SE-0051` IS NOT CLOSED, NOT ANSWERED, AND NOT GATING. `capacity` IS NOT BUILT BY THIS DOCUMENT AND IS COUNTED 0 ADDED, BECAUSE IT IS NOT ADDED.**
+>
+> It is the suite's **RR-2**, owned by `05`. `Rung.envelope` is kept as its carrier (§A.5).
+> §0's **step 5 cannot take it**, because the two arms are materially different games — which is what
+> the row itself says survived all five tests. **And `ED-WR-0011` (ruled) says the growth arm has no
+> producer at all today**, so nothing waits on the answer: *"there is no season-tick generation at
+> all… the cast only shrinks."* **It is answered alongside that row, by whoever reopens generation.**
+> Cost of being wrong: **one Query swapped for a fixture.** It gates one build item and nothing else.

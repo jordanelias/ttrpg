@@ -39,7 +39,7 @@
 > themselves — the worldly churn is in how those contents are received and acted upon by others."*
 
 > **And the two Layer-1 passages this file exists to apply**, `holonic §37.1` (:1282-1293) and
-> `holonic §37.2` (:1297-1299), quoted whole in §A.1 and never paraphrased:
+> `holonic §37.2` (:1297-1299), quoted whole in **§A.2** and never paraphrased:
 >
 > ```
 > Dispensation := (id, issuer, proposition, scope, terms[])   -- NINE typed terms, no bare effect field
@@ -1782,3 +1782,114 @@ building ahead is `05`'s **RR-C**, and each flagged item's artifact re-runs afte
 | `engine/season/decision/budget.py` · `data/fixtures.py` | `:57` pays `budget_office_bonus` per live hold · the fixture at `:430` | **term and fixture deleted** (§B.3) | no |
 | `engine/season/harness/probes.py` | `f5` `:1148-1160`, `f18` `:1442-1452` build `w.dispensations`/`w.petitions` by hand | re-aimed at `Record`s. **`f5`'s assertion does not change** — which is the test that the fold preserved the ratified property | no |
 | `architecture/` | `ARCH §B.5`, `§C.6`, `F.10`, `F.15` | ⚖ **RR-B, `05`'s. Quoted at their `§`. NOT EDITED** | — |
+
+---
+
+# PART D · FALSIFIERS
+
+`ID-11` — ship the falsifier with the claim. `CLAUDE.md` §0.1 pt 2 — **an assertion must be able to observe
+the failure it excludes.** Every row names what would be true if the claim were false, and says what it
+asserts on.
+
+| # | the claim | the falsifier, and what it can observe |
+|---|---|---|
+| **WW-1** | the writ's carrier already runs | run one populated season and count `record.created`. **If it is 0, this file's whole N-argument is wrong.** Measured **69**. *Control:* `build_realm(0)` alone → **0** — which is why the clock must be stated with the number |
+| **WW-2** | `record_kinds` is a **no-op migration** on the running world | the same season after the constructor check lands: **69 Records, all `text`, all `subject_matter == None`, no raise.** A raise means the `text: []` schema is wrong. **Observes the failure because `set(None or ()) == set()` is the exact line under test** |
+| **WW-3** | `issue` mints a writ with **exactly** its kind's keys | a declared `issue` naming `{terms, to, at}` mints one; one naming `{terms, to}` **RAISES**; one naming `{terms, to, at, reach}` **RAISES**. ⚠ **Both directions asserted** — a one-way check cannot see an extra key, and an extra key is a second vocabulary |
+| **WW-4** | a writ's content cannot be rewritten | attempt `w.write("subject_matter", …, record_kind="Record", fieldname="subject_matter")` and assert the gate refuses **for want of a row**. **If it succeeds, §A.4's STRUCTURAL grade is false and drops to CONVENTION** |
+| **WW-5** | scope enumerates **executors**, not places | `probes.py:1148-1160` re-aimed at a `Record`: `off.rung is None`, and the ids in `subject_matter["to"]` are **outside** `descendants(w, "S")`. **The assertion text does not change** — if it must change, the fold lost the property |
+| **WW-6** | `give` moves custody and **nothing else** | A gives R to co-located B: A's hold `until == tick`, B's hold live, **`w.records[R]` byte-identical before and after** (compare a `deepcopy`). *Control:* a non-co-located `give` → `give.refused`, **and both holds unchanged** |
+| **WW-7** | the deposit rule fires on the **hold**, not on the kind | after the `give`, B's ledger holds `content:dispensation` with **A's exact value**; and a `create_record kind: text` deposits `content:text` with `{}`. **The second is the control that says the branch is keyed on the hold** |
+| **WW-8** | **delivery is not assumed** — the three states are distinct | three worlds, same seed: (a) never delivered, (b) delivered and no act, (c) delivered and complied. Assert **the issuer's ledger is IDENTICAL in (a) and (b)** and **differs in (c)**. ⚠ **This is §37.3 row 4's only mechanical check, and it is the one a later convenience channel would break** |
+| **WW-9** | the `Partial` loss function is **bounded** | at `Partial`, the hearer's value differs from the teller's by **exactly one** omitted `to` id **or** one operand within `ceil(band × \|before\|)`; **`to` is never empty**, **never gains an id**, **never loses `p.id` when `p.id ∈ to`**; `terms`/`at`/`subject`/`predicate` are **equal**; **no sign change**. ⚠ **And it asserts on the three measured `news.untold` events at non-`Failure` degrees (§A.10.5) — that NO loss was applied to them**, which is the assertion that observes a degree-only guard |
+| **WW-10** | the teller's ledger is **untouched** | `deepcopy` the teller's ledger before WITNESS and assert equality after. **RR-P's test as an assertion**, and it fails loudly if any future optimisation shares a `Claim` object between ledgers |
+| **WW-11** | **no MATTER-class write is a function of a document's content** | assert `'subject_matter' not in open('engine/season/loop/matter.py').read()`. **The string is unique to the field**, so the assertion observes exactly the failure it excludes. *Control:* the same search for `stages` → **present**, which is the read that IS lawful |
+| **WW-12** | the two `forge` declarations **disagree** | assert that `(Record, forgery_quality)`'s `emits` (`record.forged`) **appears on some verb's `emits:`** — **it does not today, so the test is RED on arrival.** ⚠ A test that PASSES here would mean I misread one of the two rows |
+| **WW-13** | `give` is **resolvable** once its body and predicate land | `'give' in resolvable_verbs()`. *Control:* remove `_eff_give` → **False**, because the second gate reads `EFFECTS`. **This is the falsifier for "the verb executes", not for "the row exists"** |
+| **WW-14** | the Duke learns **only** by the three routes | in WW-8's world (c), assert no claim about the transfer reaches the issuer with `source == "inferred"`, and **no claim reaches an issuer who holds no store on the path.** *Control:* `inferred` is **0 today, measured** — so a non-zero is the observable |
+| **WW-15** | the writ's clock **follows custody** | a writ with a stage due at `t+2`, given away at `t+1`: **`matured` is set and `causes[]` chains to the giving.** The same writ whose holder is killed → **not matured**, and the TRACE note fires (`matter.py:76-77`) |
+| **WW-16** | deleting the two `World` collections is **checked** | delete them and run `test_the_entity_set_covers_every_world_collection_a_tenure_can_name`: it **fails until `harness/invariants.py:70-72` drops them.** **The falsifier already exists in the tree and I did not write it** |
+| **WW-17** | a writ **does not lapse** on a clock | run ten seasons with a writ whose `ttl` is 1: **`ttl` is unchanged and `record.expired` is never emitted.** *Control:* the holder's claim confidence **does** fall, and `claim.decayed` fires — **so the falsifier distinguishes "nothing fades" from "the right thing fades"** (§A.16) |
+
+⚠ **Two claims in this file have NO falsifier, and I name them rather than leaving the list looking
+complete.** (a) **`RR-P`'s no-bridge prohibition** — its check is CONVENTION (§C.2), and `ARCH F.13` records
+the same limitation for the act store: *"The guard is a scan, and it is CONVENTION."* (b) **§C.4's loop
+table** — `ID-16`'s derived check is blocked on the `requires` grammar, so **the signs are authored.**
+**A falsifier I cannot write is worth more said than implied.**
+
+⚠ **And none of the seventeen is licensed as a tree-wide GUARD.** `CLAUDE.md` §0.1 pt 5's predicate: a
+pattern defect earns a guard only if the defective artifact is load-bearing on **the game** or on **a Jordan
+decision.** WW-11 and WW-9 qualify (their subject is the engine's own behaviour); **WW-12 is a report, not a
+guard**, and **WW-1's numbers are measurements, not a gate.** Nothing here proposes a checker whose subject
+is another checker.
+
+---
+
+# APPENDIX · CITATION REPAIRS
+
+`CLAUDE.md` §0.1 pt 3: *"A citation you have not opened is not a citation."* Every `path:line` above was
+opened in this session. Below are the citations and claims **I inherited from my own specification** that
+were **wrong** — corrected in the text and recorded here so the error is not re-imported. Round one's
+unification pass took ~24 repairs and found three false verifications inside its own *"opened and found
+CORRECT"* list; **these are mine, and four of them are the same shape.**
+
+## The claims that were wrong on the merits — each verified the wrong half of itself
+
+| I was told | actually | how the error was made | consequence if uncorrected |
+|---|---|---|---|
+| *"`matter.py` touches no Record or Proposition — true today at `:30-296` and stays true"* | ⚠ **FALSE of Record.** `loop/matter.py:65-74` iterates `sorted(w.records)`, reads `rec.stages` and reads the live `hold`; `:106-109` writes `matured`. **TRUE of Proposition** (`grep` → no match) | the **Proposition** half was checked and the **Record** half was assumed from it | a session would ship *"MATTER reads no Record"* as an invariant and a test would go red on arrival. **The true invariant is narrower and stronger: no MATTER write is a function of a document's CONTENT** (§A.14, `WW-11`) |
+| *"`forgery_quality` is declared and **written by `forge`** … a shipped producer awaiting a consumer"* | ⚠ **the producer is not shipped.** `forge` has **no `@effect_for`** and **is not resolvable** (measured). The write exists as a table cell and a matrix row only | the verb row's `writes:` cell was read as **the behaviour** — §0.1 pt 3's *"X works today"* row, checked at the declaration instead of the call site | a build plan would schedule *"add a reader"* as the whole job when **both halves are missing** (§A.15) |
+| *"`dispatch` is `give` of a writ naming the dispatched"* | ⚠ **`ED-IN-0210`'s ruling says `dispatch` is `issue` with a person-scale referent** (`editorial_ledger_in.jsonl:104`). **Minting and handing are different acts** | the ruling was **paraphrased rather than opened** | the fold would be built on the paraphrase and would **not implement the ruling** (§A.6.1) |
+| *"0 records"* (`AUDIT_VERDICT.md`'s measurement block) | ⚠ **0 at `build_realm(0)`; 69 after ONE season.** Both reproduced this session | **a build-time count published without its clock** | **the exact inversion of this file's main argument** — a session would conclude the Record family is unreachable from a person's decision (§0.2) |
+| *"`band_floors.body` is a SITE kind … the proposal must not conflate them"* | ⚠ **the roster says the opposite.** `rosters.yaml:814-815`: *"`body` IS NOT A SITE. It is `(Person, body)`'s band row, here because `band_floors` keys on THIS roster."* | a caution inherited from a reading of the roster's **`values:`** line without its **`note:`** | **`04`'s subject, not mine** — recorded here because I opened it while checking a neighbour, and a session inheriting the caution would build a second band scheme that `H-38` forbids |
+| *"`Record.matured` is whole-record, not per-stage"* (`AUDIT_VERDICT` limit 7) | ✅ **CORRECT** — `carriers.py:445`, with Jordan's 2026-09-10 ruling transcribed at `:432-444` | — | **recorded as a verification that HELD**, because §0.1 pt 3 makes an unverified pass as suspect as an unverified fail |
+| *"the told channel deposits at the teller's confidence"* | ✅ **CORRECT** — `witness.py:363`, with the reason at `:304-310` | — | as above |
+| *"`_eff_create_record` mints the maker's hold at `:288-289`"* | ✅ **CORRECT**, and the **Record write is `:284-285`** — a different pair of lines | — | a session editing `:288-289` to add a kind would edit **the tenure, not the Record** |
+
+## The line-number and pointer repairs
+
+| cited as | actually | consequence if uncorrected |
+|---|---|---|
+| `carriers.py:429` for `Record.subject_matter` | ✅ **`:429`.** `:428` is `forgery_quality`, `:430` is `ttl`, `:431` is `stages`, `:445` is `matured` | the five are one screen apart, and round one's appendix records a session confusing `:429` with `stages` |
+| `witness.py:31` for `_told_content` | ✅ as the `def`; the **return** is `:70` and the deposit branch it feeds is **`:315-369`**, with `news.told`'s test at **`:316`** | **the degree guard goes at `:316`, not at `:31`** |
+| `epistemic.py:260` for `_ch_document_key` | ✅ as the `def`; **the predicate is `:331-333`** and the docstring runs seventy lines | a session *"reading `changes[]` at `:260`"* is reading a docstring |
+| `epistemic.py:215` for `_event_place` | ✅; the **body** is `:229-241` | — |
+| `epistemic.py:343` for `_ch_post_remit` | ✅; the **remit set is built at `:353-354`** | the place-blind-broadcast argument is about those two lines |
+| `verb_table.yaml:465` for `restore`'s formula | ✅ as the `effect:` line; **`:461` is `writes:`** | — |
+| `rosters.yaml:250-270` for `question_sources` | ✅; **the `values:` line is `:270`** | the roster edit is one line, not twenty |
+| `rosters.yaml:805` for `site_kinds` | ✅, and it is inside the **TABLES** block whose header is **`:800-803`** — so **`record_kinds` is a TABLE, not a roster**, and `roster()` **raises** on it | putting it in the rosters block would make `table()` raise at the call site |
+| `rosters.yaml:1084` for `requires_operands` | ✅ — `[actor, subject, from, to, site, kind, amount, floor]`, **eight**, and **`at` is not among them** | §A.6's computed-writ limit rests on exactly this |
+| `data/requires.py:488-491` for `REQUIRES_STEMS` | ✅ — **eight** stems, and the closure is enforced by **a test** (`engine/season/tests/test_season_shape.py:507-528`), **not by a load refusal** | claiming a load refusal would be the false-enforcement claim `state/ids.py:5-7` warns about |
+| `holonic:536-544` for the `hold` domain | ✅ — **`:538`** is the `hold` row, and **1 per object** is on it | that cardinality is the clause deciding `give` closes the giver's hold |
+| `holonic:1301-1308` for §37.3 | ✅ — the table is `:1303-1308` and §37.1's quotes are `:1286-1293` | round one cited §37.3 and honoured the wrong three quarters of §37 (§0.4) |
+| `_part2.md:438` for positions 15/16 | ✅ as the heading; **position 15's instruction is `:439-443`** and **position 16's is `:452-455`** | position 16's *"name it against `VOCABULARY.md`"* is at `:452` and **is the clause I had to discharge** |
+| `ARCH:1077` for F.15 | ✅ today, and **cited as `ARCH F.15`** throughout per the suite convention — its lines have drifted twice | a section pointer survives an edit; a line does not |
+| `AX:1319` for `§E.1.7` | ✅; **the ruling sentence is `:1327-1330`** | — |
+| `hole_register.yaml:1000` (H-84) · `:1106` (H-92) · `:795` (H-71) · `:618` (H-54) | ✅ **all four**, opened. ⚠ And round one's appendix records that **`:1102` is H-91's `unblocks:` QUOTING H-71** — a quotation cited as a source. **I did not repeat it** | — |
+
+## And one correction I made to my own design in authoring
+
+**§B.5 attack 4 was conceded and then DELETED rather than carried.** My specification counts `issue` and
+`petition` as **two** new effect bodies. They are **two registrations of ONE function** (§A.6), and the
+ledger now reports **+3 bodies by function, +5 by registration**, with **both numbers stated.** §B.5's own
+rule is that the design fails E if the author cannot delete two of the four conceded overheads;
+**I deleted one and kept two, and say which.**
+
+## What this file DROPPED, said plainly rather than left as a silent gap
+
+Per `CLAUDE.md` §0 — a skipped step is stated, not implied. **Nothing in the spec's scope for this document
+was dropped**, but two things it might have been expected to carry are **deliberately elsewhere**:
+
+- **`_ch_post_remit`'s re-basing** (the place-blind remit channel → obligees co-located, minting `inferred`).
+  It belongs with the seat model's `oblige` Tenure and is **`03`'s**, not mine; I cite the defect at §A.7
+  where it constrains `give`'s Event kind, and I do not specify the repair. **Measured here for whoever
+  takes it: `"inferred"` has 0 occurrences as a string literal in `engine/season/**.py`, and 0 claims carry
+  it in the populated world.**
+- **The per-file build order with sizes and dependencies.** `05` owns it; §C.8 supplies my file's rows and
+  §C.5 supplies the four artifacts in dependency order, which is what `05` needs from me.
+
+⚠ **And the close gate.** `python -m pytest tests/valoria -q -n auto` **was not run for this document**,
+because this document changes no code — it is a proposal, held back in full, and `CLAUDE.md` §0.4 makes the
+suite a **shipping** gate whose unit is a commit that ships behaviour. **Said aloud rather than implied**,
+per §0's requirement that a skipped step be named: **no test was run, because nothing here executes, which
+is also why the grade is `paper`.**

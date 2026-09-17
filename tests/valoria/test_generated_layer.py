@@ -24,10 +24,11 @@ leaves nothing on disk at all rather than leaving yesterday's copy in place.
 
 DETERMINISM is a separate claim and stays with each artifact's own test file
 (`test_engine_atlas.py::test_render_is_deterministic`,
-`test_contract_index.py::test_render_is_deterministic`,
-`test_key_graph.py::test_the_render_is_deterministic`,
 `test_execution_map.py::test_the_render_is_deterministic`). It has to: a non-deterministic
 builder still exits 0 and still writes a non-empty file, so nothing here could observe it.
+Two more determinism checks stood in that list — `test_contract_index.py` and
+`test_key_graph.py` — and retired with their builders under ED-IN-0232, so two of the four
+generated artifacts no longer have a determinism guard because they no longer exist.
 """
 import os
 
@@ -51,7 +52,11 @@ def test_the_layer_is_not_vacuous(generated_layer_paths):
     """Guards the guard. If `_GENERATED_LAYER` were emptied — or every builder retired without its
     artifacts being dropped from the tuple — the test above would pass over an empty list and this
     file would assert nothing at all."""
-    assert len(generated_layer_paths) >= 10, (
+    assert len(generated_layer_paths) >= 7, (
         f'only {len(generated_layer_paths)} artifacts declared in conftest._GENERATED_LAYER; the '
-        f'layer had 10 at wave 5. Fewer means a builder was retired — drop its row from the tuple '
-        f'and lower this floor in the same commit, deliberately.')
+        f'layer had 7 after ED-IN-0232. Fewer means a builder was retired — drop its row from the '
+        f'tuple and lower this floor in the same commit, deliberately.')
+    # FLOOR LOWERED 10 -> 7 (2026-09-16, ED-IN-0232), which is the deliberate act the message above
+    # asks for rather than a loosening. Two builders retired with the Key substrate —
+    # `build_key_graph.py` (1 artifact) and `build_contract_index.py` (2: CONTRACT_INDEX.md and
+    # KEY_INDEX.md) — and their rows came out of the tuple in the same commit. 10 - 3 = 7.

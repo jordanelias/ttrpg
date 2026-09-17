@@ -11,7 +11,7 @@
 ## a **term of REACH**, not as a fifth question row: `…-r2/01_ATTENTION_AND_REACH.md` (`ED-IN-0233`).
 ## **Kept as reference; struck where overturned.** §A.12's ruling that the multi-season construction is
 ## **a `works`** stands and binds round two.
-## Lane: `IN` · id: **ED-IN-0231**. Grade under `CLAUDE.md` §0.2: **`paper`** — nothing in this file
+## Lane: `IN` · id: **ED-IN-0236**. Grade under `CLAUDE.md` §0.2: **`paper`** — nothing in this file
 ## executes, PART C.5 says what would move it, and no row here may be cited as done.
 ## Method: authored at tier **`opus`** (`CLAUDE.md` §10 — *competing-considerations judgment,
 ## multi-doc synthesis*), against the working tree at 2026-09-17. Reconciliation of the disagreements

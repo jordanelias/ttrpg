@@ -1,6 +1,7 @@
 <!-- Permitted by CLAUDE.md §0's narrow exception (RULED by Jordan, 2026-09-17): a TERMINAL pass whose
      VERDICT IS THE DELIVERABLE may record it where the thing it judges lives, as a sibling inside the
-     target's own directory. Never a standing corpus, never a new tree, never `audit/`.
+     target's own directory. Never a standing corpus, never a new tree, never `.audit/`
+     (spelled `audit/` when this was written; renamed 2026-09-16 by ED-IN-0231).
 
      THE TEST, applied honestly before this file was written — DOES THIS CREATE WORK FOR A FUTURE
      SESSION? No. Every limit below is a judgment about a document that already exists in this

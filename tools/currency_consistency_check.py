@@ -335,7 +335,11 @@ def check_current_stamp_structure(drift):
 # applies only on a line that says the path is gone, so a genuinely stale head reference elsewhere
 # in the file still fails. This is the small half of the FORKED-status mechanism that
 # broken_dependency_checker needs for ledger evidence; the same idea, one file, no new format.
-_TOMBSTONE = re.compile(r'EVACUATED|FORKED|fork ref', re.I)
+# `FORK:` added 2026-09-16 (ED-IN-0232): the ledger's own row spelling is `FORK:<ref>`, so a
+# CURRENT.md line citing a retired path the canonical way — "sits at `FORK:c6e82105`" — read as
+# a live-path claim and drifted. `FORKED` (the STATUS column) and `fork ref` (prose) were both
+# already here; the one spelling a writer actually reaches for was the one missing.
+_TOMBSTONE = re.compile(r'EVACUATED|FORKED|FORK:|fork ref', re.I)
 
 
 def _tombstoned_paths(text):
@@ -433,7 +437,7 @@ def check_dead_maintainers(drift):
         base = os.path.join(REPO_ROOT, root)
         for dirpath, dirnames, filenames in os.walk(base):
             rel_dir = os.path.relpath(dirpath, REPO_ROOT).replace(os.sep, '/')
-            if any(part in ('archives', 'deprecated', 'audit') for part in rel_dir.split('/')):
+            if any(part in ('archives', 'deprecated', '.audit') for part in rel_dir.split('/')):
                 dirnames[:] = []
                 continue
             for name in filenames:

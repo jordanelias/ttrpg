@@ -20,6 +20,7 @@ that stops totality from being vacuously true.
 several; only the order decides. Order-dependence that nothing pins is a latent reordering bug.
 """
 import os
+import re
 import sys
 
 import pytest
@@ -114,7 +115,7 @@ def test_ordering_is_load_bearing():
     assert ep.classify('tests/sim/mass_battle/engine.py')[1] == 'R-MB-CANON'
     assert ep.classify('tests/sim/other_stress/notes.md')[1] == 'R-TESTS-PROSE'
     # generated output beats the two-week keep, at any date
-    assert ep.classify('audit/2026-07-29-scenario-visualization/contact_sheet.png')[0] == 'evacuate'
+    assert ep.classify('.audit/2026-07-29-scenario-visualization/contact_sheet.png')[0] == 'evacuate'
 
 
 # --------------------------------------------------------------------------------------
@@ -123,9 +124,9 @@ def test_ordering_is_load_bearing():
 
 def test_undated_audit_entries_are_not_recent():
     """`audit/lane-a/…` and bare files carry no date; they must not sneak through the window."""
-    assert ep._audit_is_recent('audit/lane-a/whatever.md') is False
-    assert ep._audit_is_recent('audit/valoria_how_to_play.md') is False
-    assert ep.classify('audit/lane-a/whatever.md')[0] == 'evacuate'
+    assert ep._audit_is_recent('.audit/lane-a/whatever.md') is False
+    assert ep._audit_is_recent('.audit/valoria_how_to_play.md') is False
+    assert ep.classify('.audit/lane-a/whatever.md')[0] == 'evacuate'
 
 
 def test_audit_cutoff_boundary():
@@ -137,15 +138,15 @@ def test_audit_cutoff_boundary():
     import datetime as _dt
     cutoff = _dt.date.fromisoformat(ep.AUDIT_CUTOFF)
     day_before = (cutoff - _dt.timedelta(days=1)).isoformat()
-    assert ep._audit_is_recent(f'audit/{ep.AUDIT_CUTOFF}-x/f.md') is True
-    assert ep._audit_is_recent(f'audit/{day_before}-x/f.md') is False
+    assert ep._audit_is_recent(f'.audit/{ep.AUDIT_CUTOFF}-x/f.md') is True
+    assert ep._audit_is_recent(f'.audit/{day_before}-x/f.md') is False
     # a date unambiguously before any plausible cutoff
-    assert ep._audit_is_recent('audit/2026-04-30-x/f.md') is False
+    assert ep._audit_is_recent('.audit/2026-04-30-x/f.md') is False
 
 
 def test_generated_output_evacuates_but_its_generator_does_not():
     """The 36 MB render directory is six days old: age alone would keep it."""
-    d = 'audit/2026-07-29-scenario-visualization/'
+    d = '.audit/2026-07-29-scenario-visualization/'
     assert ep.classify(d + 'contact_sheet_historical.png')[0] == 'evacuate'
     assert ep.classify(d + 'scenarios_historical.html')[0] == 'evacuate'
     assert ep.classify(d + 'render_scenarios.py')[0] == 'relocate'
@@ -163,7 +164,7 @@ def test_relocations_land_in_a_subsystem(part):
     for src, dest in moves.items():
         assert dest.startswith(OK), f'{src} relocates to no proper home: {dest}'
         # the whole point is leaving the evacuating trees
-        assert not dest.startswith(('audit/', 'deprecated/', 'research/'))
+        assert not dest.startswith(('.audit/', 'deprecated/', 'research/'))
 
 
 def test_no_contracted_unit_is_evacuated(part):
@@ -173,9 +174,20 @@ def test_no_contracted_unit_is_evacuated(part):
 
 
 def test_contract_guard_can_fail():
-    """POSITIVE CONTROL: plant a contracted path in the evacuate set and require a complaint."""
-    planted = ep.contract_guard({'systems/mass_battle/reference/mass_battle_v30.md'})
-    assert planted, 'the contract guard did not object to evacuating a contracted doc'
+    """POSITIVE CONTROL: plant a protected path in the evacuate set and require a complaint.
+
+    ED-IN-0231 (2026-09-16): this used to plant a `doc:` target. The design-prose quarantine set
+    every `doc:` field that named a markdown file to null — deliberately — which emptied that half
+    of the guard's universe and would have left this control unable to fire while still reporting
+    green. The planted path is now a quarantined document, which the guard protects explicitly.
+    """
+    planted = ep.contract_guard({'.designs/systems/mass_battle/reference/mass_battle_v30.md'})
+    assert planted, 'the contract guard did not object to evacuating a quarantined design doc'
+    # The other half of the guard must still fire too, or "the control passes" would only mean
+    # "the archive clause works" — a guard that protects one thing and silently stopped protecting
+    # the other reads identically from the outside.
+    planted_sim = ep.contract_guard({'systems/characters/sim/conviction.py'})
+    assert planted_sim, 'the contract guard no longer objects to evacuating a contracted sim module'
 
 
 # --------------------------------------------------------------------------------------
@@ -185,9 +197,9 @@ def test_contract_guard_can_fail():
 def test_split_path_scan_finds_what_substring_scan_cannot():
     """The concrete miss: gen_sigma_parity_goldens.py built its oracle path from segments.
 
-        os.path.join(REPO_ROOT, 'audit', '2026-06-03-contest-groundup', 'engine.py')
+        os.path.join(REPO_ROOT, '.audit', '2026-06-03-contest-groundup', 'engine.py')
 
-    contains no literal 'audit/', so `readers()` reported that file as unread while a kept tool
+    contains no literal '.audit/', so `readers()` reported that file as unread while a kept tool
     loaded it to regenerate a committed golden a kept CI test asserts on.
 
     PLANTED, NOT LIVE (2026-08-05): the evacuate set is now EMPTY — the terminal state — so a test
@@ -200,11 +212,11 @@ def test_split_path_scan_finds_what_substring_scan_cannot():
         with open(_os.path.join(d, 'probe.py'), 'w', encoding='utf-8') as fh:
             fh.write(textwrap.dedent("""
                 import os
-                P = os.path.join(REPO, 'audit', '2026-06-03-contest-groundup', 'engine.py')
+                P = os.path.join(REPO, '.audit', '2026-06-03-contest-groundup', 'engine.py')
             """))
-        planted = {'audit/2026-06-03-contest-groundup/engine.py'}
-        hits = ep.joined_path_readers(['audit'], [_os.path.join(rel, 'probe.py')], planted)
-        assert hits['audit'], 'a constructed path into an evacuating tree was not detected'
+        planted = {'.audit/2026-06-03-contest-groundup/engine.py'}
+        hits = ep.joined_path_readers(['.audit'], [_os.path.join(rel, 'probe.py')], planted)
+        assert hits['.audit'], 'a constructed path into an evacuating tree was not detected'
 
 
 def test_the_split_scan_can_fail():
@@ -296,12 +308,27 @@ def test_the_parity_oracle_is_not_evacuated():
     tools/gen_sigma_parity_goldens.py regenerates engine/tests/goldens/sigma_leverage_parity.json;
     engine/tests/test_sigma_leverage_parity.py asserts on it. Evacuating the oracle leaves a
     committed generated table with no source.
+
+    REWRITTEN 2026-09-16 (ED-IN-0231), because R-REL-ORACLE was EXECUTED and the old assertions
+    pinned the plan rather than the property. They required the ARCHIVED path to classify
+    `relocate` — true only while the move was pending, and false the moment it happened. The
+    property that actually protects the golden is that whatever the generator loads is KEPT, so
+    that is what this now asserts, read out of the generator rather than restated here. A copy of
+    the path in this test would be one more thing to forget.
     """
-    verdict, rule_id, _ = ep.classify('audit/2026-06-03-contest-groundup/engine.py')
-    assert verdict == 'relocate', f'the ground-up parity oracle must survive, got {verdict}'
-    dest, _, _ = ep.relocation('audit/2026-06-03-contest-groundup/engine.py')
-    assert dest.startswith('engine/reference/'), (
-        f'the oracle belongs with the code it validates, not in audit/: {dest}')
+    root = os.path.abspath(os.path.join(HERE, '..', '..'))
+    gen = open(os.path.join(root, 'tools', 'gen_sigma_parity_goldens.py'), encoding='utf-8').read()
+    m = re.search(r"_load_by_path\('_groundup_oracle_ref',\s*\n?\s*os\.path\.join\(REPO_ROOT,\s*(.+?)\)\)",
+                  gen, re.S)
+    assert m, 'could not read the groundup oracle path out of gen_sigma_parity_goldens.py'
+    loaded = '/'.join(p.strip().strip("'\"") for p in m.group(1).split(','))
+    assert os.path.isfile(os.path.join(root, loaded)), f'the generator loads a missing file: {loaded}'
+    verdict, rule_id, _ = ep.classify(loaded)
+    assert verdict == 'keep', (
+        f'the generator loads {loaded}, which the partition would {verdict} '
+        f'({rule_id}) — that leaves a committed generated table with no source')
+    assert not loaded.startswith('.audit/'), (
+        f'a blocking job must not load out of the hidden archive: {loaded}')
 
 
 def test_the_ed_universe_survives_evacuation(part):
@@ -364,7 +391,7 @@ def test_keep_set_doc_cutoff_matches_the_tool():
     So: any ISO date the doc presents as THE audit cutoff must equal `AUDIT_CUTOFF`. The doc is free
     to mention other dates (ledger entries, incident dates); only the ones marked as the cutoff bind.
     """
-    doc = os.path.join(HERE, '..', '..', 'systems', '_architecture', 'reference', 'repository_keep_set_v1.md')
+    doc = os.path.join(HERE, '..', '..', '.designs', 'systems', '_architecture', 'reference', 'repository_keep_set_v1.md')
     with open(doc, encoding='utf-8') as fh:
         text = fh.read()
 

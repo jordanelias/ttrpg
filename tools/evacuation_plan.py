@@ -76,7 +76,7 @@ GENERATED_EXT = ('.png', '.jpg', '.jpeg', '.gif', '.svg', '.pdf', '.html')
 AUDIT_KEEP_OVERRIDE = {
     # Jordan, 2026-08-04: "emergent narrative to be kept but joined appropriately". 46 .md, 175 IN
     # citations, design by subject -- the exact over-capture flagged before the lane rule was ruled.
-    'audit/2026-07-05-emergent-narrative-engine',
+    '.audit/2026-07-05-emergent-narrative-engine',
 }
 
 # proposals/ is per-file: some are load-bearing on kept code, most are not (ED-IN-0127 §6).
@@ -106,7 +106,7 @@ PROPOSALS_KEEP = {
 # Their RENDERED OUTPUT does not travel: R-AUDIT-GEN evacuates it, and it regenerates from the
 # relocated source. (matcher(rel) -> bool, destination-dir, rule-id, reason)
 RELOCATE = [
-    (lambda p: p.startswith('audit/2026-07-29-scenario-visualization/') and p.endswith('.py'),
+    (lambda p: p.startswith('.audit/2026-07-29-scenario-visualization/') and p.endswith('.py'),
      'systems/mass_battle/workbench/', 'R-REL-MBVIZ',
      'MB scenario visualisation + co-location measurement -- subsystem instruments, not audit records'),
     (lambda p: p.startswith('research/diagrams/mass_battle_formations/') and p.endswith('.py'),
@@ -122,9 +122,25 @@ RELOCATE = [
     # frozen reference implementations in one place beside the code they validate.
     # EXECUTION NOTE: the move requires updating gen_sigma_parity_goldens.py's load path in the
     # same commit, then regenerating the golden and confirming it is byte-identical.
-    (lambda p: p == 'audit/2026-06-03-contest-groundup/engine.py',
-     'engine/reference/contest-groundup/', 'R-REL-ORACLE',
-     'frozen parity oracle -- the last executable dependency of kept code on audit/'),
+    # EXECUTED 2026-09-16 (ED-IN-0231). The oracle was COPIED to
+    # engine/reference/contest-groundup/engine.py, gen_sigma_parity_goldens.py repointed at it in
+    # the same commit, and the golden regenerated: ONE line changed (the recorded source path) and
+    # all 1,758 parity rows are byte-identical, which is what the EXECUTION NOTE above demanded.
+    # COPIED, not moved, because `.audit/` is a historical record and deleting from it destroys
+    # evidence; the archived copy is now plain archive, read by nothing.
+    #
+    # The rule is KEPT rather than deleted, and its verdict deliberately flipped from RELOCATE to
+    # KEEP-as-archive: a rule that vanishes takes its reasoning with it, and the next reader
+    # otherwise finds an audit unit with no record of why its engine.py is special. The claim it
+    # carried — "the LAST executable dependency the kept tree has on audit/" — is now TRUE, which
+    # it was not when written: tests/valoria/test_gauge_invariants.py also sys.path-inserted into
+    # the corpus and imported reverse_pair_symmetry from it. That one was copied to tests/sim/,
+    # beside the gauge_mb it imports, in the same change.
+    # (R-REL-ORACLE's entry is GONE from this list because the relocation HAPPENED. The comment
+    # above is kept rather than deleted: a rule that vanishes takes its reasoning with it, and the
+    # next reader would otherwise find an audit unit whose engine.py looks unremarkable. The
+    # archived original now classifies under the ordinary .audit/ rules, which is correct -- it is
+    # history, and nothing reads it.)
     # THE ED UNIVERSE -- R-REL-EDUNIVERSE, EXECUTED AND RETIRED 2026-08-23 (S6/6b).
     #
     # It ruled that the 26 frozen ED-archive fragments under deprecated/archives/editorial/,
@@ -163,6 +179,22 @@ RULES = [
     # the CARRY-union-LEAVE defect: a file with no verdict would be removed under a mirror-image
     # deletion without ever appearing in a plan. Both are KEEP, and for different reasons worth
     # stating separately rather than under one pattern.
+    # ED-IN-0231 (Jordan, 2026-09-16) -- the design-prose quarantine. 230 documents left
+    # `systems/*/reference/` and the root of `engine/` for `.designs/`, and a new top-level tree
+    # matching no rule is the CARRY-union-LEAVE defect this tool exists to refuse: under a
+    # mirror-image deletion the whole archived corpus would be removed without ever appearing in a
+    # plan. It is KEEP, and one rule covers all of it because one reason does.
+    (lambda p: p.startswith('.designs/'), 'keep', 'R-DESIGN-QUARANTINE',
+     "QUARANTINED design prose, and quarantine is not retirement -- these documents are kept, "
+     "readable and resolvable, and were moved only so that an agent sweeping the code trees stops "
+     "ingesting them and reading them as canon (CLAUDE.md 1). The archive MIRRORS the tree: an "
+     "archived path is `.designs/` prefixed onto its original path. Much of it is prose with no "
+     "code pair, which this tool's own docstring already rules KEEP and which IS the spec; the "
+     "rest is superseded design whose replacement is engine/season/. Code still parses some of it "
+     "-- tools/export_key_types.py emits engine/engine_params/key_types.json from the key registry "
+     "under a blocking --check round-trip -- so this is not dead weight even by the strictest "
+     "reading. DELETE NOTHING here on the strength of the word 'archive'"),
+
     (lambda p: p.startswith('architecture/'), 'keep', 'R-ARCH-LAYER1',
      'LAYER 1 -- the code architecture and shape, RATIFIED 2026-09-05. It governs how all coding '
      'is conducted, which is agent instruction (CLAUDE.md 0.05 exempts that class from demotion), '
@@ -238,9 +270,17 @@ RULES = [
     # Python module imported BY BARE NAME from kept code; deleting one does not fail a test, it
     # stops `pytest tests/valoria` COLLECTING, which is strictly worse and was invisible to both
     # the substring and the constructed-path scans.
-    (lambda p: p == 'tests/sim/gauge_mb.py', 'keep', 'R-IMPORTED-MODULE',
-     'imported as `import gauge_mb` by two KEPT shipping-gate tests (test_gauge_invariants, '
-     'test_morale_write_sweep) -- evacuating it makes the whole suite uncollectable'),
+    # A SET, not an equality, since 2026-09-16 (ED-IN-0231): this is an ENUMERATED exception found
+    # by rehearsal, not a derived rule, so it grows. `reverse_pair_symmetry` joined it when it was
+    # copied out of the audit archive — `test_gauge_invariants` used to sys.path-insert into
+    # `.audit/` and import it from there, which made a hidden historical corpus load-bearing on a
+    # shipping-gate test. It now sits beside the `gauge_mb` it imports. ⚠ NOTE THE IMPORT FORM:
+    # this one is `from reverse_pair_symmetry import ...`, not a bare `import`, so a scan looking
+    # only for `import <name>` would not have found it either.
+    (lambda p: p in ('tests/sim/gauge_mb.py', 'tests/sim/reverse_pair_symmetry.py'),
+     'keep', 'R-IMPORTED-MODULE',
+     'imported by BARE NAME from KEPT shipping-gate tests (test_gauge_invariants, '
+     'test_morale_write_sweep) -- evacuating one makes the whole suite uncollectable'),
     # THE TWO ORCHESTRATOR-SCRIPT `keep` ROWS THAT USED TO SIT HERE ARE RETIRED, 2026-08-23 (S6/6a),
     # BECAUSE BOTH ASSERTED A LOAD-BEARING IMPORT THAT NO LONGER EXISTED.
     #
@@ -270,7 +310,7 @@ RULES = [
      'stress/session prose under tests/ -- neither executable spec nor canon'),
 
     # ---- audit/: generated output goes, generators stay, then the two-week rule
-    (lambda p: p.startswith('audit/') and p.lower().endswith(GENERATED_EXT), 'evacuate',
+    (lambda p: p.startswith('.audit/') and p.lower().endswith(GENERATED_EXT), 'evacuate',
      'R-AUDIT-GEN',
      'generated artefact -- regenerable output, evacuates at ANY date; its generator is kept by '
      'R-AUDIT-RECENT if the session is inside the window'),
@@ -315,7 +355,7 @@ RULES = [
     (lambda p: _audit_is_recent(p), 'keep', 'R-AUDIT-RECENT',
      f'audit dated on/after {AUDIT_CUTOFF}, DESIGN-subject, unit head -- includes generators '
      f'in-window'),
-    (lambda p: p.startswith('audit/'), 'evacuate', 'R-AUDIT-STALE',
+    (lambda p: p.startswith('.audit/'), 'evacuate', 'R-AUDIT-STALE',
      f'audit older than {AUDIT_CUTOFF}, or undated -- process record, not canon'),
 
     # ---- prose WITH a code pair, WHERE THE CODE HAS SUPERSEDED IT: the prose goes.
@@ -437,7 +477,12 @@ RULES = [
      'repo root: session protocol, currency index, CI config'),
 ]
 
-_AUDIT_DATE = re.compile(r'^audit/(\d{4}-\d{2}-\d{2})')
+# ED-IN-0231 (2026-09-16): the tree was renamed `audit/` -> `.audit/` so ripgrep skips it. This
+# regex is anchored, so it silently matched NOTHING after the rename — every dated unit read as
+# undated, and `_audit_is_recent` returned False for all of them, which flips the whole corpus
+# from KEEP to evacuate. A deletion plan quietly widening to everything is the exact failure
+# this module exists to refuse.
+_AUDIT_DATE = re.compile(r'^\.audit/(\d{4}-\d{2}-\d{2})')
 
 # ---------------------------------------------------------------------------------------------
 # THE SECOND CLAUSE OF THE AUDIT RULING (added 2026-08-04, ED-IN-0140)
@@ -523,7 +568,7 @@ def _audit_is_recent(rel: str) -> bool:
     Deliberately string-compares ISO dates: lexical order is chronological, and it keeps the rule
     free of a `now` that would make a deletion plan depend on its run time.
     """
-    if not rel.startswith('audit/'):
+    if not rel.startswith('.audit/'):
         return False
     m = _AUDIT_DATE.match(rel)
     return bool(m) and m.group(1) >= AUDIT_CUTOFF
@@ -795,6 +840,9 @@ def module_import_readers(evac_set: set, retained: list[str]) -> dict:
     return {k: sorted(set(v)) for k, v in hits.items()}
 
 
+ARCHIVE_PREFIX = '.designs/'
+
+
 def contract_guard(evacuating: set[str]) -> list[str]:
     """Nothing that a module contract points at may be evacuated.
 
@@ -819,6 +867,21 @@ def contract_guard(evacuating: set[str]) -> list[str]:
             hits = [e for e in evacuating if e == q or e.startswith(q + '/')]
             if hits:
                 bad.append(f"{c.get('module')}.{field} -> {q} ({len(hits)} file(s) would be evacuated)")
+
+    # ED-IN-0231 (2026-09-16): the quarantined design corpus is never evacuable, and it needs its
+    # own clause rather than riding on `doc:`. Severing the pointers set 17 `doc:` fields to null
+    # — deliberately, since `doc:` is the strongest possible "read this as authority" signal at a
+    # module — and that silently emptied the half of this guard those fields backed. A guard whose
+    # universe has quietly gone empty still returns [] and still reads as PASSING, which is the
+    # exact failure CLAUDE.md §0.1 pt 2 names: an assertion that cannot observe what it excludes.
+    # The protection moved to the partition rule R-DESIGN-QUARANTINE; this makes it assertable.
+    archived = sorted(e for e in evacuating if e.startswith(ARCHIVE_PREFIX))
+    if archived:
+        bad.append(
+            f"{len(archived)} quarantined design document(s) would be evacuated, e.g. "
+            f"{archived[0]} — `{ARCHIVE_PREFIX}` is KEEP under R-DESIGN-QUARANTINE. Quarantine is "
+            f"not retirement: these are kept, readable and resolvable, and code still parses some "
+            f"of them")
     return bad
 
 

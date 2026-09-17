@@ -10,7 +10,7 @@
 ## that no row here may be cited as done.
 ## Method: `opus` producer, `opus` self-adversarial pass (`CLAUDE.md` §10 — judgment over dispersed surfaces, and the tier is declared because the *order* is the judgment). Read-only against the tree at 2026-09-17; every number below was re-run here and every `path:line` was opened before it was written. Repairs in the APPENDIX.
 ## Grade: **`paper`** (`CLAUDE.md` §0.2). Nothing in this file executes. Its own first execution artifact is item 1b's.
-## Lane: **IN**, sharing `ED-IN-0232` with `03_THE_SURFACE.md`. This file allocates no id and edits no ledger.
+## Lane: **IN**, sharing `ED-IN-0237` with `03_THE_SURFACE.md`. This file allocates no id and edits no ledger.
 ## ⚠ **UNIFIED 2026-09-17 (`00_THE_DESIGN.md`).** Suite-wide: **`ARCH`** = `architecture/meta/04_CODE_ARCHITECTURE.md`, **`AX`** = `architecture/meta/01_AXIOMS.md`; a bare `01`/`02`/`03`/`04` means a file in THIS directory — which matters here, because this file HAS a `§A.3` of its own and `04 §A.3` used to mean the architecture's. This file's falsifiers are **`BO-n`**. The multi-season construction is **a `works`** (`01` §A.12). Reconciliation edits are struck in place.
 
 ---
@@ -858,7 +858,7 @@ roll" reading of policy** — policies change OPTIONS, never outcomes (`AX` T-b)
 | a policy-effects readout ("+N") · a legitimacy field · `domain: RungId[]` · a `Tenure.payload` revival · a per-edge council grant | each refused above or in §C.5 |
 | an eighth `requires` form without a STRUCTURAL ruling | L1 refuses it at load, and the refusal is the design statement |
 | **a cadence checker or a citation checker** | §0.4 and §0.1 pt 3 both say in terms that their subject is a reader's discipline and **no guard may be built** for it |
-| **an `audit/` file, or a findings document, from the adversarial pass** | §0 retires `audit/` as a category. The pass's output is **edits to the thing under review and at most one commit-message paragraph** |
+| **an `.audit/` file, or a findings document, from the adversarial pass** | §0 retires `.audit/` as a category (~~`audit/`~~ — renamed 2026-09-16, ED-IN-0231). The pass's output is **edits to the thing under review and at most one commit-message paragraph** |
 
 **And one thing that IS licensed, so the predicate does not read as a ban.** A guard whose subject is
 the **game** or a **ratified loader invariant** earns its keep: the `hold` object-domain guard (item
@@ -938,7 +938,7 @@ never cites it. It is **RR-3** below, and `README.md` carries all three.
 
 ### RR-1 · Policy collision: **nearness or rank?**
 
-⚠ **OWNER: `01` §C.6** (unified 2026-09-17). It is `ED-IN-0231`'s `needs_jordan` fork and `01` carries
+⚠ **OWNER: `01` §C.6** (unified 2026-09-17). It is `ED-IN-0236`'s `needs_jordan` fork and `01` carries
 the five-gate argument, the feel-of-the-game table and the recommendation's full case. **What this
 section owns is the build consequence**, which is what a ruling ledger is for. Restated here in short,
 not re-argued.
