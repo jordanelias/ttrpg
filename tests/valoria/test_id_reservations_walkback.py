@@ -233,7 +233,14 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # This is the update-the-pin-and-say-so path this test's own failure message prescribes, not a
     # revert of the walk-back: ED-IN-0098 'returned' SE 0050-0052 with max allocated ED-SE-0049, so the
     # frozen post-walk-back SE pointer was 50; 53 cannot be reached by reverting ED-IN-0098.
-    released = {'SC': 38, 'FA': 39, 'WR': 12, 'SE': 53}
+    # PIN UPDATED AGAIN 2026-09-17: SE 53 -> 54. ED-SE-0053 allocated for MATTER AND WORKS
+    # (proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md), the round-two successor
+    # to ED-SE-0052 after that suite's own pessimistic NERS pass found its headline path did not
+    # construct. Same allocation day as 0052, a separate document and a separate id; PROPOSED and HELD
+    # BACK IN FULL. ED-SE-0051 still STAYS the open escalation -- 0053 recommends its capacity arm and
+    # does not close it. Entry in registers/editorial_ledger_se.jsonl; narrative in
+    # references/id_reservations_history.md#se.
+    released = {'SC': 38, 'FA': 39, 'WR': 12, 'SE': 54}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

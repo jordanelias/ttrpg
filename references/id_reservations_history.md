@@ -378,6 +378,30 @@ Full text for both: `registers/editorial_ledger_in.jsonl`.
 BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0049-0052 RESERVED 2026-07-29 for cross-lane EDs the IN code-shape waves file in SE. MEASURED max allocated = ED-SE-0049; unused 0050-0052 (3) returned to the pool, next_free 53 -> 50. Freeze lifted: read next_free, allocate, bump, co-commit as normal. // ED-SE-0045..0048 allocated 2026-07-13: 2026-07-13 multi-agent audit P1 batch (designs/audit/2026-07-13-multi-agent-audit/) -- 0045 Prosperity->Treasury x50 vs x10 conflict (settlement_layer SS1.3 L47 vs SS1.8 L169); 0046 Fortress-City/Cathedral-City/Village missing from SS1.2 + base(Type) weight table (W_s uncomputable for the 2 compound types); 0047 SS4.7 Black Markets modifies invalid 'Settlement Wealth'/'Settlement Accord' fields; 0048 settlement_adjacency prose stale (36 settlements/PP-723) vs PP-726-rebuilt geography YAML (37/55). All open/needs_jordan. NOTE: mechanic_audit GAP-02 (Fort Level province->settlement granularity) NOT re-filed -- already ratified + tracked under ED-SE-0006 (open, execution pending); its SS2.2 mass_battle-SSA.4 mis-citation residual folds into ED-SE-0006 execution. next_free bumped 45->49. // ED-SE-0018..0044 allocated 2026-07-09: comparative-governance-research docket round 2 (designs/audit/2026-07-09-comparative-governance-research/) — same batch as the FA-lane note above; 7 authored into governance_play_redesign_v1.md/settlement_layer_v30.md as PROPOSED (ED-SE-0018/0019/0020/0021/0022/0023/0024 — Kokudaka Survey + Encabezamiento locked-extraction substrate, Goningumi cells, Za patron-lapse, Clerk Capacity, Ordenanza Ratification, Seggio Council), rest open/needs_jordan (see registers/editorial_ledger.jsonl and registers/handoffs/HANDOFF_SE.md). next_free bumped 18->45. ED-SE-0007..0017 allocated 2026-07-08 (THIS branch, RENUMBERED +1 from this branch's original ED-SE-0006..0016 -- collided with origin/main's concurrent ED-SE-0006, the coherence-audit Fort-Level bundle below): FA/SE historical-precedent research docket (designs/audit/2026-07-08-fa-se-historical-precedent-research/) — Weberian L/PS derivation table (SE-1, highest priority), dearth chain + grain routes, charter/prescription, entry terms, succession continuity, oversight toolkit, church-state seam, marcher autonomy, Weight-as-Exit, citation-patch CP-2; several needs_jordan forks (0013,0014,0015,0017). ED-SE-0006 allocated 2026-07-08 (origin/main): attribute/value coherence audit (ED-IN-0029) — Fort Level province→settlement inheritance (default: settlement = province value) + Garrison/Local-Economy/Public-Order §9 ratify-vs-[ASSUMPTION]-mark, both OPT-AV-18; decisions ratified, execution pending. ED-SE-0005 allocated 2026-07-08: pessimist-audit SE work items — Trade/Grant prune, Sponsor merge, etc. — execution pending (decision ED-IN-0027). ED-SE-0001 allocated 2026-07-05: NERS-audit E-1 accepted work item (governance_play_redesign path); ED-SE-0002 allocated 2026-07-05: edge-playability §7 item 4 (Accord/Order stacking ruling, needs_jordan), edge-playability §7 batch (PR #81)
 ```
 
+### 2026-09-17 — ED-IN-0233 / 0234 / 0235 (governance and holdings, ROUND TWO)
+
+`next_free` 233 -> 236. `proposals/2026-09-17-governance-and-holdings-r2/`, PROPOSED and HELD BACK IN
+FULL. Round two exists because round one's own pessimistic steelman NERS pass found four defects that
+were not polish: the headline emergent path **did not construct**, the downward half of its central
+mechanism was **forbidden by `holonic_ARCHITECTURE.md` §37.3**, its net-deletion claim **failed against
+the tree**, and one option **strictly dominated** at every issuing seat. Jordan then licensed changing
+the engine rather than routing around it.
+
+- **ED-IN-0233 — attention and reach (01), and the ledger and build order (05).** Two question sources
+  instead of four-plus-one: `claim_landed` over a new `reach(w, p)` Query, plus `need`. Dates and
+  crossings become claims; `date_due`, `band_crossed` and `w.crossings` are deleted and `H-110`
+  *dissolves*. Carries the suite's central claim: **net −20 engine objects**, 37 removed against 17
+  added, counted by name — where round one was net +17.
+- **ED-IN-0234 — the writ and the word (02).** The centrepiece, answering what `ARCH F.15` files as an
+  open gap. Two people-borne channels; the writ arrives verbatim or not at all; the word is lossy only
+  at `Partial`; MATTER reads no policy. **`needs_jordan: true` for RR-P**, the act-inviolate principle
+  as candidate `AX-7`, which would bind every subsystem.
+- **ED-IN-0235 — seats and content (03).** `conferral` and `revocation` as values; the `is_title` branch
+  and all four title helpers deleted; content derived from `offices_draft.yaml` rather than copied,
+  because that file cannot load as written.
+
+Full text: `registers/editorial_ledger_in.jsonl`.
+
 ### 2026-09-17 — ED-SE-0052 (the built world)
 
 `next_free` 52 -> 53. `proposals/2026-09-17-governance-and-holdings/02_THE_BUILT_WORLD.md`, PROPOSED
@@ -399,6 +423,27 @@ units of matter and **211 hearths hold none** — every site hangs from a settle
 in a hearth, and the shortfall is clamped away. Recommends `ED-SE-0051`'s **capacity** arm as a
 `capacity(w, rung)` Query over DWELLING sites with a floor, never a fixture; `ED-SE-0051` stays the
 open escalation.
+
+Full text: `registers/editorial_ledger_se.jsonl`.
+
+### 2026-09-17 — ED-SE-0053 (matter and works, ROUND TWO)
+
+`next_free` 53 -> 54. `proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md`,
+PROPOSED and HELD BACK IN FULL; the round-two successor to `ED-SE-0052`.
+
+Matter **stays where it is produced** and moves only by `transfer`, preserving `AX-1` because a person
+moves it; eaters **draw up the ladder** through a new `nearest_store(w, rung, kind)` Query. Shortfall
+crosses into `Person.body`, bodies cross `band_floors.person`, and death at 0 reuses the existing kill
+cascade. Building is a `works` Record whose last stage is `restore` or `found` — and it costs little,
+because `_eff_create_record` already mints the Record and opens the maker's `hold`, and MATTER's
+living-holder test already stops a maturation when the maker is gone.
+
+Carried forward from `ED-SE-0052` because each survived a pessimistic pass: the fabric/address
+ontology, the five site families, fortification as an `ENCLOSURE` condition band, and `hold` not
+reaching a `Site`. Also carried: that ontology's original licensing argument was **unsound** and now
+rests on cardinality, and the `fort_level` / `facility_tier` cuts stay **withdrawn as breakages**.
+
+**`ED-SE-0051` still STAYS OPEN** — the capacity arm is recommended, not adopted.
 
 Full text: `registers/editorial_ledger_se.jsonl`.
 
