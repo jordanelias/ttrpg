@@ -32,6 +32,13 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 **Facts, not a queue.** Three items of `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md`
 were RUN. `§7` of that file is the record and `probe_execution_pass.py` beside it re-takes every number.
 
+- **Item 3a LANDED — the larder ladder.** `world_q.nearest_store` + `matter`'s draw per EATER, not
+  per rung. Before it, **4,810 units sat at the 37 settlements, 0 at the 211 hearths, every person
+  lived in a hearth, and 0 rungs had both eaters and stores** — the subsistence step ran and wrote
+  nothing. After: **13 rungs written, unmet subsistence 138 → 0**, and `MW-1`'s four predictions all
+  held exactly. ⚠ **The draw bites in SEASON 2, not season 1** (§25 puts larders before yield, so
+  season 1 draws against a world that has produced nothing) — a one-season probe reads this item as
+  dead. ⚠ `World._subsistence_shortfall` is **item 3b's input**.
 - **Item 16 LANDED.** `hold`'s domain/codomain are rosters (`hold_subject_kinds` / `hold_object_kinds`);
   `World._refuse_bad_hold` + `World.class_of` read them. The 16 faction-subject province holds are
   re-homed to persons. **`in_holdings` went from false for EVERY (person, rung) pair in the world to 15

@@ -34,6 +34,7 @@ from engine.season.decision import budget                              # noqa: E
 from engine.season.harness.populated import build_realm                # noqa: E402
 from engine.season.loop.driver import resolvable_verbs                 # noqa: E402
 from engine.season.loop.predicates import in_holdings                  # noqa: E402
+from engine.season.queries import world_q                              # noqa: E402
 from engine.season.queries.world_q import provinces_of, sovereign_fraction  # noqa: E402
 from engine.season.state.carriers import Tenure, View                  # noqa: E402
 
@@ -109,6 +110,59 @@ def main() -> int:
     print(f"  the highest                                   : {moved[0]}   (§7.3b says 12)")
     print(f"  releasable scenes = scene_budget x scenes_per_round : "
           f"{k * fx.get('scenes_per_round')}   — so the excess is unspendable")
+
+    print("\n--- §7.3c · ITEM 3a, THE LARDER LADDER ---")
+    # ⚠ THE DRAW BITES IN SEASON 2, NOT SEASON 1. `#353 §25` puts larders before yield, so season
+    # one draws against a world that has produced nothing yet and EVERY eater is short. A
+    # one-season probe reads this item as dead, which is why this runs two and prints both.
+    from engine.season.data.matrix import Step                           # noqa: E402
+    from engine.season.loop.driver import SeasonDriver                   # noqa: E402
+    from engine.season.decision import make_chooser                      # noqa: E402
+    from engine.season.state.ids import H, draw_factory                  # noqa: E402
+    from engine.season.harness import probes as HP                       # noqa: E402
+    ww = build_realm(0)
+    dd = SeasonDriver(ww)
+    mint = lambda pid, verb, subj: H(ww.world_seed, ww.tick, pid, f"act:{verb}:{subj}")
+    ch = make_chooser(ww.fixtures, mint, verbs=resolvable_verbs(),
+                      draw=draw_factory(ww.world_seed, lambda: ww.tick))
+    dd.season(ch, question=None, subsistence=HP.SUBSIST,
+              contest_max_depth=ww.fixtures.get("contest_max_depth"))
+    short = ww._subsistence_shortfall
+    print(f"  after season 1: eaters short {len(short):>2} · units unmet "
+          f"{sum(sum(v.values()) for v in short.values()):>3}   (§7.3c: 46 and 138 — nothing has "
+          f"been produced yet)")
+
+    # `MW-1`'s four falsifiers, re-taken AT THE TICK THE SUITE TOOK THEM — one season of stock on
+    # the ground. The DRAW is isolated from the yield by clearing the sites, because MATTER draws
+    # and then produces in one barrier and a bare run measures the NET.
+    #
+    # ⚠ THE ABSOLUTE FIGURES ARE SEASON-DEPENDENT AND THE INVARIANT IS NOT. Taken one season later
+    # this probe read control B as 6,144 rather than 3,120 — two seasons of yield on the same
+    # untouched settlements — which is a fact about WHEN it was measured, not about the item. The
+    # load-bearing half of control B is `0 changed`, and that holds at every tick.
+    before = {rid: dict(r.stores or {}) for rid, r in ww.rungs.items()}
+    ww.sites.clear()
+    ww.step = Step.MATTER
+    evs = dd.matter([])
+    drew_at = [e.subject for e in evs if e.kind == "stores.changed"]
+    after_short = ww._subsistence_shortfall
+    print(f"  season 2's draw, isolated: eaters short {len(after_short)} · units unmet "
+          f"{sum(sum(v.values()) for v in after_short.values())}   (§7.3c: 0 and 0)")
+    print(f"  MW-1 · rungs the larder pass WRITES  : {len(drew_at)}   (predicted 13; was 0)")
+    hearth = sum(sum((r.stores or {}).values()) for r in ww.rungs.values() if r.kind == "hearth")
+    print(f"  MW-1 · hearth stores, which must stay 0 (nothing is DELIVERED) : {hearth}")
+    homes = world_q.home_of(ww)
+    anc: set = set()
+    for h in set(homes.values()):
+        cur = h
+        while cur:
+            anc.add(cur)
+            cur = world_q.parent_of(ww, cur)
+    untouched = [r for r, rr in ww.rungs.items() if rr.kind == "settlement" and r not in anc]
+    kept = sum(sum(before[r].values()) for r in untouched)
+    moved = [r for r in untouched if before[r] != (ww.rungs[r].stores or {})]
+    print(f"  MW-1 · control B — settlements with nobody beneath: {len(untouched)} holding {kept} "
+          f"units, {len(moved)} changed   (predicted 3,120 and 0 changed)")
 
     print("\n--- §7.1(b) · THE HOLONIC SURFACE ---")
     import ast

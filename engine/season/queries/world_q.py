@@ -169,6 +169,55 @@ def home_of(w: World) -> dict:
             if t.kind == "contain" and t.live and t.subject in w.persons}
 
 
+def nearest_store(w: World, rung_id: Optional[str], kind: str,
+                  available: Optional[dict] = None) -> Optional[str]:
+    """THE LARDER LADDER: the nearest rung AT OR ABOVE `rung_id` holding any `kind`, or `None`.
+
+    ⚠⚠ IT EXISTS BECAUSE THE SUBSISTENCE ECONOMY IS TWO HALVES THAT NEVER MEET. MEASURED on
+    `build_realm(0)` after one season, before this Query: **4,810 units, every one of them at the
+    37 SETTLEMENT rungs and none at the 211 hearths**, while all 46 persons live in **26 hearths**
+    — so `matter`'s per-rung draw counted **zero eaters at every rung that had stores** and the
+    whole subsistence step was INERT on a world that runs. The walk is the join, and it moves no
+    matter and creates no store: a person reaches UP the ladder they already live on.
+
+    ⚠ IT RETURNS THE RUNG ITSELF WHERE THE RUNG HAS STOCK, which is what makes this a
+    GENERALISATION rather than a replacement. A hearth with its own larder feeds its own people
+    exactly as before; the walk is a no-op wherever the old per-rung code was already right. That
+    is the control `LB-3a` pairs with, and if it ever moves, the walk is not a generalisation.
+
+    ⚠ `None` AT THE ROOT IS A SHORTFALL, NEVER AN ERROR. A person under a realm that holds nothing
+    goes hungry, and hunger is a fact about the world; raising here would make an empty larder an
+    instrument defect. What the caller does with it is the caller's — today MATTER records it and
+    acts on nothing (L5: a threshold crossing MAY NEVER PRODUCE AN OUTCOME).
+
+    ⚠ `available` IS THE CALLER'S RUNNING VIEW DURING ONE DRAW, and it is the reason two eaters
+    cannot spend the same unit. `{(rung_id, kind): units_left}`; absent, the world's own stores
+    answer. Without it a caller that defers its writes — as MATTER must, because the gate applies
+    the write — would show every eater the FULL larder and scarcity would never bind, which is the
+    exact defect `loop/effects.py`'s own header names for `transfer` (*"`transfer` twice from a
+    one-unit larder succeeds twice: the scarcity §27.1 rests on never happens"*).
+
+    ⚠ ITERATIVE WITH A VISITED SET, on `descendants`'s precedent (S38.1). `contain_ascends` makes
+    the ladder strictly ascending at `add_tenure`, so a cycle should be unreachable — but a walk
+    that hangs on a malformed fixture is a worse failure than one that stops, and the guard costs
+    one set."""
+    TRACE.query("nearest_store", "resolver")
+    seen: set = set()
+    cur = rung_id
+    while cur is not None and cur in w.rungs and cur not in seen:
+        seen.add(cur)
+        if available is not None:
+            held = available.get((cur, kind))
+            if held is None:
+                held = (w.rungs[cur].stores or {}).get(kind, 0)
+        else:
+            held = (w.rungs[cur].stores or {}).get(kind, 0)
+        if held > 0:
+            return cur
+        cur = parent_of(w, cur)
+    return None
+
+
 def presence(w: World, rung_id: str) -> list[str]:
     """S28 -- the PRESENCE INDEX the global fan-out reads."""
     TRACE.query("presence", "resolver")

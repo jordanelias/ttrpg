@@ -359,7 +359,7 @@ this file declines to give it one.**
 # §7 · THE EXECUTION PASS — 2026-09-17: **one item landed, two measured and withdrawn**
 
 ## Status of this section: **`measured`, not `paper`** (`CLAUDE.md` §0.2). Every number below was taken on this tree, by the command printed beside it. `§1`–`§6` above remain `paper`.
-## Result in one line: **item 16 LANDED** (with a repair it did not price) · **item 1 HELD** (its headline claim is false) · **item 4 REVERTED** (it starves the corpus). **The plan is executable; its size grades are not.**
+## Result in one line: **items 16 and 3a LANDED** · **item 1 HELD** (its headline claim is false) · **item 4 REVERTED** (it starves the corpus). **The plan is executable. Two of its four run items needed corrections it could not have had by reading; 3a needed none and its four predictions came out on the nose.**
 ## Lane: `IN` · **`ED-IN-0246`** (the execution pass; `§1`–`§6` remain `ED-IN-0243`)
 ## ⚠ It is an AMENDMENT to this file, not a fifth plan document. `CLAUDE.md` §0.05 clause 3 — *edit the OWNER and re-derive; never hand-edit downstream, and never keep a second copy.* This file owns THE ORDER, so a correction to the order is made here.
 
@@ -666,6 +666,77 @@ and two `test_wd_*` divergence counts move with it.
 > argument for taking the S26.3 question to Jordan as one question with item 4 attached, instead of
 > deleting a term first and discovering the cost second.
 
+### §7.3c · ITEM 3a LANDED — the larder ladder, and **the plan was exactly right about it**
+
+**This is the counterweight to §7.4's generalisation, and it is recorded first because asymmetric
+skepticism is a bias rather than a defence** (`CLAUDE.md` §0.1 pt 4). Three items had corrections;
+this one had none. `04_MATTER_AND_WORKS.md`'s `MW-1` made four checkable predictions and **all four
+came out on the nose.**
+
+**What landed.** `world_q.nearest_store(w, rung, kind, available=None)` — the nearest rung AT OR
+ABOVE a person on the containment ladder that holds a kind — and `matter`'s subsistence loop
+rewritten from **per RUNG** to **per EATER**, drawing `wt * p.weight` at that rung.
+
+**Why it was inert, measured before the change on `build_realm(0)` after one season:**
+
+```
+4,810 units — every one at the 37 SETTLEMENT rungs, 0 at the 211 hearths
+46 persons  — every one living in a hearth (26 of them)
+rungs with BOTH eaters and stores: 0
+```
+
+**The subsistence economy was two halves that never met.** The old `draw = {k: wt * len(eaters)}`
+counted zero eaters at every rung that had anything to eat, so the step ran and wrote nothing. The
+walk is the join, and **it moves no matter and creates no store** — a person reaches up the ladder
+they already live on.
+
+| `MW-1`'s prediction | measured on this branch |
+|---|---|
+| the larder pass writes `(Rung, stores)` at **13 rungs** (today 0) | **13**, all settlements |
+| unmet subsistence **138 → 0** | **138 → 0** (`{grain: 92, salt: 46}` → `{}`) |
+| **Control A** — a person in a stocked rung draws **locally**, the walk terminating at step 0 | holds; `nearest_store` returns the rung itself, and `test_lb3a_control_...eats_locally_and_unchanged` is the pinned arm |
+| **Control B** — a settlement with **nobody** in its subtree is untouched, **3,120 units** | **24 settlements, 3,120 units, 0 changed** |
+| ⚠ **falsified if hearth stores become nonzero** — nothing may be *delivered* | hearth stores **0**. The walk reads up; it never writes down |
+
+**Two defects fixed that `MW-1` does not mention**, both found by writing the falsifiers rather than
+by reading:
+
+1. **`p.weight` was dropped.** The old draw was `wt * len(eaters)` — a head count — while
+   `state/carriers.py` says *"A COHORT IS A PERSON AT weight > 1"*. **A cohort of two hundred ate
+   like one man.** Invisible in the corpus because every shipped person is at weight 1, which is
+   precisely why the falsifier plants a cohort instead of waiting for one.
+2. **Two eaters could have spent the same unit.** MATTER defers its writes to the gate, so a loop
+   reading `w.rungs[…].stores` directly shows every eater the FULL larder — the defect
+   `loop/effects.py`'s own header names for `transfer` (*"`transfer` twice from a one-unit larder
+   succeeds twice: the scarcity §27.1 rests on never happens"*). `nearest_store`'s `available`
+   parameter is the caller's running view, and `test_lb3a_two_eaters_cannot_spend_the_same_unit`
+   is the pin.
+
+⚠ **THE DRAW STAYS INSIDE THE PER-RUNG LOOP, AND THAT IS A DELIBERATE REFUSAL OF THE TIDIER SHAPE.**
+Hoisting it into its own pass over persons reads better and would reorder every `stores.changed`
+relative to its rung's `yield.taken` across the whole season — **a golden move for a reason that has
+nothing to do with this change.** Accumulating per SOURCE rung and applying it in place leaves
+`test_w8_matter_draws_before_it_produces_which_is_353s_stated_order` measuring what it was written
+to measure. It passed unchanged.
+
+⚠ **AND ONE READING ALMOST WENT IN THE REPORT WRONG.** The first measurement after the change showed
+**stores unchanged and all 46 eaters short**, which reads exactly like a no-op. It is not: `#353 §25`
+puts larders before yield, so season 1 draws against a world that has produced nothing yet. **The
+draw bites in season 2** — `eaters_short` `46 → 0`. A one-season probe would have reported this item
+dead, which is `CLAUDE.md` §0.1 pt 3 row 1 (*an absence is the cheapest claim to make and the hardest
+to see wrong*) with the barrier order as the trap.
+
+**Reported, not just traced.** `census` gains `stores_by_rung_kind`, `eaters_short` and
+`unheld_for_want_of_a_head`, and `World._subsistence_shortfall` carries the full per-person set —
+which is **item 3b's input**, since a shortfall is what falls a *body* and a body belongs to a
+person. **3b is not built here**, and the shortfall is still recorded and acted on by nothing
+(L5: a threshold crossing may never produce an outcome).
+
+**Re-record, declared** (`CLAUDE.md` §7): `runs/TRACE.txt` and `runs/results.json`. **No probe
+verdict moved.** The log content hash shifts because the economy now moves; `QUERY` rises 22,749 →
+23,085 (`nearest_store`'s own calls) and `NOTE` falls 483 → 276 (one shortfall note per barrier
+instead of one per rung).
+
 ## §7.4 · What this pass changes about the ORDER
 
 | | was | is |
@@ -686,18 +757,26 @@ one shape: **an item priced by reading its own writers, and paid for at its read
 - **Item 4** was priced as *"the cheapest item in the suite"* and is gated on an open design call —
   its reader is a corpus that was spending the scene action it deletes.
 
-**None of the three was visible to five independent reading passes**, and each took under an hour
-once something ran. **Of this order's three "no ruling needed, buildable today" items that were
-actually run, one landed clean, one landed with an unpriced repair, and one had to be reverted.**
+⚠ **AND THE FOURTH ITEM CUTS THE OTHER WAY, WHICH IS WHY IT IS IN THE SAME LIST.** **Item 3a**
+(§7.3c) was priced at *"one Query (~10 lines), one loop rewritten"* and that is exactly what it
+cost; `MW-1`'s four predictions — 13 rungs written, 138 → 0 unmet, the local-draw control, the
+3,120 untouched units — **all came out on the nose.** Its two extra defects (`p.weight` dropped, two
+eaters able to spend one unit) were found by writing the falsifiers, not by the item being
+mis-sized.
+
+**None of the three corrections was visible to five independent reading passes**, and each took
+under an hour once something ran. **Of this order's four "no ruling needed, buildable today" items
+that were actually run: two landed (one of them needing an unpriced repair), one is held, one was
+reverted.**
 `CLAUDE.md` §0.2's *done means it runs* is usually read as a rule about when to mark a juncture
 complete; **on this evidence it is at least as much a rule about when to trust an estimate.**
 
 ⚠ **AND THE HONEST CAVEAT ON THAT GENERALISATION**, since it is exactly the kind of claim §0.1 pt 3
-is about: **three items is a small sample, and they were chosen for being cheap, not at random.** A
+is about: **four items is a small sample, and they were chosen for being cheap, not at random.** A
 cheap item is the one most likely to have been priced by reading rather than by running, so this
-sample is biased **towards** finding what it found. What the three do establish is the weaker and
-still useful claim: **the plan's own size grades do not survive contact with the tree**, and an
-estimate in it is a hypothesis, not a measurement.
+sample is biased **towards** finding what it found — and item 3a is the case that shows the bias is
+not the whole story. What the four establish is the weaker and still useful claim: **an estimate in
+this order is a hypothesis, not a measurement.** Some of them are right.
 
 
 ## §7.5 · PHASE 6, SCHEDULED — the decision layer, in dependency order

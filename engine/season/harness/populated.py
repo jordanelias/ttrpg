@@ -869,10 +869,24 @@ def census(w: World) -> dict:
     # §8: `world_q.home_of` owns "where is everyone"; this used to roll its own copy, and so did
     # three other sites (see that query's docstring).
     where = home_of_q(w)
+    # ⚠ THE SUBSISTENCE ROWS ARE ITEM 3a's EXECUTION ARTIFACT, and they exist because the number
+    # that mattered was invisible. Before the larder ladder, `build_realm(0)` after one season
+    # held 4,810 units at the 37 settlements and 0 at the 211 hearths, while every person lived
+    # in a hearth — so the draw ran at 0 rungs and the census reported a thriving economy nobody
+    # could eat from. `stores_by_rung_kind` is where the food IS; `eaters_short` is who could not
+    # reach it. Both are read from the world, never from the inputs.
+    stores_by_kind: Counter = Counter()
+    for r in w.rungs.values():
+        for k, v in (r.stores or {}).items():
+            stores_by_kind[r.kind] += v
+    short = getattr(w, "_subsistence_shortfall", {})
     return {"rungs": dict(kinds), "persons": len(w.persons), "sites": len(w.sites),
             "ties": getattr(w, "_tie_census", {}), "propositions": len(w.propositions),
             "distinct_buildings_inhabited": len(set(where.values())),
-            "largest_building": max(Counter(where.values()).values()) if where else 0}
+            "largest_building": max(Counter(where.values()).values()) if where else 0,
+            "stores_by_rung_kind": dict(sorted(stores_by_kind.items())),
+            "eaters_short": len(short),
+            "unheld_for_want_of_a_head": len(getattr(w, "_unheld_for_want_of_a_head", []))}
 
 
 def run(seasons: int = 1, seed: int = 0, cap: int | None = None, w: World | None = None) -> dict:
