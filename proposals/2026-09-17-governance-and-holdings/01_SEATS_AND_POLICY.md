@@ -332,3 +332,717 @@ item.**
 > `dates 0 · docket 0` is a measurement about *one blocked disjunct* and not about the calendar.
 > Falsifier: `test_no_person_can_choose_a_governance_verb_and_h71_is_why` goes **red** and is rewritten
 > as the control — *a seat whose remit lacks the act forms no candidate.*
+
+⚠ **The tree's own test says the same thing and scopes it correctly**, which is worth quoting so a
+later session does not "discover" §0.3's correction twice. `test_season_shape.py:5012-5014`:
+*"⚠ SEVEN OF THE EIGHT, NOT ALL EIGHT. `succeed` is eligible by `own` and IS offerable — it is the one
+governance verb a person can choose."* And `:5004-5006`: *"it goes red the day `H-71` closes, which is
+exactly when the claim becomes true."*
+
+---
+
+## §A.7 · THE POLICY INSTRUMENT — a dispensation Record, held by its issuer
+
+**The instrument in two lines.** *A policy is a `Record` of kind `dispensation`, scoped to a rung,
+naming one clause and one `OUGHT` Proposition as its terms, opened by `issue` through a seat, and held
+by the issuer as an ordinary `hold` Tenure. It is in force while a living person holds it; it is read
+by a walk up `contain`; and striking it, letting it lapse and re-issuing it are three different acts
+with three different prices.*
+
+### §A.7.1 · Three dead carriers, struck in place
+
+The design stage's carrier was ~~`Tenure(subject = issuer, object = terms : PropositionId,
+kind = "hold", conferrer = the seat exercised, payload = {scope, clause, terms_operands})`~~ and **every
+field after `kind` is gone or taken**:
+
+| the field | why it cannot carry this |
+|---|---|
+| ~~`conferrer`~~ | **deleted 2026-09-03**, `carriers.py:48-56`, on `ID-2`: *"WHAT CONFERRED a Tenure is the opening Act… A field here would be a second home for a fact the act already holds."* `04 §B.8` deletes it in the type on the same day and the same ground |
+| ~~`payload`~~ | **retired** by `04 §B.8`: `term? (matures_at, declared_by : ActId, closer)` *"Replaces payload?"*. The matrix row `(Tenure, payload)` survives (`write_matrix.yaml`, emits `tenure.payload_set`) and is on the deletion list, not the build list |
+| ~~`Proposition.scope`~~ as "the rung a policy binds" | **taken.** `Proposition.scope` is declared (`carriers.py:477`) and **written and read today**: `populated.py:491-492` mints five faction creeds as `Proposition(fid, "OUGHT", lead_pid, "carries the creed of", fac_name, 0, scope=template)`, where `template` is a ROLE TEMPLATE. MEASURED: 6 of 54 propositions carry `scope`. A policy defined as *"an OUGHT whose scope is a rung"* would put two meanings on one live field |
+
+### §A.7.2 · The carrier that works, and it is already implemented for a different kind
+
+`04 §A.3` row 11 folds `Petition` and `Dispensation` into **kinds of `Record`** — and MEASURED, neither
+has a dataclass: `carriers.py` declares `Record`, `Proposition`, `Site`, `Office`, `Rung`, `Person`,
+`Tenure`, `Claim`, and no `Dispensation` and no `Petition`. Both are nonetheless **write-matrix kinds**:
+`(Dispensation, exists)` is `[RES]`/ACTS emitting `dispensation.issued` (`write_matrix.yaml:112-118`),
+and `issue` writes it (`verb_table.yaml:262`). **So `issue` writes a field of a type that does not
+exist**, and `ID-13`'s mirror image applies: a write with no carrier is as dead as a field with no
+reader.
+
+**Fold it, and the effect body is already there.** `effects.py:262-289` (`_eff_create_record`):
+
+```
+w.records[rid] = Record(rid, d.get("rung") or a.actor, d.get("kind") or "text",
+                        subject_matter=d.get("subject_matter"), stages=stages)     # :285
+w.add_tenure(Tenure(H(...), a.actor, rid, "hold", since=w.tick))                   # :287
+```
+
+with the comment at `:286` stating the shape this instrument needs, already ruled: *"S13: possession is
+a `hold` Tenure owned by the holder, never a field on the Record. **The maker holds what they made
+until they part with it.**"*
+
+| operand | its home | why that home and not another |
+|---|---|---|
+| **scope** (the rung) | `Record.rung` | the field's declared meaning is *a Record at a rung* (`carriers.py:426`), and `effects.py:285` already sets it from the act |
+| **clause** (one of seven) | `Record.kind`, or `subject_matter` beside it | §A.7.4 |
+| **terms** (a PropositionId, mood `OUGHT`) | `Record.subject_matter` (`carriers.py:429`, `Any`, set at creation and never after) | `01:1321-1330`: *"**AN OATH IS AN UTTERANCE. WHAT IS OWED IS THE `OUGHT` PROPOSITION IT UTTERS.**"* The terms are immutable (`Proposition` is `frozen=True`, `carriers.py:468-470`), so renegotiation is a new utterance and a new edge — *which is what renegotiation is* |
+| **reach** (`near` \| `all`) | `Record.subject_matter` | §A.8, and it is the operand RR-1 turns on |
+| **a declared term** | `Record.ttl` | `(Record, ttl)` is `[MAT]`/MATTER emitting `record.expired`, and `rosters.yaml:773-782` exempts the non-terminal decrements from emitting. **This is `T-n` for nothing** — ⚠ *and it is not built: `ttl` is decremented at `harness/probes.py:1599` and in a test, and NOWHERE in `loop/`* |
+| **the issuing SEAT** | the opening `Act`'s `via` | `04 §B.9`: `Act := (id, actor, via : SeatId?, verb, refs, payload, terms?, scene)`, and `04 §A.3` row 13: **`Act` persists**, resolver-side. Same argument that deleted `conferrer` |
+
+**Nothing about the issuer is a field on the policy.** Who holds it is the `hold` Tenure; who issued it
+is the opening act; what it says is a Proposition somebody uttered at a venue and can be quoted,
+disputed and misreported.
+
+### §A.7.3 · `sworn(policy)` is not a new Query — it is the shipped one
+
+> **`sworn(policy) = members(w, policy.terms)`**
+
+`world_q.members` (`world_q.py:200-211`) returns *"Everyone with a LIVE `commit` to this Proposition"*
+and filters `t.subject in w.persons`. A policy's terms are an `OUGHT` Proposition, and `commit : Person
+→ Proposition, many` (`holonic_ARCHITECTURE.md:540`) is *"faction membership"*. **A policy nobody swore
+to is a scrap of parchment; a policy the burghers swore to is a charter, and the difference is a `len()`
+over an existing function.** MEASURED: 86 live `commit` edges over 52 `OUGHT` Propositions in the built
+world, so the edge is dense today.
+
+Two consequences, and the second is the whole of the historical *dedizione* result:
+
+1. **The sworn set does not end when the issuer dies.** The `hold` ends; the commits do not. So the rule
+   is still uttered and still sworn-to, and **a successor who declines to re-issue it is declining people
+   who are on record.**
+2. **Negotiated submission is a `commit` with terms.** A territory joins a province by committing to the
+   province's Proposition *on terms that keep its own nearer policies in force* — which §A.8's nearness
+   rule gives for free, with nothing negotiated in code and no treaty object.
+
+⚠ **Naming, corrected in place.** ~~`entrenchment`~~ is **not** the word for this. The tree already has
+`entrenchment(h, H) = min(1, seasons_held/60)`, which measures how long a **holder** has held a thing
+(collated from the superseded hearth design; cited for intent only). Two ladders for one word is
+`CLAUDE.md` §4's idempotence trap and an **S** defect. The subjects differ — a holder's tenure versus a
+rule's consent — so both survive under two words, and the consent quantity is **`sworn`**: an ordinary
+English word in its ordinary sense.
+
+### §A.7.4 · `Record.kind` is a free string today, and that is an `ID-4` hazard
+
+MEASURED: `effects.py:285` defaults `Record.kind` to `d.get("kind") or "text"`, and **there is no
+`record_kinds` roster** (`grep record_kinds engine/season/rosters.yaml` → nothing). So `dispensation`,
+`petition` and `works` cost no roster row — **and a reader that filters `rec.kind == "dispensation"` is
+matching a word, which is precisely `ID-4` (`01:443`): *"Declare, don't route… bind a case to what it
+exercises by an authored declaration, never by matching words in it"*, whose cost that line gives as
+*"six recurrences in this chain."***
+
+> ### **RULED: a `record_kinds` roster lands with the fold, or the fold ships `ID-4`'s defect.**
+> One roster, `open: true`, whose members are the kinds `04 §A.3` row 11 already owes
+> (`dispensation`, `petition`) plus `works`, with the loader refusing an unrostered kind on the
+> pattern `Office.__post_init__` already uses for `remit_acts` (`carriers.py:508-512`). **This is the
+> one roster this file asks for**, and it is asked for because the alternative is a string comparison
+> in a resolver.
+
+> ### **RULED: the policy is a `Record`, its possession is a `hold`, its content is an uttered
+> `OUGHT`, and its seat is `Act.via`.** Cited to `04 §A.3` rows 11 and 13, `04 §B.4/B.5`, `04 §B.9`,
+> `01:1321-1330`, `holonic_ARCHITECTURE.md:538`, and the effect body at `effects.py:262-289`.
+> **Carriers added: zero. Verbs added: zero. Rosters added: one.**
+
+### §A.7.5 · `scope` carries two senses, and §37.3 forbids one of them — handled, not dodged
+
+`holonic_ARCHITECTURE.md:1280-1305` (§37.1–§37.3) declares
+`Dispensation := (id, issuer, proposition, scope, terms[])` and then **forbids** *"a `scope` that
+enumerates places"*, on the ground that it would delete *"office-clusters with `rung? = null`, which
+have no place"*. The same section states the rule this design must honour:
+**"SCOPE ENUMERATES EXECUTORS, NOT PLACES"** and *"a published dispensation does not apply — it lands as
+a compliance contest, per relevant Rung."*
+
+**The two senses are already in the ratified material and they are not in conflict once separated:**
+
+| the word | on this object | means |
+|---|---|---|
+| `scope` | a **Seat** (`04 §B.7`) | a rung — *"`scope?` (null = a cluster)"* |
+| `scope` | a **published dispensation's reach** (`holonic:1288`) | the **executors** it lands on |
+
+> ### **RULED: a policy names ONE rung or NONE, and the executor set is computed, never enumerated.**
+> A policy whose issuing seat has a rung scope names that rung or a rung under it, and `in_force`'s walk
+> computes who is reached. A policy issued through a **cluster** seat (`Office.rung is None` — MEASURED:
+> **16 of 19 offices**) names no rung at all: its reach is the seat's `binds` set, which does not travel
+> by `contain` at all. §37.3 is honoured because **the Record enumerates no places** — it names at most
+> one, and the reach is a Query.
+>
+> ⚠ **And the cluster half has no reader**, because `binds` has none (§A.1). So `in_force` covers the
+> vertical direction today and the **diagonal** one — a guild's rule reaching its members wherever they
+> stand — is **unbuilt and named as unbuilt** (PART C.2, LIMIT).
+
+## §A.8 · `in_force` — ONE WALK, AND IT IS THE WHOLE CASCADE
+
+> **`in_force(w, rung, clause) -> policy | None`**
+> *The nearest ancestor-or-self live policy conditioning `clause` — unless a farther one declares
+> `reach: all`, in which case the farther one.*
+
+```
+in_force(w, r, clause):
+    chain = [r, *ancestors(w, r)]                  # parent_of in a loop: world_q.py:48
+    live  = [p for p in dispensations(w) if p.clause == clause
+                                        and held_by_a_living_person(p)     # matter.py:73-75's rule
+                                        and p.rung in chain]
+    far   = the highest p in `live` declaring `reach: all`
+    near  = the first p in chain order
+    return far or near or None                     # ID-5: None is a REFUSAL, never a default
+```
+
+| candidate | who owns it? | verdict |
+|---|---|---|
+| a stored per-rung effective-policy map | — | **REFUSED.** A stored aggregate with no owner is `T-a`, and `04` PART D row 8 grades *"a stored aggregate"* STRUCTURAL at the type: *"no field slot; a Query is a function; a cache is driver-local."* A map also **goes stale**: a territory changing hands changes what is in force at every rung beneath it, that same season, and a map would need a reconciliation pass |
+| a per-`(clause, rung-kind)` propagation table | — | **REFUSED as scripting drift.** The walk knows nothing about kinds. *The same function carries a ducal levy to a mine and a settlement quarantine to a wharf*, and there is no row anywhere naming taxation and hearths together |
+| the walk | Nobody; computed | **EXTENSION, ADOPTED.** It is the ascent `predicates.py:105-140` and `world_q.py:416-437` already make, and `contain : Rung → Rung`, one parent (`holonic_ARCHITECTURE.md:539`) |
+| `None` meaning "no policy, so the default applies" | — | **REFUSED.** `ID-5` (`01:451`): *"Refuse, don't default… an absent roster raises rather than returning empty"*, whose named cost is *"a wear table that answers `20` for an unregistered kind — plausibly and wrongly, forever"* |
+
+**Three properties, and the third is the design.**
+
+1. **It is a Query, so it cannot go stale** (`T-a`). Nothing is told.
+2. **It knows nothing about kinds** — one function, two lines of body, no pair table.
+3. **NEARNESS DECIDES AND `reach` OVERRIDES IT.** A near policy displaces a far one not because it
+   outranks it but because **the near seat's people are standing there.** The far policy is not void —
+   it is *unenforced*, still in force, still citable, and its issuer may strike the near one through
+   `T-o` if their remit reaches. **So quiet non-compliance needs no verb: ignoring a decree is the
+   nearer policy existing.** That is `T-g`'s shape — *"another person's prior act refusing yours…
+   nowhere; it is not a field and not a verb"* (`01:377`) — at the institutional scale.
+
+### §A.8.1 · What a policy lapsing costs, and the shipped line that gives it
+
+`matter.py:73-78` is the whole mechanism and it is **already running**:
+
+```
+holder = next((t.subject for t in w.tenures
+               if t.object == rid and t.kind == "hold" and t.live), None)
+if holder is None or holder not in w.persons:
+    TRACE.note(f"{rid} stage {label!r} did not mature: its winder is gone ...")
+    continue
+```
+
+with the reason at `:61-64`: *"a half-made copy now correctly STOPS if the copyist is jailed, which the
+MATTER-driven version gets wrong: A COPY THAT FINISHES ITSELF."*
+
+> ### **RULED: one shipped predicate — *a Record's clock runs only while a living person holds it* —
+> gives three results this design would otherwise have had to invent.** (a) A works stops when its maker
+> dies. (b) **A policy falls out of force when its issuer dies**, because `in_force` requires a live
+> hold. (c) Therefore **the first season of a reign is spent re-issuing what the successor wants to
+> keep** — act by act, out of ~5 (`holonic_ARCHITECTURE.md:896-905`, RULED), in public, each one a
+> choice he can be held to, and what he lets lapse **the sworn notice, because their commits did not
+> lapse with the hold.** That is the medieval *confirmatio* arriving from a liveness check.
+
+⚠ **And the same line is a LIMIT, stated rather than smoothed.** Because maturation requires a live
+`hold`, **a Record cannot change hands today**: the only producer for a `hold` on a Record is
+`_eff_create_record` (`effects.py:287`). `carry` writes `DocketItem.matter` and no hold
+(`verb_table.yaml:110`); `confer`'s predicate reads `d.get("office")` and refuses anything else
+(`predicates.py:177-179`). So *"a successor inherits a half-built thing"* is **unbuilt**, and the
+smallest lawful route is widening `confer`'s object domain to the one `holonic_ARCHITECTURE.md:538`
+already declares — `hold : Person → Office | Rung | Record | Proposition` — which is an EXTENSION to a
+ruled predicate with a named cost, not a free reading.
+
+### §A.8.2 · `reached` — and the measurement that changes what it can be made of
+
+The design stage had ~~`reached(w, seat, rung) ⟸ a member of the seat's `establishment` is present at
+`rung` this season, by a `dispatch` or a live `contain``~~. **Struck, on two measurements.**
+`Office.establishment` is **empty on all nineteen offices** and `04 §B.7` call 2 rejects the field;
+and `_req_dispatch` (`predicates.py:291-294`) is *two lines* — `return d.get("subject") in w.persons` —
+so **the dispatched person need not be an establishment member at all today.**
+
+> ### **RULED: `reach` is a declared operand on the policy, not a computed property of a dead field.**
+> A superior who wants a farther rung to read his clause declares `reach: all` and pays for it in the
+> act that issues it. Where an establishment Query over `oblige` later exists (§A.1), a *second*,
+> cheaper route opens — presence bought one rung at a time — and it composes with this one rather than
+> replacing it. **Stating `reach` as an operand is what makes the instrument buildable before the
+> Query exists**, and it is the line RR-1 turns on.
+
+## §A.9 · THE SEVEN CLAUSES, ONTO THE CLOSED SEVEN `requires` FORMS
+
+**Jordan's test, taken literally:** *if a policy's entire effect could be expressed as a number added to
+a roll, it is not a policy.* Each clause either **reorders an existing step**, **removes or admits a row
+in somebody's option set**, or **creates or destroys a date**. None has a numeric term that reaches a
+pool or an obstacle.
+
+⚠ **The split, corrected in place.** ~~Three clauses are step readers and four are `requires`
+conjuncts.~~ **Two** are read only by MATTER; **one** (`sit:`) has two readers; **four** gate an act.
+The number that matters is not the split but **how many of the seven `requires` forms get used, and it
+is three.**
+
+| clause | what it RECONFIGURES | read by | form used | operands bound |
+|---|---|---|---|---|
+| **`draw:`** | the **order** in which the rung's `stores` are drawn against by the mouths in it | MATTER (`matter.py:168-175`) | — (the grammar is RESOLVE-side and cannot reach it) | — |
+| **`spend:`** | what the rung's `yield` is **committed to before anything else** — a works' next stage, the store | MATTER | — | — |
+| **`sit:`** | the rung's **own dates**: whether an assembly exists here at all, how often, what quorum, what convening conditions attach | CALENDAR — it writes `Rung.dates` and `(ConveningCondition, attached)` (`write_matrix.yaml:86-92`) — **and** gates `convene` | `relation` | `actor`, `subject` |
+| **`levy:`** | **what this rung owes upward** — matter kind, share, and the date it is owed at | MATTER (the share leaving `stores`) and RESOLVE | `scalar_threshold` | `subject`, `kind`, `amount`, `floor` |
+| **`admit:`** | **who may take an address here** — a settlement closed to incomers, a hearth that will foster | RESOLVE, on `move` | `contain_path` | `actor`, `subject`, `from`, `to` |
+| **`bear:`** | **which verbs are eligible for whom at this rung** — who may carry arms, who may `work`, who may `transfer` out of the store | RESOLVE | `relation` | `actor`, `subject`, `site` |
+| **`hear:`** | **whose demand can travel up** — who may enter, who may speak, who may only be spoken for | CALENDAR (docket formation) and RESOLVE, on `petition`/`speak`; **and it narrows Q1** (§A.15) | `relation` | `actor`, `subject` |
+
+### §A.9.1 · Why there is no eighth form and no ninth operand — and this is the section a reviewer should attack first
+
+`rosters.yaml:1086-1122` is the constraint, quoted at the line: *"⚠ **CLOSED AT SEVEN.** A cell naming a
+form outside this roster **REFUSES AT LOAD**, because an eighth form is a new thing a precondition can
+ask and that is a design change, not a table edit."* And two lines that make the fit possible:
+
+- *"⚠ **CONJUNCTION IS NOT AN EIGHTH FORM.** … a cell may be written as `all: [<form>, <form>]`"* —
+  implemented at `engine/season/data/requires.py:542-543`. So a clause conjunct is `all: [<the verb's
+  own cell>, <the clause's cell>]` and costs no grammar.
+- *"`needs:` is the closed set of operands a cell OF THAT FORM may reference — checked at load against
+  `requires_operands`"* — and `requires_operands` is closed at **eight**: `[actor, subject, from, to,
+  site, kind, amount, floor]` (`rosters.yaml:1084`).
+
+> ### **RULED: `in_force` is a Query BEHIND the predicate, never an operand — and that is what keeps the
+> instrument inside the closed grammar.** A clause cell binds **only the act's own operands**; the policy
+> it tests against is **found by the walk**, not named by the cell. So no cell ever needs to name a
+> dispensation, and no ninth operand is coined.
+
+⚠ **This is not a convenience, it is the one place the operand roster genuinely bites, and the tree
+already registered it.** `rosters.yaml:1078-1080`: *"It is the reason `comply` and `exchange` carry
+`requires_typed: none` … the first needs a DISPENSATION and the second needs the counterparty's side of a
+trade, and neither has a name here. **Coining one would be filling `H-94` by keyword argument, which is
+the ruling `H-94` is waiting for and not a table edit.**"* And `hole_register.yaml:763`: *"three
+(`comply`, `evade / defy`, `refract`) fit form 6 and are blocked on an OPERAND the closed
+`requires_operands` roster has no name for — a Dispensation — **which is `H-94`**."*
+
+**So the honest statement about the response side, which is a LIMIT and not a gap this design opens:**
+`comply`, `evade`, `defy` and `refract` — the named verbs for answering a dispensation — are blocked on
+`H-94` and **this design does not route through them**. Non-compliance is the nearer policy existing
+(§A.8 pt 3); evasion is `transfer`, `move` and `forge`, all of which are `own`-eligible; the demand that
+travels up is `petition`. **The instrument is buildable without `H-94` closing, and a session must not
+schedule `H-94` as its precondition.**
+
+### §A.9.2 · THE UNIFORMITY RULE — what keeps a clause from being a special case
+
+> **A clause's terms are a PREDICATE over what the loop can already read off a person at that rung:
+> their marks, their live `commit` edges, their presence, their `hold`s. A clause conditioning another
+> person's options MAY NOT NAME A PERSON ID. An act that would issue one is refused and emits
+> `issue.refused`** (`verb_table.yaml:264`, the row's declared refusal channel).
+
+This is `ID-17` (`01:631-645`) enforced **by the grammar** rather than by a reader noticing:
+*"A suspension is a uniform rule, and its licensed form is a band on a Query"*, and the licensed form
+*"is already in the vocabulary: `T-b`. A band on a Query **changes what may be chosen and never produces
+an outcome**, and it applies to whoever crosses it."* Two things fall out:
+
+1. **Scripting drift becomes unspellable in a policy.** You cannot write *"except Björn"*.
+2. **Every policy has beneficiaries and burdened, and both are computable.** A predicate partitions the
+   people at a rung. **Nobody authors "the guilds resent the grain law"** — the guilds are the set the
+   predicate excludes, WITNESS deposits claims about the issuing Event in the ledgers the `hear:` scope
+   reaches, and each person's own weighting inside `choose` does the rest.
+
+⚠ **The one exception, named narrowly:** a `follow:` succession clause may name a person, because naming
+your heir **is** the content of the rule (§A.5). The licence covers a clause whose scope is the issuer's
+own seat and no other.
+
+## §A.10 · THE CASCADE DOWN — one step, no propagation object, and the noise is already there
+
+The governing canon is `systems/settlements/reference/scale_hierarchy_v1.md`, **`## Status: RATIFIED —
+direct Jordan ruling, 2026-07-13`** (`:3`), §3 at `:43-46`: *"Dukes govern provinces and define
+provincial governance type… **A noisy cascading throughline** descends from duchy governance through to
+settlements **and vice versa**"*, and `:58`: *"plausibility/pressure flows down noisily, not
+deterministically."*
+
+**There is no cascade step and no cascade object.** There is MATTER, whose ordering at each rung two
+clauses condition, and one walk that finds them.
+
+```
+MATTER at rung r:
+  1. yield(r) -> r.stores                                   (Rung, yield) -- "only here"
+  2. spend: = in_force(w, r, 'spend:')     the declared stage draws, in the order the clause names
+  3. levy:  = in_force(w, r, 'levy:')      the share that leaves r.stores, held against the date
+  4. draw:  = in_force(w, r, 'draw:')      mouths fed from r.stores IN THE ORDER the clause names
+  5. short  = what step 4 could not cover  -> (Person, body)
+```
+
+**The chain is lines 3, 4 and 5 at three different rungs, reached by one walk.** A Count issues a
+`levy:` through his provincial seat — *of the grain a rung produces, a fifth leaves at the harvest date*
+— and has named no settlement and no hearth. At each settlement, step 3 calls `in_force(w, S, 'levy:')`
+and the walk ascends `contain` to the province. At each hearth beneath, the same walk finds the same
+clause **unless the settlement's own seat has issued a nearer one**. Step 4 draws mouths against a
+smaller store; step 5's `short` writes bodies.
+
+> **A named woman in a named house is thinner this season because of a sentence a man she has never
+> heard of uttered in a chamber she has never seen. Nobody authored her crisis; it is lines 3, 4 and 5.**
+
+⚠ **The bottom link is not mine and is not built.** `matter.py:168-175` computes
+`draw = {k: wt * len(eaters) for k, wt in weights.items()}` and the shortfall is **discarded** — there
+is no `(Person, body)` write in the barrier, and the file says so at `:170-172`: *"⚠ BODIES AND TRAVEL
+ARE STILL NOT BUILT."* This design **owns steps 2 and 3 and the walk**; the built world's half — what a
+place does with its yield and its stores — is `02_THE_BUILT_WORLD.md`'s. **The two meet at exactly one
+signature: `in_force(w, rung, clause)` returning a clause row, and the MATTER body reading it.**
+
+### §A.10.1 · WHERE THE NOISE IS — three sources, all pre-existing, none a modifier
+
+1. **The yield is already a draw.** `yield(H, season) = base(H) × season_factor(territory) × (3 + d10)/8.5`
+   (the superseded hearth design, cited for intent only). The policy sets the **share**; the world sets
+   the **base**. *A fifth of a good harvest is a tithe; a fifth of a bad one is a famine.* Nothing was
+   multiplied and nothing is predictable.
+2. **The fold is ordered, and `order` is a Query.** *"The second claimant on an emptied granary gets a
+   different Event"* is the write-matrix's own stated reason for `emits_on_refusal`
+   (`verb_table.yaml:12-16`). **Which** hearth goes short is decided at resolution by who reached the
+   store first, not by the policy.
+3. **Whether the far clause is read at a rung at all is another person's choice** — `reach: all` is an
+   operand somebody declared in an act out of ~5, and a `dispatch` is an act out of ~5. **This is the
+   strongest noise source available, because it is not a die: it is a politics.**
+
+⚠ **THE CHECK, STATED SO IT CAN BE RUN:** no clause in §A.9 has a term that reaches a pool or an
+obstacle. `levy:` names a matter kind and a share of matter; `draw:` names an order; `sit:` names a date
+and a quorum. **If a later session adds a clause with a numeric term that reaches `pool` or `Ob`, this
+design has been broken and that clause is the break.**
+
+### §A.10.2 · There is no policy-effects readout, and the absence is structural
+
+Jordan: *do NOT give the policy-setter a readout of its effects.* **This design cannot give him one.**
+`short` at a hearth is a resolver-side Query, and `AX-2` (`01:100-103`) makes *"no view of world truth
+available inside a decision — not capped, not filtered: **absent**."* A policy-effects panel is a
+resolver-side Query rendered to a person, which is exactly the privileged access the axiom forbids —
+and `04 §C.11` draws the only split that holds: **the engine owes the arithmetic of what the character
+already holds, and nothing else.**
+
+What the Count has instead is a ledger containing, three seasons later, a `told_by` claim of fading
+confidence — `(Claim, confidence)` decays at MATTER (`matter.py:147-153`, emitting `claim.decayed`) — and
+`causes[]` is **required and non-empty** (`holonic_ARCHITECTURE.md:676-686`), so when the reckoning fires
+the chain back to his own clause **exists in the data and can be shown to him at the moment somebody
+tells him, not before.**
+
+## §A.11 · HOW IT COMES BACK UP — four channels, and the fourth fires a DATE
+
+| # | channel | speed | the object | who pays |
+|---|---|---|---|---|
+| 1 | **EVASION** | same season | none — `transfer` the grain before the date, `move` out, `forge` a smaller holding, or simply not work the field | the evader, one act. **The governor never sees it, and it is the commonest channel** |
+| 2 | **THE GAP** | slow, arithmetic | `delivered(levy, rung, season)` versus `demanded(levy, rung)` — two Queries, neither stored | nobody. §A.13 |
+| 3 | **THE PETITION** | one date | `(Petition, exists)`, `[RES]`/ACTS, emits `petition.filed` | the petitioner, **one act of ~5**; then a seat-holder's own act to carry it up |
+| 4 | **THE COLLISION** | when both signals hold | a **Date** | the seat that issued the `sit:` clause that attached the condition |
+
+**Channel 4, precisely.** The **material** signal is `short` at the rung, or `condition.band_crossed` on
+the bodies of the people in it. The **interpretive** signal is a live `commit` count, among the persons
+in the subtree, to a Proposition that names the policy's terms as wrong — `density(w, rung, proposition)`,
+already implemented as an R-1 aggregate over descendants (`world_q.py:276-294`). **Neither alone does
+anything.** A starving quiet hearth starves. A well-fed faction with a grievance talks. **When both hold
+at a rung, a convening condition fires a DATE there** — and `holonic_ARCHITECTURE.md:831` is exact about
+what a date is: *"Dates come due. Dockets form. Option availability is recomputed. **NOTHING IS
+DECIDED.**"*
+
+Three things make this lawful rather than a threshold producing an outcome:
+
+- **`T-b` is honoured.** The condition fires a date; who comes and what is decided is people choosing.
+- **The convening predicate reads only what §24 permits** — `holonic_ARCHITECTURE.md:836-838`: *"A
+  convening predicate may read only the holder's own state, **an R-1 compute-on-demand aggregate over
+  its descendants**, or the calendar."* **Both signals are R-1 aggregates over descendants.** Checked
+  against the rule, not asserted against it.
+- **`T-c` is honoured, and this is the part that had to be got right.** Who wound this clock? **The
+  `sit:` clause did.** `(ConveningCondition, attached)` is a `[CAL, RES]` row emitting
+  `condition.attached` (`write_matrix.yaml:86-92`), written by an act.
+
+> ### **AND HERE IS THE CONSEQUENCE THAT COSTS NOTHING, BECAUSE IT IS AN ABSENCE.**
+> A rung whose seat never issued a `sit:` clause **has no venue**. Its grievance has no date to fire at
+> and no channel to leave by. **So a governor who convenes nothing is not safe — he has closed the
+> relief valve, and the grievance leaves by the only door left: a person's own act, against his body,
+> needing no venue and no verb.** A governor's cheapest act is to convene nothing; it is also the one
+> that kills him. That is a genuine strategic choice with no dominant option, and it is made of two
+> absences.
+
+### §A.11.1 · Where the founding constitution comes from, since `ID-5` forbids a default
+
+`in_force` returning `None` is a **refusal**. So a world with no policies has no dates, no levies and no
+admission gates — correct, and unplayable. The answer is the one `AX-5` already licenses: *"A
+world-generation roster is not a clock and is lawful"* (`01:181-184`). **World generation authors the
+founding policies as ordinary rows** — `hold` Tenures by named historical persons, on `OUGHT`
+Propositions they uttered, through seats they held. So the game begins with its constitution on the
+table as ordinary policy rows: every one quotable, every one strikeable, and **every one with a dead
+author whose hold ended when he died — which means every one of them was re-issued by somebody living,
+and the interface can name who.**
+
+## §A.12 · A WORKS — a Record with stages, and no new verb
+
+⚠ **Naming, corrected in place.** ~~a *work*~~ collides with the live verb `work`
+(`verb_table.yaml:755`, *labour at a site*). Under `CLAUDE.md` §4 — *coin nothing a plain word already
+covers* — the multi-season project is **a `works`** (ordinary English for a public construction),
+plural-as-singular, and the verb keeps `work`.
+
+| candidate | who owns it? | verdict |
+|---|---|---|
+| an `undertake` / `begin_work` verb | — | **REFUSED.** `create_record` is `own`-eligible, writes `Record.exists` **and** `Record.stages` (`verb_table.yaml:166-175`), and its effect body already mints the Record and opens the maker's `hold` (`effects.py:262-289`). Beginning a works is `create_record` with a `stages` operand — **and its eligibility being `own` is correct: a person may begin their own works.** The *seat* enters through `spend:` funding it and `Record.rung` placing it, never through a privileged verb |
+| a progress counter on the `Rung` | — | **REFUSED, structurally.** `Rung.__setattr__` raises on any attribute outside its eleven declared fields (`carriers.py:568-569`, `:585-592`), with the law in the exception: *"L3 — every aggregate is a function, never a field."* A counter also cannot be inherited, cannot stall visibly and cannot be destroyed by an act |
+| stages maturing at MATTER | **BUILT.** `matter.py:64-109` walks every Record's stages, checks the winder is a living holder, and writes `Record.matured` **through the gate**, emitting `term.matured` with `causes=[prior]` | **CONFORMANCE — and it runs today** |
+| a matter condition on maturation, plus `stage.stalled` on the else branch | this design | **EXTENSION**, and it is one conjunct and one emission inside a loop body that already exists |
+
+```
+MATTER, per Record with an unmatured stage, at its own rung:
+    want = the next unmatured stage
+    if in_force(w, rung, 'spend:') commits the yield to this works
+       and stores(rung, want.kind) >= want.amount:
+           draw it · mature the stage · emit `stage.matured`
+    else:  emit `stage.stalled`
+```
+
+**Three things this buys that a progress bar does not.**
+
+1. **THE STALL IS AN EVENT**, therefore witnessable, attributable and citable in an argument — *"the
+   harbour you promised is three seasons stalled."* This is the repair `skills/ners/SKILL.md` §12
+   prescribes in general form and step 4's own precedent: *"A lapse and a supersession **emit a
+   witnessable event at the venue** … so this is one sentence, not a mechanism."* **A progress bar that
+   simply fails to advance emits nothing and dominates by silence** (§12's gain/cost table: *say
+   nothing* → *the matter dies, faster* → *no act, no event, no claim*).
+2. **SABOTAGE NEEDS NO VERB.** The stage draws from `stores`. Empty the store — `transfer`, a `levy:`,
+   or better, **a rival's `spend:` clause at a nearer rung committing the yield elsewhere** — and the
+   works stalls *lawfully*. The saboteur never reads the works and has broken no rule.
+3. **ONE EMISSION RULE, THREE USES.** `stage.stalled` when a stage's draw is short; `docket.lapsed` when
+   a date passes unconvened; a stale cell on the surface. **One rule, and §A.15 finds it a second job:
+   an emission becomes a Claim at WITNESS, and a claim landing about something you hold is Q2.**
+
+⚠ **Two LIMITS, measured.** `Record.matured` is **one bool for the whole Record**
+(`carriers.py:445`), so with N stages the first maturation sets a flag the others cannot distinguish
+themselves from — a per-stage maturation needs a shape decision in `02`'s lane or a `stages` tuple that
+carries it. And the works cannot be inherited today, for §A.8.1's reason. `skills/ners/SKILL.md` §12
+step 5 is the model for saying so: *"Emitting the event makes burial visible; it does not make it
+costly… the claim that may be made is **attributable**, and **punished** must be stated as a limit."*
+
+## §A.13 · THE LEGITIMACY CHANNEL IS A BAND ON A GAP — never a field, and never `upkeep`
+
+§0.3 struck the `upkeep` channel. The replacement is the instrument six civilizations supply
+independently and the architecture already names:
+
+> **`gap(seat, rung, season) = demanded(levy, rung) − delivered(levy, rung, season)`**, banded under
+> `T-b`, **changing which options the seat-holder and his subjects see, and never producing an outcome.**
+
+`01:1338`, on `oblige` with `OUGHT` terms: *"**Breach is the sworn/performed gap** — a Query, banded
+under `T-b` — rather than a boolean nobody authored."* And `ID-17`'s licensed form is exactly a band on a
+Query (`01:642-645`). So:
+
+| band | what changes |
+|---|---|
+| delivering | nothing |
+| short | the subject's option set gains `petition`; the holder's gains `dispatch` and `revoke` |
+| chronically short | the subject's gains `repudiate` and `defy`; the holder's loses nothing — **and that asymmetry is the decay** |
+
+**Nothing is stored, nothing decays on a clock, and no number is added to a roll.** A seat hollows out
+because fewer of its clauses are read anywhere, which is `in_force` returning somebody else's row.
+
+⚠ **`delivered` and `demanded` are both absent today.** The nearest existing Query is
+`world_q.sovereign_fraction` (`world_q.py:297`), which measures something else. So this channel is
+**EXTENSION, unbuilt, and dependent on `levy:` having a reader** — which is §A.10's step 3.
+
+## §A.14 · LOSING A SEAT — six genres of downfall, from declared fields and the opening act
+
+The historical finding is that *demotion severity keys to how the seat was won* — favour-derived seats
+face clawback and ruin, kinship-derived seats face containment. The design stage hung this on
+~~`Tenure.conferrer`~~, which is **deleted**. It hangs instead on the two declared bases plus the
+opening act, which is where `carriers.py:48-56` says the fact already lives.
+
+| `conferral` basis | `revocation` basis | who may end it | what else ends with it | the genre |
+|---|---|---|---|---|
+| `confer by <seat>` | `purview` | that seat, by `revoke` (`T-o`, `via` required at the gate) | whatever else that seat conferred — a `hold` on a Rung, a benefice | **ruin** (clawback) |
+| `determine by <judging seats>` | `purview` at the body's own date | that body, by its own quorum | only the seat | **deposition** — delayable by not convening, which is the convener's power again |
+| `succeed` | `none` | **nobody living** | nothing; your hearth is still there | **containment, not ruin** |
+| `confer` after an `exchange` | `purview` | the seller cannot un-sell; the `oblige` edge survives | the seat is gone and **what you owe is not** | **debt** |
+| `confer` into a vacancy | `purview` | the same way you took it | nothing | **usurpation** — `confer` succeeding when nobody was there to refuse |
+| `determine` by an outside door (§A.3) | `none` | the custodian of the instrument | the warrant | **the realm's exposure** |
+
+> ### **RULED: six genres from two declared fields and one persisted act, and no severity enum.** An
+> enum is authored per office and drifts from how the seat was actually filled; `conferral` is asserted
+> at `establish` and the opening act cannot disagree with itself (`04 §A.3` row 13).
+
+**And the route that needs no mechanism at all: quiet obsolescence.** A seat whose clauses are never read
+— because a nearer clause always stands and nobody ever declared `reach: all` — is vacant in the only
+sense that matters, **before any venue notices.** Under this design that is not a rule: **`in_force`
+never returns his row**, so nothing he issued conditions anything, and the seat goes on existing. There
+is no `vacate_by_absence` verb because there is nothing to write.
+
+## §A.15 · WHAT RAISES THE QUESTION — the gate between *resolvable* and *choosable*
+
+**A mechanism nothing asks a person about is unplayable however well its row is written.** The producer
+is `world_q.questions_for` (`world_q.py:439-552`) and it has exactly four sources, rostered at
+`rosters.yaml:250-270`, whose note says *"ORDER IS SEMANTIC"*.
+
+| | source | fires when | referent | the instruments it raises |
+|---|---|---|---|---|
+| **Q1** | `date_due` | a `Date` is due and unfired **and** `d["holder"] in (p.id, None)` or in `mine` (`world_q.py:472-480`) | the docket items' matters | `determine` · `convene` · a vacancy · a declared term lapsing |
+| **Q2** | `claim_landed` | a claim landed since this person last deliberated **and** `c.subject == p.id or c.subject in mine` (`:492-494`) | the claim's subject | `commit` to a policy · `revoke` · **a stalled stage** · **a buried petition** |
+| **Q3** | `band_crossed` | a crossing, for a person present at the site's rung (`:513-518`) | ⚠ **the VERB, not the site** — `Question(f"q:band:{what}", …)` at `:518`, where `what` is the crossing's verb. That is `H-110` (`hole_register.yaml:1533`), **the tree's finding and not this file's** | dearth reaching a body |
+| **Q4** | `need` | a live `commit` whose object is an `OUGHT` Proposition — *standing, it recurs every season* (`:520-527`) | the Proposition's subject | **maintain / defend / amend a policy** · a vow · `repudiate` |
+
+> ### **AND THE CHEAPEST RESULT IN THIS FILE: Q4 IS LIVE AND DENSE, AND A POLICY'S TERMS ARE AN `OUGHT`
+> PROPOSITION.** MEASURED: 86 live `commit` edges over 52 `OUGHT` Propositions. **So everyone sworn to a
+> policy is asked about it every single season, today, with nothing built.** Withholding is symmetric, so
+> this is stated as loudly as the four dead things in §0.2.
+
+### §A.15.1 · The gap, and it is Jordan's own distinction arriving as an unplayability
+
+**Q1's and Q2's `mine` is `{t.object for t in p.tenures if t.live}` (`world_q.py:471`) — that is
+HOLDINGS.** Jordan's ruling separates the three, verbatim at `rosters.yaml:696-704`: *"While a King/Queen
+may have governing authority over the country, they do not necessarily have sovereign power of all
+territories/provinces/duchies nor do they necessarily have all territories/provinces/duchies in their
+holdings"* — and the code carries the two as separate functions, `in_holdings` (`predicates.py:60-103`)
+and `under_purview` (`:105-140`).
+
+> ### **SO THE QUESTION PRODUCER ASKS A GOVERNOR ABOUT WHAT HE OWNS AND NEVER ABOUT WHAT HE GOVERNS.**
+> A Lord holding one manor and governing four settlements is asked about the manor. **Every governance
+> act at a rung a seat covers but does not own is unformable, and no verb row can fix it.**
+
+> **Q5 · `purview` — for each claim landing in the person's ledger whose subject is a rung `r`, if
+> `under_purview(w, p.id, r)`, a Question with `r` as its referent.**
+
+It is **Q2 with `under_purview` substituted for the holdings set**: one existing function — already the
+single owner of *what does this person govern*, and already a disjunction over every seat they hold — one
+disjunct, one roster row on an **open, ordered** roster.
+
+| the attack | the answer |
+|---|---|
+| *"Q1 covers it — put a date on every governed rung"* | **Fails.** A date is an occasion somebody must have convened (`T-c`; `(Date, due_at)` is written only by `convene`, `write_matrix.yaml:93-100`), so this requires the governor to have already acted at a rung he is not being asked about. Circular |
+| *"a PLACE should raise the question, not a seat"* | **Refused.** A place-raises-a-question source hands a person a question about a place independent of what they know, which is the privileged access `AX-2` forbids. Q5 fires **only on claims the person already holds** — a governor is never asked about a settlement he has heard nothing of |
+| *"it will flood a King"* | **Fails, and the failure is the feature.** A King's Q5 set is every rung about which he holds a claim — and his claims are few, old and second-hand, so the set is **small and stale.** A mayor's is nearly everything under him, firsthand. **The fog is the question set**, and the same source produces the right density of business at every rung with no per-rung tuning |
+
+**Scored honestly: of the eleven instruments in §A.16, six are choosable the moment `remit:` is evaluable
+person-side, and five need Q5** — `issue` at a governed rung, `revoke` there, `dispatch` (reach is the
+territory seat's whole instrument and **nothing asks about it today**), `establish`+`confer`, and
+`create_record` for a works at a governed rung. **None needs a sixth source and none needs a verb.**
+
+⚠ **A policy also conditions the question layer, and that is what makes *"a policy changes how a rung
+functions"* literal.** `sit:` **writes the Dates** Q1 reads, so **a rung with no `sit:` clause asks
+nobody anything.** `hear:` **conjoins Q1's person filter** — today a date with `holder: None` fires for
+**everyone** (`world_q.py:476`), and under a `hear:` clause its items raise a question only for the
+persons the clause admits. **So the same date asks a different set of people different things under two
+regimes; the excluded are not blocked, they are not asked.** Two safeguards, both structural:
+
+1. **`hear:` narrows Q1 only. Q2, Q3, Q4 and Q5 are untouched** — an excluded person still forms
+   questions from their own claims, their own body, their own commitments and their own seats. **A regime
+   can stop asking you; it cannot stop you wanting.**
+2. **The exclusion is legible.** Under the uniformity rule a `hear:` clause is a predicate over marks,
+   commits, presence and holds, so the surface can state *why* a matter is not on your list in the
+   clause's own words — `ID-5`'s polarity at the interface: **name the reason, never silently return
+   empty.**
+
+## §A.16 · PER RUNG, HEARTH TO REALM — and one axis does most of the work
+
+The ladder is `person < hearth < community < settlement < territory < province < duchy < realm`
+(`rosters.yaml:106-109`) and the title ladder is **total** over it — Jordan, verbatim at
+`rosters.yaml:741-744`: *"realm = king/queen, duchy = duke/duchess, province = count/countess, territory
+= lord, settlement = mayor, community = community leader, hearth = family head, person = own autonomous
+individual."* MEASURED in the built world: `hearth 211 · community 60 · person 46 · settlement 37 ·
+territory 17 · duchy 3 · realm 1 · **province 0**`.
+
+**What makes the rungs different is not scale.** As you climb, your clauses reach more people and **your
+claims about them get coarser and older.** A person's knowledge of themselves is firsthand and current;
+a King's knowledge of a hamlet is a second-hand cohort claim three seasons stale, *because that is what
+is in his ledger*. That is `AX-2` plus the cohort rule — a cohort is a `Person` at weight > 1, never a
+subclass (`carriers.py:408` raises on `Person.weight < 1`). **So the fog at the top of the ladder is
+epistemically honest rather than a UI convenience**, and each seat gets a different **verb of attention**.
+
+| rung · title | scope | won by | lost by |
+|---|---|---|---|
+| **person** · `Individual` | themselves | existing. `own` eligibility *returns `True` immediately* (`options.py:143-144`) | death only |
+| **hearth** · `Family Head` | one household: its `stores`, its Sites, whoever is `contain`ed in it | the predecessor's `follow:` clause resolving to **exactly one** claimant at the vacancy date | death · `release` (abdication, `T-m`) · the date resolving to somebody else |
+| **community** · `Community Leader` | a set of hearths inside one settlement, **or** a membership that cuts across places (`Office.rung` is optional — 16 of 19 offices are this case) | `determine` at the community's own date, with quorum over live commits — **an election, with no election mechanism** | the same date the other way; **or the sworn drifting**, leaving a seat over nobody |
+| **settlement** · `Mayor` | the granary, the Sites, the gate, the court's date, every person present | `determine` (election) **or** `confer` (an appointed praefect) — **which one is a fact about that settlement, carried on `conferral`** | whichever party the basis names |
+| **territory** · `Lord` | several settlements, and no granary worth the name. **Its instrument is where it sends people** | ordinarily `confer` — patronage, or purchased | `revoke` on purview alone |
+| **province** · `Count` | the territories that cohere under one holder **right now** | `confer` — and the appointment is over a set that may evaporate | `revoke` from the duchy; **or the coalition dissolving, which takes the country and leaves the seat** |
+| **duchy** · `Duke` | provinces, territories, settlements and every hearth beneath, **by the walk** | the predecessor's `follow:` clause. §A.5, unchanged | **not revocable — there is no living conferrer.** Only the realm's `T-o` strike (purview **and** holdings **and** strictly higher rank, `predicates.py:255-274`) or an unresolved vacancy date, which is open war |
+| **realm** · `King`/`Queen` | the realm, and therefore every rung. **The widest remit and the thinnest reach per rung** | the `follow:` clause **plus an external warrant** — the one seat that cannot be filled from inside | not by revocation. By an unresolved vacancy date, by the gap hollowing the seat until nothing is read anywhere, or by a person's act |
+
+| rung | decides (clauses) | opposed by | a season here is | drama with **no player present** |
+|---|---|---|---|---|
+| **person** | `bear:` `hear:` `spend:` `draw:` over themselves — *I will not carry arms; I eat after the children* | their own `need`, whose subsistence term is unbounded | binding your own future, and being trusted for it | two NPCs `commit` to one `OUGHT`; one forswears; the other now holds a firsthand claim that he did, and weights every later choice about him by it. **A friendship ends and nobody wrote it** |
+| **hearth** | `draw:` (who eats first) · `spend:` · `admit:` (fostering in, turning a cousin out) · `bear:` | the members, who can `release`, `repudiate` or simply `move` — and the community above, whose `admit:` decides whether anywhere will take them | **triage with faces.** Five mouths, four portions, and the one you fed remembers | a Thin hearth's head draws against a cadet's portion; the cadet's own need drives him to the community's gate; the head's `draw:` clause is what his brother argues against at the quarter's sitting. **Cadet resentment, with no resentment stat anywhere** |
+| **community** | `admit:` (who becomes one of us) · `hear:` (who may speak) · `bear:` (who may practise) · `sit:` · `spend:` | the **excluded**, who keep their `knot` edges — *an excluded member is a leak with no loyalty* — and the settlement above, whose wider clauses stand only where they reach | **the gate.** Deciding who becomes one of us, and being the reason a person's life changed | a master stakes his standing on a candidate and the bench refuses; his own claim about the bench turns hostile; his `commit` is one act from ending; if it ends, `sworn` falls and the warden's clauses become strikeable. **A rejected apprentice destabilises a guild seat three edges later** |
+| **settlement** | `draw:` (**the granary in dearth — the most consequential clause in the game**) · `admit:` · `bear:` · `levy:` · `sit:` · `spend:` | the communities inside (nearer clauses) · the territory above (only where it reaches) · the people, through §A.11's four channels | **being besieged by your own arithmetic.** A dearth, a stalled works, eleven demands and a date that hears three | a praefect dies; the granary allocation date fires and allocates to nobody, because `in_force(w, S, 'draw:')` finds his dead clause's successor — **none** — and `ID-5` refuses rather than defaulting. The stock sits through a Hungry season and **nobody did anything wrong** |
+| **territory** | `levy:` · `sit:` (an assize at a settlement he is not in) · `bear:`/`admit:` at territory scale — **and where to declare `reach`**, which is the real choice | the settlements' nearer clauses, which stand wherever he is not; a neighbouring Lord's `admit:` closing a road; the province above | **the fog.** You govern people you cannot see and find out you were lied to three seasons late | a claim in his ledger about a hamlet is `told_by` at fading confidence, formed two seasons ago; `(Claim, confidence)` decays at MATTER; **the picture degrades on a clock nobody winds** |
+| **province** | `levy:` across territories · `sit:` (an assembly whose bench is the territory seats) · `admit:`-to-the-province | the territories, whose participation is a `commit` they may end | **waking to check whether you still have a country** | a territory's holder changes; `provinces_of` (`world_q.py:345`) recomputes; **the Count's clauses are in force and reaching nobody.** The best available portrait of a magnate in decline, and it costs nothing — the Query exists and `build_realm` builds **zero** provinces |
+| **duchy** | everything a territory seat does at a wider scope, plus the one thing nobody below can do: **`establish` a sub-seat carrying a proper subset of his acts over a proper subset of his scope, then `confer` it** | the realm above; **and his own conferred governors**, who accumulate their own `sworn` | **your governors are your reach and your rivals** | a conferred governor's clauses are **nearer** than the Duke's, so where the governor stands, the governor's law is what the loop reads. *Delegation buys reach and manufactures a rival in the same act* |
+| **realm** | `levy:` on duchies (who may refuse by simply being nearer) · `sit:` (Parliament) · the general-scope clause | **Parliament** — mechanically a community-shaped seat at realm scope whose bench is the seat-holders below | **issuing something true everywhere and enforced nowhere**, and choosing where to spend the one act that makes a sentence real | a King's `levy:` needs Parliament's `determine`; two of seven bench members are sworn to a counter-`OUGHT`; one `repudiate`s; quorum fails; the levy is refused. The gap widens; fewer of his clauses are read anywhere. **The realm hollows out over eight seasons with no battle and no authored event, and the blocker's name is in four hundred ledgers** |
+
+**Where the evidence is thin, said plainly.** The historical corpus is **silent below settlement scale** —
+two independent readers confirmed it with named searches (`grep -ni "hearth\|community\b"` over
+`research/governance/political_hierarchy_standing.md` → **zero**). So **person, hearth and community are
+derived or invented, not grounded**, and the only existing source for their numbers (appetite weights, the
+2.5/1.0 cadet claim asymmetry, the five margin bands, the admission coefficient vector) is a design
+document in a **superseded** tree, cited in this file for **intent only** and never as a value. §0.05:
+*"A design document may not be cited as the reason a behaviour is correct."*
+
+**And the one rung where two of Jordan's own rulings pull against each other: the province.**
+`rosters.yaml:108` carries `province` as a `rung_kind` and `:760` gives it a `Count`, while the
+2026-07-13 ruling implemented at `world_q.py:345-398` makes a province *"an emergent aggregation that
+exists only while its constituent territories share a common faction holder"* and `build_realm` builds
+**none**. **This file does not average over it.** The later ruling governs, `provinces_of` is the Query
+that says *which* provinces currently cohere, and the `province` entry stays a declared kind the builder
+does not instantiate — which is exactly why the Count is the one seat whose **scope** is recomputed every
+season and the one seat that can outlive its own country.
+
+---
+
+# PART B · WHAT THIS ADDS, AND WHAT IT MAKES UNNECESSARY
+
+**The bar.** `ID-13` (`01:489`): *"A DECLARED FIELD MUST REACH A READER, OR IT IS NOT DECLARED"* — so an
+addition must name its reader in the same row. And `04` PART D row 1: a faction has a type and **no
+verbs**, *"and a seat enters only through `Act.via`"* — so an addition may not be a new actor, a new
+authority or a new modifier.
+
+| added | new primitive? | its reader, named | what it makes unnecessary |
+|---|---|---|---|
+| **`in_force(w, rung, clause)`** | **no** — a function, owned by Nobody, stored nowhere | MATTER steps 2-4; four `requires` conjuncts; the `sit:`/`hear:` question filters | any propagation table; any stored per-rung policy map; a `governance_mode` enum (**a mode is a set of policies in force** — computable, nameable at the surface, owned by nobody) |
+| **the `dispensation` `Record` kind** | **no** — `04 §A.3` row 11 already owes it; the effect body exists (`effects.py:262-289`) | `in_force`; `destroy_record`; `release` | `(Dispensation, exists)` writing a field of a type with no carrier; the five-family *Ledger of Consequence* (a struck policy's ended `hold` **is** precedent, readable forever) |
+| **`reach: near \| all`**, one operand in `subject_matter` | **no** | `in_force`'s comparator | a `reached()` Query over a dead `establishment` field (§A.8.2) |
+| **the seven clauses** | **no** — three forms of seven, `all:` conjunction already implemented (`requires.py:542`) | the steps in §A.9's table | fourteen design-only settlement verbs (Develop · Fortify · Keep Order · Hold Court · Levy · Survey · Sponsor · Treat · …), each of which built naively is **a button**: an act resolving instantly against a known number and writing a stat |
+| **the conferral claim** (`remit:` person-side) | **no** — one claim predicate | `person_side_eligible` (`options.py:163-165`) | a widened `choose` signature; `Tenure.payload` as a grant carrier; the council grant fork (§A.4) |
+| **`stage.stalled` · `docket.lapsed`** | **no** — two emission kinds on rows that exist | WITNESS, and therefore Q2 | a progress bar; a "neglect" counter; any claim that *witnesses can notice an absence* — **`witness` takes events, and an omission emits none** |
+| **the gap band** | **no** — a band on a Query, `ID-17`'s licensed form | the option set at the burdened rung | `Office.upkeep` decay; a stored legitimacy or popular-support field; `veto_holders` |
+| **Q5 `purview`** | **no** — one row on an open ordered roster, one disjunct reusing `under_purview` | `questions_for` | a place-based question source (which `AX-2` would forbid without careful gating, and the gating is the hard part) |
+| **a `record_kinds` roster** | **no** — the pattern `remit_acts` already uses (`carriers.py:508-512`) | the loader | a string comparison in a resolver (`ID-4`) |
+| **`sworn(policy)`** | **no** — it *is* `world_q.members` | the strike calculus; §A.11's interpretive signal | any count field on a policy |
+
+**Carriers added: 0. Verbs added: 0. Eligibility kinds added: 0. `requires` forms added: 0. Operands
+added: 0. Rosters added: 1. Emission kinds added: 2. Queries added: 3** (`in_force`, `delivered`,
+`demanded`). **Objects deleted: fourteen** — `is_title` + `titles_held` + `highest_title_rank` +
+`title_domain` (4 helpers, `predicates.py:144-164`, `:252`); `Office.establishment` as a field;
+`Office.binds`'s absent reader is *filled*, not deleted; `judging_set_rule` from `Rung._DECLARED`;
+`Tenure.payload` and its matrix row; `budget_office_bonus`; `Rung.transmission` (`04 §A.3` row 8); `veto_holders`; a co-signature
+clause (**it is quorum with a different number**); an `open:` clause (`draw:` naming nobody, plus
+`bear:`); a `work:` clause (a `bear:` scoped to the rung the Site sits at); `begin_work` as a verb.
+
+### §B.1 · One deletion is a PRECONDITION of the policy instrument, not a tidy-up
+
+`budget.py:56-57`, read at the line:
+
+```
+offices = sum(1 for t in p.tenures if t.kind == "hold" and t.live)
+b = k + offices * fx.get("budget_office_bonus")
+```
+
+**It counts every live `hold`, whatever the object.** A policy is a `hold` on a Record. **So under this
+design, unamended, issuing a policy buys you another act, and issuing ten buys you ten** — the sharpest
+form yet of `H-92` (which records that the same line counts a possessed *book* as an office). `04 §A.3`
+row 15 already refuses the line: *"`budget` includes an `office_bonus` → **refused.** A seat's capacity is
+its establishment — more named persons, each with their own budget."*
+
+> ### **RULED: delete `budget_office_bonus` before `issue` resolves, or the instrument pays for itself.**
+> Cited to `04 §A.3` row 15 and `budget.py:56-57`. This also answers *"does holding three seats give you
+> three times the acts?"* — **no; acts are the person's and seats give establishments**, which is the only
+> reading under which a King's season differs in **kind** from a praefect's rather than in **count**.
+
+### §B.2 · Refused and deferred, each with the clause that refuses it
+
+| candidate | disposition | on what ground |
+|---|---|---|
+| `domain : RungId[]` (a set-valued seat scope) | **REFUSED** | `04 §B.7`'s singular `scope?`; the purview disjunction already covers the Lord; a set inverts rank (§A.1) |
+| `remit : (act, scope?)[]` | **REFUSED in v1** | `04 §B.7`; `establish` a sub-seat instead |
+| the grant on `Tenure.payload` | **REFUSED** | `04 §B.8` — `term?` *"Replaces payload?"* |
+| the grant on `Tenure.conferrer` | **REFUSED** | deleted 2026-09-03, `carriers.py:48-56`, on `ID-2` |
+| a policy as an `OUGHT` whose `Proposition.scope` is a rung | **REFUSED** | the field is live and means a role template (`populated.py:491-492`) |
+| legitimacy decay on `Office.upkeep` | **REFUSED** | no reader anywhere; `04 §B.7` call 2 rejects the neighbouring field |
+| a fifth `eligibility_kind` for policy | **REFUSED** | `options.py:137-142`: *"a fifth kind is a new way to make a verb unavailable and needs a ruling, not a table edit"* — a clause is a **conjunct** |
+| an eighth `requires` form, or a ninth operand | **REFUSED** | `rosters.yaml:1091-1093` refuses at load; §A.9.1 shows none is needed |
+| an `obstruct` verb; a `comply`/`ignore` pair for a policy | **REFUSED** | `T-g` (`01:377`) — a prior act refusing yours needs no verb; the nearer clause existing **is** the non-compliance |
+| a `governance_mode` / `power_base` enum | **REFUSED, and it was cut once already** | `rosters.yaml:86-92` deleted both for being unread. A mode is a bundle of clause values, and a bundle is a name for a configuration the clause table already expresses |
+| a **works** inheriting automatically | **DEFERRED, and stated as unbuilt** | `matter.py:73-75` requires a living holder and nothing but `create_record` opens a `hold` on a Record (§A.8.1) |
+| `Record.matured` per stage | **DEFERRED** | one bool per Record today (`carriers.py:445`) |
+| the diagonal direction — a cluster seat's clause reaching its members | **DEFERRED, named** | `binds` has no reader (§A.1, §A.7.5) |
+
+### §B.3 · E, scored LAST and as a ratio — and it FAILS if scored alone
+
+`CLAUDE.md` §0.06: *"**E is never scored as an independent axis**: alone it is satisfiable by amputation,
+so score it last, as a ratio against what N and R found."* **The ratio:** one roster, two emissions, three
+Queries, one operand, one claim predicate, one question source **in**; fourteen objects **out**; zero
+carriers, verbs, forms, operands and eligibility kinds added. **Vocabulary retired:** `AP`,
+`FacilityTier`, Precedent/Grudge/Debt/Reputation/Leverage-as-tags, `veto_holders`, `judging_set_rule`,
+`stake`, `is_title`, co-signature, `open:`, `work:`, `begin_work`, vow-as-object. **Vocabulary added:**
+`policy`, `clause`, `sworn`, `in_force`, `reach`, `works`. **Legibility, the second E test —** *"allows
+the player to intuit complex outcomes from simple choices"*: a policy is one sentence with two blanks
+(the rung, the clause) and its consequence is the option set below it. **PASS as a ratio, under one
+primitive added per primitive removed; and it would FAIL scored alone**, because the largest moves here
+are deletions and an amputation always scores well on tidiness.
