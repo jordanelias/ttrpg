@@ -165,48 +165,12 @@ def test_the_shipped_artifact_matches_the_authored_index():
 # wrong in the shipped artifact -- so its falsifier lives beside them.
 # ---------------------------------------------------------------------------
 
-def test_no_key_type_stores_a_flow_list_as_a_string():
-    """⚠ THIS FAILED BEFORE 2026-09-16 AND THE FAILURE WAS INVISIBLE. `_parse_entry` tested
-    `value.endswith("]")`, which is FALSE for `[personal, territory, peninsula]   # mirrors scope`,
-    so four fields across two types were stored as STRINGS. `apply_defaults` does
-    `list(entry["default_scale_signature"])`, and `list()` of a `str` iterates CHARACTERS: a Key of
-    type `mechanical.scene_entered` came back with a 50-element scale signature of single
-    characters, `meta.cascade_cluster_event` with 79, not one of them a scale.
-
-    Root cause was §8's shape: `validate_payload` strips `# comments` from payload strings and the
-    flow-list branch did not, so one convention had two implementations and one of them was absent.
-    """
-    d = json.loads((REPO / "engine" / "engine_params" / "key_types.json").read_text())
-    offenders = []
-    for tid, entry in d["types"].items():
-        for field in ("default_scale_signature", "emitting_systems", "consuming_systems"):
-            v = entry.get(field)
-            if isinstance(v, str) and v.strip().startswith("["):
-                offenders.append(f"{tid}.{field} = {v!r}")
-    assert not offenders, (
-        "a flow list is stored as a string again; apply_defaults will iterate it character by "
-        "character:\n  " + "\n  ".join(offenders))
-
-
-def test_every_default_scale_is_a_real_scale_except_the_one_recorded_gap():
-    """The parse fix made the DATA errors visible; this pins what is left rather than hiding it.
-
-    `territorial` was corrected to `territory` in the same commit -- `SCALES` names the noun and the
-    adjectival form matched nothing. `meta.legacy_event`'s `system_meta` is NOT corrected: it is a
-    FAMILY name from the registry's §8 sitting in a scale slot, on a type whose own notes say it is
-    a Phase-B migration wrapper *"pruned once originating system completes Phase B migration"*.
-    Whether a meta event carries a scale at all is a design call, not a typo, so it is recorded
-    here where an instrument reads it. Fixing it means deleting this exception deliberately."""
-    from engine.substrate.keys import SCALES
-    d = json.loads((REPO / "engine" / "engine_params" / "key_types.json").read_text())
-    KNOWN_GAP = {"meta.legacy_event": ["system_meta"]}
-    offenders = {}
-    for tid, entry in d["types"].items():
-        sig = entry.get("default_scale_signature")
-        if not isinstance(sig, list):
-            continue
-        off = [x for x in sig if x not in SCALES]
-        if off and KNOWN_GAP.get(tid) != off:
-            offenders[tid] = off
-    assert not offenders, f"key types declare a scale that is not in SCALES {SCALES}: {offenders}"
-    assert KNOWN_GAP.keys() <= d["types"].keys(), "the recorded gap names a type that no longer exists"
+# ── RETIRED 2026-09-16 (ED-IN-0232) ───────────────────────────────────────────────────
+# Two cases lived here and both read `engine/engine_params/key_types.json`:
+# `test_no_key_type_stores_a_flow_list_as_a_string` (a parse defect that made `apply_defaults`
+# iterate a string character by character) and
+# `test_every_default_scale_is_a_real_scale_except_the_one_recorded_gap` (which also carried the
+# recorded `meta.legacy_event` / `system_meta` exception). Their subject was the Key type
+# registry, which retired with the substrate under Jordan's ruling *"anything key-based gets
+# retired"*. They are deleted rather than re-pointed: there is no artifact left to read, and the
+# `SCALES` roster they validated against lived in `keys.py`.

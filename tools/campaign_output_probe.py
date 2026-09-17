@@ -10,10 +10,20 @@ reader. Jordan asked for the scratchpad to be committed; this is the half of it 
 instrument rather than a record.
 
 WHAT IT DOES. Runs five seeded campaigns (0/1/7/13/42) and both pinned batches (n=2 seed-0, n=8
-seed-42), and dumps EVERY field of each result as sorted JSON — including `key_log_hash`, the
-sha256 over the campaign's canonical KeyLog. `keys_emitted` runs 164-229 per campaign, so that
-hash is a live signal here rather than a vacuous one: any change that perturbs the Key stream
-moves it.
+seed-42), and dumps EVERY field of each result as sorted JSON.
+
+⚠ THIS PROBE GOT COARSER ON 2026-09-16 (ED-IN-0232) AND THE SENTENCE THAT JUSTIFIED ITS SENSITIVITY
+IS GONE WITH THE FIELD IT NAMED. It read: *"including `key_log_hash`, the sha256 over the campaign's
+canonical KeyLog. `keys_emitted` runs 164-229 per campaign, so that hash is a live signal here
+rather than a vacuous one: any change that perturbs the Key stream moves it."* That hash WAS the
+argument for trusting a clean diff — one field that folded every emission in the campaign. The Key
+substrate retired and `CampaignResult` lost both fields.
+
+`capture()` uses `dataclasses.asdict`, so it degraded silently rather than crashing. What remains is
+winner / season / surviving / battle_count / scenes_resolved / insurgencies_formed / npcs_generated
+/ stub_hits / accord_drift_probe_hits / final_state. `final_state` is the serialised world and is
+still broad, but a clean diff here is a weaker claim than it was, and anyone citing this probe as
+evidence of byte-identity should say which fields they compared.
 
 HOW TO USE IT, which is the whole contract:
 
@@ -23,8 +33,9 @@ HOW TO USE IT, which is the whole contract:
     diff /tmp/before.json /tmp/after.json                        # empty == byte-identical
 
 ⚠ IT IS NOT A GATE AND MUST NOT BECOME ONE. Seven campaigns take ~80 seconds, and the goldens
-that belong in CI already exist (`engine/tests/test_mc_v18_regression.py`,
-`test_f7_smoke_oracle.py`, `test_parliamentary_bridge.py`, run by the `sim-regression` job).
+that belong in CI already exist (`engine/tests/test_mc_v18_regression.py` and
+`test_f7_smoke_oracle.py`, run by the `sim-regression` job; `test_parliamentary_bridge.py` was the
+third and retired with the Key substrate, ED-IN-0232).
 This is the instrument for the question those goldens cannot answer on their own — "did MY change
 move anything, at all, anywhere" — asked before the change is committed rather than after CI
 reports which three goldens moved.
@@ -87,7 +98,8 @@ def main(argv=None) -> int:
              if json.dumps(before.get(k), sort_keys=True, default=str)
              != json.dumps(now.get(k), sort_keys=True, default=str)]
     if not moved:
-        print(f"[probe] IDENTICAL — {len(now)} captures, every field including key_log_hash")
+        print(f"[probe] IDENTICAL — {len(now)} captures, every field on CampaignResult "
+              f"(key_log_hash retired with the substrate, ED-IN-0232 — see the module docstring)")
         return 0
     print(f"[probe] MOVED: {', '.join(moved)}")
     for k in moved:

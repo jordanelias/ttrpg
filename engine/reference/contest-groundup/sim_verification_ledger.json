@@ -1,0 +1,83 @@
+{
+  "sim": "contest-groundup parity oracle (SIM-SC-GROUNDUP)",
+  "note": "Co-located verification ledger, written 2026-09-16 (ED-IN-0231) when this oracle was COPIED out of the audit archive to engine/reference/contest-groundup/ — a tree inside ci_sim_fabrication_check's scan scope, which the archive was not. Nothing about the code changed; it simply became visible to a gate it had never faced. Every entry below was traced to a live owner and quoted, EXCEPT the last two, which are recorded as oracle-local BECAUSE THEY HAVE NO OTHER OWNER — stated rather than given an invented citation, which is the failure this gate exists to catch. OVERWHELM_SIGMA is the interesting one: its live copy at systems/social_contest/sim/contest/degree_extension.py:46 cites THIS FILE, so the oracle is not merely a frozen reference — it is a canonical source that shipped code points at.",
+  "entries": [
+    {
+      "sim_variable": "MU_PER_DIE",
+      "value": 0.4,
+      "canonical_source": "engine/autoload/dice_engine.py",
+      "section": "_MU_PER_DIE (line 174)",
+      "quoted_text": "_MU_PER_DIE: float = 0.40      # [canonical: params/core.md §Expected Value, TN 7]"
+    },
+    {
+      "sim_variable": "SD_PER_DIE",
+      "value": 0.8,
+      "canonical_source": "engine/autoload/dice_engine.py",
+      "section": "_SIGMA_PER_DIE (line 175)",
+      "quoted_text": "_SIGMA_PER_DIE: float = 0.800  # [canonical: params/core.md §Expected Value, TN 7]"
+    },
+    {
+      "sim_variable": "TN",
+      "value": 7,
+      "canonical_source": "engine/autoload/dice_engine.py",
+      "section": "_die_result / TN 7 (lines 151-165)",
+      "quoted_text": "# Per-die EV at TN 7 — the only TN there is. [Jordan, 2026-08-25: \"TN7 always. Never change TN anywhere ever.\" — ED-IN-0196]"
+    },
+    {
+      "sim_variable": "OB_MIN",
+      "value": 1,
+      "canonical_source": "engine/engine_params/sim_params.json",
+      "section": "engine.autoload.OB_MIN",
+      "quoted_text": "\"name\": \"OB_MIN\""
+    },
+    {
+      "sim_variable": "M_MAX",
+      "value": 1.5,
+      "canonical_source": "engine/autoload/sigma_leverage.py",
+      "section": "line 104",
+      "quoted_text": "M_MAX = 1.5             # soft-cap ceiling, sigma-units   # [canonical: modifier_system_spec.md §3.1 Saturating function]"
+    },
+    {
+      "sim_variable": "LEVEL.minor",
+      "value": 0.25,
+      "canonical_source": "engine/autoload/sigma_leverage.py",
+      "section": "LEVEL_SIGMA (line 98)",
+      "quoted_text": "\"minor\":    0.25,   # [canonical: modifier_system_spec.md §2.3 Player-facing abstraction]"
+    },
+    {
+      "sim_variable": "LEVEL.moderate",
+      "value": 0.5,
+      "canonical_source": "engine/autoload/sigma_leverage.py",
+      "section": "LEVEL_SIGMA",
+      "quoted_text": "LEVEL_SIGMA: dict[str, float] = {"
+    },
+    {
+      "sim_variable": "LEVEL.strong",
+      "value": 0.75,
+      "canonical_source": "engine/autoload/sigma_leverage.py",
+      "section": "LEVEL_SIGMA",
+      "quoted_text": "LEVEL_SIGMA: dict[str, float] = {"
+    },
+    {
+      "sim_variable": "LEVEL.major",
+      "value": 1.0,
+      "canonical_source": "engine/autoload/sigma_leverage.py",
+      "section": "LEVEL_SIGMA",
+      "quoted_text": "LEVEL_SIGMA: dict[str, float] = {"
+    },
+    {
+      "sim_variable": "OVERWHELM_SIGMA",
+      "value": 0.85,
+      "canonical_source": "engine/reference/contest-groundup/engine.py",
+      "section": "this file IS the source",
+      "quoted_text": "sigma_leverage.py:114-116 — \"OVERWHELM_SIGMA MOVED 2026-08-27 (ED-SC-0032) to systems/social_contest/sim/contest/degree_extension.py. It is a contest constant — ITS OWN CITATION IS THE CONTEST GROUNDUP ENGINE\""
+    },
+    {
+      "sim_variable": "OB_MAX",
+      "value": 20,
+      "canonical_source": "engine/reference/contest-groundup/engine.py",
+      "section": "this file, and NO OTHER OWNER EXISTS",
+      "quoted_text": "MEASURED 2026-09-16: `grep -rn 'OB_MAX' --include='*.py' engine/ systems/` returns this file alone. Unlike OB_MIN it was never exported to sim_params.json. Recorded as an ORACLE-LOCAL constant rather than given an invented source; if the Ob ceiling is ever needed by live code it must be exported, not copied from here."
+    }
+  ]
+}

@@ -211,6 +211,6 @@ def test_the_audit_exclusion_is_ROOTED_not_a_substring():
     every bare entry would have passed the first assertion and broken those.
     """
     assert not ci_naming_check.is_excluded('skills/valoria-vector-audit/scripts/vector_audit.py')
-    assert ci_naming_check.is_excluded('audit/2026-08-17-weekly-review/00_findings.md')
+    assert ci_naming_check.is_excluded('.audit/2026-08-17-weekly-review/00_findings.md')
     assert ci_naming_check.is_excluded('engine/tests/test_f7_smoke_oracle.py')
     assert ci_naming_check.is_excluded('tests/valoria/test_names.py')

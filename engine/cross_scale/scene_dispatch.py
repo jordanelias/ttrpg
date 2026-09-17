@@ -384,17 +384,14 @@ def _resolve_slot(slot, world, rng):
         out["handoff_stub"] = handoff_stub.stub
         out["handoff_reason"] = handoff_stub.reason
 
-    # Outcome->echo transport (ED-IN-0028, flag-gated by world.echo_scheduler presence).
-    # With NO scheduler attached (ECHO_TRANSPORT off) this is byte-identical to the historical
-    # zoom_out({}) no-echo path. With one attached AND ctx carrying an `echo` block, the
-    # resolved outcome routes through domain_echo -> substrate Key (deferred faction apply).
-    if getattr(world, "echo_scheduler", None) is not None:
-        from engine.cross_scale import echo_transport
-        scene_outcomes = echo_transport.emit_scene_echo(st, out["result"], ctx, world)
-        out["echo_fired"] = bool(scene_outcomes.get("other_echoes"))
-    else:
-        scene_outcomes = {}
-    zo = zoom_in_out.zoom_out(scene_outcomes, world)
+    # Outcome->echo transport RETIRED with the Key substrate (ED-IN-0232, Jordan 2026-09-16:
+    # "anything key-based gets retired"). It was gated on `world.echo_scheduler`, which only the
+    # prototype campaign ever attached; with no scheduler this branch was already the historical
+    # no-echo path, so what remains here IS that path. `ctx['echo']` blocks are still SET by the
+    # contest and combat branches above and are now read by nobody — deliberately left in place,
+    # because they are the outcome->stat mapping a replacement consumer would need, and deleting
+    # them would destroy the mapping along with its transport.
+    zo = zoom_in_out.zoom_out({}, world)
     out["domain_echoes"] = zo.domain_echoes_queued
     return out
 

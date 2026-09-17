@@ -51,22 +51,38 @@ ALLOWED_IMPORTERS = {
     # have cost, and the reason this is a ratchet.
     'engine/tests/test_accounting_accord_drift_probe.py',
     'engine/tests/test_combat_bridge_seam.py',
-    'engine/tests/test_echo_transport.py',
     'engine/tests/test_f7_smoke_oracle.py',
     'engine/tests/test_mc_v18_regression.py',
-    'engine/tests/test_parliamentary_bridge.py',
     'engine/tests/test_pipeline_reach.py',
     'engine/tests/test_world_population.py',
-    # tests/valoria
-    'tests/valoria/_campaign.py',
-    'tests/valoria/test_contract_runtime_conformance.py',
-    'tests/valoria/test_engine_clock_phases.py',
-    'tests/valoria/test_public_governance_transfer_key.py',
     # tools
     'tools/balance_oracle.py',
     'tools/campaign_output_probe.py',
-    'tools/contract_runtime_conformance.py',
     'tools/trace_execution_phases.py',
+    # ─────────────────────────────────────────────────────────────────────────────────────────
+    # SIX LINES DELETED 2026-09-16 (ED-IN-0232), which is the visible migration record the
+    # assertion below demands rather than a quiet trim. None of the six was PORTED off mc_v18 —
+    # all six RETIRED with the Key substrate under Jordan's ruling *"anything key-based gets
+    # retired"*, so the roster shrank for a reason that is not progress toward the port:
+    #   engine/tests/test_echo_transport.py          - the bus's own oracle
+    #   engine/tests/test_parliamentary_bridge.py    - the bus-gated §10 vote
+    #   tests/valoria/test_contract_runtime_conformance.py - instrumented the bus
+    #   tests/valoria/test_public_governance_transfer_key.py - a log-only emitter's test
+    #   tools/contract_runtime_conformance.py        - the instrument itself
+    # and `tests/valoria/test_engine_clock_phases.py`, which SURVIVES as a file but stopped
+    # importing mc_v18: its four scheduler-phase cases went with the substrate and the ordering
+    # cases it kept build a world directly.
+    #
+    # A SEVENTH LINE WENT ON THE SECOND PASS: `tests/valoria/_campaign.py`, the seeded-campaign
+    # helper. All three of ITS callers were among the retired modules, so it became a module with
+    # no importers whose docstring justified keeping two inert parameters "because three callers
+    # unpack three values" — a reason that stopped being true in the same commit that wrote it. An
+    # adversarial pass caught it; the file is deleted, not kept as a convenience nobody uses.
+    #
+    # ROSTER 16 -> 9, counted from this tuple rather than from arithmetic; the AST scan below finds
+    # the same 9. None of the three non-test importers that remain (`balance_oracle`,
+    # `campaign_output_probe`, `trace_execution_phases`) is shipped engine code — they are tools.
+    # ─────────────────────────────────────────────────────────────────────────────────────────
 }
 
 

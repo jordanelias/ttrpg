@@ -29,7 +29,7 @@ where it was found, what referenced it, and why it landed in its bucket.
 WHAT COUNTS AS "BUILT". Resolution runs through the primitives the repo actually has, in order:
   1. a Python name (module-level constant, class, function, or dict key) in engine/ or systems/
   2. a key in the typed exports (engine/engine_params/*.json) -- what Godot will read
-  3. a Key TYPE in the substrate registry (systems/_architecture/reference/key_type_registry_v30.md)
+  3. a Key TYPE in the substrate registry (.designs/systems/_architecture/reference/key_type_registry_v30.md)
   (There is deliberately NO alias step here. An earlier version claimed one and its body was
   byte-identical to the plain lookup -- dead code advertising an enforcement that did not exist.
   It was wrong in principle too: `pathres` resolves PATHS, and no path resolution can change an
@@ -188,14 +188,28 @@ def doc_stems() -> set[str]:
 
 
 def subsystems() -> list[str]:
+    # ED-IN-0231 (2026-09-16): five subsystems — _architecture, articulation, npcs, ui, victory —
+    # held ONLY design prose, so quarantining it removed their `systems/` directory outright. They
+    # are still subsystems; they just have no code. Enumerate the union of both trees, or the
+    # census silently drops a third of the roster and every count it feeds reads lower for a reason
+    # that has nothing to do with the identifiers.
     out = []
-    for name in sorted(os.listdir(os.path.join(REPO, 'systems'))):
+    names = set(os.listdir(os.path.join(REPO, 'systems')))
+    archive_root = os.path.join(REPO, '.designs', 'systems')
+    if os.path.isdir(archive_root):
+        names |= set(os.listdir(archive_root))
+    for name in sorted(names):
         d = os.path.join(REPO, 'systems', name)
         # ED-IN-0179 (2026-09-09): design prose moved to `systems/<sub>/reference/`, so a
         # subsystem is no longer detectable by `*.md` at its root. Check both, so this keeps
         # working for any subsystem whose docs have not moved.
-        if os.path.isdir(d) and (glob.glob(os.path.join(d, '*.md'))
-                                 or glob.glob(os.path.join(d, 'reference', '*.md'))):
+        # ED-IN-0231 (2026-09-16): the prose moved again, to `.designs/systems/<sub>/reference/`,
+        # so a subsystem is now detectable only there. All three are checked: a subsystem is a
+        # subsystem whether its docs sit at its root, under reference/, or in the archive.
+        arch = os.path.join(REPO, '.designs', 'systems', name)
+        if (glob.glob(os.path.join(d, '*.md'))
+                or glob.glob(os.path.join(d, 'reference', '*.md'))
+                or glob.glob(os.path.join(arch, 'reference', '*.md'))):
             out.append(name)
     return out
 
@@ -270,7 +284,7 @@ def built_names() -> dict[str, list[str]]:
                     walk(v)
         walk(doc)
     # the Key substrate: a type id like `combat.strike` is the primitive an identifier may name
-    reg = os.path.join(REPO, 'systems', '_architecture', 'reference', 'key_type_registry_v30.md')
+    reg = os.path.join(REPO, '.designs', 'systems', '_architecture', 'reference', 'key_type_registry_v30.md')
     if os.path.exists(reg):
         for m in re.finditer(r'^###\s+`?([a-z_]+\.[a-z_]+)`?', open(reg, encoding='utf-8').read(),
                              re.M):
@@ -290,7 +304,7 @@ def doc_status(text: str) -> str | None:
 
       GAINED  engine/sim_reference_CONVENTIONS.md      (bare `Status:`)
       GAINED  references/restructure_ledger.md         (`# Status:`, one hash)
-      GAINED  systems/combat/combat_engine_v1/reference/README.md (bare `Status:`)
+      GAINED  .designs/systems/combat/combat_engine_v1/reference/README.md (bare `Status:`)
       LOST    godot/godot_architecture_specification.md
 
     The loss is a FIX, not a regression: that file's `## Status:` line reads
@@ -355,7 +369,7 @@ def census_for(sub: str, built: dict) -> dict:
     # ED-IN-0179 (2026-09-09): design prose lives under `systems/<sub>/reference/`. Scan both,
     # so a subsystem whose docs have not moved still censuses correctly.
     docs = sorted(glob.glob(os.path.join(REPO, 'systems', sub, '*.md'))
-                  + glob.glob(os.path.join(REPO, 'systems', sub, 'reference', '*.md')))
+                  + glob.glob(os.path.join(REPO, '.designs', 'systems', sub, 'reference', '*.md')))
     rows: dict[str, dict] = {}
     dropped: dict[str, str] = {}
     for path in docs:
@@ -466,6 +480,11 @@ def main(argv=None):
         doc = census_for(sub, built)
         text = _dump(doc)
         out = os.path.join(REPO, 'systems', sub, OUT_NAME)
+        # ED-IN-0231: a code-less subsystem has no `systems/<sub>/` directory any more (its
+        # prose is the whole of it, and that is quarantined). The census is an UNTRACKED
+        # generated artifact, so creating the directory to hold it costs nothing and keeps the
+        # roll-up covering all fifteen subsystems rather than the ten that still have code.
+        os.makedirs(os.path.dirname(out), exist_ok=True)
         if args.check:
             if not os.path.exists(out) or open(out, encoding='utf-8').read() != text:
                 drift.append(f'systems/{sub}/{OUT_NAME}')

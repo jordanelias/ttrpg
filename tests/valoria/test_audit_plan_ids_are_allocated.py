@@ -56,8 +56,13 @@ RESERVATIONS = os.path.join(REPO, 'references', 'id_reservations.yaml')
 
 # Doc trees whose headers file work under an ED. `tests/` and `deprecated/` are excluded on
 # purpose: fixtures and frozen history, per the measurement in the module docstring.
-DOC_ROOTS = ('audit', 'proposals', 'workplans', 'godot', 'registers/handoffs',
-             'canon', 'systems', 'references')
+# ED-IN-0231 (2026-09-16): `.designs` carries the quarantined subsystem corpus that used to live
+# under `systems/`. It is listed because a root that silently empties is exactly the drift the
+# floors below exist to catch — the `## Date:` count fell from 40+ to 32 the moment the files
+# moved, and without this the guard would have gone on reporting clean over a corpus it no longer
+# reached. The prose is hidden from agent sweeps, never from the audits that keep its IDs honest.
+DOC_ROOTS = ('.audit', 'proposals', 'workplans', 'godot', 'registers/handoffs',
+             'canon', 'systems', '.designs', 'references')
 
 # HEADER_LINES was 8 and that MISSED THE PLAN OF RECORD (ED-IN-0177, adversarial review).
 # `audit/2026-08-11-code-leanness/01_plan.md` carries its `## Date:` at line 37 — pushed down by an
@@ -242,7 +247,7 @@ def test_a_gap_id_is_reported_even_though_it_is_below_next_free():
 
 def test_the_plan_of_record_is_actually_in_scope():
     """HEADER_LINES=8 covered ZERO of this document's id claims. Pin that it is now reachable."""
-    rel = 'audit/2026-08-11-code-leanness/01_plan.md'
+    rel = '.audit/2026-08-11-code-leanness/01_plan.md'
     text = open(os.path.join(REPO, rel), encoding='utf-8').read()
     head = ''.join(text.splitlines(keepends=True)[:HEADER_LINES])
     assert DATE_HEADER_RE.search(head), (

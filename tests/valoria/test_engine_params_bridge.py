@@ -63,11 +63,12 @@ ENGINE_READERS = {
     'composition.json': {'engine/substrate/composition.py'},
     'descriptors.json': {'engine/substrate/descriptors.py'},
     'world_initial_state.json': {'engine/substrate/world_initial_state.py'},
-    # The one that is not a leaf. `echo_transport` builds the path itself and hands it to
-    # `TypeRegistry.load`, so the Key vocabulary has one reader but no `engine/substrate/` owner —
-    # the shape every other artifact has. Closing it means a `substrate/key_types.py` leaf; that is
-    # a real change to the Key substrate's surface and is not folded into this step.
-    'key_types.json': {'engine/cross_scale/echo_transport.py'},
+    # ⚠ `key_types.json` STOOD HERE and is GONE (2026-09-16, ED-IN-0232). It was the one entry that
+    # was not a leaf — `echo_transport` built the path itself and handed it to `TypeRegistry.load`,
+    # so the Key vocabulary had one reader and no `engine/substrate/` owner. The recorded fix was a
+    # `substrate/key_types.py` leaf; what happened instead is that Jordan retired the substrate, so
+    # the artifact, its reader and the anomaly went together. Every remaining entry is a leaf, which
+    # is the shape this set was always aiming at — reached by subtraction, not by migration.
 }
 
 #: {authored surface -> tools that PARSE it}. SHRINK-ONLY, toward the exporter alone.
@@ -84,23 +85,19 @@ AUTHORED_PARSERS = {
                                  'tools/descriptor_registry.py',
                                  'tools/quantity_registry.py',
                                  'tools/registry.py'},
-    # ⚠ THE ELEVENTH ENTRY IS THE EXPORTER, AND ITS ARRIVAL CHANGES WHAT THE OTHER TEN MEAN
-    # (2026-08-24). Until now `module_contracts.yaml` had NO exporter, so ten independent parsers
-    # was the only way to read it and this set was a census rather than a debt. It has one now:
-    # `tools/export_module_contracts.py` cooks the emits:/consumes: INTERFACE into
-    # `engine/engine_params/module_contracts.json`, on the same pattern as descriptors /
-    # key_types / composition / world_initial_state — so the other ten are now a MIGRATION
-    # BACKLOG, and a new reader has somewhere to go. That is what this gate caught: the runtime
-    # conformance instrument was about to become the eleventh INDEPENDENT parser; it reads the
-    # cooked artifact instead, and gained the sim_module -> contract-module binding that nothing
-    # in the tree owned.
-    'module_contracts.yaml': {'tools/export_module_contracts.py',
-                              'tools/export_composition.py',
-                              'tools/build_contract_index.py',
+    # ⚠ THE EXPORTER IS GONE AGAIN, AND THAT IS A LOSS, NOT A TIDY-UP (2026-09-16, ED-IN-0232).
+    # From 2026-08-24 this registry finally had one: `tools/export_module_contracts.py` cooked the
+    # emits:/consumes: INTERFACE into `engine/engine_params/module_contracts.json`, which made the
+    # other parsers a migration BACKLOG with a destination instead of a census. That interface was
+    # the Key bus's declaration and retired with the substrate, so the exporter had nothing left to
+    # cook and went with it — along with `build_contract_index.py` and `build_key_graph.py`, whose
+    # whole subject was the registry<->Key-type join. `module_contracts.yaml` is back to having no
+    # exporter and no destination for a new reader. It is recorded here rather than in a finding
+    # because this set is where the next person will look.
+    'module_contracts.yaml': {'tools/export_composition.py',
                               'tools/build_execution_map.py',
                               'tools/build_engine_atlas.py',
                               'tools/build_fork.py',
-                              'tools/build_key_graph.py',
                               'tools/ci_quantity_vocabulary_check.py',
                               'tools/evacuation_plan.py',
                               'tools/m1_acceptance.py',
@@ -281,11 +278,17 @@ def test_no_new_parser_of_an_authored_surface():
 def test_the_target_state_is_recorded_as_distance_not_as_a_claim():
     """How far the tree is from §2's paragraph, asserted so it can only close.
 
-    Three of the four runtime bindings are already the target shape — one artifact, one leaf under
-    `engine/substrate/`, nothing else. The fourth, `key_types.json`, has exactly ONE reader but that
-    reader is `engine/cross_scale/echo_transport.py`, not a leaf: the Key vocabulary is the one
-    cooked artifact with no substrate owner. Closing it means adding a `substrate/key_types.py`,
-    which changes the Key substrate's public surface and is deliberately not folded into this step.
+    ⚠ THE DISTANCE REACHED ZERO ON 2026-09-16, AND NOT BY CLOSING (ED-IN-0232). Three of the four
+    runtime bindings were already the target shape — one artifact, one leaf under
+    `engine/substrate/`, nothing else. The fourth, `key_types.json`, had exactly one reader and it
+    was `engine/cross_scale/echo_transport.py`, not a leaf: the Key vocabulary was the one cooked
+    artifact with no substrate owner. The recorded fix was to add a `substrate/key_types.py`.
+
+    What happened instead is that Jordan retired the Key substrate, so the artifact, its reader and
+    the anomaly went together. Every remaining binding is one artifact, one leaf. That IS the target
+    state, and it is reached by subtraction rather than by the migration this test was counting
+    down — which is why the assertion below now reads `== {}` with this paragraph attached, instead
+    of silently going green as if the work had been done.
     """
     multi = {a: sorted(r) for a, r in ENGINE_READERS.items() if len(r) > 1}
     assert not multi, (
@@ -295,7 +298,7 @@ def test_the_target_state_is_recorded_as_distance_not_as_a_claim():
     non_leaf = {a: sorted(m for m in r if not m.startswith('engine/substrate/'))
                 for a, r in ENGINE_READERS.items()}
     non_leaf = {a: m for a, m in non_leaf.items() if m}
-    assert non_leaf == {'key_types.json': ['engine/cross_scale/echo_transport.py']}, (
-        f'readers outside engine/substrate/ are now {non_leaf}. If key_types.json gained a leaf, '
-        f'that is the last of the four closing — update this test and say so.'
-    )
+    assert non_leaf == {}, (
+        f'readers outside engine/substrate/ are now {non_leaf}. Every cooked artifact must be read '
+        f'by exactly one leaf under engine/substrate/; a reader anywhere else is the shape '
+        f'`key_types.json` had before ED-IN-0232 removed it.')

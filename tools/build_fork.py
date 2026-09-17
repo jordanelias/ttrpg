@@ -31,7 +31,7 @@ THE MASS-BATTLE TREES -- RULED 2026-08-03 (J2), REGISTERED 2026-08-04 as ED-MB-0
   deletion list: CARRY union LEAVE does not partition the tree, and the neither-set -- .github/,
   .githooks/, .claude/, tools/, tests/valoria/, most of references/, research/, skills/, CLAUDE.md,
   CURRENT.md, HANDOFF.md -- would be DELETED, taking the enforcement tier and the shipping gate with
-  it. The authored keep-set is systems/_architecture/reference/repository_keep_set_v1.md.
+  it. The authored keep-set is .designs/systems/_architecture/reference/repository_keep_set_v1.md.
 
 Usage:
     python3 tools/build_fork.py --out /path/to/fork      # assemble + verify
@@ -78,7 +78,6 @@ CARRY = [
     # The machine-readable spine. These are DATA, not prose: the fork reads them.
     ("references/module_contracts.yaml", "references/module_contracts.yaml",
      "Key IN -> resolver -> OUT contracts + owned state, plus build/godot/port_rank/parity"),
-    ("references/key_graph.json", "references/key_graph.json", "merged producer/consumer key graph"),
     ("references/execution_map.json", "references/execution_map.json", "boot->termination spine"),
     ("references/EXECUTION_MAP.md", "references/EXECUTION_MAP.md", "the same map, readable"),
     ("references/execution_trace.json", "references/execution_trace.json",
@@ -90,7 +89,7 @@ CARRY = [
 # ── LEAVE: (path, why) — stated, because a silent omission is indistinguishable from a mistake ──
 LEAVE = [
     ("registers/", "editorial ledgers, patch register, handoffs — process, not game"),
-    ("audit/", "the audit corpus; cite back by repo@SHA"),
+    (".audit/", "the audit corpus; cite back by repo@SHA"),
     ("arcs/", "generated narrative content"),
     ("workplans/", "the progress board"),
     ("dashboard/", "the published status site"),
@@ -355,10 +354,21 @@ def verify_runs(out: str):
         "assert not bad, f'source repo leaked onto sys.path: {bad}'\n"
         "from engine import mc_v18\n"
         f"r = mc_v18.run_campaign(seed={VERIFY_SEED}, "
-        f"params={{'ECHO_TRANSPORT': True, 'CAMPAIGN_SEASONS': {VERIFY_SEASONS}}})\n"
-        "print(json.dumps({'winner': r.winner, 'keys': r.keys_emitted, "
-        "'hash': r.key_log_hash[:16], 'battles': r.battle_count}))\n"
+        f"params={{'CAMPAIGN_SEASONS': {VERIFY_SEASONS}}})\n"
+        "print(json.dumps({'winner': r.winner, 'battles': r.battle_count, "
+        "'scenes': r.scenes_resolved, 'surviving': r.surviving}))\n"
     )
+    # ⚠ THE PROBE'S FIELDS CHANGED 2026-09-16 (ED-IN-0232) AND IT WAS CRASHING UNTIL THEY DID.
+    # It read `r.keys_emitted` and `r.key_log_hash[:16]` and passed `ECHO_TRANSPORT: True`. The Key
+    # substrate retired, taking both `CampaignResult` fields and the flag's resolver, so this
+    # falsifier raised `AttributeError` inside the subprocess and returned a traceback instead of a
+    # verdict — failing in the worst direction a falsifier can, since a broken PROBE reads exactly
+    # like a broken FORK. Caught by an adversarial pass, not by a run.
+    #
+    # The replacement fields are coarser than the KeyLog hash was, and that is stated rather than
+    # glossed: a sha256 over every emission is a stronger identity than four scalars. `final_state`
+    # is deliberately NOT used — it is a large nested dict, and this probe's job is to prove the
+    # fork RUNS in isolation, not to pin its output.
     env = dict(os.environ)
     env.pop('PYTHONPATH', None)
     return subprocess.run([sys.executable, '-c', script], cwd=out, env=env,

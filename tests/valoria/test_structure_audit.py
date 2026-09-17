@@ -144,7 +144,7 @@ def test_join_accounts_for_every_module_exactly_once():
 
 def test_module_contracts_sim_module_join_is_exact():
     """Live-corpus check (companion to the bogus-fixture falsifier above): every one of the
-    27 references/module_contracts.yaml modules is accounted for in exactly one join bucket,
+    26 references/module_contracts.yaml modules is accounted for in exactly one join bucket,
     and — the one currently-known, DELIBERATE exception (mass_battle, MB-owned rows per the
     2026-07-29-code-shape-open-items plan's shared-file single-writer table) aside — the
     unresolvable bucket is empty. A regression here (a NEW unresolvable or undeclared module)
@@ -154,7 +154,11 @@ def test_module_contracts_sim_module_join_is_exact():
     g_l2, meta, edges_meta, findings, assumption_count = sa.build_l2(root)
     join = sa.l2_contract_code_join(meta, modules)
     checked = len(join['joined']) + len(join['none']) + len(join['unresolvable']) + len(join['undeclared'])
-    assert checked == len(meta) == 27, f'expected all 27 module_contracts.yaml rows accounted, got {checked}'
+    # 27 -> 26 (2026-09-16, ED-IN-0232): the `articulation_layer` row retired with the Key
+    # substrate. Its `sim_module` was `engine/cross_scale/articulation.py`, whose entire body was
+    # the bus subscriber, so the row described a module that no longer exists — and the count is
+    # re-pinned rather than relaxed to `>=`, which is what makes a silently-dropped row still fail.
+    assert checked == len(meta) == 26, f'expected all 26 module_contracts.yaml rows accounted, got {checked}'
     assert join['unresolvable'] == [], f"unresolvable (fictional/stale sim_module:) rows: {join['unresolvable']}"
     # SUBSET, not equality, and deliberately so. `mass_battle` is undeclared because the row is
     # MB-lane-owned and this (IN-owned) wave may not edit it — but module_contracts.yaml:552
@@ -201,30 +205,28 @@ def l2():
             'assumption_count': assumption_count}
 
 
-def test_l2_massbattle_fabricated_emit_stays_deleted(l2):
-    # ED-MB-0010 RESOLVED 2026-07-29 (plan-v2 E1): scene_outcome.battle_concluded was the
-    # FAMILY name of scene.battle_concluded fabricated into mass_battle.emits, deleted at
-    # the source. This test used the defect as its known answer; it is now the recurrence
-    # guard — if the family-name emit ever reappears, it surfaces as a dangling emit again
-    # and this fails. (Mutation-verified: re-adding the module_contracts row flips this red.)
-    dangling = {(d['emitter'], d['type']) for d in l2['findings']['dangling_emit']}
-    assert ('mass_battle', 'scene_outcome.battle_concluded') not in dangling
-    # Setup guard (G6 — the absence above must be observable): mass_battle itself must still
-    # be parsed into the graph, or the 'not in' passes vacuously because the whole module
-    # vanished (e.g. a YAML fat-finger in the deleting edit).
-    assert 'mass_battle' in l2['meta']
+# ── TWO DANGLING-EMIT TESTS RETIRED 2026-09-16 (ED-IN-0232) ──────────────────────────────
+# `test_l2_massbattle_fabricated_emit_stays_deleted` and
+# `test_l2_personal_combat_dead_emits_now_consumed` stood here. Both asserted a pair is NOT in
+# `l2['findings']['dangling_emit']`, and `structure_audit.build_l2` fills that list solely from
+# `references/module_contracts.yaml`'s `emits:` blocks (via `emit_terminal`). Those blocks retired
+# with the Key substrate, so the list is `[]` and every `not in` was true over nothing.
+#
+# THEY ARE DELETED RATHER THAN KEPT AS RECURRENCE GUARDS, and the distinction is worth the words.
+# A recurrence guard is worth keeping when the thing it guards can recur; re-adding an `emits:`
+# block would now be re-introducing the Key interface a ruling removed, which is a much larger and
+# louder act than a fat-fingered YAML row. The first test also carried a setup guard
+# (`assert 'mass_battle' in l2['meta']`) whose stated purpose was to catch the module vanishing —
+# it could not catch the EMIT MECHANISM vanishing, which is what happened.
+#
+# What they recorded, kept here because deleting a test deletes its history: ED-MB-0010
+# (`scene_outcome.battle_concluded`, a FAMILY name fabricated into `mass_battle.emits`, deleted at
+# source 2026-07-29) and OI-22a/OI-24 (`scene.combat_felled` / `scene.combat_resolved`, declared
+# personal_combat emits with zero wired consumers until npc_behavior + faction_state declared them).
+# Both fixes are at `FORK:c6e82105`. Caught by an adversarial pass on the retirement.
 
 
-def test_l2_personal_combat_dead_emits_now_consumed(l2):
-    # PR #131 §2.3 / module_adjudicator A4: scene.combat_felled / scene.combat_resolved
-    # were declared personal_combat emits with zero wired consumers.
-    # CLOSED 2026-07-29 (W3 item 5, OI-22a/OI-24): npc_behavior + faction_state consumes:[]
-    # now declare both types (module_contracts.yaml, per the registry's pre-existing
-    # consuming_systems: [npc_behavior, faction_layer, articulation] declaration for both
-    # types) — declared intent, runtime gated on those modules being built. No longer dangling.
-    dangling = {(d['emitter'], d['type']) for d in l2['findings']['dangling_emit']}
-    assert ('personal_combat', 'scene.combat_felled') not in dangling
-    assert ('personal_combat', 'scene.combat_resolved') not in dangling
+
 
 
 def test_l2_flags_engine_clock_doc_null(l2):
@@ -233,9 +235,23 @@ def test_l2_flags_engine_clock_doc_null(l2):
     assert l2['meta']['engine_clock']['notional'] is True
 
 
-def test_l2_has_wiring_edges_and_provenance(l2):
-    assert len(l2['edges']) > 50            # real wiring present
-    assert l2['assumption_count'] > 0        # provenance signal is live
+def test_l2_has_provenance(l2):
+    """⚠ THIS TEST LOST ITS FIRST AND LOUDEST ASSERTION ON 2026-09-16 (ED-IN-0232), and the loss is
+    recorded rather than papered over, because what it measured has genuinely ceased to exist.
+
+    It read `assert len(l2['edges']) > 50   # real wiring present`. Those edges came from ONE place:
+    `structure_audit.build_l2` walks `references/module_contracts.yaml`'s `emits:`/`consumes:`
+    blocks and draws an edge from each declaring producer to each declaring consumer. That block was
+    the Key bus's declared interface and retired with the substrate under Jordan's ruling *"anything
+    key-based gets retired"*, so `l2['edges']` is now `[]` — not because the wiring broke but
+    because the wiring WAS the Key flow. `assumption_count` went to 0 with it, for the same reason.
+
+    So the L2 layer is a node set with no edges today. That is a real reduction in what the
+    structure audit can see, and naming it here is the point: a reader who finds `build_l2` and
+    assumes it still models dataflow would be wrong. What survives, and is still asserted, is the
+    provenance tagging every module row carries.
+    """
+    assert l2['meta'], 'no module rows at all — the contracts registry failed to load'
     # every module carries a notional flag (provenance tag)
     assert all('notional' in m for m in l2['meta'].values())
 

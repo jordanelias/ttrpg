@@ -1035,3 +1035,8 @@ drift_report:
       - insurgency_pipeline
     Pass_2n:
       - mass_battle (v22-rich port plan)
+
+archived_sources_note: "⚠️ 2026-09-16: every canon_sources path under systems/ and engine/params/ in this
+  file was ALREADY broken before the design-prose archive (they use pre-2026-09-09 paths, and engine/params/
+  is a dissolved tree). They are historical citations, not live pointers; resolve them through
+  references/restructure_ledger.md via tools/pathres.py. The prose itself is quarantined under .designs/."
