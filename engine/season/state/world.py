@@ -36,7 +36,8 @@ from typing import Any, Callable, Optional
 
 from ..data.fixtures import DEFAULT_FIXTURES, Fixtures
 from ..data.matrix import Step, WriteClass, matrix_row, partition_lookup
-from ..data.rosters import RUNG_KINDS, TENURE_KINDS, roster
+from ..data.rosters import (
+    HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, Unowned, Unspecified
 from ..trace_log import TRACE
 from .carriers import (
@@ -245,6 +246,8 @@ class World:
                 "S15", needs=f"a kind from rosters.yaml: tenure_kinds {sorted(TENURE_KINDS)}",
                 law="#353 §15 -- the seven Tenure kinds are a CLOSED set. An unrostered kind is "
                     "not an error at write time and a silent never-match at read time")
+        if t.kind == "hold":
+            self._refuse_bad_hold(t)
         if t.kind == "contain" and not self.contain_ascends(t.subject, t.object):
             sub, obj = self.rungs[t.subject], self.rungs[t.object]
             raise Forbidden(
@@ -256,6 +259,63 @@ class World:
                     "loop, and Jordan's governance canon reads purview off that walk")
         (self.persons[t.subject].tenures if t.subject in self.persons else self._unowned).append(t)
         return t
+
+    def class_of(self, entity_id: str) -> "str | None":
+        """WHICH COLLECTION HOLDS THIS ID -- the one resolver, returning `None` for an id the
+        world does not hold yet.
+
+        ⚠ `None` IS "NOT YET", NOT "NOT A THING". A Tenure may be added before its subject exists
+        (`_rehome` is the whole reason), so an unresolvable id is the ordering the store is built
+        to tolerate and never a refusal. Every caller that turns a class into a verdict must
+        decide what `None` means for IT; `_refuse_bad_hold` treats it as PERMITTED.
+
+        The order is the collections' own declaration order in `__init__`, and it matters at
+        exactly one place today: a faction's id is BOTH a `Proposition` key and nothing else, so
+        no id is currently in two of these. If one ever is, this returns the first and the
+        ambiguity is a defect in the id scheme rather than in this function."""
+        for name, store in (("Person", self.persons), ("Rung", self.rungs),
+                            ("Office", self.offices), ("Site", self.sites),
+                            ("Record", self.records), ("Proposition", self.propositions)):
+            if entity_id in store:
+                return name
+        return None
+
+    def _refuse_bad_hold(self, t: Tenure) -> None:
+        """`holonic §15`'s own row for `hold`, enforced: *"`hold` | Person -> Office | Rung |
+        Record | Proposition | 1 per object"*.
+
+        ⚠ NOTHING CHECKED THIS AND THE COST WAS MEASURED BEFORE IT WAS WRITTEN. On
+        `build_realm(0)`, 2026-09-17: `hold` Tenures by (subject class, object class) were
+        `{('person', 'Office'): 19, ('faction', 'Rung'): 16}`, so `in_holdings` -- *a `hold`
+        whose object is a RUNG* -- was **false for every person over every rung in the world**.
+        A seat declaring `revocation: "holdings"` refused every revocation forever AND LOOKED
+        EXACTLY LIKE A WORKING PRECONDITION, which is the shape `CLAUDE.md` §0.2 exists to catch:
+        the branch executes, and it can never execute to True.
+
+        ⚠ BOTH ROSTERS, AND NEITHER IS A LITERAL HERE. The domain and the codomain are
+        `rosters.yaml: hold_subject_kinds` and `hold_object_kinds` -- Jordan, 2026-09-02:
+        *definitions are not hardcoded* -- so widening `hold` to a new carrier is a data edit and
+        an absent roster REFUSES rather than defaulting to a silent pass.
+
+        ⚠ AN UNRESOLVABLE ID PASSES. See `class_of`: a Tenure added before its subject exists is
+        the ordering `_rehome` repairs, not an error, and refusing it would refuse the store's own
+        construction sequence."""
+        sub, obj = self.class_of(t.subject), self.class_of(t.object)
+        if sub is not None and sub not in HOLD_SUBJECT_KINDS:
+            raise Forbidden(
+                f"`hold` tenure {t.id!r} has subject {t.subject!r}, which is a {sub}",
+                "S15",
+                needs=f"a subject on rosters.yaml: hold_subject_kinds {sorted(HOLD_SUBJECT_KINDS)}",
+                law="holonic §15 -- `hold` is a PERSON's edge. A faction holding a territory "
+                    "makes `in_holdings` false for every person over that rung, so every "
+                    "`revocation: \"holdings\"` basis refuses forever while looking satisfiable")
+        if obj is not None and obj not in HOLD_OBJECT_KINDS:
+            raise Forbidden(
+                f"`hold` tenure {t.id!r} has object {t.object!r}, which is a {obj}",
+                "S15",
+                needs=f"an object on rosters.yaml: hold_object_kinds {sorted(HOLD_OBJECT_KINDS)}",
+                law="holonic §15 -- `hold : Person -> Office | Rung | Record | Proposition`. A "
+                    "`hold` on a Site is the class the table excludes and nothing refused")
 
     def _rehome(self) -> None:
         """A Tenure added BEFORE its subject existed landed in `_unowned`; move it now.

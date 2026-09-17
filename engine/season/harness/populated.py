@@ -610,12 +610,45 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # value for a province nobody holds; `cast.resolve_faction` returns `None` for it, so the
     # province lands in `sovereign_fraction`'s `undetermined_count` instead of being quietly
     # assigned to somebody. An unheld province is a fact about the world and a thing to play for.
+    #
+    # ⚠⚠ **ITEM 16, 2026-09-17: THE HOLDER IS THE FACTION'S HEAD, A PERSON, AND THE SENTENCE ABOVE
+    # IS SUPERSEDED RATHER THAN DELETED.** §14.2's note is still true about the CARRIER (a
+    # Proposition may be a `hold` subject); it was read as a licence and it is a description of a
+    # defect. MEASURED on `build_realm(0)` before the change: `hold` Tenures were
+    # `{('person', 'Office'): 19, ('faction', 'Rung'): 16}` and `in_holdings` -- *a `hold` whose
+    # object is a RUNG* -- was **false for every person over every rung in the world**, so a seat
+    # declaring `revocation: "holdings"` refused every revocation forever while looking exactly
+    # like a working precondition. `World._refuse_bad_hold` now raises on the old shape
+    # (`rosters.yaml: hold_subject_kinds`), so this is not a preference: the old line no longer
+    # loads.
+    #
+    # ⚠ **THE LEADER IS `cast.faction_leader`, THE EXISTING OWNER, AND NO SECOND MAPPING IS MINTED
+    # HERE.** The same handle the creed above is subjected on (`rosters.yaml:
+    # faction_leaders.by_faction`, transcribed from `faction_canon_v30.md` §4) decides who holds
+    # the faction's provinces, so "who heads this faction" has one answer in this file rather than
+    # two.
+    #
+    # ⚠ **AND A FACTION WITH NO AUTHORED HEAD HOLDS NOTHING — THE SILENCE SHOWS THROUGH, AS IT
+    # ALREADY DOES FOR THE CREED.** `Guilds` and `Schoenland` have no `leader:` in canon, which is
+    # why `members()` gives them no standing question either. MEASURED: of the 16 provinces held,
+    # **15 re-home to a person and 1 (Schoenland's) does not**, so one province becomes unheld.
+    # That is the same reading `Uncontrolled` already gets one comment up — an unheld province is a
+    # fact about the world and a thing to play for — and inventing a holder for it would put a
+    # person canon does not name in charge of a territory. Counted, not swallowed: the census
+    # reports it below.
+    unheld_for_want_of_a_head: list = []
     for tid, terr in geo["provinces"].items():
         held_by = cast.resolve_faction(terr.get("faction"))
         if held_by is None:
             continue
-        w.add_tenure(Tenure(f"t_hold_terr_{tid}", f"fac_{_slug(held_by)}",
-                            f"terr_{tid}", "hold", 0))
+        lead_cid = cast.faction_leader(held_by)
+        lead_pid = f"p_{_slug(lead_cid)}" if lead_cid else None
+        if lead_pid is None or lead_pid not in w.persons:
+            unheld_for_want_of_a_head.append((f"terr_{tid}", held_by))
+            continue
+        w.add_tenure(Tenure(f"t_hold_terr_{tid}", lead_pid, f"terr_{tid}", "hold", 0))
+    # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets.
+    w._unheld_for_want_of_a_head = unheld_for_want_of_a_head
 
     # -- WHO GOVERNS: OFFICES AND TITLES ----------------------------------------
     #

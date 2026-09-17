@@ -1096,10 +1096,21 @@ def f1():
        by="probe-model",
        tests="when everyone abandons a cause, what it held must be able to be taken by someone else")
 def f2():
+    # ⚠⚠ THE CARRIER MIGRATED AND THE CLAIM DID NOT. This probe used to hold `S` with the
+    # PROPOSITION itself (`Tenure("th_dead", prop.id, "S", "hold")`), which `holonic §15` forbids
+    # -- `hold` is a PERSON's edge -- and which nothing checked until item 16 of
+    # `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` added
+    # `World._refuse_bad_hold`. The abandoned holding is now a PERSON's, and the cause being dead
+    # is what it always was: ZERO LIVE `commit` EDGES to the Proposition. `S54 item 20`'s question
+    # -- *when everyone abandons a cause, what it held must be able to be taken by someone else* --
+    # is unchanged, and is arguably sharper this way: there is a person to take it FROM.
     w = tiny_world()
     prop = Proposition("prop_dead", "OUGHT", "realm", "a dead cause", True, 0)
     w.propositions[prop.id] = prop
-    w.add_tenure(Tenure("th_dead", prop.id, "S", "hold", since=0))
+    w.add_tenure(Tenure("th_dead", "p_low", "S", "hold", since=0))
+    # The holder's own membership, then abandoned -- `until` set, so the cause has no live edge.
+    lapsed = w.add_tenure(Tenure("tc_dead", "p_low", prop.id, "commit", since=0))
+    lapsed.until = 0
     assert not [t for t in world_q.lateral(w, "faction", "commit") if t.object == prop.id]
     w.step = Step.RESOLVE
     old = world_q.hold_force(w, "S")
@@ -1109,10 +1120,12 @@ def f2():
             lambda: w.add_tenure(Tenure("th_new", "p_high", "S", "hold", since=w.tick)),
             record_kind="Tenure", fieldname="since", driver="Act")
     assert world_q.hold_force(w, "S").subject == "p_high"
-    return ("PASS: `confer` on an object whose holder-Proposition has ZERO live commit edges was "
-            "eligible, and THE SUCCESSFUL CONFER wrote `until` -- an ACT, in the ACTS class, via "
-            "the 1-per-object cardinality. S54 item 20's REFUSED half (write `until` when the "
-            "last commit reaches zero) would be an actorless social write outside the one seam")
+    return ("PASS: `confer` on an object whose holder had ZERO live commit edges to the cause he "
+            "held it for was eligible, and THE SUCCESSFUL CONFER wrote `until` -- an ACT, in the "
+            "ACTS class, via the 1-per-object cardinality. S54 item 20's REFUSED half (write "
+            "`until` when the last commit reaches zero) would be an actorless social write "
+            "outside the one seam. ~~holder-Proposition~~ -> holder, per `holonic §15`: the "
+            "holding is a person's and the cause is what died")
 
 
 @probe("F3", "a faction acts", "S3-L1", by="no-signature",

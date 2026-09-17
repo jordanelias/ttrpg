@@ -9523,7 +9523,7 @@
   "F2": {
    "id": "F2",
    "verdict": "PASS",
-   "detail": "PASS: `confer` on an object whose holder-Proposition has ZERO live commit edges was eligible, and THE SUCCESSFUL CONFER wrote `until` -- an ACT, in the ACTS class, via the 1-per-object cardinality. S54 item 20's REFUSED half (write `until` when the last commit reaches zero) would be an actorless social write outside the one seam",
+   "detail": "PASS: `confer` on an object whose holder had ZERO live commit edges to the cause he held it for was eligible, and THE SUCCESSFUL CONFER wrote `until` -- an ACT, in the ACTS class, via the 1-per-object cardinality. S54 item 20's REFUSED half (write `until` when the last commit reaches zero) would be an actorless social write outside the one seam. ~~holder-Proposition~~ -> holder, per `holonic \u00a715`: the holding is a person's and the cause is what died",
    "kind": null,
    "section": "S54 item 20",
    "title": "a memberless faction's holdings become contestable",

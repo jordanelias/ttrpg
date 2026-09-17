@@ -320,6 +320,12 @@ TENURE_KINDS = roster("tenure_kinds")
 # exclusion is a single member so drift would be cheap; the moment it is not, two code sites would
 # have to move together and only one of them is guarded. Found by the `release` adversarial pass.
 RELEASABLE_KINDS = frozenset(TENURE_KINDS) - {"contain"}
+# `holonic §15`'s DOMAIN and CODOMAIN for the `hold` row, read by `World._refuse_bad_hold`.
+# Rostered rather than inlined at the guard (Jordan, 2026-09-02 -- *definitions are not
+# hardcoded*), so widening `hold` to a new carrier is a data edit and an absent roster
+# REFUSES instead of defaulting to a silent pass.
+HOLD_OBJECT_KINDS = roster("hold_object_kinds")
+HOLD_SUBJECT_KINDS = roster("hold_subject_kinds")
 # `U1`: verb -> the capability key its contested roll draws dice from. A MAPPING inside a roster
 # row, read through `roster_map` so an absent roster refuses rather than defaulting to `{}` -- the
 # polarity that function exists to hold. A verb with no row falls through to `pool_default` inside
