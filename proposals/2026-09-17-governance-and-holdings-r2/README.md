@@ -66,6 +66,7 @@
 | **`04_MATTER_AND_WORKS.md`** | Q3 plus works and founding — the larder ladder, the body write, the `works` Record | `SE` · `ED-SE-0053` |
 | **`05_LEDGER_AND_BUILD.md`** | Q5 — the deletion ledger, the engine changes per file, the build order, the ruling ledger, the NERS pre-commitment | `IN` · `ED-IN-0233` (shared with `01`) |
 | **`probe_reach_questions.py`** | the instrument behind `01` §0.2(d)'s `561 → 1632`. Re-runnable, gates nothing, dies with this suite | — |
+| **`EXECUTION_PLAN.md`** | **`05` §A.4 streamlined into a working sheet** — 16 items, dependency-sorted, stripped to *what you change · what proves it ran · what would show it wrong.* Read this to BUILD; read `05` to understand. It adds no item and changes no count, and `05` wins on any disagreement | — (shares `ED-IN-0233`) |
 
 ## Conventions, binding on all five
 
