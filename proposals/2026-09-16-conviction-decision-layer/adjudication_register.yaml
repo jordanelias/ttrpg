@@ -73,6 +73,113 @@ meta:
       `Claim.confidence`, which witness already writes. Convictions are exactly what may not
       move there. The refusal law and this operator model agree rather than collide.
 
+
+# ===========================================================================
+# BASES — the coordinate systems a character is held in.
+# ⚠ ADDED 2026-09-17. A category says WHAT a character holds; a basis says IN
+#   WHAT COORDINATES. This section exists because Jordan's second axis list
+#   turned out not to be a competing conviction basis but a SECOND basis, and
+#   because that dissolves R7.
+# ===========================================================================
+bases:
+
+  moral_values:
+    # ⚠ RENAMED FROM `conviction` BY JORDAN, 2026-09-17: "conviction should be reserved for a
+    #   different concept, not moral values" — then, naming it: "piety".
+    #   The 13-roster holds VALUE-FRAMES. `conviction` is reserved. See STR-6 for the cost and
+    #   the collision, which are both larger than a rename usually is.
+    held_as: "13 weights over the roster currently SPELLED `convictions` in code"
+    reaches_axes_by: "PROJECTION — conviction[a] = SUM_c w_c * P[c][a] (choose.py:53)"
+    axes_today: [hierarchical, sacred, instrumental, traditional]
+    proposed_axes:
+      # Jordan, 2026-09-17 — offered AFTER the seven, and separating the two registers
+      # himself: these four are value-frames (what is right), the seven are bearing.
+      - "traditional <-> progressive"
+      - "equality    <-> hierarchy"
+      - "equity      <-> partiality"
+      - "objective   <-> subjective"     # NEW — not in the earlier seven
+    changed_from_the_earlier_seven: >-
+      Three carried over (traditional, equality, equity); `substantive <-> procedural` dropped;
+      `objective <-> subjective` added; and the three now filed as temperament are absent.
+      ⚠ That this matches the placer's clustering is CONSISTENT, not CONFIRMING — see the
+      withdrawn claim under `temperament`. Jordan may have dropped `substantive` for reasons
+      unrelated to any measurement, and no inference should be drawn from the agreement.
+    open_on_objective_vs_subjective: >-
+      ⚠ IT READS TWO WAYS AND THEY ARE DIFFERENT AXES.
+        (a) META-ETHICAL — is there a fact of the matter about what is right, discoverable by
+            anyone? A genuine conviction axis.
+        (b) PROCEDURAL — do I judge by the case's own merits or by who stands before me? That
+            is close to `equity <-> partiality` and would be largely redundant with it.
+      ⚠ AND IT COLLIDES WITH A LIVE TRACK the other three do not. `Truth` (ex-Certainty,
+      ex-Piety) is a per-character metaphysical stance, 0-5, Solmund-orthodoxy <-> Thread-truth,
+      with players seeing qualitative bands only (CURRENT.md clocks row, ED-IN-0075). A
+      character's position on whether truth is objective may ALREADY be that track rather than
+      a conviction axis. Rule the collision before this gets a column.
+    constraint: >-
+      ⚠ R7 BINDS HERE AND ONLY HERE. The projection is a LINEAR map from the weight
+      vector, so two persons with identical conviction vectors are identical on every
+      conviction axis, necessarily. taxonomy §2.3 requires the opposite for self/other
+      (Borgia and the public-spirited magistrate at identical Utility). Any quantity
+      that must vary at fixed convictions CANNOT be a conviction axis.
+
+  temperament:
+    held_as: "the axis values DIRECTLY on the Person — no roster underneath, no projection"
+    reaches_axes_by: "nothing: the character IS the vector"
+    proposed_axes:
+      - "courage        <-> cowardice"
+      - "altruistic     <-> selfish"
+      - "pacifist       <-> militaristic"
+      - "diplomacy      <-> intimidation"
+      - "passive        <-> aggressive"
+      - "humble         <-> vain"
+      - "insecure       <-> self-assured"
+      # Jordan, 2026-09-17.
+    why_it_dissolves_R7: >-
+      ⚠ THE PAYOFF, AND IT IS THE BIGGEST RESULT OF THIS THREAD. R7 binds axes REACHED
+      THROUGH A PROJECTION. A directly-held vector is not a function of the conviction
+      weights, so Borgia and the magistrate share Utility 0.9 and differ on `selfish`.
+      Jordan's first axis works — it was only ever unsatisfiable in the CONVICTION basis.
+      The tree already contains the pattern: `orient.self_other` is exactly a
+      directly-held scalar, deliberately kept OUT of the Conviction set by taxonomy §2.3
+      for this very reason. The seven generalise that one scalar into a basis.
+    what_supports_it: >-
+      ⚠ A DEFINITIONAL TEST, NOT A STATISTICAL ONE — and the statistical claim this row
+      first carried has been WITHDRAWN (see `withdrawn_claim` below).
+      THE TEST: can a character hold conviction X with temperament Y, for every X and Y?
+        Faith + vain -> a proud priest.  Faith + humble -> a meek one.  Both coherent.
+        Equity + militaristic -> a revolutionary.  Equity + pacifist -> a reformer.  Both.
+        Warden + cowardly -> a frightened steward who keeps the work anyway. Coherent.
+      Now the same test on a CONVICTION AXIS: Faith + anti-sacred? INCOHERENT — Faith IS the
+      sacred-leaning conviction, and the axis value is ENTAILED by holding it.
+      THAT ASYMMETRY IS THE ARGUMENT. A conviction axis is entailed by the convictions; a
+      temperament is free of them. It needs no placer, no threshold and no sample, and anyone
+      can check it against the taxonomy definitions.
+    withdrawn_claim:
+      claim: >-
+        This row first read: "MEASURED, and the split is BIMODAL rather than a ranking" —
+        citing per-axis abstention counts, spans and mean |v| from an independent placer's
+        13 x 7 matrix, and concluding that the three low-scoring axes were orthogonal.
+      withdrawn_by: "Jordan, 2026-09-17: 'unless you can explain your methodology here, this doesn't mean anything here'"
+      why_it_does_not_support_the_conclusion:
+        - "NOT MEASUREMENTS. Every cell is one model's judgment. There is no ground truth and nothing anchors the numbers; a different placer, or different wording, could return different ones."
+        - "THE 0.2 ABSTENTION THRESHOLD WAS CHOSEN BY THIS SESSION AFTER SEEING THE DATA. A different threshold gives different counts and possibly no gap."
+        - "'BIMODAL' OVER SEVEN POINTS IS NOT A DISTRIBUTION CLAIM. A 4/3 split of seven hand-placed values has a gap somewhere by construction."
+        - "CIRCULARITY NOT RULED OUT. The placer was given THIS SESSION'S pole definitions. Vague definitions would produce abstentions that measure the prompt, not the axis."
+        - >-
+          THE INFERENCE DOES NOT SELECT ITS CONCLUSION. Low placement variance is equally
+          consistent with: orthogonality; a vague axis; a badly-worded axis; a placer that did
+          not grasp it; or a real axis uncorrelated with THESE THIRTEEN specifically. This
+          session chose orthogonality because it fitted the argument being built — the same
+          failure §0.1 pt 3 names, committed after being caught at it twice in one session.
+      status_of_the_numbers: "at best weak corroboration; they are NOT the finding and must not be cited as one"
+    still_measured_and_still_standing:
+      - "[E] no temperament roster exists: 34 rosters in engine/season/rosters.yaml, none carrying disposition"
+      - "[R] `orient.self_other` is already a DIRECTLY-HELD scalar kept out of the Conviction set by taxonomy §2.3 — the pattern this basis generalises"
+    cost: >-
+      A second basis needs its OWN alignment table — an N x 38 verb matrix parallel to the
+      conviction one, which is 52 of 152 cells full. It does NOT need a projection matrix,
+      which is the expensive half of the conviction chain and the half R6 makes atomic.
+
 # ===========================================================================
 categories:
 
@@ -95,6 +202,10 @@ categories:
       - "one kind: religious value is a conviction weight (status quo)"
       - "two kinds: religion is a second operator — e.g. a modifier on acts a doctrine forbids"
     blocks: "the axis question — a second kind would need its own basis"
+    answered_pending_STR_6: >-
+      ⚠ Jordan's 2026-09-17 reservation of `conviction` for piety selects the SECOND option —
+      two kinds — and makes religious commitment its own quantity. Recorded here; the ruling
+      belongs on STR-6, not duplicated into this row.
     ruling:
 
   - id: CAT-2
@@ -102,6 +213,7 @@ categories:
     holds: "for whose benefit the character acts"
     absorbs: [8 self interest vs public interest]
     operator: weight
+    basis: temperament          # an axis OF CAT-9, not a standalone scalar
     carrier: "none in engine/season/. A by-reference registry row only."
     status: ABSENT
     evidence:
@@ -287,6 +399,7 @@ categories:
     holds: "which kinds of challenge the character will face, and at what cost"
     absorbs: ["the half of `fear` that names an ENCOUNTER rather than an OUTCOME"]
     operator: modifier
+    basis: temperament          # an axis OF CAT-9
     carrier: "none"
     status: ABSENT
     raised_by: >-
@@ -323,6 +436,60 @@ categories:
     blocks: "nothing today — it is absent in both directions"
     ruling:
 
+  - id: CAT-9
+    name: bearing
+    holds: "how the character carries themselves — the temperament vector, held directly"
+    absorbs: ["Jordan's seven pairs, 2026-09-17"]
+    operator: "MIXED — the seven do not share one operator, which is why they were never going to be one axis set"
+    carrier: none
+    status: ABSENT
+    basis: temperament
+    placement:
+      # Each pair, its operator, and whether machinery already exists.
+      - pair: "courage <-> cowardice"
+        operator: "modifier, keyed on what a candidate DEMANDS"
+        machinery: "none — this is CAT-8"
+      - pair: "altruistic <-> selfish"
+        operator: "weight, keyed on BENEFICIARY"
+        machinery: "partial — this is CAT-2; `beneficiary` is already a Key ROLE, absent from Candidate"
+      - pair: "pacifist <-> militaristic"
+        operator: "weight on VERBS"
+        machinery: "none — needs the temperament alignment table"
+      - pair: "diplomacy <-> intimidation"
+        operator: "weight on VERBS — which method you reach for to move someone"
+        machinery: "none — needs the temperament alignment table"
+      - pair: "passive <-> aggressive"
+        operator: "weight on VERBS, plus plausibly a floor at COMMITMENT (whether to act at all)"
+        machinery: "none — needs the temperament alignment table"
+      - pair: "humble <-> vain"
+        operator: "the gap between the character's self-account and others' account of them"
+        machinery: >-
+          ⚠ ALREADY BUILT AND UNRECOGNISED. decision/options.py:443 `standing_of` computes
+          exactly this: gap(told_by claims about p, p's own firsthand claims about p). A vain
+          character asserts more about himself than others assert about him. MEASURED: it
+          returns 1000 — the maximum-gap default — for all 12 persons, because its told_by
+          input is empty (CAT-3).
+      - pair: "insecure <-> self-assured"
+        operator: "susceptibility gain — how far another's claim moves this character"
+        machinery: >-
+          ⚠ ALREADY THE INTAKE OPERATOR Jordan restored. An insecure character has HIGH gain
+          on incoming claims; a self-assured one LOW. This is the same operator as the
+          testimony ladder (keyed on SOURCE) and Resonant Style (keyed on FORM) — a third key.
+    question: >-
+      Three of the seven are verb-weights and need a table. Two already have machinery and
+      were not recognised as temperament. Two are the existing CAT-2 and CAT-8. Is `bearing`
+      ONE vector with seven components, or are these seven independent quantities that merely
+      share a register?
+    options:
+      - "ONE vector: a temperament basis with 7 axes, held directly on Person, with its own N x 38 alignment table"
+      - "SEVEN quantities: each placed at its own operator, no shared basis, no shared table — cheaper, but gives up the orthogonality result"
+      - "a HYBRID: the three verb-weights share a table; humble/vain and insecure/self-assured stay where their machinery already is"
+    sub_questions:
+      - "does temperament DRIFT? Convictions move only by Scar. A coward who survives a battle — does his courage move, and by what?"
+      - "is temperament visible to others? standing_of implies humble/vain is; courage plausibly is; orientation may not be."
+    blocks: "CAT-2 and CAT-8 both sit inside this basis; the axis question (STR-2) changes shape if there are two bases rather than one"
+    ruling:
+
 # ===========================================================================
 # Not a category. These are the STRUCTURAL rulings the six sit on, and none of
 # the six can be built past its blocker until they are taken.
@@ -348,6 +515,12 @@ structural:
 
   - id: STR-2
     name: the axis basis
+    reshaped_2026_09_17: >-
+      ⚠ THIS ROW WAS WRITTEN ASSUMING ONE BASIS. There are two (see `bases:`), and three of
+      the seven axes it scores — selfish, passive, peaceful — belong to the TEMPERAMENT basis
+      rather than the conviction one. Their poor projection onto the thirteen Convictions is
+      what identifies them as temperament, so this row must be re-read: it measured four
+      conviction-axis candidates and three temperament axes against a conviction yardstick.
     question: >-
       Jordan proposed seven axes to replace the live four. R7 disqualifies the first
       (Selfish vs Selfless) structurally. Two of the remaining six re-measure existing
@@ -380,6 +553,40 @@ structural:
       - "keep tau=0.1 and require every term to declare its range against the floor"
       - "lower tau — more rational characters, less variety"
       - "raise tau — more variety, weaker convictions"
+    ruling:
+
+  - id: STR-6
+    name: "`conviction` is reserved, and the 13-roster is misnamed"
+    raised_by: >-
+      Jordan, 2026-09-17: "conviction should be reserved for a different concept, not moral
+      values" — and, naming the concept: "piety".
+    what_it_rules: >-
+      The thirteen-item roster holds MORAL VALUES / value-frames. It must not be called
+      `conviction`. That word is reserved for piety.
+    consequence_for_CAT_1: >-
+      ⚠ THIS ANSWERS CAT-1'S OPEN QUESTION. CAT-1 asked whether moral and religious value are
+      ONE kind or TWO, noting they share one field today so a devout and a secular character
+      differ only by a Faith weight — a difference of DEGREE where a difference of KIND may be
+      wanted. Reserving `conviction` for piety makes them TWO. Religious commitment becomes its
+      own quantity; `Faith` as one of thirteen value-frames is then either redundant or is the
+      value-frame half of a thing whose other half is piety.
+    rename_cost_measured:
+      - "[E] 40 Python files under engine/ tools/ tests/ carry the name"
+      - "[E] 60 YAML/JSON files under engine/ references/ registers/ carry it"
+      - "[E] 107 design documents under systems/ canon/ architecture/ carry it"
+      - "[R] the single owner is references/descriptor_registry.yaml:236 `conviction_roster`; engine/season/rosters.yaml binds CONVICTION_AXES and the 13x4 projection off the same name"
+      - "[D] §0.05 clause 3 governs the method: edit the OWNER and re-derive; never hand-edit downstream and never keep a second copy."
+    the_piety_collision:
+      - "[E] `piety` appears NOWHERE in engine/season/ — not in code, not in the 34 rosters. Person-side, the name is vacant in live code."
+      - "[R] because the character `Piety Track` was RETIRED into `Truth` (ED-IN-0075) — so this would restore an earlier name to a narrower concept, which is legitimate."
+      - "[R] ⚠ BUT territory-scale **Piety (PT)** is LIVE and CURRENT.md declares it DISTINCT and unchanged. Two scales, one word: a later session reading `piety` cold cannot tell which is meant — §4's idempotency test failing, exactly as STR-5 does for `belief`."
+      - "[R] the person-scale religious slot that ALREADY EXISTS is `church_standing`, a person predicate carried as a CLAIM (asserted about you, contestable), alongside heritage/grade/office/residence."
+    questions:
+      - "what does `conviction` denote once reserved — piety itself, or the firmness with which anything is held? Ordinary usage supports BOTH, which is why §4 wants it pinned before it is used."
+      - "if piety is person-scale, how is it distinguished in writing from territory-scale Piety (PT)? A qualifier on one, or a different word for one?"
+      - "does piety SUBSUME `church_standing`, sit beside it, or is church_standing the observable half (what others say of your devotion) of which piety is the interior half?"
+      - "what does the 13-roster get called? `moral_values` is used in this register as a placeholder, not a proposal."
+    interacts_with: "STR-5 — `belief` is overloaded six ways. Settling `conviction`, `piety` and `belief` separately will re-collide them; they are one vocabulary problem with three words."
     ruling:
 
   - id: STR-5
