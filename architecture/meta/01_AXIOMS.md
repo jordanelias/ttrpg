@@ -63,8 +63,12 @@ if removed.** The chain currently states five "laws" of coordinate rank. **Two o
 axioms — they are theorems**, and PART B derives them. Demoting them is not a weakening: it tells a
 future session which statements it may never trade away and which it should expect to re-derive.
 
-**There are SIX.** ⚠ The first publication said five; `AX-6` was found missing by an adversarial
-pass, and §A.1 records which theorems had been leaning on it unstated.
+**There are ~~SIX~~ → SEVEN.** ⚠ The first publication said five; `AX-6` was found missing by an
+adversarial pass, and §A.1 records which theorems had been leaning on it unstated. **`AX-7` was
+RULED by Jordan on 2026-09-17** (`ED-IN-0244`), after a pass proposed filing it as a theorem of
+`AX-1` + `AX-4` — a derivation made against a superseded framing, and one that does not reach the
+clause `AX-7` actually turns on. **The count has now moved twice. Expect it to move again rather
+than treating the number as the claim.**
 
 ---
 
@@ -105,6 +109,15 @@ current; cite it as what a re-measurement has to beat.** (`CLAUDE.md` §0.1 poin
 **Why it is axiomatic.** Independent of AX-1: one could have persons as the only actors and make
 them omniscient. This is the axiom that makes a false conclusion *indistinguishable from a true one
 to the person holding it*, which is the condition every deception mechanism in the game rests on.
+
+⚠ **`AX-2` AND `AX-7` ARE ADJACENT AND DO OPPOSITE WORK. READ THE LINE BEFORE CITING EITHER.**
+`AX-2` is scoped to the INSIDE OF A DECISION — *"a person decides from what they hold"* — and it
+**PERMITS**: what they hold MAY be false, which is what makes deception possible. `AX-7` is scoped
+to BELIEF FORMATION, upstream of deciding, and it **PROHIBITS**: a reading may never be the engine's
+own resolution handed over unmediated. So `AX-2` covers a character REACHING for world truth (and
+§A.1 files `L2`'s enforcement as its theorem); `AX-7` covers the world PUSHING truth into them,
+which no part of `AX-2` reaches. **A claim about what a person may KNOW is `AX-2`'s. A claim about
+how they came to hold it is `AX-7`'s.**
 
 ---
 
@@ -182,6 +195,7 @@ which is the wording this document shipped.
 
 ---
 
+
 ### **AX-6 · NOTHING BECOMES PERMANENT WITHOUT AN AUTHOR.**
 
 > A state that no act can undo is a state nobody chose to make final. **Every irreversibility IN THE
@@ -243,6 +257,64 @@ shadow actor wearing a state's clothes rather than a clock's.
 > free-standing commitment, when its clause-2 hole is exactly what AX-4 predicts — a per-person
 > tally summed across holders has no single owner, so AX-4 refuses it directly and needs no
 > read-side patch.
+
+---
+
+### **AX-7 · NO CHARACTER TOUCHES THE WORLD DIRECTLY.**
+
+> **The engine may receive purely objective events and actions. No character in the game can access
+> those directly.** What a character has is always a reading — of an event, of an act, of their own
+> conduct — never the event itself.
+
+**THE SANCTITY IS THE BRUTE PHYSICAL FACT, AND ONLY THAT.** Jordan, 2026-09-17, verbatim: *"when a
+letter is written or a word is spoken, there is a brute physical reality of the writing applied to a
+paper or the emission of noise. **this is what must remain the case.**"* A draw may decide what
+happens. It may not decide whether the ink met the paper.
+
+**THREE LAYERS, AND THE ENGINE MUST HOLD THEM APART.** Verbatim: *"there are three relevant things
+that happen when someone performs an action"*:
+
+| | | may it be wrong? |
+|---|---|---|
+| **(1)** | the objective performance, as a literal, ontical, objective fact | **no** — this is the sanctity |
+| **(2)** | **the performer's own understanding** of their action | **yes**, and by its OWN mechanism — a person does not witness themselves, and self-knowledge is not observation |
+| **(3)** | everyone else's understanding of that action | **yes**, by channel, competence and prior belief |
+
+- **(2) is its own object, not privileged access to (1).** A character may intend a kindness that
+  lands as an insult and go on believing it was kind.
+- **(2) IS REVISABLE BY (3).** Verbatim: *"someone else's account of what a character did can revise
+  their own understanding of it."* Testimony reaches self-knowledge; a man can be talked out of what
+  he thought he did.
+- **What governs divergence, ruled as all three together:** the **channel** it arrived on, the
+  reader's **competence**, and their **prior beliefs**. Not a draw alone.
+
+⚠ **THE SCOPE CLAUSE IS LOAD-BEARING, AND IT IS WHY THIS IS AN AXIOM RATHER THAN A MOOD.**
+**`AX-7` quantifies over WHAT HAPPENED. It does not reach WHAT IS PERMITTED.** An event and an act
+are mediated and fallible; a **remit, an office, an eligibility** is a standing permission and is
+held with certainty. Ruled 2026-09-17 in the same breath, on `H-71`: *"Too noisy for a character to
+have assailable/uncertain remits. That's just complexity for the sake of itself without any real
+gameplay value."* Without this clause a later session extends the axiom to eligibility and
+capability and manufactures exactly that noise.
+
+⚠ **IT BINDS THE CHARACTER, NEVER THE PLAYER.** Verbatim: *"their character is an avatar, which
+means that the player gets to retain their own beyond-game understanding even if the availabilities
+in game to act/react may be modified by how externalities have comported their character."* **No
+state is hidden from the player.** What narrows is the OPTION SET. The player may see plainly that
+their character has been misread and be unable to act as though they had not — and that gap is the
+game, not a confusion to be designed away.
+
+**WHAT IT FORBIDS THAT THE OTHER SIX PERMIT — the independence test, and it has a live instance.**
+`loop/witness.py:191` deposits `Claim(cid, pid, subj, e.kind, True, …)` into every observer's
+ledger: the engine's own event kind, asserted TRUE, unmediated, identically for the actor and for a
+stranger. **Every one of the six permits that deposit.** `AX-7` forbids it. `§A.1` already files
+`L2`'s enforcement — *"`choose` takes no `World`"* — as a **theorem of `AX-2`**, which covers a
+character REACHING for world truth; nothing in the six covers the world PUSHING it. That asymmetry
+is the axiom.
+
+> **FALSIFIER.** Any deposit into a person's ledger whose value is the engine's own resolution,
+> unmediated by channel, competence or prior belief. Three production sites construct a `Claim`
+> today — `witness.py:191`, `:271`, `:361` — and **all three currently violate this axiom.** They
+> are not a design to revisit; under `AX-7` they are a contradiction to fix.
 
 ---
 

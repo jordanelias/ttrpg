@@ -395,6 +395,57 @@ Full text for both: `registers/editorial_ledger_in.jsonl`.
   Four queue entries closed with citations, each verified at the call site; 17 further candidates
   REFUSED as path citations rather than dead subjects.
 
+### 2026-09-17 (later still) — ED-IN-0243 (the seam between the governance suite and the behaviour layer)
+
+**Why an id at all:** two suites written a day apart —
+`proposals/2026-09-17-governance-and-holdings-r2/` (ED-IN-0233/0234/0235, ED-SE-0053) and
+`proposals/2026-09-16-conviction-decision-layer/` — **do not cite each other**, and both were about to
+be built. They touch eight shared engine objects. `ED-IN-0243` is the unified proposal over the SEAM;
+it supersedes neither and takes no position inside either.
+
+- **One true conflict, at `H-71`,** and it is a defect in the QUESTION rather than the answer. The
+  behaviour register's `CAT-6` offers Jordan three arms; r2's `03:794` declares H-71 closed by a
+  **fourth** (the commission claim) with a build item already attached. Repair: `CAT-6` gains arm 4.
+  ⚠ And **arm 2's carrier, `(Tenure, payload)`, is r2's own deletion-ledger row 13**, so choosing it
+  is now an `RR-B`-shaped amendment — a price on neither suite's sheet.
+- **Seven live forced orderings, one demoted, one collision measured ABSENT.** The absent one is worth
+  the line: `STR-1` does **not** bind r2's body write, because `(Person, body)` is `[MAT, RES]
+  MATTER/ACTS`.
+- **The ruling sheet.** All 21 open questions from both suites through `CLAUDE.md` §0's five-step gate:
+  **12 closed with opened citations, 9 escalated.** `STR-1` — the largest claimed gate, held to block
+  five categories at once — **closes at step 3**: the six `Person` rows are `steps: [RES]`,
+  `class: "ACTS"`, each with its own `emits:` kind, so they are **a licence nobody has taken up**, not
+  the prohibition the register states. That close was only available after correcting the proposal's
+  own first-draft error, which had called those rows `INTERIOR`.
+- **Method note, since it is the reusable part:** three passes over one shared extract (§10 — *share
+  the reading, fork only the judgment*). **Both independent passes found real defects in the author's
+  document**, including the class-name error above and two seam points it had missed. Corrections are
+  struck-and-kept in place.
+
+Allocation note: `next_free` 243 → 244. Held back in full; `ED-1094`'s ratify-on-merge is refused.
+
+### 2026-09-17 (rulings) — ED-IN-0244 / ED-IN-0245 (AX-7, and the eight remaining escalations)
+
+**Jordan ruled all nine of `ED-IN-0243`'s escalations in session.** Two ids, because one of them
+amends a RATIFIED Layer 1 file and needs its own citation.
+
+- **`ED-IN-0244` — `AX-7` added to the axiom set.** *No character touches the world directly.* The
+  sanctity is the **brute physical fact** — ink meeting paper, air moving — and three layers are held
+  apart: the ontical performance, the performer's own understanding, and everyone else's. (2) runs on
+  its own mechanism (a person does not witness themselves) and **is revisable by (3)**. Divergence is
+  governed by channel + competence + prior belief together. **Scope clause:** it reaches what
+  HAPPENED, never what is PERMITTED — remits are certain. **It binds the character, never the
+  player**, whose option set narrows while their understanding does not. The live falsifier is
+  `witness.py:191`, which all six prior axioms permit. ⚠ The count has moved five → six → seven.
+- **`ED-IN-0245` — the other eight.** RR-A fold; RR-C withdrawn; CAT-6 arm 2; RR-B limb by limb
+  (B-4 withdrawn on a misread question mark that r2 made first and this suite inherited); STR-6
+  `conviction` = religious affiliations and intensities, as a vector, with confliction DERIVED;
+  STR-2's axes found mis-recorded and the thirteen superseded; RR-2 capacity plus **migration as a
+  verb**, since `move` is travel and `residence` has no writer.
+
+Allocation note: `next_free` 244 → 246.
+
+
 Allocation note: `next_free` 238 → 240 across the two. The `ED-IN-0236/0237` renumber narrative that
 used to be duplicated on the `IN:` lane row lives at the subsection above it — one owner, per §0.05
 clause 3, which is why the row now carries state and a pointer only.

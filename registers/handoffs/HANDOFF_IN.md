@@ -44,6 +44,84 @@ write-down. Read it before grepping `engine/season/` for how a character decides
 | Φ3 | APPRAISAL — how do I rank them | `decision/choose.py:302` (three terms) |
 | Φ4 | COMMITMENT — what do I spend on | `_sample_order` → `pack_scenes` → `ask_budget()` |
 
+## 🧾 2026-09-17 — THE SEAM: #408 and #409 collide in eight places (`ED-IN-0243`)
+
+**Sibling to the unit above, and read it second.** That one establishes how a character decides;
+this one establishes **where the governance suite and the behaviour layer touch each other.** The
+proposal is `proposals/2026-09-17-governance-and-behaviour/` — `00` for the findings, `01` for the
+order, `RULINGS.yaml` for the 21 questions. **Nothing has run; nothing ratified.**
+
+**Facts established, so they are not re-derived:**
+
+| fact | where |
+|---|---|
+| `resolvable_verbs()` = **18** of 38 table rows | `loop/driver.py:72`, executed |
+| `in_holdings` is **False for every person × rung** — all 19 person-holds are on Offices, all 16 rung-holds are faction-subject | `build_realm(0)` + `predicates.py:99-102` |
+| question sources after one populated season: `claim_landed` 583 · `need` 405 · `date_due` **0** · `band_crossed` **0** | instrumented over 230 `questions_for` calls |
+| the six `Person` interior rows are `class: "ACTS"`, **not** `INTERIOR` — the only `INTERIOR` row is `(Person, claim_ledger)` at `[WIT]` | `write_matrix.yaml:14-17` (the loader asserts the derivation), `:147-209` |
+| the teller of a `told_by` claim is **`_act.actor`, in scope at `witness.py:316`**, discarded by the constructor at `:361-363` | read in full |
+| `standing_of` returns the **1000 max-gap default for all 12 persons** because its `told_by` input is empty | `decision/options.py:443-465` |
+
+**⚠ Three traps for whoever builds next:**
+
+1. **`(Person, body)` is NOT person-interior.** It is `[MAT, RES] MATTER/ACTS`. A session reading
+   `STR-1` as a blanket prohibition will block r2 item 3b for no reason. **The six `ACTS` rows are a
+   licence nobody has taken up** — that is what closed `STR-1` at gate step 3.
+2. **r2's `EXECUTION_PLAN` cites `engine/season/loop/budget.py` twice and that file does not exist.**
+   The live reader of `band_floors["body"]` is **`engine/season/decision/budget.py:73`**. Filed, not
+   patched — §0.05 cl.3 makes it r2's.
+3. **A lane ledger is append-only and last-row-wins.** Grepping one and taking the FIRST hit reads a
+   superseded status as current; it produced three stale citations across the two subject suites,
+   including `ED-WR-0011`'s pairing rider on `RR-2`, **which its own later row already discharged.**
+
+**Next actions — and there are only two, both Jordan's:**
+
+- **Nine ruling requests**, consolidated from two sheets into one at `RULINGS.yaml`'s
+  `escalation_summary`: `CAT-6` · `STR-2` · `STR-5` · `STR-6` · `RR-P` · `RR-A` · `RR-B` · `RR-C` ·
+  `RR-2`. **Only `CAT-6` and `RR-A` block a build item** (items 11 and 13).
+- **Everything else in r2's plan is buildable today** — 13 of 16 items, item 1 first at ~12 lines.
+  **No session needs to re-open the seam to start.**
+
+---
+
+## ✅ 2026-09-17 — ALL NINE ESCALATIONS RULED (`ED-IN-0244`, `ED-IN-0245`)
+
+**The `ED-IN-0243` queue is empty.** Jordan ruled all nine in session. Detail per row:
+`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`. **Do not re-open these as questions.**
+
+| | ruled |
+|---|---|
+| **RR-P** | **`AX-7` added to the ratified axiom set** — see `01_AXIOMS.md`, and read its scope clause before citing it |
+| **RR-A** | **fold** `comply` / `evade \| defy` / `refract` / `dispatch`; compliance is the executor's own act. **Unblocks r2 item 13** |
+| **RR-C** | withdrawn — closes at gate steps 3/4 |
+| **CAT-6** | **arm 2**, the Tenure payload. *"Too noisy for a character to have assailable/uncertain remits"* |
+| **RR-B** | B-8 descendants only · B-4 withdrawn · B-6 follows RR-A · B-1 keep `scope?` · B-2 keep the operands · B-3/B-5 take r2's · B-7 nominal rung + purview by class |
+| **STR-5/6** | `conviction` = **religious affiliations and their intensities**, a vector; confliction **derived** |
+| **STR-2** | axes are `memory` · `substantive` · `equity` · `selfish` — the register had the wrong four. **The thirteen are superseded** |
+| **RR-2** | matter **plus hearth capacity**; `found` is the throttle; **migration is a verb persons take** |
+
+### ⚠ What the rulings OPENED — four pieces of design work that did not exist before
+
+1. **An affiliation roster and an incompatibility relation.** `conviction` is now a vector over
+   creeds. MEASURED FINDING: `ED-IN-0075`'s `Truth` (0–5, Solmund-orthodoxy ↔ Thread-truth)
+   **structurally cannot** carry Jordan's case — a midpoint on a pole scalar reads as *lukewarm about
+   both*, not *conflicted between two strong commitments*.
+2. **A migration verb.** MEASURED: nobody in Valoria can relocate. `move` is TRAVEL (a `travel_leg`
+   Tenure alter); `residence` is a contested claim predicate **with no writer anywhere**.
+3. **The 13-roster re-authored**, and the 13×N projection with it. `selfish` is measured near-inert
+   across the current roster because self/other was factored out into `orient.self_other`.
+4. **H-71's second half is still open** — arm 2 closes the holder's own knowledge of his remit, not
+   *being understood by others as seated*.
+
+### ⚠ And `AX-7` makes three shipped deposit sites a CONTRADICTION, not a preference
+
+`witness.py:191`, `:271` and `:361` are the only production sites that construct a `Claim`, and all
+three hand a character the engine's own resolution as true. Under `AX-7` that is not a design to
+revisit. **The machinery to fix it already exists** — `agreement`, `standing_of`, `belief_contradicts`
+and the testimony ladder all presuppose divergence; only the producers hand out certainty.
+
+---
+
 ## ⚠ OPEN MARKERS IN MOVED UNITS — the index, 2026-09-17 (`ED-IN-0240`)
 
 **Every unit carrying an open marker was moved to `HANDOFF_IN_history.md`** — the rows below are the complete list with the rest of the pre-generation narrative. **Their markers are reproduced here VERBATIM**, so an open item is a table row plus one file-open away instead of buried inside a multi-thousand-token session section — that is the safety claim of this trim, and it is stronger than a move without an index.
