@@ -33,6 +33,14 @@ owns each.
 | **`02_THE_BUILT_WORLD.md`** | fabric, address, the five site families, fortification, holdings, the `works` lifecycle. Owns the `hold`-guard argument, the `fort_level`/`facility_tier` withdrawal and the commons `share` reading | `SE` · `ED-SE-0052` |
 | **`03_THE_SURFACE.md`** | what the player sees, touches, is asked, and comes to believe. Owns the Surface Law, the read licences and **RR-3** | `IN` · `ED-IN-0232` |
 | **`04_BUILD_ORDER.md`** | the sequence, the pre-flight, and **the suite's single ruling ledger** — three surviving requests, thirteen closed | `IN` · `ED-IN-0232` |
+| **`UNIFICATION_LEDGER.md`** | the 21 divergences the parallel authoring produced, and how each was resolved. A closed record, not a queue | — |
+| **`AUDIT_VERDICT.md`** | the pessimistic steelman NERS verdict over this suite: the limits, what survived its attacks, the axis table and the false N-lines | — |
+
+⚠ **The last two files are RECORDS, not proposals**, and they exist under `CLAUDE.md` §0's narrow
+exception, ruled 2026-09-17: a terminal pass whose *verdict is the deliverable* may record it where
+the thing it judges lives. They create no work — the work is `04_BUILD_ORDER.md`'s — and they die
+with this directory. If either is ever mined for work items rather than read for reasoning, the
+exception has failed and the repair is to delete it.
 
 ## ⚠ The standing instructions, and they are the point of this file
 
