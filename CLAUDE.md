@@ -846,6 +846,45 @@ used at all — on the *audit/guardrail* node rather than the synthesis one.
 3. **Switching model mid-conversation invalidates the entire cache** — caches are model-scoped, no escape
    hatch. Escalate at *phase* boundaries, where the cache turns over anyway.
 
+⚠ **THE FAN-OUT'S COST IS ITS READING, NOT ITS WRITING, AND THE MEASUREMENT IS ON THIS TREE.** The
+2026-09-17 governance suite fanned four `opus` authors out of one plan. Measured from their own
+completion records: **1,568,374 tokens to deliver 7,153 lines — 219 tokens per delivered line** — and
+the bulk of it was four agents independently opening the same plan, the same round-one documents and
+the same `engine/season` files. **The independence was needed for the VERDICTS and never for the
+READS:** the four caught each other's errors and two converged on a corrected object count from
+opposite directions, none of which required a fourth reading of `verb_table.yaml`.
+
+1. **SHARE THE READING; FORK ONLY THE JUDGMENT.** Extract once, at the cheapest tier that can do it
+   (the ladder above: one-doc field extraction is `haiku`), and hand the extract down as each
+   producer's input. ⚠ **This file already carried the rule pointed the other way** — *"return
+   fixed-format summaries, not raw context: synthesis binds on the orchestrator's window"* — and the
+   INPUT side was simply never written down. It is one sentence, and a fan-out binds on its
+   producers' windows too.
+2. **A PRODUCER THAT HAS READ A LONG WAY AND WRITTEN NOTHING IS FAILING, NOT THINKING.** Two of those
+   four made **zero `Write` calls across ~1.2 MB of transcript each** and had to be told to start;
+   without that intervention both stages would have been lost whole. So instruct every author, in its
+   prompt, to **write its head and first part BEFORE it finishes reading, and append the rest** — a
+   part on disk survives a context exhaustion and a draft in the agent's head does not. When an author
+   reports it can no longer recall a citation, **the claim without its line number beats the lost
+   part**; an unlineated true claim is recoverable.
+3. **THE STAGGER IS A STEP IN THE PROCEDURE, NOT TRIVIA ABOUT CACHES** — stated twice now because once
+   was not enough. Caching fact 1 above says to fire one and await its first token; that run fired all
+   four at once and every one paid full price for an identical preamble.
+
+**And the same arithmetic governs a SINGLE call**, which is where this rule is cheapest to apply and
+easiest to forget. An unbounded list or search is the one-agent form of the same defect: one
+unfiltered workflow-run listing on that session returned **242,640 characters** for a fact that three
+rows carried. Bound the page, name the fields, and re-send a large body only when the edit needs it.
+
+⚠ **AND WHAT IS DELIBERATELY NOT WRITTEN HERE, because §0.3 says more apparatus is this repository's
+own failure mode.** That session's other four costs were real and are NOT rules: two are **already
+ruled** and the fix is compliance rather than text — speculating before measuring is §0.1 pt 3
+(*"RUN the thing that would show presence"*), and re-running the suite is §0.4's cadence — and two
+were ordinary clumsiness with no general shape (a checker rewritten three times over its own regex;
+a PR body re-sent whole for a one-line edit). **Writing a rule for each would have been eight rules
+where three were load-bearing.** If a later session finds this subsection growing an item per
+incident, that is the accretion §0.3 describes, and the repair is to cut it back to the measurement.
+
 **Orchestration patterns** (doctrine:
 `.designs/systems/_architecture/holonic_container_doctrine_v1.md`, quarantined 2026-09-16):
 - **Agonist→antagonist is a relay, not a dialogue.** Subagents are stateless and isolated: dispatch the
