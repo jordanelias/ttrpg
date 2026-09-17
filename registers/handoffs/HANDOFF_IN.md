@@ -44,6 +44,46 @@ write-down. Read it before grepping `engine/season/` for how a character decides
 | Φ3 | APPRAISAL — how do I rank them | `decision/choose.py:302` (three terms) |
 | Φ4 | COMMITMENT — what do I spend on | `_sample_order` → `pack_scenes` → `ask_budget()` |
 
+## 🧾 2026-09-17 — THE SEAM: #408 and #409 collide in eight places (`ED-IN-0243`)
+
+**Sibling to the unit above, and read it second.** That one establishes how a character decides;
+this one establishes **where the governance suite and the behaviour layer touch each other.** The
+proposal is `proposals/2026-09-17-governance-and-behaviour/` — `00` for the findings, `01` for the
+order, `RULINGS.yaml` for the 21 questions. **Nothing has run; nothing ratified.**
+
+**Facts established, so they are not re-derived:**
+
+| fact | where |
+|---|---|
+| `resolvable_verbs()` = **18** of 38 table rows | `loop/driver.py:72`, executed |
+| `in_holdings` is **False for every person × rung** — all 19 person-holds are on Offices, all 16 rung-holds are faction-subject | `build_realm(0)` + `predicates.py:99-102` |
+| question sources after one populated season: `claim_landed` 583 · `need` 405 · `date_due` **0** · `band_crossed` **0** | instrumented over 230 `questions_for` calls |
+| the six `Person` interior rows are `class: "ACTS"`, **not** `INTERIOR` — the only `INTERIOR` row is `(Person, claim_ledger)` at `[WIT]` | `write_matrix.yaml:14-17` (the loader asserts the derivation), `:147-209` |
+| the teller of a `told_by` claim is **`_act.actor`, in scope at `witness.py:316`**, discarded by the constructor at `:361-363` | read in full |
+| `standing_of` returns the **1000 max-gap default for all 12 persons** because its `told_by` input is empty | `decision/options.py:443-465` |
+
+**⚠ Three traps for whoever builds next:**
+
+1. **`(Person, body)` is NOT person-interior.** It is `[MAT, RES] MATTER/ACTS`. A session reading
+   `STR-1` as a blanket prohibition will block r2 item 3b for no reason. **The six `ACTS` rows are a
+   licence nobody has taken up** — that is what closed `STR-1` at gate step 3.
+2. **r2's `EXECUTION_PLAN` cites `engine/season/loop/budget.py` twice and that file does not exist.**
+   The live reader of `band_floors["body"]` is **`engine/season/decision/budget.py:73`**. Filed, not
+   patched — §0.05 cl.3 makes it r2's.
+3. **A lane ledger is append-only and last-row-wins.** Grepping one and taking the FIRST hit reads a
+   superseded status as current; it produced three stale citations across the two subject suites,
+   including `ED-WR-0011`'s pairing rider on `RR-2`, **which its own later row already discharged.**
+
+**Next actions — and there are only two, both Jordan's:**
+
+- **Nine ruling requests**, consolidated from two sheets into one at `RULINGS.yaml`'s
+  `escalation_summary`: `CAT-6` · `STR-2` · `STR-5` · `STR-6` · `RR-P` · `RR-A` · `RR-B` · `RR-C` ·
+  `RR-2`. **Only `CAT-6` and `RR-A` block a build item** (items 11 and 13).
+- **Everything else in r2's plan is buildable today** — 13 of 16 items, item 1 first at ~12 lines.
+  **No session needs to re-open the seam to start.**
+
+---
+
 ## ⚠ OPEN MARKERS IN MOVED UNITS — the index, 2026-09-17 (`ED-IN-0240`)
 
 **Every unit carrying an open marker was moved to `HANDOFF_IN_history.md`** — the rows below are the complete list with the rest of the pre-generation narrative. **Their markers are reproduced here VERBATIM**, so an open item is a table row plus one file-open away instead of buried inside a multi-thousand-token session section — that is the safety claim of this trim, and it is stronger than a move without an index.

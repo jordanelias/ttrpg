@@ -1,0 +1,1474 @@
+# ---------------------------------------------------------------------------
+# RULINGS.yaml — the twenty-one open questions between Jordan and two suites,
+#                run through `CLAUDE.md` §0's five-step gate.
+#
+# ## Status: PROPOSED — held back. NOTHING HERE RATIFIES ANYTHING, and this file
+#            flips no `## Status:` line anywhere in the tree.
+#
+# WHAT IT IS. Twenty-one questions sit between Jordan and two suites that cannot
+#   be built until they are answered:
+#     * SIX ruling requests from `../2026-09-17-governance-and-holdings-r2/`
+#       `05_LEDGER_AND_BUILD.md` §C.4 — RR-P, RR-A, RR-B, RR-C, RR-2, RR-3.
+#     * FIFTEEN rows carrying an empty `ruling:` in
+#       `../2026-09-16-conviction-decision-layer/adjudication_register.yaml`
+#       — nine `CAT-*` categories and six `STR-*` structural rows.
+#   Every one was run through §0's gate IN ORDER: superseded → irrelevant →
+#   answered by a design document → answered by precedent → answered by what
+#   makes sense for the architecture.
+#
+# HOW TO READ IT.
+#   * `disposition: closed`   — the gate answered it. The row carries the STEP
+#     that answered it, the ANSWER, and a CITATION. Every cited `file:line` in
+#     this file was OPENED at that line (§0.1 pt 3, row three). Where a line
+#     could not be opened the claim is written WITHOUT a line rather than with
+#     an invented one.
+#   * `disposition: escalate` — it survived all five. It is a genuine Jordan
+#     decision: two defensible options leading to materially different games, or
+#     an answer that would overwrite ratified canon. Every escalated row carries
+#     `why_not_closable:` naming which of the five steps was tried and why each
+#     was silent.
+#
+# WHAT `closed` DOES NOT MEAN. It does not mean built, ratified or agreed. It
+#   means the tree already decided this and the decision was findable. A closed
+#   row is `CLAUDE.md` §0's own instruction executed: *"find a stale
+#   `needs_jordan` on a settled question and CLOSE it with its citation.
+#   Preserving a dead question is not conservatism; it is how the queue formed."*
+#
+# ⚠ THE ONE ASYMMETRY WORTH DECLARING. This file was written by the session that
+#   also wrote `00_THE_SEAM.md`'s subject map, so its bias runs toward closing —
+#   a smaller queue looks like more work done. The counter-pressure applied at
+#   every row was §0's own escalation test, stated as a question with a
+#   falsifiable answer: WOULD THE TWO ARMS PRODUCE MATERIALLY DIFFERENT GAMES?
+#   Where the answer is YES the row escalates even though a step-5 argument was
+#   available — CAT-6, STR-2 and STR-6 are that case. Where the answer is NO the
+#   row closes even though the question FEELS like a call, which is §0's own
+#   instruction: *"Do not escalate a call that has an obvious engineering answer
+#   merely because it is a call."* CAT-7, CAT-9 and STR-3 are that case, and each
+#   says inside its own `answer:` what would re-open it.
+#
+# ⚠ TEN CORRECTIONS TO THE SOURCES, listed at `corrections_to_the_sources:` at the
+#   foot of this file. Five are citation drift and change nothing. FIVE ARE
+#   SUBSTANTIVE — entries 6, 7, 8, 9 and 10 — and three of those change what a row
+#   COSTS, what an arm IS, or whether a rider still binds, which is why every one is
+#   recorded rather than quietly fixed. **Entry 8 is the one to read: the register
+#   names its entire second basis on a word that is already taken at another scale.**
+#   ⚠ AND ONE ERROR OF THIS FILE'S OWN, caught by its own adversarial pass before
+#   publication and left visible inside `CAT-2` rather than tidied away: a first
+#   operand census was taken with a regular expression over verb-table TEXT and
+#   counted prose. It was re-taken with the loader in-process. The wrong figure, the
+#   right figure and the reason the first instrument could not see the thing it was
+#   asked about are all in that row.
+# ---------------------------------------------------------------------------
+
+meta:
+  gate: "CLAUDE.md §0's five steps"
+  counts: {total: 21, closed: 12, escalated: 9}
+  measured_on: "main, working tree, 2026-09-17"
+  sources:
+    - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml — 15 rows with an empty `ruling:`"
+    - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md §C.4:1455-1631 — 6 ruling requests"
+  prior_art_not_re_derived:
+    - "proposals/2026-09-17-governance-and-behaviour/00_THE_SEAM.md — the orchestrator's verified seam map"
+
+rows:
+
+# ===========================================================================
+# THE NINE CATEGORIES
+# ===========================================================================
+
+  - id: "CAT-1"
+    source: "adjudication_register.yaml"
+    question: >-
+      Are moral value and religious value ONE kind or two? They share one field
+      today, so a devout and a secular character differ by a Faith weight — a
+      difference of DEGREE where a difference of KIND may be wanted.
+    disposition: closed
+    step: 1
+    answer: >-
+      TWO KINDS. Jordan's 2026-09-17 reservation of the word `conviction` for
+      piety SELECTS the second option and makes religious commitment its own
+      quantity; the register says so itself in two places and then declines to
+      write the ruling down. Jordan, verbatim: *"conviction should be reserved
+      for a different concept, not moral values"*, and, naming it, *"piety"*.
+      A ruling that is recorded but not entered is still a ruling — step 1.
+      ⚠ WHAT DOES NOT CLOSE WITH IT: what the two quantities are CALLED, and how
+      person-scale piety is told apart from territory-scale Piety (PT). That is
+      STR-6, which escalates. The KIND question and the NAMING question are
+      different objects and only the first is answered here — CAT-1 asked
+      whether they are one kind or two, not what to spell them.
+    citation:
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:310-313"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:665-667"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:671-677"
+    blocks_build_item: null
+
+  - id: "CAT-2"
+    source: "adjudication_register.yaml"
+    question: >-
+      Orientation (self-interest vs care for others) is a weight keyed on
+      BENEFICIARY, and a `Candidate` carries no beneficiary. Derive it from the
+      verb's `writes:`, declare it as a new field or column, or fall back to
+      prior work's post-hoc attribution modifier?
+    disposition: closed
+    step: 5
+    answer: >-
+      DECLARE IT — and declare it as a STATIC COLUMN ON `verb_table.yaml`
+      resolving to a carrier a Candidate ALREADY holds (the actor, `subject`, or
+      a named operand), NOT as a fifth field on `Candidate`. Two of the three
+      options are eliminated by measurement and by a prior Jordan ruling, and the
+      third is eliminated by an invariant in the carrier's own docstring:
+        * OPTION 3 (post-hoc attribution) is DEAD BY RULING. Jordan, verbatim:
+          *"self interest versus care for others or whatever DRAMATICALLY WEIGHTS
+          HOW ONE CHOOSES AND BEHAVES."* That is a weight at appraisal. An
+          attribution modifier changes what a win is WORTH after the fact, which
+          is the thing he corrected. The register already demoted it; this closes
+          it.
+        * OPTION 1 (derive from the operand binding) is DEAD BY MEASUREMENT.
+          The register filed it *"UNVERIFIED across all 38 verbs"*. IT IS NOW
+          VERIFIED AND IT FAILS.
+          INSTRUMENT, named so it can be re-run: `engine.season.data.verbs.VERB_TABLE`
+          loaded in-process; for each row, `requires_typed.operands()` unioned with
+          `{subject, to} & requires_typed.needs()` — which is exactly what
+          `operands_for` carries (`options.py:385-396`), and `req is None` returns
+          `{}`, so an untyped verb carries nothing.
+          MEASURED 2026-09-17: **24 of 38 verbs are UNTYPED and can carry NO operand
+          at all.** Of the 14 typed, `to` can be carried by **12**, `from` by **1**
+          (`transfer`), `kind` by 1, `amount` by 1, `site` by 3.
+          ⚠ THE FIRST WRITING OF THIS ROW SAID `to` APPEARED IN TWO VERBS. That
+          number came from a regular expression over the `requires` and
+          `requires_typed` TEXT and it counted prose — `establish`'s `to` is a word
+          in a sentence, not a bound operand, and it missed the ten verbs that admit
+          `to` through `_REFERENT_OPERANDS` (`options.py:343`) rather than through a
+          cell. The corrected figure is 12, and the finding survives it: **26 of 38
+          verbs can carry no recipient operand, and 24 of those can carry nothing
+          whatever**, so there is no beneficiary to extract for the majority of the
+          table and the binder is not where one can live. The error is recorded
+          rather than quietly fixed because it is §0.1 pt 3's fourth row exactly —
+          a measurement that returned a number without the instrument having
+          observed the thing it was asked about.
+        * OPTION 2's OBVIOUS SPELLING — a fifth `Candidate` field — is refused by
+          `Candidate`'s own invariant: *"AND THE FIELD IS NEVER PARTIAL. A form
+          whose operands cannot all be bound forms NO Candidate."* A beneficiary
+          that binds for 2 of 38 verbs and is carried in `operands` would REFUSE
+          36 verbs outright. A beneficiary that binds for 2 of 38 and is carried
+          as a fifth field OUTSIDE `operands` is a second partial-binding rule
+          beside a rule that forbids partial binding — §8's two owners.
+      So the beneficiary is a PROPERTY OF THE VERB, declared once per row beside
+      `writes:` and `eligibility:` which are the same shape of static per-verb
+      declaration, and resolved at score time against fields the Candidate
+      already has. This is what the table is for: its own header calls it *"the
+      resolver's body"*.
+      ⚠ AND IT DISSOLVES `00_THE_SEAM.md` §3.4's forced ordering. The seam warns
+      that *"a beneficiary added as a fifth field after item 7 rewrites the binder
+      twice and re-opens that invariant twice."* A verb-table column never touches
+      `_derive_operand`, so r2 item 7 and this are independent. The seam's §3.4 is
+      a consequence of the option the register led with, not of the question.
+    citation:
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:328-334 (Jordan's verbatim correction)"
+      - "engine/season/state/carriers.py:276-279 (operands is never partial)"
+      - "engine/season/verb_table.yaml:1-11 (the table is the resolver's body; one resolve reads it)"
+      - "engine/season/decision/options.py:385-396 (what `operands_for` actually carries)"
+      - "engine/season/decision/options.py:343 (`_REFERENT_OPERANDS = (\"subject\", \"to\")`)"
+      - "engine/season/rosters.yaml:1071-1083 (`requires_operands` — the closed operand vocabulary)"
+      - "engine/season/data/verbs.py::VERB_TABLE — carriage census executed in-process, 2026-09-17"
+    blocks_build_item: null
+
+  - id: "CAT-3"
+    source: "adjudication_register.yaml"
+    question: >-
+      Jordan RULED that a claim's value is modified by the hearer's BELIEF about
+      their relation to the teller (lord > peer > enemy). A `Claim` does not
+      record the teller. Grade at deposit (no new field, relation frozen), or
+      store the teller on `Claim` (re-gradable, but the docstring appears to
+      forbid a new field)?
+    disposition: closed
+    step: 5
+    answer: >-
+      STORE THE TELLER. The option that looked blocked is not blocked, and the
+      option that looked cheap contradicts the ruling it implements.
+        * GRADE-AT-DEPOSIT CONTRADICTS THE RULING'S OWN WORDS. Jordan ruled on
+          the hearer's BELIEF about the relation. A belief is revisable by
+          definition; freezing the grade at the moment of telling makes a lord
+          later exposed as a fraud keep his inflated confidence forever, which is
+          a belief that cannot be revised. The register's own `note:` states this
+          and then declines to take it. It is taken here.
+        * THE DOCSTRING BLOCKER IS A MIS-READ, AND THIS IS THE CORRECTION THAT
+          CHANGES THE ROW'S COST. `Claim`'s docstring reads *"`round` IS THE ONLY
+          CARRIER FIELD `U2` ADDS, AND THE ONLY ONE IT MAY ADD"* — a bound on the
+          workplan item `U2`, not a freeze on the dataclass. Its companion clause
+          *"AND NO OTHER CARRIER GETS ONE"* is about no other carrier getting a
+          `round`, for a stated reason (a fourth clock), which does not reach a
+          teller field at all. The register cited the sentence as though it closed
+          the option. It does not.
+        * AND THE TELLER IS ALREADY IN SCOPE, one branch above the constructor:
+          `_act.actor` at `witness.py:316` is the teller's id and is read there to
+          exclude self-telling. The `Claim` built at `:361-363` writes ten
+          positional fields and is not one of them. The edit is one argument, not
+          a lookup.
+      ⚠ ORDERING, NOT A CONFLICT: r2 item 8 rewrites the SAME constructor to
+      deposit a lossy copy at `Partial`. `00_THE_SEAM.md` §3.1 has this right —
+      both belong in one edit, and item 8's falsifier is stronger with the teller
+      present.
+    citation:
+      - "engine/season/state/carriers.py:132-146 (the U2-scoped bound, read in full)"
+      - "engine/season/state/carriers.py:147-156 (the ten fields, no teller)"
+      - "engine/season/loop/witness.py:316 (`_act.actor` — the teller id, in scope)"
+      - "engine/season/loop/witness.py:361-363 (the constructor that discards it)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:377 (the register's own unstated implication)"
+    blocks_build_item: "r2 item 8"
+
+  - id: "CAT-4"
+    source: "adjudication_register.yaml"
+    question: >-
+      Jordan ruled fear is GENERATIVE, which makes fear and ambition one
+      mechanism differing in the sign on the target. One mechanism (signed
+      target, distinguished by `Proposition.mood`) or three mechanisms with
+      separate carriers? And: a stored counter for a need, or duration derived
+      from `Tenure.since`?
+    disposition: closed
+    step: 1
+    answer: >-
+      ONE MECHANISM, and Jordan's own two corrections of 2026-09-17 are what
+      close it. He split exactly the two things that do NOT merge — caste out of
+      `station` (now CAT-7) and CHALLENGE-fear out of `commitments` (now CAT-8) —
+      on the ground that a distillation removing something irreducible is a
+      reduction. Splitting off precisely what does not merge is an endorsement of
+      the merge of what remains: ambition (+), outcome-fear (−) and need (+ with
+      duration) are one signed target on one carrier.
+      Two supports, neither of which is the ruling:
+        * ONE CARRIER ALREADY EXISTS AND IS SINGLE-OWNED. `commit` writes
+          `Tenure.since` and `world_q`'s Q4 `need` fires off it. Three carriers
+          would be three producers of one question source, which is §8.
+        * SUB-QUESTION (a) — THE COUNTER IS DERIVED, NOT STORED, at step 5.
+          `Tenure.since` exists and `w.tick - since` is the duration. A stored
+          counter is a new `Person`-interior field, which is a NEW ROW in the
+          write matrix and a NEW instance of the tier-0 hole `H-62`
+          (`hole_register.yaml:715-717`) — paying the tree's worst open hole for
+          a number subtraction already yields. Precedent: `Claim` stores `when`
+          and eviction computes recency from it rather than storing an age
+          (`carriers.py:135-136`).
+        * SUB-QUESTION (b) — the direct/mediated test ("a fear is DIRECT iff some
+          `own`-eligible verb writes the feared field") is the RIGHT test, because
+          eligibility is exactly the predicate the engine already uses to decide
+          what a person can form, and `person_side_eligible`'s `remit:` decline
+          (`options.py:163-165`) IS the mediation. ⚠ ITS ANSWERS MOVE: r2 items
+          10 and 11 rewrite both eligibility predicates, so the test is stable and
+          the classification of any given fear is not. Re-run it after r2, do not
+          re-cite it.
+      ⚠ WHAT IS NOT A RULING AND MUST NOT BE FILED AS ONE: *"an ambition cannot
+      currently say WHAT is wanted."* `utter` defaults `mood` to `"OUGHT"`,
+      `predicate` to `""` and `value` to `None` (`effects.py:431-433`) because the
+      payload is untyped. That is a BUILD item — type `utter`'s payload — not a
+      decision. Jordan is not the person who makes a dataclass carry a string.
+    citation:
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:36-44 (Jordan's two corrections and the reduction test)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:513-525 (the split that does not merge)"
+      - "engine/season/verb_table.yaml:124 (`commit` writes `Tenure.since`)"
+      - "engine/season/loop/effects.py:431-433 (the untyped Proposition)"
+      - "engine/season/state/carriers.py:135-136 (`when` stored, recency computed)"
+      - "engine/season/hole_register.yaml:715-717 (H-62)"
+    blocks_build_item: null
+
+  - id: "CAT-5"
+    source: "adjudication_register.yaml"
+    question: >-
+      Is regard (`Person.stance`) PRODUCED by witnessed acts — a verb writes it at
+      RESOLVE — or DERIVED from the actor's claims about the other and never
+      stored?
+    disposition: closed
+    step: 3
+    answer: >-
+      PRODUCED AND STORED. A verb writes it at RESOLVE. The ratified write matrix
+      says so in a file `engine/season/shape.py`'s `write()` gate READS AT RUNTIME,
+      which makes it mechanism under §0.05 rather than prose:
+      `(Person, stance)` is `steps: [RES] · class: "ACTS" · social: "true" ·
+      emits: "stance.moved"`. A derived quantity has no write-matrix row, no write
+      class and no emit kind; this one has all three. The question is answered by
+      the design, at the row.
+      ⚠ AND OPTION 2's ARGUMENT DOES NOT BEAR. The register justifies "derived,
+      never stored" as *"consistent with View's constraint"* — a `View` carries
+      only `{holder, claim_ids, question}`, so a character cannot read another's
+      interior. `stance` is read by `stance_toward(p, ...)` from `p`'s OWN rows
+      inside `p`'s own deliberation (`choose.py:78-85`, invoked at `:305` with
+      `p`). There is no cross-holder read to forbid. The status quo already
+      satisfies the constraint that was offered as a reason to change it.
+      SO CAT-5 REDUCES TO STR-1 — `stance` has a licensed writer and no verb takes
+      the licence, which is `H-62`, one hole and not six. It carries no independent
+      ruling.
+      ⚠ CARRIED FORWARD, NOT RULED HERE: the register's own `[R]` that
+      `clock_registry_v30.md:105`'s `Disposition` has the SAME RANGE and that
+      *"`stance` IS Disposition under a second name"* is a §4 idempotency defect of
+      the same family as STR-5 and STR-6. It belongs with them, and it is named in
+      those rows rather than duplicated into a third.
+    citation:
+      - "engine/season/write_matrix.yaml:203-209 (the `(Person, stance)` row)"
+      - "engine/season/write_matrix.yaml:4 (`shape.py`'s `write()` gate reads this file)"
+      - "engine/season/write_matrix.yaml:14-17 (the class derivation: RES -> ACTS)"
+      - "engine/season/decision/choose.py:78-85 (stance_toward reads p's own rows)"
+      - "engine/season/decision/choose.py:305 (invoked with p, no cross-holder read)"
+    blocks_build_item: null
+
+  - id: "CAT-6"
+    source: "adjudication_register.yaml"
+    question: >-
+      H-71 — a seated person must be able to know their own remit, person-side,
+      so that offices can inform the suite of choices available to a character.
+      By which route?
+    disposition: escalate
+    step: null
+    why_not_closable: >-
+      STEP 1 — NOT SUPERSEDED, AND THIS IS THE ROW'S REAL DEFECT. A fourth route
+      was RULED in the sibling directory on the same day
+      (`03_SEATS_AND_CONTENT.md:794`) and CAT-6's option list does not carry it,
+      so a ruling taken from the register alone would choose among three arms with
+      a fourth built beside it. `00_THE_SEAM.md` §2 found this and calls it *"a
+      defect in the question"*, which is right. The question is repaired here and
+      put once, over four arms.
+      STEP 2 — NOT IRRELEVANT. `H-71` is `tier: 0`, `grade: absent`, and its own
+      `cite:` records that the 2026-09-02 governance slice built the RESOLVE half
+      of a mechanism this hole blocks, so `resolvable_verbs()` moved 8 → 12 and
+      *"the 8-to-12 move CANNOT AFFECT ANY RUN."* Live and load-bearing.
+      STEP 3 — SILENT BY ITS OWN ADMISSION. `§F1` asserts the clause is
+      person-side and does not say HOW; `H-71`'s `owner:` field reads
+      *"unassigned"* for exactly that reason.
+      STEP 4 — PRECEDENT EXISTS AND IT FAVOURS ARM 4, BUT IT CANNOT CLOSE A ROW
+      JORDAN HAS ALREADY BEEN ASKED. He filled this sweep himself on 2026-09-16.
+      STEP 5 — REFUSED ON PRINCIPLE. Taking it would be an agent choosing which of
+      four governance models the game has, on a tier-0 hole its own register puts
+      to Jordan, after he has already engaged with it. That is the definition of a
+      live design choice.
+      ⚠ ONE THING THE REGISTER SAYS THAT IS NO LONGER TRUE, AND IT CHANGES WHAT AN
+      ARM COSTS — see `corrections_to_the_sources:` entry 7. ARM 2's CARRIER IS ON
+      r2's DELETION LIST. `03_SEATS_AND_CONTENT.md:744` files *"the grant on
+      `Tenure.payload` | the 2026-09-16 sweep | REFUSED — retired"*, citing
+      `ARCH §B.8`'s `term? … Replaces payload?`; `05` lists `(Tenure, payload)`
+      among the fields item 14 deletes and `05:972` states it as done after the
+      suite. `00_THE_SEAM.md` §2 says arm 4 *"keeps `AX-2` untouched the same way
+      arm 2 does"*, which reads arm 2 as live. It is not: choosing arm 2 now costs
+      un-deleting a field RATIFIED `ARCH §B.8` prescribes deleting, which makes arm
+      2 an `RR-B`-shaped request rather than a free choice. THIS IS NOT A REASON TO
+      REFUSE ARM 2 — it is a price that must be on the sheet when it is chosen.
+    the_four_arms: >-
+      Stated side by side, in each source's own words, because the whole failure
+      here was an option list that was short by one.
+        ARM 1 · DECLINE (status quo). `hole_register.yaml:803`: *"`remit:` is
+          unevaluable person-side, so the verb never forms (the default; it is the
+          INCUMBENT, not a choice)."* The row is emphatic that ARM 1 WAS NEVER
+          DECIDED — `grade: absent`, `owner: unassigned`, `default: none` — and
+          that the instrument filled §F1's silence by refusing. COST: under arm 1 a
+          holder cannot know their own powers; every governance ambition is
+          unformable and every office opaque to the person holding it. That is the
+          thing Jordan's 2026-09-16 statement asks for and does not get.
+        ARM 2 · THE GRANT RIDES ON THE `hold` TENURE'S PAYLOAD.
+          `hole_register.yaml:804`. Its case, at `:807`: *"A remit on the Tenure is
+          not a second copy of the office's remit; it is the GRANT, which is what a
+          holder actually has … It reaches no `World`, so `AX-2` is untouched and
+          `choose`'s signature does not move."* COST: as above — the carrier is
+          retired by the sibling suite and by `ARCH §B.8`.
+        ARM 3 · THROUGH `sense()`. `hole_register.yaml:805`, and the row grades it
+          itself: *"ARM 3 IS INCLUDED FOR HONESTY AND IS THE WEAKEST: it leaves the
+          store alone at the cost of a third `Sensation` scalar, and S18.2 rules
+          that type to EXACTLY TWO, so taking it amends a ruled constraint rather
+          than filling this hole."*
+        ARM 4 · A CLAIM ABOUT A HELD DOCUMENT. `03_SEATS_AND_CONTENT.md:794`:
+          *"RULED: the grant is a CLAIM about a HELD DOCUMENT, and H-71 closes on
+          both sides."* A `commission` `Record` minted by `confer`; the deposit rule
+          puts a `content:commission` claim in the holder's own ledger naming a seat
+          whose `remit_acts` include the act; `person_side_eligible`'s decline
+          becomes a claim read, while world-side `_eligible` keeps asking the actual
+          hold. COST: depends on `02`'s `record_kinds` roster, which does not exist
+          (`03:798-800` declares it); it is r2 EXECUTION_PLAN item 11, gated on
+          items 5 and 10.
+    which_precedent_favours: >-
+      ARM 4, and the margin is not close — but the reason is not the one
+      `00_THE_SEAM.md` gives.
+      ⚠ THE SEAM SAYS ARM 4 *"keeps `AX-2` untouched the same way arm 2 does"*.
+      OPENED AND CHECKED, THAT UNDERSTATES IT, AND THE TWO ARMS ARE NOT
+      `AX-2`-EQUIVALENT. Arm 2's claim is NON-VIOLATION — *"it reaches no `World`"*
+      (`hole_register.yaml:807`). Arm 4's claim is CONFORMANCE: `AX-2` reads *"A
+      person decides from what they hold, and what they hold MAY BE FALSE. There is
+      no view of world truth available inside a decision"*
+      (`01_AXIOMS.md:102-103`), and a claim in a ledger is the canonical instance of
+      a thing held that may be false. `03:789-792` makes exactly this argument and
+      it survives reading: *"A claim about a seat IS the person's own state."*
+      THE TEST THAT SEPARATES THEM: CAN THE PERSON BE WRONG ABOUT THEIR OWN REMIT?
+      Under arm 2 the Tenure payload is authoritative world state the holder carries,
+      so a revoked man's grant vanishes the instant the world changes and he can
+      never act on a stale belief. Under arm 4 he can — `03:785-787` builds the case
+      deliberately: the holder deposits a `content:commission` claim in good faith,
+      attempts the act, and RESOLVE refuses it because RESOLVE asks the seat. *"No
+      special case, no forgery branch in the predicate."* `AX-2` exists to make a
+      false conclusion indistinguishable from a true one to the person holding it
+      (`01_AXIOMS.md:105-107`). Arm 2 satisfies the axiom's letter; ARM 4 PRODUCES
+      THE BEHAVIOUR THE AXIOM EXISTS FOR.
+      Two further supports, both from outside r2: `ARCH §C.3` puts no `World` in
+      `decision/`, which arm 4 honours by construction; and `person_predicates`
+      already carries `office` as a CLAIM about a person alongside heritage, grade,
+      church_standing and residence (`rosters.yaml:272-278`) — so arm 4 files a
+      seat's remit where the tree already files the seat.
+      ⚠ AND THE CASE AGAINST ARM 4, STATED BECAUSE NOBODY ELSE STATES IT: it is the
+      only arm that makes a governance power EPISTEMIC, so an office's reach becomes
+      a function of what its holder was told. If Jordan wants a seat to be a hard
+      permission rather than a believed one, arm 2 is the arm that says so, and its
+      retired carrier is a price rather than a refusal. That is the decision, and it
+      is his.
+    citation:
+      - "engine/season/hole_register.yaml:795-807 (H-71: the hole, the three arms, Jordan's 2026-09-16 sweep)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md:785-800 (arm 4, its AX-2 argument and its declared dependency)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md:744 (arm 2's carrier REFUSED — retired)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:229 (`Tenure.payload` on the deletion list)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:972 (deleted after the suite)"
+      - "architecture/meta/01_AXIOMS.md:100-107 (AX-2 and why it is axiomatic)"
+      - "engine/season/decision/options.py:163-165 (the person-side `remit:` decline)"
+      - "engine/season/rosters.yaml:272-278 (person_predicates carries `office` as a claim)"
+    blocks_build_item: "r2 item 11"
+
+  - id: "CAT-7"
+    source: "adjudication_register.yaml"
+    question: >-
+      Jordan says caste is immutable and intrinsic; the live model carries it as a
+      CONTESTED `heritage` claim. Which model stands — INTRINSIC (a field), CONTESTED
+      (status quo), or BOTH? And does caste GATE, MODIFY, or only supply dice and
+      connections?
+    disposition: closed
+    step: 3
+    answer: >-
+      CASTE DOES NOT GATE, AND THE CONTESTED MODEL STANDS. Two halves, closed by two
+      different steps, and the second half is the one the register thought was open.
+        * THE GATE HALF CLOSES AT STEP 3, on a design document quoted inside a roster
+          the loader reads at runtime. `rosters.yaml`'s `eligibility_kinds` note
+          quotes `#353 §9.2`: *"`capability` supplies dice and GATES NOTHING… **The
+          only class-shaped gate in the design is Thread Sensitivity.**"* Caste is a
+          class-shaped gate in the exact sense of that sentence. The design does not
+          merely fail to authorise a fifth eligibility kind for caste — it names the
+          one class-shaped gate it has and caste is not it. The roster's own
+          *"needs a ruling before it needs an entry"* is the PROCEDURE for a fifth
+          kind; the sentence above it is the ANSWER for this one.
+        * THE CARRIER HALF CLOSES AT STEP 4, AND THEN AT STEP 5. Precedent: every
+          fact anyone holds about a person in this engine is epistemic.
+          `person_predicates` is `[heritage, grade, church_standing, office,
+          residence]` — five things ASSERTED about a person, heritage among them
+          (`rosters.yaml:272-278`). `standing_of` is built on exactly the gap between
+          what others claim about you and what you claim about yourself
+          (`options.py:443-464`). A `View` carries only `{holder, claim_ids,
+          question}`. The tree has taken this shape five times.
+          AND THEN THE DECIDING ARGUMENT, WHICH IS WHY THIS IS NOT AN ESCALATION:
+          **BOTH IS CONTESTED PLUS A FIELD.** Option `BOTH` is the strict superset of
+          option `CONTESTED` — it adds an intrinsic field beside the claim that is
+          already there. Nothing built on the contested model has to be unbuilt to
+          reach it later, and the field costs the same in a year as today. So the two
+          arms are not a fork, and §0's escalation test — *two defensible options
+          leading to materially different games* — is not met: one option is reachable
+          from the other at unchanged cost. `INTRINSIC` alone is the only arm that
+          forecloses anything, and it is the arm that gives up passing, denunciation
+          and disputed lineage, which the register itself calls the reason the
+          contested model may be better.
+        * ON JORDAN'S WORDS, WHICH THE REGISTER READS AS A CONFLICT AND WHICH ARE NOT
+          ONE. *"Caste is immutable and intrinsic"* was said to SPLIT CAT-6, on
+          mutability: an office is opened and closed by an act and caste is changed by
+          nothing. The contested model satisfies both terms — no verb writes a
+          `heritage` claim's value, so it is immutable, and the fiction is intrinsic.
+          What is contestable is what people SAY you are, which is a different
+          proposition from what you are.
+      ⚠ WHAT WOULD RE-OPEN THIS: a design decision that the engine must know a
+      person's true lineage independently of anyone's claim — a lineage verb, an
+      inheritance rule that resolves against truth rather than against belief. That
+      is option `BOTH` arriving with a reason, and it is additive when it comes.
+    citation:
+      - "engine/season/rosters.yaml:148-160 (eligibility_kinds; §9.2's one class-shaped gate; the fifth-kind procedure)"
+      - "engine/season/rosters.yaml:272-278 (person_predicates — heritage among five asserted things)"
+      - "engine/season/decision/options.py:434 (claims paired by predicate on PERSON_PREDICATES)"
+      - "engine/season/decision/options.py:443-464 (standing_of is the told-vs-own gap)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:443-447 (Jordan's words, and what they were said to split)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:499 (`blocks: nothing downstream`)"
+    blocks_build_item: null
+
+  - id: "CAT-8"
+    source: "adjudication_register.yaml"
+    question: >-
+      Courage — the half of `fear` naming an ENCOUNTER rather than an OUTCOME. What
+      is a "challenge kind" and what enumerates them? And is courage a modifier (the
+      act costs more), a gate at the extreme (the candidate never forms), or a
+      susceptibility (gain on threat-input)?
+    disposition: closed
+    step: 3
+    answer: >-
+      A MODIFIER, RAISING THE OBSTACLE, KEYED ON A PER-VERB `demands:` DECLARATION.
+      The other two options are each closed by a document, and the shape of the third
+      is supplied by precedent.
+        * THE GATE OPTION IS CLOSED AT STEP 3. "Below a threshold the candidate is not
+          formed at all" is a fifth way to make a verb unavailable to someone, which is
+          `eligibility_kinds`'s own definition of a design change needing a ruling —
+          and the sentence above it, *"the only class-shaped gate in the design is
+          Thread Sensitivity"*, says a per-character disposition is not one. It is the
+          same closure as CAT-7's gate half, on the same four lines.
+        * THE SUSCEPTIBILITY OPTION IS A STAGE ERROR, closed against the register's own
+          unified model. Susceptibility acts at `PHI-0 INTAKE`, runs at WITNESS, and
+          the model names `Claim.confidence` as *"the one write licensed here"*. Courage
+          is keyed on WHAT A CANDIDATE DEMANDS. No candidate exists at intake — candidates
+          are formed at `PHI-2` from questions deposited at `PHI-0`. An operator cannot
+          be keyed on an object that does not exist at its stage.
+        * SO THE MODIFIER SURVIVES, and the register's own reason is the right one and is
+          stronger than it looks: *"A modifier moves the obstacle; a weight moves the
+          preference. In an additive system these collapse; under a draw they do not."*
+          Valoria resolves by draw, so the distinction is real and the modifier is the
+          operator that expresses "I will face this, at a price" rather than "I prefer
+          not to".
+        * AND THE ENUMERATION QUESTION IS ANSWERED BY PRECEDENT, NOT BY A RULING. The
+          register states the shape itself and then does not take it: *"Candidates would
+          need to declare what they demand, the way verbs already declare what they
+          write."* That is exactly right and it is the tree's existing idiom — `writes:`
+          and `eligibility:` are static per-verb columns on `verb_table.yaml`, whose header
+          calls the table *"the resolver's body"*, and their value vocabularies are rosters
+          in `rosters.yaml`. A `demands:` column plus a `challenge_kinds` roster is one more
+          instance of a pattern the table already runs twice. ⚠ THE ROSTER'S MEMBERSHIP IS
+          CONTENT AUTHORING, NOT A RULING — naming which challenges exist is design work
+          anyone can do against the verb table, and `blocks: nothing today` means nothing
+          waits on it.
+      ⚠ ONE CONSEQUENCE STATED SO IT IS NOT DISCOVERED LATE: a modifier that raises an
+      obstacle is NOT a term in `choose.py`'s score. It acts on the resolution, not on the
+      ranking, which means STR-3's noise floor does not bind it — and that is the first
+      thing a builder will get wrong, because every other operator in this register is
+      scored.
+    citation:
+      - "engine/season/rosters.yaml:148-160 (eligibility_kinds; the fifth kind; the one class-shaped gate)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:108-117 (PHI-0 INTAKE: susceptibility's stage and its one licensed write)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:526-530 (why it cannot merge; modifier vs weight under a draw)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:533-536 (the `demands:` shape, stated and not taken)"
+      - "engine/season/verb_table.yaml:1-11 (the table is the resolver's body)"
+      - "engine/season/verb_table.yaml:110-124 (writes: as a static per-verb column)"
+    blocks_build_item: null
+
+  - id: "CAT-9"
+    source: "adjudication_register.yaml"
+    question: >-
+      Is `bearing` ONE vector with seven components (a second basis with its own
+      N×38 alignment table), SEVEN independent quantities sharing only a register,
+      or a HYBRID? Plus: does it drift, and is it visible to others?
+    disposition: closed
+    step: 5
+    answer: >-
+      THE HYBRID, AND IT IS FORCED RATHER THAN CHOSEN. The row's own `operator:`
+      field decides it before the options are read: *"MIXED — the seven do not share
+      one operator, which is why they were never going to be one axis set."* An
+      alignment table is a map from (axis × verb) to a WEIGHT. Three of the seven are
+      verb-weights and fit that shape; four are not, and no table cell can hold them:
+        * `courage <-> cowardice` is a MODIFIER on an obstacle (CAT-8). A table of
+          weights cannot express a cost on a draw.
+        * `altruistic <-> selfish` is a weight keyed on BENEFICIARY (CAT-2), which is
+          a per-verb declaration resolving to a Candidate field — not an axis column.
+        * `humble <-> vain` is ALREADY BUILT as `standing_of` — the gap between the
+          told-by claims about a person and their own firsthand claims
+          (`options.py:443-464`). It is a derived quantity, not a held one.
+        * `insecure <-> self-assured` is the susceptibility GAIN at `PHI-0`, the
+          intake operator Jordan restored — a third key on an operator that already
+          exists, acting a stage earlier than any table.
+      So: ONE temperament alignment table over THREE axes (`pacifist <-> militaristic`,
+      `diplomacy <-> intimidation`, `passive <-> aggressive`), held directly on the
+      Person; and four quantities that keep the machinery they already have or are
+      getting. 7 = 3 + 1 + 1 + 1 + 1. The "ONE vector" option is not a defensible
+      alternative — it is refuted by the register's own measured placement table — and
+      "SEVEN quantities" differs from the hybrid by exactly one shared table, which is
+      a §8 question (one owner for one rule) and not a game question.
+      SUB-QUESTION — VISIBILITY. Closed at step 3 by `AX-2` and the `View` constraint:
+      temperament is visible to others ONLY as claims about the person, never as a
+      read of the field. `standing_of` is already the worked instance — `humble/vain`
+      is "visible" precisely because it is COMPUTED FROM CLAIMS. Nothing special is
+      needed and nothing new may be added.
+      SUB-QUESTION — DRIFT. Closed at step 4, and the answer is *not yet, and then by
+      the same route convictions take.* Convictions move by argument and consequence
+      and never by evidence (`AX-3`, `01_AXIOMS.md:113-115`), carried at RESOLVE by an
+      act (`write_matrix.yaml:182-188`). A drifting temperament is the same object: a
+      `[RES] ACTS` row with an act as its producer. Adding a SECOND producerless
+      interior field while `H-62` — *"NO VERB IN THE 32-ROW TABLE WRITES ANY `Person`
+      INTERIOR FIELD"* — is the tree's live tier-0 hole would be minting the defect
+      twice. So temperament is fixed until STR-1's producer exists, and inherits its
+      route when it does. That is an ORDERING, not a refusal.
+      ⚠⚠ AND THE ONE THING THAT MUST BE SETTLED BEFORE A LINE OF THIS IS BUILT, WHICH
+      THE REGISTER DOES NOT NAME: **`temperament` IS ALREADY TAKEN.**
+      `references/descriptor_registry.yaml:298` carries `temp.*`, `kind:
+      temperament_type`, *"5 territory temperaments"*, `scope: "territory/faction
+      (pop-weighted avg)"`, sourced to `territory_temperaments_v30.md` — which
+      `CURRENT.md:30` lists as a live canonical head of the settlement/territory
+      subsystem. This register names its entire second basis, its `bases:` section and
+      four of its rows on a word that already denotes a DIFFERENT quantity at a
+      DIFFERENT SCALE with a DIFFERENT CARDINALITY (five, not seven). That is the same
+      §4 idempotency failure STR-6 catches for `piety` — *"two scales, one word: a later
+      session reading it cold cannot tell which is meant"* — missed on the word this
+      register uses most. **The naming decision belongs with STR-5 and STR-6, which
+      escalate; the SHAPE above does not wait on it.** See `corrections_to_the_sources:`
+      entry 8.
+    citation:
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:548 (`operator: MIXED`)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:552-582 (the per-pair placement table)"
+      - "engine/season/decision/options.py:443-464 (standing_of — humble/vain, already built)"
+      - "architecture/meta/01_AXIOMS.md:100-107 (AX-2: no privileged access)"
+      - "architecture/meta/01_AXIOMS.md:111-115 (AX-3: what moves what is held right)"
+      - "engine/season/write_matrix.yaml:182-188 (`(Person, convictions)` — [RES] ACTS, by act)"
+      - "engine/season/hole_register.yaml:715-717 (H-62)"
+      - "references/descriptor_registry.yaml:298 (`temp.*` — 5 TERRITORY temperaments, already taken)"
+      - "CURRENT.md:30 (territory_temperaments_v30.md is a live head)"
+    blocks_build_item: null
+
+# ===========================================================================
+# THE SIX STRUCTURAL ROWS
+# ===========================================================================
+
+  - id: "STR-1"
+    source: "adjudication_register.yaml"
+    question: >-
+      Nothing writes a `Person`'s interior. Does a verb at RESOLVE write it, does a
+      SEVENTH loop step with a new write class write it, or does nothing persist —
+      the interior recomputed every season from claims and tenures?
+    disposition: closed
+    step: 3
+    answer: >-
+      A VERB AT RESOLVE WRITES IT. This is not a choice between three designs; it is
+      the design the ratified write matrix ALREADY PRESCRIBES, with the producers
+      missing. The register states the problem as a prohibition — *"nothing MAY write
+      a Person's interior"* — and the matrix says the opposite: the six rows are a
+      LICENCE nobody has taken up.
+        * WHAT THE MATRIX SAYS, read at the rows. Every one of the six is
+          `steps: [RES]`, `class: "ACTS"`, with its own `emits:` kind —
+          `axis.incremented`, `belief.revised`, `coherence.changed`,
+          `conviction.moved`, `scar.taken`, `stance.moved`. The header states the
+          derivation the loader enforces: *"A step determines its write class exactly:
+          CAL->CALENDAR, MAT->MATTER, **RES->ACTS**, WIT->INTERIOR, CEN->MATTER,
+          DEL->ACTS … the loader asserts they agree and raises if they do not."* So
+          `[RES] ACTS` MEANS "written by an act at RESOLVE", declared, checked at load,
+          and read by `shape.py`'s `write()` gate at runtime — mechanism under §0.05,
+          not prose.
+        * AND `H-62` SAYS SO IN ITS OWN WORDS: *"an interior write is a CONSEQUENCE OF
+          AN OUTCOME, which is what the new Degree-keyed `writes` column declares — so
+          the verbs are still unwritten and **there is now a column to write them in**."*
+          The matrix header repeats it: *"The verbs are still unwritten; what changed is
+          that there is now a column to write them in."* A hole whose own shape field
+          names the answer is not an open design question.
+        * OPTION 2 (A SEVENTH STEP) IS CLOSED AT STEP 3 AND WOULD NOT BE MINE TO TAKE.
+          RATIFIED `04_CODE_ARCHITECTURE.md` §A.2:134 reads *"loop/ driver + six steps.
+          The driver is the ONLY constructor of write tokens"*, quoted in `driver.py:3-4`,
+          and `:4-5` names the six by file: `loop/{calendar, matter, deliberate, resolve,
+          witness, census}.py`. A seventh step makes a ratified Layer-1 sentence
+          false, which is `RR-B`-shaped: step 5 may not overwrite ratified canon. It is
+          also unnecessary, since the licence already exists.
+        * OPTION 3 — "NOTHING PERSISTS" — ASSESSED PROPERLY, BECAUSE THE ROW SAYS IT IS
+          *"cheaper than it looks and has not been considered."* IT IS CHEAPER THAN IT
+          LOOKS, AND IT IS AXIOM-BARRED FOR TWO OF THE SIX, WHICH IS WHAT KILLS IT AS A
+          CLASS ANSWER.
+            - FOR `convictions` IT IS BARRED BY `AX-3`. *"Evidence moves what is held
+              true. Argument and consequence move what is held right."* Recomputing
+              convictions from the claim ledger makes EVIDENCE move what is held right.
+              `AX-3` exists for exactly this: *"if evidence could move a conviction, then
+              finding a document would change what a person believes is right, and the
+              moral layer would collapse into a second epistemic layer"* — which the
+              chain calls *"the single most dangerous [collision] in the design"*.
+              Option 3 IS that collision, implemented.
+            - FOR `scar` IT IS BARRED BY THE FADING CARVE-OUT. `AX-5`'s licensed fading
+              *"only REMOVES and never REVISES"*, and claims decay and are evicted on
+              `confidence × recency` (`carriers.py:135-136`). A derived scar would
+              therefore UN-SCAR a person as the memory of the event dims — a permanent
+              mark that expires, which is `AX-6`'s *"nothing becomes permanent without
+              an author"* run backwards: the author acted and the permanence evaporated
+              on a clock.
+            - AND ITS ONE REAL VIRTUE IS WHY IT MUST BE REFUSED AS A CLASS ANSWER. It
+              genuinely IS right for `regard` — CAT-5's option 2 is option 3 for one
+              field, and deriving regard from claims about the other is coherent. But
+              STR-1's entire value is its `consequence:` line: *"Pressure, scar, the
+              needs counter, the fear item and regard production are NOT five problems.
+              They are one, and one ruling unblocks all five."* A per-field answer
+              destroys that. Two of the six cannot be derived, so the class answer is
+              "stored, written by an act", and any individual field may still be derived
+              later on its own merits — CAT-5's `(Person, stance)` row being the first
+              place to argue it.
+      ⚠ ON `(Person, body)` — CONFIRMED, AND `00_THE_SEAM.md` §4 IS RIGHT ON THE
+      SUBSTANCE. `write_matrix.yaml:161-167` files it `steps: [MAT, RES] · class:
+      "MATTER/ACTS" · social: "false" · by: "DR-1"`. It is not one of the six and STR-1
+      does not bind r2 item 3b. ⚠ BUT THE SEAM'S VOCABULARY IS WRONG IN A WAY THAT
+      MATTERS HERE — it calls the six *"the INTERIOR class"*, and in the matrix's own
+      literal `class:` column the six are `ACTS`; the only `INTERIOR` row in the file is
+      `(Person, claim_ledger)` at `[WIT]`. Measured: 22 `ACTS`, 1 `INTERIOR`, 6 `MATTER`,
+      6 `MATTER/ACTS`, 1 `CALENDAR`, 3 `CALENDAR/ACTS`. The distinction is the whole of
+      why this row closes: `INTERIOR` is the class WITNESS writes and no act may touch,
+      whereas `ACTS` is the class an act is licensed to write. Reading the six as
+      `INTERIOR` is what makes STR-1 look like a prohibition needing a ruling to lift.
+      See `corrections_to_the_sources:` entry 6.
+    citation:
+      - "engine/season/write_matrix.yaml:14-17 (the class derivation; the loader asserts it)"
+      - "engine/season/write_matrix.yaml:58-64 (the six rows are ONE hole; the column exists)"
+      - "engine/season/write_matrix.yaml:147-209 (the six rows, each `[RES] ACTS` with its own emits)"
+      - "engine/season/write_matrix.yaml:161-167 (`(Person, body)` — [MAT, RES] MATTER/ACTS, not one of the six)"
+      - "engine/season/write_matrix.yaml:168-174 (`(Person, claim_ledger)` — the only INTERIOR row)"
+      - "engine/season/hole_register.yaml:715-717 (H-62's own shape field)"
+      - "engine/season/loop/driver.py:3-5 (RATIFIED 04 §A.2:134 — six steps, named by file)"
+      - "architecture/meta/01_AXIOMS.md:111-137 (AX-3 and why derivation from claims is the collision)"
+      - "architecture/meta/01_AXIOMS.md:185-188 (AX-6 — permanence has an author)"
+      - "engine/season/state/carriers.py:135-136 (claims decay on confidence x recency)"
+      - "engine/season/loop/witness.py:364 (the INTERIOR write, in code)"
+    blocks_build_item: null
+
+  - id: "STR-2"
+    source: "adjudication_register.yaml"
+    question: >-
+      Jordan proposed a replacement axis set for the live four (`hierarchical ·
+      sacred · instrumental · traditional`). With two bases now identified, which
+      axes does the MORAL-VALUE basis carry — and is `objective <-> subjective` a
+      meta-ethical axis, a procedural one largely redundant with `equity <->
+      partiality`, or the live `Truth` track under another name?
+    disposition: escalate
+    step: null
+    why_not_closable: >-
+      STEP 1 — NOT SUPERSEDED. The four proposed axes are Jordan's own, offered
+      2026-09-17, after the seven; nothing later has touched them.
+      STEP 2 — NOT IRRELEVANT, and ED-IN-0232 made it CHEAPER rather than closing
+      it. The row's own `[E] ⚠ WITHDRAWN` entry records this: with the Key substrate
+      retired there is no `KeyValidationError`, no validator and no invariant 6, so
+      *"the axis roster's only remaining owner is `engine/season/rosters.yaml`"* —
+      one owner to edit rather than two to reconcile. That changes the price, not
+      the answer.
+      STEP 3 — SILENT ON THE AXIS SET, AND THE ONE DOCUMENT THAT SPEAKS MAKES IT
+      HARDER. `CURRENT.md:30` (ED-IN-0075, Jordan ruling A) declares the per-character
+      metaphysical stance `Truth` — 0–5, Solmund-orthodoxy ↔ Thread-truth, players
+      seeing qualitative bands only — and says *"the 13 Convictions … and the
+      territory-scale Piety (PT) are DISTINCT and unchanged."* So a `Truth` track
+      exists and is ruled distinct from the conviction roster, which means
+      `objective <-> subjective` as a conviction axis either duplicates a ruled track
+      or is a different thing, and no document says which.
+      STEP 4 — NO PRECEDENT. There is no prior instance of this tree choosing a moral
+      basis; the live four came from `conviction_axis_matrix_v30.md` and are the thing
+      being replaced.
+      STEP 5 — REFUSED, ON BOTH branches of §0's test. THE AXES ARE THE MORAL CONTENT
+      OF THE GAME: they are what every conviction weight projects onto and what every
+      verb is scored against, so two axis sets are two different games by construction.
+      And the migration has no partial state — `_load_projection` and `_load_alignment`
+      raise at MODULE SCOPE, so a 13×N projection and an N×38 alignment table must both
+      exist before first import. There is no cheap way to try one.
+      ⚠ WHAT IS ALREADY DECIDED INSIDE THIS ROW AND SHOULD NOT BE RE-ASKED: the
+      register's `reshaped_2026_09_17:` note is correct that three of the seven
+      (`selfish`, `passive`, `peaceful`) are TEMPERAMENT and were measured against a
+      conviction yardstick, so the row's `measured:` correlations apply to the
+      conviction basis only. And the `[E]` statistical claim under `bases.temperament`
+      is WITHDRAWN on Jordan's own instruction — *"unless you can explain your
+      methodology here, this doesn't mean anything"* — so no number in that block may
+      be cited in support of anything.
+      ⚠ AND IT CARRIES THE SAME VOCABULARY COLLISION CAT-9 CARRIES: whatever this basis
+      is called, `temperament` is already `references/descriptor_registry.yaml:298`'s
+      five TERRITORY temperaments. It rides with STR-5/STR-6.
+    citation:
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:199-222 (the four proposed axes and the objective/subjective fork)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:635-642 (atomic migration; the withdrawn Key claim)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:262-279 (the withdrawn statistical claim)"
+      - "CURRENT.md:30 (ED-IN-0075 — Truth; the 13 Convictions and Piety (PT) DISTINCT)"
+      - "engine/season/decision/choose.py:45-58 (the projection; a person holds weights over the thirteen)"
+      - "references/descriptor_registry.yaml:293-295 (the live 13x4 and the four axes)"
+    blocks_build_item: null
+
+  - id: "STR-3"
+    source: "adjudication_register.yaml"
+    question: >-
+      `_sample_order` runs after the score sort; `P(inversion) = 1/(1+exp(Δ/τ))`, so
+      at the shipped `τ = 0.1` a term is decisive at 95% only if its score gap
+      `Δ ≥ 0.294`. Keep `τ = 0.1` and require every term to declare a range against
+      that floor, lower `τ` (more rational characters, less variety), or raise it
+      (more variety, weaker convictions)?
+    disposition: closed
+    step: 5
+    answer: >-
+      KEEP `τ = 0.1`. NOT because 0.1 is right — nobody knows that — but because the
+      other two arms are a re-tune with no control, and §0.1 pt 4 is explicit that *"a
+      number without a control is not a measurement — in either direction."*
+        * THERE IS NOTHING TO TUNE AGAINST YET. The register's own `consequence:` reads
+          *"Any new term must declare a RANGE and clear that floor"* and *"the measured
+          live plateau gap is 0.0000 — the coin-flip row."* NOT ONE of the terms this
+          whole register proposes has a declared range: `alignment` is 52 of 152 cells,
+          temperament has no table, stance is 0 rows, orientation has no carrier.
+          Moving `τ` today changes the inversion probability of a score built from one
+          populated term and a plateau. The arms "more rational" and "more variety" are
+          descriptions of a score that does not exist yet.
+        * OPTION 1 IS NOT A THIRD ARM — IT IS THE STATUS QUO PLUS A METHOD RULE, and the
+          method rule is already `CLAUDE.md` §0.1 pt 3 (*"Name the falsifier, or you have
+          not attacked the result"*). Adopting it costs nothing and adds nothing new to
+          the tree; it is a restatement of a Layer-0 obligation, applied to a term's range.
+        * SO THIS IS §0's OWN INSTRUCTION, TAKEN RATHER THAN DODGED: *"Do not escalate a
+          call that has an obvious engineering answer merely because it is a call."* The
+          engineering answer is: do not move a knob before the instrument reading it
+          exists.
+      ⚠ WHAT RE-OPENS IT, AND IT IS A MEASUREMENT AND NOT A RULING: the first time a term
+      declares a measured range against the 0.294 floor. If the terms this register
+      proposes land and their ranges cluster BELOW the floor, `τ` is wrong and the
+      measurement says so; if they clear it, `τ` is fine and nobody had to guess. At that
+      point the question has a control in both arms and becomes answerable. Until then it
+      is not a decision anyone — Jordan included — is in a position to take.
+      ⚠ AND ONE THING THE ROW DOES NOT SAY, WHICH CHANGES WHO THE FLOOR BINDS: it binds
+      only terms in the SCORE. CAT-8's courage is a modifier on an obstacle, and CAT-2's
+      orientation as ruled here resolves at score time and does bind. A builder who applies
+      the 0.294 floor uniformly will apply it to a quantity that never enters the sort.
+    citation:
+      - "engine/season/decision/choose.py:303-306 (the three-term score)"
+      - "engine/season/decision/choose.py:313-319 (scored once, then `_sample_order` on the ranked list)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:647-660 (the floor, the plateau, the three options)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:301 (alignment at 52 of 152 cells)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:419 (0 stance rows)"
+    blocks_build_item: null
+
+  - id: "STR-4"
+    source: "adjudication_register.yaml"
+    question: >-
+      A `Question` carries `{id, source, referents, about}`; `source` is PROVENANCE,
+      not type — `claim_landed` covers a threat, a gift, an insult and a rumour
+      identically. Jordan: *"Questions may need to be expanded/rewritten to enable more
+      variability and information."* Does `Question` need a TYPE dimension?
+    disposition: closed
+    step: 5
+    answer: >-
+      NO — DO NOT ADD A TYPE DIMENSION. FIX THE GATE. The row measures its own answer
+      and then files it as a question: *"the aperture is ~25 candidates per referent,
+      LINEAR — but distinct verbs reached is 28 under every aggregation rule. More
+      referents buy more candidates and NOT ONE new kind of action. Volume is bounded by
+      referents; VARIETY is bounded by the gate (CAT-6). **Adding question sources cannot
+      fix variety.**"* That is a measured negative result, and a measured negative result
+      is an answer.
+      THE SIBLING SUITE REACHED THE SAME PLACE FROM THE OTHER END, which is step 4
+      precedent arriving independently: r2 item 2a DELETES `date_due` and `band_crossed`
+      after measuring **0 questions each** on a populated season, adds ONE source (`reach`)
+      and reduces `occasioned_by` to one route. A suite that subtracts sources and a row
+      that proves sources cannot buy variety are the same finding, and neither knew about
+      the other.
+      AND THE SECOND HALF OF THE ROW IS A CONSTRAINT, NOT A QUESTION: *"aggregate_questions
+      RE-MINTS the question, keeping only source, about and a flattened referent union — so
+      every new field needs its own FOLD RULE, and per-referent roles cannot survive the
+      union at all."* That is the reason a type dimension is expensive AND it is a live
+      requirement on r2's new `reach` source, which r2 does not carry. `00_THE_SEAM.md`
+      §3.3 is right that these agree in direction and right that the fold-rule warning is a
+      constraint r2 has not picked up. **Carry it into item 2a; do not file it as a ruling.**
+      ⚠ WHAT MUST BE RE-TAKEN RATHER THAN RE-CITED, and it is the one thing in this row that
+      dies on r2's execution: the CLAUSE *"VARIETY is bounded by the gate"* is an inference
+      from the aperture being SHUT — 10 of 38 verbs unformable person-side. r2 items 1, 10,
+      11, 12 and 13 move both halves of that fraction. The conclusion *"adding question
+      sources cannot fix variety"* survives, because it is about sources. The conclusion
+      about how much variety the gate is withholding does not, and must be re-measured after
+      r2 rather than re-quoted (`00_THE_SEAM.md` §3.2).
+    citation:
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:730-738 (the measured consequence and the fold-rule constraint)"
+      - "engine/season/state/carriers.py:241-260 (Question is frozen; source refused off-roster)"
+      - "engine/season/rosters.yaml:250-260 (question_sources — a roster, not a sentence)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/EXECUTION_PLAN.md:59 (item 2a: two sources deleted, `reach` added)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/EXECUTION_PLAN.md:103-104 (the two deleted sources contribute 0 questions, measured)"
+    blocks_build_item: "r2 item 2a"
+
+  - id: "STR-5"
+    source: "adjudication_register.yaml"
+    question: >-
+      `belief` carries SIX live senses inside the decision layer and fails §4's
+      idempotency test. Which sense keeps the word, and what do the others get called?
+    disposition: escalate
+    step: null
+    why_not_closable: >-
+      ONE HALF OF THIS ROW IS ALREADY CLOSED AND THE REGISTER DOES NOT KNOW IT; the
+      other half is genuinely Jordan's and cannot be taken separately from STR-6.
+      ⚠ WHAT CLOSES, AT STEP 1: THE FIELD IS ALREADY RULED DELETED. `Person.beliefs`
+      is not one of the six senses in contention — it is condemned canon.
+      `write_matrix.yaml:52-54`: *"NINE after #358 rev.2's two schema changes land:
+      `Person.beliefs` is DELETED (§D.1.1 — a belief is a `commit` to an OUGHT, not a
+      field)."* r2 executes it: `05:210` files `(Person, beliefs)` with *"No producing
+      verb"*, and `05:972` states it deleted after the suite. The register's first
+      `[E]` — *"a carrier field with ZERO readers anywhere under `engine/season/`"* —
+      is right, and understates the position: it is not merely unread, it is scheduled
+      for deletion by a ratified schema call. So the register's option 2 (*"`belief`
+      keeps the EPISTEMIC sense … the field is the impostor"*) has its premise granted
+      already, and no ruling is needed to remove the field.
+      STEP 2 — NOT IRRELEVANT for the remainder. Four senses survive the field's death:
+      `belief_contradicts()` (whose body reads the claim ledger, not a field), S9.3's
+      refusal law title, the DESIGN TIER at `derived_stats_v30.md:216`, and the per-NPC
+      commitment at `npc_behavior_v30_infill.md:45`.
+      STEP 3 — THE TWO DOCUMENTS THAT WOULD SETTLE IT ARE QUARANTINED AND
+      REFERENCE-ONLY. Both `derived_stats_v30.md` and `npc_behavior_v30_infill.md` now
+      live under `.designs/` (ED-IN-0231), and §0.05 clause 2 makes `systems/**/*.md`
+      design intent only. A design tier described in a quarantined document cannot be
+      cited as the reason the word belongs to it.
+      STEP 4 — §4 FORBIDS THE STATUS QUO WITHOUT SELECTING A SUCCESSOR. Its worked
+      failure (`evacuate`) tells you an overloaded process word must be pinned and that
+      *"the meaning is carried by the language"*; it does not say which of four live
+      senses is the idiomatic one, and ordinary usage genuinely supports several.
+      STEP 5 — REFUSED, AND THE REASON IS IN THE ROW'S OWN `interacts_with:` FIELD:
+      *"Settling `conviction`, `piety` and `belief` separately will re-collide them;
+      they are one vocabulary problem with three words."* STR-6 is mid-ruling by Jordan
+      and is escalated below. Taking `belief` now, while `conviction` is being reserved
+      and the 13-roster renamed, is precisely the separate settlement this row warns
+      against. **STR-5 AND STR-6 ARE ONE DECISION AND SHOULD BE PUT AS ONE.**
+      ⚠ AND THE PROBLEM IS ONE WORD WIDER THAN THE REGISTER COUNTS. `stance` is
+      `Disposition` under a second name (CAT-5's own `[R]`, same range, same polarity),
+      and `temperament` — the word this register names its whole second basis on — is
+      already `references/descriptor_registry.yaml:298`'s five TERRITORY temperaments.
+      Measured on this tree, 2026-09-17: `piety` and `temperament` each appear in **0
+      files** under `engine/season/`, so both names are vacant IN LIVE CODE and taken in
+      the REFERENCE layer, which is the exact shape that makes a cold read go wrong.
+      **The decision is: `belief` · `conviction` · `piety` · `temperament` · `stance`,
+      as one naming pass, not five.**
+    citation:
+      - "engine/season/write_matrix.yaml:52-54 (Person.beliefs DELETED by #358 rev.2 §D.1.1)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:210 (`(Person, beliefs)` — no producing verb)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:972 (deleted after the suite)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:704-719 (the six senses and the three options)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:720 (interacts_with STR-6)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:421 (stance IS Disposition)"
+      - "references/descriptor_registry.yaml:298 (`temp.*` — 5 territory temperaments)"
+    blocks_build_item: null
+
+  - id: "STR-6"
+    source: "adjudication_register.yaml"
+    question: >-
+      Jordan reserved `conviction` for a different concept and named it `piety`. What
+      does `conviction` then denote; how is person-scale piety distinguished in writing
+      from territory-scale Piety (PT); does piety subsume `church_standing`; and what
+      does the 13-roster get called?
+    disposition: escalate
+    step: null
+    why_not_closable: >-
+      THE RESERVATION ITSELF IS RULED AND IS NOT WHAT ESCALATES — it is what closes
+      CAT-1. What escalates are the four naming questions the reservation opens, and
+      they are Jordan's because he is mid-ruling on them and because §4 makes the choice
+      of word a decision with no engineering answer.
+      STEP 1 — THE RULING IS THE INPUT, not a supersession. *"conviction should be
+      reserved for a different concept, not moral values"*, and *"piety"*.
+      STEP 2 — NOT IRRELEVANT, AND ONE HALF IS ALREADY RESOLVED IN THE RIGHT DIRECTION.
+      The character-scale `Piety Track` WAS retired into `Truth` (ED-IN-0075), so
+      restoring `piety` to a narrower person-scale concept is legitimate rather than a
+      collision with a live character track.
+      STEP 3 — A DESIGN DOCUMENT MAKES IT HARDER, NOT EASIER. `CURRENT.md:30` declares
+      territory-scale **Piety (PT)** DISTINCT and unchanged by the same ED-IN-0075
+      ruling. So the reservation as spoken puts one word on two scales, and §4's
+      idempotency test — *would a reader with no memory of this repo land on your
+      meaning* — fails by construction. MEASURED, 2026-09-17: `piety` appears in **0
+      files** under `engine/season/`, so the name is free in live code and occupied in
+      the reference layer. That is a real choice with no default.
+      STEP 4 — PRECEDENT SUPPLIES A CANDIDATE AND CANNOT CLOSE THE ROW. The person-scale
+      religious slot that ALREADY exists is `church_standing`, one of the five
+      `person_predicates` carried as a CLAIM (`rosters.yaml:272-278`) — asserted about
+      you, contestable. So the tree's own shape suggests piety is the INTERIOR half of
+      which `church_standing` is the observable half. That is a candidate answer to one
+      of the four questions and says nothing about the other three.
+      STEP 5 — REFUSED. §0.05 clause 1 makes a term a FACT, and a fact's head is a
+      single owner — here `references/descriptor_registry.yaml:236`'s `conviction_roster`,
+      off which `engine/season/rosters.yaml` binds `CONVICTION_AXES` and the 13×4
+      projection. Renaming it touches, measured by the register, 40 Python files, 60
+      YAML/JSON files and 107 design documents. An agent choosing a vocabulary for the
+      game's moral layer, on a word Jordan is actively reserving, is not step 5 taking an
+      obvious engineering answer — it is an agent naming the game's moral layer.
+      ⚠ AND IT IS LARGER THAN THE ROW STATES. `temperament`, the name this register gives
+      its whole second basis, is ALREADY `references/descriptor_registry.yaml:298`'s five
+      TERRITORY temperaments, sourced to `territory_temperaments_v30.md` which
+      `CURRENT.md:30` lists as a live head — the identical two-scales-one-word failure,
+      on the word the register uses most and does not check. **Put this as ONE naming
+      decision covering `belief` (STR-5), `conviction`, `piety`, `temperament` and
+      `stance`/`Disposition`.** Settling them one at a time is the failure mode the row
+      names in its own `interacts_with:` field.
+    citation:
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:665-667 (Jordan's reservation, verbatim)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:684-693 (the piety collision and the four questions)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:678-683 (the measured rename cost and the single owner)"
+      - "CURRENT.md:30 (ED-IN-0075; territory-scale Piety (PT) DISTINCT and unchanged)"
+      - "engine/season/rosters.yaml:272-278 (church_standing as a person predicate)"
+      - "references/descriptor_registry.yaml:236 (`conviction_roster` — the single owner)"
+      - "references/descriptor_registry.yaml:298 (`temp.*` — the temperament collision the row misses)"
+    blocks_build_item: null
+
+# ===========================================================================
+# THE SIX r2 RULING REQUESTS — `05_LEDGER_AND_BUILD.md` §C.4:1455-1631
+#
+# r2 ran its own six through §0's gate and concluded that all six survive. Each
+# was re-run here INDEPENDENTLY rather than accepted, because a suite grading its
+# own ruling requests is the producer grading itself. FIVE OF SIX ARE CONFIRMED,
+# AND THE SIXTH IS NOT: `RR-3` is filed as surviving in a paragraph that states
+# its own closing argument.
+# ===========================================================================
+
+  - id: "RR-P"
+    source: "r2 05 §C.4"
+    question: >-
+      Jordan's principle — *"the player must have the sanctity of their
+      choices/actions/decisions preserved in terms of the CONTENTS of those
+      choices … the worldly churn is in how those contents are RECEIVED"* — as a
+      candidate seventh axiom, `AX-7`: a draw may decide what HAPPENS, never what
+      you MEANT.
+    disposition: escalate
+    step: null
+    why_not_closable: >-
+      CONFIRMED, and r2's own reasoning survives an independent run of the gate.
+      STEP 1 — nothing supersedes it; it is Jordan's own 2026-09-17 statement.
+      STEP 2 — not irrelevant: the split it names is BUILT. `Act` carries `payload`
+      (`carriers.py:332-339`) as the actor's content; `Claim` (`:129-156`) is a
+      witness's reception; `write_matrix.yaml`'s `(Act[], returned)` row is
+      `steps: [DEL]`. The principle names an existing seam and forbids a bridge
+      back across it.
+      STEP 3 — no design document states it. Verified: `01_AXIOMS.md:66` reads
+      *"**There are SIX.**"*
+      STEP 4 — PRECEDENT EXISTS AND NARROWS RATHER THAN CLOSES, exactly as r2 says,
+      and I opened the row to check. `H-36` (`hole_register.yaml:394-400`) is
+      `grade: ruled`, Jordan 2026-09-02: *"RECEIVER-SIDE. ⚠ AN EMISSION IS NEVER
+      DISTORTED … what refracts is the PREMISES AND RATIONALE, minted per receiver
+      as a Claim."* That is RR-P's test taken, for ONE VERB. A ruling about
+      `refract` is not an axiom about every subsystem. So what reaches Jordan is the
+      GENERALISATION, with the evidence that he has already taken the specific case
+      the same way.
+      STEP 5 — CANNOT BE TAKEN. Adding `AX-7` makes `01_AXIOMS.md:66` false, and
+      that file is RATIFIED (`:3`, ED-IN-0204, Jordan: *"adopt in full"*). Step 5
+      may not overwrite ratified canon. It would also bind every subsystem, which is
+      the widest possible scope for an agent-taken decision.
+      ⚠ THE ONE THING WORTH ADDING TO r2's FRAMING: the axiom set carries its own
+      falsifier at `01_AXIOMS.md:1618` — *"the six axioms are independent: derive any
+      one from the other five"* — and `AX-6` was found BY that falsifier firing. A
+      seventh axiom must be run through it, and the live candidate is `AX-3`: if what
+      is TRUE and what is RIGHT are different kinds of thing held in different places,
+      does a draw over outcomes already fail to reach what was meant? If `AX-7` is
+      derivable from `AX-3` it is a theorem and belongs in `§A.1`'s demotion table
+      beside `T-d` and `T-f`, not in the axiom list. **That test is cheap, it is the
+      set's own, and it should be run before the ruling rather than after.**
+    citation:
+      - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1488-1511"
+      - "architecture/meta/01_AXIOMS.md:3 (RATIFIED, ED-IN-0204, 'adopt in full')"
+      - "architecture/meta/01_AXIOMS.md:66 ('There are SIX')"
+      - "architecture/meta/01_AXIOMS.md:1618 (the independence falsifier, with a hit)"
+      - "engine/season/hole_register.yaml:394-400 (H-36, grade: ruled, receiver-side)"
+      - "engine/season/state/carriers.py:332-339 (Act.payload — the actor's content)"
+      - "engine/season/state/carriers.py:129-156 (Claim — a witness's reception)"
+    blocks_build_item: null
+
+  - id: "RR-A"
+    source: "r2 05 §C.4"
+    question: >-
+      Fold the response verbs — delete `comply`, `evade / defy`, `refract`,
+      `dispatch` and `remit_acts.dispatch`. Are `commit` (the oath), `repudiate`
+      (the refusal) and the named act itself (the compliance) a response verb, or
+      does `ED-IN-0210` require the three rows to exist?
+    disposition: escalate
+    step: null
+    why_not_closable: >-
+      CONFIRMED. The blocking fact is real and I opened it.
+      STEP 1 — NOT SUPERSEDED. `ED-IN-0210` is in `registers/editorial_ledger_in.jsonl`
+      three times (append-only, last-row-wins per id): `:53` (2026-09-10, the original
+      three rulings and the open fork), `:73` (2026-09-13, the flag cleared), and `:84`
+      (2026-09-15, `supersedes_row: true`, `jordan_decision: 2026-09-15`) — the row r2
+      quotes. Its text is as r2 gives it: *"AN ORDER CARRIES TERMS LIKE A DISPENSATION,
+      and `comply`/`evade`/`refract` answer both. The second option (no response verb)
+      is REJECTED."* Nothing after it touches the subject.
+      STEP 2 — NOT IRRELEVANT. Three of the four rows are unresolvable today and
+      `dispatch` is the only live one, so the BEHAVIOURAL cost is small — but a ruling
+      is not made irrelevant by its subject being cheap.
+      STEP 3 / STEP 4 — the design document and the precedent here ARE `ED-IN-0210`,
+      and it points the other way.
+      STEP 5 — EXPRESSLY UNAVAILABLE: step 5 may not overwrite a ruling. That is the
+      whole of why this one is Jordan's.
+      ⚠ AND r2's NARROWING IS CORRECT AND SHOULD BE PRESERVED IN THE ASK. The design
+      AGREES with 0210's first half and builds it — `02` makes an order and a
+      dispensation one `Record` kind with one `subject_matter` schema, which is 0210's
+      own stated unblock. What it contests is the second half only. **The question is
+      not "may we delete four rows"; it is "is the named act itself the compliance?"**
+      Put broadly it reads as a request to overturn a ruling; put narrowly it is a
+      question about what 0210's substance requires, and the narrow form is the honest
+      one.
+      ⚠ ONE CORRECTION TO r2's CITATION, which does not change the verdict: §C.4:1515
+      cites `registers/editorial_ledger_in.jsonl:104`. THAT LINE DOES NOT EXIST — the
+      file is 96 lines. The row is at `:84`. See `corrections_to_the_sources:` entry 5.
+    citation:
+      - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1513-1546"
+      - "registers/editorial_ledger_in.jsonl:84 (ED-IN-0210, ruled 2026-09-15, supersedes_row)"
+      - "registers/editorial_ledger_in.jsonl:53 (ED-IN-0210 as first filed, with the open fork)"
+      - "registers/editorial_ledger_in.jsonl:73 (the flag-cleared row)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/EXECUTION_PLAN.md:72 (item 13 blocked on RR-A)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/EXECUTION_PLAN.md:86 (RR-A is the only item-blocking ruling)"
+    blocks_build_item: "r2 item 13"
+
+  - id: "RR-B"
+    source: "r2 05 §C.4"
+    question: >-
+      Eight sentences of RATIFIED `architecture/` that this design makes false —
+      seven text limbs plus `B-8`, which is a GAME change. AMEND `architecture/`, or
+      NARROW the design?
+    disposition: escalate
+    step: null
+    why_not_closable: >-
+      CONFIRMED. `architecture/` is RATIFIED (`01_AXIOMS.md:3`, ED-IN-0204, Jordan:
+      *"adopt in full"*), and `CLAUDE.md`'s layer table makes it Layer 1. Steps 1–4
+      cannot reach it and step 5 may not overwrite ratified canon: that is the whole
+      gate, and it stops at the same place r2 says it does.
+      ⚠ THE PART THAT IS NOT MERELY PROCEDURAL, AND THE PART AN ASK SHOULD LEAD WITH.
+      Seven limbs are text. `B-8` IS NOT. `03` derives the rank conjunct from
+      `World.contain_ascends` rather than a `rung_kinds` ordinal, and it *"buys one
+      behaviour change: a lower seat that holds the land may now unmake the seat above
+      it."* That is a governance rule about who can unmake whom — a materially
+      different game, not a sentence. It should be put FIRST and separately, because a
+      reader who sees "eight sentences of ratified text" will read all eight as
+      editorial and rule accordingly.
+      ⚠ AND THE COST ASYMMETRY MUST TRAVEL WITH THE ASK. r2 states it honestly and it
+      is easy to lose: branch (ii) on `B-6` alone is not a sentence restored. `holonic
+      §37.1`'s compliance contest *"per relevant Rung, through `contest`"* needs a prize
+      in `contest_subsystems.prizes` with a registered `provider:`, and a prize with a
+      `module:` and no `provider:` is SILENTLY DROPPED from `resolvable_verbs()` — which
+      is how `capture` dies today. Branch (ii) on `B-6` is position 22, a subsystem. A
+      ruling that reads "narrow the design" without that price attached buys something
+      nobody costed.
+      ⚠ AND THE WITHDRAWN LIMB IS THE HEALTHY SIGNAL IN THE ROW. r2 opened `ARCH F.15`
+      and `§B.5`, found that `§B.5` PRESCRIBES the Record-kind fold and calls the
+      schema *"unspecified"*, and WITHDREW the "nine typed terms" limb as conformance
+      rather than contradiction. A proposal that counts conformance as an overwritten
+      sentence is claiming a conflict it does not have. That the suite caught itself
+      doing this once is a reason to trust the remaining eight more, not less.
+    citation:
+      - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1548-1601"
+      - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1565 (B-8, the game change)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1595-1601 (B-6 at full cost)"
+      - "architecture/meta/01_AXIOMS.md:3 (RATIFIED, ED-IN-0204)"
+    blocks_build_item: null
+
+  - id: "RR-C"
+    source: "r2 05 §C.4"
+    question: >-
+      §A.4 departs from the RATIFIED order in `workplans/2026-09-11-reconciled-program.md`
+      §3. May a suite that deletes a ratified position's subject-matter record that by
+      STRIKING the position, or must the position be re-scoped by Jordan?
+    disposition: escalate
+    step: null
+    why_not_closable: >-
+      CONFIRMED, WITH ONE NARROWING r2 ITSELF SUPPLIES AND SHOULD BE HELD TO. The
+      ratification is real and it is SCOPED, which I opened and checked:
+      `workplans/2026-09-11-reconciled-program.md:3` — *"RATIFIED 2026-09-12
+      (ED-IN-0215) … ⚠ SCOPED: the merge ratifies §3's ORDER and §1's supersession
+      verdict, and nothing else."* Step 5 cannot re-order a ratified order. Steps 1–4
+      are silent on whether a position may be struck.
+      ⚠ BUT IT IS ONE DECISION WEARING TWO NUMBERS, AND THAT SHOULD BE SAID WHEN IT IS
+      PUT. `C-1` (building six effect bodies ahead of the Arc-2 gate) is disposed of by
+      r2's own §A.0.2 test — ten of the sixteen items are order-free, four of the first
+      five need no part of RR-C, and the cost of being wrong on the seventh is *"seven
+      extra rewrites at position 7"*, each a re-runnable test or census. `C-2` (deleting
+      position 19b entirely) is a CONSEQUENCE of RR-A: rule RR-A the other way and item
+      13 never lands and C-2 evaporates. `C-3` (`levy` out of position 19) is a
+      consequence of `levy`'s step-5 closure under `holonic §37.3`. **So RR-C is not a
+      seventh question. It is the procedural rider on RR-A, and ruling RR-A settles most
+      of it.** Putting them separately invites two answers to one decision.
+      ⚠ AND THE RATIFICATION'S OWN SCOPE LINE UNDERCUTS THE STRONGEST FORM OF THE
+      OBJECTION: the same `:3` records that *"§0's claim to be the single owner of the
+      ORDER across all lanes is CONTESTED"*, with `2026-09-11-arc-sequence-spine.md`
+      positions 2–15 *"independently actionable"* and the collision open. A ratified
+      order whose ownership is recorded as contested in its own status line is a weaker
+      constraint than "ratified" alone suggests. That does not license an agent to
+      re-order it — it does mean the ask should carry the qualification rather than
+      present the order as settled.
+    citation:
+      - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1603-1631"
+      - "workplans/2026-09-11-reconciled-program.md:3 (RATIFIED 2026-09-12, ED-IN-0215, SCOPED, ownership contested)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/EXECUTION_PLAN.md:88-89 (everything else buildable today)"
+    blocks_build_item: null
+
+  - id: "RR-2"
+    source: "r2 05 §C.4"
+    question: >-
+      `ED-SE-0051` — the bound on the demographic loop: matter only, or matter plus
+      hearth capacity?
+    disposition: escalate
+    step: null
+    why_not_closable: >-
+      CONFIRMED, and this is the cleanest escalation in the set: the ledger row does
+      §0's work in its own text and reaches the same verdict.
+      `registers/editorial_ledger_se.jsonl:51` — `status: open`, `needs_jordan: true`,
+      minted 2026-09-10, and verbatim: *"WHY IT IS NOT AN ENGINEERING CALL: matter-only
+      produces waves the player cannot pre-empt except by holding grain; capacity makes
+      P4 ('found and build') the throttle … **Two defensible options, materially
+      different games.** LAYER 1 IS SILENT: architecture §25 licenses the clock and
+      names no bound, so §0 test 5 … leans matter-only purely because it uses only what
+      exists — **which is a cost argument, not a design one.**"*
+      That last clause is the whole of why step 5 cannot take it, and it is the
+      distinction this gate most often gets wrong: cheapness is not correctness.
+      STEPS 1–4 — all silent, and the row says so, having run them itself: it is *"the
+      one question in `proposals/2026-09-10-settlements-factions-populations/` that
+      survived all five of `CLAUDE.md` §0's tests; every other open question in that set
+      was closed with its closing test named."*
+      ⚠ AND THE "MUST NOT BE RULED ALONE" RIDER IS HALF STALE — SEE
+      `corrections_to_the_sources:` entry 10, AND IT MAKES THIS ROW EASIER TO RULE, NOT
+      HARDER. r2 §C.4:1467-1468 carries `ED-WR-0011`'s warning as live:
+      *"Answering them in either order separately risks two rulings that do not
+      compose."* THE LEDGER IS APPEND-ONLY AND LAST-ROW-WINS PER ID, AND `ED-WR-0011`
+      HAS A SECOND ROW. `registers/editorial_ledger_wr.jsonl:12` (2026-09-13) is
+      `status: ruled`, `needs_jordan: false`: *"OI-05 RULED BY JORDAN, 2026-09-13:
+      'World-gen NPC count, for now, is just the 46 NPCs we built. We will return much
+      later.' THIS IS OPTION A."* And `:11`'s own text says what option A does to this
+      row: *"a ruling for A makes E-1 moot **for NPC generation** (though not for
+      populations)."*
+      SO: the partner question is ANSWERED, in the direction that discharges one of
+      E-1's two halves. `ED-SE-0051` no longer has to compose with an open question —
+      it is now rulable alone, **scoped to POPULATIONS**, which is the half `:11`
+      expressly exempts. The composition risk r2 carries has been retired by a ruling
+      four days before r2 was written.
+      ⚠ ONE QUALIFICATION THAT TRAVELS WITH THAT: `:12` calls itself *"PROVISIONAL BY
+      ITS OWN TERMS"* — *"for now"* and *"we will return much later"* are Jordan's, and
+      they bound what may be built on it. So the discharge is as provisional as the
+      ruling that produced it, which is a reason to state the scope when putting RR-2,
+      not a reason to keep the rider.
+      ⚠ IT GATES NOTHING IN r2. Untouched by `01`–`04`; `Rung.envelope` is kept as its
+      carrier. It is on this sheet because it is open and needs Jordan, not because
+      anything waits.
+    citation:
+      - "registers/editorial_ledger_se.jsonl:51 (ED-SE-0051 — open, needs_jordan, its own five-step run)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1463-1468"
+      - "registers/editorial_ledger_wr.jsonl:11 (ED-WR-0011 as filed — the composition warning, and its NPC-generation exemption)"
+      - "registers/editorial_ledger_wr.jsonl:12 (ED-WR-0011 RULED 2026-09-13 — option A, provisional by its own terms)"
+    blocks_build_item: null
+
+  - id: "RR-3"
+    source: "r2 05 §C.4"
+    question: >-
+      The zoom-trigger table on `scale_transitions_v30.md`'s `CANONICAL` line: adopt
+      `03`'s claim-landing replacement, or keep the thirteen authored rows?
+    disposition: closed
+    step: 3
+    answer: >-
+      ADOPT THE REPLACEMENT. **r2 STATES THE CLOSING ARGUMENT IN THE SAME SENTENCE IN
+      WHICH IT FILES THE REQUEST AS SURVIVING**, and this is the one place in §C.4 where
+      an independent run of the gate disagrees with r2's own.
+      §C.4:1469-1472 reads: *"RR-3 · … **SURVIVES** as `03_THE_SURFACE.md` states it, and
+      it is still the weakest of all six, because that file carries a second, different
+      `## Status:` line, sits in a retire set, and holds **zero `.py`** — **so under §0.05
+      it binds nothing at runtime.**"* Every clause after "because" is a reason it does
+      not survive.
+        * §0.05's TABLE IS EXPLICIT. *"a `## Status: RATIFIED` line on a `.md` | **no** —
+          reference."* A `CANONICAL` line is the same object. So the departure is not
+          from a MECHANISM, and there is no ratified canon being overwritten — which is
+          the only ground a ruling request stands on when steps 1–4 are silent.
+        * §0.05's OWN TEST, APPLIED: *"if this document were deleted, would the game
+          behave differently?"* Zero `.py`. No.
+        * AND THE "KEEP" ARM IS ARCHITECTURALLY UNAVAILABLE AS STATED. §0.05 clause 1:
+          *"A `.md` is NEVER the authored head of a fact code reads."* Thirteen authored
+          zoom triggers are exactly a fact code would read. Keeping them means AUTHORING
+          them into a runtime-read roster — which is build work anyone may do, not a
+          ruling Jordan must take. The arm as written asks him to preserve prose as a
+          head, which Layer 0 forbids.
+        * STEP 2 SUPPORTS THE SAME CLOSURE FROM THE OTHER SIDE. The file is at
+          `.designs/systems/_architecture/reference/scale_transitions_v30.md`, quarantined
+          by ED-IN-0231, and `CLAUDE.md` §1 is direct about it: *"do not read it as
+          authority: §0.05 already forbids that, and this is only the filesystem finally
+          agreeing."* r2 already knows this — it records the file as *"in a retire set"* —
+          and files the request anyway.
+      SO: adopt `03`'s claim-landing replacement. If a later session wants particular
+      zoom triggers, it authors them into a roster with a single owner and an execution
+      artifact, under §0.05, and that is content work rather than a Jordan gate.
+      ⚠ WHAT WOULD RE-OPEN IT — and it is worth stating so this closure is falsifiable:
+      evidence that any of the thirteen triggers is READ BY CODE, at which point it is a
+      mechanism and the departure is a real one. MEASURED: the file holds zero `.py` and
+      lives behind a dot-directory that `glob.glob` and ripgrep skip. Produce one reader
+      and this row re-opens.
+    citation:
+      - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1469-1472 (the request, and its own closing argument)"
+      - "proposals/2026-09-17-governance-and-holdings/03_THE_SURFACE.md:1262-1268 (the departure, registered)"
+      - "proposals/2026-09-17-governance-and-holdings/04_BUILD_ORDER.md:980-983 (the two arms as round one states them)"
+      - ".designs/systems/_architecture/reference/scale_transitions_v30.md (the subject — quarantined, ED-IN-0231)"
+      - "CLAUDE.md §0.05 (the table: a `## Status:` line on a `.md` is reference; clause 1; the deletion test)"
+      - "CLAUDE.md §1 (the `.designs/` quarantine — do not read it as authority)"
+    blocks_build_item: null
+
+# ===========================================================================
+# CORRECTIONS TO THE SOURCES
+#
+# Everything below was found by opening a cited line and reading it, per §0.1
+# pt 3 row three: *"A citation you have not opened is not a citation."* Entries
+# 1-5 are drift and change no verdict. Entries 6-9 change what something IS or
+# what it COSTS, and each is cross-referenced from the row it affects.
+#
+# ⚠ THESE ARE RECORDED, NOT REPAIRED. This file owns no other file. Each
+# correction names the surface that holds the error so its owner can take it.
+# ===========================================================================
+corrections_to_the_sources:
+
+  - n: 1
+    kind: "citation drift"
+    in: ["adjudication_register.yaml CAT-3", "00_THE_SEAM.md §3.1"]
+    said: "`witness.py:358` has the teller in scope and discards it"
+    found: >-
+      TRUE IN SUBSTANCE, WRONG AT THE LINE, AND CHEAPER THAN IT READS. `:358` is
+      prose inside a comment about measured dedup collisions. The teller's ID is
+      `_act.actor`, in scope at `:316` where it is read to exclude self-telling;
+      the constructor that omits it is at `:361-363`. A `_teller` Person lookup
+      DID stand in this block and was removed 2026-09-16 as never-read
+      (`:317-320`), which is probably where the line number came from. The edit
+      CAT-3 needs is one more positional argument, not a lookup.
+    changes_a_verdict: false
+
+  - n: 2
+    kind: "citation drift"
+    in: ["adjudication_register.yaml CAT-1"]
+    said: "`decision/choose.py:302` — term 1 of the live score"
+    found: "`:302` is `axis_w = project(p)`, hoisted out of `score`. Term 1 is at `:304`."
+    changes_a_verdict: false
+
+  - n: 3
+    kind: "citation drift"
+    in: ["adjudication_register.yaml CAT-5"]
+    said: "`decision/choose.py:77` — stance_toward is TERM 2 of the live score"
+    found: "`def stance_toward` is at `:78`; it is term 2 at `:305`. `:77` is blank."
+    changes_a_verdict: false
+
+  - n: 4
+    kind: "citation drift"
+    in: ["adjudication_register.yaml STR-3"]
+    said: "`choose.py:318` runs `_sample_order` AFTER the score sort"
+    found: "The sort is at `:314` and `_sample_order` at `:319`. `:318` is a comment."
+    changes_a_verdict: false
+
+  - n: 5
+    kind: "citation that cannot be opened"
+    in: ["r2 05_LEDGER_AND_BUILD.md §C.4:1515"]
+    said: "`ED-IN-0210` (`registers/editorial_ledger_in.jsonl:104`, ruled 2026-09-15)"
+    found: >-
+      THE FILE IS 96 LINES; `:104` DOES NOT EXIST. The id, the date, the status and
+      the quoted text are all correct — the row is at `:84`, `supersedes_row: true`,
+      `jordan_decision: "2026-09-15"`. Two earlier rows carry the same id at `:53`
+      and `:73` (the ledger is append-only, last-row-wins per id), which is the
+      likeliest source of the arithmetic. RR-A's verdict is unaffected.
+    changes_a_verdict: false
+
+  - n: 6
+    kind: "a matrix term used with the wrong meaning"
+    in: ["00_THE_SEAM.md §4", "adjudication_register.yaml STR-1 (by implication)"]
+    said: >-
+      *"STR-1's subject is the INTERIOR class — the six rows at `[RES] ACTS`
+      (`axis_count · beliefs · convictions · scar · stance · coherence`) plus
+      `claim_ledger` at `WIT`"*
+    found: >-
+      THE SIX ARE NOT `INTERIOR`. MEASURED over `write_matrix.yaml`'s `class:`
+      column: 22 `ACTS`, 6 `MATTER`, 6 `MATTER/ACTS`, 3 `CALENDAR/ACTS`, 1
+      `CALENDAR`, **1 `INTERIOR`** — and the one is `(Person, claim_ledger)` at
+      `[WIT]`. The header states the derivation the loader enforces:
+      `RES->ACTS`, `WIT->INTERIOR`. The seam's conclusion is CORRECT — `(Person,
+      body)` is `[MAT, RES] MATTER/ACTS` and STR-1 does not bind r2 item 3b — and
+      §4 is right to record the null result. ⚠ BUT THE TERM MATTERS HERE MORE THAN
+      ANYWHERE: `INTERIOR` is the class WITNESS writes and no act may touch;
+      `ACTS` is the class an act is LICENSED to write. Reading the six as
+      `INTERIOR` turns a standing licence into a prohibition, which is exactly what
+      makes STR-1 look like a design call needing a ruling to lift. It is what STR-1
+      closes on.
+    changes_a_verdict: true
+    affects: "STR-1"
+
+  - n: 7
+    kind: "an option whose carrier the sibling suite deletes"
+    in: ["00_THE_SEAM.md §2", "adjudication_register.yaml CAT-6"]
+    said: >-
+      §2: r2's route *"is arguably arm 2 relocated … which keeps `AX-2` untouched
+      the same way arm 2 does"* — reading arm 2 as a live alternative.
+    found: >-
+      ARM 2's CARRIER IS ON r2's OWN DELETION LIST, AND SO IS THE SEAM'S SIXTH
+      COLLISION. `03_SEATS_AND_CONTENT.md:744` files *"the grant on
+      `Tenure.payload` | the 2026-09-16 sweep | **REFUSED — retired**"*, citing
+      `ARCH §B.8`'s `term? … Replaces payload?`; `05:229` puts `(Tenure, payload)`
+      among item 14's field deletions and `05:972` states it deleted after the
+      suite. So the four arms are not four equal options: arm 2 now costs
+      un-deleting a field RATIFIED `ARCH §B.8` prescribes deleting, which makes it
+      an `RR-B`-shaped ask rather than a free choice. ⚠ AND THE TWO ARMS ARE NOT
+      `AX-2`-EQUIVALENT: arm 2's claim is NON-VIOLATION (*"it reaches no `World`"*),
+      arm 4's is CONFORMANCE — a claim held may be FALSE, which is the behaviour
+      `AX-2` exists to produce. CAT-6 states both side by side. **This is not a
+      reason to refuse arm 2; it is a price that must be on the sheet when it is
+      chosen.**
+    changes_a_verdict: true
+    affects: "CAT-6"
+
+  - n: 8
+    kind: "a §4 vocabulary collision the register catches for one word and misses for another"
+    in: ["adjudication_register.yaml — `bases:`, CAT-9, STR-2, and every row using the word"]
+    said: >-
+      The register introduces `temperament` as a second, PERSON-SCALE basis of
+      SEVEN directly-held axes, calls it *"the biggest result of this thread"*, and
+      names four rows on it.
+    found: >-
+      **`temperament` IS ALREADY TAKEN, AT ANOTHER SCALE, WITH ANOTHER
+      CARDINALITY.** `references/descriptor_registry.yaml:298` carries `temp.*`,
+      `kind: temperament_type`, *"5 territory temperaments"*, `value: "alpha
+      (outcomes) + beta (conduct) weights"*, `scope: "territory/faction
+      (pop-weighted avg)"`, sourced to `territory_temperaments_v30.md` — which
+      `CURRENT.md:30` lists as a live canonical head of the settlement/territory
+      subsystem. MEASURED 2026-09-17: `temperament` appears in **0 files** under
+      `engine/season/`, exactly like `piety` — vacant in live code, occupied in the
+      reference layer, which is the precise shape that makes a cold read go wrong.
+      ⚠ THIS IS THE SAME DEFECT STR-6 CATCHES FOR `piety` (*"two scales, one word:
+      a later session reading it cold cannot tell which is meant — §4's idempotency
+      test failing"*), MISSED ON THE WORD THE REGISTER USES MOST. It does not
+      damage CAT-9's shape finding, which is about operators and not about names.
+      It does mean the naming pass is FIVE words and not three: `belief` ·
+      `conviction` · `piety` · `temperament` · `stance`/`Disposition`.
+    changes_a_verdict: false
+    affects: ["CAT-9", "STR-2", "STR-5", "STR-6"]
+
+  - n: 9
+    kind: "a stale measured count"
+    in: ["adjudication_register.yaml CAT-9, `still_measured_and_still_standing`"]
+    said: "*\"[E] no temperament roster exists: 34 rosters in engine/season/rosters.yaml, none carrying disposition\"*"
+    found: >-
+      35 TODAY, and the qualitative claim is unchanged — none carries a disposition,
+      temperament, courage or piety roster. Recorded because a measured count in a
+      register is the kind of figure a later session quotes, and §0.1 pt 4 wants a
+      number to be re-runnable rather than remembered.
+    changes_a_verdict: false
+
+  - n: 10
+    kind: "a rider quoted from a superseded row of an append-only ledger"
+    in: ["r2 05_LEDGER_AND_BUILD.md §C.4:1467-1468"]
+    said: >-
+      *"⚠ `ED-WR-0011` says the two must be answered together: 'Answering them in
+      either order separately risks two rulings that do not compose.'"* — carried as
+      a live constraint on RR-2.
+    found: >-
+      THE QUOTE IS REAL AND THE ROW IT COMES FROM IS SUPERSEDED. The lane ledgers are
+      append-only with LAST-ROW-WINS PER ID — the mechanism `ED-IN-0210`'s own
+      flag-clearing row names in so many words — and `ED-WR-0011` has two rows.
+      `registers/editorial_ledger_wr.jsonl:11` (filed 2026-09-13, `status: open`,
+      `needs_jordan: true`) carries the quoted warning. `:12` (SAME DAY,
+      `status: ruled`, `needs_jordan: false`) records *"OI-05 RULED BY JORDAN,
+      2026-09-13: 'World-gen NPC count, for now, is just the 46 NPCs we built …'
+      THIS IS OPTION A."* And `:11`'s own text says what option A does: *"a ruling for
+      A makes E-1 moot for NPC generation (though not for populations)."*
+      SO THE RIDER IS DISCHARGED FOR ONE OF E-1'S TWO HALVES AND RR-2 IS NOW RULABLE
+      ALONE, SCOPED TO POPULATIONS. This makes the row EASIER, which is why it is worth
+      catching: a stale pairing constraint is a blocker that looks like diligence.
+      ⚠ THE DISCHARGE INHERITS ITS SOURCE'S PROVISIONALITY — `:12` calls itself
+      *"PROVISIONAL BY ITS OWN TERMS"*, quoting Jordan's *"for now"* and *"we will
+      return much later"*. State the scope when putting RR-2; do not carry the rider.
+      ⚠ AND THE GENERAL LESSON IS THE ONE `ED-IN-0210` ALREADY PAID FOR IN THIS SAME
+      SET OF ROWS (see entry 5, where the same id has three rows): **grepping a lane
+      ledger for an id returns every row it ever had. Take the LAST one.** Two of the
+      ten corrections in this file are that single mistake.
+    changes_a_verdict: false
+    affects: "RR-2"
+
+# ===========================================================================
+# THE NINE THAT REACH JORDAN — one line each, in the order they should be put.
+# This is a reading aid over `rows:` and adds no claim; where it and a row
+# disagree, THE ROW WINS, because the row carries the citations.
+# ===========================================================================
+escalation_summary:
+  order_and_why: >-
+    RR-A first, because it is the only one blocking a build item and because RR-C
+    is mostly its consequence. Then RR-B, whose `B-8` limb is a game change hiding
+    in a list of sentences. Then CAT-6, which is now a four-arm question and was a
+    three-arm one. Then the vocabulary pass (STR-5 + STR-6) as ONE decision over
+    five words. Then STR-2, which the vocabulary pass shapes. RR-P and RR-2 are
+    independent of all of it and gate nothing.
+  rows:
+    - {id: "RR-A",  one_line: "Is the named act itself the compliance — or does ED-IN-0210's letter require the three response rows to exist? Step 5 may not overwrite a ruling. BLOCKS r2 item 13, and nothing else."}
+    - {id: "RR-B",  one_line: "Amend eight RATIFIED `architecture/` sentences, or narrow the design? Seven are text; B-8 is a GAME change — a lower seat that holds the land may unmake the seat above it — and branch (ii) on B-6 is a whole subsystem."}
+    - {id: "RR-C",  one_line: "May a suite strike a ratified position rather than have Jordan re-scope it? Largely RR-A's rider: C-2 and C-3 are its consequences and C-1 is disposed of by r2's own order-free test."}
+    - {id: "CAT-6", one_line: "H-71 — which of FOUR routes lets a seated person know their own remit? The register offers three; r2 built a fourth. Precedent favours arm 4, which produces the behaviour AX-2 exists for; arm 2's carrier is now on r2's deletion list."}
+    - {id: "STR-5", one_line: "Which of four surviving senses keeps the word `belief`? The FIELD is already ruled deleted; the word is not. Rides with STR-6."}
+    - {id: "STR-6", one_line: "What does `conviction` denote once reserved, how is person-scale piety told from territory-scale Piety (PT), does piety subsume `church_standing`, and what is the 13-roster called? ONE naming pass over FIVE words, not three."}
+    - {id: "STR-2", one_line: "Which axes does the moral-value basis carry, and is `objective <-> subjective` meta-ethical, redundant with `equity <-> partiality`, or the live `Truth` track (ED-IN-0075) under another name? Migration is atomic — both matrices before first import."}
+    - {id: "RR-P",  one_line: "Is the sanctity of a choice's CONTENTS a seventh axiom? H-36 shows Jordan has already taken the specific case; the generalisation would bind every subsystem and make `01_AXIOMS.md:66` false. Run the set's own independence falsifier against AX-3 first."}
+    - {id: "RR-2",  one_line: "ED-SE-0051 — demographic loop bounded by matter only, or matter plus hearth capacity? The ledger row ran the gate itself and reached the same answer. ⚠ Now rulable ALONE and scoped to POPULATIONS: ED-WR-0011 was RULED 2026-09-13 and its pairing rider is discharged for NPC generation. Gates nothing."}
+
+# ===========================================================================
+# WHAT THIS FILE DOES NOT DO — `CLAUDE.md` §0's test, applied to itself.
+#
+# DOES THIS DOCUMENT CREATE WORK FOR A FUTURE SESSION? No. Every `closed` row
+# ends a question that was already open; no row opens one. It allocates no id,
+# names no deliverable, and builds no queue — the nine escalations are the
+# EXISTING queue, restated once with its citations, and twelve rows are removed
+# from it. It ratifies nothing and flips no `## Status:` line. The corrections
+# above are recorded against surfaces this file does not own and does not edit.
+# **If either suite dies, this file dies with it.**
+# ===========================================================================
