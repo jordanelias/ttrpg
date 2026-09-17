@@ -47,10 +47,12 @@
 #   says inside its own `answer:` what would re-open it.
 #
 # ⚠ TEN CORRECTIONS TO THE SOURCES, listed at `corrections_to_the_sources:` at the
-#   foot of this file. Five are citation drift and change nothing. FIVE ARE
-#   SUBSTANTIVE — entries 6, 7, 8, 9 and 10 — and three of those change what a row
-#   COSTS, what an arm IS, or whether a rider still binds, which is why every one is
-#   recorded rather than quietly fixed. **Entry 8 is the one to read: the register
+#   foot of this file. ~~Five are citation drift and change nothing. FIVE ARE
+#   SUBSTANTIVE — entries 6, 7, 8, 9 and 10~~ → **FOUR are citation drift (1-4);
+#   TWO WERE THEMSELVES WRONG AND ARE REWRITTEN (5 and 6, see the 2026-09-17 repair
+#   pass below); FOUR STAND AS FILED (7, 8, 9, 10), and two of those change what an
+#   arm IS or whether a rider still binds**, which is why every one is recorded
+#   rather than quietly fixed. **Entry 8 is the one to read: the register
 #   names its entire second basis on a word that is already taken at another scale.**
 #   ⚠ AND ONE ERROR OF THIS FILE'S OWN, caught by its own adversarial pass before
 #   publication and left visible inside `CAT-2` rather than tidied away: a first
@@ -58,11 +60,63 @@
 #   counted prose. It was re-taken with the loader in-process. The wrong figure, the
 #   right figure and the reason the first instrument could not see the thing it was
 #   asked about are all in that row.
+#
+# ⚠⚠ AND A SECOND PASS OVER THIS FILE, 2026-09-17, AFTER AN INDEPENDENT READ-ONLY
+#   CRITIC ATTACKED IT. Seven repairs, every one STRUCK-AND-KEPT (`~~old~~ → new`)
+#   rather than tidied away, because in each case the SHAPE of the error is the
+#   thing worth carrying forward:
+#     R1 · entry 5 and `RR-A` — EVERY LINE NUMBER INTO `editorial_ledger_in.jsonl`
+#       WAS WRONG, and the citation this file condemned as unopenable was CORRECT
+#       WHEN IT WAS MADE. The lesson is in entry 5: CITE THE ID, NOT THE LINE.
+#     R2 · `STR-1`'s stated ground was wrong. The VERDICT is unchanged and is not
+#       re-opened; its real ground — option 3 is AXIOM-BARRED — was already inside
+#       the row and is now promoted to the top of it.
+#     R3 · `CAT-8` re-graded `~~step 3~~ → step 5`, because it DESIGNS its own
+#       answer. The design is now labelled a PROPOSAL rather than a finding.
+#     R4 · `CAT-4` re-graded `~~step 1~~ → step 5`, because the bridge from Jordan's
+#       two corrections to the merge was THIS PASS'S INFERENCE and not his ruling.
+#       Filed as step 1 it read as *"Jordan already answered this"*, which he did not.
+#     R5 · FOUR CLOSURES ARE CHAINED, NOT INDEPENDENT. `depends_on_closure:` now
+#       says so on the rows that carry the dependency.
+#     R6 · `CAT-2` refuted option 2 on the census it had retracted three lines above.
+#     R7 · `CURRENT.md:30` was cited for two incompatible facts; one of them is `:31`.
+#   ⚠ NO DISPOSITION MOVED AND NOTHING RE-OPENED. `meta.counts` is unchanged at 12
+#   closed / 9 escalated: R3 and R4 re-grade WHICH STEP closes a row, not whether it
+#   closes. A re-grade from 1 or 3 to 5 is a weaker claim about the tree, not a
+#   weaker answer — step 5 is *"one option is clearly right for the code"*, and
+#   saying so honestly beats citing a ruling that does not reach.
 # ---------------------------------------------------------------------------
 
 meta:
   gate: "CLAUDE.md §0's five steps"
   counts: {total: 21, closed: 12, escalated: 9}
+  counts_note: >-
+    UNCHANGED BY THE 2026-09-17 REPAIR PASS. `CAT-4` moved `~~step 1~~ → step 5` and
+    `CAT-8` moved `~~step 3~~ → step 5`; both remain `closed`, so the dispositions and
+    therefore the counts do not move. What moved is the STRENGTH OF THE GROUND each
+    stands on, which is what the `step:` field is for.
+  closures_are_chained: >-
+    ⚠ THE TWELVE CLOSURES ARE NOT TWELVE INDEPENDENT RESULTS, AND THE FIRST WRITING OF
+    THIS FILE PRESENTED THEM AS IF THEY WERE. Four of them close on each other, so a
+    re-opening propagates. Stated here because a reader counting twelve closures will
+    otherwise price them as twelve independent verifications:
+      * `CAT-9` takes two of its seven placement terms from step-5 closures made in
+        THIS FILE — the courage MODIFIER is `CAT-8`'s, the beneficiary WEIGHT is
+        `CAT-2`'s. **Re-open either and `CAT-9`'s 7 = 3+1+1+1+1 decomposition
+        re-opens with it**, because two of the four non-table quantities lose the
+        machinery the decomposition assigns them.
+      * `CAT-5` closes by REDUCTION — *"CAT-5 reduces to STR-1"* — and carries no
+        independent ruling. Re-open `STR-1` and `CAT-5` is open again by construction.
+      * `CAT-7`'s gate half and `CAT-8`'s gate half close on THE SAME FOUR LINES
+        (`rosters.yaml:148-160`, quoting `#353 §9.2`). That is one closure counted
+        twice, not two closures agreeing. ⚠ This one was found by the repair pass and
+        is not in the critic's list.
+    **COUNTED HONESTLY:** TEN of the twelve rest on the tree rather than on each other
+    (`CAT-1 · CAT-2 · CAT-3 · CAT-4 · CAT-7 · CAT-8 · STR-1 · STR-3 · STR-4 · RR-3`);
+    **TWO are derivative** (`CAT-5` on `STR-1`, `CAT-9` on `CAT-8` + `CAT-2`); and
+    **one pair of the ten shares a single citation** (`CAT-7`/`CAT-8` on the gate half).
+    So the sheet holds **nine distinct grounds, not twelve**, and `CAT-9` is the most
+    exposed row on it — it is downstream of the two rows this repair pass touched most.
   measured_on: "main, working tree, 2026-09-17"
   sources:
     - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml — 15 rows with an empty `ruling:`"
@@ -148,11 +202,25 @@ rows:
           observed the thing it was asked about.
         * OPTION 2's OBVIOUS SPELLING — a fifth `Candidate` field — is refused by
           `Candidate`'s own invariant: *"AND THE FIELD IS NEVER PARTIAL. A form
-          whose operands cannot all be bound forms NO Candidate."* A beneficiary
-          that binds for 2 of 38 verbs and is carried in `operands` would REFUSE
-          36 verbs outright. A beneficiary that binds for 2 of 38 and is carried
-          as a fifth field OUTSIDE `operands` is a second partial-binding rule
-          beside a rule that forbids partial binding — §8's two owners.
+          whose operands cannot all be bound forms NO Candidate."*
+          ⚠⚠ THIS BULLET ARGUED FROM THE NUMBER THE BULLET ABOVE HAD JUST RETRACTED,
+          AND IT DID IT TWICE. The retraction was written, and then not carried three
+          lines down — which is the SAME defect the retraction records, committed in
+          the act of recording it. Re-stated here on the corrected census, struck and
+          kept: a beneficiary that binds for ~~2~~ → **12** of 38 verbs and is carried
+          in `operands` would REFUSE ~~36~~ → **26** verbs outright. A beneficiary that
+          binds for ~~2~~ → **12** of 38 and is carried as a fifth field OUTSIDE
+          `operands` is a second partial-binding rule beside a rule that forbids
+          partial binding — §8's two owners.
+          ⚠ THE VERDICT SURVIVES THE REPAIR RATHER THAN DEPENDING ON IT, WHICH IS WHY
+          THE ROW STILL CLOSES. At 12/38 the refusal is smaller and still fatal: 26
+          verbs is two thirds of the table, and **24 of those 26 can bind NO operand
+          whatever**, so the fifth field would be empty for them under any binder that
+          respects the invariant. The argument needed *"most of the table has no
+          beneficiary"*, which is true at 12 and was true at 2; it never needed the 2.
+          RE-RUN 2026-09-17 with the same in-process instrument named above, as the
+          repair's own falsifier: **38 verbs · 24 untyped · 14 typed · `to` 12 ·
+          `site` 3 · `from` 1 · `kind` 1 · `amount` 1.**
       So the beneficiary is a PROPERTY OF THE VERB, declared once per row beside
       `writes:` and `eligibility:` which are the same shape of static per-verb
       declaration, and resolved at score time against fields the Candidate
@@ -226,19 +294,53 @@ rows:
       separate carriers? And: a stored counter for a need, or duration derived
       from `Tenure.since`?
     disposition: closed
-    step: 1
+    step: 5
+    regrade: >-
+      ⚠ RE-GRADED 2026-09-17: ~~`step: 1` (superseded)~~ → **`step: 5` (answered by
+      what makes sense for the architecture)**. §0 step 1 requires *"a later ruling,
+      commit or head decided it. Cite the successor."* THE CITED SUCCESSOR DOES NOT
+      REACH THIS ROW. `adjudication_register.yaml:36-44` is Jordan splitting caste out
+      of `station` and CHALLENGE-fear out of `commitments` — opened and read at the
+      line, and it decides `CAT-7` and `CAT-8` and says nothing about `CAT-4`. The
+      bridge — *"splitting off precisely what does not merge is an endorsement of the
+      merge of what remains"* — IS THIS PASS'S OWN INFERENCE. It is a good inference
+      and the verdict stands on it, but an inference is step 5, not step 1.
+      **WHY THE MIS-FILING MATTERED:** filed at step 1 this row reads to a cold session
+      as *"Jordan already answered this, do not re-ask"* — which is exactly the
+      preservation of a wrong answer that §0's gate exists to prevent, run backwards.
+      A step-5 closure invites correction; a step-1 closure forbids it.
     answer: >-
-      ONE MECHANISM, and Jordan's own two corrections of 2026-09-17 are what
-      close it. He split exactly the two things that do NOT merge — caste out of
+      ONE MECHANISM. ~~Jordan's own two corrections of 2026-09-17 are what close it.~~
+      → **The argument below is what closes it; Jordan's two corrections are its
+      strongest EVIDENCE and not its authority (see `regrade:`).**
+      He split exactly the two things that do NOT merge — caste out of
       `station` (now CAT-7) and CHALLENGE-fear out of `commitments` (now CAT-8) —
       on the ground that a distillation removing something irreducible is a
-      reduction. Splitting off precisely what does not merge is an endorsement of
-      the merge of what remains: ambition (+), outcome-fear (−) and need (+ with
-      duration) are one signed target on one carrier.
+      reduction. Splitting off precisely what does not merge is ~~an endorsement of~~
+      → **evidence for** the merge of what remains: ambition (+), outcome-fear (−) and
+      need (+ with duration) are one signed target on one carrier. ⚠ THE INFERENCE IS
+      NOT WATERTIGHT AND THE ROW SHOULD NOT PRETEND IT IS: a person who splits two
+      items off a list of eight has said nothing about whether the remaining six are
+      one thing or six. What carries the row is the ARCHITECTURAL argument below —
+      three carriers for one signed quantity are three producers of one question
+      source — and that argument would hold had Jordan said nothing.
       Two supports, neither of which is the ruling:
-        * ONE CARRIER ALREADY EXISTS AND IS SINGLE-OWNED. `commit` writes
-          `Tenure.since` and `world_q`'s Q4 `need` fires off it. Three carriers
-          would be three producers of one question source, which is §8.
+        * ONE CARRIER ALREADY EXISTS AND IS SINGLE-OWNED — **AND IT IS DECLARED, NOT
+          EXECUTED, WHICH THIS ROW STATED IN THE PRESENT TENSE AND SHOULD NOT HAVE.**
+          ~~`commit` writes `Tenure.since` and `world_q`'s Q4 `need` fires off it.~~ →
+          **`verb_table.yaml:124` DECLARES `commit`'s `writes: ["Tenure.since"]`, and
+          `world_q.py:520-528`'s Q4 `need` keys on a live `commit` Tenure — but
+          `effects.py` registers ELEVEN `@effect_for` bodies and `commit` IS NOT ONE
+          OF THEM, so no act mints a `commit` Tenure and Q4 fires only on Tenures the
+          harness hand-plants.** Three carriers would still be three producers of one
+          question source, which is §8; the §8 argument does not need the code to run.
+          But the SUB-ANSWER for (a) — derive the duration off `Tenure.since` — is
+          **UNEXECUTABLE UNTIL r2 EXECUTION_PLAN ITEM 1 LANDS** (`@effect_for("commit")`,
+          artifact `resolvable_verbs()` **18 → 19**, `EXECUTION_PLAN.md:26` and `:58`).
+          ⚠ TWO SMALLER CORRECTIONS INSIDE THE SAME SENTENCE: Q4 reads `t.kind ==
+          "commit" and t.live` and returns `t.object`, so it fires off the TENURE'S
+          EXISTENCE, not off `since`; and the module is `engine/season/queries/world_q.py`,
+          not `loop/`.
         * SUB-QUESTION (a) — THE COUNTER IS DERIVED, NOT STORED, at step 5.
           `Tenure.since` exists and `w.tick - since` is the duration. A stored
           counter is a new `Person`-interior field, which is a NEW ROW in the
@@ -260,10 +362,21 @@ rows:
       `predicate` to `""` and `value` to `None` (`effects.py:431-433`) because the
       payload is untyped. That is a BUILD item — type `utter`'s payload — not a
       decision. Jordan is not the person who makes a dataclass carry a string.
+    depends_on_build: >-
+      **r2 EXECUTION_PLAN item 1** (`@effect_for("commit")`). Sub-question (a)'s answer
+      — the needs counter is DERIVED from `Tenure.since`, never stored — cannot execute
+      until an act can mint a `commit` Tenure. The verdict does not wait on it; the
+      BEHAVIOUR does. Falsifier for the dependency, and it is one line:
+      `grep -c '@effect_for' engine/season/loop/effects.py` returns 11 and
+      `grep '@effect_for("commit")'` returns nothing. When it returns something, this
+      note is spent.
     citation:
-      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:36-44 (Jordan's two corrections and the reduction test)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:36-44 (Jordan's two corrections — they decide CAT-7 and CAT-8, NOT this row; see `regrade:`)"
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:513-525 (the split that does not merge)"
-      - "engine/season/verb_table.yaml:124 (`commit` writes `Tenure.since`)"
+      - "engine/season/verb_table.yaml:124 (`commit` DECLARES `writes: [\"Tenure.since\"]`)"
+      - "engine/season/loop/effects.py — 11 `@effect_for` bodies, `commit` NOT among them (measured 2026-09-17)"
+      - "engine/season/queries/world_q.py:520-528 (Q4 `need` — keys on a live `commit` Tenure, returns `t.object`)"
+      - "proposals/2026-09-17-governance-and-holdings-r2/EXECUTION_PLAN.md:26 (item 1 — `@effect_for(\"commit\")`, artifact `resolvable_verbs()` 18 -> 19)"
       - "engine/season/loop/effects.py:431-433 (the untyped Proposition)"
       - "engine/season/state/carriers.py:135-136 (`when` stored, recency computed)"
       - "engine/season/hole_register.yaml:715-717 (H-62)"
@@ -300,6 +413,14 @@ rows:
       *"`stance` IS Disposition under a second name"* is a §4 idempotency defect of
       the same family as STR-5 and STR-6. It belongs with them, and it is named in
       those rows rather than duplicated into a third.
+    depends_on_closure: ["STR-1"]
+    depends_on_closure_note: >-
+      ⚠ ADDED 2026-09-17. THIS ROW IS DERIVATIVE AND THE FIRST WRITING DID NOT SAY SO
+      IN A FIELD ANYONE COULD READ. Its own answer ends *"CAT-5 REDUCES TO STR-1 …
+      It carries no independent ruling"*, which is the dependency stated in prose and
+      then not filed. **Re-open `STR-1` and this row is open again by construction** —
+      it is not an independent confirmation of the produced-and-stored model, it is the
+      same closure counted a second time under a different id.
     citation:
       - "engine/season/write_matrix.yaml:203-209 (the `(Person, stance)` row)"
       - "engine/season/write_matrix.yaml:4 (`shape.py`'s `write()` gate reads this file)"
@@ -491,17 +612,82 @@ rows:
       act costs more), a gate at the extreme (the candidate never forms), or a
       susceptibility (gain on threat-input)?
     disposition: closed
-    step: 3
+    step: 5
+    regrade: >-
+      ⚠ RE-GRADED 2026-09-17: ~~`step: 3` (answered by a design document)~~ →
+      **`step: 5` (answered by what makes sense for the architecture), WITH THE SECOND
+      HALF RELABELLED A PROPOSAL.** Filed at step 3 this row claimed to have FOUND its
+      answer in the tree. It did not: half of it DESIGNS the answer.
+      **THE TEST THAT FAILS AT STEP 3.** Step 3 answers a question by citing a document
+      that already decided it. `rosters.yaml:148-160` decides the GATE arm — a fifth
+      eligibility kind is a design change, and `#353 §9.2` names Thread Sensitivity as
+      the design's one class-shaped gate. Nothing anywhere decides that courage is
+      expressed as **a new `demands:` column on `verb_table.yaml` plus a new
+      `challenge_kinds` roster.** That is a NEW PER-VERB COLUMN ON A REGISTRY THE
+      LOADER READS AT RUNTIME, plus a new value vocabulary — under §0.05 a mechanism
+      change, not a citation. The register itself states the shape and declines to take
+      it, and this row took it and filed the taking as a finding.
+      **WHY A RE-GRADE AND NOT AN ESCALATION.** Three reasons, in order of weight.
+      (1) CONSISTENCY: `CAT-2` reaches the identical shape — *declare it as a static
+      column on `verb_table.yaml`* — and is filed `step: 5`. Two rows proposing the
+      same artifact cannot carry different dispositions without one of them being
+      wrong. (2) §0's OWN INSTRUCTION: *"Do not escalate a call that has an obvious
+      engineering answer merely because it is a call."* Given that the gate arm is
+      refused and the susceptibility arm is a stage error, the modifier is not a choice
+      among live options — it is the only one left standing. (3) THE ESCALATION TEST IS
+      NOT MET FOR THE ARM THAT SURVIVES: modifier-versus-nothing is not two defensible
+      options leading to materially different games.
+      ⚠ **AND WHAT WOULD MAKE IT AN ESCALATION AFTER ALL, STATED SO THE RE-GRADE IS
+      FALSIFIABLE:** if Jordan wants courage to be a HARD GATE — a coward's candidate
+      never forms — then the answer is a fifth `eligibility_kinds` member, which
+      `rosters.yaml:151-158` expressly says *"needs a ruling before it needs an entry"*.
+      That arm is refused here on `#353 §9.2`'s one-class-shaped-gate sentence, which is
+      RATIFIED LAYER-1 PROSE (`architecture/holonic_ARCHITECTURE.md:345`) and therefore
+      **reference, never mechanism** (§0.05). A design document may not be cited as the
+      reason a behaviour is correct. **So the gate arm is refused on the strongest
+      ground available and that ground is still prose, and if Jordan reads that sentence
+      differently the gate arm returns and this row escalates.**
+    proposes: >-
+      ⚠ **THIS IS A PROPOSAL, NOT A FINDING, AND NOTHING IN THE TREE SAYS IT YET.**
+      Two new artifacts, neither of which exists today:
+        1. **a `demands:` column on `engine/season/verb_table.yaml`** — static, one per
+           verb row, beside `writes:` and `eligibility:`;
+        2. **a `challenge_kinds` roster in `engine/season/rosters.yaml`** — the closed
+           value vocabulary that column draws on.
+      Both are runtime-read surfaces, so both are §0.05 MECHANISM and neither may be
+      authored on the strength of this sheet alone. What this row supplies is the
+      ARGUMENT FOR THAT SHAPE, which is that the tree already runs the pattern twice
+      (`writes:` and `eligibility:` are static per-verb columns with rosters behind
+      them). What it does not supply is a ruling, a roster membership or a builder's
+      licence.
     answer: >-
-      A MODIFIER, RAISING THE OBSTACLE, KEYED ON A PER-VERB `demands:` DECLARATION.
-      The other two options are each closed by a document, and the shape of the third
-      is supplied by precedent.
+      A MODIFIER, RAISING THE OBSTACLE, KEYED ON A PER-VERB `demands:` DECLARATION
+      — **the operator is a CLOSURE; the `demands:` mechanism is a PROPOSAL (see
+      `regrade:` and `proposes:`).** The other two options are each closed by a
+      document, and the shape of the third is ~~supplied by precedent~~ → **argued from
+      precedent, which is a weaker thing and the row should say so.**
         * THE GATE OPTION IS CLOSED AT STEP 3. "Below a threshold the candidate is not
           formed at all" is a fifth way to make a verb unavailable to someone, which is
           `eligibility_kinds`'s own definition of a design change needing a ruling —
           and the sentence above it, *"the only class-shaped gate in the design is
           Thread Sensitivity"*, says a per-character disposition is not one. It is the
           same closure as CAT-7's gate half, on the same four lines.
+          ⚠ **AND THAT IS A DEPENDENCY, NOT A CORROBORATION — SAID HERE BECAUSE TWO ROWS
+          CLOSING ON ONE CITATION LOOK LIKE TWO RESULTS.** `CAT-7` and `CAT-8` do not
+          independently confirm each other's gate half; they quote the same sentence.
+          ⚠ AND THE SENTENCE'S PROVENANCE, OPENED 2026-09-17 BECAUSE THIS ROW CITED IT
+          WITHOUT NAMING ITS HOME: `#353` is **`architecture/holonic_ARCHITECTURE.md`**
+          (`CURRENT.md:36` binds the number to the file) and §9.2 is at **`:345`**. It is
+          **RATIFIED LAYER 1 — and its own `## Status:` line at `:4` says of itself
+          *"under CLAUDE.md §0.05 this document is REFERENCE, never mechanism"*.** It is
+          NOT under `.designs/` and NOT quarantined; `rosters.yaml:151-158` quotes it
+          inside a YAML the loader opens, but the loader reads `values:` at `:160`
+          (`[own, remit, hold, presence]`) and never the `note:`. **So the strongest
+          ground this row has is a ratified document quoting itself into a comment
+          field, and §0.05 says a design document may not be cited as the reason a
+          behaviour is correct.** The closure holds because the ALTERNATIVE is worse —
+          a fifth eligibility kind is a declared design change — not because the prose
+          binds.
         * THE SUSCEPTIBILITY OPTION IS A STAGE ERROR, closed against the register's own
           unified model. Susceptibility acts at `PHI-0 INTAKE`, runs at WITNESS, and
           the model names `Claim.confidence` as *"the one write licensed here"*. Courage
@@ -521,17 +707,27 @@ rows:
           and `eligibility:` are static per-verb columns on `verb_table.yaml`, whose header
           calls the table *"the resolver's body"*, and their value vocabularies are rosters
           in `rosters.yaml`. A `demands:` column plus a `challenge_kinds` roster is one more
-          instance of a pattern the table already runs twice. ⚠ THE ROSTER'S MEMBERSHIP IS
-          CONTENT AUTHORING, NOT A RULING — naming which challenges exist is design work
-          anyone can do against the verb table, and `blocks: nothing today` means nothing
-          waits on it.
+          instance of a pattern the table already runs twice.
+          ⚠⚠ ~~AND THE ENUMERATION QUESTION IS ANSWERED BY PRECEDENT, NOT BY A RULING.~~
+          → **CORRECTED 2026-09-17: PRECEDENT SUPPLIES THE SHAPE AND ANSWERS NOTHING.**
+          A pattern the tree runs twice is an argument that a third instance would be
+          idiomatic. It is not a document deciding that the third instance should exist,
+          and this bullet's original heading claimed it was. The `demands:` column and
+          the `challenge_kinds` roster are **PROPOSED** here — see `proposes:`.
+          ⚠ ~~THE ROSTER'S MEMBERSHIP IS CONTENT AUTHORING, NOT A RULING~~ → **the
+          roster's MEMBERSHIP is content authoring once the roster EXISTS; whether it
+          exists is the mechanism question above.** Naming which challenges are in it is
+          design work anyone can do against the verb table, and `blocks: nothing today`
+          means nothing waits on either half.
       ⚠ ONE CONSEQUENCE STATED SO IT IS NOT DISCOVERED LATE: a modifier that raises an
       obstacle is NOT a term in `choose.py`'s score. It acts on the resolution, not on the
       ranking, which means STR-3's noise floor does not bind it — and that is the first
       thing a builder will get wrong, because every other operator in this register is
       scored.
     citation:
-      - "engine/season/rosters.yaml:148-160 (eligibility_kinds; the fifth kind; the one class-shaped gate)"
+      - "engine/season/rosters.yaml:148-160 (eligibility_kinds — `source:` :149, `open: true` :150, the `note:` :151-158, and the ONLY loader-read line `values: [own, remit, hold, presence]` at :160)"
+      - "architecture/holonic_ARCHITECTURE.md:345 (#353 §9.2 itself — RATIFIED Layer 1, and REFERENCE not mechanism by its own :4)"
+      - "CURRENT.md:36 (binds `#353` to `holonic_ARCHITECTURE.md`)"
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:108-117 (PHI-0 INTAKE: susceptibility's stage and its one licensed write)"
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:526-530 (why it cannot merge; modifier vs weight under a draw)"
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:533-536 (the `demands:` shape, stated and not taken)"
@@ -567,7 +763,13 @@ rows:
       `diplomacy <-> intimidation`, `passive <-> aggressive`), held directly on the
       Person; and four quantities that keep the machinery they already have or are
       getting. 7 = 3 + 1 + 1 + 1 + 1. The "ONE vector" option is not a defensible
-      alternative — it is refuted by the register's own measured placement table — and
+      alternative — it is refuted by the register's own ~~measured~~ → **AUTHORED**
+      placement table (⚠ CORRECTED 2026-09-17: opened at `:552-582` and it is seven
+      hand-written `pair:`/`operator:`/`machinery:` rows, a CLASSIFICATION and not a
+      measurement. **Exactly one of the seven carries a figure** — `humble/vain`'s
+      *"MEASURED: it returns 1000 … for all 12 persons"*. Calling a classification
+      measured borrows the authority of a number the table does not have, and it is the
+      load-bearing word in this sentence: an authored table can be re-authored) — and
       "SEVEN quantities" differs from the hybrid by exactly one shared table, which is
       a §8 question (one owner for one rule) and not a game question.
       SUB-QUESTION — VISIBILITY. Closed at step 3 by `AX-2` and the `View` constraint:
@@ -598,9 +800,25 @@ rows:
       register uses most. **The naming decision belongs with STR-5 and STR-6, which
       escalate; the SHAPE above does not wait on it.** See `corrections_to_the_sources:`
       entry 8.
+    depends_on_closure: ["CAT-8", "CAT-2"]
+    depends_on_closure_note: >-
+      ⚠ ADDED 2026-09-17, AND THIS IS THE MOST EXPOSED ROW ON THE SHEET. **Two of the
+      five terms in the 7 = 3+1+1+1+1 decomposition are step-5 closures made in THIS
+      FILE, not facts read off the tree:** `courage <-> cowardice` is *"a MODIFIER on an
+      obstacle (CAT-8)"* and `altruistic <-> selfish` is *"a per-verb declaration
+      resolving to a Candidate field (CAT-2)"*. Neither mechanism exists — `CAT-8`'s
+      `demands:` column is expressly a PROPOSAL and `CAT-2`'s orientation column is a
+      step-5 call. **RE-OPEN EITHER AND THIS ROW RE-OPENS**, because two of the four
+      quantities the decomposition removes from the alignment table lose the machinery
+      it assigns them and fall back into the table, at which point 7 = 3 + … is wrong.
+      The other two terms are safe: `humble <-> vain` is `standing_of`, which is BUILT
+      and executes; `insecure <-> self-assured` is the intake operator Jordan restored.
+      **SO THE ROW'S REAL STANDING IS: two terms on running code, two terms on this
+      file's own closures, three terms on an alignment table nobody has written.** It
+      reads as a measurement of the tree and it is mostly a plan.
     citation:
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:548 (`operator: MIXED`)"
-      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:552-582 (the per-pair placement table)"
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:552-582 (the per-pair placement table — AUTHORED, seven `pair:`/`operator:`/`machinery:` rows; only `humble/vain` carries a figure)"
       - "engine/season/decision/options.py:443-464 (standing_of — humble/vain, already built)"
       - "architecture/meta/01_AXIOMS.md:100-107 (AX-2: no privileged access)"
       - "architecture/meta/01_AXIOMS.md:111-115 (AX-3: what moves what is held right)"
@@ -622,12 +840,53 @@ rows:
       the interior recomputed every season from claims and tenures?
     disposition: closed
     step: 3
+    ground_corrected: >-
+      ⚠⚠ **THE VERDICT STANDS AND THE GROUND IT WAS STATED ON DID NOT. REPAIRED
+      2026-09-17; THE ROW IS NOT RE-OPENED.**
+      ~~"The register states the problem as a PROHIBITION — *nothing MAY write a
+      Person's interior* — and the matrix says the opposite."~~ **THAT IS A MIS-READ OF
+      THE REGISTER, AND IT WAS THIS FILE'S HEADLINE.** Opened at
+      `adjudication_register.yaml:604-621` and read whole: the row's `question:` reads
+      ***"Only RESOLVE remains — i.e. only an act — and no verb does it (H-62)"***, and
+      its option 1 reads ***"a verb at RESOLVE writes it — the interior moves by ACT,
+      which is how everything else in this engine moves."*** **The register had already
+      identified RESOLVE as the licensed step and already named the producers as the
+      missing thing.** Its opening sentence *"Nothing may write a Person's interior"* is
+      a statement of the TREE'S CURRENT STATE which its very next clause narrows; this
+      file quoted the opening and not the narrowing.
+      **SO OPTION 1 WAS NEVER BLOCKED BY A PROHIBITION AND NO CORRECTION UNBLOCKED IT.**
+      A class-name correction cannot be what closed a row whose source already carried
+      the answer as its first option. What actually closes STR-1 is the elimination of
+      the other two arms — and the load-bearing one is **option 3**, which the register
+      itself flagged as *"cheaper than it looks and has not been considered."* **That
+      argument was already in this row, buried four bullets down. It is promoted here.**
+      **THE CLOSURE, IN ONE LINE: OPTION 3 IS AXIOM-BARRED FOR TWO OF THE SIX FIELDS,
+      SO IT CANNOT BE THE CLASS ANSWER.**
+        * **`convictions` — barred by `AX-3`** (`architecture/meta/01_AXIOMS.md:111-115`):
+          *"Evidence moves what is held true. Argument and consequence move what is held
+          right."* Recomputing convictions from the claim ledger makes EVIDENCE move what
+          is held right. `:124-133` says why that is axiomatic and not a preference —
+          *"the moral layer would collapse into a second epistemic layer"*, the collision
+          the chain calls *"the single most dangerous in the design."*
+        * **`scar` — barred by the `AX-5` fading carve-out** (`:115`, and `AX-6` at
+          `:185-188`). The licensed fading *"only REMOVES and never REVISES"*, and claims
+          decay and are evicted on confidence × recency
+          (`engine/season/state/carriers.py:135-136`, the literal
+          `sort(key=lambda c: c.confidence * (c.when + 1))`). A DERIVED scar therefore
+          UN-SCARS a person as the memory dims — a permanent mark that expires on a
+          clock, which is `AX-6` run backwards.
+      With option 3 dead as a class answer and option 2 (a seventh step) barred by
+      RATIFIED `04_CODE_ARCHITECTURE.md` §A.2:134, **option 1 is what is left** — and it
+      is what the register offered first. The matrix supplies the SHAPE of option 1
+      (`[RES] ACTS`, six rows, six emit kinds, producers missing); it is not the thing
+      that eliminated the alternatives, and this row previously said it was.
     answer: >-
       A VERB AT RESOLVE WRITES IT. This is not a choice between three designs; it is
       the design the ratified write matrix ALREADY PRESCRIBES, with the producers
-      missing. The register states the problem as a prohibition — *"nothing MAY write
-      a Person's interior"* — and the matrix says the opposite: the six rows are a
-      LICENCE nobody has taken up.
+      missing — ~~the register states the problem as a prohibition and the matrix says
+      the opposite~~ → **and the register said so too, at its own option 1. See
+      `ground_corrected:` for what actually eliminates the other two arms.** The six
+      rows are a LICENCE nobody has taken up.
         * WHAT THE MATRIX SAYS, read at the rows. Every one of the six is
           `steps: [RES]`, `class: "ACTS"`, with its own `emits:` kind —
           `axis.incremented`, `belief.revised`, `coherence.changed`,
@@ -683,16 +942,32 @@ rows:
       ⚠ ON `(Person, body)` — CONFIRMED, AND `00_THE_SEAM.md` §4 IS RIGHT ON THE
       SUBSTANCE. `write_matrix.yaml:161-167` files it `steps: [MAT, RES] · class:
       "MATTER/ACTS" · social: "false" · by: "DR-1"`. It is not one of the six and STR-1
-      does not bind r2 item 3b. ⚠ BUT THE SEAM'S VOCABULARY IS WRONG IN A WAY THAT
-      MATTERS HERE — it calls the six *"the INTERIOR class"*, and in the matrix's own
-      literal `class:` column the six are `ACTS`; the only `INTERIOR` row in the file is
-      `(Person, claim_ledger)` at `[WIT]`. Measured: 22 `ACTS`, 1 `INTERIOR`, 6 `MATTER`,
-      6 `MATTER/ACTS`, 1 `CALENDAR`, 3 `CALENDAR/ACTS`. The distinction is the whole of
-      why this row closes: `INTERIOR` is the class WITNESS writes and no act may touch,
-      whereas `ACTS` is the class an act is licensed to write. Reading the six as
-      `INTERIOR` is what makes STR-1 look like a prohibition needing a ruling to lift.
-      See `corrections_to_the_sources:` entry 6.
+      does not bind r2 item 3b. ⚠ AND THE SEAM'S VOCABULARY WAS WRONG — it called the
+      six *"the INTERIOR class"*, and in the matrix's own literal `class:` column the six
+      are `ACTS`; the only `INTERIOR` row in the file is `(Person, claim_ledger)` at
+      `[WIT]`. Measured: 22 `ACTS`, 1 `INTERIOR`, 6 `MATTER`, 6 `MATTER/ACTS`,
+      1 `CALENDAR`, 3 `CALENDAR/ACTS`.
+      ⚠⚠ ~~The distinction is the whole of why this row closes.~~ → **CORRECTED
+      2026-09-17: IT IS NOT WHY THIS ROW CLOSES, AND THE ERROR WAS OURS AND NOT THE
+      REGISTER'S.** The `class:` census is SOUND and worth keeping — `INTERIOR` is the
+      class WITNESS writes and no act may touch, `ACTS` is the class an act is licensed
+      to write, and the seam should not have conflated them. But **the string `INTERIOR`
+      as a class name appears ZERO times in `adjudication_register.yaml`** (measured
+      2026-09-17), so the register never made this error and nothing about STR-1 ever
+      depended on correcting it. Worse, *"Person INTERIOR FIELD"* is **the tree's own
+      descriptive phrase for exactly these six rows** — `engine/season/write_matrix.yaml:59`
+      (*"NO VERB IN THE 32-ROW TABLE WRITES ANY `Person` INTERIOR FIELD"*) and
+      `engine/season/hole_register.yaml:717` (*"NO PART E VERB WRITES ANY `Person`
+      INTERIOR FIELD"*) both use it. The defect is reading a DESCRIPTION as a `class:`
+      VALUE, which is narrower than "the seam used the wrong word".
+      **What closes this row is `ground_corrected:` above — option 3 is axiom-barred.**
+      See `corrections_to_the_sources:` entry 6, rewritten in the same pass.
     citation:
+      - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:604-621 (STR-1 whole — its `question:` already names RESOLVE, its option 1 already IS the verdict)"
+      - "architecture/meta/01_AXIOMS.md:111-115 (AX-3 stated — the line option 3 breaks)"
+      - "architecture/meta/01_AXIOMS.md:124-133 (why AX-3 is axiomatic; the collision named)"
+      - "engine/season/write_matrix.yaml:59 (`Person INTERIOR FIELD` used DESCRIPTIVELY — the tree's own phrase)"
+      - "engine/season/hole_register.yaml:717 (H-62's `hole:` — the same descriptive phrase)"
       - "engine/season/write_matrix.yaml:14-17 (the class derivation; the loader asserts it)"
       - "engine/season/write_matrix.yaml:58-64 (the six rows are ONE hole; the column exists)"
       - "engine/season/write_matrix.yaml:147-209 (the six rows, each `[RES] ACTS` with its own emits)"
@@ -726,7 +1001,14 @@ rows:
       one owner to edit rather than two to reconcile. That changes the price, not
       the answer.
       STEP 3 — SILENT ON THE AXIS SET, AND THE ONE DOCUMENT THAT SPEAKS MAKES IT
-      HARDER. `CURRENT.md:30` (ED-IN-0075, Jordan ruling A) declares the per-character
+      HARDER. ~~`CURRENT.md:30`~~ → **`CURRENT.md:31`** (ED-IN-0075, Jordan ruling A;
+      ⚠ CORRECTED 2026-09-17 — BOTH LINES WERE OPENED. `:31` is the **Clocks & tracks**
+      row and carries `Truth`, ED-IN-0075 and the *"13 Convictions … and the
+      territory-scale Piety (PT) are DISTINCT"* sentence. `:30` is the
+      **Settlement / territory** row and carries `territory_temperaments_v30.md`. This
+      file cited `:30` for BOTH facts, which cannot both be true of one line; the
+      `territory_temperaments` use — CAT-9 and correction entry 8 — is the one that was
+      right) declares the per-character
       metaphysical stance `Truth` — 0–5, Solmund-orthodoxy ↔ Thread-truth, players
       seeing qualitative bands only — and says *"the 13 Convictions … and the
       territory-scale Piety (PT) are DISTINCT and unchanged."* So a `Truth` track
@@ -757,7 +1039,7 @@ rows:
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:199-222 (the four proposed axes and the objective/subjective fork)"
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:635-642 (atomic migration; the withdrawn Key claim)"
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:262-279 (the withdrawn statistical claim)"
-      - "CURRENT.md:30 (ED-IN-0075 — Truth; the 13 Convictions and Piety (PT) DISTINCT)"
+      - "CURRENT.md:31 (Clocks & tracks — ED-IN-0075, Truth; the 13 Convictions and Piety (PT) DISTINCT). ⚠ was `:30`, which is the Settlement/territory row"
       - "engine/season/decision/choose.py:45-58 (the projection; a person holds weights over the thirteen)"
       - "references/descriptor_registry.yaml:293-295 (the live 13x4 and the four axes)"
     blocks_build_item: null
@@ -934,7 +1216,11 @@ rows:
       The character-scale `Piety Track` WAS retired into `Truth` (ED-IN-0075), so
       restoring `piety` to a narrower person-scale concept is legitimate rather than a
       collision with a live character track.
-      STEP 3 — A DESIGN DOCUMENT MAKES IT HARDER, NOT EASIER. `CURRENT.md:30` declares
+      STEP 3 — A DESIGN DOCUMENT MAKES IT HARDER, NOT EASIER. ~~`CURRENT.md:30`~~ →
+      **`CURRENT.md:31`** (⚠ CORRECTED 2026-09-17: the ED-IN-0075 / Piety (PT) sentence
+      is on the **Clocks & tracks** row at `:31`; `:30` is **Settlement / territory**,
+      which is the right line for `territory_temperaments_v30.md` and the wrong one for
+      this) declares
       territory-scale **Piety (PT)** DISTINCT and unchanged by the same ED-IN-0075
       ruling. So the reservation as spoken puts one word on two scales, and §4's
       idempotency test — *would a reader with no memory of this repo land on your
@@ -966,7 +1252,8 @@ rows:
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:665-667 (Jordan's reservation, verbatim)"
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:684-693 (the piety collision and the four questions)"
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:678-683 (the measured rename cost and the single owner)"
-      - "CURRENT.md:30 (ED-IN-0075; territory-scale Piety (PT) DISTINCT and unchanged)"
+      - "CURRENT.md:31 (Clocks & tracks — ED-IN-0075; territory-scale Piety (PT) DISTINCT and unchanged). ⚠ was `:30`"
+      - "CURRENT.md:30 (Settlement / territory — `territory_temperaments_v30.md` as a live head; this is the line the temperament collision needs, and it is correct)"
       - "engine/season/rosters.yaml:272-278 (church_standing as a person predicate)"
       - "references/descriptor_registry.yaml:236 (`conviction_roster` — the single owner)"
       - "references/descriptor_registry.yaml:298 (`temp.*` — the temperament collision the row misses)"
@@ -1045,12 +1332,18 @@ rows:
     why_not_closable: >-
       CONFIRMED. The blocking fact is real and I opened it.
       STEP 1 — NOT SUPERSEDED. `ED-IN-0210` is in `registers/editorial_ledger_in.jsonl`
-      three times (append-only, last-row-wins per id): `:53` (2026-09-10, the original
-      three rulings and the open fork), `:73` (2026-09-13, the flag cleared), and `:84`
+      three times (append-only, last-row-wins per id): ~~`:53`~~ → **`:52`**
+      (2026-09-10, the original three rulings and the open fork), ~~`:73`~~ → **`:72`**
+      (2026-09-13, the flag cleared), and ~~`:84`~~ → **`:89`**
       (2026-09-15, `supersedes_row: true`, `jordan_decision: 2026-09-15`) — the row r2
       quotes. Its text is as r2 gives it: *"AN ORDER CARRIES TERMS LIKE A DISPENSATION,
       and `comply`/`evade`/`refract` answer both. The second option (no response verb)
       is REJECTED."* Nothing after it touches the subject.
+      ⚠ **THE THREE NUMBERS ABOVE WERE ALL WRONG AND ARE RE-MEASURED 2026-09-17 ON THE
+      WORKING TREE: the file is 108 lines and the id is at `:52`, `:72`, `:89`.**
+      `:84` — which this row gave as the live row — is **`ED-IN-0124`**. The SUBSTANTIVE
+      finding is untouched: there really are three rows for this id and the live one is
+      the last. See `corrections_to_the_sources:` entry 5, rewritten in the same pass.
       STEP 2 — NOT IRRELEVANT. Three of the four rows are unresolvable today and
       `dispatch` is the only live one, so the BEHAVIOURAL cost is small — but a ruling
       is not made irrelevant by its subject being cheap.
@@ -1066,14 +1359,32 @@ rows:
       Put broadly it reads as a request to overturn a ruling; put narrowly it is a
       question about what 0210's substance requires, and the narrow form is the honest
       one.
-      ⚠ ONE CORRECTION TO r2's CITATION, which does not change the verdict: §C.4:1515
-      cites `registers/editorial_ledger_in.jsonl:104`. THAT LINE DOES NOT EXIST — the
-      file is 96 lines. The row is at `:84`. See `corrections_to_the_sources:` entry 5.
+      ⚠⚠ ~~ONE CORRECTION TO r2's CITATION … THAT LINE DOES NOT EXIST — the file is 96
+      lines. The row is at `:84`.~~ → **RETRACTED IN FULL, 2026-09-17. r2's `:104` WAS
+      CORRECT WHEN IT WAS WRITTEN, AND THIS FILE CONDEMNED A GOOD CITATION.** Measured:
+      at `d44865a^` — the tree r2 was written against — `editorial_ledger_in.jsonl` was
+      **115 lines** and `ED-IN-0210`'s three rows were at **`:67`, `:87`, `:104`**.
+      `:104` was the live row, exactly as §C.4:1515 says. **THE LINE MOVED BECAUSE THE
+      FILE WAS ARCHIVED, NOT BECAUSE THE CITATION WAS INVENTED:** commit `d44865a`
+      (PR #411, ED-IN-0238) moved **fifteen rows** out to
+      `registers/editorial_ledger_in_archive.jsonl`, every one of them above `:104`, and
+      the row fell to `:89`. Today `:104` exists and holds `ED-IN-0239`.
+      **THE LESSON, AND IT IS THE ONE WORTH CARRYING PAST THIS ROW: A LINE NUMBER INTO A
+      LANE LEDGER ROTS BETWEEN SESSIONS — CITE THE ID, NOT THE LINE.** These ledgers move
+      in BOTH directions: append-only at the tail (rows are added, never edited) AND
+      actively archived in the middle (rows are lifted out wholesale). Either motion
+      invalidates every line number below it, and the second one does it silently and in
+      bulk. A citation of the form `editorial_ledger_<lane>.jsonl:NN` is correct for
+      about as long as nobody runs a hygiene pass. **Cite `ED-IN-0210` and say which of
+      its rows you mean by DATE or by `supersedes_row:`; a reader can then `grep` the id
+      and get the answer from any checkout, which is what a citation is for.**
+      See `corrections_to_the_sources:` entry 5.
     citation:
       - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1513-1546"
-      - "registers/editorial_ledger_in.jsonl:84 (ED-IN-0210, ruled 2026-09-15, supersedes_row)"
-      - "registers/editorial_ledger_in.jsonl:53 (ED-IN-0210 as first filed, with the open fork)"
-      - "registers/editorial_ledger_in.jsonl:73 (the flag-cleared row)"
+      - "ED-IN-0210, the LAST of its three rows — dated 2026-09-15, `supersedes_row: true`, `jordan_decision: 2026-09-15`. At `registers/editorial_ledger_in.jsonl:89` on 2026-09-17; DO NOT RE-CITE THE LINE, grep the id"
+      - "ED-IN-0210, first row — dated 2026-09-10, the three rulings and the open fork (`:52` today)"
+      - "ED-IN-0210, second row — dated 2026-09-13, the flag cleared (`:72` today)"
+      - "registers/editorial_ledger_in_archive.jsonl (where d44865a moved 15 rows, which is why the line numbers moved)"
       - "proposals/2026-09-17-governance-and-holdings-r2/EXECUTION_PLAN.md:72 (item 13 blocked on RR-A)"
       - "proposals/2026-09-17-governance-and-holdings-r2/EXECUTION_PLAN.md:86 (RR-A is the only item-blocking ruling)"
     blocks_build_item: "r2 item 13"
@@ -1269,11 +1580,27 @@ rows:
 #
 # Everything below was found by opening a cited line and reading it, per §0.1
 # pt 3 row three: *"A citation you have not opened is not a citation."* Entries
-# 1-5 are drift and change no verdict. Entries 6-9 change what something IS or
-# what it COSTS, and each is cross-referenced from the row it affects.
+# ~~1-5 are drift and change no verdict. Entries 6-9 change what something IS or
+# what it COSTS~~ → **1-4 are drift; 5 and 6 WERE THEMSELVES WRONG and are
+# rewritten (2026-09-17); 7, 8, 9 and 10 stand as filed** — and each is
+# cross-referenced from the row it affects.
+#
+# ⚠⚠ AND THE SECTION'S OWN FAILURE MODE IS NOW ON THE RECORD, BECAUSE IT FIRED
+# TWICE IN TEN ENTRIES. A corrections list is a place where a session states, in
+# its most confident voice, that somebody else got a detail wrong — which is
+# exactly the claim §0.1 pt 3 says is *"the cheapest to make and the hardest to
+# see wrong"*. **Entry 5 condemned a citation that was correct when it was made,
+# on three line numbers that were all wrong. Entry 6 attributed our own error to
+# the register and then credited its correction with closing a row it did not
+# close.** Both accusations were cheap, both were flattering to the accuser, and
+# neither cost more than one `wc -l` or one `grep -c` to check. **If you are
+# adding an eleventh entry: run the command that would show you are wrong,
+# FIRST.**
 #
 # ⚠ THESE ARE RECORDED, NOT REPAIRED. This file owns no other file. Each
 # correction names the surface that holds the error so its owner can take it.
+# (The two entries above that were wrong are corrections to THIS file, which it
+# does own, and are therefore repaired in place and struck rather than filed.)
 # ===========================================================================
 corrections_to_the_sources:
 
@@ -1313,38 +1640,95 @@ corrections_to_the_sources:
     changes_a_verdict: false
 
   - n: 5
-    kind: "citation that cannot be opened"
-    in: ["r2 05_LEDGER_AND_BUILD.md §C.4:1515"]
+    kind: "~~a citation that cannot be opened~~ → A GOOD CITATION WRONGLY CONDEMNED, and the reason line numbers into a lane ledger cannot be trusted"
+    in: ["r2 05_LEDGER_AND_BUILD.md §C.4:1515", "⚠ AND THIS FILE'S OWN RR-A ROW, which repeated the error"]
     said: "`ED-IN-0210` (`registers/editorial_ledger_in.jsonl:104`, ruled 2026-09-15)"
     found: >-
-      THE FILE IS 96 LINES; `:104` DOES NOT EXIST. The id, the date, the status and
-      the quoted text are all correct — the row is at `:84`, `supersedes_row: true`,
-      `jordan_decision: "2026-09-15"`. Two earlier rows carry the same id at `:53`
-      and `:73` (the ledger is append-only, last-row-wins per id), which is the
-      likeliest source of the arithmetic. RR-A's verdict is unaffected.
+      ⚠⚠ **THIS ENTRY WAS WRONG IN EVERY NUMBER IT CARRIED AND WRONG IN ITS VERDICT.
+      REWRITTEN 2026-09-17, STRUCK AND KEPT, BECAUSE AN ENTRY THAT ACCUSES A CITATION OF
+      BEING UNOPENABLE HAD BETTER HAVE OPENED IT.**
+      ~~THE FILE IS 96 LINES; `:104` DOES NOT EXIST … the row is at `:84` … two earlier
+      rows at `:53` and `:73`.~~
+      **MEASURED ON THE WORKING TREE, 2026-09-17:** `registers/editorial_ledger_in.jsonl`
+      is **108 lines**, not 96. `ED-IN-0210` occurs at **`:52`, `:72` and `:89`**, not
+      `:53`/`:73`/`:84`. **`:84` is `ED-IN-0124`** — so this entry's "corrected" pointer
+      aimed at an unrelated row. **`:104` EXISTS and holds `ED-IN-0239`.**
+      **AND THE ACCUSATION ITSELF IS WITHDRAWN: r2's `:104` WAS CORRECT WHEN IT WAS
+      MADE.** At `d44865a^`, the tree r2 was written against, the file was **115 lines**
+      and the id's three rows sat at **`:67`, `:87`, `:104`** — `:104` being the live
+      2026-09-15 row, precisely as §C.4:1515 states. Commit `d44865a` (PR #411,
+      ED-IN-0238) then moved **fifteen rows** out to
+      `registers/editorial_ledger_in_archive.jsonl`, all of them above the citation, and
+      everything below shifted up by fifteen.
+      **WHAT SURVIVES, AND IT IS THE PART WORTH KEEPING:** there really are THREE rows
+      for `ED-IN-0210`, the ledger is last-row-wins per id, and the live one is the last.
+      Entry 10's general lesson — *grepping a lane ledger for an id returns every row it
+      ever had; TAKE THE LAST ONE* — is correct and unaffected.
+      **WHAT IS ADDED, AND IT IS THE REAL LESSON OF THIS ENTRY:**
+      > **A LINE NUMBER INTO A LANE LEDGER ROTS BETWEEN SESSIONS. CITE THE ID, NOT THE
+      > LINE.**
+      These files move in two directions at once. They are **append-only at the tail**,
+      so every new row pushes nothing but still makes the file longer than any cached
+      figure; and they are **actively archived in the middle**, so a hygiene pass lifts
+      rows out in bulk and invalidates every line number beneath them silently. The
+      second motion is the dangerous one, because the citation still resolves — it just
+      resolves to a DIFFERENT ROW, which is how `:84` came to be offered here as
+      `ED-IN-0210` when it is `ED-IN-0124`. An id survives both motions and a line number
+      survives neither. **Cite `ED-IN-0210`, name the row by its DATE or its
+      `supersedes_row:` flag, and let the reader grep.**
+      ⚠ AND THE SHAPE OF THE ORIGINAL ERROR IS `CLAUDE.md` §0.1 pt 3 ROW ONE EXACTLY:
+      *"X is absent — RUN the thing that would show presence."* An absence claim about a
+      line is settled by `wc -l` and `sed -n '104p'`, which cost nothing and were not run.
     changes_a_verdict: false
+    verdict_note: "RR-A's disposition is unchanged — it escalates, and it always did. What changed is that r2's citation is no longer accused of anything."
 
   - n: 6
-    kind: "a matrix term used with the wrong meaning"
-    in: ["00_THE_SEAM.md §4", "adjudication_register.yaml STR-1 (by implication)"]
+    kind: "~~a matrix term used with the wrong meaning~~ → A CLASS-NAME ERROR THAT WAS OURS, MISATTRIBUTED TO THE REGISTER, AND WRONGLY CREDITED WITH CLOSING A ROW"
+    in:
+      - "00_THE_SEAM.md §4 — OUR OWN DRAFT. This is the only surface that made the error, and it has since repaired itself at `:264-290`."
+      - "~~adjudication_register.yaml STR-1 (by implication)~~ → **WITHDRAWN. The register did not make this error, by implication or otherwise.**"
     said: >-
       *"STR-1's subject is the INTERIOR class — the six rows at `[RES] ACTS`
       (`axis_count · beliefs · convictions · scar · stance · coherence`) plus
       `claim_ledger` at `WIT`"*
     found: >-
-      THE SIX ARE NOT `INTERIOR`. MEASURED over `write_matrix.yaml`'s `class:`
-      column: 22 `ACTS`, 6 `MATTER`, 6 `MATTER/ACTS`, 3 `CALENDAR/ACTS`, 1
-      `CALENDAR`, **1 `INTERIOR`** — and the one is `(Person, claim_ledger)` at
-      `[WIT]`. The header states the derivation the loader enforces:
-      `RES->ACTS`, `WIT->INTERIOR`. The seam's conclusion is CORRECT — `(Person,
-      body)` is `[MAT, RES] MATTER/ACTS` and STR-1 does not bind r2 item 3b — and
-      §4 is right to record the null result. ⚠ BUT THE TERM MATTERS HERE MORE THAN
-      ANYWHERE: `INTERIOR` is the class WITNESS writes and no act may touch;
-      `ACTS` is the class an act is LICENSED to write. Reading the six as
-      `INTERIOR` turns a standing licence into a prohibition, which is exactly what
-      makes STR-1 look like a design call needing a ruling to lift. It is what STR-1
-      closes on.
-    changes_a_verdict: true
+      **THE CENSUS IS SOUND AND THE ATTRIBUTION AND THE CONSEQUENCE WERE BOTH WRONG.
+      REWRITTEN 2026-09-17.**
+      **(1) THE MEASUREMENT STANDS.** Over `write_matrix.yaml`'s `class:` column:
+      22 `ACTS`, 6 `MATTER`, 6 `MATTER/ACTS`, 3 `CALENDAR/ACTS`, 1 `CALENDAR`,
+      **1 `INTERIOR`** — and the one is `(Person, claim_ledger)` at `[WIT]`. The header
+      states the derivation the loader enforces: `RES->ACTS`, `WIT->INTERIOR`. The
+      distinction is real: `INTERIOR` is the class WITNESS writes and no act may touch;
+      `ACTS` is the class an act is LICENSED to write.
+      **(2) ~~THE REGISTER MADE THIS ERROR BY IMPLICATION.~~ → IT DID NOT, AND THE
+      ERROR WAS OURS ALONE.** MEASURED 2026-09-17: the string **`INTERIOR` appears ZERO
+      times in `adjudication_register.yaml`**. It is not used there as a class name, a
+      description or anything else. The phrase *"the INTERIOR class"* originates in
+      `00_THE_SEAM.md` §4 — this suite's own round-one document — and nowhere else.
+      ⚠ AND THE UNDERLYING WORD IS THE TREE'S OWN: **`engine/season/write_matrix.yaml:59`**
+      reads *"NO VERB IN THE 32-ROW TABLE WRITES ANY `Person` INTERIOR FIELD"* and
+      **`engine/season/hole_register.yaml:717`** reads *"NO PART E VERB WRITES ANY
+      `Person` INTERIOR FIELD"*, both descriptively, both about exactly these six rows.
+      **So the defect is narrower than "the wrong word was used": it is reading a
+      DESCRIPTION as a `class:` VALUE.** Correcting a word the tree itself uses, in a
+      document that had already stopped using it, is not a correction to a source.
+      **(3) ~~IT IS WHAT STR-1 CLOSES ON.~~ → IT IS NOT, AND THIS WAS THE LARGER ERROR.**
+      STR-1 was said to close because the class name turned *"a standing licence into a
+      prohibition"*. Opened and read whole, `adjudication_register.yaml:604-621` states
+      no prohibition to lift: its `question:` reads *"Only RESOLVE remains — i.e. only an
+      act — and no verb does it (H-62)"*, and its **option 1 is the verdict already** —
+      *"a verb at RESOLVE writes it — the interior moves by ACT"*. A class-name
+      correction cannot be what closed a row whose source already carried the answer as
+      its first option. **What closes STR-1 is that option 3 is AXIOM-BARRED for
+      `convictions` (`AX-3`) and for `scar` (the `AX-5` fading carve-out), and that
+      option 2 needs a seventh loop step against ratified Layer 1.** That argument was
+      already in the row and is now promoted to its `ground_corrected:` field.
+    changes_a_verdict: false
+    changes_a_verdict_note: >-
+      ~~true~~ → **false. STR-1's verdict never depended on this entry and is unchanged.**
+      What the entry changes is a stated GROUND, which is why it is repaired rather than
+      deleted: a wrong reason for a right answer is the kind of thing a later session
+      inherits and builds on.
     affects: "STR-1"
 
   - n: 7
@@ -1432,8 +1816,13 @@ corrections_to_the_sources:
       return much later"*. State the scope when putting RR-2; do not carry the rider.
       ⚠ AND THE GENERAL LESSON IS THE ONE `ED-IN-0210` ALREADY PAID FOR IN THIS SAME
       SET OF ROWS (see entry 5, where the same id has three rows): **grepping a lane
-      ledger for an id returns every row it ever had. Take the LAST one.** Two of the
-      ten corrections in this file are that single mistake.
+      ledger for an id returns every row it ever had. Take the LAST one.** ~~Two of the
+      ten corrections in this file are that single mistake.~~ → **This entry is that
+      mistake; entry 5 turned out to be a DIFFERENT one** (2026-09-17 — entry 5's
+      citation was not a stale-row read at all, it was a line number that rotted when
+      the ledger was archived). **The two lessons are siblings and both are about the
+      same files: an id outlives its row's line number AND outlives its own earlier
+      rows. CITE THE ID, TAKE THE LAST ROW, AND NAME IT BY DATE.**
     changes_a_verdict: false
     affects: "RR-2"
 
@@ -1450,6 +1839,13 @@ escalation_summary:
     three-arm one. Then the vocabulary pass (STR-5 + STR-6) as ONE decision over
     five words. Then STR-2, which the vocabulary pass shapes. RR-P and RR-2 are
     independent of all of it and gate nothing.
+    ⚠ AND ONE THING TO CARRY INTO THE ROOM WITH THESE NINE, ADDED 2026-09-17: **the
+    TWELVE closures are not twelve independent results.** `CAT-5` is `STR-1` restated,
+    `CAT-9` is downstream of `CAT-8` and `CAT-2`, and `CAT-7`/`CAT-8` share one
+    citation — so the sheet holds **nine distinct grounds, not twelve**. See
+    `meta.closures_are_chained:`. It matters here because a reader told *"twelve are
+    closed"* prices the remaining nine against a bigger pile of settled work than
+    exists.
   rows:
     - {id: "RR-A",  one_line: "Is the named act itself the compliance — or does ED-IN-0210's letter require the three response rows to exist? Step 5 may not overwrite a ruling. BLOCKS r2 item 13, and nothing else."}
     - {id: "RR-B",  one_line: "Amend eight RATIFIED `architecture/` sentences, or narrow the design? Seven are text; B-8 is a GAME change — a lower seat that holds the land may unmake the seat above it — and branch (ii) on B-6 is a whole subsystem."}
@@ -1471,4 +1867,20 @@ escalation_summary:
 # from it. It ratifies nothing and flips no `## Status:` line. The corrections
 # above are recorded against surfaces this file does not own and does not edit.
 # **If either suite dies, this file dies with it.**
+#
+# ⚠ THE TEST RE-RUN AFTER THE 2026-09-17 REPAIR PASS, BECAUSE THE PASS ADDED
+#   `CAT-8.proposes:` AND A PROPOSAL IS THE SHAPE THE TEST EXISTS TO CATCH.
+#   §0's exception fails a record that says *"and therefore someone should build
+#   Y"*. **`proposes:` does not add that sentence — it LABELS one the row already
+#   carried.** Before the pass, `CAT-8` told a builder that a `demands:` column and
+#   a `challenge_kinds` roster were the answer, and filed that as a step-3 FINDING;
+#   a builder reading it would have built them believing the tree had decided.
+#   After the pass the same two artifacts are named as UNDECIDED. **The pass makes
+#   the document create LESS work, not more: a labelled proposal is something a
+#   future session can decline, and an unlabelled one is something it executes.**
+#   ⚠ THE HONEST RESIDUE, STATED RATHER THAN ARGUED AWAY: `CAT-8` and `CAT-2` both
+#   now sit one step from a build instruction, and if a later session finds either
+#   being cited as authority for adding a column to `verb_table.yaml`, THAT is the
+#   failure — not this file's existence. The repair then is to re-open the row, not
+#   to add a guard.
 # ===========================================================================

@@ -49,8 +49,16 @@ Executed on this tree, 2026-09-17, on `main` at `ddc6b21`:
 | holds at build | **35** — 19 person-subject (**all** on Offices, none on Rungs) · 16 rung-object (**all** faction-subject) | same |
 | questions by source, one populated season | `claim_landed: 583` · `need: 405` · **`date_due: 0`** · **`band_crossed: 0`**, over 230 `questions_for` calls | `harness.populated`, instrumented |
 
+⚠ **`need: 405` here and r2's *"`need` is already 81 questions"* are NOT the same quantity and neither
+is wrong.** This row sums every `questions_for` return across **230 calls in a season**; r2 counts the
+questions standing on the world at one point. **Nothing in this suite reconciles them, and the aperture
+gate does not settle it either** — recorded because two unreconciled figures for one word is exactly
+what §3.5 files as a defect when the two suites do it.
+
 ⚠ **The last three rows were taken by an independent verifier, not by this file's author**, against the
-r2 plan's own claims. All three CONFIRMED. The verifier also found two defects in r2's
+r2 plan's own claims. All three CONFIRMED — **though the same verifier also returned the fabricated
+`loop/budget.py` path that §7.1 now retracts, which is why "CONFIRMED by an independent pass" is not
+itself a warrant.** The verifier also found two defects in r2's
 `EXECUTION_PLAN` and one in **this file**; they are recorded at §3.6 and §7 rather than quietly fixed.
 
 Read at the line:
@@ -87,7 +95,9 @@ same thing (a seated person who knows their remit, person-side, without a new Se
 > **(a)** `~~r2's arm is arm 2 relocated, and keeps AX-2 untouched the same way~~` → **the two are not
 > equivalent.** Arm 2's claim is **non-violation** — *"it reaches no `World`"* (`hole_register.yaml:807`).
 > Arm 4's is **conformance**: `AX-2` reads *"what they hold **may be false**"*, and `03:785-787` builds
-> the revoked-man case deliberately, so a holder can believe a remit he no longer has. **Arm 4 produces
+> the ~~revoked-man~~ → **forged-commission** case deliberately (`03:784-787`; the revoked-seat case is
+> row 3 of the table at `:781` and behaves oppositely — *"he never tries, and nobody ever learns"*),
+> so a holder can believe a remit he does not have. **Arm 4 produces
 > the behaviour the axiom exists for; arm 2 satisfies its letter.** Calling them equivalent flattened
 > the one difference that should decide the ruling.
 >
@@ -228,6 +238,26 @@ That is the shape to carry forward — a seam point is not a pair of documents w
   argument — *a belief is an act, not a field* — that is itself a position on STR-5. **STR-5 should be
   ruled knowing one of its six senses has already lost its field in the sibling suite.**
 
+### 3.8 · `inferred` — r2 item 9 opens the OTHER dead epistemic channel, and the CAT-3 ruling has no operand for it
+
+**THE NINTH, found by the critic using the same method that found §3.6** — walk r2's items to their
+`engine/` objects, then check the behaviour register for that object.
+
+- **r2 item 9's execution artifact is literally the register's measured zero:** *"claim-source
+  histogram: `inferred` **0 → N**"* (`EXECUTION_PLAN.md:68`).
+- **#409 leans on that zero twice.** `adjudication_register.yaml:365`: *"[E] 580 claims after 2
+  seasons: 100% firsthand. `told_by`, **`inferred`**, `firsthand_via_knot` all ZERO"* — one of the two
+  measurements making CAT-3 `LIVE-BUT-HALF-EMPTY`. And `:160` files input 5, *"worldly
+  understanding"*, as *"claims (`told_by` / **`inferred`**) → Φ2 gate"*.
+- **So item 9 is item 8's twin on a different channel**, and §3.1 caught only one of the pair.
+- ⚠ **AND IT COLLIDES WITH A CLOSURE THIS SUITE ITSELF TOOK.** `RULINGS.yaml` closes CAT-3 at step 5
+  with **STORE THE TELLER**. An `inferred` claim **has no teller** — it is minted from co-location, not
+  from a telling. So the moment item 9 lands, the ruled susceptibility ladder (lord > peer > enemy)
+  **acquires an input class with no operand**, and neither suite says what Φ0 does with a teller-less
+  claim.
+
+**That is the eighth live seam point and the second failure of this file's completeness claim.**
+
 ---
 
 ## §4 · WHAT IS NOT A COLLISION — recorded because it is the one a reader will expect
@@ -247,14 +277,30 @@ ruling.**
 > The header (`:14-17`) gives the derivation the loader asserts: `CAL→CALENDAR`, `MAT→MATTER`,
 > `RES→ACTS`, `WIT→INTERIOR`, `CEN→MATTER`, `DEL→ACTS`.
 >
-> **`~~the INTERIOR class~~` → `ACTS`, and the difference inverts the reading.** `INTERIOR` is the class
-> **no act may touch**; `ACTS` is the class an act is **licensed** to write. Filing the six as
-> `INTERIOR` turns a standing licence into a prohibition — **which is precisely what makes STR-1 look
-> like a live design call when it is not.** Read correctly, STR-1's option 1 (*"a verb at RESOLVE
-> writes it"*) is not one of three choices: **it is the matrix's existing prescription with its
-> producers missing**, which is what `H-62` says in its own shape field. That is how the ruling pass
-> closes STR-1 at gate step 3 rather than sending it to Jordan — **and the close was only available
-> once the class name was right.**
+> **`~~the INTERIOR class~~` → `ACTS`.** `INTERIOR` is the `WIT`-derived class; `ACTS` is the
+> `RES`-derived one. The census is sound and the null result stands.
+>
+> ⚠⚠ **AND THE STORY THIS BOX ORIGINALLY TOLD ABOUT ITS OWN IMPORTANCE WAS FALSE. RETRACTED.** It
+> claimed the register states the person-interior write as a **prohibition** while the matrix says the
+> opposite, and that *"the close was only available once the class name was right."* **Both halves are
+> wrong, and an independent critic caught them:**
+> - **The register never stated a prohibition.** `STR-1`'s `question:` reads, in its own second
+>   sentence, ***"Only RESOLVE remains — i.e. only an act — and no verb does it (H-62)"***, and its
+>   option 1 reads ***"a verb at RESOLVE writes it — the interior moves by ACT."*** It had already
+>   identified RESOLVE as the licensed step with no verb taking it up. **There was no inversion to
+>   correct.**
+> - **The class-name error was OURS alone.** `INTERIOR` as a class name appears **0 times** in the
+>   register — and `write_matrix.yaml:59` and `hole_register.yaml:717` **both** use *"`Person`
+>   INTERIOR FIELD"* descriptively for exactly these six rows. **That is the tree's own usage**, so
+>   the draft was corrected against a phrasing the repository itself employs.
+>
+> **WHERE STR-1 ACTUALLY CLOSES.** The matrix decides options 1 and 2. It says nothing about **option
+> 3** — *"nothing persists: the interior is recomputed every season from claims and tenures"* — because
+> **a row licensing a RES write is silent on whether the quantity is stored or derived.** Option 3 dies
+> on ratified `architecture/`: `AX-3` (`01_AXIOMS.md:111-115`, `:124-133`) and the `AX-5`/`AX-6` fading
+> carve-out (`:185-188`), against claims decaying on confidence × recency
+> (`carriers.py:135-136`). **That is the step-3 closure. The class census is true and was never the
+> thing that closed it.**
 
 This was the collision this pass expected to find and it does not exist. It is filed here so a later
 session does not spend the search again, and because a null result is a result (`CLAUDE.md` §0.1 pt 4:
@@ -290,13 +336,17 @@ THE UNIFICATION ITSELF IS WHAT CHANGED IT.** `RULINGS.yaml` ran all 21 questions
 §0's five-step gate and **closed 12 of them**, eight of the nine `CAT-*` rows among them. The single
 largest claimed gate fell first:
 
-> **STR-1 closes at step 3, and the close was only available once §4's class-name error was fixed.**
-> The register states the person-interior write as a **prohibition** — *"nothing MAY write a Person's
-> interior"*. The ratified matrix says the opposite: each of the six rows is `steps: [RES]`,
-> `class: "ACTS"`, **with its own `emits:` kind** (`axis.incremented`, `belief.revised`,
-> `coherence.changed`, `conviction.moved`, `scar.taken`, `stance.moved`). **They are a LICENCE nobody
-> has taken up, not a ban** — which is what `H-62` says in its own shape field. So STR-1's "option 1"
-> was never one of three designs; it is the design already prescribed, with its producers missing.
+> **STR-1 closes at step 3, on ratified `architecture/`.** Its options 1 and 2 are decided by the
+> matrix — each of the six rows is `steps: [RES]`, `class: "ACTS"`, with its own `emits:` kind, so a
+> RES write is already licensed and merely unproduced (`H-62`'s own shape field). **Option 3 is the one
+> that needed killing**: *"nothing persists: the interior is recomputed every season from claims and
+> tenures"*, which the matrix cannot speak to, because **a row licensing a write is silent on whether
+> the quantity is stored or derived.** It dies on `AX-3` (`01_AXIOMS.md:111-115`, `:124-133`) and the
+> `AX-5`/`AX-6` fading carve-out (`:185-188`) against claims decaying on confidence × recency.
+>
+> ⚠ ~~*"the close was only available once §4's class-name error was fixed"*~~ — **retracted; see §4.**
+> The register never stated the prohibition this file attributed to it, and the class-name error was
+> this suite's own. **The closure is sound and its first published account of itself was not.**
 
 **What remains genuinely Jordan's on the #409 side is four questions, and they are one shape:**
 `CAT-6` (H-71, shared with r2), `STR-2` (which axes the moral-value basis carries), and
@@ -318,11 +368,13 @@ allocates no build item, opens no queue and names no deliverable. The build orde
 sheet is `RULINGS.yaml`. **If this suite dies, this file dies with it.**
 
 It also takes no position inside either suite. r2's design choices are r2's; #409's categories are
-#409's. ~~**Six seam points, one repair each**~~ → **EIGHT examined, SEVEN live** — §2's conflict plus
-§3.1, §3.2, §3.3, §3.5, §3.6 and §3.7, with §3.4 demoted to a conditional. That is the whole of the remit. ⚠ **The count was wrong in this file's first draft and is corrected in place
+#409's. ~~**Six seam points**~~ → ~~**EIGHT examined, SEVEN live**~~ → **NINE examined, EIGHT live** —
+§2's conflict plus §3.1, §3.2, §3.3, §3.5, §3.6, §3.7 and §3.8, with §3.4 demoted to a conditional. ⚠ **The count was wrong in this file's first draft and is corrected in place
 rather than silently**: §3.6 was found by the verifier after the six were written, and a completeness
-claim that has already failed once is worth leaving visible. **`BO-4` in `01` is the standing
-falsifier for an eighth.**
+claim that has already failed **twice** is worth leaving visible — §3.6 came from the code verifier,
+§3.7 from the ruling pass, and §3.8 from the critic, **each by the same method and each after the
+count had been declared final.** `BO-4` in `01` is the standing falsifier for a tenth, and on this
+record the prior should be that one exists.
 
 ---
 
@@ -331,17 +383,33 @@ falsifier for an eighth.**
 This file judges a seam and does not edit either suite. Two defects surfaced during verification and
 are recorded here for whoever builds the item:
 
-1. **`EXECUTION_PLAN` Trap 5 and item 3b cite `engine/season/loop/budget.py`, which does not exist.**
-   The reader of `band_floors["body"]` is **`engine/season/decision/budget.py:63-75`** (the live read
-   is at `:73`). The substance is unaffected — `body` is already the person's table and a `person` key
-   is redundant — but a builder following the path hits nothing.
-2. **"`band_floors.person` refuses at load" is imprecise.** No validator cross-checks a table's cell
+1. ~~**`EXECUTION_PLAN` Trap 5 and item 3b cite `engine/season/loop/budget.py`, which does not
+   exist.**~~ → ⚠⚠ **RETRACTED IN FULL. THIS DEFECT DOES NOT EXIST AND WAS THIS SUITE'S OWN.**
+   MEASURED: the string `loop/budget.py` appears **0 times** across all eight files of the r2
+   directory. Trap 5 says bare **`budget.py`** with no directory; item 3b carries no path at all; and
+   **every place r2 qualifies the path it already reads `decision/budget.py`** (`04:46`, `04:78`,
+   `05:268`, and four more). The wrong path was introduced **in this suite's own verification prompt**
+   and then attributed to r2 — a fabricated finding, published in three files and turned into a build
+   instruction. It is §0.1 pt 3 row three (*"a citation you have not opened is not a citation"*)
+   committed inside a defect register, and it is left struck rather than deleted because **a retracted
+   accusation should cost more to make than to erase.**
+2. **"`band_floors.person` refuses at load" is imprecise** — and this half SURVIVES. No validator cross-checks a table's cell
    keys against its declared `keys:` roster at import; `table()` (`data/rosters.py:241-258`) returns
    whatever cells exist. A `band_floors["person"]` access would be a plain `KeyError` **at the access
    site**, not a graceful refusal at load. The trap is real; its mechanism is not what the plan says.
 
-3. **r2 `05` §C.4 cites `editorial_ledger_in.jsonl:104` for `ED-IN-0210`; the file had 96 lines.** The
-   live row is `:84`, with earlier rows at `:53` and `:73`. ⚠ **The general defect is worth more than
+3. ~~**r2 `05` §C.4 cites `editorial_ledger_in.jsonl:104` and the file is 96 lines — `:104` does not
+   exist.**~~ → ~~*"the file is 108 lines and the rows are at `:52/:72/:89`"*~~ → ⚠⚠ **RETRACTED. r2
+   WAS RIGHT, AND THIS FILE WAS WRONG ABOUT IT TWICE, IN TWO DIFFERENT DIRECTIONS.**
+   MEASURED at `d44865a^`, the commit r2 was written against: the ledger was **115 lines** and
+   `ED-IN-0210` sat at **`:67`, `:87` and `:104`**. **r2's citation was exact when it was made.**
+   PR #411 then archived **15 rows** out of the file, and every line below them moved.
+   > **THE REAL FINDING, and it is better than the one this file kept trying to make.** A lane ledger
+   > rots by **DELETION** as well as by append — and **deletion is the dangerous direction, because the
+   > citation still RESOLVES.** It just resolves to a different row. An append-rotted citation dangles
+   > and announces itself; an archive-rotted one silently names somebody else's entry, which is how
+   > two passes of this suite "verified" two different wrong answers about one line.
+   > **CITE THE ID, NEVER THE LINE.** That rule survives all three attempts; only the accusation dies. ⚠ **The general defect is worth more than
    the citation:** a lane ledger is **append-only and last-row-wins**, so grepping one and taking the
    FIRST hit reads a superseded status as current. Two of the ruling pass's own ten source corrections
    were this same mistake.
@@ -349,6 +417,13 @@ are recorded here for whoever builds the item:
    both suites lean on; **`:12`, same day, is `status: ruled` / `needs_jordan: false`** — Jordan ruled
    option A. **So `RR-2` is rulable alone now, scoped to populations**, and the pairing that held it is
    discharged.
+⚠ **AND ONE PREMISE THIS FILE PUT TO ITS OWN REPAIR PASS WAS REFUSED, CORRECTLY.** It asserted that
+`#353 §9.2` is a quarantined `systems/**` document under `.designs/`. It is not: it is
+**`architecture/holonic_ARCHITECTURE.md:345`**, *"`capability` supplies dice and gates nothing"* —
+**RATIFIED Layer 1**. The narrower true claim survives and is the one now written: holonic's own `:4`
+files it as **reference, never mechanism** under §0.05, and the loader reads `values:` at
+`rosters.yaml:160`, never the `note:` that quotes it.
+
 5. **#409 names its entire second basis `temperament`, and the word is already taken.**
    `references/descriptor_registry.yaml:298` carries `temp.*`, *"5 territory temperaments"*, scope
    `territory/faction`, sourced to a head `CURRENT.md:30` declares live. **MEASURED: `temperament` and

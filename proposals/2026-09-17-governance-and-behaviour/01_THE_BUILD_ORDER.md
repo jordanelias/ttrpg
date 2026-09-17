@@ -1,6 +1,7 @@
 # The unified build order — one program, two suites
 
 ## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## ⚠ The ✅ marks in §5 are **reasoned dispositions, not executions.** `BO-1` and `BO-6` are discharged by reading `RULINGS.yaml` and the write matrix; neither ran anything. `BO-2` and `BO-8` are marked FIRED because a critic falsified them, which is also a reading. **Nothing in this file is an execution artifact** (§0.2).
 ## Lane: `IN` · **`ED-IN-0243`** (shared with `00`)
 ## Grade under `CLAUDE.md` §0.2: **`paper`.** Nothing in this order has run. Phase 1 item 1 is the first thing that would.
 ## Reads: `00_THE_SEAM.md` for why these two suites are one program. `RULINGS.yaml` for what is still Jordan's.
@@ -27,7 +28,7 @@ items and may require an additional edit inside one; it may not change what an i
 ## The shape of the program
 
 ```
-PHASE 0   the seam repairs          7 repairs · no ruling needed · must precede the items they touch
+PHASE 0   the seam repairs          8 repairs · no ruling needed · must precede the items they touch
 PHASE 1   the critical path          6 items · no ruling needed · buildable today
 PHASE 2   the writ and the word      4 items · one carries a seam repair
 PHASE 3   seats and content          4 items · one gated on CAT-6
@@ -45,7 +46,7 @@ its argument.
 
 ## PHASE 0 · The seam repairs
 
-Seven small edits. **None needs a ruling from Jordan** — `RULINGS.yaml` ran all 21 open questions
+Eight small edits. **None needs a ruling from Jordan** — `RULINGS.yaml` ran all 21 open questions
 through `CLAUDE.md` §0's five-step gate and **closed 12**, which converts three of these repairs from
 *decisions to be taken* into *instructions already answered*. Each exists because two documents written
 a day apart wanted the same object.
@@ -58,6 +59,7 @@ a day apart wanted the same object.
 | **S4** | **STR-4's fold-rule constraint is carried into item 2a.** `aggregate_questions` re-mints the Question keeping only `source`, `about` and a flattened referent union — so the new `reach` source must declare how it folds | ✅ **STR-4 is CLOSED at step 5 — *no type dimension; fix the gate*** — and the two suites reached that from opposite ends, which is step-4 precedent arriving twice. What survives is the **fold rule for `reach`**, which item 2a owes regardless | item 2a |
 | **S5** | **Item 7 records in one line that `operands` stays four-field**, so `benefits_me(c)` knows what it inherits | ✅ **CAT-2 is CLOSED at step 5 — the beneficiary is a *static column on `verb_table.yaml`* resolving to a carrier the Candidate already holds, explicitly NOT a fifth field.** So the feared ordering **does not exist**: a static column never touches `_derive_operand`. S5 shrinks to a one-line note and item 7 is independent of CAT-2 | — (**no longer an ordering**) |
 | **S6** | **The aperture re-measurement is scheduled, not assumed** — see §4 | #409's CAT-6 evidence and STR-4's conclusion are inferences from a shut aperture that phases 1–3 open | Phase 6 |
+| **S8** | **Item 9 carries the teller-less claim question.** `inferred` claims are minted from co-location and **have no teller**, so CAT-3's ruled *store the teller* ladder acquires an input class with no operand the moment item 9 lands | `00` §3.8. Item 9's own artifact is the register's measured zero (`inferred` **0 → N**). Neither suite says what Φ0 does with a teller-less claim | item 9 |
 | **S7** | **Item 8 carries a falsifier for its effect on `standing_of`.** Populating `told_by` moves `standing_of` (`decision/options.py:443-465`) off its measured `1000`-for-everyone default — CAT-9's carrier, a category item 8 does not think it touches | `00` §3.6. The effect is real, wanted, and **unfalsified in both suites**: item 8's own falsifier licenses *"one drifted operand"*, and that drift lands in the `c.value` `agreement()` diffs | item 8 |
 
 > ⚠ **S1 and S3 are the two that cost something if skipped, and they fail differently.** Skipping S1
@@ -85,12 +87,24 @@ Straight from the r2 `EXECUTION_PLAN`, unchanged. This is the part of the progra
 | **3a** | `nearest_store` + the per-eater draw | M | — |
 | **3b** | the body write · shared `_crossings` · `remove_person` | M | **3a** |
 
-⚠ **Two path defects in the r2 plan, reported at `00` §7 and NOT repaired here:** its Trap 5 and item
-3b cite `engine/season/loop/budget.py`, which does not exist — the live reader of `band_floors["body"]`
-is **`engine/season/decision/budget.py:73`** — and *"`band_floors.person` refuses at load"* is really a
-`KeyError` at the access site, since nothing cross-checks a table's cells against its `keys:` roster.
-**The traps are real; build to the corrected paths.**
+⚠ **ONE path defect, and ~~two~~ → ONE of them was this suite's own invention. RETRACTED:** the claim
+that r2 cites `engine/season/loop/budget.py` is false — that string appears **0 times** in r2, whose
+Trap 5 says bare `budget.py` and whose qualified paths already read `decision/budget.py`. **There is
+no path to correct and no instruction here to follow** (`00` §7.1).
+**What survives:** *"`band_floors.person` refuses at load"* is imprecise — nothing cross-checks a
+table's cells against its declared `keys:` roster, so it is a plain `KeyError` at the access site.
 | **2a** | `reach` · `place_of` · two question sources deleted · `w.crossings` deleted · `occasioned_by` → one route | M | **S4** |
+| **2b** | CALENDAR `emits="date.fired"`, `subject=venue` | S | **2a** |
+
+⚠⚠ **ROW 2b WAS MISSING FROM THIS FILE'S FIRST DRAFT AND AN INDEPENDENT CRITIC FOUND IT.** r2's sheet
+carries **18** build rows; this order carried **17**, and the strings `2b` and `date.fired` appeared
+nowhere in the suite. A builder following it would have done 2a — deleting two question sources — and
+**left the CALENDAR emit unrepaired**, which is precisely the half-done item a unified order exists to
+prevent. Its own trap, from `EXECUTION_PLAN:105-106`: **item 2b is unobservable on the populated world**
+because `w.dates` is empty after a season (`convene` never forms), so **plant a date or it proves
+nothing.**
+⚠ **And `BO-5` could not have caught this** — its falsifier is *"any edge this order VIOLATES"*, and an
+**omitted node has no edge to violate.** `BO-8` below is the replacement.
 
 **Item 1 first, and it is ~12 lines.** `commit` is Q4 `need`'s producer, `need` is already 81 questions
 on the populated world, and every one is hand-minted by the harness because no act can make one today.
@@ -226,10 +240,31 @@ and it reads below the floor — for a reason that is about the **world**, not t
 susceptibility on a channel depositing one `told_by` claim a season and it reads below the floor for
 the same reason. **Build #409 first and its own falsifier condemns terms that are fine.**
 
-That is a stronger dependency than sequencing. It says #409's central instrument **cannot be run
-honestly** until phases 1–3 land, and a session that ran it anyway would produce a table of
-well-measured, confidently wrong verdicts — the failure `CLAUDE.md` §0.1 pt 4 names: *"a number
-without a control is not a measurement — in either direction."*
+~~That is a stronger dependency than sequencing. It says #409's central instrument **cannot be run
+honestly** until phases 1–3 land…~~
+
+⚠⚠ **OVERSTATED, AND `BO-2` FIRED ON IT. The claim is narrowed here rather than defended.** An
+independent critic ran this file's own falsifier and it landed:
+
+- **The dependency is ONE-SIDED, and this file collapsed two directions while citing §0.1 pt 4's
+  *"in either direction"* as its warrant.** #409 asks that each term *"needs a **declared** range
+  against that floor"* (`synthesis.md:141-144`) and its falsifier fires when a range is *"**measured**
+  and found **below** 0.294"* (`:158`). **A below-floor reading is what a shut aperture confounds. An
+  above-floor reading is decisive today and needs no gate.**
+- **A term already clears it on the tree as it stands.** `stance_toward` (`decision/choose.py:78-87`)
+  sums `valence(−5..+5) × weight(0..5)` per stance row — a declared range of ±25 per row, sourced to
+  `#353 :333`, **independent of which verbs form.**
+- **And for that term the aperture is neither necessary nor sufficient.** Its *realised* spread is 0
+  because there are **0 stance rows** (`adjudication_register.yaml:419`) — that is `STR-1`'s missing
+  producers, which **phases 1–4 do not supply.**
+- **The "reads below the floor" prediction had no instrument**, in a file that gates work on it.
+
+> **THE NARROWED CLAIM, which is what this file now asserts:** the aperture gate is **a caveat on
+> NEGATIVE verdicts, not a precondition for running the instrument.** A term measured *below* 0.294
+> before phases 1–3 has not been shown to be decoration — it may be starved. A term measured *above*
+> it is decisive whenever it is taken. **Phase 6 is therefore less gated than this file first said**,
+> and the gate is worth keeping only for what it actually buys: it stops a below-floor reading being
+> recorded as a verdict.
 
 **And the converse is deliberately NOT claimed.** r2 without #409 is not blocked; it is merely
 incomplete. It builds a world that delivers rich input to a chooser that ranks it with an `alignment`
@@ -246,10 +281,11 @@ Falsifier prefix `BO-n`. Each is written to be runnable, not persuasive.
 | | claim | what would refute it |
 |---|---|---|
 | **BO-1** | items 1, 16, 4, 3a, 3b, 2a need no ruling | any one of them touches a `## Status: RATIFIED` sentence, or `RULINGS.yaml` lands it on an escalated row. ✅ **Run: none does.** The only escalated row touching phases 1–4 is `CAT-6` → item 11, and `RR-A` → item 13, both already outside the critical path |
-| **BO-2** | the aperture gate is necessary — #409's terms cannot be scored before it | a term whose declared range clears **Δ ≥ 0.294** on the **pre**-phase-1 tree. One such term and the gate is merely tidy |
+| **BO-2** | ~~the aperture gate is necessary — #409's terms cannot be scored before it~~ → **FIRED, and the claim is narrowed above.** `stance_toward` (`choose.py:78-87`) declares ±25 per row on the pre-phase-1 tree | ✅ **already fired once.** It now falsifies only the narrowed claim: a *below*-floor reading taken before phase 3 and recorded as a verdict rather than as a starved term |
 | **BO-3** | item 11 genuinely waits on CAT-6 | CAT-6 closes at gate step 1–4 in `RULINGS.yaml` — then S1 was bookkeeping and item 11 was never blocked |
 | **BO-4** | ~~the six seam points are all of them~~ → **the SEVEN seam points are all of them** | an eighth found in code. ⚠ **This falsifier has already fired once.** It was written while a verifier was searching; the search returned `standing_of` (`00` §3.6), the count went six → seven, and S7 was added. **A completeness claim that has failed once is not evidence for the next one** — the standing instruction is that any consumer of an object phases 1–4 change is a seam candidate until checked |
-| **BO-5** | phases 1–4 are fourteen items in a valid dependency order | any edge in the r2 `EXECUTION_PLAN` that this order violates. `05` §A.4 is the oracle, and it wins |
+| **BO-5** | phases 1–4 are r2's items in a valid dependency order | any edge in the r2 `EXECUTION_PLAN` that this order violates. `05` §A.4 is the oracle, and it wins |
+| **BO-8** | **every r2 build row appears in some phase** — the count is **18**, not 17 | ⚠ **fired once already** (row `2b`, omitted from the first draft). `grep -c` r2's row table against this file's phases; an omitted node has no edge, so `BO-5` cannot see it |
 | **BO-6** | `(Person, body)` needs no STR-1 ruling | ✅ **Discharged.** STR-1 closed at step 3 and its subject is the six `[RES] ACTS` rows; `(Person, body)` is `[MAT, RES] MATTER/ACTS` and is not among them |
 | **BO-7** | phase 6's remaining gates really are only `CAT-6`, `STR-2`, `STR-5/6` | any closed `CAT-*` row whose close does not survive an independent re-run of `CLAUDE.md` §0's gate. **Twelve closes, each with an opened citation — the falsifier is to re-open them** |
 
@@ -260,6 +296,22 @@ Falsifier prefix `BO-n`. Each is written to be runnable, not persuasive.
 **It marks no juncture done.** `CLAUDE.md` §0.2 — a juncture is done when the behaviour EXECUTES, and
 a tick in a table is not an execution artifact. Every item above carries one in the r2
 `EXECUTION_PLAN`; **nothing here has run.**
+
+⚠⚠ **AND THE "CREATES NO WORK FOR A FUTURE SESSION" CLAIM IS WITHDRAWN FOR THIS FILE. The critic is
+right and the honest answer is yes, it does.** §0's test is *"does this document create work for a
+future session? If YES it is the forbidden thing wearing a record's clothes."* **Phase 0 is eight
+repairs that exist in neither subject suite**, and at least three are new work with no home elsewhere:
+**S2** (*re-take M3 on `harness.populated`*), **S6** (the aperture re-measurement gate itself), and
+**S7** (*item 8 carries a falsifier for `standing_of`*). §0's own wording condemns it: *"a verdict that
+says 'and therefore someone should build Y' fails — that is a queue."*
+
+**`00_THE_SEAM.md` and `RULINGS.yaml` pass that test honestly. `01` does not, and the README answered
+for all four.** Rather than argue the exemption, this file states its position plainly: **it is a build
+order, which is a queue by construction**, and the user asked for one. §0's ban governs what an
+**adversarial pass** may emit as a by-product, not what a proposal asked for by name may contain. **But
+the claim that this file passes the test was false, and asserting it three times did not make it
+true.** Whether §0's clause reaches a `PROPOSED` document in `proposals/` at all is a layer-placement
+question this file does not rule on — it just stops claiming the exemption.
 
 **It ratifies nothing, and `ED-1094`'s merge-ratifies-by-default is refused in full** for this
 directory, as it is for both subject suites. No `## Status:` line flips, no ledger `status` or

@@ -10,11 +10,12 @@
 ## Why this exists
 
 Two suites were written a day apart, by different passes, and **neither cites the other.** Both were
-about to be built. They collide in **eight places**, they answer one hole two different ways, and
+about to be built. They collide in **nine places**, they answer one hole two different ways, and
 one of them measures its own headline numbers against an aperture the other re-opens.
 
-**Eight places examined, seven live** — one true conflict, six forced orderings, one demoted, and one
-expected collision **measured absent** and recorded as a null result.
+**Nine places examined, eight live** — one true conflict, seven forced orderings, one demoted, and one
+expected collision **measured absent** and recorded as a null result. ⚠ **That count has been revised
+upward three times**, each by a different independent pass, each after it had been declared final.
 
 **The claim, in one line:** they are one machine seen from opposite ends. r2 builds **what reaches a
 person and what they may do**; the behaviour layer builds **how a person chooses among what reached
@@ -52,10 +53,12 @@ suite's sheet.**
 clearing this queue is session work. It closed 12 — eight of the nine `CAT-*` rows — and the largest
 claimed gate fell first:
 
-> **STR-1 closes at step 3.** The register states the person-interior write as a *prohibition*. The
-> ratified matrix says the opposite: the six rows are `steps: [RES]`, `class: "ACTS"`, each with its
-> own `emits:` kind. **They are a licence nobody has taken up.** STR-1's "option 1" was never one of
-> three designs — it is the design already prescribed, with its producers missing.
+> **STR-1 closes at step 3, on ratified `architecture/`.** The write matrix decides its options 1 and 2
+> — the six rows are `[RES] ACTS`, each with its own `emits:` kind, a licence unproduced. But **a row
+> licensing a write is silent on whether the quantity is stored or derived**, so **option 3**
+> (*recompute the interior every season from claims and tenures*) is the one that had to be killed, and
+> it dies on `AX-3` and the `AX-5`/`AX-6` fading carve-out against claims that decay on confidence ×
+> recency.
 
 **3 · The order is forced by what is buildable, not chosen.** r2: 13 of 16 items buildable today.
 The behaviour layer, after the closures: no longer a question set, but still waiting on an axis
@@ -79,17 +82,31 @@ is incomplete, not blocked.
    independent verifier found a seventh (`standing_of`) and the ruling pass found an eighth
    (`Person.beliefs`). **The corrections are struck-and-kept in place rather than tidied away**, and
    `01`'s `BO-4` is the standing falsifier for a ninth.
-3. **`00` §4's first draft used the wrong class name**, calling the six Person rows `INTERIOR` when
-   the matrix files them `ACTS`. The conclusion was right and the vocabulary was wrong — **and the
-   wrongness was load-bearing**, because it turned a licence into a prohibition and made STR-1 look
-   like a design call. It is corrected in place and the correction is what closed STR-1.
-4. **`RULINGS.yaml` is one pass's reading, not a ruling.** Every `ruling:` in the subject register
-   stays empty. Twelve rows are *closed with a citation*, which means **a later session can re-open
-   any of them by re-opening the citation** — that is `BO-7`, and it is the intended falsifier.
-5. **Three defects in the subject suites are FILED, NOT PATCHED** (`00` §7): two wrong paths in r2's
-   `EXECUTION_PLAN` (`loop/budget.py` does not exist; the real reader is `decision/budget.py:73`), a
-   stale line citation, plus two in #409 (`ED-WR-0011`'s pairing rider is discharged; `temperament`
-   collides with a live territory-scale term). §0.05 clause 3 makes each the owner's to fix.
+3. ⚠⚠ **THIS SUITE PUBLISHED A DEFECT THAT DOES NOT EXIST**, retracted at `00` §7.1. It accused r2 of
+   citing `engine/season/loop/budget.py`; **that string appears 0 times in r2.** The wrong path
+   originated in **this suite's own verification prompt**, was attributed to a sibling suite in three
+   files, and became a build instruction. A fabricated finding inside a defect register is the worst
+   thing here; it is struck rather than deleted.
+4. **`00` §4's first draft also mis-told its own importance.** It called the six `Person` rows
+   `INTERIOR` (the matrix files them `ACTS`) and then claimed the register had stated a prohibition and
+   that fixing the name is what closed STR-1. **Both halves were wrong:** the register's own second
+   sentence already reads *"Only RESOLVE remains — i.e. only an act"*, `INTERIOR` as a class name
+   appears **0 times** in it, and the tree's own `write_matrix.yaml:59` and `hole_register.yaml:717`
+   use *"`Person` INTERIOR FIELD"* descriptively. The closure stands; the story told about it did not.
+5. **The aperture gate is narrower than first claimed**, and `01`'s own `BO-2` falsified it:
+   `stance_toward` declares a ±25 range on today's tree. It is **a caveat on negative verdicts, not a
+   precondition for running the instrument.**
+6. **`RULINGS.yaml` is one pass's reading, not a ruling**, and a critic already re-opened part of it —
+   every line number in its most-cited methodological correction failed on re-reading, and closures
+   were re-graded. Rows are *closed with a citation*, so **a later session re-opens any by re-opening
+   the citation** (`BO-7`). **Four of the twelve are chained**, not independent.
+7. **THIS SUITE ACCUSED r2 OF THREE DEFECTS AND TWO OF THEM WERE NOT r2's** (`00` §7). The
+   `loop/budget.py` path was **this suite's own invention**; the *"`:104` does not exist"* citation was
+   **exact when r2 wrote it** and was invalidated afterwards by PR #411's archive pass. **One survives**
+   — *"`band_floors.person` refuses at load"* is really a `KeyError` at the access site. Two findings
+   against #409 stand (`ED-WR-0011`'s pairing rider is discharged; `temperament` collides with a live
+   territory-scale term). ⚠ **A defect register that is wrong two times in three about its neighbour is
+   the thing to distrust most in this directory.**
 
 ---
 
@@ -115,7 +132,9 @@ an author, an independent code verifier, and an independent ruling pass. **Both 
 found real defects in the author's document**, listed at point 2 and 3 above. The extract was written
 once and handed down; neither verifier re-read the 8,000-line subject corpus.
 
-⚠ **This suite creates no standing corpus and no queue.** Under `CLAUDE.md` §0's test — *does this
-document create work for a future session?* — every file here explains a judgment about **two
-artifacts that already exist**. `01` schedules only r2's own items. **If the subject suites die, this
-suite dies with them.**
+⚠ **This suite creates no standing corpus. It DOES create work, and the earlier claim that it did not
+is withdrawn** (`01` §6). `00` and `RULINGS.yaml` explain judgments about artifacts that already exist
+and pass §0's test; **`01` is a build order, which is a queue by construction** — Phase 0 carries eight
+repairs living in neither subject suite. It was asked for by name, which differs from an adversarial
+pass emitting one as a by-product, but **the exemption should not have been claimed.** If the subject
+suites die, this suite dies with them.
