@@ -110,11 +110,20 @@ makes the grade per licence honest (one STRUCTURAL, one CONVENTION, one MECHANIC
 "BY TYPE" claim was STRUCTURAL for all three and true for none.
 
 **What is NOT licensed, and is refused by name.** Any `World`-first function in
-`engine/season/queries/world_q.py`: `presence`, `verbs`, `footprint`, `provinces_of`, `density`,
-`sovereign_fraction`, `establishment_of`, `judging_set`, `home_of`, `occasioned_by`, `hold_force`,
-`lateral`. Every one carries `TRACE.query(..., "resolver")` on its first line, which makes the
-refusal **observable rather than asserted**: a renderer that reached one would appear in the trace as
-a resolver query, and the falsifier in PART D is exactly that scan.
+`engine/season/queries/world_q.py`: `parent_of`, `descendants`, `presence`, `verbs`, `footprint`,
+`provinces_of`, `density`, `sovereign_fraction`, `establishment_of`, `judging_set`, `home_of`,
+`occasioned_by`, `hold_force`, `lateral`, `members`, `leaders`, `conferral_path`, `questions_for`.
+**Most carry `TRACE.query(..., "resolver")`, which makes the refusal observable rather than asserted**
+— a renderer that reached one would appear in the trace as a resolver query, and PART D's D-1 is that
+scan.
+
+⚠ **AND THE SCAN HAS FOUR HOLES, MEASURED, WHICH IS WHY ITS GRADE IS MECHANICAL AND NOT STRUCTURAL.**
+`grep -n "TRACE.query" engine/season/queries/world_q.py` returns **16 call sites**, and **four
+resolver-side functions have none: `parent_of` (`:48-52`), `judging_set` (`:146-148`, which raises
+instead), `hold_force` (`:138-144`) and `occasioned_by` (`:553+`).** A renderer calling `parent_of` to
+ascend the ladder — which A.3 says zoom *is* — would leave no trace at all. So D-1 must be a path/AST
+scan over `port/` **and not only a trace assertion**, and saying otherwise would be shipping a guard
+that cannot observe what it guards. Found by running the grep rather than by trusting the pattern.
 
 ⚠ **THREE of the twelve are the hard cases, and two of them are surfaces the analyse stage drew.**
 `establishment_of` reads the Office's own `establishment` field (`world_q.py:399-415`) — admissible
@@ -1160,7 +1169,7 @@ in this file can be owned until that row exists.
 | claim | grade | the construction that checks it, or why nothing can |
 |---|---|---|
 | `choose` never receives a World | **STRUCTURAL** | `View.__getattr__` raises `Forbidden` with the law inline — *"L2 — choose never receives a World. NOT BY DISCIPLINE — BY TYPE"* (`carriers.py:233-237`); plus the AX-2-binds-by-path test named at `questions.py:9-11` |
-| **the renderer reads only L-1..L-3** | **MECHANICAL** | a path/AST scan over `port/` for imports of `state/` and `world_q`, mirroring `decision/`'s. **NOT structural**, and the withdrawn law claimed it was. ⚠ And no such scan can exist until `port/` does |
+| **the renderer reads only L-1..L-3** | **MECHANICAL** | a path/AST scan over `port/` for imports of `state/` and `world_q`, mirroring `decision/`'s. **NOT structural**, and the withdrawn law claimed it was. ⚠ A `TRACE` assertion alone is insufficient: **four resolver functions emit no `TRACE.query`** (A.1.3), `parent_of` among them. And no scan can exist until `port/` does |
 | UNHELD is read from the whole ledger, never from a capped View | **MECHANICAL** | `LedgerReader` takes `claims` and returns `UNKNOWN` on no match (`person_q.py:79-100`). A test that a UNHELD cell survives `view_k=1` |
 | the surface displays no aggregate | **MECHANICAL against the accidental case, CONVENTION against the deliberate one** — `04 §B.3:240-244`'s own grading, carried across rather than restated | `Rung.__setattr__` refuses an undeclared field (`carriers.py:589-595`); a renderer computing a mean of claims is not reached by it |
 | a claim is never marked true or false | **CONVENTION** | nothing in the type system distinguishes a correctness mark from a source mark. The check is a reader, and PART D's D-4 is the falsifier |
@@ -1291,7 +1300,7 @@ first-usable.
 
 | # | claim | what would show it wrong |
 |---|---|---|
-| **D-1** | the renderer reads only L-1..L-3 | `test_the_surface_emits_no_resolver_query`: render one place for one person and assert the `TRACE` transcript contains **zero** entries tagged `"resolver"`. Every function in `world_q` emits one on its first line, so the test observes the failure it excludes. ⚠ It **cannot be written until `port/` exists**, which is the honest state of a MECHANICAL grade with no artifact |
+| **D-1** | the renderer reads only L-1..L-3 | `test_the_surface_imports_no_world_query` — a path/AST scan over `port/`, mirroring `decision/`'s, **plus** `test_the_surface_emits_no_resolver_query` over the `TRACE` transcript. ⚠ The trace half alone does **not** observe the failure: `parent_of`, `judging_set`, `hold_force` and `occasioned_by` emit no `TRACE.query` (A.1.3), and `parent_of` is the one a renderer would reach first. ⚠⚠ Neither can be written until `port/` exists — the honest state of a MECHANICAL grade with no artifact |
 | **D-2** | UNHELD is a negative fact over the whole ledger, not a gap in a capped View | `test_unheld_survives_a_view_cap_of_one`: set `view_k=1`, render a cell whose claim exists, assert it draws HELD. If it draws UNHELD, the surface is reading the View and the law is broken in the direction that looks like caution |
 | **D-3** | CONTRADICTED is readable from the ledger with no new store | `test_two_disagreeing_claims_about_a_site_both_survive_best`: deposit two claims on one `(subject, predicate)` with different values, assert `LedgerReader._best` returns one **and** the enumeration returns both. If `_best` evicts the loser, the split cell needs a store and B.1 row 2 is wrong |
 | **D-4** | the surface never marks a claim true or false | `test_no_claim_renders_a_correctness_mark`: render a ledger containing a claim the world contradicts; assert the rendered cell differs from a true claim's cell **only** in `source`, `when` and `confidence`. **Expected to be the first one a deadline breaks** |
