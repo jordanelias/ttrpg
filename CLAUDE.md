@@ -861,6 +861,13 @@ that they could plausibly have missed each other.
   a judgment node, an audit verdict, a number nobody else can reproduce. Not on a diff one reader
   can hold entire.
 
+⚠ **AND THE DENY THIS ARGUES FOR IS REFUSED — RULED by Jordan, 2026-09-17.** Verbatim: *"I want
+multiple agent dispatches."* A `PreToolUse` deny on multi-`Agent` dispatch was put to him as §11's
+shape applied to fan-out cost; the answer is no. **So the sizing rule above binds a READER and gets
+no mechanism**, and §0.1 pt 5's predicate withholds one independently — token cost is neither the
+game nor a Jordan decision. Do not re-propose it. §11 has a deny because Jordan ruled the RULE
+first; absent that, a deny is apparatus looking for a rule.
+
 **Three caching facts that bite the fan-out pattern:**
 1. **Parallel agents sharing a prefix cannot read each other's cache.** An entry is readable only once
    the first response *begins streaming*, so N concurrent identical-prefix calls all pay full price:
@@ -888,7 +895,11 @@ that they could plausibly have missed each other.
   special-case an entity or outcome (**scripting drift**); never grow a scale-local interface dialect
   (**shape divergence**).
 - **Roster discipline:** promote a role into `.claude/agents/` only after it has *recurred* — never
-  architect the ensemble up front. `valoria-critic` is the only promotion so far.
+  architect the ensemble up front. `valoria-critic` (structurally read-only) and `valoria-author` (writes its deliverable to a
+  path and returns a receipt, so a long artifact never crosses the orchestrator's window —
+  promoted 2026-09-17 on eight recurrences) are the only promotions. `valoria-author`'s own file
+  states which half of its contract is a CONTROL and which is merely DURABLE; read that before
+  trusting it.
 - **If you build an orchestrated run again**, four properties are worth re-deriving and nothing enforces
   them today: a **closed `stop_reason` set that is report-only** (RULED by Jordan — a breaker halting a
   large audit on a heuristic costs more than the defect it caught); a **null-result alarm** on any lens

@@ -88,7 +88,7 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 |  | 67 | Decisions :: - 2026-06-24 — Migrated the Claude↔GitHub automation to a Claude Code-native model: |
 |  | 298 | Decisions :: - 2026-07-01 — **Workplan sprawl cleanup.** `workplans/` was dead (both files pre-dated v3/ |
 
-**SECOND PASS, 2026-09-17 (`ED-IN-0238`) — +10 units · 3,809 tokens, rows appended to the table above.** (3,809 is measured on the bodies AS THEY SAT HERE; the per-row counts are measured on the moved copies and sum to 3,813 — one trailing newline per unit, not a discrepancy to chase.) The predicate was WIDENED to match case-INSENSITIVELY: the 2026-09-13 pass matched `awaits`/`awaiting` in lower case only, and `**Awaiting Jordan, not self-ratified:**` in the 2026-08-01 gates section slipped it — four sections would have been moved with live items inside. ⚠ AND ONE FALSE NEGATIVE SURVIVES THE WIDENING, so pin by name before re-running: *"a faction becomes buildable and readable, and three items are Jordan's"* declares an escalation set without using any marker word. **The closed-work lever is now SPENT** — of 84,745 tokens here, only these 3,809 moved; the rest carries live markers.
+**SECOND PASS, 2026-09-17 (`ED-IN-0238`) — +10 units · 3,809 tokens, rows appended to the table above.** (3,809 is measured on the bodies AS THEY SAT HERE; the per-row counts are measured on the moved copies and sum to 3,813 — one trailing newline per unit, not a discrepancy to chase.) The predicate was WIDENED to match case-INSENSITIVELY: the 2026-09-13 pass matched `awaits`/`awaiting` in lower case only, and `**Awaiting Jordan, not self-ratified:**` in the 2026-08-01 gates section slipped it — four sections would have been moved with live items inside. ⚠ AND ONE FALSE NEGATIVE SURVIVES THE WIDENING, so pin by name before re-running: *"a faction becomes buildable and readable, and three items are Jordan's"* declares an escalation set without using any marker word. ⚠ **AND A THIRD PASS MUST READ STRUCK MARKERS CORRECTLY.** `ED-IN-0239` closed four entries whose subject is retired by striking the stale marker rather than deleting it (history stays visible). A struck `~~needs_jordan~~` / `~~awaiting Jordan~~` STILL MATCHES the marker predicate, so those four read as open to a naive re-run: **a marker inside `~~…~~`, or one on an entry carrying a `⛔ CLOSED` note, is not an open item.** **The closed-work lever is now SPENT** — of 84,745 tokens here, only these 3,809 moved; the rest carries live markers.
 
 ---
 
@@ -2023,7 +2023,7 @@ from re-reading.
   honest loop-closure), distinct from §10's fan-out-only patterns. Routines deliberately out of
   scope (remote-layer, not git-readable from a hook). *Follow-up candidate:* a per-lane mechanics
   "inert count" line if `mechanics_index.yaml` gains a cheap inert flag (currently only its
-  staleness is surfaced, via the audit family).
+  staleness is surfaced, via the audit family). **⛔ CLOSED 2026-09-17 (`ED-IN-0239`): THIS ENTRY WAS NEVER `needs_jordan`** — the marker predicate matched its narrative mention of *the `needs_jordan` inbox*, a false positive in the opposite direction from the ones `ED-IN-0238` records. Its subject is retired regardless: §0.3 retired the banner and forbids a replacement, and `tools/session_open_work.py`, `tools/session_status.py` and `tests/valoria/test_session_open_work.py` are all absent from the tree (checked), so the *Follow-up candidate* line has no subject either.
 
 - **Resolution Plan v1 — Stratum-C armature deployment §6.3 wave 3 (consumer/contract hygiene)
   2026-07-08: ED-IN-0016 CLOSED, ED-IN-0030 filed.** Agonist/antagonist pair (producer + independent
@@ -2054,7 +2054,7 @@ from re-reading.
   + `references/rendering_dispositions.yaml`), rendering wave.
 
 - **Resolution Plan v1 — Stratum-C (armature deployment) FIRST SLICE 2026-07-08: ED-IN-0028, echo-transport
-  plumbing ("proceed large build").** Executed the IN-lane core of Key & Echo Armature §6.2. New
+  plumbing ("proceed large build").** **⛔ CLOSED 2026-09-17 (`ED-IN-0239`): SUBJECT RETIRED** by `ED-IN-0232` — `sim/cross_scale/echo_transport.py`, the substrate `TickScheduler` and the `scene.*_resolved` Key path are gone, and `sim/` is itself a dissolved tree (§3). Its `DEFERRED` items were deferrals on that mechanism. ⚠ The lane EDs it names (`ED-SC-0006/0007`, `ED-FA-0005`) are UNTOUCHED and remain their lanes' business. Executed the IN-lane core of Key & Echo Armature §6.2. New
   `sim/cross_scale/echo_transport.py` un-orphans `domain_echo.py` (was a ZERO-caller C-REACH island) and
   routes a resolved scene → `domain_echo` (degree-keyed) → one `scene.*_resolved` Key via the substrate
   `TickScheduler` with an OF-7 **deferred** faction apply at the ACTION→ACCOUNTING boundary. Wired into
@@ -2093,7 +2093,7 @@ from re-reading.
   CI-75 model (unpropagated supersession, refuter-upgraded).
 
 - **Key & Echo Armature v1 — DELIVERED 2026-07-07 (ED-IN-0018, this PR; deliverable 2 of 2,
-  needs_jordan = its §5 fork docket).** `designs/architecture/key_echo_armature_v1.md` (seam
+  ~~needs_jordan = its §5 fork docket~~).** **⛔ CLOSED 2026-09-17 (`ED-IN-0239`): SUBJECT RETIRED** by `ED-IN-0232` — the armature's executable half (`sim/substrate/keys.py`, 24 tests) is gone and nothing may be built on it, so its §5 fork docket has no subject. ⚠ **The docket's NON-Key items are NOT closed by this** and keep their own ids in their own lanes: `ED-SC-0002`, `ED-SE-0002`, contest live-dispatch, ER-2 band-discipline scope, CI 75-vs-80. The `ED-IN-0012/0013` double-allocation renumber it lists IS settled — `references/id_reservations.yaml` records the renumber to `ED-IN-0019/0020`. `designs/architecture/key_echo_armature_v1.md` (seam
   contracts + Echo Matrix all-directions/all-scales + §3 registry deltas + A13-A16 conformance
   specs + the consolidated §5 docket — **merge does NOT ratify §5**) + the first executable Key
   substrate (`sim/substrate/keys.py`, 24 tests) + `tests/contracts` wired into CI. Staging:
@@ -2432,7 +2432,7 @@ from re-reading.
   items a resuming session must not silently skip.
 
 - **J-36 — Key-bus closure for the 6 off-bus writers**, gated on the distillation report's deferred
-  adversarial pass. Design-tier docket item awaiting Jordan; see also `registers/handoffs/HANDOFF_SC.md`'s J-31
+  adversarial pass. Design-tier docket item ~~awaiting Jordan~~ — **⛔ CLOSED 2026-09-17 (`ED-IN-0239`): SUBJECT RETIRED.** `ED-IN-0232` retired the Key substrate on Jordan's ruling *"anything key-based gets retired"*, so there is no bus to close and no off-bus to be off. Checked rather than assumed: `keys.py` and `echo_transport.py` are absent from the tree, and the three live files still naming `echo_transport` name it only in comments. Nothing left to decide; see also `registers/handoffs/HANDOFF_SC.md`'s J-31
   (social-contest deliberative-game findings) — the two were tracked together in root `HANDOFF.md`
   before the 2026-07-08 per-lane content split.
 
