@@ -424,6 +424,28 @@ it supersedes neither and takes no position inside either.
 
 Allocation note: `next_free` 243 → 244. Held back in full; `ED-1094`'s ratify-on-merge is refused.
 
+### 2026-09-17 (rulings) — ED-IN-0244 / ED-IN-0245 (AX-7, and the eight remaining escalations)
+
+**Jordan ruled all nine of `ED-IN-0243`'s escalations in session.** Two ids, because one of them
+amends a RATIFIED Layer 1 file and needs its own citation.
+
+- **`ED-IN-0244` — `AX-7` added to the axiom set.** *No character touches the world directly.* The
+  sanctity is the **brute physical fact** — ink meeting paper, air moving — and three layers are held
+  apart: the ontical performance, the performer's own understanding, and everyone else's. (2) runs on
+  its own mechanism (a person does not witness themselves) and **is revisable by (3)**. Divergence is
+  governed by channel + competence + prior belief together. **Scope clause:** it reaches what
+  HAPPENED, never what is PERMITTED — remits are certain. **It binds the character, never the
+  player**, whose option set narrows while their understanding does not. The live falsifier is
+  `witness.py:191`, which all six prior axioms permit. ⚠ The count has moved five → six → seven.
+- **`ED-IN-0245` — the other eight.** RR-A fold; RR-C withdrawn; CAT-6 arm 2; RR-B limb by limb
+  (B-4 withdrawn on a misread question mark that r2 made first and this suite inherited); STR-6
+  `conviction` = religious affiliations and intensities, as a vector, with confliction DERIVED;
+  STR-2's axes found mis-recorded and the thirteen superseded; RR-2 capacity plus **migration as a
+  verb**, since `move` is travel and `residence` has no writer.
+
+Allocation note: `next_free` 244 → 246.
+
+
 Allocation note: `next_free` 238 → 240 across the two. The `ED-IN-0236/0237` renumber narrative that
 used to be duplicated on the `IN:` lane row lives at the subsection above it — one owner, per §0.05
 clause 3, which is why the row now carries state and a pointer only.

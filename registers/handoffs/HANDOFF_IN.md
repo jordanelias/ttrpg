@@ -84,6 +84,44 @@ order, `RULINGS.yaml` for the 21 questions. **Nothing has run; nothing ratified.
 
 ---
 
+## ✅ 2026-09-17 — ALL NINE ESCALATIONS RULED (`ED-IN-0244`, `ED-IN-0245`)
+
+**The `ED-IN-0243` queue is empty.** Jordan ruled all nine in session. Detail per row:
+`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`. **Do not re-open these as questions.**
+
+| | ruled |
+|---|---|
+| **RR-P** | **`AX-7` added to the ratified axiom set** — see `01_AXIOMS.md`, and read its scope clause before citing it |
+| **RR-A** | **fold** `comply` / `evade \| defy` / `refract` / `dispatch`; compliance is the executor's own act. **Unblocks r2 item 13** |
+| **RR-C** | withdrawn — closes at gate steps 3/4 |
+| **CAT-6** | **arm 2**, the Tenure payload. *"Too noisy for a character to have assailable/uncertain remits"* |
+| **RR-B** | B-8 descendants only · B-4 withdrawn · B-6 follows RR-A · B-1 keep `scope?` · B-2 keep the operands · B-3/B-5 take r2's · B-7 nominal rung + purview by class |
+| **STR-5/6** | `conviction` = **religious affiliations and their intensities**, a vector; confliction **derived** |
+| **STR-2** | axes are `memory` · `substantive` · `equity` · `selfish` — the register had the wrong four. **The thirteen are superseded** |
+| **RR-2** | matter **plus hearth capacity**; `found` is the throttle; **migration is a verb persons take** |
+
+### ⚠ What the rulings OPENED — four pieces of design work that did not exist before
+
+1. **An affiliation roster and an incompatibility relation.** `conviction` is now a vector over
+   creeds. MEASURED FINDING: `ED-IN-0075`'s `Truth` (0–5, Solmund-orthodoxy ↔ Thread-truth)
+   **structurally cannot** carry Jordan's case — a midpoint on a pole scalar reads as *lukewarm about
+   both*, not *conflicted between two strong commitments*.
+2. **A migration verb.** MEASURED: nobody in Valoria can relocate. `move` is TRAVEL (a `travel_leg`
+   Tenure alter); `residence` is a contested claim predicate **with no writer anywhere**.
+3. **The 13-roster re-authored**, and the 13×N projection with it. `selfish` is measured near-inert
+   across the current roster because self/other was factored out into `orient.self_other`.
+4. **H-71's second half is still open** — arm 2 closes the holder's own knowledge of his remit, not
+   *being understood by others as seated*.
+
+### ⚠ And `AX-7` makes three shipped deposit sites a CONTRADICTION, not a preference
+
+`witness.py:191`, `:271` and `:361` are the only production sites that construct a `Claim`, and all
+three hand a character the engine's own resolution as true. Under `AX-7` that is not a design to
+revisit. **The machinery to fix it already exists** — `agreement`, `standing_of`, `belief_contradicts`
+and the testimony ladder all presuppose divergence; only the producers hand out certainty.
+
+---
+
 ## ⚠ OPEN MARKERS IN MOVED UNITS — the index, 2026-09-17 (`ED-IN-0240`)
 
 **Every unit carrying an open marker was moved to `HANDOFF_IN_history.md`** — the rows below are the complete list with the rest of the pre-generation narrative. **Their markers are reproduced here VERBATIM**, so an open item is a table row plus one file-open away instead of buried inside a multi-thousand-token session section — that is the safety claim of this trim, and it is stronger than a move without an index.

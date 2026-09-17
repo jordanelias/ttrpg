@@ -101,12 +101,18 @@ same thing (a seated person who knows their remit, person-side, without a new Se
 > the behaviour the axiom exists for; arm 2 satisfies its letter.** Calling them equivalent flattened
 > the one difference that should decide the ruling.
 >
-> **(b) ARM 2'S CARRIER IS BEING DELETED BY THE SIBLING SUITE.** `(Tenure, payload)` is deletion-ledger
-> row 13 in `05` — *"**No producing verb**… `ARCH §B.8` prescribes its replacement"* — and `03:744`
-> files *"the grant on `Tenure.payload` | the 2026-09-16 sweep | **REFUSED — retired**"*. So choosing
-> arm 2 now costs **un-deleting a field that ratified `ARCH §B.8` prescribes deleting** — an
-> `RR-B`-shaped amendment, not a menu choice. **That is not a reason to refuse arm 2; it is a price
-> that must be on the sheet**, and it was on neither suite's.
+> **(b)** ~~**ARM 2'S CARRIER IS BEING DELETED BY THE SIBLING SUITE** — ratified `ARCH §B.8`
+> prescribes its replacement, so arm 2 is an `RR-B`-shaped amendment.~~ → ⚠⚠ **RETRACTED. THE THIRD
+> FALSE CLAIM THIS SUITE PUBLISHED ABOUT r2, AND THE ONE THAT MATTERED MOST.**
+> `04_CODE_ARCHITECTURE.md:337` reads `term? (matures_at, declared_by : ActId, closer) -- T-n.
+> **Replaces payload?**` — **a QUESTION MARK.** It prescribes nothing. r2's own `B-4` made the same
+> misreading and this suite inherited it without opening the line.
+> **Arm 2's real price is small**: withdrawing r2's deletion row 13, a row with no reader and no
+> producer, on a field `write_matrix.yaml:336-342` already licenses at `[RES] ACTS` with
+> `emits: tenure.payload_set`. **Arm 2 is ~2 lines and buildable today; arm 4 waits on `record_kinds`
+> (0 files under `engine/`) and item 5, the largest item in the plan.**
+> ⚠ **This inflated the price of the arm this file was steering AWAY from, and Jordan ruled ARM 2**
+> (2026-09-17, `ED-IN-0245`) — *"Too noisy for a character to have assailable/uncertain remits."*
 
 > **Disposition: the question is repaired, not escalated twice.** CAT-6 gains r2's route as **arm 4**,
 > stated in r2's own words with its citation, and the three original arms stand. Jordan rules once,

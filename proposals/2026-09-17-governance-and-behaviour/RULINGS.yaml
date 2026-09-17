@@ -27,6 +27,15 @@
 #     an answer that would overwrite ratified canon. Every escalated row carries
 #     `why_not_closable:` naming which of the five steps was tried and why each
 #     was silent.
+#   * `disposition: ruled`    — Jordan ruled it in session (`ruled.by`), after it
+#     escalated. The row KEEPS its `why_not_closable:` — that is still the honest
+#     record of why the gate could not answer it — and adds `ruled:`: `by`, the
+#     `decision`, his `reasoning` where he gave it verbatim, and `consequences:`
+#     for what the ruling changes in the build. `step:` stays `null`: a ruling is
+#     not a gate-step closure, and it is not `RATIFIED` canon either — see
+#     `CLAUDE.md` §2 for what ratifies a document. It is the record of what he
+#     decided, written so a later session reads a disposition rather than an open
+#     question.
 #
 # WHAT `closed` DOES NOT MEAN. It does not mean built, ratified or agreed. It
 #   means the tree already decided this and the decision was findable. A closed
@@ -89,12 +98,20 @@
 
 meta:
   gate: "CLAUDE.md §0's five steps"
-  counts: {total: 21, closed: 12, escalated: 9}
+  counts: {total: 21, closed: 12, ruled: 9, escalated: 0}
   counts_note: >-
     UNCHANGED BY THE 2026-09-17 REPAIR PASS. `CAT-4` moved `~~step 1~~ → step 5` and
     `CAT-8` moved `~~step 3~~ → step 5`; both remain `closed`, so the dispositions and
     therefore the counts do not move. What moved is the STRENGTH OF THE GROUND each
     stands on, which is what the `step:` field is for.
+    ⚠ CHANGED BY THE 2026-09-17 RULING PASS, LATER THE SAME DAY. Jordan ruled all nine
+    escalated rows in session: `RR-P`, `RR-A`, `RR-B`, `RR-C`, `CAT-6`, `STR-2`, `STR-5`,
+    `STR-6`, `RR-2`. Each now carries a `ruled:` block (`by`, `decision`, `reasoning`,
+    `consequences`) and `disposition: ruled`. `escalated` moves 9 → 0; a new `ruled: 9`
+    count is added; `closed` and `total` are untouched, because a ruled row was never a
+    gate closure — the five steps did not answer it, Jordan did. See
+    `escalation_summary:` for what this means for that section's own framing, and the
+    per-row `ruled:` fields for the decisions themselves.
   closures_are_chained: >-
     ⚠ THE TWELVE CLOSURES ARE NOT TWELVE INDEPENDENT RESULTS, AND THE FIRST WRITING OF
     THIS FILE PRESENTED THEM AS IF THEY WERE. Four of them close on each other, so a
@@ -435,7 +452,7 @@ rows:
       H-71 — a seated person must be able to know their own remit, person-side,
       so that offices can inform the suite of choices available to a character.
       By which route?
-    disposition: escalate
+    disposition: ruled
     step: null
     why_not_closable: >-
       STEP 1 — NOT SUPERSEDED, AND THIS IS THE ROW'S REAL DEFECT. A fourth route
@@ -533,6 +550,42 @@ rows:
       permission rather than a believed one, arm 2 is the arm that says so, and its
       retired carrier is a price rather than a refusal. That is the decision, and it
       is his.
+    ruled:
+      by: "Jordan, 2026-09-17 (in session)"
+      decision: >-
+        ARM 2 — THE GRANT RIDES ON THE `hold` TENURE'S `payload`. Arm 4 (a claim about a
+        held document) is REFUSED.
+      reasoning: >-
+        Verbatim: *"Too noisy for a character to have assailable/uncertain remits.
+        That's just complexity for the sake of itself without any real gameplay
+        value."* This targets arm 4 directly: an EPISTEMIC remit — one a holder can be
+        WRONG about, which is the very behaviour the row's own
+        `which_precedent_favours:` argues `AX-2` exists to produce — is the source of
+        the noise he is refusing. Arm 2 is authoritative rather than believed: a
+        revoked grant vanishes when the Tenure closes, with no window for a holder to
+        act on a stale or forged remit.
+      consequences: >-
+        `(Tenure, payload)` STAYS. r2's item 14 deletion of `(Tenure, payload)`
+        (`05_LEDGER_AND_BUILD.md:229`, stated done at `:972`) is WITHDRAWN by this
+        ruling — the field is not retired, and it gains the producer its own write
+        matrix already licenses at `[RES] ACTS`
+        (`engine/season/write_matrix.yaml:336-342`, `by: "W2/H-50"`,
+        `emits: "tenure.payload_set"`). r2's item 11 (`EXECUTION_PLAN.md:70`,
+        "commission `Record` on `confer`; person-side `remit:` via the claim", gated on
+        items 5 and 10) STOPS BEING H-71's answer — the mechanism it builds is arm 4,
+        now refused. The `remit:` fix (`person_side_eligible`'s decline,
+        `options.py:163-165`) reads the `hold` Tenure's `payload` directly and no
+        longer depends on item 5 (the Record-kind fold), since it needs no
+        `record_kinds` roster. This makes `RR-B`'s `B-4` limb moot in the direction
+        that matters for a build order: nothing here still wants `Tenure.payload`
+        deleted (see `RR-B`'s own ruling below).
+        ⚠ NOT SETTLED BY THIS RULING: H-71's OTHER HALF. Jordan's 2026-09-16 design
+        pressure for this hole was two-part — *"a character must be able to understand
+        for themselves AND be understood by others for being seated in that office"*
+        (`hole_register.yaml:807`). Arm 2 answers the SELF half
+        (`person_side_eligible` reads the holder's own Tenure). It says nothing about
+        how another person comes to know or contest someone else's remit — the OTHERS
+        half. That remains OPEN and is not closed by implication here.
     citation:
       - "engine/season/hole_register.yaml:795-807 (H-71: the hole, the three arms, Jordan's 2026-09-16 sweep)"
       - "proposals/2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md:785-800 (arm 4, its AX-2 argument and its declared dependency)"
@@ -989,7 +1042,7 @@ rows:
       axes does the MORAL-VALUE basis carry — and is `objective <-> subjective` a
       meta-ethical axis, a procedural one largely redundant with `equity <->
       partiality`, or the live `Truth` track under another name?
-    disposition: escalate
+    disposition: ruled
     step: null
     why_not_closable: >-
       STEP 1 — NOT SUPERSEDED. The four proposed axes are Jordan's own, offered
@@ -1035,6 +1088,46 @@ rows:
       ⚠ AND IT CARRIES THE SAME VOCABULARY COLLISION CAT-9 CARRIES: whatever this basis
       is called, `temperament` is already `references/descriptor_registry.yaml:298`'s
       five TERRITORY temperaments. It rides with STR-5/STR-6.
+    ruled:
+      by: "Jordan, 2026-09-17 (in session)"
+      decision: >-
+        RULED IN PART. THE AXES: the moral-value basis is `memory`, `substantive`,
+        `equity`, `selfish` — the four already placed and scored in
+        `candidate_basis_v1.json`, NOT the four `proposed_axes:` this register recorded.
+        THE ROSTER: open design work, not an escalation — see `consequences:`.
+      reasoning: >-
+        The register's own citation is wrong about what it is citing. Its
+        `proposed_axes:` names four axes and dates them to *"Jordan, 2026-09-17 —
+        offered AFTER the seven"* (`adjudication_register.yaml:200`), but the axes
+        Jordan actually placed and scored that day, in
+        `proposals/2026-09-16-conviction-decision-layer/candidate_basis_v1.json`, are a
+        different four: `["memory", "substantive", "equity", "selfish"]`
+        (`candidate_basis_v1.json:7`). The two lists share only `equity`. THE
+        MEASUREMENT THAT DEPENDED ON THE WRONG SET IS RECORDED AS A NULL FINDING
+        RATHER THAN DISCARDED: `selfish` is near-inert across the 13-roster — 9 of 13
+        rows at `|value| <= 0.1`, five at exactly `0.0`, per-axis `sd 0.18` against
+        `0.44-0.54` for the other three (`candidate_basis_v1.json:5`). The file's own
+        words: *"The axis measures agents; it does not measure Convictions."* This is a
+        property of the ROSTER, not the axis — `conviction_taxonomy_v30.md` §2.3
+        factored self/other out into `orient.self_other` on purpose, so `selfish`
+        reading flat against THAT roster is not evidence the axis is wrong. And
+        separately, in session: *"the thirteen are not right for what i need from the
+        game anymore."*
+      consequences: >-
+        THE PROJECTION NEEDS RE-AUTHORING, not merely a re-run against the corrected
+        axes. Migration is still atomic (`_load_projection`/`_load_alignment` raise at
+        module scope, so a 13×N projection and its alignment table must both exist
+        before first import — `adjudication_register.yaml:635-642`), and now the 13
+        ROWS are open too, not just the four COLUMNS. This is CONTENT/DESIGN WORK
+        against a named basis (`memory`/`substantive`/`equity`/`selfish`) and a named
+        projection target (`engine/season/decision/choose.py:45-58`), not a second live
+        design fork — nobody need ask Jordan again which of two axis sets to build;
+        they need to author a roster against the one he already placed.
+        `objective <-> subjective`'s collision with the `Truth` track (ED-IN-0075,
+        `CURRENT.md:31`) is MOOT — that axis is not in the ruled set. The `temperament`
+        naming collision this row shares with `CAT-9` and `STR-6`
+        (`references/descriptor_registry.yaml:298`) is untouched by this ruling and
+        still rides with `STR-6`.
     citation:
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:199-222 (the four proposed axes and the objective/subjective fork)"
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:635-642 (atomic migration; the withdrawn Key claim)"
@@ -1142,7 +1235,7 @@ rows:
     question: >-
       `belief` carries SIX live senses inside the decision layer and fails §4's
       idempotency test. Which sense keeps the word, and what do the others get called?
-    disposition: escalate
+    disposition: ruled
     step: null
     why_not_closable: >-
       ONE HALF OF THIS ROW IS ALREADY CLOSED AND THE REGISTER DOES NOT KNOW IT; the
@@ -1186,6 +1279,30 @@ rows:
       the REFERENCE layer, which is the exact shape that makes a cold read go wrong.
       **The decision is: `belief` · `conviction` · `piety` · `temperament` · `stance`,
       as one naming pass, not five.**
+    ruled:
+      by: "Jordan, 2026-09-17 (in session)"
+      decision: >-
+        `belief` KEEPS THE EPISTEMIC SENSE ONLY. The other three surviving senses
+        (`belief_contradicts()`'s claim-ledger read, S9.3's refusal-law title, the
+        per-NPC commitment named in the quarantined design tier) are told apart by
+        their own existing names and are not reassigned `belief`.
+      reasoning: >-
+        Ruled together with `STR-6`, as the row's own `interacts_with:` field says it
+        must be: *"Settling `conviction`, `piety` and `belief` separately will
+        re-collide them; they are one vocabulary problem with three words."* `STR-6`'s
+        ruling claims `conviction` for the religious sense, which removes it as a
+        candidate for `belief`'s epistemic sense and leaves the epistemic reading
+        uncontested as the one `belief` keeps.
+      consequences: >-
+        `Person.beliefs` IS DELETED REGARDLESS OF THIS RULING — that was already true
+        before Jordan ruled anything here (`write_matrix.yaml:52-54`, `#358 rev.2
+        §D.1.1`; r2 `05_LEDGER_AND_BUILD.md:210` and `:972`), because the field has
+        zero readers anywhere under `engine/season/`. This ruling settles the WORD, not
+        the field — nothing about the deletion changes. `stance`/`Disposition` and
+        `temperament` are the two further words this row's own text flags as part of
+        the same naming problem (`temp.*`, `references/descriptor_registry.yaml:298`)
+        and neither is ruled here; they are `STR-6`'s to carry or a later session's to
+        raise.
     citation:
       - "engine/season/write_matrix.yaml:52-54 (Person.beliefs DELETED by #358 rev.2 §D.1.1)"
       - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:210 (`(Person, beliefs)` — no producing verb)"
@@ -1203,7 +1320,7 @@ rows:
       does `conviction` then denote; how is person-scale piety distinguished in writing
       from territory-scale Piety (PT); does piety subsume `church_standing`; and what
       does the 13-roster get called?
-    disposition: escalate
+    disposition: ruled
     step: null
     why_not_closable: >-
       THE RESERVATION ITSELF IS RULED AND IS NOT WHAT ESCALATES — it is what closes
@@ -1248,6 +1365,48 @@ rows:
       decision covering `belief` (STR-5), `conviction`, `piety`, `temperament` and
       `stance`/`Disposition`.** Settling them one at a time is the failure mode the row
       names in its own `interacts_with:` field.
+    ruled:
+      by: "Jordan, 2026-09-17 (in session)"
+      decision: >-
+        `conviction` IS RESERVED FOR RELIGIOUS AFFILIATIONS AND THEIR INTENSITIES — a
+        VECTOR over affiliations, never a single pole scalar.
+      reasoning: >-
+        Verbatim: *"reserve 'conviction' for religious affiliations and their
+        intensities so that you can have someone who is devoutly Solmund but also
+        believes in Threadwork and therefore experiences religious confliction."* This
+        is why the shape must be a vector and cannot be a scalar: on a single
+        Solmund-orthodoxy ↔ Thread-truth pole (`ED-IN-0075`'s `Truth`, `CURRENT.md:31`),
+        a person devout in both reads as a MIDPOINT — lukewarm about each — which is
+        structurally the opposite state from devout-in-both. `Truth` cannot express
+        Jordan's case because it was built to place one person on one axis between two
+        poles, not to hold two strong, independent, possibly-incompatible commitments
+        at once. CONFLICTION IS DERIVED, never stored: it is what you compute when the
+        same person carries high intensity on two affiliations a roster marks
+        incompatible, not a field anyone writes.
+      consequences: >-
+        NEEDS AN AFFILIATION ROSTER AND AN INCOMPATIBILITY RELATION — neither exists
+        today; this is build work, not a further ruling.
+        ⚠ THE WORD COLLISION THIS RULING CREATES, AND WHY IT IS NOT FREE: `conviction`
+        is NOT vacant in live code the way `piety` and `temperament` are — it is the
+        CURRENT name of the moral-value 13-roster
+        (`references/descriptor_registry.yaml:236`'s `conviction_roster`, off which
+        `engine/season/rosters.yaml` binds `CONVICTION_AXES` and the 13×4 projection).
+        Reserving the word for religion means the moral-value basis MUST be renamed —
+        touching, by the register's own count, 40 Python files, 60 YAML/JSON files and
+        107 design documents (`adjudication_register.yaml:678-683`) — and that rename
+        is now bundled with `STR-2`'s ruling that the thirteen rows themselves are
+        superseded, so it is one redesign rather than a rename plus a redesign done
+        twice. THE NEW NAME FOR THE MORAL-VALUE BASIS IS NOT RULED HERE and is open
+        design work, same as its axes and rows.
+        ⚠ NOT SETTLED BY THIS RULING, AND NOT TO BE INFERRED FROM IT: whether the
+        religious `conviction` subsumes `church_standing`, and how person-scale
+        religion is distinguished IN WRITING from territory-scale Piety (PT) — the
+        row's third and second sub-questions. The word Jordan chose is `conviction`,
+        not `piety`, so the specific `piety`-vs-`Piety (PT)` collision the row was
+        built around DOES NOT ARISE under this ruling — but that is a collision
+        dissolving because the word changed, not a decision that `church_standing` and
+        the religious concept are the same thing or different things. That remains
+        open.
     citation:
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:665-667 (Jordan's reservation, verbatim)"
       - "proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml:684-693 (the piety collision and the four questions)"
@@ -1277,7 +1436,7 @@ rows:
       choices … the worldly churn is in how those contents are RECEIVED"* — as a
       candidate seventh axiom, `AX-7`: a draw may decide what HAPPENS, never what
       you MEANT.
-    disposition: escalate
+    disposition: ruled
     step: null
     why_not_closable: >-
       CONFIRMED, and r2's own reasoning survives an independent run of the gate.
@@ -1310,6 +1469,50 @@ rows:
       derivable from `AX-3` it is a theorem and belongs in `§A.1`'s demotion table
       beside `T-d` and `T-f`, not in the axiom list. **That test is cheap, it is the
       set's own, and it should be run before the ruling rather than after.**
+    ruled:
+      by: "Jordan, 2026-09-17 (in session)"
+      decision: >-
+        ADD `AX-7`. A draw may decide what HAPPENS; it may never decide what a
+        character MEANT.
+      reasoning: >-
+        Three things happen when someone acts, in his own words: *"(1) the objective
+        performance of the action as a literal, ontical, objective fact; (2) the
+        performer's understanding of their own action; (3) everyone else's
+        understanding of that action."* The sanctity the axiom protects is (1)'s brute
+        physical layer: *"when a letter is written or a word is spoken, there is a
+        brute physical reality of the writing applied to a paper or the emission of
+        noise. this is what must remain the case."* The engine's relationship to that
+        layer is stated directly: *"the game engine can receive purely objective events
+        and actions, but no character in the game is able to access those directly."*
+        Further, in the same session: (2) MAY DIVERGE FROM (1), and the divergence is
+        governed by CHANNEL, COMPETENCE and PRIOR BELIEFS TOGETHER — all three, not any
+        one alone. The performer reads their OWN act through its OWN mechanism, never
+        through the observation mechanism everyone else uses — a performer is not
+        merely one more observer of what they did. And *"someone else's account of what
+        a character did CAN revise their own understanding of it"* — (2) is not sealed
+        against (3) after the fact, only against the draw that produced (1).
+      consequences: >-
+        BINDS CHARACTERS, NOT THE PLAYER. Verbatim: *"their character is an avatar,
+        which means that the player gets to retain their own beyond-game understanding
+        even if the availabilities in game to act/react may be modified by how
+        externalities have comported their character."* `AX-7` constrains what a
+        CHARACTER can be made to believe about their own act, never what the PLAYER at
+        the keyboard knows — the avatar's in-fiction confusion does not launder into
+        the player's. `01_AXIOMS.md:66`'s *"There are SIX"* becomes false and needs its
+        own amendment pass, run through the set's own independence falsifier (`:1618`)
+        before it is filed as a seventh entry rather than as a theorem.
+        ⚠ SCOPE BOUNDARY, RULED VIA `CAT-6`: `AX-7` governs the EPISTEMOLOGY of what
+        HAPPENED — divergence between (1)/(2)/(3) — and never what is PERMITTED.
+        `CAT-6`'s own ruling (arm 2: the grant rides on the Tenure's `payload`, an
+        AUTHORITATIVE world-state read) is a question of what a holder is ALLOWED to
+        do, not of what they understood themselves to have done, so it is not narrowed
+        by `AX-7`. A further note from the ruling session itself, recorded rather than
+        chased down against a citation: an earlier reading that `AX-7` might reduce to
+        a theorem of `AX-1` + `AX-4` was reasoned against the SUPERSEDED
+        `Act.payload`-is-the-only-content framing and does not reach the axiom as ruled
+        here, under the three-part (1)/(2)/(3) distinction above. The independence
+        check this row's own text asks for should be re-run against THIS text, not
+        against the draft that earlier reading was aimed at.
     citation:
       - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1488-1511"
       - "architecture/meta/01_AXIOMS.md:3 (RATIFIED, ED-IN-0204, 'adopt in full')"
@@ -1327,7 +1530,7 @@ rows:
       `dispatch` and `remit_acts.dispatch`. Are `commit` (the oath), `repudiate`
       (the refusal) and the named act itself (the compliance) a response verb, or
       does `ED-IN-0210` require the three rows to exist?
-    disposition: escalate
+    disposition: ruled
     step: null
     why_not_closable: >-
       CONFIRMED. The blocking fact is real and I opened it.
@@ -1379,6 +1582,30 @@ rows:
       its rows you mean by DATE or by `supersedes_row:`; a reader can then `grep` the id
       and get the answer from any checkout, which is what a citation is for.**
       See `corrections_to_the_sources:` entry 5.
+    ruled:
+      by: "Jordan, 2026-09-17 (in session)"
+      decision: >-
+        FOLD. `comply`, `evade / defy`, `refract`, `dispatch` and `remit_acts.dispatch`
+        GO. The named act itself IS the compliance; no separate response verb exists to
+        perform it.
+      reasoning: >-
+        Ruled on the merits, not on recall: asked about his 2026-09-15 answer
+        (`ED-IN-0210`'s last row, *"AN ORDER CARRIES TERMS LIKE A DISPENSATION, and
+        `comply`/`evade`/`refract` answer both"*), Jordan said *"I don't remember."*
+        That row's own text anticipates exactly this: *"If that reading is wrong,
+        correct it here rather than anywhere else — this row is the record"*
+        (`registers/editorial_ledger_in.jsonl:89`). This ruling is that correction,
+        taken on the current question rather than defended by a memory of the old
+        answer.
+      consequences: >-
+        UNBLOCKS `r2` ITEM 13 (`EXECUTION_PLAN.md:72`) — the only build item this row
+        gated. `RR-C`'s `C-2` (item 13 deleting position 19b entire) now has something
+        to delete, and is ruled alongside `RR-C` below.
+        ⚠ A FOLLOW-UP THIS FILE CANNOT DO ITSELF: `ED-IN-0210` NEEDS A FOURTH LEDGER
+        ROW. Per its own instruction, the correction belongs in
+        `registers/editorial_ledger_in.jsonl`, not only here — this file owns no other
+        file (per its own footer) and does not add one. A later session opening that
+        ledger cold would otherwise read the 2026-09-15 row as the last word.
     citation:
       - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1513-1546"
       - "ED-IN-0210, the LAST of its three rows — dated 2026-09-15, `supersedes_row: true`, `jordan_decision: 2026-09-15`. At `registers/editorial_ledger_in.jsonl:89` on 2026-09-17; DO NOT RE-CITE THE LINE, grep the id"
@@ -1395,7 +1622,7 @@ rows:
       Eight sentences of RATIFIED `architecture/` that this design makes false —
       seven text limbs plus `B-8`, which is a GAME change. AMEND `architecture/`, or
       NARROW the design?
-    disposition: escalate
+    disposition: ruled
     step: null
     why_not_closable: >-
       CONFIRMED. `architecture/` is RATIFIED (`01_AXIOMS.md:3`, ED-IN-0204, Jordan:
@@ -1424,6 +1651,69 @@ rows:
       rather than contradiction. A proposal that counts conformance as an overwritten
       sentence is claiming a conflict it does not have. That the suite caught itself
       doing this once is a reason to trust the remaining eight more, not less.
+    ruled:
+      by: "Jordan, 2026-09-17 (in session)"
+      decision: >-
+        LIMB BY LIMB, NOT ONE BRANCH FOR ALL EIGHT. `B-1` AMENDS `architecture/` but
+        KEEPS `scope?`. `B-2` is REFUSED — `architecture/` KEEPS the `by <seat>` /
+        `by <judging seats>` operand. `B-3` AMENDS — take r2's basis name. `B-4` is
+        WITHDRAWN — there was no ratified sentence to falsify. `B-5` AMENDS — take r2's
+        sixth mint cell. `B-6` AMENDS, following `RR-A`. `B-7` is NARROWED, not adopted
+        as stated — clusters keep a NOMINAL rung. `B-8` is NARROWED — descendants only.
+      reasoning: >-
+        `B-8` — the ratified rank conjunct survives as a DERIVED property of
+        `World.contain_ascends` (strictly better as a mechanism than the `rung_kinds`
+        ordinal it replaces), but only over DESCENDANTS: drop the
+        `target.rung == via.rung` disjunct. A same-rung seat is not a higher one, and
+        admitting it would licence a same-rung coup the ratified sentence never meant.
+        `B-4` — WITHDRAWN because its premise is a misreading, not because of anything
+        `RR-B` argues on its own: `ARCH §B.8`'s line reads *"term? (matures_at,
+        declared_by : ActId, closer) -- T-n. Replaces payload?"*
+        (`architecture/meta/04_CODE_ARCHITECTURE.md:337`) — a QUESTION MARK, not a
+        prescription. There is no ratified sentence saying `payload` must go, so
+        nothing here conflicts with `CAT-6`'s ruling to keep it.
+        `B-1` — `scope?` is the only carrier for PLACELESS jurisdiction, which `B-7`'s
+        ruling below still needs; the other three fields (`upkeep`, `dates[]`, the null
+        case as previously written) amend as the design proposes.
+        `B-2` — who confers a seat is POLITICS, not a bare rostered token; dropping the
+        operand loses information the game needs, so the ratified sentence stands and
+        the design must carry it.
+        `B-3` — `B-8`'s ruling makes `reaches` (`World.contain_ascends`) derive WHICH
+        SEAT may revoke, so the *"which seat"* half of the ratified sentence is
+        satisfied by derivation rather than by a stored field; the basis-name
+        simplification is taken.
+        `B-5` — the document-content deposit rule is a genuinely new mint the ratified
+        table lacks a cell for; add it.
+        `B-6` — follows `RR-A` directly: once compliance is the executor's own act,
+        there is no separate response verb to run a compliance CONTEST over, so
+        `holonic §37.1`'s *"lands as a compliance contest, per relevant Rung, through
+        `contest`"* is the sentence that becomes false and must be amended, not
+        narrowed — narrowing it would mean building the contest-provider subsystem
+        `RR-B`'s own table prices at a full position (22, PROC-B) to implement a
+        mechanism this session just ruled unneeded.
+        `B-7` — verbatim: *"placeless offices may still have remit depending upon the
+        faction to which they belong and their according duties. For example, a
+        Cardinal may be responsible for all Knights Templars...so they may not have
+        their own lands or holdings, but they do have jurisdiction over all of the
+        Church's Temples that house Knights Templars"* — purview by CLASS, not by
+        containment descent. Ruled neither branch: clusters are not abolished (r2's
+        "every seat gets a rung") and the pure null case is not kept either (status
+        quo). A cluster seat gets a NOMINAL rung — a placement with no ordinary
+        containment meaning — and its remit resolves against the CLASS of thing its
+        faction assigns it (all Temples housing a named order, in the example), not
+        against what that nominal rung geometrically contains.
+      consequences: >-
+        `ARCH F.21`'s loader-forbidden `higher_rank` conjunct on a `scope = null` seat
+        must be REWRITTEN, not merely un-forbidden — `B-7`'s nominal rung gives a
+        cluster a rung value where none existed, so the loader's prohibition needs a
+        new predicate (nominal vs. real) rather than deletion. `B-6`'s amendment means
+        item 2 (Record-kind fold) and `02`'s "compliance is the executor's own act"
+        design proceed without a contest provider. `B-2`'s refusal means `_req_confer`
+        MUST be able to ask which seat confers — the design's bare-token
+        simplification does not ship. None of the eight amendments is executed by this
+        ruling; each is a Layer-1 text change for a later session to make, following
+        `ARCH`'s own precedent for doing so (*"AMENDED 2026-09-03 (Jordan-directed)"*,
+        *"REV. 3"*).
     citation:
       - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1548-1601"
       - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1565 (B-8, the game change)"
@@ -1437,7 +1727,7 @@ rows:
       §A.4 departs from the RATIFIED order in `workplans/2026-09-11-reconciled-program.md`
       §3. May a suite that deletes a ratified position's subject-matter record that by
       STRIKING the position, or must the position be re-scoped by Jordan?
-    disposition: escalate
+    disposition: ruled
     step: null
     why_not_closable: >-
       CONFIRMED, WITH ONE NARROWING r2 ITSELF SUPPLIES AND SHOULD BE HELD TO. The
@@ -1464,6 +1754,34 @@ rows:
       constraint than "ratified" alone suggests. That does not license an agent to
       re-order it — it does mean the ask should carry the qualification rather than
       present the order as settled.
+    ruled:
+      by: "Jordan, 2026-09-17 (in session)"
+      decision: >-
+        THE PROCEDURAL RIDER FOLLOWS `RR-A`, AS THE ROW ITSELF ARGUED. `C-2` (item 13
+        deleting position 19b) now proceeds — `RR-A`'s fold gives it something to
+        delete. `C-3` (`levy` out of position 19) proceeds on its own already-ruled
+        ground (`holonic §37.3`, step 5). `C-1` (six effect bodies ahead of the Arc-2
+        gate) is NOT ruled here as a blanket "go" — it is disposed of the way `r2`'s own
+        §A.0.2 test disposes of it: build what is order-free now, and treat position 7
+        (the 11-effect rewrite) as the one place a wrong guess costs seven extra
+        rewrites.
+      reasoning: >-
+        No separate reasoning was needed beyond `RR-A`'s: this row's own
+        `why_not_closable:` already showed `C-2` and `C-3` are CONSEQUENCES of other
+        rulings rather than a third independent question, and ruling those rulings
+        settles them. The one genuinely open procedural question — may a suite strike a
+        ratified position rather than have Jordan re-scope it — is answered by taking
+        the narrow reading the row itself argues for: this was never "may we re-order
+        `workplans/2026-09-11-reconciled-program.md` §3", it was "does `RR-A`'s answer
+        leave anything of position 19b to strike", and `RR-A`'s answer says yes, there
+        is nothing left.
+      consequences: >-
+        `C-1` remains a build-order judgment call for whoever lands the six effect
+        bodies — ten of sixteen items are order-free by `r2`'s own test
+        (`EXECUTION_PLAN.md:88-89`), and nothing in this ruling forces the other six
+        ahead of positions 3-7. `workplans/2026-09-11-reconciled-program.md`'s §3 order
+        is NOT amended by this ruling; only positions 19 and 19b, whose CONTENTS other
+        rulings already emptied or changed, move.
     citation:
       - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1603-1631"
       - "workplans/2026-09-11-reconciled-program.md:3 (RATIFIED 2026-09-12, ED-IN-0215, SCOPED, ownership contested)"
@@ -1475,7 +1793,7 @@ rows:
     question: >-
       `ED-SE-0051` — the bound on the demographic loop: matter only, or matter plus
       hearth capacity?
-    disposition: escalate
+    disposition: ruled
     step: null
     why_not_closable: >-
       CONFIRMED, and this is the cleanest escalation in the set: the ledger row does
@@ -1517,6 +1835,40 @@ rows:
       ⚠ IT GATES NOTHING IN r2. Untouched by `01`–`04`; `Rung.envelope` is kept as its
       carrier. It is on this sheet because it is open and needs Jordan, not because
       anything waits.
+    ruled:
+      by: "Jordan, 2026-09-17 (in session)"
+      decision: >-
+        MATTER PLUS HEARTH CAPACITY. A `capacity(w, rung)` QUERY over the rung's
+        dwelling Sites, with a FLOOR — never a fixture table. `found` (P4, "found and
+        build") is the throttle. SCOPED TO POPULATIONS, per the row's own discharge of
+        `ED-WR-0011`'s pairing rider for NPC generation.
+      reasoning: >-
+        No further verbatim reasoning was given beyond the mechanism itself; the
+        ledger row's own five-step run already established this is a genuine design
+        fork (`registers/editorial_ledger_se.jsonl:51`, *"Two defensible options,
+        materially different games"*) rather than a cost question, so Jordan is
+        answering the fork it raised. The choice is the CAPACITY arm, but the SHAPE
+        differs from either arm the ledger row priced: not the original proposal's
+        `hearth_capacity` FIXTURE TABLE per `site_kind` (which would be a second
+        authored fact competing with the sites themselves), but a QUERY computed off
+        the rung's own dwelling Sites, so capacity tracks what is actually built rather
+        than a table entry. The FLOOR keeps a population from being throttled to zero
+        by a rung with no dwelling sites at all — the same shape as `W5`'s own
+        floor-of-1 choice for budget (`hole_register.yaml:793`, *"a budget of 0 deletes
+        a person from the season silently instead of narrowing them"*), applied here to
+        births rather than acts.
+      consequences: >-
+        `P4` ("found and build") BECOMES THE THROTTLE the ledger row named as the
+        reason capacity was worth its cost: *"capacity makes P4 ... the throttle,
+        which the uploaded nine-game teardown reports as the lever Manor Lords and
+        Banished actually use."* `Rung.envelope` stays as the carrier, unchanged — this
+        ruling adds a Query over Sites, it does not touch `Rung.envelope`'s shape,
+        matching the row's own note that r2 leaves this untouched (`01`-`04`). SCOPE:
+        this bounds POPULATIONS. `ED-WR-0011`'s NPC-generation half is separately
+        settled (option A, `registers/editorial_ledger_wr.jsonl:12`) and that
+        settlement remains PROVISIONAL BY ITS OWN TERMS — *"for now"*, *"we will return
+        much later"* — a qualification that travels with this ruling too, since the two
+        questions were paired.
     citation:
       - "registers/editorial_ledger_se.jsonl:51 (ED-SE-0051 — open, needs_jordan, its own five-step run)"
       - "proposals/2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md:1463-1468"
@@ -1832,6 +2184,14 @@ corrections_to_the_sources:
 # disagree, THE ROW WINS, because the row carries the citations.
 # ===========================================================================
 escalation_summary:
+  status: >-
+    ⚠ RULED 2026-09-17, THE SAME DAY THIS FILE WAS FIRST WRITTEN. All nine rows below
+    were put to Jordan in session and he ruled on each; every row now carries
+    `disposition: ruled` and a `ruled:` block. THIS SECTION IS NOW THE RECORD OF WHAT
+    WAS PUT AND IN WHAT ORDER, NOT A LIVE QUEUE — do not read `order_and_why:` below as
+    still pending. The one-line summaries are unchanged because they still correctly
+    describe the QUESTION each row asked; the ANSWER is in the row's own `ruled:` field,
+    not here.
   order_and_why: >-
     RR-A first, because it is the only one blocking a build item and because RR-C
     is mostly its consequence. Then RR-B, whose `B-8` limb is a game change hiding
@@ -1883,4 +2243,16 @@ escalation_summary:
 #   being cited as authority for adding a column to `verb_table.yaml`, THAT is the
 #   failure — not this file's existence. The repair then is to re-open the row, not
 #   to add a guard.
+#
+# ⚠ THE TEST RE-RUN AGAIN, 2026-09-17, LATER THE SAME DAY, AFTER JORDAN RULED ALL NINE
+#   ESCALATIONS IN SESSION. DOES RECORDING A RULING CREATE WORK FOR A FUTURE SESSION?
+#   No — it removes the last nine open questions from the file's own queue rather than
+#   adding to it. Each `ruled:` block records a DECISION ALREADY TAKEN, not a design
+#   this file invents; where a ruling itself opens narrower follow-on work (H-71's
+#   "understood by others" half under `CAT-6`; the 13-roster's re-authoring under
+#   `STR-2`; the moral-value basis's new name under `STR-6`; the fourth
+#   `editorial_ledger_in.jsonl` row `RR-A` needs), that work is NAMED AS OPEN inside the
+#   row rather than quietly closed, which is the honest version of the same test applied
+#   to a ruling rather than to a finding. `meta.counts` now reads 12 closed / 9 ruled /
+#   0 escalated — the file records no unanswered row.
 # ===========================================================================
