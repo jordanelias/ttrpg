@@ -13,6 +13,78 @@ plus `HANDOFF_IN.md` equals the original file's, exactly.
 **It is NOT a continuity surface. Do not orient from it and do not add to it.** New work goes in
 `HANDOFF_IN.md`; this file only ever receives units that file has finished with.
 
+## Contents — the table of contents relocated from `HANDOFF_IN.md` (2026-09-17, `ED-IN-0240`)
+
+| | tokens | unit |
+|---|---|---|
+| | tokens | unit |
+|  | 4,866 | ⭐ DONE 2026-09-09, MERGED IN PR #383 — decomposition STEP 7: `decision.py`. `shape.py` 2,813 → 2,066, `decision.py` 87 |
+|  | 3,959 | ⭐ DONE 2026-09-07 — THE DECOMPOSITION IS IN `engine/season/`. `shape.py` 6,771 → 5,165 (ED-IN-0203) |
+|  | 3,487 | ⭐ DONE 2026-09-09, MERGED IN PR #383 — decomposition STEP 8: `seam.py`. `shape.py` 2,075 → 1,788, `seam.py` 372 new (E |
+|  | 3,396 | ⭐ DONE 2026-09-09 — decomposition STEP 6: `epistemic.py`. `shape.py` 3,124 → 2,803 (ED-IN-0203) |
+|  | 2,145 | THE SEPARATION WORK LIST (W1–W10) — written down 2026-08-04 (ED-IN-0135) |
+|  | 1,714 | [DONE] ED-IN-0180 — Waves 4+5: the duplication guardrail, and two artifacts nothing refreshed |
+|  | 1,372 | Next actions :: - **"Extend audit in all directions" — trace-completeness pass (2026-07-22, PR #205, in flight). |
+|  | 1,288 | [DONE] ED-IN-0182 — second adversarial review, vocabulary as the lens: five real defects |
+|  | 1,225 | 2026-08-04 (late) — STATE AS OF `9c0a616`. Read this before resuming. |
+|  | 1,182 | ⭐ DONE 2026-09-10 — ARC 1: Layer-1 MODULE-BOUNDARY conformance for `engine/season/` (ED-IN-0206) |
+|  | 978 | 📐 2026-09-12 — the v2 suite, and the ruling a cold session must read first (`ED-IN-0217`, PR #400) |
+|  | 951 | ⭐ DONE 2026-09-07 — `R8.4`'s `document_key` repair is EXECUTED (PR #379, ED-IN-0202) |
+|  | 925 | ⛔ RULED 2026-09-07 (Jordan) — #371 EXISTS. `engine/season/` IS THE HEAD. THE DECOMPOSITION WAS DONE ON THE PROTOTYPE. |
+|  | 879 | ⏱ 2026-09-11 — verification cadence ruled: the suite is a CLOSE step (`ED-IN-0213`) |
+|  | 780 | Next actions :: - **THE CONTRACT + KEY INDEXES ARE READABLE NOW (2026-08-10, ED-IN-0151). Jordan review pending. |
+|  | 768 | 2026-08-23 — S5 CLOSED (5c landed); S6 is next |
+|  | 723 | 2026-07-31 — M1 program scaffolding RATIFIED (ED-IN-0112); residuals filed (ED-IN-0113) |
+|  | 706 | ⛔ RULED 2026-09-07 (Jordan) — `engine/season/` IS THE HEAD, AND THE `R8.4` REPAIR MUST BE CARRIED INTO IT |
+|  | 679 | Pending :: - **[LANDED] ED-IN-0097 W4 ORCHESTRATOR GATE BATCH (2026-07-29) — read this before W5.** The |
+|  | 672 | 2026-08-27 — engine_clock exists, and the tick's clock calls left the ACTION phase (ED-IN-0199) |
+|  | 610 | Next actions :: - **W0/W1 of the fork plan are DONE (2026-08-03, ED-IN-0123). W2 is Jordan's, so the next |
+|  | 585 | Pending :: - **ED-IN-0064 FILED 2026-07-14 — multi-scale governance research + audit pass (analysis-only). |
+|  | 579 | Pending :: - **ED-IN-0075 FILED 2026-07-18 — "Truth" consolidation RULED + SoT authored; corpus sweep STAGED. |
+|  | 568 | Pending :: - **ED-IN-0044 RATIFIED 2026-07-12 — simulation/test harness methodology. |
+|  | 528 | Next actions :: - **⚠ `build_decisions.LANE_PATH_PREFIXES` should be a DERIVATION, not a 133-row table |
+|  | 510 | Next actions :: - **⚠ `references/id_reservations.yaml` is at 14,263 / 15,000 tokens — 737 of headroom, on the file |
+|  | 485 | Pending :: - **Attribute/value coherence audit 2026-07-08: ED-IN-0029 — PARTIALLY RATIFIED (2026-07-08 follow-o |
+|  | 485 | Next actions :: - **RESOLVED 2026-08-04 (ED-IN-0125) — the direction is INVERTED. `main` is the go-forward repo. |
+|  | 473 | Pending :: - **Wave-Q-step-3 tooling build EXECUTED 2026-07-08 (same-day follow-on to the ratification above; |
+|  | 467 | Next actions :: - **THE FORK IS BUILT AND RUNS (2026-08-03, ED-IN-0123, PR #286). Start here. |
+|  | 437 | Pending :: - **Unaddressed-areas audit + Key & Echo Armature — RATIFIED 2026-07-07 (Jordan: "Perform |
+|  | 418 | Pending :: - **ED-IN-0073 FILED 2026-07-17 — adversarial audit of the character-decision machinery (read-only). |
+|  | 406 | Next actions :: - **⚠ READ `audit/2026-08-03-session-oddities.md` BEFORE RESUMING.** Extended 2026-08-03 into the |
+|  | 384 | Pending :: - **Resolution Plan v1 — Stratum-A truth-reconciliation FIRST PASS EXECUTED 2026-07-07 (this branch, |
+|  | 383 | Pending :: - **✅ NO SELF-SCHEDULING DONE (2026-07-26, ED-IN-0084).** Jordan directive — kill the hourly PR |
+|  | 344 | ⚠ FILED 2026-09-07 FROM THE SC LANE — one write-gate defect that is `IN`'s and not theirs |
+|  | 322 | Next actions :: - **Governance Type Registry (2026-07-13)** — `designs/architecture/governance_type_registry_v1.md` |
+|  | 317 | Next actions :: - **START HERE — month-overview + consolidation (2026-07-01), doctrine + propagation spec now |
+|  | 298 | Pending :: - **Pessimist subtractive-action audit RATIFIED 2026-07-08 (ED-IN-0027; Jordan: "Please ratify all") |
+|  | 286 | Pending :: - **Qualitative NERS audit (North-Star) — RATIFIED-AS-ACCEPTED 2026-07-05 (Jordan post-merge |
+|  | 263 | Pending :: - **✅ IN lane-ledger archive pass DONE (2026-07-18).** `registers/editorial_ledger_in.jsonl` was at |
+|  | 251 | 2026-08-27 — an id-allocation gate does not exist, and the predicate says not to build one |
+|  | 240 | Pending :: - **Resolution Plan v1 — PR-2 F7 smoke oracle LANDED 2026-07-08 (ED-IN-0021 → resolved). |
+|  | 235 | Pending :: - **ED-IN-0045 (open, execution pending) — the four ED-IN-0044 quick wins, filed separately. |
+|  | 185 | Pending :: - **Resolution Plan v1 — Stratum-B oracle-to-canon FIRST SLICE 2026-07-08.** The ruled, low-risk |
+|  | 137 | Next actions :: - **Ledger-status reconciliation (LA-23, Lane A — mostly done):** flipped ED-841/842/912 `open`→`res |
+|  | 136 | Pending :: - **Resolution Plan v1 — Stratum-B SECOND SLICE 2026-07-08: knots.py ED-912 rebuild (C-TW-12 |
+|  | 136 | Next actions :: - **CI debt blocking-flips (LB-23) — reconciled 2026-07-01 (ED-1082):** `validate_ed_citations` |
+|  | 135 | Pending :: - **⚠ pre-existing bug surfaced (needs editorial reconciliation, NOT mine to rule): 4 duplicated ED- |
+|  | 120 | Next actions :: - **LB-22 residual (small):** `tools/` analysis utilities still carry `/home/claude` refs (WARN tier |
+|  | 114 | Pending :: - **[DONE 2026-07-28] ED-IN-0087/0088/0089/0090 — `.claude/` apparatus + run discipline.** Paths |
+|  | 92 | Next actions :: - **Done this pass:** unified PR #18's net-new into main → **LB-22 complete** (orchestrator retired |
+|  | 87 | Executive summary |
+|  | 74 | Next actions :: - **The new `ED-<LANE>-NNNN` namespace's own residual (from ED-IN-0001's PR body):** the |
+|  | 72 | Pending :: - **[PART] ED-IN-0087 residual — one assumption left.** Residual: `hSameFinding`'s containment |
+|  | 67 | Next actions :: - **`ci_political_v30` read-routing (LB-24):** raw file ~26k but tracked read returns 0 |
+|  | 1,235 | Decisions :: - 2026-07-09 — **Follow-on token-efficiency pass: dead GitHub-API tools retired, observabil |
+|  | 460 | Decisions :: - 2026-07-08 — **Second HANDOFF atomization pass + editorial-ledger lane split.** Jordan: " |
+|  | 305 | Decisions :: - 2026-07-02 — **HANDOFF.md split into per-lane files, matching the `ED-<LANE>-NNNN` |
+|  | 395 | Decisions :: - 2026-07-02 — **Merge-ratifies-by-default convention adopted (ED-1094); ED-1083 doctrine |
+|  | 439 | Decisions :: - 2026-07-01 — **Month-overview + architecture-consolidation session executed** (12+ commit |
+|  | 251 | Decisions :: - 2026-06-30 — **ED-1053 resolved: working-tree integrity port + sim oracle.** Ported the t |
+|  | 268 | Decisions :: - 2026-06-28 — **Open-session unification + LB-22 closed.** Reviewed every `origin` session |
+|  | 95 | Decisions :: - 2026-06-28 — **Master Workplan v5** authored (`designs/audit/2026-06-28-recent-work-orche |
+|  | 67 | Decisions :: - 2026-06-24 — Migrated the Claude↔GitHub automation to a Claude Code-native model: |
+|  | 298 | Decisions :: - 2026-07-01 — **Workplan sprawl cleanup.** `workplans/` was dead (both files pre-dated v3/ |
+
 ## The predicate that moved a unit here, stated so you can re-run it
 
 A unit moved **only if it carried none of** `needs_jordan` · `[OPEN]`/`STILL OPEN` ·

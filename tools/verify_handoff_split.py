@@ -6,7 +6,15 @@ states, and re-proves the split lossless, from the tree and git.
     python tools/verify_handoff_split.py --before <ref>
 
 WHAT IT PROVES, per lane: the line MULTISET of `HANDOFF_<LANE>.md` plus `HANDOFF_<LANE>_closed.md`
-CONTAINS the pre-split file's multiset with nothing missing. That is the whole safety claim of the
+plus `HANDOFF_<LANE>_history.md` (where that exists) CONTAINS the pre-split file's multiset with
+nothing missing.
+
+⚠ THE `_history.md` SIBLING WAS ADDED 2026-09-17 (`ED-IN-0240`, Jordan: *"TRIM THE HANDOFFS"*), and
+this tool had to learn about it or it would have reported a FALSE ALARM on the IN lane — 65k tokens
+of narrative left the live file for a destination this summation did not know. A falsifier that
+cries wolf gets ignored, which is worse than not having one. `_closed` holds what the marker
+predicate proved FINISHED; `_history` holds dated narrative regardless of markers, with every marker
+it carries indexed verbatim in the live file. That is the whole safety claim of the
 split — closed narrative was MOVED, never pruned — and it is the claim ED-IN-0221 would be wrong
 about if this exits non-zero.
 
@@ -59,12 +67,14 @@ def main(argv):
         before = argv[2]
     root = ci_common.REPO
     print(f'[verify-handoff-split] {SPLIT_ED} · before = {before}\n')
-    print(f'{"lane":<6}{"before":>10}{"live":>10}{"closed":>10}{"lines lost":>12}  verdict')
+    print(f'{"lane":<6}{"before":>10}{"live":>10}{"closed":>10}{"history":>10}'
+          f'{"lines lost":>12}  verdict')
     bad = 0
     total_moved = 0
     for lane in LANES:
         live_p = f'registers/handoffs/HANDOFF_{lane}.md'
         clos_p = f'registers/handoffs/HANDOFF_{lane}_closed.md'
+        hist_p = f'registers/handoffs/HANDOFF_{lane}_history.md'
         orig = _git('show', f'{before}:{live_p}')
         if orig is None:
             print(f'{lane:<6}{"—":>10}  cannot read {live_p} at {before} — pass --before <ref>')
@@ -72,13 +82,17 @@ def main(argv):
             continue
         live = open(os.path.join(root, live_p), encoding='utf-8').read()
         clos = open(os.path.join(root, clos_p), encoding='utf-8').read()
-        lost = Counter(orig.split('\n')) - (Counter(live.split('\n')) + Counter(clos.split('\n')))
+        hist_abs = os.path.join(root, hist_p)
+        hist = open(hist_abs, encoding='utf-8').read() if os.path.exists(hist_abs) else ''
+        lost = Counter(orig.split('\n')) - (Counter(live.split('\n')) + Counter(clos.split('\n'))
+                                            + Counter(hist.split('\n')))
         n_lost = sum(lost.values())
         ok = n_lost == 0
         bad += 0 if ok else 1
-        total_moved += ci_common.tokens(clos)
+        total_moved += ci_common.tokens(clos) + ci_common.tokens(hist)
         print(f'{lane:<6}{ci_common.tokens(orig):>10,}{ci_common.tokens(live):>10,}'
-              f'{ci_common.tokens(clos):>10,}{n_lost:>12}  {"LOSSLESS" if ok else "*** LOST CONTENT ***"}')
+              f'{ci_common.tokens(clos):>10,}{ci_common.tokens(hist):>10,}{n_lost:>12}  '
+              f'{"LOSSLESS" if ok else "*** LOST CONTENT ***"}')
         for line, c in list(lost.items())[:5]:
             print(f'        lost x{c}: {line[:100]!r}')
     print(f'\nclosed narrative moved out of the orientation surfaces: {total_moved:,} tokens')

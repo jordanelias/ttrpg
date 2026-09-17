@@ -225,6 +225,12 @@ policies:
     on_exceed: "skip"
     note: "Closed work for one lane, moved VERBATIM out of HANDOFF_<LANE>.md and never read for orientation — the live file carries an index of what moved. Uncapped for the same reason HANDOFF_archive.md is: an archive's size is not a defect, it is the point, and it only ever grows by accretion. A cap here would ask a session to split finished history, which is work with no reader. The thing that must stay small is the LIVE file, and that is the rule below."
 
+  # Per-lane HISTORY (ED-IN-0240, 2026-09-17, Jordan: "TRIM THE HANDOFFS"). Same placement rule
+  # as the _closed sibling above: it MUST stay above the `*.md` glob, because first-match wins.
+  - match: "registers/handoffs/HANDOFF_*_history.md"
+    on_exceed: "skip"
+    note: "Dated lane narrative, moved VERBATIM out of HANDOFF_<LANE>.md and never read for orientation — the live file carries an index of every OPEN MARKER the moved units hold, verbatim, which is the safety claim of the move. Distinct from the _closed sibling: _closed is what the marker predicate proved FINISHED, _history is dated narrative regardless of markers (CLAUDE.md §4 forbids a file named *closed* holding open items). Uncapped for the same reason as _closed and HANDOFF_archive.md: an archive's size is not a defect. The thing that must stay small is the LIVE file, and that is the rule below."
+
   - match: "registers/handoffs/*.md"
     max_tokens: 20000
     on_exceed: "flag_for_split"
