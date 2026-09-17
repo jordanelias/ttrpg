@@ -11075,13 +11075,43 @@ def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
         "no titled seat is contained in anything. A duchy that answers to nobody is the "
         "subordination Jordan's ruling describes, unbuilt")
 
-    # HOLDINGS ARE THE FACTION'S, NOT A PERSON'S — canon states control per province and never
-    # names a holder, so the `hold` subject is a Proposition (§14.2's licensed shape).
+    # ⚠⚠ ~~HOLDINGS ARE THE FACTION'S, NOT A PERSON'S~~ → **A PERSON'S, AND THE FACTION IS
+    # DERIVED.** Struck and kept, because the old sentence was right about the CANON and wrong
+    # about the CARRIER, and a reader needs both halves. Canon does state control per province and
+    # never names a holder — but `holonic §15` makes `hold` a PERSON's edge
+    # (`Person -> Office | Rung | Record | Proposition`), and nothing enforced it, so every
+    # province was held by a faction Proposition. MEASURED before item 16: `in_holdings` — *a
+    # `hold` whose object is a RUNG* — was **false for every person over every rung in the world**,
+    # so a seat declaring `revocation: "holdings"` refused every revocation forever while looking
+    # exactly like a working precondition.
+    #
+    # The holds are re-homed to the faction's own head (`cast.faction_leader`), and the ratified
+    # sentence is preserved by DERIVATION rather than amended: `provinces_of` groups by
+    # `faction_holding`, which reads the holder's membership `commit` (§14.2 — *"Membership is
+    # `commit`"*). See `01_THE_BUILD_ORDER.md` §7.3.
     held = [t for t in w.tenures if t.kind == "hold" and t.live and t.object in w.rungs]
-    assert held, "no faction holds any territory"
-    assert all(t.subject in w.propositions for t in held), (
-        "a RUNG is held by something that is not a faction Proposition. Canon's starting-control "
-        "table names a faction per province and never a person")
+    assert held, "nobody holds any territory"
+    assert all(t.subject in w.persons for t in held), (
+        "a RUNG is held by something that is not a PERSON. `holonic §15` makes `hold` a person's "
+        "edge, and a faction-subject hold makes `in_holdings` false for every person over that "
+        "rung — so every `revocation: \"holdings\"` basis refuses forever while looking satisfiable")
+    # ⚠ AND THE HALF THAT MATTERS, WHICH THE OLD SHAPE COULD NOT EXPRESS AT ALL. It asserts that it
+    # asserted (`CLAUDE.md` §0.1 pt 2): a sweep that finds no holder is indistinguishable from a
+    # sweep whose body never ran.
+    checked, satisfiable = 0, []
+    for pid in w.persons:
+        for rid in w.rungs:
+            checked += 1
+            if in_holdings(w, pid, rid):
+                satisfiable.append((pid, rid))
+    # The floor is DERIVED (the exact product), never a magnitude nobody chose: it observes that
+    # the loop ran to COMPLETION, so an early `break` fails here rather than passing vacuously.
+    assert checked == len(w.persons) * len(w.rungs), (
+        f"the sweep examined {checked} of {len(w.persons) * len(w.rungs)} pairs; it did not run "
+        "to completion")
+    assert satisfiable, (
+        "`in_holdings` is false for every person over every rung, so `revocation: \"holdings\"` "
+        "is unsatisfiable on a world that runs (item 16)")
 
     # A PROVINCE IS COMPUTED, NEVER BUILT (`scale_hierarchy_v1.md` §2, RATIFIED).
     assert not [r for r in w.rungs.values() if r.kind == "province"], (

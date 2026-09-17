@@ -169,6 +169,55 @@ def home_of(w: World) -> dict:
             if t.kind == "contain" and t.live and t.subject in w.persons}
 
 
+def nearest_store(w: World, rung_id: Optional[str], kind: str,
+                  available: Optional[dict] = None) -> Optional[str]:
+    """THE LARDER LADDER: the nearest rung AT OR ABOVE `rung_id` holding any `kind`, or `None`.
+
+    ⚠⚠ IT EXISTS BECAUSE THE SUBSISTENCE ECONOMY IS TWO HALVES THAT NEVER MEET. MEASURED on
+    `build_realm(0)` after one season, before this Query: **4,810 units, every one of them at the
+    37 SETTLEMENT rungs and none at the 211 hearths**, while all 46 persons live in **26 hearths**
+    — so `matter`'s per-rung draw counted **zero eaters at every rung that had stores** and the
+    whole subsistence step was INERT on a world that runs. The walk is the join, and it moves no
+    matter and creates no store: a person reaches UP the ladder they already live on.
+
+    ⚠ IT RETURNS THE RUNG ITSELF WHERE THE RUNG HAS STOCK, which is what makes this a
+    GENERALISATION rather than a replacement. A hearth with its own larder feeds its own people
+    exactly as before; the walk is a no-op wherever the old per-rung code was already right. That
+    is the control `LB-3a` pairs with, and if it ever moves, the walk is not a generalisation.
+
+    ⚠ `None` AT THE ROOT IS A SHORTFALL, NEVER AN ERROR. A person under a realm that holds nothing
+    goes hungry, and hunger is a fact about the world; raising here would make an empty larder an
+    instrument defect. What the caller does with it is the caller's — today MATTER records it and
+    acts on nothing (L5: a threshold crossing MAY NEVER PRODUCE AN OUTCOME).
+
+    ⚠ `available` IS THE CALLER'S RUNNING VIEW DURING ONE DRAW, and it is the reason two eaters
+    cannot spend the same unit. `{(rung_id, kind): units_left}`; absent, the world's own stores
+    answer. Without it a caller that defers its writes — as MATTER must, because the gate applies
+    the write — would show every eater the FULL larder and scarcity would never bind, which is the
+    exact defect `loop/effects.py`'s own header names for `transfer` (*"`transfer` twice from a
+    one-unit larder succeeds twice: the scarcity §27.1 rests on never happens"*).
+
+    ⚠ ITERATIVE WITH A VISITED SET, on `descendants`'s precedent (S38.1). `contain_ascends` makes
+    the ladder strictly ascending at `add_tenure`, so a cycle should be unreachable — but a walk
+    that hangs on a malformed fixture is a worse failure than one that stops, and the guard costs
+    one set."""
+    TRACE.query("nearest_store", "resolver")
+    seen: set = set()
+    cur = rung_id
+    while cur is not None and cur in w.rungs and cur not in seen:
+        seen.add(cur)
+        if available is not None:
+            held = available.get((cur, kind))
+            if held is None:
+                held = (w.rungs[cur].stores or {}).get(kind, 0)
+        else:
+            held = (w.rungs[cur].stores or {}).get(kind, 0)
+        if held > 0:
+            return cur
+        cur = parent_of(w, cur)
+    return None
+
+
 def presence(w: World, rung_id: str) -> list[str]:
     """S28 -- the PRESENCE INDEX the global fan-out reads."""
     TRACE.query("presence", "resolver")
@@ -388,12 +437,51 @@ def provinces_of(w: World, rung_id: str) -> dict:
             if r in w.rungs and w.rungs[r].kind == "territory"}
     holder_of: dict[str, str] = {}
     for t in w.tenures:
-        if t.kind == "hold" and t.live and t.subject in w.propositions and t.object in here:
-            holder_of[t.object] = t.subject
+        if t.kind != "hold" or not t.live or t.object not in here:
+            continue
+        fac = faction_holding(w, t.subject)
+        if fac is not None:
+            holder_of[t.object] = fac
     out: dict = {}
     for terr, holder in sorted(holder_of.items()):
         out.setdefault(holder, []).append(terr)
     return out
+
+
+def faction_holding(w: World, subject: str) -> "str | None":
+    """WHICH FACTION A `hold`'s SUBJECT COHERES UNDER — the faction Proposition id, or `None`.
+
+    ⚠⚠ THIS EXISTS BECAUSE ITEM 16 RE-HOMED EVERY RUNG `hold` FROM A FACTION TO A PERSON AND
+    `provinces_of` READ THE SUBJECT DIRECTLY. `holonic §15` makes `hold` a PERSON's edge, and
+    `01_BUILD_ORDER` item 16 enforced it -- so the subject stopped being a faction Proposition and
+    `provinces_of`'s `t.subject in w.propositions` filter matched nothing. MEASURED: the Query went
+    from grouping 16 territories to returning `{}`, silently, and the only thing that caught it was
+    a test asserting the OLD shape. The plan that scheduled item 16 did not price this.
+
+    ⚠ **THE RATIFIED SENTENCE IS PRESERVED RATHER THAN AMENDED, AND THAT IS THE WHOLE POINT.**
+    `scale_hierarchy_v1.md` §2 (RATIFIED, direct Jordan ruling 2026-07-13) says a province exists
+    *"only while its constituent territories share a common FACTION holder."* A person holding land
+    is a member of a faction, so "the same faction holds these territories" is still exactly the
+    question -- it is now answered through the holder rather than read off the edge. Grouping by
+    the PERSON instead would have quietly replaced a ratified rule with a different game (a
+    magnate's demesne, not a faction's province) by way of a data change.
+
+    ⚠ MEMBERSHIP HAS ONE OWNER AND THIS DOES NOT MINT A SECOND. §14.2: *"Membership is `commit`"*,
+    and `members()` above reads exactly this edge from the other end. A subject that is itself a
+    faction Proposition still answers for itself, so a world built the old way reads the same.
+
+    ⚠ NONE AND MANY BOTH RETURN `None`, AND NEITHER IS A DEFAULT. A holder committed to no faction
+    holds land that coheres into no province -- which is the same reading `Uncontrolled` already
+    gets, and a thing to play for. A holder committed to two is a genuine question this Query does
+    not get to answer by picking one: canon states no precedence between a magnate's two
+    allegiances, so inventing one here would put a ruling in a Query."""
+    if subject in w.propositions and subject in FACTION_BY_PROP:
+        return subject
+    if subject not in w.persons:
+        return None
+    facs = {t.object for t in w.persons[subject].tenures
+            if t.kind == "commit" and t.live and t.object in FACTION_BY_PROP}
+    return next(iter(facs)) if len(facs) == 1 else None
 
 
 def establishment_of(w: World, office_id: str) -> list[str]:

@@ -103,6 +103,37 @@ rosters:
     open: true
     values: [hold, contain, commit, oblige, succeed, tie, knot]
 
+  hold_object_kinds:
+    source: "`architecture/holonic_ARCHITECTURE.md` §15's Tenure table — *\"`hold` | Person → Office | Rung | Record | Proposition | 1 per object\"*. Item 16 of `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` (⊕ R13)."
+    open: true
+    note: >-
+      ⚠ THE CLASSES A `hold` MAY POINT AT, AND THE ROSTER IS THE OWNER RATHER THAN A LITERAL IN
+      `add_tenure`. `holonic §15` states the domain and the codomain of every Tenure kind and
+      NOTHING CHECKED EITHER: `add_tenure` validated the KIND against `tenure_kinds` and
+      `contain`'s DIRECTION, and let a `hold` point at anything at all. Measured 2026-09-17 on
+      `build_realm(0)`, that admitted 16 `hold` Tenures whose SUBJECT was a faction — a
+      Proposition, not a person — and `in_holdings` (which reads *a `hold` whose object is a
+      Rung*) was consequently **false for every person over every rung in the world**. A seat
+      whose `revocation` basis is `"holdings"` therefore refused every revocation forever while
+      looking exactly like a working precondition.
+      ⚠ **AN UNRESOLVABLE ID PASSES, AND THAT IS DELIBERATE RATHER THAN A HOLE.** `_rehome` exists
+      because a Tenure may legitimately be added BEFORE its subject is in `w.persons`, so a guard
+      that refused every unknown id would refuse the ordering the store is built to tolerate. The
+      conjunct refuses only an id that resolves to a class NOT on this roster — a Site, or a
+      person — which is what makes `Tenure(..., "fac_crown", "terr_T1", "hold")` raise while
+      `Tenure(..., "p_late", "off_x", "hold")` still lands in `_unowned` and rehomes.
+    values: [Office, Rung, Record, Proposition]
+
+  hold_subject_kinds:
+    source: "`architecture/holonic_ARCHITECTURE.md` §15 — the DOMAIN half of the same row: `hold` is a PERSON's edge."
+    open: true
+    note: >-
+      One member, and it is a roster rather than an `is not None` because the codomain above is
+      one too (§8 — the rule lives once) and because the next kind to acquire a domain check reads
+      its own row here instead of growing a second spelling. A subject that resolves to none of
+      the world's collections is UNKNOWN, not wrong, for the `_rehome` reason stated above.
+    values: [Person]
+
   rung_kinds:
     source: "#353 §10 — the containment ladder. `contain : Rung → Rung`, one parent"
     open: true

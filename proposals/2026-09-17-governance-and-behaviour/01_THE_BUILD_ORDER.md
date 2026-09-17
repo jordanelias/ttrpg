@@ -353,3 +353,479 @@ directory, as it is for both subject suites. No `## Status:` line flips, no ledg
 that exist only because two documents wanted one object — or, in S7's case, because one document
 changes an object a second document reads without either noticing. **Phase 6 is a placeholder with no schedule and
 this file declines to give it one.**
+
+---
+
+# §7 · THE EXECUTION PASS — 2026-09-17: **one item landed, two measured and withdrawn**
+
+## Status of this section: **`measured`, not `paper`** (`CLAUDE.md` §0.2). Every number below was taken on this tree, by the command printed beside it. `§1`–`§6` above remain `paper`.
+## Result in one line: **items 16 and 3a LANDED** · **item 1 HELD** (its headline claim is false) · **item 4 REVERTED** (it starves the corpus). **The plan is executable. Two of its four run items needed corrections it could not have had by reading; 3a needed none and its four predictions came out on the nose.**
+## Lane: `IN` · **`ED-IN-0246`** (the execution pass; `§1`–`§6` remain `ED-IN-0243`)
+## ⚠ It is an AMENDMENT to this file, not a fifth plan document. `CLAUDE.md` §0.05 clause 3 — *edit the OWNER and re-derive; never hand-edit downstream, and never keep a second copy.* This file owns THE ORDER, so a correction to the order is made here.
+
+## §7.1 · Two constraints ruled by Jordan mid-execution, binding on every item below
+
+> **(a) NO HARD-CODING.** *"we need to ensure that we can modify/tune these subsystems and modules
+> later, so no hard-coding."*
+>
+> **(b) HOLONIC SHAPE FOR THE DECISION LAYER.** *"please ensure holonic shape for things like
+> decision making so that they aren't directly in season loop."*
+
+Neither is new doctrine and that is the point — each is an existing Layer-0/Layer-1 rule that this
+order never restated, so every item was free to satisfy it by accident.
+
+### (a) is `CLAUDE.md` §0.05 clauses 1–3, and the tree already ships the mechanism
+
+**Three homes, and an item that invents a fourth is wrong:**
+
+| a new fact | its home | what refuses when it is missing |
+|---|---|---|
+| a **closed set** — kinds, classes, members, a domain or codomain | `engine/season/rosters.yaml`, read through `data/rosters.py: roster()` | `Unspecified` at load: *"an absent roster REFUSES; returning an empty set would make every membership test silently false"* |
+| a **table** keyed on a rostered member | `rosters.yaml: tables`, read through `table()` | the same, plus `_check_sparse_table` |
+| a **magnitude nobody has ruled** | `data/fixtures.py`'s `Fixtures` registry, at `grade: assumption`, with a named injection site and a 3-point sweep | `Ungraded` on an unregistered name — S42.2.1's *"never invent a constant"* |
+
+**So "no hard-coding" is not an aspiration to keep in mind; it is three refusals that already fire.**
+What an item owes is the *choice of home*, and the test is the one `Fixtures.wear` states: **a silent
+default does not fail, it answers plausibly and wrongly, forever.**
+
+**Applied to the items this order schedules**, the placements are forced rather than chosen:
+
+| item | the fact it introduces | home |
+|---|---|---|
+| **5** | `record_kinds` and its refusal | roster |
+| **10** | the seat table — bases as **values**, `remit_acts`, `rung`, `purview` per seat | `engine/season/offices.yaml`, a new **data file**, which is what item 10 already is |
+| **12** | `works` stages, `wear` per site kind, the founding throttle | roster + the existing `wear_per_season` / `site_yield` tables |
+| **16** | the `hold` domain and codomain | `hold_subject_kinds` · `hold_object_kinds` — **LANDED, see §7.3** |
+| **phase 6** | the affiliation roster, the incompatibility relation, the axis roster, every table in `synthesis.md` §3 | roster + tables. **None of it is a literal in a body**, and `D-27`'s scan of `loop/`, `seam/`, `decision/` is the standing check |
+
+✅ **CHECKED AGAINST THIS PASS'S OWN CHANGES, since a rule stated and not applied to the commit
+stating it is the failure mode.** Item 16 introduced one closed set and put it in `rosters.yaml`
+(`hold_subject_kinds` · `hold_object_kinds`), read through `roster()`, so `World._refuse_bad_hold`
+holds **no literal** and widening `hold` to a new carrier is a data edit. Item 4 **deleted** a
+`Fixtures` cell along with its only reader, which is the same rule at the other end — `Fixtures.get`
+raises on an unregistered name, so a reader added back without its cell fails loudly rather than
+defaulting.
+
+### (b) is `holonic_ARCHITECTURE.md` §4 and §44, and the decision layer is HALF-compliant today
+
+**What is already right, and it is structural rather than declared.** `decision/` is a package whose
+isolation is enforced **by path** (`04_CODE_ARCHITECTURE.md:1046` — *"a `choose` drafted inside
+`loop/` and moved later would have been green while violating AX-2"*). Decision-making is therefore
+**not** in the season loop, and cannot be moved there without the scan reddening. Jordan's
+constraint is satisfied at the level a guard can see.
+
+**What is NOT right, and it is the half that Phase 6 makes worse.** MEASURED 2026-09-17 by AST:
+
+```
+engine/season/loop/driver.py     : 18 names imported from decision/
+engine/season/loop/deliberate.py :  3
+```
+
+`holonic §5`'s **H2** — *"every module declares its I/O against one descent a reader can walk"* — is
+the claim graded **THE WORK**, and an eighteen-name surface is not a declared I/O; it is the loop
+reaching into the island by name. `synthesis.md` §1.3's score function adds **eight more terms**
+(`press`, `serves`, `fit`, `regard`, `orient`, `benefits_me`, `courage`, `demand`) plus the
+conviction vector. Land them the way the existing eighteen were landed and the driver imports
+**twenty-six** names from `decision/`, at which point the island is a namespace rather than a
+container.
+
+> **THE CONSTRAINT THIS ORDER NOW PUTS ON PHASE 6, and it costs nothing if taken first:**
+> **no term of `score(c)` becomes a name in `loop/`.** `make_chooser` is already the one entry
+> point — a factory returning a chooser — and it is the shape `holonic §44.2` blesses: *one
+> variation point · the TYPE is the bound · the subsystem's own policy lives there · injection is
+> explicit at the call site.* Every new term is composed **inside** `decision/choose.py` behind
+> that factory, and is reached from a **declared row** in the data files, never from a branch in
+> the loop. `holonic §44.4`: *don't route — declare.*
+>
+> ⚠ **AND THE FOUR NEVERS APPLY TO IT** (`holonic §44.3`): the chooser **holds no state**, and it
+> **does not resolve** — a term that computes an outcome is the second resolver. `cost(c)` belongs
+> on the Ob and `pull(c)` on the pool (`synthesis.md` §1.3); neither may draw.
+
+✅ **CHECKED AGAINST THIS PASS'S OWN CHANGES.** The count did not move: `loop/driver.py` still imports
+**18** names from `decision/`. Item 4 edited `decision/budget.py` **inside** the island and changed no
+signature. Item 16's new `faction_holding` is a **world** Query and sits in `queries/world_q.py`
+beside its one caller — `decision/` cannot name `world_q` (`04:570`), and putting a membership read
+person-side would have been the AX-2 breach the path scan exists to catch. **Nothing entered
+`loop/`.**
+
+## §7.2 · Item 1 BUILT, MEASURED, AND **HELD** — and its headline claim is retracted
+
+⚠⚠ **THIS ITEM IS NOT ON THE BRANCH. It was written, it ran, the run refuted the item's own reason
+for going first, and it was withdrawn rather than shipped.** What follows is the measurement, which
+stands whether or not the code ever lands.
+
+**What was written.** `@effect_for("commit")` in `engine/season/loop/effects.py` — the body
+`verb_table.yaml`'s `commit` row already declared and `write_matrix.yaml`'s `(Tenure, since)` row
+already licensed in its `by:` field (*"DR-2 — `confer`, `commit`, `oblige`, `tie`"*). ~12 lines, as
+the plan priced it, plus four `test_lb1_*` falsifiers each observing both halves — the Tenure opens
+AND `questions_for`'s Q4 then sees it. **All four passed.** `resolvable_verbs()` went **18 → 19**.
+
+**And that is the whole of what it bought.**
+
+> ### ⚠⚠ AND THE CLAIM THAT ITEM 1 *"UNBLOCKS THE MOST FOR THE LEAST"* IS FALSE AS WRITTEN, MEASURED ON THE POPULATED WORLD.
+>
+> `EXECUTION_PLAN.md`: *"Today no ACT can make one. **After item 1, a person can.**"* **Run it, and
+> a person cannot.** One populated season, seed 0, after item 1:
+>
+> ```
+> commitment.made    : 0
+> commitment.refused : 42
+> ```
+>
+> **Why, and it is structural rather than a bug in the effect.** A Candidate's `subject` binds a
+> **referent of the question** (`decision/options.py`'s `for subject in q.referents`), and
+> `commit`'s typed cell is `existence(of: subject, kind: Proposition)`. **No question source in
+> `questions_for` offers a Proposition as a referent.** Q4 comes closest and misses: it carries the
+> Proposition in `about` and emits `(prop.subject,)` — *a person* — as its referent.
+>
+> **The obvious repair was tried and is REFUSED, with its measurement.** Widening Q4's referents to
+> `(prop.subject, t.object)` gives **1 made / 57 refused** — because Q4 is the standing question
+> raised BY a commitment the person already holds, so committing off it is a **re**-commitment, and
+> the effect correctly refuses a duplicate. **A standing question cannot be the producer of the
+> thing that raises it.**
+>
+> **So item 1 is genuinely gated on the content channel, which this order puts in PHASE 2.** For a
+> person to take on a NEW commitment, a Proposition they do not yet hold must reach them:
+> `utter` mints it, a content claim carries it (**item 5**), `tell` spreads it (**item 8**), and
+> the operand binder makes it nameable (**item 7**). **Item 1 is the effect for a verb whose
+> aperture items 5/7/8 open.** It is still correct, still cheap and still first — what is withdrawn
+> is the claim that it buys a running commitment on its own.
+>
+> ### ⚠⚠ WHY IT IS HELD RATHER THAN SHIPPED WITH A DECLARED RE-RECORD, WHICH WAS THE FIRST PLAN.
+>
+> Landing it reddens **eight** assertions in `engine/season/tests/test_season_shape.py`, against
+> **two** for item 16. Measured by running each item alone against the same ten tests. Seven of the
+> eight are seeded goldens and `CLAUDE.md` §7 would admit them with the re-record declared in the
+> message. **The eighth is not a golden, and it is the one that decides this.**
+>
+> `test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_at_the_control`
+> asserts `10 <= 5` — **a control BOUND**, and its own message says what breaching it means:
+>
+> > *"the CONTROL arm diverged 10 times of 36 … More than that means some FOURTH channel reaches
+> > `opening_set`, and every other figure in `W-D` is confounded until it is found."*
+>
+> **`commit` IS that fourth channel.** Re-pinning the bound to 10 would silence an alarm built to
+> fire on exactly this, and `CLAUDE.md` §0.1 pt 2 is explicit that an assertion must be able to
+> observe the failure it excludes. **A bound is not a golden and is not re-recordable**, so the
+> choice is between disarming an instrument and holding a twelve-line effect that executes zero
+> times. The effect is held.
+>
+> **The second reason, which would matter even without the bound.** `operands_for`'s own docstring
+> prices the cost of a refusal nobody can avoid: *"once `W-B` attaches a Verdict's reads to its
+> Event that refusal is deposited at WITNESS and becomes a belief every witness holds — a FALSE
+> one."* Forty-two of those a season, forever, for a verb that cannot succeed, is a real cost paid
+> for a tick in a table.
+>
+> **WHAT UNBLOCKS IT, and it is already in this order:** items **5**, **7** and **8** — the content
+> claim, the operand binder and the told channel. **Item 1 moves from PHASE 1 to PHASE 2, after item
+> 7**, and its execution artifact changes from `resolvable_verbs()` 18 → 19 to
+> **`commitment.made` > 0 on a populated season.** A count of resolvable verbs was never the thing
+> worth having; it is satisfiable without anything running, which is `CLAUDE.md` §0.2's whole
+> subject.
+
+## §7.3 · Item 16 EXECUTED, and it delivered what the ruling said it would
+
+**What landed**, in three parts, none of them a literal:
+
+1. **`rosters.yaml: hold_object_kinds` and `hold_subject_kinds`** — `holonic §15`'s own row
+   (*"`hold` | Person → Office | Rung | Record | Proposition"*) as **data**, per §7.1(a).
+2. **`World._refuse_bad_hold`**, a conjunct beside the existing kind and `contain`-direction
+   checks, plus `World.class_of` as the one id→class resolver.
+3. **The 16 faction-subject province holds re-homed** to `cast.faction_leader`'s person — the
+   handle the creed is already subjected on, so *"who heads this faction"* keeps one answer.
+
+**MEASURED, `build_realm(0)`, before → after:**
+
+| | before | after |
+|---|---|---|
+| `hold` Tenures by (subject class, object class) | `{('person','Office'): 19, ('faction','Rung'): 16}` | `{('Person','Office'): 19, ('Person','Rung'): 15}` |
+| faction-subject holds | 16 | **0** |
+| `in_holdings` TRUE for any (person, rung) | **False, for every pair in the world** | **15 pairs, 4 distinct holders** |
+
+**So `revocation: "holdings"` can execute to True for the first time**, which is the whole of the
+ruling that moved item 16 ahead of item 10.
+
+> ⚠ **THE COST, STATED RATHER THAN ABSORBED.** `Guilds` and `Schoenland` have no `leader:` in
+> canon, so **one province (Schoenland's `terr_T16`) becomes unheld** — 16 held → 15. Inventing a
+> holder would put a person canon does not name in charge of a territory, and the file already
+> takes the opposite reading for `Uncontrolled` (*"an unheld province is a fact about the world and
+> a thing to play for"*). The world reports it as `_unheld_for_want_of_a_head` so the arithmetic is
+> findable rather than chased.
+>
+> ⚠ **AND ONE TEST ASSERTED THE OLD SHAPE AS AN INVARIANT** —
+> `test_the_populated_world_has_a_governance_ladder_and_scarce_seats`: *"a RUNG is held by something
+> that is not a faction Proposition."* It is rewritten to the new invariant, not deleted, and it
+> gains the half the old shape could not express (`in_holdings` is satisfiable, asserting that it
+> asserted). This is `LB-10c`'s own prescription arriving one item early: *"it must fail before item
+> 16 and pass after."*
+
+### ⚠⚠ §7.3a · ITEM 16 COLLIDES WITH A **RATIFIED JORDAN RULING**, AND THE PLAN DID NOT PRICE IT
+
+**This is the finding worth the most on this pass, and no reading pass could have had it.** Five
+independent passes read this order and its two subject suites; the collision is two function calls
+deep and only shows up when the world is built.
+
+`queries/world_q.py: provinces_of` implements `scale_hierarchy_v1.md` §2 — **RATIFIED, direct
+Jordan ruling 2026-07-13**:
+
+> *"Provinces are only formed if the same **faction** holds the constituent territories … a province
+> is an emergent aggregation that exists only while its constituent territories share a common
+> **faction holder**."*
+
+It read the holder **off the `hold` edge** (`t.subject in w.propositions`). Re-home the edge to a
+person and that filter matches nothing. **MEASURED, `build_realm(0)`, immediately after item 16:**
+
+```
+provinces_of(w, "r_valoria")  ->  {}          # was: 4 factions over 16 territories
+```
+
+**Silently.** No refusal, no raise — the Query returned an empty dict and every province in Valoria
+stopped existing. The only thing that caught it was a test asserting the shape item 16 exists to
+invert, which had already failed for a different reason one assertion earlier.
+
+**THE REPAIR PRESERVES THE RATIFIED SENTENCE RATHER THAN AMENDING IT**, which is the only acceptable
+direction: `provinces_of` now groups by **`faction_holding(w, subject)`**, a new Query that reads the
+holder's membership `commit` — §14.2's *"Membership is `commit`"*, the existing single owner, read
+from the other end. *"The same faction holds these territories"* is still exactly the question; it is
+answered **through** the holder instead of **off** the edge.
+
+| | before item 16 | after item 16, unrepaired | after the repair |
+|---|---|---|---|
+| `provinces_of(r_valoria)` | 4 factions | **`{}`** | **4 factions** — `crown 6 · hafenmark 4 · varfell 4 · church 1` |
+| keys are faction Propositions | yes | — | **yes** |
+| `sovereign_fraction(r_valoria)` | `(0.4, 304)` | `(0.4, 304)` | `(0.4, 304)` — **unchanged, and it is the control** |
+
+⚠ **`None` FOR NONE *AND* FOR MANY, AND NEITHER IS A DEFAULT.** A holder committed to no faction
+holds land cohering into no province — the reading `Uncontrolled` already gets. A holder committed to
+**two** is a real question canon does not answer, and picking one in a Query would put a ruling in a
+Query. Both return `None` and the land is simply not in a province.
+
+⚠ **AND ONE PROBE'S FIXTURE MIGRATED — `F2`, *"a memberless faction's holdings become
+contestable"*.** It built the forbidden shape directly (`Tenure("th_dead", prop.id, "S", "hold")`)
+and flipped **PASS → GAP**. Its CLAIM is untouched and arguably sharper under the new carrier: the
+abandoned holding is a **person's**, his membership `commit` has lapsed, and there is now somebody to
+take it *from*. After the migration the run artifacts are byte-identical but for that probe's own
+prose — **so item 16 moves the probe corpus not at all**, which is the control this change needed.
+
+**WHAT THIS SAYS ABOUT THE PLAN, and it generalises past item 16.** The r2 suite priced item 16 as
+**S**, *"an `add_tenure` guard plus a `populated.py` re-home"*, and its own `05 §A.3.7` lists the
+files it touches. `queries/world_q.py` is not among them. **A carrier change is not local to its
+writer**: every reader that pattern-matched on the old carrier's *class* is a silent consumer, and
+`t.subject in w.propositions` is exactly the kind of filter that returns empty rather than raising.
+**`BO-4`'s standing instruction already covers this** — *"any consumer of an object phases 1–4 change
+is a seam candidate until checked"* — and it was not run for item 16, because item 16 looked too small
+to need it. **It is now `BO-14`, below.**
+
+### §7.3b · ITEM 4 — ITEM 16 MAKES IT URGENT, AND THEN RUNNING IT SHOWS IT IS **NOT** THE CHEAP FREE CUT THE PLAN PRICES
+
+**Two measurements, and the second overturns the first.**
+
+**(1) Item 16 makes `H-92` live.** `decision/budget.py` counted **every live `hold`** as an office —
+*"a LANDHOLDING buys scene actions"* — and `hole_register.yaml:176` had graded it inert with a number:
+*"0 of 143 cases carry an `office.post` … all 258 persons across the 86 buildable worlds hold zero
+offices and budget exactly 5."* Item 16 re-homes 15 province holds onto 4 persons:
+
+```
+persons whose budget differs from the base 5 :  20
+the Crown's head                             :  budget 12   (6 territories + 1 office)
+releasable scenes per person per season      :  scene_budget x scenes_per_round = 5
+```
+
+**Seven unspendable scene actions, bought with land.** So `EXECUTION_PLAN`'s placement reason for
+item 4 — *"before item 10. The moment seats are filled, the defect goes live"* — points at the wrong
+item: **item 16 fills them first.**
+
+**(2) So item 4 was landed — and reverted, because the corpus starved.** `05` calls it *"the cheapest
+item in the suite"*, **S**, *"two lines and a fixture cell"*, closing two register rows. Landed, the
+season suite went from **2 failures to 10**, and one of them is not a golden:
+
+> `test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links` —
+> **`assert 12 >= 20`**: *"only 12 of the 27 NPC rung cases produced a telling at all — 26 did on
+> 2026-09-11 … below the floor the act mix has stopped producing tellings or the transport is gone,
+> and the transport is what to look at first."*
+
+**Why: `corpus_run` DOES seat offices**, whatever `hole_register.yaml:176` says about the 143 cases —
+`harness/corpus_run.py:254` plants a `hold` per office. Deleting the bonus takes **one scene action
+off every office-holder in the corpus**, and the news transport is sensitive enough to that single
+action that **tellings more than halve**. `test_u2_the_one_round_arm_reproduces_the_pre_tick_loop`
+and two `test_wd_*` divergence counts move with it.
+
+> **THE DISPOSITION: item 4 is REVERTED and RE-GRADED.** A starvation floor is an alarm, not a
+> golden, and `CLAUDE.md` §0.1 pt 2 is explicit that an assertion must be able to observe the failure
+> it excludes — re-pinning `20` down to `12` would disarm the one instrument that noticed. **Item 4
+> is not independent and not two lines: it is gated on the S26.3 design call** that
+> `hole_register.yaml:176` already owns and states in three shapes (more rounds, denser rounds, or a
+> fixed slate of scene-slots office cannot widen). Deleting the bonus without taking one of the three
+> removes a scene action the corpus was, in fact, spending.
+>
+> ⚠ **AND `H-92` IS THEREFORE LIVE ON THIS BRANCH, STATED PLAINLY RATHER THAN LEFT TO BE FOUND.**
+> After item 16 the Crown's head budgets 12. It is **inert by ceiling** — `scene_budget x
+> scenes_per_round` = 5 releasable, so the extra is unspendable, and item 16 alone trips no floor
+> (measured: **2** failures, both accounted for in §7.3). But *"land buys scene actions"* is now a
+> reachable defect rather than a latent one, and **it is the same design call** — which is the
+> argument for taking the S26.3 question to Jordan as one question with item 4 attached, instead of
+> deleting a term first and discovering the cost second.
+
+### §7.3c · ITEM 3a LANDED — the larder ladder, and **the plan was exactly right about it**
+
+**This is the counterweight to §7.4's generalisation, and it is recorded first because asymmetric
+skepticism is a bias rather than a defence** (`CLAUDE.md` §0.1 pt 4). Three items had corrections;
+this one had none. `04_MATTER_AND_WORKS.md`'s `MW-1` made four checkable predictions and **all four
+came out on the nose.**
+
+**What landed.** `world_q.nearest_store(w, rung, kind, available=None)` — the nearest rung AT OR
+ABOVE a person on the containment ladder that holds a kind — and `matter`'s subsistence loop
+rewritten from **per RUNG** to **per EATER**, drawing `wt * p.weight` at that rung.
+
+**Why it was inert, measured before the change on `build_realm(0)` after one season:**
+
+```
+4,810 units — every one at the 37 SETTLEMENT rungs, 0 at the 211 hearths
+46 persons  — every one living in a hearth (26 of them)
+rungs with BOTH eaters and stores: 0
+```
+
+**The subsistence economy was two halves that never met.** The old `draw = {k: wt * len(eaters)}`
+counted zero eaters at every rung that had anything to eat, so the step ran and wrote nothing. The
+walk is the join, and **it moves no matter and creates no store** — a person reaches up the ladder
+they already live on.
+
+| `MW-1`'s prediction | measured on this branch |
+|---|---|
+| the larder pass writes `(Rung, stores)` at **13 rungs** (today 0) | **13**, all settlements |
+| unmet subsistence **138 → 0** | **138 → 0** (`{grain: 92, salt: 46}` → `{}`) |
+| **Control A** — a person in a stocked rung draws **locally**, the walk terminating at step 0 | holds; `nearest_store` returns the rung itself, and `test_lb3a_control_...eats_locally_and_unchanged` is the pinned arm |
+| **Control B** — a settlement with **nobody** in its subtree is untouched, **3,120 units** | **24 settlements, 3,120 units, 0 changed** |
+| ⚠ **falsified if hearth stores become nonzero** — nothing may be *delivered* | hearth stores **0**. The walk reads up; it never writes down |
+
+**Two defects fixed that `MW-1` does not mention**, both found by writing the falsifiers rather than
+by reading:
+
+1. **`p.weight` was dropped.** The old draw was `wt * len(eaters)` — a head count — while
+   `state/carriers.py` says *"A COHORT IS A PERSON AT weight > 1"*. **A cohort of two hundred ate
+   like one man.** Invisible in the corpus because every shipped person is at weight 1, which is
+   precisely why the falsifier plants a cohort instead of waiting for one.
+2. **Two eaters could have spent the same unit.** MATTER defers its writes to the gate, so a loop
+   reading `w.rungs[…].stores` directly shows every eater the FULL larder — the defect
+   `loop/effects.py`'s own header names for `transfer` (*"`transfer` twice from a one-unit larder
+   succeeds twice: the scarcity §27.1 rests on never happens"*). `nearest_store`'s `available`
+   parameter is the caller's running view, and `test_lb3a_two_eaters_cannot_spend_the_same_unit`
+   is the pin.
+
+⚠ **THE DRAW STAYS INSIDE THE PER-RUNG LOOP, AND THAT IS A DELIBERATE REFUSAL OF THE TIDIER SHAPE.**
+Hoisting it into its own pass over persons reads better and would reorder every `stores.changed`
+relative to its rung's `yield.taken` across the whole season — **a golden move for a reason that has
+nothing to do with this change.** Accumulating per SOURCE rung and applying it in place leaves
+`test_w8_matter_draws_before_it_produces_which_is_353s_stated_order` measuring what it was written
+to measure. It passed unchanged.
+
+⚠ **AND ONE READING ALMOST WENT IN THE REPORT WRONG.** The first measurement after the change showed
+**stores unchanged and all 46 eaters short**, which reads exactly like a no-op. It is not: `#353 §25`
+puts larders before yield, so season 1 draws against a world that has produced nothing yet. **The
+draw bites in season 2** — `eaters_short` `46 → 0`. A one-season probe would have reported this item
+dead, which is `CLAUDE.md` §0.1 pt 3 row 1 (*an absence is the cheapest claim to make and the hardest
+to see wrong*) with the barrier order as the trap.
+
+**Reported, not just traced.** `census` gains `stores_by_rung_kind`, `eaters_short` and
+`unheld_for_want_of_a_head`, and `World._subsistence_shortfall` carries the full per-person set —
+which is **item 3b's input**, since a shortfall is what falls a *body* and a body belongs to a
+person. **3b is not built here**, and the shortfall is still recorded and acted on by nothing
+(L5: a threshold crossing may never produce an outcome).
+
+**Re-record, declared** (`CLAUDE.md` §7): `runs/TRACE.txt` and `runs/results.json`. **No probe
+verdict moved.** The log content hash shifts because the economy now moves; `QUERY` rises 22,749 →
+23,085 (`nearest_store`'s own calls) and `NOTE` falls 483 → 276 (one shortfall note per barrier
+instead of one per rung).
+
+## §7.4 · What this pass changes about the ORDER
+
+| | was | is |
+|---|---|---|
+| **item 1** | PHASE 1, *"the smallest object in the suite and it unblocks the most"*, execution artifact `resolvable_verbs()` 18 → 19 | **PHASE 2, after item 7.** ~~unblocks the most~~ → the effect for a verb whose aperture items 5/7/8 open. Execution artifact becomes **`commitment.made` > 0 on a populated season**. Still ~12 lines, and written already (§7.2) |
+| **PHASE 6** | *"the order within phase 6 is still not this file's to set"* | **it is now, and §7.5 sets it** — the file's stated reason was that `STR-2` is atomic and `STR-5`/`STR-6` name everything, and all four gates were ruled on 2026-09-17 |
+| **the aperture gate** | fires after phase 3 | **unchanged, and item 1's run is its first confirmation from the other side** — a verb that reads as dead because the world offers it nothing |
+| **item 4** | `depends on: —`, placed *"before item 10"*, **S**, *"the cheapest item in the suite"* | **BLOCKED on the S26.3 design call** (`hole_register.yaml:176`'s three shapes), and its trigger is **item 16**, not item 10. Landed, measured, **reverted** — §7.3b |
+| **item 16** | **S** — *"an `add_tenure` guard plus a `populated.py` re-home"*, files listed at `05 §A.3.7` | **S+**, and `queries/world_q.py` is in it. A carrier change is not local to its writer (§7.3a) |
+
+⚠ **THE GENERAL LESSON, AND IT IS WORTH MORE THAN THE THREE ROWS ABOVE.** All three corrections have
+one shape: **an item priced by reading its own writers, and paid for at its readers.**
+
+- **Item 1** was priced at twelve lines and is gated on three other items — its readers are
+  `questions_for` and `opening_set`, which offer it nothing.
+- **Item 16** was priced at two files (`05 §A.3.7` lists them) and reached a third, `world_q.py`,
+  which implements a **ratified Jordan ruling**.
+- **Item 4** was priced as *"the cheapest item in the suite"* and is gated on an open design call —
+  its reader is a corpus that was spending the scene action it deletes.
+
+⚠ **AND THE FOURTH ITEM CUTS THE OTHER WAY, WHICH IS WHY IT IS IN THE SAME LIST.** **Item 3a**
+(§7.3c) was priced at *"one Query (~10 lines), one loop rewritten"* and that is exactly what it
+cost; `MW-1`'s four predictions — 13 rungs written, 138 → 0 unmet, the local-draw control, the
+3,120 untouched units — **all came out on the nose.** Its two extra defects (`p.weight` dropped, two
+eaters able to spend one unit) were found by writing the falsifiers, not by the item being
+mis-sized.
+
+**None of the three corrections was visible to five independent reading passes**, and each took
+under an hour once something ran. **Of this order's four "no ruling needed, buildable today" items
+that were actually run: two landed (one of them needing an unpriced repair), one is held, one was
+reverted.**
+`CLAUDE.md` §0.2's *done means it runs* is usually read as a rule about when to mark a juncture
+complete; **on this evidence it is at least as much a rule about when to trust an estimate.**
+
+⚠ **AND THE HONEST CAVEAT ON THAT GENERALISATION**, since it is exactly the kind of claim §0.1 pt 3
+is about: **four items is a small sample, and they were chosen for being cheap, not at random.** A
+cheap item is the one most likely to have been priced by reading rather than by running, so this
+sample is biased **towards** finding what it found — and item 3a is the case that shows the bias is
+not the whole story. What the four establish is the weaker and still useful claim: **an estimate in
+this order is a hypothesis, not a measurement.** Some of them are right.
+
+
+## §7.5 · PHASE 6, SCHEDULED — the decision layer, in dependency order
+
+**All four of this file's stated gates are ruled** (`RULINGS.yaml`: 12 closed · 9 ruled · **0
+escalated**), so the declination in §PHASE 6 above is discharged. The order below is forced by the
+rulings, not chosen.
+
+| | item | why here | home, per §7.1(a) |
+|---|---|---|---|
+| **6a** | **The affiliation roster + the incompatibility relation.** `STR-6`: `conviction` is *"religious affiliations and their intensities"*, **a vector**; **confliction is DERIVED**, never stored | nothing else in phase 6 can be named until the word is free. `ED-IN-0075`'s `Truth` is a pole scalar and **structurally cannot** carry it — a person devout in two creeds reads as a lukewarm midpoint | `rosters.yaml`: an `affiliations` roster + an `incompatible` relation as a table |
+| **6b** | **Rename the moral-value basis**, which `STR-6` forces by reserving `conviction` | atomic with 6a and with 6c: 40 Python files, 60 YAML/JSON, 107 design docs by the register's own count. **Doing it separately means doing it twice** | `references/names_index.yaml` is the TERMS owner; the rename derives |
+| **6c** | **Re-author the thirteen and their projection** onto `memory · substantive · equity · selfish` (`STR-2`, and *"the thirteen are not right for what i need from the game anymore"*) | `_load_projection`/`_load_alignment` raise at module scope, so **the projection and its alignment table must both exist before first import** — migration is atomic | `rosters.yaml: tables` — `conviction_projection`, `alignment` |
+| **6d** | **`benefits_me(c)`'s beneficiary** — `CAT-2` closed: a **static column on `verb_table.yaml`** resolving to a carrier the Candidate already holds, explicitly **not** a fifth operand field | independent of 6a–6c and buildable today; a static column never touches `_derive_operand` | `verb_table.yaml`, one column |
+| **6e** | **The person-interior writers** — `press`, `scar`, the needs counter, regard. `STR-1` closed at step 3: **a verb at RESOLVE writes them**, as the matrix already prescribes | the six `[RES] ACTS` rows are *a licence nobody has taken up, not a prohibition*. Buildable today | effects in `loop/effects.py`; the magnitudes are **`Fixtures`**, swept |
+| **6f** | **The score function itself** — `pull(c) − cost(c)`, the three instantiations of one machine (`synthesis.md` §1.2) | needs 6a–6e's vectors and tables to have anything to dot against | **`decision/choose.py`, behind `make_chooser`. §7.1(b) binds here and nowhere harder** |
+| **6g** | **H-71's SECOND half** — `CAT-6`'s ruling closes the holder's own knowledge of his remit (arm 2, the `hold` Tenure's `payload`) and says **nothing** about how another person comes to know or contest someone else's seat | it is the `others` half of *"understand for themselves AND be understood by others"*, and it is **open by the ruling's own words**, not by omission | rides the content channel: a claim, not a field |
+
+**And three items the rulings opened that are NOT phase 6 and are scheduled here because nothing
+else schedules them:**
+
+| | item | ruled | where it goes |
+|---|---|---|---|
+| **S9** | **A migration verb.** MEASURED: nobody in Valoria can relocate — `move` is TRAVEL (a `travel_leg` Tenure alter) and `residence` is a contested claim predicate **with no writer** | `RR-2`: *"must be able to build hearths and accept people who move settlements"*, and **migration is a verb persons take** | a `verb_table.yaml` row + an effect. It gives `residence` its first producer |
+| **S10** | **`capacity(w, rung)`** over dwelling sites — **a floor, never a fixture**; `found` is the throttle | `RR-2`: matter **plus hearth capacity** | `queries/world_q.py`; the floor is a **table** keyed on site kind, beside `band_floors` |
+| **S11** | **`ED-IN-0210`'s fourth ledger row**, recording `RR-A`'s fold against its own 2026-09-15 answer | `RR-A`, whose own consequence field says this file cannot do it | `registers/editorial_ledger_in.jsonl` |
+
+**S9 and S10 ride with item 12** (`found` + `works`), which is Phase 4: item 12 builds `found`
+anyway, and a capacity throttle with no `found` to throttle is a Query nobody calls.
+
+## §7.6 · What would show §7 wrong
+
+| | claim | what would refute it |
+|---|---|---|
+| **BO-9** | `commit` is unformable person-side because **no question source offers a Proposition referent** | a `commitment.made` on a populated season with no change to `questions_for`. Run: one season, seed 0, count `commitment.made`. **Measured 0 / 42 refused** |
+| **BO-10** | items 5, 7 and 8 are what open `commit`'s aperture | land them and re-run `BO-9`'s command. If `commitment.made` is still 0, the producer is somewhere else and §7.2's diagnosis is wrong |
+| **BO-11** | `in_holdings` was false for **every** pair before item 16 | it asserts that it asserted — `test_lb16_*` sweeps >1000 pairs and fails if the sweep did not run (`CLAUDE.md` §0.1 pt 2) |
+| **BO-12** | the driver's decision surface is **18 names**, and phase 6 would make it 26 | re-run the AST count. If a later session lands a term of `score(c)` as a nineteenth import, §7.1(b) has been broken and this row is how it is found |
+| **BO-13** | every fact phase 6 introduces has a roster, a table or a `Fixtures` row | `grep` for a literal in `decision/choose.py`. `D-27` already scans `loop/`, `seam/`, `decision/` for a roster literal in a body |
+| **BO-14** | **`provinces_of` was the ONLY silent consumer of the `hold` carrier** | `grep` the tree for a predicate that discriminates a Tenure by its subject's or object's CLASS — `in w.propositions`, `in w.persons`, `in w.offices` — and check each against item 16's re-home. ⚠ **This falsifier has already fired once**, which is why it exists; a completeness claim that has failed once is not evidence for the next one (`BO-4`'s own wording) |
+
+## §7.7 · What §7 does NOT do
+
+**It marks no juncture done.** Items 1 and 16 ran; `python tools/m1_acceptance.py --summary` and
+`python -m engine.season.harness.register --requirements` are the instruments that decide a
+juncture, and neither moved on this pass — **THE NINE still read `met 1 · not_met 4 · partial 4`.**
+
+**It ratifies nothing.** `ED-1094`'s merge-ratifies-by-default stays refused for this directory, as
+`§6` says. No `## Status:` line flips and `CURRENT.md` is untouched.
+
+**It creates work, and says so**, exactly as `§6` conceded for the rest of this file. §7.5 is a
+schedule, which is a queue by construction; it was asked for by name.

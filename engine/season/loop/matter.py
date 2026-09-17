@@ -164,25 +164,84 @@ def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
     weights = w.fixtures.get("subsistence_weight")
     factor = w.fixtures.get("season_factor")
     scale_ = w.fixtures.get("condition_scale")
+
+    # -- THE DRAW IS PER EATER, UP THE LARDER LADDER (item 3a) -------------------
+    #
+    # ⚠⚠ ~~PER RUNG, AGAINST THAT RUNG'S OWN STORES~~ -> PER EATER, AT `nearest_store`. Struck
+    # and kept, because the old shape was not wrong so much as UNREACHABLE. `H-11` says *draw
+    # from the containing rung's stores, scaled by weight*, and that is still exactly what this
+    # does — for a rung that HAS stores. MEASURED on `build_realm(0)` after one season, before
+    # this change: **4,810 units, all 4,810 at the 37 settlement rungs, 0 at the 211 hearths**,
+    # 46 persons in 26 hearths, and **0 rungs with both eaters and stores**. So the old
+    # `draw = {k: wt * len(eaters)}` counted zero eaters wherever there was anything to eat, and
+    # the whole subsistence step was inert on the world that ships.
+    #
+    # ⚠ `p.weight`, NOT `len(eaters)`, AND THE OLD LOOP DROPPED IT. `Person.weight` is the cohort
+    # multiplier — *"A COHORT IS A PERSON AT weight > 1"* (`state/carriers.py`) — so counting
+    # heads makes a cohort of two hundred eat like one man. Every person in the shipped corpus is
+    # at weight 1, which is exactly why this was invisible and why it is fixed while it costs
+    # nothing to fix.
+    #
+    # ⚠ THE PRE-PASS EXISTS TO KEEP THE EMISSION ORDER, not because the arithmetic needs it. The
+    # draw could be hoisted into its own pass over persons, and that would reorder every
+    # `stores.changed` relative to its rung's `yield.taken` across the whole season — a golden
+    # move for a reason that has nothing to do with this change. Accumulating per SOURCE rung and
+    # applying it inside the existing per-rung loop leaves `test_w8_matter_draws_before_it_
+    # produces_which_is_353s_stated_order` measuring what it was written to measure.
+    #
+    # ⚠ AND THE RUNNING VIEW IS WHAT MAKES SCARCITY BIND. The writes are deferred to the gate, so
+    # without `left` every eater would be shown the FULL larder and two of them could spend the
+    # same unit — `loop/effects.py`'s own header names that defect for `transfer`.
+    draws: dict = {}          # source rung -> {kind: units it gives up}
+    short_by_person: dict = {}
+    left: dict = {}           # (rung, kind) -> units still unspent this season
+    if weights:
+        homes = world_q.home_of(w)
+        for pid in sorted(homes):
+            person = w.persons[pid]
+            # `H-11`'s rule, unchanged: the loop is over the WEIGHTS registry, so a kind with no
+            # weight RAISES rather than silently drawing nothing.
+            for k, wt in sorted(weights.items()):
+                want = wt * person.weight
+                if want <= 0:
+                    continue
+                src = world_q.nearest_store(w, homes[pid], k, available=left)
+                if src is None:
+                    short_by_person.setdefault(pid, {})[k] = want
+                    continue
+                held = left.get((src, k))
+                if held is None:
+                    held = (w.rungs[src].stores or {}).get(k, 0)
+                take = min(want, held)
+                left[(src, k)] = held - take
+                draws.setdefault(src, {})[k] = draws.setdefault(src, {}).get(k, 0) + take
+                if take < want:
+                    short_by_person.setdefault(pid, {})[k] = want - take
+    if short_by_person:
+        # ⚠ A SHORTFALL EMITS NOTHING AND DECIDES NOTHING, on L5's rule: a threshold crossing
+        # *"MAY NEVER PRODUCE AN OUTCOME"*. Inventing starvation here would be the outcome L5
+        # forbids, and it would be a social consequence written at MATTER, which is L4. It is
+        # recorded so a run can be read. ⚠ IT IS NOW KEYED ON THE PERSON RATHER THAN THE RUNG,
+        # which is the shape item 3b needs — the shortfall is what falls a BODY, and a body
+        # belongs to a person. 3b is not built here and this line does not pretend it is.
+        sample = dict(sorted(short_by_person.items())[:5])
+        TRACE.note(
+            f"{len(short_by_person)} eater(s) could not meet subsistence; "
+            f"{'first 5 of them' if len(short_by_person) > 5 else 'all of them'}: {sample}"
+            f" -- recorded, not acted on (L5: a crossing produces no outcome). The FULL set is "
+            f"`World._subsistence_shortfall`, which `census` counts")
+    # Reported by `census`, never read by the loop — the same treatment `_tie_census` gets. It is
+    # what makes the shortfall MEASURABLE rather than only traceable, and it is item 3b's input.
+    w._subsistence_shortfall = short_by_person
+
     for rid in sorted(w.rungs):
         r = w.rungs[rid]
-        eaters = world_q.presence(w, rid)
-        if eaters and weights:
-            # `H-11`: *draw from the containing rung's stores, scaled by weight.* A kind with
-            # no weight RAISES rather than drawing nothing (see `rosters.yaml`), so the loop
-            # is over the WEIGHTS, which is the registry, not over whatever the larder holds.
-            draw = {k: wt * len(eaters) for k, wt in weights.items()}
+        draw = draws.get(rid)
+        if draw:
             have = dict(r.stores or {})
-            after = {k: max(0, have.get(k, 0) - amt) for k, amt in draw.items()}
-            short = {k: amt - (have.get(k, 0) - after[k]) for k, amt in draw.items()
-                     if amt > have.get(k, 0)}
-            if short:
-                # ⚠ A SHORTFALL EMITS NOTHING AND DECIDES NOTHING, on L5's rule: a threshold
-                # crossing *"MAY NEVER PRODUCE AN OUTCOME"*. Inventing starvation here would
-                # be the outcome L5 forbids, and it would be a social consequence written at
-                # MATTER, which is L4. It is recorded so a run can be read.
-                TRACE.note(f"{rid} could not meet subsistence for {len(eaters)} by {short} "
-                           "-- recorded, not acted on (L5: a crossing produces no outcome)")
+            # The pre-pass already capped every take at what was there, so this cannot go
+            # negative and `max(0, ...)` would only hide an arithmetic error.
+            after = {k: have.get(k, 0) - amt for k, amt in draw.items()}
             if any(after[k] != have.get(k, 0) for k in after):
                 prior = w.last_emission_of("stores.changed", rid)
                 w.write("stores", WriteClass.MATTER,
