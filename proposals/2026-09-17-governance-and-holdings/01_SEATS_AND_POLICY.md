@@ -1,6 +1,16 @@
 # 01 · SEATS AND POLICY — governance and management at every rung, hearth to realm
 
 ## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## ⚠ **SUPERSEDED IN BOTH HALVES 2026-09-17.** The **POLICY** half — `dispensation`, `in_force`, the seven
+## clauses, `reach:`, and every MATTER read scoped to a place — is superseded ENTIRELY by
+## `../2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md` (`ED-IN-0234`), which answers
+## `AUDIT_VERDICT.md` limit 1: the round-one carrier was a **DEPARTURE** from `holonic_ARCHITECTURE.md`
+## §37.3, not an extension of it. The **SEAT** half's MECHANISM (the bases, the two predicates, purview) is
+## superseded by `…-r2/03_SEATS_AND_CONTENT.md` (`ED-IN-0235`), which **keeps this file's seat model
+## verbatim** — that model is `ARCH §B.7` entire and it survived the audit intact. Q5 `purview` survives as
+## a **term of REACH**, not as a fifth question row: `…-r2/01_ATTENTION_AND_REACH.md` (`ED-IN-0233`).
+## **Kept as reference; struck where overturned.** §A.12's ruling that the multi-season construction is
+## **a `works`** stands and binds round two.
 ## Lane: `IN` · id: **ED-IN-0231**. Grade under `CLAUDE.md` §0.2: **`paper`** — nothing in this file
 ## executes, PART C.5 says what would move it, and no row here may be cited as done.
 ## Method: authored at tier **`opus`** (`CLAUDE.md` §10 — *competing-considerations judgment,
@@ -223,6 +233,16 @@ once `Act.via` lands — not by a constructor that refuses a true thing to preve
 
 ## §A.3 · CONFERRAL AND REVOCATION ARE DECLARED BASES, NOT CODE PATHS
 
+> ⚠ **MECHANISM SUPERSEDED 2026-09-17 — `../2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md` (`ED-IN-0235`).** The DIAGNOSIS
+> below is confirmed and re-measured (conferral and revocation empty on **19 of 19** offices); what round
+> two changes is the shape of the fix. Its value sets are closed and **already ratified twice** —
+> `conferral ∈ {confer, determine, succeed}` is `ARCH §B.7` call 1 *and* `AX` ID-14, which nobody here
+> cited — and `revocation` becomes conjunct sets (`purview = {reaches}`, `holdings = {reaches,
+> in_holdings}`, `none = ⊥`). The **rank** conjunct is **DERIVED, not deleted**: `World.contain_ascends`
+> enforces strict ascent on the `rung_kinds` ordinal at the one writer, and `title_rank` IS that ordinal
+> (373/373 edges, 0 violations). One declared behaviour change follows — a lower seat holding the land may
+> now unmake the seat above it — and `ARCH F.21` is **narrowed, not closed**, which is round two's `RR-B.2`.
+
 `AX:1495-1498` is the corpus's sharpest sentence on this and it is quoted rather than paraphrased:
 
 > *"§D.6 gives an Office a **`conferral`** field — 'the basis, **per office**' — which is exactly the
@@ -347,7 +367,16 @@ exactly when the claim becomes true."*
 
 ---
 
-## §A.7 · THE POLICY INSTRUMENT — a dispensation Record, held by its issuer
+## ~~§A.7 · THE POLICY INSTRUMENT — a dispensation Record, held by its issuer~~
+
+> ⚠ **SUPERSEDED 2026-09-17 — `../2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md` (`ED-IN-0234`) replaces this section
+> entire.** Kept as reference because the *reasoning* is where round two starts: what fails is the
+> CARRIER, not the ambition. `AUDIT_VERDICT.md` limit 1 — the MATTER half is a **DEPARTURE** from
+> `holonic_ARCHITECTURE.md` §37.3, not an extension of it — and §37.3's own first and fourth
+> prohibitions name why: a clause read at MATTER under `reach: all` *is* the undistorted broadcast, and
+> a `stores` write conditioned on it *is* the state write that erases the compliance contest. Round two
+> keeps the writ and deletes the walk: **a document is handed to an executor, and his act is what
+> moves the world.** Read `02` there, not this section, for what a policy IS.
 
 **The instrument in two lines.** *A policy is a `Record` of kind `dispensation`, scoped to a rung,
 naming one clause and one `OUGHT` Proposition as its terms, opened by `issue` through a seat, and held
@@ -480,7 +509,15 @@ a compliance contest, per relevant Rung."*
 > vertical direction today and the **diagonal** one — a guild's rule reaching its members wherever they
 > stand — is **unbuilt and named as unbuilt** (PART C.2, LIMIT).
 
-## §A.8 · `in_force` — ONE WALK, AND IT IS THE WHOLE CASCADE
+## ~~§A.8 · `in_force` — ONE WALK, AND IT IS THE WHOLE CASCADE~~
+
+> ⚠ **SUPERSEDED 2026-09-17 — there is no `in_force` walk in round two.** `../2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md`
+> withdraws it, and `../2026-09-17-governance-and-holdings-r2/01_ATTENTION_AND_REACH.md` (`ED-IN-0233`) takes the part that survives: the
+> ascent is real and it is **REACH**, a filter on attention, never a resolver-side lookup that delivers a
+> clause to a place. The walk's defect is not its arithmetic — the arithmetic below is correct — it is
+> that **a place cannot receive an order.** Only a person can, and only by holding the document. Every
+> `in_force(...)` signature below is therefore withdrawn; the code blocks are kept unstruck because a
+> struck code block is unreadable, and this notice is the strike.
 
 > **`in_force(w, rung, clause) -> policy | None`**
 > *The nearest ancestor-or-self live policy conditioning `clause` — unless a farther one declares
@@ -564,7 +601,16 @@ so **the dispatched person need not be an establishment member at all today.**
 > replacing it. **Stating `reach` as an operand is what makes the instrument buildable before the
 > Query exists**, and it is the line RR-1 turns on.
 
-## §A.9 · THE SEVEN CLAUSES, ONTO THE CLOSED SEVEN `requires` FORMS
+## ~~§A.9 · THE SEVEN CLAUSES, ONTO THE CLOSED SEVEN `requires` FORMS~~
+
+> ⚠ **SUPERSEDED 2026-09-17.** The seven fixed cells go with the carrier: `../2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md`
+> replaces them with the writ's **terms as operands**, executed by the holder's act. What `AUDIT_VERDICT.md`
+> limit 6 found here still binds round two and is the reason the replacement is shaped as it is: **there are
+> no free predicates**, nothing validates a runtime `Record` at load, and *"only the sworn"* was as
+> unspellable as *"except Björn"*. Limits 4, 5, 7 and 9 all land in this section — `sit:` cannot create a
+> date, `draw: None` starves, `ceiling = matured/declared` reads a maturation `Record.matured: bool` cannot
+> carry, and a same-`(rung, clause)` collision is an unwritten branch. **Round two answers all four by
+> removing the site at which they arise**, which is why `RR-1` closes as *irrelevant* rather than answered.
 
 **Jordan's test, taken literally:** *if a policy's entire effect could be expressed as a number added to
 a roll, it is not a policy.* Each clause either **reorders an existing step**, **removes or admits a row
@@ -641,7 +687,17 @@ an outcome**, and it applies to whoever crosses it."* Two things fall out:
 your heir **is** the content of the rule (§A.5). The licence covers a clause whose scope is the issuer's
 own seat and no other.
 
-## §A.10 · THE CASCADE DOWN — one step, no propagation object, and the noise is already there
+## ~~§A.10 · THE CASCADE DOWN — one step, no propagation object, and the noise is already there~~
+
+> ⚠ **SUPERSEDED 2026-09-17 — and this is the section Jordan's own ruling overturns**, not merely the
+> audit. Verbatim, this session: *"A document from the Duke doesn't isn't like a game of telephone — the
+> written letter in some form with fidelity would end up being directly given to the settlement leader"*,
+> generalised to *"the player must have the sanctity of their choices/actions/decisions preserved in terms
+> of the contents of those choices/actions/decisions themselves — the worldly churn is in how those
+> contents are received and acted upon by others."* This section's *"the noise is already there"* puts the
+> churn in the CONTENTS, which is the half the ruling forbids. `../2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md` files
+> that ruling as **RR-P**, a candidate `AX-7`, and builds two channels from it: the writ, which arrives
+> faithfully to the person who must execute it, and the word, which is lossy and does not.
 
 The governing canon is `systems/settlements/reference/scale_hierarchy_v1.md`, **`## Status: RATIFIED —
 direct Jordan ruling, 2026-07-13`** (`:3`), §3 at `:43-46`: *"Dukes govern provinces and define
@@ -720,6 +776,14 @@ the chain back to his own clause **exists in the data and can be shown to him at
 tells him, not before.**
 
 ## §A.11 · HOW IT COMES BACK UP — four channels, and the fourth fires a DATE
+
+> ⚠ **CHANNEL 4 IS WITHDRAWN 2026-09-17** (`AUDIT_VERDICT.md` limit 4 and the S-PAUSE row): `sit:`
+> cannot create a date — `(Date, due_at)` is `[RES]` and written ONLY by `convene` — and the sitting it
+> hands off to is one where `judging_set` raises `Unspecified`, so it is *a pause to nowhere*. Channels 1–3
+> survive in substance and are re-stated as the **response** half of
+> `../2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md`, where the response is not a verb of its own but
+> `commit`/`repudiate`/the act itself — round two's `RR-A`, which reaches Jordan because `ED-IN-0210`
+> ruled against *"no response verb"* on 2026-09-15.
 
 | # | channel | speed | the object | who pays |
 |---|---|---|---|---|
@@ -1173,6 +1237,13 @@ has no expression in this model**"* (`engine/season/requirements.yaml`, R-04). *
 that sentence.**
 
 ## §C.6 · RULING REQUESTS — one, and it is the only DEPARTURE in this file
+
+> ⚠ **`RR-1` IS CLOSED 2026-09-17, at step 2 of `CLAUDE.md` §0's five-step gate — IRRELEVANT, not
+> answered.** With no `in_force` walk and no place-keyed clause there is no site at which two clauses can
+> collide: two writs naming the same executor are two content claims in one ledger, and `agreement`
+> (`engine/season/loop/options.py:412`) already scores told-against-own. **The collision is the
+> executor's, and his act resolves it.** Round two's own requests — `RR-P`, `RR-A`, `RR-B`, `RR-C` — are
+> ledgered once, in `../2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md` §6.
 
 > ### **RR-1 · POLICY COLLISION: does the NEARER policy or the HIGHER rank win?**
 

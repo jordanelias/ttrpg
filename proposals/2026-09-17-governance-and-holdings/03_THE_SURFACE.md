@@ -1,6 +1,14 @@
 # 03 · THE SURFACE — the interface through which a player engages the game world
 
 ## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## ✅ **STANDS 2026-09-17 — NOT superseded.** Round two
+## (`../2026-09-17-governance-and-holdings-r2/`) replaces the mechanism this file reads FROM and keeps the
+## file. Its **Surface Law `L-1..L-3`**, its **cell law** (HELD / STALE / UNHELD / CONTRADICTED), its
+## **causation worksheet** and **RR-3** are untouched and bind round two. Three substitutions apply
+## throughout and are struck in place where they appear: **Q5 → a term of REACH**
+## (`…-r2/01_ATTENTION_AND_REACH.md`); **every `in_force` read → the content-claim cell**
+## (`…-r2/02_THE_WRIT_AND_THE_WORD.md`); **the compliance table → the two channels** — who holds the writ ·
+## who has heard of it · who has acted on it (same file).
 ## Method: authored on **`opus`** per `CLAUDE.md` §10 — *"competing-considerations judgment; large-context synthesis … and the verify/judge stage that gates a result."* Not `fable`: §10 rules that tier **read-only audit / planner / guardrail, never synthesis or artifact authorship**, and this file is an artifact. Its adversarial pass was run against the tree, not against a sibling document.
 ## Scope: `ED-IN-0232`, lane **IN**. Every `path:line` below was opened with `sed -n` in this session before it was written. Its primary source — the analyse stage's D3 — self-reported eight invented addresses and a critic found sixteen wrong, so **no citation was carried forward unopened.** The repairs are the appendix.
 ## §0.2 grade: **`paper`.** Nothing here executes. §C.4 says what would move it and what the cheapest step is.
@@ -175,7 +183,7 @@ sources and nothing else, and `Question.__post_init__` refuses a fifth at constr
 | Q2 | `claim_landed` | **a person** — news about me or mine | `(c.when, c.round) >= floor and (c.subject == p.id or c.subject in mine)` — `:491-494` |
 | Q3 | `band_crossed` | **the world** — a threshold crossed where I stand | `if who == p.id or (at is not None and p.id in presence(w, at))` — `:517-518` |
 | Q4 | `need` | **myself** — a standing commitment | a live `commit` Tenure whose object is an OUGHT `Proposition` — `:524-528` |
-| Q5 | `purview` | **a place I answer for** — proposed by the reconciliation, not built | a crossing or landed claim at a rung under `under_purview(seat)`, claim-gated. One row on an OPEN ordered roster (`engine/season/rosters.yaml:250-270`) |
+| ~~Q5~~ | ~~`purview`~~ | ⚠ **NOT A FIFTH ROW, 2026-09-17** — `../2026-09-17-governance-and-holdings-r2/01_ATTENTION_AND_REACH.md` (`ED-IN-0233`) makes purview a term of **REACH**, a filter over Q1–Q4, so the roster gains nothing. This file's own §A.7 row below already REFUSED a fifth source, and that refusal is now the ratified reading | the rung set is `descendants(seat.rung) ∪ {seat.rung}` minus the seat exercised — `descendants` is PROPER and `under_purview` is reflexive (measured 365 against 364), which is the defect 01 names as *a Duke losing his own duchy* |
 
 **Myself · an institution · a person · the world · a place I answer for.** The set is closed along the
 right axis, and that is the design position rather than a consolation: **what the player is offered is
@@ -302,7 +310,7 @@ Oath II survives; its worked example has no referent in this model.
 | capability — *what this character is able to do* | `valoria_ui_ux_v4_1.md:63-65`, Oath II | **REFUSED.** `capability` *"GATES NOTHING"* and is forbidden from `eligibility_kinds` (`rosters.yaml:152-153`). There is nothing to render |
 | the Candidate list — *what the engine computed for me* | `opening_set`, `options.py:35-104` | **REFUSED as the FRAME, kept as the content.** Rendering it alone is the menu failure mode, and it is bounded by one question's referents (clause 3) |
 | attention — *what I currently have cause to consider*, with the four causes as player acts | **this file**, on the analyse stage's reframing | **ADOPTED** |
-| a fifth question source for the player | refused by `Question.__post_init__` (`carriers.py:259-260`) | **REFUSED.** A fifth is a roster argument, and Q5 `purview` is the one under argument (sibling 01) — a seat's attention, not a player's |
+| a fifth question source for the player | refused by `Question.__post_init__` (`carriers.py:259-260`) | **REFUSED — and the refusal WON.** A fifth is a roster argument, and Q5 `purview` was the one under argument (sibling 01). Round two agrees with this row and withdraws the fifth source: `../2026-09-17-governance-and-holdings-r2/01_ATTENTION_AND_REACH.md` makes purview a term of REACH. **This file was right and its sibling was wrong** |
 
 > ### RULED: the frame is ATTENTION and the top-level affordance is CAUSING A QUESTION.
 > **The four askers are `dispatch · convene · petition · commit`, all four are existing verbs, and
@@ -381,7 +389,7 @@ construction, because the Observation's predicate is derived from the cell"* (`:
 problem. `issue`'s requires cell is verbatim *"scope enumerates executors, not places (§37.1)"* and its
 `scale_note` reads *"a Dispensation's `scope` enumerates executors — §37.1 — so its reach is the domain
 the issuer governs"* (`verb_table.yaml:258, 261`). A policy has no provincial axis: **its reach resolves to
-people.** (~~*it has a list of people*~~ — the set is computed by `in_force`'s walk, never stored;
+people.** (~~*it has a list of people*~~ — ⚠ **and ~~`in_force`'s walk~~ is withdrawn 2026-09-17: `../2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md` has no walk, because a place cannot receive an order. Read *the content-claim cell* wherever this file reads `in_force` — who holds the writ, and what he claims its terms are.** The set was computed, never stored;
 `01` §A.7.5.)
 
 > **[DESIGN] Group the executor list by where I last heard each man was — and `residence` is already a
@@ -578,6 +586,15 @@ cited the wrong file for its own best display, and that is one of the two wrong-
 appendix. `epistemic.py:61-101` is `belief_contradicts`, which *calls* it.
 
 ### A.4.3 · Compliance — four states, and SILENCE MUST NOT READ AS COMPLIANCE
+
+> ⚠ **THE FOUR STATES BECOME TWO CHANNELS, 2026-09-17** — `../2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md`
+> (`ED-IN-0234`). The surface no longer shows *compliance with a clause in force*; it shows three
+> independent facts about a named person: **who holds the writ** · **who has heard of it** · **who has
+> acted on it**. The principle this section gets RIGHT is the one round two files as `RR-P` — that
+> **silence must not read as compliance** is exactly *the churn is in reception*, and §37.3's fourth
+> prohibition (*"the distinction between never received and received and refused, which is the whole of
+> enforcement drama"*) is the same sentence from the architecture's side. **The cell law below is
+> untouched and binding**; only the column names change.
 
 `comply` (`verb_table.yaml:130-142`) and `evade / defy` (`:220-232`) are verbs with `own` eligibility,
 so compliance emits, evasion emits, and both are witnessed by whoever the fan-out admits. That gives a

@@ -1,6 +1,13 @@
 # Governance at every rung, and the built world
 
 ## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## ⚠ **ROUND TWO IS THE CURRENT SUITE: `../2026-09-17-governance-and-holdings-r2/`** (`ED-IN-0233`,
+## `ED-IN-0234`, `ED-IN-0235`, `ED-SE-0053`), written **from** this suite's `AUDIT_VERDICT.md`. Read its
+## `README.md` for what is current and for the single list of what survives from here. This directory is
+## **kept as reference and struck where overturned** — `00`, `01`, `02` and `04` carry supersession
+## banners; **`03_THE_SURFACE.md` STANDS** (its Surface Law, cell law, causation worksheet and **RR-3**
+## bind round two); `AUDIT_VERDICT.md` and `UNIFICATION_LEDGER.md` are untouched, because they judge this
+## suite and die with it.
 ## Lane: `IN` (cross-cutting), with `SE` for `02`. Ids: **`ED-IN-0231`**, **`ED-IN-0232`**, **`ED-SE-0052`**.
 ## Grade under `CLAUDE.md` §0.2: **`paper`** for every document. Nothing here executes. `04` names what would move it.
 ## ⚠ **UNIFIED 2026-09-17.** The four documents were authored in parallel from one plan and had drifted. `00_THE_DESIGN.md` is the unified statement and the entry point; the four were reconciled in place and every correction is **struck and kept**, never deleted.
@@ -52,13 +59,25 @@ exception has failed and the repair is to delete it.
 3. **THREE ruling requests survive, and `04` §C.4 is the single ledger** (⚠ *corrected 2026-09-17:
    this said "one", `04` said "two" and `03` raised a third under its own heading — three files, three
    counts*):
-   **RR-1** (`ED-IN-0231`, `needs_jordan: true`) — does a nearer rung's clause or a higher rank win a
-   policy collision? Owned and argued by `01` §C.6.
+   ~~**RR-1** (`ED-IN-0231`, `needs_jordan: true`) — does a nearer rung's clause or a higher rank win a
+   policy collision? Owned and argued by `01` §C.6.~~ ⚠ **CLOSED 2026-09-17 by round two at step 2 of
+   `CLAUDE.md` §0's gate — IRRELEVANT, not answered.** Round two deletes the `in_force` walk and the
+   place-keyed clause, so the collision has no site: two writs naming the same executor are two content
+   claims in one ledger, and `agreement` (`engine/season/loop/options.py:412`) already scores
+   told-against-own. **The collision is the executor's, and it is resolved by his act.** Stated with its
+   reason in `…-r2/05_LEDGER_AND_BUILD.md` §6.
    **RR-2** (`ED-SE-0051`, already queued) — matter only, or matter plus hearth capacity? `02` §A.7
-   recommends the capacity arm and does not close it.
+   recommends the capacity arm and does not close it. ✅ **STILL OPEN after round two, and untouched by
+   it** — nothing in round two decides it, `Rung.envelope` is kept as its carrier, and §0's step 5 cannot
+   take it, because the two arms are materially different games.
    **RR-3** (`ED-IN-0232`) — adopt `03`'s claim-landing replacement for the thirteen authored zoom
    triggers, or keep the table? Raised by `03` §A.7/§C.3, and marked the **weakest** of the three in
-   `04` §C.4 for the reasons `03` itself measures.
+   `04` §C.4 for the reasons `03` itself measures. ✅ **SURVIVES round two exactly as `03` states it**,
+   and is still the weakest of the three. ⚠ **Round two adds four more** — **RR-P** (the principle, as a
+   candidate `AX-7`), **RR-A** (fold the response verbs), **RR-B** (four sentences of RATIFIED
+   `architecture/` that round two makes false) and **RR-C** (sequencing against a ratified order). Their
+   single ledger is `…-r2/05_LEDGER_AND_BUILD.md` §6, which supersedes `04` §C.4 as the owner of this
+   count.
    **Thirteen** other candidate requests were **closed with citations** rather than escalated, per
    `CLAUDE.md` §0's five-step gate (⚠ *`01` and `04` each listed a different "nine"; `04` §C.5 now
    carries the union and is the single owner*). Clearing a stale question is session work, not

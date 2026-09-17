@@ -1,6 +1,13 @@
 # 04 · BUILD ORDER — how the governance and built-world work gets built, in dependency order
 
 ## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## ⚠ **SUPERSEDED 2026-09-17 by `../2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md`**
+## (`ED-IN-0233`). The order is re-derived from round two's object set and the deletion arithmetic is
+## recounted by name against the tree: `AUDIT_VERDICT.md` graded this suite's **E-OVERHEAD FINDINGS** on
+## *"code in ~27 against code out ~10"*, so a build order resting on that count cannot stand unamended.
+## **Kept as reference; struck where overturned.** What survives is the DISCIPLINE rather than the sequence
+## — item 1b's rule that the first execution artifact is the deliverable, and the `paper`-grade honesty
+## that no row here may be cited as done.
 ## Method: `opus` producer, `opus` self-adversarial pass (`CLAUDE.md` §10 — judgment over dispersed surfaces, and the tier is declared because the *order* is the judgment). Read-only against the tree at 2026-09-17; every number below was re-run here and every `path:line` was opened before it was written. Repairs in the APPENDIX.
 ## Grade: **`paper`** (`CLAUDE.md` §0.2). Nothing in this file executes. Its own first execution artifact is item 1b's.
 ## Lane: **IN**, sharing `ED-IN-0232` with `03_THE_SURFACE.md`. This file allocates no id and edits no ledger.
@@ -718,7 +725,15 @@ that the proposal itself had marked `[GAP: no consumer]` and still counted.
 
 ---
 
-## A.6 · THE WHOLE ORDER, IN ONE TABLE
+## ~~A.6 · THE WHOLE ORDER, IN ONE TABLE~~
+
+> ⚠ **SUPERSEDED 2026-09-17 — `../2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md` §7 (`ED-IN-0233`) owns the order now**, and it
+> is not a re-typing of this one: round two's object set is different, so the dependency graph is
+> different. **One edge reverses, and it was measured rather than argued:** all 16 rung-holds in
+> `build_realm(0)` are **faction**-subject (0 person→rung holds), so `revocation: holdings` — whose
+> conjunct set is `{reaches, in_holdings}` — is unsatisfiable until the holds exist, which puts the
+> content item AFTER the holds item, the opposite of the direction a reader would infer here. What
+> survives from this section is **A.0's three rules** and **A.7's cadence**, not the sequence.
 
 | # | item | size | Arc-2 | pos. | falsifier |
 |---|---|---|---|---|---|
@@ -902,6 +917,14 @@ outside its own load-bearing path: **fix it in that commit, or drop it.**
 | ratification of anything in this directory | **Jordan's**, and not by merging it. Every file here is held back in full |
 
 ## C.4 · THE THREE SURVIVING RULING REQUESTS
+
+> ⚠ **NO LONGER THE SINGLE LEDGER, 2026-09-17 — `../2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md` §6 is.** Of the three
+> below: **`RR-1` is CLOSED** at step 2 of `CLAUDE.md` §0's gate (irrelevant — with no `in_force` walk and
+> no place-keyed clause there is no collision site); **`RR-2` (`ED-SE-0051`) stays open and untouched**;
+> **`RR-3` survives** exactly as `03` states it, and is still the weakest. Round two adds four — `RR-P`
+> (the principle, as a candidate `AX-7`), `RR-A` (fold the response verbs, against `ED-IN-0210`'s letter),
+> `RR-B` (four sentences of RATIFIED `architecture/` that round two makes false) and `RR-C` (sequencing
+> against a ratified order). **Seven minus one closed: six live.**
 
 Each ran `CLAUDE.md` §0's five steps — superseded · irrelevant · answered by a design document ·
 answered by precedent · answered by what makes sense for the architecture — and survived all five.

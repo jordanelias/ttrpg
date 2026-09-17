@@ -1,6 +1,18 @@
 # 00 · THE DESIGN — governance at every rung, and the built world, stated once
 
 ## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## ⚠ **SUPERSEDED 2026-09-17 by `proposals/2026-09-17-governance-and-holdings-r2/`** (`ED-IN-0233`,
+## `ED-IN-0234`, `ED-IN-0235`, `ED-SE-0053`) — the round-two suite, written **from** this suite's own
+## `AUDIT_VERDICT.md` rather than over it. **Kept as reference; struck where overturned.** Nothing here is
+## deleted and nothing here is current. Where the replacement lives: the policy carrier `in_force` and
+## every place-scoped read → `02_THE_WRIT_AND_THE_WORD.md`; the fifth question row →
+## `01_ATTENTION_AND_REACH.md`; the seat MECHANISM (the bases and the two predicates) →
+## `03_SEATS_AND_CONTENT.md`; hearth larders and the delivery move → `04_MATTER_AND_WORKS.md`; the build
+## order and the object count → `05_LEDGER_AND_BUILD.md`. **What SURVIVES is listed in the r2 `README.md`,
+## not here** — a superseded file is the wrong place to learn what is current.
+## **Strike discipline, stated so it is not mistaken for an omission:** the DEFINING sentence of each
+## overturned claim is struck in place; its incidental mentions are NOT individually struck, because a
+## document struck word-by-word is unreadable and this banner is the notice.
 ## Lane: `IN` · id: **`ED-IN-0231`**, SHARED with `01_SEATS_AND_POLICY.md`. **This file allocates no id
 ## and introduces no claim of its own.** Every sentence below is a sentence one of the four subject
 ## files already argues, measures and ships a falsifier for; what this file adds is *one statement, in
@@ -140,7 +152,13 @@ faction holder"* (`scale_hierarchy_v1.md:32`) and `build_realm` builds **zero**.
 governs; the kind stays declared and uninstantiated. That is exactly why the Count is the one seat
 whose scope is recomputed every season and the one seat that can outlive its own country. ⚠ *2026-09-17 NERS pass:* a scope recomputed every season is not `ARCH §B.7`'s `scope?` — one rung, declared at `establish` — and a set of territories is the `domain: RungId[]` shape `01` §A.1 refuses. Under §B.7 the Count is a **cluster** seat whose clauses reach by `binds`, the **unbuilt diagonal** (`01` §A.7.5), not by the walk of §A.5.
 
-## §A.4 · The policy, end to end
+## ~~§A.4 · The policy, end to end~~
+
+> ⚠ **SUPERSEDED 2026-09-17 — `../2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md` (`ED-IN-0234`).** The instrument below is
+> withdrawn entire: `holonic_ARCHITECTURE.md` §37.3 forbids by name the broadcast and the state write this
+> section's MATTER half performs, and Jordan's ruling this session forbids the churn it puts in the
+> contents. What survives is the ambition — *"a way to change or impact how a governed rung functions"* —
+> carried by a writ that is handed to an executor whose act moves the world.
 
 **Seven clauses, onto the closed seven `requires` forms, using three of them.** `draw:` and `spend:`
 are read only by MATTER. `sit:` has two readers — it writes the rung's dates *and* gates `convene` (⚠ it attaches a convening condition and names the rung's dates; **the `Date` object is still minted only by `convene`** — `(Date, due_at)` is `[RES]`, *"CAL struck"*, `write_matrix.yaml:93-100`; corrected 2026-09-17).
@@ -174,7 +192,12 @@ instead is a ledger containing, three seasons later, a fading `told_by` claim; a
 is required and non-empty, the chain back to his own clause **exists in the data and can be shown to
 him at the moment somebody tells him, not before.**
 
-## §A.5 · The cascade, as arithmetic
+## ~~§A.5 · The cascade, as arithmetic~~
+
+> ⚠ **SUPERSEDED 2026-09-17.** The arithmetic is sound and the SITE is wrong: nothing addresses a place.
+> `../2026-09-17-governance-and-holdings-r2/02_THE_WRIT_AND_THE_WORD.md` replaces the MATTER cascade with delivery to a person, and
+> `../2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md` (`ED-SE-0053`) owns what the matter economy does instead — reaching the
+> 211 hearths **with no content move and no new store**.
 
 There is no cascade step and no cascade object. There is MATTER, whose ordering two clauses condition,
 and one walk that finds them:
@@ -297,7 +320,12 @@ WITNESS and WITNESS is a barrier, so there is nothing to nest), no stat bars, no
 **The frame is ATTENTION, not capability, and the top-level affordance is CAUSING A QUESTION.** The
 engine asks a person about something through exactly four sources — a date with my name in it, a claim
 landing about me or mine, a band crossed where I stand, a standing commitment — and `01` proposes a
-fifth, **Q5 `purview`**, so a governor is asked about a rung he governs and does not own. **Four of the
+~~fifth, **Q5 `purview`**, so a governor is asked about a rung he governs and does not own~~ — ⚠ **the
+fifth ROW is withdrawn 2026-09-17 and the fifth THING survives as a term:**
+`../2026-09-17-governance-and-holdings-r2/01_ATTENTION_AND_REACH.md` (`ED-IN-0233`) makes purview a term of **REACH**, a filter on the four
+existing sources, not a fifth source beside them. It also measures why the row was the wrong shape — the
+purview limb adds **zero** questions on the tree as it stands, so an N-line asserted for it fails its own
+cut and is recorded NARROWED. **Four of the
 five askers are things a player can CAUSE**: send somebody, set a date, petition, or swear. So the
 surface's deepest control is *making a matter askable*, and the candidate list is what falls out of it
 rather than what is rendered at you. *Owner: `03` §A.2.*
@@ -366,7 +394,7 @@ authority or a new modifier.
 | **Queries** | ~~**5**~~ **8** (`in_force`, `delivered`, `demanded`, `ceiling`, `capacity` — **plus `occupiable` and `serves`, RULED in `02` §A.1 / §A.5.5 and counted by nobody, and `character`, `04` item 23**; corrected 2026-09-17) | no — owned by Nobody, storing nothing. `capacity` is already declared in the ratified Query roster; `character` ships only with a consumer named |
 | **Record kinds** | **2** (`dispensation`, `works`) | no — the fold is already owed by a ratified position |
 | **rosters** | **1** (`record_kinds`), plus **5 site families** as rows on an existing one | no — the loader pattern exists, and a `.kind` matched as a free string is `AX` ID-4's defect |
-| **question sources** | **1** (Q5 `purview`) | no — one row on an **open, ordered** roster, reusing `under_purview` |
+| ~~**question sources**~~ | ~~**1** (Q5 `purview`)~~ | ⚠ **WITHDRAWN 2026-09-17** — `../2026-09-17-governance-and-holdings-r2/01_ATTENTION_AND_REACH.md` makes it a term of REACH, so the roster gains **no row at all**. And `under_purview` is reflexive where `descendants` is proper: the correct set is `descendants(seat.rung) ∪ {seat.rung}` minus the seat exercised, measured 365 against 364 |
 | **terms operands** | **2** (`reach`, a `ttl`) | no — operands on a Record the fold already carries |
 | **emission kinds** | **2** (`stage.stalled`, `docket.lapsed`) | no — one rule, and `03` finds it a third use as a STALE cell |
 | **predicate conjuncts** | **2**, both inside a single existing owner | no — an eighth `requires` form would refuse at load |
@@ -463,6 +491,11 @@ collided**; the prefixes are this pass's repair. **None of the three is a comple
 English — and each register says so.
 
 ## §C.4 · THE RULING LEDGER — three survive, thirteen closed
+
+> ⚠ **SUPERSEDED AS THE OWNER OF THIS COUNT 2026-09-17.** `RR-1` is **closed** at step 2 of `CLAUDE.md`
+> §0's gate (irrelevant: no `in_force` walk, no place-keyed clause, so no collision site); `RR-2`
+> (`ED-SE-0051`) stays **open and untouched**; `RR-3` **survives**. Round two adds `RR-P`, `RR-A`, `RR-B`
+> and `RR-C`. The single ledger is now `../2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md` §6.
 
 **`04` §C.4 and §C.5 are the single owner of both lists. This is the index, not a second copy.**
 

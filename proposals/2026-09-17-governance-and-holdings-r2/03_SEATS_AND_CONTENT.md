@@ -69,7 +69,7 @@ So every section below carries one of three words, and the three lists are in fr
 | `Act.via : SeatId?` | `ARCH §B.9`; `ARCH §C.2` F3 | **absent.** `Act` (`carriers.py:332-365`) carries `id, actor, verb, changes, reads, contests, payload, stratum, obstacle, pool, scene` and no `via`. Verified by `grep -rn "a\.via\|act\.via\|'via'\|\"via\"" engine/season/` → **0 hits** |
 | **`establishment` is a Query over `oblige`, not a field** | `ARCH §B.7` call 2; `AX §E.2.5`'s own correction (`AX:1465`) | a field (`carriers.py:491`) read at exactly one site (`engine/season/queries/world_q.py:413`) and **`[]` on 19 of 19** |
 | a council is **one seat, many holders via `oblige`** | `AX §E.2.5` (`AX:1477`) | `Office.binds` is `"members_by_admission"` on 19 of 19 — the dataclass default (`carriers.py:488`) and its only occurrence |
-| succession is the holder's disposition | `ARCH §A.3` row 8; `ARCH §B.8` | `succeed` is `own`-eligible with a typed `relation` cell (`engine/season/verb_table.yaml:490-504`) and has **no `@effect_for` body** |
+| succession is the holder's disposition | `ARCH §A.3` row 8; `ARCH §B.8` | `succeed` is `own`-eligible with a typed `relation` cell (`engine/season/verb_table.yaml:490-506`) and has **no `@effect_for` body** |
 
 **EXTENSION — consistent with ratified Layer 1, unratified, and this file's actual proposal.**
 
@@ -78,7 +78,7 @@ So every section below carries one of three words, and the three lists are in fr
 | **the value sets are CLOSED ROSTERS the loader enforces**, refusing an off-roster basis in `Office.__post_init__` exactly as it already refuses an off-roster remit act | `carriers.py:508-512` (the existing `Unowned`); `World.add_tenure`'s own docstring, *"the same failure shape `Office.__post_init__` already refuses for remit acts (§8: one rule, applied at every constructor rather than at one)"* (`engine/season/state/world.py:240-241`) | §A.4, §A.5 |
 | **purview = `descendants(w, seat.rung) ∪ {seat.rung}`, minus the seat you are exercising** — one walk, shared with REACH (`01`) | `world_q.descendants` (`world_q.py:54`); `under_purview` already walks the same ladder (`predicates.py:132-141`) | §A.6 |
 | **the higher-rank conjunct is DERIVED from containment, not deleted** — proof in §A.5.1 from `World.contain_ascends` (`world.py:197-221`), enforced at the one writer (`world.py:248-256`) | `rosters.yaml:106-109` (`rung_kinds`); `data/rosters.py:465-472` (`title_rank` IS the rung ordinal) | §A.5.1 |
-| **`engine/season/data/offices.yaml`** — a world-gen content file read by `build_realm`, declaring **29 seats**, each with a rung ANCHOR, a remit, a conferral basis and a revocation basis | `CLAUDE.md` §0.05 clause 1 (a fact code reads is authored in YAML, never in prose); the `office_bodies`/`titles` precedent of one authored field and two derived (`data/rosters.py:408-452`) | §A.13–§A.16 |
+| **`engine/season/data/offices.yaml`** — a world-gen content file read by `build_realm`, declaring **29 seats**, each with a rung ANCHOR, a remit, a conferral basis and a revocation basis | `CLAUDE.md` §0.05 clause 1 (a fact code reads is authored in YAML, never in prose); the `office_bodies`/`titles` precedent of one authored field and two derived (`data/rosters.py:408-453`) | §A.13–§A.16 |
 | **a rung ANCHOR rather than a rung id**, resolved by the loader against the world it is building | `CLAUDE.md` §5 — *"every value crossing into Godot is hand-transcribed — live drift risk"*, applied one layer earlier: a hand-transcribed `terr_T9` rots the moment `build_realm` renames a rung | §A.14 |
 | **the commission `Record`** minted by `_eff_confer`, so the conferee **believes** his remit | `AX-2` (`AX:100-110`); `_eff_create_record`'s existing hold mint (`engine/season/loop/effects.py:287-289`); the deposit rule owned by `02` §the-writ | §A.11 |
 | **`oblige` is admission**, so F.17 closes without a sixth remit act | `ARCH F.17`; `holonic §15`'s `oblige : Person → Person \| Office, many`; `verb_table.yaml:375-383` (`oblige`, `own`, `Tenure.since`, no body) | §A.9 |
@@ -155,7 +155,7 @@ verb rows 38 · resolvable 18 · `establish` NOT resolvable · `oblige` NOT reso
 
 4. ⭐ **NEW: all 16 rung-holds are FACTION-subject and every one is a TERRITORY.** Zero persons hold
    any rung. `in_holdings(w, actor, rung)` tests `t.subject == actor` with `actor` a **person**
-   (`predicates.py:103-104`), so **a `revocation: holdings` basis refuses 100% of the time today**,
+   (`predicates.py:101-102`), so **a `revocation: holdings` basis refuses 100% of the time today**,
    for a reason that has nothing to do with the basis. That is a hidden dependency of this file's
    build item on the faction-hold re-homing, and §D's `SC-6` is its falsifier.
 
@@ -210,7 +210,7 @@ clause that decides it. **CONFORMANCE** means *this was decided; build it*. **EX
 
 ## §A.1 · THE TWO EMPTY STRINGS — both predicates read at the line, with the exact refusal each makes
 
-### §A.1.1 · `_req_confer` (`predicates.py:167-193`), opened
+### §A.1.1 · `_req_confer` (`predicates.py:167-192`), opened
 
 ```python
 @requires_predicate("confer")
@@ -270,13 +270,13 @@ at `:152` reached through `:275`; then, for a title, the faction-subject holds a
 
 | candidate | who owns it? | verdict |
 |---|---|---|
-| the refusals are a mechanism defect | round one's implicit reading | **REFUSED.** Both predicates do exactly what their `requires:` cells say. `verb_table.yaml:148` and `:472` ask for a declared basis; **the content declares none**. A mechanism that correctly refuses an under-specified world is not broken |
+| the refusals are a mechanism defect | round one's implicit reading | **REFUSED.** Both predicates do exactly what their `requires:` cells say. `verb_table.yaml:148` and `:473` ask for a declared basis; **the content declares none**. A mechanism that correctly refuses an under-specified world is not broken |
 | the refusals are a CONTENT defect | this file | ⭐ **EXTENSION, ADOPTED.** `AX §E.2.5` (`AX:1495-1498`) already says it: *"**Delegation does not need a delegation mechanism. It needs the `conferral` basis to be specified**, and that field has been on the Office since #353 carrying nothing"* |
 | both, and they are separable | this file | **CONFORMANCE + EXTENSION, and the order matters.** The `is_title` branch is a Layer-1 conformance defect (H-109) that exists **independently** of the empty bases; the empty bases are content. Fixing either alone leaves `confer` and `revoke` unformable |
 
 > ### **RULED: two empty strings, not one blocked eligibility model — and the walls are stacked, so
 > the content and the mechanism are BOTH preconditions.** Cited to `predicates.py:181-182` and
-> `:234-235` (opened above), `verb_table.yaml:148` and `:472` (the cells they implement), `AX:1495-1498`
+> `:234-235` (opened above), `verb_table.yaml:148` and `:473` (the cells they implement), `AX:1495-1498`
 > (the basis was always the slot) and `hole_register.yaml:1520` (H-109, the branch). **`_req_confer`'s
 > and `_req_revoke`'s bodies are otherwise CORRECT and this file does not rewrite what they check —
 > only WHAT THEY READ IT FROM** (§A.7).
@@ -354,7 +354,7 @@ subsection outright:
 |---|---|---|---|
 | **`confer`** | *a superior names the holder.* A seat whose ground lies inside another seat's ground, filled by that seat's exercise | `confer` (`verb_table.yaml:143-153`), `remit:confer`, writes `Tenure.until` + `Tenure.since`, effect `_eff_confer` (`effects.py:92-126`) — **built** | **admits**, if the actor exercises a seat whose purview reaches this seat (§A.6) and 1-per-object holds |
 | **`determine`** | *a body decides.* A council, an assembly, a chapter or an electorate resolves a vacancy at a sitting | `determine` (`verb_table.yaml:186-195`), `remit:determine`, writes `Tenure.degree`, **no effect body, `grade: absent`** | **refuses** `confer` outright. The seat is filled by `determine` at a fired Date, `AX §E.2.5`'s third shape — *"a seat filled by a PROCESS, not by a superior … **`determine`, not `confer`**"* |
-| **`succeed`** | *it passes to the designated heir.* The holder's own disposition, declared in life | `succeed` (`verb_table.yaml:490-504`), eligibility **`own`**, typed `relation`/`held_by` cell, writes `Tenure.since`, **no effect body** | **refuses** `confer`. The heir fills it by `succeed`, which is `own`-eligible and therefore formable by the heir with no remit at all |
+| **`succeed`** | *it passes to the designated heir.* The holder's own disposition, declared in life | `succeed` (`verb_table.yaml:490-506`), eligibility **`own`**, typed `relation`/`held_by` cell, writes `Tenure.since`, **no effect body** | **refuses** `confer`. The heir fills it by `succeed`, which is `own`-eligible and therefore formable by the heir with no remit at all |
 
 **Why exactly three and no fourth.** `ARCH §B.7`'s own list is *"confer by `<seat>` | determine by
 `<judging seats>` | succeed"*, and `AX` ID-14 spells the identical set. Round one proposed a fourth,
@@ -521,7 +521,7 @@ the purview.
 
 | candidate | who owns it? | verdict |
 |---|---|---|
-| `descendants(w, seat.rung)` alone, PROPER | the plan's §2.4 | **REFUSED, and this is a correction to my own spec.** `descendants` is proper (§A.5.1 step 3, verified by execution), so a seat at `duchy_varfell` would not reach **`duchy_varfell` itself** — and the office seated exactly there is the one thing every seat must reach. Measured: today's `under_purview` **is** reflexive — it returns `True` on the first loop iteration when `holding == seat` (`predicates.py:135-137`), which is why the King's purview count is **365** while `len(descendants(w, 'r_valoria'))` is **364**. The difference is exactly one rung: his own |
+| `descendants(w, seat.rung)` alone, PROPER | the plan's §2.4 | **REFUSED, and this is a correction to my own spec.** `descendants` is proper (§A.5.1 step 3, verified by execution), so a seat at `duchy_varfell` would not reach **`duchy_varfell` itself** — and the office seated exactly there is the one thing every seat must reach. Measured: today's `under_purview` **is** reflexive — it returns `True` on the first loop iteration when `holding == seat` (`predicates.py:135-138`), which is why the King's purview count is **365** while `len(descendants(w, 'r_valoria'))` is **364**. The difference is exactly one rung: his own |
 | `descendants(w, seat.rung) ∪ {seat.rung}`, minus the seat exercised | this file | ⭐ **EXTENSION, ADOPTED.** `reaches` as written in §A.5.1. Reflexive on the **rung**, exclusive on the **seat** — which is the only pairing that lets a Duke revoke his own chancellor and not himself |
 | `ancestors_or_self` as well, so a subordinate may act upward | nothing | **REFUSED.** `test_purview_is_containment_and_stops_at_the_holders_own_domain` (`test_season_shape.py:4467-4469`) asserts the direction and gives the reason in its own message: *"the REALM is under the duke's purview — purview is reaching upward, so a duke could act on the king's domain."* Upward reach is `petition` (`02`), never purview |
 | `under_purview` rewritten on `reaches`, with the disjunction over seats KEPT | `predicates.py:105-141` | **CONFORMANCE.** The comment at `:128-131` is load-bearing and survives: *"It is a DISJUNCTION over the seats: authority over a holding is authority from ANY title the actor holds. Taking the highest-ranked seat instead would be the same bug wearing a better argument."* **Until `Act.via` lands** (§A.10), `under_purview(w, actor, rung)` is `any(reaches(w, seat, target) for seat in seats_held(actor))`; **after** `via` lands it is `reaches(w, w.offices[a.via], target)` and the disjunction retires with the interim |
@@ -550,7 +550,7 @@ never the largest its faction owns.*
 
 > ### **RULED: purview is `reaches` — the seat's rung, its containment closure, and not the seat
 > being exercised.** Cited to `ARCH §B.7` (MECHANICAL), `world_q.py:54-64` (the walk, shared with
-> `01`'s REACH), `predicates.py:135-137` (today's reflexivity, measured as the 365/364 difference)
+> `01`'s REACH), `predicates.py:135-138` (today's reflexivity, measured as the 365/364 difference)
 > and `test_season_shape.py:4467-4469` (the direction). ⚠ **Struck and kept from my own plan:**
 > ~~*"Purview = `descendants(seat.rung)`"*~~ → **`descendants(seat.rung) ∪ {seat.rung}`, minus the
 > seat exercised**, because proper descendants exclude the seat's own rung and that is where the
@@ -777,7 +777,7 @@ re-verified against the code and kept:
 | the belief says | the world says | what happens | the code |
 |---|---|---|---|
 | permitted | permitted | the act resolves | — |
-| permitted | forbidden | **refused**, and `emits_on_refusal` fires — *so he learns* | `verb_table.yaml:151` (`confer.refused`), `:474` (`revoke.refused`) |
+| permitted | forbidden | **refused**, and `emits_on_refusal` fires — *so he learns* | `verb_table.yaml:151` (`confer.refused`), `:476` (`revoke.refused`) |
 | forbidden | permitted | **he never tries, and nobody ever learns.** A struck seat goes on governing because its holder still believes in it | no mechanism needed — the candidate is never formed |
 | forbidden | forbidden | nothing, correctly | — |
 
@@ -895,7 +895,7 @@ enters `office_bodies` **because a seat needs one**, one at a time, with the sea
 | `ladders:` standings | 47 | ⛔ **DROPPED ENTIRELY** | a standing ladder is a **faction-standing** model, not a seat. Nothing in `engine/season/` reads a standing; `rosters.yaml` has no `standings` roster. Transcribing it would be `governance_modes` again |
 | `ladders:`/`sub_ladders:` headers + branches | 10 + ~14 | ⛔ **DROPPED** | same |
 | `sub_ladders:` standings | 42 | ⛔ **DROPPED** | same |
-| `bodies:` on the live roster | 9 | ✅ **ALREADY LIVE** — transfers as a no-op | `rosters.yaml:1003-1027` |
+| `bodies:` on the live roster | 9 | ✅ **ALREADY LIVE** — transfers as a no-op | `rosters.yaml:1004-1040` |
 | `bodies:` off the roster, needed by an authored seat | **5** | ⚠ **AUTHORED FRESH into `rosters.yaml: office_bodies`**, one per seat that needs it, with `faction:` and `function:` quoted from the source the draft cites | the roster's own *"they go in the day a seat needs one"* (`:1040`) |
 | `bodies:` off the roster, needed by no authored seat | **22** | ⛔ **DROPPED** | `§0.1 pt 5` via the roster's note: apparatus load-bearing on nothing |
 | `seats:` | 25 | ⚠ **12 transfer their POST and BODY only; 9 are authored fresh; 4 are dropped** — §A.13.2 | every one is missing `id`, `remit_acts`, `conferral`, `revocation` — **four of the seven fields `offices.yaml` needs** |
@@ -943,7 +943,7 @@ for `Jarl Council`.
 `Dicastery for Doctrinal Adjudication`→`Cardinal of Justice`.
 \*\* **CONFLICT, adjudicated:** the draft says `faction: Crown`, the live build derives
 `Church of Solmund`. The post names an Archbishop; the registry row names a dual loyalty
-(`harness/populated.py:707-710` records it: *"`dual-loyalty: Crown Inner Circle agent…` (NPC-034)
+(`harness/populated.py:705-708` records it: *"`dual-loyalty: Crown Inner Circle agent…` (NPC-034)
 resolve to nothing and keep `body=None`, which is honest"*). **The live derivation wins** (gate 4,
 precedent: the tree already decided this row), and the draft's reading is recorded here, not dropped.
 \*\*\* **DOUBLY SUPERSEDED, and the live post wins.** The draft's own note records an unresolved
@@ -962,7 +962,7 @@ council shape used once so the mechanism ships with a live instance (§A.9).
 **And four LIVE seats have no draft row at all** — measured: NPC-030 (Princess), NPC-032 (Queen /
 Widow Regent), NPC-081 (Commune Representative, `proposed`), NPC-082 (Military Jarl, `proposed`).
 **They are kept**, because the draft's silence is not a deletion: the two `proposed` rows are
-`harness/populated.py:726-732`'s declared marginal call, and the two Royal Family rows are the
+`harness/populated.py:718-724`'s declared marginal call, and the two Royal Family rows are the
 succession seats `:688-691` argues for.
 
 > ### **RULED: the draft is a SOURCE, not a file. 44 of 178 rows inform `offices.yaml`; five seats are
@@ -970,7 +970,7 @@ succession seats `:688-691` argues for.
 > against today's rosters; and not one of the 25 supplies more than three of the seven fields.**
 > Cited to the measurements above (each with its command), `rosters.yaml:58-67` (the 2026-09-13
 > ruling), `rosters.yaml:1035-1040` (the 22 declined organs), `rosters.yaml:1067-1069` (the roster
-> already builds to the ruling) and `data/rosters.py:408-452` (the four refusals, each verified by
+> already builds to the ruling) and `data/rosters.py:408-453` (the four refusals, each verified by
 > construction). **A copy would have imported five superseded seats, 22 organs the tree names and
 > declines, and fifteen construction failures.**
 
@@ -1007,14 +1007,14 @@ seats:
 | `id` | ✅ | `Office.id` (`carriers.py:483`) | duplicated, or not matching `^off_[a-z0-9_]+$`. ⚠ **All 25 draft rows lack this**, so 25 ids are authored here |
 | `post` | ✅ | `Office.post` (`:484`) | empty. **Not** checked against any roster — `AX` ID-4: a post is a name and nothing is inferred from it. ⚠ **One exception, and it is the re-homed constructor clause** (§A.8): if `post ∈ titles.domains`, then `body` MUST be null and `rung`'s resolved kind MUST equal `title_domain(post)` |
 | `rung` | ✅ | `Office.rung` (`:485`) | the anchor resolves to zero rungs, or to more than one. **Four anchor forms only:** `{realm: true}` · `{duchy: "<faction>"}` · `{territory: "<code>"}` · `{settlement: "<code>"}`. ⚠ **NEVER an id**, so a `build_realm` rename cannot rot the file (`CLAUDE.md` §5's hand-transcription hazard, one layer earlier) |
-| `body` | ⬜ | `Office.body` (`:500`) | not a member of `office_bodies` → `Unspecified` at `data/rosters.py:421-428`, **verified by construction** |
-| `faction` | ✅ iff `body` is null | `Office.faction` (`:501`) | `body` and `faction` both null → `Unspecified` (`:440-445`); `faction` not on `factions` → `Unspecified` (`:446-452`); **both** set and disagreeing → `Forbidden` (`:431-438`). All three **verified by construction** |
+| `body` | ⬜ | `Office.body` (`:500`) | not a member of `office_bodies` → `Unspecified` at `data/rosters.py:423-430`, **verified by construction** |
+| `faction` | ✅ iff `body` is null | `Office.faction` (`:501`) | `body` and `faction` both null → `Unspecified` (`:440-445`); `faction` not on `factions` → `Unspecified` (`:446-452`); **both** set and disagreeing → `Forbidden` (`:432-438`). All three **verified by construction** |
 | `remit_acts` | ✅ (may be `[]`) | `Office.remit_acts` (`:486`) | any member off `remit_acts` → `Unowned` at `carriers.py:510-512`, **verified**. After `02` deletes `dispatch` the roster is `[issue, determine, confer, revoke, convene]` |
 | `conferral` | ✅ | `Office.conferral` (`:489`) | not a member of the **NEW** `conferral_bases` roster → a new `Unowned`, same shape as the remit refusal (§A.8) |
 | `revocation` | ✅ | `Office.revocation` (`:490`) | not a member of the **NEW** `revocation_bases` roster → same |
 | `holder` | ✅ | a `hold` Tenure | the case id is not in the cast; or the case already holds this seat id; or a **live `hold` already exists on this seat** — `world_q.hold_force` raises on a second (`world_q.py:138-144`) |
 | `obligees` | ⬜ | `oblige` Tenures | a case id not in the cast, or equal to `holder` |
-| `source` | ✅ | — | empty. **Not mechanism** — but a seat with no citation is the fabrication `data/rosters.py:425-427` exists to prevent, so the loader refuses it |
+| `source` | ✅ | — | empty. **Not mechanism** — but a seat with no citation is the fabrication `data/rosters.py:428-429` exists to prevent, so the loader refuses it |
 
 **Three schema rules that are not fields, and each answers a measured defect:**
 
@@ -1033,7 +1033,7 @@ seats:
 > moving anyone onto a duchy — but **within** `descendants(rung) ∪ {rung}`. Checked at build, after
 > homes are assigned (`harness/populated.py:400-422`). ⭐ **Measured false for 2 of the 3 rung-bearing
 > seats today** (§0.2 pt 3), and the repair is a `home:` for those two cases in
-> `references/npc_registry.yaml` — which `:406-407` already reads (*"if row and row.get("home") in
+> `references/npc_registry.yaml` — which `:408-409` already reads (*"if row and row.get("home") in
 > w.rungs: home = row["home"]"*), so the mechanism exists and the data does not. **`SC-3` is the
 > falsifier.**
 
@@ -1063,7 +1063,7 @@ conferral basis is exactly that, and `ARCH §B.7` call 3 already says where a co
 
 > ### **RULED: seven required fields, four anchor forms, three schema rules, two closed rosters, and
 > the rung is an ANCHOR rather than an id.** Cited to `carriers.py:479-548` field by field,
-> `data/rosters.py:408-452` (the four refusals, each verified by construction),
+> `data/rosters.py:408-453` (the four refusals, each verified by construction),
 > `carriers.py:508-512` (the refusal shape copied), `ARCH §B.7` (the ratified type),
 > `AX` ID-14 (`AX:519`) and `rosters.yaml:1086-1094` (the closed-roster precedent).
 
@@ -1082,7 +1082,7 @@ a reviewer should attack first (§D).
 | 4 | `off_duke_varfell` | Duke | D Varfell | — | Varfell | issue confer revoke convene | **determine** | **holdings** | NPC-052 | `[LIVE]`. ⚠ `conferral: determine`, not `succeed`: `faction_politics_v30.md:246` — *"first among the Jarls, **not a monarch**"*, quoted at `harness/populated.py:308-310`. The Jarl Assembly determines him |
 | 5 | `off_widow_regent` | **Queen** | realm | — | Crown | issue determine confer revoke convene | succeed | none | NPC-032 | `[LIVE]`, **post NORMALISED.** ⭐ Live post is `"Queen (Widow Regent if Almud eliminated)"`, which is **not** on `titles.domains`, so `title_domain` → `None` and she governs nothing. **A parenthesis is what stops a regent from being a regent** — `AX` ID-4's failure in one cell. Normalised to `Queen`; the condition moves to `note:` |
 | 6 | `off_heir` | Prince (Heir Apparent) | realm | — | Crown | — | succeed | none | NPC-031 | `[LIVE]` + draft `Heir Apparent` row. `ARCH F.22`: *"the named heir is eligible by `own`"* |
-| 7 | `off_princess` | Princess | realm | — | Crown | — | succeed | none | NPC-030 | `[LIVE]`. No draft row; kept — `harness/populated.py:688-691` argues the Royal Family seats |
+| 7 | `off_princess` | Princess | realm | — | Crown | — | succeed | none | NPC-030 | `[LIVE]`. No draft row; kept — `harness/populated.py:686-689` argues the Royal Family seats |
 | 8 | `off_royal_marshal` | Royal Marshal | T T1 | Inner Circle | ⟵derived | issue convene | confer | purview | NPC-036 | `[LIVE]` + draft row 1 (standing 7, `faction_politics_v30.md:194`) |
 | 9 | `off_lord_treasurer` | Lord Treasurer | T T1 | Inner Circle | ⟵ | issue | confer | purview | NPC-037 | `[LIVE]` + draft row 2 |
 | 10 | `off_spymaster` | Crown's Spymaster | T T1 | — | Crown | issue | confer | purview | NPC-033 | `[LIVE]` (authored case overlay, `remit: [issue, dispatch]` → `dispatch` deleted by `02`). Draft body `Schattendienst` **dropped** (off-roster) |
@@ -1098,7 +1098,7 @@ a reviewer should attack first (§D).
 | 20 | `off_senior_inquisitor` | Senior Inquisitor | T T9 | Cardinal of Justice | ⟵ | determine | confer | purview | NPC-004 | **`[NEW]`** draft `Cardinal Justice (alternate) / Senior Inquisitor`. Two seats on one body is lawful (a body is not a seat) |
 | 21 | `off_legal_advisor_hm` | Legal Advisor to Baralta | D Hafenmark | Inner Council | ⟵ | — | confer | purview | NPC-071 | `[LIVE]` + draft `Baralta's Legal Advisor`. One of `npc_behavior §2.16`'s **two** |
 | 22 | `off_military_commander_hm` | Military Commander | D Hafenmark | Inner Council | ⟵ | convene | confer | purview | NPC-072 | `[LIVE]` + draft row. The second of the two. `convene`: a muster is a sitting |
-| 23 | `off_commune_rep_hm` | Commune Representative (Banneret) | D Hafenmark | Inner Council | ⟵ | — | **determine** | purview | NPC-081 | `[LIVE]`, **`proposed`**. No draft row. ⚠ Exceeds `npc_behavior §2.16`'s two; kept with `harness/populated.py:726-732`'s declared marginal call attached. `determine`: a commune elects |
+| 23 | `off_commune_rep_hm` | Commune Representative (Banneret) | D Hafenmark | Inner Council | ⟵ | — | **determine** | purview | NPC-081 | `[LIVE]`, **`proposed`**. No draft row. ⚠ Exceeds `npc_behavior §2.16`'s two; kept with `harness/populated.py:718-724`'s declared marginal call attached. `determine`: a commune elects |
 | 24 | `off_guild_comptroller` | Guild Comptroller | D Hafenmark | **Guild** | ⟵ Guilds | — | **determine** | purview | NPC-007 | **`[NEW]`** ⚠⚠ **DERIVED, attack this first.** The 2026-09-13 ruling drops Feldhaus from Hafenmark's **council**, not from the world; her registry primary is *"Guilds Representative"*. Re-seated on `Guild` (on the live roster). `determine`: the Guild Forum |
 | 25 | `off_senior_jarl_west` | Senior Jarl of the Western Highlands | D Varfell | Jarl Council | ⟵ | determine | **determine** | purview | NPC-073 | `[LIVE]` + draft row (ED-637 rename to Björn Holdar). Draft body `Council of the Highlands` **dropped**; draft `rung_kind: province` **dropped** — the world has **0 provinces** |
 | 26 | `off_skald_chief` | Skald-Chief | D Varfell | Jarl Council | ⟵ | determine | **determine** | purview | NPC-074 | `[LIVE]` + draft row (ED-638 rename to Ingrid Stenskald). `determine` remit is canon: the draft's note — *"any Deed-Claim succession in Varfell needs the Skald-Chief's endorsement"* |
@@ -1205,7 +1205,7 @@ vacancy only a superior can fill, **which may be right for an office and is wron
 rosters = **5 named things in, 12 out.** Of the five, the pre-commitment concedes **two as overhead**:
 
 1. **the two rosters are +2 names for a closed set of six strings.** Conceded. The alternative — a
-   literal tuple in `predicates.py` — is `AX` ID-12's *"a definition living as a literal in a body"*,
+   literal tuple in `predicates.py` — is what `AX` ID-12 (`AX:454`, *"a closed set lives in data"*) refuses — `ARCH F.20b` states it in those words, *"a definition living as a literal in a body is what `ID-12` refuses"* —
    so the overhead buys a load-time refusal. **Kept.**
 2. **`reaches` is a fifth Query-shaped helper.** ⚠ **NOT conceded, and here is the deletion:**
    `under_purview` **becomes** `reaches` over the seat disjunction, so `reaches` is not an addition
@@ -1220,3 +1220,228 @@ required by the `requires_forms` precedent, and collapsing them into one (`bases
 revocation: [...]}`) would make one roster do two jobs — which is the `titles`/`values` duplication
 `rosters.yaml:733-742` already corrected once. **E passes narrowly, on a ratio, and the concession
 stands.**
+
+---
+
+# PART C · THE THREE QUESTIONS
+
+## §C.1 · WHO OWNS THIS? — one owner per value, and the owner is its only writer (`AX-4`, `AX:141`)
+
+| the fact | its one owner | its only writer |
+|---|---|---|
+| **which act fills a seat** | `Office.conferral` (`carriers.py:489`) | `engine/season/data/offices.yaml` at build; `establish` at RESOLVE (`verb_table.yaml:215`, `writes: [Office.exists, Office.remit, Office.establishment]` — ⚠ the third goes with the field, §A.9) |
+| **what emptying a seat requires** | `Office.revocation` (`:490`) | as above |
+| **the roster of admissible bases** | `rosters.yaml: conferral_bases` / `revocation_bases` | nobody — a closed roster, `open: false` |
+| **a seat's ground** | `Office.rung` (`:485`) | `offices.yaml` at build; `establish` at RESOLVE |
+| **whether a ground reaches another ground** | `predicates.reaches` | nobody — a function over `contain` edges |
+| **the containment ladder** | `contain` Tenures, with `World.add_tenure` as *"The ONE writer"* (`world.py:223-224`) | `World.add_tenure` alone, and it refuses a non-ascending edge (`:248-256`) |
+| **rank** | ⭐ **NOBODY — it is derived** (§A.5.1). Before this file, two owners: `title_rank` (`data/rosters.py:465`) and the `contain` ladder | — |
+| **who holds a seat** | a `hold` Tenure, owned by its subject (`ARCH §B.7` invariant *"a seat does not know its holder"*) | `_eff_confer`, `_eff_revoke`, `succeed`'s body (unwritten) |
+| **who serves a seat** | `oblige` Tenures, read by `establishment_of` (`world_q.py:399`) | `_eff_oblige` (§A.9), `_eff_release` |
+| **what a holder BELIEVES his remit to be** | his own ledger's `content:commission` claim (`carriers.py:129-156`) | WITNESS's deposit, via `02`'s rule |
+| **what his remit IS** | `Office.remit_acts` (`:486`), read by `_eligible` (`resolve.py:56`) and `_ch_post_remit` (`epistemic.py:360`) | `offices.yaml`; `establish` |
+
+⭐ **The row that matters is `rank`.** Before this file it had **two homes** — a title's ordinal and the
+containment ladder — and `AX-4` (*"every value has exactly one owner"*) was broken in a way nothing
+could see, because the two agreed on all 373 edges (measured, §A.5.1). **They agreed by construction,
+not by luck**, which is exactly why the duplicate was invisible and exactly why it can be deleted.
+
+## §C.2 · WHAT CAN CHECK THIS? — `STRUCTURAL | MECHANICAL | CONVENTION`
+
+| claim | grade | the construction |
+|---|---|---|
+| a `conferral` off the roster cannot exist | **STRUCTURAL** (typed, at load) | `Office.__post_init__` raises `Unowned`, the shape at `carriers.py:508-512`. There are four `Office` construction sites in the chain (`carriers.py:518-519`'s own count) and all four go through it |
+| a `revocation` off the roster cannot exist | **STRUCTURAL** | same |
+| **no `is_title` branch exists** | **MECHANICAL** | `grep -rn 'title_domain\|is_title' engine/season --include=*.py` → 0 outside history. A grep is mechanical, not structural: a new branch keyed on a post string could be written tomorrow |
+| a seat with no rung cannot exist | **MECHANICAL** | the `offices.yaml` loader refuses it. **Not structural** — `Office.rung` stays `Optional` because `ARCH §B.7`'s `scope?` is ratified, so a hand-built `Office(..., rung=None)` in a test is still lawful, and `SC-2` is the falsifier |
+| every holder lives inside his seat's closure | **MECHANICAL** | a build-time assertion after homes are assigned. Measured **false for 2 of 3** today (§0.2 pt 3) |
+| containment implies strictly higher rank | ⭐ **STRUCTURAL** | `World.add_tenure` raises on a non-ascending `contain` (`world.py:248-256`); `contain_ascends` is a strict `>` on the `rung_kinds` ordinal (`:220-221`). **This is the guard §A.5.1's proof rests on, and it is the strongest grade in this file** |
+| a seat cannot revoke itself | **STRUCTURAL** (typed) | `reaches` returns `False` on `target.id == via.id` before any walk |
+| purview never reaches upward | **MECHANICAL** | `descendants` walks `contain.object == cur` only (`world_q.py:62`); `test_season_shape.py:4467-4469` observes it |
+| a council is one seat | **STRUCTURAL** | `world_q.hold_force` raises on a second live `hold` (`world_q.py:138-144`) |
+| a seat's remit grants only rostered acts | **STRUCTURAL** | `Office.__post_init__:508-512`, already shipped |
+| **`offices.yaml` matches canon** | **CONVENTION** | a `source:` per row, and nothing checks that the cited line says what the row says. ⚠ **Stated as the weakest grade in the file.** `tools/validate_ed_citations.py` covers ED ids only (`CLAUDE.md` §0), and no tool validates a `systems/**` line citation |
+
+## §C.3 · WHOSE ACT MAKES IT HAPPEN? — every mechanism as execution
+
+| mechanism | the act, or the absence of one |
+|---|---|
+| a seat exists | `establish` (`verb_table.yaml:209-219`), `remit:confer`, `grade: assumption`. ⚠ **NOT resolvable today** (measured, §0.2). `offices.yaml` is the **build-time** producer; `establish` is the in-play one and remains unbuilt. **This file does not build it**, and says so |
+| a seat is filled by a superior | `confer` — **resolvable today**, effect at `effects.py:92-126`. Blocked only by the empty basis (§A.1.1) |
+| a seat is filled by a body | `determine` (`verb_table.yaml:186-195`) — **NOT resolvable**, `grade: absent`, `requires: "a fired Date with a DocketItem; judging_set — D11, absent"`. ⚠ **A `conferral: determine` seat is therefore UNFILLABLE IN PLAY today**, which is 8 of 29 seats, and `world_q.judging_set` raises `Unspecified` (`world_q.py:146-148`). **Stated as a LIMIT, not resolved** |
+| a seat is filled by an heir | `succeed` — **NOT resolvable**: `own`-eligible with a typed `relation` cell and **no `@effect_for` body**. Six of 29 seats. `ARCH F.22` |
+| a seat is emptied | `revoke` — **resolvable**, effect at `effects.py:159-172`. Blocked by the empty basis and, for `holdings`, by the faction-subject holds (§0.2 pt 4) |
+| a holder resigns | `release` (`verb_table.yaml:419-432`), `own`, **resolvable**, effect at `effects.py:129`. ⭐ **The one way a seat empties today that needs nothing from this file** |
+| a person joins an establishment | `oblige` — **NOT resolvable**; the row declares `writes: [Tenure.since]` and there is no body. §A.9 adds it |
+| a holder learns his remit | the `commission` Record + `02`'s deposit. **Nothing today**: `_eff_confer` mints no Record, and the deposit's predicate is `e.kind` (`witness.py:191`) |
+| purview is asked of the seat | `Act.via` — position 6. **Nothing today**; the interim is the seat disjunction (§A.10) |
+
+⭐ **The honest summary: of the four ways a seat is filled or emptied, TWO execute today (`confer`,
+`revoke`, both blocked on content alone) and TWO do not (`determine`, `succeed`, each missing an
+effect body).** So `offices.yaml` alone would make 15 of 29 seats conferrable and leave 14 fillable
+only at build. **That is the sentence a reader should take from this file**, and it is why §C.8's grade
+is `paper` rather than `partial`.
+
+## §C.4 · THE LOOPS, NAMED AND SIGNED (`AX` ID-16, `AX:544-549`)
+
+| loop | sign | the mechanism | what damps it |
+|---|---|---|---|
+| **`SC-L+1`** | **+** | a holder confers a subordinate seat; the subordinate's purview is a subset of his; the subordinate confers further down | **the ladder is finite and strictly descending.** `contain_ascends` (`world.py:220-221`) makes each step strictly lower on an 8-member roster, so the chain is at most 8 deep. **Structurally bounded, not tuned** |
+| **`SC-L+2`** | **+** | a man who holds land may unmake the seat that governs it, take the seat, and hold more land | **`in_holdings` requires a live `hold` on the rung**, which `transfer` cannot create (it moves matter, not rungs) and only `confer`/a build can. ⚠ **The damping is UNMEASURED because no person holds any rung today** (§0.2 pt 4), so this loop has never run. `SC-6` is where it first would |
+| **`SC-L−1`** | **−** | a seat emptied and not refilled loses its ground to nobody; nothing beneath it is conferred | **`release` is `own`-eligible and always available**, so a ladder can always shorten. `AX-6`: nothing becomes permanent without an author |
+| **`SC-L0`** | **0** | a holder believes a remit he no longer has (§A.11 row 3) and never acts | **not a loop — a fixed point**, and it is the mechanism: a struck seat goes on governing. Terminates when a claim decays or a witness corrects it |
+
+**No loop here has an unbounded positive arm**, and the reason is the containment ladder's finiteness
+rather than a fixture. ⚠ **`SC-L+2` is the one a reviewer should distrust**, because its damping term
+lives in a relation (`hold` over a rung) whose only current instances have **faction** subjects.
+
+## §C.5 · WHAT THIS FILE DOES NOT CLAIM
+
+1. That anything **runs**. Grade `paper` (§C.8).
+2. That a ratified `architecture/` sentence is changed. `ARCH §B.7`'s `Seat :=` line and `ARCH F.21`
+   are **quoted at their `§` and not edited** — RR-B (§C.9).
+3. That `Act.via` lands here. Position 6 (`_part2.md:239`).
+4. That a `Title` type or a rank ladder survives, **or that Jordan's rank clause is discarded** — it is
+   derived (§A.5.1) and the one behaviour change is declared.
+5. That `ARCH F.18` (upkeep), `ARCH F.21`, `H-101` or `H-108` close.
+6. That `offices.yaml`'s rows are verified against canon by anything but a human reading a `source:`
+   line. Grade **CONVENTION** (§C.2, last row), and it is the weakest claim in the file.
+7. That the five superseded draft seats are *wrong about canon* — they are **correctly transcribed from
+   a section a ruling superseded on the day of transcription** (§A.13.2).
+8. That round one's `03_THE_SURFACE.md` is superseded. It **STANDS**.
+9. That Jordan's principle (RR-P, `02`) is settled. Nothing in this file leans on it.
+10. That `ED-SE-0051` is answered. RR-2 stays open.
+
+## §C.6 · THE GRADE, AND WHAT WOULD MOVE IT
+
+**`paper`.** Nothing in this file executes. `CLAUDE.md` §0.2: *"A milestone juncture is done when the
+behaviour EXECUTES. Not when a document exists with a `## Status:` line."*
+
+**Four artifacts would move it, in cost order, and each is a build item in `05`:**
+
+| # | artifact | what it would show | why it has not been produced |
+|---|---|---|---|
+| 1 | `offices.yaml` + the two rosters + the two predicates on values, then `python -m engine.season.harness.corpus_run` | `confer` and `revoke` move out of *"foldable but never even attempted"* (`corpus_run.py:645-648`) and into `VERBS THAT EXECUTED` | it is one commit and this file is a proposal, `HELD BACK IN FULL` |
+| 2 | the same, plus a `census` before/after | 19 seats → 29; purview over **0** rungs → over a measured closure for all 29 | as above |
+| 3 | `@effect_for("oblige")` + `_req_oblige`, then `establishment_of` over live tenures | `establishment_of` returns a non-empty list for the Restoration seat (row 29) — **the first non-empty establishment in the world's history** | needs the body; §A.9 |
+| 4 | the commission + `02`'s deposit rule, then `test_no_person_can_choose_a_governance_verb_and_h71_is_why` (`test_season_shape.py:4992`) | that test goes **RED**, which is H-71 closing. Its own docstring (`:5005-5006`) says *"it goes red the day `H-71` closes, which is exactly when the claim becomes true"* | depends on `02`'s `record_kinds` roster, which does not exist (grep: 0) |
+
+⚠ **Artifact 1 alone does NOT make the milestone's governance juncture done**, and the temptation to
+say so is why §C.3 is in this file: `determine` and `succeed` have no effect bodies, so **14 of 29
+seats would still be fillable only at build.**
+
+## §C.7 · RULING REQUESTS — `RR-B`, and it has two items
+
+Each candidate was run through `CLAUDE.md` §0's five steps — Superseded → Irrelevant → Design doc →
+Precedent → Architecture — and the step that answered it is named. **Only survivors reach Jordan.**
+
+### Surviving: **RR-B** (this file's two items; `02` and `04` carry the others)
+
+| item | the ratified text | why steps 1–5 cannot take it |
+|---|---|---|
+| **RR-B.1 · `ARCH §B.7`'s `Seat :=` line spells `upkeep` and `dates[]`, which §A.8 deletes** | *"`Seat := ( id, post, body?, scope? …, remit(acts[], binds), conferral, revocation, **upkeep, dates[]**, exists )`"* | Step 1: nothing supersedes `§B.7`. Step 2: not irrelevant — the fields are in the ratified type. Step 3: no design doc outranks `architecture/`. Step 4: no precedent deletes a ratified schema field. **Step 5 may not overwrite ratified canon** (ED-IN-0204). Measured support for the request: **0 readers each** |
+| **RR-B.2 · `ARCH F.21` presupposes a `higher_rank` conjunct, and §A.5.1 derives rank instead** | *"the rank of a cluster seat (`scope = null`) \| no rank; **the loader forbids a `higher_rank` conjunct** on one \| church seats become revocable by purview alone — which they also lack"* | Step 1–4: silent. **Step 5 nearly takes it** — the derivation is sound and the guard is structural — **but F.21 is a ratified row that assumes the conjunct EXISTS**, and gate 5 cannot delete a thing ratified canon names. ⚠ **So F.21 is NARROWED, NOT CLOSED, and this file refuses to claim otherwise** |
+
+**RR-B also carries `02`'s and `04`'s items** — `ARCH §B.8`'s `Tenure :=` fields, `ARCH §B.5`/F.15's
+*"nine typed terms"*, and `ARCH §C.6`'s mint table. `05` §C is the single owner of the list.
+
+### Closed by the five-step gate, with the step named
+
+| candidate | closed at | by what |
+|---|---|---|
+| **H-91** — `remit:revoke` NECESSARY vs purview SUFFICIENT | **step 5** | two conjuncts, two owners, and the code already reads two different objects (`resolve.py:56` vs `predicates.py:234`). §A.5.3 |
+| **H-109** — the `is_title` branch | **step 3** | `ARCH §B.7` call 1 says *"No `is_title` branch exists anywhere"* in terms. Not a choice; a transcription |
+| **H-71** — `remit:` person-side | **step 5**, jointly with `02` | §A.11, and it closes on **both** sides. Depends on `02`'s roster |
+| **`ARCH F.17`** — how a person joins an establishment | **step 5** | admission is the joiner's `own` act, so the closed remit roster needs no sixth member. F.17's own default (read `binds`) is refused on a **measured** 0-reader field |
+| **`ARCH F.22`** — how succession fills a seat | **step 3** | `conferral: succeed` **is** the answer, and `succeed` is already `own`-eligible with a typed cell. What is missing is an effect body, which is work, not a ruling |
+| **a fourth `conferral` basis** | **step 3** | `ARCH §B.7` call 3 puts a consecration in the judging-set **door** |
+| **`term` as a fourth `revocation` value** | **step 3** | `ARCH §B.8`'s `T-o` row: *"`term.closer` names a basis, not a second authority"* |
+| **the rank conjunct's deletion** | **step 5** for the mechanism; ⚠ **RR-B.2 for the TEXT** | §A.5.1's proof plus `CLAUDE.md` §0.06's `S`-defect clause. The mechanism is decided; the ratified sentence is not this file's to edit |
+| **the five superseded draft seats** | **step 1** | Jordan ruled it, 2026-09-13, and `rosters.yaml:58-67` records the ruling verbatim |
+| **the 22 declined organs** | **step 4** | `rosters.yaml:1035-1040` is the precedent and names the number |
+| **the Archbishop's Representative faction conflict** | **step 4** | the tree already decided this row (`harness/populated.py:705-708`) |
+
+### NOT closed, and named so nobody reads them as closed
+
+`ARCH F.18` (upkeep's source) · `ARCH F.21` (RR-B.2) · `H-101` (an Office cannot name a superior
+Office) · `H-108` (`Act.via`; narrowed by the interim) · `determine`'s and `succeed`'s effect bodies ·
+`establish`'s unresolvability · the `offices.yaml` citation grade (CONVENTION) · `ED-SE-0051`.
+
+---
+
+# PART D · FALSIFIERS (`AX` ID-11 — ship the falsifier with the claim)
+
+**Each one names the assertion that would observe the failure it excludes** (`CLAUDE.md` §0.1 pt 2: an
+assertion that cannot observe the failure it excludes is not a weak test but an absent one), and each
+says **what it controls against**.
+
+| # | the claim | the falsifier, as an executable assertion | the control |
+|---|---|---|---|
+| **SC-1** | bases as values make seats conferrable | build with `offices.yaml`; `_req_confer` returns **True** for a `conferral: confer` seat under a reaching seat, and **False** for a `conferral: determine` one. ⚠ **The second half is the falsifier** — a version that admitted every non-empty string would pass the first half alone | today's world: `_req_confer` → **False** on 19 of 19, at `predicates.py:182` |
+| **SC-2** | purview is `reaches`, and it is reflexive on the rung and exclusive on the seat | four assertions, and **the fourth is the one that fails a naive rewrite**: (a) a seat reaches a rung strictly inside its own → True; (b) a seat reaches **its own rung** → True; (c) a seat reaches its own rung's **parent** → False; (d) `reaches(w, seat, seat)` → **False**. A `descendants`-only implementation fails (b); an `ancestors_or_self` one fails (c); today's `under_purview` fails (d) | `len(descendants(w,'r_valoria')) == 364` against `sum(under_purview(w,king,r) for r in w.rungs) == 365` — **the measured one-rung difference is the reflexivity, and it is the control** |
+| **SC-3** | every holder lives inside the closure of the rung he governs | for all 29: `containing_rung_of(holder) in descendants(w, seat.rung) | {seat.rung}`. ⭐ **Measured FALSE for 2 of 3 today** — the Duke of Varfell and the Duchess of Hafenmark are in `terr_T1 → duchy_valorsmark`. **So this assertion FAILS on the current tree and must be made to pass by a `home:` in `references/npc_registry.yaml`, not by weakening the assertion** | the King, who passes today |
+| **SC-4** | rank is derived, not lost | `for every pair (A,B) of the 29: B.rung in descendants(w, A.rung) ⟹ RUNG_KINDS.index(kind(A.rung)) > RUNG_KINDS.index(kind(B.rung))`, **and** `assert checked >= 1` (`CLAUDE.md` §0.1 pt 2's *"a loop that asserts conditionally must assert that it asserted"*). ⚠ **Plus the negative:** plant a `contain` edge that descends and assert `World.add_tenure` **raises `Forbidden`** — if it does not, the proof's step 2 is false and the rank conjunct must come back | the 373 live `contain` edges, **0 violations measured** |
+| **SC-5** | deleting the title helpers loses no constructor invariant | `Office(id, "King", rung, [], body="Inner Circle")` still raises, and the message still names **both** the title and the body. ⚠ **This is the falsifier for §A.8's re-homing, and it is the one most likely to be silently dropped** — a session deleting `title_domain` would delete the clause with it and every test would stay green, because **no test constructs that pair** (measured: `test_season_shape.py:6544` is the nearest and tests a body/faction mismatch, not a title/body one) | today: the same construction raises `Forbidden` (verified by construction, §A.8) |
+| **SC-6** | `revocation: holdings` is satisfiable | `_req_revoke` on `off_duke_varfell` by a holder of `duchy_varfell` → **True**, and by a non-holder with purview → **False**. ⭐ **It is UNSATISFIABLE today and the reason is not the basis:** all 16 rung-holds have **faction** subjects and `in_holdings` tests `t.subject == actor` for a person. **So this falsifier fails until the faction holds are re-homed** (`05`'s item 16), and the dependency runs **opposite to the plan's build order** | `sum(in_holdings(w,p,r) for p in w.persons for r in w.rungs) == 0`, measured |
+| **SC-7** | the derivation's judgment calls are right | two named rows, each with the assertion that would show it wrong: **row 24** (Guild Comptroller) — if `Guild`'s faction is `Guilds` and NPC-007's registry faction is Hafenmark, `office_faction` raises `Forbidden` on the mismatch, so the row must author `body: Guild` and **no** `faction:`; **row 29** (Restoration leader at T15) — if any faction ever holds `terr_T15`, the seat is standing on somebody else's ground and the row is wrong. `assert not any(t.kind=="hold" and t.object=="terr_T15" and t.live for t in w.tenures)` | measured today: no live `hold` on `terr_T15`; `BODY_FACTION["Guild"] == "Guilds"` |
+| **SC-8** | `offices.yaml` is a derivation, not a copy | `for row in offices.yaml: Office(**row)` constructs **29 of 29**. ⚠ **The control is the copy:** `for row in offices_draft.yaml['seats']: Office(...)` constructs **10 of 25** and raises `Unspecified` **15** times — 14 on the body, 1 on the faction. **Both numbers in the same test**, or the claim has no control (`CLAUDE.md` §0.1 pt 4) | measured, §A.13 |
+| **SC-9** | H-71 closes on both sides and they may disagree | two assertions: a holder with a `content:commission` claim naming a seat whose remit includes `issue` **forms** an `issue` candidate person-side; **and** a holder whose seat was revoked but whose claim survives **still forms it** and RESOLVE **refuses** it, emitting `issue.refused`. ⚠ **The second is the falsifier** — a design that kept the two readings in sync would pass the first and fail the second, and would have deleted every deception mechanism in the game | today: `person_side_eligible` declines every `remit:` alternative at `options.py:163-165`, so candidate count is **0** |
+| **SC-10** | the title family is gone | `grep -rn 'title_domain\|title_rank\|titles_held\|highest_title_rank\|is_title\|conferral_path' engine/season --include=*.py` → **0**. ⚠ **And the positive control, without which the grep proves nothing:** `rosters.yaml: titles.domains` still has its **eleven** members and `test_the_title_ladder_is_total_over_the_rungs...` (`:4403`) still passes against the roster — **the ladder is canon and stays; only its readers go** | the current grep returns the nine non-test sites of §A.3 |
+
+⚠ **THREE OF THESE TEN FAIL ON THE CURRENT TREE AND THAT IS DELIBERATE.** `SC-3` (holders outside
+their duchy), `SC-6` (faction-subject holds) and `SC-9` (the `remit:` decline) are **red today**, and
+each names the work that turns it green. A falsifier suite where every member passes before the work is
+done is a suite that observes nothing.
+
+---
+
+# APPENDIX · CITATION REPAIRS
+
+**Every `path:line` in this file was opened at that line in this session.** These are the ones I found
+**wrong in my own sources** — the plan, round one, and my own first pass — repaired in place above and
+listed here so a later session does not re-derive them.
+
+| # | source | said | measured | where repaired |
+|---|---|---|---|---|
+| 1 | my spec | *"13 of 14 body-bearing seats name a body absent from `BODY_FACTION`"* | **15** carry a body; **14 of 15** are absent | §A.13 |
+| 2 | my spec | *"26 of its 36 `bodies:` rows are non-canonical"* | **27 of 36**, decomposing as 22 declined organs + 5 spelling variants | §A.13 |
+| 3 | my spec | *"would raise `Unowned`"* | `require_member` raises **`Unspecified`** (`data/rosters.py:299-302`); `Unowned` is `Office.__post_init__:510`'s, for a bad **remit act** | §A.13 |
+| 4 | my spec / the plan §2.4 | *"Purview = `descendants(seat.rung)`"* | `descendants` is **PROPER** (verified: `'r_valoria' in descendants(w,'r_valoria')` → `False`), so it excludes the seat's own rung — where the subordinate seats sit. Today's `under_purview` **is** reflexive (`predicates.py:135-138`; the measured 365/364 difference) | §A.6, and struck in place |
+| 5 | the plan §2.4 | *"the `is_title` branch (:252-274)"* | the branch is `:252` (assignment), `:254` (`if`), `:255-274` (the title conjuncts), **`:275-276` (the `elif` tail)**. Citing `:252-274` leaves the `elif` behind | §A.1.2, §A.7 |
+| 6 | the plan §2.4 | *"`offices_draft.yaml` … ~178 data rows"* | **178 leaf data rows + 10 container headers = 188 rows.** Both figures are true of their own basis and a session citing either must say which | §A.13 |
+| 7 | the plan §2.4 | *"`Office` … zero non-test readers for `scope_rung`, `binds`, `upkeep`, `dates`, `body_function`"* | **CONFIRMED, all five.** ⚠ And `dates` needed care: all 13 `.dates` hits in `engine/season/**/*.py` are `w.dates`/`self.dates`, the World's dict — a naive grep reads as 13 readers | §A.8 |
+| 8 | the plan §2.4 | *"`establishment` is read once (`world_q.py:413`)"* | **CONFIRMED** — one non-test reader; the second hit is `harness/probes.py:1376`, an assertion | §A.9 |
+| 9 | the plan §2.4 | *"`offices_draft.yaml` … `seats:` :230, `titles:` :538"* | **CONFIRMED** both | §A.13 |
+| 10 | round one `01` §A.2 | *"`title_domain` … is `engine/season/data/rosters.py:459`"* (its own repair of ~~`predicates.py:144-164`~~) | **CONFIRMED, and INCOMPLETE:** `title_domain` has **five** non-test call sites in **three** files, two of them in `Office.__post_init__` (`carriers.py:536,546`). Round one's repair fixed the location and kept the undercount | §A.3, §0.3 |
+| 11 | round one `01` §A.3 | *"`revocation ∈ {purview, purview+holdings+rank, none, term}` … `term` CONFORMANCE on `ARCH §B.8`"* | `ARCH §B.8`'s `T-o` row says the opposite: *"`term.closer` names a basis, not a second authority"* | §A.5.2, struck in place |
+| 12 | round one `01` §B.2 | `Office.body_function` among the deletions | it is a **derived cache** of a roster read (`carriers.py:530`), not a second home for a fact. **Kept**, and `05`'s count adjusts | §A.8, struck in place |
+| 13 | round one `01` §A.1 | *"`Office` (`carriers.py:481-549`)"* | `@dataclass` at `:480`, `class Office:` at `:481`, last body line `:548`. `:549` is blank | §A.8 (cited `:479-548`) |
+| 14 | round one `01` §A.2 | *"`rosters.yaml:718-724`"* for Jordan's two revocation rules | **effectively correct**: the two rules are at `:719-723` and the whole revocation note is `:714-726`. Cited here as `:719-723` for the rules | §A.5 |
+| 15 | round one `01` §0.2 | *"the eleven-name `titles.domains` roster (`rosters.yaml:755-766`)"* | **CONFIRMED exactly**: `domains:` at `:755`, `King` at `:756`, `Individual` at `:766` | §A.2 |
+| 16 | the plan §2.4 | *"`_req_confer` (`loop/predicates.py:167-193`)"*, *"`_req_revoke` (:222-289)"* | `_req_confer` `:167-192`; `_req_revoke` `:222-287`, with `:288-289` blank. The refusal lines `:181-182` and `:234-235` are **exact** | §A.1 |
+| 17 | the plan §2.4 | *"`Act.via` is nowhere in `carriers.py:332-365`"* | **CONFIRMED**, and stronger: `grep -rn "a\.via\|act\.via\|'via'\|\"via\"" engine/season/` → **0 hits in the whole package** | §0.1 |
+| 18 | the plan §10 | `hole_register.yaml` `:795` (H-71), `:1000` (H-84), `:1520` (H-109), `:1533` (H-110), `:1106` (H-92), `:1508` (H-108) | **ALL CONFIRMED** at the `- id:` line | throughout |
+| 19 | the plan §10 | `ARCH` F.15 `:1077`, F.17 `:1079`, F.18 `:1080`, F.20 `:1082`, F.22 `:1086` | **ALL CONFIRMED.** ⚠ **And `F.21` at `:1085` is in that block and no source document cites it** — it is the one F-row about seat rank, and it is this file's RR-B.2 | §0.1, §C.7 |
+| 20 | — | *nobody cited it* | ⭐ **`AX` ID-14 (`AX:505-521`) already spells the conferral value set**: *"`Seat.conferral` becomes `hold-kind → {confer \| determine \| succeed}`"*. Round one cited `AX:1495-1498` (the field exists and carries nothing) and missed the sentence that names the three values | §A.4, and it is why §A.4's verdict is CONFORMANCE rather than EXTENSION |
+| 21 | — | *nobody measured it* | ⭐ **`world_q.conferral_path` (`:416-436`) has zero non-test callers and never reads `conferral`** | §0.2 pt 6, §A.12 |
+| 22 | — | *nobody measured it* | ⭐ **0 of 19 holders are seated at their seat's rung; the Duke of Varfell and the Duchess of Hafenmark do not live inside the duchy they govern** | §0.2 pt 3, §A.14 R-3, `SC-3` |
+| 23 | — | *nobody measured it* | ⭐ **all 16 rung-holds have FACTION subjects, so `revocation: holdings` is unsatisfiable by any person today**, for a reason unrelated to the basis | §0.2 pt 4, `SC-6` |
+| 24 | — | *nobody measured it* | ⭐ **`World.contain_ascends` is a STRICT ascent check enforced at the one writer** (`world.py:197-221`, `:248-256`), which is what makes the rank conjunct derivable rather than merely redundant | §A.5.1, `SC-4` |
+| 25 | my own first pass, §A.15 | the `revocation` distribution as `19/2/8` and `body` as `14` | `20/2/7` and `17`, both summing to 29 | §A.15, corrected in place with the error recorded |
+| 26 | my own first pass, throughout | **thirteen `path:line` citations off by one to three lines**, each written from a `grep -n` of a definition rather than from the line the claim is about | repaired by opening each: `in_holdings`'s test `:103-104`→**`:101-102`** · `under_purview`'s reflexive return `:135-137`→**`:135-138`** · `office_faction`'s body refusal `:421-428`→**`:423-430`**, its mismatch `:431-438`→**`:432-438`**, its law string `:425-427`→**`:428-429`**, the function `:408-452`→**`:408-453`** · `revoke`'s `requires` `:472`→**`:473`** and its refusal `:474`→**`:476`** · `descendants`' walk `:61`→**`:62`** · `succeed`'s row `:490-504`→**`:490-506`** · the Royal-Family note `:688-691`→**`:686-689`** · the dual-loyalty note `:707-710`→**`:705-708`** · the proposed-seat note `:726-732`→**`:718-724`** · the `home:` read `:406-407`→**`:408-409`** · the `office_bodies` mapping `:1003-1027`→**`:1004-1040`** | everywhere |
+
+⚠ **Row 26 is the most useful row in this appendix and it is about METHOD, not about lines.** Every
+one of the thirteen was written from a `grep -n` that found a **definition** and then cited a range
+around it, which is `CLAUDE.md` §0.1 pt 3's third shape exactly: *"claiming 'as `F` says at `:L`' →
+open `F` at `:L`. A citation you have not opened is not a citation."* **A grep locates; it does not
+verify.** Every one was caught by the adversarial pass over this file's own citations, run before the
+file was closed, and none was caught by writing it carefully.
+
+⚠ **Two of my own numbers were wrong on the first pass (row 25), and they are recorded rather than
+quietly fixed**, because `UNIFICATION_LEDGER.md` rows 20–21 are this suite's own precedent: three of
+round one's *"opened and found CORRECT"* lines were **false verifications**, and the repair is to show
+the correction, not the clean result.
+
+---
+
+_End of `03_SEATS_AND_CONTENT.md` · `ED-IN-0235` · lane `IN` · grade `paper` · HELD BACK IN FULL._

@@ -158,14 +158,46 @@ unsatisfiable for every producible date.** Q1 is not under-used. It is unreachab
 **(d) WHAT REACH WOULD DO, LIMB BY LIMB — `build_realm(0)`, one season, 2175 claims, 46 persons.**
 The honest decomposition, because a single aggregate here would hide the finding:
 
+⚠ **RE-RUN AND REPAIRED 2026-09-17. The instrument is `probe_reach_questions.py`, a sibling in this
+directory** — it did not exist when this table was first written, the figures came from an ad-hoc probe
+that left no artifact, and `CLAUDE.md` §0.1 pt 3 does not accept that. **The headline reproduces
+exactly; one row did not, and the attribution under it was wrong.** The probe asserts a control — row 1
+must equal `world_q.questions_for`'s own `claim_landed` count — so the ladder is anchored to the live
+query rather than to a re-implementation nobody checked (§0.1 pt 2).
+
 | the Q2 admission test | questions admitted |
 |---|---|
-| **today**: `c.subject == p.id or c.subject in mine` (`world_q.py:493`) | **561** |
-| **full REACH, SUBJECT ONLY** — all four limbs, no place clause | **561** |
-| self alone, subject-or-place | 328 |
-| self ∪ `mine`, subject-or-place | **1632** |
-| **+ ancestors-or-self of home**, subject-or-place | **1632** |
-| **+ purview** (`{seat.rung} ∪ descendants`), subject-or-place | **1632** |
+| **today**: `c.subject == p.id or c.subject in mine` (`world_q.py:493`) | **561** ✅ *= the live query, asserted* |
+| **full REACH, SUBJECT ONLY** — all four limbs, no place clause | **561** ✅ |
+| self alone, subject-or-place | ~~328~~ → **1632** ⚠ |
+| self ∪ `mine`, subject-or-place | **1632** ✅ |
+| **+ ancestors-or-self of home**, subject-or-place | **1632** ✅ |
+| **+ purview** (`{seat.rung} ∪ descendants`), subject-or-place | **1632** ✅ |
+
+> ⚠ **WHAT THE RE-RUN FOUND, AND IT IS A DEFECT IN THIS TABLE RATHER THAN IN REACH.** The six rows were
+> not all computed on one ladder — `CLAUDE.md` §0.06's **S-METHOD** failure, *"calculations consistent
+> in methodology with other mechanics"*, committed inside a single table. `place_of` has two defensible
+> readings and these rows used three:
+>
+> 1. **The ASCENDING reading** — resolve a `Record` through its `rung` field (417 of the 2175 claim
+>    instances have a Record subject) and climb from a rung to the nearest ancestor-or-self of kind
+>    `hearth`. **This is the reading under which the corpus splits `2012 hearth / 163 none`, exactly as
+>    stated below, and under which rows 4–6 read 1632.** It is the reading this file means.
+> 2. **The NO-ASCENT reading** — the literal words of the next bullet, *"a person's live `contain`
+>    Tenure's object **is** their home rung"*. On this tree that object is a rung of kind **`person`**
+>    and the hearth is its PARENT: `build_realm(0)` gives all 46 persons a person-rung. The split is
+>    `1902 person / 110 hearth / 163 none` and **rows 4–6 read 561** — the place clause adds nothing,
+>    because a person-rung holds exactly one person.
+> 3. **Row 3's `328` is neither.** It is the no-ascent reading with Records left unresolved. Under
+>    reading 1 that row is **1632**; under reading 2, 451.
+>
+> **AND THE ATTRIBUTION IS WRONG WHERE THE MAGNITUDE IS RIGHT** — the corrected claim is the more
+> useful one. ~~*"The entire effect is the PLACE clause, and it lands on the `mine` limb"*~~ → **the
+> entire effect is the ASCENT, and it lands on the SELF limb.** Rows 3–6 are one number: once `place_of`
+> climbs to the hearth, `pl == place_of(p.id)` admits everything, and `mine` adds nothing, because a
+> person's `contain` object ascends to that same hearth. **`mine` is not carrying the effect; the hearth
+> is.** This matters to §B.4's cost, because the limb about to be defended on the strength of 1071
+> questions is not the limb producing them.
 
 **Read that table before reading the rest of this file, because it overturns the plan's own N-line.**
 

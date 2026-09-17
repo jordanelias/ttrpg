@@ -1,6 +1,14 @@
 # 02 · THE BUILT WORLD — settlements and their buildings, infrastructure, fortifications and works, as the expression of factions and the contents of their holdings
 
 ## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## ⚠ **SUPERSEDED IN PART 2026-09-17 by `../2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md`**
+## (`ED-SE-0053`). **Overturned:** hearth larders and the delivery move — `AUDIT_VERDICT.md` limit 3, since
+## *"the share leaves `r.stores` at MATTER"* contradicts this file's own RULED line (`transfer` binds `from`
+## to the actor's OWN rung) — and every reading of a built thing gated on `in_force`. **KEPT and carried
+## forward by pointer:** the fabric/address ontology, the `hold`-guard argument, `Rung.envelope`, the
+## withdrawals of `fort_level` / `facility_tier` / `governance_modes` / `power_bases`, and §B.4's own FINDING
+## that the `wear` × `restore` × yield equilibrium is not player-computable. **Kept as reference; struck
+## where overturned.** `ED-SE-0051` is untouched by round two.
 ## Method: `opus` (`claude-opus-5`), per `CLAUDE.md` §10 — the authoring tier for *"large-context synthesis"* and *"contract closure"*. A reconciliation stage at tier `fable` (read-only by role, §10's audit/guardrail node) adjudicated every disagreement before this file was written; this file writes that adjudication rather than re-deriving it. Lane **SE**, id **ED-SE-0052** (`registers/editorial_ledger_se.jsonl:52`).
 ## Scope pin: every `path:line` below was opened in this session against the working tree. Every count was produced by running the thing that would have shown it wrong (`CLAUDE.md` §0.1 pt 3). **Grade under §0.2: `paper`** — ⚠ **§D.15 says what would move it** (~~§D.9~~: there is no §D.9, only the falsifier row `BW-9`, and the grade section is **D.15**; orphaned pointer repaired 2026-09-17).
 ## ⚠ **UNIFIED 2026-09-17 (`00_THE_DESIGN.md`).** Suite-wide: **`ARCH`** = `architecture/meta/04_CODE_ARCHITECTURE.md`, **`AX`** = `architecture/meta/01_AXIOMS.md`; a bare `01`/`02`/`03`/`04` means a file in THIS directory. This file's falsifiers are **`BW-n`** and its loops **`BW-L±n`**. The multi-season construction is **a `works`** (`01` §A.12's ruling, binding on the suite), never *a work* or *a project*. Reconciliation edits are struck in place.
@@ -978,6 +986,14 @@ rows · a transition registry with its hysteresis and its load check · 13 gauge
 **Carriers added: 0. Fields on carriers added: 0. Write classes, steps, strata, eligibility kinds,
 tenure kinds and `requires` forms added: 0.**
 
+> ⚠ **THIS RATIO DID NOT SURVIVE THE PASS THAT JUDGED IT.** `AUDIT_VERDICT.md` grades E-OVERHEAD
+> **FINDINGS** across the suite: *"code in ~27 against code out ~10, plus 16 content rows. 'Net deletion'
+> holds only against a counterfactual that never existed in code (14 design-only verbs, a siege
+> subsystem), not against the tree."* The in/out list above is this file's honest share; the SUITE's
+> headline was not. Round two recounts by name against the tree —
+> `../2026-09-17-governance-and-holdings-r2/05_LEDGER_AND_BUILD.md` §4 is the only place that arithmetic is owned, and no figure in this
+> directory may be cited for it.
+>
 > **E PASSES AS A RATIO — net deletion, against what N and R found — AND WOULD FAIL IF SCORED ALONE.**
 > §0.06: *"alone it is satisfiable by amputation."* The legibility half passes on its own test: the
 > player reads a **band name** because that is what the resolver reads, and remaining work as a
