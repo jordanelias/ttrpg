@@ -1019,3 +1019,291 @@ Jordan, the findings not to re-derive, and the traps this session hit. Highest-l
 
 ⚠ **Do not open another audit of the apparatus.** The measured finding is that 78% of commits whose
 subject line says consolidate/cull/prune/retire were **net line increases**.
+
+---
+
+# MOVED FROM root `HANDOFF.md` — 2026-09-17 (`ED-IN-0241`), corrections pass
+
+Two classes. (1) The `###` subsections of `## ⚠ WAS CURRENT — 2026-08-27` and `## Next actions`, ORPHANED in root when `ED-IN-0240` moved their `##` parents and took only the head — my defect, caught by reading the heading tree rather than the exit code. (2) The bodies of the ruling records; each prohibition stays in root as a row.
+
+### What landed 2026-08-27, and the one thing that moved output
+
+Four commits. **Three were byte-identical and that was the point of each.** The evidence trail is
+`registers/session_records/2026-08-27/` — two campaign captures and what they measure — and the
+instrument is `tools/campaign_output_probe.py`, promoted out of `/tmp` where it had spent the
+session licensing three commits.
+
+| ED | what | output |
+|---|---|---|
+| **ED-IN-0199** | `engine/autoload/engine_clock.py` exists. `propagation_spec_v1.md` §O.1 has said since 2026-07-02 that engine_clock owns the tick composition; the module did not exist, `season.run_season` held the ordering, and the scheduler's two phase calls sat *inside* the ACTION phase's body. `next_tick()` left the scheduler in `_PHASE_ACTION` for all of accounting, and `keys.py` defers an `apply` on exactly that condition. | **identical** |
+| **ED-SC-0031** | The ninth degree ladder — `sigma_leverage.degree`, the one the 2026-08-12 census missed — migrates to `dice_engine.degree_from_net`. | **MOVED** |
+| **ED-SC-0032** | The injection seam: `dice_engine.BandExtension`. The contest's de-saturation rule leaves the engine for the subsystem that owns it and is injected by its wrapper. | **identical** |
+| **ED-PC-0057** | The 40% covert-plate-killer ceiling is **abolished** (Jordan: *"stop arbitrary fiat capping"*). No replacement threshold. | n/a (test-only) |
+
+**The ED-SC-0031 move is not a balance result.** Six of eight campaigns change winner at n=8;
+`tools/balance_oracle.py` at n=120 per arm shows max |z| = 0.80 against a 1.96 threshold. Six
+goldens were re-pinned on that basis. Full table in the session record.
+
+### ⚠ POST-MERGE AUDIT (2026-08-27) — "are all decisions logged, ratified and propagated?"
+
+Asked after #334 merged. **The answer was no, in three ways**, all now fixed. Recording the
+result rather than only the fix, because each is a class this repo will hit again.
+
+1. **A DUPLICATE ED ID SHIPPED.** The ceiling abolition was filed as `ED-PC-0041`, which had been
+   allocated on 2026-07-29. `next_free` for PC read **57**; I filed 0041. CLAUDE.md §4 says read
+   `next_free` and allocate THAT — never max+1, never a number you reasoned to. Renumbered to
+   **ED-PC-0057** and propagated. **Nothing in CI cross-checks a lane's allocated ids against its
+   pointer**, which is why a merged PR carried it; the audit was a one-line Python script.
+2. **TWO JORDAN RULINGS WERE RECORDED NOWHERE.** A grep for their own words returned zero files:
+   *"one faction write mechanism"* and *"key contracts and module contracts etc need to be
+   explicitly defined in a centralized hierarchical manner"*. Both were given in the same
+   conversation as "one degree ladder", which drew four commits. **The shape to watch: a ruling
+   delivered alongside another, and satisfied by the tree's current state, is the one that gets
+   silently dropped** — nobody decides against it, it just never becomes a work item.
+   → **ED-FA-0038** (executed: the faction-write ruling was already substantially true, so what
+   landed is the guard that was missing) and **ED-IN-0200** (ruled, NOT executed, filed `open`).
+3. **PRE-EXISTING, NOT MINE, RECORDED NOT FIXED:** six duplicate ids in the IN ledger
+   (`0012, 0013, 0016, 0029, 0149, 0162`, all July–August). CLAUDE.md §4 documents 0012/0013;
+   the other four are undocumented. Not touched — the ED-306 precedent §4 cites says merged
+   ledger lines are not rewritten unilaterally.
+
+**The one gap left open by this audit:** no gate checks ledger ids against `id_reservations.yaml`.
+A ~10-line test would have caught (1) and (3). It is not written here because minting a guard is
+governed by §0.1 pt 5's predicate, and an id-allocation checker is load-bearing on this
+repository's process rather than on the game — the predicate's own worked-example exclusion. The
+honest disposition is that this class recurs and is cheap to detect, and that the predicate says
+not to mint the guard. **Flagged for Jordan as a genuine tension, not resolved by me.**
+
+### THE HIGHEST-VALUE WARNING FROM THIS SESSION
+
+**ED-SC-0032 broke `tools/balance_oracle.py` and nothing caught it.** Moving `degree` out of the
+engine left the oracle's arm reading `SL.degree`, so the default invocation raised AttributeError.
+That is the instrument CLAUDE.md §7 names as *the* campaign-level balance control, and the one
+whose n=120 run had licensed the previous commit's six golden re-pins — disabled by that commit's
+own successor, found by an adversarial pass rather than by anything automated.
+
+**The cause generalises and is the thing to carry forward: a deliberately-uncalled instrument has
+no freshness relationship to the code it measures.** The oracle is not a CI gate on purpose (240
+campaigns, ~13 min) and that is still right — but "not a gate" was silently doing the work of "not
+tested at all". `tests/valoria/test_balance_oracle_arms.py` now constructs both arms and asserts
+they band differently; it runs zero campaigns and costs milliseconds. **If you add another
+deliberately-uncalled instrument, add its liveness test in the same commit.**
+
+### Cross-lane items now OPEN
+
+- **[PC — the big one] Derive Ob from the DEFENDER.** Jordan, 2026-08-15: Ob is *"their
+  corresponding score/2 plus whatever specific modifiers exist for them in that instance"*, and
+  `DECISIVE_OB` is dead. The sequence is settled and is the opposite of the obvious one: **derive
+  Ob first, THEN combat's bands migrate.** This is genuine new mechanism, it is the last declared
+  HOLD in `tests/valoria/test_degree_ladder_single_owner.py`, and it is what makes guandao reach
+  47.5% on its own merits. The fiat ceiling that stood in its way is gone. See `HANDOFF_PC.md`.
+- **[IN] §4.1's drain topology is NOT implemented.** `engine_clock.run_tick` calls
+  `run_accounting` RAW — the shape `propagation_spec_v1.md` §4.1 explicitly names as its rejected
+  earlier draft ("that was unbounded"). Bounded today only because accounting emits no Keys.
+  Closing it is Phase E and is blocked on **R-1** (the D.6 double-count) and **R-4** (ORD-3
+  observer ordering). See `HANDOFF_IN.md`.
+- **[IN] ~38 flow-skeleton `file:line` anchors were re-based +5** when `module_contracts.yaml`
+  grew a composition role. That preserves each anchor's existing offset and nothing more. An
+  adversarial sample of 23 found **12 already stale** by larger, non-uniform offsets. **Nothing in
+  CI validates a `.md` anchor's CONTENT** — `test_flow_skeletons` checks only symbol proximity.
+  Repairing them is bounded but separate; a partial repair would present the unsampled remainder
+  as verified.
+- **[FA/WR] The parliamentary bridge's shut-out set has taken three values** under three unrelated
+  mechanic changes (`{'Hafenmark'}` → `set()` → `{'Church'}`). That is evidence the property
+  "the spine can eliminate a faction" tracks the seed, not the spine. Only ever measured at
+  n=8/seed-42. Settling it needs the n≥100 arm.
+- **[SC] The seam has exactly one consumer.** `PoolDesaturation` is the only `BandExtension` in
+  the tree, so its contract ("veto the top band, nothing else") is proven by hostile probes rather
+  than by a second real user. Expect that power to be what comes under pressure when a second
+  subsystem wants an extension; widen it by ruling and ledger entry, never by convenience.
+
+### Rulings received 2026-08-27, all executed or accepted
+
+Recorded verbatim in the `RULINGS` block at `tests/valoria/test_degree_ladder_single_owner.py`,
+which is now the single home for the degree-ladder rulings — it exists because ED-SC-0032 nearly
+deleted its own authority (removing the HELD entry that was the *only* in-tree record of the
+ruling authorising its shape).
+
+1. *"so plan to resolve it then if you know what to do!"* → the injection seam. **Executed.**
+2. *"yes accept. if you don't have enough dice you don't have enough dice"* → a pool-2 contest can
+   never resolve Overwhelming. **Accepted, settled, not to be re-raised.**
+3. *"dude guandao not being able to hit 47.5% on its own merits is fucked up. stop arbitrary fiat
+   capping"* → the 40% ceiling. **Abolished**, and it **overrode a sequencing objection I had
+   raised** — recorded rather than dropped, because the objection was about convenience and the
+   ruling is about whether the thing should exist.
+
+---
+
+### Ruled and landed — do not re-raise
+
+- **Jordan's ruling session landed 2026-08-14 (PR #311, ED-IN-0187/0188).** The **degree ladder** is
+  single-owned by `degree_from_net` in `engine/autoload/dice_engine.py` and reads the **margin**
+  (net − ob): ≥3 Overwhelming, ≥1 Success, [0,1) Partial, <0 Failure. The Ob-scaled 2×Ob bar, the
+  PP-232 floor and the Ob-20 exception are **ruled out**. **Faction actions roll d10** through
+  `sigma_leverage`; the d6/4+ convention is gone. `CONQUEST_MIN_MIL` is deleted.
+  ⚠ **Behaviour changed:** a roll clearing zero but falling far short used to read Partial and now
+  reads Failure. Six seeded-campaign goldens moved, each re-recorded with its cause.
+- **Mass battle: the canon question is CLOSED and has been since 2026-08-03 (J2).** Canon is
+  `tests/sim/mass_battle/` (11,269 lines, ~30 modules — the big one). `systems/mass_battle/sim/`
+  (2,385 lines) is retired but still runs the live campaign until `faction_action.py` migrates.
+  J2 is recorded at `systems/mass_battle/sim/__init__.py`. **Five independent audit lenses re-raised
+  this as open in August because `CURRENT.md` narrated the tension twice.** That narration is now
+  deleted. If you find yourself about to file it again, read the `__init__.py` header first.
+
+### The ruling agenda is CLOSED — ruled 2026-08-14, do not re-raise
+
+**Corrected 2026-08-15 (ED-IN-0191).** This section previously listed Q1b/Q4/Q5/Q6/Q7 as *"open
+and needing Jordan"*. **They were already ruled when it was written.** PR #312 (ED-IN-0185, flipped
+`proposed` → `ruled`) records Jordan's verbatim answers; I wrote this section without them and
+rebuilt the exact T5 trap the assessment had just named — a settled ruling re-surfaced as open
+work, in the one section the SessionStart banner reads. The verbatim answers live in `ED-IN-0185`
+and in the banner on `audit/2026-08-14-five-lens-repo-assessment/01_plan.md` §2. Read those, not a
+paraphrase.
+
+| Q | Ruling (Jordan, verbatim where short) | State |
+|---|---|---|
+| Q1a | CURRENT.md history: *"a delete. only include instructions to read most current commits, and where to read registers/logs/indexes"* | **EXECUTED** (ED-IN-0189) |
+| Q1b | *"b generate, never hard code"* — the head-per-subsystem table | **RULED, not executed** |
+| Q2 | *"3 or more is always overwhelming"*; a met-but-not-exceeded obstacle is a partial | bands **EXECUTED**; the **score/2 obstacle derivation is wired nowhere** — the largest outstanding piece |
+| Q3 | *"d10 always using fractional dice and fractional obstacles, sigma leveraged"* | d10+sigma **EXECUTED**; ⚠ **fractional DICE are not implemented** — `roll_net_continuous` does `int(round(pool))`, so pools are still whole dice and only the *result* is fractional |
+| Q4 | *"b"* — blanket-mark historical-resolves-at-fork, checker verifies format | vocabulary + freeze gate **EXECUTED** (ED-IN-0188, ED-IN-0190); the **433-citation sweep is not done** |
+| Q5 | *"chunk as per a, just ensure you have a companion index for them"* — numbered continuation, full file frozen, **plus a companion index** | **RULED, not executed** |
+| Q6 | *"restore"* — CLAUDE.md §5–§7; plus *"q6 active"* for the lane | lane **ACTIVATED** (ED-GO-0001); ⚠ **the §5–§7 restore is NOT done** — 327 dangling citations across 176 files |
+| Q7 | *"it will be 10 attributes, and delete the code that blocks itself from being ported as that is stale"* | **RULED, not executed.** The roster ships **nine** today; **the tenth is UNNAMED** — naming it is the workshop, the count is not |
+
+### Resolver architecture — RULED 2026-08-15
+
+Jordan, in session. These close the two HELD degree sites and set the extension pattern.
+
+- **ONE resolver for all d10 probability.** Rolls are adjusted by **standard deviation (sigma)** —
+  that is our word; "volatility" is used nowhere. `engine/autoload/sigma_leverage.py` is the sigma
+  surface, `engine/autoload/dice_engine.py` owns the ladder.
+- **TN 7 — "a roll of 7 or higher is a success"**, equivalently "above 6". Both readings were in
+  circulation; they are the same rule and the ambiguity is now closed at the owner. **No constant
+  changed.** ~~TN 6/7/8 (Controlled/Standard/Desperate) remains canon as a *situational* scale.~~
+  ⚠ **SUPERSEDED 2026-08-25 — Jordan, verbatim: "TN7 always. Never change TN anywhere ever."** There
+  is no situational scale and no other TN. A varying difficulty is an **Ob**, never a TN. Enforced in
+  code, not prose: `engine/autoload/dice_engine` raises on any other value, and
+  `tests/valoria/test_tn7_always.py` fails on a re-introduction (ED-IN-0196, ED-MB-0066).
+- **All weapons are TN 7** — "now that we have a physics engine". Weapon speed is carried by the
+  physics (reach, mass, percussion authority, recovery), never by the TN. ⚠ The engine **already**
+  did this (`core.py:46`, `TN = SL.TN_STANDARD`); the per-weapon TN 5–8 existed only in prose and is
+  corrected.
+- **Degree bands are universal.** Failure below Ob · Partial from Ob to Ob+1 · Success at Ob+1 or
+  more · Overwhelming at Ob+3 or more. This is exactly what `dice_engine.degree_from_net` already
+  implements, so **the ladder itself needs no change** — only the systems that bypass it.
+- **No system keeps its own bands.** Where a system genuinely needs a modification, the **wrapper
+  injects the engine** so the change is clean and visible — never a private re-banding.
+- **`DECISIVE_OB` is dead** — *"stupid as hell … Ob should be determined by your opponent more than
+  anything"*. Combat's fixed Ob of 3 goes; the obstacle becomes the opponent's **score/2 plus that
+  instance's modifiers**.
+
+**THE SEQUENCE MATTERS AND IS COUNTER-INTUITIVE.** Combat is *not* migrated bands-first. Derive Ob
+from the defender **first**, then the owner's ladder applies directly. `core.py`'s own docstring
+predicted this: calibrating against the fixed-Ob form first "would be work thrown away". Both HELD
+entries in `tests/valoria/test_degree_ladder_single_owner.py` now record the ruling and this order;
+delete a HELD entry when its migration lands, not before.
+
+**Not yet executed:** the combat Ob derivation + band migration (PC lane, a real redesign with a
+measured balance delta — Jordan: migrate, measure, **report before tuning**), and the
+`sigma_leverage.degree` migration (flips `degree(3,3)` from 2 to 1, pinned by 151 groundup tests and
+`_kernel_tests.py`). Also still open: **fractional dice** (`roll_net_continuous` does
+`int(round(pool))`).
+
+_(The two HELD degree sites that previously sat here as needing Jordan are **RULED** — see the
+section above. Nothing on the ED-IN-0185 agenda is awaiting a decision.)_
+
+### ✅ PARTLY RULED 2026-08-23 — faction stats (asked 2026-08-15, ruled 2026-08-23)
+
+> **Jordan ruled two of the four calls below. Read this box before the evidence, which is preserved
+> as it stood when the question was asked.**
+>
+> * **Call (1) — which roster.** RULED: **"Legitimacy is a base."** `fac.legitimacy` is declared in
+>   `references/descriptor_registry.yaml` and bound to the `Faction.L` field. The roster is **six**
+>   on both sides; the 5-vs-6 disagreement below is closed.
+> * **Call (4) — is the scale 0–7 or 1–7, uniformly.** RULED: **"Influence can be 0."** Uniformly
+>   **0–7**. This supersedes ED-IN-0029's Influence floor of 1, so the inconsistency the evidence
+>   below calls out as deciding "whether a faction can present a zero obstacle" is resolved — it can.
+> * Jordan's rationale, which is what makes call (1) a change of model rather than a reversal:
+>   *"now that we're using continuous, we don't have to worry near as much either as we can just
+>   aggregate these stats as opposed to weird derivations."*
+>
+> **STILL OPEN — calls (2) and (3), and they are not touched by the above:**
+> * **(2) is Mandate a base stat or derived from settlement L/PS.** Still derived. `fac.legitimacy`
+>   is NOT Mandate, and the ruling does not make Mandate a base stat. ⚠ The code stores Mandate *as*
+>   `Faction.L` in places (`parliamentary_bridge` still comments *"Mandate == Faction.L pre-LPS-1"*),
+>   so what is settled is that the FIELD is a declared descriptor with declared bounds — not what
+>   every call site writing it means. That conflation is ED-FA-0004 and is still open.
+> * **(3) does Treasury exist separately from Wealth.** Untouched.
+>
+> Wired in `ca0ff0c`; supersessions recorded in `registers/supersession_register.yaml`.
+
+The evidence below is preserved AS ASKED (2026-08-15) and is deliberately not rewritten — it is the
+record of what was put to Jordan. Where it states the roster as 5 or Influence as 1–7, read the box
+above.
+
+**The registry and the code disagree about what a faction *is*.**
+
+| | Roster |
+|---|---|
+| `references/descriptor_registry.yaml` declares **5** | Influence (1–7) · Wealth (0–7) · Military (0–7) · Intel (0–7) · Stability (0–7) |
+| `engine/autoload/game_state.py` implements **6** | `L` · `Sta` · `W` · `I` · `Mil` · `intel` |
+
+The conflict is `L`. The registry's own note says **"Mandate is a size-weighted derived aggregate of
+settlement L/PS — NOT a base attribute."** The code stores Mandate *as* the base scalar `Faction.L`.
+That is ED-FA-0004, still open.
+
+**Three things exist only in comments, never as code:** `Treasury`, the Mandate formula
+`7T/(T+6)`, and the per-settlement L/PS → Mandate pipeline. `Faction` has `W` (Wealth) and no
+Treasury; whether those are the same thing is undecided.
+
+**The registry's cited source is gone** — `engine/params/factions/stats_1_7_scale.md` was evacuated
+2026-08-05 (resolves at fork `c451bcb`).
+
+**Why this now matters more than it did:** obstacles are ruled to be **score/2 plus modifiers**, so
+the faction stat roster *is* the faction obstacle surface. A 0–7 stat yields obstacles 0–3.5, and
+**Influence is 1–7 while every other stat is 0–7** — that inconsistency decides whether a faction can
+present a zero obstacle.
+
+**The calls:** (1) which roster — the declared 5, the coded 6, or another; (2) is Mandate a base stat
+or derived from settlement L/PS; (3) does Treasury exist separately from Wealth; (4) is the scale
+0–7 or 1–7, uniformly.
+
+### ⛔ WITHDRAWN 2026-08-19 — this section used to hand out apparatus work as "no ruling needed"
+
+It listed tracks **B–E** of `audit/2026-08-14-five-lens-repo-assessment/01_plan.md` — owner-in-code
+sweeps, gate-perimeter widening, `sys.path.insert` governance across 131 test files, vocabulary
+entries — under the heading *"Open and agent-executable — no ruling needed"*. Every item is
+audit-sourced work on this repository's own machinery, pre-authorised for any session that read
+this file. That is precisely the T3 carrier CLAUDE.md §0.3 describes, sitting in the continuity
+surface, and it is now excluded twice over: by §0's selection term (work is this session's work only
+if Jordan asked this session, or it traces to an open M1 juncture — none of B–E does) and by §0.1
+pt 5 (the artifacts are load-bearing only on process). **Do not take this work. Do not restore this
+section.** The plan file still exists if a human ever wants it.
+
+**One item from it survives, because it is the opposite of apparatus** — it is engine code on the
+critical path of M1 juncture 1, which is why the board now names it as the increment:
+
+- **The largest unimplemented piece of the #311 ruling:** obstacles as score/2 plus modifiers is
+  **wired nowhere** (`engine/autoload/dice_engine.py:118-123` says so itself). Paired with
+  fractional dice pools (`sigma_leverage.py:284` still does `int(round(pool))`). See the board.
+
+---
+
+# THE §1 CENSUS SNAPSHOT, moved from root `HANDOFF.md` — 2026-09-17 (`ED-IN-0241`)
+
+Jordan: *"anything that gets pulled up frequently cannot be hard coded with numbers/values/dates."* Root now names the instrument for each row instead. This is the snapshot as it stood, verbatim, so nothing is lost — it is a dated reading, not a current fact.
+
+## §1 · THE CENSUS — how many open items exist, so this order is known to be complete
+
+| surface | open | where |
+|---|---|---|
+| requirement rows (**THE NINE**, ruled ED-IN-0204) | **4 `not_met` · 4 `partial`** (1 met) | `engine/season/requirements.yaml` · `register --requirements` |
+| holes | **116 rows** — 44 tier-0, of which **10 are tier-0 `grade: absent`** | `engine/season/hole_register.yaml` |
+| verbs | **20 of 38 have no predicate and no effect**; 5 foldable but never attempted; 2 always refused; **11 execute** | `corpus_run` → `WHERE THE 38 GO` |
+| cases | **54 of 143 unrepresentable** (44 faction, 10 world) | `corpus_run` → `unrepresentable scales:` |
+| `needs_jordan` ledger rows | **37 open**, of which **7 are self-contradictory** (`ED-PC-0015`…`0021`, all `ratified` and still flagged) | `registers/editorial_ledger*.jsonl` — ⚠ **fold to the LATEST row per id**; these are append-only and a naive count reads 41 |
+| M1 junctures on the board | **7: 2 not_started · 1 blocked · 4 in_progress · 0 done** | `workplans/workplan_v6_progress.yaml` — **stale, see §4** |
+
+---
+

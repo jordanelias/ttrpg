@@ -28,7 +28,7 @@ and `ED-PC-0040`'s claim-provenance gate, which refuses a ledger entry stating m
 unless it names a re-runnable instrument that is in the tree. Adding it to a CI job would convert a
 falsifier into the apparatus the predicate forbids. Delete it once the split is old news.
 """
-import subprocess, sys, os
+import re, subprocess, sys, os
 from collections import Counter
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -59,6 +59,77 @@ def _before_ref(explicit=None):
     if out and out.strip():
         return out.strip() + '^'
     return 'HEAD'
+
+
+# ── Structural invariant: a heading's PARENT does not change (ED-IN-0241) ─────
+#
+# ⚠ THIS EXISTS BECAUSE THE SAME DEFECT FIRED THREE TIMES IN ONE SESSION, and each time it was
+# patched with a hard-coded list of section names instead of a rule. Jordan: *"stop hard coding"*.
+#
+# THE DEFECT: a splitter that slices a section as "this heading to the next heading of ANY level"
+# moves a `##` head and LEAVES ITS `###` CHILDREN BEHIND. The children then sit under whatever
+# section happens to precede them, which reads as though someone filed them there deliberately.
+# It happened to `## Next actions`'s ruling records, to `## ⚠ WAS CURRENT — 2026-08-27`'s five
+# subsections, and a heading inserted on "the first `###` in the file" landed inside the ratified
+# work order, briefly filing it under "RULINGS AND STANDING STATE".
+#
+# THE RULE, which needs no names: A HEADING BELONGS TO ITS NEAREST PRECEDING HEADING OF A HIGHER
+# LEVEL. So a unit is a SUBTREE, not a slice, and moving a parent moves its children. What this
+# function checks is the observable consequence: for every heading that is STILL IN THE SAME FILE
+# after the edit, its parent heading must be the one it had before. A heading that moved to another
+# file legitimately gets a new parent there, so it is excluded — the invariant is about what STAYED.
+
+
+def _parents(text):
+    """{heading: parent heading or None}, structurally, fence-aware."""
+    out, stack, fence = {}, {}, None
+    for ln in text.split('\n'):
+        f = re.match(r'^\s*(`{3,}|~{3,})', ln)
+        if f:
+            tok = f.group(1)[0]
+            fence = None if fence == tok else (fence or tok)
+            continue
+        if fence:
+            continue
+        m = re.match(r'^(#{1,6}) (.+)$', ln)
+        if not m:
+            continue
+        lvl, head = len(m.group(1)), m.group(2).strip()
+        out[head] = next((stack[l] for l in range(lvl - 1, 0, -1) if l in stack), None)
+        stack[lvl] = head
+        for l in [l for l in stack if l > lvl]:
+            del stack[l]
+    return out
+
+
+def check_structure(before, paths):
+    """REPORT-ONLY. Prints every heading that stayed in its file under a DIFFERENT parent.
+
+    Report-only rather than blocking, and that is a ruling rather than a preference: a reparent is
+    sometimes deliberate — moving a `##` out legitimately leaves its surviving children needing a
+    new home — so a failing verdict here would halt on a heuristic, which Jordan ruled against
+    (`CLAUDE.md` §10: *"a breaker halting a large audit on a heuristic costs more than the defect
+    it caught"*). It always returns 0. READ ITS OUTPUT; it cannot decide for you.
+    """
+    bad = 0
+    print(f'\n{"file":<46}{"headings":>10}{"reparented":>12}  verdict')
+    for rel in paths:
+        old = _git('show', f'{before}:{rel}')
+        if old is None:
+            continue
+        pb, pa = _parents(old), _parents(open(os.path.join(ci_common.REPO, rel),
+                                              encoding='utf-8').read())
+        moved = [h for h in pb if h in pa and pb[h] != pa[h]]
+        bad += len(moved)
+        print(f'{rel:<46}{len(pa):>10}{len(moved):>12}  '
+              f'{"OK" if not moved else "*** REPARENTED ***"}')
+        for h in moved[:5]:
+            print(f'      {h[:68]!r}\n        was under {pb[h]!r}\n        now under {pa[h]!r}')
+    if bad:
+        print(f'  {bad} heading(s) reparented — REPORT-ONLY. Judge each: a `##` moved out leaves '
+              'its surviving children needing a parent, which is legitimate. An UNINTENDED one '
+              'reads as though someone filed a section somewhere deliberately.')
+    return 0
 
 
 def main(argv):
@@ -96,8 +167,15 @@ def main(argv):
         for line, c in list(lost.items())[:5]:
             print(f'        lost x{c}: {line[:100]!r}')
     print(f'\nclosed narrative moved out of the orientation surfaces: {total_moved:,} tokens')
-    print('[verify-handoff-split] ' + ('OK — every pre-split line is still in the tree'
-                                       if not bad else f'FAILED on {bad} lane(s)'))
+
+    # Losslessness is only half the claim; the other half is that what STAYED still reads as the
+    # document it was. Derived from the tree, never from a list of section names.
+    watched = ['HANDOFF.md'] + [f'registers/handoffs/HANDOFF_{l}.md' for l in LANES]
+    bad += check_structure(before, watched)
+
+    print('[verify-handoff-split] ' + ('OK — every pre-split line is still in the tree; heading '
+                                       'reparenting above is report-only'
+                                       if not bad else f'FAILED on {bad} check(s)'))
     return 1 if bad else 0
 
 

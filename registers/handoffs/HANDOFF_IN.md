@@ -2,7 +2,7 @@
 
 ## ⚠ CLOSED WORK LIVES IN `HANDOFF_IN_closed.md` — index, 2026-09-13 (`ED-IN-0221`)
 
-**64 units · 59,302 tokens of finished narrative moved out of this file**, verbatim and in
+**Finished narrative moved out of this file**, verbatim and in
 order, by a predicate that reads each unit's body rather than its heading (the predicate, and why
 heading markers were not trusted, are stated in that file's header). **The split is proved
 lossless** — the two files' line multisets partition the original exactly.
@@ -46,73 +46,71 @@ write-down. Read it before grepping `engine/season/` for how a character decides
 
 ## ⚠ OPEN MARKERS IN MOVED UNITS — the index, 2026-09-17 (`ED-IN-0240`)
 
-**50 units carrying an open marker were moved to `HANDOFF_IN_history.md`** with the rest of the pre-generation narrative. **Their markers are reproduced here VERBATIM**, so an open item is a table row plus one file-open away instead of buried inside a multi-thousand-token session section — that is the safety claim of this trim, and it is stronger than a move without an index.
+**Every unit carrying an open marker was moved to `HANDOFF_IN_history.md`** — the rows below are the complete list with the rest of the pre-generation narrative. **Their markers are reproduced here VERBATIM**, so an open item is a table row plus one file-open away instead of buried inside a multi-thousand-token session section — that is the safety claim of this trim, and it is stronger than a move without an index.
 
 ⚠ **A MARKER HERE IS NOT A LIVE ITEM UNTIL SOMEBODY CHECKS IT.** Every row predates the current generation (2026-09-13); many sit inside units whose own headings read `[DONE]`, `[RULED]` or `[LANDED]`, which is the defect Jordan named: *"if there are that many live markers in a handoff, then there is a problem with those markers remaining current."* Work the five-step gate in `CLAUDE.md` §0 down this table — superseded · irrelevant · answered by a document · answered by precedent · answered by the architecture — and close each row with its citation. **Closing rows here is session work; preserving them is not conservatism.**
 
-| newest date | markers carried | tokens | unit |
-|---|---|---|---|
-| 2026-09-12 | `BLOCKED` `HELD` `needs_jordan` | 2,335 | 📐 2026-09-12 — v1: seven research documents NERS-audited (`ED-IN-0217`, PR #399, merged) |
-| 2026-09-12 | `HELD` `awaits` `needs_jordan` | 1,600 | 2026-09-02 (third entry) — **H-35 RULED BY JORDAN. THE ESCALATION QUEUE IS EMPTY. |
-| 2026-09-10 | `BLOCKED` `needs_jordan` | 1,687 | 📋 2026-09-10 — the `needs_jordan` queue measured, and three of this pass's own conclusions retra |
-| 2026-09-10 | `BLOCKED` `HELD` `⏸` | 2,300 | ⏸ ARC 2 / G1 — HELD 2026-09-10. A real game defect found, RULED, implemented, measured, and BACK |
-| 2026-09-08 | `DEFERRED` `HELD` | 5,535 | ⭐ DONE 2026-09-08 — decomposition STEP 5: `queries/` + `loop/`. `shape.py` 4,153 → 3,121 (ED-IN- |
-| 2026-09-07 | `HELD` `needs_jordan` | 1,109 | ⚠ CURRENT — 2026-09-06, ED-IN-0202: eight design rulings recorded, and the one thing to build fi |
-| 2026-09-05 | `needs_jordan` | 561 | ⚠ CURRENT — 2026-09-05, ED-IN-0202: a reference for future sessions, and eight false self-claims |
-| 2026-09-02 | `HELD` | 702 | 2026-09-02 · The season loop was TESTED BY EXECUTION, and a successor architecture exists |
-| 2026-09-02 | `BLOCKED` `HELD` | 903 | 2026-09-02 (second entry) — PR #354 ADJUDICATED, AND THE IMPROVEMENT PLAN |
-| 2026-08-28 | `HELD` `needs_jordan` | 1,558 | 2026-08-28 (session close) — precedent companion, ED-IN-0201, and the harvest provenance |
-| 2026-08-27 | `needs_jordan` | 517 | 2026-08-27 — contracts, centralized and hierarchical (ED-IN-0200) — RULED, NOT EXECUTED |
-| 2026-08-23 | `BLOCKED` `DEFERRED` `HELD` `STILL OPEN` `SUSPENDED` `needs_jordan` | 1,928 | 2026-08-23 — S6 CLOSED except 6c; S7 is next |
-| 2026-08-21 | `HELD` | 1,234 | PORT NOTE — this branch is to be absorbed into PR #313 (`claude/review-commits-workplan-7x4q4g`) |
-| 2026-08-17 | `BLOCKED` `needs_jordan` | 2,131 | 2026-08-17 — Weekly code review `d36498f`..`f2fc307` + full instrument sweep (ED-IN-0194) |
-| 2026-08-14 | `HELD` `needs_jordan` | 3,244 | 2026-08-14 — Jordan's ruling session: all 10 calls RULED; 4 executed, 1 part-built, 5 not starte |
-| 2026-08-13 | `HELD` | 922 | [RULED] ED-IN-0179 — Jordan: there is no `deprecated/` conflict, and the real lesson is about vo |
-| 2026-08-13 | `BLOCKED` `HELD` `needs_jordan` | 3,193 | [DONE] ED-IN-0173/0174/0175 — Wave 1+2: the merge's own compliance debt, and G2 CLOSED (2026-08- |
-| 2026-08-12 | `BLOCKED` `HELD` `[OPEN]` `awaiting` | 4,356 | [OPEN] ED-IN-0159 — code-leanness census + a 4-phase consolidation plan (2026-08-11) |
-| 2026-08-12 | `BLOCKED` `HELD` | 1,234 | [DONE] ED-IN-0166/0167/0168 — Track G continued: ED-IN-0162 executed, G3, G9 (2026-08-12) |
-| 2026-08-12 | `HELD` | 703 | [DONE] ED-IN-0178 — Wave 3: the alias plan's foundation EXECUTED, and a control the plan never r |
-| 2026-08-11 | `BLOCKED` `HELD` | 774 | Next actions :: - **[OPEN — BLOCKED ON JORDAN] Canonical nomenclature plan written (2026-08-11). |
-| 2026-08-11 | `HELD` `[OPEN]` | 5,505 | [OPEN] ED-IN-0150 — generated per-subsystem glossary + master term index (2026-08-08) |
-| 2026-08-11 | `BLOCKED` `[OPEN]` | 1,815 | [OPEN] ED-IN-0158 — consolidation sweep: 8 opportunities, 3 candidate findings killed (2026-08-1 |
-| 2026-08-10 | `HELD` `[OPEN]` | 1,527 | Next actions :: - **[OPEN] ED-IN-0152 — subsystem flow skeletons exist for all 15 `systems/` fol |
-| 2026-08-09 | `BLOCKED` `HELD` `[OPEN]` | 1,216 | [OPEN] ED-IN-0148 — post-evacuation vector audit + the GM Resolution Register (2026-08-06) |
-| 2026-08-08 | `BLOCKED` `HELD` `[OPEN]` | 909 | Pending :: - **[OPEN] ED-IN-0149 — world-churn audit: the machinery is built and DISCONNECTED (2 |
-| 2026-08-03 | `DEFERRED` `HELD` `STILL OPEN` `needs_jordan` | 1,022 | 2026-08-03 — Fork Plan of Record rewritten to execute after two read-only Fable-5 passes (ED-IN- |
-| 2026-08-03 | `DEFERRED` `HELD` `awaiting` | 2,793 | 2026-08-01 — Four gates that could not see what they guard (ED-IN-0115..0119, PR #284) |
-| 2026-08-03 | `BLOCKED` | 200 | Next actions :: - **I1 (get `main` green) is CANON-BLOCKED, measured not assumed.** 60/60 identi |
-| 2026-08-02 | `BLOCKED` `HELD` | 1,391 | 2026-08-02 — The repointed-path pattern, guarded (ED-IN-0122, PR #284) + a planning failure wort |
-| 2026-07-29 | `HELD` `[OPEN]` | 2,828 | Pending :: - **[OPEN] ED-IN-0091 — code-shape open-items register + orchestration plan (2026-07- |
-| 2026-07-29 | `DEFERRED` `HELD` `STILL OPEN` | 1,120 | Pending :: - **[LANDED] ED-IN-0097 — W4 landed, bookkeeping AFTER the critic (2026-07-29).** `04 |
-| 2026-07-29 | `[OPEN]` | 377 | Pending :: - **[OPEN] ED-IN-0094 — fractional-resolution triad, RULED (Jordan directive, 2026-07 |
-| 2026-07-29 | `STILL OPEN` `needs_jordan` | 843 | Pending :: - **Ecosystem-review Top-5 residuals not covered by their own lane.** Filed 2026-06-3 |
-| 2026-07-22 | `BLOCKED` `HELD` | 359 | Next actions :: - **Incompleteness Ledger + audit de-cull (2026-07-22, PR #205)** — the vectoriz |
-| 2026-07-14 | `needs_jordan` | 339 | Next actions :: - **WS0 Structural Observatory + WS1 registry reader (2026-07-13/14, ED-IN-0057. |
-| 2026-07-14 | `needs_jordan` | 194 | Next actions :: - **Observatory Remediation Program filed (2026-07-14, ED-IN-0066 — renumbered o |
-| 2026-07-12 | `DEFERRED` `needs_jordan` | 473 | Decisions :: - 2026-07-12 — **Skills-ecosystem staleness remediation, "Phase 7" (ED-IN-0044..004 |
-| 2026-07-08 | `needs_jordan` | 679 | Pending :: - **Resolution Plan v1 — Stratum-C armature deployment §6.3 wave 3 (consumer/contract |
-| 2026-07-08 | `needs_jordan` | 188 | Pending :: - **Resolution Plan v1 — Stratum-B THIRD SLICE 2026-07-08: ED-PC-0005 dead-code inves |
-| 2026-07-07 | `needs_jordan` | 340 | Pending :: - **Unaddressed-areas comprehensive audit — DELIVERED 2026-07-07 (ED-IN-0017, this PR |
-| 2026-07-07 | `needs_jordan` | 414 | Pending :: - **Edge-playability audit — RATIFIED IN FULL 2026-07-05 (Jordan: "Ratify all", post- |
-| 2026-07-07 | `DEFERRED` `HELD` | 202 | Decisions :: - 2026-07-07 — **Consolidated ruling pass on the Key & Echo armature §5 docket + ed |
-| 2026-07-05 | `HELD` `awaiting` | 344 | Pending :: - **Emergent Narrative Engine design v1 — DELIVERED 2026-07-05, awaiting Jordan revie |
-| 2026-07-05 | `HELD` `needs_jordan` | 541 | Pending :: - **Narrative engine v2 "THE CHURN ENGINE" + Master Workplan v6 + steering reconcilia |
-| 2026-07-04 | `DEFERRED` `awaiting` | 316 | Pending :: - **Qualitative NERS audit (North-Star) — DELIVERED 2026-07-04, awaiting Jordan revie |
-| 2026-07-02 | `needs_jordan` | 357 | Decisions :: - 2026-07-02 — **`ED-<LANE>-NNNN` lane-tagged editorial namespace created (`ED-IN-0 |
-| 2026-06-30 | `BLOCKED` | 301 | Decisions :: - 2026-06-30 — **Adversarial ecosystem review + safe fixes.** Ran a 72-agent verifi |
-| 2026-06-29 | `needs_jordan` | 286 | Decisions :: - 2026-06-29 — **ED-citation integrity: full reconciliation (292 → 0; gate now BLOC |
-| 2026-06-28 | `DEFERRED` `needs_jordan` | 258 | Decisions :: - 2026-06-28 — **Editorial-ledger relevance triage.** Deep per-item verification of |
-| 2026-09-17 | `HELD` | 1,282 | 2026-09-17 · ROUND TWO of governance-and-holdings (`ED-IN-0233/0234/0235`) — PR #408 |
-| 2026-09-17 | `HELD` `needs_jordan` | 839 | 2026-09-17 · The governance-and-holdings suite (`ED-IN-0236`, `ED-IN-0237`) — PR #408 |
-| 2026-09-16 | `PARKED` | 190 | ⚠ ID COLLISION RESOLVED HERE — `ED-IN-0228`, 2026-09-16 |
-| 2026-09-16 | `HELD` | 926 | 🧭 2026-09-16 — the decision layer interrogated: twelve inputs, one of them live (`ED-IN-0228`) |
-| 2026-09-14 | `HELD` `STILL OPEN` | 1,418 | 2026-09-14 — the creed lands, and the axes turn out to have had two owners |
-| 2026-09-14 | `BLOCKED` | 1,969 | 2026-09-14 (later) — M1 row 5 has an instrument, and it found something on its second seed |
-| 2026-09-14 | `BLOCKED` `SUSPENDED` `needs_jordan` | 752 | 2026-09-14 (later still) — M1's remaining two rows, characterised precisely |
-| 2026-09-13 | `HELD` | 1,422 | ⚠ CURRENT — 2026-09-13 (later), PR #404: the governance layer is BUILT, and two rulings closed t |
-| 2026-09-13 | — | 1,486 | ⚠ CURRENT — 2026-09-13, PR #404: a faction becomes buildable and readable, and three items are J |
-
-
+| newest date | markers carried | unit |
+|---|---|---|
+| 2026-09-12 | `BLOCKED` `HELD` `needs_jordan` | 📐 2026-09-12 — v1: seven research documents NERS-audited (`ED-IN-0217`, PR #399, merged) |
+| 2026-09-12 | `HELD` `awaits` `needs_jordan` | 2026-09-02 (third entry) — **H-35 RULED BY JORDAN. THE ESCALATION QUEUE IS EMPTY. |
+| 2026-09-10 | `BLOCKED` `needs_jordan` | 📋 2026-09-10 — the `needs_jordan` queue measured, and three of this pass's own conclusions retra |
+| 2026-09-10 | `BLOCKED` `HELD` `⏸` | ⏸ ARC 2 / G1 — HELD 2026-09-10. A real game defect found, RULED, implemented, measured, and BACK |
+| 2026-09-08 | `DEFERRED` `HELD` | ⭐ DONE 2026-09-08 — decomposition STEP 5: `queries/` + `loop/`. `shape.py` 4,153 → 3,121 (ED-IN- |
+| 2026-09-07 | `HELD` `needs_jordan` | ⚠ CURRENT — 2026-09-06, ED-IN-0202: eight design rulings recorded, and the one thing to build fi |
+| 2026-09-05 | `needs_jordan` | ⚠ CURRENT — 2026-09-05, ED-IN-0202: a reference for future sessions, and eight false self-claims |
+| 2026-09-02 | `HELD` | 2026-09-02 · The season loop was TESTED BY EXECUTION, and a successor architecture exists |
+| 2026-09-02 | `BLOCKED` `HELD` | 2026-09-02 (second entry) — PR #354 ADJUDICATED, AND THE IMPROVEMENT PLAN |
+| 2026-08-28 | `HELD` `needs_jordan` | 2026-08-28 (session close) — precedent companion, ED-IN-0201, and the harvest provenance |
+| 2026-08-27 | `needs_jordan` | 2026-08-27 — contracts, centralized and hierarchical (ED-IN-0200) — RULED, NOT EXECUTED |
+| 2026-08-23 | `BLOCKED` `DEFERRED` `HELD` `STILL OPEN` `SUSPENDED` `needs_jordan` | 2026-08-23 — S6 CLOSED except 6c; S7 is next |
+| 2026-08-21 | `HELD` | PORT NOTE — this branch is to be absorbed into PR #313 (`claude/review-commits-workplan-7x4q4g`) |
+| 2026-08-17 | `BLOCKED` `needs_jordan` | 2026-08-17 — Weekly code review `d36498f`..`f2fc307` + full instrument sweep (ED-IN-0194) |
+| 2026-08-14 | `HELD` `needs_jordan` | 2026-08-14 — Jordan's ruling session: all 10 calls RULED; 4 executed, 1 part-built, 5 not starte |
+| 2026-08-13 | `HELD` | [RULED] ED-IN-0179 — Jordan: there is no `deprecated/` conflict, and the real lesson is about vo |
+| 2026-08-13 | `BLOCKED` `HELD` `needs_jordan` | [DONE] ED-IN-0173/0174/0175 — Wave 1+2: the merge's own compliance debt, and G2 CLOSED (2026-08- |
+| 2026-08-12 | `BLOCKED` `HELD` `[OPEN]` `awaiting` | [OPEN] ED-IN-0159 — code-leanness census + a 4-phase consolidation plan (2026-08-11) |
+| 2026-08-12 | `BLOCKED` `HELD` | [DONE] ED-IN-0166/0167/0168 — Track G continued: ED-IN-0162 executed, G3, G9 (2026-08-12) |
+| 2026-08-12 | `HELD` | [DONE] ED-IN-0178 — Wave 3: the alias plan's foundation EXECUTED, and a control the plan never r |
+| 2026-08-11 | `BLOCKED` `HELD` | Next actions :: - **[OPEN — BLOCKED ON JORDAN] Canonical nomenclature plan written (2026-08-11). |
+| 2026-08-11 | `HELD` `[OPEN]` | [OPEN] ED-IN-0150 — generated per-subsystem glossary + master term index (2026-08-08) |
+| 2026-08-11 | `BLOCKED` `[OPEN]` | [OPEN] ED-IN-0158 — consolidation sweep: 8 opportunities, 3 candidate findings killed (2026-08-1 |
+| 2026-08-10 | `HELD` `[OPEN]` | Next actions :: - **[OPEN] ED-IN-0152 — subsystem flow skeletons exist for all 15 `systems/` fol |
+| 2026-08-09 | `BLOCKED` `HELD` `[OPEN]` | [OPEN] ED-IN-0148 — post-evacuation vector audit + the GM Resolution Register (2026-08-06) |
+| 2026-08-08 | `BLOCKED` `HELD` `[OPEN]` | Pending :: - **[OPEN] ED-IN-0149 — world-churn audit: the machinery is built and DISCONNECTED (2 |
+| 2026-08-03 | `DEFERRED` `HELD` `STILL OPEN` `needs_jordan` | 2026-08-03 — Fork Plan of Record rewritten to execute after two read-only Fable-5 passes (ED-IN- |
+| 2026-08-03 | `DEFERRED` `HELD` `awaiting` | 2026-08-01 — Four gates that could not see what they guard (ED-IN-0115..0119, PR #284) |
+| 2026-08-03 | `BLOCKED` | Next actions :: - **I1 (get `main` green) is CANON-BLOCKED, measured not assumed.** 60/60 identi |
+| 2026-08-02 | `BLOCKED` `HELD` | 2026-08-02 — The repointed-path pattern, guarded (ED-IN-0122, PR #284) + a planning failure wort |
+| 2026-07-29 | `HELD` `[OPEN]` | Pending :: - **[OPEN] ED-IN-0091 — code-shape open-items register + orchestration plan (2026-07- |
+| 2026-07-29 | `DEFERRED` `HELD` `STILL OPEN` | Pending :: - **[LANDED] ED-IN-0097 — W4 landed, bookkeeping AFTER the critic (2026-07-29).** `04 |
+| 2026-07-29 | `[OPEN]` | Pending :: - **[OPEN] ED-IN-0094 — fractional-resolution triad, RULED (Jordan directive, 2026-07 |
+| 2026-07-29 | `STILL OPEN` `needs_jordan` | Pending :: - **Ecosystem-review Top-5 residuals not covered by their own lane.** Filed 2026-06-3 |
+| 2026-07-22 | `BLOCKED` `HELD` | Next actions :: - **Incompleteness Ledger + audit de-cull (2026-07-22, PR #205)** — the vectoriz |
+| 2026-07-14 | `needs_jordan` | Next actions :: - **WS0 Structural Observatory + WS1 registry reader (2026-07-13/14, ED-IN-0057. |
+| 2026-07-14 | `needs_jordan` | Next actions :: - **Observatory Remediation Program filed (2026-07-14, ED-IN-0066 — renumbered o |
+| 2026-07-12 | `DEFERRED` `needs_jordan` | Decisions :: - 2026-07-12 — **Skills-ecosystem staleness remediation, "Phase 7" (ED-IN-0044..004 |
+| 2026-07-08 | `needs_jordan` | Pending :: - **Resolution Plan v1 — Stratum-C armature deployment §6.3 wave 3 (consumer/contract |
+| 2026-07-08 | `needs_jordan` | Pending :: - **Resolution Plan v1 — Stratum-B THIRD SLICE 2026-07-08: ED-PC-0005 dead-code inves |
+| 2026-07-07 | `needs_jordan` | Pending :: - **Unaddressed-areas comprehensive audit — DELIVERED 2026-07-07 (ED-IN-0017, this PR |
+| 2026-07-07 | `needs_jordan` | Pending :: - **Edge-playability audit — RATIFIED IN FULL 2026-07-05 (Jordan: "Ratify all", post- |
+| 2026-07-07 | `DEFERRED` `HELD` | Decisions :: - 2026-07-07 — **Consolidated ruling pass on the Key & Echo armature §5 docket + ed |
+| 2026-07-05 | `HELD` `awaiting` | Pending :: - **Emergent Narrative Engine design v1 — DELIVERED 2026-07-05, awaiting Jordan revie |
+| 2026-07-05 | `HELD` `needs_jordan` | Pending :: - **Narrative engine v2 "THE CHURN ENGINE" + Master Workplan v6 + steering reconcilia |
+| 2026-07-04 | `DEFERRED` `awaiting` | Pending :: - **Qualitative NERS audit (North-Star) — DELIVERED 2026-07-04, awaiting Jordan revie |
+| 2026-07-02 | `needs_jordan` | Decisions :: - 2026-07-02 — **`ED-<LANE>-NNNN` lane-tagged editorial namespace created (`ED-IN-0 |
+| 2026-06-30 | `BLOCKED` | Decisions :: - 2026-06-30 — **Adversarial ecosystem review + safe fixes.** Ran a 72-agent verifi |
+| 2026-06-29 | `needs_jordan` | Decisions :: - 2026-06-29 — **ED-citation integrity: full reconciliation (292 → 0; gate now BLOC |
+| 2026-06-28 | `DEFERRED` `needs_jordan` | Decisions :: - 2026-06-28 — **Editorial-ledger relevance triage.** Deep per-item verification of |
+| 2026-09-17 | `HELD` | 2026-09-17 · ROUND TWO of governance-and-holdings (`ED-IN-0233/0234/0235`) — PR #408 |
+| 2026-09-17 | `HELD` `needs_jordan` | 2026-09-17 · The governance-and-holdings suite (`ED-IN-0236`, `ED-IN-0237`) — PR #408 |
+| 2026-09-16 | `PARKED` | ⚠ ID COLLISION RESOLVED HERE — `ED-IN-0228`, 2026-09-16 |
+| 2026-09-16 | `HELD` | 🧭 2026-09-16 — the decision layer interrogated: twelve inputs, one of them live (`ED-IN-0228`) |
+| 2026-09-14 | `HELD` `STILL OPEN` | 2026-09-14 — the creed lands, and the axes turn out to have had two owners |
+| 2026-09-14 | `BLOCKED` | 2026-09-14 (later) — M1 row 5 has an instrument, and it found something on its second seed |
+| 2026-09-14 | `BLOCKED` `SUSPENDED` `needs_jordan` | 2026-09-14 (later still) — M1's remaining two rows, characterised precisely |
+| 2026-09-13 | `HELD` | ⚠ CURRENT — 2026-09-13 (later), PR #404: the governance layer is BUILT, and two rulings closed t |
+| 2026-09-13 | — | ⚠ CURRENT — 2026-09-13, PR #404: a faction becomes buildable and readable, and three items are J |
 **Measured, and each cost a run to establish:**
 
 - **Q4 `need` IS the ambition mechanism** — a live `commit` Tenure to an OUGHT Proposition. It leads
