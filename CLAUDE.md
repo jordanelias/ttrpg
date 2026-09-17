@@ -64,6 +64,44 @@ mechanics).
   **at most one ledger row, and only if that row requires a human decision** (`needs_jordan: true`).
   **A finding that needs no ruling is either fixed in this commit or dropped.**
 
+  ⚠ **ONE NARROW EXCEPTION, RULED by Jordan 2026-09-17, because the flat ban was losing the reasoning.**
+  Verbatim: *"maybe that's dumb for Claude.md to stipulate as we end up losing reasoning and
+  reference."* The clause above is written for the pass that fires **at every stage that gates a
+  result** — small, frequent, incidental — and for that it is exactly right. It under-provisions for
+  the other case: a **TERMINAL pass over a large body of work, whose verdict is the thing that was
+  asked for.** A 70-line verdict with an axis table does not fit in one commit paragraph, and
+  strikethroughs in the target record *what* changed without recording *why the attack succeeded*.
+  Nobody reads `git log` to understand a design.
+
+  > **A pass whose VERDICT IS THE DELIVERABLE may record it WHERE THE THING IT JUDGES LIVES** — a
+  > section of the target, or a sibling file inside the target's own directory. **Never a standing
+  > corpus, never a new top-level tree, and never `.audit/`, which is retired as a CATEGORY.**
+
+  **THE TEST, and it is the whole of the exception — apply it before writing a line:**
+
+  > ## **DOES THIS DOCUMENT CREATE WORK FOR A FUTURE SESSION?**
+  > **If YES it is the forbidden thing wearing a record's clothes — drop it.** If it only explains a
+  > judgment about an artifact that ALREADY EXISTS, it is reference and it may stay.
+
+  A verdict that says *"X is wrong and here is why the attack landed"* about a document in the same
+  directory passes. A verdict that says *"and therefore someone should build Y"* fails — that is a
+  queue, and the queue is how `audit/` formed. **Bind it to its subject: the record dies when the
+  thing it judges dies, which is what stops it accreting.**
+
+  ⚠ **AND THE COUNTER-ARGUMENT IS RECORDED HERE BECAUSE IT IS STRONG AND A LATER SESSION WILL MEET
+  IT.** Every exception in this area is self-serving: a session that has just finished an audit
+  ALWAYS believes its audit is worth keeping, which is precisely the bias the flat ban defended
+  against. The ban was crude, and crude is what survives contact with an agent that can argue. So the
+  exception is deliberately narrow — **terminal passes only, bound to a subject, and gated on a test
+  a session must fail honestly rather than reason around.** If this exception is ever found to have
+  become the general case, the repair is to delete it and restore the flat ban, not to add a
+  qualifier. Two instances exist as of this ruling, both transcribed by hand after the fact because
+  the ban forbade writing them at the time: a NERS verdict and a unification ledger over
+  `proposals/2026-09-17-governance-and-holdings/`. (⚠ This clause read `audit/` until the 2026-09-17
+  merge; the directory was renamed `.audit/` by ED-IN-0231 on 2026-09-16 and §3 already spelled it that
+  way, so Layer 0 was inconsistent with itself for one word. Repaired here, per §0's own rule that the
+  repair is to EDIT THIS FILE.)
+
   **`needs_jordan` IS NOT A PARKING SPACE, AND MOST OF WHAT IS IN IT DOES NOT BELONG TO JORDAN**
   (RULED by Jordan). Verbatim: *"I don't believe that I need to be involved in the vast majority of
   pending decisions. Those decisions should be answerable as superseded or irrelevant, by our design

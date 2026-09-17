@@ -191,3 +191,112 @@ row, which is the authority on which head is live.)
   ED-SE-0001 ratification track.
 - **Author the remaining `needs_jordan` forks** (ED-SE-0013/0014/0015/0017's optional mechanic)
   once Jordan rules each.
+
+---
+
+## 2026-09-17 · ROUND TWO — `04_MATTER_AND_WORKS.md` (`ED-SE-0053`) — PR #408
+
+`proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md`, 1,894 lines, PROPOSED and
+**HELD BACK IN FULL**. **It supersedes the round-one `02_THE_BUILT_WORLD.md` entry below in part** —
+the hearth-larder and delivery moves only. Round one's fabric/address ontology, its `hold`-guard
+argument, `Rung.envelope` and the `fort_level`/`facility_tier` withdrawals are **kept and carried
+forward by pointer**, not re-argued. The round-one entry below stands for those.
+
+**THE ANSWER: matter does not move to people; they draw up the ladder.**
+`nearest_store(w, rung, kind)` climbs `contain` per matter kind and returns the first rung whose store
+of that kind is non-empty. It cannot tie — one parent gives a total order. The shortfall crosses the
+gate into `Person.body`; bodies cross band floors as sites do; death at 0 reuses the kill cascade.
+**Matter still moves only by `transfer`**, which is why round one's delivery move had to go: MATTER
+must not move matter across a `contain` edge.
+
+⚠ **THE MEASUREMENT BELOW IS SUPERSEDED BY A SHARPER ONE. Re-read before acting on the old numbers.**
+The round-one entry's *"37 settlements hold 4,810 and 211 hearths hold none"* is true and it is the
+wrong shape of alarm. Re-measured on `build_realm(0)`, one season: **the unmet demand is 138 units a
+season** (grain 92, salt 46) against 4,810 produced, **the larder block fires at 26 rungs and writes
+ZERO times** (all 37 `stores.changed` are yield), and **24 of the 37 settlements hold 3,120 units with
+nobody under them at all.** So this is a **five-times surplus world in which nobody can reach the
+surplus.** The counterfactual arithmetic: the walk meets 138 of 138, 13 rungs' stores fall, and the
+3,120 are correctly untouched.
+
+**A `works` is five moments and one of them already runs.** `create_record` with `kind: works` mints
+the maker's `hold` — that fires **69 times a season today**. Terms ripen at MATTER and stop if the
+master is gone: zero new code. **`found` is the one new verb**, earning exactly one of two declared
+`(Rung, exists)`/`(Site, exists)` rows through `_apply_write`'s existing map, and closing **2 of
+`H-41`'s 3** producerless-existence cells. `restore` climbs to a ceiling counted off `term.matured`
+**emissions**, never a per-stage field — which is the audit's limit 7 honoured. A rival may finish
+another's `works` with no special case.
+
+**`ARCH F.20` is the frame, in its own words** (`architecture/meta/04_CODE_ARCHITECTURE.md:1082`, one
+of two gaps that *"block the build outright"*): **"the world only decays — nothing is ever founded or
+built."** `04` signs eight loops, four of them positive, and **three of those four turn today not at
+all**.
+
+**DO NOT RE-PROPOSE THESE — each was planted and refused:**
+- **`band_floors.person` REFUSES AT LOAD.** `band_floors["body"]` already exists, its roster note
+  declares it `(Person, body)`'s, and `budget.py:64-75` reads it live in the loop. Two documents
+  planted this independently and both got the refusal. ⚠ Both readings are true at once:
+  `headless.py:64` really does build `Site("scriptorium", "hearth_ostvik", "body")`.
+- **hearth larders and any delivery move** — see above.
+- **`fort_level` / `facility_tier`** — live readers behind a blocking round-trip `--check`.
+
+**`ED-SE-0051` (RR-2) STAYS OPEN, and its ground has MOVED.** `04` still recommends the **capacity**
+arm and still refuses to close it — but it records that **this document destroys round one's decisive
+argument for it**: *"matter-only is not currently a bound"* was that argument, and after
+`nearest_store` lands, matter-only **is** a bound. Whoever answers it should answer the new question,
+not the old one. Per `ED-WR-0011` it is answered alongside that row.
+
+**Two citation repairs worth carrying:** *"(Person, body) has no writer"* is **FALSE** — `kill / wound`
+writes it at RESOLVE through the gate; the **MATTER half** is what is missing. And `ARCH` PART D row
+5's *"the gate refuses `before == after`"* is **not true of the gate** — `world.py:408` assigns
+`before = apply()` and compares nothing; the refusal is the fold's and is ACTS-only.
+
+**Two falsifiers are RED on the current tree, deliberately.** `MW-11`: the crossing predicate is
+**downward-only**, so **recovery is silent while ruin speaks**. `MW-5`: `withdrawal_only` and death
+fall in the same season, so only the `halved` arm occupies every band.
+
+⚠ Grade **`paper`** under §0.2; nothing here executes. The §0.4 close gate **RAN** on this branch:
+`2 failed, 1708 passed`, both failures `test_forked_status.py` — the shallow-checkout condition §0.4
+documents by name.
+
+---
+
+## 2026-09-17 · The built world (`ED-SE-0052`) — PR #408
+
+`proposals/2026-09-17-governance-and-holdings/02_THE_BUILT_WORLD.md`, 1,100 lines, **PROPOSED and HELD
+BACK IN FULL**. Its siblings take governance at every rung, the player surface and the build order.
+
+**The ontology, as proposed.** A built thing's **fabric is a `Site`**; its **address is the `Rung` its
+`Site.rung` names**; the seam is occupancy, *derived* rather than stored. This **NARROWS `ED-IN-0223`**
+rather than overturning it — *a building is not a hearth, it stands on one*, and the hearth is the
+plot. ⚠ The destroy-cascade argument first offered for this is **struck in place as unsound**: nothing
+in the tree destroys a `Rung` or a `Site` at all. The refusal survives on **cardinality**.
+
+**Fortification** is an `ENCLOSURE`-family `Site` whose **condition IS its strength** — bands, not a
+level — reading onto three mechanisms that already exist, with **no siege subsystem**. The band is
+world truth and an attacker holds only a decaying claim about it, so it may never be rendered as fact.
+
+**`hold` must NOT reach a `Site`** — confirmed, but *not* for the reason first offered: `share` and
+`draw_share` are declared resolver-side **Queries**, so `share` was never a field. The ground is that
+mandatory single-holdership **deletes the commons**. ⚠ `add_tenure` performs no object-class check, so
+the refusal is currently **unenforceable** — a guard is proposed rather than assumed.
+
+**NEXT ACTION, and it is the one that unblocks the cascade.** Measured on `build_realm(0)`, one
+season: **37 settlements hold 4,810 units of matter and 211 hearths hold none** — every site hangs
+from a settlement, every person lives in a hearth, and the shortfall is clamped away silently. Worse,
+**only 13 of the 37 settlements have anyone in their `contain` subtree at all**, holding 1,690 of the
+4,810; the other 3,120 sit where nobody lives. So connecting the draw across the edge is necessary and
+**not sufficient** — the sites must also be keyed to the rungs people actually occupy. Reproduce with
+`python -m engine.season.harness.populated 2`.
+
+**Two proposed free cuts were WITHDRAWN as breakages** — verify before re-proposing either:
+`fort_level` and `facility_tier` both have live engine readers and sit in
+`engine/engine_params/descriptors.json` behind a **blocking** round-trip `--check`. The engine copy of
+`fort_level` is already the derived single-owner shape the cut was asking for.
+
+**`ED-SE-0051` STAYS OPEN.** `02` *recommends* its **capacity** arm — a `capacity(w, rung)` Query over
+dwelling sites with a floor, never a fixture — on the ground that matter-only is not currently a bound
+at all, because the shortfall is recorded and not acted on. It does not close it, and per `ED-WR-0011`
+it should be answered alongside that row.
+
+⚠ Grade `paper` under §0.2; nothing here executes. The `§0.4` close gate was NOT RUN on this branch
+(sandbox denial); local gates pass and CI is authoritative.

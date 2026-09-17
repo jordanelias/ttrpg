@@ -4198,3 +4198,120 @@ and none ever will. The row **stays PARTIAL** (that was always honest); only the
 
 `2 PASS · 1 PASS (new) · 1 PARTIAL (correctly) · 1 FAIL (blocked elsewhere)` → **NOT MET**, and
 the single failing row is blocked on Jordan's rulings and on a repository this session cannot see.
+
+---
+
+## 2026-09-17 · ROUND TWO of governance-and-holdings (`ED-IN-0233/0234/0235`) — PR #408
+
+`proposals/2026-09-17-governance-and-holdings-r2/` — five documents, **8,709 lines**, PROPOSED and
+**HELD BACK IN FULL**. Read its `README.md` first. **It supersedes the round-one entry below**, which
+is kept because its conformance finding still holds. Round one's directory stands with banners.
+
+⚠⚠ **READ THIS BEFORE YOU ALLOCATE AN IN ID. `next_free` IS 238, AND THE 231 WINDOW COLLIDED AGAIN.**
+`main`'s #407 took `ED-IN-0231`/`0232` on 2026-09-16; this branch had taken the same two on
+2026-09-17 against a `next_free` of 231. `main` landed first and keeps them, so round one renumbered
+to **`ED-IN-0236`/`0237`**. **The sixth within-lane IN collision, and the second in two days on this
+one window.** Round two's `0233/0234/0235` survived only because the two branches' windows abutted
+exactly — luck, not discipline. `references/id_reservations_history.md#in` carries it. The mitigation
+`CLAUDE.md` §4 names is the only one available: **land the `next_free` bump on `main` before anything
+cites the number.** It narrows the window; it does not close it.
+
+**What round two is.** Round one was unified, then put through a terminal pessimistic-steelman NERS
+pass whose verdict is `proposals/2026-09-17-governance-and-holdings/AUDIT_VERDICT.md` (recorded under
+the narrow §0 exception Jordan ruled 2026-09-17). Round two is written **from** that verdict. Its
+limit 1 is the hinge: round one's policy instrument was a **DEPARTURE** from
+`holonic_ARCHITECTURE.md` §37.3, not an extension of it — §37.3 forbids by name both the broadcast and
+the state-write that `in_force` at MATTER under `reach: all` performs.
+
+**The IN-lane answers, one line each.** `01` — `reach(w, p)` is one filter; two question sources, not
+four-plus-one; purview is a *term* of reach, never a fifth row. `02` — two people-borne channels, the
+writ (a `Record`, verbatim-or-not-at-all, because **no write-matrix row exists for `subject_matter`**)
+and the word (a lossy `Claim`); compliance is the executor's own act. `03` — bases are VALUES on the
+seat, read by two predicates, with the content an authored table. `05` — the count, the order, the
+rulings.
+
+**NEXT ACTION, and it is one artifact.** `05` §A.4 item 1 is a single `@effect_for("commit")` body and
+it is the whole difference between a `paper` suite and an executing one. Everything else in §A.4 is
+ordered behind it. ⚠ **One edge of that order reverses against the plan and the reversal is measured:**
+all 16 rung-holds in `build_realm(0)` are **faction**-subject (zero person→rung holds), so a
+`revocation` basis whose conjunct set is `{reaches, in_holdings}` is **unsatisfiable** until the holds
+exist — item 10 depends on item 16, not the other way round.
+
+**Do not re-derive these; they are measured and they are in the documents.** 38 verb rows / 18
+resolvable. `date_due` and `band_crossed` produce **0 questions each** after a populated season,
+against 561 `claim_landed` + 81 `need`. 69 `record.created` events a season, every one `kind: text`
+with `subject_matter: None` — **the writ's carrier already runs and carries nothing.** 19 offices with
+`conferral` and `revocation` empty on 19 of 19. `world_q.conferral_path` has **zero** production
+callers and never reads `conferral`; `establishment_of` has none at all.
+
+**FOUR IN-lane ruling requests, ledgered once in `05` §C.4 — and `RR-1` is CLOSED** at step 2 of §0's
+gate (irrelevant: no `in_force` walk, no place-keyed clause, so no collision site). `RR-P` — Jordan's
+principle as a candidate `AX-7`; adopting it amends `AX`'s own *"There are SIX"*, and the port and
+three subsystems are **unchecked**. `RR-A` — fold the four response verb rows, against `ED-IN-0210`'s
+letter; cost measured at one live verb and four dead rows. `RR-B` — **eight** sentences of RATIFIED
+`architecture/` this suite makes false, not the four projected; one limb is a **game** change. `RR-C`
+— sequencing against the ratified 27-position order.
+
+**THE COUNT IS −17, NOT −20**, and it is three worse rather than one better than projected. `05` §A.1
+is its single owner and names five things the plan miscounted — including that both its sub-counts
+were one low and **cancelled**, so the old headline survived by coincidence. `04` reached −17
+independently. **Do not quote −20 from anywhere.**
+
+**One instrument exists and it is bound to the suite.** `probe_reach_questions.py` reproduces `01`'s
+`561 → 1632` (2.91×) and found two defects in the table it came from: three different readings of the
+candidate `place_of` inside one six-row table, and the effect attributed to the wrong limb — it is the
+**ascent** to the containing hearth on the self limb, not `mine`. It gates nothing and dies with the
+proposal; do not promote it to `tools/`.
+
+⚠ Grade **`paper`** under §0.2 for every document; nothing here executes. The §0.4 close gate **RAN**
+on this branch: `2 failed, 1708 passed, 23 skipped, 14 xfailed`, and both failures are
+`test_forked_status.py` — the **shallow-checkout** condition §0.4 documents by name. `cat .git/shallow`
+before debugging it.
+
+---
+
+## 2026-09-17 · The governance-and-holdings suite (`ED-IN-0236`, `ED-IN-0237`) — PR #408
+
+`proposals/2026-09-17-governance-and-holdings/` — five files, 4,873 lines, **PROPOSED and HELD BACK IN
+FULL**. Read its `README.md` first: it carries the standing instructions and a measurement block in
+which every figure names the command that reproduces it.
+
+**The finding that changes what the IN work is.** Most of the seat model is **already ratified Layer 1
+and merely unbuilt** — `04 §B.7` ships `Seat`, forbids an `is_title` branch anywhere, rules
+`establishment` a Query over `oblige` and rejects the field form, deletes `judging_set_rule` from
+`Rung`, and makes purview a property of *the seat exercised* through `Act.via`. So Jordan's 2026-09-03
+delegation ruling is decided at Layer 1 and unexpressed at Layer 2. **Treat this as conformance work,
+not new design**, and do not credit a conformance item as novel.
+
+**NEXT ACTIONS — the first five are all `S` and none is downstream of the Arc 2 gate contract.** The
+rule, stated once: work is downstream of positions 3–7 **iff** it is an `@effect_for` body or writes a
+Tenure whose subject is not the actor, so roughly two thirds of this is order-free.
+
+1. **Q3's referent → the site id** (`engine/season/queries/world_q.py:518`) — `H-110`, tier 1,
+   `absent`. ⚠ **Split it:** sites start at full condition and the highest `band_floors` edge is 800,
+   so the first crossing is ~season 21 while runs are 1–6 — **the one-line fix alone moves no
+   observable.** It needs a paired world with a site already below a floor. `H-110`'s own row declines
+   the one-liner on purpose as a design edit rather than a repair; honour that.
+2. **Matter reaches the people** — see `HANDOFF_SE.md`; the SE half is load-bearing.
+3. **`confer`/`revoke` read the office from `subject`**, since `office` is not a rostered operand, so a
+   computed `confer` can never name one.
+4. **`add_tenure` object-domain guard for `hold`** — `state/world.py` checks the Tenure kind and
+   `contain`'s ascent and nothing about a hold's object. Pairs with the faction-holds fix or it
+   reddens the corpus.
+5. **Delete `budget_office_bonus`** (`decision/budget.py`) — `04 §A.3` row 15 refuses it by name, and
+   it counts *every* live `hold`, so **issuing a policy would buy an act**. This is a precondition for
+   the policy instrument, not a cleanup.
+
+**Measured, and worth re-running before planning against it:** 19 of 19 offices carry EMPTY `conferral`
+and `revocation`, so the confer/revoke predicates refuse every seat regardless of remit; only 3 of 19
+posts sit on the titles ladder, so **16 of 19 seat-holders have purview over nothing, including their
+own rung**; `_eff_create_record` already mints a Record *and* opens the maker's `hold`, which is the
+works instrument's exact shape, shipped.
+
+**`needs_jordan` — one fork only (`ED-IN-0236`):** does a nearer rung's clause or a higher rank win a
+policy collision? Recommendation: nearest, with a superior's `reach: all` override. **Nine other
+candidate requests were CLOSED with citations** under §0's five-step gate — `04_BUILD_ORDER.md` §C.5
+lists each closure so nobody re-asks it.
+
+⚠ **The `§0.4` close gate was NOT RUN on this branch** — the sandbox denied pytest mid-session. Local
+gates pass; CI is the authoritative tier. Do not read the absence of a failure as a pass.

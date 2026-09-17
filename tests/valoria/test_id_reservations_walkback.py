@@ -221,7 +221,26 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # revert of the walk-back: the frozen pre-walk-back WR pointer was 10 -- ED-IN-0098 'returned'
     # 0010-0012 per that lane's annotation in references/id_reservations.yaml -- so 12 cannot be
     # reached by reverting ED-IN-0098.
-    released = {'SC': 38, 'FA': 39, 'WR': 12, 'SE': 52}
+    # PIN UPDATED 2026-09-17: SE 52 -> 53. ED-SE-0052 allocated for THE BUILT WORLD
+    # (proposals/2026-09-17-governance-and-holdings/02_THE_BUILT_WORLD.md) -- settlements and their
+    # buildings, infrastructure and fortifications as the expression of faction holdings; PROPOSED and
+    # HELD BACK IN FULL, nothing ratified on merge. It NARROWS ED-IN-0223 (a building stands on a hearth
+    # rather than being one), confirms `hold` must not reach a `Site`, withdraws two proposed free cuts
+    # as breakages (`fort_level` has live engine readers behind a blocking descriptor export), and
+    # recommends ED-SE-0051's capacity arm -- ED-SE-0051 itself STAYS the open escalation, so this
+    # allocation does not close it. Entry in registers/editorial_ledger_se.jsonl; narrative in
+    # references/id_reservations_history.md#se.
+    # This is the update-the-pin-and-say-so path this test's own failure message prescribes, not a
+    # revert of the walk-back: ED-IN-0098 'returned' SE 0050-0052 with max allocated ED-SE-0049, so the
+    # frozen post-walk-back SE pointer was 50; 53 cannot be reached by reverting ED-IN-0098.
+    # PIN UPDATED AGAIN 2026-09-17: SE 53 -> 54. ED-SE-0053 allocated for MATTER AND WORKS
+    # (proposals/2026-09-17-governance-and-holdings-r2/04_MATTER_AND_WORKS.md), the round-two successor
+    # to ED-SE-0052 after that suite's own pessimistic NERS pass found its headline path did not
+    # construct. Same allocation day as 0052, a separate document and a separate id; PROPOSED and HELD
+    # BACK IN FULL. ED-SE-0051 still STAYS the open escalation -- 0053 recommends its capacity arm and
+    # does not close it. Entry in registers/editorial_ledger_se.jsonl; narrative in
+    # references/id_reservations_history.md#se.
+    released = {'SC': 38, 'FA': 39, 'WR': 12, 'SE': 54}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

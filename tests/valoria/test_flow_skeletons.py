@@ -273,10 +273,28 @@ GENERATED_TARGETS = frozenset(a for _builder, arts in _GENERATED_LAYER for a in 
 #: records: `GENERATED_TARGETS` REJECTS a bare line number, and one skeleton cites
 #: `systems/ui/_identifier_census.yaml:1-2` — a header citation that is both bare and perfectly
 #: stable. Rejecting it would red a frozen document over a true claim.
+#: ⚠ THE SUBSYSTEM LIST IS THE UNION OF `systems/` AND `.designs/systems/`, AND THE UNION IS THE
+#: WHOLE FIX. This read `os.listdir(systems)` alone until 2026-09-17 and was RED ON `main`
+#: (`ef56acb`, the `.designs/` quarantine; its parent `b178fd0` was green). ED-IN-0231 moved every
+#: `.md` out of `systems/`, and git does not track an empty directory — so **five subsystem
+#: directories no longer exist in a fresh clone at all**: measured, `_architecture`, `articulation`,
+#: `npcs`, `ui` and `victory` have ZERO tracked files under `systems/`. This frozenset is computed
+#: at IMPORT, before the fixture runs the builder that re-creates those directories, so in CI the
+#: five were silently omitted and their sidecars were line-checked as if authored. On a developer's
+#: tree the directories already exist from an earlier build and the same code passes — which is why
+#: it read green locally and red in CI, on the same commit.
+#:
+#: `tools/build_identifier_census.py` had already solved this, at its own `:197-200`: it unions the
+#: two roots for exactly this reason. Taking the same union here is §8's rule — the answer lives
+#: once and this is the second caller of it, not a second answer. `.designs/systems/<sub>/` IS
+#: tracked, so the union is stable on a fresh clone.
 _CENSUS_SIDECARS = frozenset(
     'systems/%s/_identifier_census.yaml' % _sub
-    for _sub in sorted(os.listdir(os.path.join(ROOT, 'systems')))
+    for _sub in sorted(set(os.listdir(os.path.join(ROOT, 'systems')))
+                       | (set(os.listdir(os.path.join(ROOT, ARCHIVE, 'systems')))
+                          if os.path.isdir(os.path.join(ROOT, ARCHIVE, 'systems')) else set()))
     if os.path.isdir(os.path.join(ROOT, 'systems', _sub))
+    or os.path.isdir(os.path.join(ROOT, ARCHIVE, 'systems', _sub))
 )
 
 # Files whose LINE NUMBERS are not a stable anchor, though their CONTENT is. Checked by symbol,
