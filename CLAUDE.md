@@ -861,6 +861,13 @@ that they could plausibly have missed each other.
   a judgment node, an audit verdict, a number nobody else can reproduce. Not on a diff one reader
   can hold entire.
 
+⚠ **AND THE DENY THIS ARGUES FOR IS REFUSED — RULED by Jordan, 2026-09-17.** Verbatim: *"I want
+multiple agent dispatches."* A `PreToolUse` deny on multi-`Agent` dispatch was put to him as §11's
+shape applied to fan-out cost; the answer is no. **So the sizing rule above binds a READER and gets
+no mechanism**, and §0.1 pt 5's predicate withholds one independently — token cost is neither the
+game nor a Jordan decision. Do not re-propose it. §11 has a deny because Jordan ruled the RULE
+first; absent that, a deny is apparatus looking for a rule.
+
 **Three caching facts that bite the fan-out pattern:**
 1. **Parallel agents sharing a prefix cannot read each other's cache.** An entry is readable only once
    the first response *begins streaming*, so N concurrent identical-prefix calls all pay full price:
@@ -927,7 +934,17 @@ incident, that is the accretion §0.3 describes, and the repair is to cut it bac
   special-case an entity or outcome (**scripting drift**); never grow a scale-local interface dialect
   (**shape divergence**).
 - **Roster discipline:** promote a role into `.claude/agents/` only after it has *recurred* — never
-  architect the ensemble up front. `valoria-critic` is the only promotion so far.
+  architect the ensemble up front. `valoria-critic` (structurally read-only) and `valoria-author` (writes its deliverable to a
+  path and returns a receipt, so a long artifact never crosses the orchestrator's window —
+  promoted 2026-09-17 on eight recurrences) are the only promotions. ⚠ **They are OPPOSITE cases
+  and only one of them is a control.** The critic's independence *is* its missing write tool.
+  `valoria-author` holds the full producer toolset — `Bash` and `Agent` included, RULED by Jordan
+  2026-09-17 (*"we still need agents and bash"*) after its first version removed both and called
+  the removal structural — so every rule in its file is one it can break, and the file says so.
+  **The general lesson, and it is worth more than either agent: removing a tool to enforce a
+  process rule buys a CONTROL only where the rule IS the absence.** Elsewhere it buys a crippled
+  lane — that first version offered itself for code changes while removing every means of verifying
+  one (§0.4 cl.2's covering test file, §0.05 cl.3's re-derive, an exporter's `--check`).
 - **If you build an orchestrated run again**, four properties are worth re-deriving and nothing enforces
   them today: a **closed `stop_reason` set that is report-only** (RULED by Jordan — a breaker halting a
   large audit on a heuristic costs more than the defect it caught); a **null-result alarm** on any lens

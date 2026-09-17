@@ -13,6 +13,78 @@ plus `HANDOFF_IN.md` equals the original file's, exactly.
 **It is NOT a continuity surface. Do not orient from it and do not add to it.** New work goes in
 `HANDOFF_IN.md`; this file only ever receives units that file has finished with.
 
+## Contents — the table of contents relocated from `HANDOFF_IN.md` (2026-09-17, `ED-IN-0240`)
+
+| | tokens | unit |
+|---|---|---|
+| | tokens | unit |
+|  | 4,866 | ⭐ DONE 2026-09-09, MERGED IN PR #383 — decomposition STEP 7: `decision.py`. `shape.py` 2,813 → 2,066, `decision.py` 87 |
+|  | 3,959 | ⭐ DONE 2026-09-07 — THE DECOMPOSITION IS IN `engine/season/`. `shape.py` 6,771 → 5,165 (ED-IN-0203) |
+|  | 3,487 | ⭐ DONE 2026-09-09, MERGED IN PR #383 — decomposition STEP 8: `seam.py`. `shape.py` 2,075 → 1,788, `seam.py` 372 new (E |
+|  | 3,396 | ⭐ DONE 2026-09-09 — decomposition STEP 6: `epistemic.py`. `shape.py` 3,124 → 2,803 (ED-IN-0203) |
+|  | 2,145 | THE SEPARATION WORK LIST (W1–W10) — written down 2026-08-04 (ED-IN-0135) |
+|  | 1,714 | [DONE] ED-IN-0180 — Waves 4+5: the duplication guardrail, and two artifacts nothing refreshed |
+|  | 1,372 | Next actions :: - **"Extend audit in all directions" — trace-completeness pass (2026-07-22, PR #205, in flight). |
+|  | 1,288 | [DONE] ED-IN-0182 — second adversarial review, vocabulary as the lens: five real defects |
+|  | 1,225 | 2026-08-04 (late) — STATE AS OF `9c0a616`. Read this before resuming. |
+|  | 1,182 | ⭐ DONE 2026-09-10 — ARC 1: Layer-1 MODULE-BOUNDARY conformance for `engine/season/` (ED-IN-0206) |
+|  | 978 | 📐 2026-09-12 — the v2 suite, and the ruling a cold session must read first (`ED-IN-0217`, PR #400) |
+|  | 951 | ⭐ DONE 2026-09-07 — `R8.4`'s `document_key` repair is EXECUTED (PR #379, ED-IN-0202) |
+|  | 925 | ⛔ RULED 2026-09-07 (Jordan) — #371 EXISTS. `engine/season/` IS THE HEAD. THE DECOMPOSITION WAS DONE ON THE PROTOTYPE. |
+|  | 879 | ⏱ 2026-09-11 — verification cadence ruled: the suite is a CLOSE step (`ED-IN-0213`) |
+|  | 780 | Next actions :: - **THE CONTRACT + KEY INDEXES ARE READABLE NOW (2026-08-10, ED-IN-0151). Jordan review pending. |
+|  | 768 | 2026-08-23 — S5 CLOSED (5c landed); S6 is next |
+|  | 723 | 2026-07-31 — M1 program scaffolding RATIFIED (ED-IN-0112); residuals filed (ED-IN-0113) |
+|  | 706 | ⛔ RULED 2026-09-07 (Jordan) — `engine/season/` IS THE HEAD, AND THE `R8.4` REPAIR MUST BE CARRIED INTO IT |
+|  | 679 | Pending :: - **[LANDED] ED-IN-0097 W4 ORCHESTRATOR GATE BATCH (2026-07-29) — read this before W5.** The |
+|  | 672 | 2026-08-27 — engine_clock exists, and the tick's clock calls left the ACTION phase (ED-IN-0199) |
+|  | 610 | Next actions :: - **W0/W1 of the fork plan are DONE (2026-08-03, ED-IN-0123). W2 is Jordan's, so the next |
+|  | 585 | Pending :: - **ED-IN-0064 FILED 2026-07-14 — multi-scale governance research + audit pass (analysis-only). |
+|  | 579 | Pending :: - **ED-IN-0075 FILED 2026-07-18 — "Truth" consolidation RULED + SoT authored; corpus sweep STAGED. |
+|  | 568 | Pending :: - **ED-IN-0044 RATIFIED 2026-07-12 — simulation/test harness methodology. |
+|  | 528 | Next actions :: - **⚠ `build_decisions.LANE_PATH_PREFIXES` should be a DERIVATION, not a 133-row table |
+|  | 510 | Next actions :: - **⚠ `references/id_reservations.yaml` is at 14,263 / 15,000 tokens — 737 of headroom, on the file |
+|  | 485 | Pending :: - **Attribute/value coherence audit 2026-07-08: ED-IN-0029 — PARTIALLY RATIFIED (2026-07-08 follow-o |
+|  | 485 | Next actions :: - **RESOLVED 2026-08-04 (ED-IN-0125) — the direction is INVERTED. `main` is the go-forward repo. |
+|  | 473 | Pending :: - **Wave-Q-step-3 tooling build EXECUTED 2026-07-08 (same-day follow-on to the ratification above; |
+|  | 467 | Next actions :: - **THE FORK IS BUILT AND RUNS (2026-08-03, ED-IN-0123, PR #286). Start here. |
+|  | 437 | Pending :: - **Unaddressed-areas audit + Key & Echo Armature — RATIFIED 2026-07-07 (Jordan: "Perform |
+|  | 418 | Pending :: - **ED-IN-0073 FILED 2026-07-17 — adversarial audit of the character-decision machinery (read-only). |
+|  | 406 | Next actions :: - **⚠ READ `audit/2026-08-03-session-oddities.md` BEFORE RESUMING.** Extended 2026-08-03 into the |
+|  | 384 | Pending :: - **Resolution Plan v1 — Stratum-A truth-reconciliation FIRST PASS EXECUTED 2026-07-07 (this branch, |
+|  | 383 | Pending :: - **✅ NO SELF-SCHEDULING DONE (2026-07-26, ED-IN-0084).** Jordan directive — kill the hourly PR |
+|  | 344 | ⚠ FILED 2026-09-07 FROM THE SC LANE — one write-gate defect that is `IN`'s and not theirs |
+|  | 322 | Next actions :: - **Governance Type Registry (2026-07-13)** — `designs/architecture/governance_type_registry_v1.md` |
+|  | 317 | Next actions :: - **START HERE — month-overview + consolidation (2026-07-01), doctrine + propagation spec now |
+|  | 298 | Pending :: - **Pessimist subtractive-action audit RATIFIED 2026-07-08 (ED-IN-0027; Jordan: "Please ratify all") |
+|  | 286 | Pending :: - **Qualitative NERS audit (North-Star) — RATIFIED-AS-ACCEPTED 2026-07-05 (Jordan post-merge |
+|  | 263 | Pending :: - **✅ IN lane-ledger archive pass DONE (2026-07-18).** `registers/editorial_ledger_in.jsonl` was at |
+|  | 251 | 2026-08-27 — an id-allocation gate does not exist, and the predicate says not to build one |
+|  | 240 | Pending :: - **Resolution Plan v1 — PR-2 F7 smoke oracle LANDED 2026-07-08 (ED-IN-0021 → resolved). |
+|  | 235 | Pending :: - **ED-IN-0045 (open, execution pending) — the four ED-IN-0044 quick wins, filed separately. |
+|  | 185 | Pending :: - **Resolution Plan v1 — Stratum-B oracle-to-canon FIRST SLICE 2026-07-08.** The ruled, low-risk |
+|  | 137 | Next actions :: - **Ledger-status reconciliation (LA-23, Lane A — mostly done):** flipped ED-841/842/912 `open`→`res |
+|  | 136 | Pending :: - **Resolution Plan v1 — Stratum-B SECOND SLICE 2026-07-08: knots.py ED-912 rebuild (C-TW-12 |
+|  | 136 | Next actions :: - **CI debt blocking-flips (LB-23) — reconciled 2026-07-01 (ED-1082):** `validate_ed_citations` |
+|  | 135 | Pending :: - **⚠ pre-existing bug surfaced (needs editorial reconciliation, NOT mine to rule): 4 duplicated ED- |
+|  | 120 | Next actions :: - **LB-22 residual (small):** `tools/` analysis utilities still carry `/home/claude` refs (WARN tier |
+|  | 114 | Pending :: - **[DONE 2026-07-28] ED-IN-0087/0088/0089/0090 — `.claude/` apparatus + run discipline.** Paths |
+|  | 92 | Next actions :: - **Done this pass:** unified PR #18's net-new into main → **LB-22 complete** (orchestrator retired |
+|  | 87 | Executive summary |
+|  | 74 | Next actions :: - **The new `ED-<LANE>-NNNN` namespace's own residual (from ED-IN-0001's PR body):** the |
+|  | 72 | Pending :: - **[PART] ED-IN-0087 residual — one assumption left.** Residual: `hSameFinding`'s containment |
+|  | 67 | Next actions :: - **`ci_political_v30` read-routing (LB-24):** raw file ~26k but tracked read returns 0 |
+|  | 1,235 | Decisions :: - 2026-07-09 — **Follow-on token-efficiency pass: dead GitHub-API tools retired, observabil |
+|  | 460 | Decisions :: - 2026-07-08 — **Second HANDOFF atomization pass + editorial-ledger lane split.** Jordan: " |
+|  | 305 | Decisions :: - 2026-07-02 — **HANDOFF.md split into per-lane files, matching the `ED-<LANE>-NNNN` |
+|  | 395 | Decisions :: - 2026-07-02 — **Merge-ratifies-by-default convention adopted (ED-1094); ED-1083 doctrine |
+|  | 439 | Decisions :: - 2026-07-01 — **Month-overview + architecture-consolidation session executed** (12+ commit |
+|  | 251 | Decisions :: - 2026-06-30 — **ED-1053 resolved: working-tree integrity port + sim oracle.** Ported the t |
+|  | 268 | Decisions :: - 2026-06-28 — **Open-session unification + LB-22 closed.** Reviewed every `origin` session |
+|  | 95 | Decisions :: - 2026-06-28 — **Master Workplan v5** authored (`designs/audit/2026-06-28-recent-work-orche |
+|  | 67 | Decisions :: - 2026-06-24 — Migrated the Claude↔GitHub automation to a Claude Code-native model: |
+|  | 298 | Decisions :: - 2026-07-01 — **Workplan sprawl cleanup.** `workplans/` was dead (both files pre-dated v3/ |
+
 ## The predicate that moved a unit here, stated so you can re-run it
 
 A unit moved **only if it carried none of** `needs_jordan` · `[OPEN]`/`STILL OPEN` ·
@@ -3249,3 +3321,182 @@ thinness.
 
 
 ---
+
+---
+
+## ⬇ SECOND PASS — moved 2026-09-17 (`ED-IN-0238`), same predicate, widened to case-insensitive
+
+**10 units · 3,809 tokens**, verbatim and in original order, from `HANDOFF_IN.md`'s `Decisions` log (2026-06-24 … 2026-07-09). Predicate and granularity are unchanged from this file's header except that marker matching is now CASE-INSENSITIVE — see the live file's index for the miss that forced it.
+
+- 2026-07-09 — **Follow-on token-efficiency pass: dead GitHub-API tools retired, observability
+  register re-capped, two stale size warnings resolved.** Jordan: "What other steps can we take to
+  increase token efficiency... How often are we calling in from GitHub needlessly instead of just
+  looking at local cloned repo?" then "All please, but carefully." A subagent traced every
+  GitHub-API code path in the repo first: **zero live-invoked tools touch the GitHub API** — the
+  ED-1053 migration to working-tree reads is complete for every gate CI/hooks actually run. What
+  remained was dead code that only *looked* live, independently re-verified (grep for each
+  filename across every workflow/hook/skill/Python import) before touching anything:
+  - **Retired to `deprecated/tools/` / `deprecated/engine/`** (mirroring the existing
+    `valoria-orchestrator` → `deprecated/skills/` precedent, not hard-deleted):
+    `extract_values.py`, `extract_proper_nouns.py`, `valoria_collator.py`, `valoria_bulk_fix.py`,
+    `file_lookup.py`, `compliance_dryrun.py`, `engine/engine_audit_harness.py`. Also
+    `skills/prose-writer/scripts/consistency_check.py` (the GitHub-API-only naming-gate predecessor
+    `tools/ci_naming_check.py` itself documents as superseded) → `deprecated/skills/prose-writer/scripts/`.
+    Fixed the two `references/ci_checks_registry.yaml` rows that asserted a live pairing to two of
+    these (`abbreviation_registry_gate` → `valoria_collator.py`, `forbidden_token_gate` →
+    `consistency_check.py`) — both pairings were already stale/never wired, confirmed by grep.
+    **`tools/canon_coverage_check.py` deliberately left in place** — GitHub-API-based and unwired
+    too, but its own registry entry says `ci_job: ""  # not yet wired — Jordan to decide`, a
+    pending-decision status, not confirmed-dead legacy.
+  - **Dead single function removed in-place** (file itself is live): `fetch_full()` in
+    `skills/valoria-vector-audit/scripts/vector_audit.py` — a GitHub Contents API helper with zero
+    callers, vestigial from before the read-path rewrite (LB-22). Removed with its now-unused
+    `urllib.request`/`base64`/`json` imports; file still compiles.
+  - **`tools/observability/DECISIONS.md` re-capped**: was 59,085 tokens (4x its 15k
+    `atomization_rules.yaml` cap) purely from `build_decisions.py`'s `PER_CAT_CAP=60` truncation
+    setting being too generous — nothing reads the .md for completeness (console.html and any
+    programmatic consumer read the uncapped `decisions.json`, unchanged). Dropped `PER_CAT_CAP` to
+    12 and regenerated; file is now ~6.3k tokens. (Regeneration also re-swept the current corpus,
+    surfacing the counts have drifted since the file's one prior commit — expected, not a bug.)
+  - **Two other standing `compliance_check` size warnings resolved**, not by pruning content but by
+    fixing the governance that was wrong: `references/module_contracts.yaml` (~14.4k tokens) was
+    hitting the generic 10k `**/*.yaml` catch-all with no policy ever written for it despite being a
+    genuinely comprehensive, actively machine-checked 27-module registry (CLAUDE.md §6 already notes
+    it's expected to grow, not shrink) — raised its explicit cap to 18k, `warn_only`, same treatment
+    as `canonical_sources.yaml`/`mechanical_terms_index.md`. The attribute/value coherence audit's
+    `02_census/quantity_census.yaml` (~18.5k tokens) is a self-declared frozen evidence artifact
+    ("QUARANTINE-NOTE: not a registry, not canonical truth") hitting the same catch-all with nothing
+    to act on — given `on_exceed: skip`, scoped to that one file (not a blanket `designs/audit/`
+    exemption). `compliance_check.py --check-only --repo-state .` now reports 0 warnings, 0 errors
+    (previously 3 standing warnings).
+  - Model-tiering gap noted but **not code-fixed**: of three persisted Workflow scripts in
+    `.claude/` (git-tracked, each a provenance record of one already-executed audit —
+    `wf_attribute_coherence.js`, `wf_combat_critique.js`, `wf_social_contest_critique.js`), only the
+    first shows real haiku/sonnet/opus/fable tiering per CLAUDE.md §10; the other two have almost no
+    `model:` overrides. These are historical run records, not reusable named workflows (no
+    `.claude/workflows/` dir exists) — editing them now wouldn't change any past cost and would
+    misrepresent what actually ran, so left as-is. The actionable form of this finding is: apply
+    §10 tiering when *authoring* the next heavy audit/critique workflow, not a retrofit here.
+  - Verified: `compliance_check.py --check-only --repo-state .` (0/0), `ci_register_size_check.py`,
+    `ci_hooks_verifier.py` (dead-tool `/home/claude` warnings dropped from 6 files to the expected
+    remainder), `ci_naming_check.py`, `currency_consistency_check.py`, `validate_ed_citations.py`
+    (0 violations), `broken_dependency_checker.py` (clean), full `tests/valoria` suite — all green.
+
+- 2026-07-08 — **Second HANDOFF atomization pass + editorial-ledger lane split.** Jordan: "Make it
+  so that handoffs are by lane, not just a giant document. Break up handoffs and editorial register
+  for that reason because they should be atomized for better management." Two changes:
+  (1) root `HANDOFF.md`'s "## Next actions" section still carried ~9k tokens of lane-owned bullets
+  (mass battle, PC, IN, SC) despite the 2026-07-02 lane split below — every one was cross-checked
+  against its lane file first (most were already duplicated there verbatim) and dropped rather than
+  re-copied; the two genuine gaps found (R2 capstone finding, J-36) were backfilled into
+  `HANDOFF_PC.md`/`HANDOFF_IN.md` before trimming root. Root is now ~95 lines / ~1.6k tokens, only
+  cross-lane content. (2) `registers/editorial_ledger.jsonl` (404 live entries, ~150k tokens, previously
+  ungoverned by lane) split the same way: the 115 entries whose id already declares a lane
+  (`ED-<LANE>-NNNN`) moved to their own `registers/editorial_ledger_<lane>.jsonl`; the 289 pre-cutover
+  flat-ID entries stayed put (no retrofit, same precedent as the ID-namespace cutover itself). Main
+  ledger dropped from ~150k tokens (at its own cap) to ~90k. Updated
+  `tools/validate_ed_citations.py` (reads main + all lane files as "active") and
+  `tools/broken_dependency_checker.py`'s `check_editorial_ledger` (same — the lane-tagged third of
+  live entries would otherwise silently stop being checked for broken paths, the exact failure class
+  ED-1081 already fixed once) and `tools/ci_register_size_check.py` (per-lane caps). Verified:
+  `validate_ed_citations.py` 0 violations, `broken_dependency_checker.py` clean,
+  `ci_register_size_check.py`/`compliance_check.py --check-only` clean, `currency_consistency_check.py`
+  clean, full `tests/valoria` suite green.
+
+- 2026-07-02 — **HANDOFF.md split into per-lane files, matching the `ED-<LANE>-NNNN`
+  nomenclature.** Jordan: "Handoffs need to have the same tagging nomenclature. There are
+  different handoffs for different lanes." Root `HANDOFF.md` is now a thin index + genuinely
+  cross-cutting "Next actions" pointer; each lane (`MB, PC, FI, SC, FA, WR, IN, GO, SE`) gets
+  its own `registers/handoffs/HANDOFF_<LANE>.md` carrying that lane's Pending/Decisions/Next-actions.
+  Motivation is the same one behind the `ED-<LANE>-NNNN` split itself: reduce concurrent-session
+  merge-collision surface on shared continuity files. Note this partially reverses an EARLIER,
+  deliberate consolidation (`deprecated/session_machinery/` retired per-topic session-log files
+  in favor of one `HANDOFF.md`, because fragmented files rotted/went stale) — the difference
+  this time is the fragmentation is keyed to the SAME lane taxonomy the ID system already
+  enforces, not an ad-hoc per-topic split, and `tools/session_status.py`'s SessionStart banner
+  still reads one root file so there's still a single "start here" surface, just a thinner one.
+  `tools/session_status.py` unchanged (still greps root `HANDOFF.md`'s one `## Next` heading).
+
+- 2026-07-02 — **Merge-ratifies-by-default convention adopted (ED-1094); ED-1083 doctrine
+  ratified; J-38 propagation spec ratified (ED-1093).** Jordan: merging a PR ratifies its
+  PROPOSED/provisional contents by default unless the PR body explicitly holds an item back
+  for separate review — closes a real recurring gap where PR #55 was reviewed and merged but
+  `holonic_container_doctrine_v1.md` (ED-1083) sat PROPOSED in `main` afterward because the
+  prior convention required a distinct explicit ratification step nothing forced to happen.
+  Applied same-day: ED-1083 flipped provisional → ratified; doctrine `## Status:` line
+  PROPOSED → **CANONICAL**; `CURRENT.md` gained an Architecture/Holonic-doctrine row;
+  `decision_queue.md` item 20 struck resolved; `CLAUDE.md` §2 documents the standing rule.
+  **Applied a second time to J-38 itself, same PR (#58):** rather than land the propagation
+  spec as PROPOSED and rely on "ratifies on merge" text (which would repeat the exact ED-1083
+  failure mode this convention exists to close), the flip to CANONICAL was pre-staged in the
+  PR — `designs/architecture/propagation_spec_v1.md` `## Status:` line PROPOSED → **CANONICAL**,
+  ED-1093 ledger entry `status` → `ratified`, `decision_queue.md` item 18 struck resolved. A
+  whole-session Fable review (triggered after the ED-1088 ID-collision reconciliation) caught
+  this risk plus stale cross-references before merge. Scope: governs future PRs; does not
+  retroactively reopen closed decisions or ratify anything a PR explicitly holds back and flags
+  loudly as such.
+
+- 2026-07-01 — **Month-overview + architecture-consolidation session executed** (12+ commits,
+  ED-1081..1087; overview + execution/reconciliation logs + the frozen 23-item Jordan decision
+  queue at `designs/audit/2026-07-01-month-overview-architecture-consolidation/`). Landed:
+  LB-21 round-3 ID re-block · two silently-dead enforcement pieces revived
+  (`broken_dependency_checker` ledger check; non-executable tracked pre-commit hook) · CLAUDE.md
+  §6 falsified claims corrected (ED-1050/ED-1054 states) · holonic container doctrine v1
+  **PROPOSED** (`designs/architecture/holonic_container_doctrine_v1.md`, ED-1083 — Jordan-vetoable)
+  from the ingested 2026-07-01 workflow spec · Combat Pool collapsed to `max(5, History+6)` across
+  every live stale site (ED-1084) · `values_master.yaml` QUARANTINED · names_index v2 (proper-noun
+  fold; mirror 23→83) · session-log machinery → `deprecated/session_machinery/` · combat engine
+  runtime **numpy-free** (σ-kernel via `sim.autoload.sigma_leverage`; state kernel engine-owned;
+  ED-1085) with new container-hygiene guard · **first typed Godot params artifact**
+  (`engine/engine_params/combat_engine_v1.json`, blocking round-trip CI; ED-1052 seed) ·
+  contract-conformance CI (report-only; ED-1051 backlog surfaced per-PR) · CLAUDE.md §10 fable
+  tier + relay patterns; workplan **J-38** (propagation-spec authorship) docketed ·
+  `currency_consistency_check` self-updating recency gate (CI + SessionStart banner; ED-1087) ·
+  freshness pins refreshed + gate flipped **blocking** (LB-23 residual closed). Three scope
+  defaults adopted Jordan-vetoable (values_master quarantine-not-regenerate; Godot seed included;
+  freshness flip). Rulings made: **none** — everything gated sits in the decision queue.
+
+- 2026-06-30 — **ED-1053 resolved: working-tree integrity port + sim oracle.** Ported the three
+  "integrity" gates off the GitHub API to the working tree (no PAT/network): `broken_dependency_checker`
+  and `patch_propagation_checker` now `os.walk`/read locally (both green against the checkout);
+  `freshness_gate` computes git blob SHAs locally (verified identical to `git hash-object`) and checks
+  119/131 `canonical_sha__` pins (12 stale → report-only). Dropped `GITHUB_PAT` from the CI integrity job.
+  Hardened `ci_sim_fabrication_check`: full float-literal capture + `(variable,value)` matching close the
+  value-collision / float-split holes (corpus blast kept to +~200 latent, changeset-scoped; `tools/`
+  excluded from sim-classification). Added the first `sim/` test — `sim/tests/test_mc_v18_regression.py`
+  (deterministic seeded `run_batch(n=2,seed=0)`: determinism + golden + bounded smoke) — and a new
+  'Sim Reference Regression' CI job wired into All-Gates-Green. Updated CLAUDE.md §8.
+
+- 2026-06-28 — **Open-session unification + LB-22 closed.** Reviewed every `origin` session branch;
+  six were already squash-merged into main (#14–#21), one (`claude/github-ci-environment-review` = PR #18)
+  carried genuinely-unmerged work, and `claude/refresh-state-3m7nL` (abandoned 04-20 pre-migration line
+  carrying the retired `session_checkpoint`/`session_log` harness) was excluded from the merge. Unified
+  PR #18's **net-new** half (the LB-22 backlog) onto main — its already-landed half (12 skills +
+  coverage_matrix, via #16) was kept at main's version, no re-litigation. **LB-22 done:** `valoria-orchestrator`
+  retired to `deprecated/skills/`; `valoria-vector-audit` read-path rewritten; `ci_hooks_verifier.py`
+  Check 4 flipped to **blocking for `skills/`** (`tools/` stays WARN pending the API→disk port). PR #18
+  closed as superseded. `ci_register_size_check.py` taken from #18 (importable, no-PyYAML, ships the
+  drift-guard test) with #22's `names_index.yaml` threshold line re-added; `lane_assignments.yaml`
+  owns-globs repointed to `deprecated/`.
+
+- 2026-06-28 — **Master Workplan v5** authored (`designs/audit/2026-06-28-recent-work-orchestration/`),
+  reconciling the post-v4 work (06-12→06-28) into one register and superseding v4. Roadmap +
+  lane_assignments repointed to v5. Ledger verified live: **713** entries / 0 duplicate IDs / ED 1042.
+  (v5 de-staled this pass to live HEAD; PRs #16–#22 reconciled — see its §0/§10.)
+
+- 2026-06-24 — Migrated the Claude↔GitHub automation to a Claude Code-native model:
+  retired the `/home/claude` GraphQL/cache/session harness; gates now live once in `tools/`
+  and run in CI (authoritative) + local hooks/`.githooks` (advisory). See the migration PR.
+
+- 2026-07-01 — **Workplan sprawl cleanup.** `workplans/` was dead (both files pre-dated v3/v4)
+  while the live master workplan kept spawning in a fresh one-off `designs/audit/<date>-*/` folder each
+  revision, so `CURRENT.md` had to manually chase it. Relocated v5 into `workplans/` (now the
+  one live home — see its `README.md`); archived the two dead files to `deprecated/archives/workplans/`. Repointed
+  `CURRENT.md`, `references/lane_assignments.yaml`, `references/roadmap_state.yaml`, and v5's own §0
+  commit-path note. Frozen historical versions (v4 in `designs/audit/2026-06-11-orchestration/`, v3 in
+  `2026-06-10-master-workplan-v3/`) were left in place intentionally — they're bundled with sibling
+  audit artifacts and CURRENT.md already documents them as frozen records, not lost ones. Separately,
+  flagged (not moved) the `sim/` vs `tests/sim/` vs `tests/sim_framework/` naming collision — three
+  distinct-purpose directories, not duplicates; disambiguated via README notes in each rather than a
+  path rename, since `tests/sim/` is path-matched by `ci_sim_fabrication_check.py`/`atomization_rules.yaml`/
+  `lane_assignments.yaml` and a rename would need to update all three.

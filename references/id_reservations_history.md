@@ -380,6 +380,25 @@ for what survives.
 
 Full text for both: `registers/editorial_ledger_in.jsonl`.
 
+### 2026-09-17 (later) — ED-IN-0238 / ED-IN-0239 (HANDOFF_IN pass 2, and three resolutions)
+
+- **ED-IN-0238 — the second `HANDOFF_IN` closed-work pass.** Moved 10 units / 3,809 tokens, proved
+  lossless by `tools/verify_handoff_split.py --before HEAD` (0 lines lost). Widened `ED-IN-0221`'s
+  marker predicate to match case-INSENSITIVELY after `**Awaiting Jordan**` slipped its lower-case
+  `awaiting`; the widening kept four live-item sections in place that the old predicate would have
+  moved. Filed `needs_jordan` on one question — what bounds the mandatory orientation surface — and
+  **that flag is CLEARED by its own successor row**, per the append-only rule.
+- **ED-IN-0239 — the three resolutions.** Jordan refused the multi-`Agent` deny (*"I want multiple
+  agent dispatches"*, recorded in `CLAUDE.md` §10); `valoria-author` promoted as the second agent
+  definition; and `ED-IN-0238`'s escalation answered as *clear the stale queue*, not *edit Layer 0* —
+  §0.3 had already measured that shrinking the orienting surface did not change session behaviour.
+  Four queue entries closed with citations, each verified at the call site; 17 further candidates
+  REFUSED as path citations rather than dead subjects.
+
+Allocation note: `next_free` 238 → 240 across the two. The `ED-IN-0236/0237` renumber narrative that
+used to be duplicated on the `IN:` lane row lives at the subsection above it — one owner, per §0.05
+clause 3, which is why the row now carries state and a pointer only.
+
 ## IN — the 2026-07-14 duplicate-key repair (ED-IN-0064, finding OBS-IN-1)
 
 <a id="dup-key"></a>

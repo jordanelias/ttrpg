@@ -6,7 +6,11 @@
 ## which `workplans/2026-09-11-arc-sequence-spine.md` (ED-IN-0212) owned for the IN-lane engine
 ## work alone. Unit CONTENT stays with its owners: `2026-09-09-r-execution-plan.md` (U5–U10),
 ## `2026-09-09-layer1-conformance-plan.md` (G1–G4), `proposals/2026-09-05-proceedings-subsystem/`
-## (the proceedings build order). Detail per position is in `_part2`.
+## (the proceedings build order), and — ADDED 2026-09-17 (`ED-IN-0242`, on Jordan's instruction
+## to fix the gap) — `workplans/2026-09-13-work-order.md`, which owns the detail of positions
+## 13, 13b, 14, 15, 19, 19b and 20 and carries the item -> position mapping. That content lived
+## in root `HANDOFF.md`, a continuity index, so it was absent from this list and a trim nearly
+## deleted it as duplicated. Detail per position is in `_part2`.
 
 **Why this exists, in Jordan's words:** *"reconcile all plans, open items, findings and other work
 flagged over the past week that has not been addressed yet … evaluate what has been superseded
@@ -144,6 +148,7 @@ Detail per position — INSTRUCTION, LAYER, COMPLIANCE CLAUSE, OBSERVABLE/FALSIF
 | 11 | **U6** | IN | the first R-01/R-02 measurement | — |
 | 12 | **H-62-rest** | IN | writers for `scar`, `axis_count`, `convictions` | — |
 | 13 | **W28-cast** | IN | author the `cast:` blocks (**0 of 143 today**) and their reader, same commit | — |
+| 13b | **H-71** | IN | `person_side_eligible` declines every `remit:` alternative unconditionally, so a verb whose only eligibility is a remit is unreachable even where the actor holds the office. Tier 0, `grade: absent`, in-tree falsifier. ⚠ **ADDED POST-RATIFICATION 2026-09-17 (`ED-IN-0242`)** on Jordan's instruction, because it was in NO position here and its content sat only in root `HANDOFF.md`. Sub-position on the `19b` convention, so nothing renumbers. Detail: `workplans/2026-09-13-work-order.md` item 3 | **this row** |
 | 14 | **U7-own** | IN | the eight `own`-eligibility verbs, in antonym pairs; distinct operands; `Candidate.why` | — |
 | 15 | **Record-kind fold** | IN | Petition/Dispensation become kinds of `Record`; then `petition` + `carry` | — |
 | 16 | **H-84** | IN | one verb that moves a Record to another person | — |
