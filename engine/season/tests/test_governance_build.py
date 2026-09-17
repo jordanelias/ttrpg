@@ -26,7 +26,8 @@ from ..loop.driver import SeasonDriver
 from ..loop.predicates import in_holdings
 from ..queries import world_q
 from ..harness import probes as P
-from ..state.carriers import Proposition, Tenure
+from ..decision import budget as _budget
+from ..state.carriers import Proposition, Tenure, View
 
 
 # ---------------------------------------------------------------------------
@@ -187,6 +188,13 @@ def _heads(w, eaters):
     return sum(w.persons[e].weight for e in eaters)
 
 
+def decision_budget(w, pid):
+    """What `decision.budget` gives this person right now — the READ side of `Person.body`."""
+    p = w.persons[pid]
+    return _budget(p, View(pid, [], w.fixtures.get("view_k")), w.fixtures.get("scene_budget"),
+                   w.fixtures)
+
+
 def _need(w, eaters):
     """Exactly what these eaters draw in one season, per kind, from the shipped weights.
 
@@ -327,3 +335,153 @@ def test_lb3a_two_eaters_cannot_spend_the_same_unit():
     want = wt * _heads(w, eaters)
     assert short_grain == want - 1, (
         f"shortfall {short_grain} != {want} wanted - 1 available; the arithmetic does not close")
+
+
+# ---------------------------------------------------------------------------
+# ITEM 3b -- the body write, the shared `_crossings`, `remove_person`.
+# Falsifiers LB-3b and LB-3c.
+# ---------------------------------------------------------------------------
+
+def _starving_world(body_step=10):
+    """`tiny_world` with every larder bare and no site to produce one — the empty-root arm.
+
+    ⚠ `body_step` IS SET EXPLICITLY AND THE SHIPPED DEFAULT IS `0`. `H-125` parks the magnitude at
+    the control arm because all 86 buildable corpus worlds hold zero stores, so any nonzero
+    default starves 258 people in worlds that model a scene rather than an economy. The MECHANISM
+    is exercised here at a live arm — which is what keeps it a built behaviour rather than a
+    branch nothing reaches (§0.2) — and `test_lb3b_the_zero_arm_...` pins the shipped one."""
+    w = P.tiny_world()
+    for rid in ("R", "D", "S", "Hh"):
+        w.rungs[rid].stores = {}
+    w.sites.clear()
+    w.fixtures = w.fixtures.sweep("body_step", body_step)
+    return w
+
+
+def test_lb3b_a_short_larder_falls_a_body_a_band_and_narrows_the_season():
+    """**LB-3b**, and it asserts the crossing **AND** the budget drop, because either alone is
+    half-wiring.
+
+    ⚠ THIS IS THE READ/WRITE ASYMMETRY TEST (`CLAUDE.md` §0.1 pt 1). `decision.budget` reads
+    `p.body` TODAY. A MATTER write that landed on a copy — or on a `Person` the rehome replaced —
+    would fall a body that no reader ever sees, and a test asserting only *the body fell* would
+    stay green through it. So the budget is asserted to move IN THE SAME SEASON the band is
+    crossed: the band is what `body_band_penalty` counts, so the two are the same fact observed
+    from the write side and from the read side."""
+    w = _starving_world()
+    fx, k = w.fixtures, w.fixtures.get("scene_budget")
+    d = SeasonDriver(w)
+    who = "p_low"
+    start_body = w.persons[who].body
+    start_budget = decision_budget(w, who)
+    floor = max(f for f in fx.get("band_floors")["body"].values() if f <= start_body)
+
+    crossed_at = None
+    for season in range(1, 40):
+        w.step = Step.MATTER
+        evs = d.matter([])
+        w.tick += 1
+        if [e for e in evs if e.kind == "condition.band_crossed" and e.subject == who]:
+            crossed_at = season
+            break
+    assert crossed_at is not None, (
+        f"{who}'s body never crossed a band in 39 starving seasons; it is at "
+        f"{w.persons[who].body} from {start_body}")
+    assert w.persons[who].body < floor <= start_body, (
+        f"the crossing fired without the body passing the {floor} floor")
+    assert decision_budget(w, who) < start_budget, (
+        f"the band was crossed and the budget did not move ({start_budget} -> "
+        f"{decision_budget(w, who)}). The MATTER write landed somewhere `decision.budget` does "
+        "not read — which is the read/write asymmetry this test exists for")
+
+
+def test_lb3b_control_a_stocked_world_moves_no_body_and_no_budget():
+    """THE CONTROL. Same fixture, same seed, larders full — bodies constant, budgets unchanged,
+    and `_crossings` fires for SITES only.
+
+    `CLAUDE.md` §0.1 pt 4: a number without a control is not a measurement. Without this arm, a
+    body write that fired unconditionally — on the fed as well as the starving — would pass every
+    assertion in the test above."""
+    w = P.tiny_world()
+    at = {rid: _eaters_at(w, rid) for rid in ("R", "D", "S", "Hh")}
+    for rid, eaters in at.items():
+        w.rungs[rid].stores = dict(_need(w, eaters)) if eaters else {}
+    before_bodies = {pid: p.body for pid, p in w.persons.items()}
+    before_budgets = {pid: decision_budget(w, pid) for pid in w.persons}
+
+    d = SeasonDriver(w)
+    w.step = Step.MATTER
+    evs = d.matter([])
+
+    assert {pid: p.body for pid, p in w.persons.items()} == before_bodies, (
+        "a fed person's body moved")
+    assert {pid: decision_budget(w, pid) for pid in w.persons} == before_budgets, (
+        "a fed person's season narrowed")
+    person_crossings = [e for e in evs if e.kind == "condition.band_crossed"
+                        and e.subject in w.persons]
+    assert not person_crossings, f"a fed person crossed a band: {person_crossings}"
+
+
+def test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly():
+    """`body_step = 0` IS THE CONTROL ARM OF THE SWEEP, and it must reproduce the day before this
+    landed: nothing moves, nothing is emitted, nobody dies.
+
+    A sweep arm that merely varies the magnitude cannot flip a verdict. This one can — it removes
+    the cause rather than adjusting the result, which is the arm `harness/populated.py`'s own
+    `creed_sweep` docstring calls the point of a control."""
+    w = _starving_world(body_step=0)          # the SHIPPED arm, set explicitly
+    assert P.DEFAULT_FIXTURES.get("body_step") == 0, (
+        "the shipped `body_step` is no longer the control arm; `H-125` and this test disagree")
+    before = {pid: p.body for pid, p in w.persons.items()}
+
+    d = SeasonDriver(w)
+    w.step = Step.MATTER
+    evs = d.matter([])
+
+    assert w._subsistence_shortfall, "nobody is short on a bare world; the arm proves nothing"
+    assert {pid: p.body for pid, p in w.persons.items()} == before, (
+        "a body moved at `body_step = 0` — the control arm is not the pre-item tree")
+    assert not [e for e in evs if e.kind in ("body.changed", "person.died")], (
+        f"the zero arm emitted a body event: {[e.kind for e in evs]}")
+
+
+def test_lb3c_death_at_body_zero_closes_every_tenure_through_the_same_owner_as_kill():
+    """**LB-3c.** A body reaching 0 at MATTER must end every live edge NAMING that person — the
+    same cascade `kill / wound` runs at RESOLVE, through the same owner.
+
+    ⚠ IT PLANTS THE EDGE `W-E` MEASURED DANGLING: a `tie` **another person owns** that names the
+    dying one as its OBJECT. `p.tenures` is the edges this person is the SUBJECT of (§15.1), so a
+    cascade scanning only that list cannot see it, and §15.3 is explicit that the tenure ends
+    THROUGH the death. This is why `World.remove_person` scans `w.tenures`.
+
+    ⚠ THE LITERAL FORM OF `LB-3c` IS NOT USED, AND THE REASON IS RECORDED RATHER THAN THE CHECK
+    QUIETLY SOFTENED. `05_LEDGER_AND_BUILD.md` writes it as *"`grep -c "t.until = w.tick"
+    engine/season` must be 1"*. That count is **5** on this tree and each of the five is a
+    DIFFERENT closure — `confer` ending a prior hold, `release` ending what the actor owns,
+    `revoke`, and so on — none of them the death cascade. Taking the grep literally would require
+    deleting four legitimate per-verb closers. What the falsifier is ABOUT is that there is one
+    DEATH cascade, and that is asserted directly below, on behaviour rather than on a line
+    count."""
+    w = _starving_world()
+    w.add_tenure(Tenure("t_tie", "p_low", "p_mid", "tie", since=0))
+    w.persons["p_mid"].body = 1
+
+    d = SeasonDriver(w)
+    w.step = Step.MATTER
+    evs = d.matter([])
+
+    assert "p_mid" not in w.persons, "a body reached 0 and the person is still in the world"
+    assert [e.subject for e in evs if e.kind == "person.died"] == ["p_mid"]
+    assert [t.live for t in w.tenures if t.id == "t_tie"] == [False], (
+        "the `tie` another person OWNS, naming the dead one, survived the death and now dangles")
+    assert not [t for t in w.tenures if t.live and "p_mid" in (t.subject, t.object)], (
+        "a live edge still names a dead person")
+
+    # ONE OWNER, asserted on the source: `_eff_kill` must not carry its own copy of the cascade.
+    import inspect
+    from ..loop import effects as _effects
+    body = inspect.getsource(_effects._eff_kill)
+    assert "remove_person" in body, "`_eff_kill` no longer routes through the one owner"
+    assert "t.until = w.tick" not in body, (
+        "`_eff_kill` has grown its own cascade again — two sites closing tenures by hand is how "
+        "MATTER's death and RESOLVE's drift apart (§8)")

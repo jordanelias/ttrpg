@@ -461,6 +461,37 @@ DEFAULT_FIXTURES = Fixtures(
     # `stores >= 0` admits every giver: a run at this point shows how much of the transfer
     # behaviour rests on the default rather than on the world.
     default_transfer_amount=1,         # `H-94`, swept 0 / 1 / 3
+    # ⚠ ITEM 3b. HOW MUCH BODY ONE UNIT OF UNMET SUBSISTENCE COSTS. `AX-5` names three
+    # self-motions and BODIES IS THE ONE WITH NO WRITER; `04 §A.3.3` asks for the shortfall to
+    # reach `Person.body` through the gate, and the write matrix licenses `(Person, body)` at
+    # `[MAT, RES]` already. What no document supplies is the MAGNITUDE — #353 rules that a body
+    # falls, never by how much — so this is declared, defaulted and swept rather than chosen
+    # inside a body, which is `H-80`'s shape exactly.
+    #
+    # ⚠ `0` IS THE CONTROL AND IT IS THE PRE-3b TREE EXACTLY: no body moves, no band is crossed,
+    # and every reading of the corpus is identical to the day before this landed. That is what
+    # makes the sweep able to flip a verdict rather than merely vary a number.
+    #
+    # ⚠ THE ARMS ARE CHOSEN AGAINST THE BAND TABLE, NOT PICKED. `condition_scale` is 1000 and
+    # `band_floors["body"]` is `{full_operations: 800, limited: 500, withdrawal_only: 100}`, so a
+    # person must lose 201 to cross the first floor. At the populated world's measured shortfall
+    # of 3 units per eater per season: `0` never crosses · `10` crosses `full_operations` in 7
+    # seasons · `67` crosses it in one. The three arms therefore bracket the question the number
+    # actually decides — IS STARVATION A SEASON OR A CAMPAIGN — instead of bracketing a magnitude.
+    # Injection site: this line, read by `loop/matter.py`'s subsistence pass.
+    # ⚠⚠ SHIPPED AT THE CONTROL ARM, AND THE MEASUREMENT THAT FORCED IT IS THE POINT. At `10`,
+    # MEASURED: **all 86 buildable corpus worlds hold ZERO stores** while 258 persons live in
+    # them, so every person in every case world starves from season 1 and 19 tests move — not
+    # because scarcity bit, but because A CASE FIXTURE MODELS A SCENE AND NOT AN ECONOMY. A famine
+    # in a world with no larder measures the fixture's silence, not the world's scarcity, which is
+    # `CLAUDE.md` §0.1 pt 2 from the other side: the reading cannot observe the thing it names.
+    #
+    # So the MECHANISM ships and the MAGNITUDE is parked at the arm that reproduces the pre-item
+    # tree exactly. `test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly` pins that, and the other
+    # `LB-3b` falsifiers set the fixture explicitly, so the behaviour is EXERCISED rather than
+    # merely present (§0.2). Choosing the number needs a world that stocks a larder — which is
+    # what makes this a design call rather than a default nobody looked at.
+    body_step=0,                       # `H-125`, swept 0 (control, SHIPPED) / 10 / 67
     # `W-E` / `H-123`. HOW MUCH BODY A WOUND COSTS WHEN THE SCENE SAYS THE SUBJECT BLED AND DID
     # NOT GO DOWN. Part E's `writes:` names the CELL and never the VALUE, and no in-chain document
     # supplies this one -- so it is declared, defaulted and swept rather than chosen in a body,

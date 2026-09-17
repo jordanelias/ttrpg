@@ -359,7 +359,7 @@ this file declines to give it one.**
 # §7 · THE EXECUTION PASS — 2026-09-17: **one item landed, two measured and withdrawn**
 
 ## Status of this section: **`measured`, not `paper`** (`CLAUDE.md` §0.2). Every number below was taken on this tree, by the command printed beside it. `§1`–`§6` above remain `paper`.
-## Result in one line: **items 16 and 3a LANDED** · **item 1 HELD** (its headline claim is false) · **item 4 REVERTED** (it starves the corpus). **The plan is executable. Two of its four run items needed corrections it could not have had by reading; 3a needed none and its four predictions came out on the nose.**
+## Result in one line: **items 16, 3a and 3b LANDED** (3b at its control arm) · **item 1 HELD** (its headline claim is false) · **item 4 REVERTED** (it starves the corpus). **The plan is executable. Three of its five run items needed corrections it could not have had by reading; 3a needed none and its four predictions came out on the nose.**
 ## Lane: `IN` · **`ED-IN-0246`** (the execution pass; `§1`–`§6` remain `ED-IN-0243`)
 ## ⚠ It is an AMENDMENT to this file, not a fifth plan document. `CLAUDE.md` §0.05 clause 3 — *edit the OWNER and re-derive; never hand-edit downstream, and never keep a second copy.* This file owns THE ORDER, so a correction to the order is made here.
 
@@ -736,6 +736,85 @@ person. **3b is not built here**, and the shortfall is still recorded and acted 
 verdict moved.** The log content hash shifts because the economy now moves; `QUERY` rises 22,749 →
 23,085 (`nearest_store`'s own calls) and `NOTE` falls 483 → 276 (one shortfall note per barrier
 instead of one per rung).
+
+### §7.3d · ITEM 3b LANDED — a body finally falls, and it SHIPS AT ITS CONTROL ARM
+
+`AX-5` names three self-motions — matter, bodies, and the confidence of a memory — and **bodies was
+the one with no writer.** Matter wore, memory decayed, and an empty larder was a number in a trace
+that was never a fact about anybody. The write matrix has licensed `(Person, body)` at `[MAT, RES]`
+(`social: false`, emitting `body.changed` / `person.died`) the whole time; what was missing was a
+producer at MATTER.
+
+**What landed, three pieces:**
+
+| | |
+|---|---|
+| **the body write** | the shortfall from 3a reaches `Person.body` through the gate, then `_crossings` reads `band_floors["body"]` — **the same table** `decision.budget` already reads. No `band_floors.person`; `H-38` closed to avoid exactly that second scheme |
+| **`_crossings(w, id, floors, before, after, cause)`** | factored out of the site loop and called for **sites and persons**. One rule, two carriers — a second copy would let a site and a body disagree about what crossing a floor means |
+| **`World.remove_person`** | `_eff_kill`'s cascade, factored, with **MATTER and RESOLVE as its two callers**. It scans `w.tenures`, not `p.tenures`, so an edge **another person owns** that names the dying one closes too (§15.3; `W-E` measured that `tie` dangling) |
+
+**EXECUTED at `body_step = 10` on an empty-root `tiny_world`** — the artifact `04 §A.3.3` asks for,
+and it observes the write side and the read side in the same season:
+
+```
+season 1..6  bodies 970 → 820   budgets [5,5,5,5,6]   no crossing
+season 7     bodies 790         budgets [4,4,4,4,5]   condition.band_crossed × 5
+```
+
+**The band crossed and the budget moved together.** That pairing is the whole of `LB-3b`: `budget`
+reads `p.body` today, so a MATTER write landing on a copy — or on a `Person` the rehome replaced —
+would fall a body no reader ever sees, **with every test still green.** Asserting only *the body
+fell* is satisfiable by a write nobody reads.
+
+> ### ⚠⚠ AND THE SHIPPED DEFAULT IS `0`, THE CONTROL ARM, BECAUSE THE CORPUS CANNOT ANSWER FOR THE NUMBER
+>
+> At `10`, **19 tests moved.** The cause is not scarcity biting. MEASURED 2026-09-17:
+>
+> ```
+> corpus worlds built: 86 · worlds holding ANY stores: 0 · persons living in them: 258
+> ```
+>
+> **Every buildable case world holds nothing, and 258 people live in them**, so any nonzero arm
+> starves all of them from season 1. **A case fixture models a scene, not an economy** — and a
+> famine in a world with no larder measures the fixture's silence rather than the world's hunger,
+> which is `CLAUDE.md` §0.1 pt 2 from the other side: *the reading cannot observe the thing it
+> names.*
+>
+> So the **mechanism ships** and the **magnitude parks** at the arm that reproduces the pre-item
+> tree exactly. **The proof is the artifacts: `runs/TRACE.txt` and `runs/results.json` come back
+> BYTE-IDENTICAL, and `ASSUMPTIONS.md` gains one line** (`body_step | 0 | no — a harness fixture`).
+> The behaviour is still *built* rather than merely present (§0.2): every `LB-3b` falsifier sets the
+> fixture explicitly and exercises it at `10`, and `test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly`
+> pins the shipped arm.
+>
+> **`H-125` is the row**, with the arms chosen against the band table rather than picked: `condition_scale`
+> is 1000 and the floors are 800/500/100, so 201 must be lost to cross the first. At the populated
+> world's 3 units per eater per season, `0` never crosses · `10` crosses in 7 seasons · `67` in one.
+> The sweep therefore brackets **is starvation a season or a campaign**, not a magnitude.
+>
+> ⚠ **WHAT CHOOSING THE NUMBER NEEDS, so the next session does not re-derive it:** a world that
+> stocks a larder — either the case corpus gains stores, or it is ruled against the populated world.
+> And there the second question arrives: **nothing restores a body.** A fed person does not recover,
+> so any nonzero arm is monotone decay at person scale, which is `ARCH F.20`'s own complaint one
+> level down. **Neither is decided here.**
+
+**TWO OF THE PLAN'S CLAIMS ABOUT THIS ITEM DID NOT SURVIVE**, and both are cheap to state:
+
+1. ⚠ **"`Person.body` inherits the guard by adding one key — the one guard in this suite that is
+   free"** is **false.** `tests/valoria/test_morale_write_sweep.py`'s `_ENGINE_ROOT` resolves to
+   **`systems/mass_battle/sim`**, which does not contain `engine/season`; `Person.body`'s
+   assignments live in `engine/season/loop/effects.py` and `harness/probes.py` and the sweep never
+   walks them. A `_CELL_OWNED['body']` key would **exempt nothing and protect nothing** — which is
+   precisely the vacuous-whitelist class that file's own comment says it was written to end. **No
+   guard was added.** The hazard is covered by `LB-3b`'s both-halves assertion, the narrowest
+   instrument that can observe it (§0.1 pt 5: a guard must earn its existence).
+2. ⚠ **`LB-3c`'s literal form is wrong.** `05` writes it as *"`grep -c "t.until = w.tick"
+   engine/season` must be 1."* That count is **5**, and each of the five is a **different** closure —
+   `confer` ending a prior hold, `release` ending what the actor owns, `revoke`, and so on. Taking
+   the grep literally would require deleting four legitimate per-verb closers. What the falsifier is
+   ABOUT is that there is **one death cascade**, and that is asserted directly — on behaviour, plus
+   a source assertion that `_eff_kill` still routes through the one owner and has not regrown its
+   own copy.
 
 ## §7.4 · What this pass changes about the ORDER
 
