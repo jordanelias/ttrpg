@@ -4149,3 +4149,51 @@ and none ever will. The row **stays PARTIAL** (that was always honest); only the
 
 `2 PASS · 1 PASS (new) · 1 PARTIAL (correctly) · 1 FAIL (blocked elsewhere)` → **NOT MET**, and
 the single failing row is blocked on Jordan's rulings and on a repository this session cannot see.
+
+---
+
+## 2026-09-17 · The governance-and-holdings suite (`ED-IN-0231`, `ED-IN-0232`) — PR #408
+
+`proposals/2026-09-17-governance-and-holdings/` — five files, 4,873 lines, **PROPOSED and HELD BACK IN
+FULL**. Read its `README.md` first: it carries the standing instructions and a measurement block in
+which every figure names the command that reproduces it.
+
+**The finding that changes what the IN work is.** Most of the seat model is **already ratified Layer 1
+and merely unbuilt** — `04 §B.7` ships `Seat`, forbids an `is_title` branch anywhere, rules
+`establishment` a Query over `oblige` and rejects the field form, deletes `judging_set_rule` from
+`Rung`, and makes purview a property of *the seat exercised* through `Act.via`. So Jordan's 2026-09-03
+delegation ruling is decided at Layer 1 and unexpressed at Layer 2. **Treat this as conformance work,
+not new design**, and do not credit a conformance item as novel.
+
+**NEXT ACTIONS — the first five are all `S` and none is downstream of the Arc 2 gate contract.** The
+rule, stated once: work is downstream of positions 3–7 **iff** it is an `@effect_for` body or writes a
+Tenure whose subject is not the actor, so roughly two thirds of this is order-free.
+
+1. **Q3's referent → the site id** (`engine/season/queries/world_q.py:518`) — `H-110`, tier 1,
+   `absent`. ⚠ **Split it:** sites start at full condition and the highest `band_floors` edge is 800,
+   so the first crossing is ~season 21 while runs are 1–6 — **the one-line fix alone moves no
+   observable.** It needs a paired world with a site already below a floor. `H-110`'s own row declines
+   the one-liner on purpose as a design edit rather than a repair; honour that.
+2. **Matter reaches the people** — see `HANDOFF_SE.md`; the SE half is load-bearing.
+3. **`confer`/`revoke` read the office from `subject`**, since `office` is not a rostered operand, so a
+   computed `confer` can never name one.
+4. **`add_tenure` object-domain guard for `hold`** — `state/world.py` checks the Tenure kind and
+   `contain`'s ascent and nothing about a hold's object. Pairs with the faction-holds fix or it
+   reddens the corpus.
+5. **Delete `budget_office_bonus`** (`decision/budget.py`) — `04 §A.3` row 15 refuses it by name, and
+   it counts *every* live `hold`, so **issuing a policy would buy an act**. This is a precondition for
+   the policy instrument, not a cleanup.
+
+**Measured, and worth re-running before planning against it:** 19 of 19 offices carry EMPTY `conferral`
+and `revocation`, so the confer/revoke predicates refuse every seat regardless of remit; only 3 of 19
+posts sit on the titles ladder, so **16 of 19 seat-holders have purview over nothing, including their
+own rung**; `_eff_create_record` already mints a Record *and* opens the maker's `hold`, which is the
+works instrument's exact shape, shipped.
+
+**`needs_jordan` — one fork only (`ED-IN-0231`):** does a nearer rung's clause or a higher rank win a
+policy collision? Recommendation: nearest, with a superior's `reach: all` override. **Nine other
+candidate requests were CLOSED with citations** under §0's five-step gate — `04_BUILD_ORDER.md` §C.5
+lists each closure so nobody re-asks it.
+
+⚠ **The `§0.4` close gate was NOT RUN on this branch** — the sandbox denied pytest mid-session. Local
+gates pass; CI is the authoritative tier. Do not read the absence of a failure as a pass.

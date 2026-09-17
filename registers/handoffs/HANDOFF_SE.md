@@ -191,3 +191,46 @@ row, which is the authority on which head is live.)
   ED-SE-0001 ratification track.
 - **Author the remaining `needs_jordan` forks** (ED-SE-0013/0014/0015/0017's optional mechanic)
   once Jordan rules each.
+
+---
+
+## 2026-09-17 · The built world (`ED-SE-0052`) — PR #408
+
+`proposals/2026-09-17-governance-and-holdings/02_THE_BUILT_WORLD.md`, 1,100 lines, **PROPOSED and HELD
+BACK IN FULL**. Its siblings take governance at every rung, the player surface and the build order.
+
+**The ontology, as proposed.** A built thing's **fabric is a `Site`**; its **address is the `Rung` its
+`Site.rung` names**; the seam is occupancy, *derived* rather than stored. This **NARROWS `ED-IN-0223`**
+rather than overturning it — *a building is not a hearth, it stands on one*, and the hearth is the
+plot. ⚠ The destroy-cascade argument first offered for this is **struck in place as unsound**: nothing
+in the tree destroys a `Rung` or a `Site` at all. The refusal survives on **cardinality**.
+
+**Fortification** is an `ENCLOSURE`-family `Site` whose **condition IS its strength** — bands, not a
+level — reading onto three mechanisms that already exist, with **no siege subsystem**. The band is
+world truth and an attacker holds only a decaying claim about it, so it may never be rendered as fact.
+
+**`hold` must NOT reach a `Site`** — confirmed, but *not* for the reason first offered: `share` and
+`draw_share` are declared resolver-side **Queries**, so `share` was never a field. The ground is that
+mandatory single-holdership **deletes the commons**. ⚠ `add_tenure` performs no object-class check, so
+the refusal is currently **unenforceable** — a guard is proposed rather than assumed.
+
+**NEXT ACTION, and it is the one that unblocks the cascade.** Measured on `build_realm(0)`, one
+season: **37 settlements hold 4,810 units of matter and 211 hearths hold none** — every site hangs
+from a settlement, every person lives in a hearth, and the shortfall is clamped away silently. Worse,
+**only 13 of the 37 settlements have anyone in their `contain` subtree at all**, holding 1,690 of the
+4,810; the other 3,120 sit where nobody lives. So connecting the draw across the edge is necessary and
+**not sufficient** — the sites must also be keyed to the rungs people actually occupy. Reproduce with
+`python -m engine.season.harness.populated 2`.
+
+**Two proposed free cuts were WITHDRAWN as breakages** — verify before re-proposing either:
+`fort_level` and `facility_tier` both have live engine readers and sit in
+`engine/engine_params/descriptors.json` behind a **blocking** round-trip `--check`. The engine copy of
+`fort_level` is already the derived single-owner shape the cut was asking for.
+
+**`ED-SE-0051` STAYS OPEN.** `02` *recommends* its **capacity** arm — a `capacity(w, rung)` Query over
+dwelling sites with a floor, never a fixture — on the ground that matter-only is not currently a bound
+at all, because the shortfall is recorded and not acted on. It does not close it, and per `ED-WR-0011`
+it should be answered alongside that row.
+
+⚠ Grade `paper` under §0.2; nothing here executes. The `§0.4` close gate was NOT RUN on this branch
+(sandbox denial); local gates pass and CI is authoritative.
