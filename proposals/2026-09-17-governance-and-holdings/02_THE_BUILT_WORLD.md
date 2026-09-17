@@ -2,7 +2,8 @@
 
 ## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
 ## Method: `opus` (`claude-opus-5`), per `CLAUDE.md` §10 — the authoring tier for *"large-context synthesis"* and *"contract closure"*. A reconciliation stage at tier `fable` (read-only by role, §10's audit/guardrail node) adjudicated every disagreement before this file was written; this file writes that adjudication rather than re-deriving it. Lane **SE**, id **ED-SE-0052** (`registers/editorial_ledger_se.jsonl:52`).
-## Scope pin: every `path:line` below was opened in this session against the working tree. Every count was produced by running the thing that would have shown it wrong (`CLAUDE.md` §0.1 pt 3). **Grade under §0.2: `paper`** — §D.9 says what would move it.
+## Scope pin: every `path:line` below was opened in this session against the working tree. Every count was produced by running the thing that would have shown it wrong (`CLAUDE.md` §0.1 pt 3). **Grade under §0.2: `paper`** — ⚠ **§D.15 says what would move it** (~~§D.9~~: there is no §D.9, only the falsifier row `BW-9`, and the grade section is **D.15**; orphaned pointer repaired 2026-09-17).
+## ⚠ **UNIFIED 2026-09-17 (`00_THE_DESIGN.md`).** Suite-wide: **`ARCH`** = `architecture/meta/04_CODE_ARCHITECTURE.md`, **`AX`** = `architecture/meta/01_AXIOMS.md`; a bare `01`/`02`/`03`/`04` means a file in THIS directory. This file's falsifiers are **`BW-n`** and its loops **`BW-L±n`**. The multi-season construction is **a `works`** (`01` §A.12's ruling, binding on the suite), never *a work* or *a project*. Reconciliation edits are struck in place.
 
 ---
 
@@ -33,10 +34,11 @@ The tree's type system already split a building in half and never joined the hal
 and addresses nobody: `Site := (id, rung, kind, condition, drawers[])`
 (`carriers.py:411-418`; the same shape at `architecture/holonic_ARCHITECTURE.md:441`), where
 `condition` *"is PRIMARY STATE, a FIXED-POINT INT (S48), and it GATES VERBS (S12.1)"*
-(`carriers.py:412`).
+(`carriers.py:412-413`).
 
-**MEASURED, `build_realm(0)`, this session:** 211 `hearth` rungs (the buildings) and 74 `Site`s, every
-one of the 74 keyed to a `settlement` rung. The two populations are disjoint by construction. So the
+**MEASURED, `build_realm(0)`, this session (re-run 2026-09-17, unchanged):** 211 `hearth` rungs — the
+rows `venues.yaml` calls buildings, which A.1.2 narrows to **the plots buildings stand on** — and 74
+`Site`s, every one of the 74 keyed to a `settlement` rung. The two populations are disjoint by construction. So the
 211 buildings cannot wear, cannot be damaged, cannot be repaired and cannot be lost; and the 74
 fabrics house nobody.
 
@@ -97,7 +99,7 @@ exactly what you have built, because the cardinality is not 1:1 in either direct
 - **one address, no fabric.** All 60 `community` rungs and all 211 `hearth` rungs carry none.
 - **and a field on a type is available to every kind of that type.** Give `Rung` a condition for
   `hearth` and you have given it to `realm`; the type system cannot scope a field to a kind, so the
-  settlement's condition is then precisely the node-keyed average `:449-451` forbids. `04 §B.4` states
+  settlement's condition is then precisely the node-keyed average `:449-451` forbids. `ARCH §B.4` states
   the same thing from the other side: *"Node-keying is structurally unwritable: a Rung has no
   condition field, so the collapse cannot be spelled."*
 
@@ -158,7 +160,8 @@ fiction. **It is which column of which existing table the site's condition band 
 > asking about a kind that has no row RAISES."*
 
 **THE BASELINE IS TWO, NOT THREE, AND THE ROSTER SAYS SO ITSELF.** `site_kinds` is
-`[harbour, seam, body]` (`rosters.yaml:817`) and its own note at `:815-816` reads: *"⚠⚠ `body` IS NOT
+`[harbour, seam, body]` (`rosters.yaml:816` — ⚠ line repair 2026-09-17, ~~`:817`~~ is blank) and its own
+note at `:814-815` reads: *"⚠⚠ `body` IS NOT
 A SITE. It is `(Person, body)`'s band row, here because `band_floors` keys on THIS roster."* So the
 tree has **two** site kinds. Five families is therefore not a richer taxonomy than what exists — it is
 the first taxonomy, replacing an absence.
@@ -294,7 +297,7 @@ MATTER, writing through the gate and emitting `claim.decayed` (`matter.py:147-15
 with no new mechanism**, and an attacker who storms on a stale claim is `AX-2` working rather than a
 bug. The presentation hazard is where this usually breaks, and it is refused by name: a viewer shown
 the true band has been handed world truth through the interface layer, so
-**a fortification's band is rendered as the viewer's own estimate or not at all.** `04 §C.11`
+**a fortification's band is rendered as the viewer's own estimate or not at all.** `ARCH §C.11`
 (`:758-761`) is why the obvious escape fails — *"the player CONTROLS a person… for a player character
 the player IS the decision procedure"*, so anything shown before they declare is shown inside a
 decision — and R7 composes with it: *"a ruler can be wrong about their own standing… the player sees
@@ -322,6 +325,9 @@ Every reader below was opened.
 >
 > ⚠ The deletion may still be defensible on *other* grounds — both sit in trees ED-IN-0204 Decision 1
 > superseded. **The stated grounds were false**, and this row records that rather than the verdict.
+>
+> ⚠ **SINGLE OWNER (2026-09-17): this subsection owns the `fort_level` / `facility_tier` withdrawal.**
+> `04` §B.3 restated it; it is now a pointer here.
 
 **Why this row is in PART A rather than an appendix:** `CLAUDE.md` §0.1 pt 3's first shape is *"X is
 absent / dead / never fires → RUN the thing that would show presence."* Two absence claims were made
@@ -330,21 +336,21 @@ hardest to see wrong.**
 
 ---
 
-## A.4 · The lifecycle — `found`, a works `Record`, MATTER, and `restore` against a ceiling
+## A.4 · The lifecycle — `found`, a `works` `Record`, MATTER, and `restore` against a ceiling
 
 Four moments, and **exactly one new verb.**
 
 | # | moment | act | eligibility | writes | emits / on refusal |
 |---|---|---|---|---|---|
 | 1 | **FOUND the plot** | **`found`** *(NEW)* | `own`, presence entering through `requires` | `(Rung, exists)` — a `hearth`; its `contain` edge to the quarter; the founder's own `contain` moves | `rung.founded` / `found.refused` |
-| 2 | **OPEN the work** | **`create_record`** *(exists, RUNS)* | `own`, `requires: —` | `(Record, exists)`, `(Record, stages)` — **act-declared** — and the maker's `hold` on it | `record.created` |
+| 2 | **OPEN the `works`** | **`create_record`** *(exists, RUNS)* | `own`, `requires: —` | `(Record, exists)`, `(Record, stages)` — **act-declared** — and the maker's `hold` on it | `record.created` |
 | 3 | **RIPEN a stage** | *nobody; the clock act 2 wound* | — | `(Record, matured)` at MATTER | `term.matured` |
 | 4 | **RAISE the fabric** | **`restore`** *(row exists, NO effect)* | `own`, `presence:<site>` | `(Site, condition)`, through the summing clamp | `site.restored` / `restore.refused` |
 | — | **WEAR** | *nobody* | — | `(Site, condition)` down at MATTER | `condition.worn` · `condition.band_crossed` |
 
-> ### RULED: **THERE IS NO `undertake` VERB, NO `build`, NO `repair`, NO `raze`, NO `garrison` AND NO `convert`. A WORK IS A `Record` KIND WITH ACT-DECLARED STAGES, OPENED BY THE `create_record` THAT ALREADY RUNS; AND BUILDING AND REPAIRING ARE ONE ACT AT DIFFERENT BANDS.**
+> ### RULED: **THERE IS NO `undertake` VERB, NO `build`, NO `repair`, NO `raze`, NO `garrison` AND NO `convert`. A `works` IS A `Record` KIND WITH ACT-DECLARED STAGES, OPENED BY THE `create_record` THAT ALREADY RUNS; AND BUILDING AND REPAIRING ARE ONE ACT AT DIFFERENT BANDS.**
 >
-> Cited to `04 §A.3` row 11 (*"`Petition`, `Dispensation` … **kinds of `Record`**"*) and `04 §B.4/B.5`
+> Cited to `ARCH §A.3` row 11 (*"`Petition`, `Dispensation` … **kinds of `Record`**"*) and `ARCH §B.4/B.5`
 > (`:255-261`, the synthesis call that folded them, *"with no new rows"*), extended to `works` on the
 > same grounds. `01_AXIOMS.md` **ID-12** (`:454`) makes the kind a data row.
 
@@ -362,7 +368,7 @@ they part with it."* MEASURED: `record.created` fired **69 times** in one season
 **MATTER matures stages, and it already stops if the maker is gone.** `matter.py:65-78`: the stage's
 holder is looked up as a live `hold` whose object is the Record (`:73-74`), and where there is none the
 maturation is refused with the reason TRACEd verbatim — *"a half-made copy STOPS rather than finishing
-itself"* (`:76-77`). **A work with no master does not advance. Zero new code**, and it is the best
+itself"* (`:76-77`). **A `works` with no master does not advance. Zero new code**, and it is the best
 drama generator in the design.
 
 ### A.4.1 · The ceiling, and why building and repairing are one act
@@ -396,30 +402,30 @@ more term in the same `min`.** One Query, owned by Nobody, storing nothing — `
   says so every season somebody tries.
 - **TERM-STALL.** Matter and hands are there and no stage has matured. The ceiling is where it was, so
   the delta clamps to zero — and **the fold refuses an act whose effect touched nothing.** That is not
-  a hope: `04 Part D` row 5 (`:934`) records it as strengthened, with `work` emitting `site.worked`
+  a hope: `ARCH` PART D row 5 (`:934`) records it as strengthened, with `work` emitting `site.worked`
   with no delta as `ID-9`'s own worked instance, and *"the gate now refuses `before == after` at the
   write, so the receipt is never minted."* **You cannot hurry mortar**, and it is arithmetic, not a
   cooldown.
 
-### A.4.3 · The unfinished work is a designed state with five legible causes, none of them an error
+### A.4.3 · The unfinished `works` is a designed state with five legible causes, none of them an error
 
 Nobody has the matter · nobody has the hands · the terms have not ripened · the master is dead · the
 master was replaced by somebody who does not care. **Each emits something different, and the emissions
 are the only way anybody learns which.** The machinery is all present:
 
-- **the master dies** → his Tenures take `until`, the work becomes unheld, and `matter.py:73-78`
+- **the master dies** → his Tenures take `until`, the `works` becomes unheld, and `matter.py:73-78`
   refuses to mature it.
-- **a successor who does not want it** → he simply never takes the `hold`. The work stands; the fabric
-  stands at whatever condition it reached. **A half-built thing is an indictment of whoever should have
+- **a successor who does not want it** → he simply never takes the `hold`. The `works` stands; the fabric
+  stands at whatever condition it reached. **A half-built `works` is an indictment of whoever should have
   finished it, and it is visible.**
-- **a rival raises what somebody else built** → `restore` asks for `own` and presence and **no office
+- **a rival raises what somebody else began** → `restore` asks for `own` and presence and **no office
   at all** (`verb_table.yaml:450`). A cathedral begun by one faction and brought to full condition by
   another's mason is a whole political event with **no special case anywhere**: the first holds the
   works Record, the second holds nothing and stands there with the matter.
 - **abandonment must be endable** or `AX-6` breaks. `Record.ttl` already exists (`carriers.py:430`);
   the opening act declares one; the lapse emits. That is `01_AXIOMS.md` **T-n** (`:1165`) exactly — *an
   end that is not the owner's discretion is declared by the act that opened it.* And `destroy_record`
-  (`eligibility: ["hold:<record>", "presence"]`) ends every `hold` on it (`effects.py:293-295`), so
+  (`eligibility: ["hold:<record>", "presence"]`) ends every `hold` on it (`effects.py:293-296`), so
   abandoning by choice is also already spelled.
 - **one work per plot** is a `cardinality` conjunct — one of the closed seven (`rosters.yaml:1114`) —
   and the refusal emits. `T-g`'s obstruction, free, with **no build queue and no scheduler.**
@@ -448,14 +454,14 @@ not the actor**, so it is downstream of the Arc-2 gate. There are **eleven** eff
 | **membership** | `commit : Person → Proposition`, many — *"this is faction membership"* (`holonic_ARCHITECTURE.md:540`) | `members` (`world_q.py:200`) | you are of this faction |
 | **title** | `hold : Person → Rung`, **1 per object** (`:538`) | `in_holdings` (`engine/season/loop/predicates.py:60`) | **the plot is yours** |
 | **governing** | `hold : Person → Office` | `under_purview` (`predicates.py:105`) | you govern a rung kind whether or not you hold anything in it |
-| **custody** | `hold : Person → Record` | `hold_force` (`world_q.py:138-146`, which **raises** on a second live hold) | the keys, the ledger, the work — master of it without owning the ground |
+| **custody** | `hold : Person → Record` | `hold_force` (`world_q.py:138-145`, which **raises** on a second live hold) | the keys, the ledger, the `works` — master of it without owning the ground |
 | **presence** | `contain : Rung → Rung`, 1 parent | `presence`, `density` (`world_q.py:172`, `:276`) | you are here, and how many of yours are |
 | **the fabric** | **none** | `verbs(w, site, floors)` (`world_q.py:133`) | **nobody holds a fabric** |
 
 > ### RULED: **`hold` MUST NOT REACH A `Site`. CONFIRMED — AND NOT FOR THE REASON THE DESIGN PASS OFFERED.**
 >
 > `hold`'s object domain is `Office | Rung | Record | Proposition`
-> (`holonic_ARCHITECTURE.md:538`); `04 §A.3` row 12 fixes its **subject** as a Person only; `04 Part D`
+> (`holonic_ARCHITECTURE.md:538`); `ARCH §A.3` row 12 fixes its **subject** as a Person only; `ARCH` PART D
 > row 14 grades *"a banner holding territory"* **STRUCTURAL (typed)**. What is held is the **RUNG** the
 > site keys to, or the **works Record** on it. Never the fabric.
 
@@ -490,7 +496,7 @@ formula's `(1 − condition)` is normalised while `Site.condition` is a fixed-po
 
 Mandatory single-holdership is not a neutral simplification. `hold` is **1 per object**
 (`holonic_ARCHITECTURE.md:538`) and `hold_force` **raises** on a second live hold
-(`world_q.py:138-146`). So a held fabric has exactly one holder, `share = 1`, and — opened at
+(`world_q.py:138-145`). So a held fabric has exactly one holder, `share = 1`, and — opened at
 `proposals/2026-08-31-ideal/10_SUPERSEDING.md:1275-1279` — the shape that dies is named there:
 
 > *"**At a commons with many drawers, single-act closure is impossible.** One boat among a harbour's
@@ -505,11 +511,17 @@ site *"`share = 1`, and one Overwhelming season moves a quarter of the condition
 seam, a road, a wall — stops existing as a category, and with it the only mechanism in the design that
 produces collective ruin from rational private acts.
 
+⚠ **SINGLE OWNER (2026-09-17): this subsection owns the commons `share` reading.** `04` §A.5 item 15
+and §B.3 restated it; both are now pointers here. `share = 1` at a single-drawer site is the
+*special* case, not the general one, and a `restore` body written against the special case deletes the
+commons — which is why the two halves at `10_SUPERSEDING.md:1275-1279` and `:1280-1282` must be read
+together and never one at a time.
+
 **Three things the refusal keeps, and they cost nothing.** (1) **The fabric outlives its holder's
 claim** — a cathedral stands on a plot somebody holds; take the plot and the cathedral does not move,
 so **you have taken it by taking the ground under it**, one edge changing hands rather than two.
 (2) **A work can be held by somebody who does not hold the ground** — `hold : Person → Record` already
-exists, so the mason holds the work and the lord holds the plot and **neither can finish without the
+exists, so the mason holds the `works` and the lord holds the plot and **neither can finish without the
 other**: the mason's `hold` is what makes MATTER advance the stages (`matter.py:73-74`), the lord's is
 what admits the `restore`. (3) **Nobody holds a wall, and nobody should** — a rampart's rung is the
 quarter, and a wall is a common thing.
@@ -524,10 +536,14 @@ Opened: `World.add_tenure` is *"The ONE writer"* (`state/world.py:223`). It vali
 that `t.kind` is on `TENURE_KINDS`, raising `Unowned` with code `S15` (`:242-247`), and that a
 `contain` edge ascends the ladder, raising `Forbidden` with code `S10` (`:248-256`) — and then appends
 (`:257`). **It checks nothing whatever about the object class of a `hold`.** So
-`Tenure(p, <a site id>, "hold")` is accepted today, and Layer 1's `04 Part D` row 14 grade of
+`Tenure(p, <a site id>, "hold")` is accepted today, and Layer 1's `ARCH` PART D row 14 grade of
 **STRUCTURAL (typed)** describes a typed language this one is not.
 
 > ### RULED: **the object-domain conjunct lands in `add_tenure` alongside the two checks already there — `hold`'s object in `{Office, Rung, Record, Proposition}` or `Forbidden`, `S15`.**
+>
+> ⚠ **SINGLE OWNER (2026-09-17): this subsection owns the earns-its-existence argument for that guard.**
+> `04` §A.3 item 4 made the same argument at the same length; it is now a pointer here, plus the build
+> step. Two homes for one argument is `CLAUDE.md` §8's defect read at prose.
 >
 > This guard **earns its existence** under `CLAUDE.md` §0.1 pt 5's predicate, and the predicate is the
 > reason it is not apparatus: a `Tenure` the engine reads at RESOLVE, at MATTER and in six Queries is
@@ -551,7 +567,7 @@ a Proposition. The declared defect is §54's, not repaired here."* `footprint` r
 **And ratified Layer 1 forbids it in two places by name.** `01_AXIOMS.md:1078` — a Faction's
 **`NEVER.`** list includes *"a `hold` subject"*, with the reason at `:1086-1089`: it is *"what prevents
 **territory held by a banner nobody carries**, uncontestable because the holder can never appear at a
-venue."* `04 Part D` row 14 (`:944`) grades the shape **STRUCTURAL (typed)**.
+venue."* `ARCH` PART D row 14 (`:944`) grades the shape **STRUCTURAL (typed)**.
 
 > ### RULED: **KEEP THE SUBJECT A `Person` AND MINT THE HOLDERS. THE FIX IS CONTENT, NOT SCHEMA.**
 >
@@ -644,7 +660,7 @@ connected.**
 > ```
 
 **The diagnosis is the type split, observed — not a placement bug.** Yield credits **the Site's own
-rung** (`matter.py:205-224`: `if site.rung != rid: continue`, then a MATTER write to that rung's
+rung** (`matter.py:204-224`: `if site.rung != rid: continue` at `:205-206`, then a MATTER write to that rung's
 `stores`), and all 74 Sites name a settlement. Subsistence draws from **the rung the eaters are
 contained in** (`matter.py:169-176`: `eaters = world_q.presence(w, rid)`, then
 `draw = {k: wt * len(eaters) …}`), and all 46 persons are contained in hearths. So **37 settlements
@@ -684,7 +700,7 @@ problem.
 
 **And the noise Jordan asked for is already in the engine, none of it decoration.** `season_factor`
 scales every yield (`matter.py:208`); `Site.condition` scales it **multiplicatively** —
-`int(base × (condition/scale) × factor)` at `:206-207`, so ⭐ **a worn mill is a tax nobody voted
+`int(base × (condition/scale) × factor)` at `:207-209`, so ⭐ **a worn mill is a tax nobody voted
 for**, and two settlements under one policy deliver different amounts because their fabrics are in
 different repair; and the collector is a person who may be ill, absent, bribed, dead, or simply have a
 better use for one of about five acts.
@@ -694,7 +710,7 @@ better use for one of about five acts.
 | claim | status |
 |---|---|
 | larder draw and yield are **NOT IMPLEMENTED** | ⛔ **FALSE, and the tree says so about itself.** `matter.py`'s own `TRACE.decision` row lists `not_implemented=["the death cascade", "bodies, larders, yield, travel"]` at **`:50-51`** — and the larder step runs at `:164-195`, the yield step at `:196-224`. **The decision row is STALE about larders and yield.** MEASURED: `yield.taken 37`, `stores.changed 37` in one season |
-| **bodies and travel** are not built | **TRUE as stated in that row.** No verb writes any `Person` interior field (`04 §F.20a`, `:1083`), so a shortfall has no body to reach |
+| **bodies and travel** are not built | **TRUE as stated in that row.** No verb writes any `Person` interior field (`ARCH §F.20a`, `:1083`), so a shortfall has no body to reach |
 | band crossings run | **TRUE, and DOWNWARD ONLY.** The predicate is `before >= floor > s.condition` at **`matter.py:262`**, the Event is built at `:267-270`, and `w.crossings.append((s.id, verb, before, s.condition, ev.id))` at `:272`. **A building becoming usable emits nothing**, so the whole positive half would be silent. The repair is the same predicate in the other direction — `before < floor <= s.condition` — and it is one line in one file |
 
 ### A.6.2 · ⚠ THE BUILT WORLD IS UNASKABLE-ABOUT TODAY, AND IT IS ONE OPERAND
@@ -734,9 +750,27 @@ corpus produces is a Site."*
 >
 > The site id is already in the tuple, read and discarded (`matter.py:272` appends it;
 > `world_q.py:515` reads it). Binding the referent to the site is one line. **But it changes nothing
-> alone**, because **0 of 74 fabrics have anybody present at their rung** — so Q3's presence gate can
-> never fire, referent or no referent. **A.6's rung moves are the deeper of the two blockers, and the
-> line does nothing without them.**
+> alone** — and ⚠ **the REASON was corrected 2026-09-17 by re-measuring, because this file and `04`
+> named two different blockers and only one of them binds everywhere.**
+>
+> ~~"because **0 of 74 fabrics have anybody present at their rung** — so Q3's presence gate can never
+> fire… A.6's rung moves are the deeper of the two blockers."~~ **That is true of the POPULATED world
+> and false of the CORPUS worlds**, which co-locate persons and sites by construction —
+> `corpus_run.py:216` mints every Site at `ids[chain[0]]` and `:231` seats every person at the same
+> rung, and `venues.yaml:24-25` says so in its own words: *"`corpus_run.build_at` seats every person
+> directly in the settlement… every person in every world is therefore in the same room as every
+> other."*
+>
+> **The blocker that binds in BOTH families is the one `04` §A.3 item 1 measured: Q3 FIRES ON NOTHING.**
+> Re-measured here 2026-09-17, driving MATTER on `build_realm(0)`: every site starts at
+> `condition_scale = 1000` (`fixtures.py:160`), `wear_per_season` is 10 for every kind
+> (`rosters.yaml:841-844`), the highest floor is `bulk_shipping: 800` (`rosters.yaml:1191`), and **the
+> first crossing fires at MATTER pass 21** — 37 of them, `s_s_001_harbour` `bulk_shipping` 800 → 790.
+> CI runs the populated world for one season and the corpus for at most six. `w.crossings` is empty in
+> every world any gate executes.
+>
+> **So the referent fix (`04` item 1a) needs a world in which a floor is crossed (`04` item 1b), and
+> A.6's rung moves are a SECOND, populated-world-only blocker rather than "the deeper of two."**
 >
 > ⚠ Fixing Q3 **re-records goldens**, and that is said here rather than discovered: the seeded goldens
 > under `engine/tests/` observe any output-moving change to campaign-reachable code, and `CLAUDE.md` §7
@@ -797,19 +831,19 @@ objection is real and is the best case for the other arm.**
 
 ---
 
-## A.8 · PLAYER AGENCY — building is a project you START and ADVANCE, never a tag a system deposits
+## A.8 · PLAYER AGENCY — building is a `works` you START and ADVANCE, never a tag a system deposits
 
 > ### RULED: **NO SYSTEM EVER DEPOSITS A BUILT THING. EVERY FABRIC IN THE GAME WAS RAISED BY A NAMED PERSON'S ACT, AND FOR EVERY ACT THIS DOCUMENT NAMES, THE QUESTION THAT PUTS IT IN FRONT OF A PERSON IS NAMED WITH IT.**
 >
 > *"A verb nothing raises a question about is unreachable by anyone."* Candidate acts derive from
-> `Question`s, and there are exactly four sources (`world_q.py:439-553`; `rosters.yaml:250`).
+> `Question`s, and there are exactly four sources (`world_q.py:439-550`; `rosters.yaml:250`).
 
 | act | what raises the question | source | present? |
 |---|---|---|---|
 | **`restore`** (build / repair) | **the fabric crossed a band and I am here** — a wall past `mans`, a granary past `keeps`, a half-built work crossing *up* as it rises | **Q3** + A.6.2's referent + A.6.1's upward predicate | ✓ exists |
 | **`work`** (use) | the same crossing | **Q3**, same two | ✓ exists |
-| **`create_record`** (open the work) | a claim landing about the place, or a docket matter about it | **Q2** / **Q1** | ✓ exists, and it RUNS |
-| **`transfer`** (feed a work, ship relief) | the crossing at the store I am at; or the claim that a place is short | **Q3** / **Q2** | ✓ exists |
+| **`create_record`** (open the `works`) | a claim landing about the place, or a docket matter about it | **Q2** / **Q1** | ✓ exists, and it RUNS |
+| **`transfer`** (feed a `works`, ship relief) | the crossing at the store I am at; or the claim that a place is short | **Q3** / **Q2** | ✓ exists |
 | **contest a fabric** (slight, sabotage) | ⚠ **a crossing tells me the wall is SOUND, not that I want it broken. The want is mine** | **Q4** — a live `commit` to an OUGHT whose subject is that place. *This wall should not stand* is an uttered belief somebody committed to | ✓ exists, and it is the right home: **sabotage is an ambition, not a stimulus** |
 | **`found`** (stake a plot) | ⚠ **nothing. A plot that does not exist cannot raise a question about itself** | — | ⚠ **needs the fifth source document 01 proposes (`Q5 purview`)** |
 | **neglect** (the absence of `restore`) | ⭐ **nothing, and that is correct.** The crossing neglect eventually causes **is** Q3, one or ten seasons later. **Neglect is not an act and must raise no question**; what raises the question is the wall, when it falls | — | ✓ by design |
@@ -832,10 +866,10 @@ wall repaired past `mans` asks the people in the ward about itself too, and what
 
 **What the player TOUCHES — five affordances, every one an existing or proposed act, never a menu of
 abstract options:** at a plot you hold — `found` a new plot (with leave), open a works Record naming a
-kind; at a fabric you are present at — `restore` it, `work` it, contest it; at a work you hold —
+kind; at a fabric you are present at — `restore` it, `work` it, contest it; at a `works` you hold —
 `confer` it on somebody, `destroy_record` it (abandon); at a rung you govern — `utter` an order scoped
 to it and court swearers (their act, their choice); at a store you hold — `transfer` it up, down, into
-a work, or to a hearth that is short.
+a `works`, or to a hearth that is short.
 
 **Five bounds stop a player building everything, and none is a cap.** Acts (each of `found`,
 `create_record` and every `restore` is one of about five, at one place, and the actor must be present)
@@ -853,29 +887,29 @@ less you can build** — a bound that tightens with success, which no cap does) 
 every loop is negative CONVERGES** — season 40 resembles season 30 — and convergence is not a design
 goal, it is what happens when a design has no other ideas."*
 
-⚠ **THE TREE'S CURRENT STATE IS THAT DEFECT, AND `04 §F.20` IS THE SAME OBSERVATION FROM THE OTHER
+⚠ **THE TREE'S CURRENT STATE IS THAT DEFECT, AND `ARCH §F.20` IS THE SAME OBSERVATION FROM THE OTHER
 SIDE.** The live register (`engine/season/hole_register.yaml`, `kind: LOOP`) has four rows — and
 **all four are inside the claims machinery. Nothing in the register is about the world.** §F.20 says
 why: *"the world only decays — nothing is ever founded or built."*
 
 | id | the cycle | sign | the damping, named — each a mechanism that already runs |
 |---|---|---|---|
-| **L−1 · WEAR** | condition ↓ at MATTER → verbs removed → less yield → less to spend → condition ↓ | **−** | the ceiling is full for a finished work, so repair is always possible in principle; a fabric at 0 is a ruin on a plot that can be built on again. **The loop has a floor and the floor is re-enterable.** MEASURED: `condition.worn 74` per season, 1000 → 990 |
-| **L−2 · SUBSISTENCE** | people eat stores → less surplus → fewer people can be seated | **−** | `draw = wt × len(eaters)` (`matter.py:174`). **Built, and currently unreachable** — A.6 |
-| **L−3 · SIEGE** | a contest loss grades a negative condition delta → fewer verbs → weaker defence → more losses | **−** | the strata order forces pre-investment (A.3.1); the clamp bounds the sum |
-| **L+1 · THE WORKS LOOP** | a PRODUCER above its band → `(Rung, yield)` → `(Rung, stores)` → matter for `restore` → condition up → more yield | **+** | **structural, three ways:** `wear` subtracts unconditionally at MATTER **before** any act's delta; `condition_scale` clamps once (`resolve.py:549`); `ceiling` bounds it to the matured stages; and every act comes out of a budget of about five |
-| **L+2 · THE SHELTER LOOP** | DWELLINGs above `shelters` → `capacity` → the envelope may grow → more presence → more hands **and more mouths** → more works | **+** | every added body raises the draw against the same larder; and **capacity falls with the fabric**, so the bound tightens as the place wears. **This is `ED-SE-0051`'s subject** |
-| **L+3 · THE PATRONAGE LOOP** | a faction builds in a place → its members are present → `density` rises → more hands and more claims → more works | **+** | an act budget per person; `hold` is 1-per-object, so a rival taking the plot ends the patron's route in; and ⭐ **the memory of who built it decays** (`claim.decayed`, `matter.py:147-153`), so patronage must be renewed or forgotten |
-| **L−4 · THE NEGLECT LOOP** | a governor stops paying → bands cross → **crossings emit** → witnesses mint claims → his standing falls → he can bind fewer people to keep the wall → fewer keep it | **−** on him, **+** as drama | claim decay erodes the grievance; and **T-m** (`:1154`) means he may always re-court and re-bind, paying acts. **The loop is escapable and the escape costs politics** |
+| **BW-L−1 · WEAR** | condition ↓ at MATTER → verbs removed → less yield → less to spend → condition ↓ | **−** | the ceiling is full for a finished work, so repair is always possible in principle; a fabric at 0 is a ruin on a plot that can be built on again. **The loop has a floor and the floor is re-enterable.** MEASURED: `condition.worn 74` per season, 1000 → 990 |
+| **BW-L−2 · SUBSISTENCE** | people eat stores → less surplus → fewer people can be seated | **−** | `draw = wt × len(eaters)` (`matter.py:174`). **Built, and currently unreachable** — A.6 |
+| **BW-L−3 · SIEGE** | a contest loss grades a negative condition delta → fewer verbs → weaker defence → more losses | **−** | the strata order forces pre-investment (A.3.1); the clamp bounds the sum |
+| **BW-L+1 · THE WORKS LOOP** | a PRODUCER above its band → `(Rung, yield)` → `(Rung, stores)` → matter for `restore` → condition up → more yield | **+** | **structural, three ways:** `wear` subtracts unconditionally at MATTER **before** any act's delta; `condition_scale` clamps once (`resolve.py:549`); `ceiling` bounds it to the matured stages; and every act comes out of a budget of about five |
+| **BW-L+2 · THE SHELTER LOOP** | DWELLINGs above `shelters` → `capacity` → the envelope may grow → more presence → more hands **and more mouths** → more works | **+** | every added body raises the draw against the same larder; and **capacity falls with the fabric**, so the bound tightens as the place wears. **This is `ED-SE-0051`'s subject** |
+| **BW-L+3 · THE PATRONAGE LOOP** | a faction builds in a place → its members are present → `density` rises → more hands and more claims → more works | **+** | an act budget per person; `hold` is 1-per-object, so a rival taking the plot ends the patron's route in; and ⭐ **the memory of who built it decays** (`claim.decayed`, `matter.py:147-153`), so patronage must be renewed or forgotten |
+| **BW-L−4 · THE NEGLECT LOOP** | a governor stops paying → bands cross → **crossings emit** → witnesses mint claims → his standing falls → he can bind fewer people to keep the wall → fewer keep it | **−** on him, **+** as drama | claim decay erodes the grievance; and **T-m** (`:1154`) means he may always re-court and re-bind, paying acts. **The loop is escapable and the escape costs politics** |
 
-⭐ **THE TWO HALVES ARE COUPLED AT THE MECHANISM RATHER THAN BY TUNING:** every act of L+1 adds a term
-to L−1, so the amplifying loop's gain falls monotonically as it grows. That is a bound that is a
+⭐ **THE TWO HALVES ARE COUPLED AT THE MECHANISM RATHER THAN BY TUNING:** every act of BW-L+1 adds a term
+to BW-L−1, so the amplifying loop's gain falls monotonically as it grows. That is a bound that is a
 property of the arithmetic rather than of a number somebody picked.
 
 ⚠ **THREE HONEST NOTES.** (1) **ID-16's own representation is BLOCKED** — it asks for a cycle
 enumeration over *what is written × what is read* and says the read half is blocked (`:556-560`), so
 this table is a claim about the loops I know of, **not a completeness claim.** (2) **The standing/
-reputation loop is designed and INERT**: no verb writes any `Person` interior field (`04 §F.20a`), so
+reputation loop is designed and INERT**: no verb writes any `Person` interior field (`ARCH §F.20a`), so
 building visibly cannot move anyone's conviction. R7 calls that *"unavoidable and first-rank"*
 (`design_rulings_2026-09-06.md:178`). (3) **The falsifier of the whole table is one sentence**:
 §F.20's *"the world only decays"*. **The design stops being all-negative exactly when a `rung.founded`
@@ -895,8 +929,8 @@ DECLARED"*) and **ID-12** (`:454`, a closed set lives in data). No new primitive
 | **verbs: 1** | `found` | it is the **producer two declared write-matrix rows have been waiting for** — `(Rung, exists)` at `write_matrix.yaml:294-300` and `(Site, exists)` at `:322-328`, both with a step, a class, a `by:` and an emission and **no verb naming either cell.** `H-41` is `absent` and §F.20 blocks build step 2 on it. **This closes `ID-13` rather than adding to the tree** |
 | **effect bodies: 2** | `@effect_for("found")`, `@effect_for("restore")` | `restore`'s row is `grade: "ruled"` with five full columns and a specified formula (`verb_table.yaml:448-467`); what is missing is the body. Eleven exist (`effects.py:92-437`); this is the twelfth and thirteenth |
 | **Queries: 2** | `ceiling(w, site)`, `capacity(w, rung)` | resolver-side, owned by Nobody, storing nothing — **T-a** (`:255`). `capacity` is already **declared** in the §17 Query roster (`holonic_ARCHITECTURE.md:600`), so it is an implementation, not an addition |
-| **Record kinds: 1** | `works` | a data row under **ID-12**, opened by `create_record`, which already runs. `04 §A.3` row 11 and `04 §B.4/B.5` (`:255-261`) already folded two kinds in on this reasoning |
-| **roster rows: 5 families** | `site_kinds` + the coordinated `wear_per_season` / `band_floors` rows the loader demands (`fixtures.py:106-123`) | data under **ID-12**, in an extensible roster whose lookup still refuses (`rosters.yaml:809-812`). Baseline is two kinds, not three (`:815-816`) |
+| **Record kinds: 1** | `works` | a data row under **ID-12**, opened by `create_record`, which already runs. `ARCH §A.3` row 11 and `ARCH §B.4/B.5` (`:255-261`) already folded two kinds in on this reasoning |
+| **roster rows: 5 families** | `site_kinds` + the coordinated `wear_per_season` / `band_floors` rows the loader demands (`fixtures.py:106-123`) | data under **ID-12**, in an extensible roster whose lookup still refuses (`rosters.yaml:809-812`). Baseline is two kinds, not three (`:814-815`) |
 | **terms operands: 2** | a `ttl` and a `cardinality` conjunct on the works Record | `Record.ttl` already exists (`carriers.py:430`); `cardinality` is one of the closed seven (`rosters.yaml:1114`) |
 | **predicate conjuncts: 2** | the ENCLOSURE reading in `WorldReader.read`'s `contain.path` branch; the object-domain check in `add_tenure` | both land **inside a single existing owner** — `world_q.py:732-737` and `state/world.py:242-256`. Neither is a new form; an eighth `requires` form would refuse at load (`rosters.yaml:1092-1094`) |
 | **fixture columns: 1** | `houses` per DWELLING kind | one column on a kind roster that must be authored anyway. `[OPEN — Jordan tuning]`, and it is an **addition** |
@@ -906,7 +940,7 @@ DECLARED"*) and **ID-12** (`:454`, a closed set lives in data). No new primitive
 
 | made unnecessary | why it survives the cut |
 |---|---|
-| `Rung.sites` | it is whitelisted at `carriers.py:568` and is *"a BACK-REFERENCE NOTHING MAINTAINS — it is empty for every rung in the corpus"* (`matter.py:198`), with **no `(Rung, sites)` row in `write_matrix.yaml`** — so it cannot be written through the gate at all. `footprint`-style walks and `matter.py:205`'s `Site.rung` read are the maintained side. ⚠ **AND THIS IS A DEPARTURE, NOT PURE CONFORMANCE:** `04 §B.3:235` declares `Rung := (id, kind, matter(stores, sites[], records[]), …)`, so Layer 1 lists `sites[]`. **ID-13** (`:489`) is what licenses the cut against that declaration, and saying so is the honest form |
+| `Rung.sites` | it is whitelisted at `carriers.py:568` and is *"a BACK-REFERENCE NOTHING MAINTAINS — it is empty for every rung in the corpus"* (`matter.py:198`), with **no `(Rung, sites)` row in `write_matrix.yaml`** — so it cannot be written through the gate at all. `footprint`-style walks and `matter.py:205`'s `Site.rung` read are the maintained side. ⚠ **AND THIS IS A DEPARTURE, NOT PURE CONFORMANCE:** `ARCH §B.3:235` declares `Rung := (id, kind, matter(stores, sites[], records[]), …)`, so Layer 1 lists `sites[]`. **ID-13** (`:489`) is what licenses the cut against that declaration, and saying so is the honest form |
 | an `undertake` verb | `create_record` does the whole of it, holder included (`effects.py:262-290`), so this collapses to a Record kind plus a stage template |
 | `build` / `raise` / a `Build` family | `restore`, bounded by `ceiling`. **One act at different bands**, arithmetically exact |
 | `raze` as a verb, **and a build queue** | a further negative-delta contest at `Felled`; and `hold`'s 1-per-object plus the `cardinality` conjunct, which is a **refusal** rather than a scheduler |
@@ -915,7 +949,7 @@ DECLARED"*) and **ID-12** (`:454`, a closed set lives in data). No new primitive
 | the 16 faction-subject `hold` Tenures | A.5.4 — a Layer 1 violation shipping in the default world, fixed by content |
 | the ratified `confer`-on-a-memberless-holder patch | it repaired a condition A.5.4 **removes** |
 | a settlement's stored civic kind, its transition registry, hysteresis, dwell counters and their load check | **nothing writes on the crossing.** A Query read differently two seasons running has written nothing and broken nothing. A place whose walls fall stops reading as a fortress with no transition row |
-| thirteen settlement gauges as stored fields | `04 §B.3:237` — `NEVER: any social aggregate` — graded STRUCTURAL at the type, CONVENTION at a schema edit (`:240-244`). Each is a Query over fabrics, stores, holds, contains and commits |
+| thirteen settlement gauges as stored fields | `ARCH §B.3:237` — `NEVER: any social aggregate` — graded STRUCTURAL at the type, CONVENTION at a schema edit (`:240-244`). Each is a Query over fabrics, stores, holds, contains and commits |
 | a three-grade footing table with a `charter` **edge kind** | **a `Site` standing at a rung you do not hold.** The fabric IS the charter, and the grade costs nothing: `hold` gives you the ground, a standing fabric gives you presence-in-fact, `density` gives you reach |
 | `serves:` as a runtime fact | A.5.5 — a Query over `hold ∩ commit`, which cannot go stale |
 | a `Holding{confers:[Capability]}` object | `eligibility_kinds` is `[own, remit, hold, presence]` (`rosters.yaml:160`) and its note reads *"⚠ `capability` IS NOT AND MUST NEVER BE A MEMBER… An office makes an ORDINARY verb eligible; no verb exists only for office-holders. Adding a fifth kind is a DESIGN CHANGE… and not a table edit"* (`:152-156`). **A built thing may supply an OPERAND — a store to spend, a hall to sit in, a site to be present at — never a gate on who may attempt a verb.** This is the most tempting import in the subject and the one that would break the eligibility model |
@@ -958,9 +992,9 @@ tenure kinds and `requires` forms added: 0.**
 | the thing | owner | not |
 |---|---|---|
 | a fabric's condition | **`Site`**, one writer per write class (`write_matrix.yaml:315-321`) | never a `Rung`, never an aggregate |
-| a plot, its store, its dates, its records | **`Rung`** (`carriers.py:568`) | never a social aggregate (`04 §B.3:237`) |
-| a work in progress, its stages and its ttl | **`Record`** (`carriers.py:422-431`) | never fields on the Site — then nobody would be master and MATTER would have no holder to check |
-| who is master of a work | the **`hold` Tenure's subject**, minted by `create_record` (`effects.py:288`) | never a field on the Record (`effects.py:286`) |
+| a plot, its store, its dates, its records | **`Rung`** (`carriers.py:568`) | never a social aggregate (`ARCH §B.3:237`) |
+| a `works` in progress, its stages and its ttl | **`Record`** (`carriers.py:422-431`) | never fields on the Site — then nobody would be master and MATTER would have no holder to check |
+| who is master of a `works` | the **`hold` Tenure's subject**, minted by `create_record` (`effects.py:288`) | never a field on the Record (`effects.py:286`) |
 | who holds the ground | the **`hold` Tenure**, 1 per object, `Person` subject only | never a faction (A.5.4) |
 | `ceiling`, `capacity`, `verbs`, `presence`, `density`, `footprint`, `serves` | **Nobody.** Resolver-side Queries, World first | never stored, never cached outside the driver |
 | a new site kind's wear and band rows | `rosters.yaml`, enforced **both directions** at `fixtures.py:106-123` | never a default |
@@ -973,16 +1007,16 @@ A claim of STRUCTURAL that is really MECHANICAL is *"a guard that cannot observe
 
 | claim | grade | the checker, named |
 |---|---|---|
-| a fabric's condition cannot be node-keyed onto a place | **STRUCTURAL at the type** | `Rung` has no condition field and `__setattr__` raises (`carriers.py:590`); `04 §B.4:252-253` says the collapse *"cannot be spelled"* |
+| a fabric's condition cannot be node-keyed onto a place | **STRUCTURAL at the type** | `Rung` has no condition field and `__setattr__` raises (`carriers.py:590`); `ARCH §B.4:252-253` says the collapse *"cannot be spelled"* |
 | a built thing gains no new carrier | **STRUCTURAL** | there is no class to construct |
-| `hold` never reaches a `Site` | ⚠ **MECHANICAL, once the conjunct lands — CONVENTION today** | `add_tenure` checks kind (`:242`) and `contain` ascent (`:248`) and **nothing about object class**. Layer 1 grades it STRUCTURAL (typed) (`04 Part D` row 14) in a typed language this is not. **The gap is named rather than graded away** |
+| `hold` never reaches a `Site` | ⚠ **MECHANICAL, once the conjunct lands — ~~CONVENTION~~ NOTHING today** (corrected 2026-09-17: *convention* implies a reviewer with a rule to read, and no rule is written anywhere in the code; `04` §C.2's *"Today: nothing"* is the honest word) | `add_tenure` checks kind (`:242-247`) and `contain` ascent (`:248-256`) and **nothing about object class**. Layer 1 grades it STRUCTURAL (typed) (`ARCH` PART D row 14) in a typed language this is not. **The gap is named rather than graded away** |
 | a faction is never a `hold` subject | ⚠ **CONVENTION, and VIOLATED 16 times in the default world** | same conjunct; `01_AXIOMS.md:1078`; `populated.py:613-618` |
 | a new site kind arrives with its wear and band rows | **MECHANICAL at load** | `fixtures.py:106-123`, both directions, raising `Forbidden`/`Ungraded` |
 | no eighth `requires` form is smuggled in | **MECHANICAL at load** | `rosters.yaml:1092-1094` — *"a design change, not a table edit"* |
 | a built kind never regrows unauthored | **MECHANICAL** — an explicit `regrowth: 0` row per built kind, plus a test asserting it | the polarity rule makes a missing row RAISE (`rosters.yaml:809-812`), so the absence of a row is a crash rather than a silent zero. **Load-bearing on the game** — it is the line between authored and unauthored construction — so the test earns its existence under §0.1 pt 5 |
-| a repair that changed nothing mints no success Event | **MECHANICAL at the write** | `04 Part D` row 5 (`:934`): the gate refuses `before == after`, so the receipt is never minted |
-| a fortification's band is never rendered as fact | **CONVENTION**, and it cannot be made structural here | the renderer does not exist. `04 §C.11:758-761` is the argument; the check is that a reviewer reads the read list |
-| **the capacity arm of `ED-SE-0051`** | ⚠ **STRUCTURAL — and it is this document's one genuine escalation** | two defensible options leading to materially different games, with **LAYER 1 SILENT** stated in the row itself (`editorial_ledger_se.jsonl:51`). A.7 recommends; it does not decide |
+| a repair that changed nothing mints no success Event | **MECHANICAL at the write** | `ARCH` PART D row 5 (`:934`): the gate refuses `before == after`, so the receipt is never minted |
+| a fortification's band is never rendered as fact | **CONVENTION**, and it cannot be made structural here | the renderer does not exist. `ARCH §C.11:758-761` is the argument; the check is that a reviewer reads the read list |
+| **the capacity arm of `ED-SE-0051`** | ⚠ **NOT A GRADE — a RULING REQUEST**, corrected 2026-09-17 | ~~STRUCTURAL~~ was a category error: this column asks *what construction checks this claim*, and a ruling request has no construction because it has no answer yet. It is the suite's **RR-2** (`04` §C.4), `needs_jordan: true`, **LAYER 1 SILENT** stated in the row itself (`editorial_ledger_se.jsonl:51`). A.7 recommends; it does not decide. What IS checkable once ruled is `capacity`'s shape — a Query with a floor and no magnitude field (`BW-7`) |
 | **the commons `share` reading** | **MECHANICAL** | `share`/`draw_share` are declared Queries (`holonic_ARCHITECTURE.md:599-600`) with no implementation; a repair's `share` at a many-drawer site is a *formula* question with one owner, checkable by a test over a commons with N drawers |
 | **site-kind naming** (`rampart` vs `wall`; `minster` vs `chapel`) | **CONVENTION** | the roster refuses an unregistered kind, so nothing breaks either way. `CLAUDE.md` §4's idempotence test applies: choose the word ordinary usage supplies |
 
@@ -1002,7 +1036,7 @@ depositing a thing.
 | `(Rung, stores)` up | **nobody** at MATTER (yield, scaled by condition); a **person** by `transfer` | the larder step next season; `restore`'s threshold | `yield.taken`, `stores.changed` |
 | a shortfall | **nobody**, and **it produces no outcome** (`matter.py:179-185`) | a run's TRACE, and nothing else today | nothing — and A.7 is why that matters |
 | a `hold` changing hands | a **person**, `confer`/`revoke`/`release`, refused while one is live | `in_holdings`, `hold_force`, `footprint`, `serves` | the verb's own emission / its refusal |
-| a work ending unfinished | the **ttl the opening act declared** (**T-n**), or `destroy_record` by its holder (**T-m**) | `ceiling` — which freezes where it stood | the lapse / `record.destroyed` |
+| a `works` ending unfinished | the **ttl the opening act declared** (**T-n**), or `destroy_record` by its holder (**T-m**) | `ceiling` — which freezes where it stood | the lapse / `record.destroyed` |
 
 ---
 
@@ -1010,20 +1044,20 @@ depositing a thing.
 
 | # | claim | what would show it wrong |
 |---|---|---|
-| **D-1** | Binding Q3's referent to the site makes the built world actionable | `test_q3_a_band_crossing_raises_a_question_about_the_site_not_the_verb`. **Artifact: `work` candidates > 0 on the harness corpus, against 723-of-723 refused today.** ⚠ **AND IT IS EXPECTED TO FIRE ALONE:** 0 of 74 fabrics have anybody present at their rung, so without D-2 the count stays zero. **If it rises without D-2, my account of the two blockers is wrong** |
-| **D-2** | Matter reaches people once commons eaters ascend and fabrics key to the rungs people are in | `test_a_commons_site_draws_for_everyone_under_its_rung`; `test_some_site_has_a_person_present`. **Artifact: hearths holding matter > 0 and sites-with-presence > 0, against 0/211 and 0/74 measured today** |
-| **D-3** | `hold` reaching a `Site` is refused | `test_a_hold_on_a_site_is_refused_at_add_tenure` — `Tenure(p, <site id>, "hold")` raises `Forbidden`. **It goes RED today**, which is the point: the refusal is currently unenforceable. Control: `populated` still loads, and all 35 live holds still land |
-| **D-4** | No faction is a `hold` subject | `test_no_hold_tenure_has_a_faction_subject`. **Artifact: hold subjects person 35 / faction 0, against 19 / 16 measured today.** If the count cannot reach 35 without minting persons beyond the ruled 46-NPC roster, the content fix is wrong and the schema question re-opens |
-| **D-5** | Five families are roster rows and cost no machinery | the loader's coordinated-row check goes red on a kind with no `wear_per_season` or `band_floors` row (`fixtures.py:106-123`); and `test_built_kinds_do_not_regrow` asserts `regrowth == 0` for every ENCLOSURE, HALL, VESSEL and DWELLING kind. **If a built kind ever carries a non-zero row, a fortification repairs itself with no author and the design has silently taken the fourth-motion route AX-5 refuses** |
-| **D-6** | `Rung.sites` is dead and deletable | `test_rung_has_no_sites_field`. ⚠ **The falsifier that matters is the other direction:** if any reader is found that needs it, the cut is wrong **and `04 §B.3:235` was right to declare it** |
-| **D-7** | `capacity` is a Query with a floor and no magnitude carrier | `test_capacity_has_a_floor_and_no_magnitude_field`. Falsified by a rung whose `capacity == 0` while `stores > 0` making `found` self-defeating — **the attack that put the floor there** (A.7). Gated on `ED-SE-0051` |
-| **D-8** | `restore` mirrors decay and stops at the ceiling | `test_restore_mirrors_decay_and_stops_at_ceiling`. **Artifact: condition rises in a run's log — `site.restored` is 0 today.** And the two units decisions (`(1 − condition)` normalised against a 1000-scale int; `share` at a many-drawer commons) must be **decided in the same commit or the body is not writable** |
-| **D-9** | `found` is the producer `(Rung, exists)` and `(Site, exists)` have been waiting for | `test_found_is_the_producer_for_rung_exists`. **Artifact: a `rung.founded` and a `site.built` Event in a `populated.py` run's log — currently zero, measurable in one grep. THIS IS THE ARTIFACT THAT MOVES THIS DOCUMENT'S GRADE OFF `paper`**, and nothing else in this file does |
-| **D-10** | A standing enclosure refuses a `move` through its rung | `test_move_through_a_standing_enclosure_is_refused_unless_admitted`, with the refusal TRACE as the artifact. **Control: `travel.blocked` fires 23 times per season today, so the channel is live and a rise must be attributable to the conjunct and not to the ladder check.** Falsified if the reading needs an operand the `contain_path` form's `needs:` does not carry (`rosters.yaml:1118`) — then it is an eighth form and refuses at load |
-| **D-11** | The upward band crossing makes the positive half witnessable | `test_an_upward_band_crossing_emits`. **Artifact: a Q3 question raised by a repair.** Control: the 74 downward `condition.band_crossed` emissions per season must not change count |
-| **D-12** | A built world with no player in it founds, wears, stalls, falls, forgets and **asks** | a season in which it emits nothing. Five channels are named and **all five are conditional on D-1 + D-2**: a stage ripening with nobody present; a crossing; a stall's refusal; a master's death stopping a work; a work lapsing at its ttl. ⚠ **Stated as a condition, not banked** |
-| **D-13** | `fort_level` and `facility_tier` are not free cuts | delete either and show CI green. **Predicted red** at `tools/export_descriptors.py --check` (blocking, workflow `:137`) and at `systems/settlements/sim/registry.py:97`'s `ap` property |
-| **D-14** | The ontology stands on cardinality, not on a destroy cascade | name an object in this tree that a verb destroys. **There is none: `(Rung, exists)` and `(Site, exists)` have zero producers.** If one is found, A.1.1's struck argument must be re-argued rather than re-instated |
+| **BW-1** | Binding Q3's referent to the site makes the built world actionable | `test_q3_a_band_crossing_raises_a_question_about_the_site_not_the_verb`, run as a **unit** test that plants a crossing tuple — a season run is the wrong instrument (`04` item 1a). ⚠ **ARTIFACT CORRECTED 2026-09-17.** ~~"`work` candidates > 0 on the harness corpus, against 723-of-723 refused today"~~ confuses two counts: **723 Candidates DO form** — `work` is `own`-eligible and `site` already binds to the referent — and all 723 are **refused by the fold**, which the tree measures in its own words (*"`work` 723 refusals with no execution"*, `test_season_shape.py:7279`; *"`work` alone refuses 723 times"*, `:7240`; `verb_table.yaml:765`). The artifact is therefore **`work` EXECUTIONS > 0**, i.e. `work` leaving `corpus_run`'s `VERBS ONLY REFUSED` list — and it is **conditional on a world where a floor is crossed** (`04` item 1b), not on BW-2. **If executions rise with neither 1b nor BW-2, my account of the blockers is wrong** |
+| **BW-2** | Matter reaches people once commons eaters ascend and fabrics key to the rungs people are in | `test_a_commons_site_draws_for_everyone_under_its_rung`; `test_some_site_has_a_person_present`. **Artifact: hearths holding matter > 0 and sites-with-presence > 0, against 0/211 and 0/74 measured today** |
+| **BW-3** | `hold` reaching a `Site` is refused | `test_a_hold_on_a_site_is_refused_at_add_tenure` — `Tenure(p, <site id>, "hold")` raises `Forbidden`. **It goes RED today**, which is the point: the refusal is currently unenforceable. Control: `populated` still loads, and all 35 live holds still land |
+| **BW-4** | No faction is a `hold` subject | `test_no_hold_tenure_has_a_faction_subject`. **Artifact: hold subjects person 35 / faction 0, against 19 / 16 measured today.** If the count cannot reach 35 without minting persons beyond the ruled 46-NPC roster, the content fix is wrong and the schema question re-opens |
+| **BW-5** | Five families are roster rows and cost no machinery | the loader's coordinated-row check goes red on a kind with no `wear_per_season` or `band_floors` row (`fixtures.py:106-123`); and `test_built_kinds_do_not_regrow` asserts `regrowth == 0` for every ENCLOSURE, HALL, VESSEL and DWELLING kind. **If a built kind ever carries a non-zero row, a fortification repairs itself with no author and the design has silently taken the fourth-motion route AX-5 refuses** |
+| **BW-6** | `Rung.sites` is dead and deletable | `test_rung_has_no_sites_field`. ⚠ **The falsifier that matters is the other direction:** if any reader is found that needs it, the cut is wrong **and `ARCH §B.3:235` was right to declare it** |
+| **BW-7** | `capacity` is a Query with a floor and no magnitude carrier | `test_capacity_has_a_floor_and_no_magnitude_field`. Falsified by a rung whose `capacity == 0` while `stores > 0` making `found` self-defeating — **the attack that put the floor there** (A.7). Gated on `ED-SE-0051` |
+| **BW-8** | `restore` mirrors decay and stops at the ceiling | `test_restore_mirrors_decay_and_stops_at_ceiling`. **Artifact: condition rises in a run's log — `site.restored` is 0 today.** And the two units decisions (`(1 − condition)` normalised against a 1000-scale int; `share` at a many-drawer commons) must be **decided in the same commit or the body is not writable** |
+| **BW-9** | `found` is the producer `(Rung, exists)` and `(Site, exists)` have been waiting for | `test_found_is_the_producer_for_rung_exists`. **Artifact: a `rung.founded` and a `site.built` Event in a `populated.py` run's log — currently zero, measurable in one grep. THIS IS THE ARTIFACT THAT MOVES THIS DOCUMENT'S GRADE OFF `paper`**, and nothing else in this file does |
+| **BW-10** | A standing enclosure refuses a `move` through its rung | `test_move_through_a_standing_enclosure_is_refused_unless_admitted`, with the refusal TRACE as the artifact. **Control: `travel.blocked` fires 23 times per season today, so the channel is live and a rise must be attributable to the conjunct and not to the ladder check.** Falsified if the reading needs an operand the `contain_path` form's `needs:` does not carry (`rosters.yaml:1118`) — then it is an eighth form and refuses at load |
+| **BW-11** | The upward band crossing makes the positive half witnessable | `test_an_upward_band_crossing_emits`. **Artifact: a Q3 question raised by a repair.** Control: the 74 downward `condition.band_crossed` emissions per season must not change count |
+| **BW-12** | A built world with no player in it founds, wears, stalls, falls, forgets and **asks** | a season in which it emits nothing. Five channels are named and **all five are conditional on BW-1 + BW-2**: a stage ripening with nobody present; a crossing; a stall's refusal; a master's death stopping a `works`; a `works` lapsing at its ttl. ⚠ **Stated as a condition, not banked** |
+| **BW-13** | `fort_level` and `facility_tier` are not free cuts | delete either and show CI green. **Predicted red** at `tools/export_descriptors.py --check` (blocking, workflow `:137`) and at `systems/settlements/sim/registry.py:97`'s `ap` property |
+| **BW-14** | The ontology stands on cardinality, not on a destroy cascade | name an object in this tree that a verb destroys. **There is none: `(Rung, exists)` and `(Site, exists)` have zero producers.** If one is found, A.1.1's struck argument must be re-argued rather than re-instated |
 
 ### D.15 · **GRADE: `paper`** — and exactly what would move it
 
@@ -1047,8 +1081,8 @@ $ python -m engine.season.harness.populated  (1 season, seed 0) — MEASURED thi
   a hearth holding matter NONE      0 of 211
 ```
 
-**The first execution artifact is D-1's `work` candidate count; the artifact that moves the grade is
-D-9's `rung.founded`.** Both are cheap, both are currently zero, and both are measurable in one run.
+**The first execution artifact is BW-1's `work` candidate count; the artifact that moves the grade is
+BW-9's `rung.founded`.** Both are cheap, both are currently zero, and both are measurable in one run.
 
 ---
 
@@ -1082,7 +1116,7 @@ stages **wrong**, and are corrected silently above and recorded here.
 | `settlement_layer_v30.md:905` — *"canon's `Ob = 2 + Fort Level`"* | **that string is not in that file.** `:905` is a table separator. The live formula there is `Defense × 20 + Fort Level × 30` at **`:48`**; `Ob = 2 + Fort Level` lives at `systems/characters/reference/conviction_track_v30.md:138` and `systems/mass_battle/reference/military_layer_v30.md:177` | a fortification claim was cited to a file that does not carry it |
 | `rosters.yaml:149-160` — `capability` forbidden | values at **`:160`**, the note at **`:152-156`** | — |
 | *"the 211-building layer sits outside every gate"* | **overclaimed, and corrected in place at A.5.5.** The `tests/valoria` validator `venues.yaml:37-38` claims does not exist; but `populated.py` **does** refuse when `seat_precedence` and `seats:` disagree (`venues.yaml:136-138`), and `tools/export_npc_roster.py --check` fails on a row naming a nonexistent case, place or person (`references/ci_checks_registry.yaml:380`). **What is ungated is the building rows' geography resolution, and only that** | found by this document's own adversarial pass; the sweeping form was the easier claim to make |
-| `04:NNN` line forms throughout | rewritten as **`§Letter.Number`** — `§A.3`, `§B.3`, `§B.4`, `§B.8`, `§C.11`, `§F.20`, `§F.20a`, `Part D` rows 5 and 14 | `CLAUDE.md` §9 / the plan's standing instruction |
+| `ARCH:NNN` line forms throughout | rewritten as **`§Letter.Number`** — `§A.3`, `§B.3`, `§B.4`, `§B.8`, `§C.11`, `§F.20`, `§F.20a`, `Part D` rows 5 and 14 | `CLAUDE.md` §9 / the plan's standing instruction |
 
 **Two scope notes, so the appendix is honest about what it does not cover.** (1) The reconciled build
 order's item 5 — deleting `budget_office_bonus` — is **IN-lane** and belongs to document 01; it is not

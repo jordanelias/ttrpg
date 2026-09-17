@@ -4,6 +4,7 @@
 ## Method: authored on **`opus`** per `CLAUDE.md` §10 — *"competing-considerations judgment; large-context synthesis … and the verify/judge stage that gates a result."* Not `fable`: §10 rules that tier **read-only audit / planner / guardrail, never synthesis or artifact authorship**, and this file is an artifact. Its adversarial pass was run against the tree, not against a sibling document.
 ## Scope: `ED-IN-0232`, lane **IN**. Every `path:line` below was opened with `sed -n` in this session before it was written. Its primary source — the analyse stage's D3 — self-reported eight invented addresses and a critic found sixteen wrong, so **no citation was carried forward unopened.** The repairs are the appendix.
 ## §0.2 grade: **`paper`.** Nothing here executes. §C.4 says what would move it and what the cheapest step is.
+## ⚠ **UNIFIED 2026-09-17 (`00_THE_DESIGN.md`).** Suite-wide: **`ARCH`** = `architecture/meta/04_CODE_ARCHITECTURE.md`, **`AX`** = `architecture/meta/01_AXIOMS.md`; a bare `01`/`02`/`03`/`04` means a file in THIS directory. This file's falsifiers are **`SU-n`**; its **loops** are `SU-L1..SU-L9` (§C.3) and its **read licences** stay `L-1..L-3` (§A.1.3) — ~~both were `L-n` and collided inside this one file~~. The multi-season construction is **a `works`** (`01` §A.12's ruling), never *a work* or *a project*. Reconciliation edits are struck in place.
 
 ---
 
@@ -70,7 +71,7 @@ it is four facts, each of which alone breaks the parameter-list argument.
 |---|---|---|
 | **1** | **A `View` cannot carry a surface: it is capped at TWELVE claim ids.** The constructor refuses more than `k` (`engine/season/state/carriers.py:217-220`); `k` is the fixture `view_k=12` (`engine/season/data/fixtures.py:177`), read at `engine/season/loop/deliberate.py:69` and passed at `:109`. **Not one of the four surfaces is derivable from twelve ids** — a place with nine sites, a ledger view with thirty rows, a seat with nineteen executors, each exceeds it alone. A renderer handed a View would draw a twelfth of a person's knowledge and call it their perceptual horizon | *"⚠ #353 SUPPLIES K AND NEVER SUPPLIES WHICH K … nothing in the chain says which twelve of a 200-claim ledger a person brings to a question, and taking the last k — which every revision before `W5` did silently — is an invention"* — `engine/season/decision/questions.py:79-84`. The ids are **BUILT, not filtered** |
 | **2** | **Wrong SHAPE, not merely wrong size.** The cap exists because `choose` answers *one question with a bounded working set* — which is what `assemble`'s own `InstrumentDefect` says the parameter is for (`questions.py:36-42`). A surface answers *what do I know*, which is the ledger, unbounded. Widening `k` for the renderer would make the renderer's `View` a different object from the chooser's **under one name** | `CLAUDE.md` §4's idempotence trap: a word must yield the same meaning read cold in a later session |
-| **3** | **`assemble` is 4-ary, and even `choose`'s IN side is six things — so the law mis-stated its own exemplar.** `assemble(p, question, k, rule)` at `questions.py:22`; live callers pass three | *"**In:** a frozen `PersonInterior`, a `View` of ids, two scalars, an int, `Question[]`, and the verb table's *declarations*"* — `04 §C.3`, lines 566-567. And `04 §A.2`'s module table gives `decision/` the same six as its read scope (`:154`) |
+| **3** | **`assemble` is 4-ary, and even `choose`'s IN side is six things — so the law mis-stated its own exemplar.** `assemble(p, question, k, rule)` at `questions.py:22`; live callers pass three | *"**In:** a frozen `PersonInterior`, a `View` of ids, two scalars, an int, `Question[]`, and the verb table's *declarations*"* — `ARCH §C.3`, lines 566-567. And `ARCH §A.2`'s module table gives `decision/` the same six as its read scope (`:154`) |
 | **4** | **UNHELD is a negative fact over the WHOLE ledger, and a capped View cannot express it.** *"the bin at Gelbgrund · you have never looked"* asserts **no claim anywhere in this ledger matches `(subject, predicate)`**. Twelve ids chosen by a `recent` rule cannot distinguish *I hold nothing* from *it was not among the twelve* | the one reader that answers correctly is `LedgerReader`, which scans the whole list and returns `UNKNOWN` on no match (`engine/season/queries/person_q.py:82-100`) — **and it takes the ledger, not a View** |
 
 **And two reads the law's enumeration omitted, both of which it then drew surfaces from.**
@@ -89,13 +90,13 @@ god-state reads; the marks they were drawn for are withdrawn at A.3.3.
 >
 > | licence | what it admits | why it is not privileged access | grade |
 > |---|---|---|---|
-> | **L-1 · my own ledger** | every `Claim` I hold, with `source`, `when`, `confidence`, `round` | it is mine. `04 §B.2`'s `F8` carve-out admits a resolver-side read of **the actor's own ledger and no other** (`verb_table.yaml:651`) | **STRUCTURAL** — `LedgerReader` takes `claims`, not a `World` (`person_q.py:79-80`) |
-> | **L-2 · `Sensation`'s two scalars** | `subsistence` and `standing`, and nothing else | *"EXACTLY TWO SCALARS, and it is the ONLY bridge from world truth into `choose`"* (`carriers.py:161-162`); `sense` is *"the ONE non-decision function permitted a World"* (`deliberate.py:465-466`) | **CONVENTION** — `04` grades the two-scalar rule *"convention — the named residual risk"* (`carriers.py:174-176`) |
+> | **L-1 · my own ledger** | every `Claim` I hold, with `source`, `when`, `confidence`, `round` | it is mine. `ARCH §B.2`'s `F8` carve-out admits a resolver-side read of **the actor's own ledger and no other** (`verb_table.yaml:651`) | **STRUCTURAL** — `LedgerReader` takes `claims`, not a `World` (`person_q.py:79-80`) |
+> | **L-2 · `Sensation`'s two scalars** | `subsistence` and `standing`, and nothing else | *"EXACTLY TWO SCALARS, and it is the ONLY bridge from world truth into `choose`"* (`carriers.py:161-162`); `sense` is *"the ONE non-decision function permitted a World"* (`deliberate.py:465-466`) | **CONVENTION** — `ARCH` grades the two-scalar rule *"convention — the named residual risk"* (`carriers.py:174-176`) |
 > | **L-3 · state I am an endpoint of** | a `Tenure` whose subject or object is me; the remit of a seat I hold; the establishment I employ; my own `capability`, `convictions` and `stance` | an edge is not a fact about the world, it is half of me. This is already a witness channel's predicate: `_ch_witness_key` admits `pid` where a live `knot` has `pid` at either end (`epistemic.py:336-341`) | **MECHANICAL** — by path scan; no type forbids it |
 >
-> **And the ARITHMETIC of any value drawn from L-1..L-3 is owed, by `04 §C.11`:**
+> **And the ARITHMETIC of any value drawn from L-1..L-3 is owed, by `ARCH §C.11`:**
 > *"The engine owes the ARITHMETIC of what the character already holds, and nothing else"*
-> (`04 §C.11`, line 765), through `explain(p : PersonInterior, v : Value) -> Derivation` — *"person_q.
+> (`ARCH §C.11`, line 765), through `explain(p : PersonInterior, v : Value) -> Derivation` — *"person_q.
 > NO World parameter"* (`:775`). The derivation is *"assembled from the holder's own `Claim` rows —
 > their `source`, `confidence` and `when` — and from nothing else"* (`:780-781`).
 
@@ -114,21 +115,23 @@ makes the grade per licence honest (one STRUCTURAL, one CONVENTION, one MECHANIC
 `provinces_of`, `density`, `sovereign_fraction`, `establishment_of`, `judging_set`, `home_of`,
 `occasioned_by`, `hold_force`, `lateral`, `members`, `leaders`, `conferral_path`, `questions_for`.
 **Most carry `TRACE.query(..., "resolver")`, which makes the refusal observable rather than asserted**
-— a renderer that reached one would appear in the trace as a resolver query, and PART D's D-1 is that
+— a renderer that reached one would appear in the trace as a resolver query, and PART D's SU-1 is that
 scan.
 
 ⚠ **AND THE SCAN HAS FOUR HOLES, MEASURED, WHICH IS WHY ITS GRADE IS MECHANICAL AND NOT STRUCTURAL.**
 `grep -n "TRACE.query" engine/season/queries/world_q.py` returns **16 call sites**, and **four
 resolver-side functions have none: `parent_of` (`:48-52`), `judging_set` (`:146-148`, which raises
 instead), `hold_force` (`:138-144`) and `occasioned_by` (`:553+`).** A renderer calling `parent_of` to
-ascend the ladder — which A.3 says zoom *is* — would leave no trace at all. So D-1 must be a path/AST
+ascend the ladder — which A.3 says zoom *is* — would leave no trace at all. So SU-1 must be a path/AST
 scan over `port/` **and not only a trace assertion**, and saying otherwise would be shipping a guard
 that cannot observe what it guards. Found by running the grep rather than by trusting the pattern.
 
 ⚠ **THREE of the twelve are the hard cases, and two of them are surfaces the analyse stage drew.**
-`establishment_of` reads the Office's own `establishment` field (`world_q.py:399-415`) — admissible
-under **L-3**, because a seat I hold is state I am an endpoint of, and *"the named persons the office
-employs"* are people I hired. `verbs(w, site, floors)` is **not** admissible under any of the three
+`establishment_of` is admissible under **L-3**, because a seat I hold is state I am an endpoint of and
+*"the named persons the office employs"* are people I hired. ⚠ **But what it reads is corrected:**
+~~the Office's own `establishment` field (`world_q.py:399-415`)~~ is deleted by `ARCH §B.7` call 2 in
+favour of a Query over `oblige` (`01` §A.1, CONFORMANCE), and is **empty on all nineteen offices**
+today. The licence attaches to the seat, not to the field. `verbs(w, site, floors)` is **not** admissible under any of the three
 and is dealt with at A.3.3, where it costs the design its single most load-bearing display.
 `presence(w, rung)` is not admissible either — and the repair is narrow: **presence at my OWN rung is
 a fact I observe by standing there, so the surface reads it as a claim that `WITNESS` deposited**,
@@ -139,11 +142,11 @@ ledger, and the corpus's 0-of-74 presence measurement means the room is empty to
 
 | candidate | who owns it | verdict |
 |---|---|---|
-| `(Person, View)`, enforced by parameter list | the analyse stage's Render Law | **REFUSED.** Four attacks land (A.1.2). The `View` is capped at twelve **built** ids; UNHELD is a negative fact over the whole ledger; `assemble` is 4-ary and `04 §C.3`'s IN list is six things |
+| `(Person, View)`, enforced by parameter list | the analyse stage's Render Law | **REFUSED.** Four attacks land (A.1.2). The `View` is capped at twelve **built** ids; UNHELD is a negative fact over the whole ledger; `assemble` is 4-ary and `ARCH §C.3`'s IN list is six things |
 | `(Person, View)` as an aspiration **plus an enumerated exception list** | the analyse stage's own fallback, and the reconciliation's first option | **REFUSED, and this is the interesting refusal.** An exception list to a law of the form *takes no X* is the law deleted with its sentence kept. It also grades three different things STRUCTURAL when one is CONVENTION and one is MECHANICAL |
 | `(PersonInterior, Ledger, Sensation, Reads)` with `Reads` closed at three positive licences | **this file** | **ADOPTED.** Each licence carries its own grade and its own citation; the refusal is observable in `TRACE` rather than asserted |
-| a `RenderState` object built at a barrier, like `queries/cache` | nobody — proposed and refused here | **REFUSED.** `04 §A.2` gives `queries/cache` *"barrier indexes … at a barrier only"* with **any store** as its read scope (`:153`). A render cache built from that scope is god-state with a lifetime |
-| whatever the Godot scene tree finds convenient | — | **REFUSED.** `04 §A.2`: `port/` is *"the Godot shell; nothing under it is simulation"* (`:137`). A shell that reads the world is simulation |
+| a `RenderState` object built at a barrier, like `queries/cache` | nobody — proposed and refused here | **REFUSED.** `ARCH §A.2` gives `queries/cache` *"barrier indexes … at a barrier only"* with **any store** as its read scope (`:153`). A render cache built from that scope is god-state with a lifetime |
+| whatever the Godot scene tree finds convenient | — | **REFUSED.** `ARCH §A.2`: `port/` is *"the Godot shell; nothing under it is simulation"* (`:137`). A shell that reads the world is simulation |
 
 > ### RULED: the withdrawn law's INTENT is kept and its MECHANISM is replaced.
 > **`AX-2` is not enforced on the renderer by a parameter list. It is enforced by a closed,
@@ -172,7 +175,7 @@ sources and nothing else, and `Question.__post_init__` refuses a fifth at constr
 | Q2 | `claim_landed` | **a person** — news about me or mine | `(c.when, c.round) >= floor and (c.subject == p.id or c.subject in mine)` — `:491-494` |
 | Q3 | `band_crossed` | **the world** — a threshold crossed where I stand | `if who == p.id or (at is not None and p.id in presence(w, at))` — `:517-518` |
 | Q4 | `need` | **myself** — a standing commitment | a live `commit` Tenure whose object is an OUGHT `Proposition` — `:524-528` |
-| Q5 | `purview` | **a place I answer for** — proposed by the reconciliation, not built | a crossing or landed claim at a rung under `under_purview(seat)`, claim-gated. One row on an OPEN ordered roster (`engine/season/rosters.yaml:249-270`) |
+| Q5 | `purview` | **a place I answer for** — proposed by the reconciliation, not built | a crossing or landed claim at a rung under `under_purview(seat)`, claim-gated. One row on an OPEN ordered roster (`engine/season/rosters.yaml:250-270`) |
 
 **Myself · an institution · a person · the world · a place I answer for.** The set is closed along the
 right axis, and that is the design position rather than a consolation: **what the player is offered is
@@ -257,7 +260,7 @@ Three consequences, all free and none of them new mechanism:
 2. **Others may commit to your proposition, and that IS a faction.** A faction is *"a Proposition plus
    its `commit` edges"* — `members(w, faction)` is the `commit` count (`world_q.py:200-211`; §14.2's
    own line, *"A faction IS a Proposition plus its `commit` edges"*, at `:181`). So the interface for founding a movement is: say the thing, and see who
-   commits. No faction-creation screen, and none available: `04 Part D` row 1 makes an institution
+   commits. No faction-creation screen, and none available: `ARCH` PART D row 1 makes an institution
    acting STRUCTURAL-impossible — *"the type has **no verbs**"* (`:930`).
 3. **A commitment you cannot keep is a question you keep failing to answer.** Better than a quest log
    with a red cross, and it is Q4's own stated purpose — *"which is what makes an NPC with an ambition
@@ -266,7 +269,7 @@ Three consequences, all free and none of them new mechanism:
 ### A.2.3 · The named-absence rule — what the surface says about what it cannot offer
 
 `AX-2` forbids explaining *why the world withheld an option*. What it permits is **naming the shape of
-my own ignorance**, because that is arithmetic over my ledger. `04 §C.11` licenses exactly this and
+my own ignorance**, because that is arithmetic over my ledger. `ARCH §C.11` licenses exactly this and
 draws the line precisely:
 
 > *"**Hidden actors are hidden in their EXISTENCE, never in their ARITHMETIC.** 'Subsistence fell by 1
@@ -274,7 +277,7 @@ draws the line precisely:
 > they are additionally given is that it has an author they do not know. **A preview naming the author
 > is a breach; one saying the effect is unattributed is not** — and the second is what makes
 > investigation worth a scene."*
-> — `04 §C.11`, lines 783-787
+> — `ARCH §C.11`, lines 783-787
 
 **One rule, no new object:** for anything the player cannot form, the surface names the one thing that
 would make it formable — and all three cases are already traced by the engine.
@@ -305,7 +308,7 @@ Oath II survives; its worked example has no referent in this model.
 > **The four askers are `dispatch · convene · petition · commit`, all four are existing verbs, and
 > today zero of them is both formable and resolvable (measured, A.2.1). The named cheapest repair is
 > `@effect_for("commit")`, which makes the self-authored goal live and is unflagged by the Arc-2 rule.**
-> Cited to `world_q.py:439-552` for the sources, `carriers.py:259-260` for the closure,
+> Cited to `world_q.py:439-550` for the sources, `carriers.py:259-260` for the closure,
 > `verb_table.yaml:115-129` and `:746-754` for the two halves of the swearing route.
 
 ---
@@ -321,11 +324,11 @@ collision** rather than a convenience — which is what makes it a cut and not a
 | **WHAT I KNOW** — the ledger, three ways | `L-1`, and `Event.causes[]` | **KEPT.** A causal chain crosses places and seasons, so it cannot live on a place; and two disagreeing sources have nowhere else to display |
 | **THE SEAT** — a post's working surface | `H-71`, a recorded collision with **no relocation available** | **KEPT, NARROWED.** The docket could live at the place and the standing list in the ledger; what cannot move is the **remit** — *"two holders of one office share one remit, so it is not the person's state to move"* (`options.py:121-123`). **The narrowed N-line is: the seat exists because an OFFICE is a third thing, neither person nor place.** The docket and standing list sit on it as placement, not justification |
 | **THE SCENE** — a resolution in progress | `Claim.round` | **KEPT at MEDIUM confidence.** `round` is a real second clock — *"the scene tick subdivides a season into rounds … `when` still says WHICH SEASON … `round` says WHICH ROUND WITHIN it"* (`carriers.py:131-136`) — and `round` is *"THE ONLY CARRIER FIELD `U2` ADDS, AND THE ONLY ONE IT MAY ADD"* (`:131`). But a scene is also always *somewhere*, so this may be one unification short. Reported at MEDIUM, not banked |
-| four typed layers — Peninsula / Province / Settlement / Scene | `valoria_ui_ux_v4_1.md:339-345` | **CUT, FREE.** A building **is** a `hearth` and a quarter **is** a `community` — *"Neither is a new kind: the ladder already had both and the corpus never used either"* (`engine/season/venues.yaml:21-25`). Zoom is `parent_of` / `descendants` (`world_q.py:48,54`) |
+| four typed layers — Peninsula / Province / Settlement / Scene | `valoria_ui_ux_v4_1.md:339-345` | **CUT, FREE** — ⚠ **on a corrected sentence (2026-09-17).** ~~"A building **is** a `hearth` and a quarter **is** a `community`"~~ is `venues.yaml:21-22` as written and `02` §A.1.2 **narrows it**: a building is not a hearth, **a building STANDS ON one** — the `hearth` is the plot (the address), the fabric is a `Site`. The cut survives untouched, because what it rests on is the LADDER, not the sentence: *"Neither is a new kind: the ladder already had both and the corpus never used either"* (`venues.yaml:23-25`), and zoom is `parent_of` / `descendants` (`world_q.py:48,54`) |
 | a docked, priority-sorted Scene Slate | `valoria_ui_ux_v4_1.md:295-303`, with a 12-entry overflow rule and a `+N more` expander at `:299` | **CUT, FREE.** A `Question` carries `referents` (`carriers.py:251`) and every referent has a place, so the list's content is already spatial, and the ordering is already computed by `questions_for`'s own sort (`world_q.py:548-549`). **What survives is a camera control**, not a surface: *show me my questions* |
 | a character sheet of attributes and derived stats, plus a Codex with four knowledge states | `valoria_ui_ux_v4_1.md:977-1001` and the Codex at `:1003-1019` | **CUT, FREE.** `standing_of` **is** the gap between told-about-me and my own firsthand claims about me (`options.py:443-464`), so the sheet's most important row is already a two-set comparison over the ledger. What did not die: **my own capability, shown as bands, because it is mine** — one panel on the self filter |
 | a cutscene queue with priority tiers and a no-nesting clause | `valoria_ui_ux_v4_1.md:153-162` | **CUT, and it falls out of A.7 rather than standing on its own N-line.** Claims land at WITNESS and WITNESS is a barrier, so there is nothing to nest |
-| a policy register and a projects board, separately | the analyse stage's own first list | **CUT, FREE.** From the surface's side both are *a thing I set running, with named persons, that reports back late and partially*. The differences are **columns** — compliance states for one, stage terms for the other. Both specified separately at A.4.3 and A.5.2 |
+| a policy register and a `works` board, separately | the analyse stage's own first list | **CUT, FREE.** From the surface's side both are *a thing I set running, with named persons, that reports back late and partially*. The differences are **columns** — compliance states for one, stage terms for the other. Both specified separately at A.4.3 and A.5.2 |
 
 ### A.3.1 · The cell law — four states, and the fourth is NOT computed today
 
@@ -377,8 +380,9 @@ construction, because the Observation's predicate is derived from the cell"* (`:
 **2 · A POLICY'S COMPLIANCE ACROSS A PROVINCE.** The axis is wrong, and correcting it dissolves the
 problem. `issue`'s requires cell is verbatim *"scope enumerates executors, not places (§37.1)"* and its
 `scale_note` reads *"a Dispensation's `scope` enumerates executors — §37.1 — so its reach is the domain
-the issuer governs"* (`verb_table.yaml:258, 261`). A policy has no provincial axis: **it has a list of
-people.**
+the issuer governs"* (`verb_table.yaml:258, 261`). A policy has no provincial axis: **its reach resolves to
+people.** (~~*it has a list of people*~~ — the set is computed by `in_force`'s walk, never stored;
+`01` §A.7.5.)
 
 > **[DESIGN] Group the executor list by where I last heard each man was — and `residence` is already a
 > declared `person_predicate` (`rosters.yaml:281`), so the key is a claim I hold about him, never
@@ -405,7 +409,7 @@ Three routes make a stranger a referent:
 **And `interview` is formable AND resolvable** (`verb_table.yaml:643-657`; `own`; requires only *"the
 person questioned exists"*), so a player may interview someone they have never met, provided somebody
 mentioned them. ⚠ Its own row records what the precondition canon *wants* and cannot have: *"a witness is
-someone who HOLDS a claim on the matter, and `04 §B.2`'s corrected `F8` carve-out admits a resolver-side
+someone who HOLDS a claim on the matter, and `ARCH §B.2`'s corrected `F8` carve-out admits a resolver-side
 ledger read for THE ACTOR'S OWN ledger and no other … existence is the strongest clause the grammar
 admits here"* (`:651`). **That is `AX-2` refusing to tell you whether the man you are about to question
 knows anything**, and it is right.
@@ -419,7 +423,7 @@ Three withholdings, each with the line that forces it:
   EVERY ONE IS A QUERY"* (`carriers.py:586-587`) — and `__setattr__` repeats it against assignment
   (`:589-595`). A number the model refuses to store must not be invented by the renderer. This kills
   the P/D/O node bars and the derived-settlement map's three stat bars outright. ⚠ The GRADE is not
-  STRUCTURAL: `04 §B.3` rates the no-aggregate rule *"STRUCTURAL at the type … **CONVENTION at the
+  STRUCTURAL: `ARCH §B.3` rates the no-aggregate rule *"STRUCTURAL at the type … **CONVENTION at the
   schema edit** … **MECHANICAL against the accidental case, CONVENTION against the deliberate one**"*
   (`:240-244`). A session can add the field; what it cannot do is add one without a matrix row.
 - **No faction colour fill, and no province outline.** Both were drawn by the analyse stage from
@@ -439,7 +443,7 @@ Three withholdings, each with the line that forces it:
      names, and the roster says so: *"The verb keys are SITE-USE verbs (what the site is good for at
      that condition), NOT verb-table rows"* (`rosters.yaml:1182-1183`). The live cells are
      `bulk_shipping`, `fishing`, `deep_mining`, `surface_gleaning`, `full_operations`, `limited`,
-     `withdrawal_only` (`:1190-1200`). **None of the seven is a row in the 38-row verb table.** The
+     `withdrawal_only` (`:1190-1199` — ⚠ *~~`:1190-1200`~~, `:1200` is blank; repaired 2026-09-17*). **None of the seven is a row in the 38-row verb table** — and ⚠ **only FOUR of the seven are site uses on a real site**: `full_operations`, `limited` and `withdrawal_only` are `body`'s band row, and *"`body` IS NOT A SITE"* (`rosters.yaml:814-815`). `02` §A.6.2 counts the four; this file counted all seven. Both are true of the table; only the four bear on a place. The
      verb table's own retraction note says it in terms (`verb_table.yaml:765`), and `WorldReader`
      substitutes `min(floors.values())` for `work` with the reading declared, because *"the site-USE is
      an operand neither the act nor `requires_operands` carries (`H-94`)"* (`world_q.py:702-730`).
@@ -462,7 +466,7 @@ Three withholdings, each with the line that forces it:
 > reading because `agreement`'s single caller is `standing_of` and pairs only claims about oneself
 > (measured, A.3.1). **And the site option set is deferred to `H-94`'s operand rather than drawn from
 > `verbs()`**, because the query is resolver-side, has no loop caller, and speaks a vocabulary with
-> zero overlap with the verb table. Cited: `world_q.py:133-136`, `rosters.yaml:1182-1200`,
+> zero overlap with the verb table. Cited: `world_q.py:133-136`, `rosters.yaml:1182-1199`,
 > `verb_table.yaml:765`, `carriers.py:412-413`.
 
 ---
@@ -488,9 +492,20 @@ one requires cell:
 ```
 — `engine/season/verb_table.yaml:256-266`, transcribed whole
 
-**A policy is a named list of people who must do something.** Not a modifier, not a territory-wide
-flag. That single fact supplies the compliance mechanic, the evasion mechanic, the visibility mechanic
-and the political mechanic, because a list of people is a thing with faces.
+⚠ **`reach` in that cell is not `reach` in `01`.** The row's *"its reach is the domain the issuer
+governs"* is the ordinary word for *how far this touches*; `01` §A.7.5 rules a **declared operand
+`reach: near | all`** on the dispensation Record, which is the thing a superior spends an act to
+declare. Two senses, named here so a later session does not read one as the other (`CLAUDE.md` §4).
+
+**A policy reaches PEOPLE, not ground — and the people are COMPUTED, never enumerated.** Not a
+modifier, not a territory-wide flag. ⚠ **Corrected 2026-09-17:** ~~"A policy is a named LIST of people
+who must do something"~~ is the right instinct and the wrong object. `holonic_ARCHITECTURE.md:1290`
+(§37.3) **forbids a `scope` that enumerates places**, and `01` §A.7.5 rules the other half of it — the
+Record **names at most one rung and no list at all**, and who is reached is `in_force`'s walk. A stored
+list would be a second home for a fact the walk already answers, and it would go stale the season a
+man moves. What survives, and it is the whole of what this section needs, is that **the reach resolves
+to named persons with faces** — which is what supplies the compliance mechanic, the evasion mechanic,
+the visibility mechanic and the political mechanic.
 
 ### A.4.1 · ⚠ AND THE CARRIER DOES NOT EXIST — not as a stub, as nothing
 
@@ -525,9 +540,16 @@ designs the surface on that carrier and says so, rather than designing on the di
    rule and not about the world. ⚠ For the floor arm, "before and after" is a statement about
    `band_floors` cells whose keys are site uses (A.3.3), so what it can show is *which uses leave*, not
    which verbs.
-2. **The executors, as people.** Drawn from `establishment_of(office)` — *"the named persons the office
-   employs. Finite, contested, durable"* (`world_q.py:399-400`) — admissible under **L-3**. Each
-   renders as a person with what I last heard of them and when. *This is where the interface becomes a
+2. **The executors, as people.** Drawn from the office's **establishment** — *"the named persons the
+   office employs. Finite, contested, durable"* (`world_q.py:399-400`) — admissible under **L-3**,
+   because a seat I hold is state I am an endpoint of and the people in it are people I hired. ⚠ **AND
+   THE READ IS CORRECTED, 2026-09-17.** ~~`establishment_of(office)`, which reads `Office.establishment`
+   (`world_q.py:399-415`)~~ — that FIELD is deleted by `ARCH §B.7` call 2 in favour of **a Query over
+   `oblige`**, which `01` §A.1 grades CONFORMANCE and this file must not design against. Two further
+   measured facts, stated rather than smoothed: the field is **empty on all nineteen offices** (`01`
+   §0.2), and *"HOW MANY PERSONS AN OFFICE EMPLOYS IS `H-34`, GRADED `assumption`, AND IS NOT SUPPLIED
+   HERE"* (`world_q.py:407-408`). **So this display is designed on the Query and draws nothing today.**
+   Each executor renders as a person with what I last heard of them and when. *This is where the interface becomes a
    game:* you are not setting a rate, you are choosing which of six men will carry it, knowing three of
    them well and two not at all.
 3. **THE LIST OF ITS OWN BLIND SPOTS.**
@@ -585,9 +607,14 @@ Rows 3 and 4 cost nothing, which is the decaying-cost dominance shape. ⚠ And �
 that costs a man and a season is also the one row that does not exist. **Without the lapse emission,
 R-CHOICE FAILS at every governor's seat**, and with it the table has no dominant row.
 
-> **[DESIGN] ONE EMISSION RULE, THREE USES — and the carriers all exist.** A standing date that comes
-> due unmet emits; a dispensation reaching its `ttl` emits; a declared stage whose term passes
-> unmatured emits. `Date.due_at`/`fired` are read at `world_q.py:476`; `Record.ttl` is a field
+> **[DESIGN] ONE EMISSION RULE, THREE USES — and the carriers all exist.** ⚠ **The three were
+> re-stated 2026-09-17 to match the rule's owner, `01` §A.12**, which names them
+> **`stage.stalled`** (a stage's draw is short) · **`docket.lapsed`** (a date passes unconvened) · **a
+> STALE cell on this surface**. ~~"a standing date that comes due unmet; a dispensation reaching its
+> `ttl`; a declared stage whose term passes unmatured"~~ was a third triple for one rule — the
+> date-unmet arm is `docket.lapsed` under another name, and the **`ttl` lapse is a genuine FOURTH
+> instance** (`02` §A.4.3, `AX` **T-n**) rather than one of the three. Kept and renamed rather than
+> dropped, because the `ttl` case is the one that ends an abandoned `works`. `Date.due_at`/`fired` are read at `world_q.py:476`; `Record.ttl` is a field
 > (`carriers.py:430`); `Record.stages`/`matured` are fields and `matured` is a direct Jordan ruling
 > transcribed at `carriers.py:432-445`. **The governor learns his order was ignored because a date
 > passed, not because a counter stopped.**
@@ -641,9 +668,11 @@ and one that has silenced its victims produce the identical display** — a row 
 The interface must not "fix" that with a sentiment indicator. The only way to tell them apart is to go,
 and **that is the game.** Anything else is a dashboard over god-state wearing a period frame.
 
-> ### RULED: a policy is a NAMED LIST OF PEOPLE, and its surface is the edit plus the blind spots.
+> ### RULED: a policy REACHES PEOPLE (computed, never listed), and its surface is the edit plus the blind spots.
 > **Cited to `verb_table.yaml:256-266`, verbatim: `requires: "scope enumerates executors, not places
-> (§37.1)"`.** `Dispensation` has **no dataclass** (`carriers.py:608-610`), so the surface is designed
+> (§37.1)"`** — and to `holonic_ARCHITECTURE.md:1290`, which forbids the enumeration, with `01` §A.7.5
+> owning the other half (*the Record names at most one rung; the reach is `in_force`'s walk*).
+> ~~"a NAMED LIST OF PEOPLE"~~ struck 2026-09-17. `Dispensation` has **no dataclass** (`carriers.py:608-610`), so the surface is designed
 > on sibling 01's `Record`-of-kind-`dispensation` carrier and says so. Compliance has **four** states
 > and **silent ≠ complied**; the distinction requires the lapse emission, which requires CALENDAR to
 > emit first (`world_q.py:571-579`). A government is read off a room through **four channels of which
@@ -651,9 +680,9 @@ and **that is the game.** Anything else is a dashboard over god-state wearing a 
 
 ---
 
-## A.5 · PROJECT AS A SURFACE
+## A.5 · A `works` AS A SURFACE (~~*PROJECT*~~ — `01` §A.12's ruling, applied 2026-09-17)
 
-### A.5.1 · A half-finished work renders FREE, and the rendering is the mechanism
+### A.5.1 · A half-finished `works` renders FREE, and the rendering is the mechanism
 
 `Site.condition` *"is PRIMARY STATE, a FIXED-POINT INT (S48), and it GATES VERBS (S12.1)"*
 (`carriers.py:412-413`). So **a Site below every floor affords nothing**: a half-built granary is a place
@@ -668,7 +697,7 @@ these worlds and not about the threshold"* (`verb_table.yaml:765`).
 
 ### A.5.2 · On the board — named terms struck through, never a percentage
 
-A work's row shows its **stages as named terms**, read off `Record.stages: list[tuple]`
+A `works`' row shows its **stages as named terms**, read off `Record.stages: list[tuple]`
 (`carriers.py:431`), with the matured ones struck:
 
 > ~~the footings~~ · ~~the walls to the eaves~~ · **the roof** · the doors
@@ -691,7 +720,7 @@ nobody can witness a forgetting"* — the same shape, one object over.
 
 ### A.5.3 · Inheritance — you inherit the paper, not the claims
 
-`succeed` is a verb and `hold` is *"1 PER OBJECT"* (`world_q.py:138-144`), so a work passes to a
+`succeed` is a verb and `hold` is *"1 PER OBJECT"* (`world_q.py:138-144`), so a `works` passes to a
 successor — **and the successor inherits the `Record` and not the ledger.** He holds the paper and not
 the knowledge. His row shows every stage, because the Record is a document, and shows **nothing** about
 who was supplying it, whether the terms were really met, or where the stone went, until he goes and
@@ -718,7 +747,7 @@ A.4.4, and it means inheritance and reading-the-door are one mechanism rather th
 (`options.py:159-160`), so **nobody can take the paper down**, which is a better-shaped hole than a
 missing inheritance verb.
 
-> ### RULED: a project's surface is its STAGES AS NAMED TERMS, and the site's own emptiness is the progress display.
+> ### RULED: a `works`' surface is its STAGES AS NAMED TERMS, and the site's own emptiness is the progress display.
 > No percentage, on `CLAUDE.md` §0.06's S clause and `carriers.py:388-392`'s one-ladder rule.
 > Inheritance renders **the paper, not the claims**, and the two-marks rule (document-derived vs
 > observation-derived) is the design's answer. Blocked three ways, each named above rather than smoothed.
@@ -786,10 +815,10 @@ absent man privileged access.** The route down and back is people.
 ⚠⚠ **AND `inferred` IS THE GOVERNOR'S CLAIM SOURCE, RATIFIED AT LAYER 1 SINCE 2026-09-05, AND NOTHING
 WRITES IT. This is the best finding in the file and it closes three ruling requests at once.**
 
-`04 §C.6` — *"WITNESS ↔ the ledgers — attribution is per channel, per witness"* — is a ratified table
+`ARCH §C.6` — *"WITNESS ↔ the ledgers — attribution is per channel, per witness"* — is a ratified table
 assigning a **mint** to each of the five channels:
 
-| channel | mints | `04 §C.6` line |
+| channel | mints | `ARCH §C.6` line |
 |---|---|---|
 | `co_located` | the change claims, `firsthand` — **and**, if `causes` names an Act, an attribution claim read from the act store | `:732` |
 | `document_key` | **the change claims only. No attribution** | `:733` |
@@ -801,7 +830,7 @@ assigning a **mint** to each of the five channels:
 > `firsthand` attribution anywhere**, and false attribution is a `tell` carrying a claim whose subject
 > is the wrong person. **Rejected:** a global claim-subject rule, which gives a document holder an
 > attribution they could not have seen."*
-> — `04 §C.6`, lines 738-741
+> — `ARCH §C.6`, lines 738-741
 
 **`post_remit` is the office-holder's channel** — `_ch_post_remit` admits a person holding an office
 whose `remit_acts` intersect the remits that could emit this Event kind
@@ -826,19 +855,25 @@ under the default `both` rule starts from `e.subject`, the actor — a `document
 WHO ACTED."*
 
 > ### **SO THREE OF THE ANALYSE STAGE'S FIVE RULING REQUESTS ARE NOT RULING REQUESTS. They close at
-> step 1 of `CLAUDE.md` §0's ladder — superseded by `04 §C.6`, RATIFIED 2026-09-05 (ED-IN-0204).**
+> step 1 of `CLAUDE.md` §0's ladder — superseded by `ARCH §C.6`, RATIFIED 2026-09-05 (ED-IN-0204).**
 >
 > | request as filed | disposition |
 > |---|---|
-> | **R-2** — *"the interface is `inferred`'s producer"* | **CLOSED, superseded.** `04 §C.6:735` gives the producer: the `post_remit` channel. The interface is a *consumer*. The reconciliation's alternative — an effect of `thread_read` — is refused on measurement: `thread_read` is **not resolvable** and its own row says why (`verb_table.yaml:697`, `H-85`), so it would put the producer on a verb nobody can attempt |
-> | **R-4** — *"a document witness learns THAT the record changed, not who"* | **CLOSED, superseded.** `04 §C.6:733`: `document_key` mints *"the change claims only. No attribution."* Already ruled |
-> | **R-5** — *"attribution per witness"* | **CLOSED as a REQUEST, OPEN as a CONFORMANCE DEFECT.** `04 §B.9:398` types `Event := (id, kind, changes[], causes[], emitted_at, degree?)` with **no `subject`**, and `04 Part D` row 9 grades *"an Event with an actor, target or subject"* **STRUCTURAL** (`:938`). **The built carrier has `subject: str` (`carriers.py:94`)** and the fold sets it to the actor — which `01_AXIOMS.md` §T-d records: *"every ledger in the world reads 'I hold that `<actor>` did `<kind>`', certainly and identically … `T-d` is currently a naming convention, not a mechanism"* (`:324-330`). Nothing needs ruling; the code is out of conformance with a ratified row |
+> | **R-2** — *"the interface is `inferred`'s producer"* | **CLOSED, superseded.** `ARCH §C.6:735` gives the producer: the `post_remit` channel. The interface is a *consumer*. The reconciliation's alternative — an effect of `thread_read` — is refused on measurement: `thread_read` is **not resolvable** and its own row says why (`verb_table.yaml:697`, `H-85`), so it would put the producer on a verb nobody can attempt |
+> | **R-4** — *"a document witness learns THAT the record changed, not who"* | **CLOSED, superseded.** `ARCH §C.6:733`: `document_key` mints *"the change claims only. No attribution."* Already ruled |
+> | **R-5** — *"attribution per witness"* | **CLOSED as a REQUEST, OPEN as a CONFORMANCE DEFECT.** `ARCH §B.9:398` types `Event := (id, kind, changes[], causes[], emitted_at, degree?)` with **no `subject`**, and `ARCH` PART D row 9 grades *"an Event with an actor, target or subject"* **STRUCTURAL** (`:938`). **The built carrier has `subject: str` (`carriers.py:94`)** and the fold sets it to the actor — which `01_AXIOMS.md` §T-d records: *"every ledger in the world reads 'I hold that `<actor>` did `<kind>`', certainly and identically … `T-d` is currently a naming convention, not a mechanism"* (`:324-330`). Nothing needs ruling; the code is out of conformance with a ratified row |
+>
+> ⚠ **AND `04` §A.5 item 21 CARRIED THE OTHER ANSWER UNTIL 2026-09-17** — *"`thread_read` as the
+> `inferred` producer"*, inherited from the reconciling plan. **It is corrected there to this**, on
+> measurement over argument: `thread_read` is not resolvable (`verb_table.yaml:697`, `H-85`), so it
+> would put the producer on a verb nobody can attempt, and `ARCH §C.6:735` already assigns the
+> producer. This file governs the surface lane and opened the ratified table; `04` had not.
 >
 > **And the repair is ONE wiring change with a three-tuple slot already waiting for it:** carry the
-> channel through the fan instead of the mode, and dispatch `src` off `04 §C.6`'s table. It needs
+> channel through the fan instead of the mode, and dispatch `src` off `ARCH §C.6`'s table. It needs
 > `observers_for` to return `(pid, channel)` pairs rather than pids, because its `any(...)`
 > short-circuits per person (`epistemic.py:280-282` warns about exactly this) — so a person admitted by
-> two channels needs a precedence. **That precedence closes at step 5 and is not escalated:** `04 §C.6`
+> two channels needs a precedence. **That precedence closes at step 5 and is not escalated:** `ARCH §C.6`
 > says *"A witness who was present saw who did it; a witness who holds the changed document saw only
 > that it changed"* (`:726-728`), so a witness admitted by both saw who did it — **the union, with the
 > strongest channel deciding attribution.** Obvious for the code; recorded, not asked.
@@ -847,10 +882,10 @@ WHO ACTED."*
 
 `Event.causes` is required and non-empty by construction — `__post_init__` raises and *"`[ROOT]` makes
 the empty list unrepresentable rather than merely discouraged"* (`carriers.py:120-124`). So there is a
-real DAG spanning seasons and rungs. **And the surface may not walk it.** `04 §C.11` forbids it in
+real DAG spanning seasons and rungs. **And the surface may not walk it.** `ARCH §C.11` forbids it in
 terms: the derivation *"may NOT walk `causes[] → state/acts → Act.actor` — that path reaches the
 attribution `T-d` forbids, is resolver-side, and `F.13` grades its guard `CONVENTION`"* (`:779-780`).
-And `04 §B.9` closes the other door: *"`state/acts` is append-only, **resolver-side**, and no
+And `ARCH §B.9` closes the other door: *"`state/acts` is append-only, **resolver-side**, and no
 person-side Query reaches it"* (`:413-414`).
 
 > **[DESIGN] FIVE RULES.**
@@ -860,7 +895,7 @@ person-side Query reaches it"* (`:413-414`).
 > 2. **A link is drawn only where the player holds a claim whose subject is that link's subject.** No
 >    claim, no link — **a gap, with the named unknown that would close it.** *Between the reeve's order
 >    and the short bin there is something you have not looked at: what the settlement store held at
->    Michaelmas.* This is `04 §C.11`'s *"the effect is unattributed"* licence at chain scale (`:785-787`).
+>    Michaelmas.* This is `ARCH §C.11`'s *"the effect is unattributed"* licence at chain scale (`:785-787`).
 > 3. **Every drawn link carries its claim's `source`, `when` and `confidence`.** A chain of firsthand
 >    observations looks different from a chain of one man's word.
 > 4. **NO AGGREGATE CONFIDENCE NUMBER ON THE CHAIN.** There is one world and no second arm, so a
@@ -880,7 +915,7 @@ field: *"canon wants more than a claim here: `:278` makes a FAILED Reconstruct p
 WRONG conclusion the player acts on. A Claim carries `value` and `confidence`, so the carrier exists —
 what is missing is the degree that would decide which to mint"* (`:713`). **So the thing that makes a
 player's conclusion durably wrong is a degree on an existing resolvable verb, and the claim it mints is
-`inferred` via the channel `04 §C.6` already assigns.** Two halves of one mechanism, both ratified,
+`inferred` via the channel `ARCH §C.6` already assigns.** Two halves of one mechanism, both ratified,
 neither built.
 
 ### A.6.4 · What going to look actually deposits — and it is not what you looked at
@@ -936,16 +971,16 @@ before the act is ever formed (`data/requires.py:411-427`), so the belief half o
 available pre-commit and the world half only after.
 
 ⚠ **And the who-did-it row cannot be drawn honestly, and that is now a CONFORMANCE statement rather
-than a limit.** `04 §B.9` and `04 Part D` row 9 make an Event with a subject STRUCTURALLY impossible; the
+than a limit.** `ARCH §B.9` and `ARCH` PART D row 9 make an Event with a subject STRUCTURALLY impossible; the
 carrier has one; the fold sets it to the actor; WITNESS deposits every claim with it. Until the ratified
 shape is built, **the surface renders WHAT CHANGED honestly and renders WHO DID IT as a claim whose
 source is manufactured.** Stated as a limit, not designed around.
 
 > ### RULED: causation is a WORKSHEET over the player's own claims, and `causes[]` is the ENGINE's spine, not the worksheet's.
-> Barred from the DAG by `04 §C.11:779-780` and `04 §B.9:413-414`, not merely by preference. A short
+> Barred from the DAG by `ARCH §C.11:779-780` and `ARCH §B.9:413-414`, not merely by preference. A short
 > larder **emits nothing** (`matter.py:179-185`) and Q3's referent is a site-use string
 > (`world_q.py:518`, `:580-588`), so the from-below chain's first two links do not fire. From above,
-> `04 §C.6:735` already rules that the `post_remit` channel mints `inferred` — **closing R-2, R-4 and
+> `ARCH §C.6:735` already rules that the `post_remit` channel mints `inferred` — **closing R-2, R-4 and
 > R-5 as requests** — and the repair is to carry the channel through `witness.py:104-105`'s fan instead
 > of the mode. **No aggregate confidence number, competing causes unranked.**
 
@@ -982,7 +1017,7 @@ are presence-conditioned and fine as written.** §4.3.2's table is
 | # | trigger | the CONDITION cell, verbatim | honest verdict | analyse stage said |
 |---|---|---|---|---|
 | 1 | Settlement Revolt | *"Player is in a province containing a settlement at Order 0"* | ⚠ **SPLIT, and the cut does NOT hold as stated.** *"Player is in a province"* **is** a presence condition, at province grain — coarser than Q3's site grain but not absent. What fails is `Order 0`, a settlement **aggregate** the player can hold no claim about, which `Rung` refuses to store (`carriers.py:586-587`). **Repair: keep the presence condition, replace the aggregate with a crossing.** Fine as written on the half the stage attacked | ⚠ cut — *"province-membership, not presence"* |
-| 2 | Heresy Investigation Target | *"Player is the target of an active Heresy Investigation"* | ✓ **UPHELD AND SHARPENED.** The channel is `co_located` — the Inquisitor arrives and is in the room. `_ch_co_located` (`epistemic.py:244-259`) is its predicate, and under `04 §C.6:732` that channel mints `firsthand` **plus** an attribution claim | ✓ kept |
+| 2 | Heresy Investigation Target | *"Player is the target of an active Heresy Investigation"* | ✓ **UPHELD AND SHARPENED.** The channel is `co_located` — the Inquisitor arrives and is in the room. `_ch_co_located` (`epistemic.py:244-259`) is its predicate, and under `ARCH §C.6:732` that channel mints `firsthand` **plus** an attribution claim | ✓ kept |
 | 3 | Faction Leader Removal | *"Player's faction leader is assassinated, overthrown, or incapacitated"* | ⚠⚠ **PASS WRONGLY GRANTED.** The stage quoted *"The player witnesses **or learns of** the event directly"* and marked it ✓ — **that sentence is in the SCENE CONTENT column** (`:133`), not the condition. The **condition** is a world-state fact about another person with **no presence and no learning clause at all.** It is the clearest `AX-2` breach of the eight | ✓ kept, on the wrong column |
 | 4 | Mass Battle at Settlement | *"a mass battle targets a settlement in the player's current province"* | ⚠ **FINE AS WRITTEN.** *"the player's current province"* is presence at province grain, exactly as row 1. No aggregate is named. **The cut is refused** | ⚠ cut — *"same defect as revolt"* |
 | 5 | Companion Arc Trigger | *"A companion's arc branch trigger fires (npc_behavior §5.2)"* | ⚠⚠ **PASS WRONGLY GRANTED, same error as row 3.** The stage quoted *"the companion's transformation scene plays out with the player present"* and wrote *"presence is in the condition"* — **it is in the Scene Content cell** (`:135`). The condition is an NPC's interior state firing, which is another person's interior | ✓ kept, on the wrong column |
@@ -1005,7 +1040,7 @@ supported the verdict it had.
 |---|---|---|
 | Clock Band Transition | *"Any global clock (MS, CI, IP) crosses a band threshold"* | **CUT.** A global clock is an aggregate nobody holds. `Rung` refuses it; there is no carrier |
 | NPC Conviction Crisis | *"Any NPC with Disposition ≥ +1 has Scar count ≥ 2"* | **CUT.** Another person's interior, read directly. `AX-2`'s hardest breach after row 3 above. The knot case (row 6) is the licensed version of this and is already in the table |
-| Treaty Proposed or Broken | *"Any faction proposes, ratifies, or breaks a treaty involving the player's faction"* | **CUT as a trigger, KEPT as content.** A treaty is an act; its reaching me is Q2. `04 Part D` row 1 makes the faction-as-actor framing STRUCTURALLY impossible (`:930`) |
+| Treaty Proposed or Broken | *"Any faction proposes, ratifies, or breaks a treaty involving the player's faction"* | **CUT as a trigger, KEPT as content.** A treaty is an act; its reaching me is Q2. `ARCH` PART D row 1 makes the faction-as-actor framing STRUCTURALLY impossible (`:930`) |
 | Territory Control Change | *"Any territory adjacent to the player changes controller"* | ⚠ **NARROWED, not cut.** *"adjacent to the player"* is a presence-adjacent condition, which is the closest of the five to licensable. But the CHANGE is a `hold` Tenure turning over elsewhere. **Repair: the trigger is the claim about the change landing, and the new banner on the gate is what deposits it** |
 | Warden Emergency | *"RS ≤ 40 and the player has WR ≥ 1 or has met Edeyja"* | **CUT.** A global clock again, conjoined with a personal fact. The personal half is L-3; the clock half has no carrier |
 
@@ -1078,18 +1113,18 @@ loop that does not yet span the scales it transitions between.** Stated, not hid
 **The bar is `01_AXIOMS.md` §ID-13** — *"A DECLARED FIELD MUST REACH A READER, OR IT IS NOT DECLARED. A
 column, flag or axis that no resolver consults is **not a weak mechanism — it is a mechanism that does
 not exist**, wearing a schema's clothes. And it fails silently in the one direction that flatters:
-everything it would have refused is permitted"* (`:489-493`). ⚠ The reconciliation also cited `04 Part D`
+everything it would have refused is permitted"* (`:489-493`). ⚠ The reconciliation also cited `ARCH` PART D
 row 1 as this bar; **row 1 is *"an institution acts"*** (`:930`), a different claim. ID-13 is the bar and
-`04` §F.24a's closure argument is its companion; corrected here.
+`ARCH` §F.24a's closure argument is its companion; corrected here.
 
 ### B.1 · What this file ADDS — four things, and none of them is a carrier
 
 | # | addition | new primitive? | what it costs |
 |---|---|---|---|
-| 1 | **THE SURFACE LAW** — `(PersonInterior, Ledger, Sensation, Reads)`, `Reads` closed at three licences | **no.** A read licence is a rule about which existing functions a module may call. Its enforcement is a `TRACE` scan, which the queries already emit (`TRACE.query(..., "resolver")` on every one) | one scan, one test (PART D, D-1) |
+| 1 | **THE SURFACE LAW** — `(PersonInterior, Ledger, Sensation, Reads)`, `Reads` closed at three licences | **no.** A read licence is a rule about which existing functions a module may call. Its enforcement is a `TRACE` scan, which the queries already emit (`TRACE.query(..., "resolver")` on every one) | one scan, one test (PART D, SU-1) |
 | 2 | **The fourth cell state, CONTRADICTED** | **no store, one new READING.** `LedgerReader._best` already leaves the losing claim in the list (`person_q.py:82-96`); the enumeration over matching claims is derived. ⚠ Counted as an addition, not smuggled as free — `agreement`'s only caller is `standing_of` and pairs only claims about oneself over five predicates (A.3.1) | one derived list |
 | 3 | **The named-absence rule** — every absence in the option set names the one thing that would make it formable | **no.** Three cases, two already traced by the engine (`options.py:58-59`, `:159-160`, `:164-168`); the third is the complement of `questions_for`'s referent sets | one derived list |
-| 4 | **The two-marks rule** — document-derived facts render permanently distinct from observation-derived | **no.** It is the `source` field, read (`rosters.yaml:136`), and `04 §C.6`'s per-channel mint table is where the distinction is already declared | zero |
+| 4 | **The two-marks rule** — document-derived facts render permanently distinct from observation-derived | **no.** It is the `source` field, read (`rosters.yaml:136`), and `ARCH §C.6`'s per-channel mint table is where the distinction is already declared | zero |
 
 **And four things this file asks for that are NOT its additions**, because a ratified row already owns
 them and the work is wiring:
@@ -1097,25 +1132,25 @@ them and the work is wiring:
 | asked for | owner | status |
 |---|---|---|
 | `@effect_for("commit")` | `verb_table.yaml:115-129`, `grade: ruled` | RATIFIED-BUT-UNBUILT. Unflagged by the Arc-2 rule: its Tenure's subject is the actor |
-| the channel carried through `witness()`'s fan, and `src` dispatched off the five-row mint table | `04 §C.6:730-736` | RATIFIED-BUT-UNBUILT. Closes `inferred`'s producer, the document asymmetry and attribution together |
+| the channel carried through `witness()`'s fan, and `src` dispatched off the five-row mint table | `ARCH §C.6:730-736` | RATIFIED-BUT-UNBUILT. Closes `inferred`'s producer, the document asymmetry and attribution together |
 | CALENDAR emits, then the one lapse rule with three uses | `write_matrix.yaml`'s `date.fired` row; `world_q.py:571-579` | a registered silent write. Priced: *"would put a new Event in every log and move every hash"* |
-| `Event.subject` deleted; attribution per witness | `04 §B.9:398`, `04 Part D` row 9 (STRUCTURAL), `01_AXIOMS.md:324-330` | **a conformance defect, not a design question** |
+| `Event.subject` deleted; attribution per witness | `ARCH §B.9:398`, `ARCH` PART D row 9 (STRUCTURAL), `01_AXIOMS.md:324-330` | **a conformance defect, not a design question** |
 
 ### B.2 · What this file MAKES UNNECESSARY
 
 | deleted | what made it unnecessary |
 |---|---|
-| four typed UI layers, four scene classes, seven typed zoom transitions with durations and audio cues, and the province panel's separate existence | a building **is** a `hearth` and a quarter **is** a `community` (`venues.yaml:21-25`); zoom is `parent_of`/`descendants` (`world_q.py:48,54`) — **five objects for one** |
+| four typed UI layers, four scene classes, seven typed zoom transitions with durations and audio cues, and the province panel's separate existence | the ladder already carries both tiers — a building stands on a `hearth` and a quarter **is** a `community` (`venues.yaml:23-25`, narrowed by `02` §A.1.2); zoom is `parent_of`/`descendants` (`world_q.py:48,54`) — **five objects for one** |
 | the Slate dock, its 12-entry overflow rule and its `+N more` expander (`valoria_ui_ux_v4_1.md:295-303`) | `Question.referents` (`carriers.py:251`) makes the list spatial; `questions_for`'s own sort supplies the ordering (`world_q.py:548-549`). **One camera control survives** |
 | the ten-attribute character sheet, the derived block, and the Codex with its four knowledge states and ● ◐ ○ 🔒 ladder (`:977-1019`) | `standing_of` **is** the gap (`options.py:443-464`); the Codex is the ledger with a different filter and its ladder is `confidence` + `source` re-spelled |
 | the cutscene queue, its priority tiers and its no-nesting clause (`:153-162`) | claims land at WITNESS and WITNESS is a barrier (A.7.4). Nothing to nest |
-| a policy register screen and a projects board | both are *a thing I set running, with named persons, reporting back late and partially*. The difference is **columns** |
+| a policy register screen and a `works` board | both are *a thing I set running, with named persons, reporting back late and partially*. The difference is **columns** |
 | the nine-row right rail — GEN · RS · TC · IP · Framework Drift · Stature · Convictions · Obligations · Duty (`:319-329`, whose own audit's first finding is right-rail saturation at `:329`) | `Sensation` has **exactly two scalars** and is *"the ONLY bridge from world truth into `choose`"* (`carriers.py:161-162`). A global clock is an aggregate nobody holds |
-| all three stat-bar schemes: P/D/O node bars, settlement stat bars, and a project completion percentage | `Rung.__init__`'s law (`carriers.py:586-587`); and the percentage would mint a second ladder for `Site.condition` (`:388-392`), which `CLAUDE.md` §0.06's S clause calls a defect *"even when each is individually correct"* |
+| all three stat-bar schemes: P/D/O node bars, settlement stat bars, and a `works` completion percentage | `Rung.__init__`'s law (`carriers.py:586-587`); and the percentage would mint a second ladder for `Site.condition` (`:388-392`), which `CLAUDE.md` §0.06's S clause calls a defect *"even when each is individually correct"* |
 | the three-mode table's **switch** (TTRPG / Hybrid / Board Game) | `Scene` runs in rounds, stores and dates turn over per season; the rung decides the clock. No mode exists in `engine/season/` |
 | **six of the thirteen authored zoom triggers, and the trigger+priority logic of all thirteen** | a trigger is a claim landing (Q2); priority is the claim's `source`. 2 of 8 mandatory cut on their own merits, 4 of 5 Priority-1 cut (A.7.2-3) |
 | the withdrawn Render Law's own **exception list** | the three positive licences replace it, and each carries its own grade (A.1.3) |
-| ~~the analyse stage's R-2, R-4 and R-5 as ruling requests~~ | `04 §C.6:733, :735` and `04 §B.9:398` + Part D row 9 already rule all three (A.6.2). Three escalations closed at §0 step 1 |
+| ~~the analyse stage's R-2, R-4 and R-5 as ruling requests~~ | `ARCH §C.6:733, :735` and `ARCH §B.9:398` + Part D row 9 already rule all three (A.6.2). Three escalations closed at §0 step 1 |
 
 ### B.3 · The ratio, because E is scored LAST and as a ratio
 
@@ -1141,28 +1176,28 @@ defence of the cuts is N and R, not E. Said here per §0.06.
 
 ## C.1 · WHO OWNS THIS?
 
-⚠⚠ **NOBODY, AND IT IS MEASURABLE.** `04 §A.2` names **nine modules** (`:129-139`) and assigns the
+⚠⚠ **NOBODY, AND IT IS MEASURABLE.** `ARCH §A.2` names **nine modules** (`:129-139`) and assigns the
 surface's home: **`port/` — *"the Godot shell; nothing under it is simulation"*** (`:137`).
 
 - **`engine/season/port/` DOES NOT EXIST.** Measured 2026-09-17: eight of the nine module directories are
   present under `engine/season/`; `port/` is absent.
-- **`04 §A.2`'s own read-licence table (`:143-164`) has NO ROW for `port/`.** Every other module has one.
+- **`ARCH §A.2`'s own read-licence table (`:143-164`) has NO ROW for `port/`.** Every other module has one.
   So the surface's read scope is undeclared at Layer 1, which is why A.1.3 had to state it.
 - **`systems/ui/` holds ten `.md` files and ZERO `.py`, `.gd` or `.tscn`**; there is no `ui` row in
   `references/module_contracts.yaml` and no `ui` row in `CURRENT.md`. Measured.
 
-**So the ownership answer is a build item, not a person:** `port/` is created, `04 §A.2`'s table gains a
+**So the ownership answer is a build item, not a person:** `port/` is created, `ARCH §A.2`'s table gains a
 `port/` row whose *may read* column is A.1.3's three licences, and the surface lives there. Nothing else
 in this file can be owned until that row exists.
 
 | the object | its owner |
 |---|---|
-| the read licence (L-1..L-3) | `04 §A.2`'s module table, in a new `port/` row |
+| the read licence (L-1..L-3) | `ARCH §A.2`'s module table, in a new `port/` row |
 | the four cell states | the renderer, over `L-1`; no store anywhere |
-| the five claim-source mints | **already owned** — `04 §C.6:730-736`. The consumer is `witness()` |
+| the five claim-source mints | **already owned** — `ARCH §C.6:730-736`. The consumer is `witness()` |
 | the option set's content | `opening_set` (`options.py:35-104`). The surface renders; it never filters |
 | the site-use vocabulary | `rosters.yaml: band_floors` + `site_kinds`, and the missing operand is `H-94` |
-| the explanation of any displayed value | `explain(p, v) -> Derivation`, `person_q`, **no World** (`04 §C.11:775`) |
+| the explanation of any displayed value | `explain(p, v) -> Derivation`, `person_q`, **no World** (`ARCH §C.11:775`) |
 
 ## C.2 · WHAT CAN CHECK THIS?
 
@@ -1171,8 +1206,8 @@ in this file can be owned until that row exists.
 | `choose` never receives a World | **STRUCTURAL** | `View.__getattr__` raises `Forbidden` with the law inline — *"L2 — choose never receives a World. NOT BY DISCIPLINE — BY TYPE"* (`carriers.py:233-237`); plus the AX-2-binds-by-path test named at `questions.py:9-11` |
 | **the renderer reads only L-1..L-3** | **MECHANICAL** | a path/AST scan over `port/` for imports of `state/` and `world_q`, mirroring `decision/`'s. **NOT structural**, and the withdrawn law claimed it was. ⚠ A `TRACE` assertion alone is insufficient: **four resolver functions emit no `TRACE.query`** (A.1.3), `parent_of` among them. And no scan can exist until `port/` does |
 | UNHELD is read from the whole ledger, never from a capped View | **MECHANICAL** | `LedgerReader` takes `claims` and returns `UNKNOWN` on no match (`person_q.py:79-100`). A test that a UNHELD cell survives `view_k=1` |
-| the surface displays no aggregate | **MECHANICAL against the accidental case, CONVENTION against the deliberate one** — `04 §B.3:240-244`'s own grading, carried across rather than restated | `Rung.__setattr__` refuses an undeclared field (`carriers.py:589-595`); a renderer computing a mean of claims is not reached by it |
-| a claim is never marked true or false | **CONVENTION** | nothing in the type system distinguishes a correctness mark from a source mark. The check is a reader, and PART D's D-4 is the falsifier |
+| the surface displays no aggregate | **MECHANICAL against the accidental case, CONVENTION against the deliberate one** — `ARCH §B.3:240-244`'s own grading, carried across rather than restated | `Rung.__setattr__` refuses an undeclared field (`carriers.py:589-595`); a renderer computing a mean of claims is not reached by it |
+| a claim is never marked true or false | **CONVENTION** | nothing in the type system distinguishes a correctness mark from a source mark. The check is a reader, and PART D's SU-4 is the falsifier |
 | no percentage, no probability, no outcome projection | **CONVENTION** | same. `CLAUDE.md` §0.1 pt 4 is the reason and a reader is the enforcement |
 | a trigger is a claim landing, not an authored row | **MECHANICAL** | Q2's condition is code (`world_q.py:491-494`). A test that no trigger table is read by the renderer |
 | the sentence-with-blanks idiom | **CONVENTION** | `Candidate.operands` is a dict and `requires_operands` is closed at eight — `[actor, subject, from, to, site, kind, amount, floor]` (`rosters.yaml:1084`). Which blanks a sentence shows is presentation |
@@ -1194,21 +1229,26 @@ over the write/read graph — **is BLOCKED** (`:556-560`), so these are declared
 
 | # | loop | sign | whose act closes it |
 |---|---|---|---|
-| L-1 | act → WITNESS deposit → my ledger → a candidate narrowed or widened → act | **+** amplifying | the actor's. `belief_contradicts` reads the ledger (`epistemic.py:61-101`), so what I learn changes what I will attempt |
-| L-2 | a wrong `inferred` conclusion → narrows my own option set → I attempt less → I learn less | **+** amplifying, and it is the design's only self-deception loop | **mine.** `reconstruct`, and the degree that decides right from wrong (`verb_table.yaml:704-717`, `:713`) |
-| L-3 | `inferred` → `tell` → somebody else's `told_by` at my confidence → their options | **+** amplifying | the teller's. `tell` transmits the teller's own claim at the teller's own confidence (`witness.py:361-363`) |
-| L-4 | `confidence` decays → `claim.decayed` → the cell goes STALE → I renew it or act on it stale | **−** damping | nobody's — MATTER's. This is the one loop with no actor, which is why it is the only one that ends |
-| L-5 | a lapse emits → I hold a claim that my order was ignored → `revoke` or `issue` again | **−** damping | the seat-holder's, and the lapse rule is its precondition (A.4.3) |
-| L-6 | `dispatch` → he is present → his Q3 → his `tell` → my Q2 → `dispatch` again | **+** amplifying, and it costs a man and a season each turn | the governor's, then the man's. Two actors, which is what makes it slow |
-| L-7 | `utter` → `commit` → Q4 every season → acts toward it → claims that change what I want | **+** amplifying, unbounded until the commitment ends | **mine.** The only loop a player can start from nothing |
-| L-8 | `work` → `Site.condition` rises → a floor crossed upward → a Q3 → more `work` | **+** amplifying — ⚠ **and today it fires DOWNWARD only.** `matter.py:262` tests `before >= floor > s.condition`; the upward arm needs `before < floor <= s.condition` | the worker's. Sibling 02's item |
-| L-9 | a gap between delivered and demanded read as a **band on a Query** → `repudiate`/`defy`/`petition` appear in a subject's option set → the gap widens or closes | **−** damping | the subject's. `01_AXIOMS.md` §ID-17: *"A band on a Query **changes what may be chosen and never produces an outcome**"* (`:642-645`) — **never a legitimacy field** |
+| SU-L1 | act → WITNESS deposit → my ledger → a candidate narrowed or widened → act | **+** amplifying | the actor's. `belief_contradicts` reads the ledger (`epistemic.py:61-101`), so what I learn changes what I will attempt |
+| SU-L2 | a wrong `inferred` conclusion → narrows my own option set → I attempt less → I learn less | **+** amplifying, and it is the design's only self-deception loop | **mine.** `reconstruct`, and the degree that decides right from wrong (`verb_table.yaml:704-717`, `:713`) |
+| SU-L3 | `inferred` → `tell` → somebody else's `told_by` at my confidence → their options | **+** amplifying | the teller's. `tell` transmits the teller's own claim at the teller's own confidence (`witness.py:361-363`) |
+| SU-L4 | `confidence` decays → `claim.decayed` → the cell goes STALE → I renew it or act on it stale | **−** damping | nobody's — MATTER's. This is the one loop with no actor, which is why it is the only one that ends |
+| SU-L5 | a lapse emits → I hold a claim that my order was ignored → `revoke` or `issue` again | **−** damping | the seat-holder's, and the lapse rule is its precondition (A.4.3) |
+| SU-L6 | `dispatch` → he is present → his Q3 → his `tell` → my Q2 → `dispatch` again | **+** amplifying, and it costs a man and a season each turn | the governor's, then the man's. Two actors, which is what makes it slow |
+| SU-L7 | `utter` → `commit` → Q4 every season → acts toward it → claims that change what I want | **+** amplifying, unbounded until the commitment ends | **mine.** The only loop a player can start from nothing |
+| SU-L8 | `work` → `Site.condition` rises → a floor crossed upward → a Q3 → more `work` | **+** amplifying — ⚠ **and today it fires DOWNWARD only.** `matter.py:262` tests `before >= floor > s.condition`; the upward arm needs `before < floor <= s.condition` | the worker's. Sibling 02's item |
+| SU-L9 | a gap between delivered and demanded read as a **band on a Query** → `repudiate`/`defy`/`petition` appear in a subject's option set → the gap widens or closes | **−** damping | the subject's. `01_AXIOMS.md` §ID-17: *"A band on a Query **changes what may be chosen and never produces an outcome**"* (`:642-645`) — **never a legitimacy field** |
 
 **Six amplifying, three damping.** ID-16's warning is satisfied: the model does not converge, and the
 three dampers are decay, a lapse noticed, and a subject's own refusal — none of them a global governor.
 
-⚠ **AND THE ONE ITEM IN THIS FILE THAT NEEDS JORDAN.** Not a mechanism: a **departure from a CANONICAL
-document.** A.7 cuts six of thirteen authored zoom triggers and replaces the trigger-and-priority logic
+⚠ **AND THE ONE ITEM IN THIS FILE THAT NEEDS JORDAN — THE SUITE'S `RR-3`, REGISTERED 2026-09-17.**
+It was not in `04` §C.4's list of surviving requests, which said *"THE TWO SURVIVING"* and *"Nothing
+else survives"*, while this file said *"the one item in this file that needs Jordan"* — two files, two
+counts, and neither visible from inside the other. **Adjudicated on who opened the source:** this file
+opened `scale_transitions_v30.md` and measured its two `## Status:` lines, its retire-set membership
+and its zero `.py`; `04` never cites the file at all. **So it is a third survivor, `RR-3`, and `04`
+§C.4 now carries it.** Not a mechanism: a **departure from a CANONICAL document.** A.7 cuts six of thirteen authored zoom triggers and replaces the trigger-and-priority logic
 of all thirteen, in `systems/_architecture/reference/scale_transitions_v30.md` — `## Status: CANONICAL`
 at `:6`. Nothing in `engine/season/` implements a trigger table, so the cost of the departure is
 editorial rather than mechanical (`CLAUDE.md` §0.05), **and it still overwrites a ratified reading, which
@@ -1230,7 +1270,7 @@ wrong:
   is the honest statement of its cost rather than a claim that it is free.
 
 **Everything else in this file closes at §0's steps 1-5 and is NOT escalated.** R-2, R-4 and R-5 close at
-step 1 (superseded by `04 §C.6` and `04 §B.9`); the two-channel precedence closes at step 5; the
+step 1 (superseded by `ARCH §C.6` and `ARCH §B.9`); the two-channel precedence closes at step 5; the
 `thread_read`-versus-`reconstruct` producer choice closes at step 4 on `reconstruct`'s own row plus the
 resolvability measurement; `Oath II` test 1 closes at step 3 on `eligibility_kinds`' roster note.
 
@@ -1286,7 +1326,7 @@ first-usable.
 >    proves carries, since all 81 of its questions are `need`. **This is the first thing in this file that
 >    could be wrong in public.**
 > 2. **Carry the channel through `witness()`'s fan** (`witness.py:104-105`) and dispatch `src` off
->    `04 §C.6:730-736`. **Artifact:** a run in which some ledger holds a claim whose `source` is
+>    `ARCH §C.6:730-736`. **Artifact:** a run in which some ledger holds a claim whose `source` is
 >    `inferred`, which is currently impossible anywhere in the repository. Closes R-2, R-4 and R-5's
 >    mechanism in one edit.
 > 3. **A renderer under a new `port/`** that takes `(PersonInterior, Ledger, Sensation)` and draws one
@@ -1300,21 +1340,21 @@ first-usable.
 
 | # | claim | what would show it wrong |
 |---|---|---|
-| **D-1** | the renderer reads only L-1..L-3 | `test_the_surface_imports_no_world_query` — a path/AST scan over `port/`, mirroring `decision/`'s, **plus** `test_the_surface_emits_no_resolver_query` over the `TRACE` transcript. ⚠ The trace half alone does **not** observe the failure: `parent_of`, `judging_set`, `hold_force` and `occasioned_by` emit no `TRACE.query` (A.1.3), and `parent_of` is the one a renderer would reach first. ⚠⚠ Neither can be written until `port/` exists — the honest state of a MECHANICAL grade with no artifact |
-| **D-2** | UNHELD is a negative fact over the whole ledger, not a gap in a capped View | `test_unheld_survives_a_view_cap_of_one`: set `view_k=1`, render a cell whose claim exists, assert it draws HELD. If it draws UNHELD, the surface is reading the View and the law is broken in the direction that looks like caution |
-| **D-3** | CONTRADICTED is readable from the ledger with no new store | `test_two_disagreeing_claims_about_a_site_both_survive_best`: deposit two claims on one `(subject, predicate)` with different values, assert `LedgerReader._best` returns one **and** the enumeration returns both. If `_best` evicts the loser, the split cell needs a store and B.1 row 2 is wrong |
-| **D-4** | the surface never marks a claim true or false | `test_no_claim_renders_a_correctness_mark`: render a ledger containing a claim the world contradicts; assert the rendered cell differs from a true claim's cell **only** in `source`, `when` and `confidence`. **Expected to be the first one a deadline breaks** |
-| **D-5** | a policy is a named list of people, never a modifier | `test_no_rendered_policy_carries_a_numeric_term`: assert no display derived from a dispensation contains a number that is not a `requires_operands` member. If one appears, *"+N to a roll"* has returned |
-| **D-6** | silence is distinguishable from compliance | `test_a_standing_date_passing_unmet_emits_once`, plus its control `test_a_date_met_emits_a_different_kind`. ⚠ **This one is expected to FIRE today**: CALENDAR writes `Date.fired` with no `emits=`, so the first assertion fails and the failure is the finding, not the test |
-| **D-7** | a project's progress renders with no second ladder | `test_no_rendered_project_shows_a_percentage`: assert every stage display is a term string from `Record.stages`, and that no rendered value is a ratio of `Site.condition` to `condition_scale` |
-| **D-8** | the worksheet is built from claims, never from `causes[]` | `test_the_worksheet_never_reads_the_act_store`: build a chain with a real `causes[]` DAG and a player holding two of its five claims; assert the worksheet draws two nodes and three gaps. If it draws five, it walked the DAG and breached `04 §C.11:779-780` |
-| **D-9** | no aggregate confidence number on the chain | `test_no_chain_display_carries_a_scalar`: assert the worksheet's rendered fields are drawn from `{source, when, confidence}` per link and that no field is computed across links |
-| **D-10** | competing causes are unranked | `test_two_candidate_causes_render_in_a_stable_arbitrary_order_with_no_rank_field`. ⚠ **The trap this test exists for:** a stable sort *is* a ranking to a player. The assertion is on the absence of a rank FIELD and on the presence of an explicit *"unranked"* mark, not on the order |
-| **D-11** | a trigger is a claim landing and priority is the claim's `source` | `test_no_trigger_table_is_read_by_the_surface`, plus `test_a_knot_claim_renders_with_no_content`: a `firsthand_via_knot` claim must draw a named pin with no detail. If it draws a summary, the best row in the ratified table has been spent |
-| **D-12** | `inferred` has a ratified producer and no writer | `test_inferred_is_declared_and_unwritten`, asserting the grep result repo-wide — **and it is written to GO RED**: when the channel is carried through the fan, this test fails and is rewritten as its own control (*a `post_remit`-only witness holds an `inferred` claim; a `co_located` one does not*) |
-| **D-13** | the four question sources reduce to one on the corpus | `test_build_realm_produces_only_need_questions`: assert the source histogram over 46 persons at tick 0 is `{need: 81}`. **A pinned measurement, expected to change**, and when it changes the reason must be a build item and not a fixture edit |
-| **D-14** | zero of the four routes to a new question is both formable and resolvable | `test_no_route_to_attention_is_both_formable_and_resolvable`, over `dispatch`, `convene`, `petition`, `commit`. **Goes RED on step 1 of C.4** and is rewritten as the control (`commit` passes; the other three still fail) |
-| **D-15** | the site-use vocabulary and the verb table are disjoint | `test_band_floors_keys_are_not_verb_table_rows`: assert the intersection of `band_floors`' inner keys with `VERB_TABLE`'s verbs is **empty**. If it is ever non-empty, the bridge A.3.3 says is missing has been built and the option-set display is unblocked |
+| **SU-1** | the renderer reads only L-1..L-3 | `test_the_surface_imports_no_world_query` — a path/AST scan over `port/`, mirroring `decision/`'s, **plus** `test_the_surface_emits_no_resolver_query` over the `TRACE` transcript. ⚠ The trace half alone does **not** observe the failure: `parent_of`, `judging_set`, `hold_force` and `occasioned_by` emit no `TRACE.query` (A.1.3), and `parent_of` is the one a renderer would reach first. ⚠⚠ Neither can be written until `port/` exists — the honest state of a MECHANICAL grade with no artifact |
+| **SU-2** | UNHELD is a negative fact over the whole ledger, not a gap in a capped View | `test_unheld_survives_a_view_cap_of_one`: set `view_k=1`, render a cell whose claim exists, assert it draws HELD. If it draws UNHELD, the surface is reading the View and the law is broken in the direction that looks like caution |
+| **SU-3** | CONTRADICTED is readable from the ledger with no new store | `test_two_disagreeing_claims_about_a_site_both_survive_best`: deposit two claims on one `(subject, predicate)` with different values, assert `LedgerReader._best` returns one **and** the enumeration returns both. If `_best` evicts the loser, the split cell needs a store and B.1 row 2 is wrong |
+| **SU-4** | the surface never marks a claim true or false | `test_no_claim_renders_a_correctness_mark`: render a ledger containing a claim the world contradicts; assert the rendered cell differs from a true claim's cell **only** in `source`, `when` and `confidence`. **Expected to be the first one a deadline breaks** |
+| **SU-5** | a policy's reach resolves to named people and never to a modifier (~~*a named list of people*~~ — computed, not stored; `01` §A.7.5) | `test_no_rendered_policy_carries_a_numeric_term`: assert no display derived from a dispensation contains a number that is not a `requires_operands` member. If one appears, *"+N to a roll"* has returned |
+| **SU-6** | silence is distinguishable from compliance | `test_a_standing_date_passing_unmet_emits_once`, plus its control `test_a_date_met_emits_a_different_kind`. ⚠ **This one is expected to FIRE today**: CALENDAR writes `Date.fired` with no `emits=`, so the first assertion fails and the failure is the finding, not the test |
+| **SU-7** | a `works`' progress renders with no second ladder | `test_no_rendered_works_shows_a_percentage`: assert every stage display is a term string from `Record.stages`, and that no rendered value is a ratio of `Site.condition` to `condition_scale` |
+| **SU-8** | the worksheet is built from claims, never from `causes[]` | `test_the_worksheet_never_reads_the_act_store`: build a chain with a real `causes[]` DAG and a player holding two of its five claims; assert the worksheet draws two nodes and three gaps. If it draws five, it walked the DAG and breached `ARCH §C.11:779-780` |
+| **SU-9** | no aggregate confidence number on the chain | `test_no_chain_display_carries_a_scalar`: assert the worksheet's rendered fields are drawn from `{source, when, confidence}` per link and that no field is computed across links |
+| **SU-10** | competing causes are unranked | `test_two_candidate_causes_render_in_a_stable_arbitrary_order_with_no_rank_field`. ⚠ **The trap this test exists for:** a stable sort *is* a ranking to a player. The assertion is on the absence of a rank FIELD and on the presence of an explicit *"unranked"* mark, not on the order |
+| **SU-11** | a trigger is a claim landing and priority is the claim's `source` | `test_no_trigger_table_is_read_by_the_surface`, plus `test_a_knot_claim_renders_with_no_content`: a `firsthand_via_knot` claim must draw a named pin with no detail. If it draws a summary, the best row in the ratified table has been spent |
+| **SU-12** | `inferred` has a ratified producer and no writer | `test_inferred_is_declared_and_unwritten`, asserting the grep result repo-wide — **and it is written to GO RED**: when the channel is carried through the fan, this test fails and is rewritten as its own control (*a `post_remit`-only witness holds an `inferred` claim; a `co_located` one does not*) |
+| **SU-13** | the four question sources reduce to one on the corpus | `test_build_realm_produces_only_need_questions`: assert the source histogram over 46 persons at tick 0 is `{need: 81}`. **A pinned measurement, expected to change**, and when it changes the reason must be a build item and not a fixture edit |
+| **SU-14** | zero of the four routes to a new question is both formable and resolvable | `test_no_route_to_attention_is_both_formable_and_resolvable`, over `dispatch`, `convene`, `petition`, `commit`. **Goes RED on step 1 of C.4** and is rewritten as the control (`commit` passes; the other three still fail) |
+| **SU-15** | the site-use vocabulary and the verb table are disjoint | `test_band_floors_keys_are_not_verb_table_rows`: assert the intersection of `band_floors`' inner keys with `VERB_TABLE`'s verbs is **empty**. If it is ever non-empty, the bridge A.3.3 says is missing has been built and the option-set display is unblocked |
 
 **And the falsifier for PART A's central claim, which is the one that must not be quietly satisfied:**
 `test_the_surface_law_is_three_licences_not_a_parameter_list` — assert that the renderer's entry point
@@ -1349,8 +1389,8 @@ already listed and the seven this file found:
 | `world_q.py:520` (Q3 append) | `:518` | the reconciliation's repair, verified |
 | `world_q.py:198` (`c.subject == p.id`, quoted inside a verb-table note) | `:493`. The note in `verb_table.yaml:651` carries a stale address for a line that moved | drift, **in the tree, not in D3** |
 | `rosters.yaml:109` (the containment ladder) | `rung_kinds` at `:105-108`, values at `:108` | drift |
-| `rosters.yaml:816` cited as `band_floors` registering three site kinds | `:816` is `site_kinds`' `values:` line (roster at `:805-816`). **`band_floors` is at `:1175-1200`** and keys on it | right line, **wrong roster named** |
-| `rosters.yaml:250-264` (`question_sources`) | `:249-270`, values at `:270` | drift |
+| `rosters.yaml:816` cited as `band_floors` registering three site kinds | `:816` is `site_kinds`' `values:` line (roster at `:805-816`). **`band_floors` is at `:1175-1199`** and keys on it | right line, **wrong roster named** |
+| `rosters.yaml:250-264` (`question_sources`) | **`:250-270`**, `open: true` `:252`, `ordered: true` `:253`, values `:270`. ⚠ *This file's own appendix said `:249-270` and `:249` is blank — repaired 2026-09-17 by re-opening it* | drift |
 | `valoria_ui_ux_v4_1.md:461` (the perceptual-horizon line) | `:462` | the stage's own repair, verified |
 | `valoria_ui_ux_v4_1.md:70` (Oath II violation test 3) | `:67`. `:70` is blank; `:69` is Oath III's clause | the stage's own repair, verified |
 | `valoria_ui_ux_v4_1.md:295-311` (the Slate dock) | `:295-303`; the overflow rule and `+N more` at `:299` | drift |
@@ -1362,7 +1402,7 @@ already listed and the seven this file found:
 | `10_SUPERSEDING.md:1216-1222` (damage removes an option) | `:1216-1225`; the money line — *"Degradation is legible without a gauge: you can see which verbs are missing"* — is at `:1225` and was outside the cited range | drift, and the cut lost the best sentence |
 | `requirements.yaml:285-292` (R-04's 54 of 143) | `:286-292` | drift |
 | `hole_register.yaml:1102` for `H-71` | `H-71` at `:795-800`; `:1102` is `H-91`'s `unblocks` quoting it | the reconciliation's repair, verified |
-| **`04:NNN` line-number form, everywhere** | rewritten as `§Letter.Number` throughout this file, per `C14` §1.5 | form |
+| **`ARCH:NNN` line-number form, everywhere** | rewritten as `§Letter.Number` throughout this file, per `C14` §1.5 | form |
 
 **Two claims of the analyse stage's that no repair fixes, because they are wrong about the tree rather
 than about an address** — both corrected in place above, and both are `CLAUDE.md` §0.1 pt 3's *"X works
@@ -1377,7 +1417,7 @@ today"* shape:
 
 **And one claim of the reconciliation stage's**, corrected on measurement rather than on argument: it
 routed `inferred`'s producer to an effect of `thread_read`. `thread_read` is **not resolvable** and its
-own row says why (`verb_table.yaml:697`, `H-85`). `04 §C.6:735` already assigns the producer to the
+own row says why (`verb_table.yaml:697`, `H-85`). `ARCH §C.6:735` already assigns the producer to the
 `post_remit` channel, and `reconstruct` — formable, resolvable, `grade: ruled` — is the act that reaches
 it (A.6.2-3).
 
