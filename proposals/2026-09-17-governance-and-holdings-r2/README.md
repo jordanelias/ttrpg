@@ -17,15 +17,32 @@
 > those choices/actions/decisions themselves — the worldly churn is in how those contents are received
 > and acted upon by others."*
 >
+> ⚠ **And the second half of the ruling is honoured literally, which killed the obvious design.**
+> Jordan: *"speed of a writ can be the same as word of it given that the message can be delivered
+> directly as required to those who must implement it."* So **speed is NOT the axis** between the two
+> channels, and `02` carries **no latency, distance or propagation-rate parameter of any kind.** What
+> separates them is **fidelity, addressing and evidence**: which arrives first is a situation, never a
+> race.
+>
 > Round one put the churn in the CONTENTS. That is the single error from which most of its other
-> findings follow, and it is filed here as **`RR-P`**, a candidate seventh axiom.
+> findings follow, and it is filed here as **`RR-P`**, a candidate seventh axiom. `02` states its test
+> in one line — **a draw may decide what HAPPENS; it may never decide what you MEANT** — with three
+> boundaries (narrowing is legitimate · failure is not corruption · reassigning intent is forbidden)
+> and its home named in code: `Act.payload` against `Claim`. **It is not free.** Adopting it amends
+> `AX`'s own sentence *"There are SIX"*, and its consequences for the port and three subsystems are
+> **unchecked** — `02` says so rather than pricing it at zero.
+
+> **And the measurement that inverts the problem, taken by `02` and new to this round:** after one
+> populated season there are **69 `record.created` events, every one `kind: text`, every one with
+> `subject_matter: None`**, over 69 holds and 36 holders. **The writ's carrier already runs, and it
+> carries nothing.** Round one proposed to build a carrier; the carrier is built and empty.
 
 ## The five questions, and the one-line answers
 
 | Q | answer | owner |
 |---|---|---|
 | **1 · how a decision reaches a person** | **Two question sources, not four-plus-one.** `claim_landed` over one Query `reach(w, p)`, plus `need`. Dates and crossings become claims like everything else; `date_due` and `band_crossed` are deleted — **measured at 0 questions each after a populated season.** Purview is a TERM of reach, never a fifth source. | `01` |
-| **2 · how authority descends** | **Two channels, both people-borne, and no broadcast.** THE WRIT: a `Record` of kind `dispensation`, minted by `issue`, physically carried and handed by `give` — verbatim or not at all. THE WORD: a `told_by` claim spread by `tell`, lossy at `Partial`. One deposit rule makes a held document a held belief. **Compliance is the executor's own act, and MATTER reads no policy.** | `02` |
+| **2 · how authority descends** | **Two channels, both people-borne, and no broadcast.** THE WRIT: a `Record` of kind `dispensation`, minted by `issue`, physically carried and handed by `give` — verbatim or not at all. THE WORD: a `told_by` claim spread by `tell`, lossy at `Partial`. One deposit rule makes a held document a held belief. **Compliance is the executor's own act**, and **no MATTER write is a function of a document's CONTENT** — ⚠ *not* the stronger "MATTER reads no policy", which `02` measured FALSE against its own spec: `matter.py:65-74` reads `w.records`, the stages and the hold today. | `02` |
 | **3 · how matter reaches people** | **It does not move to them; they draw up the ladder.** One Query `nearest_store(w, rung, kind)`; the shortfall crosses the gate into `Person.body`; bodies cross band floors as sites do; death at 0 reuses the kill cascade. **Matter still moves only by `transfer`.** | `04` |
 | **4 · how a seat becomes fillable** | **Bases are VALUES on the seat, read by two predicates, and the content is an authored table.** `conferral ∈ {confer, determine, succeed}` — a set already ratified **twice**, at `ARCH §B.7` and `AX` ID-14. `revocation ∈ {purview, holdings, none}` as conjunct sets. The `is_title` branch and the title helpers go; `confer` also mints a `commission` Record, so the holder BELIEVES his remit. | `03` |
 | **5 · how the object count comes down** | **Net −17 engine objects: 39 removed against 22 added.** ⚠ **Not the −20 the plan projected — three WORSE, and `05` says exactly what the plan miscounted.** Vocabulary 24 terms in against 17 out. Round one's eight proposed Queries are withdrawn. | `05` |
@@ -58,7 +75,7 @@
 
 | | what it asks | why it cannot be taken by step 5 |
 |---|---|---|
-| **`RR-P`** | Jordan's principle as a candidate **`AX-7`**: the act is inviolate; the churn is in reception | axiom-shaped, would bind every subsystem, and no design document states it |
+| **`RR-P`** | Jordan's principle as a candidate **`AX-7`**: the act is inviolate; the churn is in reception | axiom-shaped, would bind every subsystem, and no design document states it. ⚠ Step 4 is **not silent** — `H-36` ruled the same test for one verb on 2026-09-02 — so what reaches Jordan is the **generalisation**, not the test |
 | **`RR-A`** | fold the four response verb rows (`comply`, `evade / defy`, `refract`, `dispatch`) | `ED-IN-0210` **ruled against** *"no response verb"* on 2026-09-15; step 5 may not overwrite a ruling. **Cost measured: one live verb and four dead rows** |
 | **`RR-B`** | **eight** sentences in RATIFIED `architecture/` that this suite makes false — not the four the plan expected | `architecture/` is ratified (`ED-IN-0204`); one limb (`03`'s containment-derived rank) is a **game** change |
 | **`RR-C`** | sequencing: the content work goes AHEAD of positions 3–7 of the ratified 27-position order | the program's ORDER is the ratified scope; step 5 cannot re-order it |
@@ -107,4 +124,8 @@ E-OVERHEAD verdict is answered with a number that is **worse than projected** �
 2. **Three of `03`'s ten falsifiers are RED on the current tree, deliberately.** They are written to fail now and pass when the content lands; a falsifier that cannot fail is `CLAUDE.md` §0.1 pt 2's absent assertion.
 3. **`01`'s headline table was repaired after its own instrument was written.** The `561 → 1632` figure reproduces exactly (2.91×), but the six rows had been computed on three different readings of `place_of`, and the effect was attributed to the wrong limb. Both are struck and corrected in `01` §0.2(d). **This is what a claim looks like before it has an instrument**, and it is left visible on purpose.
 4. **`01`'s purview limb is INERT until `03` lands.** 16 of 19 offices have `Office.rung is None`, so the limb is the empty set for 16 of 19 seat-holders. `01` says so in its own §0.2(e) rather than letting a reader find it.
-5. **The build order reverses one edge against the plan.** Item 10 depends on item 16, because `in_holdings` is **False for every person over every rung** — all 16 rung-holds are faction-subject.
+5. **`02`'s `WW-12` is RED on arrival, and deliberately.** `(Record, forgery_quality)` emits
+   `record.forged`, `forge` emits `record.created`, and **no verb emits `record.forged` at all** —
+   a writer and a reader that do not meet. `forgery_quality` has neither an `@effect_for` nor a
+   reader; it is declared and inert.
+6. **The build order reverses one edge against the plan.** Item 10 depends on item 16, because `in_holdings` is **False for every person over every rung** — all 16 rung-holds are faction-subject.
