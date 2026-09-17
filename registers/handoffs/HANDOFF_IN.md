@@ -27,6 +27,41 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 
 **The full 74-row table of contents now lives in `HANDOFF_IN_closed.md`'s own header** — an archive's index belongs in the archive. The imperative-flagged rows stay above, because a standing order must not need a second file-open to be seen.
 
+## 🧾 2026-09-17 — THE FIRST EXECUTION PASS OVER THE BUILD ORDER (`ED-IN-0246`, PR #414)
+
+**Facts, not a queue.** Three items of `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md`
+were RUN. `§7` of that file is the record and `probe_execution_pass.py` beside it re-takes every number.
+
+- **Item 16 LANDED.** `hold`'s domain/codomain are rosters (`hold_subject_kinds` / `hold_object_kinds`);
+  `World._refuse_bad_hold` + `World.class_of` read them. The 16 faction-subject province holds are
+  re-homed to persons. **`in_holdings` went from false for EVERY (person, rung) pair in the world to 15
+  true pairs over 4 holders** — `revocation: "holdings"` is satisfiable for the first time.
+- **It needed a repair the plan did not price.** `provinces_of` implements a RATIFIED ruling
+  (`scale_hierarchy_v1.md` §2, provinces cohere under a common FACTION holder) by reading the holder off
+  the `hold` edge; the re-home emptied it **silently** (4 factions → `{}`). New `faction_holding` Query
+  derives the faction through the holder's membership `commit`, preserving the ratified sentence.
+  **A carrier change is not local to its writer** — `world_q.py` is not in `05 §A.3.7`'s file list.
+- **Item 1 is HELD, and its headline claim is retracted.** `@effect_for("commit")` runs
+  (`resolvable_verbs()` 18→19) and a populated season measures **`commitment.made 0 / refused 42`**: no
+  question source offers a Proposition referent. It is gated on items 5/7/8 and re-scheduled to Phase 2.
+- **Item 4 is REVERTED.** Deleting `budget_office_bonus` starves the news transport — tellings fall
+  **26 → 12 of 27** NPC rung cases, tripping `test_r7_m6`'s floor, because `corpus_run.py:254` seats
+  offices. It is gated on the **S26.3 design call** `hole_register.yaml:176` owns in three shapes.
+
+⚠ **`H-92` IS LIVE ON `main` ONCE #414 MERGES.** A landholding buys scene actions: the Crown's head
+budgets **12** against a releasable ceiling of 5. Inert by the ceiling, reachable for the first time,
+and the same design call as item 4.
+
+⚠ **PHASE 6 IS SCHEDULED** at `01` §7.5 (6a–6g), its four gates having been ruled; **S9/S10/S11** (the
+migration verb, `capacity(w, rung)`, `ED-IN-0210`'s fourth ledger row) are scheduled there too.
+
+⚠ **TWO CONSTRAINTS RULED BY JORDAN IN SESSION, now `01` §7.1 and binding on every remaining item:**
+no hard-coding (roster · table · `Fixtures` — the three homes that already refuse), and **no term of
+`score(c)` may become a name in `loop/`** (measured: `loop/driver.py` imports 18 names from `decision/`;
+phase 6 would make it 26).
+
+---
+
 ## 🧾 2026-09-17 — THE BEHAVIOUR LAYER: established facts, so the next session does not re-derive them
 
 **PR #409. Why this unit exists:** the session that produced it inspected files 566 times and **298
