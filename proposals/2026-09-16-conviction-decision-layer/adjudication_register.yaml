@@ -74,6 +74,114 @@ meta:
       move there. The refusal law and this operator model agree rather than collide.
 
 
+
+# ===========================================================================
+# THE UNIFIED MODEL — added 2026-09-17 on Jordan's "let's unify what we have so far".
+#
+# Everything below this session produced is ONE structure: a character is held in
+# two BASES plus a set of PARTICULARS, and a decision runs in FIVE STAGES where
+# each operator kind acts at exactly one stage.
+#
+# THE COHERENCE CONDITION, which is what makes this a model rather than a pile:
+#   (1) every category sits at a definite stage with a definite operator;
+#   (2) no stage is empty;
+#   (3) where a category appears twice, the two appearances are DIFFERENT
+#       OPERATIONS ON ONE CARRIER, named as such — not a category in two places.
+# Rows that fail (3) are marked OPEN below rather than forced.
+# ===========================================================================
+model:
+
+  what_a_character_is:
+    bases:
+      moral_values: "13 weights, reduced to axes BY PROJECTION — so an axis is entailed by the weights (this is what R7 binds)"
+      temperament:  "7 axes held DIRECTLY, no roster underneath — so it varies freely at fixed moral values (this is what dissolves R7)"
+    particulars:
+      claims:      "what they know, tagged firsthand / told_by / inferred"
+      commitments: "signed targets — ambitions (+), outcome-fears (-), needs (+ with duration)"
+      regard:      "what they think of a named other; inverted, what they believe that other thinks of them"
+      position:    "office and profession — occupied, and VACATED by an act"
+      caste:       "immutable; changed by nothing"
+      piety:       "reserved (STR-6), its own quantity, not a moral-value weight"
+
+  how_a_decision_runs:
+    # Each stage names the ONE operator kind that acts there.
+    - stage: "PHI-0  INTAKE"
+      runs_at: "WITNESS"
+      operator: susceptibility
+      acts: >-
+        transforms what ARRIVES before it is anything to rank. Three keys, one operator:
+        by SOURCE (Jordan's testimony ladder — lord > peer > enemy, graded on the hearer's
+        BELIEF about the relation); by FORM (Resonant Style — Evidence / Consequence /
+        Authority / Solidarity); by GAIN (insecure <-> self-assured).
+      writes: "Claim.confidence — the one write licensed here. S9.3 forbids moving a value, not setting a claim's weight."
+      status: "[E] the channel is empty: 580 claims after 2 seasons, 100% firsthand; `tell` resolved 9 times and deposited 0"
+
+    - stage: "PHI-1  OCCASION"
+      operator: generator
+      acts: >-
+        proposes what is even at issue. The world proposes through four question sources
+        (date_due, claim_landed, band_crossed, need); the character proposes through
+        COMMITMENTS, which is Q4 `need` — a live `commit` Tenure to a Proposition.
+      status: "[E] the character's own channel leads 12/12 at genesis and 0/12 in every season after; q_rule=one_per_source restores it to 12/12"
+
+    - stage: "PHI-2  APERTURE"
+      operator: gate
+      acts: >-
+        admits or refuses a candidate outright. POSITION gates by office and remit; CASTE
+        would gate if it gates at all (unruled, CAT-7); CLAIMS gate epistemically — clause 4
+        refuses what the character's own claims know to be false.
+      status: "[E] 10 of 38 verbs unformable person-side — every governance verb (H-71). Caste and profession gate nothing: marks is read by no Python, capability supplies dice only."
+
+    - stage: "PHI-3  APPRAISAL"
+      operator: "weight AND modifier — two kinds, and they are distinct because Valoria resolves BY DRAW"
+      acts:
+        weights: >-
+          MORAL VALUES through the alignment table (verb x axis); TEMPERAMENT through its own
+          alignment table (pacifist, diplomacy, passive are all verb-weights); ORIENTATION keyed
+          on BENEFICIARY; REGARD keyed on the subject.
+        modifiers: >-
+          COURAGE keyed on what a candidate DEMANDS rather than what it achieves. A modifier
+          moves the obstacle; a weight moves the preference. In an additive system these
+          collapse; under a draw they do not.
+      status: "[E] alignment is 52 of 152 cells; 7 verbs on no axis. Temperament has no table at all. stance is 0 rows. Orientation has no carrier and no beneficiary on a Candidate."
+
+    - stage: "PHI-4  COMMITMENT"
+      operator: "none — this stage disposes rather than decides"
+      acts: "triage to the scene budget the person asks for, then _sample_order draws the final order"
+      status: >-
+        [E] P(inversion) = 1/(1+exp(D/tau)), verified against 200,000 draws per row. At the
+        shipped tau=0.1 a term is decisive at 95% only if its score gap D >= 0.294, and the
+        measured live plateau gap is 0.0000. Any new term must declare a range against this floor.
+
+  where_the_twelve_land:
+    # Jordan's opening twelve, his thirteenth, and both axis lists — each in exactly one cell.
+    "1 ambitions":            "commitments -> PHI-1 generator"
+    "2 needs":                "commitments (with duration) -> PHI-1 generator"
+    "3 fears (of an OUTCOME)": "commitments (negative sign) -> PHI-1 generator"
+    "3 fears (of a CHALLENGE)": "courage -> PHI-3 modifier    # the split Jordan forced: a state vs an encounter"
+    "4 memories":             "claims (firsthand) -> PHI-2 gate, deposited at PHI-0"
+    "5 worldly understanding": "claims (told_by / inferred) -> PHI-2 gate, deposited at PHI-0"
+    "6 moral values":         "the moral-values basis -> PHI-3 weight"
+    "7 religious values":     "piety, its own quantity once `conviction` is reserved (STR-6)"
+    "8 self vs public":       "orientation, a temperament axis -> PHI-3 weight keyed on beneficiary"
+    "9 character opinions":   "regard -> PHI-3 weight"
+    "10 obligations, office": "position -> PHI-2 gate"
+    "11 ethnicity/caste":     "caste -> PHI-2 gate, OR a modifier, OR neither (CAT-7, unruled)"
+    "12 job/profession":      "position -> PHI-2 gate; but Jordan calls it 'knowledge and connections', which reads as claims + regard rather than permission"
+    "13 how will they judge me": "regard INVERTED -> PHI-3 weight. Adds no category."
+
+  open_where_the_grid_does_not_close:
+    # Coherence condition (3). These are genuinely ambiguous and are NOT forced.
+    - "humble <-> vain is the gap `standing_of` computes — but is it read at PHI-3 (it weights candidates that expose you) or at PHI-0 (it changes how a slight LANDS)? Plausibly both, which would mean it is two quantities sharing a name."
+    - "piety's stage is unassigned. If it is a weight it belongs beside moral values at PHI-3; if it gates what a devout character may attempt it is PHI-2; if it changes how doctrine-bearing claims land it is PHI-0."
+    - "claims appear at PHI-0 (deposited) and PHI-2 (read). This SATISFIES condition (3) — two operations on one carrier — and is the only thing in the model that crosses stages, because it is the memory."
+    - "PHI-4 has no operator. Either that is correct (disposal is not decision) or orientation belongs here after all, modulating what counts as a win rather than what gets chosen."
+
+  what_the_model_asserts_that_is_falsifiable:
+    - "No category acts at two stages with the SAME operator. Find one and the model is wrong."
+    - "No stage is empty. PHI-4 having no operator is the nearest miss and is listed above."
+    - "Every one of Jordan's twelve lands in exactly one cell. Item 3 lands in two DIFFERENT cells because it was two things wearing one word; item 12 is the one still contested."
+
 # ===========================================================================
 # BASES — the coordinate systems a character is held in.
 # ⚠ ADDED 2026-09-17. A category says WHAT a character holds; a basis says IN
