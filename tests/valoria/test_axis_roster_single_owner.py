@@ -2,8 +2,8 @@
 
 WHY THIS GUARD EARNS ITS EXISTENCE (CLAUDE.md §0.1 pt 5, the load-bearing predicate). The artifact
 it protects is game code: `engine/season/decision/choose.py` sums a candidate's score over this set
-once per deliberation, and `engine/substrate/keys.py` invariant 6 rejects any Key naming an axis
-outside it. Both were reading their own literal.
+once per deliberation. The SECOND reader was `engine/substrate/keys.py`, whose invariant 6 rejected
+any Key naming an axis outside it — and both were reading their own literal.
 
 THE DEFECT IT CLOSES, MEASURED RATHER THAN FEARED (2026-09-14, ED-IN-0230). `keys.py::AXES` was a
 tuple literal and `engine/season/rosters.yaml: conviction_axes` was a `values:` list, and NOTHING
@@ -54,17 +54,21 @@ def _py_files():
 
 
 def test_both_readers_resolve_to_the_same_object():
-    """`is`, not `==`. Equal-but-separate is exactly the state this guard exists to end."""
-    from engine.substrate import descriptors, keys
+    """`is`, not `==`. Equal-but-separate is exactly the state this guard exists to end.
+
+    ⚠ ONE OF THE TWO READERS RETIRED (2026-09-16, ED-IN-0232). `keys.py::AXES` was the other arm,
+    and with the Key substrate gone the original two-literal drift is impossible by subtraction
+    rather than by this guard. What is still live, and still worth pinning, is the season engine's
+    own reading: `rosters.CONVICTION_AXES` must be the registry's roster, not a second list. The
+    `is`-identity claim moves onto that pair — `rosters` binds the descriptors object at import,
+    so a re-typed literal there breaks identity before it breaks equality.
+    """
+    from engine.substrate import descriptors
     from engine.season.data import rosters
-    assert keys.AXES is descriptors.AXES, (
-        'engine/substrate/keys.py::AXES is no longer the registry object. It was a literal until '
-        '2026-09-14 and a second literal is how the two axis lists drifted — read '
-        'engine.substrate.descriptors.AXES, do not retype it')
     assert set(rosters.CONVICTION_AXES) == set(descriptors.AXES), (
-        f'the season engine scores over {sorted(rosters.CONVICTION_AXES)} while the Key substrate '
-        f'validates against {sorted(descriptors.AXES)}. A Key naming an axis only one side knows '
-        'is rejected by keys.py invariant 6 while choose.py has already scored on it')
+        f'the season engine scores over {sorted(rosters.CONVICTION_AXES)} while the registry '
+        f'declares {sorted(descriptors.AXES)}. One of them is a second literal — read '
+        'engine.substrate.descriptors.AXES, do not retype it')
     assert len(descriptors.AXES) == 4, (
         f'{len(descriptors.AXES)} axes. key_substrate_v30.md §2.4 permits a 5th as a Class B '
         'extension "if Stage 10 calibration finds the simplification load-bearing; treat as '

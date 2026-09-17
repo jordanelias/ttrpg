@@ -15,6 +15,19 @@ Status: [CANONICAL — Phase 2 implementation 2026-05-17; Phase 5/9 faction-uniq
  no da.* Key plumbing — C-FA-1). The self-imposed port block is DELETED (Jordan, 2026-08-15 —
 ED-IN-0193); the gap is unchanged and ED-FA-0004 is still open.]
 
+⚠ RETIRED FROM THIS FILE 2026-09-16 (ED-IN-0232, RULED by Jordan: *"anything key-based gets
+retired"*): `_emit_battle_concluded`, which built a `scene.battle_concluded` Key and handed it to
+`sched.emit(key)` with no `apply=` — the first Key emission outside `echo_transport`, and one of the
+two that were log-only. It wrote nothing and was gated on `world.echo_scheduler`, which only
+`engine/mc_v18.py` ever attached.
+
+THE FALSIFIER AND ITS OUTCOME, in the commit that removed it (CLAUDE.md §0.1 pt 3). The claim was
+"removing this and its sibling in `parliamentary_transfer.py` moves no campaign output". It was
+checked WHILE THE BUS WAS STILL LIVE — both emitters removed first, substrate still attached and
+emitting — so the two arms were genuinely different runs rather than identical-by-construction:
+seed-42 n=8 win-share stayed byte-identical at {'Crown': 12.5, 'Church': 0.0, 'Hafenmark': 12.5,
+'Varfell': 75.0} while seed-1 `keys_emitted` fell 180 -> 99. Reproduce against `FORK:c6e82105`.
+
 v17 port: probabilistic action mix (M7_ASSUMPTION_SIX).
 Historically the 30/35/20/15 (unique/Conquest/Muster/Govern) vector was a FIXED, uncited prior.
 ED-FA-0012 (FA-5, 2026-07-08) retires the fixed vector: the 30/35/20/15 numbers survive only as the
@@ -36,7 +49,6 @@ Dependencies:
 from __future__ import annotations
 
 import math
-import os
 from engine.autoload import dice_engine
 from engine.autoload import sigma_leverage
 from engine.autoload.game_state import MULTS, ALL_PLAYABLE_15
@@ -349,87 +361,6 @@ def _faction_specific_unique(faction, world, rng) -> str:
     return _NOOP
 
 
-def _emit_battle_concluded(world, attacker, defender, territory_id, battle) -> None:
-    """Emit `scene.battle_concluded` into the canonical Key log. Additive; never writes state.
-
-    THE FIRST KEY EMISSION OUTSIDE `echo_transport` (ED-IN-0122). Measured before this landed: the
-    Key substrate had 55 declared types and exactly ONE live emitter — `scene.accord_echo`, 13 keys
-    per seeded campaign — while real inter-subsystem traffic ran over 16 direct Python imports. A
-    substrate with one call site is a prototype, not an architecture.
-
-    SAFETY, in the order it matters:
-      * No `apply=` callback, so `emit()` appends to the log and changes NOTHING. The seeded
-        byte-exact goldens cannot move.
-      * Silently no-ops when no scheduler is attached (`world.echo_scheduler` is optional and off in
-        many harnesses) — the same guard `emit_scene_echo` uses.
-      * Wrapped: a substrate-side validation error must never take down a campaign turn for the sake
-        of telemetry. It is re-raised only under an explicit opt-in env flag so tests can assert the
-        payload really does validate rather than trusting a swallowed exception.
-
-    PAYLOAD PROVENANCE — every required field traced to a verified source, none invented:
-      * `battle_id`     — synthesised `<season>.<seq>.<territory>`; an identifier, not a measurement.
-      * `victor`        — attacker/defender name off `battle['attacker_wins']`.
-      * `casualties_per_side` — `1 - size_pct`, where `massbattle.resolve_mass_battle` computes
-        `a_size_pct = unit_a.effective_size / unit_a.size_max` (read at :1834). Surviving fraction,
-        so lost fraction is its complement. Arithmetic on verified semantics, not an inference about
-        what the field "probably" means.
-      * `territorial_outcome` — 'transfer' / 'hold', which is exactly what `attacker_wins` decides
-        in the block that follows this call.
-    """
-    sched = getattr(world, 'echo_scheduler', None)
-    if sched is None:
-        return
-    try:
-        from engine.substrate.keys import EmittedAt, Key, Target
-
-        seq = getattr(world, '_battle_key_seq', 0)
-        world._battle_key_seq = seq + 1
-        season = int(getattr(world, 'season', 0))
-        wins = bool(battle.get('attacker_wins'))
-        defender_name = getattr(defender, 'name', None)
-        a_pct = float(battle.get('attacker_size_pct') or 0.0)
-        b_pct = float(battle.get('defender_size_pct') or 0.0)
-        key = Key(
-            id=f'scene.battle_concluded.s{season}.n{seq}',
-            type='scene.battle_concluded',
-            emitted_at=EmittedAt(season_index=season),
-            # No upstream Key exists to cite: resolve_mass_battle is a plain call, not an emission.
-            # [] is the honest value — a fabricated cause is worse than no cause (see the
-            # causes[]-population note in engine/cross_scale/echo_transport.py).
-            causes=[],
-            # 'territory', not 'provincial': the substrate's canonical roster is
-            # ("personal", "settlement", "territory", "peninsula") (keys.py SCALES), and the key
-            # registry independently declares default_scale_signature: [territory] for this type.
-            # My first draft used the lane's everyday word 'provincial' and VALORIA_STRICT_KEYS
-            # caught it — the vocabulary a subsystem speaks internally is not the substrate's.
-            scale_signature=['territory'],
-            targets=[Target(actor_id=str(territory_id), role='subject')],
-            payload={
-                'battle_id': f'{season}.{seq}.{territory_id}',
-                'victor': (getattr(attacker, 'name', None) if wins else defender_name),
-                # Raw complements, deliberately NOT rounded. The first version wrote
-                # `round(1.0 - a_pct, 6)` and ci_sim_fabrication_check correctly flagged the 6 as an
-                # uncited constant in sim code. There is no canon for a rounding precision, so
-                # adding a `# [canonical: ...]` comment would have been a FALSE citation to silence
-                # a true finding — the fix is to remove the constant, not to justify it. Rounding
-                # was cosmetic anyway: this payload is log-only telemetry and the KeyLog already
-                # serialises deterministically, so the seeded key_log_hash is unaffected.
-                'casualties_per_side': {
-                    'attacker': 1.0 - a_pct,
-                    'defender': 1.0 - b_pct,
-                },
-                'territorial_outcome': 'transfer' if wins else 'hold',
-                'degree': battle.get('degree'),
-            },
-        )
-        sched.emit(key)          # NO apply= — log-only, deferred nothing, writes nothing
-    except Exception:
-        if os.environ.get('VALORIA_STRICT_KEYS'):
-            raise
-        # Telemetry must not break a turn. The strict flag above is what makes this swallow
-        # testable instead of a place defects go to hide.
-
-
 def _try_conquest(faction, world, rng) -> str:
     """Attempt military conquest of adjacent territory.
 
@@ -468,26 +399,6 @@ def _try_conquest(faction, world, rng) -> str:
         world=world,
     )
     deg = battle['degree']
-
-    # ── scene.battle_concluded — the FIRST inter-subsystem Key emission (ED-IN-0122) ──────────
-    # PURELY ADDITIVE: no `apply=`, so nothing is written and no behaviour changes. Byte-exact
-    # goldens are untouched by construction, which is the point — this makes the Key substrate
-    # carry real traffic before any consumer depends on it, the same additive-telemetry-first
-    # discipline `stubwire` and accounting.py's drift probe already use.
-    #
-    # WHY HERE AND NOT AROUND resolve_mass_battle(): that call is a RESOLVER INVOCATION — the
-    # caller needs `attacker_wins`/`degree` synchronously to decide the transfer below — and Keys
-    # are deferred (they land at the accounting boundary). Replacing a synchronous resolver call
-    # with a Key would break it. Not every cross-subsystem import is a Key candidate: a request for
-    # a computed answer stays a call; an announcement that something HAPPENED is a Key. This is the
-    # announcement.
-    #
-    # The key graph already declares this type with FOUR consumers (articulation_layer,
-    # faction_state, npc_behavior, piety_track) — see references/key_graph.json. Note that the
-    # block below currently reaches directly into faction state (`adjust('L', -10)`); under the
-    # Key architecture that write belongs to faction_state reacting to this emission. Migrating it
-    # is a behaviour change and is deliberately NOT done here.
-    _emit_battle_concluded(world, faction, defender_faction, target, battle)
 
     if battle['attacker_wins']:
         old = t.owner

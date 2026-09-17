@@ -55,9 +55,24 @@ def test_the_spine_is_not_vacuous(emap):
     Floors per section so that losing one whole region — boot, loop or termination — cannot hide
     behind the others' rows.
     """
+    # FLOORS LOWERED (2026-09-16, ED-IN-0232), and the first version of this comment got the
+    # arithmetic wrong in a way an adversarial pass caught. It claimed FIVE spine rows retired and
+    # that each floor dropped "by exactly what was removed from its region". Counted against
+    # `tools/build_execution_map.py`'s SPINE, both halves are false:
+    #   * FOUR rows were removed, not five — `boot.substrate`, `boot.subscribe`, `loop.s2.parliament`
+    #     and `loop.close`. `loop.boundary` SURVIVES; it stopped being a scheduler CALL and became a
+    #     position between the action callback and accounting's body, which is a rewrite, not a
+    #     deletion.
+    #   * The drops are not one-for-one either: 2 boot rows went against a 1-step floor drop (5 -> 4),
+    #     and 2 loop rows against a 1-step drop (7 -> 6).
+    # The error was in the SAFE direction — the floors were dropped by the minimum, not by the amount
+    # claimed — so the numbers below are kept and the reasoning is corrected to match them. Measured
+    # now: boot has exactly 4 rows (floor 4, zero headroom), loop has 7 (floor 6), term has 3
+    # (floor 3, untouched, zero headroom). Boot and term are pinned at their exact counts, so losing
+    # ANY row in either region reds this.
     ids = [p['id'] for p in emap['phases']]
-    assert len([i for i in ids if i.startswith('boot')]) >= 5, ids
-    assert len([i for i in ids if i.startswith('loop')]) >= 7, ids
+    assert len([i for i in ids if i.startswith('boot')]) >= 4, ids
+    assert len([i for i in ids if i.startswith('loop')]) >= 6, ids
     assert len([i for i in ids if i.startswith('term')]) >= 3, ids
     assert all(len(p['anchor']) > 12 for p in emap['phases']), (
         "an anchor short enough to match by accident is not an anchor: "

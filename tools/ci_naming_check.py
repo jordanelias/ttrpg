@@ -126,7 +126,15 @@ EXCLUDE = (
     'tests/',
     'deprecated/archives/',
     'deprecated/',
-    'audit/',                     # the audit-report corpus — historical records that quote the
+    '.audit/',                    # ED-IN-0231 (2026-09-16): renamed from `audit/`. ⚠ THIS ENTRY AND
+                                  # `EXCLUDE_ROOTED` BELOW MUST MOVE TOGETHER. `is_excluded` only
+                                  # roots an entry that appears in BOTH tuples (line 179's `if x not
+                                  # in EXCLUDE_ROOTED`), so changing one alone drops this back to a
+                                  # substring test and re-exempts `skills/valoria-vector-audit/…`
+                                  # from a BLOCKING gate — the precise defect the note above records
+                                  # as already made once. Caught here by
+                                  # test_the_audit_exclusion_is_ROOTED_not_a_substring.
+                                  # The audit-report corpus — historical records that quote the
                                   # names they critique, plus GENERATED run data (a vector-audit
                                   # run's data/tokens.json derives its token universe from
                                   # names_index INCLUDING each entry's `legacy:` field, so it
@@ -165,7 +173,10 @@ EXCLUDE = (
 # entry would also root `tests/`, which would drop the 28 files under `engine/tests/` out of an
 # exemption they legitimately have. The exclusion list is not one kind of entry, so the fix is not
 # one rule for all of them.
-EXCLUDE_ROOTED = ('audit/',)
+EXCLUDE_ROOTED = ('.audit/',)   # ED-IN-0231: renamed from `audit/` so ripgrep skips it.
+                                # If this is not updated with the tree the naming gate STARTS
+                                # scanning 121 historical audit reports that quote the very
+                                # names they critique — i.e. it reds on evidence, loudly.
 
 
 def is_excluded(path):

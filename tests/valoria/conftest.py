@@ -73,9 +73,8 @@ def pytest_collection_modifyitems(config, items):
 # a diff in files no human wrote — adding ONE document to `proposals/` churned three of them and
 # turned a blocking gate red.
 #
-# THIS FIXTURE IS THE SINGLE OWNER OF THE BUILD ORDER, and the order is not cosmetic: two builders
-# READ another's output (`build_engine_atlas` and `build_contract_index` both consume
-# `references/key_graph.json`), so a test that built only what it names would get a stale or absent
+# THIS FIXTURE IS THE SINGLE OWNER OF THE BUILD ORDER, and the order is not cosmetic: builders
+# READ each other's output, so a test that built only what it names would get a stale or absent
 # input depending on execution order. Session-scoped, so the cost is paid once per run.
 #
 # WHAT REPLACED THE `--check` GATES. Each of these builders had a `--check` mode whose entire job
@@ -93,15 +92,12 @@ import pytest as _pytest
 
 _REPO = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), '..', '..'))
 
-# (builder, [artifacts it produces]) in DEPENDENCY ORDER. FOUR edges make the order load-bearing —
-# this comment said "two" until an adversarial pass recounted them (2026-08-22):
-#   * `references/key_graph.json` is read by THREE builders — build_contract_index.py:68,
-#     build_engine_atlas.py:57, build_execution_map.py:212
-#   * `references/execution_trace.json` is read by build_engine_atlas.py:59 and build_execution_map
-#   * `references/execution_map.json` is read by build_engine_atlas.py:58
-# The order below satisfies all of them; the undercount was in the description, not the tuple. It is
-# corrected rather than left, because the next person to add a builder will size the risk from this
-# comment.
+# (builder, [artifacts it produces]) in DEPENDENCY ORDER. TWO edges make the order load-bearing:
+#   * `references/execution_trace.json` is read by build_engine_atlas and build_execution_map
+#   * `references/execution_map.json` is read by build_engine_atlas
+# It was FOUR until 2026-09-16 (ED-IN-0232): the other two were `references/key_graph.json`, read by
+# three builders, and it retired with the Key substrate along with `build_key_graph.py` and
+# `build_contract_index.py`. Recount when you add a builder rather than trusting this comment.
 #
 # `trace_execution_phases.py` is the expensive one (~9.5s — it profiles a full seeded campaign) and
 # it is FIRST rather than omitted on cost grounds. Omitting it does not fail: both consumers report
@@ -112,10 +108,8 @@ _REPO = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), '..', '..'))
 # the 9.5s, and paid once per session.
 _GENERATED_LAYER = (
     ('trace_execution_phases.py',  ['references/execution_trace.json']),
-    ('build_key_graph.py',         ['references/key_graph.json']),
     ('build_execution_map.py',     ['references/execution_map.json', 'references/EXECUTION_MAP.md']),
     ('build_engine_atlas.py',      ['references/engine_atlas.json', 'references/ENGINE_ATLAS.md']),
-    ('build_contract_index.py',    ['references/CONTRACT_INDEX.md', 'references/KEY_INDEX.md']),
     ('build_identifier_census.py', ['references/identifier_census.json']),
     ('definitions_store.py',       ['references/definitions/definitions.yaml']),
 )
@@ -151,8 +145,8 @@ def generated_layer(request, tmp_path_factory):
 
     EXACTLY ONE PROCESS BUILDS, EVEN UNDER `-n auto`, and that is not an optimisation.
     `scope='session'` is per-WORKER, not per-run: with N xdist workers, N processes would run these
-    seven builders concurrently against one shared `references/` directory. A reader on worker 3
-    then sees `key_graph.json` mid-write — the same shared-tree race that took `test_engine_atlas`
+    builders concurrently against one shared `references/` directory. A reader on worker 3 then
+    sees `engine_atlas.json` mid-write — the same shared-tree race that took `test_engine_atlas`
     down on 2026-08-22, arriving from the fixture instead of from a test.
 
     The gate is an `O_CREAT | O_EXCL` create in xdist's shared base temp dir, which is atomic on

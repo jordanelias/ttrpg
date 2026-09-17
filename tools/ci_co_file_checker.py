@@ -97,10 +97,16 @@ if sim_outputs and 'tests/coverage_matrix.md' not in changed:
 # and the correction matters, because a tombstone that misstates why a gate was
 # removed is how a removal gets re-litigated from the wrong premise:
 #
-#   · Those six run CODE -> GENERATED ARTIFACT (export_engine_params --check,
+#   · Those six ran CODE -> GENERATED ARTIFACT (export_engine_params --check,
 #     export_key_types --check, export_sim_params, build_engine_atlas --check,
 #     build_test_register, build_contract_index). Rule 4 ran DESIGN DOC -> PARAMS
 #     PROSE. Different mechanism, not a stronger form of the same one.
+#     ⚠ THREE OF THE SIX ARE THEMSELVES GONE NOW, so this list is history rather
+#     than a live reassurance: build_test_register retired in culling wave 2
+#     (ED-IN-0194), and export_key_types + build_contract_index retired with the
+#     Key substrate (ED-IN-0232). Corrected on the same principle the paragraph
+#     above states — a tombstone that misstates its own reassurance is how a
+#     removal gets re-litigated from the wrong premise. Three remain.
 #   · All six PRE-EXISTED this retirement. Nothing was transferred.
 #
 # The accurate reason is simpler and sufficient: **Rule 4's SUBJECT LEFT THE TREE.**

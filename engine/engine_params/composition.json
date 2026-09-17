@@ -31,7 +31,7 @@
     "parliamentary_vote": {
       "target": "systems.social_contest.sim.parliamentary_vote:run_parliamentary_vote",
       "kind": "callable",
-      "needed_by": "engine/cross_scale/parliamentary_bridge.py (the two-pole season vote), systems/factions/sim/parliamentary_transfer.py \u00a74 (the vote-wrapped transfer resolution), and systems/factions/sim/parliamentary_action.py \u00a75.4 (the Censure motion)"
+      "needed_by": "systems/factions/sim/parliamentary_transfer.py \u00a74 (the vote-wrapped transfer resolution) and systems/factions/sim/parliamentary_action.py \u00a75.4 (the Censure motion). A THIRD caller, engine/cross_scale/parliamentary_bridge.py (the two-pole season vote), retired with the Key substrate 2026-09-16 (ED-IN-0232) \u2014 the vote mechanism itself is untouched and the two remaining callers still require this role."
     },
     "parliamentary_vote_declaration": {
       "target": "systems.social_contest.sim.parliamentary_vote:VoteDeclaration",
@@ -41,7 +41,7 @@
     "rs_track_delta": {
       "target": "systems.overview.sim.rs_track:apply_rs_delta",
       "kind": "callable",
-      "needed_by": "engine/cross_scale/echo_transport.py \u2014 the \u00a75.5 Accord Domain Echo's RS leg"
+      "needed_by": "NOBODY since 2026-09-16 (ED-IN-0232). Was engine/cross_scale/echo_transport.py \u2014 the \u00a75.5 Accord Domain Echo's RS leg, which retired with the Key substrate. Kept for the same reason as territory_transfer_* above: the target resolves, the exporter imports it, and an orphaned role is more useful named than deleted."
     },
     "scene_builder.contest": {
       "target": "systems.social_contest.sim.contest:build_contest",
@@ -126,12 +126,12 @@
     "territory_transfer_candidate": {
       "target": "systems.factions.sim.parliamentary_transfer:derive_transfer_candidate",
       "kind": "callable",
-      "needed_by": "engine/cross_scale/parliamentary_bridge.py \u2014 OI-04 derivation of (initiator, territory, mode)"
+      "needed_by": "NOBODY since 2026-09-16 (ED-IN-0232). Was engine/cross_scale/parliamentary_bridge.py \u2014 OI-04 derivation of (initiator, territory, mode)."
     },
     "territory_transfer_proposal": {
       "target": "systems.factions.sim.parliamentary_transfer:propose_transfer",
       "kind": "callable",
-      "needed_by": "engine/cross_scale/parliamentary_bridge.py \u2014 the \u00a7\u00a71-4 CB-gated transfer motion itself"
+      "needed_by": "NOBODY since 2026-09-16 (ED-IN-0232). Was engine/cross_scale/parliamentary_bridge.py \u2014 the \u00a7\u00a71-4 CB-gated transfer motion itself."
     },
     "world_gen_settlements": {
       "target": "systems.settlements.sim.registry:populate_from_geography",

@@ -395,3 +395,21 @@ ED-FI-0006/0007/0008 allocated 2026-07-13: 2026-07-13 multi-agent audit P1 batch
 BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0009-0012 RESERVED 2026-07-29 for cross-lane EDs the IN code-shape waves file in WR. MEASURED max allocated = ED-WR-0009; unused 0010-0012 (3) returned to the pool, next_free 13 -> 10. Freeze lifted: read next_free, allocate, bump, co-commit as normal. // ED-WR-0008 allocated 2026-07-13: 2026-07-13 multi-agent audit P1 -- P-25 'Scale-based Mending Stability' override table in threadwork_v30 (line 40) truncated to header + 'Object' with zero data rows (original authoring truncation, git-confirmed). Open/needs_jordan; can anchor a WR threadwork batch with the P2 tail. next_free bumped 8->9. // ED-WR-0007 allocated 2026-07-08: pessimist-audit WR Scene-Slate + threadwork work items, execution pending (decision ED-IN-0027). ED-WR-0001 + ED-WR-0002 allocated 2026-07-05: NERS-audit E-5 (peninsular_strain GD-1 sweep) + E-8 (MS/RS name sweep) accepted work items; ED-WR-0003 allocated 2026-07-05: edge-playability §7 item 10 (ambient-fabric window + Appraise Revelation), edge-playability §7 batch (PR #81)
 ```
 
+### 2026-09-16 — the 0228 window took a THIRD claimant (ED-IN-0231)
+
+The design-prose quarantine (#407) first took **ED-IN-0229**, skipping 0228 on purpose: `next_free`
+read 228, but 0228 was already claimed by the then-open PR #405, and taking it would have produced
+the within-lane collision CLAUDE.md §4 warns about. **It collided one number higher anyway.** While
+#407 was open, #405 landed keeping 0228, and #404 landed having renumbered 0228 -> 0229 and
+0229 -> 0230 — so by the time #407 merged `main`, its 0229 belonged to #404 and it renumbered again,
+to **0231**, with `next_free` at 232.
+
+That is §4's sentence demonstrated rather than quoted: *renumbering to `next_free` does not escape a
+same-lane collision*, because every live session renumbers to the same number. Skipping ahead does
+not escape it either — it only changes which number you land on. Three claimants on one window in
+one day, after the same lane collided twice on 2026-09-10 and once more after that renumber.
+
+What would actually have prevented it is the structural fix the reservations file already specifies
+and PARKS: `wiring_status.auto_allocation`. Until that exists, the only real mitigation is the one
+§4 names — land the `next_free` bump on `main` **before** anything cites the number — which narrows
+the window rather than closing it, and a branch open for hours cannot use it at all.

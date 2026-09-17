@@ -201,10 +201,19 @@ def test_scan_is_not_vacuous():
     """
     consts = _path_constants()
     shapes = _shape_counts()
-    assert len(consts) >= 55, (
-        f'only {len(consts)} module-level path constant(s) found across tools/**/*.py (expected '
-        f'~65) — the AST walk has stopped matching, so the cases below are largely vacuous. Fix '
-        f'_literal_path(), do not lower this floor.')
+    # FLOOR 55 -> 45 (2026-09-16, ED-IN-0232). This message says "do not lower this floor", and
+    # that instruction is aimed at ONE cause — a broken `_literal_path()` — so the cause was
+    # MEASURED before the floor moved rather than assumed. Five tools retired with the Key
+    # substrate, and their module-level path constants were counted out of the pre-retirement tree
+    # at `HEAD`: build_contract_index 9, build_key_graph 3, export_key_types 2,
+    # export_module_contracts 2, contract_runtime_conformance 1 = 17. 67 - 17 = 50, which is
+    # exactly what the walk now finds, across 27 files. The matcher is intact; the corpus shrank.
+    # 45 keeps five constants of headroom below today's 50, so a genuinely broken walk still reds.
+    assert len(consts) >= 45, (
+        f'only {len(consts)} module-level path constant(s) found across tools/**/*.py (50 at '
+        f'ED-IN-0232) — the AST walk has stopped matching, so the cases below are largely vacuous. '
+        f'Fix _literal_path(); lower this floor only after attributing the drop to named '
+        f'retirements, as ED-IN-0232 did.')
     # 'glob' DROPPED FROM THE REAL-TREE FLOORS 2026-08-21 (culling wave 3, ED-IN-0194). All five
     # glob-shaped constants lived in tools retired by waves 1-3; the surviving tree declares ZERO.
     #

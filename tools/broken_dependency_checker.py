@@ -90,12 +90,35 @@ def extract_file_refs(content, source_file=""):
     return refs
 
 def check_propagation_map(all_files):
-    """Check propagation_map.md for broken references."""
+    """Check propagation_map.md for broken references.
+
+    REMAP-AWARE since 2026-09-16 (ED-IN-0231). This function used to test bare
+    membership — `r not in all_files` — while the ledger checks below resolved the
+    same shape of reference through references/restructure_ledger.md. That is the
+    multi-parser divergence CLAUDE.md §8 names as a bug to fix rather than
+    propagate: propagation_map.md is a HISTORICAL log of what each batch patched,
+    so by construction it cites the path that was true when the batch ran, and the
+    ledger is where such a path resolves. Without this, every repo move turns a
+    correct historical citation into reported breakage — the design-prose
+    quarantine alone produced nine.
+
+    The direction is safe: consulting the ledger can only turn a BROKEN verdict
+    into a resolved one, never the reverse, and a ref with no row still falls
+    through to `broken`.
+    """
     content = read_file("references/propagation_map.md")
     if not content:
         return [], ["references/propagation_map.md not found"]
     refs = extract_file_refs(content, "propagation_map.md")
-    broken = [r for r in refs if r not in all_files]
+    remap = _load_restructure_map()
+    broken = []
+    for ref in refs:
+        if ref in all_files:
+            continue
+        new_home = _resolve_remap(ref, remap)
+        if _is_forked(new_home) or (new_home and new_home in all_files):
+            continue
+        broken.append(ref)
     return broken, []
 
 def check_canonical_sources(all_files):

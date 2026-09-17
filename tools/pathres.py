@@ -87,7 +87,7 @@ LEDGER_REL = os.path.join('references', 'restructure_ledger.md')
 # failure a scan looks for, not an omission.
 TREES: tuple[str, ...] = (
     "designs", "sim", "systems", "engine", "references", "params", "tests",
-    "registers", "canon", "audit", "arcs", "godot", "tools", "skills", "proposals",
+    "registers", "canon", ".audit", "arcs", "godot", "tools", "skills", "proposals",
     "workplans", "deprecated", "dashboard", "research",
 )
 

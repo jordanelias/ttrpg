@@ -122,7 +122,12 @@ PROVENANCE_PATHS = {
 # it is annotated rather than left silent so the next reader does not take it for a live tree.
 PROVENANCE_PREFIXES = ('references/splits/',)
 # Live docs that can make canonical claims.
-SCAN_PREFIXES = ('canon/', 'designs/', 'systems/', 'references/')  # engine/params/ evacuated 2026-08-05
+# ED-IN-0231 (2026-09-16): `.designs/` carries the quarantined subsystem corpus — 226 documents
+# that were under `systems/` until the design-prose quarantine. It is DECLARED HERE because a
+# gate that stops scanning a corpus does not report less, it reports CLEAN, and this one went
+# from 456 open-reference findings to 210 the moment the files moved. Hiding prose from agent
+# sweeps must not hide it from the audits that keep its citations honest.
+SCAN_PREFIXES = ('canon/', 'designs/', '.designs/', 'systems/', 'references/')  # engine/params/ evacuated 2026-08-05
 SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 
 # ── Burn-down tier (2026-08-01, ED-IN-0117) ───────────────────────────────────────────────────
@@ -151,14 +156,17 @@ SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 # went stale the moment a pair was removed (2026-09-11, ED-IN-0215): prose re-pinning a number the
 # data below already carries. Same failure as CLAUDE.md:345 ("a duplicated date rots independently
 # of its subject") and CURRENT.md:34 ("this row has carried a stale one twice"). Read the set.
-BURN_DOWN_PREFIXES = ('systems/',)  # engine/params/ evacuated 2026-08-05
+# ED-IN-0231: the subsystem corpus moved to `.designs/systems/` (design-prose quarantine). The
+# pairs below moved with it; this prefix has to follow, or four DEFERRED findings become nine
+# build failures the moment the files change address and nothing about the debt has changed.
+BURN_DOWN_PREFIXES = ('systems/', '.designs/systems/')  # engine/params/ evacuated 2026-08-05
 BURN_DOWN_ALLOW = frozenset({
     # A pair leaves this set only when its ED closes — the narrative belongs to that ED's ledger
     # row and the commit that paid it, not here. Last removal: ED-IN-0113 (ED-IN-0215, 2026-09-11).
-    ('systems/_architecture/reference/key_type_registry_v30.md', 'ED-IN-0014'),
-    ('systems/_architecture/reference/key_type_registry_v30.md', 'ED-IN-0091'),
-    ('systems/articulation/reference/articulation_layer_v30.md', 'ED-IN-0004'),
-    ('systems/articulation/reference/articulation_layer_v30.md', 'ED-IN-0091'),
+    ('.designs/systems/_architecture/reference/key_type_registry_v30.md', 'ED-IN-0014'),
+    ('.designs/systems/_architecture/reference/key_type_registry_v30.md', 'ED-IN-0091'),
+    ('.designs/systems/articulation/reference/articulation_layer_v30.md', 'ED-IN-0004'),
+    ('.designs/systems/articulation/reference/articulation_layer_v30.md', 'ED-IN-0091'),
 })
 BURN_DOWN_MAX = 9  # occurrences across the pairs above. A test pins it BOTH ways, so it may only
                    # ever move DOWN as debt is paid — never up to admit new debt.

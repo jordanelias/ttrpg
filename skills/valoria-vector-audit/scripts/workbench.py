@@ -157,6 +157,15 @@ def _resolve_doc(root, doc_rel):
         _ref = os.path.join(p, 'reference')
         if os.path.isdir(_ref):
             mds += sorted(os.path.join(_ref, f) for f in os.listdir(_ref) if f.endswith('.md'))
+        # ED-IN-0231 (2026-09-16): the design prose moved AGAIN, out of the code directory
+        # altogether and into `.designs/`, which mirrors the tree. A directory-valued doc now names
+        # a directory that still exists (it holds code) but whose `.md` files do not live there any
+        # more — the exact 'spurious missing' this branch was written to prevent, one move later.
+        for _mirror in (os.path.join(str(root), '.designs', doc_rel.rstrip('/')),
+                        os.path.join(str(root), '.designs', doc_rel.rstrip('/'), 'reference')):
+            if os.path.isdir(_mirror):
+                mds += sorted(os.path.join(_mirror, f)
+                              for f in os.listdir(_mirror) if f.endswith('.md'))
         if mds:
             parts = []
             for f in mds:

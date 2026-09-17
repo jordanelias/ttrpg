@@ -114,6 +114,22 @@ _ED_ID = re.compile(r"^(ED-[A-Z]+)-(\d+)$")
 
 
 
+# Hidden quarantine trees, as (old_prefix, new_prefix) pairs. THE TWO HAVE DIFFERENT SHAPES and
+# conflating them is a real bug, not a tidiness point: `.designs/` PREPENDS to the original path
+# (`systems/x.md` -> `.designs/systems/x.md`, because the documents were gathered from several
+# trees), while `.audit/` REPLACES a prefix (`audit/x.py` -> `.audit/x.py`, because that tree was
+# renamed whole). A single "prepend the prefix" rule silently produces `.audit/audit/x.py`, which
+# never exists, so every affected claim reads as a violation while looking like it was handled.
+QUARANTINE_MIRRORS = (('', '.designs/'), ('audit/', '.audit/'))
+
+
+def _quarantined_paths(target):
+    """Where `target` would live if it had been moved into a quarantine tree."""
+    for old, new in QUARANTINE_MIRRORS:
+        if target.startswith(old):
+            yield new + target[len(old):]
+
+
 def _resolves_through_restructure_ledger(target):
     """True if `references/restructure_ledger.md` has an EXACT row retiring `target`.
 
@@ -239,6 +255,17 @@ def check(staged_only=False):
             for ref in found:
                 target = ref.rstrip(_TRAILING_PROSE).split("::")[0]
                 if os.path.exists(os.path.join(ROOT, target)):
+                    continue
+                # QUARANTINE MIRRORS ARE AN EXISTENCE CHECK, NOT AN ALIAS RULE (2026-09-16,
+                # ED-IN-0231). `.designs/` and `.audit/` mirror the tree exactly — an archived path
+                # is the original with one prefix — so an instrument that moved into one is still
+                # ON DISK and the claim is still re-runnable, which is the only question this gate
+                # asks. This is deliberately NOT the ledger branch below: it proves the file is
+                # there rather than that a row says it went somewhere, so a fabricated path fails
+                # here exactly as it did before. That distinction is the whole correctness argument
+                # of `_resolves_through_restructure_ledger`, and widening THAT to prefixes is what
+                # `test_a_fabricated_path_under_a_forked_directory_still_violates` exists to stop.
+                if any(os.path.exists(os.path.join(ROOT, c)) for c in _quarantined_paths(target)):
                     continue
                 # RETIRED INSTRUMENTS RESOLVE, THEY DO NOT VIOLATE (2026-08-21, ED-IN-0194).
                 #

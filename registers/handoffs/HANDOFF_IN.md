@@ -80,6 +80,55 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 
 ---
 
+## ⛔ 2026-09-16 — THE KEY SUBSTRATE IS RETIRED (`ED-IN-0232`, RULED by Jordan)
+
+Verbatim: *"Anything key-based gets retired."* This answers the question `ED-IN-0227` left open and
+it is DONE, not in progress. **Nothing here needs doing; this unit exists so the next session does
+not go looking for a bus that is gone, and so the three things it genuinely cost are on the record.**
+
+**What is gone** — 25 exact `FORK:c6e82105` rows in `references/restructure_ledger.md`:
+`engine/substrate/keys.py`; `engine/cross_scale/{echo_transport,articulation,parliamentary_bridge}.py`;
+`engine/engine_params/{key_types,module_contracts}.json`;
+`tools/{export_key_types,build_key_graph,build_contract_index,contract_runtime_conformance,export_module_contracts}.py`;
+the `emits:`/`consumes:` interface and the `articulation_layer` row in `references/module_contracts.yaml`;
+two blocking CI validator rows and the report-only Module-Contract Conformance job; 13 test modules
+and `tests/valoria/_campaign.py`.
+`engine/substrate/__init__.py` now holds no code — it was a pure Key re-export, which is why
+`import engine.substrate.descriptors` used to load the whole substrate on a head that emits no Keys.
+
+**Why it was cheap, measured before anything was deleted** (the ED-IN-0227 lesson about mentions vs
+dependencies was applied first): 12 files imported `keys`, 8 named a symbol it owns, and the
+110-module transitive closure was an artifact of that `__init__`. The bus had ONE production host —
+`engine/mc_v18.py` under `ECHO_TRANSPORT` — and three emitters, two of them log-only telemetry whose
+removal left the seed-42 n=8 win-share byte-identical while `keys_emitted` fell 180 → 99.
+
+**⚠ THREE THINGS IT COST. Do not read a green suite as evidence any of these still works:**
+
+1. **`structure_audit`'s L2 graph has ZERO edges**, and the vector audit's fifth graph
+   (`build_g_key`) returns `{}`. Both derived their entire wiring model from the emit/consume
+   interface. `references/module_contracts.yaml` is also back to having **no exporter** and so no
+   destination for a new reader — the migration-backlog framing that arrived 2026-08-24 is void.
+2. **`directional_coverage_v1.md`'s "all seven Key-delivery directions are exercised" is no longer
+   backed by anything.** Fifteen tests in `engine/tests/test_pipeline_reach.py` covered it; ten
+   non-Key tests survive in that file.
+3. **281 line-numbered anchors from archived flow skeletons into live code are now ADVISORY**
+   (`tests/valoria/test_flow_skeletons.py::RETIREMENT_SHIFTED`). The 306 symbolled anchors stay
+   binding. They were NOT put in `LINE_UNSTABLE_TARGETS`, which demands a symbol: that set would
+   have failed all 281 in frozen documents nobody may correct.
+
+**Goldens moved, and the destination was already in the tree.** `mc_v18`'s campaign fell back to the
+`ECHO_TRANSPORT`-off arm — `{'Crown': 62.5, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 25.0}`,
+which `engine/tests/test_echo_transport.py` had asserted byte-exactly until it retired in the same
+commit. Both arms were recorded before anything was deleted, so this is a predicted move landing
+where it was predicted. `GOLDEN_SCENES_RESOLVED` 1072 → 407 (the §10 vote was bus-gated).
+
+**NEXT, and it is not this unit's:** Jordan, same session — *"mc_v18 is being fully retired."*
+`ED-IN-0227` holds that. This change deliberately did NOT start it: it removed mc_v18's Key wiring
+and re-pinned its goldens only as far as keeping CI green required. The roster went 16 -> 10
+(`tests/valoria/test_mc_v18_is_deprecated.py::ALLOWED_IMPORTERS`, counted from the tuple, and the
+AST scan in that file finds the same 10). The three non-test importers left — `balance_oracle`,
+`campaign_output_probe`, `trace_execution_phases` — are all tools, not shipped engine code.
+
 ## ⚠ ID COLLISION RESOLVED HERE — `ED-IN-0228`, 2026-09-16
 
 PR #405 (the decision layer) and PR #404 (the faction creed) both read `next_free: 228` and both
