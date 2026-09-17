@@ -342,10 +342,12 @@ categories:
       he said.
     the_obstacle: >-
       Weighting candidates by whose benefit needs a BENEFICIARY PER CANDIDATE, and a Candidate
-      carries only (verb, subject, why, operands) — no beneficiary. But the Key substrate
-      ALREADY declares the role: ROLES = (subject, object, witness, BENEFICIARY, bystander).
-      The concept exists one layer up and does not reach the decision layer. This is a bridge,
-      not an invention.
+      carries only (verb, subject, why, operands) — no beneficiary.
+      ⚠ CORRECTED 2026-09-17 (ED-IN-0232, PR #407). This row said the Key substrate "ALREADY
+      declares the role: ROLES = (subject, object, witness, BENEFICIARY, bystander)", and called
+      it "a bridge, not an invention". THE KEY SUBSTRATE IS RETIRED. Measured on the merged
+      tree: engine/substrate/keys.py is gone and `beneficiary` survives NOWHERE in engine/.
+      So it IS an invention, and this option costs more than the row first priced it at.
     options:
       - "derive it: a verb's `writes:` says WHAT changes, so whoever holds the changed thing is the beneficiary — the information may already be in the operand binding and merely unextracted. UNVERIFIED across all 38 verbs."
       - "declare it: a beneficiary column on the verb table, or a fifth field on Candidate"
@@ -642,7 +644,7 @@ structural:
     measured:
       - "[E] the seven span 3.18 effective directions against the live four's 2.27, normalised"
       - "[E] equality x traditional = -0.733, reproducing the live basis's worst pair (hierarchical x traditional = +0.743) to within 0.01 under an INDEPENDENT placement — the defect is in the Convictions, not the matrix"
-      - "[E] a Key with symbolic_dimensions={'equity': 0.5} raises KeyValidationError today"
+      - "[E] ⚠ WITHDRAWN 2026-09-17 — this read 'a Key with symbolic_dimensions={equity: 0.5} raises KeyValidationError today'. ED-IN-0232 retired the Key substrate; there is no Key, no validator and no invariant 6. The axis roster's only remaining owner is engine/season/rosters.yaml, which makes STR-2 CHEAPER than this row priced it: one owner to edit rather than two to reconcile."
     ruling:
 
   - id: STR-3

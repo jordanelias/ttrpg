@@ -5,6 +5,24 @@
 
 ## Status: PROPOSED — HELD BACK
 
+> ⚠⚠ **SUPERSEDED BY ED-IN-0232 (PR #407, 2026-09-17) — THE KEY SUBSTRATE IS RETIRED, AND FOUR
+> CLAIMS IN THIS DIRECTORY DIED WITH IT.** Measured on the merged tree: `engine/substrate/keys.py`
+> is **gone**; `engine/substrate/` now holds only `canon_buckets · composition · descriptors ·
+> names · stubwire · world_initial_state`. Grepped, not assumed: **no `beneficiary` role survives
+> anywhere in `engine/`**, and **nothing validates axis names at emission** — no
+> `KeyValidationError`, no invariant 6.
+>
+> | claim, as landed | status now |
+> |---|---|
+> | the axis roster is **blocking** at Key emission (`keys.py:400`) | **DEAD** — the validator is deleted |
+> | falsifier: emit a Key with `{"equity": 0.5}` and watch it raise | **UNRUNNABLE** — there is no `Key` to emit |
+> | two hardcoded axis rosters with nothing comparing them | **RESOLVED BY DELETION** — one copy is gone, so `engine/season/rosters.yaml` is now the single owner |
+> | `beneficiary` is *"already a Key role — a bridge, not an invention"* | **FALSE** — it is an invention again, and orientation's obstacle is larger than this directory says |
+>
+> One flag this directory raised is also resolved by the same PR: `tools/export_key_types.py`,
+> which parsed a `systems/**/*.md` against §0.05 clause 2, was **deleted**.
+
+
 **§0.05 class: REFERENCE.** Nothing here is a mechanism. It cites code and documents; it changes
 neither. If this file were deleted the game would behave identically — which is the test, and it
 passes as reference.
