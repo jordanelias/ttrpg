@@ -1,0 +1,739 @@
+# ---------------------------------------------------------------------------
+# BEHAVIOUR LAYER — ADJUDICATION REGISTER
+#
+# STATUS: PROPOSED — held back in full. Every `ruling:` is empty and stays empty
+#         until Jordan fills it. Nothing here is decided.
+#
+# WHY YAML AND NOT PROSE: CLAUDE.md §0.05 clause 1, as widened 2026-09-16 —
+#   "A `.md` is NEVER the authored head of a fact code reads. The head is YAML
+#    or JSON under `references/`, or a single Python owner."
+#   Jordan, verbatim: "all definitions/terms/etc need to come from code, never
+#   prose." A category roster IS a definition. So this is the shape that can be
+#   ratified into `references/` and read, rather than a document describing one.
+#
+# WHAT IT IS: six categories, distilled from Jordan's twelve decision inputs.
+#   Each row carries what the category holds, what carries it in code today,
+#   its MEASURED mechanical status, and the question he is ruling on.
+#
+# HOW TO USE IT: fill `ruling:` on each row. `status:` is measured, not opinion —
+#   correct it only against a re-run, never against a reading.
+#
+# EVIDENCE CLASSES (CLAUDE.md §0.1):
+#   E = executed on this tree.  R = read at the cited file:line.  D = derived.
+#   ⚠ Every E in this file was produced by ONE operator with ONE instrument.
+#     Neither independent critic had an execution tool. One earlier E-class claim
+#     in this session was already found to measure the wrong stage.
+# ---------------------------------------------------------------------------
+
+meta:
+  source_inputs: >-
+    Jordan, session opening: "(1) ambitions; (2) needs; (3) fears; (4) memories;
+    (5) worldly understanding (epistemic); (6) moral values; (7) religious values;
+    (8) self interest vs public interest; (9) character opinions; (10) obligations
+    and duties (faction, office); (11) ethnicity/caste; (12) job/profession/
+    educational background" — plus "the whole 'how will the other judge me' is
+    another axis that needs to be considered".
+  distillation_claim: >-
+    ⚠ FIRST STATED AS SIX AND CORRECTED TO EIGHT BY JORDAN, 2026-09-17, in two moves.
+    (a) `station` falsely merged caste with office/profession — mutability splits them,
+        so caste is its own row (CAT-7).
+    (b) `commitments` falsely merged the two senses of fear — the outcome sense merges
+        with ambition, the CHALLENGE sense does not and is its own row (CAT-8).
+    The thirteenth input ("how will the other judge me") is `regard` inverted and still
+    adds no category. A distillation that removes something irreducible is a reduction,
+    and both corrections were removals of exactly that kind.
+  operators:
+    # The kinds an input can BE. Prior work wrote five as one, which is why they
+    # never composed. Susceptibility is struck: it is an input to OTHER people's
+    # decisions, not to this character's.
+    gate:      "decides whether a candidate exists at all"
+    generator: "decides which candidates are proposed"
+    weight:    "decides the ranking among them"
+    modifier:  "decides the cost of one — distinct from `weight` because Valoria resolves by DRAW, so moving the obstacle and moving the preference are different acts"
+  operators_at_intake:
+    # ⚠ CORRECTED BY JORDAN, 2026-09-17, and the correction is structural rather than a
+    # relabelling. This session first STRUCK susceptibility, reasoning that Resonant Style
+    # "describes what works ON this character, so it is an input to OTHER characters'
+    # decisions". Jordan, verbatim: "Susceptibility is a modifier that transforms the input
+    # received from others." That is this character's own processing, not somebody else's.
+    #
+    # The four operators above act on CANDIDATES at decision time. Susceptibility acts on
+    # INFORMATION at intake time. It was not a category error — it is a DIFFERENT STAGE, and
+    # filing it beside the four is what made it look misplaced.
+    susceptibility: >-
+      the gain on what reaches this character. ONE operator with TWO keys, and naming them
+      together is the consolidation the correction buys:
+        * keyed on FORM   — Resonant Style (Evidence · Consequence · Authority · Solidarity),
+                            a closed four at npc_behavior_v30.md:32
+        * keyed on SOURCE — Jordan's ruling: claim value modified by the hearer's BELIEF about
+                            their relation to the teller (lord > peer > enemy)
+      These were two separate problems in this session's earlier work. They are one operator.
+    why_S9_3_agrees: >-
+      WITNESS *is* intake. Susceptibility is the one thing licensed to act there — it sets
+      `Claim.confidence`, which witness already writes. Convictions are exactly what may not
+      move there. The refusal law and this operator model agree rather than collide.
+
+
+
+# ===========================================================================
+# THE UNIFIED MODEL — added 2026-09-17 on Jordan's "let's unify what we have so far".
+#
+# Everything below this session produced is ONE structure: a character is held in
+# two BASES plus a set of PARTICULARS, and a decision runs in FIVE STAGES where
+# each operator kind acts at exactly one stage.
+#
+# THE COHERENCE CONDITION, which is what makes this a model rather than a pile:
+#   (1) every category sits at a definite stage with a definite operator;
+#   (2) no stage is empty;
+#   (3) where a category appears twice, the two appearances are DIFFERENT
+#       OPERATIONS ON ONE CARRIER, named as such — not a category in two places.
+# Rows that fail (3) are marked OPEN below rather than forced.
+# ===========================================================================
+model:
+
+  what_a_character_is:
+    bases:
+      moral_values: "13 weights, reduced to axes BY PROJECTION — so an axis is entailed by the weights (this is what R7 binds)"
+      temperament:  "7 axes held DIRECTLY, no roster underneath — so it varies freely at fixed moral values (this is what dissolves R7)"
+    particulars:
+      claims:      "what they know, tagged firsthand / told_by / inferred"
+      commitments: "signed targets — ambitions (+), outcome-fears (-), needs (+ with duration)"
+      regard:      "what they think of a named other; inverted, what they believe that other thinks of them"
+      position:    "office and profession — occupied, and VACATED by an act"
+      caste:       "immutable; changed by nothing"
+      piety:       "reserved (STR-6), its own quantity, not a moral-value weight"
+
+  how_a_decision_runs:
+    # Each stage names the ONE operator kind that acts there.
+    - stage: "PHI-0  INTAKE"
+      runs_at: "WITNESS"
+      operator: susceptibility
+      acts: >-
+        transforms what ARRIVES before it is anything to rank. Three keys, one operator:
+        by SOURCE (Jordan's testimony ladder — lord > peer > enemy, graded on the hearer's
+        BELIEF about the relation); by FORM (Resonant Style — Evidence / Consequence /
+        Authority / Solidarity); by GAIN (insecure <-> self-assured).
+      writes: "Claim.confidence — the one write licensed here. S9.3 forbids moving a value, not setting a claim's weight."
+      status: "[E] the channel is empty — see CAT-3, which owns the figure and its provenance."
+
+    - stage: "PHI-1  OCCASION"
+      operator: generator
+      acts: >-
+        proposes what is even at issue. The world proposes through four question sources
+        (date_due, claim_landed, band_crossed, need); the character proposes through
+        COMMITMENTS, which is Q4 `need` — a live `commit` Tenure to a Proposition.
+      status: "[E] the character's own channel leads 12/12 at genesis and 0/12 in every season after; q_rule=one_per_source restores it to 12/12"
+
+    - stage: "PHI-2  APERTURE"
+      operator: gate
+      acts: >-
+        admits or refuses a candidate outright. POSITION gates by office and remit; CASTE
+        would gate if it gates at all (unruled, CAT-7); CLAIMS gate epistemically — clause 4
+        refuses what the character's own claims know to be false.
+      status: "[E] 10 of 38 verbs unformable person-side — every governance verb (H-71). Caste and profession gate nothing: marks is read by no Python, capability supplies dice only."
+
+    - stage: "PHI-3  APPRAISAL"
+      operator: "weight AND modifier — two kinds, and they are distinct because Valoria resolves BY DRAW"
+      acts:
+        weights: >-
+          MORAL VALUES through the alignment table (verb x axis); TEMPERAMENT through its own
+          alignment table (pacifist, diplomacy, passive are all verb-weights); ORIENTATION keyed
+          on BENEFICIARY; REGARD keyed on the subject.
+        modifiers: >-
+          COURAGE keyed on what a candidate DEMANDS rather than what it achieves. A modifier
+          moves the obstacle; a weight moves the preference. In an additive system these
+          collapse; under a draw they do not.
+      status: "[E] alignment fill: see CAT-1, which owns the figure. Temperament has no table at all; stance is 0 rows; orientation has no carrier and no beneficiary on a Candidate."
+
+    - stage: "PHI-4  COMMITMENT"
+      operator: "none — this stage disposes rather than decides"
+      acts: "triage to the scene budget the person asks for, then _sample_order draws the final order"
+      status: "[E] see STR-3 — it owns the noise floor, its derivation and its verification. Any new term must declare a range against that floor."
+
+  where_the_twelve_land:
+    # Jordan's opening twelve, his thirteenth, and both axis lists — each in exactly one cell.
+    "1 ambitions":            "commitments -> PHI-1 generator"
+    "2 needs":                "commitments (with duration) -> PHI-1 generator"
+    "3 fears (of an OUTCOME)": "commitments (negative sign) -> PHI-1 generator"
+    "3 fears (of a CHALLENGE)": "courage -> PHI-3 modifier    # the split Jordan forced: a state vs an encounter"
+    "4 memories":             "claims (firsthand) -> PHI-2 gate, deposited at PHI-0"
+    "5 worldly understanding": "claims (told_by / inferred) -> PHI-2 gate, deposited at PHI-0"
+    "6 moral values":         "the moral-values basis -> PHI-3 weight"
+    "7 religious values":     "piety, its own quantity once `conviction` is reserved (STR-6)"
+    "8 self vs public":       "orientation, a temperament axis -> PHI-3 weight keyed on beneficiary"
+    "9 character opinions":   "regard -> PHI-3 weight"
+    "10 obligations, office": "position -> PHI-2 gate"
+    "11 ethnicity/caste":     "caste -> PHI-2 gate, OR a modifier, OR neither (CAT-7, unruled)"
+    "12 job/profession":      "position -> PHI-2 gate; but Jordan calls it 'knowledge and connections', which reads as claims + regard rather than permission"
+    "13 how will they judge me": "regard INVERTED -> PHI-3 weight. Adds no category."
+
+  open_where_the_grid_does_not_close:
+    # Coherence condition (3). These are genuinely ambiguous and are NOT forced.
+    - "humble <-> vain — ⚠ RESOLVED, see CAT-9 and synthesis.md §2: it is `regard` INVERTED, entering PHI-3 through regard(subject(c)) when the subject is the actor. Not two quantities sharing a name. This line said otherwise while the same file answered it 400 lines on; corrected rather than left standing."
+    - "piety's stage is unassigned. If it is a weight it belongs beside moral values at PHI-3; if it gates what a devout character may attempt it is PHI-2; if it changes how doctrine-bearing claims land it is PHI-0."
+    - "claims appear at PHI-0 (deposited) and PHI-2 (read). This SATISFIES condition (3) — two operations on one carrier — and is the only thing in the model that crosses stages, because it is the memory."
+    - "PHI-4 has no operator. Either that is correct (disposal is not decision) or orientation belongs here after all, modulating what counts as a win rather than what gets chosen."
+
+  what_the_model_asserts_that_is_falsifiable:
+    - "No category acts at two stages with the SAME operator. Find one and the model is wrong."
+    - "No stage is empty. PHI-4 having no operator is the nearest miss and is listed above."
+    - "Every one of Jordan's twelve lands in exactly one cell. Item 3 lands in two DIFFERENT cells because it was two things wearing one word; item 12 is the one still contested."
+
+# ===========================================================================
+# BASES — the coordinate systems a character is held in.
+# ⚠ ADDED 2026-09-17. A category says WHAT a character holds; a basis says IN
+#   WHAT COORDINATES. This section exists because Jordan's second axis list
+#   turned out not to be a competing conviction basis but a SECOND basis, and
+#   because that dissolves R7.
+# ===========================================================================
+bases:
+
+  moral_values:
+    # ⚠ RENAMED FROM `conviction` BY JORDAN, 2026-09-17: "conviction should be reserved for a
+    #   different concept, not moral values" — then, naming it: "piety".
+    #   The 13-roster holds VALUE-FRAMES. `conviction` is reserved. See STR-6 for the cost and
+    #   the collision, which are both larger than a rename usually is.
+    held_as: "13 weights over the roster currently SPELLED `convictions` in code"
+    reaches_axes_by: "PROJECTION — conviction[a] = SUM_c w_c * P[c][a] (choose.py:53)"
+    axes_today: [hierarchical, sacred, instrumental, traditional]
+    proposed_axes:
+      # Jordan, 2026-09-17 — offered AFTER the seven, and separating the two registers
+      # himself: these four are value-frames (what is right), the seven are bearing.
+      - "traditional <-> progressive"
+      - "equality    <-> hierarchy"
+      - "equity      <-> partiality"
+      - "objective   <-> subjective"     # NEW — not in the earlier seven
+    changed_from_the_earlier_seven: >-
+      Three carried over (traditional, equality, equity); `substantive <-> procedural` dropped;
+      `objective <-> subjective` added; and the three now filed as temperament are absent.
+      ⚠ That this matches the placer's clustering is CONSISTENT, not CONFIRMING — see the
+      withdrawn claim under `temperament`. Jordan may have dropped `substantive` for reasons
+      unrelated to any measurement, and no inference should be drawn from the agreement.
+    open_on_objective_vs_subjective: >-
+      ⚠ IT READS TWO WAYS AND THEY ARE DIFFERENT AXES.
+        (a) META-ETHICAL — is there a fact of the matter about what is right, discoverable by
+            anyone? A genuine conviction axis.
+        (b) PROCEDURAL — do I judge by the case's own merits or by who stands before me? That
+            is close to `equity <-> partiality` and would be largely redundant with it.
+      ⚠ AND IT COLLIDES WITH A LIVE TRACK the other three do not. `Truth` (ex-Certainty,
+      ex-Piety) is a per-character metaphysical stance, 0-5, Solmund-orthodoxy <-> Thread-truth,
+      with players seeing qualitative bands only (CURRENT.md clocks row, ED-IN-0075). A
+      character's position on whether truth is objective may ALREADY be that track rather than
+      a conviction axis. Rule the collision before this gets a column.
+    constraint: >-
+      ⚠ R7 BINDS HERE AND ONLY HERE. The projection is a LINEAR map from the weight
+      vector, so two persons with identical conviction vectors are identical on every
+      conviction axis, necessarily. taxonomy §2.3 requires the opposite for self/other
+      (Borgia and the public-spirited magistrate at identical Utility). Any quantity
+      that must vary at fixed convictions CANNOT be a conviction axis.
+
+  temperament:
+    held_as: "the axis values DIRECTLY on the Person — no roster underneath, no projection"
+    reaches_axes_by: "nothing: the character IS the vector"
+    proposed_axes:
+      - "courage        <-> cowardice"
+      - "altruistic     <-> selfish"
+      - "pacifist       <-> militaristic"
+      - "diplomacy      <-> intimidation"
+      - "passive        <-> aggressive"
+      - "humble         <-> vain"
+      - "insecure       <-> self-assured"
+      # Jordan, 2026-09-17.
+    why_it_dissolves_R7: >-
+      ⚠ THE PAYOFF, AND IT IS THE BIGGEST RESULT OF THIS THREAD. R7 binds axes REACHED
+      THROUGH A PROJECTION. A directly-held vector is not a function of the conviction
+      weights, so Borgia and the magistrate share Utility 0.9 and differ on `selfish`.
+      Jordan's first axis works — it was only ever unsatisfiable in the CONVICTION basis.
+      The tree already contains the pattern: `orient.self_other` is exactly a
+      directly-held scalar, deliberately kept OUT of the Conviction set by taxonomy §2.3
+      for this very reason. The seven generalise that one scalar into a basis.
+    what_supports_it: >-
+      ⚠ A DEFINITIONAL TEST, NOT A STATISTICAL ONE — and the statistical claim this row
+      first carried has been WITHDRAWN (see `withdrawn_claim` below).
+      THE TEST: can a character hold conviction X with temperament Y, for every X and Y?
+        Faith + vain -> a proud priest.  Faith + humble -> a meek one.  Both coherent.
+        Equity + militaristic -> a revolutionary.  Equity + pacifist -> a reformer.  Both.
+        Warden + cowardly -> a frightened steward who keeps the work anyway. Coherent.
+      Now the same test on a CONVICTION AXIS: Faith + anti-sacred? INCOHERENT — Faith IS the
+      sacred-leaning conviction, and the axis value is ENTAILED by holding it.
+      THAT ASYMMETRY IS THE ARGUMENT. A conviction axis is entailed by the convictions; a
+      temperament is free of them. It needs no placer, no threshold and no sample, and anyone
+      can check it against the taxonomy definitions.
+    withdrawn_claim:
+      claim: >-
+        This row first read: "MEASURED, and the split is BIMODAL rather than a ranking" —
+        citing per-axis abstention counts, spans and mean |v| from an independent placer's
+        13 x 7 matrix, and concluding that the three low-scoring axes were orthogonal.
+      withdrawn_by: "Jordan, 2026-09-17: 'unless you can explain your methodology here, this doesn't mean anything here'"
+      why_it_does_not_support_the_conclusion:
+        - "NOT MEASUREMENTS. Every cell is one model's judgment. There is no ground truth and nothing anchors the numbers; a different placer, or different wording, could return different ones."
+        - "THE 0.2 ABSTENTION THRESHOLD WAS CHOSEN BY THIS SESSION AFTER SEEING THE DATA. A different threshold gives different counts and possibly no gap."
+        - "'BIMODAL' OVER SEVEN POINTS IS NOT A DISTRIBUTION CLAIM. A 4/3 split of seven hand-placed values has a gap somewhere by construction."
+        - "CIRCULARITY NOT RULED OUT. The placer was given THIS SESSION'S pole definitions. Vague definitions would produce abstentions that measure the prompt, not the axis."
+        - >-
+          THE INFERENCE DOES NOT SELECT ITS CONCLUSION. Low placement variance is equally
+          consistent with: orthogonality; a vague axis; a badly-worded axis; a placer that did
+          not grasp it; or a real axis uncorrelated with THESE THIRTEEN specifically. This
+          session chose orthogonality because it fitted the argument being built — the same
+          failure §0.1 pt 3 names, committed after being caught at it twice in one session.
+      status_of_the_numbers: "at best weak corroboration; they are NOT the finding and must not be cited as one"
+    still_measured_and_still_standing:
+      - "[E] no temperament roster exists: 34 rosters in engine/season/rosters.yaml, none carrying disposition"
+      - "[R] `orient.self_other` is already a DIRECTLY-HELD scalar kept out of the Conviction set by taxonomy §2.3 — the pattern this basis generalises"
+    cost: >-
+      A second basis needs its OWN alignment table — an N x 38 verb matrix parallel to the
+      conviction one (fill figure owned by CAT-1). It does NOT need a projection matrix,
+      which is the expensive half of the conviction chain and the half R6 makes atomic.
+
+# ===========================================================================
+categories:
+
+  - id: CAT-1
+    name: convictions
+    holds: "what the character takes to be right"
+    absorbs: [6 moral values, 7 religious values]
+    operator: weight
+    carrier: "Person.convictions — 13 weights, projected to 4 axes"
+    status: LIVE
+    evidence:
+      - "[E] populated across 12/12 persons in build_realm(0,12)"
+      - "[R] decision/choose.py:302 — term 1 of the live score, the only conviction→action path"
+      - "[E] the alignment table it multiplies is 52 of 152 cells; 7 verbs sit on no axis. ⚠ THIS ROW OWNS THAT FIGURE — this row's ruling is what will change it, so cite it from here rather than restating it."
+    question: >-
+      Are moral and religious value ONE kind or two? They share one field today —
+      a devout and a secular character differ by a Faith weight, a difference of
+      DEGREE where you may want a difference of KIND.
+    options:
+      - "one kind: religious value is a conviction weight (status quo)"
+      - "two kinds: religion is a second operator — e.g. a modifier on acts a doctrine forbids"
+    blocks: "the axis question — a second kind would need its own basis"
+    answered_pending_STR_6: >-
+      ⚠ Jordan's 2026-09-17 reservation of `conviction` for piety selects the SECOND option —
+      two kinds — and makes religious commitment its own quantity. Recorded here; the ruling
+      belongs on STR-6, not duplicated into this row.
+    ruling:
+
+  - id: CAT-2
+    name: orientation
+    holds: "for whose benefit the character acts"
+    absorbs: [8 self interest vs public interest]
+    operator: weight
+    basis: temperament          # an axis OF CAT-9, not a standalone scalar
+    carrier: "none in engine/season/. A by-reference registry row only."
+    status: ABSENT
+    evidence:
+      - "[R] references/descriptor_registry.yaml:296 — `orient.self_other`, scale [-1,+1], under a header reading 'REGISTERED BY REFERENCE — authoritative content stays in the source doc'"
+      - "[E] Person has no `orient` field"
+      - "[D] R7: axes are a LINEAR map from the conviction vector, so identical vectors are identical on every axis — while taxonomy §2.3 requires Borgia and the magistrate to differ at identical vectors. Self/other therefore CANNOT be an axis. It is the one quantity that must sit outside the vector."
+    question: >-
+      ⚠ RE-FILED 2026-09-17 ON JORDAN'S CORRECTION, AND THE CORRECTION IS A PROMOTION.
+      This row first led with prior work's reading — a modifier on OUTCOME ATTRIBUTION, i.e.
+      how much of a win accrues to the faction after the fact. Jordan, verbatim: "self interest
+      versus care for others or whatever DRAMATICALLY WEIGHTS HOW ONE CHOOSES AND BEHAVES."
+      That is a WEIGHT AT APPRAISAL, on the choosing — not a post-hoc attribution. The operator
+      is corrected above.
+      ⚠ ALSO CORRECTED: this session listed "self-interest cannot be a conviction" among the
+      impurities it was removing, which mis-attributed a position to Jordan. He listed it as
+      input (8), DISTINCT from moral (6) and religious (7) values, and never called it a
+      conviction. R7 is a fact about the tree's projection architecture; it corrects nothing
+      he said.
+    the_obstacle: >-
+      Weighting candidates by whose benefit needs a BENEFICIARY PER CANDIDATE, and a Candidate
+      carries only (verb, subject, why, operands) — no beneficiary.
+      ⚠ CORRECTED 2026-09-17 (ED-IN-0232, PR #407). This row said the Key substrate "ALREADY
+      declares the role: ROLES = (subject, object, witness, BENEFICIARY, bystander)", and called
+      it "a bridge, not an invention". THE KEY SUBSTRATE IS RETIRED. Measured on the merged
+      tree: engine/substrate/keys.py is gone and `beneficiary` survives NOWHERE in engine/.
+      So it IS an invention, and this option costs more than the row first priced it at.
+    options:
+      - "derive it: a verb's `writes:` says WHAT changes, so whoever holds the changed thing is the beneficiary — the information may already be in the operand binding and merely unextracted. UNVERIFIED across all 38 verbs."
+      - "declare it: a beneficiary column on the verb table, or a fifth field on Candidate"
+      - "prior work's reading (demoted from the lead): a modifier on attribution, raw x (1 - 0.5*max(0,orient)) — weaker, because it changes what a win is WORTH rather than what gets CHOSEN"
+    blocks: "Jordan's proposed axis 1 (Selfish vs Selfless), which R7 disqualifies as an AXIS — the input is not disqualified, only that placement"
+    ruling:
+
+  - id: CAT-3
+    name: claims
+    holds: "what the character knows, tagged by how they came to know it"
+    absorbs: [4 memories, 5 worldly understanding]
+    operator: gate
+    carrier: "Person.ledger — Claim(id, holder, subject, predicate, value, when, source, confidence, visibility, round)"
+    status: LIVE-BUT-HALF-EMPTY
+    evidence:
+      - "[R] claim_sources = [firsthand, told_by, inferred, firsthand_via_knot] — memory vs worldly-understanding is ALREADY the discriminator"
+      - "[R] witness_channels includes `document_key` and `chronicle` — the 'read by the person' channels"
+      - "[E] 580 claims after 2 seasons: 100% firsthand. told_by, inferred, firsthand_via_knot all ZERO"
+      - "[E] `tell` RESOLVED 9 times and deposited 0 claims"
+      - "[R] the one live consumer of provenance is decision/options.py:461 (standing_of)"
+      - "[E] consequently standing_of returns 1000 — the maximum-gap default — for ALL 12 persons, permanently"
+    question: >-
+      RULED by Jordan: claim value is modified by the hearer's BELIEF about their
+      relation to the teller — lord > peer > enemy. This needs the teller's identity,
+      and a Claim does not record it: `source` is a channel kind, `holder` is the
+      hearer, and witness.py:358 has the teller in scope and discards it.
+    options:
+      - "grade at deposit — no new field, but the relation FREEZES at the moment of telling; a lord later exposed as a fraud keeps his inflated confidence"
+      - "store the teller on Claim — re-gradable, consistent with 'hearer's belief', but Claim's own docstring says `round` is 'THE ONLY CARRIER FIELD U2 ADDS, AND THE ONLY ONE IT MAY ADD'"
+    note: "A belief that cannot be revised is not a belief, so the ruling appears to imply the field. Stated, not taken."
+    blocks: "every mediated fear; standing_of; the whole second-hand knowledge half"
+    ruling:
+
+  - id: CAT-4
+    name: commitments
+    holds: "signed targets the character pursues or averts, some carrying a counter"
+    absorbs: [1 ambitions, 2 needs, 3 fears]
+    operator: generator
+    carrier: "a live `commit` Tenure whose object is a Proposition"
+    status: LIVE-BUT-CONTENTLESS
+    evidence:
+      - "[R] `commit` is a VERB: eligibility `own`, stratum social, writes Tenure.since — so a person opens a standing commitment on themselves with no remit"
+      - "[R] queries/world_q.py Q4 fires a standing question off it EVERY SEASON — that IS the ambition mechanism"
+      - "[E] Q4 leads for 12/12 persons at genesis and 0/12 in every season after; reactive traffic reaches 136-180 questions while `need` stays at 12"
+      - "[E] q_rule=one_per_source restores ambition's reach from 0/12 to 12/12 — a one-word data edit"
+      - "[R] loop/effects.py:430 — every person-formed Proposition has mood='OUGHT', predicate='', value=None, because `utter` is untyped"
+      - "[R] NOTHING in the decision path reads prop.predicate or prop.value"
+      - "[E] `fear|fears` matches ONE file in all of engine/ — a case fixture. No field, no roster, no verb."
+    question: >-
+      Jordan ruled fear is GENERATIVE — it directs toward the acts that avert the
+      feared state, so the minus sign is on the TARGET and not on the action. That
+      makes fear and ambition one mechanism. But an ambition cannot currently say
+      WHAT is wanted — the Proposition has no readable content.
+    options:
+      - "one mechanism, signed target: ambition (+) / fear (-) / need (+ with a duration counter), distinguished by Proposition.mood"
+      - "three mechanisms with separate carriers"
+    sub_questions:
+      - "does a need get a STORED counter, or is duration derived from Tenure.since?"
+      - "direct vs mediated fear is decidable from the verb table — a fear is DIRECT iff some `own`-eligible verb writes the feared field. Measured: starving is direct (exchange, transfer); demotion is mediated (only remit:revoke). Is that the right test?"
+    blocks: "B's pressure model, C's ambition nominator, every proactive action"
+    ruling:
+
+  - id: CAT-5
+    name: regard
+    holds: "what the character thinks of a particular other — and, inverted, what they believe that other thinks of them"
+    absorbs: [9 character opinions, "how will the other judge me"]
+    operator: weight
+    carrier: "Person.stance — (referent, valence -5..+5, weight 0..5)"
+    status: FIELD-EXISTS-ZERO-DATA
+    evidence:
+      - "[R] decision/choose.py:77 — stance_toward is TERM 2 of the live score"
+      - "[E] 0 stance rows across all 12 persons in a built realm — term 2 is not merely producerless, it is measurably zero"
+      - "[R] no verb writes (Person, stance): it is social:true and the verb table has no producer"
+      - "[R] clock_registry_v30.md:105 specifies `Disposition`, -5 to +5, faction-indexed, per-NPC — the SAME RANGE. `stance` IS Disposition under a second name."
+      - "[R] a View carries only {holder, claim_ids, question}; everything else raises. A character cannot read another's interior — only hold CLAIMS about them."
+    question: >-
+      Jordan: an enemy is deposited "from stuff like poor opinions of someone or
+      like antagonistic factions". Poor opinions have a field with no producer;
+      factional antagonism has 8 faction names and NO relation between them in
+      engine code.
+    options:
+      - "regard is produced by witnessed acts — a verb writes it at RESOLVE"
+      - "regard is DERIVED from claims about the other, never stored (consistent with View's constraint, and it makes regard epistemic like everything else)"
+    note: >-
+      The inverted direction — 'how will they judge me' — needs a model of what the
+      other values, buildable ONLY from the actor's own claims about them. That
+      function is read-only and lawful today; it is the one piece of this design
+      H-62 does not block.
+    blocks: "the bottom rung of the testimony ladder (CAT-3); mediated fear (CAT-4)"
+    ruling:
+
+  - id: CAT-6
+    name: position
+    holds: "a place the character occupies and can vacate, and what it permits them"
+    absorbs: [10 obligations and duties, 12 job/profession/education]
+    # ⚠ CORRECTED BY JORDAN, 2026-09-17. This row was `station` and absorbed CASTE as well.
+    # Verbatim: "offices and professions can be vacated as a character moves to occupy another
+    # one. caste is immutable and intrinsic." MUTABILITY IS THE LOAD-BEARING PROPERTY and it
+    # splits the merge: an office is opened and closed BY AN ACT (confer/revoke write
+    # Tenure.until); caste is changed by nothing. Caste is now CAT-7.
+    operator: gate
+    carrier: "Person.tenures (office) · Person.capability (profession?)   # caste moved to CAT-7"
+    status: OFFICE-BLOCKED / PROFESSION-INERT
+    evidence:
+      - "[R] person_side_eligible DECLINES on remit:, presence: and hold:<placeholder>"
+      - "[E] 10 of 38 verbs are unformable person-side — every governance verb: confer, convene, destroy_record, determine, dispatch, establish, issue, levy, open_case, revoke"
+      - "[E] Person.marks and Person.capability are EMPTY across all 12 persons"
+      - "[R] Person.marks is read by NO Python in the tree; capability is read once as a dice source, where the fixture states 'Rank supplies dice and gates nothing'"
+      - "[R] eligibility_kinds is CLOSED at four, and its note reads: 'capability IS NOT AND MUST NEVER BE A MEMBER... Adding a fifth kind is a DESIGN CHANGE... and not a table edit, so it needs a ruling before it needs an entry.'"
+    question: >-
+      Jordan: "offices must be able to inform the suite of choices available to a
+      character, and a character must be able to understand for themselves and be
+      understood by others for being seated in that office (which in turn means
+      knowing of their remit)." That is H-71, whose sweep now has three arms.
+      Separately: caste and profession GATE nothing, and making them gate requires
+      a fifth eligibility kind — which the roster says needs a ruling first.
+    options:
+      office:
+        - "H-71 arm 2 — the grant rides on the hold Tenure's payload (person-side by construction, AX-2 untouched)"
+        - "H-71 arm 1 — decline (status quo: no person forms a governance verb)"
+        - "H-71 arm 3 — through sense() (costs a third Sensation scalar; S18.2 rules that type to exactly two)"
+      # caste_and_profession: MOVED TO CAT-7, which owns the question and the same three
+      #   options. Two unruled option-sets for one question let it be ruled twice, differently.
+    note: "Jordan on (12): 'will concern the kind of knowledge and possibly connections they have' — which reads as a modifier and a claim-source, not a gate."
+    blocks: "duty as a generator; every mediated fear; B's standing agenda; C's duty contestant"
+    ruling:
+
+  - id: CAT-7
+    name: caste
+    holds: "what the character intrinsically IS — northern, central or southern Einhir"
+    absorbs: [11 ethnicity/caste]
+    operator: "gate or modifier — UNRULED, see options"
+    carrier: "`heritage`, a PERSON PREDICATE carried as a CLAIM — not a field"
+    status: CONTESTED-BY-CONSTRUCTION
+    raised_by: "Jordan, 2026-09-17: 'caste is immutable and intrinsic'"
+    evidence:
+      - "[R] person_predicates = [heritage, grade, church_standing, office, residence] — caste sits in the roster of things ASSERTED about a person"
+      - "[R] read at decision/options.py:434 inside standing_of: `own_by = {c.predicate: c for c in own if c.predicate in PERSON_PREDICATES}` — the gap between what OTHERS claim about your heritage and what YOU claim IS your standing"
+      - "[E] Person.marks — the plausible intrinsic field — is EMPTY across all 12 persons and is read by NO Python in the tree"
+      - "[R] eligibility_kinds is CLOSED at four; its note: 'The only class-shaped gate in the design is Thread Sensitivity. Adding a fifth kind is a DESIGN CHANGE ... and not a table edit, so it needs a ruling before it needs an entry.'"
+    question: >-
+      ⚠ THE TREE HAS ALREADY DECIDED AGAINST THE RULING. Jordan says caste is immutable and
+      intrinsic; the live model carries it as a CONTESTED CLAIM, where caste is what people
+      say you are and the two accounts may differ. Contested caste gives passing, denunciation
+      and disputed lineage for free — which may be better than intrinsic for a descent-based
+      system, or may be wrong. Which model stands?
+    options:
+      - "INTRINSIC: an immutable field on Person, set at generation, written by nothing. ⚠ This makes caste the ONLY one of the twelve inputs that needs NO write path — H-62 blocks what must persist AND change, and caste never changes. Cheapest of the twelve to make real."
+      - "CONTESTED (status quo): a `heritage` claim, compared between firsthand and told_by. Intrinsic in the fiction, assertable in the mechanics."
+      - "BOTH: an intrinsic field for what is true, and a heritage claim for what is believed — they differ, and the difference is the drama."
+    sub_question: "does caste GATE (a fifth eligibility kind, which the roster says needs a ruling first), or MODIFY (change the cost of an act), or only supply dice and connections?"
+    blocks: "nothing downstream — which is why it is the cheapest row here to close"
+    ruling:
+
+  - id: CAT-8
+    name: courage
+    holds: "which kinds of challenge the character will face, and at what cost"
+    absorbs: ["the half of `fear` that names an ENCOUNTER rather than an OUTCOME"]
+    operator: modifier
+    basis: temperament          # an axis OF CAT-9
+    carrier: "none"
+    status: ABSENT
+    raised_by: >-
+      Jordan, 2026-09-17: "the antonym of fear is bravery, and if we list a character's
+      bravery as challenges they are willing to face, then how does that work?"
+    the_split: >-
+      ⚠ THIS BREAKS THIS SESSION'S OWN MERGE, AND THE BREAK IS THE POINT. The distillation
+      claimed ambition and fear are one mechanism differing only in target sign. TWO THINGS
+      ARE CALLED FEAR and only one of them merges:
+        * FEAR OF AN OUTCOME — "demoted", "starving again". Names a world-state. Target-shaped,
+          signed, GENERATES acts that avert it. This is the sense Jordan's own earlier ruling
+          described ("perform duties so as to impress superiors"). It merges with ambition
+          into CAT-4.
+        * FEAR OF A CHALLENGE — "armed men", "a tribunal", "deep water". Names NO state to
+          reach or avoid. A disposition toward the COST OF A PATH, not toward a destination.
+          It does NOT merge. Its antonym is bravery: the same axis, other end.
+      THE TEST: does it name a STATE or a KIND OF ENCOUNTER? A state is a commitment (CAT-4).
+      An encounter-kind is this category.
+    why_it_cannot_merge: >-
+      A commitment is a GENERATOR — it proposes candidates. Courage is a MODIFIER keyed on what
+      a candidate DEMANDS rather than what it ACHIEVES. Keeping them independent is what lets a
+      coward hold an ambition and a brave man dread disgrace; the merge would have made that
+      character inexpressible.
+    evidence:
+      - "[E] `courage` appears in 15 files and every one is PROSE. The single hit in engine/season/state/carriers.py is the word 'discouraged' inside a law string. `bravery`, `mettle`, `valour`: 0 files. The name is free — no §4 collision."
+    question: >-
+      What is a "challenge kind", and what enumerates them? A courage table is per-character
+      over a CLOSED ROSTER of challenge kinds, and that roster does not exist. Candidates would
+      need to declare what they demand, the way verbs already declare what they write.
+    options:
+      - "a modifier: a challenge a character fears costs more (raises the Ob of the act)"
+      - "a gate at the extreme: below a threshold the candidate is not formed at all"
+      - "a susceptibility: courage sets the gain on threat-input, folding it into the intake operator rather than the decision operators"
+    blocks: "nothing today — it is absent in both directions"
+    ruling:
+
+  - id: CAT-9
+    name: bearing
+    holds: "how the character carries themselves — the temperament vector, held directly"
+    absorbs: ["Jordan's seven pairs, 2026-09-17"]
+    operator: "MIXED — the seven do not share one operator, which is why they were never going to be one axis set"
+    carrier: none
+    status: ABSENT
+    basis: temperament
+    placement:
+      # Each pair, its operator, and whether machinery already exists.
+      - pair: "courage <-> cowardice"
+        operator: "modifier, keyed on what a candidate DEMANDS"
+        machinery: "none — this is CAT-8"
+      - pair: "altruistic <-> selfish"
+        operator: "weight, keyed on BENEFICIARY"
+        machinery: "partial — this is CAT-2; see CAT-2.the_obstacle for the cost, which ED-IN-0232 RAISED"
+      - pair: "pacifist <-> militaristic"
+        operator: "weight on VERBS"
+        machinery: "none — needs the temperament alignment table"
+      - pair: "diplomacy <-> intimidation"
+        operator: "weight on VERBS — which method you reach for to move someone"
+        machinery: "none — needs the temperament alignment table"
+      - pair: "passive <-> aggressive"
+        operator: "weight on VERBS, plus plausibly a floor at COMMITMENT (whether to act at all)"
+        machinery: "none — needs the temperament alignment table"
+      - pair: "humble <-> vain"
+        operator: "the gap between the character's self-account and others' account of them"
+        machinery: >-
+          ⚠ ALREADY BUILT AND UNRECOGNISED. decision/options.py:443 `standing_of` computes
+          exactly this: gap(told_by claims about p, p's own firsthand claims about p). A vain
+          character asserts more about himself than others assert about him. MEASURED: it
+          returns 1000 — the maximum-gap default — for all 12 persons, because its told_by
+          input is empty (CAT-3).
+      - pair: "insecure <-> self-assured"
+        operator: "susceptibility gain — how far another's claim moves this character"
+        machinery: >-
+          ⚠ ALREADY THE INTAKE OPERATOR Jordan restored. An insecure character has HIGH gain
+          on incoming claims; a self-assured one LOW. This is the same operator as the
+          testimony ladder (keyed on SOURCE) and Resonant Style (keyed on FORM) — a third key.
+    question: >-
+      Three of the seven are verb-weights and need a table. Two already have machinery and
+      were not recognised as temperament. Two are the existing CAT-2 and CAT-8. Is `bearing`
+      ONE vector with seven components, or are these seven independent quantities that merely
+      share a register?
+    options:
+      - "ONE vector: a temperament basis with 7 axes, held directly on Person, with its own N x 38 alignment table"
+      - "SEVEN quantities: each placed at its own operator, no shared basis, no shared table — cheaper, but gives up the orthogonality result"
+      - "a HYBRID: the three verb-weights share a table; humble/vain and insecure/self-assured stay where their machinery already is"
+    sub_questions:
+      - "does temperament DRIFT? Convictions move only by Scar. A coward who survives a battle — does his courage move, and by what?"
+      - "is temperament visible to others? standing_of implies humble/vain is; courage plausibly is; orientation may not be."
+    blocks: "CAT-2 and CAT-8 both sit inside this basis; the axis question (STR-2) changes shape if there are two bases rather than one"
+    ruling:
+
+# ===========================================================================
+# Not a category. These are the STRUCTURAL rulings the six sit on, and none of
+# the six can be built past its blocker until they are taken.
+# ===========================================================================
+structural:
+
+  - id: STR-1
+    name: person-interior write path
+    question: >-
+      Nothing may write a Person's interior. Six loop steps: MATTER, CALENDAR,
+      CENSUS and WITNESS each carry a refusal law; DELIBERATE "returns an act array
+      and writes nothing else". Only RESOLVE remains — i.e. only an act — and no
+      verb does it (H-62).
+    consequence: >-
+      Pressure, scar, the needs counter, the fear item and regard production are
+      NOT five problems. They are one, and one ruling unblocks all five.
+    options:
+      - "a verb at RESOLVE writes it — the interior moves by ACT, which is how everything else in this engine moves"
+      - "a seventh step with a new write class — larger, and needs its own ruling"
+      - "nothing persists: the interior is recomputed every season from claims and tenures"
+    note: "The third option is cheaper than it looks and has not been considered: if regard and pressure are DERIVED rather than stored, H-62 never binds."
+    ruling:
+
+  - id: STR-2
+    name: the axis basis
+    reshaped_2026_09_17: >-
+      ⚠ THIS ROW WAS WRITTEN ASSUMING ONE BASIS. There are two (see `bases:`), and three of
+      the seven axes it scores — selfish, passive, peaceful — belong to the TEMPERAMENT basis
+      rather than the conviction one. Their poor projection onto the thirteen Convictions is
+      what identifies them as temperament, so this row must be re-read: it measured four
+      conviction-axis candidates and three temperament axes against a conviction yardstick.
+    question: >-
+      Jordan proposed seven axes to replace the live four. R7 disqualifies the first
+      (Selfish vs Selfless) structurally. Two of the remaining six re-measure existing
+      axes (Equality = hierarchical flipped at r=-0.971; Traditional = traditional at
+      r=+0.989). Three are genuinely new (substantive, equity, peaceful). One failed
+      to measure (Passive vs Assertive: 6/13 abstain, nothing reaching ±0.7).
+    consequence: >-
+      Migration is ATOMIC: _load_projection and _load_alignment raise at MODULE SCOPE,
+      so a 13x7 projection and a 7x38 alignment table must both exist before first
+      import. There is no partial state and no graceful degradation.
+    measured:
+      - "[E] the seven span 3.18 effective directions against the live four's 2.27, normalised"
+      - "[E] equality x traditional = -0.733, reproducing the live basis's worst pair (hierarchical x traditional = +0.743) to within 0.01 under an INDEPENDENT placement — the defect is in the Convictions, not the matrix"
+      - "[E] ⚠ WITHDRAWN 2026-09-17 — this read 'a Key with symbolic_dimensions={equity: 0.5} raises KeyValidationError today'. ED-IN-0232 retired the Key substrate; there is no Key, no validator and no invariant 6. The axis roster's only remaining owner is engine/season/rosters.yaml, which makes STR-2 CHEAPER than this row priced it: one owner to edit rather than two to reconcile."
+    ruling:
+
+  - id: STR-3
+    name: the noise floor
+    question: >-
+      choose.py:318 runs _sample_order AFTER the score sort. P(inversion) =
+      1/(1+exp(D/tau)) — the Gumbel difference is Logistic. At the shipped tau=0.1
+      a term is decisive at 95% only if its score gap D >= 0.294.
+    consequence: >-
+      Any new term must declare a RANGE and clear that floor, or it cannot be shown
+      to decide anything. The measured live plateau gap is 0.0000 — the coin-flip row.
+    measured:
+      - "[E] closed form verified against 200,000 simulated draws per row to 4 decimals"
+      - "[E] the sampler changes the top choice for 9 of 12 persons"
+    options:
+      - "keep tau=0.1 and require every term to declare its range against the floor"
+      - "lower tau — more rational characters, less variety"
+      - "raise tau — more variety, weaker convictions"
+    ruling:
+
+  - id: STR-6
+    name: "`conviction` is reserved, and the 13-roster is misnamed"
+    raised_by: >-
+      Jordan, 2026-09-17: "conviction should be reserved for a different concept, not moral
+      values" — and, naming the concept: "piety".
+    what_it_rules: >-
+      The thirteen-item roster holds MORAL VALUES / value-frames. It must not be called
+      `conviction`. That word is reserved for piety.
+    consequence_for_CAT_1: >-
+      ⚠ THIS ANSWERS CAT-1'S OPEN QUESTION. CAT-1 asked whether moral and religious value are
+      ONE kind or TWO, noting they share one field today so a devout and a secular character
+      differ only by a Faith weight — a difference of DEGREE where a difference of KIND may be
+      wanted. Reserving `conviction` for piety makes them TWO. Religious commitment becomes its
+      own quantity; `Faith` as one of thirteen value-frames is then either redundant or is the
+      value-frame half of a thing whose other half is piety.
+    rename_cost_measured:
+      - "[E] 40 Python files under engine/ tools/ tests/ carry the name"
+      - "[E] 60 YAML/JSON files under engine/ references/ registers/ carry it"
+      - "[E] 107 design documents under systems/ canon/ architecture/ carry it"
+      - "[R] the single owner is references/descriptor_registry.yaml:236 `conviction_roster`; engine/season/rosters.yaml binds CONVICTION_AXES and the 13x4 projection off the same name"
+      - "[D] §0.05 clause 3 governs the method: edit the OWNER and re-derive; never hand-edit downstream and never keep a second copy."
+    the_piety_collision:
+      - "[E] `piety` appears NOWHERE in engine/season/ — not in code, not in the 34 rosters. Person-side, the name is vacant in live code."
+      - "[R] because the character `Piety Track` was RETIRED into `Truth` (ED-IN-0075) — so this would restore an earlier name to a narrower concept, which is legitimate."
+      - "[R] ⚠ BUT territory-scale **Piety (PT)** is LIVE and CURRENT.md declares it DISTINCT and unchanged. Two scales, one word: a later session reading `piety` cold cannot tell which is meant — §4's idempotency test failing, exactly as STR-5 does for `belief`."
+      - "[R] the person-scale religious slot that ALREADY EXISTS is `church_standing`, a person predicate carried as a CLAIM (asserted about you, contestable), alongside heritage/grade/office/residence."
+    questions:
+      - "what does `conviction` denote once reserved — piety itself, or the firmness with which anything is held? Ordinary usage supports BOTH, which is why §4 wants it pinned before it is used."
+      - "if piety is person-scale, how is it distinguished in writing from territory-scale Piety (PT)? A qualifier on one, or a different word for one?"
+      - "does piety SUBSUME `church_standing`, sit beside it, or is church_standing the observable half (what others say of your devotion) of which piety is the interior half?"
+      - "what does the 13-roster get called? `moral_values` is used in this register as a placeholder, not a proposal."
+    interacts_with: "STR-5 — `belief` is overloaded six ways. Settling `conviction`, `piety` and `belief` separately will re-collide them; they are one vocabulary problem with three words."
+    ruling:
+
+  - id: STR-5
+    name: the word "belief" is in vocabulary conflict
+    raised_by: "Jordan, 2026-09-17"
+    question: >-
+      `belief` carries SIX live senses inside the decision layer. CLAUDE.md §4's idempotency
+      rule requires a later session to read a process word cold and land on the same meaning.
+      It cannot. Which sense keeps the word, and what do the others get called?
+    senses_measured:
+      - "[E] `Person.beliefs` — a carrier field with ZERO readers anywhere under engine/season/. The only `.beliefs` in the engine is autoload/game_state.py, a WORLD-level dict — a different object."
+      - "[R] `belief_contradicts()` — §F1 clause 4's filter. Its docstring reads 'is requires(verb) KNOWN-FALSE from p's OWN CLAIMS?'. The name says belief; the body reads the claim ledger, not the field."
+      - "[R] S9.3's refusal law is titled 'WITNESS NEVER TOUCHES A BELIEF' and its own next clause reads 'if evidence can move a CONVICTION'. Name and reason disagree; the row it guards covers convictions, beliefs, scar and axis_count — the whole moral interior."
+      - "[R] Belief as a DESIGN TIER — derived_stats_v30.md:216: 'specific stance taken in the moment; may be revised; produces CP awards on revision', sitting between Conviction and Inspiration."
+      - "[R] Belief as a PER-NPC COMMITMENT — npc_behavior_v30_infill.md:45: 'Conviction-derived commitment + situation-specific application', 2-3 per named NPC, becoming a SCAR on revision."
+      - "[D] A Claim is itself a subjective holding — Jordan, 2026-09-02: 'our understanding of all other words and actions is subjective and singular.'"
+    options:
+      - "`belief` keeps the TIER sense (the revisable situated commitment) and the field is renamed or deleted — it has no readers, so deleting costs nothing measurable"
+      - "`belief` keeps the EPISTEMIC sense (what I hold true) and the tier is renamed — but then belief_contradicts is correctly named and the field is the impostor"
+      - "the word is retired from process vocabulary entirely; each sense takes an ordinary word that already covers it (claim · commitment · conviction)"
+    note: >-
+      §4's own worked failure is the precedent: `evacuate` was coined for what `retire`
+      already covered, a later session read it cold, derived the wrong meaning, and escalated
+      a non-existent blocker across three surfaces. This is the same shape with a word that
+      was not even coined — it was overloaded.
+    blocks: "CAT-3 (claims) and CAT-4 (commitments) both borrow it; the tier model in the distillation rests on it"
+    ruling:
+
+  - id: STR-4
+    name: question expressiveness
+    question: >-
+      A Question carries {id, source, referents, about}. `source` is PROVENANCE, not
+      type: claim_landed covers a threat, a gift, an insult and a rumour identically.
+      Jordan: "Questions may need to be expanded/rewritten to enable more variability
+      and information."
+    consequence: >-
+      MEASURED: the aperture is ~25 candidates per referent, LINEAR — but distinct
+      verbs reached is 28 under every aggregation rule. More referents buy more
+      candidates and NOT ONE new kind of action. Volume is bounded by referents;
+      VARIETY is bounded by the gate (CAT-6). Adding question sources cannot fix variety.
+    also: >-
+      aggregate_questions RE-MINTS the question, keeping only source, about and a
+      flattened referent union — so every new field needs its own FOLD RULE, and
+      per-referent roles cannot survive the union at all.
+    ruling:

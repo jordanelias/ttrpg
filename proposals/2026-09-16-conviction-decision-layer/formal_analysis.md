@@ -5,6 +5,12 @@
 
 ## Status: PROPOSED — HELD BACK
 
+> ⚠ **Superseded in part by ED-IN-0232 (the Key substrate retired).** Owner:
+> `references/restructure_ledger.md#the-key-substrate-retired-2026-09-16-ed-in-0232`, with the
+> ledger row in `registers/editorial_ledger_in.jsonl`. Four claims in this directory died with it;
+> `behaviour_census.md` carries the list, and the affected sentences are corrected in place.
+
+
 **§0.05 class: REFERENCE.** Companion to `behaviour_census.md` (diagnosis) and
 `behaviour_algorithms.md` (proposals B and C; proposal A scrapped by Jordan, *"Lexicographic is
 stupid"*).

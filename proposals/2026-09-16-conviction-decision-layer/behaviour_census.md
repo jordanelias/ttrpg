@@ -5,6 +5,26 @@
 
 ## Status: PROPOSED — HELD BACK
 
+> ⚠⚠ **SUPERSEDED BY ED-IN-0232 (PR #407, 2026-09-17) — THE KEY SUBSTRATE IS RETIRED, AND FOUR
+> CLAIMS IN THIS DIRECTORY DIED WITH IT.** Measured on the merged tree: `engine/substrate/keys.py`
+> is **gone**; `engine/substrate/` now holds only `canon_buckets · composition · descriptors ·
+> names · stubwire · world_initial_state`. Grepped, not assumed: **no `beneficiary` role survives
+> anywhere in `engine/`**, and **nothing validates axis names at emission** — no
+> `KeyValidationError`, no invariant 6.
+>
+> | claim, as landed | status now |
+> |---|---|
+> | the axis roster is **blocking** at Key emission (`keys.py:400`) | **DEAD** — the validator is deleted |
+> | falsifier: emit a Key with `{"equity": 0.5}` and watch it raise | **UNRUNNABLE** — there is no `Key` to emit |
+> | two hardcoded axis rosters with nothing comparing them | **RESOLVED BY DELETION** — one copy is gone, so `engine/season/rosters.yaml` is now the single owner |
+> | `beneficiary` is *"already a Key role — a bridge, not an invention"* | **FALSE** — it is an invention again, and orientation's obstacle is larger than this directory says |
+>
+> One flag this directory raised is also resolved by the same PR: `tools/export_key_types.py`,
+> which parsed a `systems/**/*.md` against §0.05 clause 2, was **deleted**.
+>
+> Owner for the supersession itself: `references/restructure_ledger.md#the-key-substrate-retired-2026-09-16-ed-in-0232` and the `ED-IN-0232` row in `registers/editorial_ledger_in.jsonl`. This list is the *local* consequence; the event is recorded there.
+
+
 **§0.05 class: REFERENCE.** Nothing here is a mechanism. It cites code and documents; it changes
 neither. If this file were deleted the game would behave identically — which is the test, and it
 passes as reference.
@@ -66,7 +86,7 @@ Every mechanism in the tree that decides, modifies, gates or generates a charact
 | # | mechanism | shape | decides | opened at | live? |
 |---|---|---|---|---|---|
 | 1 | **Conviction** (13, weighted) | vector over a closed roster; 1–3 primary at 0.6–0.8 plus cultural 0.2–0.4 | what they want | `conviction_taxonomy_v30.md` §2, §4 | **yes** — `Person.convictions` |
-| 2 | **Conviction axes** (4) | 13×4 projection matrix | the scoring basis | `conviction_axis_matrix_v30.md` §2; `engine/substrate/keys.py:59` | **yes**, and blocking — `keys.py:400` raises on an unlisted axis name |
+| 2 | **Conviction axes** (4) | 13×4 projection matrix | the scoring basis | `conviction_axis_matrix_v30.md` §2; `engine/substrate/keys.py:59` | ~~blocking at Key emission~~ — **DEAD**, ED-IN-0232 deleted the validator. The roster survives only at `engine/season/rosters.yaml`, now its single owner |
 | 3 | **Ethical Framework** (7) | **Ob modifier**, −1 aligned / +1 contradicting / +2 Church-Thread | what they are rewarded for | `factions_personal_v30.md:69`, roster at `:104–:365` | no |
 | 4 | **Resonant Style** (4) | Evidence · Consequence · Authority · Solidarity | how they can be moved | `npc_behavior_v30.md` §1.3 `:32` | no |
 | 5 | **Conviction Scar → crisis** | per-Conviction counter; 3+ → **d6 crisis table** | when they act unpredictably | `conviction_track_v1.md` §2 | **no** — `(Person, scar)` exists, nothing writes it |
@@ -246,7 +266,7 @@ Per `CLAUDE.md` §0.1 pt 3, each load-bearing claim with the observation that wo
 | §4.1 — the two architectures conflict | find a reading on which a lexicographic override and an additive sum agree about whether Survival can be outranked. |
 | §4.2 — four names collide | `grep -n "^\*\*Ethical Framework" systems/factions/reference/factions_personal_v30.md` against the roster at `descriptor_registry.yaml:conviction_roster`. |
 | §2 row 17 — §F2 is the only live decider | rebind or delete the other sixteen and observe a season run change. Nothing else is called. |
-| §2 row 2 — the axis roster is blocking | **RUN 2026-09-16, not reasoned.** A `Key` built with `symbolic_dimensions={"traditional": 0.5}` appends; the same Key with `{"equity": 0.5}` raises `KeyValidationError: key 'k1' uses non-canonical axis 'equity' (§2.3 invariant 6)`. One of the seven axes under discussion is **rejected at Key emission today.** |
+| §2 row 2 — the axis roster is blocking | ⚠ **UNRUNNABLE SINCE ED-IN-0232 — there is no `Key` to emit.** It was run on 2026-09-16 and did raise; the validator has since been deleted. Retained because a falsifier that has *become* unrunnable is itself the finding: the claim it guarded is now false in the other direction — nothing validates axis names at all. |
 
 **One defect found while compiling this and not yet fixed:** `engine/substrate/keys.py:59` and
 `engine/season/rosters.yaml: conviction_axes.values` are two independently hardcoded copies of the
