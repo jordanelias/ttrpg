@@ -4,7 +4,39 @@
 ## ⚠ The ✅ marks in §5 are **reasoned dispositions, not executions.** `BO-1` and `BO-6` are discharged by reading `RULINGS.yaml` and the write matrix; neither ran anything. `BO-2` and `BO-8` are marked FIRED because a critic falsified them, which is also a reading. **Nothing in this file is an execution artifact** (§0.2).
 ## Lane: `IN` · **`ED-IN-0243`** (shared with `00`)
 ## Grade under `CLAUDE.md` §0.2: **`paper`.** Nothing in this order has run. Phase 1 item 1 is the first thing that would.
-## Reads: `00_THE_SEAM.md` for why these two suites are one program. `RULINGS.yaml` for what is still Jordan's.
+## Reads: `00_THE_SEAM.md` for why these two suites are one program. `RULINGS.yaml` for the rulings.
+
+---
+
+# ✅ ALL NINE ESCALATIONS WERE RULED BY JORDAN ON 2026-09-17 (`ED-IN-0244`, `ED-IN-0245`)
+
+**This file was written while the queue was open. It is corrected in place below, struck-and-kept —
+but read this block first, because three of its statements would send a builder the wrong way.**
+
+| what this file said | what was ruled |
+|---|---|
+| item **11** (commission `Record`) answers `H-71`, gated on `CAT-6` | **`CAT-6` → ARM 2**, the Tenure payload. Item 11 is **no longer H-71's answer**; the `remit:` fix is a ~2-line read of `Tenure.payload`, licensed today by `write_matrix.yaml:336-342`, and **no longer depends on item 5** |
+| item **13** is BLOCKED on `RR-A` | **`RR-A` → FOLD.** Item 13 is **unblocked** and leaves Phase 5 |
+| `S1` — give `CAT-6` a fourth arm | **discharged.** The menu was repaired and then ruled; arm 2 was chosen, and §2(b)'s claim that arm 2 cost a ratified amendment was **retracted as false** |
+| Phase 5 holds **two** blocked items | **one.** Only item 15 (`Act.via` + F3, the Arc-2 gate) is still blocked |
+| `RULINGS.yaml` is "what is still Jordan's" | it is now **12 closed · 9 ruled · 0 escalated** |
+
+⚠ **AND THE RULINGS OPENED WORK THIS ORDER DOES NOT SCHEDULE**, because it did not exist when the
+order was written. It is **not** added to the phases below — `01` schedules r2's items, and these are
+new design:
+
+1. **A migration verb.** `RR-2`'s second half, ruled: *"must be able to build hearths and accept
+   people who move settlements."* MEASURED: nobody in Valoria can relocate — `move` is TRAVEL (a
+   `travel_leg` Tenure alter) and `residence` is a contested claim predicate **with no writer**.
+   Ruled to be **a verb persons take**, which gives `residence` its first producer.
+2. **A `capacity(w, rung)` Query** over dwelling sites with a floor, never a fixture; `found` is the
+   throttle, and item 12 builds `found` anyway.
+3. **An affiliation roster and an incompatibility relation** — `conviction` is now a vector over
+   creeds, with confliction DERIVED. `ED-IN-0075`'s `Truth` is a pole scalar and structurally cannot
+   carry it.
+4. **The thirteen re-authored** with their projection onto `memory` · `substantive` · `equity` ·
+   `selfish`, and **`H-71`'s second half** — arm 2 closes the holder's own knowledge, not others'
+   witness of his seat.
 
 ---
 
@@ -135,7 +167,7 @@ Item 5 is the largest single item in the program and everything in phases 2–4 
 | # | change | size | depends on |
 |---|---|---|---|
 | **10** | `offices.yaml` — bases as rostered values · both predicates rewritten · four title helpers + `is_title` + the `titles` roster deleted · holders seated · purview corrected | **L** | **4, 16** |
-| **11** | commission `Record` on `confer`; person-side `remit:` via the claim | M | **5, 10, and the CAT-6 ruling after S1** |
+| ~~**11**~~ | ~~commission `Record` on `confer`; person-side `remit:` via the claim~~ → ⚠ **`CAT-6` RULED ARM 2**, so this is no longer `H-71`'s answer. The `remit:` fix is a **~2-line read of `Tenure.payload`**, licensed today, and **item 5 is no longer a dependency**. Whether the commission `Record` is still wanted for other reasons is not decided here | S | ~~5, 10~~ → **10** |
 | **9** | obligees co-located mint `inferred` · `oblige` body · `establishment_of` rewritten with a caller · `Office.establishment` deleted | M | 1 |
 | **14** | the 13 field deletions + `judging_set` + `conferral_path` | S | **9, 10** |
 
@@ -175,11 +207,11 @@ or built"* — which `architecture/meta/04_CODE_ARCHITECTURE.md:1082` files as o
 
 ---
 
-## PHASE 5 · Blocked, and on what
+## PHASE 5 · Blocked, and on what — ~~two items~~ → **ONE**
 
 | # | change | blocked by | can it start? |
 |---|---|---|---|
-| **13** | RR-A's four verb deletions + `remit_acts.dispatch` | **`RR-A`** — folding the four response verb rows overwrites `ED-IN-0210`'s letter | **No.** Jordan's |
+| ~~**13**~~ | ~~RR-A's four verb deletions + `remit_acts.dispatch`, blocked on `RR-A`~~ | ✅ **UNBLOCKED 2026-09-17.** `RR-A` ruled **FOLD** — `comply`, `evade \| defy`, `refract` and `dispatch` go; compliance is the executor's own act. `ED-IN-0210` carries the successor row | **Yes, today** |
 | **15** | `Act.via` + F3 | ratified **positions 3–5**; it is the Arc-2 gate itself | No |
 
 ---

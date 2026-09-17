@@ -114,7 +114,14 @@ same thing (a seated person who knows their remit, person-side, without a new Se
 > ⚠ **This inflated the price of the arm this file was steering AWAY from, and Jordan ruled ARM 2**
 > (2026-09-17, `ED-IN-0245`) — *"Too noisy for a character to have assailable/uncertain remits."*
 
-> **Disposition: the question is repaired, not escalated twice.** CAT-6 gains r2's route as **arm 4**,
+> ✅ **RULED 2026-09-17: ARM 2, the Tenure payload** (`ED-IN-0245`). Jordan: *"Too noisy for a
+> character to have assailable/uncertain remits. That's just complexity for the sake of itself
+> without any real gameplay value."* The menu was repaired first and then ruled, so this section did
+> its job — but note that **(b) below overstated arm 2's price and is retracted**, and that arm 4,
+> which this file recommended, was not taken. **The half of H-71 about being UNDERSTOOD BY OTHERS as
+> seated remains open.**
+>
+> **Disposition as written at the time: the question is repaired, not escalated twice.** CAT-6 gains r2's route as **arm 4**,
 > stated in r2's own words with its citation, and the three original arms stand. Jordan rules once,
 > over four options, with the knowledge that one of them has a build item attached
 > (`EXECUTION_PLAN` item 11, gated on items 5 and 10).

@@ -87,6 +87,16 @@ LEDGERS = {
     # its id decides whether the rule binds. Guard: tests/valoria/test_claim_provenance_archives.py.
     "registers/editorial_ledger_in_archive.jsonl": "ED-IN-0087",
     "registers/editorial_ledger_pc_archive.jsonl": "ED-PC-0040",
+
+    # ── THE DEEP ARCHIVE, added 2026-09-17 (ED-IN-0245) ──────────────────────
+    # Same rule, one store further down. Jordan ruled the live lane ledger is an
+    # INDEX OF OPEN WORK, not a history: pre-current-month and terminal-status rows
+    # leave it even when their bodies read as current. They land in
+    # `registers/archive/` as frozen YAML fragments, and without this entry every
+    # one of them would leave this gate's scope the moment it was archived --
+    # which is precisely what ED-IN-0165 was written to prevent one store up.
+    # Cutover ids are the live files': an archived entry is the same entry.
+    "registers/archive/editorial_ledger_in_archive_pre-2026-09.yaml": "ED-IN-0087",
 }
 
 # The marker an entry uses to name its instrument.
@@ -195,9 +205,36 @@ def _is_pre_cutover(entry_id, cutover_id):
 
 
 def _load(path):
+    """JSONL lane ledger, or a frozen YAML fragment under `registers/archive/`.
+
+    ⚠ THE YAML ARM WAS ADDED 2026-09-17 (ED-IN-0245) AND IT CLOSES THE SAME HOLE
+    `ED-IN-0165` CLOSED FOR THE `_archive.jsonl` SIBLINGS. Jordan ruled that anything
+    pre-dating the current month, and anything carrying a terminal status, leaves the
+    live lane ledger. The deep store for that is `registers/archive/` -- uncapped
+    (`atomization_rules`: `on_exceed: skip`) and globbed by `validate_ed_citations.py`,
+    so ids keep resolving. But this gate's `LEDGERS` is a JSONL path map, so the first
+    pass of that archival took 29 entries OUT OF SCOPE and the gate's coverage fell
+    47 -> 18 WHILE STILL REPORTING GREEN -- the exact defect `ED-IN-0165` names, and
+    `tests/valoria/test_claim_provenance_archives.py` caught it within the hour.
+    Reading the fragments here means archiving can no longer shrink this gate's
+    population, whichever store it moves to."""
     out = []
     full = os.path.join(ROOT, path)
     if not os.path.exists(full):
+        return out
+    if path.endswith((".yaml", ".yml")):
+        try:                                              # `ci_common.load_yaml` is the intended
+            doc = ci_common.load_yaml(full, default={}) or {}  # owner of YAML register load (§8);
+        except Exception as e:                            # loading it bare here would raise the
+                                                          # shrink-only residual that
+                                                          # test_ci_common_primitives ratchets.
+            print(f"  [ERROR] {path} is not valid YAML ({e})")   # A malformed fragment is
+            return out                               # REPORTED, never silently skipped:
+                                                     # silence is how scope shrinks unseen.
+        entries = doc.get("entries") if isinstance(doc, dict) else doc
+        for i, entry in enumerate(entries or [], 1):
+            if isinstance(entry, dict):
+                out.append((i, entry))
         return out
     with open(full, encoding="utf-8") as f:
         for i, line in enumerate(f, 1):

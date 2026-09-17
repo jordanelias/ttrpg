@@ -41,7 +41,11 @@ the reasoning and the controls, and this suite carries neither.
 
 ## The results, in the order they matter
 
-**1 · The conflict — H-71, and it is a defect in the QUESTION, not the answer.** #409's CAT-6 puts
+**1 · The conflict — H-71, and it is a defect in the QUESTION, not the answer.** ✅ **RULED: ARM 2**,
+the Tenure payload — *"Too noisy for a character to have assailable/uncertain remits."* ⚠ And this
+section's claim that arm 2 cost a ratified amendment was **FALSE and is retracted** (`00` §2(b)):
+`04_CODE_ARCHITECTURE.md:337` reads *"Replaces payload?"* with a question mark.
+ #409's CAT-6 puts
 H-71 to Jordan as a **three**-option choice. r2's `03:794` declares it **RULED** by a fourth route
 (the commission claim) with a build item already attached. Ruled from the register alone, Jordan
 chooses among three while a fourth sits built next door. **The repair: CAT-6 gains arm 4, and Jordan
@@ -118,7 +122,12 @@ flips, no ledger `status` or `needs_jordan` field changes, `CURRENT.md` is untou
 `ruling:` field in `../2026-09-16-conviction-decision-layer/adjudication_register.yaml` is filled by
 this suite.**
 
-**Nine ruling requests reach Jordan**, consolidated from two sheets into one: `CAT-6` · `STR-2` ·
+✅ **ALL NINE WERE RULED BY JORDAN ON 2026-09-17** (`ED-IN-0244`, `ED-IN-0245`). `RULINGS.yaml` now
+reads **12 closed · 9 ruled · 0 escalated** — the queue is empty, and `01` carries what the rulings
+changed about the build order. **`AX-7` was added to the ratified axiom set**, which is the one
+outcome that reaches beyond this suite.
+
+~~**Nine ruling requests reach Jordan**~~, consolidated from two sheets into one: `CAT-6` · `STR-2` ·
 `STR-5` · `STR-6` · `RR-P` · `RR-A` · `RR-B` · `RR-C` · `RR-2`. `RULINGS.yaml`'s
 `escalation_summary` is their single index, and each carries the gate steps that were tried and why
 each was silent.
