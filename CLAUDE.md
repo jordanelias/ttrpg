@@ -252,6 +252,16 @@ experiment?). **Specificity about what to attack, plus an artifact proving it ha
    | **"X is absent / dead / never fires"** | RUN the thing that would show presence. An absence is the cheapest claim to make and the hardest to see wrong. |
    | **"X works today"** | Open the CALL SITE, not the declaration. A roster existing is not a roster being used. |
    | **"as `F` says at `:L`"** | Open `F` at `:L`. A citation you have not opened is not a citation. |
+   | **"I ran it / I could not reproduce it"** | Check the RUN HAPPENED, not just that the command exited. A generator that no-ops, a test that skips, a rebuild that writes nothing — each returns 0 and proves nothing. Diff the artifact, or assert the thing changed. |
+
+   ⚠ **THE FOURTH ROW WAS ADDED 2026-09-17 AND IT IS THE SHAPE THAT COST THE MOST.** A session
+   chasing a red CI gate reported *"regenerated the census exactly as CI does; cannot reproduce"* —
+   having never checked the generator ran. It had; the file was byte-identical for a different
+   reason; and the real cause (CI builds the PR MERGE COMMIT, and `main` had moved) went unfound
+   through **two** wrong public diagnoses, one of them a PR comment that then had to be retracted.
+   ONE `md5sum` BEFORE AND AFTER — about fifty tokens — WOULD HAVE CLOSED IT. A reproduction is a
+   result claim like any other, and *"I could not reproduce it"* is the absence-claim in row one
+   wearing a lab coat: it is cheap to make, flattering to the maker, and hard to see wrong.
 
    **NO GUARD MAY BE BUILT FOR THIS.** Its subject is a reader's discipline, which is precisely what
    pt 5's predicate excludes; like §0.4, the enforcement is that you read it. It is also why this is
@@ -797,6 +807,21 @@ defaulting the whole fan-out to Opus.
 mechanical stages, raised only for the hardest verify/judge stages, and mirror the tier in the plan.
 Canonical fan-out: **Haiku finders → Sonnet analyzers → Opus verifier/synthesizer**, with `fable` — when
 used at all — on the *audit/guardrail* node rather than the synthesis one.
+
+**SIZE THE FAN-OUT TO THE SUBJECT, NOT TO THE SLOT (measured 2026-09-17).** The tier table above says
+WHICH model; nothing said HOW MANY, and the omission is expensive. A `/simplify` pass dispatched
+**four reviewers over a 953-line prose diff and spent 423,171 tokens** — and all four returned the
+same top finding. **Four independent agents converging on one finding over a diff that small is
+REDUNDANCY, NOT CORROBORATION.** Convergence is only evidence when the search space is big enough
+that they could plausibly have missed each other.
+
+- **Before spawning N agents, ask what N-1 would miss.** If you cannot name it, spawn fewer.
+- **A skill or command that mandates a lane count is sized for its typical subject, not for yours.**
+  Running fewer, and saying why, is obedience to §0's max-effort rule — *"the most thorough path
+  THAT DELIVERABLE warrants"* — not a shortcut around the command.
+- **Independence is what you are buying**, so spend it where the producer is likeliest to be wrong:
+  a judgment node, an audit verdict, a number nobody else can reproduce. Not on a diff one reader
+  can hold entire.
 
 **Three caching facts that bite the fan-out pattern:**
 1. **Parallel agents sharing a prefix cannot read each other's cache.** An entry is readable only once

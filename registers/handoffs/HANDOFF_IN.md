@@ -80,6 +80,53 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 
 ---
 
+## 🧾 2026-09-17 — THE BEHAVIOUR LAYER: established facts, so the next session does not re-derive them
+
+**PR #409. Why this unit exists:** the session that produced it inspected files 566 times and **298
+of those were re-reads of something it had already opened** — `rosters.yaml` 36×, `verb_table.yaml`
+19×, `choose.py` 17×, H-71 four separate times. There is no context between sessions (§1), so a fact
+established and not written down is a fact the next session pays for again. **This is that
+write-down. Read it before grepping `engine/season/` for how a character decides.**
+
+**The live decision pipeline is FOUR PHASES, not a scoring function:**
+
+| | phase | owner |
+|---|---|---|
+| Φ1 | OCCASION — what am I asked about | `queries/world_q.py:159` → `decision/questions.py:45` |
+| Φ2 | APERTURE — what could I coherently do | `decision/options.py:35` (four clauses, none a score) |
+| Φ3 | APPRAISAL — how do I rank them | `decision/choose.py:302` (three terms) |
+| Φ4 | COMMITMENT — what do I spend on | `_sample_order` → `pack_scenes` → `ask_budget()` |
+
+**Measured, and each cost a run to establish:**
+
+- **Q4 `need` IS the ambition mechanism** — a live `commit` Tenure to an OUGHT Proposition. It leads
+  for **12/12 persons at genesis and 0/12 in every season after**; `claim_landed` grows to 136–180
+  while `need` stays at 12. `q_rule = one_per_source` restores its reach to 12/12. One word.
+- **The aperture is bounded twice.** ~25 candidates per referent, linear — but **28 distinct verbs
+  under every aggregation rule**. More referents buy more candidates and no new KIND of action.
+- **10 of 38 verbs are unformable person-side** — every governance verb (H-71), plus `destroy_record`
+  (H-75/H-33, *not* H-71). ⚠ **`hole_register.yaml:806` still says "9 of 32" and is STALE** — the
+  tree has 38, verified directly. The owner is wrong and the downstream copies are right; fixing the
+  owner is a live-registry edit nobody has made.
+- **`P(inversion) = 1/(1 + e^{Δ/τ})`** at `_sample_order`, verified against 200,000 draws per row.
+  At the shipped `τ = 0.1` a term decides at 95% only when **Δ ≥ 0.294**; the measured live plateau
+  gap is **0.0000**. ⚠ **`choose.py:318` runs the sampler AFTER the score sort** — a session that
+  reconstructs the ranking with `sorted()` is measuring the wrong stage, and one did.
+- **580 claims after two seasons, 100% `firsthand`.** `tell` **resolved 9 times and deposited 0**, so
+  `standing_of` returns the maximum-gap default (1000) for every person, permanently.
+- **`Person.marks` is read by NO Python; `capability` is read once as a dice source** where the
+  fixture states *"Rank supplies dice and gates nothing"*. `stance` holds **0 rows** in a built realm.
+- **H-62 in one line:** six loop steps, four carry refusal laws against a Person social write,
+  DELIBERATE writes nothing — only RESOLVE remains, i.e. only an act, and no verb does it. Pressure,
+  scar, needs, fear and stance production are **one problem, not five**.
+
+**Open for Jordan, in the register's `ruling:` fields** (`proposals/2026-09-16-conviction-decision-layer/adjudication_register.yaml`):
+STR-6 (what `conviction` means once reserved for piety, and the person/territory `piety` collision),
+STR-1 (the Person-interior write path), CAT-7 (caste intrinsic vs the contested `heritage` claim the
+tree already built). STR-5 is the `belief` vocabulary conflict — six live senses, measured.
+
+---
+
 ## ⛔ 2026-09-16 — THE KEY SUBSTRATE IS RETIRED (`ED-IN-0232`, RULED by Jordan)
 
 Verbatim: *"Anything key-based gets retired."* This answers the question `ED-IN-0227` left open and
