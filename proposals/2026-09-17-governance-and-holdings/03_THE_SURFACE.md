@@ -78,7 +78,7 @@ it is four facts, each of which alone breaks the parameter-list argument.
 (`world_q.py:345-397`) and `footprint(w, faction)` unions *"the rungs it holds, plus the rungs its
 members sit in"* (`:254-272`). The stage drew both — a province as a coalescence of outlines, title as
 boundary against presence as occupancy — **while asserting the renderer takes no `World`.** Those are
-god-state reads; the marks they were drawn for are withdrawn at A.3.5.
+god-state reads; the marks they were drawn for are withdrawn at A.3.3.
 ### A.1.3 · The replacement — THE SURFACE LAW, three licences, enumerated and closed
 
 > ### **THE SURFACE LAW**
@@ -120,7 +120,7 @@ a resolver query, and the falsifier in PART D is exactly that scan.
 `establishment_of` reads the Office's own `establishment` field (`world_q.py:399-415`) — admissible
 under **L-3**, because a seat I hold is state I am an endpoint of, and *"the named persons the office
 employs"* are people I hired. `verbs(w, site, floors)` is **not** admissible under any of the three
-and is dealt with at A.3.5, where it costs the design its single most load-bearing display.
+and is dealt with at A.3.3, where it costs the design its single most load-bearing display.
 `presence(w, rung)` is not admissible either — and the repair is narrow: **presence at my OWN rung is
 a fact I observe by standing there, so the surface reads it as a claim that `WITNESS` deposited**,
 never as the query. That is not a softening: `_ch_co_located` is the channel that puts the room in my
@@ -276,17 +276,14 @@ would make it formable — and all three cases are already traced by the engine.
 | an operand would not bind | the blank: *"you have nothing in mind to send"* | *"`operands_for` traces every decline, so the count is measurable rather than inferred from a verb's absence"* — `options.py:58-59` |
 | **no question names this subject** | *"nothing has made you think about Gelbgrund. You have sent nobody, and nobody has come."* | **[DESIGN]** the complement of `questions_for`'s referent sets over what the player can see. One derived list, no carrier, no store |
 
-⚠ **AND THE STRUCK-AFFORDANCE DISPLAY COLLIDES WITH THE EXISTING UI CORPUS, WHICH I RULE RATHER THAN
-IGNORE.** `valoria_ui_ux_v4_1.md:63` states Oath II as *"**Only surface UI elements the character can
-use**"*, and its violation test 1 at `:65` is *"Does the UI display a control for a capability the
-character does not currently have (e.g., a Thread sight toggle on a TS 0 character)? If yes → FAIL."*
-Read literally, that fails the display above. **It does not apply, and the reason is in the engine's
-vocabulary:** test 1's referent is a **capability** gate, and `eligibility_kinds` is
-`[own, remit, hold, presence]` with the roster note *"⚠ `capability` IS NOT AND MUST NEVER BE A
-MEMBER … 'capability supplies dice and GATES NOTHING'"* (`engine/season/rosters.yaml:152-160`). The
-struck affordance's gate is an **eligibility** clause — a public fact about an office anybody in the
-world can know — not a hidden capability. Oath II survives; its worked example has no referent in this
-model.
+⚠ **THE STRUCK-AFFORDANCE DISPLAY COLLIDES WITH THE UI CORPUS, AND I RULE IT RATHER THAN IGNORE IT.**
+Oath II is *"**Only surface UI elements the character can use**"* (`valoria_ui_ux_v4_1.md:63`) and its
+violation test 1 is *"Does the UI display a control for a **capability** the character does not currently
+have …? If yes → FAIL"* (`:65`). **It does not apply:** test 1's referent is a *capability* gate, and
+`eligibility_kinds` is `[own, remit, hold, presence]` with the note *"⚠ `capability` IS NOT AND MUST NEVER
+BE A MEMBER … 'capability supplies dice and GATES NOTHING'"* (`rosters.yaml:152-160`). The struck
+affordance's gate is an **eligibility** clause — a public fact about an office — not a hidden capability.
+Oath II survives; its worked example has no referent in this model.
 
 | candidate framing for the option set | who owns it | verdict |
 |---|---|---|
@@ -299,7 +296,7 @@ model.
 > **The four askers are `dispatch · convene · petition · commit`, all four are existing verbs, and
 > today zero of them is both formable and resolvable (measured, A.2.1). The named cheapest repair is
 > `@effect_for("commit")`, which makes the self-authored goal live and is unflagged by the Arc-2 rule.**
-> Cited to `world_q.py:439-552` for the sources, `carriers.py:263-265` for the closure,
+> Cited to `world_q.py:439-552` for the sources, `carriers.py:259-260` for the closure,
 > `verb_table.yaml:115-129` and `:746-754` for the two halves of the swearing route.
 
 ---
@@ -352,70 +349,59 @@ Three readings, each load-bearing, and the third is a correction to the analyse 
   **readable** — it is one derived enumeration over the ledger, no store, no field. It is an addition
   of one reading, and it is counted as one in PART B rather than smuggled as free.
 
-### A.3.2 · Reading 1 of 3 the critic found unreachable — COMPARING TWO PLACES
+### A.3.2 · The three readings a critic found unreachable — answered, with no new object
 
-**The problem.** *Is Gelbgrund worse off than Erzbach?* Both places are subjects in one ledger, so the
-comparison is person-side and adds no read. What is missing is a **pairing vocabulary**: `agreement`
-pairs by predicate over `person_predicates`, and there is no `place_predicates` roster.
+**1 · COMPARING TWO PLACES.** Both places are subjects in one ledger, so the comparison is person-side
+and adds no read. What looks missing is a **pairing vocabulary** — `agreement` pairs by predicate over
+`person_predicates`, and there is no `place_predicates` roster. **One is not needed, because the
+vocabulary is derived rather than authored:** the `W-B` observation deposit writes claims in
+`LedgerReader`'s own namespace — *"`stores:<kind>` / `condition` / `contain.path:<to>` / `claim.held` /
+`exists:<kind>` / a relation stem"* (`witness.py:220-221`) — and *"These claims are in that namespace by
+construction, because the Observation's predicate is derived from the cell"* (`:225`).
 
-**And one is not needed, because the vocabulary is derived rather than authored.** The `W-B`
-observation deposit writes claims in the `requires` namespace — `LedgerReader`'s own vocabulary is
-*"`stores:<kind>` / `condition` / `contain.path:<to>` / `claim.held` / `exists:<kind>` / a relation
-stem"* (`engine/season/loop/witness.py:220-221`), and those predicates are **derived from the verb's
-typed cell**, not from a roster: *"These claims are in that namespace by construction, because the
-Observation's predicate is derived from the cell"* (`:225`).
+> **[DESIGN] The comparison is `agreement`'s shape with both arms re-bound: `pair(claims about A, claims
+> about B)` over the predicates present in BOTH, with the unpaired ones named as why it is thin.** *You
+> hold `stores:grain` for both, four seasons apart. You hold `condition` for Erzbach's harbour and
+> nothing for Gelbgrund's.* One derived list, zero rosters — **and the honest output of a two-place
+> comparison is usually a report about the reader**, which is `AX-2` rendered as a feature.
 
-> **[DESIGN] The comparison is `agreement`'s shape with both arms re-bound: `pair(claims about A,
-> claims about B)` over the predicates present in BOTH, with the unpaired predicates named as the
-> reason the comparison is thin.** *You hold `stores:grain` for both, four seasons apart. You hold
-> `condition` for Erzbach's harbour and nothing for Gelbgrund's.* One derived list; zero new rosters;
-> **and the honest output of a two-place comparison is usually a report about the reader**, which is
-> the correct answer and is `AX-2` rendered as a feature.
+**2 · A POLICY'S COMPLIANCE ACROSS A PROVINCE.** The axis is wrong, and correcting it dissolves the
+problem. `issue`'s requires cell is verbatim *"scope enumerates executors, not places (§37.1)"* and its
+`scale_note` reads *"a Dispensation's `scope` enumerates executors — §37.1 — so its reach is the domain
+the issuer governs"* (`verb_table.yaml:258, 261`). A policy has no provincial axis: **it has a list of
+people.**
 
-### A.3.3 · Reading 2 of 3 — A POLICY'S COMPLIANCE ACROSS A PROVINCE
+> **[DESIGN] Group the executor list by where I last heard each man was — and `residence` is already a
+> declared `person_predicate` (`rosters.yaml:281`), so the key is a claim I hold about him, never
+> `home_of`** (resolver-side, `world_q.py:150-170`). The unplaced go in a named bucket: *"three men you
+> cannot place."* The provincial shape is an artifact of my knowledge of my own staff, which is what a
+> governor actually has.
 
-**The axis is wrong, and correcting it dissolves the problem.** `issue`'s `requires` cell is verbatim
-*"scope enumerates executors, not places (§37.1)"* and its `scale_note` says *"a Dispensation's `scope`
-enumerates executors — §37.1 — so its reach is the domain the issuer governs"*
-(`engine/season/verb_table.yaml:258, 261`). So a policy has no provincial axis: **it has a list of
-people.** "Compliance across a province" is a grouping of that list.
+⚠ **Free of new objects, not free of work.** `establishment_of` reads *"the named persons the office
+employs. Finite, contested, durable"* (`world_q.py:399-400`) and *"HOW MANY PERSONS AN OFFICE EMPLOYS IS
+`H-34`, GRADED `assumption`, AND IS NOT SUPPLIED HERE"* (`:407-408`); and the world has 19 offices and
+**0 `Record`s**, so there is no dispensation to be compliant with.
 
-> **[DESIGN] Group the executor list by where I last heard each of them was — and `residence` is
-> already a declared `person_predicate` (`rosters.yaml:281`), so the grouping key is a claim I hold
-> about each man, never `home_of`** (which is resolver-side, `world_q.py:150-170`). The unplaced
-> executors go in a named bucket: *"three men you cannot place."* The provincial shape is an artifact
-> of my own knowledge of my own staff, which is what a governor actually has.
-
-⚠ **Free, in the sense that it needs no new object, and NOT free in the sense of working today.**
-`establishment_of` reads *"the named persons the office employs. Finite, contested, durable"*
-(`world_q.py:399-400`) and *"HOW MANY PERSONS AN OFFICE EMPLOYS IS `H-34`, GRADED `assumption`, AND IS
-NOT SUPPLIED HERE"* (`:407-408`). And the world has 19 offices and 0 `Record`s, so there is no
-dispensation to be compliant with.
-
-### A.3.4 · Reading 3 of 3 — FINDING A PERSON YOU HAVE NOT MET
-
-`opening_set`'s clause 3 is `subject in referents(q)` (`options.py:48`), so **the reachable subjects are
-the referents of my questions and nothing else.** A person nobody has mentioned is not a referent and
-cannot be acted on — which is correct, and is the axiom rather than a gap.
-
-The three routes by which a stranger becomes a referent, and their live status:
+**3 · FINDING A PERSON YOU HAVE NOT MET.** `opening_set`'s clause 3 is `subject in referents(q)`
+(`options.py:48`), so **the reachable subjects are the referents of my questions and nothing else.** A
+person nobody has mentioned is not a referent and cannot be acted on — which is the axiom, not a gap.
+Three routes make a stranger a referent:
 
 | route | mechanism | live? |
 |---|---|---|
-| somebody tells me about them | Q2, `(c.subject,)` is the referent (`world_q.py:494`); a `told_by` claim's subject is a person id | **the only live one**, and it is the answer: *you find a person by asking someone* |
-| they are a matter on a docket I sit on | Q1's referents are the docket's matters (`:479-480`) | dead — `w.dates` is 0 and `calendar()` writes `Date.fired` with no `emits=`, so Q1's provenance walks nowhere (`world_q.py:571-579`) |
+| somebody tells me about them | Q2 — `(c.subject,)` is the referent (`world_q.py:494`), and a `told_by` claim's subject is a person id | **the only live one**, and it is the answer: *you find a person by asking someone* |
+| they are a matter on a docket I sit on | Q1's referents are the docket's matters (`:479-480`) | dead — `w.dates` is 0, and `calendar()` writes `Date.fired` with no `emits=` so Q1's provenance walks nowhere (`world_q.py:571-579`) |
 | I swear something about them | Q4's referent is `(prop.subject,)` (`:527-528`) | one effect body away (A.2.2) |
 
-**And `interview` is the verb, and it is formable AND resolvable** (`verb_table.yaml:643-657`;
-eligibility `own`; requires only *"the person questioned exists"*). So a player may interview a person
-they have never met, provided somebody mentioned them. ⚠ Its own row records what the precondition
-canon *wants* and cannot have: *"a witness is someone who HOLDS a claim on the matter, and `04 §B.2`'s
-corrected `F8` carve-out admits a resolver-side ledger read for THE ACTOR'S OWN ledger and no other …
-So `own_ledger` cannot be pointed at the person being questioned, and existence is the strongest clause
-the grammar admits here"* (`:651`). **That is `AX-2` refusing to tell you whether the man you are about
-to question knows anything**, and it is right.
+**And `interview` is formable AND resolvable** (`verb_table.yaml:643-657`; `own`; requires only *"the
+person questioned exists"*), so a player may interview someone they have never met, provided somebody
+mentioned them. ⚠ Its own row records what the precondition canon *wants* and cannot have: *"a witness is
+someone who HOLDS a claim on the matter, and `04 §B.2`'s corrected `F8` carve-out admits a resolver-side
+ledger read for THE ACTOR'S OWN ledger and no other … existence is the strongest clause the grammar
+admits here"* (`:651`). **That is `AX-2` refusing to tell you whether the man you are about to question
+knows anything**, and it is right.
 
-### A.3.5 · What the place surface must NOT draw, and the one display this costs the design
+### A.3.3 · What the place surface must NOT draw, and the one display this costs the design
 
 Three withholdings, each with the line that forces it:
 
@@ -428,11 +414,10 @@ Three withholdings, each with the line that forces it:
   schema edit** … **MECHANICAL against the accidental case, CONVENTION against the deliberate one**"*
   (`:240-244`). A session can add the field; what it cannot do is add one without a matrix row.
 - **No faction colour fill, and no province outline.** Both were drawn by the analyse stage from
-  `footprint` and `provinces_of`, which are resolver-side (`world_q.py:254-272`, `:345-397`) and are
-  **not in the licence list** (A.1.3). The distinction `footprint` records — *"Holding is title;
-  presence is reach"* (`:257-258`) — is real and is exactly what a player cannot see from outside.
-  What the surface may draw is what my claims say: *the banner on the gate at Erzbach, per the
-  carter, last spring.*
+  `footprint` and `provinces_of` — resolver-side (`world_q.py:254-272`, `:345-397`), **not in the licence
+  list** (A.1.3). The distinction `footprint` records, *"Holding is title; presence is reach"*
+  (`:257-258`), is real and is exactly what a player cannot see from outside. The surface draws what my
+  claims say: *the banner on the gate at Erzbach, per the carter, last spring.*
 - ⚠⚠ **AND THE SITE OPTION SET — THE DESIGN'S MOST LOAD-BEARING DISPLAY — SURVIVES ONLY AS A CLAIM,
   BECAUSE THE QUERY IS RESOLVER-SIDE AND ITS VOCABULARY IS NOT THE PLAYER'S.** Two separate facts,
   measured:
@@ -529,7 +514,7 @@ designs the surface on that carrier and says so, rather than designing on the di
    never a modifier. The pre-commit display shows the **rule** before and after, and this is the one
    thing on the whole surface that may be shown with certainty, because it is a statement about the
    rule and not about the world. ⚠ For the floor arm, "before and after" is a statement about
-   `band_floors` cells whose keys are site uses (A.3.5), so what it can show is *which uses leave*, not
+   `band_floors` cells whose keys are site uses (A.3.3), so what it can show is *which uses leave*, not
    which verbs.
 2. **The executors, as people.** Drawn from `establishment_of(office)` — *"the named persons the office
    employs. Finite, contested, durable"* (`world_q.py:399-400`) — admissible under **L-3**. Each
@@ -614,10 +599,10 @@ could read it from, with the honest state of each:
 
 | channel | what it would show | live? |
 |---|---|---|
-| **1 · the missing use** | a market with no `exchange`, a wharf with no shipping | ⚠ **BROKEN.** `verbs()` has no loop caller and returns site uses, not verb rows (A.3.5). And `exchange` is formable but **not resolvable** |
+| **1 · the missing use** | a market with no `exchange`, a wharf with no shipping | ⚠ **BROKEN.** `verbs()` has no loop caller and returns site uses, not verb rows (A.3.3). And `exchange` is formable but **not resolvable** |
 | **2 · who is standing where** | an executor at the granary door *is* the policy embodied | ⚠ **BROKEN in the corpus.** `presence` is resolver-side; the reading is the `co_located` claim it deposits — and **0 of 74 sites has anyone present at its rung** (measured) |
 | **3 · what is nailed to the door** | a `Record` at the rung, and it can be a forgery | ⚠ **BROKEN, and worse than reported.** `examine`'s typed cell is over a **`Site`**, explicitly: *"`Site` rather than `Record` per the block comment's reading of `:315-322`"* (`verb_table.yaml:636`). **No verb's precondition admits a Record**, `forge` is formable but **not resolvable**, and the world holds **0 Records** |
-| **4 · what the people say** | `interview` | **LIVE.** Formable and resolvable (A.3.4) |
+| **4 · what the people say** | `interview` | **LIVE.** Formable and resolvable (A.3.2) |
 
 ⚠ **The forgery reading survives on a different verb than the analyse stage named.**
 `Record.forgery_quality` is a real field (`carriers.py:428`) and it is written by TWO rows —
@@ -633,24 +618,19 @@ learns about government, they learn from somebody.**
 
 ### A.4.5 · Who it hurt — the docket, legibly biased; and the false calm
 
-`AX-2` forbids a welfare readout and any *"who is worse off"* panel is one. What a seat-holder
-genuinely has is **petitions**, and `petition` is `own`-eligible with *"no dedup, no cap, no per-venue
-limit (§26.3)"* (`verb_table.yaml:399`). So the honest rendering of *"who did this hurt"* is the docket,
-unfiltered, with the places that have sent nothing **visibly sending nothing**:
-
-> *Eleven petitions, nine from Gransol and the two towns on the road. Nothing from the four villages in
-> the west.*
-
-A place that never petitions is either content or unreachable and the seat-holder cannot tell which.
-That is a real question with a real cost to answer, and it is the duchy's ruled character.
+`AX-2` forbids a welfare readout and any *"who is worse off"* panel is one. What a seat-holder has is
+**petitions**, `own`-eligible with *"no dedup, no cap, no per-venue limit (§26.3)"* (`verb_table.yaml:399`).
+So the honest rendering of *"who did this hurt"* is **the docket, unfiltered, with the places that have
+sent nothing visibly sending nothing** — *eleven petitions, nine from Gransol and the two towns on the
+road; nothing from the four villages in the west.* A place that never petitions is either content or
+unreachable and the seat-holder cannot tell which: a real question with a real cost to answer.
 
 ⚠ **AND THIS SURFACE MUST BE ABLE TO SHOW A FALSE CALM.** The coverage suite's sharpest finding about a
-duke: his reform *"inverts through three mechanisms"* and **"suppresses the grievance that would have
-reported the failure"** (`proposals/2026-08-30-play-space-coverage/08_coverage_matrix.md:136`).
-**From above, a working policy and a policy that has silenced its victims produce the identical
-display** — a row of complied-per-the-reeve. The interface must not "fix" that with a sentiment
-indicator. The only way to tell them apart is to go, and **that is the game.** Anything else is a
-dashboard over god-state wearing a period frame.
+duke is that his reform **"suppresses the grievance that would have reported the failure"**
+(`proposals/2026-08-30-play-space-coverage/08_coverage_matrix.md:136`). **From above, a working policy
+and one that has silenced its victims produce the identical display** — a row of complied-per-the-reeve.
+The interface must not "fix" that with a sentiment indicator. The only way to tell them apart is to go,
+and **that is the game.** Anything else is a dashboard over god-state wearing a period frame.
 
 > ### RULED: a policy is a NAMED LIST OF PEOPLE, and its surface is the edit plus the blind spots.
 > **Cited to `verb_table.yaml:256-266`, verbatim: `requires: "scope enumerates executors, not places
@@ -667,17 +647,15 @@ dashboard over god-state wearing a period frame.
 ### A.5.1 · A half-finished work renders FREE, and the rendering is the mechanism
 
 `Site.condition` *"is PRIMARY STATE, a FIXED-POINT INT (S48), and it GATES VERBS (S12.1)"*
-(`carriers.py:412-413`). So **a Site below every floor affords nothing**, and a half-built granary is a
-place you can stand in and cannot use. The surface draws it as **a place with no affordances**, and the
-uses it *will* have are struck.
+(`carriers.py:412-413`). So **a Site below every floor affords nothing**: a half-built granary is a place
+you can stand in and cannot use, drawn as **a place with no affordances**, with the uses it *will* have
+struck. **A player reads "not finished yet" off the fact that there is nothing to do here.** No progress
+bar, and none available.
 
-> **A player reads "not finished yet" off the fact that there is nothing to do here.**
-
-No progress bar, and none available. ⚠ And the honest statement of what carries it: the gate is a
-`band_floors` lookup with no loop caller, over a site-use vocabulary that is not the verb table
-(A.3.5). **So "affords nothing" describes the design and not the running loop**, and the corpus's
-`work` acts refuse 723 of 723 — *"the corpus refuses all 723 because no referent it produces is a Site,
-which is a fact about these worlds and not about the threshold"* (`verb_table.yaml:765`).
+⚠ And what carries it: a `band_floors` lookup with no loop caller, over a site-use vocabulary that is not
+the verb table (A.3.3). **So "affords nothing" describes the design and not the running loop** — the
+corpus's `work` acts refuse 723 of 723, *"because no referent it produces is a Site, which is a fact about
+these worlds and not about the threshold"* (`verb_table.yaml:765`).
 
 ### A.5.2 · On the board — named terms struck through, never a percentage
 
@@ -686,28 +664,21 @@ A work's row shows its **stages as named terms**, read off `Record.stages: list[
 
 > ~~the footings~~ · ~~the walls to the eaves~~ · **the roof** · the doors
 
-**Not 60%.** Two reasons, and the second is the binding one.
+**Not 60%.** Two reasons, and the second is binding. A percentage is an aggregate of incommensurable
+things — stone, hands, seasons — answering no question a player has, where a named term answers the only
+one they have: **what do I send next.** And ⚠ **a percentage mints a SECOND LADDER for one quantity**,
+which `CLAUDE.md` §0.06's S clause calls a defect *"even when each is individually correct"*:
+`Person.body` defaults to `DEFAULT_FIXTURES.get("condition_scale")` precisely because a bare literal
+*"would be a second, silent copy of that scale"* (`carriers.py:388-392`). A completion bar is the third.
 
-1. A percentage is an aggregate of incommensurable things — stone, hands, seasons — and it answers no
-   question a player has. A named term answers the only question they have: **what do I send next.**
-2. ⚠ **A percentage mints a SECOND LADDER for one quantity, which `CLAUDE.md` §0.06's S clause calls a
-   defect *"even when each is individually correct."*** `Site.condition` and `Person.body` are the same
-   fixed-point scale by construction — `Person.body` defaults to
-   `DEFAULT_FIXTURES.get("condition_scale")` and the comment says a bare literal there *"would be a
-   second, silent copy of that scale"* (`carriers.py:388-392`). A completion percentage would be the
-   third copy.
-
-**The next term is expressed as what a person can supply** — *so many measures of stone; two men for
-two seasons* — read off the term the act declared, never computed. `Record.stages` is written at RESOLVE
-and *"terms are act-declared, never MATTER-advanced"*; `Record.matured` was ruled by Jordan on
-2026-09-10 with the reasoning transcribed at `carriers.py:432-445`, including that the previous code
-emitted `term.matured` **and applied no write at all** — `ID-9` live.
-
-**The stall is the third use of the one emission rule** (A.4.3): a stage's term whose date passes
-unmatured emits, and then *"The roof was to be on by Michaelmas. Michaelmas has passed."* A date, not a
-number. And `witness.py` records the sibling gap in its own words: *"**a claim leaving a ledger is a real
-state change that Part D gives no kind, so nobody can witness a forgetting**"* — the same shape, one
-object over.
+**The next term is what a person can supply** — *so many measures of stone; two men for two seasons* —
+read off the term the act declared, never computed. `Record.stages` is written at RESOLVE, *"terms are
+act-declared, never MATTER-advanced"*; `Record.matured` is Jordan's 2026-09-10 ruling, transcribed at
+`carriers.py:432-445`, including that the code previously emitted `term.matured` **and applied no write
+at all** — `ID-9` live. **The stall is the third use of the one emission rule** (A.4.3): *"The roof was
+to be on by Michaelmas. Michaelmas has passed."* A date, not a number. `witness.py` records the sibling
+gap in its own words — *"a claim leaving a ledger is a real state change that Part D gives no kind, so
+nobody can witness a forgetting"* — the same shape, one object over.
 
 ### A.5.3 · Inheritance — you inherit the paper, not the claims
 
@@ -757,16 +728,10 @@ The analyse stage wrote that a shortfall *"itself generates a `Question` whose r
 and that the engine *"hands the interface the exact object the player needs."* **Opened and measured:
 it does not.** `matter()` computes the draw, detects the shortfall, and deliberately emits nothing:
 
-```
-if short:
-    # ⚠ A SHORTFALL EMITS NOTHING AND DECIDES NOTHING, on L5's rule: a threshold
-    # crossing *"MAY NEVER PRODUCE AN OUTCOME"*. Inventing starvation here would
-    # be the outcome L5 forbids ... It is recorded so a run can be read.
-    TRACE.note(f"{rid} could not meet subsistence for {len(eaters)} by {short} ...")
-```
-— `engine/season/loop/matter.py:179-185`; the draw itself is
-`draw = {k: wt * len(eaters) for k, wt in weights.items()}` at `:174`, over
-`eaters = world_q.presence(w, rid)` at `:169`
+> *"⚠ A SHORTFALL EMITS NOTHING AND DECIDES NOTHING, on L5's rule: a threshold crossing **'MAY NEVER
+> PRODUCE AN OUTCOME'**. Inventing starvation here would be the outcome L5 forbids … It is recorded so a
+> run can be read."* — `engine/season/loop/matter.py:179-185`, whose whole response is a `TRACE.note`.
+> The draw is `draw = {k: wt * len(eaters) ...}` at `:174`, over `eaters = world_q.presence(w, rid)` at `:169`.
 
 **The crossing machinery covers `Site.condition` bands only** — `for verb, floor in sorted(floors.items()): if before >= floor > s.condition:` at `matter.py:261-262`, emitting
 `condition.band_crossed` and appending `(s.id, verb, before, s.condition, ev.id)` to `w.crossings` at
@@ -780,7 +745,7 @@ all.** The three things that actually reach the player from below:
    it as **quantity against NEED, never against a maximum**: *grain, eleven weeks; the season is
    thirteen.* The player does not need the number, they need to know they are short.
 2. **The use that left.** If the settlement's store now moves only by the reeve's hand, the hearth's
-   `transfer` out of it is gone. ⚠ Blocked at the bridge (A.3.5).
+   `transfer` out of it is gone. ⚠ Blocked at the bridge (A.3.3).
 3. **The question** — which today does not fire, per 1 above and per H-110 below.
 
 ⚠⚠ **AND Q3's REFERENT IS NOT A PLACE — IT IS A SITE-USE STRING, WHICH IS WORSE THAN A WRONG ID.**
@@ -1299,7 +1264,7 @@ player's vocabulary is thirteen verbs and none of them is an act of office; the 
 
 ⚠ **AND THE CHEAPEST STEP OFF `paper` IS NOT THE ONE THE ANALYSE STAGE NAMED.** It ranked *"call
 `verbs()` from the loop and draw one site's option set"* as the smallest first move. **Measured, that
-step draws site-use labels that are not verb-table rows** (A.3.5), from a query that is not in the read
+step draws site-use labels that are not verb-table rows** (A.3.3), from a query that is not in the read
 licence, at sites where 0 of 74 has anyone present — so it would produce a panel of `bulk_shipping` and
 `fishing` beside a candidate list that shares no vocabulary with it. It is cheap and it is not
 first-usable.
@@ -1340,7 +1305,7 @@ first-usable.
 | **D-12** | `inferred` has a ratified producer and no writer | `test_inferred_is_declared_and_unwritten`, asserting the grep result repo-wide — **and it is written to GO RED**: when the channel is carried through the fan, this test fails and is rewritten as its own control (*a `post_remit`-only witness holds an `inferred` claim; a `co_located` one does not*) |
 | **D-13** | the four question sources reduce to one on the corpus | `test_build_realm_produces_only_need_questions`: assert the source histogram over 46 persons at tick 0 is `{need: 81}`. **A pinned measurement, expected to change**, and when it changes the reason must be a build item and not a fixture edit |
 | **D-14** | zero of the four routes to a new question is both formable and resolvable | `test_no_route_to_attention_is_both_formable_and_resolvable`, over `dispatch`, `convene`, `petition`, `commit`. **Goes RED on step 1 of C.4** and is rewritten as the control (`commit` passes; the other three still fail) |
-| **D-15** | the site-use vocabulary and the verb table are disjoint | `test_band_floors_keys_are_not_verb_table_rows`: assert the intersection of `band_floors`' inner keys with `VERB_TABLE`'s verbs is **empty**. If it is ever non-empty, the bridge A.3.5 says is missing has been built and the option-set display is unblocked |
+| **D-15** | the site-use vocabulary and the verb table are disjoint | `test_band_floors_keys_are_not_verb_table_rows`: assert the intersection of `band_floors`' inner keys with `VERB_TABLE`'s verbs is **empty**. If it is ever non-empty, the bridge A.3.3 says is missing has been built and the option-set display is unblocked |
 
 **And the falsifier for PART A's central claim, which is the one that must not be quietly satisfied:**
 `test_the_surface_law_is_three_licences_not_a_parameter_list` — assert that the renderer's entry point
