@@ -458,7 +458,7 @@ decline) was never decided** — it is what the instrument did when §F1 was sil
 
 **Repair, shaped to survive AX-2.** The `confer` Event carries the conferred seat's `remit.acts`; the
 witness step mints the conferee's firsthand claim of it (`loop/witness.py:175` mints only `firsthand`
-/ `firsthand_via_knot`, so this is the existing channel); `person_side_eligible` then evaluates
+/ `firsthand_via_knot`, so this is the existing channel — ⚠ existing *channel*; the deposit's predicate is `e.kind`, `witness.py:191`, so the remit-claim SHAPE is a new deposit rule, `01` §A.6, 2026-09-17); `person_side_eligible` then evaluates
 `remit:<act>` from the person's **own ledger**. ⚠ **`ARCH §C.3` binds `engine/season/decision/` by
 PATH** — no `World`, as an import, a name, an attribute or a string — so a reader added here must
 take a snapshot. That is what makes the ledger arm the arm that fits and the Query-over-`via.scope`
@@ -507,8 +507,8 @@ distinguishes a repair from a deletion.
 
 Five families as `site_kinds` members, each landing with its `wear_per_season` rate **and** its
 `band_floors` cell in the same commit (**L28/L29** — the load is the falsifier), plus a `site_yield`
-cell per productive kind (**L30**) and `regrowth: 0` rows for built kinds so item 7's upward crossing
-is not confused with regrowth. **Artifact.** The loader green with 8 site kinds.
+cell per productive kind (**L30**) ~~and `regrowth: 0` rows for built kinds so item 7's upward crossing
+is not confused with regrowth~~ (⛔ struck 2026-09-17: no `regrowth` table exists and nothing would read one — `02` §C.2; the guard against unauthored regrowth is a sign assertion over `(Site, condition)` writes by step, not a row). **Artifact.** The loader green with 8 site kinds.
 **Control.** `band_floors`' declared sweep (`rosters.yaml:1179`): the offered-use set from
 `world_q.verbs` must change under `halved`/`doubled`. **Falsifier.** the import itself ·
 `test_built_kinds_do_not_regrow`. ⚠ `body` is on `site_kinds` and **is not a site** — it is
@@ -748,8 +748,8 @@ that the proposal itself had marked `[GAP: no consumer]` and still counted.
 | 23 | `character(w, rung)` | S | no | last | only with a consumer named |
 
 **Items 1–12 are cheap, unflagged, and mostly fixes.** A session may land them one commit each
-(`[fix]`, `[simulation]`, `[design]` for item 1's ruling-shaped half). **13, 15, 16 and 21b wait on
-19 and 20.** ⚠ **Nothing in this table marks a juncture done** (§0.2); a juncture is done when
+(`[fix]`, `[simulation]`, `[design]` for item 1's ruling-shaped half). **13, 15, 16 ~~and 21b~~ wait on
+19 and 20** (21b's flag was dropped at item 21 and this sentence had not followed; corrected 2026-09-17)**.** ⚠ **Nothing in this table marks a juncture done** (§0.2); a juncture is done when
 something runs it and prints.
 
 ---
@@ -1003,7 +1003,7 @@ These thirteen were live candidates for `needs_jordan` and are closed here.
 | 5 | **Who may `open_case`?** | **CLOSED.** `open_case` is `remit:determine`; the person's route is `petition` (`own`) | 3 | ratified position 19; the `verb_table.yaml` rows |
 | 6 | **Council cardinality — one seat or many?** | **CLOSED: ONE seat, many holders via `oblige`** | 3 | `AX §E.2.5` (`:1465`); `ARCH §B.7` call 2 |
 | 7 | **Is a province stored or emergent?** | **CLOSED: a declared `rung_kind` that `build_realm` never builds — emergent** | 3 | `world_q.py:345 provinces_of`; `rosters.yaml:109` (province is on the ladder); `systems/settlements/reference/scale_hierarchy_v1.md` §2 (`## Status: RATIFIED`, 2026-07-13; *"a province is an emergent aggregation"*, `:32-33`) |
-| 8 | **AX-5 bidirectional MATTER — is an upward crossing a fourth motion?** | **CLOSED: motion 1.** Ship `regrowth: 0` rows for built kinds plus item 7's falsifier. No ruling | 5 | `matter.py:262`; R4's four routes (`design_rulings_2026-09-06.md:81-87`) |
+| 8 | **AX-5 bidirectional MATTER — is an upward crossing a fourth motion?** | **CLOSED: motion 1.** ~~Ship `regrowth: 0` rows for built kinds plus~~ item 7's falsifier, plus the sign assertion `02` §C.2 now carries (the `regrowth` rows were struck 2026-09-17 — no table, no reader). No ruling | 5 | `matter.py:262`; R4's four routes (`design_rulings_2026-09-06.md:81-87`) |
 | 9 | **Prince-bishop exclusivity — may one person hold a title seat and a body seat?** | **CLOSED: yes, and exclusivity is CONTENT** — refused at `confer` by a `cardinality`/`relation` conjunct once `Act.via` lands. `Office.__post_init__` already refuses a title-in-a-body (`carriers.py:536`) | 5 | `ARCH §B.7`; `state/carriers.py:527-547` |
 
 | 10 | **The council grant fork — where does a council member's grant live?** | **CLOSED at gate 3, and the premise is dead.** `ARCH §B.8` retires `Tenure.payload` in favour of `term?`, so there is no payload to put a grant on; `01` §A.6 puts it nowhere at all — what a person may do by virtue of a seat is a **claim in their own ledger**, deposited by the same witness step for a council member as for a sole holder. `hold` keeps 1-per-object | 3, 1 | `ARCH §B.8`; `01` §A.4, §A.6; `world_q.py:138-145` |
@@ -1023,7 +1023,7 @@ template. `wound` → `Site` — deferred to position 22, which is not the same 
 | # | claim | what would show it wrong |
 |---|---|---|
 | BO-1 | **The gate-contract rule partitions the work correctly** | an item with an empty `writes:` and no Tenure-on-another write that nevertheless has to be rewritten at position 7. One such item and the rule is not a rule |
-| BO-2 | **Two thirds of both subjects are Arc-2-independent** | count the flagged rows in §A.6: 4 of 23 are `YES`, 2 are the gate itself. If a reader finds a fifth `@effect_for` hiding in items 1–12, the fraction moves |
+| BO-2 | **Two thirds of both subjects are Arc-2-independent** | count the flagged rows in §A.6: ~~4 of 23~~ **3 of 23** are `YES` (13, 15, 16 — item 21's strike dropped the fourth and this row had not followed; corrected 2026-09-17), 2 are the gate itself. If a reader finds a fifth `@effect_for` hiding in items 1–12, the fraction moves |
 | BO-3 | **Items 1–5 are testable today** | any of them needing a carrier, a roster member or a gate parameter that does not exist. Item 4 is the closest call — it needs item 8 to keep `populated` loading, which is why they are paired in the text rather than left to be discovered |
 | BO-4 | **Q3's referent fix alone changes nothing observable** | a crossing in any world any gate executes. The falsifier is cheap: `len(w.crossings)` after the runs CI performs. Measured 0; if it is ever non-zero, item 1b is unnecessary and should be dropped |
 | BO-5 | **`Rung.sites` is a free cut** | a reader outside tests, or a `(Rung, sites)` matrix row. Measured: neither exists. `grep -rn "\.sites" engine/season --include=*.py` and the 40-row matrix are the instruments |

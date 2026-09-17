@@ -44,7 +44,7 @@ readings, and they bind the whole directory.**
 | **post** | the seat's name string, from which **nothing may be inferred** | ~~a discriminator~~. Reading purview off a post string is the live defect (§A.2) |
 | **purview** | what a seat governs: the `contain` closure of its `scope`, plus the holder's own `hold` Tenures, asked of **the seat exercised** | ~~*domain*~~, ~~*scope*~~ used for the same thing. `scope` is the seat's **one** rung (or none) |
 | **policy** | a `Record` of kind `dispensation`, scoped to at most one rung, naming one **clause** and one `OUGHT` Proposition as its **terms**, held by its issuer | ~~*instrument*~~ as a second noun, ~~a modifier~~, ~~a flag on a territory~~ |
-| **clause** | one of seven — `draw: spend: sit: levy: admit: bear: hear:` — each either reordering a step, changing an option set, or creating a date | ~~*dispensation*~~ for the clause. The `dispensation` is the Record; the clause is what it says |
+| **clause** | one of seven — `draw: spend: sit: levy: admit: bear: hear:` — each either reordering a step, changing an option set, or ~~creating~~ **conditioning** a date (the `Date` is `convene`'s — §A.4, corrected 2026-09-17) | ~~*dispensation*~~ for the clause. The `dispensation` is the Record; the clause is what it says |
 | **reach** | a **declared operand** on the policy, `near | all`. A superior spends an act to declare `all` | ~~the ordinary word~~ in `verb_table.yaml:261`'s *"its reach is the domain the issuer governs"*. Two senses, named (`03` §A.4) |
 | **a `works`** | the multi-season construction: a `Record` of kind `works` with act-declared stages | ⛔ ~~*a work*~~ (collides with the live verb `work`, *labour at a site*) and ⛔ ~~*a project*~~. **RULED `01` §A.12; `02` and `03` used both and are corrected in place** |
 | **fabric** | the built thing itself — a `Site`, which has a `condition` | ~~*building*~~ used for the plot |
@@ -138,12 +138,12 @@ design document in a superseded tree — cited for intent, never as a value (`CL
 province *"an emergent aggregation that exists only while its constituent territories share a common
 faction holder"* (`scale_hierarchy_v1.md:32`) and `build_realm` builds **zero**. The later ruling
 governs; the kind stays declared and uninstantiated. That is exactly why the Count is the one seat
-whose scope is recomputed every season and the one seat that can outlive its own country.
+whose scope is recomputed every season and the one seat that can outlive its own country. ⚠ *2026-09-17 NERS pass:* a scope recomputed every season is not `ARCH §B.7`'s `scope?` — one rung, declared at `establish` — and a set of territories is the `domain: RungId[]` shape `01` §A.1 refuses. Under §B.7 the Count is a **cluster** seat whose clauses reach by `binds`, the **unbuilt diagonal** (`01` §A.7.5), not by the walk of §A.5.
 
 ## §A.4 · The policy, end to end
 
 **Seven clauses, onto the closed seven `requires` forms, using three of them.** `draw:` and `spend:`
-are read only by MATTER. `sit:` has two readers — it writes the rung's dates *and* gates `convene`.
+are read only by MATTER. `sit:` has two readers — it writes the rung's dates *and* gates `convene` (⚠ it attaches a convening condition and names the rung's dates; **the `Date` object is still minted only by `convene`** — `(Date, due_at)` is `[RES]`, *"CAL struck"*, `write_matrix.yaml:93-100`; corrected 2026-09-17).
 `levy:`, `admit:`, `bear:` and `hear:` gate an act. A clause conjunct is `all: [<the verb's own cell>,
 <the clause's cell>]`, which the grammar already implements; **an eighth form refuses at load**, and
 that refusal is the design statement rather than a limitation. *Owner: `01` §A.9.*
@@ -183,15 +183,15 @@ and one walk that finds them:
 MATTER at rung r:
   1. yield(r) -> r.stores                                   (Rung, yield) -- "only here"
   2. spend: = in_force(w, r, 'spend:')     the declared stage draws, in the order the clause names
-  3. levy:  = in_force(w, r, 'levy:')      the share that leaves r.stores, held against the date
+  3. levy:  = in_force(w, r, 'levy:')      the share DEMANDED of r.stores (read by demanded()); NOTHING LEAVES HERE
   4. draw:  = in_force(w, r, 'draw:')      mouths fed from r.stores IN THE ORDER the clause names
   5. short  = what step 4 could not cover  -> (Person, body)     [UNBUILT]
 ```
 
 A Count issues a `levy:` through his provincial seat and **names no settlement and no hearth**. At each
-settlement, step 3 calls `in_force(w, S, 'levy:')` and the walk ascends to the province. At each hearth
+settlement, step 3 calls `in_force(w, S, 'levy:')` and the walk ascends to the province (⚠ **which does not exist in the built world**: `build_realm` builds `province 0`, §A.3, and no `contain` chain names one — `populated.py:317-363` links hearth → community → settlement → territory → duchy → realm. A Count's seat is a cluster seat whose clause travels by `binds`, `01` §A.7.5's **unbuilt diagonal**; the headline runs today from a **duchy** or **territory** seat, and *provincial* is Jordan's intent rather than a constructible step. Corrected 2026-09-17). At each hearth
 beneath, the same walk finds the same clause **unless the settlement's own seat has issued a nearer
-one**. Step 4 draws mouths against a smaller store.
+one**. Step 4 draws mouths against a smaller store. ⚠ **Step 3 corrected 2026-09-17:** it read ~~*the share that leaves r.stores*~~; `02` §A.6 RULES that MATTER moves no matter across a `contain` edge — a tax that collects itself is the fourth clock `AX` **T-c** forbids — and `transfer` binds `from` to the actor's own containing rung. So the share is **demanded** at MATTER and **moved** only by a person's `transfer` at RESOLVE, one season upstream; step 4 draws against a store somebody's act has already reduced, or has not. `01` §A.10 carries the same strike.
 
 > **A named woman in a named house is thinner this season because of a sentence a man she has never
 > heard of uttered in a chamber she has never seen. Nobody authored her crisis; it is lines 3, 4 and 5.**
@@ -363,7 +363,7 @@ authority or a new modifier.
 |---|---|---|
 | **verbs** | **1** (`found`) | no — it is the producer two declared write-matrix rows have waited for, and `ARCH §F.20` asks for it by name |
 | **effect bodies** | **2** (`found`, `restore`) | no — `restore`'s row is `grade: ruled` with its formula already in it; eleven bodies exist |
-| **Queries** | **5** (`in_force`, `delivered`, `demanded`, `ceiling`, `capacity`) | no — owned by Nobody, storing nothing. `capacity` is already declared in the ratified Query roster |
+| **Queries** | ~~**5**~~ **8** (`in_force`, `delivered`, `demanded`, `ceiling`, `capacity` — **plus `occupiable` and `serves`, RULED in `02` §A.1 / §A.5.5 and counted by nobody, and `character`, `04` item 23**; corrected 2026-09-17) | no — owned by Nobody, storing nothing. `capacity` is already declared in the ratified Query roster; `character` ships only with a consumer named |
 | **Record kinds** | **2** (`dispensation`, `works`) | no — the fold is already owed by a ratified position |
 | **rosters** | **1** (`record_kinds`), plus **5 site families** as rows on an existing one | no — the loader pattern exists, and a `.kind` matched as a free string is `AX` ID-4's defect |
 | **question sources** | **1** (Q5 `purview`) | no — one row on an **open, ordered** roster, reusing `under_purview` |
@@ -372,6 +372,7 @@ authority or a new modifier.
 | **predicate conjuncts** | **2**, both inside a single existing owner | no — an eighth `requires` form would refuse at load |
 | **surface readings** | **4**, over existing state | no store, no carrier, no verb |
 | **content moves** | **2** (fabrics at the rungs people are in; 16 faction holds re-homed) | content, not schema |
+| **fixture columns** | **1** (`houses` per DWELLING kind — `02` §B.1 counts it; this table omitted it until 2026-09-17) | ⚠ **an addition**, `[OPEN — Jordan tuning]` |
 
 **Carriers added: 0. Fields on carriers: 0. Write classes, steps, strata, eligibility kinds, tenure
 kinds, `requires` forms and operands: 0.**
@@ -388,7 +389,7 @@ gauges as stored fields, a transition registry with its hysteresis, three stat-b
 completion percentage, four typed UI layers, a Slate dock, a character sheet, a Codex, a cutscene queue
 and a mode switch. **And every "+N to a roll" reading of a policy or a built thing.**
 
-**E, scored LAST and as a ratio (`CLAUDE.md` §0.06).** In: one verb, two effect bodies, five Queries,
+**E, scored LAST and as a ratio (`CLAUDE.md` §0.06).** In: one verb, two effect bodies, ~~five~~ **eight** Queries (three counted by nobody until 2026-09-17), one fixture column,
 two Record kinds, one roster, one question source, two operands, two emissions, two conjuncts, four
 readings. Out: the list above. **PASS as a ratio, far below one primitive added per primitive removed —
 and it would FAIL scored alone**, because the largest moves here are deletions and an amputation always
@@ -427,7 +428,7 @@ will assume it is structural, and the assumption is the failure mode."*
 | `in_force` cannot go stale | **STRUCTURAL** | it is a function; there is no field to initialise and forget |
 | `decision/` sees no World | **STRUCTURAL by path** | plus a live AST test |
 | purview is asked of the seat, not the actor | **MECHANICAL** | `ARCH §B.7`'s own grade, **and it is violated in running code today** |
-| a clause cannot name a person; adding a site kind is three edits | **MECHANICAL at load** | the operand roster and the coordinated-row check |
+| a clause cannot name a person; adding a site kind is three edits | **NOTHING today** for the first (the cell is load-checked, the Record is runtime — `01` §C.2, corrected 2026-09-17) · **MECHANICAL at load** for the second | the coordinated-row check; for the clause, an `issue` effect body that does not exist |
 | a `hold` never reaches a `Site` | **MECHANICAL once the conjunct lands — NOTHING today** | ⚠ `add_tenure` checks kind and `contain` ascent and **nothing about object class** |
 | the renderer reads only L-1..L-3 | **MECHANICAL** | a path/AST scan — ⚠ **and a `TRACE` assertion alone cannot observe the failure**: four resolver functions emit no `TRACE.query`, `parent_of` among them |
 | a policy-effects readout cannot be built on the surface | **MECHANICAL** | ⚠ corrected — see the note below |
@@ -489,7 +490,7 @@ thirteen, and `04` now carries it.
 **Falsified by** any of: a clause row whose terms bind `amount` or `floor` **and whose reader passes it
 to a contest**; a clause for which **no** world exists where flipping its value changes
 `World.content_hash()` (then it has no reader and `AX` ID-13 deletes it); a seeded two-arm run in which
-the settlement's and the hearth's `stores` are **equal** with the province's `levy:` present and absent
+the settlement's and the hearth's `stores` are **equal** with the ~~province's~~ **duchy's** `levy:` present and absent (no province rung exists to issue from — §A.5)
 (then the walk is not being called); or the distribution of `short` at the hearth being **disjoint**
 between arms over ≥30 seeds (then it is arithmetic, not emergence — *this is the row that distinguishes
 a design from a spreadsheet*).

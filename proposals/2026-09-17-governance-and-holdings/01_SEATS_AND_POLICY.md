@@ -69,8 +69,8 @@ front, so a reader can skip the first list entirely.
 
 | item | what it rests on |
 |---|---|
-| **the policy instrument**: a `dispensation` `Record`, held by its issuer, whose reach is the issuing seat's (§A.7) | `ARCH §A.3` row 11; `ARCH §B.4/B.5`; `holonic_ARCHITECTURE.md:538`; `engine/season/loop/effects.py:262-289` |
-| **`in_force(w, rung, clause)`** — the nearest-ancestor walk up `contain`, plus a `reach` operand (§A.8) | `world_q.py:48` `parent_of`; the same ascent `predicates.py:105-140` and `world_q.py:416-437` already walk |
+| **the policy instrument**: a `dispensation` `Record`, held by its issuer, whose reach is the issuing seat's (§A.7) | `ARCH §A.3` row 11; `ARCH §B.4/B.5`; `holonic_ARCHITECTURE.md:538`; `engine/season/loop/effects.py:262-289`. ⚠ **NARROWED BY THE 2026-09-17 NERS PASS: EXTENSION for the carrier and for the four RESOLVE-gating clauses only.** The three MATTER-read clauses (`draw:` `spend:` `levy:`) and the `reach: all` operand contravene `holonic_ARCHITECTURE.md` §37.3 rows 1, 2 and 4 (`:1300-1306` — *broadcasting a dispensation to all descendants* · *applying a dispensation as a state write* · *assuming delivery*), which §A.7.5 does not address (it honours row 3 only). `ARCH §B.2` F8 (`:230`) keeps `comply` reading the actor's OWN claim of the terms, and `ARCH §F.15` (`:1077`) files the downward mechanism as an **open gap**, not a superseded rule. **That half is a DEPARTURE and belongs with RR-1**, not an extension |
+| **`in_force(w, rung, clause)`** — the nearest-ancestor walk up `contain`, plus a `reach` operand (§A.8) | `world_q.py:48` `parent_of`; the same ascent `predicates.py:105-140` and `world_q.py:416-437` already walk. ⚠ Same narrowing as the row above (2026-09-17): the walk is EXTENSION as a Query; its MATTER readers and `reach: all` are the departure |
 | **the seven clauses**, three as step readers and four as `requires` conjuncts (§A.9) | `rosters.yaml:1086-1122` (seven forms, closed); `engine/season/data/requires.py:542` (`all`) |
 | **the conferral claim** — `remit:` evaluated person-side from the holder's own ledger (§A.6) | `options.py:107-169`; `engine/season/loop/witness.py:175`; `AX:100-103` (AX-2) |
 | **a `record_kinds` roster**, so `Record.kind` is declared rather than matched (§A.7.4) | `AX:443` (ID-4); `effects.py:285`'s `d.get("kind") or "text"` |
@@ -303,7 +303,7 @@ one office share one remit**, so it is not the person's state to move"* (`:119-1
 | widen `choose`'s signature to take a `World` | — | **REFUSED, structurally.** `ARCH §C.3`: *"`decision/` imports `person_q` and `data/`. **It does not import `state/`, `world_q` or `loop/`**"*, and `ARCH §A.3` row 1 gives the reason: *"the only thing making no World in scope checkable by path rather than by reading bodies"* |
 | the grant on `Tenure.payload` | the 2026-09-16 sweep's arm 2 | **REFUSED — retired.** `ARCH §B.8`: `term?` *"Replaces payload?"* |
 | the grant on `Tenure.conferrer` | the design stage's own carrier | **REFUSED — gone.** `carriers.py:48-56`: *"WHAT CONFERRED a Tenure is the opening Act… A field here would be a second home for a fact the act already holds — `ID-2`"* |
-| **the conferee's own ledger carries a claim of the seat's remit, deposited at the conferral** | the conferee (`carriers.py:382`) | ⭐ **EXTENSION, ADOPTED.** `remit:<act>` person-side = *the actor's ledger carries a live claim that they hold seat `S`, and a claim that `S`'s remit contains `<act>`*. The `confer` Event's payload carries the seat's `remit.acts`; WITNESS deposits each observer's own claim (`witness.py:175`: `src = "firsthand_via_knot" if via_knot else "firsthand"`), and the conferee is present by construction |
+| **the conferee's own ledger carries a claim of the seat's remit, deposited at the conferral** | the conferee (`carriers.py:382`) | ⭐ **EXTENSION, ADOPTED.** `remit:<act>` person-side = *the actor's ledger carries a live claim that they hold seat `S`, and a claim that `S`'s remit contains `<act>`*. The `confer` Event's payload carries the seat's `remit.acts`; WITNESS deposits each observer's own claim (`witness.py:175`: `src = "firsthand_via_knot" if via_knot else "firsthand"`), and the conferee is present by construction. ⚠ *2026-09-17 NERS pass:* the existing deposit's predicate is the EVENT KIND (`Claim(cid, pid, subj, e.kind, True, …)`, `witness.py:191`), so nothing today mints *S's remit contains X*; the **channel** exists, the **claim shape is a new deposit rule** — one, and counted as the addition it is |
 
 **Why this is better than a wider signature and not merely cheaper.** `AX-2` is honoured rather than dodged
 — `AX:102-103`: *"A person decides from what they hold, and what they hold may be false. There is no view of
@@ -473,8 +473,8 @@ a compliance contest, per relevant Rung."*
 > A policy whose issuing seat has a rung scope names that rung or a rung under it, and `in_force`'s walk
 > computes who is reached. A policy issued through a **cluster** seat (`Office.rung is None` — MEASURED:
 > **16 of 19 offices**) names no rung at all: its reach is the seat's `binds` set, which does not travel
-> by `contain` at all. §37.3 is honoured because **the Record enumerates no places** — it names at most
-> one, and the reach is a Query.
+> by `contain` at all. ~~§37.3 is honoured~~ **§37.3 ROW 3 is honoured** (narrowed 2026-09-17, NERS pass) because **the Record enumerates no places** — it names at most
+> one, and the reach is a Query. ⚠ **Rows 1, 2 and 4 of the same table are NOT honoured by the MATTER-read clauses or by `reach: all`:** `in_force` at MATTER delivers one undistorted clause to every descendant rung with no executor to receive or refuse it, and conditions a `stores` write on it. §0.1's EXTENSION row carries the narrowing.
 >
 > ⚠ **And the cluster half has no reader**, because `binds` has none (§A.1). So `in_force` covers the
 > vertical direction today and the **diagonal** one — a guild's rule reaching its members wherever they
@@ -496,6 +496,8 @@ in_force(w, r, clause):
     near  = the first p in chain order
     return far or near or None                     # ID-5: None is a REFUSAL, never a default
 ```
+
+⚠ **One branch is unwritten (2026-09-17 NERS pass): two live dispensations on the same `(rung, clause)`.** `near = the first p in chain order` is then arrival order — the dependence `resolve.py:549`'s clamp was built to refuse. The obvious engineering answer (`CLAUDE.md` §0 gate 5) is the shape `02` §A.4.3 already uses for a works: a `cardinality` conjunct on `issue`, **one live dispensation per `(rung, clause)`**, refused with `issue.refused` — ⚠ as a `REQUIRES_PREDICATES` entry, not a typed cell, until `cardinality` gains its `@requirement_form` (`04` §A.1.1 **L2**: the form is rostered and unimplemented and a cell naming it refuses at load; `02` §A.4.3's *one works per plot* conjunct and `04` item 14 sit on the same unbuilt form). Not a ruling; recorded so it is not re-derived.
 
 | candidate | who owns it? | verdict |
 |---|---|---|
@@ -578,8 +580,8 @@ is three.**
 |---|---|---|---|---|
 | **`draw:`** | the **order** in which the rung's `stores` are drawn against by the mouths in it | MATTER (`matter.py:168-175`) | — (the grammar is RESOLVE-side and cannot reach it) | — |
 | **`spend:`** | what the rung's `yield` is **committed to before anything else** — a works' next stage, the store | MATTER | — | — |
-| **`sit:`** | the rung's **own dates**: whether an assembly exists here at all, how often, what quorum, what convening conditions attach | CALENDAR — it writes `Rung.dates` and `(ConveningCondition, attached)` (`write_matrix.yaml:86-92`) — **and** gates `convene` | `relation` | `actor`, `subject` |
-| **`levy:`** | **what this rung owes upward** — matter kind, share, and the date it is owed at | MATTER (the share leaving `stores`) and RESOLVE | `scalar_threshold` | `subject`, `kind`, `amount`, `floor` |
+| **`sit:`** | the rung's **own dates**: whether an assembly exists here at all, how often, what quorum, what convening conditions attach | CALENDAR — it writes `Rung.dates` and `(ConveningCondition, attached)` (`write_matrix.yaml:86-92`) — **and** gates `convene` (⚠ *2026-09-17 NERS pass:* both of those rows admit `CAL`; **`(Date, due_at)` does not** — `steps: [RES]`, *"CAL struck. `due_at` is written ONLY by `convene`"*, `write_matrix.yaml:93-100`, which §0.2 pt 5 already says. So a `sit:` clause attaches the condition and gates `convene`; **the `Date` itself is still a `convene` act's**, or the row regains `CAL` — a `steps:` edit PART B counts as zero and would have to count) | `relation` | `actor`, `subject` |
+| **`levy:`** | **what this rung owes upward** — matter kind, share, and the date it is owed at | MATTER (~~the share leaving `stores`~~ **the share `demanded()`** — nothing leaves at MATTER, `02` §A.6, corrected 2026-09-17) and RESOLVE (`transfer`) | `scalar_threshold` | `subject`, `kind`, `amount`, `floor` |
 | **`admit:`** | **who may take an address here** — a settlement closed to incomers, a hearth that will foster | RESOLVE, on `move` | `contain_path` | `actor`, `subject`, `from`, `to` |
 | **`bear:`** | **which verbs are eligible for whom at this rung** — who may carry arms, who may `work`, who may `transfer` out of the store | RESOLVE | `relation` | `actor`, `subject`, `site` |
 | **`hear:`** | **whose demand can travel up** — who may enter, who may speak, who may only be spoken for | CALENDAR (docket formation) and RESOLVE, on `petition`/`speak`; **and it narrows Q1** (§A.15) | `relation` | `actor`, `subject` |
@@ -654,15 +656,17 @@ clauses condition, and one walk that finds them.
 MATTER at rung r:
   1. yield(r) -> r.stores                                   (Rung, yield) -- "only here"
   2. spend: = in_force(w, r, 'spend:')     the declared stage draws, in the order the clause names
-  3. levy:  = in_force(w, r, 'levy:')      the share that leaves r.stores, held against the date
+  3. levy:  = in_force(w, r, 'levy:')      the share DEMANDED of r.stores (read by demanded()); NOTHING LEAVES HERE
   4. draw:  = in_force(w, r, 'draw:')      mouths fed from r.stores IN THE ORDER the clause names
   5. short  = what step 4 could not cover  -> (Person, body)
 ```
 
+⚠ **Step 3 corrected by the 2026-09-17 NERS pass.** It read ~~*the share that leaves r.stores, held against the date*~~. `02` §A.6 RULES *MATTER MUST NOT MOVE MATTER ACROSS A `contain` EDGE. A PERSON MUST* (`T-c`, AX-5), and `transfer`'s cell binds `of: from` to the actor's OWN containing rung (`verb_table.yaml:728-745`), so the levy's movement is the payer's or a present collector's `transfer` at RESOLVE, one season upstream of the larder that feels it. `levy:` at MATTER is read by `demanded()` (§A.13) and moves nothing; step 4 draws against a store somebody's act has already reduced — or has not.
+
 **The chain is lines 3, 4 and 5 at three different rungs, reached by one walk.** A Count issues a
 `levy:` through his provincial seat — *of the grain a rung produces, a fifth leaves at the harvest date*
 — and has named no settlement and no hearth. At each settlement, step 3 calls `in_force(w, S, 'levy:')`
-and the walk ascends `contain` to the province. At each hearth beneath, the same walk finds the same
+and the walk ascends `contain` to the province (⚠ **which does not exist in the built world** — `build_realm` builds `province 0` and no `contain` chain names one, `populated.py:317-363`: hearth → community → settlement → territory → duchy → realm. A Count's seat is a cluster seat whose clause travels by `binds`, the unbuilt diagonal of §A.7.5; the headline runs today from a **duchy** or **territory** seat. Corrected 2026-09-17). At each hearth beneath, the same walk finds the same
 clause **unless the settlement's own seat has issued a nearer one**. Step 4 draws mouths against a
 smaller store; step 5's `short` writes bodies.
 
@@ -729,7 +733,7 @@ the bodies of the people in it. The **interpretive** signal is a live `commit` c
 in the subtree, to a Proposition that names the policy's terms as wrong — `density(w, rung, proposition)`,
 already implemented as an R-1 aggregate over descendants (`world_q.py:276-294`). **Neither alone does
 anything.** A starving quiet hearth starves. A well-fed faction with a grievance talks. **When both hold
-at a rung, a convening condition fires a DATE there** — and `holonic_ARCHITECTURE.md:831` is exact about
+at a rung, a convening condition fires a DATE there** (⚠ *fires* means the attached condition is met; minting the `Date` is `(Date, due_at)`, `[RES]`, `convene` only — §A.9's `sit:` row, corrected 2026-09-17 — so at an unconvened rung the collision is a condition met and no occasion, and the holder's `convene` is still the act that opens the door) — and `holonic_ARCHITECTURE.md:831` is exact about
 what a date is: *"Dates come due. Dockets form. Option availability is recomputed. **NOTHING IS
 DECIDED.**"*
 
@@ -878,7 +882,7 @@ is `world_q.questions_for` (`world_q.py:439-550`) and it has exactly four source
 ### §A.15.1 · The gap, and it is Jordan's own distinction arriving as an unplayability
 
 **Q1's and Q2's `mine` is `{t.object for t in p.tenures if t.live}` (`world_q.py:471`) — that is
-HOLDINGS.** Jordan's ruling separates the three, verbatim at `rosters.yaml:696-704`: *"While a King/Queen
+~~HOLDINGS~~ every object the person is a live tenure-subject of — their holds, their home rung (`contain`), their creeds (`commit`), their obligees — and never purview** (narrowed 2026-09-17; the conclusion below is unchanged). Jordan's ruling separates the three, verbatim at `rosters.yaml:696-704`: *"While a King/Queen
 may have governing authority over the country, they do not necessarily have sovereign power of all
 territories/provinces/duchies nor do they necessarily have all territories/provinces/duchies in their
 holdings"* — and the code carries the two as separate functions, `in_holdings` (`predicates.py:60-103`)
@@ -978,7 +982,7 @@ exists only while its constituent territories share a common faction holder"* an
 **none**. **This file does not average over it.** The later ruling governs, `provinces_of` is the Query
 that says *which* provinces currently cohere, and the `province` entry stays a declared kind the builder
 does not instantiate — which is exactly why the Count is the one seat whose **scope** is recomputed every
-season and the one seat that can outlive its own country.
+season and the one seat that can outlive its own country. ⚠ *2026-09-17 NERS pass:* a scope *recomputed every season* is not `ARCH §B.7`'s `scope?` — one rung, declared at `establish` — and a set of territories is the `domain: RungId[]` shape §A.1 refuses. Under §B.7 the Count is a **cluster** seat and his clauses reach by `binds` (the unbuilt diagonal, §A.7.5), not by the walk.
 
 ---
 
@@ -1088,7 +1092,7 @@ assume it is structural, and the assumption is the failure mode."*
 | claim | grade | the construction that carries it |
 |---|---|---|
 | a policy cannot carry a modifier | **STRUCTURAL** | there is no numeric field on the Record a resolver reads as a bonus, and `Rung.__setattr__` raises on an undeclared attribute (`carriers.py:589-595`) |
-| a clause cannot name a person | **MECHANICAL at load** | the clause cell is one of seven forms whose `needs:` is checked against `requires_operands`; a person id is not an operand of a predicate over marks/commits/presence |
+| a clause cannot name a person | ~~**MECHANICAL at load**~~ **NOTHING today; MECHANICAL at RESOLVE once `@effect_for("issue")` refuses it** (corrected 2026-09-17) | the load check reaches the verb-table CELL, one fixed shape per clause kind; a policy's terms live in a `Record` minted at runtime (`subject_matter`, `Any`), which no loader sees. What the closed grammar gives is narrower and worth saying: **there are no free predicates at all** — a clause is one of seven fixed cells plus operand values, so *"except Björn"* is unspellable for the same reason *"only the sworn"* is, unless a fixed cell tests a `commit` edge |
 | an eighth clause shape cannot ship | **MECHANICAL at load** | `rosters.yaml:1092-1094` — a cell naming an unrostered form **refuses at load** |
 | a policy-effects readout cannot be built **inside `choose`** | **STRUCTURAL** | `ARCH §C.3` — `decision/` cannot import `state/`, `world_q` or `loop/`; `ARCH` PART D row 2 |
 | a policy-effects readout cannot be built **on the SURFACE** | ⚠ **MECHANICAL, corrected 2026-09-17** | ~~STRUCTURAL~~ overstated it, and `03` measured why: the surface's home `engine/season/port/` **does not exist**, `ARCH §A.2`'s read-licence table has **no `port/` row**, and the `TRACE.query` scan that would catch a resolver read has **four holes** — `parent_of`, `judging_set`, `hold_force`, `occasioned_by` emit none. `ARCH §C.3` binds `decision/` by path; it does not reach a renderer. `03` §C.2, §A.1.3 |
@@ -1215,7 +1219,7 @@ unread) — are now rows there with these citations. **Do not re-ask any of the 
 |---|---|---|
 | **SP-1** | a seat-holder can be offered a governance act from his own ledger | a run where `person_side_eligible` admits `remit:issue` for a person whose ledger carries **no** claim of the seat's remit — then the claim is not what is being read. Control: `test_no_person_can_choose_a_governance_verb_and_h71_is_why` (`test_season_shape.py:4992`) must go **red**, and if it stays green nothing changed |
 | **SP-2** | a clause is a mechanism and not a field | for some clause row, **no** world in which flipping its value changes `World.content_hash()`. That clause has no reader and `ID-13` deletes it |
-| **SP-3** | the cascade reaches a hearth | two arms, one seeded world, the province's `levy:` present and absent: if the settlement's `stores` and the hearth's `stores` are **equal** in both arms, the walk is not being called |
+| **SP-3** | the cascade reaches a hearth | two arms, one seeded world, the ~~province's~~ **duchy's** `levy:` present and absent (⚠ no province rung exists to issue from — §A.10, 2026-09-17): if the settlement's `stores` and the hearth's `stores` are **equal** in both arms, the walk is not being called |
 | **SP-4** | the cascade is noisy | the distribution of `short` at the hearth over ≥30 seeds being **disjoint** between arms, or the hearth's outcome being a function of the clause alone. Then it is arithmetic, not emergence |
 | **SP-5** | the collision needs **both** signals | the date firing in the material-only arm **or** in the interpretive-only arm. Three arms are required; asymmetric skepticism is the failure mode here |
 | **SP-6** | nearness decides and `reach` overrides it | a hearth reading the province's clause while a live settlement clause on the same clause exists and no `reach: all` is declared. ⚠ **This test is void until RR-1 is ruled**, and writing it before the ruling would pin the fork |

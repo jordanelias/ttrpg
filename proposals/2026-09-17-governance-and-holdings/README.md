@@ -71,6 +71,16 @@ owns each.
    verb (`04`), a `723` figure called `transfer`'s when the tree measures it for `work` (`04`), two
    different sets of "nine closed rulings" (`01` and `04`), and roughly twenty line-number drifts.
    Each is marked where it stood. A document that hid its corrections would be less useful, not more.
+   **The 2026-09-17 pessimistic NERS pass added its own**, struck the same way: the conformance division's
+   EXTENSION label narrowed for the MATTER-read clauses and `reach: all` against `holonic_ARCHITECTURE.md`
+   §37.3 rows 1/2/4 (`01` §0.1, §A.7.5); `levy:` moving matter at MATTER against `02` §A.6's own ruling
+   (`01` §A.9/§A.10, `00` §A.5); `sit:` minting a `Date` the write matrix reserves to `convene` (`01`
+   §A.9/§A.11, `00` §A.4); the provincial headline walking to a rung that does not exist (`00` §A.3/§A.5/§D.1,
+   `01` §A.10/§A.16, SP-3); `regrowth: 0` rows with no table and no reader (`02` §C.2, BW-5; `04` item 9,
+   §C.5 row 8); `ceiling` reading a per-stage maturation the carrier lacks (`02` §A.4.1); a load-time grade
+   on a runtime object (`01`/`00` §C.2); BW-14 falsified by `destroy_record`; the conferral claim's deposit
+   shape (`01` §A.6, `04` item 6); an unwritten same-rung tie in `in_force` (`01` §A.8); and three stale
+   counts (`00` PART B Queries 5→8 and the omitted `houses` column; `04` BO-2 and its `21b`).
 6. **CITATION PREFIXES, UNIFIED 2026-09-17, because the old ones collided with this directory's own
    file numbers.** ~~`04 §B.7`~~ and ~~`01:443`~~ read as pointers to `04_BUILD_ORDER.md` and
    `01_SEATS_AND_POLICY.md`, and `04_BUILD_ORDER.md` really does have a `§A.3` of its own. So:
