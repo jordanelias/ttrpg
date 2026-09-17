@@ -19,6 +19,7 @@ from __future__ import annotations
 import pytest
 
 from ..gaps import Forbidden
+from ..data.cast import faction_leader
 from ..harness.populated import build_realm
 from ..loop.predicates import in_holdings
 from ..harness import probes as P
@@ -107,7 +108,13 @@ def test_lb16_build_realm_has_no_faction_holds_and_holdings_is_satisfiable():
             checked += 1
             if in_holdings(w, pid, rid):
                 true_pairs.append((pid, rid))
-    assert checked > 1000, f"the sweep only examined {checked} pairs; it did not run"
+    # ⚠ THE FLOOR IS DERIVED, NOT A NUMBER. An earlier draft asserted `checked > 1000` — a
+    # magnitude nobody chose, which `tools/ci_sim_fabrication_check.py` correctly refused. The
+    # exact product is stronger AND literal-free: it observes that the loop ran to COMPLETION
+    # rather than merely that it ran a lot, so a sweep truncated by an early `break` fails here.
+    assert checked == len(w.persons) * len(w.rungs), (
+        f"the sweep examined {checked} of {len(w.persons) * len(w.rungs)} pairs; it did not run "
+        "to completion, so an empty result below would be indistinguishable from a skipped body")
     assert true_pairs, (
         "`in_holdings` is false for every person over every rung -- item 16 did not land, and "
         "every `revocation: \"holdings\"` basis refuses forever")
@@ -128,7 +135,16 @@ def test_lb16_a_faction_with_no_authored_head_holds_nothing_and_it_is_counted():
         "nothing was dropped -- either canon grew the missing leaders, in which case delete this "
         "test, or the re-home silently invented a holder")
     assert all(fac for _, fac in dropped)
+    # ⚠ THE ARITHMETIC IS A PARTITION, NOT A TOTAL. An earlier draft asserted `== 16` — the count
+    # measured before the re-home, pinned into a test as a literal, which is the hard-coding
+    # `tools/ci_sim_fabrication_check.py` exists to refuse and which would go stale the day canon
+    # assigns one more province. The INVARIANT is what matters and it needs no number: the held
+    # and the dropped are disjoint, and every drop is a faction canon genuinely gives no head.
     rung_holds = [t for t in w.tenures if t.kind == "hold" and w.class_of(t.object) == "Rung"]
-    assert len(rung_holds) + len(dropped) == 16, (
-        f"{len(rung_holds)} person-held rungs + {len(dropped)} dropped != the 16 measured before "
-        "the re-home; the arithmetic moved and nobody said so")
+    held_rungs = {t.object for t in rung_holds}
+    dropped_rungs = {r for r, _ in dropped}
+    assert held_rungs.isdisjoint(dropped_rungs), (
+        f"a territory is both held and recorded as unheld: {held_rungs & dropped_rungs}")
+    assert all(faction_leader(fac) is None for _, fac in dropped), (
+        "a province was dropped for a faction that DOES have an authored head — the re-home "
+        f"lost a holding it could have placed: {dropped}")

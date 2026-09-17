@@ -11104,7 +11104,11 @@ def test_the_populated_world_has_a_governance_ladder_and_scarce_seats():
             checked += 1
             if in_holdings(w, pid, rid):
                 satisfiable.append((pid, rid))
-    assert checked > 1000, f"the sweep examined only {checked} pairs; it did not run"
+    # The floor is DERIVED (the exact product), never a magnitude nobody chose: it observes that
+    # the loop ran to COMPLETION, so an early `break` fails here rather than passing vacuously.
+    assert checked == len(w.persons) * len(w.rungs), (
+        f"the sweep examined {checked} of {len(w.persons) * len(w.rungs)} pairs; it did not run "
+        "to completion")
     assert satisfiable, (
         "`in_holdings` is false for every person over every rung, so `revocation: \"holdings\"` "
         "is unsatisfiable on a world that runs (item 16)")
