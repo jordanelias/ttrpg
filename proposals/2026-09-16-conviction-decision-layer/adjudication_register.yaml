@@ -172,7 +172,7 @@ model:
 
   open_where_the_grid_does_not_close:
     # Coherence condition (3). These are genuinely ambiguous and are NOT forced.
-    - "humble <-> vain is the gap `standing_of` computes — but is it read at PHI-3 (it weights candidates that expose you) or at PHI-0 (it changes how a slight LANDS)? Plausibly both, which would mean it is two quantities sharing a name."
+    - "humble <-> vain — ⚠ RESOLVED, see CAT-9 and synthesis.md §2: it is `regard` INVERTED, entering PHI-3 through regard(subject(c)) when the subject is the actor. Not two quantities sharing a name. This line said otherwise while the same file answered it 400 lines on; corrected rather than left standing."
     - "piety's stage is unassigned. If it is a weight it belongs beside moral values at PHI-3; if it gates what a devout character may attempt it is PHI-2; if it changes how doctrine-bearing claims land it is PHI-0."
     - "claims appear at PHI-0 (deposited) and PHI-2 (read). This SATISFIES condition (3) — two operations on one carrier — and is the only thing in the model that crosses stages, because it is the memory."
     - "PHI-4 has no operator. Either that is correct (disposal is not decision) or orientation belongs here after all, modulating what counts as a win rather than what gets chosen."
@@ -325,7 +325,7 @@ categories:
     carrier: "none in engine/season/. A by-reference registry row only."
     status: ABSENT
     evidence:
-      - "[R] references/descriptor_registry.yaml:260 — `orient.self_other`, scale [-1,+1], under a header reading 'REGISTERED BY REFERENCE — authoritative content stays in the source doc'"
+      - "[R] references/descriptor_registry.yaml:296 — `orient.self_other`, scale [-1,+1], under a header reading 'REGISTERED BY REFERENCE — authoritative content stays in the source doc'"
       - "[E] Person has no `orient` field"
       - "[D] R7: axes are a LINEAR map from the conviction vector, so identical vectors are identical on every axis — while taxonomy §2.3 requires Borgia and the magistrate to differ at identical vectors. Self/other therefore CANNOT be an axis. It is the one quantity that must sit outside the vector."
     question: >-
@@ -449,8 +449,8 @@ categories:
     # splits the merge: an office is opened and closed BY AN ACT (confer/revoke write
     # Tenure.until); caste is changed by nothing. Caste is now CAT-7.
     operator: gate
-    carrier: "Person.tenures (office) · Person.marks (caste?) · Person.capability (profession?)"
-    status: OFFICE-BLOCKED / CASTE-AND-PROFESSION-INERT
+    carrier: "Person.tenures (office) · Person.capability (profession?)   # caste moved to CAT-7"
+    status: OFFICE-BLOCKED / PROFESSION-INERT
     evidence:
       - "[R] person_side_eligible DECLINES on remit:, presence: and hold:<placeholder>"
       - "[E] 10 of 38 verbs are unformable person-side — every governance verb: confer, convene, destroy_record, determine, dispatch, establish, issue, levy, open_case, revoke"
@@ -469,10 +469,8 @@ categories:
         - "H-71 arm 2 — the grant rides on the hold Tenure's payload (person-side by construction, AX-2 untouched)"
         - "H-71 arm 1 — decline (status quo: no person forms a governance verb)"
         - "H-71 arm 3 — through sense() (costs a third Sensation scalar; S18.2 rules that type to exactly two)"
-      caste_and_profession:
-        - "a fifth eligibility kind — a class-shaped gate, which the roster says is a design change"
-        - "not a gate: caste/profession supply DICE and CONNECTIONS, never permission"
-        - "a modifier: they change the cost of an act, not its availability"
+      # caste_and_profession: MOVED TO CAT-7, which owns the question and the same three
+      #   options. Two unruled option-sets for one question let it be ruled twice, differently.
     note: "Jordan on (12): 'will concern the kind of knowledge and possibly connections they have' — which reads as a modifier and a claim-source, not a gate."
     blocks: "duty as a generator; every mediated fear; B's standing agenda; C's duty contestant"
     ruling:
@@ -561,7 +559,7 @@ categories:
         machinery: "none — this is CAT-8"
       - pair: "altruistic <-> selfish"
         operator: "weight, keyed on BENEFICIARY"
-        machinery: "partial — this is CAT-2; `beneficiary` is already a Key ROLE, absent from Candidate"
+        machinery: "partial — this is CAT-2; see CAT-2.the_obstacle for the cost, which ED-IN-0232 RAISED"
       - pair: "pacifist <-> militaristic"
         operator: "weight on VERBS"
         machinery: "none — needs the temperament alignment table"

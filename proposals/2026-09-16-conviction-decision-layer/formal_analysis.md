@@ -5,22 +5,10 @@
 
 ## Status: PROPOSED — HELD BACK
 
-> ⚠⚠ **SUPERSEDED BY ED-IN-0232 (PR #407, 2026-09-17) — THE KEY SUBSTRATE IS RETIRED, AND FOUR
-> CLAIMS IN THIS DIRECTORY DIED WITH IT.** Measured on the merged tree: `engine/substrate/keys.py`
-> is **gone**; `engine/substrate/` now holds only `canon_buckets · composition · descriptors ·
-> names · stubwire · world_initial_state`. Grepped, not assumed: **no `beneficiary` role survives
-> anywhere in `engine/`**, and **nothing validates axis names at emission** — no
-> `KeyValidationError`, no invariant 6.
->
-> | claim, as landed | status now |
-> |---|---|
-> | the axis roster is **blocking** at Key emission (`keys.py:400`) | **DEAD** — the validator is deleted |
-> | falsifier: emit a Key with `{"equity": 0.5}` and watch it raise | **UNRUNNABLE** — there is no `Key` to emit |
-> | two hardcoded axis rosters with nothing comparing them | **RESOLVED BY DELETION** — one copy is gone, so `engine/season/rosters.yaml` is now the single owner |
-> | `beneficiary` is *"already a Key role — a bridge, not an invention"* | **FALSE** — it is an invention again, and orientation's obstacle is larger than this directory says |
->
-> One flag this directory raised is also resolved by the same PR: `tools/export_key_types.py`,
-> which parsed a `systems/**/*.md` against §0.05 clause 2, was **deleted**.
+> ⚠ **Superseded in part by ED-IN-0232 (the Key substrate retired).** Owner:
+> `references/restructure_ledger.md#the-key-substrate-retired-2026-09-16-ed-in-0232`, with the
+> ledger row in `registers/editorial_ledger_in.jsonl`. Four claims in this directory died with it;
+> `behaviour_census.md` carries the list, and the affected sentences are corrected in place.
 
 
 **§0.05 class: REFERENCE.** Companion to `behaviour_census.md` (diagnosis) and

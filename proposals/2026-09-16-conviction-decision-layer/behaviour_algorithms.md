@@ -279,7 +279,7 @@ threshold is too loose and the character has no settled character.
 and cleanly in none of them.
 
 - Self/other is **already a live registered scalar** — `orient.self_other` at
-  `references/descriptor_registry.yaml:260`, with its own drift formula and its own attribution
+  `references/descriptor_registry.yaml:296`, with its own drift formula and its own attribution
   formula at `conviction_taxonomy_v30.md` §3.1–§3.2. It is not an axis and should not become one;
   taxonomy §2.3 factors it *out* of Convictions deliberately, citing Borgia against a
   public-spirited magistrate with identical Utility. **It belongs at Φ4, modifying what the character
@@ -361,7 +361,7 @@ and each grounded in something already single-owned:
 
 | add | what it carries | which phase needs it | grounded in |
 |---|---|---|---|
-| **roles on `referents`** | `subject` / `object` / `witness` / `beneficiary` / `bystander` instead of a flat tuple | **Φ2** — bind a verb's subject operand to the *subject*-role referent, not to every referent | `engine/substrate/keys.py:63` — the roster already exists and is single-owned. §8-clean, invents nothing. |
+| **roles on `referents`** | `subject` / `object` / `witness` / `beneficiary` / `bystander` instead of a flat tuple | **Φ2** — bind a verb's subject operand to the *subject*-role referent, not to every referent | ⚠ **FALSE SINCE ED-IN-0232** — this read *"`engine/substrate/keys.py:63` — the roster already exists and is single-owned. §8-clean, invents nothing."* The Key substrate is retired; **no `ROLES` roster survives anywhere in `engine/`**, so roles on referents are an invention, not a reuse. |
 | **`kind`** | `obligation · opportunity · threat · grievance · offer · summons` — orthogonal to `source` | **Φ3** — lets duty, fear and ambition be told apart without inspecting a payload | new closed roster; the `source` roster's own note says *"the roster is where a fifth would be argued for"* |
 | **`stake`** | what changes if this goes unanswered, signed, per referent | **Φ3 — and this is the repair for `H-73`** | see 8.3 |
 | **`asker`** | who is owed the answer | **Φ3** — `stance_toward` needs somebody to have a stance *about* | `Claim` already knows its depositor |
