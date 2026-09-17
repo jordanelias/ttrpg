@@ -897,9 +897,15 @@ first; absent that, a deny is apparatus looking for a rule.
 - **Roster discipline:** promote a role into `.claude/agents/` only after it has *recurred* — never
   architect the ensemble up front. `valoria-critic` (structurally read-only) and `valoria-author` (writes its deliverable to a
   path and returns a receipt, so a long artifact never crosses the orchestrator's window —
-  promoted 2026-09-17 on eight recurrences) are the only promotions. `valoria-author`'s own file
-  states which half of its contract is a CONTROL and which is merely DURABLE; read that before
-  trusting it.
+  promoted 2026-09-17 on eight recurrences) are the only promotions. ⚠ **They are OPPOSITE cases
+  and only one of them is a control.** The critic's independence *is* its missing write tool.
+  `valoria-author` holds the full producer toolset — `Bash` and `Agent` included, RULED by Jordan
+  2026-09-17 (*"we still need agents and bash"*) after its first version removed both and called
+  the removal structural — so every rule in its file is one it can break, and the file says so.
+  **The general lesson, and it is worth more than either agent: removing a tool to enforce a
+  process rule buys a CONTROL only where the rule IS the absence.** Elsewhere it buys a crippled
+  lane — that first version offered itself for code changes while removing every means of verifying
+  one (§0.4 cl.2's covering test file, §0.05 cl.3's re-derive, an exporter's `--check`).
 - **If you build an orchestrated run again**, four properties are worth re-deriving and nothing enforces
   them today: a **closed `stop_reason` set that is report-only** (RULED by Jordan — a breaker halting a
   large audit on a heuristic costs more than the defect it caught); a **null-result alarm** on any lens
