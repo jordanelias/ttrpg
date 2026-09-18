@@ -14,7 +14,10 @@
 > §3's sort, §4's lane pointers, §5's governance. **NOT ratified, because the PR body held each back
 > loudly:** v6's **retirement** (deferred — see §6; v6 remains on disk and this supersession is of
 > authority, not of the file), the **ORDER collision** between the reconciled program and the
-> arc-sequence spine (open; a commit closes it, not a paragraph), and every `## Status:` line on the
+> arc-sequence spine (⚠ **CLOSED 2026-09-18 by `ED-IN-0253`** — this is the commit that line asked
+> for, not a paragraph: `workplans/2026-09-11-reconciled-program.md` §3 is now the single ORDER, the
+> spine is subordinated to it as a CONTENT owner, and the governance build order and the gather's
+> amendment are folded in with a mapping table at §3.4), and every `## Status:` line on the
 > documents §6 marks superseded, none of which moves.
 
 **as_of 2026-09-12**, working tree at `claude/repo-review-work-plans-2ly5xc` (base `main` `2d5ec4e`).

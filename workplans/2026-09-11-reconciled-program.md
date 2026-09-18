@@ -1,6 +1,6 @@
 # THE RECONCILED PROGRAM — every live item, in one order, across every lane
 
-## Status: **RATIFIED 2026-09-12 (ED-IN-0215)** — by the merge of PR #397 under `ED-1094`. ⚠ **SCOPED:** the merge ratifies **§3's ORDER and §1's supersession verdict**, and nothing else. §5's eleven rulings are unanswered, §7's six held-back items are still held, and **§0's claim to be the single owner of the ORDER across all lanes is contested** — `workplans/2026-09-11-arc-sequence-spine.md` positions 2–15 remain independently actionable, and `valoria_master_workplan_v7.md` §6 records that the collision is open and needs a commit rather than a paragraph.
+## Status: **RATIFIED 2026-09-12 (ED-IN-0215). AMENDED 2026-09-18 (`ED-IN-0253`) INTO THE SINGLE PLAN, ON JORDAN'S INSTRUCTION** — *"I need one single clearly defined plan"*, and his choice of option (b): fold the governance build order in, land the contested-ownership commit, stop maintaining two. ⚠ **THE CONTESTED-OWNERSHIP NOTE IS RESOLVED AND THIS IS THE COMMIT IT ASKED FOR.** It read: *"§0's claim to be the single owner of the ORDER across all lanes is contested — `workplans/2026-09-11-arc-sequence-spine.md` positions 2–15 remain independently actionable, and `valoria_master_workplan_v7.md` §6 records that the collision is open and needs a commit rather than a paragraph."* **§3 is now the only ORDER in the repository.** The spine, the governance build order and the gather's amendment are subordinated by header line to this file and own CONTENT only. ⚠ **STILL SCOPED:** the 2026-09-12 merge ratified §3's order and §1's supersession verdict and nothing else; §5's rulings and §7's held-back items are untouched here. ⚠ **§3 WAS RE-SEQUENCED, which §8 previously declined to do** — *"the sequence is RATIFIED and this session did not re-sequence it"*. That restraint was right without an instruction and is superseded by one. **No existing position number changed**; new rows use the lettered sub-position convention (`13b`, `19b`, `ED-IN-0242`) so no citation in the tree dangles, and §3.4 maps every folded item.
 ## Owner: infrastructure / cross-cutting (IN lane)
 ## Supersedes: nothing outright. It becomes the SINGLE OWNER OF THE ORDER across all lanes,
 ## which `workplans/2026-09-11-arc-sequence-spine.md` (ED-IN-0212) owned for the IN-lane engine
@@ -128,42 +128,216 @@ A measured half-life of one day, and the thing that falsified it was the game wo
 
 ---
 
-## 3. THE SEQUENCE — 27 positions, all lanes
+## 3. THE SEQUENCE — THE SINGLE PLAN
 
-Detail per position — INSTRUCTION, LAYER, COMPLIANCE CLAUSE, OBSERVABLE/FALSIFIER, TIER — is in
-**`_part2` §8**. This table is the order and nothing else.
+**This table is the only ORDER in the repository.** Detail per position is in `_part2` §8 and in the
+CONTENT owners named in this file's header. Nothing else in the tree may carry an order.
 
-| # | handle | lane | one line | ruling? |
-|---|---|---|---|---|
-| 1 | **CLOSE-PASS** | IN | flip the ~97 rows of §2.1 with their citations; the queue reads ≤ 12 | — |
-| 2 | **RET-SC** | IN/SC | execute the ruled `systems/social_contest/` retirement; relocate the demote-only rule first | — |
-| 3 | **G1a** | IN | act store · `Receipt` · `state/gate` · `log.append` assertion · the ruled `Record.matured` write | — |
-| 4 | **G1b** | IN | delete `Event.subject`; read the actor through `causes[] → state/acts` | — |
-| 5 | **G2** | IN | one `Token`, minted in `loop/driver` only; **33** gate sites; and the `_rehome()` route the scan cannot see | — |
-| 6 | **G3** | IN | `NotYours` at the gate · `Act.via` · purview through `via.scope` | — |
-| 7 | **G4** | IN | `NoOpReceipt`; the effect contract finalised; 11 effects rewritten once | — |
-| 8 | **H-98** | IN/PC | the **general** ladder branch's producer, and the wound-count band edges. ⚠ **RESCOPED by the antagonist pass** — see `_part2` | — |
-| 9 | **PC-SURRENDER** | PC | promote §11.4 Yield/Disengage into `combat_engine_v1/` | — |
-| 10 | **U5 / R-07** | IN | `stance_delta`; `Person.stance` written; `stance.moved` | — |
-| 11 | **U6** | IN | the first R-01/R-02 measurement | — |
-| 12 | **H-62-rest** | IN | writers for `scar`, `axis_count`, `convictions` | — |
-| 13 | **W28-cast** | IN | author the `cast:` blocks (**0 of 143 today**) and their reader, same commit | — |
-| 13b | **H-71** | IN | `person_side_eligible` declines every `remit:` alternative unconditionally, so a verb whose only eligibility is a remit is unreachable even where the actor holds the office. Tier 0, `grade: absent`, in-tree falsifier. ⚠ **ADDED POST-RATIFICATION 2026-09-17 (`ED-IN-0242`)** on Jordan's instruction, because it was in NO position here and its content sat only in root `HANDOFF.md`. Sub-position on the `19b` convention, so nothing renumbers. Detail: `workplans/2026-09-13-work-order.md` item 3 | **this row** |
-| 14 | **U7-own** | IN | the eight `own`-eligibility verbs, in antonym pairs; distinct operands; `Candidate.why` | — |
-| 15 | **Record-kind fold** | IN | Petition/Dispensation become kinds of `Record`; then `petition` + `carry` | — |
-| 16 | **H-84** | IN | one verb that moves a Record to another person | — |
-| 17 | **U8 / R-06b** | IN | `ambitions(p)`, `build_at` from the cast | — |
-| 18 | **PROC-A** | SC | re-host the stress suite (its tracer is **gone**); `judging_set`; `arrangements.yaml` | — |
-| 19 | **U7-remit** | IN | `levy`, `establish`, `open_case`, `determine`, `issue` | — |
-| 19b | **U7-disp** | IN | `comply`, `evade / defy`, `refract` | **ED-IN-0210** |
-| 20 | **U9 / R-04** | IN | faction-scale queries; 44 re-scales; the 10 world cases | — |
-| 21 | **U10** | IN | the second measurement; `measured:` from instrument output only | — |
-| 22 | **PROC-B** | SC | the proceedings provider; the composed obstacle with a ceiling; THE BAR | — |
-| 23 | **PART-E-0/2** | IN | typed ids with an owned `H`; the ONE loader's remaining invariants | — |
-| 24 | **SE-BUILD** | SE | settlements P1–P4 | **ED-SE-0051** + acceptance |
-| 25 | **MB-GOLDEN** | MB | apply the golden-mode ruling; fix three flags whose defaults contradict their comments | **ED-MB-0061/0016** |
-| 26 | **GO-VERSION** | GO | record the ruled version; ED-1050's deferred re-export; then held H6 | **the Godot version** |
-| 27 | **WR-SCOPE** | WR | build or retire threadwork | **ED-WR-0010** |
+**Three columns decide how you read a row.** `STATE` is execution-bound per `CLAUDE.md` §0.2 — `DONE`
+means the behaviour runs and something ran it, never that a document exists. `GATE` names what the row
+waits on: a position, or Jordan, or nothing. **A row whose `GATE` is `—` is buildable today.**
+
+| `STATE` | meaning |
+|---|---|
+| **DONE** | it runs, and the evidence is named in §3.3 |
+| **DONE·INERT** | the code landed and does not yet affect the game. **§0.2 does not count this as done** |
+| **OPEN** | buildable; `GATE` says what if anything it waits on |
+| **BLOCKED** | a named position must land first |
+| **JORDAN** | a decision or authored content is owed, named exactly |
+
+**Numbering.** No existing position number changed. Rows folded in from the governance build order and
+the gather take **lettered sub-positions** on the position they belong to, per the `13b`/`19b`
+convention (`ED-IN-0242`). §3.4 maps every old build-order item number to its position so no citation
+in the tree dangles.
+
+---
+
+### 3.1 · ⭐ START HERE — the next three, in order
+
+**1. Position `13b` — H-71's remit read.** A ~2-line read of `Tenure.payload`, licensed today by
+`write_matrix.yaml:336-342`. **Tier 0, `grade: absent`, and it unblocks 9 of 38 verbs** — every
+governance verb is unformable person-side because `person_side_eligible` declines every `remit:`
+alternative unconditionally, even where the actor holds the office. Its falsifier is already in the
+tree and goes RED the day the hole closes:
+`test_no_person_can_choose_a_governance_verb_and_h71_is_why`. **No ruling needed.** `CAT-6`'s arm-2
+ruling decoupled it from the Record-kind fold, so the old dependency on position 15 is spent. Best
+cost-to-unlock ratio in the plan.
+
+**2. Position `2` — RET-SC.** Ruled 2026-09-06 and unexecuted since. It is subtraction — 47 files,
+1.2 MB — and it is the one position whose cost only grows, because 20+ inbound reference sites outside
+the tree keep accruing and several are machine-read by blocking gates. Relocate the demote-only rule
+first.
+
+**3. Positions `3`→`7` — G1a, G1b, G2, G3, G4.** The write discipline and the Arc-2 gate: the act
+store, `Receipt`, one `Token` across 33 gate sites, `NotYours`, `NoOpReceipt`, the effect contract
+finalised. ⚠ **`4`→`5` is a HARD SERIAL EDGE** (§4) — G1b deletes `world.py:295`'s `subject` parameter
+and G2 replaces that same signature's write class. `isolation: worktree` does not help; it defers the
+collision to the merge. **This is what position `15`'s `Act.via` work waits on, and it is the largest
+single blocker in the plan.**
+
+---
+
+### 3.2 · THE ORDER
+
+| # | handle | lane | what runs | STATE | GATE |
+|---|---|---|---|---|---|
+| 1 | **CLOSE-PASS** | IN | flip §2.1's rows with their citations; the queue reads ≤ 12 | **OPEN** · partial | — ⚠ ship the fold-to-latest script as its instrument (§8.3) |
+| 2 | **RET-SC** | IN/SC | execute the ruled `systems/social_contest/` retirement; relocate the demote-only rule first | **OPEN** | — |
+| 3 | **G1a** | IN | act store · `Receipt` · `state/gate` · `log.append` assertion · the ruled `Record.matured` write | **OPEN** | — |
+| 4 | **G1b** | IN | delete `Event.subject`; read the actor through `causes[] → state/acts` | **OPEN** | 3 |
+| 5 | **G2** | IN | one `Token`, minted in `loop/driver` only; 33 gate sites; the `_rehome()` route the scan cannot see | **OPEN** | **4 — hard serial** |
+| 6 | **G3** | IN | `NotYours` at the gate · `Act.via` · purview through `via.scope`. **Absorbs build-order item 15 (`Act.via` + F3)** | **OPEN** | 5 |
+| 7 | **G4** | IN | `NoOpReceipt`; the effect contract finalised; 11 effects rewritten once | **OPEN** | 6 |
+| **7a** | **COMMIT-EFFECT** | IN | `@effect_for("commit")` — mint the Tenure the `commit` row already declares. ~12 lines. `commit` is Q4 `need`'s producer and all 81 `need` questions on the populated world are hand-minted today | **OPEN** | — ⚠ **placement is a JUDGMENT, not a ruling:** buildable today, but landing a new effect before G4 means G4 rewrites it. Build it before 7 only if you accept that. Trap: an effect body that touches nothing makes the fold emit the refusal — the body must return the object it opened |
+| 8 | **H-98** | IN/PC | the general ladder branch's producer, and the wound-count band edges. ⚠ RESCOPED — see `_part2` | **OPEN** | 7 |
+| 9 | **PC-SURRENDER** | PC | promote §11.4 Yield/Disengage into `combat_engine_v1/` | **OPEN** | 7 |
+| 10 | **U5 / R-07** | IN | `stance_delta`; `Person.stance` written; `stance.moved` | **OPEN** | — ⚠ `stance` is one of five `Person` interior rows with **no specified trigger**; W-F is not started |
+| 11 | **U6** | IN | the first R-01/R-02 measurement | **OPEN** | 10 |
+| **11a** | **REACH** | IN | `reach` · `place_of` · two question sources deleted · `w.crossings` deleted · `occasioned_by` → one route | **OPEN** | S4 |
+| **11b** | **CALENDAR-EMIT** | IN | CALENDAR `emits="date.fired"`, `subject=venue` | **OPEN** | 11a ⚠ **unobservable on the populated world** — `w.dates` is empty after a season because `convene` never forms. **Plant a date or it proves nothing** |
+| 12 | **H-62-rest** | IN | the remaining `Person` interior writers: `axis_count`, `convictions` (`scar` is DONE — see §3.3) | **OPEN** | — |
+| **12b** | **6a — AFFILIATIONS** | IN | the affiliation roster + the incompatibility relation, as a table. `conviction` is a VECTOR; confliction is DERIVED, never stored | **JORDAN** | **R3 — the cells.** Then it derives: one owner edit, no `engine/season/*.py` change |
+| **12c** | **6c — THE THIRTEEN** | IN | re-author the thirteen and their projection onto `memory · substantive · equity · selfish` | **JORDAN** | **R3 — the cells.** Atomic with 12b/12d: `_load_projection`/`_load_alignment` raise at module scope, so both tables must exist before first import |
+| **12d** | **6b — THE RENAME** | IN | rename the moral-value basis, which `STR-6` forces by reserving `conviction` | **JORDAN** | **restore `tools/valoria_rename.py` from `FORK:1e4c6f4`, or accept a hand sweep of 29 Python files / 308 occurrences / 51 YAML-JSON / 12 live `.md`.** See §3.5 — the stated "it derives" mechanism does not exist |
+| 13 | **W28-cast** | IN | author the `cast:` blocks and their reader, same commit | **OPEN** | — ⚠ use the harness loader's count, never a grep (§6's GAP) |
+| **13b** | **H-71** | IN | `person_side_eligible` reads the `hold` Tenure's `payload` instead of declining every `remit:` alternative. **Absorbs the gather's `13c`** | **OPEN** ⭐ | — **START HERE.** Tier 0; 9 of 38 verbs; falsifier in-tree |
+| **13d** | **10 — OFFICES** | IN | `offices.yaml` — bases as rostered values · both predicates rewritten · four title helpers + `is_title` + the `titles` roster deleted · holders seated · purview corrected | **OPEN** | — its two build-order deps are spent: item 16 is DONE, item 4 is REVERTED |
+| 14 | **U7-own** | IN | the eight `own`-eligibility verbs, in antonym pairs; distinct operands; `Candidate.why` | **OPEN** | 12, 13 |
+| 15 | **Record-kind fold** | IN | Petition/Dispensation become kinds of `Record`; `record_kinds` + its refusal; `issue`/`petition` bodies; 2 matrix rows and 2 `World` dicts deleted; the deposit rule; then `petition` + `carry`. **≡ build-order item 5 — SAME WORK, TWO NUMBERS (§3.5)** | **OPEN** | 11a. **The largest single item in the plan; everything in `15a`–`15c` hangs off it** |
+| **15a** | **6 — GIVE** | IN | `give` + body + `_req_give` + release-before-mint | **BLOCKED** | 15 |
+| **15b** | **8 — LOSSY TELL** | IN | `tell` at `Partial` deposits a lossy copy — and the teller's identity | **BLOCKED** | 15 |
+| **15c** | **7 — CONTENT OPERANDS** | IN | content-claim operands; Q2's third clause; the invariant statement | **BLOCKED** | 15, 15a |
+| 16 | **H-84** | IN | one verb that moves a Record to another person | **OPEN** | 15 |
+| 17 | **U8 / R-06b** | IN | `ambitions(p)`, `build_at` from the cast | **OPEN** | 13 |
+| **17a** | **9 — OBLIGEES** | IN | obligees co-located mint `inferred` · `oblige` body · `establishment_of` rewritten with a caller · `Office.establishment` deleted | **OPEN** | 7a |
+| 18 | **PROC-A** | SC | re-host the stress suite (its tracer is gone); `judging_set`; `arrangements.yaml` | **OPEN** | — |
+| **18a** | **14 — FIELD DELETIONS** | IN | the 13 field deletions + `judging_set` + `conferral_path` | **OPEN** | 17a, 13d |
+| **★ GATE** | **APERTURE RE-MEASUREMENT** | IN | **Fires ONCE, after `18a`. A measurement, not a build item, and NOTHING BELOW MAY BE SCORED BEFORE IT PASSES.** Re-take: verbs resolvable (was 18/38) · verbs unformable person-side (was 10/38, every governance verb) · claims by source (was `{firsthand: 2174, told_by: 1}`, `inferred: 0`) · questions by source. **Then re-take `CAT-6`'s evidence block and `STR-4`'s conclusion against the new numbers — both are inferences from a shut aperture, and re-citing them is not re-taking them** | **OPEN** | 18a |
+| 19 | **U7-remit** | IN | `levy`, `establish`, `open_case`, `determine`, `issue` | **BLOCKED** | 13b, ★ |
+| 19b | **U7-disp** | IN | ⚠ **RE-SCOPED BY RULING.** `RR-A` ruled **FOLD**: `comply`, `evade \| defy`, `refract` and `dispatch` GO — compliance is the executor's own act. What remains is the deletion, not the build | **OPEN** | `ED-IN-0210` keeps one live fork; do not clear its flag |
+| **19c** | **MIGRATE** | IN/SE | a migration verb. **Nobody in Valoria can relocate** — `move` is TRAVEL (a `travel_leg` Tenure alter) and `residence` is a contested claim predicate **with no writer** | **OPEN** | — opened by the 09-17 rulings; no order scheduled it until now |
+| 20 | **U9 / R-04** | IN | faction-scale queries; 44 re-scales; the 10 world cases. **54 of 143 cases are unrepresentable today — 44 at faction scale, 10 at world** | **BLOCKED** | ★ |
+| 21 | **U10** | IN | the second measurement; `measured:` from instrument output only | **BLOCKED** | 20 ⚠ `requirements.yaml` carries **four mutually inconsistent R3 figures** (`:142`, `:265`, `:333`, `:524`) with no stated baseline. Any position measuring propagation trips on this — fix it here |
+| 22 | **PROC-B** | SC | the proceedings provider; the composed obstacle with a ceiling; THE BAR | **BLOCKED** | 18, ★ |
+| 23 | **PART-E-0/2** | IN | typed ids with an owned `H`; the ONE loader's remaining invariants | **OPEN** | 22 |
+| 24 | **SE-BUILD** | SE | settlements P1–P4. ⚠ **MIS-SIZED AS WRITTEN: P1 is DONE bar a number, P4 is now `24e`, and P2/P3 grew a ruled dependency.** Re-scope before starting | **OPEN** · partial | see `24d`, `24e` |
+| **24d** | **SE-CAPACITY** | SE | `capacity(w, rung)` as a Query over the rung's dwelling Sites **with a FLOOR — never a fixture table** | **OPEN** | ⚠ **RULED, NOT GATED** (§3.6). The blocker is that the mechanism has **zero code**: no `capacity` in `queries/`, and no `dwelling`/`houses`/`shelters` anywhere in `engine/season/`, where `rosters.yaml:847` fixes `site_kinds` to three, one of which is not a site |
+| **24e** | **12 — WORKS & FOUNDING** | SE/IN | `works` kind · `work` advances `stage` · `restore` body · `found` + body · `(Rung\|Site, exists)` get a producer. **This is `found` (P4), which the `ED-SE-0051` ruling names as THE THROTTLE**, and it answers `ARCH` `F.20` — *"the world only decays — nothing is ever founded or built"*, one of two gaps `04:1082` says *"block the build outright"*. It is also the R-half with no player in it (§0.06) | **BLOCKED** | 15 |
+| 25 | **MB-GOLDEN** | MB | apply the golden-mode ruling; fix three flags whose defaults contradict their comments | **OPEN** | `ED-MB-0061/0016` — both `superseded`, flags cleared |
+| 26 | **GO-VERSION** | GO | record the ruled version; ED-1050's deferred re-export; then held H6 | **JORDAN** | **the Godot engine version — UNRESOLVED, and `CLAUDE.md` forbids settling it by editing a document** |
+| 27 | **WR-SCOPE** | WR | build or retire threadwork | **OPEN** | `ED-WR-0010` **ruled: threadwork IS IN SCOPE.** ⚠ Part 3 of the head and `systems/threadwork/sim/coherence.py` still implement the model `RULINGS.md` replaced |
+
+---
+
+### 3.3 · DONE — five items that landed 2026-09-17/18, with their evidence
+
+**Folded in from the governance build order, which is now a CONTENT owner only.** `§0.2`: a row is
+`DONE` because something ran it, not because a document says so. Execution artifact for all five:
+`python -m pytest engine/season/tests/test_governance_build.py -q` → **25 passed in 6.78s**.
+
+| build-order item | what landed | where | belongs to |
+|---|---|---|---|
+| **16** | `add_tenure`'s hold-object guard; the 16 faction rung-holds re-homed to persons. **A precondition, not a tidy-up** — `in_holdings` was false for every person over every rung, so a seat whose `revocation` is `"holdings"` refused every revocation forever *while looking like a working precondition* | `data/rosters.py`, `rosters.yaml`, `state/world.py` | `13d` |
+| **3a** | `nearest_store` + the per-eater draw — **and it MEETS its demand**, which is rarer than landing. Season 1: 46 eaters short, 138 units. Season 2: 0 short. `stores.changed` 87 = 37 + 37 + **13 draws**, which is r2 §A.4's predicted counterfactual arriving as an observation | `queries/world_q.py:172`, `loop/matter.py:249` | `24` (P1) |
+| **3b** | the body write · one shared `_crossings` owner · `remove_person` | `loop/matter.py:309-313`, `state/world.py:320` | `24` (P1) |
+| **6d** | the `beneficiary:` column, all 38 rows, off a `beneficiary_kinds` roster with three loader refusals. 5,345 candidates, **3,796 (71.0%) resolve a personal beneficiary, ZERO declared-but-unresolved** | `verb_table.yaml`, `data/verbs.py`, `decision/choose.py` | `12` |
+| **6e** | `(Person, scar[axis])` gets a producer — **the first write to any `Person` interior field in the tree** | `loop/effects.py`, `state/carriers.py` | `12` |
+
+⚠ **TWO OF THE FIVE DO NOT AFFECT THE GAME YET, and `§0.2` does not let that pass as done.**
+
+- **`3b` is `DONE·INERT`.** `data/fixtures.py:494` ships `body_step=0` as a **declared control**. With
+  46 eaters short 138 units: `body.changed` 0, `person.died` 0, `w.crossings` 0, all 46 bodies at
+  1000. **`ED-IN-0247` is `needs_jordan: true` for exactly one thing — the number — and it is a PICK, not a
+  blank:** `fixtures.py:494` reads `body_step=0,  # H-125, swept 0 (control, SHIPPED) / 10 / 67`. The
+  file says why it is Jordan's in its own comment — *"Choosing the number needs a world that stocks a
+  larder — which is what makes this a design call rather than a default nobody looked at."* **One value
+  off that sweep turns a built mechanism live.** ⚠ **And the other half of P1's crossing ask is missing**: `world_q.py:602-605`
+  derives `at` from `w.sites.get(who)`, which is `None` for a person-keyed crossing, so the `presence`
+  branch cannot fire — **a body falling is a Question for its owner alone, never for the hearth.**
+- **`6d` is `DONE·UNWIRED`**, deliberately. `orient` has no producer, so wiring it into `score` would
+  multiply a measured quantity by an unruled magnitude and move every golden for a weight nobody set.
+
+**Also landed and NOT a position:** the counterparty change (`ED-IN-0210` Ruling 1) — every person's
+OUGHT now names a PERSON. Control 443 acts / 0 naming another person → shipped 692 acts / 256 naming
+another person; distinct executed sets 25 → 43. Recorded in §8.1.
+
+**REVERTED:** build-order item **4** (delete `budget_office_bonus`). Priced as a free cut; running it
+showed **it starves the corpus**. A starvation floor is an alarm, not a saving. Do not re-propose it as
+cheap.
+
+**HELD:** build-order item **1** is *built and held* — its headline claim was measured false. It rides
+at `7a` with that stated.
+
+---
+
+### 3.4 · THE MAPPING — every old build-order item number to its position
+
+**Read this before citing any bare item number.** ⚠ **The two schemes collided, and that is the
+strongest single argument for one plan:** build-order *item 16* is not position 16, *item 15* is not
+position 15, and *item 5* and *position 15* were **the same work under two numbers**.
+
+| build-order item | position | note |
+|---|---|---|
+| 1 | `7a` | built and HELD; headline claim false |
+| 2a · 2b | `11a` · `11b` | 2b was **missing from the build order's first draft** and an independent critic found it |
+| 3a · 3b | **DONE** (§3.3) | 3b inert |
+| 4 | **REVERTED** | starves the corpus |
+| 5 | **`15`** | ⚠ **same work as position 15 — merged, not duplicated** |
+| 6 · 7 · 8 | `15a` · `15c` · `15b` | all hang off `15` |
+| 9 | `17a` | |
+| 10 | `13d` | its deps are spent |
+| 11 | **PARKED** | `CAT-6` arm 2 retired it as H-71's answer; whether the commission `Record` is wanted for other reasons is undecided |
+| 12 | `24e` | the `found` throttle; `ARCH F.20` |
+| 13 | **`19b`** | `RR-A` ruled FOLD — now a deletion |
+| 14 | `18a` | |
+| 15 | **`6`** | ⚠ absorbed into G3, which already names `Act.via` |
+| 16 | **DONE** (§3.3) | |
+| 6a · 6b · 6c | `12b` · `12d` · `12c` | all three JORDAN-gated on R3 |
+| 6d · 6e | **DONE** (§3.3) | 6d unwired |
+| 6f | **not scheduled** | the score function; needs 12b–12d's tables to have anything to dot against |
+| 6g | **not scheduled** | H-71's SECOND half — how another person comes to know or contest someone else's seat. **Open by the ruling's own words**, not by omission |
+| the gather's `13c` · `19c` · `24a`–`24d` | `13b` · `19c` · `12b`–`12d`, `24d` | ⚠ the gather placed the conviction items at `24a`–`24c`, under SE-BUILD, which was wrong — they are position 12's siblings. Corrected here |
+
+---
+
+### 3.5 · THE ONE COST THIS AMENDMENT RE-PRICES
+
+⚠ **`01_THE_BUILD_ORDER.md:1028` says of 6b: *"`references/names_index.yaml` is the TERMS owner; the
+rename derives."* BOTH HALVES ARE FALSE, MEASURED.**
+
+1. **The executor is retired.** `names_index.yaml:13-14` advertises `tools/valoria_rename.py`;
+   `references/restructure_ledger.md:1525` is its `FORK:1e4c6f4` row. The tool that would derive the
+   rename was deleted.
+2. **`names_index.yaml` does not own the thirteen.** Its `conv.*` block is **seven** entries at
+   `:105-111`, all `enforce: warn`. The real chain is `descriptor_registry.yaml:236` (`count: 13`) →
+   `rosters.yaml:228` (`from_descriptor:`) → `descriptors.json`, behind the blocking `--check`.
+3. **The 107-document arm has fallen to 12.** That figure was measured *before* `ED-IN-0231`
+   quarantined `systems/`. Live count is **12**, with 66 quarantined. `01_THE_BUILD_ORDER.md:1028` and
+   `RULINGS.yaml:1356-1357` both carry the stale number forward — `§0.1` pt 3 row four, **inflating
+   6b nine-fold on its largest arm**.
+
+**Net: `12b` and `12c` are cheap and DO derive** — Jordan's content, then one owner edit, no
+`engine/season/*.py` change, because `decision/choose.py:358-360` resolves the tables by name.
+**`12d` does not derive.**
+
+---
+
+### 3.6 · `ED-SE-0051` IS RULED, AND FOUR SURFACES DISAGREE
+
+`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml:1838-1844` carries `disposition: ruled`,
+`ruled.by: "Jordan, 2026-09-17 (in session)"`:
+
+> **MATTER PLUS HEARTH CAPACITY. A `capacity(w, rung)` QUERY over the rung's dwelling Sites, with a
+> FLOOR — never a fixture table. `found` (P4, "found and build") is the throttle. SCOPED TO POPULATIONS.**
+
+Its own `citation:` names `registers/editorial_ledger_se.jsonl:51`, so it is unambiguously this
+question. Against that: the ledger row reads `open`/`needs_jordan`; `HANDOFF_SE.md`'s body still says
+*"STAYS OPEN"*; both settlement suites say *"NOT RULED"*. **The flag is not closed in this commit** —
+`§0` step 1 licenses it and the 2026-09-15 `SUPERSEDING ROW` batch is the precedent, but closing a
+Jordan-gated row against three contrary surfaces wants his word (`ED-IN-0251`, `ED-IN-0252`).
+**`24d` is therefore RULED and buildable, not gated.**
+
+---
 
 **Parked, with reasons (not positions):** VOCAB-BALLOT — its output is a document (§0.2), and three
 of its four contested rows are settled by positions 5 and 8; rebuild it after those land.
@@ -172,14 +346,18 @@ blocks nothing. OLD-DRIVER — **drop** (§0.1 pt 5: its artifact is load-bearin
 repository's process, so *"accept the defect and write nothing"*). PC-COMBATPOOL — demoted to a
 record defect: the code already has one owner at `combat_engine_v1/core.py:48-51`; two of the three
 "definitions" are prose that dies at position 2. CANDIDATE-WHY — rides at 14.
-`ED-MB-0044/0056/0057` — a hand pass, not a position.
+`ED-MB-0044/0056/0057` — a hand pass, not a position. **Build-order item 11** — retired as H-71's
+answer by `CAT-6` arm 2. **Build-order 6f and 6g** — 6f needs `12b`–`12d` first; 6g is H-71's open
+second half.
 
 **Record defects, which ride along with whatever position touches them and are never scheduled:**
 `H-46` still `absent` after U3 landed · the `workplan_v6_progress.yaml` / `CLAUDE.md` §0,§9 /
 `m1_acceptance.py` binding to the retired M1 board · `HANDOFF_META_ARCHITECTURE.md:3` reading
-PROPOSED under a RATIFIED directory · `HANDOFF.md:463-469` naming S7 as *"THE STEP TO TAKE"* ·
-the spine's spent §0 table · `ED-MB-0016`'s file cites pointing at paths the 08-24 port deleted ·
-`ED-IN-0210` reading `status: ruled` while carrying an open fork.
+PROPOSED under a RATIFIED directory · the spine's spent §0 table · `ED-MB-0016`'s file cites pointing
+at paths the 08-24 port deleted · `ED-IN-0210` reading `status: ruled` while carrying an open fork ·
+`CURRENT.md:31` reading *"DISTINCT and unchanged"* against `ED-IN-0251`'s R2 · `CURRENT.md`'s
+`_Last reconciled:_` stamp at 2026-09-16 against 18 heads touched 09-18 · **`R7` naming two live
+rulings and two different `R3`s existing** (`ED-IN-0252` §4).
 
 ---
 

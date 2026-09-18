@@ -3,7 +3,15 @@
 ## Status: **PROPOSED (2026-09-18). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
 ## Lane: `IN` · **`ED-IN-0252`**
 ## Grade under `CLAUDE.md` §0.2: **`paper`.** Nothing in this file has run. Every row names what would run it.
-## ⚠ **`workplans/2026-09-11-reconciled-program.md` §3 IS THE RATIFIED SINGLE OWNER OF THE ORDER (`ED-IN-0215`). This file adds rows to it and reorders nothing.** Sub-position lettering follows the `19b`/`13b` convention so no existing number moves.
+## ⚠⚠ **FOLDED IN AND SPENT AS AN ORDER, 2026-09-18 (`ED-IN-0253`), hours after it was written.** All
+## eight rows below now live in `workplans/2026-09-11-reconciled-program.md` §3, which is the single
+## plan. **Read them there, not here.** Two placements were CORRECTED in the fold: the conviction items
+## sat at `24a`–`24c` under SE-BUILD, which was wrong — they are position **12**'s siblings (`12b`,
+## `12c`, `12d`), because position 12 is the `Person`-interior writers; and this file's `13c` is just
+## position **13b**, which already IS H-71. **The corrections are the argument for one plan**: a
+## seventh order surface mis-filed its own rows within a day of writing them.
+## What this file still owns: §3's re-pricing of 6b, §4's three collisions, §5's `R-08` correction and
+## §6's `ED-SE-0051` finding — reasoning, not sequence.
 
 ---
 

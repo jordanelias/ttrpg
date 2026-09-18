@@ -27,7 +27,9 @@ every other dated section below is marked **WAS CURRENT** and is history. Five s
 
 ## ⚠⚠ THIS IS AN INDEX, NOT AN ORDER. THE ORDER IS RATIFIED AND LIVES ELSEWHERE.
 
-**`workplans/2026-09-11-reconciled-program.md` §3 — 27 positions, `RATIFIED ED-IN-0215` — IS THE SINGLE OWNER OF THE ORDER.** If you are choosing what to do next, open it.
+**`workplans/2026-09-11-reconciled-program.md` §3 IS THE SINGLE PLAN.** If you are choosing what to do next, open it — and start at its **§3.1 · START HERE**, which names the next three in order.
+
+⚠ **AMENDED 2026-09-18 (`ED-IN-0253`) ON JORDAN'S INSTRUCTION — *"I need one single clearly defined plan"*.** The order was spread over five surfaces; it is now on one. The contested-ownership note in that file's own `## Status:` line is CLOSED, `valoria_master_workplan_v7.md:16`'s open ORDER collision is CLOSED, and the arc-sequence spine, the governance build order and the gather's `05_THE_ORDER.md` are subordinated to it as CONTENT owners. **No position number changed** and §3.4 maps every folded item, so no citation dangles. §3 now carries a `STATE` column that is execution-bound per `CLAUDE.md` §0.2 — `DONE` means something ran it — and §3.3 records the five items that landed 09-17/18, **two of which do not affect the game yet and are marked `DONE·INERT` rather than done.**
 
 **Everything this section used to argue moved to `workplans/2026-09-13-work-order.md` on 2026-09-17 (`ED-IN-0242`):** why Arc 2 comes first, the live ownership collision its status line records, and the warning that `requirements.yaml`'s `measured:` blocks understate progress and carry four mutually inconsistent R3 figures. All three are about the ORDER or about an INSTRUMENT, and neither is what a continuity index is for.
 
