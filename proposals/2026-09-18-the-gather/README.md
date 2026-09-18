@@ -84,24 +84,25 @@ independence is structural rather than declared. **No row in this suite is licen
 
 ## §5 · READING ORDER
 
-⚠ **THE SUITE IS INCOMPLETE AT THIS COMMIT AND THE TABLE SAYS SO PER FILE.** A reading order that
-lists files which do not exist is the defect this repository keeps paying for; the state column is
-here so nobody opens a promise.
+**THE SUITE IS COMPLETE.** The state column is kept because it was load-bearing while it was not, and
+because a reading order that lists files which do not exist is the defect this repository keeps paying
+for. All six landed; `05` is the amendment and every `engine_season:` row feeding it is in `01`–`04`.
 
 | file | state | what it holds |
 |---|---|---|
 | `00_THE_CENSUS.md` | **COMPLETE** | the measured numbers, every one with its command |
 | `01_GOVERNANCE.md` | **COMPLETE** | the 09-03 corpus rebuild, holdings r1/r2, the seam |
-| `02_SETTLEMENTS.md` | **WRITTEN — receipt pending** | the 09-10 set, `ED-SE-0051/0052/0053`, and what of P1/P2 is already built |
-| `03_DECISIONS.md` | **WRITTEN — receipt pending** | the conviction layer, the 09-18 orphan, and what `ED-IN-0251` unblocked |
+| `02_SETTLEMENTS.md` | **COMPLETE** | the 09-10 set, `ED-SE-0051/0052/0053`, and what of P1/P2 is already built |
+| `03_DECISIONS.md` | **COMPLETE** | the conviction layer, the 09-18 orphan, and what `ED-IN-0251` unblocked |
 | `04_THE_TAIL.md` | **COMPLETE** | degree-sweep, proceedings, social-contest branches, emergent narrative ×2, greenfield, term-ownership |
-| `05_THE_ORDER.md` | **NOT WRITTEN** | the amendment to the ratified order — only the items no order schedules |
+| `05_THE_ORDER.md` | **COMPLETE** | the amendment to the ratified order — only the items no order schedules |
 
-**"Receipt pending" means the file is on disk and its author had not yet handed back when this was
-written** — so its rows are unreviewed by the orchestrator, not unwritten. Stated rather than smoothed:
-§10's relay reconciles in the orchestrator, and that step has not run for those two.
-**`04_THE_TAIL.md` is the one that mattered most** — 60% of the corpus by line count, and the largest
-thing no prior pass had dispositioned.
+**`04_THE_TAIL.md` was the one that mattered most** — 60% of the corpus by line count, and the largest
+thing no prior pass had dispositioned. **§1's falsifier is ANSWERED and the suite passes it:** `01`
+carries three non-`NONE` rows and `03` two, so `05` has eight schedulable rows. It is not all-`NONE`
+and the directory is not self-condemned. ⚠ **But `04` is all-`NONE` across seven trees** — 60% of the
+corpus implies no `engine/season/` change at all, which is the single most useful thing this gather
+measured.
 
 Sequential parts in reading order, per `CLAUDE.md` §4's ruling. **Not an `_index` + `_infill` pair**,
 which is retired as a default.

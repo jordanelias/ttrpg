@@ -7,8 +7,11 @@ index; see it for cross-lane/global items.
 ⚠ **THIS LANE HAS LIVE WORK AND THE HEADER SAID OTHERWISE UNTIL 2026-09-18 (`ED-IN-0251`).** It read
 *"No active work tracked in this lane as of the 2026-07-02 HANDOFF split"* — false against this file's
 own body 110 lines down, and the first thing a reader saw. **What is live:** `ED-SE-0051` (E-1, the
-bound on the demographic loop — the lane's one open `needs_jordan`, and the only ledger row in the
-tree whose LAST entry is both `open` and flagged), `ED-SE-0052` and `ED-SE-0053`. See the dated
+bound on the demographic loop — ⚠ **RULED BY JORDAN 2026-09-17 AND STILL FLAGGED `open` IN THIS LANE'S
+LEDGER**, which is a four-surface disagreement, not an open question: see
+`proposals/2026-09-18-the-gather/05_THE_ORDER.md` §6 for the verbatim ruling at
+`RULINGS.yaml:1838-1844` and why the flag is not closed without Jordan's word. **The sections below
+still read "STAYS OPEN" and are stale on that point.**), `ED-SE-0052` and `ED-SE-0053`. See the dated
 sections below, **cited by heading rather than by line**: *"2026-09-10 — the settlements/factions/populations
 proposal set…"*, *"2026-09-17 · ROUND TWO — `04_MATTER_AND_WORKS.md` (`ED-SE-0053`)"* and
 *"2026-09-17 · The built world (`ED-SE-0052`)"*. ⚠ **By heading deliberately, and the reason is this
