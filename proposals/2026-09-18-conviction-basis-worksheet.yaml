@@ -286,81 +286,140 @@ alignment_set: ~           # your cells, once the axes above are settled
 #     -> 0 / 0 / 0 everywhere. Genuinely vacant; no collision to manage.
 #   pragmatism -> 0 live, 0 registry, but see the collision note below.
 
-bearing_axes:
+# ⚠⚠ THE PAIRING BELOW WAS REFUTED THE SAME DAY, BY A SECOND UPLOADED DOCUMENT
+# (`character-model-term-index.md`, Part 4). The original is struck and kept rather than tidied
+# away, because the correction is the useful part.
+#
+#   ~~five bipolar HELD AXES: rigidity<->flexibility · means-before-ends<->ends-justify-means ·
+#     indirect<->direct · humble<->grandstanding · insecure<->secure, plus pragmatism and
+#     fluidity unpaired~~
+#
+# WHY IT WAS WRONG. It read all twelve as axes of one basis. They are not the same KIND of thing:
+# the document sorts every term into FIELD (stored) / READOUT (computed, never stored) /
+# STRUCTURE (a property of how fields relate) / DISPOSED, and most of the twelve are not fields.
+# A readout stored as a field throws away what generated it.
+#
+# THE RESOLUTION, and it COLLAPSES the basis rather than growing it — five of your twelve are ONE
+# FIELD read from different angles:
+#
+#   rigidity            = HIGH bend_price
+#   flexibility         = LOW  bend_price
+#   means before ends   = bend_price = INFINITY -- a GATE (the option is not scored at all)
+#   ends justify means  = a READOUT over the bend_price VECTOR, weighted by tag frequency
+#   pragmatism          = low bend_price + stable goal weights + derived warrant
+#
+# ⚠ SO `means before ends` AND `ends justify means` ARE NOT TWO POLES OF ONE AXIS. One is a gate
+#   on the field; the other is a summary of the whole vector. My pairing made a readout into a pole.
+# ⚠ AND `pragmatism` IS NOT A DUPLICATE OF `instrumental`/`Utility` after all — that collision
+#   claim is WITHDRAWN. It is a bend_price reading. The document adds the sharp part: the
+#   parameters are IDENTICAL to "unprincipled", and which word an observer uses depends on whether
+#   they share the ends. Nothing in the character distinguishes them.
+#
+# THREE ARE READOUTS -- computed after the fact, never stored:
+#   humble / grandstanding  = the integrity delta read the other way; it IS `social_weight` made
+#                             visible. (Agrees with synthesis.md:112's `regard` inverted.)
+#   insecure / secure       = distance between CLAIMED and PERCEIVED identity tags.
+#                             ⚠ THAT IS `standing_of` (decision/options.py:443-464) ALREADY --
+#                             gap(told_by claims about p, p's own firsthand claims about p).
+#                             The document found the concept; the tree already computes it.
+#   ends justify means      = above.
+#
+# TWO SPLIT INTO SEPARATE FIELDS RATHER THAN PAIRING:
+#   direct / indirect  = TWO fields, not one axis: SPEECH CONVENTION (a culture prior) and
+#                        `means_directness` (force to the source, or displaced onto a proxy).
+#                        "The polite killer and the blunt schemer are both real." With
+#                        `initiation_threshold` and `proportionality` this is the 2x2 plus a
+#                        magnitude -- passive-aggressive is a CELL, assertive is low-threshold +
+#                        direct + proportionate.
+#
+# ONE IS GENUINELY NEW AND ANSWERS THE QUESTION THIS FILE ASKED:
+#   fluidity = `drift_rate` -- the rate at which OPERATIVE weights themselves migrate -- and the
+#              document states flatly it is NOT the opposite of rigidity. Rigidity is what you will
+#              not pay; drift is whether what you hold moves at all. So they are independent, and
+#              this file's "far end of one axis, or its own axis?" is answered: ITS OWN FIELD.
+#
+# MEASURED 2026-09-18 -- every new name is vacant, live code / references / .designs / proposals:
+#   bend_price 0/0/0/0 · drift_rate 0/0/0/0 · concern_curve 0/0/0/0 · social_weight 0/0/0/0 ·
+#   suppression_residue 0/0/0/0. The `warrant` and `purity` hits elsewhere are ordinary English,
+#   not terms. No collision to manage on any of them.
 
-  # FIVE CLEAN PAIRS. Confirm the poles, or re-pair them.
-  - name: ~                      # rigidity <-> flexibility
-    poles: [rigidity, flexibility]
-    keep: ~
-    note: "vacant everywhere measured"
-
-  - name: ~                      # means before ends <-> ends justify means
-    poles: ["means before ends", "ends justify means"]
-    keep: ~
-    note: >-
-      ⚠ THIS IS THE AXIS YOU DROPPED FROM THE MORAL SET AND IT IS NOT LOST, IT IS RELOCATED.
-      `substantive <-> procedural` was one of the earlier seven and was dropped from the four
-      proposed moral axes (adjudication_register.yaml:206-207). Means-vs-ends is that axis. As
-      BEARING it escapes R7; as a moral column it could not vary at fixed weights.
-      Watch the overlap with three of the thirteen — Order and Precedent (procedural
-      correctness) against Utility (results) — which is a reason to keep it here, not there.
-
-  - name: ~                      # indirect <-> direct
-    poles: [indirect, direct]
-    keep: ~
-    note: >-
-      Vacant. The `direct`/`means` grep hits in engine/season are ordinary English in comments,
-      not terms. ⚠ ONE REFINEMENT WORTH TAKING OR REFUSING DELIBERATELY: indirect/direct is
-      MEANS, and it reads as a 2x2 with an INITIATION THRESHOLD rather than as one axis —
-      low threshold + direct = confrontational, low + indirect = scheming, high + direct =
-      blunt when pushed, high + indirect = passive-aggressive. `passive` was already one of
-      the seven (RULINGS.yaml:1092-1093 files it as temperament). One axis or two: your call.
-
-  - name: ~                      # humble <-> grandstanding
-    poles: [humble, grandstanding]
-    keep: ~
-    note: >-
-      ⚠ THE DESIGN ALREADY ANSWERS THIS ONE AND THE ANSWER IS NOT A NEW AXIS. synthesis.md:112
-      closes `humble <-> vain` as `regard(subject(c))` INVERTED, entering the score when the
-      subject is the actor themselves — a grandstander weights acts that put him in front of
-      witnesses. `standing_of` already computes the quantity it reads. Adding a bearing axis
-      here means TWO owners of one behaviour (CLAUDE.md §8). Decide which home it takes.
-
-  - name: ~                      # insecure <-> secure
-    poles: [insecure, secure]
-    keep: ~
-    note: >-
-      Vacant as a name, and IT ALREADY HAS A LIVE COMPUTED INPUT. `standing_of`
-      (decision/options.py:443-464) is literally gap(what others tell you about yourself, what
-      you hold firsthand about yourself): 0 = everyone reads you as you read yourself, max =
-      total mismatch. That is insecurity as a MEASURED quantity rather than an authored trait.
-      ⚠ It is one of S18.2's EXACTLY TWO Sensation scalars and a third cannot be added
-      (loop/deliberate.py:474-476), so this attaches to the existing scalar or it is a held
-      axis — not a new Sensation term.
-      ⚠ MEASURED: it returns the MAXIMUM gap for every person today, because the told_by
-      channel is empty (paired == 0). Everyone in Valoria is currently maximally misread.
-
-  # TWO THAT ARE NOT YET PAIRS — both need a word from you.
-  - name: ~
-    poles: [pragmatism, ~]
-    keep: ~
-    note: >-
-      ⚠ AGAINST WHAT? And ⚠ IT COLLIDES: `instrumental` is one of the four LIVE moral axes and
-      `Utility` ("effectiveness, results, instrumental judgment",
-      descriptor_registry.yaml:240) is one of the thirteen. Pragmatism as a bearing axis makes
-      it the THIRD owner of one quantity — this is the same shape as `selfish` duplicating
-      `orient · benefits_me(c)`, now for the second time in this basis. Either pragmatism is
-      bearing and `instrumental`/`Utility` give it up, or it stays moral and drops out here.
-
-  - name: ~
-    poles: [fluidity, ~]
+bearing_fields:
+  # Confirm, reject, or re-cut. These are the document's, not yours, and nothing is ratified.
+  - name: bend_price
+    holds: "per character x conviction, in cost units -- the cost at which the conviction yields"
+    absorbs: [rigidity, flexibility, "means before ends", "ends justify means", pragmatism]
     keep: ~
     note: >-
-      ⚠ IS THIS THE SAME AXIS AS rigidity <-> flexibility, OR A SECOND ONE? Ordinary usage
-      separates them — flexible means willing to bend, fluid means holding no fixed shape at
-      all — so it reads as either the far end of one axis or an axis of its own. §4's
-      idempotency test is what decides it: a reader with no memory of this repo must land on
-      one meaning, and today they would not.
+      INFINITY means a GATE and finite means a WEIGHT, and that difference is load-bearing in this
+      engine: a gate removes the option from the candidate set, a weight scores it at a price.
+      ⚠ The document recommends ONE GLOBAL VALUE FIRST, per-conviction later (its cut, item 3).
 
-bearing_held_as: ~   # confirm: values DIRECTLY on the Person, no roster, no projection (R7's escape)
-bearing_scale: ~     # e.g. '[-1,+1]' per axis, or '0-5' like Truth's, or something else
+  - name: drift_rate
+    holds: "rate at which operative weights migrate"
+    absorbs: [fluidity, progressive, traditional]
+    keep: ~
+    note: "independent of bend_price, not its opposite"
+
+  - name: means_directness
+    holds: "force to the source, or displaced onto a proxy"
+    absorbs: [indirect, direct]
+    keep: ~
+    note: "pairs with initiation_threshold as a 2x2; add proportionality and `assertive` appears"
+
+  - name: social_weight
+    holds: "how much the predicted reading of an act enters the score"
+    absorbs: [humble, grandstanding]
+    keep: ~
+    note: >-
+      ⚠ THE INTEGRITY READOUT COMES FREE with it (score twice, once with the social term zeroed).
+      ⚠ AND IT HAS NO ARM TO MEASURE AGAINST TODAY: the social term is measurably ZERO -- 0 stance
+      rows -- so every live decision ALREADY IS the social-term-zeroed arm.
+
+bearing_readouts: ~   # computed, never stored: integrity · grandstanding/humility ·
+                      # insecurity/security · hypocrisy · adaptability · denial
+bearing_held_as: ~    # confirm: values DIRECTLY on the Person, no roster, no projection (R7's escape)
+bearing_scale: ~      # e.g. '[-1,+1]' per field, or '0-5' like Truth's, or something else
+
+# ============================================================================
+# 5. ⚠⚠ A THIRD AXIS SET ARRIVED, AND IT IS THE ONE THING HERE ONLY YOU CAN SETTLE
+# ============================================================================
+# `character-model-term-index.md` Part 5 declares the roster as 13 convictions x THREE axes:
+#
+#     warrant  (-3 given      ... +3 derived)
+#     facing   (-3 downward   ... +3 upward)
+#     purity   ( 0 violation costs ... 3 violation defiles)
+#
+# THAT IS A THIRD SET, against the four you RULED on 2026-09-17 (memory/substantive/equity/selfish,
+# RULINGS.yaml:1094-1096) and the four LIVE today (traditional/sacred/instrumental/hierarchical).
+# STR-2's whole point was that two axis sets are two different games; three is not better.
+#
+# FOUR THINGS ABOUT IT, MEASURED OR READ, BEFORE YOU CHOOSE:
+#
+#  (a) ⚠ ITS DEFINITIONS LIVE IN A FILE THAT DOES NOT EXIST. Part 5 defers "full descriptor, axis
+#      definitions, aggregation rules and sweep arms" to `conviction_projection_vnext.yaml`.
+#      SEARCHED 2026-09-18: absent from the repository AND from the uploads. So the three axes are
+#      named here and defined nowhere.
+#
+#  (b) ⚠ `purity` AGGREGATES BY WEIGHTED **MAX**, NEVER SUM -- and the single owner cannot compute
+#      that. `data/convictions.to_axes` IS `Sigma_conv w[conv] * P[conv][axis]`, a linear sum, and
+#      §8 makes it the one owner of convictions->axes. A max-aggregating axis needs that owner
+#      changed, not a new column.
+#      ⚠ It does NOT escape R7, and it is worth being clear about that: max is still a function of
+#      the weight vector ALONE, so two people with identical weights are still identical on it.
+#      Max buys a different SHAPE, not per-character variation.
+#
+#  (c) ⚠ `facing` IS USED FOR TWO DIFFERENT OBJECTS IN ONE DOCUMENT -- a conviction AXIS here, and
+#      a character FIELD at its §1.7 ("weights obligation upward / lateral / downward"). And
+#      synthesis.md:229 already owns the second sense as the personality parameter. Three uses of
+#      one word; §4's cold-reader test fails.
+#
+#  (d) ITS DIAGNOSIS OF THE LIVE MATRIX IS CORRECT AND REPRODUCES. It cites "an effective rank of
+#      1.87" for v30. MEASURED on rosters.yaml's own cells: participation ratio on the CORRELATION
+#      matrix = 1.869; on the COVARIANCE matrix = 1.849, which is what
+#      `harness/conviction_spread` prints as 1.85. SAME FINDING, two normalizations -- not a
+#      disagreement, and worth knowing so 1.87 and 1.85 are not read as two numbers.
+#      Its stated reason for three axes rather than four is that merging `update_rule` into
+#      `warrant` "repeats the error that gave v30 an effective rank of 1.87".
+
+third_axis_set_verdict: ~   # 'take warrant/facing/purity' | 'keep memory/substantive/equity/selfish'
+                            # | 'neither, and here is the set'
