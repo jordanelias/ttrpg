@@ -72,7 +72,7 @@ from ..queries.world_q import home_of as home_of_q
 from ..gaps import Unspecified
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.rosters import (BODY_FACTION, FACTIONS, ROLE_TEMPLATE_OF, faction_prop_id,
-                            load_yaml, title_domain)
+                            load_yaml, remit_or_default, title_domain)
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..state.carriers import Office, Person, Proposition, Rung, Site, Tenure
@@ -687,6 +687,14 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
     # per-post remit, and the five remit acts are a CLOSED set whose members gate verbs — inventing
     # one would silently hand somebody an authority nobody granted. An empty remit is lawful and
     # grants nothing.
+    # ⚠⚠ **AMENDED 2026-09-18: THE SEATING BELOW NOW FILLS AN EMPTY REMIT FROM
+    # `rosters.yaml: remit_default`, WHICH IS THE THING THIS PARAGRAPH REFUSES TO DO.** The refusal
+    # is correct AS CANON and is not overturned — Jordan asked for a generic remit explicitly and
+    # only *"for testing purposes for now"*, so the tree hands out an authority nobody granted, ON
+    # PURPOSE, and says so in three places rather than letting it look canonical. The default is
+    # transparently wrong (every office gets every act), which is what stops it reading as design.
+    # This paragraph stays because it states the standard the default is an exception to, and the
+    # per-POST remits that replace it must meet it.
     from .corpus_run import rescales          # deferred — `data/__init__` records what eager costs
     overlays = rescales()
     seated, no_post, occupations, proposed = 0, [], [], []
@@ -742,7 +750,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         body = over.get("body") if over else (_sub if _sub in BODY_FACTION else None)
         oid = f"off_{_slug(cid)}"
         w.offices[oid] = Office(
-            oid, post, rung, list(over.get("remit") or []),
+            oid, post, rung, remit_or_default(over.get("remit")),
             body=body,
             faction=(over.get("faction") if over else None) or (None if body else fac_name),
         )

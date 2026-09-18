@@ -5119,6 +5119,85 @@ def test_a_holder_can_now_choose_the_governance_verbs_their_office_grants():
         "the fold can no longer execute the governance verbs; the slice has regressed")
 
 
+def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
+    """THE TESTING DEFAULT, PINNED — and pinned as a FIXTURE, not as a design.
+
+    Jordan, 2026-09-18: *"anyway, for testing purposes for now, just build out a generic remit"*.
+    `rosters.yaml: remit_default` is that, and its own note says at length why a transparently
+    wrong placeholder is safer than a plausible one. This test asserts what it BUYS and what it
+    does NOT, so a later session reading it cold cannot mistake either.
+
+    WHAT IT BUYS: `H-71` (`ED-IN-0255`) put the remit on the holder's `hold` Tenure, but 16 of the
+    populated realm's 19 offices carried `remit_acts: []` — blocked by DATA, not by any mechanism.
+    With the default, every seated holder carries a grant and all NINE become formable.
+
+    ⚠ THAT CLOSES FOUR, NOT EIGHT, AND THIS DOCSTRING CLAIMED EIGHT BEFORE IT WAS MEASURED.
+    Measured on `build_realm(0)` in both arms: five of the nine were ALREADY formable off the three
+    granted seats (`determine`, `dispatch`, `issue`, `levy`, `open_case`); the four the default
+    closes are `confer`, `convene`, `establish`, `revoke`. The assertion below pins the nine, and
+    this paragraph pins what the nine cost.
+
+    ⚠ WHAT IT DOES NOT BUY, ASSERTED SO THE GAP CANNOT BE READ AS SUCCESS: the CORPUS executed set
+    does not move. `corpus_run` seats an office only through an `apply_rescale` overlay, and all
+    three that do (NPC-008/033/038) DECLARE a remit, so `remit_or_default` reaches none of them.
+    Formable in the populated realm is not executed in the corpus, and `R-05` is scored on the
+    corpus.
+
+    ⚠ AND EXECUTION IN THE POPULATED REALM IS NOT INSTRUMENTED BY ANYTHING — a pre-existing gap
+    (root `HANDOFF.md` §4: *"no `corpus_run` or `register --requirements` path consults it"*), so
+    this test asserts FORMABILITY and makes no claim about execution. Stated rather than left as
+    an inference."""
+    from ..data.rosters import REMIT_ACTS, REMIT_DEFAULT, remit_or_default
+    from ..harness import populated as PP
+
+    # the fill rule itself: fills an empty remit, never overwrites a declared one
+    assert remit_or_default([]) == sorted(REMIT_DEFAULT)
+    assert remit_or_default(["issue"]) == ["issue"], (
+        "the default overwrote a declared remit — the three grounded overlays would lose the "
+        "remit their own case text supports")
+    # ⚠ SORTED, AND THE ASSERTION IS THE POINT RATHER THAN THE TIDINESS. `REMIT_DEFAULT` is a
+    # frozenset; returning `list(...)` gave a PER-PROCESS order that made
+    # `build_realm(0).content_hash()` differ on every run (3/3 distinct under three
+    # `PYTHONHASHSEED`s). A determinism break visible only ACROSS processes is invisible to every
+    # same-process self-comparison in this suite, which is why it is pinned here explicitly.
+    assert remit_or_default([]) == sorted(remit_or_default([])), "the default is not sorted"
+    # ⚠ THE DEFAULT IS A VERBATIM COPY OF `remit_acts` WITH NO DERIVATION LINK, so a seventh remit
+    # act would silently not reach it. Pinned rather than wired: keeping them separate is what lets
+    # the default NARROW later, which per-post remits will want. This goes red the day they drift.
+    assert set(REMIT_DEFAULT) <= set(REMIT_ACTS), (
+        f"the default grants {sorted(set(REMIT_DEFAULT) - set(REMIT_ACTS))}, which are not remit "
+        "acts — `Office.__post_init__` would refuse them at every seat")
+    assert set(REMIT_DEFAULT) == set(REMIT_ACTS), (
+        "the default and the remit roster have drifted. That may be correct — a narrower default "
+        "is the likely shape once per-post remits land — but it must be a decision, not a silent "
+        "omission. Re-read `rosters.yaml: remit_default`'s note and update this assertion")
+
+    w = PP.build_realm(0)
+    offices = list(w.offices.values())
+    # [GROUNDED: measured 2026-09-18 on `build_realm(0)` -- the populated realm seats 19 offices, of which 3 carried a remit before `remit_default` and 19 after; the seat registry is `harness/populated.py`'s own, not a constant chosen here]
+    assert len(offices) >= 19, f"the realm seats {len(offices)} offices; the fixture has moved"
+    ungranted = [o.id for o in offices if not o.remit_acts]
+    assert not ungranted, f"offices with no remit after the default: {ungranted}"
+
+    held = [t for t in w.tenures if t.kind == "hold" and t.live and t.object in w.offices]
+    assert held, "no office is held; `_grant_remit` has nothing to stamp"
+    assert all(t.granted_acts for t in held), (
+        "a seated holder carries no grant — `add_tenure` is not stamping, or the office is empty")
+
+    gov = [v for v, r in VERB_TABLE.items()
+           if any(a.startswith("remit:") for a in (r.eligibility or ()))]
+    # [GROUNDED: measured 2026-09-18 over `VERB_TABLE` -- nine rows carry a `remit:` alternative (confer, convene, determine, dispatch, establish, issue, levy, open_case, revoke), which is the same nine `H-71`'s `unblocks:` field names]
+    assert len(gov) == 9, f"{len(gov)} verbs carry a `remit:` alternative; H-71's nine has moved"
+    formable = set()
+    for t in held:
+        p = w.persons.get(t.subject)
+        if p:
+            formable |= {v for v in gov if person_side_eligible(p, VERB_TABLE[v])}
+    assert formable == set(gov), (
+        f"only {sorted(formable)} of the nine remit verbs are formable by a seated holder; the "
+        "generic remit is not reaching them")
+
+
 def test_h71_the_grant_is_a_snapshot_not_a_mirror():
     """WHAT THE STORE DOES TODAY -- **not** what the design intends. The distinction matters and an
     earlier writing of this docstring got it wrong.

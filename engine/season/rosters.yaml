@@ -149,6 +149,53 @@ rosters:
       ruling above forbids.
     values: [issue, determine, confer, revoke, dispatch, convene]
 
+  remit_default:
+    source: "⚠⚠ NOT CANON. A TESTING FIXTURE, RULED BY JORDAN 2026-09-18: *\"anyway, for testing purposes for now, just build out a generic remit\"*."
+    open: true
+    note: >-
+      ⚠⚠ **THIS IS A TEST FIXTURE AND IT IS OBVIOUSLY NOT A DESIGN. READ THIS BEFORE USING IT FOR
+      ANYTHING.** It hands EVERY seated office EVERY remit act, which is exactly the authority
+      `harness/populated.py` refused to invent on its own account: *"inventing one would silently
+      hand somebody an authority nobody granted"*. That refusal was right and is not overturned —
+      what changed is that Jordan asked for a generic remit SO THE GOVERNANCE VERBS CAN BE
+      EXERCISED AT ALL, and a value that is transparently wrong is safer as a placeholder than a
+      plausible one, because nobody will mistake *"every office can do everything"* for canon.
+
+      WHY IT EXISTS. `H-71` closed 2026-09-18 (`ED-IN-0255`): a holder's remit now rides on their
+      `hold` Tenure and `person_side_eligible` reads it. But of the 19 offices the populated realm
+      seats, only THREE carried a remit — blocked by DATA, not by any mechanism. This roster is
+      that data, provisionally.
+      ⚠ IT BUYS FOUR VERBS, NOT EIGHT, AND THE FIRST WRITING OF THIS NOTE SAID EIGHT WITHOUT
+      MEASURING IT. Measured on `build_realm(0)`, both arms: BEFORE, five of the nine were already
+      formable off the three granted seats (`determine`, `dispatch`, `issue`, `levy`, `open_case`)
+      and FOUR were unreachable (`confer`, `convene`, `establish`, `revoke`). The default closes
+      those four. `H-71`'s own `cite:` says the never-attempted set went 5 -> 4 and is consistent;
+      the "eight" was invented. `CLAUDE.md` §0.1 pt 3 — a number without its measurement.
+
+      ⚠ IT DEFERS TO ANY REAL REMIT AND NEVER OVERWRITES ONE. The three grounded overlays
+      (NPC-008 `issue`; NPC-033 `issue`/`dispatch`; NPC-038 `issue`/`determine`/`dispatch`) keep
+      exactly what their case text supports. This fills ONLY an empty remit.
+
+      WHAT REPLACES IT, and the shape is already known. A remit belongs to a POST, and an office is
+      a post plus a scope. ⚠ BUT `Office.post` DOES NOT CURRENTLY HOLD A POST — measured
+      2026-09-18, the realm's 19 posts include `"Cardinal Justice"`, `"Queen (Widow Regent if
+      Almud eliminated)"`, `"Senior Jarl of the Western Highlands"` and `"Archbishop's
+      Representative / Father"`, each fusing a post with a scope, a condition or a relationship.
+      Jordan, same session: *"cardinal is a post / king is a post / confessor is a post"*. So
+      per-post remits need the post field normalised first, and that is a prior unit rather than a
+      detail of this one.
+
+      ⚠ AND ECCLESIASTICAL POSTS ARE THE AWKWARD CASE, named here so the later work does not
+      rediscover it. Jordan: *"Confessor governs the Church tho"* and *"they are super weird in
+      that they don't have territories at first"*. So a Confessor's scope is a BODY
+      (`rosters.yaml` maps `"Church of Solmund": ecclesiastical`) and NOT a rung, with territory
+      arriving later if at all. `data/cast.py::title_of` says `Doux`, `Confessor`, `Father` and
+      `Prince` *"are real titles that govern no rung"* — correct about the RUNG LADDER and wrong
+      if read as governing nothing. No schema change is needed: `Office.rung` is already
+      `Optional` (*"null is the office-cluster case (S6.2)"*) and `Office.body`/`faction` carry
+      the institution.
+    values: [issue, determine, confer, revoke, dispatch, convene]
+
   witness_channels:
     source: "#353 §28 `:1004` — the five channels the fan-out computes an observer set from"
     open: true

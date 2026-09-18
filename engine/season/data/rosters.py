@@ -333,6 +333,36 @@ HOLD_SUBJECT_KINDS = roster("hold_subject_kinds")
 VERB_CAPABILITY = roster_map("verb_capability", "values")
 RUNG_KINDS = roster("rung_kinds", ordered=True)
 REMIT_ACTS = roster("remit_acts")
+# ⚠ A TESTING FIXTURE, NOT CANON — see the roster's own note. Jordan, 2026-09-18: "for testing
+# purposes for now, just build out a generic remit". It fills an EMPTY remit and never overwrites
+# a grounded one.
+REMIT_DEFAULT = roster("remit_default")
+
+
+def remit_or_default(declared) -> list[str]:
+    """A seat's remit, or the TESTING default when it declares none — the ONE owner of that rule.
+
+    ⚠ IT FILLS AN EMPTY REMIT AND NEVER OVERWRITES A DECLARED ONE. The three grounded overlays
+    (NPC-008/033/038) keep exactly what their case text supports; `remit_default` reaches only the
+    seats that carry `[]`, which was 16 of the populated realm's 19 when this landed.
+
+    ⚠⚠ THE DEFAULT IS NOT CANON — see `rosters.yaml: remit_default`'s own note for why a
+    transparently-wrong placeholder is the safe shape and what replaces it (per-POST remits, which
+    need `Office.post` normalised first). Jordan, 2026-09-18: *"for testing purposes for now, just
+    build out a generic remit"*.
+
+    ⚠ NO FILTERING, DELIBERATELY. `corpus_run`'s own comment records why: a rev-1 filter
+    `[a for a in ... if a in REMIT_ACTS]` dropped an unrecognised remit act on the floor, *"a quiet
+    default sitting underneath `Office.__post_init__`'s loud one"*. A declared remit passes through
+    untouched and `Office.__post_init__` refuses it loudly if it is off-roster.
+    """
+    declared = list(declared or [])
+    # ⚠ `sorted`, NOT `list`. `REMIT_DEFAULT` is a frozenset, so `list()` gave a PER-PROCESS order
+    # and `build_realm(0).content_hash()` returned a different digest on every run — measured 3/3
+    # distinct under three `PYTHONHASHSEED`s, 3/3 identical without this. Gameplay was unaffected,
+    # but R4 byte-identical replay is not, and a determinism break that only shows across processes
+    # is exactly the kind a same-process self-comparison cannot see. Found by `/code-review`.
+    return declared if declared else sorted(REMIT_DEFAULT)
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)
 CLAIM_SOURCES = roster("claim_sources")
 STRATA = roster("strata", ordered=True)
