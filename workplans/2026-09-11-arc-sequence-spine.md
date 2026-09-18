@@ -60,7 +60,7 @@ re-cut into five units rather than four** — see §3 for why the original cut i
 | **13** | **U7-remit** — `levy`, `establish`, `open_case`, `determine`, `issue` | G3, for `via.scope` | `levy` executing **with `Act.via` set** is U9's own observable |
 | **14** | **U9 / R-04** — `faction_q`-shaped queries, `scale_of_rung`, the 44 re-scales, the 10 world cases | G3 + U8 + U7-remit | the last structural unit |
 | **15** | **U10** — second measurement; `measured:` lines from instrument output only | everything above | — |
-| **off-spine** | **U7-disp** — `comply`, `evade / defy`, `refract` | — | **genuinely Jordan's.** ED-IN-0210's fork (*does an order carry terms?*) is the one remaining node that survives all five of §0's tests. Do not schedule it until ruled |
+| **off-spine** | **U7-disp** — `comply`, `evade / defy`, `construe` | — | **genuinely Jordan's.** ED-IN-0210's fork (*does an order carry terms?*) is the one remaining node that survives all five of §0's tests. Do not schedule it until ruled |
 
 **Where two units were order-free, that is said and a choice is still made** — the ask was a spine, not
 a lattice. U3 is order-free against Arc 2 (picked first so game yield lands even if G1a stalls on the

@@ -148,7 +148,7 @@ def claim_subjects(e: "Event", rule: str, refs: Optional[list] = None) -> list:
         # AN OVERCLAIM A CRITIC BROKE.** The first writing of this comment quoted Reading 07 §3 —
         # *"the `tell` chain is the only transport"* — as though this line served `tell` alone. It
         # does not: it fires for every verb with `writes: []` (`speak`, `comply`, `dispatch`,
-        # `evade`/`defy`, `refract`, the investigation acts), for `contest.resolved`, and for
+        # `evade`/`defy`, `construe`, the investigation acts), for `contest.resolved`, and for
         # every refusal. That is **correct and it is a different carrier**: Reading 07 §5 names
         # three, and the first is PRESENCE — *you were there*. A speech changes nothing and is
         # still witnessed, and what a witness learns is what was spoken ABOUT. Transport is what

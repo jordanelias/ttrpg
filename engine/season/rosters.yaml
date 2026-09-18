@@ -1545,7 +1545,7 @@ tables:
         utter:          -0.7    # the uttered word binds the utterer whatever advantage later counsels — `commit`, one step up
         forge:           0.8    # counterfeiting a record for advantage is the purest means-to-ends act on the table
         evade / defy:    0.7    # putting your own calculus over a demand — self_preservation's 0.8, read for what it always was
-        refract:         0.7    # a deliberate re-telling calculated to serve the refractor's aim, not to keep the bond
+        construe:        0.7    # a deliberate reading of the terms calculated to serve the construer's aim, not to keep the bond
         exchange:        0.6    # a trade that must balance on both sides is ledger-logic, no oath behind either side
         transfer:        0.6    # moving stores between hearths is bald calculation, stripped of any binding or vow
         comply:          0.5    # the safe route is obeying — the lower-risk, calculated path over what conviction prefers
