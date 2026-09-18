@@ -1,4 +1,13 @@
-# THE RECONCILED PROGRAM — every live item, in one order, across every lane
+# THE PLAN — governance · settlements · behaviour: every live item, in one order, across every lane
+
+> **RENAMED 2026-09-18 (`ED-IN-0254`), on Jordan's instruction.** It was
+> `workplans/2026-09-11-reconciled-program.md`, and the date was the problem: *"2026-09-11 is
+> misleading as if anything is sorted by date, then it will appear old."* A creation date on the
+> LIVING plan reads as staleness, and `CLAUDE.md` §4 already says a filename cannot carry currency —
+> *"Only `CURRENT.md` and a head's `## Status:` line can tell you what is current."*
+> **Both old paths resolve** through `references/restructure_ledger.md` via `tools/pathres.py`
+> (verified `ALIASED`), so every citation in the frozen registers and the 09-17 suites still points
+> here. **Prose still calling this "the reconciled program" means this file.**
 
 ## Status: **RATIFIED 2026-09-12 (ED-IN-0215). AMENDED 2026-09-18 (`ED-IN-0253`) INTO THE SINGLE PLAN, ON JORDAN'S INSTRUCTION** — *"I need one single clearly defined plan"*, and his choice of option (b): fold the governance build order in, land the contested-ownership commit, stop maintaining two. ⚠ **THE CONTESTED-OWNERSHIP NOTE IS RESOLVED AND THIS IS THE COMMIT IT ASKED FOR.** It read: *"§0's claim to be the single owner of the ORDER across all lanes is contested — `workplans/2026-09-11-arc-sequence-spine.md` positions 2–15 remain independently actionable, and `valoria_master_workplan_v7.md` §6 records that the collision is open and needs a commit rather than a paragraph."* **§3 is now the only ORDER in the repository.** The spine, the governance build order and the gather's amendment are subordinated by header line to this file and own CONTENT only. ⚠ **STILL SCOPED:** the 2026-09-12 merge ratified §3's order and §1's supersession verdict and nothing else; §5's rulings and §7's held-back items are untouched here. ⚠ **§3 WAS RE-SEQUENCED, which §8 previously declined to do** — *"the sequence is RATIFIED and this session did not re-sequence it"*. That restraint was right without an instruction and is superseded by one. **No existing position number changed**; new rows use the lettered sub-position convention (`13b`, `19b`, `ED-IN-0242`) so no citation in the tree dangles, and §3.4 maps every folded item.
 ## Owner: infrastructure / cross-cutting (IN lane)

@@ -1,6 +1,6 @@
 # THE WORK ORDER — unit content for the seven items (2026-09-13)
 
-## Status: **CONTENT OWNER.** Not an order — `workplans/2026-09-11-reconciled-program.md` owns the
+## Status: **CONTENT OWNER.** Not an order — `workplans/2026-09-18-governance-settlement-behaviour-plan.md` owns the
 ## order (`RATIFIED`, `ED-IN-0215`). This file owns what each of these seven units IS: the
 ## `file:line`, the measurement with its control, the falsifier, and the corrections earlier drafts
 ## needed. Moved out of root `HANDOFF.md` on 2026-09-17 (`ED-IN-0242`).
@@ -172,7 +172,7 @@ Moved from root `HANDOFF.md` 2026-09-17 (`ED-IN-0242`) — it argues about the O
 
 ## ⚠⚠ THIS IS AN INDEX, NOT AN ORDER. THE ORDER IS RATIFIED AND LIVES ELSEWHERE.
 
-**`workplans/2026-09-11-reconciled-program.md` — *"every live item, in one order, across every lane"*,
+**`workplans/2026-09-18-governance-settlement-behaviour-plan.md` — *"every live item, in one order, across every lane"*,
 `## Status: RATIFIED 2026-09-12 (ED-IN-0215)`, 27 positions — IS THE SINGLE OWNER OF THE ORDER.**
 The first draft of this section was a *third* ordering surface that did not name it, and an
 adversarial pass overturned it on exactly that.

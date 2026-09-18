@@ -4,7 +4,7 @@
 ## Lane: `IN` (cross-cutting) · **`ED-IN-0252`**
 ## Grade under `CLAUDE.md` §0.2: **`measured`** for `00` and for every disposition carrying an opened `file:line`; **`paper`** for `05_THE_ORDER.md`. **Nothing in this suite has run.**
 ## Supersedes: **nothing.** It disposes OF trees; it replaces none of them.
-## ⚠ It is NOT a fourth order. `workplans/2026-09-11-reconciled-program.md` §3 is the RATIFIED single owner of the order (`ED-IN-0215`) and `05` is an **amendment** to it, not a rival.
+## ⚠ It is NOT a fourth order. `workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3 is the RATIFIED single owner of the order (`ED-IN-0215`) and `05` is an **amendment** to it, not a rival.
 
 > **Jordan, this session:** *"I want the design proposal trees to be gathered today and orchestrated
 > as per previous PRs recently."*

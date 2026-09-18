@@ -27,7 +27,7 @@ every other dated section below is marked **WAS CURRENT** and is history. Five s
 
 ## ⚠⚠ THIS IS AN INDEX, NOT AN ORDER. THE ORDER IS RATIFIED AND LIVES ELSEWHERE.
 
-**`workplans/2026-09-11-reconciled-program.md` §3 IS THE SINGLE PLAN.** If you are choosing what to do next, open it — and start at its **§3.1 · START HERE**, which names the next three in order.
+**`workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3 IS THE SINGLE PLAN.** If you are choosing what to do next, open it — and start at its **§3.1 · START HERE**, which names the next three in order.
 
 ⚠ **AMENDED 2026-09-18 (`ED-IN-0253`) ON JORDAN'S INSTRUCTION — *"I need one single clearly defined plan"*.** The order was spread over five surfaces; it is now on one. The contested-ownership note in that file's own `## Status:` line is CLOSED, `valoria_master_workplan_v7.md:16`'s open ORDER collision is CLOSED, and the arc-sequence spine, the governance build order and the gather's `05_THE_ORDER.md` are subordinated to it as CONTENT owners. **No position number changed** and §3.4 maps every folded item, so no citation dangles. §3 now carries a `STATE` column that is execution-bound per `CLAUDE.md` §0.2 — `DONE` means something ran it — and §3.3 records the five items that landed 09-17/18, **two of which do not affect the game yet and are marked `DONE·INERT` rather than done.**
 
@@ -80,7 +80,7 @@ run moves until it closes. ⚠ A handoff elsewhere says FIVE; the register says 
 is the surface with the falsifier (`test_no_person_can_choose_a_governance_verb_and_h71_is_why`,
 which goes RED the day the hole closes). Read the register, not the cached figure.
 Neither surface named the other; this note is where they meet.
-`workplans/2026-09-11-reconciled-program.md`'s record defect naming this row is spent with it.
+`workplans/2026-09-18-governance-settlement-behaviour-plan.md`'s record defect naming this row is spent with it.
 
 ⚠ **`ED-WR-0011` IS NOT ON THIS LIST AND THIS ENTRY FIRST PUT IT HERE.** The ledger carries a SECOND
 row under that id: `status: ruled`, `needs_jordan: false` — *"OI-05 RULED BY JORDAN, 2026-09-13…
@@ -102,7 +102,7 @@ needs_jordan**."* Clearing it would have deleted a live escalation.
    asserted "37 open / 7 contradictory" against this section's own rule that *every row names the
    command that measures it* — and it named a glob. Measured by hand on 2026-09-13 the count is
    **41, 51 or 77 depending on the predicate** (all-files / non-archive / any-status), and folding
-   append-only rows to the latest per id gives 37. Against that, `2026-09-11-reconciled-program.md`
+   append-only rows to the latest per id gives 37. Against that, `2026-09-18-governance-settlement-behaviour-plan.md`
    (RATIFIED) measured **108 open / 158 flagged** on 2026-09-11, and this file's own 2026-09-10
    section reads 151/105 then 153/106. Position-1 closures have been landing, so a fall is real —
    **but no number here has a control, which is §0.1 pt 4 on this row's own terms.** The honest

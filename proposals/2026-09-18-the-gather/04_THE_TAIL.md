@@ -16,11 +16,11 @@ re-verified against no fresh `wc`).
 | path | verdict | successor / disposition | `engine_season:` |
 |---|---|---|---|
 | `2026-09-04-degree-sweep/` | **ABSORBED** | findings landed as `engine/season/hole_register.yaml` rows H-113..H-120 + `architecture/meta/HANDOFF_NEXT.md` §2A | NONE |
-| `2026-09-05-proceedings-subsystem/` | **LIVE, SCHEDULED** | RULED (ED-SC-0033) to own all social contests; slotted at `workplans/2026-09-11-reconciled-program.md:156,161` (PROC-A, PROC-B) — not yet built | NONE |
+| `2026-09-05-proceedings-subsystem/` | **LIVE, SCHEDULED** | RULED (ED-SC-0033) to own all social contests; slotted at `workplans/2026-09-18-governance-settlement-behaviour-plan.md:156,161` (PROC-A, PROC-B) — not yet built | NONE |
 | `2026-09-04-social-contest-branches/` | **SUPERSEDED** | by the ruled game-structure model, `2026-09-05-proceedings-subsystem/` (ED-SC-0033) | NONE |
 | `2026-09-12-emergent-narrative-primitives/` | **SUPERSEDED** | by `2026-09-12-emergent-narrative-primitives-v2/00_INDEX.md:9` | NONE |
 | `2026-09-12-emergent-narrative-primitives-v2/` | **LIVE** (partial ABSORBED) | 6 of 14 proposals folded into `workplans/valoria_master_workplan_v7.md:658` §7 Amendment 1 (ED-IN-0218); 8 remain open PROPOSED | NONE |
-| `2026-08-28-greenfield-systems-suite/` | **SUPERSEDED** | chain: → `2026-08-29-greenfield-systems-suite-v2/` (its own `ARCHIVED.md:3`) → `architecture/` (`workplans/2026-09-11-reconciled-program.md:63`) | NONE |
+| `2026-08-28-greenfield-systems-suite/` | **SUPERSEDED** | chain: → `2026-08-29-greenfield-systems-suite-v2/` (its own `ARCHIVED.md:3`) → `architecture/` (`workplans/2026-09-18-governance-settlement-behaviour-plan.md:63`) | NONE |
 | `2026-09-16-term-ownership/` | **ORPHAN** (mixed — see §7) | `key_type_registry.yaml` half SPENT (ED-IN-0232); `offices_draft.yaml` 6-row sliver ABSORBED (`engine/season/rosters.yaml:930,971`), remainder unverified | NONE |
 
 **None of the seven implies an `engine/season/` change.** That is not a gap in this pass — it is
@@ -59,7 +59,7 @@ after the sweep, addressing exactly the on-ramp gap it measured. Not this tail's
 HELD BACK IN FULL, nothing here runs, no `CURRENT.md` row moves. But `CURRENT.md:28` records Jordan's
 ruling (ED-SC-0033, verbatim): *"this subsystem obviously owns all social contests"* — naming this
 directory — and the same ruling repoints the two contest prizes at `rosters.yaml:441-446` here.
-`workplans/2026-09-11-reconciled-program.md:156` and `:161` carry it as ratified-order positions
+`workplans/2026-09-18-governance-settlement-behaviour-plan.md:156` and `:161` carry it as ratified-order positions
 **PROC-A** (*"re-host the stress suite … `judging_set`; `arrangements.yaml`"*) and **PROC-B** (*"the
 proceedings provider; the composed obstacle with a ceiling; THE BAR"*) — scheduled, ordered work, not
 an undispositioned tail tree. **Verdict: LIVE, and out of this lane's scope to act on further.**
@@ -108,7 +108,7 @@ PRE-CRITIQUE suite (v1). ## Status: SUPERSEDED (2026-08-29) by
 given (`ARCHIVED.md:6-10`) — a critique target must stay readable so the critique's citations
 resolve. The census table lists v1 (this row) as NO / not held back and 12 files; v2 is a sibling
 directory this lane was not asked to disposition, but its own fate is visible one hop further:
-`workplans/2026-09-11-reconciled-program.md:63` (opened), the `SUPERSEDED BY architecture/` row,
+`workplans/2026-09-18-governance-settlement-behaviour-plan.md:63` (opened), the `SUPERSEDED BY architecture/` row,
 names *"greenfield v1+v2"* explicitly among fourteen trees superseded by `architecture/`. **Chain,
 two hops, both opened at the citing line: v1 → v2 (`ARCHIVED.md:3`) → `architecture/`
 (`reconciled-program.md:63`).** Six of v1's own claims are additionally flagged **false** by the

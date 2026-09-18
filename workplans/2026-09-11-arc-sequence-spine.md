@@ -1,7 +1,7 @@
 # ONE SPINE FOR EVERYTHING THAT REMAINS — Arc 1 / Arc 2 / Arc 3 resequenced
 
 ## Status: PROPOSED (ED-IN-0212). ⚠⚠ **SUPERSEDED AS AN *ORDER* 2026-09-18 (`ED-IN-0253`).**
-## **THE ORDER IS `workplans/2026-09-11-reconciled-program.md` §3 AND NOWHERE ELSE.** This file's
+## **THE ORDER IS `workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3 AND NOWHERE ELSE.** This file's
 ## positions 2–15 were the surviving basis for calling that document's single-ownership claim
 ## "contested"; Jordan closed the collision — *"I need one single clearly defined plan"* — and this
 ## file now owns its ARGUMENT and its dependency reasoning only. **Do not build from the order below.**

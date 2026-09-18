@@ -2,7 +2,7 @@
 
 ## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
 ## ⚠⚠ **FOLDED INTO THE SINGLE PLAN 2026-09-18 (`ED-IN-0253`). THIS FILE IS A *CONTENT* OWNER AND NO
-## LONGER AN ORDER.** The order is `workplans/2026-09-11-reconciled-program.md` §3.
+## LONGER AN ORDER.** The order is `workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3.
 ## ⚠ **ITS ITEM NUMBERS COLLIDE WITH THAT FILE'S POSITION NUMBERS AND ONE PAIR WAS THE SAME WORK
 ## TWICE** — this file's *item 5* and position *15* are both the Record-kind fold; *item 15* is
 ## absorbed into position *6* (G3, which already names `Act.via`); *item 16* is not position 16.

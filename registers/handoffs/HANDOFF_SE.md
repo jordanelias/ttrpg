@@ -19,7 +19,7 @@ very repair:** the first two writings of this paragraph gave `:116/:197/:263` an
 and BOTH were stale on arrival — each rewrite of the header moved the body it was pointing at. A line
 number inside the file it indexes is invalidated by editing that file. The lane's position in the
 ratified order is **24, SE-BUILD (settlements P1–P4), gated on `ED-SE-0051`** —
-`workplans/2026-09-11-reconciled-program.md` §3.
+`workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3.
 
 **Canonical head — BY BARE FILENAME, deliberately:** `settlement_layer_v30.md` (+
 `settlement_adjacency_v30.md`, `territory_temperaments_v30.md`, `geography_v30.md`), with

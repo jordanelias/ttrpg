@@ -4,7 +4,7 @@
 ## Lane: `IN` · **`ED-IN-0252`**
 ## Grade under `CLAUDE.md` §0.2: **`paper`.** Nothing in this file has run. Every row names what would run it.
 ## ⚠⚠ **FOLDED IN AND SPENT AS AN ORDER, 2026-09-18 (`ED-IN-0253`), hours after it was written.** All
-## eight rows below now live in `workplans/2026-09-11-reconciled-program.md` §3, which is the single
+## eight rows below now live in `workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3, which is the single
 ## plan. **Read them there, not here.** Two placements were CORRECTED in the fold: the conviction items
 ## sat at `24a`–`24c` under SE-BUILD, which was wrong — they are position **12**'s siblings (`12b`,
 ## `12c`, `12d`), because position 12 is the `Person`-interior writers; and this file's `13c` is just
