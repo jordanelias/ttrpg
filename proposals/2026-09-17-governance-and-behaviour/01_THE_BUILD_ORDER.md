@@ -359,8 +359,8 @@ this file declines to give it one.**
 # §7 · THE EXECUTION PASS — 2026-09-17: **one item landed, two measured and withdrawn**
 
 ## Status of this section: **`measured`, not `paper`** (`CLAUDE.md` §0.2). Every number below was taken on this tree, by the command printed beside it. `§1`–`§6` above remain `paper`.
-## Result in one line: **items 16, 3a, 3b and 6e LANDED** (3b and 6e at their control arms) · **item 1 HELD** (its headline claim is false) · **item 4 REVERTED** (it starves the corpus). **The plan is executable. Most of its run items needed corrections they could not have had by reading — 6e's own first inertness claim was false and a control caught it — and 3a needed none.** ⚠ Item **6d** landed the same day on the unmerged PR #416 (the `0248` slot, its own `§7.3e`); this file's copy of that row is on that branch, not this one, and the id is not spelled in full because its ledger row is not in this tree.
-## Lane: `IN` · **`ED-IN-0246`** (the execution pass; `§1`–`§6` remain `ED-IN-0243`)
+## Result in one line: **items 16, 3a, 3b, 6d and 6e LANDED** (3b and 6e at their control arms) · **item 1 HELD** (its headline claim is false) · **item 4 REVERTED** (it starves the corpus). **The plan is executable. Most of its run items needed corrections they could not have had by reading — 6e's own first inertness claim was false and a control caught it — and 3a needed none.**
+## Lane: `IN` · **`ED-IN-0246`** (the execution pass; `§1`–`§6` remain `ED-IN-0243`; **`6d` is `ED-IN-0248`**, **`6e` is `ED-IN-0249`**)
 ## ⚠ It is an AMENDMENT to this file, not a fifth plan document. `CLAUDE.md` §0.05 clause 3 — *edit the OWNER and re-derive; never hand-edit downstream, and never keep a second copy.* This file owns THE ORDER, so a correction to the order is made here.
 
 ## §7.1 · Two constraints ruled by Jordan mid-execution, binding on every item below
@@ -816,10 +816,84 @@ fell* is satisfiable by a write nobody reads.
    a source assertion that `_eff_kill` still routes through the one owner and has not regrown its
    own copy.
 
+### §7.3e · ITEM 6d LANDED — the beneficiary, declared; and a column that CANNOT be derived
+
+**`synthesis.md` §1.3 spells one term of the score `orient · benefits_me(c)`, and a `Candidate`
+carries `(verb, subject, why, operands)` and nothing else.** So orientation — *"self interest
+versus care for others or whatever DRAMATICALLY WEIGHTS HOW ONE CHOOSES AND BEHAVES"*, Jordan's
+own words — had a weight and nobody to weigh. `CAT-2` closed at step 5: **declare it as a static
+column on `verb_table.yaml` resolving to a carrier the Candidate ALREADY holds, explicitly not a
+fifth `Candidate` field.** This is that, built.
+
+**Four pieces, and the third is the one that does the work:**
+
+| | |
+|---|---|
+| **the roster** | `rosters.yaml: beneficiary_kinds` — `{actor, subject, to, none}`. §7.1(a)'s forced home: a closed set lives in `rosters.yaml` and an absent roster REFUSES |
+| **the column** | all **38 rows**, each grounded in its own `writes:`/`emits:` column, with a `beneficiary_note:` on the eleven where the call is not forced by the write |
+| **LOADER INVARIANT 13** | three refusals — a row with **no** column, an **off-roster** member, and an **operand beneficiary the row's own cell can never bind**. Each was proven to fire by substitution *before* being relied on |
+| **the resolver** | `beneficiary_of(p, c)` and `benefits_me(p, c)` in `decision/choose.py` |
+
+## MEASURED — one populated season, seed 0
+
+```
+candidates formed          5,345
+  by declared kind         actor 3,047 · none 1,549 · subject 588 · to 161
+  RESOLVED                 3,796  (71.0%)
+  declared-but-UNRESOLVED      0
+```
+
+**The zero is the result.** `CAT-2` killed option 1 — derive the beneficiary from the operand
+binding — by measuring that **24 of 38 verbs are UNTYPED and can carry no operand whatever**; only
+12 admit `to`. That census re-runs on this tree and reproduces exactly. A *static* column escapes
+that failure **only while it declares carriers real candidates actually hold**, and a column that
+did not would resolve to `None` throughout, read `benefits_me = 0.0` for everybody, and leave
+every other assertion in the block green. **Invariant 13's third check forbids that structurally
+rather than by measurement**, which is the difference between a property and a lucky reading.
+
+### ⚠⚠ AND THE COLUMN CANNOT BE DERIVED FROM `writes:` EITHER — `kill / wound` is the proof
+
+The obvious economy is to skip the column and read the write matrix: *the beneficiary is whoever
+the verb writes on.* **`kill / wound` writes `Person.body` and `Person.exists` ON THE SUBJECT, and
+the good does not accrue to the person felled.** A write can be a **harm**, so that rule names the
+victim as the beneficiary of their own killing. This is why `CAT-2`'s *declare it* is load-bearing
+and not a preference, and `test_lb6d_kill_is_declared_to_benefit_the_actor_not_the_person_it_writes_on`
+is the assertion that goes red the day somebody derives the column. The write column is **evidence
+for each row** — every note cites it — and never the rule.
+
+## ⚠ THE CONTROL ON THIS ITEM'S OWN HEADLINE
+
+`benefits_me` reads `1.0` on **3,420** of the 5,345 candidates, and **that number must not be read
+as a fact about Valorians.** MEASURED, same run: **2,650 candidates (49.6%) carry THE ACTOR AS
+THEIR OWN SUBJECT, uniformly 98 per verb** — `opening_set` offers every person themselves as a
+referent for every verb, so a person forms `interview <self>` and `kill / wound <self>` alongside
+the rest. The self-benefiting share is **the aperture's shape**, it predates this item, this item
+does not touch it, and **nothing is scheduled from it here** (§0: a finding that needs no ruling is
+fixed or dropped — this one is neither a defect of 6d nor 6d's to fix, and it is recorded because a
+number without a control is not a measurement, §0.1 pt 4).
+
+## What 6d does NOT do, both deliberate
+
+1. **It does not wire the term into `score`.** `orient` is a Person-interior scalar with **no
+   producer** — `STR-1` closed at step 3 (*a verb at RESOLVE writes them*) and no verb does, which
+   is item **6e**. Wiring today multiplies a measured quantity by an unruled magnitude and moves
+   every golden for a weight nobody set. `6d` owes `benefits_me(c)`; `6f` owes the term.
+2. **It adds no name to `loop/`** — §7.1(b), checked rather than asserted: the driver's decision
+   surface is still **18** and `deliberate.py`'s still **3**, and `benefits_me` is not on the
+   package surface at all (`decision/__init__.py` re-exports six names from `choose` and neither of
+   these is among them). ⚠ **AND THE 18 IS A WEAK GUARD, which is worth knowing before `6f` leans
+   on it:** `driver.py` opens with `from .. import decision`, so the package itself is one of the
+   eighteen and every public name on it is reachable by attribute without moving the count. The
+   count catches a new `from ..decision import <term>`; it does not catch `decision.<term>`.
+   ⚠ A FIRST COUNT OF THIS FILE'S OWN NUMBER CAME BACK **17**, because the AST filter matched
+   `n.module` and a bare relative import carries `None`. §7.1(b)'s 18 is right and the correction
+   is this file's reader's, not its author's — recorded because *"as `F` says at `:L`"* is a claim
+   like any other (§0.1 pt 3) and this one nearly landed as a false retraction of a true figure.
+
 ### §7.3f · ITEM 6e LANDED — the first write to any `Person` interior field in the tree
 
-> ⚠ **THIS IS `§7.3f` AND NOT `§7.3e`, WHICH IS HELD BY THE UNMERGED PR #416** (item 6d, the
-> `beneficiary:` column, the `0248` slot). Both branches were cut from the same `main` and both
+> ⚠ **THIS IS `§7.3f` AND NOT `§7.3e` BECAUSE 6d TOOK THAT LETTER** (`ED-IN-0248`, the
+> `beneficiary:` column, §7.3e above). Both branches were cut from the same `main` and both
 > would otherwise have taken the next free letter — §4's two-unmerged-branches hazard,
 > arriving on a section heading instead of on an id. Numbered around rather than collided.
 
@@ -953,7 +1027,7 @@ rulings, not chosen.
 | **6a** | **The affiliation roster + the incompatibility relation.** `STR-6`: `conviction` is *"religious affiliations and their intensities"*, **a vector**; **confliction is DERIVED**, never stored | nothing else in phase 6 can be named until the word is free. `ED-IN-0075`'s `Truth` is a pole scalar and **structurally cannot** carry it — a person devout in two creeds reads as a lukewarm midpoint | `rosters.yaml`: an `affiliations` roster + an `incompatible` relation as a table |
 | **6b** | **Rename the moral-value basis**, which `STR-6` forces by reserving `conviction` | atomic with 6a and with 6c: 40 Python files, 60 YAML/JSON, 107 design docs by the register's own count. **Doing it separately means doing it twice** | `references/names_index.yaml` is the TERMS owner; the rename derives |
 | **6c** | **Re-author the thirteen and their projection** onto `memory · substantive · equity · selfish` (`STR-2`, and *"the thirteen are not right for what i need from the game anymore"*) | `_load_projection`/`_load_alignment` raise at module scope, so **the projection and its alignment table must both exist before first import** — migration is atomic | `rosters.yaml: tables` — `conviction_projection`, `alignment` |
-| **6d** | **`benefits_me(c)`'s beneficiary** — `CAT-2` closed: a **static column on `verb_table.yaml`** resolving to a carrier the Candidate already holds, explicitly **not** a fifth operand field | independent of 6a–6c and buildable today; a static column never touches `_derive_operand` | `verb_table.yaml`, one column |
+| **6d** | ✅ **LANDED 2026-09-18 (`ED-IN-0248`) — see §7.3e.** **`benefits_me(c)`'s beneficiary** — `CAT-2` closed: a **static column on `verb_table.yaml`** resolving to a carrier the Candidate already holds, explicitly **not** a fifth operand field | independent of 6a–6c and buildable today; a static column never touches `_derive_operand`. ⚠ **The row was right that it is independent and right that it is cheap; it did not price the one thing that could have made it vacuous** — a declared carrier real candidates never hold. Measured: 0 such, and a loader invariant now forbids them | `verb_table.yaml`, one column — **built there** |
 | **6e** | ⚠ **PARTLY LANDED 2026-09-18 (`ED-IN-0249`) — `scar` ONLY, see §7.3f. AND THIS ROW NAMES FOUR THINGS OF WHICH ONLY ONE IS A MATRIX ROW:** `scar` is `(Person, scar)` at `[RES] ACTS`; `press`, the needs counter and `regard` are `synthesis.md` §1.3 SCORE TERMS, not licensed writes, so they are a different object and are not covered by `STR-1`'s licence. The five interior rows still without a producer are `axis_count`, `beliefs`, `coherence`, `convictions`, `stance` — and **none of their triggers is specified anywhere**, which is what made `scar` buildable and them not. **The person-interior writers** — `press`, `scar`, the needs counter, regard. `STR-1` closed at step 3: **a verb at RESOLVE writes them**, as the matrix already prescribes | the six `[RES] ACTS` rows are *a licence nobody has taken up, not a prohibition*. Buildable today | effects in `loop/effects.py`; the magnitudes are **`Fixtures`**, swept |
 | **6f** | **The score function itself** — `pull(c) − cost(c)`, the three instantiations of one machine (`synthesis.md` §1.2) | needs 6a–6e's vectors and tables to have anything to dot against | **`decision/choose.py`, behind `make_chooser`. §7.1(b) binds here and nowhere harder** |
 | **6g** | **H-71's SECOND half** — `CAT-6`'s ruling closes the holder's own knowledge of his remit (arm 2, the `hold` Tenure's `payload`) and says **nothing** about how another person comes to know or contest someone else's seat | it is the `others` half of *"understand for themselves AND be understood by others"*, and it is **open by the ruling's own words**, not by omission | rides the content channel: a claim, not a field |

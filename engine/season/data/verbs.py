@@ -70,6 +70,13 @@ VERB_TABLE_YAML = files.VERB_TABLE_YAML
 
 ELIGIBILITY_KINDS = roster("eligibility_kinds")
 
+BENEFICIARY_KINDS = roster("beneficiary_kinds")
+# The two members that are OPERAND NAMES rather than structural carriers. `actor` is held by every
+# Candidate unconditionally and `subject` is a field on it, so neither needs the cell to bind --
+# but `to` is carried only where the row's `requires_typed` admits it, and a row declaring a
+# beneficiary its own cell can never bind is `CAT-2`'s option 1 re-entering through the column.
+_OPERAND_BENEFICIARIES = ("to",)
+
 @dataclass(frozen=True)
 class VerbRow:
     verb: str
@@ -130,6 +137,28 @@ class VerbRow:
     # Why a row carries `requires_typed: none`. Required BY THE LOADER on such a row: an untyped
     # cell with no reason is indistinguishable from one nobody got to.
     requires_typed_note: str = ""
+    # ⚠ THE EIGHTH COLUMN, ADDED BY PHASE-6 ITEM `6d` (2026-09-17). WHO THE ACT IS TAKEN FOR THE
+    # GOOD OF -- a `beneficiary_kinds` member, resolving to a carrier THE CANDIDATE ALREADY HOLDS.
+    # `CAT-2`, closed at step 5: *"DECLARE IT -- and declare it as a STATIC COLUMN ON
+    # `verb_table.yaml` ... NOT as a fifth field on `Candidate`."*
+    #
+    # ⚠ THE OTHER TWO OPTIONS ARE DEAD BY MEASUREMENT AND BY RULING, AND THE MEASUREMENT IS
+    # RE-RUNNABLE HERE. Deriving the beneficiary from the operand binding fails because 24 of 38
+    # verbs are UNTYPED and can carry no operand at all; only 12 admit `to`. Re-take it with
+    # `requires_typed.operands() | ({"subject","to"} & requires_typed.needs())` over this table.
+    # A post-hoc attribution modifier is dead by Jordan's own correction -- orientation is a
+    # weight AT APPRAISAL, not a rescoring of what a win was worth.
+    #
+    # ⚠⚠ AND IT CANNOT BE DERIVED FROM `writes:` EITHER, WHICH IS WHY IT IS DECLARED RATHER THAN
+    # COMPUTED. `kill / wound` writes `Person.body` and `Person.exists` ON THE SUBJECT and the
+    # good does not accrue to the person felled: A WRITE CAN BE A HARM. A rule reading the write
+    # column would name the victim as the beneficiary of their own killing. The write column is
+    # EVIDENCE for each row -- every `beneficiary_note:` cites it -- and never the rule.
+    #
+    # ⚠ `none` IS A DECLARATION. The loader requires the column on every row, so a new verb
+    # cannot arrive without one; an absent column would read as `false` for every verb, which is
+    # the UNKNOWN/False collapse `operands_for` refuses one level down.
+    beneficiary: str = ""
 
     def eligibility_kinds(self) -> tuple:
         return tuple(a.split(":")[0].strip() for a in self.eligibility)
@@ -239,7 +268,8 @@ def _load_verb_table() -> dict:
                       str(r.get("contests") or "").strip(),
                       by_degree, emits_by_degree,
                       build_typed_requires(name, r.get("requires_typed")),
-                      str(r.get("requires_typed_note") or "").strip())
+                      str(r.get("requires_typed_note") or "").strip(),
+                      str(r.get("beneficiary") or "").strip())
         # A row that declares `requires_typed: none` must SAY WHY. The three admissible reasons
         # are a well-formedness constraint on the Act (§F.24a: `issue`, `open_case` -- *"they
         # belong in the `Act` schema and are refused at construction"*), a `per act` cell, and an
@@ -250,6 +280,52 @@ def _load_verb_table() -> dict:
                 f"verb_table.yaml: {name!r} declares `requires_typed: none` and no "
                 "`requires_typed_note:`. An untyped cell with no reason is indistinguishable "
                 "from one nobody typed, which is the state W-A exists to end.")
+        # LOADER INVARIANT 13 (`CAT-2`, phase-6 item `6d`). THE BENEFICIARY COLUMN, IN THREE
+        # CHECKS -- and the third is the one that carries the ruling's content.
+        #
+        # (1) IT IS REQUIRED. A row without it is refused at load, so a verb cannot arrive
+        #     carrying no declaration. `none` is how a row says the good accrues to no person the
+        #     Candidate holds; a BLANK would say the same thing to `benefits_me` and nothing at
+        #     all to a reader, which is the state `requires_typed_note` already exists to end.
+        if "beneficiary" not in r:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares no `beneficiary:`. Every row must say who "
+                f"the act is taken for the good of -- one of {sorted(BENEFICIARY_KINDS)}. "
+                "`none` is the declaration for an act whose good accrues to a Record, an Office, "
+                "a Site or a Rung; an ABSENT column would read as `false` for every verb, which "
+                "is the UNKNOWN/False collapse `operands_for` refuses one level down.")
+        # (2) IT IS ROSTERED. `beneficiary_kinds` is the closed set, in `rosters.yaml`, so a
+        #     fifth carrier is a data edit argued for in the roster rather than a new string here.
+        require_member(
+            row.beneficiary, BENEFICIARY_KINDS,
+            what=f"verb_table.yaml: {name!r}'s `beneficiary:`", where="rosters.yaml",
+            needs="one of the rostered carriers, or `none`",
+            law="CAT-2 -- the beneficiary resolves to a carrier a Candidate ALREADY holds (the "
+                "actor, `subject`, or a named operand). A name outside the roster is a carrier "
+                "nothing can resolve")
+        # (3) AN OPERAND BENEFICIARY MUST BE CARRIABLE BY THIS ROW'S OWN CELL, AND THIS IS THE
+        #     CHECK THAT KEEPS THE COLUMN HONEST. `CAT-2` killed option 1 -- derive the
+        #     beneficiary from the operand binding -- by MEASURING that 24 of 38 verbs are
+        #     untyped and can carry nothing whatever. A static column dodges that failure only
+        #     while it declares carriers the row can actually hold: `beneficiary: to` on a verb
+        #     whose cell never binds `to` is the same dead reference, moved into the column that
+        #     was supposed to escape it, and it would resolve to `None` forever in silence.
+        #     `actor` and `subject` are exempt BY CONSTRUCTION, not by leniency -- the first is
+        #     structural on every Candidate (`operands_for` skips it for exactly that reason) and
+        #     the second is a field on the carrier, so neither depends on a cell.
+        if row.beneficiary in _OPERAND_BENEFICIARIES:
+            req = row.requires_typed
+            carriable = set()
+            if req is not None:
+                carriable = set(req.operands()) | set(req.needs())
+            if row.beneficiary not in carriable:
+                raise SystemExit(
+                    f"verb_table.yaml: {name!r} declares `beneficiary: {row.beneficiary}` and its "
+                    f"`requires_typed` cell neither binds nor admits that operand "
+                    f"(carriable: {sorted(carriable) or 'nothing -- the row is UNTYPED'}). The "
+                    "beneficiary would resolve to nothing for every candidate ever formed, which "
+                    "is the dead reference CAT-2 measured option 1 dying of -- a static column "
+                    "escapes it only while it names a carrier this row can hold.")
         if name == "release":
             _release_domain = frozenset(r.get("domain") or ())
         # The two keyed columns must agree on their band set, or a band writes with nothing to

@@ -92,10 +92,10 @@ BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0036-0039 RES
 - **`ED-IN-0246`** — the governance/settlements/decisions execution pass: item 16 landed, items 1
   and 4 measured and held.
 - **`ED-IN-0247`** — item 3b, a body finally falls, shipped at its control arm.
-- **the `0248` slot** — phase-6 item **6d**, the `beneficiary:` column closing `CAT-2`. ⚠ Its
-  ledger row is on the UNMERGED PR #416, so the id is deliberately not spelled in full here: a
-  citation whose row this tree does not carry is what `tools/validate_ed_citations.py` calls
-  NONEXISTENT, and it is right to. It becomes citable when that PR merges.
+- **`ED-IN-0248`** — phase-6 item **6d**, the `beneficiary:` column closing `CAT-2`. ⚠ This read
+  *"the `0248` slot"* while PR #416 was unmerged, because a citation whose ledger row this tree did
+  not carry is what `tools/validate_ed_citations.py` calls NONEXISTENT — and it was right to. #416
+  merged first, so the row is here and the citation is spelled properly again.
 - **`ED-IN-0249`** — phase-6 item **6e**, `(Person, scar[axis])`, the first write to any `Person`
   interior field.
 
