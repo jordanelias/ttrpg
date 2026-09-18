@@ -371,9 +371,18 @@ bearing_fields:
     absorbs: [humble, grandstanding]
     keep: ~
     note: >-
-      ⚠ THE INTEGRITY READOUT COMES FREE with it (score twice, once with the social term zeroed).
-      ⚠ AND IT HAS NO ARM TO MEASURE AGAINST TODAY: the social term is measurably ZERO -- 0 stance
-      rows -- so every live decision ALREADY IS the social-term-zeroed arm.
+      ⚠⚠ ~~THE INTEGRITY READOUT COMES FREE with it (score twice, once with the social term
+      zeroed).~~ WITHDRAWN 2026-09-18 -- the formula it came from is CIRCULAR, and its own author
+      retracted it (`character-model-adjudication.md` D1). `U(act) - U(act | social zeroed, COST
+      zeroed)` is algebraically `social_weight x social_term`, so it recovers a parameter you set
+      and measures nothing about the character.
+      THE CORRECTED FORM ZEROES THE SOCIAL TERM AND **KEEPS THE COST**: `integrity = U(act) -
+      U(act | social_term = 0)`. That answers a real question -- would he still do it unwitnessed,
+      AT THIS PRICE -- and its answer depends on `bend_price` against the cost, which no single
+      parameter yields.
+      ⚠ AND IT STILL HAS NO ARM ON THIS TREE: the social term is measurably ZERO (0 stance rows),
+      so every live decision already IS the social-term-zeroed arm. The corrected formula is
+      buildable only once something writes a social term.
 
 bearing_readouts: ~   # computed, never stored: integrity · grandstanding/humility ·
                       # insecurity/security · hypocrisy · adaptability · denial
