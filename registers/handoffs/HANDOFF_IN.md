@@ -32,6 +32,36 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 **Facts, not a queue.** Three items of `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md`
 were RUN. `§7` of that file is the record and `probe_execution_pass.py` beside it re-takes every number.
 
+- **Phase-6 item 6e LANDED — the FIRST write to any `Person` interior field in the tree
+  (`ED-IN-0249`, `H-128`).** `04 §F.20a`: *no verb writes any Person interior field at all*, so
+  every interior consequence was inert. Six matrix rows carry `[RES] ACTS` licences and MEASURED
+  2026-09-18 **all six had zero non-test producers**. `scar` is the one that could be built because
+  it is **the only one whose TRIGGER the chain specifies** — §54 item 21 amends the design doc's
+  *written at WITNESS* to *written at RESOLVE by the outcome that names the person*, S9.3 being the
+  law underneath. `Person.scar` + `_scar` in `loop/effects.py`, axes read from **`ALIGNMENT`** (the
+  existing owner — no second table authored), magnitude `Fixtures scar_step` swept 0/1/10, shipped
+  at 0. EXECUTED through the real combat road: at `10` a `Wounded` outcome leaves `{'sacred': 3.0}`.
+  ⚠⚠ **THE FIRST INERTNESS CLAIM WAS FALSE AND A CONTROL CAUGHT IT.** *"TRACE.txt and results.json
+  byte-identical"* — a clean `origin/main` worktree at the same seed disproved it: `content_hash`
+  digests a dataclass as `repr(obj)`, so **`Person` gaining a field moves every digest whatever its
+  value** (`ff5c5765f4d2` → `ab77c30d273b`). TRUE and now claimed everywhere: `TRACE.txt` IS
+  byte-identical (**no behaviour changes**), and the re-record is two lines — `ASSUMPTIONS.md` gains
+  the fixture, `results.json`'s A5 row a new log hash, verdict still PASS. **Budget that re-record
+  for any future carrier field.**
+  ⚠ **The magnitude parks for a DIFFERENT reason from `H-125`'s: nothing reads `scar`.** Its reader
+  is the Conviction crisis, which item 21 puts at L5, out of this item.
+  ⚠ **Named, not inherited:** depth is *assumed* proportional to alignment; the person scarred is
+  the SUBJECT and the ACTOR reading is at least as defensible. And `kill / wound` engages **1 of 4**
+  axes in `ALIGNMENT`, so the scar is narrow — that table's sparseness, not this item's.
+  ⚠ **§7.5's 6e row names four things and only `scar` is a matrix row** — `press`, the needs counter
+  and `regard` are score terms, a different object. Five interior rows still have no producer
+  (`axis_count`, `beliefs`, `coherence`, `convictions`, `stance`) and **none of their triggers is
+  specified anywhere**, which is exactly what made `scar` buildable and them not.
+  ⚠ **Two ids/sections were numbered AROUND the unmerged PR #416, not collided with it:** that PR
+  holds the `0248` slot and `§7.3e`; this took `ED-IN-0249` and `§7.3f`, and `next_free` jumped to
+  250. The other id is not spelled in full anywhere in this tree — its ledger row is on that
+  branch, so citing it here would be a citation resolving to nothing.
+  §4's two-unmerged-branches hazard, seen from the second branch.
 - **Item 3b LANDED, AT ITS CONTROL ARM (`ED-IN-0247`, `H-125`).** A body finally falls: the
   shortfall reaches `Person.body` through the gate, `_crossings` is factored for **sites and
   persons** off the one `band_floors` table, and `World.remove_person` is `_eff_kill`'s cascade with

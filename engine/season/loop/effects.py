@@ -23,7 +23,10 @@ and it is §47's failure exactly: a false claim of enforcement stops the next re
 
 from __future__ import annotations
 
-from ..data.rosters import FELLED, RELEASABLE_KINDS, WOUND_HARM_MODELS, require_member
+from ..data.rosters import (
+    CONVICTION_AXES, FELLED, RELEASABLE_KINDS, WOUND_HARM_MODELS, require_member,
+)
+from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
 from ..gaps import InstrumentDefect, Unspecified
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.ids import H
@@ -305,6 +308,50 @@ def _eff_destroy_record(w: "World", a: "Act", res: "Resolution | None" = None) -
     return [rid]
 
 
+def _scar(w: "World", p, verb: str) -> None:
+    """`(Person, scar[axis])` -- THE MORAL LAYER'S MISSING MOTION, §54 item 21.
+
+    ⚠ THE FORM IS THE CHAIN'S OWN AMENDMENT, NOT THE SOURCE DOCUMENT'S, AND THE DIFFERENCE IS THE
+    WHOLE REASON THIS SITS AT RESOLVE. `conviction_track_v1.md` §2 -- the mechanic's design home,
+    quarantined and REFERENCE under §0.05 -- has an NPC *"accumulate Conviction Scars from
+    WITNESSING morally-loading events"*. `holonic_ARCHITECTURE.md:1901` folds that in AMENDED and
+    says why in as many words: *"the source says written at WITNESS, which breaks two things --
+    the moral layer's WITNESS row is nothing, and a scar written there is an Event writing a
+    `(Person, ...)` social row, which is L4. Lawful form: a `(Person, scar[axis])` row,
+    `social: true`, written at RESOLVE in the ACTS class BY THE OUTCOME THAT NAMES THE PERSON."*
+    S9.3 is the law underneath (*"WITNESS NEVER TOUCHES A BELIEF"*), so the design document's own
+    trigger table is the one part of it that may not be implemented.
+
+    ⚠ THE AXES COME FROM `ALIGNMENT`, WHICH ALREADY OWNS *which axes a verb engages*. §8: find the
+    single-owner primitive and compose on it. A second table mapping outcome -> axis would be a
+    second owner of the same claim, free to disagree with the one `choose` scores against -- and
+    it would have to be AUTHORED, on a basis `STR-2` is about to replace. Reading `ALIGNMENT`
+    keyed by the live axis roster means this survives that rename by never having known the old
+    names. `axis` on L3's closed registry, as item 21 requires.
+
+    ⚠ WHAT IS ASSUMED HERE AND IS NOT THE CHAIN'S, STATED SO IT CAN BE ATTACKED: that the depth of
+    the moral wound is PROPORTIONAL to how strongly the verb engages the axis. Item 21 gives the
+    row, the step, the class and the keying; it does not give a formula. The alternative -- a flat
+    scar on every engaged axis -- is the arm a sweep would compare, and `scar_step` is where it
+    would be run from.
+
+    ⚠ AND WHO IS SCARRED IS THE SUBJECT, WHICH IS A READING OF *"the outcome that names the
+    person"* AND NOT A CERTAINTY. The outcome of `kill / wound` names the person wounded, so the
+    wound is theirs. The competing reading -- that the ACTOR carries the moral wound of having
+    done it -- is at least as defensible on the mechanic's own *moral wound* framing, and nothing
+    in item 21 settles it. Left as the open question rather than decided in silence."""
+    step = w.fixtures.get("scar_step")
+    if not step:
+        # THE CONTROL ARM, AND IT RETURNS BEFORE TOUCHING THE CARRIER. A zero-depth scar written
+        # as a 0.0 cell would still put a key on the field and still move `World.content_hash()`,
+        # which is the difference between an arm that is inert and one that merely looks it.
+        return None
+    for axis in CONVICTION_AXES:
+        weight = abs(float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL)))
+        if weight:
+            p.scar[axis] = p.scar.get(axis, 0.0) + step * weight
+
+
 @effect_for("kill / wound")
 def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     """§E3: writes `(Person, body)`, `(Person, exists)` and `(Tenure, until)`.
@@ -401,6 +448,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
                 law="the magnitude is READ from the scene; a scene that carries none cannot be "
                     "read, and choosing a number here is what this arm exists not to do")
         p.body = max(1, p.body * max(0, left) // full)
+    _scar(w, p, a.verb)
     if p.body > 0:
         return [who]
     # ⚠ `w.tenures`, NOT `p.tenures + w._unowned`, AND THAT IS A FIX `W-E`'s OWN TEST FOUND.

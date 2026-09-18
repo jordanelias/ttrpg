@@ -508,4 +508,27 @@ DEFAULT_FIXTURES = Fixtures(
     # gate saw it; `corpus_run`'s R5 passed throughout because it matches on the fixture
     # KEY in a `site:`, never on the id a comment cites.
     wound_harm_model="scene_fraction",  # `H-123`, swept scene_fraction / total / none
+    # `H-128` / §54 item 21. HOW DEEP A MORAL WOUND THE OUTCOME CUTS, per unit of the verb's own
+    # alignment with an axis. Part D carries `(Person, scar[axis])` at `[RES] ACTS` and names NO
+    # magnitude; no in-chain document supplies one either, so it is declared, defaulted and swept
+    # rather than chosen in a body. Injection site: this line, read by `_eff_kill`.
+    #
+    # ⚠⚠ SHIPPED AT `0`, THE CONTROL ARM, AND THE REASON IS NOT TIMIDITY. At `0` the scar write
+    # is a no-op, so `runs/TRACE.txt` comes back BYTE-IDENTICAL: NO BEHAVIOUR CHANGES.
+    # ⚠ AND THE ARTIFACTS ARE *NOT* ALL BYTE-IDENTICAL, WHICH THE FIRST WRITING OF THIS COMMENT
+    # CLAIMED AND A CONTROL DISPROVED THE SAME HOUR. `World.content_hash` digests a dataclass as
+    # `repr(obj)`, which lists EVERY DECLARED FIELD, so `Person` GAINING A FIELD moves every
+    # person's digest whatever its value -- measured against a clean `origin/main` worktree,
+    # `ff5c5765f4d2` -> `ab77c30d273b` at this arm. The move is STRUCTURAL, not behavioural, and
+    # the re-record is two lines: `ASSUMPTIONS.md` gains this fixture, and `results.json`'s A5 row
+    # carries a new log hash with its verdict still PASS. Stated because "byte-identical" was the
+    # claim, the claim was wrong, and a re-record nobody can account for is what §7 forbids.
+    # The arm is what makes that checkable: the mechanism is built and
+    # exercised at a nonzero arm by its own falsifiers, while the magnitude waits on the one
+    # thing that cannot be measured yet -- NOTHING READS `scar`. Its reader is the Conviction
+    # crisis, which §54 item 21 puts at L5 (*"an L5 edge that rewrites an option set and never
+    # rolls an outcome"*) and which this item does not build. A magnitude tuned against no reader
+    # is tuned against nothing.
+    # [JUSTIFIED: engine/season/hole_register.yaml H-128 -- the moral-wound depth; Part D names the cell and never the value, and the sweep brackets *does a wound scar at all* rather than a magnitude]
+    scar_step=0,                       # `H-128`, swept 0 (control, SHIPPED) / 1 / 10
 )
