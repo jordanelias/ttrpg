@@ -4,12 +4,31 @@ Lane-scoped continuity for the `SE` (settlements) lane, per the `ED-<LANE>-NNNN`
 (`ED-IN-0001`) and `CLAUDE.md` §3's session-lane-scoping convention. Root `HANDOFF.md` is the
 index; see it for cross-lane/global items.
 
-No active work tracked in this lane as of the 2026-07-02 HANDOFF split. Canonical head:
-`systems/settlements/reference/settlement_layer_v30.md` (+ `settlement_adjacency_v30.md`,
-`territory_temperaments_v30.md`, `systems/world/reference/geography_v30.md`). (The `designs/` tree was
-dissolved; every old path resolves through `references/restructure_ledger.md` via `tools/pathres.py`.
-This line named `designs/territory/…` until 2026-09-10 — repaired against `CURRENT.md`'s Settlement
-row, which is the authority on which head is live.)
+⚠ **THIS LANE HAS LIVE WORK AND THE HEADER SAID OTHERWISE UNTIL 2026-09-18 (`ED-IN-0251`).** It read
+*"No active work tracked in this lane as of the 2026-07-02 HANDOFF split"* — false against this file's
+own body 110 lines down, and the first thing a reader saw. **What is live:** `ED-SE-0051` (E-1, the
+bound on the demographic loop — the lane's one open `needs_jordan`, and the only ledger row in the
+tree whose LAST entry is both `open` and flagged), `ED-SE-0052` and `ED-SE-0053`. See the dated
+sections below, **cited by heading rather than by line**: *"2026-09-10 — the settlements/factions/populations
+proposal set…"*, *"2026-09-17 · ROUND TWO — `04_MATTER_AND_WORKS.md` (`ED-SE-0053`)"* and
+*"2026-09-17 · The built world (`ED-SE-0052`)"*. ⚠ **By heading deliberately, and the reason is this
+very repair:** the first two writings of this paragraph gave `:116/:197/:263` and then `:130/:211/:277`,
+and BOTH were stale on arrival — each rewrite of the header moved the body it was pointing at. A line
+number inside the file it indexes is invalidated by editing that file. The lane's position in the
+ratified order is **24, SE-BUILD (settlements P1–P4), gated on `ED-SE-0051`** —
+`workplans/2026-09-11-reconciled-program.md` §3.
+
+**Canonical head — BY BARE FILENAME, deliberately:** `settlement_layer_v30.md` (+
+`settlement_adjacency_v30.md`, `territory_temperaments_v30.md`, `geography_v30.md`), with
+`governance_play_redesign_v1.md` the PROPOSAL and `scale_hierarchy_v1.md` the B12 hierarchy ruling.
+⚠ **The `systems/**` paths this line used to give are GONE and are not replaced with new ones.**
+`systems/` holds no `.md` at all (`ED-IN-0231`); the design documents are quarantined, and
+`CLAUDE.md` §1 forbids pointing at that tree — *"do not point at it — `CURRENT.md` names those
+documents by bare filename, deliberately."* **`CURRENT.md`'s Settlement row is the authority on which
+head is live**; `tools/pathres.py` over `references/restructure_ledger.md` resolves a retired path.
+(This line named `designs/territory/…` until 2026-09-10, then dead `systems/**/reference/` paths until
+2026-09-18. Two repairs, same cause: a continuity file transcribing a location instead of citing the
+index that owns it.)
 
 ## Pending
 
