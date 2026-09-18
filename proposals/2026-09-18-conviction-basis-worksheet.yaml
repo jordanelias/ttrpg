@@ -1,0 +1,560 @@
+# CONVICTION + MORAL BASIS — Jordan's authoring surface
+#
+# STATUS: WORKSHEET. Not a proposal, not canon, ratifies nothing. It exists so the CELLS are
+# in front of you instead of statistics about them. Type values here; they get written to the
+# OWNERS below and this file is then deleted. It holds no fact of its own (CLAUDE.md §0.05 cl.3).
+#
+# OWNERS the values land at:
+#   affiliations + incompatibility -> references/descriptor_registry.yaml (roster) + engine/season/rosters.yaml (table)
+#   moral basis axes + rows        -> references/descriptor_registry.yaml (conviction_roster, axis_roster)
+#   the 13xN projection            -> engine/season/rosters.yaml tables.conviction_projection
+#   the verb x axis alignment      -> engine/season/rosters.yaml tables.alignment
+#
+# RULINGS THIS SERVES (2026-09-18, in session, NOT YET RECORDED IN THE TREE):
+#   R1  `conviction` is reserved for RELIGIOUS AFFILIATION AND INTENSITY. A vector over
+#       affiliations; confliction DERIVED from an incompatibility relation, never stored. (= STR-6)
+#   R2  `Truth` IS NOW `Conviction`. ED-IN-0075's 0-5 pole (Solmund-orthodoxy <-> Thread-truth,
+#       CURRENT.md:31, ruled 'DISTINCT and unchanged') is ABSORBED. Its two poles stop being ends
+#       of one axis and become two affiliations a person can hold at full intensity at once —
+#       which is the case a pole scalar structurally could not express.
+#   R3  The cells are yours.
+
+# ============================================================================
+# 1. THE RELIGIOUS CONVICTION VECTOR  (R1 + R2).  NOTHING OF THIS EXISTS TODAY.
+# ============================================================================
+# Measured 2026-09-18: no affiliation roster, no incompatibility relation, and
+# `church_standing` is one string in a claim-predicate values list (rosters.yaml:312) that
+# nothing reads. The only religious FACTION is 'Church of Solmund'.
+#
+# CANDIDATES BELOW ARE DRAWN FROM canon/, not invented — cited so you can reject on the source.
+# Strike what you don't want, add what's missing, set nothing else.
+
+affiliations:
+  - name: solmund_orthodoxy
+    canon: "canon/00_philosophical_foundations.md:241,257"
+    gloss: "the outer tradition — Church institutional theology; the perceptual prophylaxis as received doctrine"
+    keep: ~            # true / false
+  - name: inner_tradition
+    canon: "canon/00_philosophical_foundations.md:283-285"
+    gloss: "within the Church; thread-sensitive; preserves ontological knowledge as poetry and practice, not propositional doctrine"
+    keep: ~            # true / false
+  - name: threadwork
+    canon: "canon/00_philosophical_foundations.md:263-265"
+    gloss: "active practice — suspension of all grounding in order to touch threads"
+    keep: ~            # true / false
+  - name: einhir_revival
+    canon: "canon/03_canonical_timeline.md:22; canon/02_canon_constraints.md:71"
+    gloss: "Varfell; the pre-Calamity civilisation's working restored"
+    keep: ~            # true / false
+  - name: altonian_theocracy
+    canon: "canon/02_canon_constraints.md:71"
+    gloss: "Hafenmark-aligned; a rival ecclesiastical polity"
+    keep: ~            # true / false
+
+# INTENSITY — what a person's per-affiliation number means. Truth was 0-5 with players seeing
+# qualitative bands only (ED-IN-0075). A vector can keep that or not; your call.
+intensity:
+  scale: ~                 # e.g. '0-5' (Truth's, inherited) or '[0,1]' or '0-3'
+  player_sees: ~           # 'bands' (Truth's ruling) or 'number'
+  bands: ~                 # if bands: name them, lowest first
+
+# INCOMPATIBILITY — the relation confliction is DERIVED from. Fill the half-matrix.
+# true  = holding BOTH at high intensity puts the person in religious confliction
+# false = compatible; a person may hold both without strain
+incompatible:
+  solmund_orthodoxy + inner_tradition: ~
+  solmund_orthodoxy + threadwork: ~
+  solmund_orthodoxy + einhir_revival: ~
+  solmund_orthodoxy + altonian_theocracy: ~
+  inner_tradition + threadwork: ~
+  inner_tradition + einhir_revival: ~
+  inner_tradition + altonian_theocracy: ~
+  threadwork + einhir_revival: ~
+  threadwork + altonian_theocracy: ~
+  einhir_revival + altonian_theocracy: ~
+
+# ⚠ THE ONE PAIR THAT IS YOUR OWN WORKED EXAMPLE: solmund_orthodoxy + threadwork. You said
+#   'devoutly Solmund but also believes in Threadwork and therefore experiences religious
+#   confliction' — so that pair is `true` unless you now say otherwise. Every other cell is open.
+
+# ============================================================================
+# 2. THE MORAL-VALUE BASIS — rows AND columns are both open (STR-2)
+# ============================================================================
+# STR-6 forces a rename: `conviction` now belongs to religion, so the moral basis needs a name.
+# STR-6 says explicitly this is NOT ruled and is not an agent's to pick.
+moral_basis_name: ~        # what the 13-roster becomes. `values` is free; `temperament`,
+                           # `disposition`, `creed`, `belief` are all taken elsewhere in the tree.
+
+# THE AXES. STR-2 ruled these four (the set you placed and scored 2026-09-16). Change them here
+# if you want them changed — the ruling is a starting point, not a cage.
+moral_axes:
+  - memory
+  - substantive
+  - equity
+  - selfish
+
+# ⚠ TWO PROBLEMS WITH THAT SET, both mine to flag and yours to settle:
+#   `equity` is ALSO one of the thirteen rows (below), so the row is nearly its own column —
+#      its cell reads 0.9 against itself.
+#   `selfish` duplicates `orient · benefits_me(c)`, which PR #416 built on 2026-09-18.
+#      conviction_taxonomy_v30.md §2.3 factored self/other OUT of the thirteen on purpose
+#      (registered at descriptor_registry.yaml:296, orient.self_other, [-1,+1]).
+#      Keeping both means self-interest enters the score twice.
+
+# THE ROWS. You said 'the thirteen are not right for what i need from the game anymore'.
+# Strike, rename, add.
+moral_rows:
+  - Faith
+  - Authority
+  - Order
+  - Scholastic
+  - Utility
+  - Equity
+  - Liberty
+  - Precedent
+  - Community
+  - Identity
+  - Warden
+  - Virtue
+  - Honor
+
+# THE GRID. Both existing placements are shown so you edit rather than start blank.
+#   live_*  = what the engine scores against TODAY (rosters.yaml tables.conviction_projection,
+#             transcribed from conviction_axis_matrix_v30.md §2)
+#   cand_*  = the 2026-09-16 placement on your four axes (candidate_basis_v1.json — its own header
+#             says 'one placement, not a canon change'). Every cell of it is a placement of a row
+#             you may be deleting, so treat it as a starting sketch, not a migration.
+#   set_*   = YOURS. This is the column that lands.
+projection:
+  Faith:
+    live: {traditional: +0.6, sacred: +0.9, instrumental: -0.3, hierarchical: +0.4}
+    cand: {memory: +0.4, substantive: -0.3, equity: +0.2, selfish: -0.1}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Authority:
+    live: {traditional: +0.4, sacred: +0.2, instrumental: +0.1, hierarchical: +0.9}
+    cand: {memory: +0.4, substantive: -0.2, equity: -0.3, selfish: +0.0}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Order:
+    live: {traditional: +0.4, sacred: -0.1, instrumental: +0.2, hierarchical: +0.5}
+    cand: {memory: +0.2, substantive: -0.9, equity: +0.4, selfish: +0.0}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Scholastic:
+    live: {traditional: -0.1, sacred: +0.2, instrumental: +0.3, hierarchical: +0.1}
+    cand: {memory: +0.2, substantive: -0.5, equity: +0.4, selfish: +0.0}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Utility:
+    live: {traditional: -0.4, sacred: -0.5, instrumental: +0.9, hierarchical: -0.1}
+    cand: {memory: -0.7, substantive: +0.9, equity: +0.0, selfish: +0.0}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Equity:
+    live: {traditional: -0.2, sacred: +0.2, instrumental: -0.2, hierarchical: -0.4}
+    cand: {memory: -0.3, substantive: +0.6, equity: +0.9, selfish: -0.2}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Liberty:
+    live: {traditional: -0.5, sacred: -0.2, instrumental: +0.1, hierarchical: -0.7}
+    cand: {memory: -0.3, substantive: +0.2, equity: +0.3, selfish: +0.1}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Precedent:
+    live: {traditional: +0.9, sacred: +0.4, instrumental: -0.4, hierarchical: +0.3}
+    cand: {memory: +0.9, substantive: -0.5, equity: +0.2, selfish: +0.0}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Community:
+    live: {traditional: +0.5, sacred: +0.3, instrumental: -0.2, hierarchical: +0.0}
+    cand: {memory: +0.3, substantive: +0.3, equity: -0.5, selfish: -0.2}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Identity:
+    live: {traditional: +0.6, sacred: +0.2, instrumental: +0.0, hierarchical: +0.4}
+    cand: {memory: +0.5, substantive: +0.0, equity: -0.9, selfish: +0.0}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Warden:
+    live: {traditional: +0.4, sacred: +0.4, instrumental: -0.1, hierarchical: +0.5}
+    cand: {memory: -0.3, substantive: +0.6, equity: -0.3, selfish: -0.5}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Virtue:
+    live: {traditional: +0.3, sacred: +0.4, instrumental: -0.5, hierarchical: +0.2}
+    cand: {memory: +0.1, substantive: +0.4, equity: +0.3, selfish: +0.2}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Honor:
+    live: {traditional: +0.8, sacred: +0.4, instrumental: -0.7, hierarchical: +0.5}
+    cand: {memory: +0.6, substantive: -0.5, equity: -0.3, selfish: +0.1}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+
+# ============================================================================
+# 3. ALIGNMENT — verb x axis. THE OTHER HALF, and I had only ever shown you stats on it.
+# ============================================================================
+# The 13xN says what a person CARES about. This says what a VERB IS WORTH on an axis. The score
+# term is the dot product of the two, so a perfect projection against a sparse alignment table
+# still scores nothing. Live: 52 cells over 31 of 38 verbs, 17 of them negative.
+#
+# ⚠ IT IS KEYED ON THE LIVE AXES. Changing the moral axes above means re-authoring THIS table in
+#   the same commit — _load_projection and _load_alignment both raise at module scope, so a
+#   13xN projection and its NxM alignment must exist before first import. There is no half-state.
+alignment_live:
+  traditional:
+    confer: +0.4
+    create_record: +0.8
+    destroy_record: -1.0
+    evade / defy: -0.5
+    oblige: +0.3
+    open_case: +0.4
+    reconstruct: +0.4
+    release: -0.3
+    repudiate: -0.5
+    research: +0.7
+    succeed: +0.6
+    tie / knot: +0.5
+  sacred:
+    commit: +0.7
+    confer: +0.5
+    destroy_record: -0.3
+    establish: +0.3
+    evade / defy: -0.3
+    forge: -0.5
+    kill / wound: +0.3
+    oblige: +0.4
+    repudiate: -0.6
+    surveil: -0.3
+    tie / knot: +0.7
+    utter: +0.8
+  instrumental:
+    commit: -0.8
+    comply: +0.5
+    evade / defy: +0.7
+    exchange: +0.6
+    forge: +0.8
+    interview: -0.3
+    move: +0.5
+    reconstruct: +0.4
+    refract: +0.7
+    research: +0.3
+    surveil: -0.8
+    transfer: +0.6
+    utter: -0.7
+    work: +0.4
+  hierarchical:
+    comply: +0.6
+    confer: +0.8
+    destroy_record: -0.4
+    determine: +1.0
+    dispatch: +0.5
+    establish: +0.7
+    evade / defy: -0.9
+    issue: +0.6
+    levy: +0.6
+    open_case: +0.5
+    petition: +0.4
+    repudiate: -0.5
+    revoke: +0.7
+    surveil: -0.3
+
+# ⚠ 7 VERBS HAVE NO CELL ON ANY AXIS. The moral term is exactly 0.0 for every
+#   candidate on these, so the score falls back to stance + urgency:
+verbs_with_no_moral_weight:
+  - carry
+  - convene
+  - examine
+  - restore
+  - speak
+  - tell
+  - thread_read
+#   `speak` and `tell` are in that list. The moral layer currently says nothing about testimony —
+#   the channel the whole epistemic layer runs on (measured: 580 claims, 100% firsthand, tell
+#   resolving 9 times and depositing 0).
+
+alignment_set: ~           # your cells, once the axes above are settled
+
+# ============================================================================
+# 4. THE BEARING BASIS — Jordan's 12 concepts, 2026-09-18
+# ============================================================================
+# "pragmatism, flexibility, rigidity, fluidity, means before ends, ends justify means,
+#  indirect, direct, humble, grandstanding, insecure, secure"
+#
+# THESE ARE BEARING, NOT VALUE-FRAMES, AND YOU SEPARATED THEM YOURSELF ALREADY:
+#   adjudication_register.yaml:201 — *"these four are value-frames (what is right), the seven
+#   are bearing."*
+#
+# ⚠ AND THERE IS A STRUCTURAL REASON IT MUST BE THE SECOND BASIS, NOT A COLUMN ON THE FIRST.
+#   R7, adjudication_register.yaml:223-228: the projection is a LINEAR map from the weight
+#   vector, so TWO PERSONS WITH IDENTICAL MORAL WEIGHTS ARE IDENTICAL ON EVERY MORAL AXIS,
+#   NECESSARILY. A rigid man and a fluid man who hold the same principles is the whole point of
+#   this list — and it is structurally IMPOSSIBLE as a moral axis and FREE as a held one.
+#   The second basis is held DIRECTLY on the Person: no roster underneath, no projection
+#   (adjudication_register.yaml:232-234 — *"the character IS the vector"*).
+#
+# MEASURED 2026-09-18, live code / both registries / .designs/systems/characters:
+#   flexibility · rigidity · fluidity · humble · grandstanding · insecure · secure
+#     -> 0 / 0 / 0 everywhere. Genuinely vacant; no collision to manage.
+#   pragmatism -> 0 live, 0 registry, but see the collision note below.
+
+# ⚠⚠ THE PAIRING BELOW WAS REFUTED THE SAME DAY, BY A SECOND UPLOADED DOCUMENT
+# (`character-model-term-index.md`, Part 4). The original is struck and kept rather than tidied
+# away, because the correction is the useful part.
+#
+#   ~~five bipolar HELD AXES: rigidity<->flexibility · means-before-ends<->ends-justify-means ·
+#     indirect<->direct · humble<->grandstanding · insecure<->secure, plus pragmatism and
+#     fluidity unpaired~~
+#
+# WHY IT WAS WRONG. It read all twelve as axes of one basis. They are not the same KIND of thing:
+# the document sorts every term into FIELD (stored) / READOUT (computed, never stored) /
+# STRUCTURE (a property of how fields relate) / DISPOSED, and most of the twelve are not fields.
+# A readout stored as a field throws away what generated it.
+#
+# THE RESOLUTION, and it COLLAPSES the basis rather than growing it — five of your twelve are ONE
+# FIELD read from different angles:
+#
+#   rigidity            = HIGH bend_price
+#   flexibility         = LOW  bend_price
+#   means before ends   = bend_price = INFINITY -- a GATE (the option is not scored at all)
+#   ends justify means  = a READOUT over the bend_price VECTOR, weighted by tag frequency
+#   pragmatism          = low bend_price + stable goal weights + derived warrant
+#
+# ⚠ SO `means before ends` AND `ends justify means` ARE NOT TWO POLES OF ONE AXIS. One is a gate
+#   on the field; the other is a summary of the whole vector. My pairing made a readout into a pole.
+# ⚠ AND `pragmatism` IS NOT A DUPLICATE OF `instrumental`/`Utility` after all — that collision
+#   claim is WITHDRAWN. It is a bend_price reading. The document adds the sharp part: the
+#   parameters are IDENTICAL to "unprincipled", and which word an observer uses depends on whether
+#   they share the ends. Nothing in the character distinguishes them.
+#
+# THREE ARE READOUTS -- computed after the fact, never stored:
+#   humble / grandstanding  = the integrity delta read the other way; it IS `social_weight` made
+#                             visible. (Agrees with synthesis.md:112's `regard` inverted.)
+#   insecure / secure       = distance between CLAIMED and PERCEIVED identity tags.
+#                             ⚠ THAT IS `standing_of` (decision/options.py:443-464) ALREADY --
+#                             gap(told_by claims about p, p's own firsthand claims about p).
+#                             The document found the concept; the tree already computes it.
+#   ends justify means      = above.
+#
+# TWO SPLIT INTO SEPARATE FIELDS RATHER THAN PAIRING:
+#   direct / indirect  = TWO fields, not one axis: SPEECH CONVENTION (a culture prior) and
+#                        `means_directness` (force to the source, or displaced onto a proxy).
+#                        "The polite killer and the blunt schemer are both real." With
+#                        `initiation_threshold` and `proportionality` this is the 2x2 plus a
+#                        magnitude -- passive-aggressive is a CELL, assertive is low-threshold +
+#                        direct + proportionate.
+#
+# ONE IS GENUINELY NEW AND ANSWERS THE QUESTION THIS FILE ASKED:
+#   fluidity = `drift_rate` -- the rate at which OPERATIVE weights themselves migrate -- and the
+#              document states flatly it is NOT the opposite of rigidity. Rigidity is what you will
+#              not pay; drift is whether what you hold moves at all. So they are independent, and
+#              this file's "far end of one axis, or its own axis?" is answered: ITS OWN FIELD.
+#
+# MEASURED 2026-09-18 -- every new name is vacant, live code / references / .designs / proposals:
+#   bend_price 0/0/0/0 · drift_rate 0/0/0/0 · concern_curve 0/0/0/0 · social_weight 0/0/0/0 ·
+#   suppression_residue 0/0/0/0. The `warrant` and `purity` hits elsewhere are ordinary English,
+#   not terms. No collision to manage on any of them.
+
+bearing_fields:
+  # Confirm, reject, or re-cut. These are the document's, not yours, and nothing is ratified.
+  - name: bend_price
+    holds: "per character x conviction, in cost units -- the cost at which the conviction yields"
+    absorbs: [rigidity, flexibility, "means before ends", "ends justify means", pragmatism]
+    keep: ~
+    note: >-
+      INFINITY means a GATE and finite means a WEIGHT, and that difference is load-bearing in this
+      engine: a gate removes the option from the candidate set, a weight scores it at a price.
+      ⚠ The document recommends ONE GLOBAL VALUE FIRST, per-conviction later (its cut, item 3).
+
+  - name: drift_rate
+    holds: "rate at which operative weights migrate"
+    absorbs: [fluidity, progressive, traditional]
+    keep: ~
+    note: "independent of bend_price, not its opposite"
+
+  - name: means_directness
+    holds: "force to the source, or displaced onto a proxy"
+    absorbs: [indirect, direct]
+    keep: ~
+    note: "pairs with initiation_threshold as a 2x2; add proportionality and `assertive` appears"
+
+  - name: social_weight
+    holds: "how much the predicted reading of an act enters the score"
+    absorbs: [humble, grandstanding]
+    keep: ~
+    note: >-
+      ⚠⚠ ~~THE INTEGRITY READOUT COMES FREE with it (score twice, once with the social term
+      zeroed).~~ WITHDRAWN 2026-09-18 -- the formula it came from is CIRCULAR, and its own author
+      retracted it (`character-model-adjudication.md` D1). `U(act) - U(act | social zeroed, COST
+      zeroed)` is algebraically `social_weight x social_term`, so it recovers a parameter you set
+      and measures nothing about the character.
+      THE CORRECTED FORM ZEROES THE SOCIAL TERM AND **KEEPS THE COST**: `integrity = U(act) -
+      U(act | social_term = 0)`. That answers a real question -- would he still do it unwitnessed,
+      AT THIS PRICE -- and its answer depends on `bend_price` against the cost, which no single
+      parameter yields.
+      ⚠ AND IT STILL HAS NO ARM ON THIS TREE: the social term is measurably ZERO (0 stance rows),
+      so every live decision already IS the social-term-zeroed arm. The corrected formula is
+      buildable only once something writes a social term.
+
+bearing_readouts: ~   # computed, never stored: integrity · grandstanding/humility ·
+                      # insecurity/security · hypocrisy · adaptability · denial
+bearing_held_as: ~    # confirm: values DIRECTLY on the Person, no roster, no projection (R7's escape)
+bearing_scale: ~      # e.g. '[-1,+1]' per field, or '0-5' like Truth's, or something else
+
+# ============================================================================
+# 5. ⚠⚠ A THIRD AXIS SET ARRIVED, AND IT IS THE ONE THING HERE ONLY YOU CAN SETTLE
+# ============================================================================
+# `character-model-term-index.md` Part 5 declares the roster as 13 convictions x THREE axes:
+#
+#     warrant  (-3 given      ... +3 derived)
+#     facing   (-3 downward   ... +3 upward)
+#     purity   ( 0 violation costs ... 3 violation defiles)
+#
+# THAT IS A THIRD SET, against the four you RULED on 2026-09-17 (memory/substantive/equity/selfish,
+# RULINGS.yaml:1094-1096) and the four LIVE today (traditional/sacred/instrumental/hierarchical).
+# STR-2's whole point was that two axis sets are two different games; three is not better.
+#
+# FOUR THINGS ABOUT IT, MEASURED OR READ, BEFORE YOU CHOOSE:
+#
+#  (a) ⚠ ITS DEFINITIONS LIVE IN A FILE THAT DOES NOT EXIST. Part 5 defers "full descriptor, axis
+#      definitions, aggregation rules and sweep arms" to `conviction_projection_vnext.yaml`.
+#      SEARCHED 2026-09-18: absent from the repository AND from the uploads. So the three axes are
+#      named here and defined nowhere.
+#
+#  (b) ⚠ `purity` AGGREGATES BY WEIGHTED **MAX**, NEVER SUM -- and the single owner cannot compute
+#      that. `data/convictions.to_axes` IS `Sigma_conv w[conv] * P[conv][axis]`, a linear sum, and
+#      §8 makes it the one owner of convictions->axes. A max-aggregating axis needs that owner
+#      changed, not a new column.
+#      ⚠ It does NOT escape R7, and it is worth being clear about that: max is still a function of
+#      the weight vector ALONE, so two people with identical weights are still identical on it.
+#      Max buys a different SHAPE, not per-character variation.
+#
+#  (c) ⚠ `facing` IS USED FOR TWO DIFFERENT OBJECTS IN ONE DOCUMENT -- a conviction AXIS here, and
+#      a character FIELD at its §1.7 ("weights obligation upward / lateral / downward"). And
+#      synthesis.md:229 already owns the second sense as the personality parameter. Three uses of
+#      one word; §4's cold-reader test fails.
+#
+#  (d) ITS DIAGNOSIS OF THE LIVE MATRIX IS CORRECT AND REPRODUCES. It cites "an effective rank of
+#      1.87" for v30. MEASURED on rosters.yaml's own cells: participation ratio on the CORRELATION
+#      matrix = 1.869; on the COVARIANCE matrix = 1.849, which is what
+#      `harness/conviction_spread` prints as 1.85. SAME FINDING, two normalizations -- not a
+#      disagreement, and worth knowing so 1.87 and 1.85 are not read as two numbers.
+#      Its stated reason for three axes rather than four is that merging `update_rule` into
+#      `warrant` "repeats the error that gave v30 an effective rank of 1.87".
+
+third_axis_set_verdict: ~   # 'take warrant/facing/purity' | 'keep memory/substantive/equity/selfish'
+                            # | 'neither, and here is the set'
+
+# ============================================================================
+# 6. ⚠⚠⚠ THE DOCKET — does `6f` GET BUILT, OR DELETED?
+# ============================================================================
+# `decision-procedure-docket.md` supersedes the adjudication's two-stage proposal and REPLACES THE
+# UTILITY SUM IN FULL with an ordered list of TESTS, each returning EXCLUDE / DECIDE / PASS. Run in
+# order until one DECIDEs, one option remains, or the set EMPTIES. Three bands; only the middle
+# (six DECISIVE tests: obligation · threat · conviction · standing · goal · habit) is authored, and
+# what is authored is THEIR ORDER, not a number.
+#
+# THIS IS NOT A REFINEMENT OF PHASE 6. `6f` IS *"the score function itself -- pull(c) - cost(c)"*
+# (01_THE_BUILD_ORDER.md:1032). Under the docket there is no score function. 6f is not built; it is
+# deleted, and 6a-6e's carriers are relocated into individual tests instead of summed.
+#
+# ── WHAT THIS TREE ALREADY AGREES WITH ───────────────────────────────────────
+#   * THE APERTURE IS ALREADY PROHIBITION-SHAPED. `opening_set` is four DISCRETE clauses with no
+#     arithmetic and it REMOVES rather than scoring low, which is the docket's own definition of an
+#     honest refusal. Stage 1-2 partly exists.
+#   * A SUM CANNOT BE NARRATED, and this tree has the absence measured: `trace_log` records actor,
+#     verb and budget only; the per-term breakdown lives transiently in `choose.py:359-369` and is
+#     thrown away. The docket's `reason = test.name` is exactly the datum that is missing.
+#
+# ── WHAT THIS TREE MEASURES AGAINST IT, AND IT IS THE DOCKET'S STRONGEST ARGUMENT ──
+# The document's best claim is that a procedure can DETECT a dilemma (the live set empties) where a
+# sum only ever returns a least-bad number. MEASURED on `build_realm(0)`, 2026-09-18, separating
+# the two different empties the tree currently treats as one:
+#
+#     persons                                46
+#     no QUESTION at all                      0   <- `questions.py:29`'s case
+#     has a question, ZERO candidates left    0   <- the DOCKET's dilemma case
+#     has a question, exactly ONE left        0   <- decided by exclusion alone
+#     has a question, two or more            46   <- median 28 candidates each
+#
+# ⚠ AND "FIRES ZERO TIMES" UNDERSTATED THE DOCKET — CORRECTED 2026-09-18 ON A RULING THAT THE
+# BEST DESIGN WINS, WHICH MAKES THE COMPARISON HAVE TO BE FAIR. Zero-today is not unreachable, and
+# the honest figure is HOW MUCH EXCLUSION IT WOULD TAKE. MEASURED (probe arm 3):
+#
+#     candidates per person       min 28   median 28   max 28
+#     distinct VERBS per person   min 28   median 28   max 28
+#     distinct SUBJECTS per person min 1   median  1   max  1
+#
+# ⚠⚠ THE APERTURE IS A CONSTANT FUNCTION OF THE PERSON ON THIS WORLD — identical verb count and
+# identical subject count for all 46. So NEITHER clause 2 (`eligibility`) NOR clause 4 (known-false
+# from the person's own claims) discriminates between anybody, and every difference between two
+# people's behaviour comes from the SCORE or from which single subject they were handed. That is a
+# finding about the INCUMBENT, not the challenger.
+#
+# AND IT REFRAMES THE DILEMMA ENTIRELY: the set empties PER QUESTION, and the referent set is ONE.
+# So Prohibition must beat 28 VERBS TOWARD ONE TARGET — not 28 verbs across many targets. That is a
+# real dramatic situation, not an absurd one: *everything I could do to my brother is either
+# forbidden by my oath or beneath me.* A POINTED question makes a dilemma cheap; a broad verb
+# repertoire makes it impossible. **THE DILEMMA RATE IS A PROPERTY OF THE QUESTION AND THE VERB
+# BREADTH, NOT OF THE DOCKET**, and 28 is the number to beat. Same aperture fact already
+# known from the other side: `opening_set` offers every person themselves as a referent for every
+# verb (2,650 of 5,345 candidates carry the actor as their own subject).
+# ⚠ AND IT IS FAIR TO THE DOCKET TO SAY THE REST: the docket BRINGS ITS OWN EXCLUDER. Its
+# Prohibition test (scope · purity>=2 · lexical exclusions · taboo gates) is precisely a narrowing
+# stage this tree does not have, and NONE of those four exist here. So the dilemma rate under a
+# docket is not the rate under today's aperture; it depends entirely on excluders nobody has built,
+# and it is untestable until they exist.
+# ⚠ THIS IS ED-IN-0243'S STRUCTURAL CLAIM MIRRORED. That claim: the behaviour layer's falsifier
+# cannot run honestly before the aperture OPENS, because a term's range is bounded by what the
+# world offers it. This one: the dilemma detector cannot run before the aperture NARROWS. The
+# aperture gates the measurability of the behaviour layer in both directions.
+#
+# ── THE CONCRETE BLOCKER NOBODY HAS NAMED ────────────────────────────────────
+# ⚠⚠ THE DOCKET RETURNS ONE ACT; THIS ENGINE'S BUDGET MODEL NEEDS AN ORDER. §7's `decide()` returns
+# `result, reason` — singular. But `pack_scenes(p, ranked, n_scenes, ...)` takes a RANKED LIST and
+# `n_scenes` IS A COST BUDGET, not a count: `take()` spends it across the ranking and an extended
+# scene costs 2 against a plain one's 1. S26.3 (*the PERSON triages*) and U2 (the budget is the
+# SEASON REMAINDER) both assume an ordering the person chooses to leave undone. A docket produces a
+# DECISION, not a triage. Adopting it means either running the docket repeatedly until the budget
+# is spent, or having it return an order — and the document addresses neither.
+#
+# ── WHAT GOES WITH THE SUM, AND IT IS THIS SESSION'S OWN YARDSTICK ───────────
+# ⚠ STR-3's `D >= 0.294` FLOOR IS AN ARTIFACT OF THE SUM AND DOES NOT SURVIVE THE DOCKET.
+# `P(inversion) = 1/(1+e^{D/tau})` is the softmax in `_sample_order` at the shipped `tau = 0.1`.
+# With no continuous score there is no `tau`, no inversion probability and no floor, so *"does this
+# term move the score by 0.294"* stops being a question. The replacement test is *does this test
+# ever fire, and when it fires does it DECIDE* — cheaper to check and a different kind of claim.
+# Said plainly because this session's whole review was conducted against that floor.
+#
+# ── THE COMPARISON THAT ARGUES FOR IT, FROM THIS TREE'S NUMBERS NOT THE DOCUMENT'S ──
+# 52 authored cells in `conviction_projection` currently yield SIX distinct top-ranked verbs across
+# 46 people (measured; `2026-09-18-conviction-basis-probe.py`). Of the 28 verbs each person is
+# offered, the sum realizes 6 — **21% of its own available first-act space, on 52 authored cells.**
+# The docket's six decisive tests give 720 orderings with ZERO authored numbers.
+#
+# ⚠⚠ AND ONE READING THIS FILE PUBLISHED IS RETRACTED, BECAUSE IT WAS A CATEGORY ERROR. It said the
+# moral term *"discriminates BETWEEN persons below its own falsifier floor"* (median gap 0.1445,
+# 24.5% clearing 0.294). `STR-3`'s floor is an INVERSION PROBABILITY INSIDE ONE SOFTMAX —
+# `_sample_order` keys on `score(c)/tau + g` per candidate WITHIN one person's list
+# (`choose.py:317`) — so it is the chance two of THAT PERSON'S candidates swap order. TWO PEOPLE
+# NEVER SHARE A SORT, so their gap on one verb has no inversion attached and the floor is silent
+# on it. `RULINGS.yaml:1176-1179` warns of precisely this: *"a builder who applies the 0.294 floor
+# uniformly will apply it to a quantity that never enters the sort."* Found by a structurally
+# read-only critic; verified at both lines before retracting.
+# WHAT SURVIVES AND NEEDS NO FLOOR: 41 distinct conviction vectors produce SIX distinct first acts,
+# 41 distinct full rankings against 2 under the uniform control, median rank disagreement 0.2882
+# against 0.0000. Those are behavioural counts and they carry the argument on their own.
+# WHAT ELSE SURVIVES: arm 1's within-person comparison IS legitimate — those candidates do share a
+# sort — so *the moral term reorders one person's options strongly and distinguishes two people
+# weakly* is still the finding. Only the word "below the floor" is withdrawn.
+#
+# ⚠ AND THE SUM HAS A FALSE N-LINE AT ITS CENTRE, which is the NERS pass's graded finding.
+# `synthesis.md` §1.3 justifies exactly one minus sign by *"Valoria resolves by drawing, so a term
+# that moves the obstacle and a term that moves the preference are different objects. `cost` belongs
+# on the Ob; `pull` belongs on the pool."* BOTH HALVES SURVIVE THE CUT: the obstacle is already a
+# RESOLVE-side quantity and `resolve.py:388` refuses at Ob > 2xPool while *"the computed chooser
+# never sets"* `Act.obstacle`; and putting `pull` on the pool contradicts `options.py:141`'s ruling,
+# verbatim, *"capability supplies dice and GATES NOTHING"* (#353 §9.2). So `cost(c) = demand ·
+# (1 - courage)` is not load-bearing for the Ob/pool split it was introduced to protect.
+# ⚠ NOT APPLES TO APPLES — 720 is a configuration space, 6 is a realized outcome count, and the
+# honest form of the comparison is weaker: the expensive authored artifact is delivering very
+# little differentiation, and the cheap structural one has a large space to draw on. That is still
+# the strongest argument on the table, and it is not an argument the document knew it had.
+#
+# ── ONE LINE OF CODE WOULD HAVE TO CHANGE ITS MIND ───────────────────────────
+# `decision/questions.py:29` — *"Such a person forms no candidates and does nothing, which is
+# correct."* Under the docket, excluded-to-empty is not correct silence, it is the content.
+# No-occasion silence stays correct; the two empties must be told apart first.
+
+docket_verdict: ~          # 'build 6f as the sum' | 'replace 6f with the docket'
+                           # | 'docket as the interrupt handler, sum deleted' | 'neither yet'
+docket_order: ~            # if taken: the six DECISIVE tests in order, per character archetype
+                           # (obligation · threat · conviction · standing · goal · habit)
