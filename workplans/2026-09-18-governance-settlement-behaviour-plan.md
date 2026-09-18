@@ -295,7 +295,7 @@ single blocker in the plan.**
 | **18a** | **14 — FIELD DELETIONS** | IN | the 13 field deletions + `judging_set` + `conferral_path` | **OPEN** | 17a, 13d |
 | **★ GATE** | **APERTURE RE-MEASUREMENT** | IN | **Fires ONCE, after `18a`. A measurement, not a build item, and NOTHING BELOW MAY BE SCORED BEFORE IT PASSES.** Re-take: verbs resolvable (was 18/38) · verbs unformable person-side (was 10/38, every governance verb) · claims by source (was `{firsthand: 2174, told_by: 1}`, `inferred: 0`) · questions by source. ⚠⚠ **RE-TAKE IT PER HOLDER, NOT PER ENGINE (changed by `13b`, 2026-09-18).** *"10 of 38 unformable"* was never a property of the engine — measured after `13b`: **2 of 38 for a person seated on `off_duke`, 10 of 38 for a person holding nothing.** A single number for this row is now a category error, and the suites that argue from the flat figure are listed in `§3.8`. **Then re-take `CAT-6`'s evidence block and `STR-4`'s conclusion against the new numbers — both are inferences from a shut aperture, and re-citing them is not re-taking them** | **OPEN** | 18a |
 | 19 | **U7-remit** | IN | `levy`, `establish`, `open_case`, `determine`, `issue` | **OPEN** · re-scoped | ⚠ **`13b` LANDED, so this is no longer blocked on it — and `13b` changed what it IS.** All five are now FORMABLE by a holder whose office grants them; none executes. `establish` has **no effect at all** (`13f`), and `issue` is granted in three corpus worlds and does not execute for a reason **not yet established**. So this position is no longer "make them eligible" — it is "give them predicates, effects and operands". Still gated on ★ |
-| 19b | **U7-disp** | IN | ⚠ **RE-SCOPED BY RULING.** `RR-A` ruled **FOLD**: `comply`, `evade \| defy`, `refract` and `dispatch` GO — compliance is the executor's own act. What remains is the deletion, not the build | **OPEN** | `ED-IN-0210` keeps one live fork; do not clear its flag |
+| 19b | **U7-disp** | IN | **BUILD the three response verbs** — `comply`, `evade \| defy`, and the third one pending its rename. ⚠ **THE FOLD IS REVERSED (`ED-IN-0210`, 2026-09-18).** Jordan, shown the consequence: *"i did not realize that meant deleting those verbs. i think that's wrong."* Nothing was ever deleted — the FOLD was ruled 09-17 and never executed — so this reverts to its original sense | **OPEN** | ⚠ **`refract` NEEDS A NAME** — *"refract is the wrong word to use for whatever it is tho"*. `needs_jordan` on `ED-IN-0210`; candidates ranked in that row. **Do not build the third verb under a name he has rejected.** `ED-IN-0210`'s open fork (*are `dispatch` and `comply` two sides of one thing?*) is UNCHANGED and is not closed by the reversal |
 | **19c** | **MIGRATE** | IN/SE | a migration verb. **Nobody in Valoria can relocate** — `move` is TRAVEL (a `travel_leg` Tenure alter) and `residence` is a contested claim predicate **with no writer** | **OPEN** | — opened by the 09-17 rulings; no order scheduled it until now |
 | 20 | **U9 / R-04** | IN | faction-scale queries; 44 re-scales; the 10 world cases. **54 of 143 cases are unrepresentable today — 44 at faction scale, 10 at world** | **BLOCKED** | ★ |
 | 21 | **U10** | IN | the second measurement; `measured:` from instrument output only | **BLOCKED** | 20 ⚠ `requirements.yaml` carries **four mutually inconsistent R3 figures** (`:142`, `:265`, `:333`, `:524`) with no stated baseline. Any position measuring propagation trips on this — fix it here |
@@ -444,9 +444,22 @@ re-taking them."* That instruction now has a trigger.
 
 ---
 
-### 3.8a · ⚠⚠ THE COLLISION: `13b` MADE `dispatch` WORK AND `19b` IS RULED TO DELETE IT
+### 3.8a · ~~THE COLLISION~~ — RESOLVED THE DAY IT WAS FOUND, AND THE SWEEP IS WHY
 
-**This is the sweep's most consequential finding and it is Jordan's to resolve.**
+✅ **DISSOLVED 2026-09-18 (`ED-IN-0210`, reversal row).** The sweep below found that closing `13b`
+bought `dispatch` while position `19b` was ruled to delete it. Put to Jordan; he reversed the FOLD:
+*"i did not realize that meant deleting those verbs. i think that's wrong."* **The verbs stay**,
+`19b` reverts to a build, and nothing needed undoing because the FOLD was never executed.
+
+⚠ **THIS IS THE CLEAREST THING THE `§3.0` CADENCE HAS BOUGHT SO FAR, and it is worth saying why.**
+The collision was invisible from either end: `RR-A` was ruled on 09-17 without knowing `H-71` would
+close on 09-18, and `13b` was built without reading `RR-A`. **Only a forward sweep over the LATER
+positions could see it** — and it surfaced a ruling taken after Jordan had said *"I don't remember"*,
+which his own earlier ruling (09-15, *"the second option (no response verb) is REJECTED"*) had
+already decided the other way. Two of his three statements now agree and the dissenting one was
+explicitly taken without recall.
+
+**What follows is the collision as first recorded, kept because the reasoning is the record:**
 
 `13b`'s only measurable effect on the corpus was to put **`dispatch`** into the executed set — one
 verb, in one of 89 worlds. Position **`19b`** carries `RR-A`, ruled **FOLD** on 2026-09-17:
