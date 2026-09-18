@@ -432,3 +432,85 @@ bearing_scale: ~      # e.g. '[-1,+1]' per field, or '0-5' like Truth's, or some
 
 third_axis_set_verdict: ~   # 'take warrant/facing/purity' | 'keep memory/substantive/equity/selfish'
                             # | 'neither, and here is the set'
+
+# ============================================================================
+# 6. ⚠⚠⚠ THE DOCKET — does `6f` GET BUILT, OR DELETED?
+# ============================================================================
+# `decision-procedure-docket.md` supersedes the adjudication's two-stage proposal and REPLACES THE
+# UTILITY SUM IN FULL with an ordered list of TESTS, each returning EXCLUDE / DECIDE / PASS. Run in
+# order until one DECIDEs, one option remains, or the set EMPTIES. Three bands; only the middle
+# (six DECISIVE tests: obligation · threat · conviction · standing · goal · habit) is authored, and
+# what is authored is THEIR ORDER, not a number.
+#
+# THIS IS NOT A REFINEMENT OF PHASE 6. `6f` IS *"the score function itself -- pull(c) - cost(c)"*
+# (01_THE_BUILD_ORDER.md:1032). Under the docket there is no score function. 6f is not built; it is
+# deleted, and 6a-6e's carriers are relocated into individual tests instead of summed.
+#
+# ── WHAT THIS TREE ALREADY AGREES WITH ───────────────────────────────────────
+#   * THE APERTURE IS ALREADY PROHIBITION-SHAPED. `opening_set` is four DISCRETE clauses with no
+#     arithmetic and it REMOVES rather than scoring low, which is the docket's own definition of an
+#     honest refusal. Stage 1-2 partly exists.
+#   * A SUM CANNOT BE NARRATED, and this tree has the absence measured: `trace_log` records actor,
+#     verb and budget only; the per-term breakdown lives transiently in `choose.py:359-369` and is
+#     thrown away. The docket's `reason = test.name` is exactly the datum that is missing.
+#
+# ── WHAT THIS TREE MEASURES AGAINST IT, AND IT IS THE DOCKET'S STRONGEST ARGUMENT ──
+# The document's best claim is that a procedure can DETECT a dilemma (the live set empties) where a
+# sum only ever returns a least-bad number. MEASURED on `build_realm(0)`, 2026-09-18, separating
+# the two different empties the tree currently treats as one:
+#
+#     persons                                46
+#     no QUESTION at all                      0   <- `questions.py:29`'s case
+#     has a question, ZERO candidates left    0   <- the DOCKET's dilemma case
+#     has a question, exactly ONE left        0   <- decided by exclusion alone
+#     has a question, two or more            46   <- median 28 candidates each
+#
+# SO THE DILEMMA DETECTOR WOULD FIRE ZERO TIMES ON THE WORLD AS IT STANDS. Not because the
+# mechanism is wrong — because THE APERTURE IS TOO WIDE TO EMPTY ANYONE. Same aperture fact already
+# known from the other side: `opening_set` offers every person themselves as a referent for every
+# verb (2,650 of 5,345 candidates carry the actor as their own subject).
+# ⚠ AND IT IS FAIR TO THE DOCKET TO SAY THE REST: the docket BRINGS ITS OWN EXCLUDER. Its
+# Prohibition test (scope · purity>=2 · lexical exclusions · taboo gates) is precisely a narrowing
+# stage this tree does not have, and NONE of those four exist here. So the dilemma rate under a
+# docket is not the rate under today's aperture; it depends entirely on excluders nobody has built,
+# and it is untestable until they exist.
+# ⚠ THIS IS ED-IN-0243'S STRUCTURAL CLAIM MIRRORED. That claim: the behaviour layer's falsifier
+# cannot run honestly before the aperture OPENS, because a term's range is bounded by what the
+# world offers it. This one: the dilemma detector cannot run before the aperture NARROWS. The
+# aperture gates the measurability of the behaviour layer in both directions.
+#
+# ── THE CONCRETE BLOCKER NOBODY HAS NAMED ────────────────────────────────────
+# ⚠⚠ THE DOCKET RETURNS ONE ACT; THIS ENGINE'S BUDGET MODEL NEEDS AN ORDER. §7's `decide()` returns
+# `result, reason` — singular. But `pack_scenes(p, ranked, n_scenes, ...)` takes a RANKED LIST and
+# `n_scenes` IS A COST BUDGET, not a count: `take()` spends it across the ranking and an extended
+# scene costs 2 against a plain one's 1. S26.3 (*the PERSON triages*) and U2 (the budget is the
+# SEASON REMAINDER) both assume an ordering the person chooses to leave undone. A docket produces a
+# DECISION, not a triage. Adopting it means either running the docket repeatedly until the budget
+# is spent, or having it return an order — and the document addresses neither.
+#
+# ── WHAT GOES WITH THE SUM, AND IT IS THIS SESSION'S OWN YARDSTICK ───────────
+# ⚠ STR-3's `D >= 0.294` FLOOR IS AN ARTIFACT OF THE SUM AND DOES NOT SURVIVE THE DOCKET.
+# `P(inversion) = 1/(1+e^{D/tau})` is the softmax in `_sample_order` at the shipped `tau = 0.1`.
+# With no continuous score there is no `tau`, no inversion probability and no floor, so *"does this
+# term move the score by 0.294"* stops being a question. The replacement test is *does this test
+# ever fire, and when it fires does it DECIDE* — cheaper to check and a different kind of claim.
+# Said plainly because this session's whole review was conducted against that floor.
+#
+# ── THE COMPARISON THAT ARGUES FOR IT, FROM THIS TREE'S NUMBERS NOT THE DOCUMENT'S ──
+# 52 authored cells in `conviction_projection` currently yield SIX distinct top-ranked verbs across
+# 46 people (measured; `2026-09-18-conviction-basis-probe.py`). The docket's six decisive tests
+# give 720 orderings with ZERO authored numbers.
+# ⚠ NOT APPLES TO APPLES — 720 is a configuration space, 6 is a realized outcome count, and the
+# honest form of the comparison is weaker: the expensive authored artifact is delivering very
+# little differentiation, and the cheap structural one has a large space to draw on. That is still
+# the strongest argument on the table, and it is not an argument the document knew it had.
+#
+# ── ONE LINE OF CODE WOULD HAVE TO CHANGE ITS MIND ───────────────────────────
+# `decision/questions.py:29` — *"Such a person forms no candidates and does nothing, which is
+# correct."* Under the docket, excluded-to-empty is not correct silence, it is the content.
+# No-occasion silence stays correct; the two empties must be told apart first.
+
+docket_verdict: ~          # 'build 6f as the sum' | 'replace 6f with the docket'
+                           # | 'docket as the interrupt handler, sum deleted' | 'neither yet'
+docket_order: ~            # if taken: the six DECISIVE tests in order, per character archetype
+                           # (obligation · threat · conviction · standing · goal · habit)
