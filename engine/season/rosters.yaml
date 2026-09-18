@@ -1114,6 +1114,32 @@ rosters:
       predicates did.
     values: [actor, subject, from, to, site, kind, amount, floor]
 
+  beneficiary_kinds:
+    source: >-
+      `CAT-2`, closed at step 5 (`proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml`).
+      The carriers a verb's `beneficiary:` column may name -- *"a carrier a Candidate ALREADY
+      holds (the actor, `subject`, or a named operand), NOT a fifth field on `Candidate`."*
+    note: >-
+      ⚠ THIS IS A SUBSET OF `requires_operands` PLUS TWO, AND IT IS NOT THAT ROSTER. The operand
+      vocabulary says what a PRECONDITION may bind; this says who an act is taken FOR THE GOOD OF.
+      `from`, `site`, `kind`, `amount` and `floor` are absent because none of them names a person,
+      and a beneficiary that is not a person is not a beneficiary -- it is the `none` member.
+      ⚠ `actor` IS A MEMBER HERE AND IS NEVER CARRIED IN `operands` (`operands_for` skips it:
+      *"`actor` is structural on both sides and is never carried"*). That asymmetry is the point.
+      The actor is the one carrier every Candidate holds unconditionally, so a verb declaring
+      `beneficiary: actor` resolves for every candidate ever formed, where `to` resolves only
+      where the cell binds it.
+      ⚠ `none` IS A DECLARATION, NOT A BLANK, and the loader requires the column on every row.
+      An act whose good accrues to a Record, an Office, a Site or a Rung has no person-beneficiary
+      the Candidate carries, and saying so in the data is what distinguishes it from a row nobody
+      graded. Absence would read as `false` for every verb -- the UNKNOWN/False collapse
+      `operands_for` refuses one level down.
+      ⚠ WHAT THIS ROSTER DOES NOT DECIDE: the WEIGHT. `synthesis.md` §1.3 spells the term
+      `orient · benefits_me(c)`, and `orient` is a Person-interior scalar with no producer
+      (`STR-1`, phase 6e). This roster and its column deliver `benefits_me(c)`; nothing multiplies
+      it yet, and `decision/choose.py`'s `score` is untouched.
+    values: [actor, subject, to, none]
+
   requires_forms:
     source: >-
       `architecture/meta/04_CODE_ARCHITECTURE.md` §F.24a -- SEVEN forms, read

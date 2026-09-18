@@ -101,6 +101,8 @@ verbs:
   - verb:        "carry"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "none"
+    beneficiary_note: "the good accrues to the PETITIONER, and a `carry` Candidate carries the Petition (`subject`, kind `Petition`) rather than the person who filed it."
     requires:    "a Petition exists; costs budget like any act"
     requires_typed:
       form:      existence
@@ -115,6 +117,7 @@ verbs:
   - verb:        "commit"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "actor"
     requires:    "the Proposition exists (immutable, §14)"
     requires_typed:
       form:      existence
@@ -130,6 +133,8 @@ verbs:
   - verb:        "comply"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "none"
+    beneficiary_note: "the obliger is who compliance is FOR, and `comply` is one of the two rows that carry `requires_typed: none` because the dispensation it answers has no name in `requires_operands`. `H-94`, not a table edit."
     requires:    "a claim of the dispensation's terms is in the actor's own ledger"
     requires_typed: none
     requires_typed_note: "§E3 `:430` — *a claim of the dispensation's terms is in the actor's **own** ledger*. §F.24a form 6, and the FORM is not the problem — `tell` is typed on it. THE OPERAND IS: the entity is a DISPENSATION, and `rosters.yaml: requires_operands` is closed on (actor, subject, from, to, site, kind, amount, floor) with no name for one. Typing it as `of: subject` would assert that an act's subject IS the dispensation whose terms are sought, which no in-chain document says; coining `dispensation` would be filling `H-94` by keyword argument. Stays on REQUIRES_PREDICATES, where it has no predicate, so the fold refuses and names what is missing — today's behaviour exactly."
@@ -145,6 +150,7 @@ verbs:
     scale_note: "conferral seats an office, and an office sits at a rung"
     stratum:     "binding_decision"
     eligibility: ["remit:confer"]
+    beneficiary: "subject"
     requires:    "the office's conferral basis, and 1-per-object: no live hold on the object, or the holder-Proposition has zero live commit (§54 it. 20)"
     writes:      ["Tenure.until", "Tenure.since"]
     emits:       ["tenure.opened", "tenure.closed"]
@@ -157,6 +163,7 @@ verbs:
     scale_note: "a convening gathers a venue's rung, not a person -- ARCHITECTURE_V2 :`the venue's container resolves`"
     stratum:     "binding_decision"
     eligibility: ["remit:convene"]
+    beneficiary: "none"
     requires:    "the venue's container resolves, or is NONE (§6.2)"
     writes:      ["Date.due_at", "ConveningCondition.attached"]
     emits:       ["date.scheduled"]
@@ -166,6 +173,7 @@ verbs:
   - verb:        "create_record"
     stratum:     "uncontested_material"
     eligibility: ["own"]
+    beneficiary: "none"
     requires:    "—"
     writes:      ["Record.exists", "Record.stages"]
     emits:       ["record.created"]
@@ -176,6 +184,7 @@ verbs:
   - verb:        "destroy_record"
     stratum:     "uncontested_material"
     eligibility: ["hold:<record>", "presence"]
+    beneficiary: "actor"
     requires:    "—"
     writes:      ["Record.exists"]
     emits:       ["record.destroyed"]
@@ -188,6 +197,8 @@ verbs:
     scale_note: "a sitting decides at the venue's rung"
     stratum:     "binding_decision"
     eligibility: ["remit:determine"]
+    beneficiary: "none"
+    beneficiary_note: "who a determination FAVOURS is the `judging_set`, which `requires` itself records as *D11, absent*. `none` here is that absence declared, not a reading of the verb."
     requires:    "a fired Date with a DocketItem; judging_set — D11, absent"
     writes:      ["Tenure.degree"]
     emits:       ["matter.determined"]
@@ -199,6 +210,8 @@ verbs:
     scale_note: "a dispatch sends a person across rungs; its reach is the territory, not the sender"
     stratum:     "binding_decision"
     eligibility: ["remit:dispatch"]
+    beneficiary: "none"
+    beneficiary_note: "an order is given TO the named person and taken FOR the issuing remit; the remit is an Office and no Candidate carries it."
     requires:    "the named person exists"
     writes:      []
     emits:       ["order.given"]
@@ -211,6 +224,7 @@ verbs:
     scale_note: "founding an office is an act on the rung that will hold it"
     stratum:     "binding_decision"
     eligibility: ["remit:confer"]
+    beneficiary: "none"
     requires:    "the establishing office's conferral basis, and a rung to establish it at"
     writes:      ["Office.exists", "Office.remit", "Office.establishment"]
     emits:       ["office.established"]
@@ -220,6 +234,7 @@ verbs:
   - verb:        "evade / defy"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "actor"
     requires:    "as comply"
     requires_typed: none
     requires_typed_note: "§E3 `:431` — *as `comply`*, and it inherits `comply`'s reason unchanged: the operand is a Dispensation and the closed operand roster has no name for one."
@@ -235,6 +250,8 @@ verbs:
     scale_note: "as `levy` -- it writes `Rung.stores`"
     stratum:     "uncontested_material"
     eligibility: ["own"]
+    beneficiary: "none"
+    beneficiary_note: "the counterparty is the other beneficiary and is exactly what `exchange` cannot carry -- the second of the two `requires_typed: none` rows, for want of an operand name for the other side of a trade."
     requires:    "both sides' stores cover their side of the exchange"
     requires_typed: none
     requires_typed_note: "W3's own cell — *both sides' stores cover their side of the exchange*. §F.24a form 2 TWICE, one clause per side, and the SECOND side cannot be written: it needs the counterparty's matter kind and quantity, and `rosters.yaml: requires_operands` is closed with no names for them. ⚠ TYPING ONE SIDE ONLY IS THE `_req_confer` DEFECT — a dropped conjunct is an over-admission, and `G4` weighs it equally with an invention. Stays on REQUIRES_PREDICATES with no predicate, so the fold refuses."
@@ -247,6 +264,7 @@ verbs:
   - verb:        "forge"
     stratum:     "uncontested_material"
     eligibility: ["own"]
+    beneficiary: "actor"
     requires:    "—"
     writes:      ["Record.exists", "Record.forgery_quality"]
     emits:       ["record.created"]
@@ -258,6 +276,7 @@ verbs:
     scale_note: "a Dispensation's `scope` enumerates executors -- §37.1 -- so its reach is the domain the issuer governs"
     stratum:     "binding_decision"
     eligibility: ["remit:issue"]
+    beneficiary: "none"
     requires:    "scope enumerates executors, not places (§37.1)"
     writes:      ["Dispensation.exists"]
     emits:       ["dispensation.issued"]
@@ -268,6 +287,8 @@ verbs:
   - verb:        "kill / wound"
     stratum:     "contested_physical"
     eligibility: ["own"]
+    beneficiary: "actor"
+    beneficiary_note: "⚠⚠ THE ROW THAT PROVES THIS COLUMN CANNOT BE DERIVED FROM `writes:`. It writes `Person.body` and `Person.exists` ON THE SUBJECT, and the good does not accrue to the person felled. A write can be a HARM, so a rule reading the write column would name the victim as the beneficiary of their own killing. `CAT-2`'s *declare it* is what this row is evidence for."
     requires:    "—"
     contests: "the body"
     requires_note: "⚠ `contests:` IS A REAL FIELD NOW, NOT A NOTE. ARCHITECTURE_V2.md:394 declares the column -- `contests: <prize> | none`, *if set, routes to the seam at RESOLVE (§39)* -- and :434 sets it on this row. The transcription put it here, where nothing reads it, so the fold executed a kill as a DIRECT WRITE. Jordan, 2026-09-02: *that would trigger the personal combat scene. you can't just kill or wound.* The design already said so."
@@ -350,6 +371,7 @@ verbs:
     scale_note: "a levy moves a Rung's stores -- the rung IS the subject"
     stratum:     "uncontested_material"
     eligibility: ["remit:issue", "presence:<rung>"]
+    beneficiary: "actor"
     requires:    "stores(...) >= amount"
     writes:      ["Rung.stores"]
     emits:       ["levy.taken"]
@@ -361,6 +383,7 @@ verbs:
   - verb:        "move"
     stratum:     "movement"
     eligibility: ["own"]
+    beneficiary: "actor"
     requires:    "a contain path exists"
     requires_typed:
       form:      contain_path
@@ -375,6 +398,7 @@ verbs:
   - verb:        "oblige"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "actor"
     requires:    "—"
     writes:      ["Tenure.since"]
     emits:       ["duty.taken"]
@@ -384,6 +408,8 @@ verbs:
   - verb:        "open_case"
     stratum:     "social"
     eligibility: ["remit:determine"]
+    beneficiary: "none"
+    beneficiary_note: "whom a case serves is the party it is opened on behalf of; the act writes a `Record` and carries no such person."
     requires:    "the act DECLARES the stages and their terms (§13.1)"
     writes:      ["Record.exists", "Record.stages"]
     emits:       ["case.opened"]
@@ -395,6 +421,7 @@ verbs:
   - verb:        "petition"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "actor"
     requires:    "—"
     requires_note: "— no dedup, no cap, no per-venue limit (§26.3)"
     writes:      ["Petition.exists"]
@@ -406,6 +433,7 @@ verbs:
   - verb:        "refract"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "actor"
     requires:    "as comply — ⚠ emitter- or receiver-side is absent, D18"
     requires_typed: none
     requires_typed_note: "§E3 `:432` — *as `comply` — ⚠ **emitter- or receiver-side is `absent`, D18***. Grade `absent`. Even setting aside `comply`'s operand problem, WHOSE ledger is read is the thing `D18` records as missing, and a typed cell would have to pick one. §42.2.1: the honest behaviour is to refuse, not to pick."
@@ -419,6 +447,7 @@ verbs:
   - verb:        "release"
     stratum:     "binding_decision"
     eligibility: ["own"]
+    beneficiary: "subject"
     requires:    "a live tenure of a releasable kind, owned by the actor, toward the subject"
     requires_typed: none
     domain:      [hold, commit, oblige, succeed, tie, knot]
@@ -433,6 +462,7 @@ verbs:
   - verb:        "repudiate"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "actor"
     requires:    "a live commit exists"
     requires_typed:
       form:      existence
@@ -448,6 +478,8 @@ verbs:
   - verb:        "restore"
     stratum:     "uncontested_material"
     eligibility: ["own", "presence:<site>"]
+    beneficiary: "none"
+    beneficiary_note: "a restored site benefits whoever holds it, which is a WORLD read (`Tenure` on the site) and not a carrier the Candidate holds. `S10`'s territory, not this column's."
     requires:    "the site exists and the actor is present at it"
     requires_typed:
       all:
@@ -470,6 +502,8 @@ verbs:
     scale_note: "as `confer` -- it unseats the same office"
     stratum:     "binding_decision"
     eligibility: ["remit:revoke"]
+    beneficiary: "none"
+    beneficiary_note: "revocation is taken AGAINST the holder and FOR the revoking remit -- an Office, which no Candidate carries. Same shape as `dispatch`."
     requires:    "the office's revocation basis, and a live hold exists"
     writes:      ["Tenure.until"]
     emits:       ["tenure.closed"]
@@ -480,6 +514,7 @@ verbs:
   - verb:        "speak"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "none"
     requires:    "—"
     writes:      []
     emits:       ["speech.made"]
@@ -492,6 +527,7 @@ verbs:
     scale_note: "succession is one person taking another's tenure; the office's rung does not change"
     stratum:     "binding_decision"
     eligibility: ["own"]
+    beneficiary: "subject"
     requires:    "the actor holds the office or estate whose heir is being designated"
     requires_typed:
       form:      relation
@@ -507,6 +543,7 @@ verbs:
   - verb:        "tell"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "subject"
     requires:    "the teller holds a claim on the subject"
     requires_typed:
       form:      own_ledger
@@ -624,6 +661,8 @@ verbs:
     stratum:     "contested_physical"
     stratum_note: "§27's strata are a RESOLUTION-ORDER band over what an act touches, and they are not the `contests:` column -- these six declare no prize (see the block comment). The placeholder filed all six under `contested_physical` and this splits them three ways on what each act TOUCHES -- the physical world, a conversation, or the actor's own held evidence. ⚠ THE FIRST WRITING OF THIS NOTE CITED `fieldwork_v30.md:353-355` AS THE WARRANT AND THAT LINE DOES NOT LICENSE IT: `:355` reads -- *EACH investigation action faces: base Ob (from Depth) + Concealment Ob* -- so canon makes ALL SIX contestable and conditions concealment on the concealer being PRESENT IN THE SCENE, not on the act being physical. The split may still be right for resolution ORDER, which is all a stratum decides; it is not derived from that line, and it is graded with the row."
     eligibility: ["own", "presence:<site>"]
+    beneficiary: "actor"
+    beneficiary_note: "the six investigation verbs (`examine`, `interview`, `research`, `surveil`, `thread_read`, `reconstruct`) all write `[]` and emit `finding.made`: a finding is a Claim minted at WITNESS into THE ACTOR'S OWN LEDGER, which is the carrier the good lands on. `tell` is the one that points the other way -- it deposits with the person told, so its beneficiary is `subject`."
     requires:    "the site exists and the actor is present at it"
     requires_typed:
       all:
@@ -643,6 +682,7 @@ verbs:
   - verb:        "interview"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "actor"
     requires:    "the person questioned exists"
     requires_typed:
       form:      existence
@@ -658,6 +698,7 @@ verbs:
   - verb:        "research"
     stratum:     "uncontested_material"
     eligibility: ["own", "presence:<site>"]
+    beneficiary: "actor"
     requires:    "the record consulted exists"
     requires_typed:
       form:      existence
@@ -673,6 +714,7 @@ verbs:
   - verb:        "surveil"
     stratum:     "contested_physical"
     eligibility: ["own", "presence:<rung>"]
+    beneficiary: "actor"
     requires:    "the place watched exists and the actor is present at it"
     requires_typed:
       all:
@@ -692,6 +734,7 @@ verbs:
   - verb:        "thread_read"
     stratum:     "contested_physical"
     eligibility: ["own", "presence:<site>"]
+    beneficiary: "actor"
     requires:    "Thread Sensitivity >= 30"
     requires_typed: none
     requires_typed_note: "REASON (c) OF THE THREE `data/verbs.py:239-248` ADMITS -- an operand the closed `requires_operands` roster has no name for -- AND IT IS ALREADY REGISTERED, so this is a citation and not a new hole. `hole_register.yaml` H-85: Thread Sensitivity is what #353 §9.2 calls *'the only class-shaped gate in the design'*, and §9.2 *specifies NO carrier, NO roster of what it gates, and NO predicate*. `fieldwork_v30.md:297` requires TS >= 30 for this act and `:37` gates Depth 4 on the same number. Typing it would mean coining an operand, which `rosters.yaml: requires_operands` calls *'filling H-94 by keyword argument, which is the ruling H-94 is waiting for and not a table edit'*. ⚠ THE CONSEQUENCE IS STATED PLAINLY: with no typed cell and no `REQUIRES_PREDICATES` entry this verb is NOT in `resolvable_verbs()`, so it is a row that exists and cannot yet be attempted. That is what canon says of a character below the gate (`:76` -- *'Characters below the gate cannot attempt the action'*), and it is the honest state rather than a stand-in threshold."
@@ -704,6 +747,7 @@ verbs:
   - verb:        "reconstruct"
     stratum:     "uncontested_material"
     eligibility: ["own"]
+    beneficiary: "actor"
     requires:    "the actor holds a claim on the subject"
     requires_typed:
       form:      own_ledger
@@ -718,6 +762,7 @@ verbs:
   - verb:        "tie / knot"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "actor"
     requires:    "—"
     requires_note: "stored once, on the lower id (§15.1)"
     writes:      ["Tenure.since"]
@@ -728,6 +773,7 @@ verbs:
   - verb:        "transfer"
     stratum:     "uncontested_material"
     eligibility: ["own", "hold:<store>"]
+    beneficiary: "to"
     requires:    "stores(hearth(giver), kind) >= amount (§54 it. 7)"
     requires_typed:
       form:      scalar_threshold
@@ -746,6 +792,7 @@ verbs:
   - verb:        "utter"
     stratum:     "social"
     eligibility: ["own"]
+    beneficiary: "none"
     requires:    "—"
     writes:      ["Proposition.exists"]
     emits:       ["proposition.uttered"]
@@ -755,6 +802,8 @@ verbs:
   - verb:        "work"
     stratum:     "uncontested_material"
     eligibility: ["own", "presence:<site>"]
+    beneficiary: "none"
+    beneficiary_note: "the same world read as `restore`: the site's holder is not a carrier the Candidate holds."
     requires:    "condition >= floor(verb) (§12.1)"
     requires_typed:
       form:      scalar_threshold

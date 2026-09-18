@@ -32,6 +32,26 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 **Facts, not a queue.** Three items of `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md`
 were RUN. `§7` of that file is the record and `probe_execution_pass.py` beside it re-takes every number.
 
+- **Phase-6 item 6d LANDED — the `beneficiary:` column (`ED-IN-0248`, closes `CAT-2` in code).**
+  `synthesis.md` §1.3's `orient · benefits_me(c)` had a weight and nobody to weigh: a `Candidate`
+  carries `(verb, subject, why, operands)` and no beneficiary. Built what `CAT-2` ruled — a STATIC
+  column on `verb_table.yaml`, all 38 rows, off a `beneficiary_kinds` roster, with three loader
+  refusals (no column · off-roster · **an operand beneficiary the row's own cell can never bind**),
+  and `beneficiary_of`/`benefits_me` in `decision/choose.py`. MEASURED, one populated season seed 0:
+  **5,345 candidates · 3,796 (71.0%) resolve a personal beneficiary · ZERO declared-but-unresolved.**
+  That zero is the result — a column naming carriers real candidates never hold is `CAT-2`'s dead
+  option 1 one level along, and would read `0.0` for everybody with every test green.
+  ⚠ **NOT wired into `score`, deliberately:** `orient` has no producer (`STR-1` → item **6e**), so
+  wiring it multiplies a measured quantity by an unruled magnitude and moves every golden for a
+  weight nobody set. **Nothing entered `loop/`** — driver still 18, and the term is not on the
+  package surface.
+  ⚠ **The column cannot be derived from `writes:` and `kill / wound` is the proof:** it writes on
+  its SUBJECT and the good does not accrue to the person felled — a write can be a HARM. A falsifier
+  pins it.
+  ⚠ **Control on its own headline:** 2,650 of 5,345 candidates (49.6%) carry THE ACTOR AS THEIR OWN
+  SUBJECT, 98 per verb — `opening_set` offers everyone themselves as a referent for every verb. So
+  `benefits_me == 1.0` on 3,420 is the aperture's shape, **not** a fact about Valorians. Pre-existing,
+  untouched here, and nothing is scheduled from it.
 - **Item 3b LANDED, AT ITS CONTROL ARM (`ED-IN-0247`, `H-125`).** A body finally falls: the
   shortfall reaches `Person.body` through the gate, `_crossings` is factored for **sites and
   persons** off the one `band_floors` table, and `World.remove_person` is `_eff_kill`'s cascade with

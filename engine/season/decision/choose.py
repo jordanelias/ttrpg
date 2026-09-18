@@ -29,7 +29,7 @@ from ..data.rosters import CONVICTION_AXES, SCENE_PACKING_RULES, require_member
 # `CONVICTION_PROJECTION` / `PROJECTION_DEFAULT_CELL` were imported here until 2026-09-16 and
 # are not any more: the loop that read the 13x4 moved into `data/convictions.to_axes`, its
 # single owner. Keeping the imports declared a dependency this module no longer has.
-from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
+from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL, VERB_TABLE
 from ..gaps import Unspecified
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
 from .options import opening_set
@@ -39,6 +39,62 @@ def align(verb: str, axis: str) -> float:
     """§F2's `alignment(c.verb, axis)`. Sparse: an unlisted pair reads the table's own declared
     `default_cell`, never a literal here."""
     return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
+
+
+def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
+    """WHO THIS CANDIDATE IS TAKEN FOR THE GOOD OF -- the verb's declared `beneficiary:` column,
+    resolved against the carriers THIS Candidate holds. `CAT-2`, phase-6 item `6d`.
+
+    ⚠ THE RESOLUTION IS THE WHOLE OF THE MECHANISM AND IT TOUCHES `_derive_operand` NOWHERE.
+    The column is static per verb; this reads it and looks up a carrier the Candidate already has.
+    That is the property `CAT-2` bought by declaring rather than deriving -- *"a verb-table column
+    never touches `_derive_operand`, so r2 item 7 and this are independent"* -- and it is why this
+    function needs no World, no Query and no fifth `Candidate` field.
+
+    ⚠⚠ `None` HAS TWO MEANINGS AND A CALLER THAT CONFLATES THEM IS WRONG. They are told apart by
+    the ROW, not by this return:
+      * `beneficiary: none` -- the verb DECLARES that no person the Candidate holds is the one it
+        is done for the good of. A `create_record` benefits a Record. This is an answer.
+      * a declared carrier that DID NOT BIND on this candidate -- `to` where the cell admits the
+        operand but this particular form carries none. This is a HOLE, and
+        `test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms` counts it
+        separately (measured 0 over a populated season), because a term that silently reads as
+        *"benefits nobody"* whenever its operand is missing is `§0.1 pt 2` exactly: an assertion
+        that cannot observe the failure it excludes.
+    `VERB_TABLE[c.verb].beneficiary` discriminates the two, which is why this returns the id
+    rather than a tri-state -- the discriminator is already in the data and a second encoding of
+    it here would be §8's two owners."""
+    row = VERB_TABLE.get(c.verb)
+    if row is None:
+        raise Unspecified(
+            f"no verb_table row for {c.verb!r}, so its beneficiary cannot be read",
+            "CAT-2",
+            needs="a row in verb_table.yaml, or a candidate whose verb is in the table",
+            law="the beneficiary is a PROPERTY OF THE VERB -- a candidate for a verb the table "
+                "does not carry has no declaration to resolve, and defaulting would invent one")
+    kind = row.beneficiary
+    if kind == "none":
+        return None
+    if kind == "actor":
+        return p.id
+    if kind == "subject":
+        return c.subject or None
+    return c.operands.get(kind)
+
+
+def benefits_me(p: Person, c: Candidate) -> float:
+    """`synthesis.md` §1.3's `benefits_me(c)` -- 1.0 where the act is taken for the actor's own
+    good, 0.0 otherwise. The `orient ·` that multiplies it is NOT here and NOT in `score`.
+
+    ⚠ NOTHING MULTIPLIES THIS YET, DELIBERATELY, AND THE REASON IS A MISSING PRODUCER RATHER THAN
+    A MISSING LINE. `orient` is a Person-interior scalar; `STR-1` closed at step 3 -- *a verb at
+    RESOLVE writes them* -- and no verb does, which is phase-6 item `6e`. Wiring the term today
+    would multiply a measured quantity by an unruled magnitude and move every golden for a weight
+    nobody has set. The term lands with its weight (`6f`), and this is the half `6d` owes.
+
+    ⚠ IT IS A FLOAT AND NOT A BOOL BECAUSE IT IS A SCORE TERM. `beneficiary_of` carries the
+    identity for anything that needs to know WHO; this answers only *is it me*."""
+    return 1.0 if beneficiary_of(p, c) == p.id else 0.0
 
 
 def project(p: Person) -> dict:

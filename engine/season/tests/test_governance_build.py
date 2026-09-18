@@ -485,3 +485,205 @@ def test_lb3c_death_at_body_zero_closes_every_tenure_through_the_same_owner_as_k
     assert "t.until = w.tick" not in body, (
         "`_eff_kill` has grown its own cascade again — two sites closing tenures by hand is how "
         "MATTER's death and RESOLVE's drift apart (§8)")
+
+
+# =================================================================================================
+# LB-6d -- THE BENEFICIARY COLUMN (`CAT-2`, phase-6 item `6d`)
+#
+# What these assert, and the order matters: the column is DECLARED on every row (and the loader
+# refuses a row without one), the declaration is CARRIABLE by the row that makes it, and the
+# resolution RUNS on candidates the engine actually forms. The third is the one that could have
+# been vacuous -- a column that resolves to nothing is CAT-2's dead option 1 relocated, and
+# `benefits_me` would read 0.0 forever with every test green.
+# =================================================================================================
+
+
+def _verb_table_text() -> str:
+    from ..data import files
+    return files.VERB_TABLE_YAML.read_text()
+
+
+def _load_with(table_text: str):
+    """Reload the verb table from SUBSTITUTED text, restoring the file whatever happens. The
+    loader reads the file at import, so the arm has to be built on disk rather than injected."""
+    import importlib
+    from ..data import files, verbs as _verbs
+    p = files.VERB_TABLE_YAML
+    original = p.read_text()
+    p.write_text(table_text)
+    try:
+        importlib.reload(_verbs)
+    finally:
+        p.write_text(original)
+        importlib.reload(_verbs)
+
+
+_LEVY_ROW = (
+    '  - verb:        "levy"\n'
+    '    scale:   "settlement"\n'
+    '    scale_note: "a levy moves a Rung\'s stores -- the rung IS the subject"\n'
+    '    stratum:     "uncontested_material"\n'
+    '    eligibility: ["remit:issue", "presence:<rung>"]\n'
+    '    beneficiary: "actor"\n'
+)
+
+
+def test_lb6d_every_verb_declares_a_rostered_beneficiary():
+    """**LB-6d.** `CAT-2`: *"DECLARE IT -- and declare it as a STATIC COLUMN ON `verb_table.yaml`
+    resolving to a carrier a Candidate ALREADY holds."* Every row, no exceptions, from the
+    roster."""
+    from ..data.verbs import BENEFICIARY_KINDS, VERB_TABLE
+
+    # Same control as `test_season_shape.py`'s own `len(_load_verb_table()) == 38`: it is here so
+    # that a table which SHRANK cannot let this census pass while examining a handful of rows.
+    # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
+    assert len(VERB_TABLE) == 38, "the verb count moved; this row's census is stale"
+    undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
+    assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
+    off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()
+                  if r.beneficiary not in BENEFICIARY_KINDS]
+    assert not off_roster, f"beneficiaries outside `beneficiary_kinds`: {off_roster}"
+    # IT ASSERTS THAT IT ASSERTED (§0.1 pt 2): the two checks above are both "no bad rows found",
+    # which a census over an EMPTY table satisfies. This counts the rows that actually carried a
+    # declaration, so a loader returning nothing fails here instead of passing silently.
+    declared = [v for v, r in VERB_TABLE.items() if r.beneficiary in BENEFICIARY_KINDS]
+    assert len(declared) == len(VERB_TABLE)
+
+
+def test_lb6d_a_row_without_the_column_is_refused_at_load():
+    """The column is REQUIRED, so a new verb cannot arrive carrying no declaration. An absent
+    column would read as `benefits nobody` for that verb -- the UNKNOWN/False collapse."""
+    src = _verb_table_text()
+    dropped = src.replace(_LEVY_ROW, _LEVY_ROW.replace('    beneficiary: "actor"\n', ""), 1)
+    assert dropped != src, "the substitution did not apply -- this test is asserting nothing"
+    with pytest.raises(SystemExit, match="declares no `beneficiary:`"):
+        _load_with(dropped)
+
+
+def test_lb6d_an_off_roster_beneficiary_is_refused_at_load():
+    """`beneficiary_kinds` is the closed set. A fifth carrier is argued for in `rosters.yaml`,
+    never spelled into a cell."""
+    from ..gaps import Unspecified
+    src = _verb_table_text()
+    bogus = src.replace(_LEVY_ROW, _LEVY_ROW.replace('"actor"', '"treasury"'), 1)
+    assert bogus != src, "the substitution did not apply -- this test is asserting nothing"
+    with pytest.raises(Unspecified):
+        _load_with(bogus)
+
+
+def test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load():
+    """⚠ THE CHECK THAT KEEPS THE COLUMN HONEST, AND THE REASON `CAT-2` CLOSED THE WAY IT DID.
+
+    Option 1 -- derive the beneficiary from the operand binding -- died on a measurement: 24 of 38
+    verbs are UNTYPED and carry no operand at all. A static column escapes that only while it
+    declares carriers the row can actually hold. `beneficiary: to` on an untyped verb is the SAME
+    dead reference wearing the new column, and it would resolve to `None` for every candidate ever
+    formed, silently, forever."""
+    src = _verb_table_text()
+    unbindable = src.replace(
+        _LEVY_ROW, _LEVY_ROW.replace('beneficiary: "actor"', 'beneficiary: "to"'), 1)
+    assert unbindable != src, "the substitution did not apply -- this test is asserting nothing"
+    with pytest.raises(SystemExit, match="neither binds nor admits"):
+        _load_with(unbindable)
+
+
+def test_lb6d_kill_is_declared_to_benefit_the_actor_not_the_person_it_writes_on():
+    """⚠ THE ROW THAT PROVES THE COLUMN CANNOT BE DERIVED FROM `writes:`.
+
+    `kill / wound` writes `Person.body` and `Person.exists` ON THE SUBJECT. A rule reading the
+    write column would name the victim as the beneficiary of their own killing, because A WRITE
+    CAN BE A HARM. This is the falsifier for the claim that the declaration is load-bearing: if
+    someone later derives this column, THIS is the assertion that goes red."""
+    from ..data.verbs import VERB_TABLE
+
+    row = VERB_TABLE["kill / wound"]
+    assert "Person.body" in row.writes and "Person.exists" in row.writes, (
+        "the row no longer writes on its subject, so this test's premise is gone")
+    assert row.beneficiary == "actor", (
+        "`kill / wound`'s beneficiary was derived from `writes:` and now names the victim")
+
+
+def test_lb6d_none_and_an_unbound_carrier_are_different_answers():
+    """`beneficiary_of` returns `None` twice over and the two are NOT the same claim. `none` is
+    the verb's answer; an unbound carrier is a hole. The ROW discriminates them, which is why the
+    resolver returns an id rather than a tri-state."""
+    from ..data.verbs import VERB_TABLE
+    from ..decision.choose import beneficiary_of, benefits_me
+    from ..state.carriers import Candidate, Person
+
+    p = Person(id="p1")
+    declared_none = Candidate(verb="create_record", subject="rec1")
+    assert VERB_TABLE["create_record"].beneficiary == "none"
+    assert beneficiary_of(p, declared_none) is None
+
+    hole = Candidate(verb="transfer", subject="r1", operands={})
+    assert VERB_TABLE["transfer"].beneficiary == "to"
+    assert beneficiary_of(p, hole) is None, "an unbound `to` resolved to something"
+
+    bound = Candidate(verb="transfer", subject="r1", operands={"to": "p3"})
+    assert beneficiary_of(p, bound) == "p3"
+    assert benefits_me(p, bound) == 0.0
+    assert benefits_me(p, Candidate(verb="levy", subject="r1")) == 1.0
+
+
+def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
+    """⚠⚠ THE ONE THAT IS NOT SATISFIABLE BY DECLARING ANYTHING (`CLAUDE.md` §0.2).
+
+    Every test above reads the table or a hand-built Candidate. This one runs a season, takes
+    every Candidate the deliberation ACTUALLY forms, and resolves each against its row. The
+    failure it excludes is the one that matters: a column that declares carriers real candidates
+    never hold resolves to `None` throughout, `benefits_me` reads 0.0 for everybody, and every
+    other assertion in this block still passes.
+
+    IT ASSERTS THAT IT ASSERTED (§0.1 pt 2) -- the examined count is asserted non-trivial, so a
+    run that formed no candidates fails here instead of passing vacuously.
+
+    ⚠ THE CONTROL ON ITS OWN HEADLINE, because a number without one is not a measurement (§0.1
+    pt 4): roughly HALF of all candidates carry THE ACTOR AS THEIR OWN SUBJECT -- `opening_set`
+    offers every person themselves as a referent for every verb. So the count of candidates
+    reading `benefits_me == 1.0` is inflated by the aperture's shape and must not be read as
+    *"persons are self-interested two thirds of the time"*. That is a property of the candidate
+    former, which this item does not touch and this test does not assert a bound on."""
+    from ..data.verbs import VERB_TABLE
+    from ..decision import choose as _choose
+    from ..harness import populated
+
+    seen: list = []
+    inner = _choose.opening_set
+
+    def spy(person, view, question, fx):
+        cands = inner(person, view, question, fx)
+        seen.extend((person, c) for c in cands)
+        return cands
+
+    _choose.opening_set = spy
+    try:
+        populated.run(seasons=1, seed=0)
+    finally:
+        _choose.opening_set = inner
+
+    # A FLOOR, not a measurement. The season forms 5,345 candidates at this seed (§7.3e, re-taken
+    # by `probe_execution_pass.py`), so this sits far below the observed figure and is deliberately
+    # NOT pinned to 5,345 -- pinning it would reland every unrelated aperture change here as a
+    # false failure, which is how a guard stops being read.
+    # [JUSTIFIED: a floor far below the 5,345 measured at this seed, chosen only to fail a sweep that ran thinly or not at all -- the vacuous pass this test exists to exclude]
+    assert len(seen) > 1000, (
+        f"only {len(seen)} candidates were formed; this sweep cannot observe what it is for")
+
+    holes = [(p.id, c.verb) for p, c in seen
+             if VERB_TABLE[c.verb].beneficiary != "none"
+             and _choose.beneficiary_of(p, c) is None]
+    assert not holes, (
+        f"{len(holes)} candidates declare a beneficiary that did not resolve, e.g. {holes[:5]}. "
+        "A declared carrier that never binds is CAT-2's dead option 1 inside the new column")
+
+    resolved = sum(1 for p, c in seen if _choose.beneficiary_of(p, c) is not None)
+    assert resolved > len(seen) // 4, (
+        f"only {resolved} of {len(seen)} candidates resolve any beneficiary -- the column is "
+        "declared but inert, which is the failure this test exists to see")
+
+    # The term SPANS its codomain. A `benefits_me` that is constant across candidates is inert by
+    # construction (`urgency`'s own note: "a term constant across candidates is INERT BY
+    # CONSTRUCTION -- the dead-carrier complaint"), whatever `orient` later multiplies it by.
+    values = {_choose.benefits_me(p, c) for p, c in seen}
+    assert values == {0.0, 1.0}, f"`benefits_me` never varied across a season: {values}"
