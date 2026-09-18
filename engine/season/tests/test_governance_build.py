@@ -687,3 +687,149 @@ def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
     # CONSTRUCTION -- the dead-carrier complaint"), whatever `orient` later multiplies it by.
     values = {_choose.benefits_me(p, c) for p, c in seen}
     assert values == {0.0, 1.0}, f"`benefits_me` never varied across a season: {values}"
+
+# LB-6e -- `(Person, scar[axis])`, THE MORAL LAYER'S MISSING MOTION (§54 item 21, `H-128`)
+#
+# `04 §F.20a`: *no verb writes any `Person` interior field at all*, so every interior consequence
+# is inert and a person leaves a season morally identical to the one who entered it. This is the
+# one interior row whose TRIGGER the chain actually specifies, so it is the one that can be built
+# without inventing the condition.
+#
+# THE SHIPPED ARM IS `scar_step = 0` AND IS PINNED BELOW. Every other test here sets the fixture
+# explicitly, so the behaviour is EXERCISED rather than merely present (`CLAUDE.md` §0.2).
+# =================================================================================================
+
+
+def _scar_bands(scar_step, ids=range(24)):
+    """Fold `kill / wound` through the REAL road at a given `scar_step`, and report each band's
+    scar. Deliberately `_we_bands`' shape (`test_season_shape.py`) rather than a new harness: the
+    act id is the only thing that varies, because `combat_seam` seeds its RNG from it, so nothing
+    about the WORLD is tuned to reach a band."""
+    from ..data.matrix import Step as _Step
+    from ..state.carriers import Act as _Act
+
+    seen = {}
+    for i in ids:
+        w = P.tiny_world()
+        w.step = _Step.RESOLVE
+        w.fixtures = w.fixtures.sweep("scar_step", scar_step)
+        d = SeasonDriver(w)
+        act = _Act(id=f"scar{i}", actor="p_low", verb="kill / wound",
+                   payload={"subject": "p_mid"})
+        evs = d.resolve([act], w.fixtures.get("contest_max_depth"))
+        deg = evs[0].degree if evs else None
+        alive = "p_mid" in w.persons
+        seen.setdefault(deg, dict(
+            alive=alive,
+            scar=(dict(w.persons["p_mid"].scar) if alive else None),
+            kinds=sorted(e.kind for e in evs)))
+    return seen
+
+
+def test_lb6e_the_matrix_row_finally_has_a_field():
+    """`formal_analysis.md` C3 measured it: *"`matrix_rows_without_a_field()['absent']` lists
+    `(Person, scar)`"*. A Part D row naming a field that does not exist is a licence pointing at
+    nothing."""
+    from ..state.carriers import Person
+
+    p = Person(id="p1")
+    assert hasattr(p, "scar"), "`(Person, scar)` still names a field the carrier does not have"
+    assert p.scar == {}, (
+        "`scar` ships pre-seeded. It is keyed on the AXIS ROSTER, and `STR-2` rules those members "
+        "change -- seeding them here would put a copy of a roster about to be replaced into a "
+        "carrier (§0.05 clause 3)")
+
+
+def test_lb6e_a_wound_scars_and_the_axes_come_from_the_alignment_table():
+    """**LB-6e**, and it observes BOTH halves: that a scar is WRITTEN, and that its KEYS are the
+    ones `ALIGNMENT` engages -- not a second table, and not a literal.
+
+    §8: `ALIGNMENT` already owns *which axes a verb engages*, and `choose` scores against it. A
+    second outcome->axis table would be a second owner of that claim, free to disagree with the
+    one the decision layer reads."""
+    from ..data.rosters import CONVICTION_AXES
+    from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
+    from ..seam.wrappers import combat as C
+    if C.engine() is None:                      # a NAMED gap, never a silent skip
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+
+    engaged = {ax for ax in CONVICTION_AXES
+               if float(ALIGNMENT.get(ax, {}).get("kill / wound", ALIGNMENT_DEFAULT_CELL))}
+    if not engaged:
+        pytest.skip("`kill / wound` engages no axis in ALIGNMENT, so this item has nothing to key "
+                    "a scar on -- a data state, reported rather than asserted around")
+
+    seen = _scar_bands(scar_step=10)
+    wounded = [v for k, v in seen.items() if k == "Wounded"]
+    assert wounded, (
+        f"the sweep reached bands {sorted(str(k) for k in seen)} and never `Wounded`, so this "
+        "test asserted nothing about a scar")
+    got = wounded[0]["scar"]
+    assert got, "a wound at `scar_step=10` left no scar at all"
+    assert set(got) <= set(CONVICTION_AXES), (
+        f"scar is keyed on {sorted(set(got) - set(CONVICTION_AXES))}, which the axis roster does "
+        "not carry -- the keys came from somewhere other than the roster")
+    assert set(got) == engaged, (
+        f"scar keys {sorted(got)} != the axes ALIGNMENT engages for this verb {sorted(engaged)}; "
+        "a second owner of *which axes a verb engages* has appeared")
+    assert all(v > 0 for v in got.values()), got
+
+
+def test_lb6e_the_zero_arm_writes_no_scar_and_reports_none():
+    """THE SHIPPED ARM, PINNED. At `scar_step = 0` `_scar` returns BEFORE touching the carrier, so
+    no key is added. A zero-valued cell would still be a key, which is the difference between an
+    arm that is inert and one that merely looks it.
+
+    ⚠ THIS PINS THE BEHAVIOUR, NOT THE WHOLE TREE, AND THE NARROWER NAME IS A CORRECTION. It was
+    called `..._is_the_pre_item_tree_exactly` and that was FALSE: `World.content_hash` digests a
+    dataclass as `repr(obj)`, so `Person` gaining a field moves every person's digest whatever its
+    value (`ff5c5765f4d2` -> `ab77c30d273b`, measured against a clean `origin/main` worktree).
+    `runs/TRACE.txt` IS byte-identical -- no behaviour changes -- and that is the claim this test
+    can actually make. `H-128` carries the full accounting of the two-line re-record."""
+    from ..seam.wrappers import combat as C
+    if C.engine() is None:
+        pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
+
+    seen = _scar_bands(scar_step=0)
+    assert seen, "the sweep folded nothing; this pin asserts nothing"
+    scarred = {k: v["scar"] for k, v in seen.items() if v["alive"] and v["scar"]}
+    assert not scarred, (
+        f"the control arm wrote a scar: {scarred}. `scar_step=0` must reproduce the pre-item tree "
+        "exactly, or this item moved a golden it claims not to have")
+    # AND THE EVENT STREAM IS UNMOVED TOO -- `scar.taken` is deliberately NOT in this verb's
+    # `emits:`, because an `emits:` cell fires per BAND from the table rather than per write, so
+    # declaring it would report a scar on every wound including at this arm, where none is taken.
+    for band, v in seen.items():
+        assert "scar.taken" not in v["kinds"], (
+            f"band {band!r} emitted `scar.taken` at the control arm, reporting a scar that was "
+            "not written -- the `ID-9` defect this row's own `emits:` note names")
+
+
+def test_lb6e_a_verb_that_engages_no_axis_scars_nothing():
+    """THE CONTROL ON THE MECHANISM, not on the magnitude (§0.1 pt 4). `_scar` keys off
+    `ALIGNMENT`, so a verb with no engaged axis must leave no scar even at a large step. Without
+    this, `_scar` could be scarring every axis unconditionally and the test above -- which only
+    checks the keys it DOES find -- would not see it."""
+    from ..data.rosters import CONVICTION_AXES
+    from ..loop.effects import _scar
+    from ..state.carriers import Person
+
+    w = P.tiny_world()
+    w.fixtures = w.fixtures.sweep("scar_step", 10)
+    p = Person(id="p_test")
+    _scar(w, p, "no_such_verb_engages_no_axis")
+    assert p.scar == {}, (
+        f"a verb engaging no axis still scarred {p.scar} -- `_scar` is not reading ALIGNMENT, it "
+        "is writing every axis unconditionally")
+    # AND THE POSITIVE ARM, so this is not a test that passes because `_scar` never writes.
+    engaged = [ax for ax in CONVICTION_AXES if ALIGNMENT_OF("kill / wound", ax)]
+    if engaged:
+        q = Person(id="p_test2")
+        _scar(w, q, "kill / wound")
+        assert q.scar, "`_scar` wrote nothing for a verb that DOES engage an axis; the negative "\
+                       "arm above proves nothing on its own"
+
+
+def ALIGNMENT_OF(verb, axis):
+    from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
+    return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))

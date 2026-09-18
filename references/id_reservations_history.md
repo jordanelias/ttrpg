@@ -87,6 +87,32 @@ BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0036-0039 RES
 
 ## IN — Infrastructure / cross-cutting
 
+### 2026-09-17/18 — `ED-IN-0246..0249`, and a two-unmerged-branches allocation
+
+- **`ED-IN-0246`** — the governance/settlements/decisions execution pass: item 16 landed, items 1
+  and 4 measured and held.
+- **`ED-IN-0247`** — item 3b, a body finally falls, shipped at its control arm.
+- **`ED-IN-0248`** — phase-6 item **6d**, the `beneficiary:` column closing `CAT-2`. ⚠ This read
+  *"the `0248` slot"* while PR #416 was unmerged, because a citation whose ledger row this tree did
+  not carry is what `tools/validate_ed_citations.py` calls NONEXISTENT — and it was right to. #416
+  merged first, so the row is here and the citation is spelled properly again.
+- **`ED-IN-0249`** — phase-6 item **6e**, `(Person, scar[axis])`, the first write to any `Person`
+  interior field.
+
+⚠ **`0248` AND `0249` WERE ALLOCATED ON TWO SEPARATE BRANCHES, NEITHER MERGED, AND THAT IS §4's
+DOCUMENTED HAZARD ARRIVING RATHER THAN A MISTAKE.** Both branches were cut from the same `main`,
+so both read `next_free: 248`. The second branch saw `0248` already taken by the open PR #416,
+took `0249`, and bumped `next_free` to **250** so a third branch cannot re-take either. The same
+collision hit a *section heading* in the same pair of branches — PR #416 holds `§7.3e` of
+`01_THE_BUILD_ORDER.md` and the 6e branch numbered itself `§7.3f` around it.
+
+**The lesson is the one `CLAUDE.md` §4 already states and is worth re-stating with a second
+instance: renumbering to `next_free` does not escape a collision, because every live branch
+renumbers to the same `next_free`.** What worked here was reading the OTHER branch's claim before
+allocating, which is discipline and not a mechanism; `wiring_status.auto_allocation` remains the
+structural fix and remains PARKED.
+
+
 **2026-09-12 — ED-IN-0216 / 0217 / 0218 allocated, and the state-file comment condensed to fit the lane-row
 cap.** `tests/valoria/test_id_reservations_walkback.py::test_narrative_does_not_creep_back_into_the_state_file`
 caps a lane row at 600 chars; the IN row stood at 593 and the third of these allocations pushed it to 655.

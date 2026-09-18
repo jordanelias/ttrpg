@@ -359,8 +359,8 @@ this file declines to give it one.**
 # §7 · THE EXECUTION PASS — 2026-09-17: **one item landed, two measured and withdrawn**
 
 ## Status of this section: **`measured`, not `paper`** (`CLAUDE.md` §0.2). Every number below was taken on this tree, by the command printed beside it. `§1`–`§6` above remain `paper`.
-## Result in one line: **items 16, 3a, 3b and 6d LANDED** (3b at its control arm) · **item 1 HELD** (its headline claim is false) · **item 4 REVERTED** (it starves the corpus). **The plan is executable. Three of its six run items needed corrections it could not have had by reading; 3a and 6d needed none.**
-## Lane: `IN` · **`ED-IN-0246`** (the execution pass; `§1`–`§6` remain `ED-IN-0243`; **`6d` is `ED-IN-0248`**)
+## Result in one line: **items 16, 3a, 3b, 6d and 6e LANDED** (3b and 6e at their control arms) · **item 1 HELD** (its headline claim is false) · **item 4 REVERTED** (it starves the corpus). **The plan is executable. Most of its run items needed corrections they could not have had by reading — 6e's own first inertness claim was false and a control caught it — and 3a needed none.**
+## Lane: `IN` · **`ED-IN-0246`** (the execution pass; `§1`–`§6` remain `ED-IN-0243`; **`6d` is `ED-IN-0248`**, **`6e` is `ED-IN-0249`**)
 ## ⚠ It is an AMENDMENT to this file, not a fifth plan document. `CLAUDE.md` §0.05 clause 3 — *edit the OWNER and re-derive; never hand-edit downstream, and never keep a second copy.* This file owns THE ORDER, so a correction to the order is made here.
 
 ## §7.1 · Two constraints ruled by Jordan mid-execution, binding on every item below
@@ -890,6 +890,90 @@ number without a control is not a measurement, §0.1 pt 4).
    is this file's reader's, not its author's — recorded because *"as `F` says at `:L`"* is a claim
    like any other (§0.1 pt 3) and this one nearly landed as a false retraction of a true figure.
 
+### §7.3f · ITEM 6e LANDED — the first write to any `Person` interior field in the tree
+
+> ⚠ **THIS IS `§7.3f` AND NOT `§7.3e` BECAUSE 6d TOOK THAT LETTER** (`ED-IN-0248`, the
+> `beneficiary:` column, §7.3e above). Both branches were cut from the same `main` and both
+> would otherwise have taken the next free letter — §4's two-unmerged-branches hazard,
+> arriving on a section heading instead of on an id. Numbered around rather than collided.
+
+**`04 §F.20a` measured the state this ends:** *"no verb writes any `Person` interior field at
+all"*, so every interior consequence was inert — a person left a season morally identical to the
+one who entered it, `choose` scored against a constant, and the epistemic layer had no moral layer
+to disagree with. Six matrix rows carry `[RES] ACTS` licences (`axis_count`, `beliefs`,
+`coherence`, `convictions`, `scar`, `stance`). **MEASURED 2026-09-18: all six had ZERO non-test
+producers.**
+
+## Why `scar` is the one that could be built, and the others still cannot
+
+**It is the only one whose TRIGGER the chain specifies.** `STR-1` closes at step 3 with *a verb at
+RESOLVE writes it* — which settles the STEP and the CLASS for all six and names no verb for any of
+them. §54 item 21 goes further for this row alone, and the sentence is worth quoting because it is
+an **amendment to the design document, not a reading of it**:
+
+> *"the source says **written at WITNESS**, which breaks two things — the moral layer's WITNESS row
+> is nothing, and a scar written there is an Event writing a `(Person, …)` social row, which is L4.
+> **Lawful form: a `(Person, scar[axis])` row, `social: true`, written at RESOLVE in the ACTS class
+> BY THE OUTCOME THAT NAMES THE PERSON**; `axis` on L3's closed registry; crisis is an L5 edge that
+> rewrites an option set and never rolls an outcome"*
+
+So `conviction_track_v1.md` §2 — the mechanic's own design home — has its trigger table (*scars
+accrue from **witnessing** morally-loading events*) as **precisely the part that may not be
+implemented**, because S9.3 (*"WITNESS NEVER TOUCHES A BELIEF"*) forbids it. §0.05 decides between
+them without argument: the matrix is mechanism, the quarantined design doc is reference.
+
+| | |
+|---|---|
+| **the field** | `Person.scar`, a **bare dict**. `matrix_rows_without_a_field()['absent']` listed this row until today (`formal_analysis.md` C3) |
+| **the producer** | `_scar` in `loop/effects.py`, called from `_eff_kill` on the bands whose outcome names the person |
+| **the axes** | read from **`ALIGNMENT`**, the existing single owner of *which axes a verb engages*. §8: no second table is authored, so none can disagree with what `choose` scores against |
+| **the magnitude** | `Fixtures scar_step`, **`H-128`**, swept `0 / 1 / 10`, **shipped at 0** |
+
+## EXECUTED — the real road, 24 act ids, all three bands
+
+```
+scar_step=0    Felled: removed   Wounded: scar {}                Untouched: scar {}
+scar_step=10   Felled: removed   Wounded: scar {'sacred': 3.0}   Untouched: scar {}
+```
+
+## ⚠⚠ THE INERTNESS CLAIM THIS ITEM FIRST MADE WAS FALSE, AND A CONTROL CAUGHT IT
+
+It said `TRACE.txt` **and** `results.json` come back byte-identical. **A clean `origin/main`
+worktree running the same seed disproved it in one command:** `World.content_hash` digests a
+dataclass as `repr(obj)`, which lists **every declared field**, so `Person` *gaining a field* moves
+every person's digest whatever its value — `ff5c5765f4d2` → `ab77c30d273b`.
+
+**What is true is narrower, and is now what every surface claims:** `TRACE.txt` **is**
+byte-identical, so **no behaviour changes**; the entire re-record is **two lines** — `ASSUMPTIONS.md`
+gains the fixture (exactly as `H-125` did) and `results.json`'s A5 row carries a new log hash **with
+its verdict still PASS**. The error was caught only by **building** the control rather than
+reasoning about it, which is §0.1 pt 3 row 4 in one sentence: *check the run happened.* Anyone
+adding a carrier field after this should expect the same move and budget the re-record.
+
+## Why the magnitude parks — and it is a DIFFERENT reason from `H-125`'s
+
+Not that the corpus cannot answer, but that **nothing reads `scar`.** Item 21 names its reader —
+the Conviction crisis — and puts it at **L5**, out of this item. **A magnitude tuned against no
+reader is tuned against nothing**, and the number that matters is the one at which a crisis fires,
+which cannot be chosen before the crisis exists.
+
+## Three things named rather than inherited
+
+1. **Depth is assumed PROPORTIONAL** to the verb's alignment with the axis. Item 21 gives the row,
+   the step, the class and the keying; it gives no formula. A flat scar on every engaged axis is
+   the arm a sweep would compare.
+2. **The person scarred is the SUBJECT, and that is a reading.** *"The outcome that names the
+   person"* reads naturally as the one wounded — but the **actor** carrying the moral wound of
+   having done it is at least as defensible on the mechanic's own *moral wound* framing, and item
+   21 does not settle it.
+3. **MEASURED LIMIT: `kill / wound` engages exactly ONE of four axes** in `ALIGNMENT` (`sacred`), so
+   the scar is narrow. That is the table's sparseness — 52 of 152 cells — and not this item's.
+
+⚠ **AND IT SURVIVES `STR-2`, DELIBERATELY.** The moral-value axes become `memory · substantive ·
+equity · selfish`, so `scar`'s key set is about to be replaced. It ships as an **empty dict** and
+`_scar` reads the roster, so it inherits the new basis **by never having known the old one** — the
+one design constraint this item took from an unbuilt one.
+
 ## §7.4 · What this pass changes about the ORDER
 
 | | was | is |
@@ -944,7 +1028,7 @@ rulings, not chosen.
 | **6b** | **Rename the moral-value basis**, which `STR-6` forces by reserving `conviction` | atomic with 6a and with 6c: 40 Python files, 60 YAML/JSON, 107 design docs by the register's own count. **Doing it separately means doing it twice** | `references/names_index.yaml` is the TERMS owner; the rename derives |
 | **6c** | **Re-author the thirteen and their projection** onto `memory · substantive · equity · selfish` (`STR-2`, and *"the thirteen are not right for what i need from the game anymore"*) | `_load_projection`/`_load_alignment` raise at module scope, so **the projection and its alignment table must both exist before first import** — migration is atomic | `rosters.yaml: tables` — `conviction_projection`, `alignment` |
 | **6d** | ✅ **LANDED 2026-09-18 (`ED-IN-0248`) — see §7.3e.** **`benefits_me(c)`'s beneficiary** — `CAT-2` closed: a **static column on `verb_table.yaml`** resolving to a carrier the Candidate already holds, explicitly **not** a fifth operand field | independent of 6a–6c and buildable today; a static column never touches `_derive_operand`. ⚠ **The row was right that it is independent and right that it is cheap; it did not price the one thing that could have made it vacuous** — a declared carrier real candidates never hold. Measured: 0 such, and a loader invariant now forbids them | `verb_table.yaml`, one column — **built there** |
-| **6e** | **The person-interior writers** — `press`, `scar`, the needs counter, regard. `STR-1` closed at step 3: **a verb at RESOLVE writes them**, as the matrix already prescribes | the six `[RES] ACTS` rows are *a licence nobody has taken up, not a prohibition*. Buildable today | effects in `loop/effects.py`; the magnitudes are **`Fixtures`**, swept |
+| **6e** | ⚠ **PARTLY LANDED 2026-09-18 (`ED-IN-0249`) — `scar` ONLY, see §7.3f. AND THIS ROW NAMES FOUR THINGS OF WHICH ONLY ONE IS A MATRIX ROW:** `scar` is `(Person, scar)` at `[RES] ACTS`; `press`, the needs counter and `regard` are `synthesis.md` §1.3 SCORE TERMS, not licensed writes, so they are a different object and are not covered by `STR-1`'s licence. The five interior rows still without a producer are `axis_count`, `beliefs`, `coherence`, `convictions`, `stance` — and **none of their triggers is specified anywhere**, which is what made `scar` buildable and them not. **The person-interior writers** — `press`, `scar`, the needs counter, regard. `STR-1` closed at step 3: **a verb at RESOLVE writes them**, as the matrix already prescribes | the six `[RES] ACTS` rows are *a licence nobody has taken up, not a prohibition*. Buildable today | effects in `loop/effects.py`; the magnitudes are **`Fixtures`**, swept |
 | **6f** | **The score function itself** — `pull(c) − cost(c)`, the three instantiations of one machine (`synthesis.md` §1.2) | needs 6a–6e's vectors and tables to have anything to dot against | **`decision/choose.py`, behind `make_chooser`. §7.1(b) binds here and nowhere harder** |
 | **6g** | **H-71's SECOND half** — `CAT-6`'s ruling closes the holder's own knowledge of his remit (arm 2, the `hold` Tenure's `payload`) and says **nothing** about how another person comes to know or contest someone else's seat | it is the `others` half of *"understand for themselves AND be understood by others"*, and it is **open by the ruling's own words**, not by omission | rides the content channel: a claim, not a field |
 

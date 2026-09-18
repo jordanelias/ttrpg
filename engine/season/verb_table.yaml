@@ -334,9 +334,20 @@ verbs:
     # a decisive win from a narrow one beyond wound count on the VICTOR, so a fourth band
     # (Overwhelming vs Success) has no source in the data. It is NOT invented here. The three
     # bands below are the ones the scene can distinguish.
+    # ⚠ `Person.scar` ADDED TO BOTH SURVIVING-OUTCOME BANDS 2026-09-18 (`ED-IN-0249`, §54 item 21
+    # — *"written at RESOLVE in the ACTS class BY THE OUTCOME THAT NAMES THE PERSON"*). It is on
+    # `Felled` as well as `Wounded` because the write is declared by the BAND, and `_eff_kill`
+    # runs `_scar` before the person is removed; declaring it only on `Wounded` would make the
+    # table say a felling cannot scar, which is a claim about the moral layer rather than about
+    # this item. At the shipped `scar_step = 0` neither branch writes anything.
+    # ⚠ AND `scar.taken` IS DELIBERATELY NOT ADDED TO `emits:` BELOW. The matrix names that kind
+    # for the row, but an `emits:` cell fires PER BAND from the table, not per write, so adding it
+    # would report a scar on every wound including at the control arm where none is taken — the
+    # exact `ID-9` defect the flat `person.died` above was, in the same row, one column across.
+    # The kind lands with the magnitude that makes it true.
     writes:
-      Felled:       ["Person.body", "Person.exists", "Tenure.until"]
-      Wounded:      ["Person.body"]
+      Felled:       ["Person.body", "Person.exists", "Tenure.until", "Person.scar"]
+      Wounded:      ["Person.body", "Person.scar"]
       Untouched:    []
     writes_grade: "ruled -- the SPLIT is read from scene combat (Jordan 2026-09-03); H-98 keeps only the question of whether a decisive win is distinguishable from a narrow one, which the engine currently does not answer. ⚠ EXECUTED 2026-09-04 (`W-E`): all three branches now run end to end through `SeasonDriver.resolve` -> `contest()` -> `combat_seam` -> `wrapper.fight`, and their consequences differ -- Felled deletes the subject and emits `person.died`, Wounded leaves them alive with a lower body and emits `body.changed`, Untouched writes nothing and emits `contest.undecided`. Falsifier: `test_we_a_contested_acts_consequence_differs_by_degree`."
     writes_source: "combat_seam.resolve -> wound_state[THE ACT'S SUBJECT]: felled | wounds. ⚠ CORRECTED 2026-09-04 BY `W-E`, AND THE OLD CELL SAID `wound_state[loser]`, WHICH WOULD KILL THE WRONG PERSON. This verb's writes land on `payload[\"subject\"]` (`_eff_kill`), so if the ACTOR is the one felled, reading `[loser]` selects the `Felled` branch and the fold deletes the TARGET -- who is standing. The band is read off the person the writes land on. `health_remaining`/`health_full` are still read, but for the MAGNITUDE (`wound_harm_model`, `H-123`), not for the band."

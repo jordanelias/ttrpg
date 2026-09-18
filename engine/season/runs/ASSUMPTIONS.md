@@ -54,3 +54,4 @@ exercised by this run.**
 | `default_transfer_amount` | `1` | no — a harness fixture |
 | `body_step` | `0` | no — a harness fixture |
 | `wound_harm_model` | `scene_fraction` | no — a harness fixture |
+| `scar_step` | `0` | no — a harness fixture |
