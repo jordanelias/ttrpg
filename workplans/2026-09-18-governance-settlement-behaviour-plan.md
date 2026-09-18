@@ -161,16 +161,72 @@ in the tree dangles.
 
 ---
 
+### 3.0 · THE PER-STEP CADENCE — RULED by Jordan, 2026-09-18
+
+*"at end of each step i expect a /code-review and /simplify to run followed by fixes then a forward
+sweep to see how it impacts stuff"*
+
+**One step = one position (or sub-position) = one commit.** Five phases, in order, every time:
+
+| # | phase | what it is |
+|---|---|---|
+| 1 | **BUILD** | the position's change, and nothing else. No widening. |
+| 2 | **`/code-review`** | the native fresh-context reviewer, which never saw the reasoning. Read the findings, then **apply** them. Verify each before applying — a review finding is a bug report, not a verdict. |
+| 3 | **`/simplify`** | reuse · simplification · efficiency · altitude. Quality only; it does not hunt bugs. |
+| 4 | **FORWARD SWEEP** | below — the phase with the least established meaning, so it is defined rather than named. |
+| 5 | **CLOSE** | `tools/valoria_local.py --staged`, the lane validator, **the full suite ONCE** (`§0.4` — it is a shipping gate, and the unit being shipped is this commit), then the `[scope]` commit citing its `PP`/`ED`. |
+
+⚠ **`§0.4` IS NOT SUSPENDED BY THIS CADENCE.** `/code-review` and `/simplify` are not pytest. The
+inner loop stays the one file covering the edit; the full suite runs once, at phase 5. A step that
+re-runs the suite after each fix pays 3.5× for the same verdict.
+
+**FORWARD SWEEP — the definition, because it is a coinage and `§4` requires it survive the session
+reset.** *What did this change reach that nobody asked it to?* Five checks, each with an artifact:
+
+1. **The instruments.** `python -m engine.season.harness.register --requirements` · `corpus_run` ·
+   `python tools/m1_acceptance.py --summary`. **Did any row move, and is every move the intended
+   one?** An unintended move is the finding.
+2. **The hole register.** Did this close, narrow or widen a row — and does its falsifier now behave
+   as the row predicts? A row whose falsifier did NOT flip when the code says it should have is the
+   most valuable thing this sweep can catch.
+3. **The call sites.** Grep the changed symbol's callers, not its declaration (`§0.1` pt 3 row two:
+   *a roster existing is not a roster being used*).
+4. **Figures the change just made stale.** Any `measured:` block, `cite:` field, handoff or plan row
+   quoting a number this step moved. **This is the defect this repository pays for most** — `§0.1`
+   pt 3 row four — and a sweep that skips it hands the next session a confident wrong number.
+5. **The goldens.** Did anything output-moving change, and was a re-record INTENDED? `§7`: nothing
+   verifies a golden re-pin was deliberate, so say so plainly when one happens.
+
+**The sweep's output is edits plus at most one paragraph in the commit message** (`§0`'s
+adversarial-pass bound). It creates no document and no directory. A finding that needs no ruling is
+fixed in that commit or dropped.
+
 ### 3.1 · ⭐ START HERE — the next three, in order
 
-**1. Position `13b` — H-71's remit read.** A ~2-line read of `Tenure.payload`, licensed today by
-`write_matrix.yaml:336-342`. **Tier 0, `grade: absent`, and it unblocks 9 of 38 verbs** — every
-governance verb is unformable person-side because `person_side_eligible` declines every `remit:`
-alternative unconditionally, even where the actor holds the office. Its falsifier is already in the
-tree and goes RED the day the hole closes:
-`test_no_person_can_choose_a_governance_verb_and_h71_is_why`. **No ruling needed.** `CAT-6`'s arm-2
-ruling decoupled it from the Record-kind fold, so the old dependency on position 15 is spent. Best
-cost-to-unlock ratio in the plan.
+**1. Position `13b` — H-71's remit grant.** Tier 0, `grade: absent`, `owner: unassigned`. Today
+`person_side_eligible` (`engine/season/decision/options.py:107`) reaches its `remit` branch, emits a
+`TRACE.note` and falls through to `return False`, so **every governance verb is unformable
+person-side even where the actor holds the office whose remit names the act.** Its falsifier is
+already in the tree and goes RED the day the hole closes:
+`test_no_person_can_choose_a_governance_verb_and_h71_is_why`. **No ruling needed** — `CAT-6` ruled
+arm 2, which decoupled this from the Record-kind fold, so the old dependency on position 15 is spent.
+
+⚠⚠ **IT IS NOT A ~2-LINE READ, AND THE PLAN SAID SO UNTIL THE CODE WAS OPENED (2026-09-18).** The
+build order's *"a ~2-line read of `Tenure.payload`"* describes **one half of a two-half arm.** H-71's
+own sweep, arm 2, verbatim: *"THE GRANT RIDES ON THE TENURE — **`confer` writes** the office's remit
+acts into the `hold` Tenure's `payload`, **and `person_side_eligible` reads** them there."*
+
+**The read alone ships another `DONE·INERT`.** With no writer, the payload is absent on every live
+`hold` Tenure, the new branch admits nobody, and the falsifier stays green while the code looks
+finished — the exact shape `3b` is in (§3.3). **So `13b` is: the `confer` effect writes the grant,
+the eligibility branch reads it, and the falsifier flips. Three things, one commit.**
+`write_matrix.yaml:336-342` licenses `Tenure.payload` at `[RES] ACTS`, which is where `confer`'s
+effect runs, so the write is licensed where it needs to be.
+
+⚠ **AND RE-MEASURE THE UNLOCK BEFORE QUOTING IT.** H-71's `unblocks:` reads *"9 of 32 verbs"*; the
+verb table is now **38** rows, so that figure predates two landings. `§0.1` pt 3 row four. Take it
+with `person_side_eligible` over the roster — the same instrument the aperture gate names — not from
+this line.
 
 **2. Position `2` — RET-SC.** Ruled 2026-09-06 and unexecuted since. It is subtraction — 47 files,
 1.2 MB — and it is the one position whose cost only grows, because 20+ inbound reference sites outside
@@ -209,7 +265,7 @@ single blocker in the plan.**
 | **12c** | **6c — THE THIRTEEN** | IN | re-author the thirteen and their projection onto `memory · substantive · equity · selfish` | **JORDAN** | **R3 — the cells.** Atomic with 12b/12d: `_load_projection`/`_load_alignment` raise at module scope, so both tables must exist before first import |
 | **12d** | **6b — THE RENAME** | IN | rename the moral-value basis, which `STR-6` forces by reserving `conviction` | **JORDAN** | **restore `tools/valoria_rename.py` from `FORK:1e4c6f4`, or accept a hand sweep of 29 Python files / 308 occurrences / 51 YAML-JSON / 12 live `.md`.** See §3.5 — the stated "it derives" mechanism does not exist |
 | 13 | **W28-cast** | IN | author the `cast:` blocks and their reader, same commit | **OPEN** | — ⚠ use the harness loader's count, never a grep (§6's GAP) |
-| **13b** | **H-71** | IN | `person_side_eligible` reads the `hold` Tenure's `payload` instead of declining every `remit:` alternative. **Absorbs the gather's `13c`** | **OPEN** ⭐ | — **START HERE.** Tier 0; 9 of 38 verbs; falsifier in-tree |
+| **13b** | **H-71** | IN | **BOTH HALVES OF ARM 2, or it ships inert:** `confer`'s effect WRITES the office's remit acts into the `hold` Tenure's `payload`, and `person_side_eligible` (`decision/options.py:107`) READS them there instead of falling through to `return False`. **Absorbs the gather's `13c`** | **OPEN** ⭐ | — **START HERE.** Tier 0. ⚠ the `unblocks:` figure *"9 of 32"* predates a 38-row table — re-measure, do not quote |
 | **13d** | **10 — OFFICES** | IN | `offices.yaml` — bases as rostered values · both predicates rewritten · four title helpers + `is_title` + the `titles` roster deleted · holders seated · purview corrected | **OPEN** | — its two build-order deps are spent: item 16 is DONE, item 4 is REVERTED |
 | 14 | **U7-own** | IN | the eight `own`-eligibility verbs, in antonym pairs; distinct operands; `Candidate.why` | **OPEN** | 12, 13 |
 | 15 | **Record-kind fold** | IN | Petition/Dispensation become kinds of `Record`; `record_kinds` + its refusal; `issue`/`petition` bodies; 2 matrix rows and 2 `World` dicts deleted; the deposit rule; then `petition` + `carry`. **≡ build-order item 5 — SAME WORK, TWO NUMBERS (§3.5)** | **OPEN** | 11a. **The largest single item in the plan; everything in `15a`–`15c` hangs off it** |
