@@ -1,0 +1,264 @@
+# CONVICTION + MORAL BASIS — Jordan's authoring surface
+#
+# STATUS: WORKSHEET. Not a proposal, not canon, ratifies nothing. It exists so the CELLS are
+# in front of you instead of statistics about them. Type values here; they get written to the
+# OWNERS below and this file is then deleted. It holds no fact of its own (CLAUDE.md §0.05 cl.3).
+#
+# OWNERS the values land at:
+#   affiliations + incompatibility -> references/descriptor_registry.yaml (roster) + engine/season/rosters.yaml (table)
+#   moral basis axes + rows        -> references/descriptor_registry.yaml (conviction_roster, axis_roster)
+#   the 13xN projection            -> engine/season/rosters.yaml tables.conviction_projection
+#   the verb x axis alignment      -> engine/season/rosters.yaml tables.alignment
+#
+# RULINGS THIS SERVES (2026-09-18, in session, NOT YET RECORDED IN THE TREE):
+#   R1  `conviction` is reserved for RELIGIOUS AFFILIATION AND INTENSITY. A vector over
+#       affiliations; confliction DERIVED from an incompatibility relation, never stored. (= STR-6)
+#   R2  `Truth` IS NOW `Conviction`. ED-IN-0075's 0-5 pole (Solmund-orthodoxy <-> Thread-truth,
+#       CURRENT.md:31, ruled 'DISTINCT and unchanged') is ABSORBED. Its two poles stop being ends
+#       of one axis and become two affiliations a person can hold at full intensity at once —
+#       which is the case a pole scalar structurally could not express.
+#   R3  The cells are yours.
+
+# ============================================================================
+# 1. THE RELIGIOUS CONVICTION VECTOR  (R1 + R2).  NOTHING OF THIS EXISTS TODAY.
+# ============================================================================
+# Measured 2026-09-18: no affiliation roster, no incompatibility relation, and
+# `church_standing` is one string in a claim-predicate values list (rosters.yaml:312) that
+# nothing reads. The only religious FACTION is 'Church of Solmund'.
+#
+# CANDIDATES BELOW ARE DRAWN FROM canon/, not invented — cited so you can reject on the source.
+# Strike what you don't want, add what's missing, set nothing else.
+
+affiliations:
+  - name: solmund_orthodoxy
+    canon: "canon/00_philosophical_foundations.md:241,257"
+    gloss: "the outer tradition — Church institutional theology; the perceptual prophylaxis as received doctrine"
+    keep: ~            # true / false
+  - name: inner_tradition
+    canon: "canon/00_philosophical_foundations.md:283-285"
+    gloss: "within the Church; thread-sensitive; preserves ontological knowledge as poetry and practice, not propositional doctrine"
+    keep: ~            # true / false
+  - name: threadwork
+    canon: "canon/00_philosophical_foundations.md:263-265"
+    gloss: "active practice — suspension of all grounding in order to touch threads"
+    keep: ~            # true / false
+  - name: einhir_revival
+    canon: "canon/03_canonical_timeline.md:22; canon/02_canon_constraints.md:71"
+    gloss: "Varfell; the pre-Calamity civilisation's working restored"
+    keep: ~            # true / false
+  - name: altonian_theocracy
+    canon: "canon/02_canon_constraints.md:71"
+    gloss: "Hafenmark-aligned; a rival ecclesiastical polity"
+    keep: ~            # true / false
+
+# INTENSITY — what a person's per-affiliation number means. Truth was 0-5 with players seeing
+# qualitative bands only (ED-IN-0075). A vector can keep that or not; your call.
+intensity:
+  scale: ~                 # e.g. '0-5' (Truth's, inherited) or '[0,1]' or '0-3'
+  player_sees: ~           # 'bands' (Truth's ruling) or 'number'
+  bands: ~                 # if bands: name them, lowest first
+
+# INCOMPATIBILITY — the relation confliction is DERIVED from. Fill the half-matrix.
+# true  = holding BOTH at high intensity puts the person in religious confliction
+# false = compatible; a person may hold both without strain
+incompatible:
+  solmund_orthodoxy + inner_tradition: ~
+  solmund_orthodoxy + threadwork: ~
+  solmund_orthodoxy + einhir_revival: ~
+  solmund_orthodoxy + altonian_theocracy: ~
+  inner_tradition + threadwork: ~
+  inner_tradition + einhir_revival: ~
+  inner_tradition + altonian_theocracy: ~
+  threadwork + einhir_revival: ~
+  threadwork + altonian_theocracy: ~
+  einhir_revival + altonian_theocracy: ~
+
+# ⚠ THE ONE PAIR THAT IS YOUR OWN WORKED EXAMPLE: solmund_orthodoxy + threadwork. You said
+#   'devoutly Solmund but also believes in Threadwork and therefore experiences religious
+#   confliction' — so that pair is `true` unless you now say otherwise. Every other cell is open.
+
+# ============================================================================
+# 2. THE MORAL-VALUE BASIS — rows AND columns are both open (STR-2)
+# ============================================================================
+# STR-6 forces a rename: `conviction` now belongs to religion, so the moral basis needs a name.
+# STR-6 says explicitly this is NOT ruled and is not an agent's to pick.
+moral_basis_name: ~        # what the 13-roster becomes. `values` is free; `temperament`,
+                           # `disposition`, `creed`, `belief` are all taken elsewhere in the tree.
+
+# THE AXES. STR-2 ruled these four (the set you placed and scored 2026-09-16). Change them here
+# if you want them changed — the ruling is a starting point, not a cage.
+moral_axes:
+  - memory
+  - substantive
+  - equity
+  - selfish
+
+# ⚠ TWO PROBLEMS WITH THAT SET, both mine to flag and yours to settle:
+#   `equity` is ALSO one of the thirteen rows (below), so the row is nearly its own column —
+#      its cell reads 0.9 against itself.
+#   `selfish` duplicates `orient · benefits_me(c)`, which PR #416 built on 2026-09-18.
+#      conviction_taxonomy_v30.md §2.3 factored self/other OUT of the thirteen on purpose
+#      (registered at descriptor_registry.yaml:296, orient.self_other, [-1,+1]).
+#      Keeping both means self-interest enters the score twice.
+
+# THE ROWS. You said 'the thirteen are not right for what i need from the game anymore'.
+# Strike, rename, add.
+moral_rows:
+  - Faith
+  - Authority
+  - Order
+  - Scholastic
+  - Utility
+  - Equity
+  - Liberty
+  - Precedent
+  - Community
+  - Identity
+  - Warden
+  - Virtue
+  - Honor
+
+# THE GRID. Both existing placements are shown so you edit rather than start blank.
+#   live_*  = what the engine scores against TODAY (rosters.yaml tables.conviction_projection,
+#             transcribed from conviction_axis_matrix_v30.md §2)
+#   cand_*  = the 2026-09-16 placement on your four axes (candidate_basis_v1.json — its own header
+#             says 'one placement, not a canon change'). Every cell of it is a placement of a row
+#             you may be deleting, so treat it as a starting sketch, not a migration.
+#   set_*   = YOURS. This is the column that lands.
+projection:
+  Faith:
+    live: {traditional: +0.6, sacred: +0.9, instrumental: -0.3, hierarchical: +0.4}
+    cand: {memory: +0.4, substantive: -0.3, equity: +0.2, selfish: -0.1}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Authority:
+    live: {traditional: +0.4, sacred: +0.2, instrumental: +0.1, hierarchical: +0.9}
+    cand: {memory: +0.4, substantive: -0.2, equity: -0.3, selfish: +0.0}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Order:
+    live: {traditional: +0.4, sacred: -0.1, instrumental: +0.2, hierarchical: +0.5}
+    cand: {memory: +0.2, substantive: -0.9, equity: +0.4, selfish: +0.0}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Scholastic:
+    live: {traditional: -0.1, sacred: +0.2, instrumental: +0.3, hierarchical: +0.1}
+    cand: {memory: +0.2, substantive: -0.5, equity: +0.4, selfish: +0.0}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Utility:
+    live: {traditional: -0.4, sacred: -0.5, instrumental: +0.9, hierarchical: -0.1}
+    cand: {memory: -0.7, substantive: +0.9, equity: +0.0, selfish: +0.0}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Equity:
+    live: {traditional: -0.2, sacred: +0.2, instrumental: -0.2, hierarchical: -0.4}
+    cand: {memory: -0.3, substantive: +0.6, equity: +0.9, selfish: -0.2}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Liberty:
+    live: {traditional: -0.5, sacred: -0.2, instrumental: +0.1, hierarchical: -0.7}
+    cand: {memory: -0.3, substantive: +0.2, equity: +0.3, selfish: +0.1}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Precedent:
+    live: {traditional: +0.9, sacred: +0.4, instrumental: -0.4, hierarchical: +0.3}
+    cand: {memory: +0.9, substantive: -0.5, equity: +0.2, selfish: +0.0}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Community:
+    live: {traditional: +0.5, sacred: +0.3, instrumental: -0.2, hierarchical: +0.0}
+    cand: {memory: +0.3, substantive: +0.3, equity: -0.5, selfish: -0.2}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Identity:
+    live: {traditional: +0.6, sacred: +0.2, instrumental: +0.0, hierarchical: +0.4}
+    cand: {memory: +0.5, substantive: +0.0, equity: -0.9, selfish: +0.0}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Warden:
+    live: {traditional: +0.4, sacred: +0.4, instrumental: -0.1, hierarchical: +0.5}
+    cand: {memory: -0.3, substantive: +0.6, equity: -0.3, selfish: -0.5}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Virtue:
+    live: {traditional: +0.3, sacred: +0.4, instrumental: -0.5, hierarchical: +0.2}
+    cand: {memory: +0.1, substantive: +0.4, equity: +0.3, selfish: +0.2}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+  Honor:
+    live: {traditional: +0.8, sacred: +0.4, instrumental: -0.7, hierarchical: +0.5}
+    cand: {memory: +0.6, substantive: -0.5, equity: -0.3, selfish: +0.1}
+    set:  {memory: ~, substantive: ~, equity: ~, selfish: ~}
+
+# ============================================================================
+# 3. ALIGNMENT — verb x axis. THE OTHER HALF, and I had only ever shown you stats on it.
+# ============================================================================
+# The 13xN says what a person CARES about. This says what a VERB IS WORTH on an axis. The score
+# term is the dot product of the two, so a perfect projection against a sparse alignment table
+# still scores nothing. Live: 52 cells over 31 of 38 verbs, 17 of them negative.
+#
+# ⚠ IT IS KEYED ON THE LIVE AXES. Changing the moral axes above means re-authoring THIS table in
+#   the same commit — _load_projection and _load_alignment both raise at module scope, so a
+#   13xN projection and its NxM alignment must exist before first import. There is no half-state.
+alignment_live:
+  traditional:
+    confer: +0.4
+    create_record: +0.8
+    destroy_record: -1.0
+    evade / defy: -0.5
+    oblige: +0.3
+    open_case: +0.4
+    reconstruct: +0.4
+    release: -0.3
+    repudiate: -0.5
+    research: +0.7
+    succeed: +0.6
+    tie / knot: +0.5
+  sacred:
+    commit: +0.7
+    confer: +0.5
+    destroy_record: -0.3
+    establish: +0.3
+    evade / defy: -0.3
+    forge: -0.5
+    kill / wound: +0.3
+    oblige: +0.4
+    repudiate: -0.6
+    surveil: -0.3
+    tie / knot: +0.7
+    utter: +0.8
+  instrumental:
+    commit: -0.8
+    comply: +0.5
+    evade / defy: +0.7
+    exchange: +0.6
+    forge: +0.8
+    interview: -0.3
+    move: +0.5
+    reconstruct: +0.4
+    refract: +0.7
+    research: +0.3
+    surveil: -0.8
+    transfer: +0.6
+    utter: -0.7
+    work: +0.4
+  hierarchical:
+    comply: +0.6
+    confer: +0.8
+    destroy_record: -0.4
+    determine: +1.0
+    dispatch: +0.5
+    establish: +0.7
+    evade / defy: -0.9
+    issue: +0.6
+    levy: +0.6
+    open_case: +0.5
+    petition: +0.4
+    repudiate: -0.5
+    revoke: +0.7
+    surveil: -0.3
+
+# ⚠ 7 VERBS HAVE NO CELL ON ANY AXIS. The moral term is exactly 0.0 for every
+#   candidate on these, so the score falls back to stance + urgency:
+verbs_with_no_moral_weight:
+  - carry
+  - convene
+  - examine
+  - restore
+  - speak
+  - tell
+  - thread_read
+#   `speak` and `tell` are in that list. The moral layer currently says nothing about testimony —
+#   the channel the whole epistemic layer runs on (measured: 580 claims, 100% firsthand, tell
+#   resolving 9 times and depositing 0).
+
+alignment_set: ~           # your cells, once the axes above are settled
