@@ -465,8 +465,26 @@ third_axis_set_verdict: ~   # 'take warrant/facing/purity' | 'keep memory/substa
 #     has a question, exactly ONE left        0   <- decided by exclusion alone
 #     has a question, two or more            46   <- median 28 candidates each
 #
-# SO THE DILEMMA DETECTOR WOULD FIRE ZERO TIMES ON THE WORLD AS IT STANDS. Not because the
-# mechanism is wrong — because THE APERTURE IS TOO WIDE TO EMPTY ANYONE. Same aperture fact already
+# ⚠ AND "FIRES ZERO TIMES" UNDERSTATED THE DOCKET — CORRECTED 2026-09-18 ON A RULING THAT THE
+# BEST DESIGN WINS, WHICH MAKES THE COMPARISON HAVE TO BE FAIR. Zero-today is not unreachable, and
+# the honest figure is HOW MUCH EXCLUSION IT WOULD TAKE. MEASURED (probe arm 3):
+#
+#     candidates per person       min 28   median 28   max 28
+#     distinct VERBS per person   min 28   median 28   max 28
+#     distinct SUBJECTS per person min 1   median  1   max  1
+#
+# ⚠⚠ THE APERTURE IS A CONSTANT FUNCTION OF THE PERSON ON THIS WORLD — identical verb count and
+# identical subject count for all 46. So NEITHER clause 2 (`eligibility`) NOR clause 4 (known-false
+# from the person's own claims) discriminates between anybody, and every difference between two
+# people's behaviour comes from the SCORE or from which single subject they were handed. That is a
+# finding about the INCUMBENT, not the challenger.
+#
+# AND IT REFRAMES THE DILEMMA ENTIRELY: the set empties PER QUESTION, and the referent set is ONE.
+# So Prohibition must beat 28 VERBS TOWARD ONE TARGET — not 28 verbs across many targets. That is a
+# real dramatic situation, not an absurd one: *everything I could do to my brother is either
+# forbidden by my oath or beneath me.* A POINTED question makes a dilemma cheap; a broad verb
+# repertoire makes it impossible. **THE DILEMMA RATE IS A PROPERTY OF THE QUESTION AND THE VERB
+# BREADTH, NOT OF THE DOCKET**, and 28 is the number to beat. Same aperture fact already
 # known from the other side: `opening_set` offers every person themselves as a referent for every
 # verb (2,650 of 5,345 candidates carry the actor as their own subject).
 # ⚠ AND IT IS FAIR TO THE DOCKET TO SAY THE REST: the docket BRINGS ITS OWN EXCLUDER. Its
@@ -498,8 +516,9 @@ third_axis_set_verdict: ~   # 'take warrant/facing/purity' | 'keep memory/substa
 #
 # ── THE COMPARISON THAT ARGUES FOR IT, FROM THIS TREE'S NUMBERS NOT THE DOCUMENT'S ──
 # 52 authored cells in `conviction_projection` currently yield SIX distinct top-ranked verbs across
-# 46 people (measured; `2026-09-18-conviction-basis-probe.py`). The docket's six decisive tests
-# give 720 orderings with ZERO authored numbers.
+# 46 people (measured; `2026-09-18-conviction-basis-probe.py`). Of the 28 verbs each person is
+# offered, the sum realizes 6 — **21% of its own available first-act space, on 52 authored cells.**
+# The docket's six decisive tests give 720 orderings with ZERO authored numbers.
 # ⚠ NOT APPLES TO APPLES — 720 is a configuration space, 6 is a realized outcome count, and the
 # honest form of the comparison is weaker: the expensive authored artifact is delivering very
 # little differentiation, and the cheap structural one has a large space to draw on. That is still

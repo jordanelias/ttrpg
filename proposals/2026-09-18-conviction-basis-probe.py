@@ -181,6 +181,59 @@ def _prove_control_fires(w) -> None:
     raise AssertionError("the control assertion is VACUOUS -- it did not fire on a poisoned table")
 
 
+def arm_three_aperture(w) -> None:
+    """HOW FAR IS THE APERTURE FROM EVER EMPTYING? -- the docket's dilemma detector's precondition.
+
+    `decision-procedure-docket.md` §6 makes an EMPTY live set a detected dilemma, and calls that
+    the strongest single argument against a weighted sum. Whether it can ever fire is a property
+    of THIS ENGINE'S APERTURE, not of the docket, so it is measured here rather than argued.
+
+    ⚠ A FIRST READING OF THIS ARM SAID ONLY *"fires zero times"* AND THAT UNDERSTATED THE DOCKET.
+    Zero-today is not the same as unreachable, and the honest figure is HOW MUCH EXCLUSION IT
+    WOULD TAKE. That is what this prints."""
+    fx = w.fixtures
+    rows = []
+    for pid, p in w.persons.items():
+        qs = questions_for(w, p, None)
+        if not qs:
+            rows.append((pid, None, None, None))
+            continue
+        q = qs[0]
+        v = assemble(p, q, fx.get("view_k"))
+        c = opening_set(p, v, q, fx)
+        rows.append((pid, len(c), len({x.verb for x in c}), len({x.subject for x in c})))
+    with_q = [r for r in rows if r[1] is not None]
+    counts = sorted(r[1] for r in with_q)
+    verbs = sorted(r[2] for r in with_q)
+    subs = sorted(r[3] for r in with_q)
+    print("ARM 3 -- THE APERTURE, and whether a live set can EMPTY")
+    print(f"  persons {len(rows)}   with a question {len(with_q)}   no question {len(rows)-len(with_q)}")
+    print(f"  candidates per person   min {counts[0]}  median {statistics.median(counts):.0f}  max {counts[-1]}")
+    print(f"  distinct VERBS per person    min {verbs[0]}  median {statistics.median(verbs):.0f}  max {verbs[-1]}")
+    print(f"  distinct SUBJECTS per person min {subs[0]}  median {statistics.median(subs):.0f}  max {subs[-1]}")
+    print(f"  excluded to EMPTY: {sum(1 for c in counts if c == 0)}   decided by exclusion alone (exactly 1): "
+          f"{sum(1 for c in counts if c == 1)}")
+    print()
+    if counts[0] == counts[-1] and verbs[0] == verbs[-1] and subs[0] == subs[-1]:
+        print("  ⚠⚠ THE APERTURE IS A CONSTANT FUNCTION OF THE PERSON ON THIS WORLD -- identical verb")
+        print("     count, identical subject count, for every person. So NEITHER clause 2")
+        print("     (`eligibility`) NOR clause 4 (known-false from the person's OWN claims)")
+        print("     discriminates between anybody here, and every difference between two people's")
+        print("     behaviour must come from the SCORE or from which single subject they were given.")
+        print()
+    print(f"  WHAT A DILEMMA COSTS: the set empties PER QUESTION, and the referent set is "
+          f"{statistics.median(subs):.0f}.")
+    print(f"  So Prohibition must beat {statistics.median(verbs):.0f} VERBS toward ONE target -- not that many verbs")
+    print("  across many targets. A POINTED question makes a dilemma cheap; a broad verb repertoire")
+    print("  makes it impossible. THE DILEMMA RATE IS A PROPERTY OF THE QUESTION AND THE VERB")
+    print("  BREADTH, NOT OF THE DOCKET -- and the number to beat is printed above.")
+    print()
+    print("  ⚠ NOT MEASURABLE HERE: the rate under the docket's OWN excluders. Its Prohibition band")
+    print("    is scope · purity>=2 · lexical exclusions · taboo gates, and NONE of the four exist in")
+    print("    this tree (searched: 0 hits for `bend_price`, `purity`, `lexical` as terms). Until they")
+    print("    do, the rate is bounded by the numbers above and not otherwise knowable.\n")
+
+
 def main() -> int:
     w = build_realm(0)
     print(f"world: build_realm(0) -- {len(w.persons)} persons, {len(w.rungs)} rungs")
@@ -188,6 +241,7 @@ def main() -> int:
     arm_one_within_person(w)
     arm_two_between_persons(w)
     coverage()
+    arm_three_aperture(w)
     if "--prove-control" in sys.argv:
         _prove_control_fires(w)
     print("NOT MEASURED HERE, BY DESIGN -- how many directions each basis carries. That belongs to")
