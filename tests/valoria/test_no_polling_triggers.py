@@ -10,9 +10,15 @@ dropping either turns the suite red rather than silently restoring the waste cla
 Background: in the 2026-07-19..26 window, 116 `send_later` self check-ins re-entered
 persistent sessions to re-confirm PRs that were already green (97/118 trigger prompts
 said so). A wake-up re-sends the whole conversation; with an EMPTY conversation that is
-still ~23.2k tokens (CLAUDE.md alone is ~12.2k), so the floor was ~2.7M tokens for zero
-state change. The median wake-to-wake gap was 61.9 min, just past the 1h prompt-cache
-TTL, so most of it was uncached.
+still ~23.2k tokens, so the floor was ~2.7M tokens for zero state change. The median
+wake-to-wake gap was 61.9 min, just past the 1h prompt-cache TTL, so most of it was
+uncached.
+
+The CLAUDE.md component of that floor was written here as "~12.2k" and was STALE BY 57%:
+measured 2026-09-18 with tools/ci_common.tokens(), the file was 19,228 tokens before the
+same-day cut brought it to ~14k. A cost model that understates its own rule's payoff is
+the fourth row of CLAUDE.md §0.1 pt 3 in miniature — the figure was carried forward
+rather than re-measured. Re-measure it here rather than adjusting it by eye.
 
 NOTE on scope: no test can observe a *hosted* session actually calling the tool. What is
 testable is that the deny-list and the doctrine are present and cover every primitive we
@@ -49,7 +55,23 @@ REQUIRED_DENY = (
     'update_trigger',  # re-arms an EXISTING Routine — reachable without create_trigger
     'fire_trigger',    # fires a Routine now; its prompt can re-arm, so it re-enters the chain
     'Skill(loop)',     # /loop's entry point: a prompt re-run on an interval, in-session
+    # WIDENED 2026-09-18. Both were reachable in a live session while all seven above passed —
+    # the roster-incompleteness this file's own NOTE predicted, found by enumerating the session's
+    # actual tool surface rather than re-reading the list.
+    'Monitor',         # documented as "use Monitor with an until-loop to wait on a condition":
+                       # an in-session polling loop, which §11 forbids "by any mechanism"
+    'watch_url',       # arms an inbound webhook that "wakes the session if idle" — a session
+                       # arming its own wake-up, which is the rule verbatim
 )
+
+# DELIBERATELY NOT DENIED, so a later session does not add them as "obviously missing":
+#   * `create_session` — spawning a child is fan-out, not a wake-up, and Jordan RULED for
+#     multi-agent dispatch (CLAUDE.md §10, 2026-09-17: "I want multiple agent dispatches").
+#     A child that polls is a prompt defect, not a reachable primitive to block.
+#   * `subscribe_pr_activity` — §11 names this path explicitly as UNAFFECTED: genuine PR activity
+#     arrives as a push event and needs no polling.
+#   * `list_triggers` / `delete_trigger` / `CronList` / `CronDelete` — read and teardown. Blocking
+#     teardown would strand a Routine that someone else armed.
 
 # LIMIT OF THE Skill(loop) ENTRY, stated rather than assumed (CLAUDE.md §0.1 point 3):
 # the MCP entries match a fully-qualified tool name, a format this repo has already seen
