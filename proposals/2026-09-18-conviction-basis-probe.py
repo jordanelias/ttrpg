@@ -7,6 +7,13 @@ committed instrument: the probes lived in a scratchpad that dies with the contai
 critic marked the whole claim CANNOT-VERIFY on exactly that ground, and it was right —
 `ED-IN-0228`'s own rule is that a stated number names a re-runnable command. This is that command.
 Pass `--prove-control` to run the falsifier that shows the control arm's assertion is not vacuous.
+
+⚠⚠ ONE READING THIS PROBE FIRST PUBLISHED WAS A CATEGORY ERROR AND IS RETRACTED IN ARM 2. It
+compared an INTER-PERSON score gap to `STR-3`'s `D >= 0.294`. That floor is an inversion
+probability inside ONE person's softmax and does not reach across persons. The arm's COUNTS
+(distinct top verb, distinct rankings, rank disagreement, and the control) never needed it and
+stand unchanged. Found by a structurally read-only critic, verified at `choose.py:317` and
+`RULINGS.yaml:1176-1179` before the retraction.
 `CLAUDE.md` §0.1 pt 3 row four is the shape of the failure: *"check the RUN HAPPENED."*
 
 WHAT IT MEASURES, AND WHY IT IS TWO ARMS AND NOT ONE. The first arm asks whether the moral term
@@ -131,14 +138,13 @@ def arm_two_between_persons(w) -> None:
         pairs = list(itertools.combinations([pid for pid, _ in people], 2))
         dis = [_disagreement(ranks[a], ranks[b]) for a, b in pairs]
         gaps = [abs(terms[a][v] - terms[b][v]) for a, b in pairs for v in verbs]
-        over = sum(1 for g in gaps if g >= FLOOR)
         tops = {ranks[pid][0] for pid, _ in people}
         print(f"  --- {name} ---")
         print(f"    distinct TOP-ranked verb   {len(tops)}")
         print(f"    distinct FULL ranking      {len({tuple(ranks[pid]) for pid, _ in people})}")
         print(f"    rank disagreement   median {statistics.median(dis):.4f}   max {max(dis):.4f}")
         print(f"    |gap| two people, same verb  median {statistics.median(gaps):.4f}   max {max(gaps):.4f}")
-        print(f"      clears {FLOOR}:  {over}/{len(gaps)}  ({100 * over / len(gaps):.1f}%)")
+        print(f"      ^ NOT compared to {FLOOR} -- see the note below; the floor does not govern this.")
         if name.startswith("UNIFORM"):
             control_ok = (len(tops) == 1 and statistics.median(dis) == 0.0)
     print()
@@ -147,7 +153,18 @@ def arm_two_between_persons(w) -> None:
     # must be able to observe the failure it excludes).
     assert control_ok, "CONTROL FAILED: uniform projection still discriminated -- this probe is wrong"
     print("  CONTROL FIRED: uniform gives exactly 1 top verb and 0.0000 median disagreement,")
-    print("  so the live arm's discrimination is the projection's and not this probe's artefact.\n")
+    print("  so the live arm's discrimination is the projection's and not this probe's artefact.")
+    print()
+    print("  ⚠⚠ THE FLOOR DOES NOT GOVERN THIS ARM, AND A FIRST VERSION OF THIS PROBE SAID IT DID.")
+    print("     `STR-3`'s D >= 0.294 is an INVERSION probability inside ONE softmax:")
+    print("     `_sample_order` keys on `score(c)/tau + g` per candidate WITHIN one person's list")
+    print("     (choose.py:317), so it is the chance two of THAT PERSON'S candidates swap order.")
+    print("     TWO DIFFERENT PEOPLE NEVER SHARE A SORT, so their gap on the same verb has no")
+    print("     inversion attached and the floor says nothing about it. RULINGS.yaml:1176-1179")
+    print("     warns of exactly this: *'a builder who applies the 0.294 floor uniformly will apply")
+    print("     it to a quantity that never enters the sort.'* Retracted; the counts above stand on")
+    print("     their own and need no floor. Arm 1's comparison IS legitimate -- those candidates")
+    print("     do share a sort.\n")
 
 
 def coverage() -> None:

@@ -519,6 +519,31 @@ third_axis_set_verdict: ~   # 'take warrant/facing/purity' | 'keep memory/substa
 # 46 people (measured; `2026-09-18-conviction-basis-probe.py`). Of the 28 verbs each person is
 # offered, the sum realizes 6 — **21% of its own available first-act space, on 52 authored cells.**
 # The docket's six decisive tests give 720 orderings with ZERO authored numbers.
+#
+# ⚠⚠ AND ONE READING THIS FILE PUBLISHED IS RETRACTED, BECAUSE IT WAS A CATEGORY ERROR. It said the
+# moral term *"discriminates BETWEEN persons below its own falsifier floor"* (median gap 0.1445,
+# 24.5% clearing 0.294). `STR-3`'s floor is an INVERSION PROBABILITY INSIDE ONE SOFTMAX —
+# `_sample_order` keys on `score(c)/tau + g` per candidate WITHIN one person's list
+# (`choose.py:317`) — so it is the chance two of THAT PERSON'S candidates swap order. TWO PEOPLE
+# NEVER SHARE A SORT, so their gap on one verb has no inversion attached and the floor is silent
+# on it. `RULINGS.yaml:1176-1179` warns of precisely this: *"a builder who applies the 0.294 floor
+# uniformly will apply it to a quantity that never enters the sort."* Found by a structurally
+# read-only critic; verified at both lines before retracting.
+# WHAT SURVIVES AND NEEDS NO FLOOR: 41 distinct conviction vectors produce SIX distinct first acts,
+# 41 distinct full rankings against 2 under the uniform control, median rank disagreement 0.2882
+# against 0.0000. Those are behavioural counts and they carry the argument on their own.
+# WHAT ELSE SURVIVES: arm 1's within-person comparison IS legitimate — those candidates do share a
+# sort — so *the moral term reorders one person's options strongly and distinguishes two people
+# weakly* is still the finding. Only the word "below the floor" is withdrawn.
+#
+# ⚠ AND THE SUM HAS A FALSE N-LINE AT ITS CENTRE, which is the NERS pass's graded finding.
+# `synthesis.md` §1.3 justifies exactly one minus sign by *"Valoria resolves by drawing, so a term
+# that moves the obstacle and a term that moves the preference are different objects. `cost` belongs
+# on the Ob; `pull` belongs on the pool."* BOTH HALVES SURVIVE THE CUT: the obstacle is already a
+# RESOLVE-side quantity and `resolve.py:388` refuses at Ob > 2xPool while *"the computed chooser
+# never sets"* `Act.obstacle`; and putting `pull` on the pool contradicts `options.py:141`'s ruling,
+# verbatim, *"capability supplies dice and GATES NOTHING"* (#353 §9.2). So `cost(c) = demand ·
+# (1 - courage)` is not load-bearing for the Ob/pool split it was introduced to protect.
 # ⚠ NOT APPLES TO APPLES — 720 is a configuration space, 6 is a realized outcome count, and the
 # honest form of the comparison is weaker: the expensive authored artifact is delivering very
 # little differentiation, and the cheap structural one has a large space to draw on. That is still
