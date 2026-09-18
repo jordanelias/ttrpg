@@ -298,6 +298,14 @@ rows:
       of play required in a season
     status: not_met
     measured: >-
+      ⚠ **12 of 38 AS OF 2026-09-18 (`H-71` closed): `dispatch` joined, and the aperture figure
+      below is now PERSON-DEPENDENT rather than a property of the engine.** Measured on
+      `tiny_world`: a holder seated on `off_duke` has **2 of 38** verbs unformable person-side,
+      where a person holding no office still has **10 of 38**. The old reading — *"10 of 38
+      unformable"* as a flat fact — was a fact about NOBODY HOLDING AN OFFICE. `dispatch` executes
+      in 1 of the 89 live corpus worlds, because only 3 of 143 cases seat a granting office
+      (NPC-008/033/038, via `apply_rescale`). **This row is still `not_met`**: one verb arriving
+      does not build the table out.
       **11 of 38 verbs execute in the corpus** (create_record, interview, move, reconstruct,
       release, research, speak, surveil, tell, transfer, utter). 20 carry no predicate and no
       effect, 5 are foldable but never attempted (the governance verbs, `H-71`), and 2 are

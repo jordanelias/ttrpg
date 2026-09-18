@@ -223,10 +223,24 @@ the eligibility branch reads it, and the falsifier flips. Three things, one comm
 `write_matrix.yaml:336-342` licenses `Tenure.payload` at `[RES] ACTS`, which is where `confer`'s
 effect runs, so the write is licensed where it needs to be.
 
-⚠ **AND RE-MEASURE THE UNLOCK BEFORE QUOTING IT.** H-71's `unblocks:` reads *"9 of 32 verbs"*; the
-verb table is now **38** rows, so that figure predates two landings. `§0.1` pt 3 row four. Take it
-with `person_side_eligible` over the roster — the same instrument the aperture gate names — not from
-this line.
+✅ **BUILT 2026-09-18 (`ED-IN-0255`), AND THE UNLOCK WAS MEASURED RATHER THAN QUOTED.** Both halves
+landed: `World._grant_remit` writes the grant at `add_tenure` (the one writer, so every mint path
+carries it — the effect alone would have shipped inert), `Tenure.granted_acts` owns the payload
+shape, and `person_side_eligible` reads the holder's own state. `choose` still receives no `World`.
+
+**WHAT IT BOUGHT, AND IT IS SMALLER THAN THE ROW PROMISED.** The `unblocks:` nine is correct — nine
+rows carry a `remit:` alternative — but exactly **one** entered the corpus executed set: `dispatch`,
+in **1 of 89** live worlds, because only **3 of 143** cases seat a granting office (NPC-008,
+NPC-033, NPC-038, via `apply_rescale` overlays rather than `build_at`). **No requirement row moved**:
+`R-05` is still `not_met` and THE NINE still reads met 1 / not_met 4 / partial 4. `issue` is granted
+in all three worlds and does not execute, and **why is not established** — a null, not a diagnosis.
+
+⭐ **THE REAL RESULT IS THE APERTURE, AND IT REFRAMES THE 09-17 SUITES' CENTRAL PREMISE.** Those
+documents argue from *"10 of 38 verbs unformable person-side"* as a flat property. Measured now: a
+holder seated on `off_duke` has **2 of 38** unformable; a person holding no office still has **10 of
+38**. **The aperture was never shut — nobody was seated.** `00_THE_SEAM.md`'s *"the ranking cannot
+discriminate verbs when 10 of 38 never form"* is a statement about an unpopulated office table, and
+the aperture re-measurement gate below should re-take it per HOLDER, not per engine.
 
 **2. Position `2` — RET-SC.** Ruled 2026-09-06 and unexecuted since. It is subtraction — 47 files,
 1.2 MB — and it is the one position whose cost only grows, because 20+ inbound reference sites outside
@@ -265,8 +279,10 @@ single blocker in the plan.**
 | **12c** | **6c — THE THIRTEEN** | IN | re-author the thirteen and their projection onto `memory · substantive · equity · selfish` | **JORDAN** | **R3 — the cells.** Atomic with 12b/12d: `_load_projection`/`_load_alignment` raise at module scope, so both tables must exist before first import |
 | **12d** | **6b — THE RENAME** | IN | rename the moral-value basis, which `STR-6` forces by reserving `conviction` | **JORDAN** | **restore `tools/valoria_rename.py` from `FORK:1e4c6f4`, or accept a hand sweep of 29 Python files / 308 occurrences / 51 YAML-JSON / 12 live `.md`.** See §3.5 — the stated "it derives" mechanism does not exist |
 | 13 | **W28-cast** | IN | author the `cast:` blocks and their reader, same commit | **OPEN** | — ⚠ use the harness loader's count, never a grep (§6's GAP) |
-| **13b** | **H-71** | IN | **BOTH HALVES OF ARM 2, or it ships inert:** `confer`'s effect WRITES the office's remit acts into the `hold` Tenure's `payload`, and `person_side_eligible` (`decision/options.py:107`) READS them there instead of falling through to `return False`. **Absorbs the gather's `13c`** | **OPEN** ⭐ | — **START HERE.** Tier 0. ⚠ the `unblocks:` figure *"9 of 32"* predates a 38-row table — re-measure, do not quote |
-| **13d** | **10 — OFFICES** | IN | `offices.yaml` — bases as rostered values · both predicates rewritten · four title helpers + `is_title` + the `titles` roster deleted · holders seated · purview corrected | **OPEN** | — its two build-order deps are spent: item 16 is DONE, item 4 is REVERTED |
+| **13b** | **H-71** | IN | ✅ the grant rides on the Tenure: `World._grant_remit` at `add_tenure` writes it, `Tenure.granted_acts` owns the shape, `person_side_eligible` reads it. Register re-graded `absent` -> `measured`; Artifact 0's tier-0 `absent` list 10 -> 9 | **DONE** | — bought **1 verb in 1 of 89 worlds** (`dispatch`), moved **no requirement row**, and re-measured the aperture to **2 of 38 for a holder / 10 of 38 for a non-holder**. Cost: a seated holder's 8 new verbs displace subsistence work (`work` 51->41, `release` 57->36) — see `24f` |
+| **13e** | **ONE READING OF THE REMIT** | IN | route `_eligible` (`loop/resolve.py:56`) and `_ch_post_remit` (`epistemic.py:360`) onto `t.granted_acts` instead of `w.offices[...].remit_acts`. Both already hold the Tenure, so it is a one-line edit at each site and needs no `World` in `choose` | **OPEN** | — ⚠ **the top finding of `13b`'s review, and TWO structurally independent read-only lanes rediscovered it separately** (§10's ranking signal). The predicate *does this holder have this remit* now has THREE readings over TWO stores, and `epistemic.py:350-352` already records the tree paying for this exact mistake once: *"Re-deriving it here was `CLAUDE.md` §8 broken one function apart, which is how it came out wrong."* That sentence is now false in the tree. ⚠ **Do `13f` first** — this makes the resolver snapshot-dependent, which is the semantics `13f` gates |
+| **13f** | **`establish` HAS NO EFFECT** | IN | `verb_table.yaml:229` declares `writes: ["Office.exists", "Office.remit", "Office.establishment"]` and **no effect is registered in `loop/effects.py`**. Build it, or strike the `writes:` cell | **OPEN** | — ⚠ **it gates a semantics that is currently undecided and was nearly decided by accident.** `establish` is the only act that would change an office's remit, so whether a remit change reaches SITTING holders (snapshot) or only future ones (mirror) arrives with this effect. `13b`'s first writing answered it from a test docstring; that was retracted. **Rule it here, with the effect in front of you.** `establish` is itself `remit:confer`-eligible, so it is one of the nine `H-71` unblocked |
+| **13d** | **10 — OFFICES** | IN | `offices.yaml` — bases as rostered values · both predicates rewritten · four title helpers + `is_title` + the `titles` roster deleted · **holders seated** · purview corrected | **OPEN** ⭐ | — its two build-order deps are spent (16 DONE, 4 REVERTED). ⚠⚠ **`13b` MADE THIS THE POSITION THAT UNBLOCKS GOVERNANCE, and it was not that before.** The remaining 8 of 9 remit verbs are now blocked by **office DATA, not by any mechanism**: `harness/populated.py:686` — *"EVERY OTHER OFFICE CARRIES `remit_acts: []`, WHICH IS A DECLARED ABSENCE"*, and only 3 of 143 corpus cases grant anything. Seating holders on offices with populated remits now grants them automatically, because the grant rides on the Tenure. **This is the cheapest remaining move on `R-05`** |
 | 14 | **U7-own** | IN | the eight `own`-eligibility verbs, in antonym pairs; distinct operands; `Candidate.why` | **OPEN** | 12, 13 |
 | 15 | **Record-kind fold** | IN | Petition/Dispensation become kinds of `Record`; `record_kinds` + its refusal; `issue`/`petition` bodies; 2 matrix rows and 2 `World` dicts deleted; the deposit rule; then `petition` + `carry`. **≡ build-order item 5 — SAME WORK, TWO NUMBERS (§3.5)** | **OPEN** | 11a. **The largest single item in the plan; everything in `15a`–`15c` hangs off it** |
 | **15a** | **6 — GIVE** | IN | `give` + body + `_req_give` + release-before-mint | **BLOCKED** | 15 |
@@ -277,8 +293,8 @@ single blocker in the plan.**
 | **17a** | **9 — OBLIGEES** | IN | obligees co-located mint `inferred` · `oblige` body · `establishment_of` rewritten with a caller · `Office.establishment` deleted | **OPEN** | 7a |
 | 18 | **PROC-A** | SC | re-host the stress suite (its tracer is gone); `judging_set`; `arrangements.yaml` | **OPEN** | — |
 | **18a** | **14 — FIELD DELETIONS** | IN | the 13 field deletions + `judging_set` + `conferral_path` | **OPEN** | 17a, 13d |
-| **★ GATE** | **APERTURE RE-MEASUREMENT** | IN | **Fires ONCE, after `18a`. A measurement, not a build item, and NOTHING BELOW MAY BE SCORED BEFORE IT PASSES.** Re-take: verbs resolvable (was 18/38) · verbs unformable person-side (was 10/38, every governance verb) · claims by source (was `{firsthand: 2174, told_by: 1}`, `inferred: 0`) · questions by source. **Then re-take `CAT-6`'s evidence block and `STR-4`'s conclusion against the new numbers — both are inferences from a shut aperture, and re-citing them is not re-taking them** | **OPEN** | 18a |
-| 19 | **U7-remit** | IN | `levy`, `establish`, `open_case`, `determine`, `issue` | **BLOCKED** | 13b, ★ |
+| **★ GATE** | **APERTURE RE-MEASUREMENT** | IN | **Fires ONCE, after `18a`. A measurement, not a build item, and NOTHING BELOW MAY BE SCORED BEFORE IT PASSES.** Re-take: verbs resolvable (was 18/38) · verbs unformable person-side (was 10/38, every governance verb) · claims by source (was `{firsthand: 2174, told_by: 1}`, `inferred: 0`) · questions by source. ⚠⚠ **RE-TAKE IT PER HOLDER, NOT PER ENGINE (changed by `13b`, 2026-09-18).** *"10 of 38 unformable"* was never a property of the engine — measured after `13b`: **2 of 38 for a person seated on `off_duke`, 10 of 38 for a person holding nothing.** A single number for this row is now a category error, and the suites that argue from the flat figure are listed in `§3.8`. **Then re-take `CAT-6`'s evidence block and `STR-4`'s conclusion against the new numbers — both are inferences from a shut aperture, and re-citing them is not re-taking them** | **OPEN** | 18a |
+| 19 | **U7-remit** | IN | `levy`, `establish`, `open_case`, `determine`, `issue` | **OPEN** · re-scoped | ⚠ **`13b` LANDED, so this is no longer blocked on it — and `13b` changed what it IS.** All five are now FORMABLE by a holder whose office grants them; none executes. `establish` has **no effect at all** (`13f`), and `issue` is granted in three corpus worlds and does not execute for a reason **not yet established**. So this position is no longer "make them eligible" — it is "give them predicates, effects and operands". Still gated on ★ |
 | 19b | **U7-disp** | IN | ⚠ **RE-SCOPED BY RULING.** `RR-A` ruled **FOLD**: `comply`, `evade \| defy`, `refract` and `dispatch` GO — compliance is the executor's own act. What remains is the deletion, not the build | **OPEN** | `ED-IN-0210` keeps one live fork; do not clear its flag |
 | **19c** | **MIGRATE** | IN/SE | a migration verb. **Nobody in Valoria can relocate** — `move` is TRAVEL (a `travel_leg` Tenure alter) and `residence` is a contested claim predicate **with no writer** | **OPEN** | — opened by the 09-17 rulings; no order scheduled it until now |
 | 20 | **U9 / R-04** | IN | faction-scale queries; 44 re-scales; the 10 world cases. **54 of 143 cases are unrepresentable today — 44 at faction scale, 10 at world** | **BLOCKED** | ★ |
@@ -288,6 +304,7 @@ single blocker in the plan.**
 | 24 | **SE-BUILD** | SE | settlements P1–P4. ⚠ **MIS-SIZED AS WRITTEN: P1 is DONE bar a number, P4 is now `24e`, and P2/P3 grew a ruled dependency.** Re-scope before starting | **OPEN** · partial | see `24d`, `24e` |
 | **24d** | **SE-CAPACITY** | SE | `capacity(w, rung)` as a Query over the rung's dwelling Sites **with a FLOOR — never a fixture table** | **OPEN** | ⚠ **RULED, NOT GATED** (§3.6). The blocker is that the mechanism has **zero code**: no `capacity` in `queries/`, and no `dwelling`/`houses`/`shelters` anywhere in `engine/season/`, where `rosters.yaml:847` fixes `site_kinds` to three, one of which is not a site |
 | **24e** | **12 — WORKS & FOUNDING** | SE/IN | `works` kind · `work` advances `stage` · `restore` body · `found` + body · `(Rung\|Site, exists)` get a producer. **This is `found` (P4), which the `ED-SE-0051` ruling names as THE THROTTLE**, and it answers `ARCH` `F.20` — *"the world only decays — nothing is ever founded or built"*, one of two gaps `04:1082` says *"block the build outright"*. It is also the R-half with no player in it (§0.06) | **BLOCKED** | 15 |
+| **24f** | **SUBSISTENCE IS TERRITORIAL** | SE | ⭐ **RULED 2026-09-18 (`ED-IN-0255`)** — *"subsistence/starvation should largely be an abstract/governance issue, and we can just have NPC synecdoches that just represent the overall population affected... i don't think having lords and guild members etc worry about subsistence is worthwhile"* · *"it's a territorial issue"*. Move the demographic loop off per-person eaters and bodies onto a TERRITORIAL quantity with population synecdoches | **OPEN** | — ruled, unscheduled by any prior order. ⚠ **It re-opens `ED-IN-0247`**: `body_step` is a per-PERSON body write, and this ruling puts that SCALE in question, not just its magnitude. Answer the scale before picking the number |
 | 25 | **MB-GOLDEN** | MB | apply the golden-mode ruling; fix three flags whose defaults contradict their comments | **OPEN** | `ED-MB-0061/0016` — both `superseded`, flags cleared |
 | 26 | **GO-VERSION** | GO | record the ruled version; ED-1050's deferred re-export; then held H6 | **JORDAN** | **the Godot engine version — UNRESOLVED, and `CLAUDE.md` forbids settling it by editing a document** |
 | 27 | **WR-SCOPE** | WR | build or retire threadwork | **OPEN** | `ED-WR-0010` **ruled: threadwork IS IN SCOPE.** ⚠ Part 3 of the head and `systems/threadwork/sim/coherence.py` still implement the model `RULINGS.md` replaced |
@@ -401,6 +418,83 @@ question. Against that: the ledger row reads `open`/`needs_jordan`; `HANDOFF_SE.
 `§0` step 1 licenses it and the 2026-09-15 `SUPERSEDING ROW` batch is the precedent, but closing a
 Jordan-gated row against three contrary surfaces wants his word (`ED-IN-0251`, `ED-IN-0252`).
 **`24d` is therefore RULED and buildable, not gated.**
+
+### 3.8 · FORWARD SWEEP AFTER `13b` — what closing one tier-0 hole did to the later positions
+
+**Run 2026-09-18 under `§3.0` phase 4.** Each row is a change made above, not a note left here.
+
+| position | what `13b` changed about it |
+|---|---|
+| **★ APERTURE GATE** | its premise. *"10 of 38 unformable person-side"* is **person-dependent**: 2 of 38 for a seated holder, 10 of 38 for a non-holder. Re-take it per holder; a single number is now a category error |
+| **`13d` OFFICES** | ⭐ **promoted in value.** The remaining 8 of 9 remit verbs are blocked by office DATA, not by any mechanism — seating holders on offices with populated remits now grants them automatically. **Cheapest remaining move on `R-05`** |
+| **`19` U7-remit** | **unblocked and re-scoped.** No longer "make them eligible" — all five are formable now and none executes. It is predicates, effects and operands |
+| **`19b` U7-disp** | ⚠⚠ **A COLLISION — see below** |
+| **`24f`** | its origin. The displacement `13b` caused is what produced the ruling |
+| **`13e`, `13f`** | new, both opened by `13b`'s own review |
+
+⚠ **AND THE APERTURE FIGURE IS LOAD-BEARING OUTSIDE THIS PLAN.** Four documents argue from the flat
+*"10 of 38"*: `proposals/2026-09-17-governance-and-behaviour/00_THE_SEAM.md` (three times, including
+*"the ranking cannot discriminate verbs when 10 of 38 never form"* and *"susceptibility cannot
+calibrate on a channel that..."*), its `README.md`, and `RULINGS.yaml:1220` (*"from the aperture being
+SHUT"*). **Those are PROPOSED records of what was measured then and are deliberately not rewritten**
+— but an argument resting on a shut aperture needs re-taking against a seated holder, and the build
+order's own instruction already says so: *"re-take #409's CAT-6 evidence block and STR-4's conclusion
+against the new numbers. Both are inferences from a shut aperture. Re-citing them is not the same as
+re-taking them."* That instruction now has a trigger.
+
+---
+
+### 3.8a · ⚠⚠ THE COLLISION: `13b` MADE `dispatch` WORK AND `19b` IS RULED TO DELETE IT
+
+**This is the sweep's most consequential finding and it is Jordan's to resolve.**
+
+`13b`'s only measurable effect on the corpus was to put **`dispatch`** into the executed set — one
+verb, in one of 89 worlds. Position **`19b`** carries `RR-A`, ruled **FOLD** on 2026-09-17:
+*"`comply`, `evade | defy`, `refract` and `dispatch` go; compliance is the executor's own act."*
+
+**So the ruled order deletes the one verb the tier-0 hole bought.** Both are correct as ruled, a day
+apart, and neither knew about the other:
+
+| | |
+|---|---|
+| **If `RR-A` stands** | `13b`'s measurable corpus effect drops to **zero**, and its value is entirely in what `13d` will make reachable. That is a defensible outcome — the mechanism is right and the corpus is what is thin — but it should be a decision, not a discovery |
+| **If `dispatch` survives** | `RR-A` needs re-reading now that the verb forms person-side, which it could not when the fold ruling was made |
+
+⚠ **The hole register saw this coming and nobody connected it.** `H-71`'s `unblocks:` names *"`levy`
+whose other alternative is also unevaluable"* and `ED-IN-0210`'s open fork is *"are `dispatch` and
+`comply` two sides of one thing?"* — **`dispatch` is the subject of both an open fork and a deletion
+ruling.** Nothing is done here beyond recording it: `19b` is not re-scoped and `RR-A` is not
+re-opened.
+
+---
+
+### 3.7 · ⭐ SUBSISTENCE IS A TERRITORIAL ISSUE — RULED 2026-09-18 (`ED-IN-0255`)
+
+**Jordan, verbatim:** *"subsistence/starvation should largely be an abstract/governance issue, and we
+can just have NPC synecdoches that just represent the overall population affected? i don't think
+having lords and guild members etc worry about subsistence is worthwhile"* and *"it's a territorial
+issue"*.
+
+**IT ARRIVED AS A CONSEQUENCE, WHICH IS WHY IT IS RECORDED HERE RATHER THAN FILED.** Closing `13b`
+gave a seated duke eight formable governance verbs, and they displaced the only subsistence actor in
+the canonical test world — because `world_q.presence(w, "S")` is `['p_high']` in every season, so
+**the duke WAS the settlement's larder economy**. `test_w8`'s entire drain observable was *"the two
+granted transfers whose `from` is `S` and whose `to` is not (`S -> p_high`, one grain each)"*. The
+ruling says that model is not worth having, so the guard was **retired rather than re-pointed** — and
+it could not have been re-pointed anyway: `p_low` and `p_mid` sit at the hearth `Hh`, never at `S`.
+
+**WHAT IT CHANGES, and each is a row rather than a paragraph:**
+
+| | |
+|---|---|
+| **`24f`** | the unit itself — the demographic loop moves to a territorial quantity with population synecdoches |
+| **`24`, `24d`, `24e`** | re-scope. `3a`'s per-eater draw and `3b`'s per-body write are PERSON-scale, which the ruling moves. `24d`'s ruled `capacity(w, rung)` is already rung-scoped and is CONSISTENT with it |
+| **`ED-IN-0247`** | ⚠ **re-opened at a deeper level.** It was *"pick `body_step` off the sweep 0/10/67"*. The ruling asks whether a per-PERSON body write is the right carrier at all. **Answer the scale before the number** — a value chosen for the wrong carrier is worse than none |
+| **`test_w8`** | its non-vacuity guard is gone, deliberately, and the comment at the site is the pointer to rebuild it on the territorial quantity |
+
+⚠ **WHAT THIS RULING DOES NOT SAY.** It does not retire the larder, `nearest_store` or the ladder —
+`3a` is built, measured to meet its demand, and untouched. It says the *decision* about food is not a
+lord's, and the *scale* is territorial. Nothing here licenses deleting working code.
 
 ---
 

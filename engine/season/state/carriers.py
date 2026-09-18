@@ -62,6 +62,42 @@ class Tenure:
     def live(self) -> bool:
         return self.until is None
 
+    @property
+    def granted_acts(self) -> tuple:
+        """THE GRANT THIS TENURE CARRIES -- `H-71` arm 2, and the ONE owner of the payload's shape.
+
+        ⚠ `payload` HAD ZERO WRITERS AND ZERO READERS UNTIL THIS LANDED, which by the same test
+        the deleted `conferrer` field failed (above) made it a field that *"does not exist, wearing
+        a schema's clothes"*. This property and `World._grant_remit` are its first reader and its
+        first writer, and they are deliberately the ONLY two: §8 -- the shape of a payload is a
+        rule, so it lives once. A caller that reaches into `payload["remit_acts"]` itself has
+        re-implemented it and will drift.
+
+        WHAT IT IS, and it is NOT a mirror of the office. `H-71`'s ruled arm 2: *"THE GRANT RIDES
+        ON THE TENURE -- `confer` writes the office's remit acts into the `hold` Tenure's
+        `payload`, and `person_side_eligible` reads them there."* A remit on the Tenure is not a
+        second copy of the office's remit; it is **the grant, which is what a holder actually
+        has**. So this is a SNAPSHOT taken when the Tenure opened, and an office whose `remit_acts`
+        change later does not retroactively re-grant its sitting holders -- *"an office whose
+        remit changes does so by an ACT, which is how everything else in this engine changes."*
+        `_grant_remit` carries the same statement from the writing side.
+
+        Returns `()` for every Tenure that carries no grant, which is every kind but `hold` and
+        every `hold` on a non-office. A tuple rather than a set, because `content_hash()` folds it.
+        """
+        p = self.payload
+        if not isinstance(p, dict):
+            return ()
+        acts = p.get("remit_acts")
+        # ⚠ RETURNED AS STORED ON THE COMMON PATH, NOT RE-TUPLED. `_grant_remit` writes a tuple,
+        # and this property is read inside `any(... for t in p.tenures)` which is itself inside
+        # `person_side_eligible`'s loop over `row.eligibility` -- so re-tupling cost N*M
+        # constructions of a value that cannot change between them. The `tuple(...)` fallback
+        # stays for a payload some other writer set as a list.
+        if acts is None:
+            return ()
+        return acts if isinstance(acts, tuple) else tuple(acts)
+
 
 
 
