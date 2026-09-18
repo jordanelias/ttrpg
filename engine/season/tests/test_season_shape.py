@@ -663,14 +663,35 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     ⚠ BOTH FALSIFIERS EXECUTED 2026-09-11, by monkeypatching the loader's YAML read: strip the
     `release` row -> *"verb_table.yaml: no `release` row"*; narrow its `domain:` to `['hold']` ->
     *"declares domain ['hold'], and `tenure_kinds \\ {contain}` is [...]"*. Two raises, two arms,
-    and neither is reachable from the other."""
+    and neither is reachable from the other.
+
+    ⚠ 32 -> 34, LOADER INVARIANT 13 (the `beneficiary:` column, `CAT-2` / `ED-IN-0248`),
+    2026-09-18, AND BOTH ARE LOAD-TIME. Invariant 13 is three checks and only two of them raise
+    `SystemExit`: the column being REQUIRED on every row, and an OPERAND beneficiary the row's own
+    `requires_typed` cell can neither bind nor admit. The third -- membership of
+    `beneficiary_kinds` -- goes through `require_member` and raises `Unspecified`, which is why
+    this count moves by two and not by three.
+    ⚠ THE SECOND OF THE TWO IS THE ONE WORTH THE PIN, and it is the `release`-`domain:` lesson one
+    column along. `CAT-2` killed *derive the beneficiary from the operand binding* by measuring
+    that 24 of 38 verbs are UNTYPED and can carry no operand at all. A STATIC column escapes that
+    only while it declares carriers the row can actually hold, so `beneficiary: to` on an untyped
+    verb is the same dead reference wearing the new column -- it would resolve to `None` for every
+    candidate ever formed, `benefits_me` would read 0.0 for everybody, and every other assertion
+    about the column would stay green. The raise makes that unwritable at load instead of
+    unobservable at run.
+    ⚠ BOTH FALSIFIERS EXECUTED 2026-09-18, by substituting `levy`'s row on disk and reloading:
+    drop its `beneficiary:` -> *"declares no `beneficiary:`"*; set it to `to` on that untyped row
+    -> *"neither binds nor admits that operand (carriable: nothing -- the row is UNTYPED)"*. Both
+    are pinned by their own tests in `test_governance_build.py`
+    (`test_lb6d_a_row_without_the_column_is_refused_at_load`,
+    `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load`)."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 32, (
-        f"{total} load-time exits across the model set, expected 32. Per file: "
+    assert total == 34, (
+        f"{total} load-time exits across the model set, expected 34. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 

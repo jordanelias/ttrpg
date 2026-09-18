@@ -210,6 +210,57 @@ def main() -> int:
     print(f"  at body_step=10: {who} body {start} -> {tw.persons[who].body}, crossed a band at "
           f"season {crossed}, budget {b0} -> {bud()}   (§7.3d: 1000 -> 790, season 7, 5 -> 4)")
 
+    print("\n--- §7.3e · ITEM 6d, THE BENEFICIARY COLUMN (ED-IN-0248) ---")
+    from engine.season.data.verbs import VERB_TABLE as _VT
+    from engine.season.decision import choose as _choose
+    from engine.season.harness import populated as _populated
+
+    # The carriage census CAT-2 killed option 1 on, re-taken in-process. A static column is only
+    # safe while it declares carriers a row can hold, so this is the number the loader's third
+    # invariant exists to keep honest.
+    _typed = [r for r in _VT.values() if r.requires_typed is not None]
+    _admits_to = [v for v, r in _VT.items() if r.requires_typed is not None
+                  and "to" in (set(r.requires_typed.operands()) | set(r.requires_typed.needs()))]
+    print(f"  carriage census: {len(_VT)} verbs · {len(_VT) - len(_typed)} UNTYPED · "
+          f"{len(_typed)} typed · `to` carriable by {len(_admits_to)}"
+          f"   (CAT-2: 38 / 24 / 14 / 12)")
+    print(f"  declared        : {Counter(r.beneficiary for r in _VT.values())}"
+          f"   (§7.3e: actor 18 · none 15 · subject 4 · to 1)")
+
+    # THE MEASUREMENT THAT IS NOT SATISFIABLE BY DECLARING ANYTHING: resolve every beneficiary on
+    # the candidates a real season forms. `opening_set` is read as a BARE NAME inside `choose`, so
+    # rebinding it HERE reaches that reader -- the same namespace rule `decision/choose.py`'s own
+    # docstring states for the degree sweep.
+    seen: list = []
+    _inner = _choose.opening_set
+
+    def _spy(person, view, question, fx):
+        cands = _inner(person, view, question, fx)
+        seen.extend((person, c) for c in cands)
+        return cands
+
+    _choose.opening_set = _spy
+    try:
+        _populated.run(seasons=1, seed=0)
+    finally:
+        _choose.opening_set = _inner
+
+    by_kind = Counter(_VT[c.verb].beneficiary for _, c in seen)
+    holes = [(p.id, c.verb) for p, c in seen
+             if _VT[c.verb].beneficiary != "none" and _choose.beneficiary_of(p, c) is None]
+    resolved = sum(1 for p, c in seen if _choose.beneficiary_of(p, c) is not None)
+    mine = sum(1 for p, c in seen if _choose.benefits_me(p, c) == 1.0)
+    self_subject = sum(1 for p, c in seen if c.subject == p.id)
+    print(f"  candidates formed        : {len(seen)}   (§7.3e: 5345)")
+    print(f"    by declared kind       : {dict(by_kind)}")
+    print(f"    RESOLVED               : {resolved}"
+          f" ({resolved / len(seen):.1%})   (§7.3e: 3796, 71.0%)")
+    print(f"    declared-but-UNRESOLVED: {len(holes)}   (§7.3e: 0 -- THIS IS THE RESULT)")
+    print(f"    benefits_me == 1.0     : {mine}   (§7.3e: 3420)")
+    print(f"  ⚠ CONTROL on that last figure: {self_subject} candidates"
+          f" ({self_subject / len(seen):.1%}) carry THE ACTOR AS THEIR OWN SUBJECT"
+          f"   (§7.3e: 2650, 49.6%) -- the aperture's shape, not a fact about Valorians")
+
     print("\n--- §7.1(b) · THE HOLONIC SURFACE ---")
     import ast
     root = Path(__file__).resolve().parents[2]
