@@ -15,7 +15,11 @@
       "mcp__Claude_Code_Remote__fire_trigger",
       "mcp__claude-code-remote__fire_trigger",
       "mcp__claude_code_remote__fire_trigger",
-      "Skill(loop)"
+      "Skill(loop)",
+      "Monitor",
+      "mcp__Claude_Code_Remote__watch_url",
+      "mcp__claude-code-remote__watch_url",
+      "mcp__claude_code_remote__watch_url"
     ],
     "allow": [
       "Bash(git *)",
