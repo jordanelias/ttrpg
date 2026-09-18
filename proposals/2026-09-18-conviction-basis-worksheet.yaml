@@ -262,3 +262,105 @@ verbs_with_no_moral_weight:
 #   resolving 9 times and depositing 0).
 
 alignment_set: ~           # your cells, once the axes above are settled
+
+# ============================================================================
+# 4. THE BEARING BASIS — Jordan's 12 concepts, 2026-09-18
+# ============================================================================
+# "pragmatism, flexibility, rigidity, fluidity, means before ends, ends justify means,
+#  indirect, direct, humble, grandstanding, insecure, secure"
+#
+# THESE ARE BEARING, NOT VALUE-FRAMES, AND YOU SEPARATED THEM YOURSELF ALREADY:
+#   adjudication_register.yaml:201 — *"these four are value-frames (what is right), the seven
+#   are bearing."*
+#
+# ⚠ AND THERE IS A STRUCTURAL REASON IT MUST BE THE SECOND BASIS, NOT A COLUMN ON THE FIRST.
+#   R7, adjudication_register.yaml:223-228: the projection is a LINEAR map from the weight
+#   vector, so TWO PERSONS WITH IDENTICAL MORAL WEIGHTS ARE IDENTICAL ON EVERY MORAL AXIS,
+#   NECESSARILY. A rigid man and a fluid man who hold the same principles is the whole point of
+#   this list — and it is structurally IMPOSSIBLE as a moral axis and FREE as a held one.
+#   The second basis is held DIRECTLY on the Person: no roster underneath, no projection
+#   (adjudication_register.yaml:232-234 — *"the character IS the vector"*).
+#
+# MEASURED 2026-09-18, live code / both registries / .designs/systems/characters:
+#   flexibility · rigidity · fluidity · humble · grandstanding · insecure · secure
+#     -> 0 / 0 / 0 everywhere. Genuinely vacant; no collision to manage.
+#   pragmatism -> 0 live, 0 registry, but see the collision note below.
+
+bearing_axes:
+
+  # FIVE CLEAN PAIRS. Confirm the poles, or re-pair them.
+  - name: ~                      # rigidity <-> flexibility
+    poles: [rigidity, flexibility]
+    keep: ~
+    note: "vacant everywhere measured"
+
+  - name: ~                      # means before ends <-> ends justify means
+    poles: ["means before ends", "ends justify means"]
+    keep: ~
+    note: >-
+      ⚠ THIS IS THE AXIS YOU DROPPED FROM THE MORAL SET AND IT IS NOT LOST, IT IS RELOCATED.
+      `substantive <-> procedural` was one of the earlier seven and was dropped from the four
+      proposed moral axes (adjudication_register.yaml:206-207). Means-vs-ends is that axis. As
+      BEARING it escapes R7; as a moral column it could not vary at fixed weights.
+      Watch the overlap with three of the thirteen — Order and Precedent (procedural
+      correctness) against Utility (results) — which is a reason to keep it here, not there.
+
+  - name: ~                      # indirect <-> direct
+    poles: [indirect, direct]
+    keep: ~
+    note: >-
+      Vacant. The `direct`/`means` grep hits in engine/season are ordinary English in comments,
+      not terms. ⚠ ONE REFINEMENT WORTH TAKING OR REFUSING DELIBERATELY: indirect/direct is
+      MEANS, and it reads as a 2x2 with an INITIATION THRESHOLD rather than as one axis —
+      low threshold + direct = confrontational, low + indirect = scheming, high + direct =
+      blunt when pushed, high + indirect = passive-aggressive. `passive` was already one of
+      the seven (RULINGS.yaml:1092-1093 files it as temperament). One axis or two: your call.
+
+  - name: ~                      # humble <-> grandstanding
+    poles: [humble, grandstanding]
+    keep: ~
+    note: >-
+      ⚠ THE DESIGN ALREADY ANSWERS THIS ONE AND THE ANSWER IS NOT A NEW AXIS. synthesis.md:112
+      closes `humble <-> vain` as `regard(subject(c))` INVERTED, entering the score when the
+      subject is the actor themselves — a grandstander weights acts that put him in front of
+      witnesses. `standing_of` already computes the quantity it reads. Adding a bearing axis
+      here means TWO owners of one behaviour (CLAUDE.md §8). Decide which home it takes.
+
+  - name: ~                      # insecure <-> secure
+    poles: [insecure, secure]
+    keep: ~
+    note: >-
+      Vacant as a name, and IT ALREADY HAS A LIVE COMPUTED INPUT. `standing_of`
+      (decision/options.py:443-464) is literally gap(what others tell you about yourself, what
+      you hold firsthand about yourself): 0 = everyone reads you as you read yourself, max =
+      total mismatch. That is insecurity as a MEASURED quantity rather than an authored trait.
+      ⚠ It is one of S18.2's EXACTLY TWO Sensation scalars and a third cannot be added
+      (loop/deliberate.py:474-476), so this attaches to the existing scalar or it is a held
+      axis — not a new Sensation term.
+      ⚠ MEASURED: it returns the MAXIMUM gap for every person today, because the told_by
+      channel is empty (paired == 0). Everyone in Valoria is currently maximally misread.
+
+  # TWO THAT ARE NOT YET PAIRS — both need a word from you.
+  - name: ~
+    poles: [pragmatism, ~]
+    keep: ~
+    note: >-
+      ⚠ AGAINST WHAT? And ⚠ IT COLLIDES: `instrumental` is one of the four LIVE moral axes and
+      `Utility` ("effectiveness, results, instrumental judgment",
+      descriptor_registry.yaml:240) is one of the thirteen. Pragmatism as a bearing axis makes
+      it the THIRD owner of one quantity — this is the same shape as `selfish` duplicating
+      `orient · benefits_me(c)`, now for the second time in this basis. Either pragmatism is
+      bearing and `instrumental`/`Utility` give it up, or it stays moral and drops out here.
+
+  - name: ~
+    poles: [fluidity, ~]
+    keep: ~
+    note: >-
+      ⚠ IS THIS THE SAME AXIS AS rigidity <-> flexibility, OR A SECOND ONE? Ordinary usage
+      separates them — flexible means willing to bend, fluid means holding no fixed shape at
+      all — so it reads as either the far end of one axis or an axis of its own. §4's
+      idempotency test is what decides it: a reader with no memory of this repo must land on
+      one meaning, and today they would not.
+
+bearing_held_as: ~   # confirm: values DIRECTLY on the Person, no roster, no projection (R7's escape)
+bearing_scale: ~     # e.g. '[-1,+1]' per axis, or '0-5' like Truth's, or something else
