@@ -49,7 +49,10 @@ were RUN. `§7` of that file is the record and `probe_execution_pass.py` beside 
   its SUBJECT and the good does not accrue to the person felled — a write can be a HARM. A falsifier
   pins it.
   ⚠ **Control on its own headline:** 2,650 of 5,345 candidates (49.6%) carry THE ACTOR AS THEIR OWN
-  SUBJECT, 98 per verb — `opening_set` offers everyone themselves as a referent for every verb. So
+  SUBJECT — 28 verbs form them, 22 at exactly 98 and six lower (`surveil` 93, `examine` 86,
+  `restore` 86, `move` 84, `transfer` 79, `research` 66). ⚠ This read *"98 per verb"* until
+  2026-09-18 and was self-refuting: 2650/98 = 27.04, not an integer verb count.
+  `opening_set` offers everyone themselves as a referent for every verb. So
   `benefits_me == 1.0` on 3,420 is the aperture's shape, **not** a fact about Valorians. Pre-existing,
   untouched here, and nothing is scheduled from it.
 - **Phase-6 item 6e LANDED — the FIRST write to any `Person` interior field in the tree

@@ -18,6 +18,8 @@ from __future__ import annotations
 
 import pytest
 
+from collections import Counter
+
 from ..data.matrix import Step
 from ..gaps import Forbidden
 from ..data.cast import faction_leader
@@ -504,18 +506,38 @@ def _verb_table_text() -> str:
 
 
 def _load_with(table_text: str):
-    """Reload the verb table from SUBSTITUTED text, restoring the file whatever happens. The
-    loader reads the file at import, so the arm has to be built on disk rather than injected."""
+    """Reload the verb table from SUBSTITUTED text, pointing the loader at a TEMPORARY FILE.
+
+    ⚠⚠ THIS USED TO WRITE THE TRACKED `engine/season/verb_table.yaml` AND RESTORE IT IN A
+    `finally`, AND THAT WAS UNSAFE IN THE ONE CONFIGURATION CI ACTUALLY RUNS.
+    `.github/workflows/valoria-ci.yml:351` runs `pytest engine/season/tests -q -n auto`, and
+    xdist's default `--dist load` spreads one file's tests across workers. Two failures follow
+    from writing the real path:
+      * ANOTHER worker reading the table mid-arm (`test_season_shape.py` reads it directly in
+        three places) sees a deliberately broken table and goes red for a reason unrelated to
+        what it tests;
+      * two `_load_with` calls OVERLAPPING leave the repo file corrupted for good — B snapshots
+        A's broken arm as its `original`, A restores the real text, then B's `finally` writes
+        A's broken arm back. A process killed between the write and the `finally` does the same
+        with one worker.
+    A test that can leave a tracked source file broken is not a strong test with a caveat; it is
+    a test that edits the repository. The substituted table now lives in a `tmp` file and only
+    the MODULE-LEVEL binding moves, so nothing outside this process can observe the arm and
+    there is no path that mutates the working tree."""
     import importlib
+    import tempfile
+    from pathlib import Path
     from ..data import files, verbs as _verbs
-    p = files.VERB_TABLE_YAML
-    original = p.read_text()
-    p.write_text(table_text)
-    try:
-        importlib.reload(_verbs)
-    finally:
-        p.write_text(original)
-        importlib.reload(_verbs)
+    real = files.VERB_TABLE_YAML
+    with tempfile.TemporaryDirectory() as d:
+        arm = Path(d) / "verb_table.yaml"
+        arm.write_text(table_text)
+        files.VERB_TABLE_YAML = arm
+        try:
+            importlib.reload(_verbs)
+        finally:
+            files.VERB_TABLE_YAML = real
+            importlib.reload(_verbs)
 
 
 _LEVY_ROW = (
@@ -543,11 +565,18 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()
                   if r.beneficiary not in BENEFICIARY_KINDS]
     assert not off_roster, f"beneficiaries outside `beneficiary_kinds`: {off_roster}"
-    # IT ASSERTS THAT IT ASSERTED (§0.1 pt 2): the two checks above are both "no bad rows found",
-    # which a census over an EMPTY table satisfies. This counts the rows that actually carried a
-    # declaration, so a loader returning nothing fails here instead of passing silently.
-    declared = [v for v, r in VERB_TABLE.items() if r.beneficiary in BENEFICIARY_KINDS]
-    assert len(declared) == len(VERB_TABLE)
+    # ⚠ WHAT STOOD HERE WAS TAUTOLOGICAL AND CLAIMED NOT TO BE. It rebuilt `declared` with the
+    # NEGATION of the `off_roster` predicate asserted empty one line above, so
+    # `len(declared) == len(VERB_TABLE)` held unconditionally, and the empty-table case its
+    # comment invoked is already excluded by the `== 38` assertion at the top. A comment claiming
+    # a §0.1 pt 2 vacuity guard that the code does not provide is worse than no guard.
+    # The real vacuity risk is the OTHER direction -- a census that examined rows carrying no
+    # column at all -- so it is the DISTRIBUTION that is pinned, which a broken loader cannot fake.
+    kinds = Counter(r.beneficiary for r in VERB_TABLE.values())
+    assert set(kinds) <= set(BENEFICIARY_KINDS) and sum(kinds.values()) == len(VERB_TABLE)
+    assert kinds["none"] < len(VERB_TABLE), (
+        f"every row declares `none` ({kinds}) -- the column is present and says nothing, which "
+        "this census would otherwise report as full coverage")
 
 
 def test_lb6d_a_row_without_the_column_is_refused_at_load():
@@ -562,12 +591,17 @@ def test_lb6d_a_row_without_the_column_is_refused_at_load():
 
 def test_lb6d_an_off_roster_beneficiary_is_refused_at_load():
     """`beneficiary_kinds` is the closed set. A fifth carrier is argued for in `rosters.yaml`,
-    never spelled into a cell."""
-    from ..gaps import Unspecified
+    never spelled into a cell.
+
+    ⚠ IT EXPECTS `SystemExit`, AND IT EXPECTED `Unspecified` UNTIL 2026-09-18. The check went
+    through `require_member`, which raises the PER-ACT gap type -- so a broken table imported
+    inside `corpus_run.run_case`'s try block was caught there and reported as one case's
+    DESIGN-GAP. `H-115`'s split is that load-time refusals are fatal `SystemExit`; this row is
+    load-time, so it raises that now and this assertion follows it."""
     src = _verb_table_text()
     bogus = src.replace(_LEVY_ROW, _LEVY_ROW.replace('"actor"', '"treasury"'), 1)
     assert bogus != src, "the substitution did not apply -- this test is asserting nothing"
-    with pytest.raises(Unspecified):
+    with pytest.raises(SystemExit, match="not in `beneficiary_kinds`"):
         _load_with(bogus)
 
 
@@ -670,6 +704,17 @@ def test_lb6d_the_column_resolves_on_candidates_the_engine_actually_forms():
     assert len(seen) > 1000, (
         f"only {len(seen)} candidates were formed; this sweep cannot observe what it is for")
 
+    # ⚠⚠ THIS ZERO IS STRUCTURAL, NOT MEASURED, AND THE ITEM PRESENTED IT AS ITS RESULT.
+    # Traced end to end after the fact: `actor` -> `p.id`, never None. `subject` -> `c.subject`,
+    # and `opening_set` only ever builds a Candidate from `q.referents`, so it is never falsy.
+    # `to` is declared by ONE row (`transfer`) whose form lists `to` in `needs:`, and
+    # `_derive_operand` answers `to` with `return subject` (`options.py:309`) -- so it cannot be
+    # None either. `holes` is therefore 0 for reasons in the CODE, not in the data, and the
+    # assertion below cannot fail while that holds. Kept because it is a real regression guard on
+    # those three paths, but it is NOT evidence that the column was declared well, and the
+    # records that read it that way are corrected. The measurement that would bear on THAT is the
+    # coverage line beneath it: 10 of the 38 rows (every `remit:`-gated verb, `confer` among
+    # them) form zero candidates, so their declarations are never exercised here at all.
     holes = [(p.id, c.verb) for p, c in seen
              if VERB_TABLE[c.verb].beneficiary != "none"
              and _choose.beneficiary_of(p, c) is None]
@@ -796,13 +841,20 @@ def test_lb6e_the_zero_arm_writes_no_scar_and_reports_none():
     assert not scarred, (
         f"the control arm wrote a scar: {scarred}. `scar_step=0` must reproduce the pre-item tree "
         "exactly, or this item moved a golden it claims not to have")
-    # AND THE EVENT STREAM IS UNMOVED TOO -- `scar.taken` is deliberately NOT in this verb's
-    # `emits:`, because an `emits:` cell fires per BAND from the table rather than per write, so
-    # declaring it would report a scar on every wound including at this arm, where none is taken.
-    for band, v in seen.items():
-        assert "scar.taken" not in v["kinds"], (
-            f"band {band!r} emitted `scar.taken` at the control arm, reporting a scar that was "
-            "not written -- the `ID-9` defect this row's own `emits:` note names")
+    # ⚠ THE ASSERTION THAT STOOD HERE COULD NOT FAIL, AND SAYING WHY IS THE REPAIR. It read
+    # `assert "scar.taken" not in v["kinds"]` -- but `scar.taken` is in NO band's `emits:` in
+    # `verb_table.yaml`, so `emits_at` can never return it, for any band, any fixture value and
+    # any future edit short of adding the column. That is §0.1 pt 2 exactly: an absent test
+    # wearing a present one's clothes, sitting inside this item's own control. What is actually
+    # worth pinning is that the table has not GROWN the kind while the magnitude is still 0 --
+    # which is a claim about the data, so it is asserted against the data.
+    from ..data.verbs import VERB_TABLE
+    row = VERB_TABLE["kill / wound"]
+    declared = {k for band in row.emits_by_degree for k in row.emits_by_degree[band]}
+    assert "scar.taken" not in declared, (
+        "`scar.taken` has been added to this verb's `emits:` while `scar_step` still ships at 0, "
+        "so every wound now reports a scar that was not written -- the `ID-9` defect the row's "
+        f"own note refuses. Declared kinds: {sorted(declared)}")
 
 
 def test_lb6e_a_verb_that_engages_no_axis_scars_nothing():

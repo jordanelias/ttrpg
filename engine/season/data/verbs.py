@@ -61,7 +61,7 @@ from .matrix import MATRIX
 from .requires import TypedRequires, build_typed_requires
 from .rosters import (
     CONVICTION_AXES, CONVICTIONS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, load_yaml,
-    require_member, roster,
+    require_member, roster, roster_map,
     table,
     table_meta,
 )
@@ -71,11 +71,30 @@ VERB_TABLE_YAML = files.VERB_TABLE_YAML
 ELIGIBILITY_KINDS = roster("eligibility_kinds")
 
 BENEFICIARY_KINDS = roster("beneficiary_kinds")
-# The two members that are OPERAND NAMES rather than structural carriers. `actor` is held by every
-# Candidate unconditionally and `subject` is a field on it, so neither needs the cell to bind --
-# but `to` is carried only where the row's `requires_typed` admits it, and a row declaring a
-# beneficiary its own cell can never bind is `CAT-2`'s option 1 re-entering through the column.
-_OPERAND_BENEFICIARIES = ("to",)
+# ⚠ WHICH BENEFICIARY KINDS NEED A CELL TO BIND -- READ FROM THE ROSTER, NEVER LISTED HERE.
+# `beneficiary_kinds.carriage` classifies every member `structural` or `operand`:
+#   structural -- the carrier is on the Candidate regardless of the row's `requires_typed`
+#                 (`actor` is held unconditionally, `subject` is a field, `none` carries nothing);
+#   operand    -- carried only where the row's own cell binds or admits it, so invariant 13's
+#                 third check must verify carriability for it.
+# ⚠⚠ THIS WAS A LITERAL TUPLE AND JORDAN'S OWN GUARD CAUGHT IT
+# (`test_jordan_no_definition_is_hardcoded_in_a_body`). Two versions were wrong in the same
+# direction: first `("to",)`, a hand-kept list of operand members; then a hardcoded structural
+# set subtracted from the roster, which is the same definition written the other way round.
+# Either one silently stops covering a member the moment `rosters.yaml` gains one -- which is
+# precisely the edit that roster's own note invites. Now a new member with no `carriage:` entry
+# REFUSES at load, so the check cannot fall behind the roster.
+_BENEFICIARY_CARRIAGE = roster_map("beneficiary_kinds", "carriage")
+_unclassified = set(BENEFICIARY_KINDS) - set(_BENEFICIARY_CARRIAGE)
+if _unclassified:
+    raise SystemExit(
+        f"rosters.yaml: `beneficiary_kinds` carries {sorted(_unclassified)} with no `carriage:` "
+        "entry. Every member must be classified `structural` or `operand`, because loader "
+        "invariant 13's third check verifies carriability for the operand ones and would "
+        "silently skip an unclassified member -- CAT-2's dead option 1 re-entering through the "
+        "column, which that check exists to forbid.")
+_OPERAND_BENEFICIARIES = tuple(
+    sorted(k for k, v in _BENEFICIARY_CARRIAGE.items() if str(v).strip() == "operand"))
 
 @dataclass(frozen=True)
 class VerbRow:
@@ -296,13 +315,22 @@ def _load_verb_table() -> dict:
                 "is the UNKNOWN/False collapse `operands_for` refuses one level down.")
         # (2) IT IS ROSTERED. `beneficiary_kinds` is the closed set, in `rosters.yaml`, so a
         #     fifth carrier is a data edit argued for in the roster rather than a new string here.
-        require_member(
-            row.beneficiary, BENEFICIARY_KINDS,
-            what=f"verb_table.yaml: {name!r}'s `beneficiary:`", where="rosters.yaml",
-            needs="one of the rostered carriers, or `none`",
-            law="CAT-2 -- the beneficiary resolves to a carrier a Candidate ALREADY holds (the "
-                "actor, `subject`, or a named operand). A name outside the roster is a carrier "
-                "nothing can resolve")
+        #     ⚠⚠ IT RAISES `SystemExit`, NOT `Unspecified`, AND THE FIRST VERSION HAD THAT
+        #     BACKWARDS. This went through `require_member`, which raises `Unspecified` -- and
+        #     this file's own `H-115` docstring codifies the opposite split: load-time refusals
+        #     are CORRECTLY fatal `SystemExit`, while `Unspecified`/`ShapeGap`/`Forbidden`/
+        #     `NoProducer` are the PER-ACT gap taxonomy. `corpus_run.run_case` catches that
+        #     taxonomy, so a broken TABLE imported inside its try block was reported as ONE
+        #     CASE's `status="DESIGN-GAP"` -- a whole-table defect attributed to a case, which is
+        #     the mis-attribution `H-115` was raised to end, arriving through the new check.
+        #     It was also invisible to `test_h115_...`, which counts `raise SystemExit` only.
+        if row.beneficiary not in BENEFICIARY_KINDS:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `beneficiary: {row.beneficiary!r}`, which is "
+                f"not in `beneficiary_kinds` ({sorted(BENEFICIARY_KINDS)}). CAT-2 -- the "
+                "beneficiary resolves to a carrier a Candidate ALREADY holds (the actor, "
+                "`subject`, or a named operand); a name outside the roster is a carrier nothing "
+                "can resolve. Add it to rosters.yaml and argue for it there, never here.")
         # (3) AN OPERAND BENEFICIARY MUST BE CARRIABLE BY THIS ROW'S OWN CELL, AND THIS IS THE
         #     CHECK THAT KEEPS THE COLUMN HONEST. `CAT-2` killed option 1 -- derive the
         #     beneficiary from the operand binding -- by MEASURING that 24 of 38 verbs are

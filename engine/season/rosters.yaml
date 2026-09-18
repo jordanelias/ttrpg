@@ -1139,6 +1139,18 @@ rosters:
       (`STR-1`, phase 6e). This roster and its column deliver `benefits_me(c)`; nothing multiplies
       it yet, and `decision/choose.py`'s `score` is untouched.
     values: [actor, subject, to, none]
+    # ⚠ WHICH MEMBERS NEED A CELL TO BIND, DECLARED PER MEMBER RATHER THAN DERIVED IN A BODY.
+    # `structural` -- the carrier is on the Candidate no matter what the row's `requires_typed`
+    # says (`actor` is held by every Candidate; `subject` is a field on it; `none` carries
+    # nothing by definition). `operand` -- carried ONLY where the row's own cell binds or admits
+    # it, so loader invariant 13's third check must verify carriability for it.
+    # ⚠⚠ THIS EXISTS BECAUSE `verbs.py` HELD THE SPLIT AS A LITERAL AND JORDAN'S OWN GUARD CAUGHT
+    # IT (`test_jordan_no_definition_is_hardcoded_in_a_body`). A hand-kept tuple beside a roster
+    # that promises *"a fifth carrier is a data edit argued for in the roster rather than a new
+    # string here"* is the second owner that promise exists to prevent: add a member, and the
+    # check silently does not cover it. Classified here, a new member without a classification
+    # REFUSES at load instead.
+    carriage: {actor: structural, subject: structural, to: operand, none: structural}
 
   requires_forms:
     source: >-

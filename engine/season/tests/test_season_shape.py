@@ -679,6 +679,26 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     candidate ever formed, `benefits_me` would read 0.0 for everybody, and every other assertion
     about the column would stay green. The raise makes that unwritable at load instead of
     unobservable at run.
+    ⚠ 34 -> 35, THE SAME ROW CORRECTED, 2026-09-18. Invariant 13's ROSTER check went through
+    `require_member`, which raises `Unspecified` -- the PER-ACT gap type. That inverted this
+    file's own split: `corpus_run.run_case` catches that taxonomy, so a broken TABLE imported
+    inside its try block was reported as ONE CASE's `DESIGN-GAP` rather than as the fatal load
+    failure it is. The check now raises `SystemExit` like its two siblings, so all THREE of
+    invariant 13's refusals are counted here instead of two, and the defect this test exists to
+    catch -- a load-time refusal that does not present as one -- is closed rather than recorded.
+    ⚠ THE PREVIOUS ENTRY'S "moves by two and not by three" WAS THE DEFECT, NOT BOOKKEEPING. It
+    noticed the asymmetry, explained it, and shipped it; the explanation was the tell.
+
+    ⚠ 35 -> 36, THE SAME PASS, AND THIS ONE IS A NEW REFUSAL RATHER THAN A CORRECTED ONE.
+    `beneficiary_kinds` now classifies every member `structural` or `operand` in the ROSTER
+    (`carriage:`), because the split was a literal tuple in `verbs.py` and
+    `test_jordan_no_definition_is_hardcoded_in_a_body` caught it -- twice, since the first repair
+    subtracted a hardcoded structural set from the roster, which is the same definition written
+    backwards. The new raise fires when a member arrives with no classification, which is exactly
+    the edit that roster's own note invites (*"a fifth carrier is a data edit argued for in the
+    roster"*) and the edit that would otherwise leave invariant 13's third check silently not
+    covering it. It is load-time and fatal, so it is counted here.
+
     ⚠ BOTH FALSIFIERS EXECUTED 2026-09-18, by substituting `levy`'s row on disk and reloading:
     drop its `beneficiary:` -> *"declares no `beneficiary:`"*; set it to `to` on that untyped row
     -> *"neither binds nor admits that operand (carriable: nothing -- the row is UNTYPED)"*. Both
@@ -690,8 +710,8 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 34, (
-        f"{total} load-time exits across the model set, expected 34. Per file: "
+    assert total == 36, (
+        f"{total} load-time exits across the model set, expected 36. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 

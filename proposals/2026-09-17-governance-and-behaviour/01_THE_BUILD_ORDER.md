@@ -843,7 +843,7 @@ candidates formed          5,345
   declared-but-UNRESOLVED      0
 ```
 
-**The zero is the result.** `CAT-2` killed option 1 — derive the beneficiary from the operand
+**⚠ THE ZERO IS STRUCTURAL, NOT MEASURED, AND THIS SECTION FIRST CALLED IT "the result".** Traced after the fact: `actor` resolves to `p.id`, `subject` to a field `opening_set` always sets, and `to` is declared by one row whose `_derive_operand` answers it with `return subject` — so no candidate the engine forms *can* reach the unresolved branch. The zero is a property of three code paths, not a reading of the data, and it is corrected here rather than left standing as this item's headline. What the sweep does establish is narrower and still worth having: those three paths resolve on 3,796 real candidates and no fourth path appeared. `CAT-2` killed option 1 — derive the beneficiary from the operand
 binding — by measuring that **24 of 38 verbs are UNTYPED and can carry no operand whatever**; only
 12 admit `to`. That census re-runs on this tree and reproduces exactly. A *static* column escapes
 that failure **only while it declares carriers real candidates actually hold**, and a column that
@@ -864,8 +864,8 @@ for each row** — every note cites it — and never the rule.
 ## ⚠ THE CONTROL ON THIS ITEM'S OWN HEADLINE
 
 `benefits_me` reads `1.0` on **3,420** of the 5,345 candidates, and **that number must not be read
-as a fact about Valorians.** MEASURED, same run: **2,650 candidates (49.6%) carry THE ACTOR AS
-THEIR OWN SUBJECT, uniformly 98 per verb** — `opening_set` offers every person themselves as a
+as a fact about Valorians.** MEASURED, same run: **2,650 (49.6%) carry THE ACTOR AS THEIR OWN SUBJECT** — 28 verbs form them, 22 at exactly 98 and six lower (`surveil` 93, `examine` 86, `restore` 86, `move` 84, `transfer` 79, `research` 66) ⚠ *(this read "uniformly 98 per verb" until 2026-09-18 and was
+self-refuting: 2650/98 = 27.04, not an integer verb count. Re-measured, same seed.)* — `opening_set` offers every person themselves as a
 referent for every verb, so a person forms `interview <self>` and `kill / wound <self>` alongside
 the rest. The self-benefiting share is **the aperture's shape**, it predates this item, this item
 does not touch it, and **nothing is scheduled from it here** (§0: a finding that needs no ruling is

@@ -26,11 +26,24 @@ from __future__ import annotations
 from ..data.rosters import (
     CONVICTION_AXES, FELLED, RELEASABLE_KINDS, WOUND_HARM_MODELS, require_member,
 )
-from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
+
 from ..gaps import InstrumentDefect, Unspecified
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.ids import H
 from ..trace_log import TRACE
+
+# ⚠ THE SCAR ACCUMULATOR'S PRECISION, AND IT EXISTS TO MAKE THE FOLD ORDER-INDEPENDENT.
+# `scar` accumulates across acts, and incremental IEEE addition is NON-ASSOCIATIVE -- the control
+# `results.json`'s A5 row already records on this tree is exactly it (five float deltas summed in
+# two orders give 0.30000000000000004 vs 0.3; the same five as integers are identical), and A5's
+# own conclusion is that *"a one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE
+# ORDERING AND NOT ANOTHER"*. Because `scar` reaches `repr(Person)` -> `_entity_digest` ->
+# `content_hash`, a one-ulp divergence moves the hash too. `S27.3`'s answer elsewhere is
+# sum-then-clamp-once, which needs the whole set at once and this write does not have it;
+# rounding each accumulation to a fixed place buys the same property -- `round(a+b) == round(b+a)`
+# -- for a per-act writer.
+# [JUSTIFIED: a PRECISION, not a game value -- six places is far below any magnitude `scar_step` can take and exists only to keep accumulation associative; nothing in the model reads it as a quantity]
+_SCAR_DP = 6  # ED-IN-0249 / H-128 -- the scar accumulator's precision, order-independence only
 
 
 # ---------------------------------------------------------------------------
@@ -343,13 +356,39 @@ def _scar(w: "World", p, verb: str) -> None:
     step = w.fixtures.get("scar_step")
     if not step:
         # THE CONTROL ARM, AND IT RETURNS BEFORE TOUCHING THE CARRIER. A zero-depth scar written
-        # as a 0.0 cell would still put a key on the field and still move `World.content_hash()`,
-        # which is the difference between an arm that is inert and one that merely looks it.
+        # as a 0.0 cell would still put a key on the field, and `_entity_digest` reprs every
+        # field -- which is the difference between an arm that is inert and one that looks it.
         return None
+    # ⚠⚠ `decision.align`, NOT A LOCAL `ALIGNMENT` READ, AND THE LOCAL READ WAS A REAL DEFECT
+    # RATHER THAN A STYLE SLIP. This computed the cell inline off THIS module's own `ALIGNMENT`
+    # binding. `align()` reads the binding in `decision/choose.py`, which is the one the `H-66`
+    # alignment sweep REBINDS (`decision.ALIGNMENT = alignment_at(point)`) -- so the sweep moved
+    # `choose`'s scoring and could not move the scar at all. MEASURED before the fix: under the
+    # `uniform` arm `align('kill / wound','sacred')` read 1.0 while `_scar` still wrote 3.0 off
+    # the unrebound 0.3. The docstring above promises exactly what the inline read broke: no
+    # second table free to disagree with the one `choose` scores against. One owner, §8, and the
+    # sweep now reaches both readers.
+    from ..decision import align
+    # ⚠ SIGNED, AND THE `abs()` THAT STOOD HERE COLLAPSED A DISTINCTION THE READER NEEDS.
+    # 17 of the 52 populated `ALIGNMENT` cells are NEGATIVE, so a verb that VIOLATES an axis and
+    # one that UPHOLDS it cut an identical wound under `abs()`. It is invisible today only
+    # because `kill / wound`'s one cell is `+0.3`; it bites the moment a negative-cell verb is
+    # wired, and the scar's named reader -- the Conviction crisis -- is about the DIRECTION of
+    # the wound. The magnitude keeps the cell's sign and `scar` is a signed accumulator.
     for axis in CONVICTION_AXES:
-        weight = abs(float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL)))
+        weight = float(align(verb, axis))
         if weight:
-            p.scar[axis] = p.scar.get(axis, 0.0) + step * weight
+            p.scar[axis] = round(p.scar.get(axis, 0.0) + step * weight, _SCAR_DP)
+    # ⚠ SORTED ON WRITE, BECAUSE A DICT'S INSERTION ORDER REACHES `World.content_hash()`.
+    # `_entity_digest` digests a dataclass as `repr(obj)`, and `repr` of a dict is
+    # insertion-ordered -- so two people scarred by the same verbs in opposite ORDERS held equal
+    # values and produced different digests. `_entity_digest` already `sorted()`s PLAIN dicts for
+    # this exact reason (`world.py:141`), but a dict FIELD inside a dataclass never reaches that
+    # branch. `A5`/`S32` assert the content hash is order-independent; that survived only while
+    # this dict could hold one key. Re-inserting in sorted order makes the field carry its own
+    # canonical form rather than relying on nobody scarring twice.
+    if len(p.scar) > 1:
+        p.scar = {k: p.scar[k] for k in sorted(p.scar)}
 
 
 @effect_for("kill / wound")
@@ -430,6 +469,16 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
         "H-123",
         law="`observers_for`'s precedent and its reason -- *an unrecognised mode silently "
             "falling back would make every measurement of this sweep read the control*")
+    # ⚠⚠ THE SCAR RUNS BEFORE THE HARM-MODEL BRANCH, AND IT USED TO RUN AFTER IT -- WHICH
+    # CONFOUNDED TWO INDEPENDENT SWEEPS. `wound_harm_model == "none"` returns early (it is
+    # `H-123`'s control, the arm that isolates *the band selected a different write set* from
+    # *the band changed a value*), so with the call below that `return` a `Wounded` outcome at
+    # `scar_step=10` silently wrote NO scar while `verb_table.yaml` declared `Person.scar` for
+    # that band unconditionally. Sweeping `H-123` therefore also swept whether `H-128`'s
+    # mechanism ran at all, so neither row measured what it says it measures. The moral wound
+    # is a consequence of the OUTCOME, not of how much body the scene took, so it belongs
+    # ahead of the magnitude model entirely.
+    _scar(w, p, a.verb)
     if res.degree == FELLED:
         # The scene says this person went down, and the table says that is the kill. The body
         # goes to 0 on every arm: the arms grade a WOUND, and a felling is not one.
@@ -448,7 +497,6 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
                 law="the magnitude is READ from the scene; a scene that carries none cannot be "
                     "read, and choosing a number here is what this arm exists not to do")
         p.body = max(1, p.body * max(0, left) // full)
-    _scar(w, p, a.verb)
     if p.body > 0:
         return [who]
     # ⚠ `w.tenures`, NOT `p.tenures + w._unowned`, AND THAT IS A FIX `W-E`'s OWN TEST FOUND.
