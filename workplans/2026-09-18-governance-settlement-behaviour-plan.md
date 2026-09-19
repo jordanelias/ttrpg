@@ -301,9 +301,9 @@ single blocker in the plan.**
 | 21 | **U10** | IN | the second measurement; `measured:` from instrument output only | **BLOCKED** | 20 ⚠ `requirements.yaml` carries **four mutually inconsistent R3 figures** (`:142`, `:265`, `:333`, `:524`) with no stated baseline. Any position measuring propagation trips on this — fix it here |
 | 22 | **PROC-B** | SC | the proceedings provider; the composed obstacle with a ceiling; THE BAR | **BLOCKED** | 18, ★ |
 | 23 | **PART-E-0/2** | IN | typed ids with an owned `H`; the ONE loader's remaining invariants | **OPEN** | 22 |
-| 24 | **SE-BUILD** | SE | settlements P1–P4. ⚠ **MIS-SIZED AS WRITTEN: P1 is DONE bar a number, P4 is now `24e`, and P2/P3 grew a ruled dependency.** Re-scope before starting | **OPEN** · partial | see `24d`, `24e` |
+| 24 | **SE-BUILD** | SE | settlements P1–P4. ⚠ **MIS-SIZED AS WRITTEN: P1 is DONE bar a number, P4 is now `24e`, and P2/P3 grew a ruled dependency.** Re-scope before starting | **OPEN** · partial | ✅ **P1/P3/P4 ACCEPTED FOR BUILD 2026-09-19** (`ED-SE-0054`); P2 is not in the acceptance. ⚠ P1's write site inherits `24f`'s open scale question. See `24d`, `24e` |
 | **24d** | **SE-CAPACITY** | SE | `capacity(w, rung)` as a Query over the rung's dwelling Sites **with a FLOOR — never a fixture table** | **OPEN** | ✅ **RULED AND CLOSED 2026-09-19** (`ED-SE-0051`, §3.6); ungated. The blocker is that the mechanism has **zero code**: no `capacity` in `queries/`, and no `dwelling`/`houses`/`shelters` anywhere in `engine/season/`, where `rosters.yaml:847` fixes `site_kinds` to three, one of which is not a site |
-| **24e** | **12 — WORKS & FOUNDING** | SE/IN | `works` kind · `work` advances `stage` · `restore` body · `found` + body · `(Rung\|Site, exists)` get a producer. **This is `found` (P4), which the `ED-SE-0051` ruling names as THE THROTTLE**, and it answers `ARCH` `F.20` — *"the world only decays — nothing is ever founded or built"*, one of two gaps `04:1082` says *"block the build outright"*. It is also the R-half with no player in it (§0.06) | **BLOCKED** | 15 |
+| **24e** | **12 — WORKS & FOUNDING** | SE/IN | `works` kind · `work` advances `stage` · `restore` body · `found` + body · `(Rung\|Site, exists)` get a producer. **This is `found` (P4), which the `ED-SE-0051` ruling names as THE THROTTLE**, and it answers `ARCH` `F.20` — *"the world only decays — nothing is ever founded or built"*, one of two gaps `04:1082` says *"block the build outright"*. It is also the R-half with no player in it (§0.06) | **BLOCKED** | 15. ✅ **P4 ACCEPTED FOR BUILD 2026-09-19** (`ED-SE-0054`) — the acceptance does NOT unblock it; `found` still waits on the Record-kind fold, and `04_EVALUATION.md` grades P4 `paper` / **refuses at load** pending three table corrections |
 | **24f** | **SUBSISTENCE IS TERRITORIAL** | SE | ⭐ **RULED 2026-09-18 (`ED-IN-0255`)** — *"subsistence/starvation should largely be an abstract/governance issue, and we can just have NPC synecdoches that just represent the overall population affected... i don't think having lords and guild members etc worry about subsistence is worthwhile"* · *"it's a territorial issue"*. Move the demographic loop off per-person eaters and bodies onto a TERRITORIAL quantity with population synecdoches | **OPEN** | — ruled, unscheduled by any prior order. ⚠ **It re-opens `ED-IN-0247`**: `body_step` is a per-PERSON body write, and this ruling puts that SCALE in question, not just its magnitude. Answer the scale before picking the number |
 | 25 | **MB-GOLDEN** | MB | apply the golden-mode ruling; fix three flags whose defaults contradict their comments | **OPEN** | `ED-MB-0061/0016` — both `superseded`, flags cleared |
 | 26 | **GO-VERSION** | GO | record the ruled version; ED-1050's deferred re-export; then held H6 | **JORDAN** | **the Godot engine version — UNRESOLVED, and `CLAUDE.md` forbids settling it by editing a document** |
@@ -607,9 +607,10 @@ If any pair is actually run concurrently, use `isolation: worktree` (`CLAUDE.md`
 ## 5. THE RULING BATCH — what actually needs Jordan
 
 Eleven items, ordered by what each unblocks. Each is answerable without reading a plan.
-⚠ **TWO WERE ANSWERED 2026-09-19 and are struck rather than deleted, so the count and the
-order do not shift under a reader returning to this list:** item 3(i) (`ED-SE-0051`) and
-the `CURRENT.md:31` record defect in §5's preamble (*"Truth becomes Conviction"*).
+⚠ **THREE WERE ANSWERED 2026-09-19 and are struck rather than deleted, so the count and the
+order do not shift under a reader returning to this list:** item 3(i) (`ED-SE-0051`),
+item 3(ii) (*"accept"* — P1/P3/P4, `ED-SE-0054`), and the `CURRENT.md:31` record defect
+in §5's preamble (*"Truth becomes Conviction"*).
 
 0. **THE UNDECLARED CONTENT-HASH TIEBREAK — and this one is needed before position 3.**
    ⚠ **Added by the antagonist pass, which caught the first draft taking one of a pair and dropping
@@ -643,8 +644,18 @@ the `CURRENT.md:31` record defect in §5's preamble (*"Truth becomes Conviction"
    question itself proposed was refused, because a fixture is a second home for a fact the Sites
    already carry (§0.05 cl.1). `found` (P4) is the throttle, scoped to populations. Closed at the
    ledger with a second row under the id; `24d` is ungated and blocked only on `capacity` having
-   zero code. ⚠ **(ii) IS STILL YOURS:** accept P1, P3, P4 for build as proposed? P4 is `F.20`,
-   which `04:61` says blocks the build outright.
+   zero code.
+   ✅ **(ii) ANSWERED 2026-09-19: *"accept"*** (`ED-SE-0054`). **P1, P3 and P4 are accepted for
+   build.** P2 is NOT in the acceptance — the question named three, and P2 is the loop `ED-SE-0051`
+   just bounded. ⚠⚠ **P1's CARRIER IS STILL IN QUESTION AND THE ACCEPTANCE DOES NOT SETTLE IT:**
+   P1 writes `(Person, body)` on every eater at a rung, and `ED-IN-0255` ruled subsistence
+   TERRITORIAL — *"i don't think having lords and guild members etc worry about subsistence is
+   worthwhile"* — which is P1's mechanism exactly. **P1's write site inherits `24f`'s open scale
+   question**; build the shortfall reaching bodies, and settle whose body at `24f`. A session
+   building P1 without reading `24f` builds the carrier that was ruled against.
+   ⚠ Neither P3 nor P4 is buildable as it stands and `04_EVALUATION.md` grades both `paper`: P3 has
+   two writes the gate refuses, P4 **refuses at load** pending three table corrections. Build
+   details, not design questions — the first work of the position rather than a qualification.
 4. **ED-MB-0061 + ED-MB-0016 — the mass-battle golden.** Re-base one global golden with every F1–F8
    flag **ON (A)**, or keep per-flag baselines **(B)**? Recommendation on record: A. Unblocks 25 and
    the three flags whose defaults contradict their own comments.

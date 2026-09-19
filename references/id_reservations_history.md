@@ -493,6 +493,24 @@ clause 3, which is why the row now carries state and a pointer only.
 
 *Moved verbatim from `id_reservations.yaml` line 236, 2026-08-01. 3104 chars.*
 
+**2026-09-19 — `ED-SE-0054` allocated; `next_free` 54 → 55.** Jordan, answering ruling-batch item
+3(ii) of `workplans/2026-09-18-governance-settlement-behaviour-plan.md`: **"accept"** — P1 (dearth
+reaches the body), P3 (individuation is a refusal) and P4 (founding and building) of
+`proposals/2026-09-10-settlements-factions-populations/` are **accepted for build**.
+
+- **P2 is NOT in the acceptance.** The question named three; P2 (the bodies clock) is the loop
+  `ED-SE-0051` bounded with hearth capacity two rulings earlier the same day.
+- ⚠ **P1's carrier is in question and the acceptance does not settle it.** P1 writes
+  `(Person, body)` on every eater at a rung; `ED-IN-0255` (2026-09-18) ruled subsistence
+  **territorial** — *"i don't think having lords and guild members etc worry about subsistence is
+  worthwhile"* — which is P1's mechanism exactly. Not escalated, because plan position `24f`
+  already carries it: *"Answer the scale before picking the number."* P1's write site inherits it.
+- ⚠ **Neither P3 nor P4 is buildable as it stands**, per `04_EVALUATION.md`'s own grading: P3 has
+  two writes the gate refuses; P4 **refuses at load** pending three table corrections. Build
+  details rather than design questions. P4 is `24e` and stays blocked on position 15.
+
+Full row: `registers/editorial_ledger_se.jsonl`, `ED-SE-0054`.
+
 ```text
 BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0049-0052 RESERVED 2026-07-29 for cross-lane EDs the IN code-shape waves file in SE. MEASURED max allocated = ED-SE-0049; unused 0050-0052 (3) returned to the pool, next_free 53 -> 50. Freeze lifted: read next_free, allocate, bump, co-commit as normal. // ED-SE-0045..0048 allocated 2026-07-13: 2026-07-13 multi-agent audit P1 batch (designs/audit/2026-07-13-multi-agent-audit/) -- 0045 Prosperity->Treasury x50 vs x10 conflict (settlement_layer SS1.3 L47 vs SS1.8 L169); 0046 Fortress-City/Cathedral-City/Village missing from SS1.2 + base(Type) weight table (W_s uncomputable for the 2 compound types); 0047 SS4.7 Black Markets modifies invalid 'Settlement Wealth'/'Settlement Accord' fields; 0048 settlement_adjacency prose stale (36 settlements/PP-723) vs PP-726-rebuilt geography YAML (37/55). All open/needs_jordan. NOTE: mechanic_audit GAP-02 (Fort Level province->settlement granularity) NOT re-filed -- already ratified + tracked under ED-SE-0006 (open, execution pending); its SS2.2 mass_battle-SSA.4 mis-citation residual folds into ED-SE-0006 execution. next_free bumped 45->49. // ED-SE-0018..0044 allocated 2026-07-09: comparative-governance-research docket round 2 (designs/audit/2026-07-09-comparative-governance-research/) — same batch as the FA-lane note above; 7 authored into governance_play_redesign_v1.md/settlement_layer_v30.md as PROPOSED (ED-SE-0018/0019/0020/0021/0022/0023/0024 — Kokudaka Survey + Encabezamiento locked-extraction substrate, Goningumi cells, Za patron-lapse, Clerk Capacity, Ordenanza Ratification, Seggio Council), rest open/needs_jordan (see registers/editorial_ledger.jsonl and registers/handoffs/HANDOFF_SE.md). next_free bumped 18->45. ED-SE-0007..0017 allocated 2026-07-08 (THIS branch, RENUMBERED +1 from this branch's original ED-SE-0006..0016 -- collided with origin/main's concurrent ED-SE-0006, the coherence-audit Fort-Level bundle below): FA/SE historical-precedent research docket (designs/audit/2026-07-08-fa-se-historical-precedent-research/) — Weberian L/PS derivation table (SE-1, highest priority), dearth chain + grain routes, charter/prescription, entry terms, succession continuity, oversight toolkit, church-state seam, marcher autonomy, Weight-as-Exit, citation-patch CP-2; several needs_jordan forks (0013,0014,0015,0017). ED-SE-0006 allocated 2026-07-08 (origin/main): attribute/value coherence audit (ED-IN-0029) — Fort Level province→settlement inheritance (default: settlement = province value) + Garrison/Local-Economy/Public-Order §9 ratify-vs-[ASSUMPTION]-mark, both OPT-AV-18; decisions ratified, execution pending. ED-SE-0005 allocated 2026-07-08: pessimist-audit SE work items — Trade/Grant prune, Sponsor merge, etc. — execution pending (decision ED-IN-0027). ED-SE-0001 allocated 2026-07-05: NERS-audit E-1 accepted work item (governance_play_redesign path); ED-SE-0002 allocated 2026-07-05: edge-playability §7 item 4 (Accord/Order stacking ruling, needs_jordan), edge-playability §7 batch (PR #81)
 ```

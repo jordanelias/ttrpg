@@ -245,7 +245,22 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # BACK IN FULL. ED-SE-0051 still STAYS the open escalation -- 0053 recommends its capacity arm and
     # does not close it. Entry in registers/editorial_ledger_se.jsonl; narrative in
     # references/id_reservations_history.md#se.
-    released = {'SC': 38, 'FA': 39, 'WR': 12, 'SE': 54}
+    #
+    # PIN UPDATED 2026-09-19: SE 54 -> 55, and this note is the "say so" the failure message asks
+    # for. ED-SE-0054 allocated: Jordan answering ruling-batch item 3(ii) with "accept" -- P1
+    # (dearth reaches the body), P3 (individuation is a refusal) and P4 (founding and building) of
+    # proposals/2026-09-10-settlements-factions-populations/ are ACCEPTED FOR BUILD. P2 is NOT in
+    # the acceptance; it is the loop ED-SE-0051 bounded with hearth capacity the same day.
+    # ⚠ P1's CARRIER IS IN QUESTION AND THE ACCEPTANCE DOES NOT SETTLE IT: P1 writes (Person, body)
+    # on every eater at a rung, and ED-IN-0255 ruled subsistence TERRITORIAL -- "i don't think
+    # having lords and guild members etc worry about subsistence is worthwhile" -- which is P1's
+    # mechanism exactly. Plan position 24f already carries the question ("answer the scale before
+    # picking the number"), so P1's write site inherits it rather than this being a new escalation.
+    # ⚠ AND ED-SE-0051 NO LONGER "STAYS the open escalation" as the note above says: it CLOSED
+    # 2026-09-19 (matter plus hearth capacity, as a Query over dwelling Sites, never a fixture
+    # table). That note is left as the true record of what 0053's allocation day believed.
+    # Entry in registers/editorial_ledger_se.jsonl; narrative in id_reservations_history.md#se.
+    released = {'SC': 38, 'FA': 39, 'WR': 12, 'SE': 55}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (
