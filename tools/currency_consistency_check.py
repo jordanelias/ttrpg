@@ -85,12 +85,37 @@ def _git_last_commit_date(path):
     return r.stdout.strip() if r.returncode == 0 else ''
 
 
+_PATH_IN_BACKTICKS = re.compile(
+    r'`((?:designs|systems|engine|params|references|canon|sim|tools|tests|skills)/[^`\s]*)`')
+
+# A TRAILING `:NNN` IS A LINE CITATION, NOT PART OF THE PATH (2026-09-19).
+# This repo cites a line the ordinary way — `engine/engine_params/params_tables.yaml:3145` — and
+# CLAUDE.md §0.1 pt 3 instructs a reader to open `F` at `:L`, so the form is standard here rather
+# than incidental. Read literally, the suffix made `check_current_paths_exist` report that live,
+# 669 KB file as nonexistent: of the drift rows a reader saw, the one naming a missing path was the
+# one row that was not drift, which is worse than a missed finding because it spends the reading.
+#
+# STRIPPED AT THE SINGLE EXTRACTION POINT, deliberately. The regex had two copies — here and in
+# `_tombstoned_paths` — whose outputs are compared by `in` at check_current_paths_exist. Fixing one
+# would make a tombstoned `path.yaml:12` stop matching its own exemption and START reporting, so
+# the half-fix is worse than the defect. One owner, both callers (§8).
+#
+# ⚠ IT WIDENS THE STAMP CHECK TOO, and that is correct rather than incidental: `_canonical_head_paths`
+# reads the same list, so a cited-with-line canonical head now answers `git log` instead of silently
+# returning '' and never staling. MEASURED at the repair: params_tables.yaml last moved 2026-09-09
+# against a 2026-09-16 stamp, so the row count falls 8 -> 7 today and nothing new is introduced.
+_LINE_SUFFIX = re.compile(r':\d+(?:-\d+)?$')
+
+
+def _paths_in(text):
+    """Backticked repo paths in `text`, with any `:NNN` / `:NNN-NNN` line citation removed."""
+    return [_LINE_SUFFIX.sub('', m) for m in _PATH_IN_BACKTICKS.findall(text)]
+
+
 def _current_md_paths(text):
     """Paths named in CURRENT.md (backticked); keeps trailing-slash package dirs.
     Glob patterns (engine/params/bg/*) are references to families, not checkable paths."""
-    paths = re.findall(
-        r'`((?:designs|systems|engine|params|references|canon|sim|tools|tests|skills)/[^`\s]*)`', text)
-    return sorted({p for p in paths if '*' not in p and '?' not in p})
+    return sorted({p for p in _paths_in(text) if '*' not in p and '?' not in p})
 
 
 # Trees that hold CANONICAL HEADS. The stamp answers one question — "has a canonical head moved
@@ -348,9 +373,7 @@ def _tombstoned_paths(text):
     for line in text.splitlines():
         if not _TOMBSTONE.search(line):
             continue
-        out.update(re.findall(
-            r'`((?:designs|systems|engine|params|references|canon|sim|tools|tests|skills)/[^`\s]*)`',
-            line))
+        out.update(_paths_in(line))
     return out
 
 
