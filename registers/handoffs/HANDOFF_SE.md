@@ -6,9 +6,12 @@ index; see it for cross-lane/global items.
 
 ⚠ **THIS LANE HAS LIVE WORK AND THE HEADER SAID OTHERWISE UNTIL 2026-09-18 (`ED-IN-0251`).** It read
 *"No active work tracked in this lane as of the 2026-07-02 HANDOFF split"* — false against this file's
-own body 110 lines down, and the first thing a reader saw. **What is live:** `ED-SE-0051` (E-1, the
-bound on the demographic loop — ⚠ **RULED BY JORDAN 2026-09-17 AND STILL FLAGGED `open` IN THIS LANE'S
-LEDGER**, which is a four-surface disagreement, not an open question: see
+own body 110 lines down, and the first thing a reader saw. **What is live:** ✅ `ED-SE-0051` (E-1, the
+bound on the demographic loop) is **CLOSED — RULED `matter plus hearth capacity`, and the ledger now
+says so** (Jordan, 2026-09-19: *"commit whatever se-0051 is"*, closing a ruling he gave 2026-09-17).
+The four-surface disagreement this header described is resolved; the ledger's last row under that id
+is `status: ruled`, `needs_jordan: false`. ⚠ **NOTHING IS BUILT** — `capacity` has zero code, and
+position `24d` is now ruled-and-ungated rather than waiting on an answer. For the verbatim ruling see
 `proposals/2026-09-18-the-gather/05_THE_ORDER.md` §6 for the verbatim ruling at
 `RULINGS.yaml:1838-1844` and why the flag is not closed without Jordan's word. **The sections below
 still read "STAYS OPEN" and are stale on that point.**), `ED-SE-0052` and `ED-SE-0053`. See the dated
@@ -18,7 +21,8 @@ proposal set…"*, *"2026-09-17 · ROUND TWO — `04_MATTER_AND_WORKS.md` (`ED-S
 very repair:** the first two writings of this paragraph gave `:116/:197/:263` and then `:130/:211/:277`,
 and BOTH were stale on arrival — each rewrite of the header moved the body it was pointing at. A line
 number inside the file it indexes is invalidated by editing that file. The lane's position in the
-ratified order is **24, SE-BUILD (settlements P1–P4), gated on `ED-SE-0051`** —
+ratified order is **24, SE-BUILD (settlements P1–P4)** — ⚠ no longer gated on `ED-SE-0051`, which
+closed 2026-09-19; it is gated on `capacity` not existing —
 `workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3.
 
 **Canonical head — BY BARE FILENAME, deliberately:** `settlement_layer_v30.md` (+
@@ -141,10 +145,13 @@ index that owns it.)
   `## Status:` line, closes an ED row, moves a `CURRENT.md` row, or changes code on merge. **Start at
   `05_COLLISIONS_AND_RESIDUE.md` §6** — the 2026-09-06 rulings were found late and move three things
   in the set.
-  - **`ED-SE-0051` is the one open escalation** (`needs_jordan: true`): whether the demographic loop
-    is bounded by **matter alone** (Malthusian waves; costs nothing new) or **matter plus hearth
-    capacity** (a `hearth_capacity` fixture per `site_kind`; makes founding-and-building the player's
-    throttle). Layer 1 §25 licenses the clock and names no bound. Both arms priced in
+  - ✅ **`ED-SE-0051` IS CLOSED (2026-09-19) — it was this lane's one open escalation.** The fork was
+    whether the demographic loop is bounded by **matter alone** (Malthusian waves; costs nothing new)
+    or **matter plus hearth capacity**. **RULED: matter plus hearth capacity** — and the SHAPE was
+    ruled with it: a `capacity(w, rung)` **Query over the rung's dwelling Sites, with a floor, NEVER
+    a fixture table**. The original row proposed a `hearth_capacity` fixture per `site_kind`; that
+    shape was refused, because a fixture is a second home for a fact the Sites already carry.
+    Founding-and-building (`found`, P4) is the throttle, scoped to populations. Layer 1 §25 licenses the clock and names no bound. Both arms priced in
     `05_COLLISIONS_AND_RESIDUE.md` §4; both ship with P1 as the `−` term either way.
   - **The set's own named hole is `H-62`, and Jordan's R7 calls it first-rank:** no verb in
     `verb_table.yaml` writes any `Person` interior field, so convictions cannot move and `choose`
@@ -261,7 +268,7 @@ all**.
 - **hearth larders and any delivery move** — see above.
 - **`fort_level` / `facility_tier`** — live readers behind a blocking round-trip `--check`.
 
-**`ED-SE-0051` (RR-2) STAYS OPEN, and its ground has MOVED.** `04` still recommends the **capacity**
+⚠ **`ED-SE-0051` (RR-2) READ "STAYS OPEN" HERE AND IS NOW CLOSED (2026-09-19, ruled `matter plus hearth capacity`). Its ground had MOVED even then.** `04` still recommends the **capacity**
 arm and still refuses to close it — but it records that **this document destroys round one's decisive
 argument for it**: *"matter-only is not currently a bound"* was that argument, and after
 `nearest_store` lands, matter-only **is** a bound. Whoever answers it should answer the new question,
@@ -315,7 +322,7 @@ from a settlement, every person lives in a hearth, and the shortfall is clamped 
 `engine/engine_params/descriptors.json` behind a **blocking** round-trip `--check`. The engine copy of
 `fort_level` is already the derived single-owner shape the cut was asking for.
 
-**`ED-SE-0051` STAYS OPEN.** `02` *recommends* its **capacity** arm — a `capacity(w, rung)` Query over
+⚠ **`ED-SE-0051` READ "STAYS OPEN" HERE AND IS NOW CLOSED (2026-09-19).** Its capacity arm was ruled, in the Query-not-fixture shape this passage recommends. `02` *recommends* its **capacity** arm — a `capacity(w, rung)` Query over
 dwelling sites with a floor, never a fixture — on the ground that matter-only is not currently a bound
 at all, because the shortfall is recorded and not acted on. It does not close it, and per `ED-WR-0011`
 it should be answered alongside that row.

@@ -195,6 +195,11 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # call. The entry is in registers/editorial_ledger_se.jsonl; the proposal set it comes from is
     # PROPOSED and HELD BACK FROM RATIFICATION-ON-MERGE IN FULL, and nothing about it is decided.
     # Same update-the-pin-and-say-so path this test's own failure message asks for.
+    # ✅ DECIDED 2026-09-19, appended rather than rewritten because this log is chronological and the
+    # note above is a true record of the allocation. Jordan ruled MATTER PLUS HEARTH CAPACITY -- and
+    # refused the shape this note describes: NOT a `hearth_capacity` fixture per site_kind, but a
+    # `capacity(w, rung)` Query over the rung's dwelling Sites with a floor. So the cost sentence
+    # above ("one fixture table and one conjunct") priced an arm that was not taken.
     #
     # PIN UPDATED 2026-09-10: WR 10 -> 11, resolved alongside the SE bump above at the merge of
     # PR #388 -- two lanes advancing independently, which is exactly the collision the lane-tagged
