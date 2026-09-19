@@ -20,9 +20,16 @@ acts would make every refusal chain unresolvable, which is the defect one level 
 
 APPEND-ONLY IS ENFORCED, NOT ASKED. The list is private and there is no remove, no clear, no
 setter and no mutable accessor: `__iter__` yields from a tuple copy so a caller holding the
-result cannot reach the backing list. Re-appending an id is refused rather than ignored, because
-two acts with one id make `causes[]` ambiguous in exactly the way an unresolvable id is not --
-silently, with both readings available.
+result cannot reach the backing list.
+
+⚠ RE-APPENDING AN ID IS IDEMPOTENT WHEN THE ACT IS EQUAL AND REFUSED WHEN IT DIFFERS. Read
+`append`'s own note for why -- the short version is that a DIFFERING act on a live id makes every
+`causes[]` naming it ambiguous with both readings available, while an EQUAL one changes no
+reading, and a real id collision in the tree (`W17`'s control arm) makes the distinction load-
+bearing rather than theoretical. An earlier draft of this paragraph said re-appending an id "is
+refused rather than ignored" full stop; that was written against rev 1 and left standing when the
+code relaxed, which is a docstring asserting a check the code does not perform -- false in the
+direction that stops the next reader checking.
 """
 from typing import Iterator, Optional
 
