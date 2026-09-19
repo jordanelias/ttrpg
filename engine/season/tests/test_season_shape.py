@@ -2073,6 +2073,7 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
 # the honest reading is that the guard is right and the site is genuinely mechanism — not that
 # the ceiling is a formality. If a third arrives for a reason that is not "language or grammar",
 # that is the creep this ratchet exists to make visible.
+# [JUSTIFIED: a RATCHET COUNT, not a magnitude -- it is the number of declared `roster-exempt:` sites in the model set, and the argument for each increment is the comment block directly above. Fitted to the tree by construction: run the guard and it reports the true count. 2026-09-19: 14 -> 15 for `rosters.py`'s `_ptrs`.]
 EXEMPT_CEILING = 15
 
 
@@ -11535,9 +11536,12 @@ def test_the_spine_aggregates_from_every_hearth_to_the_realm():
         f"{sorted(world_q.descendants(w, 'lr_realm'))}")
 
     # AGGREGATION folds upward: a duchy sees its own half and NOT its sibling's.
-    # [GROUNDED: measured 2026-09-19 -- each duchy subtree is 5 place rungs below it + 6 person rungs (its own holder is a child of the duchy rung) = 11, and 11 + 11 + 2 duchies + 1 realm-holder = 25]
     a = world_q.r1_aggregate(w, "lr_duchy_a", lambda _: 1)
     b = world_q.r1_aggregate(w, "lr_duchy_b", lambda _: 1)
+    # ⚠ THE TAG SITS DIRECTLY ABOVE THE ASSERT, NOT ABOVE THE BLOCK. `ci_sim_fabrication_check`
+    # reads the SAME or PREVIOUS line only; two lines up reaches nothing, which is how this
+    # constant shipped ungrounded and red-lit CI.
+    # [GROUNDED: measured 2026-09-19 -- each duchy subtree is 5 place rungs below it + 6 person rungs (its own holder is a child of the duchy rung) = 11, and 11 + 11 + 2 duchies + 1 realm-holder = 25]
     assert a == b == 11, f"the two duchy subtrees are not equal: {a} vs {b}"
     assert set(world_q.descendants(w, "lr_duchy_a")) & set(
         world_q.descendants(w, "lr_duchy_b")) == set(), (
