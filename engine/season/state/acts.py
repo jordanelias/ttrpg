@@ -49,13 +49,14 @@ class ActStore:
     def append(self, act: Act) -> Act:
         """Record `act`. Returns it, so a caller can append inline in the fold.
 
-        ⚠ REFUSES A DUPLICATE ID RATHER THAN OVERWRITING OR IGNORING. `resolve()` sorts one
-        global array and folds each member once, so a second append of one id means either the
-        same act was folded twice or two acts were minted onto one id -- and `H(seed, tick,
-        actor, "act:verb:key")` makes the second reachable: two acts by one actor on one verb
-        with one key in one tick collide. Both are defects and neither is visible if the store
-        takes the last writer, because `causes[]` then resolves to a real act that is not the
-        one that caused the Event.
+        ⚠ NEVER OVERWRITES. A DIFFERING act on a live id is REFUSED; an EQUAL one is a no-op.
+        `resolve()` sorts one global array and folds each member once, so a second append of one
+        id means either the same act reached the store twice by two entry points (harmless, and
+        deliberate -- see the note below) or two acts were minted onto one id. The second is
+        reachable: `H(seed, tick, actor, "act:verb:key")` carries no draw ordinal, so two acts by
+        one actor on one verb with one key in one tick collide. Taking the last writer would hide
+        it, because `causes[]` would then resolve to a real act that is not the one that caused
+        the Event -- silently, with nothing to notice.
         """
         if not isinstance(act, Act):
             raise Unspecified(
