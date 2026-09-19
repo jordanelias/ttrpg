@@ -282,7 +282,7 @@ single blocker in the plan.**
 | **13b** | **H-71** | IN | ✅ the grant rides on the Tenure: `World._grant_remit` at `add_tenure` writes it, `Tenure.granted_acts` owns the shape, `person_side_eligible` reads it. Register re-graded `absent` -> `measured`; Artifact 0's tier-0 `absent` list 10 -> 9 | **DONE** | — bought **1 verb in 1 of 89 worlds** (`dispatch`), moved **no requirement row**, and re-measured the aperture to **2 of 38 for a holder / 10 of 38 for a non-holder**. Cost: a seated holder's 8 new verbs displace subsistence work (`work` 51->41, `release` 57->36) — see `24f` |
 | **13e** | **ONE READING OF THE REMIT** | IN | route `_eligible` (`loop/resolve.py:56`) and `_ch_post_remit` (`epistemic.py:360`) onto `t.granted_acts` instead of `w.offices[...].remit_acts`. Both already hold the Tenure, so it is a one-line edit at each site and needs no `World` in `choose` | **OPEN** | — ⚠ **the top finding of `13b`'s review, and TWO structurally independent read-only lanes rediscovered it separately** (§10's ranking signal). The predicate *does this holder have this remit* now has THREE readings over TWO stores, and `epistemic.py:350-352` already records the tree paying for this exact mistake once: *"Re-deriving it here was `CLAUDE.md` §8 broken one function apart, which is how it came out wrong."* That sentence is now false in the tree. ⚠ **Do `13f` first** — this makes the resolver snapshot-dependent, which is the semantics `13f` gates |
 | **13f** | **`establish` HAS NO EFFECT** | IN | `verb_table.yaml:229` declares `writes: ["Office.exists", "Office.remit", "Office.establishment"]` and **no effect is registered in `loop/effects.py`**. Build it, or strike the `writes:` cell | **OPEN** | — ⚠ **it gates a semantics that is currently undecided and was nearly decided by accident.** `establish` is the only act that would change an office's remit, so whether a remit change reaches SITTING holders (snapshot) or only future ones (mirror) arrives with this effect. `13b`'s first writing answered it from a test docstring; that was retracted. **Rule it here, with the effect in front of you.** `establish` is itself `remit:confer`-eligible, so it is one of the nine `H-71` unblocked |
-| **13d** | **10 — OFFICES** | IN | `offices.yaml` — bases as rostered values · both predicates rewritten · four title helpers + `is_title` + the `titles` roster deleted · **holders seated** · purview corrected | **OPEN** ⭐ | — its two build-order deps are spent (16 DONE, 4 REVERTED). ⚠⚠ **`13b` MADE THIS THE POSITION THAT UNBLOCKS GOVERNANCE, and it was not that before.** The remaining 8 of 9 remit verbs are now blocked by **office DATA, not by any mechanism**: `harness/populated.py:686` — *"EVERY OTHER OFFICE CARRIES `remit_acts: []`, WHICH IS A DECLARED ABSENCE"*, and only 3 of 143 corpus cases grant anything. Seating holders on offices with populated remits now grants them automatically, because the grant rides on the Tenure. **This is the cheapest remaining move on `R-05`** |
+| **13d** | **10 — OFFICES** | IN | `offices.yaml` — bases as rostered values · both predicates rewritten · four title helpers + `is_title` + the `titles` roster deleted · ✅ **holders seated** · purview corrected | **OPEN** ⭐ · **1 of 5 done** | — its two build-order deps are spent (16 DONE, 4 REVERTED). ⚠⚠ **`13b` MADE THIS THE POSITION THAT UNBLOCKS GOVERNANCE, and it was not that before.** The remaining 8 of 9 remit verbs are now blocked by **office DATA, not by any mechanism**: `harness/populated.py:686` — *"EVERY OTHER OFFICE CARRIES `remit_acts: []`, WHICH IS A DECLARED ABSENCE"*, and only 3 of 143 corpus cases grant anything. Seating holders on offices with populated remits now grants them automatically, because the grant rides on the Tenure. **This is the cheapest remaining move on `R-05`**. ⚠ **PARTIAL 2026-09-19 — see `§3.8b`:** *holders seated* landed as the 13-seat generic spine (`engine/season/governance_spine.yaml`). Purview is still behind `Act.via` (position 6, Arc-2) and the `is_title` deletion is behind `ED-IN-0256` ruling (3) being BUILT. **Do not read this position as closed** |
 | 14 | **U7-own** | IN | the eight `own`-eligibility verbs, in antonym pairs; distinct operands; `Candidate.why` | **OPEN** | 12, 13 |
 | 15 | **Record-kind fold** | IN | Petition/Dispensation become kinds of `Record`; `record_kinds` + its refusal; `issue`/`petition` bodies; 2 matrix rows and 2 `World` dicts deleted; the deposit rule; then `petition` + `carry`. **≡ build-order item 5 — SAME WORK, TWO NUMBERS (§3.5)** | **OPEN** | 11a. **The largest single item in the plan; everything in `15a`–`15c` hangs off it** |
 | **15a** | **6 — GIVE** | IN | `give` + body + `_req_give` + release-before-mint | **BLOCKED** | 15 |
@@ -478,6 +478,42 @@ whose other alternative is also unevaluable"* and `ED-IN-0210`'s open fork is *"
 `comply` two sides of one thing?"* — **`dispatch` is the subject of both an open fork and a deletion
 ruling.** Nothing is done here beyond recording it: `19b` is not re-scoped and `RR-A` is not
 re-opened.
+
+---
+
+### 3.8b · FORWARD SWEEP AFTER `13d`-PARTIAL — what the generic spine did to the later positions
+
+**Run 2026-09-19 under `§3.0` phase 4.** What landed is the **thirteen-seat generic governance
+spine** (`engine/season/governance_spine.yaml` + `harness/governance_spine.py`), NOT all of `13d`.
+Each row is a change made above, not a note left here.
+
+⚠ **WHAT `13d` STILL OWES, STATED FIRST so the position is not read as closed.** Of its five
+pieces — bases as rostered values · both predicates rewritten · the four title helpers + `is_title`
++ the `titles` roster deleted · **holders seated** · purview corrected — **only "holders seated" is
+done.** Purview is behind `Act.via` (position 6, the Arc-2 gate) and the `is_title` deletion is
+behind ruling (3) of `ED-IN-0256` being BUILT rather than merely ruled. The position stays **OPEN**.
+
+| position | what the spine changed about it |
+|---|---|
+| **★ APERTURE GATE** | its **instrument**. `13b` made the aperture per-holder but left exactly ONE example to measure on (`off_duke`). There are now **13 holders at 7 distinct depths in one world**, so *"re-take it per holder"* has a population rather than an anecdote |
+| **`13e` ONE READING OF THE REMIT** | its **test bed**. All 13 seats carry `granted_acts` from `remit_default`, so the two stores are guaranteed to agree today — which is exactly the world in which routing `_eligible` and `_ch_post_remit` onto `t.granted_acts` can be shown to change nothing, and then made to disagree deliberately |
+| **`13f` `establish` HAS NO EFFECT** | its **evidence**. `_grant_remit` snapshots at `add_tenure`, and `test_h71_the_grant_is_a_snapshot_not_a_mirror` now has 13 seated holders to show it on. The snapshot-vs-mirror question `13f` must rule is now observable rather than argued from a docstring |
+| **`17` U8 / R-06b** | **precedent, and a caution.** `build_at`-from-the-cast is a third builder. The spine's header argues at length why it is NOT a flag on `build_realm` — a regular census and an irregular one must not be one world — and `17` should inherit that argument rather than re-litigate it |
+| **`18a` FIELD DELETIONS** | **partially unblocked.** It is gated on `13d`, which is still open — but its `conferral_path` deletion now has somewhere to point: `ED-IN-0256` records the ruled conferral vocabulary (**appointed · elected · annex**), so the deletion replaces a field with a ruled set rather than with nothing |
+| **`19c` MIGRATE** | its **observable**. Two disjoint chains sharing only the realm is the minimum world in which *relocation* is distinguishable from *travel* — a move from chain `a` to chain `b` crosses six containment edges and changes every ancestor but one |
+| **`20` U9 / R-04** | ⭐ **materially cheaper.** `faction x` is the first faction whose whole extent is **declared and regular** — 13 offices across 7 rungs. Jordan's *"factions can be of any scale remember"* was a ruling with no fixture exercising it; it now has one, which is what the 44 faction-scale re-scales need to be written against |
+| **`24f` SUBSISTENCE IS TERRITORIAL** | its **seats**. The ruling asks for *"NPC synecdoches that just represent the overall population affected"* at territorial scale. The spine has two territory rungs, each with a holder and a remit — the shape a synecdoche attaches to |
+
+⚠ **ONE THING THE SPINE DOES NOT BUY, SAID PLAINLY.** It asserts **shape only**. Nothing propagates
+along it yet; `test_the_generic_ladder_is_seven_deep_and_splits_once` says so in its own docstring,
+because a green tick on a 13-seat census would otherwise read as evidence of a working channel.
+Dissemination and aggregation remain **unmeasured** — the spine is the instrument, not the result.
+
+⚠ **AND IT MOVED A HASH.** `faction x` is a roster member, so `harness/populated.build_realm` mints
+a 9th Proposition and the authored realm's `content_hash()` went `8437fca…` → `df6bbb…` (54 → 55
+propositions). **MEASURED, and nothing pins either value** — `corpus_run` compares a world against
+its own replay, not against a stored digest, and `engine/tests` (sim-regression, 972 passed) is
+green. Recorded because §7 says to say plainly when a golden could have moved.
 
 ---
 

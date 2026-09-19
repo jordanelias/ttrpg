@@ -102,6 +102,13 @@ VERB_TABLE_YAML = PACKAGE_DIR / "verb_table.yaml"
 HOLE_REGISTER_YAML = PACKAGE_DIR / "hole_register.yaml"
 REQUIREMENTS_YAML = PACKAGE_DIR / "requirements.yaml"
 ENDINGS_CLASSIFIED_YAML = PACKAGE_DIR / "ENDINGS_CLASSIFIED.yaml"
+# ⚠ A FIXTURE'S REGISTRY, AND IT IS ANCHORED HERE FOR THE SAME REASON THE FIVE ABOVE ARE.
+# `governance_spine.yaml` declares the 13-seat generic ladder. It was first written with a
+# local `Path(__file__).resolve().parents[1]` inside `harness/governance_spine.py` — a
+# SECOND anchor in the package whose whole point is to have one, and the exact defect
+# `harness/populated.py` records having already removed once. The invariant that catches it
+# is this module's own: `grep -rln __file__ season/` must print this file and nothing else.
+GOVERNANCE_SPINE_YAML = PACKAGE_DIR / "governance_spine.yaml"
 
 # The one sibling proposal still read from here: the degree sweep's two arm modules, imported by
 # source in two tests. A predecessor's committed corpus; this package does not own it.

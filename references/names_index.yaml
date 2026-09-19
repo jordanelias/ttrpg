@@ -26,6 +26,9 @@
 #     enforce:   block | warn
 #                  block = hard CI gate (ci_naming_check) — naming invariants.
 #                  warn  = report-only drift lint (ci_naming_check --warn) until triaged, then flipped.
+#                  ⚠ NOTHING VALIDATES THIS FIELD. `tools/names.py: all_legacy` does
+#                  `e.get('enforce', 'warn')` and filters by exact string, so an unknown value or a
+#                  typo silently reads as neither tier. Spell one of the two.
 #     context:   [<regex terms>]  — OPTIONAL. When the `canonical` display collides with a
 #                  common English word (Faith / Order / Reason / …), the disambiguation terms
 #                  that must co-occur for a prose hit to count as THIS definition. The single
@@ -297,6 +300,25 @@ entries:
   world.stillhelm: {canonical: "Stillhelm", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   world.valorsplatz: {canonical: "Valorsplatz", aliases: [], legacy: [], category: proper_noun, enforce: warn}
   # -- factions --
+  # ⚠⚠ A TEST FACTION, NOT CANON — RULED BY JORDAN 2026-09-18: *"place them all under 'faction x'
+  # as a test faction"*. It exists so `engine/season/harness/governance_spine.py`'s generic governance spine
+  # can seat offices at all: `office_faction` REFUSES an office naming neither a `body` nor a
+  # `faction`, and a declared faction must be a member of this roster (`H-99` + §42.2's polarity
+  # rule, *"no evidence of belonging is a refusal, never a default faction"*). So a fully generic
+  # seat is forbidden by design, which is the code being right.
+  # ⚠ IT IS DELIBERATELY UNMISTAKABLE. `faction x` names no polity, appears nowhere in
+  # `systems/world/`, and would be absurd as canon — the same discipline as
+  # `rosters.yaml: remit_default`, where a transparently wrong placeholder is safer than a
+  # plausible one because nobody mistakes it for a design. An earlier attempt used `Crown`, which
+  # would have made a fixture look like canon Crown structure.
+  # ⚠ THIS ROW CARRIES NO `enforce:` TIER, AND AN EARLIER VERSION SET `enforce: off` ON THE
+  # STATED GROUND THAT *"the naming guard must not nag about a fixture in prose"*. MEASURED
+  # 2026-09-19: THAT NAG COULD NEVER HAVE FIRED. `tools/names.py: all_legacy` builds matchers
+  # by iterating a row's `legacy:` list, and this row's is empty — so it contributes ZERO
+  # matchers at every tier, and `off`, `warn`, `block` and omitting the field are
+  # byte-identical here. The tier was a third enum value invented to solve a problem that did
+  # not exist, and no validator would have caught that. Omitted rather than documented.
+  world.faction_x: {canonical: "faction x", aliases: [], legacy: [], category: proper_noun, token_class: faction}
   world.guilds: {canonical: "Guilds", aliases: [], legacy: [], category: proper_noun, enforce: warn, token_class: faction, patterns: ['\bGuilds?\b']}
   # RULED by Jordan, 2026-09-13: "the church is Church of Solmund." This row said `Church` while
   # `engine/season/rosters.yaml: factions` said `Church of Solmund`, so two registries single-owned

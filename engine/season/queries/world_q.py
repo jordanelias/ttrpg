@@ -501,6 +501,41 @@ def establishment_of(w: World, office_id: str) -> list[str]:
     return [p for p in off.establishment if p in w.persons]
 
 
+def ancestry(w: World, rung_id: str) -> list[str]:
+    """`[rung_id, its parent, ..., the root]` — the containment walk up from a rung.
+
+    ⚠ **IT EXISTS BECAUSE THREE SITES HAD ROLLED IT BY HAND**, which is the same reason and the
+    same remedy as `home_of` above. `parent_of` owns ONE EDGE; every caller that wants the CHAIN
+    was repeating the identical loop — step, guard with a visited set, stop at the root or on a
+    revisit — in `WorldReader._ancestry`, in `conferral_path`, and most recently in
+    `harness/governance_spine.census`. §8: the walk is a rule, and a rule lives once.
+
+    ⚠ **THE VISITED SET IS LOAD-BEARING, NOT DEFENSIVE.** `World.add_tenure` enforces strict
+    ascent on a `contain` edge, so a well-formed world presents no cycle — but `contain_ascends`
+    passes any edge whose endpoints are not both resolvable rungs, so a half-built world can. The
+    three hand copies each carried their own guard and agreed; consolidating keeps that agreement
+    a property of one function rather than a coincidence of three.
+
+    The start rung is INCLUDED, so `len(ancestry(w, r)) - 1` is its depth and a root returns
+    `[root]`. An unknown id returns `[id]` — this reports the containment edges that exist and
+    does not assert the rung does.
+
+    ⚠ **IT DOES NOT `TRACE`, AND THAT IS THE EXTRACTION BEING CORRECT RATHER THAN AN OMISSION.**
+    The first writing called `TRACE.query("ancestry", "resolver")` like its neighbours, and
+    `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` went red on `TRACE.txt`
+    and `results.json`: `conferral_path` traces its own name and would now have traced twice, and
+    `WorldReader._ancestry` traced nothing and would have started. A helper extracted to remove
+    duplication must be INVISIBLE to its callers -- the moment it emits, consolidating three copies
+    becomes a behaviour change, and the callers own their query names."""
+    out: list[str] = []
+    seen: set[str] = set()
+    cur: str | None = rung_id
+    while cur is not None and cur not in seen:
+        out.append(cur); seen.add(cur)
+        cur = parent_of(w, cur)
+    return out
+
+
 def conferral_path(w: World, office_id: str) -> list[str]:
     """The chain of seats from this office UP to the rung that confers it, by containment.
 
@@ -517,11 +552,7 @@ def conferral_path(w: World, office_id: str) -> list[str]:
     off = w.offices.get(office_id)
     if off is None or off.rung is None:
         return []
-    out, cur, seen = [], off.rung, set()
-    while cur is not None and cur not in seen:
-        out.append(cur); seen.add(cur)
-        cur = parent_of(w, cur)
-    return out
+    return ancestry(w, off.rung)
 
 
 def questions_for(w: World, p: Person, since: Optional[tuple] = None) -> list[Question]:
@@ -749,11 +780,7 @@ class WorldReader:
         self._w, self._actor = w, actor
 
     def _ancestry(self, start: str) -> list:
-        seen, cur = [], start
-        while cur is not None and cur not in seen:
-            seen.append(cur)
-            cur = parent_of(self._w, cur)
-        return seen
+        return ancestry(self._w, start)
 
     def read(self, subject, predicate: str):
         w = self._w

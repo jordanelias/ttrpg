@@ -1,0 +1,109 @@
+# THE GENERIC LADDER — the spine dissemination and aggregation are observed on.
+#
+# ⚠⚠ A TEST FIXTURE, NOT CANON. It names no territory and no person from `canon/`.
+# ⚠ BUT IT IS NOT INVISIBLE TO THE AUTHORED WORLD, AND AN EARLIER VERSION OF THIS LINE
+# IMPLIED IT WAS. `faction x` is a member of `rosters.yaml: factions`, and
+# `harness/populated.build_realm` mints one Proposition per roster member — so the authored
+# realm now carries `fac_faction_x` and its `World.content_hash()` MOVED (MEASURED
+# 2026-09-19: 8437fca87a6960597f9387a52efea0d4 -> df6bbb532e645d15b51cd2072589c9de, 54 -> 55
+# propositions). That is accepted rather than hidden: `from_names: faction` is a pointer that
+# takes no literal extras — `rosters.py` RAISES `Unspecified` on a roster carrying both a pointer
+# and `values:` (ED-IN-0230, "a pointed-at roster has ONE owner"), so that is an enforced refusal
+# at load rather than a convention. The naming index is therefore the ONLY lawful home for the
+# name Jordan ruled, and the blast radius is FORCED rather than accepted: `of_class` (the roster
+# path) and `by_token_class` (the corpus-audit path) key on the SAME `token_class: faction` field,
+# so roster membership and the audit token are ONE purchase and cannot be bought separately. The
+# three alternatives were each measured worse — an invented `office_bodies` row FORGES canon
+# (`rosters.py`: "inventing a body here would be indistinguishable from canon to the next
+# session"), a `faction_fixture` token class gives "what is a faction" two owners (§8), and a
+# fixture-exclusion mechanism in the loader is apparatus whose subject is test hygiene, which
+# §0.1 pt 5's predicate withholds. The hash is STABLE, just not equal to the pre-fixture
+# one; a golden recorded before 2026-09-19 and compared after is comparing two worlds.
+#
+# ⚠ BUT IT IS NOT PLACELESS, AND THE FIRST WRITING OF THIS HEADER CLAIMED IT WAS. Every seat
+# belongs to **`faction x`**, a TEST FACTION ruled by Jordan 2026-09-18: *"place them all under
+# 'faction x' as a test faction"*. It cannot be placeless — `office_faction` REFUSES an office
+# naming neither a `body` nor a `faction`, and a declared faction must be a roster member (`H-99`
+# plus §42.2's polarity rule, *"no evidence of belonging is a refusal, never a default faction"*),
+# so a fully generic seat is FORBIDDEN BY DESIGN, which is the code being right.
+# ⚠ `faction x` is authored at `references/names_index.yaml: world.faction_x` and reaches
+# `rosters.yaml: factions` through `from_names: faction` — the roster's own row says *"Edit the
+# naming index, not here."* An earlier version of this fixture used `Crown`, which would have made
+# it look like canon Crown structure; `faction x` is unmistakable, which is the point.
+# ⚠ AND FACTIONS ARE NOT REALM-SCALED: Jordan, *"factions can be of any scale remember"*, so a
+# test faction spanning one seven-deep chain is not a category error.
+#
+# Every seat and every holder here is GENERIC by design: Jordan, 2026-09-18,
+# *"you also need to develop a chain of generic NPCs with generic offices from hearth to realm"*,
+# because *"otherwise we don't know how dissemination and aggregation works"*, and *"we should
+# fine tune FROM generics for specific NPCs and offices"*. So this is the BASE the authored cast
+# specialises onto, and it is deliberately characterless.
+#
+# WHY THIRTEEN AND NOT 127. Jordan asked for 1 / 2 / 4 / 8 / 16 / 32 / 64 — uniform binary
+# branching over the seven non-`person` rungs, 127 seats — then said *"probably too granular
+# without payoff"*. The payoff test is what you need to SEE: **depth** to watch a realm decision
+# reach a hearth head and a hearth event surface at the realm, and **branching** only where you
+# want to observe DIVERGENCE. One split gives divergence. So this is depth 7 with a single binary
+# split at the duchy — two parallel chains under one realm — and the 127-seat uniform fan-out
+# answers a different and later question: how propagation DEGRADES with width.
+#   ⚠ Against `R-01`/`R-02`'s measured ~4% later-decision divergence, 127 seats would mostly buy
+#   114 more places for nothing to happen. Widen once the mechanism holds at depth.
+#
+# ⚠ WHAT IS NEW HERE IS REGULARITY, NOT DEPTH — AND AN EARLIER VERSION OF THIS HEADER SAID
+# OTHERWISE. It claimed this was "the first world in the tree with a `province` rung at all", which
+# is false: `corpus_run.build_at` slices `rung_kinds` from the case's scale upward, so all 37
+# person-scale cases (ED-IN-0255) already build a province and a depth-7 chain. The narrow claim
+# that does hold is about the AUTHORED REALM: `harness/populated.py` goes realm -> duchy ->
+# territory and skips `province` entirely, so Jordan's "4 counts" had nowhere to sit there. What
+# this spine adds is a DECLARED, REGULAR shape with a branch point — a corpus world is one chain
+# wide, so it can show a decision travelling but never fanning out or folding back in.
+#
+# SHAPE: two chains, `a` and `b`, sharing one realm. `contain` runs child -> parent and must
+# ASCEND `rung_kinds` strictly, which `World.add_tenure` enforces.
+#
+#     realm ──┬── duchy_a ── province_a ── territory_a ── settlement_a ── community_a ── hearth_a
+#             └── duchy_b ── province_b ── territory_b ── settlement_b ── community_b ── hearth_b
+#
+# EVERY SEAT'S REMIT COMES FROM `rosters.yaml: remit_default` VIA `remit_or_default`, which is the
+# testing default and says at length that it is not canon. No remit is authored here.
+
+version: 1
+
+# The rung ladder, parent-first. `kind` must be a `rung_kinds` member; `under` is the parent rung,
+# and `null` only for the realm.
+rungs:
+  - {id: lr_realm,        kind: realm,      under: null,            post: "Sovereign"}
+  - {id: lr_duchy_a,      kind: duchy,      under: lr_realm,        post: "Duke"}
+  - {id: lr_duchy_b,      kind: duchy,      under: lr_realm,        post: "Duke"}
+  - {id: lr_province_a,   kind: province,   under: lr_duchy_a,      post: "Count"}
+  - {id: lr_province_b,   kind: province,   under: lr_duchy_b,      post: "Count"}
+  - {id: lr_territory_a,  kind: territory,  under: lr_province_a,   post: "Lord"}
+  - {id: lr_territory_b,  kind: territory,  under: lr_province_b,   post: "Lord"}
+  - {id: lr_settlement_a, kind: settlement, under: lr_territory_a,  post: "Mayor"}
+  - {id: lr_settlement_b, kind: settlement, under: lr_territory_b,  post: "Mayor"}
+  - {id: lr_community_a,  kind: community,  under: lr_settlement_a, post: "Community Leader"}
+  - {id: lr_community_b,  kind: community,  under: lr_settlement_b, post: "Community Leader"}
+  - {id: lr_hearth_a,     kind: hearth,     under: lr_community_a,  post: "Hearth Head"}
+  - {id: lr_hearth_b,     kind: hearth,     under: lr_community_b,  post: "Hearth Head"}
+
+# ⚠ `post:` ABOVE IS A GENERIC LABEL AND NOT A CANON POST. Jordan: *"cardinal is a post / king is
+# a post / confessor is a post"*, and `Office.post` does not currently hold a normalised post at
+# all — the authored realm's 19 include `"Cardinal Justice"` and `"Queen (Widow Regent if Almud
+# eliminated)"`, each fusing a post with a scope or a condition. Normalising that is a prior unit.
+# These thirteen are placeholders chosen to be obviously generic: `Sovereign`, not a king's name.
+#
+# ⚠ AND THE SETTLEMENT SHAPES ARE NOT MODELLED HERE, DELIBERATELY. Jordan: *"settlements can hold
+# a publicly elected mayor, a publicly elected council, an assigned governor, or an assigned
+# council"*. `Office` has `conferral` and `binds` fields but NO VOCABULARY for either:
+# `conferral: Optional[str] = None`, no roster, and essentially no values set anywhere in the tree.
+# Jordan, on that gap: *"nah, it doesn't have it yet"* and *"don't worry about it for now"*. So
+# every settlement here is a single `Mayor`, and the shapes are recorded rather than half-built.
+#
+# ⚠⚠ DO NOT READ THE SENTENCE ABOVE AS "NO VOCABULARY WAS EVER RULED" — ONE WAS, THE SAME DAY, AND
+# IT IS NOT THE 2x2 AN EARLIER DRAFT OF THIS HEADER INFERRED FROM IT. `ED-IN-0256` records Jordan's
+# ruling that `conferral` is **appointed, elected, annex** — THREE values, not the two
+# ("elected/assigned") that reading the four settlement shapes as a 2x2 produced, and `annex` is
+# not a shape a settlement offers at all. Revocation was ruled alongside it: the **rung above, of
+# the same faction**. Neither has a code-readable owner yet, which is what `H-109` is for; until it
+# does, `ED-IN-0256` is where the ruled set lives and this comment is the pointer to it, so a later
+# session does not re-derive a 2x2 from the settlement sentence and re-ask a settled question.

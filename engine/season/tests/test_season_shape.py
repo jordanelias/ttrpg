@@ -11498,3 +11498,89 @@ def _home_of(w, pid):
         if t.kind == "contain" and t.live and t.subject == pid:
             return t.object
     return None
+
+
+def test_the_generic_ladder_is_seven_deep_and_splits_once():
+    """THE SPINE dissemination and aggregation will be measured on — asserted as a SHAPE.
+
+    Jordan, 2026-09-18: *"you also need to develop a chain of generic NPCs with generic offices
+    from hearth to realm"*, because *"otherwise we don't know how dissemination and aggregation
+    works"*. He specified 1/2/4/8/16/32/64 and then said *"probably too granular without
+    payoff"*, and chose thirteen to start.
+
+    WHAT THIRTEEN BUYS AND WHY IT IS THE RIGHT FIRST NUMBER: **depth** to watch a realm decision
+    reach a hearth head and a hearth event surface at the realm, and **one branch point** to watch
+    whether it crosses to a sibling chain or stops. Uniform binary fan-out (127 seats) answers a
+    different question — how propagation DEGRADES with width — and against `R-01`/`R-02`'s
+    measured ~4% later-decision divergence it would mostly add places for nothing to happen.
+
+    ⚠ THIS TEST ASSERTS SHAPE ONLY. It makes no claim that anything propagates; that is what the
+    spine exists to MEASURE, and the measurement is a later unit. Saying so here stops a green
+    tick being read as evidence of a working channel.
+
+    ⚠ AN EARLIER VERSION OF THIS DOCSTRING CLAIMED THIS WAS THE FIRST WORLD IN THE TREE WITH A
+    `province` RUNG, AND THAT WAS FALSE. `corpus_run.build_at` slices `rung_kinds` from the case's
+    scale upward, so all 37 person-scale cases already build a province and a depth-7 chain. What
+    is true is narrower: `harness/populated.py` goes realm -> duchy -> territory and skips
+    `province`, so Jordan's "4 counts" had nowhere to sit IN THE AUTHORED REALM. The spine's claim
+    is its REGULARITY and its branch point, not its depth — a corpus world is one chain wide and
+    cannot show a decision fanning out or folding back in."""
+    from ..harness import governance_spine as L
+
+    w = L.build(0)
+    c = L.census(w)
+    # [GROUNDED: measured 2026-09-18 by `python -m engine.season.harness.governance_spine` -- 13 rungs, 13 offices, 13 held, 13 granted, max_depth 6, leaves lr_hearth_a/lr_hearth_b]
+    assert c["rungs"] == 13 and c["offices"] == 13, c
+    # [GROUNDED: measured 2026-09-18 by `python -m engine.season.harness.governance_spine` -- 13 rungs, 13 offices, 13 held, 13 granted, max_depth 6, two leaves (lr_hearth_a, lr_hearth_b). The thirteen is `governance_spine.yaml`'s own row count, not a number chosen here]
+    assert c["held"] == 13, f"a seat is unheld: {c}"
+    # ⚠ `held` AND `seated` ARE DIFFERENT CLAIMS, AND ONLY THE SECOND IS ABOUT PEOPLE. `held`
+    # counts live `hold` Tenures pointing at a known office; `add_tenure` routes a hold whose
+    # HOLDER does not exist to `_unowned` without refusing, so thirteen holds can coexist with
+    # zero persons. MUTANT-CHECKED 2026-09-19: deleting `build`'s `w.persons[pid] = Person(...)`
+    # leaves `rungs/offices/held` at 13/13/13 and moves `persons`/`seated` to 0/0. Without these
+    # two rows this test passed on a world with nobody in it — which is the whole subject of
+    # Jordan's *"otherwise we don't know how dissemination and aggregation works"*.
+    assert c["persons"] == 13, f"the spine has no holders to propagate between: {c}"
+    assert c["seated"] == 13, (
+        f"a hold Tenure names a person who does not exist: {c}. `held` cannot see this — it "
+        "checks the OFFICE end of the edge")
+    # [GROUNDED: measured 2026-09-18 -- all 13 holders carry a remit grant, because every ladder seat's remit comes from `rosters.yaml: remit_default` via `remit_or_default([])` and `add_tenure` stamps it onto the `hold` Tenure]
+    assert c["granted"] == 13, (
+        f"a holder carries no remit grant: {c}. `remit_or_default` fills from the testing default, "
+        "so this goes red if that default is narrowed to exclude a seat")
+
+    # seven LEVELS is depth 0..6 — realm at 0, hearth at 6
+    # [GROUNDED: measured 2026-09-18 -- seven LEVELS is depth 0..6, realm at 0 and hearth at 6, over the seven non-`person` members of rosters.yaml: rung_kinds]
+    assert c["max_depth"] == 6, f"the chain is not seven deep: {c}"
+    assert c["by_kind"]["realm"] == 1, "more than one realm; the chains no longer share a top"
+    assert c["by_kind"]["province"] == 2, (
+        "the province level is not two wide — `populated.build_realm` skips this rung entirely, "
+        "so the branch factor here is what makes it observable at all")
+    assert set(c["by_kind"]) == {"realm", "duchy", "province", "territory", "settlement",
+                                 "community", "hearth"}, (
+        f"the ladder skips or invents a rung kind: {sorted(c['by_kind'])}")
+    assert all(v == 2 for k, v in c["by_kind"].items() if k != "realm"), (
+        f"the split is not binary at every level below the realm: {c['by_kind']}")
+
+    # ONE branch point: exactly two leaves, and they are the two hearths
+    assert len(c["leaves"]) == 2, f"expected two leaf rungs, got {c['leaves']}"
+    assert all(w.rungs[r].kind == "hearth" for r in c["leaves"]), (
+        f"a leaf is not a hearth: {[(r, w.rungs[r].kind) for r in c['leaves']]}")
+
+    # the two chains are DISJOINT below the realm, which is what makes divergence observable
+    # ⚠ WALKED THROUGH `world_q.parent_of`, NOT A LOCAL DICT (§8 — never re-implement a rule).
+    # The comprehension this replaced kept the LAST live `contain` edge for a rung while
+    # `parent_of` returns the FIRST, so on a world where a rung had two parents this test and
+    # `under_purview` would have disagreed about the same rung's ancestors.
+    from ..queries import world_q
+    def path(r):
+        out, seen = [], {r}
+        while True:
+            nxt = world_q.parent_of(w, r)
+            if nxt is None or nxt in seen:
+                return out
+            out.append(nxt); seen.add(nxt); r = nxt
+    a, b = path(c["leaves"][0]), path(c["leaves"][1])
+    assert set(a) & set(b) == {"lr_realm"}, (
+        f"the two chains share more than the realm: {sorted(set(a) & set(b))} — a decision could "
+        "reach the sibling chain through a shared rung rather than by propagating")

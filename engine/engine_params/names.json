@@ -3,7 +3,7 @@
   "schema_version": 1,
   "source": "references/names_index.yaml",
   "registry_version": 3,
-  "count": 115,
+  "count": 116,
   "canonical": {
     "agg.body": "Body",
     "agg.mind": "Mind",
@@ -79,6 +79,7 @@
     "world.edeyja": "Edeyja",
     "world.ehrenfeld": "Ehrenfeld",
     "world.einhir": "Einhir",
+    "world.faction_x": "faction x",
     "world.feldmark": "Feldmark",
     "world.forgetting": "Forgetting",
     "world.gerik_strand": "Gerik Strand",
@@ -210,7 +211,8 @@
       "Löwenritter",
       "Restoration Movement",
       "Schoenland",
-      "Varfell"
+      "Varfell",
+      "faction x"
     ],
     "mech": [
       "Disposition",
