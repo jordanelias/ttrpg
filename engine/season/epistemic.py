@@ -347,9 +347,25 @@ def _ch_post_remit(w, e, pid) -> bool:
     channel that admits nobody in every possible world was reported as one of five carrying a
     predicate.
 
-    The correct lookup ALREADY LIVES ONCE, in `_eligible`: the tenure's object is an OFFICE, and
-    the office carries `remit_acts`. Re-deriving it here was `CLAUDE.md` §8 broken one function
-    apart, which is how it came out wrong. Found by the `W6` adversarial pass."""
+    ⚠⚠ THIS PARAGRAPH SAID *"the correct lookup ALREADY LIVES ONCE, in `_eligible`"*, AND THAT
+    BECAME FALSE ON 2026-09-18 — in the commit that closed `H-71`, which did not come back and
+    amend it. There are now THREE readings of *does this holder have this remit* over TWO stores:
+    this site and `loop/resolve.py:56` read the live `w.offices[...].remit_acts`, while
+    `decision/options.py` reads the SNAPSHOT on the `hold` Tenure (`Tenure.granted_acts`, written
+    by `World._grant_remit` at `add_tenure`). They agree today and are not guaranteed to: a hold
+    opened BEFORE its office exists gets an empty snapshot and is never revisited, so the person
+    side refuses while both world-side readings admit; and any future write to `Office.remit_acts`
+    is a silent no-op person-side — §0.1 pt 1's read/write asymmetry, with no guard shipped.
+
+    ⚠ THE CONSOLIDATION IS SCHEDULED, NOT FORGOTTEN: position `13e` of
+    `workplans/2026-09-18-governance-settlement-behaviour-plan.md` routes this site and `_eligible`
+    onto `t.granted_acts`; `13f` gates it, because whether a remit change reaches SITTING holders
+    (snapshot) or only future ones (mirror) is undecided and arrives with `establish`'s effect.
+    THREE structurally independent read-only review lanes have now rediscovered this separately,
+    which is §10's rank-by-independent-rediscovery signal rather than three copies of one opinion.
+    The original W6 finding below stands; it is the §8 lesson this file then had to relearn.
+
+    Found by the `W6` adversarial pass."""
     remits = {x.split(":", 1)[1] for r in VERB_TABLE.values() if e.kind in (r.emits or ())
               for x in (r.eligibility or ()) if x.startswith("remit:")}
     if not remits:

@@ -728,7 +728,7 @@ already carried**, in four places: `engine/season/hole_register.yaml:795` (`H-71
 `grade: absent`), R-05's own `measured:` block at `engine/season/requirements.yaml:303` (*"5 are foldable
 but never attempted (the governance verbs, `H-71`)"*), `registers/handoffs/HANDOFF_IN.md:154`, and
 `architecture/PLAN.md:1369` as blocker class B. It also has a green falsifier that reddens the day the
-hole closes — `test_no_person_can_choose_a_governance_verb_and_h71_is_why`.
+hole closes. ✅ **IT CLOSED 2026-09-18**; that falsifier went red and is now `test_a_holder_can_now_choose_the_governance_verbs_their_office_grants`.
 
 **The true membership is `{confer, convene, dispatch, revoke, destroy_record}`**
 (`engine/season/tests/test_season_shape.py:6348-6351`). The session's list substituted `kill / wound`

@@ -29,7 +29,7 @@ every other dated section below is marked **WAS CURRENT** and is history. Five s
 
 **`workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3 IS THE SINGLE PLAN.** If you are choosing what to do next, open it — and start at its **§3.1 · START HERE**, which names the next three in order.
 
-⚠ **AMENDED 2026-09-18 (`ED-IN-0253`) ON JORDAN'S INSTRUCTION — *"I need one single clearly defined plan"*.** The order was spread over five surfaces; it is now on one. The contested-ownership note in that file's own `## Status:` line is CLOSED, `valoria_master_workplan_v7.md:16`'s open ORDER collision is CLOSED, and the arc-sequence spine, the governance build order and the gather's `05_THE_ORDER.md` are subordinated to it as CONTENT owners. **No position number changed** and §3.4 maps every folded item, so no citation dangles. §3 now carries a `STATE` column that is execution-bound per `CLAUDE.md` §0.2 — `DONE` means something ran it — and §3.3 records the five items that landed 09-17/18, **two of which do not affect the game yet and are marked `DONE·INERT` rather than done.**
+⚠ **AMENDED 2026-09-18 (`ED-IN-0253`), and the detail is IN THE PLAN, not here.** Jordan: *"I need one single clearly defined plan"*. `workplans/2026-09-18-governance-settlement-behaviour-plan.md`'s own `## Status:` line carries what changed, what it subordinates and why no citation dangles — it was copied into this file verbatim, which is the inlining `ED-IN-0242` already moved out of here once and which put this file back over its size cap. A continuity index points at an order; it does not restate one.
 
 **Everything this section used to argue moved to `workplans/2026-09-13-work-order.md` on 2026-09-17 (`ED-IN-0242`):** why Arc 2 comes first, the live ownership collision its status line records, and the warning that `requirements.yaml`'s `measured:` blocks understate progress and carry four mutually inconsistent R3 figures. All three are about the ORDER or about an INSTRUMENT, and neither is what a continuity index is for.
 
@@ -72,15 +72,11 @@ times the size of everything else in this file.
 ⚠ **`ED-IN-0210`'s FORK CAME OFF THIS LIST 2026-09-15 — RULED, NOT DROPPED.** Jordan: *"AN ORDER
 CARRIES TERMS LIKE A DISPENSATION … The second option (no response verb) is REJECTED."* The ledger's
 last row for that id reads `status: ruled`, `needs_jordan: false`, `jordan_decision: 2026-09-15`
-(`registers/editorial_ledger_in.jsonl`), and an id's effective status is its LAST row. ⚠ **The
-ruling does not make 19b buildable** — `dispatch` is blocked by `H-71`
-(`engine/season/hole_register.yaml`, `tier: 0`, `grade: absent`, `owner: unassigned`), whose own
-`unblocks:` reads *"9 of 32 verbs cannot be formed person-side — 8 remit-ONLY, plus `levy`"*, so no
-run moves until it closes. ⚠ A handoff elsewhere says FIVE; the register says nine, and the register
-is the surface with the falsifier (`test_no_person_can_choose_a_governance_verb_and_h71_is_why`,
-which goes RED the day the hole closes). Read the register, not the cached figure.
-Neither surface named the other; this note is where they meet.
-`workplans/2026-09-18-governance-settlement-behaviour-plan.md`'s record defect naming this row is spent with it.
+(`registers/editorial_ledger_in.jsonl`), and an id's effective status is its LAST row.
+✅ **`H-71` CLOSED 2026-09-18 (`13b`).** This paragraph used to say it blocked 19b, and cited a
+falsifier that has since been rewritten — it told readers *"read the register, not the cached
+figure"* while being the cached figure. The aperture is now person-dependent, so no single number
+belongs here: run `python -m engine.season.harness.register --requirements`.
 
 ⚠ **`ED-WR-0011` IS NOT ON THIS LIST AND THIS ENTRY FIRST PUT IT HERE.** The ledger carries a SECOND
 row under that id: `status: ruled`, `needs_jordan: false` — *"OI-05 RULED BY JORDAN, 2026-09-13…

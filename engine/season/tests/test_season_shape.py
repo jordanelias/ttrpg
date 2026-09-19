@@ -2064,7 +2064,16 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
 # works, never what the game is. It is the first exemption this guard has earned on its own author.
 # 13 -> 14, W5: `View.__slots__`, for the same reason — a language construct naming the class's
 # own attributes, which crossed the three-element threshold when the View gained `question`.
-EXEMPT_CEILING = 14
+# 14 -> 15, 2026-09-19: `rosters.py`'s `_ptrs`, the owner-pointer key names, which crossed the
+# three-element threshold when `from_roster:` joined `from_descriptor:` and `from_names:`. The
+# argument the ceiling demands: this is the LOADER'S OWN YAML GRAMMAR, and it is the one list that
+# provably cannot live in `rosters.yaml` — `roster()` would have to read the file to learn how to
+# read the file. Same direction as the two above: editing it changes how the code works, never
+# what the game is. ⚠ This is the SECOND exemption the guard has earned on its own author, and
+# the honest reading is that the guard is right and the site is genuinely mechanism — not that
+# the ceiling is a formality. If a third arrives for a reason that is not "language or grammar",
+# that is the creep this ratchet exists to make visible.
+EXEMPT_CEILING = 15
 
 
 def test_jordan_no_definition_is_hardcoded_in_a_body():
@@ -11500,6 +11509,50 @@ def _home_of(w, pid):
     return None
 
 
+def test_the_spine_aggregates_from_every_hearth_to_the_realm():
+    """R-1 RUNS ON THE SPINE — the half of Jordan's ask the shape test cannot reach.
+
+    *"otherwise we don't know how dissemination and aggregation works"* names TWO directions, and
+    a census of rungs, offices and holders observes neither. This drives `world_q.r1_aggregate`,
+    which is R-1 itself: compute on demand over descendants, never stored.
+
+    ⚠ IT EXISTS BECAUSE ITS ABSENCE HID A REAL BREAK. `build` did not mint `Rung(pid, "person")`
+    while all three sibling builders do, so the 13 holders sat in the containment tree via their
+    `contain` edges while `w.rungs` did not know them. `descendants(w, "lr_realm")` returned 25
+    ids of which 13 were unresolvable, and `r1_aggregate` raised `KeyError: 'lp_realm'` — on the
+    only world built to measure aggregation. Every shape assertion stayed green throughout.
+
+    The counting function is deliberately `lambda _: 1`: this asserts REACH, not a magnitude, so
+    it cannot go stale against a balance change."""
+    from ..harness import governance_spine as L
+    from ..queries import world_q
+
+    w = L.build(0)
+    # every rung under the realm, places and people alike, reached in one aggregate
+    # [GROUNDED: measured 2026-09-19 -- 25 descendants of lr_realm = 12 place rungs below the realm + 13 person rungs; the realm itself is not its own descendant]
+    assert world_q.r1_aggregate(w, "lr_realm", lambda _: 1) == 25, (
+        f"aggregation does not reach the whole spine: "
+        f"{sorted(world_q.descendants(w, 'lr_realm'))}")
+
+    # AGGREGATION folds upward: a duchy sees its own half and NOT its sibling's.
+    # [GROUNDED: measured 2026-09-19 -- each duchy subtree is 5 place rungs below it + 6 person rungs (its own holder is a child of the duchy rung) = 11, and 11 + 11 + 2 duchies + 1 realm-holder = 25]
+    a = world_q.r1_aggregate(w, "lr_duchy_a", lambda _: 1)
+    b = world_q.r1_aggregate(w, "lr_duchy_b", lambda _: 1)
+    assert a == b == 11, f"the two duchy subtrees are not equal: {a} vs {b}"
+    assert set(world_q.descendants(w, "lr_duchy_a")) & set(
+        world_q.descendants(w, "lr_duchy_b")) == set(), (
+        "the duchy subtrees overlap — a quantity aggregated at one would double-count the other")
+
+    # DISSEMINATION is the same edge read downward: the realm is an ancestor of every hearth
+    # holder, and the hearth holder's chain passes through exactly one duchy.
+    for leaf in ("lp_hearth_a", "lp_hearth_b"):
+        chain = world_q.ancestry(w, leaf)
+        assert chain[0] == leaf and chain[-1] == "lr_realm", chain
+        # [GROUNDED: measured 2026-09-19 -- person -> hearth -> community -> settlement -> territory -> province -> duchy -> realm is 8 nodes including both ends]
+        assert len(chain) == 8, f"the reach from a hearth head to the realm is not seven steps: {chain}"
+        assert len([r for r in chain if w.rungs[r].kind == "duchy"]) == 1, chain
+
+
 def test_the_generic_ladder_is_seven_deep_and_splits_once():
     """THE SPINE dissemination and aggregation will be measured on — asserted as a SHAPE.
 
@@ -11530,7 +11583,15 @@ def test_the_generic_ladder_is_seven_deep_and_splits_once():
     w = L.build(0)
     c = L.census(w)
     # [GROUNDED: measured 2026-09-18 by `python -m engine.season.harness.governance_spine` -- 13 rungs, 13 offices, 13 held, 13 granted, max_depth 6, leaves lr_hearth_a/lr_hearth_b]
-    assert c["rungs"] == 13 and c["offices"] == 13, c
+    assert c["place_rungs"] == 13 and c["offices"] == 13, c
+    # ⚠ 26 RUNGS, NOT 13, AND THE DIFFERENCE IS THE POINT. `person` is the first member of
+    # `rung_kinds`, so each of the 13 holders is a rung too — as in all three sibling builders.
+    # An earlier version of this builder omitted `Rung(pid, "person")`, and the cost was exactly
+    # the capability the spine exists for: `world_q.descendants(w, "lr_realm")` returned 25 ids of
+    # which 13 were unresolvable and `r1_aggregate` raised `KeyError`. This assertion and
+    # `test_the_spine_aggregates` below are what would have caught it.
+    # [GROUNDED: measured 2026-09-19 by `python -m engine.season.harness.governance_spine` -- 26 rungs = 13 place + 13 person, 13 offices]
+    assert c["rungs"] == 26, f"the holders are not seated as rungs: {c['by_kind']}"
     # [GROUNDED: measured 2026-09-18 by `python -m engine.season.harness.governance_spine` -- 13 rungs, 13 offices, 13 held, 13 granted, max_depth 6, two leaves (lr_hearth_a, lr_hearth_b). The thirteen is `governance_spine.yaml`'s own row count, not a number chosen here]
     assert c["held"] == 13, f"a seat is unheld: {c}"
     # ⚠ `held` AND `seated` ARE DIFFERENT CLAIMS, AND ONLY THE SECOND IS ABOUT PEOPLE. `held`
@@ -11553,36 +11614,36 @@ def test_the_generic_ladder_is_seven_deep_and_splits_once():
 
     # seven LEVELS is depth 0..6 — realm at 0, hearth at 6
     # [GROUNDED: measured 2026-09-18 -- seven LEVELS is depth 0..6, realm at 0 and hearth at 6, over the seven non-`person` members of rosters.yaml: rung_kinds]
-    assert c["max_depth"] == 6, f"the chain is not seven deep: {c}"
+    assert c["place_depth"] == 6, f"the chain of places is not seven deep: {c}"
+    # [GROUNDED: measured 2026-09-19 -- 7 with the person rung, matching `corpus_run.build_at`'s depth for a person-scale case]
+    assert c["max_depth"] == 7, f"a holder is not inside their rung: {c}"
     assert c["by_kind"]["realm"] == 1, "more than one realm; the chains no longer share a top"
     assert c["by_kind"]["province"] == 2, (
         "the province level is not two wide — `populated.build_realm` skips this rung entirely, "
         "so the branch factor here is what makes it observable at all")
     assert set(c["by_kind"]) == {"realm", "duchy", "province", "territory", "settlement",
-                                 "community", "hearth"}, (
+                                 "community", "hearth", "person"}, (
         f"the ladder skips or invents a rung kind: {sorted(c['by_kind'])}")
-    assert all(v == 2 for k, v in c["by_kind"].items() if k != "realm"), (
+    assert all(v == 2 for k, v in c["by_kind"].items() if k not in ("realm", "person")), (
         f"the split is not binary at every level below the realm: {c['by_kind']}")
 
     # ONE branch point: exactly two leaves, and they are the two hearths
-    assert len(c["leaves"]) == 2, f"expected two leaf rungs, got {c['leaves']}"
-    assert all(w.rungs[r].kind == "hearth" for r in c["leaves"]), (
-        f"a leaf is not a hearth: {[(r, w.rungs[r].kind) for r in c['leaves']]}")
+    # ⚠ `place_leaves`, NOT `leaves`: with every holder minted as a rung, NO place rung is
+    # childless, so the bare leaf set is the 13 people. The declared shape is a claim about places.
+    assert len(c["place_leaves"]) == 2, f"expected two leaf places, got {c['place_leaves']}"
+    assert all(w.rungs[r].kind == "hearth" for r in c["place_leaves"]), (
+        f"a leaf is not a hearth: {[(r, w.rungs[r].kind) for r in c['place_leaves']]}")
 
     # the two chains are DISJOINT below the realm, which is what makes divergence observable
-    # ⚠ WALKED THROUGH `world_q.parent_of`, NOT A LOCAL DICT (§8 — never re-implement a rule).
-    # The comprehension this replaced kept the LAST live `contain` edge for a rung while
-    # `parent_of` returns the FIRST, so on a world where a rung had two parents this test and
-    # `under_purview` would have disagreed about the same rung's ancestors.
+    # ⚠ `world_q.ancestry`, NOT A LOCAL WALK (§8). This went through THREE wrong versions: a dict
+    # comprehension (which keeps the LAST live `contain` edge where `parent_of` returns the FIRST),
+    # then a hand-rolled `parent_of` loop, then a hand-rolled loop left standing AFTER `ancestry`
+    # was extracted — so this test was the fourth copy of a walk whose own helper docstring, in
+    # this same commit, claimed to have consolidated them all. `[1:]` drops each leaf's own id;
+    # `ancestry` includes the start, and what is compared here is the two chains ABOVE the leaves.
     from ..queries import world_q
-    def path(r):
-        out, seen = [], {r}
-        while True:
-            nxt = world_q.parent_of(w, r)
-            if nxt is None or nxt in seen:
-                return out
-            out.append(nxt); seen.add(nxt); r = nxt
-    a, b = path(c["leaves"][0]), path(c["leaves"][1])
+    a = world_q.ancestry(w, c["place_leaves"][0])[1:]
+    b = world_q.ancestry(w, c["place_leaves"][1])[1:]
     assert set(a) & set(b) == {"lr_realm"}, (
         f"the two chains share more than the realm: {sorted(set(a) & set(b))} — a decision could "
         "reach the sibling chain through a shared rung rather than by propagating")

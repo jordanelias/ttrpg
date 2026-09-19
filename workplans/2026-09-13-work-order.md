@@ -43,7 +43,7 @@ names: an absence is the cheapest claim to make and the hardest to see wrong.
 |---|---|---|---|
 | ~~1~~ | ✅ **DONE 2026-09-13** — the counterparty. Each person now holds their OWN Proposition naming another PERSON, with the case's own want | R-06 · R-07 · half of `W27` | **acts** naming another person **0 → 256**; distinct behaviours **25 → 43** | **S** |
 | **2** | **The cast.** Port `harness/populated.py`'s per-case cast into `build_at` — one named person per case, seated by institution | `W27` · R-06 · R-07 · `A3` | `build_at` seats > 3 named people; `RANKING DISCRIMINATION` moves | **M** |
-| **3** | **`H-71`.** 5 verbs are foldable and never attempted. ⚠ *Downstream of Arc 2* | R-05 · `H-71` (tier 0) | `test_no_person_can_choose_a_governance_verb_and_h71_is_why` **reddens** | **M** |
+| **3** | **`H-71`.** 5 verbs are foldable and never attempted. ⚠ *Downstream of Arc 2* | R-05 · `H-71` (tier 0) | ✅ **DONE 2026-09-18.** `test_no_person_can_choose_a_governance_verb_and_h71_is_why` went red as predicted and is now `test_a_holder_can_now_choose_the_governance_verbs_their_office_grants` | **M** |
 | **4** | **The 20 silent verbs.** 20 of 38 carry no predicate and no effect | R-05 · `H-62` (tier 0) | `WHERE THE 38 GO`: the 20 shrinks | **L** |
 | **5** | **The six antonyms.** `ED-IN-0210` Ruling 2; none of the 9 verbs exists | R-05 · relations that end | the 9 appear in `verb_table.yaml` and execute | **M** |
 | **6** | **`Tenure.term`.** `T-n`'s unbuilt half — `Tenure` has `until`, not `term` | R-05 · relations that lapse | a `Tenure` matures a declared term at a later tick | **M** |

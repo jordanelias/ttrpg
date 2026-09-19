@@ -194,7 +194,14 @@ rosters:
       if read as governing nothing. No schema change is needed: `Office.rung` is already
       `Optional` (*"null is the office-cluster case (S6.2)"*) and `Office.body`/`faction` carry
       the institution.
-    values: [issue, determine, confer, revoke, dispatch, convene]
+
+      ⚠ IT POINTS AT `remit_acts` RATHER THAN RESTATING IT. The first writing spelled the same six
+      values here, and a test pinned the two sets equal — so a seventh remit act meant editing two
+      rows or reddening a test for an unrelated reason (§0.05 cl.3). "Every remit act" is what the
+      fixture MEANS, so the pointer states the intent as well as removing the copy. Narrowing it
+      later means replacing `from_roster:` with a `values:` list, which the loader accepts and
+      which is a visible edit rather than a silent divergence.
+    from_roster: remit_acts
 
   witness_channels:
     source: "#353 §28 `:1004` — the five channels the fan-out computes an observer set from"
