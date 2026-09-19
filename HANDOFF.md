@@ -82,8 +82,8 @@ belongs here: run `python -m engine.season.harness.register --requirements`.
 row under that id: `status: ruled`, `needs_jordan: false` — *"OI-05 RULED BY JORDAN, 2026-09-13…
 **THIS IS OPTION A OF THE TWO THE ROW ITSELF DRAFTED**… Season-tick generation = **none**, which is a
 RULING rather than a deferral."* Option A **is** the generator answer, so the question is closed, not
-deferred. `ED-SE-0051`/E-1 (*matter only, or matter plus hearth capacity?*) is still open on the
-settlements side and is still the same question's sibling.
+deferred. ✅ `ED-SE-0051`/E-1 (*matter only, or matter plus hearth capacity?*) **closed 2026-09-19** —
+**matter plus hearth capacity**, as a Query over dwelling Sites, never a fixture table.
 
 ⚠ **AND `ED-IN-0210`'s FLAG IS DELIBERATE, NOT STALE.** §4 below first listed it as
 self-contradictory (`ruled` + still flagged) and *"closing on citation alone"*. It is `ruled` **for

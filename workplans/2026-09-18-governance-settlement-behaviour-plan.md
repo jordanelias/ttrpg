@@ -302,7 +302,7 @@ single blocker in the plan.**
 | 22 | **PROC-B** | SC | the proceedings provider; the composed obstacle with a ceiling; THE BAR | **BLOCKED** | 18, ★ |
 | 23 | **PART-E-0/2** | IN | typed ids with an owned `H`; the ONE loader's remaining invariants | **OPEN** | 22 |
 | 24 | **SE-BUILD** | SE | settlements P1–P4. ⚠ **MIS-SIZED AS WRITTEN: P1 is DONE bar a number, P4 is now `24e`, and P2/P3 grew a ruled dependency.** Re-scope before starting | **OPEN** · partial | see `24d`, `24e` |
-| **24d** | **SE-CAPACITY** | SE | `capacity(w, rung)` as a Query over the rung's dwelling Sites **with a FLOOR — never a fixture table** | **OPEN** | ⚠ **RULED, NOT GATED** (§3.6). The blocker is that the mechanism has **zero code**: no `capacity` in `queries/`, and no `dwelling`/`houses`/`shelters` anywhere in `engine/season/`, where `rosters.yaml:847` fixes `site_kinds` to three, one of which is not a site |
+| **24d** | **SE-CAPACITY** | SE | `capacity(w, rung)` as a Query over the rung's dwelling Sites **with a FLOOR — never a fixture table** | **OPEN** | ✅ **RULED AND CLOSED 2026-09-19** (`ED-SE-0051`, §3.6); ungated. The blocker is that the mechanism has **zero code**: no `capacity` in `queries/`, and no `dwelling`/`houses`/`shelters` anywhere in `engine/season/`, where `rosters.yaml:847` fixes `site_kinds` to three, one of which is not a site |
 | **24e** | **12 — WORKS & FOUNDING** | SE/IN | `works` kind · `work` advances `stage` · `restore` body · `found` + body · `(Rung\|Site, exists)` get a producer. **This is `found` (P4), which the `ED-SE-0051` ruling names as THE THROTTLE**, and it answers `ARCH` `F.20` — *"the world only decays — nothing is ever founded or built"*, one of two gaps `04:1082` says *"block the build outright"*. It is also the R-half with no player in it (§0.06) | **BLOCKED** | 15 |
 | **24f** | **SUBSISTENCE IS TERRITORIAL** | SE | ⭐ **RULED 2026-09-18 (`ED-IN-0255`)** — *"subsistence/starvation should largely be an abstract/governance issue, and we can just have NPC synecdoches that just represent the overall population affected... i don't think having lords and guild members etc worry about subsistence is worthwhile"* · *"it's a territorial issue"*. Move the demographic loop off per-person eaters and bodies onto a TERRITORIAL quantity with population synecdoches | **OPEN** | — ruled, unscheduled by any prior order. ⚠ **It re-opens `ED-IN-0247`**: `body_step` is a per-PERSON body write, and this ruling puts that SCALE in question, not just its magnitude. Answer the scale before picking the number |
 | 25 | **MB-GOLDEN** | MB | apply the golden-mode ruling; fix three flags whose defaults contradict their comments | **OPEN** | `ED-MB-0061/0016` — both `superseded`, flags cleared |
@@ -404,7 +404,7 @@ rename derives."* BOTH HALVES ARE FALSE, MEASURED.**
 
 ---
 
-### 3.6 · `ED-SE-0051` IS RULED, AND FOUR SURFACES DISAGREE
+### 3.6 · ~~`ED-SE-0051` IS RULED, AND FOUR SURFACES DISAGREE~~ — ✅ **CLOSED 2026-09-19**
 
 `proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml:1838-1844` carries `disposition: ruled`,
 `ruled.by: "Jordan, 2026-09-17 (in session)"`:
@@ -413,11 +413,24 @@ rename derives."* BOTH HALVES ARE FALSE, MEASURED.**
 > FLOOR — never a fixture table. `found` (P4, "found and build") is the throttle. SCOPED TO POPULATIONS.**
 
 Its own `citation:` names `registers/editorial_ledger_se.jsonl:51`, so it is unambiguously this
-question. Against that: the ledger row reads `open`/`needs_jordan`; `HANDOFF_SE.md`'s body still says
-*"STAYS OPEN"*; both settlement suites say *"NOT RULED"*. **The flag is not closed in this commit** —
-`§0` step 1 licenses it and the 2026-09-15 `SUPERSEDING ROW` batch is the precedent, but closing a
-Jordan-gated row against three contrary surfaces wants his word (`ED-IN-0251`, `ED-IN-0252`).
-**`24d` is therefore RULED and buildable, not gated.**
+question. Against that, the ledger read `open`/`needs_jordan`, `HANDOFF_SE.md`'s body said *"STAYS
+OPEN"* in three places, and the r2 documents called the capacity arm *"recommended, not adopted"*.
+
+✅ **JORDAN CLOSED IT 2026-09-19:** *"commit whatever se-0051 is"*. The ledger now carries a second
+row under the id (`status: ruled`, `needs_jordan: false`) and `HANDOFF_SE.md`'s three claims are
+corrections rather than assertions. **All four surfaces now agree with the ruling he gave on 09-17.**
+
+⚠ **WHAT WAS ACTUALLY DECIDED IS THE SHAPE, NOT JUST THE ARM.** E-1's own text proposed the capacity
+bound as *"a `hearth_capacity` fixture table per `site_kind`, adding no new primitive"*. Jordan took
+the arm and **refused that shape**: a `capacity(w, rung)` **Query over dwelling Sites with a floor,
+never a fixture**. A fixture would be a second home for a fact the Sites already carry (§0.05 cl.1),
+and it would make capacity authored where the ruling makes it derived.
+
+**`24d` is RULED AND UNGATED — and still not buildable, for a different reason.** The blocker was
+never the answer; it is that the mechanism has ZERO CODE: no `capacity` in `engine/season/queries/`,
+and no `dwelling`/`houses`/`shelters` anywhere in `engine/season/`, where `rosters.yaml`'s
+`site_kinds` fixes three kinds one of which is not a site. `24e` (`found`, P4) is what makes the
+throttle real and is blocked on position 15.
 
 ### 3.8 · FORWARD SWEEP AFTER `13b` — what closing one tier-0 hole did to the later positions
 
@@ -563,8 +576,11 @@ second half.
 `m1_acceptance.py` binding to the retired M1 board · `HANDOFF_META_ARCHITECTURE.md:3` reading
 PROPOSED under a RATIFIED directory · the spine's spent §0 table · `ED-MB-0016`'s file cites pointing
 at paths the 08-24 port deleted · `ED-IN-0210` reading `status: ruled` while carrying an open fork ·
-`CURRENT.md:31` reading *"DISTINCT and unchanged"* against `ED-IN-0251`'s R2 · `CURRENT.md`'s
-`_Last reconciled:_` stamp at 2026-09-16 against 18 heads touched 09-18 · **`R7` naming two live
+~~`CURRENT.md:31` reading *"DISTINCT and unchanged"* against `ED-IN-0251`'s R2~~ ✅ **FIXED
+2026-09-19 — Jordan ruled *"Truth becomes Conviction"*** and the row carries the absorption · ⚠
+`CURRENT.md`'s `_Last reconciled:_` stamp is **STILL at 2026-09-16 against 18 heads touched 09-18,
+and was deliberately NOT bumped** when that row was flipped: bumping silences all 18 without
+reading one, so the flip is a dated note beneath the stamp instead. **This defect is live** · **`R7` naming two live
 rulings and two different `R3`s existing** (`ED-IN-0252` §4).
 
 ---
@@ -591,6 +607,9 @@ If any pair is actually run concurrently, use `isolation: worktree` (`CLAUDE.md`
 ## 5. THE RULING BATCH — what actually needs Jordan
 
 Eleven items, ordered by what each unblocks. Each is answerable without reading a plan.
+⚠ **TWO WERE ANSWERED 2026-09-19 and are struck rather than deleted, so the count and the
+order do not shift under a reader returning to this list:** item 3(i) (`ED-SE-0051`) and
+the `CURRENT.md:31` record defect in §5's preamble (*"Truth becomes Conviction"*).
 
 0. **THE UNDECLARED CONTENT-HASH TIEBREAK — and this one is needed before position 3.**
    ⚠ **Added by the antagonist pass, which caught the first draft taking one of a pair and dropping
@@ -616,9 +635,16 @@ Eleven items, ordered by what each unblocks. Each is answerable without reading 
 2. **ED-IN-0210's fork — is `comply` one verb or two?** Does an `issue`d dispensation and a
    `dispatch`ed order get answered by the same `comply`/`evade`/`refract` keyed on the ledger claim
    **(A)**, or does `dispatch` need its own obey/disobey pair **(B)**? Evidence leans A. Unblocks 19b.
-3. **ED-SE-0051 + the settlements set.** (i) Bound the demographic loop by **matter only (A)** or
-   **matter plus a hearth-capacity table per site kind (B)**? (ii) Accept P1, P3, P4 for build as
-   proposed? Unblocks 24; P4 is `F.20`, which `04:61` says blocks the build outright.
+3. ✅ **~~ED-SE-0051~~ ANSWERED 2026-09-19 — the settlements set's half (ii) remains.**
+   (i) ~~Bound the demographic loop by matter only (A) or matter plus a hearth-capacity table per
+   site kind (B)?~~ **RULED: the capacity arm — and NOT the shape this question offered.** Jordan
+   took *matter plus hearth capacity* as a `capacity(w, rung)` **Query over the rung's dwelling
+   Sites, with a floor, never a fixture table**; the *"hearth-capacity table per site kind"* the
+   question itself proposed was refused, because a fixture is a second home for a fact the Sites
+   already carry (§0.05 cl.1). `found` (P4) is the throttle, scoped to populations. Closed at the
+   ledger with a second row under the id; `24d` is ungated and blocked only on `capacity` having
+   zero code. ⚠ **(ii) IS STILL YOURS:** accept P1, P3, P4 for build as proposed? P4 is `F.20`,
+   which `04:61` says blocks the build outright.
 4. **ED-MB-0061 + ED-MB-0016 — the mass-battle golden.** Re-base one global golden with every F1–F8
    flag **ON (A)**, or keep per-flag baselines **(B)**? Recommendation on record: A. Unblocks 25 and
    the three flags whose defaults contradict their own comments.
