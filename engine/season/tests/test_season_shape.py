@@ -11540,7 +11540,9 @@ def test_the_generic_ladder_is_seven_deep_and_splits_once():
     # leaves `rungs/offices/held` at 13/13/13 and moves `persons`/`seated` to 0/0. Without these
     # two rows this test passed on a world with nobody in it — which is the whole subject of
     # Jordan's *"otherwise we don't know how dissemination and aggregation works"*.
+    # [GROUNDED: measured 2026-09-19 by `python -m engine.season.harness.governance_spine` -- persons 13, seated 13. The thirteen is `governance_spine.yaml`'s own row count, one holder minted per declared rung, NOT a magnitude chosen here]
     assert c["persons"] == 13, f"the spine has no holders to propagate between: {c}"
+    # [GROUNDED: measured 2026-09-19 -- 13 of 13 hold Tenures name a person that exists. MUTANT-CHECKED: deleting `build`'s `w.persons[pid] = Person(...)` moves this to 0 while `held` stays 13, which is the asymmetry this row exists to observe]
     assert c["seated"] == 13, (
         f"a hold Tenure names a person who does not exist: {c}. `held` cannot see this — it "
         "checks the OFFICE end of the edge")
