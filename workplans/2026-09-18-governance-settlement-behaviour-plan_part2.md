@@ -1,7 +1,11 @@
-# THE RECONCILED PROGRAM — part 2: the instruction and the compliance clause per position
+# THE PLAN — part 2: the instruction and the compliance clause per position
+
+> **RENAMED 2026-09-18 (`ED-IN-0254`)** from `workplans/2026-09-11-reconciled-program_part2.md`; the
+> old path resolves via `tools/pathres.py`. Reads after
+> `workplans/2026-09-18-governance-settlement-behaviour-plan.md`.
 
 ## Status: PROPOSED (ED-IN-0215)
-## Reads after `2026-09-11-reconciled-program.md`. That file owns the ORDER and the supersession
+## Reads after `2026-09-18-governance-settlement-behaviour-plan.md`. That file owns the ORDER and the supersession
 ## verdict; this one owns the per-position detail. Unit CONTENT still belongs to its own owner.
 
 **How to read a position.** `INSTRUCTION` is what a session does from cold. `LAYER` is decided by

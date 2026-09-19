@@ -57,14 +57,18 @@ ALIASES = _DATA['aliases']
 #: meeting one can find out what replaced it, not so it keeps resolving.
 LEGACY = _DATA['legacy']
 
-#: {token_class -> (canonical, ...)}. `FACTIONS = BY_CLASS['faction']` is the eighth-member roster
+#: {token_class -> (canonical, ...)}. `FACTIONS = BY_CLASS['faction']` is the roster
 #: `engine/season/rosters.yaml: factions` derives from rather than copying.
 BY_CLASS = {k: tuple(v) for k, v in _DATA['by_class'].items()}
 
 #: Display strings more than one entry claims. See the module docstring.
 AMBIGUOUS = _DATA['ambiguous']
 
-#: The canonical faction roster, 8 members. Read this instead of spelling a faction name.
+#: The faction roster. Read this instead of spelling a faction name.
+#: ⚠ ITS SIZE IS NOT AN INVARIANT and no caller may assume one (RULED by Jordan, 2026-09-19:
+#: *"faction count should not be pinned"*). It grows when the world does, and it carries test
+#: fixtures — `faction x`, the generic governance ladder's — alongside canon. Membership is the
+#: question to ask it; a length is not.
 FACTIONS = BY_CLASS.get('faction', ())
 
 

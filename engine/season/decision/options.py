@@ -78,6 +78,11 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     KNOWN-FALSE — a claim the person holds that contradicts the requirement — and NOT
     "unproven". Absence of a belief is not a belief in the negative.
 
+    ⚠ **THIS PARAGRAPH DESCRIBES THE PRE-2026-09-18 BEHAVIOUR AND IS KEPT AS THE RECORD.**
+    `H-71` IS CLOSED: `remit:` is now evaluated person-side off the `hold` Tenure's granted acts,
+    and `presence:` is the only kind still declining unconditionally. What follows is why it could
+    not be evaluated before, which is still the reason the hole existed.
+
     ⚠ ONE OF §F1'S FOUR ELIGIBILITY KINDS CANNOT BE EVALUATED HERE, and it declines rather
     than admitting. See `person_side_eligible`: `remit:` needs the OFFICE's remit, and #353
     §11.1 is explicit that "who holds an office is NOT a field on the office -- it is a `hold`
@@ -110,17 +115,28 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
     A DISJUNCTION: `transfer` is eligible by `own` OR `hold:<store>`, so one alternative admitting
     is enough and one alternative declining decides nothing.
 
-    ⚠ TWO OF THE FOUR KINDS DECLINE HERE, EACH NAMING ITS HOLE, and neither admits on an
+    ⚠ **ONE OF THE FOUR KINDS DECLINES HERE — `remit:` NO LONGER DOES, AS OF 2026-09-18 (`13b`,
+    `H-71`).** The bullet below is kept because it states WHY the hole existed and what closed it,
+    but read it as history: the grant now rides on the `hold` Tenure (`World._grant_remit` writes
+    it at `add_tenure`, `Tenure.granted_acts` owns the shape) and the body 45 lines down ADMITS on
+    `arg in t.granted_acts`. An earlier version of this docstring still opened *"TWO OF THE FOUR
+    KINDS DECLINE"* with the `remit:` bullet unmarked, so the function a reader opens to learn the
+    rule stated the opposite of what it did.
+
+    ⚠ THE DECLINING KIND NAMES ITS HOLE, and neither it nor any other branch admits on an
     unevaluable predicate -- that would be a silent fill off the register (`G1`) at the opposite
     polarity to §42.2, which sends zero evidence to the verdict AGAINST the thing measured. The
     resolver's `_eligible` still evaluates both, because it HAS a `World`; this is the person's
     reading, and the gap between the two readings is the finding.
 
-      * `remit:<act>` -- `H-71`, NEW. Needs the OFFICE's `remit_acts`. #353 §11.1: "who holds an
+      * ~~`remit:<act>`~~ **— CLOSED 2026-09-18, kept as the history of the hole.** It needed
+        the OFFICE's `remit_acts`, which the person could not see. #353 §11.1: "who holds an
         office is NOT a field on the office -- it is a `hold` Tenure, owned by the holder", so
         the person owns the tenure and the office owns the remit. Unlike `budget`'s collision
         there is no relocation available: two holders of one office share one remit, so it is not
-        the person's state to move. §F1 asserts this clause is person-side and does not say how.
+        the person's state to move. §F1 asserted this clause is person-side and did not say
+        how; `13b` is the how — a SNAPSHOT of the office's remit is stamped onto the Tenure when
+        the hold opens, so the person reads their own row and `choose` still receives no `World`.
       * `presence:<rung>` -- declined because the ARGUMENT IS A PLACEHOLDER naming a kind of
         rung rather than an id, which is `H-75`, and is the same reasoning the `hold:<store>`
         branch already carries one block below. ⚠ CORRECTED BY `W6`'s adversarial pass: this said
@@ -161,8 +177,26 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
         # `remit` and `presence` decline: see the docstring. TRACE records the decline so the
         # count is measurable rather than inferred from a verb's absence.
         elif kind == "remit":
-            TRACE.note(f"`remit:{arg}` is unevaluable person-side (H-71, the office's remit is "
-                       f"not the holder's state); {row.verb!r} declines rather than admitting")
+            # ⚠ `H-71` CLOSED HERE, arm 2. The grant rides on the Tenure: `World._grant_remit`
+            # stamps the office's remit acts into the `hold` Tenure's `payload` at the ONE writer,
+            # and `Tenure.granted_acts` owns the shape both sides read. So the holder's own state
+            # answers this, `choose` still receives no `World`, and `AX-2` is untouched.
+            # A placeholder is not matched, for the same reason `hold:<store>` refuses: `<act>`
+            # names a KIND of act, not one, and admitting on it would be the over-admission `G4`
+            # weighs equally with an over-refusal. Every live `remit:` cell in `verb_table.yaml`
+            # is a literal (`remit:issue`, `remit:confer`), so this refuses nothing that exists.
+            if arg and not placeholder and any(
+                    t.kind == "hold" and t.live and arg in t.granted_acts
+                    for t in p.tenures):
+                return True
+            if placeholder:
+                TRACE.note(f"`remit:<{arg}>` names an ACT KIND, not an act (H-75); "
+                           f"{row.verb!r} declines rather than admitting on any granted remit")
+            elif not arg:
+                TRACE.note(f"bare `remit` names no act; {row.verb!r} declines")
+            else:
+                TRACE.note(f"`remit:{arg}` not granted on any live `hold` this person holds; "
+                           f"{row.verb!r} declines")
         elif kind == "presence":
             TRACE.note(f"`presence:` eligibility is unevaluable person-side (H-33, the presence "
                        f"index); {row.verb!r} declines rather than admitting")

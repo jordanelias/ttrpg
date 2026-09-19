@@ -98,9 +98,14 @@ def _load_rosters() -> tuple:
         if not isinstance(_r, dict):
             continue
         # ⚠ ONE RULE OVER EVERY POINTER, NOT ONE PER POINTER. `from_names:` joined
-        # `from_descriptor:` on 2026-09-16; spelling the refusal a second time is how the two
-        # would drift apart, which is the defect this refusal is about.
-        _ptrs = [k for k in ("from_descriptor", "from_names") if k in _r]
+        # `from_descriptor:` on 2026-09-16 and `from_roster:` on 2026-09-19; spelling the refusal
+        # once per pointer is how they would drift apart, which is the defect this refusal is about.
+        # roster-exempt: these are THIS LOADER'S OWN YAML GRAMMAR -- the key names a row may carry
+        # to name its owner -- not a definition the game resolves from. Moving them into
+        # `rosters.yaml` is circular by construction: `roster()` would have to read the file to
+        # learn how to read the file. It fails the data-file test in the direction that exempts:
+        # changing this list changes how the LOADER works, never what the game is.
+        _ptrs = [k for k in ("from_descriptor", "from_names", "from_roster") if k in _r]
         if len(_ptrs) > 1:
             raise Unspecified(
                 f"roster {_n!r} carries {len(_ptrs)} owner pointers ({', '.join(_ptrs)})",
@@ -172,6 +177,28 @@ def roster(name: str, ordered: bool = False):
                       "`python tools/export_names.py`",
                 law="ED-IN-0230 -- a pointed-at roster REFUSES when its owner is empty. Returning "
                     "an empty set would be the silent-false `rosters.yaml`'s own header forbids")
+    elif "from_roster" in r:
+        # `from_roster:` — the same pointer aimed at a SIBLING ROW IN THIS FILE, for the case where
+        # one roster's members ARE another's. ⚠ IT EXISTS BECAUSE `remit_default` SPELLED
+        # `remit_acts`' SIX VALUES A SECOND TIME, and a test pinned the two equal — so adding a
+        # seventh remit act meant editing two rows, or reddening a test for a reason unrelated to
+        # the edit (§0.05 cl.3, "never keep a second copy"). A row that later needs to NARROW the
+        # set replaces this pointer with its own `values:`, which is an explicit edit rather than a
+        # silent divergence.
+        src = _ROSTERS.get(r["from_roster"])
+        if not isinstance(src, dict) or not src.get("values"):
+            raise Unspecified(
+                f"roster {name!r} points at roster {r['from_roster']!r}, which is absent or "
+                f"carries no `values:`", "rosters.yaml",
+                needs=f"give {r['from_roster']} its members, or point somewhere that has them",
+                law="ED-IN-0230 -- a pointed-at roster REFUSES when its owner is missing. Falling "
+                    "back to a local literal is how the two lists drifted in the first place")
+        if r["from_roster"] == name:
+            raise Unspecified(
+                f"roster {name!r} points at itself", "rosters.yaml",
+                needs="point at the roster that owns these members",
+                law="ED-IN-0230 -- a pointer names ANOTHER row's ownership, never its own")
+        vals = list(src["values"])
     elif "values" not in r:
         raise Unspecified(
             f"{name!r} is not a roster -- it has no `values:`", "rosters.yaml",
@@ -333,6 +360,38 @@ HOLD_SUBJECT_KINDS = roster("hold_subject_kinds")
 VERB_CAPABILITY = roster_map("verb_capability", "values")
 RUNG_KINDS = roster("rung_kinds", ordered=True)
 REMIT_ACTS = roster("remit_acts")
+# ⚠ A TESTING FIXTURE, NOT CANON — see the roster's own note. Jordan, 2026-09-18: "for testing
+# purposes for now, just build out a generic remit". It fills an EMPTY remit and never overwrites
+# a grounded one.
+REMIT_DEFAULT = roster("remit_default")
+
+
+def remit_or_default(declared) -> list[str]:
+    """A seat's remit, or the TESTING default when it declares none — the ONE owner of that rule.
+
+    ⚠ IT FILLS AN EMPTY REMIT AND NEVER OVERWRITES A DECLARED ONE. The three grounded overlays
+    (NPC-008/033/038) keep exactly what their case text supports; `remit_default` reaches only the
+    seats that carry `[]`, which was 16 of the populated realm's 19 when this landed.
+
+    ⚠⚠ THE DEFAULT IS NOT CANON — see `rosters.yaml: remit_default`'s own note for why a
+    transparently-wrong placeholder is the safe shape and what replaces it (per-POST remits, which
+    need `Office.post` normalised first). Jordan, 2026-09-18: *"for testing purposes for now, just
+    build out a generic remit"*.
+
+    ⚠ NO FILTERING, DELIBERATELY. `corpus_run`'s own comment records why: a rev-1 filter
+    `[a for a in ... if a in REMIT_ACTS]` dropped an unrecognised remit act on the floor, *"a quiet
+    default sitting underneath `Office.__post_init__`'s loud one"*. A declared remit passes through
+    untouched and `Office.__post_init__` refuses it loudly if it is off-roster.
+    """
+    declared = list(declared or [])
+    # ⚠ `sorted`, NOT `list`. `REMIT_DEFAULT` is a frozenset, so `list()` gave a PER-PROCESS order
+    # and `build_realm(0).content_hash()` returned a different digest on every run — measured 3/3
+    # distinct under three `PYTHONHASHSEED`s, 3/3 identical without this. Gameplay was unaffected,
+    # but R4 byte-identical replay is not, and a determinism break that only shows across processes
+    # is exactly the kind a same-process self-comparison cannot see. Found by `/code-review`.
+    return declared if declared else sorted(REMIT_DEFAULT)
+
+
 WITNESS_CHANNELS = roster("witness_channels", ordered=True)
 CLAIM_SOURCES = roster("claim_sources")
 STRATA = roster("strata", ordered=True)

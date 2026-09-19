@@ -526,6 +526,8 @@ shipped once and made a fabricated `MEASURED-BY:` path pass across 162 namespace
 | `tests/threadwork_decision_point_analysis.md` | `tests/stress/threadwork_decision_point_analysis.md` | PENDING |
 | `tests/throughline_analysis_2026-04-17.md` | `tests/audit/throughline_analysis.md` | PENDING |
 | `tests/valoria_throughline_synthesis_holistic_audit.md` | `tests/audit/throughline_synthesis_holistic.md` | PENDING |
+| `workplans/2026-09-11-reconciled-program.md` | `workplans/2026-09-18-governance-settlement-behaviour-plan.md` | RELOCATED |
+| `workplans/2026-09-11-reconciled-program_part2.md` | `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` | RELOCATED |
 
 ## DELETES (4 files)
 

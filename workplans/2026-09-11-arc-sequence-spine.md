@@ -1,6 +1,12 @@
 # ONE SPINE FOR EVERYTHING THAT REMAINS — Arc 1 / Arc 2 / Arc 3 resequenced
 
-## Status: PROPOSED (ED-IN-0212)
+## Status: PROPOSED (ED-IN-0212). ⚠⚠ **SUPERSEDED AS AN *ORDER* 2026-09-18 (`ED-IN-0253`).**
+## **THE ORDER IS `workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3 AND NOWHERE ELSE.** This file's
+## positions 2–15 were the surviving basis for calling that document's single-ownership claim
+## "contested"; Jordan closed the collision — *"I need one single clearly defined plan"* — and this
+## file now owns its ARGUMENT and its dependency reasoning only. **Do not build from the order below.**
+## Nothing here is deleted: the adjudication that produced it is still the best statement of WHY the
+## Arc 1/2/3 edges fall where they do, and §3 of the reconciled program relies on it.
 ## Owner: infrastructure / cross-cutting (IN lane)
 ## Supersedes: nothing. AMENDS the ORDER in `workplans/2026-09-09-layer1-conformance-plan.md`
 ## (Arc 2's unit cut) and `workplans/2026-09-09-r-execution-plan.md` (Arc 3's sequence). Both
@@ -54,7 +60,7 @@ re-cut into five units rather than four** — see §3 for why the original cut i
 | **13** | **U7-remit** — `levy`, `establish`, `open_case`, `determine`, `issue` | G3, for `via.scope` | `levy` executing **with `Act.via` set** is U9's own observable |
 | **14** | **U9 / R-04** — `faction_q`-shaped queries, `scale_of_rung`, the 44 re-scales, the 10 world cases | G3 + U8 + U7-remit | the last structural unit |
 | **15** | **U10** — second measurement; `measured:` lines from instrument output only | everything above | — |
-| **off-spine** | **U7-disp** — `comply`, `evade / defy`, `refract` | — | **genuinely Jordan's.** ED-IN-0210's fork (*does an order carry terms?*) is the one remaining node that survives all five of §0's tests. Do not schedule it until ruled |
+| **off-spine** | **U7-disp** — `comply`, `evade / defy`, `construe` | — | **genuinely Jordan's.** ED-IN-0210's fork (*does an order carry terms?*) is the one remaining node that survives all five of §0's tests. Do not schedule it until ruled |
 
 **Where two units were order-free, that is said and a choice is still made** — the ask was a spine, not
 a lattice. U3 is order-free against Arc 2 (picked first so game yield lands even if G1a stalls on the

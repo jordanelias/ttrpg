@@ -2064,7 +2064,17 @@ def test_w2_the_class_column_is_derived_and_cross_checked():
 # works, never what the game is. It is the first exemption this guard has earned on its own author.
 # 13 -> 14, W5: `View.__slots__`, for the same reason — a language construct naming the class's
 # own attributes, which crossed the three-element threshold when the View gained `question`.
-EXEMPT_CEILING = 14
+# 14 -> 15, 2026-09-19: `rosters.py`'s `_ptrs`, the owner-pointer key names, which crossed the
+# three-element threshold when `from_roster:` joined `from_descriptor:` and `from_names:`. The
+# argument the ceiling demands: this is the LOADER'S OWN YAML GRAMMAR, and it is the one list that
+# provably cannot live in `rosters.yaml` — `roster()` would have to read the file to learn how to
+# read the file. Same direction as the two above: editing it changes how the code works, never
+# what the game is. ⚠ This is the SECOND exemption the guard has earned on its own author, and
+# the honest reading is that the guard is right and the site is genuinely mechanism — not that
+# the ceiling is a formality. If a third arrives for a reason that is not "language or grammar",
+# that is the creep this ratchet exists to make visible.
+# [JUSTIFIED: a RATCHET COUNT, not a magnitude -- it is the number of declared `roster-exempt:` sites in the model set, and the argument for each increment is the comment block directly above. Fitted to the tree by construction: run the guard and it reports the true count. 2026-09-19: 14 -> 15 for `rosters.py`'s `_ptrs`.]
+EXEMPT_CEILING = 15
 
 
 def test_jordan_no_definition_is_hardcoded_in_a_body():
@@ -4994,12 +5004,44 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     # a magnitude and the block would be attributing nothing to nothing. One positive drain
     # somewhere is what keeps the attribution a measurement.
     # [GROUNDED: measured 2026-09-11 under `U1`, `tiny_world`, ten seasons -- full arm drains 0, `no_move` arm drains 2, and the attribution holds exactly in both cells]
-    assert drained + nm_drained > 0, (
-        f"NO arm of this test moved grain out of `S` (full {drained}, no-move {nm_drained}). The "
-        "two equalities above still exclude a second cause, but nothing here observes a drain's "
-        "magnitude any more, so this run cannot say what moved the settlement's larder. Look at "
-        "why `transfer` stopped being granted before re-pinning: under `U1` it was `tell`'s "
-        "degree changing the belief stream that forms transfer Candidates.")
+    # ⚠⚠ **THIS GUARD IS RETIRED BY A JORDAN RULING, NOT WEAKENED BY A FAILING RUN (2026-09-18,
+    # `ED-IN-0255`).** It went red when `H-71` closed, and the honest reading of WHY is what
+    # retires it rather than re-points it. Verbatim: *"subsistence/starvation should largely be an
+    # abstract/governance issue, and we can just have NPC synecdoches that just represent the
+    # overall population affected? i don't think having lords and guild members etc worry about
+    # subsistence is worthwhile"* and *"it's a territorial issue"*.
+    #
+    # THE DRAIN THIS GUARD OBSERVED WAS A LORD DOING SUBSISTENCE WORK. The docstring above states
+    # it exactly: the whole of the movement is *"the two granted transfers whose `from` is `S` and
+    # whose `to` is not (`S -> p_high`, one grain each)"*, and `world_q.presence(w, "S")` is
+    # `['p_high']` in every season of every arm. `p_high` is the DUKE. He was the settlement's only
+    # subsistence actor because he is the only person seated there, and `H-71` merely gave him
+    # eight governance verbs to prefer instead -- measured: `p_high` gains `confer, convene,
+    # determine, dispatch, establish, issue, levy, open_case`; `p_low` and `p_mid` gain none,
+    # holding no office. So the displacement is the ruling arriving as behaviour.
+    #
+    # ⚠ RE-POINTING IT AT `p_low`/`p_mid` WOULD NOT WORK AND WOULD NOT BE HONEST. They are seated
+    # at the hearth `Hh`, not at `S`, so they never drained `S` in any arm; the guard cannot be
+    # moved to a non-lord because no non-lord is there. The model it needs does not exist yet.
+    #
+    # WHAT IS KEPT AND WHY THAT IS SUFFICIENT: both equalities above are UNCHANGED and remain
+    # exclusions at zero, as this block's own note says -- they still go red if anything but
+    # `transfer` moves the larder. What is dropped is only the demand that SOME arm drain, which
+    # under the ruling is a demand that a lord haul grain.
+    #
+    # ⚠ WHAT REPLACES IT IS NOT WRITTEN YET AND IS NOT THIS TEST'S JOB. The ruling makes
+    # subsistence territorial with population synecdoches, which is positions 24 / 24d / 24e of
+    # the plan and bears on `ED-IN-0247`'s `body_step` (a per-PERSON body write, whose scale the
+    # ruling puts in question). When that lands, the non-vacuity guard belongs on the TERRITORIAL
+    # quantity, and this comment is the pointer to rebuild it there rather than here.
+    # ⚠ NO REPLACEMENT ASSERTION, AND A TAUTOLOGY WOULD BE WORSE THAN NONE. The first writing of
+    # this retirement put `assert drained + nm_drained >= 0` here, which `/code-review` correctly
+    # called a tautology: it cannot observe any failure, and with both arms at 0 the two equalities
+    # above reduce to `0 == 0`, so the block would stay green even if `transfer` stopped executing
+    # entirely. §0.1 pt 2 -- *"an assertion must be able to observe the failure it excludes"*, and
+    # `pytest.approx` on an exactness claim *"is not a weak test but an absent one"*. So the guard
+    # is GONE rather than replaced, and the loss is stated here instead of being papered over by a
+    # line that looks like a check. What restores it is the territorial quantity (see above).
     # AND THE MECHANISM THE DOCSTRING REFUTES STAYS REFUTED, asserted rather than recited: an extra
     # eater at `S` would draw 2 a season, which is the order of magnitude of every delta here.
     assert {tuple(sorted(world_q.presence(no_move_d.w, "S")))} == {("p_high",)}, (
@@ -5030,42 +5072,193 @@ def test_w8_work_emits_a_success_while_repairing_nothing():
         "`H-94` has closed and this test is the record of a defect that no longer exists")
 
 
-def test_no_person_can_choose_a_governance_verb_and_h71_is_why():
-    """⚠ THE HALF THE SLICE DOES NOT BUILD, PINNED SO IT CANNOT BE ASSUMED AWAY.
+def test_a_holder_can_now_choose_the_governance_verbs_their_office_grants():
+    """⚠ THIS TEST FLIPPED, AND THE FLIP IS `H-71` CLOSING. It was
+    `test_no_person_can_choose_a_governance_verb_and_h71_is_why`, and it asserted `not offered`.
 
-    The four governance verbs execute when the fold is HANDED an Act. **No person can ever form
-    one.** `person_side_eligible` declines every `remit:` alternative unconditionally — that is
-    `H-71`, which the register already carried as `absent` and **tier 0**, with its `unblocks:`
-    already reading *"9 of 32 verbs cannot be formed person-side — 8 remit-ONLY"*. All four
-    governance verbs carry `remit:` as their ONLY eligibility, so `Query.opening_set` never offers
-    them, in any world — including one where the actor genuinely holds the office whose remit
-    names the act.
+    ITS OWN DOCSTRING ASKED FOR THIS: *"it goes red the day `H-71` closes, which is exactly when
+    the claim becomes true"*, and *"re-read the slice's note and this test's docstring together
+    before deleting either"*. So it is rewritten rather than deleted, and the history stays.
 
-    So `resolvable_verbs()` moving 8 → 12 CANNOT AFFECT ANY RUN, and the claim *"the governance
-    verbs now run"* is true of `resolve` and false of any person deliberating. This test is that
-    sentence made mechanical: it goes red the day `H-71` closes, which is exactly when the claim
-    becomes true. Found by the governance-slice adversarial pass."""
+    WHAT IT USED TO RECORD, because the record is the point: the four governance verbs executed
+    when the fold was HANDED an Act, and **no person could ever form one** --
+    `person_side_eligible` declined every `remit:` alternative unconditionally, in any world,
+    including one where the actor genuinely held the office whose remit named the act. So
+    `resolvable_verbs()` moving 8 -> 12 COULD NOT AFFECT ANY RUN.
+
+    WHAT CLOSED IT: `H-71` arm 2. `World._grant_remit` stamps the office's remit acts into the
+    `hold` Tenure's `payload` at `add_tenure`, the one writer; `Tenure.granted_acts` owns the
+    shape; and the `remit` branch reads the holder's own state. `choose` still receives no
+    `World`, so `AX-2` is untouched.
+
+    ⚠ THE ASSERTION IS PER-OFFICE, NOT BLANKET, and that is what makes it a test rather than a
+    tautology. `off_duke` grants `issue - determine - confer - dispatch - convene` and NOT
+    `revoke`, so a duke can form six of the seven remit-only governance verbs and **cannot form
+    `revoke`** -- which is precisely why `test_the_fold_closes_a_tenure_on_revoke` has to add
+    `revoke` to the office before it can drive the fold. A grant that admitted all seven would be
+    the over-admission `G4` weighs equally with an over-refusal."""
     w = P.tiny_world()
     duke = w.persons["p_high"]
     assert any(t.subject == "p_high" and t.object == "off_duke" and t.live for t in w.tenures)
     assert "confer" in w.offices["off_duke"].remit_acts
-    # ⚠ SEVEN OF THE EIGHT, NOT ALL EIGHT. `succeed` is eligible by `own` and IS offerable — it
-    # is the one governance verb a person can choose, and it is not in this slice (it has no
-    # predicate and no effect). Scoping to the remit-only rows is what makes the assertion about
-    # `H-71` rather than about `binding_decision`.
+    assert "revoke" not in w.offices["off_duke"].remit_acts, (
+        "the fixture office now grants `revoke`; this test's negative arm has lost its subject")
     gov = [v for v, r in VERB_TABLE.items()
            if r.stratum == "binding_decision"
            and all(alt.startswith("remit:") for alt in r.eligibility)]
     assert len(gov) >= 7, f"only {len(gov)} remit-only governance verbs; the roster has moved"
-    offered = [v for v in gov if person_side_eligible(duke, VERB_TABLE[v])]
-    assert not offered, (
-        f"a person can now choose {offered} — `H-71` has closed, and the governance slice's claim "
-        "that its verbs 'run' is finally true of a deliberating person rather than only of the "
-        "fold. Re-read the slice's note and this test's docstring together before deleting either")
-    # AND THE FOUR ARE IN THE FOLD'S SET, which is the half that DOES work — the two facts
-    # together are the honest statement of where the slice stands.
+    offered = {v for v in gov if person_side_eligible(duke, VERB_TABLE[v])}
+    assert offered, (
+        "no remit-only governance verb is offerable to a person who holds the office granting it "
+        "-- `H-71` has REGRESSED. Check that `add_tenure` still calls `_grant_remit`")
+    assert "confer" in offered, "the duke's office grants `confer` and the person cannot form it"
+    # ⚠ THIS ASSERTS THE MECHANISM, NOT A SIDE OF `H-91`. It pins that the grant is read off the
+    # office that granted it rather than admitting blanket -- an over-admission would be `G4`.
+    # It is NOT a ruling that `remit:` should stay NECESSARY: `H-91` holds that keeping
+    # `remit:revoke` necessary may be an over-REFUSAL against Jordan's 2026-09-02 ruling that
+    # purview is SUFFICIENT, and that row says the conflict *"becomes live the moment H-71
+    # closes"* -- which is now. `H-91` is `grade: absent` and reserves the call; closing `H-71`
+    # moved it from unreachable to reachable and this line must not be read as answering it.
+    assert "revoke" not in offered, (
+        "`revoke` is offerable to a holder whose office does NOT grant it -- the grant is "
+        "admitting on something other than its own office, which is an over-admission (G4). "
+        "If this is being changed deliberately under `H-91`, rule that row first")
+    # AND THE FOUR ARE STILL IN THE FOLD'S SET. The two halves now agree, which is the whole
+    # point of closing the hole rather than the half the slice built.
     assert {"confer", "revoke", "dispatch", "convene"} <= resolvable_verbs(), (
         "the fold can no longer execute the governance verbs; the slice has regressed")
+
+
+def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
+    """THE TESTING DEFAULT, PINNED — and pinned as a FIXTURE, not as a design.
+
+    Jordan, 2026-09-18: *"anyway, for testing purposes for now, just build out a generic remit"*.
+    `rosters.yaml: remit_default` is that, and its own note says at length why a transparently
+    wrong placeholder is safer than a plausible one. This test asserts what it BUYS and what it
+    does NOT, so a later session reading it cold cannot mistake either.
+
+    WHAT IT BUYS: `H-71` (`ED-IN-0255`) put the remit on the holder's `hold` Tenure, but 16 of the
+    populated realm's 19 offices carried `remit_acts: []` — blocked by DATA, not by any mechanism.
+    With the default, every seated holder carries a grant and all NINE become formable.
+
+    ⚠ THAT CLOSES FOUR, NOT EIGHT, AND THIS DOCSTRING CLAIMED EIGHT BEFORE IT WAS MEASURED.
+    Measured on `build_realm(0)` in both arms: five of the nine were ALREADY formable off the three
+    granted seats (`determine`, `dispatch`, `issue`, `levy`, `open_case`); the four the default
+    closes are `confer`, `convene`, `establish`, `revoke`. The assertion below pins the nine, and
+    this paragraph pins what the nine cost.
+
+    ⚠ WHAT IT DOES NOT BUY, ASSERTED SO THE GAP CANNOT BE READ AS SUCCESS: the CORPUS executed set
+    does not move. `corpus_run` seats an office only through an `apply_rescale` overlay, and all
+    three that do (NPC-008/033/038) DECLARE a remit, so `remit_or_default` reaches none of them.
+    Formable in the populated realm is not executed in the corpus, and `R-05` is scored on the
+    corpus.
+
+    ⚠ AND EXECUTION IN THE POPULATED REALM IS NOT INSTRUMENTED BY ANYTHING — a pre-existing gap
+    (root `HANDOFF.md` §4: *"no `corpus_run` or `register --requirements` path consults it"*), so
+    this test asserts FORMABILITY and makes no claim about execution. Stated rather than left as
+    an inference."""
+    from ..data.rosters import REMIT_ACTS, REMIT_DEFAULT, remit_or_default
+    from ..harness import populated as PP
+
+    # the fill rule itself: fills an empty remit, never overwrites a declared one
+    assert remit_or_default([]) == sorted(REMIT_DEFAULT)
+    assert remit_or_default(["issue"]) == ["issue"], (
+        "the default overwrote a declared remit — the three grounded overlays would lose the "
+        "remit their own case text supports")
+    # ⚠ SORTED, AND THE ASSERTION IS THE POINT RATHER THAN THE TIDINESS. `REMIT_DEFAULT` is a
+    # frozenset; returning `list(...)` gave a PER-PROCESS order that made
+    # `build_realm(0).content_hash()` differ on every run (3/3 distinct under three
+    # `PYTHONHASHSEED`s). A determinism break visible only ACROSS processes is invisible to every
+    # same-process self-comparison in this suite, which is why it is pinned here explicitly.
+    assert remit_or_default([]) == sorted(remit_or_default([])), "the default is not sorted"
+    # ⚠ THE DEFAULT IS A VERBATIM COPY OF `remit_acts` WITH NO DERIVATION LINK, so a seventh remit
+    # act would silently not reach it. Pinned rather than wired: keeping them separate is what lets
+    # the default NARROW later, which per-post remits will want. This goes red the day they drift.
+    assert set(REMIT_DEFAULT) <= set(REMIT_ACTS), (
+        f"the default grants {sorted(set(REMIT_DEFAULT) - set(REMIT_ACTS))}, which are not remit "
+        "acts — `Office.__post_init__` would refuse them at every seat")
+    assert set(REMIT_DEFAULT) == set(REMIT_ACTS), (
+        "the default and the remit roster have drifted. That may be correct — a narrower default "
+        "is the likely shape once per-post remits land — but it must be a decision, not a silent "
+        "omission. Re-read `rosters.yaml: remit_default`'s note and update this assertion")
+
+    w = PP.build_realm(0)
+    offices = list(w.offices.values())
+    # [GROUNDED: measured 2026-09-18 on `build_realm(0)` -- the populated realm seats 19 offices, of which 3 carried a remit before `remit_default` and 19 after; the seat registry is `harness/populated.py`'s own, not a constant chosen here]
+    assert len(offices) >= 19, f"the realm seats {len(offices)} offices; the fixture has moved"
+    ungranted = [o.id for o in offices if not o.remit_acts]
+    assert not ungranted, f"offices with no remit after the default: {ungranted}"
+
+    held = [t for t in w.tenures if t.kind == "hold" and t.live and t.object in w.offices]
+    assert held, "no office is held; `_grant_remit` has nothing to stamp"
+    assert all(t.granted_acts for t in held), (
+        "a seated holder carries no grant — `add_tenure` is not stamping, or the office is empty")
+
+    gov = [v for v, r in VERB_TABLE.items()
+           if any(a.startswith("remit:") for a in (r.eligibility or ()))]
+    # [GROUNDED: measured 2026-09-18 over `VERB_TABLE` -- nine rows carry a `remit:` alternative (confer, convene, determine, dispatch, establish, issue, levy, open_case, revoke), which is the same nine `H-71`'s `unblocks:` field names]
+    assert len(gov) == 9, f"{len(gov)} verbs carry a `remit:` alternative; H-71's nine has moved"
+    formable = set()
+    for t in held:
+        p = w.persons.get(t.subject)
+        if p:
+            formable |= {v for v in gov if person_side_eligible(p, VERB_TABLE[v])}
+    assert formable == set(gov), (
+        f"only {sorted(formable)} of the nine remit verbs are formable by a seated holder; the "
+        "generic remit is not reaching them")
+
+
+def test_h71_the_grant_is_a_snapshot_not_a_mirror():
+    """WHAT THE STORE DOES TODAY -- **not** what the design intends. The distinction matters and an
+    earlier writing of this docstring got it wrong.
+
+    The payload is written at seating and never revisited, so mutating an office's `remit_acts`
+    afterwards does not reach a sitting holder, while `_eligible` (which has a `World`) sees it at
+    once. This test pins that BEHAVIOUR.
+
+    ⚠⚠ **IT DOES NOT PIN THE SEMANTICS, AND THE FIRST WRITING CLAIMED IT DID.** It rested on the
+    register's *"an office whose remit changes does so by an ACT"* and called the snapshot a ruled
+    choice. **MEASURED, and the justification does not hold:** the only act that would change a
+    remit is `establish`, which DECLARES `writes: ["Office.exists", "Office.remit",
+    "Office.establishment"]` (`verb_table.yaml:229`) and **has no effect registered in
+    `loop/effects.py` at all**. The only writes to `remit_acts` anywhere in `engine/` are
+    `_grant_remit`'s own two payload writes; every other hit is a read, a roster validation or a
+    docstring. `CLAUDE.md` §0.1 pt 3 row two -- *"a roster existing is not a roster being used"*.
+
+    **So snapshot and mirror are observationally IDENTICAL in every reachable run**, and this test
+    reaches the distinction only by hand-mutating an office, which no game path does. The choice is
+    therefore UNDECIDED by anything in the tree, and it is not this test's to decide. `establish`
+    is itself `remit:confer`-eligible -- one of the nine verbs `H-71` unblocks -- so the semantics
+    arrives WITH `establish`'s effect and should be ruled there.
+
+    ⚠ **AND THIS DOCSTRING NO LONGER FORECLOSES THE OTHER REPAIR.** It used to say a later session
+    must not "fix" the snapshot into a mirror because that would put a `World` read into `choose`
+    and undo `AX-2`. That was a false dichotomy: the other repair needs no `World` in `choose` --
+    route the two world-side readers (`resolve.py:56`, `epistemic.py:360`) onto `t.granted_acts`,
+    which they can do because both already hold the Tenure. Two independent read-only reviews
+    rediscovered that repair; it is the open finding, not a forbidden one."""
+    w = P.tiny_world()
+    duke = w.persons["p_high"]
+    assert not person_side_eligible(duke, VERB_TABLE["revoke"]), "fixture: duke lacks `revoke`"
+
+    w.offices["off_duke"].remit_acts = list(w.offices["off_duke"].remit_acts) + ["revoke"]
+    assert not person_side_eligible(duke, VERB_TABLE["revoke"]), (
+        "mutating the office re-granted a SITTING holder -- the payload has become a mirror of "
+        "the office instead of the grant taken at seating, which is not arm 2")
+
+    # A NEW seating carries the mutation, so the act-shaped path is not broken by the snapshot.
+    # ⚠ ON A DIFFERENT OFFICE, AND `/code-review` IS WHY. The first writing seated `p_mid` on
+    # `off_duke` -- a SECOND live holder of one office, which passes today only because
+    # `_refuse_bad_hold` does not yet enforce the *"1 per object"* row it quotes from
+    # `holonic §15`. A test that depends on an unenforced rule breaks for an unrelated reason the
+    # day the rule lands, so this uses an office nobody holds.
+    w.offices["off_dicastery"].remit_acts = list(w.offices["off_dicastery"].remit_acts) + ["revoke"]
+    assert not any(t.kind == "hold" and t.object == "off_dicastery" and t.live
+                   for t in w.tenures), "fixture: `off_dicastery` is already held"
+    w.add_tenure(Tenure("t_h71_new", "p_mid", "off_dicastery", "hold", w.tick))
+    assert person_side_eligible(w.persons["p_mid"], VERB_TABLE["revoke"]), (
+        "a holder seated AFTER the office gained `revoke` did not receive it -- `_grant_remit` is "
+        "not running on this mint path")
 
 
 def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
@@ -6078,8 +6271,25 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # being a broken-closed witness channel (`test_w6_every_named_channel_…`).
     # [GROUNDED: measured 2026-09-11 over the 27 NPC rung cases at seed 0, 3 seasons -- `release` executed 164, `tenure.closed` 6, `release.refused` 158; `work` executed 177, `work.unavailable` 177]
     # [GROUNDED: measured 2026-09-11 over the 27 NPC rung cases at seed 0, 3 seasons, BY A ONE-OFF SCRIPT AND NOT BY A COMMITTED COMMAND (`corpus_run` prints the executed and refused VERB SETS, not per-verb counts) -- `release` executed 164, `tenure.closed` 6, `release.refused` 158; `work` executed 177, `work.unavailable` 177. What is instrumented is the pair of assertions in this file: `release` in the executed set, and 15 of the 89 live worlds]
-    assert ever == {"create_record", "interview", "move", "reconstruct", "release", "research",
-                    "speak", "surveil", "tell", "transfer", "utter"}, (
+    # ⚠ 11 -> 12, `dispatch` (`H-71` closed, 2026-09-18), AND IT IS THE FIRST VERB TO ARRIVE BY
+    # ELIGIBILITY RATHER THAN BY AN OPERAND OR A PREDICATE. The three routes above are all about
+    # binding a verb's arguments; this one is about whether a person may form the verb AT ALL.
+    # `H-71` arm 2: `World._grant_remit` stamps the office's `remit_acts` into the `hold` Tenure's
+    # `payload` at `add_tenure` (the ONE writer, so every mint path carries it), `Tenure.
+    # granted_acts` owns the shape, and `person_side_eligible`'s `remit` branch reads the holder's
+    # own state instead of declining unconditionally. `choose` still receives no `World`.
+    # ⚠ ONE VERB, NOT NINE, AND THE GAP IS THE MEASUREMENT WORTH KEEPING. `H-71`'s `unblocks:`
+    # reads "9 of 32 verbs cannot be formed person-side" and the 9 is correct -- nine rows carry a
+    # `remit:` alternative. Only `dispatch` reaches this set, because ONLY THREE OF 143 CORPUS
+    # CASES SEAT A GRANTING OFFICE, and they do it through `apply_rescale` overlays rather than
+    # through `build_at`: NPC-008 (`issue`), NPC-033 (`issue`, `dispatch`), NPC-038 (`issue`,
+    # `determine`, `dispatch`). `dispatch` executes in exactly ONE of the 89 live worlds (NPC-033)
+    # and is refused in that same world, so it is exercised both ways.
+    # ⚠ `issue` IS GRANTED IN ALL THREE AND DOES NOT EXECUTE, AND WHY IS NOT ESTABLISHED HERE.
+    # Stated as a null rather than given a cause: a fabricated mechanism would survive being
+    # wrong, which is the failure `release`'s note above spent four lines correcting.
+    assert ever == {"create_record", "dispatch", "interview", "move", "reconstruct", "release",
+                    "research", "speak", "surveil", "tell", "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -6317,7 +6527,17 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # unreachable and lets two worlds differ in WHO they act on, not only in what they do.
     # Variety rose because the worlds stopped being the same world. 25 -> 43.
     # [GROUNDED: measured 2026-09-13 through the season driver, both arms at seed 0 over the same cases, after `build_at` gave each person a person-subject Proposition -- distinct executed sets over the live worlds: 25 -> 43. The mechanism and direction are in the block above this line.]
-    assert len(by_sig) == 43, (
+    # ⚠ 43 -> 44, `H-71` CLOSED (2026-09-18), AND THE DIRECTION IS SAID BEFORE THE NUMBER because
+    # the assertion below demands it. ONE world gained a signature nothing else has: NPC-033 is
+    # the only live case whose overlay seats an office granting `dispatch`, so once
+    # `person_side_eligible` could read a remit off the holder's own `hold` Tenure, that world and
+    # only that world grew a verb. Variety rose by one because ONE world stopped sharing its
+    # behaviour, not because the ranking learned to discriminate -- `H-96` is untouched.
+    # ⚠ AND THE UNIVERSAL SET WAS CHECKED IN THE SAME BREATH, as this message requires: it did NOT
+    # move. `dispatch` is reachable in one world of 89, so it cannot be universal, and no verb
+    # regained universality -- the `U1` shape this warning was written for did not recur.
+    # [GROUNDED: measured 2026-09-18 through `corpus_run.run_case` at seed 0 over the same 143 corpus cases, both arms -- control stashed to the prior commit gives 43, this tree gives 44, and the one world that moved is NPC-033, the only live case whose `apply_rescale` overlay seats an office granting `dispatch`. The universal set was re-taken in the same run and did NOT move.]
+    assert len(by_sig) == 44, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -6399,7 +6619,10 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # somebody -- so `create_record` executes everywhere rather than in most places. Variety up
     # AND universality up is not a contradiction: the worlds differ more in what else they do.
     assert universal == {"create_record", "utter"}, sorted(universal)
-    assert varying == {"interview", "move", "release", "research",
+    # `dispatch` joins the VARYING set and not the universal one, which is the check the
+    # distinct-behaviour message above demands be made in the same breath: it is reachable in one
+    # live world of 89 (NPC-033, the only overlay granting it), so it cannot be universal.
+    assert varying == {"dispatch", "interview", "move", "release", "research",
                        "reconstruct", "speak", "surveil", "tell", "transfer"}, sorted(varying)
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -6438,10 +6661,22 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
         "one-season case, reaching it has become a function of LENGTH alone and the scene budget "
         "has stopped competing for the scene; if `lo` is empty, every live case reaches it and "
         "the ranking has gone inert")
-    assert foldable_all - ever - refused_only == {"confer", "convene", "dispatch", "revoke",
+    # ⚠ FIVE -> FOUR: `dispatch` LEFT THIS SET, 2026-09-18, AND THIS ASSERTION IS THE ONE THAT
+    # PREDICTED IT. Its own message read *"any movement means `H-71` has moved"*, and `H-71` moved:
+    # arm 2 put the office's remit on the holder's `hold` Tenure, so a person can form `dispatch`
+    # where their office grants it. It is now ATTEMPTED (and both executed and refused) in
+    # NPC-033, the one live world whose overlay grants it.
+    # ⚠ THE OTHER THREE GOVERNANCE VERBS DID NOT FOLLOW, and the reason is the corpus rather than
+    # the hole: `confer`, `convene` and `revoke` are granted by NO overlay in the corpus
+    # (NPC-008/033/038 grant only `issue`, `dispatch`, `determine`), so no person holds an office
+    # admitting them. `H-71` is closed and they are still never attempted -- which is why this set
+    # keeps four members instead of emptying, and why closing a hole is not the same as reaching
+    # the verbs behind it.
+    assert foldable_all - ever - refused_only == {"confer", "convene", "revoke",
                                               "destroy_record"}, (
-        f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Four of the "
-        "five are the governance verbs and `H-71` is why; any movement means `H-71` has moved")
+        f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Three of "
+        "the four are the governance verbs no corpus overlay grants; `H-71` is CLOSED, so the "
+        "reason is now the corpus's offices and not the eligibility branch")
 
 
 
@@ -7367,11 +7602,29 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # different channel: this pass's subject is the OPERAND channel, and what `release` adds to it
     # is a verb whose precondition is read by a registered predicate rather than a cell — the
     # second route, and the first verb to exercise it since `revoke`.
-    assert set(executed) == {"create_record", "interview", "move", "reconstruct", "release",
-                             "research", "speak", "surveil", "tell", "transfer", "utter"}, (
+    # ⚠ 11 -> 12, `dispatch` (`H-71` closed, 2026-09-18), AND IT IS THE FIRST VERB TO ARRIVE BY
+    # ELIGIBILITY RATHER THAN BY AN OPERAND OR A PREDICATE. The three routes above are all about
+    # binding a verb's arguments; this one is about whether a person may form the verb AT ALL.
+    # `H-71` arm 2: `World._grant_remit` stamps the office's `remit_acts` into the `hold` Tenure's
+    # `payload` at `add_tenure` (the ONE writer, so every mint path carries it), `Tenure.
+    # granted_acts` owns the shape, and `person_side_eligible`'s `remit` branch reads the holder's
+    # own state instead of declining unconditionally. `choose` still receives no `World`.
+    # ⚠ ONE VERB, NOT NINE, AND THE GAP IS THE MEASUREMENT WORTH KEEPING. `H-71`'s `unblocks:`
+    # reads "9 of 32 verbs cannot be formed person-side" and the 9 is correct -- nine rows carry a
+    # `remit:` alternative. Only `dispatch` reaches this set, because ONLY THREE OF 143 CORPUS
+    # CASES SEAT A GRANTING OFFICE, and they do it through `apply_rescale` overlays rather than
+    # through `build_at`: NPC-008 (`issue`), NPC-033 (`issue`, `dispatch`), NPC-038 (`issue`,
+    # `determine`, `dispatch`). `dispatch` executes in exactly ONE of the 89 live worlds (NPC-033)
+    # and is refused in that same world, so it is exercised both ways.
+    # ⚠ `issue` IS GRANTED IN ALL THREE AND DOES NOT EXECUTE, AND WHY IS NOT ESTABLISHED HERE.
+    # Stated as a null rather than given a cause: a fabricated mechanism would survive being
+    # wrong, which is the failure `release`'s note above spent four lines correcting.
+    assert set(executed) == {"create_record", "dispatch", "interview", "move", "reconstruct",
+                             "release", "research", "speak", "surveil", "tell", "transfer",
+                             "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
-        "ED-FI-0009's, 10 -> 11 is `release`'s, and any further movement is a fresh one, not a "
-        "re-reading of any of them")
+        "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, and any further movement is "
+        "a fresh one, not a re-reading of any of them")
     # ⚠ `examine` JOINED `work`, FOR `work`'s EXACT REASON, and that is the strongest single piece
     # of evidence this corpus offers about its own worlds: two verbs from two different chains,
     # binding two different operands (`site` and `subject`), both refuse because NO REFERENT THESE
@@ -11255,3 +11508,146 @@ def _home_of(w, pid):
         if t.kind == "contain" and t.live and t.subject == pid:
             return t.object
     return None
+
+
+def test_the_spine_aggregates_from_every_hearth_to_the_realm():
+    """R-1 RUNS ON THE SPINE — the half of Jordan's ask the shape test cannot reach.
+
+    *"otherwise we don't know how dissemination and aggregation works"* names TWO directions, and
+    a census of rungs, offices and holders observes neither. This drives `world_q.r1_aggregate`,
+    which is R-1 itself: compute on demand over descendants, never stored.
+
+    ⚠ IT EXISTS BECAUSE ITS ABSENCE HID A REAL BREAK. `build` did not mint `Rung(pid, "person")`
+    while all three sibling builders do, so the 13 holders sat in the containment tree via their
+    `contain` edges while `w.rungs` did not know them. `descendants(w, "lr_realm")` returned 25
+    ids of which 13 were unresolvable, and `r1_aggregate` raised `KeyError: 'lp_realm'` — on the
+    only world built to measure aggregation. Every shape assertion stayed green throughout.
+
+    The counting function is deliberately `lambda _: 1`: this asserts REACH, not a magnitude, so
+    it cannot go stale against a balance change."""
+    from ..harness import governance_spine as L
+    from ..queries import world_q
+
+    w = L.build(0)
+    # every rung under the realm, places and people alike, reached in one aggregate
+    # [GROUNDED: measured 2026-09-19 -- 25 descendants of lr_realm = 12 place rungs below the realm + 13 person rungs; the realm itself is not its own descendant]
+    assert world_q.r1_aggregate(w, "lr_realm", lambda _: 1) == 25, (
+        f"aggregation does not reach the whole spine: "
+        f"{sorted(world_q.descendants(w, 'lr_realm'))}")
+
+    # AGGREGATION folds upward: a duchy sees its own half and NOT its sibling's.
+    a = world_q.r1_aggregate(w, "lr_duchy_a", lambda _: 1)
+    b = world_q.r1_aggregate(w, "lr_duchy_b", lambda _: 1)
+    # ⚠ THE TAG SITS DIRECTLY ABOVE THE ASSERT, NOT ABOVE THE BLOCK. `ci_sim_fabrication_check`
+    # reads the SAME or PREVIOUS line only; two lines up reaches nothing, which is how this
+    # constant shipped ungrounded and red-lit CI.
+    # [GROUNDED: measured 2026-09-19 -- each duchy subtree is 5 place rungs below it + 6 person rungs (its own holder is a child of the duchy rung) = 11, and 11 + 11 + 2 duchies + 1 realm-holder = 25]
+    assert a == b == 11, f"the two duchy subtrees are not equal: {a} vs {b}"
+    assert set(world_q.descendants(w, "lr_duchy_a")) & set(
+        world_q.descendants(w, "lr_duchy_b")) == set(), (
+        "the duchy subtrees overlap — a quantity aggregated at one would double-count the other")
+
+    # DISSEMINATION is the same edge read downward: the realm is an ancestor of every hearth
+    # holder, and the hearth holder's chain passes through exactly one duchy.
+    for leaf in ("lp_hearth_a", "lp_hearth_b"):
+        chain = world_q.ancestry(w, leaf)
+        assert chain[0] == leaf and chain[-1] == "lr_realm", chain
+        # [GROUNDED: measured 2026-09-19 -- person -> hearth -> community -> settlement -> territory -> province -> duchy -> realm is 8 nodes including both ends]
+        assert len(chain) == 8, f"the reach from a hearth head to the realm is not seven steps: {chain}"
+        assert len([r for r in chain if w.rungs[r].kind == "duchy"]) == 1, chain
+
+
+def test_the_generic_ladder_is_seven_deep_and_splits_once():
+    """THE SPINE dissemination and aggregation will be measured on — asserted as a SHAPE.
+
+    Jordan, 2026-09-18: *"you also need to develop a chain of generic NPCs with generic offices
+    from hearth to realm"*, because *"otherwise we don't know how dissemination and aggregation
+    works"*. He specified 1/2/4/8/16/32/64 and then said *"probably too granular without
+    payoff"*, and chose thirteen to start.
+
+    WHAT THIRTEEN BUYS AND WHY IT IS THE RIGHT FIRST NUMBER: **depth** to watch a realm decision
+    reach a hearth head and a hearth event surface at the realm, and **one branch point** to watch
+    whether it crosses to a sibling chain or stops. Uniform binary fan-out (127 seats) answers a
+    different question — how propagation DEGRADES with width — and against `R-01`/`R-02`'s
+    measured ~4% later-decision divergence it would mostly add places for nothing to happen.
+
+    ⚠ THIS TEST ASSERTS SHAPE ONLY. It makes no claim that anything propagates; that is what the
+    spine exists to MEASURE, and the measurement is a later unit. Saying so here stops a green
+    tick being read as evidence of a working channel.
+
+    ⚠ AN EARLIER VERSION OF THIS DOCSTRING CLAIMED THIS WAS THE FIRST WORLD IN THE TREE WITH A
+    `province` RUNG, AND THAT WAS FALSE. `corpus_run.build_at` slices `rung_kinds` from the case's
+    scale upward, so all 37 person-scale cases already build a province and a depth-7 chain. What
+    is true is narrower: `harness/populated.py` goes realm -> duchy -> territory and skips
+    `province`, so Jordan's "4 counts" had nowhere to sit IN THE AUTHORED REALM. The spine's claim
+    is its REGULARITY and its branch point, not its depth — a corpus world is one chain wide and
+    cannot show a decision fanning out or folding back in."""
+    from ..harness import governance_spine as L
+
+    w = L.build(0)
+    c = L.census(w)
+    # [GROUNDED: measured 2026-09-18 by `python -m engine.season.harness.governance_spine` -- 13 rungs, 13 offices, 13 held, 13 granted, max_depth 6, leaves lr_hearth_a/lr_hearth_b]
+    assert c["place_rungs"] == 13 and c["offices"] == 13, c
+    # ⚠ 26 RUNGS, NOT 13, AND THE DIFFERENCE IS THE POINT. `person` is the first member of
+    # `rung_kinds`, so each of the 13 holders is a rung too — as in all three sibling builders.
+    # An earlier version of this builder omitted `Rung(pid, "person")`, and the cost was exactly
+    # the capability the spine exists for: `world_q.descendants(w, "lr_realm")` returned 25 ids of
+    # which 13 were unresolvable and `r1_aggregate` raised `KeyError`. This assertion and
+    # `test_the_spine_aggregates` below are what would have caught it.
+    # [GROUNDED: measured 2026-09-19 by `python -m engine.season.harness.governance_spine` -- 26 rungs = 13 place + 13 person, 13 offices]
+    assert c["rungs"] == 26, f"the holders are not seated as rungs: {c['by_kind']}"
+    # [GROUNDED: measured 2026-09-18 by `python -m engine.season.harness.governance_spine` -- 13 rungs, 13 offices, 13 held, 13 granted, max_depth 6, two leaves (lr_hearth_a, lr_hearth_b). The thirteen is `governance_spine.yaml`'s own row count, not a number chosen here]
+    assert c["held"] == 13, f"a seat is unheld: {c}"
+    # ⚠ `held` AND `seated` ARE DIFFERENT CLAIMS, AND ONLY THE SECOND IS ABOUT PEOPLE. `held`
+    # counts live `hold` Tenures pointing at a known office; `add_tenure` routes a hold whose
+    # HOLDER does not exist to `_unowned` without refusing, so thirteen holds can coexist with
+    # zero persons. MUTANT-CHECKED 2026-09-19: deleting `build`'s `w.persons[pid] = Person(...)`
+    # leaves `rungs/offices/held` at 13/13/13 and moves `persons`/`seated` to 0/0. Without these
+    # two rows this test passed on a world with nobody in it — which is the whole subject of
+    # Jordan's *"otherwise we don't know how dissemination and aggregation works"*.
+    # [GROUNDED: measured 2026-09-19 by `python -m engine.season.harness.governance_spine` -- persons 13, seated 13. The thirteen is `governance_spine.yaml`'s own row count, one holder minted per declared rung, NOT a magnitude chosen here]
+    assert c["persons"] == 13, f"the spine has no holders to propagate between: {c}"
+    # [GROUNDED: measured 2026-09-19 -- 13 of 13 hold Tenures name a person that exists. MUTANT-CHECKED: deleting `build`'s `w.persons[pid] = Person(...)` moves this to 0 while `held` stays 13, which is the asymmetry this row exists to observe]
+    assert c["seated"] == 13, (
+        f"a hold Tenure names a person who does not exist: {c}. `held` cannot see this — it "
+        "checks the OFFICE end of the edge")
+    # [GROUNDED: measured 2026-09-18 -- all 13 holders carry a remit grant, because every ladder seat's remit comes from `rosters.yaml: remit_default` via `remit_or_default([])` and `add_tenure` stamps it onto the `hold` Tenure]
+    assert c["granted"] == 13, (
+        f"a holder carries no remit grant: {c}. `remit_or_default` fills from the testing default, "
+        "so this goes red if that default is narrowed to exclude a seat")
+
+    # seven LEVELS is depth 0..6 — realm at 0, hearth at 6
+    # [GROUNDED: measured 2026-09-18 -- seven LEVELS is depth 0..6, realm at 0 and hearth at 6, over the seven non-`person` members of rosters.yaml: rung_kinds]
+    assert c["place_depth"] == 6, f"the chain of places is not seven deep: {c}"
+    # [GROUNDED: measured 2026-09-19 -- 7 with the person rung, matching `corpus_run.build_at`'s depth for a person-scale case]
+    assert c["max_depth"] == 7, f"a holder is not inside their rung: {c}"
+    assert c["by_kind"]["realm"] == 1, "more than one realm; the chains no longer share a top"
+    assert c["by_kind"]["province"] == 2, (
+        "the province level is not two wide — `populated.build_realm` skips this rung entirely, "
+        "so the branch factor here is what makes it observable at all")
+    assert set(c["by_kind"]) == {"realm", "duchy", "province", "territory", "settlement",
+                                 "community", "hearth", "person"}, (
+        f"the ladder skips or invents a rung kind: {sorted(c['by_kind'])}")
+    assert all(v == 2 for k, v in c["by_kind"].items() if k not in ("realm", "person")), (
+        f"the split is not binary at every level below the realm: {c['by_kind']}")
+
+    # ONE branch point: exactly two leaves, and they are the two hearths
+    # ⚠ `place_leaves`, NOT `leaves`: with every holder minted as a rung, NO place rung is
+    # childless, so the bare leaf set is the 13 people. The declared shape is a claim about places.
+    assert len(c["place_leaves"]) == 2, f"expected two leaf places, got {c['place_leaves']}"
+    assert all(w.rungs[r].kind == "hearth" for r in c["place_leaves"]), (
+        f"a leaf is not a hearth: {[(r, w.rungs[r].kind) for r in c['place_leaves']]}")
+
+    # the two chains are DISJOINT below the realm, which is what makes divergence observable
+    # ⚠ `world_q.ancestry`, NOT A LOCAL WALK (§8). This went through THREE wrong versions: a dict
+    # comprehension (which keeps the LAST live `contain` edge where `parent_of` returns the FIRST),
+    # then a hand-rolled `parent_of` loop, then a hand-rolled loop left standing AFTER `ancestry`
+    # was extracted — so this test was the fourth copy of a walk whose own helper docstring, in
+    # this same commit, claimed to have consolidated them all. `[1:]` drops each leaf's own id;
+    # `ancestry` includes the start, and what is compared here is the two chains ABOVE the leaves.
+    from ..queries import world_q
+    a = world_q.ancestry(w, c["place_leaves"][0])[1:]
+    b = world_q.ancestry(w, c["place_leaves"][1])[1:]
+    assert set(a) & set(b) == {"lr_realm"}, (
+        f"the two chains share more than the realm: {sorted(set(a) & set(b))} — a decision could "
+        "reach the sibling chain through a shared rung rather than by propagating")

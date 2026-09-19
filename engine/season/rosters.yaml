@@ -149,6 +149,60 @@ rosters:
       ruling above forbids.
     values: [issue, determine, confer, revoke, dispatch, convene]
 
+  remit_default:
+    source: "⚠⚠ NOT CANON. A TESTING FIXTURE, RULED BY JORDAN 2026-09-18: *\"anyway, for testing purposes for now, just build out a generic remit\"*."
+    open: true
+    note: >-
+      ⚠⚠ **THIS IS A TEST FIXTURE AND IT IS OBVIOUSLY NOT A DESIGN. READ THIS BEFORE USING IT FOR
+      ANYTHING.** It hands EVERY seated office EVERY remit act, which is exactly the authority
+      `harness/populated.py` refused to invent on its own account: *"inventing one would silently
+      hand somebody an authority nobody granted"*. That refusal was right and is not overturned —
+      what changed is that Jordan asked for a generic remit SO THE GOVERNANCE VERBS CAN BE
+      EXERCISED AT ALL, and a value that is transparently wrong is safer as a placeholder than a
+      plausible one, because nobody will mistake *"every office can do everything"* for canon.
+
+      WHY IT EXISTS. `H-71` closed 2026-09-18 (`ED-IN-0255`): a holder's remit now rides on their
+      `hold` Tenure and `person_side_eligible` reads it. But of the 19 offices the populated realm
+      seats, only THREE carried a remit — blocked by DATA, not by any mechanism. This roster is
+      that data, provisionally.
+      ⚠ IT BUYS FOUR VERBS, NOT EIGHT, AND THE FIRST WRITING OF THIS NOTE SAID EIGHT WITHOUT
+      MEASURING IT. Measured on `build_realm(0)`, both arms: BEFORE, five of the nine were already
+      formable off the three granted seats (`determine`, `dispatch`, `issue`, `levy`, `open_case`)
+      and FOUR were unreachable (`confer`, `convene`, `establish`, `revoke`). The default closes
+      those four. `H-71`'s own `cite:` says the never-attempted set went 5 -> 4 and is consistent;
+      the "eight" was invented. `CLAUDE.md` §0.1 pt 3 — a number without its measurement.
+
+      ⚠ IT DEFERS TO ANY REAL REMIT AND NEVER OVERWRITES ONE. The three grounded overlays
+      (NPC-008 `issue`; NPC-033 `issue`/`dispatch`; NPC-038 `issue`/`determine`/`dispatch`) keep
+      exactly what their case text supports. This fills ONLY an empty remit.
+
+      WHAT REPLACES IT, and the shape is already known. A remit belongs to a POST, and an office is
+      a post plus a scope. ⚠ BUT `Office.post` DOES NOT CURRENTLY HOLD A POST — measured
+      2026-09-18, the realm's 19 posts include `"Cardinal Justice"`, `"Queen (Widow Regent if
+      Almud eliminated)"`, `"Senior Jarl of the Western Highlands"` and `"Archbishop's
+      Representative / Father"`, each fusing a post with a scope, a condition or a relationship.
+      Jordan, same session: *"cardinal is a post / king is a post / confessor is a post"*. So
+      per-post remits need the post field normalised first, and that is a prior unit rather than a
+      detail of this one.
+
+      ⚠ AND ECCLESIASTICAL POSTS ARE THE AWKWARD CASE, named here so the later work does not
+      rediscover it. Jordan: *"Confessor governs the Church tho"* and *"they are super weird in
+      that they don't have territories at first"*. So a Confessor's scope is a BODY
+      (`rosters.yaml` maps `"Church of Solmund": ecclesiastical`) and NOT a rung, with territory
+      arriving later if at all. `data/cast.py::title_of` says `Doux`, `Confessor`, `Father` and
+      `Prince` *"are real titles that govern no rung"* — correct about the RUNG LADDER and wrong
+      if read as governing nothing. No schema change is needed: `Office.rung` is already
+      `Optional` (*"null is the office-cluster case (S6.2)"*) and `Office.body`/`faction` carry
+      the institution.
+
+      ⚠ IT POINTS AT `remit_acts` RATHER THAN RESTATING IT. The first writing spelled the same six
+      values here, and a test pinned the two sets equal — so a seventh remit act meant editing two
+      rows or reddening a test for an unrelated reason (§0.05 cl.3). "Every remit act" is what the
+      fixture MEANS, so the pointer states the intent as well as removing the copy. Narrowing it
+      later means replacing `from_roster:` with a `values:` list, which the loader accepts and
+      which is a visible edit rather than a silent divergence.
+    from_roster: remit_acts
+
   witness_channels:
     source: "#353 §28 `:1004` — the five channels the fan-out computes an observer set from"
     open: true
@@ -937,7 +991,8 @@ rosters:
       weighted conviction vector and to a player-eligible faction — that is directly a faction's
       identity — and `systems/world/` has no competing role-template concept, so there is nothing
       to be superseded BY. The day world says otherwise, world wins and this roster changes.
-      ⚠ TWO OF THE EIGHT FACTIONS HAVE NO TEMPLATE, RECORDED AS AN ABSENCE. §4's player-eligible
+      ⚠ TWO FACTIONS HAVE NO TEMPLATE, RECORDED AS AN ABSENCE BY NAME (the roster's size is not
+      an invariant — RULED 2026-09-19). §4's player-eligible
       column covers Crown, Church of Solmund, Hafenmark, Varfell, Löwenritter and Restoration
       Movement. `Guilds` and `Schoenland` are absent from it. `faction_role_template` leaves them
       out rather than assigning a plausible one — inventing `mercantile-procedural` for the Guilds
@@ -954,7 +1009,7 @@ rosters:
       # on `factions` rather than a field on the office block. §4's table is a function of the
       # faction: every Crown office is `sovereign`, whoever holds it. Carrying it per-office would
       # store the same derivable fact 47 times and let two offices of one faction disagree.
-      # ⚠ SIX OF EIGHT FACTIONS, AND THE TWO GAPS ARE DELIBERATE. `Guilds` and `Schoenland` are not
+      # ⚠ TWO NAMED GAPS, AND BOTH ARE DELIBERATE. `Guilds` and `Schoenland` are not
       # in §4's player-eligible column and get no entry, so a lookup for them RAISES per §42.2's
       # polarity rule. Assigning the Guilds `mercantile-procedural` because it sounds right is the
       # fabrication the precedence ruling exists to stop, and it would read as canon a session on.
@@ -1545,7 +1600,7 @@ tables:
         utter:          -0.7    # the uttered word binds the utterer whatever advantage later counsels — `commit`, one step up
         forge:           0.8    # counterfeiting a record for advantage is the purest means-to-ends act on the table
         evade / defy:    0.7    # putting your own calculus over a demand — self_preservation's 0.8, read for what it always was
-        refract:         0.7    # a deliberate re-telling calculated to serve the refractor's aim, not to keep the bond
+        construe:        0.7    # a deliberate reading of the terms calculated to serve the construer's aim, not to keep the bond
         exchange:        0.6    # a trade that must balance on both sides is ledger-logic, no oath behind either side
         transfer:        0.6    # moving stores between hearths is bald calculation, stripped of any binding or vow
         comply:          0.5    # the safe route is obeying — the lower-risk, calculated path over what conviction prefers

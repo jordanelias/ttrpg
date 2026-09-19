@@ -27,7 +27,9 @@ every other dated section below is marked **WAS CURRENT** and is history. Five s
 
 ## ⚠⚠ THIS IS AN INDEX, NOT AN ORDER. THE ORDER IS RATIFIED AND LIVES ELSEWHERE.
 
-**`workplans/2026-09-11-reconciled-program.md` §3 — 27 positions, `RATIFIED ED-IN-0215` — IS THE SINGLE OWNER OF THE ORDER.** If you are choosing what to do next, open it.
+**`workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3 IS THE SINGLE PLAN.** If you are choosing what to do next, open it — and start at its **§3.1 · START HERE**, which names the next three in order.
+
+⚠ **AMENDED 2026-09-18 (`ED-IN-0253`), and the detail is IN THE PLAN, not here.** Jordan: *"I need one single clearly defined plan"*. `workplans/2026-09-18-governance-settlement-behaviour-plan.md`'s own `## Status:` line carries what changed, what it subordinates and why no citation dangles — it was copied into this file verbatim, which is the inlining `ED-IN-0242` already moved out of here once and which put this file back over its size cap. A continuity index points at an order; it does not restate one.
 
 **Everything this section used to argue moved to `workplans/2026-09-13-work-order.md` on 2026-09-17 (`ED-IN-0242`):** why Arc 2 comes first, the live ownership collision its status line records, and the warning that `requirements.yaml`'s `measured:` blocks understate progress and carry four mutually inconsistent R3 figures. All three are about the ORDER or about an INSTRUMENT, and neither is what a continuity index is for.
 
@@ -70,22 +72,18 @@ times the size of everything else in this file.
 ⚠ **`ED-IN-0210`'s FORK CAME OFF THIS LIST 2026-09-15 — RULED, NOT DROPPED.** Jordan: *"AN ORDER
 CARRIES TERMS LIKE A DISPENSATION … The second option (no response verb) is REJECTED."* The ledger's
 last row for that id reads `status: ruled`, `needs_jordan: false`, `jordan_decision: 2026-09-15`
-(`registers/editorial_ledger_in.jsonl`), and an id's effective status is its LAST row. ⚠ **The
-ruling does not make 19b buildable** — `dispatch` is blocked by `H-71`
-(`engine/season/hole_register.yaml`, `tier: 0`, `grade: absent`, `owner: unassigned`), whose own
-`unblocks:` reads *"9 of 32 verbs cannot be formed person-side — 8 remit-ONLY, plus `levy`"*, so no
-run moves until it closes. ⚠ A handoff elsewhere says FIVE; the register says nine, and the register
-is the surface with the falsifier (`test_no_person_can_choose_a_governance_verb_and_h71_is_why`,
-which goes RED the day the hole closes). Read the register, not the cached figure.
-Neither surface named the other; this note is where they meet.
-`workplans/2026-09-11-reconciled-program.md`'s record defect naming this row is spent with it.
+(`registers/editorial_ledger_in.jsonl`), and an id's effective status is its LAST row.
+✅ **`H-71` CLOSED 2026-09-18 (`13b`).** This paragraph used to say it blocked 19b, and cited a
+falsifier that has since been rewritten — it told readers *"read the register, not the cached
+figure"* while being the cached figure. The aperture is now person-dependent, so no single number
+belongs here: run `python -m engine.season.harness.register --requirements`.
 
 ⚠ **`ED-WR-0011` IS NOT ON THIS LIST AND THIS ENTRY FIRST PUT IT HERE.** The ledger carries a SECOND
 row under that id: `status: ruled`, `needs_jordan: false` — *"OI-05 RULED BY JORDAN, 2026-09-13…
 **THIS IS OPTION A OF THE TWO THE ROW ITSELF DRAFTED**… Season-tick generation = **none**, which is a
 RULING rather than a deferral."* Option A **is** the generator answer, so the question is closed, not
-deferred. `ED-SE-0051`/E-1 (*matter only, or matter plus hearth capacity?*) is still open on the
-settlements side and is still the same question's sibling.
+deferred. ✅ `ED-SE-0051`/E-1 (*matter only, or matter plus hearth capacity?*) **closed 2026-09-19** —
+**matter plus hearth capacity**, as a Query over dwelling Sites, never a fixture table.
 
 ⚠ **AND `ED-IN-0210`'s FLAG IS DELIBERATE, NOT STALE.** §4 below first listed it as
 self-contradictory (`ruled` + still flagged) and *"closing on citation alone"*. It is `ruled` **for
@@ -100,7 +98,7 @@ needs_jordan**."* Clearing it would have deleted a live escalation.
    asserted "37 open / 7 contradictory" against this section's own rule that *every row names the
    command that measures it* — and it named a glob. Measured by hand on 2026-09-13 the count is
    **41, 51 or 77 depending on the predicate** (all-files / non-archive / any-status), and folding
-   append-only rows to the latest per id gives 37. Against that, `2026-09-11-reconciled-program.md`
+   append-only rows to the latest per id gives 37. Against that, `2026-09-18-governance-settlement-behaviour-plan.md`
    (RATIFIED) measured **108 open / 158 flagged** on 2026-09-11, and this file's own 2026-09-10
    section reads 151/105 then 153/106. Position-1 closures have been landing, so a fall is real —
    **but no number here has a control, which is §0.1 pt 4 on this row's own terms.** The honest

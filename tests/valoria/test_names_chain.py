@@ -73,15 +73,27 @@ def test_an_alias_and_a_key_and_a_canonical_all_resolve():
     assert N.canonical_for("RM") == "Restoration Movement"           # alias added 2026-09-16
 
 
-def test_the_faction_roster_is_eight_and_the_season_loop_derives_it():
+def test_the_season_loop_derives_the_faction_roster_rather_than_copying_it():
     """`rosters.yaml: factions` carries `from_names: faction` and no `values:`, so these are the
-    same object rather than two lists that agree today. Schoenland is the eighth: its row is filed
-    with the PLACES and lacked `token_class: faction` until 2026-09-16, so the alias map saw seven
-    while the season roster carried eight."""
+    same object rather than two lists that agree today. Schoenland was the case that proved it: its
+    row is filed with the PLACES and lacked `token_class: faction` until 2026-09-16, so the alias
+    map saw seven members while the season roster carried eight.
+
+    ⚠ THE ROSTER'S **SIZE** IS DELIBERATELY NOT ASSERTED (RULED by Jordan, 2026-09-19: *"faction
+    count should not be pinned"*). This test's subject is the DERIVATION — that one edit at the
+    naming index reaches the season loop — and that claim is size-independent. A count pin here
+    would go red every time the world gained a faction, which is the world working rather than the
+    chain breaking; it fired exactly that way when the `faction x` ladder fixture landed. Named
+    members are still checked below, because a member DISAPPEARING is a real break of the chain
+    while a member arriving is not."""
     from engine.season.data.rosters import FACTIONS
     assert set(N.FACTIONS) == set(FACTIONS), "the derived roster and the leaf disagree"
-    assert len(N.FACTIONS) == 8
-    assert "Schoenland" in N.FACTIONS and "Church of Solmund" in N.FACTIONS
+    # Named members, not a count: each of these is a row whose `token_class: faction` is what
+    # carries it down the chain, so losing one is the exact regression Schoenland surfaced.
+    for member in ("Schoenland", "Church of Solmund", "Crown", "Guilds"):
+        assert member in N.FACTIONS, (
+            f"{member!r} left the derived roster: {sorted(N.FACTIONS)}. Its `names_index.yaml` row "
+            "has lost `token_class: faction`, or the export was not re-run")
 
 
 # ---------------------------------------------------------------------------

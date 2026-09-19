@@ -1058,57 +1058,57 @@
   1058  probe:P10            WRITE     carrier_exists  @S30  write_class="MATTER" step="MATTER" admitted=true
   1059  probe:P10            EVENT     term.matured [b763415423361b7b]  @S19  causes=["ROOT"]
   1060  probe:P11            QUERY     opening_set  @S17  side="person"
-  1061  probe:P11            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'confer' declines rather than admitting
-  1062  probe:P11            NOTE      `remit:convene` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'convene' declines rather than admitting
+  1061  probe:P11            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'confer' declines
+  1062  probe:P11            NOTE      `remit:convene` not granted on any live `hold` this person holds; 'convene' declines
   1063  probe:P11            NOTE      `hold:<record>` names an object KIND, not an id (H-75); 'destroy_record' declines rather than admitting on any held object
   1064  probe:P11            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'destroy_record' declines rather than admitting
-  1065  probe:P11            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'determine' declines rather than admitting
-  1066  probe:P11            NOTE      `remit:dispatch` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'dispatch' declines rather than admitting
-  1067  probe:P11            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'establish' declines rather than admitting
-  1068  probe:P11            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'issue' declines rather than admitting
-  1069  probe:P11            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'levy' declines rather than admitting
+  1065  probe:P11            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'determine' declines
+  1066  probe:P11            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'dispatch' declines
+  1067  probe:P11            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
+  1068  probe:P11            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
+  1069  probe:P11            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
   1070  probe:P11            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  1071  probe:P11            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'open_case' declines rather than admitting
-  1072  probe:P11            NOTE      `remit:revoke` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'revoke' declines rather than admitting
+  1071  probe:P11            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1072  probe:P11            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   1073  probe:P11            QUERY     opening_set  @S17  side="person"
-  1074  probe:P11            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'confer' declines rather than admitting
-  1075  probe:P11            NOTE      `remit:convene` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'convene' declines rather than admitting
+  1074  probe:P11            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'confer' declines
+  1075  probe:P11            NOTE      `remit:convene` not granted on any live `hold` this person holds; 'convene' declines
   1076  probe:P11            NOTE      `hold:<record>` names an object KIND, not an id (H-75); 'destroy_record' declines rather than admitting on any held object
   1077  probe:P11            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'destroy_record' declines rather than admitting
-  1078  probe:P11            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'determine' declines rather than admitting
-  1079  probe:P11            NOTE      `remit:dispatch` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'dispatch' declines rather than admitting
-  1080  probe:P11            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'establish' declines rather than admitting
-  1081  probe:P11            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'issue' declines rather than admitting
-  1082  probe:P11            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'levy' declines rather than admitting
+  1078  probe:P11            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'determine' declines
+  1079  probe:P11            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'dispatch' declines
+  1080  probe:P11            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
+  1081  probe:P11            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
+  1082  probe:P11            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
   1083  probe:P11            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  1084  probe:P11            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'open_case' declines rather than admitting
-  1085  probe:P11            NOTE      `remit:revoke` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'revoke' declines rather than admitting
+  1084  probe:P11            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1085  probe:P11            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   1086  probe:P12            QUERY     opening_set  @S17  side="person"
-  1087  probe:P12            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'confer' declines rather than admitting
-  1088  probe:P12            NOTE      `remit:convene` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'convene' declines rather than admitting
+  1087  probe:P12            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'confer' declines
+  1088  probe:P12            NOTE      `remit:convene` not granted on any live `hold` this person holds; 'convene' declines
   1089  probe:P12            NOTE      `hold:<record>` names an object KIND, not an id (H-75); 'destroy_record' declines rather than admitting on any held object
   1090  probe:P12            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'destroy_record' declines rather than admitting
-  1091  probe:P12            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'determine' declines rather than admitting
-  1092  probe:P12            NOTE      `remit:dispatch` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'dispatch' declines rather than admitting
-  1093  probe:P12            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'establish' declines rather than admitting
-  1094  probe:P12            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'issue' declines rather than admitting
-  1095  probe:P12            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'levy' declines rather than admitting
+  1091  probe:P12            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'determine' declines
+  1092  probe:P12            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'dispatch' declines
+  1093  probe:P12            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
+  1094  probe:P12            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
+  1095  probe:P12            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
   1096  probe:P12            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  1097  probe:P12            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'open_case' declines rather than admitting
-  1098  probe:P12            NOTE      `remit:revoke` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'revoke' declines rather than admitting
+  1097  probe:P12            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1098  probe:P12            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   1099  probe:P12            QUERY     opening_set  @S17  side="person"
-  1100  probe:P12            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'confer' declines rather than admitting
-  1101  probe:P12            NOTE      `remit:convene` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'convene' declines rather than admitting
+  1100  probe:P12            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'confer' declines
+  1101  probe:P12            NOTE      `remit:convene` not granted on any live `hold` this person holds; 'convene' declines
   1102  probe:P12            NOTE      `hold:<record>` names an object KIND, not an id (H-75); 'destroy_record' declines rather than admitting on any held object
   1103  probe:P12            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'destroy_record' declines rather than admitting
-  1104  probe:P12            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'determine' declines rather than admitting
-  1105  probe:P12            NOTE      `remit:dispatch` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'dispatch' declines rather than admitting
-  1106  probe:P12            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'establish' declines rather than admitting
-  1107  probe:P12            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'issue' declines rather than admitting
-  1108  probe:P12            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'levy' declines rather than admitting
+  1104  probe:P12            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'determine' declines
+  1105  probe:P12            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'dispatch' declines
+  1106  probe:P12            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
+  1107  probe:P12            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
+  1108  probe:P12            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
   1109  probe:P12            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  1110  probe:P12            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'open_case' declines rather than admitting
-  1111  probe:P12            NOTE      `remit:revoke` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'revoke' declines rather than admitting
+  1110  probe:P12            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1111  probe:P12            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   1112  probe:P15            QUERY     presence  @S17  side="resolver"
   1113  probe:P15            QUERY     presence  @S17  side="resolver"
   1114  probe:P15            QUERY     presence  @S17  side="resolver"
@@ -1963,31 +1963,31 @@
   1963  probe:P30            DECISION  ordering 1 acts  @S27/S32  chose="five strata, then a content-derived hash key over one global array" alternatives=["completion order", "rank", "per-container sort (voids the fold)"] not_implemented=[]
   1964  probe:P30            GAP       [UNSPECIFIED] verb 'do' is on no row of the verb table  @S27/E2  needs="a row in verb_table.yaml, ruled before it is added" law="\u00a7E2 -- the resolver's body IS the table. A verb the table does not carry has no semantics, and inventing them at the call site is the second resolver \u00a727.2 forbids" expected=false
   1965  probe:P31            QUERY     opening_set  @S17  side="person"
-  1966  probe:P31            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'confer' declines rather than admitting
-  1967  probe:P31            NOTE      `remit:convene` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'convene' declines rather than admitting
+  1966  probe:P31            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'confer' declines
+  1967  probe:P31            NOTE      `remit:convene` not granted on any live `hold` this person holds; 'convene' declines
   1968  probe:P31            NOTE      `hold:<record>` names an object KIND, not an id (H-75); 'destroy_record' declines rather than admitting on any held object
   1969  probe:P31            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'destroy_record' declines rather than admitting
-  1970  probe:P31            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'determine' declines rather than admitting
-  1971  probe:P31            NOTE      `remit:dispatch` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'dispatch' declines rather than admitting
-  1972  probe:P31            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'establish' declines rather than admitting
-  1973  probe:P31            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'issue' declines rather than admitting
-  1974  probe:P31            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'levy' declines rather than admitting
+  1970  probe:P31            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'determine' declines
+  1971  probe:P31            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'dispatch' declines
+  1972  probe:P31            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
+  1973  probe:P31            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
+  1974  probe:P31            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
   1975  probe:P31            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  1976  probe:P31            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'open_case' declines rather than admitting
-  1977  probe:P31            NOTE      `remit:revoke` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'revoke' declines rather than admitting
+  1976  probe:P31            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1977  probe:P31            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   1978  probe:P31            QUERY     opening_set  @S17  side="person"
-  1979  probe:P31            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'confer' declines rather than admitting
-  1980  probe:P31            NOTE      `remit:convene` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'convene' declines rather than admitting
+  1979  probe:P31            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'confer' declines
+  1980  probe:P31            NOTE      `remit:convene` not granted on any live `hold` this person holds; 'convene' declines
   1981  probe:P31            NOTE      `hold:<record>` names an object KIND, not an id (H-75); 'destroy_record' declines rather than admitting on any held object
   1982  probe:P31            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'destroy_record' declines rather than admitting
-  1983  probe:P31            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'determine' declines rather than admitting
-  1984  probe:P31            NOTE      `remit:dispatch` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'dispatch' declines rather than admitting
-  1985  probe:P31            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'establish' declines rather than admitting
-  1986  probe:P31            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'issue' declines rather than admitting
-  1987  probe:P31            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'levy' declines rather than admitting
+  1983  probe:P31            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'determine' declines
+  1984  probe:P31            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'dispatch' declines
+  1985  probe:P31            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
+  1986  probe:P31            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
+  1987  probe:P31            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
   1988  probe:P31            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  1989  probe:P31            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'open_case' declines rather than admitting
-  1990  probe:P31            NOTE      `remit:revoke` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'revoke' declines rather than admitting
+  1989  probe:P31            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  1990  probe:P31            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   1991  probe:P32            QUERY     budget  @S17  side="person"
   1992  probe:P32            QUERY     budget  @S17  side="person"
   1993  probe:P32            QUERY     budget  @S17  side="person"
@@ -1995,18 +1995,18 @@
   1995  probe:P33            GAP       [UNSPECIFIED] act cost beyond budget consumption  @S26.3  needs="a cost model; the budget is a FLAT COUNT of acts" law="S26.3 -- 'a petition consumes budget LIKE ANY ACT, AND THAT IS THE WHOLE OF THE PRICING'. There is no per-act cost scalar anywhere in Part II, so a cheap act and a ruinous one cost a character the same" expected=false
   1996  probe:P35            GAP       [UNSPECIFIED] an audience-scoped second standing  @S18.2  needs="a second standing scalar, or an owner for an audience-scoped one" law="S18.2 -- Sensation is EXACTLY TWO FLOATS and S46.1 makes widening it structural in Godot ('nobody can add a third field to Vector2'). A second, audience-scoped standing has NO CARRIER and S22 gives NO OWNER for one -- and the first standing does not compute either (see P14)" expected=false
   1997  probe:P36            QUERY     opening_set  @S17  side="person"
-  1998  probe:P36            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'confer' declines rather than admitting
-  1999  probe:P36            NOTE      `remit:convene` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'convene' declines rather than admitting
+  1998  probe:P36            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'confer' declines
+  1999  probe:P36            NOTE      `remit:convene` not granted on any live `hold` this person holds; 'convene' declines
   2000  probe:P36            NOTE      `hold:<record>` names an object KIND, not an id (H-75); 'destroy_record' declines rather than admitting on any held object
   2001  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'destroy_record' declines rather than admitting
-  2002  probe:P36            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'determine' declines rather than admitting
-  2003  probe:P36            NOTE      `remit:dispatch` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'dispatch' declines rather than admitting
-  2004  probe:P36            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'establish' declines rather than admitting
-  2005  probe:P36            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'issue' declines rather than admitting
-  2006  probe:P36            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'levy' declines rather than admitting
+  2002  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'determine' declines
+  2003  probe:P36            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'dispatch' declines
+  2004  probe:P36            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
+  2005  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
+  2006  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
   2007  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  2008  probe:P36            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'open_case' declines rather than admitting
-  2009  probe:P36            NOTE      `remit:revoke` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'revoke' declines rather than admitting
+  2008  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2009  probe:P36            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   2010  probe:P36            STEP      enter CALENDAR  @S23
   2011  probe:P36            BARRIER   barrier 1 - CALENDAR  @S23
   2012  probe:P36            STEP      leave CALENDAR  @S23
@@ -2046,18 +2046,18 @@
   2046  probe:P36            QUERY     questions_for  @S17  side="resolver"
   2047  probe:P36            QUERY     budget  @S17  side="person"
   2048  probe:P36            QUERY     opening_set  @S17  side="person"
-  2049  probe:P36            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'confer' declines rather than admitting
-  2050  probe:P36            NOTE      `remit:convene` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'convene' declines rather than admitting
+  2049  probe:P36            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'confer' declines
+  2050  probe:P36            NOTE      `remit:convene` not granted on any live `hold` this person holds; 'convene' declines
   2051  probe:P36            NOTE      `hold:<record>` names an object KIND, not an id (H-75); 'destroy_record' declines rather than admitting on any held object
   2052  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'destroy_record' declines rather than admitting
-  2053  probe:P36            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'determine' declines rather than admitting
-  2054  probe:P36            NOTE      `remit:dispatch` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'dispatch' declines rather than admitting
-  2055  probe:P36            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'establish' declines rather than admitting
-  2056  probe:P36            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'issue' declines rather than admitting
-  2057  probe:P36            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'levy' declines rather than admitting
+  2053  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'determine' declines
+  2054  probe:P36            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'dispatch' declines
+  2055  probe:P36            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
+  2056  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
+  2057  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
   2058  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  2059  probe:P36            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'open_case' declines rather than admitting
-  2060  probe:P36            NOTE      `remit:revoke` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'revoke' declines rather than admitting
+  2059  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2060  probe:P36            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   2061  probe:P36            QUERY     budget  @S17  side="person"
   2062  probe:P36            ACT       p_mid :: move  @S26  scenes_left=3 interaction="1/3"
   2063  probe:P36            ACT       p_mid :: surveil  @S26  scenes_left=3 interaction="2/3"
@@ -2156,18 +2156,18 @@
   2156  probe:P36            QUERY     questions_for  @S17  side="resolver"
   2157  probe:P36            QUERY     budget  @S17  side="person"
   2158  probe:P36            QUERY     opening_set  @S17  side="person"
-  2159  probe:P36            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'confer' declines rather than admitting
-  2160  probe:P36            NOTE      `remit:convene` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'convene' declines rather than admitting
+  2159  probe:P36            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'confer' declines
+  2160  probe:P36            NOTE      `remit:convene` not granted on any live `hold` this person holds; 'convene' declines
   2161  probe:P36            NOTE      `hold:<record>` names an object KIND, not an id (H-75); 'destroy_record' declines rather than admitting on any held object
   2162  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'destroy_record' declines rather than admitting
-  2163  probe:P36            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'determine' declines rather than admitting
-  2164  probe:P36            NOTE      `remit:dispatch` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'dispatch' declines rather than admitting
-  2165  probe:P36            NOTE      `remit:confer` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'establish' declines rather than admitting
-  2166  probe:P36            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'issue' declines rather than admitting
-  2167  probe:P36            NOTE      `remit:issue` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'levy' declines rather than admitting
+  2163  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'determine' declines
+  2164  probe:P36            NOTE      `remit:dispatch` not granted on any live `hold` this person holds; 'dispatch' declines
+  2165  probe:P36            NOTE      `remit:confer` not granted on any live `hold` this person holds; 'establish' declines
+  2166  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'issue' declines
+  2167  probe:P36            NOTE      `remit:issue` not granted on any live `hold` this person holds; 'levy' declines
   2168  probe:P36            NOTE      `presence:` eligibility is unevaluable person-side (H-33, the presence index); 'levy' declines rather than admitting
-  2169  probe:P36            NOTE      `remit:determine` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'open_case' declines rather than admitting
-  2170  probe:P36            NOTE      `remit:revoke` is unevaluable person-side (H-71, the office's remit is not the holder's state); 'revoke' declines rather than admitting
+  2169  probe:P36            NOTE      `remit:determine` not granted on any live `hold` this person holds; 'open_case' declines
+  2170  probe:P36            NOTE      `remit:revoke` not granted on any live `hold` this person holds; 'revoke' declines
   2171  probe:P36            QUERY     budget  @S17  side="person"
   2172  probe:P36            ACT       p_mid :: utter  @S26  scenes_left=1 interaction="1/3"
   2173  probe:P36            ACT       p_mid :: work  @S26  scenes_left=1 interaction="2/3"
@@ -18625,7 +18625,7 @@
  18625  probe:A31b           DECISION  individuation  @S29  chose="demand-driven only; generated nobody" alternatives=["a clock that generates (forbidden)", "a world-gen roster (S54 item 18 -- not a clock, not folded in)"] not_implemented=[]
  18626  probe:A31b           STEP      leave CENSUS  @S23
  18627  probe:A31b           QUERY     verbs  @S17  side="resolver"
- 18628  probe:A33            GAP       [COLLISION] emitter-side vs receiver-side refraction  @S37.4  needs="pick one, write it down beside the code, and expect the choice to be revisited" law="S37.4 -- R-2 says downward influence is 'EMITTING a refraction' (EMITTER-side); the act vocabulary puts `refract` at the RECEIVING end, beside `comply`, `evade`, `defy`. THE CHAIN HAS NOT RECONCILED THESE and emitter-side and receiver-side distortion ARE DIFFERENT GAMES" expected=false
+ 18628  probe:A33            GAP       [COLLISION] emitter-side vs receiver-side refraction  @S37.4  needs="pick one, write it down beside the code, and expect the choice to be revisited" law="S37.4 -- R-2 says downward influence is 'EMITTING a refraction' (EMITTER-side); the act vocabulary puts the receiving-end act beside `comply`, `evade`, `defy`. THE CHAIN HAS NOT RECONCILED THESE and emitter-side and receiver-side distortion ARE DIFFERENT GAMES. \u26a0 NARROWED 2026-09-18: the receiving-end ACT is now `construe`, not `refract`, so the WORD no longer carries both senses -- `refraction` names only the phenomenon (the premises arriving distorted, ruled receiver-side 2026-09-02). The vocabulary collision this probe names is half gone; what survives is the SUBSTANTIVE question of which side distorts, which that ruling answers and S37.4 has not absorbed" expected=false
  18629  probe:A34            GAP       [FORBIDDEN] a scheduled social recovery or decay  @S34  needs="a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs" law="S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT" expected=false
  18630  probe:A36            STEP      enter CALENDAR  @S23
  18631  probe:A36            BARRIER   barrier 1 - CALENDAR  @S23
@@ -55099,6 +55099,7 @@
  55099  probe:A39            GAP       [UNSPECIFIED] the degree ladder's margin model  @S39.4  needs="a margin -- pool, obstacle, and the four band edges read off it" law="S39.4 -- ONE degree ladder for every scale, FOUR BANDS READ OFF THE MARGIN, never off the obstacle's size. No in-chain document supplies the margin model, and S27.2 refuses a second resolver, an auto-resolve formula and a fast path -- so a band computed here without a margin IS the second resolver" expected=false
  55100  probe:P43            GAP       [FORBIDDEN] resolver-side Query 'cohort_unrest' aggregates per-person tallies ACROSS HOLDERS  @S22.4  needs="" law="L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down" expected=false
  55101  probe:P42            QUERY     budget  @S17  side="person"
- 55102  probe:P42            QUERY     budget  @S17  side="person"
+ 55102  probe:P42            NOTE      `hold` 't_p42' opened on 'off_x', which the world does not hold yet -- no remit granted, and nothing revisits this Tenure
  55103  probe:P42            QUERY     budget  @S17  side="person"
  55104  probe:P42            QUERY     budget  @S17  side="person"
+ 55105  probe:P42            QUERY     budget  @S17  side="person"

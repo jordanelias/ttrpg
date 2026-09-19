@@ -255,14 +255,24 @@ def test_token_classes_sourced_from_names_index_byte_identical():
     FAC_CTX = {'Crown': [r'\bAlmud\b', r'\bfaction\b', r'\bMandate\b', r'\bTreaty\b', r'\bTorben\b'],
                'Church of Solmund': [r'\bArne\b', r'\bCardinal\b', r'\bPiety\b', r'\bHeresy\b',
                                      r'\bfaction\b', r'\bConfessor\b', r'\bdoctrine\b']}
-    assert set(va.CLASSES['faction']) == set(FAC_PATS)
+    # ⚠ MEMBERSHIP IS CHECKED ONE WAY ONLY, AND THE ROSTER'S SIZE NOT AT ALL (RULED by Jordan,
+    # 2026-09-19: *"faction count should not be pinned"*). This test's subject is the word
+    # BYTE-IDENTICAL in its own name: that each token below still carries the PATTERNS and CONTEXT
+    # it carried when they were hardcoded, so a drifted pattern changes what the corpus audit
+    # matches and this goes red. A faction ARRIVING changes no pattern of any other faction, and
+    # `faction x` — the ladder fixture at `names_index.yaml: world.faction_x` — is the case that
+    # showed a two-way equality asserting the wrong thing: it failed on a roster that had grown
+    # correctly. So the direction that matters is kept (every expected token is present and
+    # unchanged) and the direction that fired is dropped.
+    assert set(FAC_PATS) <= set(va.CLASSES['faction']), (
+        f"a pinned faction token left the class: {sorted(set(FAC_PATS) - set(va.CLASSES['faction']))}")
     for disp, pats in FAC_PATS.items():
         tok = va.SEED_TOKENS.get(disp)
         assert tok is not None and tok['scale'] == 'faction', disp
         assert tok['patterns'] == pats, disp
         assert tok['context'] == FAC_CTX.get(disp, []), disp
     # sourced via token_class (a proper_noun that ALSO carries an audit class), not category
-    assert {m['canonical'] for m in names.by_token_class('faction').values()} == set(FAC_PATS)
+    assert set(FAC_PATS) <= {m['canonical'] for m in names.by_token_class('faction').values()}
     assert names.canonical('world.guilds') == 'Guilds'   # world.guilds added + mirrored
 
     # mechanics: namespaced ids (mech.*) so a generic "Stability" is collision-safe from the

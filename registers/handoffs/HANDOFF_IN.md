@@ -202,7 +202,7 @@ order, `RULINGS.yaml` for the 21 questions. **Nothing has run; nothing ratified.
 | | ruled |
 |---|---|
 | **RR-P** | **`AX-7` added to the ratified axiom set** — see `01_AXIOMS.md`, and read its scope clause before citing it |
-| **RR-A** | **fold** `comply` / `evade \| defy` / `refract` / `dispatch`; compliance is the executor's own act. **Unblocks r2 item 13** |
+| **RR-A** | **fold** `comply` / `evade \| defy` / `refract` / `dispatch`; compliance is the executor's ⚠⚠ **BOTH HALVES OF THIS LINE ARE SUPERSEDED (2026-09-18, `ED-IN-0210`): the FOLD IS REVERSED — Jordan, shown the consequence, said *"i did not realize that meant deleting those verbs. i think that's wrong."* The verbs STAY (nothing was ever deleted). And `refract` is RENAMED `construe` on his ruling. The quote is kept verbatim because it is the record of a superseded decision; grep `ED-IN-0210` for the live row.**  own act. **Unblocks r2 item 13** |
 | **RR-C** | withdrawn — closes at gate steps 3/4 |
 | **CAT-6** | **arm 2**, the Tenure payload. *"Too noisy for a character to have assailable/uncertain remits"* |
 | **RR-B** | B-8 descendants only · B-4 withdrawn · B-6 follows RR-A · B-1 keep `scope?` · B-2 keep the operands · B-3/B-5 take r2's · B-7 nominal rung + purview by class |

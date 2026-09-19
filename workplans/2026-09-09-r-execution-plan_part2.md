@@ -334,7 +334,7 @@ Act**, not questions asked of the world. **They belong in the `Act` schema and a
 construction**, not evaluated at RESOLVE."* So they are **not** `requires` cells and no predicate is
 written for them.
 
-`comply` / `evade / defy` / `refract` need an operand name — `dispensation` — added to the **closed**
+`comply` / `evade / defy` / `construe` need an operand name — `dispensation` — added to the **closed**
 `requires_operands` roster (`rosters.yaml:865`) with a `source:`, **and** `F.15`'s nine terms as a
 `Record` kind schema **in data** before any predicate can read them. `F.15` (`04:1077`) grades that
 absence: *"**the nine dispensation terms** *(§B.5)* — *\"nine typed terms\"* and nothing lists them | a
@@ -680,12 +680,12 @@ tree had already decided what §15.0 re-opened.** Three were re-verified by hand
 | **`requires_typed` is not a counterparty test** | **It is the counterparty test the design has.** Form 1 `existence(of: to, kind: Person)` is exactly *"the object of an `oblige` must be an entity"* — checked **by path** at load (`data/requires.py:538-582`) and evaluated **in the fold** (`loop/resolve.py:185-187`), which is where §15.0a says the check belongs. **F8 was a missing CELL, not a missing COLUMN**: `oblige` has `requires: —` and no typed cell | ✅ |
 | **the missing `counterparty:` field is the schema gap** | **NON-FINDING.** Layer 1 has three homes, all per-operand: `Act.refs`/`payload` (`04:395`), `requires_typed` forms 1 and 5, and PART D row 13 + typed ids (`04:193-195`, unbuilt — an Arc-2/step-0 gap ED-IN-0206 already records). What actually let the fiat through: `oblige`'s empty cell, the operand aliasing, and untyped ids | ✅ |
 | **"only the prose prevents `comply` answering a `dispatch`"** | **`comply` has `requires_typed: none` and no predicate, so the fold RAISES** (`resolve.py:189-200`). The prose is not the blocker | |
-| **the Dispensation four are "a complete cycle, the strongest place to build"** | Written as **prose only**: all three responses carry `requires_typed: none`, there is no dispensation operand (`rosters.yaml:873-876`), `writes:` is *"per the term's own row"* with the nine terms **unspecified** (`04:1077` F.15 — *"`issue` produces a document nobody can comply with"*), and `refract`'s side is `absent`. **Blocked on F.15 and H-94, both unruled.** Not the strongest place | |
+| **the Dispensation four are "a complete cycle, the strongest place to build"** | Written as **prose only**: all three responses carry `requires_typed: none`, there is no dispensation operand (`rosters.yaml:873-876`), `writes:` is *"per the term's own row"* with the nine terms **unspecified** (`04:1077` F.15 — *"`issue` produces a document nobody can comply with"*), and `construe`'s side is `absent`. **Blocked on F.15 and H-94, both unruled.** Not the strongest place | |
 
 #### SOFTENED
 
 - **"writes state" ⟂ "is an interaction"** — true of the **table's `writes:` column**, false of the architecture: `tell` *does* write, INTERIOR state at barrier 4 under a different token (`04:117` AX-3, `04:160`). ⚠ And **"interaction" is a coinage that collides with Layer 1's**: `04:396` types `Scene := (…, interactions : Act[])`, so in `04`'s vocabulary **every Act is an interaction**, `oblige` included. That fails `CLAUDE.md` §4's idempotent-meaning test — do not reuse the word this way.
-- **Axis 3's "who resists" column CONFLICTS with `04` for all six groups.** `04:669` and `01:353-369` T-g: *"obstruction and scarcity need no verb."* The other party's resistance is **their own later act** — `tell` → the hearer's `refract`; `issue`/`establish` → their `evade / defy`; `petition`/`carry` → the body's `determine`; `levy` → scarcity; `succeed` → rivals contest the **seat at conferral**, a different verb. That is AX-1 + ED-SC-0035 applied.
+- **Axis 3's "who resists" column CONFLICTS with `04` for all six groups.** `04:669` and `01:353-369` T-g: *"obstruction and scarcity need no verb."* The other party's resistance is **their own later act** — `tell` → the hearer's `construe`; `issue`/`establish` → their `evade / defy`; `petition`/`carry` → the body's `determine`; `levy` → scarcity; `succeed` → rivals contest the **seat at conferral**, a different verb. That is AX-1 + ED-SC-0035 applied.
 - **"No corpus act can name two distinct parties"** — too strong. Actor + subject *are* two parties. What cannot form is a **THREE-PLACE** act (actor, office, heir) — which is precisely what broke `succeed`.
 - **`hold` "paired, built"** — only the T-o path is built; T-m is why *"a person cannot resign an office"* (`HANDOFF_NEXT.md:54`).
 - **U1 upstream of U7** — true for `contests:` rows, false for uncontested verbs whose counterparty is an operand and whose obstacle is scarcity.
@@ -781,7 +781,7 @@ inject"* — **is stale**: they are named in a CANONICAL doc, `investigation_sys
 |---|---|
 | establishes/ends a RELATION (`Tenure`) | `commit` `confer` `oblige` `succeed` `tie / knot` `repudiate` `revoke` `move` `determine` |
 | acts on MATTER or a thing's state | `transfer` `levy` `exchange` `work` `restore` `create_record` `forge` `open_case` `destroy_record` `establish` `issue` `utter` `petition` `carry` `convene` `kill / wound` |
-| writes NOTHING — pure emission | `speak` `tell` `dispatch` `comply` `evade / defy` `refract` `the six investigation acts` |
+| writes NOTHING — pure emission | `speak` `tell` `dispatch` `comply` `evade / defy` `construe` `the six investigation acts` |
 
 ⚠ **"Writes state" and "is an interaction" are INDEPENDENT.** `tell` writes nothing yet is a genuine
 interaction — it moves a claim into another's ledger. `oblige` writes state and is **not** one. That
@@ -791,7 +791,7 @@ orthogonality is why a fiat passes a green suite: the test was on the wrong axis
 
 **Declared today: ONE.** `kill / wound` → `contests: "the body"`, the only `contests:` row.
 
-⭐ **`issue → comply / evade / defy / refract` IS A COMPLETE INTERACTION CYCLE, ALREADY WRITTEN.** All
+⭐ **`issue → comply / evade / defy / construe` IS A COMPLETE INTERACTION CYCLE, ALREADY WRITTEN.** All
 three responses require *"a claim of the dispensation's terms is in the actor's own ledger"* and emit
 `compliance.given` / `compliance.withheld` / `terms.distorted`. **All four are unbuilt, and U7 files
 them last as "group 3".** The investigation six are the second such family (#359's capability against
@@ -799,8 +799,8 @@ secrecy), de-scoped entirely as "group 4".
 
 **Where an obstacle and degrees are structurally required** — ⚠ **this column is a READING, not a
 declaration: nothing in `verb_table.yaml` names a counterparty, and that missing field is arguably the
-schema gap the whole ruling implies**: `tell`/`speak` (the hearer), `evade / defy`/`refract` (the
-issuer's authority — `refract` is degrees *by definition*), `levy` (the levied), `succeed` (rival
+schema gap the whole ruling implies**: `tell`/`speak` (the hearer), `evade / defy`/`construe` (the
+issuer's authority — `construe` is degrees *by definition*), `levy` (the levied), `succeed` (rival
 claimants), `petition`/`carry` (the receiving body), `establish`/`issue` (those bound).
 **Legitimately needing none** — one party, own resources: `create_record` `utter` `work` `restore`
 `move` `commit` `repudiate` `destroy_record`.
@@ -814,7 +814,7 @@ claimants), `petition`/`carry` (the receiving body), `establish`/`issue` (those 
 3. **U1 is upstream of U7** (§15.0a).
 4. ⚠ **The `dispatch`/`comply` fork is OPEN and is `ED-IN-0210`'s `needs_jordan`.** `comply` keys on a
    **claim in the ledger**, which `dispatch`'s `order.given` already deposits — so the response family
-   is anchored to the *artifact* when its mechanism is the *claim*. Either `comply/evade/refract`
+   is anchored to the *artifact* when its mechanism is the *claim*. Either `comply/evade/construe`
    answer both channels, or `dispatch` needs its own obey/disobey pair.
 
 ---

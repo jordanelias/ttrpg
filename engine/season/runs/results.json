@@ -9919,7 +9919,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (66e86544bf40...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (984b6294b534...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10252,7 +10252,7 @@
    "section": "S37.4",
    "title": "refraction has a side",
    "needs": "pick one, write it down beside the code, and expect the choice to be revisited",
-   "law": "S37.4 -- R-2 says downward influence is 'EMITTING a refraction' (EMITTER-side); the act vocabulary puts `refract` at the RECEIVING end, beside `comply`, `evade`, `defy`. THE CHAIN HAS NOT RECONCILED THESE and emitter-side and receiver-side distortion ARE DIFFERENT GAMES",
+   "law": "S37.4 -- R-2 says downward influence is 'EMITTING a refraction' (EMITTER-side); the act vocabulary puts the receiving-end act beside `comply`, `evade`, `defy`. THE CHAIN HAS NOT RECONCILED THESE and emitter-side and receiver-side distortion ARE DIFFERENT GAMES. \u26a0 NARROWED 2026-09-18: the receiving-end ACT is now `construe`, not `refract`, so the WORD no longer carries both senses -- `refraction` names only the phenomenon (the premises arriving distorted, ruled receiver-side 2026-09-02). The vocabulary collision this probe names is half gone; what survives is the SUBSTANTIVE question of which side distorts, which that ruling answers and S37.4 has not absorbed",
    "by": "no-signature",
    "tests": "an instruction must be able to be distorted somewhere between issuer and executor"
   },
@@ -11133,7 +11133,7 @@
    "what": "emitter-side vs receiver-side refraction",
    "where": "S37.4",
    "needs": "pick one, write it down beside the code, and expect the choice to be revisited",
-   "law": "S37.4 -- R-2 says downward influence is 'EMITTING a refraction' (EMITTER-side); the act vocabulary puts `refract` at the RECEIVING end, beside `comply`, `evade`, `defy`. THE CHAIN HAS NOT RECONCILED THESE and emitter-side and receiver-side distortion ARE DIFFERENT GAMES",
+   "law": "S37.4 -- R-2 says downward influence is 'EMITTING a refraction' (EMITTER-side); the act vocabulary puts the receiving-end act beside `comply`, `evade`, `defy`. THE CHAIN HAS NOT RECONCILED THESE and emitter-side and receiver-side distortion ARE DIFFERENT GAMES. \u26a0 NARROWED 2026-09-18: the receiving-end ACT is now `construe`, not `refract`, so the WORD no longer carries both senses -- `refraction` names only the phenomenon (the premises arriving distorted, ruled receiver-side 2026-09-02). The vocabulary collision this probe names is half gone; what survives is the SUBSTANTIVE question of which side distorts, which that ruling answers and S37.4 has not absorbed",
    "case": "probe:A33",
    "expected": false
   },
@@ -11224,7 +11224,7 @@
   "BARRIER": 1871,
   "DECISION": 1887,
   "QUERY": 23085,
-  "NOTE": 276,
+  "NOTE": 277,
   "WRITE": 10556,
   "EVENT": 10554,
   "ACT": 95,

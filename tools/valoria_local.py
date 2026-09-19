@@ -11,6 +11,27 @@ Modes:
   --staged  (default) — the git index: what `git commit` is about to record.
   --local             — HEAD~1..HEAD.
 
+⚠ NEITHER MODE IS THE SCOPE CI GRADES A PULL REQUEST AT, AND THAT GAP SHIPS RED BUILDS.
+The changeset-scoped gates — `ci_sim_fabrication_check` and `ci_claim_provenance_check`
+sharpest — grade ONLY ADDED LINES, and CI computes "added" against `origin/main...HEAD`
+(the whole branch) while these modes compute it against the index or the last commit.
+So a constant added earlier on the branch and left ungrounded passes here and reds there.
+MEASURED 2026-09-19: PR #421 went red TWICE in one session on gates that had passed
+locally minutes before, both times on lines the author had just written.
+
+BEFORE YOU PUSH, run a gate at CI's scope — VERIFIED to reproduce both failures exactly:
+
+    GITHUB_BASE_REF=main GITHUB_EVENT_NAME=pull_request python3 tools/ci_sim_fabrication_check.py
+
+⚠ A `--branch` MODE FOR THIS WAS BUILT AND REVERTED THE SAME HOUR, deliberately, and the
+reason belongs here rather than in a commit nobody reads: it was written, it appeared to
+work, and the falsifier for the case it existed to catch — a defect committed earlier on
+the branch, invisible to `--local` — showed it MISSING that case just as the two existing
+modes do. Shipping it would have added a mode whose docstring claimed a coverage it did
+not have, which is worse than the gap it was meant to close. The env-var recipe above is
+what is actually verified, so that is what is written down. If a mode is built again, the
+falsifier is the first thing to write: two commits, the defect in the first.
+
 Exit 0 if all BLOCKING validators pass; 1 otherwise. Supersession is warn-only.
 """
 import os

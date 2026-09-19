@@ -14,7 +14,10 @@
 > §3's sort, §4's lane pointers, §5's governance. **NOT ratified, because the PR body held each back
 > loudly:** v6's **retirement** (deferred — see §6; v6 remains on disk and this supersession is of
 > authority, not of the file), the **ORDER collision** between the reconciled program and the
-> arc-sequence spine (open; a commit closes it, not a paragraph), and every `## Status:` line on the
+> arc-sequence spine (⚠ **CLOSED 2026-09-18 by `ED-IN-0253`** — this is the commit that line asked
+> for, not a paragraph: `workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3 is now the single ORDER, the
+> spine is subordinated to it as a CONTENT owner, and the governance build order and the gather's
+> amendment are folded in with a mapping table at §3.4), and every `## Status:` line on the
 > documents §6 marks superseded, none of which moves.
 
 **as_of 2026-09-12**, working tree at `claude/repo-review-work-plans-2ly5xc` (base `main` `2d5ec4e`).
@@ -47,7 +50,7 @@ days; v6 §0 proved it and this file inherits the fix. Four surfaces own what th
 
 | It owns | It does NOT own | Owner |
 |---|---|---|
-| **WHAT** the milestones are and **WHO** can answer each open question | **THE ORDER** the work is done in | `workplans/2026-09-11-reconciled-program.md` (+ `_part2`) — 27 positions, PROPOSED under ED-IN-0215 |
+| **WHAT** the milestones are and **WHO** can answer each open question | **THE ORDER** the work is done in | `workplans/2026-09-18-governance-settlement-behaviour-plan.md` (+ `_part2`) — 27 positions, PROPOSED under ED-IN-0215 |
 | the per-lane **next increment** | per-lane **status** | `registers/handoffs/HANDOFF_<LANE>.md` |
 | which head a lane's work sits under | **which head is canonical** | `CURRENT.md` |
 | that a milestone row reads met or not | **whether the behaviour runs** | **nothing here fully owns this — see below** |
@@ -576,7 +579,7 @@ its unit, its contents, and its *not earlier because* / *not later because*. Pos
 `log ∪ acts ∪ {ROOT}` … the ruled `Record.matured` fix, with the H-80 control re-derived first."* **A
 session can execute positions 2–15 from that table without ever opening the reconciled program.**
 
-A second, independent break: `workplans/2026-09-11-reconciled-program.md:57` still lists *"the spine
+A second, independent break: `workplans/2026-09-18-governance-settlement-behaviour-plan.md:57` still lists *"the spine
 (ORDER, positions 2–15)"* as **LIVE**, and this document edits neither file. Under `CLAUDE.md` §0.05 a
 reference document resolves nothing — **it cannot close a collision between two other reference
 documents by asserting it closed.** The header of the earlier draft claimed an effect its own §5 row
@@ -725,7 +728,7 @@ already carried**, in four places: `engine/season/hole_register.yaml:795` (`H-71
 `grade: absent`), R-05's own `measured:` block at `engine/season/requirements.yaml:303` (*"5 are foldable
 but never attempted (the governance verbs, `H-71`)"*), `registers/handoffs/HANDOFF_IN.md:154`, and
 `architecture/PLAN.md:1369` as blocker class B. It also has a green falsifier that reddens the day the
-hole closes — `test_no_person_can_choose_a_governance_verb_and_h71_is_why`.
+hole closes. ✅ **IT CLOSED 2026-09-18**; that falsifier went red and is now `test_a_holder_can_now_choose_the_governance_verbs_their_office_grants`.
 
 **The true membership is `{confer, convene, dispatch, revoke, destroy_record}`**
 (`engine/season/tests/test_season_shape.py:6348-6351`). The session's list substituted `kill / wound`

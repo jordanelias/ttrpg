@@ -276,7 +276,7 @@ either** — they are listed individually below and should be discounted accordi
 **what:** emitter-side vs receiver-side refraction
 
 **needs:** pick one, write it down beside the code, and expect the choice to be revisited
-**law:** S37.4 -- R-2 says downward influence is 'EMITTING a refraction' (EMITTER-side); the act vocabulary puts `refract` at the RECEIVING end, beside `comply`, `evade`, `defy`. THE CHAIN HAS NOT RECONCILED THESE and emitter-side and receiver-side distortion ARE DIFFERENT GAMES
+**law:** S37.4 -- R-2 says downward influence is 'EMITTING a refraction' (EMITTER-side); the act vocabulary puts the receiving-end act beside `comply`, `evade`, `defy`. THE CHAIN HAS NOT RECONCILED THESE and emitter-side and receiver-side distortion ARE DIFFERENT GAMES. ⚠ NARROWED 2026-09-18: the receiving-end ACT is now `construe`, not `refract`, so the WORD no longer carries both senses -- `refraction` names only the phenomenon (the premises arriving distorted, ruled receiver-side 2026-09-02). The vocabulary collision this probe names is half gone; what survives is the SUBSTANTIVE question of which side distorts, which that ruling answers and S37.4 has not absorbed
 
 ### `A34` — a social quantity sinks by neglect alone  ·  **FORBIDDEN**  ·  `S34`  ·  by `no-signature`
 **what:** a scheduled social recovery or decay

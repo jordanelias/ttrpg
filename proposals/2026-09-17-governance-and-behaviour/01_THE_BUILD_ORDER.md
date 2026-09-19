@@ -1,6 +1,15 @@
 # The unified build order — one program, two suites
 
 ## Status: **PROPOSED (2026-09-17). HELD BACK IN FULL. NOTHING RATIFIES ON MERGE.**
+## ⚠⚠ **FOLDED INTO THE SINGLE PLAN 2026-09-18 (`ED-IN-0253`). THIS FILE IS A *CONTENT* OWNER AND NO
+## LONGER AN ORDER.** The order is `workplans/2026-09-18-governance-settlement-behaviour-plan.md` §3.
+## ⚠ **ITS ITEM NUMBERS COLLIDE WITH THAT FILE'S POSITION NUMBERS AND ONE PAIR WAS THE SAME WORK
+## TWICE** — this file's *item 5* and position *15* are both the Record-kind fold; *item 15* is
+## absorbed into position *6* (G3, which already names `Act.via`); *item 16* is not position 16.
+## **§3.4 of the reconciled program maps every item number here to its position. Read it before citing
+## a bare item number from this file.** The phase tables below keep their per-item detail — the traps,
+## the dependencies, the retractions and the §7 execution record — and that detail is why this file
+## stays.
 ## ⚠ The ✅ marks in §5 are **reasoned dispositions, not executions.** `BO-1` and `BO-6` are discharged by reading `RULINGS.yaml` and the write matrix; neither ran anything. `BO-2` and `BO-8` are marked FIRED because a critic falsified them, which is also a reading. **Nothing in this file is an execution artifact** (§0.2).
 ## Lane: `IN` · **`ED-IN-0243`** (shared with `00`)
 ## Grade under `CLAUDE.md` §0.2: **`paper`.** Nothing in this order has run. Phase 1 item 1 is the first thing that would.

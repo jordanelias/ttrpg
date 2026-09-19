@@ -329,6 +329,17 @@ territories:
     files_count: 9
 
 factions:
+  faction_x:
+    # ⚠⚠ A TEST FACTION, NOT CANON — RULED by Jordan 2026-09-18: "place them all under 'faction x'
+    # as a test faction". THIS FILE IS A MIRROR: `references/names_index.yaml` is authoritative
+    # and `tools/ci_names_consistency.py` refuses a divergence, which is how this entry came to
+    # exist — the gate caught the missing mirror on the same commit that authored the index row.
+    # It exists so `engine/season/harness/governance_spine.py`'s generic governance spine can seat offices:
+    # `office_faction` refuses an office naming neither a `body` nor a `faction`, so a fully
+    # generic seat is forbidden by design (`H-99` + §42.2's polarity rule).
+    canonical: "faction x"
+    aliases: []
+    source: fixture
   guilds:
     canonical: "Guilds"
     aliases: []

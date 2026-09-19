@@ -1498,7 +1498,7 @@ revoke, work`). **The remaining 20 are these**, and note `tie / knot`, `evade / 
 |---|---|---|
 | **(1) no hole, merely unbuilt** — `PLAN.md:1649-1651` W31(a) **verbatim** | `commit`, `repudiate`, `oblige`, `tie / knot`, `forge`, `petition`, `carry`, `succeed` | 8 |
 | **(2)** — this plan's subdivision of W31(b) | `restore`, `exchange`, `levy`, `establish`, `open_case`, `destroy_record`, `determine` | 7 |
-| **(3) the Dispensation four** — W31(b) | `comply`, `evade / defy`, `refract`, `issue` | 4 |
+| **(3) the Dispensation four** — W31(b) | `comply`, `evade / defy`, `construe`, `issue` | 4 |
 | **(4) the six investigation acts** — W31(b), **DE-SCOPED** | `the six investigation acts` | 1 |
 
 ⚠ **`PLAN.md` W31 has TWO groups, not four** — (a) *"No hole, merely unbuilt"* and (b) *"Hole-gated —

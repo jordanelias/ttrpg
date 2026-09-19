@@ -298,11 +298,25 @@ rows:
       of play required in a season
     status: not_met
     measured: >-
-      **11 of 38 verbs execute in the corpus** (create_record, interview, move, reconstruct,
-      release, research, speak, surveil, tell, transfer, utter). 20 carry no predicate and no
-      effect, 5 are foldable but never attempted (the governance verbs, `H-71`), and 2 are
-      attempted and always refused (`work` and `examine`, both because no question these worlds
-      raise refers to a Site).
+      ⚠ **12 of 38 AS OF 2026-09-18 (`H-71` closed): `dispatch` joined, and the aperture figure
+      below is now PERSON-DEPENDENT rather than a property of the engine.** Measured on
+      `tiny_world`: a holder seated on `off_duke` has **2 of 38** verbs unformable person-side,
+      where a person holding no office still has **10 of 38**. The old reading — *"10 of 38
+      unformable"* as a flat fact — was a fact about NOBODY HOLDING AN OFFICE. `dispatch` executes
+      in 1 of the 89 live corpus worlds, because only 3 of 143 cases seat a granting office
+      (NPC-008/033/038, via `apply_rescale`). **This row is still `not_met`**: one verb arriving
+      does not build the table out.
+      ⚠ **THE PARAGRAPH BELOW IS THE PRE-`H-71` READING AND IS SUPERSEDED BY THE ONE ABOVE.**
+      It is kept because its BREAKDOWN is still the only one taken, and struck through in prose
+      because an earlier version of this field carried both counts live: a session running
+      `python -m engine.season.harness.register --requirements` (§9's named instrument) got
+      *"12 of 38"* and *"11 of 38"* in one field with nothing saying which was current.
+      ~~11 of 38 verbs execute in the corpus~~ **-> 12, `dispatch` joined** (create_record,
+      interview, move, reconstruct, release, research, speak, surveil, tell, transfer, utter,
+      **dispatch**). 20 carry no predicate and no effect; ~~5 are foldable but never attempted~~
+      **-> 4** (the governance verbs less `dispatch`, and re-pinned at 4 by
+      `test_the_corpus_runs_and_the_ranking_cannot_discriminate`); and 2 are attempted and always
+      refused (`work` and `examine`, both because no question these worlds raise refers to a Site).
       ⚠ **2 of 38 DECLARE `contests:`, NOT 1 — `U1`, 2026-09-11.** `tell` gained
       `contests: "a standing"` (ED-SC-0037), routing to the σ-leverage provider, so it joins
       `kill / wound`. **THE PLAN PROJECTED 1 -> 3 AND THE THIRD IS NOT AVAILABLE**: `speak` cannot

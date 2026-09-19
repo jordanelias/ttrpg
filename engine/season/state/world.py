@@ -248,6 +248,7 @@ class World:
                     "not an error at write time and a silent never-match at read time")
         if t.kind == "hold":
             self._refuse_bad_hold(t)
+            self._grant_remit(t)
         if t.kind == "contain" and not self.contain_ascends(t.subject, t.object):
             sub, obj = self.rungs[t.subject], self.rungs[t.object]
             raise Forbidden(
@@ -279,6 +280,58 @@ class World:
             if entity_id in store:
                 return name
         return None
+
+    def _grant_remit(self, t: Tenure) -> None:
+        """`H-71` arm 2, THE WRITE HALF: seating a holder writes the office's remit acts into the
+        `hold` Tenure's `payload`, so the grant rides on the thing the holder owns.
+
+        ⚠ IT IS HERE AND NOT IN `_eff_confer`, AND THAT PLACEMENT IS THE WHOLE FIX. `confer`'s
+        effect is one of MANY mint paths -- `corpus_run.build_at`, `probes.edge`,
+        `populated.build_realm` and the fixtures all open `hold` Tenures directly at world build.
+        Writing the grant in the effect alone would leave every world-built holder ungranted, the
+        new eligibility branch would admit nobody in the corpus, and `H-71` would read closed while
+        changing no run -- the `DONE-INERT` shape `3b` is in. This method sits in `add_tenure`,
+        which its own docstring calls *"The ONE writer"* and which cites §8 for exactly this
+        reason: *"one rule, applied at every constructor rather than at one"*. Every mint path gets
+        the grant, `confer`'s included, and a path added later gets it without knowing it exists.
+
+        ⚠ SNAPSHOT, NOT MIRROR, and the consequence is stated rather than discovered. The payload
+        is the grant AS AT SEATING. Mutating `w.offices[x].remit_acts` afterwards does NOT reach a
+        sitting holder -- `test_h71_the_grant_is_a_snapshot_not_a_mirror` pins it. That is arm 2's
+        own semantics and not an oversight: the GRANT is what the holder has, and an office whose
+        remit changes does so by an act. The RESOLVER is unaffected either way, because `_eligible`
+        has a `World` and reads `w.offices` directly; this is the person's reading only, and the
+        gap between the two readings is what `H-71` was.
+
+        ⚠ IT REACHES NO `World` FROM THE READ SIDE. `AX-2` is untouched and `choose`'s signature
+        does not move, which is the property that made arm 2 preferable to arm 3's third
+        `Sensation` scalar (S18.2 rules that type to exactly two).
+
+        Leaves a payload another writer already set alone, and writes nothing for a `hold` whose
+        object is not an office (`hold` also takes Rung, Record and Proposition per `holonic §15`).
+        """
+        off = self.offices.get(t.object)
+        if off is None:
+            # ⚠ TRACED, NOT SILENT, and `/code-review` is why. A `hold` may be added BEFORE its
+            # Office exists -- an ordering `class_of` and `_rehome` explicitly tolerate -- and a
+            # bare `return` left that holder permanently remit-ineligible with no error and no
+            # tell. It is still not an error here (the object may legitimately be a Rung, Record
+            # or Proposition per `holonic §15`), so the honest form is a note that names the one
+            # case that IS a defect: an id the world does not hold yet.
+            if self.class_of(t.object) is None:
+                TRACE.note(f"`hold` {t.id!r} opened on {t.object!r}, which the world does not "
+                           f"hold yet -- no remit granted, and nothing revisits this Tenure")
+            return
+        # ⚠ KEY-SCOPED, NOT WHOLE-FIELD, and `/code-review` found the defect this fixes. The first
+        # writing was `if t.payload is not None: return`, which made the grant FIRST-WRITER-WINS on
+        # a public constructor field: `Tenure(..., "hold", 0, payload={"note": "x"})` produced a
+        # seated holder whose `granted_acts` was `()`, indistinguishable from an office that grants
+        # nothing. The payload is a dict of independent keys, so only `remit_acts` is this
+        # method's to own and only that key is left alone when already set.
+        if isinstance(t.payload, dict):
+            t.payload.setdefault("remit_acts", tuple(off.remit_acts))
+        elif t.payload is None:
+            t.payload = {"remit_acts": tuple(off.remit_acts)}
 
     def _refuse_bad_hold(self, t: Tenure) -> None:
         """`holonic §15`'s own row for `hold`, enforced: *"`hold` | Person -> Office | Rung |
