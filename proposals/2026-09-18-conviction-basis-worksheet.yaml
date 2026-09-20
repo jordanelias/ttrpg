@@ -1,5 +1,12 @@
 # CONVICTION + MORAL BASIS — Jordan's authoring surface
 #
+# ⛔ SUPERSEDED 2026-09-20 by `proposals/2026-09-20-pursuit-basis-worksheet.yaml` (`ED-IN-0261`).
+# DO NOT AUTHOR INTO THIS FILE. It is written against the pre-2026-09-20 shape -- 13 rows, 4 axes,
+# and `conviction` still doing double duty for religion and morals. Every one of those is now ruled
+# otherwise: the rows are 15 PURSUITS, the axes are 7 BIPOLAR `pursuit_axes`, and `conviction` is
+# reserved for religious affiliation. Kept in place, unedited below this banner, because
+# `ED-IN-0251` R3 cites it and its §1 religious cells are carried forward unchanged.
+#
 # STATUS: WORKSHEET. Not a proposal, not canon, ratifies nothing. It exists so the CELLS are
 # in front of you instead of statistics about them. Type values here; they get written to the
 # OWNERS below and this file is then deleted. It holds no fact of its own (CLAUDE.md §0.05 cl.3).
