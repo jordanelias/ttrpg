@@ -1,0 +1,225 @@
+# PURSUITS + AXES — Jordan's authoring surface
+#
+# STATUS: WORKSHEET. Not a proposal, not canon, ratifies nothing. It exists so the CELLS are in
+# front of you instead of statistics about them. Type values into `set:`; they get written to the
+# OWNERS below and this file is then deleted. It holds no fact of its own (CLAUDE.md §0.05 cl.3).
+#
+# SUPERSEDES `proposals/2026-09-18-conviction-basis-worksheet.yaml`, which was written against the
+# pre-2026-09-20 shape (13 rows, 4 axes, `conviction` still doing double duty). Every ruling below
+# is Jordan's, 2026-09-20, recorded at ED-IN-0261.
+#
+# OWNERS the values land at:
+#   pursuit roster        -> references/descriptor_registry.yaml   (replaces conviction_roster)
+#   pursuit_axes roster   -> references/descriptor_registry.yaml   (replaces conviction_axes)
+#   the 15x7 projection   -> engine/season/rosters.yaml            tables.pursuit_projection
+#   the verb x axis table -> engine/season/rosters.yaml            tables.alignment
+#
+# ⚠ R6 ATOMICITY: rows, axes, projection and alignment land in ONE commit or nothing imports.
+# `_load_alignment` and `_load_projection` refuse an unrostered key and an all-zero matrix at
+# module scope, so a partial landing is an ImportError, not a bad score.
+
+# ============================================================================
+# 1. THE PURSUITS  (15).  `Person.pursuits`, replacing `Person.convictions`.
+# ============================================================================
+# A PURSUIT IS SOMETHING A PERSON IS AFTER, not a position they hold — which is why the old
+# thirteen (Authority, Precedent, Utility, Equity, Identity) mostly did not survive: they were
+# institutional positions. Three were renamed away from live collisions, measured on
+# `.py`/`.yaml` in engine/season + systems + references, non-test:
+#   status  (510 hits, the ubiquitous field key)       -> reputation
+#   order   (442 hits, canonical/act/sort ordering)    -> stability
+#   authority (ruled a property of the SEAT, never of the person, #358 rev.2 §E.2.2) -> stability
+
+pursuits:
+  - virtue
+  - honour          # note the spelling; the live roster had `Honor`
+  - liberty
+  - justice
+  - wealth
+  - reputation      # was `status`
+  - scholastics     # was `Scholastic`
+  - stability       # was `order`, then `authority`; namespaced per names_index.yaml:127-128
+  - individuality
+  - community
+  - faith
+  - happiness
+  - family
+  - love
+  - warden          # restored 2026-09-20; the only row touching the thread side
+
+# ============================================================================
+# 2. THE AXES  (7, bipolar).  `pursuit_axes`, replacing `conviction_axes`.
+# ============================================================================
+# Both poles are NAMED, which the old four were not — `hierarchical -0.9` was opaque where
+# `equal` is not. Two carry Jordan's own definitions, verbatim 2026-09-20:
+#
+#   deontological — "one will not take actions that they find disagreeable even if it leads to
+#                    a good outcome"
+#   instrumental  — "one holds that the outcome justifies the means"
+#   precedent     — "one will choose actions based on what actions have been performed in
+#                    similar situations prior"
+#   substantive   — "one will choose actions based upon what they think best fits the situation
+#                    without reference to the past"
+#
+# ⚠ THESE TWO AXES ARE ORTHOGONAL AND A PRIOR SESSION CLAIMED OTHERWISE. One is what makes an act
+# permissible (the act itself vs its outcome); the other is where you look for the answer (the past
+# vs the present case). All four corners are populated — a canon lawyer is deontological+precedent,
+# a person with an inviolable line derived fresh is deontological+substantive. A high measured `r`
+# between them is therefore a PLACEMENT defect, not a redundant axis.
+
+pursuit_axes:
+  - {neg: hierarchical, pos: equal}
+  - {neg: precedent,    pos: substantive}
+  - {neg: partisan,     pos: equitable}    # `partial` collided with the requirements register's own state value
+  - {neg: selfish,      pos: selfless}
+  - {neg: rigid,        pos: flexible}
+  - {neg: grandiose,    pos: humble}
+  - {neg: deontological, pos: instrumental}
+
+# ⚠ `sacred` IS GONE FROM THIS BASIS and has moved to `Person.conviction`, where it carries
+# religious affiliation intensity (R1/R2, ED-IN-0251). It was always a religious word sitting in
+# a moral basis. CONSEQUENCE, stated because it is easy to miss: `_scar` reads ALIGNMENT, and
+# `kill / wound`'s ONLY cell was `sacred 0.30` — so the departure orphans the engine's only
+# interior writer unless §5 lands with it.
+
+# ============================================================================
+# 3. THE PROJECTION GRID.  15 pursuits x 7 axes = 105 cells.
+# ============================================================================
+# `set:` is YOURS and is the column that lands. `was:` shows where an ANCESTOR row sat on the OLD
+# four axes, for the 7 pursuits that have one — it is reference for intent only. The old axes do
+# not correspond to the new ones, so `was:` is NOT a migration and must not be read as one.
+#
+# METHOD NOTE, so nothing is computed behind you: the instrument that scores a placement is
+#   `python -m engine.season.harness.conviction_spread --candidate FILE.json`
+# and it reports mean vector, magnitude `sqrt(sum(mean_i^2))`, per-row cosine against that mean,
+# `within_60deg` = count(cos > 0.5), pairwise correlation `r[a,b] = cov[a][b]/sqrt(cov[a][a]*cov[b][b])`,
+# and participation ratio `PR = (sum L)^2 / sum(L^2)` over the covariance eigenvalues. `within_60deg`
+# is ED-IN-0214's own measure — nine of thirteen inside 60 degrees was the defect. PR says how many
+# of the seven declared axes actually carry variance.
+
+projection:
+  virtue:         {was: {traditional: +0.3, sacred: +0.4, instrumental: -0.5, hierarchical: +0.2}, set: {}}
+  honour:         {was: {traditional: +0.8, sacred: +0.4, instrumental: -0.7, hierarchical: +0.5}, set: {}}
+  liberty:        {was: {traditional: -0.5, sacred: -0.2, instrumental: +0.1, hierarchical: -0.7}, set: {}}
+  justice:        {was: null, set: {}}
+  wealth:         {was: null, set: {}}
+  reputation:     {was: null, set: {}}
+  scholastics:    {was: {traditional: -0.1, sacred: +0.2, instrumental: +0.3, hierarchical: +0.1}, set: {}}
+  stability:      {was: null, set: {}}   # `Order` was the nearest ancestor and is NOT the same pursuit
+  individuality:  {was: null, set: {}}
+  community:      {was: {traditional: +0.5, sacred: +0.3, instrumental: -0.2, hierarchical: +0.0}, set: {}}
+  faith:          {was: {traditional: +0.6, sacred: +0.9, instrumental: -0.3, hierarchical: +0.4}, set: {}}
+  happiness:      {was: null, set: {}}
+  family:         {was: null, set: {}}
+  love:           {was: null, set: {}}
+  warden:         {was: {traditional: +0.4, sacred: +0.4, instrumental: -0.1, hierarchical: +0.5}, set: {}}
+
+# ✅ `faith` KEEPS ITS ROW — RULED 2026-09-20, and the reasoning is the basis's own test case.
+# `Person.conviction` is WHICH SIDE YOU ARE ON and how intensely. The `faith` PURSUIT is HOW MUCH OF
+# YOURSELF GOES INTO RELIGIOUS MATTERS AT ALL. They are orthogonal: a person can be intensely
+# orthodox and never act on it, or lukewarm in belief with their whole life organised around church
+# politics. Jordan's pair, verbatim: *"someone who is a devout church of Solmund follower want to do
+# work for the church or someone who is pure Einhir and anti Solmund church whose faith work is
+# about dismantling it."*
+#
+# ⚠⚠ USE THAT PAIR AS THE PLACEMENT'S FALSIFIER, not as an illustration. Both score HIGH on the
+# `faith` pursuit and want opposite things, so they can only be separated BY THE AXES — plausibly
+# precedent/substantive, hierarchical/equal and deontological/instrumental. That is exactly the
+# discrimination the old basis could not do: nine of thirteen rows sat within 60 degrees of one mean
+# vector (ED-IN-0214), so two people sharing a primary came out the same. AFTER placing the 105
+# cells, score the two and check they land far apart. If they do not, the placement is wrong — and
+# `conviction_spread`'s `within_60deg` is the aggregate form of the same check.
+
+# ============================================================================
+# 4. THE VERB x AXIS TABLE.  Sparse.
+# ============================================================================
+# `ALIGNMENT[axis][verb]` — how much a verb ENGAGES an axis. Read by TWO unrelated callers and
+# that is a live defect, recorded here rather than fixed silently:
+#   `decision/choose.py::score` at DELIBERATE — ranking candidates a person may choose
+#   `loop/effects.py::_scar`    at RESOLVE    — deciding which axes an outcome marks
+# The second is why `kill / wound` carries a cell at all despite never being choosable.
+#
+# THE VERB SET MOVES WITH THIS CHANGE: 38 - 1 + 3 = 40.
+#   OUT: `kill / wound` — RULED 2026-09-20 NOT A VERB. It is the combat seam's outcome contract
+#        wearing an attempt's clothes, and it was the ONLY row carrying `contests: "the body"`,
+#        so the personal-combat engine has had no person-side door.
+#   IN:  `fight`     — the attempt. Opponent is `subject`. Needs a typed precondition so
+#                      `operands_for` is non-empty, or it fails driver.py:146's second clause
+#                      exactly as `kill / wound` does.
+#   IN:  `challenge` / `accept` — the duel pair. `accept` carries `contests: "the body"`.
+#        `duel` is NOT a verb: it is the name of what resolves.
+#
+# Current table: 52 of 152 cells over 31 of 38 verbs (~34% dense). At 40x7 the grid is 280
+# positions. DO NOT scale the old density — three axes are new and four are gone, so every cell
+# needs re-reasoning. Seven verbs carry no cell today and two of them matter: `speak` and `tell`
+# are unweighted, so the moral layer is structurally silent on testimony.
+
+alignment:
+  set: {}     # {axis: {verb: value}} — sparse; an unlisted pair reads the table's `default_cell`
+
+# ============================================================================
+# 5. SCARS.  What `Person.scar` was always supposed to be.
+# ============================================================================
+# THE DESIGN (`conviction_track_v1.md` §2, quarantined — reference for intent, not authority):
+# scars accrue from WITNESSING morally-loading events, are counted PER ELEMENT, and at thresholds
+# they MOVE THE WEIGHTS:
+#     1  -> that element destabilises; decision forks increase when it is salient
+#     2  -> its WEIGHT SHIFTS DOWN, other primaries gain proportionally; arc transition
+#     3+ -> crisis: acts unpredictably when that element is engaged. Terminal — restabilise into a
+#           new configuration, fold into another, or be destroyed by the incoherence
+#
+# THAT IS THE ONLY THING IN THE DESIGN THAT CLOSES THE DECISION LOOP. Measured: 2,403 forks
+# reconverge 100%, later-decision divergence ~4%, because nothing writes back to who a person is.
+#
+# WHAT WAS BUILT INSTEAD, and all three are wrong:
+#   trigger  witnessing            -> being wounded in a fight   (item 21's L4 amendment)
+#   key      per-conviction        -> per-AXIS                    (`_scar` reads ALIGNMENT)
+#   type     a COUNT with thresholds -> a continuous float depth  (`scar_step x cell`)
+# The third is why `scar_step` has been parked at 0 with no reader: it is a magnitude for a
+# mechanic whose unit is "how many times".
+#
+# RULED 2026-09-20:
+scars:
+  applies_to: [pursuits, convictions]    # BOTH tracks take counts and thresholds
+  unit: count                            # not a magnitude; `scar_step` retires with the float model
+  thresholds: {destabilise: 1, weight_shift: 2, crisis: 3}
+  # THE LAWFUL WRITE, worked 2026-09-20 — the deferral is lifted:
+  #   L4 constrains WHO writes, not WHEN: `social: true` means ONLY AN ACT MAY WRITE IT
+  #     (holonic_ARCHITECTURE.md:173). At WITNESS the writer is the world processing an Event,
+  #     which is the violation item 21 names. At RESOLVE the writer is the ACT, which is lawful.
+  #   "Who witnessed" is NOT private to WITNESS. `epistemic.py:440 observers_for(w, e, mode,
+  #     everyone)` is a standalone function; WITNESS calls it and RESOLVE can call it too, so
+  #     there is ONE owner of perception (§8) rather than a duplicated predicate.
+  #   Witnessing is already selective: `fan_out_mode = all_five` is the shipped, ruled default
+  #     (2026-09-07, R7) over chronicle / co_located / document_key / post_remit / witness_key.
+  #   SO: at RESOLVE, after the act's Event is formed, the act calls `observers_for` and writes a
+  #     scar on each observer whose pursuits or convictions that act violated.
+  #   ⚠ DECLARED DIVERGENCE, not a defect: `observers_for` at RESOLVE and at WITNESS can differ on
+  #     `co_located`, because WITNESS is the join and a later act can move someone. The scar then
+  #     reflects who was present WHEN IT HAPPENED, which is the more correct of the two readings
+  #     for witnessing — but it is a real difference between two calls to one function.
+  crisis_reader: ~     # OPEN: the L5 edge rewrites an option set and never rolls an outcome
+
+# ============================================================================
+# 6. WHAT IS DECIDED, AND WHAT IS NOT
+# ============================================================================
+decided_2026_09_20:
+  - Person.marks dropped — a retired write-matrix row whose field outlived it, zero readers
+  - Person.convictions -> Person.pursuits; conviction_axes -> pursuit_axes
+  - >-
+    Person.orient dropped — self/other now lives in the pursuit space, so a field is a second home.
+    `benefits_me` and the 38-row beneficiary column SURVIVE — the selfish axis score supplies the
+    disposition, the column supplies the per-candidate fact. That also dissolves R7's objection
+    rather than hitting it: two people with identical pursuits ARE identically disposed.
+  - sacred moves to Person.conviction (religious affiliation intensity)
+  - kill / wound is not a verb; fight, challenge, accept are
+  - >-
+    deontological is a REFUSAL and gates — the weight IS a threshold, filtering candidates at
+    `opening_set(p, v, q, fx)`, which is person-side with no World, so AX-2 holds. A candidate whose
+    `align(verb, deontological)` sits beyond what the person tolerates NEVER FORMS. `score` cannot
+    express refusal; it ranks, and at tau=0.1 a good enough outcome outranks any finite penalty.
+
+open:
+  - the 105 projection cells and the alignment re-cell   # yours
+  - faith as a pursuit, now that religion has its own vector
+  - the crisis reader (the L5 edge) for both tracks
+  - H-80 is refused by the kill / wound ruling and should be closed rather than left planning the opposite

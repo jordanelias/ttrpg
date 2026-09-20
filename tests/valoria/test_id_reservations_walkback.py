@@ -260,7 +260,10 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # 2026-09-19 (matter plus hearth capacity, as a Query over dwelling Sites, never a fixture
     # table). That note is left as the true record of what 0053's allocation day believed.
     # Entry in registers/editorial_ledger_se.jsonl; narrative in id_reservations_history.md#se.
-    released = {'SC': 38, 'FA': 39, 'WR': 12, 'SE': 55}
+    # PIN UPDATED 2026-09-20: WR 12 -> 13. ED-WR-0012 allocated to strike a review derivation that
+    # had been promoted into live canon and never ruled (canon/philosophy/04_being_persistence.md §4.5's
+    # 'rendered by many' clause), RULED by Jordan the same day. Lane-ledger row carries the provenance.
+    released = {'SC': 38, 'FA': 39, 'WR': 13, 'SE': 55}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

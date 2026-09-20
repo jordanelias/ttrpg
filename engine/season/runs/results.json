@@ -228,16 +228,16 @@
      ],
      "resolved": [
       {
-       "ok": false,
+       "ok": true,
        "bound": true,
        "kind": "verb",
-       "detail": "'kill / wound' is on the table and the fold cannot execute it: needs an effect"
+       "detail": "'kill / wound' executes"
       }
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "'kill / wound' is on the table and the fold cannot execute it: needs an effect",
+      "verdict": "PASS",
+      "detail": "'kill / wound' executes",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -992,10 +992,9 @@
    "core": 4,
    "core_routed": 4,
    "core_unmapped": 0,
-   "core_blocked": 2,
+   "core_blocked": 1,
    "blockers": [
-    "H-84",
-    "kill / wound"
+    "H-84"
    ],
    "unbound": [],
    "routed": [
@@ -1082,10 +1081,10 @@
      ],
      "resolved": [
       {
-       "ok": false,
+       "ok": true,
        "bound": true,
        "kind": "verb",
-       "detail": "'kill / wound' is on the table and the fold cannot execute it: needs an effect"
+       "detail": "'kill / wound' executes"
       },
       {
        "ok": true,
@@ -1108,8 +1107,8 @@
      ],
      "unbound": [],
      "verdict": {
-      "verdict": "GAP",
-      "detail": "'kill / wound' is on the table and the fold cannot execute it: needs an effect \u00b7 'surveil' executes \u00b7 'interview' executes \u00b7 'tell' executes",
+      "verdict": "PASS",
+      "detail": "'kill / wound' executes \u00b7 'surveil' executes \u00b7 'interview' executes \u00b7 'tell' executes",
       "kind": null,
       "section": "",
       "by": "declared",
@@ -9503,7 +9502,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 28 candidates were OFFERED from the computed option set and only 18 of 38 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'surveil', 'utter', 'work'] -- 5 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 28 candidates were OFFERED from the computed option set and only 19 of 38 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'surveil', 'utter', 'work'] -- 5 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",

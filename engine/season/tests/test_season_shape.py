@@ -5484,7 +5484,8 @@ def test_w9_h80s_zero_control_is_executed_not_merely_described():
     # asserting a relation the mechanism no longer produces.
     # [GROUNDED: measured 2026-09-11 under `U3` -- maturation depths {0: 0, 3: 10, 6: 10}; the arms remain equal and the ceiling falls from 12 with the denser ranking]
     # [GROUNDED: measured 2026-09-11 with `Record.matured` written at MATTER through the gate -- depths {0: 0, 3: 13, 6: 12} and maturation counts 35 vs 47; the deepest chain at both arms runs through `record.created` and `proposition.uttered`, so its length is act-driven]
-    assert (depths[3], depths[6]) == (13, 12), (
+    # [GROUNDED: RE-PINNED 2026-09-20, `depths[6]` 12 -> 11, by `ED-IN-0261`'s amendment admitting `kill / wound` to `resolvable_verbs()`. THE UNIT THAT MOVED IT IS NAMED, per the message below: a contested act now competes for a scene at every arm, so the act MIX changed and this ceiling is act-mix-driven by this test's own argument. `depths[3]` did not move, which is the control -- a change in the STAGE COUNT's reader would have moved both. The clause the message guards is checked and unchanged: 11 < 13, so `depths[6]` still does not exceed `depths[3]` and the depth is still not discriminating]
+    assert (depths[3], depths[6]) == (13, 11), (
         f"the maturation depth ceiling moved: {depths}. This is a MEASUREMENT of a mixed chain "
         "whose length the act mix sets, not a discriminator — `H-80`'s discriminator is the COUNT, "
         "asserted below and still live. Re-pin these two numbers with the unit that moved them. "
@@ -6305,8 +6306,25 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # ⚠ `issue` IS GRANTED IN ALL THREE AND DOES NOT EXECUTE, AND WHY IS NOT ESTABLISHED HERE.
     # Stated as a null rather than given a cause: a fabricated mechanism would survive being
     # wrong, which is the failure `release`'s note above spent four lines correcting.
-    assert ever == {"create_record", "dispatch", "interview", "move", "reconstruct", "release",
-                    "research", "speak", "surveil", "tell", "transfer", "utter"}, (
+    # ⚠⚠ 12 -> 13, `kill / wound`, 2026-09-20 (`ED-IN-0261` amended: Jordan, *"admit kill and
+    # wound as resolvable verbs"*). IT IS PROGRESS AND IT IS THE FOURTH ROUTE, and its route is
+    # none of the three above: the verb was excluded from `resolvable_verbs()` by the CONTEST
+    # gate's second clause -- a contested row must be TYPED, because `operands_for` returns `{}`
+    # for an untyped one and the seam would have got a single claimant. Typing the row's
+    # precondition (`existence` on `subject`, kind `Person`) bound the second claimant and the
+    # clause stopped holding. `H-96` is re-measured, not reused: MEASURED at 47 of 143 cases
+    # executing it, and the personal-combat engine reached from the season loop for the first
+    # time -- until this commit `@provider("contest","personal_combat")` had NO PERSON-SIDE DOOR.
+    # ⚠ THREE FOLD DEFECTS HAD TO BE FIXED BEFORE THE ADMISSION RAN, and each is in the same
+    # commit with its own measurement: `resolve()`'s contest branch skipped eligibility and
+    # `requires` entirely (85 whole-case DESIGN-GAPs), `opening_set` offered every person
+    # themselves as an adversary (47 more), and a dead actor went on acting (`ARC-10`, `ARC-12`).
+    # The corpus returns to its pre-admission bar on every count but one: `NPC-009` moves
+    # `RUNS-UNDECLARED` -> `RUNS-ALONE-UNDECLARED`, which is a death breaking that case's
+    # propagation and is the mechanic working rather than a regression.
+    assert ever == {"create_record", "dispatch", "interview", "kill / wound", "move",
+                    "reconstruct", "release", "research", "speak", "surveil", "tell",
+                    "transfer", "utter"}, (
         f"the executed set moved to {sorted(ever)} — that is progress or regression and `H-96` "
         "must be re-measured rather than reused")
     # ⚠ `move` JOINED `transfer` HERE, AND IT IS THE SAME HOLE. Both are refused for want of an
@@ -6554,7 +6572,21 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # move. `dispatch` is reachable in one world of 89, so it cannot be universal, and no verb
     # regained universality -- the `U1` shape this warning was written for did not recur.
     # [GROUNDED: measured 2026-09-18 through `corpus_run.run_case` at seed 0 over the same 143 corpus cases, both arms -- control stashed to the prior commit gives 43, this tree gives 44, and the one world that moved is NPC-033, the only live case whose `apply_rescale` overlay seats an office granting `dispatch`. The universal set was re-taken in the same run and did NOT move.]
-    assert len(by_sig) == 44, (
+    # ⚠ 44 -> 57, `kill / wound` ADMITTED TO `resolvable_verbs()` (2026-09-20, `ED-IN-0261`
+    # amended). THE DIRECTION FIRST, as this message demands: variety ROSE, and it rose because a
+    # world in which somebody was killed stops resembling one in which nobody was. 47 of the 89
+    # live worlds execute it, so it splits the corpus nearly in half and the split crosses every
+    # other verb's presence.
+    # ⚠ AND THE UNIVERSAL SET WAS CHECKED IN THE SAME BREATH, which is the check this message
+    # exists to force: it did NOT move — `{create_record, utter}` before and after. No verb
+    # regained universality, so this is not the `U1` shape.
+    # ⚠ WHAT IT COST IS NAMED RATHER THAN NETTED OFF. A contested act wins a scene somebody else
+    # would have had, and seven verbs reach fewer worlds for it: `tell` 72 -> 63, `interview`
+    # 53 -> 46, `speak` 82 -> 78, `move` 51 -> 47, `surveil` 58 -> 55, `transfer` 77 -> 75,
+    # `release` 10 -> 9. `create_record`, `utter`, `reconstruct`, `research` and `dispatch` are
+    # unmoved. Variety bought with somebody else's scene is still variety, and it is still a cost.
+    # [GROUNDED: measured 2026-09-20 through `corpus_run.run_case` at seed 0 over the same 143 corpus cases, both arms, control from this tree with the five files of the admission stashed -- distinct executed sets 44 -> 57 over the same 89 live worlds; universal `{create_record, utter}` UNMOVED; `kill / wound` 0 -> 47 worlds and the seven displacements above]
+    assert len(by_sig) == 57, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -6639,7 +6671,12 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `dispatch` joins the VARYING set and not the universal one, which is the check the
     # distinct-behaviour message above demands be made in the same breath: it is reachable in one
     # live world of 89 (NPC-033, the only overlay granting it), so it cannot be universal.
-    assert varying == {"dispatch", "interview", "move", "release", "research",
+    # `kill / wound` JOINS THE VARYING SET AND NOT THE UNIVERSAL ONE — 47 live worlds of 89, which
+    # is the same-breath check the distinct-behaviour message above demands. It is the first
+    # CONTESTED verb ever to appear in either set: until 2026-09-20 the personal-combat provider
+    # had no person-side door, so `@provider("contest","personal_combat")` was registered and
+    # unreachable from a season.
+    assert varying == {"dispatch", "interview", "kill / wound", "move", "release", "research",
                        "reconstruct", "speak", "surveil", "tell", "transfer"}, sorted(varying)
     # ⚠ THE `tell` SEASON THRESHOLD SURVIVES ONLY IN ITS ONE-DIRECTIONAL HALF, AND THE HALF THAT
     # BROKE BROKE FOR A REASON THIS TEST WANTS. A one-season case still never reaches `tell` —
@@ -7636,12 +7673,20 @@ def test_wc_transfer_executes_in_the_corpus_and_the_executed_set_is_exactly_this
     # ⚠ `issue` IS GRANTED IN ALL THREE AND DOES NOT EXECUTE, AND WHY IS NOT ESTABLISHED HERE.
     # Stated as a null rather than given a cause: a fabricated mechanism would survive being
     # wrong, which is the failure `release`'s note above spent four lines correcting.
-    assert set(executed) == {"create_record", "dispatch", "interview", "move", "reconstruct",
-                             "release", "research", "speak", "surveil", "tell", "transfer",
-                             "utter"}, (
+    # ⚠ 12 -> 13 IS `kill / wound`'s, 2026-09-20 (`ED-IN-0261` amended), AND IT IS A FRESH
+    # MEASUREMENT AND NOT A RE-READING OF THE FOUR BEFORE IT, which is what this message asks for.
+    # The four earlier moves were all about BINDING -- an operand the Candidate could not carry,
+    # a predicate the fold could not evaluate, an eligibility the person could not read. This one
+    # is about ROUTING: the row was typed so that a contested act could reach the seam with two
+    # claimants instead of one, and `driver.py`'s contest gate stopped excluding it. MEASURED at
+    # 47 of the 89 live corpus worlds.
+    assert set(executed) == {"create_record", "dispatch", "interview", "kill / wound", "move",
+                             "reconstruct", "release", "research", "speak", "surveil", "tell",
+                             "transfer", "utter"}, (
         f"the executed set is {sorted(executed)} -- 4 -> 6 was `W-C`'s measurement, 6 -> 10 is "
-        "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, and any further movement is "
-        "a fresh one, not a re-reading of any of them")
+        "ED-FI-0009's, 10 -> 11 is `release`'s, 11 -> 12 is `H-71`'s, 12 -> 13 is the admission "
+        "of `kill / wound`, and any further movement is a fresh one, not a re-reading of any of "
+        "them")
     # ⚠ `examine` JOINED `work`, FOR `work`'s EXACT REASON, and that is the strongest single piece
     # of evidence this corpus offers about its own worlds: two verbs from two different chains,
     # binding two different operands (`site` and `subject`), both refuse because NO REFERENT THESE
@@ -7955,30 +8000,50 @@ def test_wc_the_fold_binds_what_the_person_bound():
             checked += 1
     assert checked >= 10, f"only {checked} operands were exercised; the walk proves too little"
 
-    # ⚠ AND THE UNTYPED HALF OF THE SCOPE NOTE, ASSERTED AGAINST THE FOLD'S OWN SOURCE. The claim
-    # is that the fold builds NO BINDING for an untyped verb, and what makes it true is that
-    # `_fold`'s single `evaluate(...)` call sits INSIDE the `requires_typed is not None` branch --
-    # the untyped path reaches `REQUIRES_PREDICATES` or raises, and neither constructs a binding.
+    # ⚠ AND THE UNTYPED HALF OF THE SCOPE NOTE, ASSERTED AGAINST THE RESOLVER'S OWN SOURCE. The
+    # claim is that the fold builds NO BINDING for an untyped verb, and what makes it true is that
+    # the single `evaluate(...)` call sits INSIDE the `requires_typed is not None` branch -- the
+    # untyped path reaches `REQUIRES_PREDICATES` or raises, and neither constructs a binding.
     # Move that call out of the branch and the `{actor}` vs `{actor, subject}` divergence acquires
     # a reader while this test's scope note silently stops covering it, so the structure is what
     # is pinned rather than a sentence about it.
+    #
+    # ⚠ THE SCAN NAMES `_admits`, AND IT NAMED `_fold` UNTIL `ED-IN-0261`'s AMENDMENT MOVED THE
+    # CALL. It moved for a reason this test cannot see and would have been broken by: `resolve()`'s
+    # contest branch is an ALTERNATIVE to `_fold` and never entered it, so a contested act's
+    # precondition was never read at all -- invisible while no contested verb was choosable, and 85
+    # whole-case DESIGN-GAPs the day `kill / wound` was admitted. `_admits` is the shared owner both
+    # paths now call, so it is where the property lives. THE PROPERTY IS UNCHANGED AND THE SCAN IS
+    # NOT WEAKENED: still exactly one call, still inside the typed branch. If a second evaluation
+    # site ever appears in `_fold` itself, `_ONE_EVALUATE_OWNER` is what has to be re-argued.
     import ast as _ast
-    _fold_fn = next(n for n in _ast.walk(_ast.parse(files.LOOP_DIR.joinpath("resolve.py").read_text()))
-                    if isinstance(n, _ast.FunctionDef) and n.name == "_fold")
-    _calls = [n for n in _ast.walk(_fold_fn)
+    _resolve_src = _ast.parse(files.LOOP_DIR.joinpath("resolve.py").read_text())
+    _ONE_EVALUATE_OWNER = "_admits"
+    _owner_fn = next(n for n in _ast.walk(_resolve_src)
+                     if isinstance(n, _ast.FunctionDef) and n.name == _ONE_EVALUATE_OWNER)
+    _calls = [n for n in _ast.walk(_owner_fn)
               if isinstance(n, _ast.Call) and getattr(n.func, "id", "") == "evaluate"]
     # ASSERT THAT IT ASSERTED: zero calls would satisfy every clause below and observe nothing.
     assert len(_calls) == 1, (
-        f"`_fold` makes {len(_calls)} `evaluate(...)` calls; this scope note is written for "
-        "exactly one, guarded by the typed branch")
-    _guarded = [n for n in _ast.walk(_fold_fn)
+        f"`{_ONE_EVALUATE_OWNER}` makes {len(_calls)} `evaluate(...)` calls; this scope note is "
+        "written for exactly one, guarded by the typed branch")
+    _guarded = [n for n in _ast.walk(_owner_fn)
                 if isinstance(n, _ast.If) and "requires_typed" in _ast.unparse(n.test)
                 and any(c is _calls[0] for b in n.body for c in _ast.walk(b))]
     assert _guarded, (
-        "`_fold` calls `evaluate(...)` outside its `requires_typed is not None` branch, so an "
-        "UNTYPED verb now reaches `evaluate` with a binding. The person's binding is `{actor}` "
-        "and the fold's is `{actor, subject}`; that divergence just acquired a reader, and this "
-        "test excludes untyped verbs from its equality on the grounds that it has none")
+        f"`{_ONE_EVALUATE_OWNER}` calls `evaluate(...)` outside its `requires_typed is not None` "
+        "branch, so an UNTYPED verb now reaches `evaluate` with a binding. The person's binding is "
+        "`{actor}` and the fold's is `{actor, subject}`; that divergence just acquired a reader, "
+        "and this test excludes untyped verbs from its equality on the grounds that it has none")
+    # ⚠ AND THE OWNER IS STILL THE ONLY ONE, which is the half the rename could have quietly lost:
+    # a copy left behind in `_fold`, or a third in the contest branch, is the second resolver §27.2
+    # forbids and neither clause above would see it.
+    _all_calls = [n for n in _ast.walk(_resolve_src)
+                  if isinstance(n, _ast.Call) and getattr(n.func, "id", "") == "evaluate"]
+    assert len(_all_calls) == 1, (
+        f"`resolve.py` makes {len(_all_calls)} `evaluate(...)` calls and the precondition is "
+        f"supposed to be evaluated in exactly one place (`{_ONE_EVALUATE_OWNER}`). Two sites is "
+        "two readings of one cell, which is what the extraction existed to prevent")
 
 
 def test_wc_no_operand_is_defaulted_by_a_get_or_setdefault_in_shape_py_outside_eff_kill():
@@ -8955,7 +9020,15 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # mix, so a verb that never formed a droppable Candidate here now does. `transfer` stays,
     # which is what the message below requires — that chain is the acceptance's own.
     # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written through the gate -- headless clause-4 drops on {examine, interview, research, restore, transfer}]
-    assert {v for v, _ in hl_live} == {"examine", "interview", "research", "restore", "transfer"}, (
+    # ⚠ `kill / wound` JOINS THE HEADLESS DROP SET, 2026-09-20 (`ED-IN-0261` amended), AND IT IS
+    # THE SAME SHAPE AS `interview`'s ARRIVAL: the verb became CHOOSABLE, so for the first time it
+    # can form a Candidate for clause 4 to drop. `transfer` stays, which is what the message below
+    # requires. ⚠ AND IT IS WORTH NAMING WHAT THE DROP MEANS HERE, because this verb's cell is the
+    # only one in the set whose subject is a PERSON: the drop is a person declining to form an
+    # attack on somebody they hold a claim says is dead. That is §F1 clause 4 reaching the moral
+    # layer's own vocabulary through the same grammar cell as a granary.
+    assert {v for v, _ in hl_live} == {"examine", "interview", "kill / wound", "research",
+                                       "restore", "transfer"}, (
         f"the headless drops are on {sorted({v for v, _ in hl_live})}. `transfer` must stay — "
         "that chain is the acceptance's own, `stores:grain` read by a `transfer.refused` and read "
         "back by the same cell, and it is the only place the acceptance's binding argument "
@@ -9067,7 +9140,13 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # act mix, `interview` joins the drop set, and two more executable pairs are suppressed.
     # The channel is healthier by this measure and still outcome-inert by the one below.
     # [GROUNDED: re-measured 2026-09-11 with `Record.matured` written through the gate -- 8 executable clause-4 drops on `build_world(0)`, from 6 under `U3`]
-    assert len(dropped) == 8, (
+    # ⚠ 8 -> 9, 2026-09-20 (`ED-IN-0261` amended), AND IT IS ONE PAIR AND IT IS NAMED:
+    # `('kill / wound', 'rec:6bf46a143f347c12')`. The verb became choosable, so for the first time
+    # it forms a Candidate the clause can drop. The direction is the healthy one this block's
+    # previous entry describes -- the channel fires wider -- and the outcome-inertness recorded
+    # below is unchanged by it.
+    # [GROUNDED: re-measured 2026-09-20 with `kill / wound` admitted to `resolvable_verbs()` -- 9 executable clause-4 drops on `build_world(0)`, the ninth being `('kill / wound', 'rec:6bf46a143f347c12')`]
+    assert len(dropped) == 9, (
         f"{len(dropped)} executable clause-4 drops, not 6. The drops are the channel itself; if "
         "this falls toward zero the clause has stopped firing, which is a different and worse "
         "failure than the loss of outcome-relevance recorded above.")
@@ -9157,7 +9236,16 @@ def test_wb_clause_four_fires_in_the_corpus_at_the_shipped_default_and_not_at_th
     # `move` formable where a rung-subject question did not, so it is now among the candidates
     # clause 4 can drop. `U3` removed it for the converse reason (the projection changed which
     # candidates reached a deliberation at all); this puts it back by changing what they are about.
-    assert {v for v, _ in live} == {"examine", "interview", "move", "research", "restore", "surveil"}, (
+    # ⚠ `kill / wound` JOINS THE ARC-01 DROP SET, 2026-09-20 (`ED-IN-0261` amended), AND THIS
+    # MESSAGE'S "any other verb is a new finding and must be measured" IS SATISFIED HERE RATHER
+    # THAN WAIVED. THE FINDING: the verb became choosable for the first time, so it forms
+    # Candidates clause 4 can drop, and every one of its drops in this arm is on a NON-PERSON
+    # subject -- `r_realm`, `rec:22e10ab02d7c516a`, `rec:d21c0c6c82147523`. That is the clause
+    # doing precisely what the row's typed precondition says: `existence` of a PERSON, dropped on
+    # a belief that the referent is a record or a rung. The two verbs the message warns about are
+    # checked and unmoved: `tell` is absent and `surveil` is present exactly as before.
+    assert {v for v, _ in live} == {"examine", "interview", "kill / wound", "move", "research",
+                                    "restore", "surveil"}, (
         f"the drops are on {sorted({v for v, _ in live})}. `tell` here means a "
         "`claim.held` claim is reaching a ledger again, which is the self-refuting belief "
         "`LEDGER_DERIVED_STEMS` excludes. `surveil` RETURNING means `tell`'s degree has stopped "
@@ -9782,7 +9870,15 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # the LEAST headroom before and gains the most here: with each person's OUGHT naming another
     # person, a fork changes who is acted on even where everyone already saw everything.]
     # [GROUNDED: measured 2026-09-13 through the season driver, both arms at seed 0 over the same cases, after `build_at` gave each person a person-subject Proposition -- W-D total arm: genuine 28 -> 31, diverged 2 -> 7. The mechanism and direction are in the block above this line.]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (31, 7), got
+    # ⚠ 7 -> 8 AT THE `total` ARM, 2026-09-20 (`ED-IN-0261` amended), AND THE OTHER TWO ARMS DID
+    # NOT MOVE (`none` 4, `actor` 6). DIRECTION FIRST: divergence ROSE, which is the direction
+    # R-01/R-02 want and the one this whole unit exists to measure. A contested act is the first
+    # verb in the corpus whose outcome is drawn rather than computed, so a fork that changes WHO
+    # is attacked changes a later decision in a way no uncontested verb could. The denominator is
+    # unmoved at 31, which is the control this message demands: the fork POPULATION is the same
+    # and the RATE is what moved.
+    # [GROUNDED: measured 2026-09-20 through the season driver, both arms at seed 0 over the same cases, control from this tree with the five files of the `kill / wound` admission stashed -- W-D `total` arm: genuine 31 UNMOVED, diverged 7 -> 8; `none` 4 and `actor` 6 both unmoved. The denominator holding while the rate moves is the control: the fork population is the same and a contested act is the first verb whose outcome is drawn rather than computed]
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (31, 8), got
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -10142,7 +10238,15 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # the LEAST headroom before and gains the most here: with each person's OUGHT naming another
     # person, a fork changes who is acted on even where everyone already saw everything.]
     # [GROUNDED: measured 2026-09-13 through the season driver, both arms at seed 0 over the same cases, after `build_at` gave each person a person-subject Proposition -- fingerprint total arm: 28/2 -> 31/7. The mechanism and direction are in the block above this line.]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (31, 7), got
+    # ⚠ 7 -> 8 AT THE `total` ARM, 2026-09-20 (`ED-IN-0261` amended), AND THE OTHER TWO ARMS DID
+    # NOT MOVE (`none` 4, `actor` 6). DIRECTION FIRST: divergence ROSE, which is the direction
+    # R-01/R-02 want and the one this whole unit exists to measure. A contested act is the first
+    # verb in the corpus whose outcome is drawn rather than computed, so a fork that changes WHO
+    # is attacked changes a later decision in a way no uncontested verb could. The denominator is
+    # unmoved at 31, which is the control this message demands: the fork POPULATION is the same
+    # and the RATE is what moved.
+    # [GROUNDED: measured 2026-09-20 through the season driver, both arms at seed 0 over the same cases, control from this tree with the five files of the `kill / wound` admission stashed -- W-D `total` arm: genuine 31 UNMOVED, diverged 7 -> 8; `none` 4 and `actor` 6 both unmoved. The denominator holding while the rate moves is the control: the fork population is the same and a contested act is the first verb whose outcome is drawn rather than computed]
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (31, 8), got
 
 
 # ===========================================================================

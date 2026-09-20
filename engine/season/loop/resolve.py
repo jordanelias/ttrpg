@@ -106,6 +106,82 @@ def _occasion_ids(self, w: "World", a: Act) -> list:
         return []
     return [c for c in occasioned_by(w, getattr(sc, "occasion", None)) if c != a.id]
 
+def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
+    """§E2's FIRST TWO STEPS, FOR BOTH PATHS: eligibility, then `requires` against the world the
+    predecessors left. Returns `(ok, refusal_kinds, verdict)`.
+
+    ⚠⚠ THIS FUNCTION EXISTS BECAUSE THE CONTEST BRANCH SKIPPED BOTH OF THEM, and the defect was
+    invisible while no contested verb could be chosen. §E2's order is *eligibility -> `requires`
+    -> resolve*, and `resolve()` routed to the seam BEFORE `_fold` was entered -- so a contested
+    act was carried into personal combat without its precondition ever being read. MEASURED the
+    day `kill / wound` was admitted (`ED-IN-0261`, amended): 85 of 143 corpus cases became
+    whole-case DESIGN-GAPs, 74 of them `PARTY-GAP` -- *claimant not a person: 'p_a' /
+    'rec:cb377aad7694a2da'* -- because `opening_set` binds `subject` from the question's referent
+    and a question's referent is usually a Record or a Rung. The row's own precondition says the
+    subject is a living person and it was never asked.
+
+    ⚠ THE FIX IS AN ORDERING, NOT A NEW RULE, which is why this is an extraction rather than a
+    predicate: the eligibility test and the `requires` evaluation below are `_fold`'s, moved
+    up so the two paths share ONE owner (§8). A `_fold`-local copy of them inside the contest
+    branch would be the second resolver §27.2 forbids, arriving as a guard.
+
+    ⚠ A REFUSED CONTESTED ACT EMITS AND IS WITNESSED. It does not raise and it is not dropped:
+    `emits_on_refusal` is what a reader sees, the act still cost a scene, and the distinction
+    between a LOSS (the contest ran and went against you) and a REFUSAL (it never ran) is the
+    one the row's degree bands were built to keep."""
+    if not self._eligible(w, a, row):
+        TRACE.decision(f"{a.actor} is not eligible for {a.verb}", "E4",
+                       chose="emit the refusal", alternatives=["raise", "silently drop"])
+        return (False, row.emits_on_refusal or ("act.ineligible",), Verdict(UNKNOWN, ()))
+    verdict = Verdict(UNKNOWN, ())
+    if row.requires.strip() not in NO_PRECONDITION:
+        if row.requires_typed is not None:
+            # ⚠ THE TYPED CELL, AND `is True` RATHER THAN A TRUTH TEST. `evaluate` returns
+            # three values, and UNKNOWN -- an operand the act does not carry, or a question
+            # the world cannot answer -- must REFUSE. §42.2's polarity: zero evidence goes to
+            # the verdict AGAINST the thing measured, so an unevaluable precondition is a
+            # refusal and never a silent admission. That is the same polarity the untyped
+            # branch below has always had, and the reason `work` (whose `_req_work` ended in
+            # a bare `return True` for an act naming no site) now refuses instead.
+            #
+            # ⚠ `W-B`: THE VERDICT'S `observed` RIDES ON THE EVENT, AND THE REFUSAL'S READS
+            # ARE THE INFORMATIVE ONES. This block used to say the reads were "deliberately
+            # dropped here ... building the carrier before its reader exists is `ID-13`", and
+            # the reader existed already: `belief_contradicts` evaluates the same cell against
+            # `LedgerReader`, so a claim carrying `(subject, predicate, value)` is read by the
+            # same code that produced the Observation. The carrier is no longer dead --
+            # `SeasonDriver.witness` deposits it, gated on `observation_deposit_mode`.
+            #
+            # ⚠ ATTACHED TO SUCCESS AND REFUSAL ALIKE. A refusal's reads are WHY it refused --
+            # `stores:grain -> 0` on an emptied hearth -- and it is the only read whose value
+            # can make `belief_contradicts` fire, because `0 >= 1` is the one thing in this
+            # grammar that evaluates False. Attaching only to the success would build the
+            # channel and leave out the traffic.
+            verdict = evaluate(row.requires_typed, WorldReader(w, a.actor),
+                               binding_from_act(a))
+            ok = verdict.value is True
+        else:
+            pred = REQUIRES_PREDICATES.get(a.verb)
+            if pred is None:
+                raise Unspecified(
+                    f"{a.verb!r} has a precondition the fold cannot evaluate: "
+                    f"{row.requires!r}",
+                    "E2",
+                    needs="a typed `requires_typed:` cell, a predicate in "
+                          "REQUIRES_PREDICATES, or a `requires:` the table states "
+                          "structurally rather than in prose",
+                    law="§E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the "
+                        "same defect `resolve` had, one column along: a rule the code cannot "
+                        "read")
+            ok = bool(pred(w, a))
+        if not ok:
+            TRACE.decision(f"{a.verb} by {a.actor}: precondition unmet", "E2/S27.1",
+                           chose="emit the refusal -- scarcity falls out of the fold",
+                           alternatives=["raise (no Event, no witness, no arc)"])
+            return (False, row.emits_on_refusal or ("act.refused",), verdict)
+    return (True, (), verdict)
+
+
 def _fold(self, w: "World", a: Act, resolution: "Resolution | None" = None) -> list[Event]:
     """ONE act through the table. This is what `effect` used to be, and the difference is
     that it is the SAME code for every act and every caller.
@@ -162,57 +238,15 @@ def _fold(self, w: "World", a: Act, resolution: "Resolution | None" = None) -> l
                       degree=_degree, observed=verdict.observed)
                 for k in kinds]
 
-    if not self._eligible(w, a, row):
-        TRACE.decision(f"{a.actor} is not eligible for {a.verb}", "E4",
-                       chose="emit the refusal", alternatives=["raise", "silently drop"])
-        return ev(row.emits_on_refusal or ("act.ineligible",), [a.id])
-
-    # `requires`, AGAINST THE WORLD THE PREDECESSORS LEFT -- which is the whole of §27.1.
-    if row.requires.strip() not in NO_PRECONDITION:
-        if row.requires_typed is not None:
-            # ⚠ THE TYPED CELL, AND `is True` RATHER THAN A TRUTH TEST. `evaluate` returns
-            # three values, and UNKNOWN -- an operand the act does not carry, or a question
-            # the world cannot answer -- must REFUSE. §42.2's polarity: zero evidence goes to
-            # the verdict AGAINST the thing measured, so an unevaluable precondition is a
-            # refusal and never a silent admission. That is the same polarity the untyped
-            # branch below has always had, and the reason `work` (whose `_req_work` ended in
-            # a bare `return True` for an act naming no site) now refuses instead.
-            #
-            # ⚠ `W-B`: THE VERDICT'S `observed` NOW RIDES ON THE EVENT, AND THE REFUSAL'S
-            # READS ARE THE INFORMATIVE ONES. This block used to say the reads were
-            # "deliberately dropped here ... building the carrier before its reader exists is
-            # `ID-13`", and the reader existed already: `belief_contradicts` evaluates the same
-            # cell against `LedgerReader`, so a claim carrying `(subject, predicate, value)` is
-            # read by the same code that produced the Observation. The carrier is no longer
-            # dead -- `SeasonDriver.witness` deposits it, gated on `observation_deposit_mode`.
-            #
-            # ⚠ ATTACHED TO SUCCESS AND REFUSAL ALIKE. A refusal's reads are WHY it refused --
-            # `stores:grain -> 0` on an emptied hearth -- and it is the only read whose value
-            # can make `belief_contradicts` fire, because `0 >= 1` is the one thing in this
-            # grammar that evaluates False. Attaching only to the success would build the
-            # channel and leave out the traffic.
-            verdict = evaluate(row.requires_typed, WorldReader(w, a.actor),
-                               binding_from_act(a))
-            ok = verdict.value is True
-        else:
-            pred = REQUIRES_PREDICATES.get(a.verb)
-            if pred is None:
-                raise Unspecified(
-                    f"{a.verb!r} has a precondition the fold cannot evaluate: "
-                    f"{row.requires!r}",
-                    "E2",
-                    needs="a typed `requires_typed:` cell, a predicate in "
-                          "REQUIRES_PREDICATES, or a `requires:` the table states "
-                          "structurally rather than in prose",
-                    law="§E2 -- `requires` is checked IN THE FOLD. Stated as prose it is the "
-                        "same defect `resolve` had, one column along: a rule the code cannot "
-                        "read")
-            ok = bool(pred(w, a))
-        if not ok:
-            TRACE.decision(f"{a.verb} by {a.actor}: precondition unmet", "E2/S27.1",
-                           chose="emit the refusal -- scarcity falls out of the fold",
-                           alternatives=["raise (no Event, no witness, no arc)"])
-            return ev(row.emits_on_refusal or ("act.refused",), [a.id])
+    # §E2's first two steps, THROUGH THE ONE OWNER (`_admits`). They used to be written out
+    # here, and writing them here is exactly what let `resolve()`'s contest branch skip them:
+    # that branch never enters this function. `_admits`'s docstring carries the measurement.
+    # ⚠ `verdict` IS REBOUND, and `ev` reads it at CALL time by closing over the NAME -- so a
+    # refusal carries the reads that produced it and an ineligibility carries none, which is
+    # honest (eligibility reads tenures, not the requirement).
+    _ok, _refusal_kinds, verdict = self._admits(w, a, row)
+    if not _ok:
+        return ev(_refusal_kinds, [a.id])
 
     # Each `writes:` through the gate. The gate is the only writer; the fold never assigns.
     changed: list = []
@@ -399,6 +433,37 @@ def resolve(self, acts: list[Act],
         # each of the five emission sites: `CLAUDE.md` §8, and five sites is five chances to
         # forget the one that refuses.
         w.acts.append(a)
+        # ⚠⚠ S27.1 SAID SO ALL ALONG: *each act sees the world its predecessors left.* A
+        # PREDECESSOR CAN REMOVE THE ACTOR, and until a person could be killed inside the fold
+        # nothing ever tested what the successor does. The answer is that he does not act: acts
+        # are minted for everyone at DELIBERATE, resolved in stratum order at RESOLVE, and a man
+        # felled in the third act of the season is not there for the ninth.
+        #
+        # MEASURED, the day `kill / wound` was admitted to `resolvable_verbs()` (`ED-IN-0261`,
+        # amended): `ARC-10` and `ARC-12` reached `combat_seam` with a dead FIRST claimant --
+        # *"claimant not a person: 'p_c' / 'p_a'"* -- and published a whole-case DESIGN-GAP for
+        # it. The seam was right to refuse; the fold should never have offered it the act.
+        #
+        # ⚠ IT EMITS, AND THE KIND IS `act.ineligible` RATHER THAN THE ROW'S OWN REFUSAL. The act
+        # is in the store above, so its id is a live cause and something has to resolve it (the
+        # act store's header is the argument). And the reading is literal rather than borrowed:
+        # eligibility is the question *may this person do this*, and the answer for a dead man is
+        # no for every verb at once, which is why the kind is the fold's and not the table's.
+        #
+        # ⚠ NOT A GUARD OVER THE DEATH CASCADE, which is `World.remove_person`'s and stays there
+        # (§8). This is the fold reading its own world between acts -- the ONE thing §27.1 says
+        # the ordered fold is for.
+        if a.actor not in w.persons:
+            TRACE.decision(f"{a.actor} does not survive to act", "S27.1",
+                           chose="emit `act.ineligible`; a predecessor removed the actor",
+                           alternatives=["fold it anyway (the seam then sees a dead claimant)",
+                                         "drop it silently (its act id never resolves)"])
+            _gone = [Event(H(w.world_seed, w.tick, a.actor, f"act.ineligible:{a.id}"),
+                           "act.ineligible", a.actor, [], [a.id], w.tick)]
+            for _e in _gone:
+                self.act_of[_e.id] = a
+            out.extend(_gone)
+            continue
         # S27.4: an attempt at Ob > 2 x Pool is REFUSED, and the season is spent. An
         # uncontested attempt routes to a GATE, never to an Ob = 0 roll.
         mult = w.fixtures.get("obstacle_refusal_multiple")
@@ -429,6 +494,27 @@ def resolve(self, acts: list[Act],
         _row = VERB_TABLE.get(a.verb)
         _contests = list(a.contests or ()) or ([_row.contests] if _row and _row.contests else [])
         if _contests:
+            # ⚠⚠ §E2's ORDER, RESTORED: ELIGIBILITY AND `requires` BEFORE THE SEAM, NOT AFTER IT.
+            # This branch used to route straight into personal combat, so a contested act's
+            # precondition was never read -- `_fold`, which owns that check, is the branch this
+            # one is the alternative to. The defect could not be seen while no contested verb was
+            # choosable; admitting `kill / wound` made it 85 whole-case DESIGN-GAPs in one run.
+            # `_admits` carries the measurement and is the single owner (§8).
+            #
+            # ⚠ A REFUSAL HERE IS AN EVENT, NOT A RAISE. The act happened and was witnessed; what
+            # did not happen is the contest. `emits_on_refusal` -- `kill.refused` on the one row
+            # that reaches this today -- is the kind, and `causes=[a.id]` keeps the chain
+            # resolvable exactly as the two refusal branches in `_fold` do.
+            _ok, _refusal_kinds, _verdict = self._admits(w, a, _row) if _row else (True, (), None)
+            if not _ok:
+                produced = [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
+                                  k, a.actor, [], [a.id], w.tick,
+                                  observed=_verdict.observed if _verdict else ())
+                            for k in _refusal_kinds]
+                for _e in produced:
+                    self.act_of[_e.id] = a
+                out.extend(produced)
+                continue
             if contest_max_depth is None:
                 raise Forbidden("a contest was reached with no caller-supplied max_depth",
                                 "S39.3", law="S39.3 -- the depth cap has NO DEFAULT; a default is a number somebody made up and it will be cited later as though it were measured")

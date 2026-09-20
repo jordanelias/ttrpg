@@ -152,7 +152,7 @@ systems:
     canonical_sha__canon__philosophy__06_operations_md: "ecee0261e09c00e7525cd0535e89b2e62f759749"
   self_rendering:
     design_doc: canon/philosophy/04_being_persistence.md
-    canonical_sha__canon__philosophy__04_being_persistence_md: "55045a32520f92ea1317cb0de86606185e3b00ea"
+    canonical_sha__canon__philosophy__04_being_persistence_md: "66e6845b0b4c8c0a2e0f91e0a4f734ec0c53873a"
 
 # ────────────────────────────────────────────────────────────────────────
 # All 17 full_stack systems mapped. sim_gate('full_stack') will pass after a

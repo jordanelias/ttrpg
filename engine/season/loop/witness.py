@@ -91,8 +91,14 @@ def witness(self, events: list[Event]) -> int:
     # S61 is explicit about the specified behaviour and this now implements it:
     #   "WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private
     #    is private. A wrapper does not fix this and must not be presented as fixing it."
-    # The five channels are NAMED (S20) and NONE of their predicates is given, so there is
-    # no predicate by which anyone could be EXCLUDED. The fan-out is therefore total.
+    # ⚠ THE SENTENCE THAT STOOD HERE IS FALSE AND WAS CONTRADICTED SIX LINES BELOW IT (corrected
+    # 2026-09-20, `ED-IN-0261`). It read: *the five channels are NAMED (S20) and NONE of their
+    # predicates is given, so there is no predicate by which anyone could be EXCLUDED; the fan-out
+    # is therefore total.* `W6`/`H-33` gave the channels predicates, `rosters.yaml:
+    # witness_channel_predicates` carries them, and `fan_out_mode` ships at `all_five` -- the ruled
+    # default since 2026-09-07 (R7). S61's total fan is the CONTROL ARM, not the behaviour. A reader
+    # taking the old sentence at its word concludes witnessing is unselective, which is how the scar
+    # mechanic came to be written against participants instead of observers.
     # Seeds the cache `_ch_co_located` reads. Before `W6`'s adversarial pass this was built
     # here and read NOWHERE -- the predicate rebuilt it per (event, person).
     cache.presence_index(w)
