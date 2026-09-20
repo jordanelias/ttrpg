@@ -580,13 +580,16 @@ These give you very different immortals.
 
 ### Question 2: what dissolved Solmund?
 
-A mechanism is derivable but is not an account. Others' rendering **holds** a third-mode being
-(D-1(A)); so a change in how the community rendered him would weaken what held him. And the
-essentialist reinterpretation you describe — the community reading his teaching through a theology it
-could bear — is exactly such a change.
+⚠ **DECLINED BY THE AUTHOR, 2026-09-20 (`ED-WR-0012`).** This section asked him to decide whether he
+wanted it. He does not. The answer stands at `RULINGS.md` D-8b: **he ceased the work**, no external
+cause required.
 
-**That is suggestive and it is quite beautiful:** the Church's misunderstanding of him is what
-dissolved him. But the framework does not establish it, and you should decide whether you want it.
+The declined proposal, kept so it is not re-derived: *a mechanism is derivable but is not an account.
+Others' rendering holds a third-mode being (D-1(A)); so a change in how the community rendered him
+would weaken what held him, and the essentialist reinterpretation — the community reading his teaching
+through a theology it could bear — is exactly such a change. That is suggestive and quite beautiful:
+the Church's misunderstanding of him is what dissolved him.* It rested on the §4.5 clause struck in the
+same change, which was a review derivation, never ruled, and in conflict with P-05/P-06.
 
 ### Question 3: did his presence strain reality?
 

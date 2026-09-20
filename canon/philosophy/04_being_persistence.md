@@ -219,10 +219,15 @@ persisted for centuries is not more settled than a new one, only more practised.
 This also grounds §4.7: an orphaned configuration decays because removing its causal history removes
 accumulated depth, and nothing in present rendering replaces it.
 
-One derived factor still bears on persistence: since others' rendering moves a configuration's threads
-(§4.2), a threadcut being rendered by many is bound into the weave more strongly than one rendered by
-few. Persistence is partly a function of *being rendered* — though this is imbrication, not depth, and
-it does not reduce the cost.
+*(An earlier draft added a derived factor here: that since others' rendering moves a configuration's
+threads (§4.2), a threadcut being rendered by many is bound into the weave more strongly than one
+rendered by few, so persistence is partly a function of being rendered. That was a derivation from the
+review — `_review/L_derivation_audit_part3.md` §(b), which flagged its own result UNDERDETERMINED — not
+the author's, and it is struck. It was never ruled: neither `RULINGS.md` nor `DECISIONS.md` carries an
+entry for it. It also contradicts this section and the constraints that rest on it: nothing configures
+a threadcut being, being configured is itself the work, P-05 calls mode 3 self-maintaining, and P-06
+puts self-maintenance "without ground-spooled accumulation". A persistence that is partly supplied by
+others restores exactly the external configuration those deny.)*
 
 ## §4.6 The three modes of emergence
 
