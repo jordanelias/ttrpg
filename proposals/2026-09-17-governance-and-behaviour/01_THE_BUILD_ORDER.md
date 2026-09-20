@@ -883,10 +883,13 @@ number without a control is not a measurement, §0.1 pt 4).
 
 ## What 6d does NOT do, both deliberate
 
-1. **It does not wire the term into `score`.** `orient` is a Person-interior scalar with **no
-   producer** — `STR-1` closed at step 3 (*a verb at RESOLVE writes them*) and no verb does, which
-   is item **6e**. Wiring today multiplies a measured quantity by an unruled magnitude and moves
-   every golden for a weight nobody set. `6d` owes `benefits_me(c)`; `6f` owes the term.
+1. **It does not wire the term into `score`.** ⚠ CORRECTED 2026-09-20 (`ED-IN-0257`): the reason
+   first given here — *"`orient` is a Person-interior scalar with no producer"* — was wrong, since
+   no verb writes `Person.convictions` either and that is term 1 of the live score. The missing
+   piece is the STATE: `Person` has no `orient` field, and `data/cast.py` skips the 28 authored
+   `self_other_initial` values in `references/npc_registry.yaml`. The wiring is `6f`'s: a fourth
+   term on §F2's ratified three, `STR-3`'s range floor (authored range [-0.40, +0.10], cleared by
+   4 of 46), and `STR-2`'s `selfish` axis. `6d` owes `benefits_me(c)`; `6f` owes the term.
 2. **It adds no name to `loop/`** — §7.1(b), checked rather than asserted: the driver's decision
    surface is still **18** and `deliberate.py`'s still **3**, and `benefits_me` is not on the
    package surface at all (`decision/__init__.py` re-exports six names from `choose` and neither of

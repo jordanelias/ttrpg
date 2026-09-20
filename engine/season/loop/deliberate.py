@@ -79,13 +79,22 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
     # measured directly: planting one live `hold` on `p_carin` moves her budget 5 -> 6 and leaves
     # the releasable count at 5. S26.3 says the budget varies BY OFFICE, so this silently denies
     # what the design grants, and the one-pass loop did not (it packed the whole budget in one
-    # call). ⚠ IT IS LATENT, NOT LIVE, AND THAT IS WHY NOTHING IS RESHAPED HERE: measured over the
-    # whole corpus, 0 of 143 cases carry an `office.post` — the only source of a live `hold` —
-    # so all 258 persons in the 86 buildable worlds have zero holds and budget exactly 5. The
-    # ceiling binds nothing that runs. It becomes live the day a case seats an office-holder, and
-    # the fix is a design call with three defensible shapes (more rounds / denser rounds / a
-    # fixed slate of scene-slots that office cannot widen), which is why it is declared here
-    # rather than decided on a case that does not exist.
+    # call). ⚠⚠ IT IS LIVE, AND THIS COMMENT SAID LATENT UNTIL 2026-09-20 (`ED-IN-0257`). The
+    # claim was *0 of 143 cases carry an `office.post`, so the ceiling binds nothing that runs*.
+    # That is true of the corpus CASE FILES and false of the BUILT WORLDS: the `office:` blocks
+    # live in the `cases/exercises/` OVERLAY (`NPC-008`, `NPC-033`, `NPC-038`) and reach a world
+    # through `apply_rescale` (`harness/corpus_run.py:165-174`, applied at `:411`), which the
+    # 86-world basis every figure here used does NOT apply. With the overlay, `build_at` seats
+    # `p_a` on a live `hold` (`corpus_run.py:243-254`); `harness/probes.py:107` has seated
+    # `p_high` on `off_duke` since `tiny_world` existed, so every probe season carried the
+    # ceiling; `harness/populated.py:757` seats one hold per office. `H-71`'s own cite already
+    # recorded the overlay path, so the register contradicted itself and THIS was the stale side.
+    # ⚠ AND THE COUNT IS WIDER THAN OFFICES: `budget()` counts every live `hold`, and
+    # `_eff_create_record` mints one per Record (`loop/effects.py:302-305`), so `headless`'s Carin
+    # is over the ceiling from her first record. That is `H-92`, and it is a PREREQUISITE of any
+    # repair that derives the round count from the budget — otherwise a season lengthens on
+    # records. The repair's shape is still a design call; what is no longer true is that it binds
+    # nothing that runs.
     k_budget = w.fixtures.get("scene_budget")
     q_rule = w.fixtures.get("question_aggregation_rule")
     per_round = w.fixtures.get("scenes_per_round")

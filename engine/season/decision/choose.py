@@ -86,11 +86,17 @@ def benefits_me(p: Person, c: Candidate) -> float:
     """`synthesis.md` §1.3's `benefits_me(c)` -- 1.0 where the act is taken for the actor's own
     good, 0.0 otherwise. The `orient ·` that multiplies it is NOT here and NOT in `score`.
 
-    ⚠ NOTHING MULTIPLIES THIS YET, DELIBERATELY, AND THE REASON IS A MISSING PRODUCER RATHER THAN
-    A MISSING LINE. `orient` is a Person-interior scalar; `STR-1` closed at step 3 -- *a verb at
-    RESOLVE writes them* -- and no verb does, which is phase-6 item `6e`. Wiring the term today
-    would multiply a measured quantity by an unruled magnitude and move every golden for a weight
-    nobody has set. The term lands with its weight (`6f`), and this is the half `6d` owes.
+    ⚠ NOTHING MULTIPLIES THIS YET, AND THE REASON IS A MISSING FIELD, NOT A MISSING PRODUCER
+    (CORRECTED 2026-09-20, `ED-IN-0257`; the old reason read *"`orient` ... no verb writes it"*).
+    That reason proves too much: NO VERB WRITES `Person.convictions` EITHER -- grep `verb_table.yaml`
+    for it, zero hits -- and `convictions` is term 1 of the live score, genesis-authored from
+    `references/npc_registry.yaml` at `harness/populated.py:442-443`. Applied evenly, the old reason
+    un-wires the score's first term. What is actually missing is the STATE: `Person` has no `orient`
+    field, and the 28 authored `self_other_initial` values in that same registry are the one cell
+    `data/cast.py::convictions_of` skips (its `continue` past non-list entries). The wiring waits on
+    `6f`: `ARCHITECTURE_V2.md` §F2 is a RATIFIED three-term shape, `STR-3` asks a new term to declare
+    its range against the 0.294 decisive floor (authored range [-0.40, +0.10], cleared by 4 of 46),
+    and `STR-2`'s `selfish` axis decides whether self-interest would enter the score twice.
 
     ⚠ IT IS A FLOAT AND NOT A BOOL BECAUSE IT IS A SCORE TERM. `beneficiary_of` carries the
     identity for anything that needs to know WHO; this answers only *is it me*."""

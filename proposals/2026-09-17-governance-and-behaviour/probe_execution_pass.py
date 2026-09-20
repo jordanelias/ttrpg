@@ -255,7 +255,8 @@ def main() -> int:
     print(f"    by declared kind       : {dict(by_kind)}")
     print(f"    RESOLVED               : {resolved}"
           f" ({resolved / len(seen):.1%})   (§7.3e: 3796, 71.0%)")
-    print(f"    declared-but-UNRESOLVED: {len(holes)}   (§7.3e: 0 -- THIS IS THE RESULT)")
+    print(f"    declared-but-UNRESOLVED: {len(holes)}   "
+          f"(§7.3e: 0 -- STRUCTURAL, not a result; test_governance_build.py:707-717)")
     print(f"    benefits_me == 1.0     : {mine}   (§7.3e: 3420)")
     print(f"  ⚠ CONTROL on that last figure: {self_subject} candidates"
           f" ({self_subject / len(seen):.1%}) carry THE ACTOR AS THEIR OWN SUBJECT"
