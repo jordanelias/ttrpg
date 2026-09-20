@@ -6992,7 +6992,7 @@ def test_n3_an_act_cites_what_occasioned_it_and_a_telling_is_about_what_was_told
             refs = act_refs(act)
             if not refs:
                 continue
-            subs = claim_subjects(e, w4.fixtures.get("claim_subject_rule"), refs)
+            subs = claim_subjects(w4, e, w4.fixtures.get("claim_subject_rule"), refs)
             assert act.actor not in subs or act.actor in refs, (
                 f"a telling deposited a claim about the teller {act.actor!r}: {subs} — §F1's Q2 "
                 "can never fire on it for the listener, which is what made `R3` zero")

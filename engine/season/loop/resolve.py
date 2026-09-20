@@ -117,6 +117,13 @@ def _fold(self, w: "World", a: Act, resolution: "Resolution | None" = None) -> l
     arrives here only from `resolve()`'s seam branch, carrying the band the subsystem's own
     result decided (`degree_of`)."""
     self.resolved.append(a)      # observation only -- decides nothing, see `resolved`
+    # G1a. AND THE STORE, which is NOT observation -- every Event this fold emits names `a.id`
+    # in `causes[]`, and `state/log.py` refuses a cause that resolves to nothing. `resolve()`
+    # already recorded it before its own refusal branches; this is idempotent on that same
+    # object (see `ActStore.append`) and exists for the callers that enter `_fold` directly,
+    # which is most of the `W-B` suite. Putting it at the entry point rather than trusting the
+    # one caller is the difference between an invariant and a convention.
+    w.acts.append(a)
     row = VERB_TABLE.get(a.verb)
     if row is None:
         # WHOSE GAP IS IT? Two different facts wear the same shape, and reporting them
@@ -350,7 +357,13 @@ def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None,
 
     w.write(fld, mrow.write_class(Step.RESOLVE), apply,
             record_kind=kind, fieldname=fld, driver="Act")
-    return [StateChange(t, "set", "Act", fld) for t in touched]
+    # G1a. MINTED AGAINST THE WRITE THAT JUST RAN, not constructed. `touched` is populated from
+    # inside `apply()` -- the effect reports the ids it changed -- so the subjects are known only
+    # now, after `w.write` has returned. That ordering is the reason `state/gate.py`'s window
+    # stays open past the write instead of the mint being `write()`'s return value; the gate's
+    # header records the bound it costs. Before this line these were bare `StateChange`s, which
+    # is to say: the fold ASSERTED what it had changed and nothing could check the assertion.
+    return [w.gate.mint(t, "set", "Act", fld) for t in touched]
 
 def resolve(self, acts: list[Act],
             contest_max_depth: Optional[int] = None) -> list[Event]:
@@ -379,6 +392,13 @@ def resolve(self, acts: list[Act],
     out: list[Event] = []
     pending: dict[str, list[int]] = {}     # S27.3 SUM-THEN-CLAMP-ONCE accumulator
     for a in ordered:
+        # G1a. THE ACT ENTERS THE STORE BEFORE IT IS FOLDED, and the order is the whole point:
+        # every branch below emits `causes=[a.id]`, INCLUDING the two refusal branches, so an
+        # act recorded only on success would leave every refusal chain unresolvable -- which is
+        # the case the act store's own header names. Appended once per act, here, rather than at
+        # each of the five emission sites: `CLAUDE.md` §8, and five sites is five chances to
+        # forget the one that refuses.
+        w.acts.append(a)
         # S27.4: an attempt at Ob > 2 x Pool is REFUSED, and the season is spent. An
         # uncontested attempt routes to a GATE, never to an Ob = 0 roll.
         mult = w.fixtures.get("obstacle_refusal_multiple")

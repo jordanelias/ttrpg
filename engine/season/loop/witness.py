@@ -178,7 +178,8 @@ def witness(self, events: list[Event]) -> int:
         # §F1's Q2 clause "a claim whose subject is SOMETHING THEY HOLD" unreachable and left
         # the narrative substrate empty. `changes[]` already names what an act touched, so
         # this reads the Event the design has rather than adding a field to it (§8.1).
-        for n, subj in enumerate(claim_subjects(e, claim_rule, act_refs(self.act_of.get(e.id)))):
+        for n, subj in enumerate(claim_subjects(w, e, claim_rule,
+                                                act_refs(self.act_of.get(e.id)))):
             cid = (e.id if via_knot and n == 0
                    else H(w.world_seed, w.tick, pid, f"claim:{e.id}:{n}"))
             # ⚠ `self.round` IS THE LAST ARGUMENT AND `U2` IS WHY. §F1 Q2 is *a claim LANDING in
