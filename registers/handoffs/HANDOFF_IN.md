@@ -27,6 +27,135 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 
 **The full 74-row table of contents now lives in `HANDOFF_IN_closed.md`'s own header** — an archive's index belongs in the archive. The imperative-flagged rows stay above, because a standing order must not need a second file-open to be seen.
 
+## 🧾 2026-09-20 — THE CHARACTER MODEL AND THE DECISION LAYER, RULED (`ED-IN-0261`, PR #424)
+
+**One design session with Jordan.** The rulings and the authoring surface landed, and **one ruling
+was built and runs** — the combat seam's person-side door, below. The rename, the 105 cells, the
+verb split and the scar rebuild are R6-atomic and downstream of cells that are Jordan's under
+`STR-6`/R3. Read
+`proposals/2026-09-20-pursuit-basis-worksheet.yaml` before anything in this area — it carries the
+rulings, the grid, the scar model and the open list.
+
+### ⭐ THE COMBAT SEAM HAS A PERSON-SIDE DOOR, AND IT RUNS
+
+`ED-IN-0261` as first written refused `H-80`'s item. **Jordan reversed it the same session —
+*"admit kill and wound as resolvable verbs"* — and the row is amended.** `fight` and the duel pair
+`challenge` → `accept` were never in conflict with it and still stand: those are the acts a person
+DECLARES; the admission is about whether the fold can carry a body-contest at all.
+
+**`kill / wound` is in `resolvable_verbs()` (18 → 19) and EXECUTES IN 47 OF THE 89 LIVE CORPUS
+WORLDS.** Until this commit `@provider("contest","personal_combat")` was registered and unreachable
+from a season. The admission itself is **one cell** — a typed `requires` on the row (`existence` of
+`subject`, kind `Person`) — because `driver.py`'s contest gate excludes a contested verb that is
+UNTYPED, on the ground that `operands_for` returns `{}` for one and the seam would get a single
+claimant. Typing the row binds `subject`, which IS the second claimant.
+
+**Three fold defects had to be fixed first, all latent, all invisible while no contested verb could
+be chosen.** Each is at one owner, each with its measurement in `ED-IN-0261`:
+
+| # | the defect | measured |
+|---|---|---|
+| 1 | `resolve()`'s contest branch skipped **eligibility and `requires` entirely** — §E2's order is *eligibility → requires → resolve*, and that branch is the alternative to `_fold`, where both lived | 85 of 143 cases → whole-case DESIGN-GAP, 74 of them `PARTY-GAP` |
+| 2 | **every person was offered themselves as an adversary** — `opening_set` offers everyone themselves as a referent, 49.6% of all candidates | 47 more cases on *needs two parties; got 1* |
+| 3 | **the dead stayed referenceable** — `remove_person` left the person's own `person`-kind RUNG standing, so `confer` seated offices on corpses and dead men went on acting | 11 on `_refuse_bad_hold`, 2 (`ARC-10`/`ARC-12`) on a dead claimant |
+
+Fixes: `_admits(w, a, row)`, the one owner both paths read (§8); a person-side decline off the
+row's own `contests:` column, never a verb name; the node dies with the person, and the fold emits
+`act.ineligible` for an actor a predecessor removed.
+
+**The corpus returns to its pre-admission bar on every count but one** (both arms, seed 0, control
+from this tree with the five files stashed): DESIGN-GAP 0 → 85 → **0**, R1 89/89 → 4/89 → **89/89**,
+UNREPRESENTABLE 54 unmoved. ⚠ The exception: **`NPC-009` moves `RUNS-UNDECLARED` →
+`RUNS-ALONE-UNDECLARED`** — a death breaking that case's propagation, which is the mechanic working.
+
+**Seven artifact numbers moved and each is re-pinned with its control, not adjusted** — distinct
+executed sets 44 → 57 (and the universal set `{create_record, utter}` was re-taken in the same
+breath and did NOT move); `W-D` fork divergence at `total` 7 → 8 with the denominator unmoved at
+31, which is **more** divergence and the direction R-01/R-02 want.
+
+⚠ **A THIRD ARM SEPARATES THE ADMISSION FROM THE FOLD FIXES, and it corrects a two-arm reading
+that had credited the whole displacement to the contest.** Same 89 worlds, seed 0, the admission
+monkey-patched off at the loaded row so `resolvable_verbs()` is 18 again:
+
+| | baseline | fold fixes only | + admission |
+|---|---|---|---|
+| distinct executed sets | 44 | **44** | **57** |
+| `tell` | 72 | 70 | 63 |
+| `interview` | 53 | 57 | 46 |
+| `release` | 10 | 12 | 9 |
+| `research` | 63 | 64 | 63 |
+| `speak` · `move` · `surveil` · `transfer` | 82 · 51 · 58 · 77 | unmoved | 78 · 47 · 55 · 75 |
+
+**The fold fixes alone move variety not at all** — 44 → 44 — and move four verbs slightly; `tell`'s
+own −2 is defect 1 biting the *other* contested row, whose precondition is now read before the seam.
+**Every point of the variety is the admission's.** Two committed artifacts re-recorded
+deliberately, and the re-record is the payoff: `NPC-010`'s `core_blocked` falls 2 → 1 and case rows
+reading *"the fold cannot execute it"* now read PASS.
+
+**What it did NOT move, stated because an absence is the cheapest claim to make.** The headless
+content hash is `80789994e376c5304c5f8acce4a3b4d7` before and after; `m1_acceptance` holds
+`ab77c30d273b` with 0 stub invocations; 24 headless seeds × 4 seasons + 2 populated report **0
+invariant violations over 16,194 events**; `engine/tests` (CI's `sim-regression`) is 972 passed /
+3 xfailed. And **the nine requirements did not move a row** — still 1 met · 4 partial · 4 not_met.
+R-05 (*all verbs must be built out*) gained one verb of 38 and stays `not_met`.
+
+⚠ **THE SLASHED NAME SURVIVES AND IS SEPARATELY RULED WRONG** (*"kill / wound isn't supposed to be
+a verb by itself"*). Splitting it into `kill` and `wound` needs a row of ALIGNMENT cells each, and
+`ALIGNMENT` is being re-celled whole over the seven `pursuit_axes` — **so the split rides that
+commit**, where the cells are authored once, rather than inventing two rows of four old-basis cells
+that are about to be deleted. `fight` and `challenge` → `accept` ride it for the same reason.
+
+### What landed
+`ED-IN-0261` (this ruling set) · `ED-WR-0012` (a review derivation struck from canon, PR #424) ·
+`ED-IN-0260` (six false records corrected, PR #423, merged).
+
+### Waiting on Jordan — the only thing blocking the build
+**The 105 projection cells** (15 pursuits × 7 axes) and the alignment re-cell over 40 verbs.
+Falsifier for the placement is recorded in the worksheet and is worth using: a devout
+Church-builder and an anti-Solmund Einhir dismantler both score HIGH on `faith` and want opposite
+things, so **only the axes can separate them**. If they do not land far apart, the placement is
+wrong; `conviction_spread`'s `within_60deg` is the aggregate form of the same check.
+
+### Decided and buildable, in this order
+1. **The rename** — `Person.convictions` → `Person.pursuits`, `conviction_axes` → `pursuit_axes`.
+   MEASURED: **483** occurrences in `engine/season` non-test, **392** in `references/` owners.
+   ⚠ **`registers/`'s 403 must NOT be rewritten** — they record what was said when. And it is a
+   **disambiguation, not a substitution**: R2 moved `Conviction` *to* religion, so a mechanical
+   sweep would rename the sense that is supposed to keep the spelling. `tools/valoria_rename.py`
+   is ABSENT from the tree (checked) — it is a hand sweep or a restore from `FORK:1e4c6f4`.
+2. **The 105 cells**, once authored. R6: rows, axes, projection and alignment in ONE commit or
+   nothing imports — both loaders refuse an unrostered key and an all-zero matrix at module scope.
+3. **The verbs** — `kill`/`wound` split, `fight`, `challenge` → `accept`. All four need
+   ALIGNMENT cells, so they ride item 2's commit. The ADMISSION is already done (above).
+4. **The scar rebuild** — counts per element, thresholds 1/2/3, on BOTH tracks. The lawful write is
+   worked and recorded: at RESOLVE the **act** calls `epistemic.py:440 observers_for(...)` — the
+   same owner WITNESS calls — and writes on each observer whose pursuits or convictions the act
+   violated. L4 constrains WHO writes, not when.
+5. **Deontology as a gate** at `opening_set(p, v, q, fx)` — person-side, no World, AX-2 intact.
+
+### Facts established here, so nobody re-derives them
+- **Only 2 of 38 verbs carry `contests`** — `kill / wound` → the body, `tell` → a standing — so
+  `kill / wound` is the ONLY route to `@provider("contest","personal_combat")`. ⚠ **It was excluded
+  from `resolvable_verbs` and now is not** (above); the *"no person-side door"* half of this fact is
+  spent, and what remains is how narrow the door is: one row, one prize, one provider.
+- **`Person.stance` has FOUR live senses** and no `names_index` entry: social regard (season),
+  physical guard (combat), tactical posture (`MassBattle.def_stance`), and a gloss word in the
+  glossary for *Truth* and *Orientation*. `names_index.yaml:127-128` already namespaces busy words
+  — that convention, not a hunt for unused ones, is the right tool for data.
+- **`scar_step` parked at 0 because it is a magnitude for a mechanic whose unit is a COUNT.** Not
+  for want of a reader.
+- **`witness.py:94-95` was false** (claimed the channel predicates do not exist) and is corrected.
+  `fan_out_mode = all_five` is the shipped ruled default; witnessing IS selective.
+- **`Person.marks`** is dropped in ruling but **still in the tree** — it moves with the next change
+  that already shifts the content hash, since `Person` gaining or losing a field moves every digest.
+
+### Known-red, not this lane's
+`engine/season/tests/test_season_shape.py::test_w15_the_run_cases_entrypoint_writes_nothing` — an
+xdist race with its own sibling. Reproduces **2/2 on a clean `origin/main` worktree**, so it is the
+base's. Diagnosed in a comment on PR #423 with the proposed patch and its two constraints (the lock
+cannot live under `PACKAGE`; `xdist_group` needs `--dist loadgroup`). **Unfixed, and it will keep
+reddening unrelated PRs.**
+
 ## 🧾 2026-09-17 — THE FIRST EXECUTION PASS OVER THE BUILD ORDER (`ED-IN-0246`, PR #414)
 
 **Facts, not a queue.** Three items of `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md`

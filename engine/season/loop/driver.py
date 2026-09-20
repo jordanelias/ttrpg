@@ -441,7 +441,7 @@ from .calendar import calendar                                            # noqa
 from .census import census                                                # noqa: E402
 from .deliberate import deliberate                                        # noqa: E402
 from .matter import matter                                               # noqa: E402
-from .resolve import _apply_write, _eligible, _fold, _occasion_ids, resolve  # noqa: E402
+from .resolve import _admits, _apply_write, _eligible, _fold, _occasion_ids, resolve  # noqa: E402
 from .witness import witness                                              # noqa: E402
 
 SeasonDriver.calendar = calendar
@@ -453,6 +453,8 @@ SeasonDriver.census = census
 # RESOLVE's own machinery, bound for the same reason: `_fold` reaches all three through `self`, and
 # two source-scanning guards read `_apply_write`'s and `_fold`'s spans by name.
 SeasonDriver._eligible = _eligible
+# §E2's eligibility + `requires`, the ONE owner both the fold and the contest branch read.
+SeasonDriver._admits = _admits
 SeasonDriver._occasion_ids = _occasion_ids
 SeasonDriver._fold = _fold
 SeasonDriver._apply_write = _apply_write

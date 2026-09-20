@@ -96,6 +96,26 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
         if not person_side_eligible(p, row):
             continue
         for subject in q.referents:
+            # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
+            # `move`'s `contain_path` cell keeps the same shape of rule -- *"a node is not a path
+            # to itself"* -- as the reader's own, and this is that rule one seam over. It reads
+            # the ROW'S OWN COLUMN (`contests:`), never a verb name, so it holds for whatever
+            # else declares a prize later.
+            #
+            # MEASURED, the day `kill / wound` was admitted to `resolvable_verbs()`
+            # (`ED-IN-0261`, amended): `opening_set` offers every person THEMSELVES as a referent
+            # for every verb -- 49.6% of all candidates in the one-season sweep name the actor as
+            # their own subject -- so the commonest contested candidate in the corpus was a
+            # person attacking himself. 47 of 143 cases died on `personal combat needs two
+            # parties; got 1` for no other reason.
+            #
+            # ⚠ WHY IT DECLINES HERE RATHER THAN REFUSING IN THE FOLD, which is the opposite of
+            # the choice clause 4 makes: clause 4 is EPISTEMIC -- a person who wrongly believes
+            # the granary full SHOULD form the Candidate and learn otherwise -- and being alone
+            # in a room is not a belief anyone can be wrong about. There is no world-read here
+            # and no `World`: `p.id` against a referent the person already holds.
+            if row.contests and subject == p.id:
+                continue
             # ⚠ OPERANDS BEFORE THE BELIEF TEST, AND THE ORDER IS THE POINT. Clause 4 asks
             # whether the requirement is known-false ABOUT THIS BINDING, so the binding has to
             # exist first -- asking it of an unbound cell is what made the person read a

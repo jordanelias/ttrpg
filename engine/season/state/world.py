@@ -404,6 +404,28 @@ class World:
             if (t.subject == who or t.object == who) and t.live:
                 t.until = self.tick
         self.persons.pop(who, None)
+        # ⚠⚠ THE PERSON'S OWN `person`-KIND RUNG DIES WITH THEM, and leaving it behind was a
+        # LATENT ID-SCHEME DEFECT that only a death could reach. `class_of`'s own docstring names
+        # the hazard -- *"no id is currently in two of these. If one ever is, this returns the
+        # first and the ambiguity is a defect in the id scheme"* -- and a person-kind rung is
+        # exactly that case: `persons` is scanned first, so the id reads `Person` while they live
+        # and silently becomes `Rung` the moment they do not.
+        #
+        # MEASURED, the day `kill / wound` was admitted to `resolvable_verbs()` (`ED-IN-0261`,
+        # amended), over the 143-case corpus: 11 cases died on `_refuse_bad_hold` -- *"`hold`
+        # tenure has subject 'p_c', which is a Rung"* -- because `confer` seated an office on a
+        # corpse, and 2 more on `PARTY-GAP` -- *"claimant not a person"* -- because a later act
+        # named one as an adversary. Both are the same fact: THE DEAD STAYED REFERENCEABLE. A
+        # rung is what `questions_for` walks, so as long as the node stood, the world went on
+        # offering the man as something to confer on and someone to fight.
+        #
+        # ⚠ THE KIND IS CHECKED, NOT ASSUMED. Only a `person`-kind rung IS the person; a hearth
+        # or a realm that happens to share an id would be a different defect and this must not
+        # quietly delete it. §15.3 is the law -- the edges end THROUGH the death -- and the node
+        # the edges hung from is not a thirteenth edge to close, it is the person.
+        _node = self.rungs.get(who)
+        if _node is not None and _node.kind == "person":
+            self.rungs.pop(who, None)
         return [who]
 
     def _rehome(self) -> None:
