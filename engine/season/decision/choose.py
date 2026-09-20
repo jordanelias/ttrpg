@@ -87,7 +87,7 @@ def benefits_me(p: Person, c: Candidate) -> float:
     good, 0.0 otherwise. The `orient ·` that multiplies it is NOT here and NOT in `score`.
 
     ⚠ NOTHING MULTIPLIES THIS YET, AND THE REASON IS A MISSING FIELD, NOT A MISSING PRODUCER
-    (CORRECTED 2026-09-20, `ED-IN-0257`; the old reason read *"`orient` ... no verb writes it"*).
+    (CORRECTED 2026-09-20, `ED-IN-0260`; the old reason read *"`orient` ... no verb writes it"*).
     That reason proves too much: NO VERB WRITES `Person.convictions` EITHER -- grep `verb_table.yaml`
     for it, zero hits -- and `convictions` is term 1 of the live score, genesis-authored from
     `references/npc_registry.yaml` at `harness/populated.py:442-443`. Applied evenly, the old reason

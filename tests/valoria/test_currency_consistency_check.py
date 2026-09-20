@@ -219,3 +219,35 @@ def test_guard_is_wired_into_run_checks():
     """A check nothing calls is decoration (ED-IN-0180's 'live signal with no consumer')."""
     import inspect
     assert 'check_current_stamp_structure' in inspect.getsource(ccc.run_checks)
+
+
+def test_a_line_citation_is_not_part_of_the_path():
+    """`file.yaml:3145` cites a LINE; the path is `file.yaml` (2026-09-19).
+
+    FALSIFIER FOR THE DEFECT THIS FIXES. Before the repair `check_current_paths_exist` reported
+    the live 669 KB `engine/engine_params/params_tables.yaml` as nonexistent, because the row
+    naming it in CURRENT.md cites a line the way CLAUDE.md §0.1 pt 3 tells a reader to. Asserting
+    only that the stripped path is PRESENT would pass on a parser that returned both forms, so the
+    suffixed form is asserted ABSENT as well — that is the assertion that observes the failure.
+    """
+    text = "| row | `engine/engine_params/params_tables.yaml:3145` carries the pre-ruling row |"
+    paths = ccc._current_md_paths(text)
+    assert 'engine/engine_params/params_tables.yaml' in paths
+    assert 'engine/engine_params/params_tables.yaml:3145' not in paths
+    # a range citation is the same object
+    assert ccc._current_md_paths("`engine/season/rosters.yaml:441-446`") == \
+        ['engine/season/rosters.yaml']
+    # and a path that merely CONTAINS a colon-digit mid-string keeps it
+    assert ccc._current_md_paths("`tools/x:1y.py`") == ['tools/x:1y.py']
+
+
+def test_the_two_path_extractions_cannot_disagree():
+    """The tombstone exemption is tested by `in` against _current_md_paths, so both readers must
+    spell a path the same way. They had SEPARATE COPIES of the regex; stripping the line suffix in
+    one only would have made a tombstoned `path:NNN` stop matching its own exemption and start
+    reporting — a half-fix strictly worse than the defect, which is why they now share `_paths_in`.
+    """
+    line = "| **Board game** | ⚠️ EVACUATED — `engine/params/board_game.md:12` at fork ref c451bcb |"
+    tombstoned = ccc._tombstoned_paths(line)
+    assert tombstoned == {'engine/params/board_game.md'}
+    assert set(ccc._current_md_paths(line)) <= tombstoned

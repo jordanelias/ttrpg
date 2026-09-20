@@ -41,9 +41,12 @@ from ..data.rosters import (
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, Unowned, Unspecified
 from ..trace_log import TRACE
 from .carriers import (
-    Event, Office, Person, Proposition, Record, Rung, Site, StateChange, Tenure,
+    Event, Office, Person, Proposition, Receipt, Record, Rung, Site, StateChange, Tenure,
 )
 from .ids import H
+from .acts import ActStore
+from .gate import Gate
+from .log import EventLog
 
 # Where S30's matrix says "no", the refusal belongs to the LAW THE CELL ENFORCES, not to the
 # matrix's bookkeeping rule. These are the cells whose "no" is a named law refusing.
@@ -158,7 +161,14 @@ class World:
         # S15.1 -- the store is the SUBJECT'S. `_unowned` holds only the Tenures whose subject
         # is not a person (`contain : Rung -> Rung` is the bulk of them). See the `tenures` view.
         self._unowned: list[Tenure] = []
-        self.log: list[Event] = []
+        # G1a. THE GATE, THE ACT STORE AND THE LOG ARE ONE UNIT (`04:1024` step 3) and are built
+        # together because each is what makes the next checkable: the gate mints receipts, the
+        # act store is what `causes[]` resolves against, and the log is where both are verified
+        # at `append`. The log takes a THUNK for the act ids rather than the store itself -- the
+        # set grows as RESOLVE folds, and a log holding a store could walk it.
+        self.gate = Gate()
+        self.acts = ActStore()
+        self.log = EventLog(self.gate, lambda: self.acts.ids())
         self.dates: dict[str, dict] = {}
         self.docket: list[dict] = []
 
@@ -544,6 +554,13 @@ class World:
             self._refuse_undeclared_kind(thing, wclass, sname, record_kind, fieldname,
                                          emits, declared)
 
+        # G1a. THE WINDOW OPENS HERE -- after every refusal above has had its chance and
+        # immediately before the mutation, so a write that is going to be refused never
+        # authorizes a mint. It stays open past `apply()` deliberately: `loop/resolve.py`'s
+        # `_apply_write` learns WHAT it changed from inside that closure and mints its receipts
+        # after this call returns. `state/gate.py`'s header states the bound that buys and the
+        # one it does not.
+        self.gate.opening(record_kind, fieldname, wclass.value, self.tick)
         before = apply()
         TRACE.write(thing, wclass.value, sname, True)
         self.writes.append((thing, wclass.value, sname, record_kind, fieldname, driver))
@@ -584,7 +601,12 @@ class World:
                 # widening `H`'s signature would have been a second way to say the same thing.
                 id=H(self.world_seed, self.tick, subj, f"emit:{emits}#{self.new_draw()}"),
                 kind=emits, subject=subj,
-                changes=[StateChange(subj, "set", wclass.value, fieldname, None)],
+                # G1a. MINTED, NOT CONSTRUCTED. This Event is the gate's own emission, so its
+                # change is the one receipt in the tree whose provenance was never in doubt --
+                # which is exactly why it is the right place to prove the mint works end to end.
+                # `Receipt` subclasses `StateChange` and adds no hashed field, so this line moves
+                # no content hash and `runs/` stays byte-identical.
+                changes=[self.gate.mint(subj, "set", wclass.value, fieldname, None)],
                 # ⚠ `causes` IS REQUIRED IN SUBSTANCE AND THE DEFAULT IS NOT `[ROOT]`. Handing an
                 # un-caused emission the root is how every Event in the `W9` artifact came to
                 # carry `causes=[ROOT]` — #353 §19.4 calls that field "the substrate of the entire

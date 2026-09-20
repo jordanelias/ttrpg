@@ -79,7 +79,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
     # measured directly: planting one live `hold` on `p_carin` moves her budget 5 -> 6 and leaves
     # the releasable count at 5. S26.3 says the budget varies BY OFFICE, so this silently denies
     # what the design grants, and the one-pass loop did not (it packed the whole budget in one
-    # call). ⚠⚠ IT IS LIVE, AND THIS COMMENT SAID LATENT UNTIL 2026-09-20 (`ED-IN-0257`). The
+    # call). ⚠⚠ IT IS LIVE, AND THIS COMMENT SAID LATENT UNTIL 2026-09-20 (`ED-IN-0260`). The
     # claim was *0 of 143 cases carry an `office.post`, so the ceiling binds nothing that runs*.
     # That is true of the corpus CASE FILES and false of the BUILT WORLDS: the `office:` blocks
     # live in the `cases/exercises/` OVERLAY (`NPC-008`, `NPC-033`, `NPC-038`) and reach a world

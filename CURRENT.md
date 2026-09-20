@@ -20,11 +20,14 @@ read out of it — the frozen ED-ledger fragments the blocking citation gate loa
 _Last reconciled: 2026-09-16 (IN lane — **ED-IN-0232 retired the Key substrate** on Jordan's ruling *"anything key-based gets retired"*; the Architecture / Key substrate row below is now a RETIRED row and is the only head that moved. Everything else in this stamp is the prior reconciliation, unchanged: PR #404 merging PR #405 — **no head moved on either side.** #405 landed the decision layer as `ED-IN-0228` while #404 held that id for the faction creed: both sessions read `next_free: 228` and both allocated it, which is §4's documented collision firing again. #405 merged first and KEEPS 0228; #404 renumbered creed 0228->0229 and axis-roster-single-owner 0229->0230, `next_free` 231. #404 also gave TERMS one owner that reaches `systems/` (`names_index.yaml` -> `tools/export_names.py --check` -> `engine/engine_params/names.json` -> `engine/substrate/names.py`), with `rosters.yaml: factions` deriving via `from_names:`. Neither touch is a head change.)
 
 ⚠ **TWO ROWS MOVED 2026-09-19 AND THE STAMP ABOVE IS DELIBERATELY NOT BUMPED.** A bump would mean
-*this whole index was re-read against every head*, and it was not — `currency_consistency_check.py`
-reports **18 drift rows** (heads touched 2026-09-18 by other sessions' merges) that nobody has
-reconciled, and moving the date to today would silence all 18 without reading one of them. The two
-rows below were ruled by Jordan and edited here; everything else in this file still carries the
-2026-09-16 reconciliation and its known drift.
+*this whole index was re-read against every head*, and it was not — `python
+tools/currency_consistency_check.py` names the heads touched since the stamp by other sessions'
+merges, nobody has reconciled them, and moving the date to today would silence every one without
+reading one. **Run it; do not trust a count written here.** A count stood at this spot and was
+measured before its own session's edit landed, so it was stale in the commit that wrote it — which
+is the hard-coded-number defect Jordan ruled against for exactly the files read at every session
+start. The two rows below were ruled by Jordan and edited here; everything else in this file still
+carries the 2026-09-16 reconciliation and its known drift.
 
 - **Clocks & tracks** — `Truth` becomes `Conviction` (`ED-IN-0251` R2, ruled 2026-09-19). ED-IN-0075
   is superseded for the per-character axis; the territory-scale `Piety (PT)` is untouched.

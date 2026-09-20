@@ -334,7 +334,7 @@ single blocker in the plan.**
   file says why it is Jordan's in its own comment — *"Choosing the number needs a world that stocks a
   larder — which is what makes this a design call rather than a default nobody looked at."* **One value
   off that sweep turns a built mechanism live.** ⚠ **And the other half of P1's crossing ask is missing**: `world_q.py:633-637`
-  (CORRECTED 2026-09-20, `ED-IN-0257`; `:602-605` is Q2, and Q3 begins at `:615`)
+  (CORRECTED 2026-09-20, `ED-IN-0260`; `:602-605` is Q2, and Q3 begins at `:615`)
   derives `at` from `w.sites.get(who)`, which is `None` for a person-keyed crossing, so the `presence`
   branch cannot fire — and `proposals/2026-09-10-settlements-factions-populations/02_PROPOSALS_SUBSTRATE.md:54-60`
   already specifies the repair (`at = parent_of(w, who)` when `who` names a person) — **a body falling is a Question for its owner alone, never for the hearth.**

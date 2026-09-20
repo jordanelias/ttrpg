@@ -883,7 +883,7 @@ number without a control is not a measurement, §0.1 pt 4).
 
 ## What 6d does NOT do, both deliberate
 
-1. **It does not wire the term into `score`.** ⚠ CORRECTED 2026-09-20 (`ED-IN-0257`): the reason
+1. **It does not wire the term into `score`.** ⚠ CORRECTED 2026-09-20 (`ED-IN-0260`): the reason
    first given here — *"`orient` is a Person-interior scalar with no producer"* — was wrong, since
    no verb writes `Person.convictions` either and that is term 1 of the live score. The missing
    piece is the STATE: `Person` has no `orient` field, and `data/cast.py` skips the 28 authored

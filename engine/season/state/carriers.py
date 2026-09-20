@@ -113,6 +113,44 @@ class StateChange:
 
 
 @dataclass
+class Receipt(StateChange):
+    """G1a -- WHAT THE GATE HANDS BACK, and the only kind of change an Event may carry.
+
+    A `StateChange` says WHAT CHANGED. A `Receipt` says what changed AND THAT THE GATE IS THE ONE
+    THAT CHANGED IT. Those are different claims and the tree only ever made the first, so an
+    Event's `changes[]` was a set of assertions with no provenance: any caller could construct
+    `StateChange(...)` naming a write that never happened, append the Event, and every reader
+    downstream -- the witness fold, `claim_subjects`, the content hash -- would take it. That is
+    `ID-9` with no instrument against it, and `ID-9` is not hypothetical here: `loop/matter.py`
+    emitted `term.matured` carrying a change to `Record.stages` while nothing in the package
+    mutated it (see `Record.matured`'s own note, ruled 2026-09-10).
+
+    ⚠ `serial` IS PROVENANCE, NOT DATA, AND THE CONTENT HASH DOES NOT FOLD IT. `World.content_hash`
+    reads five named fields off each change -- `subject|mode|driver|field|delta` -- which this
+    inherits unchanged, so introducing the type moves NO hash and `runs/` stays byte-identical.
+    That is deliberate: a provenance token is a fact about who wrote, not about what the world is,
+    and folding it would make two worlds with identical state hash differently because their
+    receipts were minted in a different order. Adding a SIXTH hashed field would also have moved
+    every golden, which #417 measured the hard way -- a carrier gaining a field moves every digest
+    that reprs it.
+
+    ⚠ IT IS FORGEABLE IN PYTHON AND THE GUARD IS NOT THE CONSTRUCTOR. Nothing stops
+    `Receipt(..., serial=7)`; what stops it counting is `state/log.py`, which checks the minting
+    gate still holds THAT OBJECT under THAT serial (`minted.get(r.serial) is r`). An identity
+    check, not an equality one -- a forged receipt carrying a real serial is a different object
+    and fails. `S34`'s enforcement column rates this class of rule *"convention -- the named
+    residual risk"* for `__slots__`; this one is stronger than convention because the check is
+    executed at append rather than asserted in prose, but it is still Python and a determined
+    author with the gate in hand can spell around it. What it forecloses is the ACCIDENT: a
+    hand-built change reaching the log because nobody remembered the gate.
+    """
+    # -1 is the UNMINTED sentinel and is never a key in the gate's minted map, so a `Receipt`
+    # built by hand is refused by the same check that refuses a `StateChange` -- it does not need
+    # its own branch, and a branch per forgery shape is how a checker acquires a gap.
+    serial: int = -1
+
+
+@dataclass
 class Event:
     """S19 -- THE RECORD THAT WAS MISSING. S19.3: three fields are NOT on it and each absence
     is a design decision -- no actor (attribution is a per-witness Claim), no target (observers

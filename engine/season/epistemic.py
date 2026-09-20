@@ -52,6 +52,7 @@ from .data.requires import binding_of, evaluate
 from .data.rosters import CLAIM_SUBJECT_RULES, FAN_OUT_MODES, WITNESS_CHANNELS, require_member
 from .data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from .gaps import Unspecified
+from .state.attribution import anchor_of
 from .queries import cache, world_q
 from .queries.person_q import LedgerReader
 from .state.carriers import Event, Person
@@ -115,7 +116,7 @@ def act_refs(a) -> list:
     return [subj] if subj else []
 
 
-def claim_subjects(e: "Event", rule: str, refs: Optional[list] = None) -> list:
+def claim_subjects(w, e: "Event", rule: str, refs: Optional[list] = None) -> list:
     """`H-79`: what the claims deposited from one Event are ABOUT.
 
     `actor` is the incumbent — one claim, subject = the Event's own subject. `per_change` mints
@@ -131,7 +132,13 @@ def claim_subjects(e: "Event", rule: str, refs: Optional[list] = None) -> list:
         "H-79",
         law="#353 §20 types `Claim.subject` and never says what a WITNESS deposit's subject "
             "is; a rule outside the roster is a fourth answer nobody declared")
-    out = [] if rule == "per_change" else [e.subject]
+    # G1b. `anchor_of` REPLACES `e.subject`, and it is the same value by measurement rather
+    # than by intention -- 1,428 events over 5 seeds, 0 disagreements (`state/attribution.py`).
+    # What it adds is that the two senses the field conflated are now separable: an act-caused
+    # Event anchors on its ACTOR, a MATTER write on the THING WRITTEN, and a reader no longer has
+    # to infer which it received from whether the id happens to name a person.
+    anchor = anchor_of(w, e)
+    out = [] if rule == "per_change" else [anchor]
     if rule in ("per_change", "both"):
         for c in e.changes:
             if c.subject and c.subject not in out:
@@ -188,7 +195,7 @@ def claim_subjects(e: "Event", rule: str, refs: Optional[list] = None) -> list:
         # eviction pressure this sweep measures against is unchanged.
         if not any(c.subject for c in e.changes) and any(refs or ()):
             out = [r for r in (refs or ()) if r]
-    return out or [e.subject]
+    return out or [anchor]
 
 
 # ---------------------------------------------------------------------------
@@ -226,17 +233,24 @@ def _event_place(w: "World", e: "Event") -> Optional[str]:
     *"because every person has a `person`-kind Rung, made almost every Event private to its own
     subject"*, and `PLAN.md` §D4 names it as a standing hazard. Found by the `W6` adversarial
     pass."""
-    if e.subject in w.persons:
+    # G1b. THE LOOKUP ORDER IS UNCHANGED AND THE HAZARD NOTE ABOVE STILL BINDS -- only the
+    # SOURCE of the id moved, from the overloaded field to `anchor_of`, which returns the same
+    # value on every event measured. Person-before-rung remains the whole of this function's
+    # correctness.
+    anchor = anchor_of(w, e)
+    if anchor is None:
+        return None
+    if anchor in w.persons:
         for t in w.tenures:
-            if t.kind == "contain" and t.subject == e.subject and t.live:
+            if t.kind == "contain" and t.subject == anchor and t.live:
                 return t.object
         return None
-    if e.subject in w.sites:
-        return getattr(w.sites[e.subject], "rung", None)
-    if e.subject in w.rungs:
-        return e.subject
+    if anchor in w.sites:
+        return getattr(w.sites[anchor], "rung", None)
+    if anchor in w.rungs:
+        return anchor
     for t in w.tenures:
-        if t.kind == "contain" and t.subject == e.subject and t.live:
+        if t.kind == "contain" and t.subject == anchor and t.live:
             return t.object
     return None
 
@@ -334,10 +348,15 @@ def _ch_document_key(w, e, pid) -> bool:
 
 
 def _ch_witness_key(w, e, pid) -> bool:
-    if pid == e.subject:
+    # G1b. The witness key is the Event's anchor -- the actor where one acted, the written thing
+    # otherwise. Same value as the field it replaces; see `state/attribution.py` for the control.
+    anchor = anchor_of(w, e)
+    if anchor is None:
+        return False
+    if pid == anchor:
         return True
     return any(t.kind == "knot" and t.live and pid in (t.subject, t.object)
-               and e.subject in (t.subject, t.object) for t in w.tenures)
+               and anchor in (t.subject, t.object) for t in w.tenures)
 
 
 def _ch_post_remit(w, e, pid) -> bool:

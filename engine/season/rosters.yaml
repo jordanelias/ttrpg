@@ -1190,7 +1190,7 @@ rosters:
       graded. Absence would read as `false` for every verb -- the UNKNOWN/False collapse
       `operands_for` refuses one level down.
       ⚠ WHAT THIS ROSTER DOES NOT DECIDE: the WEIGHT. `synthesis.md` §1.3 spells the term
-      `orient · benefits_me(c)`. CORRECTED 2026-09-20 (`ED-IN-0257`): this note read *"`orient` is
+      `orient · benefits_me(c)`. CORRECTED 2026-09-20 (`ED-IN-0260`): this note read *"`orient` is
       a Person-interior scalar with no producer (`STR-1`, phase 6e)"*, which proves too much --
       no verb writes `Person.convictions` either, and that is term 1 of the live score. The
       missing piece is the STATE: `Person` has no `orient` field and `data/cast.py` skips the 28
