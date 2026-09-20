@@ -37,6 +37,37 @@ file-open away instead of buried. **`!` marks a unit containing imperative langu
 
 ## Pending
 
+- **▶ JORDAN RULED, 2026-09-20: DELETE THE `partisan` POLEARM (`ED-IN-0261`, IN lane, PR #424).**
+  Verbatim, choosing between renaming the weapon and deleting it: *"use partisan. we can just get
+  rid of it as a polearms."* **NOT DONE, AND DELIBERATELY NOT IN THE IN-LANE PR** — it is PC-lane
+  code with PC-lane goldens, and §4's lane-scoping convention says it lands in a PC commit.
+  - **WHY IT CAME UP:** the seven `pursuit_axes` ruled that day name a pole `partisan` (it replaced
+    `partial`, which collided with the requirements register's own state value at 126 hits). The
+    **collision is nominal, not mechanical** — the pursuit pole is data under `references/`, the
+    polearm is a weapon key in `systems/combat/` — so nothing is broken today. Jordan ruled the
+    deletion anyway, and the reason to honour it is §4's *idempotent in meaning*: a later session
+    reading `partisan` cold should land on one thing.
+  - **MEASURED 2026-09-20 — 14 non-`.md` hits across 11 files.** THREE ARE THE DEFINITION and are
+    what deletion means: `weapons.py:322` (the `dict(...)` row), `weapons.py:852` (the element
+    decomposition `[_E(2),_E(1),_E(1)]` — central blade double, sharpened wing-lugs single), and
+    `workbench/balance.py:37` (the polearm roster line). **TWO TESTS**
+    (`tests/valoria/test_combat_lever_sign_safety.py`, `test_combat_audit_pins.py`) and **THREE
+    GOLDEN FILES** (`r3_identity_golden.json`, `golden_element_parity.json`,
+    `golden_heft_percussion_snapshot.json`) carry it and move with it.
+  - ⚠ **FOUR EXPLANATORY COMMENTS CITE IT AS EVIDENCE AND MUST BE RE-POINTED, NOT DELETED** —
+    `core.py:541` and `combat_systems.py:361` both use it as *the worst armour-defeat on the board*
+    (adef_cap 0.176 against plate's 0.72 threshold, landing 11 damage), `combat_systems.py:464`
+    uses its wing-lugs as the worked example of multi-element synthesis, and `weapon_physics.py:266`
+    and `weapons.py:51` name it in `JD-5`/`JD-8`'s composite groupings. **Deleting the weapon out
+    from under those four leaves four arguments citing a thing that does not exist**, which is the
+    dangling-citation shape the repo treats as a defect. Re-point each to `spetum` or `ranseur`,
+    which are the same JD-5 bind/catch wing family, and **re-take the number** rather than carrying
+    0.176 across to a weapon it was not measured on (`CLAUDE.md` §0.1 pt 3, row 4).
+  - **THE CLOSE IS THE GOLDEN RE-RECORD AND IT IS THE RISK.** Say plainly that it was re-recorded
+    and why (§7: nothing verifies a re-pin was intended). The falsifier that the deletion is clean:
+    the three goldens should move **only** by the removal of `partisan` rows — any other delta means
+    the deletion changed a shared model and is not a deletion.
+
 - **▶▶ W8d DONE (2026-07-30) — the measuring instrument is now audited, and it does not support the
   inference the plan's other packages were going to make of it.** New:
   `tests/valoria/_draw_stream.py` (single owner of the RNG draw-stream instrument, following the

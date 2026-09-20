@@ -298,6 +298,23 @@ rows:
       of play required in a season
     status: not_met
     measured: >-
+      ⚠⚠ **13 of 38 AS OF 2026-09-20 (`ED-IN-0261` amended): `kill / wound` joined, and it is the
+      FIRST CONTESTED VERB EVER TO EXECUTE FROM A SEASON.** Jordan: *"admit kill and wound as
+      resolvable verbs."* Until that commit `@provider("contest","personal_combat")` was registered
+      and unreachable — the seam had no person-side door, because the only row declaring
+      `contests: "the body"` was UNTYPED and `driver.py`'s contest gate excludes an untyped
+      contested verb (`operands_for` returns `{}` for one, so the seam would get a single
+      claimant). Typing the row's precondition bound `subject`, which is the second claimant.
+      MEASURED: **47 of the 89 live corpus worlds** execute it, and `runs/CASELOG_NPC.md` rows that
+      read *"'kill / wound' is on the table and the fold cannot execute it"* now read PASS —
+      `NPC-010`'s `core_blocked` falls 2 -> 1. **This row is still `not_met`**: one verb arriving
+      does not build the table out, and 25 rows still carry no predicate, no effect, or both.
+      ⚠ **AND THE `contests:` LINE BELOW IS UNCHANGED AT 2 OF 38, WHICH IS THE POINT.** Admitting
+      the verb did not add a prize or a provider; it opened the one door that already existed. The
+      door is narrow — one row, one prize, one provider — and `fight`, `challenge` -> `accept` are
+      ruled and unbuilt, waiting on the `ALIGNMENT` re-cell over the seven `pursuit_axes`.
+      ⚠ **THE PARAGRAPH BELOW IS THE PRE-ADMISSION READING.** Its breakdown is still the only one
+      taken for the other twelve; its count is superseded by the one above.
       ⚠ **12 of 38 AS OF 2026-09-18 (`H-71` closed): `dispatch` joined, and the aperture figure
       below is now PERSON-DEPENDENT rather than a property of the engine.** Measured on
       `tiny_world`: a holder seated on `off_duke` has **2 of 38** verbs unformable person-side,
