@@ -113,9 +113,21 @@ projection:
   love:           {was: null, set: {}}
   warden:         {was: {traditional: +0.4, sacred: +0.4, instrumental: -0.1, hierarchical: +0.5}, set: {}}
 
-# ⚠ `faith` KEEPS ITS ROW AND R1 MAKES THAT A QUESTION, not an oversight: religion now has its own
-# vector, so a `faith` PURSUIT is the value-frame half — wanting there to be something to be
-# faithful TO — rather than devotion itself. If that distinction does not earn a row, strike it.
+# ✅ `faith` KEEPS ITS ROW — RULED 2026-09-20, and the reasoning is the basis's own test case.
+# `Person.conviction` is WHICH SIDE YOU ARE ON and how intensely. The `faith` PURSUIT is HOW MUCH OF
+# YOURSELF GOES INTO RELIGIOUS MATTERS AT ALL. They are orthogonal: a person can be intensely
+# orthodox and never act on it, or lukewarm in belief with their whole life organised around church
+# politics. Jordan's pair, verbatim: *"someone who is a devout church of Solmund follower want to do
+# work for the church or someone who is pure Einhir and anti Solmund church whose faith work is
+# about dismantling it."*
+#
+# ⚠⚠ USE THAT PAIR AS THE PLACEMENT'S FALSIFIER, not as an illustration. Both score HIGH on the
+# `faith` pursuit and want opposite things, so they can only be separated BY THE AXES — plausibly
+# precedent/substantive, hierarchical/equal and deontological/instrumental. That is exactly the
+# discrimination the old basis could not do: nine of thirteen rows sat within 60 degrees of one mean
+# vector (ED-IN-0214), so two people sharing a primary came out the same. AFTER placing the 105
+# cells, score the two and check they land far apart. If they do not, the placement is wrong — and
+# `conviction_spread`'s `within_60deg` is the aggregate form of the same check.
 
 # ============================================================================
 # 4. THE VERB x AXIS TABLE.  Sparse.
