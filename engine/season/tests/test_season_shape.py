@@ -1434,14 +1434,31 @@ def test_w15_the_run_cases_entrypoint_writes_nothing():
     and fingerprints every file under the proposal before and after. A restored write fails here
     however it is spelled and wherever under the proposal it lands.
 
-    ⚠ IT IS NOT SAFE IN A SHARED xdist POOL WITH ITS OWN SIBLING, and that is a property of what it
-    measures rather than a defect to fix. It fingerprints with MTIME, and
-    `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` WRITES those same files
-    by executing the emitter; on separate workers the two straddle each other and this one reports
-    a write that is the sibling's. CI cannot hit it -- `sim-regression` and the unit suite are
-    SEPARATE JOBS -- and neither can `pytest engine/season/tests -n auto`. It reddens only if
-    somebody runs `engine/season/tests tests/valoria engine/tests` in ONE invocation, which is not
-    a thing the repo asks for. Recorded because it costs a session ten minutes to re-derive."""
+    ⚠⚠ IT IS NOT SAFE IN A SHARED xdist POOL WITH ITS OWN SIBLING, AND CI *DOES* HIT THAT.
+    It fingerprints with MTIME, and `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte`
+    WRITES those same files by executing the emitter; on separate workers the two straddle each
+    other and this one reports a write that is the sibling's.
+
+    ⚠ THIS DOCSTRING CLAIMED THE OPPOSITE UNTIL 2026-09-20 (`ED-IN-0260`). It read: *CI cannot
+    hit it -- `sim-regression` and the unit suite are SEPARATE JOBS -- and neither can
+    `pytest engine/season/tests -n auto`. It reddens only if somebody runs `engine/season/tests
+    tests/valoria engine/tests` in ONE invocation, which is not a thing the repo asks for.* Both
+    halves are false, and for the same reason: BOTH SIBLINGS LIVE IN `engine/season/tests`, so the
+    workflow's own line (`.github/workflows/valoria-ci.yml:351`,
+    `python -m pytest engine/season/tests -q -n auto`) puts them in ONE pool. Separate JOBS never
+    separated them. MEASURED 2026-09-20: red on CI for PR #423 (run 35485183042), and
+    `pytest engine/season/tests -q -n auto -k w15` reproduces it 3/3 on that branch and 2/2 on a
+    clean `origin/main` worktree -- so it is the base's, not any one branch's. A full-suite run
+    masks it, because scheduling usually keeps the two apart; that is why it reads as a flake.
+
+    ⚠ THE FIX IS NOT TAKEN HERE, and the shape is recorded so the next session does not re-derive
+    it: SERIALIZE THE PAIR, never weaken the assertion. `_fingerprint`'s own docstring says why
+    mtime is load-bearing -- a content-only hash was defeated by a restored write that produced
+    byte-identical output -- so comparing content instead would delete the thing this test is for.
+    An inter-process lock shared by the two must live OUTSIDE `PACKAGE`, because `_proposal_files()`
+    sweeps the whole package tree and would fingerprint the lock itself; the alternative,
+    `@pytest.mark.xdist_group`, needs `--dist loadgroup` and so changes the workflow's invocation.
+    Either is a behaviour change to a gate and belongs in its own commit with its own falsifier."""
     before = _fingerprint(with_mtime=True)
     # Assert that it asserted (CLAUDE.md S0.1 point 2): an empty tree would otherwise let this
     # pass having observed nothing, which is the exact vacuity its sibling test guards against.

@@ -39,11 +39,18 @@ were RUN. `§7` of that file is the record and `probe_execution_pass.py` beside 
   refusals (no column · off-roster · **an operand beneficiary the row's own cell can never bind**),
   and `beneficiary_of`/`benefits_me` in `decision/choose.py`. MEASURED, one populated season seed 0:
   **5,345 candidates · 3,796 (71.0%) resolve a personal beneficiary · ZERO declared-but-unresolved.**
-  That zero is the result — a column naming carriers real candidates never hold is `CAT-2`'s dead
-  option 1 one level along, and would read `0.0` for everybody with every test green.
-  ⚠ **NOT wired into `score`, deliberately:** `orient` has no producer (`STR-1` → item **6e**), so
-  wiring it multiplies a measured quantity by an unruled magnitude and moves every golden for a
-  weight nobody set. **Nothing entered `loop/`** — driver still 18, and the term is not on the
+  ⚠ **That zero is STRUCTURAL, not measured** (corrected 2026-09-20, `ED-IN-0260`; this read
+  *"that zero is the result"*). `actor` → `p.id`, `subject` is set by `opening_set` on every
+  Candidate it forms, and the one `to` row's `_derive_operand` returns the subject — so no formed
+  candidate can reach the unresolved branch and the assertion cannot fail while that code holds
+  (`test_governance_build.py:707-717`). What the sweep DOES establish: the three paths resolve on
+  3,796 real candidates and no fourth path appeared, and 10 of 38 rows form zero candidates and
+  are never exercised by it.
+  ⚠ **NOT wired into `score`** — and NOT because `orient` lacks a producer (corrected 2026-09-20,
+  `ED-IN-0260`): `convictions` has no verb producer either and is term 1 of the live score. `Person`
+  has no `orient` FIELD, and `data/cast.py` skips the 28 authored `self_other_initial` values in
+  `references/npc_registry.yaml`. The wiring is `6f`'s — a fourth term on §F2's ratified three,
+  `STR-3`'s range floor, and `STR-2`'s `selfish`. **Nothing entered `loop/`** — driver still 18, and the term is not on the
   package surface.
   ⚠ **The column cannot be derived from `writes:` and `kill / wound` is the proof:** it writes on
   its SUBJECT and the good does not accrue to the person felled — a write can be a HARM. A falsifier
