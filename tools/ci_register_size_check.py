@@ -142,13 +142,31 @@ THRESHOLDS = {
     # [ED-MB-0051, 2026-07-29] MB lane archive — same 150k overflow ceiling as the IN sibling.
     "registers/editorial_ledger_mb_archive.jsonl": 250_000,
     # PC was the THIRD lane to reach its 50k cap (ED-PC-0050, 2026-07-29), during the E0-E3
-    # combat-correctness arc. Same convention as the IN archive above: settled entries
-    # (status resolved/ratified, needs_jordan not True) move here; anything open, deferred,
-    # or still awaiting Jordan stays in the live lane ledger.
+    # combat-correctness arc. Same convention as the IN archive above: settled entries move here
+    # by ED-IN-0245's TWO criteria and no others — pre-current-month OR terminal status — which is
+    # what the print_advice() text below already says. ⚠ This comment USED to add a third criterion
+    # ("needs_jordan not True ... still awaiting Jordan stays"), which the ruling does not contain,
+    # and a 2026-09-22 pass read it as authority and held terminal ids back on the strength of it.
+    # needs_jordan is NOT a criterion, because archiving does not bury the question: HANDOFF.md's
+    # census greps registers/editorial_ledger*.jsonl, a glob that matches the _archive siblings.
+    # Re-measure rather than quoting a count from this comment — the census command is in
+    # HANDOFF.md §1 and the figures it returns move with every commit (the re-cited-number defect
+    # this file warns about 25 lines above). Anything non-terminal and dated this month stays.
     # NOTE the MB sibling above landed independently on main the same day — three lanes crossed
     # the 50k cap within a week, so this is now a recurring pattern rather than a one-off. Adding
     # the cap by hand each time is the manual step; a per-lane default would retire it.
     "registers/editorial_ledger_pc_archive.jsonl": 250_000,
+    # The remaining six lanes got their archive sibling in the 2026-09-22 ED-IN-0245 sweep (both
+    # criteria applied at once: pre-current-month OR terminal status, whole ids only), which is the
+    # first pass to archive out of a lane that had never overflowed. Same 250_000 convention and the
+    # same validate_ed_citations.py glob (editorial_ledger_*_archive.jsonl) as the three above, so
+    # nothing about citation resolution changes when a lane's first archive appears.
+    "registers/editorial_ledger_fa_archive.jsonl": 250_000,  # created by the 2026-09-22 ED-IN-0245 archive pass
+    "registers/editorial_ledger_fi_archive.jsonl": 250_000,  # created by the 2026-09-22 ED-IN-0245 archive pass
+    "registers/editorial_ledger_go_archive.jsonl": 250_000,  # created by the 2026-09-22 ED-IN-0245 archive pass
+    "registers/editorial_ledger_sc_archive.jsonl": 250_000,  # created by the 2026-09-22 ED-IN-0245 archive pass
+    "registers/editorial_ledger_se_archive.jsonl": 250_000,  # created by the 2026-09-22 ED-IN-0245 archive pass
+    "registers/editorial_ledger_wr_archive.jsonl": 250_000,  # created by the 2026-09-22 ED-IN-0245 archive pass
     # Audit/simulation-run verdict registry (added with the GitHub Pages dashboard,
     # 2026-07-11): one JSONL line per completed audit/simulation-balance run, appended
     # by 8 skills (valoria-canon-guard, -mechanic-audit, -resolution-diagnostic,

@@ -70,8 +70,8 @@ This suite is built to the same shape and should carry the same asymmetry or be 
 
 ## §4 · METHOD — and its one real limitation
 
-Reading shared once, judgment forked four ways (`CLAUDE.md` §10 pt 1): one batched read-only
-measurement lane (Haiku, `valoria-measure`, no write tools) produced `00`, and its table was handed
+Reading shared once, judgment forked four ways (`CLAUDE.md` §10 pt 1): one batched measurement lane
+(Haiku, `valoria-measure`, which holds no Write or Edit tool) produced `00`, and its table was handed
 DOWN to four authors rather than re-measured by each. Four judgment lanes, sized to the subject and
 not to the slot (§10) — governance, settlements, decisions, and the long tail, which is 60% of the
 corpus by line count and the largest thing no prior pass dispositioned.

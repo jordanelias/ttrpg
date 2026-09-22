@@ -1,7 +1,7 @@
 # 00 · THE CENSUS — every tree in `proposals/`, measured
 
 ## Status: **MEASURED (2026-09-18). This file asserts no verdict.** Dispositions are `01`.
-## Method: one batched read-only measurement lane (Haiku, `valoria-measure`, no write tools), re-runnable from the commands in the tables. Every number carries the command that takes it (`CLAUDE.md` §0.1 pt 3).
+## Method: one batched measurement lane (Haiku, `valoria-measure`, which holds no Write or Edit tool), re-runnable from the commands in the tables. Every number carries the command that takes it (`CLAUDE.md` §0.1 pt 3).
 
 ---
 

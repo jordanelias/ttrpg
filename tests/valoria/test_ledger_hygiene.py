@@ -165,8 +165,11 @@ def test_a_genuinely_missing_instrument_is_still_caught():
 
 REGISTERS_DIR = os.path.join(ROOT, 'registers')
 
-# Ids that legitimately appear in BOTH a live ledger and its archive. Currently EMPTY, and that
-# is a result rather than an omission.
+# Ids that legitimately appear in BOTH a live ledger and its archive. It currently holds the four
+# pre-cutover flat ids below and nothing else; the LANE pairs carry no exemption at all, which is
+# the result that matters. (This paragraph said "currently EMPTY" while the literal below held
+# four entries — stale prose above a live value, in the file guarding the splitting invariant.
+# Read the literal, not this comment.)
 #
 # ED-IN-0012/0013 were listed here for exactly one commit. They are the documented 2026-07-05
 # DOUBLE-ALLOCATION (PR #83's SC-audit batch vs PR #81/#82's edge-playability items — two

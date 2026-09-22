@@ -72,7 +72,8 @@ times the size of everything else in this file.
 ⚠ **`ED-IN-0210`'s FORK CAME OFF THIS LIST 2026-09-15 — RULED, NOT DROPPED.** Jordan: *"AN ORDER
 CARRIES TERMS LIKE A DISPENSATION … The second option (no response verb) is REJECTED."* The ledger's
 last row for that id reads `status: ruled`, `needs_jordan: false`, `jordan_decision: 2026-09-15`
-(`registers/editorial_ledger_in.jsonl`), and an id's effective status is its LAST row.
+(`registers/editorial_ledger_in_archive.jsonl` — the id left the live ledger in the 2026-09-22
+`ED-IN-0245` sweep on the terminal-status criterion), and an id's effective status is its LAST row.
 ✅ **`H-71` CLOSED 2026-09-18 (`13b`).** This paragraph used to say it blocked 19b, and cited a
 falsifier that has since been rewritten — it told readers *"read the register, not the cached
 figure"* while being the cached figure. The aperture is now person-dependent, so no single number
