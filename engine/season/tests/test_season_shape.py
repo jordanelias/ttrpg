@@ -12,12 +12,17 @@ Run: python3 -m pytest engine/season/tests -q
 
 from __future__ import annotations
 
+import ast
 import dataclasses
 import contextlib
+import fcntl
+import hashlib
 import inspect
 import json
 import re
 import sys
+import tempfile
+import textwrap
 from pathlib import Path
 
 import pytest
@@ -1429,6 +1434,106 @@ def _run(module: str):
     return proc
 
 
+# ── THE W15 PAIR IS SERIALIZED (ED-IN-0260's deferred fix, taken 2026-09-22) ───────────────
+# `test_w15_the_run_cases_entrypoint_writes_nothing` fingerprints this package with MTIME, and
+# `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` WRITES every file under
+# `runs/` by executing the emitter — twice, because its `finally` puts the committed bytes back
+# and a restore is itself a write. On separate xdist workers the two straddle each other and the
+# fingerprinting one reports a write that is its sibling's.
+#
+# MEASURED before this lock: red 2/2 locally (`pytest engine/season/tests -q -n auto -k w15`) and
+# on 3 of 4 CI job runs across two commits. A full-suite run often masks it, because scheduling
+# usually keeps the two apart — which is why it reads as a flake and is not one.
+#
+# SERIALIZED, NEVER WEAKENED. `_fingerprint`'s docstring records why mtime is load-bearing: a
+# content-only hash was already defeated once by a restored write that produced byte-identical
+# output. The repair is to stop the overlap, not to stop noticing it.
+#
+# THE LOCK LIVES OUTSIDE `PACKAGE`, and that placement is the whole trick: `_proposal_files()`
+# sweeps the package tree with `rglob`, so a lockfile inside it would be fingerprinted by the very
+# test it protects and would recreate this failure wearing a different name.
+_W15_LOCK = Path(tempfile.gettempdir()) / (
+    "valoria-w15-" + hashlib.sha256(str(PACKAGE).encode()).hexdigest()[:16] + ".lock")
+
+
+@contextlib.contextmanager
+def _w15_exclusive():
+    """Hold an inter-process exclusive lock across the whole body of either w15 entrypoint test.
+
+    POSIX-only by construction (`fcntl`), which is what this repo's CI and dev containers are. It
+    is deliberately NOT degraded to a no-op elsewhere: a silently absent lock is the exact defect
+    this exists to remove, so an ImportError that a reader can see beats a guard that is quietly
+    not guarding.
+    """
+    with open(_W15_LOCK, "w") as fh:
+        fcntl.flock(fh, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(fh, fcntl.LOCK_UN)
+
+
+def test_w15_every_entrypoint_test_holds_the_serialization_lock():
+    """THE FALSIFIER FOR THE LOCK ABOVE, and the reason it is a test rather than a comment.
+
+    The lock only works while every test that EXECUTES an entrypoint takes it. A third such test
+    added later without `_w15_exclusive`, or the decorator dropped from one of the two, restores
+    the straddle silently — and the symptom would surface on someone else's unrelated PR, days
+    later, exactly as it did on `#423` and `#426`. So the invariant is checked by source, which is
+    the only thing that can see a MISSING wrapper.
+
+    It also pins the placement: a lock inside `PACKAGE` would be swept by `_proposal_files()`.
+
+    ⚠ BOTH HALVES ARE AST, NOT TEXT, AND THREE TEXT DRAFTS FAILED IN THREE DIFFERENT WAYS --
+    which is the argument for the instrument, not a tally of mistakes. `'_run("' in src` matched
+    `_r7_run("`, a different helper that builds a world in-process and writes nothing here. A
+    word boundary still matched `P._run(w, over)`, an unrelated METHOD. And checking the guard by
+    name, `"_w15_exclusive" in src`, was VACUOUS: the sibling's own docstring names the helper, so
+    deleting the actual `with` statement left this test green -- caught only by mutating the lock
+    away and watching this pass, which is what CLAUDE.md §0.1 point 2 asks of any assertion. The
+    third draft then matched ITSELF, on the prose above quoting the pattern it was searching for.
+
+    An `ast.Call` to the NAME `_run` is none of those things: an attribute call has no `.id`, a
+    differently-named helper has a different one, and prose is not a call node at all.
+    """
+    module = sys.modules[__name__]
+    checked = 0
+    for name, obj in vars(module).items():
+        if not (name.startswith("test_") and callable(obj)):
+            continue
+        tree = ast.parse(textwrap.dedent(inspect.getsource(obj)))
+        runs_entrypoint = any(
+            isinstance(node, ast.Call)
+            and getattr(node.func, "id", None) == "_run"
+            and node.args and isinstance(node.args[0], ast.Constant)
+            and isinstance(node.args[0].value, str)
+            for node in ast.walk(tree)
+        )
+        if not runs_entrypoint:
+            continue
+        checked += 1
+        guarded = any(
+            isinstance(node, ast.With)
+            and any(isinstance(it.context_expr, ast.Call)
+                    and getattr(it.context_expr.func, "id", None) == "_w15_exclusive"
+                    for it in node.items)
+            for node in ast.walk(tree)
+        )
+        assert guarded, (
+            f"{name} executes a harness entrypoint but does not hold the w15 lock. Wrap its body "
+            f"in `with _w15_exclusive():` — an unserialized entrypoint test straddles its sibling "
+            f"on another xdist worker and reports that sibling's writes as its own."
+        )
+    # Assert that it asserted (CLAUDE.md §0.1 point 2): if the source scan finds nothing, this
+    # test passes having observed nothing at all, which is the vacuity it is meant to exclude.
+    assert checked >= 2, f"expected at least the two w15 entrypoint tests, scanned {checked}"
+
+    assert PACKAGE not in _W15_LOCK.parents, (
+        f"the w15 lock is inside PACKAGE ({_W15_LOCK}); `_proposal_files()` rglobs that tree, so "
+        f"the lockfile would be fingerprinted by the test it protects."
+    )
+
+
 def test_w15_the_run_cases_entrypoint_writes_nothing():
     """`report.py` is the sole emitter. Executed, not read: this runs `run_cases.py` as a script
     and fingerprints every file under the proposal before and after. A restored write fails here
@@ -1451,21 +1556,23 @@ def test_w15_the_run_cases_entrypoint_writes_nothing():
     clean `origin/main` worktree -- so it is the base's, not any one branch's. A full-suite run
     masks it, because scheduling usually keeps the two apart; that is why it reads as a flake.
 
-    ⚠ THE FIX IS NOT TAKEN HERE, and the shape is recorded so the next session does not re-derive
-    it: SERIALIZE THE PAIR, never weaken the assertion. `_fingerprint`'s own docstring says why
-    mtime is load-bearing -- a content-only hash was defeated by a restored write that produced
-    byte-identical output -- so comparing content instead would delete the thing this test is for.
-    An inter-process lock shared by the two must live OUTSIDE `PACKAGE`, because `_proposal_files()`
-    sweeps the whole package tree and would fingerprint the lock itself; the alternative,
-    `@pytest.mark.xdist_group`, needs `--dist loadgroup` and so changes the workflow's invocation.
-    Either is a behaviour change to a gate and belongs in its own commit with its own falsifier."""
-    before = _fingerprint(with_mtime=True)
-    # Assert that it asserted (CLAUDE.md S0.1 point 2): an empty tree would otherwise let this
-    # pass having observed nothing, which is the exact vacuity its sibling test guards against.
-    assert len(before) > 10, f"fingerprinted only {len(before)} files -- the sweep is broken"
-    _run("run_cases")
-    after = _fingerprint(with_mtime=True)
-    changed = sorted(k for k in set(before) | set(after) if before.get(k) != after.get(k))
+    ⚠ THE FIX IS NOW TAKEN — `_w15_exclusive` above, 2026-09-22, in its own commit with its own
+    falsifier (`test_w15_every_entrypoint_test_holds_the_serialization_lock`), which is what
+    `ED-IN-0260` asked for. The shape is the one that ruling named: SERIALIZE THE PAIR, never
+    weaken the assertion. `_fingerprint`'s own docstring says why mtime is load-bearing -- a
+    content-only hash was defeated by a restored write that produced byte-identical output -- so
+    comparing content instead would delete the thing this test is for. The lock lives OUTSIDE
+    `PACKAGE` because `_proposal_files()` sweeps the whole package tree and would fingerprint the
+    lock itself. The rejected alternative, `@pytest.mark.xdist_group`, needs `--dist loadgroup`
+    and so would change `.github/workflows/valoria-ci.yml`'s invocation for the same result."""
+    with _w15_exclusive():
+        before = _fingerprint(with_mtime=True)
+        # Assert that it asserted (CLAUDE.md S0.1 point 2): an empty tree would otherwise let this
+        # pass having observed nothing, which is the exact vacuity its sibling test guards against.
+        assert len(before) > 10, f"fingerprinted only {len(before)} files -- the sweep is broken"
+        _run("run_cases")
+        after = _fingerprint(with_mtime=True)
+        changed = sorted(k for k in set(before) | set(after) if before.get(k) != after.get(k))
     assert not changed, f"run_cases.py wrote under the proposal: {changed}"
 
 
@@ -1474,22 +1581,28 @@ def test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte():
     byte-identical. This is what makes a stale artifact impossible rather than merely unlikely:
     it covers `results.json`, `TRACE.txt` and all eight markdown files, and every field rendered
     into them -- not the one scalar the per-case test can reach. It subsumes the four wrong ARC
-    cases, including the three a verdict comparison cannot see."""
+    cases, including the three a verdict comparison cannot see.
+
+    ⚠ HOLDS `_w15_exclusive` FOR THE SAME REASON ITS SIBLING DOES, and this is the half that does
+    the damage: it writes every file under `runs/` TWICE -- once by executing the emitter, once
+    more in the `finally` that restores the committed bytes, since a restore is itself a write.
+    Unserialized, those writes land inside the sibling's before/after window on another worker."""
     runs = PACKAGE / "runs"
-    before = {f.name: f.read_bytes() for f in sorted(runs.iterdir()) if f.is_file()}
-    assert len(before) >= 10, f"expected the ten run artifacts, fingerprinted {sorted(before)}"
-    try:
-        _run("report")
-        after = {f.name: f.read_bytes() for f in sorted(runs.iterdir()) if f.is_file()}
-    finally:
-        # PUT THE COMMITTED BYTES BACK. Without this the test HEALS the tree it is judging: a
-        # stale artifact would fail once, be silently overwritten with the correct output, and
-        # pass on the next run -- so the defect it exists to catch would be unreproducible and
-        # would leave an uncommitted edit nobody asked for. A test does not repair its subject.
-        for name, blob in before.items():
-            f = runs / name
-            if not f.exists() or f.read_bytes() != blob:
-                f.write_bytes(blob)
+    with _w15_exclusive():
+        before = {f.name: f.read_bytes() for f in sorted(runs.iterdir()) if f.is_file()}
+        assert len(before) >= 10, f"expected the ten run artifacts, fingerprinted {sorted(before)}"
+        try:
+            _run("report")
+            after = {f.name: f.read_bytes() for f in sorted(runs.iterdir()) if f.is_file()}
+        finally:
+            # PUT THE COMMITTED BYTES BACK. Without this the test HEALS the tree it is judging: a
+            # stale artifact would fail once, be silently overwritten with the correct output, and
+            # pass on the next run -- so the defect it exists to catch would be unreproducible and
+            # would leave an uncommitted edit nobody asked for. A test does not repair its subject.
+            for name, blob in before.items():
+                f = runs / name
+                if not f.exists() or f.read_bytes() != blob:
+                    f.write_bytes(blob)
     assert set(before) == set(after), (
         f"report.py changed WHICH artifacts exist: added {sorted(set(after) - set(before))}, "
         f"removed {sorted(set(before) - set(after))}")
