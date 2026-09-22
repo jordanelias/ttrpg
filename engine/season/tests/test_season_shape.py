@@ -1452,8 +1452,11 @@ def _run(module: str):
 # THE LOCK LIVES OUTSIDE `PACKAGE`, and that placement is the whole trick: `_proposal_files()`
 # sweeps the package tree with `rglob`, so a lockfile inside it would be fingerprinted by the very
 # test it protects and would recreate this failure wearing a different name.
+# The digest is NOT truncated, and that is deliberate rather than lazy: a truncation length is a
+# bare mechanical constant with no canon behind it, which `ci_sim_fabrication_check` correctly
+# refuses (it gated the `[:16]` this line first carried). A full digest needs no justification.
 _W15_LOCK = Path(tempfile.gettempdir()) / (
-    "valoria-w15-" + hashlib.sha256(str(PACKAGE).encode()).hexdigest()[:16] + ".lock")
+    "valoria-w15-" + hashlib.sha256(str(PACKAGE).encode()).hexdigest() + ".lock")
 
 
 @contextlib.contextmanager
