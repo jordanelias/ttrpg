@@ -26,6 +26,10 @@ The close sequence from CLAUDE.md §0.4 and §0's last bullet, as steps rather t
    runs the staged-file validators; it **does not run pytest and never has**, so local-green is not
    CI-green. Then the one validator that owns what you touched — check
    `references/ci_checks_registry.yaml`'s `role:` line rather than guessing.
+   - **Layer conformance** (RATIFIED, ED-IN-0263): if the diff touches `engine/season/` code, run
+     the `layer-conformance` skill's Lens B on the files you changed; if it adds a tool, a guard, a
+     hook or a governance rule, run Lens A. Its output is edits to this commit, not a document.
+     A diff touching neither skips this.
 
 5. **Commit.** `[scope] description` with scope ∈ the §2 vocabulary, **subject ≤ 72 characters**,
    detail in the body, citing any `PP-NNN` / `ED-NNN`. On `main`, branch first.

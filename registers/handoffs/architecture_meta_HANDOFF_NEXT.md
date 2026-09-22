@@ -1,6 +1,6 @@
 # HANDOFF — what is pending, in dependency order
 
-## Status: **RATIFIED 2026-09-05 (ED-IN-0204) — Jordan ruled "adopt in full". This is LAYER 1: the code architecture and shape, which GOVERNS HOW ALL CODING IS CONDUCTED. Under CLAUDE.md §0.05 it is reference for GAME MECHANISM — the code is the formula — and binding as AGENT INSTRUCTION, the same standing as CLAUDE.md itself. The game code it governs is `engine/season/`.**
+## Status: **REFERENCE — NOT LAYER 1.** Moved out of `architecture/meta/` 2026-09-22 (ED-IN-0263): a work queue is Layer 0 continuity, not code architecture, and was being read as binding. Its §2a rulings stay citable here; its pending items are superseded in order by `workplans/2026-09-18-governance-settlement-behaviour-plan.md`. Frozen; do not add to it.
 ## rewrote #358 to rev. 2, conditioned #357 against it, and evaluated #359 against both.
 ## ⚠ **UPDATED 2026-09-03 (rev. 3)** — the evaluation's §6A change list is now APPLIED. Read
 ## `README.md`'s rev. 3 banner for what landed; PART 1 and PART 2 below are re-cut against it.

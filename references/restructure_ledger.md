@@ -2580,3 +2580,5 @@ does not hold it — precisely the unfollowable-provenance defect the ED-IN-0145
 records and `tests/valoria/test_forked_status.py::test_the_fork_rows_name_a_real_ref` checks for.
 Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contract_index.py` at
 `c6e82105` reproduces them exactly, which is the stronger provenance a generated file can have. -->
+| `architecture/meta/HANDOFF_NEXT.md` | `registers/handoffs/architecture_meta_HANDOFF_NEXT.md` | MOVED |
+| `architecture/HANDOFF_META_ARCHITECTURE.md` | `registers/handoffs/architecture_HANDOFF_META_ARCHITECTURE.md` | MOVED |

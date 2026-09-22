@@ -1,6 +1,6 @@
 # HANDOFF — the meta-architecture stage
 
-**Status: PROPOSED. Nothing here is ratified.** Written 2026-09-03, at the end of the session that
+**Status: REFERENCE — NOT LAYER 1.** Moved out of `architecture/` 2026-09-22 (ED-IN-0263); frozen history of the meta-architecture stage. Was: PROPOSED, never ratified. Written 2026-09-03, at the end of the session that
 landed `W28`'s office schema (`f56b11e`) and the adversarial-audit remediation (`4c68adc`).
 
 ## Why this file exists, and what it replaces

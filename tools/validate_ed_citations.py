@@ -155,7 +155,7 @@ SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
 # ⚠ THE COUNT IS NOT RESTATED HERE, DELIBERATELY. This sentence read "these five exact pairs" and
 # went stale the moment a pair was removed (2026-09-11, ED-IN-0215): prose re-pinning a number the
 # data below already carries. Same failure as CLAUDE.md:345 ("a duplicated date rots independently
-# of its subject") and CURRENT.md:34 ("this row has carried a stale one twice"). Read the set.
+# of its subject") and `git show 88fc88e:CURRENT.md` line 34 ("this row has carried a stale one twice"). Read the set.
 # ED-IN-0231: the subsystem corpus moved to `.designs/systems/` (design-prose quarantine). The
 # pairs below moved with it; this prefix has to follow, or four DEFERRED findings become nine
 # build failures the moment the files change address and nothing about the debt has changed.

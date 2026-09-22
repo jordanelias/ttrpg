@@ -459,14 +459,14 @@ def _load_verb_table() -> dict:
     # ⚠ ROW 15 HAS A SECOND HALF THIS DOES NOT IMPLEMENT, NAMED SO NOBODY READS THE CHECK'S NAME
     # AS COVERING IT: `04:464-465` states invariant 6 as two conjuncts, the domain AND *"every
     # kind's OPENER set is declared too"*. Only the first is here. The second is
-    # `architecture/meta/HANDOFF_NEXT.md` item 1e and is open.
+    # `registers/handoffs/architecture_meta_HANDOFF_NEXT.md` item 1e and is open.
     if "release" not in out:
         raise SystemExit(
             "verb_table.yaml: no `release` row. Loader invariant 6 (04 PART D row 15) is the "
             "check that `tenure_kinds \\ {contain}` all have a closer, and without the verb "
             "every one of them is an edge that can be opened and never ended -- the "
             "open-without-close state T-m refuses. Removing the verb is a design change and "
-            "`architecture/meta/HANDOFF_NEXT.md` §2a rules against re-opening it.")
+            "`registers/handoffs/architecture_meta_HANDOFF_NEXT.md` §2a rules against re-opening it.")
     # ⚠ `RELEASABLE_KINDS` AND NOT A SECOND `frozenset(TENURE_KINDS) - {"contain"}`. The
     # derivation lives once, in `data/rosters.py` beside the roster it reads; this is the
     # comparison against the verb table's DECLARED column, which is the whole point of the column.

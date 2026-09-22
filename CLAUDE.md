@@ -344,12 +344,12 @@ which §0.1 pt 5's predicate excludes. The enforcement is that you read it.
 
 The live canonical surface is **Generation v40**. `/currency` runs this. Strict priority order:
 
-1. **`CURRENT.md`** — the **single human-readable index** of the live canonical head per subsystem, and
-   the authority whenever you are unsure a doc is current. Read its own `_Last reconciled:_` stamp.
-   Fresher than any filename or in-file version string.
-2. **`HANDOFF.md`** — the **continuity index**: a root file pointing to lane-scoped
-   `registers/handoffs/HANDOFF_<LANE>.md` files, plus genuinely cross-cutting pending work. Split per
-   lane to cut concurrent-session merge collisions. **Nothing reads it automatically — read root
+1. **`CURRENT.md`** — the **single index** of the live canonical head per subsystem, and the authority
+   whenever you are unsure a doc is current. **Both it and every handoff are POINTER INDEXES** (RULED:
+   *"anything that gets pulled up frequently cannot be hard coded"*): a head, an id, a path, a command —
+   never a count, figure, ruling text or dated narrative. Narrative goes in commits and `_history` files.
+2. **`HANDOFF.md`** — the **continuity index**, pointing to `registers/handoffs/HANDOFF_<LANE>.md` (an
+   Open table and a Standing-orders table per lane). **Nothing reads either automatically — read root
    `HANDOFF.md` AND your lane's file yourself.**
 3. **`references/canonical_sources.yaml`** + **`registers/mechanics_index.yaml`** — machine-readable
    indices. The `canonical_sha__*` pins are verified against the **working tree** by

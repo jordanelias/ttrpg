@@ -34,6 +34,8 @@ description: >
 
 # LAYER CONFORMANCE
 
+## Status: RATIFIED 2026-09-22 (ED-IN-0263). Jordan, in session: *"ensure layer 1 skill is ratified and implemented"*. Invocable as a project skill through the symlink `.claude/skills/layer-conformance`; run at the close by `.claude/commands/close.md` step 4.
+
 ## What this skill owns, and what it copies
 
 **It owns the METHOD.** The content it checks against is owned elsewhere and is read there, every
@@ -55,7 +57,7 @@ four definitions.
 - **It never copies a SPEC ROW, a TABLE, a GRADE DEFINITION or a COUNT.** Those it cites by § and
   line, because a copy rots away from its source silently and the next session reads the copy. That is
   the failure `CURRENT.md`'s season-loop row records having made **twice** with a test count
-  (`CURRENT.md:34`, *"this row has carried a stale one twice"*).
+  (`git show 88fc88e:CURRENT.md`, line 34, *"this row has carried a stale one twice"*).
 - **It does reproduce a `CLAUDE.md` PROHIBITION together with that rule's failure clause** — see WHAT
   THIS PASS MAY NOT PRODUCE. That is deliberate and precedented:
   `workplans/2026-09-09-layer1-conformance-plan_part2.md` §13 made the same call on the same reasoning,

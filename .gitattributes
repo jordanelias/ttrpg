@@ -1,3 +1,9 @@
 # Shell hooks must stay LF so the #!/bin/sh interpreter line works on every platform.
 .githooks/** text eol=lf
 *.sh text eol=lf
+
+# Generated season-loop run output (engine/season/runs/). TRACKED on purpose: it is the byte-for-byte golden
+# `test_w15_report_py_reproduces_every_committed_artifact_byte_for_byte` compares against, and
+# `harness/delta.py` reads the committed results.json. `-diff` keeps its multi-megabyte TRACE.txt out of
+# `git diff`/`git log -p` (and so out of every agent that reads a diff); the bytes are unchanged.
+engine/season/runs/** -diff linguist-generated=true
