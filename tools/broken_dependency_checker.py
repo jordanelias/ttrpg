@@ -218,7 +218,17 @@ LIVE_STATUSES = ('open', 'provisional', 'applied', 'confirmed', 'deferred')
 # copy of the 9-code tuple; obs_core's header records that one such copy once
 # silently omitted GO, undercounting a whole lane.
 _LANE_CODES = ci_common.LANE_CODES
-LANE_LEDGER_PATHS = tuple(f'registers/editorial_ledger_{lane.lower()}.jsonl' for lane in _LANE_CODES)
+# THE ARCHIVE SIBLINGS ARE IN THE POPULATION, and that is the point of this pair rather than an
+# afterthought. ED-IN-0245 moves a row out of the live lane ledger on DATE alone, so a row whose
+# status is still `open` or `deferred` — exactly the LIVE_STATUSES below — now lives in the archive.
+# Reading only the live files would shrink this blocking gate's population every time a sweep runs,
+# silently, which is the read/write asymmetry CLAUDE.md §0.1 pt 1 describes: the writer (the sweep)
+# moved the rows and the reader (this gate) went on reading the old location. MEASURED 2026-09-22
+# when the archives were added: 0 new violations, so this restores coverage without moving the bar.
+LANE_LEDGER_PATHS = tuple(
+    f'registers/editorial_ledger_{lane.lower()}{suffix}.jsonl'
+    for lane in _LANE_CODES for suffix in ('', '_archive')
+)
 
 
 def check_editorial_ledger(all_files):

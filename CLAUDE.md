@@ -32,7 +32,7 @@ governing HOW WORK IS DONE.
 
 | | | binds |
 |---|---|---|
-| **Layer 0** | **this file**, `CURRENT.md`, `HANDOFF.md` | the AGENT — how a session works, what may be built, what counts as done |
+| **Layer 0** | **this file**, `CURRENT.md`, `HANDOFF.md`, and the user-level `CLAUDE.md` where one is loaded | the AGENT — how a session works, what may be built, what counts as done |
 | **Layer 1** | `architecture/` (RATIFIED, ED-IN-0204) | how code is written |
 | **Layer 1 scripts** | guards derived from Layer 1 | Layer 2 |
 | **Layer 2** | the game code | the game |
@@ -43,6 +43,10 @@ checked by code, which has no natural top, whereas an instruction is followed or
 corrected by rewriting it. §0.05's asymmetry — prose non-binding for GAME MECHANISM, binding as AGENT
 INSTRUCTION — is what stops the recursion. (`references/ci_checks_registry.yaml`'s `subject:` field
 counts the opposite way on a different axis — do not spell it "layer".)
+
+**Where the user-level file and this one disagree**, this file governs the work — lanes, cadence, gates,
+evidence standards, commit shape, what counts as done — and the user file governs the register a result
+is reported in. Name the conflict; never silently rank them.
 
 ---
 
@@ -703,11 +707,13 @@ never for the READS.**
 - **Roster discipline: promote a role into `.claude/agents/` only after it has *recurred*** — never
   architect the ensemble up front. Three promotions: `valoria-critic` (structurally read-only),
   `valoria-author` (writes to a path, returns a receipt, so a long artifact never crosses the
-  orchestrator's window) and `valoria-measure` (batched Haiku measurement, fixed-format table, cannot
-  write). ⚠ **The critic and the author are OPPOSITE cases and only one is a control.** The critic's
-  independence *is* its missing write tool. `valoria-author` holds the full producer toolset — `Bash` and
-  `Agent` included, RULED 2026-09-17 (*"we still need agents and bash"*) — so every rule in its file is
-  one it can break, and the file says so. **The general lesson: removing a tool to enforce a process rule
+  orchestrator's window) and `valoria-measure` (batched Haiku measurement, fixed-format table, returns
+  its numbers instead of writing them). ⚠ **One lesson at three strengths.** The critic's independence
+  *is* its missing write tool — a full control. `valoria-author` holds the whole producer toolset, `Bash`
+  and `Agent` included (RULED 2026-09-17, *"we still need agents and bash"*), so every rule in its file
+  is one it can break, and the file says so — no control at all. `valoria-measure` is the PARTIAL case:
+  no Write or Edit, but `Bash` to measure with, so its no-writing rule is a control on those two tools
+  and instruction only against `sed -i`. **The general lesson: removing a tool to enforce a process rule
   buys a CONTROL only where the rule IS the absence.** Elsewhere it buys a crippled lane.
 - **If you build an orchestrated run again**, four properties are worth re-deriving and nothing enforces
   them: a **closed `stop_reason` set that is report-only** (RULED — a breaker halting a large audit on a
