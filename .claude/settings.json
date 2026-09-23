@@ -19,7 +19,11 @@
       "Monitor",
       "mcp__Claude_Code_Remote__watch_url",
       "mcp__claude-code-remote__watch_url",
-      "mcp__claude_code_remote__watch_url"
+      "mcp__claude_code_remote__watch_url",
+      "mcp__Claude_Code_Remote__subscribe_pr_activity",
+      "mcp__claude-code-remote__subscribe_pr_activity",
+      "mcp__claude_code_remote__subscribe_pr_activity",
+      "mcp__github__subscribe_pr_activity"
     ],
     "allow": [
       "Bash(git *)",

@@ -62,14 +62,16 @@ REQUIRED_DENY = (
                        # an in-session polling loop, which §11 forbids "by any mechanism"
     'watch_url',       # arms an inbound webhook that "wakes the session if idle" — a session
                        # arming its own wake-up, which is the rule verbatim
+    # WIDENED 2026-09-23 (ED-IN-0266, RULED by Jordan on being shown the cost): every PR event
+    # re-sends the whole context — measured ~1.5M tokens for one wake that reported "CI is still
+    # running". A subscription is a wake-up the session arms for itself.
+    'subscribe_pr_activity',
 )
 
 # DELIBERATELY NOT DENIED, so a later session does not add them as "obviously missing":
 #   * `create_session` — spawning a child is fan-out, not a wake-up, and Jordan RULED for
 #     multi-agent dispatch (CLAUDE.md §10, 2026-09-17: "I want multiple agent dispatches").
 #     A child that polls is a prompt defect, not a reachable primitive to block.
-#   * `subscribe_pr_activity` — §11 names this path explicitly as UNAFFECTED: genuine PR activity
-#     arrives as a push event and needs no polling.
 #   * `list_triggers` / `delete_trigger` / `CronList` / `CronDelete` — read and teardown. Blocking
 #     teardown would strand a Routine that someone else armed.
 
@@ -108,7 +110,8 @@ def test_mcp_denies_cover_the_server_name_spellings():
     # deny rule matches the tool's fully-qualified name, so one spelling is not enough:
     # a session on a surface that normalizes differently would sail straight past it.
     deny = _deny_list()
-    for tool in ('send_later', 'create_trigger', 'update_trigger', 'fire_trigger'):
+    for tool in ('send_later', 'create_trigger', 'update_trigger', 'fire_trigger',
+                 'subscribe_pr_activity'):
         spellings = {d.split('__')[1] for d in deny
                      if d.startswith('mcp__') and d.endswith(f'__{tool}')}
         assert {'Claude_Code_Remote', 'claude-code-remote', 'claude_code_remote'} <= spellings, (
