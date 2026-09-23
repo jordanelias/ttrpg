@@ -19,7 +19,11 @@
       "Monitor",
       "mcp__Claude_Code_Remote__watch_url",
       "mcp__claude-code-remote__watch_url",
-      "mcp__claude_code_remote__watch_url"
+      "mcp__claude_code_remote__watch_url",
+      "mcp__Claude_Code_Remote__subscribe_pr_activity",
+      "mcp__claude-code-remote__subscribe_pr_activity",
+      "mcp__claude_code_remote__subscribe_pr_activity",
+      "mcp__github__subscribe_pr_activity"
     ],
     "allow": [
       "Bash(git *)",
@@ -35,6 +39,34 @@
       "Bash(head *)",
       "Bash(tail *)",
       "Bash(diff *)",
+      "mcp__github__pull_request_read"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/tools/hook_naming_guard.py\""
+          }
+        ]
+      },
+      {
+        "matcher": "Grep|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/tools/hook_md_sweep_guard.py\""
+          }
+        ]
+      }
+    ],
+    "SessionStart": [],
+    "Stop": []
+  }
+}      "Bash(diff *)",
       "mcp__github__pull_request_read"
     ]
   },
