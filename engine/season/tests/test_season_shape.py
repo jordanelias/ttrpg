@@ -5287,7 +5287,7 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
     corpus.
 
     ⚠ AND EXECUTION IN THE POPULATED REALM IS NOT INSTRUMENTED BY ANYTHING — a pre-existing gap
-    (root `HANDOFF.md` §4: *"no `corpus_run` or `register --requirements` path consults it"*), so
+    (root `HANDOFF.md`'s pre-pointer §4, archived in `registers/handoffs/HANDOFF_archive.md`: *"no `corpus_run` or `register --requirements` path consults it"*), so
     this test asserts FORMABILITY and makes no claim about execution. Stated rather than left as
     an inference."""
     from ..data.rosters import REMIT_ACTS, REMIT_DEFAULT, remit_or_default

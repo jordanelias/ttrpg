@@ -154,7 +154,7 @@ def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
 
     ⚠ **A PERSON CAN NOW RESIGN AN OFFICE, AND THAT WAS A `T-m` VIOLATION IN THE TABLE, NOT THE
     DESIGN.** `hold` was closable only by `revoke`, which is `remit:revoke` -- so a seat could be
-    taken from someone and never laid down. `architecture/meta/HANDOFF_NEXT.md` §2a: *"The design
+    taken from someone and never laid down. `registers/handoffs/architecture_meta_HANDOFF_NEXT.md` §2a: *"The design
     says a person may resign; the verb table does not let them. Fix the table, and do not re-open
     the design."* `hold` is in the domain for exactly this reason.
 

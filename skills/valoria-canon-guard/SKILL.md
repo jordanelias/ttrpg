@@ -83,33 +83,7 @@ Read them from the working tree — do not rely on remembered Foundations conten
 - All Foundations citations must reference the working-tree file, not memory.
 - Do not use remembered constraint values — P-15 in particular must be read from `canon/02_canon_constraints.md` in the working tree.
 
-## Dashboard registry logging — MANDATE REMOVED 2026-08-19
+## Registry logging — retired
 
-**Append only when a human asks for a record. Never because this skill ran.**
+**Retired.** `tools/audit_registry.py` and `references/audit_registry.jsonl` were retired 2026-08-21 (`FORK:1e4c6f4`, ED-IN-0194). A pass records nothing in a registry: its output is edits plus at most one commit paragraph (`CLAUDE.md` §0).
 
-This section read "MANDATORY on completion" and ordered an append to
-`references/audit_registry.jsonl` "every time, not only on request". Removed by Jordan's ruling
-("break out of recursion loops for building, auditing and gating infrastructure work that
-infinitely regresses"). `proposals/2026-08-18-breaking-the-recursion.md` §5.2 identifies exactly
-this class as **the flow layer, and the one that matters most**: a standing prompt-level order to
-grow a register fires *before* any doctrine is consulted, so no amendment to CLAUDE.md can bind it.
-Seven skills carried this paragraph verbatim; all seven are cleared.
-
-`tools/audit_registry.py` still exists and still works. Do not restore a mandatory append.
-
-```bash
-python tools/audit_registry.py append \
-  --audit-type canon_guard \
-  --subsystem <personal_combat|mass_battle|social_contest|faction_political|settlement_territory|threadwork|fieldwork_investigation|architecture|cross_cutting|corpus_wide> \
-  --skill valoria-canon-guard \
-  --date <YYYY-MM-DD> \
-  --folder "<designs/audit/... path this run's output actually lives at>" \
-  --scope "<one-line: what was audited>" \
-  --verdict <this skill's own verdict, mapped to PASS|FAIL|PARTIAL|CONFORMANT|NON_CONFORMANT|OPEN|MIXED|CLOSED> \
-  --verdict-detail "<one-line context, e.g. a PR number or ratification note>"
-```
-
-Pick `--subsystem` from what the run actually targeted (`cross_cutting` if it
-genuinely spans several, `corpus_wide` only for a whole-corpus pass). See
-`tools/audit_registry.py`'s module docstring for the full field/vocabulary
-reference — this is the single source of truth for the schema, not this note.

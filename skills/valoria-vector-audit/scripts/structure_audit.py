@@ -732,7 +732,7 @@ def run(root, out):
     L.append('## L2 Key-closure — relationship to the module-adjudicator (§8 disclosure)')
     L.append('')
     L.append('The two closure findings below (phantom-producer, dangling-emit) overlap '
-             '`valoria-module-adjudicator`’s **A3 consume-closure** and **A4 orphan emission** — and '
+             'the retired (ED-IN-0232) `valoria-module-adjudicator`’s **A3 consume-closure** and **A4 orphan emission** — and '
              'the honest §8 accounting (corrected after the Fable-5 2026-07-14 audit called out an '
              'earlier over-claim) is: this is **NOT the same rule, and the two are NOT equivalent.** '
              '`contract_adjudicator.adjudicate()` already runs A1–A12 **corpus-wide** in one call '

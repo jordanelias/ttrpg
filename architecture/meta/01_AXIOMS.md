@@ -30,7 +30,7 @@ two answer different questions: `PLAN.md` says what to BUILD; this asks what the
 
 ## §0.2 · The test this document has to pass, taken from the handoff that asked for it
 
-`HANDOFF_META_ARCHITECTURE.md` names the recurring defect class, measured across five of seven
+`registers/handoffs/architecture_HANDOFF_META_ARCHITECTURE.md` names the recurring defect class, measured across five of seven
 findings in the preceding audit:
 
 > *"an artifact that reports success for something that did not happen"*, or *"a guard that cannot

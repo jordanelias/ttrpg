@@ -340,6 +340,9 @@ RETIREMENT_SHIFTED = frozenset({
     # Both carry golden re-pins whose recorded-old-values blocks added lines above every anchor.
     'engine/tests/test_f7_smoke_oracle.py',
     'engine/tests/test_mc_v18_regression.py',
+    # ED-IN-0263 (2026-09-22): rewritten as a pointer index, so every row moved. Archived anchors
+    # into it are frozen; a bare line is advisory, a symbol (`npc_behavior_v30`) is still checked.
+    'CURRENT.md',
 }) | _CENSUS_SIDECARS
 
 # Symbols the Key retirement DELETED (ED-IN-0232). An archived skeleton citing one of these is not

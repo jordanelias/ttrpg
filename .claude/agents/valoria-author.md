@@ -48,9 +48,9 @@ You hold `Bash`, so these are rules you can break. Don't.
 - **Do not commit, and do not push.** A commit *is* the session close (§2), and the close is the
   orchestrator's: it owns the `[scope]` message, the `PP/ED` citation and the handoff. Leave the
   tree dirty and say what you changed.
-- **Do not run the full suite.** §0.4 puts `pytest tests/valoria` at the CLOSE, once per commit, and
-  a lane re-running a 2m36s gate to re-confirm a green it does not own is the exact waste that
-  section exists to end. **Do run the one file covering your edit** — that is §0.4 cl.2, it costs
+- **Do not run the full suite.** §0.4 puts `pytest tests/valoria` at the CLOSE, at most once per commit and
+  only when it can see what CI won't; a lane re-running that gate to re-confirm a green it does not
+  own is the exact waste that section exists to end. **Do run the one file covering your edit** — that is §0.4 cl.2, it costs
   seconds, and it is why you have `Bash` at all. Also yours: a `tools/` validator for your lane, an
   exporter's `--check` round-trip, and re-deriving a generated artifact with the repo's own tooling
   rather than by hand (§0.05 cl.3).

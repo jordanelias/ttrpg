@@ -301,7 +301,7 @@ def build_at(case: dict, seed: int = 0) -> World:
     # ⚠ **AND "W27 WILL REPLACE IT" WOULD BE FALSE, SO IT IS NOT SAID.** `populated.py` IS `W27`,
     # landed 2026-09-13, and it declares itself *"a second instrument beside [`corpus_run`], not a
     # replacement"*. Nothing currently schedules this loop's removal. Removing it means porting
-    # `populated`'s per-case cast INTO `build_at` -- item 2 of `HANDOFF.md`'s work order -- and
+    # `populated`'s per-case cast INTO `build_at` -- item 2 of `workplans/2026-09-13-work-order.md` -- and
     # until somebody does that, this default is load-bearing on every number the grader reports.
     want = wants_of(case)
     cast = ("p_a", "p_b", "p_c")

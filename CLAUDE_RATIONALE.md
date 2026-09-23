@@ -325,3 +325,26 @@ whole roster. Re-verify against a live permission denial before trusting it.
 
 **The cost figure in the test's docstring was stale by 57%** until 2026-09-18: it cited `CLAUDE.md` at
 ~12.2k tokens against a measured 19,228, understating the rule's own payoff.
+
+---
+
+## Figures moved out of `CLAUDE.md` (2026-09-23, ED-IN-0265)
+
+`CLAUDE.md` is read at every session start, and Jordan ruled that nothing read that often carries
+figures (*"anything that gets pulled up frequently cannot be hard coded with numbers/values/dates"*).
+These are the figures it quoted, verbatim, with their dates. They are history: re-measure, never quote.
+
+- **§0.2** — *"MEASURED by AST: 223 files mention it, exactly 16 IMPORT it, none production … 78 of the
+  136 test functions in `engine/tests/`, 57% of CI's blocking `sim-regression` job, import it."* By
+  2026-09-23 `ALLOWED_IMPORTERS` listed 9, which is why the live count belongs to the test.
+- **§0.4** — *"Measured 2026-09-11, 4 cores: serial `9m 01s`, `-n auto` `2m 36s` … Re-measured
+  2026-09-18: `2m 28s` over 1,747 collected."* On 2026-09-23 a 4-core remote container took `5m 06s`
+  with `-n auto`, so the figure was also container-dependent.
+- **§1 / §3** — *"The 230 design documents"*, *"226 design documents are quarantined"*.
+- **§2** — *"MEASURED 2026-09-18 over the last 30 commits: median 125 characters, minimum 96, all
+  thirty over 80."*
+- **§3** — *"MEASURED 2026-09-18: 550 files, 263,919 lines — larger than all of `engine/` — and 2 of its
+  271 `## Status:` lines are RATIFIED."* On 2026-09-23: 561 files, 266,249 lines.
+- **§8** — *"the gate: ~2m36s. Serial, it is 9m01s"* and *"pays 3.5× for the same verdict"*.
+- **§4, §10, §11** — the 116-file size-cap figure, the 219 tokens per delivered line and the 116
+  check-ins: their sections above already carry them.

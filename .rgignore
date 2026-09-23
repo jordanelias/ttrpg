@@ -1,0 +1,2 @@
+# ripgrep (the Grep tool) skips these: generated run output, searched only by naming it.
+engine/season/runs/

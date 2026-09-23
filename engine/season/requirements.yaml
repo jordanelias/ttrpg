@@ -350,7 +350,7 @@ rows:
       >= 30, which the closed `requires_operands` roster has no name for (`H-85`).
       ⚠ **37 -> 38 AND 10 -> 11 EXECUTE, `release` (2026-09-11).** `04_CODE_ARCHITECTURE.md`
       §A.3 row 14 names it — *four closing verbs missing → one `release` verb, eligibility `own`,
-      generic over kind* — and `architecture/meta/HANDOFF_NEXT.md` §2a rules the repair: *"The
+      generic over kind* — and `registers/handoffs/architecture_meta_HANDOFF_NEXT.md` §2a rules the repair: *"The
       design says a person may resign; the verb table does not let them. Fix the table, and do not
       re-open the design."* It is the ANTONYM half of the table: `oblige`, `commit`, `tie`, `knot`,
       `succeed` and `hold` all end through it, so a seat can now be laid down rather than only

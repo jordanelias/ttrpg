@@ -1,27 +1,17 @@
 ---
 name: ners
 description: >
-  THE NERS PASS — the repo's cut test on any design object, mechanism or suite. NERS is not four
-  scores. It is ONE operation applied four times: propose the cut, and name what dies. N — remove
-  the object. E — remove MORE. R — remove the alternatives. S — remove the rung or the seam. Two
-  things the shorthand loses: E is scored as a RATIO against what N and R found, never as an
-  independent axis, because scored alone it is satisfiable by amputation; and N is checked from all
-  six directions (CLAUDE.md §0.06). The pass is graded
-  on the cuts that turn out to be FREE — an object whose claimed lost possibility SURVIVES THE CUT,
-  because something else already provides it (the false N-line). That is the highest-value thing it
-  produces.
-  The definitions themselves are canon and live in CLAUDE.md §0.06 — read them there; this skill
-  owns the METHOD, not the definitions. Two evidence instruments, one verdict: (1) the object
-  ledger here, for any design shape; (2) for anything that resolves by a DRAW, the Phase 0-6 stress
-  test in the sibling `resolution-diagnostic` skill — invoke it, and its findings return here as
-  evidence rather than as a verdict of their own.
-  ALWAYS use for: "NERS audit", "NERS pass", "NERS review", "is this NERS compliant", "is this
-  necessary", "is this elegant", "is this robust", "false N-line", "does this add a system",
-  "is this seat playable", "is one option dominant", "does this propagate across scales",
-  "grade this mechanic", "audit this design". Do NOT use for pure internal-consistency
-  checks with no cut question (formula gaps, redundancy) — that is valoria-mechanic-audit; for
-  contract/seam closure — that is valoria-module-adjudicator, which defers behavioural NERS back
-  here; or to stress a resolver's draw on its own — that is `resolution-diagnostic`.
+  THE NERS PASS — the cut test on any design object, mechanism or suite: propose the cut and name
+  what dies. N removes the object, E removes more, R removes the alternatives, S removes the rung or
+  seam. E is scored last, as a ratio against what N and R found; N is checked from all six
+  directions. Graded on FALSE N-LINES — cuts that turn out free because something already ruled in
+  provides the lost possibility. The definitions live in CLAUDE.md §0.06; this skill owns the method.
+  For anything resolved by a draw, run `resolution-diagnostic` and bring its findings back here as
+  evidence. Use for: NERS audit/pass/review, "is this necessary/elegant/robust", false N-line, "does
+  this add a system", "is one option dominant", "does this propagate across scales", grading or
+  auditing a mechanic or design. Not for internal-consistency checks with no cut question
+  (valoria-mechanic-audit), contract/seam closure (read `references/module_contracts.yaml` directly), or stressing a draw
+  on its own (resolution-diagnostic).
 ---
 
 # NERS
@@ -157,8 +147,8 @@ a normal NERS pass, not an out-of-scope one.
 
 **Routes elsewhere.** Internal consistency with no cut question (a formula gap, a dangling
 cross-reference, a redundant definition) → `valoria-mechanic-audit`. Contract/seam closure — does
-module X emit what module Y consumes → `valoria-module-adjudicator`, which defers behavioural NERS
-back here. Corpus vocabulary and isolates → `valoria-vector-audit`.
+module X provide what module Y reads → `references/module_contracts.yaml`, read directly (the
+Key-based adjudicator is retired, ED-IN-0232). Corpus vocabulary and isolates → `valoria-vector-audit`.
 
 **Resolve the target's canonical head first** — `CURRENT.md`, then the head's `## Status:` line
 (CLAUDE.md §1, §4). A filename suffix is not currency: `_v30` reads as "current generation" while the
