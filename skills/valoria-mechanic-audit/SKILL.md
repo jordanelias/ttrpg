@@ -129,28 +129,7 @@ For each: PRESENT / ALTERED (with justification check) / ABSENT
 - No editorial judgment — mechanical analysis only
 - All mechanical values cited with source file and section from the working tree
 
-## Dashboard registry logging (MANDATORY on completion)
+## Registry logging — retired
 
-**Append only when a human asks for a record. Never because this skill ran.**
+**Retired.** `tools/audit_registry.py` and `references/audit_registry.jsonl` were retired 2026-08-21 (`FORK:1e4c6f4`, ED-IN-0194). A pass records nothing in a registry: its output is edits plus at most one commit paragraph (`CLAUDE.md` §0).
 
-This paragraph ordered an append to `references/audit_registry.jsonl` "every time, not only on
-request". Mandate removed 2026-08-19 by Jordan's ruling to break the build/audit/gate recursion;
-`proposals/2026-08-18-breaking-the-recursion.md` §5.2 names this class the flow layer that matters
-most, because a prompt-level order fires before any doctrine is consulted. Do not restore it.
-
-```bash
-python tools/audit_registry.py append \
-  --audit-type mechanic_audit \
-  --subsystem <personal_combat|mass_battle|social_contest|faction_political|settlement_territory|threadwork|fieldwork_investigation|architecture|cross_cutting|corpus_wide> \
-  --skill valoria-mechanic-audit \
-  --date <YYYY-MM-DD> \
-  --folder "<designs/audit/... path this run's output actually lives at>" \
-  --scope "<one-line: what was audited>" \
-  --verdict <this skill's own verdict, mapped to PASS|FAIL|PARTIAL|CONFORMANT|NON_CONFORMANT|OPEN|MIXED|CLOSED> \
-  --verdict-detail "<one-line context, e.g. a PR number or ratification note>"
-```
-
-Pick `--subsystem` from what the run actually targeted (`cross_cutting` if it
-genuinely spans several, `corpus_wide` only for a whole-corpus pass). See
-`tools/audit_registry.py`'s module docstring for the full field/vocabulary
-reference — this is the single source of truth for the schema, not this note.

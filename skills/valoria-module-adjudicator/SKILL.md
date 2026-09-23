@@ -20,6 +20,8 @@ description: >
   routes an architecture-conformance task.
 ---
 
+## Status: ⛔ NOT INVOCABLE — KEY-BASED, SUBJECT RETIRED (ED-IN-0232, RULED: *"anything key-based gets retired"*). Its checks close emit/consume over the Key Type Registry, which is deleted; the prerequisite `designs/` paths are dissolved; the run command below fails on its `--registry` argument. Deliberately left out of `.claude/skills/` (ED-IN-0264). Retiring the skill itself — delete plus a `FORK:` row — is the remaining step. For contract closure until then, read `references/module_contracts.yaml` directly; for layer placement use `layer-conformance`.
+
 **Prerequisite:** This skill reads canonical architecture docs; never adjudicate from memory or chat-session maps. Read from the working tree, index-first: `designs/architecture/key_substrate_v30.md` (§2.3, §4.1, §4.6, §8), `designs/architecture/key_type_registry_v30.md`, `designs/architecture/scale_transitions_v30.md` (§3, §5), `designs/scene/derived_stats_v30.md` (§1, §11, §14 — PROPOSAL status; re-verify before relying), plus the target module's canonical doc via `references/canonical_sources.yaml` lookup.
 
 **Naming note (collision guard):** "armature" is a canonical term (Conviction armature, `armature_position`, Faction Meta-Armature — key_substrate §8.2). This instrument is therefore the *adjudicator*, never "the armature." It audits modules that *use* the Conviction armature; it does not modify that system.
@@ -165,29 +167,7 @@ Output: the adjudication verdict is **edits to `references/module_contracts.yaml
 - **Scope the enums.** The `scales` and `resolver` enums are `[ASSUMPTION]`-grade until Jordan ratifies; the assessor treats unknown members as warnings so a wrong enum cannot false-halt work.
 - **RuntimeError from any hook = hard halt.** Report verbatim, stop. (Read-ordering errors from `read_sections` prescribe their own remedy — index first — which is compliance, not bypass.)
 
-## Dashboard registry logging (MANDATORY on completion)
+## Registry logging — retired
 
-**Append only when a human asks for a record. Never because this skill ran.**
+**Retired.** `tools/audit_registry.py` and `references/audit_registry.jsonl` were retired 2026-08-21 (`FORK:1e4c6f4`, ED-IN-0194). A pass records nothing in a registry: its output is edits plus at most one commit paragraph (`CLAUDE.md` §0).
 
-This paragraph ordered an append to `references/audit_registry.jsonl` "every time, not only on
-request". Mandate removed 2026-08-19 by Jordan's ruling to break the build/audit/gate recursion;
-`proposals/2026-08-18-breaking-the-recursion.md` §5.2 names this class the flow layer that matters
-most, because a prompt-level order fires before any doctrine is consulted. Do not restore it.
-
-```bash
-python tools/audit_registry.py append \
-  --audit-type module_adjudicator \
-  --subsystem <personal_combat|mass_battle|social_contest|faction_political|settlement_territory|threadwork|fieldwork_investigation|architecture|cross_cutting|corpus_wide> \
-  --skill valoria-module-adjudicator \
-  --date <YYYY-MM-DD> \
-  --folder "<designs/audit/... path this run's output actually lives at>" \
-  --scope "<one-line: what was audited>" \
-  --verdict <this skill's own verdict, mapped to PASS|FAIL|PARTIAL|CONFORMANT|NON_CONFORMANT|OPEN|MIXED|CLOSED> \
-  --verdict-detail "<one-line context, e.g. a PR number or ratification note>"
-```
-
-Pick `--subsystem` from what the run actually targeted (`cross_cutting` if it
-genuinely spans several — a whole-graph verdict, as opposed to a per-module one,
-normally does). See `tools/audit_registry.py`'s module docstring for the full
-field/vocabulary reference — this is the single source of truth for the schema,
-not this note.

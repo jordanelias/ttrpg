@@ -1,35 +1,20 @@
 ---
 name: layer-conformance
 description: >
-  LAYER CONFORMANCE — the repo's placement-and-compliance pass, and the skill a session runs when the
-  question is "code architecture compliance": does this artifact sit in the right layer, and does the
-  code conform to the ratified code architecture? TWO LENSES, IN ORDER, because the second is
-  meaningless without the first. LENS A · PLACEMENT asks which layer an artifact binds (Layer 0 the
-  agent, Layer 1 how code is written, Layer 2 the game), whether a claim is being made a MECHANISM in
-  prose where only code can carry it, whether a proposed guard earns its existence, whether the work
-  is reaching for a level beneath Layer 0 (there is none — the repair is to edit CLAUDE.md), and
-  whether a new governance scheme is being spelled "Layer". LENS B · LAYER-1 CONFORMANCE runs code in
-  `engine/season/` against `architecture/meta/04_CODE_ARCHITECTURE.md` — BY PATH, not by reading
-  bodies; grading each finding STRUCTURAL / MECHANICAL / CONVENTION per that document's own §0; and
-  reading BOTH halves of a §A.2 row, because a directory count reported as row conformance is the
-  defect this repo has already shipped and corrected once. The DEFINITIONS live with their owners —
-  CLAUDE.md's layer table and `architecture/` — and this skill owns the METHOD, exactly as `ners` owns
-  the NERS method while CLAUDE.md §0.06 owns the NERS definitions. It copies no table, no grade
-  definition and no count from either owner; where it does reproduce a CLAUDE.md PROHIBITION it carries
-  that rule's failure clause with it, deliberately and for the reason stated inside.
-  Its output is EDITS to the thing under review plus at most one paragraph in a commit message: it
-  creates no directory, no findings file, and no guard whose subject is apparatus.
-  ALWAYS use for: "code architecture compliance", "is this Layer-1 compliant", "layer conformance",
-  "does this conform to 04", "does this conform to the code architecture", "which layer does this
-  belong in", "is this a mechanism or reference", "should this be a guard", "does this guard earn its
-  existence", "is this apparatus or game", "am I building a Layer -1", "can I call this a Layer",
-  "is this STRUCTURAL or MECHANICAL", "does the scan actually cover what I claimed", "is `engine/season/`
-  conformant", "check the §A.2 modules", "is the write gate built".
-  Do NOT use for: judging whether a DESIGN is good — that is `ners`, which asks what dies when you cut
-  it, not where it lives; contract IN→resolver→OUT closure — that is `valoria-module-adjudicator`;
-  finding inert or inconsistent mechanics — that is `valoria-mechanic-audit`; P-01..P-15 philosophy
-  compliance — that is `valoria-canon-guard`; or reviewing a diff for correctness bugs — that is the
-  native `/code-review`, a fresh-context reviewer that never saw your reasoning.
+  LAYER CONFORMANCE — placement and Layer-1 compliance, two lenses run in order. LENS A (placement):
+  which layer an artifact binds (0 the agent, 1 how code is written, 2 the game); whether prose is
+  being made a mechanism only code can carry; whether a proposed guard earns its existence; whether
+  work reaches for a level beneath Layer 0 (there is none — edit CLAUDE.md); whether a new scheme is
+  spelled "Layer". LENS B (Layer-1 conformance): checks `engine/season/` against
+  `architecture/meta/04_CODE_ARCHITECTURE.md` by path, grades each finding STRUCTURAL / MECHANICAL /
+  CONVENTION per that document's §0, and reads both halves of a §A.2 row. Definitions stay with their
+  owners (CLAUDE.md's layer table, `architecture/`); this skill owns the method and copies no table or
+  count. Output is edits plus at most a commit paragraph. Run by /close step 4. Use for: code
+  architecture compliance, layer conformance, "does this conform to 04", "which layer does this
+  belong in", "mechanism or reference", "should this be a guard", "apparatus or game", "is
+  engine/season conformant". Not for design quality (ners), contract closure
+  (valoria-module-adjudicator), inert mechanics (valoria-mechanic-audit), P-01..P-15
+  (valoria-canon-guard), or diff bugs (/code-review).
 ---
 
 # LAYER CONFORMANCE

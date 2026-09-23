@@ -10,11 +10,11 @@ The close sequence from CLAUDE.md §0.4 and §0's last bullet, as steps rather t
    has pyyaml alone, so without this step step 3 cannot run at all.
 
 2. **Learn the container's known-red before debugging anything.** `cat .git/shallow` — if this is a
-   shallow clone, `tests/valoria/test_forked_status.py` fails two tests on arrival because the
+   shallow clone, `tests/valoria/test_forked_status.py` fails on arrival because the
    commits its `FORK:` rows name are out of reach. That is the clone, not `main`. Do not debug it.
 
-3. **The full suite, ONCE.** `python -m pytest tests/valoria -q -n auto` — ~2m36s parallel, 9m01s
-   serial, same 1817 tests. Omitting `-n auto` pays 3.5× for the same verdict.
+3. **The full suite, ONCE.** `python -m pytest tests/valoria -q -n auto` — `-n auto` is a
+   scheduler, not a filter: same tests, several times faster (`CLAUDE.md` §0.4 has the measurement).
    - Red? Re-run **the failing file only** while you fix it. The full suite comes back once, when
      you believe you are done. Red is not a licence to loop the gate.
    - Already green from before your last edits? Run it anyway — this is the per-commit shipping
