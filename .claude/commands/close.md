@@ -17,8 +17,9 @@ The close sequence from CLAUDE.md §0.4 and §0's last bullet, as steps rather t
    scheduler, not a filter: same tests, several times faster (`CLAUDE.md` §0.4 has the measurement).
    - Red? Re-run **the failing file only** while you fix it. The full suite comes back once, when
      you believe you are done. Red is not a licence to loop the gate.
-   - Already green from before your last edits? Run it anyway — this is the per-commit shipping
-     gate. But never run it a second time to re-confirm a green you already hold.
+   - **First decide whether to run it at all** (`CLAUDE.md` §0.4 cl.1): name what it can observe
+     that CI's run on push will not. Prose, ledger, skill or link changes run only the test files
+     that read what changed (`grep -rl <path> tests/`); CI is the full gate.
    - Touched `engine/season/`? Add `python -m pytest engine/season/tests -q -n auto`. Touched
      nothing it can reach? Do not run it — "everything, just in case" is the habit §0.4 ends.
 

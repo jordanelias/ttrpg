@@ -317,9 +317,10 @@ one file `seconds`. Re-measured 2026-09-18: `2m 28s` over **1,747 collected**. `
 not a filter — it runs the SAME gate. The count moves as tests land; **re-measure it rather than quoting
 this line**, which is the carried-forward-figure defect §0.1 pt 3 row 4 describes.
 
-1. **The full suite runs ONCE PER COMMIT: after that commit's last edit, immediately before it.** It is
-   a SHIPPING gate, so the unit is the thing being shipped. Run it after an individual *edit* and it
-   returns no information the close run would not.
+1. **The full suite runs AT MOST once per commit, and only when it can observe something CI will not
+   (RULED 2026-09-23: *"stop running suites so frequently … interrogate their merits"*).** CI runs it on
+   every push. Name what a local run would catch first; a diff of prose, ledgers, skills or links runs
+   only the test files that read what it touched (`grep -rl <path> tests/`) and lets CI be the gate.
 2. **Mid-session, run only the file covering what you touched.** If you cannot name that file, finding
    it out costs seconds against nine minutes.
 3. **Never re-run to re-confirm a green you already hold.**
@@ -588,7 +589,7 @@ re-implement a rule.** Known live violations, treated as bugs rather than propag
 
 ```sh
 python tools/session_provision.py                # installs pyyaml pytest numpy pytest-xdist if absent; silent
-python -m pytest tests/valoria -q -n auto        # the gate: ~2m36s. Serial, it is 9m01s.
+python -m pytest tests/valoria -q -n auto        # the gate; CI runs it on every push (§0.4)
 python -m pytest tests/valoria/test_<x>.py -q    # the inner loop: seconds. This is the mid-session run.
 ```
 
