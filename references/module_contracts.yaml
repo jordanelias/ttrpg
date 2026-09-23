@@ -1,7 +1,7 @@
 # references/module_contracts.yaml
 # Module wrapper contracts — every game system/mechanic as IN → resolver → OUT(+Keys).
-# Governed by skills/valoria-module-adjudicator/SKILL.md; machine-checked by
-# skills/valoria-module-adjudicator/scripts/contract_adjudicator.py (checks A1-A12).
+# Its governing skill and checker (valoria-module-adjudicator, contract_adjudicator.py) were
+# Key-based and are retired (ED-IN-0232, ED-IN-0265; FORK:88fc88e). Read this file directly.
 #
 # DISCIPLINE (normative, from the skill):
 #   - Edges are transcribed VERBATIM from canonical sources, including type strings

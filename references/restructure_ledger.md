@@ -1529,6 +1529,7 @@ adversarial review survives the wave written to end it.
 | `skills/valoria-arc-generator/` | `FORK:1e4c6f4` | FORKED |
 | `skills/valoria-simulator/` | `FORK:1e4c6f4` | FORKED |
 | `skills/valoria-workplan-navigator/` | `FORK:1e4c6f4` | FORKED |
+| `skills/valoria-module-adjudicator/` | `FORK:88fc88e` | FORKED |
 | `.github/workflows/dashboard.yml` | `FORK:1e4c6f4` | FORKED |
 | `.github/workflows/audit-refresh.yml` | `FORK:1e4c6f4` | FORKED |
 | `tools/ci_gate_coverage.py` | `FORK:1e4c6f4` | FORKED |

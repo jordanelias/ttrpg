@@ -10,17 +10,17 @@ Design docs keep their TTRPG/board-game mechanical detail; those abstractions *a
 that repo's CI pin one version while `godot/` here documents another. Awaiting a ruling; do not settle
 it by editing a document.
 
-**Why this file is short.** It was 984 lines / 19,228 tokens on 2026-09-17, charged on every session
-and again on every subagent delegation; it had been cut to 664 lines on 09-09 and regrew 48% in eight
-days, every commit adding and none removing net. **The rules are here. The reasoning — worked
+**Why this file is short.** It is charged on every session and again on every subagent delegation,
+and it has regrown after every cut, every commit adding and none removing net (the measurements are
+in `CLAUDE_RATIONALE.md`). **Anything read at every session start carries POINTERS, never figures**
+(§1). **The rules are here. The reasoning — worked
 failures, counter-arguments, the history of each wording — is in `CLAUDE_RATIONALE.md`, which is
 reference, never binding, and NOT required reading.** Open it when a rule here looks arbitrary and you
 are about to change it.
 
-**The cap is 760 lines, and it is a real number rather than an aspiration.** This pass reached 750 from
-984 (−24%) by moving narrative out, and stopped there honestly: what remains is operative rules, four
-tables and Jordan's verbatim rulings, so the next 200 lines would come out of hazard knowledge rather
-than padding. **Land the rule here, the story in the sibling. If you are about to push past 760, cut
+**The cap is 760 lines (`wc -l CLAUDE.md`), and it is a real number rather than an aspiration.** What
+remains is operative rules, tables and Jordan's verbatim rulings, so further cuts come out of hazard
+knowledge rather than padding. **Land the rule here, the story in the sibling. If you are about to push past 760, cut
 something instead — and if the rules genuinely no longer fit, raise the cap in the same commit and say
 what you added.**
 
@@ -276,11 +276,10 @@ This is the one claim here a session **cannot satisfy by writing**.
   but **the row aggregating "all junctures execute" counts `state:` strings in
   `workplans/workplan_v6_progress.yaml`, a hand-edited board** that a few one-word edits green. It
   declares itself DOC-DERIVED — **bookkeeping, not evidence.**
-- ⚠ **`mc_v18` is DEPRECATED IN PLACE (ED-IN-0227).** MEASURED by AST: 223 files mention it, exactly 16
-  IMPORT it, none production. Deletion was measured and REFUSED on cost — 78 of the 136 test functions
-  in `engine/tests/`, 57% of CI's blocking `sim-regression` job, import it. The mechanism is a
-  shrink-only ratchet (`tests/valoria/test_mc_v18_is_deprecated.py`), which fails on a NEW importer and
-  on a roster line whose module no longer imports it. **Nothing new is built there.**
+- ⚠ **`mc_v18` is DEPRECATED IN PLACE (ED-IN-0227).** No game code imports it; deletion was
+  REFUSED on cost, because tests in CI's blocking `sim-regression` job do (`CLAUDE_RATIONALE.md` §0.2).
+  The mechanism is a shrink-only ratchet: `tests/valoria/test_mc_v18_is_deprecated.py`'s
+  `ALLOWED_IMPORTERS` is the live list, and it fails on a NEW importer and on a stale roster line. **Nothing new is built there.**
 - "Authoring the design doc" is **not** the deliverable for a juncture that has running code: verify the
   code against the sim and record the contract; the doc may follow verified behaviour.
 - **A juncture done in code and open on the board is a BOARD defect, not a work item.**
@@ -312,10 +311,9 @@ PRINTS is the T1 regression; one that is silent is not.** If the diagnosis needs
 ### 0.4 VERIFICATION CADENCE — the suite is a CLOSE step, not an inner loop (RULED)
 
 *"figure out a far better work pattern with Claude.md or whatever so you don't run this shit after every
-edit."* **Measured 2026-09-11, 4 cores: serial `9m 01s`, `-n auto` `2m 36s`** (what CI has always run),
-one file `seconds`. Re-measured 2026-09-18: `2m 28s` over **1,747 collected**. `-n auto` is a scheduler,
-not a filter — it runs the SAME gate. The count moves as tests land; **re-measure it rather than quoting
-this line**, which is the carried-forward-figure defect §0.1 pt 3 row 4 describes.
+edit."* One file takes seconds; the whole suite takes minutes even with `-n auto`, which is what CI runs
+— a scheduler, not a filter, so the SAME gate several times faster than serial. The timings are in
+`CLAUDE_RATIONALE.md` §0.4; **re-measure rather than quote them** (§0.1 pt 3 row 4).
 
 1. **The full suite runs AT MOST once per commit, and only when it can observe something CI will not
    (RULED 2026-09-23: *"stop running suites so frequently … interrogate their merits"*).** CI runs it on
@@ -333,7 +331,7 @@ this line**, which is the carried-forward-figure defect §0.1 pt 3 row 4 describ
 the close, once, and only the ones your change can reach.
 
 ⚠ **Learn your container's known-red BEFORE you debug it.** A **shallow** checkout cannot reach the
-commits the `FORK:` rows name, so `tests/valoria/test_forked_status.py` fails two tests on arrival. That
+commits the `FORK:` rows name, so `tests/valoria/test_forked_status.py` fails on arrival. That
 is the clone, not `main`. One `cat .git/shallow` settles it.
 
 **This binds a reader, and NO GUARD MAY BE BUILT FOR IT** — its subject is this repository's process,
@@ -366,7 +364,7 @@ deleted and lives at a fork ref. A **quarantined** document is *kept, readable a
 out of the code trees and the default search path because an agent kept reading it as canon. Jordan:
 *"game code keeps getting poisoned by these stray .md files that you are unable to consistently avoid as
 you are AI, so we have to quarantine them somehow so you stop pulling them into your sweeps or read them
-as canon."* The 230 design documents formerly under `systems/*/reference/` and at the root of `engine/`
+as canon."* The design documents formerly under `systems/*/reference/` and at the root of `engine/`
 are there. **The leading dot is the mechanism** — ripgrep and `glob.glob` skip dot-directories unless
 asked; `os.walk`, `Path.rglob` and `git ls-files` do not, so this reduces accidental ingestion rather
 than preventing it, and every archived file carries an `ARCHIVED-NOT-CANON` banner with its original
@@ -384,8 +382,8 @@ for a second such tree.
   `[scope] description` where scope ∈
   `editorial, patch, simulation, compilation, infrastructure, skill, cleanup, godot, phase, fix, bugfix, design`.
   Cite `PP-NNN` / `ED-NNN` when applicable.
-- **Subject line ≤ 72 characters; detail in the body.** MEASURED 2026-09-18 over the last 30 commits:
-  median 125 characters, minimum 96, all thirty over 80. The subject is an index entry, not an abstract
+- **Subject line ≤ 72 characters; detail in the body.** It had drifted far past this
+  (`CLAUDE_RATIONALE.md`, *Figures moved out*); check with `git log --format=%s -30 | awk '{print length}'`. The subject is an index entry, not an abstract
   — and `git log --oneline` is the archaeology this section points a shallow clone at. Nothing enforces
   this; it is a reader's discipline like §0.4.
 - **Continuity = git history + `HANDOFF.md`/the lane file.** Pausing mid-task, capture next actions
@@ -409,7 +407,7 @@ says where an old path went. Only what those cannot tell you:
 - **`systems/`** — design source of truth for `combat`, `social_contest` and `mass_battle`, the three
   retained by ED-IN-0204. **One subsystem = one folder = one ID lane = one `CURRENT.md` row = one
   `HANDOFF_<LANE>.md`.** Each holds oracle scripts in `sim/`, imported as `systems.<sub>.sim.*`.
-  ⚠ **`systems/` HOLDS NO `.md` AT ALL (ED-IN-0231)** — 226 design documents are quarantined in
+  ⚠ **`systems/` HOLDS NO `.md` AT ALL (ED-IN-0231)** — its design documents are quarantined in
   `.designs/systems/<sub>/`. `tools/ci_design_prose_quarantine.py` is blocking; the invariant is **zero,
   not a ratchet**.
 - **`engine/`** — the executable model (substrate leaf readers, autoload hub, cross-scale, campaign
@@ -442,8 +440,8 @@ says where an old path went. Only what those cannot tell you:
   that difference is written down. §0 retires this **as a category**: do not add to it. **Nothing outside
   it loads anything inside it** (RULED); the two live dependencies were **COPIED out**, not moved.
   **Keep it that way** — a live dependency on a hidden tree is invisible to anyone searching normally.
-- **`proposals/`** — unratified proposals, surfaced BY LOCATION. ⚠ **MEASURED 2026-09-18: 550 files,
-  263,919 lines — larger than all of `engine/` — and 2 of its 271 `## Status:` lines are RATIFIED.** This
+- **`proposals/`** — unratified proposals, surfaced BY LOCATION. ⚠ **It is larger than `engine/` and almost none of it
+  is RATIFIED** (`git ls-files proposals | wc -l`; `git grep -l '^## Status:.*RATIFIED' -- proposals`). This
   is the shape `.audit/` was retired for. Before starting a new directory here, answer what it changes in
   `engine/season/`.
 - **`godot/`** — see §6. **`workplans/`** — master workplan plus the hand-edited board (§0.2).
@@ -459,7 +457,7 @@ through `references/restructure_ledger.md`.
   splits into **`_part2`, `_part3`, … in reading order**. The `*_index.md` + `*_infill.md` pair is
   **RETIRED as a default**; existing pairs are grandfathered. **Nothing enforces either half of this —
   not the pair rule and not a length** (ED-IN-0220: the general caps were advisory, exited 0, and fired
-  on 116 files with a median only 40% over, so they described ordinary document size; deleted). **When it
+  on ordinary document sizes rather than outliers; deleted — `CLAUDE_RATIONALE.md` §4). **When it
   splits is your judgment**, and the test is whether a reader can work with it. ⚠ The **explicit
   per-file** caps in `references/atomization_rules.yaml` are untouched and several ARE blocking — read
   the rule for the file you are editing.
@@ -564,7 +562,8 @@ fields are unchecked, none pin a generating SHA — so verify a cited `PP-NNN`/`
 - **Local tier — advisory accelerators.** One-time per clone: `git config core.hooksPath .githooks`.
   `.githooks/pre-commit` runs the SAME validators on staged files via
   `python tools/valoria_local.py --staged`. `.claude/settings.json` wires two PreToolUse hooks — the
-  naming guard (BLOCKING, `sys.exit(2)`) on writes and `tools/hook_md_sweep_guard.py` on Grep/Glob. Not
+  naming guard (BLOCKING, `sys.exit(2)`) on writes and `tools/hook_md_sweep_guard.py` on Grep/Glob — which
+  a `Bash` grep bypasses, since `Bash(grep *)` is pre-approved; it steers, it does not enforce. Not
   every blocking CI gate runs locally — `tools/compliance_check.py`'s size caps are CI-side, so
   **local-green ≠ compliance-green**. `git commit --no-verify` bypasses local; CI still enforces.
 
@@ -594,7 +593,7 @@ python -m pytest tests/valoria/test_<x>.py -q    # the inner loop: seconds. This
 ```
 
 Same tests either way — `-n auto` is a scheduler, not a filter, and it is what CI has always run.
-**Omitting `-n auto` is how a session pays 3.5× for the same verdict.** A fresh remote container has
+**Omitting `-n auto` pays several times over for the same verdict.** A fresh remote container has
 pyyaml only, which is why the provisioner exists (§0.3). The cadence deciding WHEN each runs is §0.4.
 
 ---
@@ -608,7 +607,7 @@ pyyaml only, which is why the provisioner exists (§0.3). The cadence deciding W
 | Combat-balance simulation | `systems/combat/combat_engine_v1/workbench/balance.py` directly |
 | Finding inert/inconsistent mechanics | `valoria-mechanic-audit` |
 | Philosophy (**P-01..P-15**) compliance | `valoria-canon-guard` |
-| IN → resolver → OUT contract closure | `valoria-module-adjudicator` |
+| IN → resolver → OUT contract closure | `references/module_contracts.yaml`, read directly — the Key-based adjudicator is retired (ED-IN-0232) |
 | **A NERS pass** on any design object | `ners`, which owns the **method**; the four **definitions** are §0.06 |
 | Stressing anything that resolves by a **draw** — σ-leverage, μ-shift vs Ob-shift, fractional pool/Ob, sub-1D floor | `resolution-diagnostic`. Its output is **evidence**, not a verdict: carry findings into a `ners` pass |
 | **Layer placement** — which layer does this bind, is prose being made a mechanism, does a proposed guard earn its existence | `layer-conformance` (Lens A); the **definitions** are the layer table, §0.05 and §0.1 pt 5 |
@@ -674,8 +673,8 @@ node rather than the synthesis one.
   **The sizing rule binds a READER and gets no mechanism**; §0.1 pt 5's predicate withholds one
   independently, as token cost is neither the game nor a Jordan decision. Do not re-propose it.
 
-**THE FAN-OUT'S COST IS ITS READING, NOT ITS WRITING** — measured at 219 tokens per delivered line, most
-of it agents independently opening the same files. **The independence was needed for the VERDICTS and
+**THE FAN-OUT'S COST IS ITS READING, NOT ITS WRITING** — the measurement is in `CLAUDE_RATIONALE.md`
+§10, and most of it was agents independently opening the same files. **The independence was needed for the VERDICTS and
 never for the READS.**
 
 1. **SHARE THE READING; FORK ONLY THE JUDGMENT.** Extract once, at the cheapest tier that can do it —
@@ -746,8 +745,8 @@ which this rule does not reach).
 **Why the floor is high even for a "cheap" check-in.** A wake-up re-sends the entire context — this file,
 the system prompt and tool schemas, plus everything the session already carried — and the usual one-hour
 re-arm is measured from the *end* of the previous turn, so it overshoots the prompt-cache TTL and most
-wake-ups re-send everything **uncached**. In the 2026-07-19..26 window, 116 `send_later` check-ins
-re-entered sessions to re-confirm PRs that were already green (97 of 118 trigger prompts said so).
+wake-ups re-send everything **uncached**. Measured, most check-ins re-confirmed PRs that were
+already green (`CLAUDE_RATIONALE.md` §11).
 
 **The falsifier:** delete a deny entry and that test fails, along with its CI job. If it ever passes while
 a session is still arming wake-ups, the guard is wrong and the mechanism has moved — find the new

@@ -12,8 +12,7 @@ description: >
   count. Output is edits plus at most a commit paragraph. Run by /close step 4. Use for: code
   architecture compliance, layer conformance, "does this conform to 04", "which layer does this
   belong in", "mechanism or reference", "should this be a guard", "apparatus or game", "is
-  engine/season conformant". Not for design quality (ners), contract closure
-  (valoria-module-adjudicator), inert mechanics (valoria-mechanic-audit), P-01..P-15
+  engine/season conformant". Not for design quality (ners), inert mechanics (valoria-mechanic-audit), P-01..P-15
   (valoria-canon-guard), or diff bugs (/code-review).
 ---
 

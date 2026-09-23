@@ -10,7 +10,7 @@ description: >
   evidence. Use for: NERS audit/pass/review, "is this necessary/elegant/robust", false N-line, "does
   this add a system", "is one option dominant", "does this propagate across scales", grading or
   auditing a mechanic or design. Not for internal-consistency checks with no cut question
-  (valoria-mechanic-audit), contract/seam closure (valoria-module-adjudicator), or stressing a draw
+  (valoria-mechanic-audit), contract/seam closure (read `references/module_contracts.yaml` directly), or stressing a draw
   on its own (resolution-diagnostic).
 ---
 
@@ -147,8 +147,8 @@ a normal NERS pass, not an out-of-scope one.
 
 **Routes elsewhere.** Internal consistency with no cut question (a formula gap, a dangling
 cross-reference, a redundant definition) → `valoria-mechanic-audit`. Contract/seam closure — does
-module X emit what module Y consumes → `valoria-module-adjudicator`, which defers behavioural NERS
-back here. Corpus vocabulary and isolates → `valoria-vector-audit`.
+module X provide what module Y reads → `references/module_contracts.yaml`, read directly (the
+Key-based adjudicator is retired, ED-IN-0232). Corpus vocabulary and isolates → `valoria-vector-audit`.
 
 **Resolve the target's canonical head first** — `CURRENT.md`, then the head's `## Status:` line
 (CLAUDE.md §1, §4). A filename suffix is not currency: `_v30` reads as "current generation" while the
