@@ -59,14 +59,18 @@ def test_both_readers_resolve_to_the_same_object():
     ⚠ ONE OF THE TWO READERS RETIRED (2026-09-16, ED-IN-0232). `keys.py::AXES` was the other arm,
     and with the Key substrate gone the original two-literal drift is impossible by subtraction
     rather than by this guard. What is still live, and still worth pinning, is the season engine's
-    own reading: `rosters.CONVICTION_AXES` must be the registry's roster, not a second list. The
+    own reading: `rosters.PURSUIT_AXES` must be the registry's roster, not a second list. The
     `is`-identity claim moves onto that pair — `rosters` binds the descriptors object at import,
     so a re-typed literal there breaks identity before it breaks equality.
+
+    ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): the season-side symbol and
+    roster row were `rosters.CONVICTION_AXES` / `conviction_axes`. The registry's own
+    `axis_roster` block this guard ultimately checks against is UNCHANGED.
     """
     from engine.substrate import descriptors
     from engine.season.data import rosters
-    assert set(rosters.CONVICTION_AXES) == set(descriptors.AXES), (
-        f'the season engine scores over {sorted(rosters.CONVICTION_AXES)} while the registry '
+    assert set(rosters.PURSUIT_AXES) == set(descriptors.AXES), (
+        f'the season engine scores over {sorted(rosters.PURSUIT_AXES)} while the registry '
         f'declares {sorted(descriptors.AXES)}. One of them is a second literal — read '
         'engine.substrate.descriptors.AXES, do not retype it')
     assert len(descriptors.AXES) == 4, (
@@ -79,16 +83,16 @@ def test_both_readers_resolve_to_the_same_object():
 def test_the_roster_row_points_at_the_owner_and_carries_no_literal():
     """The `values:` list must not come back — that IS the second roster, in YAML."""
     from engine.season.data.rosters import _ROSTERS
-    row = _ROSTERS.get('conviction_axes') or {}
+    row = _ROSTERS.get('pursuit_axes') or {}
     assert 'values' not in row, (
-        'engine/season/rosters.yaml: conviction_axes has a `values:` list again. That is the '
+        'engine/season/rosters.yaml: pursuit_axes has a `values:` list again. That is the '
         'second axis roster restored, in the file the Python-scanning guard below does not read. '
         'Use `from_descriptor: axis_roster`')
     assert row.get('from_descriptor') == 'axis_roster', (
-        'conviction_axes must point at `axis_roster` in the descriptor registry')
+        'pursuit_axes must point at `axis_roster` in the descriptor registry')
     # And the pointer is load-bearing rather than decorative: the `forbidden:` bar still fires.
     assert 'exposure' in (row.get('forbidden') or []), (
-        "conviction_axes' `forbidden: [exposure]` bar is gone. #353 `:1897` names the Exposure "
+        "pursuit_axes' `forbidden: [exposure]` bar is gone. #353 `:1897` names the Exposure "
         'collision — three senses of one word — and routing through `roster()` rather than '
         'importing AXES directly is what keeps that data-side bar alive')
 

@@ -116,6 +116,18 @@ def act_refs(a) -> list:
     return [subj] if subj else []
 
 
+def _tenure_by_id(w, tid: str):
+    """The Tenure with this id, or `None`. Linear, and deliberately not indexed -- the same
+    precedent `state/attribution.py::_event_by_id` states for the log: a lookup that is not hot
+    does not earn a second structure to keep in step with `w.tenures`. Not called on a hot path
+    -- measured over a 44.6s / 143-case corpus run, this lookup is reached 52 times against
+    39,932 `claim_subjects` calls total, 0.111s of the run (`ED-IN-0267`'s own measurement)."""
+    for t in w.tenures:
+        if t.id == tid:
+            return t
+    return None
+
+
 def claim_subjects(w, e: "Event", rule: str, refs: Optional[list] = None) -> list:
     """`H-79`: what the claims deposited from one Event are ABOUT.
 
@@ -139,10 +151,49 @@ def claim_subjects(w, e: "Event", rule: str, refs: Optional[list] = None) -> lis
     # to infer which it received from whether the id happens to name a person.
     anchor = anchor_of(w, e)
     out = [] if rule == "per_change" else [anchor]
+
+    def _add(entity: str) -> None:
+        if entity not in out:
+            out.append(entity)
+
     if rule in ("per_change", "both"):
         for c in e.changes:
-            if c.subject and c.subject not in out:
-                out.append(c.subject)
+            if not c.subject:
+                continue
+            # ⚠ H-71's OTHERS HALF -- A `hold` TENURE'S RECEIPT NAMES THE EDGE, NOT WHAT IT
+            # CONNECTS, AND A WITNESS CANNOT ACT ON AN EDGE'S OWN ID. `_eff_confer`/`_eff_revoke`/
+            # `_eff_release` report the Tenure's own hash id as touched -- correctly, because that
+            # is what the gate actually wrote (the Receipt's honesty is what a rejected earlier
+            # fix broke, by reporting the office and the holder in the Tenure's place). Expanding
+            # here, at the READER, keeps that honesty and still makes the fact legible: a claim
+            # about a `hold` that opened or closed is really a claim about its SUBJECT (who) and
+            # its OBJECT (what they hold).
+            #
+            # ⚠⚠ SCOPED TO `t.kind == "hold"`, NOT TO THE EVENT KIND -- A FIRST VERSION KEYED ON
+            # `e.kind in ("tenure.opened", "tenure.closed")` AND THAT WAS WRONG, FOUND BY
+            # ADVERSARIAL REVIEW. Both kinds are shared by every Tenure closer: `_eff_release`
+            # ends ANY of `RELEASABLE_KINDS` (`hold, commit, oblige, succeed, tie, knot`,
+            # `data/rosters.py`) through the ONE generic `tenure.closed` emit
+            # (`verb_table.yaml`'s `release` row), so keying on the event kind admitted every one
+            # of those, not just offices -- a `release` of a person's `commit` Tenure to an OUGHT
+            # Proposition would have expanded into `(person, ...)` and `(proposition, ...)` and
+            # broadcast both to every witness under the shipped `all_five` default, which is a
+            # moral/ambition fact nobody ruled witnessable and the exact class of unmediated
+            # deposit `AX-7`'s falsifier names. Keying on the TENURE'S OWN KIND is the correct cut
+            # -- H-71 is about OFFICES, offices are held through `hold` Tenures, and `hold` is
+            # already `_ch_document_key`'s own restriction for reading a live Tenure by its two
+            # ends (`epistemic.py`, `_ch_document_key`: `t.kind == "hold" and t.subject == pid and
+            # t.object == c.subject`) -- a search rather than an expansion, and keyed on the OBJECT
+            # rather than the Tenure's own id, so it is a related read on the same restriction
+            # rather than the identical operation. A `commit`/`oblige`/`succeed`/`tie`/`knot`
+            # closure still deposits the Tenure's own opaque id, unchanged from before this row --
+            # the safe default, and correct: nobody has ruled those witnessable in this form.
+            t = _tenure_by_id(w, c.subject)
+            if t is not None and t.kind == "hold":  # H-71: office-shaped tenures only
+                _add(t.subject)
+                _add(t.object)
+                continue
+            _add(c.subject)
         # ⚠ **AND WHAT THE ACT NAMED, WHICH IS THE HALF THAT WAS MISSING.** An Event that wrote
         # nothing has an empty `changes[]`, so every claim deposited from one was minted about
         # **the actor** — by the `or [e.subject]` fallback below, `e.subject` being the actor for

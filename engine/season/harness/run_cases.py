@@ -19,7 +19,7 @@ from __future__ import annotations
 import re
 
 from ..data.matrix import MATRIX
-from ..data.rosters import CONVICTIONS
+from ..data.rosters import PURSUITS
 from ..state.ids import H
 from ..data.verbs import VERB_TABLE
 from ..loop.driver import resolvable_verbs
@@ -34,14 +34,14 @@ from . import probes as P
 # WHAT A CASE SAYS ABOUT THE PERSON IT SEATS. Two derivations, one home.
 #
 # ⚠ THEY LIVED IN TWO DIFFERENT HARNESSES AND THAT WAS THE DEFECT (§8). `wants_of` was in
-# `populated.py` and `seed_convictions` in `corpus_run.py`, so the two instruments that build a
+# `populated.py` and `seed_pursuits` in `corpus_run.py`, so the two instruments that build a
 # world from a case reached across each other to share them -- and `corpus_run` could not read
 # `wants_of` at all without an import cycle. Both are PURE FUNCTIONS OF A CASE DICT, which is what
 # this module already owns (`load_cases`), so this is where they belong and neither harness now
 # imports the other.
 # ===========================================================================
 
-def seed_convictions(seed: int, case_id: str, pid: str) -> dict:
+def seed_pursuits(seed: int, case_id: str, pid: str) -> dict:
     """WHAT ONE PERSON BELIEVES, DRAWN FROM THE CASE ID. `{conviction: weight}`, 1-3 entries.
 
     ⚠ **THE SINGLE OWNER OF THIS DRAW (`CLAUDE.md` §8), AND IT BECAME ONE BY BEING COPIED.**
@@ -72,11 +72,11 @@ def seed_convictions(seed: int, case_id: str, pid: str) -> dict:
     the first, and the rest are the "distributed" remainder.
 
     ⚠ `U3`: THE WEIGHTS ARE OVER THE THIRTEEN CONVICTIONS, NOT OVER THE FOUR AXES. Seeding from
-    `CONVICTION_AXES` was correct while that roster WAS the conviction set; after the swap it
+    `PURSUIT_AXES` was correct while that roster WAS the conviction set; after the swap it
     would hand every person a weight on `hierarchical`, which is a basis vector and not something
     anybody believes.
     """
-    convictions = sorted(CONVICTIONS)
+    pursuits = sorted(PURSUITS)
     # [JUSTIFIED: `16` is `int()`'s RADIX for H()'s blake2b hexdigest -- same as combat_seam.py:153. The `3` is #353 §14's own upper bound: "1-3 primary + distributed"]
     n_conv = 1 + int(H(seed, 0, case_id, f"axis:{pid}:n"), 16) % 3
     # [JUSTIFIED: a DESCENDING ladder, not three chosen magnitudes -- #353 §14 distinguishes the "primary" conviction from the "distributed" remainder and supplies no numbers. What the corpus needs is that the first outweighs the rest; 0.9 matches the single-conviction weight this replaced, so a 1-conviction case is unchanged by the ladder]
@@ -103,8 +103,8 @@ def seed_convictions(seed: int, case_id: str, pid: str) -> dict:
         # RULED by Jordan, 2026-09-16: *"Conviction will be getting overhauled."* The overhaul is
         # where this belongs -- it re-records whatever it moves, which this change on its own does
         # not. Take it THEN, not before, and re-run the creed sweep when you do.
-        pick = int(H(seed, 0, case_id, purpose), 16) % len(convictions)
-        chosen.setdefault(convictions[pick], weights[k])
+        pick = int(H(seed, 0, case_id, purpose), 16) % len(pursuits)  # [JUSTIFIED: 16 is int()'s RADIX for H()'s blake2b hexdigest, stated in full above -- unchanged by this rename]
+        chosen.setdefault(pursuits[pick], weights[k])
     return chosen
 
 def wants_of(case: dict) -> str:

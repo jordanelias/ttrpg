@@ -792,13 +792,13 @@ def test_lb6e_a_wound_scars_and_the_axes_come_from_the_alignment_table():
     §8: `ALIGNMENT` already owns *which axes a verb engages*, and `choose` scores against it. A
     second outcome->axis table would be a second owner of that claim, free to disagree with the
     one the decision layer reads."""
-    from ..data.rosters import CONVICTION_AXES
+    from ..data.rosters import PURSUIT_AXES
     from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
     from ..seam.wrappers import combat as C
     if C.engine() is None:                      # a NAMED gap, never a silent skip
         pytest.skip(f"personal_combat engine unavailable: {C.load_error()}")
 
-    engaged = {ax for ax in CONVICTION_AXES
+    engaged = {ax for ax in PURSUIT_AXES
                if float(ALIGNMENT.get(ax, {}).get("kill / wound", ALIGNMENT_DEFAULT_CELL))}
     if not engaged:
         pytest.skip("`kill / wound` engages no axis in ALIGNMENT, so this item has nothing to key "
@@ -811,8 +811,8 @@ def test_lb6e_a_wound_scars_and_the_axes_come_from_the_alignment_table():
         "test asserted nothing about a scar")
     got = wounded[0]["scar"]
     assert got, "a wound at `scar_step=10` left no scar at all"
-    assert set(got) <= set(CONVICTION_AXES), (
-        f"scar is keyed on {sorted(set(got) - set(CONVICTION_AXES))}, which the axis roster does "
+    assert set(got) <= set(PURSUIT_AXES), (
+        f"scar is keyed on {sorted(set(got) - set(PURSUIT_AXES))}, which the axis roster does "
         "not carry -- the keys came from somewhere other than the roster")
     assert set(got) == engaged, (
         f"scar keys {sorted(got)} != the axes ALIGNMENT engages for this verb {sorted(engaged)}; "
@@ -862,7 +862,7 @@ def test_lb6e_a_verb_that_engages_no_axis_scars_nothing():
     `ALIGNMENT`, so a verb with no engaged axis must leave no scar even at a large step. Without
     this, `_scar` could be scarring every axis unconditionally and the test above -- which only
     checks the keys it DOES find -- would not see it."""
-    from ..data.rosters import CONVICTION_AXES
+    from ..data.rosters import PURSUIT_AXES
     from ..loop.effects import _scar
     from ..state.carriers import Person
 
@@ -874,7 +874,7 @@ def test_lb6e_a_verb_that_engages_no_axis_scars_nothing():
         f"a verb engaging no axis still scarred {p.scar} -- `_scar` is not reading ALIGNMENT, it "
         "is writing every axis unconditionally")
     # AND THE POSITIVE ARM, so this is not a test that passes because `_scar` never writes.
-    engaged = [ax for ax in CONVICTION_AXES if ALIGNMENT_OF("kill / wound", ax)]
+    engaged = [ax for ax in PURSUIT_AXES if ALIGNMENT_OF("kill / wound", ax)]
     if engaged:
         q = Person(id="p_test2")
         _scar(w, q, "kill / wound")

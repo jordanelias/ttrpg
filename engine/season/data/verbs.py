@@ -60,7 +60,7 @@ from ..gaps import Forbidden, Unspecified
 from .matrix import MATRIX
 from .requires import TypedRequires, build_typed_requires
 from .rosters import (
-    CONVICTION_AXES, CONVICTIONS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, load_yaml,
+    PURSUIT_AXES, PURSUITS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, load_yaml,
     require_member, roster, roster_map,
     table,
     table_meta,
@@ -487,7 +487,7 @@ def _check_sparse_table(name: str, cells: dict, rows: "set|tuple", row_what: str
                         cols: "set|tuple", col_what: str, row_law: str, col_law: str) -> dict:
     """THE THREE CHECKS A ROSTER-KEYED SPARSE TABLE NEEDS, IN ONE PLACE.
 
-    `alignment` (axis x verb) and `conviction_projection` (conviction x axis) are the same KIND of
+    `alignment` (axis x verb) and `pursuit_projection` (conviction x axis) are the same KIND of
     object — a mapping whose outer key names a roster member, whose inner keys name another
     roster's members, that may be sparse and may not be uniformly zero. Each check exists because
     the corresponding failure is SILENT: a cell on an unrostered outer key is never read and never
@@ -521,13 +521,13 @@ def _check_sparse_table(name: str, cells: dict, rows: "set|tuple", row_what: str
 
 
 def _load_projection() -> dict:
-    """`tables.conviction_projection`, the 13x4 that maps a person's convictions into axis space.
+    """`tables.pursuit_projection`, the 13x4 that maps a person's convictions into axis space.
 
-    ⚠⚠ **THIS TABLE EXISTS BECAUSE `conviction_axes` USED TO DO TWO JOBS AND COULD DO NEITHER
+    ⚠⚠ **THIS TABLE EXISTS BECAUSE `pursuit_axes` USED TO DO TWO JOBS AND COULD DO NEITHER
     WELL.** Before `U3` the roster held four names -- `Precedent`, `self_preservation`,
     `suspicion`, `harm_borne` -- one of which is a CONVICTION and three of which are ad-hoc
     scalars, and §F2's `conviction[axis]` looked a person's weight up in that one index set.
-    `conviction_axes`'s own note called the conflation out and predicted this repair: *"THIRTEEN
+    `pursuit_axes`'s own note called the conflation out and predicted this repair: *"THIRTEEN
     convictions projecting onto FOUR axes through a 13x4 matrix ... It is the likeliest thing to
     change when `H-46` closes."* It changed here, and `H-46` did NOT close -- Jordan, 2026-09-02:
     *"convictions roster and axes etc may be modified in future."*
@@ -542,16 +542,16 @@ def _load_projection() -> dict:
     ⚠ IT DOES NOT CHECK THAT ALL 13 x 4 CELLS ARE PRESENT. Sparse is lawful here exactly as it is
     for `alignment`: an unlisted pair reads `default_cell`. What is checked is that every cell
     NAMED is nameable."""
-    cells = table("conviction_projection")
+    cells = table("pursuit_projection")
     return _check_sparse_table(
-        "conviction_projection", cells, CONVICTIONS, "conviction", CONVICTION_AXES, "axis",
+        "pursuit_projection", cells, PURSUITS, "conviction", PURSUIT_AXES, "axis",
         row_law=("§F2 -- a person's convictions are weights over the roster. A projection row for a "
                  "conviction nobody can hold is read by nothing"),
         col_law=("engine/substrate/keys.py::AXES single-owns the four names; a fifth is one edit "
                  "there and a refusal here, never two rosters drifting apart"))
 
 
-CONVICTION_PROJECTION = _load_projection()
+PURSUIT_PROJECTION = _load_projection()
 # ⚠ NO `PROJECTION_DECLARED` HERE, AND ITS ABSENCE IS DELIBERATE. `ALIGNMENT_DECLARED` below
 # exists because `ALIGNMENT` is REBOUND by `alignment_at()`'s sweep, so every arm must be
 # built from an immutable baseline rather than from the previous arm. The projection has a
@@ -559,7 +559,7 @@ CONVICTION_PROJECTION = _load_projection()
 # second 13x4 in memory that a reader assumes is wired to something because its sibling is.
 # It comes back in the commit that adds the sweep, the way `ALIGNMENT_DECLARED` arrived with
 # `ALIGNMENT_SWEEP`.
-PROJECTION_DEFAULT_CELL = float(table_meta("conviction_projection").get("default_cell", 0.0))
+PROJECTION_DEFAULT_CELL = float(table_meta("pursuit_projection").get("default_cell", 0.0))
 
 
 def _load_alignment() -> dict:
@@ -573,7 +573,7 @@ def _load_alignment() -> dict:
     cells = table("alignment")
     verbs = set(VERB_TABLE)
     return _check_sparse_table(
-        "alignment", cells, CONVICTION_AXES, "axis", verbs, "verb",
+        "alignment", cells, PURSUIT_AXES, "axis", verbs, "verb",
         row_law=("§F2 -- `conviction[axis] * alignment(verb, axis)` sums over the ROSTER. A cell on "
                  "an unrostered axis is never read and never reported"),
         col_law=("§E2 -- the verb table is the roster of verbs. A cell keyed on a verb that does "
@@ -590,11 +590,11 @@ def rows_without_a_producer() -> dict:
     """Every `social: true` row that no verb writes — §7.2's rule for W2, as a REPORT.
 
     ⚠ IT IS A FLAG AND NOT A DELETE INSTRUCTION, and the W2 audit is why. W2 retired six rows on
-    this rule; applied literally the same rule condemns `(Person, convictions)`, which #353 §9.3
+    this rule; applied literally the same rule condemns `(Person, pursuits)`, which #353 §9.3
     REQUIRES ("moved by argument and consequence"). So a producerless row is one of two different
     things and the report cannot tell them apart:
 
-      * A HOLE — the verb is missing. `(Person, convictions)` has no verb because Part E carries
+      * A HOLE — the verb is missing. `(Person, pursuits)` has no verb because Part E carries
         no argument verb, which is a gap in Part E, not a reason to delete a row #353 mandates.
       * DEAD — nothing in the design produces it. That was the six.
 
@@ -647,7 +647,7 @@ def alignment_at(point: str) -> dict:
         # scored differently from one present on it, convictions could still discriminate, and
         # `P31` passed under the "control". The test's own observability check caught it: a
         # control that the probe survives is not a control (§0.1 point 2).
-        return {ax: {v: 1.0 for v in VERB_TABLE} for ax in CONVICTION_AXES}
+        return {ax: {v: 1.0 for v in VERB_TABLE} for ax in PURSUIT_AXES}
     return {ax: {v: (1.0 if w > 0 else -1.0 if w < 0 else 0.0) for v, w in row.items()}
             for ax, row in ALIGNMENT_DECLARED.items()}
 

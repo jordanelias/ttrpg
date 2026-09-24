@@ -40,8 +40,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from engine.season.data.rosters import CONVICTION_AXES                    # noqa: E402
-from engine.season.data.verbs import ALIGNMENT, CONVICTION_PROJECTION     # noqa: E402
+from engine.season.data.rosters import PURSUIT_AXES                       # noqa: E402
+from engine.season.data.verbs import ALIGNMENT, PURSUIT_PROJECTION        # noqa: E402
+# ⚠ RENAMED 2026-09-24 (`ED-IN-0268`) FROM `CONVICTION_AXES`/`CONVICTION_PROJECTION` -- a pure
+# identifier rename in `engine/season/`, values unchanged. This script sits outside that sweep's
+# stated scope (`engine/season` non-test + `references/` owners) but imports its symbols directly,
+# so it went dead until this line moved with them; found by an adversarial pass over the rename.
 from engine.season.decision import assemble, opening_set                  # noqa: E402
 from engine.season.decision.choose import align, project                  # noqa: E402
 from engine.season.harness.populated import build_realm                   # noqa: E402
@@ -52,13 +56,13 @@ from engine.season.queries.world_q import questions_for                   # noqa
 # 2026-09-16-conviction-decision-layer/synthesis.md §3]
 FLOOR = 0.294
 
-AXES = sorted(CONVICTION_AXES)
+AXES = sorted(PURSUIT_AXES)
 
 # THE CONTROL TABLE, HOISTED SO IT IS SUBSTITUTABLE AND THE CONTROL'S OWN ASSERTION IS NOT VACUOUS.
 # A first version built this inline from a literal `1.0`, which made the assertion below able to
 # observe only an arithmetic bug and NEVER a wrong control -- the class `CLAUDE.md` §0.1 pt 2 names
 # and PR #418 found three of. Proven to fire by substitution: see `_prove_control_fires`.
-UNIFORM_TABLE = {c: {a: 1.0 for a in AXES} for c in CONVICTION_PROJECTION}
+UNIFORM_TABLE = {c: {a: 1.0 for a in AXES} for c in PURSUIT_PROJECTION}
 
 
 def _proj(weights: dict, rows: dict) -> dict:
@@ -129,7 +133,7 @@ def arm_two_between_persons(w) -> None:
     print(f"  DISTINCT conviction vectors     {len(distinct)}\n")
 
     control_ok = None
-    for name, rows in (("LIVE 13x4", CONVICTION_PROJECTION), ("UNIFORM (control)", UNIFORM_TABLE)):
+    for name, rows in (("LIVE 13x4", PURSUIT_PROJECTION), ("UNIFORM (control)", UNIFORM_TABLE)):
         ranks, terms = {}, {}
         for pid, p in people:
             aw = _proj(p.convictions, rows)
@@ -187,7 +191,7 @@ def _prove_control_fires(w) -> None:
     global UNIFORM_TABLE
     kept = UNIFORM_TABLE
     UNIFORM_TABLE = {c: {a: (1.0 if i % 2 else 0.2) for i, a in enumerate(AXES)}
-                     for c in CONVICTION_PROJECTION}
+                     for c in PURSUIT_PROJECTION}
     try:
         arm_two_between_persons(w)
     except AssertionError:

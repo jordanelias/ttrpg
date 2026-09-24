@@ -238,6 +238,27 @@ entries:
     category: substrate
     enforce: warn
 
+  # ── SEASON-SIDE PURSUIT RENAME (2026-09-24, ED-IN-0261 item 1) -- warn, not block: a block
+  # entry would red this commit's own history-quoting comments. Substrate leaf stays absent here.
+  season.person_pursuits:
+    canonical: pursuits
+    aliases: []
+    legacy: ["Person.convictions", "seed_convictions", "convictions_of", "role_template_convictions"]
+    category: substrate
+    enforce: warn
+  season.pursuit_axes:
+    canonical: pursuit_axes
+    aliases: []
+    legacy: ["conviction_axes", "CONVICTION_AXES"]
+    category: substrate
+    enforce: warn
+  season.pursuit_projection:
+    canonical: pursuit_projection
+    aliases: []
+    legacy: ["conviction_projection", "CONVICTION_PROJECTION"]
+    category: substrate
+    enforce: warn
+
   # ── PROPER-NOUN CORPUS FOLD-IN (2026-07-01, ED-1084) ─────────────────────────
   # Generated from references/proper_noun_registry.yaml (every category); warn-tier;
   # mirror-checked by ci_names_consistency (last key segment -> registry entry).

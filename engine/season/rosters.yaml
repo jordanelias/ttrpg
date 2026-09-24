@@ -25,7 +25,7 @@
 #   > **The test, stated so it is idempotent:** a number that is a PROPERTY OF A ROSTER MEMBER
 #   > travels with the roster and lives here. A number that stands free of any roster — `K = 12`,
 #   > a budget base, a ledger cap — is a `Fixture`. `alignment[axis][verb]` has no meaning apart
-#   > from `conviction_axes` and the verb table; `view_k` has meaning on its own.
+#   > from `pursuit_axes` and the verb table; `view_k` has meaning on its own.
 #
 # TABLES ARE A SECOND TOP-LEVEL KEY, not a roster with a strange shape. A roster is a SET and
 # `roster()` returns a frozenset; a table is a MAPPING and `table()` returns a dict. Reading one
@@ -244,7 +244,11 @@ rosters:
       nobody has tested.
     values: [own, remit, hold, presence]
 
-  convictions:
+  # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this row was `convictions:`.
+  # The season-side name is now `pursuits`/`PURSUITS`; the row's SOURCE, values (read via
+  # `from_descriptor:`) and the underlying `descriptor_registry.yaml:conviction_roster` block are
+  # byte-identical and still carry the old 13-name taxonomy — only the season-side label moved.
+  pursuits:
     source: >-
       references/descriptor_registry.yaml `conviction_roster` (:235-251), count 13, itself sourced
       from systems/characters/reference/conviction_taxonomy_v30.md §2 and exported to
@@ -258,8 +262,8 @@ rosters:
       shape; it is not a closure, and `open: true` says so in data rather than in this note alone.
       ⚠ **THESE ARE CONVICTIONS AND THEY ARE NOT AXES.** The row immediately below carries FOUR
       ethical axes; a person's convictions are weights over THESE THIRTEEN, and they reach the
-      axes only through `tables.conviction_projection`. Before `U3` this file held one index set
-      doing both jobs, and `conviction_axes`'s own note called that *"the likeliest thing to change
+      axes only through `tables.pursuit_projection`. Before `U3` this file held one index set
+      doing both jobs, and `pursuit_axes`'s own note called that *"the likeliest thing to change
       when `H-46` closes"* — it changed here without closing it.
     # ⚠⚠ **NO `values:` HERE, AND THAT IS THE WHOLE POINT OF THE ROW.** A first writing of `U3`
     # listed the thirteen names in this file, and that was a SECOND ROSTER —
@@ -268,20 +272,22 @@ rosters:
     # `systems/characters/sim/conviction.py`, eight in `systems/world/sim/npe.py`, thirteen
     # registered) and the disagreement silently disabled ED-912 §6.1's Conviction Scar. That guard
     # scans PYTHON, so a copy in YAML would have slipped past it while being the same defect.
-    # `data/rosters.py` binds `CONVICTIONS` from `engine.substrate.descriptors` — the one leaf
-    # reader, fed by the one exporter, from the one owner at
-    # `references/descriptor_registry.yaml:conviction_roster`. This row carries the SOURCE and the
-    # NOTE, which is what a roster row is for when the values live somewhere better.
+    # `data/rosters.py` binds `PURSUITS` from `engine.substrate.descriptors` (as `CONVICTIONS`,
+    # the leaf's own unrenamed name) — the one leaf reader, fed by the one exporter, from the one
+    # owner at `references/descriptor_registry.yaml:conviction_roster`. This row carries the
+    # SOURCE and the NOTE, which is what a roster row is for when the values live somewhere better.
     # ⚠ `from_descriptor:`, NOT `values: []` (2026-09-15). This row carried an EMPTY list
     # while the real thirteen arrived by a separate direct import in `data/rosters.py`, so
-    # `roster("convictions")` returned `frozenset()` — the "membership test silently false"
+    # `roster("pursuits")` returned `frozenset()` — the "membership test silently false"
     # outcome `roster()`'s own refusal text forbids, in the file whose header promises the
     # opposite. `from_descriptor` is the mechanism ED-IN-0230 built; this is the row that
     # motivated it, finally migrated. It also puts the data-side `forbidden:` bar within
     # reach of this roster, which a direct import cannot do.
     from_descriptor: conviction_roster
 
-  conviction_axes:
+  # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this row was `conviction_axes:`.
+  # `open:`, `forbidden:` and `from_descriptor:` are byte-identical to before the rename.
+  pursuit_axes:
     source: >-
       references/descriptor_registry.yaml:258 — the `axis.*` by_reference row, "4 ethical axes
       (hierarchical/sacred/instrumental/traditional)", scale "[-1,+1] basis", sourced to
@@ -304,7 +310,7 @@ rosters:
       formula indexes convictions BY axis, i.e. treats them as ONE index set ... It is the likeliest
       thing to change when `H-46` closes."* `U3` makes that change WITHOUT closing `H-46`, which
       stays `absent` and open per Jordan's 2026-09-02 ruling: the roster above holds the thirteen,
-      this row holds the four, and `tables.conviction_projection` is the 13×4 between them. What V2
+      this row holds the four, and `tables.pursuit_projection` is the 13×4 between them. What V2
       §F2 spells `conviction[axis]` is now computed rather than looked up —
       `Σ_conv conviction[conv] · projection[conv][axis]` — so the formula is unchanged in shape and
       its index set is no longer overloaded.
@@ -1326,7 +1332,9 @@ tables:
         limited:         500
         withdrawal_only: 100
 
-  role_template_convictions:
+  # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this table was
+  # `role_template_convictions:`; cells, `row:` and `default_cell:` are byte-identical.
+  role_template_pursuits:
     source: >-
       systems/factions/reference/faction_canon_v30.md §4 "Role Templates and Expected Convictions"
       (per PP-686 §3.3.1, over the PP-684 13-Conviction taxonomy). TIER 2 — near-canon, and it
@@ -1334,10 +1342,10 @@ tables:
       itself has.
     row: H-99
     default_cell: 0.0
-    keys: [role_templates, convictions]
+    keys: [role_templates, pursuits]
     note: >-
       ⚠ **WHAT A FACTION EXPECTS OF ITS MEMBERS, WHICH IS NOT THE SAME AS WHAT ANY MEMBER HOLDS.**
-      `conviction_projection` maps a PERSON's thirteen weights into the four ethical axes; this maps
+      `pursuit_projection` maps a PERSON's thirteen weights into the four ethical axes; this maps
       a ROLE TEMPLATE's expectations onto the same thirteen. The two multiply against each other
       nowhere — they are different objects with one shared vocabulary, and the vocabulary is the
       canonical thirteen in both cases, read from the single owner.
@@ -1393,7 +1401,10 @@ tables:
         Identity:   0.15
         Order:      0.15
 
-  conviction_projection:
+  # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this table was
+  # `conviction_projection:`; `source:`, `row:`, `default_cell:`, `sweep:` and the 52 cells are
+  # byte-identical.
+  pursuit_projection:
     source: >-
       systems/characters/reference/conviction_axis_matrix_v30.md §2 / PP-687, registered by
       reference at references/descriptor_registry.yaml:259 — the `map.conviction_axis` row,
@@ -1401,7 +1412,7 @@ tables:
     row: H-46
     default_cell: 0.0
     sweep: [declared, uniform, sign_only]
-    keys: [convictions, conviction_axes]
+    keys: [pursuits, pursuit_axes]
     note: >-
       ⚠⚠ **THESE 52 CELLS ARE READ, NOT INVENTED, AND THAT IS WHAT SEPARATES THIS TABLE FROM
       `alignment` BELOW.** Every value is transcribed from `conviction_axis_matrix_v30.md` §2's
@@ -1497,7 +1508,7 @@ tables:
     # `sign_only` keeps the directions and discards the magnitudes, which is the separation worth
     # having when the magnitudes are declared invented and the directions are argued.
     sweep: [declared, uniform, sign_only]
-    keys: [conviction_axes, verb_table]
+    keys: [pursuit_axes, verb_table]
     note: >-
       ⚠ THESE WEIGHTS ARE INVENTED, AND THE ROW IS WHAT MAKES THAT LAWFUL. PLAN `W5`: the table is
       "**registered as its own `assumption` row** … the closed 13 axes are enumerated nowhere, so

@@ -129,7 +129,7 @@ CLAUDE_MD = REPO_ROOT / "CLAUDE.md"
 # ⚠ THE CAST, AND IT IS CANON RATHER THAN THIS PACKAGE'S OWN. 46 character rows whose ids are an
 # EXACT 1:1 MATCH with `load_cases("NPC")` — measured, zero symmetric difference — carrying an
 # authored `faction`, `role`, weighted `convictions` over the canonical thirteen, and a `title` on
-# seven. It sat unread by anything that executes while `run_cases.seed_convictions` derived each
+# seven. It sat unread by anything that executes while `run_cases.seed_pursuits` derived each
 # person's convictions from `blake2b(seed, case_id, pid)`. Named here because `files.py` is the one
 # anchor; read through `data/cast.py`, which is the one reader.
 NPC_REGISTRY_YAML = REFERENCES_DIR / "npc_registry.yaml"

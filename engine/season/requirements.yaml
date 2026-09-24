@@ -408,7 +408,8 @@ rows:
     status: partial
     measured: >-
       `Person` carries `convictions` against a `conviction_axes` roster with an alignment
-      matrix, and a zero matrix is refused at load (PLAN §W5's dead-carrier guardrail). AMBITION
+      matrix, and a zero matrix is refused at load (PLAN §W5's dead-carrier guardrail).
+      (renamed `pursuits`/`pursuit_axes` 2026-09-24, `ED-IN-0261` item 1; values unchanged) AMBITION
       is not fieldless: a person's motive is expressed as a `commit` Tenure to an OUGHT
       Proposition (`engine/season/harness/headless.py::build_world`, `S.Tenure(..., "commit", ...)` to
       `prop_einhir`), and the Q4 source (`"Q4 -- \`need\`"`,

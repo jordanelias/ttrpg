@@ -48,9 +48,9 @@ from collections import Counter
 from .. import decision
 from ..data.fixtures import DEFAULT_FIXTURES, SITE_YIELD
 from ..data.matrix import Step
-# `CONVICTIONS` dropped 2026-09-16: `seed_convictions` moved to `run_cases.py`, which is its
+# `CONVICTIONS` dropped 2026-09-16: `seed_pursuits` moved to `run_cases.py`, which is its
 # single owner, and nothing here reads the roster any more.
-from ..data.rosters import CONVICTION_AXES, RUNG_KINDS, load_yaml
+from ..data.rosters import PURSUIT_AXES, RUNG_KINDS, load_yaml
 from ..data.verbs import VERB_TABLE
 from ..decision import align, make_chooser
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Unowned, Unspecified
@@ -62,7 +62,7 @@ from ..state.world import World
 from ..data import files
 from . import probes as P
 from . import run_cases as R
-from .run_cases import seed_convictions, wants_of
+from .run_cases import seed_pursuits, wants_of
 
 # `CLAUDE.md` §0.1 pt 5 / `G1`: declared here with its reason, not a bare literal in a body.
 # [JUSTIFIED: an INSTRUMENT BUDGET, not a rule of the game -- no design document names a season cap. `W6`'s flood is the measurement it is fitted to: the corpus's longest `span_seasons` is 16, and running those costs more than the grading they buy. Lowering it truncates long cases; raising it changes no verdict this instrument reports]
@@ -188,7 +188,7 @@ def build_at(case: dict, seed: int = 0) -> World:
 
     ⚠ THE CONVICTIONS ARE SEEDED FROM THE CASE ID, over the THIRTEEN CONVICTIONS -- not over
     `conviction_axes`, which this said until 2026-09-16 and which `U3` superseded when the set
-    it indexes went from 4 to 13. The draw itself lives in `run_cases.seed_convictions`, its
+    it indexes went from 4 to 13. The draw itself lives in `run_cases.seed_pursuits`, its
     single owner; this module only calls it. Rev 1 wrote
     three axis names and the weight `0.9` as literals, which is a fill off the register (`G1`) and,
     worse, was the ENTIRE ranking function — `stance` is empty in these worlds and §F2's `urgency`
@@ -229,7 +229,7 @@ def build_at(case: dict, seed: int = 0) -> World:
         # -- rather than in a person-shaped container, which is what the ladder actually says.
         if chain:
             w.add_tenure(Tenure(f"t_{pid}_in", pid, ids[chain[0]], "contain", 0))
-        w.persons[pid].convictions = seed_convictions(seed, str(case.get("id")), pid)
+        w.persons[pid].pursuits = seed_pursuits(seed, str(case.get("id")), pid)
     # ⚠ `W28`: THE CASE MAY SEAT ITS OWN ACTOR ON AN OFFICE. A re-scaled case carries
     # `office: {post, remit, why}` — `post` names the office the prose names, `remit` the acts it
     # carries, and `why` records the DERIVATION, because that is what makes this authoring rather
@@ -601,7 +601,7 @@ def main(seed: int = 0) -> int:
         # the failure mode `H-97` exists to report on. `make_chooser` scores the same way (§8: the
         # rule lives once), so this instrument and the thing it measures cannot drift apart.
         axis_w = decision.project(pr)
-        nz = sum(1 for x in cd if any(axis_w[a] * align(x.verb, a) for a in CONVICTION_AXES))
+        nz = sum(1 for x in cd if any(axis_w[a] * align(x.verb, a) for a in PURSUIT_AXES))
         sep.append((nz, len(cd)))
     if sep:
         tot = sep[0][1]

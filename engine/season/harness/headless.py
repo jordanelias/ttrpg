@@ -30,7 +30,7 @@ from __future__ import annotations
 import argparse
 
 from ..data.fixtures import DEFAULT_FIXTURES
-from ..data.convictions import conviction as _conv
+from ..data.pursuits import pursuit as _pursuit
 from ..data.verbs import VERB_TABLE
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
@@ -114,16 +114,16 @@ def build_world(seed: int = 0, fixtures: "S.Fixtures" = None) -> World:
     # is two canonical names in one dict, so it read as a roster fragment — and the distinction
     # between a ROSTER (an enumeration that can drift out of step with the owner) and a REFERENCE
     # (a choice of one member) is not one an AST scan can draw.
-    # `_conv` draws it by CONSTRUCTION rather than by argument: one name per call, each checked
+    # `_pursuit` draws it by CONSTRUCTION rather than by argument: one name per call, each checked
     # against `CONVICTIONS`, which IS `engine.substrate.descriptors.CONVICTIONS` — the same object,
     # not a copy. A rename in `references/descriptor_registry.yaml` now raises here by name instead
     # of silently seeding a conviction nobody holds, which is strictly more than the literals did.
     # [JUSTIFIED: these five weights are AUTHORED CHARACTER, not a mechanical constant -- #353 §14 types convictions as "weights over the closed 13 | 1-3 primary + distributed" and supplies no magnitudes. Carin at Precedent 0.9 is what the docstring above explains starts her causal chain; the rest are her, the bailiff and the warden being three different people. `H-46` is the row and it is open]
-    w.persons[CARIN].convictions = {_conv("Precedent"): 0.9, _conv("Utility"): 0.3}
+    w.persons[CARIN].pursuits = {_pursuit("Precedent"): 0.9, _pursuit("Utility"): 0.3}
     # [JUSTIFIED: as the line above -- authored character under `H-46`, not a mechanical constant. The bailiff is procedural-first (Order 0.8) and the warden holds one conviction weakly, which is what makes the three people three]
-    w.persons[BAILIFF].convictions = {_conv("Order"): 0.8, _conv("Precedent"): 0.4}
+    w.persons[BAILIFF].pursuits = {_pursuit("Order"): 0.8, _pursuit("Precedent"): 0.4}
     # [JUSTIFIED: as above -- one conviction, held weakly; the warden is the least opinionated of the three by design]
-    w.persons[WARDEN].convictions = {_conv("Precedent"): 0.6}
+    w.persons[WARDEN].pursuits = {_pursuit("Precedent"): 0.6}
     return w
 
 

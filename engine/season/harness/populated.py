@@ -79,7 +79,7 @@ from ..state.carriers import Office, Person, Proposition, Rung, Site, Tenure
 from ..state.ids import H, draw_factory
 from ..state.world import World
 from . import probes as P
-from .run_cases import load_cases, seed_convictions, wants_of
+from .run_cases import load_cases, seed_pursuits, wants_of
 
 GEOGRAPHY = "systems/settlements/valoria_geography_v30.yaml"
 VENUES = "engine/season/venues.yaml"
@@ -423,7 +423,7 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         # ⚠⚠ AUTHORED, NOT DRAWN — AND THE DRAW REMAINS AS THE NAMED FALLBACK IT ALWAYS WAS.
         # `references/npc_registry.yaml` carries a weighted conviction vector for all 46 of these
         # people, cited to canon, using only the canonical thirteen. Nothing that executes had ever
-        # opened it, so `seed_convictions` — a `blake2b(seed, case_id, pid)` draw — was supplying
+        # opened it, so `seed_pursuits` — a `blake2b(seed, case_id, pid)` draw — was supplying
         # the one quantity that orders every candidate in these worlds. The contrast is not
         # cosmetic: Carin Vedel (NPC-088), whose case is hand-copying SUPPRESSED texts, is authored
         # `Liberty 0.60 / Equity 0.20` and was drawn `Authority 0.90` — the precise opposite of her
@@ -437,10 +437,10 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
         # person with no convictions scores every candidate identically, which is `uniform`, the
         # sweep's CONTROL arm, shipped silently as a default.
         #
-        # ⚠ `seed_convictions` IS STILL THE SINGLE OWNER OF THE DRAW (§8) and is still called
+        # ⚠ `seed_pursuits` IS STILL THE SINGLE OWNER OF THE DRAW (§8) and is still called
         # rather than copied. What changed is which source is consulted first.
-        authored = cast.convictions_of(cast.row(cid) or {})
-        w.persons[pid].convictions = authored or seed_convictions(seed, cid, pid)
+        authored = cast.pursuits_of(cast.row(cid) or {})
+        w.persons[pid].pursuits = authored or seed_pursuits(seed, cid, pid)
 
     # -- WHO BELONGS TO WHAT ----------------------------------------------------
     #
