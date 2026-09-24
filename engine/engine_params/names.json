@@ -3,7 +3,7 @@
   "schema_version": 1,
   "source": "references/names_index.yaml",
   "registry_version": 3,
-  "count": 119,
+  "count": 122,
   "canonical": {
     "agg.body": "Body",
     "agg.mind": "Mind",
@@ -50,9 +50,12 @@
     "ppt.consequence": "Consequence",
     "ppt.evidence": "Evidence",
     "ppt.loyalty": "Loyalty",
-    "season.person_pursuits": "pursuits",
+    "season.of": "pursuits_of",
     "season.pursuit_axes": "pursuit_axes",
     "season.pursuit_projection": "pursuit_projection",
+    "season.pursuits": "pursuits",
+    "season.role_template": "role_template_pursuits",
+    "season.seed": "seed_pursuits",
     "set.defense": "Defense",
     "set.facility_tier": "Facility Tier",
     "set.legitimacy": "Legitimacy",
@@ -197,9 +200,9 @@
     "Theocracy Counter": "Church Influence",
     "conviction_axes": "pursuit_axes",
     "conviction_projection": "pursuit_projection",
-    "convictions_of": "pursuits",
-    "role_template_convictions": "pursuits",
-    "seed_convictions": "pursuits"
+    "convictions_of": "pursuits_of",
+    "role_template_convictions": "role_template_pursuits",
+    "seed_convictions": "seed_pursuits"
   },
   "by_class": {
     "clock": [

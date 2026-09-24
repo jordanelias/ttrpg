@@ -238,14 +238,10 @@ entries:
     category: substrate
     enforce: warn
 
-  # ── SEASON-SIDE PURSUIT RENAME (2026-09-24, ED-IN-0261 item 1) -- warn, not block: a block
-  # entry would red this commit's own history-quoting comments. Substrate leaf stays absent here.
-  season.person_pursuits:
-    canonical: pursuits
-    aliases: []
-    legacy: ["Person.convictions", "seed_convictions", "convictions_of", "role_template_convictions"]
-    category: substrate
-    enforce: warn
+  season.pursuits: {canonical: pursuits, legacy: ["Person.convictions"], category: substrate, enforce: warn}
+  season.seed: {canonical: seed_pursuits, legacy: ["seed_convictions"], category: substrate, enforce: warn}
+  season.of: {canonical: pursuits_of, legacy: ["convictions_of"], category: substrate, enforce: warn}
+  season.role_template: {canonical: role_template_pursuits, legacy: ["role_template_convictions"], category: substrate, enforce: warn}
   season.pursuit_axes:
     canonical: pursuit_axes
     aliases: []
