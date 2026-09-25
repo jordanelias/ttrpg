@@ -66,32 +66,4 @@
     "SessionStart": [],
     "Stop": []
   }
-}      "Bash(diff *)",
-      "mcp__github__pull_request_read"
-    ]
-  },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/tools/hook_naming_guard.py\""
-          }
-        ]
-      },
-      {
-        "matcher": "Grep|Glob",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR/tools/hook_md_sweep_guard.py\""
-          }
-        ]
-      }
-    ],
-    "SessionStart": [],
-    "Stop": []
-  }
 }
