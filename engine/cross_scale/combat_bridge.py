@@ -58,8 +58,9 @@ or any balance quantity: a PC rebalance must not turn that test red.
 """
 from __future__ import annotations
 
-import os
 import random as _random_mod
+
+from engine.substrate import pc_engine
 
 # SEAM CONSUMED (widened from the plan's "wrapper public API" declaration — recorded in
 # audit/2026-07-29-code-shape-open-items/04_execution_ledger.md): `wrapper.fight(A, B, cfg, rng,
@@ -67,37 +68,12 @@ import random as _random_mod
 # here.
 #
 # combat_engine_v1/ is a non-package "scripts-on-path" directory (CLAUDE.md §3: "stays a
-# non-package scripts-on-path dir; only systems/combat/ + systems/combat/sim/ are packages") —
-# every consumer (wrapper.py itself, the workbench scripts, the audit harnesses) reaches its
-# siblings via this SAME sys.path insert + bare-name import, never a dotted
-# `systems.combat.combat_engine_v1.x` package import (there is no __init__.py to make one). This
-# bridge follows the established convention rather than inventing a second import style — no edit
-# to anything under systems/combat/ either way.
-#
-# LAZY, MEMOIZED (not module-level): the sys.path mutation + the `combatant`/`wrapper` imports
-# happen inside `_load_engine()`, on first actual use, and are cached in the module-level
-# `_engine` singleton below — so `import combat_bridge` is side-effect-free and the flag-OFF
-# world (DISPATCH_COMBAT_BRIDGE off) never touches sys.path or the PC combat_engine_v1 tree.
-_COMBAT_ENGINE_V1_DIR = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-    'systems', 'combat', 'combat_engine_v1')
-
-_engine = None   # lazily set to (combatant_mod, wrapper_mod) by _load_engine(); see above.
-
-
-def _load_engine():
-    """Import combat_engine_v1's `combatant` + `wrapper` modules on first use only, memoized in
-    the module-level `_engine` tuple thereafter. Deferred so `import combat_bridge` never mutates
-    `sys.path` or imports PC-owned code when the flag is off."""
-    global _engine
-    if _engine is None:
-        import sys
-        if _COMBAT_ENGINE_V1_DIR not in sys.path:
-            sys.path.insert(0, _COMBAT_ENGINE_V1_DIR)
-        import combatant as _combatant_mod
-        import wrapper as _wrapper_mod
-        _engine = (_combatant_mod, _wrapper_mod)
-    return _engine
+# non-package scripts-on-path dir; only systems/combat/ + systems/combat/sim/ are packages"), so it
+# is loaded through the ONE path seam, engine/substrate/pc_engine.py (2026-09-25; this module's
+# former private loader was one of two copies of that insert). `pc_engine.load()` runs on first
+# actual use and RAISES on a missing tree, which this bridge lets propagate. Importing pc_engine is
+# side-effect-free, so `import combat_bridge` still never mutates sys.path, and the flag-OFF world
+# (DISPATCH_COMBAT_BRIDGE off) never touches the PC combat_engine_v1 tree.
 
 
 def _combatant_from_faction_mil(fid, world):
@@ -107,8 +83,7 @@ def _combatant_from_faction_mil(fid, world):
     if f is None:
         return None
     history = max(1, round(f.Mil))
-    _combatant_mod, _ = _load_engine()
-    return _combatant_mod.Combatant(label=fid, history=history)
+    return pc_engine.load().combatant.Combatant(label=fid, history=history)
 
 
 def derive_parties(ctx, world):
@@ -136,9 +111,8 @@ def resolve(a, b, rng):
     global RNG state. Returns a small typed dict — SHAPE ONLY, see module docstring's
     "CHARACTERIZATION, NOT OUTCOME" note: `{'result': -1|0|1, 'winner': label|None, 'a_label':
     str, 'b_label': str, 'a_history': int, 'b_history': int}`."""
-    _, _wrapper_mod = _load_engine()
     fight_rng = _random_mod.Random(rng.getrandbits(32))
-    result = _wrapper_mod.fight(a, b, rng=fight_rng)
+    result = pc_engine.load().wrapper.fight(a, b, rng=fight_rng)
     winner = a.label if result == 1 else (b.label if result == -1 else None)
     return {
         "result": result,

@@ -8,10 +8,7 @@ REGISTRY the package loads; `tests/test_season_shape.py` legitimately resolves i
 AST walk, and neither of those is a second anchor. Before this
 module the package carried 29 independent anchors across 10 files, each climbing its own chain of
 `.parent`s, and the length of that chain was a fact about where the file happened to sit rather
-than about the tree. `combat_seam.py` is the worked case for why that is dangerous rather than
-merely untidy: it climbed four levels, so moving the file one directory changes which directory
-`_PC` names, `engine()` returns `None`, `resolve()` answers `ENGINE-UNAVAILABLE`, six seam tests
-SKIP, and the run stays GREEN. A path anchor fails silently by construction -- the degradation each
+than about the tree. A path anchor fails silently by construction -- the degradation each
 seam performs on purpose (a named gap rather than an ImportError) is exactly what hides a wrong
 anchor -- so the anchor has to be checked at import, in one place, or not at all.
 
@@ -119,13 +116,10 @@ GOVERNANCE_SPINE_YAML = PACKAGE_DIR / "governance_spine.yaml"
 DEGREE_SWEEP_DIR = REPO_ROOT / "proposals" / "2026-09-04-degree-sweep"
 
 # ---------------------------------------------------------------------------
-# THE REPOSITORY. Two seams reach out of the proposal and both load BY PATH and ON FIRST USE:
-# `combat_seam.engine()` (the flat personal-combat module set) and `seam.degree_ladder()`
-# (`engine.autoload.dice_engine`). Each is deferred so the tracer still runs where the tree is
-# absent, degrading to a NAMED gap rather than an ImportError at import.
+# THE REPOSITORY. The flat personal-combat module set is NOT anchored here: it is loaded by the
+# one path seam, engine/substrate/pc_engine.py (2026-09-25), which seam/wrappers/combat.py calls.
 # ---------------------------------------------------------------------------
 SYSTEMS_DIR = REPO_ROOT / "systems"
-PC_ENGINE_DIR = SYSTEMS_DIR / "combat" / "combat_engine_v1"
 REFERENCES_DIR = REPO_ROOT / "references"
 MODULE_CONTRACTS_YAML = REFERENCES_DIR / "module_contracts.yaml"
 CLAUDE_MD = REPO_ROOT / "CLAUDE.md"
