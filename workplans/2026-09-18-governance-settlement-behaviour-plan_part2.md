@@ -336,7 +336,8 @@ edge must raise. If it passes, the basis walk is still reading the actor.
 **TIER.** `opus`/`opus`. The wrong answer is a quietly permissive gate.
 **STATE (2026-09-25). NOT STARTED.** `Act` has no `via` (`state/carriers.py:406`); `under_purview`
 (`loop/predicates.py:105`) and the title helpers read the ACTOR's own titles; `_req_revoke` carries
-the `is_title` branch at `predicates.py:252`. **The three live violations, located:** `_eff_revoke`
+the `is_title` branch at `predicates.py:347-349` (moved from `:252` by `13f`'s additions to this file —
+re-check citations below `13f`'s edits before building). **The three live violations, located:** `_eff_revoke`
 (`loop/effects.py:191`) and `_eff_confer` (`:108`) close another person's `hold`; `_eff_kill` (`:410`)
 closes others' edges through `World.remove_person` (`state/world.py:384`). `_eff_release` (`:161`) is
 T-m by construction. **The `Act(...)` mint** is in `decision/choose.py` — `via` is set there, from the
@@ -834,6 +835,23 @@ holder's Tenure is emitted. A hand-mutation of `w.offices[x].remit_acts` still d
 unknown one, emits `establish.refused`, constructs nothing, and **lets no exception escape the fold**.
 Assert on the Event, not on the absence of a traceback.
 **GATE.** — (phase α). It is one of the nine `H-71` unblocked; `§3.9` edge 2 puts it before `13e`.
+**BUILT 2026-09-25.** `office_described_by`/`_req_establish`/`_eff_establish` landed as specified;
+21 new tests in `test_governance_build.py`. Confirmed by an antagonist pass (independent re-run):
+`engine/season/tests -q -n auto` 209 passed clean (not the 207-with-2-pre-existing-failures the
+builder's own receipt reported — that was the pre-fix baseline; the corpus never-attempted pin gaining
+`establish` and one probe count moving 19→20 of 38 resolvable are RE-PINS this diff causes, not
+failures it fixes, and `runs/results.json`'s diff is confirmed to move exactly those two things, no
+probe verdict flipped). **KNOWN LIMITATIONS, NOT BLOCKING, RECORDED SO A LATER SESSION DOES NOT
+RE-FIND THEM:** an office with `rung=None` (an office cluster — `tiny_world`'s `off_dicastery`, and
+every populated office governing neither a realm nor a duchy) can never be re-remitted by this effect,
+correctly refused rather than silently admitted; the remit-change arm cannot fire in ANY built world
+today because no world builder sets an office's `conferral`, so it is reachable only through a
+hand-built fixture, the same dependence `confer` already has; and there is no authority clause on who
+may found or re-remit what — any holder with the `confer` remit can found an office for any
+faction at any rung and re-remit any office with a conferral basis, including granting themselves a
+new remit act in one act, which is unreachable until `13d-i` (conferral values) and `15c` (operands)
+land and should be checked again then, possibly against the purview model `revoke` already uses
+(`loop/predicates.py:110-114`).
 
 **13e — ONE READING OF THE REMIT.**
 **not earlier** `13f` · **not later** `17a`, which replaces one of the two functions this edits.
@@ -855,9 +873,11 @@ remit verb, which it admitted before this position. Assert the refusal, and asse
 re-stamps the sitting holder's grant, so the resolver ADMITS. That is `13f`'s falsifier and the
 complement of this one: by hand → refuse, by act → admit. Assert both arms, or the two positions'
 falsifiers read as contradicting each other. **And an AST scan:** no
-`remit_acts` read outside `_grant_remit` and `Office.__post_init__`. A fourth reader is planned —
-`budget()` counting `t.granted_acts` (`HANDOFF_IN.md`, blocked on `test_n3`'s floor) — and the scan is
-what stops it regressing to the office.
+`remit_acts` read outside `_grant_remit`, `Office.__post_init__` **and `_eff_establish`** (allow-listed
+2026-09-25 — `13f` landed first and `loop/effects.py:194,196` compares and rewrites `remit_acts`
+directly, on the office being re-remitted, which is what the effect's whole job is). A fourth reader is
+planned — `budget()` counting `t.granted_acts` (`HANDOFF_IN.md`, blocked on `test_n3`'s floor) — and the
+scan is what stops it regressing to the office.
 **GATE.** `13f` (`§3.9` edge 2). **TIER.** `sonnet` producer — two one-line edits; `opus` critic,
 because three independent lanes found this and a fourth reading is already queued.
 
@@ -866,7 +886,7 @@ because three independent lanes found this and a fourth reading is already queue
 `harness/governance_spine.py`; every empty remit filled from `rosters.yaml`'s `remit_default`, `:152`, a
 declared TEST FIXTURE). NOT done: `engine/season/data/offices.yaml` does not exist; there is no
 conferral or revocation roster; the `titles` roster is live (`rosters.yaml:783`); the `is_title` branch
-is live (`loop/predicates.py:252`); the title helpers are live (`predicates.py:144-165`, `titles_held`,
+is live (`loop/predicates.py:347-349`, moved from `:252` by `13f`); the title helpers are live (`predicates.py:144-165`, `titles_held`,
 `highest_title_rank`, plus `title_domain` and `title_rank`); purview reads the actor
 (`predicates.py:105`).
 

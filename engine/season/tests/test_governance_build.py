@@ -1114,3 +1114,52 @@ def test_13f_confer_and_establish_ask_one_basis_test(monkeypatch):
     monkeypatch.setattr(_preds, "has_conferral_basis", lambda off: False)
     assert not _preds._req_confer(w, conf), "`_req_confer` does not ask the shared basis test"
     assert not _preds._req_establish(w, est), "`_req_establish` does not ask the shared basis test"
+
+
+def test_13f_a_planted_establish_founds_an_office_by_body_not_only_by_faction():
+    """`office_described_by`'s `body` branch, otherwise unexercised -- every other test in this
+    section founds through `faction`. `Imperial Court` is a body that DERIVES to faction `Crown`
+    (`data/rosters.py::office_faction`, `rosters.yaml:1096`), so the constructed `Office` carries
+    both: the body as given, and the faction `office_faction` resolved it to."""
+    w, d = _establish_world()
+    out = _establish(w, d, "e_by_body", _founding(faction=None, body="Imperial Court"))
+    assert [e.kind for e in out] == ["office.established"], [e.kind for e in out]
+    off = w.offices["off_reeve"]
+    assert (off.body, off.faction) == ("Imperial Court", "Crown"), (off.body, off.faction)
+
+
+def test_13f_the_restamp_skips_a_non_hold_tenure_and_a_dead_hold_on_the_same_office():
+    """The re-stamp's filter, `t.kind == "hold" and t.object == off.id and t.live`
+    (`loop/effects.py`), is never exercised by the other tests: they seat exactly one live `hold`.
+    Plants three tenures on the SAME office -- a live `hold` (re-stamped on every remit change), a
+    `commit` naming the office as its object (a different kind, `add_tenure` never grants it), and
+    a `hold` that is already closed at seating (`until` set, so `.live` is False from the start) --
+    and asserts the re-stamp at `establish` time touches only the first.
+
+    `add_tenure` calls `_grant_remit` for every `hold`, live or not -- the grant is a SNAPSHOT taken
+    AT SEATING, not gated on liveness -- so the closed hold IS granted once, to the office's remit
+    as it stood when it was seated. What this test isolates is `_eff_establish`'s re-stamp on a
+    LATER remit change, which the `.live` filter excludes it from: its grant stays frozen."""
+    w, d = _establish_world()
+    t_live = _seat_reeve(w, ["issue"])
+    w.add_tenure(Tenure("t_commit", "p_low", "off_reeve", "commit", 0))
+    w.add_tenure(Tenure("t_dead", "p_low", "off_reeve", "hold", 0, until=1))
+    [t_commit] = [t for t in w.tenures if t.id == "t_commit"]
+    [t_dead] = [t for t in w.tenures if t.id == "t_dead"]
+    assert t_commit.granted_acts == (), "fixture: a `commit` Tenure should never be granted"
+    assert t_dead.granted_acts == ("issue",), (
+        f"fixture: a `hold`, even dead on arrival, is granted the snapshot AT SEATING -- got "
+        f"{t_dead.granted_acts}")
+
+    out = _establish(w, d, "e_restamp_filter", _founding(remit=["issue", "dispatch"]))
+    ps = next(e for e in out if e.kind == "tenure.payload_set")
+    touched = {c.subject for c in ps.changes}
+    # `t_live.id` is in there; `off_reeve` rides along too -- `_apply_write` unions every earned
+    # kind's touched ids onto every Event this act produces (the pre-existing `Receipt.field`
+    # imprecision `hole_register.yaml`'s `H-71` `source:` already names), not this filter's concern.
+    assert t_live.id in touched, touched
+    assert t_commit.id not in touched and t_dead.id not in touched, touched
+    assert t_live.granted_acts == ("issue", "dispatch"), t_live.granted_acts
+    assert t_commit.granted_acts == (), "a `commit` Tenure was re-stamped as though it were a `hold`"
+    assert t_dead.granted_acts == ("issue",), (
+        f"a CLOSED `hold`'s grant moved off its seating-time snapshot: {t_dead.granted_acts}")
