@@ -40,6 +40,7 @@ from ..data.rosters import (
     HOLD_OBJECT_KINDS, HOLD_SUBJECT_KINDS, RUNG_KINDS, TENURE_KINDS, roster)
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, Unowned, Unspecified
 from ..trace_log import TRACE
+from .attribution import anchor_of
 from .carriers import (
     Event, Office, Person, Proposition, Receipt, Record, Rung, Site, StateChange, Tenure,
 )
@@ -665,9 +666,17 @@ class World:
         """The id of the most recent Event of `kind` about `subject`, or None.
 
         `W4`'s chaining primitive: a licensed clock's next tick names its previous one, so
-        `[ROOT]` stops appearing after the clock's genuine first emission."""
+        `[ROOT]` stops appearing after the clock's genuine first emission.
+
+        G1b. Reads `anchor_of` rather than the raw field. Every emission this method is ever
+        asked about comes from `write`'s own auto-emission block above, which always mints
+        `changes=[self.gate.mint(subj, ...)]` alongside `subject=subj` -- so `anchor_of`'s tier 2
+        (the first change carrying a subject) returns the identical `subj` by construction, not
+        by coincidence. `Event.subject` stays live for the one class `anchor_of` cannot yet
+        reach (`plague.struck` and its kin -- see `state/attribution.py`), so this is a reader
+        migration, not a behaviour change."""
         for e in reversed(self.log):
-            if e.kind == kind and e.subject == subject:
+            if e.kind == kind and anchor_of(self, e) == subject:
                 return e.id
         return None
 
