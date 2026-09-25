@@ -13,7 +13,10 @@ WHAT THIS MODULE IS FOR, STATED SO IT IS NOT MISTAKEN FOR A REPOSITORY GUARD. It
 instrument directory and nowhere else (`PLAN.md` §7, guardrail `G9`). The hole-register grading
 below (R0-R3) grades no repository signal, aggregates no verdict, and has no CI job of its own. It
 exists because an instrument that fills a hole must be able to ASK whether that hole is fillable,
-and a markdown table cannot be asked.
+and a markdown table cannot be asked. "No job of its own" means no dedicated CI step, NOT ungated:
+the `test_w0_*` / `test_w1_*` falsifiers in `engine/season/tests/test_season_shape.py` run these
+rules and the citation gate inside CI's blocking `pytest engine/season/tests` step, so a malformed
+row or a fabricated citation reds the build there.
 
 ⚠ `check_requirements()`, further down in this same file, is NOT covered by the paragraph above --
 it IS a CI job (`valoria-ci.yml`'s `python -m engine.season.harness.register --requirements`,
