@@ -4,9 +4,9 @@
 
 WHAT THIS IS
 ------------
-scene_dispatch's combat branch has always called the DEPRECATED
-`systems.combat.sim.combat.resolve_combat_round` and deferred whenever the aggregate World holds
-no personal-scale actors (scene_dispatch.py's own "DELIBERATE BOUNDARIES" note: "combat... still
+scene_dispatch's combat branch used to call the DEPRECATED
+`systems.combat.sim.combat.resolve_combat_round` (retired 2026-09-25, ED-900/904, ED-1029) and
+deferred whenever the aggregate World held no personal-scale actors (scene_dispatch.py's own "DELIBERATE BOUNDARIES" note: "combat... still
 defer[s] (no bridge exists for those actor shapes)"). This module is that bridge's combat half —
 the mirror of `_emergency_council_parties` (ED-SC-0006), which closed the identical gap for the
 `contest` branch. It is IN-side only (`engine/cross_scale/`); it imports

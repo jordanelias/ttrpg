@@ -225,11 +225,12 @@ def _resolve_slot(slot, world, rng):
         if st == "combat":
             # OI-01 (ED-IN-0091 plan §2.2): DISPATCH_COMBAT_BRIDGE, default OFF, decided ONCE per
             # campaign and stashed on `world` by mc_v18.run_campaign (mirrors ECHO_TRANSPORT's
-            # world.echo_scheduler-presence pattern, ED-IN-0028). With the flag OFF this branch is
-            # BYTE-IDENTICAL to the pre-bridge historical path — the deprecated
-            # systems.combat.sim.combat.resolve_combat_round call stays in place unchanged; retiring
-            # it happens at the ON flip, a separately-scheduled IN action after PC's E0-E3 merge
-            # (plan §0/§2.2), never a side effect of this wave.
+            # world.echo_scheduler-presence pattern, ED-IN-0028). Flag ON is the ONLY personal-combat
+            # resolver (combat_engine_v1 via combat_bridge). Flag OFF is a named gap: the deprecated
+            # systems.combat.sim.combat.resolve_combat_round fallback was RETIRED 2026-09-25
+            # (ED-900/904, ED-1029), since it was dead twice over — it read ctx['participants'],
+            # which nothing produces, and no combat scene is ever queued organically. Retiring the
+            # flag itself is the ON flip, blocked on the attribution model named below.
             if getattr(world, "dispatch_combat_bridge", False):
                 from engine.cross_scale import combat_bridge
                 parts = combat_bridge.derive_parties(ctx, world)
@@ -267,14 +268,13 @@ def _resolve_slot(slot, world, rng):
                 ctx["echo"] = {"actor_faction": winner_fid, "target_faction": winner_fid,
                               "most_relevant_stat": "Mil", "degree": echo_degree}
             else:
-                parts = ctx.get("participants")
-                if not parts or len(parts) < 2:
-                    out["reason"] = "context-derivation gap: no personal combat actors in aggregate world-state"
-                    return out
-                rr = composition.require('scene_resolver.combat')(
-                    parts, scene=ctx.get("scene"), rng=rng)
-                out["resolved"] = True
-                out["result"] = getattr(rr, "__dict__", str(rr))
+                # The deprecated systems.combat.sim.combat path was RETIRED 2026-09-25 (ED-900/904,
+                # ED-1029; OI-01's bridge is the only personal-combat resolver). Flag-off is a named
+                # gap, not a second resolver. `ctx["participants"]` never had a producer (measured:
+                # rg over engine/, tests/, tools/, systems/ found only this branch's read).
+                out["reason"] = ("DISPATCH_COMBAT_BRIDGE off: personal combat resolves only through "
+                                 "combat_engine_v1 via combat_bridge; no flag-off resolver exists")
+                return out
         elif st == "contest":
             parts = ctx.get("parties")
             stakes = ctx.get("stakes") or {}

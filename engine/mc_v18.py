@@ -85,10 +85,9 @@ def _dispatch_combat_bridge_on(effective_params: dict) -> bool:
     """DISPATCH_COMBAT_BRIDGE flag (ED-IN-0091, plan §2.2, OI-01) — **default OFF**. It resolves
     a `params` override before the env var; that shape was mirrored from `_echo_transport_on`,
     which retired with the Key substrate (ED-IN-0232), leaving this the only flag of its kind. With the
-    flag off `world.dispatch_combat_bridge` is False and scene_dispatch's combat branch takes the
-    UNCHANGED historical path (the deprecated `systems.combat.sim.combat.resolve_combat_round`
-    call stays in place — byte-identical to pre-bridge behaviour, per the plan's "ship-flag-off"
-    term). The flip to ON is a deliberate, separately-scheduled IN action after PC's E0-E3 batches
+    flag off `world.dispatch_combat_bridge` is False and scene_dispatch's combat branch returns a
+    named gap (unresolved, with a reason): the deprecated `systems.combat.sim.combat` fallback was
+    retired 2026-09-25 (ED-900/904, ED-1029), having never been reachable. The flip to ON is a deliberate, separately-scheduled IN action after PC's E0-E3 batches
     merge (plan §0/§2.2), never a side effect of this wave."""
     if 'DISPATCH_COMBAT_BRIDGE' in effective_params:
         return bool(effective_params['DISPATCH_COMBAT_BRIDGE'])

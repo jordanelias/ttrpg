@@ -172,9 +172,6 @@ composition_roles:
   # engine/cross_scale/scene_dispatch.py's four and echo_transport.py's one. With these,
   # NESTED_BASELINE reaches 0 alongside BASELINE_TOTAL, and `engine/` names no subsystem at all —
   # which is the condition CLAUDE.md §3's "acyclic" claim needed before it could be restated.
-  scene_resolver.combat:
-    target: "systems.combat.sim.combat:resolve_combat_round"
-    needed_by: "engine/cross_scale/scene_dispatch.py — the personal-combat scene branch"
   scene_resolver.contest:
     target: "systems.social_contest.sim.contest:resolve_contest"
     needed_by: "engine/cross_scale/scene_dispatch.py — the promoted §Agon kernel (ED-SC-0006), paired with scene_builder.contest"
