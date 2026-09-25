@@ -4,7 +4,10 @@
 > old path resolves via `tools/pathres.py`. Reads after
 > `workplans/2026-09-18-governance-settlement-behaviour-plan.md`.
 
-## Status: PROPOSED (ED-IN-0215)
+## Status: RATIFIED 2026-09-12 (ED-IN-0215), same as the file this reads after — a stale `PROPOSED`
+## left over from before that ratification is corrected here (found 2026-09-25 during the ED-IN-0270
+## amendment). AMENDED 2026-09-25 (`ED-IN-0270`): lettered sub-position entries added or corrected
+## throughout (see that file's `§3.1`/`§3.9` for what changed and why).
 ## Reads after `2026-09-18-governance-settlement-behaviour-plan.md`. That file owns the ORDER and the supersession
 ## verdict; this one owns the per-position detail. Unit CONTENT still belongs to its own owner.
 
@@ -30,7 +33,7 @@ TEXT is unchanged; citations at or below `:213` (`:120`, `:124`, `:131`, `:152`,
 *"every quotation below was re-read at its cited line"* — held when it was written and does not hold
 for the moved range.
 
-**THE LETTERED SUB-POSITIONS (added 2026-09-25).** Until this date every numbered position had an
+**THE LETTERED SUB-POSITIONS (added 2026-09-25, `ED-IN-0270`).** Until this date every numbered position had an
 entry here and no lettered one did; they existed only as `§3.2` row text. Each now has an entry beside
 the position it hangs off, in `§3.2`'s order, with the same fields — plus `WHERE` (the files it
 edits) and `GATE`, because a lettered row's dependencies are what `§3.1`'s phases are built from.
@@ -269,8 +272,8 @@ token's class.
 `loop/calendar.py` 2 · `loop/resolve.py` 2 (**re-measured 2026-09-25 at `952dc21`** by the method
 below; MATTER gained item 3b's `body`/`exists` writes at `matter.py:309,322`. Re-run it at build
 time rather than trusting either number). Reproduce with: `ast` walk over `engine/season/**/*.py` minus `tests/`, keeping
-`Call` nodes whose `func` is an `Attribute` with `attr == "write"`, **grouped by receiver** — 33 have
-receiver `w`, 9 have receiver `TRACE`. ⚠ **Those 9 are `trace_log.py`'s tracer, a different object,
+`Call` nodes whose `func` is an `Attribute` with `attr == "write"`, **grouped by receiver** — ~~33~~
+**36** have receiver `w` (33 on the spine's day), and 9 have receiver `TRACE` (re-run 2026-09-25). ⚠ **Those 9 are `trace_log.py`'s tracer, a different object,
 and are NOT gate sites.** The spine's 33 was right; an earlier draft of this document reported 42 as
 an overturn and was wrong (part 1 §7). Whether the tracer calls ride along is this unit's pre-flight
 call, not a rewrite it inherits.
@@ -496,8 +499,9 @@ is an ORDER placement, not that decision — part 1 `§5` item 12. And a second,
 the PC `ED-` id block is exhausted (`references/id_reservations.yaml:124`, `HANDOFF_PC.md`), so a
 release comes before anything is filed. **The symbols, located:** Disengage already exists as an
 EMERGENT behaviour — `combat_engine_v1/wrapper.py:167-183`, gated by `disengage_attempt_p` /
-`disengage_clean_p` (`combat_systems.py:972,993`), constants in `config.py`. Yield has none. The source is quarantined reference:
-`.designs/systems/combat/reference/combat_reference_v1.md` §11.4.
+`disengage_clean_p` (`combat_systems.py:972,993`), constants in `config.py`. Yield has none. The
+source is quarantined reference, named here by bare filename as `CLAUDE.md` §1 asks:
+`combat_reference_v1.md` §11.4.
 **IF BUILT — ONE DATA DECISION TO STATE, NOT INVENT.** A yield maps onto the seam as a `Margin` /
 `wound_state` with the loser's outcome (`seam/wrappers/combat.py`'s `resolve`), never a fourth
 resolver. `combat_degree_bands` is `[Felled, Wounded, Untouched]`, and position 8 forbids a fourth
@@ -692,8 +696,15 @@ the split rows `kill`, `wound`, `fight`, `challenge`, `accept`). **Atomic becaus
 and `_load_alignment` bind at module scope (`data/verbs.py`) and refuse an unrostered key or an
 all-zero matrix, so a partial landing is an `ImportError`.** Then `ED-IN-0261`'s verb split
 (`HANDOFF_IN.md`), then `12`'s scar rebuild.
-**PREPARABLE BEFORE THE CELLS (`12b`'s schema half).** A `(Person, conviction)` carrier, its matrix
-row, and a `person_q` Query for confliction — derived, never stored. No cell values.
+~~**PREPARABLE BEFORE THE CELLS (`12b`'s schema half).**~~ **`12b`'s SCHEMA HALF — IN THE CELLS
+COMMIT, NOT BEFORE IT (corrected 2026-09-25).** A `(Person, conviction)` carrier, its matrix row, and
+a `person_q` Query for confliction, derived and never stored. No cell values. This is `.py` work, so
+part 1's *"no `engine/season/*.py` change"* holds for `12c`'s tables and not for `12b`. Preparing it
+ahead of the cells would ship a carrier with nothing in it and nothing reading it. That is `ID-13`'s
+*"a mechanism that does not exist, wearing a schema's clothes"*, the rule `24d-ii` is held to below.
+⚠ **The Query also needs a caller.** If nothing reads confliction when the cells land (the score
+function, build-order 6f, is unscheduled), the Query waits for 6f, just as `capacity` waits for
+`19c`.
 **WHERE.** `references/descriptor_registry.yaml`, `engine/engine_params/descriptors.json` (via the
 exporter, never by hand), `rosters.yaml`, `verb_table.yaml`, `state/carriers.py`, `write_matrix.yaml`,
 `queries/person_q.py`.
@@ -752,11 +763,26 @@ evaluable — a `_req_establish` in `REQUIRES_PREDICATES` or a typed cell. **Com
 conferred"*), factored once if it is not, so `13d-i` rewrites ONE function and both predicates
 inherit the rostered values. Which office's basis the prose means — the new office's declared
 conferral, or the establishing actor's — is a reading the build states. (3) `_eff_establish` constructs
-an `Office(...)` and returns its id. `Office.__post_init__` REQUIRES a `body` or a `faction` (it refuses
+an `Office(...)` and returns its id. ~~`Office.__post_init__` REQUIRES a `body` or a `faction` (it refuses
 an office belonging to nothing) and validates `remit_acts` against `REMIT_ACTS` (`carriers.py:603`):
-let those refusals stand, never pre-empt them with a default. (4) `Office.establishment` stays in
-`writes:` until `17a` deletes the field, its matrix row and this entry together (r2
-`05_LEDGER_AND_BUILD.md:238-246`: *three edits, not one*); the effect leaves the field at its default.
+let those refusals stand, never pre-empt them with a default.~~ ⚠ **CORRECTED 2026-09-25: THOSE ARE
+RAISES, NOT REFUSALS, and a raise inside RESOLVE crashes the fold.** `Office.__post_init__` raises
+`Unowned` on a remit act off `REMIT_ACTS` (`carriers.py:603-607`). `office_faction` raises on an
+unknown body or faction, a body/faction mismatch, or an office belonging to nothing
+(`data/rosters.py:491-521`).
+It raises `Forbidden` when a titled post names a body (`carriers.py:626-637`). Raised from inside the
+effect's `apply()`, any of these escapes the fold, and `establish.refused` is never emitted. **So an
+`establish` whose operands are empty, or name a body, faction or rung that does not resolve, REFUSES
+before any `Office` is constructed.** It uses the fold's existing refusal paths. First choice: the
+precondition returns `False`, and the fold emits `emits_on_refusal`. Otherwise the effect returns
+`[]` and the fold emits the refusal (`loop/resolve.py:306-311`), as `_eff_kill` does for a payload
+naming no subject. The precondition asks the SAME owners the constructor asks: `office_faction`,
+with its refusal translated to `False` so the rule still lives once, and `REMIT_ACTS` membership. The
+constructor's raises remain as the backstop for a malformed `Office` that got past it, and there
+loud is correct. Never pre-empt the check with a default, and never catch the raise and report
+success. (4) `Office.establishment` stays in `writes:` until `17a` deletes the field, its matrix row
+and this entry together (r2 ~~`05_LEDGER_AND_BUILD.md:238-246`~~ `05_LEDGER_AND_BUILD.md:214-221`:
+*three edits, not one*). The effect leaves the field at its default.
 (5) **Decide snapshot vs mirror with the effect in front of you.** The evidence: `_grant_remit`'s
 docstring states SNAPSHOT (`state/world.py:295`), and `test_h71_the_grant_is_a_snapshot_not_a_mirror`
 (`engine/season/tests/test_season_shape.py:5368`) pins the behaviour and records that it is not ruled.
@@ -771,9 +797,28 @@ reached (mirror's observable); `choose` still receives no `World`. ⚠ **Route t
 a rule that lives once — **given an explicit overwrite**, because today it calls
 `payload.setdefault("remit_acts", …)` (`world.py:343`), which leaves an existing grant untouched. A
 second writer that knows the key is `CLAUDE.md` §8 broken.
+**REQUIRES — WITHOUT THIS THE CANDIDATE'S LICENCE NEVER FIRES (added 2026-09-25).** `establish`'s
+`writes:` (`verb_table.yaml:229`) is `["Office.exists", "Office.remit", "Office.establishment"]`, and
+it names no `Tenure.payload`. The fold gates exactly the pairs a verb declares. It runs the effect
+once, inside the FIRST pair's `w.write` (`loop/resolve.py:293-298`, `:369-393`). So a re-stamp
+written from `_eff_establish` today writes `Tenure.payload` inside the `Office` write's `apply()`,
+under the Office pair's gate and not its own. The fold consults the `(Tenure, payload)` matrix row
+(`write_matrix.yaml:339-345`) only for a verb that declares that pair. **So `writes:` gains
+`Tenure.payload`, and `emits:` gains `tenure.payload_set`**, that row's declared emission. It is
+earned only when a holder was actually re-stamped, through the effect's `{kind: [ids]}` return
+(`loop/resolve.py:377-390`), so an establish with no sitting holder does not publish it.
+**AN `establish` ON AN OFFICE ID THAT ALREADY EXISTS IS A REMIT CHANGE, NOT A REFUSAL.** This is a
+candidate answer at the same ladder step (§0 test 5), NOT a fresh escalation. This position's own
+framing is that *the grant changes only by an act*. `establish` is the only act whose `writes:` name
+`Office.remit`, so refusing it on an existing id would leave NO act able to change a remit, and the
+re-stamp would be dead code. On an existing id the effect rewrites `remit_acts` in place and
+re-stamps every live `hold`. It earns `remit.changed` (`(Office, remit)`'s declared emission, which
+`emits:` also gains) and not `office.established`. Any other difference refuses. An act naming a
+different `body`/`faction` for an existing id is re-founding, which `writes:` does not declare. The
+FALSIFIER below is this case.
 **WHERE.** `loop/effects.py`, `loop/predicates.py`, `state/world.py` (`_grant_remit`),
-`write_matrix.yaml` or `state/carriers.py` (the key), `verb_table.yaml` (only if a typed cell is the
-precondition route).
+`write_matrix.yaml` or `state/carriers.py` (the key), `verb_table.yaml` (the `Tenure.payload` write
+and the two emissions above, and a typed cell if that is the precondition route).
 **OBSERVABLE.** A planted `Act(verb="establish", payload={…})` naming a body or faction executes and
 `office.established` is emitted; a sitting holder's `granted_acts` changes by that act. ⚠ **A computed
 `establish` forms with NO operands** — its `requires_typed` is absent, so `operands_for` returns `{}`
@@ -782,10 +827,12 @@ corpus world executes it. Once it is resolvable the corpus chooser offers it, so
 sets move: name the move, and re-read
 `test_the_corpus_runs_and_the_ranking_cannot_discriminate`'s pinned never-attempted set
 (`test_season_shape.py:6996`).
-**FALSIFIER.** Change an office's remit by a planted `establish`: a sitting holder's `granted_acts`
-DID change (the mirror observable) while a hand-mutation of `w.offices[x].remit_acts` still does NOT
-(the snapshot half of the existing test). And an `establish` naming no `body`/`faction` refuses at the
-effect and constructs nothing.
+**FALSIFIER.** Change an office's remit by a planted `establish` on its EXISTING id: a sitting
+holder's `granted_acts` DID change (the mirror observable), and a `tenure.payload_set` naming that
+holder's Tenure is emitted. A hand-mutation of `w.offices[x].remit_acts` still does NOT change it
+(the snapshot half of the existing test). And an `establish` naming no `body`/`faction`, or an
+unknown one, emits `establish.refused`, constructs nothing, and **lets no exception escape the fold**.
+Assert on the Event, not on the absence of a traceback.
 **GATE.** — (phase α). It is one of the nine `H-71` unblocked; `§3.9` edge 2 puts it before `13e`.
 
 **13e — ONE READING OF THE REMIT.**
@@ -802,8 +849,12 @@ set(t.granted_acts)`. Both loops already bind `t`. Delete the `w.offices.get` re
 **COMPLIANCE.** `CLAUDE.md` §8, *"every rule lives once"*; the paragraph at `epistemic.py:420-436`
 records the tree paying for this exact mistake once.
 **FALSIFIER.** Hand-open a `hold` on an office that does NOT yet exist (snapshot `()`), then create the
-office: the resolver must now REFUSE the holder's remit verb, which it admitted before this position —
-assert the refusal, and assert the test observed `>= 1` such holder. **And an AST scan:** no
+office **BY HAND** (`w.offices[x] = Office(...)`, no act). The resolver must now REFUSE the holder's
+remit verb, which it admitted before this position. Assert the refusal, and assert the test observed
+`>= 1` such holder. ⚠ **Not by `establish` (clarified 2026-09-25).** After `13f`, an `establish`
+re-stamps the sitting holder's grant, so the resolver ADMITS. That is `13f`'s falsifier and the
+complement of this one: by hand → refuse, by act → admit. Assert both arms, or the two positions'
+falsifiers read as contradicting each other. **And an AST scan:** no
 `remit_acts` read outside `_grant_remit` and `Office.__post_init__`. A fourth reader is planned —
 `budget()` counting `t.granted_acts` (`HANDOFF_IN.md`, blocked on `test_n3`'s floor) — and the scan is
 what stops it regressing to the office.
@@ -820,16 +871,28 @@ is live (`loop/predicates.py:252`); the title helpers are live (`predicates.py:1
 (`predicates.py:105`).
 
 **13d-i — OFFICES AS DATA.**
-**not earlier** nothing — phase α · **not later** G3, which re-points the predicates this rewrites, and
-`18a`, whose `conferral_path` deletion replaces a field with this position's roster.
-**INSTRUCTION.** Content owner: r2 `03_SEATS_AND_CONTENT.md` and r2 item 10. (1) Rosters for
-conferral — **`appointed · elected · annex`**, `ED-IN-0256` ruling (2) — and for revocation —
+**not earlier** nothing — phase α · **not later** G3, which re-points the predicates this rewrites.
+~~and `18a`, whose `conferral_path` deletion replaces a field with this position's roster~~
+(corrected 2026-09-25: `conferral_path` is a Query superseded by `13d-ii`'s purview walk, not a field
+replaced by these rosters. See `18a`.)
+**INSTRUCTION.** Content owner: r2 `03_SEATS_AND_CONTENT.md` and r2 item 10, **for STRUCTURE only**.
+⚠ **r2's roster VALUES ARE SUPERSEDED (found 2026-09-25).** r2 `03:1043-1056` specifies two closed
+rosters (`open: false`) with a basis assigned per seat. The values are `conferral_bases: [confer,
+determine, succeed]` and `revocation_bases: [purview, holdings, none]`, and r2's 29 seats are
+authored on them. Both value lists predate `ED-IN-0256` (2026-09-18), whose rulings (2) and (3)
+replace them. **r2 supplies the structure. The ED supplies the values.** Mapping r2's seats onto the
+new values is this position's build work, stated seat by seat and never inherited from r2's
+columns. The two conferral vocabularies do not correspond by name: r2's is keyed on the act that
+opens the hold, the ruling's on how a seat is filled. (1) Rosters for conferral —
+**`appointed · elected · annex`**, `ED-IN-0256` ruling (2) — and for revocation —
 *"rung above of same faction"*, ruling (3): structural, the holder of the rung ABOVE within the SAME
-faction, not a rank comparison. That is what unblocks the `is_title` deletion (`H-109`). (2)
+faction. It is not a rank comparison, and not r2's `purview`/`holdings` conjuncts. That is what
+unblocks the `is_title` deletion (`H-109`). (2)
 `_req_confer` (`predicates.py:167`, whose whole basis test today is a non-empty `conferral` string) and
 `_req_revoke` (`:222`) rewritten on those values. (3) Delete `titles`, `title_domain`, `titles_held`,
 `highest_title_rank`, `title_rank`. (4) **RE-HOME, DO NOT DELETE** the title-in-a-body refusal in
-`Office.__post_init__` (`carriers.py:611-620`): r2 `03:661` re-expresses it as a CONTENT rule in
+`Office.__post_init__` (~~`carriers.py:611-620`~~ `carriers.py:626-637`; `:611-620` is the faction
+comment): r2 `03:661` re-expresses it as a CONTENT rule in
 `offices.yaml`'s loader, same refusal and law string. (5) `offices.yaml` as the world-gen content
 file `build_realm` reads — r2 `03:81` declares 29 seats, informed by 44 of `offices_draft.yaml`'s rows
 (`03` §A.13).
@@ -986,7 +1049,7 @@ families **by module**, not by first parameter.
 **STATE.** `oblige` writes `Tenure.since`, has no effect, and is not resolvable (`verb_table.yaml`).
 `world_q.establishment_of` (`:487`) reads `Office.establishment` and has **zero callers**;
 `Office.establishment` is a live field (`state/carriers.py:586`) with a live matrix row and a live
-`writes:` entry on `establish` — r2 `05:238-246`, *three edits, not one*. `_ch_post_remit`
+`writes:` entry on `establish` — r2 ~~`05:238-246`~~ `05:214-221`, *three edits, not one*. `_ch_post_remit`
 (`epistemic.py:413`) is the channel r2 item 9 rewrites to *"obligees co-located, minting
 `inferred`"*; claims by source read `{firsthand: 2174, told_by: 1}`, `inferred: 0` (a 2026-09-17
 figure — part 1's ★ row).
@@ -1020,30 +1083,45 @@ it. A thirteenth arrangement loads with no code change; a fifteenth key fails na
 **TIER.** `sonnet`/`opus`; the stress re-host is `sonnet` — bounded translation of declared cases.
 
 **18a — FIELD DELETIONS (added 2026-09-25).**
-**not earlier** `17a` (the `Office.establishment` half), `13d-i` (the `conferral_path` half) and `18`
-(the `judging_set` half) · **not later** the ★ gate, which re-measures after it.
+**not earlier** `17a` (the `Office.establishment` half), ~~`13d-i` (the `conferral_path` half)~~
+`13d-i` + `13d-ii` (r2 item 14 depends on item 10 whole, `05:1254`; the `conferral_path` half is
+`13d-ii`'s, i.e. G3 — corrected 2026-09-25) and `18` (the `judging_set` half) · **not later** the ★
+gate, which re-measures after it.
 **STATE.** All thirteen fields in r2 `05:223-256` still exist: `Tenure.payload`
 (`state/carriers.py:59`), `Person.beliefs` (`:457`), `Office.establishment` / `upkeep` / `dates` /
 `scope_rung`, `Rung.sites` / `records` / `dates` / `stake` / `transmission` / `judging_set_rule` (in
 `_DECLARED`, `:663`), `Site.drawers` (`:513`). `world_q.judging_set` (`:146`) raises `Unspecified` and has
-two probe callers (`harness/probes.py:1221`, `:2480`); `world_q.conferral_path` (`:539`) has none.
+two probe callers (`harness/probes.py:1221`, `:2480`). `world_q.conferral_path` (`:539`) ~~has
+none~~ **has one caller, a test** (corrected 2026-09-25):
+`test_the_populated_world_has_a_governance_ladder_and_scarce_seats`
+(`engine/season/tests/test_season_shape.py:11674`), asserting at `:11753-11756`. That assertion is
+the executed check of Jordan's 2026-09-13 subordination ruling (*"the duchy is underneath the
+Crown"*, quoted at `:11745-11746`).
 **INSTRUCTION.** Content owner: r2 item 14 and `05` §A.1.1(c)–(e). Delete **twelve** fields — ⚠ **NOT
 `Tenure.payload`**. r2 `05:229` says *"NOTHING reads it"*; since `13b` it carries the remit grant
 (`world.py::_grant_remit`, `carriers.py::Tenure.granted_acts`). `RULINGS.yaml` CAT-6 already priced
 this (*"ARM 2's CARRIER IS ON r2's DELETION LIST … un-deleting a field RATIFIED ARCH §B.8 prescribes
 deleting"*), so if ARCH §B.8's `term?` replacement is ever built, it carries the grant. Delete
-`conferral_path` — `13d-i`'s rosters are what replaces it. **`judging_set`: position 18 BUILDS
+`conferral_path`. ~~— `13d-i`'s rosters are what replaces it.~~ ⚠ **CORRECTED 2026-09-25: the rosters
+matched on the TERM "conferral", not the concept.** `conferral_path` is an ancestry walk
+(`world_q.py:539-555`, returning `ancestry(w, off.rung)`). r2 `05:450-451` names what supersedes it:
+*"superseded by `descendants(w, seat.rung)`, which `03`'s purview rule uses"*, i.e. `13d-ii`'s purview
+walk, built by G3. **And it is not caller-free.** Re-point the subordination test's two assertions
+onto `ancestry(w, o.rung)`, the primitive `conferral_path` wraps, in the same commit. Deleting the
+test with the Query would delete the only executed check of a Jordan ruling. **`judging_set`: position 18 BUILDS
 `world_q.judging_set(w, venue, matter)` for `19`'s `determine` (`H-32`), and r2 item 14 deletes the STUB
 of the same name.** `18` lands first (the order's own sequence), so this position deletes only the
 stub `18` has replaced — never the name.
-**WHERE.** `state/carriers.py`, `queries/world_q.py`, `write_matrix.yaml`, `harness/probes.py`.
+**WHERE.** `state/carriers.py`, `queries/world_q.py`, `write_matrix.yaml`, `harness/probes.py`,
+`tests/test_season_shape.py` (the `conferral_path` re-point).
 **COMPLIANCE.** `04:176` — `Rung.judging_set_rule` *"**deleted**; the judging set is a Query over
 seats"*.
 **OBSERVABLE.** `matrix_rows_without_a_field()`'s report, before and after, as the artifact (r2
 `05:1254`).
 **FALSIFIER.** `Tenure.granted_acts` still returns the grant for a seated holder after the deletions —
 the test that you did not delete the live field.
-**GATE.** `17a`, `13d-i`, `18` (part 1 `§3.9` edges 5 and 11).
+**GATE.** `17a`, `13d-i`, `13d-ii` (≡ G3, position 6; added 2026-09-25), `18` (part 1 `§3.9` edges 5
+and 11).
 
 **★ — APERTURE RE-MEASUREMENT (added 2026-09-25).** A measurement, not a build. Fires once, after
 `18a`.
@@ -1162,11 +1240,16 @@ guard (`CLAUDE.md` §0.1 pt 5: a one-off defect).
 carries residence), `loop/matter.py` (the leg), `queries/world_q.py` (`capacity`, as a caller).
 **OBSERVABLE.** The two disjoint chains of the governance spine (part 1 `§3.8b`): a `migrate` from
 chain `a` to chain `b` changes residence; a `move` does not. A person's budget penalty returns to 0
-once their leg ends.
+once their leg ends. ⚠ **The spine has no dwellings (added 2026-09-25).** `harness/governance_spine.build`
+builds its own `World` with its own hearths (`lr_hearth_a` / `lr_hearth_b`), and the ruling has only
+`build_realm` mint dwellings. So on the spine every rung's `capacity` reads the FLOOR, unless
+`24d-i`'s decision (4) extends minting to the spine. Run the residence half on the spine. Run the
+capacity half on `build_realm`, or on the spine once (4) says it mints. State which.
 **FALSIFIER.** A `migrate` into a rung at capacity refuses; a `move` leaves `residence` unchanged; after
 N moves and the legs' end, `len(travel_leg)` is 0.
-**GATE.** `24d-i` and `capacity` (`24d-ii`, landing here if `24e` has not) · the presence/residence
-answer.
+**GATE.** `24d-i` and `capacity` (`24d-ii`, ~~landing here if `24e` has not~~ **which lands here**:
+this is its only in-scope caller, since `24e`'s `found` grows capacity and does not call it —
+corrected 2026-09-25) · the presence/residence answer.
 
 ### 20 · U9 / R-04 · 21 · U10 · 22 · PROC-B · 23 · PART-E-0/2
 **20 — INSTRUCTION.** `faction_q` as **queries, never fields**: `resolve`, `holdings`, `purview`,
@@ -1250,9 +1333,11 @@ but CENSUS/MATTER; or a stored aggregate where a Query is required. **TIER.** `o
 **STATE (2026-09-25), read with `24f`.** **P1 is `DONE·INERT`**: `loop/matter.py:298-326` writes
 `(Person, body)` and cascades death through `remove_person`, shipped at the control arm
 (`data/fixtures.py:494`, `body_step=0`, `H-125` swept 0 / 10 / 67; `ED-IN-0247` holds the number).
-Its other half is missing: `world_q.py:633-637` derives `at` from `w.sites.get(who)`, so a
-PERSON-keyed crossing never becomes a Question — the repair (`at = parent_of(w, who)` when `who` names
-a person) is specified at `proposals/2026-09-10-settlements-factions-populations/02_PROPOSALS_SUBSTRATE.md:54-60`.
+Its other half is missing: `world_q.py:633-637` derives `at` from `w.sites.get(who)`, so for a
+PERSON-keyed crossing the `presence` branch cannot fire. ~~never becomes a Question~~ (Corrected
+2026-09-25: `:636`'s `who == p.id` still gives the OWNER the Question. Only the co-present people at
+the hearth miss it, as part 1 `§3.3` says.) The repair (`at = parent_of(w, who)` when `who` names a
+person) is specified at `proposals/2026-09-10-settlements-factions-populations/02_PROPOSALS_SUBSTRATE.md:54-60`.
 **Do not pick the number before `24f` settles the carrier's scale.** **P2** is not in `ED-SE-0054`'s
 acceptance — skip it. **P3 NOT STARTED**: `loop/census.py` writes nothing (its own `:34`); the
 `(Person, weight)` and `(Person, exists)` `[CEN]` rows exist; `04_EVALUATION.md` grades it *"two writes
@@ -1261,60 +1346,107 @@ refused by the gate, one demand kind authored-only"*. It needs `person.demanded`
 
 **24d — SE-CAPACITY. RULED (`ED-SE-0051`, 2026-09-17); SUBSTRATE RULED 2026-09-25; SPLIT IN TWO.**
 The ruling: a `capacity(w, rung)` Query over the rung's dwelling Sites, with a FLOOR, never a fixture
-table; `found` is the throttle (`RULINGS.yaml` RR-2; `01_THE_BUILD_ORDER.md` S10). It had no referent:
+table; `found` is the throttle (`RULINGS.yaml` RR-2; `01_THE_BUILD_ORDER.md` S10). ⚠ **Which reading
+of "throttle" is taken, stated 2026-09-25:** RR-2's own reasoning (`RULINGS.yaml:1855-1859`). Capacity
+throttles POPULATION (its floor is *"applied here to births rather than acts"*), and `found`/`build`
+are the lever that GROWS capacity. BO `:1056-1057`'s *"a capacity throttle with no `found` to
+throttle"* reads the other way, with `found` as the throttled act. That reading is NOT taken: a
+`found` refused at capacity could never add the housing that lifts capacity, so a full rung would
+stay full forever. It had no referent:
 `build_realm(0)` builds 74 Sites, all `harbour`/`seam`, and the 211 buildings are `hearth` RUNGS
-(part 1 `§3.6`). **Jordan chose, 2026-09-25: add a `dwelling` SITE KIND; `build_realm` mints one dwelling
+(part 1 `§3.6`). **Jordan chose, 2026-09-25 (`ED-SE-0055`): add a `dwelling` SITE KIND; `build_realm` mints one dwelling
 Site per hearth rung; `capacity(w, rung)` queries descendant Sites of that kind** — the literal
 reading, at the cost of a new data family and 211 new Sites in every populated world's hash.
 
 **24d-i — THE DWELLING SUBSTRATE.**
-**not earlier** nothing — part 1 `§3.1` phase α · **not later** `24e` and `19c`, which throttle on it.
+**not earlier** nothing — part 1 `§3.1` phase α · **not later** `24e`, whose `build` needs the
+`dwelling` kind, and `19c`, which throttles on it.
 **INSTRUCTION.** (1) Add `dwelling` to `site_kinds` (`rosters.yaml:896`). The set is extensible by
 adding a row — *"THE SET IS EXTENSIBLE AND THE LOOKUP STILL REFUSES"* — and a lookup for an
 unregistered kind raises. (2) **The loader then FORCES two rows:** `data/fixtures.py:106-128` checks
 `wear_per_season` and `band_floors` against `site_kinds` in both directions and raises `Ungraded` on a
 site kind with no row. `site_yield` forces none (`default_cell: 0`). Declare each value under its
 existing register row and sweep (`H-07` wear, `H-08` floors). ⚠ **Every Site wears at MATTER, every
-season** (`loop/matter.py:381`, `wear = w.fixtures.wear(s.kind)`), and band floors are what crossings
+season** (`loop/matter.py:383`, `wear = w.fixtures.wear(s.kind)`), and band floors are what crossings
 fire on — so a non-zero wear and non-empty floors add up to 211 condition writes, their Events and
 their crossings to every populated season. An empty `band_floors.dwelling` cell gives no site-use
-verbs and no crossings. Whatever is chosen, measure the per-season Event count before and after, and
-name it. (3) `build_realm` mints one Site of kind `dwelling` per `hearth` rung (`harness/populated.py:361`),
+verbs and no crossings. ~~Whatever is chosen~~ ⚠ **DECIDED 2026-09-25: ship the CONTROL arm,
+`wear_per_season.dwelling: 0` and an empty `band_floors.dwelling`, swept under `H-07`/`H-08`.** This
+has the same shape as `body_step=0` and `scar_step=0` (part 1 `§3.3`). The reason is concrete. A
+dwelling Site sits at a hearth, and persons live in hearths. With non-zero wear, a dwelling crossing reaches
+Q3's `presence` branch (`world_q.py:633-637`: `at` is the Site's rung, the hearth, and its residents
+are present) and becomes a live `band_crossed` Question for every resident. That brings `band_crossed`
+alive on the populated world, and it breaks `11a`'s premise that the source it deletes contributes 0
+("the control is an identity"). At wear 0 no dwelling's condition moves, so no crossing fires and
+`11a`'s identity holds. ⚠ **THAT DOES NOT MAKE IT SILENT, and "inert" is claimed only as far as it
+is measured.** MATTER emits one Event PER WRITE (`H-12`, enforced in `World.write`), and the wear
+loop writes every Site every season whatever its wear (`loop/matter.py:381-396`). So each dwelling
+still emits one `condition.worn` per season, 211 more Events per populated season. Their place is the
+hearth, so `_ch_co_located` (`epistemic.py:309-322`) can hand them to every resident. **Measure,
+before and after, on `build_realm(0)` over one season:** the Event count (expected +211 per season,
+all `condition.worn`), claims by source, and questions by source. Label the position **DONE·INERT**
+(part 1's `§3.2` legend) only if claims and questions do not move. If they move, say what moved, and
+declare it with the hash. A non-zero wear is chosen with a consumer in front of it, at `24e`/`24f`,
+never here. (3) `build_realm` mints one Site of kind `dwelling` per `hearth` rung (`harness/populated.py:361`),
 at that rung, with an id and an initial condition built the way the producing Sites' are (`:370-374`).
-(4) **`corpus_run.build_at` also builds hearth rungs**, for a `person`-scaled case
-(`harness/corpus_run.py:226-231`). The ruling names `build_realm` only; decide whether `build_at`
-mints dwellings too, and state it — it decides whether capacity can vary on any world `R-05` is scored
-on (part 1 `§5`, not Jordan's).
-**WHERE.** `rosters.yaml`, `harness/populated.py`; `harness/corpus_run.py` only if (4) says so.
+(4) **`build_realm` is not the only builder of hearths — there are three more (list completed
+2026-09-25).** `corpus_run.build_at` builds a `person`-scaled case's `hearth` rung
+(`harness/corpus_run.py:209-211`) and seats its people in it (`:226-231`). `governance_spine.build`
+builds `lr_hearth_a` / `lr_hearth_b` (`harness/governance_spine.py:126`; `governance_spine.yaml:86-87`).
+`probes.tiny_world` builds `Hh` (`harness/probes.py:73`). The ruling names `build_realm` only. Decide
+for each whether it mints dwellings too, and state it. `build_at` decides whether capacity can vary on
+any world `R-05` is scored on. The spine decides whether `19c`'s capacity falsifier can run where its
+residence observable runs (`19c`). `tiny_world` decides whether the probes see a dwelling at all. This
+is part 1 `§5`, not Jordan's.
+**WHERE.** `rosters.yaml`, `harness/populated.py`; `harness/corpus_run.py`,
+`harness/governance_spine.py` and `harness/probes.py` only if (4) says so.
 `data/fixtures.py` needs no change — its refusals are the check.
 **OBSERVABLE.** `build_realm(0)`'s census: Sites 74 → 285 (74 + 211), dwellings == hearth rungs,
 rungs unchanged at 375. The content hash moves on every populated world — **DECLARED**, per `CLAUDE.md`
 §7.
 **FALSIFIER.** Every hearth rung carries exactly one dwelling and no other rung carries any — asserted
 as a count equal to the hearth count, with the hearth count `>= 1` so an empty world cannot pass. And
-the loader's own refusal, planted: `dwelling` without a `wear_per_season` row fails at load.
+the loader's own refusal, planted: `dwelling` without a `wear_per_season` row fails at load. And the
+control arm, asserted: over one populated season, `band_crossed` Questions naming a dwelling Site
+`== 0`, while the `dwelling` count is `>= 1` and `condition.worn` Events naming a dwelling are
+`>= 1`. The last clause proves the wear loop visited them, so the zero is not an empty population.
 **GATE.** — .
 
 **24d-ii — CAPACITY.**
-**not earlier** `24d-i` · **lands IN THE SAME COMMIT AS ITS FIRST CALLER** — `24e`'s `found` throttle, or
-`19c`'s if that lands first.
+**not earlier** `24d-i` · **lands IN THE SAME COMMIT AS ITS FIRST CALLER** — ~~`24e`'s `found` throttle, or
+`19c`'s if that lands first~~ **`19c`'s `migrate`, its only caller in scope** (corrected 2026-09-25).
+`24e`'s `found`/`build` mint what this counts and do not call it (`24e`, and `24d`'s reading of
+*"throttle"* above).
 **INSTRUCTION.** `queries/world_q.py::capacity(w, rung) -> int`: the dwelling Sites at `rung` and at
 its descendants. ⚠ `descendants` (`world_q.py:54`) EXCLUDES its own rung and walks `contain` Tenures
 between rungs; Sites hang off rungs by `Site.rung`. So the own rung is added explicitly, and a hearth's
 own dwelling is counted. **The FLOOR is a table keyed on site kind, beside `band_floors`** (BO S10),
-loaded with the same both-direction key check the other site-kind tables get. What its cells hold — the
-floor, and if the build needs it, what one dwelling houses — is declared with a `row:` and a `sweep:`
-like every injected table in `rosters.yaml`: the ruling fixed the SHAPE, not a number. **The floor is a
-lower bound on a derived quantity** — `max(floor, derived)`, the shape of `W5`'s budget floor-of-1
-that RR-2's reasoning cites. What was refused is capacity AUTHORED per kind, a second home for a fact
-the Sites carry.
+loaded with the same both-direction key check the other site-kind tables get. ~~What its cells hold — the
+floor, and if the build needs it, what one dwelling houses —~~ **Its cells hold the FLOOR and nothing
+else** (corrected 2026-09-25). The floor is declared with a `row:` and a `sweep:` like every injected
+table in `rosters.yaml`, because the ruling fixed the SHAPE, not a number. **The floor is a lower bound
+on a derived quantity**: `max(floor, derived)`, the shape of `W5`'s budget floor-of-1 that RR-2's
+reasoning cites. ⚠ **What one dwelling houses is NOT a table cell.** A per-kind *"houses N"* cell is
+capacity AUTHORED per kind. That is the `hearth_capacity` fixture per `site_kind` Jordan refused
+(`RULINGS.yaml:1850-1854`; part 1 `§3.6`), a second home for a fact the Sites carry. BO S10
+(`01_THE_BUILD_ORDER.md:1053`) licenses only the floor as a table. The derived quantity is the dwelling
+Sites themselves, i.e. their count. If a build needs more than a count, the quantity comes off the
+Site (`CLAUDE.md` §0.05 cl.1), never off a per-kind cell.
+⚠ **THE CONSUMER THE RULING REASONS ABOUT HAS NO BUILDER IN SCOPE, stated rather than papered over.**
+RR-2's floor is *"applied here to births rather than acts"* (`RULINGS.yaml:1855-1859`). A BIRTH, or
+whatever eventually grows a population, is what refuses above capacity. Nothing in the tree grows
+one. `loop/census.py` owns `weight` and `envelope` and writes nothing: *"NO CLOCK GENERATES
+ANYTHING"* (`:33`, `ED-WR-0011` option A). The only envelope write is probe `W9`'s *"BIRTH IS
+ENVELOPE WEIGHT"* (`harness/probes.py:1639-1650`). So this Query's one caller in scope is `19c`'s
+`migrate`, which moves people and does not grow them. The population throttle the ruling describes
+has no subject until a birth-side consumer exists (part 1 `§6`).
 **COMPLIANCE.** `04:124` / `ID-13` — no declared-but-unread row. Precedent for "with a caller or not at
 all": r2 `05` §A.1.5(d), on `establishment_of`.
 **FALSIFIER.** A rung with zero dwellings returns exactly the floor, never 0 — RR-2's stated reason for
 the floor. One more dwelling under a rung raises its capacity and every ancestor's by the same step.
 And an AST check that `capacity(` has a caller outside `tests/`.
 **WHERE.** `queries/world_q.py`, `rosters.yaml`, `data/fixtures.py` (the floor table's load and check).
-**GATE.** `24d-i`; rides `24e` or `19c`.
+**GATE.** `24d-i`; rides ~~`24e` or~~ `19c`.
 
 **24e — WORKS & FOUNDING (P4).**
 **not earlier** `15` (`record_kinds`), `15c` (`found`'s operands), `24d-i` · **not later** `24f`'s
@@ -1327,20 +1459,30 @@ before either verb can be attempted"*: those corrections are this position's fir
 **INSTRUCTION.** Content owner: r2 `04_MATTER_AND_WORKS.md` §A.6 and r2 item 12. A `works` is a `Record`
 of kind `works` with `stages` (so `record_kinds`, `15`); `work` advances `stage` (and inherits G4's
 accumulator answer); `_eff_restore`; a `found` row and `_eff_found` minting a `hearth` Rung and its
-`contain` Tenure through `add_tenure`, which enforces strict ascent (`state/world.py:263`), **throttled by
-`capacity` — `24d-ii` lands here**; a `build` row and `_eff_build` minting a Site of a `site_kinds`
-member. ⚠ **A founded hearth has no dwelling until one is BUILT.** `build_realm`'s one-per-hearth is
-world GENERATION; at runtime a dwelling exists because someone built it, which is what makes
-`found`/`build` the throttle. State it if the build reads otherwise. The works' `ceiling` is decided off
-the emission log (r2 `04` §A.6).
+`contain` Tenure through `add_tenure`, which enforces strict ascent (`state/world.py:263`). ~~**throttled by
+`capacity` — `24d-ii` lands here**~~ ⚠ **CORRECTED 2026-09-25: `found` is NOT throttled by
+`capacity`, and `24d-ii` does not land here.** `found`/`build` are how capacity GROWS. Refusing a
+`found` at a rung at capacity would deadlock: a full rung could never add the housing that raises
+its ceiling, so any rung that filled would stay full forever. `found` keeps its own preconditions
+(well-formed operands, the maker's standing, strict ascent) but has no capacity refusal. It is the
+lever RR-2 calls *"the throttle"* (`24d` above). Then a `build` row and `_eff_build` minting a Site
+of a `site_kinds` member. ⚠ **A founded hearth has no dwelling until one is BUILT.** `build_realm`'s
+one-per-hearth is world GENERATION; at runtime a dwelling exists because someone built it, which is
+what makes `found`/`build` the throttle. The works' `ceiling` is decided off the emission log (r2
+`04` §A.6).
 **WHERE.** `verb_table.yaml`, `write_matrix.yaml`, `loop/effects.py`, `loop/predicates.py` or typed
-cells, `queries/world_q.py`, `rosters.yaml`.
+cells, `rosters.yaml`. (~~`queries/world_q.py`~~ was there for `capacity`, which is `19c`'s now.)
 **COMPLIANCE.** `04:1084` F.20 — *"the world only decays — nothing is ever founded or built"*.
 **OBSERVABLE.** `census` shows exactly one more rung after one `found`; a Site's condition rises under
 `work` on a works Record.
-**FALSIFIER.** A `text` Record is NOT advanced by `work` (r2 `05:1252`'s control); a `found` at a rung
-at capacity refuses.
-**GATE.** `15`, `15c`, `24d-i`; carries `24d-ii`; after G4 in part 1 `§3.1`.
+**FALSIFIER.** A `text` Record is NOT advanced by `work` (r2 `05:1252`'s control). ~~a `found` at a rung
+at capacity refuses~~ (inverted; corrected 2026-09-25) **A `found` then a `build` of a `dwelling` at
+a rung whose population is at capacity SUCCEEDS**, and that rung's dwelling count, and so every
+ancestor's count, rises by exactly one. Assert the count before and after, not only the success
+Event. If the build lands with `19c`, read the rise through `capacity`. The refusal belongs to the
+consumer: a `migrate` into a full rung (`19c`), and eventually a birth, which nothing builds yet
+(`24d-ii`).
+**GATE.** `15`, `15c`, `24d-i`; ~~carries `24d-ii`~~ (`19c` carries it); after G4 in part 1 `§3.1`.
 
 **24f — SUBSISTENCE IS TERRITORIAL (`ED-IN-0255`, ruled 2026-09-18).**
 **not earlier** G2, which rewrites the same file's gate sites · **not later** any `body_step` pick and
@@ -1360,10 +1502,30 @@ P1's body write moves to the cohort only. **CANDIDATE — §0 test 5, NOT Jordan
 exempt. It changes who starves, so the antagonist attacks it hard; the NUMBER stays `ED-IN-0247`'s.
 It re-opens `test_w8`'s retired drain guard (part 1 `§3.7`): rebuild that guard on the territorial
 quantity.
+⚠⚠ **THE ATTACK LANDED (2026-09-25): AS THE TREE STANDS, THE CANDIDATE IS DEAD ON ARRIVAL.** Nothing
+mints a `weight > 1` person on any built world. `Person.weight` defaults to 1 (`state/carriers.py:450`),
+and every builder constructs persons without it: `build_realm` (`harness/populated.py:420`),
+`build_at` (`harness/corpus_run.py:219`) and the spine (`harness/governance_spine.py:129`). The one
+heavier person in the tree is a test crowd, `Person("crowd_1", …, weight=40)` (`harness/probes.py:744`).
+MATTER's draw is over every housed person, weighted by `weight` (`loop/matter.py:240-256`). So
+*"`weight == 1` exempt"* leaves **zero eaters on every built world**. That switches off `3a`'s draw and
+P1's body write entirely, and part 1 `§3.7` says *"nothing here licenses deleting working code"*.
+**REQUIRES, BEFORE THE CANDIDATE CAN BE TAKEN, and missing from this entry until now:**
+- **A producer of synecdoche cohorts.** Name what mints them, and from what. `Rung.envelope` is the
+  territorial population carrier, but no built world writes it; the only envelope write is probe
+  `W9`'s (`harness/probes.py:1639-1650`). Name the step that mints them: world generation, or CENSUS,
+  which owns `weight` and `envelope` (`loop/census.py:1`) and by ruling generates nothing on a clock
+  (`:33`, `ED-WR-0011` option A).
+- **The exemption lands in the same commit as that producer, or after it**, never before. Its
+  falsifier asserts the eater count on `build_realm(0)` is `>= 1` before and after, so the exemption
+  cannot silently empty the pass.
+This is a precondition, not a settled design. Until the producer is named, **the candidate is not
+taken**, and `24f`'s specification is incomplete (part 1 `§6`).
 **WHERE.** `loop/matter.py`'s subsistence pass (`:246-326`), `queries/world_q.py`, the test.
 **FALSIFIER.** Under a non-zero `body_step` arm: a `weight == 1` office-holder at a rung in dearth keeps
 their body; a `weight > 1` cohort at the same rung draws and its body moves. The rebuilt drain guard
-asserts it observed `>= 1` cohort drawing.
+asserts it observed `>= 1` cohort drawing **on a built world, not only on the probe crowd**. A guard
+that passes only on `probes.py:744` is the dead-on-arrival case above, passing.
 **CONFLICT.** `loop/matter.py` with G2 (8 sites) and `11a` (`w.crossings`) — part 1 `§3.9`.
 **GATE.** G2; before any `body_step` pick (part 1 `§3.9` edge 8).
 
