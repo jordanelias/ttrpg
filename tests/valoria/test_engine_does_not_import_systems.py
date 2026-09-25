@@ -258,11 +258,21 @@ def _relative_module_files(text, path):
     blindness looked exactly like a fix. `engine/season/` was decomposed and every path it derives
     moved into ONE anchor module, `season/data/files.py` — which is good architecture and which
     deleted the literal `"systems"` from `combat_seam.py`. The insert did not move:
-    `sys.path.insert(0, str(_PC))` is still there, with `_PC = files.PC_ENGINE_DIR`. The chain
+    `sys.path.insert(0, str(_PC))` was still there, with `_PC = files.PC_ENGINE_DIR`. The chain
     below followed local NAME assignments only, so it stopped at `files` and reported the file
     clean. A blocking gate reporting a live seam as absent is the same defect this whole module
     exists to prevent, one level up: consolidating an anchor is exactly the kind of ordinary,
     correct refactor that must not be able to hide a seam.
+
+    ⚠ THE CONCRETE CASE THIS WAS BUILT FOR IS GONE, AND THE MECHANISM STAYS ANYWAY. `_PC =
+    files.PC_ENGINE_DIR` was deleted 2026-09-25 when `combat_bridge.py` and `season/seam/wrappers/
+    combat.py`'s loaders were consolidated into `engine/substrate/pc_engine.py`, whose own
+    `PC_ENGINE_DIR` is a LOCAL assignment the chain below catches without this one-hop branch (see
+    `PATH_SEAM_ALLOWED`'s docstring). No file in the current tree exercises the one-hop path, so
+    nothing plants a two-file hop to prove this branch still works if it broke — an honest gap
+    (`CLAUDE.md` §0.1 pt 2), not a claim that it is covered. Kept because the shape it catches
+    (an anchor consolidation moving a seam's literal one hop away) is a correct refactor pattern,
+    not a one-time accident, and could recur.
 
     Relative imports only, and one hop only. That is not laziness: a relative import names a file
     unambiguously from the importer's own location, so the resolution cannot be wrong, and every

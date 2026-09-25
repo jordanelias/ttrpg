@@ -186,9 +186,27 @@ MATRIX: dict[tuple[str, str], MatrixRow] = _load_write_matrix()
 
 # Rows W2 RETIRED, kept so a write to one gets its own diagnosis rather than the generic
 # "no row" -- a retired row and a row that never existed are different facts about the design.
+#
+# ⚠ NOT EVERY RETIREMENT IS W2's REASON, AND THE VALUE MUST BE ABLE TO SAY SO. An entry is either
+# a bare string (W2's own shape: no producing verb, no MATTER write) or a mapping with its own
+# `reason`/`needs` -- `Person.beliefs` is retired because #358 rev.2 §D.1.1 DELETES the field, not
+# because nothing produces it, and telling that writer to "add a producing verb" would be advice
+# for the wrong defect. Found by a read-only critic, layer-conformance pass, 2026-09-25.
+_W2_LAW = ("retired by W2 -- its `emits:` kind is produced by no Part E verb "
+           "and written at no MATTER site")
+_W2_NEEDS = "a Part E verb that produces its `emits:` kind, added in the same commit as the row"
+
+
+def _retirement(entry) -> tuple:
+    """`(law, needs)` for one `retired:` entry."""
+    if isinstance(entry, dict):
+        return (entry["reason"],
+                entry.get("needs", "nothing -- the field is gone by design, not by an unmet dependency"))
+    return _W2_LAW, _W2_NEEDS
+
+
 MATRIX_RETIRED: dict = {
-    tuple(x.split(".", 1)): "retired by W2 -- its `emits:` kind is produced by no Part E verb "
-                            "and written at no MATTER site"
+    tuple((x["name"] if isinstance(x, dict) else x).split(".", 1)): _retirement(x)
     for x in (load_yaml(WRITE_MATRIX_YAML.read_text()).get("retired") or [])
 }
 
@@ -227,11 +245,10 @@ def matrix_row(record_kind: str, fieldname: str) -> MatrixRow:
     if row is not None:
         return row
     if (record_kind, fieldname) in MATRIX_RETIRED:
+        law, needs = MATRIX_RETIRED[(record_kind, fieldname)]
         raise Unspecified(
             f"({record_kind}, {fieldname}) was RETIRED from the write matrix", "S30.1",
-            needs="a Part E verb that produces its `emits:` kind, added in the same commit as "
-                  "the row",
-            law=MATRIX_RETIRED[(record_kind, fieldname)])
+            needs=needs, law=law)
     raise Unspecified(
         f"({record_kind}, {fieldname}) is on no row of the write matrix", "S30.1",
         needs="rule the row first, then add it; the reverse order invents the thing the rule prevents",

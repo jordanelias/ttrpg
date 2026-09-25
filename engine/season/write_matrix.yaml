@@ -380,8 +380,13 @@ retired:
   - "Person.marks"
   - "Rung.stake"
   - "Site.drawers"
-  # ⚠ DELETED 2026-09-25 WITH ITS CARRIER FIELD, AND NOT FOR W2's REASON (no producing verb). #358
-  # rev.2 §D.1.1 deletes the field -- a belief is a `commit` to an OUGHT, not a field -- and
-  # `Person.beliefs` had zero readers and zero writers in engine/season (measured by grep), so the
-  # row and `state/carriers.py`'s `Person.beliefs` went together (04:179; 04:980, PART D row 44).
-  - "Person.beliefs"
+  - name: "Person.beliefs"
+    reason: >-
+      DELETED 2026-09-25 WITH ITS CARRIER FIELD, AND NOT FOR W2's REASON (no producing verb). #358
+      rev.2 §D.1.1 deletes the field -- a belief is a `commit` to an OUGHT, not a field -- and
+      `Person.beliefs` had zero readers and zero writers in engine/season (measured by grep), so
+      the row and `state/carriers.py`'s `Person.beliefs` went together (04:179; 04:980, PART D
+      row 44).
+    needs: >-
+      nothing -- a `commit` to an OUGHT is the mechanism now (§D.1.1); do not re-add this field or
+      route belief-writes here

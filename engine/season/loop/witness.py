@@ -395,9 +395,20 @@ def witness(self, events: list[Event]) -> int:
             # `(Person, claim_ledger)`'s version of `H-86` and is recorded on that row.
             # Found by the `W4` adversarial pass.
             # The comparator's owner is `state/ledgers.py` (04 §A.2:149); this closure is the
-            # gated write that applies it, and it drains the ledger to `cap` in one write.
+            # gated write that applies it. ⚠ ONE CLAIM PER WRITE, MATCHING THE PRE-EXTRACTION
+            # SEMANTICS -- an earlier wording of this closure called `evict_over_cap(p.ledger, cap)`
+            # once, draining every excess claim in a single `w.write`. State-wise that is identical
+            # (the sort key never changes between evictions within one call, so popping k off a
+            # once-sorted list matches k separate sort-then-pop-one passes) but INSTRUMENTATION
+            # is not: `World.write` mints one gate receipt, one `TRACE.write` row and one
+            # `self.writes` entry per call, and `harness/report.py`'s "N writes through the gate"
+            # plus `_trace_counts` (compared by `harness/delta.py` between two runs) both count
+            # those -- so batching silently changed those counts whenever one deposit minted enough
+            # claims to evict more than one at a time, which is exactly the case the `while` above
+            # this loop exists for (one deposit can mint several claims; see the comment above).
+            # Found by a read-only critic, layer-conformance pass, 2026-09-25.
             def _evict(p=p):
-                ledgers.evict_over_cap(p.ledger, cap)
+                ledgers.evict_over_cap(p.ledger, len(p.ledger) - 1)
             w.write("claim_ledger", WriteClass.INTERIOR, _evict,
                     record_kind="Person", fieldname="claim_ledger", driver="Event")
     w._in_parallel_map = False
