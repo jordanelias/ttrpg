@@ -7,7 +7,7 @@
 |---|---|---|
 | Pursuit-axis cells + the alignment re-cell over the verbs | `ED-IN-0261`; `proposals/2026-09-20-pursuit-basis-worksheet.yaml` | Jordan places the cells; falsifier is the devout-Solmund/anti-Solmund faith pair, must land far apart |
 | Verb split `kill`/`wound`, add `fight`, `challenge`→`accept` | `ED-IN-0261` item 3 | rides the pursuit-cell commit (ALIGNMENT authored once, not twice) |
-| Scar rebuild — per-element counts, both tracks | `ED-IN-0261` item 4; `engine/season/loop/effects.py:324` `_scar`, `engine/season/epistemic.py:440` `observers_for` | build after the ALIGNMENT re-cell lands |
+| Scar rebuild — per-element counts, both tracks | `ED-IN-0261` item 4; `engine/season/loop/effects.py:340` `_scar`, `engine/season/epistemic.py:491` `observers_for` | build after the ALIGNMENT re-cell lands |
 | Deontology gate at `opening_set` | `ED-IN-0261` item 5; `engine/season/decision/options.py:35` | implement the person-side refusal threshold, no `World` |
 | Migration verb — nobody in Valoria can relocate | `RULINGS.yaml` `RR-2`, `proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml` | author the verb; matter-plus-hearth-capacity throttle already ruled — but `capacity(w, rung)` has no site kind to run over yet, `site_kinds` (`rosters.yaml`) is `[harbour, seam, body]` with no `dwelling`; that gap is prior to the verb |
 | Build-order item 1 (commit verb) HELD — no Proposition question source | `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` §7 | build items 5/7/8 first, then retry |
