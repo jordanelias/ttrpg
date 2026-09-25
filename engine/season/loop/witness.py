@@ -22,6 +22,7 @@ from ..data.rosters import OBSERVATION_DEPOSIT_MODES, WITNESS_CHANNELS, require_
 from ..epistemic import act_refs, claim_subjects, observers_for
 from ..queries import cache
 from ..queries.person_q import LedgerReader
+from ..state.attribution import actor_of
 from ..state.carriers import Claim, Event
 from ..state.ids import H
 from ..trace_log import TRACE
@@ -248,7 +249,15 @@ def witness(self, events: list[Event]) -> int:
         # `seen_obs_by_pid` above; the first writing of this scoped it inside the fan loop, so
         # the sentence was true of one Event and false of the pass. See that comment for the
         # measurement.
-        if obs_mode != "none" and (obs_mode == "total" or pid == e.subject):
+        # G1b. `actor_of` REPLACES `e.subject` here -- the SHIPPED default is
+        # `observation_deposit_mode: actor`, so this branch is the one this unit's own
+        # falsifier names: silently vacating it would starve every headless run's `W-B`
+        # deposits rather than merely mis-scoping them. Measured equivalent to the field for
+        # every act-caused Event (`test_g1b_attribution.py`); for an actorless Event (MATTER's
+        # wear, a calendar crossing) `e.subject` held the record it concerned, never a person id,
+        # so `pid == e.subject` was already always False there -- `actor_of` returning `None`
+        # preserves that by construction rather than by an id-namespace coincidence.
+        if obs_mode != "none" and (obs_mode == "total" or pid == actor_of(w, e)):
             seen_obs = seen_obs_by_pid.setdefault(pid, set())
             # `e.observed`, NOT `getattr(e, "observed", ())`. The field is on `Event` now, so
             # a default here would be a guard for a case that cannot arise -- and it would

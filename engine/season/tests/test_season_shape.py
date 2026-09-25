@@ -5375,18 +5375,29 @@ def test_h71_the_grant_is_a_snapshot_not_a_mirror():
 
     ⚠⚠ **IT DOES NOT PIN THE SEMANTICS, AND THE FIRST WRITING CLAIMED IT DID.** It rested on the
     register's *"an office whose remit changes does so by an ACT"* and called the snapshot a ruled
-    choice. **MEASURED, and the justification does not hold:** the only act that would change a
-    remit is `establish`, which DECLARES `writes: ["Office.exists", "Office.remit",
-    "Office.establishment"]` (`verb_table.yaml:229`) and **has no effect registered in
-    `loop/effects.py` at all**. The only writes to `remit_acts` anywhere in `engine/` are
-    `_grant_remit`'s own two payload writes; every other hit is a read, a roster validation or a
+    choice. **MEASURED AT THE TIME, and the justification did not hold:** the only act that would
+    change a remit was `establish`, which DECLARED `writes: ["Office.exists", "Office.remit",
+    "Office.establishment"]` (`verb_table.yaml:229`) and **had no effect registered in
+    `loop/effects.py` at all**. The only writes to `remit_acts` anywhere in `engine/` were then
+    `_grant_remit`'s own two payload writes; every other hit was a read, a roster validation or a
     docstring. `CLAUDE.md` §0.1 pt 3 row two -- *"a roster existing is not a roster being used"*.
+    ⚠ **NO LONGER TRUE, since plan position `13f` (2026-09-25): `_eff_establish` now writes
+    `remit_acts` too** (`loop/effects.py`) -- this paragraph is kept as the historical measurement
+    that motivated ruling the question below, not as a current fact.
 
-    **So snapshot and mirror are observationally IDENTICAL in every reachable run**, and this test
-    reaches the distinction only by hand-mutating an office, which no game path does. The choice is
-    therefore UNDECIDED by anything in the tree, and it is not this test's to decide. `establish`
-    is itself `remit:confer`-eligible -- one of the nine verbs `H-71` unblocks -- so the semantics
-    arrives WITH `establish`'s effect and should be ruled there.
+    **So snapshot and mirror WERE observationally IDENTICAL in every reachable run at the time**, and
+    this test reached the distinction only by hand-mutating an office, which no game path did. The
+    choice was therefore UNDECIDED by anything in the tree at that point, and was not this test's to
+    decide. `establish` is itself `remit:confer`-eligible -- one of the nine verbs `H-71` unblocks --
+    so the semantics arrived WITH `establish`'s effect and is ruled below.
+
+    ⚠ **DECIDED THERE, AT PLAN POSITION `13f` (2026-09-25), AND THIS TEST IS NOW ITS HALF.** The
+    answer is neither pure arm: the payload stays a SNAPSHOT, so a hand-mutation of the office --
+    this test -- still reaches no sitting holder, and `establish`'s effect re-stamps every live
+    `hold` on the office it writes, through `_grant_remit(force=True)`, so the grant changes by an
+    ACT and reaches sitting holders in the same act. The act half is
+    `test_13f_an_establish_on_an_existing_id_changes_the_remit_and_reaches_the_sitting_holder` in
+    `test_governance_build.py`; the two are the complement of each other and both must hold.
 
     ⚠ **AND THIS DOCSTRING NO LONGER FORECLOSES THE OTHER REPAIR.** It used to say a later session
     must not "fix" the snapshot into a mirror because that would put a `World` read into `choose`
@@ -6993,11 +7004,22 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # admitting them. `H-71` is closed and they are still never attempted -- which is why this set
     # keeps four members instead of emptying, and why closing a hole is not the same as reaching
     # the verbs behind it.
-    assert foldable_all - ever - refused_only == {"confer", "convene", "revoke",
+    # ⚠ FOUR -> FIVE: `establish` JOINED THIS SET, 2026-09-25 (plan position `13f`), AND IT
+    # ARRIVED HERE RATHER THAN IN `ever` OR `refused_only` FOR THE SAME REASON THE THREE ABOVE ARE
+    # HERE. `13f` gave it a predicate and an effect, so `resolvable_verbs()` now carries it -- but
+    # its eligibility is `remit:confer`, and no corpus overlay grants `confer`, so no person in any
+    # corpus world can form it. Nothing else in this test moved: `ever`, `refused_only`, the 57
+    # distinct sets and the universal and varying sets are all unchanged, because a verb nobody
+    # attempts changes no run. Where it IS formable (`tiny_world`'s duke, every seat of
+    # `build_realm` under `remit_default`) a computed `establish` carries no operands -- the row is
+    # untyped, so `operands_for` returns `{}` -- and `_req_establish` refuses it; it executes only
+    # from a hand-built Act until `15c` widens the operand vocabulary.
+    assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record"}, (
-        f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Three of "
-        "the four are the governance verbs no corpus overlay grants; `H-71` is CLOSED, so the "
-        "reason is now the corpus's offices and not the eligibility branch")
+        f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Four of "
+        "the five are the governance verbs no corpus overlay grants (`establish` is "
+        "`remit:confer`-eligible); `H-71` is CLOSED, so the reason is now the corpus's offices and "
+        "not the eligibility branch")
 
 
 

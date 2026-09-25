@@ -1,4 +1,5 @@
-"""`season.loop.predicates` — the five `requires:` cells the grammar does not type.
+"""`season.loop.predicates` — the six `requires:` cells the grammar does not type (five until
+`establish` joined them at plan position `13f`, 2026-09-25; the count below is the older one).
 
 EXTRACTED, step 5 of the decomposition (a PURE MOVE but for two call sites, named below). The
 registry and its decorator travel with the functions they register, which is the rule step 3
@@ -25,8 +26,9 @@ from __future__ import annotations
 from typing import Optional
 
 from ..data.rosters import RELEASABLE_KINDS, title_domain, title_rank
+from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries import world_q
-from ..state.carriers import subject_of
+from ..state.carriers import Office, subject_of
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -163,6 +165,16 @@ def highest_title_rank(w: "World", actor: str) -> int:
     return max((title_rank(post) for post, _ in titles_held(w, actor)), default=-1)
 
 
+def has_conferral_basis(off: "Office") -> bool:
+    """THE BASIS TEST, ONCE: does this office declare how it is filled?
+
+    `_req_confer` asks it of the office being conferred and `_req_establish` of the office being
+    founded, so `13d-i` -- which rewrites this test on the rostered values `ED-IN-0256` rules
+    (*appointed · elected · annex*) -- edits ONE function and both preconditions inherit it. Today
+    the whole test is a non-empty `conferral` string, which is what `_req_confer` inlined."""
+    return bool((off.conferral or "").strip())
+
+
 @requires_predicate("confer")
 def _req_confer(w: "World", a: "Act") -> bool:
     """Part E, IN FULL: *"the office's **conferral basis**, and 1-per-object: no live `hold` on the
@@ -178,7 +190,7 @@ def _req_confer(w: "World", a: "Act") -> bool:
     obj = d.get("office")
     if not obj or obj not in w.offices:
         return False
-    if not (w.offices[obj].conferral or "").strip():
+    if not has_conferral_basis(w.offices[obj]):
         return False                       # no conferral basis: the office cannot be conferred
     if not any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures):
         return True                        # 1-per-object satisfied
@@ -188,6 +200,89 @@ def _req_confer(w: "World", a: "Act") -> bool:
                    if t.kind == "hold" and t.object == obj and t.live), None)
     return holder is not None and not any(
         t.kind == "commit" and t.subject == holder and t.live for t in w.tenures)
+
+
+def office_described_by(a: "Act") -> "Optional[Office]":
+    """THE OFFICE AN `establish` ACT DESCRIBES, read once for the precondition and the effect.
+
+    The operands are the office overlay's own keys (`corpus_run._check_office`,
+    `populated.build_realm`): `office` (the id), `post`, `rung`, `remit`, `body` and/or `faction`,
+    `conferral`, `revocation`. `None` when the id, post, rung or remit is absent, or any operand is
+    not the shape the constructor takes -- which is every COMPUTED `establish` today, because the
+    row is untyped and `operands_for` carries nothing (`15c` is what changes that).
+
+    ⚠ OTHERWISE IT CONSTRUCTS THE `Office`, AND THE CONSTRUCTOR'S RAISES PROPAGATE. That is the
+    point: `Office.__post_init__` is where a remit act is checked against `REMIT_ACTS` (`Unowned`),
+    where `office_faction` refuses an unknown body or faction, a mismatch or an office belonging to
+    nothing (`Unspecified`/`Forbidden`), and where a title seated in a body is refused
+    (`Forbidden`). `corpus_run._check_office` validates an overlay the same way, for the reason it
+    gives: *the validator is the constructor, not a second copy of its rules*. The object returned
+    is held by nothing -- no `World` is read or written here."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    oid, post, rung, remit = d.get("office"), d.get("post"), d.get("rung"), d.get("remit")
+    if not all(isinstance(x, str) and x.strip() for x in (oid, post, rung)):
+        return None
+    if not isinstance(remit, (list, tuple)) or not all(isinstance(x, str) for x in remit):
+        return None
+    body, faction = d.get("body"), d.get("faction")
+    conferral, revocation = d.get("conferral"), d.get("revocation")
+    if not all(x is None or isinstance(x, str) for x in (body, faction, conferral, revocation)):
+        return None
+    return Office(oid, post, rung, list(remit), conferral=conferral, revocation=revocation,
+                  body=body, faction=faction)
+
+
+@requires_predicate("establish")
+def _req_establish(w: "World", a: "Act") -> bool:
+    """W3's row: *"the establishing office's conferral basis, and a rung to establish it at"*.
+
+    ⚠ THE READING, STATED BECAUSE THE PROSE ADMITS TWO: *the establishing office* is THE OFFICE
+    THE ACT DESCRIBES -- the one being founded, or re-remitted on an id that already exists -- and
+    NOT the office the actor sits in. The basis `_req_confer` tests is a property of the office
+    being FILLED (*"the office's conferral basis"*), so read the same way here it asks whether the
+    new seat declares how it is filled. The other reading makes the founder's own seat's basis
+    decide whether ANY office may be founded, which nothing in the row motivates; and it would let
+    an establish found a seat with no basis, which `_req_confer` then refuses forever -- an office
+    that exists and can never be filled. Eligibility (`remit:confer`) already says who may act.
+
+    FOUR CLAUSES, EACH A REFUSAL AND NONE A RAISE -- a raise from inside the effect's `apply()`
+    escapes the fold, and `establish.refused` would never be emitted:
+      1. the office resolves: `office_described_by` returns one, and the constructor's refusals
+         (the three it raises) are translated to False HERE, so each rule still lives once, in the
+         constructor. They remain the loud backstop inside the effect;
+      2. its rung is one the world holds;
+      3. it has a conferral basis, by the ONE basis test `_req_confer` also asks;
+      4. its id is new -- held by no collection (a `hold` opened on it early is what the effect
+         re-stamps) -- or it is an EXISTING office and the act changes its remit and nothing else.
+
+    ⚠ CLAUSE 4's SECOND ARM IS A REMIT CHANGE, NOT A REFUSAL. `establish` is the only verb whose
+    `writes:` name the office's remit, so refusing it on an existing id would leave no act able to
+    change a remit. Any other difference -- a different post, rung, body, faction, conferral or
+    revocation -- REFUSES: naming a different belonging for an existing id is re-founding, which
+    `writes:` does not declare. The act restates the office in full; an operand it omits is read
+    as the constructor reads it (`None`), never filled from the office it would replace.
+    ⚠ SO AN OFFICE WITH NO RUNG (`Office.rung` is Optional, the office-cluster case §6.2) cannot
+    have its remit changed by this verb: clause 2 requires a rung and clause 4 requires the same
+    one. That is the row's prose, applied, not a choice made here."""
+    try:
+        off = office_described_by(a)
+    except (Unowned, Unspecified, Forbidden):
+        return False                       # the constructor refused it: translated, never filled
+    if off is None:
+        return False                       # an operand the office needs is not on the act
+    if off.rung not in w.rungs:
+        return False                       # "a rung to establish it at"
+    if not has_conferral_basis(off):
+        return False                       # "the establishing office's conferral basis"
+    held_as = w.class_of(off.id)
+    if held_as is None:
+        return True                        # a new office
+    if held_as != "Office":
+        return False                       # the id is a person's, a rung's... -- `class_of` ambiguity
+    cur = w.offices[off.id]
+    return (off.post == cur.post and off.rung == cur.rung and off.body == cur.body
+            and off.faction == cur.faction and off.conferral == cur.conferral
+            and off.revocation == cur.revocation)
 
 
 @requires_predicate("release")
@@ -332,4 +427,7 @@ def _req_convene(w: "World", a: "Act") -> bool:
 # is closed) and `04 §A.3` row 14 asks for a verb, not a form. The verb row states the same thing
 # at its `requires_typed_note:` and closes with the condition under which this stops being true:
 # *"IF AN `any` COMBINATOR IS EVER RULED, THIS CELL IS THE FIRST THING TO TYPE."*
+# ⚠ THE SIXTH IS `establish` (`13f`, 2026-09-25), `remit:`-eligible like the first four. Its
+# operands -- post, rung, remit, body/faction, conferral -- are not in `requires_operands`, and its
+# clauses ask the `Office` constructor and `World.class_of`, neither of which is a grammar form.
 # ---------------------------------------------------------------------------

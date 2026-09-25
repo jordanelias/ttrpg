@@ -80,7 +80,10 @@ class Tenure:
         has**. So this is a SNAPSHOT taken when the Tenure opened, and an office whose `remit_acts`
         change later does not retroactively re-grant its sitting holders -- *"an office whose
         remit changes does so by an ACT, which is how everything else in this engine changes."*
-        `_grant_remit` carries the same statement from the writing side.
+        `_grant_remit` carries the same statement from the writing side. ⚠ SINCE `13f`
+        (2026-09-25) THAT ACT EXISTS: `establish` re-stamps every live `hold` on the office it
+        writes, through `_grant_remit(force=True)` -- so a hand-mutation still reaches nobody and
+        the act reaches every sitting holder.
 
         Returns `()` for every Tenure that carries no grant, which is every kind but `hold` and
         every `hold` on a non-office. A tuple rather than a set, because `content_hash()` folds it.
