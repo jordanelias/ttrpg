@@ -393,9 +393,10 @@ def witness(self, events: list[Event]) -> int:
             # change that Part D gives no kind, so nobody can witness a forgetting.** That is
             # `(Person, claim_ledger)`'s version of `H-86` and is recorded on that row.
             # Found by the `W4` adversarial pass.
-            p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))
-            w.write("claim_ledger", WriteClass.INTERIOR,
-                    lambda p=p: p.ledger.pop(0),
+            def _evict(p=p):
+                p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))
+                p.ledger.pop(0)
+            w.write("claim_ledger", WriteClass.INTERIOR, _evict,
                     record_kind="Person", fieldname="claim_ledger", driver="Event")
     w._in_parallel_map = False
     # S9.3/S28: WITNESS NEVER TOUCHES A BELIEF. Nothing above writes `beliefs` or

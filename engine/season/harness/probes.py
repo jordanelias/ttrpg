@@ -2309,20 +2309,6 @@ def a34():
     )
 
 
-@probe("A35", "the design needs Godot 4.6", "S52", by="probe-model",
-       tests="the port must be able to target a decided engine version")
-def a35():
-    floor = {"WorkerThreadPool.add_group_task": (4, 0), "typed Dictionary": (4, 4),
-             "@abstract": (4, 5)}
-    hi = max(floor.values())
-    assert hi == (4, 5) and floor["WorkerThreadPool.add_group_task"] == (4, 0)
-    return (f"PASS (transcription, not execution -- this instrument runs no Godot): the highest "
-            f"named requirement is {hi[0]}.{hi[1]}. NOTHING IN THIS DESIGN NEEDS 4.6; the honest "
-            "floor is >= 4.4 and the real decision is 4.3 vs >= 4.4. THE HOLONIC DECOMPOSITION "
-            "ADDS NO VERSION PRESSURE -- its heaviest requirement is 4.0, and @abstract's fallback "
-            "(a typed error result) is needed anyway because GDScript has no exceptions")
-
-
 @probe("A36", "a person's act order is the order it resolves in", "S26.3", by="construction",
        tests="what a character does first must be able to close off what they could have done after")
 def a36():

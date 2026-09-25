@@ -122,6 +122,16 @@ class VerbRow:
     # matter at the rung or office that holds it"*. So a faction never acts: a PERSON HOLDING AN
     # OFFICE acts, and the scale is the rung that office reaches. Governance at faction scale is
     # `binding_decision x <rung>`, not a faction verb.
+    #
+    # ⚠ SAME NAME AS A RETIRED FIELD, AND THE COLLISION IS WORTH NAMING HERE RATHER THAN AT ITS
+    # OWN SITE. `04_CODE_ARCHITECTURE.md` §A.3 row 4 (`04:173`) and §B.13 invariant 10 (`04:470`)
+    # both say a `scale:` key is "deleted; the loader rejects the key" — but that row describes
+    # THE CHAIN's `scale:` (a per-module/per-verb-row concept, retired at Stage 1/2, ID-13). This
+    # field is a later, unrelated ruling under the same word (`CLAUDE.md` §4's exact hazard: one
+    # spelling, two meanings, no shared context between the sessions that met each). It is not
+    # rejected by 04's rows above; those rows are about a different, already-dead field. `04` is
+    # ratified and this comment does not edit it (`CLAUDE.md` §0.05) — it names the ambiguity at
+    # the site that would otherwise be misread, per the layer-conformance skill's B4.
     scale: str = "person"
     # ⚠ PART E'S `contests:` COLUMN, WHICH WAS TRANSCRIBED INTO A NOTE AND LOST.
     # `ARCHITECTURE_V2.md:394` declares it — *"`contests: <prize> | none` — if set, ROUTES TO THE

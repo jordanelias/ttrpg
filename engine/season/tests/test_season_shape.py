@@ -1500,61 +1500,17 @@ def _w15_exclusive():
             fcntl.flock(fh, fcntl.LOCK_UN)
 
 
-def test_w15_every_entrypoint_test_holds_the_serialization_lock():
-    """THE FALSIFIER FOR THE LOCK ABOVE, and the reason it is a test rather than a comment.
-
-    The lock only works while every test that EXECUTES an entrypoint takes it. A third such test
-    added later without `_w15_exclusive`, or the decorator dropped from one of the two, restores
-    the straddle silently — and the symptom would surface on someone else's unrelated PR, days
-    later, exactly as it did on `#423` and `#426`. So the invariant is checked by source, which is
-    the only thing that can see a MISSING wrapper.
-
-    It also pins the placement: a lock inside `PACKAGE` would be swept by `_proposal_files()`.
-
-    ⚠ BOTH HALVES ARE AST, NOT TEXT, AND THREE TEXT DRAFTS FAILED IN THREE DIFFERENT WAYS --
-    which is the argument for the instrument, not a tally of mistakes. `'_run("' in src` matched
-    `_r7_run("`, a different helper that builds a world in-process and writes nothing here. A
-    word boundary still matched `P._run(w, over)`, an unrelated METHOD. And checking the guard by
-    name, `"_w15_exclusive" in src`, was VACUOUS: the sibling's own docstring names the helper, so
-    deleting the actual `with` statement left this test green -- caught only by mutating the lock
-    away and watching this pass, which is what CLAUDE.md §0.1 point 2 asks of any assertion. The
-    third draft then matched ITSELF, on the prose above quoting the pattern it was searching for.
-
-    An `ast.Call` to the NAME `_run` is none of those things: an attribute call has no `.id`, a
-    differently-named helper has a different one, and prose is not a call node at all.
-    """
-    module = sys.modules[__name__]
-    checked = 0
-    for name, obj in vars(module).items():
-        if not (name.startswith("test_") and callable(obj)):
-            continue
-        tree = ast.parse(textwrap.dedent(inspect.getsource(obj)))
-        runs_entrypoint = any(
-            isinstance(node, ast.Call)
-            and getattr(node.func, "id", None) == "_run"
-            and node.args and isinstance(node.args[0], ast.Constant)
-            and isinstance(node.args[0].value, str)
-            for node in ast.walk(tree)
-        )
-        if not runs_entrypoint:
-            continue
-        checked += 1
-        guarded = any(
-            isinstance(node, ast.With)
-            and any(isinstance(it.context_expr, ast.Call)
-                    and getattr(it.context_expr.func, "id", None) == "_w15_exclusive"
-                    for it in node.items)
-            for node in ast.walk(tree)
-        )
-        assert guarded, (
-            f"{name} executes a harness entrypoint but does not hold the w15 lock. Wrap its body "
-            f"in `with _w15_exclusive():` — an unserialized entrypoint test straddles its sibling "
-            f"on another xdist worker and reports that sibling's writes as its own."
-        )
-    # Assert that it asserted (CLAUDE.md §0.1 point 2): if the source scan finds nothing, this
-    # test passes having observed nothing at all, which is the vacuity it is meant to exclude.
-    assert checked >= 2, f"expected at least the two w15 entrypoint tests, scanned {checked}"
-
+def test_w15_the_lock_is_not_swept_by_the_fingerprint_it_protects_against():
+    """`_w15_every_entrypoint_test_holds_the_serialization_lock` LIVED HERE AND WAS DELETED
+    (layer-conformance pass, CLAUDE.md §0.1 pt 5). Its subject was not the entrypoint tests' actual
+    behaviour but whether OTHER TESTS' source held `_w15_exclusive()` — a guard whose subject is
+    another guard, the exact forbidden shape §0.1 pt 5 names. A lane's proposed alternative (move
+    the lock inside `_run()`) was checked and found unsafe: the run_cases test's fingerprinting
+    happens OUTSIDE `_run()`, and the report test's `finally`-restore write does too, so a lock
+    scoped to `_run()` alone would not cover the actual straddle ED-IN-0260 fixed. The real
+    protection — `with _w15_exclusive():` around the two entrypoint tests below — is untouched by
+    that deletion; this is the one piece of the old test worth keeping as a check rather than a
+    comment, since a future edit to `_W15_LOCK` could still regress it."""
     assert PACKAGE not in _W15_LOCK.parents, (
         f"the w15 lock is inside PACKAGE ({_W15_LOCK}); `_proposal_files()` rglobs that tree, so "
         f"the lockfile would be fingerprinted by the test it protects."
