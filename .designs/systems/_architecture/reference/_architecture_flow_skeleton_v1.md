@@ -63,8 +63,8 @@ enter/exit them: `engine/mc_v18.py`, `engine/autoload/game_state.py`, `systems/f
 | `articulation.evaluate_articulation_triggers` | `engine/cross_scale/articulation.py:44 evaluate_articulation_triggers` | `engine/tests/test_pipeline_reach.py:801` (test-only probe; no production caller) |
 | `articulation.generate_chronicle_entry` | `engine/cross_scale/articulation.py:53 generate_chronicle_entry` | — (zero callers anywhere in the corpus, including tests) |
 | `articulation.subscribe_all` | `engine/cross_scale/articulation.py:152 subscribe_all` | `engine/mc_v18.py:277` |
-| `combat_bridge.derive_parties` | `engine/cross_scale/combat_bridge.py:114 derive_parties` | `engine/cross_scale/scene_dispatch.py:236` (inside `_resolve_slot`; only reachable when `world.dispatch_combat_bridge` is True — default False, `engine/mc_v18.py:100`) |
-| `combat_bridge.resolve` | `engine/cross_scale/combat_bridge.py:131 resolve` | `engine/cross_scale/scene_dispatch.py:240` (inside `_resolve_slot`; same default-off gate) |
+| `combat_bridge.derive_parties` | `engine/cross_scale/combat_bridge.py:89 derive_parties` | `engine/cross_scale/scene_dispatch.py:236` (inside `_resolve_slot`; only reachable when `world.dispatch_combat_bridge` is True — default False, `engine/mc_v18.py:100`) |
+| `combat_bridge.resolve` | `engine/cross_scale/combat_bridge.py:106 resolve` | `engine/cross_scale/scene_dispatch.py:240` (inside `_resolve_slot`; same default-off gate) |
 
 ## 2. IN
 
@@ -181,7 +181,7 @@ ids — `engine/substrate/keys.py:442-431` (comment) / `:384-389` (enforcement).
 | lateral | `systems.social_contest.sim.contest` (SC) | `build_contest`/`resolve_contest` | `engine/cross_scale/scene_dispatch.py:287-299` |
 | registration (was lateral) | `systems.social_contest.sim.parliamentary_vote` (SC) | `run_parliamentary_vote` — **no longer imported**: `engine/` names the ROLE `parliamentary_vote` and `references/module_contracts.yaml` names the module (plan S5a, 2026-08-22) | `references/module_contracts.yaml:93 parliamentary_vote`; resolved at `engine/cross_scale/parliamentary_bridge.py:169-170 run_parliamentary_scene` |
 | registration (was lateral) | `systems.factions.sim.parliamentary_transfer` (FA) | `propose_transfer` — by ROLE. The **CB-availability helpers are no longer reached at all**: the derivation that read them moved into that module as `derive_transfer_candidate` (plan S5a) | `references/module_contracts.yaml:107 territory_transfer_proposal`; resolved at `engine/cross_scale/parliamentary_bridge.py:138-143 _run_transfer_motion` |
-| lateral | `systems.combat.sim.combat` (deprecated) / `combat_engine_v1` (PC) | `resolve_combat_round` / `wrapper.fight` | `engine/cross_scale/scene_dispatch.py:273-274`; `engine/cross_scale/combat_bridge.py:97-98`, `:141` |
+| lateral | ~~`systems.combat.sim.combat` (deprecated)~~ retired 2026-09-25 (ED-900/904, ED-1029; the dead flag-off branch in `scene_dispatch.py` was deleted the same day) / `combat_engine_v1` (PC) | `wrapper.fight` (the only resolver now) | `engine/cross_scale/combat_bridge.py:115` |
 | lateral | `systems.fieldwork.sim.fieldwork` / `investigation` (FI) | stub-wired resolvers | `engine/cross_scale/scene_dispatch.py:351-356` |
 | in (up) | `systems.factions.sim.faction_action` (FA) | Direct `TickScheduler.emit` call into the substrate from outside `engine/cross_scale/` | `systems/factions/sim/faction_action.py:424` |
 | in (up) | `systems.factions.sim.parliamentary_transfer` (FA) | Direct `TickScheduler.emit` call into the substrate from outside `engine/cross_scale/` | `systems/factions/sim/parliamentary_transfer.py:240` |

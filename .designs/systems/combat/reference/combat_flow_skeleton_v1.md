@@ -21,10 +21,10 @@
 
 | Callable | Anchor | Called by |
 |---|---|---|
-| `wrapper.fight(A, B, cfg=None, rng=None, max_bouts=12) -> int` | `systems/combat/combat_engine_v1/wrapper.py:465 fight` | `engine/cross_scale/combat_bridge.py:141 resolve` (campaign seam, flag-gated — §7); `systems/combat/combat_engine_v1/workbench/balance.py:65`, `systems/combat/combat_engine_v1/workbench/server.py:77`, `systems/combat/combat_engine_v1/workbench/trace.py:23`, `systems/combat/combat_engine_v1/workbench/armour_participation.py:78`, `systems/combat/combat_engine_v1/workbench/armour_participation.py:145`, `systems/combat/combat_engine_v1/workbench/build_levers.py:73` (offline balance/trace harnesses, CLI-invoked); `tests/valoria/test_combat_invariants.py` |
+| `wrapper.fight(A, B, cfg=None, rng=None, max_bouts=12) -> int` | `systems/combat/combat_engine_v1/wrapper.py:465 fight` | `engine/cross_scale/combat_bridge.py:106 resolve` (campaign seam, flag-gated — §7); `systems/combat/combat_engine_v1/workbench/balance.py:65`, `systems/combat/combat_engine_v1/workbench/server.py:77`, `systems/combat/combat_engine_v1/workbench/trace.py:23`, `systems/combat/combat_engine_v1/workbench/armour_participation.py:78`, `systems/combat/combat_engine_v1/workbench/armour_participation.py:145`, `systems/combat/combat_engine_v1/workbench/build_levers.py:73` (offline balance/trace harnesses, CLI-invoked); `tests/valoria/test_combat_invariants.py` |
 | `wrapper.engagement(A, B, first, cfg, rng, prev_closed=False)` | `systems/combat/combat_engine_v1/wrapper.py:47 engagement` | `wrapper.fight:480` only — internal, not an outside-callable entry |
-| `combat_bridge.derive_parties(ctx, world)` | `engine/cross_scale/combat_bridge.py:114 derive_parties` | `engine/cross_scale/scene_dispatch.py:236 derive_parties` |
-| `combat_bridge.resolve(a, b, rng)` | `engine/cross_scale/combat_bridge.py:131 resolve` | `engine/cross_scale/scene_dispatch.py:240 resolve` |
+| `combat_bridge.derive_parties(ctx, world)` | `engine/cross_scale/combat_bridge.py:89 derive_parties` | `engine/cross_scale/scene_dispatch.py:236 derive_parties` |
+| `combat_bridge.resolve(a, b, rng)` | `engine/cross_scale/combat_bridge.py:106 resolve` | `engine/cross_scale/scene_dispatch.py:240 resolve` |
 | `systems.combat.sim.combat.resolve_combat_round(participants, scene=None, rng=None)` (DEPRECATED engine) | `systems/combat/sim/combat.py:268 resolve_combat_round` | `engine/cross_scale/scene_dispatch.py:274-275 _resolve_slot` (flag-off default branch; resolved by the `scene_resolver.combat` role since plan S5a, not imported) |
 | `systems.combat.sim.combat.resolve_action(actor, target, action_type, scene=None, rng=None)` | `systems/combat/sim/combat.py:189 resolve_action` | `resolve_combat_round:293` only |
 | `combat_engine_v1/workbench/balance.py` CLI (`weapon_matchup_table`, `attribute_parity_table`, `run_all`, …) | `systems/combat/combat_engine_v1/workbench/balance.py:222` (if __name__) | Jordan/operator, direct invocation (CLAUDE.md §9 routing table) |
@@ -41,8 +41,8 @@
 | `Combatant.__init__` attribute overrides (`weapon`, `armor`, `tradition`, `strength`, `agi`, `end`, `cog`, `att`, `spirit`, `focus`, `history`, `disp`, `skills`, `equipped`) | arg | caller-constructed, else class defaults | `systems/combat/combat_engine_v1/combatant.py:93 Combatant.__init__` |
 | `WEAPONS`, `GEOMETRY`, `HALFSWORD_FORM/BASE` (weapon data registry) | registry | `systems/combat/combat_engine_v1/weapons.py:74 WEAPONS` | `systems/combat/combat_engine_v1/combatant.py:7` (from weapons import) |
 | `TRADITIONS`, `ADJACENT`, `ABILITIES`, `TRADITION_KIT` (tradition/ability registries) | registry | `systems/combat/combat_engine_v1/traditions.py:18 TRADITIONS`, `ability_primitives.py` | `systems/combat/combat_engine_v1/tradition.py:13-19` facade re-export |
-| `ctx['factions'] = (fid_a, fid_b)` | arg | queued scene context (never populated live — §7) | `engine/cross_scale/combat_bridge.py:121 derive_parties` |
-| `world.factions[fid].Mil` | world-state | strategic `World.factions` (aggregate faction stats) | `engine/cross_scale/combat_bridge.py:109` (history=max(1, round(f.Mil))) |
+| `ctx['factions'] = (fid_a, fid_b)` | arg | queued scene context (never populated live — §7) | `engine/cross_scale/combat_bridge.py:96 derive_parties` |
+| `world.factions[fid].Mil` | world-state | strategic `World.factions` (aggregate faction stats) | `engine/cross_scale/combat_bridge.py:85` (history=max(1, round(f.Mil))) |
 | `world.dispatch_combat_bridge` | flag | decided once per campaign by `mc_v18.run_campaign`, default OFF | `engine/mc_v18.py:97 _dispatch_combat_bridge_on`, `engine/mc_v18.py:256` |
 | `wrapper._TRACE` callable | flag | workbench trace/branch-explorer seam, `None` by default | `systems/combat/combat_engine_v1/wrapper.py:16` (_TRACE = None) |
 
@@ -114,7 +114,7 @@ S5. **Campaign-seam dispatch** (outside `systems/combat/`, traced for the IN-sid
 | Output | Kind | Consumer | Anchor |
 |---|---|---|---|
 | `fight()` return `int` (`+1`\|`-1`\|`0`) | return value | `combat_bridge.resolve` (wraps into a result dict); workbench win-rate tallies; tests | `systems/combat/combat_engine_v1/wrapper.py:483-484`, `systems/combat/combat_engine_v1/wrapper.py:494-495` |
-| `combat_bridge.resolve()` return dict (`result`, `winner`, `a_label`, `b_label`, `a_history`, `b_history`) | return value | `scene_dispatch._resolve_slot`'s `out["result"]` | `engine/cross_scale/combat_bridge.py:142-150` |
+| `combat_bridge.resolve()` return dict (`result`, `winner`, `a_label`, `b_label`, `a_history`, `b_history`) | return value | `scene_dispatch._resolve_slot`'s `out["result"]` | `engine/cross_scale/combat_bridge.py:117-124` |
 | `ctx["echo"]` block (ON-branch only) | write to caller-owned dict | `echo_transport.emit_scene_echo` | `engine/cross_scale/scene_dispatch.py:268-269` |
 | `scene.combat_resolved` `Key` (substrate) | emit | `engine.substrate.TickScheduler` log; deferred `Faction.adjust(stat, delta)` apply at accounting boundary | `engine/cross_scale/echo_transport.py:418-440` |
 | `resolve_combat_round()` return `RoundResult` (deprecated engine) | return value | `scene_dispatch._resolve_slot`'s `out["result"]` (OFF branch) | `engine/cross_scale/scene_dispatch.py:274-276` |
@@ -128,7 +128,7 @@ S5. **Campaign-seam dispatch** (outside `systems/combat/`, traced for the IN-sid
 | `Combatant.wt` (`WoundTracker`: `cumulative_damage`, `wounds`, `felled`) | RW | `systems/combat/combat_engine_v1/combatant.py:50 WoundTracker` | `systems/combat/combat_engine_v1/wrapper.py:471` (A.wt.__init__(...)); `systems/combat/combat_engine_v1/combatant.py:154 apply_wound` |
 | `Combatant.grip_position`, `.lunge_depth`, `.sel_*`, `.range_avail`, `.facing` | RW | `combat_engine_v1/combatant.py` (declared, per-beat derived); written by `wrapper.py` per beat | `systems/combat/combat_engine_v1/wrapper.py:133-141` |
 | `Combatant.weapon` (half-sword form switch) | RW | `combatant.py` field; mutated by `wrapper.py` via `combat_systems.halfsword_target` | `systems/combat/combat_engine_v1/wrapper.py:241-242` |
-| `world.factions[fid].Mil` (aggregate faction stat) | R | `engine/autoload/game_state.py` `Faction` | `engine/cross_scale/combat_bridge.py:109 f.Mil` |
+| `world.factions[fid].Mil` (aggregate faction stat) | R | `engine/autoload/game_state.py` `Faction` | `engine/cross_scale/combat_bridge.py:85 f.Mil` |
 | `world.factions[fid]` stat (via `.adjust`) | W (deferred, accounting boundary) | `engine/autoload/game_state.py` `Faction.adjust` | `engine/cross_scale/echo_transport.py:437-438` (f.adjust(...)) |
 | `world.dispatch_combat_bridge` | W (once, campaign init) / R (per season) | `engine/mc_v18.py` | `engine/mc_v18.py:256`; read at `engine/cross_scale/scene_dispatch.py:234` |
 | `world.echo_scheduler` / `world.key_log` | W (once, campaign init) / R (per scene) | `engine/mc_v18.py` / `engine/cross_scale/echo_transport.py` | `engine/mc_v18.py:262-268` |
@@ -137,7 +137,7 @@ S5. **Campaign-seam dispatch** (outside `systems/combat/`, traced for the IN-sid
 
 | Direction | Peer | Mechanism | Anchor |
 |---|---|---|---|
-| up | `engine/cross_scale/combat_bridge.py` (IN lane) | consumes `wrapper.fight` + `combatant.Combatant` as-is via a sibling-directory `sys.path` insert + bare import (no `systems.combat.combat_engine_v1` package import exists) | `engine/cross_scale/combat_bridge.py:95-99 _load_engine` |
+| up | `engine/cross_scale/combat_bridge.py` (IN lane) | consumes `wrapper.fight` + `combatant.Combatant` as-is via `engine/substrate/pc_engine.py`, the one path seam (2026-09-25 — combat_bridge's own former private loader, `_load_engine`, was one of two copies of this insert and was deleted when the two were consolidated; no `systems.combat.combat_engine_v1` package import exists) | `engine/substrate/pc_engine.py:40-49 load` |
 | up | `engine/cross_scale/scene_dispatch.py` (IN lane) | dispatches queued `combat`-type scenes to either the bridge (flag ON) or the deprecated `systems.combat.sim.combat` (flag OFF, default) | `engine/cross_scale/scene_dispatch.py:224-274` |
 | up | `engine/mc_v18.py` (campaign driver) | decides+stashes `world.dispatch_combat_bridge` once per campaign; calls `scene_dispatch.run_scene_phase` every season | `engine/mc_v18.py:160`, `engine/mc_v18.py:256` |
 | lateral | `engine/autoload/sigma_leverage.py` | `core.py` resolves its continuous dice-pool roll through the shared sigma-leverage kernel, not a private re-implementation | `systems/combat/combat_engine_v1/core.py:19` (from engine.autoload import sigma_leverage as SL) |
