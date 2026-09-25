@@ -66,7 +66,7 @@ from ..gaps import Unspecified
 #      `WoundTracker` the engine computed -- `combat_seam.resolve`'s `wound_state`.
 #
 # ⚠ THE BAND IS READ OFF **THE ACT'S SUBJECT**, NOT OFF "THE LOSER", AND THAT CORRECTS THE TABLE.
-# `verb_table.yaml`'s `writes_source:` cell says `wound_state[loser]`. `kill / wound` writes on
+# `verb_table.yaml`'s `writes_source_note:` cell (`writes_source:` until 2026-09-25) said `wound_state[loser]`. `kill / wound` writes on
 # `payload["subject"]` (`_eff_kill`), so reading the LOSER kills the wrong person whenever the
 # ACTOR is the one felled: A attacks B, B fells A, `wound_state[A].felled` is True, and the fold
 # would delete B. The subject is the person the writes land on, so the subject is the person

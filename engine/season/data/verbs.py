@@ -52,7 +52,7 @@ harmless -- a `dict` type hint on a name the next line immediately rebinds.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from typing import Optional
 
 from . import files
@@ -269,6 +269,13 @@ class VerbRow:
                     "union, which would write more than the contest actually resolved")
         return tuple(self.writes_by_degree[degree])
 
+# Loader invariant 10's verb-row key set, DERIVED from `VerbRow` rather than listed: every field a
+# YAML column fills (the two `*_by_degree` maps are built from `writes:`/`emits:`, not read), plus
+# `domain` (read for `release`, invariant 6) and `source` (every row's provenance column).
+_VERB_ROW_KEYS = (frozenset(f.name for f in fields(VerbRow) if not f.name.endswith("_by_degree"))
+                  | {"domain", "source"})
+
+
 def _load_verb_table() -> dict:
     import yaml as _y
     if not VERB_TABLE_YAML.exists():
@@ -280,6 +287,19 @@ def _load_verb_table() -> dict:
         name = r["verb"]
         if name in out:
             raise SystemExit(f"verb_table.yaml: {name!r} appears more than once")
+        # LOADER INVARIANT 10, VERB HALF (`04 §B.13 #10`, `04:470`): UNKNOWN KEYS ARE REJECTED.
+        # A column is either one this loader reads or an annotation spelled `*_note`; anything else
+        # is a column that silently does nothing, which is what `writes_grade:`, `writes_source:`,
+        # `eligibility_substitution:`, `eligibility_sweep:` and `effect:` were until 2026-09-25.
+        # ⚠ #10's OTHER CLAUSE -- *"a `scale:` key fails the load"* -- IS NOT ENFORCED, BECAUSE IT
+        # IS ABOUT A DIFFERENT FIELD: the chain's retired per-module `scale:`, not the ruled
+        # rung-kind column `VerbRow.scale` carries (see the comment on that field above).
+        unknown = sorted(k for k in r if k not in _VERB_ROW_KEYS and not str(k).endswith("_note"))
+        if unknown:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} carries unknown key(s) {unknown}. 04 §B.13 #10 -- a "
+                f"row's keys are the ones this loader reads ({sorted(_VERB_ROW_KEYS)}) or an "
+                "annotation spelled `*_note`; any other column is read by nothing.")
         # ⚠ `writes:` NOW TAKES TWO SHAPES (#358 rev.2 invariant 12). A mapping is degree-keyed;
         # a sequence is the flat form. The union feeds the Part D check below either way, so a
         # pair named in ANY branch is still validated against the matrix at load.

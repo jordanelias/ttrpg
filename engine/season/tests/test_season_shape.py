@@ -741,14 +741,19 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     `requires` cell or a non-`own` eligibility -- with an empty `emits_on_refusal`). `matrix.py`:
     #10 (a write-matrix row carrying a key outside its seven columns). Each fires while its YAML
     is being read, so each is fatal and counted here. Falsifiers: each planted on disk, RED
-    naming the row, reverted, GREEN."""
+    naming the row, reverted, GREEN.
+
+    ⚠ 39 -> 40, 2026-09-25, #10's VERB HALF, LOAD-TIME. `verbs.py` refuses a `verb_table.yaml` row
+    carrying a key the loader does not read unless it is an annotation spelled `*_note`; the five
+    dead columns (`writes_grade`, `writes_source`, `eligibility_substitution`,
+    `eligibility_sweep`, `effect`) were renamed to `*_note` form in the same commit."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 39, (
-        f"{total} load-time exits across the model set, expected 39. Per file: "
+    assert total == 40, (
+        f"{total} load-time exits across the model set, expected 40. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -10860,7 +10865,7 @@ def _code_only_lines(path: Path) -> list:
 
 
 def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
-    """A CORRECTION TO `verb_table.yaml`, EXECUTED. Its `writes_source:` cell said the band comes
+    """A CORRECTION TO `verb_table.yaml`, EXECUTED. Its `writes_source_note:` cell said the band comes
     from `wound_state[loser]`. `kill / wound` writes on `payload["subject"]` (`_eff_kill`), so on
     a fight the ACTOR loses, the loser's tracker says `felled` and the fold would delete the
     TARGET -- who is standing, unhurt or merely bled. The band is read off the person the writes
@@ -10896,7 +10901,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     assert [e.kind for e in evs] == ["body.changed"], [(e.kind, e.degree) for e in evs]
     assert "p_mid" in w2.persons, (
         "the subject was deleted by a fight the ACTOR lost -- the band is being read off the "
-        "loser, which is the defect `verb_table.yaml`'s `writes_source:` cell used to specify")
+        "loser, which is the defect `verb_table.yaml`'s `writes_source_note:` cell used to specify")
     assert evs[0].degree == WOUNDED
 
 
