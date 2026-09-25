@@ -734,14 +734,21 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     -> *"neither binds nor admits that operand (carriable: nothing -- the row is UNTYPED)"*. Both
     are pinned by their own tests in `test_governance_build.py`
     (`test_lb6d_a_row_without_the_column_is_refused_at_load`,
-    `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load`)."""
+    `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load`).
+
+    ⚠ 36 -> 39, 2026-09-25, THREE MORE `04 §B.13` LOADER INVARIANTS, ALL LOAD-TIME. `verbs.py`:
+    #9 (a `contests:` prize outside `contest_subsystems.prizes`) and #4 (a failable clause -- a
+    `requires` cell or a non-`own` eligibility -- with an empty `emits_on_refusal`). `matrix.py`:
+    #10 (a write-matrix row carrying a key outside its seven columns). Each fires while its YAML
+    is being read, so each is fatal and counted here. Falsifiers: each planted on disk, RED
+    naming the row, reverted, GREEN."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 36, (
-        f"{total} load-time exits across the model set, expected 36. Per file: "
+    assert total == 39, (
+        f"{total} load-time exits across the model set, expected 39. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 

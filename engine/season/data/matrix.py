@@ -22,7 +22,7 @@ this module: `_load_write_matrix` below imports it from there rather than owning
 from __future__ import annotations
 
 import enum
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from typing import Optional
 
 from . import files
@@ -115,6 +115,12 @@ class MatrixRow:
         return STEP_CLASS[step]
 
 
+# A row's column set, DERIVED from `MatrixRow` rather than listed: every field the row carries,
+# plus `class`, the prose column the loader cross-checks against the step->class derivation and
+# does not store (see the CROSS-CHECK below).
+_MATRIX_ROW_KEYS = frozenset(f.name for f in fields(MatrixRow)) | {"class"}
+
+
 def _load_write_matrix() -> dict:
     import yaml as _yaml
     if not WRITE_MATRIX_YAML.exists():
@@ -122,6 +128,15 @@ def _load_write_matrix() -> dict:
     doc = load_yaml(WRITE_MATRIX_YAML.read_text())
     out = {}
     for r in doc["rows"]:
+        # LOADER INVARIANT 10 (`04 §B.13 #10`, `04:470`): UNKNOWN KEYS ARE REJECTED. Every row
+        # carries exactly these seven columns; an eighth is a column nothing reads, and a
+        # misspelled one silently drops the column it meant.
+        extra = sorted(set(r) - _MATRIX_ROW_KEYS)
+        if extra:
+            raise SystemExit(
+                f"write_matrix.yaml ({r.get('kind')}, {r.get('field')}): unknown key(s) {extra}; "
+                f"a row carries exactly {sorted(_MATRIX_ROW_KEYS)}. 04 §B.13 #10 -- unknown keys "
+                "are rejected at load.")
         steps = frozenset(Step[_STEP_OF[s]] for s in r["steps"])
         # roster-exempt: MECHANISM. This parses §G4's three `social:` values into Python; it
         # is the file format, not a definition the game resolves from.

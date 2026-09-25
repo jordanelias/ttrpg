@@ -70,6 +70,13 @@ VERB_TABLE_YAML = files.VERB_TABLE_YAML
 
 ELIGIBILITY_KINDS = roster("eligibility_kinds")
 
+# The "no cell" prose sentinel `requires` and `requires_typed` use. Defined ABOVE the loader (it sat
+# at the foot of this module until 2026-09-25) because loader invariant 4 now reads it at load.
+NO_PRECONDITION = ("—", "-", "")
+
+# Loader invariant 9's roster: the prizes `contest_subsystems` claims, read once at load.
+_CONTEST_PRIZES = frozenset(roster_map("contest_subsystems", "prizes"))
+
 BENEFICIARY_KINDS = roster("beneficiary_kinds")
 # ⚠ WHICH BENEFICIARY KINDS NEED A CELL TO BIND -- READ FROM THE ROSTER, NEVER LISTED HERE.
 # `beneficiary_kinds.carriage` classifies every member `structural` or `operand`:
@@ -442,6 +449,32 @@ def _load_verb_table() -> dict:
         if row.stratum not in STRATA:
             raise SystemExit(f"verb_table.yaml: {name!r} has stratum {row.stratum!r}, which is "
                              f"not one of rosters.yaml's {list(STRATA)}")
+        # LOADER INVARIANT 9 (`04 §B.13 #9`, `04:469`): CONTEST PRIZES ⊆ THE SUBSYSTEM ROSTER. A
+        # misspelled prize used to load clean, boot clean, and reach the seam's generic refusal at
+        # first call naming no row (`manifest.registry.unclaimed_contest_prizes`'s docstring). The
+        # roster, `contest_subsystems.prizes`, owns which prizes exist.
+        if row.contests and row.contests not in _CONTEST_PRIZES:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `contests: {row.contests}`, which is not a "
+                f"`contest_subsystems.prizes` key ({sorted(_CONTEST_PRIZES)}). 04 §B.13 #9 -- "
+                "contest prizes are a SUBSET of the subsystem roster; an unclaimed prize resolves "
+                "to no provider and the seam refuses generically, naming no row.")
+        # LOADER INVARIANT 4 (`04 §B.13 #4`, F7, `04:461-464`): EVERY FAILABLE CLAUSE HAS A
+        # REFUSAL KIND. A clause can fail if the row has a `requires` cell, or if any eligibility
+        # alternative is other than `own` (which cannot decline). Such a row with an empty
+        # `emits_on_refusal` would refuse by emitting a kind nobody declared.
+        # ⚠ THE PER-CONJUNCT HALF OF F7 IS NOT ENFORCED HERE. `emits_on_refusal` is one flat
+        # tuple per row, so a multi-conjunct `requires_typed` cell (`restore`, `examine` and
+        # `surveil` carry an `AllOf` of two today) cannot say which conjunct a kind refuses for
+        # without a keyed schema; that schema does not exist.
+        _failable = (row.requires.strip() not in NO_PRECONDITION
+                     or any(k != "own" for k in row.eligibility_kinds()))
+        if _failable and not row.emits_on_refusal:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} has a failable clause (a `requires` cell, or an "
+                f"eligibility other than `own`: {list(row.eligibility)}) and an empty "
+                "`emits_on_refusal:`. 04 §B.13 #4 (F7) -- every failable clause has a refusal "
+                "kind; a refusal with no declared kind is a fabricated emission.")
         out[name] = row
     # -----------------------------------------------------------------------
     # LOADER INVARIANT 6 (`04_CODE_ARCHITECTURE.md` PART D row 15, MECHANICAL at load):
@@ -661,4 +694,3 @@ def alignment_at(point: str) -> dict:
     return {ax: {v: (1.0 if w > 0 else -1.0 if w < 0 else 0.0) for v, w in row.items()}
             for ax, row in ALIGNMENT_DECLARED.items()}
 
-NO_PRECONDITION = ("—", "-", "")
