@@ -1506,7 +1506,8 @@ rows:
   #     bolted to the driver. This is the largest of the seven and it is `ID-9`'s own mechanism;
   #     it is listed in the meta-architecture's HANDOFF as pending rather than rowed, because it
   #     is a build item.
-  #   * `Person.beliefs` survives with a matrix row where §D.1.1 deletes the field.
+  #   * ~~`Person.beliefs` survives with a matrix row where §D.1.1 deletes the field.~~ CLOSED
+  #     2026-09-25: the row and the carrier field were deleted together (write_matrix.yaml `retired:`).
   #   * `Rung._DECLARED` still carries `stake`, `transmission`, `judging_set_rule`; §B.3 deletes
   #     all three, and Stage 4 §B.7 moves the judging set to a Query over seats.
   #   * `Office.establishment` is a field with a matrix row AND a producing verb, where §B.7 and

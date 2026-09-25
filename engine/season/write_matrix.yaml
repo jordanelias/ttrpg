@@ -55,6 +55,12 @@
 #
 #   Date.fired is now fixed in place (below) -- it was a data error, not a hole.
 #
+#   ⚠ 2026-09-25: INVARIANT 2 IS ENFORCED AT LOAD (`data/verbs.py`). `Person.beliefs` is DELETED,
+#   row and carrier field together (see `retired:`), and each of the EIGHT remaining RES rows with
+#   no producing verb carries an `unproduced:` cell naming its hole. The loader refuses an orphan
+#   without one, and refuses the cell on a row a verb now writes. Re-running the command above
+#   lists exactly the eight.
+#
 # ⚠ THE SIX `Person` ROWS ARE THE FINDING, AND THEY ARE ONE HOLE, NOT SIX.
 # NO VERB IN THE 32-ROW TABLE WRITES ANY `Person` INTERIOR FIELD. That is tier-0 `H-62`, and it
 # means every interior consequence is inert: convictions cannot move, so `choose` scores against a
@@ -151,13 +157,7 @@ rows:
     social:  "true"
     by:      "ONE ROW PER AXIS (V2 writes it `axis_count[axis]`). D6. L3 clause 1's counter. `axis` on D6's registry"
     emits:   "`axis.incremented`"
-  - kind:    "Person"
-    field:   "beliefs"
-    steps:   [RES]
-    class:   "ACTS"
-    social:  "true"
-    by:      "DR-2; §9.3"
-    emits:   "`belief.revised`"
+    unproduced: "H-62: an interior write is a consequence of an outcome and no verb writes one yet -- no trigger for the axis counter is specified anywhere (its axis registry is H-20)"
   - kind:    "Person"
     field:   "body"
     steps:   [MAT, RES]
@@ -179,6 +179,7 @@ rows:
     social:  "false"
     by:      "W2/H-47, CORRECTED BY W2's ADVERSARIAL PASS -- IT WAS WRONG IN BOTH DIRECTIONS. It admitted MAT only, and #353 :98 puts the seam at RESOLVE via `contest`, so the ONE writer #353 licenses (:1904, 'written only through seam Events') would have RAISED -- an over-refusal, G4. And admitting MAT with `social: false` made THE WORLD a writer of coherence, which is a FOURTH LICENSED CLOCK against §25.1 :862-866, 'the three licensed clocks are exhaustive -- matter, bodies, and the confidence of a memory'. Now RES, `social: false` so a seam Event may write it, and the seam bound is ENFORCED IN `write()` on `(Tenure, until)`'s precedent rather than asserted in this cell -- a comment is not a constraint"
     emits:   "`coherence.changed`"
+    unproduced: "H-47 / H-62: a §54 fold-in with no specified trigger; only an act may write it and the verb table carries none that does"
   - kind:    "Person"
     field:   "pursuits"
     steps:   [RES]
@@ -186,6 +187,7 @@ rows:
     social:  "true"
     by:      "DR-2; §9.3 — moved by argument and consequence, never by evidence"
     emits:   "`pursuit.moved`"
+    unproduced: "H-62: #353 §9.3 mandates the row (moved by argument and consequence) and Part E carries no argument verb"
     # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this row was
     # `field: "convictions"` / `emits: "\`conviction.moved\`"`. No producer exists for either
     # name (grep-confirmed), so this is a pure rename, not a behaviour change.
@@ -210,6 +212,7 @@ rows:
     social:  "true"
     by:      "DR-2"
     emits:   "`stance.moved`"
+    unproduced: "H-62: an interior write with no specified trigger; only an act may write it and the verb table carries none that does"
   - kind:    "Person"
     field:   "travel_leg"
     steps:   [MAT, RES]
@@ -287,6 +290,7 @@ rows:
     social:  "false"
     by:      "DR-3"
     emits:   "`date.scheduled`"
+    unproduced: "no hole row -- orphan since at least 2026-09-03 (this file's #358 rev.2 invariant-2 measurement lists it; git blame stops at the shallow-clone boundary f41f20a, 2026-09-07)"
   - kind:    "Rung"
     field:   "envelope"
     steps:   [MAT, CEN]
@@ -301,6 +305,7 @@ rows:
     social:  "true"
     by:      "W2/H-41 -- founding a hearth. Part D's existence rows covered only `Person` and `Record`"
     emits:   "`rung.founded`"
+    unproduced: "H-41: founding a hearth -- Part D's existence rows had no producer for Rung"
   - kind:    "Rung"
     field:   "stores"
     steps:   [MAT, RES]
@@ -329,6 +334,7 @@ rows:
     social:  "true"
     by:      "W2/H-41 -- building a site"
     emits:   "`site.built`"
+    unproduced: "H-41: building a site -- no founding verb writes Site.exists (HANDOFF item 2d)"
   - kind:    "Tenure"
     field:   "degree"
     steps:   [RES]
@@ -343,6 +349,7 @@ rows:
     social:  "true"
     by:      "W2/H-50. ⚠ PROVENANCE CORRECTED by the adversarial pass: this said \"a §54 fold-in\" and #353 §54's items :1893-1908 do NOT include `payload`. The field is real (:532) and the defect is real -- it left P39's 'a relationship carries state' WITH NO WRITER"
     emits:   "`tenure.payload_set`"
+    unproduced: "H-50: a §54 fold-in -- 'a relationship carries state' has no writer"
   - kind:    "Tenure"
     field:   "since"
     steps:   [RES]
@@ -373,3 +380,8 @@ retired:
   - "Person.marks"
   - "Rung.stake"
   - "Site.drawers"
+  # ⚠ DELETED 2026-09-25 WITH ITS CARRIER FIELD, AND NOT FOR W2's REASON (no producing verb). #358
+  # rev.2 §D.1.1 deletes the field -- a belief is a `commit` to an OUGHT, not a field -- and
+  # `Person.beliefs` had zero readers and zero writers in engine/season (measured by grep), so the
+  # row and `state/carriers.py`'s `Person.beliefs` went together (04:179; 04:980, PART D row 44).
+  - "Person.beliefs"

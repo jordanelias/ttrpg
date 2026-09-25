@@ -40,7 +40,7 @@ from ..data.rosters import (
     BODY_FACTION, BODY_FUNCTION, CLAIM_SOURCES, CLAIM_SUBJECT_RULES, COMBAT_BANDS, PURSUIT_AXES, PURSUITS, FACTIONS, FELLED, QUESTION_SOURCES, REMIT_ACTS, ROLE_TEMPLATE_OF, ROSTERS_YAML, RUNG_KINDS, SCENE_PACKING_RULES, STRATA, TENURE_KINDS, TITLE_DOMAINS, UNTOUCHED, VIEW_BUILDER_RULES, WITNESS_CHANNELS, WOUNDED, _ROSTERS, load_yaml, office_faction, roster, roster_map, title_domain, title_rank,
 )
 from ..data.verbs import (
-    ALIGNMENT_SWEEP, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, alignment_at, rows_without_a_producer,
+    ALIGNMENT_SWEEP, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, alignment_at, rows_without_a_producer, tenure_kinds_without_an_opener,
 )
 from .. import decision
 from ..decision import (
@@ -167,9 +167,12 @@ def test_d1_the_partition_is_not_invented():
     assert MATRIX, "the write matrix loaded empty -- nothing was checked"
     for (kind, fname), row in MATRIX.items():
         assert row.by.strip(), f"({kind}, {fname}) carries no provenance"
-    for kind, fname in (("Person", "pursuits"), ("Person", "beliefs")):
+    # ⚠ `(Person, beliefs)` LEFT THIS LOOP 2026-09-25: row and carrier field were deleted together
+    # (`04:179`, PART D row 44 -- a belief is a `commit` to an OUGHT). It must now refuse as RETIRED.
+    for kind, fname in (("Person", "pursuits"),):
         social, by = partition_lookup(kind, fname)
         assert social is True and by.strip(), f"({kind}, {fname}) has a row but no usable grade"
+    assert ("Person", "beliefs") in MATRIX_RETIRED and ("Person", "beliefs") not in MATRIX
 
 
 def test_d1b_a_field_cannot_ride_on_another_fields_matrix_row():
@@ -746,14 +749,20 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     ⚠ 39 -> 40, 2026-09-25, #10's VERB HALF, LOAD-TIME. `verbs.py` refuses a `verb_table.yaml` row
     carrying a key the loader does not read unless it is an annotation spelled `*_note`; the five
     dead columns (`writes_grade`, `writes_source`, `eligibility_substitution`,
-    `eligibility_sweep`, `effect`) were renamed to `*_note` form in the same commit."""
+    `eligibility_sweep`, `effect`) were renamed to `*_note` form in the same commit.
+
+    ⚠ 40 -> 44, 2026-09-25, #2 AND #6's SECOND HALF, ALL LOAD-TIME (`verbs.py`, after the row
+    loop). #2: a RES matrix row no verb writes that carries no `unproduced:` cell, and an
+    `unproduced:` cell on a row a verb DOES write (stale). #6: `tenure_kinds.openers` not covering
+    exactly the roster, and an opener naming no verb. An EMPTY opener set is reported
+    (`tenure_kinds_without_an_opener`), not raised, so it adds nothing here."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 40, (
-        f"{total} load-time exits across the model set, expected 40. Per file: "
+    assert total == 44, (
+        f"{total} load-time exits across the model set, expected 44. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -3280,6 +3289,10 @@ def test_w5_the_reporting_guards_are_actually_called():
         print(f"    {pair}")
     print(f"  rows on dict-modelled kinds (uncheckable): {len(absent_field['unmodelled'])}")
     print(f"  `social: true` rows no verb writes: {len(no_producer)}")
+    # Loader invariant 6's second half, reported: tenure kinds whose declared opener set is empty.
+    unopened = tenure_kinds_without_an_opener()
+    assert isinstance(unopened, list)
+    print(f"  tenure kinds no act can open: {len(unopened)} {unopened}")
 
     # The two W5 fields are the falsifier: they WERE in `absent` and the fix removed them, so if
     # either regresses out of `Person` this list grows and the assertion below names it.

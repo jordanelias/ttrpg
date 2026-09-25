@@ -110,14 +110,21 @@ class MatrixRow:
     social: Optional[bool]      # None == `n/a`
     by: str
     emits: tuple
+    # ⚠ OPTIONAL, AND ONLY ON A `RES` ROW NO VERB WRITES: `"<hole id or F-tag>: <reason>"`. Loader
+    # invariant 2 (`04 §B.13 #2`, checked in `data/verbs.py` once the verb table exists) refuses a
+    # RES row with no producing verb that does not carry one, and refuses one that carries it
+    # while a verb DOES write the row -- a stale declaration is the same lie in the other
+    # direction. `04:1025` (PART E step 2) records the literal invariant as unsatisfiable today;
+    # this column is how the table says which rows fail it and why, so the check can run at all.
+    unproduced: str = ""
 
     def write_class(self, step: "Step") -> "WriteClass":
         return STEP_CLASS[step]
 
 
-# A row's column set, DERIVED from `MatrixRow` rather than listed: every field the row carries,
-# plus `class`, the prose column the loader cross-checks against the step->class derivation and
-# does not store (see the CROSS-CHECK below).
+# A row's column set, DERIVED from `MatrixRow` rather than listed: every field the row carries
+# (`unproduced` is the one optional column), plus `class`, the prose column the loader
+# cross-checks against the step->class derivation and does not store (see the CROSS-CHECK below).
 _MATRIX_ROW_KEYS = frozenset(f.name for f in fields(MatrixRow)) | {"class"}
 
 
@@ -169,7 +176,8 @@ def _load_write_matrix() -> dict:
                 "One row per (kind, field) -- a duplicate makes the gate's behaviour depend on "
                 "file order.")
         out[key] = MatrixRow(
-            r["kind"], r["field"], steps, social, r["by"], emits)
+            r["kind"], r["field"], steps, social, r["by"], emits,
+            str(r.get("unproduced") or "").strip())
     return out
 
 

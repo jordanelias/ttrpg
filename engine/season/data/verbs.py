@@ -57,10 +57,10 @@ from typing import Optional
 
 from . import files
 from ..gaps import Forbidden, Unspecified
-from .matrix import MATRIX
+from .matrix import MATRIX, Step
 from .requires import TypedRequires, build_typed_requires
 from .rosters import (
-    PURSUIT_AXES, PURSUITS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, load_yaml,
+    PURSUIT_AXES, PURSUITS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, TENURE_KINDS, load_yaml,
     require_member, roster, roster_map,
     table,
     table_meta,
@@ -519,10 +519,10 @@ def _load_verb_table() -> dict:
     # `rosters.yaml` and forget its closer, and the load fails HERE rather than shipping a relation
     # nothing can end.
     #
-    # ⚠ ROW 15 HAS A SECOND HALF THIS DOES NOT IMPLEMENT, NAMED SO NOBODY READS THE CHECK'S NAME
-    # AS COVERING IT: `04:464-465` states invariant 6 as two conjuncts, the domain AND *"every
-    # kind's OPENER set is declared too"*. Only the first is here. The second is
-    # `registers/handoffs/architecture_meta_HANDOFF_NEXT.md` item 1e and is open.
+    # ⚠ ROW 15's SECOND HALF -- `04:466-467`, *"every kind's OPENER set is declared too"* -- IS
+    # BELOW, after this check: `tenure_kinds.openers` in `rosters.yaml`, measured from
+    # `loop/effects.py`. Declared-and-empty is REPORTED (`tenure_kinds_without_an_opener`), not
+    # refused.
     if "release" not in out:
         raise SystemExit(
             "verb_table.yaml: no `release` row. Loader invariant 6 (04 PART D row 15) is the "
@@ -540,7 +540,56 @@ def _load_verb_table() -> dict:
             "(04 PART D row 15) requires them equal: a kind in the roster and not in this "
             "domain is an edge that can be opened and never closed, and a kind here and "
             "not in the roster is a closer for a relation that does not exist.")
+    # LOADER INVARIANT 6, SECOND HALF (`04 §B.13 #6`, `04:466-467`, `ID-14`): EVERY KIND'S OPENER
+    # SET IS DECLARED. Declared means present: a kind with no `openers:` entry, or an entry for a
+    # kind the roster does not have, or an opener naming no verb, refuses. An EMPTY set is a
+    # declaration too -- the kind has no opener today -- and `tenure_kinds_without_an_opener`
+    # reports it rather than refusing, since a relation nothing can open yet may be correct.
+    _openers = roster_map("tenure_kinds", "openers")
+    if set(_openers) != set(TENURE_KINDS):
+        raise SystemExit(
+            f"rosters.yaml: `tenure_kinds.openers` declares {sorted(_openers)} and the roster is "
+            f"{sorted(TENURE_KINDS)}. 04 §B.13 #6 -- every kind's opener set is declared, and "
+            "only for a kind that exists.")
+    _stray = sorted((k, v) for k, vs in _openers.items() for v in (vs or []) if v not in out)
+    if _stray:
+        raise SystemExit(
+            f"rosters.yaml: `tenure_kinds.openers` names opener(s) that are no verb: {_stray}. "
+            "04 §B.13 #6 -- an opener is a row of verb_table.yaml.")
+    # LOADER INVARIANT 2 (`04 §B.13 #2`, `04:459`): EVERY MATRIX ROW WITH `RES` HAS A PRODUCING
+    # VERB -- or DECLARES that it has none, and why, in its `unproduced:` column. `04:1025` (PART
+    # E step 2) records the literal invariant as unsatisfiable today; the column is what lets the
+    # check run and stay honest in both directions: an undeclared orphan refuses, and so does a
+    # declaration on a row some verb now writes, which would otherwise outlive its reason.
+    _produced = _produced_pairs(out)
+    for (kind, fld), mrow in MATRIX.items():
+        if Step.RESOLVE not in mrow.steps:
+            continue
+        has_producer = f"{kind}.{fld}" in _produced
+        if not has_producer and not mrow.unproduced:
+            raise SystemExit(
+                f"write_matrix.yaml ({kind}, {fld}) is written at RES and no verb writes it. "
+                "04 §B.13 #2 -- a RES row has a producing verb, or declares `unproduced: \"<hole "
+                "id or F-tag>: <reason>\"`.")
+        if has_producer and mrow.unproduced:
+            raise SystemExit(
+                f"write_matrix.yaml ({kind}, {fld}) declares `unproduced:` and a verb writes it. "
+                "04 §B.13 #2 -- the declaration is stale; delete it.")
     return out
+
+
+def _produced_pairs(table: dict) -> set:
+    """Every `Kind.field` some verb writes, in any Degree branch (`VerbRow.writes` is the union).
+    One owner for invariant 2 above and `rows_without_a_producer` below."""
+    return {w for v in table.values() for w in v.writes}
+
+
+def tenure_kinds_without_an_opener() -> list:
+    """Loader invariant 6's second half, as a REPORT: the tenure kinds whose declared opener set
+    (`rosters.yaml` `tenure_kinds.openers`) is empty -- relations no act can open today. Reported,
+    not refused: an unopenable kind may be correct for now, and which of them are holes is a
+    judgement the roster's `# hole` comments record."""
+    return sorted(k for k, vs in roster_map("tenure_kinds", "openers").items() if not vs)
 
 VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
 
@@ -664,7 +713,7 @@ def rows_without_a_producer() -> dict:
     Distinguishing them is a judgement, so this reports and a human decides. What it MUST NOT do
     is what the first reading of the rule did: delete on sight. `emits:` was parsed and never read
     by anything until this function, so the column the retirement rested on was inert data."""
-    produced = {w for v in VERB_TABLE.values() for w in v.writes}
+    produced = _produced_pairs(VERB_TABLE)
     out = {}
     for (kind, fld), row in MATRIX.items():
         if row.social is not True:

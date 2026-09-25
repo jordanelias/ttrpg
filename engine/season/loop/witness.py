@@ -399,8 +399,8 @@ def witness(self, events: list[Event]) -> int:
             w.write("claim_ledger", WriteClass.INTERIOR, _evict,
                     record_kind="Person", fieldname="claim_ledger", driver="Event")
     w._in_parallel_map = False
-    # S9.3/S28: WITNESS NEVER TOUCHES A BELIEF. Nothing above writes `beliefs` or
-    # `pursuits` -- and under rev 2's Partition both are MISSING rows, so an attempt would
-    # raise rather than be caught by inspection.
+    # S9.3/S28: WITNESS NEVER TOUCHES A BELIEF. Nothing above writes `pursuits` -- its row
+    # admits RES only, so a WITNESS attempt would raise rather than be caught by inspection --
+    # and `beliefs` is no longer a field (retired 2026-09-25; a belief is a `commit` to an OUGHT).
     TRACE.step("WITNESS", "leave")
     return deposits

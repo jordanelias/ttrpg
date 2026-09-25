@@ -698,7 +698,7 @@ def p18():
         and antecedent.subject == site.id, (
         f"the crossing names {ev.causes[0]!r}, which is not a `condition.worn` for {site.id}")
     assert verb in before and verb not in after
-    social = [c for c in ev.changes if c.field in ("stance", "pursuits", "beliefs")]
+    social = [c for c in ev.changes if c.field in ("stance", "pursuits")]   # `beliefs` retired 2026-09-25
     assert not social and not ev.degree
     return (f"PASS, AND BOTH HALVES OF L5 RAN. ⚠ THE SITE IS SEEDED one season above its "
             f"highest floor (see `_seed_near_floor`), so {n} is NOT the unseeded pacing -- `A31b` "
