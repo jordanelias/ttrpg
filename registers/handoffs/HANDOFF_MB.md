@@ -12,7 +12,7 @@
 | `config.py` comment contradicts the shipped default | `systems/mass_battle/sim/config.py:315-317` | edit comment to match `MB_FRICTION_CEV` default `'1'` |
 | R3 gauge scenario never engages (both sides `stance:'hold'`) | `tests/sim/gauge_mb.py:330-331` | apply the named one-line engineering fix (`ED-MB-0044`) |
 | Dead-primitive dispositions unexecuted (`_octagon_dmg_mod`/`_SHAPE_BUILD`, `provenance.py`, `resolve_internal_collisions`) | `ED-MB-0057` | execute or re-adjudicate each disposition — `resolve_internal_collisions` re-adjudicated to DELETE, `proposals/2026-09-25-squad-engagement-synthesis.md` Part B |
-| Squad-engagement concept v5, audited and reconciled against MB canon: build slate (Part A) + six items for Jordan (Part C) | `ED-MB-0067` / `proposals/2026-09-25-squad-engagement-synthesis.md` | Jordan rules Part C |
+| Squad-engagement concept v5: build slate (Part A) + all six Part C items ruled by Jordan 2026-09-25 | `ED-MB-0067` (2nd row) / `proposals/2026-09-25-squad-engagement-synthesis.md` | propagate d.1 into `mass_battle_v30.md` (overwrites PP-711); work out the C2/C3 coupling formula and C4's roll |
 
 ## Standing orders — do not re-raise, do not do
 | order | source |

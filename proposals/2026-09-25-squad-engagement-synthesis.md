@@ -1,10 +1,14 @@
 # Squad Engagement Engine v5, reconciled against mass-battle canon: what to build, what not to, what Jordan decides
 
-## Status: PROPOSED (Jordan-vetoable)
+## Status: RULED (Jordan, 2026-09-25) — design decided; unimplemented
 
-**Date:** 2026-09-25 · **Lane:** MB · **Ledger:** `ED-MB-0067` — the one row carrying Part C.
-**Ratify-on-merge (ED-1094):** merging ratifies **Parts A and B**. **Part C is HELD BACK** — every item in it is
-Jordan's, and the PR that lands this document must say so in its body.
+**Date:** 2026-09-25 · **Lane:** MB · **Ledger:** `ED-MB-0067` (two rows — the second records this ruling; the
+last row governs).
+**Ratify-on-merge (ED-1094):** merging ratifies **Parts A, B and C** — Jordan ruled Part C directly, in session,
+after this document was first drafted; the ruling is recorded in Part C below and in `ED-MB-0067`'s second row.
+**Not yet done:** nothing in this document has been built. Directive d.1 (below) overwrites PP-711 and still
+needs its own propagation into `mass_battle_v30.md`; the exact mechanical coupling for C2–C4 is follow-up design
+work, not settled by the ruling itself.
 
 **Inputs.**
 
@@ -233,96 +237,88 @@ Each entry is closed. **Re-proposing one needs a new argument, not the concept's
 
 ---
 
-## Part C — What Jordan decides
+## Part C — Ruled by Jordan, 2026-09-25
 
-Five questions and one confirmation, in the concept's own §13 form. **ED-MB-0067 is the single ledger row for all
-six.** Three extend items already queued rather than opening new ones (C1 → ED-MB-0045; C2 → ED-MB-0041/0039;
-C3 touches ED-MB-0041). Each carries a **default — the existing ruling or code — which stands until Jordan rules.
-Nothing in Part A waits on any of them.**
+Six items; Jordan ruled all six directly, in session, after this document was first drafted. **`ED-MB-0067`'s
+second row is the ledger record.** Three extend items already queued rather than opening new ones (C1 →
+ED-MB-0045; C2 → ED-MB-0041/0039; C3 touches ED-MB-0041's yield-split item). Where the ruling settles the
+*direction* but not the exact mechanical form, that is marked explicitly — it is follow-up design work, not a
+further ruling needed.
 
-1. **C1 — Movement and facing: per cell, or a rigid squad?** (F4; one arm of ED-MB-0045's emergence verdict.) The
-   concept keeps the cell as the primitive for *state* but moves route and facing to a squad with one rigid
-   footprint (concept:222, :445, :460-464). Jordan's 2026-07-25 directive names both as per-cell
-   (`config.py:55-56`), and the sim implements it — per-cell facing with a reaction clock, the node model with
-   cell-level deformation, per-cell TOI (`orchestration.py:1030-1110`; `hierarchy/units.py:1594-1629`,
-   `:2157-2253`). The evidence for the concept is ED-MB-0045's verdict: "subunit-emergent, not cell-emergent …
-   Delete the cell layer and little shipped behaviour changes."
-   - **(i) Per-cell route and facing** — the directive stands; the concept's formation grammar is rebuilt on cells
-     steering toward the sub-unit's goal, as the node model already does. ***Default.***
-   - **(ii) Rigid squads** — retracts the directive for route and facing; retires the per-cell facing clock and
-     per-cell TOI.
-2. **C2 — What does an envelopment do?** (F7's payoff; ED-MB-0041's Tier-3 item, "shift from damage multiplier to
-   morale collapse per du Picq".) Today a rear attack does about double damage (ED-MB-0018: the octagon is "a
-   DAMAGE-RECEIVED MULTIPLIER"; `config.py:204-210`, `orchestration.py:1307-1341`) and the per-cell envelopment
-   shock adds a morale hit on top (`orchestration.py:1156-1171`). The concept makes the payoff morale only
-   (concept:110-117, :462).
-   - **(i) Keep the multiplier plus the shock.** ***Default*** — ED-MB-0018 stands.
-   - **(ii) Morale collapse only** — retire the rear-damage multiplier; overturns ED-MB-0018.
+1. **C1 — Movement and facing: per cell.** (F4; one arm of ED-MB-0045's emergence verdict.) **RULED: per-cell.**
+   The 2026-07-25 directive stands — route and facing are per-cell, not squad-rigid. The concept's formation
+   grammar is rebuilt on cells steering toward the sub-unit's goal, as the node model already does. This closes
+   the movement/facing arm of ED-MB-0045; the verdict's other arms are untouched.
 
-   ED-MB-0039's separate fork — **(A)** the combined-arms reframe vs **(B)** the gated seal-failure gradient — is
-   neither answered nor changed by the concept. It does make a third arm testable once A1–A4 ship: **(C)
-   envelopment as a gradient set by command timing** — whether the flank arrives before the centre breaks.
-   (C) is compatible with (B) and needs no ruling until it can be measured.
-3. **C3 — Does "Pressure vs Steadiness" replace any Discipline check?** (F5's replacement half + F8's entry gate.)
-   The concept replaces dice with a diceless hysteresis: a body holds while Pressure ≤ Steadiness (concept §3.3,
-   :157-185). The sim gates three things on Discipline: the inter-unit cascade check, Ob 1
-   (`orchestration.py:2534-2540`); the reform gate (`orchestration.py:297-331`); entering and holding a fighting
-   withdrawal, `eff_discipline ≥ D_YIELD` (`core/exchange.py:23`; `hierarchy/units.py:597-604`).
-   - **(i) None** — Discipline keeps all three; Pressure/Steadiness is not adopted. ***Default.***
-   - **(ii) Named checks among the three**, with Discipline (persisting, PP-712) supplying the Steadiness base; the
-     concept's officer contribution ⌊Cmd/2⌋ (concept:193) lives here.
+2. **C2 — Envelopment payoff: the multiplier stands, and feeds morale collapse, checked against Discipline.**
+   (F7's payoff; ED-MB-0041's Tier-3 item.) **RULED.** Keep ED-MB-0018's rear/flank damage multiplier — a rear or
+   flank attack still does more damage. The multiplied damage is a *contributing cause* of morale collapse, not a
+   parallel, independent effect: the envelopment morale shock should scale with the casualties the multiplier
+   actually produced. Whether the affected cell's morale then actually breaks under that pressure is checked
+   against Discipline — see C3.
+   `[ASSUMPTION: read as a causal chain (damage → contributes to morale collapse → gated by a Discipline check)
+   rather than three independent mechanisms — basis: Jordan's "multiply damage, which in turn helps collapse
+   morale and checks against discipline." The coupling formula — how much realized damage should scale the shock
+   — is follow-up mechanical design, not resolved by this ruling.]`
+   ED-MB-0039's separate (A)/(B) geometry fork is untouched. The concept's plan-based envelopment (§5) is a
+   compatible framing for *how* an envelopment is executed, not a competing answer to *what it does on contact* —
+   this ruling settles the latter only.
 
-   ⚠ **Correction to the audit:** it filed F8's entry gate under ED-MB-0041's queued "yield split". That item is a
-   different question — split `YIELD_POOL_MULT` into offence malus + survivability
-   (`registers/editorial_ledger_mb_archive.jsonl:38`). The entry gate is *this* question applied to `D_YIELD`, so it
-   is folded in here; the yield split stays queued, untouched by the concept.
-4. **C4 — Feigned retreat: a recognition roll, or fog?** (F13.) PP-256, ratified with its Clarification:
-   recognising a feint takes Command Ob 2 and holding against it Discipline Ob 1 (`mass_battle_v30.md:378-382`;
-   `config.py:226-239`; `orchestration.py:2477-2516`). **It is dead code today** — `feigned` is only ever assigned
-   `False` in the engine (`orchestration.py:2274`); only test stubs set it, as ED-MB-0041 recorded. The concept has
-   no conversion rule: observers see only "enemy moving away" (concept:242, :334).
-   - **(i) Keep PP-256 and wire it through A1–A2** — a feint becomes an order the plan layer can issue, and the
-     Command Ob 2 roll is how an observer's sight-limited condition learns "feint" rather than "retreat".
-     ***Default.***
-   - **(ii) Fog only** — no roll; retires PP-256.
-   - **(iii) Leave it dead** — the status quo.
-5. **C5 — Span of control: one ladder or two?** (F14's ladder half.) Canon: a general commands at most Command
-   sub-units (`mass_battle_v30.md:314-320`; `engine.py:90-99`). The concept: an officer's span is `3 + Cmd` cells,
-   and the general gets a command budget `CP_max = 3 + Cmd` (concept:193-196, §6.1).
-   - **(i) One ladder** — every echelon commands up to its holder's Cmd; A3's officers exceed the Command cap by
-     nesting, ED-1090's route. Cost: with the concept's 6–9-cell squads, a Cmd-3 officer spans 3 cells, so "outside
-     span" becomes the usual state. ***Default.***
-   - **(ii) The concept's `3 + Cmd`** for officers and the budget, keeping "= Command" for the general's cap — two
-     ladders for one quantity, an S defect unless a reason the scales differ is recorded (§0.06).
-   - **(iii) `3 + Cmd` at every echelon** — overwrites the ratified general cap.
-6. **C6 — Directives a–d: were they rulings?** The concept presents a–d as Jordan's, d as rulings "recorded verbatim"
-   on 2026-09-23 (concept:6-15). **Before this document the repository held no record of any of them** (the audit's
-   search for `Channeller|Mass pool|Squad Engagement` across `*.jsonl`, `*.yaml`, `*.md` returned nothing). Affirm
-   them here, or not — do not inherit them.
+3. **C3 — Control state: retain Discipline; fold Pressure in carefully.** (F5's replacement half + F8's entry
+   gate.) **RULED.** Discipline remains the persisting stat (PP-712) and keeps its existing gates — the inter-unit
+   cascade check, the reform gate, the fighting-withdrawal entry gate (`D_YIELD`). The concept's Pressure condition
+   is not adopted as a second, parallel gate; it is folded into how a Discipline check resolves.
+   `[ASSUMPTION: "fold in carefully" is read as Pressure modifying a Discipline check in the moment (an Ob shift or
+   an effective-Discipline shift), never as a second independent pass/fail test alongside it — basis: avoiding the
+   two-ladders defect the audit flagged (F5/F14), and the explicit instruction to do this carefully rather than by
+   simple addition. Which of the two mechanical forms applies is follow-up design work.]`
+   The concept's officer Steadiness contribution (`⌊Cmd/2⌋`) has no stat to attach to now that "Steadiness" is not
+   adopted as a name; if a squad leader's Cmd should modify a Discipline check the way it was meant to modify
+   Steadiness, that is part of the same follow-up.
+   ⚠ Correction carried from the audit stage: F8's entry gate is *this* question applied to `D_YIELD`, not
+   ED-MB-0041's "yield split" (which is the separate `YIELD_POOL_MULT` offence/survivability split) — folded in
+   here; the yield split stays queued, untouched.
 
-   | directive | what the tree already holds | if affirmed |
-   |---|---|---|
-   | **a** — FM and Total War inform formation; FM informs roles | `ROLE_SPEC` is the FM position→role model (`config.py:462-499`) | nothing changes |
-   | **b** — the Mass pool is retired | ED-MB-0006, shipped (F1) | nothing changes; no row |
-   | **c** — the player routes paths, feints, delays, gives conditional orders | conditional Orders exist (`core/contact.py:14-67`); routes are A1; feints are C4 | nothing beyond Part A and C4 |
-   | **d.1** — faction state sets the morale baseline | morale start = the general's Command + quality (PP-711; `mass_battle_v30.md:230-231`, `:660`; `engine.py:344-347`) | **overwrites PP-711** — the one directive that changes ratified MB canon: (i) keep PP-711; (ii) faction state replaces it; (iii) faction state adds a term to it |
-   | **d.2** — bounded variance is allowed under GD-2 | GD-2 is faction-AI ordering (F6) | nothing; drop it |
-   | **d.3** — the player character is a commander who can duel | §3.7 PP-111, A.5, PP-506, ED-898 | nothing; consistent with canon |
-   | **d.4** — "Channellers" are not a thing | canon Phase 4 Thread operations and §A.10 (`mass_battle_v30.md:439-461`, `:560-613`); the sim has only an empty `threadwork_check` hook (`orchestration.py:333-335`) | a Thread-lane question if "Channellers" meant Thread practitioners; not ruled from this lane |
+4. **C4 — Feigned retreat: fog, with a roll to identify it.** (F13.) **RULED.** Observers still see only "enemy
+   moving away" — there is no automatic "enemy routing" flag; the concept's fog model stands. A roll exists for
+   the observing side to attempt to identify what it is actually seeing.
+   `[ASSUMPTION: the roll is PP-256's existing Command Ob 2 recognition check, re-purposed to resolve under fog
+   rather than retired outright — basis: it is the only "identify a feint" roll in canon, and reusing it avoids a
+   second recognition mechanic for the same purpose (CLAUDE.md §4's idempotent-vocabulary rule). Whether the
+   feigning side's Discipline Ob 1 "hold" check survives alongside it is not settled by this ruling and is
+   follow-up design work.]`
+   PP-256's automatic-reveal framing does not survive as previously worded; its recognition roll does, repurposed.
 
-   So the ask is one line: *did you rule d.1–d.4?* If yes, d.1 needs its own call against PP-711 and d.4 goes to
-   the Thread lane; everything else is already consistent.
+5. **C5 — Span of control: one ladder.** (F14's ladder half.) **RULED: default.** Every echelon commands up to its
+   holder's Cmd — the existing "max simultaneous commanded = Command" rule stands at every scale, including A3's
+   new officer post. The concept's separate `3 + Cmd` span-and-budget ladder is not adopted.
 
-**Not asked**, because an existing ruling answers them and the concept argues from preference only: a discrete
-morale clock (ED-1024), casualties drawn off the degree ladder (S39.4), instantaneous brace (ED-1095), dropping
-fatigue (the flags-ON ruling). Reversing any of them is Jordan's to do; nothing here asks for it.
+6. **C6 — Directives a–d: confirmed real and ruled.** **RULED.** Jordan confirmed directly that a–d are genuine
+   prior rulings, not unverified inheritance. This repository's ledgers held no record of them because they were
+   made outside this repository; `ED-MB-0067`'s second row closes that gap.
 
-**Already queued, touched by the concept, unchanged by it:** ED-MB-0039 (A)/(B); ED-MB-0041's depth cap, graded
-cavalry refusal, Command σ-ceiling and yield split; ED-MB-0045's CEV naming and dual 2:1 targets; the mass_battle
-contract's `state: []` (`references/module_contracts.yaml:636`) — where the cell roster the concept implies (N, Q,
-morale position, momentum, control state, volleys, plan step) differs materially from the sim's actual one
-(`cell_troops`, `cell_morale`, `cell_facing_vec`, `halted_cells`, per-column stamina, discipline,
-routed / broken / yielding / pocketed, orders), which argues for ruling the shape before populating it.
+   | directive | disposition |
+   |---|---|
+   | **a** — FM/Total War inform formation | Confirmed; already the shipped position→role model. Nothing changes. |
+   | **b** — the Mass pool is retired | Confirmed; already shipped (ED-MB-0006, F1). Nothing changes; no row. |
+   | **c** — routes, feints, delays, conditional orders | Confirmed; routes are A1, feints are C4, conditional orders already exist. Nothing beyond Part A and C4. |
+   | **d.1** — faction state sets the morale baseline | **Confirmed — overwrites PP-711.** `[ASSUMPTION: "sets the baseline" is full replacement of PP-711's general's-Command-+-quality term with faction Stability, per the concept's own unqualified wording (concept:11) and this confirmation — basis: no blending language appears in either. The Stability→s₀ mapping itself is still [PLACEHOLDER] in the concept (concept:580) — unresolved implementation detail, not a further ruling needed.]` **Still to do, not done in this pass:** propagate into `mass_battle_v30.md`'s morale-start section and file PP-711's supersession. |
+   | **d.2** — variance allowed "under GD-2" | Confirmed as directive, but GD-2 is unrelated (F6) — nothing to propagate; drop it. |
+   | **d.3** — the player character is a duelling commander | Confirmed; already consistent with canon (PP-111, ED-898). Nothing changes. |
+   | **d.4** — "Channellers" are not a thing | Confirmed. Propagation is a Thread-lane matter, out of this lane's scope — flag it there. |
+
+**Follow-up work this ruling opens, not yet done:** the C2/C3 coupling formula (how realized envelopment damage
+scales the morale shock; how Pressure modifies a Discipline check); the C4 mechanics (which roll, whose Ob, under
+fog); d.1's propagation into `mass_battle_v30.md` and its own PP-711-supersession ledger entry. None of this
+blocks Part A, which was already clear to build.
+
+**Not reopened by this ruling:** a discrete morale clock (ED-1024 stands), casualties off the degree ladder
+(S39.4 stands), instantaneous brace (ED-1095 stands), dropping fatigue (the flags-ON ruling stands) — Part B's
+dispositions on these are unchanged.
+
+**Already queued, touched by the concept, unchanged by this ruling:** ED-MB-0039's (A)/(B) geometry fork;
+ED-MB-0041's depth cap, graded cavalry refusal and Command σ-ceiling; ED-MB-0045's CEV naming and dual 2:1
+targets; the mass_battle contract's `state: []` (`references/module_contracts.yaml:636`).
 
 ---
 
