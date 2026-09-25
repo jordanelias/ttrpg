@@ -7,6 +7,7 @@ import collections, json, sys, time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "engine" / "reference" / "degree-sweep"))  # sweep_core/arm9_* moved (ED-IN-0231 precedent)
 import sweep_core as K
 from sweep_core import S, C, R, Log, LADDER_C, LADDER_D, KW
 import arm0_census as A0

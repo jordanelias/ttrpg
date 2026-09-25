@@ -9666,7 +9666,8 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
 # `W-D` — THE ACCEPTANCE RUN. Does an open §F1 clause 4 make a fork change a LATER DECISION?
 # =================================================================================================
 
-_WD_SWEEP = files.DEGREE_SWEEP_DIR
+_WD_SWEEP = files.DEGREE_SWEEP_DIR  # now `engine/reference/degree-sweep/`; the record stays in
+                                     # `proposals/2026-09-04-degree-sweep/` (ED-IN-0231 precedent)
 
 
 def _wd_arm9():

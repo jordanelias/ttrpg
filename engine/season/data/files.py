@@ -111,9 +111,11 @@ ENDINGS_CLASSIFIED_YAML = PACKAGE_DIR / "ENDINGS_CLASSIFIED.yaml"
 # above): this module owns every path to a registry the package loads.
 GOVERNANCE_SPINE_YAML = PACKAGE_DIR / "governance_spine.yaml"
 
-# The one sibling proposal still read from here: the degree sweep's two arm modules, imported by
-# source in two tests. A predecessor's committed corpus; this package does not own it.
-DEGREE_SWEEP_DIR = REPO_ROOT / "proposals" / "2026-09-04-degree-sweep"
+# The degree sweep's two arm modules (plus their shared `sweep_core`), imported by source in two
+# tests. Moved out of `proposals/2026-09-04-degree-sweep` to `engine/reference/degree-sweep/` so
+# the blocking test suite depends on no unratified tree (ED-IN-0231 precedent); the measurement
+# record (runs/, README.md, EXECUTION_PLAN.md, the other arms) stays in the proposal.
+DEGREE_SWEEP_DIR = ENGINE_DIR / "reference" / "degree-sweep"
 
 # ---------------------------------------------------------------------------
 # THE REPOSITORY. The flat personal-combat module set is NOT anchored here: it is loaded by the

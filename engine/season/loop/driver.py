@@ -14,7 +14,8 @@ the facade is deleted at step 10"*, of a file step 10 deleted. `resolvable_verbs
 function that stayed, because its callers are all outside `loop/`.
 
 ⚠ **THE IMPORT LIST BELOW IS WIDER THAN THIS MODULE USES**, and that is load-bearing rather than
-untidy: `proposals/2026-09-04-degree-sweep/sweep_core.py` builds a read-only `S` aggregate over the
+untidy: `engine/reference/degree-sweep/sweep_core.py` (moved from `proposals/2026-09-04-degree-sweep/`)
+builds a read-only `S` aggregate over the
 package's owner modules so a frozen measurement's `S.<name>` keeps resolving. ⚠ It is ALSO how a dead
 import can make a rebind silent -- `questions_for` sat here unused, so
 `wd_extra.py`'s `DRV.questions_for = qspy` went on succeeding while reaching nothing after
