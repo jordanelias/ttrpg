@@ -1,5 +1,5 @@
 """
-sim/mc_v18.py — Top-level strategic simulator runner — orchestrator only
+engine/mc_v18.py — Top-level strategic simulator runner — orchestrator only
 
 ⛔⛔ **SUPERSEDED. `engine/season/` IS THE HEAD.** Jordan ruled it on 2026-09-07 —
 *"#371 EXISTS. `engine/season/` IS THE HEAD. THE DECOMPOSITION WAS DONE ON THE PROTOTYPE"* — and

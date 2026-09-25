@@ -1,8 +1,11 @@
 """THE ONE ANCHOR. Every path this package derives is named here, once.
 
-⚠ THIS IS THE ONLY MODULE IN `season/` THAT MAY ANCHOR ITSELF ON ITS OWN MODULE LOCATION, and that
-is a checkable property rather than a convention: with `D` standing for the dunder spelling of the
-module-location name, `grep -rln D season/` must print this file and nothing else. Before this
+⚠ THIS IS THE ONLY MODULE IN `season/` THAT MAY ANCHOR ITSELF ON ITS OWN MODULE LOCATION -- a
+checkable property, though not by a bare grep for the dunder spelling of the module-location name:
+a comment discussing the invariant necessarily matches it too (`harness/governance_spine.py` names
+this paradox at its own site). The narrower, actually-true claim: this module owns every path to a
+REGISTRY the package loads; `tests/test_season_shape.py` legitimately resolves its own `.py` for an
+AST walk, and neither of those is a second anchor. Before this
 module the package carried 29 independent anchors across 10 files, each climbing its own chain of
 `.parent`s, and the length of that chain was a fact about where the file happened to sit rather
 than about the tree. `combat_seam.py` is the worked case for why that is dangerous rather than
@@ -94,7 +97,7 @@ ARCH_PLAN_MD = ARCH_DIR / "PLAN.md"
 SOURCE_353_MD = ARCH_DIR / "holonic_ARCHITECTURE.md"
 
 # ---------------------------------------------------------------------------
-# THE FIVE REGISTRIES THIS PACKAGE READS AT LOAD, all co-located since the adoption.
+# THE YAML REGISTRIES THIS PACKAGE READS, all co-located since the adoption.
 # ---------------------------------------------------------------------------
 WRITE_MATRIX_YAML = PACKAGE_DIR / "write_matrix.yaml"
 ROSTERS_YAML = PACKAGE_DIR / "rosters.yaml"
@@ -102,12 +105,13 @@ VERB_TABLE_YAML = PACKAGE_DIR / "verb_table.yaml"
 HOLE_REGISTER_YAML = PACKAGE_DIR / "hole_register.yaml"
 REQUIREMENTS_YAML = PACKAGE_DIR / "requirements.yaml"
 ENDINGS_CLASSIFIED_YAML = PACKAGE_DIR / "ENDINGS_CLASSIFIED.yaml"
-# ⚠ A FIXTURE'S REGISTRY, AND IT IS ANCHORED HERE FOR THE SAME REASON THE FIVE ABOVE ARE.
+# ⚠ A FIXTURE'S REGISTRY, AND IT IS ANCHORED HERE FOR THE SAME REASON THE OTHERS ABOVE ARE.
 # `governance_spine.yaml` declares the 13-seat generic ladder. It was first written with a
 # local `Path(__file__).resolve().parents[1]` inside `harness/governance_spine.py` — a
 # SECOND anchor in the package whose whole point is to have one, and the exact defect
 # `harness/populated.py` records having already removed once. The invariant that catches it
-# is this module's own: `grep -rln __file__ season/` must print this file and nothing else.
+# is this module's own -- narrower than a bare grep for `__file__` (see the module docstring
+# above): this module owns every path to a registry the package loads.
 GOVERNANCE_SPINE_YAML = PACKAGE_DIR / "governance_spine.yaml"
 
 # The one sibling proposal still read from here: the degree sweep's two arm modules, imported by

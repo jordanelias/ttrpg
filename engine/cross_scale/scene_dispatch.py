@@ -1,5 +1,5 @@
 """
-sim/cross_scale/scene_dispatch.py — Consumer-side scale-seam glue (NEW 2026-06-06)
+engine/cross_scale/scene_dispatch.py — Consumer-side scale-seam glue (NEW 2026-06-06)
 
 Wires the previously-disconnected scale-transition seam. The mechanism pieces
 already existed (scene_slate queue, zoom_in/zoom_out protocol §4, live

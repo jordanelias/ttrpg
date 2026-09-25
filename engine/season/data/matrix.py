@@ -163,11 +163,10 @@ MATRIX: dict[tuple[str, str], MatrixRow] = _load_write_matrix()
 
 # Rows W2 RETIRED, kept so a write to one gets its own diagnosis rather than the generic
 # "no row" -- a retired row and a row that never existed are different facts about the design.
-import yaml as _yaml_boot
 MATRIX_RETIRED: dict = {
     tuple(x.split(".", 1)): "retired by W2 -- its `emits:` kind is produced by no Part E verb "
                             "and written at no MATTER site"
-    for x in (_yaml_boot.safe_load(WRITE_MATRIX_YAML.read_text()).get("retired") or [])
+    for x in (load_yaml(WRITE_MATRIX_YAML.read_text()).get("retired") or [])
 }
 
 # S320's disclosure hook. W2 empties it BY CONSTRUCTION -- the three rows it used to carry were

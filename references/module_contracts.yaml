@@ -1330,4 +1330,7 @@ foundation_gaps:
       is routinely satisfied and which never runs. FA lane. STILL AN INTERPRETATION: ''da.public_governance
       + outcome success + target_territory_id means that territory is now owned by faction_id'' is not declared
       by the key type registry. Sound for all three live emitters today; a dedicated da.territorial_transfer
-      type would state it rather than imply it. Jordan call; see the fork plan section 7.'
+      type would state it rather than imply it. Jordan call; see the fork plan section 7. FALSIFIERS
+      RETIRED: test_public_governance_transfer_key.py and test_faction_l_reconstruction.py were both deleted
+      2026-09-16 (ED-IN-0232) with the Key substrate. NOBODY since then has re-measured either claim in this
+      row -- flagged rather than re-verified, per the sibling rows at lines 118, 122 and 205.'

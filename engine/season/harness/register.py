@@ -10,9 +10,14 @@ does `run_cases.py:214` (`_register()`, to grade a case's `exercises:`). An earl
 line claimed sole readership and was wrong -- `rg -n HOLE_REGISTER_YAML engine/season` returns both.
 
 WHAT THIS MODULE IS FOR, STATED SO IT IS NOT MISTAKEN FOR A REPOSITORY GUARD. It lives inside the
-instrument directory and nowhere else (`PLAN.md` §7, guardrail `G9`). It grades no repository
-signal, aggregates no verdict, and has no CI job. It exists because an instrument that fills a
-hole must be able to ASK whether that hole is fillable, and a markdown table cannot be asked.
+instrument directory and nowhere else (`PLAN.md` §7, guardrail `G9`). The hole-register grading
+below (R0-R3) grades no repository signal, aggregates no verdict, and has no CI job of its own. It
+exists because an instrument that fills a hole must be able to ASK whether that hole is fillable,
+and a markdown table cannot be asked.
+
+⚠ `check_requirements()`, further down in this same file, is NOT covered by the paragraph above --
+it IS a CI job (`valoria-ci.yml`'s `python -m engine.season.harness.register --requirements`,
+blocking), grading a different acceptance surface (`requirements.yaml`, not `hole_register.yaml`).
 
     python register.py --counts                 # the tallies, computed, never typed
     python register.py --check                  # every rule; exit 1 on any violation
@@ -62,9 +67,8 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-import yaml
-
 from ..data import files
+from ..data.rosters import load_yaml
 
 ARCH_DIR = files.ARCH_DIR
 REGISTER = files.HOLE_REGISTER_YAML
@@ -151,7 +155,7 @@ def section_exists(sec: str) -> bool:
 def load(path: Path = REGISTER) -> dict:
     if not path.exists():
         raise SystemExit(f"register not found: {path}")
-    return yaml.safe_load(path.read_text())
+    return load_yaml(path.read_text())
 
 
 def grade_of(cell: str) -> str:
@@ -642,7 +646,7 @@ def check_requirements() -> int:
       2. A row at `not_met` must still name a `measure:` -- what WOULD show it, if it held. A
          requirement nothing could ever measure is not a requirement, it is a mood.
     """
-    doc = yaml.safe_load(REQUIREMENTS.read_text())
+    doc = load_yaml(REQUIREMENTS.read_text())
     rows = doc.get("rows") or []
     bad: list[str] = []
     for r in rows:

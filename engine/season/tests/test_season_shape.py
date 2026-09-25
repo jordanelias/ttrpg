@@ -11414,23 +11414,32 @@ def test_u2_the_round_index_is_a_driver_local_and_no_carrier_but_claim_has_one()
         "`Claim.round` is the one exception and it records when a claim landed, not where the loop "
         "is. A second one is a fourth clock arriving as a field")
 
-    src = Path(__file__).resolve().parent.parent / "loop" / "driver.py"
-    tree = _ast.parse(src.read_text())
-    # ⚠ `AugAssign` AS WELL AS `Assign`, BECAUSE THE LINE IS `w.tick += 1`. A scan that counted
-    # only plain assignments read ZERO and would have passed a driver that advanced the clock in
-    # every round — the guard unable to observe the failure it excludes (§0.1 pt 2), caught by
-    # running it.
-    ticks = [n for n in _ast.walk(tree)
-             if isinstance(n, _ast.AugAssign)
-             and isinstance(n.target, _ast.Attribute) and n.target.attr == "tick"]
-    ticks += [n for n in _ast.walk(tree)
-              if isinstance(n, _ast.Assign)
-              for t in n.targets
-              if isinstance(t, _ast.Attribute) and t.attr == "tick"]
+    # ⚠ EVERY `loop/` MODULE, NOT ONLY `driver.py` (`files.loop_modules()`). A fixed path to
+    # `driver.py` alone -- this scan's own shape until this line -- went narrow the moment the six
+    # steps left it for their own modules at unit L5 (ED-IN-0206); it would have reported clean over
+    # a `.tick` write planted in any of the other five, the fifth documented recurrence of exactly
+    # this narrowing in this package.
+    ticks = []
+    scanned = 0
+    for src in files.loop_modules():
+        tree = _ast.parse(src.read_text())
+        scanned += 1
+        # ⚠ `AugAssign` AS WELL AS `Assign`, BECAUSE THE LINE IS `w.tick += 1`. A scan that counted
+        # only plain assignments read ZERO and would have passed a driver that advanced the clock in
+        # every round — the guard unable to observe the failure it excludes (§0.1 pt 2), caught by
+        # running it.
+        ticks += [n for n in _ast.walk(tree)
+                 if isinstance(n, _ast.AugAssign)
+                 and isinstance(n.target, _ast.Attribute) and n.target.attr == "tick"]
+        ticks += [n for n in _ast.walk(tree)
+                  if isinstance(n, _ast.Assign)
+                  for t in n.targets
+                  if isinstance(t, _ast.Attribute) and t.attr == "tick"]
+    assert scanned >= 5, f"only {scanned} loop/ modules found — guard vacuous"
     assert len(ticks) == 1, (
-        f"{len(ticks)} assignments to `.tick` in loop/driver.py. The season advances the clock "
-        "ONCE (D-45); a round that advanced it would be a tick, and the scene tick's whole claim "
-        "is that it is not one")
+        f"{len(ticks)} assignments to `.tick` across loop/'s {scanned} modules. The season advances "
+        "the clock ONCE (D-45); a round that advanced it would be a tick, and the scene tick's "
+        "whole claim is that it is not one")
 
 
 def test_a_telling_deposits_what_was_told_and_the_teller_is_not_told_their_own_news():

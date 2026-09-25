@@ -1,5 +1,5 @@
 """
-sim/autoload/scene_slate.py — Scene selection and queue manager
+engine/autoload/scene_slate.py — Scene selection and queue manager
 
 Canon source: designs/architecture/scale_transitions_v30.md §4 Zoom In-Out Protocol
 Status: [CANONICAL — Phase 1 implementation 2026-05-17]
