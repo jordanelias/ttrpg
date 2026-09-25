@@ -448,10 +448,12 @@ class Person:
     id: str
     name: str = ""
     weight: int = 1
-    marks: list[str] = field(default_factory=list)
+    # ⚠ `marks` DELETED 2026-09-24 (`ED-IN-0261` item 1). A retired `write_matrix.yaml` field
+    # (see its `retired:` list) with zero readers/writers repo-wide, measured by grep before
+    # deletion; the row's history stays in that ledger, only the dead carrier field is gone.
     capability: dict = field(default_factory=dict)
     stance: list[tuple] = field(default_factory=list)
-    convictions: dict = field(default_factory=dict)
+    pursuits: dict = field(default_factory=dict)
     beliefs: list[tuple] = field(default_factory=list)
     ledger: list[Claim] = field(default_factory=list)
     # W5. Part D carries `(Person, body)` and `(Person, travel_leg)` and this class had NEITHER,

@@ -37,10 +37,10 @@ from ..data.requires import (
     Observation, REQUIRES_OPERANDS, REQUIRES_STEMS, UNKNOWN, binding_from_act, binding_of, build_typed_requires, evaluate,
 )
 from ..data.rosters import (
-    BODY_FACTION, BODY_FUNCTION, CLAIM_SOURCES, CLAIM_SUBJECT_RULES, COMBAT_BANDS, CONVICTION_AXES, CONVICTIONS, FACTIONS, FELLED, QUESTION_SOURCES, REMIT_ACTS, ROLE_TEMPLATE_OF, ROSTERS_YAML, RUNG_KINDS, SCENE_PACKING_RULES, STRATA, TENURE_KINDS, TITLE_DOMAINS, UNTOUCHED, VIEW_BUILDER_RULES, WITNESS_CHANNELS, WOUNDED, _ROSTERS, load_yaml, office_faction, roster, roster_map, title_domain, title_rank,
+    BODY_FACTION, BODY_FUNCTION, CLAIM_SOURCES, CLAIM_SUBJECT_RULES, COMBAT_BANDS, PURSUIT_AXES, PURSUITS, FACTIONS, FELLED, QUESTION_SOURCES, REMIT_ACTS, ROLE_TEMPLATE_OF, ROSTERS_YAML, RUNG_KINDS, SCENE_PACKING_RULES, STRATA, TENURE_KINDS, TITLE_DOMAINS, UNTOUCHED, VIEW_BUILDER_RULES, WITNESS_CHANNELS, WOUNDED, _ROSTERS, load_yaml, office_faction, roster, roster_map, title_domain, title_rank,
 )
 from ..data.verbs import (
-    ALIGNMENT_SWEEP, CONVICTION_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, alignment_at, rows_without_a_producer,
+    ALIGNMENT_SWEEP, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, alignment_at, rows_without_a_producer,
 )
 from .. import decision
 from ..decision import (
@@ -160,24 +160,24 @@ def test_d1_the_partition_is_not_invented():
     # Part D is loaded from `write_matrix.yaml`, every row is STATED, and every row carries a
     # `by:`. Pinning the old two-row list would now pin the absence of the ~30 rows Part D adds.
     #
-    # `(Person, convictions)` and `(Person, beliefs)` NO LONGER RAISE, and that is Part D closing
+    # `(Person, pursuits)` and `(Person, beliefs)` NO LONGER RAISE, and that is Part D closing
     # the gap rather than the instrument flattering it: V2 §D3 gives each its own row -- RESOLVE
     # only, ACTS, `social: true`, DR-2 and §9.3. What must still raise is a field with NO row,
     # and it must not be able to ride on a neighbour's.
     assert MATRIX, "the write matrix loaded empty -- nothing was checked"
     for (kind, fname), row in MATRIX.items():
         assert row.by.strip(), f"({kind}, {fname}) carries no provenance"
-    for kind, fname in (("Person", "convictions"), ("Person", "beliefs")):
+    for kind, fname in (("Person", "pursuits"), ("Person", "beliefs")):
         social, by = partition_lookup(kind, fname)
         assert social is True and by.strip(), f"({kind}, {fname}) has a row but no usable grade"
 
 
 def test_d1b_a_field_cannot_ride_on_another_fields_matrix_row():
     """DEFECT 1, second form. The matrix names THINGS, not (kind, field) pairs. Keying the
-    derivation on `thing` lets `(Person, convictions)` ride on `stance`'s row."""
+    derivation on `thing` lets `(Person, pursuits)` ride on `stance`'s row."""
     w = _w()
     w.step = Step.RESOLVE
-    # W2: `convictions` has its own row now, so the ride-on has to be probed with a field Part D
+    # W2: `pursuits` has its own row now, so the ride-on has to be probed with a field Part D
     # genuinely does not carry. `(Person, mood)` is W2's own planted example, and the `thing`
     # argument is the parameter that CARRIED the defect -- passing `stance` for it must not help.
     with pytest.raises(Unspecified) as e:
@@ -185,6 +185,30 @@ def test_d1b_a_field_cannot_ride_on_another_fields_matrix_row():
                 record_kind="Person", fieldname="mood", driver="Act")
     assert "Person" in str(e.value) and "mood" in str(e.value), (
         "the refusal did not NAME the pair, so a reader cannot tell which cell is unmarked")
+
+
+def test_d1c_a_matter_write_to_person_pursuits_refuses_with_its_own_law_not_the_fallback():
+    """FALSIFIER for the rename's one silent-hazard line (`ED-IN-0261` item 1, `state/world.py`'s
+    `MATRIX_REFUSAL_LAW` loop, keyed on the field-name STRING). If that string had stayed
+    `"convictions"` after the field became `Person.pursuits`, a MATTER write to `(Person,
+    pursuits)` would still be refused -- `write_matrix.yaml`'s row only allows `RES` -- but it
+    would fall through to `MATRIX_REFUSAL_LAW.get(...)` returning `None` and raise under the
+    GENERIC `S30` fallback ("ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION") instead of under the
+    SPECIFIC `S3-L4` law this cell actually carries. A refusal that fires for the wrong reason is
+    the silent narrowing `CLAUDE.md` §0.1 pt 2 exists to make loud: this test observes the LAW
+    STRING, not just that an exception was raised."""
+    w = _w()
+    w.step = Step.MATTER
+    with pytest.raises(Forbidden) as e:
+        w.write("stance", WriteClass.MATTER, lambda: None,
+                record_kind="Person", fieldname="pursuits", driver="Event")
+    assert e.value.where == "S3-L4", (
+        f"refused at {e.value.where!r}, not S3-L4 -- the MATRIX_REFUSAL_LAW lookup for "
+        "(Person, pursuits) missed and this fell through to a generic cell")
+    assert "NO SOCIAL QUANTITY MOVES AT MATTER" in e.value.law, (
+        f"refused with law text {e.value.law!r}, which is not S3-L4's specific text -- this is "
+        "the generic S30 fallback wearing S3-L4's name, exactly the hazard this test exists to "
+        "catch")
 
 
 def test_d2_witness_does_not_lie_about_its_driver():
@@ -843,11 +867,11 @@ def test_a_cache_cannot_be_built_inside_a_parallel_map():
         w.cache_at_barrier("k", lambda: 1)
 
 
-def test_witness_writes_no_belief_and_no_conviction():
+def test_witness_writes_no_belief_and_no_pursuit():
     """S9.3: 'IF EVIDENCE CAN MOVE A CONVICTION, the moral layer has become a second epistemic
     layer and T2 is gone. This is the single most dangerous collision in the design.'"""
     src = inspect.getsource(SeasonDriver.witness)
-    for banned in ("beliefs", "convictions"):
+    for banned in ("beliefs", "pursuits"):
         assert f'fieldname="{banned}"' not in src
 
 
@@ -2011,7 +2035,7 @@ def test_w2_every_write_call_site_names_a_pair_on_the_matrix():
     # are not in the corpus at all, and four real ones were missing. Derived by running the walk.
     _PAIRS_AT_L5 = {
         ("Claim", "confidence"), ("Date", "fired"), ("DocketItem", "matter"),
-        ("Person", "claim_ledger"), ("Person", "convictions"), ("Person", "exists"),
+        ("Person", "claim_ledger"), ("Person", "pursuits"), ("Person", "exists"),
         ("Person", "scar"), ("Person", "stance"), ("Record", "matured"),
         ("Record", "stages"), ("Record", "ttl"), ("Rung", "envelope"),
         ("Rung", "stores"), ("Rung", "yield"), ("Site", "condition"),
@@ -3194,7 +3218,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
         # and at -0.9 negatively. What changed is that the conviction reaches the verb through
         # `Σ_axis projection[Precedent][axis] · alignment(verb, axis)` rather than through one cell.
         for sign in (0.9, -0.9):
-            p.convictions = {"Precedent": sign}
+            p.pursuits = {"Precedent": sign}
             picked = ch(p, v, Sensation(0), lambda: 1)[0].acts[0].verb
             # ⚠ THE PROJECTION IS TAKEN AT UNIT WEIGHT, NOT AT THE PERSON'S. A first port of this
             # line used `decision.project(p)`, which already carries `sign` — so `cell` came back
@@ -3203,8 +3227,8 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
             # is negative and whose score at a negative weight is therefore positive). What this
             # assertion has always measured is the CONVICTION'S AFFINITY for the verb, independent
             # of how strongly the person holds it — one cell before `U3`, a projected row after.
-            row = CONVICTION_PROJECTION["Precedent"]
-            cell = sum(row.get(ax, 0.0) * align(picked, ax) for ax in CONVICTION_AXES)
+            row = PURSUIT_PROJECTION["Precedent"]
+            cell = sum(row.get(ax, 0.0) * align(picked, ax) for ax in PURSUIT_AXES)
             assert cell * sign >= 0, (
                 f"at Precedent={sign} the person chose {picked!r}, whose PROJECTED Precedent "
                 f"score is {cell} — the pick is on the WRONG side of zero, so the sweep's "
@@ -3213,7 +3237,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
             assert cell != 0, (
                 f"at Precedent={sign} the person chose {picked!r}, which the projection and the "
                 "table together do not score at all — the pick was decided entirely by the name "
-                "tiebreak. Check `conviction_projection[Precedent]` before `alignment`: a "
+                "tiebreak. Check `pursuit_projection[Precedent]` before `alignment`: a "
                 "conviction that projects to the zero vector cannot score any verb.")
     finally:
         decision.choose.ALIGNMENT = saved2
@@ -4411,7 +4435,7 @@ def test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links():
         f"the shipped arm raises {got['all_five'][2]} questions against `total`'s "
         f"{got['total'][2]}, i.e. FEWER. Under `U3` it has been raising more; a fall back below "
         "the control means the projection has gone sparse again or a deposit channel has closed. "
-        "Check `conviction_projection` loads before `H-33`.")
+        "Check `pursuit_projection` loads before `H-33`.")
     assert got["presence_only"][2] < got["total"][2], (
         f"`presence_only` raises as many questions as `total` ({got}) — then the narrowing costs "
         "nothing at this link in either arm and the thinning measured above is not attributable "
@@ -5430,6 +5454,133 @@ def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
     assert remit == [duke], (
         f"`post_remit` admits {remit}; it should admit exactly the holder of an office whose "
         "remit covers the verb that emitted this kind")
+
+
+def test_h71_others_half_a_witness_learns_who_was_seated_on_what():
+    """`H-71`'s SECOND half, `ED-IN-0245`/`CAT-6`: *"being UNDERSTOOD BY OTHERS as seated remains
+    OPEN."* The first half (a holder's own knowledge of their remit) closed at `13b` on the `hold`
+    Tenure's `payload`; this is the other side of that same conferral -- does anyone ELSE come to
+    know it happened.
+
+    Before this row's fix, `_eff_confer`'s Tenure id reached the ledger unexpanded, so `H-79`'s
+    `per_change`/`both` rule deposited `(<hash>, "tenure.opened", True)` on every admitted witness
+    -- a claim naming nothing any reader dispatches on. The fix expands it AT THE READER
+    (`epistemic.claim_subjects`): a Tenure-lifecycle change resolves to the two entities the
+    Tenure connects, the same `(subject, object)` read `_ch_document_key` already performs on a
+    live Tenure. The Receipt itself is untouched and stays honest -- `e.changes` still names the
+    Tenure that was actually written; only the WITNESSED CLAIM is about what the Tenure connects.
+    An earlier version of this fix instead had `_eff_confer` report the office and the new holder
+    directly, which minted Receipts asserting a `Tenure.until` write against an Office id and a
+    Person id -- neither of which is a Tenure, and neither of which was written. Caught by
+    adversarial review; corrected to expand at the reader instead, which also serves `_eff_revoke`
+    and `_eff_release`'s identical shape for free, rather than three effects each inventing their
+    own legible id.
+
+    `fan_out_mode` is the control axis: `presence_only` shows the fact travels through witnessing
+    (only a co-located person learns it), `total`/`all_five` show every living person does once
+    `chronicle` admits them (it is a `binding_decision` kind and fires unconditionally)."""
+    def run(mode):
+        w = P.tiny_world(DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
+        w.offices["off_dicastery"].conferral = "the duke's remit (harness fixture)"
+        d = SeasonDriver(w)
+        d.matter([])
+        out = d.resolve([Act(id="g_conf", actor="p_high", verb="confer",
+                             payload={"office": "off_dicastery", "to": "p_mid"})],
+                        contest_max_depth=w.fixtures.get("contest_max_depth"))
+        e = next((x for x in out if x.kind == "tenure.opened"), None)
+        assert e is not None, (
+            f"the fold emitted {[x.kind for x in out]} — no `tenure.opened` to test the write with")
+        # RECEIPT HONESTY, PINNED, POSITIVELY. `changes[]` must name exactly the Tenure that was
+        # actually written -- the SAME id `person_side_eligible`/`_grant_remit` would later read
+        # off `p_mid`'s own `hold` Tenure -- not the office or the holder directly; expansion
+        # happens at the reader, not here.
+        [nt] = [t for t in w.tenures if t.subject == "p_mid" and t.object == "off_dicastery"]
+        assert {c.subject for c in e.changes} == {nt.id}, (
+            f"tenure.opened changed {[c.subject for c in e.changes]!r} — expected exactly the new "
+            f"Tenure's own id {nt.id!r}; the office and the holder belong in the witnessed claim, "
+            "not the Receipt")
+        # S19.5 -- ONE LOG, NOT TWO. `season()` appends `resolve()`'s events to `w.log` itself
+        # (`driver.py:396`) before calling `witness()`; a bare resolve()+witness() pairing outside
+        # `season()` must do the same, or a claim's `causes=[e.id]` names an id `state/log.py`
+        # cannot resolve.
+        for x in out:
+            w.log.append(x)
+        d.witness(out)
+        return w
+
+    def holds(w, pid):
+        return {(c.subject, c.predicate, c.value) for c in w.persons[pid].ledger}
+
+    office_claim = ("off_dicastery", "tenure.opened", True)
+    holder_claim = ("p_mid", "tenure.opened", True)
+
+    # `total` and `all_five` (the shipped default) both admit every living person, by different
+    # channels: `total` unconditionally, `all_five` because `chronicle` is an event-kind filter
+    # over every `binding_decision` verb (`_ch_chronicle`, `epistemic.py`) and `confer` is one.
+    # Same guarantee, same assertion, so one loop over both rather than two copies that could
+    # silently drift apart on what each checks.
+    for mode in ("total", "all_five"):
+        w = run(mode)
+        for pid in w.persons:
+            assert office_claim in holds(w, pid), (
+                f"{pid} witnessed nothing about the office under fan_out_mode={mode}")
+            assert holder_claim in holds(w, pid), (
+                f"{pid} witnessed nothing about the new holder under fan_out_mode={mode}")
+
+    # `presence_only`: `world_q.presence` is direct containment (`tiny_world` seats `p_high` in
+    # the settlement and everyone else in the hearth or the realm), so only the actor is
+    # co-located with the act -- nobody else learns it through THIS channel. Genuinely different
+    # from the loop above (asserting ABSENCE for all but one person), so kept separate.
+    w = run("presence_only")
+    assert office_claim in holds(w, "p_high")
+    for pid in w.persons:
+        if pid == "p_high":
+            continue
+        assert not any(c[1] == "tenure.opened" for c in holds(w, pid)), (
+            f"{pid} learned of the conferral under presence_only with no co-location channel open")
+
+
+def test_h71_others_half_a_non_hold_tenure_release_stays_opaque():
+    """THE FIX'S OWN GUARDRAIL, REGRESSION-TESTED. A first version of the tenure-lifecycle
+    expansion in `epistemic.claim_subjects` keyed on the EVENT KIND (`tenure.opened`/
+    `tenure.closed`), which an adversarial pass found wrong: `_eff_release` closes ANY of
+    `RELEASABLE_KINDS` (`hold, commit, oblige, succeed, tie, knot`) through that same generic
+    `tenure.closed` emit, so keying on the event kind would have expanded a `commit` Tenure's
+    (person, Proposition) pair onto every witness the moment someone released an ambition --
+    exactly the unmediated moral/epistemic fact `AX-7` already flags as a standing violation, and
+    nobody has ruled it witnessable in this form. The fix instead keys on the TENURE'S OWN KIND
+    (`t.kind == "hold"`), which restricts the expansion to office-shaped tenures only -- the same
+    restriction `_ch_document_key` already applies when reading a live Tenure by its two ends.
+
+    This test releases a `commit` Tenure (not a `hold`) and asserts the witnessed claim still
+    names the Tenure's own opaque id, unexpanded -- proving the guard, not merely its absence."""
+    w = P.tiny_world()
+    w.propositions["prop_test"] = Proposition(
+        "prop_test", "OUGHT", "p_mid", "ambition", True, w.tick)
+    ct = Tenure(H(w.world_seed, w.tick, "p_mid", "commit:prop_test"),
+               "p_mid", "prop_test", "commit", since=w.tick)
+    w.add_tenure(ct)
+    d = SeasonDriver(w)
+    d.matter([])
+    out = d.resolve([Act(id="g_rel", actor="p_mid", verb="release",
+                         payload={"subject": "prop_test"})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    e = next((x for x in out if x.kind == "tenure.closed"), None)
+    assert e is not None, (
+        f"the fold emitted {[x.kind for x in out]} — no `tenure.closed`; the release did not run")
+    assert {c.subject for c in e.changes} == {ct.id}, (
+        f"tenure.closed changed {[c.subject for c in e.changes]!r} — expected only the Tenure's "
+        f"own id {ct.id!r}")
+    for x in out:
+        w.log.append(x)
+    d.witness(out)
+    everyone_claims = {c for pid in w.persons for c in
+                       {(c.subject, c.predicate, c.value) for c in w.persons[pid].ledger}}
+    assert not any(subj == "prop_test" for subj, _, _ in everyone_claims), (
+        "a witness holds a claim naming the Proposition directly -- the commit Tenure's "
+        "(subject, object) pair was expanded, which is exactly what H-71's fix must NOT do for a "
+        "non-hold Tenure kind"
+    )
 
 
 def test_w9_h80s_zero_control_is_executed_not_merely_described():

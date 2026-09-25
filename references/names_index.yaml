@@ -238,6 +238,23 @@ entries:
     category: substrate
     enforce: warn
 
+  season.pursuits: {canonical: pursuits, legacy: ["Person.convictions"], category: substrate, enforce: warn}
+  season.seed: {canonical: seed_pursuits, legacy: ["seed_convictions"], category: substrate, enforce: warn}
+  season.of: {canonical: pursuits_of, legacy: ["convictions_of"], category: substrate, enforce: warn}
+  season.role_template: {canonical: role_template_pursuits, legacy: ["role_template_convictions"], category: substrate, enforce: warn}
+  season.pursuit_axes:
+    canonical: pursuit_axes
+    aliases: []
+    legacy: ["conviction_axes", "CONVICTION_AXES"]
+    category: substrate
+    enforce: warn
+  season.pursuit_projection:
+    canonical: pursuit_projection
+    aliases: []
+    legacy: ["conviction_projection", "CONVICTION_PROJECTION"]
+    category: substrate
+    enforce: warn
+
   # ── PROPER-NOUN CORPUS FOLD-IN (2026-07-01, ED-1084) ─────────────────────────
   # Generated from references/proper_noun_registry.yaml (every category); warn-tier;
   # mirror-checked by ci_names_consistency (last key segment -> registry entry).

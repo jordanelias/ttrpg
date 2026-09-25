@@ -25,9 +25,9 @@ from __future__ import annotations
 
 import math as _math
 from typing import Any, Callable, Optional
-from ..data.rosters import CONVICTION_AXES, SCENE_PACKING_RULES, require_member
-# `CONVICTION_PROJECTION` / `PROJECTION_DEFAULT_CELL` were imported here until 2026-09-16 and
-# are not any more: the loop that read the 13x4 moved into `data/convictions.to_axes`, its
+from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member
+# `PURSUIT_PROJECTION` / `PROJECTION_DEFAULT_CELL` were imported here until 2026-09-16 and
+# are not any more: the loop that read the 13x4 moved into `data/pursuits.to_axes`, its
 # single owner. Keeping the imports declared a dependency this module no longer has.
 from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL, VERB_TABLE
 from ..gaps import Unspecified
@@ -88,12 +88,12 @@ def benefits_me(p: Person, c: Candidate) -> float:
 
     ⚠ NOTHING MULTIPLIES THIS YET, AND THE REASON IS A MISSING FIELD, NOT A MISSING PRODUCER
     (CORRECTED 2026-09-20, `ED-IN-0260`; the old reason read *"`orient` ... no verb writes it"*).
-    That reason proves too much: NO VERB WRITES `Person.convictions` EITHER -- grep `verb_table.yaml`
-    for it, zero hits -- and `convictions` is term 1 of the live score, genesis-authored from
+    That reason proves too much: NO VERB WRITES `Person.pursuits` EITHER -- grep `verb_table.yaml`
+    for it, zero hits -- and `pursuits` is term 1 of the live score, genesis-authored from
     `references/npc_registry.yaml` at `harness/populated.py:442-443`. Applied evenly, the old reason
     un-wires the score's first term. What is actually missing is the STATE: `Person` has no `orient`
     field, and the 28 authored `self_other_initial` values in that same registry are the one cell
-    `data/cast.py::convictions_of` skips (its `continue` past non-list entries). The wiring waits on
+    `data/cast.py::pursuits_of` skips (its `continue` past non-list entries). The wiring waits on
     `6f`: `ARCHITECTURE_V2.md` §F2 is a RATIFIED three-term shape, `STR-3` asks a new term to declare
     its range against the 0.294 decisive floor (authored range [-0.40, +0.10], cleared by 4 of 46),
     and `STR-2`'s `selfish` axis decides whether self-interest would enter the score twice.
@@ -109,12 +109,12 @@ def project(p: Person) -> dict:
     ⚠⚠ **§F2's `conviction[axis]` IS COMPUTED NOW, NOT LOOKED UP, AND THE FORMULA IS UNCHANGED IN
     SHAPE.** V2 §F2 spells `score(c) = Σ_axis conviction[axis] · alignment(c.verb, axis)` and that
     indexing only works if a person's convictions are KEYED BY AXIS — which is what
-    `conviction_axes` used to be forced to be, holding `Precedent` (a conviction) beside
+    `pursuit_axes` used to be forced to be, holding `Precedent` (a conviction) beside
     `self_preservation`, `suspicion` and `harm_borne` (three ad-hoc scalars) so the lookup had
-    something to hit. `conviction_axes`'s own note named the conflation and predicted the repair.
+    something to hit. `pursuit_axes`'s own note named the conflation and predicted the repair.
     So:
 
-        conviction[axis]  :=  Σ_conv  p.convictions[conv] · projection[conv][axis]
+        conviction[axis]  :=  Σ_conv  p.pursuits[conv] · projection[conv][axis]
 
     and `Σ_axis` above is untouched. A person holds weights over the THIRTEEN; the projection is
     the only thing that knows about axes.
@@ -128,13 +128,13 @@ def project(p: Person) -> dict:
     RATHER THAN A SILENT DROP.** `PROJECTION_DEFAULT_CELL` is the declared 0.0; the loader has
     already refused any conviction name outside the roster, so an unlisted pair here is a cell the
     data chose to leave sparse, not a typo that got through."""
-    # ⚠ DELEGATED, NOT DUPLICATED. `data.convictions.to_axes` is the one owner of
+    # ⚠ DELEGATED, NOT DUPLICATED. `data.pursuits.to_axes` is the one owner of
     # *convictions → axes*, because a second caller appeared that does not have a `Person`:
     # `data.cast.loyalty` projects a ROLE TEMPLATE's expected-conviction vector through the same
     # 13×4. Keeping the loop here as well would be two owners of one rule (§8), and the two would
     # be free to disagree about the sparse default.
-    from ..data.convictions import to_axes
-    return to_axes(p.convictions)
+    from ..data.pursuits import to_axes
+    return to_axes(p.pursuits)
 
 
 def stance_toward(p: Person, referent: str) -> float:
@@ -335,9 +335,9 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
     is open", so §G's discipline applies to the weights and not to this structure.
 
     Four properties, and each is checked by a test rather than asserted here:
-      1. EVERY INPUT IS PERSON-SIDE -- `convictions`, `stance`, the View, the two Sensation
+      1. EVERY INPUT IS PERSON-SIDE -- `pursuits`, `stance`, the View, the two Sensation
          scalars. No World, no resolver-side Query. L2 by parameter list.
-      2. It CONSUMES `convictions` and `stance`, which #353 declares as fields and no formula in
+      2. It CONSUMES `pursuits` and `stance`, which #353 declares as fields and no formula in
          the chain reads -- a carrier nothing consumes is dead state (§22.1's own complaint).
       3. THE PERSON TRIAGES. `ask_budget()` is asked, not imposed; the engine never truncates.
       4. A lookup on one's own interior is indistinguishable from a deliberation at this
@@ -363,7 +363,7 @@ def make_chooser(fx: "Fixtures", mint: Callable[[str, str, str], str],
         # would run it once per candidate for an identical answer.
         axis_w = project(p)
         def score(c: Candidate) -> float:
-            return (sum(axis_w[ax] * align(c.verb, ax) for ax in CONVICTION_AXES)
+            return (sum(axis_w[ax] * align(c.verb, ax) for ax in PURSUIT_AXES)
                     + stance_toward(p, c.subject or "")
                     + u)
         # ⚠ SCORED ONCE, NOT TWICE. `score` was passed to `_sample_order` and re-invoked there for

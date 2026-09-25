@@ -41,8 +41,8 @@ import math
 import sys
 from typing import Optional
 
-from ..data.rosters import CONVICTION_AXES
-from ..data.verbs import CONVICTION_PROJECTION, PROJECTION_DEFAULT_CELL
+from ..data.rosters import PURSUIT_AXES
+from ..data.verbs import PURSUIT_PROJECTION, PROJECTION_DEFAULT_CELL
 
 
 def _covariance(rows: dict, axes: list) -> list:
@@ -144,12 +144,12 @@ def spread(candidate: Optional[tuple] = None) -> dict:
         axes = list(axes)
         rows = {c: [float(raw[c].get(a, PROJECTION_DEFAULT_CELL)) for a in axes] for c in raw}
     else:
-        axes = list(CONVICTION_AXES)
+        axes = list(PURSUIT_AXES)
         # The DECLARED sparse default, not a literal — `decision.project` reads the same constant,
         # and an instrument that hard-codes `0.0` stops agreeing with the thing it measures the day
         # the row's `default_cell` moves.
-        rows = {c: [CONVICTION_PROJECTION[c].get(a, PROJECTION_DEFAULT_CELL) for a in axes]
-                for c in CONVICTION_PROJECTION}
+        rows = {c: [PURSUIT_PROJECTION[c].get(a, PROJECTION_DEFAULT_CELL) for a in axes]
+                for c in PURSUIT_PROJECTION}
     n = len(rows) or 1
     mean = [sum(v[i] for v in rows.values()) / n for i in range(len(axes))]
     mag = math.sqrt(sum(m * m for m in mean))

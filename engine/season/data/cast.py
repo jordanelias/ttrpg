@@ -10,7 +10,7 @@ invalid.
 ⚠ NOTHING THAT EXECUTES HAD EVER OPENED IT. The only two Python files naming it are a test that
 checks it PARSES (`tests/valoria/test_references_yaml_parse.py`, a regression guard from when it
 was unparseable) and a proposal whose own comment says it is out of scope. Meanwhile
-`run_cases.seed_convictions` draws each person's convictions from
+`run_cases.seed_pursuits` draws each person's convictions from
 `blake2b(seed, case_id, pid)` — so a corpus of 46 people with authored, weighted, canon-cited
 conviction vectors was being given invented ones, and `R-06`'s *"characters must be robustly built
 with goals, ambitions, convictions"* was measured against the invention.
@@ -18,8 +18,8 @@ with goals, ambitions, convictions"* was measured against the invention.
 WHAT THIS MODULE IS AND IS NOT. It READS and VALIDATES; it does not translate and it does not
 guess. A faction string that resolves to no canonical faction comes back `None` and is counted,
 never coerced to a plausible neighbour — §42.2's polarity rule, and the same line
-`data/convictions.py` holds one layer down: *"A name that is not canonical is a typo or a rename,
-and both should stop the run rather than seed a person with a conviction `CONVICTION_PROJECTION`
+`data/pursuits.py` holds one layer down: *"A name that is not canonical is a typo or a rename,
+and both should stop the run rather than seed a person with a conviction `PURSUIT_PROJECTION`
 has no row for."*
 
 ⚠ LAZY, AND `data/__init__.py` RECORDS WHY AT LENGTH. Nothing here runs at import. That module's
@@ -179,11 +179,11 @@ def resolve_faction(name: Optional[str]) -> Optional[str]:
     return resolved if resolved in FACTIONS else None
 
 
-def convictions_of(r: dict) -> dict:
+def pursuits_of(r: dict) -> dict:
     """`{conviction: weight}` from the row, every name checked against the canonical thirteen.
 
     ⚠ IT VALIDATES THROUGH THE ONE OWNER AND DOES NOT RE-DO THE MEMBERSHIP TEST.
-    `data.convictions.conviction` already is that check, delegating in turn to
+    `data.pursuits.pursuit` already is that check, delegating in turn to
     `engine.substrate.descriptors.resolve_conviction` — the single reader of the single export of
     the single roster. A second membership test here is the exact shape
     `tests/valoria/test_conviction_roster_single_owner.py` exists to prevent, and that guard is
@@ -192,8 +192,13 @@ def convictions_of(r: dict) -> dict:
 
     ⚠ THE ROW GROUPS ARE `primary` AND `secondary` AND BOTH ARE TAKEN FLAT. The registry's own
     schema separates them; §F2's score does not, because a weight is a weight. Keeping the groups
-    would mean inventing what the distinction is worth, which nothing states."""
-    from .convictions import conviction
+    would mean inventing what the distinction is worth, which nothing states.
+
+    ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this function was
+    `convictions_of`. It still reads `r.get("convictions")` -- `references/npc_registry.yaml`'s
+    own key -- UNCHANGED: that registry is canon and its per-character migration to the new
+    pursuits is Jordan's own later, separate authoring step, not this rename."""
+    from .pursuits import pursuit
     out: dict = {}
     block = r.get("convictions") or {}
     if not isinstance(block, dict):
@@ -203,7 +208,7 @@ def convictions_of(r: dict) -> dict:
             continue                    # `cultural_label` / `self_other_initial` sit here too
         for entry in rows:
             if isinstance(entry, dict) and entry.get("conviction") is not None:
-                out[conviction(str(entry["conviction"]))] = float(entry.get("weight") or 0.0)
+                out[pursuit(str(entry["conviction"]))] = float(entry.get("weight") or 0.0)
     return out
 
 
@@ -299,13 +304,13 @@ def loyalty(r: dict, faction: Optional[str]) -> Optional[int]:
     loyal TO, and inventing a midpoint would put a number where canon has a silence (§42.2's
     polarity rule)."""
     import math
-    from .convictions import to_axes
+    from .pursuits import to_axes
     from .rosters import ROLE_TEMPLATE_OF, table
     template = ROLE_TEMPLATE_OF.get(str(faction or ""))
     if template is None:
         return None
-    mine = to_axes(convictions_of(r))
-    theirs = to_axes((table("role_template_convictions") or {}).get(template) or {})
+    mine = to_axes(pursuits_of(r))
+    theirs = to_axes((table("role_template_pursuits") or {}).get(template) or {})
     dot = sum(mine.get(a, 0.0) * theirs.get(a, 0.0) for a in set(mine) | set(theirs))
     na = math.sqrt(sum(v * v for v in mine.values()))
     nb = math.sqrt(sum(v * v for v in theirs.values()))

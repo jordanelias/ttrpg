@@ -117,11 +117,11 @@ def test_a_candidate_basis_is_scored_by_the_same_rule_as_the_live_one():
     """The parameter's falsifier: handing `spread` the LIVE table explicitly must give the same
     answer as letting it read the module. If the two paths diverge, the candidate branch is
     measuring something the control is not, and every comparison drawn from it is void."""
-    from engine.season.data.rosters import CONVICTION_AXES
-    from engine.season.data.verbs import CONVICTION_PROJECTION
-    axes = list(CONVICTION_AXES)
+    from engine.season.data.rosters import PURSUIT_AXES
+    from engine.season.data.verbs import PURSUIT_PROJECTION
+    axes = list(PURSUIT_AXES)
     # [JUSTIFIED: the sparse default, matching PROJECTION_DEFAULT_CELL — not a game value here]
-    rows = {c: {a: CONVICTION_PROJECTION[c].get(a, 0.0) for a in axes}
-            for c in CONVICTION_PROJECTION}
+    rows = {c: {a: PURSUIT_PROJECTION[c].get(a, 0.0) for a in axes}
+            for c in PURSUIT_PROJECTION}
     assert spread((axes, rows))["spectrum"]["effective_axes"] == pytest.approx(
         spread()["spectrum"]["effective_axes"], abs=1e-12)  # [JUSTIFIED: float64 identity]

@@ -14,23 +14,29 @@ AND ONLY ONE OF THEM IS WRONG ABOUT THIS CASE.**
 READING a roster is not AUTHORING one, and a substring scan cannot tell them apart. Rather than
 spell around the second guard or widen it, the validator moves to the package that owns the
 definition surface — which is where a "is this a real conviction?" question belonged anyway. The
-harness calls `conviction("Precedent")` and names no roster at all, which is TRUE of it in the
+harness calls `pursuit("Precedent")` and names no roster at all, which is TRUE of it in the
 sense that guard means.
 
 ⚠ IT VALIDATES AND DOES NOT TRANSLATE. `resolve_conviction`'s rule is that no legacy name is
 silently migrated; this holds the same line one layer down. A name that is not canonical is a typo
 or a rename, and both should stop the run rather than seed a person with a conviction
-`CONVICTION_PROJECTION` has no row for.
+`PURSUIT_PROJECTION` has no row for.
+
+⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only). The season-side name is now
+`pursuit`/`PURSUITS`/`PURSUIT_AXES`/`PURSUIT_PROJECTION` — module was `data/convictions.py`. It
+still validates against the SUBSTRATE's unchanged 13-name conviction leaf
+(`engine.substrate.descriptors.CONVICTIONS`/`resolve_conviction`) until the later, Jordan-authored
+content step adds the new pursuits and axes; no value here has moved.
 """
 from __future__ import annotations
 
 from ..gaps import Unspecified
 from engine.substrate.descriptors import resolve_conviction
 
-from .rosters import CONVICTIONS
+from .rosters import PURSUITS
 
 
-def conviction(name: str) -> str:
+def pursuit(name: str) -> str:
     """Return `name` if it is one of the thirteen; raise naming the roster if it is not.
 
     ⚠ IT DELEGATES. `engine.substrate.descriptors.resolve_conviction` already IS this check, against
@@ -46,7 +52,7 @@ def conviction(name: str) -> str:
     except ValueError as exc:
         raise Unspecified(
             f"{name!r} is not a canonical Conviction", "descriptor_registry.yaml",
-            needs=f"one of {sorted(CONVICTIONS)}",
+            needs=f"one of {sorted(PURSUITS)}",
             law=str(exc)) from exc
 
 
@@ -54,7 +60,7 @@ def to_axes(weights: dict) -> dict:
     """A weighted conviction map, projected into the four ethical axes. THE ONE OWNER.
 
     `Σ_conv weight[conv] · projection[conv][axis]`, over `references/descriptor_registry.yaml`'s
-    thirteen and `rosters.yaml: tables.conviction_projection`'s 13×4.
+    thirteen and `rosters.yaml: tables.pursuit_projection`'s 13×4.
 
     ⚠ IT TAKES A DICT, NOT A `Person`, AND THAT IS WHY IT IS HERE RATHER THAN IN `decision/`.
     `decision.choose.project` was the only projector and its signature is `Person -> dict`, so a
@@ -68,13 +74,13 @@ def to_axes(weights: dict) -> dict:
 
     ⚠ A CONVICTION THE MATRIX DOES NOT LIST PROJECTS TO NOTHING — the sparse default, not a silent
     drop: the roster check has already refused any name outside the canonical thirteen."""
-    from .rosters import CONVICTION_AXES
-    from .verbs import CONVICTION_PROJECTION, PROJECTION_DEFAULT_CELL
-    out = {ax: 0.0 for ax in CONVICTION_AXES}
+    from .rosters import PURSUIT_AXES
+    from .verbs import PURSUIT_PROJECTION, PROJECTION_DEFAULT_CELL
+    out = {ax: 0.0 for ax in PURSUIT_AXES}
     for conv, w in (weights or {}).items():
-        row = CONVICTION_PROJECTION.get(conv)
+        row = PURSUIT_PROJECTION.get(conv)
         if row is None:
             continue
-        for ax in CONVICTION_AXES:
+        for ax in PURSUIT_AXES:
             out[ax] += float(w) * float(row.get(ax, PROJECTION_DEFAULT_CELL))
     return out

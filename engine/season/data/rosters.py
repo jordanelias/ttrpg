@@ -89,10 +89,10 @@ def _load_rosters() -> tuple:
     # ⚠ BOTH KEYS IS A DECLARED-BUT-UNREAD `values:`, AND THE CHECK IS AT LOAD FOR A MEASURED
     # REASON. `04 §B.13` ID-12 puts the loader's cross-validation at load, "not at the first act
     # that would have hit it", and this rule proves why: it first shipped inside `roster()`, where
-    # it only ever saw rows something CALLED `roster()` on. `convictions` is not one of those --
-    # its runtime route is the direct `CONVICTIONS` import below, so the row that MOTIVATED the
+    # it only ever saw rows something CALLED `roster()` on. `pursuits` is not one of those --
+    # its runtime route is the direct `PURSUITS` import below, so the row that MOTIVATED the
     # rule was the one row the rule could not reach. Driving the loop with both keys planted on it
-    # ran clean and emitted a content hash; planted on `conviction_axes`, which IS read through
+    # ran clean and emitted a content hash; planted on `pursuit_axes`, which IS read through
     # `roster()`, it refused. Here it fires on every row whatever reads it, or nothing does.
     for _n, _r in rosters.items():
         if not isinstance(_r, dict):
@@ -143,8 +143,8 @@ def roster(name: str, ordered: bool = False):
     # A roster whose definition belongs to `references/descriptor_registry.yaml` names the block
     # and carries no `values:`, so there is exactly one place to edit and no second list to drift.
     # This is the `conviction_roster` shape made general: that row was handled by importing
-    # `CONVICTIONS` directly, which works but SKIPS the `forbidden:` bar below — and that bar is
-    # load-bearing on `conviction_axes` (#353 `:1897`, the Exposure collision). Routing through
+    # `PURSUITS` directly, which works but SKIPS the `forbidden:` bar below — and that bar is
+    # load-bearing on `pursuit_axes` (#353 `:1897`, the Exposure collision). Routing through
     # here keeps the data-side bar on a pointed-at roster, which a direct import could not.
     if "from_descriptor" in r:
         # ⚠ THE BOTH-KEYS REFUSAL IS AT LOAD, IN `_load_rosters`, NOT HERE. It lived here first and
@@ -220,7 +220,7 @@ def roster(name: str, ordered: bool = False):
                       "content is a mapping read with roster_map()",
                 law="rosters.yaml's header -- an empty set makes every membership test silently "
                     "false, so it REFUSES exactly as an absent roster does")
-    # A roster may FORBID a member by name. `conviction_axes` forbids `exposure` bare, because
+    # A roster may FORBID a member by name. `pursuit_axes` forbids `exposure` bare, because
     # #353 `:1897` names it as three senses of one word; a data edit that added it would
     # otherwise reintroduce the collision silently, which is the whole failure mode this file
     # exists to prevent. The check is on the DATA, so it survives every route into the roster.
@@ -409,14 +409,18 @@ STRATA = roster("strata", ordered=True)
 # number of hops when the definition is owned elsewhere.
 # ⚠⚠ AND "THE ONE ROSTER THAT WORKS THAT WAY" IS STALE AS OF 2026-09-15, WHICH IS WHY THE CLAIM IS
 # CORRECTED HERE RATHER THAN LEFT TO READ TRUE. The row was given `from_descriptor: conviction_roster`
-# in that migration, so `roster("convictions")` now resolves through the pointer branch above and
+# in that migration, so `roster("pursuits")` now resolves through the pointer branch above and
 # returns the SAME thirteen -- measured, the two are set-equal. Two routes, one owner, no second
 # copy: the direct import below is the leaf and the pointer is the data-side route that also gets
-# the `forbidden:` bar. `conviction_axes` on the line after this one has only ever had the pointer.
+# the `forbidden:` bar. `pursuit_axes` on the line after this one has only ever had the pointer.
 # What would be a defect is a THIRD route carrying its own literal, and that is what the guard in
 # `roster()` above now refuses.
-from engine.substrate.descriptors import CONVICTIONS  # noqa: E402  (the single owner's leaf)
-CONVICTION_AXES = roster("conviction_axes")
+# ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): the season-side binding is now
+# `PURSUITS`/`PURSUIT_AXES`. The leaf itself (`CONVICTIONS`) and `descriptor_registry.yaml`'s
+# `conviction_roster`/`axis_roster` keys are UNCHANGED -- they still carry the old 13/4 taxonomy,
+# and this import merely gives the season package a vocabulary-neutral name for it.
+from engine.substrate.descriptors import CONVICTIONS as PURSUITS  # noqa: E402
+PURSUIT_AXES = roster("pursuit_axes")
 QUESTION_SOURCES = roster("question_sources", ordered=True)
 PERSON_PREDICATES = roster("person_predicates")
 VIEW_BUILDER_RULES = roster("view_builder_rules")

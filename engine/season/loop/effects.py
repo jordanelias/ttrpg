@@ -24,7 +24,7 @@ and it is §47's failure exactly: a false claim of enforcement stops the next re
 from __future__ import annotations
 
 from ..data.rosters import (
-    CONVICTION_AXES, FELLED, RELEASABLE_KINDS, WOUND_HARM_MODELS, require_member,
+    PURSUIT_AXES, FELLED, RELEASABLE_KINDS, WOUND_HARM_MODELS, require_member,
 )
 
 from ..gaps import InstrumentDefect, Unspecified
@@ -139,6 +139,22 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     # the fold publish `tenure.closed` anyway -- a state change that did not happen, which is the
     # fabricated-`person.died` class committed inside the fix for it. The mapping's empty entry is
     # dropped by `_apply_write`.
+    #
+    # ⚠ `[nt.id]`, NOT `[obj, to]` -- KEPT AS THE TENURE'S OWN ID, DELIBERATELY, AFTER A REJECTED
+    # ALTERNATIVE. A first version of this fix reported `[obj, to]` (the office and the new
+    # holder) so a witness's claim would name something legible. It was wrong: `_apply_write`
+    # mints a Receipt against THIS write pair's field (`Tenure.until`, `verb_table.yaml`'s first
+    # `writes:` entry for `confer`) for every id an effect reports, so `[obj, to]` minted
+    # `(off_dicastery, set, Act, until)` and `(p_mid, set, Act, until)` -- Receipts asserting that
+    # an OFFICE and a PERSON each had a `Tenure.until` write, which did not happen to either; only
+    # the new Tenure did. That is the ID-9 class of defect this file's other comments name --
+    # "an Event reporting a state change that did not happen" -- one seam over, in the Receipt
+    # rather than the Event. Found by an adversarial critique of the first version. The Receipt
+    # must name what was ACTUALLY written; H-71's others-half is closed at the READER instead --
+    # see `epistemic.claim_subjects`'s Tenure-lifecycle expansion, which turns a `tenure.opened`/
+    # `tenure.closed` Receipt naming a Tenure into claims about the two entities that Tenure
+    # connects, on the same read `_ch_document_key` already does. One reader rule serves `confer`,
+    # `revoke` and `release` alike, rather than three effects each inventing their own legible id.
     return {"tenure.opened": [nt.id], "tenure.closed": closed}
 
 
@@ -375,7 +391,7 @@ def _scar(w: "World", p, verb: str) -> None:
     # because `kill / wound`'s one cell is `+0.3`; it bites the moment a negative-cell verb is
     # wired, and the scar's named reader -- the Conviction crisis -- is about the DIRECTION of
     # the wound. The magnitude keeps the cell's sign and `scar` is a signed accumulator.
-    for axis in CONVICTION_AXES:
+    for axis in PURSUIT_AXES:
         weight = float(align(verb, axis))
         if weight:
             p.scar[axis] = round(p.scar.get(axis, 0.0) + step * weight, _SCAR_DP)

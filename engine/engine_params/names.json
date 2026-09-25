@@ -3,7 +3,7 @@
   "schema_version": 1,
   "source": "references/names_index.yaml",
   "registry_version": 3,
-  "count": 116,
+  "count": 122,
   "canonical": {
     "agg.body": "Body",
     "agg.mind": "Mind",
@@ -50,6 +50,12 @@
     "ppt.consequence": "Consequence",
     "ppt.evidence": "Evidence",
     "ppt.loyalty": "Loyalty",
+    "season.of": "pursuits_of",
+    "season.pursuit_axes": "pursuit_axes",
+    "season.pursuit_projection": "pursuit_projection",
+    "season.pursuits": "pursuits",
+    "season.role_template": "role_template_pursuits",
+    "season.seed": "seed_pursuits",
     "set.defense": "Defense",
     "set.facility_tier": "Facility Tier",
     "set.legitimacy": "Legitimacy",
@@ -181,14 +187,22 @@
     "Warden": "Wardens"
   },
   "legacy": {
+    "CONVICTION_AXES": "pursuit_axes",
+    "CONVICTION_PROJECTION": "pursuit_projection",
     "Cohesion": "Discipline",
     "Combat Power": "Power",
     "Command Rating": "Command",
     "Contact Rounds": "Thread Fatigue",
     "EventImpact": "Key",
     "Galbados": "Solmund",
+    "Person.convictions": "pursuits",
     "Rendering Stability": "Mending Stability",
-    "Theocracy Counter": "Church Influence"
+    "Theocracy Counter": "Church Influence",
+    "conviction_axes": "pursuit_axes",
+    "conviction_projection": "pursuit_projection",
+    "convictions_of": "pursuits_of",
+    "role_template_convictions": "role_template_pursuits",
+    "seed_convictions": "seed_pursuits"
   },
   "by_class": {
     "clock": [

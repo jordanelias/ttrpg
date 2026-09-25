@@ -399,7 +399,7 @@ def witness(self, events: list[Event]) -> int:
                     record_kind="Person", fieldname="claim_ledger", driver="Event")
     w._in_parallel_map = False
     # S9.3/S28: WITNESS NEVER TOUCHES A BELIEF. Nothing above writes `beliefs` or
-    # `convictions` -- and under rev 2's Partition both are MISSING rows, so an attempt would
+    # `pursuits` -- and under rev 2's Partition both are MISSING rows, so an attempt would
     # raise rather than be caught by inspection.
     TRACE.step("WITNESS", "leave")
     return deposits

@@ -402,14 +402,14 @@ def p6():
     w = tiny_world()
     w.step = Step.RESOLVE
     w.write("stance", WriteClass.ACTS, lambda: None,
-            record_kind="Person", fieldname="convictions", driver="Act")
+            record_kind="Person", fieldname="pursuits", driver="Act")
     # W2: this RAISED until Part D was loaded as data. `(Person, convictions)` had no row of its
     # own and the old gate was keyed on a THING, so the only way to write it was to ride on
     # `stance`'s row -- which is defect D1, and the instrument correctly refused rather than let
     # it. V2 §D3 gives it its own row: RESOLVE only, ACTS, `social: true`, DR-2 and §9.3
     # ("moved by argument and consequence, never by evidence"). The refusal was the ABSENCE of a
     # row, and the row now exists.
-    return ("PASS: `(Person, convictions)` is written at RESOLVE in the ACTS class by an act -- "
+    return ("PASS: `(Person, pursuits)` is written at RESOLVE in the ACTS class by an act -- "
             "its OWN Part D row (DR-2, §9.3), not `stance`'s")
 
 
@@ -698,7 +698,7 @@ def p18():
         and antecedent.subject == site.id, (
         f"the crossing names {ev.causes[0]!r}, which is not a `condition.worn` for {site.id}")
     assert verb in before and verb not in after
-    social = [c for c in ev.changes if c.field in ("stance", "convictions", "beliefs")]
+    social = [c for c in ev.changes if c.field in ("stance", "pursuits", "beliefs")]
     assert not social and not ev.degree
     return (f"PASS, AND BOTH HALVES OF L5 RAN. ⚠ THE SITE IS SEEDED one season above its "
             f"highest floor (see `_seed_near_floor`), so {n} is NOT the unseeded pacing -- `A31b` "
@@ -942,16 +942,16 @@ def p31():
     # test this: it scored an authored roster of three verbs the table does not carry.
     inner = make_chooser(w.fixtures, lambda a, b, c: f"{a}:{b}:{c}",
                          draw=draw_factory(w.world_seed, lambda: w.tick))
-    p.convictions = {"Precedent": 0.9}
+    p.pursuits = {"Precedent": 0.9}  # [JUSTIFIED: the sign, not the magnitude, is what P31 observes -- any nonzero weight of opposite sign at the second line below would show the same property]
     # `W17`: `choose` returns SCENES now, so the pick is the first interaction of
     # the first scene. The default policy fills scenes in score order, so that is
     # still the highest-scoring candidate.
     principled = inner(p, v, Sensation(0), ask)[0].acts[0].verb
-    p.convictions = {"Precedent": -0.9}
+    p.pursuits = {"Precedent": -0.9}  # [JUSTIFIED: the sign flip is the test; see the line above]
     inverted = inner(p, v, Sensation(0), ask)[0].acts[0].verb
     assert principled != inverted, (
         f"flipping the sign of the only conviction changed nothing: both chose {principled!r}. "
-        "`convictions` is a dead carrier -- the exact defect #353 :739-744 names")
+        "`pursuits` is a dead carrier -- the exact defect #353 :739-744 names")
     return (f"PASS BY CONSTRUCTION: {principled!r} at Precedent +0.9, {inverted!r} at -0.9. The "
             "motive is Person-interior, read PERSON-SIDE ONLY, and it skewed the pick with NO "
             "branch in the resolver and nothing stored about the bias -- nobody, the holder and "
@@ -2372,12 +2372,12 @@ def p37():
     # and never goes through `make_chooser`; it is corrected so the corpus does not seed a
     # conviction nobody can hold.
     # [JUSTIFIED: 0.9 is a single strong conviction, the same magnitude this probe used before `U3` under the retired name `suspicion`; P37 branches on `> 0.5` so any value above the threshold shows the same property, and the NUMBER is not what it observes]
-    p.convictions = {"Order": 0.9}
+    p.pursuits = {"Order": 0.9}
     chosen = []
     def choose(q, v, s, ask_budget):
         if q.id != p.id:
             return []
-        verb = "purge" if q.convictions.get("Order", 0) > 0.5 else "tolerate"
+        verb = "purge" if q.pursuits.get("Order", 0) > 0.5 else "tolerate"
         chosen.append(verb)
         return [Act_(w, q, verb)]
     _run(w, choose)

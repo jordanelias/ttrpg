@@ -6,14 +6,12 @@
 | item | where it lives | next step |
 |---|---|---|
 | Pursuit-axis cells + the alignment re-cell over the verbs | `ED-IN-0261`; `proposals/2026-09-20-pursuit-basis-worksheet.yaml` | Jordan places the cells; falsifier is the devout-Solmund/anti-Solmund faith pair, must land far apart |
-| Rename `Person.convictions`→`pursuits`, `conviction_axes`→`pursuit_axes` | `ED-IN-0261` item 1 | hand-sweep `engine/season` + `references/` owners; `registers/`'s citations of the old name stay untouched |
 | Verb split `kill`/`wound`, add `fight`, `challenge`→`accept` | `ED-IN-0261` item 3 | rides the pursuit-cell commit (ALIGNMENT authored once, not twice) |
 | Scar rebuild — per-element counts, both tracks | `ED-IN-0261` item 4; `engine/season/loop/effects.py:324` `_scar`, `engine/season/epistemic.py:440` `observers_for` | build after the ALIGNMENT re-cell lands |
 | Deontology gate at `opening_set` | `ED-IN-0261` item 5; `engine/season/decision/options.py:35` | implement the person-side refusal threshold, no `World` |
-| Migration verb — nobody in Valoria can relocate | `RULINGS.yaml` `RR-2`, `proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml` | author the verb; matter-plus-hearth-capacity throttle already ruled |
-| H-71 arm 2 — being understood by others as seated, not just self-knowledge of remit | `engine/season/hole_register.yaml:795` `H-71` | design + build the second arm |
+| Migration verb — nobody in Valoria can relocate | `RULINGS.yaml` `RR-2`, `proposals/2026-09-17-governance-and-behaviour/RULINGS.yaml` | author the verb; matter-plus-hearth-capacity throttle already ruled — but `capacity(w, rung)` has no site kind to run over yet, `site_kinds` (`rosters.yaml`) is `[harbour, seam, body]` with no `dwelling`; that gap is prior to the verb |
 | Build-order item 1 (commit verb) HELD — no Proposition question source | `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` §7 | build items 5/7/8 first, then retry |
-| Build-order item 4 REVERTED — `budget_office_bonus` deletion starves news transport | `engine/season/hole_register.yaml:176`; `ED-IN-0246` | Jordan picks repair shape (more rounds / denser rounds / fixed scene-slate) |
+| Build-order item 4 REVERTED — `budget_office_bonus` deletion starves news transport | `engine/season/hole_register.yaml:176` (`H-10`/`H-92`); `ED-IN-0246` | fully re-planned 2026-09-24 (`budget()` should count `t.granted_acts`, not every `hold`; the round-release ceiling caps at `scenes_per_round` regardless of budget) — BLOCKED: the fix trips `test_n3`'s `attempt_cases >= 20`/`told_cases >= 8` floors (measured 21→8, 11→2), and whether that floor is a property to repair `tell`'s economy against (R-09) or a golden to re-pin is Jordan's call, not a technical one |
 | Build-order Phase 6 (6a–6g) scheduled, gates ruled | `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` §7.5 | build in dependency order |
 | `AX-7` makes three `Claim`-construction sites a contradiction, not a preference | `ED-IN-0244`/`ED-IN-0245` `RR-P`; `engine/season/loop/witness.py:191,271,361` | wire `agreement`/`standing_of`/`belief_contradicts` into the producers |
 

@@ -213,9 +213,11 @@ Fields are grouped by Stage 1's split reader clause — **held** fields need a *
 code reads must ship the way to re-run it*.
 
 ```
-Person := ( id, weight, capability, marks[], body, exists, travel_leg
-          , stance[], convictions, scar[axis], axis_count[axis], coherence?
+Person := ( id, weight, capability, body, exists, travel_leg
+          , stance[], pursuits, scar[axis], axis_count[axis], coherence?
           , ledger )
+-- renamed/dropped 2026-09-24, ED-IN-0261 item 1: `convictions` -> `pursuits` (season-side name
+   only, values unchanged); `marks[]` dropped (retired write_matrix.yaml field, zero readers)
 NOT ON IT:  beliefs (a commit to an OUGHT) · ties_index (Nobody's) · any aggregate · anything about another person
 LOCATION:   the person-kind Rung sharing its n; its contain edge is where they are
 ```
