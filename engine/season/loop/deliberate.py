@@ -17,16 +17,22 @@ delivers the MODULE boundary `04 §A.2:134` requires; the write discipline is Ar
 *"owns nothing; calls `sense()`, builds a `View`, calls `choose` per person; reads a frozen `World`,
 **for `sense` only**; token: none."* Measured against the body:
 
-- it calls `w._rehome()`, which MUTATES the tenure store, during DELIBERATE -- a barrier that owns
-  nothing and holds no token;
-- it reads `w.fixtures` and calls `questions_for(w, p)`, a `world_q` read that is not `sense`;
+- it read `w.fixtures`;
 - it sets `w.step` and `w._in_parallel_map`, and writes `self.scenes` and `a.scene`.
 
 None of that is L5's doing -- the body is unchanged from when it was a method on `SeasonDriver` --
 but the module boundary is what makes the divergence checkable, so it is recorded here rather than
-left for a reader to find under a header that reads like conformance. **The `_rehome()` call is the
-one that matters**: either it moves to the MATTER barrier or the row is amended. That is a Layer-1
-question, not this unit's. Found by the Fable gate on Arc 1 and filed under `ED-IN-0206`.
+left for a reader to find under a header that reads like conformance. Found by the Fable gate on
+Arc 1 and filed under `ED-IN-0206`.
+
+⚠ **RESOLVED 2026-09-25 FOR THE TWO THAT MATTERED (ED-IN-0206).** This body used to call
+`w._rehome()`, which MUTATES the tenure store, and `questions_for(w, p, since)`, a `world_q` read
+that is not `sense`. Read together, `04:115` (AX-4, one write path), `04:155` (the driver owns the
+caches' lifetimes), `04:158` (this row), `04:154` (a decision may read `Question[]`) and `04:976`
+(PART D row 41: DELIBERATE runs "on a projection built at barrier 2") put both at the driver: it
+rehomes before the freeze and builds the per-person question projection
+(`SeasonDriver._questions_at_barrier`), and this step receives it as `questions`. `04` was not
+amended to match the code (layer-conformance B4).
 """
 
 from __future__ import annotations
@@ -41,7 +47,6 @@ from ..data.matrix import Step
 from ..data.requires import REQUIRES_STEMS
 from ..decision import aggregate_questions
 from ..gaps import Forbidden, Ungraded
-from ..queries.world_q import questions_for
 from ..state.carriers import Act, Person
 from ..state.world import World
 from ..trace_log import TRACE
@@ -50,21 +55,18 @@ from ..trace_log import TRACE
 
 # -- DELIBERATE -- a MAP, not a barrier (S26) ---------------------------
 def deliberate(self, choose: Callable[..., list[Act]], question: Any,
-               subsistence: Callable[[Person, World], int]) -> list[Act]:
+               subsistence: Callable[[Person, World], int], questions: dict) -> list[Act]:
     w = self.w
     if not w.frozen:
         raise Forbidden("DELIBERATE entered on an unfrozen world", "S26.2",
                         law="S26.2 -- the world is FROZEN from the end of MATTER to the start of RESOLVE. THIS IS WHAT MAKES THE MAP SAFE TO PARALLELISE")
     w.step = Step.DELIBERATE
     TRACE.step("DELIBERATE", "enter")
-    # ⚠ CALLED HERE, NOT ONLY FROM THE `tenures` GETTER. `_rehome` exists so that a Tenure
-    # added before its subject Person existed still reaches its owner, and its own docstring
-    # names `budget` as what would otherwise read zero offices for a duke. But `budget`,
-    # `person_side_eligible` and `questions_for` all read `p.tenures` DIRECTLY and this step
-    # never touches `w.tenures`, so the guard did not cover the three functions it named --
-    # it worked only if unrelated code happened to read the aggregate first. One call, at the
-    # barrier, before any person-side read.
-    w._rehome()
+    # ⚠ `_rehome()` IS NO LONGER CALLED HERE (2026-09-25, ED-IN-0206). `budget`,
+    # `person_side_eligible` and `questions_for` read `p.tenures` DIRECTLY, so the tenure store
+    # must be whole before any person-side read -- and making it whole MUTATES the store, which a
+    # step that owns nothing (04:158) may not do. The driver calls it at barrier 2, before the
+    # freeze (`SeasonDriver.season`), as the owner of barrier lifetimes (04:155).
     acts: list[Act] = []
     k_view = w.fixtures.get("view_k")
     # ⚠⚠ `scene_budget` HAS TWO READERS SINCE `U2` AND THEY READ IT AS TWO DIFFERENT QUANTITIES.
@@ -108,7 +110,10 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # An explicit `question` still overrides, so a probe can name the q it is testing.
         # ⚠ `U2`: SINCE THIS PERSON LAST DELIBERATED, not since last season. `None` on their first
         # deliberation of the season means `(tick - 1, 0)`, which is the pre-tick reading exactly.
-        qs = questions_for(w, p, self._deliberated_at.get(p.id))
+        # ⚠ READ FROM THE PROJECTION, NOT COMPUTED HERE (2026-09-25): the driver builds
+        # `questions_for(w, p, since)` for every person at barrier 2 (`04:976`, PART D row 41) and
+        # passes it in; a decision may read `Question[]` (`04:154`), not the World (`04:158`).
+        qs = questions[p.id]
         # `H-54`, DECLARED. This was `qs[0] if qs else None` — an `absent` hole filled inside
         # a subscript, with no row and no alternative (`G1`). `question_sources` is ORDERED,
         # so taking the first silently ruled that A DATE ALWAYS BEATS A NEED, which decides

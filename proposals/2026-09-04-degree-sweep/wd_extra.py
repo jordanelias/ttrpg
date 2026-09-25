@@ -39,10 +39,13 @@ from sweep_core import S, DRV
 # name) and reached nothing: `qsrc`, `qlead` and `qmulti` below came back ZERO, which is a
 # FABRICATED NULL -- the direction `CLAUDE.md` §0.1 pt 4 calls the worse of the two. Found by the
 # Fable gate on Arc 1; it is the sibling of the A39 spy that arc DID move, on the same module.
-from engine.season.loop import deliberate as DLB   # noqa: E402
+# ⚠ AND IT MOVED BACK, 2026-09-25 (ED-IN-0206): the driver now builds the per-person question
+# projection at barrier 2 (`SeasonDriver._questions_at_barrier`) and `deliberate` no longer calls
+# `questions_for`, so the reader lives in `loop.driver` again and the spy names `DRV`. The spy
+# also takes `since` now -- `questions_for(w, p, since)` has been three-argument since `U2`.
 from engine.season.trace_log import TRACE
 
-_REAL_QF = DLB.questions_for
+_REAL_QF = DRV.questions_for
 
 
 def corpus_drops(mode: str, slots: str = "narrow"):
@@ -61,8 +64,8 @@ def corpus_drops(mode: str, slots: str = "narrow"):
     qlead = collections.Counter()          # ... and the source of the one `first` actually takes
     qmulti = collections.Counter()         # how often >1 question SHARES the leading source
 
-    def qspy(w, p):
-        out = _REAL_QF(w, p)
+    def qspy(w, p, since=None):
+        out = _REAL_QF(w, p, since)
         for q in out:
             qsrc[q.source] += 1
         if out:
@@ -80,12 +83,12 @@ def corpus_drops(mode: str, slots: str = "narrow"):
         # the change must reproduce the committed 0 / 37 / 123 drops and 123-of-123
         # true-when-recorded exactly. They do.
         TRACE.rows.clear()
-        DLB.questions_for = qspy
+        DRV.questions_for = qspy
         try:
             (_r, drops, deps) = W._instrumented(
                 lambda: A9._run(case, W.SEED, W.SEASONS, fixtures=fx))
         finally:
-            DLB.questions_for = _REAL_QF
+            DRV.questions_for = _REAL_QF
         w = W._WORLDS[-1]
         kinds.update(e.kind for e in w.log)
         by_cid = {d["cid"]: d for d in deps}

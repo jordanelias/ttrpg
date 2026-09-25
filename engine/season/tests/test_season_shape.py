@@ -425,7 +425,8 @@ def test_d9d_the_frozen_world_is_read_not_merely_written():
     """S32 rest 1 is the FIRST thing order-independence rests on. Rev 1 set w.frozen and
     nothing ever read it."""
     with pytest.raises(Forbidden):
-        SeasonDriver(_w()).deliberate(lambda p, v, s, ask_budget: [], None, P.SUBSIST)
+        d = SeasonDriver(_w())
+        d.deliberate(lambda p, v, s, ask_budget: [], None, P.SUBSIST, d._questions_at_barrier())
 
 
 def test_d9e_the_rung_guard_is_a_whitelist_not_a_blacklist():
@@ -3232,11 +3233,16 @@ def test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner():
     # [JUSTIFIED: matched half of the control pair immediately above]
     assert decision.budget(p, View(p.id, [], 12), fx.get("scene_budget"), fx) > base, (
         "rehoming did not change what `budget` reads, so the office is still invisible to it")
-    # and the barrier does it, so no caller has to remember.
-    src = _code_only(inspect.getsource(SeasonDriver.deliberate))
-    assert "_rehome" in src, (
-        "DELIBERATE does not rehome — every person-side reader is back to depending on whether "
-        "something else read `w.tenures` first")
+    # and the barrier does it, so no caller has to remember. ⚠ THE DRIVER'S BARRIER, NOT
+    # DELIBERATE (2026-09-25, ED-IN-0206): rehoming MUTATES the tenure store, and DELIBERATE owns
+    # nothing (04:158) — so the driver calls it at barrier 2 (04:509), before it enters DELIBERATE.
+    season_src = "".join(_code_only(inspect.getsource(SeasonDriver.season)).split())
+    at_rehome, at_deliberate = season_src.find("w._rehome()"), season_src.find("self.deliberate(")
+    assert at_rehome != -1 and at_deliberate != -1 and at_rehome < at_deliberate, (
+        "the driver does not rehome before DELIBERATE — every person-side reader is back to "
+        "depending on whether something else read `w.tenures` first")
+    assert "_rehome" not in _code_only(inspect.getsource(SeasonDriver.deliberate)), (
+        "DELIBERATE mutates the tenure store again; 04:158 says it owns nothing")
 
 
 def test_w5_the_reporting_guards_are_actually_called():
