@@ -376,7 +376,9 @@ def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
     were indistinguishable. Now confidence decays, the product is non-monotonic in age, and a
     claim at confidence 0 is evicted first however recent it is. That is the difference the test
     is supposed to be about, and the string could not see it. Found by the `W4` adversarial pass."""
-    ranked = lambda claims: sorted(claims, key=lambda c: c.confidence * (c.when + 1))
+    # THE LIVE COMPARATOR, NOT A COPY: `state/ledgers.py` owns it since 2026-09-25 (04 §A.2:149).
+    from ..state import ledgers
+    ranked = lambda claims: sorted(claims, key=lambda c: ledgers.eviction_key(c.confidence, c.when))
     old_and_confident = Claim("a", "p", "s", "k", True, when=0, source="f",
                                 confidence=100, visibility="own")
     # [JUSTIFIED: a fixture tick, chosen only to be recent relative to `recent_mid` below]
@@ -398,8 +400,10 @@ def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
         f"the product ranks {[c.id for c in got]}; a lexicographic (confidence, when) sort would "
         "rank ['e', 'c', 'd'] — the recent mid-confidence claim first. That is the comparator this "
         "test exists to exclude, and it is now excluded by BEHAVIOUR")
-    # AND THE LIVE COMPARATOR IS THE ONE MEASURED ABOVE, not a copy of it in this file.
-    assert "c.confidence * (c.when" in inspect.getsource(SeasonDriver.witness)
+    # AND THE LIVE COMPARATOR IS THE ONE MEASURED ABOVE, not a copy of it in this file: its owner
+    # states the product, and WITNESS's eviction write calls that owner rather than a local key.
+    assert "confidence*(recency+1)" in "".join(_code_only(inspect.getsource(ledgers.eviction_key)).split())
+    assert "ledgers.evict_over_cap(" in "".join(_code_only(inspect.getsource(SeasonDriver.witness)).split())
 
 
 def test_d9c_max_depth_has_no_default_anywhere():

@@ -23,6 +23,7 @@ from ..epistemic import act_refs, claim_subjects, observers_for
 from ..queries import cache
 from ..queries.person_q import LedgerReader
 from ..state.carriers import Claim, Event
+from ..state import ledgers
 from ..state.ids import H
 from ..trace_log import TRACE
 
@@ -393,9 +394,10 @@ def witness(self, events: list[Event]) -> int:
             # change that Part D gives no kind, so nobody can witness a forgetting.** That is
             # `(Person, claim_ledger)`'s version of `H-86` and is recorded on that row.
             # Found by the `W4` adversarial pass.
+            # The comparator's owner is `state/ledgers.py` (04 §A.2:149); this closure is the
+            # gated write that applies it, and it drains the ledger to `cap` in one write.
             def _evict(p=p):
-                p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))
-                p.ledger.pop(0)
+                ledgers.evict_over_cap(p.ledger, cap)
             w.write("claim_ledger", WriteClass.INTERIOR, _evict,
                     record_kind="Person", fieldname="claim_ledger", driver="Event")
     w._in_parallel_map = False
