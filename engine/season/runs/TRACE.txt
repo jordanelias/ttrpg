@@ -55099,7 +55099,7 @@
  55099  probe:A39            GAP       [UNSPECIFIED] the degree ladder's margin model  @S39.4  needs="a margin -- pool, obstacle, and the four band edges read off it" law="S39.4 -- ONE degree ladder for every scale, FOUR BANDS READ OFF THE MARGIN, never off the obstacle's size. No in-chain document supplies the margin model, and S27.2 refuses a second resolver, an auto-resolve formula and a fast path -- so a band computed here without a margin IS the second resolver" expected=false
  55100  probe:P43            GAP       [FORBIDDEN] resolver-side Query 'cohort_unrest' aggregates per-person tallies ACROSS HOLDERS  @S22.4  needs="" law="L3 clause 2 -- THAT IS STORED, MONOTONE, NEVER-DECAYING UNREST IN ALL BUT NAME -- worse than the field L3 banned, because the banned field could at least go down" expected=false
  55101  probe:P42            QUERY     budget  @S17  side="person"
- 55102  probe:P42            NOTE      `hold` 't_p42' opened on 'off_x', which the world does not hold yet -- no remit granted, and nothing revisits this Tenure
+ 55102  probe:P42            NOTE      `hold` 't_p42' opened on 'off_x', which the world does not hold yet -- no remit granted until an `establish` founds it
  55103  probe:P42            QUERY     budget  @S17  side="person"
  55104  probe:P42            QUERY     budget  @S17  side="person"
  55105  probe:P42            QUERY     budget  @S17  side="person"

@@ -138,7 +138,14 @@ rows:
     by:      "DR-2. ⚠ RETIRED BY W2 for having no producing verb, RETURNED BY W3 WITH `establish`, which is the discipline the retirement rule encodes: a row exists because a producer produces it. Its SIZE per office kind is H-34 and stays `assumption`"
     emits:   "`establishment.changed`"
   - kind:    "Office"
-    field:   "remit"
+    # ⚠ RENAMED `remit` -> `remit_acts` 2026-09-25 (plan position `13f`, the key reconciled at its
+    # owner, `CLAUDE.md` §0.05 cl.3). V2 wrote `(Office, remit)` and `Office` has no `remit` field --
+    # `matrix_rows_without_a_field()['absent']` listed this row -- so the gate licensed a cell
+    # nothing could write. The ROW moved rather than the FIELD because `Office.remit_acts` is read at
+    # every remit check in the package AND folds into `World.content_hash` through `repr(Office)`,
+    # whose text carries the field NAME: renaming the field would move every digest of every world
+    # holding an office, where renaming the row moves none. `remit.changed` is unchanged.
+    field:   "remit_acts"
     steps:   [RES]
     class:   "ACTS"
     social:  "true"
@@ -365,7 +372,8 @@ rows:
 # `writes` column, not assumed.
 # ⚠ TWO CAME BACK AT W3, WITH THEIR PRODUCER, and a third row -- `(Office, exists)` -- came
 # with them. `establish` is a verb #353 names
-# and Part E omits; V2 names it in its own `(Office, remit)` row. W3 adds the verb, and
+# and Part E omits; V2 names it in its own `(Office, remit)` row (keyed `remit_acts` since `13f`,
+# the field it always meant). W3 adds the verb, and
 # the row returns in the same commit -- which is the whole discipline the rule encodes:
 # a row exists because a producer produces it.
 retired:

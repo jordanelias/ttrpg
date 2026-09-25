@@ -28,6 +28,7 @@ from ..data.rosters import (
 )
 
 from ..gaps import InstrumentDefect, Unspecified
+from ..loop.predicates import office_described_by
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.ids import H
 from ..trace_log import TRACE
@@ -156,6 +157,48 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     # connects, on the same read `_ch_document_key` already does. One reader rule serves `confer`,
     # `revoke` and `release` alike, rather than three effects each inventing their own legible id.
     return {"tenure.opened": [nt.id], "tenure.closed": closed}
+
+
+@effect_for("establish")
+def _eff_establish(w: "World", a: "Act", res: "Resolution | None" = None) -> dict:
+    """Founds an office, or changes an existing office's remit -- and in the SAME act re-stamps the
+    grant on every live `hold` on it.
+
+    `_req_establish` has already refused everything that would make the constructor raise, so the
+    `Office` built here is the one it admitted; if it is built from an act that skipped the
+    precondition, the constructor's raise is the backstop and is left loud. `None` (an operand
+    missing) returns nothing touched, and the fold emits `establish.refused`.
+
+    A NEW id: the office is stored with `establishment` at its default -- `17a` deletes that field,
+    its matrix row and the `writes:` entry together, and this effect does not pre-empt it. An
+    EXISTING id: `remit_acts` is rewritten in place and nothing else is touched (the precondition
+    refused any other difference). It earns `remit.changed` only if the remit actually moved.
+
+    ⚠ THE RE-STAMP, AND WHY IT IS HERE AND ROUTED THROUGH `_grant_remit`. The grant on a `hold` is
+    a SNAPSHOT (`Tenure.granted_acts`): a hand-mutation of `w.offices[x].remit_acts` reaches no
+    sitting holder. The act that changes a remit re-stamps them, so the grant still changes only
+    by an act while sitting holders are reached -- and a `hold` opened on this id before the office
+    existed, which `_grant_remit` traced and stamped nothing for, gets its grant now. `force=True`
+    is `_grant_remit`'s own overwrite, so the payload key keeps ONE writer (`CLAUDE.md` §8).
+    `tenure.payload_set` is earned only by a Tenure whose payload was actually written, so an
+    establish with no sitting holder -- or one whose holders already carry this grant -- does not
+    publish it."""
+    off = office_described_by(a)
+    if off is None:
+        return []
+    cur = w.offices.get(off.id)
+    if cur is None:
+        w.offices[off.id] = off
+        wrote = {"office.established": [off.id]}
+    else:
+        moved = list(cur.remit_acts) != list(off.remit_acts)
+        if moved:
+            cur.remit_acts = list(off.remit_acts)
+        wrote = {"remit.changed": [off.id] if moved else []}
+    wrote["tenure.payload_set"] = [
+        t.id for t in w.tenures
+        if t.kind == "hold" and t.object == off.id and t.live and w._grant_remit(t, force=True)]
+    return wrote
 
 
 @effect_for("release")

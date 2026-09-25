@@ -16,20 +16,27 @@ Run: python -m pytest engine/season/tests/test_governance_build.py -q
 
 from __future__ import annotations
 
+import dataclasses
+
 import pytest
 
 from collections import Counter
 
-from ..data.matrix import Step
-from ..gaps import Forbidden
+from ..data.matrix import MATRIX, Step
+from ..data.verbs import VERB_TABLE
+from ..gaps import Forbidden, Unowned, Unspecified
 from ..data.cast import faction_leader
 from ..harness.populated import build_realm
-from ..loop.driver import SeasonDriver
-from ..loop.predicates import in_holdings
+from ..loop import predicates as _preds
+from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..loop.predicates import in_holdings, office_described_by
 from ..queries import world_q
 from ..harness import probes as P
 from ..decision import budget as _budget
-from ..state.carriers import Proposition, Tenure, View
+from ..decision import operands_for, person_side_eligible
+from ..state.carriers import (
+    Act, Office, Proposition, Tenure, View, matrix_rows_without_a_field,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -885,3 +892,225 @@ def test_lb6e_a_verb_that_engages_no_axis_scars_nothing():
 def ALIGNMENT_OF(verb, axis):
     from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
     return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
+
+
+# =================================================================================================
+# PLAN POSITION `13f` -- `establish` HAS AN EFFECT.
+# `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, position `13f`, which is a
+# later plan than this file's `LB-n` sheet; the tests carry the position id instead. Its FALSIFIER,
+# observed in both halves: a planted `establish` on an EXISTING id changes a sitting holder's
+# `granted_acts` and publishes a `tenure.payload_set` naming that holder's Tenure, while a
+# hand-mutation of the office reaches nobody (`test_h71_the_grant_is_a_snapshot_not_a_mirror`,
+# `test_season_shape.py`, is that half); and an `establish` naming no belonging, or an unknown one,
+# emits `establish.refused`, constructs nothing and lets no exception escape the fold.
+# =================================================================================================
+
+def _establish_world():
+    """`tiny_world`, unchanged. Its duke `p_high` holds `off_duke`, whose remit grants `confer` --
+    the eligibility `establish` declares -- and `p_mid` holds no office."""
+    w = P.tiny_world()
+    d = SeasonDriver(w)
+    d.matter([])
+    return w, d
+
+
+def _founding(**over) -> dict:
+    """A well-formed `establish` payload for an office `tiny_world` does not have. `appointed` is
+    one of the three conferral values `ED-IN-0256` rules, so the fixture survives `13d-i`
+    rostering them; any non-empty string passes the basis test today."""
+    p = dict(office="off_reeve", post="Reeve", rung="S", remit=["issue", "dispatch"],
+             faction="Crown", conferral="appointed")
+    p.update(over)
+    return p
+
+
+def _establish(w, d, aid: str, payload, actor: str = "p_high") -> list:
+    return d.resolve([Act(id=aid, actor=actor, verb="establish", payload=payload)],
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
+
+
+def _seat_reeve(w, remit):
+    """An EXISTING office with a conferral basis and a sitting holder, seated through
+    `add_tenure` so the holder's grant is the snapshot `_grant_remit` takes at seating. The
+    payload carries a key of another writer's, so the re-stamp is seen to be key-scoped."""
+    w.offices["off_reeve"] = Office("off_reeve", "Reeve", "S", list(remit),
+                                    conferral="appointed", faction="Crown")
+    w.add_tenure(Tenure("t_reeve", "p_mid", "off_reeve", "hold", 0, payload={"note": "kept"}))
+    [t] = [t for t in w.tenures if t.id == "t_reeve"]
+    return t
+
+
+def test_13f_the_remit_row_is_keyed_on_the_field_the_office_has():
+    """Instruction (1). Part D's `(Office, remit)` named a field `Office` does not have, so the gate
+    licensed a cell nothing could write and `matrix_rows_without_a_field()` listed it. The ROW is
+    renamed at its owner, to the field the constructor validates and every remit check reads."""
+    fields = {f.name for f in dataclasses.fields(Office)}
+    assert "remit_acts" in fields and "remit" not in fields, sorted(fields)
+    assert ("Office", "remit_acts") in MATRIX and ("Office", "remit") not in MATRIX
+    assert ("Office", "remit_acts") not in matrix_rows_without_a_field()["absent"]
+    assert not [k for k in matrix_rows_without_a_field()["absent"] if k[0] == "Office"], (
+        "an `Office` row still names a field the carrier does not have")
+    assert "Office.remit_acts" in VERB_TABLE["establish"].writes
+    assert "remit.changed" in MATRIX[("Office", "remit_acts")].emits
+
+
+def test_13f_a_planted_establish_founds_the_office_and_grants_a_hold_opened_before_it():
+    """THE CONCRETE CASE THE POSITION NAMES: a `hold` opened on an office id before the office
+    exists gets no grant (`_grant_remit` traces and stamps nothing), and `establish` then creates
+    the office. The act re-stamps that holder in the same act, and the person-side reader sees it."""
+    w, d = _establish_world()
+    w.add_tenure(Tenure("t_early", "p_mid", "off_reeve", "hold", 0))
+    [t] = [t for t in w.tenures if t.id == "t_early"]
+    mid = w.persons["p_mid"]
+    assert "off_reeve" not in w.offices and t.granted_acts == (), "fixture: not the early-hold case"
+    assert not person_side_eligible(mid, VERB_TABLE["dispatch"]), "fixture: p_mid can dispatch"
+
+    out = _establish(w, d, "e_found", _founding())
+    kinds = [e.kind for e in out]
+    assert kinds == ["office.established", "tenure.payload_set"], kinds
+    off = w.offices["off_reeve"]
+    assert (off.post, off.rung, off.remit_acts, off.faction, off.conferral) == (
+        "Reeve", "S", ["issue", "dispatch"], "Crown", "appointed"), off
+    assert off.establishment == [], "the effect wrote `establishment`, which is `17a`'s to delete"
+    assert t.granted_acts == ("issue", "dispatch"), (
+        f"the early holder's grant is {t.granted_acts} -- the act did not re-stamp it")
+    assert person_side_eligible(mid, VERB_TABLE["dispatch"]), (
+        "the grant is on the Tenure and the person-side reader still refuses the remit verb")
+    ps = next(e for e in out if e.kind == "tenure.payload_set")
+    assert t.id in {c.subject for c in ps.changes}, [c.subject for c in ps.changes]
+
+
+def test_13f_an_office_nobody_holds_publishes_no_payload_set():
+    """`tenure.payload_set` is EARNED by a re-stamped holder, never published for one that is not
+    there -- the fabricated-emission class `_fold`'s own comments name. The success is still
+    published: the office was founded."""
+    w, d = _establish_world()
+    out = _establish(w, d, "e_bare", _founding())
+    assert [e.kind for e in out] == ["office.established"], [e.kind for e in out]
+    assert "off_reeve" in w.offices
+
+
+def test_13f_an_establish_on_an_existing_id_changes_the_remit_and_reaches_the_sitting_holder():
+    """**THE POSITION'S FALSIFIER.** Both halves, in one world and in order, so neither can pass
+    for the other's reason:
+
+      * SNAPSHOT: a hand-mutation of `w.offices[x].remit_acts` does NOT reach the sitting holder;
+      * MIRROR'S OBSERVABLE, BY AN ACT: a planted `establish` on the EXISTING id rewrites the
+        remit in place, emits `remit.changed` and NOT `office.established`, changes the sitting
+        holder's `granted_acts`, and publishes a `tenure.payload_set` naming that holder's Tenure.
+
+    And the act that changes nothing is refused rather than reported: re-running it writes
+    nothing, so the fold emits `establish.refused`."""
+    w, d = _establish_world()
+    t = _seat_reeve(w, ["issue"])
+    mid = w.persons["p_mid"]
+    assert t.granted_acts == ("issue",), f"fixture: seating stamped {t.granted_acts}"
+
+    # SNAPSHOT: the hand-mutation reaches nobody.
+    w.offices["off_reeve"].remit_acts = ["issue", "convene"]
+    assert t.granted_acts == ("issue",), "a hand-mutation re-granted a sitting holder"
+    assert not person_side_eligible(mid, VERB_TABLE["convene"])
+
+    office = w.offices["off_reeve"]
+    out = _establish(w, d, "e_remit", _founding(remit=["issue", "dispatch"]))
+    kinds = [e.kind for e in out]
+    assert kinds == ["remit.changed", "tenure.payload_set"], kinds
+    assert w.offices["off_reeve"] is office, "the office was re-founded, not re-remitted in place"
+    assert office.remit_acts == ["issue", "dispatch"], office.remit_acts
+    assert t.granted_acts == ("issue", "dispatch"), (
+        f"the sitting holder's grant is {t.granted_acts}: the act changed the office and did not "
+        "reach the holder -- `_grant_remit(force=True)` is not being called, or is still a setdefault")
+    assert t.payload.get("note") == "kept", "the re-stamp overwrote a key it does not own"
+    assert person_side_eligible(mid, VERB_TABLE["dispatch"])
+    assert not person_side_eligible(mid, VERB_TABLE["convene"]), (
+        "the hand-mutation's `convene` survived -- the grant is the ACT's remit, not a union")
+    ps = next(e for e in out if e.kind == "tenure.payload_set")
+    assert t.id in {c.subject for c in ps.changes}, [c.subject for c in ps.changes]
+
+    again = _establish(w, d, "e_again", _founding(remit=["issue", "dispatch"]))
+    assert [e.kind for e in again] == ["establish.refused"], [e.kind for e in again]
+
+
+@pytest.mark.parametrize("change", [
+    dict(faction="Church of Solmund"),
+    dict(post="Warden"),
+    dict(rung="Hh"),
+    dict(conferral="elected"),
+    dict(revocation="purview"),
+], ids=lambda c: next(iter(c)))
+def test_13f_an_existing_id_refuses_any_change_but_the_remit(change):
+    """Re-founding -- a different belonging, post, rung or basis on an id that exists -- is not a
+    write `establish` declares, so it REFUSES and touches neither the office nor the holder. The
+    control is in the same world: the same act without the change is admitted."""
+    w, d = _establish_world()
+    t = _seat_reeve(w, ["issue"])
+    plain = _founding(remit=["issue", "dispatch"])
+    assert _preds._req_establish(w, Act(id="ctl", actor="p_high", verb="establish",
+                                        payload=plain)), "control: the unchanged act is refused"
+
+    out = _establish(w, d, "e_refound", {**plain, **change})
+    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert w.offices["off_reeve"].remit_acts == ["issue"]
+    assert t.granted_acts == ("issue",)
+
+
+# `raises` marks the payloads the CONSTRUCTOR itself rejects, so each refusal below is shown to
+# have intercepted a real raise rather than to have been a no-op nothing would have tripped.
+@pytest.mark.parametrize("payload,raises", [
+    ({}, False),
+    (_founding(faction=None), True),                                   # belongs to nothing
+    (_founding(faction="Nowhere Brotherhood"), True),                  # an unknown faction
+    (_founding(faction=None, body="Office of Nothing"), True),         # an unknown body
+    (_founding(body="Imperial Court", faction="Church of Solmund"), True),   # a mismatch
+    (_founding(remit=["issue", "levy"]), True),                        # off `REMIT_ACTS`
+    (_founding(post="Duke", faction=None, body="Imperial Court"), True),     # a title in a body
+    (_founding(rung="nowhere"), False),                                # a rung the world lacks
+    (_founding(conferral=None), False),                                # no conferral basis
+    (_founding(office="p_low"), False),                                # an id a person holds
+], ids=["empty", "no-belonging", "unknown-faction", "unknown-body", "mismatch", "off-roster-remit",
+        "title-in-body", "unknown-rung", "no-basis", "person-id"])
+def test_13f_an_unfoundable_establish_refuses_constructs_nothing_and_raises_nothing(payload, raises):
+    """The fold's FIRST refusal path: the precondition returns False and the fold emits
+    `emits_on_refusal`. Asserted on the Event -- the fold is called bare, so a raise escaping it
+    fails this test as an error rather than passing silently."""
+    w, d = _establish_world()
+    before = dict(w.offices)
+    act = Act(id="e_bad", actor="p_high", verb="establish", payload=payload)
+    if raises:
+        with pytest.raises((Unowned, Unspecified, Forbidden)):
+            office_described_by(act)
+    out = d.resolve([act], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert w.offices == before, f"an office was constructed: {sorted(set(w.offices) - set(before))}"
+
+
+def test_13f_a_computed_establish_carries_no_operands_and_refuses():
+    """The row is resolvable now and still untyped, so a COMPUTED `establish` forms with NO
+    operands -- `operands_for` returns `{}` -- and must refuse until `15c` widens the operand
+    vocabulary. What the chooser puts on its payload is the question's referent as `subject`, and
+    that founds nothing."""
+    row = VERB_TABLE["establish"]
+    assert "establish" in resolvable_verbs()
+    assert row.requires_typed is None
+    w, d = _establish_world()
+    duke = w.persons["p_high"]
+    assert person_side_eligible(duke, row), "fixture: the duke cannot form `establish` at all"
+    assert operands_for(duke, row, None, "p_low", w.fixtures) == {}
+    out = _establish(w, d, "e_computed", {"subject": "p_low"})
+    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+
+
+def test_13f_confer_and_establish_ask_one_basis_test(monkeypatch):
+    """Instruction (2): the basis test is FACTORED ONCE, so `13d-i` rewrites one function and both
+    preconditions inherit it. Observed by behaviour, not by reading source: with the ONE function
+    patched to refuse, both predicates refuse an act each admits unpatched. A predicate carrying
+    its own copy of the test would go on admitting."""
+    w, d = _establish_world()
+    w.offices["off_dicastery"].conferral = "appointed"
+    conf = Act(id="c_basis", actor="p_high", verb="confer",
+               payload={"office": "off_dicastery", "to": "p_mid"})
+    est = Act(id="e_basis", actor="p_high", verb="establish", payload=_founding())
+    assert _preds._req_confer(w, conf) and _preds._req_establish(w, est), "control: not admitted"
+    monkeypatch.setattr(_preds, "has_conferral_basis", lambda off: False)
+    assert not _preds._req_confer(w, conf), "`_req_confer` does not ask the shared basis test"
+    assert not _preds._req_establish(w, est), "`_req_establish` does not ask the shared basis test"

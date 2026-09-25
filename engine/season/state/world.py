@@ -292,9 +292,12 @@ class World:
                 return name
         return None
 
-    def _grant_remit(self, t: Tenure) -> None:
+    def _grant_remit(self, t: Tenure, force: bool = False) -> bool:
         """`H-71` arm 2, THE WRITE HALF: seating a holder writes the office's remit acts into the
         `hold` Tenure's `payload`, so the grant rides on the thing the holder owns.
+
+        RETURNS WHETHER IT WROTE THE PAYLOAD. `add_tenure` ignores it; `_eff_establish` reports
+        exactly the Tenures it returns True for, so `tenure.payload_set` is earned by a real write.
 
         ⚠ IT IS HERE AND NOT IN `_eff_confer`, AND THAT PLACEMENT IS THE WHOLE FIX. `confer`'s
         effect is one of MANY mint paths -- `corpus_run.build_at`, `probes.edge`,
@@ -314,6 +317,17 @@ class World:
         has a `World` and reads `w.offices` directly; this is the person's reading only, and the
         gap between the two readings is what `H-71` was.
 
+        ⚠ `force=True` IS HOW THE ACT REACHES SITTING HOLDERS, AND IT IS HERE SO THE KEY HAS ONE
+        WRITER (`13f`, 2026-09-25). The act that changes a remit is `establish`, and its effect
+        re-stamps every live `hold` on the office it wrote, in the same act -- so a hand-mutation
+        still reaches nobody (snapshot's property) while an act reaches every sitting holder
+        (mirror's observable), and `choose` still receives no `World`. It also reaches a `hold`
+        opened on an office id BEFORE the office existed, which the trace below records and which
+        nothing but that act revisits. Without the flag the call below is a `setdefault` and leaves an existing grant
+        untouched; a caller that wrote `payload["remit_acts"]` itself to get round that would be a
+        second writer of a key `Tenure.granted_acts` says lives once (`CLAUDE.md` §8). With it, an
+        EQUAL grant is still left alone, so a re-stamp that changes nothing reports nothing.
+
         ⚠ IT REACHES NO `World` FROM THE READ SIDE. `AX-2` is untouched and `choose`'s signature
         does not move, which is the property that made arm 2 preferable to arm 3's third
         `Sensation` scalar (S18.2 rules that type to exactly two).
@@ -331,18 +345,24 @@ class World:
             # case that IS a defect: an id the world does not hold yet.
             if self.class_of(t.object) is None:
                 TRACE.note(f"`hold` {t.id!r} opened on {t.object!r}, which the world does not "
-                           f"hold yet -- no remit granted, and nothing revisits this Tenure")
-            return
+                           f"hold yet -- no remit granted until an `establish` founds it")
+            return False
+        grant = tuple(off.remit_acts)
         # ⚠ KEY-SCOPED, NOT WHOLE-FIELD, and `/code-review` found the defect this fixes. The first
         # writing was `if t.payload is not None: return`, which made the grant FIRST-WRITER-WINS on
         # a public constructor field: `Tenure(..., "hold", 0, payload={"note": "x"})` produced a
         # seated holder whose `granted_acts` was `()`, indistinguishable from an office that grants
         # nothing. The payload is a dict of independent keys, so only `remit_acts` is this
-        # method's to own and only that key is left alone when already set.
-        if isinstance(t.payload, dict):
-            t.payload.setdefault("remit_acts", tuple(off.remit_acts))
-        elif t.payload is None:
-            t.payload = {"remit_acts": tuple(off.remit_acts)}
+        # method's to own and only that key is left alone when already set -- unless `force`.
+        if t.payload is None:
+            t.payload = {"remit_acts": grant}
+            return True
+        if not isinstance(t.payload, dict):
+            return False
+        if "remit_acts" in t.payload and (not force or t.granted_acts == grant):
+            return False
+        t.payload["remit_acts"] = grant
+        return True
 
     def _refuse_bad_hold(self, t: Tenure) -> None:
         """`holonic §15`'s own row for `hold`, enforced: *"`hold` | Person -> Office | Rung |

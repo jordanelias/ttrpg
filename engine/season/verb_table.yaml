@@ -226,8 +226,10 @@ verbs:
     eligibility: ["remit:confer"]
     beneficiary: "none"
     requires:    "the establishing office's conferral basis, and a rung to establish it at"
-    writes:      ["Office.exists", "Office.remit", "Office.establishment"]
-    emits:       ["office.established"]
+    requires_note: "`13f` (2026-09-25) evaluates this as `_req_establish` in `loop/predicates.py`, and THE READING IS STATED THERE: *the establishing office* is the office the act describes -- the one being founded, or re-remitted on an id that exists -- NOT the office the actor sits in. That office's declared `conferral` must pass the SAME basis test `_req_confer` asks (`has_conferral_basis`), so an establish can never found a seat `confer` would refuse forever. Operands ride on the payload: `office`, `post`, `rung`, `remit`, `body` and/or `faction`, `conferral`, optional `revocation` -- the office overlay's own keys. A computed act carries none of them (`requires_typed` is absent, so `operands_for` returns `{}`) and REFUSES until `15c` widens the operand vocabulary."
+    writes:      ["Office.exists", "Office.remit_acts", "Office.establishment", "Tenure.payload"]
+    writes_note: "`13f`: `Office.remit` -> `Office.remit_acts`, the key reconciled at the matrix row (see that row). `Tenure.payload` ADDED because the effect re-stamps the grant on every live `hold` on the office it writes, through `World._grant_remit`, and the fold gates exactly the pairs a verb declares -- undeclared, that write would ride under the `Office` pair's gate. `Office.establishment` stays declared and UNWRITTEN (the effect leaves it at its default) until `17a` deletes the field, its matrix row and this entry together."
+    emits:       ["office.established", "remit.changed", "tenure.payload_set"]
     emits_on_refusal: ["establish.refused"]
     grade:       "assumption"
     source:      "W3 -- #353 names it and Part E omits it, and V2 NAMES IT IN ITS OWN `(Office, remit)` ROW ('`establish` is an act') while giving it no verb row. Its three Part D rows were RETIRED BY W2 for having no producing verb; they return in the same commit as this row, which is the discipline: a row exists because a producer produces it. Eligibility is `assumption` -- #353 does not say which remit establishes an office. Register rows H-41, H-34."
