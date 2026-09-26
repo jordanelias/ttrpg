@@ -192,7 +192,12 @@ lane_ids:
     # recommendation. next_free bumped 12->13.
     FI: { name: "Field investigation", next_free: 10 }   # no reservation held; allocate at next_free as normal. ED-FI-0009 allocated 2026-09-10 (the six investigation acts built as six verb rows; the seam/pool/obstacle/exposure ruling request). Narrative: id_reservations_history.md#fi
     # ED-FI-0003 allocated 2026-07-07 (status open): ed_options OPT-6 (knots propagation completion) — 2026-07-07 consolidated ruling pass, see ED-IN-0026
-    SC: { name: "Social contest",      next_free: 38 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    SC: { name: "Social contest",      next_free: 39 }  # block RELEASED 2026-07-30 (ED-IN-0098): 0017-0020 returned, max allocated ED-SC-0016. Narrative: id_reservations_history.md#sc
+    # ED-SC-0038 allocated 2026-09-26 (status ruled, NOT needs_jordan): two of Jordan's 2026-09-04
+    # rulings (multi-matter/conditional adjudication; binding-in-scene), relayed only inside the
+    # scope-banned 09-04-social-contest-branches corpus, apply to all twelve proceeding rows in the
+    # 09-05-proceedings-subsystem successor, not just negotiation. Reopens 19_PLAN.md PART I item 1
+    # and P-14/D-8 for a build session. next_free 38 -> 39.
     # ED-SC-0037 allocated 2026-09-09 (status open, NEEDS_JORDAN): which provider resolves a
     # social contest until proceedings lands -- interim dice now vs. wait. The one call in the
     # R-execution plan that survived all five of CLAUDE.md section 0's tests. next_free 37 -> 38.

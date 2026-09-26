@@ -17,6 +17,7 @@ that exists).
 | Combat's degree ladder (the one remaining hold; cross-lane with MB) | `tests/valoria/test_degree_ladder_single_owner.py` (`RULINGS`) | land the Ob-derivation-from-defender mechanism, then abolish the 40% ceiling |
 | `contest_legacy_stub.py` dead-compare-model vs. live per-side kernel — design fork, not a bug | `proposals/2026-09-04-social-contest-branches/11_FOUR_GAMES_AUDIT_AND_PLAN.md` §8 E1 | rule which model canon describes |
 | Which provider resolves a social contest until proceedings lands | `ED-SC-0037` (ruled — read the row for the disposition before assuming either option A or B) | confirm the ruled option is wired at the seam call site |
+| Two of Jordan's 2026-09-04 rulings (multi-matter/conditional adjudication; binding-in-scene) bind all twelve proceeding rows, not just negotiation | `ED-SC-0038` | before `21_RECONCILIATION.md` step 14's bar runs: decide per-matter vs. single-margin outcome; re-examine `19_PLAN.md` PART I item 1 and P-14/D-8 against the verbatim rulings |
 
 ## Standing orders — do not re-raise, do not do
 
