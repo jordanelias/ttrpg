@@ -184,6 +184,10 @@ which track is live**:
 > every person present deposits a claim that the descent happened. **The concession is visible
 > because it was witnessed** — `AX-2` supplying the enforcement `AX-3` needs. No `concession_penalty`
 > field exists anywhere in this design, and none is wanted.
+>
+> ⚠ **QUALIFIED 2026-09-26 per `21_RECONCILIATION.md` C-2:** *visible* is true at **kind** granularity
+> only — the room learns a descent happened, not how far, until `R8.2`'s per-term observation
+> producer lands (`10_LOOPS_AND_GAPS.md` P-22).
 
 ⚠ **AND `AX-3` FORBIDS THE OBVIOUS SHORTCUT, WHICH MUST BE NAMED SO IT IS NOT TAKEN LATER.** It is
 very tempting to give the bench a single scalar — *conviction that the accused is guilty* — that
@@ -292,19 +296,30 @@ retraction is recorded here rather than overwritten.**
 > **The rung is intra-contest state, and a proceeding is ONE contest inside ONE `RESOLVE`.** It is
 > opened by a `speak` that declares `contests:`, it runs on a shorter clock inside the seam, and it
 > ends within the tick. **So the rung never has to survive a barrier**, and a value that never
-> crosses a barrier is not a field — it is a local of the run, derived from the Events the run has
-> emitted so far.
+> crosses a barrier is not a field — it is a local of the run, derived from the acts the run has
+> resolved so far (⚠ was "the Events the run has emitted so far" — corrected 2026-09-26 with the
+> formula below, per `21_RECONCILIATION.md` C-2).
 >
 > ```
-> rung(run) := the lowest rung any emitted `matter.*` Event in THIS run has named
->              -- a fold over the run's own emissions. Owned by nobody. Stored nowhere.
+> rung(run) := the lowest rung any resolved `speak` Act in THIS run has named
+>              -- a fold over the run's own ACTS, not over emitted `matter.*` Events (`act_of`
+>                 already keeps Event id -> the Act that emitted it). Owned by nobody. Stored
+>                 nowhere.
 >              -- Dies with the run, exactly as a barrier cache dies at the next barrier
 > ```
 >
+> ⚠ **CORRECTED 2026-09-26 per `21_RECONCILIATION.md` C-2 (`F-28`):** this cell read "a fold over
+> the run's own emissions" over "any emitted `matter.*` Event", which names an operand the emission
+> does not carry. `ED-SC-0034` licenses the aggregate outright and the fold already keeps `act_of`,
+> so the correct read is a fold over the run's own **acts** — zero fields, zero Event kinds, same
+> as the surrounding claim. The residue C-2 leaves open (what a *witness* learns about *which* rung
+> was conceded is not carried at kind granularity, and is deferred to `R8.2`'s later observation
+> producer) is unchanged by this correction.
+>
 > **This is `T-a` and `ID-1` applied one scale down**, and it removes the objection this section
 > originally used against the Query option: *"a Query that must pick among histories is a resolver
-> making a decision."* **Inside one run there is one history** — the run's own ordered emissions —
-> so there is nothing to pick among.
+> making a decision."* **Inside one run there is one history** — the run's own ordered acts (⚠ was
+> "ordered emissions" — corrected 2026-09-26, same C-2) — so there is nothing to pick among.
 
 **What this costs, stated because a refusal with no cost is not a refusal.** ⚠ **A matter's ladder
 position does not persist between seasons.** A hearing adjourned and resumed next season **starts at
