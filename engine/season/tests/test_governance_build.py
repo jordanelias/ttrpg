@@ -36,6 +36,7 @@ from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..loop.predicates import in_holdings, office_described_by
 from ..queries import world_q
 from ..harness import probes as P
+from ..state.attribution import anchor_of
 from ..decision import budget as _budget
 from ..decision import operands_for, person_side_eligible
 from ..state.carriers import (
@@ -295,7 +296,7 @@ def test_lb3a_the_root_larder_at_zero_feeds_nobody_and_raises_nothing():
     assert set(w._subsistence_shortfall) == set(world_q.home_of(w)), (
         "some eater is neither fed nor recorded short — the loop skipped them silently")
     assert not [e for e in evs if e.kind == "stores.changed"], (
-        f"a store changed on a world that holds nothing: {[e.subject for e in evs]}")
+        f"a store changed on a world that holds nothing: {[anchor_of(w, e) for e in evs]}")
 
 
 def test_lb3a_a_cohort_eats_by_its_weight_and_not_by_its_head_count():
@@ -395,7 +396,7 @@ def test_lb3b_a_short_larder_falls_a_body_a_band_and_narrows_the_season():
         w.step = Step.MATTER
         evs = d.matter([])
         w.tick += 1
-        if [e for e in evs if e.kind == "condition.band_crossed" and e.subject == who]:
+        if [e for e in evs if e.kind == "condition.band_crossed" and anchor_of(w, e) == who]:
             crossed_at = season
             break
     assert crossed_at is not None, (
@@ -432,7 +433,7 @@ def test_lb3b_control_a_stocked_world_moves_no_body_and_no_budget():
     assert {pid: decision_budget(w, pid) for pid in w.persons} == before_budgets, (
         "a fed person's season narrowed")
     person_crossings = [e for e in evs if e.kind == "condition.band_crossed"
-                        and e.subject in w.persons]
+                        and anchor_of(w, e) in w.persons]
     assert not person_crossings, f"a fed person crossed a band: {person_crossings}"
 
 
@@ -485,7 +486,7 @@ def test_lb3c_death_at_body_zero_closes_every_tenure_through_the_same_owner_as_k
     evs = d.matter([])
 
     assert "p_mid" not in w.persons, "a body reached 0 and the person is still in the world"
-    assert [e.subject for e in evs if e.kind == "person.died"] == ["p_mid"]
+    assert [anchor_of(w, e) for e in evs if e.kind == "person.died"] == ["p_mid"]
     assert [t.live for t in w.tenures if t.id == "t_tie"] == [False], (
         "the `tie` another person OWNS, naming the dead one, survived the death and now dangles")
     assert not [t for t in w.tenures if t.live and "p_mid" in (t.subject, t.object)], (
@@ -1769,7 +1770,8 @@ def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_seas
     scale = w.fixtures.get("condition_scale")
     assert len(dw) >= 1, "no dwelling was built; the zeros below would describe nothing"
     assert qs, "the questions_for spy saw no deliberation; the zero below would be unobserved"
-    worn = Counter(e.subject for e in w.log if e.kind == "condition.worn" and e.subject in dw)
+    worn = Counter(anchor_of(w, e) for e in w.log
+                   if e.kind == "condition.worn" and anchor_of(w, e) in dw)
     assert worn == Counter(list(dw)), (
         f"the wear loop did not visit every dwelling exactly once: "
         f"{len(worn)} of {len(dw)} worn, {sum(worn.values())} Events")
@@ -1781,7 +1783,7 @@ def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_seas
     # over two seasons, none carrying a dwelling id. No dwelling tuple means no dwelling Question.
     crossed = [c for c in w.crossings if c[0] in dw]
     assert crossed == [], f"{len(crossed)} dwelling crossings reach Q3 at the control arm"
-    assert not [e for e in w.log if e.kind == "condition.band_crossed" and e.subject in dw]
+    assert not [e for e in w.log if e.kind == "condition.band_crossed" and anchor_of(w, e) in dw]
     assert all(w.sites[sid].condition == scale for sid in dw), "a dwelling's condition moved at wear 0"
     assert not [q for q in qs if {q.about, *q.referents} & set(dw)], (
         "some question source now names a dwelling. `work` binds a referent as its `site`, and "
@@ -1798,7 +1800,7 @@ def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_seas
     # deposits are excluded because their ids are not stable across arms; measured, every
     # `claim.deposited` id differs even where the claim id does not.
     other = lambda log: {e.id for e in log if e.kind != "claim.deposited"}
-    worn_ids = {e.id for e in w.log if e.kind == "condition.worn" and e.subject in dw}
+    worn_ids = {e.id for e in w.log if e.kind == "condition.worn" and anchor_of(w, e) in dw}
     assert other(w.log) - worn_ids == other(cw.log), (
         f"{len(other(w.log) - worn_ids ^ other(cw.log))} non-deposit Events differ between arms")
 

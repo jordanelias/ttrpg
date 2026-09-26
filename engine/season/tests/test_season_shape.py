@@ -780,7 +780,7 @@ def test_event_never_grows_a_target_or_an_actor():
     is for is an Event that cannot be misattributed, AND MISATTRIBUTION IS A FEATURE.'
 
     ⚠ THE BAN LIST IS THE INVARIANT; THE EXACT SET IS A RATCHET, AND `W-B` MOVED IT BY ONE.
-    `observed` is admitted and the other six are still banned, which is the distinction S19.3
+    `observed` is admitted and the six are still banned (seven since G1b added `subject`), which is the distinction S19.3
     actually draws: the three absent fields are about ATTRIBUTION and RECIPIENCY -- who did it, who
     it is for -- and each absence is a design decision. `observed` is neither. It is what the FOLD
     READ to reach its verdict, and §27.1 already makes reading the precondition the fold's
@@ -789,10 +789,12 @@ def test_event_never_grows_a_target_or_an_actor():
     NEW field still turns this red and has to be argued here. Loosening it to `banned & fields ==
     set()` would let the next field in silently, which is how `target` would eventually arrive."""
     fields = set(Event.__dataclass_fields__)
-    for banned in ("target", "actor", "source_actor", "recipient", "to", "stat_deltas"):
+    # G1b (2026-09-26) MOVED THE RATCHET THE OTHER WAY, BY ONE: `subject` is deleted -- `04:402`
+    # names it beside `actor` and `target` -- so it joins the ban list rather than leaving the
+    # exact set and nothing else.
+    for banned in ("target", "actor", "subject", "source_actor", "recipient", "to", "stat_deltas"):
         assert banned not in fields
-    assert fields == {"id", "kind", "subject", "changes", "causes", "emitted_at", "degree",
-                      "observed"}
+    assert fields == {"id", "kind", "changes", "causes", "emitted_at", "degree", "observed"}
 
 
 def test_causes_is_never_empty():
@@ -3601,7 +3603,7 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
         return cur
 
     hers = [e for e in w.log
-            if (lambda o: o.subject == HL.CARIN
+            if (lambda o: anchor_of(w, o) == HL.CARIN
                 or any(c.subject == HL.CARIN for c in o.changes)
                 or o.kind == "record.created")(origin_of(e))]
     assert hers, "no Event in the log traces back to an act of Carin's at all"
@@ -3613,7 +3615,7 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
         cur = next((by_id[c] for c in cur.causes if c in by_id), None)
     print("\n  W9 check 2 — the longest causal chain:")
     for e in reversed(chain):
-        print(f"    t{e.emitted_at} {e.kind:16} {e.subject[:26]:26} causes={[c[:8] for c in e.causes]}")
+        print(f"    t{e.emitted_at} {e.kind:16} {(anchor_of(w, e) or '-')[:26]:26} causes={[c[:8] for c in e.causes]}")
     pub_by_id = {e.id: e for e in published.log}
 
     def pub_depth(e, seen=()):
@@ -3635,7 +3637,7 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
         return cur
 
     pub_hers = [e for e in published.log
-                if (lambda o: o.subject == HL.CARIN
+                if (lambda o: anchor_of(published, o) == HL.CARIN
                     or any(c.subject == HL.CARIN for c in o.changes)
                     or o.kind == "record.created")(pub_origin_of(e))]
     d_pub = max((pub_depth(e) for e in pub_hers), default=0)
@@ -3708,8 +3710,9 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     assert all(e.causes for e in w.log), "an Event carries an empty causes[] (§19.4)"
     # and the chain must START at one of HER acts, not at a clock.
     origin = chain[-1]
-    assert origin.subject == HL.CARIN or any(c.subject == HL.CARIN for c in origin.changes) \
-        or origin.kind == "record.created", f"the chain's origin is {origin.kind} on {origin.subject}"
+    assert anchor_of(w, origin) == HL.CARIN or any(c.subject == HL.CARIN for c in origin.changes) \
+        or origin.kind == "record.created", (
+            f"the chain's origin is {origin.kind} on {anchor_of(w, origin)}")
 
 
 def test_w9_check3_every_fixture_read_resolves_to_a_register_site():
@@ -3823,7 +3826,7 @@ def test_w9_check5_every_declared_exercises_verb_runs_or_is_recorded_not_assesse
     # clause "with `causes[]` walking back to her act" was never executed. Walking to an ACT id
     # is the thing the plan asks for and is now what this tests.
     hers = {c for e in w.log for c in e.causes
-            if c not in by_id and c != "ROOT" and e.subject == HL.CARIN}
+            if c not in by_id and c != "ROOT" and anchor_of(w, e) == HL.CARIN}
 
     def walks_back(e, seen=()):
         if any(c in hers for c in e.causes):
@@ -3911,7 +3914,12 @@ def test_w4_a_band_crossing_walks_back_to_the_wear_that_caused_it():
         ante = by_id.get(c.causes[0])
         assert ante is not None and ante.kind == "condition.worn", (
             f"a crossing's antecedent is {ante.kind if ante else None!r}, not the wear")
-        assert ante.subject == c.subject and ante.emitted_at == c.emitted_at, (
+        # G1b: `Event.subject` is deleted. `anchor_of(w, c)` would INHERIT the wear's anchor
+        # through tier 3, so comparing the two anchors is true by construction; the site the
+        # crossing was EMITTED FOR is `w.crossings`' own record, written by `_crossings` from its
+        # argument, and that is what the wear's anchor must match.
+        crossed = next(sid for sid, _verb, _was, _now, eid in w.crossings if eid == c.id)
+        assert anchor_of(w, ante) == crossed and ante.emitted_at == c.emitted_at, (
             "the crossing names a wear Event about a different site or a different season")
 
 
@@ -3978,7 +3986,7 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
     w.write("ttl", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
             record_kind="Record", fieldname="ttl", driver="Event")
     assert rec.ttl == 1, "the exempt write did not apply"
-    assert not [e for e in w.log if e.subject == rec.id], (
+    assert not [e for e in w.log if anchor_of(w, e) == rec.id], (
         "the exempt row emitted anyway — `record.expired` on a non-terminal decrement asserts an "
         "expiry that has not happened")
     # AND THE EXEMPTION IS NARROW: an UNDECLARED kind is still refused on the same row.
@@ -4139,7 +4147,7 @@ def test_w6_an_unrecognised_fan_out_mode_refuses_rather_than_falling_back():
     which is the failure mode that makes a sweep worse than no sweep."""
     from ..harness import headless as HL
     w = HL.build_world(0)
-    e = next(iter(w.log), None) or Event(H(w.world_seed, 0, "x", "t"), "speech.made", "x",
+    e = next(iter(w.log), None) or Event(H(w.world_seed, 0, "x", "t"), "speech.made",
                                            [], [ROOT], 0)
     with pytest.raises(Unspecified, match="not one of"):
         observers_for(w, e, "everyone_obviously", list(w.persons))
@@ -4811,7 +4819,7 @@ def test_w8_matter_draws_before_it_produces_which_is_353s_stated_order():
     d = SeasonDriver(w)
     w.step = Step.MATTER
     evs = d.matter([])
-    order = [(e.kind, e.subject) for e in evs if e.kind in ("stores.changed", "yield.taken")]
+    order = [(e.kind, anchor_of(w, e)) for e in evs if e.kind in ("stores.changed", "yield.taken")]
     assert order, f"MATTER emitted no economy events at all: {[e.kind for e in evs]}"
     # `S` both draws (one person present) and produces (it owns both sites), so it is the one
     # rung where the order is observable at all.
@@ -10868,9 +10876,12 @@ def test_r8_4_document_key_fires_for_a_non_author_holding_the_changed_record():
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "record.created"), None)
     assert e is not None, f"the fold emitted {[x.kind for x in out]} — no `record.created`"
-    assert e.subject == author, (
-        f"`record.created`'s subject is {e.subject!r}, not the actor — then this test is no longer "
-        "exercising the shape `R8.4` is about, and the repair needs re-deriving, not re-asserting")
+    # G1b: `Event.subject` is deleted; what it held for a fold Event -- the ACTOR -- is
+    # `anchor_of`'s tier 1, so the shape this test needs is asserted through that.
+    assert anchor_of(w, e) == author, (
+        f"`record.created` anchors on {anchor_of(w, e)!r}, not the actor — then this test is no "
+        "longer exercising the shape `R8.4` is about, and the repair needs re-deriving, not "
+        "re-asserting")
     rec = next((c.subject for c in e.changes if c.subject), None)
     assert rec is not None and rec != author, (
         f"the fold wrote no record into `changes[]` (got {[c.subject for c in e.changes]}) — the "
@@ -10943,9 +10954,10 @@ def test_r8_4_document_key_reaches_a_non_author_through_a_store():
     assert e is not None, (
         f"the fold emitted {[x.kind for x in out]} — a `transfer.refused` means the eligibility or "
         "the typed `scalar_threshold` cell rejected the act, and nothing below is about the channel")
-    assert e.subject == actor and {c.subject for c in e.changes} == {"S", "Hh"}, (
-        f"`transfer.made` carries subject={e.subject!r} changes={[c.subject for c in e.changes]} — "
-        "if the changes stop naming both rungs this test is no longer exercising the reach it claims")
+    assert anchor_of(w, e) == actor and {c.subject for c in e.changes} == {"S", "Hh"}, (
+        f"`transfer.made` anchors on {anchor_of(w, e)!r} with changes="
+        f"{[c.subject for c in e.changes]} — if the changes stop naming both rungs this test is no "
+        "longer exercising the reach it claims")
 
     doc = CHANNEL_PREDICATES["document_key"]
     assert doc(w, e, witness), (

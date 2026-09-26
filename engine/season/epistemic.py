@@ -131,7 +131,8 @@ def _tenure_by_id(w, tid: str):
 def claim_subjects(w, e: "Event", rule: str, refs: Optional[list] = None) -> list:
     """`H-79`: what the claims deposited from one Event are ABOUT.
 
-    `actor` is the incumbent — one claim, subject = the Event's own subject. `per_change` mints
+    `actor` is the incumbent — one claim, subject = the Event's anchor (`anchor_of`; it was the
+    Event's own `subject` field until G1b deleted it). `per_change` mints
     one per `StateChange`, subject = THE THING CHANGED, which is what makes §F1's Q2 clause
     "something they hold" reachable at all. `both` is the union.
 
@@ -196,8 +197,8 @@ def claim_subjects(w, e: "Event", rule: str, refs: Optional[list] = None) -> lis
             _add(c.subject)
         # ⚠ **AND WHAT THE ACT NAMED, WHICH IS THE HALF THAT WAS MISSING.** An Event that wrote
         # nothing has an empty `changes[]`, so every claim deposited from one was minted about
-        # **the actor** — by the `or [e.subject]` fallback below, `e.subject` being the actor for
-        # anything the fold emits. §F1's Q2 admits a claim whose subject is the holder or
+        # **the actor** — by the `or [anchor]` fallback below (it read `or [e.subject]` until G1b
+        # deleted the field), the anchor being the actor for anything the fold emits. §F1's Q2 admits a claim whose subject is the holder or
         # something the holder holds, so *a claim about the actor can never raise a listener's
         # question*: the news arrived in a form nobody could act on. Measured before this line
         # existed: `R3` = 0 of 30 on the NPC lane, 0 of 59 on ARC.
@@ -246,7 +247,15 @@ def claim_subjects(w, e: "Event", rule: str, refs: Optional[list] = None) -> lis
         # eviction pressure this sweep measures against is unchanged.
         if not any(c.subject for c in e.changes) and any(refs or ()):
             out = [r for r in (refs or ()) if r]
-    return out or [anchor]
+    # ⚠ G1b: AN EVENT NOTHING ANCHORS IS DEPOSITED ABOUT NOTHING, NOT ABOUT `None`. With
+    # `Event.subject` deleted, `anchor_of` answers `None` for an Event with no act, no change and
+    # no anchored antecedent. The channel predicates already admit nobody for one, but the `total`
+    # arm fans every Event to everyone, and without this line it minted `Claim(subject=None)` into
+    # every ledger -- measured, 5 of 5 in `tiny_world`. `witness`'s own precedent decides it: a
+    # read the instrument cannot answer (`UNKNOWN`) is NOT deposited, because the instrument's gap
+    # would become a belief. No production emitter reaches this (every logged Event in the probe
+    # corpus, headless and the populated realm anchors); `test_g1b_attribution.py` plants one.
+    return [s for s in (out or [anchor]) if s is not None]
 
 
 # ---------------------------------------------------------------------------
@@ -384,7 +393,7 @@ def _ch_document_key(w, e, pid) -> bool:
     ⚠ AND ONE INTERACTION THIS DOES NOT SETTLE, BECAUSE IT IS `PHASE 1` STEP 3's. A channel decides
     WHO witnesses, not WHAT they learn. Composed with the deposit layer as it stands -- `observers_for`
     discards which channel admitted a person, and `claim_subjects` under the default `both` rule
-    starts from `e.subject`, the actor -- a `document_key`-only witness learns WHO ACTED. `R8.5`
+    starts from the Event's anchor, the actor -- a `document_key`-only witness learns WHO ACTED. `R8.5`
     cites a ratified line pointing the other way (*"a document holder saw only that the document
     changed"*). ⚠ WHEN THIS DOCSTRING WAS FIRST WRITTEN, ON THE PROTOTYPE, IT SAID THAT LINE
     *"lives on unmerged PR #371, not in this tree"*. That is no longer true of THIS file: #371 was

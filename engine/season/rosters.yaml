@@ -443,7 +443,8 @@ rosters:
       that act is in nobody's ledger. ⚠ **NARROWED 2026-09-04 — the first writing said this of every
       write-nothing act and that is not what the code does.** The replacement is guarded on
       `any(refs)`: a write-nothing act that names NOTHING leaves `out` untouched, and the actor
-      survives — via the standing `out or [e.subject]` fallback under `per_change`, and because the
+      survives — via the standing `out or [anchor]` fallback under `per_change` (`e.subject` until
+      G1b deleted the field; `anchor_of` returns the same actor), and because the
       actor is already in `out` under `both`. So the price is paid exactly where there is a named
       subject to pay it with, which is also the only place the Q2 reachability it buys applies.
       ⚠ **AND THE NARROWING IS CODE-TRUE BUT CORPUS-VACUOUS, SAID HERE BECAUSE THE FIRST WRITING OF
@@ -456,8 +457,9 @@ rosters:
       true is that anything exercises it. Falsifier, and it is what makes this a measurement rather
       than a reading of the source: a non-zero no-refs count would witness the case, and the count
       is zero. `H-111`'s refusal question is where a witness would first appear.
-      Attribution is `T-d`'s subject and `H-107`'s — an Event carries no actor, and the tracer's
-      `Event.subject`, which still does, is the row for it. The `actor` arm is untouched and is
+      Attribution is `T-d`'s subject and `H-107`'s — an Event carries no actor, and since G1b
+      (2026-09-26) no `subject` either: `H-107`'s field is deleted and attribution reads
+      `causes[]` through `state/attribution.py`. The `actor` arm is untouched and is
       where the incumbent behaviour survives.
       ⚠ **AND THE REASON IT REPLACES RATHER THAN JOINS IS RECORDED HONESTLY, BECAUSE IT IS NOT A
       DERIVATION.** Joining mints one extra claim per write-nothing Event; the cap evicts on
@@ -591,7 +593,7 @@ rosters:
     predicates:
       co_located:    "the person shares a live `contain` Tenure with the Event's place -- the presence index S28 already builds and the fan-out never read"
       document_key:  "the person holds a live `hold` Tenure over something THIS EVENT CHANGED -- a subject named in `changes[]` (a Record, a store). ⚠ THIS ROW READ *the Event's SUBJECT* until `R8.4`, and that clause is why the channel could not fire on a single act: every fold-emitted Event sets `subject = a.actor` and no `hold` takes a PERSON as object, so the equality held only on `MATTER`/`CALENDAR` kinds, which carry no verb and no actor. The parenthetical was always right and the clause it qualified was wrong. Corrected here in the same change as the predicate, because this row is where the meaning lives (see the note above) and `R5` quotes it verbatim as the channel's definition"
-      witness_key:   "the person IS the Event's subject, or shares a live `knot` Tenure with it -- S28's knot deposit, which already reuses the Event id"
+      witness_key:   "the person IS the Event's anchor (`state/attribution.py::anchor_of` -- the actor where one acted, the written thing otherwise; it read the deleted `Event.subject` until G1b), or shares a live `knot` Tenure with it -- S28's knot deposit, which already reuses the Event id"
       post_remit:    "the person holds a live office Tenure whose remit covers the verb that emitted this kind"
       chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
 
