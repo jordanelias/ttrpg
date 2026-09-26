@@ -426,15 +426,18 @@ def _ch_post_remit(w, e, pid) -> bool:
     opened BEFORE its office exists gets an empty snapshot and is never revisited, so the person
     side refuses while both world-side readings admit; and any future write to `Office.remit_acts`
     is a silent no-op person-side — §0.1 pt 1's read/write asymmetry, with no guard shipped.~~
-    **CLOSED 2026-09-26, position `13e`.** The three readings are now one: this site and
-    `loop/resolve.py`'s `_eligible` both admit on `t.granted_acts` (`remits & set(t.granted_acts)`
-    here, `arg in t.granted_acts` there) — the same store `decision/options.py` already read —
-    and the `w.offices.get(t.object)` lookup that made each a live-world reading is deleted from
-    both. The read/write asymmetry this paragraph named is gone with it: the only readers of
-    `Office.remit_acts` left anywhere are `_grant_remit`, `Office.__post_init__` and
-    `_eff_establish` (an AST scan in `test_governance_build.py`'s `13e` section pins that set).
+    **CLOSED 2026-09-26, position `13e`.** The three readings are now ONE STORE, though still
+    three call sites that each ask it independently (this site, `loop/resolve.py`'s `_eligible`,
+    and `decision/options.py`) — a further §8 move a later reader may make, not claimed here: this
+    site and `_eligible` both admit on `t.granted_acts` (`remits & set(t.granted_acts)` here,
+    `arg in t.granted_acts` there) — the same store `decision/options.py` already read — and the
+    `w.offices.get(t.object)` lookup that made each a live-world reading is deleted from both. The
+    read/write asymmetry this paragraph named is gone with it: the only readers of
+    `Office.remit_acts` left in `engine/season/`'s non-test code are `_grant_remit`,
+    `Office.__post_init__` and `_eff_establish` (an AST scan in `test_governance_build.py`'s `13e`
+    section pins that set over the package, excluding `tests/`).
 
-    ⚠ THE CONSOLIDATION IS SCHEDULED, NOT FORGOTTEN: ~~position `13e` of
+    ~~⚠ THE CONSOLIDATION IS SCHEDULED, NOT FORGOTTEN: position `13e` of
     `workplans/2026-09-18-governance-settlement-behaviour-plan.md` routes this site and `_eligible`
     onto `t.granted_acts`; `13f` gates it, because whether a remit change reaches SITTING holders
     (snapshot) or only future ones (mirror) is undecided and arrives with `establish`'s effect.~~
@@ -444,7 +447,7 @@ def _ch_post_remit(w, e, pid) -> bool:
     above onto the snapshot that decision established. THREE structurally independent read-only
     review lanes had rediscovered this separately before either position landed, which was §10's
     rank-by-independent-rediscovery signal rather than three copies of one opinion. The original
-    W6 finding below stands; it is the §8 lesson this file then had to relearn.
+    W6 finding above stands; it is the §8 lesson this file then had to relearn.
 
     Found by the `W6` adversarial pass."""
     remits = {x.split(":", 1)[1] for r in VERB_TABLE.values() if e.kind in (r.emits or ())

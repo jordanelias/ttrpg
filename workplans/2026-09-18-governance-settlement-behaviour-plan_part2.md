@@ -880,6 +880,22 @@ planned — `budget()` counting `t.granted_acts` (`HANDOFF_IN.md`, blocked on `t
 scan is what stops it regressing to the office.
 **GATE.** `13f` (`§3.9` edge 2). **TIER.** `sonnet` producer — two one-line edits; `opus` critic,
 because three independent lanes found this and a fourth reading is already queued.
+**BUILT 2026-09-26.** Both edits landed as specified; two new tests (the two-arm falsifier through
+`_eligible`, and a separate test proving `_ch_post_remit` reads the same snapshot rather than the
+live office, closing a coverage gap the first draft left — the file's only prior `post_remit` test
+never exercised a holder whose office and snapshot disagree). Confirmed by an antagonist pass that
+found ONE real, sonnet-tier-missed regression before commit: `test_the_revocation_branch_executes_
+in_the_fold_and_not_only_as_a_predicate` (`test_season_shape.py`) hand-mutated `off_duke.remit_acts`
+AFTER seating the actor, which worked only because the pre-`13e` resolver read the live office —
+exactly the read/write asymmetry this position exists to close, and the sonnet producer's own
+grep excluded `tests/`, so it never saw the site the fix would break. Fixed by seating the actor
+with the remit already granted (`_seat`'s own default), not by hand-mutating after the fact.
+`engine/season/tests -q -n auto`: 293 passed (290 after `13f` + 3 this position's own tests). Three
+stale docstrings this position's own change made false in the present tense
+(`state/world.py::_grant_remit`, and two passages inside `test_h71_the_grant_is_a_snapshot_not_a_
+mirror`) corrected with dated notes, history kept. `plan.md`'s `13e`/`13f` rows, both still `OPEN`
+though `13f` had already landed, flipped to `DONE` in the same commit — the producer flagged this
+correctly as a board defect (`CLAUDE.md` §0.2) but out of its own `WHERE.`
 
 **13d — OFFICES. SPLIT 2026-09-25: `13d-i` is buildable now; `13d-ii` is G3's.**
 **STATE.** *Holders seated* is DONE as the 13-seat generic spine (`engine/season/governance_spine.yaml`,

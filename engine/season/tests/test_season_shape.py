@@ -4817,17 +4817,27 @@ def test_the_revocation_branch_executes_in_the_fold_and_not_only_as_a_predicate(
     the branch is ever reached — `off_duke`'s remit does not carry `revoke`. So the branch had
     never executed inside the resolver in any test or any run.
 
-    This drives the fold. The office is given the `revoke` remit so Part E's `remit:revoke`
-    eligibility is satisfied, and the act is resolved rather than asked about.
+    This drives the fold. The actor is seated on an office carrying the `revoke` remit so Part E's
+    `remit:revoke` eligibility is satisfied, and the act is resolved rather than asked about.
 
     ⚠ THE REMIT REQUIREMENT IS ITSELF `H-91`. Jordan's rule makes purview SUFFICIENT; Part E keeps
     `remit:revoke` necessary. This test satisfies both so the branch can be observed at all, and
-    the conflict between them is registered rather than settled here."""
+    the conflict between them is registered rather than settled here.
+
+    ⚠ **SEATED WITH THE REMIT, NOT HAND-MUTATED ONTO IT (CORRECTED 2026-09-26, position `13e`).**
+    The first writing mutated `off_duke.remit_acts` in place AFTER `tiny_world()` had already
+    seated `p_high` on it, which worked only because `_eligible` read the live office directly.
+    Position `13e` routed that read onto `t.granted_acts`, the snapshot `_grant_remit` takes AT
+    SEATING (`state/world.py`) — exactly the distinction `test_h71_the_grant_is_a_snapshot_not_a_
+    mirror` pins — so a hand-mutation after the fact no longer reaches the actor, which is §0.1
+    pt 1's read/write asymmetry hazard, caught by an antagonist pass over `13e` rather than by any
+    test run before it. `_seat` gives `p_high` a SECOND office whose remit already carries
+    `revoke` at construction, so the snapshot is correct when it is taken."""
     w = P.tiny_world()
     w.offices["off_dicastery"].revocation = "the duke's writ (harness fixture)"
     w.offices["off_dicastery"].rung = "S"
     w.add_tenure(Tenure("t_dic", "p_mid", "off_dicastery", "hold", 0))
-    w.offices["off_duke"].remit_acts = list(w.offices["off_duke"].remit_acts) + ["revoke"]
+    _seat(w, "p_high", "off_marshal", "Marshal", "S", remit=("issue", "revoke"))
     act = Act(id="f1", actor="p_high", verb="revoke", payload={"office": "off_dicastery"})
     before = [t.id for t in w.tenures if t.kind == "hold" and t.object == "off_dicastery" and t.live]
     assert before, "the fixture office is unheld; the fold would have nothing to close"
@@ -5370,8 +5380,11 @@ def test_h71_the_grant_is_a_snapshot_not_a_mirror():
     earlier writing of this docstring got it wrong.
 
     The payload is written at seating and never revisited, so mutating an office's `remit_acts`
-    afterwards does not reach a sitting holder, while `_eligible` (which has a `World`) sees it at
-    once. This test pins that BEHAVIOUR.
+    afterwards does not reach a sitting holder. ~~while `_eligible` (which has a `World`) sees it
+    at once~~ ⚠ **NO LONGER TRUE, since position `13e` (2026-09-26): `_eligible` now reads
+    `t.granted_acts` too** (`loop/resolve.py`), the same frozen snapshot this test pins, not the
+    live office — so a hand-mutation reaches NEITHER reading now, and the divergence this sentence
+    described is exactly what `13e` closed. This test pins that BEHAVIOUR.
 
     ⚠⚠ **IT DOES NOT PIN THE SEMANTICS, AND THE FIRST WRITING CLAIMED IT DID.** It rested on the
     register's *"an office whose remit changes does so by an ACT"* and called the snapshot a ruled
@@ -5402,9 +5415,14 @@ def test_h71_the_grant_is_a_snapshot_not_a_mirror():
     ⚠ **AND THIS DOCSTRING NO LONGER FORECLOSES THE OTHER REPAIR.** It used to say a later session
     must not "fix" the snapshot into a mirror because that would put a `World` read into `choose`
     and undo `AX-2`. That was a false dichotomy: the other repair needs no `World` in `choose` --
-    route the two world-side readers (`resolve.py:56`, `epistemic.py:360`) onto `t.granted_acts`,
+    ~~route the two world-side readers (`resolve.py:56`, `epistemic.py:360`) onto `t.granted_acts`,
     which they can do because both already hold the Tenure. Two independent read-only reviews
-    rediscovered that repair; it is the open finding, not a forbidden one."""
+    rediscovered that repair; it is the open finding, not a forbidden one.~~ ⚠ **DONE 2026-09-26,
+    POSITION `13e`.** Both world-side readers -- `loop/resolve.py`'s `_eligible` and
+    `epistemic.py`'s `_ch_post_remit` -- now read `t.granted_acts`, deleting the `w.offices.get`
+    read each one carried. `decision/options.py`'s own reading was already correct and needed no
+    change. Three independent read-only reviews had rediscovered the duplication before this
+    landed; the finding is closed, not open."""
     w = P.tiny_world()
     duke = w.persons["p_high"]
     assert not person_side_eligible(duke, VERB_TABLE["revoke"]), "fixture: duke lacks `revoke`"

@@ -26,6 +26,7 @@ from collections import Counter
 from ..data import files
 from ..data.matrix import MATRIX, Step
 from ..data.verbs import VERB_TABLE
+from ..epistemic import CHANNEL_PREDICATES
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..data.cast import faction_leader
 from ..harness.populated import build_realm
@@ -1234,6 +1235,40 @@ def test_13e_hand_created_office_refuses_act_established_office_admits():
         "the resolver refused `p_low`'s `dispatch` after a planted `establish` re-stamped the "
         "grant -- `13f`'s own falsifier and this position's complement")
     assert person_side_eligible(w.persons["p_low"], dispatch)
+
+
+def test_13e_the_witness_channel_also_reads_the_snapshot_not_the_live_office():
+    """`epistemic._ch_post_remit`'s HALF of this position's fix has no behavioural test elsewhere:
+    `test_a_binding_decision_lights_the_two_witness_channels_that_needed_one`
+    (`test_season_shape.py`) exercises `post_remit` on `off_duke`, whose remit already carries
+    `confer` at seating -- it passes identically whether the channel reads `t.granted_acts` or the
+    live office, because the two never disagree there. This test builds the disagreement: a holder
+    whose OFFICE gains `confer` only AFTER seating (live-only, never in the snapshot), witnessing a
+    REAL `confer` Event performed by someone else. Pre-`13e`, `_ch_post_remit` read `w.offices.get
+    (t.object).remit_acts` live and would have wrongly admitted this holder as a remit-covering
+    witness; post-`13e` it reads `t.granted_acts`, which the live-only grant never reached."""
+    w, d = _establish_world()
+    w.add_tenure(Tenure("t_hand", "p_mid", "off_hand", "hold", 0))
+    [t_hand] = [t for t in w.tenures if t.id == "t_hand"]
+    assert "off_hand" not in w.offices, "fixture: not seated yet"
+    w.offices["off_hand"] = Office("off_hand", "Reeve", "S", ["issue", "dispatch", "confer"],
+                                    conferral="appointed", faction="Crown")
+    assert t_hand.granted_acts == (), (
+        "a hand-created office re-granted a sitting holder -- fixture is not the snapshot case")
+
+    w.offices["off_dicastery"].conferral = "the duke's remit (harness fixture)"
+    out = d.resolve([Act(id="g_conf", actor="p_high", verb="confer",
+                          payload={"office": "off_dicastery", "to": "p_low"})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    e = next((x for x in out if x.kind == "tenure.opened"), None)
+    assert e is not None, f"fixture: confer did not open a Tenure: {[x.kind for x in out]}"
+
+    assert CHANNEL_PREDICATES["post_remit"](w, e, "p_high"), (
+        "control: the duke's own snapshot genuinely carries `confer` -- the channel should admit")
+    assert not CHANNEL_PREDICATES["post_remit"](w, e, "p_mid"), (
+        "`post_remit` admitted a witness whose OFFICE carries `confer` only live, never in their "
+        "own Tenure's snapshot -- it is still reading `w.offices[...].remit_acts` instead of "
+        "`t.granted_acts`")
 
 
 def _remit_acts_attribute_reads_outside_allowlist() -> list:

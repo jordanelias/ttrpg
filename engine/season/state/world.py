@@ -313,9 +313,12 @@ class World:
         is the grant AS AT SEATING. Mutating `w.offices[x].remit_acts` afterwards does NOT reach a
         sitting holder -- `test_h71_the_grant_is_a_snapshot_not_a_mirror` pins it. That is arm 2's
         own semantics and not an oversight: the GRANT is what the holder has, and an office whose
-        remit changes does so by an act. The RESOLVER is unaffected either way, because `_eligible`
-        has a `World` and reads `w.offices` directly; this is the person's reading only, and the
-        gap between the two readings is what `H-71` was.
+        remit changes does so by an act. ~~The RESOLVER is unaffected either way, because
+        `_eligible` has a `World` and reads `w.offices` directly; this is the person's reading
+        only, and the gap between the two readings is what `H-71` was.~~ ⚠ **NO LONGER TRUE, since
+        position `13e` (2026-09-26): `_eligible` now reads `t.granted_acts` too**, the same
+        snapshot this method writes -- the gap `H-71` named between the resolver's reading and the
+        person's reading is closed, not merely unaffected by it.
 
         ⚠ `force=True` IS HOW THE ACT REACHES SITTING HOLDERS, AND IT IS HERE SO THE KEY HAS ONE
         WRITER (`13f`, 2026-09-25). The act that changes a remit is `establish`, and its effect
