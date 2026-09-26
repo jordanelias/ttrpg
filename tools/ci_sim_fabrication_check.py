@@ -194,7 +194,17 @@ def is_sim_file(path: str) -> bool:
     #
     # Verified exhaustively, not by inspection: applying main's predicate and this one to all 3,117
     # tracked files gives 169 -> 268, with those 2 the complete lost set and 102 gained.
-    if norm.startswith(('engine/tests/', 'tests/valoria/', 'tests/contracts/')):
+    #
+    # ⚠ `engine/season/tests/` ADDED 2026-09-26, ON THE SAME REASONING, NOT A NEW ONE. That 2026-08-01
+    # measurement covered every tracked file AT THE TIME, and `engine/season/tests/` did not exist
+    # yet — its first file landed 2026-09-07, five weeks later. Measured directly rather than
+    # inferred: `ci_sim_fabrication_check.py --staged` flagged a test's own `len(cases) >= 8` and
+    # `len(TITLE_DOMAINS) >= 11` floors as uncited mechanical constants — exactly the class this
+    # comment already names ("no canon entry for '50 is a sane floor for this assertion'") — because
+    # `engine/season/` matches `sim_reference_prefixes()`'s Rule 1 and this tuple never grew to keep
+    # its own `tests/` subtree out. `CLAUDE.md` §0.1 pt 5: correct when written, broken because
+    # something else (a new test directory) moved; the fix is one more prefix, not a new gate.
+    if norm.startswith(('engine/tests/', 'engine/season/tests/', 'tests/valoria/', 'tests/contracts/')):
         return False
     # Rule 1 — the live oracle, from the single owner. This is what the basename proxy stopped
     # matching when sim/ was retired, and the whole reason this predicate needed repair.

@@ -38,14 +38,24 @@ def _load():
 
 
 def _live_oracle_files():
-    """Every .py in the sim reference, per the single owner. Not a hardcoded list."""
+    """Every .py in the sim reference, per the single owner. Not a hardcoded list.
+
+    ⚠ `engine/season/tests/` ADDED 2026-09-26, the SAME independent judgment as `engine/tests/`
+    below, not a delegation to `ci_sim_fabrication_check.is_sim_file`'s own exclusion tuple --
+    doing that would make `test_every_live_oracle_file_is_visible_to_the_gate`'s comparison
+    tautological (this function IS the independent yardstick that test checks `is_sim_file`
+    against). Found the same day as the gap it exposes: `is_sim_file`'s exclusion tuple grew an
+    `engine/season/tests/` entry (a pytest suite, not oracle) and this file's OWN hand-maintained
+    copy of the same judgment did not, so the two disagreed the moment one was fixed alone --
+    exactly the `CLAUDE.md` §8 "one rule, two homes" shape, discovered by running this suite
+    rather than assumed fixed."""
     import ci_common
     out = []
     for prefix in ci_common.sim_reference_prefixes(ROOT):
         for p in glob.glob(os.path.join(ROOT, prefix, '**', '*.py'), recursive=True):
             rel = os.path.relpath(p, ROOT).replace(os.sep, '/')
-            if rel.startswith('engine/tests/'):
-                continue  # the oracle's own regression suite, excluded deliberately
+            if rel.startswith('engine/tests/') or rel.startswith('engine/season/tests/'):
+                continue  # the oracle's own regression suites, excluded deliberately
             out.append(rel)
     return sorted(set(out))
 
