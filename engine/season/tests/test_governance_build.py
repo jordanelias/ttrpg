@@ -16,12 +16,14 @@ Run: python -m pytest engine/season/tests/test_governance_build.py -q
 
 from __future__ import annotations
 
+import ast
 import dataclasses
 
 import pytest
 
 from collections import Counter
 
+from ..data import files
 from ..data.matrix import MATRIX, Step
 from ..data.verbs import VERB_TABLE
 from ..gaps import Forbidden, Unowned, Unspecified
@@ -1163,3 +1165,115 @@ def test_13f_the_restamp_skips_a_non_hold_tenure_and_a_dead_hold_on_the_same_off
     assert t_commit.granted_acts == (), "a `commit` Tenure was re-stamped as though it were a `hold`"
     assert t_dead.granted_acts == ("issue",), (
         f"a CLOSED `hold`'s grant moved off its seating-time snapshot: {t_dead.granted_acts}")
+
+
+# =================================================================================================
+# PLAN POSITION `13e` -- ONE READING OF THE REMIT.
+# `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, position `13e`. Routes
+# `loop/resolve.py`'s `_eligible` and `epistemic.py`'s `_ch_post_remit` off the live
+# `w.offices[...].remit_acts` and onto the Tenure's own `t.granted_acts` -- the same store
+# `decision/options.py` already read, closing the THREE-readings-over-two-stores gap
+# `epistemic.py`'s `_ch_post_remit` docstring tracked. FALSIFIER, both arms in one world: a `hold`
+# opened before its office exists, then the office HAND-CREATED (no act) -> the resolver now
+# REFUSES the remit verb it admitted before this position; the same shape but the office FOUNDED
+# BY `establish` -> the resolver ADMITS, because `13f`'s re-stamp reaches the sitting holder. AND
+# an AST scan: no `Office.remit_acts` attribute read anywhere in the non-test package outside
+# `_grant_remit`, `Office.__post_init__` and `_eff_establish`.
+# =================================================================================================
+
+
+def test_13e_hand_created_office_refuses_act_established_office_admits():
+    """**THE POSITION'S FALSIFIER, BOTH ARMS, ONE WORLD.** Two holders, each seated on an office
+    id BEFORE that office exists, so each Tenure's `granted_acts` snapshot opens at `()`:
+
+      * `p_mid` on `off_hand` -- the office is then HAND-CREATED (`w.offices[x] = Office(...)`, no
+        act). Pre-`13e`, `_eligible` read `w.offices.get(t.object)` live and admitted the moment
+        the dict held the id, regardless of the Tenure's own grant. Post-`13e` it reads
+        `t.granted_acts`, which a hand-mutation never reaches -- REFUSED.
+      * `p_low` on `off_act` -- the office is then FOUNDED BY A PLANTED `establish`. `13f`'s
+        effect re-stamps every live `hold` on the id it wrote, so `t.granted_acts` picks up the
+        grant in the same act -- ADMITTED.
+
+    Both arms exercise the RESOLVER (`_eligible`, `loop/resolve.py`), not `person_side_eligible`:
+    the person-side reading (`decision/options.py`) already read `t.granted_acts` before this
+    position and was never the bug -- `13f`'s own falsifier
+    (`test_13f_a_planted_establish_founds_the_office_and_grants_a_hold_opened_before_it`) pins the
+    ADMIT arm through that reading already. This pins the WORLD-side half `13e` closes, and its
+    REFUSE arm is the one no earlier test observes: before this position the resolver admitted it."""
+    w, d = _establish_world()
+    w.add_tenure(Tenure("t_hand", "p_mid", "off_hand", "hold", 0))
+    w.add_tenure(Tenure("t_act", "p_low", "off_act", "hold", 0))
+    [t_hand] = [t for t in w.tenures if t.id == "t_hand"]
+    [t_act] = [t for t in w.tenures if t.id == "t_act"]
+    assert "off_hand" not in w.offices and "off_act" not in w.offices, "fixture: neither exists yet"
+    early_holders = [t for t in (t_hand, t_act) if t.granted_acts == ()]
+    assert len(early_holders) >= 1, (
+        "fixture: no hold was opened before its office existed -- the falsifier is vacuous")
+
+    dispatch = VERB_TABLE["dispatch"]
+
+    # ARM 1 -- HAND-CREATED: no act, so no re-stamp reaches `t_hand`. REFUSE.
+    w.offices["off_hand"] = Office("off_hand", "Reeve", "S", ["issue", "dispatch"],
+                                    conferral="appointed", faction="Crown")
+    assert t_hand.granted_acts == (), "a hand-mutation re-granted a sitting holder"
+    act_hand = Act(id="a_hand", actor="p_mid", verb="dispatch", payload={})
+    assert not d._eligible(w, act_hand, dispatch), (
+        "the resolver admitted `p_mid`'s `dispatch` off a hand-created office -- `_eligible` is "
+        "still reading `w.offices[...].remit_acts` live instead of `t.granted_acts`")
+    assert not person_side_eligible(w.persons["p_mid"], dispatch), (
+        "control: the person-side reading was already correct before this position")
+
+    # ARM 2 -- FOUNDED BY ACT: `establish`'s effect re-stamps `t_act` in the same act. ADMIT.
+    out = _establish(w, d, "e_act", _founding(office="off_act"))
+    kinds = [e.kind for e in out]
+    assert kinds == ["office.established", "tenure.payload_set"], kinds
+    assert t_act.granted_acts == ("issue", "dispatch"), (
+        f"the act did not reach the sitting holder: {t_act.granted_acts}")
+    act_act = Act(id="a_act", actor="p_low", verb="dispatch", payload={})
+    assert d._eligible(w, act_act, dispatch), (
+        "the resolver refused `p_low`'s `dispatch` after a planted `establish` re-stamped the "
+        "grant -- `13f`'s own falsifier and this position's complement")
+    assert person_side_eligible(w.persons["p_low"], dispatch)
+
+
+def _remit_acts_attribute_reads_outside_allowlist() -> list:
+    """Every `Attribute` node named `remit_acts` anywhere under the package's NON-TEST sources,
+    outside `_grant_remit`, `Office.__post_init__` and `_eff_establish` -- the allow-list the
+    position's own falsifier names. `tests/` is excluded on purpose: a fixture asserting
+    `office.remit_acts == [...]` or hand-mutating one to build the SNAPSHOT-vs-mirror scenario is
+    the test's job, not a consumer of the fact through the eligibility path this scan protects.
+    A dict-key string (`t.payload["remit_acts"]`) is a `Subscript`/`Constant`, never an
+    `Attribute`, so `Tenure.granted_acts`'s own storage never matches this scan by construction."""
+    violations = []
+    for path in sorted(files.PACKAGE_DIR.rglob("*.py")):
+        rel = path.relative_to(files.PACKAGE_DIR)
+        if rel.parts[0] == "tests":
+            continue
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        allowed_spans = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef) and node.name in ("_grant_remit", "_eff_establish"):
+                allowed_spans.append((node.lineno, node.end_lineno))
+            elif isinstance(node, ast.ClassDef) and node.name == "Office":
+                allowed_spans += [(sub.lineno, sub.end_lineno) for sub in node.body
+                                   if isinstance(sub, ast.FunctionDef) and sub.name == "__post_init__"]
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Attribute) and node.attr == "remit_acts":
+                if not any(a <= node.lineno <= b for a, b in allowed_spans):
+                    violations.append(f"{rel.as_posix()}:{node.lineno}")
+    return violations
+
+
+def test_13e_no_remit_acts_attribute_read_outside_the_three_allow_listed_sites():
+    """**THE POSITION'S FALSIFIER, AST CLAUSE.** Before this position, `loop/resolve.py`'s
+    `_eligible` and `epistemic.py`'s `_ch_post_remit` were a fourth and fifth reader of
+    `Office.remit_acts`, beyond the three this scan allow-lists; this test observes their absence
+    now that both read `t.granted_acts` instead. A fourth reader is PLANNED
+    (`budget()` counting `t.granted_acts`, not `Office.remit_acts` -- not this position's job), so
+    this pins the CURRENT set to catch a future regression back onto the office-side field rather
+    than to block anything today."""
+    violations = _remit_acts_attribute_reads_outside_allowlist()
+    assert violations == [], (
+        f"`Office.remit_acts` read as an attribute outside `_grant_remit`/`Office.__post_init__`/"
+        f"`_eff_establish` at {violations} -- position `13e` consolidated every consumer onto "
+        f"`Tenure.granted_acts`")

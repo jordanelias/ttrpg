@@ -50,10 +50,16 @@ def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
         if kind == "own":
             return True                       # every person may attempt their own acts
         if kind == "remit":
+            # ⚠ ADMITS ON THE TENURE'S SNAPSHOT, NOT THE LIVE OFFICE (position `13e`,
+            # 2026-09-26). Was `off = w.offices.get(t.object); if off and arg in
+            # off.remit_acts` -- a second reading of the same fact `decision/options.py`
+            # already read off `t.granted_acts`, and the two could disagree (`epistemic.py`'s
+            # `_ch_post_remit` docstring names the gap). `t.granted_acts` is the grant the
+            # holder actually has; an office hand-mutated after seating does not reach it,
+            # and an `establish` re-stamp does (`13f`).
             for t in w.tenures:
                 if t.subject == a.actor and t.kind == "hold" and t.until is None:
-                    off = w.offices.get(t.object)
-                    if off and arg in off.remit_acts:
+                    if arg in t.granted_acts:
                         return True
         elif kind == "hold":
             # ⚠ THE ARGUMENT IS COMPARED, as it is person-side. It was parsed and discarded
