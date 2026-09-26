@@ -32,7 +32,7 @@ from engine.season.gaps import Forbidden, InstrumentDefect, ShapeGap, Unspecifie
 from engine.season.harness import headless as HL
 from engine.season.harness import probes as P
 from engine.season.loop.driver import SeasonDriver, mint_token, resolvable_verbs
-from engine.season.state.carriers import Act, Tenure
+from engine.season.state.carriers import Act, StateChange, Tenure
 from engine.season.state.gate import NoToken, Token
 from engine.season.state.ids import H, draw_factory
 
@@ -231,7 +231,13 @@ def test_g2_the_fold_is_no_longer_circular_a_wrong_token_is_refused():
     w = P.tiny_world()
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
-    act = lambda aid: Act(id=aid, actor="p_low", verb="work", payload={"site": "site_harbour"})
+    # ⚠ G4: THE ACT NOW DECLARES A DELTA. It declared none, and the control arm below asserted
+    # `site.worked` for a `work` that repaired nothing -- `H-94`'s worked case, which G4's
+    # `NoOpReceipt` refuses (`work.unavailable`). The control must be an act that DOES the thing,
+    # or it is not a control; a delta of 1 is the smallest that is one. The wrong-token arm is
+    # unaffected: the class is refused before anything is staged.
+    act = lambda aid: Act(id=aid, actor="p_low", verb="work", payload={"site": "site_harbour"},
+                          changes=[StateChange("site_harbour", "alter", "Act", "condition", 1)])
     with pytest.raises(Forbidden) as e:
         d._fold(w, mint_token(w, WriteClass.MATTER), act("g2_wrong"))
     assert e.value.where == "S30.2" and "class" in str(e.value), (e.value.where, str(e.value))

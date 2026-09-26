@@ -48,7 +48,8 @@ from .carriers import (
 from .ids import H
 from .acts import ActStore
 from .gate import (
-    TENURE_WRITE_CLASSES, Gate, NoToken, Token, not_yours, refuse_unauthored)
+    EDGE, ENTITY, STAGED, TENURE_WRITE_CLASSES, Change, Gate, NoToken, Subject, Token, no_op,
+    not_yours, refuse_unauthored)
 from .log import EventLog
 
 # Where S30's matrix says "no", the refusal belongs to the LAW THE CELL ENFORCES, not to the
@@ -197,6 +198,14 @@ class World:
         # ANTECEDENT can name the emission its own write just produced -- which is how a band
         # crossing's `causes[]` reaches the wear that crossed the floor.
         self._emitted_by_write: list[Event] = []
+        # G4 -- S27.3's SUM-THEN-CLAMP-ONCE ACCUMULATOR, `(record_kind, id, field) -> [(act id,
+        # delta)]`. It lived as a local of `loop/resolve.py::resolve` and was fed off the success
+        # EVENTS; it is a store now because an act's `work` WRITES to it, through the gate, and the
+        # gate must be able to read it before and after (`Subject.staged`). RESOLVE-scoped: filled
+        # by the fold's staging writes, drained by `resolve()`'s one write per cell at the end
+        # (`take_staged`), so it is empty at every barrier -- which is why the content hash does not
+        # fold it (and `test_h118`'s underscore exclusion is the right one, not an oversight).
+        self._staged: dict[tuple, list] = {}
         self.crossings: list[tuple] = []        # S12.1/L5 -- band-edge crossings, EMISSIONS
         # S33: "`purpose` must be unique per DRAW, not per operation, or two draws inside one
         # act collide." A per-TICK ordinal is unique within the tick AND identical across runs
@@ -328,8 +337,13 @@ class World:
     # its legs inside `(Person, travel_leg)`). A check keyed on `record_kind == "Tenure"` would see
     # none of them. So the store is OBSERVED instead: a snapshot before `apply()`, a diff after, and
     # every changed Tenure put to `state/gate.py::tenure_write_basis` -- whatever pair it hid in.
-    # G4 replaces the opaque closure with a gate-applied change; this observation is what F3 needs
-    # UNTIL then, and it is cheap to delete once the gate knows the change before it applies it.
+    # ⚠ THIS SAID *"G4 replaces the opaque closure with a gate-applied change; this observation is
+    # ... cheap to delete once the gate knows the change before it applies it"*, AND G4 DID NOT
+    # DELETE IT, FOR TWO REASONS. (1) A `Change` names its subjects before it runs, but its
+    # `apply` is still a closure, so an effect can still touch a Tenure it did not name -- and F3
+    # must see EVERY Tenure written, named or not, or an unnamed edge write is the bypass. (2) G4
+    # READS it: an `edge` subject has moved iff this diff lists it, so F9 and F3 share one
+    # observation of the tenure store rather than taking two.
     def _tenure_snapshot(self) -> list:
         """`(tenure, its seven written fields)` for every Tenure in the store, owner-first.
 
@@ -367,8 +381,10 @@ class World:
         ⚠ THE TENURE STORE ONLY, AND THAT IS STATED RATHER THAN IMPLIED. An effect that also wrote
         something else in the same `apply()` -- `establish`'s new office, `kill / wound`'s removed
         person -- keeps that write; undoing an arbitrary closure is not something the gate can do
-        until G4 hands it the change instead of a closure (`H-130` is this class). What IS
-        guaranteed: no Tenure write the gate refused survives the refusal."""
+        (`H-130` is this class). G4 did not change that: a `Change` names its subjects but its
+        `apply` is still a closure. What IS guaranteed: no Tenure write the gate refused -- for
+        want of a basis (`NotYours`) OR because the write moved nothing it named (`NoOpReceipt`)
+        -- survives the refusal."""
         for t, was in changes:
             if was is None:
                 owner = self.persons.get(t.subject)
@@ -377,6 +393,59 @@ class World:
             else:
                 (t.subject, t.object, t.kind, t.since, t.until, t.degree, t.payload) = \
                     _written_fields(was, copy=False)
+
+    # -- G4: WHAT A SUBJECT READS, BEFORE AND AFTER A WRITE ------------------------------------
+    def state_of(self, s: Subject) -> Any:
+        """`04 §C.2`'s `get()` for ONE declared subject -- the value the gate compares either side
+        of `apply()`. `state/gate.py`'s G4 block says why each shape reads what it reads.
+
+        An `entity` is `(False,)` when absent and `(True, <digest>)` when present, so a creation
+        and a deletion both move it. The digest is `_entity_digest` -- the string `content_hash`
+        folds for that entity -- unless the subject names `fields`, when it is those attributes'
+        `repr`s: a snapshot, never a reference, because an in-place mutation (`scar[axis] = ...`,
+        `payload["remit_acts"] = ...`) would otherwise compare equal to itself. A `staged` cell is
+        the NET delta staged on it. An `edge` is not read here -- see `write`.
+
+        ⚠ A STORE THAT IS NOT A STATE COLLECTION IS A CALLER BUG, AND IT RAISES. Read as "absent"
+        it would compare `(False,)` to `(False,)` and every write naming it would be refused as a
+        no-op for a typo -- a refusal that says the design declined when the effect misspelt."""
+        tag = s.ref[0]
+        if tag == ENTITY:
+            _, store, eid, fields = s.ref
+            if store not in self._STATE_COLLECTIONS:
+                raise InstrumentDefect(
+                    f"subject {eid!r} names store {store!r}, which is not one of World's state "
+                    f"collections {list(self._STATE_COLLECTIONS)}")
+            obj = getattr(self, store).get(eid)
+            if obj is None:
+                return (False,)
+            if fields is None:
+                return (True, _entity_digest(obj))
+            return (True,) + tuple(repr(getattr(obj, f)) for f in fields)
+        if tag == STAGED:
+            return sum(d for _, d in self._staged.get(s.ref[1], ()))
+        raise InstrumentDefect(f"`state_of` has no reader for a {tag!r} subject ({s.id!r}); an "
+                               f"`edge` is judged from the tenure observation in `write`")
+
+    def stage(self, key: tuple, act_id: str, delta: int) -> None:
+        """`S27.3`: STAGE ONE ACT'S DELTA on a cell, to be summed with every other act's and
+        applied ONCE, clamped, by `resolve()` at the end of the fold (`take_staged`).
+
+        ⚠ AN ALTER BY ZERO STAGES NOTHING, and that is the store's property rather than the
+        effect's decision: adding zero to a sum is not a write. The gate sees the staged total
+        unmoved and refuses the act as a no-op (`NoOpReceipt`), which is how `work` with no delta
+        -- `H-94`'s worked case -- stops emitting `site.worked`. The act id is kept beside the delta
+        because the accumulator's own write is judged per SUBJECT, and when it moves nothing every
+        act that staged on that subject is refused with it."""
+        if delta:
+            self._staged.setdefault(key, []).append((act_id, delta))
+
+    def take_staged(self) -> list:
+        """Every staged cell and its `(act id, delta)` contributions, in staging order -- and the
+        accumulator EMPTIED, so a cell is applied once and nothing staged survives its RESOLVE."""
+        out = list(self._staged.items())
+        self._staged = {}
+        return out
 
     def _grant_remit(self, t: Tenure, force: bool = False) -> bool:
         """`H-71` arm 2, THE WRITE HALF: seating a holder writes the office's remit acts into the
@@ -507,9 +576,10 @@ class World:
         DANGLED. §15.3 is explicit that the tenure ends THROUGH the death.
 
         ⚠ IT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `write`. Both callers are
-        already inside a gated write when they reach here — `_eff_kill` through the fold's
-        `apply()`, MATTER through its own `w.write` — and a nested write is a write inside a
-        write, which the gate refuses.
+        already inside a gated write when they reach here — `_eff_kill` through its `Change`'s
+        `apply`, which the gate calls (G4; `_eff_kill` no longer reads the return value, the gate
+        reads the victim instead), MATTER through its own `w.write` — and a nested write is a write
+        inside a write, which the gate refuses.
 
         ⚠ G3: AND THAT IS WHAT MAKES THE CASCADE ATTRIBUTABLE. The gate's F3 clause admits an edge
         closed by a non-owner -- or by no actor at all, at MATTER -- only as `destroy's cascade`:
@@ -599,15 +669,38 @@ class World:
             law="a kind no row declares is a FABRICATED kind, and the `emits:` column is the "
                 "only thing that may name one")
 
-    def write(self, thing: str, token: Token, apply: Callable[[], Any],
+    def write(self, thing: str, token: Token, apply: Optional[Callable[[], Any]],
               record_kind: str, fieldname: str, driver: str,
               caused_person_exists: Optional[str] = None,
               emits: Optional[str] = None,
               causes: Optional[list[str]] = None,
               subject: Optional[str] = None,
               actor: Optional[str] = None,
-              via: Optional[str] = None) -> Any:
-        """`G3`. `actor` AND `via` ARE WHO IS WRITING AND THROUGH WHICH SEAT -- `04 §C.2`'s
+              via: Optional[str] = None,
+              change: Optional[Change] = None) -> Any:
+        """`G4`. A WRITE IS HANDED EITHER A CLOSURE (`apply`) OR A `Change` (`change`), NEVER BOTH.
+
+        A `Change` is the fold's: the subjects an effect writes, named before it runs, and the
+        write. The gate reads every subject, applies the write, reads them again -- `04 §C.2`'s
+        *"before = get(); store._set(); after = get()"* -- and then, in this order: F3 (below) is
+        asked of every Tenure the write touched, named or not, and refuses with the store put
+        back; if NO named subject moved, the observed Tenure changes are put back too and it
+        raises `NoOpReceipt` (F9); otherwise it MINTS one receipt per subject that moved, for no
+        other, and returns `[(subject, receipt), ...]`. The fold mints nothing (`state/gate.py`'s
+        header). The order is not a detail: authority first, so an unlawful edge write is refused
+        as `NotYours` and put back rather than excused as a no-op that left it standing.
+
+        A closure is every other writer's -- MATTER's clocks, CALENDAR, WITNESS's deposits, the
+        probes, and the fold's check-only pairs after its first. It is applied unjudged, exactly as
+        before G4, and its return value is returned. ⚠ THAT IS A BOUND, NOT AN OVERSIGHT: `04 §C.2`
+        puts the no-op check on EVERY write, and the plan's position G4 rewrites the EFFECTS'
+        contract. A MATTER write that moves nothing still traces as written and still emits its
+        declared kind -- and that is LIVE, not hypothetical: `dwelling` wears at 0
+        (`rosters.yaml`), so every dwelling's `condition.worn` every season is exactly F9's shape.
+        Moving those writers onto `Change` is their own position's question, and MATTER has no
+        refusal kind for a no-op to become.
+
+        `G3`. `actor` AND `via` ARE WHO IS WRITING AND THROUGH WHICH SEAT -- `04 §C.2`'s
         `gate.write(token, kind, field, id, change, actor?, via?)`. Both default to `None`, which
         is an ACTORLESS write (MATTER's clocks, WITNESS's deposits): it may still close a Tenure
         through a death or a destruction the same write caused (`cascade`), and nothing else. The
@@ -664,6 +757,21 @@ class World:
                 f"World.write({thing!r}, ...) was handed a token minted at tick {token.tick}; the "
                 f"world is at tick {self.tick}. A token is dropped at its barrier (04 §C.1) and a "
                 f"kept one authorizes nothing a season later.")
+        # G4. ONE OR THE OTHER, AND A `Change` THAT IS NOT ONE IS REFUSED BY TYPE: an effect still
+        # written to the pre-G4 contract (mutate, return ids) returns a list, and admitting it as a
+        # closure would re-open exactly the unjudged path this position closes. After the token
+        # checks, so a write with no token is still refused for want of a token first (G2).
+        if (apply is None) == (change is None):
+            raise InstrumentDefect(
+                f"World.write({thing!r}, ...) takes a closure OR a Change, exactly one; got "
+                f"apply={'set' if apply is not None else 'None'}, "
+                f"change={'set' if change is not None else 'None'}")
+        if change is not None and not isinstance(change, Change):
+            raise InstrumentDefect(
+                f"World.write({thing!r}, ...) was handed {type(change).__name__} {change!r} as its "
+                f"change. An effect returns a `state/gate.py::Change` -- the subjects it writes and "
+                f"the write -- so the gate can read them before and after (G4); an effect still "
+                f"mutating and returning ids is on the retired contract")
         wclass = token.write_class
         step = self.step
         sname = step.value if step else "-"
@@ -771,28 +879,59 @@ class World:
         # this same write removed from the world -- the existence changes it CAUSED, observed here
         # rather than claimed: `caused_person_exists` is the caller's word for S15.3's pre-check
         # above, and the cascade basis does not take it.
-        watch = wclass in TENURE_WRITE_CLASSES
+        # G4: A `Change` IS ALWAYS WATCHED -- its `edge` subjects are judged from this same
+        # observation -- whatever its class. Every fold write is ACTS, which is watched anyway.
+        watch = wclass in TENURE_WRITE_CLASSES or change is not None
+        changes: list = []
         if watch:
             snap = self._tenure_snapshot()
             existed = [set(store) for _, store in self._entity_stores()]
-        before = apply()
+        if change is None:
+            before = apply()
+        else:
+            # `04 §C.2`: *"before = get(); store._set(); after = get()"*. `edge` subjects have no
+            # `get()` of their own: the tenure diff below is theirs.
+            was = [None if s.ref[0] == EDGE else self.state_of(s) for s in change.subjects]
+            change.apply()
+            before = None
         if watch:
             changes = self._tenure_changes(snap)
             if changes:
-                gone = frozenset().union(*(was - set(store) for was, (_, store)
+                gone = frozenset().union(*(was_ids - set(store) for was_ids, (_, store)
                                            in zip(existed, self._entity_stores())))
                 refused = refuse_unauthored(self, changes, actor, via, gone)
                 if refused:
                     # THE REFUSAL IS ONLY HONEST IF THE EDGE IS AS IT WAS: the store goes back
                     # first, the trace records a refused write, and the mint window SHUTS -- a
-                    # refused write must not be able to issue the receipts `_apply_write` would
-                    # otherwise mint after it returns (`H-131`'s `close()`, given a caller).
+                    # refused write must not be able to issue a receipt after it
+                    # (`H-131`'s `close()`, given a caller).
                     self._restore_tenures(changes)
                     TRACE.write(thing, wclass.value, sname, False)
                     self.gate.close()
                     raise not_yours(refused, actor, via, record_kind, fieldname)
+        moved: list = []
+        if change is not None:
+            # F9, AFTER F3 AND NEVER BEFORE IT (the docstring says why). An `edge` subject moved
+            # iff the diff lists that Tenure -- by identity, changed or opened.
+            edged = {id(t) for t, _ in changes}
+            moved = [s for s, b in zip(change.subjects, was)
+                     if (id(s.ref[1]) in edged if s.ref[0] == EDGE else self.state_of(s) != b)]
+            if not moved:
+                # NOTHING IT NAMED MOVED, SO NOTHING IT DID STANDS WHERE THE GATE CAN SEE IT: a
+                # Tenure the closure touched anyway goes back, as on `NotYours` -- otherwise the
+                # refusal Event would stand beside an edge the refused write opened.
+                if changes:
+                    self._restore_tenures(changes)
+                TRACE.write(thing, wclass.value, sname, False, where="F9")
+                self.gate.close()
+                raise no_op(list(change.subjects), actor, record_kind, fieldname)
         TRACE.write(thing, wclass.value, sname, True)
         self.writes.append((thing, wclass.value, sname, record_kind, fieldname, driver))
+        if change is not None:
+            # THE GATE MINTS, AND ONLY FOR WHAT MOVED -- `04 §C.2`'s `r = Receipt(...)` after the
+            # no-op check, so a receipt for a write that did not happen is never issued at all.
+            # Field and mode are the pair's and `"set"`, the receipt the fold used to mint by hand.
+            before = [(s, self.gate.mint(s.id, "set", driver, fieldname)) for s in moved]
         if emits is not None:
             # ⚠ THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. `thing` is a human label for the
             # trace line (`"condition"`); the emission's subject has to be the RECORD ID or

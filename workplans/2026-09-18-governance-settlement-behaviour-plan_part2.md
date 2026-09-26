@@ -439,6 +439,54 @@ rewritten.
 **FALSIFIER, sharpened.** The planted no-mutation effect must produce the refusal Event and NO
 `mode="set"` receipt for its subject: refusal count `>= 1`, success count `== 0`.
 
+✅ **DONE — `ED-IN-0278`, 2026-09-26.** `state/gate.py` gains `Subject` (entity / edge / staged),
+`Change(subjects, apply)`, `NO_CHANGE` and `NoOpReceipt`; `World.write` takes a closure XOR a
+`Change` (refused by type otherwise), reads every named subject before and after applying, asks
+F3 first (a Tenure write with no basis is `NotYours` and is put back, never excused as a no-op),
+then refuses `NoOpReceipt` if nothing named moved (putting back any Tenure the closure touched
+regardless), and otherwise mints one receipt per subject that moved and no other. All twelve
+effects in `loop/effects.py` are rewritten to the new contract (each names its own subjects, its
+own docstring states the decision); `work`'s pre-flight hazard is resolved by judging it TWICE —
+once per act at the staged cell (`World.stage`/`state_of`'s `staged` tag), once per site at
+`resolve()`'s summed accumulator write (now `World._staged`/`take_staged`, not a local) — so a
+zero-or-cancelling delta refuses at the act and a clamp-eaten sum refuses every act that staged on
+it (`_refuse_after_the_fact`). Confirmed by direct execution, not merely trusted: 341 tests pass;
+`build_realm(0)`'s content hash is BYTE-IDENTICAL before/after at 1 season
+(`52cfd9f0be4822fa9f4abd9ee3b0b6e6`) and 4 seasons (`97577abf0d862a921ce3b27fbe24fb36`) — the
+OBSERVABLE's licensed hash-move (`work`) never fires because no run in `build_realm(0)` reaches a
+non-zero delta's clamp edge. **WHAT DID MOVE, AND IT IS NOT WHAT THE OBSERVABLE NAMED:** the
+143-case corpus's distinct-executed-set count, 57 → 64 over the same 89 live worlds (28 changed).
+The plan's own OBSERVABLE licensed a hash move from `work` alone; none occurred, and what moved
+instead is a different measure entirely, from a different verb — attributed and verified
+independently rather than taken on the producer's word, via a `git worktree` at `335d095` (this
+position's own parent commit) run head-to-head against this tree over the same 143 cases, seed 0:
+628 of 900 `transfer` effect calls have `from == to == r_hearth` (an upstream operand-derivation
+defect, not this position's — see `H-136` below), so the decrement and increment cancel on one
+store; before G4 this cancelling write still published `transfer.made` with two receipts (`ID-9`'s
+own shape), and F9 now correctly refuses it as `transfer.refused`. TRACE-verified: of 892 total
+F9 refusals in the corpus, exactly 628 carry F9's "every subject it named reads the same"
+message on `(Rung, stores)` — the rest are pre-existing declines (`contain_ascends` failing for
+`move`, insufficient stores for `transfer`) now routed through the same channel, not new
+behaviour. Every per-verb population delta the corpus move produces was independently reproduced:
+`transfer` 75→59 worlds, and the cascade (worlds evolving differently once a transfer that used to
+silently succeed is refused) moves `speak` 78→81, `tell` 63→60, `surveil` 55→53, `interview`
+46→45, `kill / wound` 47→46, `move` 47→46, `release` 9→8; `create_record`/`utter` unmoved. Accepted
+as a correctness fix, not a regression: the old behaviour was `ID-9`'s fabricated-success class.
+`kill / wound`'s subject is narrowed to presence + `body` only (`Subject.entity(..., fields=("body",))`),
+deliberately excluding the scar — verified sound: judging the whole Person would recouple `H-123`'s
+control arm to `H-128`'s scar sweep, which an earlier fix deliberately decoupled; at shipped
+`scar_step = 0` the two readings cannot differ, and no run in `build_realm(0)` reaches the case
+that would separate them. TWO HOLES FILED FROM THE VERIFICATION PASS, both latent and neither
+fixable inside this position's declared WHERE: `H-135` (a closure write — MATTER, CALENDAR,
+WITNESS — is never judged for F9, so `dwelling`'s zero-wear `condition.worn` is live, unhypothetical
+`ID-9` left open outside effects) and `H-136` (the self-transfer derivation itself, `H-94`'s own
+lane, is unfixed — F9 stops it being REPORTED as a transfer, not from being formed and refused
+every time). Superseded state, kept for history: **STATE (2026-09-25). NOT STARTED.** `_apply_write`
+(`loop/resolve.py:352`) computes no before/after; the effect runs inside `apply()` and the receipts
+are minted after `w.write` returns (`:400`). Eleven effects are registered today; every effect
+landed before this position adds one to the rewrite (`13f` first, in part 1 `§3.1`'s order — so
+twelve).
+
 ### 7a · COMMIT-EFFECT (added 2026-09-25)
 **not earlier** than `15`, `15c` and `15b` — its aperture is shut until they land · **not later** than
 `17a`, which waits on it.

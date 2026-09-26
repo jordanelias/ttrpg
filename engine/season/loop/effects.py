@@ -13,12 +13,37 @@ does. A verb-keyed effect registered here is one implementation for every caller
 a `writes:` column and no effect REFUSES rather than silently writing nothing. Register row H-63.
 
 ⚠ NOTHING HERE TAKES A WRITE TOKEN, AND NO EFFECT CALLS `w.write`. The first version of this
-docstring said every effect writes THROUGH `w.write(...)`, which is the exact inversion
-`_eff_confer`'s own docstring refutes seventy lines below — *"AN EFFECT MUTATES AND RETURNS THE
-IDS IT TOUCHED; IT DOES NOT CALL `w.write` … My first version did both, and the fold correctly
-refused."* An effect mutates directly (`w.add_tenure`, `w.records[...] =`, `src.stores[kind] =`)
-and returns the ids; the FOLD passes those ids through the gate. Caught by a read-only critic,
-and it is §47's failure exactly: a false claim of enforcement stops the next reader checking.
+docstring said every effect writes THROUGH `w.write(...)`, which is the exact inversion the old
+`_eff_confer` docstring refuted -- *"AN EFFECT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT
+CALL `w.write` … My first version did both, and the fold correctly refused."* Caught by a
+read-only critic, and it is §47's failure exactly: a false claim of enforcement stops the next
+reader checking.
+
+⚠⚠ G4 (plan position 7): THE CONTRACT EVERY EFFECT HERE IS WRITTEN TO, AND IT CHANGED. An effect
+no longer MUTATES and REPORTS; it DESCRIBES. It reads the world as its predecessors left it and
+returns a `state/gate.py::Change` -- the SUBJECTS it will write, named BEFORE anything moves, and
+the write (`apply`), which still goes through the store's own methods (`add_tenure`,
+`remove_person`, `_grant_remit`), because those are the one owners of their rules. The fold hands
+the `Change` to `World.write`, which reads every subject, applies, reads again, and mints a receipt
+for each subject that MOVED and for no other; if none moved it raises `NoOpReceipt` and the fold
+emits the row's refusal (`04 §C.2`, F9). So an effect says what it will write and THE GATE says
+whether it did -- the bookkeeping several effects carried to avoid claiming a write that did not
+happen (`establish`'s `moved`, `_grant_remit`'s return value read as an `earned` filter) is the
+gate's now, once.
+
+WHAT EACH EFFECT NAMES IS A DECISION, and each docstring below states its own. Two rules hold for
+all twelve, and both exist to keep every hash that is not `work`'s where it was:
+
+  1. AN EFFECT NAMES THE IDS IT USED TO REPORT, IN THE ORDER IT REPORTED THEM -- and where it
+     used to decide by hand WHETHER to report one (`establish`'s office), it names it always and
+     the gate decides. So the receipts a success Event carries are exactly the ones it carried,
+     and `content_hash` folds each receipt. Naming MORE
+     (`move`'s legs, `create_record`'s `hold`, `kill`'s cascade) would add receipts to Events that
+     have always carried fewer and move hashes no no-op refusal explains. The unnamed Tenures are
+     still SEEN -- F3 judges every Tenure written, and a no-op refusal puts them back.
+  2. DECLINING IS `NO_CHANGE`. An effect that decides not to write (`transfer` to a non-rung, a
+     `move` up no ladder, an `utter` over an existing Proposition) returns it, and the gate's
+     `NoOpReceipt` is the refusal -- the same channel as an effect that ran and moved nothing.
 """
 
 from __future__ import annotations
@@ -30,6 +55,7 @@ from ..data.rosters import (
 from ..gaps import InstrumentDefect, Unspecified
 from ..loop.predicates import office_described_by
 from ..state.carriers import Proposition, Record, Tenure
+from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
 from ..trace_log import TRACE
 
@@ -107,14 +133,20 @@ def _operand(a: "Act", name: str):
 # person, it tells one, and whether they go is their own act next season.
 
 @effect_for("confer")
-def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
+def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """Seats an office: a new `hold` Tenure opens, and any prior holder's closes.
 
-    ⚠ AN EFFECT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `w.write`. The fold
-    calls it INSIDE the gate's `apply()`, once, for all of the row's `writes:` — so a nested
-    `w.write` is a write inside a write, and returning `None` tells the fold nothing was touched,
-    which makes it emit the REFUSAL. My first version did both, and the fold correctly refused an
-    act whose state change had in fact happened. `_apply_write`'s docstring states the contract.
+    ⚠ IT DOES NOT CALL `w.write`, AND IT NO LONGER MUTATES WHERE IT DECIDES. Before G4 the fold
+    called it INSIDE the gate's `apply()` and it returned the ids it had touched; a nested
+    `w.write` there was a write inside a write, which the fold refused (my first version did both).
+    Now it returns a `Change` and the gate applies it.
+
+    G4 -- WHAT IT NAMES: THE EDGES, EACH WITH THE KIND IT EARNS. Every live `hold` on the office
+    (`tenure.closed`) and the new one (`tenure.opened`), opened-first as the old mapping reported
+    them. Each is an `edge` subject, judged by G3's diff: a closed hold's `until` moves, the new
+    hold appears. So conferring onto an UNHELD office names no closure and earns no
+    `tenure.closed`, which the old per-kind mapping did by hand. It cannot be a no-op in practice
+    -- the new hold always opens -- but if it were, it would refuse like any other.
 
     ⚠ G3 -- BOTH ITS WRITES ARE ON EDGES SOMEBODY ELSE OWNS, AND EACH IS DECLARED. The write gate's
     F3 clause (`state/gate.py::tenure_write_basis`) admits the conferee's new `hold` under the
@@ -136,20 +168,20 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     # silent self-conferral becomes a loud `InstrumentDefect`) and nothing measurable moved.
     obj, to = d.get("office"), _operand(a, "to")
     if not obj or obj not in w.offices:
-        return []
-    closed = []
-    for t in w.tenures:
-        if t.kind == "hold" and t.object == obj and t.live:
-            t.until = w.tick
-            closed.append(t.id)
+        return NO_CHANGE
+    closed = [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live]
     nt = Tenure(H(w.world_seed, w.tick, to, f"hold:{obj}"), to, obj, "hold", w.tick)
-    w.add_tenure(nt)
+
+    def perform() -> None:
+        for t in closed:
+            t.until = w.tick
+        w.add_tenure(nt)
     # ⚠ PER-KIND. Conferring onto an UNHELD office closes nothing, and returning a flat list made
     # the fold publish `tenure.closed` anyway -- a state change that did not happen, which is the
-    # fabricated-`person.died` class committed inside the fix for it. The mapping's empty entry is
-    # dropped by `_apply_write`.
+    # fabricated-`person.died` class committed inside the fix for it. Each subject now carries the
+    # kind it earns, and a kind no moved subject earned is not emitted (`loop/resolve.py::_fold`).
     #
-    # ⚠ `[nt.id]`, NOT `[obj, to]` -- KEPT AS THE TENURE'S OWN ID, DELIBERATELY, AFTER A REJECTED
+    # ⚠ `nt.id`, NOT `[obj, to]` -- KEPT AS THE TENURE'S OWN ID, DELIBERATELY, AFTER A REJECTED
     # ALTERNATIVE. A first version of this fix reported `[obj, to]` (the office and the new
     # holder) so a witness's claim would name something legible. It was wrong: `_apply_write`
     # mints a Receipt against THIS write pair's field (`Tenure.until`, `verb_table.yaml`'s first
@@ -164,23 +196,33 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     # `tenure.closed` Receipt naming a Tenure into claims about the two entities that Tenure
     # connects, on the same read `_ch_document_key` already does. One reader rule serves `confer`,
     # `revoke` and `release` alike, rather than three effects each inventing their own legible id.
-    return {"tenure.opened": [nt.id], "tenure.closed": closed}
+    return Change((Subject.edge(nt, "tenure.opened"),)
+                  + tuple(Subject.edge(t, "tenure.closed") for t in closed), perform)
 
 
 @effect_for("establish")
-def _eff_establish(w: "World", a: "Act", res: "Resolution | None" = None) -> dict:
+def _eff_establish(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """Founds an office, or changes an existing office's remit -- and in the SAME act re-stamps the
     grant on every live `hold` on it.
 
     `_req_establish` has already refused everything that would make the constructor raise, so the
     `Office` built here is the one it admitted; if it is built from an act that skipped the
     precondition, the constructor's raise is the backstop and is left loud. `None` (an operand
-    missing) returns nothing touched, and the fold emits `establish.refused`.
+    missing) is `NO_CHANGE`, and the fold emits `establish.refused`.
 
     A NEW id: the office is stored with `establishment` at its default -- `17a` deletes that field,
     its matrix row and the `writes:` entry together, and this effect does not pre-empt it. An
     EXISTING id: `remit_acts` is rewritten in place and nothing else is touched (the precondition
     refused any other difference). It earns `remit.changed` only if the remit actually moved.
+
+    G4 -- WHAT IT NAMES: THE OFFICE (whole, as the content hash sees it) earning `office.established`
+    or `remit.changed`, then every live `hold` on it earning `tenure.payload_set` -- the order the
+    old mapping reported. THE GATE NOW DECIDES WHAT THIS EFFECT USED TO DECIDE BY HAND: the old
+    body compared the remits itself (`moved`) and read `_grant_remit`'s boolean to filter which
+    holds it reported, two private answers to *did this write happen*. Both are the gate's before-
+    and-after now: an equal remit leaves the office's digest where it was (no `remit.changed`), a
+    hold already carrying this grant is not in the tenure diff (no `tenure.payload_set`), and an
+    establish that moves neither is `NoOpReceipt` -> `establish.refused`, as it was.
 
     ⚠ THE RE-STAMP, AND WHY IT IS HERE AND ROUTED THROUGH `_grant_remit`. The grant on a `hold` is
     a SNAPSHOT (`Tenure.granted_acts`): a hand-mutation of `w.offices[x].remit_acts` reaches no
@@ -195,28 +237,32 @@ def _eff_establish(w: "World", a: "Act", res: "Resolution | None" = None) -> dic
     ⚠ G3 -- THE RE-STAMP WRITES A SITTING HOLDER'S EDGE, AND IT IS DECLARED. A `hold` is its
     holder's (S15.1), so re-writing its grant is a Tenure write by a non-owner -- a fourth live one
     beside `revoke`, `confer` and `kill / wound`, which G3's plan text did not list. The gate admits
-    it under the CONFERRAL basis (the seat exercised may fill this office, so it may re-grant it),
-    or `T-m` for the actor's own `hold`; `_req_establish`'s clause 5 asks that first."""
+    it under the CONFERRAL basis (the seat exercised may fill this office, so it may re-grant it);
+    `_req_establish`'s clause 5 asks that first. ⚠ *"or `T-m` for the actor's own `hold`"* STOOD
+    HERE AND IS FALSE SINCE G3's OWN ANTAGONIST FIX: `T-m` never admits re-granting a seat-hold,
+    not even the actor's own (`state/gate.py::tenure_write_basis`) -- a sole holder re-stamping
+    his own seat is exactly the exploit that fix closed. Corrected at G4, which rewrote this body."""
     off = office_described_by(a)
     if off is None:
-        return []
+        return NO_CHANGE
     cur = w.offices.get(off.id)
-    if cur is None:
-        w.offices[off.id] = off
-        wrote = {"office.established": [off.id]}
-    else:
-        moved = list(cur.remit_acts) != list(off.remit_acts)
-        if moved:
+    holds = [t for t in w.tenures if t.kind == "hold" and t.object == off.id and t.live]
+
+    def perform() -> None:
+        if cur is None:
+            w.offices[off.id] = off
+        else:
             cur.remit_acts = list(off.remit_acts)
-        wrote = {"remit.changed": [off.id] if moved else []}
-    wrote["tenure.payload_set"] = [
-        t.id for t in w.tenures
-        if t.kind == "hold" and t.object == off.id and t.live and w._grant_remit(t, force=True)]
-    return wrote
+        for t in holds:
+            w._grant_remit(t, force=True)
+    return Change(
+        (Subject.entity("offices", off.id,
+                        "office.established" if cur is None else "remit.changed"),)
+        + tuple(Subject.edge(t, "tenure.payload_set") for t in holds), perform)
 
 
 @effect_for("release")
-def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
+def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """`04 §A.3` row 14's generic closer: the actor ends a live edge they own.
 
     THE MIRROR OF EVERY OPENER AT ONCE, which is the point -- `04 §A.3` row 14 replaces *four
@@ -231,10 +277,14 @@ def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     says a person may resign; the verb table does not let them. Fix the table, and do not re-open
     the design."* `hold` is in the domain for exactly this reason.
 
-    ⚠ NO `w.write` HERE. An effect MUTATES AND RETURNS THE IDS IT TOUCHED; the fold calls it inside
-    the gate's `apply()` for the row's `writes:`. Returning an empty list is how the fold learns
-    nothing was closed, and that is what emits `release.refused` -- so the refusal channel is the
-    return value, not a raise (§E2: *failure emits, never raises*).
+    ⚠ NO `w.write` HERE, AND NOTHING TO RELEASE IS A REFUSAL, NOT A RAISE (§E2: *failure emits,
+    never raises*). Before G4 an empty returned list was how the fold learned nothing was closed;
+    now the `Change` names no edge, the gate finds nothing moved, and `NoOpReceipt` is what emits
+    `release.refused` -- the same refusal, through the one channel every effect shares.
+
+    G4 -- WHAT IT NAMES: each live releasable edge the actor owns on `subject`, as an `edge`
+    subject; the whole of what it writes. A closure always moves `until` (live means `until is
+    None`), so a release that finds an edge is never a no-op, and one that finds none always is.
 
     ⚠ G3: `T-m` BY CONSTRUCTION, CONFIRMED RATHER THAN ASSUMED. The scan below closes only edges
     whose `subject` is the actor, so every write it makes is the owner's own and the gate admits it
@@ -242,33 +292,40 @@ def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     observes both halves: the release admitted, and a write by the same actor on another's edge
     refused."""
     subj = _operand(a, "subject")
-    touched = []
-    for t in w.tenures:
-        if (t.subject == a.actor and t.object == subj
-                and t.kind in RELEASABLE_KINDS and t.live):
-            t.until = w.tick
-            touched.append(t.id)
-    return touched
+    edges = [t for t in w.tenures
+             if (t.subject == a.actor and t.object == subj
+                 and t.kind in RELEASABLE_KINDS and t.live)]
+    return _closing(w, edges)
 
 
 @effect_for("revoke")
-def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
+def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """Unseats an office: the live `hold` closes. The mirror of `confer`, which is why the two are
     the pair that proves the slice — one opens what the other closes, on the same row.
+
+    G4 -- WHAT IT NAMES: every live `hold` on the office, as an `edge` subject -- exactly what it
+    closes and what it always reported. An office nobody holds names nothing, and the gate's
+    `NoOpReceipt` emits `revoke.refused` where the empty list used to.
 
     ⚠ G3: A `T-o` WRITE, AND `via` MUST BE PRESENT. The `hold` it closes is the incumbent's, so the
     write gate admits it only as `04 §C.2`'s third clause -- `Act.via` names a seat the actor sits
     in, and the target seat's revocation basis (ruling (3), `rung_above_same_faction`) admits THAT
     seat -- or `T-m` if the incumbent is the actor. A revocation with no seat is refused at the gate
-    and the hold put back; `_req_revoke` asks the same `may_revoke` first."""
+    and the hold put back; `_req_revoke` asks the same `may_revoke` first. ⚠ F3 IS ASKED BEFORE F9,
+    so a seatless revocation is `NotYours` -- never excused as a no-op."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     obj = d.get("office")
-    touched = []
-    for t in w.tenures:
-        if t.kind == "hold" and t.object == obj and t.live:
+    return _closing(w, [t for t in w.tenures if t.kind == "hold" and t.object == obj and t.live])
+
+
+def _closing(w: "World", edges: list) -> Change:
+    """`release` and `revoke`'s one write: close these edges at this tick, each named as an `edge`
+    subject earning every kind the row declares (`tenure.closed`, on both rows). One body because
+    it is one write; the two effects differ only in WHICH edges, which is the whole of each."""
+    def perform() -> None:
+        for t in edges:
             t.until = w.tick
-            touched.append(t.id)
-    return touched
+    return Change(tuple(Subject.edge(t) for t in edges), perform)
 
 
 @effect_for("convene")
@@ -281,23 +338,42 @@ def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
 
     ⚠ WHAT THE SITTING THEN DECIDES IS `H-32` AND IS NOT HERE. `convene` puts a date on the
     calendar and stops, which is `L5`: a clock may not produce an outcome. `W7` is the item that
-    makes the sitting decide."""
+    makes the sitting decide.
+
+    G4 -- WHAT IT NAMES: THE DATE, whole. Its id is `H(seed, tick, actor, venue)`, so a SECOND
+    identical convening by the same person at the same venue in the same season finds the date
+    already due when it says and already attached -- it moves nothing, and is now
+    `convene.refused` where it used to publish a second `date.scheduled` for a date that was
+    scheduled once. A different `when` moves `due_at` and is a real reschedule. Measured before
+    this position on `build_realm(0)`: no convening in four seasons repeats one, so no run moves."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     when = int(d.get("when", w.tick + 1))
     did = H(w.world_seed, w.tick, a.actor, f"convene:{d.get('venue') or '-'}")
-    date = w.dates.setdefault(did, {"id": did, "venue": d.get("venue")})
-    date["due_at"] = when
-    date["convening_attached"] = True
-    return [did]
+
+    def perform() -> None:
+        date = w.dates.setdefault(did, {"id": did, "venue": d.get("venue")})
+        date["due_at"] = when
+        date["convening_attached"] = True
+    return Change((Subject.entity("dates", did),), perform)
 
 
 @effect_for("move")
-def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
+def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§D4 / #353 §15.1: travel is a TENURE ALTER, owned by the traveller as the Tenure's subject.
     The old leg closes and a new one opens; the destination rides on the payload where the act
     names one. ⚠ This is `H-63`: Part E's `writes:` names the three cells and never the values, so
     what a `move` DOES is stated here rather than in the table — one implementation owned by the
-    resolver, which is the distinction §27.2 draws against a caller-supplied lambda."""
+    resolver, which is the distinction §27.2 draws against a caller-supplied lambda.
+
+    G4 -- WHAT IT NAMES: THE TRAVELLER, WHOLE -- and only the traveller, which is what it always
+    reported. That is not an omission of the legs: a `contain` leg is owned by its subject and
+    stored on the Person (S15.1), so the Person's digest -- the string the content hash folds for
+    them -- carries the legs AND `travel_leg`, and a move moves it. Naming the two legs as well
+    would put two receipts on every `travel.moved` that has always carried one, which moves a hash
+    for a reason that is not a no-op. A traveller who is not a Person (a hand-built act; RESOLVE
+    never folds one, `act.ineligible` stops it first) names an absent subject that stays absent,
+    so the move is refused and the legs it opened are put back -- where before G4 it published
+    `travel.moved` about a mover that does not exist."""
     dest = _operand(a, "to")
     # ⚠ THE GUARD MOVED TO `_operand` AND ITS HISTORY IS KEPT HERE, because the history is what
     # makes the guard's shape legible. Rev 1 fell through on a missing destination, closed every
@@ -325,43 +401,75 @@ def _eff_move(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
                        "S10/E3", chose="change nothing, so the fold emits the refusal",
                        alternatives=["write the edge anyway (add_tenure raises and the season "
                                      "dies)", "let the precondition admit it and crash later"])
-        return []
-    for t in w.tenures:
-        if t.subject == a.actor and t.kind == "contain" and t.until is None:
-            t.until = w.tick
-    w.add_tenure(Tenure(H(w.world_seed, w.tick, a.actor, f"leg:{a.id}"),
-                        a.actor, dest, "contain", since=w.tick))
-    # ⚠ THE DECLARED WRITE, NOW ACTUALLY WRITTEN. `verb_table.yaml`'s `move` row names
-    # `(Person, travel_leg)` as its FIRST write and rev 1 never touched the field, so
-    # `Query.budget`'s distance penalty read `len(p.travel_leg)` == 0 in every run and the only
-    # test of it set the field by hand. A declared write that no effect performs is a lie the
-    # write matrix cannot catch, because the matrix gates writes that HAPPEN.
-    mover = w.persons.get(a.actor)
-    if mover is not None:
-        mover.travel_leg = list(mover.travel_leg) + [dest]
-    return [a.actor]
+        return NO_CHANGE
+
+    def perform() -> None:
+        for t in w.tenures:
+            if t.subject == a.actor and t.kind == "contain" and t.until is None:
+                t.until = w.tick
+        w.add_tenure(Tenure(H(w.world_seed, w.tick, a.actor, f"leg:{a.id}"),
+                            a.actor, dest, "contain", since=w.tick))
+        # ⚠ THE DECLARED WRITE, NOW ACTUALLY WRITTEN. `verb_table.yaml`'s `move` row names
+        # `(Person, travel_leg)` as its FIRST write and rev 1 never touched the field, so
+        # `Query.budget`'s distance penalty read `len(p.travel_leg)` == 0 in every run and the only
+        # test of it set the field by hand. A declared write that no effect performs is a lie the
+        # write matrix cannot catch, because the matrix gates writes that HAPPEN.
+        mover = w.persons.get(a.actor)
+        if mover is not None:
+            mover.travel_leg = list(mover.travel_leg) + [dest]
+    return Change((Subject.entity("persons", a.actor),), perform)
 
 
 @effect_for("work")
-def _eff_work(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
+def _eff_work(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """`work` alters `(Site, condition)` by the act's declared delta. The DELTA IS NOT APPLIED
     HERE -- §27.3 sums every delta across the fold and clamps ONCE, so applying it per act would
     make the clamp arrival-order dependent, which §32 forbids. The write goes through the gate so
     the class and Partition are checked; the value lands in the accumulator.
 
-    ⚠ IT REPORTS THE SITE ANYWAY. The fold now refuses an act whose effect touched nothing, and
-    `work`'s DELTA is deferred while its SUBJECT is not: the act is about that site, and saying
-    so is what keeps the deferral from reading as a no-op."""
+    ⚠⚠ G4 -- THE ONE EFFECT WHOSE WRITE IS NOT WHERE ITS CHANGE IS, AND WHERE F9 IS JUDGED FOR IT.
+    The plan's pre-flight named the trap: a gate that compares the SITE either side of this act's
+    write sees no change BY CONSTRUCTION -- the site moves later, in `resolve()`'s one write per
+    cell -- so `work` would be refused forever. So the change is judged TWICE, at the two writes
+    that exist, each by the same before-and-after and neither by a rule of its own:
+
+      1. HERE, PER ACT: the act STAGES its delta on the accumulator (`World.stage`), and the
+         subject is that staged cell (`Subject.staged`). It moves iff the delta is non-zero -- an
+         alter by zero stages nothing -- so a `work` declaring no delta, or a delta of 0, is
+         `NoOpReceipt` -> `work.unavailable` at its own write. That is `H-94`'s worked case:
+         `site.worked` over a repair nobody declared. The receipt still names the SITE, which is
+         what the success Event has always carried (hash-identical where a real delta is staged).
+      2. AT THE ACCUMULATOR, PER SITE: `resolve()` writes the clamped sum once, naming the Site, and
+         the gate compares the site's condition either side. A clamp that eats the whole sum -- a
+         site already at `condition_scale` being worked up, or two deltas cancelling -- moves
+         nothing, and EVERY act that staged on that site is refused with it: their provisional
+         `site.worked` is replaced in place by `work.unavailable` (`_refuse_after_the_fact`).
+
+    WHY NOT JUDGE ONLY AT (2), the plan's candidate: an act with no delta stages nothing, so the
+    accumulator would never learn of it and its `site.worked` would stand beside a site another
+    act moved. WHY NOT ONLY AT (1): a per-act delta cannot see the clamp. The staged cell is not a
+    parallel mechanism -- it is a store the gate reads like any other, which is why the gate needed
+    no branch for `work`.
+
+    ⚠ THE DELTA IS READ FROM THE ACT'S OWN DECLARED CHANGES, ON ITS OWN SITE, AND NOWHERE ELSE.
+    Before G4 the accumulator summed every integer delta on ANY success Event's `changes[]` for ANY
+    site -- so an act of a verb whose row writes no `Site.condition` could move a site by riding a
+    delta on its Event, a write the matrix never saw declared. Now only `work` stages, and only on
+    the site it names. Unreachable from a computed act (none carries a delta: `H-94`)."""
     # ⚠ NO FALLBACK. This read `or next((x for x in sorted(w.sites)), None)` -- the alphabetically
     # FIRST site in the world -- so a `work` with no site named one nobody chose. `_eff_move`
     # refused the identical situation and this did not; found by the W-A adversarial pass, which
     # noted the two are the same defect one verb along. `W-C` gave that answer ONE owner
     # (`_operand`) rather than two copies of it.
-    return [_operand(a, "site")]
+    site = _operand(a, "site")
+    delta = sum(c.delta for c in (a.changes or ())
+                if c.subject == site and c.field == "condition" and isinstance(c.delta, int))
+    cell = Subject.staged("Site", site, "condition")
+    return Change((cell,), lambda: w.stage(cell.ref[1], a.id, delta))
 
 
 @effect_for("create_record")
-def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
+def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§E3: `create_record` writes `(Record, exists)` and `(Record, stages)`. `H-63` is why the
     VALUES are here and not in the table.
 
@@ -369,7 +477,16 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
     stage list ACT-DECLARED -- "the act DECLARES the stages and their terms" -- so an act that
     names none creates a record with none, and the instrument does not invent a ladder. That is
     what makes Carin's season the case `PLAN.md` §6.1 chose: a Record with act-declared stages is
-    the largest ruled row in the corpus and nothing about it needs a default."""
+    the largest ruled row in the corpus and nothing about it needs a default.
+
+    G4 -- WHAT IT NAMES: THE RECORD, whole -- what it always reported; the maker's `hold` is not
+    named (a second receipt on every `record.created` would move every hash that has one). A new
+    id always moves (absent -> present). The one no-op is an act naming an id that ALREADY holds
+    an identical Record: the Record does not move, the gate refuses, and the `hold` the write
+    opened beside it is PUT BACK with the refusal -- so the maker does not end up holding a second
+    edge on a record the act did not make. A differing Record on an existing id is still an
+    overwrite, as it was; whether a Record id may be re-made at all is not this position's to
+    decide (`utter` refuses the same case for a Proposition by immutability, S14)."""
     d = a.payload if isinstance(a.payload, dict) else {}
     rid = d.get("record") or f"rec:{a.id}"
     stages = list(d.get("stages") or [])
@@ -382,28 +499,40 @@ def _eff_create_record(w: "World", a: "Act", res: "Resolution | None" = None) ->
         n = w.fixtures.get("record_stages_default")
         term = w.fixtures.get("record_stage_term")
         stages = [(w.tick + (i + 1) * term, f"stage{i + 1}", a.id) for i in range(n)]
-    w.records[rid] = Record(rid, d.get("rung") or a.actor, d.get("kind") or "text",
-                            subject_matter=d.get("subject_matter"), stages=stages)
+    rec = Record(rid, d.get("rung") or a.actor, d.get("kind") or "text",
+                 subject_matter=d.get("subject_matter"), stages=stages)
     # S13: possession is a `hold` Tenure owned by the holder, never a field on the Record. The
     # maker holds what they made until they part with it.
-    w.add_tenure(Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}"),
-                        a.actor, rid, "hold", since=w.tick))
-    return [rid]
+    held = Tenure(H(w.world_seed, w.tick, a.actor, f"hold:{rid}"),
+                  a.actor, rid, "hold", since=w.tick)
+
+    def perform() -> None:
+        w.records[rid] = rec
+        w.add_tenure(held)
+    return Change((Subject.entity("records", rid),), perform)
 
 
 @effect_for("destroy_record")
-def _eff_destroy_record(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
+def _eff_destroy_record(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§E3: writes `(Record, exists)`. The Record goes, and every `hold` on it ends -- S15.3's
-    rule that a tenure dies THROUGH the death of what it is over, never beside it."""
+    rule that a tenure dies THROUGH the death of what it is over, never beside it.
+
+    G4 -- WHAT IT NAMES: THE RECORD, whose existence is the whole of the declared write; it always
+    moves (present -> absent), so a destruction that finds its record is never a no-op and one that
+    does not declines (`NO_CHANGE` -> `destroy.refused`, as the old `None` did). The closed holds
+    are the cascade -- F3 admits each as `destroy's cascade` because this same write removed the
+    id -- and are not named, as they were never reported."""
     d = a.payload if isinstance(a.payload, dict) else {}
     rid = d.get("record")
     if rid is None or rid not in w.records:
-        return None
-    del w.records[rid]
-    for t in w.tenures:
-        if t.object == rid and t.live:
-            t.until = w.tick
-    return [rid]
+        return NO_CHANGE
+
+    def perform() -> None:
+        del w.records[rid]
+        for t in w.tenures:
+            if t.object == rid and t.live:
+                t.until = w.tick
+    return Change((Subject.entity("records", rid),), perform)
 
 
 def _scar(w: "World", p, verb: str) -> None:
@@ -477,8 +606,35 @@ def _scar(w: "World", p, verb: str) -> None:
 
 
 @effect_for("kill / wound")
-def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
+def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§E3: writes `(Person, body)`, `(Person, exists)` and `(Tenure, until)`.
+
+    ⚠⚠ G4 -- WHAT IT NAMES, AND THE ONE EFFECT THAT NARROWS ITS SUBJECT TO A FIELD. The subject is
+    the person wounded, read as PRESENCE and `body` (`fields=("body",)`) -- the two cells the
+    band's own kinds name (`person.died` is existence, `body.changed` is body). THREE THINGS THE
+    SAME WRITE DOES ARE DELIBERATELY NOT PART OF WHAT THE GATE JUDGES:
+      * `scar`. It is written by the OUTCOME, whatever the body did -- the comment at `_scar`'s
+        call below says why it was moved ahead of the magnitude model: so that sweeping `H-123`
+        (`wound_harm_model`) does not also sweep whether `H-128`'s scar runs. Judging the whole
+        Person would re-couple them the other way: at `scar_step > 0` the `none` arm -- `H-123`'s
+        control, whose whole job is to emit the REFUSAL -- would start emitting `body.changed`
+        for a body nothing touched, and the control would measure `scar_step`. So a wound that
+        moves only the scar is refused, and the scar stands, exactly as the `none` arm always
+        behaved. At the shipped `scar_step = 0` the two readings cannot differ.
+      * the CASCADE (`remove_person`'s closures). A consequence of the existence change, which IS
+        judged; F3 admits each closure as `destroy's cascade`; never reported, so never named. If
+        existence did not move the cascade did not run.
+      * the dead person's own `person`-kind rung, popped by the same owner -- the same reasoning.
+    THE NEW NO-OP THIS MAKES VISIBLE: a `Wounded` outcome under `scene_fraction` whose fraction
+    rounds back to the body it started from (`max(1, body * left // full)` at `body == 1`, or a
+    scene that took no health) used to emit `body.changed` over an unchanged body and is now
+    `kill.refused`. MEASURED BEFORE THIS POSITION on `build_realm(0)`, four seasons: every
+    `kill / wound` that reached this effect moved its subject, so no run moves.
+
+    ⚠ AND THE TWO `Unspecified` RAISES NOW COME BEFORE ANYTHING IS WRITTEN. The no-scene raise
+    always did; the no-health-scale raise came AFTER `_scar` had written, so a season that died on
+    it died with the scar already moved. Both are read while the `Change` is built, which touches
+    nothing.
 
     ⚠ THE TENURE ENDS THROUGH THE DEATH, which is §15.3's rule and the reason this is ONE effect
     rather than three writes a caller sequences: "a plague that kills the praefect ends his
@@ -531,7 +687,7 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     who = d.get("subject")
     p = w.persons.get(who)
     if p is None:
-        return None
+        return NO_CHANGE
     # ⚠ NO SCENE, NO HARM -- AND THIS IS A REFUSAL TO INVENT, NOT A MISSING FEATURE. `kill / wound`
     # declares `contests: the body`, so the only lawful route into this effect is through the
     # seam; an act folded without one has no scene to read a severity off, and the pre-`W-E`
@@ -562,16 +718,16 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     # that band unconditionally. Sweeping `H-123` therefore also swept whether `H-128`'s
     # mechanism ran at all, so neither row measured what it says it measures. The moral wound
     # is a consequence of the OUTCOME, not of how much body the scene took, so it belongs
-    # ahead of the magnitude model entirely.
-    _scar(w, p, a.verb)
+    # ahead of the magnitude model entirely. (G4: it is still the first thing `perform` writes;
+    # the magnitude below is COMPUTED first only because computing it writes nothing.)
     if res.degree == FELLED:
         # The scene says this person went down, and the table says that is the kill. The body
         # goes to 0 on every arm: the arms grade a WOUND, and a felling is not one.
-        p.body = 0
+        body = 0
     elif model == "none":
-        return None
+        body = None                             # the control arm: the body is not written
     elif model == "total":
-        p.body = 0
+        body = 0
     else:                                       # `scene_fraction`
         full = int(st.get("health_full") or 0)
         left = int(st.get("health_remaining") or 0)
@@ -581,54 +737,74 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
                 needs="`health_full` on the subject's wound state",
                 law="the magnitude is READ from the scene; a scene that carries none cannot be "
                     "read, and choosing a number here is what this arm exists not to do")
-        p.body = max(1, p.body * max(0, left) // full)
-    if p.body > 0:
-        return [who]
-    # ⚠ `w.tenures`, NOT `p.tenures + w._unowned`, AND THAT IS A FIX `W-E`'s OWN TEST FOUND.
-    # `p.tenures` is the tenures this person is the SUBJECT of (§15.1 -- a Tenure is owned by its
-    # subject), so the old scan could not see an edge ANOTHER PERSON owns that names the dead one
-    # as its OBJECT. Measured in `tiny_world`: `t10`, a live `tie` from `p_low` to `p_mid`,
-    # survived `p_mid`'s death and then DANGLED, because `del w.persons[who]` had already removed
-    # the person it pointed at. §15.3 is explicit that the tenure ends THROUGH THE DEATH; this is
-    # the write the `Felled` branch declares (`Tenure.until`) actually reaching every edge it
-    # names. `w.tenures` is owner-first over every person plus `_unowned`, so it is a WIDENING of
-    # the same scan and not a second rule.
-    # ⚠ THE CASCADE MOVED TO `World.remove_person` (item 3b) AND THE COMMENT ABOVE IS ITS
-    # PROVENANCE. It is unchanged in behaviour — the same `w.tenures` scan, for the same `W-E`
-    # reason — and it moved because MATTER is now a SECOND way to die (a body reaching 0 from an
-    # empty larder), and two sites closing tenures by hand is how the two drift apart (§8).
-    # ⚠ G3: THESE CLOSURES ARE `destroy's cascade`, AND THE GATE RECOGNISES THEM BY OBSERVATION.
-    # They run inside this act's own gated write (the `(Person, body)` pair, the first in the
-    # `Felled` band), `remove_person` takes `who` out of `w.persons` in the same `apply()`, and the
-    # gate admits a closure of an edge naming an id THE SAME WRITE removed -- and nothing else. A
-    # cascade that closed the edges and left the person standing would be refused and put back.
-    return w.remove_person(who)
+        body = max(1, p.body * max(0, left) // full)
+
+    def perform() -> None:
+        _scar(w, p, a.verb)
+        if body is None:
+            return
+        p.body = body
+        if p.body > 0:
+            return
+        # ⚠ `w.tenures`, NOT `p.tenures + w._unowned`, AND THAT IS A FIX `W-E`'s OWN TEST FOUND.
+        # `p.tenures` is the tenures this person is the SUBJECT of (§15.1 -- a Tenure is owned by
+        # its subject), so the old scan could not see an edge ANOTHER PERSON owns that names the
+        # dead one as its OBJECT. Measured in `tiny_world`: `t10`, a live `tie` from `p_low` to
+        # `p_mid`, survived `p_mid`'s death and then DANGLED, because `del w.persons[who]` had
+        # already removed the person it pointed at. §15.3 is explicit that the tenure ends THROUGH
+        # THE DEATH; this is the write the `Felled` branch declares (`Tenure.until`) actually
+        # reaching every edge it names. `w.tenures` is owner-first over every person plus
+        # `_unowned`, so it is a WIDENING of the same scan and not a second rule.
+        # ⚠ THE CASCADE MOVED TO `World.remove_person` (item 3b) AND THE COMMENT ABOVE IS ITS
+        # PROVENANCE. It is unchanged in behaviour — the same `w.tenures` scan, for the same `W-E`
+        # reason — and it moved because MATTER is now a SECOND way to die (a body reaching 0 from
+        # an empty larder), and two sites closing tenures by hand is how the two drift apart (§8).
+        # ⚠ G3: THESE CLOSURES ARE `destroy's cascade`, AND THE GATE RECOGNISES THEM BY
+        # OBSERVATION. They run inside this act's own gated write (the `(Person, body)` pair, the
+        # first in the `Felled` band), `remove_person` takes `who` out of `w.persons` in the same
+        # `apply()`, and the gate admits a closure of an edge naming an id THE SAME WRITE removed
+        # -- and nothing else. A cascade that closed the edges and left the person standing would
+        # be refused and put back.
+        w.remove_person(who)
+    return Change((Subject.entity("persons", who, fields=("body",)),), perform)
 
 
 @effect_for("utter")
-def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
+def _eff_utter(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§E3: writes `(Proposition, exists)`. §14: a Proposition is IDENTITY-BEARING AND IMMUTABLE,
     fixed at utterance and never destroyed -- `Proposition` is a frozen dataclass, so that is
-    structural here rather than asserted."""
+    structural here rather than asserted.
+
+    G4 -- WHAT IT NAMES: THE PROPOSITION, whole; it always moves (absent -> present), because an
+    id already uttered is declined before anything is built (`NO_CHANGE` -> `act.refused`, the
+    fold's own kind, since the row declares no refusal -- as the old `None` produced)."""
     d = a.payload if isinstance(a.payload, dict) else {}
     pid = d.get("proposition") or f"prop:{a.id}"
     if pid in w.propositions:
-        return None                       # immutable: an utterance never overwrites one
-    w.propositions[pid] = Proposition(pid, d.get("mood") or "OUGHT",
-                                      d.get("subject") or a.actor,
-                                      d.get("predicate") or "", d.get("value"), w.tick)
-    return [pid]
+        return NO_CHANGE                  # immutable: an utterance never overwrites one
+    prop = Proposition(pid, d.get("mood") or "OUGHT", d.get("subject") or a.actor,
+                       d.get("predicate") or "", d.get("value"), w.tick)
+    return Change((Subject.entity("propositions", pid),),
+                  lambda: w.propositions.__setitem__(pid, prop))
 
 
 @effect_for("transfer")
-def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
+def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """§54 item 7's mirror: the giver's store goes DOWN and the receiver's goes UP.
 
     ⚠ THE FIRST VERSION ONLY DECREMENTED, and §E3 says `transfer` writes `(Rung, stores)` **×2**,
     one per side. A one-sided transfer ANNIHILATES MATTER -- six grain left the world and arrived
     nowhere, in an economy where `yield` is the only source (#353 `:856`). The scarcity proof still
     passed, because it only watched the giver: a run can be right about the thing it looks at and
-    wrong about the world."""
+    wrong about the world.
+
+    G4 -- WHAT IT NAMES: BOTH RUNGS, giver first, each whole -- the two `(Rung, stores)` writes and
+    the two ids it always reported. Two no-ops become visible that the old contract reported as
+    successes: a transfer of `amount` 0, and a transfer from a rung TO ITSELF (the decrement and
+    the increment land on one store and cancel). Each moved nothing and is now `transfer.refused`.
+    Neither is a transfer; both published `transfer.made` with two receipts. MEASURED BEFORE THIS
+    POSITION on `build_realm(0)`, four seasons: no `transfer` reached this effect at all (every one
+    refused at its precondition), so no run moves."""
     # ⚠ FOUR SILENT DEFAULTS STOOD HERE AND `W-C` DELETED ALL FOUR: `from`/`to` defaulted to
     # `""`, `kind` to `"grain"` and `amount` to `1`. Each was §0.05's literal-in-a-body, and
     # together they made an operand-less `transfer` a WELL-FORMED act about a granary nobody
@@ -659,12 +835,14 @@ def _eff_transfer(w: "World", a: "Act", res: "Resolution | None" = None) -> None
                        f"{_operand(a, 'from')!r} to {_operand(a, 'to')!r}", "E3/S27.1",
                        chose="change nothing, so the fold emits the refusal",
                        alternatives=["move the giver's side anyway (matter leaves the world)"])
-        return []
-    src.stores = dict(src.stores or {})
-    src.stores[kind] = src.stores.get(kind, 0) - amount
-    dst.stores = dict(dst.stores or {})
-    dst.stores[kind] = dst.stores.get(kind, 0) + amount
+        return NO_CHANGE
+
+    def perform() -> None:
+        src.stores = dict(src.stores or {})
+        src.stores[kind] = src.stores.get(kind, 0) - amount
+        dst.stores = dict(dst.stores or {})
+        dst.stores[kind] = dst.stores.get(kind, 0) + amount
     # BOTH SIDES, because §E3 says `transfer` writes `(Rung, stores)` twice -- one per side -- and
     # a one-sided report would make the Event name half of what it did. The `if r is not None`
     # filter that stood here is gone with the branch above that made it necessary.
-    return [src.id, dst.id]
+    return Change((Subject.entity("rungs", src.id), Subject.entity("rungs", dst.id)), perform)

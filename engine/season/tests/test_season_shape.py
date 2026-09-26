@@ -4931,7 +4931,9 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     and blocked 21, and grain genuinely crosses between rungs. WHAT DID NOT: the hearth still
     starves on season 2 and never recovers, because the only economy that reaches it is
     subsistence OUT and no site produces INTO it — and `work`, the verb that would repair a
-    producer, still declares no delta (`test_w8_work_emits_a_success_while_repairing_nothing`).
+    producer, still declares no delta (`test_w8_work_emits_a_success_only_when_the_site_moves`,
+    which until G4 was `..._while_repairing_nothing` and pinned the success that delta-less
+    `work` falsely emitted; it is refused now, which changes nothing this paragraph measures).
     So the residual cause is the one `H-94` was masking: `work` writes `(Site, condition)` and
     Part E names the CELL and never the VALUE, which is `H-63`.
 
@@ -5135,25 +5137,99 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
         "merely incomplete")
 
 
-def test_w8_work_emits_a_success_while_repairing_nothing(): 
-    """`H-94`'s worked case, and the sharpest single statement of it.
-
-    §27.3 defers `work`'s delta to the fold's accumulator and clamps once — correct, and the
-    reason `_eff_work` reports the site anyway is so the deferral does not read as a no-op. With
-    NO DELTA DECLARED nothing is accumulated, so `site.worked` is an emitted success for a repair
-    that did not happen. That is the rule this file states twice elsewhere (`_fold` refuses an
-    effect that touched nothing; `conditional_emission_rows` exempts `(Record, ttl)` on the same
-    argument) failing at the one place the fold cannot see it, because the effect DID report a
-    subject."""
+def _w8_work(acts_deltas, site_id="site_seam", condition=None):
+    """Fold `work` acts through the REAL `resolve()` -- the fold AND §27.3's accumulator, which is
+    where `work`'s change actually lands -- one act per `(act id, delta)`; `delta=None` declares
+    none. Returns `(events, condition before, condition after, the site id)`."""
     w = P.tiny_world()
-    site = w.sites["site_seam"]
+    site = w.sites[site_id]
+    if condition is not None:
+        site.condition = condition
     before = site.condition
     d = SeasonDriver(w); w.step = Step.RESOLVE
-    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="wk", actor="p_low", verb="work", payload={"site": site.id})])
+    acts = [Act(id=aid, actor="p_low", verb="work", payload={"site": site.id},
+                changes=([] if dv is None else
+                         [StateChange(site.id, "alter", "Act", "condition", dv)]))
+            for aid, dv in acts_deltas]
+    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), acts)
+    return evs, before, site.condition, site.id
+
+
+def _w8_site_receipts(evs, sid):
+    """Every gate-minted `set` receipt on `sid` any of these Events carries."""
+    return [c for e in evs for c in e.changes
+            if c.subject == sid and c.mode == "set" and type(c).__name__ == "Receipt"]
+
+
+def test_w8_work_emits_a_success_only_when_the_site_moves():
+    """⚠ THIS TEST FLIPPED AT G4 (plan position 7), AND THE FLIP IS F9 CLOSING. It was
+    `test_w8_work_emits_a_success_while_repairing_nothing`, and it asserted that a `work` naming
+    its site and declaring NO DELTA emitted `site.worked` while `site.condition` stayed where it
+    was -- `H-94`'s worked case, pinned as a defect, whose own assertion message said it would go
+    red *"the day `H-94` closes"*.
+
+    WHY THE OLD BEHAVIOUR WAS WRONG, in the design's own words: `04 §C.2`'s F9 note -- *"`work`
+    emitting `site.worked` while accumulating no delta, which is the instance `ID-9` is written
+    from, passes the check unchanged"*. The fold's old guard refused an effect that REPORTED
+    nothing; `_eff_work` reported its site to keep the deferral from reading as a no-op, so the
+    guard passed and a success Event carrying a gate-minted receipt shipped for a repair that did
+    not happen. The gate never compared anything.
+
+    WHAT HOLDS NOW, and each arm is a place the new rule could be wrong:
+      1. NO DELTA -> `work.unavailable`, the site unmoved, and NO `set` receipt on it anywhere.
+         Judged at the act's own write: it stages nothing, the staged cell does not move.
+      2. A DELTA OF EXACTLY 0 -> the same. A declared nothing is still nothing.
+      3. A REAL DELTA -> `site.worked`, the condition moved by EXACTLY that delta, and the success
+         carries the site's receipt. The control: without it arms 1-2 would pass for a `work`
+         that never succeeds at all, which is the plan's own warning (*"or `work` is refused
+         forever"*).
+      4. A REAL DELTA ON A SITE AT ITS CEILING -> refused. The act staged a non-zero delta, so its
+         own write moved; the SITE did not, because the clamp ate it. Judged at the accumulator's
+         write, where the change actually lands -- a gate that judged only per act passes this.
+      5. TWO DELTAS THAT CANCEL -> both refused, the site unmoved: the site did not change, so no
+         act changed it (sum-then-clamp-once has no per-act share to credit).
+      6. A REAL DELTA BESIDE A ZERO ONE on the same site -> the zero is refused and the real one
+         succeeds. A gate that judged only per SITE passes this -- it would credit the zero.
+
+    MUTATIONS, each a monkeypatch of `World.state_of` so the named reads never compare equal, run
+    against this tree (G4, 2026-09-26), each arm run on its own: (a) EVERY read -- the gate
+    compares nothing, which is the pre-G4 contract: arms 1, 2, 4, 5 and 6 go red, arm 3 (the
+    control) stays green; (b) only the SITE reads -- the
+    accumulator's write unjudged: arms 4 and 5 go red, 1 and 2 stay green; (c) only the STAGED
+    reads -- the per-act write unjudged: arms 1, 2 and 6 go red, 4 and 5 stay green. So each of
+    the two judgments is observed failing on its own, by the arms that name it."""
+    # 1. no delta
+    evs, before, after, sid = _w8_work([("wk0", None)])
+    assert [e.kind for e in evs] == ["work.unavailable"], [e.kind for e in evs]
+    assert after == before, (before, after)
+    assert _w8_site_receipts(evs, sid) == [], _w8_site_receipts(evs, sid)
+    # 2. a declared delta of zero
+    evs, before, after, sid = _w8_work([("wk0z", 0)])
+    assert [e.kind for e in evs] == ["work.unavailable"], [e.kind for e in evs]
+    assert after == before and _w8_site_receipts(evs, sid) == []
+    # 3. the control: a real repair succeeds and moves the site by exactly its delta
+    evs, before, after, sid = _w8_work([("wk5", 5)])
     assert [e.kind for e in evs] == ["site.worked"], [e.kind for e in evs]
-    assert site.condition == before, (
-        f"`work` moved condition {before} -> {site.condition} from an act declaring no delta; "
-        "`H-94` has closed and this test is the record of a defect that no longer exists")
+    assert after == before + 5, (before, after)
+    assert len(_w8_site_receipts(evs, sid)) == 1, _w8_site_receipts(evs, sid)
+    # 4. a real delta the clamp eats: the site is already at the scale's ceiling
+    scale = P.tiny_world().fixtures.get("condition_scale")
+    evs, before, after, sid = _w8_work([("wkc", 5)], site_id="site_harbour", condition=scale)
+    assert before == scale and after == scale, (before, after)
+    assert [e.kind for e in evs] == ["work.unavailable"], (
+        f"{[e.kind for e in evs]}: a `work` whose delta the clamp ate entirely published a success "
+        "-- the accumulator's write is not being judged, and F9 holds only per act")
+    assert _w8_site_receipts(evs, sid) == []
+    # 5. two deltas that cancel
+    evs, before, after, sid = _w8_work([("wkp", 3), ("wkm", -3)])
+    assert after == before
+    assert sorted(e.kind for e in evs) == ["work.unavailable", "work.unavailable"], (
+        [e.kind for e in evs])
+    # 6. a real delta beside a zero one, on the same site
+    evs, before, after, sid = _w8_work([("wkr", 4), ("wkz", None)])
+    assert after == before + 4, (before, after)
+    by_act = {e.causes[0]: e.kind for e in evs}
+    assert by_act == {"wkr": "site.worked", "wkz": "work.unavailable"}, by_act
 
 
 def test_a_holder_can_now_choose_the_governance_verbs_their_office_grants():
@@ -6803,7 +6879,30 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `release` 10 -> 9. `create_record`, `utter`, `reconstruct`, `research` and `dispatch` are
     # unmoved. Variety bought with somebody else's scene is still variety, and it is still a cost.
     # [GROUNDED: measured 2026-09-20 through `corpus_run.run_case` at seed 0 over the same 143 corpus cases, both arms, control from this tree with the five files of the admission stashed -- distinct executed sets 44 -> 57 over the same 89 live worlds; universal `{create_record, utter}` UNMOVED; `kill / wound` 0 -> 47 worlds and the seven displacements above]
-    assert len(by_sig) == 57, (
+    # ⚠ 57 -> 64, G4 (plan position 7, 2026-09-26): `NoOpReceipt` REFUSES THE SELF-TRANSFER.
+    # THE UNIT AND THE DIRECTION FIRST: variety ROSE, and the whole of the move is ONE verb's no-op
+    # refusal. 628 of the corpus's 900 `transfer` effect calls moved grain FROM A RUNG TO ITSELF --
+    # `operands_for` binds `to` from the question's referent, which is usually the giver's own
+    # hearth (`r_hearth -> r_hearth`) -- so the decrement and the increment landed on one store and
+    # cancelled, and each published `transfer.made` with two receipts over a store that did not
+    # move. That is F9's own shape (`04 §C.2`: a success Event for a write that did not happen),
+    # and G4's gate now refuses it: `transfer.refused`. A refused act is witnessed differently from
+    # a made one, so the worlds it touched then choose differently, and they stop sharing a
+    # signature.
+    # ⚠ ATTRIBUTED BY CONTROL, NOT BY ARGUMENT: the same corpus with the no-op judgment switched
+    # off FOR `transfer` ALONE (every other verb still judged) reproduces all 89 live worlds'
+    # executed sets EXACTLY and 57 signatures, and no other verb raised a single new no-op
+    # refusal anywhere in it (`work` never reaches its effect in the corpus: it is refused-only).
+    # ⚠ THE UNIVERSAL SET WAS CHECKED IN THE SAME BREATH: `{create_record, utter}` UNMOVED, and the
+    # varying set is the same eleven. THE COST, NAMED: `transfer` reaches 75 -> 59 worlds (the 16
+    # whose every transfer was a self-transfer), and the cascade moves `speak` 78 -> 81, `tell`
+    # 63 -> 60, `surveil` 55 -> 53, `interview` 46 -> 45, `kill / wound` 47 -> 46, `move` 47 -> 46,
+    # `release` 9 -> 8; `create_record`, `utter`, `reconstruct`, `research`, `dispatch` unmoved.
+    # ⚠ WHAT IT DOES NOT FIX: the self-transfer is still MINTED -- the derivation that names the
+    # giver's own hearth as the receiver is `H-94`'s lane (operands), not the gate's; G4 only stops
+    # it being reported as a transfer.
+    # [GROUNDED: measured 2026-09-26 through `corpus_run.run_case` at seed 0 over the same 143 corpus cases, both arms, control from a `git worktree` at 335d095 (the commit before G4) -- distinct executed sets 57 -> 64 over the same 89 live worlds, 28 of them with a different executed set; the transfer-exempt control arm on this tree reproduces 57 and every live world's executed set exactly; 628 new no-op refusals, all `transfer`]
+    assert len(by_sig) == 64, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -7676,7 +7775,18 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
 
     MUTATION (run 2026-09-04): restore `_req_work`'s trailing `return True` by giving the cell an
     operand default (`site` bound to any fixture site) -- the operand-less act is admitted again
-    and this test goes RED on the first assertion. Unmutated it is GREEN."""
+    and this test goes RED on the first assertion. Unmutated it is GREEN.
+
+    ⚠ G4 (2026-09-26): EVERY ADMITTED ARM NOW DECLARES A DELTA OF 1, AND WITHOUT IT THIS TEST
+    WOULD STOP DISCRIMINATING. Before G4 a `work` with no delta emitted `site.worked`, so these
+    arms could assert the precondition admitted by reading the success kind. G4 refuses a `work`
+    that stages nothing (`NoOpReceipt` -> `work.unavailable`) -- the SAME kind the precondition
+    refuses with -- so an admitted-but-deltaless act and a precondition refusal became
+    indistinguishable here. A delta of 1 makes the admitted arms do something, and the kinds
+    discriminate again. ⚠ `_fold` ALONE: its `site.worked` is PROVISIONAL, because the delta is
+    only staged here and lands at `resolve()`'s summed write, which these direct calls never
+    reach. That is fine for what this test is about -- the precondition -- and the success-only-
+    when-the-site-moves property is `test_w8_work_emits_a_success_only_when_the_site_moves`'s."""
     w = P.tiny_world()
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
@@ -7684,10 +7794,12 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
     assert bare == ["work.unavailable"], (
         f"a `work` naming no site emitted {bare}. It cannot have checked a condition against a "
         "floor, because it was never told whose condition")
+    one = lambda sid: [StateChange(sid, "alter", "Act", "condition", 1)]
     # AND IT STILL ADMITS A NAMED, WORKABLE SITE -- otherwise the refusal above is not the
     # polarity rule, it is the verb being broken (§0.1 point 2: the control the first arm needs).
     ok = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w1", actor="p_low", verb="work",
-                                           payload={"site": "site_harbour"}))]
+                                           payload={"site": "site_harbour"},
+                                           changes=one("site_harbour")))]
     assert ok == ["site.worked"], f"a workable site was refused: {ok}"
     # AND IT REFUSES A SITE BELOW EVERY FLOOR, which is the failure §12.1's gate exists to
     # observe and the one `_req_work`'s FIRST version (`condition >= 0`) could not.
@@ -7695,7 +7807,8 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
     kept, site.condition = site.condition, 0
     try:
         dead = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w2", actor="p_low", verb="work",
-                                                 payload={"site": site.id}))]
+                                                 payload={"site": site.id},
+                                                 changes=one(site.id)))]
         assert dead == ["work.unavailable"], f"a site at condition 0 was worked: {dead}"
     finally:
         site.condition = kept
@@ -7712,7 +7825,8 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
         "the fixture no longer places `site_seam` between its loosest and strictest floor, so "
         "this pin no longer discriminates the three readings -- re-choose the site")
     workable = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w3", actor="p_low", verb="work",
-                                                 payload={"site": seam.id}))]
+                                                 payload={"site": seam.id},
+                                                 changes=one(seam.id)))]
     assert workable == ["site.worked"], (
         f"a seam at condition {seam.condition} was refused ({workable}); surface_gleaning's "
         f"floor is {min(fl.values())} and the generic verb reads the loosest")
@@ -7949,13 +8063,15 @@ def test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing():
     WHAT THE SWEEP SAYS, and it is two findings rather than one:
       * THE STORES MOVE WITH IT, exactly: at 1 the giver falls by 1 and the receiver rises by 1;
         at 3, by 3. So `_eff_transfer` rests entirely on this fixture.
-      * THE EMISSION DOES NOT. `transfer.made` at all three points, including 0 -- where the
-        precondition `stores >= 0` admits every giver and the effect changes no value. A verdict
-        that does not flip across a sweep is itself a finding (§42.2.1), and this one is: the
-        fold's *"an effect that touched nothing must not emit the success"* guard watches the IDS
+      * ~~THE EMISSION DOES NOT.~~ ⚠ CLOSED AT G4 (plan position 7, 2026-09-26). It read:
+        *"`transfer.made` at all three points, including 0 -- where the precondition `stores >= 0`
+        admits every giver and the effect changes no value ... the fold's guard watches the IDS
         an effect returns, not the values it changed, so a transfer of nothing publishes a
-        success. Recorded rather than fixed here -- the guard's polarity is the fold's business
-        and the default is 1, so this is the control arm reporting what a control arm is for.
+        success. Recorded rather than fixed here -- the guard's polarity is the fold's
+        business"*. G4 is that business: the gate now reads both rungs before and after the write
+        and refuses one that moved neither (`NoOpReceipt`), so at 0 the emission FLIPS to
+        `transfer.refused` and the two live arms keep `transfer.made`. The verdict now moves
+        with the sweep, which is what a control arm is for.
 
     MUTATION (run 2026-09-04): make `_derive_operand` return the literal `1` for `"amount"`
     instead of `fx.get("default_transfer_amount")` -- the fixture stops reaching the derivation,
@@ -8006,9 +8122,11 @@ def test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing():
         assert moved.get("Hh") == (8, 8 - amount) and moved.get("S") == (40, 40 + amount), (
             f"at amount={amount} the stores moved {moved}; §E3 gives `transfer` TWO "
             "`Rung.stores` writes, one per side, and they must be equal and opposite")
-    # AND THE EMISSION IS INVARIANT ACROSS THE SWEEP -- the second finding, pinned so it is a
-    # measurement rather than a surprise the next reader has to re-derive.
-    assert {a: k for a, (k, _m) in seen.items()} == {0: ["transfer.made"], 1: ["transfer.made"],
+    # AND THE EMISSION FOLLOWS THE STORES (G4) -- a transfer of nothing is refused, the two that
+    # move matter succeed. It was pinned INVARIANT (`transfer.made` at 0 too) as the record of the
+    # defect G4 closed; see the docstring.
+    assert {a: k for a, (k, _m) in seen.items()} == {0: ["transfer.refused"],
+                                                     1: ["transfer.made"],
                                                      3: ["transfer.made"]}, seen
 
 
@@ -10972,9 +11090,9 @@ def test_r8_4_document_key_reaches_a_non_author_through_a_store():
     This is the result the first writing of the `R8.4` repair MISSED and denied in its own
     docstring (*"the channel still fires for nobody but the author"*). That is true of Carin's
     world, which contains no `hold` over a rung, and false of the mechanism: `_eff_transfer`
-    returns `[src.id, dst.id]`, `_apply_write` subjects the `StateChange`s to those RUNGS, and the
-    fold puts them on the Event. So a person holding the DESTINATION witnesses a transfer they
-    took no part in.
+    names both rungs (G4: its `Change`'s subjects; it returned `[src.id, dst.id]` before), the gate
+    mints a receipt subjected to each RUNG that moved, and the fold puts them on the Event. So a
+    person holding the DESTINATION witnesses a transfer they took no part in.
 
     ⚠ WHY THIS MATTERS MORE THAN THE RECORD CASE. `H-84` blocks the RECORD route — nothing moves a
     Record to a second person — so the sibling test above has to construct its holder as a declared

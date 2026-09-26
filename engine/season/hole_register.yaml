@@ -1671,6 +1671,32 @@ rows:
     cite:      "FOUND BY AN ANTAGONIST PASS ON G3 (plan position 6, 2026-09-26), reading `decision/options.py`'s own stated limit against the plan's own `G3` fixture, which seats `p_king` on both `off_crown` and `off_mayor` -- the first case in the tree where a person actually holds two seats, though on non-overlapping grants. `decision/options.py`'s own docstring already names the limit and the reason (purview needs the containment tree, which is not the person's own state) -- this row exists so the day a builder overlaps two seats' grants, the silent-refusal failure mode is already on record rather than re-discovered"
     source:    "antagonist pass on G3, plan position 6, 2026-09-26"
 
+  - id:        H-135
+    tier:      1
+    kind:      "WIRING"
+    hole:      "A CLOSURE WRITE (MATTER's, CALENDAR's, WITNESS's) IS NEVER JUDGED FOR F9, SO A NO-OP STILL TRACES AS WRITTEN AND STILL EMITS ITS DECLARED KIND. G4 rewired every EFFECT's write onto `Change`, which the gate reads before and after and refuses if nothing moved; `World.write`'s other branch (a bare `apply` closure) runs unjudged, exactly as before G4 -- `04 §C.2` puts the no-op check on EVERY write, and this position leaves it half-built. LIVE, NOT HYPOTHETICAL: `dwelling` wears at 0 (`rosters.yaml`), so `condition.worn` fires every season over a dwelling whose condition cannot move -- the same fabricated-success shape (`ID-9`) G4 closed for effects, left open for MATTER, CALENDAR and WITNESS"
+    owner:     "state/world.py -- `write()`'s closure branch; loop/calendar.py, loop/witness.py, and MATTER's clock writers"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "nothing today in the sense of a season dying on it -- a fabricated `condition.worn` is a wrong Event, not a crash, and no probe or test currently reads a MATTER emission's truth the way `state/log.py`'s provenance check reads a gate-minted receipt's. Reachable the day a narrative reader or a probe trusts one"
+    cite:      "FOUND BY G4'S OWN DOCSTRING (`state/world.py::write`, plan position 7, 2026-09-26), which states the bound rather than implying it: \"A MATTER write that moves nothing still traces as written and still emits its declared kind -- and that is LIVE, not hypothetical: dwelling wears at 0, so every dwelling's condition.worn every season is exactly F9's shape.\" Registered rather than fixed here: widening F9 to every closure write is its own position -- moving MATTER, CALENDAR and WITNESS onto `Change` -- not a correction inside G4's declared WHERE, and `CLAUDE.md` §0.1 pt 5 withholds a guard for a gap no current caller exploits"
+    source:    "G4's own docstring, plan position 7, 2026-09-26; registered by the orchestrator's verification pass"
+
+  - id:        H-136
+    tier:      1
+    kind:      "COLLISION"
+    hole:      "`operands_for`'S `to` DERIVATION BINDS MOST OF THE CORPUS'S `transfer` CALLS TO THE GIVER'S OWN HEARTH, SO THE ACT IS A SELF-TRANSFER BEFORE IT IS EVER FOLDED. `H-94`'s closed default reads `to` as the question's referent, with no exclusion for a referent that IS the giver's own rung -- so a `transfer` whose question names the giver's own need derives a `to` identical to `from`. G4's `NoOpReceipt` stops this being reported as a successful `transfer.made` (F9's fix, and the corpus's own 57 -> 64 distinct-behaviour move is entirely this), but the derivation itself is unchanged: the act is still minted and still attempted, refused as a no-op every time rather than never formed"
+    owner:     "decision/options.py / decision._derive_operand -- `operands_for`'s `to` binding, H-94's own site"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "nothing today that a season dies on -- the act is refused cleanly (`transfer.refused`), which is F9's own correct behaviour. Reachable as a corpus-quality question the day someone reads `transfer.refused`'s count as evidence about the economy rather than about the operand"
+    cite:      "FOUND BY THE ORCHESTRATOR'S VERIFICATION PASS ON G4 (plan position 7, 2026-09-26), reproducing the producer's corpus-signature claim directly: a `git worktree` at 335d095 (pre-G4) against this tree, `corpus_run.run_case` seed 0 over the same 143-case corpus, both arms -- 628 of 900 `transfer` effect calls have `from == to`, all `r_hearth`. `_eff_transfer`'s own G4 docstring already names the cause and the lane (\"the derivation that names the giver's own hearth as the receiver is H-94's lane (operands), not the gate's\"); this row is that lane's open half, registered rather than re-derived, since H-94 itself is CLOSED and this is a new, distinct manifestation of its documented ASSUMPTION rather than a re-opening of its own text"
+    source:    "orchestrator's verification pass on G4, plan position 7, 2026-09-26"
+
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
 # "Every defect gets a register row, or is discharged with a named section."

@@ -374,9 +374,9 @@ def _ch_document_key(w, e, pid) -> bool:
 
     ⚠ THE CHANNEL DOES REACH A NON-AUTHOR TODAY, AND AN EARLIER WRITING OF THIS DOCSTRING DENIED
     IT. It said *the channel still fires for nobody but the author*, which is true of Carin's world
-    -- she holds no rung -- and FALSE OF THE MECHANISM. `_eff_transfer` returns `[src.id, dst.id]`,
-    `_apply_write` turns those into `StateChange`s subjected to the RUNGS, and the fold puts them on
-    the Event. EXECUTED on `tiny_world`: with `p_other` holding `S` and acting, and `p_low` holding
+    -- she holds no rung -- and FALSE OF THE MECHANISM. `_eff_transfer` names both rungs (G4: as
+    the subjects of its `Change`, where it returned `[src.id, dst.id]`), the gate mints a receipt
+    subjected to each RUNG that moved, and the fold puts them on the Event. EXECUTED on `tiny_world`: with `p_other` holding `S` and acting, and `p_low` holding
     the destination `Hh`, `transfer.made` carries `changes=['S','Hh']` and `document_key` returns
     True for `p_low` -- **a non-author, witnessing an act, through the bureaucratic channel**. That
     is `R5` reachable, which is what this repair was for, and it under-reported itself. Found by the

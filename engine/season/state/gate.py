@@ -11,26 +11,28 @@ of Layer-2 policy welded to `World`'s own state. G2 changed WHAT `World.write` i
 `Token`, not a bare `WriteClass`) and left WHERE the checks live alone: moving them out of `World`
 is not a signature change and no plan position asks for it. **G1a made the receipt unforgeable;
 G2 made the write class something only the driver can hand out; G3 (below, `NotYours`) made the
-gate ask WHO wrote a Tenure, which every check before it -- row, step, class -- never did.**
+gate ask WHO wrote a Tenure, which every check before it -- row, step, class -- never did; G4
+(below, `NoOpReceipt`) made the gate ask WHETHER the write changed anything, and refuse the
+receipt when it did not.**
 
-⚠ THE AUTHORIZATION WINDOW, AND WHY IT IS NOT A PER-CALL RETURN VALUE. The obvious design is
-`write() -> Receipt`, and it does not fit the one caller that matters. `loop/resolve.py`'s
-`_apply_write` cannot know WHAT it changed until the effect has run: the effect reports touched
-ids from inside the `apply()` closure, so the subjects of the receipts are discovered DURING the
-write and read AFTER it returns. A mint that closed at `return` would therefore be unusable by
-the fold -- which is every act in the game -- and the fold would go on hand-building changes,
-leaving this file a decoration.
+⚠ THE AUTHORIZATION WINDOW, AND WHY IT WAS NOT A PER-CALL RETURN VALUE (G1a) -- AND WHAT G4 CHANGED
+ABOUT THAT. The obvious design is `write() -> Receipt`, and G1a found it did not fit the one caller
+that matters: `loop/resolve.py`'s `_apply_write` could not know WHAT it changed until the effect
+had run, because the effect reported touched ids from inside the `apply()` closure. So the window
+opens when a gate write begins and stays open until the NEXT gate write opens its own, or the step
+barrier closes it; `mint()` outside a window raises. The property that buys: **you cannot mint a
+receipt without having just performed a real gate write.** What it does not buy: a second receipt
+minted after an unrelated later write would be attributed to that write.
 
-So the window opens when a gate write begins and stays open until the NEXT gate write opens its
-own, or the step barrier closes it. `mint()` outside a window raises. The property that buys:
-**you cannot mint a receipt without having just performed a real gate write**, which is the whole
-of what `changes[]` needs to mean something. What it does not buy: a second receipt minted after
-an unrelated later write would be attributed to that write. That is a narrower guarantee than
-"one receipt per write" and it is the honest one -- stating it is cheaper than a guard that
-implies it.
+G4 makes the obvious design fit. An effect now hands the gate a `Change` that NAMES ITS SUBJECTS
+BEFORE IT RUNS, so `World.write` reads each subject before and after applying it and mints the
+receipts itself, for the subjects that moved and no others (`04 §C.2`: *"before = get();
+store._set(); after = get() / before == after or raise NoOpReceipt / r = Receipt(...)"*). The fold
+mints nothing any more. The window's open-past-the-write property therefore has no production
+consumer left; it is unchanged here because closing it is `H-131`'s barrier question, not G4's.
 """
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 from ..data.matrix import MATRIX, WriteClass
 from ..data.rosters import CONFERRAL_BASES, REVOCATION_BASES
@@ -460,6 +462,143 @@ def not_yours(refused: list, actor: Optional[str], via: Optional[str], record_ki
 TENURE_WRITE_CLASSES = frozenset(
     row.write_class(step) for (kind, _f), row in MATRIX.items() if kind == "Tenure"
     for step in row.steps)
+
+
+# =================================================================================================
+# G4 -- F9 AT THE GATE. `04 §C.2`, verbatim:
+#
+#     before = get(); store._set(); after = get()               -- THE GATE APPLIES THE WRITE
+#     before == after                     or raise NoOpReceipt  -- ⚠ F9 · see PART D row 5
+#
+# ⚠ THE SECOND LINE'S `or` READS INVERTED, AND WHAT IS BUILT IS WHAT ITS PROSE SAYS. `04:559-564`
+# and PART D row 5 both state it the one way: *"The gate now refuses `before == after` at the
+# write, so the receipt is never minted"*. EQUAL raises.
+#
+# WHAT CHANGED, AND IT IS THE CONTRACT OF EVERY EFFECT IN `loop/effects.py`. Before G4 an effect
+# MUTATED inside an opaque `apply()` and RETURNED the ids it touched, and the fold minted a receipt
+# for every id it was told -- so an effect that named an id it never changed produced a success
+# Event carrying a gate-minted receipt, and `state/log.py`'s provenance check (which asks only
+# WHO minted it) admitted it. That is `ID-9`'s own worked example surviving PART D row 5 (F9):
+# `work` emitted `site.worked` over a condition nothing wrote. Now an effect returns a `Change`:
+# the SUBJECTS it writes, named before it runs, and the write. `World.write` reads every subject,
+# applies the write, reads them again, and mints a receipt for each subject that moved and for no
+# other. None moved: `NoOpReceipt`, and the fold turns it into the row's refusal.
+#
+# WHAT `get()` READS -- ONE RULE, THREE SUBJECT SHAPES, OWNED BY `World.state_of`:
+#
+#   `entity`  an id in one of `World._STATE_COLLECTIONS`: present-or-absent, and the entity's
+#             `_entity_digest` -- THE SAME per-entity string `World.content_hash` folds, so a
+#             subject has moved exactly when the content hash can see that it moved. `fields=`
+#             narrows the read to named attributes; ONE effect uses it (`kill / wound`, whose
+#             docstring says why).
+#   `edge`    a Tenure, by IDENTITY. Not read here at all: it has moved iff G3's observation of the
+#             tenure store (`World._tenure_changes`) lists it -- changed or opened. The snapshot G3
+#             already takes is reused rather than a second one taken (the plan's own conflict
+#             note: G4 composes with F3's observation, it does not duplicate it).
+#   `staged`  a cell of `S27.3`'s sum-then-clamp-once accumulator (`World.stage`): the net
+#             delta staged on it so far. An act's `work` moves it iff its delta is non-zero; the
+#             accumulator's own write at the end of RESOLVE then moves the SITE, and that is where
+#             the clamp can turn a staged delta into no change at all.
+# =================================================================================================
+
+
+class NoOpReceipt(Forbidden):
+    """`04 §C.2` F9 / PART D row 5: a write whose every subject reads the same after it as before.
+
+    ⚠ A `Forbidden`, ON `NotYours`' PRECEDENT AND FOR ITS REASON. The call was well-formed and the
+    row, step, class and F3 all admitted it; what refuses it is `ID-9` -- *a success Event for a
+    write that did not happen* -- made a property of the write rather than of the append. That is a
+    law refusing. `loop/resolve.py` catches it at the fold boundary and emits the row's own
+    `emits_on_refusal` (the same refusal an effect that declined has always produced), so in a
+    season it is never seen as an exception; a probe that writes a `Change` by hand meets it raw.
+
+    ⚠ ITS OWN CLASS, SO A TEST CAN TELL IT FROM `NotYours`. Both are raised after `apply()`, and
+    F3 is asked FIRST: an unauthorized Tenure write is refused and PUT BACK as `NotYours` even when
+    no declared subject moved, so an effect cannot launder an unlawful edge write as a mere no-op
+    (a no-op refusal would otherwise leave the unlawful edge standing)."""
+
+
+# `Subject.ref`'s three tags. What each reads is `World.state_of`'s; the block above says why.
+ENTITY = "entity"
+EDGE = "edge"
+STAGED = "staged"
+
+
+@dataclass(frozen=True, eq=False)
+class Subject:
+    """ONE THING A WRITE NAMES: what a receipt will name (`id`), what the gate reads before and
+    after (`ref`), and which of the row's `emits:` kinds it earns if it moves (`earns`).
+
+    `earns=None` is the plain-list contract every effect had before per-kind earning existed: the
+    subject earns EVERY kind the row declares. A named kind earns only that one -- `confer` opens
+    one edge (`tenure.opened`) and closes another (`tenure.closed`), and conferring onto an unheld
+    office must not publish a closure that did not happen.
+
+    `eq=False`: a subject holding a Tenure compares by identity, as the Tenure store does (two
+    Tenures may share an `id`; `World._tenure_changes` says so)."""
+
+    id: str
+    ref: tuple
+    earns: Optional[str] = None
+
+    @classmethod
+    def entity(cls, store: str, eid: str, earns: Optional[str] = None,
+               fields: Optional[tuple] = None) -> "Subject":
+        return cls(eid, (ENTITY, store, eid, tuple(fields) if fields else None), earns)
+
+    @classmethod
+    def edge(cls, t: Tenure, earns: Optional[str] = None) -> "Subject":
+        return cls(t.id, (EDGE, t), earns)
+
+    @classmethod
+    def staged(cls, record_kind: str, eid: str, fieldname: str) -> "Subject":
+        return cls(eid, (STAGED, (record_kind, eid, fieldname)), None)
+
+
+@dataclass(frozen=True, eq=False)
+class Change:
+    """WHAT AN EFFECT HANDS THE GATE: the subjects it writes, NAMED BEFORE IT RUNS, and the write.
+
+    The gate calls `apply()` between its two reads -- *"the gate applies the write"* (S30.2) is now
+    literal for the fold. `apply` still mutates through the store's own methods (`add_tenure`,
+    `remove_person`, `_grant_remit`), because those are the one owners of their rules; what moved
+    is WHO DECIDES WHETHER IT HAPPENED. An effect says what it will write; the gate says whether it
+    did.
+
+    ⚠ THE BOUND, STATED RATHER THAN IMPLIED. `apply` is still a closure, so an effect can mutate
+    something it did not name. The gate sees two things it did not declare: every Tenure (G3's
+    observation, which F3 judges and a no-op refusal PUTS BACK), and nothing else. An undeclared
+    mutation of a non-Tenure entity is as invisible to F9 as it was to everything before it;
+    `H-130` is the same class one step over."""
+
+    subjects: tuple
+    apply: Callable[[], None]
+
+
+def _nothing() -> None:
+    return None
+
+
+# AN EFFECT THAT DECLINES WRITES NOTHING: no subjects, nothing applied. The gate raises
+# `NoOpReceipt` on it like on any other write that moved nothing, so "the effect declined" and "the
+# effect ran and changed nothing" reach the fold through ONE channel and emit ONE refusal. Before G4
+# they were two (a falsy return, and -- for `work` -- nothing at all).
+NO_CHANGE = Change((), _nothing)
+
+
+def no_op(still: list, actor: Optional[str], record_kind: str, fieldname: str) -> NoOpReceipt:
+    """The `NoOpReceipt` for a write none of whose `still` subjects moved -- built here so the
+    message and the law live once, on `not_yours`' pattern."""
+    shown = ", ".join(s.id for s in still[:_NAMED_IN_MESSAGE])
+    more = f" and {len(still) - _NAMED_IN_MESSAGE} more" if len(still) > _NAMED_IN_MESSAGE else ""
+    return NoOpReceipt(
+        f"a ({record_kind}, {fieldname}) write by {actor or 'no actor'} changed nothing: "
+        f"{('every subject it named reads the same after it -- ' + shown + more) if still else 'it named no subject'}",
+        "F9",
+        needs="a write that moves at least one subject it names",
+        law="04 §C.2 / PART D row 5 (F9) -- `before == after` is refused AT THE WRITE, so the "
+            "receipt is never minted: a success Event for a write that did not happen is ID-9, "
+            "and a receipt minted by the gate for it passes every append-side check")
 
 
 class _Window:

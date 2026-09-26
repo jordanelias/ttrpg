@@ -297,7 +297,9 @@ def test_g3_a_revoke_with_no_seat_is_refused_at_the_gate_itself(gate_only):
       (b) the fold with eligibility AND `requires` bypassed (`gate_only`) -> `NotYours`, so the gate
           is what refuses when nothing before it does;
       (c) after either, the duke's hold is LIVE and the mint window is SHUT -- a refused write
-          cannot issue the receipts `_apply_write` would mint after it returns."""
+          cannot issue a receipt after it. (G4 moved the fold's mint INSIDE `World.write`, so
+          `_apply_write` no longer mints after the write returns; the shut window is still what
+          stops any caller minting against a refused one.)"""
     w, d = _gov_world()
     t = _hold(w, "off_duke")
     with pytest.raises(NotYours):
