@@ -41,14 +41,17 @@ from dataclasses import dataclass, field
 from engine.autoload import dice_engine
 from engine.autoload.game_state import MULTS
 
-# Shared Persuasion-Track thresholds (§6) — single source of truth, do NOT redefine:
-from systems.social_contest.sim.contest import (
-    PERSUASION_WIN_THRESHOLD,        # 7  [canonical: social_contest_v30 §6/§10]
-    PERSUASION_LOSS_THRESHOLD,       # 3
-    PERSUASION_TOTAL_VICTORY,        # 9
-    PERSUASION_TOTAL_DEFEAT,         # 1
-    PERSUASION_TRACK_START_DEFAULT,  # 5
-)
+# Persuasion-Track thresholds (§6). MOVED HERE 2026-09-26 (retirement wave, ED-SC-0033 clause 2
+# unit 3a): formerly imported from `systems.social_contest.sim.contest`, which re-exported them
+# from the now-deleted `contest_legacy_stub.py` (`FORK:10859d64:systems/social_contest/sim/contest_legacy_stub.py`).
+# This module was the ONLY live consumer of these constants (measured: `grep -rn "PERSUASION_"
+# systems/ engine/` — the other reader, `contest/__init__.py`, was the re-export being retired),
+# so they are inlined here rather than re-homed to a third module.
+PERSUASION_WIN_THRESHOLD = 7        # [canonical: social_contest_v30 §6 — "Persuasion Track ≥ 7 = Side A wins"]
+PERSUASION_LOSS_THRESHOLD = 3       # [canonical: social_contest_v30 §6 — "≤ 3 = Side B wins; 4-6 = compromise"]
+PERSUASION_TOTAL_VICTORY = 9        # [canonical: social_contest_v30 §6 — "Persuasion Track ≥ 9 or ≤ 1"]
+PERSUASION_TOTAL_DEFEAT = 1         # [canonical: social_contest_v30 §6 — "Persuasion Track ≥ 9 or ≤ 1"]
+PERSUASION_TRACK_START_DEFAULT = 5  # [canonical: social_contest_v30 §6] Neutral starting position
 
 # ── §10-specific constants (ledgered in tests/sim/v18-integration/sim_verification_ledger.json) ──
 BG_VOTE_TN = 7                              # [canonical: §10 — "Roll combined pool TN 7"]
