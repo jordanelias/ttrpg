@@ -222,7 +222,7 @@ that absence with a named stub marker rather than inventing a trigger, so `world
 life of every campaign — `engine/mc_v18.py:231 _faction_actions_callback` (§3a).
 
 **`mass_battle` — faction-scale battle.** Two disjoint trees, both alive for different reasons. TREE A is retired
-by ruling yet carries the campaign's only battle seam — `systems/mass_battle/sim/massbattle.py:99 resolve_mass_battle`.
+by ruling yet carries the campaign's only battle seam — `systems/mass_battle/sim/massbattle.py:205 resolve_mass_battle`.
 TREE B is ruled canon and unit/cell-scale, and cannot receive a strategically-built unit: feeding it one raises,
 and the failure is measured rather than asserted — `tests/valoria/test_j2_mass_battle_seam.py:65 _canon_accepts_a_strategic_unit`.
 The two trees share no code, so any result measured on one is a result about that tree alone (§3g).

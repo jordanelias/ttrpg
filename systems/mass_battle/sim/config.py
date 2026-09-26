@@ -4,7 +4,7 @@ import os as _os
 import os as _sigma_os
 import math
 
-__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'MB_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'SUBUNIT_ROUT_FLOOR', 'ROUT_CASCADE_FRAC', 'MB_CELL_MORALE', 'CELL_MORALE_PULL', 'CELL_BREAK_ROUT_FRAC', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'MB_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MB_VOLLEY_DENSITY_ENABLED', 'MB_VOLLEY_DENSITY_REF', 'MB_VOLLEY_DENSITY_FLOOR', 'MB_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'MB_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'MB_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'MB_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'MB_FRACTIONAL_POOL', 'PER_DIE_NET_EV', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'MB_FRICTION_CEV', 'MB_FRICTION_SIGMA', 'PER_CELL', 'MB_STAMINA_DRAIN', 'MB_STAMINA_REST', 'MB_ROTATE_FLOOR', 'MB_STAM_SIGMA', 'MB_DEPTH_ROTATE', 'MB_FRONTAGE_BLEND', 'MB_FRONTAGE_REF', 'MB_REFILL_FLOOR', 'MB_CLOSE_RANKS', 'MB_CELL_DAMAGE', 'MB_CHARGE_SIGMA', 'MB_SHOCK_FRONT', 'MB_SHOCK_REAR', 'MB_SHOCK_BRACE_FLOOR', 'MB_SHOCK_HOLD_BRACE', 'MB_SHOCK_DISC_FULL', 'MB_SHOCK_DEPTH_FULL', 'MB_SHOCK_DEPTH_REF', 'MB_SHOCK_SHAKEN_GAIN', 'MB_CAVALRY_SPEED_MULT', 'MB_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'MB_BRACE_ENABLED', 'MB_RECOIL_FRONTAL', 'MB_CHARGE_RECOIL', 'MB_BRACE_SETUP_DELAY', 'MB_RECOIL_CHARGER_GATE', 'MB_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'MB_PIN_REACH', 'MB_REFUSE', 'MB_ENVELOP_MOD', 'MB_ENVELOP_DEPTH_RESIST', 'MB_POCKET_MOD', 'MB_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'MB_KITE_ENABLED', 'MB_KITE_STANDOFF', 'MB_NODE_COHESION', 'MB_CELL_EXCLUSION']
+__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'CELL_FLOOR', 'CELL_CAP', 'MB_TROOP_DENSITY_CAP', 'TROOP_TYPE_DENSITY_CAP', 'cell_cap_for', 'SUBUNIT_ROUT_FLOOR', 'ROUT_CASCADE_FRAC', 'MB_CELL_MORALE', 'CELL_MORALE_PULL', 'CELL_BREAK_ROUT_FRAC', 'MAX_TROOPS_PER_UNIT', 'LINE_ASPECT', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'MB_STOCHASTIC_ROUT', 'ROUT_ONSET_FRAC', 'ROUT_CAP_FRAC', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'RANGED_DR_DEFAULT', 'VOLLEY_LETHALITY_SCALE', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MB_VOLLEY_DENSITY_ENABLED', 'MB_VOLLEY_DENSITY_REF', 'MB_VOLLEY_DENSITY_FLOOR', 'MB_VOLLEY_DENSITY_CAP', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'OCTAGON_DMG_MULT', 'MB_OCTAGON_DMG', 'FACING_REACTION_TICKS', 'MULTI_SIDE_SHOCK', 'OCTAGON_LOCAL_REACH', 'MB_FEIGNED_RETREAT', 'FEIGNED_RECOGNIZE_OB', 'FEIGNED_RETREAT_OB', 'OVEREXTEND_PENALTY', 'MB_RESERVE_COMMIT', 'RESERVE_COMMIT_TURN', 'MB_YIELD_EMERGENT', 'MB_YIELD_RALLY', 'YIELD_RALLY_MORALE_FRAC', 'MB_YIELD_POCKET', 'YIELD_POCKET_REACH', 'STANCE_SPEED_MOD', 'MB_INTENT_RESOLUTION', 'STANCE_COMMITMENT', 'INTENT_OFFENSE_D', 'INTENT_DEFENSE_D', 'MB_FRACTIONAL_POOL', 'PER_DIE_NET_EV', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'MORALE_SIBLING_PULL', 'MB_FRICTION_CEV', 'MB_FRICTION_SIGMA', 'PER_CELL', 'MB_STAMINA_DRAIN', 'MB_STAMINA_REST', 'MB_ROTATE_FLOOR', 'MB_STAM_SIGMA', 'MB_DEPTH_ROTATE', 'MB_FRONTAGE_BLEND', 'MB_FRONTAGE_REF', 'MB_REFILL_FLOOR', 'MB_CLOSE_RANKS', 'MB_CELL_DAMAGE', 'MB_CHARGE_SIGMA', 'MB_SHOCK_FRONT', 'MB_SHOCK_REAR', 'MB_SHOCK_BRACE_FLOOR', 'MB_SHOCK_HOLD_BRACE', 'MB_SHOCK_DISC_FULL', 'MB_SHOCK_DEPTH_FULL', 'MB_SHOCK_DEPTH_REF', 'MB_SHOCK_SHAKEN_GAIN', 'MB_CAVALRY_SPEED_MULT', 'MB_ENVELOP_SPEED_MULT', 'ENVELOP_STANDOFF', 'ENVELOP_ORBIT_CAP', 'MB_BRACE_ENABLED', 'MB_RECOIL_FRONTAL', 'MB_CHARGE_RECOIL', 'MB_BRACE_SETUP_DELAY', 'MB_RECOIL_CHARGER_GATE', 'MB_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'MB_PIN_REACH', 'MB_REFUSE', 'MB_ENVELOP_MOD', 'MB_ENVELOP_DEPTH_RESIST', 'MB_POCKET_MOD', 'MB_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'LANCHESTER_DENSITY_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'POOL_QUALITY_MODEL', 'POOL_QUALITY_SCALE', 'TROOP_TYPE_ROLES', 'ROLE_SPEC', 'MB_KITE_ENABLED', 'MB_KITE_STANDOFF', 'MB_NODE_COHESION', 'MB_CELL_EXCLUSION', 'ROUTE_WAYPOINT_EPS', 'ROUTE_BUDGET_TICKS', 'MB_AMMO_ENABLED', 'MB_VOLLEYS_START', 'MB_VOLLEYS_RESUPPLY']
 
 # [ED-MB-0041] Volley Size-loss -> troop-casualty scale. Replaces the per-target
 # `max(1,(h_per_size+1)//2)`, which made better armour/discipline/command INCREASE a unit's own missile
@@ -390,6 +390,107 @@ MB_ENVELOP_MOD = float(_sigma_os.environ.get('MB_ENVELOP_MOD', '-1.0'))  # rear-
 MB_ENVELOP_DEPTH_RESIST = float(_sigma_os.environ.get('MB_ENVELOP_DEPTH_RESIST', '0.3'))  # defender column depth resists the wrap (Clausewitz reserves)
 MB_POCKET_MOD = float(_sigma_os.environ.get('MB_POCKET_MOD', '-1.0'))   # surround penalty magnitude
 MB_POCKET_REACH = int(_sigma_os.environ.get('MB_POCKET_REACH', '2'))    # lateral column reach to count a flanker
+
+# [A1, ED-MB-0067 Part A — squad-engagement synthesis, "Routes with waypoints"] Waypoint-route
+# primitives (hierarchy/units.py Subunit._resolve_route_goal / check_orders' route-clamp). A
+# waypoint counts as REACHED once the sub-unit's anchor is within this distance of it (advances
+# _route_idx to the next waypoint); [ASSUMPTION: half a cell — basis: matches this file's other
+# half-cell convergence/aliveness thresholds (_ColBlock.alive()'s density>0.5, the D2b fix's
+# mag>=0.5 checks) rather than a game-balance magnitude — a marching order should not require
+# landing on the exact float coordinate to count as "passed through B".]
+ROUTE_WAYPOINT_EPS = 0.5
+# Jordan's ruled path-length budget for a route, "0.5*speed*maximum-ticks-in-battle"
+# (2026-07-02, cited verbatim in _resolve_maneuver_goal's own docstring, which records the
+# formula as NOT YET ENFORCED anywhere — A1 is the first thing that enforces it). DERIVED from
+# TICKS_PER_PHASE (not a second independently-asserted magnitude): 3 phases/engagement is the
+# same "limit of three phases per simultaneous engagement per turn" convention run_battle's own
+# max_turns=18 default already encodes. [ASSUMPTION: "maximum-ticks-in-battle" read as ONE
+# engagement (run_battle's own 18-tick cap), not a whole multi-turn campaign — basis: `t` resets
+# to 1 at the start of every run_battle call and neither check_orders nor the route resolver has
+# any visibility into which multi-turn battle-turn is currently running, so "one engagement" is
+# the only locally-computable reading; a route re-issued at the start of the next engagement earns
+# a fresh budget, consistent with routes being a per-engagement marching order rather than a single
+# plan spanning an entire campaign.]
+ROUTE_BUDGET_TICKS = 3 * TICKS_PER_PHASE  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6); Jordan direction — "limit of three phases per simultaneous engagement per turn"]
+
+# [A2, ED-MB-0067 Part A — "Order conditions limited to what the unit can know"] core/contact.py's
+# _visible_enemy_cells filters an order condition's enemy_cells through FOV_HALF_DEG's facing cone
+# alone (composed on MB_FACING_MODEL/MB_FACING_FOV_GATE, the existing facing-model flags -- see its
+# own docstring). [adversarial-pass fix, 2026-09-26] A first version ALSO filtered by a standalone
+# sight-range distance constant (MB_SIGHT_RANGE). Removed: review found it provably dead by
+# construction, not merely unexercised -- every enemy_range:/refuse_range value anywhere in this
+# package (production or tests) is <=10, and the constant had to be set ABOVE that (to avoid
+# regressing the one shipped consumer, build_refused_flank's refuse_range=10), so no value it could
+# hold would ever actually bind. Simpler and more honest to filter on facing alone until a future
+# order condition's genuinely long-range D makes a distance axis meaningful to add back.
+
+# [A6, ED-MB-0067 Part A — "Missile ammunition and resupply"] Per-subunit volley count
+# (Subunit.eff_volleys/drain_volleys/resupply_volleys, mirroring stamina's OWN existing per-subunit
+# ledger and its own-else-inherited-Unit pattern exactly -- ammo belongs to the shooter). A first
+# version put this on percell._ColBlock (column-block granularity); reworked after adversarial
+# review found that ledger structurally unsound (a column position is shared across whatever
+# subunits currently occupy it, so ammo tracked there could regenerate for free under
+# MB_CLOSE_RANKS=1, or silently stop being metered at all under MB_CLOSE_RANKS=0 -- see
+# percell._ColBlock's own note). New CALIBRATED-DEBT either way — canon has sling AMMO TYPES only
+# (mass_battle_v30.md:93-101), no volley count or resupply rate to cite.
+#
+# [adversarial-pass round 2, 2026-09-26] DEFAULTS ON, per this file's own flags-ON precedent
+# (config.py:331) -- round 1's "defaults OFF" premise is REVERSED here, because it was WRONG, not
+# merely cautious. Round 1's claim ("this sandbox reproduces NONE of bat.py's committed EXPECTED
+# hashes even on an untouched tree") was measured with a HAND-ROLLED bat.py invocation that set
+# only 4 of the ~40 env vars tools/ci_golden_modes_check.py's FIELD_PINS actually pins (missing
+# MB_FACING_MODEL among many others) -- i.e. it silently ran a DIFFERENT, unpinned configuration
+# and its disagreement with EXPECTED never tested what it claimed to. Re-measured PROPERLY (the
+# real tool, `python3 tools/ci_golden_modes_check.py`, plus a direct bat.py invocation using
+# test_mass_battle_byte_exact.py's own _PINNED_OFF for the two legacy modes it is supposed to
+# cover): with EVERY pin in place, THIS sandbox reproduces bat.py's committed EXPECTED hash
+# byte-for-byte for unit_field_mor0, cell_field_mor0 AND cell_legacy_mor1 -- the three modes the
+# real tool checks. (The two remaining modes, unit_legacy_mor0/cell_legacy_mor0, do genuinely
+# mismatch EXPECTED here even properly pinned -- confirmed, by a clean-tree/modified-tree digest
+# comparison, to be a PRE-EXISTING drift unrelated to this feature; see this session's report and
+# the ED-MB-0061 known-red register, `test_mass_battle_byte_exact.py`'s own KNOWN_RED entries.)
+# See bat.py's own EXPECTED comment (this ED, this date) for the actual re-recording.
+MB_AMMO_ENABLED = _sigma_os.environ.get('MB_AMMO_ENABLED', '1') == '1'
+# [ASSUMPTION, MEASURED against bat.py's own 'ranged' battery row, not asserted — matching A8's own
+# "chosen on evidence rather than asserted" methodology, since no canonical source exists to cite
+# for either number. A first pick of START=20/RESUPPLY=6 was traced across all 24 seeds of that row
+# (direct instrumentation, not guessed): net depletion (raw shots fired minus turn-boundary
+# resupply) reached as low as 2 of 20 remaining but never crossed 0 in any seed -- ammunition was
+# depleting under the hood with ZERO observable effect, since the "stops firing" gate never actually
+# engaged. Halved to 10/3 (same ~30% resupply ratio) so the legacy-lattice arm's longer (5-9-turn)
+# engagements genuinely exhaust and recover ammunition, instead of shipping a mechanism that is
+# live in code but silently inert at its own default there.
+#
+# ⚠ RE-MEASURED after the percell._ColBlock -> Subunit.eff_volleys move (same battery, same 24
+# seeds, both arms): the legacy-lattice arm's numbers are UNCHANGED by the ledger move (this
+# specific battery row's one archer subunit never shifts files at all -- stance='hold' the whole
+# battle -- so the column-sharing defect the move fixes never had anything to bite on HERE; the fix
+# matters for other, moving/multi-subunit scenarios, not this one). RE-MEASURED AGAIN after the F4
+# fix (engine.build_army/gauge_mb.make_mixed_unit seeding a ranged subunit its own pool instead of
+# inheriting a Unit shared with its siblings): also unchanged here, because this specific bat.py
+# row builds its archer via bat.py's own single-subunit `make_unit`, a path F4's fix does not touch
+# at all (a lone subunit already reads its parent Unit's pool 1:1 -- no sibling to share with, so
+# it was never affected by the bug F4 closed). The shipped cell_field configuration -- the one
+# actually playable, per this repo's own "we have no 'grid' mode... it always occurs on a
+# coordinate field" ruling (bat.py's own VOCABULARY section) -- fires EXACTLY 7 shots total in ALL
+# 24 seeds regardless of battle length (2 to 20 turns), confirmed three times now (initial
+# measurement, post-ledger-move, post-F4) with the same instrumentation and the same result. 7
+# never reaches even this reduced 10-volley cap. This is NOT an
+# artifact of the calibration or the ledger design -- it is that the archer and its melee opponent
+# lock into contact after one short initial approach window and never re-separate into the volley
+# band again for the rest of the battle, a property of how standoff/halt resolves on the
+# continuous-coordinate path. Reported as a genuine finding rather than forced by shrinking the
+# constant to match: AMMUNITION AS CURRENTLY SCOPED CANNOT MATTER IN THE SHIPPED CONFIGURATION
+# without a deeper change to how/when a ranged sub-unit disengages to re-range (out of scope for
+# A6, which builds "the signal trigger kind and the fired-signals bookkeeping"-equivalent floor for
+# ammo: the count-and-gate mechanism, not battlefield kiting/disengagement behaviour). Picking a
+# tiny enough START to force cell_field's digest to move too (~7 or less) was considered and
+# declined: it would make the legacy arm exhaust almost instantly (its shortest engagements already
+# fire 13+ shots) purely to chase a digest on a config this constant cannot otherwise influence --
+# tuning to the measurement instrument, not the mechanism, which is the exact thing this repo's own
+# evidence discipline warns against. Still Jordan-vetoable CALIBRATED-DEBT.]
+MB_VOLLEYS_START = float(_sigma_os.environ.get('MB_VOLLEYS_START', '10'))
+MB_VOLLEYS_RESUPPLY = float(_sigma_os.environ.get('MB_VOLLEYS_RESUPPLY', '3'))
 
 # ─── P-L LANCHESTER ATTRITION SUBSTRATE (D-D; spec designs/audit/2026-06-01-massbattle-stub-wiring/mb_lanchester_design.md 81ea569d) ───
 # Linear Law = ancient/melee (casualty rate ∝ enemy strength IN CONTACT, frontage-capped);

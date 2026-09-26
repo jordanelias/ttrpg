@@ -11,6 +11,56 @@ from systems.mass_battle.sim.geometry import *
 __all__ = ['check_orders', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom']
 
 
+def _visible_enemy_cells(sub, enemy_cells):
+    """[A2, ED-MB-0067 Part A -- squad-engagement synthesis, "Order conditions limited to what the
+    unit can know"] Filter `enemy_cells` down to the ones `sub` can actually perceive: within its
+    facing cone, angle-to-facing <= FOV_HALF_DEG (105 deg -- ALL of GREEN (<45) and YELLOW (45-90)
+    PLUS 15 degrees of RED (90-105); NOT the GREEN+YELLOW boundary itself, which is 90 -- see
+    geometry.octagon_angle's own zone cutoffs; corrected here after a review found the first version
+    of this docstring claimed the two boundaries were the same). Composed on geometry.octagon_angle
+    for the angle itself (not a re-implementation of its cos/acos math). Facing falls back to
+    (advance_dir, 0) when the sub-unit's node facing is unset, the same fallback find_contacts'
+    head_a/head_b computation and _resolve_maneuver_goal's envelop-wheel both already use.
+
+    [adversarial-pass fix] The facing-cone check is now conditioned on `MB_FACING_MODEL and
+    MB_FACING_FOV_GATE` -- the SAME two flags orchestration.py's own existing FOV-blind-arc gate
+    already composes on (its own comment: "no-op unless the facing model is enabled"), reused here
+    rather than adding a second, parallel, always-on perception check. With either flag off, every
+    enemy cell counts as visible (facing has no bearing under this feature's own convention, which
+    already treats MB_FACING_MODEL as the master switch for every facing-gated mechanic). Both
+    default ON but MB_FACING_MODEL is pinned OFF in every golden-battery mode
+    (tools/ci_golden_modes_check.py's FIELD_PINS), which is what makes this mechanism structurally
+    inert there -- not merely a value someone picked to be large enough to never matter.
+
+    [adversarial-pass fix, removed] An earlier version also filtered by a standalone MB_SIGHT_RANGE
+    distance -- removed. Every enemy_range:/refuse_range value anywhere in this package (production
+    or tests) is <=10, so a distance axis set above that (as it had to be, to avoid regressing the
+    one shipped enemy_range: consumer, build_refused_flank's refuse_range=10) could never actually
+    bind: dead by construction, not merely unexercised by the current battery. Simpler and more
+    honest to filter on facing alone until a future caller's genuinely long-range order condition
+    makes a distance axis meaningful to add back.
+
+    Order conditions are the ONLY thing this filters -- assign_targets' own targeting (which enemy a
+    sub-unit fights once contact is joined) is untouched; this is command/perception (what a
+    standing order can react to), not combat-target selection."""
+    if not enemy_cells:
+        return enemy_cells
+    # [movement-substrate review 06 — contact cluster precedent] Read at CALL TIME, not import-bound
+    # -- same reasoning as find_contacts' own _u.FIELD_MOVEMENT reads in this file: a runtime flag
+    # flip (e.g. validators.py) stays consistent, and this avoids a units->contact import cycle.
+    import systems.mass_battle.sim.hierarchy.units as _u
+    if not (_u.MB_FACING_MODEL and _u.MB_FACING_FOV_GATE):
+        return enemy_cells
+    facing = getattr(sub, '_node_facing', None) or (sub.advance_dir, 0)
+    my = sub.centroid()
+    out = []
+    for e in enemy_cells:
+        _, angle_deg = octagon_angle(e, my, facing)
+        if angle_deg <= FOV_HALF_DEG:
+            out.append(e)
+    return out
+
+
 def check_orders(unit, t, enemy_cells):
     """[Stage C] Fire each subunit's pending orders (Subunit.orders, a Tuple[Order,...]) whose trigger
     condition is met this tick. Called once per tick per side, BEFORE assign_targets (an order's
@@ -19,8 +69,14 @@ def check_orders(unit, t, enemy_cells):
     Reuses the exact 'kind:value' trigger-parsing idiom already in production for target_condition's
     'in_range:N' (see assign_targets, immediately below) -- no new parsing pattern.
 
-    Triggers: 'immediate' | 'tick:N' (t >= N) | 'enemy_range:D' (within D of the nearest enemy cell) |
-    'ally_at:D' (within D of order.waypoint_ref's centroid -- the allied Subunit to watch).
+    Triggers: 'immediate' | 'tick:N' (t >= N) | 'enemy_range:D' (within D of the nearest OBSERVED
+    enemy cell -- filtered per-sub-unit through _visible_enemy_cells, see A2) | 'ally_at:D' (within D
+    of order.waypoint_ref's centroid -- the allied Subunit to watch) | 'own_strength:FRAC' (this
+    subunit's own casualty fraction) | 'signal:NAME' (A4 -- NAME is in `unit.fired_signals`).
+    behavior may also set 'fire_signal': NAME (A4) -- a pseudo-field, not a real Subunit attribute:
+    once THIS order's own trigger condition fires, NAME is added to the issuing Unit's
+    fired_signals, the one real order-writable path to release a 'signal:NAME' trigger from inside
+    a battle.
 
     Byte-exact: Subunit.orders defaults to () -- the while loop body never executes for any existing
     Subunit, the identical safe-default pattern as the already-shipped target_delay_ticks: int = 0."""
@@ -34,9 +90,14 @@ def check_orders(unit, t, enemy_cells):
                 fired = t >= int(order.trigger.split(':', 1)[1])
             elif order.trigger.startswith('enemy_range:'):
                 D = float(order.trigger.split(':', 1)[1])
-                if enemy_cells:
+                # [A2, ED-MB-0067 Part A] Perception-limited: an enemy cell only counts toward this
+                # trigger if `sub` can actually see it (facing cone, when the facing model is on --
+                # see _visible_enemy_cells) -- was every enemy cell unconditionally, omniscient
+                # regardless of facing, in every configuration including the facing model's own OFF.
+                visible = _visible_enemy_cells(sub, enemy_cells)
+                if visible:
                     my = sub.centroid()
-                    fired = min(math.hypot(my[0] - er, my[1] - ec) for (er, ec) in enemy_cells) <= D
+                    fired = min(math.hypot(my[0] - er, my[1] - ec) for (er, ec) in visible) <= D
             elif order.trigger.startswith('ally_at:'):
                 D = float(order.trigger.split(':', 1)[1])
                 if order.waypoint_ref is not None:
@@ -51,10 +112,62 @@ def check_orders(unit, t, enemy_cells):
                 frac = float(order.trigger.split(':', 1)[1])
                 start = getattr(sub, '_start_troops', 0) or 0
                 fired = start > 0 and (sub.troop_total() / start) <= frac
+            elif order.trigger.startswith('signal:'):
+                # [A4, ED-MB-0067 Part A] Go-code: fires once NAME has been added to the issuing
+                # Unit's `fired_signals` set (see Unit.fired_signals and Order's own docstring). A
+                # signal never fired keeps the order pending forever, the same "correctly never
+                # met" semantics every other trigger already has (an unmet enemy_range, an
+                # unreached own_strength threshold).
+                name = order.trigger.split(':', 1)[1]
+                fired = name in unit.fired_signals
             if not fired:
                 break
             for k, v in order.behavior.items():
+                if k == 'fire_signal':
+                    # [A4, ED-MB-0067 Part A -- adversarial-pass fix] Not a real Subunit attribute
+                    # -- a PSEUDO-field consumed here directly, adding the name to the ISSUING
+                    # Unit's fired_signals set (per-Unit, see Unit.fired_signals' own note) instead
+                    # of being setattr-ed onto the subunit. This is the one real, order-writable
+                    # path to fire a 'signal:' trigger from inside a battle: once THIS order's own
+                    # trigger condition is met (any kind -- tick:, enemy_range:, own_strength:,
+                    # another signal:, ...), it releases every other pending order (on any subunit
+                    # of this same Unit) watching for the same name -- WITHIN THIS SAME tick's
+                    # check_orders call if that other subunit's own turn through the `for sub in
+                    # unit.subunits` loop below (see check_orders' own top) has not yet been taken,
+                    # otherwise on the next call. Deliberately not disguised as more precise than it
+                    # is: subunit ITERATION ORDER decides which of the two happens (confirmed by
+                    # direct construction of both orderings), and no messenger latency is modelled
+                    # either way (out of scope for A4) -- so "at most one tick's delay, never more"
+                    # is the honest guarantee, not "always next call".
+                    unit.fired_signals.add(v)
+                    continue
                 setattr(sub, k, v)
+            # [A1, ED-MB-0067 Part A] Clamp a freshly-assigned route to Jordan's ruled path-length
+            # budget (0.5*speed*max-ticks) THE MOMENT it is assigned, using the sub-unit's position
+            # at THIS tick as the route's start point -- see Subunit._clamp_route_to_budget. Applying
+            # this here (not inside _resolve_route_goal, which reads the route fresh every tick
+            # without re-deriving it) means the budget is a fixed planning bound set at order-issue
+            # time, not one that silently grows if the sub-unit is later shoved backward by combat
+            # contention. Inert whenever 'route' is not one of the fields this order sets.
+            #
+            # [F6, adversarial-pass round 2] The resume index is resolved ONCE here
+            # (`order.behavior.get('_route_idx', 0)`, not read back off `sub._route_idx` after
+            # setattr already applied it) and threaded explicitly into BOTH the clamp call
+            # (`start_idx=`, so a resume-partway order's already-passed legs are never measured
+            # against the budget -- see _clamp_route_to_budget's own note) and the cursor
+            # assignment immediately after, so the two can never disagree about which index this
+            # order actually intends to resume at.
+            if 'route' in order.behavior:
+                _resume_idx = order.behavior.get('_route_idx', 0)
+                sub.route = sub._clamp_route_to_budget(sub.route, start_idx=_resume_idx)
+                sub._route_idx = _resume_idx
+                # [F2 fix, adversarial-pass round 2] A fresh/re-issued route must not inherit a
+                # stalled-waypoint tick count left over from whatever the sub-unit was previously
+                # chasing (see _resolve_route_goal's stall-breaker) -- especially since an index
+                # COLLISION (e.g. both the old and new route resuming at the same idx) would
+                # otherwise silently carry the old count forward onto an unrelated waypoint.
+                sub._route_wait_ticks = 0
+                sub._route_wait_idx = _resume_idx
             # [ED-1095] Track when 'brace' most recently BECAME present via an order (vs. having been
             # present since construction, stamped 0 in __post_init__) -- resolution._subunit_braced
             # requires a full tick since this stamp before treating the subunit as braced. Reset to -1

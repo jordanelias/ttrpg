@@ -302,6 +302,23 @@ _ORDER_SAFE_FIELDS = frozenset({
     # `stance`), read fresh every tick via `yield_active` -- no cached derived state keyed off it,
     # same reasoning as every other field in this set.
     'yielding',
+    # [A1, ED-MB-0067 Part A] `route` (an ordered tuple of absolute waypoints) and `_route_idx` (its
+    # cursor) are read fresh every tick by _resolve_route_goal -- no cached geometry keyed off
+    # either, same reasoning as every other field in this set. `_route_idx` is included alongside
+    # `route` so a re-routing order can reset the cursor to 0 in the SAME behavior dict as the new
+    # route; without it, a subunit re-routed after partially following an earlier route would start
+    # the new one part-way through (or already "finished") at whatever index the old route left it at.
+    'route', '_route_idx',
+    # [A4, ED-MB-0067 Part A -- adversarial-pass fix] `fire_signal` is a PSEUDO-field: not a real
+    # Subunit attribute at all, so check_orders special-cases it (skips the generic setattr, adds
+    # the name to the issuing Unit's fired_signals set instead -- see check_orders' own comment).
+    # Listed here so an Order carrying it passes construction-time validation like every other
+    # order-settable behavior key; this is the one real, order-writable path to fire a 'signal:'
+    # trigger from inside a battle (a review found nothing else could -- only a test writing to
+    # fired_signals directly), letting one order's OWN trigger condition release a go-code for
+    # every OTHER pending order watching it, without messenger relay or cross-Unit broadcast
+    # (both still out of scope).
+    'fire_signal',
 })
 
 # [Stage C, adversarial review] Recognized trigger prefixes -- validated eagerly at construction so a
@@ -309,7 +326,7 @@ _ORDER_SAFE_FIELDS = frozenset({
 # for the rest of the battle (the two failure modes -- "malformed trigger" and "condition legitimately
 # never met" -- are otherwise behaviourally indistinguishable to a caller; a condition that's correctly
 # never satisfied SHOULD stay pending forever, that's by design, but a typo should not get that far).
-_ORDER_TRIGGER_KINDS = ('immediate', 'tick:', 'enemy_range:', 'ally_at:', 'own_strength:')
+_ORDER_TRIGGER_KINDS = ('immediate', 'tick:', 'enemy_range:', 'ally_at:', 'own_strength:', 'signal:')
 
 
 @dataclass
@@ -318,18 +335,26 @@ class Order:
     'immediate' | 'tick:N' | 'enemy_range:D' | 'ally_at:D' (needs waypoint_ref) |
     'own_strength:FRAC' (ED-MB-0030 — fires when this subunit's current troops fall to <= FRAC of its
     spawn count, e.g. 'own_strength:0.5' = "act once I'm down to half": withdraw a spent body, commit a
-    weakened one, brace when thinned, etc.). behavior: a dict of attribute->value, applied via setattr
-    when the trigger fires (e.g. {'stance':'balanced', 'instructions':('envelop',)}) -- restricted to
-    _ORDER_SAFE_FIELDS (behavioral/targeting switches, including escort_of/escort_offset -- a subunit can
-    switch INTO escort mode mid-battle via an order), not geometry/troop-accounting fields (see
-    _ORDER_SAFE_FIELDS's own note for why)."""
+    weakened one, brace when thinned, etc.) | 'signal:NAME' (A4, ED-MB-0067 Part A — a go-code: fires
+    once NAME is in the issuing Unit's `fired_signals` set, e.g. a caller does
+    `unit.fired_signals.add('advance')` to release every pending order whose trigger is
+    'signal:advance', on every subunit, in one act — see check_orders). behavior: a dict of
+    attribute->value, applied via setattr when the trigger fires (e.g. {'stance':'balanced',
+    'instructions':('envelop',)}) -- restricted to _ORDER_SAFE_FIELDS (behavioral/targeting switches,
+    including escort_of/escort_offset -- a subunit can switch INTO escort mode mid-battle via an
+    order), not geometry/troop-accounting fields (see _ORDER_SAFE_FIELDS's own note for why)."""
     trigger: str
     behavior: dict = field(default_factory=dict)
     waypoint_ref: Optional[object] = field(default=None, repr=False)  # only consulted for 'ally_at:D'
 
     def __post_init__(self):
-        if self.trigger != 'immediate' and not self.trigger.startswith(('tick:', 'enemy_range:', 'ally_at:', 'own_strength:')):
+        if self.trigger != 'immediate' and not self.trigger.startswith(('tick:', 'enemy_range:', 'ally_at:', 'own_strength:', 'signal:')):
             raise ValueError(f"Order.trigger {self.trigger!r} unrecognized; expected one of {_ORDER_TRIGGER_KINDS}")
+        # [A4, ED-MB-0067 Part A] 'signal:NAME' carries a NAME, not a number -- validated separately,
+        # outside the numeric-payload loop immediately below (which would otherwise try float(NAME)
+        # and reject every legitimate signal name).
+        if self.trigger.startswith('signal:') and not self.trigger[len('signal:'):]:
+            raise ValueError(f"Order.trigger {self.trigger!r}: signal name must be non-empty")
         # [Fable-audit A9 fix, 2026-07-24] Range-check the numeric payload EAGERLY at construction. Before,
         # a malformed payload ('own_strength:0.x5', 'tick:foo') raised inside check_orders on the tick the
         # trigger was tested — long after the order was queued — defeating the whole point of validating
@@ -354,6 +379,29 @@ class Order:
         if bad:
             raise ValueError(f"Order.behavior sets unsafe field(s) {sorted(bad)}; "
                               f"Order may only set {sorted(_ORDER_SAFE_FIELDS)} (see _ORDER_SAFE_FIELDS)")
+        # [A4, ED-MB-0067 Part A -- adversarial-pass fix, round 1] `fire_signal`'s value is a NAME,
+        # validated eagerly for the same reason every other malformed-payload case here is: a
+        # typo'd empty name should fail loud at construction, not silently never release anything
+        # for the rest of the battle.
+        # [F11, adversarial-pass round 2] Round 1 only checked truthiness, not type -- an int
+        # raises nothing useful here (added to fired_signals silently, never matches a string
+        # 'signal:NAME' trigger's own str split), a list raises an unhashable-type TypeError deep
+        # inside `unit.fired_signals.add(v)`, mid-battle, far from where the mistake was made.
+        # Matches this class's own eager-validation doctrine (see this method's other checks).
+        if 'fire_signal' in self.behavior:
+            _fs = self.behavior['fire_signal']
+            if not isinstance(_fs, str) or not _fs:
+                raise ValueError(f"Order.behavior['fire_signal'] must be a non-empty string name, got {_fs!r}")
+        # [F11, adversarial-pass round 2] `route`'s waypoints must each be a 2-tuple/2-list of
+        # numbers, validated eagerly for the same reason: `{'route': (30, 20)}` (a single
+        # coordinate pair, not wrapped in an outer tuple) unpacks as two waypoints `30` and `20`
+        # and previously crashed deep inside _clamp_route_to_budget on the tick the order fires
+        # (`wr, wc = route[idx]` against a bare int), far from where the mistake was made.
+        if 'route' in self.behavior:
+            for _wp in self.behavior['route']:
+                if not (isinstance(_wp, (tuple, list)) and len(_wp) == 2
+                        and all(isinstance(_x, (int, float)) for _x in _wp)):
+                    raise ValueError(f"Order.behavior['route'] waypoint {_wp!r} must be a 2-tuple/2-list of numbers")
 
 
 @dataclass
@@ -443,6 +491,16 @@ class Subunit:
     # mechanically real (triplex-acies line relief; Clausewitz reserves).
     stamina: Optional[float] = None
     stamina_max: Optional[float] = None
+    # [A6, ED-MB-0067 Part A -- "Missile ammunition and resupply"; adversarial-pass rework] Per-
+    # subunit volley count, mirroring `stamina` immediately above EXACTLY: None INHERITS the parent
+    # Unit's own pool (single-subunit units stay byte-exact via eff_volleys -> unit.volleys), an
+    # explicit value gives a subunit its OWN independent pool. Moved here from a shared per-column-
+    # block ledger (percell._ColBlock) after review found that ledger structurally unsound -- a
+    # column position is shared across whatever subunits currently occupy it, so ammo tracked there
+    # could regenerate for free (a subunit shifting onto a new column) or silently stop being
+    # metered at all (an empty column lookup), depending on MB_CLOSE_RANKS. Ammo belongs to the
+    # shooter, not to a column other subunits pass through -- see percell._ColBlock's own note.
+    volleys: Optional[float] = None
     # Per-subunit rout lifecycle (Jordan directive 2026-06-17): a subunit tracks its OWN rout/broken
     # state, so a heavily-hit subunit can break while a fresh sibling holds ("a section of the line
     # breaks" — §A.12 Cannae/Hastings). routed = its eroding morale reached 0; broken = its discipline
@@ -493,6 +551,16 @@ class Subunit:
     # phase 2 the first time `past` is true. Default False -> byte-exact/inert for any subunit
     # that never uses 'envelop'.
     _envelop_committed: bool = False
+    # [A1, ED-MB-0067 Part A -- squad-engagement synthesis, "Routes with waypoints"] An ordered tuple
+    # of absolute (r,c) waypoints to march through in sequence, ahead of whatever
+    # _resolve_maneuver_goal's instruction-based branches or the plain target_centroid default would
+    # otherwise select -- see Subunit._resolve_route_goal. Set via an Order's behavior (Order may
+    # only set _ORDER_SAFE_FIELDS; `route` is clamped to the ruled path-length budget by
+    # check_orders at the moment it is assigned, not re-clamped here). `_route_idx` is the read-fresh
+    # cursor into it; both default to the empty/zero case, under which _resolve_route_goal returns
+    # None immediately -> byte-exact/inert for any existing Subunit that never receives a route.
+    route: Tuple[Tuple[float, float], ...] = ()
+    _route_idx: int = 0
 
     def __post_init__(self):
         # Construction-time validation (arch review / stress-test hardening): turn the cryptic
@@ -722,6 +790,29 @@ class Subunit:
         else:
             u = self._u()
             if u is not None: u.stamina = new
+    @property
+    def eff_volleys(self):
+        """[A6, ED-MB-0067 Part A] Same own-else-inherited-Unit pattern as eff_stamina immediately
+        above. No-parent fallback is MB_VOLLEYS_START (an unseeded lone Subunit starts fresh),
+        mirroring eff_stamina's own fallback to STAMINA_MAX."""
+        if self.volleys is not None: return self.volleys
+        u = self._u()
+        return u.volleys if u is not None else MB_VOLLEYS_START
+    def drain_volleys(self, amount):
+        # Reduce effective volleys (floor 0). Same own-else-inherited-Unit write routing as drain_stamina.
+        new = max(0.0, self.eff_volleys - amount)
+        if self.volleys is not None: self.volleys = new
+        else:
+            u = self._u()
+            if u is not None: u.volleys = new
+    def resupply_volleys(self, amount):
+        # Increase effective volleys, capped at MB_VOLLEYS_START (there is no per-subunit "max" the
+        # way eff_stamina_max is separately configurable -- the cap IS the global starting count).
+        new = min(MB_VOLLEYS_START, self.eff_volleys + amount)
+        if self.volleys is not None: self.volleys = new
+        else:
+            u = self._u()
+            if u is not None: u.volleys = new
     @property
     def eff_discipline_start(self):
         if self.discipline_start is not None: return self.discipline_start
@@ -1100,6 +1191,186 @@ class Subunit:
                 out.append((int(round(r)), int(round(c))))  # OFF: exact prior snap
         return out
 
+    def _route_speed_budget(self):
+        """[A1, ED-MB-0067 Part A] Jordan's ruled path-length budget for a route: 0.5*speed*
+        maximum-ticks-in-battle (this class's own _resolve_maneuver_goal docstring, a 2026-07-02
+        verbal ruling that nothing enforced until this addition — see ROUTE_BUDGET_TICKS for the
+        max-ticks reading). `speed` is this sub-unit's own UNDEGRADED base cell speed — the same
+        `base` local _node_advance derives before its discipline multiplier — not a live,
+        continuously-recomputed rate: a route is a marching ORDER, planned once at issue time
+        (check_orders clamps it there), so the budget should not shrink retroactively if the
+        sub-unit later takes discipline damage mid-route, any more than a real order's marching
+        distance would be renegotiated because the men grew tired.
+
+        [adversarial-pass fix] Includes the cavalry speed multiplier -- a STRUCTURAL, troop-type-
+        derived property (like the shape/tier speed table itself), not a live/time-varying one
+        like discipline, so excluding it (as the first version of this method did) is not the same
+        kind of simplification as excluding disc_mult: every troop type was getting the identical
+        9.0-cell budget regardless of mount, which measured too short to ever reach the deployed
+        enemy line from the historical starting rows. _node_advance's own `vel *= MB_CAVALRY_SPEED_
+        MULT` is the precedent reused here, not a new magnitude."""
+        op = _oriented(self)
+        speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _o, _p in op]
+        nz = [s for s in speeds if s > 0]
+        base = min(nz) if nz else 0
+        if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers'):
+            base *= MB_CAVALRY_SPEED_MULT
+        return 0.5 * base * ROUTE_BUDGET_TICKS
+
+    def _clamp_route_to_budget(self, route, start_idx=0):
+        """[A1] Truncate `route` (an ordered tuple of absolute (r,c) waypoints) to the prefix that
+        fits within `_route_speed_budget`'s bound, measured as cumulative distance from this
+        sub-unit's CURRENT anchor through the waypoints in order, STARTING FROM `start_idx`. A
+        waypoint beyond the budget is dropped entirely (the route simply ends one waypoint short)
+        rather than clipped mid-segment -- the simplest reading that still makes the budget bind,
+        and it matches this resolver's existing one-goal-at-a-time (not path-segment) granularity.
+        Called once, by check_orders, at the moment a route is assigned by an order -- not
+        re-clamped on every read, so a sub-unit that is shoved backward by combat contention
+        mid-route does not retroactively earn a longer effective route than the order planned.
+
+        [F6, adversarial-pass round 2] `start_idx` closes a real bug: check_orders' own comment
+        documents a resume-partway escape hatch (an order setting both `route` and an explicit
+        `_route_idx` together), but this method used to always measure from route[0] regardless --
+        "a legitimate resume-from-index-2 order can have its budget consumed (and waypoints
+        dropped) by legs the subunit will never actually walk." Waypoints before `start_idx`
+        (`head`, below) are returned UNCLAMPED and UNMEASURED: they are legs already behind the
+        sub-unit by the caller's own resume intent, not a walk this order is asking the budget to
+        cover. The caller passes the resolved resume index explicitly (not read from
+        self._route_idx here) so a plain fresh route (start_idx=0, the default) is never
+        accidentally measured against a STALE index left over from whatever route preceded it.
+
+        [adversarial-pass fix, round 1] Guards `self._node_anchor`, which only exists on the node path
+        (_init_node_state, gated on MB_NODE_COHESION -- see Subunit.__post_init__). Routes are a
+        node-path-only mechanism by construction (_resolve_route_goal is reached only via
+        _resolve_maneuver_goal <- _node_advance, itself dispatched only when MB_NODE_COHESION and
+        hasattr(self,'_node_pos')); on the legacy lattice arm (documented elsewhere in this
+        codebase -- bat.py's own comment -- as "not a way the game can be played", kept only as a
+        byte-exact regression oracle) there is no position to measure a budget from and no consumer
+        that will ever read the result, so returning the route UNCLAMPED there is an explicit,
+        harmless no-op ON THIS METHOD -- dead data on that arm -- rather than the AttributeError
+        this raised before (confirmed by direct reproduction: any route order at
+        MB_NODE_COHESION=0 crashed check_orders outright). See run_battle's moving_a/moving_b gate
+        (F5, round 2) for why the sub-unit's overall INCLUSION in movement needed a separate fix --
+        this guard alone was not sufficient to make the legacy arm's handling of a route-only atom
+        a true no-op end to end."""
+        if not route:
+            return route
+        if not hasattr(self, '_node_anchor'):
+            return route
+        start_idx = max(0, min(start_idx, len(route)))
+        head, tail = route[:start_idx], route[start_idx:]
+        budget = self._route_speed_budget()
+        r, c = self._node_anchor
+        total = 0.0
+        out = []
+        for (wr, wc) in tail:
+            total += math.hypot(wr - r, wc - c)
+            if total > budget:
+                break
+            out.append((wr, wc))
+            r, c = wr, wc
+        if len(out) < len(tail):
+            # [adversarial-pass fix] Visible, not silent: a dropped waypoint is a real planning
+            # consequence (the order asked for more marching than the budget allows), so it goes
+            # through the SAME observe-only trace seam every other mechanical event in this engine
+            # uses (resolution.trace_event) -- zero cost when tracing is off, no new mechanism.
+            trace_event('route_clamped', dropped=len(tail) - len(out), kept=len(out), budget=round(budget, 3))
+        return head + tuple(out)
+
+    def _resolve_route_goal(self):
+        """[A1, ED-MB-0067 Part A -- squad-engagement synthesis, "Routes with waypoints"] March
+        through self.route (already clamped to the path-length budget by check_orders when it was
+        assigned) in order, advancing self._route_idx once the anchor is within ROUTE_WAYPOINT_EPS
+        of the current waypoint. Returns the current unreached waypoint, or None once every
+        waypoint has been passed (or none were ever set) -- falling through to whatever
+        _resolve_maneuver_goal's instruction branches or the plain target_centroid default would
+        otherwise select. Monotonic (_route_idx only ever increases), so unlike _envelop_goal's
+        phase test this cannot oscillate between two goals. Default route=() -> _route_idx(0) >=
+        len(())(0) immediately -> None -> byte-exact/inert for any Subunit that never receives a
+        route.
+
+        [adversarial-pass fix, round 1, priority -- REVERSED in round 2] Round 1 SUSPENDED
+        (returned None without touching route data) whenever `yield_active` or stance=='retreat'
+        was active, reasoning both were transient engine-set states worth resuming through once
+        they ended. Reversed after review: `yield_active` (Subunit.yield_active's own property) is
+        `yielding and eff_discipline >= D_YIELD and unit_type != 'ranged'` -- it can flip back to
+        False because eff_discipline DROPS below D_YIELD (core/state.py's discipline-degradation
+        check), i.e. the body degrading FURTHER under combat losses, not because it recovered or
+        the pressure that caused yielding actually eased. "Resume once the emergent state ends"
+        therefore resumed the route at exactly the moment the body had gotten MORE disordered,
+        marching it back onto a stale pre-battle waypoint. And stance=='retreat' has no engine
+        writer anywhere in this package (grep-confirmed) -- it was mischaracterized as emergent; it
+        is only ever set by an explicit order, i.e. already a commanded override, not a transient
+        condition worth silently resuming through later.
+
+        [adversarial-pass fix, round 2] Both paths now CLEAR the route the first time they're
+        detected (self.route=(), self._route_idx=0) -- abandon, not suspend. This is naturally
+        one-shot: once cleared, `route` is empty, so every later call falls through the ordinary
+        `idx >= len(route)` check below and returns None regardless, with no extra state needed to
+        keep it from "re-triggering." Visible via the same observe-only trace seam
+        _clamp_route_to_budget's own dropped-waypoint event uses.
+
+        [adversarial-pass fix, round 2, F2 -- stall breaker] A waypoint has no general progress
+        guarantee even with the above fixed: `_node_anchor` is the mean of per-cell positions AFTER
+        each cell is independently edge-clamped (_node_advance's own `min(BATTLEFIELD_SIZE-1,
+        max(0, ...))`), so a waypoint placed near the battlefield edge can leave the ACHIEVABLE
+        anchor permanently more than ROUTE_WAYPOINT_EPS away from it -- with no yield/retreat
+        involved at all, a route could lock the anchor onto the same unreachable goal forever (a
+        pending route pre-empts every other _resolve_maneuver_goal branch, unconditionally).
+        Bounded the same shape _envelop_wheel_goal's own orbit cap already uses (a getattr-tracked
+        tick counter, force-committed past a cap): a waypoint not reached within
+        ROUTE_BUDGET_TICKS of trying (reusing the existing route-budget constant, not a second one)
+        is dropped and the cursor advances exactly as if it had been reached, so a single
+        unreachable waypoint costs at most one route-budget's worth of ticks, never the rest of the
+        battle. The wait counter is keyed to WHICH waypoint index it is counting for
+        (`_route_wait_idx`), so it self-resets whenever the index changes for any reason (reached,
+        or force-dropped) -- check_orders also resets it explicitly on every fresh/re-issued route,
+        since an index COLLISION (old and new route both stalled/starting at the same idx) would
+        otherwise silently carry a stale count over onto an unrelated waypoint.
+
+        [adversarial-pass fix, defence-in-depth] Also guards `_node_anchor` (see
+        _clamp_route_to_budget's note) in case this is ever reached off the node path."""
+        if self.yield_active or self.stance == 'retreat':
+            if self.route:
+                trace_event('route_abandoned', reason=('yield' if self.yield_active else 'retreat'),
+                            idx=self._route_idx, remaining=len(self.route) - self._route_idx)
+                self.route = ()
+                self._route_idx = 0
+            return None
+        route = self.route
+        idx = self._route_idx
+        if idx >= len(route):
+            return None
+        if not hasattr(self, '_node_anchor'):
+            return None
+        if idx != getattr(self, '_route_wait_idx', -1):
+            self._route_wait_idx = idx
+            self._route_wait_ticks = 0
+        ar, ac = self._node_anchor
+        wr, wc = route[idx]
+        if math.hypot(wr - ar, wc - ac) <= ROUTE_WAYPOINT_EPS:
+            idx += 1
+            self._route_idx = idx
+            self._route_wait_idx = idx
+            self._route_wait_ticks = 0
+            if idx >= len(route):
+                return None
+            return route[idx]
+        self._route_wait_ticks += 1
+        if self._route_wait_ticks < ROUTE_BUDGET_TICKS:
+            return (wr, wc)
+        # [F2 fix] Stalled past the bound -- force-advance past this waypoint, same shape as
+        # _envelop_wheel_goal's orbit-cap force-commit.
+        trace_event('route_waypoint_stalled', idx=idx, waypoint=(round(wr, 3), round(wc, 3)),
+                    anchor=(round(ar, 3), round(ac, 3)))
+        idx += 1
+        self._route_idx = idx
+        self._route_wait_idx = idx
+        self._route_wait_ticks = 0
+        if idx >= len(route):
+            return None
+        return route[idx]
+
     def _resolve_maneuver_goal(self, enemy_cells):
         """[movement audit fix-plan step 7, ED-MB-0001 -- the waypoint primitive] Per-subunit maneuver
         goal for the ANCHOR (not per-cell -- the node path's relational cohesion, self._node_rel,
@@ -1125,7 +1396,28 @@ class Subunit:
         state machine, not an open-ended path, so there is no route length to validate against the
         budget; that formula applies to a genuinely free-form waypoint list, which is a further
         extension beyond what this step builds (Image 2's asymmetric per-wing / interior-strike-
-        point case) -- not built in this pass, flagged as follow-up, not silently dropped."""
+        point case) -- not built in this pass, flagged as follow-up, not silently dropped.
+
+        [A1, ED-MB-0067 Part A] THE FREE-FORM WAYPOINT LIST THIS DOCSTRING FLAGGED AS FOLLOW-UP IS
+        NOW BUILT: see _resolve_route_goal, checked immediately below -- BEFORE the `if not
+        enemy_cells: return None` gate that follows, deliberately, since a marching order must be
+        followed even with no enemy in sight (unlike every other goal this method resolves, which
+        needs live enemy geometry to mean anything). The budget IS enforced now, at check_orders'
+        order-application time (see its own comment), not here -- this resolver still computes a
+        goal point fresh each tick from whatever self.route/_route_idx already say, the same
+        never-cache-derived-state discipline every other branch below follows.
+
+        [ASSUMPTION: an unfinished route takes priority over EVERY instruction branch below
+        (envelop/sweep/kite/yield/wheel), not just the plain target_centroid default -- basis: the
+        brief names no ordering between a route and those instructions, and "follow the marching
+        order you were given" reads as the more literal command-obedience interpretation than
+        letting a concurrent instruction preempt it mid-route; once the route completes
+        (_resolve_route_goal returns None), normal instruction-based resolution takes over exactly
+        as before. Jordan-vetoable -- a caller wanting the reverse priority can still achieve it by
+        not setting both a route and a preempting instruction on the same sub-unit at once.]"""
+        route_goal = self._resolve_route_goal()
+        if route_goal is not None:
+            return route_goal
         if not enemy_cells:
             return None
         # Gated behind the SAME toggles the legacy per-cell version uses (MB_ENVELOP_PATH/
@@ -1330,11 +1622,25 @@ class Subunit:
         equivalent of the legacy's dr,dc = -dr,-dc inversion. In-band returns the anchor's own
         current position (zero resulting delta downstream), matching the legacy's early `return`
         (hold position entirely, keep volleying) rather than the plain step-4 default (which would
-        still close in row)."""
+        still close in row).
+
+        [F7, ED-MB-0067 Part A, adversarial-pass round 2] `far_bound` used to key on `unit_type ==
+        'ranged'` alone, unconditionally -- a kiter out of ammo (Subunit.eff_volleys <= 0, once
+        MB_AMMO_ENABLED is on) would keep holding the WIDE volley-range standoff band forever,
+        "keeping volleying" a weapon that can no longer fire: a decorative unit for the rest of the
+        battle, contributing nothing. Now also requires `eff_volleys > 0` for the ranged (wide)
+        bound; once empty, `far_bound` falls back to the same melee `reach_for(troop_type)` bound a
+        non-ranged kiter already uses, so an empty kiter closes to melee (re-engages) instead of
+        hovering. Reads `self.eff_volleys` directly rather than gating on MB_AMMO_ENABLED: when
+        ammo is disabled nothing ever drains eff_volleys, so it stays at its seeded positive value
+        for the whole battle and this is byte-exact/inert whenever the flag is off -- no flag check
+        needed here at all, and no cross-module staleness risk from reading a bare MB_AMMO_ENABLED
+        name bound at a different module's import time."""
         ar, ac = self._node_anchor
         nearest = min(enemy_cells, key=lambda e: (e[0] - ar) ** 2 + (e[1] - ac) ** 2)
         d = math.hypot(nearest[0] - ar, nearest[1] - ac)
-        far_bound = VOLLEY_MAX_RANGE if self.unit_type == 'ranged' else reach_for(self.troop_type)
+        far_bound = (VOLLEY_MAX_RANGE if self.unit_type == 'ranged' and self.eff_volleys > 0
+                     else reach_for(self.troop_type))
         if d < MB_KITE_STANDOFF:
             return (2 * ar - nearest[0], 2 * ac - nearest[1])  # too close -> flee (reflect through anchor)
         if d > far_bound:
@@ -1479,7 +1785,15 @@ class Subunit:
         toi_deferred = bool(FIELD_MOVEMENT and enemy_cells_float)
         ar, ac = self._node_anchor
         nar, nac = ar, ac
-        if target_centroid and step > 0:
+        # [A1, ED-MB-0067 Part A] A sub-unit marching an unfinished route must advance even with no
+        # target_atom/escort (target_centroid=None) and no enemy in sight -- run_battle's moving_a/
+        # moving_b now include such atoms (see its own comment) but pass target_centroid=None for
+        # them, so the gate below is widened to match; every EXISTING caller always passes a real
+        # (truthy) target_centroid (confirmed: advance_cells/_node_advance are only ever invoked for
+        # atoms with a target_atom or escort, both of which guarantee a non-None cached centroid), so
+        # this widening changes nothing for any of them -- byte-exact.
+        _has_route = self._route_idx < len(self.route)
+        if (target_centroid or _has_route) and step > 0:
             # [movement audit fix-plan step 7, ED-MB-0001] Maneuver goal resolution: an instruction-
             # driven goal (envelop/sweep) takes priority over the plain target_centroid steering.
             # Falls back to fix-plan step 4's lateral file-holding default (see _resolve_maneuver_
@@ -1487,7 +1801,7 @@ class Subunit:
             goal = self._resolve_maneuver_goal(enemy_cells)
             if goal is not None:
                 goal_r, goal_c = goal
-            else:
+            elif target_centroid:
                 # [step 4] Lateral file-holding: a v12 mechanism that existed only on the legacy
                 # grid path and regressed to pure-centroid convergence on the node path (finding
                 # 1.3) -- a plain advance with no active goal steered every subunit's column at the
@@ -1517,6 +1831,13 @@ class Subunit:
                 else:
                     goal_c = target_centroid[1]
                 goal_r = target_centroid[0]
+            else:
+                # [A1] Reached only when _has_route was True (so this block was entered) but the
+                # route finished THIS call (_resolve_route_goal returned None) with no
+                # target_atom/escort to fall back on -- hold the anchor exactly where it is,
+                # equivalent to this whole block never having been entered (the pre-A1 behaviour
+                # for every atom with no target_centroid).
+                goal_r, goal_c = ar, ac
             dr = goal_r - ar
             dc = goal_c - ac
             if self.stance == "retreat":
@@ -2378,9 +2699,28 @@ class Unit:
     # G-1: stamina (0–STAMINA_MAX). Drains per contact tick, recovers at phase boundary.
     stamina: int = STAMINA_MAX
     stamina_max: int = STAMINA_MAX
+    # [A6, ED-MB-0067 Part A] Unit-level volley pool, mirroring `stamina` immediately above exactly
+    # -- the inherited-else-own target every unseeded (volleys=None) Subunit's eff_volleys reads.
+    volleys: float = MB_VOLLEYS_START
     # Jordan directive 2026-06-02: if both provided, Command is DERIVED (Cha primary + Cog secondary).
     charisma: int = None
     cognition: int = None
+    # [A4, ED-MB-0067 Part A -- squad-engagement synthesis, "go-codes"] Names added here (e.g.
+    # `unit.fired_signals.add('advance')`, or an order's own 'fire_signal' behavior key -- see
+    # check_orders) make every pending order on any of this Unit's subunits whose trigger is
+    # 'signal:NAME' eligible to fire -- within the SAME check_orders call if that subunit's own
+    # turn through the per-subunit loop has not yet been taken this tick, otherwise the next call
+    # (subunit iteration order decides which; see check_orders' 'fire_signal' handling for the
+    # verified detail) -- see check_orders' 'signal:' branch. Per-UNIT, not further synchronized
+    # across the several
+    # Units of one multi-unit side (run_multi_unit_battle's side_a/side_b are plain lists of Units,
+    # with no side-level container to hold shared state instead -- [ASSUMPTION: a go-code is scoped
+    # to the Unit it's issued on, not broadcast across a whole multi-unit side -- basis: no such
+    # broadcast primitive exists today and the brief explicitly scoped this item to "the signal
+    # trigger kind and the fired-signals bookkeeping", not messenger/relay, which is where a
+    # cross-Unit broadcast would naturally belong]). Default empty -> inert for any Unit that never
+    # has a signal added -- no PRE-A4 test or production code constructs a 'signal:' trigger.
+    fired_signals: Set[str] = field(default_factory=set)
 
     def __post_init__(self):
         # [canonical: Jordan directive 2026-06-02] Command DERIVED from Charisma (primary) +
@@ -2399,6 +2739,10 @@ class Unit:
         self.effective_size = float(self.size)  # v16: continuous, not floored
         self.stamina = STAMINA_MAX
         self.stamina_max = STAMINA_MAX
+        # [A6, ED-MB-0067 Part A] Mirrors the stamina reset immediately above exactly (same
+        # reasoning, whatever it is -- this is an existing, pre-A6 pattern reused faithfully, not
+        # a new one invented for volleys).
+        self.volleys = MB_VOLLEYS_START
         for a in self.subunits:
             if a.stance == "balanced": a.stance = self.stance
             a._unit = self                     # stat-inheritance back-ref (per-subunit eff_* falls back here)
