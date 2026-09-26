@@ -357,14 +357,23 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
     the effect's discipline, and a `give` that forgets the release is refused here before
     `hold_force` ever sees two holders. SEATS ARE EXCLUDED: a seat passes by its conferral basis,
     never by its holder handing it on. It does NOT compose with `via` (no seat is exercised), and it
-    is NOT the receiver's own act (position 16 specifies one two-party verb by the giver). Position
-    16 adds it as the sixth clause of this function, and nothing else here moves."""
+    is NOT the receiver's own act (position 16 specifies one two-party verb by the giver).
+    ⚠ CORRECTED 2026-09-26, ANTAGONIST PASS: this docstring claimed position 16 "adds it as the
+    sixth clause of this function, and nothing else here moves" -- FALSE AS STATED. This function
+    judges ONE changed Tenure at a time and has no visibility into what happened to any OTHER
+    Tenure the same write touched; `gone` carries only EXISTENCE removals (`W-4`'s `_entity_stores`
+    diff), never Tenure closures. "Closed under T-m in this same write" is information nothing
+    passed to `tenure_write_basis` or `refuse_unauthored` currently carries -- `until == w.tick`
+    cannot distinguish a closure THIS write made from one an earlier write made the same tick.
+    Position 16 needs more than a sixth clause: `refuse_unauthored` (below) must also compute and
+    pass forward which ids were closed under T-m in the SAME batch of `changes` it already holds,
+    or the receiver's basis cannot be judged. That plumbing is position 16's to add; it is not
+    built here because nothing exercises it yet and an unreachable plumbing change is unverifiable
+    (`CLAUDE.md` §0.1 pt 5) -- but the docstring must not claim the gap does not exist."""
     opened = was is None
     owner = t.subject if opened else was.subject
     if not opened and (t.subject, t.object, t.kind) != (was.subject, was.object, was.kind):
         return None
-    if actor is not None and actor == owner:
-        return T_M
     if opened:
         moved = None
     else:
@@ -372,9 +381,23 @@ def tenure_write_basis(w: "World", t: Tenure, was: Optional[Tenure], actor: Opti
             ("since", t.since, was.since), ("until", t.until, was.until),
             ("degree", t.degree, was.degree), ("payload", t.payload, was.payload)) if now != then}
     closed = (not opened and was.until is None and t.until is not None and moved == {"until"})
+    seat = w.offices.get(t.object) if t.kind == "hold" else None
+    # ⚠ T-M NEVER ADMITS OPENING OR RE-GRANTING A SEAT-HOLD, EVEN THE ACTOR'S OWN (found by the
+    # antagonist pass, 2026-09-26: "the wrong answer is a quietly permissive gate" was exactly
+    # this). `owner` on an OPENED edge is read from the write itself (`t.subject`), so "the actor
+    # IS the owner" is self-fulfilling for any actor who names themselves the new holder --
+    # measured: a bare gate write let an UNRELATED actor with no via and no purview open a hold on
+    # ANY seat naming themselves subject, and let a sole holder re-stamp their own seat's remit
+    # (`establish`'s re-grant) the same way. `04:330` -- purview is asked of the SEAT exercised,
+    # never the actor -- and a seat's authority over itself is never personal, not even to its own
+    # sitting holder: a duke does not grant himself new powers by re-founding his own duchy. A
+    # PURE CLOSURE is unaffected -- voluntary resignation of one's own seat (`release`) is still
+    # T-m, because closing what you hold is not an act of authority over the seat, it is giving it
+    # up. Only `closed` distinguishes the two; `is_seat_hold` alone would also refuse `release`.
+    if actor is not None and actor == owner and not (seat is not None and not closed):
+        return T_M
     if closed and (t.subject in gone or t.object in gone):
         return CASCADE
-    seat = w.offices.get(t.object) if t.kind == "hold" else None
     if seat is None:
         return None
     if closed and may_revoke(w, actor, via, seat):

@@ -349,6 +349,78 @@ def test_g3_release_is_the_owners_discretion_and_the_owners_only():
     assert theirs.live
 
 
+def test_g3_t_m_never_admits_self_seating_on_an_unrelated_seat(gate_only):
+    """FOUND BY AN ANTAGONIST PASS, 2026-09-26: T-m read `owner` from the WRITE ITSELF for an
+    OPENED edge (`t.subject`), so "the actor is the owner" was self-fulfilling for anyone who
+    named themselves the new holder -- an UNRELATED actor, `via=None`, no purview anywhere, could
+    open a `hold` on ANY seat naming himself its subject. `04:330` -- purview is asked of the SEAT
+    exercised, never the actor. A bare gate write, `_admits` bypassed, so what refuses is the
+    gate's own T-m boundary and nothing upstream of it."""
+    w, _ = _gov_world()
+    assert w.offices["off_reeve"].conferral == "appointed" and not _hold(w, "off_reeve"), "fixture"
+
+    def open_reeve():
+        w.add_tenure(Tenure("t_self_seat", "p_other", "off_reeve", "hold", w.tick,
+                            payload={"remit_acts": ("issue",)}))
+
+    with pytest.raises(NotYours) as refused:
+        w.write("Tenure", mint_token(w, WriteClass.ACTS), open_reeve,
+                record_kind="Tenure", fieldname="until", driver="Act",
+                actor="p_other", via=None)
+    assert refused.value.where == "F3", refused.value.where
+    assert _hold(w, "off_reeve") is None, "the self-seating was refused and the seat stayed empty"
+
+    # CONTROL: the same open, through a seat with real purview over off_reeve (the King's), admits.
+    w.write("Tenure", mint_token(w, WriteClass.ACTS), open_reeve,
+           record_kind="Tenure", fieldname="until", driver="Act",
+           actor="p_king", via="off_crown")
+    assert _hold(w, "off_reeve") is not None, "control: a purview-holding seat could not seat p_king"
+
+
+def test_g3_t_m_never_admits_re_stamping_ones_own_seat_without_a_superiors_basis(gate_only):
+    """THE PAYLOAD-SIDE TWIN. `off_duke` has exactly one holder, `p_high`, and `establish`'s own
+    re-stamp mechanism (`World._grant_remit`) writes ONLY his `hold`'s `payload` -- so `owner ==
+    actor` on every re-stamp of his own seat, and pre-fix T-m admitted it with no seat at all.
+    Refused with `via=None` and reflexively through `off_duke` itself (`may_fill` refuses
+    `via == off.id`); admitted through `off_crown`, the seat directly above in the same faction."""
+    w, _ = _gov_world()
+    t = _hold(w, "off_duke")
+    assert t.subject == "p_high" and t.granted_acts == ("issue", "determine", "confer",
+                                                         "dispatch", "convene"), "fixture"
+
+    def restamp():
+        t.payload = dict(t.payload)
+        t.payload["remit_acts"] = t.payload["remit_acts"] + ("revoke",)
+
+    for via in (None, "off_duke"):
+        before = t.payload
+        with pytest.raises(NotYours) as refused:
+            w.write("Tenure", mint_token(w, WriteClass.ACTS), restamp,
+                    record_kind="Tenure", fieldname="payload", driver="Act",
+                    actor="p_high", via=via)
+        assert refused.value.where == "F3", (via, refused.value.where)
+        assert t.payload == before, f"via={via!r}: the refused self-re-stamp reached the grant"
+
+    w.write("Tenure", mint_token(w, WriteClass.ACTS), restamp,
+           record_kind="Tenure", fieldname="payload", driver="Act",
+           actor="p_king", via="off_crown")
+    assert "revoke" in t.granted_acts, "control: the King's own seat could not re-stamp the duke"
+
+
+def test_g3_t_m_still_admits_a_sole_holders_own_resignation():
+    """THE CONTROL FOR BOTH TESTS ABOVE: closing one's own seat -- not opening or re-granting it --
+    is still T-m, because giving up a seat is not an exercise of the seat's authority. `release` on
+    `off_duke2`'s sole holder, no `via`, admitted and the hold closes."""
+    w, d = _gov_world()
+    t = _hold(w, "off_duke2")
+    assert t.subject == "p_other", "fixture"
+    out = d.resolve(mint_token(w, WriteClass.ACTS),
+                    [Act(id="rel_seat", actor="p_other", verb="release",
+                         payload={"subject": "off_duke2"})],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert "tenure.closed" in {e.kind for e in out} and not t.live, [e.kind for e in out]
+
+
 # The reeve's seat restated in full with one more remit act -- clause 4's only admitted change.
 _RESTAMP = dict(office="off_reeve", post="Reeve", rung="S", remit=["issue", "dispatch"],
                 faction="Crown", conferral="appointed", revocation=_RUNG_ABOVE)

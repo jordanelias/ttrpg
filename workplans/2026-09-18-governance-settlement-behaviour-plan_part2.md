@@ -358,7 +358,26 @@ previously-lawful non-owner write is now refused — name each one.
 **FALSIFIER.** A `T-o` write whose `via` names a seat whose `revocation` basis does **not** reach the
 edge must raise. If it passes, the basis walk is still reading the actor.
 **TIER.** `opus`/`opus`. The wrong answer is a quietly permissive gate.
-**STATE (2026-09-25, UPDATED 2026-09-26). NOT STARTED.** `Act` has no `via` (`state/carriers.py:406`).
+✅ **DONE — `ED-IN-0277`, 2026-09-26.** `Act.via` exists; the F3/AX-4 clause 2 gate is built
+(`state/gate.py::tenure_write_basis`, five bases: T-m, T-n [unbuildable, no `term` field],
+cascade, T-o, conferral); `_eligible`/`_req_confer`/`_req_revoke` re-pointed to `via.scope`;
+ruling (4)'s purview walk built (`purview_reaches`, absorbing `13d-ii`); the fifth clause
+(conferral-basis opener, `04_VERBS.md`'s own finding) written. `give` (position 16) is decided,
+not built. A GENUINE, SERIOUS FINDING FROM THE CLOSING ANTAGONIST PASS, FIXED BEFORE THIS
+POSITION COULD BE CALLED DONE: T-m originally read "owner" from the write itself for an opened
+edge, so any actor naming themselves the new holder of ANY seat was admitted with no `via` and no
+purview at all -- exactly the "quietly permissive gate" the plan's own tier note warned against.
+Reproduced directly (an unrelated actor self-seated on an unheld office with `via=None`; a sole
+holder re-stamped their own seat's grant the same way), fixed (T-m never admits opening or
+re-granting a seat-hold, only a pure closure), reproduced-fixed, and pinned with two new
+falsifiers. Four more findings registered as holes rather than fixed in place, all latent and
+none caused by this position: `H-132` (conferral's territorial basis vs revocation's
+same-faction rule disagree on a grant REDUCTION -- a live design choice, not closed by precedent),
+`H-133` (a precondition/effect cardinality mismatch that could turn a refusal into an uncaught
+crash if two live holders ever existed on one office), `H-134` (two-seat exercise picks
+insertion-order, not purview-order, with no alarm), and `H-131` corrected (`Gate.close()` gained
+its first game caller, on refusal, still not wired at ordinary barriers). Superseded state, kept
+for history: **STATE (2026-09-25, UPDATED 2026-09-26). NOT STARTED.** `Act` has no `via` (`state/carriers.py:406`).
 ~~`under_purview` (`loop/predicates.py:105`) and the title helpers read the ACTOR's own titles;
 `_req_revoke` carries the `is_title` branch at `predicates.py:347-349`~~ ⚠ **CORRECTED: `13d-i`
 deleted `under_purview`, `titles_held`, `highest_title_rank` and `title_rank`, and rewrote
@@ -1112,7 +1131,19 @@ tier 0, `absent`) is the row; `epistemic.py:376-382` says in terms that `H-84` f
 side. `give` must close-then-open in ONE effect, so the fold never sees two live holders.
 **FALSIFIER, added** (r2 `05:1246`'s control). A `give` without the release leaves two holders and
 `hold_force` raises; a non-co-located `give` is refused.
-**CONFLICT — for G3's pre-flight.** Under G3 the giver's close is T-m, but the RECEIVER's open matches
+✅ **SETTLED BY `G3`'S PRE-FLIGHT (`ED-IN-0277`, 2026-09-26), NOT BUILT THERE.** The giver's close is
+`T-m`; the receiver's open needs a SIXTH, causation-bound basis (not authority-bound like `T-o`):
+*a `hold` opened on an object that is NOT a seat, of the same kind and object as an edge the actor
+OWNED, was live before, and closed under `T-m` in this same write* — seats excluded (a seat passes
+by its own conferral basis, never by its holder handing it on), and it does not compose with `via`
+(`state/gate.py::tenure_write_basis`'s docstring). ⚠ **THIS POSITION MUST ALSO WIDEN THE PLUMBING,
+NOT JUST ADD A SIXTH CLAUSE** (corrected 2026-09-26, antagonist pass on G3: the first writing of the
+decision claimed the clause bolts on with "nothing else here moves," which is false). `tenure_write_
+basis` judges one changed Tenure at a time and `refuse_unauthored` passes each pair separately;
+neither currently carries "which ids this same write closed under T-m," and `gone` (existence
+removals) cannot stand in for it. `give`'s own build must compute that set (from the same `changes`
+`refuse_unauthored` already holds) and thread it through before the sixth clause can be judged.
+Superseded, kept for history: **CONFLICT — for G3's pre-flight.** Under G3 the giver's close is T-m, but the RECEIVER's open matches
 none of the four admitted bases unless `give` is admitted as the receiver's own act or as a fifth
 basis. Position 6 settles it, beside the conferral opener.
 **GATE.** 15; lands after G4 in part 1 `§3.1`.
