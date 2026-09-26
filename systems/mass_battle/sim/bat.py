@@ -554,7 +554,48 @@ EXPECTED = {
     # A fix that moved any of them would have been touching something it did not claim to.
     # [ED-IN-0187, 2026-08-14] RE-RECORDED — the ruled degree ladder; see the note above.
     # was d11cb4fb97ea19605c9034033606457a1ead7a066b3f7a0c3df98620e9769ba9
-    'cell_legacy_mor1': '4cff46a32a54ce7586f851f55a138221c39ace8e24d9c8c44aa3c1ec3902b2c6',
+    # [ED-MB-0067 Part A, 2026-09-26, A6 — squad-engagement synthesis, missile ammunition]
+    # MB_AMMO_ENABLED flips '0' -> '1' (default ON, matching this file's own flags-ON precedent;
+    # an EARLIER commit of this same feature shipped it OFF on a since-retracted premise -- a
+    # hand-rolled verification invocation was missing most of tools/ci_golden_modes_check.py's real
+    # pin vector, so its "this sandbox can't reproduce any golden" finding never actually tested
+    # what it claimed to; properly pinned, this sandbox DOES reproduce the committed golden for
+    # every mode this comment touches -- see config.py's own note at MB_AMMO_ENABLED). A shooter now
+    # stops contributing once its own volley pool (MB_VOLLEYS_START=10, MB_VOLLEYS_RESUPPLY=3/turn)
+    # hits zero, mirroring stamina's existing per-subunit drain/resupply shape exactly.
+    #
+    # WHY THIS MODE ALONE, OF THE THREE tools/ci_golden_modes_check.py COVERS. Measured directly
+    # (not asserted, config.py's own note at MB_VOLLEYS_START has the full trace): the battery's
+    # 'ranged' row's shooter reaches 0 volleys in 15/24 seeds on THIS mode's legacy-lattice arm
+    # (FIELD_MOVEMENT=0 -- engagements run long enough, 5-9 turns, to exhaust and resupply). On
+    # unit_field_mor0/cell_field_mor0 (FIELD_MOVEMENT=1) the shooter fires exactly 7 shots total in
+    # ALL 24 seeds regardless of battle length -- it locks into melee contact after one short
+    # approach window and never re-separates into volley range again -- so ammo cannot bind there
+    # and BOTH field modes are confirmed digest-IDENTICAL with the flag on vs off (re-verified with
+    # the real tool, not the hand-rolled invocation the retracted premise used).
+    #
+    # unit_legacy_mor0/cell_legacy_mor0 (the two modes this file's own EXPECTED already does NOT
+    # match, for a confirmed PRE-EXISTING and unrelated reason -- see those entries' own history
+    # and ED-MB-0061/test_mass_battle_byte_exact.py's KNOWN_RED register) also move under ammo, by
+    # the same legacy-arm mechanism -- but are DELIBERATELY NOT re-recorded here. Their pre-ammo
+    # values were independently confirmed (clean-tree vs modified-tree digest comparison, this
+    # session) to already mismatch the committed golden before this change touched anything, so a
+    # locally-computed post-ammo value for either would not be a genuine re-record -- it would bury
+    # an already-undiagnosed drift under a second, conflated cause. Left untouched, pending a
+    # session with real reference-CI access to resolve the pre-existing drift and re-record ammo's
+    # effect together, honestly, rather than separately and speculatively here.
+    #
+    # CONTROLS (§0.1 #4 — a number without one is not a measurement):
+    #   1. Direct instrumentation (not just digest motion): eff_volleys is traced tick-by-tick
+    #      across all 24 seeds of the 'ranged' row; it reaches exactly 0 in 15/24 seeds on the
+    #      legacy arm, consistent with this digest's move.
+    #   2. Isolated to the flag: every other pin (PYTHONHASHSEED included) held fixed between the
+    #      compared runs; only MB_AMMO_ENABLED's resolved default differed.
+    #   3. The other four modes' pre-ammo values were independently reproduced on a clean (stashed)
+    #      tree byte-for-byte identical to this tree before the flip -- the comparison this note
+    #      rests on is controlled, not a single uncontrolled sample.
+    # was 4cff46a32a54ce7586f851f55a138221c39ace8e24d9c8c44aa3c1ec3902b2c6
+    'cell_legacy_mor1': 'cc6ab475a5ebedec42d551aae42be77ec3d130a1e3ddd4d2924249cfa2e616df',
 }
 
 

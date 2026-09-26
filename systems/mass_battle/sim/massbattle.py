@@ -113,17 +113,26 @@ def _morale_start_from_stability(faction):
 
     THIS SUPERSEDES THE UNTAGGED MORALE-STARTING-FORMULA SENTENCE AT `mass_battle_v30.md:230-231`
     ("Starting = general's Command + unit quality modifier (cap 7)") — NOT PP-711. PP-711 is a
-    DIFFERENT, live, already-implemented rule: the battle-boundary morale RESET
-    (`orchestration.py:reset_morale_between_battles`, called at every campaign battle boundary,
+    DIFFERENT rule: the battle-boundary morale RESET (`orchestration.py:reset_morale_between_battles`,
     citing "§PP-711 (Morale resets between battles)" in its own docstring). PP-711 is unaffected by
-    this change — reinforced, even, since it now resets a unit's morale to a real Stability-derived
-    value instead of a flat hardcoded stub. The starting-formula sentence itself carries no PP
-    number of its own; `mass_battle_v30.md:660` (the RESET section) merely references it for
-    context, which is how the wrong "supersedes PP-711" framing first arose — corrected in
-    `registers/editorial_ledger_mb.jsonl`'s ED-MB-0067, third correction row; do not re-cite PP-711
-    here. No code ever implemented the starting-formula sentence — `_faction_to_unit` hardcoded
-    morale=5/morale_start=5 with an honest [canonical: inherited default — see GAP above] comment —
-    so this is a NEW derivation, not an edit to prior logic.
+    this change — reinforced, even, since that function now resets a unit's morale to a real
+    Stability-derived value instead of a flat hardcoded stub, WHEN IT RUNS. The starting-formula
+    sentence itself carries no PP number of its own; `mass_battle_v30.md:660` (the RESET section)
+    merely references it for context, which is how the wrong "supersedes PP-711" framing first arose
+    — corrected in `registers/editorial_ledger_mb.jsonl`'s ED-MB-0067, third correction row; do not
+    re-cite PP-711 here. No code ever implemented the starting-formula sentence — `_faction_to_unit`
+    hardcoded morale=5/morale_start=5 with an honest [canonical: inherited default — see GAP above]
+    comment — so this is a NEW derivation, not an edit to prior logic.
+
+    [CORRECTION 2026-09-26, ED-MB-0069] The above previously claimed `reset_morale_between_battles`
+    is "called at every campaign battle boundary" — a second citation error in this same docstring,
+    found by an adversarial pass on unrelated work and confirmed by grep: no call site exists
+    anywhere in `engine/` or this file; only test code (`test_persubunit_stress.py`,
+    `tests/valoria/test_mass_battle_signals.py`) invokes it directly. `engine/mc_v18.py`'s campaign
+    loop never references it, `morale`, or this file's own `_faction_to_unit` by that claim. Whether
+    PP-711 is enforced in the live campaign some OTHER way (each battle rebuilding a fresh Unit from
+    Faction stats, so there is no stale morale to reset) or is simply unenforced there is not yet
+    determined — flagged, not resolved, in `registers/handoffs/HANDOFF_MB.md`.
 
     [ASSUMPTION: rounded to the nearest int (half-up, see `_round_half_up`) and floored at 1 rather
     than 0 — basis: `mass_battle_v30.md:230-231` states canon's own Morale range directly ("Morale

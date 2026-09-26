@@ -320,6 +320,9 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
                   stance=sp.pop('stance', stance),
                   instructions=tuple(instructions), advance_dir=advance_dir, role=role)
         for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max',
+                  'volleys',  # [A6, ED-MB-0067 Part A -- F4] was missing from this tuple entirely,
+                  # so an explicit per-spec override silently vanished (sp.pop never ran, kw never
+                  # got the key) -- see this loop's own note below for the seed-when-absent half.
                   'troops', 'concentration', 'orders',
                   'width', 'depth', 'distribution'):  # [ED-MB-0025/0026] explicit grid + density gradient
             if k in sp:
@@ -345,6 +348,23 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
             kw['morale'] = morale
         if kw.get('morale_start') is None:
             kw['morale_start'] = kw['morale'] if morale_start is None else morale_start
+        # [A6, ED-MB-0067 Part A -- adversarial-pass round 2, F4] `volleys` was missing from the
+        # per-subunit forwarding tuple above entirely -- not merely unseeded like morale used to be,
+        # NEVER forwarded at all, so every ranged subunit built here fell through to
+        # Subunit.volleys=None -> eff_volleys inherits the ONE shared parent Unit pool. With 2+
+        # subunits on that Unit (this constructor's whole point), between_turn_recovery's per-
+        # subunit resupply_volleys call still runs for every OTHER subunit too (melee siblings
+        # included -- it is not gated on unit_type), so a shared pool is resupplied once per
+        # sibling per turn instead of once, and a ranged subunit's own drain is likewise not
+        # isolated from what its siblings do to that same pool -- the exact column-block-style
+        # sharing bug this file's own ledger-move note already fixed once, relocated one level up
+        # from "per-column" to "per-Unit". Same fix shape as the morale defaulting immediately
+        # above (DG-4), scoped to unit_type=='ranged' -- the exact gate volley_phase.fire() itself
+        # checks before ever reading eff_volleys -- rather than every subunit: a melee subunit's
+        # ammo count is never read for combat, so seeding it would be harmless but meaningless
+        # bookkeeping; what matters is that the SHOOTER's own pool is isolated.
+        if kw.get('volleys') is None and kw['unit_type'] == 'ranged':
+            kw['volleys'] = MB_VOLLEYS_START
         subs.append(Subunit.of_type(tt, shape, tier, pos, **kw))
     return Unit(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,
