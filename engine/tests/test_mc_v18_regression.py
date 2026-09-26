@@ -139,10 +139,37 @@ _N = 2
 # OLD values, preserved (the ECHO_TRANSPORT-on arm, unreachable from this commit on):
 #   GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 0.0, 'Hafenmark': 0.0, 'Varfell': 50.0}
 #   GOLDEN_WINNERS   = {'Crown': 1, 'Varfell': 1}
-GOLDEN_WIN_SHARE = {'Crown': 0.0, 'Church': 50.0, 'Hafenmark': 50.0, 'Varfell': 0.0}
-GOLDEN_WINNERS = {'Hafenmark': 1, 'Church': 1}
+# RE-PINNED 2026-09-26 (ED-MB-0068 / directive d.1) — A STRATEGIC UNIT'S STARTING MORALE IS NOW
+# DERIVED FROM FACTION STABILITY. `massbattle.py:_faction_to_unit` hardcoded `morale=5,
+# morale_start=5` for every faction (an inherited, never-canon default — see the function's own
+# [GAP] comment); it now reads `faction.Sta`, round-half-up (`_round_half_up`, NOT Python's
+# banker's-rounding `round()` — see its docstring), floored at 1 / ceilinged at 7
+# (`_morale_start_from_stability`). THIS SUPERSEDES THE UNTAGGED MORALE-STARTING-FORMULA SENTENCE
+# AT `mass_battle_v30.md:230-231` ("General's Command + unit quality modifier") — NOT PP-711, which
+# is a DIFFERENT, live, already-implemented rule (the battle-boundary morale RESET,
+# `orchestration.py:reset_morale_between_battles`) unaffected by this change; a prior version of
+# this note wrongly said "supersedes PP-711" — corrected per
+# `registers/editorial_ledger_mb.jsonl`'s ED-MB-0067, third correction row.
+# `_try_conquest` -> `resolve_mass_battle` -> `_faction_to_unit` runs on every campaign-reachable
+# Military Conquest, so every seeded battle in this golden now starts at a Stability-derived morale
+# instead of a flat 5 — a RULED MECHANISM CHANGE, not drift, and this IS the single variable:
+# `_GarrisonStub` (the uncontrolled-territory arm) is held at its pre-change flat 5 deliberately, so
+# an unheld/uncontrolled-territory battle's morale is unchanged and any movement here traces to real
+# factions' Stability alone. NOT a balance measurement at n=2, and the balance oracle was NOT run
+# for this pin (§7 demands `tools/balance_oracle.py` at n>=100 for an actual balance claim). The
+# old arm predates ED-MB-0068 and is unreachable from this commit, so there is no second arm to
+# pair against it as a HISTORICAL comparison; a same-commit patch/undo arm (undoing only
+# `_morale_start_from_stability`) is possible and was not ruled out, it was simply not run in this
+# pass. These values were computed by running the current code directly (`run_campaign(seed=0)`,
+# `run_campaign(seed=1)`), not carried over from an earlier trace.
+# OLD values, preserved (pre-d.1, flat-morale-5 arm):
+#   GOLDEN_WIN_SHARE = {'Crown': 0.0, 'Church': 50.0, 'Hafenmark': 50.0, 'Varfell': 0.0}
+#   GOLDEN_WINNERS   = {'Hafenmark': 1, 'Church': 1}
+#   GOLDEN_BATTLES_MEAN = 36.0
+GOLDEN_WIN_SHARE = {'Crown': 50.0, 'Church': 50.0, 'Hafenmark': 0.0, 'Varfell': 0.0}
+GOLDEN_WINNERS = {'Crown': 1, 'Church': 1}
 # RE-PINNED 2026-08-21, M1 juncture 1: fractional dice pools (ED-IN-0187). `sigma_leverage.roll_net_continuous` no longer rounds its pool, so every sampled value changes and the RNG stream diverges. NOT a balance signal at this n — the control is `tools/balance_oracle.py` at 120 campaigns per arm, where no faction shifts significantly (all |z| < 0.53); see the RE-PINNED block in test_f7_smoke_oracle.py for the table.
-GOLDEN_BATTLES_MEAN = 36.0
+GOLDEN_BATTLES_MEAN = 29.5
 
 
 def test_mc_v18_batch_is_deterministic():
@@ -187,9 +214,23 @@ def test_mc_v18_win_share_is_well_formed():
 def test_flag_on_resolves_at_least_one_contest():
     """ED-SC-0006 item 3: with ECHO_TRANSPORT on, the campaign resolves >=1 contest — closing the
     gap where the flag-OFF golden is structurally blind to contest regressions. (The full flag-ON
-    campaign golden lives in sim/tests/test_parliamentary_bridge.py.)"""
-    r = run_campaign(seed=_SEED, params={'ECHO_TRANSPORT': 1})
-    assert r.scenes_resolved >= 1, "no contest resolved under ECHO_TRANSPORT — the consequence spine is dead"
+    campaign golden lives in sim/tests/test_parliamentary_bridge.py.)
+
+    RE-PINNED 2026-09-26 (ED-MB-0068 / directive d.1): a single `seed=_SEED` (0) sometimes resolves
+    ZERO contests under Stability-derived morale (RNG-stream drift from the derivation change, not
+    a dead consequence spine — verified directly: seeds 1-5 under the same ECHO_TRANSPORT=1 params
+    resolve 9-74 contests each). Summed across `_N` seeds instead, mirroring this file's own
+    established idiom immediately above (`test_..._party_derivation...`, `total = sum(...) > 0`),
+    so a single unlucky seed can no longer make this test fragile to the next RNG-shifting change
+    either."""
+    total = sum(
+        run_campaign(seed=_SEED + i, params={'ECHO_TRANSPORT': 1}).scenes_resolved
+        for i in range(_N)
+    )
+    assert total > 0, (
+        f"no contest resolved under ECHO_TRANSPORT across the seed-{_SEED} golden batch "
+        f"(got {total}) — the consequence spine may be dead"
+    )
 
 
 if __name__ == '__main__':

@@ -1585,6 +1585,17 @@ def volley_phase(unit_a, unit_b):
         # kept for defence-in-depth, not because it's expected to trigger today.
         if shooter_atom.yield_active:
             return 0, None, False
+        # [A6, ED-MB-0067 Part A -- squad-engagement synthesis, "Missile ammunition and resupply"]
+        # Ammunition: a subunit out of volleys stops contributing missile output entirely -- there
+        # is no melee-fallback concept for a 'ranged' unit_type in this sim (confirmed by grep for a
+        # stance/profile switch keyed on ammo), so "stops firing" is the whole effect.
+        # Subunit.eff_volleys (own-else-inherited-Unit, mirroring eff_stamina exactly) -- NOT a
+        # per-column-block ledger (a first version used percell._ColBlock, reworked after review
+        # found that structurally unsound: ammo tracked on a column position other subunits could
+        # occupy either regenerated for free (MB_CLOSE_RANKS=1) or silently stopped being metered at
+        # all (MB_CLOSE_RANKS=0) -- see percell._ColBlock's own note and Subunit.volleys' own note.
+        if MB_AMMO_ENABLED and shooter_atom.eff_volleys <= 0:
+            return 0, None, False
         target_atoms = target_unit.subunits
         # E (atomized archer targeting): an archer ORDERED to a specific or weakest target fires at IT when
         # in range, else the nearest -- so archers can be directed at a flanker / priority unit. Gated by
@@ -1637,6 +1648,10 @@ def volley_phase(unit_a, unit_b):
             net_after_dr = net_after_dr * K_SQUARE * shooter_atom.eff_size
         dens = _volley_density_mult(target_unit)
         out = net_after_dr * dens
+        # [A6] Decrement THIS shooter's own ammo on every tick it actually fires (a real target was
+        # found and a shot resolved) -- not merely eligible to. drain_volleys floors at 0.
+        if MB_AMMO_ENABLED:
+            shooter_atom.drain_volleys(1)
         trace_event('volley', shooter=getattr(shooter_unit, 'name', '?'), d=best_dist,
                     pool=pool, net=net, net_dr=round(net_after_dr, 2),
                     dens=round(dens, 3), loss=round(out, 2))
@@ -1744,6 +1759,30 @@ def attribute_hp_loss(unit, before, after, source, t=None, phase=None):
                 faction=getattr(unit, 'faction', '?'),
                 source=source, t=t, phase=phase,
                 before=before, after=after, delta=delta)
+
+
+def _is_moving_atom(atom):
+    """[Stage C / A1, ED-MB-0067 Part A -- extracted at F5, adversarial-pass round 2] An atom is
+    included in this tick's advance_cells pass if it has a target, is actively screening as an
+    unengaged escort, OR is marching an unfinished route.
+
+    [F5 fix] The route case is additionally gated on the node path actually being active
+    (`hasattr(atom, '_node_anchor')`), which round 1 omitted. On the legacy-lattice arm
+    (MB_NODE_COHESION=0) advance_cells falls through to its per-cell/legacy loop, whose no-target
+    branch (`else: cell_offsets[...] += actual_speed`) does NOT hold position -- it marches the
+    atom full-speed along advance_dir forever, ignoring the route entirely (which really is dead
+    data there, per _clamp_route_to_budget's own note). So including a route-only atom (no
+    target_atom, no escort) in this predicate on that arm was not the harmless no-op round 1's own
+    docstring claimed -- it turned a previously-motionless atom (excluded from this list
+    altogether, pre-A1) into one marching forever in a fixed direction, driven by nothing the
+    route order actually specified. On the node path, this same inclusion is correct and intended:
+    _resolve_route_goal (reached via _resolve_maneuver_goal <- _node_advance) is what actually
+    consumes the route as a real steering goal.
+
+    Extracted to a single named predicate (was duplicated inline across moving_a/moving_b) so the
+    fix lives once and a unit test can call the real gate directly rather than a hand-copy of it."""
+    return bool(atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged)
+                or (atom._route_idx < len(atom.route) and hasattr(atom, '_node_anchor')))
 
 
 def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6)]
@@ -1911,17 +1950,25 @@ def run_battle(unit_a, unit_b, max_turns=18):  # [canonical: mass_battle_v30.md 
         # [Stage C] additive `or` clause: a screening escort (escort_of set, not yet engaged) moves
         # even with target_atom=None, using the escort centroid computed above. Every existing
         # scenario's `if atom.target_atom:` case is untouched (escort_of defaults to None).
-        moving_a = [atom for atom in unit_a.subunits
-                    if atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged)]
-        moving_b = [atom for atom in unit_b.subunits
-                    if atom.target_atom or (atom.escort_of is not None and not atom._escort_engaged)]
+        # [A1, ED-MB-0067 Part A] second additive `or` clause: a sub-unit marching an unfinished
+        # route moves even with no target_atom/escort at all (no enemy in sight yet) -- there is no
+        # cached_centroids entry for such an atom (the loops above only populate one for a
+        # target_atom or an escort), so the advance_cells calls below use .get(id(atom)) instead of
+        # a bare [id(atom)] indexing and pass target_centroid=None for it; _node_advance's own gate
+        # (see its comment) is what makes a None target_centroid safe here, and its _resolve_route_
+        # goal/_resolve_maneuver_goal chain is what actually supplies the route as the goal.
+        # [F5, adversarial-pass round 2] The route clause is gated on the node path actually being
+        # active -- see _is_moving_atom's own docstring for why inclusion without that guard was
+        # not the harmless no-op it looked like on the legacy-lattice arm.
+        moving_a = [atom for atom in unit_a.subunits if _is_moving_atom(atom)]
+        moving_b = [atom for atom in unit_b.subunits if _is_moving_atom(atom)]
         for atom in moving_a:
             # per-subunit formation-hold: each subunit advances on its OWN Discipline
             # (single-subunit inherits -> == unit.discipline -> byte-exact)
-            atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
+            atom.advance_cells(atom.eff_discipline, cached_centroids.get(id(atom)),
                                enemy_cells=b_cells_set, enemy_cells_float=b_cells_float)
         for atom in moving_b:
-            atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
+            atom.advance_cells(atom.eff_discipline, cached_centroids.get(id(atom)),
                                enemy_cells=a_cells_set, enemy_cells_float=a_cells_float)
         # [TOI refactor] On the FIELD_MOVEMENT path, the advance_cells calls above only PROPOSED
         # (uncapped) end-of-tick positions for every atom on BOTH sides -- enemy_cells_float being
@@ -2212,6 +2259,16 @@ def between_turn_recovery(unit):
         return
     for atom in unit.subunits:
         atom.recover_stamina(BETWEEN_TURN_STAMINA_RECOVERY)
+        # [A6, ED-MB-0067 Part A -- squad-engagement synthesis, "Missile ammunition and resupply"]
+        # Resupply at the between-turn lull -- the simplest slice named in the brief. Per-subunit
+        # (Subunit.resupply_volleys, capped at MB_VOLLEYS_START), same loop as stamina immediately
+        # above and the SAME reasoning: not singled out by troop type (a melee atom's volleys count
+        # is simply never read -- see fire()'s own unit_type=='ranged' gate), matching how stamina's
+        # own recovery does not distinguish troop type either. Moved here from a per-column-block
+        # loop over unit.col_grid after the ammo ledger itself moved -- see percell._ColBlock's and
+        # Subunit.volleys' own notes for why.
+        if MB_AMMO_ENABLED:
+            atom.resupply_volleys(MB_VOLLEYS_RESUPPLY)
     # [ED-MB-0042 sweep] Deliberately a BARE write, not unit.set_morale. Recovery is a bounded INCREMENT,
     # not an absolute statement about the body — and once cells own the state this pool is STALE (erosion
     # goes to the cells and never updates it), so broadcasting it downward would RE-INFLATE damaged cells
@@ -2273,6 +2330,11 @@ def reset_morale_between_battles(unit):
     # boundary so a feint/overextension does not leak into the next battle (inert when the toggle is OFF).
     unit.feigned = False
     unit.overextended = False
+    # [A4, ED-MB-0067 Part A -- adversarial-pass fix] Go-codes are a per-BATTLE tactic too, same
+    # reasoning as feigned/overextended immediately above: without this, a signal fired in one
+    # battle would leak into the next campaign engagement and release every order watching for
+    # that name on tick 1, regardless of what actually happened this time.
+    unit.fired_signals = set()
     for atom in unit.subunits:
         if atom.morale is not None:
             atom.set_morale(atom.eff_morale_start)  # own Morale -> nominal start [ED-MB-0042 sweep: via set_morale so the cells reset too]

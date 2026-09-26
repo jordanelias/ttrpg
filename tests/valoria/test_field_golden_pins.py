@@ -78,6 +78,17 @@ _KNOWN_INERT = {
     # dead behind MB_CELL_MORALE (pinned '0'):
     'CELL_BREAK_ROUT_FRAC', 'CELL_MORALE_PULL',
 }
+# [A6, ED-MB-0067 Part A, 2026-09-26] MB_AMMO_ENABLED/MB_VOLLEYS_START/MB_VOLLEYS_RESUPPLY are NOT
+# classified here (in _KNOWN_INERT) -- round 1 briefly did, while the flag shipped OFF; reclassified
+# THIS round into tools/ci_golden_modes_check.py's FIELD_PINS instead now that the default is ON and
+# measured live (a shooter's own pool reaches exactly 0 in 15/24 seeds of the battery's 'ranged' row
+# on the legacy arm) -- an ambient flip must produce a named red there, not a silent pass here.
+# [A2, ED-MB-0067 Part A, 2026-09-26] core/contact.py's _visible_enemy_cells (the enemy_range:
+# perception filter) introduces NO new env-read -- it composes on MB_FACING_MODEL/MB_FACING_FOV_GATE,
+# already pinned/classified above (MB_FACING_MODEL is in FIELD_PINS at '0'; MB_FACING_FOV_GATE is
+# already in _KNOWN_INERT's "no-ops while MB_FACING_MODEL is pinned '0'" group) -- so nothing new
+# needs classifying here. An earlier version added a standalone MB_SIGHT_RANGE distance constant;
+# removed as provably dead by construction (see config.py's own comment), not merely inert-by-value.
 
 _ENV_READ = re.compile(r"environ\.(?:get|setdefault)\(\s*['\"](\w+)['\"](?:\s*,\s*['\"]([^'\"]*)['\"])?")
 

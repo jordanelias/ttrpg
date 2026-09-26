@@ -468,3 +468,22 @@ here is the canon mass-battle engine — still holds; only its path changed.
 **Not a coverage change, recorded so a reader does not go looking:** `tests/sim/gauge_mb.py` and the
 package `__init__.py` files appear in this commit's changeset as deletions rather than additions.
 They moved with the engine; nothing was dropped.
+
+## 2026-09-26 — `gauge_mb.py`'s `make_mixed_unit` gets its own ammo-pool fix (ED-MB-0069)
+
+**Not a retroactive coverage change — `make_mixed_unit` has no call site anywhere in this repo**
+(grep-confirmed: it is defined and otherwise unused). The fix is preventive, closing a gap before
+any gauge scenario exercises it, not a correction to an existing measurement.
+
+Squad-engagement Tier-1 (A1/A2/A4/A6, `ED-MB-0067` Part A) added missile ammunition
+(`Subunit.eff_volleys`, per-subunit, own-else-inherited-Unit). An adversarial review found
+`engine.build_army` — the live, callable multi-subunit army constructor — never forwarded an
+explicit per-spec `volleys` override and never seeded one for a ranged subunit, so every ranged
+subunit built through it silently shared ONE ammo pool with its melee siblings (F4). `make_mixed_unit`
+here is `build_army`'s gauge-harness-local twin (same spec-dict-list shape, same per-subunit
+kwarg-forwarding pattern) and carried the identical gap. Fixed the same way: a ranged subunit
+(`unit_type=='ranged'`) is now seeded its own `volleys=MB_VOLLEYS_START` unless the spec already sets
+one, mirroring `build_army`'s own fix and the pre-existing DG-4 per-subunit morale-seeding precedent
+this constructor already follows. Does not backport DG-4's morale fix itself — `make_mixed_unit` still
+leaves per-subunit morale unseeded unless a spec sets it explicitly, a pre-existing gap unrelated to
+A6, left alone.
