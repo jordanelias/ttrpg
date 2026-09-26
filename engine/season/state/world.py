@@ -469,12 +469,20 @@ class World:
         read/write asymmetry of exactly the shape §0.1 point 1 describes, and it would be
         invisible because both surfaces are individually correct.
 
-        ⚠ ONE CALLER, THE MATTER BARRIER (`loop/matter.py`), AND THAT IS G2's DISPOSITION OF IT.
-        It had two: the `tenures` getter, on every read, and an explicit call at the head of
-        DELIBERATE. Both made DELIBERATE -- which `04 §A.2` says *"owns nothing ... token: none"*
-        -- a mutator of the tenure store. Moving it rather than licensing it: MATTER is the last
-        barrier before the world freezes and holds a token, and no step between MATTER and
-        DELIBERATE can create a Person, so a Tenure homed at MATTER is homed for the whole map.
+        ⚠ ONE CALLER TODAY, THE MATTER BARRIER (`loop/matter.py`), AND THAT IS G2's DISPOSITION OF
+        IT -- NOT A STRUCTURAL GUARANTEE (corrected 2026-09-26, antagonist pass on G2: the
+        original wording read as though this were enforced tree-wide). It had two: the `tenures`
+        getter, on every read, and an explicit call at the head of DELIBERATE. Both made
+        DELIBERATE -- which `04 §A.2` says *"owns nothing ... token: none"* -- a mutator of the
+        tenure store. Moving it rather than licensing it: no step between MATTER and any
+        DELIBERATE round can create a Person (checked by grepping every `Person(` construction in
+        the tree -- `harness/` only), so a Tenure homed at MATTER stays homed for the whole map;
+        MATTER holding a token is not what makes this true, `_rehome` itself is not a gate write
+        and is not token-checked (below). WHAT IS ACTUALLY GUARDED: `test_g2_token.py`'s DELIBERATE
+        falsifier catches a call restored to DELIBERATE or to the `tenures` getter. It does NOT
+        catch a new call added to RESOLVE, WITNESS or CENSUS -- there is no scan for that, only
+        this docstring's word that the disposition is "here, once a season, and nowhere else." A
+        future caller elsewhere would need its own review, not an automatic red.
         ⚠ IT IS STILL NOT A GATE WRITE, and that is stated rather than left to be found: it moves
         an already-admitted Tenure between two Python lists and changes none of its fields, so it
         has no `(kind, field)` row to be checked against. What G2 changes is WHERE it may run.
@@ -520,11 +528,20 @@ class World:
         then feeds the existing S30.2 check unchanged. It stays in the second position, where the
         bare class sat, so every call site changed by one argument and nothing else moved.
 
-        ⚠ THE S30.2 CHECK STOPPED BEING CIRCULAR HERE. Before G2 the fold's own writes passed
-        `mrow.write_class(Step.RESOLVE)`, the same expression this method computes from the same
-        map, so `expect is wclass` could not fail for any of them. The class now comes from the
-        token the DRIVER minted for the step, and the step name from `self.step`, which the step
-        sets -- two sources, so a driver that handed RESOLVE a MATTER token is refused here.
+        ⚠ THE S30.2 CHECK STOPPED BEING WEAK HERE, NOT WHOLLY CIRCULAR (corrected 2026-09-26,
+        antagonist pass on G2: "could not fail for any of them" overstated it). Before G2 the
+        fold's own writes passed `mrow.write_class(Step.RESOLVE)` -- a class computed from the
+        HARDCODED step `Step.RESOLVE`, not from `self.step`. On a row written at more than one
+        step (`[MAT,RES]`, e.g. `(Person, body)`), a fold write that somehow ran while
+        `self.step` was NOT `RESOLVE` would still have been checked correctly, because the two
+        sides used different steps to compute the SAME class value only when they agreed by
+        construction -- every real fold write happens at RESOLVE, where they always did agree.
+        What was genuinely circular, and is the property G2 actually fixes: a fold write AT
+        RESOLVE could never disagree with itself, because both sides derived the identical class
+        from the identical step. The class now comes from the token the DRIVER minted for the
+        step, and the step name from `self.step` -- two INDEPENDENT sources for the same
+        real-world case, so a driver that handed RESOLVE a MATTER token is refused here, which
+        the old comparison could not express because it never asked the driver at all.
 
         `W4`. THE GATE IS ALSO THE EMITTER, because `H-12` is `ruled` that way: *"MATTER emits
         an Event per write so crossings have an antecedent"*, default *"Part D's `emits:` column"*.

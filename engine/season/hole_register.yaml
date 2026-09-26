@@ -1606,6 +1606,32 @@ rows:
     cite:      "FOUND BY AN ANTAGONIST PASS ON G1b's OWN CLOSURE (plan position 4, 2026-09-26), reading `state/world.py`'s `last_emission_of` docstring against `loop/matter.py`'s actual callers rather than trusting the docstring's blanket claim that every kind it is asked about comes from `World.write`'s own auto-emission block. NOT A REGRESSION: the deleted `Event.subject` field carried the identical value for a fold-emitted Event (the fold's own constructor set it to `a.actor`), so this mismatch predates G1b and G1b's migration reproduces it faithfully — what G1b's docstring got wrong was claiming a universal guarantee that was only ever true for MATTER-exclusive kinds (`stores.changed`, `condition.worn`, `yield.taken`, `claim.deposited`, `claim.decayed`). Corrected in `state/world.py`'s docstring in the same commit that filed this row. FIX SHAPE, NOT TAKEN HERE: `last_emission_of` could read the first minted receipt in `changes[]` instead of `anchor_of`, which would resolve every caller correctly regardless of tier -- but MATTER's own auto-emission block is the only minter of a receipt-carrying `changes[]` for these kinds today, so the fix is behaviourally inert until a fold-emitted `body.changed`/`person.died` actually collides with a MATTER-caused one at the same pid, which needs `body_step > 0`. A fix landed before that reachability exists cannot be verified against anything and would be exactly the kind of guard `CLAUDE.md` §0.1 pt 5 forbids; land it with `24f` or whatever position first flips `body_step` off its control arm"
     source:    "antagonist pass on G1b finish, plan position 4, 2026-09-26"
 
+  - id:        H-130
+    tier:      1
+    kind:      "WIRING"
+    hole:      "`World.write` CAN APPLY A MUTATION AND THEN STILL RAISE. `state/world.py`'s own comment at the gate-window open says *\"a write that is going to be refused never authorizes a mint\"*, but `apply()` runs, `TRACE.write(..., True)` logs success and `self.writes` records the write BEFORE the `subject is None` check (when `emits` is set) or `Event.__post_init__`'s empty-`causes` check can still raise. A caller that reaches either check mutates the world and is then told its write was refused"
+    owner:     "state/world.py -- `write()`, the ordering between `apply()` and its own subject/causes checks"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "nothing today -- every loop caller passes `subject=` whenever `emits` is set (`H-107`'s own closure measured this across the whole populated realm, headless runs and the probe corpus), so the gap is unreached by any current production or apparatus caller"
+    cite:      "FOUND BY AN ANTAGONIST PASS ON G2 (plan position 5, 2026-09-26), reading `World.write` end to end while checking G2's token-check ordering against the rest of the method. NOT CAUSED BY G2 OR G1b: the ordering is G1a's own (`state/gate.py`'s header, `state/world.py`'s `G1a. THE WINDOW OPENS HERE` comment). The mint-authorization guarantee the comment states IS upheld for the receipt itself (a receipt cannot be minted outside an open window, which is G1a's actual property); what is NOT upheld is the wider claim that a refused write authorizes nothing AT ALL -- `apply()` already ran. Registered rather than fixed here: the fix is a G1a-lane reordering (validate subject/causes before calling `apply()`), and no current caller exercises the gap, so a fix now would be unverifiable against anything real, which is exactly what `CLAUDE.md` §0.1 pt 5 argues against minting a guard for"
+    source:    "antagonist pass on G2, plan position 5, 2026-09-26"
+
+  - id:        H-131
+    tier:      1
+    kind:      "WIRING"
+    hole:      "`Gate.close()` HAS NO CALLER. Its own docstring says *\"Called at a step barrier. A window left open across a barrier would let the next step's first hand-built change mint against the previous step's write\"* -- but nothing in `loop/driver.py` or any step function calls it; the only caller anywhere in the tree is a test (`tests/test_g1a_act_store_and_receipts.py`). The barrier-closing half of the design `state/gate.py`'s header describes is undocumented as missing rather than simply unbuilt"
+    owner:     "state/gate.py -- `Gate.close`; loop/driver.py -- where a barrier transition would call it"
+    grade:     "measured"
+    default:   "none"
+    site:      ""
+    sweep:     []
+    unblocks:  "nothing today -- `Gate.opening()` unconditionally REPLACES `self._open` on every `World.write` call, and `World.write` is the only production caller of `gate.mint()`, so every mint is preceded by a fresh `opening()` in the same call regardless of whether the previous window was ever closed. The gap `close()` exists to prevent -- a stray direct `gate.mint()` call reusing a stale cross-barrier window -- has no current caller to exploit it"
+    cite:      "FOUND BY AN ANTAGONIST PASS ON G2 (plan position 5, 2026-09-26), grepping every call site of `gate.close` and `.close(` under `engine/season/` while auditing the token/window design G2 sits beside. NOT CAUSED BY G2: the gap is G1a's own, present since the gate was built. Registered rather than fixed: wiring `close()` into `loop/driver.py`'s barrier transitions is a design decision about WHERE in `season()` each barrier ends (before or after the token drops), not a one-line correction, and CLAUDE.md §0.1 pt 5's predicate withholds a guard for a gap nothing currently reaches"
+    source:    "antagonist pass on G2, plan position 5, 2026-09-26"
+
 # ---------------------------------------------------------------------------
 # THE DISCHARGE MAP -- guardrail G8.
 # "Every defect gets a register row, or is discharged with a named section."

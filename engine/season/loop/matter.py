@@ -85,8 +85,14 @@ def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[
     # directly -- see it. It ran at the head of DELIBERATE, a barrier that owns nothing and holds
     # no token (`04 §A.2`), which the Fable gate on Arc 1 found and `ED-IN-0206` filed; G2 was
     # told to dispose of it and moved it. Here is sufficient because nothing between this line and
-    # DELIBERATE can create a Person -- no step does, and the world is frozen from the end of this
-    # barrier -- so every Tenure DELIBERATE reads is already homed. MEASURED 2026-09-26 at
+    # any DELIBERATE round can create a Person -- no step does, full stop, checked by grepping
+    # every `Person(` construction in the tree (`harness/` only; nothing in `loop/` or an effect
+    # constructs one). ⚠ CORRECTED 2026-09-26, ANTAGONIST PASS ON G2: this comment previously
+    # also cited "the world is frozen from the end of this barrier" as a second reason. That is
+    # false for U2's multi-round seasons -- RESOLVE thaws the world every round (`w.frozen = False`,
+    # `loop/resolve.py`), so a season's second and later DELIBERATE rounds run on an UNFROZEN
+    # world. The freeze protects nothing here; the no-Person-construction fact does the whole of
+    # the work, alone. MEASURED 2026-09-26 at
     # `build_realm(0)`, one season: it moves ZERO Tenures in every builder in the tree
     # (`build_realm`, `headless.build_world`, `tiny_world`, `governance_spine.build`,
     # `corpus_run.build_at` all create persons first); it moves one only in the planted ordering

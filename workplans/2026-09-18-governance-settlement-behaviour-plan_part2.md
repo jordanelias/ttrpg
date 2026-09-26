@@ -309,7 +309,17 @@ calling `gate.write` must fail **for want of a token**, not for want of a matrix
 error is raised.
 **TIER.** `opus` for the type and scan; **`sonnet` for the ~~42~~ 36-site rewrite** — mechanical against a
 fixed signature, and the tier drop pays because the handoff is the `ast`-derived site list itself.
-**STATE (2026-09-25). NOT STARTED** — no `Token` type exists anywhere in `engine/season/`
+✅ **DONE — `ED-IN-0276`, 2026-09-26.** `Token` exists (`state/gate.py`), constructed only in
+`loop/driver.py::mint_token`; all 36 gate sites rewritten; content hash confirmed stationary
+(`build_realm(0)` x1 season, `52cfd9f0be4822fa9f4abd9ee3b0b6e6`, unchanged). `_rehome()` moved to
+the MATTER barrier, disposing of `ED-IN-0206`'s finding (not licensed in place). A genuine latent
+defect fixed as a side effect: the S30.2 class check on the fold's own writes was weak (computed
+from a hardcoded step rather than the driver's actual token) and is now checked against an
+independent source. Two new holes filed from the closing antagonist pass, both pre-existing
+(G1a-lane, not caused by G2 or G1b), both latent and unreached by any current caller: `H-130`
+(`World.write` can apply a mutation before a late refusal can still fire) and `H-131`
+(`Gate.close()` has no caller; currently harmless because every mint is preceded by a fresh
+`opening()` in the same call). Superseded state, kept for history: **STATE (2026-09-25). NOT STARTED** — no `Token` type exists anywhere in `engine/season/`
 (`state/gate.py:36`: *"Not a token in `04:199`'s sense — that is G2"*). `World.write`'s signature is
 at `state/world.py:467-472`, the one line G1b and G2 both touch.
 **CONFLICT.** Beyond `4 → 5`: `loop/matter.py` is also edited by `11a`, `24f` and `24` (P1), and
