@@ -451,6 +451,14 @@ class Act:
     # it flattens scenes into the produced list, so a caller that returns bare Acts (the
     # pre-`W17` accounting, still lawful under `as_scenes`) simply has none.
     scene: Optional[str] = None
+    # G3 -- THE SEAT EXERCISED. `04 §B.9`: `Act := (id, actor : PersonId, via : SeatId?, ...)`, and
+    # `04:120` (AX-1): *"only a person acts ... a seat enters through `Act.via`"*. An office id, or
+    # `None` for a person acting as themselves. It is what `_eligible`'s `remit:` branch, `_req_revoke`,
+    # `_req_confer`, `_req_establish` and the write gate's F3 clause (T-o and the conferral basis)
+    # ask -- never the actor's other seats -- so a Duke who is also a Chancellor acts as ONE of them
+    # per act. Set person-side at the mint (`decision/choose.py::pack_scenes`), from the same grant
+    # `person_side_eligible` admitted on; the gate refuses a `via` the actor does not occupy.
+    via: Optional[str] = None
 
 
 # S27: FIVE STRATA. movement / binding decisions / contested physical / uncontested material / social

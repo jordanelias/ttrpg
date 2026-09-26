@@ -500,7 +500,9 @@ def p9():
     log = []
     def choose(p, v, s, ask_budget):
         if p.id == "p_high":
-            return [Act_(w, p, "dispatch", payload="p_mid")]
+            # G3: a remit act names the seat it is exercised through (`Act.via`); `dispatch` is
+            # the duke's by `off_duke`'s grant, so the order goes out through `off_duke`.
+            return [Act_(w, p, "dispatch", payload="p_mid", via="off_duke")]
         if p.id == "p_mid":
             log.append("ran-own-choose")
             return [Act_(w, p, "refuse")]
@@ -826,7 +828,10 @@ def p22():
             # Part D row. H-22 rules it: "the `hold` Tenure is the HOLDER'S". A hold is a
             # RELATIONSHIP, and modelling it as a field on one of its ends is the ride-on defect
             # pointing the other way. The pair is `(Tenure, since)`, which the table carries.
-            record_kind="Tenure", fieldname="since", driver="Act")
+            # ⚠ G3: AND THE HOLDER WRITES IT. The write named no actor, which the gate's F3 clause
+            # now refuses for any Tenure -- H-22's own reading makes this the holder's act, so it
+            # is admitted as `T-m` (the owner's discretion) with `p_low` as the actor.
+            record_kind="Tenure", fieldname="since", driver="Act", actor="p_low")
     # W2: THE BLOCKER MOVED, IT DID NOT CLOSE, and this probe must not report a pass for the
     # half that landed. Recording the hold is lawful now. Whether a hold GATES ANOTHER'S ACT is
     # Part E's `eligibility: hold:<record>`, and no verb table exists to evaluate it -- so no
@@ -871,12 +876,20 @@ def p24():
     w.step = Step.MATTER
     held = [t for t in w.tenures if t.subject == "p_high"]
     assert held
-    for t in held:
-        w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda t=t: setattr(t, "until", w.tick),
-                record_kind="Tenure", fieldname="until", driver="Event",
-                caused_person_exists="p_high",
-                emits="tenure.closed", subject=t.object, causes=[ROOT])     # `W4`
-    assert all(not t.live for t in held)
+    # ⚠ G3 (plan position 6): THE DEATH HAPPENS IN THE WRITE, AND BEFORE G3 IT DID NOT. This closed
+    # each of `p_high`'s tenures in its own write, DECLARING `caused_person_exists="p_high"` -- and
+    # `p_high` never died: he was still in `w.persons` when the probe returned. S15.3's pre-check
+    # takes that parameter at the caller's word, so the seam passed on a death that was only
+    # claimed. `04 §C.2`'s F3 admits an actorless Tenure write only as `destroy's cascade` -- *"an
+    # existence change THIS SAME ACT caused"* -- and the gate now OBSERVES it (the ids the write
+    # removed) instead of taking the claim. So the write that ends the tenures is the write that
+    # kills: `World.remove_person`, MATTER's and `kill / wound`'s one cascade, inside the same
+    # `(Tenure, until)` row S15.3 bounds. One write, one emission, every edge naming him closed.
+    w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: w.remove_person("p_high"),
+            record_kind="Tenure", fieldname="until", driver="Event",
+            caused_person_exists="p_high",
+            emits="tenure.closed", subject="p_high", causes=[ROOT])         # `W4`
+    assert all(not t.live for t in held) and "p_high" not in w.persons
     return ("PASS: `(Tenure, until)` is social:false -- THE PARTITION'S ONE DECLARED SEAM, and the "
             "only Partition row ARCHITECTURE.md states -- and death's `until` write is the only "
             "Tenure write in the MATTER class. The cascade CROSSES OWNERS (S31.1 exception 2), "
@@ -1153,6 +1166,19 @@ def f2():
     # is what it always was: ZERO LIVE `commit` EDGES to the Proposition. `S54 item 20`'s question
     # -- *when everyone abandons a cause, what it held must be able to be taken by someone else* --
     # is unchanged, and is arguably sharper this way: there is a person to take it FROM.
+    #
+    # ⚠⚠ G3 (plan position 6) TURNS THIS PROBE FROM PASS TO FORBIDDEN, AND THAT IS THE DESIGN
+    # ANSWERING, NOT THE PROBE BREAKING. Its first write closes `th_dead` -- `p_low`'s OWN holding --
+    # on behalf of somebody else, and before G3 the gate admitted it because the gate never asked
+    # who wrote a Tenure (it carried no actor at all). `04 §C.2`'s F3 now does, and a person's
+    # holding of a RUNG may be ended only by its owner (`T-m`), a declared term (`T-n`, unbuilt),
+    # a seat's revocation basis (`T-o` -- which a holding does not have: only a SEAT declares one),
+    # or a cascade from something ceasing to exist. The taker (`p_high`, written as the actor so the
+    # refusal names him rather than an absent author) has none of them. So S54 item 20, as this
+    # probe MODELS it for a holding of land, is FORBIDDEN by AX-4 clause 2: what a dead cause's
+    # holder held can pass by his release, by his death (a contest, and the cascade), or -- for a
+    # SEAT -- by `confer`'s displacement under T-o (`_req_confer`'s disjunct), and not by seizure.
+    # The unreachable lines after the write are left as the claim the probe USED to make.
     w = tiny_world()
     prop = Proposition("prop_dead", "OUGHT", "realm", "a dead cause", True, 0)
     w.propositions[prop.id] = prop
@@ -1164,10 +1190,10 @@ def f2():
     w.step = Step.RESOLVE
     old = world_q.hold_force(w, "S")
     w.write("Tenure", mint_token(w, WriteClass.ACTS), lambda: setattr(old, "until", w.tick),
-            record_kind="Tenure", fieldname="until", driver="Act")
+            record_kind="Tenure", fieldname="until", driver="Act", actor="p_high")
     w.write("Tenure", mint_token(w, WriteClass.ACTS),
             lambda: w.add_tenure(Tenure("th_new", "p_high", "S", "hold", since=w.tick)),
-            record_kind="Tenure", fieldname="since", driver="Act")
+            record_kind="Tenure", fieldname="since", driver="Act", actor="p_high")
     assert world_q.hold_force(w, "S").subject == "p_high"
     return ("PASS: `confer` on an object whose holder had ZERO live commit edges to the cause he "
             "held it for was eligible, and THE SUCCESSFUL CONFER wrote `until` -- an ACT, in the "
@@ -1383,13 +1409,25 @@ def f11():
        tests="a post must be able to be given and taken away by named people at named occasions")
 def f12():
     w = tiny_world()
+    # ⚠ G3 (plan position 6): "BY NAMED PEOPLE" NOW HAS TO MEAN A SEAT. These two writes close the
+    # duke's `hold` and open the clerk's -- both edges somebody ELSE owns -- and until G3 they were
+    # admitted with no actor at all, because the gate never asked who wrote a Tenure. `04 §C.2`'s F3
+    # admits the close as T-o (a seat whose revocation basis reaches the duke's) and the open as the
+    # conferral basis (a seat whose purview reaches the duchy), both through `Act.via`. So the probe
+    # seats a King on the realm, gives the duke's seat the two ruled bases (`ED-IN-0256` (2), (3)),
+    # and writes as him, through his seat. It was fixed by giving it a seat, not by loosening the
+    # gate -- the plan's instruction for every hand-built non-owner write.
+    w.offices["off_crown"] = Office("off_crown", "King", "R", ["confer", "revoke"], faction="Crown")
+    w.add_tenure(Tenure("t_crown", "p_king", "off_crown", "hold", since=0))
+    w.offices["off_duke"].conferral = "appointed"
+    w.offices["off_duke"].revocation = "rung_above_same_faction"
     w.step = Step.RESOLVE
     t = world_q.hold_force(w, "off_duke")
     w.write("Tenure", mint_token(w, WriteClass.ACTS), lambda: setattr(t, "until", w.tick),
-            record_kind="Tenure", fieldname="until", driver="Act")
+            record_kind="Tenure", fieldname="until", driver="Act", actor="p_king", via="off_crown")
     w.write("Tenure", mint_token(w, WriteClass.ACTS),
             lambda: w.add_tenure(Tenure("t_new", "p_mid", "off_duke", "hold", since=w.tick)),
-            record_kind="Tenure", fieldname="since", driver="Act")
+            record_kind="Tenure", fieldname="since", driver="Act", actor="p_king", via="off_crown")
     assert not t.live and world_q.hold_force(w, "off_duke").subject == "p_mid"
     # 30 is half of `entrenchment_seasons` (60), so entrenchment reads 500 of `condition_scale`
     # 1000 -- deliberately off BOTH boundaries, neither zero nor saturated -- and this probe

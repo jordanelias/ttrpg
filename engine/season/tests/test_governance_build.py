@@ -930,8 +930,13 @@ def _founding(**over) -> dict:
     return p
 
 
-def _establish(w, d, aid: str, payload, actor: str = "p_high") -> list:
-    return d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id=aid, actor=actor, verb="establish", payload=payload)],
+def _establish(w, d, aid: str, payload, actor: str = "p_high", via: str = "off_duke") -> list:
+    """G3 (plan position 6): the act names the seat it is exercised through. `establish` is
+    `remit:confer`-eligible, and `off_duke` -- a Crown seat at `D`, over every rung `_founding` uses
+    -- is the duke's seat whose grant carries `confer`; since G3 `_eligible` asks THAT seat, and the
+    write gate asks its purview before a sitting holder's grant may be re-stamped."""
+    return d.resolve(mint_token(d.w, WriteClass.ACTS),
+                     [Act(id=aid, actor=actor, verb="establish", payload=payload, via=via)],
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
 
 
@@ -1062,10 +1067,12 @@ def test_13f_an_existing_id_refuses_any_change_but_the_remit(change):
     t = _seat_reeve(w, ["issue"])
     plain = _founding(remit=["issue", "dispatch"])
     assert _preds._req_establish(w, Act(id="ctl", actor="p_high", verb="establish",
-                                        payload=plain)), "control: the unchanged act is refused"
+                                        payload=plain, via="off_duke")), (
+        "control: the unchanged act is refused")
 
     changed_payload = {**plain, **change}
-    changed_act = Act(id="check_constructs", actor="p_high", verb="establish", payload=changed_payload)
+    changed_act = Act(id="check_constructs", actor="p_high", verb="establish",
+                      payload=changed_payload, via="off_duke")
     changed_office = office_described_by(changed_act)  # raises if this `change` is off-roster/malformed
     assert changed_office is not None, (
         f"{change}: the payload did not describe a constructible Office at all")
@@ -1097,7 +1104,9 @@ def test_13f_an_unfoundable_establish_refuses_constructs_nothing_and_raises_noth
     fails this test as an error rather than passing silently."""
     w, d = _establish_world()
     before = dict(w.offices)
-    act = Act(id="e_bad", actor="p_high", verb="establish", payload=payload)
+    # G3: through the duke's seat, so the refusal is the PRECONDITION's -- without `via` the act
+    # would be refused one step earlier, at eligibility, and this would observe nothing about it.
+    act = Act(id="e_bad", actor="p_high", verb="establish", payload=payload, via="off_duke")
     if raises:
         with pytest.raises((Unowned, Unspecified, Forbidden)):
             office_described_by(act)
@@ -1129,9 +1138,12 @@ def test_13f_confer_and_establish_ask_one_basis_test(monkeypatch):
     its own copy of the test would go on admitting."""
     w, d = _establish_world()
     w.offices["off_dicastery"].conferral = "appointed"
+    # G3: the conferred seat needs GROUND inside the duke's purview (a rungless seat is reached by
+    # no purview, so nobody may confer it), and both acts name the duke's seat.
+    w.offices["off_dicastery"].rung = "S"
     conf = Act(id="c_basis", actor="p_high", verb="confer",
-               payload={"office": "off_dicastery", "to": "p_mid"})
-    est = Act(id="e_basis", actor="p_high", verb="establish", payload=_founding())
+               payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke")
+    est = Act(id="e_basis", actor="p_high", verb="establish", payload=_founding(), via="off_duke")
     assert _preds._req_confer(w, conf) and _preds._req_establish(w, est), "control: not admitted"
     monkeypatch.setattr(_preds, "has_conferral_basis", lambda off: False)
     assert not _preds._req_confer(w, conf), "`_req_confer` does not ask the shared basis test"
@@ -1236,7 +1248,10 @@ def test_13e_hand_created_office_refuses_act_established_office_admits():
     w.offices["off_hand"] = Office("off_hand", "Reeve", "S", ["issue", "dispatch"],
                                     conferral="appointed", faction="Crown")
     assert t_hand.granted_acts == (), "a hand-mutation re-granted a sitting holder"
-    act_hand = Act(id="a_hand", actor="p_mid", verb="dispatch", payload={})
+    # G3: each act names the seat it is exercised through -- the holder's own. Without `via` the
+    # REFUSE arm would pass for the wrong reason (no seat exercised at all) and observe nothing
+    # about the snapshot; with it, the grant on THAT seat's `hold` is what decides.
+    act_hand = Act(id="a_hand", actor="p_mid", verb="dispatch", payload={}, via="off_hand")
     assert not d._eligible(w, act_hand, dispatch), (
         "the resolver admitted `p_mid`'s `dispatch` off a hand-created office -- `_eligible` is "
         "still reading `w.offices[...].remit_acts` live instead of `t.granted_acts`")
@@ -1249,7 +1264,7 @@ def test_13e_hand_created_office_refuses_act_established_office_admits():
     assert kinds == ["office.established", "tenure.payload_set"], kinds
     assert t_act.granted_acts == ("issue", "dispatch"), (
         f"the act did not reach the sitting holder: {t_act.granted_acts}")
-    act_act = Act(id="a_act", actor="p_low", verb="dispatch", payload={})
+    act_act = Act(id="a_act", actor="p_low", verb="dispatch", payload={}, via="off_act")
     assert d._eligible(w, act_act, dispatch), (
         "the resolver refused `p_low`'s `dispatch` after a planted `establish` re-stamped the "
         "grant -- `13f`'s own falsifier and this position's complement")
@@ -1276,8 +1291,9 @@ def test_13e_the_witness_channel_also_reads_the_snapshot_not_the_live_office():
         "a hand-created office re-granted a sitting holder -- fixture is not the snapshot case")
 
     w.offices["off_dicastery"].conferral = "appointed"      # rostered since `13d-i`
+    w.offices["off_dicastery"].rung = "S"                    # G3: ground inside the duke's purview
     out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_conf", actor="p_high", verb="confer",
-                          payload={"office": "off_dicastery", "to": "p_low"})],
+                          payload={"office": "off_dicastery", "to": "p_low"}, via="off_duke")],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "tenure.opened"), None)
     assert e is not None, f"fixture: confer did not open a Tenure: {[x.kind for x in out]}"
@@ -1373,9 +1389,19 @@ def _ladder_world():
     return w, d
 
 
+def _seat_of(w, actor):
+    """The one seat `actor` holds, or `None` -- what a candidate revoker EXERCISES since G3, when
+    `_req_revoke` asks ruling (3) of `Act.via` and not of every seat the actor holds. Refuses a
+    fixture that seats one candidate twice, because then WHICH seat is the question under test."""
+    seats = sorted(t.object for t in w.tenures
+                   if t.kind == "hold" and t.subject == actor and t.live and t.object in w.offices)
+    assert len(seats) <= 1, f"fixture: {actor} holds {seats} -- name the seat it exercises"
+    return seats[0] if seats else None
+
+
 def _may_revoke(w, actor, office) -> bool:
     return _preds._req_revoke(w, Act(id=f"r_{actor}_{office}", actor=actor, verb="revoke",
-                                     payload={"office": office}))
+                                     payload={"office": office}, via=_seat_of(w, actor)))
 
 
 def test_13d_i_lb10c_a_titled_seat_is_revocable_only_by_the_seat_above_in_its_faction():
@@ -1528,8 +1554,9 @@ def test_13d_i_the_conferral_basis_is_roster_membership_not_a_nonempty_string():
     that arm is reached by hand-mutation -- the predicate is tested on what it reads."""
     w, _ = _establish_world()
     off = w.offices["off_dicastery"]
+    off.rung = "S"               # G3: ground inside the duke's purview, or nobody may confer it
     conf = Act(id="c_b", actor="p_high", verb="confer",
-               payload={"office": "off_dicastery", "to": "p_mid"})
+               payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke")
     checked = 0
     for basis in sorted(CONFERRAL_BASES):
         off.conferral = basis
@@ -1550,7 +1577,7 @@ def test_13d_i_an_off_roster_conferral_on_establish_refuses_and_raises_nothing()
     constructs nothing, and lets no exception escape the fold. Every rostered basis founds."""
     w, d = _establish_world()
     act = Act(id="e_offroster", actor="p_high", verb="establish",
-              payload=_founding(conferral="something-not-on-the-roster"))
+              payload=_founding(conferral="something-not-on-the-roster"), via="off_duke")
     with pytest.raises(Unspecified):
         office_described_by(act)
     out = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
@@ -1597,8 +1624,11 @@ def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_ot
     assert held(), "fixture: nobody holds the duke's seat"
 
     def run(aid, actor):
-        return [e.kind for e in d.resolve(mint_token(d.w, WriteClass.ACTS), 
-            [Act(id=aid, actor=actor, verb="revoke", payload={"office": "off_duke"})],
+        # G3: each King revokes through his own seat (`Act.via`), which is what eligibility,
+        # ruling (3) and the write gate's T-o clause now ask.
+        return [e.kind for e in d.resolve(mint_token(d.w, WriteClass.ACTS),
+            [Act(id=aid, actor=actor, verb="revoke", payload={"office": "off_duke"},
+                 via=_seat_of(w, actor))],
             contest_max_depth=w.fixtures.get("contest_max_depth"))]
 
     assert run("rv_rival", "c_rival_king") == ["revoke.refused"]

@@ -9521,11 +9521,13 @@
   },
   "F2": {
    "id": "F2",
-   "verdict": "PASS",
-   "detail": "PASS: `confer` on an object whose holder had ZERO live commit edges to the cause he held it for was eligible, and THE SUCCESSFUL CONFER wrote `until` -- an ACT, in the ACTS class, via the 1-per-object cardinality. S54 item 20's REFUSED half (write `until` when the last commit reaches zero) would be an actorless social write outside the one seam. ~~holder-Proposition~~ -> holder, per `holonic \u00a715`: the holding is a person's and the cause is what died",
-   "kind": null,
-   "section": "S54 item 20",
+   "verdict": "GAP",
+   "detail": "a (Tenure, until) write by p_high exercising no seat wrote Tenures it has no basis for: th_dead (hold owned by p_low on S, changed)",
+   "kind": "FORBIDDEN",
+   "section": "F3",
    "title": "a memberless faction's holdings become contestable",
+   "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), or cascade (the edge names something this same write removed). T-n is unbuilt: Tenure carries no term",
+   "law": "04 \u00a7C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner writes only under a declared basis. Per-verb eligibility enforced this by CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a superior may revoke' cannot degrade into 'anyone with a remit string'",
    "by": "probe-model",
    "tests": "when everyone abandons a cause, what it held must be able to be taken by someone else"
   },
@@ -10787,6 +10789,15 @@
   },
   {
    "kind": "FORBIDDEN",
+   "what": "a (Tenure, until) write by p_high exercising no seat wrote Tenures it has no basis for: th_dead (hold owned by p_low on S, changed)",
+   "where": "F3",
+   "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), or cascade (the edge names something this same write removed). T-n is unbuilt: Tenure carries no term",
+   "law": "04 \u00a7C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner writes only under a declared basis. Per-verb eligibility enforced this by CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a superior may revoke' cannot degrade into 'anyone with a remit string'",
+   "case": "probe:F2",
+   "expected": false
+  },
+  {
+   "kind": "FORBIDDEN",
    "what": "a faction taking an action of its own",
    "where": "S3-L1",
    "needs": "a named person at a venue",
@@ -11222,13 +11233,13 @@
   "STEP": 5580,
   "BARRIER": 1871,
   "DECISION": 1887,
-  "QUERY": 23085,
+  "QUERY": 23086,
   "NOTE": 277,
-  "WRITE": 10556,
-  "EVENT": 10554,
+  "WRITE": 10554,
+  "EVENT": 10553,
   "ACT": 95,
   "CLAIM": 1114,
-  "GAP": 86
+  "GAP": 87
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

@@ -114,7 +114,15 @@ def _eff_confer(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     calls it INSIDE the gate's `apply()`, once, for all of the row's `writes:` — so a nested
     `w.write` is a write inside a write, and returning `None` tells the fold nothing was touched,
     which makes it emit the REFUSAL. My first version did both, and the fold correctly refused an
-    act whose state change had in fact happened. `_apply_write`'s docstring states the contract."""
+    act whose state change had in fact happened. `_apply_write`'s docstring states the contract.
+
+    ⚠ G3 -- BOTH ITS WRITES ARE ON EDGES SOMEBODY ELSE OWNS, AND EACH IS DECLARED. The write gate's
+    F3 clause (`state/gate.py::tenure_write_basis`) admits the conferee's new `hold` under the
+    CONFERRAL basis -- `Act.via` names a seat the actor sits in whose purview reaches this seat,
+    which declares a rostered conferral basis -- and the incumbent's closed `hold` under `T-o`, the
+    seat's revocation basis exercised through the same `via` (or `T-m`, where the incumbent is the
+    actor). Without them the gate raises `NotYours` and puts both edges back. `_req_confer` asks the
+    same two predicates first, so the shipped fold refuses (and emits) before this ever runs."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     # ⚠ `to` WAS `d.get("to") or a.actor` -- a silent default that seated the ACTOR whenever the
     # act named nobody, which is the same class as `_eff_transfer`'s four and is deleted with
@@ -182,7 +190,13 @@ def _eff_establish(w: "World", a: "Act", res: "Resolution | None" = None) -> dic
     is `_grant_remit`'s own overwrite, so the payload key keeps ONE writer (`CLAUDE.md` §8).
     `tenure.payload_set` is earned only by a Tenure whose payload was actually written, so an
     establish with no sitting holder -- or one whose holders already carry this grant -- does not
-    publish it."""
+    publish it.
+
+    ⚠ G3 -- THE RE-STAMP WRITES A SITTING HOLDER'S EDGE, AND IT IS DECLARED. A `hold` is its
+    holder's (S15.1), so re-writing its grant is a Tenure write by a non-owner -- a fourth live one
+    beside `revoke`, `confer` and `kill / wound`, which G3's plan text did not list. The gate admits
+    it under the CONFERRAL basis (the seat exercised may fill this office, so it may re-grant it),
+    or `T-m` for the actor's own `hold`; `_req_establish`'s clause 5 asks that first."""
     off = office_described_by(a)
     if off is None:
         return []
@@ -220,7 +234,13 @@ def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     ⚠ NO `w.write` HERE. An effect MUTATES AND RETURNS THE IDS IT TOUCHED; the fold calls it inside
     the gate's `apply()` for the row's `writes:`. Returning an empty list is how the fold learns
     nothing was closed, and that is what emits `release.refused` -- so the refusal channel is the
-    return value, not a raise (§E2: *failure emits, never raises*)."""
+    return value, not a raise (§E2: *failure emits, never raises*).
+
+    ⚠ G3: `T-m` BY CONSTRUCTION, CONFIRMED RATHER THAN ASSUMED. The scan below closes only edges
+    whose `subject` is the actor, so every write it makes is the owner's own and the gate admits it
+    with no seat (`via=None`). `test_g3_release_is_the_owners_discretion_and_the_owners_only`
+    observes both halves: the release admitted, and a write by the same actor on another's edge
+    refused."""
     subj = _operand(a, "subject")
     touched = []
     for t in w.tenures:
@@ -234,7 +254,13 @@ def _eff_release(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
 @effect_for("revoke")
 def _eff_revoke(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
     """Unseats an office: the live `hold` closes. The mirror of `confer`, which is why the two are
-    the pair that proves the slice — one opens what the other closes, on the same row."""
+    the pair that proves the slice — one opens what the other closes, on the same row.
+
+    ⚠ G3: A `T-o` WRITE, AND `via` MUST BE PRESENT. The `hold` it closes is the incumbent's, so the
+    write gate admits it only as `04 §C.2`'s third clause -- `Act.via` names a seat the actor sits
+    in, and the target seat's revocation basis (ruling (3), `rung_above_same_faction`) admits THAT
+    seat -- or `T-m` if the incumbent is the actor. A revocation with no seat is refused at the gate
+    and the hold put back; `_req_revoke` asks the same `may_revoke` first."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     obj = d.get("office")
     touched = []
@@ -571,6 +597,11 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> None:
     # PROVENANCE. It is unchanged in behaviour — the same `w.tenures` scan, for the same `W-E`
     # reason — and it moved because MATTER is now a SECOND way to die (a body reaching 0 from an
     # empty larder), and two sites closing tenures by hand is how the two drift apart (§8).
+    # ⚠ G3: THESE CLOSURES ARE `destroy's cascade`, AND THE GATE RECOGNISES THEM BY OBSERVATION.
+    # They run inside this act's own gated write (the `(Person, body)` pair, the first in the
+    # `Felled` band), `remove_person` takes `who` out of `w.persons` in the same `apply()`, and the
+    # gate admits a closure of an edge naming an id THE SAME WRITE removed -- and nothing else. A
+    # cascade that closed the edges and left the person standing would be refused and put back.
     return w.remove_person(who)
 
 

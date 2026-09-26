@@ -18,9 +18,9 @@ checking.* So every probe declares its provenance:
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
-**Of 59 PROBES that did not pass, 30 were raised BY THE SHAPE ITSELF and 23 exist only because THERE IS NO SIGNATURE TO CALL.**
+**Of 60 PROBES that did not pass, 30 were raised BY THE SHAPE ITSELF and 23 exist only because THERE IS NO SIGNATURE TO CALL.**
 
-> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 86 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 59 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
+> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 87 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 60 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -32,7 +32,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 15 of 63 PASSes are not by construction
+**And 14 of 62 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -71,6 +71,7 @@ either** — they are listed individually below and should be discounted accordi
 | `F16b` | **FORBIDDEN** | construction | S10.1 | a faction must be able to hold a pooled level of loyalty, unrest or legitimacy |
 | `F17` | **UNSPECIFIED** | construction | S27/E2 | a superior's approval must be able to be a formal precondition without which subordinates cannot act |
 | `F19` | **NO-PRODUCER** | no-signature | S36.1 | a settlement's needs must be able to surface as demands without a named petitioner |
+| `F2` | **FORBIDDEN** | probe-model | F3 | when everyone abandons a cause, what it held must be able to be taken by someone else |
 | `F21` | **UNSPECIFIED** | construction | S61 | a character sitting on a collective body must be able to have their individual position registered distinctly from the body's deci |
 | `F3` | **FORBIDDEN** | no-signature | S3-L1 | a faction must be able to take an action of its own |
 | `F6` | **UNSPECIFIED** | no-signature | S62 | an order from above must be able to fail to arrive, distinctly from being refused |
@@ -121,7 +122,6 @@ either** — they are listed individually below and should be discounted accordi
 | `F13` | PASS | construction | S24 | when a post falls empty the process to fill it must be able to start |
 | `F16` | PASS | construction | S10 | a faction must be able to hold a pooled resource that its members' actions raise and lower |
 | `F18` | PASS | probe-model | S36.1 | a place must be able to generate demands of its own that cut against what the authority above ordered |
-| `F2` | PASS | probe-model | S54 item 20 | when everyone abandons a cause, what it held must be able to be taken by someone else |
 | `F20` | PASS | probe-model | S14 | a standing agreement between two polities must be able to constrain what people on either side may do |
 | `F4` | PASS | construction | S11.1 | holding a post must be able to make an action available that is not available otherwise |
 | `F5` | PASS | probe-model | S6.2 | a body with members everywhere and a seat nowhere must be able to issue instructions |
@@ -349,6 +349,12 @@ either** — they are listed individually below and should be discounted accordi
 
 **needs:** a named person who wants it, and a named person who carries it
 **law:** S36.1 -- 'a want -> Petition(petitioner, ...)'. EVERY ARROW IS A PERSON'S ACT OR A CALENDAR FACT: no automatic promotion, no queue drain, no priority function -- and therefore NO PRODUCER for a placeless want. A Rung owns `matter`, `dates`, `envelope`, `stake` -- arrangements, not wants
+
+### `F2` — a memberless faction's holdings become contestable  ·  **FORBIDDEN**  ·  `F3`  ·  by `probe-model`
+**what:** a (Tenure, until) write by p_high exercising no seat wrote Tenures it has no basis for: th_dead (hold owned by p_low on S, changed)
+
+**needs:** T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), or cascade (the edge names something this same write removed). T-n is unbuilt: Tenure carries no term
+**law:** 04 §C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner writes only under a declared basis. Per-verb eligibility enforced this by CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a superior may revoke' cannot degrade into 'anyone with a remit string'
 
 ### `F21` — a member's individual position is recorded in a body's collective output  ·  **UNSPECIFIED**  ·  `S61`  ·  by `construction`
 **what:** judging_set_rule

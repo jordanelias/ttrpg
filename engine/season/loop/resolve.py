@@ -32,7 +32,7 @@ from ..loop.predicates import REQUIRES_PREDICATES
 from ..queries.world_q import WorldReader, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
-from ..state.gate import Token
+from ..state.gate import Token, seat_hold
 from ..state.ids import draw_factory, H
 from ..state.world import World
 from ..trace_log import TRACE
@@ -59,10 +59,18 @@ def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
             # `_ch_post_remit` docstring names the gap). `t.granted_acts` is the grant the
             # holder actually has; an office hand-mutated after seating does not reach it,
             # and an `establish` re-stamp does (`13f`).
-            for t in w.tenures:
-                if t.subject == a.actor and t.kind == "hold" and t.until is None:
-                    if arg in t.granted_acts:
-                        return True
+            #
+            # ⚠ G3: THE SEAT EXERCISED, NOT ANY SEAT HELD. This scanned EVERY live `hold` the
+            # actor owned and admitted if any granted the act. `04:332` -- *"purview is asked of
+            # the seat exercised, not the actor"* -- and `04:120`, *"a seat enters through
+            # `Act.via`"*: a remit is a SEAT's, so a remit act is eligible only through the one
+            # seat it names, which the actor must occupy (`seat_hold`, the gate's own test). An
+            # act naming no seat (`via=None`) is the actor acting as themselves and has no remit
+            # at all. `decision/choose.py` sets `via` person-side from the same grant, so a
+            # COMPUTED act is admitted exactly as before; a hand-built one names its seat.
+            t = seat_hold(w, a.actor, a.via)
+            if t is not None and arg in t.granted_acts:
+                return True
         elif kind == "hold":
             # ⚠ THE ARGUMENT IS COMPARED, as it is person-side. It was parsed and discarded
             # here too, so `hold:<store>` admitted anyone holding ANY object -- an
@@ -408,8 +416,11 @@ def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, ef
     # `STEP_CLASS[step]` from the same map, so S30.2's check could not fail for any fold write
     # (`test_w3_the_write_class_check_still_refuses_a_wrong_class` named that limit). The token is
     # a second source: a driver that handed RESOLVE a MATTER token would now be refused.
+    # G3: WHO IS WRITING, AND THROUGH WHICH SEAT -- the gate's F3 clause asks both of every Tenure
+    # the effect touches. `via` is `None` for an act exercising no seat, and then only the actor's
+    # own edges (and a cascade the act itself caused) can be written.
     w.write(fld, token, apply,
-            record_kind=kind, fieldname=fld, driver="Act")
+            record_kind=kind, fieldname=fld, driver="Act", actor=a.actor, via=a.via)
     # G1a. MINTED AGAINST THE WRITE THAT JUST RAN, not constructed. `touched` is populated from
     # inside `apply()` -- the effect reports the ids it changed -- so the subjects are known only
     # now, after `w.write` has returned. That ordering is the reason `state/gate.py`'s window

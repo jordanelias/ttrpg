@@ -75,6 +75,7 @@ from ..data.matrix import Step, WriteClass
 from ..gaps import Forbidden, Unspecified
 from ..state.attribution import anchor_of
 from ..state.carriers import Event, Person, Proposition, Rung, Site, Tenure, View
+from ..state.gate import NotYours
 from ..state.world import World
 
 # ⚠ L5: THE LOOP IS `loop/`, NOT `driver.py`. Six step bodies left the driver for their own
@@ -887,7 +888,14 @@ def test_hold_cardinality_is_one_per_object():
 
 def test_the_partition_seam_is_bounded_by_causation_not_by_the_column():
     """S15.3: 'a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM
-    CANNOT TOUCH IT.'"""
+    CANNOT TOUCH IT.'
+
+    ⚠ G3 (plan position 6) MADE THE SECOND HALF TRUE RATHER THAN DECLARED. It used to close the
+    duke's `hold` in a write that CLAIMED `caused_person_exists="p_high"` while `p_high` stayed
+    alive -- S15.3's pre-check takes the parameter at the caller's word. The gate's F3 clause admits
+    an actorless Tenure write only as a cascade from an existence change THE SAME WRITE caused, and
+    OBSERVES it: so the claim alone is now refused (`NotYours`, the second write here, with the edge
+    left live), and the write that ends the tenure is the one that kills."""
     w = _w()
     w.step = Step.MATTER
     t = next(x for x in w.tenures if x.kind == "hold")
@@ -895,11 +903,18 @@ def test_the_partition_seam_is_bounded_by_causation_not_by_the_column():
         w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: setattr(t, "until", 0),
                 record_kind="Tenure", fieldname="until", driver="Event",
                 emits="tenure.closed", subject=t.object, causes=[ROOT])
-    w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: setattr(t, "until", 0),
+    # The claimed-but-unperformed death: S15.3's pre-check passes on the parameter, F3 refuses it.
+    with pytest.raises(NotYours):
+        w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: setattr(t, "until", 0),
+                record_kind="Tenure", fieldname="until", driver="Event",
+                caused_person_exists="p_high",
+                emits="tenure.closed", subject=t.object, causes=[ROOT])
+    assert t.live and "p_high" in w.persons, "the refused write left the edge closed"
+    w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: w.remove_person("p_high"),
             record_kind="Tenure", fieldname="until", driver="Event",
             caused_person_exists="p_high",
-            emits="tenure.closed", subject=t.object, causes=[ROOT])
-    assert not t.live
+            emits="tenure.closed", subject="p_high", causes=[ROOT])
+    assert not t.live and "p_high" not in w.persons
 
 
 def test_a_missing_provider_is_a_boot_failure():
@@ -4567,6 +4582,14 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
     # of `conferral_bases` (ED-IN-0256 ruling (2)), so the old free string refused. `appointed` is
     # the value that names what a `confer` by the duke is; the other two would pass equally.
     w.offices["off_dicastery"].conferral = "appointed"
+    # ⚠ G3 (plan position 6): THE SEAT CONFERRED NEEDS GROUND, AND EVERY ACT NAMES ITS SEAT. The
+    # conferral basis is asked of the seat EXERCISED (`Act.via`) and admits only where that seat's
+    # PURVIEW reaches the seat conferred (`ED-IN-0256` ruling (4), `state/gate.py::may_fill`). A
+    # rungless seat -- `off_dicastery` as `tiny_world` builds it, the S6.2 cluster -- is reached by
+    # no purview at all, so NOBODY may confer it; the fixture gives it the settlement under the
+    # duke's duchy, as `test_the_revocation_branch_executes_in_the_fold_...` below already does.
+    # And the three acts go out through `off_duke`, the seat whose grant carries all three remits.
+    w.offices["off_dicastery"].rung = "S"
 
     made = []
 
@@ -4580,11 +4603,11 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
         # exactly what `confer`'s 1-per-object precondition requires.
         acts = [
             Act(id="g_confer", actor=duke, verb="confer",
-                  payload={"office": "off_dicastery", "to": "p_mid"}),
+                  payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke"),
             Act(id="g_convene", actor=duke, verb="convene",
-                  payload={"venue": "S", "when": w.tick + 1}),
+                  payload={"venue": "S", "when": w.tick + 1}, via="off_duke"),
             Act(id="g_dispatch", actor=duke, verb="dispatch",
-                  payload={"subject": "p_low"}),
+                  payload={"subject": "p_low"}, via="off_duke"),
         ]
         made.extend(acts)
         return acts
@@ -4728,7 +4751,11 @@ def test_the_revocation_branch_executes_in_the_fold_and_not_only_as_a_predicate(
     w.add_tenure(Tenure("t_dic", "p_mid", "off_dicastery", "hold", 0))
     _seat(w, "p_high", "off_vicar", "Vicar", "D", remit=("issue", "revoke"),
           faction="Church of Solmund")
-    act = Act(id="f1", actor="p_high", verb="revoke", payload={"office": "off_dicastery"})
+    # G3: THROUGH THE VICAR'S SEAT, NAMED. `p_high` also holds `off_duke` (Crown, no `revoke`), and
+    # since G3 the act is judged on the ONE seat it exercises -- eligibility, ruling (3) and the
+    # write gate's T-o clause all ask `off_vicar`, never "any seat he holds".
+    act = Act(id="f1", actor="p_high", verb="revoke", payload={"office": "off_dicastery"},
+              via="off_vicar")
     before = [t.id for t in w.tenures if t.kind == "hold" and t.object == "off_dicastery" and t.live]
     assert before, "the fixture office is unheld; the fold would have nothing to close"
     w.step = Step.RESOLVE
@@ -5357,10 +5384,12 @@ def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
     # same trap the slice test fell into. The conferral basis is a harness fixture; Part E requires
     # an office to HAVE one and neither fixture office does.
     w.offices["off_dicastery"].conferral = "appointed"
+    # G3: ground for the seat conferred, and the duke's seat named -- see the governance-slice test.
+    w.offices["off_dicastery"].rung = "S"
     d = SeasonDriver(w)
     d.matter(mint_token(d.w, WriteClass.MATTER), [])
     out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_conf", actor=duke, verb="confer",
-                           payload={"office": "off_dicastery", "to": "p_mid"})],
+                           payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke")],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "tenure.opened"), None)
     assert e is not None, (
@@ -5401,10 +5430,12 @@ def test_h71_others_half_a_witness_learns_who_was_seated_on_what():
     def run(mode):
         w = P.tiny_world(DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
         w.offices["off_dicastery"].conferral = "appointed"
+        # G3: ground for the seat conferred, and the duke's seat named -- see the slice test.
+        w.offices["off_dicastery"].rung = "S"
         d = SeasonDriver(w)
         d.matter(mint_token(d.w, WriteClass.MATTER), [])
         out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_conf", actor="p_high", verb="confer",
-                             payload={"office": "off_dicastery", "to": "p_mid"})],
+                             payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke")],
                         contest_max_depth=w.fixtures.get("contest_max_depth"))
         e = next((x for x in out if x.kind == "tenure.opened"), None)
         assert e is not None, (
