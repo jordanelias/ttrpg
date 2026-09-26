@@ -23,6 +23,7 @@ from ..epistemic import act_refs, claim_subjects, observers_for
 from ..queries import cache
 from ..queries.person_q import LedgerReader
 from ..state.carriers import Claim, Event
+from ..state import ledgers
 from ..state.ids import H
 from ..trace_log import TRACE
 
@@ -393,13 +394,26 @@ def witness(self, events: list[Event]) -> int:
             # change that Part D gives no kind, so nobody can witness a forgetting.** That is
             # `(Person, claim_ledger)`'s version of `H-86` and is recorded on that row.
             # Found by the `W4` adversarial pass.
-            p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))
-            w.write("claim_ledger", WriteClass.INTERIOR,
-                    lambda p=p: p.ledger.pop(0),
+            # The comparator's owner is `state/ledgers.py` (04 §A.2:149); this closure is the
+            # gated write that applies it. ⚠ ONE CLAIM PER WRITE, MATCHING THE PRE-EXTRACTION
+            # SEMANTICS -- an earlier wording of this closure called `evict_over_cap(p.ledger, cap)`
+            # once, draining every excess claim in a single `w.write`. State-wise that is identical
+            # (the sort key never changes between evictions within one call, so popping k off a
+            # once-sorted list matches k separate sort-then-pop-one passes) but INSTRUMENTATION
+            # is not: `World.write` mints one gate receipt, one `TRACE.write` row and one
+            # `self.writes` entry per call, and `harness/report.py`'s "N writes through the gate"
+            # plus `_trace_counts` (compared by `harness/delta.py` between two runs) both count
+            # those -- so batching silently changed those counts whenever one deposit minted enough
+            # claims to evict more than one at a time, which is exactly the case the `while` above
+            # this loop exists for (one deposit can mint several claims; see the comment above).
+            # Found by a read-only critic, layer-conformance pass, 2026-09-25.
+            def _evict(p=p):
+                ledgers.evict_over_cap(p.ledger, len(p.ledger) - 1)
+            w.write("claim_ledger", WriteClass.INTERIOR, _evict,
                     record_kind="Person", fieldname="claim_ledger", driver="Event")
     w._in_parallel_map = False
-    # S9.3/S28: WITNESS NEVER TOUCHES A BELIEF. Nothing above writes `beliefs` or
-    # `pursuits` -- and under rev 2's Partition both are MISSING rows, so an attempt would
-    # raise rather than be caught by inspection.
+    # S9.3/S28: WITNESS NEVER TOUCHES A BELIEF. Nothing above writes `pursuits` -- its row
+    # admits RES only, so a WITNESS attempt would raise rather than be caught by inspection --
+    # and `beliefs` is no longer a field (retired 2026-09-25; a belief is a `commit` to an OUGHT).
     TRACE.step("WITNESS", "leave")
     return deposits

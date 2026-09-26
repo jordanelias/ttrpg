@@ -116,7 +116,7 @@ def act_refs(a) -> list:
     return [subj] if subj else []
 
 
-def _tenure_by_id(w, tid: str):
+def _tenure_by_id(w: "World", tid: str):
     """The Tenure with this id, or `None`. Linear, and deliberately not indexed -- the same
     precedent `state/attribution.py::_event_by_id` states for the log: a lookup that is not hot
     does not earn a second structure to keep in step with `w.tenures`. Not called on a hot path
@@ -128,7 +128,7 @@ def _tenure_by_id(w, tid: str):
     return None
 
 
-def claim_subjects(w, e: "Event", rule: str, refs: Optional[list] = None) -> list:
+def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = None) -> list:
     """`H-79`: what the claims deposited from one Event are ABOUT.
 
     `actor` is the incumbent — one claim, subject = the Event's own subject. `per_change` mints
@@ -306,7 +306,7 @@ def _event_place(w: "World", e: "Event") -> Optional[str]:
     return None
 
 
-def _ch_co_located(w, e, pid) -> bool:
+def _ch_co_located(w: "World", e, pid) -> bool:
     """⚠ READS THE BARRIER'S PRESENCE INDEX, WHICH IS WHAT MAKES THE CLAIM ABOUT IT TRUE. `W6`
     published *"the presence index this barrier has always built was UNUSED until this line"* while
     this function called `Query.presence` DIRECTLY, rebuilding the answer with a full `w.tenures`
@@ -322,7 +322,7 @@ def _ch_co_located(w, e, pid) -> bool:
     return pid in index.get(place, ())
 
 
-def _ch_document_key(w, e, pid) -> bool:
+def _ch_document_key(w: "World", e, pid) -> bool:
     """⚠ THIS COULD NEVER FIRE ON AN ACT, AND THE REPAIR IS TO READ `changes[]` (`R8.4`).
 
     It tested `t.object == e.subject`. Every fold-emitted Event sets `subject = a.actor` on the one
@@ -398,7 +398,7 @@ def _ch_document_key(w, e, pid) -> bool:
                for t in w.tenures)
 
 
-def _ch_witness_key(w, e, pid) -> bool:
+def _ch_witness_key(w: "World", e, pid) -> bool:
     # G1b. The witness key is the Event's anchor -- the actor where one acted, the written thing
     # otherwise. Same value as the field it replaces; see `state/attribution.py` for the control.
     anchor = anchor_of(w, e)
@@ -410,7 +410,7 @@ def _ch_witness_key(w, e, pid) -> bool:
                and anchor in (t.subject, t.object) for t in w.tenures)
 
 
-def _ch_post_remit(w, e, pid) -> bool:
+def _ch_post_remit(w: "World", e, pid) -> bool:
     """⚠ THIS COULD NEVER RETURN `True`. It compared `t.object` -- AN OFFICE ID -- against a set of
     REMIT ACT NAMES, and fell back to `getattr(t, "remit", None)` on a `Tenure` that has no such
     field. So `off_duke` was tested against `{"issue"}` and `None` against `{"issue"}`, and a
@@ -448,7 +448,7 @@ def _ch_post_remit(w, e, pid) -> bool:
     return False
 
 
-def _ch_chronicle(w, e, pid) -> bool:
+def _ch_chronicle(w: "World", e, pid) -> bool:
     """The matter-of-record channel: what a binding decision emits is public.
 
     ⚠ THIS DOES NOT READ `pid`, AND SAYING SO IS THE HONEST DESCRIPTION. It is an EVENT-KIND

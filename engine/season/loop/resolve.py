@@ -596,7 +596,8 @@ def resolve(self, acts: list[Act],
             # ⚠ AND THE BAND IS READ OFF THE ACT'S **SUBJECT**, NOT OFF THE LOSER.
             # `kill / wound` writes on `payload["subject"]`, so reading the loser would kill
             # the target whenever the ACTOR was the one felled. `verb_table.yaml`'s
-            # `writes_source:` cell said `wound_state[loser]` and is corrected there.
+            # `writes_source_note:` cell (`writes_source:` until 2026-09-25) said
+            # `wound_state[loser]` and is corrected there.
             #
             # ⚠ `contest.resolved` IS GONE AND ITS REMOVAL IS A CLOSURE, NOT A LOSS. It was
             # one of the three BODY LITERALS `README.md` records invariant 7 as refusing (a

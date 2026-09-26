@@ -698,7 +698,7 @@ def p18():
         and antecedent.subject == site.id, (
         f"the crossing names {ev.causes[0]!r}, which is not a `condition.worn` for {site.id}")
     assert verb in before and verb not in after
-    social = [c for c in ev.changes if c.field in ("stance", "pursuits", "beliefs")]
+    social = [c for c in ev.changes if c.field in ("stance", "pursuits")]   # `beliefs` retired 2026-09-25
     assert not social and not ev.degree
     return (f"PASS, AND BOTH HALVES OF L5 RAN. ⚠ THE SITE IS SEEDED one season above its "
             f"highest floor (see `_seed_near_floor`), so {n} is NOT the unseeded pacing -- `A31b` "
@@ -2307,20 +2307,6 @@ def a34():
         needs="a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs",
         law=f"S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of {steps}, MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT",
     )
-
-
-@probe("A35", "the design needs Godot 4.6", "S52", by="probe-model",
-       tests="the port must be able to target a decided engine version")
-def a35():
-    floor = {"WorkerThreadPool.add_group_task": (4, 0), "typed Dictionary": (4, 4),
-             "@abstract": (4, 5)}
-    hi = max(floor.values())
-    assert hi == (4, 5) and floor["WorkerThreadPool.add_group_task"] == (4, 0)
-    return (f"PASS (transcription, not execution -- this instrument runs no Godot): the highest "
-            f"named requirement is {hi[0]}.{hi[1]}. NOTHING IN THIS DESIGN NEEDS 4.6; the honest "
-            "floor is >= 4.4 and the real decision is 4.3 vs >= 4.4. THE HOLONIC DECOMPOSITION "
-            "ADDS NO VERSION PRESSURE -- its heaviest requirement is 4.0, and @abstract's fallback "
-            "(a typed error result) is needed anyway because GDScript has no exceptions")
 
 
 @probe("A36", "a person's act order is the order it resolves in", "S26.3", by="construction",

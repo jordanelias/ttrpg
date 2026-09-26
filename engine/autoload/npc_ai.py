@@ -1,5 +1,5 @@
 """
-sim/autoload/npc_ai.py — NPC priority trees, action selection, faction AI dispatch
+engine/autoload/npc_ai.py — NPC priority trees, action selection, faction AI dispatch
 
 Canon source: designs/architecture/complete_systems_reference.md Part 1 (NAMED NPCs)
 Game Design constraints applicable: GD-2

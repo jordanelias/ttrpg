@@ -21,12 +21,12 @@ def _sim_params():
         open(os.path.join(ROOT, 'engine', 'engine_params', 'sim_params.json')))["params"]}
 
 
-def test_links_current():
+def test_links_current(generated_layer):
     ok, msgs = lvp.check()
     assert ok, "\n".join(msgs)
 
 
-def test_every_link_token_is_real():
+def test_every_link_token_is_real(generated_layer):
     """Anti-fabrication: each link's token must literally appear in the value's name OR its dict keys."""
     params = _sim_params()
     for l in lvp.build()["links"]:
@@ -38,13 +38,13 @@ def test_every_link_token_is_real():
         assert in_name or in_keys, f"fabricated link: token '{l['token']}' not in {l['value']} name/keys"
 
 
-def test_no_authoring_or_citeid_links():
+def test_no_authoring_or_citeid_links(generated_layer):
     """The guards hold: no link to an authoring abbreviation, and no cite-ID token (PP_329)."""
     for l in lvp.build()["links"]:
         assert l["token"].lower() not in lvp._EXCLUDE_ABBR, f"authoring abbr leaked: {l}"
 
 
-def test_indexes_agree_with_link_list():
+def test_indexes_agree_with_link_list(generated_layer):
     d = lvp.build()
     flat = {(l["value"], l["pointer_key"]) for l in d["links"]}
     for pk, blk in d["by_pointer"].items():

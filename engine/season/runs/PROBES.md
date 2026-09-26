@@ -1,6 +1,6 @@
 # THE PROBE LEDGER
 
-**122 probes.** Each is a real execution against `shape.py` that either
+**121 probes.** Each is a real execution against `shape.py` that either
 completes or raises a typed gap.
 
 ## How each verdict was reached
@@ -14,13 +14,13 @@ checking.* So every probe declares its provenance:
 | `construction` | **the shape itself raised** — a gate, a law or a type stopped it. This is evidence | 78 |
 | `no-signature` | nothing to call. The design supplies no function by which it could be attempted — which *is* the refusal, but **absence is not a guard** | 25 |
 | `convention` | the shape permits it and only a reader stops it. §27.2 is the design's own example and says so out loud | 1 |
-| `probe-model` | the probe supplies a model the design does not, to reach the question at all | 18 |
+| `probe-model` | the probe supplies a model the design does not, to reach the question at all | 17 |
 
 ## ⚠ THE ENFORCEMENT SPLIT — the single most important number in this ledger
 
 **Of 59 PROBES that did not pass, 30 were raised BY THE SHAPE ITSELF and 23 exist only because THERE IS NO SIGNATURE TO CALL.**
 
-> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 86 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 59 of 122. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
+> ⚠ **THIS COUNTS PROBES, NOT GAP EVENTS, and the two numbers differ.** `results.json`'s `_trace_counts.GAP` is 86 — every gap RAISED during the run, including several inside one probe and several the corpus cases hit. This line counts probes whose VERDICT is not PASS: 59 of 121. Both are honest counts of different populations, and `G10` forbids reporting either without its basis — which this file did until the `W5` adversarial pass read both.
 
 That is close to an even split, and it matters more than any case verdict. A refusal a
 gate enforces and a refusal that exists because nobody wrote the function are different
@@ -32,7 +32,7 @@ has no module system and no visibility modifiers, so the guarantee there is
 a contributor closes by simply writing the function — no gate fires, no test goes red,
 and the design's own §27.2 admission applies: *enforced by a person noticing*.
 
-**And 15 of 63 PASSes are not by construction
+**And 14 of 62 PASSes are not by construction
 either** — they are listed individually below and should be discounted accordingly. A
 `probe-model` PASS means the instrument supplied something the design does not.
 
@@ -109,7 +109,6 @@ either** — they are listed individually below and should be discounted accordi
 | `A31b` | PASS | construction | S42.2.1 | a conclusion about how fast the world decays must not depend on a number nobody decided |
 | `A31c` | PASS | construction | S42.2.1 | a conclusion about which actions a place supports must not depend on a number nobody decided |
 | `A32` | PASS | construction | S62 | the number of playable moments a character gets must be able to be counted |
-| `A35` | PASS | probe-model | S52 | the port must be able to target a decided engine version |
 | `A37` | PASS | construction | S27 | movement, binding decisions and social acts must be able to resolve in a fixed order relative to each other |
 | `A38` | PASS | construction | S27.4 | an attempt far beyond a character's ability must be refused rather than rolled |
 | `A39` | PASS | construction | S39.2 | the outcome of a conflict must be traceable back to the action that started it |

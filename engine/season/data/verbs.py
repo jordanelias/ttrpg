@@ -52,15 +52,15 @@ harmless -- a `dict` type hint on a name the next line immediately rebinds.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from typing import Optional
 
 from . import files
 from ..gaps import Forbidden, Unspecified
-from .matrix import MATRIX
+from .matrix import MATRIX, Step
 from .requires import TypedRequires, build_typed_requires
 from .rosters import (
-    PURSUIT_AXES, PURSUITS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, load_yaml,
+    PURSUIT_AXES, PURSUITS, RELEASABLE_KINDS, RUNG_KINDS, STRATA, TENURE_KINDS, load_yaml,
     require_member, roster, roster_map,
     table,
     table_meta,
@@ -69,6 +69,13 @@ from .rosters import (
 VERB_TABLE_YAML = files.VERB_TABLE_YAML
 
 ELIGIBILITY_KINDS = roster("eligibility_kinds")
+
+# The "no cell" prose sentinel `requires` and `requires_typed` use. Defined ABOVE the loader (it sat
+# at the foot of this module until 2026-09-25) because loader invariant 4 now reads it at load.
+NO_PRECONDITION = ("—", "-", "")
+
+# Loader invariant 9's roster: the prizes `contest_subsystems` claims, read once at load.
+_CONTEST_PRIZES = frozenset(roster_map("contest_subsystems", "prizes"))
 
 BENEFICIARY_KINDS = roster("beneficiary_kinds")
 # ⚠ WHICH BENEFICIARY KINDS NEED A CELL TO BIND -- READ FROM THE ROSTER, NEVER LISTED HERE.
@@ -122,6 +129,16 @@ class VerbRow:
     # matter at the rung or office that holds it"*. So a faction never acts: a PERSON HOLDING AN
     # OFFICE acts, and the scale is the rung that office reaches. Governance at faction scale is
     # `binding_decision x <rung>`, not a faction verb.
+    #
+    # ⚠ SAME NAME AS A RETIRED FIELD, AND THE COLLISION IS WORTH NAMING HERE RATHER THAN AT ITS
+    # OWN SITE. `04_CODE_ARCHITECTURE.md` §A.3 row 4 (`04:173`) and §B.13 invariant 10 (`04:470`)
+    # both say a `scale:` key is "deleted; the loader rejects the key" — but that row describes
+    # THE CHAIN's `scale:` (a per-module/per-verb-row concept, retired at Stage 1/2, ID-13). This
+    # field is a later, unrelated ruling under the same word (`CLAUDE.md` §4's exact hazard: one
+    # spelling, two meanings, no shared context between the sessions that met each). It is not
+    # rejected by 04's rows above; those rows are about a different, already-dead field. `04` is
+    # ratified and this comment does not edit it (`CLAUDE.md` §0.05) — it names the ambiguity at
+    # the site that would otherwise be misread, per the layer-conformance skill's B4.
     scale: str = "person"
     # ⚠ PART E'S `contests:` COLUMN, WHICH WAS TRANSCRIBED INTO A NOTE AND LOST.
     # `ARCHITECTURE_V2.md:394` declares it — *"`contests: <prize> | none` — if set, ROUTES TO THE
@@ -252,6 +269,13 @@ class VerbRow:
                     "union, which would write more than the contest actually resolved")
         return tuple(self.writes_by_degree[degree])
 
+# Loader invariant 10's verb-row key set, DERIVED from `VerbRow` rather than listed: every field a
+# YAML column fills (the two `*_by_degree` maps are built from `writes:`/`emits:`, not read), plus
+# `domain` (read for `release`, invariant 6) and `source` (every row's provenance column).
+_VERB_ROW_KEYS = (frozenset(f.name for f in fields(VerbRow) if not f.name.endswith("_by_degree"))
+                  | {"domain", "source"})
+
+
 def _load_verb_table() -> dict:
     import yaml as _y
     if not VERB_TABLE_YAML.exists():
@@ -263,6 +287,19 @@ def _load_verb_table() -> dict:
         name = r["verb"]
         if name in out:
             raise SystemExit(f"verb_table.yaml: {name!r} appears more than once")
+        # LOADER INVARIANT 10, VERB HALF (`04 §B.13 #10`, `04:470`): UNKNOWN KEYS ARE REJECTED.
+        # A column is either one this loader reads or an annotation spelled `*_note`; anything else
+        # is a column that silently does nothing, which is what `writes_grade:`, `writes_source:`,
+        # `eligibility_substitution:`, `eligibility_sweep:` and `effect:` were until 2026-09-25.
+        # ⚠ #10's OTHER CLAUSE -- *"a `scale:` key fails the load"* -- IS NOT ENFORCED, BECAUSE IT
+        # IS ABOUT A DIFFERENT FIELD: the chain's retired per-module `scale:`, not the ruled
+        # rung-kind column `VerbRow.scale` carries (see the comment on that field above).
+        unknown = sorted(k for k in r if k not in _VERB_ROW_KEYS and not str(k).endswith("_note"))
+        if unknown:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} carries unknown key(s) {unknown}. 04 §B.13 #10 -- a "
+                f"row's keys are the ones this loader reads ({sorted(_VERB_ROW_KEYS)}) or an "
+                "annotation spelled `*_note`; any other column is read by nothing.")
         # ⚠ `writes:` NOW TAKES TWO SHAPES (#358 rev.2 invariant 12). A mapping is degree-keyed;
         # a sequence is the flat form. The union feeds the Part D check below either way, so a
         # pair named in ANY branch is still validated against the matrix at load.
@@ -432,6 +469,32 @@ def _load_verb_table() -> dict:
         if row.stratum not in STRATA:
             raise SystemExit(f"verb_table.yaml: {name!r} has stratum {row.stratum!r}, which is "
                              f"not one of rosters.yaml's {list(STRATA)}")
+        # LOADER INVARIANT 9 (`04 §B.13 #9`, `04:469`): CONTEST PRIZES ⊆ THE SUBSYSTEM ROSTER. A
+        # misspelled prize used to load clean, boot clean, and reach the seam's generic refusal at
+        # first call naming no row (`manifest.registry.unclaimed_contest_prizes`'s docstring). The
+        # roster, `contest_subsystems.prizes`, owns which prizes exist.
+        if row.contests and row.contests not in _CONTEST_PRIZES:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} declares `contests: {row.contests}`, which is not a "
+                f"`contest_subsystems.prizes` key ({sorted(_CONTEST_PRIZES)}). 04 §B.13 #9 -- "
+                "contest prizes are a SUBSET of the subsystem roster; an unclaimed prize resolves "
+                "to no provider and the seam refuses generically, naming no row.")
+        # LOADER INVARIANT 4 (`04 §B.13 #4`, F7, `04:461-464`): EVERY FAILABLE CLAUSE HAS A
+        # REFUSAL KIND. A clause can fail if the row has a `requires` cell, or if any eligibility
+        # alternative is other than `own` (which cannot decline). Such a row with an empty
+        # `emits_on_refusal` would refuse by emitting a kind nobody declared.
+        # ⚠ THE PER-CONJUNCT HALF OF F7 IS NOT ENFORCED HERE. `emits_on_refusal` is one flat
+        # tuple per row, so a multi-conjunct `requires_typed` cell (`restore`, `examine` and
+        # `surveil` carry an `AllOf` of two today) cannot say which conjunct a kind refuses for
+        # without a keyed schema; that schema does not exist.
+        _failable = (row.requires.strip() not in NO_PRECONDITION
+                     or any(k != "own" for k in row.eligibility_kinds()))
+        if _failable and not row.emits_on_refusal:
+            raise SystemExit(
+                f"verb_table.yaml: {name!r} has a failable clause (a `requires` cell, or an "
+                f"eligibility other than `own`: {list(row.eligibility)}) and an empty "
+                "`emits_on_refusal:`. 04 §B.13 #4 (F7) -- every failable clause has a refusal "
+                "kind; a refusal with no declared kind is a fabricated emission.")
         out[name] = row
     # -----------------------------------------------------------------------
     # LOADER INVARIANT 6 (`04_CODE_ARCHITECTURE.md` PART D row 15, MECHANICAL at load):
@@ -456,10 +519,10 @@ def _load_verb_table() -> dict:
     # `rosters.yaml` and forget its closer, and the load fails HERE rather than shipping a relation
     # nothing can end.
     #
-    # ⚠ ROW 15 HAS A SECOND HALF THIS DOES NOT IMPLEMENT, NAMED SO NOBODY READS THE CHECK'S NAME
-    # AS COVERING IT: `04:464-465` states invariant 6 as two conjuncts, the domain AND *"every
-    # kind's OPENER set is declared too"*. Only the first is here. The second is
-    # `registers/handoffs/architecture_meta_HANDOFF_NEXT.md` item 1e and is open.
+    # ⚠ ROW 15's SECOND HALF -- `04:466-467`, *"every kind's OPENER set is declared too"* -- IS
+    # BELOW, after this check: `tenure_kinds.openers` in `rosters.yaml`, measured from
+    # `loop/effects.py`. Declared-and-empty is REPORTED (`tenure_kinds_without_an_opener`), not
+    # refused.
     if "release" not in out:
         raise SystemExit(
             "verb_table.yaml: no `release` row. Loader invariant 6 (04 PART D row 15) is the "
@@ -477,7 +540,56 @@ def _load_verb_table() -> dict:
             "(04 PART D row 15) requires them equal: a kind in the roster and not in this "
             "domain is an edge that can be opened and never closed, and a kind here and "
             "not in the roster is a closer for a relation that does not exist.")
+    # LOADER INVARIANT 6, SECOND HALF (`04 §B.13 #6`, `04:466-467`, `ID-14`): EVERY KIND'S OPENER
+    # SET IS DECLARED. Declared means present: a kind with no `openers:` entry, or an entry for a
+    # kind the roster does not have, or an opener naming no verb, refuses. An EMPTY set is a
+    # declaration too -- the kind has no opener today -- and `tenure_kinds_without_an_opener`
+    # reports it rather than refusing, since a relation nothing can open yet may be correct.
+    _openers = roster_map("tenure_kinds", "openers")
+    if set(_openers) != set(TENURE_KINDS):
+        raise SystemExit(
+            f"rosters.yaml: `tenure_kinds.openers` declares {sorted(_openers)} and the roster is "
+            f"{sorted(TENURE_KINDS)}. 04 §B.13 #6 -- every kind's opener set is declared, and "
+            "only for a kind that exists.")
+    _stray = sorted((k, v) for k, vs in _openers.items() for v in (vs or []) if v not in out)
+    if _stray:
+        raise SystemExit(
+            f"rosters.yaml: `tenure_kinds.openers` names opener(s) that are no verb: {_stray}. "
+            "04 §B.13 #6 -- an opener is a row of verb_table.yaml.")
+    # LOADER INVARIANT 2 (`04 §B.13 #2`, `04:459`): EVERY MATRIX ROW WITH `RES` HAS A PRODUCING
+    # VERB -- or DECLARES that it has none, and why, in its `unproduced:` column. `04:1025` (PART
+    # E step 2) records the literal invariant as unsatisfiable today; the column is what lets the
+    # check run and stay honest in both directions: an undeclared orphan refuses, and so does a
+    # declaration on a row some verb now writes, which would otherwise outlive its reason.
+    _produced = _produced_pairs(out)
+    for (kind, fld), mrow in MATRIX.items():
+        if Step.RESOLVE not in mrow.steps:
+            continue
+        has_producer = f"{kind}.{fld}" in _produced
+        if not has_producer and not mrow.unproduced:
+            raise SystemExit(
+                f"write_matrix.yaml ({kind}, {fld}) is written at RES and no verb writes it. "
+                "04 §B.13 #2 -- a RES row has a producing verb, or declares `unproduced: \"<hole "
+                "id or F-tag>: <reason>\"`.")
+        if has_producer and mrow.unproduced:
+            raise SystemExit(
+                f"write_matrix.yaml ({kind}, {fld}) declares `unproduced:` and a verb writes it. "
+                "04 §B.13 #2 -- the declaration is stale; delete it.")
     return out
+
+
+def _produced_pairs(table: dict) -> set:
+    """Every `Kind.field` some verb writes, in any Degree branch (`VerbRow.writes` is the union).
+    One owner for invariant 2 above and `rows_without_a_producer` below."""
+    return {w for v in table.values() for w in v.writes}
+
+
+def tenure_kinds_without_an_opener() -> list:
+    """Loader invariant 6's second half, as a REPORT: the tenure kinds whose declared opener set
+    (`rosters.yaml` `tenure_kinds.openers`) is empty -- relations no act can open today. Reported,
+    not refused: an unopenable kind may be correct for now, and which of them are holes is a
+    judgement the roster's `# hole` comments record."""
+    return sorted(k for k, vs in roster_map("tenure_kinds", "openers").items() if not vs)
 
 VERB_TABLE: dict = {}          # filled after STRATA loads, at the bottom of the roster block
 
@@ -601,7 +713,7 @@ def rows_without_a_producer() -> dict:
     Distinguishing them is a judgement, so this reports and a human decides. What it MUST NOT do
     is what the first reading of the rule did: delete on sight. `emits:` was parsed and never read
     by anything until this function, so the column the retirement rested on was inert data."""
-    produced = {w for v in VERB_TABLE.values() for w in v.writes}
+    produced = _produced_pairs(VERB_TABLE)
     out = {}
     for (kind, fld), row in MATRIX.items():
         if row.social is not True:
@@ -651,4 +763,3 @@ def alignment_at(point: str) -> dict:
     return {ax: {v: (1.0 if w > 0 else -1.0 if w < 0 else 0.0) for v, w in row.items()}
             for ax, row in ALIGNMENT_DECLARED.items()}
 
-NO_PRECONDITION = ("—", "-", "")

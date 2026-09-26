@@ -48,11 +48,6 @@
       "kind": "callable",
       "needed_by": "engine/cross_scale/scene_dispatch.py \u2014 builds the contest the resolver then runs"
     },
-    "scene_resolver.combat": {
-      "target": "systems.combat.sim.combat:resolve_combat_round",
-      "kind": "callable",
-      "needed_by": "engine/cross_scale/scene_dispatch.py \u2014 the personal-combat scene branch"
-    },
     "scene_resolver.contest": {
       "target": "systems.social_contest.sim.contest:resolve_contest",
       "kind": "callable",

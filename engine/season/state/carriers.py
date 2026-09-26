@@ -454,7 +454,9 @@ class Person:
     capability: dict = field(default_factory=dict)
     stance: list[tuple] = field(default_factory=list)
     pursuits: dict = field(default_factory=dict)
-    beliefs: list[tuple] = field(default_factory=list)
+    # ⚠ `beliefs` DELETED 2026-09-25 with its `write_matrix.yaml` row (now on that file's
+    # `retired:` list): `04:179` / `04:980` (PART D row 44) -- a belief is a `commit` to an OUGHT,
+    # not a field. Zero readers and zero writers in engine/season, measured by grep before deletion.
     ledger: list[Claim] = field(default_factory=list)
     # W5. Part D carries `(Person, body)` and `(Person, travel_leg)` and this class had NEITHER,
     # so both rows named a field that did not exist — the `(Record, held_by)` defect, at scale

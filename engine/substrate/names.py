@@ -11,19 +11,19 @@ ruling could land in `references/` and never arrive: `systems/world/sim/npe.py` 
 NPCs affiliated to `'Church'` after Jordan ruled the name is `Church of Solmund`.
 
 `tools/export_names.py` cooks the index into `engine/engine_params/names.json` behind a blocking
-`--check`; this is its single runtime reader. Same shape as `descriptors.py`, `composition.py`,
-`keys.py` and `world_initial_state.py`.
+`--check`; this is its single runtime reader. Same shape as `descriptors.py`, `composition.py`
+and `world_initial_state.py`.
 
 IT IS A LEAF. This MODULE imports stdlib only -- `json`, `os` -- exactly as
 `world_initial_state.py` does, verified by AST rather than asserted. That is what lets BOTH trees
 read it without either naming the other: a name propagates in one direction, from the authored
 index outward, and a subsystem wanting the canonical spelling asks instead of spelling it.
 
-⚠ THE PACKAGE IS NOT A LEAF, AND THE DISTINCTION IS WORTH THE LINE. `engine/substrate/__init__.py`
-imports `keys`, so `import engine.substrate.names` pulls `keys` and `descriptors` in with it --
-measured, not feared. Nothing here depends on them and removing them would not change this module,
-but a caller counting loaded modules will see three. `from engine.substrate.names import FACTIONS`
-costs the same as any other import from this package; it is not a hidden dependency edge.
+⚠ THE PACKAGE `__init__.py` USED TO NOT BE A LEAF, AND THE DISTINCTION MATTERED WHILE IT LASTED.
+Until 2026-09-16 it imported `keys.py` and re-exported it, so `import engine.substrate.names`
+pulled `keys` and `descriptors` in with it. `keys.py` retired under ED-IN-0232 and the re-export
+went with it -- `engine/substrate/__init__.py` now imports nothing. `from engine.substrate.names
+import FACTIONS` costs exactly what it names; it is not a hidden dependency edge.
 
 ⚠ AMBIGUOUS NAMES RAISE. They are not resolved to whichever row was met first. Two display strings
 are claimed twice in the index and both collisions are real quantities, not typos:

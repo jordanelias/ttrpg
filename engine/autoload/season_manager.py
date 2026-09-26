@@ -1,5 +1,5 @@
 """
-sim/autoload/season_manager.py — Season-loop orchestration
+engine/autoload/season_manager.py — Season-loop orchestration
 
 Canon source: designs/architecture/campaign_architecture_v30.md;
               [FORK: mc_v17.py L691-710 — ref c451bcb, superseded by mc_v18, file evacuated

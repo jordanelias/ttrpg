@@ -1,5 +1,5 @@
 """
-sim/cross_scale/handoff_rules.py — 8 handoff rules between scales (§3)
+engine/cross_scale/handoff_rules.py — 8 handoff rules between scales (§3)
 
 Canon source: designs/architecture/scale_transitions_v30.md §3
 

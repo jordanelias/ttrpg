@@ -1,8 +1,9 @@
 """`decision/` -- the `budget` member of `04_CODE_ARCHITECTURE.md` §A.2:133.
 
 `budget`, and the body-band penalty it applies. §A.2's table lists `budget` in `decision/`'s
-members row (`04:133`) AND in its "may read" column, an ambiguity `04` carries and this unit does
-not resolve; L3 records it rather than picking silently.
+members row (`04:133`) AND in its "may read" column -- both hold at once, not a contradiction: it
+is a `decision/` member whose output `choose` reads, exactly as a `decision/` file's "may read"
+column licenses.
 
 AX-2 binds every file under `decision/`: no `World`, as an import, a name, an attribute or a
 string. Enforced BY PATH over this directory (`04:1046`).
