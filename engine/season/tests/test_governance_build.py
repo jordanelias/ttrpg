@@ -1605,3 +1605,202 @@ def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_ot
     kinds = run("rv_king", "c_king")
     assert "tenure.closed" in kinds and "revoke.refused" not in kinds, kinds
     assert not held(), "the fold accepted the revocation and the duke's hold survived"
+
+
+# =================================================================================================
+# PLAN POSITION `24d-i` -- THE DWELLING SUBSTRATE (`ED-SE-0055`).
+# `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, position `24d-i`. `dwelling`
+# joins `site_kinds` with the two rows the loader forces, both at the CONTROL arm
+# (`wear_per_season.dwelling: 0`, `band_floors.dwelling: {}`), and `build_realm` mints one dwelling
+# Site per `hearth` rung. FALSIFIERS: exactly one dwelling on every hearth and none elsewhere, with
+# a hearth floor so an empty world cannot pass; the loader's refusal, planted; and the control arm
+# over one populated season, with no dwelling band crossing while the wear loop visited every one.
+#
+# ⚠ WHICH OTHER HEARTH BUILDERS MINT, AND WHY. The ruling names `build_realm` only; the rest is
+# this position's architecture call (`CLAUDE.md` §0, step 5).
+#   * `governance_spine.build` MINTS. The spine is the template the realm is fine-tuned FROM, and
+#     `19c`'s `migrate` runs its observable on the spine's two disjoint chains. With a dwelling per
+#     hearth, `capacity` counts 2 at the realm and 1 down each chain. Without, every rung reads the
+#     floor. Cost: two Sites on a world no test runs a season on today.
+#   * `corpus_run.build_at` DOES NOT. Every corpus world is ONE chain wide. Measured over every
+#     buildable case, a corpus world has 0 or 1 hearth, so a dwelling there would be counted by
+#     every rung of the chain alike, and `capacity` would still be one number per world. Minting
+#     would buy no variation for `R-05` to score. It would still add a wear Event, co-located with
+#     all three persons, to every hearth-scaled world.
+#   * `probes.tiny_world` DOES NOT. It isolates mechanisms. A dwelling at `Hh` would sit with three
+#     of its five persons and hand each a witnessed wear claim every season, in every probe and
+#     every test built on it. It would also trip probe `F10`'s assert that `Hh` carries no Site;
+#     that assert guards against PRODUCTION and would fire on a dwelling that produces nothing. A
+#     probe that needs a dwelling plants one, as `site_odd` is planted.
+#   * `headless.build_world` DOES NOT. The spec's list omits this fourth builder (`hearth_ostvik`).
+#     It is Carin's single worked case and `m1_acceptance`'s probe world. A dwelling there would
+#     add a wear claim to Carin's and the bailiff's ledgers, and nothing in either world reads
+#     housing.
+# =================================================================================================
+
+def _dwellings(w):
+    return [s for s in w.sites.values() if s.kind == "dwelling"]
+
+
+def _hearths(w):
+    return sorted(rid for rid, r in w.rungs.items() if r.kind == "hearth")
+
+
+def _spine():
+    from ..harness import governance_spine
+    return governance_spine.build(0)
+
+
+@pytest.mark.parametrize("build", [lambda: build_realm(0), _spine], ids=["build_realm", "spine"])
+def test_24d_i_every_hearth_carries_exactly_one_dwelling_and_no_other_rung_carries_any(build):
+    """FALSIFIER (a), on both builders that mint. Exactly one per hearth and none elsewhere is ONE
+    comparison: the dwellings counted per rung must equal each hearth counted once. A dwelling on
+    a settlement, a hearth with two, or a hearth with none all fail it."""
+    w = build()
+    hearths = _hearths(w)
+    assert len(hearths) >= 1, "the world builds no hearth; everything below would pass vacuously"
+    dw = _dwellings(w)
+    per_rung = Counter(s.rung for s in dw)
+    assert per_rung == Counter(hearths), (
+        f"dwellings per rung != one per hearth. Off-hearth (first 10): "
+        f"{sorted(set(per_rung) - set(hearths))[:10]}; hearths without exactly one (first 10): "
+        f"{sorted(h for h in hearths if per_rung[h] != 1)[:10]}")
+    scale = w.fixtures.get("condition_scale")
+    checked = 0
+    for s in dw:
+        assert s.condition == scale, (
+            f"{s.id} starts at {s.condition}, not at `condition_scale`, which is how the producing "
+            "Sites are built")
+        checked += 1
+    assert checked == len(hearths) >= 1, checked
+
+
+def test_24d_i_the_realm_mint_adds_sites_and_displaces_no_producing_site():
+    """The OBSERVABLE's census, derived rather than pinned. The producing Sites are still one per
+    producing kind per settlement, and the total is those plus one per hearth. A dwelling id that
+    collided with a producing Site's would overwrite it, and the first count would drop."""
+    from ..data.fixtures import SITE_YIELD
+    w = build_realm(0)
+    settlements = [r for r in w.rungs.values() if r.kind == "settlement"]
+    producing = [k for k in sorted(SITE_YIELD) if SITE_YIELD[k]]
+    assert settlements and producing, "fixture: no settlement or no producing kind"
+    others = Counter(s.kind for s in w.sites.values() if s.kind != "dwelling")
+    assert others == Counter({k: len(settlements) for k in producing}), others
+    assert len(w.sites) == len(settlements) * len(producing) + len(_hearths(w)), len(w.sites)
+    assert not [s.id for s in w.sites.values() if s.id in w.rungs], "a Site id shadows a rung id"
+
+
+def test_24d_i_the_loader_refuses_dwelling_without_its_wear_or_floor_row(monkeypatch):
+    """FALSIFIER (b), the loader's own refusal, planted and reverted by `monkeypatch`. The
+    `dwelling` key is deleted from the loaded table the loader reads, and `_load_matter_tables`
+    must raise `Ungraded` NAMING `dwelling`. That is the refusal for a kind with no row, and not
+    some other failure. The unplanted arm must load, with the control-arm values."""
+    from ..data import rosters as _R
+    from ..data.fixtures import DEFAULT_FIXTURES, _load_matter_tables
+    from ..gaps import Ungraded
+
+    rates, floors, _w, _y = _load_matter_tables()
+    assert rates["dwelling"] == 0 and floors["dwelling"] == {}, (rates, floors)
+    assert DEFAULT_FIXTURES.wear("dwelling") == 0
+
+    checked = 0
+    for table, cell in (("wear_per_season", _R._ROSTERS["wear_per_season"]["rates"]),
+                        ("band_floors", _R._TABLES["band_floors"]["cells"])):
+        with monkeypatch.context() as m:
+            m.delitem(cell, "dwelling")
+            with pytest.raises(Ungraded) as got:
+                _load_matter_tables()
+            assert table in str(got.value) and "dwelling" in str(got.value), str(got.value)
+        assert "dwelling" in cell, f"the plant on {table} was not reverted"
+        checked += 1
+    assert checked == 2, checked
+
+
+def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_season(monkeypatch):
+    """FALSIFIER (c), and the `DONE·INERT` measurement it rests on, as a CONTROLLED comparison.
+
+    TREATMENT is `build_realm(0)`. CONTROL is the same world with its dwellings deleted before the
+    season. The control reproduces the pre-`24d-i` tree exactly: build hash and one-season hash
+    were both byte-identical to the checkout before this change when measured.
+
+    Treatment: no dwelling crossing reaches Q3, so no `band_crossed` Question comes from one, and
+    every dwelling emits exactly one `condition.worn` and keeps its condition. The Events are what
+    prove the wear loop visited them, so the zero is not an empty population.
+    Treatment against control: the same Questions by id, the same resolved acts, every other
+    non-deposit Event by id, and every control claim survives.
+
+    ⚠ IT IS NOT SILENT, AND THIS POSITION IS NOT `DONE·INERT` BY THE PLAN'S TEST. CLAIMS MOVE. The
+    wear Events are witnessed through `co_located`, so each resident of a hearth gets one
+    firsthand `condition.worn` claim about that hearth's dwelling. This test pins the SHAPE of that
+    movement, not its count. ⚠ It is a ONE-season identity. Measured beyond it: from season 2, the
+    added claims displace others at `ledger_cap`, and by season 4 one resolved act differs."""
+    from ..harness import populated
+    from ..loop import deliberate
+
+    def season(strip):
+        w = build_realm(0)
+        if strip:
+            for s in _dwellings(w):
+                del w.sites[s.id]
+        dw = {s.id: s.rung for s in _dwellings(w)}
+        qs = []
+        inner = deliberate.questions_for
+
+        def spy(w_, p, since=None):
+            out = inner(w_, p, since)
+            qs.extend(out)
+            return out
+        with monkeypatch.context() as m:
+            m.setattr(deliberate, "questions_for", spy)
+            out = populated.run(seasons=1, w=w)
+        return w, dw, qs, out
+
+    w, dw, qs, out = season(strip=False)
+    scale = w.fixtures.get("condition_scale")
+    assert len(dw) >= 1, "no dwelling was built; the zeros below would describe nothing"
+    assert qs, "the questions_for spy saw no deliberation; the zero below would be unobserved"
+    worn = Counter(e.subject for e in w.log if e.kind == "condition.worn" and e.subject in dw)
+    assert worn == Counter(list(dw)), (
+        f"the wear loop did not visit every dwelling exactly once: "
+        f"{len(worn)} of {len(dw)} worn, {sum(worn.values())} Events")
+    # ⚠ A `band_crossed` QUESTION NEVER NAMES A SITE, so "Questions naming a dwelling" is
+    # attributed through Q3's ONLY input. `questions_for` builds one from each `w.crossings` tuple
+    # `(site, use, ...)` as `Question(..., (use,), use)`: its referent is the site-USE, the floor's
+    # key. A filter on dwelling ids over the Questions cannot fail. Measured with a planted
+    # `wear 10` / `{planted_use: 995}`: 211 dwelling crossings and 460 `band_crossed` Questions
+    # over two seasons, none carrying a dwelling id. No dwelling tuple means no dwelling Question.
+    crossed = [c for c in w.crossings if c[0] in dw]
+    assert crossed == [], f"{len(crossed)} dwelling crossings reach Q3 at the control arm"
+    assert not [e for e in w.log if e.kind == "condition.band_crossed" and e.subject in dw]
+    assert all(w.sites[sid].condition == scale for sid in dw), "a dwelling's condition moved at wear 0"
+    assert not [q for q in qs if {q.about, *q.referents} & set(dw)], (
+        "some question source now names a dwelling. `work` binds a referent as its `site`, and "
+        "`world_q`'s `floor` read raises a bare `ValueError` on `band_floors.dwelling: {}`")
+
+    cw, cdw, cqs, cout = season(strip=True)
+    assert cdw == {}, "the control still has dwellings"
+    # By Question ID, not only by source: the same questions, to the same people, about the same
+    # things.
+    assert sorted(q.id for q in qs) == sorted(q.id for q in cqs), (
+        Counter(q.source for q in qs), Counter(q.source for q in cqs))
+    assert (out["acts"], out["act_subjects"]) == (cout["acts"], cout["act_subjects"])
+    # Every Event but the deposits is the control's, plus exactly the dwellings' own wear. The
+    # deposits are excluded because their ids are not stable across arms; measured, every
+    # `claim.deposited` id differs even where the claim id does not.
+    other = lambda log: {e.id for e in log if e.kind != "claim.deposited"}
+    worn_ids = {e.id for e in w.log if e.kind == "condition.worn" and e.subject in dw}
+    assert other(w.log) - worn_ids == other(cw.log), (
+        f"{len(other(w.log) - worn_ids ^ other(cw.log))} non-deposit Events differ between arms")
+
+    claims = {c.id: c for p in w.persons.values() for c in p.ledger}
+    control = {c.id for p in cw.persons.values() for c in p.ledger}
+    assert control and control <= set(claims), (
+        f"{len(control - set(claims))} control claims are gone from the treatment arm; the "
+        "dwellings displaced something in season one")
+    added = [claims[i] for i in set(claims) - control]
+    at = {rung: sid for sid, rung in dw.items()}
+    home = world_q.home_of(w)
+    assert added, "no claim moved; if that is now true, `24d-i` IS `DONE·INERT` -- relabel it"
+    for c in added:
+        assert c.predicate == "condition.worn" and c.subject == at.get(home.get(c.holder)), (
+            f"an added claim is not a resident's claim on their own hearth's dwelling: {c}")

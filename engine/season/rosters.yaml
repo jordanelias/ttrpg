@@ -901,10 +901,17 @@ rosters:
       Adding a kind means adding a row here; asking about a kind that has no row RAISES, because
       §42.2.1's worked example is exactly this table: *"a wear table that returns 20 for an
       unregistered site kind does not fail — it answers, plausibly and wrongly, forever."*
-      ⚠ THESE THREE ARE THE INSTRUMENT'S, NOT #353's, so `H-07` is `assumption`, not transcription.
+      ⚠ `harbour`, `seam` AND `body` ARE THE INSTRUMENT'S, NOT #353's, so `H-07` is `assumption`,
+      not transcription.
       ⚠⚠ `body` IS NOT A SITE. It is `(Person, body)`'s band row, here because `band_floors` keys on
       THIS roster and `H-38` ruled *"`Site.condition` is the model"* — no second scheme. See `p32`.
-    values: [harbour, seam, body]
+      ⚠ `dwelling` IS JORDAN'S, 2026-09-25 (`ED-SE-0055`, plan position `24d-i`): `ED-SE-0051`'s
+      `capacity(w, rung)` counts *"the rung's dwelling Sites"*, and he chose to make that phrase
+      literal rather than re-read it as the hearth rungs. `harness/populated.build_realm` mints one
+      per `hearth` rung. Adding it forced the `wear_per_season` and `band_floors` rows below
+      (`data/fixtures.py`'s `_load_matter_tables` refuses a site kind with no row); it has no
+      `site_yield` row, because a dwelling produces nothing and that table's `default_cell` is 0.
+    values: [harbour, seam, body, dwelling]
 
   matter_kinds:
     source: "#353 §10.4 VERBATIM: *It is a type parameter, not an enumeration. Grain, salt, timber, ore and coin are rows in a registry, not members of a closed set in a source file.*"
@@ -929,10 +936,24 @@ rosters:
       `shape.py` when these were literals (*"splitting them into rosters.yaml would put one
       declaration in two files"*) is answered by the fixture reading the data rather than
       restating it.
+      ⚠ `dwelling: 0` IS THE CONTROL ARM, SHIPPED DELIBERATELY (`24d-i`), and it is `H-07`'s own
+      *"no wear at all"* sweep point applied to one kind. The same shape as `body_step = 0` and
+      `scar_step = 0`. A dwelling sits AT a hearth and persons live in hearths. A non-zero rate
+      together with any floor in `band_floors.dwelling` would let a dwelling's condition cross
+      it, reach Q3's `presence` branch in `queries/world_q.questions_for`, and hand every
+      resident a live `band_crossed` Question. That would bring `band_crossed` alive on the
+      populated world, and plan position `11a`'s premise (the source it deletes contributes 0,
+      so its control is an identity) would break. Either half at its control arm blocks the
+      crossing; both ship there. At 0 no dwelling's condition moves.
+      ⚠ ZERO IS NOT SILENT. `loop/matter.py`'s wear loop still WRITES every Site every season,
+      and `World.write` emits one `condition.worn` per write (`H-12`), so every dwelling emits
+      one wear Event a season, and its residents witness it (`co_located`) as a claim. A non-zero
+      rate is chosen with a consumer in front of it, at `24e`/`24f`, never here.
     rates:
-      harbour: 10
-      seam:    10
-      body:    10
+      harbour:  10
+      seam:     10
+      body:     10
+      dwelling: 0
 
   subsistence_weight:
     source: "`H-11` — *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*."
@@ -1354,6 +1375,15 @@ tables:
       ⚠ THE FLOORS ARE INVENTED. #353 states that a band edge crossing emits and may produce no
       outcome; it supplies no edges. `H-08` is the row, and until `W8` it was an `assumption` with
       no `site:` and no sweep at all — one of `PLAN.md` §1.5's unowned residue, now owned.
+      ⚠ `dwelling: {}` IS EMPTY ON PURPOSE (`24d-i`, the control arm beside `wear_per_season`'s
+      `dwelling: 0`). No floor means no band edge, so `loop/matter.py`'s `_crossings` fires
+      nothing for a dwelling at any wear. `halved` and `doubled` leave an empty cell empty.
+      ⚠ AN EMPTY CELL IS NOT A WORKABLE SITE, AND THE `floor` READ DOES NOT SAY SO TYPED:
+      `queries/world_q.py`'s `floor` stem takes `min(floors.values())`, which raises a bare
+      `ValueError` on `{}`. It is unreached only while no question names a dwelling as a
+      referent, since `work` binds its `site` from the referent. None does at the control arm;
+      `24d-i`'s test in `engine/season/tests/test_governance_build.py` asserts it over one
+      populated season.
     cells:
       harbour:
         bulk_shipping:   800
@@ -1365,6 +1395,7 @@ tables:
         full_operations: 800
         limited:         500
         withdrawal_only: 100
+      dwelling: {}
 
   # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this table was
   # `role_template_convictions:`; cells, `row:` and `default_cell:` are byte-identical.

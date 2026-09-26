@@ -30,7 +30,7 @@ from engine.substrate import names as _names
 from ..data import files
 from ..data.rosters import load_yaml, remit_or_default
 from ..queries import world_q
-from ..state.carriers import Office, Person, Rung, Tenure
+from ..state.carriers import Office, Person, Rung, Site, Tenure
 from ..state.world import World
 
 # ⚠ THE ANCHOR IS `data/files.py`, NOT A LOCAL `__file__`. That module is the package's single
@@ -91,7 +91,8 @@ def spec() -> list[dict]:
 
 
 def build(seed: int = 0) -> World:
-    """The thirteen-seat spine: 13 rungs, 13 generic offices, 13 generic holders.
+    """The thirteen-seat spine: 13 rungs, 13 generic offices, 13 generic holders, and one
+    `dwelling` Site per `hearth` rung (`24d-i`; see the note at the mint).
 
     ⚠ PARENT-FIRST AND ASSERTED, NOT ASSUMED. `World.add_tenure` refuses a `contain` edge that
     does not ASCEND `rung_kinds` strictly, so the file's order is load-bearing: a child declared
@@ -157,6 +158,20 @@ def build(seed: int = 0) -> World:
         w.add_tenure(Tenure(f"lt_in_{key}", pid, rid, "contain", 0))
         if under is not None:
             w.add_tenure(Tenure(f"lt_up_{key}", rid, under, "contain", 0))
+        # ⚠ A DWELLING PER HEARTH, BY `populated.build_realm`'s RULE (`ED-SE-0055`, plan position
+        # `24d-i`). The ruling names `build_realm` only; minting here too is `24d-i`'s own
+        # architecture call. Two reasons. This spine is the template the realm is fine-tuned FROM
+        # (this module's header), so a spine hearth with no dwelling would give the two worlds
+        # different hearths. And `19c`'s `migrate` runs its observable on the spine's two disjoint
+        # chains. Without dwellings every rung's `capacity` would be the floor, the same number
+        # on every rung, so no throttle that depends on housing built could show there. With one
+        # per hearth, the realm counts two and each chain below it counts one. The id follows
+        # this module's `l<letter>_<key>` convention with `s` for Site, and the starting
+        # condition is the realm's, full `condition_scale`.
+        if kind == "hearth":
+            sid = f"ls_{key}_dwelling"
+            w.sites[sid] = Site(sid, rid, "dwelling",
+                                condition=w.fixtures.get("condition_scale"))
     return w
 
 
