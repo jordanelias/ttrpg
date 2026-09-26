@@ -1546,13 +1546,13 @@ rows:
     kind:      "COLLISION"
     hole:      "THERE IS AN `is_title` BRANCH. `_req_revoke` computes `target_is_title = title_domain(post) is not None` and takes one of two rules on it. The meta-architecture states the opposite in terms -- there is no `Title` type and NO `is_title` BRANCH ANYWHERE -- and makes the difference two VALUES of a seat's declared `revocation` basis instead of two code paths"
     owner:     "loop/predicates.py -- `_req_revoke`; `rosters.yaml` -- the revocation basis"
-    grade:     "absent"
+    grade:     "measured"
     default:   "none"
     site:      ""
     sweep:     []
     unblocks:  "nothing today -- but every future seat kind inherits the branch, which is what `ID-4` (declare, don't route) exists to prevent"
     cite:      "READ AT `_req_revoke`, WHERE THE BRANCH IS EXPLICIT AND COMMENTED AS A RULING: *two rules, and which one applies turns on whether the target is a title*. The two rules are real and Jordan ruled both -- an ordinary office is revocable on purview, a title needs purview plus holdings plus rank -- so this row is NOT an argument that the behaviour is wrong. It is that the DISCRIMINATOR is computed from the post's name rather than declared on the seat, so adding a third kind of seat means editing a resolver instead of a data row. ⚠ IT IS ENTANGLED WITH `H-108` AND SHOULD BE FIXED WITH IT, NOT BEFORE: both are the same question -- what does the actor exercise -- answered once on the act and once in a branch"
-    source:    "shape conformance against #358 Stage 4 §B.7 / §D.7"
+    source:    "shape conformance against #358 Stage 4 §B.7 / §D.7. ⚠⚠ CLOSED 2026-09-26 (`ED-IN-0256` ruling (3), plan position `13d-i`), APPENDED HERE RATHER THAN AS A NEW FIELD, PER R0: the entanglement with `H-108` this row itself predicted TURNED OUT SEVERABLE, not a precondition -- `ED-IN-0256`'s ruling (3), *\"rung above of same faction\"*, supplied a discriminator-free revocation rule Jordan ruled independently of `H-108`'s `Act.via`/purview question, and the plan's own build order schedules this position (phase alpha, buildable now) well before G3 (phase beta, `H-108`'s owner). `_req_revoke` now dispatches `seated_on_the_rung_above` off `Office.revocation`'s rostered value with NO `is_title` branch and no read of `title_domain` inside it at all -- the discriminator this row named is gone, not merely relabelled. `title_domain` and `titles_held`/`highest_title_rank`/`title_rank` are deleted from `loop/predicates.py`; `title_domain` itself SURVIVES, but only as `harness/populated.py`'s own world-generation reader (a different caller, outside this hole's `owner:`), which the deferred `offices.yaml` unit inherits. MEASURED: `test_governance_build.py`'s `13d-i` section, `test_13d_i_one_rule_at_every_depth_and_no_title_branch` specifically -- a titled seat (`Mayor`) and an untitled one (`Reeve`) on the same rung answer `_req_revoke` identically, which is `H-109` closed as a behaviour rather than as a grep."
 
   - id:        H-110
     tier:      1

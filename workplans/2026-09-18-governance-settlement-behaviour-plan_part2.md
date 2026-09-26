@@ -312,8 +312,14 @@ at `state/world.py:467-472`, the one line G1b and G2 both touch.
 are rewritten exactly once here.
 
 **INSTRUCTION.** `Act` gains `via: Optional[SeatId]`. In `state/gate.py`, for a Tenure write, admit the
-declared bases and otherwise raise. Re-point `loop/resolve.py`'s `_eligible` `remit:` branch,
-`under_purview`, `_req_revoke` and `_req_confer` from the actor's own `hold` tenures to `via.scope`.
+declared bases and otherwise raise. Re-point `loop/resolve.py`'s `_eligible` `remit:` branch and
+`_req_confer` from the actor's own `hold` tenures to `via.scope`. ⚠ **`under_purview` NO LONGER
+EXISTS (corrected 2026-09-26): `13d-i` deleted it** — it was `titles_held`'s only other caller and
+`_req_revoke`'s only game caller, dead the moment both of those were gone. `_req_revoke` now
+dispatches `seated_on_the_rung_above`, ruling (3)'s structural rule, which reads the actor's own
+`hold` tenures directly (no `under_purview` indirection) — THIS is what G3 re-points to `via.scope`.
+Ruling (4)'s purview (`13d-ii`, absorbed below) is a SEPARATE mechanism from ruling (3)'s
+revocation rule; G3 builds ruling (4) fresh rather than re-pointing anything named `under_purview`.
 **Expect three live violations** — `revoke`, `confer` and `kill / wound` all write another's edge;
 declare each as `T-o`-with-`via` or under its own basis.
 ⚠ **AND A FOURTH CASE THE FIRST DRAFT MISSED, added by the antagonist pass:** a **conferral-basis
@@ -334,10 +340,14 @@ previously-lawful non-owner write is now refused — name each one.
 **FALSIFIER.** A `T-o` write whose `via` names a seat whose `revocation` basis does **not** reach the
 edge must raise. If it passes, the basis walk is still reading the actor.
 **TIER.** `opus`/`opus`. The wrong answer is a quietly permissive gate.
-**STATE (2026-09-25). NOT STARTED.** `Act` has no `via` (`state/carriers.py:406`); `under_purview`
-(`loop/predicates.py:105`) and the title helpers read the ACTOR's own titles; `_req_revoke` carries
-the `is_title` branch at `predicates.py:347-349` (moved from `:252` by `13f`'s additions to this file —
-re-check citations below `13f`'s edits before building). **The three live violations, located:** `_eff_revoke`
+**STATE (2026-09-25, UPDATED 2026-09-26). NOT STARTED.** `Act` has no `via` (`state/carriers.py:406`).
+~~`under_purview` (`loop/predicates.py:105`) and the title helpers read the ACTOR's own titles;
+`_req_revoke` carries the `is_title` branch at `predicates.py:347-349`~~ ⚠ **CORRECTED: `13d-i`
+deleted `under_purview`, `titles_held`, `highest_title_rank` and `title_rank`, and rewrote
+`_req_revoke` on ruling (3)'s structural rule with no `is_title` branch (`H-109` closed).** What
+remains for G3: `_req_revoke`'s `seated_on_the_rung_above` still reads the actor's own `hold`
+tenures directly, which is exactly the read this position re-points to `via.scope`; `_req_confer`
+does the same. **The three live violations, located:** `_eff_revoke`
 (`loop/effects.py:191`) and `_eff_confer` (`:108`) close another person's `hold`; `_eff_kill` (`:410`)
 closes others' edges through `World.remove_person` (`state/world.py:384`). `_eff_release` (`:161`) is
 T-m by construction. **The `Act(...)` mint** is in `decision/choose.py` — `via` is set there, from the
@@ -898,13 +908,18 @@ though `13f` had already landed, flipped to `DONE` in the same commit — the pr
 correctly as a board defect (`CLAUDE.md` §0.2) but out of its own `WHERE.`
 
 **13d — OFFICES. SPLIT 2026-09-25: `13d-i` is buildable now; `13d-ii` is G3's.**
-**STATE.** *Holders seated* is DONE as the 13-seat generic spine (`engine/season/governance_spine.yaml`,
-`harness/governance_spine.py`; every empty remit filled from `rosters.yaml`'s `remit_default`, `:152`, a
-declared TEST FIXTURE). NOT done: `engine/season/data/offices.yaml` does not exist; there is no
-conferral or revocation roster; the `titles` roster is live (`rosters.yaml:783`); the `is_title` branch
-is live (`loop/predicates.py:347-349`, moved from `:252` by `13f`); the title helpers are live (`predicates.py:144-165`, `titles_held`,
-`highest_title_rank`, plus `title_domain` and `title_rank`); purview reads the actor
-(`predicates.py:105`).
+**STATE (updated 2026-09-26 — `13d-i` items 1-4 DONE, item 5 deferred).** *Holders seated* is DONE as
+the 13-seat generic spine (`engine/season/governance_spine.yaml`, `harness/governance_spine.py`; every
+empty remit filled from `rosters.yaml`'s `remit_default`, `:152`, a declared TEST FIXTURE).
+**Conferral and revocation rosters now exist** (`rosters.yaml: conferral_bases, revocation_bases`,
+`ED-IN-0256` rulings (2)/(3)), `_req_confer`/`_req_revoke` rewritten on them, and `H-109`'s `is_title`
+branch, `titles_held`, `highest_title_rank` and `title_rank` are DELETED from `loop/predicates.py`.
+NOT done: `engine/season/data/offices.yaml` still does not exist (item 5, deferred to a later unit);
+`title_domain` and the `titles` roster SURVIVE, but only as `harness/populated.py`'s world-generation
+reader for the whole populated realm — a real, unresolved finding from the `13d-i` build: r2's own
+two documents disagree about whether `titles` should eventually be deleted (`03` §A.12: stays; `05`
+RULED (c): deleted, domains fold into `offices.yaml`), left for whoever builds item 5, or Jordan;
+purview still reads the actor (`predicates.py:105`, ruling (4), `13d-ii`/G3's own job).
 
 **13d-i — OFFICES AS DATA.**
 **not earlier** nothing — phase α · **not later** G3, which re-points the predicates this rewrites.
@@ -944,6 +959,24 @@ the holder of the rung above in the same faction: iterate the candidate revokers
 **CONFLICT.** G3 on the same two predicates (`§3.9` edge 3). If `13f` has landed, its
 `_req_establish` composes on the same basis test and inherits this rewrite.
 **GATE.** — .
+**BUILT 2026-09-26 — ITEMS (1)-(4) ONLY; ITEM (5) DEFERRED.** Rosters, both predicates and the four
+deletions landed as specified; `under_purview` also deleted (not on the original list, but dead the
+moment `titles_held`/`highest_title_rank` were gone, and `_req_revoke`'s only game caller). The
+title-in-a-body refusal re-homed as a standalone `refuse_a_title_in_a_body` in `state/carriers.py`
+(loop imports state, not the reverse, so it can't live in `loop/predicates.py`), still called from
+`Office.__post_init__`. `title_domain`/`titles` KEPT — `harness/populated.py`'s populated-realm
+office-seating still calls it, and replacing that is item (5)'s job. `H-109` closed
+(`hole_register.yaml`, `source:` appended per R0). Confirmed by an antagonist pass that found the
+built reading ("rung above" means the immediate parent, never any ancestor, however "same faction")
+had NO FALSIFIER — every fixture happened to seat someone at the target's immediate parent, so a
+mutant walking past an empty parent to the nearest same-faction seat passed every test unchanged.
+Closed with a dedicated test (`test_13d_i_an_empty_parent_refuses_even_a_same_faction_grandparent`)
+built specifically to diverge the two readings, mutation-tested against the rejected reading before
+being accepted; the chosen reading's docstring now states both rejected alternatives (holding land;
+walking to the nearest same-faction seat) and why. Two open questions raised, not resolved: whether
+`confer` should narrow to `appointed`-only seats now that `elected`/`annex` have no verb that could
+ever fill one; and this file's own G3 entry, corrected in place, since it named `under_purview` as
+something to re-point and that function no longer exists.
 
 **13d-ii — PURVIEW.** Absorbed into position 6 (G3), which rewrites every purview reader exactly once.
 The ruling is `ED-IN-0256` (4): *"owner of highest rung in chain of ownership, eg territory is owned by

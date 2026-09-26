@@ -144,6 +144,18 @@ def seated_on_the_rung_above(w: "World", actor: str, off: "Office") -> bool:
       * a seat on a TOP rung (nothing contains it) is likewise strippable by nobody;
       * the rung above means the PARENT, not any ancestor: a King of the same faction does not
         reach past an empty duchy to a Lord, and a foreign seat on the parent rung never reaches.
+
+    ⚠ TWO OTHER READINGS OF THE RULING'S WORDS, REJECTED AND SAID SO: (a) LAND, NOT A SEAT --
+    `in_holdings`/`faction_holding` would answer "who owns the parent rung", which the plan
+    explicitly excludes (*"not r2's `purview`/`holdings` conjuncts"*) and which ruling (4)'s own
+    separate purview clause already covers by a different mechanism; conflating the two would make
+    this ruling redundant with that one rather than its own thing. (b) THE NEAREST SAME-FACTION
+    SEAT ABOVE, walking past an empty or foreign-faction parent to find one -- rejected because
+    ruling (4)'s purview clause is the one that WALKS a chain ("owner of highest rung in chain of
+    ownership"); ruling (3) says only "rung above", the single adjacent relationship, and reading a
+    walk into it collapses the distinction between the two rulings. `test_governance_build.py`'s
+    `13d-i` section pins the parent reading against the nearest-seat reading directly: a target
+    whose parent carries no same-faction seat, with a same-faction seat two rungs up, refuses.
     ⚠ A PERSON SEATED BOTH ON THE RUNG ABOVE AND ON THE TARGET passes -- their authority is the
     upper seat's, and the ruling names no exclusion for it."""
     if off.rung is None or off.rung not in w.rungs:

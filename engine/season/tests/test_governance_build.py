@@ -1049,14 +1049,27 @@ def test_13f_an_establish_on_an_existing_id_changes_the_remit_and_reaches_the_si
 def test_13f_an_existing_id_refuses_any_change_but_the_remit(change):
     """Re-founding -- a different belonging, post, rung or basis on an id that exists -- is not a
     write `establish` declares, so it REFUSES and touches neither the office nor the holder. The
-    control is in the same world: the same act without the change is admitted."""
+    control is in the same world: the same act without the change is admitted.
+
+    ⚠ **ASSERTS THE OFFICE STILL CONSTRUCTS (added 2026-09-26, antagonist finding).** Without this,
+    a future off-roster `change` value would refuse for the WRONG reason -- the constructor raising
+    inside `office_described_by`, translated to `False` before clause 4's basis-difference check
+    ever runs -- and this test would keep passing while testing nothing about re-founding. Each
+    `change` here must still be a WELL-FORMED office, differing from the seated one by exactly the
+    one declared field, or the case is not exercising what its `id` claims."""
     w, d = _establish_world()
     t = _seat_reeve(w, ["issue"])
     plain = _founding(remit=["issue", "dispatch"])
     assert _preds._req_establish(w, Act(id="ctl", actor="p_high", verb="establish",
                                         payload=plain)), "control: the unchanged act is refused"
 
-    out = _establish(w, d, "e_refound", {**plain, **change})
+    changed_payload = {**plain, **change}
+    changed_act = Act(id="check_constructs", actor="p_high", verb="establish", payload=changed_payload)
+    changed_office = office_described_by(changed_act)  # raises if this `change` is off-roster/malformed
+    assert changed_office is not None, (
+        f"{change}: the payload did not describe a constructible Office at all")
+
+    out = _establish(w, d, "e_refound", changed_payload)
     assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
     assert w.offices["off_reeve"].remit_acts == ["issue"]
     assert t.granted_acts == ("issue",)
@@ -1371,8 +1384,15 @@ def test_13d_i_lb10c_a_titled_seat_is_revocable_only_by_the_seat_above_in_its_fa
     the deleted `is_title` branch treated specially.
 
     Ten candidates, each isolating one way to be WRONG about "rung above of same faction" -- the
-    faction, the parent-vs-ancestor, the rank, the rung, the land, the seat itself -- and EXACTLY ONE
-    is admitted. The loop asserts it ran to completion (`CLAUDE.md` §0.1 pt 2)."""
+    faction, the rank, the rung, the land, the seat itself -- and EXACTLY ONE is admitted. The loop
+    asserts it ran to completion (`CLAUDE.md` §0.1 pt 2).
+
+    ⚠ **DOES NOT ISOLATE "PARENT" FROM "NEAREST SAME-FACTION ANCESTOR" (corrected 2026-09-26,
+    found by an antagonist pass).** In THIS world the target's only ancestor at any distance is
+    also its immediate parent (`R` sits directly above `D`), so a mutant that walked past an empty
+    or foreign parent to find the nearest same-faction seat would still pass every candidate here.
+    `test_13d_i_an_empty_parent_refuses_even_a_same_faction_grandparent` is the test that isolates
+    it, with a chain long enough for the two readings to disagree."""
     w, _ = _ladder_world()
     assert title_domain(w.offices["off_duke"].post) == "duchy", "fixture: the target is not a title"
     _seat_on(w, "c_king", "off_king", "King", "R", "Crown")                  # above, same faction
@@ -1420,6 +1440,32 @@ def test_13d_i_the_seat_above_of_another_faction_refuses_though_it_meets_the_old
         "a higher-ranked seat of ANOTHER faction, on the rung above and holding the duchy, stripped "
         "the duke -- the rewrite is still the purview/holdings/rank conjunction")
     assert _may_revoke(w, "c_king", "off_duke"), "control: the same-faction twin is refused"
+
+
+def test_13d_i_an_empty_parent_refuses_even_a_same_faction_grandparent():
+    """**PINS "PARENT" AGAINST "NEAREST SAME-FACTION SEAT ABOVE."** Every other `13d-i` fixture
+    seats someone at the target's immediate parent rung, so the two readings never disagree there
+    -- an antagonist pass found this gap directly: with only those fixtures, a mutant that walks
+    PAST an empty or foreign-faction parent to the nearest same-faction seat passes every existing
+    test. This builds the one world where the readings diverge: `off_reeve_hh` sits at `Hh`, whose
+    parent `S` holds NO seat at all, while its grandparent `D` holds `off_duke`, Crown -- the same
+    faction. Under `seated_on_the_rung_above`'s own reading (the ADJACENT rung only), the duke's
+    holder must REFUSE; under a nearest-same-faction-ancestor reading he would be admitted. Ruling
+    (3)'s words are "rung above", not a walk -- that verb belongs to ruling (4)'s purview clause
+    ("owner of highest rung in CHAIN of ownership"), a different mechanism this position does not
+    build."""
+    w, _ = _ladder_world()
+    assert world_q.parent_of(w, "S") == "D" and world_q.parent_of(w, "Hh") == "S", (
+        "fixture: the chain is not Hh -> S -> D as assumed")
+    assert not any(t.kind == "hold" and t.object in w.rungs and w.rungs[t.object].kind == "S"
+                   for t in w.tenures), "fixture: someone already sits at S"
+    _seat_on(w, "p_reeve", "off_reeve_hh", "Reeve", "Hh", "Crown", remit=("issue",))
+    w.offices["off_reeve_hh"].revocation = _RUNG_ABOVE
+    assert w.offices["off_duke"].faction == w.offices["off_reeve_hh"].faction == "Crown", (
+        "fixture: the duke and the reeve are not the same faction")
+    assert not _may_revoke(w, "p_high", "off_reeve_hh"), (
+        "the Crown duke, two rungs above an empty parent, revoked a Crown reeve -- "
+        "seated_on_the_rung_above walked PAST the empty parent instead of refusing at it")
 
 
 def test_13d_i_one_rule_at_every_depth_and_no_title_branch():
