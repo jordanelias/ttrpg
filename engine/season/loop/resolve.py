@@ -240,7 +240,7 @@ def _fold(self, w: "World", a: Act, resolution: "Resolution | None" = None) -> l
 
     def ev(kinds, causes, changes=None):
         return [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
-                      k, a.actor, list(changes or []), list(causes), w.tick,
+                      k, list(changes or []), list(causes), w.tick,
                       degree=_degree, observed=verdict.observed)
                 for k in kinds]
 
@@ -465,7 +465,7 @@ def resolve(self, acts: list[Act],
                            alternatives=["fold it anyway (the seam then sees a dead claimant)",
                                          "drop it silently (its act id never resolves)"])
             _gone = [Event(H(w.world_seed, w.tick, a.actor, f"act.ineligible:{a.id}"),
-                           "act.ineligible", a.actor, [], [a.id], w.tick)]
+                           "act.ineligible", [], [a.id], w.tick)]
             for _e in _gone:
                 self.act_of[_e.id] = a
             out.extend(_gone)
@@ -484,7 +484,7 @@ def resolve(self, acts: list[Act],
             # because `Act.obstacle` defaults to `None` and the computed chooser never sets
             # one, so no test could reach it. Found by the `W4` adversarial pass.
             out.append(Event(H(w.world_seed, w.tick, a.actor, f"refused:{a.id}"),
-                             "attempt.refused", a.actor, [], [a.id], w.tick))
+                             "attempt.refused", [], [a.id], w.tick))
             TRACE.decision(f"{a.actor} attempted Ob={a.obstacle} against Pool={a.pool}",
                            "S27.4", chose="refuse; the season is spent",
                            alternatives=["roll it anyway", "route to an Ob=0 roll"])
@@ -514,7 +514,7 @@ def resolve(self, acts: list[Act],
             _ok, _refusal_kinds, _verdict = self._admits(w, a, _row) if _row else (True, (), None)
             if not _ok:
                 produced = [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
-                                  k, a.actor, [], [a.id], w.tick,
+                                  k, [], [a.id], w.tick,
                                   observed=_verdict.observed if _verdict else ())
                             for k in _refusal_kinds]
                 for _e in produced:

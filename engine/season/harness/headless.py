@@ -34,6 +34,7 @@ from ..data.pursuits import pursuit as _pursuit
 from ..data.verbs import VERB_TABLE
 from ..decision import make_chooser
 from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..state.attribution import anchor_of
 from ..state.carriers import Person, Proposition, Rung, Site, Tenure
 from ..state.ids import H, draw_factory
 from ..state.world import World
@@ -185,8 +186,11 @@ def main() -> int:
         print(f"  season {n}: rounds={s['rounds']} acts={s['acts']} events={s['events']} "
               f"deposits={s['deposits']}")
     if a.log:
-        for e in r["world"].log:
-            print(f"    {e.kind:22} {e.subject:12} causes={e.causes}")
+        # G1b: `Event.subject` is gone; `anchor_of` is what it was -- the actor where one acted,
+        # the written thing otherwise -- and `-` where nothing says (an `anchor_of` of `None`).
+        w = r["world"]
+        for e in w.log:
+            print(f"    {e.kind:22} {anchor_of(w, e) or '-':12} causes={e.causes}")
     print(f"  verbs the fold can execute: {r['resolvable']} of {r['verbs']}")
     print(f"CONTENT HASH: {r['hash']}")
     return 0

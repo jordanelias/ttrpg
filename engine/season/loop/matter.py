@@ -50,8 +50,14 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
     out: list = []
     for verb, floor in sorted(floors.items()):
         if before >= floor > after:
+            # G1b: NO `subject=` -- the field is deleted. The crossing is ABOUT whatever the
+            # write that crossed the floor was about, and `anchor_of` reads that through
+            # `causes[0]` (tier 3). Both callers pass the gate emission they just made, so the
+            # `[ROOT]` arm is unreachable today; were it reached, the crossing would anchor on
+            # nothing and nobody would witness it -- which `test_g1b_attribution.py`'s planted
+            # anchorless Event pins as the observable consequence.
             ev = Event(id=H(w.world_seed, w.tick, subject_id, f"crossing:{verb}"),
-                       kind="condition.band_crossed", subject=subject_id, changes=[],
+                       kind="condition.band_crossed", changes=[],
                        causes=[cause] if cause else [ROOT], emitted_at=w.tick)
             w.log.append(ev)
             out.append(ev)

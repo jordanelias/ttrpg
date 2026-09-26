@@ -166,10 +166,20 @@ class Event:
     a `Claim`; for who learned of it, `WITNESS`. A reader who brings the ordinary sense looks for
     the actor field, does not find it, and concludes the carrier is incomplete -- which is the
     mistake the three absences exist to prevent. Defined at both sites per `CLAUDE.md` §4:
-    `architecture/meta/01_AXIOMS.md` §D.9 is the prose home (ED-IN-0220)."""
+    `architecture/meta/01_AXIOMS.md` §D.9 is the prose home (ED-IN-0220).
+
+    ⚠ `subject` WAS DECLARED HERE AND IS DELETED (G1b, plan position 4, 2026-09-26) -- `04:402`'s
+    *"No `actor`, no `target`, no `subject` on `Event`"* is now true of this class. The field was
+    OVERLOADED: the fold set it to the ACTOR, `World.write` and MATTER to the THING WRITTEN, and
+    every reader had to guess which it got. Both senses are now read off the channels that already
+    held them, through `state/attribution.py` -- `actor_of` walks `causes[]` into the act store,
+    `anchor_of` falls back to `changes[]` and then to the cause's own anchor. An emitter with no
+    act, no change and no antecedent has NOTHING that says what it concerns, and `anchor_of`
+    answers `None` for it; `test_g1b_attribution.py` plants one and asserts WITNESS deposits
+    nothing, so that channel going quiet is observed rather than assumed. A hand-built Event that
+    needs an anchor carries a change naming it (`harness/probes.py::about`)."""
     id: str
     kind: str
-    subject: str
     changes: list[StateChange]
     causes: list[str]
     emitted_at: int

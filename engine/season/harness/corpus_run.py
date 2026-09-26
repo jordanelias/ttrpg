@@ -560,8 +560,11 @@ def planted_control(seed: int = 0) -> tuple:
     a2 = Act(id="ctl_b", actor="p_b", verb="speak")
     d.resolved.extend([a1, a2])
     k = VERB_TABLE["speak"].emits[0]
-    e1 = Event(H(w.world_seed, 0, "p_a", f"{k}:{a1.id}"), k, "p_a", [], [ROOT], 0)
-    e2 = Event(H(w.world_seed, 0, "p_b", f"{k}:{a2.id}"), k, "p_b", [], [e1.id], 0)
+    # G1b: `Event.subject` is deleted, so each carries what it is about as a change (`P.about`).
+    # `_r3_propagates` reads neither -- it attributes by the fold's id derivation -- so this keeps
+    # the planted Events anchored for every OTHER reader of the log without moving the control.
+    e1 = Event(H(w.world_seed, 0, "p_a", f"{k}:{a1.id}"), k, [P.about("p_a")], [ROOT], 0)
+    e2 = Event(H(w.world_seed, 0, "p_b", f"{k}:{a2.id}"), k, [P.about("p_b")], [e1.id], 0)
     w.log.extend([e1, e2])
     return before, _r3_propagates(w, d)
 

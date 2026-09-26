@@ -612,11 +612,20 @@ class World:
         self.writes.append((thing, wclass.value, sname, record_kind, fieldname, driver))
         if emits is not None:
             # ⚠ THE SUBJECT IS THE RECORD, NOT THE TRACE LABEL. `thing` is a human label for the
-            # trace line (`"condition"`); the Event's subject has to be the RECORD ID or nothing
-            # can find the emission again. The first version used `thing`, so every site's wear
-            # emitted under the subject `"condition"` — and `last_emission_of` therefore never
-            # matched, so season 1's wear re-rooted at `[ROOT]` and the clock did not chain. That
-            # is exactly the failure `W4`'s ROOT-count proof exists to catch, and it caught it.
+            # trace line (`"condition"`); the emission's subject has to be the RECORD ID or
+            # nothing can find the emission again. The first version used `thing`, so every
+            # site's wear emitted under the subject `"condition"` — and `last_emission_of`
+            # therefore never matched, so season 1's wear re-rooted at `[ROOT]` and the clock did
+            # not chain. That is exactly the failure `W4`'s ROOT-count proof exists to catch, and
+            # it caught it.
+            #
+            # ⚠ `subject=` OUTLIVED `Event.subject` (G1b, 2026-09-26), AND IT HAD TO. The plan
+            # said to delete both; this parameter is not the field. It is the ONLY place the gate
+            # learns WHICH RECORD it wrote -- `thing` is a label, `apply` is opaque -- and it goes
+            # on the minted receipt below as `Receipt.subject`, which is `anchor_of`'s tier 2 and
+            # therefore what `last_emission_of` matches on. Deleting it would have vacated the
+            # change channel on every gate emission and re-rooted every MATTER clock: the
+            # "channel goes quiet" failure G1b's own plan row warns of.
             if subject is None:
                 raise Forbidden(
                     f"({record_kind}, {fieldname}) emits {emits!r} with no `subject=`", "S33",
@@ -646,7 +655,7 @@ class World:
                 # ordinal belongs inside the string the design already reserves for it, and
                 # widening `H`'s signature would have been a second way to say the same thing.
                 id=H(self.world_seed, self.tick, subj, f"emit:{emits}#{self.new_draw()}"),
-                kind=emits, subject=subj,
+                kind=emits,
                 # G1a. MINTED, NOT CONSTRUCTED. This Event is the gate's own emission, so its
                 # change is the one receipt in the tree whose provenance was never in doubt --
                 # which is exactly why it is the right place to prove the mint works end to end.
@@ -691,13 +700,11 @@ class World:
         `W4`'s chaining primitive: a licensed clock's next tick names its previous one, so
         `[ROOT]` stops appearing after the clock's genuine first emission.
 
-        G1b. Reads `anchor_of` rather than the raw field. Every emission this method is ever
+        G1b. Reads `anchor_of`; `Event.subject` is deleted. Every emission this method is ever
         asked about comes from `write`'s own auto-emission block above, which always mints
-        `changes=[self.gate.mint(subj, ...)]` alongside `subject=subj` -- so `anchor_of`'s tier 2
-        (the first change carrying a subject) returns the identical `subj` by construction, not
-        by coincidence. `Event.subject` stays live for the one class `anchor_of` cannot yet
-        reach (`plague.struck` and its kin -- see `state/attribution.py`), so this is a reader
-        migration, not a behaviour change."""
+        `changes=[self.gate.mint(subj, ...)]` from its `subject=` argument -- so `anchor_of`'s
+        tier 2 (the first change carrying a subject) returns that `subj` by construction, not by
+        coincidence."""
         for e in reversed(self.log):
             if e.kind == kind and anchor_of(self, e) == subject:
                 return e.id
@@ -771,7 +778,11 @@ class World:
         for t in sorted(self.tenures, key=lambda t: t.id):
             h.update(f"T|{t.id}|{_entity_digest(t)}".encode())
         for e in self.log:
-            h.update(f"{e.id}|{e.kind}|{e.subject}|{e.emitted_at}|{e.degree}|"
+            # G1b (2026-09-26): `Event.subject` is deleted, so it is no longer folded -- the one
+            # DECLARED hash move of that position, and it moves every hash that has a log. The
+            # written thing is still folded, as `changes[]` below; an act's actor is not folded
+            # as a name, only through the ids it was minted into (`e.id`, `causes[]`).
+            h.update(f"{e.id}|{e.kind}|{e.emitted_at}|{e.degree}|"
                      f"{','.join(e.causes)}".encode())
             for c in e.changes:
                 h.update(f"~{c.subject}|{c.mode}|{c.driver}|{c.field}|{c.delta}".encode())

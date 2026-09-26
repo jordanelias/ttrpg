@@ -73,6 +73,7 @@ from ..queries import world_q
 from ..data.fixtures import Fixtures
 from ..data.matrix import Step, WriteClass
 from ..gaps import Forbidden, Unspecified
+from ..state.attribution import anchor_of
 from ..state.carriers import Event, Person, Proposition, Rung, Site, Tenure, View
 from ..state.world import World
 
@@ -240,7 +241,7 @@ def test_d3b_the_gate_applies_the_write():
             emits="condition.worn", subject=site.id, causes=[ROOT])
     # [JUSTIFIED: the same arbitrary decrement, read back -- this line exists to prove the lambda ran, not to pin a magnitude]
     assert site.condition == before - 7
-    assert w.log[-1].kind == "condition.worn" and w.log[-1].subject == site.id
+    assert w.log[-1].kind == "condition.worn" and anchor_of(w, w.log[-1]) == site.id
 
 
 def test_d4_contest_is_not_a_second_resolver():
@@ -796,8 +797,8 @@ def test_event_never_grows_a_target_or_an_actor():
 
 def test_causes_is_never_empty():
     with pytest.raises(Forbidden):
-        Event("i", "a.b", "s", [], [], 0)
-    assert Event("i", "a.b", "s", [], [ROOT], 0).causes == [ROOT]
+        Event("i", "a.b", [], [], 0)
+    assert Event("i", "a.b", [], [ROOT], 0).causes == [ROOT]
 
 
 def test_choose_receives_no_world():

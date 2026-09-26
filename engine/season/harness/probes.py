@@ -45,6 +45,7 @@ from ..loop.deliberate import sense
 from ..loop.driver import SeasonDriver, resolvable_verbs
 from ..queries.world_q import questions_for
 from ..seam import ContestError, contest
+from ..state.attribution import anchor_of
 from ..state.carriers import (
     Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View,
 )
@@ -267,6 +268,29 @@ def chooser(w, only=None, verbs=None):
     return choose
 
 
+def about(subject: str) -> StateChange:
+    """THE CHANGE A HAND-BUILT EVENT CARRIES TO SAY WHAT IT IS ABOUT -- G1b's tier-2 carrier for
+    apparatus, and the one owner of its shape.
+
+    `Event.subject` is deleted (G1b), so an Event with no act among its causes, no change and no
+    antecedent anchors on NOTHING: `anchor_of` returns `None`, and WITNESS then places it nowhere
+    and deposits it to nobody. Every such Event in the tree was built here, in the probe corpus --
+    `plague.struck` is the class `state/attribution.py` named as the blocker -- so the apparatus
+    says what its Events concern the one way the carrier still allows: a change naming it.
+
+    ⚠ A BARE `StateChange`, NOT A `Receipt`, AND THAT IS THE TRANSITIONAL SEAM ON PURPOSE. No gate
+    write is open when a probe builds an Event, so there is no receipt to mint; `state/log.py`
+    admits a bare change and verifies only receipts (`test_a_bare_statechange_is_still_admitted_
+    and_this_is_the_transitional_seam`). When `G4` closes that seam, every Event built through
+    this function stops being admitted -- which is where they should go red, all at once, from
+    one owner, rather than from nine hand-written copies.
+
+    `field=None` and `delta=None`: it names the thing and asserts no value, so no reader that
+    keys on `field` (`probes.py`'s social-change check, `resolve`'s accumulator) mistakes it for a
+    write it did not make."""
+    return StateChange(subject, "set", "Event")
+
+
 def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
     """S33: `purpose` MUST BE UNIQUE PER DRAW, NOT PER OPERATION -- "or two draws inside one act
     collide".
@@ -280,9 +304,18 @@ def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
 
     A CONTENT-DERIVED draw was the second attempt and it collides whenever two draws in one tick
     are alike. The unit S33 names is the DRAW, so the ordinal lives on the World and is reset at
-    the start of every tick: unique within the tick, and identical across runs of the same seed."""
-    return Event(H(w.world_seed, w.tick, subj_seed, f"ev:{kind}:{w.new_draw()}"), kind, subject,
-                 changes or [], causes, w.tick, degree)
+    the start of every tick: unique within the tick, and identical across runs of the same seed.
+
+    ⚠ G1b: `subject` RIDES AS THE LEADING CHANGE, NOT AS A FIELD (`about`, above), so
+    `anchor_of` answers `subject` at tier 2 for every Event built here, whatever its causes say.
+    LEADING, and not only when `changes` is empty, because tier 2 reads the FIRST change carrying
+    a subject: a caller's own changes appended after it cannot re-anchor the Event behind the
+    `subject` argument's back. And tier 2 rather than tier 3 for the chained ones too: A2's
+    `sitting.decided` is about `D` and is caused by a petition about `p_low`, so inheriting its
+    cause's anchor would have been wrong -- measured, it was the one corpus Event where tier 3
+    disagreed with the field."""
+    return Event(H(w.world_seed, w.tick, subj_seed, f"ev:{kind}:{w.new_draw()}"), kind,
+                 [about(subject)] + list(changes or []), causes, w.tick, degree)
 
 
 @probe("P2", "the scene budget is ~5 and the PERSON chooses what to leave undone", "S26.3",
@@ -599,7 +632,9 @@ def p15():
     # IN p_high" -- nobody -- and `narrow` was EMPTY. The probe reported an exclusion mechanism
     # while demonstrating that nothing said anywhere reached anyone. §0.1 pt 2, and a repeat of a
     # conflation `witness` had already retracted once. Found by the `W6` adversarial pass.
-    e = Event(H(w.world_seed, w.tick, "p_low", "probe:p15"), "speech.made", "p_low", [],
+    # G1b: what the speech is about rides as a change (`about`), since `Event.subject` is gone;
+    # without it the Event anchors on nothing and every channel below answers "nobody".
+    e = Event(H(w.world_seed, w.tick, "p_low", "probe:p15"), "speech.made", [about("p_low")],
               [ROOT], w.tick)
     everyone = list(w.persons)
     total = observers_for(w, e, "total", everyone)
@@ -695,7 +730,7 @@ def p18():
         "CROSSINGS HAVE AN ANTECEDENT")
     antecedent = next((e for e in w.log if e.id == ev.causes[0]), None)
     assert antecedent is not None and antecedent.kind == "condition.worn" \
-        and antecedent.subject == site.id, (
+        and anchor_of(w, antecedent) == site.id, (
         f"the crossing names {ev.causes[0]!r}, which is not a `condition.worn` for {site.id}")
     assert verb in before and verb not in after
     social = [c for c in ev.changes if c.field in ("stance", "pursuits", "beliefs")]
@@ -1692,7 +1727,7 @@ def w12():
        tests="the story must be able to be reconstructed from what caused what")
 def a1():
     w = tiny_world()
-    Event(H(1, 0, "x", "e"), "thing.happened", "x", [], [], 0)
+    Event(H(1, 0, "x", "e"), "thing.happened", [], [], 0)
     return "UNREACHABLE"
 
 
