@@ -40,6 +40,7 @@ from sweep_core import S, DRV
 # FABRICATED NULL -- the direction `CLAUDE.md` §0.1 pt 4 calls the worse of the two. Found by the
 # Fable gate on Arc 1; it is the sibling of the A39 spy that arc DID move, on the same module.
 from engine.season.loop import deliberate as DLB   # noqa: E402
+from engine.season.state.attribution import anchor_of  # noqa: E402
 from engine.season.trace_log import TRACE
 
 _REAL_QF = DLB.questions_for
@@ -99,17 +100,23 @@ def corpus_drops(mode: str, slots: str = "narrow"):
             # as its `subject` AND that Event to name a cause AND the cause to still be in the log.
             # `provenance_resolved` is therefore recorded per row and counted in the summary, so
             # the denominator of the cross-person claim is visible instead of assumed.
-            # ⚠ AND `dep_actor` IS `Event.subject`, WHICH IS THE ACTOR FOR WHAT `_fold` EMITS AND
+            # ⚠ AND `dep_actor` IS `anchor_of(w, e2)`, WHICH IS THE ACTOR FOR WHAT `_fold` EMITS AND
             # IS NOT ESTABLISHED FOR EVERY KIND -- `claim_subjects`' `per_change` rule mints claims
-            # about THE THING CHANGED, whose Event subject is still the actor, but nothing here
+            # about THE THING CHANGED, whose Event anchor is still the actor, but nothing here
             # proves that for a kind the corpus has not yet emitted. Stated rather than assumed.
+            # `Event.subject` DELETED (G1b, plan position 4, 2026-09-26) -- `e.subject` here read
+            # the claim.deposited Event's minted subject (tier 2 of `anchor_of`), and `e2.subject`
+            # read the causing Event's actor (tier 1) or written thing (tier 2), exactly what
+            # `anchor_of` now supplies; this script was not in G1b's own WHERE and broke on the
+            # field's deletion since it imports live `engine.season` code, found and fixed as a
+            # consequence of the field's blast radius rather than a design change here.
             prov = {}
             for e in w.log:
-                if e.kind == "claim.deposited" and e.subject == c.get("cid"):
+                if e.kind == "claim.deposited" and anchor_of(w, e) == c.get("cid"):
                     src = e.causes[0] if e.causes else None
                     for e2 in w.log:
                         if e2.id == src:
-                            prov = dict(kind=e2.kind, actor=e2.subject)
+                            prov = dict(kind=e2.kind, actor=anchor_of(w, e2))
                     break
             ops = d.get("operands") or {}
             rows.append(dict(case=case["id"], lane=lane, pid=d["pid"], verb=d["verb"],

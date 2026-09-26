@@ -287,7 +287,15 @@ def about(subject: str) -> StateChange:
 
     `field=None` and `delta=None`: it names the thing and asserts no value, so no reader that
     keys on `field` (`probes.py`'s social-change check, `resolve`'s accumulator) mistakes it for a
-    write it did not make."""
+    write it did not make. ⚠ NARROWER THAN "NO READER MISTAKES IT," AND SAID SO 2026-09-26
+    (antagonist pass on G1b's own closure): a reader keying on `c.subject` ALONE, ignoring
+    `field` -- `epistemic._ch_document_key`, `matter.py`'s `term.matured` prior search,
+    `queries/world_q.py::occasioned_by`, `claim_subjects`' `per_change` rule -- treats this bare
+    change exactly as it would a real write's, because none of them ask `field` at all. Measured
+    inert today: `tiny_world`'s only `hold` is `p_high -> off_duke` and nothing in the probe
+    corpus reaches those readers through a hand-built Event's `about(...)` in a way that changes
+    a count (`W6` still reads 9 deposits, unmoved). Grows the transitional-seam population `G4`
+    closes; not a new hazard, the SAME one the paragraph above already names."""
     return StateChange(subject, "set", "Event")
 
 
@@ -307,7 +315,10 @@ def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
     the start of every tick: unique within the tick, and identical across runs of the same seed.
 
     ⚠ G1b: `subject` RIDES AS THE LEADING CHANGE, NOT AS A FIELD (`about`, above), so
-    `anchor_of` answers `subject` at tier 2 for every Event built here, whatever its causes say.
+    `anchor_of` answers `subject` at tier 2 for every Event built here -- PROVIDED `causes` names
+    no act id, since tier 1 (actor) is checked first and would win over this change (corrected
+    2026-09-26, antagonist pass on G1b's own closure: "whatever its causes say" overclaimed this;
+    no current `Ev()` caller passes an act-id cause, so it is inert today, not false in practice).
     LEADING, and not only when `changes` is empty, because tier 2 reads the FIRST change carrying
     a subject: a caller's own changes appended after it cannot re-anchor the Event behind the
     `subject` argument's back. And tier 2 rather than tier 3 for the chained ones too: A2's

@@ -88,6 +88,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import sweep_core as K
 from sweep_core import S, C, R, Log, PS_CHOOSE, PS_OPTIONS
 import arm9_forking as A9
+from engine.season.state.attribution import anchor_of
 
 SEED = 0
 SEASONS = 4          # arm 9's own published run: `runs/arm9.json` records seasons=4, seed=0.
@@ -321,14 +322,20 @@ def forensics(case: dict, mode: str, slots: str, at: int, take: int, in_budget: 
 
     def deposit_of(w, cid):
         """The Event that deposited this claim: `w.write(... emits='claim.deposited',
-        subject=<claim id>, causes=[<event id>])`, then that Event's own kind/subject."""
+        subject=<claim id>, causes=[<event id>])`, then that Event's own kind/anchor.
+
+        `Event.subject` DELETED (G1b, plan position 4, 2026-09-26) -- `e.subject`/`e2.subject`
+        read the minted subject (tier 2) and the causing Event's actor-or-written-thing (tier
+        1/2), exactly what `anchor_of` now supplies. Not in G1b's own WHERE; fixed as a
+        consequence of the field's blast radius into this live-importing script."""
         for e in w.log:
-            if e.kind == "claim.deposited" and e.subject == cid:
+            if e.kind == "claim.deposited" and anchor_of(w, e) == cid:
                 src = e.causes[0] if e.causes else None
                 for e2 in w.log:
                     if e2.id == src:
+                        anchor2 = anchor_of(w, e2)
                         return dict(deposit_event=e.id, by_event=e2.id, by_kind=e2.kind,
-                                    by_subject=e2.subject, by_actor=getattr(e2, "subject", None))
+                                    by_subject=anchor2, by_actor=anchor2)
                 return dict(deposit_event=e.id, by_event=src, by_kind=None, by_subject=None)
         return dict(deposit_event=None)
 

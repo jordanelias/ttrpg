@@ -223,7 +223,15 @@ before trusting the channel — silently vacating the actor channel is the failu
 passing suite does not see it.
 **TIER.** `opus`/`opus`. Not delegable: the failure is a channel that goes quiet.
 
-**STATE (2026-09-25). PARTIAL — COMMITTED** (`952dc21`, PR #429, `ED-IN-0269`, ledger `status:
+✅ **DONE — `ED-IN-0275`, 2026-09-26.** `Event.subject` is deleted, the field's two overloaded
+senses read through `state/attribution.py` (`actor_of`/`anchor_of`), and `04:402`'s STRUCTURAL
+claim is now true of the tree. Declared hash move: `build_realm(0)` x1 season
+`546fafa1c7e617ea7b85641a94505bc9` -> `52cfd9f0be4822fa9f4abd9ee3b0b6e6`. `World.write`'s
+`subject=` parameter is KEPT (it feeds the minted Receipt, not the deleted field -- a plan
+correction, not a corner cut). One latent, pre-existing wiring gap found by the closing
+antagonist pass and registered rather than fixed in place: `H-129`, `last_emission_of` chains on
+the wrong person for a fold-emitted `body.changed`/`person.died` (latent at `body_step=0`).
+Superseded state, kept for history: **STATE (2026-09-25). PARTIAL — COMMITTED** (`952dc21`, PR #429, `ED-IN-0269`, ledger `status:
 partial`). Every production READER except the content hash is off the field: G1a (`ED-IN-0258`) built
 `state/attribution.py` (`actor_of`, `anchor_of`) and moved `epistemic.py`'s three readers
 (`claim_subjects`, `_event_place`, `_ch_witness_key`); `ED-IN-0269` moved `world.py::last_emission_of`

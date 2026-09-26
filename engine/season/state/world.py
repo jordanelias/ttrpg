@@ -700,11 +700,26 @@ class World:
         `W4`'s chaining primitive: a licensed clock's next tick names its previous one, so
         `[ROOT]` stops appearing after the clock's genuine first emission.
 
-        G1b. Reads `anchor_of`; `Event.subject` is deleted. Every emission this method is ever
-        asked about comes from `write`'s own auto-emission block above, which always mints
-        `changes=[self.gate.mint(subj, ...)]` from its `subject=` argument -- so `anchor_of`'s
-        tier 2 (the first change carrying a subject) returns that `subj` by construction, not by
-        coincidence."""
+        G1b. Reads `anchor_of`; `Event.subject` is deleted. ⚠ CORRECTED 2026-09-26, ANTAGONIST
+        PASS ON G1b's OWN CLOSURE: the first writing of this docstring claimed every emission
+        this method is EVER asked about comes from `write`'s own auto-emission block above, "by
+        construction, not by coincidence" -- true for a kind MATTER alone emits (`stores.changed`,
+        `condition.worn`, `yield.taken`, `claim.deposited`, `claim.decayed`), false for
+        `body.changed` and `person.died`, which the FOLD also emits on `Wounded`/`Felled`
+        (`verb_table.yaml`). A fold-emitted Event of either kind carries `causes=[a.id]`
+        (`loop/resolve.py`), so `anchor_of`'s tier 1 (actor) wins over tier 2, and the id returned
+        is the COMBATANT's, not the victim's `pid` this method was asked about. NOT A REGRESSION:
+        the deleted field carried the identical value for a fold-emitted Event (`Event(H(...), k,
+        a.actor, ...)`), so `last_emission_of("body.changed", <victim>)` already missed a
+        combat-caused wound before this deletion -- this docstring's overclaim is new, the gap it
+        describes is not. LATENT AT SHIPPED DEFAULTS: `body_step = 0` skips the caller
+        (`loop/matter.py`) entirely, so nothing reaches it on a built world today. Registered
+        rather than fixed here: `hole_register.yaml` H-129 -- a fix (reading the first minted
+        receipt in `changes[]` instead of `anchor_of`) would move outputs in a `body_step > 0`
+        sweep arm and needs its own decision, not a side effect of this position's field deletion.
+        Every OTHER caller of this method (the six kinds above) is unaffected: each names a kind
+        with exactly one emitter, MATTER's own auto-emission block, so tier 2 still returns `subj`
+        by construction for all of them."""
         for e in reversed(self.log):
             if e.kind == kind and anchor_of(self, e) == subject:
                 return e.id

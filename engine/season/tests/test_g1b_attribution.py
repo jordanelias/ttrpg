@@ -158,9 +158,13 @@ def test_an_event_that_anchors_nowhere_is_deposited_to_nobody(mode):
     """THE PLAN'S FALSIFIER, RUN THROUGH A REAL SEASON: *"plant a probe Event with no changes and
     `[ROOT]`: `anchor_of` returns `None` AND the witness deposits nothing for it."*
 
-    ⚠ OVER EVERY FAN-OUT ARM, AND `total` IS WHY. The channel predicates admit nobody for an
-    anchorless Event on their own -- `_event_place` finds no place, `_ch_witness_key` no key, the
-    document channel no change. `total` consults no predicate: it fans every Event to everyone,
+    ⚠ OVER EVERY FAN-OUT ARM, AND `total` IS WHY. The five channel predicates admit nobody for
+    `plague.struck`, though not all for the same reason: `_event_place` finds no place and
+    `_ch_witness_key` no key BECAUSE the Event has no anchor; `_ch_post_remit` and `_ch_chronicle`
+    are EVENT-KIND filters that admit nobody for this kind regardless of anchor (`plague.struck`
+    is on no verb's `emits:`), and would refuse it even with one (corrected 2026-09-26, antagonist
+    pass on G1b's own closure -- the anchor is not why those two refuse). `total` consults no
+    predicate: it fans every Event to everyone,
     and before `claim_subjects` stopped depositing about `None` it minted `Claim(subject=None)`
     into all five ledgers of this world (measured). The arms are read from the roster, so a
     fourth arm is covered by existing.
