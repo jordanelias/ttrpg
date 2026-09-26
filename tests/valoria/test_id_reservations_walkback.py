@@ -263,7 +263,11 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # PIN UPDATED 2026-09-20: WR 12 -> 13. ED-WR-0012 allocated to strike a review derivation that
     # had been promoted into live canon and never ruled (canon/philosophy/04_being_persistence.md §4.5's
     # 'rendered by many' clause), RULED by Jordan the same day. Lane-ledger row carries the provenance.
-    released = {'SC': 38, 'FA': 39, 'WR': 13, 'SE': 55}
+    # PIN UPDATED 2026-09-26: SE 55 -> 56. ED-SE-0055 allocated for the season-loop's dwelling-Site
+    # ruling (plan position 24d-i's substrate: Jordan chose the literal reading of ED-SE-0051/RR-2,
+    # a real dwelling Site kind rather than a hearth-rung reinterpretation). Lane ledger:
+    # registers/editorial_ledger_se.jsonl.
+    released = {'SC': 38, 'FA': 39, 'WR': 13, 'SE': 56}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

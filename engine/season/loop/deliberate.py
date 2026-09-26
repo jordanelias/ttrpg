@@ -87,7 +87,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
     # 86-world basis every figure here used does NOT apply. With the overlay, `build_at` seats
     # `p_a` on a live `hold` (`corpus_run.py:243-254`); `harness/probes.py:107` has seated
     # `p_high` on `off_duke` since `tiny_world` existed, so every probe season carried the
-    # ceiling; `harness/populated.py:757` seats one hold per office. `H-71`'s own cite already
+    # ceiling; `harness/populated.py:777` seats one hold per office. `H-71`'s own cite already
     # recorded the overlay path, so the register contradicted itself and THIS was the stale side.
     # ⚠ AND THE COUNT IS WIDER THAN OFFICES: `budget()` counts every live `hold`, and
     # `_eff_create_record` mints one per Record (`loop/effects.py:302-305`), so `headless`'s Carin

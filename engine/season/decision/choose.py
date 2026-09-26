@@ -90,7 +90,7 @@ def benefits_me(p: Person, c: Candidate) -> float:
     (CORRECTED 2026-09-20, `ED-IN-0260`; the old reason read *"`orient` ... no verb writes it"*).
     That reason proves too much: NO VERB WRITES `Person.pursuits` EITHER -- grep `verb_table.yaml`
     for it, zero hits -- and `pursuits` is term 1 of the live score, genesis-authored from
-    `references/npc_registry.yaml` at `harness/populated.py:442-443`. Applied evenly, the old reason
+    `references/npc_registry.yaml` at `harness/populated.py:462-463`. Applied evenly, the old reason
     un-wires the score's first term. What is actually missing is the STATE: `Person` has no `orient`
     field, and the 28 authored `self_other_initial` values in that same registry are the one cell
     `data/cast.py::pursuits_of` skips (its `continue` past non-list entries). The wiring waits on

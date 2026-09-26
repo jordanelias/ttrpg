@@ -806,9 +806,12 @@ class WorldReader:
             if s is None:
                 return UNKNOWN
             floors = w.fixtures.get("band_floors").get(s.kind)
-            if floors is None:
+            if not floors:
                 # `_req_work`'s refusal, carried unchanged: `H-08` owns the per-kind floors and
                 # §42.2.1 forbids picking a plausible number for a kind nobody registered.
+                # `not floors` catches BOTH a missing kind (`None`) and a kind registered with no
+                # uses (`{}`, `dwelling`'s control-arm row, `24d-i`) -- `min({}.values())` is a bare
+                # `ValueError`, not this typed refusal, and `is None` alone let it through.
                 raise Unspecified(
                     f"no band floors for site kind {s.kind!r}", "S12.1",
                     needs="a per-kind floor table -- register row H-08",

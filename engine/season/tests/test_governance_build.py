@@ -1721,19 +1721,29 @@ def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_seas
 
     TREATMENT is `build_realm(0)`. CONTROL is the same world with its dwellings deleted before the
     season. The control reproduces the pre-`24d-i` tree exactly: build hash and one-season hash
-    were both byte-identical to the checkout before this change when measured.
+    were both byte-identical to the checkout before this change when measured -- against `bcc9a1f`
+    (the commit immediately before `24d-i` landed) in a worktree:
+    build `fa6ea34ceeb85cb2d64f3d6bbf0fefc5`, one-season `65823840d82e1051cfaab49ce3e6f432`,
+    both reproduced exactly by the control arm on the current tree.
 
     Treatment: no dwelling crossing reaches Q3, so no `band_crossed` Question comes from one, and
     every dwelling emits exactly one `condition.worn` and keeps its condition. The Events are what
     prove the wear loop visited them, so the zero is not an empty population.
-    Treatment against control: the same Questions by id, the same resolved acts, every other
+    Treatment against control: the same Questions by id, the same act COUNT and the same
+    act-subject distribution (not checked by act id -- see the assertion below), every other
     non-deposit Event by id, and every control claim survives.
 
     ⚠ IT IS NOT SILENT, AND THIS POSITION IS NOT `DONE·INERT` BY THE PLAN'S TEST. CLAIMS MOVE. The
     wear Events are witnessed through `co_located`, so each resident of a hearth gets one
     firsthand `condition.worn` claim about that hearth's dwelling. This test pins the SHAPE of that
-    movement, not its count. ⚠ It is a ONE-season identity. Measured beyond it: from season 2, the
-    added claims displace others at `ledger_cap`, and by season 4 one resolved act differs."""
+    movement, not its count. ⚠ It is a ONE-season identity. Measured beyond it (reproduced directly,
+    `build_realm(0)`, both arms, seasons 1-4): claim displacement at `ledger_cap` starts season 2
+    (0 control claims missing from treatment at season 1, 8 at season 2, 24 at season 3, 60 at
+    season 4) and the resolved-act COUNT first differs at season 4 by exactly one (1457 vs 1458) --
+    but "one resolved act differs" describes the COUNT, not an isolated identity difference: the
+    act-identity sequence itself first diverges mid-season-4 (index 1309 of 1457/1458) and stays
+    diverged, 115 of the season's acts differing in id or verb by the season's end. One seed; not
+    swept."""
     from ..harness import populated
     from ..loop import deliberate
 

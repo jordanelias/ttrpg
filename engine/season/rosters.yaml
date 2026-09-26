@@ -937,8 +937,12 @@ rosters:
       declaration in two files"*) is answered by the fixture reading the data rather than
       restating it.
       ⚠ `dwelling: 0` IS THE CONTROL ARM, SHIPPED DELIBERATELY (`24d-i`), and it is `H-07`'s own
-      *"no wear at all"* sweep point applied to one kind. The same shape as `body_step = 0` and
-      `scar_step = 0`. A dwelling sits AT a hearth and persons live in hearths. A non-zero rate
+      *"no wear at all"* sweep point applied to one kind. ⚠ **NOT THE SAME SHAPE AS `body_step = 0`
+      AND `scar_step = 0`** (corrected 2026-09-26 — a prior version of this note claimed it was):
+      those two `continue` past the write itself (`loop/matter.py:305`), so nothing is emitted at
+      their control arm. `wear_per_season` carries no such skip — MATTER writes every Site every
+      season whatever its rate, so `dwelling: 0` still emits (see below). A dwelling sits AT a
+      hearth and persons live in hearths. A non-zero rate
       together with any floor in `band_floors.dwelling` would let a dwelling's condition cross
       it, reach Q3's `presence` branch in `queries/world_q.questions_for`, and hand every
       resident a live `band_crossed` Question. That would bring `band_crossed` alive on the

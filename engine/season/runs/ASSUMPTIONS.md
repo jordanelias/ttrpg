@@ -26,7 +26,7 @@ exercised by this run.**
 | `scene_budget` | `5` | no — a harness fixture |
 | `ledger_cap` | `200` | no — a harness fixture |
 | `view_k` | `12` | no — a harness fixture |
-| `wear_per_season` | `{'harbour': 10, 'seam': 10, 'body': 10}` | no — a harness fixture |
+| `wear_per_season` | `{'harbour': 10, 'seam': 10, 'body': 10, 'dwelling': 0}` | no — a harness fixture |
 | `confidence_default` | `100` | no — a harness fixture |
 | `choice_temperature` | `0.1` | no — a harness fixture |
 | `claim_decay_per_season` | `5` | no — a harness fixture |
@@ -36,7 +36,7 @@ exercised by this run.**
 | `pool_default` | `2` | no — a harness fixture |
 | `obstacle_default` | `2` | no — a harness fixture |
 | `obstacle_refusal_multiple` | `2` | yes — §27.4 |
-| `band_floors` | `{'harbour': {'bulk_shipping': 800, 'fishing': 100}, 'seam': {'deep_mining': 700, 'surface_gleaning': 50}, 'body': {'full_operations': 800, 'limited': 500, 'withdrawal_only': 100}}` | no — a harness fixture |
+| `band_floors` | `{'harbour': {'bulk_shipping': 800, 'fishing': 100}, 'seam': {'deep_mining': 700, 'surface_gleaning': 50}, 'body': {'full_operations': 800, 'limited': 500, 'withdrawal_only': 100}, 'dwelling': {}}` | no — a harness fixture |
 | `season_factor` | `1.0` | no — a harness fixture |
 | `subsistence_weight` | `{'grain': 2, 'salt': 1}` | no — a harness fixture |
 | `question_aggregation_rule` | `first` | no — a harness fixture |

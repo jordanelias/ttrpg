@@ -540,7 +540,7 @@ write tokens — **INTERIOR at WITNESS, ACTS at RESOLVE**. And the interior writ
 rows; and a `Failure` band that writes a stance move must fail at load.
 **TIER.** `sonnet`/`opus` — **no byte-identity control exists here**, so the critic carries the weight.
 **CORRECTIONS (2026-09-25).**
-- **The field is written today — at CONSTRUCTION, not by any act.** `harness/populated.py:596`
+- **The field is written today — at CONSTRUCTION, not by any act.** `harness/populated.py:616`
   appends `(prop.subject, …)` rows from `cast.stance_from_loyalty`, and `decision/choose.py`'s
   `stance_toward` (`:140`) is read by `score`. `requirements.yaml` R-07's *"nothing writes it"* is true
   of ACTS and false of construction. **FALSIFIER, added:** after two seasons at least one `stance.moved`
@@ -1461,7 +1461,7 @@ at that rung, with an id and an initial condition built the way the producing Si
 (4) **`build_realm` is not the only builder of hearths — there are three more (list completed
 2026-09-25).** `corpus_run.build_at` builds a `person`-scaled case's `hearth` rung
 (`harness/corpus_run.py:209-211`) and seats its people in it (`:226-231`). `governance_spine.build`
-builds `lr_hearth_a` / `lr_hearth_b` (`harness/governance_spine.py:126`; `governance_spine.yaml:86-87`).
+builds `lr_hearth_a` / `lr_hearth_b` (`harness/governance_spine.py:127`; `governance_spine.yaml:86-87`).
 `probes.tiny_world` builds `Hh` (`harness/probes.py:73`). The ruling names `build_realm` only. Decide
 for each whether it mints dwellings too, and state it. `build_at` decides whether capacity can vary on
 any world `R-05` is scored on. The spine decides whether `19c`'s capacity falsifier can run where its
@@ -1573,8 +1573,8 @@ It re-opens `test_w8`'s retired drain guard (part 1 `§3.7`): rebuild that guard
 quantity.
 ⚠⚠ **THE ATTACK LANDED (2026-09-25): AS THE TREE STANDS, THE CANDIDATE IS DEAD ON ARRIVAL.** Nothing
 mints a `weight > 1` person on any built world. `Person.weight` defaults to 1 (`state/carriers.py:450`),
-and every builder constructs persons without it: `build_realm` (`harness/populated.py:420`),
-`build_at` (`harness/corpus_run.py:219`) and the spine (`harness/governance_spine.py:129`). The one
+and every builder constructs persons without it: `build_realm` (`harness/populated.py:440`),
+`build_at` (`harness/corpus_run.py:219`) and the spine (`harness/governance_spine.py:130`). The one
 heavier person in the tree is a test crowd, `Person("crowd_1", …, weight=40)` (`harness/probes.py:744`).
 MATTER's draw is over every housed person, weighted by `weight` (`loop/matter.py:240-256`). So
 *"`weight == 1` exempt"* leaves **zero eaters on every built world**. That switches off `3a`'s draw and
