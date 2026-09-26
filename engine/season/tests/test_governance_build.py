@@ -25,6 +25,7 @@ from collections import Counter
 
 from ..data import files
 from ..data.matrix import MATRIX, Step
+from ..data.rosters import CONFERRAL_BASES, REVOCATION_BASES, RUNG_KINDS, TITLE_DOMAINS, title_domain
 from ..data.verbs import VERB_TABLE
 from ..epistemic import CHANNEL_PREDICATES
 from ..gaps import Forbidden, Unowned, Unspecified
@@ -38,7 +39,8 @@ from ..harness import probes as P
 from ..decision import budget as _budget
 from ..decision import operands_for, person_side_eligible
 from ..state.carriers import (
-    Act, Office, Proposition, Tenure, View, matrix_rows_without_a_field,
+    Act, Office, Person, Proposition, Rung, Tenure, View, matrix_rows_without_a_field,
+    refuse_a_title_in_a_body,
 )
 
 
@@ -919,8 +921,8 @@ def _establish_world():
 
 def _founding(**over) -> dict:
     """A well-formed `establish` payload for an office `tiny_world` does not have. `appointed` is
-    one of the three conferral values `ED-IN-0256` rules, so the fixture survives `13d-i`
-    rostering them; any non-empty string passes the basis test today."""
+    one of the three conferral values `ED-IN-0256` rules, and since `13d-i` rostered them the
+    basis test passes nothing else."""
     p = dict(office="off_reeve", post="Reeve", rung="S", remit=["issue", "dispatch"],
              faction="Crown", conferral="appointed")
     p.update(over)
@@ -1039,7 +1041,10 @@ def test_13f_an_establish_on_an_existing_id_changes_the_remit_and_reaches_the_si
     dict(post="Warden"),
     dict(rung="Hh"),
     dict(conferral="elected"),
-    dict(revocation="purview"),
+    # ⚠ (`13d-i`) WAS `revocation="purview"`, r2's superseded value. Off the roster it now raises
+    # in the constructor, so the act would refuse for THAT reason and this case would stop
+    # observing a basis DIFFERENCE. The rostered value differs from the seat's `None` and constructs.
+    dict(revocation="rung_above_same_faction"),
 ], ids=lambda c: next(iter(c)))
 def test_13f_an_existing_id_refuses_any_change_but_the_remit(change):
     """Re-founding -- a different belonging, post, rung or basis on an id that exists -- is not a
@@ -1256,7 +1261,7 @@ def test_13e_the_witness_channel_also_reads_the_snapshot_not_the_live_office():
     assert t_hand.granted_acts == (), (
         "a hand-created office re-granted a sitting holder -- fixture is not the snapshot case")
 
-    w.offices["off_dicastery"].conferral = "the duke's remit (harness fixture)"
+    w.offices["off_dicastery"].conferral = "appointed"      # rostered since `13d-i`
     out = d.resolve([Act(id="g_conf", actor="p_high", verb="confer",
                           payload={"office": "off_dicastery", "to": "p_low"})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
@@ -1312,3 +1317,245 @@ def test_13e_no_remit_acts_attribute_read_outside_the_three_allow_listed_sites()
         f"`Office.remit_acts` read as an attribute outside `_grant_remit`/`Office.__post_init__`/"
         f"`_eff_establish` at {violations} -- position `13e` consolidated every consumer onto "
         f"`Tenure.granted_acts`")
+
+
+# =================================================================================================
+# PLAN POSITION `13d-i` -- OFFICES AS DATA (items 1-4; item 5, `offices.yaml`, is a later unit).
+# `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, position `13d-i`. The two
+# bases are rostered values (`rosters.yaml: conferral_bases`, `revocation_bases`) carrying
+# `ED-IN-0256` rulings (2) and (3); `_req_confer` / `_req_establish` share a membership test and
+# `_req_revoke` dispatches on the seat's declared basis, with no `is_title` branch (`H-109`).
+# FALSIFIER `LB-10c`, re-pointed by ruling (3): a titled seat is revocable ONLY by the holder of a
+# seat on the rung directly above it, in its faction -- every candidate iterated and counted.
+# =================================================================================================
+
+_RUNG_ABOVE = "rung_above_same_faction"       # `revocation_bases`' one member, ruling (3)
+
+
+def _person(w, pid):
+    """A bare person, placed the way `tiny_world` places its own."""
+    w.persons[pid] = Person(pid, pid)
+    w.rungs[pid] = Rung(pid, "person")
+    w.add_tenure(Tenure(f"t_in_{pid}", pid, "Hh", "contain", 0))
+
+
+def _seat_on(w, pid, oid, post, rung, faction, remit=("issue",)):
+    """Seat `pid` on a new office, the office constructed FIRST so the grant is correct at seating."""
+    if pid not in w.persons:
+        _person(w, pid)
+    w.offices[oid] = Office(oid, post, rung, list(remit), faction=faction)
+    w.add_tenure(Tenure(f"t_{oid}", pid, oid, "hold", 0))
+
+
+def _ladder_world():
+    """`tiny_world` (R ⊃ D ⊃ S ⊃ Hh; `p_high` holds `off_duke`, a Crown `Duke` at `D`), plus a
+    SIBLING duchy `D2` under `R` and a SECOND realm `R2` containing nothing of `R`'s. The duke's
+    seat declares the rostered revocation basis."""
+    w, d = _establish_world()
+    w.rungs["D2"] = Rung("D2", "duchy")
+    w.add_tenure(Tenure("t_d2_in_r", "D2", "R", "contain", 0))
+    w.rungs["R2"] = Rung("R2", "realm")
+    w.offices["off_duke"].revocation = _RUNG_ABOVE
+    return w, d
+
+
+def _may_revoke(w, actor, office) -> bool:
+    return _preds._req_revoke(w, Act(id=f"r_{actor}_{office}", actor=actor, verb="revoke",
+                                     payload={"office": office}))
+
+
+def test_13d_i_lb10c_a_titled_seat_is_revocable_only_by_the_seat_above_in_its_faction():
+    """**`LB-10c`, AS RULING (3) RE-POINTS IT.** r2 named it `..._revocable_only_by_a_holder_of_its_
+    domain` and priced it on a three-conjunct `holdings` rule; both predate `ED-IN-0256`, so this
+    asserts the ruling. The target is TITLED (`Duke`, on `titles.domains`), because that is the case
+    the deleted `is_title` branch treated specially.
+
+    Ten candidates, each isolating one way to be WRONG about "rung above of same faction" -- the
+    faction, the parent-vs-ancestor, the rank, the rung, the land, the seat itself -- and EXACTLY ONE
+    is admitted. The loop asserts it ran to completion (`CLAUDE.md` §0.1 pt 2)."""
+    w, _ = _ladder_world()
+    assert title_domain(w.offices["off_duke"].post) == "duchy", "fixture: the target is not a title"
+    _seat_on(w, "c_king", "off_king", "King", "R", "Crown")                  # above, same faction
+    _seat_on(w, "c_rival_king", "off_rival_king", "King", "R", "Hafenmark")  # above, OTHER faction
+    _seat_on(w, "c_far_king", "off_far_king", "King", "R2", "Crown")         # outranks, not above
+    _seat_on(w, "c_peer_duke", "off_peer_duke", "Duke", "D2", "Crown")       # sibling rung
+    _seat_on(w, "c_chancellor", "off_chancellor", "Chancellor", "D", "Crown")  # the SAME rung
+    _seat_on(w, "c_mayor", "off_mayor", "Mayor", "S", "Crown")               # below
+    _seat_on(w, "c_councillor", "off_privy", "Privy Councillor", None, "Crown")  # no rung at all
+    _person(w, "c_landholder")
+    w.add_tenure(Tenure("t_land_r", "c_landholder", "R", "hold", 0))         # HOLDS the rung above
+    candidates = {
+        "c_king": True, "c_rival_king": False, "c_far_king": False, "c_peer_duke": False,
+        "c_chancellor": False, "c_mayor": False, "c_councillor": False, "c_landholder": False,
+        "p_high": False,                                         # the target's own holder
+        "p_other": False,                                        # holds nothing
+    }
+    assert in_holdings(w, "c_landholder", "R"), "fixture: the landholder does not hold the rung"
+    checked, admitted = 0, []
+    for pid, expected in candidates.items():
+        got = _may_revoke(w, pid, "off_duke")
+        assert got is expected, f"{pid}: `_req_revoke` answered {got}, ruling (3) says {expected}"
+        checked += 1
+        admitted += [pid] if got else []
+    assert checked == len(candidates) and checked >= 10, f"the sweep checked {checked}"
+    assert admitted == ["c_king"], admitted
+
+
+def test_13d_i_the_seat_above_of_another_faction_refuses_though_it_meets_the_old_title_rule():
+    """**THE DIFFERENT-FACTION CASE, BUILT TO SATISFY EVERYTHING THE DELETED RULE ASKED.** The
+    rival King sits on the rung above the duchy (so the old containment purview held), OUTRANKS a
+    duke (realm over duchy in `rung_kinds`), and HOLDS THE DUCHY (`in_holdings`) -- the 2026-09-02
+    title rule's three conjuncts, all true. Ruling (3) refuses him on the one thing that differs:
+    his faction. The control is his Crown twin in the same world, identical but for the faction."""
+    w, _ = _ladder_world()
+    for pid, oid, fac in (("c_rival_king", "off_rival_king", "Hafenmark"),
+                          ("c_king", "off_king", "Crown")):
+        _seat_on(w, pid, oid, "King", "R", fac)
+        w.add_tenure(Tenure(f"t_land_d_{pid}", pid, "D", "hold", 0))
+        assert in_holdings(w, pid, "D"), f"fixture: {pid} does not hold the duchy"
+    assert RUNG_KINDS.index(w.rungs["R"].kind) > RUNG_KINDS.index(w.rungs["D"].kind)
+    assert world_q.parent_of(w, "D") == "R", "fixture: the King's rung is not above the duchy"
+    assert w.offices["off_rival_king"].faction != w.offices["off_duke"].faction
+    assert not _may_revoke(w, "c_rival_king", "off_duke"), (
+        "a higher-ranked seat of ANOTHER faction, on the rung above and holding the duchy, stripped "
+        "the duke -- the rewrite is still the purview/holdings/rank conjunction")
+    assert _may_revoke(w, "c_king", "off_duke"), "control: the same-faction twin is refused"
+
+
+def test_13d_i_one_rule_at_every_depth_and_no_title_branch():
+    """GENERAL OVER ANY SEAT AND ANY DEPTH (`CLAUDE.md` §0 -- never special-case). Three depths --
+    a duchy under a realm, a settlement under a duchy, a hearth under a settlement -- and at the
+    settlement a TITLED seat (`Mayor`) and an UNTITLED one (`Reeve`) side by side. Each is
+    revocable by the seat on its parent rung and by nothing further up; the titled and untitled
+    seats answer identically, which is `H-109` closed as a behaviour, not as a grep."""
+    w, _ = _ladder_world()
+    _seat_on(w, "c_king", "off_king", "King", "R", "Crown")
+    _seat_on(w, "c_mayor", "off_mayor_s", "Mayor", "S", "Crown")
+    _seat_on(w, "p_mid", "off_reeve_s", "Reeve", "S", "Crown")
+    _seat_on(w, "p_low", "off_head_hh", "Family Head", "Hh", "Crown")
+    for oid in ("off_mayor_s", "off_reeve_s", "off_head_hh"):
+        w.offices[oid].revocation = _RUNG_ABOVE
+    assert title_domain("Mayor") and title_domain("Reeve") is None, "fixture: titled/untitled pair"
+    cases = [
+        ("off_duke", "c_king", True), ("off_duke", "c_mayor", False),
+        ("off_mayor_s", "p_high", True), ("off_mayor_s", "c_king", False),   # grandparent
+        ("off_reeve_s", "p_high", True), ("off_reeve_s", "c_king", False),
+        ("off_head_hh", "c_mayor", True), ("off_head_hh", "p_high", False),  # grandparent
+    ]
+    checked = 0
+    for oid, pid, expected in cases:
+        assert _may_revoke(w, pid, oid) is expected, (oid, pid, expected)
+        checked += 1
+    assert checked == len(cases) >= 8
+    assert [_may_revoke(w, p, "off_mayor_s") for p in ("p_high", "c_king")] == \
+        [_may_revoke(w, p, "off_reeve_s") for p in ("p_high", "c_king")], (
+            "a titled and an untitled seat on the same rung answer differently -- an is_title branch")
+
+
+def test_13d_i_the_revocation_basis_is_a_rostered_value_and_gates_the_rule():
+    """The right revoker is refused unless the seat DECLARES a rostered basis: `None` (strippable by
+    nobody, r2's `none`), r2's superseded `purview` (hand-mutated past the constructor), and the
+    rostered value, in that order, on one seat and one actor. And the constructor refuses to build
+    a seat declaring the off-roster value -- the `remit_acts` refusal's shape, one field along."""
+    w, _ = _ladder_world()
+    _seat_on(w, "c_king", "off_king", "King", "R", "Crown")
+    seat = w.offices["off_duke"]
+    seen = []
+    for basis, expected in ((None, False), ("purview", False), (_RUNG_ABOVE, True)):
+        seat.revocation = basis
+        seen.append(_may_revoke(w, "c_king", "off_duke"))
+        assert seen[-1] is expected, (basis, seen[-1])
+    assert seen == [False, False, True], seen
+    assert set(REVOCATION_BASES) == {_RUNG_ABOVE}, sorted(REVOCATION_BASES)
+    with pytest.raises(Unspecified):
+        Office("off_x", "Reeve", "S", [], faction="Crown", revocation="purview")
+    assert Office("off_y", "Reeve", "S", [], faction="Crown", revocation=_RUNG_ABOVE).revocation
+
+
+def test_13d_i_the_conferral_basis_is_roster_membership_not_a_nonempty_string():
+    """**THE BEHAVIOUR CHANGE, STATED.** Before `13d-i` `has_conferral_basis` admitted any non-empty
+    string -- including the free fixture string `test_season_shape.py` used, which is asserted
+    REFUSED here. Now: every member of `conferral_bases` passes (all three iterated, not one
+    sampled), an off-roster string and `None` refuse, through `has_conferral_basis` AND through
+    `_req_confer` on an unheld office. The constructor refuses to BUILD the off-roster value, so
+    that arm is reached by hand-mutation -- the predicate is tested on what it reads."""
+    w, _ = _establish_world()
+    off = w.offices["off_dicastery"]
+    conf = Act(id="c_b", actor="p_high", verb="confer",
+               payload={"office": "off_dicastery", "to": "p_mid"})
+    checked = 0
+    for basis in sorted(CONFERRAL_BASES):
+        off.conferral = basis
+        assert _preds.has_conferral_basis(off) and _preds._req_confer(w, conf), basis
+        checked += 1
+    assert checked == len(CONFERRAL_BASES) >= 3, checked
+    for basis in (None, "something-not-on-the-roster", "the duke's remit (harness fixture)", ""):
+        off.conferral = basis
+        assert not _preds.has_conferral_basis(off), f"{basis!r} passed the basis test"
+        assert not _preds._req_confer(w, conf), f"`_req_confer` admitted {basis!r}"
+    with pytest.raises(Unspecified):
+        Office("off_x", "Reeve", "S", [], faction="Crown", conferral="something-not-on-the-roster")
+
+
+def test_13d_i_an_off_roster_conferral_on_establish_refuses_and_raises_nothing():
+    """`13f`'s contract under the new test: `_req_establish` translates the constructor's new
+    refusal to False, so an `establish` naming an off-roster basis emits `establish.refused`,
+    constructs nothing, and lets no exception escape the fold. Every rostered basis founds."""
+    w, d = _establish_world()
+    act = Act(id="e_offroster", actor="p_high", verb="establish",
+              payload=_founding(conferral="something-not-on-the-roster"))
+    with pytest.raises(Unspecified):
+        office_described_by(act)
+    out = d.resolve([act], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert "off_reeve" not in w.offices
+    founded = 0
+    for i, basis in enumerate(sorted(CONFERRAL_BASES)):
+        out = _establish(w, d, f"e_ok_{i}", _founding(office=f"off_reeve_{i}", conferral=basis))
+        assert [e.kind for e in out] == ["office.established"], (basis, [e.kind for e in out])
+        founded += 1
+    assert founded == len(CONFERRAL_BASES) >= 3
+
+
+def test_13d_i_the_title_in_a_body_refusal_is_rehomed_not_dropped():
+    """Item (4), r2 `03` SC-5: *"deleting the title helpers loses no constructor invariant"*. The
+    refusal is now a function of its own (`state/carriers.py::refuse_a_title_in_a_body`), which
+    the constructor still calls and `offices.yaml`'s loader will. Asserted on BOTH routes, for EVERY
+    title on the roster (counted), with the message naming the title AND the body; and the two
+    non-cases -- a title with no body, a non-title in a body -- pass."""
+    checked = 0
+    for ttl in sorted(TITLE_DOMAINS):
+        with pytest.raises(Forbidden) as direct:
+            refuse_a_title_in_a_body("off_t", ttl, "Imperial Court")
+        with pytest.raises(Forbidden) as built:
+            Office("off_t", ttl, None, [], body="Imperial Court")
+        for exc in (direct.value, built.value):
+            assert repr(ttl) in str(exc) and "'Imperial Court'" in str(exc), str(exc)
+        checked += 1
+    assert checked == len(TITLE_DOMAINS) >= 11, checked
+    refuse_a_title_in_a_body("off_t", "King", None)                  # a title held at a rung
+    refuse_a_title_in_a_body("off_t", "Chancellor", "Imperial Court")  # an office in an organ
+    assert Office("off_t", "Chancellor", None, [], body="Imperial Court").faction == "Crown"
+
+
+def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_other_faction():
+    """§0.2 -- DONE MEANS IT RUNS. Planted `revoke` acts through the resolver, both revokers seated
+    with `revoke` in their grant so eligibility passes and the PREDICATE decides: the other
+    faction's King first (`revoke.refused`; the duke's `hold` survives), then the Crown King
+    (`tenure.closed`; it does not). Asserted on the Events."""
+    w, d = _ladder_world()
+    _seat_on(w, "c_rival_king", "off_rival_king", "King", "R", "Hafenmark", remit=("revoke",))
+    _seat_on(w, "c_king", "off_king", "King", "R", "Crown", remit=("revoke",))
+    held = lambda: [t for t in w.tenures if t.kind == "hold" and t.object == "off_duke" and t.live]
+    assert held(), "fixture: nobody holds the duke's seat"
+
+    def run(aid, actor):
+        return [e.kind for e in d.resolve(
+            [Act(id=aid, actor=actor, verb="revoke", payload={"office": "off_duke"})],
+            contest_max_depth=w.fixtures.get("contest_max_depth"))]
+
+    assert run("rv_rival", "c_rival_king") == ["revoke.refused"]
+    assert held(), "the other faction's King closed the duke's hold"
+    kinds = run("rv_king", "c_king")
+    assert "tenure.closed" in kinds and "revoke.refused" not in kinds, kinds
+    assert not held(), "the fold accepted the revocation and the duke's hold survived"

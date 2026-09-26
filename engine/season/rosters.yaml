@@ -802,11 +802,11 @@ rosters:
       govern any of their holdings in their stead"* — a governor for a duchy (which is how regency
       and puppet rulers arise), a council for a province, mayoral elections for a settlement. NOT
       BUILT: this roster is the ladder only, and delegation is registered as open.
-      ⚠ AND THE REVOCATION RULE, WHICH IS TWO RULES AND NOT ONE. This note said only *"authority
-      over a governance act is RANK + CONTAINMENT … and not `remit:<act>`"*, full stop, while the
-      mechanism ran a two-rule branch — so the data file's prose and the code it feeds disagreed,
-      which is precisely the §0.05 failure of treating a note as if it were the mechanism. Both
-      rules, as Jordan stated them:
+      ⚠⚠ THE REVOCATION RULE BELOW IS SUPERSEDED (`13d-i`, 2026-09-26) BY ED-IN-0256 ruling (3),
+      *"rung above of same faction"* -- `revocation_bases`. `_req_revoke` no longer reads this
+      roster, and `title_rank`/`titles_held`/`highest_title_rank` are deleted. What still reads it
+      is `title_domain`: world-gen (`harness/populated.py`) and two `Office.__post_init__` clauses.
+      The two 2026-09-02 rules, kept as the record of what the ruling replaced:
         · an ORDINARY office — *"a Duke can revoke office from any individual in that office so
           long as that office is for a holding under their purview"* — purview alone;
         · a TITLE — *"King/Queen cannot revoke title of Duke/Duchess if they do not have duchy is
@@ -1274,6 +1274,40 @@ rosters:
       `04 §B.13`'s own line makes a fixture: *"a number standing free of any roster is a
       fixture"*. R7 (ED-IN-0205) moved it off `total`; this roster says nothing about that.
     values: [total, presence_only, all_five]
+
+  conferral_bases:
+    source: "JORDAN, ED-IN-0256 ruling (2), 2026-09-18, VERBATIM: *\"appointed, elected, annex\"* -- HOW A SEAT IS FILLED. Plan position `13d-i`."
+    open: false
+    note: >-
+      ⚠ THE VALUES ARE THE RULING'S, THE SHAPE IS r2's (`proposals/2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md`
+      §A.4). r2 spelled this roster `[confer, determine, succeed]`, keyed on the ACT that opens
+      the hold; that list predates ED-IN-0256 and is superseded by it. The two vocabularies do not
+      correspond by name, so no r2 seat's value carries over -- a seat's basis is authored against
+      THIS list. `open: false`: a fourth way to fill a seat is a design change, not a table edit.
+      READ BY: `Office.__post_init__`, which refuses a declared basis off this list (the
+      `remit_acts` refusal's shape, so a typo is loud rather than a seat nobody can ever fill), and
+      `loop/predicates.py::has_conferral_basis`, the ONE basis test `_req_confer` and
+      `_req_establish` share. ⚠ NOTHING DISCRIMINATES BETWEEN THE THREE YET: `confer` admits a seat
+      declaring any of them. Which act fills an `elected` or an `annex` seat is not ruled, and no
+      election or annexation verb exists; narrowing `confer` to `appointed` would leave the other
+      two seats fillable by nothing.
+    values: [appointed, elected, annex]
+
+  revocation_bases:
+    source: "JORDAN, ED-IN-0256 ruling (3), 2026-09-18, VERBATIM: *\"rung above of same faction\"* -- WHO MAY STRIP A SEAT. Plan position `13d-i`; closes the `is_title` branch (`H-109`)."
+    open: false
+    note: >-
+      ⚠ ONE VALUE, BECAUSE ONE RULE WAS RULED. The holder of a seat on the rung DIRECTLY ABOVE the
+      seat's own rung, in the SAME faction -- structural, NOT a rank comparison, and applied to
+      every seat alike. It replaces both of the 2026-09-02 rules the `titles` note above records
+      (purview for an office; purview + holdings + higher rank for a title) and r2's
+      `[purview, holdings, none]`. A seat with NO declared basis (`None`) is revocable by nobody,
+      which is what r2's `none` meant; it needs no member of its own.
+      ⚠ THIS ROSTER NAMES THE BASIS AND NOTHING ELSE -- the `fan_out_modes` split above. The rule
+      is BEHAVIOUR and lives in `loop/predicates.py` (`REVOCATION_RULES`), which refuses at IMPORT
+      if a member here has no rule there or the reverse, so the roster cannot grow a value the
+      resolver silently treats as another.
+    values: [rung_above_same_faction]
 
 tables:
 

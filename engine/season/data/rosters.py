@@ -4,7 +4,7 @@ decomposition, a PURE MOVE: no behaviour changed, only where the code lives).
 Owns everything that loads or reads `rosters.yaml`: the closed-set/mapping readers (`roster`,
 `roster_map`, `table`, `table_meta`), the roster constants bound at import (Jordan 2026-09-02 --
 "I do not want definitions etc to be hardcoded"), and the two lookups that resolve canon's own
-axes rather than the game's (`office_faction`, `title_domain`/`title_rank`).
+axes rather than the game's (`office_faction`, `title_domain`).
 
 Also owns `load_yaml` -- the one YAML reader every loader in this package shares, so a duplicate
 mapping key raises instead of `safe_load`'s silent last-one-wins. It lives here rather than
@@ -245,6 +245,8 @@ def roster_map(name: str, key: str) -> dict:
     `title_domain` returns `None` for every post, `target_is_title` becomes universally false, and
     `_req_revoke` SILENTLY REVERTS TO PURVIEW-FOR-EVERYTHING -- the reading Jordan's fourth
     message exists to forbid. A guard that fails open into the ruled-against behaviour.
+    (That consequence is history since `13d-i`, 2026-09-26, which deleted `target_is_title`; the
+    refusal still guards every mapping read here.)
 
     One owner, so a third mapping inherits the refusal by existing (§8). Found by the
     governance-canon adversarial pass."""
@@ -360,6 +362,12 @@ HOLD_SUBJECT_KINDS = roster("hold_subject_kinds")
 VERB_CAPABILITY = roster_map("verb_capability", "values")
 RUNG_KINDS = roster("rung_kinds", ordered=True)
 REMIT_ACTS = roster("remit_acts")
+# ED-IN-0256 rulings (2) and (3), plan position `13d-i`: HOW A SEAT IS FILLED and WHO MAY STRIP IT.
+# Bound at import for `TITLE_DOMAINS`' reason below -- an unbound roster is the one whose absence
+# goes unnoticed. `Office.__post_init__` refuses a declared basis off either; the predicates in
+# `loop/predicates.py` read them.
+CONFERRAL_BASES = roster("conferral_bases")
+REVOCATION_BASES = roster("revocation_bases")
 # ⚠ A TESTING FIXTURE, NOT CANON — see the roster's own note. Jordan, 2026-09-18: "for testing
 # purposes for now, just build out a generic remit". It fills an EMPTY remit and never overwrites
 # a grounded one.
@@ -451,6 +459,10 @@ WOUND_HARM_MODELS = roster("wound_harm_models")
 # lazily through a bare `_ROSTERS.get(...) or {}`, so it alone got no existence refusal -- and
 # because `_req_revoke` fails OPEN into purview-for-everything when the mapping is empty, the one
 # unbound roster was the one whose absence silently restores a ruled-against behaviour.
+# ⚠ (`13d-i`, 2026-09-26) `_req_revoke` NO LONGER READS IT -- revocation is `revocation_bases`
+# (ED-IN-0256 ruling (3)), so the fail-open above is history. An empty mapping would now make
+# every post a non-title: `Office` would stop refusing a title in a body and `build_realm` would
+# seat no titled office. Still worth the import-time refusal.
 TITLE_DOMAINS = roster_map("titles", "domains")
 
 # ⚠ THE OFFICE'S THREE CANON AXES -- `H-99`, and they are BOUND AT IMPORT for the reason the
@@ -522,21 +534,16 @@ def office_faction(body: str | None, declared: str | None) -> str:
     return declared
 
 
-# `title_domain`/`title_rank` -- RELOCATED FROM shape.py's governance slice (step 2). Both
-# are pure roster reads (`TITLE_DOMAINS`, `RUNG_KINDS`), not verbs, so they belong beside
-# the rosters they read rather than beside the governance verbs that call them.
+# `title_domain` -- RELOCATED FROM shape.py's governance slice (step 2). A pure roster read
+# (`TITLE_DOMAINS`), not a verb, so it belongs beside the roster it reads rather than beside the
+# governance verbs that once called it.
+# ⚠ `title_rank` IS DELETED (`13d-i`, 2026-09-26). Its one decision was `_req_revoke`'s
+# strictly-higher-rank conjunct, and ED-IN-0256 ruling (3) makes revocation *"rung above of same
+# faction"* -- structural, not a rank comparison. `title_domain` SURVIVES THAT POSITION, and not by
+# choice: `harness/populated.py`'s office seating calls it to decide who holds a titled seat and
+# at which rung (the deferred `offices.yaml` unit's to replace), and `Office.__post_init__`'s
+# title-in-a-body refusal cannot be stated without it (see `state/carriers.py`).
 def title_domain(post: Optional[str]) -> Optional[str]:
     """The rung kind a title governs, from `rosters.yaml: titles`. `None` for a post that is not
     a title — a Dicastery is an office, not a rank."""
     return TITLE_DOMAINS.get(str(post or ""))
-
-
-def title_rank(post: Optional[str]) -> int:
-    """A title's rank as its domain's ordinal in `rung_kinds`. Higher governs wider.
-
-    ⚠ RANK IS NOT A SECOND LADDER. `rung_kinds` is already ordered person → realm, and each title
-    names the rung kind it governs, so the ordering falls out of a roster that exists rather than
-    from a number somebody assigns. `-1` for a non-title."""
-    dom = title_domain(post)
-    return -1 if dom is None else (list(RUNG_KINDS).index(dom)
-                                              if dom in RUNG_KINDS else -1)
