@@ -1,5 +1,5 @@
 """
-sim/autoload/game_state.py — Global mutable state container — factions, territories, world tracks
+engine/autoload/game_state.py — Global mutable state container — factions, territories, world tracks
 
 Canon source: designs/architecture/complete_systems_reference.md;
               [FORK: mc_v17.py starting state tables — ref c451bcb, superseded by mc_v18,

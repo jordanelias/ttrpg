@@ -1,7 +1,9 @@
 """engine/substrate/canon_buckets.py — continuous → canonical-index bucketing helpers.
 
 Relocated `canonical_accord` out of `engine/autoload/game_state.py` (OI-52a, ED-IN-0097,
-`audit/2026-07-29-code-shape-open-items/01_orchestration_plan_v1.md` §3 Wave 4 item 2, 2026-07-29).
+`audit/2026-07-29-code-shape-open-items/01_orchestration_plan_v1.md` §3 Wave 4 item 2, 2026-07-29 --
+path unresolved after the `audit/` -> `.audit/` rename, ED-IN-0231; the surviving `.audit/` corpus
+carries no directory by this name).
 
 WHY. `structure_audit.py` flagged a 2-node import cycle: `engine.autoload.game_state` lazily
 imports `systems.world.sim.npe.NPC` inside `restore_world` (game_state.py:370), and
@@ -15,7 +17,8 @@ threshold comparisons, with no dependency on `game_state`'s `World`/`Territory`/
 `ACCORD_MAP` state at runtime (its docstring documents the `ACCORD_MAP` thresholds it mirrors,
 it does not read the dict). That makes it a substrate-tier leaf both `game_state` and `npe` can
 import at module top level without recreating the cycle: `engine/substrate/` already has no
-internal dependents (see `engine/substrate/keys.py`, `engine/substrate/stubwire.py`), so adding
+internal dependents (see `engine/substrate/stubwire.py`; `keys.py`, the other worked example this
+line used to cite, retired under ED-IN-0232), so adding
 this here breaks the npe→game_state edge outright rather than merely deferring it.
 
 `game_state.py` re-exports `canonical_accord` from here (`from engine.substrate.canon_buckets

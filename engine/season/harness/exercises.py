@@ -52,9 +52,8 @@ from __future__ import annotations
 import hashlib
 import re
 
-import yaml
-
 from ..data import files
+from ..data.rosters import load_yaml
 from .register import REG_ID_RE as REG_ID
 
 OVERLAY = files.EXERCISES_DIR
@@ -111,7 +110,7 @@ def load() -> dict:
     two files cannot annotate one row with different answers."""
     out: dict = {}
     for f in sorted(OVERLAY.glob("*.yaml")):
-        doc = yaml.safe_load(f.read_text()) or {}
+        doc = load_yaml(f.read_text()) or {}
         cid = doc.get("case")
         if not cid:
             raise SystemExit(f"{f.name}: no `case:` key")

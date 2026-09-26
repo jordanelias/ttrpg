@@ -35,7 +35,8 @@ sweep arm that wants to substitute one must name the module the reader lives in:
 
 Re-exporting either from here would let a reader rebind THIS namespace and silently miss the
 reader -- step 8's `_LADDER` lesson, where a rebound value re-exported is a stale snapshot. The
-suite and `proposals/2026-09-04-degree-sweep/sweep_core.py` name the owning modules for this
+suite and `engine/reference/degree-sweep/sweep_core.py` (moved from `proposals/2026-09-04-degree-sweep/`)
+name the owning modules for this
 reason; a rebind that reaches the wrong namespace does not fail loudly, it reports every branch
 identical, which is the fabricated null `CLAUDE.md` §0.1 pt 4 calls the worse direction.
 

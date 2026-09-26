@@ -40,7 +40,7 @@ from ..data.rosters import (
     BODY_FACTION, BODY_FUNCTION, CLAIM_SOURCES, CLAIM_SUBJECT_RULES, COMBAT_BANDS, PURSUIT_AXES, PURSUITS, FACTIONS, FELLED, QUESTION_SOURCES, REMIT_ACTS, ROLE_TEMPLATE_OF, ROSTERS_YAML, RUNG_KINDS, SCENE_PACKING_RULES, STRATA, TENURE_KINDS, TITLE_DOMAINS, UNTOUCHED, VIEW_BUILDER_RULES, WITNESS_CHANNELS, WOUNDED, _ROSTERS, load_yaml, office_faction, roster, roster_map, title_domain, title_rank,
 )
 from ..data.verbs import (
-    ALIGNMENT_SWEEP, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, alignment_at, rows_without_a_producer,
+    ALIGNMENT_SWEEP, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, alignment_at, rows_without_a_producer, tenure_kinds_without_an_opener,
 )
 from .. import decision
 from ..decision import (
@@ -167,9 +167,12 @@ def test_d1_the_partition_is_not_invented():
     assert MATRIX, "the write matrix loaded empty -- nothing was checked"
     for (kind, fname), row in MATRIX.items():
         assert row.by.strip(), f"({kind}, {fname}) carries no provenance"
-    for kind, fname in (("Person", "pursuits"), ("Person", "beliefs")):
+    # ⚠ `(Person, beliefs)` LEFT THIS LOOP 2026-09-25: row and carrier field were deleted together
+    # (`04:179`, PART D row 44 -- a belief is a `commit` to an OUGHT). It must now refuse as RETIRED.
+    for kind, fname in (("Person", "pursuits"),):
         social, by = partition_lookup(kind, fname)
         assert social is True and by.strip(), f"({kind}, {fname}) has a row but no usable grade"
+    assert ("Person", "beliefs") in MATRIX_RETIRED and ("Person", "beliefs") not in MATRIX
 
 
 def test_d1b_a_field_cannot_ride_on_another_fields_matrix_row():
@@ -373,7 +376,9 @@ def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
     were indistinguishable. Now confidence decays, the product is non-monotonic in age, and a
     claim at confidence 0 is evicted first however recent it is. That is the difference the test
     is supposed to be about, and the string could not see it. Found by the `W4` adversarial pass."""
-    ranked = lambda claims: sorted(claims, key=lambda c: c.confidence * (c.when + 1))
+    # THE LIVE COMPARATOR, NOT A COPY: `state/ledgers.py` owns it since 2026-09-25 (04 §A.2:149).
+    from ..state import ledgers
+    ranked = lambda claims: sorted(claims, key=lambda c: ledgers.eviction_key(c.confidence, c.when))
     old_and_confident = Claim("a", "p", "s", "k", True, when=0, source="f",
                                 confidence=100, visibility="own")
     # [JUSTIFIED: a fixture tick, chosen only to be recent relative to `recent_mid` below]
@@ -395,8 +400,10 @@ def test_d9b_eviction_ranks_on_the_product_not_lexicographically():
         f"the product ranks {[c.id for c in got]}; a lexicographic (confidence, when) sort would "
         "rank ['e', 'c', 'd'] — the recent mid-confidence claim first. That is the comparator this "
         "test exists to exclude, and it is now excluded by BEHAVIOUR")
-    # AND THE LIVE COMPARATOR IS THE ONE MEASURED ABOVE, not a copy of it in this file.
-    assert "c.confidence * (c.when" in inspect.getsource(SeasonDriver.witness)
+    # AND THE LIVE COMPARATOR IS THE ONE MEASURED ABOVE, not a copy of it in this file: its owner
+    # states the product, and WITNESS's eviction write calls that owner rather than a local key.
+    assert "confidence*(recency+1)" in "".join(_code_only(inspect.getsource(ledgers.eviction_key)).split())
+    assert "ledgers.evict_over_cap(" in "".join(_code_only(inspect.getsource(SeasonDriver.witness)).split())
 
 
 def test_d9c_max_depth_has_no_default_anywhere():
@@ -425,7 +432,8 @@ def test_d9d_the_frozen_world_is_read_not_merely_written():
     """S32 rest 1 is the FIRST thing order-independence rests on. Rev 1 set w.frozen and
     nothing ever read it."""
     with pytest.raises(Forbidden):
-        SeasonDriver(_w()).deliberate(lambda p, v, s, ask_budget: [], None, P.SUBSIST)
+        d = SeasonDriver(_w())
+        d.deliberate(lambda p, v, s, ask_budget: [], None, P.SUBSIST, d._questions_at_barrier())
 
 
 def test_d9e_the_rung_guard_is_a_whitelist_not_a_blacklist():
@@ -733,14 +741,32 @@ def test_h115_the_fourteen_load_time_raises_are_unchanged():
     -> *"neither binds nor admits that operand (carriable: nothing -- the row is UNTYPED)"*. Both
     are pinned by their own tests in `test_governance_build.py`
     (`test_lb6d_a_row_without_the_column_is_refused_at_load`,
-    `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load`)."""
+    `test_lb6d_an_operand_beneficiary_the_row_cannot_carry_is_refused_at_load`).
+
+    ⚠ 36 -> 39, 2026-09-25, THREE MORE `04 §B.13` LOADER INVARIANTS, ALL LOAD-TIME. `verbs.py`:
+    #9 (a `contests:` prize outside `contest_subsystems.prizes`) and #4 (a failable clause -- a
+    `requires` cell or a non-`own` eligibility -- with an empty `emits_on_refusal`). `matrix.py`:
+    #10 (a write-matrix row carrying a key outside its seven columns). Each fires while its YAML
+    is being read, so each is fatal and counted here. Falsifiers: each planted on disk, RED
+    naming the row, reverted, GREEN.
+
+    ⚠ 39 -> 40, 2026-09-25, #10's VERB HALF, LOAD-TIME. `verbs.py` refuses a `verb_table.yaml` row
+    carrying a key the loader does not read unless it is an annotation spelled `*_note`; the five
+    dead columns (`writes_grade`, `writes_source`, `eligibility_substitution`,
+    `eligibility_sweep`, `effect`) were renamed to `*_note` form in the same commit.
+
+    ⚠ 40 -> 44, 2026-09-25, #2 AND #6's SECOND HALF, ALL LOAD-TIME (`verbs.py`, after the row
+    loop). #2: a RES matrix row no verb writes that carries no `unproduced:` cell, and an
+    `unproduced:` cell on a row a verb DOES write (stale). #6: `tenure_kinds.openers` not covering
+    exactly the roster, and an opener naming no verb. An EMPTY opener set is reported
+    (`tenure_kinds_without_an_opener`), not raised, so it adds nothing here."""
     mods = _model_modules()
     # [JUSTIFIED: a VACUITY FLOOR over this package's own module count, not a game value -- see the sibling assertion above]
     assert len(mods) >= 8, f"model set collapsed to {len(mods)} — this guard would pass vacuously"
     total = sum(_code_only(m.read_text()).count("raise SystemExit") for m in mods)
     # [JUSTIFIED: a MEASURED PROPERTY OF THIS PACKAGE, not a game value -- the load-time refusals counted across the model set, and the point of pinning it is that a move must not drop one]
-    assert total == 36, (
-        f"{total} load-time exits across the model set, expected 36. Per file: "
+    assert total == 44, (
+        f"{total} load-time exits across the model set, expected 44. Per file: "
         + ", ".join(f"{m.name}={_code_only(m.read_text()).count('raise SystemExit')}"
                     for m in mods if _code_only(m.read_text()).count("raise SystemExit")))
 
@@ -1500,61 +1526,17 @@ def _w15_exclusive():
             fcntl.flock(fh, fcntl.LOCK_UN)
 
 
-def test_w15_every_entrypoint_test_holds_the_serialization_lock():
-    """THE FALSIFIER FOR THE LOCK ABOVE, and the reason it is a test rather than a comment.
-
-    The lock only works while every test that EXECUTES an entrypoint takes it. A third such test
-    added later without `_w15_exclusive`, or the decorator dropped from one of the two, restores
-    the straddle silently — and the symptom would surface on someone else's unrelated PR, days
-    later, exactly as it did on `#423` and `#426`. So the invariant is checked by source, which is
-    the only thing that can see a MISSING wrapper.
-
-    It also pins the placement: a lock inside `PACKAGE` would be swept by `_proposal_files()`.
-
-    ⚠ BOTH HALVES ARE AST, NOT TEXT, AND THREE TEXT DRAFTS FAILED IN THREE DIFFERENT WAYS --
-    which is the argument for the instrument, not a tally of mistakes. `'_run("' in src` matched
-    `_r7_run("`, a different helper that builds a world in-process and writes nothing here. A
-    word boundary still matched `P._run(w, over)`, an unrelated METHOD. And checking the guard by
-    name, `"_w15_exclusive" in src`, was VACUOUS: the sibling's own docstring names the helper, so
-    deleting the actual `with` statement left this test green -- caught only by mutating the lock
-    away and watching this pass, which is what CLAUDE.md §0.1 point 2 asks of any assertion. The
-    third draft then matched ITSELF, on the prose above quoting the pattern it was searching for.
-
-    An `ast.Call` to the NAME `_run` is none of those things: an attribute call has no `.id`, a
-    differently-named helper has a different one, and prose is not a call node at all.
-    """
-    module = sys.modules[__name__]
-    checked = 0
-    for name, obj in vars(module).items():
-        if not (name.startswith("test_") and callable(obj)):
-            continue
-        tree = ast.parse(textwrap.dedent(inspect.getsource(obj)))
-        runs_entrypoint = any(
-            isinstance(node, ast.Call)
-            and getattr(node.func, "id", None) == "_run"
-            and node.args and isinstance(node.args[0], ast.Constant)
-            and isinstance(node.args[0].value, str)
-            for node in ast.walk(tree)
-        )
-        if not runs_entrypoint:
-            continue
-        checked += 1
-        guarded = any(
-            isinstance(node, ast.With)
-            and any(isinstance(it.context_expr, ast.Call)
-                    and getattr(it.context_expr.func, "id", None) == "_w15_exclusive"
-                    for it in node.items)
-            for node in ast.walk(tree)
-        )
-        assert guarded, (
-            f"{name} executes a harness entrypoint but does not hold the w15 lock. Wrap its body "
-            f"in `with _w15_exclusive():` — an unserialized entrypoint test straddles its sibling "
-            f"on another xdist worker and reports that sibling's writes as its own."
-        )
-    # Assert that it asserted (CLAUDE.md §0.1 point 2): if the source scan finds nothing, this
-    # test passes having observed nothing at all, which is the vacuity it is meant to exclude.
-    assert checked >= 2, f"expected at least the two w15 entrypoint tests, scanned {checked}"
-
+def test_w15_the_lock_is_not_swept_by_the_fingerprint_it_protects_against():
+    """`_w15_every_entrypoint_test_holds_the_serialization_lock` LIVED HERE AND WAS DELETED
+    (layer-conformance pass, CLAUDE.md §0.1 pt 5). Its subject was not the entrypoint tests' actual
+    behaviour but whether OTHER TESTS' source held `_w15_exclusive()` — a guard whose subject is
+    another guard, the exact forbidden shape §0.1 pt 5 names. A lane's proposed alternative (move
+    the lock inside `_run()`) was checked and found unsafe: the run_cases test's fingerprinting
+    happens OUTSIDE `_run()`, and the report test's `finally`-restore write does too, so a lock
+    scoped to `_run()` alone would not cover the actual straddle ED-IN-0260 fixed. The real
+    protection — `with _w15_exclusive():` around the two entrypoint tests below — is untouched by
+    that deletion; this is the one piece of the old test worth keeping as a check rather than a
+    comment, since a future edit to `_W15_LOCK` could still regress it."""
     assert PACKAGE not in _W15_LOCK.parents, (
         f"the w15 lock is inside PACKAGE ({_W15_LOCK}); `_proposal_files()` rglobs that tree, so "
         f"the lockfile would be fingerprinted by the test it protects."
@@ -3276,11 +3258,16 @@ def test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner():
     # [JUSTIFIED: matched half of the control pair immediately above]
     assert decision.budget(p, View(p.id, [], 12), fx.get("scene_budget"), fx) > base, (
         "rehoming did not change what `budget` reads, so the office is still invisible to it")
-    # and the barrier does it, so no caller has to remember.
-    src = _code_only(inspect.getsource(SeasonDriver.deliberate))
-    assert "_rehome" in src, (
-        "DELIBERATE does not rehome — every person-side reader is back to depending on whether "
-        "something else read `w.tenures` first")
+    # and the barrier does it, so no caller has to remember. ⚠ THE DRIVER'S BARRIER, NOT
+    # DELIBERATE (2026-09-25, ED-IN-0206): rehoming MUTATES the tenure store, and DELIBERATE owns
+    # nothing (04:158) — so the driver calls it at barrier 2 (04:509), before it enters DELIBERATE.
+    season_src = "".join(_code_only(inspect.getsource(SeasonDriver.season)).split())
+    at_rehome, at_deliberate = season_src.find("w._rehome()"), season_src.find("self.deliberate(")
+    assert at_rehome != -1 and at_deliberate != -1 and at_rehome < at_deliberate, (
+        "the driver does not rehome before DELIBERATE — every person-side reader is back to "
+        "depending on whether something else read `w.tenures` first")
+    assert "_rehome" not in _code_only(inspect.getsource(SeasonDriver.deliberate)), (
+        "DELIBERATE mutates the tenure store again; 04:158 says it owns nothing")
 
 
 def test_w5_the_reporting_guards_are_actually_called():
@@ -3306,6 +3293,10 @@ def test_w5_the_reporting_guards_are_actually_called():
         print(f"    {pair}")
     print(f"  rows on dict-modelled kinds (uncheckable): {len(absent_field['unmodelled'])}")
     print(f"  `social: true` rows no verb writes: {len(no_producer)}")
+    # Loader invariant 6's second half, reported: tenure kinds whose declared opener set is empty.
+    unopened = tenure_kinds_without_an_opener()
+    assert isinstance(unopened, list)
+    print(f"  tenure kinds no act can open: {len(unopened)} {unopened}")
 
     # The two W5 fields are the falsifier: they WERE in `absent` and the fix removed them, so if
     # either regresses out of `Person` this list grows and the assertion below names it.
@@ -9675,7 +9666,8 @@ def test_wb_h40s_decay_sweep_is_re_run_in_every_arm_and_goes_inert_at_total():
 # `W-D` — THE ACCEPTANCE RUN. Does an open §F1 clause 4 make a fork change a LATER DECISION?
 # =================================================================================================
 
-_WD_SWEEP = files.DEGREE_SWEEP_DIR
+_WD_SWEEP = files.DEGREE_SWEEP_DIR  # now `engine/reference/degree-sweep/`; the record stays in
+                                     # `proposals/2026-09-04-degree-sweep/` (ED-IN-0231 precedent)
 
 
 def _wd_arm9():
@@ -10891,7 +10883,7 @@ def _code_only_lines(path: Path) -> list:
 
 
 def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
-    """A CORRECTION TO `verb_table.yaml`, EXECUTED. Its `writes_source:` cell said the band comes
+    """A CORRECTION TO `verb_table.yaml`, EXECUTED. Its `writes_source_note:` cell said the band comes
     from `wound_state[loser]`. `kill / wound` writes on `payload["subject"]` (`_eff_kill`), so on
     a fight the ACTOR loses, the loser's tracker says `felled` and the fold would delete the
     TARGET -- who is standing, unhurt or merely bled. The band is read off the person the writes
@@ -10927,7 +10919,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
     assert [e.kind for e in evs] == ["body.changed"], [(e.kind, e.degree) for e in evs]
     assert "p_mid" in w2.persons, (
         "the subject was deleted by a fight the ACTOR lost -- the band is being read off the "
-        "loser, which is the defect `verb_table.yaml`'s `writes_source:` cell used to specify")
+        "loser, which is the defect `verb_table.yaml`'s `writes_source_note:` cell used to specify")
     assert evs[0].degree == WOUNDED
 
 
@@ -11414,23 +11406,32 @@ def test_u2_the_round_index_is_a_driver_local_and_no_carrier_but_claim_has_one()
         "`Claim.round` is the one exception and it records when a claim landed, not where the loop "
         "is. A second one is a fourth clock arriving as a field")
 
-    src = Path(__file__).resolve().parent.parent / "loop" / "driver.py"
-    tree = _ast.parse(src.read_text())
-    # ⚠ `AugAssign` AS WELL AS `Assign`, BECAUSE THE LINE IS `w.tick += 1`. A scan that counted
-    # only plain assignments read ZERO and would have passed a driver that advanced the clock in
-    # every round — the guard unable to observe the failure it excludes (§0.1 pt 2), caught by
-    # running it.
-    ticks = [n for n in _ast.walk(tree)
-             if isinstance(n, _ast.AugAssign)
-             and isinstance(n.target, _ast.Attribute) and n.target.attr == "tick"]
-    ticks += [n for n in _ast.walk(tree)
-              if isinstance(n, _ast.Assign)
-              for t in n.targets
-              if isinstance(t, _ast.Attribute) and t.attr == "tick"]
+    # ⚠ EVERY `loop/` MODULE, NOT ONLY `driver.py` (`files.loop_modules()`). A fixed path to
+    # `driver.py` alone -- this scan's own shape until this line -- went narrow the moment the six
+    # steps left it for their own modules at unit L5 (ED-IN-0206); it would have reported clean over
+    # a `.tick` write planted in any of the other five, the fifth documented recurrence of exactly
+    # this narrowing in this package.
+    ticks = []
+    scanned = 0
+    for src in files.loop_modules():
+        tree = _ast.parse(src.read_text())
+        scanned += 1
+        # ⚠ `AugAssign` AS WELL AS `Assign`, BECAUSE THE LINE IS `w.tick += 1`. A scan that counted
+        # only plain assignments read ZERO and would have passed a driver that advanced the clock in
+        # every round — the guard unable to observe the failure it excludes (§0.1 pt 2), caught by
+        # running it.
+        ticks += [n for n in _ast.walk(tree)
+                 if isinstance(n, _ast.AugAssign)
+                 and isinstance(n.target, _ast.Attribute) and n.target.attr == "tick"]
+        ticks += [n for n in _ast.walk(tree)
+                  if isinstance(n, _ast.Assign)
+                  for t in n.targets
+                  if isinstance(t, _ast.Attribute) and t.attr == "tick"]
+    assert scanned >= 5, f"only {scanned} loop/ modules found — guard vacuous"
     assert len(ticks) == 1, (
-        f"{len(ticks)} assignments to `.tick` in loop/driver.py. The season advances the clock "
-        "ONCE (D-45); a round that advanced it would be a tick, and the scene tick's whole claim "
-        "is that it is not one")
+        f"{len(ticks)} assignments to `.tick` across loop/'s {scanned} modules. The season advances "
+        "the clock ONCE (D-45); a round that advanced it would be a tick, and the scene tick's "
+        "whole claim is that it is not one")
 
 
 def test_a_telling_deposits_what_was_told_and_the_teller_is_not_told_their_own_news():

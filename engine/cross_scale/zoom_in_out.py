@@ -1,5 +1,5 @@
 """
-sim/cross_scale/zoom_in_out.py — Zoom In/Out protocol (§4)
+engine/cross_scale/zoom_in_out.py — Zoom In/Out protocol (§4)
 
 Canon source: designs/architecture/scale_transitions_v30.md §4
 

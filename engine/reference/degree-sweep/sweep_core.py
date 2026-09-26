@@ -33,7 +33,7 @@ from pathlib import Path
 # from inside this file, four levels away from the change. Dotted imports also end the second
 # identity the flat form created: a module reachable as both `shape` and `engine.season.shape` is
 # two module objects with two sets of module-level state in one process.
-_REPO_ROOT = Path(__file__).resolve().parents[2]
+_REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 

@@ -1,5 +1,5 @@
 """
-sim/tests/test_parliamentary_action.py — Parliamentary Sanction (Censure tier) mechanism oracle
+engine/tests/test_parliamentary_action.py — Parliamentary Sanction (Censure tier) mechanism oracle
 
 Guards systems/factions/sim/parliamentary_action.py — the ED-SC-0007 residual "parliamentary_vote-in-the-
 loop" MECHANISM (proposer/target/declaration authoring for the §10 BG-vote resolver, which shipped

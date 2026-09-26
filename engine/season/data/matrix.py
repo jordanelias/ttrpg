@@ -22,7 +22,7 @@ this module: `_load_write_matrix` below imports it from there rather than owning
 from __future__ import annotations
 
 import enum
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from typing import Optional
 
 from . import files
@@ -110,9 +110,22 @@ class MatrixRow:
     social: Optional[bool]      # None == `n/a`
     by: str
     emits: tuple
+    # ⚠ OPTIONAL, AND ONLY ON A `RES` ROW NO VERB WRITES: `"<hole id or F-tag>: <reason>"`. Loader
+    # invariant 2 (`04 §B.13 #2`, checked in `data/verbs.py` once the verb table exists) refuses a
+    # RES row with no producing verb that does not carry one, and refuses one that carries it
+    # while a verb DOES write the row -- a stale declaration is the same lie in the other
+    # direction. `04:1025` (PART E step 2) records the literal invariant as unsatisfiable today;
+    # this column is how the table says which rows fail it and why, so the check can run at all.
+    unproduced: str = ""
 
     def write_class(self, step: "Step") -> "WriteClass":
         return STEP_CLASS[step]
+
+
+# A row's column set, DERIVED from `MatrixRow` rather than listed: every field the row carries
+# (`unproduced` is the one optional column), plus `class`, the prose column the loader
+# cross-checks against the step->class derivation and does not store (see the CROSS-CHECK below).
+_MATRIX_ROW_KEYS = frozenset(f.name for f in fields(MatrixRow)) | {"class"}
 
 
 def _load_write_matrix() -> dict:
@@ -122,6 +135,15 @@ def _load_write_matrix() -> dict:
     doc = load_yaml(WRITE_MATRIX_YAML.read_text())
     out = {}
     for r in doc["rows"]:
+        # LOADER INVARIANT 10 (`04 §B.13 #10`, `04:470`): UNKNOWN KEYS ARE REJECTED. Every row
+        # carries exactly these seven columns; an eighth is a column nothing reads, and a
+        # misspelled one silently drops the column it meant.
+        extra = sorted(set(r) - _MATRIX_ROW_KEYS)
+        if extra:
+            raise SystemExit(
+                f"write_matrix.yaml ({r.get('kind')}, {r.get('field')}): unknown key(s) {extra}; "
+                f"a row carries exactly {sorted(_MATRIX_ROW_KEYS)}. 04 §B.13 #10 -- unknown keys "
+                "are rejected at load.")
         steps = frozenset(Step[_STEP_OF[s]] for s in r["steps"])
         # roster-exempt: MECHANISM. This parses §G4's three `social:` values into Python; it
         # is the file format, not a definition the game resolves from.
@@ -154,7 +176,8 @@ def _load_write_matrix() -> dict:
                 "One row per (kind, field) -- a duplicate makes the gate's behaviour depend on "
                 "file order.")
         out[key] = MatrixRow(
-            r["kind"], r["field"], steps, social, r["by"], emits)
+            r["kind"], r["field"], steps, social, r["by"], emits,
+            str(r.get("unproduced") or "").strip())
     return out
 
 
@@ -163,11 +186,28 @@ MATRIX: dict[tuple[str, str], MatrixRow] = _load_write_matrix()
 
 # Rows W2 RETIRED, kept so a write to one gets its own diagnosis rather than the generic
 # "no row" -- a retired row and a row that never existed are different facts about the design.
-import yaml as _yaml_boot
+#
+# ⚠ NOT EVERY RETIREMENT IS W2's REASON, AND THE VALUE MUST BE ABLE TO SAY SO. An entry is either
+# a bare string (W2's own shape: no producing verb, no MATTER write) or a mapping with its own
+# `reason`/`needs` -- `Person.beliefs` is retired because #358 rev.2 §D.1.1 DELETES the field, not
+# because nothing produces it, and telling that writer to "add a producing verb" would be advice
+# for the wrong defect. Found by a read-only critic, layer-conformance pass, 2026-09-25.
+_W2_LAW = ("retired by W2 -- its `emits:` kind is produced by no Part E verb "
+           "and written at no MATTER site")
+_W2_NEEDS = "a Part E verb that produces its `emits:` kind, added in the same commit as the row"
+
+
+def _retirement(entry) -> tuple:
+    """`(law, needs)` for one `retired:` entry."""
+    if isinstance(entry, dict):
+        return (entry["reason"],
+                entry.get("needs", "nothing -- the field is gone by design, not by an unmet dependency"))
+    return _W2_LAW, _W2_NEEDS
+
+
 MATRIX_RETIRED: dict = {
-    tuple(x.split(".", 1)): "retired by W2 -- its `emits:` kind is produced by no Part E verb "
-                            "and written at no MATTER site"
-    for x in (_yaml_boot.safe_load(WRITE_MATRIX_YAML.read_text()).get("retired") or [])
+    tuple((x["name"] if isinstance(x, dict) else x).split(".", 1)): _retirement(x)
+    for x in (load_yaml(WRITE_MATRIX_YAML.read_text()).get("retired") or [])
 }
 
 # S320's disclosure hook. W2 empties it BY CONSTRUCTION -- the three rows it used to carry were
@@ -205,11 +245,10 @@ def matrix_row(record_kind: str, fieldname: str) -> MatrixRow:
     if row is not None:
         return row
     if (record_kind, fieldname) in MATRIX_RETIRED:
+        law, needs = MATRIX_RETIRED[(record_kind, fieldname)]
         raise Unspecified(
             f"({record_kind}, {fieldname}) was RETIRED from the write matrix", "S30.1",
-            needs="a Part E verb that produces its `emits:` kind, added in the same commit as "
-                  "the row",
-            law=MATRIX_RETIRED[(record_kind, fieldname)])
+            needs=needs, law=law)
     raise Unspecified(
         f"({record_kind}, {fieldname}) is on no row of the write matrix", "S30.1",
         needs="rule the row first, then add it; the reverse order invents the thing the rule prevents",

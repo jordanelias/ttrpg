@@ -310,9 +310,9 @@ def _register() -> dict:
     row that rests on it -- which is more honest than routing such a row to a probe that happens
     to raise for a different reason."""
     if not _REGISTER:
-        import yaml as _y
+        from ..data.rosters import load_yaml
         path = files.HOLE_REGISTER_YAML
-        for r in (_y.safe_load(path.read_text()) or {}).get("rows") or []:
+        for r in (load_yaml(path.read_text()) or {}).get("rows") or []:
             _REGISTER[r["id"]] = r
     return _REGISTER
 

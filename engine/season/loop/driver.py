@@ -14,12 +14,16 @@ the facade is deleted at step 10"*, of a file step 10 deleted. `resolvable_verbs
 function that stayed, because its callers are all outside `loop/`.
 
 ⚠ **THE IMPORT LIST BELOW IS WIDER THAN THIS MODULE USES**, and that is load-bearing rather than
-untidy: `proposals/2026-09-04-degree-sweep/sweep_core.py` builds a read-only `S` aggregate over the
+untidy: `engine/reference/degree-sweep/sweep_core.py` (moved from `proposals/2026-09-04-degree-sweep/`)
+builds a read-only `S` aggregate over the
 package's owner modules so a frozen measurement's `S.<name>` keeps resolving. ⚠ It is ALSO how a dead
 import can make a rebind silent -- `questions_for` sat here unused, so
 `wd_extra.py`'s `DRV.questions_for = qspy` went on succeeding while reaching nothing after
-`deliberate` moved. Found by the Fable gate on Arc 1; the name is gone and the spy names
-`loop.deliberate`. **A name kept here for the aggregate must not also be a name something rebinds.**
+`deliberate` moved. Found by the Fable gate on Arc 1. ⚠ **THE NAME IS BACK AND LIVE SINCE
+2026-09-25 (ED-IN-0206):** `_questions_at_barrier` builds the per-person question projection at
+barrier 2 and hands it to `deliberate`, which no longer calls `questions_for` itself -- so the spy
+names `loop.driver` again (`wd_extra.py`'s `DRV.questions_for`). **A name kept here for the
+aggregate must not also be a name something rebinds.**
 """
 from __future__ import annotations
 
@@ -54,6 +58,7 @@ from ..queries.person_q import entrenchment
 from ..queries.person_q import LedgerReader
 from ..queries.world_q import WorldReader
 from ..queries.world_q import occasioned_by
+from ..queries.world_q import questions_for
 from ..loop.effects import EFFECTS, effect_for
 from ..loop.predicates import REQUIRES_PREDICATES, requires_predicate
 from .. import decision
@@ -273,11 +278,16 @@ class SeasonDriver:
         # reader in the same commit.
         self._realised: dict = {}
 
-
-
-
-
-
+    # -- the question projection, built at barrier 2 -----------------------
+    def _questions_at_barrier(self) -> dict:
+        """`{person id: Question[]}` -- the per-person projection `04:976` (PART D row 41) says is
+        built at barrier 2, and which DELIBERATE receives rather than reads off the World
+        (`04:158`: it reads a frozen World "for `sense` only"; `04:154`: a decision may read
+        `Question[]`). `since` is SINCE THIS PERSON LAST DELIBERATED (`U2`), exactly the argument
+        DELIBERATE passed when it made this call itself."""
+        w = self.w
+        return {p.id: questions_for(w, p, self._deliberated_at.get(p.id))
+                for p in w.persons.values()}
 
     # -- one season --------------------------------------------------------
     def season(self, choose, question, subsistence,
@@ -362,8 +372,13 @@ class SeasonDriver:
             self.round = r
             # S26.2 again, not a second rule: RESOLVE thaws, so each round re-freezes before its
             # own DELIBERATE. MATTER did the first one.
+            # Barrier 2 (04:509): the tenure store is made whole BEFORE the freeze, by the driver --
+            # the owner of barrier lifetimes (04:155). DELIBERATE owns nothing (04:158). `_rehome`
+            # exists so a Tenure added before its subject Person existed still reaches its owner;
+            # `budget`, `person_side_eligible` and `questions_for` read `p.tenures` directly.
+            w._rehome()
             w.frozen = True
-            acts = self.deliberate(choose, question, subsistence)
+            acts = self.deliberate(choose, question, subsistence, self._questions_at_barrier())
             events = self.resolve(acts, contest_max_depth)
             # ⚠⚠ **WHAT WAS REALISED, AS OPPOSED TO WHAT WAS ATTEMPTED — AND IT CAN ONLY BE KNOWN
             # HERE, AFTER THE FOLD.** `deliberate` records an attempt at RELEASE, because that is

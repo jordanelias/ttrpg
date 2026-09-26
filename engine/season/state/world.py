@@ -80,7 +80,9 @@ MATRIX_REFUSAL_LAW: dict[tuple[tuple[str, str], Step], tuple[str, str]] = {
 # roster-exempt: MECHANISM. The four rows that lost their law to the rekey, listed so each gets
 # its own entry. Which rows these are is derivable from the matrix (`social: true`, Person);
 # the list is a loop over a fix, not a definition.
-for _pk_field in ("pursuits", "beliefs", "scar", "axis_count"):
+# (`beliefs` left this loop 2026-09-25 with its row and its carrier field; a write to it now
+# refuses as RETIRED through `matrix_row`.)
+for _pk_field in ("pursuits", "scar", "axis_count"):
     MATRIX_REFUSAL_LAW[(("Person", _pk_field), Step.MATTER)] = (
         "S3-L4",
         "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY "

@@ -2583,3 +2583,6 @@ Their BUILDERS are forked above; re-running `build_key_graph.py` or `build_contr
 `c6e82105` reproduces them exactly, which is the stronger provenance a generated file can have. -->
 | `architecture/meta/HANDOFF_NEXT.md` | `registers/handoffs/architecture_meta_HANDOFF_NEXT.md` | MOVED |
 | `architecture/HANDOFF_META_ARCHITECTURE.md` | `registers/handoffs/architecture_HANDOFF_META_ARCHITECTURE.md` | MOVED |
+| `proposals/2026-09-04-degree-sweep/sweep_core.py` | `engine/reference/degree-sweep/sweep_core.py` | DONE (2026-09-25, ED-IN-0231 precedent — executed by the blocking `engine/season/tests` suite (`test_season_shape.py`'s W-D acceptance region); moved so the blocking tier depends on no unratified tree. `runs/`, `README.md`, `EXECUTION_PLAN.md` and the remaining arms stay under `proposals/` — record, not instrument; `tools/ci_design_prose_quarantine.py` forbids `.md` under `engine/**` outside `engine/season/**` regardless) |
+| `proposals/2026-09-04-degree-sweep/arm9_forking.py` | `engine/reference/degree-sweep/arm9_forking.py` | DONE (2026-09-25, ED-IN-0231 precedent — same move, same reason; md5-identical content) |
+| `proposals/2026-09-04-degree-sweep/arm9_subj.py` | `engine/reference/degree-sweep/arm9_subj.py` | DONE (2026-09-25, ED-IN-0231 precedent — same move, same reason; md5-identical content) |
