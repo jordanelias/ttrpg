@@ -332,12 +332,46 @@ _FACTIONS = ['Crown', 'Church', 'Hafenmark', 'Varfell']
 #   GOLDEN_WINNERS         = {'Crown': 1, 'Hafenmark': 1, 'Varfell': 6}
 #   GOLDEN_BATTLES_MEAN    = 35.9
 #   GOLDEN_SCENES_RESOLVED = 1072
-GOLDEN_WIN_SHARE = {'Crown': 62.5, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 25.0}
-# GOLDEN_WINNERS mirrors _win_share's raw `wins` dict shape: only factions with >=1 win get a key.
-# Hafenmark alone is absent — it wins 0 of 8 under this arm, as it did under the 2026-08-14 reband.
-GOLDEN_WINNERS = {'Crown': 5, 'Church': 1, 'Varfell': 2}
-GOLDEN_BATTLES_MEAN = 39.1
-GOLDEN_SCENES_RESOLVED = 407  # 1072 -> 407 (ED-IN-0232 — the §10 vote was bus-gated and stops running; the drop is NOT an independent measurement of the spine's share, it is these two numbers subtracted); 975 -> 1072 (ED-SC-0031); 862 -> 858 (fractional pools, 08-21) -> 947 (per-stat floors, 08-22) -> 967 (roster rulings, 08-23)
+# ⚠ RE-PINNED 2026-09-26 (ED-MB-0068 / directive d.1) — A STRATEGIC UNIT'S STARTING MORALE IS NOW
+# DERIVED FROM FACTION STABILITY, superseding the mass_battle_v30.md:230-231 morale
+# starting-formula sentence (NOT PP-711 — PP-711 is the DIFFERENT, live, unaffected
+# battle-boundary morale-reset rule; see ED-MB-0067's third correction row).
+# `massbattle.py:_faction_to_unit` hardcoded `morale=5, morale_start=5` for EVERY faction fed to
+# Military Conquest; it now reads `faction.Sta`, round-half-up (not Python's banker's-rounding
+# `round()` — see `_round_half_up`'s docstring), floored at 1, ceilinged at 7
+# (`_morale_start_from_stability`). `_try_conquest` reaches this on every campaign-reachable
+# conquest, so every seeded battle in this n=8 batch now starts at a Stability-derived morale
+# instead of a flat 5. A RULED MECHANISM CHANGE, not drift. The single-variable guarantee: the
+# `_GarrisonStub` arm (uncontrolled-territory defender) is held at the PRE-change flat 5
+# deliberately, so this move traces to real factions' Stability alone.
+#
+# NOT a balance measurement at n=8, and the balance oracle was NOT run for this pin (§7 demands
+# `tools/balance_oracle.py` at n>=100 for an actual balance claim; a same-commit patch/undo arm —
+# undoing only `_morale_start_from_stability` — is possible and was not ruled out as unreachable,
+# it was simply not run in this pass. A future session making a balance claim about d.1 should run
+# it rather than infer one from this coarse trajectory pin).
+#
+# THESE VALUES WERE COMPUTED BY RUNNING THE CURRENT CODE (`run_campaign(seed=42+i)` for i in
+# range(8)), not derived from an earlier trace — an earlier version of this pin was written before
+# the round-half-up fix (`_round_half_up`) landed and was WRONG after that fix shifted the RNG
+# stream again; do not trust a re-pin here that does not show its own re-verification the same way.
+# Hafenmark now wins seeds 42 and 46 (2/8, not the 1/8 an earlier version of this pin claimed).
+# `test_f7_hafenmark_elimination_lockout` below traces all 8 seeds' territory histories directly:
+# seeds 42 and 46 each lock out Church (not Hafenmark) alone; 45 and 49 lock out BOTH Church and
+# Hafenmark together (confounded — two factions zeroed, not usable for a single-faction lockout
+# check); 43, 44 and 48 lock out nobody; seed 47 is the ONLY seed where Hafenmark alone reaches 0
+# and never recovers while exactly one different faction (Varfell) wins — that is the one the
+# lockout test uses.
+#
+# OLD values, preserved (pre-d.1, flat-morale-5 arm):
+#   GOLDEN_WIN_SHARE = {'Crown': 62.5, 'Church': 12.5, 'Hafenmark': 0.0, 'Varfell': 25.0}
+#   GOLDEN_WINNERS = {'Crown': 5, 'Church': 1, 'Varfell': 2}
+#   GOLDEN_BATTLES_MEAN = 39.1
+#   GOLDEN_SCENES_RESOLVED = 407
+GOLDEN_WIN_SHARE = {'Crown': 25.0, 'Church': 0.0, 'Hafenmark': 25.0, 'Varfell': 50.0}
+GOLDEN_WINNERS = {'Hafenmark': 2, 'Varfell': 4, 'Crown': 2}
+GOLDEN_BATTLES_MEAN = 36.1
+GOLDEN_SCENES_RESOLVED = 503  # 407 -> 503 (ED-MB-0068, d.1: Stability-derived morale shifts every battle's RNG stream); 1072 -> 407 (ED-IN-0232 — the §10 vote was bus-gated and stops running; the drop is NOT an independent measurement of the spine's share, it is these two numbers subtracted); 975 -> 1072 (ED-SC-0031); 862 -> 858 (fractional pools, 08-21) -> 947 (per-stat floors, 08-22) -> 967 (roster rulings, 08-23)
 WALL_TIME_CEILING_S = 90.0  # n=8 runs ~16s; generous headroom for CI variance
 
 _CACHE = {}
@@ -436,24 +470,44 @@ def test_f7_hafenmark_elimination_lockout():
     THE COUNT IS NOW PAIRED WITH THE MECHANISM, because the count alone could never have answered
     that question — which is why this test asked a reader to "investigate" instead of doing so. The
     property assertion below is the one with meaning; the count stays as a trajectory pin.
+
+    ⚠ RE-PINNED 2026-09-26 (ED-MB-0068 / directive d.1) — 0/8 -> 2/8, AND A DIFFERENT SEED NOW
+    CARRIES THE MECHANISM CHECK. Stability-derived morale (see the module-level RE-PINNED block
+    above) shifts every campaign-reachable Military Conquest's RNG stream, and this batch's
+    Hafenmark win moved from a bystander question to a live one: Hafenmark now WINS on seeds 42
+    and 46 (`winners['Hafenmark'] == 2` in the golden above), and seed 44 — the seed this test
+    traced since the 2026-08-27 re-pin — no longer zeroes Hafenmark's territories (its minimum
+    moves 0 -> 1) and its winner is Crown, not Church. None of seeds 42/44/46 can carry the
+    mechanism check as before: 42 and 46 are Hafenmark WINS, not bystander eliminations, and 44 no
+    longer eliminates anyone.
+
+    MEASURED BY RUNNING THE CURRENT CODE, not assumed and not carried over from an earlier trace —
+    an earlier version of this docstring traced seed 47 before the round-half-up rounding fix
+    (`_round_half_up`) landed, and that trace was WRONG after the fix shifted the RNG stream again
+    (it claimed seed 47's winner was Church; it is Varfell). Territory-count traces for all of seed
+    42..49, re-run against the current code: seeds 42 and 46 each lock out Church alone (Hafenmark
+    wins both); seeds 45 and 49 lock out BOTH Church and Hafenmark together (two factions zeroed —
+    confounded, not usable for a single-faction check); seeds 43, 44 and 48 eliminate nobody; seed
+    47 is the ONLY seed where Hafenmark alone reaches 0 (minimum territory counts: Crown 2, Church
+    1, Hafenmark 0, Varfell 4) and never recovers through season 50, while a different single
+    faction (Varfell) wins. That is the same shape the seed-44 trace was pinned for (one faction
+    permanently zeroed, a different faction wins) — only the seed number and the winner moved.
     """
     campaigns = _campaigns42()
     hafenmark_wins = sum(1 for r in campaigns if r.winner == 'Hafenmark')
-    # ⚠ RE-PINNED 1 -> 0 (2026-09-16, ED-IN-0232), and the message below is what decided it rather
-    # than the count. The Key substrate retired, so the campaign runs what used to be the
-    # ECHO_TRANSPORT-off arm; seed 44 — the campaign the 2026-08-27 re-pin was about — no longer
-    # flips to Hafenmark. That is the "shifted RNG stream" half of this assertion's own question,
-    # not the "broken lockout" half: the MECHANISM assertion below runs unchanged and still passes,
-    # which is exactly the distinction it was built to make. 0/8 is also where this pin stood before
-    # ED-SC-0031, so the count is returning to a value this file already recorded.
-    assert hafenmark_wins == 0, (
-        f"Hafenmark won {hafenmark_wins} != 0 — trajectory moved; check the MECHANISM assertion "
+    # ⚠ RE-PINNED 0 -> 2 (2026-09-26, ED-MB-0068) — see the docstring's final paragraph. Seeds 42
+    # and 46 now win for Hafenmark under Stability-derived morale; that is a trajectory move, not a
+    # broken lockout, which is what the MECHANISM assertion below (now traced on seed 47, where
+    # Hafenmark is a bystander again) exists to distinguish.
+    assert hafenmark_wins == 2, (
+        f"Hafenmark won {hafenmark_wins} != 2 — trajectory moved; check the MECHANISM assertion "
         "below before regenerating, since that is the one that distinguishes a broken lockout "
         "from a shifted RNG stream")
 
-    # THE MECHANISM: a faction that reaches 0 territories never holds one again. Measured on the
-    # seed that flipped, which is the campaign this re-pin is about; one extra campaign rather than
-    # eight, because the other seven did not change and re-tracing them buys nothing.
+    # THE MECHANISM: a faction that reaches 0 territories never holds one again. Measured on seed
+    # 47, the seed in THIS batch where Hafenmark alone is eliminated and stays eliminated (see the
+    # docstring); one extra campaign rather than eight, because the other seven did not test the
+    # lockout on Hafenmark specifically.
     from engine.autoload import engine_clock as _clock
     history = []
     _orig = _clock.run_tick
@@ -465,21 +519,15 @@ def test_f7_hafenmark_elimination_lockout():
 
     _clock.run_tick = _traced
     try:
-        flipped = run_campaign(seed=44, max_seasons=50)
+        flipped = run_campaign(seed=47, max_seasons=50)
     finally:
         _clock.run_tick = _orig
 
-    # ⚠ TWO PRECONDITIONS HERE INVERTED ON 2026-09-16 (ED-IN-0232), and they inverted TOWARD a
-    # stronger test rather than away from one, which is why they are re-pinned rather than dropped.
-    # Both were bookkeeping about the 2026-08-27 re-pin, not about the lockout: seed 44 was traced
-    # because it was the campaign that had flipped to Hafenmark, and the last line asserted
-    # Hafenmark never reached 0 there — i.e. that the winner was an untouched bystander, so the
-    # loop above was exercising some OTHER faction or nothing at all.
-    #
-    # With the Key bus retired the campaign runs the old flag-OFF arm, and on seed 44 Hafenmark now
-    # reaches 0 and never returns while Church wins. So the faction the loop examines is the one
-    # this test is named for, and the lockout is genuinely under test instead of incidentally so.
-    assert flipped.winner == 'Church', f"seed 44 winner moved ({flipped.winner})"
+    # ⚠ RE-POINTED 2026-09-26 (ED-MB-0068) from seed 44 to seed 47 — see the docstring. Hafenmark
+    # reaches 0 there and never returns while Varfell wins, so the faction the loop examines below
+    # is the one this test is named for, exactly as seed 44 served before Stability-derived morale
+    # moved its trajectory off the lockout.
+    assert flipped.winner == 'Varfell', f"seed 47 winner moved ({flipped.winner})"
     assert len(history) >= 50, f"the trace captured {len(history)} seasons — it is not running"
     checked = 0
     for faction in history[0]:
@@ -494,12 +542,12 @@ def test_f7_hafenmark_elimination_lockout():
             "trajectory shift, and must not be re-pinned away")
     # §0.1 pt 2: a conditional loop must assert that it asserted. Without this the whole mechanism
     # check passes silently on a campaign where nobody is ever eliminated — which is exactly the
-    # state seed 44 was in before this commit, and nothing said so.
+    # state seed 44 fell into under this commit, and nothing would have said so.
     assert checked >= 1, (
-        "no faction reached 0 territories on seed 44, so the lockout loop above asserted nothing. "
+        "no faction reached 0 territories on seed 47, so the lockout loop above asserted nothing. "
         "Pick a seed that eliminates someone, or the mechanism is untested")
     assert min(h['Hafenmark'] for h in history) == 0 and flipped.winner != 'Hafenmark', (
-        "Hafenmark no longer reaches 0 on seed 44, so this test is back to checking the lockout on "
+        "Hafenmark no longer reaches 0 on seed 47, so this test is back to checking the lockout on "
         "a bystander. Re-read the trace and pick a seed where the eliminated faction is the one "
         "named here")
 
