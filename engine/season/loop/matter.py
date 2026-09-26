@@ -8,19 +8,23 @@ and a stub would fail two and silently vacate the third, which is why step 9 of 
 decomposition (ED-IN-0203) refused to delegate. Step 5 established the technique when
 `class Query` bound module functions as staticmethods.
 
-⚠ **THE TOKEN IS STILL A `WriteClass` PARAMETER AND THAT IS G2's, NOT THIS UNIT's.** `04 §A.3`
-row 3 replaces the parameter with an unforgeable token type minted only by the driver; until
-that lands, this step passes `WriteClass` exactly as it did inside the class. Unit L5
-delivers the MODULE boundary `04 §A.2:134` requires; the write discipline is Arc 2.
+⚠ **THE TOKEN IS HANDED IN BY THE DRIVER (G2).** `SeasonDriver.season` mints a MATTER `Token`
+through `loop/driver.py::mint_token` and passes it as `token`; every gate write below presents
+it. This module constructs none and calls no minter -- `tests/test_g2_token.py` fails if it does.
+
+⚠ **AND THIS BARRIER NOW OWNS `World._rehome()` (G2's disposition of `ED-IN-0206`'s finding).** It
+ran at the head of DELIBERATE and on every `w.tenures` read; it runs here, once a season, and
+nowhere else. See the call below and `_rehome`'s own docstring for why here and not licensed there.
 """
 
 from __future__ import annotations
 
 from typing import Optional
 from ..data.fixtures import SITE_YIELD
-from ..data.matrix import Step, WriteClass
+from ..data.matrix import Step
 from ..queries import world_q
 from ..state.carriers import Event
+from ..state.gate import Token
 from ..state.ids import H, ROOT
 from ..trace_log import TRACE
 
@@ -70,11 +74,24 @@ def _crossings(w: "World", subject_id: str, floors: dict, before, after,
     return out
 
 
-def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
+def matter(self, token: Token, actorless: Optional[list[Event]] = None) -> list[Event]:
     w = self.w
     w.step = Step.MATTER
     TRACE.step("MATTER", "enter"); TRACE.barrier(2, "MATTER")
     w.discard_caches()
+    # G2. THE TENURE STORE IS REHOMED HERE, AT THE LAST BARRIER BEFORE THE FREEZE, AND ONLY HERE.
+    # `_rehome` routes a Tenure added before its subject Person existed onto that Person's own
+    # list, so `budget`, `person_side_eligible` and `questions_for` -- which read `p.tenures`
+    # directly -- see it. It ran at the head of DELIBERATE, a barrier that owns nothing and holds
+    # no token (`04 §A.2`), which the Fable gate on Arc 1 found and `ED-IN-0206` filed; G2 was
+    # told to dispose of it and moved it. Here is sufficient because nothing between this line and
+    # DELIBERATE can create a Person -- no step does, and the world is frozen from the end of this
+    # barrier -- so every Tenure DELIBERATE reads is already homed. MEASURED 2026-09-26 at
+    # `build_realm(0)`, one season: it moves ZERO Tenures in every builder in the tree
+    # (`build_realm`, `headless.build_world`, `tiny_world`, `governance_spine.build`,
+    # `corpus_run.build_at` all create persons first); it moves one only in the planted ordering
+    # `test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner` builds. Hash-neutral.
+    w._rehome()
     emitted: list[Event] = []
 
     # S31.2: the EVENT CHANNEL and the DEATH CASCADE run SERIALLY, BEFORE the parallel
@@ -146,7 +163,7 @@ def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
             # maturation in `emitted` TWICE — once by hand and once by the drain — and WITNESS fans
             # out whatever it is given. The hand-built version had to do both because it never
             # crossed the gate.
-            w.write("matured", WriteClass.MATTER,
+            w.write("matured", token,
                     lambda rec=rec: setattr(rec, "matured", True),
                     record_kind="Record", fieldname="matured", driver="Event",
                     emits="term.matured", subject=rid, causes=[prior])
@@ -190,7 +207,7 @@ def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
             after = max(0, c.confidence - decay)
             if after == c.confidence:
                 continue
-            w.write("confidence", WriteClass.MATTER,
+            w.write("confidence", token,
                     lambda c=c, after=after: setattr(c, "confidence", after),
                     record_kind="Claim", fieldname="confidence", driver="Event",
                     emits="claim.decayed", subject=c.id, causes=[prior])
@@ -312,7 +329,7 @@ def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
         was = person.body
         prior_b = w.last_emission_of("body.changed", pid)
         _m = len(w._emitted_by_write)
-        w.write("body", WriteClass.MATTER,
+        w.write("body", token,
                 lambda person=person, lost=lost: setattr(person, "body", max(0, person.body - lost)),
                 record_kind="Person", fieldname="body", driver="Event",
                 emits="body.changed", subject=pid,
@@ -325,7 +342,7 @@ def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
             # factored — the same `w.tenures` scan, so an edge another person owns that NAMES the
             # dead one closes here too (§15.3, and `W-E`'s measured dangling `tie`).
             prior_d = w.last_emission_of("person.died", pid)
-            w.write("exists", WriteClass.MATTER,
+            w.write("exists", token,
                     lambda pid=pid: w.remove_person(pid),
                     record_kind="Person", fieldname="exists", driver="Event",
                     emits="person.died", subject=pid,
@@ -341,7 +358,7 @@ def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
             after = {k: have.get(k, 0) - amt for k, amt in draw.items()}
             if any(after[k] != have.get(k, 0) for k in after):
                 prior = w.last_emission_of("stores.changed", rid)
-                w.write("stores", WriteClass.MATTER,
+                w.write("stores", token,
                         lambda r=r, after=after: r.stores.update(after),
                         record_kind="Rung", fieldname="stores", driver="Event",
                         emits="stores.changed", subject=rid,
@@ -367,14 +384,14 @@ def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
         if not produced:
             continue
         prior_y = w.last_emission_of("yield.taken", rid)
-        w.write("yield", WriteClass.MATTER,
+        w.write("yield", token,
                 lambda r=r, produced=produced: object.__setattr__(r, "yield", dict(produced)),
                 record_kind="Rung", fieldname="yield", driver="Event",
                 emits="yield.taken", subject=rid,
                 causes=[prior_y] if prior_y else [ROOT])
         prior_s = w.last_emission_of("stores.changed", rid)
         credited = {k: (r.stores or {}).get(k, 0) + v for k, v in produced.items()}
-        w.write("stores", WriteClass.MATTER,
+        w.write("stores", token,
                 lambda r=r, credited=credited: r.stores.update(credited),
                 record_kind="Rung", fieldname="stores", driver="Event",
                 emits="stores.changed", subject=rid,
@@ -395,7 +412,7 @@ def matter(self, actorless: Optional[list[Event]] = None) -> list[Event]:
         # `W9` artifact's entire log unwalkable.
         prior_wear = w.last_emission_of("condition.worn", s.id)
         _mark = len(w._emitted_by_write)
-        w.write("condition", WriteClass.MATTER,
+        w.write("condition", token,
                 lambda s=s, wear=wear: setattr(s, "condition", max(0, s.condition - wear)),
                 record_kind="Site", fieldname="condition", driver="Event",
                 emits="condition.worn", subject=s.id,

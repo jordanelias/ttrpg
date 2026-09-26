@@ -46,6 +46,7 @@ from ..state.carriers import (
     Act, Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene,
     Sensation, Site, StateChange, Tenure, View, subject_of,
 )
+from ..state.gate import Token
 from ..state.ids import H, ROOT
 from ..state.world import World
 from ..epistemic import CHANNEL_PREDICATES, act_refs, claim_subjects, observers_for
@@ -67,6 +68,27 @@ from ..seam import (
     degree_ladder, ladder_error,
 )
 from ..trace_log import TRACE
+
+
+def mint_token(w: World, wclass: WriteClass) -> Token:
+    """`G2` / `04:199` -- **THE ONE CONSTRUCTOR OF A WRITE TOKEN.** *"`Token := (write_class, tick)`
+    -- constructed by loop/driver and NOWHERE ELSE."* `04:206` grades that MECHANICAL -- *"a test
+    asserts `Token(` appears in `loop/driver` only"* -- and `tests/test_g2_token.py` is that test.
+
+    `SeasonDriver.season` calls this once per barrier and hands the result to the step as a
+    parameter, which is `04 §C.1` line for line: `cal = Token(CALENDAR,t); calendar(w,cal); drop`.
+    DELIBERATE is called with none.
+
+    ⚠ IT IS A MODULE FUNCTION, NOT A `SeasonDriver` METHOD, AND THAT IS DELIBERATE. The six steps are
+    BOUND onto `SeasonDriver` (foot of this file), so a method here would be one `self.` away from
+    `deliberate`'s body. A module function is reachable only by importing it, and the same scan
+    refuses any game module under `engine/season/` other than this one that calls it.
+
+    ⚠ APPARATUS CALLS IT TOO, AND SAYS SO. `harness/probes.py` and the tests stand in for the driver
+    at a synthetic barrier -- `w.step = Step.RESOLVE` by hand, then a write -- and they mint here
+    rather than constructing a `Token` themselves, so the construction stays in this file. The scan
+    allows `harness/` and `tests/` to CALL this and nothing outside this file to CONSTRUCT one."""
+    return Token(wclass, w.tick)
 
 
 def resolvable_verbs() -> frozenset:
@@ -353,8 +375,11 @@ class SeasonDriver:
         self.round = 0
         self._queued, self._spent, self._deliberated_at = {}, {}, {}
         self._inputs, self._realised = {}, {}
-        self.calendar()
-        matter_events = self.matter(actorless)
+        # G2 / `04 §C.1`: ONE TOKEN PER BARRIER, MINTED HERE, PASSED IN, NEVER KEPT. Each is built
+        # inline in the call so no local outlives its step -- the pseudocode's `drop` is the end of
+        # the expression. DELIBERATE, below, is the one step called with none.
+        self.calendar(mint_token(w, WriteClass.CALENDAR))
+        matter_events = self.matter(mint_token(w, WriteClass.MATTER), actorless)
         rounds = int(w.fixtures.get("scene_budget"))
         n_acts, n_events, deposits = 0, len(matter_events), 0
         pending_matter = list(matter_events)
@@ -363,8 +388,8 @@ class SeasonDriver:
             # S26.2 again, not a second rule: RESOLVE thaws, so each round re-freezes before its
             # own DELIBERATE. MATTER did the first one.
             w.frozen = True
-            acts = self.deliberate(choose, question, subsistence)
-            events = self.resolve(acts, contest_max_depth)
+            acts = self.deliberate(choose, question, subsistence)      # a MAP: no token
+            events = self.resolve(mint_token(w, WriteClass.ACTS), acts, contest_max_depth)
             # ⚠⚠ **WHAT WAS REALISED, AS OPPOSED TO WHAT WAS ATTEMPTED — AND IT CAN ONLY BE KNOWN
             # HERE, AFTER THE FOLD.** `deliberate` records an attempt at RELEASE, because that is
             # when the scene-action is spent and the budget does not care how it went. Whether the
@@ -397,11 +422,11 @@ class SeasonDriver:
                 TRACE.event(e.id, e.kind, e.causes)
             # MATTER's events are seasonal and join the FIRST round's fan-out only; the alternative
             # deposits one wear once per round, which is the fourth clock this docstring refuses.
-            deposits += self.witness(pending_matter + events)
+            deposits += self.witness(mint_token(w, WriteClass.INTERIOR), pending_matter + events)
             pending_matter = []
             n_acts += len(acts)
             n_events += len(events)
-        self.census()
+        self.census(mint_token(w, WriteClass.MATTER))
         w.tick += 1
         # ⚠ `rounds` IS REPORTED BECAUSE THE TICK IS OTHERWISE INVISIBLE IN EVERY ARTIFACT `U2`
         # PRODUCES. The unit reshaped a season into R rounds and no observable said so: the
@@ -434,8 +459,10 @@ class SeasonDriver:
 # refused to delegate and why this does not either. Step 5 established the technique when
 # `class Query` bound `world_q`'s functions as staticmethods.
 #
-# ⚠ `self.<step>()` IS UNCHANGED AT EVERY CALL SITE. `season()` calls all six through `self`, so the
-# binding is what keeps those six calls resolving without editing one of them.
+# ⚠ `season()` CALLS ALL SIX THROUGH `self`, so the binding is what keeps those calls resolving. As
+# of G2 five of them take the barrier's `Token` as their first argument after `self` -- `04 §C.1`'s
+# `calendar(w,cal)`, `matter(w,mat)`, `resolve(w,act,scenes)`, `witness(w,intr,cache)`,
+# `census(w,mat2)` -- and `deliberate` takes none.
 # ---------------------------------------------------------------------------
 from .calendar import calendar                                            # noqa: E402
 from .census import census                                                # noqa: E402

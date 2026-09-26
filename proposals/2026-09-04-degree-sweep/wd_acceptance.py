@@ -255,9 +255,10 @@ def _instrumented(fn):
                               observed=obs, carrier=carrier))
         return res
 
-    def witness(self, events):
+    # G2 (2026-09-26): `witness` takes the driver's INTERIOR token first; the spy passes it through.
+    def witness(self, token, events):
         before = {pid: {c.id for c in pp.ledger} for pid, pp in self.w.persons.items()}
-        out = _REAL_WITNESS(self, events)
+        out = _REAL_WITNESS(self, token, events)
         for pid, pp in self.w.persons.items():
             for c in pp.ledger:
                 if c.id in before.get(pid, ()):

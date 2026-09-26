@@ -8,15 +8,16 @@ and a stub would fail two and silently vacate the third, which is why step 9 of 
 decomposition (ED-IN-0203) refused to delegate. Step 5 established the technique when
 `class Query` bound module functions as staticmethods.
 
-⚠ **THE TOKEN IS STILL A `WriteClass` PARAMETER AND THAT IS G2's, NOT THIS UNIT's.** `04 §A.3`
-row 3 replaces the parameter with an unforgeable token type minted only by the driver; until
-that lands, this step passes `WriteClass` exactly as it did inside the class. Unit L5
-delivers the MODULE boundary `04 §A.2:134` requires; the write discipline is Arc 2.
+⚠ **THE TOKEN IS HANDED IN BY THE DRIVER (G2).** `SeasonDriver.season` mints an INTERIOR `Token`
+through `loop/driver.py::mint_token` and passes it as `token`, once per round; every gate write
+below presents it. This module constructs none and calls no minter -- `tests/test_g2_token.py`
+fails if it does.
 """
 
 from __future__ import annotations
 
-from ..data.matrix import Step, WriteClass
+from ..data.matrix import Step
+from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN
 from ..data.rosters import OBSERVATION_DEPOSIT_MODES, WITNESS_CHANNELS, require_member
 from ..epistemic import act_refs, claim_subjects, observers_for
@@ -72,7 +73,7 @@ def _told_content(w, act):
 
 
 # -- WITNESS -- barrier 4 -- THE JOIN (S28) -----------------------------
-def witness(self, events: list[Event]) -> int:
+def witness(self, token: Token, events: list[Event]) -> int:
     w = self.w
     w.step = Step.WITNESS
     TRACE.step("WITNESS", "enter"); TRACE.barrier(4, "WITNESS")
@@ -204,7 +205,7 @@ def witness(self, events: list[Event]) -> int:
             # `W4`'s own ROOT-count proof unsatisfiable. Chained to the witnessed Event, the
             # walk is `decayed -> ... -> deposited -> the act that was witnessed`, which is
             # what #353 §19.4 means by the substrate of the emergent-narrative claim.
-            w.write("claim_ledger", WriteClass.INTERIOR,
+            w.write("claim_ledger", token,
                     lambda p=p, c=c: p.ledger.append(c),
                     record_kind="Person", fieldname="claim_ledger", driver="Event",
                     emits="claim.deposited", subject=c.id, causes=[e.id])
@@ -287,7 +288,7 @@ def witness(self, events: list[Event]) -> int:
                 oc = Claim(H(w.world_seed, w.tick, pid, f"obs:{e.id}:{len(seen_obs)}"),
                            pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own",
                            self.round)   # `U2`: see the deposit above
-                w.write("claim_ledger", WriteClass.INTERIOR,
+                w.write("claim_ledger", token,
                         lambda p=p, c=oc: p.ledger.append(c),
                         record_kind="Person", fieldname="claim_ledger", driver="Event",
                         emits="claim.deposited", subject=oc.id, causes=[e.id])
@@ -377,7 +378,7 @@ def witness(self, events: list[Event]) -> int:
                 tc = Claim(H(w.world_seed, w.tick, pid, f"told:{e.id}"),
                            pid, _held.subject, _held.predicate, _held.value, w.tick,
                            "told_by", _held.confidence, "own", self.round)
-                w.write("claim_ledger", WriteClass.INTERIOR,
+                w.write("claim_ledger", token,
                         lambda p=p, c=tc: p.ledger.append(c),
                         record_kind="Person", fieldname="claim_ledger", driver="Event",
                         emits="claim.deposited", subject=tc.id, causes=[e.id])
@@ -403,7 +404,7 @@ def witness(self, events: list[Event]) -> int:
             # `(Person, claim_ledger)`'s version of `H-86` and is recorded on that row.
             # Found by the `W4` adversarial pass.
             p.ledger.sort(key=lambda c: c.confidence * (c.when + 1))
-            w.write("claim_ledger", WriteClass.INTERIOR,
+            w.write("claim_ledger", token,
                     lambda p=p: p.ledger.pop(0),
                     record_kind="Person", fieldname="claim_ledger", driver="Event")
     w._in_parallel_map = False

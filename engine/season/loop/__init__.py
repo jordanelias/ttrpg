@@ -23,9 +23,10 @@ sit beside the fold that reads them. Recorded rather than left for a later reade
 conformance gap — the same disposition L3 took for `queries/readers.py`, except that one had a
 `04`-sanctioned home to go to and these do not.
 
-⚠ **THE TOKEN IS STILL A `WriteClass` PARAMETER IN ALL SIX.** §A.3 row 3 replaces it with an
-unforgeable token type minted only by the driver; that is Arc 2's G2, not this unit. L5 delivers the
-MODULE boundary; the write discipline follows.
+⚠ **THE TOKEN (G2).** §A.3 row 3's token type is `state/gate.py::Token`, constructed only in
+`driver.py::mint_token`. `SeasonDriver.season` mints one per barrier and passes it to five of the six
+steps as their first argument; `deliberate` receives none. `tests/test_g2_token.py` is the scan
+`04:206` grades MECHANICAL.
 
 ⚠ NEITHER MODULE HERE MAY IMPORT THE DRIVER, and the direction is what keeps it true: a table the
 fold reads cannot also read the fold. The driver imports these two; they do not import it, and the six

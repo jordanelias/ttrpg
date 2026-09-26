@@ -8,25 +8,31 @@ and a stub would fail two and silently vacate the third, which is why step 9 of 
 decomposition (ED-IN-0203) refused to delegate. Step 5 established the technique when
 `class Query` bound module functions as staticmethods.
 
-⚠ **THE TOKEN IS STILL A `WriteClass` PARAMETER AND THAT IS G2's, NOT THIS UNIT's.** `04 §A.3`
-row 3 replaces the parameter with an unforgeable token type minted only by the driver; until
-that lands, this step passes `WriteClass` exactly as it did inside the class. Unit L5
-delivers the MODULE boundary `04 §A.2:134` requires; the write discipline is Arc 2.
+⚠ **NO TOKEN, BY SIGNATURE (G2).** `SeasonDriver.season` hands every other step a `Token` minted
+by `loop/driver.py::mint_token`; this one is called with none, so there is nothing here that
+`World.write` would accept (it raises `NoToken` first). That is `04 §C.1`'s *"a MAP. No token
+exists in this scope"*, and `tests/test_g2_token.py` holds it two ways: no `Token(` or
+`mint_token(` in this module, and a run-time check that a DELIBERATE call leaves every `World`
+store byte-identical -- by ANY route, not only through the gate.
 
-⚠ **THE §A.2 ROW QUOTED ABOVE IS NOT WHAT THIS BODY DOES, AND SAYING SO IS THE POINT.** The row reads
-*"owns nothing; calls `sense()`, builds a `View`, calls `choose` per person; reads a frozen `World`,
-**for `sense` only**; token: none."* Measured against the body:
+⚠ **THE §A.2 ROW QUOTED ABOVE, MEASURED AGAINST THIS BODY.** The row reads *"owns nothing; calls
+`sense()`, builds a `View`, calls `choose` per person; reads a frozen `World`, **for `sense`
+only**; token: none."* What the body does beyond that:
 
-- it calls `w._rehome()`, which MUTATES the tenure store, during DELIBERATE -- a barrier that owns
-  nothing and holds no token;
 - it reads `w.fixtures` and calls `questions_for(w, p)`, a `world_q` read that is not `sense`;
-- it sets `w.step` and `w._in_parallel_map`, and writes `self.scenes` and `a.scene`.
+- it sets `w.step` and `w._in_parallel_map` -- barrier bookkeeping, not a store -- and writes the
+  DRIVER's own `self.scenes` / `self._queued` / `self._spent` and each released `a.scene` / `a.id`,
+  all on objects that are not `World` stores (the acts are this step's RETURN, the matrix's
+  `(Act[], returned)` row, and enter the act store only at RESOLVE).
 
-None of that is L5's doing -- the body is unchanged from when it was a method on `SeasonDriver` --
-but the module boundary is what makes the divergence checkable, so it is recorded here rather than
-left for a reader to find under a header that reads like conformance. **The `_rehome()` call is the
-one that matters**: either it moves to the MATTER barrier or the row is amended. That is a Layer-1
-question, not this unit's. Found by the Fable gate on Arc 1 and filed under `ED-IN-0206`.
+⚠ **`w._rehome()` WAS CALLED HERE AND IS NOT ANY MORE (G2, disposing of `ED-IN-0206`'s finding).**
+It MUTATED the tenure store during a barrier that owns nothing and holds no token -- found by the
+Fable gate on Arc 1, left undecided by L5 as *"a Layer-1 question, not this unit's"*, and handed
+to G2 by the plan (*"It is this unit's"*). Moved to the MATTER barrier rather than licensed by
+amending the `04` row: MATTER is the last barrier before the freeze, holds a token, and nothing
+between it and this step can create a Person, so every Tenure read here is already homed. The
+`w.tenures` getter's own `_rehome()` call went with it, since that was the same mutation reached
+through any `world_q` query this step makes. See `World._rehome`.
 """
 
 from __future__ import annotations
@@ -57,14 +63,11 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
                         law="S26.2 -- the world is FROZEN from the end of MATTER to the start of RESOLVE. THIS IS WHAT MAKES THE MAP SAFE TO PARALLELISE")
     w.step = Step.DELIBERATE
     TRACE.step("DELIBERATE", "enter")
-    # ⚠ CALLED HERE, NOT ONLY FROM THE `tenures` GETTER. `_rehome` exists so that a Tenure
-    # added before its subject Person existed still reaches its owner, and its own docstring
-    # names `budget` as what would otherwise read zero offices for a duke. But `budget`,
-    # `person_side_eligible` and `questions_for` all read `p.tenures` DIRECTLY and this step
-    # never touches `w.tenures`, so the guard did not cover the three functions it named --
-    # it worked only if unrelated code happened to read the aggregate first. One call, at the
-    # barrier, before any person-side read.
-    w._rehome()
+    # ⚠ G2: `w._rehome()` STOOD HERE AND MOVED TO THE MATTER BARRIER. Its reason is unchanged --
+    # `budget`, `person_side_eligible` and `questions_for` read `p.tenures` DIRECTLY, so a Tenure
+    # added before its subject existed must be homed before any person-side read -- but the
+    # repair is a store mutation and this step owns no store. MATTER runs it before the freeze,
+    # which is before this line in every season. See the module docstring.
     acts: list[Act] = []
     k_view = w.fixtures.get("view_k")
     # ⚠⚠ `scene_budget` HAS TWO READERS SINCE `U2` AND THEY READ IT AS TWO DIFFERENT QUANTITIES.

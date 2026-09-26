@@ -46,7 +46,7 @@ from .carriers import (
 )
 from .ids import H
 from .acts import ActStore
-from .gate import Gate
+from .gate import Gate, NoToken, Token
 from .log import EventLog
 
 # Where S30's matrix says "no", the refusal belongs to the LAW THE CELL ENFORCES, not to the
@@ -197,8 +197,16 @@ class World:
     # -- THE TENURE STORE, ROUTED BY SUBJECT (S15.1) -----------------------
     @property
     def tenures(self) -> "_TenureView":
-        """Every live-or-dead Tenure, owner-first. Read-only -- see `_TenureView`."""
-        self._rehome()
+        """Every live-or-dead Tenure, owner-first. Read-only -- see `_TenureView`.
+
+        ⚠ A READ, AND AS OF G2 ONLY A READ. This getter called `self._rehome()` first, so every
+        read of the aggregate -- 219 of them inside DELIBERATE alone on `build_realm(0)` over one
+        season, 67,005 inside WITNESS -- was also a store mutation, and DELIBERATE (a barrier that
+        owns nothing) mutated the tenure store through any `world_q` query it made. The repair now
+        runs at exactly one place, the MATTER barrier (see `_rehome`). Nothing is lost from THIS
+        view by not rehoming here: an unhomed Tenure is still in `_unowned`, which is appended
+        below, so the aggregate holds every Tenure either way -- only its position moves, and only
+        for a Tenure whose subject was created after it, which no builder in the tree produces."""
         out: list[Tenure] = []
         for pid in sorted(self.persons):
             out.extend(self.persons[pid].tenures)
@@ -459,7 +467,19 @@ class World:
         creates the Person leaves `p.tenures` empty while `w.tenures` still shows it -- so
         `budget` would read zero offices for a duke the world agrees is a duke. That is a
         read/write asymmetry of exactly the shape §0.1 point 1 describes, and it would be
-        invisible because both surfaces are individually correct."""
+        invisible because both surfaces are individually correct.
+
+        ⚠ ONE CALLER, THE MATTER BARRIER (`loop/matter.py`), AND THAT IS G2's DISPOSITION OF IT.
+        It had two: the `tenures` getter, on every read, and an explicit call at the head of
+        DELIBERATE. Both made DELIBERATE -- which `04 §A.2` says *"owns nothing ... token: none"*
+        -- a mutator of the tenure store. Moving it rather than licensing it: MATTER is the last
+        barrier before the world freezes and holds a token, and no step between MATTER and
+        DELIBERATE can create a Person, so a Tenure homed at MATTER is homed for the whole map.
+        ⚠ IT IS STILL NOT A GATE WRITE, and that is stated rather than left to be found: it moves
+        an already-admitted Tenure between two Python lists and changes none of its fields, so it
+        has no `(kind, field)` row to be checked against. What G2 changes is WHERE it may run.
+        `test_g2_token.py::test_g2_deliberate_mutates_no_store_by_any_route` is the falsifier --
+        restore either old call and it goes red on a planted unhomed Tenure."""
         if not self._unowned:
             return
         keep = []
@@ -487,13 +507,26 @@ class World:
             law="a kind no row declares is a FABRICATED kind, and the `emits:` column is the "
                 "only thing that may name one")
 
-    def write(self, thing: str, wclass: WriteClass, apply: Callable[[], Any],
+    def write(self, thing: str, token: Token, apply: Callable[[], Any],
               record_kind: str, fieldname: str, driver: str,
               caused_person_exists: Optional[str] = None,
               emits: Optional[str] = None,
               causes: Optional[list[str]] = None,
               subject: Optional[str] = None) -> Any:
-        """`W4`. THE GATE IS ALSO THE EMITTER, because `H-12` is `ruled` that way: *"MATTER emits
+        """`G2`. THE SECOND ARGUMENT IS A `Token`, NOT A `WriteClass`. `04:199` -- *"`Token :=
+        (write_class, tick)` -- constructed by loop/driver and NOWHERE ELSE"* -- and `04 §C.2`'s
+        *"`gate.write(token, ...)`"*. The token is checked FIRST, before the matrix row, so a
+        caller holding no token is refused as `NoToken` whatever it was trying to write; its class
+        then feeds the existing S30.2 check unchanged. It stays in the second position, where the
+        bare class sat, so every call site changed by one argument and nothing else moved.
+
+        ⚠ THE S30.2 CHECK STOPPED BEING CIRCULAR HERE. Before G2 the fold's own writes passed
+        `mrow.write_class(Step.RESOLVE)`, the same expression this method computes from the same
+        map, so `expect is wclass` could not fail for any of them. The class now comes from the
+        token the DRIVER minted for the step, and the step name from `self.step`, which the step
+        sets -- two sources, so a driver that handed RESOLVE a MATTER token is refused here.
+
+        `W4`. THE GATE IS ALSO THE EMITTER, because `H-12` is `ruled` that way: *"MATTER emits
         an Event per write so crossings have an antecedent"*, default *"Part D's `emits:` column"*.
 
         A MATTER write on a row that declares an `emits:` kind MUST name one, and naming one the
@@ -507,6 +540,21 @@ class World:
         lives once: keyed on `(record_kind, fieldname)`, which is the same key the write class and
         the social partition are already read from, so a new MATTER write inherits its emission by
         existing rather than by remembering."""
+        # G2. NO TOKEN, NO WRITE -- and nothing else is consulted first, so the refusal is
+        # attributable. `isinstance` rather than duck-typing: a bare `WriteClass` has a `.value`
+        # and would otherwise pass straight through to the class check, which is the pre-G2 call
+        # shape this exists to refuse.
+        if not isinstance(token, Token):
+            raise NoToken(
+                f"World.write({thing!r}, ...) was handed {type(token).__name__} {token!r}, not a "
+                f"Token. 04:199 -- only `loop/driver.py::mint_token` constructs one, and a step "
+                f"writes with the token the driver passed it. DELIBERATE is handed none.")
+        if token.tick != self.tick:
+            raise NoToken(
+                f"World.write({thing!r}, ...) was handed a token minted at tick {token.tick}; the "
+                f"world is at tick {self.tick}. A token is dropped at its barrier (04 §C.1) and a "
+                f"kept one authorizes nothing a season later.")
+        wclass = token.write_class
         step = self.step
         sname = step.value if step else "-"
         # W2: THE GATE IS KEYED ON `(kind, field)`, which is how S30's own rule is stated. It was

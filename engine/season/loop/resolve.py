@@ -8,10 +8,11 @@ and a stub would fail two and silently vacate the third, which is why step 9 of 
 decomposition (ED-IN-0203) refused to delegate. Step 5 established the technique when
 `class Query` bound module functions as staticmethods.
 
-⚠ **THE TOKEN IS STILL A `WriteClass` PARAMETER AND THAT IS G2's, NOT THIS UNIT's.** `04 §A.3`
-row 3 replaces the parameter with an unforgeable token type minted only by the driver; until
-that lands, this step passes `WriteClass` exactly as it did inside the class. Unit L5
-delivers the MODULE boundary `04 §A.2:134` requires; the write discipline is Arc 2.
+⚠ **THE TOKEN IS HANDED IN BY THE DRIVER (G2).** `SeasonDriver.season` mints an ACTS `Token`
+through `loop/driver.py::mint_token` and passes it as `token`, once per round. `resolve` threads
+it to `_fold` and `_fold` to `_apply_write`, each taking it as the argument after `w`; every gate
+write below presents it. This module constructs none and calls no minter --
+`tests/test_g2_token.py` fails if it does.
 """
 
 from __future__ import annotations
@@ -22,7 +23,7 @@ from ..gaps import InstrumentDefect
 from ..data.rosters import STRATA
 
 from typing import Optional
-from ..data.matrix import Step, WriteClass, matrix_row
+from ..data.matrix import Step, matrix_row
 from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
 from ..data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from ..gaps import Forbidden, Unspecified
@@ -31,6 +32,7 @@ from ..loop.predicates import REQUIRES_PREDICATES
 from ..queries.world_q import WorldReader, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
+from ..state.gate import Token
 from ..state.ids import draw_factory, H
 from ..state.world import World
 from ..trace_log import TRACE
@@ -188,7 +190,8 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
     return (True, (), verdict)
 
 
-def _fold(self, w: "World", a: Act, resolution: "Resolution | None" = None) -> list[Event]:
+def _fold(self, w: "World", token: Token, a: Act,
+          resolution: "Resolution | None" = None) -> list[Event]:
     """ONE act through the table. This is what `effect` used to be, and the difference is
     that it is the SAME code for every act and every caller.
 
@@ -300,7 +303,7 @@ def _fold(self, w: "World", a: Act, resolution: "Resolution | None" = None) -> l
             kind, _, fld = pair.partition(".")
             # The effect runs ONCE, on the first pair: a verb writing three cells is ONE
             # operation, and running it per pair minted three Tenures for one `move`.
-            made = self._apply_write(w, a, kind, fld, eff if n == 0 else None,
+            made = self._apply_write(w, token, a, kind, fld, eff if n == 0 else None,
                                      earned=earned, resolution=resolution)
             changed.extend(c for c in made if c not in changed)
         # ⚠ AN EFFECT THAT TOUCHED NOTHING DID NOT DO THE THING, AND MUST NOT EMIT THE
@@ -355,7 +358,7 @@ def _fold(self, w: "World", a: Act, resolution: "Resolution | None" = None) -> l
     # is `§8`: the rule lives once, on the one path every act-emission takes.
     return ev(kinds, [a.id] + self._occasion_ids(w, a), list(a.changes) + changed)
 
-def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None,
+def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, eff=None,
                  earned: Optional[set] = None,
                  resolution: "Resolution | None" = None) -> list:
     """The fold's write. It carries no per-verb behaviour -- the effect of a write is the
@@ -368,7 +371,12 @@ def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None,
     `H-79`'s `per_change` rule has nothing to read and §F1's Q2 clause "a claim whose subject
     is something they hold" stays unreachable, which is how the narrative substrate stayed
     empty through four revisions."""
-    mrow = matrix_row(kind, fld)
+    # ⚠ G2: ASKED FOR ITS SIDE EFFECT ONLY. This was `mrow = matrix_row(kind, fld)` and `mrow` fed
+    # the class below. The class now comes from the driver's token, so the row is no longer read
+    # here -- but the call still raises `Unspecified` for an absent row BEFORE `World.write` is
+    # reached, and `World.write` would raise the same thing only after logging a refused
+    # `TRACE.write` line. Kept so a signature move does not also move `runs/TRACE.txt`.
+    matrix_row(kind, fld)
     touched: list = []
     earned = earned if earned is not None else set()
 
@@ -395,7 +403,12 @@ def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None,
         elif got:
             touched.extend(got)
 
-    w.write(fld, mrow.write_class(Step.RESOLVE), apply,
+    # G2: THE DRIVER'S ACTS TOKEN, NOT `mrow.write_class(Step.RESOLVE)`. The old expression was the
+    # one non-literal class in the tree, and it was CIRCULAR -- `World.write` computes the same
+    # `STEP_CLASS[step]` from the same map, so S30.2's check could not fail for any fold write
+    # (`test_w3_the_write_class_check_still_refuses_a_wrong_class` named that limit). The token is
+    # a second source: a driver that handed RESOLVE a MATTER token would now be refused.
+    w.write(fld, token, apply,
             record_kind=kind, fieldname=fld, driver="Act")
     # G1a. MINTED AGAINST THE WRITE THAT JUST RAN, not constructed. `touched` is populated from
     # inside `apply()` -- the effect reports the ids it changed -- so the subjects are known only
@@ -405,7 +418,7 @@ def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None,
     # is to say: the fold ASSERTED what it had changed and nothing could check the assertion.
     return [w.gate.mint(t, "set", "Act", fld) for t in touched]
 
-def resolve(self, acts: list[Act],
+def resolve(self, token: Token, acts: list[Act],
             contest_max_depth: Optional[int] = None) -> list[Event]:
     w = self.w
     w.step = Step.RESOLVE
@@ -611,7 +624,7 @@ def resolve(self, acts: list[Act],
             # `body.changed` / `contest.undecided` -- which is where invariant 7 says a kind
             # is declared. Two body literals remain (`act.ineligible`, `act.refused`) and
             # they are not this item's.
-            produced = self._fold(w, a, Resolution(degree_of(r, _target), r))
+            produced = self._fold(w, token, a, Resolution(degree_of(r, _target), r))
             TRACE.decision(
                 f"contest for {_contests[0]!r} resolved", "S39/H-98",
                 chose=f"read the degree off the scene and fold at it "
@@ -622,7 +635,7 @@ def resolve(self, acts: list[Act],
         else:
             # S27.1: CONTENTION IS AN ORDERED FOLD. Each act sees the world its predecessors
             # left. SEQUENCE, NOT SIMULTANEITY -- and NO ACT NEEDS TO KNOW ANOTHER EXISTED.
-            produced = self._fold(w, a)
+            produced = self._fold(w, token, a)
         # ⚠ `W-E`: THE TWO PATHS SHARE THE BOOKKEEPING BELOW, AND THAT IS §8 RATHER THAN
         # TIDINESS. The contest branch used to `continue` past all of it, so a contested act's
         # Events were never entered in `act_of` and its deltas never reached §27.3's
@@ -656,7 +669,7 @@ def resolve(self, acts: list[Act],
         if sid in w.sites and fname == "condition":
             site = w.sites[sid]
             total = sum(deltas)
-            w.write("condition", WriteClass.ACTS,
+            w.write("condition", token,
                     lambda site=site, total=total: setattr(
                         site, "condition", max(0, min(scale, site.condition + total))),
                     record_kind="Site", fieldname="condition", driver="Act")

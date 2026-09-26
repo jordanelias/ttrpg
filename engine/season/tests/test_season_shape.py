@@ -52,7 +52,7 @@ from ..epistemic import (
 )
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Ungraded, Unspecified
 from ..loop.deliberate import sense
-from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.predicates import REQUIRES_PREDICATES, in_holdings
 from ..queries import world_q
 from ..queries.person_q import LedgerReader
@@ -182,7 +182,7 @@ def test_d1b_a_field_cannot_ride_on_another_fields_matrix_row():
     # genuinely does not carry. `(Person, mood)` is W2's own planted example, and the `thing`
     # argument is the parameter that CARRIED the defect -- passing `stance` for it must not help.
     with pytest.raises(Unspecified) as e:
-        w.write("stance", WriteClass.ACTS, lambda: None,
+        w.write("stance", mint_token(w, WriteClass.ACTS), lambda: None,
                 record_kind="Person", fieldname="mood", driver="Act")
     assert "Person" in str(e.value) and "mood" in str(e.value), (
         "the refusal did not NAME the pair, so a reader cannot tell which cell is unmarked")
@@ -201,7 +201,7 @@ def test_d1c_a_matter_write_to_person_pursuits_refuses_with_its_own_law_not_the_
     w = _w()
     w.step = Step.MATTER
     with pytest.raises(Forbidden) as e:
-        w.write("stance", WriteClass.MATTER, lambda: None,
+        w.write("stance", mint_token(w, WriteClass.MATTER), lambda: None,
                 record_kind="Person", fieldname="pursuits", driver="Event")
     assert e.value.where == "S3-L4", (
         f"refused at {e.value.where!r}, not S3-L4 -- the MATRIX_REFUSAL_LAW lookup for "
@@ -236,7 +236,7 @@ def test_d3b_the_gate_applies_the_write():
     # an antecedent. `[ROOT]` is said EXPLICITLY here because this synthetic write is the first
     # emission in its world — which is exactly the carve-out, and saying it is the point.
     # [JUSTIFIED: an ARBITRARY DECREMENT in a synthetic write, not a wear rate -- this test asserts that a MATTER write emits and logs, and any nonzero delta shows that. Nothing in the game reads it; `before - 7` and `before - 1` would test the same property]
-    w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", before - 7),
+    w.write("condition", mint_token(w, WriteClass.MATTER), lambda: setattr(site, "condition", before - 7),
             record_kind="Site", fieldname="condition", driver="Event",
             emits="condition.worn", subject=site.id, causes=[ROOT])
     # [JUSTIFIED: the same arbitrary decrement, read back -- this line exists to prove the lambda ran, not to pin a magnitude]
@@ -347,7 +347,7 @@ def test_d8_one_doctrinal_condition_raises_one_kind():
     # correctly, because `(Rung, stores)` is on the table and `thing` is a trace label. The
     # unmarked cell has to be a real unmarked cell.
     with pytest.raises(Unspecified):
-        w.write("stores", WriteClass.ACTS, lambda: None,
+        w.write("stores", mint_token(w, WriteClass.ACTS), lambda: None,
                 record_kind="Rung", fieldname="no_such_field", driver="Act")
     with pytest.raises(Unspecified):
         partition_lookup("Record", "anything")
@@ -585,12 +585,12 @@ def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
     d = SeasonDriver(w)
     act = Act(id="sweep_kw", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"})
     with pytest.raises(Unspecified):
-        d._fold(w, act)
+        d._fold(w, mint_token(w, WriteClass.ACTS), act)
     # THE CATCH LIST run_case ACTUALLY USES (corpus_run.py:350), not a copy of it (§8).
     act2 = Act(id="sweep_kw2", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"})
     caught_as_gap = False
     try:
-        d._fold(w, act2)
+        d._fold(w, mint_token(w, WriteClass.ACTS), act2)
     except (ShapeGap, Unspecified, Forbidden, NoProducer):
         caught_as_gap = True
     assert caught_as_gap, (
@@ -892,10 +892,10 @@ def test_the_partition_seam_is_bounded_by_causation_not_by_the_column():
     w.step = Step.MATTER
     t = next(x for x in w.tenures if x.kind == "hold")
     with pytest.raises(Forbidden):
-        w.write("Tenure", WriteClass.MATTER, lambda: setattr(t, "until", 0),
+        w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: setattr(t, "until", 0),
                 record_kind="Tenure", fieldname="until", driver="Event",
                 emits="tenure.closed", subject=t.object, causes=[ROOT])
-    w.write("Tenure", WriteClass.MATTER, lambda: setattr(t, "until", 0),
+    w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: setattr(t, "until", 0),
             record_kind="Tenure", fieldname="until", driver="Event",
             caused_person_exists="p_high",
             emits="tenure.closed", subject=t.object, causes=[ROOT])
@@ -1174,7 +1174,7 @@ def test_r3_the_l4_limb_is_actually_exercised():
     w = _w()
     w.step = Step.RESOLVE
     with pytest.raises(Forbidden) as e:
-        w.write("stance", WriteClass.ACTS, lambda: None,
+        w.write("stance", mint_token(w, WriteClass.ACTS), lambda: None,
                 record_kind="Person", fieldname="stance", driver="Event")
     assert "social:true" in str(e.value)
 
@@ -2170,7 +2170,7 @@ def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
     w = _w()
     w.step = Step.RESOLVE
     with pytest.raises(Unspecified) as e:
-        w.write("stance", WriteClass.ACTS, lambda: None,
+        w.write("stance", mint_token(w, WriteClass.ACTS), lambda: None,
                 record_kind="Person", fieldname="mood", driver="Act")
     msg = str(e.value)
     assert "Person" in msg and "mood" in msg, f"the refusal did not name the pair: {msg}"
@@ -2434,7 +2434,7 @@ def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
     victim = next(v for v in missing)
     act = Act(id="a_x", actor="p_low", verb=victim)
     with pytest.raises(Unspecified) as e:
-        d._fold(w, act)
+        d._fold(w, mint_token(w, WriteClass.ACTS), act)
     assert "precondition" in str(e.value) or "no row" in str(e.value)
 
     # `work`'s precondition must be able to FAIL. A site below every floor is unworkable.
@@ -2454,24 +2454,25 @@ def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
 def test_w3_the_write_class_check_still_refuses_a_wrong_class():
     """§30.2: *the write class is a PARAMETER of the store API, checked PER WRITE SITE.*
 
-    ⚠ HONEST LIMIT, NAMED RATHER THAN LEFT TO BE FOUND. For the FOLD's own writes the check is
-    CIRCULAR: `_apply_write` passes `mrow.write_class(step)` and `World.write` computes the same
-    expression from the same map, so `expect is wclass` always holds. That is not a defect to fix
-    by contriving a second opinion — a table-driven fold and its gate necessarily read one table —
-    but it does mean the per-site check no longer catches anything for the 32 table verbs, and the
-    coverage claim must not be made for them.
+    ⚠ THE HONEST LIMIT THIS NAMED IS CLOSED BY G2 (2026-09-26), AND THE RECORD STAYS SO THE CLOSURE
+    CAN BE CHECKED. It read: for the FOLD's own writes the check is CIRCULAR -- `_apply_write`
+    passed `mrow.write_class(step)` and `World.write` computed the same expression from the same
+    map, so `expect is wclass` always held and the per-site check caught nothing for the table
+    verbs. The fold now passes the ACTS `Token` the driver handed RESOLVE, which is a second
+    source, so a fold handed the wrong token IS refused --
+    `test_g2_token.py::test_g2_the_fold_is_no_longer_circular_a_wrong_token_is_refused` runs that.
 
-    What the gate DOES still enforce is that a caller passing a WRONG class is refused, which is
-    what the check is for. That is exercised here directly, since no fold write can exercise it."""
+    What is exercised HERE is the direct caller: a WRONG class is refused and the right one
+    admitted, on one row, so the refusal is about the class and not the row."""
     w = _w()
     w.step = Step.RESOLVE
     # `(Rung, stores)` at RESOLVE is the ACTS class. MATTER must be refused.
     with pytest.raises(Forbidden) as e:
-        w.write("stores", WriteClass.MATTER, lambda: None,
+        w.write("stores", mint_token(w, WriteClass.MATTER), lambda: None,
                 record_kind="Rung", fieldname="stores", driver="Act")
     assert "class" in str(e.value).lower(), str(e.value)
     # And the right class is admitted, so the refusal above is about the CLASS and not the row.
-    w.write("stores", WriteClass.ACTS, lambda: None,
+    w.write("stores", mint_token(w, WriteClass.ACTS), lambda: None,
             record_kind="Rung", fieldname="stores", driver="Act")
 
 
@@ -2613,7 +2614,7 @@ def test_w5_q_has_a_producer_across_all_four_sources():
             kind = next(k for k in floors_by_kind if k != "body")
             top = max(floors_by_kind[kind].values())
             w.sites["s_q3"] = Site("s_q3", here, kind, top + 5, [])
-            SeasonDriver(w).matter()
+            SeasonDriver(w).matter(mint_token(w, WriteClass.MATTER))
             assert w.crossings, "the fixture no longer crosses a floor -- Q3 has nothing to read"
             assert w.crossings[0][0] in w.sites, (
                 "a crossing is keyed on something that is not a site; the writer changed shape")
@@ -3279,11 +3280,21 @@ def test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner():
     # [JUSTIFIED: matched half of the control pair immediately above]
     assert decision.budget(p, View(p.id, [], 12), fx.get("scene_budget"), fx) > base, (
         "rehoming did not change what `budget` reads, so the office is still invisible to it")
-    # and the barrier does it, so no caller has to remember.
-    src = _code_only(inspect.getsource(SeasonDriver.deliberate))
-    assert "_rehome" in src, (
-        "DELIBERATE does not rehome — every person-side reader is back to depending on whether "
-        "something else read `w.tenures` first")
+    # and the barrier does it, so no caller has to remember. ⚠ G2 MOVED THE BARRIER: this read
+    # `"_rehome" in getsource(SeasonDriver.deliberate)`, pinning the repair inside a step that owns
+    # no store and holds no token (`ED-IN-0206`). It is MATTER's now, and asserted by RUNNING MATTER
+    # on the same planted ordering rather than by reading its source -- a source match would pass on
+    # a call that never executes (§0.2). DELIBERATE's half -- that it no longer does this -- is
+    # `test_g2_token.py::test_g2_deliberate_mutates_no_store_by_any_route`.
+    # [JUSTIFIED: the same arbitrary structural seed as the world above]
+    w2 = World(7)
+    w2.add_tenure(Tenure("t_early", "p_late", "off_x", "hold", since=0))
+    w2.persons["p_late"] = Person("p_late", "Late")
+    assert not w2.persons["p_late"].tenures, "the second plant is not reproducing the ordering"
+    SeasonDriver(w2).matter(mint_token(w2, WriteClass.MATTER), [])
+    assert [t.id for t in w2.persons["p_late"].tenures] == ["t_early"], (
+        "the MATTER barrier did not rehome — every person-side reader in DELIBERATE is back to "
+        "depending on whether something else homed the Tenure first")
 
 
 def test_w5_the_reporting_guards_are_actually_called():
@@ -3960,16 +3971,16 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
     site = list(w.sites.values())[0]
 
     with pytest.raises(Forbidden, match="emitted nothing"):
-        w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
+        w.write("condition", mint_token(w, WriteClass.MATTER), lambda: setattr(site, "condition", 1),
                 record_kind="Site", fieldname="condition", driver="Event")
     with pytest.raises(Forbidden, match="does not declare"):
-        w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
+        w.write("condition", mint_token(w, WriteClass.MATTER), lambda: setattr(site, "condition", 1),
                 record_kind="Site", fieldname="condition", driver="Event",
                 emits="site.exploded", subject=site.id, causes=[ROOT])
     # S19.4's own guard, in `Event.__post_init__` — NOT a second copy in `write()`. The first
     # version of `W4` re-implemented it there, which is §8's rule broken one constructor apart.
     with pytest.raises(Forbidden, match="causes="):
-        w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
+        w.write("condition", mint_token(w, WriteClass.MATTER), lambda: setattr(site, "condition", 1),
                 record_kind="Site", fieldname="condition", driver="Event",
                 emits="condition.worn", subject=site.id, causes=[])
 
@@ -3983,7 +3994,7 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
     assert "Record.ttl" in roster("conditional_emission_rows")
     rec = Record("rec_w4", "S", "writ", ttl=2)
     w.records[rec.id] = rec
-    w.write("ttl", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
+    w.write("ttl", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "ttl", rec.ttl - 1),
             record_kind="Record", fieldname="ttl", driver="Event")
     assert rec.ttl == 1, "the exempt write did not apply"
     assert not [e for e in w.log if anchor_of(w, e) == rec.id], (
@@ -3991,13 +4002,13 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
         "expiry that has not happened")
     # AND THE EXEMPTION IS NARROW: an UNDECLARED kind is still refused on the same row.
     with pytest.raises(Forbidden, match="does not declare"):
-        w.write("ttl", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
+        w.write("ttl", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "ttl", rec.ttl - 1),
                 record_kind="Record", fieldname="ttl", driver="Event",
                 emits="record.vanished", subject=rec.id, causes=[ROOT])
     # AND `subject=` IS MANDATORY WHEN EMITTING — the trace-label fallback was the value that
     # made every site's wear emit under the subject `"condition"`.
     with pytest.raises(Forbidden, match="no `subject="):
-        w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
+        w.write("condition", mint_token(w, WriteClass.MATTER), lambda: setattr(site, "condition", 1),
                 record_kind="Site", fieldname="condition", driver="Event",
                 emits="condition.worn", causes=[ROOT])
 
@@ -4043,8 +4054,8 @@ def test_w4_a_refused_attempt_names_the_attempt_not_the_campaign_seed():
     mult = w.fixtures.get("obstacle_refusal_multiple")
     a = Act(id="act_refused", actor=pid, verb="work")
     a.obstacle, a.pool = mult * 10 + 1, 1        # Ob > multiple x Pool -> S27.4 refuses
-    d.matter([])
-    out = d.resolve([a], contest_max_depth=2)
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [a], contest_max_depth=2)
     refused = [e for e in out if e.kind == "attempt.refused"]
     assert refused, "S27.4 did not refuse the over-obstacle attempt; the fixture no longer reaches it"
     for e in refused:
@@ -4578,8 +4589,8 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
         made.extend(acts)
         return acts
 
-    d.matter([])
-    out = d.resolve(made or choose(w.persons[duke], None, None, None),
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), made or choose(w.persons[duke], None, None, None),
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     kinds = {e.kind for e in out}
     assert "tenure.opened" in kinds, (
@@ -4721,7 +4732,7 @@ def test_the_revocation_branch_executes_in_the_fold_and_not_only_as_a_predicate(
     before = [t.id for t in w.tenures if t.kind == "hold" and t.object == "off_dicastery" and t.live]
     assert before, "the fixture office is unheld; the fold would have nothing to close"
     w.step = Step.RESOLVE
-    events = SeasonDriver(w).resolve([act])
+    events = SeasonDriver(w).resolve(mint_token(w, WriteClass.ACTS), [act])
     kinds = [e.kind for e in events]
     assert "attempt.refused" not in kinds, (
         f"the fold refused a revocation whose preconditions all hold: {kinds}")
@@ -4818,7 +4829,7 @@ def test_w8_matter_draws_before_it_produces_which_is_353s_stated_order():
     w = P.tiny_world()
     d = SeasonDriver(w)
     w.step = Step.MATTER
-    evs = d.matter([])
+    evs = d.matter(mint_token(d.w, WriteClass.MATTER), [])
     order = [(e.kind, anchor_of(w, e)) for e in evs if e.kind in ("stores.changed", "yield.taken")]
     assert order, f"MATTER emitted no economy events at all: {[e.kind for e in evs]}"
     # `S` both draws (one person present) and produces (it owns both sites), so it is the one
@@ -4843,7 +4854,7 @@ def test_w8_a_worn_site_produces_less_and_a_dead_one_produces_nothing():
         for st in w.sites.values():
             st.condition = cond
         d = SeasonDriver(w); w.step = Step.MATTER
-        d.matter([])
+        d.matter(mint_token(d.w, WriteClass.MATTER), [])
         return sum(getattr(w.rungs["S"], "yield").values())
     full = produced(w0 := DEFAULT_FIXTURES.get("condition_scale"))
     half = produced(w0 // 2)
@@ -4866,7 +4877,7 @@ def test_w8_the_none_arm_is_a_real_control_and_the_loader_refuses_it_as_a_defaul
     try:
         for k in SITE_YIELD:
             SITE_YIELD[k] = {}
-        d.matter([])
+        d.matter(mint_token(d.w, WriteClass.MATTER), [])
         assert not getattr(w.rungs["S"], "yield"), (
             "the `none` arm still produced; then the control cannot break the claim")
     finally:
@@ -5111,7 +5122,7 @@ def test_w8_work_emits_a_success_while_repairing_nothing():
     site = w.sites["site_seam"]
     before = site.condition
     d = SeasonDriver(w); w.step = Step.RESOLVE
-    evs = d.resolve([Act(id="wk", actor="p_low", verb="work", payload={"site": site.id})])
+    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="wk", actor="p_low", verb="work", payload={"site": site.id})])
     assert [e.kind for e in evs] == ["site.worked"], [e.kind for e in evs]
     assert site.condition == before, (
         f"`work` moved condition {before} -> {site.condition} from an act declaring no delta; "
@@ -5347,8 +5358,8 @@ def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
     # an office to HAVE one and neither fixture office does.
     w.offices["off_dicastery"].conferral = "appointed"
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="g_conf", actor=duke, verb="confer",
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_conf", actor=duke, verb="confer",
                            payload={"office": "off_dicastery", "to": "p_mid"})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "tenure.opened"), None)
@@ -5391,8 +5402,8 @@ def test_h71_others_half_a_witness_learns_who_was_seated_on_what():
         w = P.tiny_world(DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
         w.offices["off_dicastery"].conferral = "appointed"
         d = SeasonDriver(w)
-        d.matter([])
-        out = d.resolve([Act(id="g_conf", actor="p_high", verb="confer",
+        d.matter(mint_token(d.w, WriteClass.MATTER), [])
+        out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_conf", actor="p_high", verb="confer",
                              payload={"office": "off_dicastery", "to": "p_mid"})],
                         contest_max_depth=w.fixtures.get("contest_max_depth"))
         e = next((x for x in out if x.kind == "tenure.opened"), None)
@@ -5413,7 +5424,7 @@ def test_h71_others_half_a_witness_learns_who_was_seated_on_what():
         # cannot resolve.
         for x in out:
             w.log.append(x)
-        d.witness(out)
+        d.witness(mint_token(d.w, WriteClass.INTERIOR), out)
         return w
 
     def holds(w, pid):
@@ -5469,8 +5480,8 @@ def test_h71_others_half_a_non_hold_tenure_release_stays_opaque():
                "p_mid", "prop_test", "commit", since=w.tick)
     w.add_tenure(ct)
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="g_rel", actor="p_mid", verb="release",
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_rel", actor="p_mid", verb="release",
                          payload={"subject": "prop_test"})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "tenure.closed"), None)
@@ -5481,7 +5492,7 @@ def test_h71_others_half_a_non_hold_tenure_release_stays_opaque():
         f"own id {ct.id!r}")
     for x in out:
         w.log.append(x)
-    d.witness(out)
+    d.witness(mint_token(d.w, WriteClass.INTERIOR), out)
     everyone_claims = {c for pid in w.persons for c in
                        {(c.subject, c.predicate, c.value) for c in w.persons[pid].ledger}}
     assert not any(subj == "prop_test" for subj, _, _ in everyone_claims), (
@@ -7585,7 +7596,7 @@ def test_wa_the_fold_and_the_person_read_the_same_cell_with_opposite_polarities(
     assert verdict.value is UNKNOWN, verdict
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
-    kinds = [e.kind for e in d._fold(w, a)]
+    kinds = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), a)]
     assert kinds == ["transfer.refused"], (
         f"an operand-less `transfer` emitted {kinds}. UNKNOWN must refuse in the fold; admitting "
         "it would move grain the act never named -- `H-94` filled by accident")
@@ -7599,7 +7610,7 @@ def test_wa_the_fold_and_the_person_read_the_same_cell_with_opposite_polarities(
     # `LedgerReader`. So the guard is not deleted: it now asserts the field EXISTS and CARRIES THE
     # SAME READS THE VERDICT DID, which is the property that would break if `W-B` were reverted
     # halfway -- a field added and never populated is the dead carrier from the other direction.
-    ev = d._fold(w, Act(id="wa_t2", actor="p_low", verb="transfer", payload={"subject": "Hh"}))
+    ev = d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_t2", actor="p_low", verb="transfer", payload={"subject": "Hh"}))
     assert all(hasattr(e, "observed") for e in ev), (
         "an Event lost its `observed` field -- `W-B` attaches the fold's reads to every Event an "
         "act emits, and a missing field means the carrier was reverted")
@@ -7638,13 +7649,13 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
     w = P.tiny_world()
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
-    bare = [e.kind for e in d._fold(w, Act(id="wa_w0", actor="p_low", verb="work"))]
+    bare = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w0", actor="p_low", verb="work"))]
     assert bare == ["work.unavailable"], (
         f"a `work` naming no site emitted {bare}. It cannot have checked a condition against a "
         "floor, because it was never told whose condition")
     # AND IT STILL ADMITS A NAMED, WORKABLE SITE -- otherwise the refusal above is not the
     # polarity rule, it is the verb being broken (§0.1 point 2: the control the first arm needs).
-    ok = [e.kind for e in d._fold(w, Act(id="wa_w1", actor="p_low", verb="work",
+    ok = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w1", actor="p_low", verb="work",
                                            payload={"site": "site_harbour"}))]
     assert ok == ["site.worked"], f"a workable site was refused: {ok}"
     # AND IT REFUSES A SITE BELOW EVERY FLOOR, which is the failure §12.1's gate exists to
@@ -7652,7 +7663,7 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
     site = w.sites["site_harbour"]
     kept, site.condition = site.condition, 0
     try:
-        dead = [e.kind for e in d._fold(w, Act(id="wa_w2", actor="p_low", verb="work",
+        dead = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w2", actor="p_low", verb="work",
                                                  payload={"site": site.id}))]
         assert dead == ["work.unavailable"], f"a site at condition 0 was worked: {dead}"
     finally:
@@ -7669,7 +7680,7 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
     assert min(fl.values()) <= seam.condition < max(fl.values()), (
         "the fixture no longer places `site_seam` between its loosest and strictest floor, so "
         "this pin no longer discriminates the three readings -- re-choose the site")
-    workable = [e.kind for e in d._fold(w, Act(id="wa_w3", actor="p_low", verb="work",
+    workable = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w3", actor="p_low", verb="work",
                                                  payload={"site": seam.id}))]
     assert workable == ["site.worked"], (
         f"a seam at condition {seam.condition} was refused ({workable}); surface_gleaning's "
@@ -7940,7 +7951,7 @@ def test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing():
         before = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
         d = SeasonDriver(w)
         w.step = Step.RESOLVE
-        kinds = [e.kind for e in d._fold(w, acts[0])]
+        kinds = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), acts[0])]
         after = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
         # ⚠ ZERO-VALUED KEYS ARE NOT MOVEMENT, AND THIS ARM WAS COUPLED TO THE KIND FIXTURE UNTIL
         # THE `W-C` ADVERSARIAL PASS. At `amount=0` the effect still runs
@@ -8033,7 +8044,7 @@ def test_wc_the_store_kind_sweep_runs_all_three_arms_and_an_unstocked_kind_refus
         before = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
         d = SeasonDriver(w)
         w.step = Step.RESOLVE
-        emitted = [e.kind for e in d._fold(w, acts[0])]
+        emitted = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), acts[0])]
         after = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
         moved = {r: (before[r].get(kind), after[r].get(kind))
                  for r in w.rungs if norm(before[r]) != norm(after[r])}
@@ -8503,12 +8514,12 @@ def _wb_fold_one(w, verb="transfer", actor="p_low", subject="S"):
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
     a = Act(id=f"wb_{verb}", actor=actor, verb=verb, payload=dict(ops))
-    evs = d._fold(w, a)
+    evs = d._fold(w, mint_token(w, WriteClass.ACTS), a)
     for e in evs:
         w.log.append(e)
         d.act_of[e.id] = a
     w.step = Step.WITNESS
-    d.witness(evs)
+    d.witness(mint_token(d.w, WriteClass.INTERIOR), evs)
     return d, evs, ops, row, q
 
 
@@ -8561,12 +8572,12 @@ def test_wb_the_fold_attaches_the_verdicts_reads_to_every_event_the_act_emits():
     w3.step = Step.RESOLVE
     q3 = Question("q:wb3", "need", ("S",), "prop")
     typed_ops = operands_for(p3, VERB_TABLE["transfer"], q3, "S", w3.fixtures)
-    typed = d3._fold(w3, Act(id="wb_pre", actor="p_low", verb="transfer",
+    typed = d3._fold(w3, mint_token(w3, WriteClass.ACTS), Act(id="wb_pre", actor="p_low", verb="transfer",
                                payload=dict(typed_ops)))
     assert typed and typed[0].observed, (
         "the priming act read nothing, so the leak this asserts against cannot happen and the "
         "assertion below is vacuous")
-    untyped = d3._fold(w3, Act(id="wb_cr", actor="p_low", verb="create_record",
+    untyped = d3._fold(w3, mint_token(w3, WriteClass.ACTS), Act(id="wb_cr", actor="p_low", verb="create_record",
                                  payload={"subject": "S"}))
     assert untyped, "create_record emitted nothing — the fixture changed"
     assert all(e.observed == () for e in untyped), (
@@ -8958,7 +8969,7 @@ def test_wb_two_reads_of_one_cell_in_one_barrier_deposit_exactly_one_claim():
     evs = []
     for n in (1, 2):
         a = Act(id=f"wb_dedup_{n}", actor="p_low", verb="transfer", payload=dict(ops))
-        out = d._fold(w, a)
+        out = d._fold(w, mint_token(w, WriteClass.ACTS), a)
         for e in out:
             w.log.append(e)
             d.act_of[e.id] = a
@@ -8971,7 +8982,7 @@ def test_wb_two_reads_of_one_cell_in_one_barrier_deposit_exactly_one_claim():
         f"both reads returned the same value: {reads}. `_eff_transfer` no longer mutates "
         "`Rung.stores` during RESOLVE, so the same-tick collision this pins cannot arise")
     w.step = Step.WITNESS
-    d.witness(evs)
+    d.witness(mint_token(d.w, WriteClass.INTERIOR), evs)
     landed = [(c.subject, c.predicate, c.value, c.when, c.confidence) for c in p.ledger
               if c.predicate == "stores:grain"]
     assert len(landed) == 1, (
@@ -10459,7 +10470,7 @@ def _we_bands(model="scene_fraction", ids=range(24)):
         d = SeasonDriver(w)
         act = Act(id=f"we{i}", actor="p_low", verb="kill / wound",
                     payload={"subject": "p_mid"})
-        evs = d.resolve([act], w.fixtures.get("contest_max_depth"))
+        evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], w.fixtures.get("contest_max_depth"))
         deg = evs[0].degree if evs else None
         alive = "p_mid" in w.persons
         seen.setdefault(deg, dict(
@@ -10564,7 +10575,7 @@ def test_we_event_degree_is_assigned_and_stays_none_where_nothing_graded_it():
     # THE UNCONTESTED PATH. `speak` declares no `contests:`, so nothing graded it.
     w = _w(); w.step = Step.RESOLVE
     d = SeasonDriver(w)
-    evs = d.resolve([Act(id="we_sp", actor="p_low", verb="speak")], 2)
+    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we_sp", actor="p_low", verb="speak")], 2)
     assert evs and all(e.degree is None for e in evs), [(e.kind, e.degree) for e in evs]
 
 
@@ -10841,7 +10852,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
 
     w2 = _w(); w2.step = Step.RESOLVE
     d = SeasonDriver(w2)
-    evs = d.resolve([Act(id="we0", actor="p_low", verb="kill / wound",
+    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we0", actor="p_low", verb="kill / wound",
                            payload={"subject": "p_mid"})], 2)
     assert [e.kind for e in evs] == ["body.changed"], [(e.kind, e.degree) for e in evs]
     assert "p_mid" in w2.persons, (
@@ -10871,8 +10882,8 @@ def test_r8_4_document_key_fires_for_a_non_author_holding_the_changed_record():
     w = P.tiny_world()
     author, holder, bystander = "p_low", "p_other", "p_mid"
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="r_mk", actor=author, verb="create_record", payload={})],
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="r_mk", actor=author, verb="create_record", payload={})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "record.created"), None)
     assert e is not None, f"the fold emitted {[x.kind for x in out]} — no `record.created`"
@@ -10946,8 +10957,8 @@ def test_r8_4_document_key_reaches_a_non_author_through_a_store():
     w.add_tenure(Tenure("t_src", actor, "S", "hold", since=0))
     w.add_tenure(Tenure("t_dst", witness, "Hh", "hold", since=0))
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="tr1", actor=actor, verb="transfer",
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="tr1", actor=actor, verb="transfer",
                            payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 3})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "transfer.made"), None)
@@ -11011,8 +11022,9 @@ def _u2_bailiff_sets(plant: bool, at_round: int = 0, stamp: bool = True):
     # that differs between the two arms is ONE CLAIM ARRIVING MID-SEASON.
     real_witness = SeasonDriver.witness
 
-    def witness_then_plant(self, events):
-        n = real_witness(self, events)
+    # G2: `witness` takes the driver's INTERIOR token first; the spy passes it straight through.
+    def witness_then_plant(self, token, events):
+        n = real_witness(self, token, events)
         if plant and self.round == at_round:
             b = w.persons[HL.BAILIFF]
             b.ledger.append(Claim(

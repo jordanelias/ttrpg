@@ -13,6 +13,9 @@ same reason -- to show that the road beyond it is real, or that it is not.
 from __future__ import annotations
 import sweep_core as K
 from sweep_core import S, C, R, CS, KW, Log
+# G2 (2026-09-26): `_fold` takes the driver's ACTS token after `w`; a bare call mints its own there.
+from engine.season.data.matrix import WriteClass
+from engine.season.loop.driver import mint_token
 
 
 def runnable_cases(lane: str) -> list:
@@ -151,7 +154,7 @@ def run_2c(log: Log) -> dict:
     verdict, detail = None, ""
     try:
         try:
-            d._fold(w, act)
+            d._fold(w, mint_token(w, WriteClass.ACTS), act)
             verdict, detail = "COMPLETED", "no gap raised"
         except S.InstrumentDefect as e:
             verdict, detail = "CAUGHT-343 -> status INSTRUMENT-DEFECT", f"{type(e).__name__}: {e}"

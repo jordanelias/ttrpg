@@ -24,7 +24,7 @@ import pytest
 from collections import Counter
 
 from ..data import files
-from ..data.matrix import MATRIX, Step
+from ..data.matrix import MATRIX, Step, WriteClass
 from ..data.rosters import CONFERRAL_BASES, REVOCATION_BASES, RUNG_KINDS, TITLE_DOMAINS, title_domain
 from ..data.verbs import VERB_TABLE
 from ..epistemic import CHANNEL_PREDICATES
@@ -32,7 +32,7 @@ from ..gaps import Forbidden, Unowned, Unspecified
 from ..data.cast import faction_leader
 from ..harness.populated import build_realm
 from ..loop import predicates as _preds
-from ..loop.driver import SeasonDriver, resolvable_verbs
+from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..loop.predicates import in_holdings, office_described_by
 from ..queries import world_q
 from ..harness import probes as P
@@ -191,7 +191,7 @@ def _matter_once(w, *, keep_yield=False):
         w.sites.clear()
     d = SeasonDriver(w)
     w.step = Step.MATTER
-    return d.matter([])
+    return d.matter(mint_token(d.w, WriteClass.MATTER), [])
 
 
 def _eaters_at(w, rung_id):
@@ -394,7 +394,7 @@ def test_lb3b_a_short_larder_falls_a_body_a_band_and_narrows_the_season():
     crossed_at = None
     for season in range(1, 40):
         w.step = Step.MATTER
-        evs = d.matter([])
+        evs = d.matter(mint_token(d.w, WriteClass.MATTER), [])
         w.tick += 1
         if [e for e in evs if e.kind == "condition.band_crossed" and anchor_of(w, e) == who]:
             crossed_at = season
@@ -426,7 +426,7 @@ def test_lb3b_control_a_stocked_world_moves_no_body_and_no_budget():
 
     d = SeasonDriver(w)
     w.step = Step.MATTER
-    evs = d.matter([])
+    evs = d.matter(mint_token(d.w, WriteClass.MATTER), [])
 
     assert {pid: p.body for pid, p in w.persons.items()} == before_bodies, (
         "a fed person's body moved")
@@ -451,7 +451,7 @@ def test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly():
 
     d = SeasonDriver(w)
     w.step = Step.MATTER
-    evs = d.matter([])
+    evs = d.matter(mint_token(d.w, WriteClass.MATTER), [])
 
     assert w._subsistence_shortfall, "nobody is short on a bare world; the arm proves nothing"
     assert {pid: p.body for pid, p in w.persons.items()} == before, (
@@ -483,7 +483,7 @@ def test_lb3c_death_at_body_zero_closes_every_tenure_through_the_same_owner_as_k
 
     d = SeasonDriver(w)
     w.step = Step.MATTER
-    evs = d.matter([])
+    evs = d.matter(mint_token(d.w, WriteClass.MATTER), [])
 
     assert "p_mid" not in w.persons, "a body reached 0 and the person is still in the world"
     assert [anchor_of(w, e) for e in evs if e.kind == "person.died"] == ["p_mid"]
@@ -774,7 +774,7 @@ def _scar_bands(scar_step, ids=range(24)):
         d = SeasonDriver(w)
         act = _Act(id=f"scar{i}", actor="p_low", verb="kill / wound",
                    payload={"subject": "p_mid"})
-        evs = d.resolve([act], w.fixtures.get("contest_max_depth"))
+        evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], w.fixtures.get("contest_max_depth"))
         deg = evs[0].degree if evs else None
         alive = "p_mid" in w.persons
         seen.setdefault(deg, dict(
@@ -916,7 +916,7 @@ def _establish_world():
     the eligibility `establish` declares -- and `p_mid` holds no office."""
     w = P.tiny_world()
     d = SeasonDriver(w)
-    d.matter([])
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
     return w, d
 
 
@@ -931,7 +931,7 @@ def _founding(**over) -> dict:
 
 
 def _establish(w, d, aid: str, payload, actor: str = "p_high") -> list:
-    return d.resolve([Act(id=aid, actor=actor, verb="establish", payload=payload)],
+    return d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id=aid, actor=actor, verb="establish", payload=payload)],
                      contest_max_depth=w.fixtures.get("contest_max_depth"))
 
 
@@ -1101,7 +1101,7 @@ def test_13f_an_unfoundable_establish_refuses_constructs_nothing_and_raises_noth
     if raises:
         with pytest.raises((Unowned, Unspecified, Forbidden)):
             office_described_by(act)
-    out = d.resolve([act], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
     assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
     assert w.offices == before, f"an office was constructed: {sorted(set(w.offices) - set(before))}"
 
@@ -1276,7 +1276,7 @@ def test_13e_the_witness_channel_also_reads_the_snapshot_not_the_live_office():
         "a hand-created office re-granted a sitting holder -- fixture is not the snapshot case")
 
     w.offices["off_dicastery"].conferral = "appointed"      # rostered since `13d-i`
-    out = d.resolve([Act(id="g_conf", actor="p_high", verb="confer",
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_conf", actor="p_high", verb="confer",
                           payload={"office": "off_dicastery", "to": "p_low"})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "tenure.opened"), None)
@@ -1553,7 +1553,7 @@ def test_13d_i_an_off_roster_conferral_on_establish_refuses_and_raises_nothing()
               payload=_founding(conferral="something-not-on-the-roster"))
     with pytest.raises(Unspecified):
         office_described_by(act)
-    out = d.resolve([act], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
     assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
     assert "off_reeve" not in w.offices
     founded = 0
@@ -1597,7 +1597,7 @@ def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_ot
     assert held(), "fixture: nobody holds the duke's seat"
 
     def run(aid, actor):
-        return [e.kind for e in d.resolve(
+        return [e.kind for e in d.resolve(mint_token(d.w, WriteClass.ACTS), 
             [Act(id=aid, actor=actor, verb="revoke", payload={"office": "off_duke"})],
             contest_max_depth=w.fixtures.get("contest_max_depth"))]
 

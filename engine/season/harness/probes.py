@@ -42,7 +42,10 @@ from ..gaps import (
     Collision, Forbidden, NoProducer, ShapeGap, Ungraded, Unowned, Unspecified, expect_refusal,
 )
 from ..loop.deliberate import sense
-from ..loop.driver import SeasonDriver, resolvable_verbs
+# G2: `mint_token` is the driver's one Token constructor. A probe that sets `w.step` by hand and
+# writes is standing in for the driver at a synthetic barrier, so it mints there rather than
+# building a `Token` itself -- `tests/test_g2_token.py` refuses a `Token(` anywhere but the driver.
+from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries.world_q import questions_for
 from ..seam import ContestError, contest
 from ..state.attribution import anchor_of
@@ -445,7 +448,7 @@ def p5():
 def p6():
     w = tiny_world()
     w.step = Step.RESOLVE
-    w.write("stance", WriteClass.ACTS, lambda: None,
+    w.write("stance", mint_token(w, WriteClass.ACTS), lambda: None,
             record_kind="Person", fieldname="pursuits", driver="Act")
     # W2: this RAISED until Part D was loaded as data. `(Person, convictions)` had no row of its
     # own and the old gate was keyed on a THING, so the only way to write it was to ride on
@@ -467,7 +470,7 @@ def p7():
     # S54 item 21, verdict FOLD-IN amended: "a `(Person, scar[axis])` row, `social: true`,
     # written at RESOLVE in the ACTS class by the outcome that names the person". Reporting the
     # row as absent INVERTED THE SIGN ON A SEVEN-ARC FINDING.
-    w.write("stance", WriteClass.ACTS,
+    w.write("stance", mint_token(w, WriteClass.ACTS),
             lambda: scars.__setitem__("Mercy", scars.get("Mercy", 0) + 1),
             record_kind="Person", fieldname="scar", driver="Act")
     assert scars == {"Mercy": 1}
@@ -516,7 +519,7 @@ def p10():
     r = Record("rec1", "Hh", "copy", stages=[("half", 2), ("done", 4)])
     w.records[r.id] = r
     w.step = Step.RESOLVE
-    w.write("carrier_exists", WriteClass.ACTS, lambda: w.records.__setitem__(r.id, r),
+    w.write("carrier_exists", mint_token(w, WriteClass.ACTS), lambda: w.records.__setitem__(r.id, r),
             record_kind="Record", fieldname="stages", driver="Act")
     # W2: raised until Part D carried the `Record` rows (defect D7). It now lands -- and the
     # probe shows BOTH halves of what it claims, because declaring the stages is only the first.
@@ -527,7 +530,7 @@ def p10():
     # `W4`: a MATTER write on a row Part D gives an `emits:` must name one. `[ROOT]` is said
     # EXPLICITLY because this synthetic world has no antecedent -- which is the carve-out, and
     # saying it rather than defaulting to it is the point.
-    w.write("carrier_exists", WriteClass.MATTER, lambda: setattr(r, "matured", True),
+    w.write("carrier_exists", mint_token(w, WriteClass.MATTER), lambda: setattr(r, "matured", True),
             record_kind="Record", fieldname="matured", driver="Event",
             emits="term.matured", subject=r.id, causes=[ROOT])
     return ("PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is "
@@ -763,7 +766,7 @@ def p18():
 def p19():
     w = tiny_world()
     w.step = Step.MATTER
-    w.write("stance", WriteClass.MATTER, lambda: None,
+    w.write("stance", mint_token(w, WriteClass.MATTER), lambda: None,
             record_kind="Person", fieldname="stance", driver="Event")
     return "UNREACHABLE"
 
@@ -773,7 +776,7 @@ def p19():
 def p20():
     w = tiny_world()
     w.step = Step.CENSUS
-    w.write("carrier_exists", WriteClass.MATTER,
+    w.write("carrier_exists", mint_token(w, WriteClass.MATTER),
             lambda: w.persons.__setitem__("p_new", Person("p_new", "someone")),
             record_kind="Person", fieldname="exists", driver="Event",
             emits="person.individuated", subject="p_new", causes=[ROOT])   # `W4`
@@ -817,7 +820,7 @@ def p22():
     w = tiny_world()
     w.records["rec_writ"] = Record("rec_writ", "S", "writ")
     w.step = Step.RESOLVE
-    w.write("Tenure", WriteClass.ACTS,
+    w.write("Tenure", mint_token(w, WriteClass.ACTS),
             lambda: w.add_tenure(Tenure("t_hold", "p_low", "rec_writ", "hold", since=0)),
             # W2: this declared `(Record, held_by)`, which is not a Record field and is on no
             # Part D row. H-22 rules it: "the `hold` Tenure is the HOLDER'S". A hold is a
@@ -853,7 +856,7 @@ def p22():
 def p23():
     w = tiny_world()
     w.step = Step.MATTER
-    w.write("carrier_exists", WriteClass.MATTER, lambda: w.persons.pop("p_low", None),
+    w.write("carrier_exists", mint_token(w, WriteClass.MATTER), lambda: w.persons.pop("p_low", None),
             record_kind="Person", fieldname="exists", driver="Event",
             emits="person.died", subject="p_low", causes=[ROOT])           # `W4`
     # W2: as P20. The row Part D adds is what lets a season end with no institution involved.
@@ -869,7 +872,7 @@ def p24():
     held = [t for t in w.tenures if t.subject == "p_high"]
     assert held
     for t in held:
-        w.write("Tenure", WriteClass.MATTER, lambda t=t: setattr(t, "until", w.tick),
+        w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda t=t: setattr(t, "until", w.tick),
                 record_kind="Tenure", fieldname="until", driver="Event",
                 caused_person_exists="p_high",
                 emits="tenure.closed", subject=t.object, causes=[ROOT])     # `W4`
@@ -886,7 +889,7 @@ def p25():
     w = tiny_world()
     w.step = Step.MATTER
     t = [x for x in w.tenures if x.subject == "p_high" and x.kind == "hold"][0]
-    w.write("Tenure", WriteClass.MATTER, lambda: setattr(t, "until", w.tick),
+    w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: setattr(t, "until", w.tick),
             record_kind="Tenure", fieldname="until", driver="Event")   # no causation supplied
     return "UNREACHABLE"
 
@@ -1160,9 +1163,9 @@ def f2():
     assert not [t for t in world_q.lateral(w, "faction", "commit") if t.object == prop.id]
     w.step = Step.RESOLVE
     old = world_q.hold_force(w, "S")
-    w.write("Tenure", WriteClass.ACTS, lambda: setattr(old, "until", w.tick),
+    w.write("Tenure", mint_token(w, WriteClass.ACTS), lambda: setattr(old, "until", w.tick),
             record_kind="Tenure", fieldname="until", driver="Act")
-    w.write("Tenure", WriteClass.ACTS,
+    w.write("Tenure", mint_token(w, WriteClass.ACTS),
             lambda: w.add_tenure(Tenure("th_new", "p_high", "S", "hold", since=w.tick)),
             record_kind="Tenure", fieldname="since", driver="Act")
     assert world_q.hold_force(w, "S").subject == "p_high"
@@ -1382,9 +1385,9 @@ def f12():
     w = tiny_world()
     w.step = Step.RESOLVE
     t = world_q.hold_force(w, "off_duke")
-    w.write("Tenure", WriteClass.ACTS, lambda: setattr(t, "until", w.tick),
+    w.write("Tenure", mint_token(w, WriteClass.ACTS), lambda: setattr(t, "until", w.tick),
             record_kind="Tenure", fieldname="until", driver="Act")
-    w.write("Tenure", WriteClass.ACTS,
+    w.write("Tenure", mint_token(w, WriteClass.ACTS),
             lambda: w.add_tenure(Tenure("t_new", "p_mid", "off_duke", "hold", since=w.tick)),
             record_kind="Tenure", fieldname="since", driver="Act")
     assert not t.live and world_q.hold_force(w, "off_duke").subject == "p_mid"
@@ -1407,7 +1410,7 @@ def f13():
     w = tiny_world()
     w.dates["d_conf"] = dict(due_at=0, holder="D", fired=False)
     w.dates["d_vacant"] = dict(due_at=0, holder=None, fired=False)
-    SeasonDriver(w).calendar()
+    SeasonDriver(w).calendar(mint_token(w, WriteClass.CALENDAR))
     assert w.dates["d_conf"]["fired"] and w.dates["d_vacant"]["fired"]
     assert len(w.docket) == 1
     return ("PASS: both dates FIRED; the vacant one ALLOCATED NOTHING AND LAPSED rather than "
@@ -1454,10 +1457,10 @@ def f16():
     # measuring AGAINST the design, which S0.1 point 4 rules is no more acceptable than flattery.
     rung = w.rungs["D"]
     w.step = Step.RESOLVE
-    w.write("stores", WriteClass.ACTS,
+    w.write("stores", mint_token(w, WriteClass.ACTS),
             lambda: rung.stores.__setitem__("coin", rung.stores.get("coin", 0) + 40),
             record_kind="Rung", fieldname="stores", driver="Act")
-    w.write("stores", WriteClass.ACTS,
+    w.write("stores", mint_token(w, WriteClass.ACTS),
             lambda: rung.stores.__setitem__("coin", rung.stores["coin"] - 15),
             record_kind="Rung", fieldname="stores", driver="Act")
     assert rung.stores["coin"] == 25
@@ -1606,7 +1609,7 @@ def w2():
 def w3():
     w = tiny_world()
     w.step = Step.MATTER
-    w.write("stance", WriteClass.MATTER, lambda: None,
+    w.write("stance", mint_token(w, WriteClass.MATTER), lambda: None,
             record_kind="Person", fieldname="stance", driver="Event")
     return "UNREACHABLE"
 
@@ -1655,7 +1658,7 @@ def w7():
     # non-terminal decrement of §13's licensed clock has no declared kind and the row is exempt
     # from the must-name-a-kind rule by `rosters.yaml: conditional_emission_rows`. Emitting the
     # terminal kind here would assert an expiry that has not happened.
-    w.write("carrier_exists", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
+    w.write("carrier_exists", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "ttl", rec.ttl - 1),
             record_kind="Record", fieldname="ttl", driver="Event")
     # W2: raised until Part D carried the five `Record` rows -- defect D7, under which EVERY
     # Record write was an unmarked cell. `(Record, ttl)` is MATTER-only, `social: false`,
@@ -1689,7 +1692,7 @@ def w9():
     r = w.rungs["S"]
     r.envelope = [100, 200, 150, 60]
     w.step = Step.MATTER
-    w.write("envelope", WriteClass.MATTER, lambda: r.envelope.__setitem__(0, r.envelope[0] + 5),
+    w.write("envelope", mint_token(w, WriteClass.MATTER), lambda: r.envelope.__setitem__(0, r.envelope[0] + 5),
             record_kind="Rung", fieldname="envelope", driver="Event",
             emits="envelope.changed", subject=r.id, causes=[ROOT])          # `W4`
     assert r.envelope[0] == 105
@@ -1774,7 +1777,7 @@ def a3():
     w = tiny_world()
     w.step = Step.MATTER
     # the crossing itself is lawful (P18); what is refused is the crossing PRODUCING AN OUTCOME.
-    w.write("stance", WriteClass.MATTER, lambda: None,
+    w.write("stance", mint_token(w, WriteClass.MATTER), lambda: None,
             record_kind="Person", fieldname="stance", driver="Event")
     return "UNREACHABLE"
 
