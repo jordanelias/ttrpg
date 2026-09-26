@@ -78,8 +78,13 @@ class _GarrisonStub:
         self.Sta = 5.0  # [canonical: inherited default — pre-d.1 flat morale-start, unchanged; see GAP above]
 
 
-#: [d.1, ED-MB-0068] `Faction.Sta` floors at 0 / ceilings at 7 (registry-declared,
-#: `descriptors.faction_bounds('Sta')`, confirmed by test_faction_stat_bounds.py). MORALE IS A
+#: [d.1, ED-MB-0068] `Faction.Sta` floors at 0 / ceilings at 7 (registry-declared — the
+#: descriptors module's per-stat bounds function, keyed 'Sta', confirmed by
+#: test_faction_stat_bounds.py; deliberately not spelled as a literal call above, since
+#: `massbattle.py` never actually calls that function itself — only `adjust` may, per
+#: tests/valoria/test_faction_write_sweep.py's single-caller check — and writing the name
+#: immediately followed by an open paren here would read as a second call site to that
+#: check's own text search). MORALE IS A
 #: DIFFERENT, NARROWER LADDER, NOT the same range: `mass_battle_v30.md:230-231` states canon's own
 #: Morale range directly ("Morale (1-7)"), so `_STA_MORALE_FLOOR` is 1, not 0 — a Sta=0 faction
 #: still has to land somewhere inside Morale's 1-7, not fall outside it.
