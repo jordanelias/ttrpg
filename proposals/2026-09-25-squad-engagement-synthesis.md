@@ -302,16 +302,17 @@ further ruling needed.
    | **a** — FM/Total War inform formation | Confirmed; already the shipped position→role model. Nothing changes. |
    | **b** — the Mass pool is retired | Confirmed; already shipped (ED-MB-0006, F1). Nothing changes; no row. |
    | **c** — routes, feints, delays, conditional orders | Confirmed; routes are A1, feints are C4, conditional orders already exist. Nothing beyond Part A and C4. |
-   | **d.1** — faction state sets the morale baseline | **Confirmed — overwrites PP-711.** `[ASSUMPTION: "sets the baseline" is full replacement of PP-711's general's-Command-+-quality term with faction Stability, per the concept's own unqualified wording (concept:11) and this confirmation — basis: no blending language appears in either. The Stability→s₀ mapping itself is still [PLACEHOLDER] in the concept (concept:580) — unresolved implementation detail, not a further ruling needed.]` **Still to do, not done in this pass:** change the formula where it actually lives — `engine.py:344-347`'s `morale_start` computation (and any other site deriving it from the general's Command + quality) — to read faction Stability instead, and file PP-711's supersession. `mass_battle_v30.md` is reference (CLAUDE.md §0.05): editing its prose would not change what the engine computes, so it is not the fix and is not gating anything here — it may be updated afterward as documentation, once the code changes. |
+   | **d.1** — faction state sets the morale baseline | **Confirmed — overwrites PP-711.** `[ASSUMPTION: "sets the baseline" is full replacement of PP-711's general's-Command-+-quality term with faction Stability, per the concept's own unqualified wording (concept:11) and this confirmation — basis: no blending language appears in either. The Stability→s₀ mapping itself is still [PLACEHOLDER] in the concept (concept:580) — unresolved implementation detail, not a further ruling needed.]` **Correction (ED-MB-0067's 4th row):** PP-711's Command+quality formula was never implemented — `massbattle.py:_faction_to_unit` hardcodes `morale=5, morale_start=5` with its own `[GAP]` comment admitting no canonical spec exists there. There is no formula to change; d.1 is a new derivation. **Still to do, not done in this pass:** replace that hardcoded default with a value derived from `Faction.Sta` at `massbattle.py:_faction_to_unit`, and file PP-711's supersession. `mass_battle_v30.md` is reference (CLAUDE.md §0.05): editing its prose would not change what the engine computes, so it is not the fix and is not gating anything here — it may be updated afterward as documentation, once the code changes. |
    | **d.2** — variance allowed "under GD-2" | Confirmed as directive, but GD-2 is unrelated (F6) — nothing to propagate; drop it. |
    | **d.3** — the player character is a duelling commander | Confirmed; already consistent with canon (PP-111, ED-898). Nothing changes. |
    | **d.4** — "Channellers" are not a thing | Confirmed. Propagation is a Thread-lane matter, out of this lane's scope — flag it there. |
 
 **Follow-up work this ruling opens, not yet done:** the C2/C3 coupling formula (how realized envelopment damage
 scales the morale shock; how Pressure modifies a Discipline check); the C4 mechanics (which roll, whose Ob, under
-fog); d.1's propagation into the engine — `engine.py:344-347`'s `morale_start` formula, changed to read faction
-Stability — and its own PP-711-supersession ledger entry. `mass_battle_v30.md` is reference and is not where any
-of this is fixed. None of this blocks Part A, which was already clear to build.
+fog); d.1's landing as a new derivation at `massbattle.py:_faction_to_unit` (replacing its hardcoded
+`morale=5, morale_start=5` with a value derived from `Faction.Sta` — PP-711 was never actually implemented, so
+this is not editing an existing formula) and its own PP-711-supersession ledger entry. `mass_battle_v30.md` is
+reference and is not where any of this is fixed. None of this blocks Part A, which was already clear to build.
 
 **Not reopened by this ruling:** a discrete morale clock (ED-1024 stands), casualties off the degree ladder
 (S39.4 stands), instantaneous brace (ED-1095 stands), dropping fatigue (the flags-ON ruling stands) — Part B's
