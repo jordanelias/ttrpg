@@ -344,6 +344,13 @@ class World:
     # must see EVERY Tenure written, named or not, or an unnamed edge write is the bypass. (2) G4
     # READS it: an `edge` subject has moved iff this diff lists it, so F9 and F3 share one
     # observation of the tenure store rather than taking two.
+    # ⚠⚠ "EVERY TENURE WRITTEN" IS TRUE ONLY OF WHAT `apply` DOES, NOT OF THE EFFECT'S WHOLE
+    # EXECUTION -- CORRECTED (antagonist pass, 2026-09-27, `H-137`). The snapshot above is taken
+    # inside `write()`, and an effect's own body runs BEFORE `write()` is ever called
+    # (`loop/resolve.py::_apply_write`'s `change = eff(w, a, resolution)`) -- so a mutation an
+    # effect made EAGERLY, before constructing and returning its `Change`, is already baked into
+    # the snapshot itself and produces no diff at all. Every shipped effect defers its mutation
+    # into `Change.apply`, which this observation does cover; nothing enforces that they must.
     def _tenure_snapshot(self) -> list:
         """`(tenure, its seven written fields)` for every Tenure in the store, owner-first.
 
@@ -578,8 +585,12 @@ class World:
         ⚠ IT MUTATES AND RETURNS THE IDS IT TOUCHED; IT DOES NOT CALL `write`. Both callers are
         already inside a gated write when they reach here — `_eff_kill` through its `Change`'s
         `apply`, which the gate calls (G4; `_eff_kill` no longer reads the return value, the gate
-        reads the victim instead), MATTER through its own `w.write` — and a nested write is a write
-        inside a write, which the gate refuses.
+        reads the victim instead), MATTER through its own `w.write` — and a nested write would be
+        a write inside a write. ⚠ CORRECTED (antagonist pass, 2026-09-27): this said "which the
+        gate refuses" and nothing does -- `World.write` has no re-entrancy check of any kind. The
+        property holds today only because every current caller of `remove_person` is careful to
+        call it from inside its own already-open write rather than opening a second one; it is a
+        discipline on the two call sites, not a guarantee the gate enforces.
 
         ⚠ G3: AND THAT IS WHAT MAKES THE CASCADE ATTRIBUTABLE. The gate's F3 clause admits an edge
         closed by a non-owner -- or by no actor at all, at MATTER -- only as `destroy's cascade`:

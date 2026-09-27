@@ -569,7 +569,14 @@ class Change:
     something it did not name. The gate sees two things it did not declare: every Tenure (G3's
     observation, which F3 judges and a no-op refusal PUTS BACK), and nothing else. An undeclared
     mutation of a non-Tenure entity is as invisible to F9 as it was to everything before it;
-    `H-130` is the same class one step over."""
+    `H-130` is the same class one step over.
+
+    ⚠⚠ AND THE BOUND ITSELF HAS A BOUND -- CORRECTED (antagonist pass, 2026-09-27, `H-137`). "The
+    gate sees ... every Tenure" is true only of what runs INSIDE `apply`. The effect that BUILDS
+    this `Change` runs earlier, before `World.write` (and its tenure snapshot) is ever reached
+    (`loop/resolve.py::_apply_write`) -- a mutation made there, before this object is even
+    constructed, is invisible to F3 as well as F9, not merely to F9. Every shipped effect defers
+    its mutation into `apply`; nothing enforces that the next one must."""
 
     subjects: tuple
     apply: Callable[[], None]

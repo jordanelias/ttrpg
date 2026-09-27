@@ -466,8 +466,10 @@ store; before G4 this cancelling write still published `transfer.made` with two 
 own shape), and F9 now correctly refuses it as `transfer.refused`. TRACE-verified: of 892 total
 F9 refusals in the corpus, exactly 628 carry F9's "every subject it named reads the same"
 message on `(Rung, stores)` — the rest are pre-existing declines (`contain_ascends` failing for
-`move`, insufficient stores for `transfer`) now routed through the same channel, not new
-behaviour. Every per-verb population delta the corpus move produces was independently reproduced:
+`move`; `_eff_transfer`'s own `from`/`to`-names-no-rung decline for `transfer`, corrected here —
+an earlier writing of this note said "insufficient stores," which cannot produce a `NoOpReceipt`
+at all since that refusal fires at the precondition, before the effect or the gate ever runs) now
+routed through the same channel, not new behaviour. Every per-verb population delta the corpus move produces was independently reproduced:
 `transfer` 75→59 worlds, and the cascade (worlds evolving differently once a transfer that used to
 silently succeed is refused) moves `speak` 78→81, `tell` 63→60, `surveil` 55→53, `interview`
 46→45, `kill / wound` 47→46, `move` 47→46, `release` 9→8; `create_record`/`utter` unmoved. Accepted
@@ -481,7 +483,35 @@ fixable inside this position's declared WHERE: `H-135` (a closure write — MATT
 WITNESS — is never judged for F9, so `dwelling`'s zero-wear `condition.worn` is live, unhypothetical
 `ID-9` left open outside effects) and `H-136` (the self-transfer derivation itself, `H-94`'s own
 lane, is unfixed — F9 stops it being REPORTED as a transfer, not from being formed and refused
-every time). Superseded state, kept for history: **STATE (2026-09-25). NOT STARTED.** `_apply_write`
+every time).
+
+⚠ **A GENUINE, FORWARD-REACHABLE GAP FOUND BY THE CLOSING ANTAGONIST PASS, 2026-09-27, REGISTERED
+RATHER THAN FIXED HERE (`H-137`).** An effect's own body runs wholly OUTSIDE the gate's observation
+window: `_apply_write` calls `change = eff(w, a, resolution)` *before* `World.write` — and
+therefore before its tenure snapshot — is ever reached. A mutation an effect makes eagerly, before
+constructing and returning its `Change`, is invisible to **both** F3 and F9 — the exact bypass
+shape G3 closed for `tenure_write_basis`, reached by a different route this position opened. Not
+reachable today: all twelve shipped effects were read in full, twice over, and every one defers
+its mutation into `Change.apply`; nothing enforces that a thirteenth must. **Forward-reachable
+immediately**: position `7a` (below) is not yet built and its own text described the *retired*
+pre-G4 contract — corrected there in the same pass. Two docstrings that overclaimed "the gate sees
+every Tenure" without that caveat are corrected (`state/gate.py::Change`, `state/world.py`'s
+`_tenure_snapshot` comment). **Not fixed**: the fix is a real design decision about `write()`'s
+calling convention (snapshot around the effect call, or hand `write()` the effect itself), not a
+one-line change, and this position's own tier note (`opus`/`opus`, "the wrong answer is a quietly
+permissive gate") together with G3's precedent argues for a considered fix over a rushed one at the
+tail of an already-large position. **Four smaller latent holes from the same pass, none reachable
+today, none fixed**: `H-138` (a zero-amount `transfer` can spuriously read as moved when a side
+lacks the transferred `kind`, at `H-94`'s own `amount=0` sweep point, not at the shipped default),
+`H-139` (outright Tenure deletion, unlike closing with `until`, is invisible to the diff and
+un-rollback-able), `H-140` (a `move` to one's own current location isn't caught as a no-op the way
+a self-transfer is — an unruled design question, `H-136`'s own shape for a different verb),
+`H-141` (an `earns=None` subject's "earns every kind" contract is silently dropped if any other
+moved subject in the same `Change` names an explicit kind). **Two corrections to this DONE note's
+own first writing**: the "insufficient stores" explanation above is fixed (see the inline note);
+`H-135`'s live-instance claim narrowed from MATTER/CALENDAR/WITNESS to MATTER alone, after reading
+CALENDAR's and WITNESS's actual call sites (neither manifests the shape today); `H-136`'s citation
+corrected to its real source. Superseded state, kept for history: **STATE (2026-09-25). NOT STARTED.** `_apply_write`
 (`loop/resolve.py:352`) computes no before/after; the effect runs inside `apply()` and the receipts
 are minted after `w.write` returns (`:400`). Eleven effects are registered today; every effect
 landed before this position adds one to the rewrite (`13f` first, in part 1 `§3.1`'s order — so
@@ -494,9 +524,17 @@ twelve).
 **STATE.** Built once and HELD, not in the tree: `EFFECTS` has no `commit`, and `commit` is not
 resolvable (`writes: ["Tenure.since"]` with no effect; `loop/driver.py:99`). `HANDOFF_IN.md` carries
 it HELD.
-**INSTRUCTION.** `@effect_for("commit")` minting the `commit` Tenure the row already declares (kind in
-`tenure_kinds`), through `add_tenure`, returning the Tenure it opened — an effect that returns nothing
-makes the fold emit the refusal (`loop/resolve.py:306-311`). Content owner:
+**INSTRUCTION.** `@effect_for("commit")`, written to the **G4 contract** (`state/gate.py::Change`,
+plan position 7, DONE): build the `commit` Tenure the row already declares (kind in `tenure_kinds`)
+as a local object, and return `Change((Subject.edge(nt),), lambda: w.add_tenure(nt))` — the effect
+NAMES the edge and DEFERS the `add_tenure` call into the closure; it does **not** call `add_tenure`
+eagerly in its own body before constructing the `Change`. ⚠ **THIS INSTRUCTION READ "minting ...
+through `add_tenure`, returning the Tenure it opened" UNTIL 2026-09-27, WHICH IS THE RETIRED
+PRE-G4 CONTRACT** (mutate directly, return what you touched) — an antagonist pass on G4's close
+found this exact mismatch and filed it as `H-137`: an effect that mutates before returning its
+`Change` is invisible to both F3 and F9, because the gate's observation window opens only around
+the returned closure, not around the effect's own body. `Change(subjects, apply)` returning
+NO_CHANGE — not an empty/falsy return — is how the fold learns nothing was written. Content owner:
 `proposals/2026-09-17-governance-and-behaviour/01_THE_BUILD_ORDER.md` §7.2 (`:460`), which records the
 first build: *"`commitment.made : 0` / `commitment.refused : 42`"* on one populated season, because
 **no question source offers a Proposition referent** (BO-9). BO-10: build-order items 5, 7 and 8 — here
