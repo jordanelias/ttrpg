@@ -3,16 +3,16 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 167,
-    "total": 422,
-    "uncited": 255,
+    "total": 423,
+    "uncited": 256,
     "of_which_assumption_grade": 11
   },
-  "count": 422,
+  "count": 423,
   "by_module": {
     "engine.autoload": 14,
     "engine.cross_scale": 13,
     "engine": 1,
-    "engine.season": 6,
+    "engine.season": 7,
     "characters": 7,
     "combat": 12,
     "factions": 65,
@@ -432,6 +432,17 @@
       "note": "ED-IN-0249 / H-128 -- the scar accumulator's precision, order-independence only",
       "citation": "ED-IN-0249",
       "citation_grade": "source"
+    },
+    {
+      "key": "engine.season._NAMED_IN_MESSAGE",
+      "name": "_NAMED_IN_MESSAGE",
+      "value": 4,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/state/gate.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
     },
     {
       "key": "characters.BELIEF_MOMENTUM_PER_CONTEST_CAP",

@@ -9502,7 +9502,7 @@
   "P36": {
    "id": "P36",
    "verdict": "PASS",
-   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 28 candidates were OFFERED from the computed option set and only 19 of 38 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'surveil', 'utter', 'work'] -- 5 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
+   "detail": "PASS BY CONSTRUCTION, WITH A MEASUREMENT: 28 candidates were OFFERED from the computed option set and only 20 of 38 verbs can be RESOLVED at all, so this ran over the resolvable ones. ['move', 'speak', 'surveil', 'utter', 'work'] -- 5 distinct verbs through the SAME resolver, no branching-outcome machinery (Part VIII refuses it as an authoring convention over Record). \u26a0 REV 2 WAS A PASS-WITH-A-DISCLOSURE and the disclosure was the finding: 'THE ROSTER IS THE PROBE'S, because S61 leaves `opening_set` nothing to compute from.' The roster is gone -- these come from the verb table via `questions_for` -- and the three verbs rev 2 authored (`protect`, `report`, `leverage`) are on NO table row, so the branching it demonstrated was branching among inventions",
    "kind": null,
    "section": "S17",
    "title": "a choice branches three ways",
@@ -9521,11 +9521,13 @@
   },
   "F2": {
    "id": "F2",
-   "verdict": "PASS",
-   "detail": "PASS: `confer` on an object whose holder had ZERO live commit edges to the cause he held it for was eligible, and THE SUCCESSFUL CONFER wrote `until` -- an ACT, in the ACTS class, via the 1-per-object cardinality. S54 item 20's REFUSED half (write `until` when the last commit reaches zero) would be an actorless social write outside the one seam. ~~holder-Proposition~~ -> holder, per `holonic \u00a715`: the holding is a person's and the cause is what died",
-   "kind": null,
-   "section": "S54 item 20",
+   "verdict": "GAP",
+   "detail": "a (Tenure, until) write by p_high exercising no seat wrote Tenures it has no basis for: th_dead (hold owned by p_low on S, changed)",
+   "kind": "FORBIDDEN",
+   "section": "F3",
    "title": "a memberless faction's holdings become contestable",
+   "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), or cascade (the edge names something this same write removed). T-n is unbuilt: Tenure carries no term",
+   "law": "04 \u00a7C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner writes only under a declared basis. Per-verb eligibility enforced this by CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a superior may revoke' cannot degrade into 'anyone with a remit string'",
    "by": "probe-model",
    "tests": "when everyone abandons a cause, what it held must be able to be taken by someone else"
   },
@@ -9918,7 +9920,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (73e96f94b7e8...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (b93e887ca230...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10093,7 +10095,7 @@
    "section": "S44.1",
    "title": "a wrapper checks what crosses a rung boundary",
    "needs": "nothing -- THE RULE WAS STATED OVER A FIELD THAT DOES NOT EXIST",
-   "law": "S44.1 -- THERE IS NOTHING TO CHECK. Event's fields are ['causes', 'changes', 'degree', 'emitted_at', 'id', 'kind', 'observed', 'subject']: no target, no actor. 'The only transport the suite defines IS a chain of `tell` acts; there is no non-act news transport anywhere in the shape.' Observers are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT. Three independent lanes killed this, and the fix that suggests itself -- add a target field -- is the twin of the attribution field the design DELIBERATELY REMOVED",
+   "law": "S44.1 -- THERE IS NOTHING TO CHECK. Event's fields are ['causes', 'changes', 'degree', 'emitted_at', 'id', 'kind', 'observed']: no target, no actor. 'The only transport the suite defines IS a chain of `tell` acts; there is no non-act news transport anywhere in the shape.' Observers are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT. Three independent lanes killed this, and the fix that suggests itself -- add a target field -- is the twin of the attribution field the design DELIBERATELY REMOVED",
    "by": "no-signature",
    "tests": "influence passing between scales must be able to be checked for direction"
   },
@@ -10161,7 +10163,7 @@
    "section": "S10",
    "title": "the graph is traversed without hanging",
    "needs": "a parent strictly above the child on `rung_kinds`",
-   "law": "#353 \u00a710 -- `contain : Rung -> Rung` is the containment LADDER. An edge that does not ascend makes `under_purview` walk sideways or loop, and Jordan's governance canon reads purview off that walk",
+   "law": "#353 \u00a710 -- `contain : Rung -> Rung` is the containment LADDER. An edge that does not ascend makes the purview walk (`state/gate.py::purview_reaches`/`descendants`, since G3; `under_purview` before it, deleted by `13d-i`) walk sideways or loop, and Jordan's governance canon reads purview off that walk",
    "by": "construction",
    "tests": "the engine must be able to walk its own references without looping forever"
   },
@@ -10777,6 +10779,15 @@
   },
   {
    "kind": "FORBIDDEN",
+   "what": "a (Tenure, until) write by p_high exercising no seat wrote Tenures it has no basis for: th_dead (hold owned by p_low on S, changed)",
+   "where": "F3",
+   "needs": "T-m (the actor owns the edge), T-o (via present, the actor seated in it, the seat's revocation basis reaching it), conferral (via's purview over a seat that declares a conferral basis), or cascade (the edge names something this same write removed). T-n is unbuilt: Tenure carries no term",
+   "law": "04 \u00a7C.2 F3 / AX-4 clause 2 -- the owner is the value's ONLY writer, and a non-owner writes only under a declared basis. Per-verb eligibility enforced this by CONVENTION until G3; a revocation with no seat in Act.via is refused here, so 'a superior may revoke' cannot degrade into 'anyone with a remit string'",
+   "case": "probe:F2",
+   "expected": false
+  },
+  {
+   "kind": "FORBIDDEN",
    "what": "a faction taking an action of its own",
    "where": "S3-L1",
    "needs": "a named person at a venue",
@@ -11041,7 +11052,7 @@
    "what": "a wrapper checking direction on a Key crossing a rung boundary",
    "where": "S44.1",
    "needs": "nothing -- THE RULE WAS STATED OVER A FIELD THAT DOES NOT EXIST",
-   "law": "S44.1 -- THERE IS NOTHING TO CHECK. Event's fields are ['causes', 'changes', 'degree', 'emitted_at', 'id', 'kind', 'observed', 'subject']: no target, no actor. 'The only transport the suite defines IS a chain of `tell` acts; there is no non-act news transport anywhere in the shape.' Observers are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT. Three independent lanes killed this, and the fix that suggests itself -- add a target field -- is the twin of the attribution field the design DELIBERATELY REMOVED",
+   "law": "S44.1 -- THERE IS NOTHING TO CHECK. Event's fields are ['causes', 'changes', 'degree', 'emitted_at', 'id', 'kind', 'observed']: no target, no actor. 'The only transport the suite defines IS a chain of `tell` acts; there is no non-act news transport anywhere in the shape.' Observers are computed at WITNESS from presence; THE EMITTER DECLARES NO RECIPIENT. Three independent lanes killed this, and the fix that suggests itself -- add a target field -- is the twin of the attribution field the design DELIBERATELY REMOVED",
    "case": "probe:A20",
    "expected": false
   },
@@ -11077,7 +11088,7 @@
    "what": "`contain` from realm 'R' to hearth 'Hh' does not go up the ladder",
    "where": "S10",
    "needs": "a parent strictly above the child on `rung_kinds`",
-   "law": "#353 \u00a710 -- `contain : Rung -> Rung` is the containment LADDER. An edge that does not ascend makes `under_purview` walk sideways or loop, and Jordan's governance canon reads purview off that walk",
+   "law": "#353 \u00a710 -- `contain : Rung -> Rung` is the containment LADDER. An edge that does not ascend makes the purview walk (`state/gate.py::purview_reaches`/`descendants`, since G3; `under_purview` before it, deleted by `13d-i`) walk sideways or loop, and Jordan's governance canon reads purview off that walk",
    "case": "probe:A26",
    "expected": false
   },
@@ -11212,13 +11223,13 @@
   "STEP": 5580,
   "BARRIER": 1871,
   "DECISION": 1887,
-  "QUERY": 23086,
+  "QUERY": 23087,
   "NOTE": 277,
-  "WRITE": 10556,
-  "EVENT": 10554,
+  "WRITE": 10554,
+  "EVENT": 10553,
   "ACT": 95,
   "CLAIM": 1114,
-  "GAP": 86
+  "GAP": 87
  },
  "_corpus_defects": [
   "ARC1.yaml: committed inside a markdown fence with transcript preamble",

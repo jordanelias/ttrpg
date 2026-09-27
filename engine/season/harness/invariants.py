@@ -78,8 +78,8 @@ def _all_tenures(w) -> list:
     ⚠⚠ **THIS FUNCTION USED TO MERGE THE TWO STORES BY HAND, AND THE COMMENT JUSTIFYING THAT WAS
     FALSE.** It read `list(w.tenures) + list(w._unowned)` with an `id()`-keyed dedup, and claimed
     *"a sweep reading only `w.tenures` would examine the person-owned half and report zero
-    violations for the other"*. `World.tenures` (`state/world.py:186-194`) already calls
-    `_rehome()` and then extends with `self._unowned` — so the hand-merge double-added every
+    violations for the other"*. `World.tenures` already extends the owners' lists with
+    `self._unowned` (it no longer rehomes on read; G2 moved that to MATTER) — so the hand-merge double-added every
     unowned Tenure and survived **only** because of the dedup pass, which is direct evidence the
     duplication was never checked against the property it was working around. §8: the rule lives
     once, and it already lived in `World`.

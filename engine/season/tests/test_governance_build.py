@@ -16,20 +16,33 @@ Run: python -m pytest engine/season/tests/test_governance_build.py -q
 
 from __future__ import annotations
 
+import ast
+import dataclasses
+
 import pytest
 
 from collections import Counter
 
-from ..data.matrix import Step
-from ..gaps import Forbidden
+from ..data import files
+from ..data.matrix import MATRIX, Step, WriteClass
+from ..data.rosters import CONFERRAL_BASES, REVOCATION_BASES, RUNG_KINDS, TITLE_DOMAINS, title_domain
+from ..data.verbs import VERB_TABLE
+from ..epistemic import CHANNEL_PREDICATES
+from ..gaps import Forbidden, Unowned, Unspecified
 from ..data.cast import faction_leader
 from ..harness.populated import build_realm
-from ..loop.driver import SeasonDriver
-from ..loop.predicates import in_holdings
+from ..loop import predicates as _preds
+from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
+from ..loop.predicates import in_holdings, office_described_by
 from ..queries import world_q
 from ..harness import probes as P
+from ..state.attribution import anchor_of
 from ..decision import budget as _budget
-from ..state.carriers import Proposition, Tenure, View
+from ..decision import operands_for, person_side_eligible
+from ..state.carriers import (
+    Act, Office, Person, Proposition, Rung, Tenure, View, matrix_rows_without_a_field,
+    refuse_a_title_in_a_body,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -178,7 +191,7 @@ def _matter_once(w, *, keep_yield=False):
         w.sites.clear()
     d = SeasonDriver(w)
     w.step = Step.MATTER
-    return d.matter([])
+    return d.matter(mint_token(d.w, WriteClass.MATTER), [])
 
 
 def _eaters_at(w, rung_id):
@@ -283,7 +296,7 @@ def test_lb3a_the_root_larder_at_zero_feeds_nobody_and_raises_nothing():
     assert set(w._subsistence_shortfall) == set(world_q.home_of(w)), (
         "some eater is neither fed nor recorded short — the loop skipped them silently")
     assert not [e for e in evs if e.kind == "stores.changed"], (
-        f"a store changed on a world that holds nothing: {[e.subject for e in evs]}")
+        f"a store changed on a world that holds nothing: {[anchor_of(w, e) for e in evs]}")
 
 
 def test_lb3a_a_cohort_eats_by_its_weight_and_not_by_its_head_count():
@@ -381,9 +394,9 @@ def test_lb3b_a_short_larder_falls_a_body_a_band_and_narrows_the_season():
     crossed_at = None
     for season in range(1, 40):
         w.step = Step.MATTER
-        evs = d.matter([])
+        evs = d.matter(mint_token(d.w, WriteClass.MATTER), [])
         w.tick += 1
-        if [e for e in evs if e.kind == "condition.band_crossed" and e.subject == who]:
+        if [e for e in evs if e.kind == "condition.band_crossed" and anchor_of(w, e) == who]:
             crossed_at = season
             break
     assert crossed_at is not None, (
@@ -413,14 +426,14 @@ def test_lb3b_control_a_stocked_world_moves_no_body_and_no_budget():
 
     d = SeasonDriver(w)
     w.step = Step.MATTER
-    evs = d.matter([])
+    evs = d.matter(mint_token(d.w, WriteClass.MATTER), [])
 
     assert {pid: p.body for pid, p in w.persons.items()} == before_bodies, (
         "a fed person's body moved")
     assert {pid: decision_budget(w, pid) for pid in w.persons} == before_budgets, (
         "a fed person's season narrowed")
     person_crossings = [e for e in evs if e.kind == "condition.band_crossed"
-                        and e.subject in w.persons]
+                        and anchor_of(w, e) in w.persons]
     assert not person_crossings, f"a fed person crossed a band: {person_crossings}"
 
 
@@ -438,7 +451,7 @@ def test_lb3b_the_zero_arm_is_the_pre_item_tree_exactly():
 
     d = SeasonDriver(w)
     w.step = Step.MATTER
-    evs = d.matter([])
+    evs = d.matter(mint_token(d.w, WriteClass.MATTER), [])
 
     assert w._subsistence_shortfall, "nobody is short on a bare world; the arm proves nothing"
     assert {pid: p.body for pid, p in w.persons.items()} == before, (
@@ -470,10 +483,10 @@ def test_lb3c_death_at_body_zero_closes_every_tenure_through_the_same_owner_as_k
 
     d = SeasonDriver(w)
     w.step = Step.MATTER
-    evs = d.matter([])
+    evs = d.matter(mint_token(d.w, WriteClass.MATTER), [])
 
     assert "p_mid" not in w.persons, "a body reached 0 and the person is still in the world"
-    assert [e.subject for e in evs if e.kind == "person.died"] == ["p_mid"]
+    assert [anchor_of(w, e) for e in evs if e.kind == "person.died"] == ["p_mid"]
     assert [t.live for t in w.tenures if t.id == "t_tie"] == [False], (
         "the `tie` another person OWNS, naming the dead one, survived the death and now dangles")
     assert not [t for t in w.tenures if t.live and "p_mid" in (t.subject, t.object)], (
@@ -761,7 +774,7 @@ def _scar_bands(scar_step, ids=range(24)):
         d = SeasonDriver(w)
         act = _Act(id=f"scar{i}", actor="p_low", verb="kill / wound",
                    payload={"subject": "p_mid"})
-        evs = d.resolve([act], w.fixtures.get("contest_max_depth"))
+        evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], w.fixtures.get("contest_max_depth"))
         deg = evs[0].degree if evs else None
         alive = "p_mid" in w.persons
         seen.setdefault(deg, dict(
@@ -885,3 +898,1026 @@ def test_lb6e_a_verb_that_engages_no_axis_scars_nothing():
 def ALIGNMENT_OF(verb, axis):
     from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL
     return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
+
+
+# =================================================================================================
+# PLAN POSITION `13f` -- `establish` HAS AN EFFECT.
+# `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, position `13f`, which is a
+# later plan than this file's `LB-n` sheet; the tests carry the position id instead. Its FALSIFIER,
+# observed in both halves: a planted `establish` on an EXISTING id changes a sitting holder's
+# `granted_acts` and publishes a `tenure.payload_set` naming that holder's Tenure, while a
+# hand-mutation of the office reaches nobody (`test_h71_the_grant_is_a_snapshot_not_a_mirror`,
+# `test_season_shape.py`, is that half); and an `establish` naming no belonging, or an unknown one,
+# emits `establish.refused`, constructs nothing and lets no exception escape the fold.
+# =================================================================================================
+
+def _establish_world():
+    """`tiny_world`, unchanged. Its duke `p_high` holds `off_duke`, whose remit grants `confer` --
+    the eligibility `establish` declares -- and `p_mid` holds no office."""
+    w = P.tiny_world()
+    d = SeasonDriver(w)
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    return w, d
+
+
+def _founding(**over) -> dict:
+    """A well-formed `establish` payload for an office `tiny_world` does not have. `appointed` is
+    one of the three conferral values `ED-IN-0256` rules, and since `13d-i` rostered them the
+    basis test passes nothing else."""
+    p = dict(office="off_reeve", post="Reeve", rung="S", remit=["issue", "dispatch"],
+             faction="Crown", conferral="appointed")
+    p.update(over)
+    return p
+
+
+def _establish(w, d, aid: str, payload, actor: str = "p_high", via: str = "off_duke") -> list:
+    """G3 (plan position 6): the act names the seat it is exercised through. `establish` is
+    `remit:confer`-eligible, and `off_duke` -- a Crown seat at `D`, over every rung `_founding` uses
+    -- is the duke's seat whose grant carries `confer`; since G3 `_eligible` asks THAT seat, and the
+    write gate asks its purview before a sitting holder's grant may be re-stamped."""
+    return d.resolve(mint_token(d.w, WriteClass.ACTS),
+                     [Act(id=aid, actor=actor, verb="establish", payload=payload, via=via)],
+                     contest_max_depth=w.fixtures.get("contest_max_depth"))
+
+
+def _seat_reeve(w, remit):
+    """An EXISTING office with a conferral basis and a sitting holder, seated through
+    `add_tenure` so the holder's grant is the snapshot `_grant_remit` takes at seating. The
+    payload carries a key of another writer's, so the re-stamp is seen to be key-scoped."""
+    w.offices["off_reeve"] = Office("off_reeve", "Reeve", "S", list(remit),
+                                    conferral="appointed", faction="Crown")
+    w.add_tenure(Tenure("t_reeve", "p_mid", "off_reeve", "hold", 0, payload={"note": "kept"}))
+    [t] = [t for t in w.tenures if t.id == "t_reeve"]
+    return t
+
+
+def test_13f_the_remit_row_is_keyed_on_the_field_the_office_has():
+    """Instruction (1). Part D's `(Office, remit)` named a field `Office` does not have, so the gate
+    licensed a cell nothing could write and `matrix_rows_without_a_field()` listed it. The ROW is
+    renamed at its owner, to the field the constructor validates and every remit check reads."""
+    fields = {f.name for f in dataclasses.fields(Office)}
+    assert "remit_acts" in fields and "remit" not in fields, sorted(fields)
+    assert ("Office", "remit_acts") in MATRIX and ("Office", "remit") not in MATRIX
+    assert ("Office", "remit_acts") not in matrix_rows_without_a_field()["absent"]
+    assert not [k for k in matrix_rows_without_a_field()["absent"] if k[0] == "Office"], (
+        "an `Office` row still names a field the carrier does not have")
+    assert "Office.remit_acts" in VERB_TABLE["establish"].writes
+    assert "remit.changed" in MATRIX[("Office", "remit_acts")].emits
+
+
+def test_13f_a_planted_establish_founds_the_office_and_grants_a_hold_opened_before_it():
+    """THE CONCRETE CASE THE POSITION NAMES: a `hold` opened on an office id before the office
+    exists gets no grant (`_grant_remit` traces and stamps nothing), and `establish` then creates
+    the office. The act re-stamps that holder in the same act, and the person-side reader sees it."""
+    w, d = _establish_world()
+    w.add_tenure(Tenure("t_early", "p_mid", "off_reeve", "hold", 0))
+    [t] = [t for t in w.tenures if t.id == "t_early"]
+    mid = w.persons["p_mid"]
+    assert "off_reeve" not in w.offices and t.granted_acts == (), "fixture: not the early-hold case"
+    assert not person_side_eligible(mid, VERB_TABLE["dispatch"]), "fixture: p_mid can dispatch"
+
+    out = _establish(w, d, "e_found", _founding())
+    kinds = [e.kind for e in out]
+    assert kinds == ["office.established", "tenure.payload_set"], kinds
+    off = w.offices["off_reeve"]
+    assert (off.post, off.rung, off.remit_acts, off.faction, off.conferral) == (
+        "Reeve", "S", ["issue", "dispatch"], "Crown", "appointed"), off
+    assert off.establishment == [], "the effect wrote `establishment`, which is `17a`'s to delete"
+    assert t.granted_acts == ("issue", "dispatch"), (
+        f"the early holder's grant is {t.granted_acts} -- the act did not re-stamp it")
+    assert person_side_eligible(mid, VERB_TABLE["dispatch"]), (
+        "the grant is on the Tenure and the person-side reader still refuses the remit verb")
+    ps = next(e for e in out if e.kind == "tenure.payload_set")
+    assert t.id in {c.subject for c in ps.changes}, [c.subject for c in ps.changes]
+
+
+def test_13f_an_office_nobody_holds_publishes_no_payload_set():
+    """`tenure.payload_set` is EARNED by a re-stamped holder, never published for one that is not
+    there -- the fabricated-emission class `_fold`'s own comments name. The success is still
+    published: the office was founded."""
+    w, d = _establish_world()
+    out = _establish(w, d, "e_bare", _founding())
+    assert [e.kind for e in out] == ["office.established"], [e.kind for e in out]
+    assert "off_reeve" in w.offices
+
+
+def test_13f_an_establish_on_an_existing_id_changes_the_remit_and_reaches_the_sitting_holder():
+    """**THE POSITION'S FALSIFIER.** Both halves, in one world and in order, so neither can pass
+    for the other's reason:
+
+      * SNAPSHOT: a hand-mutation of `w.offices[x].remit_acts` does NOT reach the sitting holder;
+      * MIRROR'S OBSERVABLE, BY AN ACT: a planted `establish` on the EXISTING id rewrites the
+        remit in place, emits `remit.changed` and NOT `office.established`, changes the sitting
+        holder's `granted_acts`, and publishes a `tenure.payload_set` naming that holder's Tenure.
+
+    And the act that changes nothing is refused rather than reported: re-running it writes
+    nothing, so the fold emits `establish.refused`."""
+    w, d = _establish_world()
+    t = _seat_reeve(w, ["issue"])
+    mid = w.persons["p_mid"]
+    assert t.granted_acts == ("issue",), f"fixture: seating stamped {t.granted_acts}"
+
+    # SNAPSHOT: the hand-mutation reaches nobody.
+    w.offices["off_reeve"].remit_acts = ["issue", "convene"]
+    assert t.granted_acts == ("issue",), "a hand-mutation re-granted a sitting holder"
+    assert not person_side_eligible(mid, VERB_TABLE["convene"])
+
+    office = w.offices["off_reeve"]
+    out = _establish(w, d, "e_remit", _founding(remit=["issue", "dispatch"]))
+    kinds = [e.kind for e in out]
+    assert kinds == ["remit.changed", "tenure.payload_set"], kinds
+    assert w.offices["off_reeve"] is office, "the office was re-founded, not re-remitted in place"
+    assert office.remit_acts == ["issue", "dispatch"], office.remit_acts
+    assert t.granted_acts == ("issue", "dispatch"), (
+        f"the sitting holder's grant is {t.granted_acts}: the act changed the office and did not "
+        "reach the holder -- `_grant_remit(force=True)` is not being called, or is still a setdefault")
+    assert t.payload.get("note") == "kept", "the re-stamp overwrote a key it does not own"
+    assert person_side_eligible(mid, VERB_TABLE["dispatch"])
+    assert not person_side_eligible(mid, VERB_TABLE["convene"]), (
+        "the hand-mutation's `convene` survived -- the grant is the ACT's remit, not a union")
+    ps = next(e for e in out if e.kind == "tenure.payload_set")
+    assert t.id in {c.subject for c in ps.changes}, [c.subject for c in ps.changes]
+
+    again = _establish(w, d, "e_again", _founding(remit=["issue", "dispatch"]))
+    assert [e.kind for e in again] == ["establish.refused"], [e.kind for e in again]
+
+
+def test_13f_a_sole_holder_re_stamping_their_own_office_refuses_and_does_not_crash(monkeypatch):
+    """FOUND BY A `/code-review` PASS ON THE ACCUMULATED PHASE ALPHA+BETA DIFF, 2026-09-27, AND
+    REPRODUCED DIRECTLY BEFORE THIS FIX: `_req_establish`'s clause 5 excluded the ACTOR from its
+    `others` check -- "another person's needs the seat" -- so a SOLE holder re-stamping their own
+    office's remit skipped `may_fill` entirely and the precondition admitted the act. `state/
+    gate.py::tenure_write_basis`'s T-m (G3's own antagonist-pass fix) never admits re-granting a
+    seat-hold, not even the actor's own, so the gate then raised `NotYours` -- UNCAUGHT by `_fold`,
+    which only catches `NoOpReceipt` -- and the season would have died instead of the row's own
+    `establish.refused` firing. `_req_establish`'s `held` now asks `may_fill` whenever ANY live
+    holder exists, self included -- the fix is `not held or may_fill(...)`, replacing `not others`.
+
+    `p_mid` is the SOLE holder here, exercising `off_reeve` itself as `via` (self-referential,
+    which `may_fill` refuses on its own terms too: `via == off.id`) -- the worst case, since it
+    was ALSO the case `_req_establish`'s old code admitted unconditionally whenever `others` was
+    empty. `p_mid` is seated WITH `confer` in the grant -- without it `_eligible`
+    (`loop/resolve.py`, `establish` is `remit:confer`-eligible) refuses the act before
+    `_req_establish` is ever reached, which is exactly the mistake this test's own first writing
+    made: it seated `p_mid` with `["issue"]` only, so `_eligible` refused first and the test passed
+    identically whether or not `_req_establish`'s clause 5 was fixed -- a citation-free assertion
+    that could not observe the failure it excluded (`CLAUDE.md` section 0.1 pt 2), found by a
+    holistic antagonist pass over this same sweep and corrected here.
+
+    THE MUTATION IS THE REAL OLD CODE, RUN THROUGH THE FULL `resolve()` PIPELINE -- not a
+    reimplementation trusted to match it, and not a check that some OTHER clause refuses first
+    (`monkeypatch.setattr(PR, "may_fill", ...)` alone does not prove this, since `_eligible` gates
+    the act before `_req_establish` ever runs: patching `may_fill` without also fixing the seeded
+    remit would still pass for the wrong reason). `PR.REQUIRES_PREDICATES["establish"]` -- the
+    registry `@requires_predicate` populates at decoration time, which `_admits` actually calls --
+    is patched directly, because patching the bare module attribute `PR._req_establish` does NOT
+    reach the caller (the registry holds the original function object, captured before any
+    monkeypatch of the module-level name)."""
+    w, d = _establish_world()
+    _seat_reeve(w, ["confer"])
+    out = _establish(w, d, "e_self", _founding(remit=["confer", "dispatch"]),
+                     actor="p_mid", via="off_reeve")
+    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert w.offices["off_reeve"].remit_acts == ["confer"], (
+        "the refused act still re-stamped the remit")
+
+    # MUTATION: the retired precondition, run through the SAME pipeline on a FRESH world --
+    # reproduces the uncaught crash this fix closes. `others` (not `held`) is the retired name.
+    import engine.season.loop.predicates as PR
+    from ..state.gate import NotYours
+
+    def retired_req_establish(w, a):
+        off = PR.office_described_by(a)
+        if off is None or off.rung not in w.rungs or not PR.has_conferral_basis(off):
+            return False
+        held_as = w.class_of(off.id)
+        if held_as is not None:
+            if held_as != "Office":
+                return False
+            cur = w.offices[off.id]
+            if not (off.post == cur.post and off.rung == cur.rung and off.body == cur.body
+                    and off.faction == cur.faction and off.conferral == cur.conferral
+                    and off.revocation == cur.revocation):
+                return False
+        others = any(t.kind == "hold" and t.object == off.id and t.live and t.subject != a.actor
+                    for t in w.tenures)
+        return not others or PR.may_fill(w, a.actor, a.via, off)
+
+    monkeypatch.setitem(PR.REQUIRES_PREDICATES, "establish", retired_req_establish)
+    w2, d2 = _establish_world()
+    _seat_reeve(w2, ["confer"])
+    with pytest.raises(NotYours):
+        _establish(w2, d2, "e_self_retired", _founding(remit=["confer", "dispatch"]),
+                  actor="p_mid", via="off_reeve")
+
+
+@pytest.mark.parametrize("change", [
+    dict(faction="Church of Solmund"),
+    dict(post="Warden"),
+    dict(rung="Hh"),
+    dict(conferral="elected"),
+    # ⚠ (`13d-i`) WAS `revocation="purview"`, r2's superseded value. Off the roster it now raises
+    # in the constructor, so the act would refuse for THAT reason and this case would stop
+    # observing a basis DIFFERENCE. The rostered value differs from the seat's `None` and constructs.
+    dict(revocation="rung_above_same_faction"),
+], ids=lambda c: next(iter(c)))
+def test_13f_an_existing_id_refuses_any_change_but_the_remit(change):
+    """Re-founding -- a different belonging, post, rung or basis on an id that exists -- is not a
+    write `establish` declares, so it REFUSES and touches neither the office nor the holder. The
+    control is in the same world: the same act without the change is admitted.
+
+    ⚠ **ASSERTS THE OFFICE STILL CONSTRUCTS (added 2026-09-26, antagonist finding).** Without this,
+    a future off-roster `change` value would refuse for the WRONG reason -- the constructor raising
+    inside `office_described_by`, translated to `False` before clause 4's basis-difference check
+    ever runs -- and this test would keep passing while testing nothing about re-founding. Each
+    `change` here must still be a WELL-FORMED office, differing from the seated one by exactly the
+    one declared field, or the case is not exercising what its `id` claims."""
+    w, d = _establish_world()
+    t = _seat_reeve(w, ["issue"])
+    plain = _founding(remit=["issue", "dispatch"])
+    assert _preds._req_establish(w, Act(id="ctl", actor="p_high", verb="establish",
+                                        payload=plain, via="off_duke")), (
+        "control: the unchanged act is refused")
+
+    changed_payload = {**plain, **change}
+    changed_act = Act(id="check_constructs", actor="p_high", verb="establish",
+                      payload=changed_payload, via="off_duke")
+    changed_office = office_described_by(changed_act)  # raises if this `change` is off-roster/malformed
+    assert changed_office is not None, (
+        f"{change}: the payload did not describe a constructible Office at all")
+
+    out = _establish(w, d, "e_refound", changed_payload)
+    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert w.offices["off_reeve"].remit_acts == ["issue"]
+    assert t.granted_acts == ("issue",)
+
+
+# `raises` marks the payloads the CONSTRUCTOR itself rejects, so each refusal below is shown to
+# have intercepted a real raise rather than to have been a no-op nothing would have tripped.
+@pytest.mark.parametrize("payload,raises", [
+    ({}, False),
+    (_founding(faction=None), True),                                   # belongs to nothing
+    (_founding(faction="Nowhere Brotherhood"), True),                  # an unknown faction
+    (_founding(faction=None, body="Office of Nothing"), True),         # an unknown body
+    (_founding(body="Imperial Court", faction="Church of Solmund"), True),   # a mismatch
+    (_founding(remit=["issue", "levy"]), True),                        # off `REMIT_ACTS`
+    (_founding(post="Duke", faction=None, body="Imperial Court"), True),     # a title in a body
+    (_founding(rung="nowhere"), False),                                # a rung the world lacks
+    (_founding(conferral=None), False),                                # no conferral basis
+    (_founding(office="p_low"), False),                                # an id a person holds
+], ids=["empty", "no-belonging", "unknown-faction", "unknown-body", "mismatch", "off-roster-remit",
+        "title-in-body", "unknown-rung", "no-basis", "person-id"])
+def test_13f_an_unfoundable_establish_refuses_constructs_nothing_and_raises_nothing(payload, raises):
+    """The fold's FIRST refusal path: the precondition returns False and the fold emits
+    `emits_on_refusal`. Asserted on the Event -- the fold is called bare, so a raise escaping it
+    fails this test as an error rather than passing silently."""
+    w, d = _establish_world()
+    before = dict(w.offices)
+    # G3: through the duke's seat, so the refusal is the PRECONDITION's -- without `via` the act
+    # would be refused one step earlier, at eligibility, and this would observe nothing about it.
+    act = Act(id="e_bad", actor="p_high", verb="establish", payload=payload, via="off_duke")
+    if raises:
+        with pytest.raises((Unowned, Unspecified, Forbidden)):
+            office_described_by(act)
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert w.offices == before, f"an office was constructed: {sorted(set(w.offices) - set(before))}"
+
+
+def test_13f_a_computed_establish_carries_no_operands_and_refuses():
+    """The row is resolvable now and still untyped, so a COMPUTED `establish` forms with NO
+    operands -- `operands_for` returns `{}` -- and must refuse until `15c` widens the operand
+    vocabulary. What the chooser puts on its payload is the question's referent as `subject`, and
+    that founds nothing."""
+    row = VERB_TABLE["establish"]
+    assert "establish" in resolvable_verbs()
+    assert row.requires_typed is None
+    w, d = _establish_world()
+    duke = w.persons["p_high"]
+    assert person_side_eligible(duke, row), "fixture: the duke cannot form `establish` at all"
+    assert operands_for(duke, row, None, "p_low", w.fixtures) == {}
+    out = _establish(w, d, "e_computed", {"subject": "p_low"})
+    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+
+
+def test_13f_confer_and_establish_ask_one_basis_test(monkeypatch):
+    """Instruction (2): the basis test is FACTORED ONCE, so `13d-i` rewrites one function and both
+    preconditions inherit it. Observed by behaviour, not by reading source: with the ONE function
+    patched to refuse, both predicates refuse an act each admits unpatched. A predicate carrying
+    its own copy of the test would go on admitting."""
+    w, d = _establish_world()
+    w.offices["off_dicastery"].conferral = "appointed"
+    # G3: the conferred seat needs GROUND inside the duke's purview (a rungless seat is reached by
+    # no purview, so nobody may confer it), and both acts name the duke's seat.
+    w.offices["off_dicastery"].rung = "S"
+    conf = Act(id="c_basis", actor="p_high", verb="confer",
+               payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke")
+    est = Act(id="e_basis", actor="p_high", verb="establish", payload=_founding(), via="off_duke")
+    assert _preds._req_confer(w, conf) and _preds._req_establish(w, est), "control: not admitted"
+    monkeypatch.setattr(_preds, "has_conferral_basis", lambda off: False)
+    assert not _preds._req_confer(w, conf), "`_req_confer` does not ask the shared basis test"
+    assert not _preds._req_establish(w, est), "`_req_establish` does not ask the shared basis test"
+
+
+def test_13f_a_planted_establish_founds_an_office_by_body_not_only_by_faction():
+    """`office_described_by`'s `body` branch, otherwise unexercised -- every other test in this
+    section founds through `faction`. `Imperial Court` is a body that DERIVES to faction `Crown`
+    (`data/rosters.py::office_faction`, `rosters.yaml:1096`), so the constructed `Office` carries
+    both: the body as given, and the faction `office_faction` resolved it to."""
+    w, d = _establish_world()
+    out = _establish(w, d, "e_by_body", _founding(faction=None, body="Imperial Court"))
+    assert [e.kind for e in out] == ["office.established"], [e.kind for e in out]
+    off = w.offices["off_reeve"]
+    assert (off.body, off.faction) == ("Imperial Court", "Crown"), (off.body, off.faction)
+
+
+def test_13f_the_restamp_skips_a_non_hold_tenure_and_a_dead_hold_on_the_same_office():
+    """The re-stamp's filter, `t.kind == "hold" and t.object == off.id and t.live`
+    (`loop/effects.py`), is never exercised by the other tests: they seat exactly one live `hold`.
+    Plants three tenures on the SAME office -- a live `hold` (re-stamped on every remit change), a
+    `commit` naming the office as its object (a different kind, `add_tenure` never grants it), and
+    a `hold` that is already closed at seating (`until` set, so `.live` is False from the start) --
+    and asserts the re-stamp at `establish` time touches only the first.
+
+    `add_tenure` calls `_grant_remit` for every `hold`, live or not -- the grant is a SNAPSHOT taken
+    AT SEATING, not gated on liveness -- so the closed hold IS granted once, to the office's remit
+    as it stood when it was seated. What this test isolates is `_eff_establish`'s re-stamp on a
+    LATER remit change, which the `.live` filter excludes it from: its grant stays frozen."""
+    w, d = _establish_world()
+    t_live = _seat_reeve(w, ["issue"])
+    w.add_tenure(Tenure("t_commit", "p_low", "off_reeve", "commit", 0))
+    w.add_tenure(Tenure("t_dead", "p_low", "off_reeve", "hold", 0, until=1))
+    [t_commit] = [t for t in w.tenures if t.id == "t_commit"]
+    [t_dead] = [t for t in w.tenures if t.id == "t_dead"]
+    assert t_commit.granted_acts == (), "fixture: a `commit` Tenure should never be granted"
+    assert t_dead.granted_acts == ("issue",), (
+        f"fixture: a `hold`, even dead on arrival, is granted the snapshot AT SEATING -- got "
+        f"{t_dead.granted_acts}")
+
+    out = _establish(w, d, "e_restamp_filter", _founding(remit=["issue", "dispatch"]))
+    ps = next(e for e in out if e.kind == "tenure.payload_set")
+    touched = {c.subject for c in ps.changes}
+    # `t_live.id` is in there; `off_reeve` rides along too -- `_apply_write` unions every earned
+    # kind's touched ids onto every Event this act produces (the pre-existing `Receipt.field`
+    # imprecision `hole_register.yaml`'s `H-71` `source:` already names), not this filter's concern.
+    assert t_live.id in touched, touched
+    assert t_commit.id not in touched and t_dead.id not in touched, touched
+    assert t_live.granted_acts == ("issue", "dispatch"), t_live.granted_acts
+    assert t_commit.granted_acts == (), "a `commit` Tenure was re-stamped as though it were a `hold`"
+    assert t_dead.granted_acts == ("issue",), (
+        f"a CLOSED `hold`'s grant moved off its seating-time snapshot: {t_dead.granted_acts}")
+
+
+# =================================================================================================
+# PLAN POSITION `13e` -- ONE READING OF THE REMIT.
+# `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, position `13e`. Routes
+# `loop/resolve.py`'s `_eligible` and `epistemic.py`'s `_ch_post_remit` off the live
+# `w.offices[...].remit_acts` and onto the Tenure's own `t.granted_acts` -- the same store
+# `decision/options.py` already read, closing the THREE-readings-over-two-stores gap
+# `epistemic.py`'s `_ch_post_remit` docstring tracked. FALSIFIER, both arms in one world: a `hold`
+# opened before its office exists, then the office HAND-CREATED (no act) -> the resolver now
+# REFUSES the remit verb it admitted before this position; the same shape but the office FOUNDED
+# BY `establish` -> the resolver ADMITS, because `13f`'s re-stamp reaches the sitting holder. AND
+# an AST scan: no `Office.remit_acts` attribute read anywhere in the non-test package outside
+# `_grant_remit`, `Office.__post_init__` and `_eff_establish`.
+# =================================================================================================
+
+
+def test_13e_hand_created_office_refuses_act_established_office_admits():
+    """**THE POSITION'S FALSIFIER, BOTH ARMS, ONE WORLD.** Two holders, each seated on an office
+    id BEFORE that office exists, so each Tenure's `granted_acts` snapshot opens at `()`:
+
+      * `p_mid` on `off_hand` -- the office is then HAND-CREATED (`w.offices[x] = Office(...)`, no
+        act). Pre-`13e`, `_eligible` read `w.offices.get(t.object)` live and admitted the moment
+        the dict held the id, regardless of the Tenure's own grant. Post-`13e` it reads
+        `t.granted_acts`, which a hand-mutation never reaches -- REFUSED.
+      * `p_low` on `off_act` -- the office is then FOUNDED BY A PLANTED `establish`. `13f`'s
+        effect re-stamps every live `hold` on the id it wrote, so `t.granted_acts` picks up the
+        grant in the same act -- ADMITTED.
+
+    Both arms exercise the RESOLVER (`_eligible`, `loop/resolve.py`), not `person_side_eligible`:
+    the person-side reading (`decision/options.py`) already read `t.granted_acts` before this
+    position and was never the bug -- `13f`'s own falsifier
+    (`test_13f_a_planted_establish_founds_the_office_and_grants_a_hold_opened_before_it`) pins the
+    ADMIT arm through that reading already. This pins the WORLD-side half `13e` closes, and its
+    REFUSE arm is the one no earlier test observes: before this position the resolver admitted it."""
+    w, d = _establish_world()
+    w.add_tenure(Tenure("t_hand", "p_mid", "off_hand", "hold", 0))
+    w.add_tenure(Tenure("t_act", "p_low", "off_act", "hold", 0))
+    [t_hand] = [t for t in w.tenures if t.id == "t_hand"]
+    [t_act] = [t for t in w.tenures if t.id == "t_act"]
+    assert "off_hand" not in w.offices and "off_act" not in w.offices, "fixture: neither exists yet"
+    early_holders = [t for t in (t_hand, t_act) if t.granted_acts == ()]
+    assert len(early_holders) >= 1, (
+        "fixture: no hold was opened before its office existed -- the falsifier is vacuous")
+
+    dispatch = VERB_TABLE["dispatch"]
+
+    # ARM 1 -- HAND-CREATED: no act, so no re-stamp reaches `t_hand`. REFUSE.
+    w.offices["off_hand"] = Office("off_hand", "Reeve", "S", ["issue", "dispatch"],
+                                    conferral="appointed", faction="Crown")
+    assert t_hand.granted_acts == (), "a hand-mutation re-granted a sitting holder"
+    # G3: each act names the seat it is exercised through -- the holder's own. Without `via` the
+    # REFUSE arm would pass for the wrong reason (no seat exercised at all) and observe nothing
+    # about the snapshot; with it, the grant on THAT seat's `hold` is what decides.
+    act_hand = Act(id="a_hand", actor="p_mid", verb="dispatch", payload={}, via="off_hand")
+    assert not d._eligible(w, act_hand, dispatch), (
+        "the resolver admitted `p_mid`'s `dispatch` off a hand-created office -- `_eligible` is "
+        "still reading `w.offices[...].remit_acts` live instead of `t.granted_acts`")
+    assert not person_side_eligible(w.persons["p_mid"], dispatch), (
+        "control: the person-side reading was already correct before this position")
+
+    # ARM 2 -- FOUNDED BY ACT: `establish`'s effect re-stamps `t_act` in the same act. ADMIT.
+    out = _establish(w, d, "e_act", _founding(office="off_act"))
+    kinds = [e.kind for e in out]
+    assert kinds == ["office.established", "tenure.payload_set"], kinds
+    assert t_act.granted_acts == ("issue", "dispatch"), (
+        f"the act did not reach the sitting holder: {t_act.granted_acts}")
+    act_act = Act(id="a_act", actor="p_low", verb="dispatch", payload={}, via="off_act")
+    assert d._eligible(w, act_act, dispatch), (
+        "the resolver refused `p_low`'s `dispatch` after a planted `establish` re-stamped the "
+        "grant -- `13f`'s own falsifier and this position's complement")
+    assert person_side_eligible(w.persons["p_low"], dispatch)
+
+
+def test_13e_the_witness_channel_also_reads_the_snapshot_not_the_live_office():
+    """`epistemic._ch_post_remit`'s HALF of this position's fix has no behavioural test elsewhere:
+    `test_a_binding_decision_lights_the_two_witness_channels_that_needed_one`
+    (`test_season_shape.py`) exercises `post_remit` on `off_duke`, whose remit already carries
+    `confer` at seating -- it passes identically whether the channel reads `t.granted_acts` or the
+    live office, because the two never disagree there. This test builds the disagreement: a holder
+    whose OFFICE gains `confer` only AFTER seating (live-only, never in the snapshot), witnessing a
+    REAL `confer` Event performed by someone else. Pre-`13e`, `_ch_post_remit` read `w.offices.get
+    (t.object).remit_acts` live and would have wrongly admitted this holder as a remit-covering
+    witness; post-`13e` it reads `t.granted_acts`, which the live-only grant never reached."""
+    w, d = _establish_world()
+    w.add_tenure(Tenure("t_hand", "p_mid", "off_hand", "hold", 0))
+    [t_hand] = [t for t in w.tenures if t.id == "t_hand"]
+    assert "off_hand" not in w.offices, "fixture: not seated yet"
+    w.offices["off_hand"] = Office("off_hand", "Reeve", "S", ["issue", "dispatch", "confer"],
+                                    conferral="appointed", faction="Crown")
+    assert t_hand.granted_acts == (), (
+        "a hand-created office re-granted a sitting holder -- fixture is not the snapshot case")
+
+    w.offices["off_dicastery"].conferral = "appointed"      # rostered since `13d-i`
+    w.offices["off_dicastery"].rung = "S"                    # G3: ground inside the duke's purview
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_conf", actor="p_high", verb="confer",
+                          payload={"office": "off_dicastery", "to": "p_low"}, via="off_duke")],
+                    contest_max_depth=w.fixtures.get("contest_max_depth"))
+    e = next((x for x in out if x.kind == "tenure.opened"), None)
+    assert e is not None, f"fixture: confer did not open a Tenure: {[x.kind for x in out]}"
+
+    assert CHANNEL_PREDICATES["post_remit"](w, e, "p_high"), (
+        "control: the duke's own snapshot genuinely carries `confer` -- the channel should admit")
+    assert not CHANNEL_PREDICATES["post_remit"](w, e, "p_mid"), (
+        "`post_remit` admitted a witness whose OFFICE carries `confer` only live, never in their "
+        "own Tenure's snapshot -- it is still reading `w.offices[...].remit_acts` instead of "
+        "`t.granted_acts`")
+
+
+def _remit_acts_attribute_reads_outside_allowlist() -> list:
+    """Every `Attribute` node named `remit_acts` anywhere under the package's NON-TEST sources,
+    outside `_grant_remit`, `Office.__post_init__` and `_eff_establish` -- the allow-list the
+    position's own falsifier names. `tests/` is excluded on purpose: a fixture asserting
+    `office.remit_acts == [...]` or hand-mutating one to build the SNAPSHOT-vs-mirror scenario is
+    the test's job, not a consumer of the fact through the eligibility path this scan protects.
+    A dict-key string (`t.payload["remit_acts"]`) is a `Subscript`/`Constant`, never an
+    `Attribute`, so `Tenure.granted_acts`'s own storage never matches this scan by construction."""
+    violations = []
+    for path in sorted(files.PACKAGE_DIR.rglob("*.py")):
+        rel = path.relative_to(files.PACKAGE_DIR)
+        if rel.parts[0] == "tests":
+            continue
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        allowed_spans = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef) and node.name in ("_grant_remit", "_eff_establish"):
+                allowed_spans.append((node.lineno, node.end_lineno))
+            elif isinstance(node, ast.ClassDef) and node.name == "Office":
+                allowed_spans += [(sub.lineno, sub.end_lineno) for sub in node.body
+                                   if isinstance(sub, ast.FunctionDef) and sub.name == "__post_init__"]
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Attribute) and node.attr == "remit_acts":
+                if not any(a <= node.lineno <= b for a, b in allowed_spans):
+                    violations.append(f"{rel.as_posix()}:{node.lineno}")
+    return violations
+
+
+def test_13e_no_remit_acts_attribute_read_outside_the_three_allow_listed_sites():
+    """**THE POSITION'S FALSIFIER, AST CLAUSE.** Before this position, `loop/resolve.py`'s
+    `_eligible` and `epistemic.py`'s `_ch_post_remit` were a fourth and fifth reader of
+    `Office.remit_acts`, beyond the three this scan allow-lists; this test observes their absence
+    now that both read `t.granted_acts` instead. A fourth reader is PLANNED
+    (`budget()` counting `t.granted_acts`, not `Office.remit_acts` -- not this position's job), so
+    this pins the CURRENT set to catch a future regression back onto the office-side field rather
+    than to block anything today."""
+    violations = _remit_acts_attribute_reads_outside_allowlist()
+    assert violations == [], (
+        f"`Office.remit_acts` read as an attribute outside `_grant_remit`/`Office.__post_init__`/"
+        f"`_eff_establish` at {violations} -- position `13e` consolidated every consumer onto "
+        f"`Tenure.granted_acts`")
+
+
+# =================================================================================================
+# PLAN POSITION `13d-i` -- OFFICES AS DATA (items 1-4; item 5, `offices.yaml`, is a later unit).
+# `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, position `13d-i`. The two
+# bases are rostered values (`rosters.yaml: conferral_bases`, `revocation_bases`) carrying
+# `ED-IN-0256` rulings (2) and (3); `_req_confer` / `_req_establish` share a membership test and
+# `_req_revoke` dispatches on the seat's declared basis, with no `is_title` branch (`H-109`).
+# FALSIFIER `LB-10c`, re-pointed by ruling (3): a titled seat is revocable ONLY by the holder of a
+# seat on the rung directly above it, in its faction -- every candidate iterated and counted.
+# =================================================================================================
+
+_RUNG_ABOVE = "rung_above_same_faction"       # `revocation_bases`' one member, ruling (3)
+
+
+def _person(w, pid):
+    """A bare person, placed the way `tiny_world` places its own."""
+    w.persons[pid] = Person(pid, pid)
+    w.rungs[pid] = Rung(pid, "person")
+    w.add_tenure(Tenure(f"t_in_{pid}", pid, "Hh", "contain", 0))
+
+
+def _seat_on(w, pid, oid, post, rung, faction, remit=("issue",)):
+    """Seat `pid` on a new office, the office constructed FIRST so the grant is correct at seating."""
+    if pid not in w.persons:
+        _person(w, pid)
+    w.offices[oid] = Office(oid, post, rung, list(remit), faction=faction)
+    w.add_tenure(Tenure(f"t_{oid}", pid, oid, "hold", 0))
+
+
+def _ladder_world():
+    """`tiny_world` (R ⊃ D ⊃ S ⊃ Hh; `p_high` holds `off_duke`, a Crown `Duke` at `D`), plus a
+    SIBLING duchy `D2` under `R` and a SECOND realm `R2` containing nothing of `R`'s. The duke's
+    seat declares the rostered revocation basis."""
+    w, d = _establish_world()
+    w.rungs["D2"] = Rung("D2", "duchy")
+    w.add_tenure(Tenure("t_d2_in_r", "D2", "R", "contain", 0))
+    w.rungs["R2"] = Rung("R2", "realm")
+    w.offices["off_duke"].revocation = _RUNG_ABOVE
+    return w, d
+
+
+def _seat_of(w, actor):
+    """The one seat `actor` holds, or `None` -- what a candidate revoker EXERCISES since G3, when
+    `_req_revoke` asks ruling (3) of `Act.via` and not of every seat the actor holds. Refuses a
+    fixture that seats one candidate twice, because then WHICH seat is the question under test."""
+    seats = sorted(t.object for t in w.tenures
+                   if t.kind == "hold" and t.subject == actor and t.live and t.object in w.offices)
+    assert len(seats) <= 1, f"fixture: {actor} holds {seats} -- name the seat it exercises"
+    return seats[0] if seats else None
+
+
+def _may_revoke(w, actor, office) -> bool:
+    return _preds._req_revoke(w, Act(id=f"r_{actor}_{office}", actor=actor, verb="revoke",
+                                     payload={"office": office}, via=_seat_of(w, actor)))
+
+
+def test_13d_i_lb10c_a_titled_seat_is_revocable_only_by_the_seat_above_in_its_faction():
+    """**`LB-10c`, AS RULING (3) RE-POINTS IT.** r2 named it `..._revocable_only_by_a_holder_of_its_
+    domain` and priced it on a three-conjunct `holdings` rule; both predate `ED-IN-0256`, so this
+    asserts the ruling. The target is TITLED (`Duke`, on `titles.domains`), because that is the case
+    the deleted `is_title` branch treated specially.
+
+    Ten candidates, each isolating one way to be WRONG about "rung above of same faction" -- the
+    faction, the rank, the rung, the land, the seat itself -- and EXACTLY ONE is admitted. The loop
+    asserts it ran to completion (`CLAUDE.md` §0.1 pt 2).
+
+    ⚠ **DOES NOT ISOLATE "PARENT" FROM "NEAREST SAME-FACTION ANCESTOR" (corrected 2026-09-26,
+    found by an antagonist pass).** In THIS world the target's only ancestor at any distance is
+    also its immediate parent (`R` sits directly above `D`), so a mutant that walked past an empty
+    or foreign parent to find the nearest same-faction seat would still pass every candidate here.
+    `test_13d_i_an_empty_parent_refuses_even_a_same_faction_grandparent` is the test that isolates
+    it, with a chain long enough for the two readings to disagree."""
+    w, _ = _ladder_world()
+    assert title_domain(w.offices["off_duke"].post) == "duchy", "fixture: the target is not a title"
+    _seat_on(w, "c_king", "off_king", "King", "R", "Crown")                  # above, same faction
+    _seat_on(w, "c_rival_king", "off_rival_king", "King", "R", "Hafenmark")  # above, OTHER faction
+    _seat_on(w, "c_far_king", "off_far_king", "King", "R2", "Crown")         # outranks, not above
+    _seat_on(w, "c_peer_duke", "off_peer_duke", "Duke", "D2", "Crown")       # sibling rung
+    _seat_on(w, "c_chancellor", "off_chancellor", "Chancellor", "D", "Crown")  # the SAME rung
+    _seat_on(w, "c_mayor", "off_mayor", "Mayor", "S", "Crown")               # below
+    _seat_on(w, "c_councillor", "off_privy", "Privy Councillor", None, "Crown")  # no rung at all
+    _person(w, "c_landholder")
+    w.add_tenure(Tenure("t_land_r", "c_landholder", "R", "hold", 0))         # HOLDS the rung above
+    candidates = {
+        "c_king": True, "c_rival_king": False, "c_far_king": False, "c_peer_duke": False,
+        "c_chancellor": False, "c_mayor": False, "c_councillor": False, "c_landholder": False,
+        "p_high": False,                                         # the target's own holder
+        "p_other": False,                                        # holds nothing
+    }
+    assert in_holdings(w, "c_landholder", "R"), "fixture: the landholder does not hold the rung"
+    checked, admitted = 0, []
+    for pid, expected in candidates.items():
+        got = _may_revoke(w, pid, "off_duke")
+        assert got is expected, f"{pid}: `_req_revoke` answered {got}, ruling (3) says {expected}"
+        checked += 1
+        admitted += [pid] if got else []
+    assert checked == len(candidates) and checked >= 10, f"the sweep checked {checked}"
+    assert admitted == ["c_king"], admitted
+
+
+def test_13d_i_the_seat_above_of_another_faction_refuses_though_it_meets_the_old_title_rule():
+    """**THE DIFFERENT-FACTION CASE, BUILT TO SATISFY EVERYTHING THE DELETED RULE ASKED.** The
+    rival King sits on the rung above the duchy (so the old containment purview held), OUTRANKS a
+    duke (realm over duchy in `rung_kinds`), and HOLDS THE DUCHY (`in_holdings`) -- the 2026-09-02
+    title rule's three conjuncts, all true. Ruling (3) refuses him on the one thing that differs:
+    his faction. The control is his Crown twin in the same world, identical but for the faction."""
+    w, _ = _ladder_world()
+    for pid, oid, fac in (("c_rival_king", "off_rival_king", "Hafenmark"),
+                          ("c_king", "off_king", "Crown")):
+        _seat_on(w, pid, oid, "King", "R", fac)
+        w.add_tenure(Tenure(f"t_land_d_{pid}", pid, "D", "hold", 0))
+        assert in_holdings(w, pid, "D"), f"fixture: {pid} does not hold the duchy"
+    assert RUNG_KINDS.index(w.rungs["R"].kind) > RUNG_KINDS.index(w.rungs["D"].kind)
+    assert world_q.parent_of(w, "D") == "R", "fixture: the King's rung is not above the duchy"
+    assert w.offices["off_rival_king"].faction != w.offices["off_duke"].faction
+    assert not _may_revoke(w, "c_rival_king", "off_duke"), (
+        "a higher-ranked seat of ANOTHER faction, on the rung above and holding the duchy, stripped "
+        "the duke -- the rewrite is still the purview/holdings/rank conjunction")
+    assert _may_revoke(w, "c_king", "off_duke"), "control: the same-faction twin is refused"
+
+
+def test_13d_i_an_empty_parent_refuses_even_a_same_faction_grandparent():
+    """**PINS "PARENT" AGAINST "NEAREST SAME-FACTION SEAT ABOVE."** Every other `13d-i` fixture
+    seats someone at the target's immediate parent rung, so the two readings never disagree there
+    -- an antagonist pass found this gap directly: with only those fixtures, a mutant that walks
+    PAST an empty or foreign-faction parent to the nearest same-faction seat passes every existing
+    test. This builds the one world where the readings diverge: `off_reeve_hh` sits at `Hh`, whose
+    parent `S` holds NO seat at all, while its grandparent `D` holds `off_duke`, Crown -- the same
+    faction. Under `seated_on_the_rung_above`'s own reading (the ADJACENT rung only), the duke's
+    holder must REFUSE; under a nearest-same-faction-ancestor reading he would be admitted. Ruling
+    (3)'s words are "rung above", not a walk -- that verb belongs to ruling (4)'s purview clause
+    ("owner of highest rung in CHAIN of ownership"), a different mechanism this position does not
+    build."""
+    w, _ = _ladder_world()
+    assert world_q.parent_of(w, "S") == "D" and world_q.parent_of(w, "Hh") == "S", (
+        "fixture: the chain is not Hh -> S -> D as assumed")
+    assert not any(t.kind == "hold" and t.object in w.rungs and w.rungs[t.object].kind == "S"
+                   for t in w.tenures), "fixture: someone already sits at S"
+    _seat_on(w, "p_reeve", "off_reeve_hh", "Reeve", "Hh", "Crown", remit=("issue",))
+    w.offices["off_reeve_hh"].revocation = _RUNG_ABOVE
+    assert w.offices["off_duke"].faction == w.offices["off_reeve_hh"].faction == "Crown", (
+        "fixture: the duke and the reeve are not the same faction")
+    assert not _may_revoke(w, "p_high", "off_reeve_hh"), (
+        "the Crown duke, two rungs above an empty parent, revoked a Crown reeve -- "
+        "seated_on_the_rung_above walked PAST the empty parent instead of refusing at it")
+
+
+def test_13d_i_one_rule_at_every_depth_and_no_title_branch():
+    """GENERAL OVER ANY SEAT AND ANY DEPTH (`CLAUDE.md` §0 -- never special-case). Three depths --
+    a duchy under a realm, a settlement under a duchy, a hearth under a settlement -- and at the
+    settlement a TITLED seat (`Mayor`) and an UNTITLED one (`Reeve`) side by side. Each is
+    revocable by the seat on its parent rung and by nothing further up; the titled and untitled
+    seats answer identically, which is `H-109` closed as a behaviour, not as a grep."""
+    w, _ = _ladder_world()
+    _seat_on(w, "c_king", "off_king", "King", "R", "Crown")
+    _seat_on(w, "c_mayor", "off_mayor_s", "Mayor", "S", "Crown")
+    _seat_on(w, "p_mid", "off_reeve_s", "Reeve", "S", "Crown")
+    _seat_on(w, "p_low", "off_head_hh", "Family Head", "Hh", "Crown")
+    for oid in ("off_mayor_s", "off_reeve_s", "off_head_hh"):
+        w.offices[oid].revocation = _RUNG_ABOVE
+    assert title_domain("Mayor") and title_domain("Reeve") is None, "fixture: titled/untitled pair"
+    cases = [
+        ("off_duke", "c_king", True), ("off_duke", "c_mayor", False),
+        ("off_mayor_s", "p_high", True), ("off_mayor_s", "c_king", False),   # grandparent
+        ("off_reeve_s", "p_high", True), ("off_reeve_s", "c_king", False),
+        ("off_head_hh", "c_mayor", True), ("off_head_hh", "p_high", False),  # grandparent
+    ]
+    checked = 0
+    for oid, pid, expected in cases:
+        assert _may_revoke(w, pid, oid) is expected, (oid, pid, expected)
+        checked += 1
+    assert checked == len(cases) >= 8
+    assert [_may_revoke(w, p, "off_mayor_s") for p in ("p_high", "c_king")] == \
+        [_may_revoke(w, p, "off_reeve_s") for p in ("p_high", "c_king")], (
+            "a titled and an untitled seat on the same rung answer differently -- an is_title branch")
+
+
+def test_13d_i_the_revocation_basis_is_a_rostered_value_and_gates_the_rule():
+    """The right revoker is refused unless the seat DECLARES a rostered basis: `None` (strippable by
+    nobody, r2's `none`), r2's superseded `purview` (hand-mutated past the constructor), and the
+    rostered value, in that order, on one seat and one actor. And the constructor refuses to build
+    a seat declaring the off-roster value -- the `remit_acts` refusal's shape, one field along."""
+    w, _ = _ladder_world()
+    _seat_on(w, "c_king", "off_king", "King", "R", "Crown")
+    seat = w.offices["off_duke"]
+    seen = []
+    for basis, expected in ((None, False), ("purview", False), (_RUNG_ABOVE, True)):
+        seat.revocation = basis
+        seen.append(_may_revoke(w, "c_king", "off_duke"))
+        assert seen[-1] is expected, (basis, seen[-1])
+    assert seen == [False, False, True], seen
+    assert set(REVOCATION_BASES) == {_RUNG_ABOVE}, sorted(REVOCATION_BASES)
+    with pytest.raises(Unspecified):
+        Office("off_x", "Reeve", "S", [], faction="Crown", revocation="purview")
+    assert Office("off_y", "Reeve", "S", [], faction="Crown", revocation=_RUNG_ABOVE).revocation
+
+
+def test_13d_i_the_conferral_basis_is_roster_membership_not_a_nonempty_string():
+    """**THE BEHAVIOUR CHANGE, STATED.** Before `13d-i` `has_conferral_basis` admitted any non-empty
+    string -- including the free fixture string `test_season_shape.py` used, which is asserted
+    REFUSED here. Now: every member of `conferral_bases` passes (all three iterated, not one
+    sampled), an off-roster string and `None` refuse, through `has_conferral_basis` AND through
+    `_req_confer` on an unheld office. The constructor refuses to BUILD the off-roster value, so
+    that arm is reached by hand-mutation -- the predicate is tested on what it reads."""
+    w, _ = _establish_world()
+    off = w.offices["off_dicastery"]
+    off.rung = "S"               # G3: ground inside the duke's purview, or nobody may confer it
+    conf = Act(id="c_b", actor="p_high", verb="confer",
+               payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke")
+    checked = 0
+    for basis in sorted(CONFERRAL_BASES):
+        off.conferral = basis
+        assert _preds.has_conferral_basis(off) and _preds._req_confer(w, conf), basis
+        checked += 1
+    assert checked == len(CONFERRAL_BASES) >= 3, checked
+    for basis in (None, "something-not-on-the-roster", "the duke's remit (harness fixture)", ""):
+        off.conferral = basis
+        assert not _preds.has_conferral_basis(off), f"{basis!r} passed the basis test"
+        assert not _preds._req_confer(w, conf), f"`_req_confer` admitted {basis!r}"
+    with pytest.raises(Unspecified):
+        Office("off_x", "Reeve", "S", [], faction="Crown", conferral="something-not-on-the-roster")
+
+
+def test_13d_i_an_off_roster_conferral_on_establish_refuses_and_raises_nothing():
+    """`13f`'s contract under the new test: `_req_establish` translates the constructor's new
+    refusal to False, so an `establish` naming an off-roster basis emits `establish.refused`,
+    constructs nothing, and lets no exception escape the fold. Every rostered basis founds."""
+    w, d = _establish_world()
+    act = Act(id="e_offroster", actor="p_high", verb="establish",
+              payload=_founding(conferral="something-not-on-the-roster"), via="off_duke")
+    with pytest.raises(Unspecified):
+        office_described_by(act)
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], contest_max_depth=w.fixtures.get("contest_max_depth"))
+    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert "off_reeve" not in w.offices
+    founded = 0
+    for i, basis in enumerate(sorted(CONFERRAL_BASES)):
+        out = _establish(w, d, f"e_ok_{i}", _founding(office=f"off_reeve_{i}", conferral=basis))
+        assert [e.kind for e in out] == ["office.established"], (basis, [e.kind for e in out])
+        founded += 1
+    assert founded == len(CONFERRAL_BASES) >= 3
+
+
+def test_13d_i_the_title_in_a_body_refusal_is_rehomed_not_dropped():
+    """Item (4), r2 `03` SC-5: *"deleting the title helpers loses no constructor invariant"*. The
+    refusal is now a function of its own (`state/carriers.py::refuse_a_title_in_a_body`), which
+    the constructor still calls and `offices.yaml`'s loader will. Asserted on BOTH routes, for EVERY
+    title on the roster (counted), with the message naming the title AND the body; and the two
+    non-cases -- a title with no body, a non-title in a body -- pass."""
+    checked = 0
+    for ttl in sorted(TITLE_DOMAINS):
+        with pytest.raises(Forbidden) as direct:
+            refuse_a_title_in_a_body("off_t", ttl, "Imperial Court")
+        with pytest.raises(Forbidden) as built:
+            Office("off_t", ttl, None, [], body="Imperial Court")
+        for exc in (direct.value, built.value):
+            assert repr(ttl) in str(exc) and "'Imperial Court'" in str(exc), str(exc)
+        checked += 1
+    assert checked == len(TITLE_DOMAINS) >= 11, checked
+    refuse_a_title_in_a_body("off_t", "King", None)                  # a title held at a rung
+    refuse_a_title_in_a_body("off_t", "Chancellor", "Imperial Court")  # an office in an organ
+    assert Office("off_t", "Chancellor", None, [], body="Imperial Court").faction == "Crown"
+
+
+def test_13d_i_revoke_executes_in_the_fold_for_the_seat_above_and_refuses_the_other_faction():
+    """§0.2 -- DONE MEANS IT RUNS. Planted `revoke` acts through the resolver, both revokers seated
+    with `revoke` in their grant so eligibility passes and the PREDICATE decides: the other
+    faction's King first (`revoke.refused`; the duke's `hold` survives), then the Crown King
+    (`tenure.closed`; it does not). Asserted on the Events."""
+    w, d = _ladder_world()
+    _seat_on(w, "c_rival_king", "off_rival_king", "King", "R", "Hafenmark", remit=("revoke",))
+    _seat_on(w, "c_king", "off_king", "King", "R", "Crown", remit=("revoke",))
+    held = lambda: [t for t in w.tenures if t.kind == "hold" and t.object == "off_duke" and t.live]
+    assert held(), "fixture: nobody holds the duke's seat"
+
+    def run(aid, actor):
+        # G3: each King revokes through his own seat (`Act.via`), which is what eligibility,
+        # ruling (3) and the write gate's T-o clause now ask.
+        return [e.kind for e in d.resolve(mint_token(d.w, WriteClass.ACTS),
+            [Act(id=aid, actor=actor, verb="revoke", payload={"office": "off_duke"},
+                 via=_seat_of(w, actor))],
+            contest_max_depth=w.fixtures.get("contest_max_depth"))]
+
+    assert run("rv_rival", "c_rival_king") == ["revoke.refused"]
+    assert held(), "the other faction's King closed the duke's hold"
+    kinds = run("rv_king", "c_king")
+    assert "tenure.closed" in kinds and "revoke.refused" not in kinds, kinds
+    assert not held(), "the fold accepted the revocation and the duke's hold survived"
+
+
+# =================================================================================================
+# PLAN POSITION `24d-i` -- THE DWELLING SUBSTRATE (`ED-SE-0055`).
+# `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md`, position `24d-i`. `dwelling`
+# joins `site_kinds` with the two rows the loader forces, both at the CONTROL arm
+# (`wear_per_season.dwelling: 0`, `band_floors.dwelling: {}`), and `build_realm` mints one dwelling
+# Site per `hearth` rung. FALSIFIERS: exactly one dwelling on every hearth and none elsewhere, with
+# a hearth floor so an empty world cannot pass; the loader's refusal, planted; and the control arm
+# over one populated season, with no dwelling band crossing while the wear loop visited every one.
+#
+# ⚠ WHICH OTHER HEARTH BUILDERS MINT, AND WHY. The ruling names `build_realm` only; the rest is
+# this position's architecture call (`CLAUDE.md` §0, step 5).
+#   * `governance_spine.build` MINTS. The spine is the template the realm is fine-tuned FROM, and
+#     `19c`'s `migrate` runs its observable on the spine's two disjoint chains. With a dwelling per
+#     hearth, `capacity` counts 2 at the realm and 1 down each chain. Without, every rung reads the
+#     floor. Cost: two Sites on a world no test runs a season on today.
+#   * `corpus_run.build_at` DOES NOT. Every corpus world is ONE chain wide. Measured over every
+#     buildable case, a corpus world has 0 or 1 hearth, so a dwelling there would be counted by
+#     every rung of the chain alike, and `capacity` would still be one number per world. Minting
+#     would buy no variation for `R-05` to score. It would still add a wear Event, co-located with
+#     all three persons, to every hearth-scaled world.
+#   * `probes.tiny_world` DOES NOT. It isolates mechanisms. A dwelling at `Hh` would sit with three
+#     of its five persons and hand each a witnessed wear claim every season, in every probe and
+#     every test built on it. It would also trip probe `F10`'s assert that `Hh` carries no Site;
+#     that assert guards against PRODUCTION and would fire on a dwelling that produces nothing. A
+#     probe that needs a dwelling plants one, as `site_odd` is planted.
+#   * `headless.build_world` DOES NOT. The spec's list omits this fourth builder (`hearth_ostvik`).
+#     It is Carin's single worked case and `m1_acceptance`'s probe world. A dwelling there would
+#     add a wear claim to Carin's and the bailiff's ledgers, and nothing in either world reads
+#     housing.
+# =================================================================================================
+
+def _dwellings(w):
+    return [s for s in w.sites.values() if s.kind == "dwelling"]
+
+
+def _hearths(w):
+    return sorted(rid for rid, r in w.rungs.items() if r.kind == "hearth")
+
+
+def _spine():
+    from ..harness import governance_spine
+    return governance_spine.build(0)
+
+
+@pytest.mark.parametrize("build", [lambda: build_realm(0), _spine], ids=["build_realm", "spine"])
+def test_24d_i_every_hearth_carries_exactly_one_dwelling_and_no_other_rung_carries_any(build):
+    """FALSIFIER (a), on both builders that mint. Exactly one per hearth and none elsewhere is ONE
+    comparison: the dwellings counted per rung must equal each hearth counted once. A dwelling on
+    a settlement, a hearth with two, or a hearth with none all fail it."""
+    w = build()
+    hearths = _hearths(w)
+    assert len(hearths) >= 1, "the world builds no hearth; everything below would pass vacuously"
+    dw = _dwellings(w)
+    per_rung = Counter(s.rung for s in dw)
+    assert per_rung == Counter(hearths), (
+        f"dwellings per rung != one per hearth. Off-hearth (first 10): "
+        f"{sorted(set(per_rung) - set(hearths))[:10]}; hearths without exactly one (first 10): "
+        f"{sorted(h for h in hearths if per_rung[h] != 1)[:10]}")
+    scale = w.fixtures.get("condition_scale")
+    checked = 0
+    for s in dw:
+        assert s.condition == scale, (
+            f"{s.id} starts at {s.condition}, not at `condition_scale`, which is how the producing "
+            "Sites are built")
+        checked += 1
+    assert checked == len(hearths) >= 1, checked
+
+
+def test_24d_i_the_realm_mint_adds_sites_and_displaces_no_producing_site():
+    """The OBSERVABLE's census, derived rather than pinned. The producing Sites are still one per
+    producing kind per settlement, and the total is those plus one per hearth. A dwelling id that
+    collided with a producing Site's would overwrite it, and the first count would drop."""
+    from ..data.fixtures import SITE_YIELD
+    w = build_realm(0)
+    settlements = [r for r in w.rungs.values() if r.kind == "settlement"]
+    producing = [k for k in sorted(SITE_YIELD) if SITE_YIELD[k]]
+    assert settlements and producing, "fixture: no settlement or no producing kind"
+    others = Counter(s.kind for s in w.sites.values() if s.kind != "dwelling")
+    assert others == Counter({k: len(settlements) for k in producing}), others
+    assert len(w.sites) == len(settlements) * len(producing) + len(_hearths(w)), len(w.sites)
+    assert not [s.id for s in w.sites.values() if s.id in w.rungs], "a Site id shadows a rung id"
+
+
+def test_24d_i_the_loader_refuses_dwelling_without_its_wear_or_floor_row(monkeypatch):
+    """FALSIFIER (b), the loader's own refusal, planted and reverted by `monkeypatch`. The
+    `dwelling` key is deleted from the loaded table the loader reads, and `_load_matter_tables`
+    must raise `Ungraded` NAMING `dwelling`. That is the refusal for a kind with no row, and not
+    some other failure. The unplanted arm must load, with the control-arm values."""
+    from ..data import rosters as _R
+    from ..data.fixtures import DEFAULT_FIXTURES, _load_matter_tables
+    from ..gaps import Ungraded
+
+    rates, floors, _w, _y = _load_matter_tables()
+    assert rates["dwelling"] == 0 and floors["dwelling"] == {}, (rates, floors)
+    assert DEFAULT_FIXTURES.wear("dwelling") == 0
+
+    checked = 0
+    for table, cell in (("wear_per_season", _R._ROSTERS["wear_per_season"]["rates"]),
+                        ("band_floors", _R._TABLES["band_floors"]["cells"])):
+        with monkeypatch.context() as m:
+            m.delitem(cell, "dwelling")
+            with pytest.raises(Ungraded) as got:
+                _load_matter_tables()
+            assert table in str(got.value) and "dwelling" in str(got.value), str(got.value)
+        assert "dwelling" in cell, f"the plant on {table} was not reverted"
+        checked += 1
+    assert checked == 2, checked
+
+
+def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_season(monkeypatch):
+    """FALSIFIER (c), and the `DONE·INERT` measurement it rests on, as a CONTROLLED comparison.
+
+    TREATMENT is `build_realm(0)`. CONTROL is the same world with its dwellings deleted before the
+    season. The control reproduces the pre-`24d-i` tree exactly: build hash and one-season hash
+    were both byte-identical to the checkout before this change when measured -- against `bcc9a1f`
+    (the commit immediately before `24d-i` landed) in a worktree:
+    build `fa6ea34ceeb85cb2d64f3d6bbf0fefc5`, one-season `65823840d82e1051cfaab49ce3e6f432`,
+    both reproduced exactly by the control arm on the current tree.
+
+    Treatment: no dwelling crossing reaches Q3, so no `band_crossed` Question comes from one, and
+    every dwelling emits exactly one `condition.worn` and keeps its condition. The Events are what
+    prove the wear loop visited them, so the zero is not an empty population.
+    Treatment against control: the same Questions by id, the same act COUNT and the same
+    act-subject distribution (not checked by act id -- see the assertion below), every other
+    non-deposit Event by id, and every control claim survives.
+
+    ⚠ IT IS NOT SILENT, AND THIS POSITION IS NOT `DONE·INERT` BY THE PLAN'S TEST. CLAIMS MOVE. The
+    wear Events are witnessed through `co_located`, so each resident of a hearth gets one
+    firsthand `condition.worn` claim about that hearth's dwelling. This test pins the SHAPE of that
+    movement, not its count. ⚠ It is a ONE-season identity. Measured beyond it (reproduced directly,
+    `build_realm(0)`, both arms, seasons 1-4): claim displacement at `ledger_cap` starts season 2
+    (0 control claims missing from treatment at season 1, 8 at season 2, 24 at season 3, 60 at
+    season 4) and the resolved-act COUNT first differs at season 4 by exactly one (1457 vs 1458) --
+    but "one resolved act differs" describes the COUNT, not an isolated identity difference: the
+    act-identity sequence itself first diverges mid-season-4 (index 1309 of 1457/1458) and stays
+    diverged, 115 of the season's acts differing in id or verb by the season's end. One seed; not
+    swept."""
+    from ..harness import populated
+    from ..loop import driver
+
+    def season(strip):
+        w = build_realm(0)
+        if strip:
+            for s in _dwellings(w):
+                del w.sites[s.id]
+        dw = {s.id: s.rung for s in _dwellings(w)}
+        qs = []
+        inner = driver.questions_for
+
+        def spy(w_, p, since=None):
+            out = inner(w_, p, since)
+            qs.extend(out)
+            return out
+        with monkeypatch.context() as m:
+            # ⚠ MERGE, 2026-09-27 (ED-IN-0206, main): the reader moved from `loop.deliberate` back
+            # to `loop.driver` -- the driver now builds the per-person question projection at
+            # barrier 2 (`SeasonDriver._questions_at_barrier`) rather than `deliberate` calling
+            # `questions_for` itself. The spy must name the module the reader actually lives in
+            # (the same lesson `wd_extra.py`'s own history records), or it patches a name nothing
+            # reads and the counts below come back silently empty.
+            m.setattr(driver, "questions_for", spy)
+            out = populated.run(seasons=1, w=w)
+        return w, dw, qs, out
+
+    w, dw, qs, out = season(strip=False)
+    scale = w.fixtures.get("condition_scale")
+    assert len(dw) >= 1, "no dwelling was built; the zeros below would describe nothing"
+    assert qs, "the questions_for spy saw no deliberation; the zero below would be unobserved"
+    worn = Counter(anchor_of(w, e) for e in w.log
+                   if e.kind == "condition.worn" and anchor_of(w, e) in dw)
+    assert worn == Counter(list(dw)), (
+        f"the wear loop did not visit every dwelling exactly once: "
+        f"{len(worn)} of {len(dw)} worn, {sum(worn.values())} Events")
+    # ⚠ A `band_crossed` QUESTION NEVER NAMES A SITE, so "Questions naming a dwelling" is
+    # attributed through Q3's ONLY input. `questions_for` builds one from each `w.crossings` tuple
+    # `(site, use, ...)` as `Question(..., (use,), use)`: its referent is the site-USE, the floor's
+    # key. A filter on dwelling ids over the Questions cannot fail. Measured with a planted
+    # `wear 10` / `{planted_use: 995}`: 211 dwelling crossings and 460 `band_crossed` Questions
+    # over two seasons, none carrying a dwelling id. No dwelling tuple means no dwelling Question.
+    crossed = [c for c in w.crossings if c[0] in dw]
+    assert crossed == [], f"{len(crossed)} dwelling crossings reach Q3 at the control arm"
+    assert not [e for e in w.log if e.kind == "condition.band_crossed" and anchor_of(w, e) in dw]
+    assert all(w.sites[sid].condition == scale for sid in dw), "a dwelling's condition moved at wear 0"
+    assert not [q for q in qs if {q.about, *q.referents} & set(dw)], (
+        "some question source now names a dwelling. `work` binds a referent as its `site`, and "
+        "`world_q`'s `floor` read raises a bare `ValueError` on `band_floors.dwelling: {}`")
+
+    cw, cdw, cqs, cout = season(strip=True)
+    assert cdw == {}, "the control still has dwellings"
+    # By Question ID, not only by source: the same questions, to the same people, about the same
+    # things.
+    assert sorted(q.id for q in qs) == sorted(q.id for q in cqs), (
+        Counter(q.source for q in qs), Counter(q.source for q in cqs))
+    assert (out["acts"], out["act_subjects"]) == (cout["acts"], cout["act_subjects"])
+    # Every Event but the deposits is the control's, plus exactly the dwellings' own wear. The
+    # deposits are excluded because their ids are not stable across arms; measured, every
+    # `claim.deposited` id differs even where the claim id does not.
+    other = lambda log: {e.id for e in log if e.kind != "claim.deposited"}
+    worn_ids = {e.id for e in w.log if e.kind == "condition.worn" and anchor_of(w, e) in dw}
+    assert other(w.log) - worn_ids == other(cw.log), (
+        f"{len(other(w.log) - worn_ids ^ other(cw.log))} non-deposit Events differ between arms")
+
+    claims = {c.id: c for p in w.persons.values() for c in p.ledger}
+    control = {c.id for p in cw.persons.values() for c in p.ledger}
+    assert control and control <= set(claims), (
+        f"{len(control - set(claims))} control claims are gone from the treatment arm; the "
+        "dwellings displaced something in season one")
+    added = [claims[i] for i in set(claims) - control]
+    at = {rung: sid for sid, rung in dw.items()}
+    home = world_q.home_of(w)
+    assert added, "no claim moved; if that is now true, `24d-i` IS `DONE·INERT` -- relabel it"
+    for c in added:
+        assert c.predicate == "condition.worn" and c.subject == at.get(home.get(c.holder)), (
+            f"an added claim is not a resident's claim on their own hearth's dwelling: {c}")

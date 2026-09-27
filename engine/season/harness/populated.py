@@ -373,6 +373,26 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
                 w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", k,
                                      condition=w.fixtures.get("condition_scale"))
 
+    # -- a dwelling per hearth, at the hearth (`ED-SE-0055`, plan position `24d-i`) -----------
+    # `ED-SE-0051`'s `capacity(w, rung)` counts *"the rung's dwelling Sites"*, and the
+    # buildings above are `hearth` RUNGS, not Sites. Jordan chose the literal reading on
+    # 2026-09-25: a `dwelling` site kind, one per hearth rung. The id and starting condition are
+    # built the way the producing Sites' are, one layer down: `s_` + the place's key + `_` + kind,
+    # at full `condition_scale`. Iterating `buildings_at` covers every hearth this function builds,
+    # because the building loop above is its only `hearth` constructor.
+    # ⚠ NOTHING READS A DWELLING YET. `capacity` (`24d-ii`) lands with `19c`'s `migrate`. It ships
+    # at the control arm, `wear_per_season.dwelling: 0` and an empty `band_floors.dwelling`
+    # (`rosters.yaml`, which says why), so it wears nothing and crosses no band. It still emits
+    # one `condition.worn` per dwelling per season, because MATTER writes every Site.
+    # ⚠ `governance_spine.build` mints dwellings by the same rule. `corpus_run.build_at`,
+    # `probes.tiny_world` and `headless.build_world` do not.
+    # `engine/season/tests/test_governance_build.py`, section `24d-i`, records why.
+    for sid in geo["settlements"]:
+        for bid, b in buildings_at[sid]:
+            s_id = f"s_{_slug(sid)}_{b['slug']}_dwelling"
+            w.sites[s_id] = Site(s_id, bid, "dwelling",
+                                 condition=w.fixtures.get("condition_scale"))
+
     # -- the cast ---------------------------------------------------------------
     # ⚠ **NPC CASES ARE PEOPLE; ARC CASES ARE NOT, AND THE FIRST CUT SEATED ALL 143.** The NPC
     # lane names persons -- "Carin Vedel", "Inge Baralta", "Orm". The ARC lane names SITUATIONS --

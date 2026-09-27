@@ -8,31 +8,41 @@ and a stub would fail two and silently vacate the third, which is why step 9 of 
 decomposition (ED-IN-0203) refused to delegate. Step 5 established the technique when
 `class Query` bound module functions as staticmethods.
 
-⚠ **THE TOKEN IS STILL A `WriteClass` PARAMETER AND THAT IS G2's, NOT THIS UNIT's.** `04 §A.3`
-row 3 replaces the parameter with an unforgeable token type minted only by the driver; until
-that lands, this step passes `WriteClass` exactly as it did inside the class. Unit L5
-delivers the MODULE boundary `04 §A.2:134` requires; the write discipline is Arc 2.
+⚠ **NO TOKEN, BY SIGNATURE (G2).** `SeasonDriver.season` hands every other step a `Token` minted
+by `loop/driver.py::mint_token`; this one is called with none, so there is nothing here that
+`World.write` would accept (it raises `NoToken` first). That is `04 §C.1`'s *"a MAP. No token
+exists in this scope"*, and `tests/test_g2_token.py` holds it two ways: no `Token(` or
+`mint_token(` in this module, and a run-time check that a DELIBERATE call leaves every `World`
+store byte-identical -- by ANY route, not only through the gate.
 
-⚠ **THE §A.2 ROW QUOTED ABOVE IS NOT WHAT THIS BODY DOES, AND SAYING SO IS THE POINT.** The row reads
-*"owns nothing; calls `sense()`, builds a `View`, calls `choose` per person; reads a frozen `World`,
-**for `sense` only**; token: none."* Measured against the body:
+⚠ **THE §A.2 ROW QUOTED ABOVE, MEASURED AGAINST THIS BODY.** The row reads *"owns nothing; calls
+`sense()`, builds a `View`, calls `choose` per person; reads a frozen `World`, **for `sense`
+only**; token: none."* What the body does beyond that:
 
-- it read `w.fixtures`;
-- it sets `w.step` and `w._in_parallel_map`, and writes `self.scenes` and `a.scene`.
+- it sets `w.step` and `w._in_parallel_map` -- barrier bookkeeping, not a store -- and writes the
+  DRIVER's own `self.scenes` / `self._queued` / `self._spent` and each released `a.scene` / `a.id`,
+  all on objects that are not `World` stores (the acts are this step's RETURN, the matrix's
+  `(Act[], returned)` row, and enter the act store only at RESOLVE).
 
 None of that is L5's doing -- the body is unchanged from when it was a method on `SeasonDriver` --
 but the module boundary is what makes the divergence checkable, so it is recorded here rather than
 left for a reader to find under a header that reads like conformance. Found by the Fable gate on
 Arc 1 and filed under `ED-IN-0206`.
 
-⚠ **RESOLVED 2026-09-25 FOR THE TWO THAT MATTERED (ED-IN-0206).** This body used to call
-`w._rehome()`, which MUTATES the tenure store, and `questions_for(w, p, since)`, a `world_q` read
-that is not `sense`. Read together, `04:115` (AX-4, one write path), `04:155` (the driver owns the
-caches' lifetimes), `04:158` (this row), `04:154` (a decision may read `Question[]`) and `04:976`
-(PART D row 41: DELIBERATE runs "on a projection built at barrier 2") put both at the driver: it
-rehomes before the freeze and builds the per-person question projection
-(`SeasonDriver._questions_at_barrier`), and this step receives it as `questions`. `04` was not
-amended to match the code (layer-conformance B4).
+⚠ **`w._rehome()` AND `questions_for(w, p, since)` WERE CALLED HERE AND ARE NOT ANY MORE (G2,
+disposing of `ED-IN-0206`'s finding; RESOLVED 2026-09-25).** `_rehome()` MUTATED the tenure store
+during a barrier that owns nothing and holds no token, and `questions_for` was a `world_q` read
+that is not `sense` -- left undecided by L5 as *"a Layer-1 question, not this unit's"*, and handed
+to G2 by the plan (*"It is this unit's"*). Read together, `04:115` (AX-4, one write path), `04:155`
+(the driver owns the caches' lifetimes), `04:158` (this row), `04:154` (a decision may read
+`Question[]`) and `04:976` (PART D row 41: DELIBERATE runs "on a projection built at barrier 2")
+put both at the driver rather than licensing them here by amending the `04` row (layer-conformance
+B4): it rehomes before the freeze -- MATTER is the last barrier before the freeze, holds a token,
+and nothing between it and this step can create a Person, so every Tenure read here is already
+homed -- and builds the per-person question projection (`SeasonDriver._questions_at_barrier`),
+which this step receives as `questions`. The `w.tenures` getter's own `_rehome()` call went with
+it, since that was the same mutation reached through any `world_q` query this step makes. See
+`World._rehome`.
 """
 
 from __future__ import annotations
@@ -62,11 +72,12 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
                         law="S26.2 -- the world is FROZEN from the end of MATTER to the start of RESOLVE. THIS IS WHAT MAKES THE MAP SAFE TO PARALLELISE")
     w.step = Step.DELIBERATE
     TRACE.step("DELIBERATE", "enter")
-    # ⚠ `_rehome()` IS NO LONGER CALLED HERE (2026-09-25, ED-IN-0206). `budget`,
-    # `person_side_eligible` and `questions_for` read `p.tenures` DIRECTLY, so the tenure store
-    # must be whole before any person-side read -- and making it whole MUTATES the store, which a
-    # step that owns nothing (04:158) may not do. The driver calls it at barrier 2, before the
-    # freeze (`SeasonDriver.season`), as the owner of barrier lifetimes (04:155).
+    # ⚠ G2: `w._rehome()` STOOD HERE AND MOVED TO THE MATTER BARRIER (2026-09-25, ED-IN-0206). Its
+    # reason is unchanged -- `budget`, `person_side_eligible` and `questions_for` read `p.tenures`
+    # DIRECTLY, so a Tenure added before its subject existed must be homed before any person-side
+    # read -- but the repair is a store mutation and this step owns no store (04:158). MATTER runs
+    # it before the freeze, which is before this line in every season, as the owner of barrier
+    # lifetimes (04:155). See the module docstring.
     acts: list[Act] = []
     k_view = w.fixtures.get("view_k")
     # ⚠⚠ `scene_budget` HAS TWO READERS SINCE `U2` AND THEY READ IT AS TWO DIFFERENT QUANTITIES.
@@ -89,7 +100,7 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
     # 86-world basis every figure here used does NOT apply. With the overlay, `build_at` seats
     # `p_a` on a live `hold` (`corpus_run.py:243-254`); `harness/probes.py:107` has seated
     # `p_high` on `off_duke` since `tiny_world` existed, so every probe season carried the
-    # ceiling; `harness/populated.py:757` seats one hold per office. `H-71`'s own cite already
+    # ceiling; `harness/populated.py:777` seats one hold per office. `H-71`'s own cite already
     # recorded the overlay path, so the register contradicted itself and THIS was the stale side.
     # ⚠ AND THE COUNT IS WIDER THAN OFFICES: `budget()` counts every live `hold`, and
     # `_eff_create_record` mints one per Record (`loop/effects.py:302-305`), so `headless`'s Carin

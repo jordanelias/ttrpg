@@ -163,6 +163,48 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
         *"`H-33`, the presence index, which does not exist"*, and `W6` BUILT it -- `_ch_co_located`
         reads it and `H-33` now carries a `site:`. The citation survived the thing it cited. The
         refusal itself is unchanged and correct; only its reason was stale."""
+    return _admitted_through(p, row, trace=True)[0]
+
+
+def exercised_seat(p: Person, row: "Optional[VerbRow]") -> Optional[str]:
+    """G3 -- THE SEAT A COMPUTED ACT EXERCISES: the office id its `Act.via` carries, or `None`.
+
+    `04 §B.9` gives `Act` a `via : SeatId?` and `04:332` asks purview of the seat exercised, so
+    the act a person mints has to say which seat it is exercised through -- and only the person can
+    say, because only the person's own Tenures are in scope here (AX-2). It is the seat through
+    which `person_side_eligible` ADMITTED the verb, read by the SAME walk (`_admitted_through`) so
+    the two cannot disagree: a `remit:` alternative admits through the first live `hold` whose grant
+    carries the act, and that hold's object is the seat. An `own` or `hold` alternative admits the
+    person AS THEMSELVES, and no seat is exercised -- `kill / wound`, `transfer`, `release` all mint
+    with `via=None`. The fold's `_eligible` then admits the same act through the same seat, so
+    making `via` required there moves no computed act (measured: `build_realm(0)`'s content hash
+    over one season is unchanged by G3).
+
+    ⚠ WHICH SEAT, WHEN SEVERAL GRANT THE ACT, IS THE FIRST IN THE PERSON'S OWN TENURE ORDER -- a
+    fixed rule, not a choice, and a LIMIT stated rather than hidden: a person holding two seats that
+    both grant `confer` always exercises the first, even where only the second has purview over
+    the target. Choosing by purview would need the containment tree, which is not the person's
+    state. No world builder seats anyone twice today; the day one does, this is where the choice
+    becomes a candidate per seat. Traces nothing: the admission it mirrors already traced. A verb
+    on no row (`row is None` -- a hand-ranked candidate naming an invented verb) exercises nothing;
+    the fold refuses the verb itself, and inventing a seat for it here would be a second answer."""
+    if row is None:
+        return None
+    return _admitted_through(p, row, trace=False)[1]
+
+
+def _granting_hold(p: Person, act: str):
+    """The first live `hold` in the person's OWN store whose grant carries `act`, or `None` -- the
+    one person-side reading of *which seat grants this* (`H-71` arm 2's snapshot)."""
+    return next((t for t in p.tenures if t.kind == "hold" and t.live and act in t.granted_acts),
+                None)
+
+
+def _admitted_through(p: Person, row: "VerbRow", trace: bool) -> tuple:
+    """`(admitted, seat)`: `person_side_eligible`'s walk over the row's DISJUNCTION, once, for both
+    of its readers -- the FIRST alternative that admits decides, and `seat` is the office it admitted
+    through (`None` unless that alternative was `remit:`). `trace=False` is `exercised_seat`'s
+    reading of a verb the first reading already traced, so the trace records each decline once."""
     for alt in row.eligibility:
         kind, _, raw = alt.partition(":")
         kind, raw = kind.strip(), raw.strip()
@@ -177,7 +219,7 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
                 law="#353 §9.2 -- 'capability supplies dice and GATES NOTHING'. A fifth kind is a "
                     "new way to make a verb unavailable and needs a ruling, not a table edit")
         if kind == "own":
-            return True
+            return (True, None)
         if kind == "hold":
             # ⚠ THE ARGUMENT IS COMPARED. It was parsed and thrown away, so `transfer`'s
             # `hold:<store>` and `destroy_record`'s `hold:<record>` admitted anyone holding ANY
@@ -187,11 +229,11 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
             # DECLINES rather than guessing which store the act meant: that binding is `H-75`.
             if not raw:                       # bare `hold` -- holding anything admits
                 if any(t.kind == "hold" and t.live for t in p.tenures):
-                    return True
+                    return (True, None)
             elif not placeholder:             # a literal object id
                 if any(t.kind == "hold" and t.live and t.object == arg for t in p.tenures):
-                    return True
-            else:
+                    return (True, None)
+            elif trace:
                 TRACE.note(f"`hold:<{arg}>` names an object KIND, not an id (H-75); "
                            f"{row.verb!r} declines rather than admitting on any held object")
         # `remit` and `presence` decline: see the docstring. TRACE records the decline so the
@@ -205,10 +247,12 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
             # names a KIND of act, not one, and admitting on it would be the over-admission `G4`
             # weighs equally with an over-refusal. Every live `remit:` cell in `verb_table.yaml`
             # is a literal (`remit:issue`, `remit:confer`), so this refuses nothing that exists.
-            if arg and not placeholder and any(
-                    t.kind == "hold" and t.live and arg in t.granted_acts
-                    for t in p.tenures):
-                return True
+            # G3: the hold that grants it IS the seat exercised -- returned, not just found.
+            seat = _granting_hold(p, arg) if arg and not placeholder else None
+            if seat is not None:
+                return (True, seat.object)
+            if not trace:
+                continue
             if placeholder:
                 TRACE.note(f"`remit:<{arg}>` names an ACT KIND, not an act (H-75); "
                            f"{row.verb!r} declines rather than admitting on any granted remit")
@@ -217,10 +261,10 @@ def person_side_eligible(p: Person, row: "VerbRow") -> bool:
             else:
                 TRACE.note(f"`remit:{arg}` not granted on any live `hold` this person holds; "
                            f"{row.verb!r} declines")
-        elif kind == "presence":
+        elif kind == "presence" and trace:
             TRACE.note(f"`presence:` eligibility is unevaluable person-side (H-33, the presence "
                        f"index); {row.verb!r} declines rather than admitting")
-    return False
+    return (False, None)
 
 
 def containing_rung_of(p: Person) -> Optional[str]:

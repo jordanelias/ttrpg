@@ -32,7 +32,7 @@ from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member
 from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL, VERB_TABLE
 from ..gaps import Unspecified
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
-from .options import opening_set
+from .options import exercised_seat, opening_set
 
 
 def align(verb: str, axis: str) -> float:
@@ -90,7 +90,7 @@ def benefits_me(p: Person, c: Candidate) -> float:
     (CORRECTED 2026-09-20, `ED-IN-0260`; the old reason read *"`orient` ... no verb writes it"*).
     That reason proves too much: NO VERB WRITES `Person.pursuits` EITHER -- grep `verb_table.yaml`
     for it, zero hits -- and `pursuits` is term 1 of the live score, genesis-authored from
-    `references/npc_registry.yaml` at `harness/populated.py:442-443`. Applied evenly, the old reason
+    `references/npc_registry.yaml` at `harness/populated.py:462-463`. Applied evenly, the old reason
     un-wires the score's first term. What is actually missing is the STATE: `Person` has no `orient`
     field, and the 28 authored `self_other_initial` values in that same registry are the one cell
     `data/cast.py::pursuits_of` skips (its `continue` past non-list entries). The wiring waits on
@@ -461,8 +461,15 @@ def pack_scenes(p: Person, ranked: list, n_scenes: int, fx: "Fixtures", mint,
                      # what the person bound. The subject is written first and the operands over
                      # it, so a cell that binds the referent under its own name (`to`, `site`)
                      # cannot disagree with `subject` about which thing that is.
+                     #
+                     # ⚠ G3: AND THE SEAT IT IS EXERCISED THROUGH. `via` is read person-side off
+                     # the grant `person_side_eligible` admitted the verb on (`exercised_seat`,
+                     # the same walk), so a remit act names the seat whose remit it is and an
+                     # `own` act names none. The fold's eligibility, `_req_revoke`/`_req_confer`
+                     # and the write gate ask THIS seat and no other (`04:332`).
                      [Act(mint(p.id, c.verb, c.subject or ""), p.id, c.verb,
-                          payload=_payload_of(c)) for c in chunk],
+                          payload=_payload_of(c),
+                          via=exercised_seat(p, VERB_TABLE.get(c.verb))) for c in chunk],
                      # `H-77`: a scene carrying more than one interaction is the EXTENDED one.
                      # This is what `extended` MEANS, and until W17's adversarial pass nothing
                      # ever set it -- so `Scene.cost` returned 1 unconditionally, H-77's sweep

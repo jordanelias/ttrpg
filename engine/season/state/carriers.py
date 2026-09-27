@@ -31,7 +31,8 @@ from typing import Any, Optional
 from ..data.fixtures import DEFAULT_FIXTURES
 from ..data.matrix import MATRIX
 from ..data.rosters import (
-    BODY_FUNCTION, QUESTION_SOURCES, REMIT_ACTS, RUNG_KINDS, office_faction, title_domain,
+    BODY_FUNCTION, CONFERRAL_BASES, QUESTION_SOURCES, REMIT_ACTS, REVOCATION_BASES, RUNG_KINDS,
+    office_faction, require_member, title_domain,
 )
 from ..gaps import Forbidden, Unowned, Unspecified
 
@@ -80,7 +81,10 @@ class Tenure:
         has**. So this is a SNAPSHOT taken when the Tenure opened, and an office whose `remit_acts`
         change later does not retroactively re-grant its sitting holders -- *"an office whose
         remit changes does so by an ACT, which is how everything else in this engine changes."*
-        `_grant_remit` carries the same statement from the writing side.
+        `_grant_remit` carries the same statement from the writing side. ⚠ SINCE `13f`
+        (2026-09-25) THAT ACT EXISTS: `establish` re-stamps every live `hold` on the office it
+        writes, through `_grant_remit(force=True)` -- so a hand-mutation still reaches nobody and
+        the act reaches every sitting holder.
 
         Returns `()` for every Tenure that carries no grant, which is every kind but `hold` and
         every `hold` on a non-office. A tuple rather than a set, because `content_hash()` folds it.
@@ -162,10 +166,20 @@ class Event:
     a `Claim`; for who learned of it, `WITNESS`. A reader who brings the ordinary sense looks for
     the actor field, does not find it, and concludes the carrier is incomplete -- which is the
     mistake the three absences exist to prevent. Defined at both sites per `CLAUDE.md` §4:
-    `architecture/meta/01_AXIOMS.md` §D.9 is the prose home (ED-IN-0220)."""
+    `architecture/meta/01_AXIOMS.md` §D.9 is the prose home (ED-IN-0220).
+
+    ⚠ `subject` WAS DECLARED HERE AND IS DELETED (G1b, plan position 4, 2026-09-26) -- `04:402`'s
+    *"No `actor`, no `target`, no `subject` on `Event`"* is now true of this class. The field was
+    OVERLOADED: the fold set it to the ACTOR, `World.write` and MATTER to the THING WRITTEN, and
+    every reader had to guess which it got. Both senses are now read off the channels that already
+    held them, through `state/attribution.py` -- `actor_of` walks `causes[]` into the act store,
+    `anchor_of` falls back to `changes[]` and then to the cause's own anchor. An emitter with no
+    act, no change and no antecedent has NOTHING that says what it concerns, and `anchor_of`
+    answers `None` for it; `test_g1b_attribution.py` plants one and asserts WITNESS deposits
+    nothing, so that channel going quiet is observed rather than assumed. A hand-built Event that
+    needs an anchor carries a change naming it (`harness/probes.py::about`)."""
     id: str
     kind: str
-    subject: str
     changes: list[StateChange]
     causes: list[str]
     emitted_at: int
@@ -437,6 +451,14 @@ class Act:
     # it flattens scenes into the produced list, so a caller that returns bare Acts (the
     # pre-`W17` accounting, still lawful under `as_scenes`) simply has none.
     scene: Optional[str] = None
+    # G3 -- THE SEAT EXERCISED. `04 §B.9`: `Act := (id, actor : PersonId, via : SeatId?, ...)`, and
+    # `04:120` (AX-1): *"only a person acts ... a seat enters through `Act.via`"*. An office id, or
+    # `None` for a person acting as themselves. It is what `_eligible`'s `remit:` branch, `_req_revoke`,
+    # `_req_confer`, `_req_establish` and the write gate's F3 clause (T-o and the conferral basis)
+    # ask -- never the actor's other seats -- so a Duke who is also a Chancellor acts as ONE of them
+    # per act. Set person-side at the mint (`decision/choose.py::pack_scenes`), from the same grant
+    # `person_side_eligible` admitted on; the gate refuses a `via` the actor does not occupy.
+    via: Optional[str] = None
 
 
 # S27: FIVE STRATA. movement / binding decisions / contested physical / uncontested material / social
@@ -574,6 +596,36 @@ class Proposition:
     scope: Any = None
 
 
+def refuse_a_title_in_a_body(office_id: str, post: Optional[str], body: Optional[str]) -> None:
+    """THE TITLE-IN-A-BODY REFUSAL, AS A FUNCTION OF ITS OWN (plan position `13d-i`, item 4).
+
+    ⚠ A TITLE IS NOT AN OFFICE, AND CONFLATING THEM PUT A KING IN THE CHURCH. `titles` carries
+    the governance ladder Jordan ruled, so a `post` that names a TITLE is a seat on that ladder and
+    cannot also be an organ of a faction. The overlay `{post: "King", body: "Cardinal of Justice"}`
+    was ACCEPTED before this check and produced a realm title whose Church affiliation existed
+    nowhere in canon.
+
+    WHY IT IS A FUNCTION NOW. r2 `03_SEATS_AND_CONTENT.md` §A.8 re-homes this clause from the
+    constructor to `offices.yaml`'s loader as a CONTENT rule, "same refusal, same law string". That
+    loader does not exist yet (the deferred `offices.yaml` unit), so the rule is given a name the
+    loader can call, and `Office.__post_init__` goes on calling it until then -- MOVED, never
+    dropped: every office is still refused on construction exactly as before.
+
+    ⚠ IT STILL ASKS `title_domain`, AND IT HAS TO. *Is this post a title?* has exactly one owner in
+    the tree, `rosters.yaml: titles` through `title_domain` -- `Office` carries no title flag and
+    `post` is a free name (`AX` ID-4). So the plan's instruction to delete `titles` and
+    `title_domain` cannot be carried out while this refusal lives: r2 `03` §A.12 keeps the roster
+    for this reason, r2 `05` RULED (c) deletes it, and the plan follows `05` for the deletion and
+    `03:661` for this re-home. Deleting the roster makes this refusal unstatable in its same form."""
+    if body is not None and title_domain(post) is not None:
+        raise Forbidden(
+            f"office {office_id!r} names the TITLE {post!r} and the body {body!r}",
+            "rosters.yaml -- titles vs office_bodies",
+            needs="a title is held at a rung on the governance ladder, not seated in an organ",
+            law="Jordan 2026-09-02 -- the title ladder turns on holdings and purview; an "
+                "office belongs to a faction's body. A post is one or the other, never both")
+
+
 @dataclass
 class Office:
     """S11. `rung?` is OPTIONAL; null is the office-cluster case (S6.2)."""
@@ -625,21 +677,34 @@ class Office:
         self.faction = office_faction(self.body, self.faction)
         if self.body is not None:
             self.body_function = BODY_FUNCTION[self.body]
-        # ⚠ A TITLE IS NOT AN OFFICE, AND CONFLATING THEM PUT A KING IN THE CHURCH. `titles`
-        # carries the governance ladder Jordan ruled (`title_domain`, read by `_req_revoke`), so a
-        # `post` that names a TITLE is a seat on that ladder and cannot also be an organ of a
-        # faction. The overlay `{post: "King", body: "Cardinal of Justice"}` was ACCEPTED before
-        # this check and produced a realm title whose Church affiliation existed nowhere in canon.
-        if self.body is not None and title_domain(self.post) is not None:
-            raise Forbidden(
-                f"office {self.id!r} names the TITLE {self.post!r} and the body {self.body!r}",
-                "rosters.yaml -- titles vs office_bodies",
-                needs="a title is held at a rung on the governance ladder, not seated in an organ",
-                law="Jordan 2026-09-02 -- the title ladder turns on holdings and purview; an "
-                    "office belongs to a faction's body. A post is one or the other, never both")
+        # HOW THE SEAT IS FILLED AND WHO MAY STRIP IT -- ED-IN-0256 rulings (2) and (3), `13d-i`.
+        # The remit clause's shape, one field along: a typo in a declared basis would otherwise
+        # make a seat nobody can ever fill or strip, and look like a working precondition while
+        # it did. `None` stays lawful -- a seat declaring no basis is refused by the predicates,
+        # not here, because every world builder in the tree still constructs seats without one.
+        if self.conferral is not None:
+            require_member(
+                self.conferral, CONFERRAL_BASES,
+                f"office {self.id!r} declares the conferral basis {self.conferral!r}",
+                "rosters.yaml -- conferral_bases",
+                law="ED-IN-0256 (2) -- a seat is filled by one of a CLOSED set of ways; an "
+                    "off-roster basis would pass no conferral, silently, forever")
+        if self.revocation is not None:
+            require_member(
+                self.revocation, REVOCATION_BASES,
+                f"office {self.id!r} declares the revocation basis {self.revocation!r}",
+                "rosters.yaml -- revocation_bases",
+                law="ED-IN-0256 (3) -- who may strip a seat is a CLOSED set of rules; an "
+                    "off-roster basis would admit no revocation, silently, forever")
+        # A TITLE IS NOT AN OFFICE -- the refusal and its reasoning live in the function, which
+        # `offices.yaml`'s loader calls once it exists (`13d-i` item 4, r2 `03` §A.8).
+        refuse_a_title_in_a_body(self.id, self.post, self.body)
         # A titled post must sit at the rung its title governs. Otherwise a Duke seated at the
         # realm has realm-wide purview (`under_purview` walks up to the SEAT), which is the
         # governance canon inverted by a data-entry slip.
+        # ⚠ (`13d-i`, 2026-09-26) `under_purview` IS DELETED and `scope_rung` has NO READER in the
+        # game -- only `test_season_shape.py`'s populated-realm assertion. Left standing because it
+        # goes with the field, which r2 `03` §A.8 deletes and this position does not own.
         dom = title_domain(self.post)
         if dom is not None and self.scope_rung is None and self.rung is not None:
             self.scope_rung = self.rung

@@ -8,21 +8,25 @@ and a stub would fail two and silently vacate the third, which is why step 9 of 
 decomposition (ED-IN-0203) refused to delegate. Step 5 established the technique when
 `class Query` bound module functions as staticmethods.
 
-⚠ **THE TOKEN IS STILL A `WriteClass` PARAMETER AND THAT IS G2's, NOT THIS UNIT's.** `04 §A.3`
-row 3 replaces the parameter with an unforgeable token type minted only by the driver; until
-that lands, this step passes `WriteClass` exactly as it did inside the class. Unit L5
-delivers the MODULE boundary `04 §A.2:134` requires; the write discipline is Arc 2.
+⚠ **THE TOKEN IS HANDED IN BY THE DRIVER (G2), AND THIS BODY DOES NOT YET SPEND IT.** `04 §C.1`
+gives CENSUS a MATTER token -- `mat2 = Token(MATTER,t); census(w,mat2); drop` -- and the write
+matrix licenses writes at CENSUS, so `SeasonDriver.season` mints one and passes it. The body below
+writes nothing (S29: demand-driven, and no demand is wired), so the parameter is held for the
+licensed rows rather than read. Kept rather than dropped because `04 §C.1` is Layer 1 and names it,
+and because the first individuation write then needs no signature change; if it is dropped instead,
+a write added here without one is refused at the gate as `NoToken`, loudly.
 """
 
 from __future__ import annotations
 
 from ..data.matrix import Step
+from ..state.gate import Token
 from ..trace_log import TRACE
 
 
 
 # -- CENSUS -- shares WITNESS's join (S29) ------------------------------
-def census(self) -> None:
+def census(self, token: Token) -> None:
     w = self.w
     w.step = Step.CENSUS
     TRACE.step("CENSUS", "enter")

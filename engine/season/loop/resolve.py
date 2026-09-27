@@ -8,10 +8,11 @@ and a stub would fail two and silently vacate the third, which is why step 9 of 
 decomposition (ED-IN-0203) refused to delegate. Step 5 established the technique when
 `class Query` bound module functions as staticmethods.
 
-⚠ **THE TOKEN IS STILL A `WriteClass` PARAMETER AND THAT IS G2's, NOT THIS UNIT's.** `04 §A.3`
-row 3 replaces the parameter with an unforgeable token type minted only by the driver; until
-that lands, this step passes `WriteClass` exactly as it did inside the class. Unit L5
-delivers the MODULE boundary `04 §A.2:134` requires; the write discipline is Arc 2.
+⚠ **THE TOKEN IS HANDED IN BY THE DRIVER (G2).** `SeasonDriver.season` mints an ACTS `Token`
+through `loop/driver.py::mint_token` and passes it as `token`, once per round. `resolve` threads
+it to `_fold` and `_fold` to `_apply_write`, each taking it as the argument after `w`; every gate
+write below presents it. This module constructs none and calls no minter --
+`tests/test_g2_token.py` fails if it does.
 """
 
 from __future__ import annotations
@@ -22,7 +23,7 @@ from ..gaps import InstrumentDefect
 from ..data.rosters import STRATA
 
 from typing import Optional
-from ..data.matrix import Step, WriteClass, matrix_row
+from ..data.matrix import Step, matrix_row
 from ..data.requires import UNKNOWN, Verdict, binding_from_act, evaluate
 from ..data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from ..gaps import Forbidden, Unspecified
@@ -31,6 +32,7 @@ from ..loop.predicates import REQUIRES_PREDICATES
 from ..queries.world_q import WorldReader, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
+from ..state.gate import Change, NoOpReceipt, Subject, Token, seat_hold
 from ..state.ids import draw_factory, H
 from ..state.world import World
 from ..trace_log import TRACE
@@ -50,11 +52,25 @@ def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
         if kind == "own":
             return True                       # every person may attempt their own acts
         if kind == "remit":
-            for t in w.tenures:
-                if t.subject == a.actor and t.kind == "hold" and t.until is None:
-                    off = w.offices.get(t.object)
-                    if off and arg in off.remit_acts:
-                        return True
+            # ⚠ ADMITS ON THE TENURE'S SNAPSHOT, NOT THE LIVE OFFICE (position `13e`,
+            # 2026-09-26). Was `off = w.offices.get(t.object); if off and arg in
+            # off.remit_acts` -- a second reading of the same fact `decision/options.py`
+            # already read off `t.granted_acts`, and the two could disagree (`epistemic.py`'s
+            # `_ch_post_remit` docstring names the gap). `t.granted_acts` is the grant the
+            # holder actually has; an office hand-mutated after seating does not reach it,
+            # and an `establish` re-stamp does (`13f`).
+            #
+            # ⚠ G3: THE SEAT EXERCISED, NOT ANY SEAT HELD. This scanned EVERY live `hold` the
+            # actor owned and admitted if any granted the act. `04:332` -- *"purview is asked of
+            # the seat exercised, not the actor"* -- and `04:120`, *"a seat enters through
+            # `Act.via`"*: a remit is a SEAT's, so a remit act is eligible only through the one
+            # seat it names, which the actor must occupy (`seat_hold`, the gate's own test). An
+            # act naming no seat (`via=None`) is the actor acting as themselves and has no remit
+            # at all. `decision/choose.py` sets `via` person-side from the same grant, so a
+            # COMPUTED act is admitted exactly as before; a hand-built one names its seat.
+            t = seat_hold(w, a.actor, a.via)
+            if t is not None and arg in t.granted_acts:
+                return True
         elif kind == "hold":
             # ⚠ THE ARGUMENT IS COMPARED, as it is person-side. It was parsed and discarded
             # here too, so `hold:<store>` admitted anyone holding ANY object -- an
@@ -182,7 +198,8 @@ def _admits(self, w: "World", a: Act, row: "VerbRow") -> tuple:
     return (True, (), verdict)
 
 
-def _fold(self, w: "World", a: Act, resolution: "Resolution | None" = None) -> list[Event]:
+def _fold(self, w: "World", token: Token, a: Act,
+          resolution: "Resolution | None" = None) -> list[Event]:
     """ONE act through the table. This is what `effect` used to be, and the difference is
     that it is the SAME code for every act and every caller.
 
@@ -233,10 +250,7 @@ def _fold(self, w: "World", a: Act, resolution: "Resolution | None" = None) -> l
     _degree = resolution.degree if resolution is not None else None
 
     def ev(kinds, causes, changes=None):
-        return [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
-                      k, a.actor, list(changes or []), list(causes), w.tick,
-                      degree=_degree, observed=verdict.observed)
-                for k in kinds]
+        return _act_events(w, a, kinds, causes, changes, _degree, verdict.observed)
 
     # §E2's first two steps, THROUGH THE ONE OWNER (`_admits`). They used to be written out
     # here, and writing them here is exactly what let `resolve()`'s contest branch skip them:
@@ -290,20 +304,34 @@ def _fold(self, w: "World", a: Act, resolution: "Resolution | None" = None) -> l
         # The alternative considered and rejected: gate all pairs dry, then apply. That
         # separates the check from the write, which is precisely what §30.2 forbids -- "the
         # gate APPLIES the write".
-        for n, pair in enumerate(_pairs):
-            kind, _, fld = pair.partition(".")
-            # The effect runs ONCE, on the first pair: a verb writing three cells is ONE
-            # operation, and running it per pair minted three Tenures for one `move`.
-            made = self._apply_write(w, a, kind, fld, eff if n == 0 else None,
-                                     earned=earned, resolution=resolution)
-            changed.extend(c for c in made if c not in changed)
+        try:
+            for n, pair in enumerate(_pairs):
+                kind, _, fld = pair.partition(".")
+                # The effect runs ONCE, on the first pair: a verb writing three cells is ONE
+                # operation, and running it per pair minted three Tenures for one `move`.
+                made = self._apply_write(w, token, a, kind, fld, eff if n == 0 else None,
+                                         earned=earned, resolution=resolution)
+                changed.extend(c for c in made if c not in changed)
         # ⚠ AN EFFECT THAT TOUCHED NOTHING DID NOT DO THE THING, AND MUST NOT EMIT THE
         # SUCCESS. `kill / wound`'s effect returns early when its payload names no subject --
         # which is every computed act, since §F1's Candidate carries no operands (`H-80`) --
         # and the fold then emitted `person.died` ANYWAY. Artifact 2 published four fabricated
         # deaths across a four-season run, into every ledger, and `person.died` is one of the
         # three endings §6.3's own chain check accepts. Found by the `W9` adversarial pass.
-        if eff is not None and not changed:
+        #
+        # ⚠⚠ G4: THIS IS NOW THE GATE'S JUDGMENT, CAUGHT HERE -- "CONVERTED AT THE FOLD BOUNDARY
+        # INTO THE ROW'S REFUSAL KIND". It was `if eff is not None and not changed`, a check on
+        # whether the effect REPORTED an id, which is exactly what `work` defeated: it reported its
+        # site and changed nothing, so the check passed and `site.worked` shipped (F9). The gate
+        # now reads every subject the effect names before and after the write and raises
+        # `NoOpReceipt` when none moved; an effect that declines (`NO_CHANGE`) names none, so the
+        # old falsy-return case lands here too, through one channel instead of two. The Event is
+        # unchanged -- same kinds, same `[a.id]` cause, no changes -- so every refusal the old
+        # check produced is byte-identical. What moved is that the WRITE is refused too: the trace
+        # records it as refused (`F9`), where it used to record a write that changed nothing as
+        # admitted. A refused first pair leaves the later pairs unchecked: a refused write
+        # authorizes nothing after it.
+        except NoOpReceipt:
             TRACE.decision(f"{a.verb} wrote nothing", "E3",
                            chose="emit the refusal, not the success",
                            alternatives=["emit `emits:` anyway (publishes an event for a "
@@ -349,7 +377,7 @@ def _fold(self, w: "World", a: Act, resolution: "Resolution | None" = None) -> l
     # is `§8`: the rule lives once, on the one path every act-emission takes.
     return ev(kinds, [a.id] + self._occasion_ids(w, a), list(a.changes) + changed)
 
-def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None,
+def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, eff=None,
                  earned: Optional[set] = None,
                  resolution: "Resolution | None" = None) -> list:
     """The fold's write. It carries no per-verb behaviour -- the effect of a write is the
@@ -358,48 +386,69 @@ def _apply_write(self, w: "World", a: Act, kind: str, fld: str, eff=None,
     ⚠ IT NOW RETURNS THE `StateChange`s THE WRITE MADE, and that is what lets an Event say
     WHAT IT CHANGED. Before, an Event's `changes[]` was whatever the CALLER had put on the
     Act -- so a computed act, which is every act after `W5`, emitted an Event changing
-    nothing. The fold knows what it wrote; an effect returns the ids it touched. Without this
-    `H-79`'s `per_change` rule has nothing to read and §F1's Q2 clause "a claim whose subject
-    is something they hold" stays unreachable, which is how the narrative substrate stayed
-    empty through four revisions."""
-    mrow = matrix_row(kind, fld)
-    touched: list = []
+    nothing. The fold knows what it wrote. Without this `H-79`'s `per_change` rule has nothing
+    to read and §F1's Q2 clause "a claim whose subject is something they hold" stays
+    unreachable, which is how the narrative substrate stayed empty through four revisions.
+
+    G4: "what it wrote" is now the GATE'S answer -- the receipts `World.write` minted for the
+    subjects that moved -- where it was the effect's report. An effect naming a subject that did
+    not move gets no receipt for it; one naming nothing that moved raises `NoOpReceipt`, which
+    `_fold` turns into the refusal."""
+    # ⚠ G2: ASKED FOR ITS SIDE EFFECT ONLY. This was `mrow = matrix_row(kind, fld)` and `mrow` fed
+    # the class below. The class now comes from the driver's token, so the row is no longer read
+    # here -- but the call still raises `Unspecified` for an absent row BEFORE `World.write` is
+    # reached, and `World.write` would raise the same thing only after logging a refused
+    # `TRACE.write` line. Kept so a signature move does not also move `runs/TRACE.txt`.
+    matrix_row(kind, fld)
     earned = earned if earned is not None else set()
+    # G2: THE DRIVER'S ACTS TOKEN, NOT `mrow.write_class(Step.RESOLVE)`. The old expression was the
+    # one non-literal class in the tree, and it was CIRCULAR -- `World.write` computes the same
+    # `STEP_CLASS[step]` from the same map, so S30.2's check could not fail for any fold write
+    # (`test_w3_the_write_class_check_still_refuses_a_wrong_class` named that limit). The token is
+    # a second source: a driver that handed RESOLVE a MATTER token would now be refused.
+    # G3: WHO IS WRITING, AND THROUGH WHICH SEAT -- the gate's F3 clause asks both of every Tenure
+    # the effect touches. `via` is `None` for an act exercising no seat, and then only the actor's
+    # own edges (and a cascade the act itself caused) can be written.
+    if eff is None:
+        # A PAIR AFTER THE FIRST: gated for its class, step and partition, carrying NO change --
+        # the effect already ran, once, on the first pair (`_fold` says why). A closure, so the
+        # gate does not judge it for F9: it names nothing and mints nothing, and a check-only
+        # write refused as a no-op would refuse every multi-cell verb on its second cell.
+        w.write(fld, token, lambda: None,
+                record_kind=kind, fieldname=fld, driver="Act", actor=a.actor, via=a.via)
+        return []
+    # ⚠ `W-E`: EVERY EFFECT TAKES THE RESOLUTION, AND UNIFORMLY. `H-114` measured the
+    # alternative -- `_eff_kill` took no degree, so the effect that computes the VALUES could not
+    # honour the branch `writes_at` had just selected, and a fold at degree `Wounded` DELETED THE
+    # PERSON. One signature for all twelve rather than an inspect-the-callable dispatch: a fold
+    # that passes different arguments to different effects has a second contract nobody declared.
+    #
+    # ⚠⚠ G4: THE EFFECT RUNS HERE, BEFORE THE WRITE, AND WRITES NOTHING -- IT RETURNS THE CHANGE.
+    # `04 §C.2`'s signature is `gate.write(token, kind, field, id, change, ...)`: the change is an
+    # ARGUMENT, computed by the caller and applied by the gate. Before G4 the effect ran INSIDE
+    # the gate's `apply()` and reported ids after the fact, so the gate could not read a subject
+    # before it moved. One consequence, stated: an effect's own refusal to be built (`_operand`'s
+    # `InstrumentDefect`, `kill / wound`'s `Unspecified`) now raises before the gate's class and
+    # step checks rather than after them -- both are call-site defects and neither mutates.
+    change = eff(w, a, resolution)
+    got = w.write(fld, token, None, record_kind=kind, fieldname=fld, driver="Act",
+                  actor=a.actor, via=a.via, change=change)
+    # ⚠ AN EFFECT MAY EARN SOME OF ITS DECLARED KINDS AND NOT OTHERS. A subject that earns `None`
+    # earns *all* of them (the original plain-list contract); a named kind earns only that one.
+    # Without this the fold emitted EVERY kind in `emits:` the moment anything changed -- so
+    # `confer` onto an unheld office published `tenure.closed` with nothing closed. That is the
+    # fabricated-`person.died` class committed INSIDE the fix for it. Found by the
+    # governance-slice adversarial pass. G4: a kind is earned by a subject that MOVED, which the
+    # gate decides, not by one the effect listed.
+    for s, _r in got:
+        if s.earns:
+            earned.add(s.earns)
+    # G1a -> G4. THE GATE MINTED THESE, INSIDE THE WRITE, FOR THE SUBJECTS THAT MOVED AND NO OTHER.
+    # They were minted here, after `w.write` returned, for every id the effect REPORTED -- which is
+    # how a no-op receipt (`before == after`) came to be issued by the gate and admitted by the log.
+    return [r for _s, r in got]
 
-    def apply():
-        # ⚠ `W-E`: EVERY EFFECT TAKES THE RESOLUTION, AND UNIFORMLY. `H-114` measured the
-        # alternative -- `_eff_kill` took no degree, so the effect that computes the VALUES
-        # could not honour the branch `writes_at` had just selected, and a fold at degree
-        # `Wounded` DELETED THE PERSON. One signature for all ten rather than an
-        # inspect-the-callable dispatch: a fold that passes different arguments to different
-        # effects has a second contract nobody declared.
-        got = eff(w, a, resolution) if eff is not None else None
-        # ⚠ AN EFFECT MAY EARN SOME OF ITS DECLARED KINDS AND NOT OTHERS. A list means *all*
-        # of them (the original contract, unchanged); a MAPPING `{kind: [ids]}` names which.
-        # Without this the fold emitted EVERY kind in `emits:` the moment anything changed --
-        # so `confer` onto an unheld office published `tenure.closed` with nothing closed.
-        # That is the fabricated-`person.died` class committed INSIDE the fix for it, and the
-        # existing guard cannot see it because it is all-or-nothing per act. Found by the
-        # governance-slice adversarial pass.
-        if isinstance(got, dict):
-            for k, ids in got.items():
-                if ids:
-                    earned.add(k)
-                    touched.extend(ids)
-        elif got:
-            touched.extend(got)
-
-    w.write(fld, mrow.write_class(Step.RESOLVE), apply,
-            record_kind=kind, fieldname=fld, driver="Act")
-    # G1a. MINTED AGAINST THE WRITE THAT JUST RAN, not constructed. `touched` is populated from
-    # inside `apply()` -- the effect reports the ids it changed -- so the subjects are known only
-    # now, after `w.write` has returned. That ordering is the reason `state/gate.py`'s window
-    # stays open past the write instead of the mint being `write()`'s return value; the gate's
-    # header records the bound it costs. Before this line these were bare `StateChange`s, which
-    # is to say: the fold ASSERTED what it had changed and nothing could check the assertion.
-    return [w.gate.mint(t, "set", "Act", fld) for t in touched]
-
-def resolve(self, acts: list[Act],
+def resolve(self, token: Token, acts: list[Act],
             contest_max_depth: Optional[int] = None) -> list[Event]:
     w = self.w
     w.step = Step.RESOLVE
@@ -424,7 +473,11 @@ def resolve(self, acts: list[Act],
                    alternatives=["completion order", "rank", "per-container sort (voids the fold)"])
 
     out: list[Event] = []
-    pending: dict[str, list[int]] = {}     # S27.3 SUM-THEN-CLAMP-ONCE accumulator
+    # S27.3 SUM-THEN-CLAMP-ONCE accumulator. ⚠ G4: IT IS `World._staged` NOW, NOT A LOCAL HERE,
+    # because an act's `work` WRITES to it through the gate (`_eff_work`'s docstring). Anything
+    # staged before this pass came from a bare `_fold` outside any RESOLVE -- a test calling the
+    # fold directly -- and belongs to no ordered fold, so it is discarded rather than applied.
+    w.take_staged()
     for a in ordered:
         # G1a. THE ACT ENTERS THE STORE BEFORE IT IS FOLDED, and the order is the whole point:
         # every branch below emits `causes=[a.id]`, INCLUDING the two refusal branches, so an
@@ -459,7 +512,7 @@ def resolve(self, acts: list[Act],
                            alternatives=["fold it anyway (the seam then sees a dead claimant)",
                                          "drop it silently (its act id never resolves)"])
             _gone = [Event(H(w.world_seed, w.tick, a.actor, f"act.ineligible:{a.id}"),
-                           "act.ineligible", a.actor, [], [a.id], w.tick)]
+                           "act.ineligible", [], [a.id], w.tick)]
             for _e in _gone:
                 self.act_of[_e.id] = a
             out.extend(_gone)
@@ -478,7 +531,7 @@ def resolve(self, acts: list[Act],
             # because `Act.obstacle` defaults to `None` and the computed chooser never sets
             # one, so no test could reach it. Found by the `W4` adversarial pass.
             out.append(Event(H(w.world_seed, w.tick, a.actor, f"refused:{a.id}"),
-                             "attempt.refused", a.actor, [], [a.id], w.tick))
+                             "attempt.refused", [], [a.id], w.tick))
             TRACE.decision(f"{a.actor} attempted Ob={a.obstacle} against Pool={a.pool}",
                            "S27.4", chose="refuse; the season is spent",
                            alternatives=["roll it anyway", "route to an Ob=0 roll"])
@@ -508,7 +561,7 @@ def resolve(self, acts: list[Act],
             _ok, _refusal_kinds, _verdict = self._admits(w, a, _row) if _row else (True, (), None)
             if not _ok:
                 produced = [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
-                                  k, a.actor, [], [a.id], w.tick,
+                                  k, [], [a.id], w.tick,
                                   observed=_verdict.observed if _verdict else ())
                             for k in _refusal_kinds]
                 for _e in produced:
@@ -606,7 +659,7 @@ def resolve(self, acts: list[Act],
             # `body.changed` / `contest.undecided` -- which is where invariant 7 says a kind
             # is declared. Two body literals remain (`act.ineligible`, `act.refused`) and
             # they are not this item's.
-            produced = self._fold(w, a, Resolution(degree_of(r, _target), r))
+            produced = self._fold(w, token, a, Resolution(degree_of(r, _target), r))
             TRACE.decision(
                 f"contest for {_contests[0]!r} resolved", "S39/H-98",
                 chose=f"read the degree off the scene and fold at it "
@@ -617,7 +670,7 @@ def resolve(self, acts: list[Act],
         else:
             # S27.1: CONTENTION IS AN ORDERED FOLD. Each act sees the world its predecessors
             # left. SEQUENCE, NOT SIMULTANEITY -- and NO ACT NEEDS TO KNOW ANOTHER EXISTED.
-            produced = self._fold(w, a)
+            produced = self._fold(w, token, a)
         # ⚠ `W-E`: THE TWO PATHS SHARE THE BOOKKEEPING BELOW, AND THAT IS §8 RATHER THAN
         # TIDINESS. The contest branch used to `continue` past all of it, so a contested act's
         # Events were never entered in `act_of` and its deltas never reached §27.3's
@@ -637,29 +690,99 @@ def resolve(self, acts: list[Act],
         # pass, on zero.
         for _e in produced:
             self.act_of[_e.id] = a
-        for ch in (c for e in produced for c in e.changes):
-            if ch.field and isinstance(ch.delta, int):
-                pending.setdefault(f"{ch.subject}|{ch.field}", []).append(ch.delta)
+        # ⚠ G4: THE `for ch in e.changes: if isinstance(ch.delta, int): pending[...]` LOOP THAT
+        # STOOD HERE IS GONE. It fed §27.3's accumulator off the success EVENTS, so any verb whose
+        # act rode an integer delta on its `changes[]` moved a site whose `Site.condition` its
+        # row never declared -- and it could not tell the accumulator WHICH acts a site's total
+        # came from, which is what judging that total's write needs. `_eff_work` stages its own
+        # delta through the gate instead (`World.stage`).
         out.extend(produced)
 
     # S27.3 / S32 rest 4: SUM ALL DELTAS, CLAMP ONCE. Clamping may not depend on arrival
     # order. Integer addition is associative and commutative, so this is order-independent
     # AS A FACT, not as a claim (S32/S48).
+    #
+    # ⚠⚠ G4: AND THIS IS WHERE F9 IS JUDGED FOR THE CHANGE `work` DEFERRED. The write names the
+    # SITE and the gate compares its condition either side, so a sum the clamp eats entirely -- a
+    # site at `condition_scale` worked up, deltas that cancel -- moves nothing and raises
+    # `NoOpReceipt`. Every act that staged on the site then gets its refusal in place of its
+    # provisional success (`_refuse_after_the_fact`): the site did not change, so no act changed
+    # it. A site that is gone by now names an absent subject that stays absent, and refuses the
+    # same way -- where the old loop skipped it silently and left every `site.worked` standing.
     scale = w.fixtures.get("condition_scale")
-    for key, deltas in pending.items():
-        sid, fname = key.split("|", 1)
-        if sid in w.sites and fname == "condition":
-            site = w.sites[sid]
-            total = sum(deltas)
-            w.write("condition", WriteClass.ACTS,
-                    lambda site=site, total=total: setattr(
-                        site, "condition", max(0, min(scale, site.condition + total))),
-                    record_kind="Site", fieldname="condition", driver="Act")
-            TRACE.decision(f"clamping {sid}.condition", "S27.3",
-                           chose=f"sum {deltas} = {total}, then clamp ONCE",
-                           alternatives=["clamp per delta (arrival-order dependent)"])
+    for (rk, sid, fname), contribs in w.take_staged():
+        if (rk, fname) != ("Site", "condition"):
+            raise InstrumentDefect(
+                f"a delta was staged on ({rk}, {fname}) of {sid!r}, and S27.3's accumulator "
+                f"applies `(Site, condition)` only -- nothing here would ever land it")
+        deltas = [d for _aid, d in contribs]
+        total = sum(deltas)
+        site = w.sites.get(sid)
+
+        def clamp_once(site=site, total=total) -> None:
+            if site is not None:
+                site.condition = max(0, min(scale, site.condition + total))
+        try:
+            w.write("condition", token, None,
+                    record_kind="Site", fieldname="condition", driver="Act",
+                    change=Change((Subject.entity("sites", sid),), clamp_once))
+        except NoOpReceipt:
+            TRACE.decision(f"the summed write to a site moved nothing -> {sid}.condition",
+                           "S27.3/F9",
+                           chose=f"refuse every act that staged on it ({len(contribs)})",
+                           alternatives=["let each act's provisional success stand (a success "
+                                         "Event for a write that did not happen: F9)"])
+            _refuse_after_the_fact(self, w, out, [aid for aid, _d in contribs])
+        TRACE.decision(f"clamping {sid}.condition", "S27.3",
+                       chose=f"sum {deltas} = {total}, then clamp ONCE",
+                       alternatives=["clamp per delta (arrival-order dependent)"])
     TRACE.step("RESOLVE", "leave")
     return out
+
+
+def _act_events(w: "World", a: Act, kinds, causes, changes=None, degree=None,
+                observed=()) -> list:
+    """THE ONE SHAPE OF AN ACT'S EMISSION: one Event per kind, its id `H(seed, tick, actor,
+    "<kind>:<act id>")`. `_fold`'s `ev` is this with the act's degree and verdict bound; the
+    accumulator's after-the-fact refusal (G4) is this with the success Event's, so a `work`
+    refused at the accumulator is byte-for-byte the Event it would have been refused as at its
+    own write. Extracted rather than copied: two constructions of one id scheme is §8's defect."""
+    return [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"),
+                  k, list(changes or []), list(causes), w.tick,
+                  degree=degree, observed=observed)
+            for k in kinds]
+
+
+def _refuse_after_the_fact(self, w: "World", out: list, act_ids: list) -> None:
+    """G4: REPLACE, IN PLACE, THE PROVISIONAL SUCCESS OF EVERY ACT WHOSE DEFERRED WRITE MOVED
+    NOTHING, WITH THE ROW'S REFUSAL.
+
+    `work`'s success is provisional by construction: `_fold` emits it when the act STAGES a
+    non-zero delta, and only `resolve()`'s summed write says whether the site moved. When it did
+    not, each staging act's Events -- contiguous in `out`, because `resolve` extends one act's
+    at once -- are replaced where they stand by `emits_on_refusal`, carrying what a refusal at
+    the act's own write would carry: `[a.id]` alone as cause, no changes, the same degree and the
+    same precondition reads. `act_of` follows the replacement, so WITNESS attributes the refusal
+    to the act and nothing keeps pointing at an Event that never entered the log."""
+    for aid in dict.fromkeys(act_ids):
+        at = [i for i, e in enumerate(out)
+              if getattr(self.act_of.get(e.id), "id", None) == aid]
+        if not at:
+            continue
+        if at != list(range(at[0], at[-1] + 1)):
+            raise InstrumentDefect(
+                f"act {aid!r}'s Events are not contiguous in RESOLVE's output ({at}); "
+                f"`resolve` extends one act's Events at once, so something interleaved them")
+        a = self.act_of[out[at[0]].id]
+        row = VERB_TABLE.get(a.verb)
+        first = out[at[0]]
+        refusal = _act_events(w, a, row.emits_on_refusal or ("act.refused",), [a.id],
+                              degree=first.degree, observed=first.observed)
+        for i in at:
+            self.act_of.pop(out[i].id, None)
+        out[at[0]:at[-1] + 1] = refusal
+        for e in refusal:
+            self.act_of[e.id] = a
 
 
 # ---------------------------------------------------------------------------

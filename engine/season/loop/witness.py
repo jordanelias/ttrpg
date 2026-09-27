@@ -8,20 +8,22 @@ and a stub would fail two and silently vacate the third, which is why step 9 of 
 decomposition (ED-IN-0203) refused to delegate. Step 5 established the technique when
 `class Query` bound module functions as staticmethods.
 
-⚠ **THE TOKEN IS STILL A `WriteClass` PARAMETER AND THAT IS G2's, NOT THIS UNIT's.** `04 §A.3`
-row 3 replaces the parameter with an unforgeable token type minted only by the driver; until
-that lands, this step passes `WriteClass` exactly as it did inside the class. Unit L5
-delivers the MODULE boundary `04 §A.2:134` requires; the write discipline is Arc 2.
+⚠ **THE TOKEN IS HANDED IN BY THE DRIVER (G2).** `SeasonDriver.season` mints an INTERIOR `Token`
+through `loop/driver.py::mint_token` and passes it as `token`, once per round; every gate write
+below presents it. This module constructs none and calls no minter -- `tests/test_g2_token.py`
+fails if it does.
 """
 
 from __future__ import annotations
 
-from ..data.matrix import Step, WriteClass
+from ..data.matrix import Step
+from ..state.gate import Token
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN
 from ..data.rosters import OBSERVATION_DEPOSIT_MODES, WITNESS_CHANNELS, require_member
 from ..epistemic import act_refs, claim_subjects, observers_for
 from ..queries import cache
 from ..queries.person_q import LedgerReader
+from ..state.attribution import actor_of
 from ..state.carriers import Claim, Event
 from ..state import ledgers
 from ..state.ids import H
@@ -72,7 +74,7 @@ def _told_content(w, act):
 
 
 # -- WITNESS -- barrier 4 -- THE JOIN (S28) -----------------------------
-def witness(self, events: list[Event]) -> int:
+def witness(self, token: Token, events: list[Event]) -> int:
     w = self.w
     w.step = Step.WITNESS
     TRACE.step("WITNESS", "enter"); TRACE.barrier(4, "WITNESS")
@@ -204,7 +206,7 @@ def witness(self, events: list[Event]) -> int:
             # `W4`'s own ROOT-count proof unsatisfiable. Chained to the witnessed Event, the
             # walk is `decayed -> ... -> deposited -> the act that was witnessed`, which is
             # what #353 §19.4 means by the substrate of the emergent-narrative claim.
-            w.write("claim_ledger", WriteClass.INTERIOR,
+            w.write("claim_ledger", token,
                     lambda p=p, c=c: p.ledger.append(c),
                     record_kind="Person", fieldname="claim_ledger", driver="Event",
                     emits="claim.deposited", subject=c.id, causes=[e.id])
@@ -249,7 +251,15 @@ def witness(self, events: list[Event]) -> int:
         # `seen_obs_by_pid` above; the first writing of this scoped it inside the fan loop, so
         # the sentence was true of one Event and false of the pass. See that comment for the
         # measurement.
-        if obs_mode != "none" and (obs_mode == "total" or pid == e.subject):
+        # G1b. `actor_of` REPLACES `e.subject` here -- the SHIPPED default is
+        # `observation_deposit_mode: actor`, so this branch is the one this unit's own
+        # falsifier names: silently vacating it would starve every headless run's `W-B`
+        # deposits rather than merely mis-scoping them. Measured equivalent to the field for
+        # every act-caused Event (`test_g1b_attribution.py`); for an actorless Event (MATTER's
+        # wear, a calendar crossing) `e.subject` held the record it concerned, never a person id,
+        # so `pid == e.subject` was already always False there -- `actor_of` returning `None`
+        # preserves that by construction rather than by an id-namespace coincidence.
+        if obs_mode != "none" and (obs_mode == "total" or pid == actor_of(w, e)):
             seen_obs = seen_obs_by_pid.setdefault(pid, set())
             # `e.observed`, NOT `getattr(e, "observed", ())`. The field is on `Event` now, so
             # a default here would be a guard for a case that cannot arise -- and it would
@@ -279,7 +289,7 @@ def witness(self, events: list[Event]) -> int:
                 oc = Claim(H(w.world_seed, w.tick, pid, f"obs:{e.id}:{len(seen_obs)}"),
                            pid, o.subject, o.predicate, o.value, w.tick, src, conf, "own",
                            self.round)   # `U2`: see the deposit above
-                w.write("claim_ledger", WriteClass.INTERIOR,
+                w.write("claim_ledger", token,
                         lambda p=p, c=oc: p.ledger.append(c),
                         record_kind="Person", fieldname="claim_ledger", driver="Event",
                         emits="claim.deposited", subject=oc.id, causes=[e.id])
@@ -369,7 +379,7 @@ def witness(self, events: list[Event]) -> int:
                 tc = Claim(H(w.world_seed, w.tick, pid, f"told:{e.id}"),
                            pid, _held.subject, _held.predicate, _held.value, w.tick,
                            "told_by", _held.confidence, "own", self.round)
-                w.write("claim_ledger", WriteClass.INTERIOR,
+                w.write("claim_ledger", token,
                         lambda p=p, c=tc: p.ledger.append(c),
                         record_kind="Person", fieldname="claim_ledger", driver="Event",
                         emits="claim.deposited", subject=tc.id, causes=[e.id])
@@ -407,9 +417,13 @@ def witness(self, events: list[Event]) -> int:
             # claims to evict more than one at a time, which is exactly the case the `while` above
             # this loop exists for (one deposit can mint several claims; see the comment above).
             # Found by a read-only critic, layer-conformance pass, 2026-09-25.
+            # ⚠ G2 (merge, 2026-09-27): the second positional argument to `w.write` is the driver's
+            # own `Token` for this step, not a bare `WriteClass` -- this closure predates G2's
+            # token discipline and is updated to it here rather than at G2's own close, since the
+            # two landed on independent branches. `token` is this function's own parameter.
             def _evict(p=p):
                 ledgers.evict_over_cap(p.ledger, len(p.ledger) - 1)
-            w.write("claim_ledger", WriteClass.INTERIOR, _evict,
+            w.write("claim_ledger", token, _evict,
                     record_kind="Person", fieldname="claim_ledger", driver="Event")
     w._in_parallel_map = False
     # S9.3/S28: WITNESS NEVER TOUCHES A BELIEF. Nothing above writes `pursuits` -- its row
