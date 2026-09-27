@@ -391,11 +391,18 @@ def _try_conquest(faction, world, rng) -> str:
     # Phase 7 §4.10.3 — mass-battle engine invocation (replaces v17 single-roll path).
     # Defender is the territory owner faction, or None (uncontrolled garrison stub).
     from systems.mass_battle.sim.massbattle import resolve_mass_battle
+    from systems.mass_battle.sim.terrain import terrain_row_for_territory
     defender_faction = world.factions.get(t.owner) if t.owner else None
+    # [A7, ED-MB-0067 Part A / ED-MB-0074] Was terrain=None with a [GAP] comment here — the
+    # engagement's own province IS the geography query key ED-780 asks for ("query the geography at
+    # battle coordinates"); no separate coordinate plumbing was needed, `target` already names it.
     battle = resolve_mass_battle(
         faction_a=faction,
         faction_b=defender_faction,
-        terrain=None,  # [GAP: terrain modifiers deferred to Phase 7 follow-on Steps 2-9]
+        # fort_level is the LIVE, engine-derived value (t is already in scope) — NOT the geography
+        # YAML's own authored copy, which can and does disagree (CLAUDE.md §0.05 clause 3; see
+        # terrain_row_for_territory's own docstring, adversarial review 2026-09-27).
+        terrain=terrain_row_for_territory(target, fort_level=t.fort_level),
         world=world,
     )
     deg = battle['degree']

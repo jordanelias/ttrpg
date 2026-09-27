@@ -41,14 +41,14 @@ the calling chain through `systems/factions/sim/faction_action.py` and `engine/m
 | Callable | Anchor | Called-by |
 |---|---|---|
 | **ADAPTER** (`systems/mass_battle/sim/massbattle.py`, 146 lines — strategic seam only) | | |
-| `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:205 resolve_mass_battle` | `systems/factions/sim/faction_action.py:461 resolve_mass_battle` (import) → `:433` (call) |
-| `_faction_to_unit(faction)` | `systems/mass_battle/sim/massbattle.py:165 _faction_to_unit` | `systems/mass_battle/sim/massbattle.py:221 _faction_to_unit` (and `:226`, `:228`) |
+| `resolve_mass_battle(faction_a, faction_b, terrain, world)` | `systems/mass_battle/sim/massbattle.py:240 resolve_mass_battle` | `systems/factions/sim/faction_action.py:393 resolve_mass_battle` (import) → `:399` (call) |
+| `_faction_to_unit(faction)` | `systems/mass_battle/sim/massbattle.py:200 _faction_to_unit` | `systems/mass_battle/sim/massbattle.py:221 _faction_to_unit` (and `:226`, `:228`) |
 | **ENGINE** (`systems/mass_battle/sim/`, the canon cell-scale engine) | | |
-| `orchestration.run_battle(unit_a, unit_b, max_turns)` | `systems/mass_battle/sim/orchestration.py:1788 run_battle` | (a) `systems/mass_battle/sim/engine.py:540 run_battle` (router branch); (b) `tests/valoria/test_deployment_geometry.py:183 run_battle` |
-| `orchestration.run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/orchestration.py:2426 run_multi_turn_battle` | (a) `systems/mass_battle/sim/engine.py:542 run_multi_turn_battle` (router branch); (b) `tests/valoria/test_deployment_geometry.py:107 run_multi_turn_battle` |
-| `orchestration.run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/orchestration.py:2627 run_multi_unit_battle` | (a) `systems/mass_battle/sim/engine.py:544 run_multi_unit_battle` (router branch); (b) `tests/valoria/test_reserve_commit.py:42 run_multi_unit_battle` |
-| `engine.resolve_battle(*args, kind='multi', **kwargs)` | `systems/mass_battle/sim/engine.py:532 resolve_battle` | `systems/mass_battle/sim/workbench/trace.py:89 resolve_battle` (and `:92`) |
-| `engine.build_unit` / `build_army` / `build_envelopment` / `build_refused_flank` | `systems/mass_battle/sim/engine.py:176 build_unit`, `:213 build_army`, `:375 build_envelopment`, `:472 build_refused_flank` | `systems/mass_battle/sim/bat.py:47 build_unit`, `:74 build_envelopment`, `:86 build_refused_flank`; `tests/sim/gauge_mb.py:162 build_army` |
+| `orchestration.run_battle(unit_a, unit_b, max_turns)` | `systems/mass_battle/sim/orchestration.py:1788 run_battle` | (a) `systems/mass_battle/sim/engine.py:612 run_battle` (router branch); (b) `tests/valoria/test_deployment_geometry.py:183 run_battle` |
+| `orchestration.run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/orchestration.py:2426 run_multi_turn_battle` | (a) `systems/mass_battle/sim/engine.py:614 run_multi_turn_battle` (router branch); (b) `tests/valoria/test_deployment_geometry.py:107 run_multi_turn_battle` |
+| `orchestration.run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b, anchor_map, max_battle_turns)` | `systems/mass_battle/sim/orchestration.py:2627 run_multi_unit_battle` | (a) `systems/mass_battle/sim/engine.py:616 run_multi_unit_battle` (router branch); (b) `tests/valoria/test_reserve_commit.py:42 run_multi_unit_battle` |
+| `engine.resolve_battle(*args, kind='multi', **kwargs)` | `systems/mass_battle/sim/engine.py:611 resolve_battle` | `systems/mass_battle/sim/workbench/trace.py:89 resolve_battle` (and `:92`) |
+| `engine.build_unit` / `build_army` / `build_envelopment` / `build_refused_flank` | `systems/mass_battle/sim/engine.py:176 build_unit`, `:213 build_army`, `:454 build_envelopment`, `:551 build_refused_flank` | `systems/mass_battle/sim/bat.py:62 build_unit`, `:89 build_envelopment`, `:101 build_refused_flank`; `tests/sim/gauge_mb.py:162 build_army` |
 
 ## 2. IN
 
@@ -57,8 +57,8 @@ the calling chain through `systems/factions/sim/faction_action.py` and `engine/m
 | **ADAPTER** | | | |
 | `faction_a` (attacker; has `.name`, `.Mil`) | arg | `systems/factions/sim/faction_action.py:464 faction_a` (the calling faction) | `systems/factions/sim/faction_action.py:463-468` |
 | `faction_b` (defender, or `None`) | arg | `systems/factions/sim/faction_action.py:462 defender_faction` (`world.factions.get(t.owner)`) | `systems/factions/sim/faction_action.py:462` |
-| `terrain` | arg | hardcoded `None` at the call site (deferred) | `systems/factions/sim/faction_action.py:466` |
-| `world` (for `world.rng`) | world-state | `systems/factions/sim/faction_action.py:453 world` | `systems/mass_battle/sim/massbattle.py:230 rngsource` |
+| `terrain` | arg | [CLOSED 2026-09-27, A7/ED-MB-0074] no longer hardcoded `None` — derived per-battle from `terrain.terrain_row_for_territory(target, fort_level=t.fort_level)` | `systems/factions/sim/faction_action.py:394` (import), `:402` (call); `systems/mass_battle/sim/terrain.py:124 terrain_row_for_territory` (resolver) |
+| `world` (for `world.rng`) | world-state | `systems/factions/sim/faction_action.py:403 world` | `systems/mass_battle/sim/massbattle.py:313 rngsource` |
 | **ENGINE** | | | |
 | `unit_a`, `unit_b` (`Unit` dataclass instances) | arg | constructed by `engine.build_unit`/`build_army`/`build_envelopment`/`build_refused_flank` | `systems/mass_battle/sim/engine.py:176-509` |
 | `shape_a`, `shape_b`, `anchor_map` | arg | caller-supplied deployment geometry | `systems/mass_battle/sim/orchestration.py:2426-2483 run_multi_turn_battle` |
@@ -79,13 +79,13 @@ the calling chain through `systems/factions/sim/faction_action.py` and `engine/m
 - **S0.1** `[gate]` the campaign action roll: the mass-battle path is reached only if `roll < cum_conquest` selects Conquest for this faction's turn, ahead of `_try_conquest`. `systems/factions/sim/faction_action.py:260`
 - **S0.2** `[gate]` `_try_conquest` no-ops (`return _NOOP`, no battle) if the faction has no reachable `targets`. `systems/factions/sim/faction_action.py:453-454`. The former `faction.Mil >= CONQUEST_MIN_MIL` half of this gate was DELETED 2026-08-14 (Jordan ruling), so low-Military factions now reach the battle engine rather than being filtered before it.
 - **S1** `resolve_mass_battle` constructs `unit_a` from `faction_a` via `_faction_to_unit`; `[branch]` if `faction_b` is `None`, constructs `unit_b` from a synthetic `_GarrisonStub` at `Mil=1.5`, else from `faction_b`. `systems/mass_battle/sim/massbattle.py:221-228 _faction_to_unit`
-  - **S1.1** the constructed `Unit` is the pre-port adapter's minimum-viable default and is CARRIED OVER FIELD-FOR-FIELD: one `Line`/`infantry` subunit at `tier=2`, `command=4`, `discipline=5`, `morale=5`, `power=round(faction.Mil)`. `systems/mass_battle/sim/massbattle.py:165 _faction_to_unit`. It is a recorded `[GAP]`, not canon — see §7.
-- **S2** `[emit]` `run_battle(unit_a, unit_b, max_turns=18)` — the canon engine's single-encounter orchestrator. Multi-turn and multi-unit orchestration exist in the engine and are NOT invoked from this path. `systems/mass_battle/sim/massbattle.py:232 run_battle`
-  - **S2.1** `[gate]` the whole call is scoped by `rngsource.using(world.rng)`, so the engine's module-global `random` draws resolve against the campaign's seeded generator instead of the process-global one. Without this the seeded campaign goldens would be unpinnable rather than merely moved. `systems/mass_battle/sim/massbattle.py:230 rngsource`, `systems/mass_battle/sim/rngsource.py:1`
+  - **S1.1** the constructed `Unit` is the pre-port adapter's minimum-viable default and is CARRIED OVER FIELD-FOR-FIELD: one `Line`/`infantry` subunit at `tier=2`, `command=4`, `discipline=5`, `morale=5`, `power=round(faction.Mil)`. `systems/mass_battle/sim/massbattle.py:200 _faction_to_unit`. It is a recorded `[GAP]`, not canon — see §7.
+- **S2** `[emit]` `run_battle(unit_a, unit_b, max_turns=18)` — the canon engine's single-encounter orchestrator. Multi-turn and multi-unit orchestration exist in the engine and are NOT invoked from this path. `systems/mass_battle/sim/massbattle.py:315 run_battle`
+  - **S2.1** `[gate]` the whole call is scoped by `rngsource.using(world.rng)`, so the engine's module-global `random` draws resolve against the campaign's seeded generator instead of the process-global one. Without this the seeded campaign goldens would be unpinnable rather than merely moved. `systems/mass_battle/sim/massbattle.py:313 rngsource`, `systems/mass_battle/sim/rngsource.py:1`
   - **S2.2** the per-tick flow itself is the ENGINE branch below, entered at `run_battle`. `systems/mass_battle/sim/orchestration.py:1788 run_battle`
-- **S3** `[branch]` `resolve_mass_battle` computes `a_size_pct`/`b_size_pct` from `effective_size`/`size_max`, derives `attacker_wins`, then maps to one of four `degree` strings via nested threshold checks. `systems/mass_battle/sim/massbattle.py:128-139`
-  - **S3.1** `[gap]` those thresholds are a bespoke post-hoc classification of survivor ratios, NOT the canonical margin-based degree ladder (`engine/autoload/dice_engine.py degree_from_net`). They were carried over verbatim so the engine swap stayed a single-variable experiment; reconciling the two ladders is open MB-lane work. `systems/mass_battle/sim/massbattle.py:56 OVERWHELMING_ATTACKER_MIN`
-- **S4** returns `{attacker_wins, degree, attacker_size_pct, defender_size_pct}`. `systems/mass_battle/sim/massbattle.py:141-146`
+- **S3** `[branch]` `resolve_mass_battle` computes `a_size_pct`/`b_size_pct` from `effective_size`/`size_max`, derives `attacker_wins`, then maps to one of four `degree` strings via nested threshold checks. `systems/mass_battle/sim/massbattle.py:317-328`
+  - **S3.1** `[gap]` those thresholds are a bespoke post-hoc classification of survivor ratios, NOT the canonical margin-based degree ladder (`engine/autoload/dice_engine.py degree_from_net`). They were carried over verbatim so the engine swap stayed a single-variable experiment; reconciling the two ladders is open MB-lane work. `systems/mass_battle/sim/massbattle.py:59 OVERWHELMING_ATTACKER_MIN`
+- **S4** returns `{attacker_wins, degree, attacker_size_pct, defender_size_pct}`. `systems/mass_battle/sim/massbattle.py:310-315`
 
 Continuing in the caller (`_try_conquest`, outside this subsystem's own folder but the only place
 the return value is consumed):
@@ -95,7 +95,7 @@ the return value is consumed):
 
 ### ENGINE — `systems/mass_battle/sim/` (the canon cell-scale engine; reached from S2 above)
 
-- **S1** `[gate]` `engine.resolve_battle(*args, kind=..., **kwargs)` routes to one of three orchestrators by `kind` — `'single'` → `run_battle`, `'multi'` → `run_multi_turn_battle`, `'multi_unit'` → `run_multi_unit_battle` — a pure pass-through router, byte-exact to calling the target directly. `systems/mass_battle/sim/engine.py:532-545 resolve_battle`
+- **S1** `[gate]` `engine.resolve_battle(*args, kind=..., **kwargs)` routes to one of three orchestrators by `kind` — `'single'` → `run_battle`, `'multi'` → `run_multi_turn_battle`, `'multi_unit'` → `run_multi_unit_battle` — a pure pass-through router, byte-exact to calling the target directly. `systems/mass_battle/sim/engine.py:611-624 resolve_battle`
 - **S2** `orchestration.run_battle(unit_a, unit_b, max_turns)` — one engagement turn, phase-bounded by `TICKS_PER_PHASE`:
   - **S2.1** `[gate]` `assert (not FIELD_MOVEMENT) or MB_NODE_COHESION` — invalid mode combination fails loudly. `systems/mass_battle/sim/orchestration.py:1758-1759`
   - **S2.2** `_draw_friction_cev` drawn once per unit per battle (lazy, first-entry-only). `systems/mass_battle/sim/orchestration.py:1767-1768`
@@ -139,7 +139,7 @@ the return value is consumed):
 | Output | Kind | Consumer | Anchor |
 |---|---|---|---|
 | **ADAPTER** | | | |
-| `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:469 deg`, `:461 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:141-146` |
+| `{attacker_wins, degree, attacker_size_pct, defender_size_pct}` | dict (return) | `systems/factions/sim/faction_action.py:405 deg`, `:407 battle['attacker_wins']` | `systems/mass_battle/sim/massbattle.py:310-315` |
 | `scene.battle_concluded` Key | emit (additive-only, no `apply=`) | `world.echo_scheduler` when attached; 4 declared consumers per `references/key_graph.json` per docstring (not independently re-verified here) | `systems/factions/sim/faction_action.py:424` (sched.emit(key)) |
 | **ENGINE** | | | |
 | `{winner, turns, phases, tick_in_phase, a_stamina, b_stamina, a_hp_pct, b_hp_pct, a_morale, b_morale, truncated_groups, truncated_pairs, truncated_troops, max_groups}` | dict (return) | `run_multi_turn_battle` (`:2443`), `run_multi_unit_battle` (`:2735`), test callers | `systems/mass_battle/sim/orchestration.py:2166-2182` |
@@ -153,16 +153,16 @@ the return value is consumed):
 | Field | R/W | Owning module | Anchor |
 |---|---|---|---|
 | **ADAPTER** | | | |
-| `unit.effective_size` / `unit.size_max` | R | `systems/mass_battle/sim/hierarchy/units.py` (`Unit`) | read `systems/mass_battle/sim/massbattle.py:128-129` |
-| `unit.routed` | R | `systems/mass_battle/sim/hierarchy/units.py` (`Unit`) | read `systems/mass_battle/sim/massbattle.py:130` |
-| `world.rng` | R | caller (`GameState`, outside this subsystem) | `systems/mass_battle/sim/massbattle.py:230 rngsource` |
+| `unit.effective_size` / `unit.size_max` | R | `systems/mass_battle/sim/hierarchy/units.py` (`Unit`) | read `systems/mass_battle/sim/massbattle.py:317-318` |
+| `unit.routed` | R | `systems/mass_battle/sim/hierarchy/units.py` (`Unit`) | read `systems/mass_battle/sim/massbattle.py:319` |
+| `world.rng` | R | caller (`GameState`, outside this subsystem) | `systems/mass_battle/sim/massbattle.py:313 rngsource` |
 | the engine's active RNG holder | RW | `systems/mass_battle/sim/rngsource.py` (this subsystem) | `systems/mass_battle/sim/rngsource.py:1` |
 | `world.battle_count` | W | `systems/factions/sim/faction_action.py` (outside this subsystem's own folder — see §6) | `systems/factions/sim/faction_action.py:525` |
 | **ENGINE** | | | |
 | `unit.hp` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit`) | write `systems/mass_battle/sim/orchestration.py:2064-2065` |
-| `unit.morale` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.set_morale`, `Unit.cascade_morale_hit`) | `systems/mass_battle/sim/hierarchy/units.py:2811 set_morale` |
-| `unit.routed` / `atom.routed` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.derive_rout`) | `systems/mass_battle/sim/hierarchy/units.py:2794 derive_rout`; write site `systems/mass_battle/sim/orchestration.py:2154-2161` |
-| `unit.stamina` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Subunit.drain_stamina`) | `systems/mass_battle/sim/hierarchy/units.py:778 drain_stamina` |
+| `unit.morale` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.set_morale`, `Unit.cascade_morale_hit`) | `systems/mass_battle/sim/hierarchy/units.py:2885 set_morale` |
+| `unit.routed` / `atom.routed` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Unit.derive_rout`) | `systems/mass_battle/sim/hierarchy/units.py:2864 derive_rout`; write site `systems/mass_battle/sim/orchestration.py:2154-2161` |
+| `unit.stamina` | RW | `systems/mass_battle/sim/hierarchy/units.py` (`Subunit.drain_stamina`) | `systems/mass_battle/sim/hierarchy/units.py:796 drain_stamina` |
 | `unit.col_grid` (per-column grid, `PER_CELL` only) | RW | `systems/mass_battle/sim/percell.py` | `systems/mass_battle/sim/orchestration.py:2173-2174 sync_col_grid` |
 
 ## 6. Seams
@@ -174,7 +174,7 @@ the return value is consumed):
 | lateral | `systems/factions/sim/faction_action.py` (FA lane) | `_faction_actions_callback` → `faction_take_action` → `_try_conquest` → `resolve_mass_battle` (the ADAPTER) — the one live faction-scale battle call, reached only past the action-roll gate and the targets gate (S0.1–S0.2), and from there into the canon engine | `engine/mc_v18.py:149 faction_take_action`; `systems/factions/sim/faction_action.py:261 _try_conquest`, `:431-438 resolve_mass_battle` |
 | down | `engine/substrate/keys.py` | `_try_conquest` emits `scene.battle_concluded` off the battle result, additive-only | `systems/factions/sim/faction_action.py:382` (from engine.substrate.keys import ..., :361 key =) |
 | — | `systems/social_contest/sim/contest/wrapper.py` | comment-only reference ("Mirrors mass_battle.engine") — not an import, no runtime coupling | `systems/social_contest/sim/contest/wrapper.py:4`, `systems/social_contest/sim/contest/wrapper.py:290` |
-| — (none outward) | `engine/`, other `systems/*` | The ENGINE half imports nothing from `engine.` and nothing from another `systems/` subsystem: it operates on `Unit`/`Subunit` dataclasses alone. The coupling is one-directional and lives entirely in the ADAPTER, which is what let the engine be swapped underneath the campaign without touching a caller. | `systems/mass_battle/sim/massbattle.py:43-45 rngsource` (the adapter's only three imports, all in-subsystem) |
+| — (none outward) | `engine/`, other `systems/*` | The ENGINE half imports nothing from `engine.` and nothing from another `systems/` subsystem: it operates on `Unit`/`Subunit` dataclasses alone. The coupling is one-directional and lives entirely in the ADAPTER, which is what let the engine be swapped underneath the campaign without touching a caller. | `systems/mass_battle/sim/massbattle.py:43-48` (the adapter's imports — four as of A7/ED-MB-0074's `terrain` import, all in-subsystem) |
 
 ## 7. Traced gaps
 
@@ -185,9 +185,9 @@ the return value is consumed):
 
 | Gap | Evidence |
 |---|---|
-| **`_faction_to_unit`'s mapping is unspecified, and this is the live one.** No canonical spec exists for turning a strategic faction into a cell-scale `Unit`. The adapter builds one `Line`/`infantry` subunit at `tier=2`, `command=4`, `discipline=5`, `morale=5`, `power=round(faction.Mil)` — the pre-port defaults, carried over field-for-field so the engine swap stayed single-variable. The canon engine can express troop types, equipment, formations, multi-subunit hierarchies and orders of battle; the campaign uses none of them, because what a faction's army IS at the strategic scale is an unanswered design question, not a wiring gap. | `systems/mass_battle/sim/massbattle.py:165 _faction_to_unit`; `systems/mass_battle/sim/massbattle.py:70-75` (the recorded `[GAP]`) |
-| **The adapter's degree map is not the canonical degree ladder.** `resolve_mass_battle` classifies a finished battle by survivor-size ratio through three bespoke thresholds; the game's ladder (`degree_from_net`) is margin-based. Both are live, they disagree by construction, and nothing reconciles them. Carried over verbatim rather than fixed, so the swap measured the resolution model and nothing else. | `systems/mass_battle/sim/massbattle.py:56 OVERWHELMING_ATTACKER_MIN`; `systems/mass_battle/sim/massbattle.py:132-139` |
-| **Multi-turn and multi-unit orchestration is unreached from the campaign.** The engine implements `run_multi_turn_battle` and `run_multi_unit_battle`; `resolve_mass_battle` calls only single-encounter `run_battle`. Their only callers are tests. This is now a DELIBERATE scope statement rather than dead code — the orchestrators are the canon engine's and are exercised — but the campaign does not reach them. | `systems/mass_battle/sim/massbattle.py:232 run_battle`; `systems/mass_battle/sim/orchestration.py:2426 run_multi_turn_battle`, `:2627 run_multi_unit_battle` |
+| **`_faction_to_unit`'s mapping is unspecified, and this is the live one.** No canonical spec exists for turning a strategic faction into a cell-scale `Unit`. The adapter builds one `Line`/`infantry` subunit at `tier=2`, `command=4`, `discipline=5`, `morale=5`, `power=round(faction.Mil)` — the pre-port defaults, carried over field-for-field so the engine swap stayed single-variable. The canon engine can express troop types, equipment, formations, multi-subunit hierarchies and orders of battle; the campaign uses none of them, because what a faction's army IS at the strategic scale is an unanswered design question, not a wiring gap. | `systems/mass_battle/sim/massbattle.py:200 _faction_to_unit`; `systems/mass_battle/sim/massbattle.py:32` (the recorded `[GAP]`) |
+| **The adapter's degree map is not the canonical degree ladder.** `resolve_mass_battle` classifies a finished battle by survivor-size ratio through three bespoke thresholds; the game's ladder (`degree_from_net`) is margin-based. Both are live, they disagree by construction, and nothing reconciles them. Carried over verbatim rather than fixed, so the swap measured the resolution model and nothing else. | `systems/mass_battle/sim/massbattle.py:59 OVERWHELMING_ATTACKER_MIN`; `systems/mass_battle/sim/massbattle.py:321-328` |
+| **Multi-turn and multi-unit orchestration is unreached from the campaign.** The engine implements `run_multi_turn_battle` and `run_multi_unit_battle`; `resolve_mass_battle` calls only single-encounter `run_battle`. Their only callers are tests. This is now a DELIBERATE scope statement rather than dead code — the orchestrators are the canon engine's and are exercised — but the campaign does not reach them. | `systems/mass_battle/sim/massbattle.py:315 run_battle`; `systems/mass_battle/sim/orchestration.py:2426 run_multi_turn_battle`, `:2627 run_multi_unit_battle` |
 | **Two never-wired modules survive the port.** `tactic_cards.py`'s `FACTION_TACTIC_CARD_POOL_MODIFIERS` is an empty dict reserving a name and import path; `altonian_reinforcements.py`'s `invoke_altonian_reinforcements` raises `NotImplementedError` unconditionally, and a guard test asserts it must keep doing so until MB's own migration converts it. | `systems/mass_battle/sim/tactic_cards.py:23`; `systems/mass_battle/sim/altonian_reinforcements.py:20-21 invoke_altonian_reinforcements`; `engine/tests/test_pipeline_reach.py:810-821 test_only_accepted_handoff_still_raises_unconditionally` |
 | **`CASCADING_ENABLED` is a hardcoded `True` module constant, not an env-read flag** — despite `config.py` being otherwise env-var-driven for its toggles (§2). The `else resolve_engagements(...)` branch is therefore unreachable without a source edit. | `systems/mass_battle/sim/config.py:143 CASCADING_ENABLED` |
 | **`rally_check` and `threadwork_check` are empty stub hooks** called unconditionally by `phase_boundary` every phase; `reform_check` is implemented and flag-gated on `REFORM_CHECK_ENABLED` (default ON). The Thread→Mass handoff `handoff_rules.py` describes has no execution path from the mass-battle side. | `systems/mass_battle/sim/orchestration.py:288-290 rally_check`, `:333-335 threadwork_check`, `:296-330 reform_check`; call site `systems/mass_battle/sim/orchestration.py:337 phase_boundary` |

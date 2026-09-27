@@ -446,9 +446,18 @@ jobs:
       # rubber stamp. It flips to blocking when fork #2 is ruled.
       #
       # `|| true` is deliberate and is the whole of "report-only"; the log carries the numbers.
-      - run: |
-          cd tests/sim
-          PYTHONPATH=. python3 -m mass_battle.lanchester_signature || true
+      #
+      # [ED-MB-0070 fix] This step invoked `cd tests/sim && PYTHONPATH=. python3 -m
+      # mass_battle.lanchester_signature` -- a package `tests/sim/mass_battle/` that the 2026-08-24
+      # port deleted (the module now lives at systems/mass_battle/sim/lanchester_signature.py, dotted
+      # imports). Every run since that port has raised ModuleNotFoundError before printing a single
+      # number, silently swallowed by `|| true` -- the log did NOT carry the numbers, contrary to the
+      # comment above. Same stale-path pattern as this batch's other two fixes (a test's BAT_PY
+      # constant; bat.py's own sys.path bootstrap), a third form of it (a `cd` plus an un-dotted
+      # module name) that a literal grep for the slash-form path could not find. Verified fixed by
+      # direct execution, 2026-09-27 (python3 -m systems.mass_battle.sim.lanchester_signature from the
+      # repo root: real output, no import error).
+      - run: python3 -m systems.mass_battle.sim.lanchester_signature || true
 
   compliance-check:
     name: Compliance Check

@@ -1,0 +1,658 @@
+{
+  "n": 60,
+  "note": "Decision-relevant confirms only (1.0=baseline plateau edge, 0.7=plateau edge nearest the transition, 0.6=chosen, 0.5=rejected). 0.9/0.8 were screened at n=40 against the original 6-row set and found identical to 1.0/0.7 (the mechanism does not bite until the 8-row-set boundaries below 0.7); not re-confirmed at n=60 against the corrected 8-row set for time, since neither is a candidate for the final choice.",
+  "results": [
+    {
+      "value": 1.0,
+      "data": {
+        "rout_cascade_frac": 1.0,
+        "n": 60,
+        "row_ids": [
+          "H3",
+          "H4",
+          "H5",
+          "H6",
+          "H10",
+          "H11",
+          "C4",
+          "C7"
+        ],
+        "rows": {
+          "H3": {
+            "label": "Envelopment vs Line",
+            "metric": "decA",
+            "decA": 44.89795918367347,
+            "a_pct": 36.666666666666664,
+            "dec_n": 49,
+            "draw_pct": 18.333333333333332,
+            "win_band": [
+              55,
+              72
+            ],
+            "win_cas": 1.9169290694342995,
+            "lose_cas": 36.11121825378395,
+            "capped_pct": 21.666666666666668,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 36% outside 15-30; capped 22%"
+          },
+          "H4": {
+            "label": "Envelopment vs Arrowhead (Cannae)",
+            "metric": "decA",
+            "decA": 36.53846153846154,
+            "a_pct": 31.666666666666664,
+            "dec_n": 52,
+            "draw_pct": 13.333333333333334,
+            "win_band": [
+              45,
+              62
+            ],
+            "win_cas": 2.7688728906616595,
+            "lose_cas": 45.00634485156799,
+            "capped_pct": 13.333333333333334,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 45% outside 15-30"
+          },
+          "H5": {
+            "label": "RefusedFlank vs Envelopment",
+            "metric": "decA",
+            "decA": 51.02040816326531,
+            "a_pct": 41.66666666666667,
+            "dec_n": 49,
+            "draw_pct": 18.333333333333332,
+            "win_band": [
+              48,
+              62
+            ],
+            "win_cas": 4.882366692215971,
+            "lose_cas": 49.745008152774325,
+            "capped_pct": 18.333333333333332,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 50% outside 15-30"
+          },
+          "H6": {
+            "label": "RefusedFlank vs Line",
+            "metric": "decA",
+            "decA": 53.333333333333336,
+            "a_pct": 40.0,
+            "dec_n": 45,
+            "draw_pct": 25.0,
+            "win_band": [
+              48,
+              60
+            ],
+            "win_cas": 2.8243545788173448,
+            "lose_cas": 59.385988706552986,
+            "capped_pct": 25.0,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 59% outside 15-30; capped 25%"
+          },
+          "H10": {
+            "label": "Line vs Envelopment (rev H3)",
+            "metric": "decA",
+            "decA": 42.0,
+            "a_pct": 35.0,
+            "dec_n": 50,
+            "draw_pct": 16.666666666666664,
+            "win_band": [
+              28,
+              45
+            ],
+            "win_cas": 1.7907816109505081,
+            "lose_cas": 30.884866613689745,
+            "capped_pct": 16.666666666666664,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 31% outside 15-30"
+          },
+          "H11": {
+            "label": "Arrowhead vs Envelopment (rev H4)",
+            "metric": "decA",
+            "decA": 43.39622641509434,
+            "a_pct": 38.333333333333336,
+            "dec_n": 53,
+            "draw_pct": 11.666666666666666,
+            "win_band": [
+              38,
+              55
+            ],
+            "win_cas": 3.2827866671468793,
+            "lose_cas": 60.59414886375067,
+            "capped_pct": 11.666666666666666,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 61% outside 15-30"
+          },
+          "C4": {
+            "label": "Cav flank/envelopment vs Line",
+            "metric": "decA",
+            "decA": 45.0,
+            "a_pct": 45.0,
+            "dec_n": 60,
+            "draw_pct": 0.0,
+            "win_band": [
+              75,
+              95
+            ],
+            "win_cas": 3.1101843802914892,
+            "lose_cas": 46.148135164191025,
+            "capped_pct": 0.0,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 46% outside 15-30"
+          },
+          "C7": {
+            "label": "Cav envelop vs holding Line (hold+d8)",
+            "metric": "decA",
+            "decA": 51.666666666666664,
+            "a_pct": 51.66666666666667,
+            "dec_n": 60,
+            "draw_pct": 0.0,
+            "win_band": [
+              65,
+              100
+            ],
+            "win_cas": 4.069740638258301,
+            "lose_cas": 38.69555607468378,
+            "capped_pct": 1.6666666666666667,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 39% outside 15-30"
+          }
+        }
+      }
+    },
+    {
+      "value": 0.7,
+      "data": {
+        "rout_cascade_frac": 0.7,
+        "n": 60,
+        "row_ids": [
+          "H3",
+          "H4",
+          "H5",
+          "H6",
+          "H10",
+          "H11",
+          "C4",
+          "C7"
+        ],
+        "rows": {
+          "H3": {
+            "label": "Envelopment vs Line",
+            "metric": "decA",
+            "decA": 44.89795918367347,
+            "a_pct": 36.666666666666664,
+            "dec_n": 49,
+            "draw_pct": 18.333333333333332,
+            "win_band": [
+              55,
+              72
+            ],
+            "win_cas": 1.9169290694342995,
+            "lose_cas": 36.11121825378395,
+            "capped_pct": 21.666666666666668,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 36% outside 15-30; capped 22%"
+          },
+          "H4": {
+            "label": "Envelopment vs Arrowhead (Cannae)",
+            "metric": "decA",
+            "decA": 36.53846153846154,
+            "a_pct": 31.666666666666664,
+            "dec_n": 52,
+            "draw_pct": 13.333333333333334,
+            "win_band": [
+              45,
+              62
+            ],
+            "win_cas": 2.7688728906616595,
+            "lose_cas": 45.00634485156799,
+            "capped_pct": 13.333333333333334,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 45% outside 15-30"
+          },
+          "H5": {
+            "label": "RefusedFlank vs Envelopment",
+            "metric": "decA",
+            "decA": 51.02040816326531,
+            "a_pct": 41.66666666666667,
+            "dec_n": 49,
+            "draw_pct": 18.333333333333332,
+            "win_band": [
+              48,
+              62
+            ],
+            "win_cas": 4.882366692215971,
+            "lose_cas": 49.745008152774325,
+            "capped_pct": 18.333333333333332,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 50% outside 15-30"
+          },
+          "H6": {
+            "label": "RefusedFlank vs Line",
+            "metric": "decA",
+            "decA": 53.333333333333336,
+            "a_pct": 40.0,
+            "dec_n": 45,
+            "draw_pct": 25.0,
+            "win_band": [
+              48,
+              60
+            ],
+            "win_cas": 2.8243545788173448,
+            "lose_cas": 59.385988706552986,
+            "capped_pct": 25.0,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 59% outside 15-30; capped 25%"
+          },
+          "H10": {
+            "label": "Line vs Envelopment (rev H3)",
+            "metric": "decA",
+            "decA": 42.0,
+            "a_pct": 35.0,
+            "dec_n": 50,
+            "draw_pct": 16.666666666666664,
+            "win_band": [
+              28,
+              45
+            ],
+            "win_cas": 1.7907816109505081,
+            "lose_cas": 30.884866613689745,
+            "capped_pct": 16.666666666666664,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 31% outside 15-30"
+          },
+          "H11": {
+            "label": "Arrowhead vs Envelopment (rev H4)",
+            "metric": "decA",
+            "decA": 43.39622641509434,
+            "a_pct": 38.333333333333336,
+            "dec_n": 53,
+            "draw_pct": 11.666666666666666,
+            "win_band": [
+              38,
+              55
+            ],
+            "win_cas": 3.2827866671468793,
+            "lose_cas": 60.59414886375067,
+            "capped_pct": 11.666666666666666,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 61% outside 15-30"
+          },
+          "C4": {
+            "label": "Cav flank/envelopment vs Line",
+            "metric": "decA",
+            "decA": 45.0,
+            "a_pct": 45.0,
+            "dec_n": 60,
+            "draw_pct": 0.0,
+            "win_band": [
+              75,
+              95
+            ],
+            "win_cas": 3.1101843802914892,
+            "lose_cas": 41.322152711484705,
+            "capped_pct": 0.0,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 41% outside 15-30"
+          },
+          "C7": {
+            "label": "Cav envelop vs holding Line (hold+d8)",
+            "metric": "decA",
+            "decA": 51.666666666666664,
+            "a_pct": 51.66666666666667,
+            "dec_n": 60,
+            "draw_pct": 0.0,
+            "win_band": [
+              65,
+              100
+            ],
+            "win_cas": 4.069740638258301,
+            "lose_cas": 37.04165711167596,
+            "capped_pct": 1.6666666666666667,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 37% outside 15-30"
+          }
+        }
+      }
+    },
+    {
+      "value": 0.6,
+      "data": {
+        "rout_cascade_frac": 0.6,
+        "n": 60,
+        "row_ids": [
+          "H3",
+          "H4",
+          "H5",
+          "H6",
+          "H10",
+          "H11",
+          "C4",
+          "C7"
+        ],
+        "rows": {
+          "H3": {
+            "label": "Envelopment vs Line",
+            "metric": "decA",
+            "decA": 44.89795918367347,
+            "a_pct": 36.666666666666664,
+            "dec_n": 49,
+            "draw_pct": 18.333333333333332,
+            "win_band": [
+              55,
+              72
+            ],
+            "win_cas": 1.8157599882990385,
+            "lose_cas": 29.615720232619523,
+            "capped_pct": 20.0,
+            "casualty_ok": true,
+            "casualty_flag": "OK",
+            "casualty_why": ""
+          },
+          "H4": {
+            "label": "Envelopment vs Arrowhead (Cannae)",
+            "metric": "decA",
+            "decA": 36.53846153846154,
+            "a_pct": 31.666666666666664,
+            "dec_n": 52,
+            "draw_pct": 13.333333333333334,
+            "win_band": [
+              45,
+              62
+            ],
+            "win_cas": 2.6045049583764683,
+            "lose_cas": 36.97553986420471,
+            "capped_pct": 13.333333333333334,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 37% outside 15-30"
+          },
+          "H5": {
+            "label": "RefusedFlank vs Envelopment",
+            "metric": "decA",
+            "decA": 51.02040816326531,
+            "a_pct": 41.66666666666667,
+            "dec_n": 49,
+            "draw_pct": 18.333333333333332,
+            "win_band": [
+              48,
+              62
+            ],
+            "win_cas": 4.880072030036047,
+            "lose_cas": 44.46011435830955,
+            "capped_pct": 18.333333333333332,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 44% outside 15-30"
+          },
+          "H6": {
+            "label": "RefusedFlank vs Line",
+            "metric": "decA",
+            "decA": 54.34782608695652,
+            "a_pct": 41.66666666666667,
+            "dec_n": 46,
+            "draw_pct": 23.333333333333332,
+            "win_band": [
+              48,
+              60
+            ],
+            "win_cas": 2.762955566234359,
+            "lose_cas": 43.112697098009605,
+            "capped_pct": 23.333333333333332,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 43% outside 15-30; capped 23%"
+          },
+          "H10": {
+            "label": "Line vs Envelopment (rev H3)",
+            "metric": "decA",
+            "decA": 41.1764705882353,
+            "a_pct": 35.0,
+            "dec_n": 51,
+            "draw_pct": 15.0,
+            "win_band": [
+              28,
+              45
+            ],
+            "win_cas": 1.6075031637128954,
+            "lose_cas": 24.935227354065972,
+            "capped_pct": 15.0,
+            "casualty_ok": true,
+            "casualty_flag": "OK",
+            "casualty_why": ""
+          },
+          "H11": {
+            "label": "Arrowhead vs Envelopment (rev H4)",
+            "metric": "decA",
+            "decA": 42.592592592592595,
+            "a_pct": 38.333333333333336,
+            "dec_n": 54,
+            "draw_pct": 10.0,
+            "win_band": [
+              38,
+              55
+            ],
+            "win_cas": 3.0271238115792696,
+            "lose_cas": 47.08734123834675,
+            "capped_pct": 10.0,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 47% outside 15-30"
+          },
+          "C4": {
+            "label": "Cav flank/envelopment vs Line",
+            "metric": "decA",
+            "decA": 41.37931034482759,
+            "a_pct": 40.0,
+            "dec_n": 58,
+            "draw_pct": 3.3333333333333335,
+            "win_band": [
+              75,
+              95
+            ],
+            "win_cas": 2.091218048680891,
+            "lose_cas": 36.07827437236987,
+            "capped_pct": 0.0,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 36% outside 15-30"
+          },
+          "C7": {
+            "label": "Cav envelop vs holding Line (hold+d8)",
+            "metric": "decA",
+            "decA": 43.333333333333336,
+            "a_pct": 43.333333333333336,
+            "dec_n": 60,
+            "draw_pct": 0.0,
+            "win_band": [
+              65,
+              100
+            ],
+            "win_cas": 1.912765191621573,
+            "lose_cas": 27.495081197881124,
+            "capped_pct": 0.0,
+            "casualty_ok": true,
+            "casualty_flag": "OK",
+            "casualty_why": ""
+          }
+        }
+      }
+    },
+    {
+      "value": 0.5,
+      "data": {
+        "rout_cascade_frac": 0.5,
+        "n": 60,
+        "row_ids": [
+          "H3",
+          "H4",
+          "H5",
+          "H6",
+          "H10",
+          "H11",
+          "C4",
+          "C7"
+        ],
+        "rows": {
+          "H3": {
+            "label": "Envelopment vs Line",
+            "metric": "decA",
+            "decA": 44.89795918367347,
+            "a_pct": 36.666666666666664,
+            "dec_n": 49,
+            "draw_pct": 18.333333333333332,
+            "win_band": [
+              55,
+              72
+            ],
+            "win_cas": 1.8157599882990385,
+            "lose_cas": 29.615720232619523,
+            "capped_pct": 20.0,
+            "casualty_ok": true,
+            "casualty_flag": "OK",
+            "casualty_why": ""
+          },
+          "H4": {
+            "label": "Envelopment vs Arrowhead (Cannae)",
+            "metric": "decA",
+            "decA": 36.53846153846154,
+            "a_pct": 31.666666666666664,
+            "dec_n": 52,
+            "draw_pct": 13.333333333333334,
+            "win_band": [
+              45,
+              62
+            ],
+            "win_cas": 2.6045049583764683,
+            "lose_cas": 36.97553986420471,
+            "capped_pct": 13.333333333333334,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 37% outside 15-30"
+          },
+          "H5": {
+            "label": "RefusedFlank vs Envelopment",
+            "metric": "decA",
+            "decA": 43.39622641509434,
+            "a_pct": 38.333333333333336,
+            "dec_n": 53,
+            "draw_pct": 11.666666666666666,
+            "win_band": [
+              48,
+              62
+            ],
+            "win_cas": 4.076378243529224,
+            "lose_cas": 34.912302205917825,
+            "capped_pct": 10.0,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 35% outside 15-30"
+          },
+          "H6": {
+            "label": "RefusedFlank vs Line",
+            "metric": "decA",
+            "decA": 50.0,
+            "a_pct": 41.66666666666667,
+            "dec_n": 50,
+            "draw_pct": 16.666666666666664,
+            "win_band": [
+              48,
+              60
+            ],
+            "win_cas": 2.925306001770254,
+            "lose_cas": 32.735609342043055,
+            "capped_pct": 16.666666666666664,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 33% outside 15-30"
+          },
+          "H10": {
+            "label": "Line vs Envelopment (rev H3)",
+            "metric": "decA",
+            "decA": 41.1764705882353,
+            "a_pct": 35.0,
+            "dec_n": 51,
+            "draw_pct": 15.0,
+            "win_band": [
+              28,
+              45
+            ],
+            "win_cas": 1.6075031637128954,
+            "lose_cas": 24.935227354065972,
+            "capped_pct": 15.0,
+            "casualty_ok": true,
+            "casualty_flag": "OK",
+            "casualty_why": ""
+          },
+          "H11": {
+            "label": "Arrowhead vs Envelopment (rev H4)",
+            "metric": "decA",
+            "decA": 42.592592592592595,
+            "a_pct": 38.333333333333336,
+            "dec_n": 54,
+            "draw_pct": 10.0,
+            "win_band": [
+              38,
+              55
+            ],
+            "win_cas": 3.0271238115792696,
+            "lose_cas": 47.08734123834675,
+            "capped_pct": 10.0,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 47% outside 15-30"
+          },
+          "C4": {
+            "label": "Cav flank/envelopment vs Line",
+            "metric": "decA",
+            "decA": 41.37931034482759,
+            "a_pct": 40.0,
+            "dec_n": 58,
+            "draw_pct": 3.3333333333333335,
+            "win_band": [
+              75,
+              95
+            ],
+            "win_cas": 2.091218048680891,
+            "lose_cas": 36.07827437236987,
+            "capped_pct": 0.0,
+            "casualty_ok": false,
+            "casualty_flag": "UNREAL",
+            "casualty_why": "loser 36% outside 15-30"
+          },
+          "C7": {
+            "label": "Cav envelop vs holding Line (hold+d8)",
+            "metric": "decA",
+            "decA": 43.333333333333336,
+            "a_pct": 43.333333333333336,
+            "dec_n": 60,
+            "draw_pct": 0.0,
+            "win_band": [
+              65,
+              100
+            ],
+            "win_cas": 1.912765191621573,
+            "lose_cas": 27.495081197881124,
+            "capped_pct": 0.0,
+            "casualty_ok": true,
+            "casualty_flag": "OK",
+            "casualty_why": ""
+          }
+        }
+      }
+    }
+  ]
+}

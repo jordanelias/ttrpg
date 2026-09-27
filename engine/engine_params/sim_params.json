@@ -3,11 +3,11 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 171,
-    "total": 419,
-    "uncited": 248,
+    "total": 422,
+    "uncited": 251,
     "of_which_assumption_grade": 11
   },
-  "count": 419,
+  "count": 422,
   "by_module": {
     "engine.autoload": 14,
     "engine.cross_scale": 13,
@@ -17,7 +17,7 @@
     "combat": 12,
     "factions": 65,
     "fieldwork": 15,
-    "mass_battle": 141,
+    "mass_battle": 144,
     "overview": 12,
     "settlements": 24,
     "social_contest": 49,
@@ -3175,6 +3175,46 @@
       "note": "[canonical: class-B test-fixture: a typical (un-braced) line's discipline -- shattered by envelopment shock]",
       "citation": "class-B test-fixture: a typical (un-braced) line's discipline -- shattered by envelopment shock",
       "citation_grade": "source"
+    },
+    {
+      "key": "mass_battle.CANDIDATE_VALUES",
+      "name": "CANDIDATE_VALUES",
+      "value": [
+        1.0,
+        0.9,
+        0.8,
+        0.7,
+        0.6,
+        0.5
+      ],
+      "kind": "vector",
+      "module": "mass_battle",
+      "file": "systems/mass_battle/sim/workbench/rout_cascade_sweep.py",
+      "note": "[JUSTIFIED: 0.1-step screening grid, see comment above]",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "mass_battle._DEFAULT_SCREEN_N",
+      "name": "_DEFAULT_SCREEN_N",
+      "value": 40,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "systems/mass_battle/sim/workbench/rout_cascade_sweep.py",
+      "note": "[JUSTIFIED: half of gauge_mb.py's own default n=60]",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "mass_battle._WORKER_TIMEOUT_S",
+      "name": "_WORKER_TIMEOUT_S",
+      "value": 300,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "systems/mass_battle/sim/workbench/rout_cascade_sweep.py",
+      "note": "[JUSTIFIED: matches ci_golden_modes_check.py's own per-mode timeout]",
+      "citation": null,
+      "citation_grade": null
     },
     {
       "key": "mass_battle.DEFAULT_PORT",

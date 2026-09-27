@@ -6,10 +6,12 @@
 last row governs).
 **Ratify-on-merge (ED-1094):** merging ratifies **Parts A, B and C** — Jordan ruled Part C directly, in session,
 after this document was first drafted; the ruling is recorded in Part C below and in `ED-MB-0067`'s second row.
-**Not yet done:** nothing in this document has been built. Directive d.1 (below) overwrites the mass-battle
-morale starting-formula sentence — NOT PP-711, which is a different rule (see ED-MB-0067's 5th row) — and still
-needs its own propagation into `mass_battle_v30.md`; the exact mechanical coupling for C2–C4 is follow-up design
-work, not settled by the ruling itself.
+**Execution status is a pointer, not a figure here** (CLAUDE.md §1): read `registers/handoffs/HANDOFF_MB.md`'s
+row for this ledger id for what has actually been built and when — this document is the ruling record and is not
+kept in sync with it. As of Part D (2026-09-27): Part A's build slate and C4 are executed; C2/C3's coupling has a
+design (Part D, below) but is NOT built. Directive d.1 overwrites the mass-battle morale starting-formula sentence
+— NOT PP-711, which is a different rule (see ED-MB-0067's 5th row) — and still needs its own propagation into
+`mass_battle_v30.md`.
 
 **Inputs.**
 
@@ -324,6 +326,109 @@ dispositions on these are unchanged.
 **Already queued, touched by the concept, unchanged by this ruling:** ED-MB-0039's (A)/(B) geometry fork;
 ED-MB-0041's depth cap, graded cavalry refusal and Command σ-ceiling; ED-MB-0045's CEV naming and dual 2:1
 targets; the mass_battle contract's `state: []` (`references/module_contracts.yaml:636`).
+
+---
+
+## Part D — C2/C3 coupling formula: a design, not a ruling (2026-09-27)
+
+**Status: PROPOSED — needs Jordan.** Everything above this line in Part C is ruled; this section is not — it is
+the "follow-up mechanical design" Part C's own text (lines 262-263, 274-275) names and defers. It specifies the
+change precisely enough to build, and is deliberately NOT executed in this pass: it touches the per-pair loop
+inside `resolve_engagements` (`orchestration.py:727-1377`), the single most adversarially-contested code in this
+file (the "partition-invariance fix" and "Fable-audit B6" comments at `:1389-1401` are scar tissue from exactly
+this neighbourhood), and removing the mechanism it replaces moves byte-exact goldens under `MB_ENVELOP_SHOCK`
+(default-ON) — the same class of re-verification A8 needed, including a row-selection methodology error the
+critic caught on the first attempt (`ED-MB-0071`). C2's *direction* is ruled; C3's Discipline-check *form* is a
+live fork with no single "clearly right for the code" answer (§0's needs_jordan step 5) — that fork, not the
+plumbing, is what should be built and adversarially reviewed as one unit, in its own pass.
+
+**What exists today.** `MB_ENVELOP_SHOCK` fires as a PRE-combat delta-sigma penalty on the shocked side's OWN
+offensive net successes, computed per contact pair inside `resolve_engagements`'s main loop
+(`orchestration.py:777-1375`) and applied before that pair's degree/damage for the SAME exchange:
+
+```
+elif MB_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:       # orchestration.py:1156
+    ...
+    ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b, t)  # :1165 — REPLACE
+...
+elif MB_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:       # :1169
+    ...
+    ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a, t)  # :1171 — REPLACE
+```
+
+`_charge_shock_sigma` (`resolution.py:176-207`) always returns `<= 0` (its own docstring: "Applied to the
+defender's offensive net successes -> it fights worse that exchange") — a parallel, independent effect, exactly
+what Jordan's ruling says should change. **Do not touch the sibling `if a_pen > 0` / `if b_pen > 0` branches
+immediately above each** (`:1153-1155`, `:1166-1168`) — those are the CHARGE-shock path (a landed momentum
+charge), Phase 3, already ratified (`engine.py:58`'s registry: `"status":"WIRED"`), and out of C2/C3's scope;
+only the two `elif MB_ENVELOP_SHOCK` branches are the envelopment case this ruling addresses.
+
+**The precedent this reuses.** `run_multi_unit_battle`'s freed-attacker path (`orchestration.py:2775-2780`):
+```
+_disc = target.agg_discipline()
+if _disc > 0 and target.command > 0:
+    erosion = dmg / (_disc * target.command)
+    target.cascade_morale_hit(erosion)
+```
+scales realized damage into a morale-erosion amount, gated only by the passive stat (no roll). This is the right
+FORMULA (Jordan: "the envelopment morale shock should scale with the casualties the multiplier actually
+produced" — `dmg` here is exactly that), but it belongs to a **different scale of the simulation**:
+`run_multi_unit_battle` resolves cross-pair, post-battle events, while the envelopment shock lives inside
+`run_battle`'s per-tick loop (`:1788-2254`), where damage is committed at `:2118-2119`. The formula transplants;
+the call site does not — it needs its own hook in `run_battle`, not a shared call into the freed-attacker code.
+
+**The plumbing (uncontroversial — build this regardless of which check-form below is chosen).**
+`resolve_engagements` already threads a conditionally-populated field through exactly this shape —
+`cell_dmg_a`/`cell_dmg_b`, gated by `MB_CELL_DAMAGE`, merged sub-phase-by-sub-phase in
+`resolve_engagements_cascading` (`:1486-1488`) — so the new field is one more instance of an existing idiom, not
+a new one:
+1. Add `shocked_a = shocked_b = False` beside `dmg_a, dmg_b = 0, 0` (`:740`); set `shocked_b = True` in place of
+   the `ns_b +=` at `:1165`, `shocked_a = True` in place of `:1171`.
+2. Add `"shocked_a": shocked_a, "shocked_b": shocked_b` to `resolve_engagements`'s return dict (`:1376-1377`)
+   and to `resolve_engagements_cascading`'s own empty-`pairs` early return (`:1415-1417`) — miss the second one
+   and a tick with no active pairs reads a `KeyError` downstream.
+3. In `resolve_engagements_cascading`, OR them across sub-phases exactly where `total_dmg_a`/`total_dmg_b`
+   already accumulate (`:1483-1484`): `total_shocked_a = total_shocked_a or result["shocked_a"]`, etc.; add both
+   to its own return dict (`:1496-1499`).
+4. In `run_battle`, read `result["shocked_b"]` / `result["shocked_a"]` right after the damage commit
+   (`:2118-2119`) and branch into whichever check-form is chosen below, using `result["dmg_a"]`/`result["dmg_b"]`
+   — already the tick's full realized damage, melee and volley already separated — as the scaling input.
+
+**The fork C3 leaves open — how a Discipline check composes with the erosion.** Three shapes considered:
+
+1. *Formula-only, no roll.* Apply `erosion = result["dmg_b"] / (unit_b.agg_discipline() * unit_b.command)` via
+   `cascade_morale_hit` unconditionally whenever `shocked_b`, byte-identical in form to the freed-attacker
+   precedent. Reads "checked against Discipline" as already satisfied by the existing `agg_discipline()`
+   denominator (higher Discipline → smaller erosion). Simplest; adds no new roll. **Declined to recommend:**
+   Part C's own wording treats "the multiplied damage is a contributing cause" and "checked against Discipline"
+   as two clauses, not one — C3 separately says this is folded into how a Discipline check *resolves*, which
+   reads as an actual check, not a passive scale.
+2. *Roll-gated erosion (recommended).* Reuse `discipline_check_cascade(unit)` (`:2596-2602`, Ob 1 against the
+   unit's own `discipline`) unmodified. `shocked_b` true and `discipline_check_cascade(unit_b)` false → apply the
+   same erosion formula as (1); check passes → no erosion this tick. Binary, and reuses an existing roll rather
+   than inventing one — the same idempotent-vocabulary move C4 made reusing PP-256's recognition check
+   (CLAUDE.md §4) — and every other check in this module (`feigned_retreat_recognized`, `recall_check`,
+   `discipline_check_cascade` itself) is already binary pass/fail, so this stays consistent in methodology with
+   its siblings (§0.06's S axis) rather than introducing a new shape.
+3. *Roll-scaled erosion.* Roll the same pool, scale erosion continuously by margin against `MORALE_CASCADE_OB`
+   rather than gating pass/fail. Smoother, and closer to this file's general preference for continuous scaling
+   over hard gates (ED-MB-0018's own reasoning) — but every existing check in this module is binary; this would
+   be the first graded one, a new mechanical shape with no sibling to be consistent with. **Declined to
+   recommend** on that basis, not ruled out on merits.
+
+**What this design does NOT cover.** C3's "fold Pressure into a Discipline check" is Pressure-specific and out of
+scope here: no Pressure stat exists in code today (Part C: "the concept's Pressure condition is not adopted as a
+second, parallel gate"), so there is nothing yet to fold in. Option 2 above checks Discipline exactly as it
+already exists (`discipline_check_cascade`, unmodified), which is the whole of what C3 asks for absent a Pressure
+value. If a Pressure-like modifier is ever built, it modifies THAT check's Ob or pool, not this design.
+
+**Verification this will need, when built.** A dedicated producer/critic pass, not folded into a larger batch:
+(a) every gauge row and `bat.py` battery scenario currently exercising `MB_ENVELOP_SHOCK` re-run, digest/win-share
+re-recorded where it moves, disclosed the way A8's was; (b) a test pinning that the OLD pre-combat penalty is
+gone (an envelop-shock-eligible pair's net successes for that exchange are unaffected by the condition); (c) a
+test pinning the NEW post-damage erosion fires only under `shocked_b`/`shocked_a` and scales with
+`result["dmg_b"]`/`result["dmg_a"]`; (d) the discipline-check gate's pass and fail arms both exercised directly,
+mirroring `test_rout_contagion.py`'s own pattern of pinning both sides of a boundary.
 
 ---
 

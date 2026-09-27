@@ -61,7 +61,14 @@ FIELD_PINS = {
     'MB_OCTAGON_DMG': '1', 'MB_CELL_MORALE': '0',
     # Group A — unconditional in shared code (digest-relevant in all four modes)
     'SIGMA_HEAD': '1', 'MORALE_FIX': '1', 'MB_STOCHASTIC_ROUT': '1',
-    'ROUT_CASCADE_FRAC': '1.0', 'REFORM_CHECK_ENABLED': '0',
+    # [A8, ED-MB-0067 Part A / ED-MB-0071, 2026-09-27, corrected same day] Was '1.0' (the pre-sweep
+    # inert default), briefly '0.5', now '0.6' -- adversarial review found 0.5 under-evidenced once
+    # the sweep's own row set was corrected to include C4/C7; 0.6 achieves the identical
+    # casualty-realism gain with zero win-share-control cost (see config.py's own comment). Re-pinned
+    # to track config.py's own default, same reason MB_AMMO_ENABLED's pin moved when THAT default
+    # flipped -- an ambient ROUT_CASCADE_FRAC in the runner must produce a named red, not a silent
+    # check against a superseded value.
+    'ROUT_CASCADE_FRAC': '0.6', 'REFORM_CHECK_ENABLED': '0',
     'MB_CONVERGENCE_NORM': '1', 'MB_CELL_DAMAGE': '0', 'MULTI_SIDE_SHOCK': '0.5',
     'OCTAGON_LOCAL_REACH': '2.0', 'FACING_REACTION_TICKS': '2',
     'LANCHESTER_ENABLED': '1', 'K_LINEAR': '12', 'K_SQUARE': '0.25',

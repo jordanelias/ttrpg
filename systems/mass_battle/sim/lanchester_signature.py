@@ -11,8 +11,10 @@ Validates the two attrition laws the P-L substrate introduces, per the design sp
   (3) NO-ANNIHILATION invariant: battles still terminate by ROUT (the morale/rout system
       decides the end), not by attrition to zero. Lanchester FEEDS morale; it does not replace it.
 
-Requires LANCHESTER_ENABLED on (the engine default). Run:
-    PYTHONPATH=tests/sim python3 -m systems.mass_battle.sim.lanchester_signature
+Requires LANCHESTER_ENABLED on (the engine default). Run from the repo root (no PYTHONPATH needed --
+`-m` puts cwd on sys.path automatically; verified 2026-09-27, ED-MB-0070 -- this line previously read
+`PYTHONPATH=tests/sim`, stale residue from before the 2026-08-24 port):
+    python3 -m systems.mass_battle.sim.lanchester_signature
 
 All numeric thresholds below are class-B TOLERANCES derived from validated P-L behaviour,
 NOT canonical magnitudes; the SIGNATURES are the spec section-four validation plan.

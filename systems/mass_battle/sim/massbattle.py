@@ -11,8 +11,10 @@ WHAT SURVIVED THE OVERWRITE, AND WHY IT HAD TO. The canon engine's entry point i
 `run_battle(unit_a, unit_b, max_turns=18)` takes constructed Units. The campaign's entry point is
 STRATEGIC: `faction_action._try_conquest` has two factions and needs a degree back. The adapter
 between them — `resolve_mass_battle`, `_faction_to_unit`, the garrison stub, and the size-ratio ->
-degree map — existed ONLY in the old engine, and `systems/factions/sim/faction_action.py:462`
-imports it by this exact path. Overwriting the file wholesale would have broken the campaign at
+degree map — existed ONLY in the old engine, and `systems/factions/sim/faction_action.py:393`
+imports it by this exact path (this citation previously read `:462`, a stale line number pointing at
+an unrelated Muster-cost line — corrected 2026-09-27, ED-MB-0070, caught by adversarial review).
+Overwriting the file wholesale would have broken the campaign at
 import. So the engine was replaced and the adapter was kept, which is what "port the engine" has to
 mean if the campaign is to keep running.
 
@@ -43,6 +45,7 @@ import math
 from systems.mass_battle.sim import rngsource
 from systems.mass_battle.sim.hierarchy.units import Subunit, Unit
 from systems.mass_battle.sim.orchestration import run_battle
+from systems.mass_battle.sim.terrain import FOREST_BROKEN
 
 #: Size-ratio -> degree thresholds. CARRIED OVER VERBATIM from the pre-port adapter so that the
 #: golden movement this commit causes is attributable to the engine swap and nothing else. These are
@@ -134,10 +137,42 @@ def _morale_start_from_stability(faction):
     found by an adversarial pass on unrelated work and confirmed by grep: no call site exists
     anywhere in `engine/` or this file; only test code (`test_persubunit_stress.py`,
     `tests/valoria/test_mass_battle_signals.py`) invokes it directly. `engine/mc_v18.py`'s campaign
-    loop never references it, `morale`, or this file's own `_faction_to_unit` by that claim. Whether
-    PP-711 is enforced in the live campaign some OTHER way (each battle rebuilding a fresh Unit from
-    Faction stats, so there is no stale morale to reset) or is simply unenforced there is not yet
-    determined — flagged, not resolved, in `registers/handoffs/HANDOFF_MB.md`.
+    loop never references it, `morale`, or this file's own `_faction_to_unit` by that claim.
+
+    [RESOLVED 2026-09-27, ED-MB-0070] The prior row left open whether PP-711 is enforced some other
+    way or simply unenforced. Half right, half wrong — corrected by an adversarial review (Opus,
+    2026-09-27) that opened `orchestration.py` directly rather than trusting this docstring's own
+    prior claim, the same discipline that caught the PP-711/starting-formula conflation above.
+    `resolve_mass_battle` (below) calls `_faction_to_unit` fresh for BOTH sides on every invocation,
+    and `_try_conquest` (`systems/factions/sim/faction_action.py:393-400`) calls `resolve_mass_battle`
+    fresh for every Military Conquest — no `Unit` this function returns is cached or persisted on
+    `faction`/`world` between calls (grep-confirmed: no `lru_cache`/memoization wraps either
+    function). Every campaign battle therefore starts from a brand-new `Unit` whose MORALE is derived
+    from the faction's Stability AT THAT MOMENT — for morale alone, a stronger property than "reset
+    between battles", since there is no stale morale ever available to reset.
+
+    WRONG PART, NOW CORRECTED: `reset_morale_between_battles` does NOT "stay live in `run_battle`'s
+    own internal multi-turn loop" — it has NO production call site anywhere in this package.
+    `run_multi_turn_battle` calls `reset_positions`, `run_battle` and `between_turn_recovery` between
+    turns, never this function; its own docstring says so directly ("NOT within a single battle:
+    between_turn_recovery handles the within-battle turn boundary"). Every caller is a test writing to
+    a hand-built `Unit` directly (`tests/valoria/test_mass_battle_signals.py`,
+    `test_persubunit_stress.py`, `tests/valoria/test_charger_latch.py`,
+    `tests/valoria/test_morale_write_sweep.py`, `tests/valoria/test_octagon_damage.py`) — it is dead
+    in production, full stop, not merely unreached at this one seam.
+
+    SCOPE, STATED PRECISELY: fresh construction closes the gap for PP-711 (morale) ONLY. The same
+    function's docstring also carries PP-712 ("Discipline persists between battles") — fresh
+    construction does NOT satisfy that: `_faction_to_unit` hardcodes `discipline=5,
+    discipline_start=5` every call, so Discipline does not carry over either, which is the SAME
+    pre-existing `[GAP: faction -> unit construction lacks canonical spec]` this file already
+    declares above, not a new one. This paragraph is about PP-711 alone.
+
+    Would become load-bearing at the strategic seam the moment a `Unit` persists across more than one
+    battle here — most plausibly the season loop's own mass-battle provider seam
+    (`engine/season/seam/contest.py`), which does not yet call this adapter at all
+    (`engine/season/rosters.yaml`: "NO PROVIDER"), rather than the deprecated `mc_v18` path. Not a
+    currently-open item.
 
     [ASSUMPTION: rounded to the nearest int (half-up, see `_round_half_up`) and floored at 1 rather
     than 0 — basis: `mass_battle_v30.md:230-231` states canon's own Morale range directly ("Morale
@@ -217,6 +252,39 @@ def resolve_mass_battle(faction_a, faction_b, terrain, world):
     between runs at the same seed". Porting without restoring that property would not have moved the
     seeded goldens — it would have made them UNPINNABLE. See `rngsource.py` for why the property is
     restored with a holder rather than a threaded parameter.
+
+    terrain: [A7, ED-MB-0067 Part A / ED-MB-0074] One of `terrain.py`'s six A.9 row constants (its
+    caller, `faction_action._try_conquest`, derives it from the engagement province via
+    `terrain.terrain_row_for_territory` — no separate coordinate plumbing needed, the province tid
+    IS the geography query key). Was accepted and silently discarded since this adapter's creation
+    (a `[GAP]` comment at the one call site said so plainly).
+
+    [CORRECTED, adversarial review 2026-09-27] The FOREST_BROKEN branch below writes `unit.speed`, but
+    THIS FUNCTION CALLS `run_battle`, and `run_battle` never reads `.speed` at all — only
+    `orchestration.pursuit_damage` and `orchestration.run_multi_unit_battle` do (neither reachable from
+    here). The write is not "mechanically applied and merely campaign-unreachable pending a Fast-speed
+    side"; it is inert on ITS OWN TERMS, independent of `_faction_to_unit` never producing a Fast unit —
+    even a hand-built Fast-speed pair run through THIS function would see no effect. Kept rather than
+    removed because it is harmless (dead-writes a field this call path never reads) and is the correct
+    first half of A.9's "Cavalry -> Standard" rule for whichever future seam DOES reach `.speed`'s real
+    readers — but it is not evidence of anything working today, and the ledger/handoff text saying so
+    was wrong. NOT yet applied, disclosed rather than silently ignored: UPHILL (a damage/defense
+    magnitude — ED-MB-0018's own precedent, "the octagon is NOT a pool penalty, it's a MULTIPLIER",
+    says how but not how much — A.9's own table does give one, "+3 DR"-adjacent numbers for the other
+    rows, but translating them is a separate pass since it moves goldens), WALLS (a DR bonus, same
+    reason), NARROW_PASS ("1 engagement per side" — vacuous at THIS seam anyway, since `run_battle`
+    below is already a single 1v1 pair; would only bind once army-scale multi-Unit plans exist, per
+    Part A's own 'Sequenced' table; ALSO not currently reachable from any real, unfortified territory —
+    see `terrain_row_for_territory`'s own docstring for the geometric reason, not a fortification one),
+    and RIVER_CROSSING (not yet reachable from `terrain_row_for_territory` at all — see its own module
+    docstring). OPEN_FLAT is A.9's own "no modifiers" row and needs no branch.
+
+    [CORRECTED, adversarial review 2026-09-27] UPHILL/WALLS above are not missing a number from canon —
+    A.9's table already gives one each ("+1D Def / -1D Off", "+3 DR"). What is deferred is TRANSLATING
+    that dice-pool-era number into this engine's sigma/degree model, the way ED-MB-0018 translated the
+    octagon's facing bonus from a pool modifier into a damage multiplier — a real design step, not a
+    blank to fill in, and one that moves goldens once done. That translation work is deferred, not the
+    number itself.
     """
     unit_a = _faction_to_unit(faction_a)
     if faction_b is None:
@@ -226,6 +294,21 @@ def resolve_mass_battle(faction_a, faction_b, terrain, world):
         unit_b = _faction_to_unit(_GarrisonStub(name='Uncontrolled', Mil=1.5))
     else:
         unit_b = _faction_to_unit(faction_b)
+
+    # [A7, ED-MB-0067 Part A / ED-MB-0074] A.9: "Forest / broken: Cavalry -> Standard; flanking
+    # impossible." Only the speed half is attempted here (flanking-impossible would need the
+    # envelopment pipeline, out of scope for this pass — see this function's own docstring).
+    # [CORRECTED, adversarial review 2026-09-27] This write is inert, full stop — not merely
+    # campaign-unreachable. `run_battle` below never reads `.speed` (only `pursuit_damage` and
+    # `run_multi_unit_battle` do, neither called from this function), so even a hand-built Fast-speed
+    # unit run through THIS path would see no effect. Doubly inert today because `_faction_to_unit`
+    # never sets `speed` either (its own [GAP] comment covers that half) — but fixing only that half
+    # would not make this branch do anything. See this function's own docstring for the full disclosure.
+    if terrain == FOREST_BROKEN:
+        if unit_a.speed == 'Fast':
+            unit_a.speed = 'Standard'
+        if unit_b.speed == 'Fast':
+            unit_b.speed = 'Standard'
 
     with rngsource.using(getattr(world, 'rng', None)):
         # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]

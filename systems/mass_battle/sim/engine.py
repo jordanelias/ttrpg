@@ -211,7 +211,8 @@ def build_unit(shape, tier, name, faction, anchor_col, *, troop_type='infantry',
 
 
 def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale=6,  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6 defaults, same as build_unit]
-               morale_start=None, dr=1, stance='balanced', speed='Standard', anchor_col=25):
+               morale_start=None, dr=1, stance='balanced', speed='Standard', anchor_col=25,
+               officers=()):
     """Faction→ARMY adapter: construct a MULTI-subunit Unit from a list of per-subunit spec dicts.
     `gauge_mb.make_mixed_unit` already proves the data model supports independently-placed/typed/tasked
     subunits, but that constructor is gauge-harness-local; this is the public, workbench-facing
@@ -260,12 +261,88 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     NOT get this same treatment -- its shape parameter is a required positional with no default, so
     there is no "unspecified shape" case there to fill (see its own docstring).
     [canonical: gauge_mb.make_mixed_unit — the spec-dict-list shape this mirrors; config.py
-    TROOP_TYPE_ROLES/ROLE_SPEC — the role->shape/instructions menu this wires]"""
+    TROOP_TYPE_ROLES/ROLE_SPEC — the role->shape/instructions menu this wires]
+
+    officers: [A3, ED-MB-0067 Part A / ED-MB-0073] Default () — ZERO behavior change for every
+    existing caller (every existing spec omits 'officer', so `direct == len(specs)` below and the
+    SUBUNIT_CAP check is exactly what it always was). When given, a list of Officer specs (dicts,
+    e.g. {'name': 'Aulus', 'command': 5}, or {'name':..., 'charisma':..., 'cognition':...} to derive
+    Command the ED-899 way) or Officer instances. A subunit spec may then carry an 'officer': NAME
+    key naming which officer commands it (omitted = a direct report to the general, same as today).
+    This is ED-1090's own queued reconciliation: Command clamps 1..7, so fielding more than Command
+    (up to the hard ceiling SUBUNIT_CAP=11) "implies a future Command-exceeding mechanism (e.g.
+    subordinate officers/lieutenancy)" — verbatim, `registers/editorial_ledger.jsonl`'s ED-1090 row.
+    A3's OWN text is precise about what changes and what does not: "the general's cap... counts the
+    officers he commands rather than every sub-unit" — SUBUNIT_CAP itself is NOT dropped, only what
+    it counts changes, from raw subunits to (officers actually used + un-officered direct subunits).
+    C5 (Part C, ruled 2026-09-25) separately ladders each officer's OWN span, and the general's
+    direct-reports count, against Command — "one ladder... at every echelon, including the new
+    officer post."
+
+    [FIX, adversarial-review round 1] The first version of this validation branched on `if not
+    officer_objs` and skipped SUBUNIT_CAP entirely once ANY officer was supplied — even one no spec
+    actually referenced. Combined with `command` never being clamped anywhere in this file (unlike
+    `Officer`'s own clamp), that let a single unused dummy officer plus an unrealistically large
+    `command` value bypass BOTH ceilings at once: an idle officer contributes to neither `counts` nor
+    the general's Command check, so an arbitrary number of un-officered subunits passed. Fixed by
+    computing `general_direct` (officers actually referenced + un-officered subunits) UNIFORMLY,
+    always checking it against SUBUNIT_CAP (which is what lets it count officers instead of raw
+    subunits, exactly as A3's text says, in BOTH the empty- and non-empty-officers case), and
+    checking it against the general's own (now clamped) Command ONLY when officers are actually used
+    — enforcing the Command ladder unconditionally would raise on existing single-tier armies built
+    with more direct subunits than their Command (several already exist in this package's own
+    tests/gauges), which is an existing-behavior change this item does not make."""
     # [ED-1090] SUBUNIT_CAP is module-level (see its definition above build_unit) so other callers
     # (Army Configuration Mode's UI) read the single source rather than duplicating the literal.
-    if len(specs) > SUBUNIT_CAP:
-        raise ValueError(f"build_army: {len(specs)} subunits exceeds the videogame cap of "
-                          f"{SUBUNIT_CAP} (ED-1090; mass_battle_v30.md §A.5)")
+    # isinstance(o, Officer) would be the direct check, but several tests in this package reload
+    # hierarchy.units (importlib.reload) to pick up an env-var-gated flag -- which rebinds Officer to
+    # a NEW class object, so an instance built from the pre-reload class fails isinstance against the
+    # post-reload one in the same worker process (found by adversarial review running the full suite,
+    # not by this file's own tests, which stay single-module and never see the mismatch). Checking for
+    # `dict` instead is reload-safe: dict's identity never changes, and everything this parameter
+    # accepts is either a mapping (build one) or already Officer-shaped (pass through).
+    officer_objs = tuple(Officer(**o) if isinstance(o, dict) else o for o in officers)
+    # [A3, ED-MB-0067 Part A / ED-MB-0073] Eager, fail-loud validation, matching this file's own
+    # existing SUBUNIT_CAP-raise convention rather than silently truncating or ignoring an
+    # over-assigned officer. Runs UNCONDITIONALLY (not only when officers is non-empty, F6's fix): a
+    # spec referencing an officer that does not exist is a caller mistake regardless of whether any
+    # OTHER officer was supplied.
+    by_name = {}
+    for o in officer_objs:
+        if o.name in by_name:
+            raise ValueError(f"build_army: duplicate officer name {o.name!r}")
+        by_name[o.name] = o
+    counts = {}
+    direct = 0
+    for sp in specs:
+        oname = sp.get('officer')
+        if oname is None:
+            direct += 1
+            continue
+        if oname not in by_name:
+            raise ValueError(f"build_army: subunit officer {oname!r} is not in officers "
+                              f"(known: {sorted(by_name)})")
+        counts[oname] = counts.get(oname, 0) + 1
+    for oname, n in counts.items():
+        cap = by_name[oname].command
+        if n > cap:
+            raise ValueError(f"build_army: officer {oname!r} commands {n} subunits, exceeding "
+                              f"their own Command {cap} (C5, ED-MB-0067 Part C: max commanded "
+                              f"= Command at every echelon)")
+    # general_direct == len(specs) whenever no spec sets 'officer' (every existing caller) --
+    # byte-exact continuation of ED-1090's own flat check in that case.
+    general_direct = len(counts) + direct
+    if general_direct > SUBUNIT_CAP:
+        raise ValueError(f"build_army: {general_direct} direct reports "
+                          f"({len(counts)} officers + {direct} un-officered subunits) exceeds the "
+                          f"videogame cap of {SUBUNIT_CAP} (ED-1090; mass_battle_v30.md §A.5)")
+    if officer_objs:
+        clamped_command = clamp_command(command)
+        if general_direct > clamped_command:
+            raise ValueError(f"build_army: general commands {general_direct} direct reports "
+                              f"({len(counts)} officers + {direct} un-officered subunits), exceeding "
+                              f"their own Command {clamped_command} (C5, ED-MB-0067 Part C: max "
+                              f"commanded = Command at every echelon)")
     advance_dir = -1 if faction == 'A' else 1
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
     # [ED-MB-0017] Frontage-aware, anchor-centred battle line: space subunits by their own frontage so
@@ -324,7 +401,9 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
                   # so an explicit per-spec override silently vanished (sp.pop never ran, kw never
                   # got the key) -- see this loop's own note below for the seed-when-absent half.
                   'troops', 'concentration', 'orders',
-                  'width', 'depth', 'distribution'):  # [ED-MB-0025/0026] explicit grid + density gradient
+                  'width', 'depth', 'distribution',  # [ED-MB-0025/0026] explicit grid + density gradient
+                  'officer'):  # [A3, ED-MB-0067 Part A / ED-MB-0073] already validated above this loop;
+                  # forwarded the same generic way as every other per-subunit override in this tuple.
             if k in sp:
                 kw[k] = sp.pop(k)
         # [DG-4, ED-MB-0002, 2026-07-04 ruling: "Morale is blend of per-subunit as well as whole
@@ -369,7 +448,7 @@ def build_army(specs, name, faction, *, power=4, command=4, discipline=5, morale
     return Unit(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,
                 morale=morale, morale_start=(morale if morale_start is None else morale_start),
-                subunits=subs, dr=dr, stance=stance, speed=speed)
+                subunits=subs, dr=dr, stance=stance, speed=speed, officers=officer_objs)
 
 
 def build_envelopment(center_specs, wing_specs, name, faction, *,
