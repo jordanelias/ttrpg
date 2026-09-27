@@ -26,9 +26,13 @@ needed are gone.
     time) already covers the live claim, and the campaign-boundary half was mc_v18's own
     serialization step, not a game property.
 `test_knots_stay_unpopulated_honest_deferral` (falsifier 4) is REWRITTEN, not deleted, below — it
-drives `systems.overview.sim.season.run_season` directly instead of `engine.mc_v18.run_campaign`,
-since the claim it guards has no successor elsewhere and `run_season`'s own `action_callback` is
-optional (nothing in the deferral depends on which callback, or none, drives the season).
+drives `systems.overview.sim.season.run_season` instead of `engine.mc_v18.run_campaign`, since the
+claim it guards has no successor elsewhere. It supplies `engine.cross_scale.scene_dispatch
+.run_scene_phase` (the same function `mc_v18._faction_actions_callback` calls, called directly, no
+faction-action logic) as `run_season`'s `action_callback`, so the season's scene-dispatch phase —
+where a fieldwork call site is likeliest to eventually land — actually runs each season; an earlier
+version of this rewrite passed no callback at all and silently stopped watching that phase, caught
+by an antagonist pass the same day.
 """
 from __future__ import annotations
 
@@ -37,6 +41,7 @@ import random
 import yaml
 
 from engine.autoload import game_state, victory, scene_slate
+from engine.cross_scale import scene_dispatch
 from systems.overview.sim.season import run_season
 from systems.settlements.sim.registry import LEGAL_TYPES
 from systems.world.sim import npe
@@ -142,20 +147,26 @@ def test_simulate_npc_actions_already_wired_every_season_via_accounting():
 def test_knots_stay_unpopulated_honest_deferral():
     """OI-07's world.knots half: form_knot's §3.1 prerequisites (Disposition, Bonds, TS) are
     personal-scale actor fields absent from the aggregate World — no world-gen/season formation
-    rule exists in canon. world.knots must stay empty across several seasons of the season loop.
+    rule exists in canon. world.knots must stay empty across several seasons of the season loop,
+    with the season's own scene-dispatch phase (where a fieldwork-mechanic call site is most
+    likely to eventually land — `_resolve_slot` already has a "fieldwork" branch) actually run.
 
-    REWRITTEN 2026-09-27 (mc_v18-retirement plan M1): previously drove `engine.mc_v18.run_campaign`
-    to get a multi-season World; this claim has no successor elsewhere (unlike world-npcs, which
-    test_f7_smoke_oracle.py's golden already covers), so rather than delete it, it is decoupled
-    from mc_v18 — `run_season`'s `action_callback` is optional (systems/overview/sim/season.py's
-    own docstring: "by tests to inject deterministic actions or skip the step entirely"), and
-    form_knot has no call site regardless of which callback drives the loop, so no callback is
-    needed to exercise this deferral. `victory.reset()`/`scene_slate.clear()` guard against
-    leaked module-level state from an earlier test in the same pytest process — both are
-    module-level singletons (`engine/autoload/{victory,scene_slate}.py`), not per-World."""
+    REWRITTEN 2026-09-27 (mc_v18-retirement plan M1, corrected by an antagonist pass same day):
+    previously drove `engine.mc_v18.run_campaign` to get a multi-season World. The FIRST rewrite
+    decoupled it by calling `run_season(world)` with NO action_callback — which really does run
+    (`engine_clock.run_tick`'s `advance_season` + `accounting.run_accounting`), but SILENTLY
+    NARROWED the guard: `run_tick` only invokes scene dispatch (`scene_dispatch.run_scene_phase`,
+    where the fieldwork branch actually lives) INSIDE a caller-supplied action_callback, and this
+    test supplied none. A guard that no longer watches the likeliest wiring site is not the same
+    guard. This version supplies `scene_dispatch.run_scene_phase` itself as the callback — the
+    same function `engine.mc_v18._faction_actions_callback` calls, but called directly, with none
+    of that callback's faction-action logic — so `run_season` drives the ACTUAL scene-dispatch
+    phase every season, still with no `engine.mc_v18` import. `victory.reset()`/`scene_slate.clear()`
+    guard against leaked module-level state from an earlier test in the same pytest process — both
+    are module-level singletons (`engine/autoload/{victory,scene_slate}.py`), not per-World."""
     world = game_state.create_world(seed=1)
     victory.reset()
     scene_slate.clear()
     for _ in range(5):
-        run_season(world)
+        run_season(world, action_callback=lambda w: scene_dispatch.run_scene_phase(w, w.rng))
     assert world.knots == {}, "world.knots is no longer empty — honest-deferral guard tripped"

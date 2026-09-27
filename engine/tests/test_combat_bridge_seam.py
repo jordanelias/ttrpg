@@ -9,15 +9,23 @@ dict. It NEVER pins a damage value, a win rate, or any other balance quantity co
 assertion in this file red; if one day it does, the assertion was written wrong (plan §0 "Seam
 terms for the wrapper", term 1) — fix the test, don't chase the PC session.
 
-RETIRED 2026-09-27 (mc_v18-retirement plan M1): this file used to also carry a byte-parity probe
-(DISPATCH_COMBAT_BRIDGE=OFF leaves campaign output unchanged) and a reachability no-op probe
-(DISPATCH_COMBAT_BRIDGE=ON moves nothing because no live trigger queues a `combat` scene_type),
-both driven through `engine.mc_v18.run_batch`/`run_campaign`. Both were deleted along with that
-import: each said, in its own docstring, that it duplicated coverage the retained goldens already
-carry (`test_f7_smoke_oracle.py`, `test_mc_v18_regression.py`) — mc_v18 is frozen/deprecated in
-place (ED-IN-0227) and neither probe exercised anything but that frozen module's own OFF/ON
-dispatch, so losing the duplicate cost nothing. The schema/determinism/winner-mapping tests below
-are unaffected — they call `combat_bridge` directly, never mc_v18.
+RETIRED 2026-09-27 (mc_v18-retirement plan M1): this file used to also carry a byte-parity probe,
+`test_no_params_equals_explicit_flag_off` (DISPATCH_COMBAT_BRIDGE=OFF leaves campaign output
+unchanged, via `engine.mc_v18.run_batch`). Deleted along with that half of the mc_v18 import: its
+own docstring said plainly that it duplicated coverage the retained goldens already carry
+(`test_f7_smoke_oracle.py`, `test_mc_v18_regression.py`), both of which run the flag OFF. The
+schema/determinism/winner-mapping tests below are unaffected — they call `combat_bridge` directly,
+never mc_v18.
+
+`test_flag_on_is_a_no_op_on_the_currently_reachable_campaign` (below) is KEPT, not deleted — a
+first pass wrongly grouped it with the byte-parity probe as "redundant with the goldens", but
+neither retained golden ever sets `DISPATCH_COMBAT_BRIDGE` (an antagonist pass caught this), and
+its claim — that nothing in the CURRENT campaign loop organically queues a `combat` scene_type, so
+flipping the flag changes no real output — has no decoupled substitute yet: proving that requires
+driving a full campaign through real, organic triggers, which only `engine.mc_v18.run_campaign`
+can currently do (`engine/season/` has no faction-scale triggers of its own — building those is
+this plan's own later stages, M2 onward). So this file does NOT clear `ALLOWED_IMPORTERS` this
+round; only the one genuinely-redundant test is gone.
 """
 from __future__ import annotations
 
@@ -27,6 +35,7 @@ import pytest
 
 from engine.autoload import game_state
 from engine.cross_scale import combat_bridge
+from engine.mc_v18 import run_campaign
 
 
 # ── derive_parties: schema + context-derivation-gap behaviour (never an outcome) ────────────────
@@ -161,3 +170,29 @@ def test_resolve_is_deterministic_under_a_fixed_seed():
     r1 = combat_bridge.resolve(a1, b1, random.Random(999))
     r2 = combat_bridge.resolve(a2, b2, random.Random(999))
     assert r1 == r2
+
+
+# ── flag-ON reachability no-op (Wave 1 exit criteria) ─────────────────────────────────────────
+
+def test_flag_on_is_a_no_op_on_the_currently_reachable_campaign():
+    """No live trigger queues a `combat` scene_type today (verified 2026-07-29 — see
+    combat_bridge.py's module docstring), so flipping DISPATCH_COMBAT_BRIDGE ON must not move
+    ANY campaign output: the combat branch is simply never entered either way. This is a
+    reachability guard, not a balance claim — the moment a future wave adds a combat-scene
+    trigger, THIS test is expected to fail, and that failure is the intended signal to write the
+    ON-state acceptance instead of silently red-lining."""
+    off = run_campaign(seed=42, params={'DISPATCH_COMBAT_BRIDGE': 0})
+    on = run_campaign(seed=42, params={'DISPATCH_COMBAT_BRIDGE': 1})
+    assert off.winner == on.winner
+    assert off.season == on.season
+    assert off.scenes_resolved == on.scenes_resolved
+    assert off.stub_hits == on.stub_hits
+    assert off.battle_count == on.battle_count
+    assert off.final_state == on.final_state
+    # ⚠ TWO FIELDS DROPPED, TWO ADDED (2026-09-16, ED-IN-0232). `key_log_hash` and `keys_emitted`
+    # were the strongest comparands here — a campaign-wide content hash over every emission — and
+    # they retired with the Key substrate along with the `CampaignResult` fields themselves. Their
+    # replacement is NOT weaker by accident: `final_state` is the serialised world, so comparing it
+    # is a broader equality than the key log ever was. `battle_count` is added because it is the
+    # output the combat branch would actually move if it were ever entered, which is this test's
+    # whole subject.

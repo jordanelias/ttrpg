@@ -96,10 +96,8 @@ FACTION_DEFAULT_WEIGHT_PCT = 60
 # conviction taxonomy in the corpus. `conv.*`, the 13x4 conviction-axis matrix, the contest styles
 # and the cultural-background templates all key on the registry's thirteen, so an NPC generated
 # with `worldview=['Survival']` could never be scored by any of them. Nothing downstream reads
-# `worldview` yet (world-npcs is an honest deferral — `engine/tests/test_f7_smoke_oracle.py`'s
-# `npcs_generated==0` golden is the live falsifier; `test_pipeline_reach.py`'s own copy of this
-# guard retired 2026-09-27, mc_v18-retirement plan M1), so this costs no campaign golden today and
-# stops the drift before it does.
+# `worldview` yet (world-npcs is an honest deferral, `test_f7_smoke_oracle.py:434`'s `npcs_generated
+# ==0` golden is the live falsifier), so this costs no campaign golden today and stops the drift.
 # [canonical: conviction_taxonomy_v30 §2 via references/descriptor_registry.yaml:conviction_roster]
 CONVICTIONS = descriptors.CONVICTIONS
 

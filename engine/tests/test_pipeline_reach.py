@@ -37,37 +37,34 @@ STRICTLY (not xfail), per the plan's explicit instruction ("Strict rows this wav
 stub invocations") — those assertions are expected to be red until that sibling lane lands in the
 same wave/PR, which is the acceptance oracle doing its job, not a defect in this file.
 
-DESIGN CHOICE — dynamic xfail over hardcoded strict/red (documented so a reader does not mistake
-this for indecision): a handful of rows below (combat-under-flag chief among them) use
-`pytest.mark.xfail(<live introspection>, strict=True, ...)` instead of a bare assertion OR a bare
-`@pytest.mark.xfail`. This is deliberate: this file is ONE of four file-disjoint lanes landing in
-the same wave/PR without a guaranteed relative order (wf_wave1_spine.js's own "Build" phase runs
-oracle/dispatch/conv1/conv2 in `parallel()`), so hardcoding "always red" would misreport a row the
-moment a sibling lane's work lands, and hardcoding "always strict" would hard-fail CI on a lane that
-has not landed yet. `strict=True` xfail is the self-flagging shape: honestly xfail while the
-introspected condition says "not wired," and a hard, loud CI failure (XPASS) the moment the
-condition flips true but nobody flipped the marker — which is exactly the manual "flip the row"
-step the plan's burn-down process describes (§6.4 note in the wave text: "waves flip rows to strict
-as they land").
+Mirrors `test_f7_smoke_oracle.py`'s bootstrap (sys.path insert) — read there first, per the
+assignment; this file does not alter or re-record that oracle's goldens.
 
-XFAIL_MANIFEST below is the live P1 burn-down list this file promises to be (plan §2.3): one row per
-still-unwired direction, each citing the OI row and the plan location that schedules its closure.
-Every xfail in this file corresponds to exactly one manifest row; nothing here is a disguised pass.
-
-Mirrors `test_f7_smoke_oracle.py`'s bootstrap (sys.path insert, direct `engine.mc_v18` imports) —
-read there first, per the assignment; this file does not alter or re-record that oracle's goldens.
-
-RETIRED 2026-09-27 (mc_v18-retirement plan M1): the `combat-bridge-on`, `world-npcs` and
-`world-knots` XFAIL_MANIFEST rows and their tests are deleted along with the `engine.mc_v18`
-import. `world-npcs`/`world-knots` duplicated `test_f7_smoke_oracle.py`'s own `npcs_generated==0`
-golden and `test_world_population.py`'s honest-deferral guards (the latter kept, rewritten off
-mc_v18 — see that file); `combat-bridge-on` exercised only mc_v18's own dormant dispatch branch
-(env-var-gated, off by default, never run in a normal CI pass). None of the three had a live
-trigger surface independent of the frozen module. `world-settlements` is deleted too, for the
-same reason as its near-duplicate in `test_world_population.py`: settlements populate once, at
-`create_world` time, and `run_campaign` never re-derives them, so the world-gen-time falsifier
+RETIRED 2026-09-27 (mc_v18-retirement plan M1): the `XFAIL_MANIFEST`/`_manifest_reason` bookkeeping
+this file used to carry, and the `world-npcs`/`world-knots`/`world-settlements` rows and tests that
+drove `engine.mc_v18.run_campaign`, are deleted along with the `engine.mc_v18` import.
+`world-npcs`/`world-knots` duplicated `test_f7_smoke_oracle.py`'s own `npcs_generated==0` golden and
+`test_world_population.py`'s honest-deferral guards (the latter kept, rewritten off mc_v18 — see
+that file). `world-settlements` is deleted for the same reason as its near-duplicate in
+`test_world_population.py`: settlements populate once, at `create_world` time, and `run_campaign`
+never re-derives them, so the world-gen-time falsifier
 (`test_settlements_populated_at_world_gen_matches_geography_source_exactly`, kept, in that other
 file) already covers the live claim.
+
+`combat-bridge-on` is NOT deleted — a first pass wrongly reasoned it "exercised only mc_v18's own
+dormant dispatch branch" and cut it along with the rest. An antagonist pass caught the error: the
+branch it exercises (`_resolve_slot`'s `st == "combat"` case, `engine/cross_scale/scene_dispatch.py`)
+is live season-loop dispatch code, not mc_v18's — mc_v18 only ever supplied the flag value — and
+neither retained golden (`test_f7_smoke_oracle.py`, `test_mc_v18_regression.py`) ever sets
+`DISPATCH_COMBAT_BRIDGE`, so deleting it with no successor would have left NOTHING in the tree
+exercising `scene_type="combat"` at all. It is RESTORED below as an unconditional test (no xfail,
+no `engine.mc_v18` import — it sets `world.dispatch_combat_bridge` directly), which is also strictly
+more real coverage than the original: the original only ran for real under a manually-set env var
+that no CI pass ever sets, so in practice it recorded an xfail and never executed the assertion.
+
+With `XFAIL_MANIFEST` gone, this file no longer has an xfail-manifest burn-down list — every
+assertion below is either an unconditional strict check or the "converted stub invocations" rows
+that were always strict per the plan's own wave assignment (see the OI-17/18a/19 section).
 """
 from __future__ import annotations
 
@@ -81,76 +78,9 @@ _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')
 if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
-import pytest  # noqa: E402
-
 from engine.autoload import game_state, scene_slate  # noqa: E402
 from engine.cross_scale import scene_dispatch  # noqa: E402
 from engine.substrate import stubwire  # noqa: E402
-
-
-# ═════════════════════════════════════════════════════════════════════════════════════════════
-# XFAIL_MANIFEST — the live P1 burn-down list (plan §2.3). One row per still-unwired direction.
-# `strict` rows use a live-introspected condition (see module docstring "DESIGN CHOICE"); `always`
-# rows are unconditionally xfail this wave because their closure is explicitly scheduled for a
-# LATER wave (Wave 2/3), not this one, per the plan's own wave assignment. `honest-deferral` rows
-# are a THIRD kind added by the Oracle stage this wave (2026-07-29): unlike `wave2`/`wave3`, these
-# are not scheduled to close in any future wave — canon itself specifies no world-gen/season-tick
-# trigger for the mechanism, so the deferral is the considered, permanent-until-canon-changes
-# disposition, not a to-do. They stay xfail (never flip to strict) for exactly that reason.
-#
-# WAVE 2 BURN-DOWN (2026-07-29, ED-IN-0095): four rows retired this wave, each confirmed XPASS
-# (strict) by running its test directly against the tree, not by inspection — accord-echo-leg
-# (OI-03), vertical-up-handoff (OI-06), territory-transfer-resolver (OI-04), world-settlements
-# (OI-07). Their tests are now unconditional strict assertions (see each test's own docstring for
-# the resolving citation) and their manifest rows are removed per this list's own "one row per
-# still-unwired direction" contract. world-npcs/world-knots stay xfail but reclassified
-# `honest-deferral` (see rows below) — Wave 2 landed a considered disposition, not a wire-up.
-# ═════════════════════════════════════════════════════════════════════════════════════════════
-XFAIL_MANIFEST = [
-    {"id": "diagonal-causes", "oi": "OI-28", "kind": "strict-condition",
-     "area": "Key direction 6: diagonal (causes[])",
-     "reason": "HONESTY CORRECTION (2026-07-29, same-day W3 follow-on — the prior version of this "
-               "reason described the causes[]-populating path as not-yet-existing; that went stale "
-               "the moment it landed, in this same file's own wave, and was left uncorrected): "
-               "echo_transport._apply_accord_echo now builds a real scene.accord_echo Key (OI-03 "
-               "registered the type; a real sched.emit call site exists) AND genuinely populates "
-               "its causes[] field with the sibling §5.2 domain-echo Key's id when that leg also "
-               "fired for the SAME scene resolution — the ONE executable, non-decorative causes[] "
-               "instance corpus-wide, unit-falsified directly against the real KeyLog by "
-               "engine/tests/test_accord_echo.py's two §3 tests (log-lookup, not string-equality). "
-               "This row STAYS xfail anyway, for a genuinely different reason than before: the path "
-               "is executable but DORMANT — no live producer module declares "
-               "echo['scene_outcome'] (scene_dispatch.py / parliamentary_bridge.py, re-verified "
-               "2026-07-29; same scan test_direction2b uses), so classify_scene_outcome always "
-               "returns None in any real campaign and _apply_accord_echo's Key-with-causes[] "
-               "branch never runs outside a test that hand-supplies the input. The xfail condition "
-               "below is now LIVE-INTROSPECTED (mirrors combat-bridge-on's own pattern) rather than "
-               "a hardcoded always-red: it re-checks that same dormancy scan, so the MARKER "
-               "self-lifts the moment a producer supplies the input — but that is not the same "
-               "claim as 'no manual burn-down step needed' (re-critic HIGH correction, 2026-07-29): "
-               "the test BODY below deliberately omits scene_outcome from its ctx (real dormancy, "
-               "not a stand-in), so once the marker lifts the test goes HARD RED, not green — a "
-               "deliberate loud alarm demanding the body be rewritten to thread the landed "
-               "producer's real input, not a self-resolving row. See test_accord_echo.py's "
-               "test_accord_leg_receives_the_domain_echo_"
-               "keys_real_in_log_id / test_accord_leg_caused_by_key_id_is_none_when_the_domain_"
-               "echo_leg_does_not_fire for the unit-level falsifiers (both green today), and "
-               "test_direction6b_accord_echo_leg_receives_a_genuine_in_log_causal_id below for the "
-               "companion reach-level check."},
-    {"id": "altonian-reinforcements-handoff", "oi": "OI-10 / OI-17", "kind": "accepted-handoff",
-     "area": "unconditional NotImplementedError exemption",
-     "reason": "systems/mass_battle/sim/altonian_reinforcements.py is the ONE accepted "
-               "cross-session handoff (MB-owned file) — conversion is MB plan §12 I1, not this "
-               "program's job (critic F9: an IN exit criterion may not be hostage to another "
-               "session's schedule). This module MUST still raise NotImplementedError; if it "
-               "does not, MB's conversion has landed and this manifest row (and its guard test "
-               "below) should be deleted."},
-]
-
-
-def _manifest_reason(manifest_id: str) -> str:
-    row = next(r for r in XFAIL_MANIFEST if r["id"] == manifest_id)
-    return f"{row['oi']}: {row['reason']} [XFAIL_MANIFEST['{manifest_id}']]"
 
 
 # ═════════════════════════════════════════════════════════════════════════════════════════════
@@ -216,18 +146,36 @@ def _source_scan(pattern: str, module_paths: list[str]):
 # ═════════════════════════════════════════════════════════════════════════════════════════════
 # §1 acceptance — "All scene directions dispatch" (OI-01/OI-02)
 # ═════════════════════════════════════════════════════════════════════════════════════════════
-#
-# The combat-under-flag-ON probe that used to stand here (OI-01, `_dispatch_combat_bridge_on`
-# imported from `engine.mc_v18`) is RETIRED 2026-09-27 — see module docstring. Combat is otherwise
-# covered by `test_combat_bridge_seam.py`'s schema/determinism tests, which never touch mc_v18.
+
+
+def test_combat_resolves_via_canonical_bridge_under_flag_on():
+    """OI-01: with `world.dispatch_combat_bridge` set, combat resolves through combat_engine_v1
+    via the IN-side bridge (`engine/cross_scale/scene_dispatch.py`'s `_resolve_slot`, `st ==
+    "combat"` branch), not the retired `systems.combat.sim.combat` path. Well-formed context
+    (ctx['factions']) is supplied deliberately — this direction's acceptance is evaluated on its
+    OWN documented contract (combat_bridge.py), not on the empty-context probe the total-mapping
+    test below uses for scene_types that resolve unconditionally of context.
+
+    UNCONDITIONAL, no `engine.mc_v18` import (mc_v18-retirement plan M1, correctional pass — see
+    module docstring): the flag is set directly rather than resolved through mc_v18's
+    `_dispatch_combat_bridge_on`, which read an env var this test never actually set, so the
+    original xfail-gated version recorded an expected-failure and never ran this assertion for
+    real in any normal CI pass. This version always runs it."""
+    world = _fresh_world(seed=7)
+    world.dispatch_combat_bridge = True
+    slot = scene_slate.SceneSlot(scene_type="combat",
+                                  context={"factions": ("Crown", "Church")}, priority=0)
+    res = scene_dispatch._resolve_slot(slot, world, world.rng)
+    assert res.get("resolved") is True, f"combat did not resolve via the canonical bridge: {res}"
+    assert res["result"]["a_label"] == "Crown" and res["result"]["b_label"] == "Church"
 
 
 def test_scene_type_total_mapping_resolves_or_stub_flags():
     """§1 acceptance: every scene_type the slate can queue (plan's named roster: combat, contest,
     investigation/fieldwork, thread operation, domain action) either resolves through its
     canonical resolver or records a stubwire flag — never a silent 'not live' string (OI-01/02).
-    combat is covered separately above (its acceptance is flag-conditional, not unconditional);
-    this test covers the remaining five scene_type strings via DIRECT `_resolve_slot` probes (not
+    combat is covered separately above; this test covers the remaining five scene_type strings via
+    DIRECT `_resolve_slot` probes (not
     organic triggering — today only 'contest' is ever organically queued, via Stability Crisis),
     so a direction that is real but never organically triggered this wave is still checked, not
     silently skipped (§0.1 point 2). STRICT (no xfail): the dispatch lane's OI-02 conversion and
@@ -268,9 +216,10 @@ def test_scene_type_total_mapping_resolves_or_stub_flags():
 #
 # What that costs, said plainly: `directional_coverage_v1.md`'s claim that all seven delivery
 # directions are exercised is no longer backed by anything in this tree, and the accord-echo leg's
-# dormancy scan (`_scene_outcome_declared_by_a_live_producer`) went with them. The ten tests below
-# are what survives, and none of them is about delivery — they cover the combat bridge, world
-# population after a seeded campaign, and the stub-wiring census.
+# dormancy scan (`_scene_outcome_declared_by_a_live_producer`) went with them. The seven tests
+# below are what survives (further trimmed 2026-09-27, mc_v18-retirement plan M1 — see module
+# docstring): the combat bridge and the stub-wiring census. World population after a seeded
+# campaign moved to `test_world_population.py`, decoupled from `engine.mc_v18` where it survives.
 # ═════════════════════════════════════════════════════════════════════════════════════════════
 
 
@@ -364,14 +313,15 @@ def test_oi17_full_module_conversions_are_stub_wired():
 def test_only_accepted_handoff_still_raises_unconditionally():
     """The other half of 'zero unconditional NotImplementedError... except': altonian_reinforcements
     is the ONE module this file expects to still raise. If it stops raising, MB's own §12 I1
-    conversion has landed — a good thing — and this test (plus its XFAIL_MANIFEST row) should be
-    deleted, not left green-by-accident."""
+    conversion has landed — a good thing — and this test should be deleted, not left
+    green-by-accident. (The `XFAIL_MANIFEST` row this test used to also name was removed
+    2026-09-27, mc_v18-retirement plan M1 — there is no longer a row to delete alongside it.)"""
     outcome, detail = _probe("systems.mass_battle.sim.altonian_reinforcements",
                               "invoke_altonian_reinforcements", (_fresh_world(seed=1),))
     assert outcome == "raw_stub", (
         "altonian_reinforcements no longer raises unconditionally (outcome="
-        f"{outcome!r}: {detail}) — if MB plan §12 I1 has converted it, DELETE this test and the "
-        "'altonian-reinforcements-handoff' XFAIL_MANIFEST row rather than updating the assertion"
+        f"{outcome!r}: {detail}) — if MB plan §12 I1 has converted it, DELETE this test rather "
+        "than updating the assertion"
     )
 
 

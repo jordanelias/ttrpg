@@ -49,25 +49,32 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 ALLOWED_IMPORTERS = {
     # engine/tests — CI job `sim-regression`. 78 test functions; the coverage the deletion would
     # have cost, and the reason this is a ratchet.
+    'engine/tests/test_combat_bridge_seam.py',
     'engine/tests/test_f7_smoke_oracle.py',
     'engine/tests/test_mc_v18_regression.py',
     # ─────────────────────────────────────────────────────────────────────────────────────────
-    # FOUR LINES DELETED 2026-09-27 (mc_v18-retirement plan M0/M1, `proposals/2026-09-27-mc-v18-
-    # retirement-plan/PROPOSAL.md`), same visible-migration-record discipline as the six-lines-
-    # deleted block below. Each file had its mc_v18-using tests deleted (or, for one claim with no
-    # successor, rewritten to drive the season loop directly) — see each file's own docstring for
-    # what moved where. Not ported to a season-side equivalent by this stage; that is a separate,
-    # later decision (M6), and the two retained goldens below still exercise mc_v18's OFF-path
-    # behaviour in full:
+    # THREE LINES DELETED 2026-09-27 (mc_v18-retirement plan M0/M1, `proposals/2026-09-27-mc-v18-
+    # retirement-plan/PROPOSAL.md`, corrected by an antagonist pass on the same day — see below),
+    # same visible-migration-record discipline as the six-lines-deleted block below. Each file had
+    # its mc_v18-using tests deleted (or, for claims with no successor, rewritten/restored against
+    # a non-mc_v18 target) — see each file's own docstring for what moved where. Not ported to a
+    # season-side equivalent by this stage; that is a separate, later decision (M6), and the two
+    # retained goldens above still exercise mc_v18's OFF-path behaviour in full:
     #   engine/tests/test_accounting_accord_drift_probe.py - kept 6 tests, dropped 1 (the
     #     World->CampaignResult boundary check, internal to the frozen module)
-    #   engine/tests/test_combat_bridge_seam.py - kept 6 tests, dropped 2 (byte-parity/reachability
-    #     probes each self-documented as redundant with the goldens below)
-    #   engine/tests/test_pipeline_reach.py - kept 6 tests, dropped 4 (three honest-deferral/
-    #     reachability rows + their XFAIL_MANIFEST entries, one settlement-boundary duplicate)
+    #   engine/tests/test_pipeline_reach.py - kept 7 tests (dropped 3 net: three honest-deferral/
+    #     settlement-boundary rows drove mc_v18 with a real successor elsewhere; RESTORED one,
+    #     the combat-under-flag-ON test, decoupled from mc_v18 — a first pass wrongly deleted it
+    #     as "only mc_v18's dormant branch" when the branch it exercises is live scene_dispatch.py
+    #     code with no other test reaching it; caught by an antagonist pass)
     #   engine/tests/test_world_population.py - kept 6 tests, dropped 2, REWROTE 1 (the
     #     world.knots deferral guard, which had no successor, now drives `run_season` directly
     #     instead of `run_campaign` — decoupled from mc_v18, not deleted)
+    # `engine/tests/test_combat_bridge_seam.py` does NOT clear this round (stays above, roster
+    # unchanged there): it dropped only 1 of its 2 mc_v18-using tests. The one that stays,
+    # `test_flag_on_is_a_no_op_on_the_currently_reachable_campaign`, has no decoupled substitute —
+    # its claim needs a full campaign driven through real organic triggers, which only
+    # `engine.mc_v18.run_campaign` can currently do. See that file's own docstring.
     # ─────────────────────────────────────────────────────────────────────────────────────────
     # tools
     'tools/balance_oracle.py',
@@ -93,8 +100,8 @@ ALLOWED_IMPORTERS = {
     # unpack three values" — a reason that stopped being true in the same commit that wrote it. An
     # adversarial pass caught it; the file is deleted, not kept as a convenience nobody uses.
     #
-    # ROSTER 16 -> 9 -> 5 (the second drop is the FOUR LINES DELETED block above), counted from
-    # this tuple rather than from arithmetic; the AST scan below finds the same 5. None of the
+    # ROSTER 16 -> 9 -> 6 (the second drop is the THREE LINES DELETED block above), counted from
+    # this tuple rather than from arithmetic; the AST scan below finds the same 6. None of the
     # three non-test importers that remain (`balance_oracle`, `campaign_output_probe`,
     # `trace_execution_phases`) is shipped engine code — they are tools.
     # ─────────────────────────────────────────────────────────────────────────────────────────
