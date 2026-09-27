@@ -13,7 +13,7 @@ from __future__ import annotations
 from typing import Any, Optional
 
 from ..data import files
-from ..data.rosters import roster_map
+from ..data.rosters import load_yaml, roster_map
 from ..gaps import NoProducer, Unspecified
 
 # ⚠ THE ROLE NAMES ARE DATA, NOT A LITERAL HERE. A role maps to the roster that declares its
@@ -40,9 +40,8 @@ _CONTRACTS_CACHE: list = []
 def _contracts() -> list:
     """`references/module_contracts.yaml`'s `modules:` list, parsed once."""
     if not _CONTRACTS_CACHE:
-        import yaml as _y
         text = files.MODULE_CONTRACTS_YAML.read_text()
-        _CONTRACTS_CACHE.append((_y.safe_load(text) or {}).get("modules") or [])
+        _CONTRACTS_CACHE.append((load_yaml(text) or {}).get("modules") or [])
     return _CONTRACTS_CACHE[0]
 
 

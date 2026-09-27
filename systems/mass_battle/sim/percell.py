@@ -9,7 +9,21 @@ __all__ = ['_erode_cell_morale_from_damage', '_apply_with_spill', '_ColBlock', '
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
-    Depth is the reserve queue (refill + fatigue rotation + flank-refusal in later increments)."""
+    Depth is the reserve queue (refill + fatigue rotation + flank-refusal in later increments).
+
+    [A6, ED-MB-0067 Part A -- squad-engagement synthesis, "Missile ammunition and resupply"] A first
+    version put a `volleys` count HERE, at column-block granularity (matching `stamina`'s own
+    granularity, one interpretation of "the same ledger stamina already uses"). REMOVED after
+    adversarial review found it a genuine structural defect, not just an imprecise precedent claim:
+    a column BLOCK is shared across whatever subunits currently occupy that absolute column (see
+    build_column_grid/sync_col_grid, keyed on column position, not identity), so (a) under
+    MB_CLOSE_RANKS=1 (the shipped default) a ranged sub-unit that shifts files onto a not-yet-seen
+    column gets a BRAND NEW _ColBlock at MB_VOLLEYS_START -- free ammo, not a resupply -- and (b)
+    under MB_CLOSE_RANKS=0 (the golden-pinned config) `_ammo_cols` (the caller's column lookup) can
+    come back empty when col_grid hasn't been re-synced, silently disabling metering entirely rather
+    than gating it. Ammo now lives on Subunit.volleys instead (hierarchy/units.py, mirroring
+    Subunit.stamina's own EXISTING per-subunit ledger and its own-else-inherited-Unit precedent
+    exactly) -- ammo belongs to the shooter, not to a column position other subunits pass through."""
     __slots__ = ('col', 'density', 'start_density', 'stamina', 'depth')
     def __init__(self, col, density, depth):
         self.col = col

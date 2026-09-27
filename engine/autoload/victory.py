@@ -1,5 +1,5 @@
 """
-sim/autoload/victory.py — Victory check — peninsular_sovereignty is the SOLE victory function per GD-1
+engine/autoload/victory.py — Victory check — peninsular_sovereignty is the SOLE victory function per GD-1
 
 Canon source: canon/02_canon_constraints.md §B GD-1; designs/provincial/victory_v30.md §0
 Game Design constraints applicable: GD-1

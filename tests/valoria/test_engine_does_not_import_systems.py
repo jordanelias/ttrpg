@@ -198,9 +198,10 @@ def test_this_check_can_observe_its_own_failure(tmp_path):
         'the pattern must not fire on a function-local import — that is a different problem'
 
 
-#: The ONE surviving seam, declared rather than invisible. `engine/cross_scale/combat_bridge.py`
-#: inserts `systems/combat/combat_engine_v1/` onto `sys.path` and imports `combatant` and `wrapper`
-#: by BARE NAME. It was invisible to every instrument in this file until 2026-08-22: both regexes
+#: The ONE surviving seam, declared rather than invisible. `engine/substrate/pc_engine.py` (until
+#: 2026-09-25, `engine/cross_scale/combat_bridge.py`'s own loader) inserts
+#: `systems/combat/combat_engine_v1/` onto `sys.path` and imports `combatant` and `wrapper` by BARE
+#: NAME. It was invisible to every instrument in this file until 2026-08-22: both regexes
 #: look for the literal token `systems`, and the import probe below used to filter `sys.modules` by
 #: the `systems.` prefix — under which those two modules appear as `combatant` and `wrapper`.
 #:
@@ -213,13 +214,13 @@ def test_this_check_can_observe_its_own_failure(tmp_path):
 #: out of scope for a step whose subject is the composition registry.
 #:
 #: It can only shrink. Converting it deletes this entry.
-#: SECOND ENTRY ADDED 2026-09-05 (ED-IN-0204, the adoption). `season/combat_seam.py` is the SAME
-#: seam from the season loop's side, into the same flat module set, following combat_bridge's
-#: discipline deliberately (its own header cites it as precedent). It is declared rather than
-#: converted for the identical reason the first entry gives: dotted-path loading would give
-#: `wrapper`/`combatant` a second identity in a process that also loads them flat, which the
-#: balance workbench does. Still shrink-only: converting either one deletes its entry.
-PATH_SEAM_ALLOWED = {'cross_scale/combat_bridge.py', 'season/seam/wrappers/combat.py'}
+#: A SECOND ENTRY WAS ADDED 2026-09-05 (ED-IN-0204, the adoption): `season/combat_seam.py`, later
+#: `season/seam/wrappers/combat.py`, the SAME seam from the season loop's side. CONSOLIDATED
+#: 2026-09-25: both former loaders now call ONE leaf, `substrate/pc_engine.py`, which owns the only
+#: spelling of the path and the only insert. The seam still cannot be a dotted import, for the
+#: reason above: dotted-path loading would give `wrapper`/`combatant` a second identity in a
+#: process that also loads them flat, which the balance workbench does. Still shrink-only.
+PATH_SEAM_ALLOWED = {'substrate/pc_engine.py'}
 
 
 def _chain_hits(expr, assigned, names_re):
@@ -257,11 +258,21 @@ def _relative_module_files(text, path):
     blindness looked exactly like a fix. `engine/season/` was decomposed and every path it derives
     moved into ONE anchor module, `season/data/files.py` — which is good architecture and which
     deleted the literal `"systems"` from `combat_seam.py`. The insert did not move:
-    `sys.path.insert(0, str(_PC))` is still there, with `_PC = files.PC_ENGINE_DIR`. The chain
+    `sys.path.insert(0, str(_PC))` was still there, with `_PC = files.PC_ENGINE_DIR`. The chain
     below followed local NAME assignments only, so it stopped at `files` and reported the file
     clean. A blocking gate reporting a live seam as absent is the same defect this whole module
     exists to prevent, one level up: consolidating an anchor is exactly the kind of ordinary,
     correct refactor that must not be able to hide a seam.
+
+    ⚠ THE CONCRETE CASE THIS WAS BUILT FOR IS GONE, AND THE MECHANISM STAYS ANYWAY. `_PC =
+    files.PC_ENGINE_DIR` was deleted 2026-09-25 when `combat_bridge.py` and `season/seam/wrappers/
+    combat.py`'s loaders were consolidated into `engine/substrate/pc_engine.py`, whose own
+    `PC_ENGINE_DIR` is a LOCAL assignment the chain below catches without this one-hop branch (see
+    `PATH_SEAM_ALLOWED`'s docstring). No file in the current tree exercises the one-hop path, so
+    nothing plants a two-file hop to prove this branch still works if it broke — an honest gap
+    (`CLAUDE.md` §0.1 pt 2), not a claim that it is covered. Kept because the shape it catches
+    (an anchor consolidation moving a seam's literal one hop away) is a correct refactor pattern,
+    not a one-time accident, and could recur.
 
     Relative imports only, and one hop only. That is not laziness: a relative import names a file
     unambiguously from the importer's own location, so the resolution cannot be wrong, and every
@@ -402,7 +413,8 @@ def test_importing_every_engine_module_pulls_in_no_subsystem():
 # §0.4 is the cadence this serves.
 @pytest.mark.slow
 def test_the_one_declared_path_seam_is_still_the_only_one():
-    """`combat_bridge` reaches into `systems/` by `sys.path` + bare name. That is a real seam and it
+    """`substrate/pc_engine.py` reaches into `systems/` by `sys.path` + bare name — the one leaf
+    both `combat_bridge` and the season combat seam load through. That is a real seam and it
     is DECLARED here rather than left invisible — the ratchet's own rule is that a seam which cannot
     move yet is added deliberately, with its reason, never as a drive-by.
 

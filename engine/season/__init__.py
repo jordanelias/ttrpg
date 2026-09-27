@@ -32,6 +32,9 @@ itself and prints `PROBE FLIPS 0` no matter what changed. That number was quoted
 five commit messages before an independent verifier caught it.
 
 Every path this package derives is named once in `engine.season.data.files`, the only module here
-allowed to anchor itself on its own module location. That is checkable rather than aspirational:
-grepping the dunder-file spelling across `engine/season/` must print exactly that one file.
+allowed to anchor itself on its own module location. That is checkable, though not by a bare grep
+for the dunder-file spelling across `engine/season/` printing exactly that one file -- a comment
+discussing the invariant matches it too. The narrower, actually-true claim: `data/files.py` owns
+every path to a registry the package loads; a test file legitimately resolving its own `.py` for an
+AST walk is not a second anchor.
 """

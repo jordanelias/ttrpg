@@ -105,13 +105,12 @@ def rescales() -> dict:
     ⚠ AND THERE IS NO CLASSIFIER. 23 of the 47 match none of the institution words the other 24
     do, so a keyword rule would cover half the corpus and silently mis-scale the rest — the ROUTER
     `W10` deleted, returning as a corpus tool. Measured before deciding not to build one."""
-    import yaml
     out: dict = {}
     d = files.EXERCISES_DIR
     if not d.is_dir():
         return out
     for f in sorted(d.glob("*.yaml")):
-        doc = yaml.safe_load(f.read_text()) or {}
+        doc = load_yaml(f.read_text()) or {}
         sc = doc.get("scale")
         if doc.get("case") and isinstance(sc, dict):
             if not sc.get("why"):

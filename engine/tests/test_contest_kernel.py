@@ -1,5 +1,5 @@
 """
-sim/tests/test_contest_kernel.py — pytest gate for the promoted groundup contest kernel.
+engine/tests/test_contest_kernel.py — pytest gate for the promoted groundup contest kernel.
 
 Stage 1b (designs/audit/2026-06-30-contest-stage0-reconciliation): the 9-module groundup
 kernel was relocated into systems/social_contest/sim/contest/ and unified onto the ONE canonical σ-kernel

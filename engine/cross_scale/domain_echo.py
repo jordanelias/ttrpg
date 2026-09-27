@@ -1,5 +1,5 @@
 """
-sim/cross_scale/domain_echo.py — Domain Echo (§5) — scene → faction stat propagation
+engine/cross_scale/domain_echo.py — Domain Echo (§5) — scene → faction stat propagation
 
 Canon source: designs/architecture/scale_transitions_v30.md §5
 

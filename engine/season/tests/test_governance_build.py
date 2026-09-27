@@ -1845,7 +1845,7 @@ def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_seas
     diverged, 115 of the season's acts differing in id or verb by the season's end. One seed; not
     swept."""
     from ..harness import populated
-    from ..loop import deliberate
+    from ..loop import driver
 
     def season(strip):
         w = build_realm(0)
@@ -1854,14 +1854,20 @@ def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_seas
                 del w.sites[s.id]
         dw = {s.id: s.rung for s in _dwellings(w)}
         qs = []
-        inner = deliberate.questions_for
+        inner = driver.questions_for
 
         def spy(w_, p, since=None):
             out = inner(w_, p, since)
             qs.extend(out)
             return out
         with monkeypatch.context() as m:
-            m.setattr(deliberate, "questions_for", spy)
+            # ⚠ MERGE, 2026-09-27 (ED-IN-0206, main): the reader moved from `loop.deliberate` back
+            # to `loop.driver` -- the driver now builds the per-person question projection at
+            # barrier 2 (`SeasonDriver._questions_at_barrier`) rather than `deliberate` calling
+            # `questions_for` itself. The spy must name the module the reader actually lives in
+            # (the same lesson `wd_extra.py`'s own history records), or it patches a name nothing
+            # reads and the counts below come back silently empty.
+            m.setattr(driver, "questions_for", spy)
             out = populated.run(seasons=1, w=w)
         return w, dw, qs, out
 

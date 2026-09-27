@@ -19,20 +19,30 @@ store byte-identical -- by ANY route, not only through the gate.
 `sense()`, builds a `View`, calls `choose` per person; reads a frozen `World`, **for `sense`
 only**; token: none."* What the body does beyond that:
 
-- it reads `w.fixtures` and calls `questions_for(w, p)`, a `world_q` read that is not `sense`;
 - it sets `w.step` and `w._in_parallel_map` -- barrier bookkeeping, not a store -- and writes the
   DRIVER's own `self.scenes` / `self._queued` / `self._spent` and each released `a.scene` / `a.id`,
   all on objects that are not `World` stores (the acts are this step's RETURN, the matrix's
   `(Act[], returned)` row, and enter the act store only at RESOLVE).
 
-⚠ **`w._rehome()` WAS CALLED HERE AND IS NOT ANY MORE (G2, disposing of `ED-IN-0206`'s finding).**
-It MUTATED the tenure store during a barrier that owns nothing and holds no token -- found by the
-Fable gate on Arc 1, left undecided by L5 as *"a Layer-1 question, not this unit's"*, and handed
-to G2 by the plan (*"It is this unit's"*). Moved to the MATTER barrier rather than licensed by
-amending the `04` row: MATTER is the last barrier before the freeze, holds a token, and nothing
-between it and this step can create a Person, so every Tenure read here is already homed. The
-`w.tenures` getter's own `_rehome()` call went with it, since that was the same mutation reached
-through any `world_q` query this step makes. See `World._rehome`.
+None of that is L5's doing -- the body is unchanged from when it was a method on `SeasonDriver` --
+but the module boundary is what makes the divergence checkable, so it is recorded here rather than
+left for a reader to find under a header that reads like conformance. Found by the Fable gate on
+Arc 1 and filed under `ED-IN-0206`.
+
+⚠ **`w._rehome()` AND `questions_for(w, p, since)` WERE CALLED HERE AND ARE NOT ANY MORE (G2,
+disposing of `ED-IN-0206`'s finding; RESOLVED 2026-09-25).** `_rehome()` MUTATED the tenure store
+during a barrier that owns nothing and holds no token, and `questions_for` was a `world_q` read
+that is not `sense` -- left undecided by L5 as *"a Layer-1 question, not this unit's"*, and handed
+to G2 by the plan (*"It is this unit's"*). Read together, `04:115` (AX-4, one write path), `04:155`
+(the driver owns the caches' lifetimes), `04:158` (this row), `04:154` (a decision may read
+`Question[]`) and `04:976` (PART D row 41: DELIBERATE runs "on a projection built at barrier 2")
+put both at the driver rather than licensing them here by amending the `04` row (layer-conformance
+B4): it rehomes before the freeze -- MATTER is the last barrier before the freeze, holds a token,
+and nothing between it and this step can create a Person, so every Tenure read here is already
+homed -- and builds the per-person question projection (`SeasonDriver._questions_at_barrier`),
+which this step receives as `questions`. The `w.tenures` getter's own `_rehome()` call went with
+it, since that was the same mutation reached through any `world_q` query this step makes. See
+`World._rehome`.
 """
 
 from __future__ import annotations
@@ -47,7 +57,6 @@ from ..data.matrix import Step
 from ..data.requires import REQUIRES_STEMS
 from ..decision import aggregate_questions
 from ..gaps import Forbidden, Ungraded
-from ..queries.world_q import questions_for
 from ..state.carriers import Act, Person
 from ..state.world import World
 from ..trace_log import TRACE
@@ -56,18 +65,19 @@ from ..trace_log import TRACE
 
 # -- DELIBERATE -- a MAP, not a barrier (S26) ---------------------------
 def deliberate(self, choose: Callable[..., list[Act]], question: Any,
-               subsistence: Callable[[Person, World], int]) -> list[Act]:
+               subsistence: Callable[[Person, World], int], questions: dict) -> list[Act]:
     w = self.w
     if not w.frozen:
         raise Forbidden("DELIBERATE entered on an unfrozen world", "S26.2",
                         law="S26.2 -- the world is FROZEN from the end of MATTER to the start of RESOLVE. THIS IS WHAT MAKES THE MAP SAFE TO PARALLELISE")
     w.step = Step.DELIBERATE
     TRACE.step("DELIBERATE", "enter")
-    # ⚠ G2: `w._rehome()` STOOD HERE AND MOVED TO THE MATTER BARRIER. Its reason is unchanged --
-    # `budget`, `person_side_eligible` and `questions_for` read `p.tenures` DIRECTLY, so a Tenure
-    # added before its subject existed must be homed before any person-side read -- but the
-    # repair is a store mutation and this step owns no store. MATTER runs it before the freeze,
-    # which is before this line in every season. See the module docstring.
+    # ⚠ G2: `w._rehome()` STOOD HERE AND MOVED TO THE MATTER BARRIER (2026-09-25, ED-IN-0206). Its
+    # reason is unchanged -- `budget`, `person_side_eligible` and `questions_for` read `p.tenures`
+    # DIRECTLY, so a Tenure added before its subject existed must be homed before any person-side
+    # read -- but the repair is a store mutation and this step owns no store (04:158). MATTER runs
+    # it before the freeze, which is before this line in every season, as the owner of barrier
+    # lifetimes (04:155). See the module docstring.
     acts: list[Act] = []
     k_view = w.fixtures.get("view_k")
     # ⚠⚠ `scene_budget` HAS TWO READERS SINCE `U2` AND THEY READ IT AS TWO DIFFERENT QUANTITIES.
@@ -111,7 +121,10 @@ def deliberate(self, choose: Callable[..., list[Act]], question: Any,
         # An explicit `question` still overrides, so a probe can name the q it is testing.
         # ⚠ `U2`: SINCE THIS PERSON LAST DELIBERATED, not since last season. `None` on their first
         # deliberation of the season means `(tick - 1, 0)`, which is the pre-tick reading exactly.
-        qs = questions_for(w, p, self._deliberated_at.get(p.id))
+        # ⚠ READ FROM THE PROJECTION, NOT COMPUTED HERE (2026-09-25): the driver builds
+        # `questions_for(w, p, since)` for every person at barrier 2 (`04:976`, PART D row 41) and
+        # passes it in; a decision may read `Question[]` (`04:154`), not the World (`04:158`).
+        qs = questions[p.id]
         # `H-54`, DECLARED. This was `qs[0] if qs else None` — an `absent` hole filled inside
         # a subscript, with no row and no alternative (`G1`). `question_sources` is ORDERED,
         # so taking the first silently ruled that A DATE ALWAYS BEATS A NEED, which decides

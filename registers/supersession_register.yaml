@@ -469,3 +469,38 @@ entries:
       campaign path), and systems/threadwork/sim/operations.py OperationResult.tn reports 7 where it reported
       8 for binding/POP operations. Both are report values catching up with what the engine was already
       doing.'
+
+  - superseded_id: "PP-711 (General's Command + unit quality modifier morale-start formula)"
+    scope: >
+      PP-711 ratified a strategic-layer unit's starting morale as the general's Command stat plus
+      a unit-quality modifier (.designs/systems/mass_battle/reference/mass_battle_v30.md:230-231,
+      :660). It was never implemented: `systems/mass_battle/sim/massbattle.py:_faction_to_unit`
+      hardcoded `morale=5, morale_start=5` for every faction, with its own honest
+      `[canonical: inherited default — see GAP above]` comment recording that no code ever built
+      the formula. Superseding it is therefore a NEW derivation landing at that hardcode, not an
+      edit to prior logic.
+    superseded_by: "ED-MB-0068 (executing directive d.1, ruled ED-MB-0067)"
+    superseded_date: "2026-09-26"
+    replacement: >
+      A strategic-layer unit's starting morale is now derived from its faction's Stability
+      (`Faction.Sta`, engine/autoload/game_state.py, registry floor 0 / ceiling 7) via
+      `_morale_start_from_stability` in massbattle.py: `max(1, min(7, round(Sta)))`. The floor of
+      1 (not 0) and the round-to-nearest-int mapping are THIS IMPLEMENTATION'S OWN choice, not
+      part of Jordan's d.1 ruling — flagged `[ASSUMPTION: ... Jordan-vetoable]` at the derivation
+      itself, on the basis that canon's Morale floor is 1 while the general is present
+      (mass_battle_v30.md:254) and rout fires at morale<=0, so a Stability-0 faction must not
+      field a pre-routed unit. `_GarrisonStub` (the uncontrolled-territory defender, which has no
+      backing Faction) is held at the PRE-change flat morale-start of 5, unchanged, so the swap is
+      attributable to real factions' Stability alone. Goldens re-recorded:
+      `engine/tests/test_mc_v18_regression.py` (seed-0, n=2) and
+      `engine/tests/test_f7_smoke_oracle.py` (seed-42, n=8) — both move because
+      `_try_conquest` -> `resolve_mass_battle` -> `_faction_to_unit` runs on every
+      campaign-reachable Military Conquest. `tests/valoria/test_mass_battle_byte_exact.py`,
+      `tests/valoria/test_field_golden_pins.py` and `tools/ci_golden_modes_check.py`'s three
+      pinned modes stay byte-exact (verified before and after) — none of them route through
+      `_faction_to_unit`, which is the control that isolates this change to the strategic seam.
+    files_to_recheck:
+      - .designs/systems/mass_battle/reference/mass_battle_v30.md   # reference only (§0.05); not gating
+      - systems/mass_battle/sim/massbattle.py   # DONE — the derivation itself
+      - engine/tests/test_mc_v18_regression.py   # DONE — golden re-recorded
+      - engine/tests/test_f7_smoke_oracle.py   # DONE — golden re-recorded

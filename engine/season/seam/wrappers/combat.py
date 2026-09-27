@@ -18,9 +18,11 @@ This module does not decide anything about combat. It derives two parties, hands
 engine with a deterministic RNG, and returns what the engine says. Every combat rule stays in
 `systems/combat/`, which this chain may read and may not edit.
 
-⚠ THE PRECEDENT IS `engine/cross_scale/combat_bridge.py`, AND IT IS FOLLOWED RATHER THAN
-REINVENTED (§0: *answered by precedent — the tree has already decided this shape somewhere else*).
-That module is the same seam from the campaign side, and its discipline is the part worth copying:
+⚠ THE LOADER IS SHARED: `engine/substrate/pc_engine.py`, the one path seam into
+`combat_engine_v1/`, which `engine/cross_scale/combat_bridge.py` (the same seam from the campaign
+side) also calls. This module translates that leaf's raise into its typed refusal, `ENGINE-UNAVAILABLE`.
+⚠ THE PARTY DISCIPLINE FOLLOWS `combat_bridge.py` AS PRECEDENT RATHER THAN REINVENTING IT (§0:
+*answered by precedent — the tree has already decided this shape somewhere else*). Its discipline is the part worth copying:
 derive EXACTLY ONE field from something the actor genuinely has, leave every other field at the
 class's own constructor default, and return a typed gap rather than fabricate a party. The
 `Combatant` defaults it names — strength 4, agi 4, end 4, cog 3, att 3, spirit 3, focus 3, disp 4,
@@ -64,10 +66,8 @@ that exists rather than a mapping between types that do not meet.
 from __future__ import annotations
 
 import random
-import sys
 from typing import Any, Optional
 
-from ...data import files
 from ...decision import body_band_penalty
 # ⚠ THE LEAF, NOT THE PACKAGE. `...manifest` re-exports from `registry.py`, which imports
 # THIS module to register it — importing the package here closes that loop and the cycle
@@ -75,39 +75,22 @@ from ...decision import body_band_penalty
 from ...manifest.providers import provider
 from ...state.ids import H
 
-# ⚠ THE SILENT ONE, AND IT IS NAMED HERE BECAUSE ITS FAILURE IS GREEN. This used to climb four
-# `parents[...]` levels from this module's own location -- a depth that is a fact about where this
-# file sits rather than about the tree. Move the file one directory and `_PC` names something that
-# does not exist, `engine()` returns `None`, `resolve()` answers `ENGINE-UNAVAILABLE`, the six seam
-# tests SKIP, and the run reports success. The anchor is asserted at import in `season.data.files`.
-_PC = files.PC_ENGINE_DIR
-
 _LOADED: Optional[tuple] = None
 _LOAD_ERROR: str = ""
 
 
 def engine() -> Optional[tuple]:
-    """`(wrapper, combatant)` or `None`, loaded on FIRST USE and by PATH.
-
-    ⚠ DEFERRED AND BY PATH, WHICH IS THE PRECEDENT'S SHAPE AND NOT LAZINESS. `combat_engine_v1/`
-    is a flat module set with its own bare-import convention (`combat_bridge.py` says so, and the
-    balance workbench depends on it), so it cannot be imported as `systems.combat...` without
-    giving those modules a second identity. Deferring also means the tracer still runs when the
-    engine is absent — this seam degrades to a named gap rather than an ImportError at load."""
+    """`(wrapper, combatant)` or `None`: the substrate leaf's RAISE, translated to this seam's typed
+    refusal (04 §A.2:162). Loaded on FIRST USE by the one path seam, engine/substrate/pc_engine.py;
+    the import is deferred so the tracer still imports where the engine tree is absent."""
     global _LOADED, _LOAD_ERROR
     if _LOADED is not None or _LOAD_ERROR:
         return _LOADED
-    if not _PC.is_dir():
-        _LOAD_ERROR = f"{_PC} does not exist"
-        return None
     try:
-        if str(_PC) not in sys.path:
-            sys.path.insert(0, str(_PC))
-        import wrapper as _w                      # noqa: E402  (flat module set, bare name)
-        import combatant as _c                    # noqa: E402
-        _LOADED = (_w, _c)
+        from engine.substrate import pc_engine
+        _LOADED = pc_engine.load()          # a PCEngine: (wrapper, combatant) BY NAME — the order this seam always used
         return _LOADED
-    except Exception as e:                        # a real import failure is a NAMED gap
+    except Exception as e:                  # a real load failure is a NAMED gap
         _LOAD_ERROR = f"{type(e).__name__}: {e}"
         return None
 
