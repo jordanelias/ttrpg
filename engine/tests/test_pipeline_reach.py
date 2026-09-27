@@ -53,14 +53,8 @@ file) already covers the live claim.
 
 `combat-bridge-on` is NOT deleted — a first pass wrongly reasoned it "exercised only mc_v18's own
 dormant dispatch branch" and cut it along with the rest. An antagonist pass caught the error: the
-branch it exercises (`_resolve_slot`'s `st == "combat"` case, `engine/cross_scale/scene_dispatch.py`)
-is live season-loop dispatch code, not mc_v18's — mc_v18 only ever supplied the flag value — and
-neither retained golden (`test_f7_smoke_oracle.py`, `test_mc_v18_regression.py`) ever sets
-`DISPATCH_COMBAT_BRIDGE`, so deleting it with no successor would have left NOTHING in the tree
-exercising `scene_type="combat"` at all. It is RESTORED below as an unconditional test (no xfail,
-no `engine.mc_v18` import — it sets `world.dispatch_combat_bridge` directly), which is also strictly
-more real coverage than the original: the original only ran for real under a manually-set env var
-that no CI pass ever sets, so in practice it recorded an xfail and never executed the assertion.
+branch it exercises (`_resolve_slot`'s `st == "combat"` case) is live season-loop dispatch code,
+not mc_v18's. It is RESTORED below, decoupled from mc_v18 — see that test's own docstring.
 
 With `XFAIL_MANIFEST` gone, this file no longer has an xfail-manifest burn-down list — every
 assertion below is either an unconditional strict check or the "converted stub invocations" rows

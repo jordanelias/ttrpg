@@ -25,14 +25,8 @@ needed are gone.
     `create_world` time, and a campaign run never re-derives them; falsifier 1 above (world-gen
     time) already covers the live claim, and the campaign-boundary half was mc_v18's own
     serialization step, not a game property.
-`test_knots_stay_unpopulated_honest_deferral` (falsifier 4) is REWRITTEN, not deleted, below — it
-drives `systems.overview.sim.season.run_season` instead of `engine.mc_v18.run_campaign`, since the
-claim it guards has no successor elsewhere. It supplies `engine.cross_scale.scene_dispatch
-.run_scene_phase` (the same function `mc_v18._faction_actions_callback` calls, called directly, no
-faction-action logic) as `run_season`'s `action_callback`, so the season's scene-dispatch phase —
-where a fieldwork call site is likeliest to eventually land — actually runs each season; an earlier
-version of this rewrite passed no callback at all and silently stopped watching that phase, caught
-by an antagonist pass the same day.
+`test_knots_stay_unpopulated_honest_deferral` (falsifier 4) is REWRITTEN, not deleted, below,
+since the claim it guards has no successor elsewhere — see that test's own docstring for how.
 """
 from __future__ import annotations
 
@@ -168,5 +162,5 @@ def test_knots_stay_unpopulated_honest_deferral():
     victory.reset()
     scene_slate.clear()
     for _ in range(5):
-        run_season(world, action_callback=lambda w: scene_dispatch.run_scene_phase(w, w.rng))
+        run_season(world, action_callback=scene_dispatch.run_scene_phase)
     assert world.knots == {}, "world.knots is no longer empty — honest-deferral guard tripped"
