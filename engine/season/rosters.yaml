@@ -1384,12 +1384,15 @@ tables:
       ⚠ `dwelling: {}` IS EMPTY ON PURPOSE (`24d-i`, the control arm beside `wear_per_season`'s
       `dwelling: 0`). No floor means no band edge, so `loop/matter.py`'s `_crossings` fires
       nothing for a dwelling at any wear. `halved` and `doubled` leave an empty cell empty.
-      ⚠ AN EMPTY CELL IS NOT A WORKABLE SITE, AND THE `floor` READ DOES NOT SAY SO TYPED:
-      `queries/world_q.py`'s `floor` stem takes `min(floors.values())`, which raises a bare
-      `ValueError` on `{}`. It is unreached only while no question names a dwelling as a
-      referent, since `work` binds its `site` from the referent. None does at the control arm;
-      `24d-i`'s test in `engine/season/tests/test_governance_build.py` asserts it over one
-      populated season.
+      ⚠ AN EMPTY CELL IS NOT A WORKABLE SITE, AND THE `floor` READ SAYS SO TYPED: `queries/
+      world_q.py`'s `floor` stem checks `if not floors:` before `min(floors.values())` and raises
+      a typed `Unspecified` (S12.1) rather than a bare `ValueError` on `{}` -- CORRECTED
+      (code-review pass on the accumulated Phase alpha+beta diff, 2026-09-27): this said the read
+      was untyped and would crash, which was true when `24d-i` first landed and is not true of the
+      tree today (`world_q.py`'s own comment at the guard names `dwelling`'s control-arm row by
+      id). It is unreached only while no question names a dwelling as a referent, since `work`
+      binds its `site` from the referent. None does at the control arm; `24d-i`'s test in
+      `engine/season/tests/test_governance_build.py` asserts it over one populated season.
     cells:
       harbour:
         bulk_shipping:   800

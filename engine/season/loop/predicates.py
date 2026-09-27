@@ -286,10 +286,22 @@ def _req_establish(w: "World", a: "Act") -> bool:
                 and off.faction == cur.faction and off.conferral == cur.conferral
                 and off.revocation == cur.revocation):
             return False                   # re-founding, which `writes:` does not declare
-    # 5. G3 -- the re-stamp writes every sitting holder's grant; another person's needs the seat.
-    others = any(t.kind == "hold" and t.object == off.id and t.live and t.subject != a.actor
-                 for t in w.tenures)
-    return not others or may_fill(w, a.actor, a.via, off)
+    # 5. G3 -- the re-stamp writes EVERY sitting holder's grant, the actor's own included.
+    #
+    # ⚠ CORRECTED (code-review pass on the accumulated Phase alpha+beta diff, 2026-09-27): this
+    # excluded `t.subject == a.actor` from the check, on the docstring's own reasoning -- "another
+    # person's needs the seat" -- but that reasoning stopped being true the moment G3's antagonist
+    # pass closed T-m for seat-hold re-grants (`state/gate.py::tenure_write_basis`, `04:330`): T-m
+    # NEVER admits re-granting a seat-hold, not even the actor's own, so a sole holder's re-stamp
+    # needs `may_fill` exactly as another person's does. REPRODUCED DIRECTLY before the fix:
+    # `p_king`, sole holder of `off_mayor`, re-establishing it via `off_mayor` itself passed this
+    # precondition (`others` was `False`) and then raised an UNCAUGHT `NotYours` inside `_fold`,
+    # which does not catch it -- a season-killing crash where the row's own `establish.refused`
+    # should have fired. `held` is `True` for a founding too (no holder exists yet, self or
+    # other), so founding a brand-new office is unaffected -- `may_fill` is only asked when a
+    # live `hold` already exists to re-stamp.
+    held = any(t.kind == "hold" and t.object == off.id and t.live for t in w.tenures)
+    return not held or may_fill(w, a.actor, a.via, off)
 
 
 @requires_predicate("release")

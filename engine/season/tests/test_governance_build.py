@@ -1042,6 +1042,46 @@ def test_13f_an_establish_on_an_existing_id_changes_the_remit_and_reaches_the_si
     assert [e.kind for e in again] == ["establish.refused"], [e.kind for e in again]
 
 
+def test_13f_a_sole_holder_re_stamping_their_own_office_refuses_and_does_not_crash(monkeypatch):
+    """FOUND BY A `/code-review` PASS ON THE ACCUMULATED PHASE ALPHA+BETA DIFF, 2026-09-27, AND
+    REPRODUCED DIRECTLY BEFORE THIS FIX: `_req_establish`'s clause 5 excluded the ACTOR from its
+    `others` check -- "another person's needs the seat" -- so a SOLE holder re-stamping their own
+    office's remit skipped `may_fill` entirely and the precondition admitted the act. `state/
+    gate.py::tenure_write_basis`'s T-m (G3's own antagonist-pass fix) never admits re-granting a
+    seat-hold, not even the actor's own, so the gate then raised `NotYours` -- UNCAUGHT by `_fold`,
+    which only catches `NoOpReceipt` -- and the season would have died instead of the row's own
+    `establish.refused` firing. `_req_establish`'s `held` now asks `may_fill` whenever ANY live
+    holder exists, self included -- the fix is `not held or may_fill(...)`, replacing `not others`.
+
+    `p_mid` is the SOLE holder here, exercising `off_reeve` itself as `via` (self-referential,
+    which `may_fill` refuses on its own terms too: `via == off.id`) -- the worst case, since it
+    was ALSO the case `_req_establish`'s old code admitted unconditionally whenever `others` was
+    empty. The mutation below is the control: forcing `may_fill` to `True` must flip the
+    precondition, proving the refusal above genuinely comes from asking it rather than from some
+    other clause refusing first."""
+    w, d = _establish_world()
+    _seat_reeve(w, ["issue"])
+    out = _establish(w, d, "e_self", _founding(remit=["issue", "dispatch"]),
+                     actor="p_mid", via="off_reeve")
+    assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
+    assert w.offices["off_reeve"].remit_acts == ["issue"], (
+        "the refused act still re-stamped the remit")
+
+    # MUTATION: confirm the refusal genuinely comes from `may_fill`'s real answer on THIS actor
+    # and THIS `via` (a self-referential seat, which `may_fill` refuses on `via == off.id` alone)
+    # -- not from some other clause. Forcing `may_fill` to `True` must flip the precondition to
+    # admit the act, which is the falsifier this test would miss if `held`/`may_fill` were never
+    # actually reached for the sole-holder case.
+    import engine.season.loop.predicates as PR
+    monkeypatch.setattr(PR, "may_fill", lambda *a, **k: True)
+    w2, d2 = _establish_world()
+    _seat_reeve(w2, ["issue"])
+    assert PR._req_establish(w2, Act(id="e_probe", actor="p_mid", verb="establish", via="off_reeve",
+                                     payload=_founding(remit=["issue", "dispatch"]))), (
+        "forcing may_fill to True did not flip the precondition -- it is not asking may_fill "
+        "for the sole-holder case, so the refusal above is not evidence the fix works")
+
+
 @pytest.mark.parametrize("change", [
     dict(faction="Church of Solmund"),
     dict(post="Warden"),
