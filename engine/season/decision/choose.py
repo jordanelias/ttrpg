@@ -1,17 +1,24 @@
 """`decision/` -- the `choose` member of `04_CODE_ARCHITECTURE.md` §A.2:133.
 
-`make_chooser` and everything it resolves by BARE NAME: `align` (which reads `ALIGNMENT`),
-`stance_toward`, `urgency`, and `pack_scenes` (with `_payload_of`).
+`make_chooser` and everything it resolves by BARE NAME: `stance_toward`, `urgency`, and
+`pack_scenes` (with `_payload_of`). `align` and `project` are imported from `options.py` and
+re-exported here, so `from .choose import align, project` still resolves.
 
-⚠ **THE BARE-NAME CLUSTER IS WHY THESE FOUR ARE ONE FILE, AND IT IS NOT A STYLE CHOICE.** Three
+⚠ **THE BARE-NAME CLUSTER IS WHY THESE ARE ONE FILE, AND IT IS NOT A STYLE CHOICE.** Three
 names in the old `decision.py` are read bare inside a body and rebound from OUTSIDE as module
 attributes -- `ALIGNMENT` (by `align`), `pack_scenes` (by `make_chooser`) and `belief_contradicts`
-(by `opening_set`, which is why that one lives in `options.py`). A bare name resolves in ITS OWN
-module's globals, so a rebind reaches it only if it targets the module the reader lives in. Split
-`align` from `make_chooser` and `PS.pack_scenes = spy` in the degree-sweep arms becomes a NO-OP
-that reports every branch identical -- a fabricated null, which `CLAUDE.md` §0.1 pt 4 calls the
-worse of the two directions. The rebind sites name `decision.choose` and `decision.options`
-directly for this reason; see `__init__.py`.
+(by `opening_set`). A bare name resolves in ITS OWN module's globals, so a rebind reaches it only
+if it targets the module the reader lives in: `PS.pack_scenes = spy` in the degree-sweep arms
+reaches `make_chooser` only because both live here, and a rebind aimed at the wrong namespace
+reports every branch identical -- a fabricated null, which `CLAUDE.md` §0.1 pt 4 calls the worse
+of the two directions. The rebind sites name `decision.choose` and `decision.options` directly for
+this reason; see `__init__.py`.
+
+⚠ **`align` (AND WITH IT THE `ALIGNMENT` REBIND) LIVES IN `options.py` NOW.** `opening_set`'s
+`H-146` refusal gate calls `align` and `project`, and reaching them here from `options.py` made
+`choose <-> options` an import cycle that executed at runtime. The same rule decides the new
+address: the rebind is `decision.options.ALIGNMENT`, because that is where the reader is defined.
+This module no longer binds `ALIGNMENT`, so a stale `decision.choose.ALIGNMENT` read fails loudly.
 
 ⚠ **`ALIGNMENT` AND `belief_contradicts` ARE NOT RE-EXPORTED FROM `__init__.py`** -- step 8's
 `_LADDER` lesson: a rebound value re-exported is a stale snapshot, and a reader who rebinds the
@@ -29,16 +36,13 @@ from ..data.rosters import PURSUIT_AXES, SCENE_PACKING_RULES, require_member
 # `PURSUIT_PROJECTION` / `PROJECTION_DEFAULT_CELL` were imported here until 2026-09-16 and
 # are not any more: the loop that read the 13x4 moved into `data/pursuits.to_axes`, its
 # single owner. Keeping the imports declared a dependency this module no longer has.
-from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL, VERB_TABLE
+from ..data.verbs import VERB_TABLE
 from ..gaps import Unspecified
 from ..state.carriers import Act, Candidate, Person, Question, Scene, Sensation, View
-from .options import exercised_seat, opening_set
-
-
-def align(verb: str, axis: str) -> float:
-    """§F2's `alignment(c.verb, axis)`. Sparse: an unlisted pair reads the table's own declared
-    `default_cell`, never a literal here."""
-    return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
+# `align` and `project` are DEFINED in `options.py` (see this module's docstring) and imported
+# here because `make_chooser`'s score calls both; `options` never imports this module.
+# `exercised_seat` is `options.py`'s own G3 helper (`via=exercised_seat(...)`, below).
+from .options import align, exercised_seat, opening_set, project
 
 
 def beneficiary_of(p: Person, c: Candidate) -> Optional[str]:
@@ -101,40 +105,6 @@ def benefits_me(p: Person, c: Candidate) -> float:
     ⚠ IT IS A FLOAT AND NOT A BOOL BECAUSE IT IS A SCORE TERM. `beneficiary_of` carries the
     identity for anything that needs to know WHO; this answers only *is it me*."""
     return 1.0 if beneficiary_of(p, c) == p.id else 0.0
-
-
-def project(p: Person) -> dict:
-    """A person's thirteen conviction weights, in the four-axis basis. `U3` / R-06a.
-
-    ⚠⚠ **§F2's `conviction[axis]` IS COMPUTED NOW, NOT LOOKED UP, AND THE FORMULA IS UNCHANGED IN
-    SHAPE.** V2 §F2 spells `score(c) = Σ_axis conviction[axis] · alignment(c.verb, axis)` and that
-    indexing only works if a person's convictions are KEYED BY AXIS — which is what
-    `pursuit_axes` used to be forced to be, holding `Precedent` (a conviction) beside
-    `self_preservation`, `suspicion` and `harm_borne` (three ad-hoc scalars) so the lookup had
-    something to hit. `pursuit_axes`'s own note named the conflation and predicted the repair.
-    So:
-
-        conviction[axis]  :=  Σ_conv  p.pursuits[conv] · projection[conv][axis]
-
-    and `Σ_axis` above is untouched. A person holds weights over the THIRTEEN; the projection is
-    the only thing that knows about axes.
-
-    ⚠ **THE MATRIX IS READ, NOT INVENTED** — `conviction_axis_matrix_v30.md` §2, with a per-cell
-    rationale in its §3. That is the difference between this table and `alignment`, whose own note
-    says of its cells *"a reason is not a citation"*. They multiply together, so which of the two
-    is argued and which is cited is worth being able to see.
-
-    ⚠ **A CONVICTION THE MATRIX DOES NOT LIST PROJECTS TO NOTHING, AND THAT IS THE SPARSE DEFAULT
-    RATHER THAN A SILENT DROP.** `PROJECTION_DEFAULT_CELL` is the declared 0.0; the loader has
-    already refused any conviction name outside the roster, so an unlisted pair here is a cell the
-    data chose to leave sparse, not a typo that got through."""
-    # ⚠ DELEGATED, NOT DUPLICATED. `data.pursuits.to_axes` is the one owner of
-    # *convictions → axes*, because a second caller appeared that does not have a `Person`:
-    # `data.cast.loyalty` projects a ROLE TEMPLATE's expected-conviction vector through the same
-    # 13×4. Keeping the loop here as well would be two owners of one rule (§8), and the two would
-    # be free to disagree about the sparse default.
-    from ..data.pursuits import to_axes
-    return to_axes(p.pursuits)
 
 
 def stance_toward(p: Person, referent: str) -> float:

@@ -531,4 +531,15 @@ DEFAULT_FIXTURES = Fixtures(
     # is tuned against nothing.
     # [JUSTIFIED: engine/season/hole_register.yaml H-128 -- the moral-wound depth; Part D names the cell and never the value, and the sweep brackets *does a wound scar at all* rather than a magnitude]
     scar_step=0,                       # `H-128`, swept 0 (control, SHIPPED) / 1 / 10
+    # `H-146` / `ED-IN-0261`. WHICH `pursuit_axes` MEMBER GATES `opening_set` -- deontology as a
+    # REFUSAL, read by `decision/options.py::opening_set`. The axis NAME is ruled (`deontological`, the
+    # NEG pole of `deontological/instrumental`) and the THRESHOLD is the person's own projected
+    # weight, so there is no magnitude here to sweep. `None` is the CONTROL and is SHIPPED, but NOT
+    # because no matching axis exists today -- a `layer-conformance` attack (2026-09-27) found that
+    # `instrumental` (`references/descriptor_registry.yaml:286`) already carries the same
+    # `deontological/instrumental` sign convention, so `refusal_axis="instrumental"` WOULD arm this
+    # gate against the current 13-pursuit content. `None` is shipped because arming it now is an
+    # unruled design choice, not because the axis is unavailable -- whether to arm it before or wait
+    # for `H6`'s 15-pursuit landing is for the orchestrator/Jordan to decide, not this row.
+    refusal_axis=None,                 # `H-146`, control None (SHIPPED)
 )

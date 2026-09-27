@@ -488,7 +488,7 @@ as position 15, and build-order item 6 (`15a`) is position `16` — one piece of
 | 14 | `18a` | |
 | 15 | **`6`** | ⚠ absorbed into G3, which already names `Act.via` |
 | 16 | **DONE** (§3.3) | |
-| 6a · 6b · 6c | `12b` · `12d` · `12c` | all three JORDAN-gated on R3 |
+| 6a · 6b · 6c | `12b` · `12d` · `12c` | 6a and 6c JORDAN-gated on R3; 6b (`12d`) **PARTIALLY DONE** — season-side rename landed (`ED-IN-0268`), registry/substrate rename deferred to the content landing |
 | 6d · 6e | **DONE** (§3.3) | 6d unwired |
 | 6f | **not scheduled** | the score function; needs 12b–12d's tables to have anything to dot against |
 | 6g | ~~**not scheduled**~~ ✅ **DONE 2026-09-24** (`ED-IN-0267`) | ~~H-71's SECOND half — how another person comes to know or contest someone else's seat. **Open by the ruling's own words**, not by omission~~ The *know* half closed at the reader: `epistemic.claim_subjects` expands a `hold`-Tenure receipt into (holder, office). **Contesting a seat** — a verb that acts on the now-legible claim — is separate, unruled, and nobody's position yet (the commit's own words: *"No consumer verb built, and none is this item's"*) |

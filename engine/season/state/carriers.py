@@ -497,9 +497,11 @@ class Person:
     # whatever the axis roster holds at read time.
     #
     # ⚠⚠ THIS IS WHY THE FIELD IS A BARE DICT AND NOT PRE-SEEDED WITH THE FOUR AXES. The axis
-    # roster is `references/descriptor_registry.yaml`'s `axis_roster` leaf, and `STR-2` (Jordan,
-    # 2026-09-17) RULES THAT ITS MEMBERS CHANGE -- the moral-value basis becomes
-    # `memory · substantive · equity · selfish`. Seeding the four current names here would put a
+    # roster is `references/descriptor_registry.yaml`'s `axis_roster` leaf, and its members are
+    # RULED TO CHANGE -- `ED-IN-0261` (Jordan, 2026-09-20, superseding `STR-2`'s four) makes the
+    # basis seven bipolar axes: `hierarchical↔equal · precedent↔substantive · partisan↔equitable ·
+    # selfish↔selfless · rigid↔flexible · grandiose↔humble · deontological↔instrumental`.
+    # Seeding the four current names here would put a
     # copy of a roster that is about to be replaced into a carrier, which is §0.05 clause 3's
     # *never keep a second copy* on the one field most likely to be migrated. An empty dict
     # inherits the new basis by not knowing about the old one.

@@ -55,3 +55,4 @@ exercised by this run.**
 | `body_step` | `0` | no — a harness fixture |
 | `wound_harm_model` | `scene_fraction` | no — a harness fixture |
 | `scar_step` | `0` | no — a harness fixture |
+| `refusal_axis` | `None` | no — a harness fixture |

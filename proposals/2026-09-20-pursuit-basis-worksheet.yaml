@@ -13,6 +13,13 @@
 #   pursuit_axes roster   -> references/descriptor_registry.yaml   (replaces conviction_axes)
 #   the 15x7 projection   -> engine/season/rosters.yaml            tables.pursuit_projection
 #   the verb x axis table -> engine/season/rosters.yaml            tables.alignment
+#   role-template weights -> engine/season/rosters.yaml            tables.role_template_pursuits
+#       ⚠ FAILS SILENTLY on a bad name: read via data/cast.py `loyalty` -> data/pursuits.py `to_axes`,
+#         which skips a pursuit PURSUIT_PROJECTION has no row for, and `table()` validates no keys.
+#         A missed migration here is wrong numbers, not an error -- the landing must check it itself.
+#   per-character weights -> references/npc_registry.yaml          each person's `convictions:` block
+#       RAISES on a bad name: read via data/cast.py `pursuits_of` -> data/pursuits.py `pursuit()`,
+#         which raises `Unspecified` on a non-canonical name.
 #
 # ⚠ R6 ATOMICITY: rows, axes, projection and alignment land in ONE commit or nothing imports.
 # `_load_alignment` and `_load_projection` refuse an unrostered key and an all-zero matrix at
@@ -186,7 +193,7 @@ scars:
   #   L4 constrains WHO writes, not WHEN: `social: true` means ONLY AN ACT MAY WRITE IT
   #     (holonic_ARCHITECTURE.md:173). At WITNESS the writer is the world processing an Event,
   #     which is the violation item 21 names. At RESOLVE the writer is the ACT, which is lawful.
-  #   "Who witnessed" is NOT private to WITNESS. `epistemic.py:440 observers_for(w, e, mode,
+  #   "Who witnessed" is NOT private to WITNESS. `epistemic.py:491 observers_for(w, e, mode,
   #     everyone)` is a standalone function; WITNESS calls it and RESOLVE can call it too, so
   #     there is ONE owner of perception (§8) rather than a duplicated predicate.
   #   Witnessing is already selective: `fan_out_mode = all_five` is the shipped, ruled default
@@ -220,6 +227,10 @@ decided_2026_09_20:
 
 open:
   - the 105 projection cells and the alignment re-cell   # yours
-  - faith as a pursuit, now that religion has its own vector
   - the crisis reader (the L5 edge) for both tracks
-  - H-80 is refused by the kill / wound ruling and should be closed rather than left planning the opposite
+  - >-
+    H-80 (a computed act cannot declare its OPERANDS). The premise this item first stated -- that
+    the kill / wound ruling refused H-80 -- was withdrawn the same day: kill / wound was ADMITTED,
+    unblocked by a one-off typed `requires` cell (verb_table.yaml), not by closing H-80's general
+    operand-channel gap. That gap is still open, and `fight`, `challenge` and `accept` may hit it
+    again when they land.

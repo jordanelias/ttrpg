@@ -24,8 +24,9 @@ string. Enforced BY PATH over this directory (`04:1046`).
 from __future__ import annotations
 
 from typing import Optional
-from ..data.rosters import PERSON_PREDICATES
-from ..data.verbs import ELIGIBILITY_KINDS, VERB_TABLE
+from ..data.pursuits import to_axes
+from ..data.rosters import PERSON_PREDICATES, PURSUIT_AXES, require_member
+from ..data.verbs import ALIGNMENT, ALIGNMENT_DEFAULT_CELL, ELIGIBILITY_KINDS, VERB_TABLE
 from ..epistemic import belief_contradicts
 from ..gaps import Forbidden
 from ..state.carriers import Candidate, Claim, Person, Question, View
@@ -92,8 +93,14 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
     wrong place, and no such relocation is available for a remit two holders share."""
     TRACE.query("opening_set", "person")
     out: list[Candidate] = []
+    axis = fx.get("refusal_axis")
+    tolerance = refusal_tolerance(p, axis)
     for verb, row in sorted(VERB_TABLE.items()):
         if not person_side_eligible(p, row):
+            continue
+        if tolerance is not None and refuses(verb, axis, tolerance):
+            TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
+                       f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
             continue
         for subject in q.referents:
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
@@ -127,6 +134,109 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
                 continue
             out.append(Candidate(verb, subject, why=q.source, operands=ops))
     return out
+
+
+# ⚠ `align` AND `project` LIVE HERE, NOT IN `choose.py`, AND THE REASON IS AN IMPORT CYCLE THAT
+# EXECUTED. `ED-IN-0261`'s refusal gate (`H-146`) made `opening_set` call both, and they were
+# reached by `from .choose import ...` inside function bodies while `choose.py` imports this
+# module at top level: `choose <-> options`, a real runtime cycle that
+# `tests/valoria/test_import_cycle_game_state_npe.py` counted, because a deferred import hides a
+# cycle from an instrument without removing it. Both are defined ONCE, here, and `choose.py`
+# imports them back -- the edge now runs one way only.
+#
+# ⚠⚠ THE `ALIGNMENT` REBIND TARGET MOVED WITH THE READER, and that is the bare-name rule
+# `choose.py`'s docstring states, not an exception to it. `align` reads `ALIGNMENT` bare, so the
+# rebind that reaches it is `decision.options.ALIGNMENT`. One rebind now reaches BOTH readers --
+# `choose`'s score and this gate -- which is the property the `H-66` sweep and the `H-146` tests
+# need. `choose.py` no longer binds the name at all, so a stale `decision.choose.ALIGNMENT` read
+# raises `AttributeError` rather than rebinding a copy nothing reads.
+#
+# ⚠ RECORDED, NOT ACTED ON: a `/simplify` altitude pass argues these belong one layer deeper --
+# `align` beside `ALIGNMENT` in `data/verbs.py` (which already narrates `align()` by name in its
+# own comments), `project` folded into `data/pursuits.to_axes`, its own docstring's stated single
+# owner. That would remove the `decision/` coupling at its root instead of relocating it to
+# whichever file the cycle happened to make reachable. Not done here: `align`/`project` are also
+# read from `loop/effects.py` and `harness/corpus_run.py`, so the move's real blast radius is
+# wider than this commit's, and a placement preference is not the same class of defect as the
+# cycle that forced this one. Worth doing as its own unit, not folded into H-146.
+
+
+def align(verb: str, axis: str) -> float:
+    """§F2's `alignment(c.verb, axis)`. Sparse: an unlisted pair reads the table's own declared
+    `default_cell`, never a literal here."""
+    return float(ALIGNMENT.get(axis, {}).get(verb, ALIGNMENT_DEFAULT_CELL))
+
+
+def project(p: Person) -> dict:
+    """A person's thirteen conviction weights, in the four-axis basis. `U3` / R-06a.
+
+    ⚠⚠ **§F2's `conviction[axis]` IS COMPUTED NOW, NOT LOOKED UP, AND THE FORMULA IS UNCHANGED IN
+    SHAPE.** V2 §F2 spells `score(c) = Σ_axis conviction[axis] · alignment(c.verb, axis)` and that
+    indexing only works if a person's convictions are KEYED BY AXIS — which is what
+    `pursuit_axes` used to be forced to be, holding `Precedent` (a conviction) beside
+    `self_preservation`, `suspicion` and `harm_borne` (three ad-hoc scalars) so the lookup had
+    something to hit. `pursuit_axes`'s own note named the conflation and predicted the repair.
+    So:
+
+        conviction[axis]  :=  Σ_conv  p.pursuits[conv] · projection[conv][axis]
+
+    and `Σ_axis` above is untouched. A person holds weights over the THIRTEEN; the projection is
+    the only thing that knows about axes.
+
+    ⚠ **THE MATRIX IS READ, NOT INVENTED** — `conviction_axis_matrix_v30.md` §2, with a per-cell
+    rationale in its §3. That is the difference between this table and `alignment`, whose own note
+    says of its cells *"a reason is not a citation"*. They multiply together, so which of the two
+    is argued and which is cited is worth being able to see.
+
+    ⚠ **A CONVICTION THE MATRIX DOES NOT LIST PROJECTS TO NOTHING, AND THAT IS THE SPARSE DEFAULT
+    RATHER THAN A SILENT DROP.** `PROJECTION_DEFAULT_CELL` is the declared 0.0; the loader has
+    already refused any conviction name outside the roster, so an unlisted pair here is a cell the
+    data chose to leave sparse, not a typo that got through.
+
+    ⚠ DELEGATED, NOT DUPLICATED. `data.pursuits.to_axes` is the one owner of *convictions → axes*,
+    because a second caller appeared that does not have a `Person`: `data.cast.loyalty` projects a
+    ROLE TEMPLATE's expected-conviction vector through the same 13×4. `to_axes` reads
+    `data.verbs.PURSUIT_PROJECTION` at call time, so that is still the rebind that reaches here."""
+    return to_axes(p.pursuits)
+
+
+def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
+    """`ED-IN-0261`'s deontological gate, the PERSON half: their projected weight on the gating
+    axis, which IS the threshold (Jordan: *"the weighting is a threshold for certain actions"*).
+    `None` when `refusal_axis` is unset -- the control arm, under which `opening_set` refuses
+    nothing. The axis is whatever `Fixtures` names, checked against the live roster, never a
+    literal here.
+
+    ⚠ RUNS `project(p)` A SECOND TIME FOR THE SAME PERSON `choose()` PROJECTS FOR `score`, AND
+    THIS IS KNOWN AND DEFERRED, NOT MISSED. Dormant today -- `refusal_axis` ships unset, and this
+    line short-circuits above before `project` is ever called. Threading the caller's own
+    projection through would need an optional parameter on `opening_set` itself, which breaks
+    every test/harness spy pinned to its current four-parameter arity (measured: one such spy in
+    `test_governance_build.py` alone); worth doing WITH `H6`, when the gate ships live and the
+    cost stops being theoretical, not as a speculative widening now."""
+    if axis is None:
+        return None
+    require_member(axis, PURSUIT_AXES, f"refusal axis {axis!r} is not on the pursuit_axes roster",
+                   "H-146", law="ED-IN-0261 -- the gate reads a ROSTERED axis; an unrostered one "
+                                "would raise `Unspecified` rather than project to a real weight")
+    return project(p)[axis]
+
+
+def refuses(verb: str, axis: str, tolerance: float) -> bool:
+    """Does a person whose weight on `axis` is `tolerance` refuse `verb`? The PERSON-SIDE refusal
+    `score` cannot express: it ranks, and at `choice_temperature` 0.1 a good enough outcome
+    outranks any finite penalty (`ED-IN-0261`).
+
+    Sign convention: the axis's NEG pole is the refusing one (`deontological` on
+    `deontological/instrumental`), so a verb is refused when its alignment sits further toward the
+    POS pole than the person's own weight. Only a verb the axis ENGAGES can be refused -- a zero
+    cell, including the sparse default, is not one of the *"certain actions"* the ruling gates;
+    `_scar` reads engagement the same way.
+
+    Reads THIS module's `align`, the one `choose`'s score reads too, so a rebind of
+    `decision.options.ALIGNMENT` moves the gate and the ranking together."""
+    a = align(verb, axis)
+    return bool(a) and a > tolerance
 
 
 def person_side_eligible(p: Person, row: "VerbRow") -> bool:
