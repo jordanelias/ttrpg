@@ -9,23 +9,24 @@ dict. It NEVER pins a damage value, a win rate, or any other balance quantity co
 assertion in this file red; if one day it does, the assertion was written wrong (plan §0 "Seam
 terms for the wrapper", term 1) — fix the test, don't chase the PC session.
 
-Also covers, per the Wave 1 exit criteria: a byte-parity probe that DISPATCH_COMBAT_BRIDGE=OFF
-(the default) leaves campaign output completely unchanged from the pre-bridge behaviour, and that
-DISPATCH_COMBAT_BRIDGE=ON is *itself* a no-op on any currently-reachable campaign, because nothing
-in the live loop yet queues a `combat` scene_type (verified 2026-07-29 — see combat_bridge.py's
-module docstring). That second probe is a reachability guard, not a balance claim: it would trip
-the moment some future wave adds a combat-scene trigger, which is the intended signal.
+RETIRED 2026-09-27 (mc_v18-retirement plan M1): this file used to also carry a byte-parity probe
+(DISPATCH_COMBAT_BRIDGE=OFF leaves campaign output unchanged) and a reachability no-op probe
+(DISPATCH_COMBAT_BRIDGE=ON moves nothing because no live trigger queues a `combat` scene_type),
+both driven through `engine.mc_v18.run_batch`/`run_campaign`. Both were deleted along with that
+import: each said, in its own docstring, that it duplicated coverage the retained goldens already
+carry (`test_f7_smoke_oracle.py`, `test_mc_v18_regression.py`) — mc_v18 is frozen/deprecated in
+place (ED-IN-0227) and neither probe exercised anything but that frozen module's own OFF/ON
+dispatch, so losing the duplicate cost nothing. The schema/determinism/winner-mapping tests below
+are unaffected — they call `combat_bridge` directly, never mc_v18.
 """
 from __future__ import annotations
 
-import os
 import random
 
 import pytest
 
 from engine.autoload import game_state
 from engine.cross_scale import combat_bridge
-from engine.mc_v18 import run_campaign, run_batch
 
 
 # ── derive_parties: schema + context-derivation-gap behaviour (never an outcome) ────────────────
@@ -160,49 +161,3 @@ def test_resolve_is_deterministic_under_a_fixed_seed():
     r1 = combat_bridge.resolve(a1, b1, random.Random(999))
     r2 = combat_bridge.resolve(a2, b2, random.Random(999))
     assert r1 == r2
-
-
-# ── flag-OFF byte-parity + flag-ON reachability no-op (Wave 1 exit criteria) ─────────────────────
-
-def test_no_params_equals_explicit_flag_off():
-    """Pins no-params ≡ explicit-OFF equivalence ONLY — it does NOT and cannot observe OFF-drift:
-    both arms of this comparison run the exact same post-bridge dispatch code (the flag is read
-    off `world`, defaulting False either way), so a regression that changed the OFF-path itself
-    would move both sides identically and this test would stay green. (Renamed from
-    `test_flag_off_is_the_default_and_byte_identical_to_no_params`, which claimed exactly that
-    "byte identical to [true, pre-bridge] no params" property this test cannot demonstrate.)
-    The TRUE OFF-parity instruments — the ones that actually pin PRE-bridge behaviour and would
-    catch OFF-path drift — are the pre-existing pinned goldens that run in the same gate:
-    `test_f7_smoke_oracle.py` (`GOLDEN_SCENES_RESOLVED=463` etc.), `test_mc_v18_regression.py`,
-    and `test_echo_transport.py`."""
-    assert os.environ.get('DISPATCH_COMBAT_BRIDGE') is None, (
-        "DISPATCH_COMBAT_BRIDGE must not be set in the test environment for this probe to be valid")
-    default = run_batch(n=3, base_seed=42)
-    explicit_off = run_batch(n=3, base_seed=42, params={'DISPATCH_COMBAT_BRIDGE': 0})
-    assert default.win_share == explicit_off.win_share
-    assert default.all_winners == explicit_off.all_winners
-    assert default.battles_mean == explicit_off.battles_mean
-
-
-def test_flag_on_is_a_no_op_on_the_currently_reachable_campaign():
-    """No live trigger queues a `combat` scene_type today (verified 2026-07-29 — see
-    combat_bridge.py's module docstring), so flipping DISPATCH_COMBAT_BRIDGE ON must not move
-    ANY campaign output: the combat branch is simply never entered either way. This is a
-    reachability guard, not a balance claim — the moment a future wave adds a combat-scene
-    trigger, THIS test is expected to fail, and that failure is the intended signal to write the
-    ON-state acceptance instead of silently red-lining."""
-    off = run_campaign(seed=42, params={'DISPATCH_COMBAT_BRIDGE': 0})
-    on = run_campaign(seed=42, params={'DISPATCH_COMBAT_BRIDGE': 1})
-    assert off.winner == on.winner
-    assert off.season == on.season
-    assert off.scenes_resolved == on.scenes_resolved
-    assert off.stub_hits == on.stub_hits
-    assert off.battle_count == on.battle_count
-    assert off.final_state == on.final_state
-    # ⚠ TWO FIELDS DROPPED, TWO ADDED (2026-09-16, ED-IN-0232). `key_log_hash` and `keys_emitted`
-    # were the strongest comparands here — a campaign-wide content hash over every emission — and
-    # they retired with the Key substrate along with the `CampaignResult` fields themselves. Their
-    # replacement is NOT weaker by accident: `final_state` is the serialised world, so comparing it
-    # is a broader equality than the key log ever was. `battle_count` is added because it is the
-    # output the combat branch would actually move if it were ever entered, which is this test's
-    # whole subject.

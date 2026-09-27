@@ -56,6 +56,18 @@ Every xfail in this file corresponds to exactly one manifest row; nothing here i
 
 Mirrors `test_f7_smoke_oracle.py`'s bootstrap (sys.path insert, direct `engine.mc_v18` imports) —
 read there first, per the assignment; this file does not alter or re-record that oracle's goldens.
+
+RETIRED 2026-09-27 (mc_v18-retirement plan M1): the `combat-bridge-on`, `world-npcs` and
+`world-knots` XFAIL_MANIFEST rows and their tests are deleted along with the `engine.mc_v18`
+import. `world-npcs`/`world-knots` duplicated `test_f7_smoke_oracle.py`'s own `npcs_generated==0`
+golden and `test_world_population.py`'s honest-deferral guards (the latter kept, rewritten off
+mc_v18 — see that file); `combat-bridge-on` exercised only mc_v18's own dormant dispatch branch
+(env-var-gated, off by default, never run in a normal CI pass). None of the three had a live
+trigger surface independent of the frozen module. `world-settlements` is deleted too, for the
+same reason as its near-duplicate in `test_world_population.py`: settlements populate once, at
+`create_world` time, and `run_campaign` never re-derives them, so the world-gen-time falsifier
+(`test_settlements_populated_at_world_gen_matches_geography_source_exactly`, kept, in that other
+file) already covers the live claim.
 """
 from __future__ import annotations
 
@@ -74,7 +86,6 @@ import pytest  # noqa: E402
 from engine.autoload import game_state, scene_slate  # noqa: E402
 from engine.cross_scale import scene_dispatch  # noqa: E402
 from engine.substrate import stubwire  # noqa: E402
-from engine.mc_v18 import run_campaign, _dispatch_combat_bridge_on  # noqa: E402
 
 
 # ═════════════════════════════════════════════════════════════════════════════════════════════
@@ -96,12 +107,6 @@ from engine.mc_v18 import run_campaign, _dispatch_combat_bridge_on  # noqa: E402
 # `honest-deferral` (see rows below) — Wave 2 landed a considered disposition, not a wire-up.
 # ═════════════════════════════════════════════════════════════════════════════════════════════
 XFAIL_MANIFEST = [
-    {"id": "combat-bridge-on", "oi": "OI-01", "kind": "strict-condition",
-     "area": "scene dispatch: combat",
-     "reason": "DISPATCH_COMBAT_BRIDGE defaults OFF this wave (plan §2.2 term 2 / §6) — the ON "
-               "flip is a separately scheduled IN action after PC's E0-E3 merge, never a side "
-               "effect of this wave. Run with env DISPATCH_COMBAT_BRIDGE=1 to exercise the strict "
-               "assertion for real."},
     {"id": "diagonal-causes", "oi": "OI-28", "kind": "strict-condition",
      "area": "Key direction 6: diagonal (causes[])",
      "reason": "HONESTY CORRECTION (2026-07-29, same-day W3 follow-on — the prior version of this "
@@ -132,37 +137,6 @@ XFAIL_MANIFEST = [
                "echo_leg_does_not_fire for the unit-level falsifiers (both green today), and "
                "test_direction6b_accord_echo_leg_receives_a_genuine_in_log_causal_id below for the "
                "companion reach-level check."},
-    {"id": "world-npcs", "oi": "OI-05", "kind": "honest-deferral",
-     "area": "world chain: world.npcs",
-     "reason": "RECLASSIFIED Wave 2 (was 'generate_npc has zero call sites', framed as an "
-               "oversight): re-verified against investigation_systems_v30.md SYSTEM 1 this wave "
-               "— Two-Tier Generation's Tier-1 seed is scene-specification-driven only ('Scene "
-               "specification declares density and composition'); no canon head names a "
-               "world-gen initial count or a season-tick generation trigger (NPE-02's proposed "
-               "persistence cap is an unresolved Open Question, not a ratified number). The "
-               "honest move is to generate none automatically rather than fabricate a count "
-               "(CLAUDE.md §5/§7) — world.npcs is a PERMANENT deferral until canon specifies a "
-               "trigger, not a to-do for a later wave. The drift half (simulate_npc_actions) was "
-               "already wired every season pre-wave via accounting.py:78-82 and is unaffected. "
-               "The deferral is recorded live via engine.mc_v18._faction_actions_callback's "
-               "stubwire.stub_resolve('generate_npc(world-gen|season-tick)', ...) call, firing "
-               "once per season — see engine/tests/test_world_population.py's "
-               "test_generate_npc_has_no_automatic_call_site_this_wave /"
-               "test_npc_and_knot_deferral_stubs_fire_every_season for the falsifiers."},
-    {"id": "world-knots", "oi": "OI-07", "kind": "honest-deferral",
-     "area": "world chain: world.knots",
-     "reason": "RECLASSIFIED Wave 2 (was 'same never-populated shape as world.npcs', framed as "
-               "an oversight): re-verified against knots_v30.md §3.1 this wave — form_knot's "
-               "Prerequisites (Disposition +5 with target NPC, PC Bonds >= 5, PC's current Knot "
-               "count < floor(Bonds/2) + 1) are personal-scale actor fields (Disposition, Bonds) "
-               "that do not exist anywhere on the aggregate strategic World; no world-gen or "
-               "season-tick formation rule exists in canon to cite. world.knots is a PERMANENT "
-               "deferral until canon specifies a formation rule, not a to-do for a later wave. "
-               "The deferral is recorded live via engine.mc_v18._faction_actions_callback's "
-               "stubwire.stub_resolve('form_knot(world-gen|season-tick)', ...) call, firing once "
-               "per season — see engine/tests/test_world_population.py's "
-               "test_knots_stay_unpopulated_honest_deferral /"
-               "test_npc_and_knot_deferral_stubs_fire_every_season for the falsifiers."},
     {"id": "altonian-reinforcements-handoff", "oi": "OI-10 / OI-17", "kind": "accepted-handoff",
      "area": "unconditional NotImplementedError exemption",
      "reason": "systems/mass_battle/sim/altonian_reinforcements.py is the ONE accepted "
@@ -242,31 +216,10 @@ def _source_scan(pattern: str, module_paths: list[str]):
 # ═════════════════════════════════════════════════════════════════════════════════════════════
 # §1 acceptance — "All scene directions dispatch" (OI-01/OI-02)
 # ═════════════════════════════════════════════════════════════════════════════════════════════
-
-# _dispatch_combat_bridge_on is imported from engine.mc_v18 (the single owner, CLAUDE.md §8) —
-# not re-implemented here. run_campaign decides the flag from `effective_params`/the env var and
-# stashes it on `world.dispatch_combat_bridge`; this test drives `_resolve_slot` directly (below
-# run_campaign) so it must reproduce the identical decision, never a second one. The owner takes
-# an `effective_params` dict (params-override-then-env-var, mirroring `_echo_transport_on`); this
-# file has no params override to give it, so it always passes `{}` (env-var-only resolution).
-
-
-@pytest.mark.xfail(not _dispatch_combat_bridge_on({}), strict=True,
-                    reason=_manifest_reason("combat-bridge-on"))
-def test_combat_resolves_via_canonical_bridge_under_flag_on():
-    """OI-01: with the flag genuinely ON (world.dispatch_combat_bridge — the same attribute
-    run_campaign sets), combat resolves through combat_engine_v1 via the IN-side bridge, not the
-    DEPRECATED systems.combat.sim.combat path. Well-formed context (ctx['factions']) is supplied
-    deliberately — this direction's acceptance is evaluated on its OWN documented contract
-    (combat_bridge.py), not on the empty-context probe the total-mapping test below uses for the
-    scene_types that resolve unconditionally of context."""
-    world = _fresh_world(seed=7)
-    world.dispatch_combat_bridge = _dispatch_combat_bridge_on({})
-    slot = scene_slate.SceneSlot(scene_type="combat",
-                                  context={"factions": ("Crown", "Church")}, priority=0)
-    res = scene_dispatch._resolve_slot(slot, world, world.rng)
-    assert res.get("resolved") is True, f"combat did not resolve via the canonical bridge: {res}"
-    assert res["result"]["a_label"] == "Crown" and res["result"]["b_label"] == "Church"
+#
+# The combat-under-flag-ON probe that used to stand here (OI-01, `_dispatch_combat_bridge_on`
+# imported from `engine.mc_v18`) is RETIRED 2026-09-27 — see module docstring. Combat is otherwise
+# covered by `test_combat_bridge_seam.py`'s schema/determinism tests, which never touch mc_v18.
 
 
 def test_scene_type_total_mapping_resolves_or_stub_flags():
@@ -348,37 +301,10 @@ def test_scene_type_total_mapping_resolves_or_stub_flags():
 
 
 
-# ═════════════════════════════════════════════════════════════════════════════════════════════
-# §1 acceptance — "world chains populated" (OI-05/OI-07). world-settlements resolved Wave 2
-# (below); world-npcs/world-knots are Wave-2-RECLASSIFIED to `honest-deferral` — permanently
-# xfail, not "until a later wave" (see XFAIL_MANIFEST's per-row reason for the canon citation).
-# ═════════════════════════════════════════════════════════════════════════════════════════════
-
-@pytest.mark.xfail(strict=True, reason=_manifest_reason("world-npcs"))
-def test_world_npcs_populated_after_a_seeded_campaign():
-    r = run_campaign(seed=42)
-    assert r.npcs_generated > 0, "world.npcs stayed empty (OI-05: generate_npc has zero callers)"
-
-
-@pytest.mark.xfail(strict=True, reason=_manifest_reason("world-knots"))
-def test_world_knots_populated_after_a_seeded_campaign():
-    r = run_campaign(seed=42)
-    knots = r.final_state.get("knots", {})
-    assert knots, "world.knots stayed empty (OI-07)"
-
-
-def test_world_settlements_populated_after_a_seeded_campaign():
-    """RESOLVED (Wave 2 item 4, OI-07, XFAIL_MANIFEST row 'world-settlements' retired
-    2026-07-29): systems/settlements/sim/registry.py gained `populate_from_geography`, called at
-    world-gen and serialized via game_state.serialize_world/restore_world — confirmed XPASS(strict)
-    by running this test directly. This row stays a REACH probe (truthiness only, matching this
-    file's own convention for direction/world-chain rows); the thorough falsifier (exact count
-    vs. the geography source, serialization round-trip, RNG-purity) lives in
-    engine/tests/test_world_population.py, not duplicated here. STRICT now (no xfail)."""
-    r = run_campaign(seed=42)
-    settlements = r.final_state.get("settlements", {})
-    assert settlements, "world.settlements stayed empty or unserialized entirely (OI-07)"
-
+# §1 acceptance — "world chains populated" (OI-05/OI-07) RETIRED 2026-09-27 (mc_v18-retirement
+# plan M1, see module docstring): world-npcs, world-knots and world-settlements each drove
+# `engine.mc_v18.run_campaign` and are gone with that import. See module docstring for where each
+# claim's live coverage now stands.
 
 # ═════════════════════════════════════════════════════════════════════════════════════════════
 # §1 acceptance — articulation minimal bus subscriber (OI-08, plan §3 Wave 2 item 6). New this
