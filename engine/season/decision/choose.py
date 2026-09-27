@@ -15,7 +15,7 @@ of the two directions. The rebind sites name `decision.choose` and `decision.opt
 this reason; see `__init__.py`.
 
 ⚠ **`align` (AND WITH IT THE `ALIGNMENT` REBIND) LIVES IN `options.py` NOW.** `opening_set`'s
-`H-129` refusal gate calls `align` and `project`, and reaching them here from `options.py` made
+`H-146` refusal gate calls `align` and `project`, and reaching them here from `options.py` made
 `choose <-> options` an import cycle that executed at runtime. The same rule decides the new
 address: the rebind is `decision.options.ALIGNMENT`, because that is where the reader is defined.
 This module no longer binds `ALIGNMENT`, so a stale `decision.choose.ALIGNMENT` read fails loudly.

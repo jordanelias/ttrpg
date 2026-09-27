@@ -341,7 +341,7 @@ pass verifying against the working tree rather than trusting the shape of the au
     `deontological/instrumental` sign convention this gate hardcodes, so `refusal_axis="instrumental"`
     WOULD arm the gate against the CURRENT 13-pursuit tables — "cannot fire even by accident" was
     false. It ships with `refusal_axis` unset because arming it now is an unruled design choice, not
-    because no usable name exists. See `hole_register.yaml` H-129's `default:` field for the full
+    because no usable name exists. See `hole_register.yaml` H-146's `default:` field for the full
     correction.
 - **H3 is NOT inert, and the first draft's claim that it was is wrong.** `_scar`'s replacement reads the
   **already-populated** old tables — 52 projection cells (`rosters.yaml:1449-1513`) and 52 alignment
@@ -410,12 +410,12 @@ would touch a dozen call sites across `test_season_shape.py`, `probes.py` and `c
 `architecture/meta/04_CODE_ARCHITECTURE.md:133`'s own documented signature, so it is deferred rather
 than widened into — and `layer-conformance` (Lens A clean; Lens B found the same H2-inertness error
 this section's own first correction made above, plus a CONVENTION-grade note on the hardcoded sign
-pole, both now recorded at `hole_register.yaml` H-129, and ran the actual plant-a-violation falsifier
+pole, both now recorded at `hole_register.yaml` H-146, and ran the actual plant-a-violation falsifier
 the skill requires rather than trusting a static read of the AX-2 scan). Tests: the new `test_h2_*`
 suite (4), the full `test_governance_build.py` (29), `test_choose_receives_no_world`, and — the
 correct AX-2 falsifier for THIS code, per the layer-conformance attack — `test_decision_package_never_names_world_anywhere_under_it`
 (`test_season_shape.py:2781`) all green. `register --check` rows R2(6)/G6(15) confirmed identical
-before and after (`git stash` control). Full detail in `hole_register.yaml` H-129 and the working
+before and after (`git stash` control). Full detail in `hole_register.yaml` H-146 and the working
 tree; this plan is not re-narrating a completed build, only marking it done.
 
 **H1 · Record hygiene.** *Owner type: ENGINEERING. DONE.*
@@ -463,7 +463,7 @@ tables.*
     `ast.walk` over every file `DECISION_DIR.rglob("*.py")` returns, including late imports inside
     function bodies.
 - **Records:** the sign convention. `deontological` is the NEG pole (worksheet `:76`) — hardcoded as
-  `>` in `refuses`, not read from roster data; flagged CONVENTION-grade at H-129 for `H6` to address
+  `>` in `refuses`, not read from roster data; flagged CONVENTION-grade at H-146 for `H6` to address
   when the poles become data, not guarded now (no code path can fail on it while the axis ships unset).
 
 ### §3.3 · Blocked on Jordan: C1 + C2

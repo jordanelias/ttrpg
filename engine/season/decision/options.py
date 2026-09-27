@@ -100,7 +100,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
             continue
         if tolerance is not None and refuses(verb, axis, tolerance):
             TRACE.note(f"{p.id} refuses {verb!r}: its `{axis}` alignment exceeds their own "
-                       f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-129")
+                       f"projected weight {tolerance:+.3f} (ED-IN-0261)", "H-146")
             continue
         for subject in q.referents:
             # ⚠⚠ A CONTEST NEEDS TWO CLAIMANTS, AND A PERSON IS NOT THEIR OWN ADVERSARY.
@@ -137,7 +137,7 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
 
 
 # ⚠ `align` AND `project` LIVE HERE, NOT IN `choose.py`, AND THE REASON IS AN IMPORT CYCLE THAT
-# EXECUTED. `ED-IN-0261`'s refusal gate (`H-129`) made `opening_set` call both, and they were
+# EXECUTED. `ED-IN-0261`'s refusal gate (`H-146`) made `opening_set` call both, and they were
 # reached by `from .choose import ...` inside function bodies while `choose.py` imports this
 # module at top level: `choose <-> options`, a real runtime cycle that
 # `tests/valoria/test_import_cycle_game_state_npe.py` counted, because a deferred import hides a
@@ -147,9 +147,18 @@ def opening_set(p: Person, v: View, q: Question, fx: "Fixtures") -> list[Candida
 # ⚠⚠ THE `ALIGNMENT` REBIND TARGET MOVED WITH THE READER, and that is the bare-name rule
 # `choose.py`'s docstring states, not an exception to it. `align` reads `ALIGNMENT` bare, so the
 # rebind that reaches it is `decision.options.ALIGNMENT`. One rebind now reaches BOTH readers --
-# `choose`'s score and this gate -- which is the property the `H-66` sweep and the `H-129` tests
+# `choose`'s score and this gate -- which is the property the `H-66` sweep and the `H-146` tests
 # need. `choose.py` no longer binds the name at all, so a stale `decision.choose.ALIGNMENT` read
 # raises `AttributeError` rather than rebinding a copy nothing reads.
+#
+# ⚠ RECORDED, NOT ACTED ON: a `/simplify` altitude pass argues these belong one layer deeper --
+# `align` beside `ALIGNMENT` in `data/verbs.py` (which already narrates `align()` by name in its
+# own comments), `project` folded into `data/pursuits.to_axes`, its own docstring's stated single
+# owner. That would remove the `decision/` coupling at its root instead of relocating it to
+# whichever file the cycle happened to make reachable. Not done here: `align`/`project` are also
+# read from `loop/effects.py` and `harness/corpus_run.py`, so the move's real blast radius is
+# wider than this commit's, and a placement preference is not the same class of defect as the
+# cycle that forced this one. Worth doing as its own unit, not folded into H-146.
 
 
 def align(verb: str, axis: str) -> float:
@@ -196,11 +205,19 @@ def refusal_tolerance(p: Person, axis: Optional[str]) -> Optional[float]:
     axis, which IS the threshold (Jordan: *"the weighting is a threshold for certain actions"*).
     `None` when `refusal_axis` is unset -- the control arm, under which `opening_set` refuses
     nothing. The axis is whatever `Fixtures` names, checked against the live roster, never a
-    literal here."""
+    literal here.
+
+    ⚠ RUNS `project(p)` A SECOND TIME FOR THE SAME PERSON `choose()` PROJECTS FOR `score`, AND
+    THIS IS KNOWN AND DEFERRED, NOT MISSED. Dormant today -- `refusal_axis` ships unset, and this
+    line short-circuits above before `project` is ever called. Threading the caller's own
+    projection through would need an optional parameter on `opening_set` itself, which breaks
+    every test/harness spy pinned to its current four-parameter arity (measured: one such spy in
+    `test_governance_build.py` alone); worth doing WITH `H6`, when the gate ships live and the
+    cost stops being theoretical, not as a speculative widening now."""
     if axis is None:
         return None
     require_member(axis, PURSUIT_AXES, f"refusal axis {axis!r} is not on the pursuit_axes roster",
-                   "H-129", law="ED-IN-0261 -- the gate reads a ROSTERED axis; an unrostered one "
+                   "H-146", law="ED-IN-0261 -- the gate reads a ROSTERED axis; an unrostered one "
                                 "would raise `Unspecified` rather than project to a real weight")
     return project(p)[axis]
 

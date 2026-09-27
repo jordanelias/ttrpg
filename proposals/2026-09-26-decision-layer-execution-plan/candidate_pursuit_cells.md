@@ -559,8 +559,8 @@ grandiose↔humble · **D/I** deontological↔instrumental.
 
 | axis | value | grade | citation |
 |---|---|---|---|
-| H/E | **−0.5** | cited | S1 §3.13 "Honor is rank-bearing (knight's honor differs from merchant's…)" |
-| P/S | **−0.8** | cited | S1 §3.13 trad +0.8 "honor codes are ancestral and slow-moving … Honor's primary axis is traditional"; S3 corroborates (memory +0.6, substantive −0.5) |
+| H/E | **−0.5** | cited | S1 §3.13 "Honour is rank-bearing (knight's honour differs from merchant's…)" |
+| P/S | **−0.8** | cited | S1 §3.13 trad +0.8 "honour codes are ancestral and slow-moving … Honour's primary axis is traditional"; S3 corroborates (memory +0.6, substantive −0.5) |
 | Pa/Eq | **−0.3** | cited, reasoning re-grounded | S3 −0.3 kept. Substantive ground: honour binds to the PLEDGED party — oath, liege, comrade — and its obligations do not run to the unpledged; against a standing-blind rule it is partial by construction (Virke: "your word is your network", S7 `:256`). Moderate, because the code itself is applied consistently to whoever is inside it |
 | Se/Sl | **+0.2** | reasoned — **CHANGED rev. 4** (was cited −0.1; §1b(c) honour↔selfish: Bourdieu's and Pitt-Rivers's honour carries OBLIGATIONS — generosity, hospitality, riposte on behalf of one's own — other-directed; this is §1b(a)'s selfless+grandiose corner) | corpus value beneath: S3 selfish +0.1, with its own null-finding caveat |
 | R/F | **−0.6** | derived — **re-examined rev. 3, KEPT** | direction from S1 §3.13 "one keeps the oath even at material cost … slow-moving"; magnitude mine. Under §0.5's test: honour is "hold to THIS pledged code in the face of difficulty", not "try a different old code when this one is hard" — the oath-keeper at material cost is rigid by Jordan's definition, and precedent by where the code comes from. Both signs stand on the same evidence; no registry row reads otherwise (Haldorsen "Completes missions Sigrid aborts", S7 `:829`; Virke "your word is your network", `:256`) |
@@ -647,7 +647,7 @@ Guilds' framework "Moral Relativism … +1 Ob on actions requiring moral consist
 | Se/Sl | **−0.6** | derived | S4: on the self side of the pursuit space. Magnitude mine |
 | R/F | **+0.3** | reasoned | no corpus citation; placed because reputation-seeking bends to its audience — Strand's flattery vulnerability (S7 `:235`) and CAT-9's "insecure … high gain on incoming claims" (`adjudication_register.yaml:577-582`) are the same shape: the reputed adjust to how they are read. Moderate flexible |
 | G/Hu | **−0.4** | derived — **CHANGED rev. 4** (was −0.6; §1b(c) reputation↔grandiose: Goffman's impression management is strategic and a reputation for modesty is a reputation; gaze-seeking yes, inflated self-account not necessarily) | `synthesis.md` §2 / CAT-9 (`adjudication_register.yaml:569-576`): humble↔vain is "the gap between the character's self-account and others' account"; the pursuit of reputation is the pursuit of the others'-account, and S4 chose `reputation` precisely as `standing_of`'s "CONTRASTING concept" (`options.py:477`). Magnitude mine |
-| D/I | **+0.3** | reasoned | no corpus citation; placed because an act chosen for how it will be SEEN is chosen for its effect, which is Jordan's `instrumental` ("the outcome justifies the means", S5 `:64`) — tempered because a reputation for keeping one's word is bought only by principled acts. Honor's −0.7 is not carried: S4 split reputation off honour rather than out of it |
+| D/I | **+0.3** | reasoned | no corpus citation; placed because an act chosen for how it will be SEEN is chosen for its effect, which is Jordan's `instrumental` ("the outcome justifies the means", S5 `:64`) — tempered because a reputation for keeping one's word is bought only by principled acts. Honour's −0.7 is not carried: S4 split reputation off honour rather than out of it |
 
 **Phase 3 grounding — reputation.** H/E: §1a reputation — Weber's status honour is a rank: CONFIRMED −0.3. P/S: Ridgeway — one is reputed against established expectation: CONFIRMED −0.2. Pa/Eq: Origgi — reputation is audience-specific: CONFIRMED −0.3. Se/Sl: Schwartz achievement/self-enhancement: CONFIRMED −0.6. R/F: Goffman — impression management is adaptive: CONFIRMED +0.3. G/Hu: §1b(c) reputation↔grandiose: **CHANGED −0.6 → −0.4**. D/I: Goffman — strategic: CONFIRMED +0.3.
 
@@ -1004,7 +1004,7 @@ as `axis_w[selfish] × benefits_me(c)`, and the five new verbs need a `beneficia
 | verb | value | grade | reason |
 |---|---|---|---|
 | forge | **+0.8** | carried | "the purest means-to-ends act on the table" |
-| commit | **−0.8** | carried | "binds regardless of what later calculation would recommend — Honor's own −0.7 shape" |
+| commit | **−0.8** | carried | "binds regardless of what later calculation would recommend — Honour's own −0.7 shape" |
 | utter | **−0.7** | carried | "the uttered word binds the utterer whatever advantage later counsels" |
 | evade / defy | **+0.7** | carried | "putting your own calculus over a demand" |
 | construe | **+0.7** | carried | "calculated to serve the construer's aim" |

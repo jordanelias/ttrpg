@@ -1929,7 +1929,7 @@ def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_seas
     for c in added:
         assert c.subject == at.get(home.get(c.holder)), (
             f"an added claim is not a resident's claim on their own hearth's dwelling: {c}")
-# H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-129`. A refusal at `opening_set`, not a score term:
+# H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-146`. A refusal at `opening_set`, not a score term:
 # the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
 # past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`
 # names, so these tests take a rostered axis by position and name none.
@@ -1959,7 +1959,7 @@ def _h2_base(min_verbs=3):
     base = {(c.verb, c.subject) for c in _options.opening_set(p, v, q, w.fixtures)}
     verbs = sorted({vb for vb, _ in base})
     assert len(verbs) >= min_verbs, (
-        f"only {verbs} form here; the H-129 gate tests need >= {min_verbs}")
+        f"only {verbs} form here; the H-146 gate tests need >= {min_verbs}")
     return w, p, q, v, base, verbs
 
 
@@ -1985,7 +1985,7 @@ def test_h2_the_shipped_arm_is_the_control_and_refuses_nothing():
     from ..data.rosters import PURSUIT_AXES
     from ..decision import options as _options
     assert DEFAULT_FIXTURES.get("refusal_axis") is None, (
-        "the shipped arm is no longer the control; `H-129` and this test disagree")
+        "the shipped arm is no longer the control; `H-146` and this test disagree")
 
     w, p, q, v, base, verbs = _h2_base()
     restore = _h2_inject(p, sorted(PURSUIT_AXES)[0], -0.4, {vb: 0.9 for vb in verbs})

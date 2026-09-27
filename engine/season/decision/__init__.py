@@ -10,7 +10,7 @@ budget.   NO World in scope."*
     questions.py   assemble · aggregate_questions · view_ids
     options.py     THE `opening_set` MEMBER -- opening_set and its operand machinery,
                    person_side_eligible, agreement, standing_of, and `align` / `project`
-                   (which the `H-129` refusal gate calls; defined here so `options` never
+                   (which the `H-146` refusal gate calls; defined here so `options` never
                    imports `choose`)
 
 ⚠ `entrenchment` LEFT AT UNIT L3, to `queries/person_q.py`. It was the only one of the four symbols
@@ -31,7 +31,7 @@ and `belief_contradicts` are read BY BARE NAME inside a body -- `align` reads th
 `opening_set` the second -- and a bare name resolves in its own module's globals. So a test or a
 sweep arm that wants to substitute one must name the module the reader lives in:
 
-    decision.options.ALIGNMENT             (align reads it -- choose's score and the H-129 gate)
+    decision.options.ALIGNMENT             (align reads it -- choose's score and the H-146 gate)
     decision.choose.pack_scenes            (make_chooser calls it)
     decision.options.belief_contradicts    (opening_set reads it)
 
