@@ -19,7 +19,7 @@ from __future__ import annotations
 from ..data.matrix import Step, WriteClass
 from ..data.requires import LEDGER_DERIVED_STEMS, UNKNOWN
 from ..data.rosters import OBSERVATION_DEPOSIT_MODES, WITNESS_CHANNELS, require_member
-from ..epistemic import act_refs, claim_subjects, observers_for
+from ..epistemic import SEEN_PREDICATE, act_refs, claim_subjects, observers_for, seen_of, seen_subject
 from ..queries import cache
 from ..queries.person_q import LedgerReader
 from ..state.carriers import Claim, Event
@@ -68,7 +68,17 @@ def _told_content(w, act):
     subj = refs[0] if refs else None
     if teller is None or subj is None:
         return None
-    return LedgerReader(teller.ledger).latest_about(subj)
+    # ⚠ `R8.1`: A `seen` CLAIM IS PASSED ON ONLY WHEN IT IS ALL THE TELLER HOLDS ABOUT THE SUBJECT.
+    # The `seen` deposit lands in every co-located witness -- the teller included -- with an
+    # identical value, so without this the teller's NEWEST claim about a rung was almost always a
+    # `seen` the hearer already held, the exact-triple guard below suppressed it, and the told
+    # channel carried nothing: MEASURED at the `R8.1` commit, `build_world(0)`, four seasons, 0
+    # `told_by` claims. `seen` is ruled BESIDE the existing deposits, not in place of what a telling
+    # carries. Same comparator both times (`LedgerReader`'s one rule); only the pool differs, and
+    # a rumour of a sighting still travels when a sighting is all the teller has.
+    own = [c for c in teller.ledger if c.predicate != SEEN_PREDICATE]
+    return (LedgerReader(own).latest_about(subj)
+            or LedgerReader(teller.ledger).latest_about(subj))
 
 
 # -- WITNESS -- barrier 4 -- THE JOIN (S28) -----------------------------
@@ -170,6 +180,18 @@ def witness(self, events: list[Event]) -> int:
     # A plain local dict fixes it. ⚠ NOT `w.cache()` -- `cache_at_barrier` is `Forbidden` inside
     # `_in_parallel_map` (`state/world.py:474-476`), which is this whole region.
     told_by_event: dict = {}
+    # `R8.1` -- WHAT EACH WITNESS SAW, RESOLVED HERE AND NOT IN THE LOOP BELOW, BECAUSE THE LOOP IS
+    # A PARALLEL MAP. `seen_of` asks every live channel which of them admits the witness, and
+    # `co_located` reads the barrier's presence index -- which `cache_at_barrier` refuses inside
+    # `_in_parallel_map` even when it is already built. `None` means deposit nothing, and it has
+    # ONE cause: the Event has no subject to be about. A struct whose every term is `None` IS
+    # deposited -- *something happened here and I know nothing about it* is `R8.5`'s document
+    # holder exactly.
+    seen_by: dict = {}
+    for pid, e, _m in fan:
+        subj = seen_subject(w, e, pid, mode)
+        seen_by[(pid, e.id)] = (None if subj is None
+                                else (subj, seen_of(w, e, self.act_of.get(e.id), pid, mode)))
     w._in_parallel_map = True
     for pid, e, channel in fan:
         p = w.persons.get(pid)
@@ -285,6 +307,27 @@ def witness(self, events: list[Event]) -> int:
                         emits="claim.deposited", subject=oc.id, causes=[e.id])
                 TRACE.claim(pid, e.id, src)
                 deposits += 1
+        # `R8.1`. THE THIRD DEPOSIT: ONE `seen` CLAIM PER (WITNESS, EVENT), BESIDE THE TWO ABOVE.
+        # Its value is `epistemic.Seen` -- `{stratum, marks, who, why}`, each `None` where the
+        # admitting channels withhold it -- and its subject is the changed thing, else the RUNG,
+        # which is what lets it raise Q2 for everyone standing there (`questions_for`'s
+        # `c.subject in mine`). No verb token rides in it: that is the whole difference from the
+        # event-kind claim, which still carries `e.kind` verbatim.
+        # ⚠ NOT GATED BY `REQUIRES_STEMS`, AND IT SHOULD NOT BE ADDED THERE. That set closes what a
+        # verb's `requires_typed:` cell may ASK, and `_require_known_stem` checks verb cells at
+        # load, never a deposit; `seen` is declared in `rosters.yaml: observation_terms`, the row
+        # `R8.3` names.
+        _seen = seen_by.get((pid, e.id))
+        if _seen is not None:
+            sc = Claim(H(w.world_seed, w.tick, pid, f"seen:{e.id}"),
+                       pid, _seen[0], SEEN_PREDICATE, _seen[1], w.tick, src, conf, "own",
+                       self.round)   # `U2`: see the first deposit
+            w.write("claim_ledger", WriteClass.INTERIOR,
+                    lambda p=p, c=sc: p.ledger.append(c),
+                    record_kind="Person", fieldname="claim_ledger", driver="Event",
+                    emits="claim.deposited", subject=sc.id, causes=[e.id])
+            TRACE.claim(pid, e.id, src)
+            deposits += 1
         # THE TOLD CHANNEL -- `claim_sources`' `told_by`, WHICH NOTHING WROTE.
         #
         # ⚠ WHAT WAS TOLD, NOT MERELY THAT A TELLING HAPPENED. The event-kind deposit above

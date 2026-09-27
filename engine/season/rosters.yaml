@@ -610,6 +610,50 @@ rosters:
       post_remit:    "the person holds a live office Tenure whose remit covers the verb that emitted this kind"
       chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
 
+  observation_terms:
+    source: "`R8.1`, `references/design_rulings_2026-09-06.md` -- Jordan: *\"I saw this person doing y, but I don't know what y is\"*, *\"someone looking like y did x\"*, *\"they saw someone skulking around for no reason they could discern\"*. One `seen` claim per (witness, event), BESIDE the two existing deposits; its value is a frozen struct of these four terms, each `None` where the channel withholds it"
+    cite: "R8"
+    open: true
+    ordered: true
+    note: >-
+      `values:` IS THE STRUCT, IN FIELD ORDER -- `epistemic.Seen` refuses at import if its fields
+      and this list differ, and every term needs a `_term_<name>` reader there (the
+      `CHANNEL_PREDICATES` precedent: a named member with no reader RAISES, never quietly reads
+      `None`). `stratum` is the coarse WHAT (`strata`), never the verb TOKEN -- a witness can say
+      *someone was doing something social* without naming `tell`. ⚠ Not never the INFORMATION:
+      `movement` has exactly one member (`move`), so that one stratum is bijective with its verb --
+      see `epistemic._term_stratum`'s docstring, found by adversarial review. `marks` is the
+      actor's appearance; `Person.marks` itself was DELETED 2026-09-24 (`ED-IN-0261` item 1) as a
+      zero-reader/zero-writer field, so this term now reads nothing rather than a deleted
+      attribute and is `()` for every actor (see `epistemic._term_marks`) -- `()` still means
+      *seen, and nothing describable*, and `None` still means *this channel does not show a body
+      at all*. `who` is the actor's id. `why` is the motive.
+      ⚠ `supplied_by:` IS WHAT EACH CHANNEL SHOWS, and a witness's struct is the UNION over the
+      channels that admit them under the live `fan_out_mode` (`epistemic.live_channels`). The
+      `total` arm is `H-33`'s control and shows EVERY term to every witness, so this table is read
+      only by the narrow arms. Two cells are ruled: `R8.5` quotes the ratified line *"a co-located
+      witness saw who acted; a document holder saw only that the document changed"* -- so
+      `document_key` shows NOTHING, and its witness holds an all-`None` struct, which IS deposited
+      (the claim's subject still says WHERE something happened). `witness_key`, `post_remit` and
+      `chronicle` are unruled: they withhold rather than invent, and are an injected default in
+      `H-33`'s sense, exactly as the channel predicates themselves are.
+      ⚠ NO CHANNEL SUPPLIES `why`, AND THAT IS `R8.4`'s DEFECT, NOT A CHOICE MADE HERE:
+      `Candidate.why` is dropped at `pack_scenes` and `Act` carries no motive, so the engine
+      forgets it before the act executes and no witness can learn it. Case 4 (*no discernible
+      reason*) is therefore every deposit today. `Person.marks` has zero writers, so `marks` is
+      `()` wherever it is shown -- case 2 (*someone looking like y*, `who=None`) is supported by
+      the struct and reached by nothing until a recognition producer exists, which `R8.2` defers
+      to its own commit.
+    values: [stratum, marks, who, why]
+    deposit:
+      predicate: seen
+    supplied_by:
+      co_located:   [stratum, marks, who]
+      witness_key:  [stratum, who]
+      document_key: []
+      post_remit:   [stratum]
+      chronicle:    [stratum]
+
   # ── WHAT THE SEASON LOOP IS ───────────────────────────────────────────────────────────────────
   # RULED BY JORDAN, 2026-09-05:
   #   *"season loop governs inputs into the seams and collected outputs. it's the processor of all
