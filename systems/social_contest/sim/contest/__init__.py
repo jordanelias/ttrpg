@@ -17,37 +17,24 @@ the v30 surface re-skin and the build_contest/resolve_contest wrapper + appeal
 multiplicative/additive flag are the NEXT stage, not this one.
 
 ──────────────────────────────────────────────────────────────────────────────
-BACK-COMPAT SHIM (deprecate-not-delete):
-The two live importers of the OLD single-compare stub keep resolving through this
-package, which re-exports the stub's public API from systems.social_contest.sim.contest_legacy_stub
-(the deprecated stub, retained as the provenance source):
-  • sim/cross_scale/scene_dispatch.py:105  ->  import systems.social_contest.sim.contest as contest ; contest.run_contest(...)
-  • systems/social_contest/sim/parliamentary_vote.py:42   ->  from systems.social_contest.sim.contest import PERSUASION_* thresholds
-These re-exports are the legacy surface; the promoted kernel's own API (Bout, Venue,
-ContestedMode, the venue/mode registries, faction adapters, narrative) is exposed
-alongside. The NEXT stage folds the legacy run_contest into the wrapper.
+⚠ THE BACK-COMPAT SHIM DESCRIBED HERE IS RETIRED (2026-09-26, ED-SC-0033 clause 2 unit 3a).
+`systems.social_contest.sim.contest_legacy_stub` — the deprecated single-compare stub this
+package used to re-export — is DELETED
+(`FORK:10859d64:systems/social_contest/sim/contest_legacy_stub.py`). Its two claimed live
+importers were measured before deletion: `scene_dispatch.py`'s `run_contest` call was already
+retired by ED-SC-0006 (2026-07-08) — the comment at `scene_dispatch.py:286-287` is historical,
+not a live call; the package's own `run_contest`/`ContestResult`/`ExchangeResult`/
+`build_argue_pool`/`resolve_exchange`/`ARGUE_POOL_TN`/`CONCENTRATION_MULTIPLIER`/
+`RESISTANCE_DEFAULT`/`CONTEST_FATIGUE_PENALTY` re-exports had ZERO live callers outside this
+file and the stub's own re-export chain (measured by grep across `engine/ tools/ tests/`).
+`parliamentary_vote.py`'s five `PERSUASION_*` thresholds were the one genuinely live import;
+they are now inlined directly in `parliamentary_vote.py`, which no longer imports this package
+for them. `resolve_exchange:132-190` was the only code implementing canon §4's compare-model
+(the design fork `proposals/2026-09-04-social-contest-branches/11_FOUR_GAMES_AUDIT_AND_PLAN.md`
+§8 E1 named) and is recoverable at the fork ref above, not lost.
 ──────────────────────────────────────────────────────────────────────────────
 """
 from __future__ import annotations
-
-# ── Legacy surface re-exported for the two live importers (deprecate-not-delete) ──
-# scene_dispatch.py uses run_contest; parliamentary_vote.py uses the PERSUASION_* thresholds.
-from systems.social_contest.sim.contest_legacy_stub import (  # noqa: F401
-    run_contest,
-    resolve_exchange,
-    build_argue_pool,
-    ContestResult,
-    ExchangeResult,
-    ARGUE_POOL_TN,
-    CONCENTRATION_MULTIPLIER,
-    PERSUASION_WIN_THRESHOLD,
-    PERSUASION_LOSS_THRESHOLD,
-    PERSUASION_TOTAL_VICTORY,
-    PERSUASION_TOTAL_DEFEAT,
-    PERSUASION_TRACK_START_DEFAULT,
-    RESISTANCE_DEFAULT,
-    CONTEST_FATIGUE_PENALTY,
-)
 
 # ── Promoted kernel public API (the real engine this stage relocates) ──
 from .contract import (  # noqa: F401
@@ -99,12 +86,6 @@ from . import narrative   # noqa: F401
 from .policy import POLICIES  # noqa: F401
 
 __all__ = [
-    # legacy surface
-    "run_contest", "resolve_exchange", "build_argue_pool", "ContestResult", "ExchangeResult",
-    "ARGUE_POOL_TN", "CONCENTRATION_MULTIPLIER",
-    "PERSUASION_WIN_THRESHOLD", "PERSUASION_LOSS_THRESHOLD", "PERSUASION_TOTAL_VICTORY",
-    "PERSUASION_TOTAL_DEFEAT", "PERSUASION_TRACK_START_DEFAULT",
-    "RESISTANCE_DEFAULT", "CONTEST_FATIGUE_PENALTY",
     # kernel surface
     "A", "B", "other", "Move", "FaultState", "Adjudicator", "Panel", "ContestView", "Pressure",
     "Stasis", "Appeal", "Standing", "Face", "Reserve", "Pool", "SelfGating", "Leverage", "Room",

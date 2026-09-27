@@ -447,6 +447,13 @@ OBSERVATION_DEPOSIT_MODES = roster("observation_deposit_modes")
 # at the head of this file). Bound at import for `TITLE_DOMAINS`' reason: an unbound roster is
 # the one whose absence goes unnoticed.
 FAN_OUT_MODES = roster("fan_out_modes")
+# `R8.1`. THE `seen` CLAIM -- its four terms (ordered: they are the struct's fields), the one
+# predicate it is deposited under, and which terms each witness channel shows. Bound at import for
+# `TITLE_DOMAINS`' reason; cross-validated against `WITNESS_CHANNELS` and `epistemic.Seen` at
+# import in `epistemic.py`, beside the channel predicates it is keyed on.
+OBSERVATION_TERMS = roster("observation_terms", ordered=True)
+OBSERVATION_DEPOSIT = roster_map("observation_terms", "deposit")
+TERMS_SUPPLIED_BY = roster_map("observation_terms", "supplied_by")
 # `W-E`. THE THREE BANDS PERSONAL COMBAT CAN DISTINGUISH, and HOW MUCH BODY A WOUND COSTS. Bound
 # here with every other roster rather than beside their reader in the S39 block below, because
 # that is where an absent roster's refusal is guaranteed to fire (`TITLE_DOMAINS`' lesson, above).

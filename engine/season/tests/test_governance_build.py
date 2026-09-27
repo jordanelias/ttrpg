@@ -27,7 +27,7 @@ from ..data import files
 from ..data.matrix import MATRIX, Step, WriteClass
 from ..data.rosters import CONFERRAL_BASES, REVOCATION_BASES, RUNG_KINDS, TITLE_DOMAINS, title_domain
 from ..data.verbs import VERB_TABLE
-from ..epistemic import CHANNEL_PREDICATES
+from ..epistemic import CHANNEL_PREDICATES, SEEN_PREDICATE
 from ..gaps import Forbidden, Unowned, Unspecified
 from ..data.cast import faction_leader
 from ..harness.populated import build_realm
@@ -1918,6 +1918,14 @@ def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_seas
     at = {rung: sid for sid, rung in dw.items()}
     home = world_q.home_of(w)
     assert added, "no claim moved; if that is now true, `24d-i` IS `DONE·INERT` -- relabel it"
+    # ⚠ MERGE, 2026-09-27 (`R8.1`, `seen` claim): a resident is a CO-LOCATED WITNESS of their own
+    # dwelling's wear Event, so `seen`'s deposit fires beside `condition.worn` for the same Event --
+    # a second added claim about the same subject, not a claim on something else. `SEEN_PREDICATE`
+    # is admitted here for that reason; the subject check is unchanged and still the whole of what
+    # this test polices (a claim about ANYTHING else would still fail it).
+    assert {c.predicate for c in added} <= {"condition.worn", SEEN_PREDICATE}, (
+        f"an added claim carries a predicate this test does not expect: "
+        f"{sorted({c.predicate for c in added})}")
     for c in added:
-        assert c.predicate == "condition.worn" and c.subject == at.get(home.get(c.holder)), (
+        assert c.subject == at.get(home.get(c.holder)), (
             f"an added claim is not a resident's claim on their own hearth's dwelling: {c}")

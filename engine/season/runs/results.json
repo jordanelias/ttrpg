@@ -9802,7 +9802,7 @@
   "W6": {
    "id": "W6",
    "verdict": "PASS",
-   "detail": "PASS: ONE Event spanning many rungs, with ONE id, emitted SERIALLY before the parallel section. Sharding it per rung would BREAK causes[], because ONE CAUSE IS ONE ID (S31.1 exception 3). It reached 9 ledger(s) through WITNESS",
+   "detail": "PASS: ONE Event spanning many rungs, with ONE id, emitted SERIALLY before the parallel section. Sharding it per rung would BREAK causes[], because ONE CAUSE IS ONE ID (S31.1 exception 3). It reached 18 ledger(s) through WITNESS",
    "kind": null,
    "section": "S31.1",
    "title": "a plague spans many rungs as one event",
@@ -9920,7 +9920,7 @@
   "A5": {
    "id": "A5",
    "verdict": "PASS",
-   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (b93e887ca230...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
+   "detail": "PASS, AND THE CONTROL FIRED. Fixed point: condition 893 == 893 and the LOG CONTENT HASH matches (2d8f8fb923f0...) under a reversed act order, through the real fold and sum-then-clamp-once. THE CONTROL: the same five deltas summed UNCLAMPED as IEEE floats in the two orders give 0.30000000000000004 vs 0.3 -- DIFFERENT, and the same five summed as integers give 3 vs 3 -- IDENTICAL. So the divergence is IEEE NON-ASSOCIATIVITY and not an artefact of clamping (rev 3's control clamped per step, which is order-dependent in integers too AND is what S27.3 forbids). TWO SEPARATE PROPERTIES, and S32 says not to conflate them: THE CANONICAL SORT BUYS REPRODUCIBILITY (arm 1); FIXED POINT BUYS ORDER-INDEPENDENCE (arm 2). If fixed point were refused, the honest word would be CANONICALLY ORDERED, not order-independent, and every document would have to change the word. A one-ulp difference at a band floor is A VERB THAT EXISTS IN ONE ORDERING AND NOT ANOTHER (S12.1/S48)",
    "kind": null,
    "section": "S32",
    "title": "the fold is order-independent, and the float control actually fires",
@@ -10182,7 +10182,7 @@
   "A28": {
    "id": "A28",
    "verdict": "PASS",
-   "detail": "PASS over 263 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 20 causes name an ACT and 238 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
+   "detail": "PASS over 484 events from a real run: id uniqueness, a NON-DECREASING season index, a stable content hash, and referential integrity on causes[] against log UNION resolved -- 20 causes name an ACT and 459 name an EVENT, zero dangle. \u26a0 THE UNION IS `H-82` AND IT IS A READING, NOT A GIVEN: #353 `:658` and `:1377` cannot both hold as written, and this probe asserts the reading `W9` took rather than leaving it in a code comment",
    "kind": null,
    "section": "S19.1",
    "title": "the log's invariants hold",
@@ -11225,10 +11225,10 @@
   "DECISION": 1887,
   "QUERY": 23087,
   "NOTE": 277,
-  "WRITE": 10554,
-  "EVENT": 10553,
+  "WRITE": 20422,
+  "EVENT": 20036,
   "ACT": 95,
-  "CLAIM": 1114,
+  "CLAIM": 2168,
   "GAP": 87
  },
  "_corpus_defects": [
