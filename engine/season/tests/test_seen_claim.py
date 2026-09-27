@@ -395,3 +395,52 @@ def test_r8_3_seen_is_not_a_requirement_stem_and_agreement_does_not_pair_it():
     assert agreement(told, own) == (0, 0, 0), (
         "`agreement` now pairs `seen` claims -- then R8.3's cost is PAID: two witnesses who agree "
         "on `who` and differ on `marks` score as disagreeing. Decide that deliberately")
+
+
+def test_r8_told_content_prefers_a_non_seen_claim_when_the_teller_holds_both():
+    """RULED (Jordan, 2026-09-27): item 3 of the four `valoria-critic` findings on the R8.1
+    integration was that `witness.py::_told_content`'s preference for a non-`seen` claim had no
+    falsifier -- the only cited control (`build_world(0)`, `own = [c for c in teller.ledger if
+    c.predicate != SEEN_PREDICATE]` in place) showed 0 `told_by` claims either way, so nothing
+    distinguished "the preference matters" from "nothing here ever fires". This is a technical gap,
+    not a design question, and closes by building the falsifier directly on `_told_content`
+    (no season loop, no corpus) rather than by finding a world where the effect surfaces downstream.
+
+    THE TELLER HOLDS BOTH: an ordinary claim about the subject, landed first, and a `seen` claim
+    about the same subject, landed later and therefore MORE RECENT by `LedgerReader`'s own
+    comparator. Without the `SEEN_PREDICATE` filter, `latest_about` returns the `seen` claim --
+    provably, by the MUTATION ARM below, which deletes the filter and turns this red. With it,
+    `_told_content` must return the ordinary claim."""
+    from ..loop.witness import _told_content
+
+    w = P.tiny_world()
+    teller = w.persons[ACTOR]
+    ordinary = Claim("ord1", ACTOR, RUNG, "stores:grain", 3, 0, "firsthand", 100, "own")
+    seen_claim = Claim("seen1", ACTOR, RUNG, SEEN_PREDICATE,
+                        Seen(stratum="social", marks=(), who=ACTOR), 1, "firsthand", 100, "own")
+    teller.ledger.append(ordinary)
+    teller.ledger.append(seen_claim)
+    act = Act(id="told_content_probe", actor=ACTOR, verb="tell", payload={"subject": RUNG})
+
+    got = _told_content(w, act)
+    assert got is not None, "`_told_content` returned nothing with a real claim on the ledger"
+    assert got.id == "ord1", (
+        f"`_told_content` returned {got.id!r}, not the ordinary claim `ord1` -- the teller's most "
+        "RECENT claim about the subject is the `seen` one, so a comparator with no `SEEN_PREDICATE` "
+        "preference would return it instead")
+
+    # MUTATION ARM -- delete the preference, exactly as `_told_content`'s own docstring's
+    # "MEASURED at the R8.1 commit" line was built against the un-filtered comparator.
+    import engine.season.loop.witness as WITNESS_MOD
+
+    def mutated(w_, act_):
+        t = w_.persons.get(act_.actor)
+        refs = WITNESS_MOD.act_refs(act_)
+        subj = refs[0] if refs else None
+        if t is None or subj is None:
+            return None
+        return LedgerReader(t.ledger).latest_about(subj)
+
+    assert mutated(w, act).id == "seen1", (
+        "the mutation arm (no `SEEN_PREDICATE` filter) did not return the `seen` claim -- the "
+        "fixture is not exercising the preference this test is built to falsify")
