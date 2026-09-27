@@ -364,8 +364,9 @@ RUNG_KINDS = roster("rung_kinds", ordered=True)
 REMIT_ACTS = roster("remit_acts")
 # ED-IN-0256 rulings (2) and (3), plan position `13d-i`: HOW A SEAT IS FILLED and WHO MAY STRIP IT.
 # Bound at import for `TITLE_DOMAINS`' reason below -- an unbound roster is the one whose absence
-# goes unnoticed. `Office.__post_init__` refuses a declared basis off either; the predicates in
-# `loop/predicates.py` read them.
+# goes unnoticed. `Office.__post_init__` refuses a declared basis off either; `state/gate.py`'s
+# `has_conferral_basis`/`REVOCATION_RULES` read them (moved there by G3; CORRECTED, antagonist
+# pass, 2026-09-27 -- this said `loop/predicates.py`).
 CONFERRAL_BASES = roster("conferral_bases")
 REVOCATION_BASES = roster("revocation_bases")
 # ⚠ A TESTING FIXTURE, NOT CANON — see the roster's own note. Jordan, 2026-09-18: "for testing

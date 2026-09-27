@@ -1056,30 +1056,59 @@ def test_13f_a_sole_holder_re_stamping_their_own_office_refuses_and_does_not_cra
     `p_mid` is the SOLE holder here, exercising `off_reeve` itself as `via` (self-referential,
     which `may_fill` refuses on its own terms too: `via == off.id`) -- the worst case, since it
     was ALSO the case `_req_establish`'s old code admitted unconditionally whenever `others` was
-    empty. The mutation below is the control: forcing `may_fill` to `True` must flip the
-    precondition, proving the refusal above genuinely comes from asking it rather than from some
-    other clause refusing first."""
+    empty. `p_mid` is seated WITH `confer` in the grant -- without it `_eligible`
+    (`loop/resolve.py`, `establish` is `remit:confer`-eligible) refuses the act before
+    `_req_establish` is ever reached, which is exactly the mistake this test's own first writing
+    made: it seated `p_mid` with `["issue"]` only, so `_eligible` refused first and the test passed
+    identically whether or not `_req_establish`'s clause 5 was fixed -- a citation-free assertion
+    that could not observe the failure it excluded (`CLAUDE.md` section 0.1 pt 2), found by a
+    holistic antagonist pass over this same sweep and corrected here.
+
+    THE MUTATION IS THE REAL OLD CODE, RUN THROUGH THE FULL `resolve()` PIPELINE -- not a
+    reimplementation trusted to match it, and not a check that some OTHER clause refuses first
+    (`monkeypatch.setattr(PR, "may_fill", ...)` alone does not prove this, since `_eligible` gates
+    the act before `_req_establish` ever runs: patching `may_fill` without also fixing the seeded
+    remit would still pass for the wrong reason). `PR.REQUIRES_PREDICATES["establish"]` -- the
+    registry `@requires_predicate` populates at decoration time, which `_admits` actually calls --
+    is patched directly, because patching the bare module attribute `PR._req_establish` does NOT
+    reach the caller (the registry holds the original function object, captured before any
+    monkeypatch of the module-level name)."""
     w, d = _establish_world()
-    _seat_reeve(w, ["issue"])
-    out = _establish(w, d, "e_self", _founding(remit=["issue", "dispatch"]),
+    _seat_reeve(w, ["confer"])
+    out = _establish(w, d, "e_self", _founding(remit=["confer", "dispatch"]),
                      actor="p_mid", via="off_reeve")
     assert [e.kind for e in out] == ["establish.refused"], [e.kind for e in out]
-    assert w.offices["off_reeve"].remit_acts == ["issue"], (
+    assert w.offices["off_reeve"].remit_acts == ["confer"], (
         "the refused act still re-stamped the remit")
 
-    # MUTATION: confirm the refusal genuinely comes from `may_fill`'s real answer on THIS actor
-    # and THIS `via` (a self-referential seat, which `may_fill` refuses on `via == off.id` alone)
-    # -- not from some other clause. Forcing `may_fill` to `True` must flip the precondition to
-    # admit the act, which is the falsifier this test would miss if `held`/`may_fill` were never
-    # actually reached for the sole-holder case.
+    # MUTATION: the retired precondition, run through the SAME pipeline on a FRESH world --
+    # reproduces the uncaught crash this fix closes. `others` (not `held`) is the retired name.
     import engine.season.loop.predicates as PR
-    monkeypatch.setattr(PR, "may_fill", lambda *a, **k: True)
+    from ..state.gate import NotYours
+
+    def retired_req_establish(w, a):
+        off = PR.office_described_by(a)
+        if off is None or off.rung not in w.rungs or not PR.has_conferral_basis(off):
+            return False
+        held_as = w.class_of(off.id)
+        if held_as is not None:
+            if held_as != "Office":
+                return False
+            cur = w.offices[off.id]
+            if not (off.post == cur.post and off.rung == cur.rung and off.body == cur.body
+                    and off.faction == cur.faction and off.conferral == cur.conferral
+                    and off.revocation == cur.revocation):
+                return False
+        others = any(t.kind == "hold" and t.object == off.id and t.live and t.subject != a.actor
+                    for t in w.tenures)
+        return not others or PR.may_fill(w, a.actor, a.via, off)
+
+    monkeypatch.setitem(PR.REQUIRES_PREDICATES, "establish", retired_req_establish)
     w2, d2 = _establish_world()
-    _seat_reeve(w2, ["issue"])
-    assert PR._req_establish(w2, Act(id="e_probe", actor="p_mid", verb="establish", via="off_reeve",
-                                     payload=_founding(remit=["issue", "dispatch"]))), (
-        "forcing may_fill to True did not flip the precondition -- it is not asking may_fill "
-        "for the sole-holder case, so the refusal above is not evidence the fix works")
+    _seat_reeve(w2, ["confer"])
+    with pytest.raises(NotYours):
+        _establish(w2, d2, "e_self_retired", _founding(remit=["confer", "dispatch"]),
+                  actor="p_mid", via="off_reeve")
 
 
 @pytest.mark.parametrize("change", [

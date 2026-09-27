@@ -258,15 +258,21 @@ def _req_establish(w: "World", a: "Act") -> bool:
     ⚠ CLAUSE 5 IS G3's, AND IT EXISTS BECAUSE `13f`'s RE-STAMP WRITES OTHER PEOPLE'S TENURES -- a
     fourth live non-owner write the G3 plan text did not list beside `revoke`, `confer` and
     `kill / wound`. `_eff_establish` re-stamps the grant (`Tenure.payload`) on every live `hold` on
-    the office, and a sitting holder's `hold` is HIS edge. The write gate admits that under the
-    conferral basis -- the authority that may fill a seat may re-grant it (`state/gate.py::
-    tenure_write_basis`) -- so this refuses first, with the gate's own predicate, whenever there is
-    such a holder: 5. every live `hold` on the office is the actor's own, OR the seat the act
+    the office, and a sitting holder's `hold` is HIS edge -- the ACTOR's OWN included, since T-m
+    never admits re-granting a seat-hold (`state/gate.py::tenure_write_basis`, corrected by G3's
+    own antagonist pass). The write gate admits the re-stamp only under the conferral basis -- the
+    authority that may fill a seat may re-grant it -- so this refuses first, with the gate's own
+    predicate, whenever ANY live hold exists on the office, self included: 5. the seat the act
     exercises may fill the office (`may_fill`: purview over its rung, `via` not the office itself).
-    An office nobody else sits in is unaffected, which is every `establish` before `13f` could
-    re-stamp anyone. ⚠ It is STRICTER THAN THE GATE by one case, deliberately: a re-stamp that
-    changes no grant writes nothing the gate would see, and this still asks for the authority --
-    mirroring `_grant_remit`'s equal-grant test here would be a second copy of it (§8)."""
+    An office NOBODY sits in -- a founding -- is unaffected, since there is no hold yet for
+    `may_fill` to be asked about. ⚠ It is STRICTER THAN THE GATE by one case, deliberately: a
+    re-stamp that changes no grant writes nothing the gate would see, and this still asks for the
+    authority -- mirroring `_grant_remit`'s equal-grant test here would be a second copy of it
+    (§8). ⚠ CORRECTED (antagonist pass on the accumulated Phase alpha+beta diff, 2026-09-27): this
+    said "every live hold ... is the actor's own, OR the seat ... may fill the office" and "an
+    office nobody ELSE sits in is unaffected" -- both described the RETIRED rule, which excluded
+    the actor's own hold from needing `may_fill` at all. See the corrected comment on clause 5's
+    body below for the reproduction that found this."""
     try:
         off = office_described_by(a)
     except (Unowned, Unspecified, Forbidden):
@@ -297,8 +303,9 @@ def _req_establish(w: "World", a: "Act") -> bool:
     # `p_king`, sole holder of `off_mayor`, re-establishing it via `off_mayor` itself passed this
     # precondition (`others` was `False`) and then raised an UNCAUGHT `NotYours` inside `_fold`,
     # which does not catch it -- a season-killing crash where the row's own `establish.refused`
-    # should have fired. `held` is `True` for a founding too (no holder exists yet, self or
-    # other), so founding a brand-new office is unaffected -- `may_fill` is only asked when a
+    # should have fired. ⚠ `held` IS `False` FOR A FOUNDING (no holder exists yet, self or other
+    # -- corrected 2026-09-27, this line previously said `True`), so founding a brand-new office
+    # short-circuits `not held` to `True` and is unaffected -- `may_fill` is only asked when a
     # live `hold` already exists to re-stamp.
     held = any(t.kind == "hold" and t.object == off.id and t.live for t in w.tenures)
     return not held or may_fill(w, a.actor, a.via, off)

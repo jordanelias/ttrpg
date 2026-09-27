@@ -269,8 +269,10 @@ class World:
         WEARING THE NAME OF A HIERARCHY. Jordan, 2026-09-02: *settlements are nested inside
         territories inside provinces inside duchies inside realm? I think that is required too, or
         is that unnecessary to nest these and instead just explicitly define scale?* The nesting is
-        required and it is the thing `under_purview` WALKS -- a scale label cannot be walked, so
-        the two are not interchangeable. But no `contain` edge was direction-checked, so a
+        required and it is the thing the purview walk climbs (`under_purview`, since deleted by
+        `13d-i`; its successor is `state/gate.py::purview_reaches`/`descendants`) -- a scale label
+        cannot be walked, so the two are not interchangeable. But no `contain` edge was
+        direction-checked, so a
         settlement containing a duchy was accepted, and `probes` builds an outright cycle.
         Measured: `corpus_run.build_at` gives 37 person-scale cases a `person`-kind rung containing
         three person rungs, and nothing refused.
@@ -296,8 +298,10 @@ class World:
                 f"not go up the ladder", "S10",
                 needs="a parent strictly above the child on `rung_kinds`",
                 law="#353 §10 -- `contain : Rung -> Rung` is the containment LADDER. An "
-                    "edge that does not ascend makes `under_purview` walk sideways or "
-                    "loop, and Jordan's governance canon reads purview off that walk")
+                    "edge that does not ascend makes the purview walk (`state/gate.py::"
+                    "purview_reaches`/`descendants`, since G3; `under_purview` before it, "
+                    "deleted by `13d-i`) walk sideways or loop, and Jordan's governance "
+                    "canon reads purview off that walk")
         (self.persons[t.subject].tenures if t.subject in self.persons else self._unowned).append(t)
         return t
 

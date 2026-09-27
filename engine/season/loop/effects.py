@@ -329,7 +329,7 @@ def _closing(w: "World", edges: list) -> Change:
 
 
 @effect_for("convene")
-def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> list:
+def _eff_convene(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     """Schedules a sitting: a Date comes due, with a ConveningCondition attached — Part E's two
     writes, both done by this one effect because the fold calls it once for the row.
 

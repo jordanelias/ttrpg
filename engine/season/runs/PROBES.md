@@ -240,7 +240,7 @@ either** — they are listed individually below and should be discounted accordi
 **what:** `contain` from realm 'R' to hearth 'Hh' does not go up the ladder
 
 **needs:** a parent strictly above the child on `rung_kinds`
-**law:** #353 §10 -- `contain : Rung -> Rung` is the containment LADDER. An edge that does not ascend makes `under_purview` walk sideways or loop, and Jordan's governance canon reads purview off that walk
+**law:** #353 §10 -- `contain : Rung -> Rung` is the containment LADDER. An edge that does not ascend makes the purview walk (`state/gate.py::purview_reaches`/`descendants`, since G3; `under_purview` before it, deleted by `13d-i`) walk sideways or loop, and Jordan's governance canon reads purview off that walk
 
 ### `A27` — every value the game needs has an owner  ·  **UNOWNED**  ·  `S22.3`  ·  by `no-signature`
 **what:** 4 values named in the ownership table's OWN gap list

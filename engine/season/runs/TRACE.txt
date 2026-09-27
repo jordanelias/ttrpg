@@ -5272,7 +5272,7 @@
   5272  probe:A24            QUERY     descendants  @S17  side="resolver"
   5273  probe:A25            QUERY     descendants  @S17  side="resolver"
   5274  probe:A25            QUERY     lateral:ties  @S17  side="resolver"
-  5275  probe:A26            GAP       [FORBIDDEN] `contain` from realm 'R' to hearth 'Hh' does not go up the ladder  @S10  needs="a parent strictly above the child on `rung_kinds`" law="#353 \u00a710 -- `contain : Rung -> Rung` is the containment LADDER. An edge that does not ascend makes `under_purview` walk sideways or loop, and Jordan's governance canon reads purview off that walk" expected=false
+  5275  probe:A26            GAP       [FORBIDDEN] `contain` from realm 'R' to hearth 'Hh' does not go up the ladder  @S10  needs="a parent strictly above the child on `rung_kinds`" law="#353 \u00a710 -- `contain : Rung -> Rung` is the containment LADDER. An edge that does not ascend makes the purview walk (`state/gate.py::purview_reaches`/`descendants`, since G3; `under_purview` before it, deleted by `13d-i`) walk sideways or loop, and Jordan's governance canon reads purview off that walk" expected=false
   5276  probe:A27            GAP       [UNOWNED] 4 values named in the ownership table's OWN gap list  @S22.3  needs="an ownership row each" law="S22.3 -- named rather than glossed: season_factor's distribution (BLOCKS yield); the cohort's construal spread (rule stated, representation not); the object-side Tenure index (Nobody, by rule -- a barrier-built cache); travel legs (in the write matrix AND the churn ledger AND no ownership row)" expected=false
   5277  probe:A28            STEP      enter CALENDAR  @S23
   5278  probe:A28            BARRIER   barrier 1 - CALENDAR  @S23

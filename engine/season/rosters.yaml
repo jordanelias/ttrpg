@@ -1313,8 +1313,10 @@ rosters:
       THIS list. `open: false`: a fourth way to fill a seat is a design change, not a table edit.
       READ BY: `Office.__post_init__`, which refuses a declared basis off this list (the
       `remit_acts` refusal's shape, so a typo is loud rather than a seat nobody can ever fill), and
-      `loop/predicates.py::has_conferral_basis`, the ONE basis test `_req_confer` and
-      `_req_establish` share. ⚠ NOTHING DISCRIMINATES BETWEEN THE THREE YET: `confer` admits a seat
+      `state/gate.py::has_conferral_basis` (moved from `loop/predicates.py` by G3, since the gate
+      asks it and may not import the loop; `predicates.py` re-imports the name), the ONE basis test
+      `_req_confer` and `_req_establish` share -- CORRECTED (antagonist pass, 2026-09-27), this
+      said `loop/predicates.py::has_conferral_basis`. ⚠ NOTHING DISCRIMINATES BETWEEN THE THREE YET: `confer` admits a seat
       declaring any of them. Which act fills an `elected` or an `annex` seat is not ruled, and no
       election or annexation verb exists; narrowing `confer` to `appointed` would leave the other
       two seats fillable by nothing.
@@ -1331,9 +1333,10 @@ rosters:
       `[purview, holdings, none]`. A seat with NO declared basis (`None`) is revocable by nobody,
       which is what r2's `none` meant; it needs no member of its own.
       ⚠ THIS ROSTER NAMES THE BASIS AND NOTHING ELSE -- the `fan_out_modes` split above. The rule
-      is BEHAVIOUR and lives in `loop/predicates.py` (`REVOCATION_RULES`), which refuses at IMPORT
-      if a member here has no rule there or the reverse, so the roster cannot grow a value the
-      resolver silently treats as another.
+      is BEHAVIOUR and lives in `state/gate.py` (`REVOCATION_RULES`, moved from `loop/predicates.py`
+      by G3 for the same reason as `has_conferral_basis` above -- CORRECTED, antagonist pass,
+      2026-09-27), which refuses at IMPORT if a member here has no rule there or the reverse, so
+      the roster cannot grow a value the resolver silently treats as another.
     values: [rung_above_same_faction]
 
 tables:
