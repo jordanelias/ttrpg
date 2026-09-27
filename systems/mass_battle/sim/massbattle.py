@@ -11,8 +11,10 @@ WHAT SURVIVED THE OVERWRITE, AND WHY IT HAD TO. The canon engine's entry point i
 `run_battle(unit_a, unit_b, max_turns=18)` takes constructed Units. The campaign's entry point is
 STRATEGIC: `faction_action._try_conquest` has two factions and needs a degree back. The adapter
 between them — `resolve_mass_battle`, `_faction_to_unit`, the garrison stub, and the size-ratio ->
-degree map — existed ONLY in the old engine, and `systems/factions/sim/faction_action.py:462`
-imports it by this exact path. Overwriting the file wholesale would have broken the campaign at
+degree map — existed ONLY in the old engine, and `systems/factions/sim/faction_action.py:393`
+imports it by this exact path (this citation previously read `:462`, a stale line number pointing at
+an unrelated Muster-cost line — corrected 2026-09-27, ED-MB-0070, caught by adversarial review).
+Overwriting the file wholesale would have broken the campaign at
 import. So the engine was replaced and the adapter was kept, which is what "port the engine" has to
 mean if the campaign is to keep running.
 
@@ -134,10 +136,42 @@ def _morale_start_from_stability(faction):
     found by an adversarial pass on unrelated work and confirmed by grep: no call site exists
     anywhere in `engine/` or this file; only test code (`test_persubunit_stress.py`,
     `tests/valoria/test_mass_battle_signals.py`) invokes it directly. `engine/mc_v18.py`'s campaign
-    loop never references it, `morale`, or this file's own `_faction_to_unit` by that claim. Whether
-    PP-711 is enforced in the live campaign some OTHER way (each battle rebuilding a fresh Unit from
-    Faction stats, so there is no stale morale to reset) or is simply unenforced there is not yet
-    determined — flagged, not resolved, in `registers/handoffs/HANDOFF_MB.md`.
+    loop never references it, `morale`, or this file's own `_faction_to_unit` by that claim.
+
+    [RESOLVED 2026-09-27, ED-MB-0070] The prior row left open whether PP-711 is enforced some other
+    way or simply unenforced. Half right, half wrong — corrected by an adversarial review (Opus,
+    2026-09-27) that opened `orchestration.py` directly rather than trusting this docstring's own
+    prior claim, the same discipline that caught the PP-711/starting-formula conflation above.
+    `resolve_mass_battle` (below) calls `_faction_to_unit` fresh for BOTH sides on every invocation,
+    and `_try_conquest` (`systems/factions/sim/faction_action.py:393-400`) calls `resolve_mass_battle`
+    fresh for every Military Conquest — no `Unit` this function returns is cached or persisted on
+    `faction`/`world` between calls (grep-confirmed: no `lru_cache`/memoization wraps either
+    function). Every campaign battle therefore starts from a brand-new `Unit` whose MORALE is derived
+    from the faction's Stability AT THAT MOMENT — for morale alone, a stronger property than "reset
+    between battles", since there is no stale morale ever available to reset.
+
+    WRONG PART, NOW CORRECTED: `reset_morale_between_battles` does NOT "stay live in `run_battle`'s
+    own internal multi-turn loop" — it has NO production call site anywhere in this package.
+    `run_multi_turn_battle` calls `reset_positions`, `run_battle` and `between_turn_recovery` between
+    turns, never this function; its own docstring says so directly ("NOT within a single battle:
+    between_turn_recovery handles the within-battle turn boundary"). Every caller is a test writing to
+    a hand-built `Unit` directly (`tests/valoria/test_mass_battle_signals.py`,
+    `test_persubunit_stress.py`, `tests/valoria/test_charger_latch.py`,
+    `tests/valoria/test_morale_write_sweep.py`, `tests/valoria/test_octagon_damage.py`) — it is dead
+    in production, full stop, not merely unreached at this one seam.
+
+    SCOPE, STATED PRECISELY: fresh construction closes the gap for PP-711 (morale) ONLY. The same
+    function's docstring also carries PP-712 ("Discipline persists between battles") — fresh
+    construction does NOT satisfy that: `_faction_to_unit` hardcodes `discipline=5,
+    discipline_start=5` every call, so Discipline does not carry over either, which is the SAME
+    pre-existing `[GAP: faction -> unit construction lacks canonical spec]` this file already
+    declares above, not a new one. This paragraph is about PP-711 alone.
+
+    Would become load-bearing at the strategic seam the moment a `Unit` persists across more than one
+    battle here — most plausibly the season loop's own mass-battle provider seam
+    (`engine/season/seam/contest.py`), which does not yet call this adapter at all
+    (`engine/season/rosters.yaml`: "NO PROVIDER"), rather than the deprecated `mc_v18` path. Not a
+    currently-open item.
 
     [ASSUMPTION: rounded to the nearest int (half-up, see `_round_half_up`) and floored at 1 rather
     than 0 — basis: `mass_battle_v30.md:230-231` states canon's own Morale range directly ("Morale

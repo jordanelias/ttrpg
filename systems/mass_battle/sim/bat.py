@@ -16,8 +16,23 @@ adds it so every later stage has a reproducible byte-exact check.
 """
 import os, sys, hashlib
 
-# import the package exactly as the stress harness / gauge do
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # tests/sim on path
+# [ED-MB-0070 fix] REPO ROOT on sys.path, so `from systems.mass_battle.sim... import` resolves when
+# this file is launched as a bare script (`python3 systems/mass_battle/sim/bat.py`), which puts only
+# the script's OWN directory on sys.path, never `cwd`. This used to read
+# `dirname(dirname(abspath(__file__)))` -- TWO levels up from `.../systems/mass_battle/sim/bat.py` is
+# `.../systems/mass_battle`, not the repo root FOUR levels up (verified by direct execution: three
+# levels up, `.../systems`, was tried first here and still raised ModuleNotFoundError -- caught by
+# re-running, not assumed). The comment above it ("tests/sim on path") gives away why the old count
+# was wrong: it is unmoved residue from when this file lived at
+# `tests/sim/mass_battle/bat.py`, where two levels up genuinely was `tests/sim`, correct for THAT
+# location's un-dotted `import mass_battle...`. The 2026-08-24 port to `systems/mass_battle/sim/`
+# changed both the file's depth and its import style (dotted, `systems.mass_battle.sim.engine`) and
+# this line was never re-derived for either change -- it has done nothing useful since, silently
+# papered over by every caller that separately exports PYTHONPATH pointed at the repo root
+# (tools/ci_golden_modes_check.py since the same date; tests/valoria/test_mass_battle_byte_exact.py
+# only since this same fix). Fixing it here, at the source, fixes every caller, present and future,
+# rather than adding a THIRD independent copy of the same workaround.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 from systems.mass_battle.sim.engine import (  # noqa: E402
     build_unit, build_envelopment, build_refused_flank, resolve_battle,
     SIDE_A_START_ROW, SIDE_B_START_ROW)

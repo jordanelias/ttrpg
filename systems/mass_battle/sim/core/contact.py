@@ -76,7 +76,10 @@ def check_orders(unit, t, enemy_cells):
     behavior may also set 'fire_signal': NAME (A4) -- a pseudo-field, not a real Subunit attribute:
     once THIS order's own trigger condition fires, NAME is added to the issuing Unit's
     fired_signals, the one real order-writable path to release a 'signal:NAME' trigger from inside
-    a battle.
+    a battle. behavior may also set 'feign_retreat': bool (C4, ED-MB-0067 Part C / ED-MB-0071) --
+    another pseudo-field: sets the issuing Unit's `.feigned` (PP-256), pre-declaring a Feigned
+    Retreat before the unit's normal rout check runs -- the order-writable path that mechanic (fully
+    built in orchestration.py) was missing.
 
     Byte-exact: Subunit.orders defaults to () -- the while loop body never executes for any existing
     Subunit, the identical safe-default pattern as the already-shipped target_delay_ticks: int = 0."""
@@ -140,6 +143,17 @@ def check_orders(unit, t, enemy_cells):
                     # either way (out of scope for A4) -- so "at most one tick's delay, never more"
                     # is the honest guarantee, not "always next call".
                     unit.fired_signals.add(v)
+                    continue
+                if k == 'feign_retreat':
+                    # [C4, ED-MB-0067 Part C / ED-MB-0071] Same shape as fire_signal immediately
+                    # above: not a real Subunit attribute, so it is set on the ISSUING UNIT instead
+                    # -- PP-256's Feigned Retreat is a Unit-wide tactic (Unit.feigned), not a
+                    # per-subunit one. This is the trigger PP-256's resolution machinery
+                    # (feigned_retreat_recognized / feigned_retreat_check / resolve_feigned_retreat,
+                    # all in orchestration.py, all pre-dating this change) was missing: nothing
+                    # anywhere previously set `.feigned` outside its dataclass default and the
+                    # battle-boundary reset, so a fully-built, ratified mechanic never fired.
+                    unit.feigned = bool(v)
                     continue
                 setattr(sub, k, v)
             # [A1, ED-MB-0067 Part A] Clamp a freshly-assigned route to Jordan's ruled path-length

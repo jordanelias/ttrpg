@@ -6,8 +6,16 @@ begins pursuing a *feigning* enemy, two rolls resolve the trap:
   2. if deceived, the pursuer makes a Discipline check Ob 1 — failing it OVEREXTENDS the pursuer,
      cutting its next engagement pool by OVEREXTEND_PENALTY.
 
-The whole tactic is GATED behind MB_FEIGNED_RETREAT (default OFF) so the multi-unit RNG stream is
-unchanged unless explicitly enabled (the flip is needs_jordan).
+The whole tactic is GATED behind MB_FEIGNED_RETREAT (default ON since the flags-ON ruling — this
+docstring previously said "default OFF", stale; see test_field_golden_pins.py's `_FLIPPED_BY_THE_RULING`
+for where that flip is actually tracked).
+
+[C4, ED-MB-0067 Part C / ED-MB-0071] Jordan ruled fog stands (no automatic "enemy routing" reveal) with
+a roll to identify a feint — exactly what `feigned_retreat_recognized`/`feigned_retreat_check` above
+already do. What was missing, confirmed dead by construction (nothing anywhere set `.feigned` outside
+its dataclass default and the battle-boundary reset), was the trigger: a commander pre-declaring the
+ruse. `core/contact.py`'s `check_orders` now supports it as the `'feign_retreat': bool` pseudo-field on
+an Order's `behavior` — see the order-trigger tests at the end of this file.
 
 Convention note (verified, not a bug): the engine's `roll_pool` is the canonical §A net-successes roll
 (face 1 = -1 botch, 7-9 = +1, 10 = +2) used by EVERY other §A check (recall_check, cascade, …). Under
@@ -145,6 +153,73 @@ def test_overextended_pool_penalty_applies_only_when_gated_on():
     off_base = u2.base_combat_pool()
     u2.overextended = True
     assert u2.base_combat_pool() == off_base, "OFF: overextended flag must be inert (byte-exact)"
+
+
+# ─── C4, ED-MB-0067 Part C / ED-MB-0071: the missing trigger ─────────────────
+# Everything above tests RESOLUTION (recognize/hold/overextend), which pre-dates this change and was
+# already correct. Nothing above ever exercised how `.feigned` gets set in the first place outside a
+# test hand-writing it — confirmed dead by construction (grep: no assignment anywhere but the dataclass
+# default and the battle-boundary reset). These tests cover the new order-writable path only.
+
+def test_feign_retreat_is_a_recognized_order_safe_field():
+    """'feign_retreat' passes Order's eager validation, matching every other pseudo-field."""
+    from systems.mass_battle.sim.hierarchy.units import Order
+    Order(trigger='immediate', behavior={'feign_retreat': True})   # does not raise
+
+
+def test_feign_retreat_order_sets_the_unit_flag_not_the_subunit():
+    """Must land on the ISSUING UNIT's `.feigned` (PP-256 is a Unit-wide tactic, not per-subunit),
+    and must never leak onto the Subunit as a real attribute -- same discipline as fire_signal's
+    own leak test in test_mass_battle_signals.py."""
+    _reload(on=True)
+    from systems.mass_battle.sim.core.contact import check_orders
+    from systems.mass_battle.sim.hierarchy.units import Order, Subunit, Unit
+    su = Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
+                 advance_dir=1, stance='balanced', unit_type='melee',
+                 orders=(Order('tick:1', {'feign_retreat': True}),))
+    u = Unit(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+             morale=6, morale_start=6, subunits=[su])
+    assert u.feigned is False
+    check_orders(u, 1, [])
+    assert u.feigned is True
+    assert su._order_idx == 1
+    assert not hasattr(su, 'feign_retreat'), "'feign_retreat' must not leak onto the Subunit"
+
+
+def test_feign_retreat_order_does_not_fire_before_its_own_trigger():
+    _reload(on=True)
+    from systems.mass_battle.sim.core.contact import check_orders
+    from systems.mass_battle.sim.hierarchy.units import Order, Subunit, Unit
+    su = Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
+                 advance_dir=1, stance='balanced', unit_type='melee',
+                 orders=(Order('tick:5', {'feign_retreat': True}),))
+    u = Unit(name='u', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+             morale=6, morale_start=6, subunits=[su])
+    check_orders(u, 1, [])
+    assert u.feigned is False, "must not pre-declare a feint before the order's own trigger fires"
+    assert su._order_idx == 0
+
+
+def test_feign_retreat_end_to_end_through_resolve_feigned_retreat():
+    """The trigger is not just plumbing -- it changes what resolve_feigned_retreat sees at the real
+    pursuit call site, exactly as if `.feigned` had been set by hand (the only way this fully-built,
+    ratified mechanic was reachable before this order-writable path existed)."""
+    _, O = _reload(on=True)
+    from systems.mass_battle.sim.core.contact import check_orders
+    from systems.mass_battle.sim.hierarchy.units import Order, Subunit, Unit
+    su = Subunit(shape='Line', troop_type='infantry', tier=2, starting_position=(25, 25),
+                 advance_dir=1, stance='balanced', unit_type='melee',
+                 orders=(Order('immediate', {'feign_retreat': True}),))
+    feigning_unit = Unit(name='feigner', faction='A', power=4, command=4, discipline=1,
+                          discipline_start=1, morale=6, morale_start=6, subunits=[su])
+    pursuer = _Stub(discipline=1, command=1)
+    assert O.resolve_feigned_retreat(pursuer, feigning_unit) is None, \
+        "must be a no-op before the order fires -- .feigned still False"
+    check_orders(feigning_unit, 1, [])
+    assert feigning_unit.feigned is True
+    random.seed(4)
+    r = O.resolve_feigned_retreat(pursuer, feigning_unit)
+    assert r is not None, "resolve_feigned_retreat must now engage once the order has set .feigned"
 
 
 def teardown_module(module):

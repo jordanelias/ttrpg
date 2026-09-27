@@ -319,6 +319,12 @@ _ORDER_SAFE_FIELDS = frozenset({
     # every OTHER pending order watching it, without messenger relay or cross-Unit broadcast
     # (both still out of scope).
     'fire_signal',
+    # [C4, ED-MB-0067 Part C / ED-MB-0071] `feign_retreat` is ALSO a PSEUDO-field, same shape as
+    # `fire_signal` immediately above: not a real Subunit attribute, so check_orders special-cases it
+    # (skips the generic setattr, sets the ISSUING UNIT's `.feigned` instead of a Subunit field --
+    # PP-256's Feigned Retreat is a Unit-wide tactic, per `Unit.feigned`'s own declaration, not a
+    # per-subunit one). Listed here for the same construction-time-validation reason as `fire_signal`.
+    'feign_retreat',
 })
 
 # [Stage C, adversarial review] Recognized trigger prefixes -- validated eagerly at construction so a
@@ -342,7 +348,12 @@ class Order:
     attribute->value, applied via setattr when the trigger fires (e.g. {'stance':'balanced',
     'instructions':('envelop',)}) -- restricted to _ORDER_SAFE_FIELDS (behavioral/targeting switches,
     including escort_of/escort_offset -- a subunit can switch INTO escort mode mid-battle via an
-    order), not geometry/troop-accounting fields (see _ORDER_SAFE_FIELDS's own note for why)."""
+    order), not geometry/troop-accounting fields (see _ORDER_SAFE_FIELDS's own note for why).
+    behavior may also set 'feign_retreat': bool (C4, ED-MB-0067 Part C / ED-MB-0071) -- a pseudo-field,
+    not a real Subunit attribute: once this order's trigger fires, the ISSUING UNIT's `.feigned` is set
+    to the given value, pre-declaring a Feigned Retreat (PP-256) before the unit's normal rout check
+    ever runs. Inert unless MB_FEIGNED_RETREAT is ON; resolved at the pursuit call site by the
+    already-shipped feigned_retreat_recognized / feigned_retreat_check, unchanged by this field."""
     trigger: str
     behavior: dict = field(default_factory=dict)
     waypoint_ref: Optional[object] = field(default=None, repr=False)  # only consulted for 'ally_at:D'
@@ -2687,7 +2698,17 @@ class Unit:
     # ED-MB-0022: Feigned Retreat (PP-256). `feigned` = this unit declared a Feigned Retreat and is
     # withdrawing to bait a pursuer (its "rout" is a ruse). `overextended` = a pursuer that failed the
     # PP-256 Discipline check while chasing a feigning enemy — its NEXT engagement pool is cut by
-    # OVEREXTEND_PENALTY. Both are inert unless MB_FEIGNED_RETREAT is ON (default OFF, byte-exact).
+    # OVEREXTEND_PENALTY. Both are inert unless MB_FEIGNED_RETREAT is ON (default ON — this comment
+    # previously said "default OFF", stale since the flag's default flip; see config.py).
+    # [C4, ED-MB-0067 Part C / ED-MB-0071] Jordan ruled fog stands (no automatic "enemy routing"
+    # reveal) with a roll for the observer to identify it — already correctly shipped as
+    # orchestration.py's feigned_retreat_recognized (Command Ob 2) chained into feigned_retreat_check
+    # (Discipline Ob 1), both invoked from resolve_feigned_retreat at the pursuit call site. What was
+    # missing, confirmed dead by construction (no assignment to `.feigned` anywhere outside this
+    # default and the battle-boundary reset): a way to actually SET this flag. `'feign_retreat'` in
+    # core/contact.py's check_orders is that path — a commander pre-declares the ruse via an Order
+    # before the unit's normal rout mechanism ever fires, so WHEN it later routs, resolve_feigned_retreat
+    # already finds `.feigned` True. See Order's own docstring below and _ORDER_SAFE_FIELDS' note.
     feigned: bool = False
     overextended: bool = False
     stance: str = "balanced"
@@ -2884,8 +2905,12 @@ class Unit:
         else:
             raw = min(self.effective_size, self.command) + self.command + pen + stam_pen
         # ED-MB-0022: an OVEREXTENDED pursuer (failed the PP-256 Feigned Retreat Discipline check)
-        # re-engages at a bounded pool penalty. Gated by MB_FEIGNED_RETREAT (default OFF -> flag never
-        # set -> branch inert -> byte-exact). [canonical: mass_battle_v30.md §B.4 — Overextended -2D]
+        # re-engages at a bounded pool penalty. Gated by MB_FEIGNED_RETREAT (default ON since the
+        # flags-ON ruling; this comment previously said "default OFF", stale). Still effectively inert
+        # in every existing golden battery: `.overextended` is set only via resolve_feigned_retreat,
+        # which requires `.feigned` True first, and nothing set `.feigned` before the 'feign_retreat'
+        # order pseudo-field (C4, ED-MB-0067 Part C / ED-MB-0071) — see Unit.feigned's own comment.
+        # [canonical: mass_battle_v30.md §B.4 — Overextended -2D]
         if MB_FEIGNED_RETREAT and self.overextended:
             raw -= OVEREXTEND_PENALTY
         return max(1, math.floor(raw))
