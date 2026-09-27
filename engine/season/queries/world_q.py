@@ -35,6 +35,11 @@ from ..data.requires import UNKNOWN
 from ..data.rosters import FACTION_BY_PROP, QUESTION_SOURCES, TENURE_KINDS
 from ..gaps import Forbidden, Unspecified
 from ..state.carriers import Person, Question, Site, Tenure
+# ⚠ `parent_of` AND `descendants` ARE RE-EXPORTED, NOT DEFINED HERE (G3, plan position 6). The
+# write gate's F3 clause needs both -- ruling (3)'s parent rung and ruling (4)'s purview subtree --
+# and the gate is in `state/`, which may not import this module. The bodies moved down unchanged;
+# these names are the same function objects, so every `world_q.parent_of(...)` call is unaffected.
+from ..state.containment import descendants, parent_of  # noqa: F401 -- re-exported
 from ..state.ids import ROOT
 from ..state.world import World
 from ..trace_log import TRACE
@@ -45,23 +50,8 @@ from ..trace_log import TRACE
 # ===========================================================================
 
 # ---- resolver-side: World FIRST, always -----------------------------
-def parent_of(w: World, rung_id: str) -> Optional[str]:
-    for t in w.tenures:
-        if t.kind == "contain" and t.subject == rung_id and t.live:
-            return t.object
-    return None
-
-def descendants(w: World, rung_id: str) -> list[str]:
-    """S6.1 -- the CONTAINMENT TREE and only it. S38.1: ITERATIVE, with a visited set --
-    the reference graph is cyclic ON PURPOSE and a tree walk hangs on the NORMAL case."""
-    TRACE.query("descendants", "resolver")
-    out, seen, stack = [], {rung_id}, [rung_id]
-    while stack:
-        cur = stack.pop()
-        for t in w.tenures:
-            if t.kind == "contain" and t.object == cur and t.live and t.subject not in seen:
-                seen.add(t.subject); out.append(t.subject); stack.append(t.subject)
-    return out
+# `parent_of(w, rung_id)` and `descendants(w, rung_id)` -- see the import above and
+# `state/containment.py`.
 
 def r1_aggregate(w: World, rung_id: str, over: Callable[[str], int]) -> int:
     """R-1: COMPUTE ON DEMAND over DESCENDANTS. Never received, never stored. S22.4 cl.3:
@@ -806,9 +796,12 @@ class WorldReader:
             if s is None:
                 return UNKNOWN
             floors = w.fixtures.get("band_floors").get(s.kind)
-            if floors is None:
+            if not floors:
                 # `_req_work`'s refusal, carried unchanged: `H-08` owns the per-kind floors and
                 # §42.2.1 forbids picking a plausible number for a kind nobody registered.
+                # `not floors` catches BOTH a missing kind (`None`) and a kind registered with no
+                # uses (`{}`, `dwelling`'s control-arm row, `24d-i`) -- `min({}.values())` is a bare
+                # `ValueError`, not this typed refusal, and `is None` alone let it through.
                 raise Unspecified(
                     f"no band floors for site kind {s.kind!r}", "S12.1",
                     needs="a per-kind floor table -- register row H-08",

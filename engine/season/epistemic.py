@@ -154,7 +154,8 @@ def _hold_tenure_ends(w: "World", subject: str) -> tuple:
 def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = None) -> list:
     """`H-79`: what the claims deposited from one Event are ABOUT.
 
-    `actor` is the incumbent — one claim, subject = the Event's own subject. `per_change` mints
+    `actor` is the incumbent — one claim, subject = the Event's anchor (`anchor_of`; it was the
+    Event's own `subject` field until G1b deleted it). `per_change` mints
     one per `StateChange`, subject = THE THING CHANGED, which is what makes §F1's Q2 clause
     "something they hold" reachable at all. `both` is the union.
 
@@ -215,8 +216,8 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
                 _add(s)
         # ⚠ **AND WHAT THE ACT NAMED, WHICH IS THE HALF THAT WAS MISSING.** An Event that wrote
         # nothing has an empty `changes[]`, so every claim deposited from one was minted about
-        # **the actor** — by the `or [e.subject]` fallback below, `e.subject` being the actor for
-        # anything the fold emits. §F1's Q2 admits a claim whose subject is the holder or
+        # **the actor** — by the `or [anchor]` fallback below (it read `or [e.subject]` until G1b
+        # deleted the field), the anchor being the actor for anything the fold emits. §F1's Q2 admits a claim whose subject is the holder or
         # something the holder holds, so *a claim about the actor can never raise a listener's
         # question*: the news arrived in a form nobody could act on. Measured before this line
         # existed: `R3` = 0 of 30 on the NPC lane, 0 of 59 on ARC.
@@ -265,7 +266,15 @@ def claim_subjects(w: "World", e: "Event", rule: str, refs: Optional[list] = Non
         # eviction pressure this sweep measures against is unchanged.
         if not any(c.subject for c in e.changes) and any(refs or ()):
             out = [r for r in (refs or ()) if r]
-    return out or [anchor]
+    # ⚠ G1b: AN EVENT NOTHING ANCHORS IS DEPOSITED ABOUT NOTHING, NOT ABOUT `None`. With
+    # `Event.subject` deleted, `anchor_of` answers `None` for an Event with no act, no change and
+    # no anchored antecedent. The channel predicates already admit nobody for one, but the `total`
+    # arm fans every Event to everyone, and without this line it minted `Claim(subject=None)` into
+    # every ledger -- measured, 5 of 5 in `tiny_world`. `witness`'s own precedent decides it: a
+    # read the instrument cannot answer (`UNKNOWN`) is NOT deposited, because the instrument's gap
+    # would become a belief. No production emitter reaches this (every logged Event in the probe
+    # corpus, headless and the populated realm anchors); `test_g1b_attribution.py` plants one.
+    return [s for s in (out or [anchor]) if s is not None]
 
 
 # ---------------------------------------------------------------------------
@@ -384,9 +393,9 @@ def _ch_document_key(w: "World", e, pid) -> bool:
 
     ⚠ THE CHANNEL DOES REACH A NON-AUTHOR TODAY, AND AN EARLIER WRITING OF THIS DOCSTRING DENIED
     IT. It said *the channel still fires for nobody but the author*, which is true of Carin's world
-    -- she holds no rung -- and FALSE OF THE MECHANISM. `_eff_transfer` returns `[src.id, dst.id]`,
-    `_apply_write` turns those into `StateChange`s subjected to the RUNGS, and the fold puts them on
-    the Event. EXECUTED on `tiny_world`: with `p_other` holding `S` and acting, and `p_low` holding
+    -- she holds no rung -- and FALSE OF THE MECHANISM. `_eff_transfer` names both rungs (G4: as
+    the subjects of its `Change`, where it returned `[src.id, dst.id]`), the gate mints a receipt
+    subjected to each RUNG that moved, and the fold puts them on the Event. EXECUTED on `tiny_world`: with `p_other` holding `S` and acting, and `p_low` holding
     the destination `Hh`, `transfer.made` carries `changes=['S','Hh']` and `document_key` returns
     True for `p_low` -- **a non-author, witnessing an act, through the bureaucratic channel**. That
     is `R5` reachable, which is what this repair was for, and it under-reported itself. Found by the
@@ -403,7 +412,7 @@ def _ch_document_key(w: "World", e, pid) -> bool:
     ⚠ AND ONE INTERACTION THIS DOES NOT SETTLE, BECAUSE IT IS `PHASE 1` STEP 3's. A channel decides
     WHO witnesses, not WHAT they learn. Composed with the deposit layer as it stands -- `observers_for`
     discards which channel admitted a person, and `claim_subjects` under the default `both` rule
-    starts from `e.subject`, the actor -- a `document_key`-only witness learns WHO ACTED. `R8.5`
+    starts from the Event's anchor, the actor -- a `document_key`-only witness learns WHO ACTED. `R8.5`
     cites a ratified line pointing the other way (*"a document holder saw only that the document
     changed"*). ⚠ WHEN THIS DOCSTRING WAS FIRST WRITTEN, ON THE PROTOTYPE, IT SAID THAT LINE
     *"lives on unmerged PR #371, not in this tree"*. That is no longer true of THIS file: #371 was
@@ -440,21 +449,35 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
 
     ⚠⚠ THIS PARAGRAPH SAID *"the correct lookup ALREADY LIVES ONCE, in `_eligible`"*, AND THAT
     BECAME FALSE ON 2026-09-18 — in the commit that closed `H-71`, which did not come back and
-    amend it. There are now THREE readings of *does this holder have this remit* over TWO stores:
-    this site and `loop/resolve.py:56` read the live `w.offices[...].remit_acts`, while
+    amend it. ~~There are now THREE readings of *does this holder have this remit* over TWO
+    stores: this site and `loop/resolve.py:56` read the live `w.offices[...].remit_acts`, while
     `decision/options.py` reads the SNAPSHOT on the `hold` Tenure (`Tenure.granted_acts`, written
     by `World._grant_remit` at `add_tenure`). They agree today and are not guaranteed to: a hold
     opened BEFORE its office exists gets an empty snapshot and is never revisited, so the person
     side refuses while both world-side readings admit; and any future write to `Office.remit_acts`
-    is a silent no-op person-side — §0.1 pt 1's read/write asymmetry, with no guard shipped.
+    is a silent no-op person-side — §0.1 pt 1's read/write asymmetry, with no guard shipped.~~
+    **CLOSED 2026-09-26, position `13e`.** The three readings are now ONE STORE, though still
+    three call sites that each ask it independently (this site, `loop/resolve.py`'s `_eligible`,
+    and `decision/options.py`) — a further §8 move a later reader may make, not claimed here: this
+    site and `_eligible` both admit on `t.granted_acts` (`remits & set(t.granted_acts)` here,
+    `arg in t.granted_acts` there) — the same store `decision/options.py` already read — and the
+    `w.offices.get(t.object)` lookup that made each a live-world reading is deleted from both. The
+    read/write asymmetry this paragraph named is gone with it: the only readers of
+    `Office.remit_acts` left in `engine/season/`'s non-test code are `_grant_remit`,
+    `Office.__post_init__` and `_eff_establish` (an AST scan in `test_governance_build.py`'s `13e`
+    section pins that set over the package, excluding `tests/`).
 
-    ⚠ THE CONSOLIDATION IS SCHEDULED, NOT FORGOTTEN: position `13e` of
+    ~~⚠ THE CONSOLIDATION IS SCHEDULED, NOT FORGOTTEN: position `13e` of
     `workplans/2026-09-18-governance-settlement-behaviour-plan.md` routes this site and `_eligible`
     onto `t.granted_acts`; `13f` gates it, because whether a remit change reaches SITTING holders
-    (snapshot) or only future ones (mirror) is undecided and arrives with `establish`'s effect.
-    THREE structurally independent read-only review lanes have now rediscovered this separately,
-    which is §10's rank-by-independent-rediscovery signal rather than three copies of one opinion.
-    The original W6 finding below stands; it is the §8 lesson this file then had to relearn.
+    (snapshot) or only future ones (mirror) is undecided and arrives with `establish`'s effect.~~
+    **DONE 2026-09-26.** `13f` (2026-09-25) landed first and settled the gating question —
+    `establish` re-stamps every live `hold` on the office it writes, so a remit change reaches
+    sitting holders by an ACT and not by a hand-mutation — and `13e` then routed both readings
+    above onto the snapshot that decision established. THREE structurally independent read-only
+    review lanes had rediscovered this separately before either position landed, which was §10's
+    rank-by-independent-rediscovery signal rather than three copies of one opinion. The original
+    W6 finding above stands; it is the §8 lesson this file then had to relearn.
 
     Found by the `W6` adversarial pass."""
     remits = {x.split(":", 1)[1] for r in VERB_TABLE.values() if e.kind in (r.emits or ())
@@ -463,8 +486,7 @@ def _ch_post_remit(w: "World", e, pid) -> bool:
         return False
     for t in w.tenures:
         if t.subject == pid and t.kind == "hold" and t.live:
-            off = w.offices.get(t.object)
-            if off and remits & set(off.remit_acts):
+            if remits & set(t.granted_acts):
                 return True
     return False
 

@@ -2,10 +2,10 @@
 
 `04:402` states the end position as STRUCTURAL: *"No `actor`, no `target`, no `subject` on
 `Event` -- the fields do not exist"*, and `changes[]` carries the changed things individually.
-The field is live in the tree today, so that claim is not yet true of the code. This module is
-the replacement it needs, and G1a is what made it possible: attribution reads `causes[]` against
-the act store, and the changed thing reads `changes[]`, which now carries verified receipts
-rather than assertions.
+**As of G1b (plan position 4, 2026-09-26) that claim is true of the code: the field is deleted.**
+This module is what replaced it, and G1a is what made it possible: attribution reads `causes[]`
+against the act store, and the changed thing reads `changes[]`, which now carries verified
+receipts rather than assertions.
 
 ⚠ WHY THE FIELD HAS TO GO RATHER THAN BE TIDIED. `Event.subject` is OVERLOADED, and the two
 senses are set by different emitters:
@@ -19,12 +19,12 @@ function's correctness" -- because getting it wrong once made almost every Event
 own subject and `P15` could not tell a working channel from one broken closed. That hazard is a
 consequence of the overload, not of the lookup.
 
-FOUR TIERS, IN ORDER, AND THE LAST ONE IS THE BLOCKER:
+THREE TIERS, IN ORDER. There were four, and the fourth was the field:
 
     1. the ACT channel   -- `causes[]` -> act store -> `actor`
     2. the CHANGE channel-- the first `changes[]` entry carrying a subject
     3. the CAUSE channel -- a consequence inherits the anchor of the Event that caused it
-    4. `Event.subject`   -- the field itself, still load-bearing, still here
+    (4. `Event.subject`  -- DELETED by G1b; an Event reaching none of 1-3 now anchors on `None`)
 
 MEASURED, and the sequence of measurements matters more than any one of them. A first sweep of
 1,428 events over 5 headless seeds found tiers 1-2 sufficient: 201 by act with 0 disagreements,
@@ -40,15 +40,27 @@ The two classes the corpus found:
     EVENT that wrote the condition. Tier 3 recovers it exactly: the crossing is about whatever
     its cause was about.
   * `plague.struck` -- `causes=[ROOT]`, no changes, no act, subject a rung. **Nothing in the
-    Event holds what it concerns.** Tier 4 is the only thing that answers, which is the finding:
-    `Event.subject` CANNOT BE DELETED while this class exists, and G1b's instruction to delete
-    it is blocked on giving such an emitter an antecedent or a receipt of its own.
+    Event held what it concerned** except the field, so tier 4 was the only thing that answered
+    and this class was why the field could not go.
 
-⚠ SO THIS MODULE DOES NOT YET LET THE FIELD GO, AND SAYS SO RATHER THAN IMPLYING OTHERWISE. What
-it does is make the dependence *countable*: tier 4 is the exact population that still needs the
-field, and a reader trying to finish G1b should be working to make that tier unreachable.
-`engine/season/tests/test_g1b_attribution.py` pins the ladder and controls tiers 1-3 against the
-field on live runs.
+HOW THAT BLOCKER CLOSED, AND WHERE THE CLASS TURNED OUT TO LIVE. Every `causes=[ROOT]`-and-no-
+`changes` Event in the tree was APPARATUS, never production: the fold's four emitters carry
+`[a.id]` (tier 1), the gate's emission carries a minted receipt (tier 2), and MATTER's
+`condition.band_crossed` names the write that crossed the floor (tier 3). The probe corpus's
+`Ev()` -- `plague.struck` among its callers -- `probes.py`'s P15 speech and `corpus_run`'s
+`planted_control` were the whole population, and each now carries a bare change naming what it
+is about (`harness/probes.py::about`), which is tier 2. So the field went with no production
+emitter changing, and one corpus Event MOVED IN THE RIGHT DIRECTION: A2's `sitting.decided`
+(subject `D`, caused by a petition about `p_low`) had anchored on `p_low` through tier 3 while
+the field said `D`; its own change now says `D`, the field's answer.
+
+⚠ `None` IS NOW A REAL, REACHABLE ANSWER FROM `anchor_of`, AND IT MEANS "NOBODY CAN SAY WHAT
+THIS IS ABOUT". Every reader treats it as the absence it is: `_event_place` returns no place,
+`_ch_witness_key` admits nobody, `last_emission_of` matches nothing. That makes a regression
+here SILENT -- an emitter that drops its change vacates its witness channel and nothing raises.
+`engine/season/tests/test_g1b_attribution.py` is the instrument against it: it plants such an
+Event and asserts the witness deposits nothing for it, and it asserts over the probe corpus and
+live runs that every logged Event anchors, with a population floor so an empty log cannot pass.
 """
 from typing import TYPE_CHECKING, Optional
 
@@ -78,12 +90,13 @@ def actor_of(w, e: "Event") -> Optional[str]:
 
 
 def anchor_of(w, e: "Event") -> Optional[str]:
-    """WHAT THE EVENT IS ABOUT. Four tiers, in order; see the module header for the measurement.
+    """WHAT THE EVENT IS ABOUT. Three tiers, in order; see the module header for the measurement.
 
-    This is the exact function `Event.subject` was performing, with the overload made explicit
-    instead of left for each reader to disentangle. It returns `None` only for an Event that
-    reaches none of the four tiers -- which, with tier 4 being the field, means an Event whose
-    subject is empty too.
+    This is the function `Event.subject` was performing, with the overload made explicit instead
+    of left for each reader to disentangle. It returns `None` for an Event that reaches none of
+    the three tiers -- no act among its causes, no change naming anything, no antecedent that
+    anchors -- and since the field is gone, that `None` is final: nothing else in the Event says
+    what it concerns.
     """
     who = actor_of(w, e)
     if who is not None:
@@ -112,16 +125,11 @@ def anchor_of(w, e: "Event") -> Optional[str]:
             got = anchor_of(w, prior)
             if got is not None:
                 return got
-    # TIER 4 -- THE FIELD ITSELF, AND IT IS WHY `Event.subject` CANNOT BE DELETED YET.
-    # `plague.struck` carries `causes=[ROOT]`, no changes and no act: a world event ABOUT a rung
-    # with no antecedent in the model at all. Its subject is irreducible -- no channel above can
-    # hold it, because nothing else in the Event knows what it concerns. G1b's instruction is to
-    # delete the field; the measurement says the field is still load-bearing for this class, so
-    # it stays and the blocker is recorded rather than worked around. What has to exist first is
-    # an emitter that says what such an Event is about -- a receipt naming the rung, or an
-    # antecedent it can inherit from. Until then this line is the honest tier, and it is the one
-    # a reader should be trying to make unreachable.
-    return getattr(e, "subject", None) or None
+    # NO TIER 4. It read `Event.subject`, and G1b deleted the field once the only class that
+    # needed it -- `plague.struck` and its kin, `causes=[ROOT]` with no change and no act -- was
+    # shown to be apparatus and given a change of its own (module header). An Event arriving
+    # here has no channel left that names what it concerns, and `None` says so.
+    return None
 
 
 def _event_by_id(w, eid: str):

@@ -34,7 +34,7 @@ from systems.mass_battle.sim.engine import (  # noqa: E402
     Subunit, Unit, SIDE_A_START_ROW, SIDE_B_START_ROW,
     run_battle, run_multi_turn_battle, build_unit, build_army, build_envelopment, build_refused_flank,
     resolve_battle, _centered_line_cols)
-from systems.mass_battle.sim.config import TROOPS_PER_TIER  # noqa: E402
+from systems.mass_battle.sim.config import TROOPS_PER_TIER, MB_VOLLEYS_START  # noqa: E402
 
 # ─────────────────────────────────────────────────────────────────────────────────────────────────
 # [ED-MB-0027] HONEST-GAUGE density-matching constants (fiat register §1 measurement integrity).
@@ -96,9 +96,20 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
         # as before. A caller-set stat still overrides the preset.
         kw = dict(unit_type=sp.pop('unit_type', 'melee'), stance=sp.pop('stance', stance),
                   instructions=sp.pop('instructions', ()))
-        for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max'):
+        for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max', 'volleys'):
             if k in sp:
                 kw[k] = sp.pop(k)
+        # [A6, ED-MB-0067 Part A -- adversarial-pass round 2, F4] Same cross-subunit ammo-pool gap
+        # engine.build_army had (see its own note): an unseeded ranged subunit's volleys (None)
+        # inherits the ONE shared parent Unit pool, which every OTHER subunit's between_turn_recovery
+        # resupply call also writes to. Give a ranged subunit its own explicit pool unless the spec
+        # already set one; a melee subunit's ammo count is never read for combat (volley_phase.fire's
+        # own unit_type=='ranged' gate), so it is left inheriting as before. This does NOT backport
+        # build_army's separate DG-4 morale-seeding fix (this function still leaves per-subunit
+        # morale unseeded unless a spec sets it explicitly) -- that is a pre-existing gap unrelated
+        # to A6, out of scope here.
+        if kw.get('volleys') is None and kw['unit_type'] == 'ranged':
+            kw['volleys'] = MB_VOLLEYS_START
         subs.append(Subunit.of_type(tt, sp.pop('shape'), sp.pop('tier', 3), pos, **kw))
     return Unit(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,

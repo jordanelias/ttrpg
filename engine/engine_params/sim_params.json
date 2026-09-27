@@ -3,21 +3,21 @@
   "schema_version": 2,
   "citation_coverage": {
     "cited": 171,
-    "total": 415,
-    "uncited": 244,
+    "total": 419,
+    "uncited": 248,
     "of_which_assumption_grade": 11
   },
-  "count": 415,
+  "count": 419,
   "by_module": {
     "engine.autoload": 14,
     "engine.cross_scale": 13,
     "engine": 1,
-    "engine.season": 6,
+    "engine.season": 7,
     "characters": 7,
     "combat": 12,
     "factions": 65,
     "fieldwork": 15,
-    "mass_battle": 138,
+    "mass_battle": 141,
     "overview": 12,
     "settlements": 24,
     "social_contest": 49,
@@ -432,6 +432,17 @@
       "note": "ED-IN-0249 / H-128 -- the scar accumulator's precision, order-independence only",
       "citation": "ED-IN-0249",
       "citation_grade": "source"
+    },
+    {
+      "key": "engine.season._NAMED_IN_MESSAGE",
+      "name": "_NAMED_IN_MESSAGE",
+      "value": 4,
+      "kind": "scalar",
+      "module": "engine.season",
+      "file": "engine/season/state/gate.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
     },
     {
       "key": "characters.BELIEF_MOMENTUM_PER_CONTEST_CAP",
@@ -2128,6 +2139,17 @@
       "citation_grade": "source"
     },
     {
+      "key": "mass_battle.ROUTE_WAYPOINT_EPS",
+      "name": "ROUTE_WAYPOINT_EPS",
+      "value": 0.5,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "systems/mass_battle/sim/config.py",
+      "note": "",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
       "key": "mass_battle.ROUT_CAP_FRAC",
       "name": "ROUT_CAP_FRAC",
       "value": 0.3,
@@ -2693,6 +2715,28 @@
       "note": "[canonical: inherited from the pre-port adapter — see note above]",
       "citation": "inherited from the pre-port adapter — see note above",
       "citation_grade": "source"
+    },
+    {
+      "key": "mass_battle._STA_MORALE_CEIL",
+      "name": "_STA_MORALE_CEIL",
+      "value": 7,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "systems/mass_battle/sim/massbattle.py",
+      "note": "[JUSTIFIED: mirrors Faction.Sta's own registry ceiling (test_faction_stat_bounds.py) and matches Morale's canon ceiling (mass_battle_v30.md:230-231, \"Morale (1-7)\")]",
+      "citation": null,
+      "citation_grade": null
+    },
+    {
+      "key": "mass_battle._STA_MORALE_FLOOR",
+      "name": "_STA_MORALE_FLOOR",
+      "value": 1,
+      "kind": "scalar",
+      "module": "mass_battle",
+      "file": "systems/mass_battle/sim/massbattle.py",
+      "note": "[JUSTIFIED: mass_battle_v30.md:230-231 states canon's Morale range directly (\"Morale (1-7)\") — this is the direct citation, not an inference from the separate in-battle erosion floor at :254]",
+      "citation": null,
+      "citation_grade": null
     },
     {
       "key": "mass_battle.BETWEEN_TURN_MORALE_RECOVERY",

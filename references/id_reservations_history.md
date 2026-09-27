@@ -87,6 +87,19 @@ BLOCK RELEASED 2026-07-30 (ED-IN-0098, W5 capstone walk-back). Was 0036-0039 RES
 
 ## IN — Infrastructure / cross-cutting
 
+**2026-09-26 — ED-IN-0262..0274 allocated, and the state-file comment condensed a second time.**
+`tests/valoria/test_id_reservations_walkback.py::test_narrative_does_not_creep_back_into_the_state_file`
+caught the IN row at 723 chars (cap 600) -- it was condensed once already at `ED-IN-0218`
+(2026-09-12, below) and simply re-grew the same way, one ID's worth of narrative appended per
+allocation with nothing ever moved out. Per the guard's own instruction the narrative moves here;
+the row keeps a short summary and the pointer. The per-ID detail for this stretch (13f/13e/13d-i/
+24d-i's build-then-verify pairs, the plan write-up and its correction, and `24d-i`'s own
+correction pass) lives in `registers/editorial_ledger_in.jsonl`, one row per ID
+(`ED-IN-0262`..`ED-IN-0274`), and is not re-duplicated here. The same run also caught a second,
+unrelated pin gone stale: `test_the_2026_07_30_walkback_actually_moved_something` still expected
+`SE` at 55, one allocation (`ED-SE-0055`, the `24d-i` dwelling-Site ruling, 2026-09-25) behind the
+tree -- updated in the same commit as this condensation, per that test's own instruction.
+
 ### 2026-09-17/18 — `ED-IN-0246..0249`, and a two-unmerged-branches allocation
 
 - **`ED-IN-0246`** — the governance/settlements/decisions execution pass: item 16 landed, items 1

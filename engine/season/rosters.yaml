@@ -458,7 +458,8 @@ rosters:
       that act is in nobody's ledger. ⚠ **NARROWED 2026-09-04 — the first writing said this of every
       write-nothing act and that is not what the code does.** The replacement is guarded on
       `any(refs)`: a write-nothing act that names NOTHING leaves `out` untouched, and the actor
-      survives — via the standing `out or [e.subject]` fallback under `per_change`, and because the
+      survives — via the standing `out or [anchor]` fallback under `per_change` (`e.subject` until
+      G1b deleted the field; `anchor_of` returns the same actor), and because the
       actor is already in `out` under `both`. So the price is paid exactly where there is a named
       subject to pay it with, which is also the only place the Q2 reachability it buys applies.
       ⚠ **AND THE NARROWING IS CODE-TRUE BUT CORPUS-VACUOUS, SAID HERE BECAUSE THE FIRST WRITING OF
@@ -471,8 +472,9 @@ rosters:
       true is that anything exercises it. Falsifier, and it is what makes this a measurement rather
       than a reading of the source: a non-zero no-refs count would witness the case, and the count
       is zero. `H-111`'s refusal question is where a witness would first appear.
-      Attribution is `T-d`'s subject and `H-107`'s — an Event carries no actor, and the tracer's
-      `Event.subject`, which still does, is the row for it. The `actor` arm is untouched and is
+      Attribution is `T-d`'s subject and `H-107`'s — an Event carries no actor, and since G1b
+      (2026-09-26) no `subject` either: `H-107`'s field is deleted and attribution reads
+      `causes[]` through `state/attribution.py`. The `actor` arm is untouched and is
       where the incumbent behaviour survives.
       ⚠ **AND THE REASON IT REPLACES RATHER THAN JOINS IS RECORDED HONESTLY, BECAUSE IT IS NOT A
       DERIVATION.** Joining mints one extra claim per write-nothing Event; the cap evicts on
@@ -606,7 +608,7 @@ rosters:
     predicates:
       co_located:    "the person shares a live `contain` Tenure with the Event's place -- the presence index S28 already builds and the fan-out never read"
       document_key:  "the person holds a live `hold` Tenure over something THIS EVENT CHANGED -- a subject named in `changes[]` (a Record, a store). ⚠ THIS ROW READ *the Event's SUBJECT* until `R8.4`, and that clause is why the channel could not fire on a single act: every fold-emitted Event sets `subject = a.actor` and no `hold` takes a PERSON as object, so the equality held only on `MATTER`/`CALENDAR` kinds, which carry no verb and no actor. The parenthetical was always right and the clause it qualified was wrong. Corrected here in the same change as the predicate, because this row is where the meaning lives (see the note above) and `R5` quotes it verbatim as the channel's definition"
-      witness_key:   "the person IS the Event's subject, or shares a live `knot` Tenure with it -- S28's knot deposit, which already reuses the Event id"
+      witness_key:   "the person IS the Event's anchor (`state/attribution.py::anchor_of` -- the actor where one acted, the written thing otherwise; it read the deleted `Event.subject` until G1b), or shares a live `knot` Tenure with it -- S28's knot deposit, which already reuses the Event id"
       post_remit:    "the person holds a live office Tenure whose remit covers the verb that emitted this kind"
       chronicle:     "the kind is emitted by a `binding_decision` verb -- a matter of record, and public because the decision is institutional"
 
@@ -861,11 +863,11 @@ rosters:
       govern any of their holdings in their stead"* — a governor for a duchy (which is how regency
       and puppet rulers arise), a council for a province, mayoral elections for a settlement. NOT
       BUILT: this roster is the ladder only, and delegation is registered as open.
-      ⚠ AND THE REVOCATION RULE, WHICH IS TWO RULES AND NOT ONE. This note said only *"authority
-      over a governance act is RANK + CONTAINMENT … and not `remit:<act>`"*, full stop, while the
-      mechanism ran a two-rule branch — so the data file's prose and the code it feeds disagreed,
-      which is precisely the §0.05 failure of treating a note as if it were the mechanism. Both
-      rules, as Jordan stated them:
+      ⚠⚠ THE REVOCATION RULE BELOW IS SUPERSEDED (`13d-i`, 2026-09-26) BY ED-IN-0256 ruling (3),
+      *"rung above of same faction"* -- `revocation_bases`. `_req_revoke` no longer reads this
+      roster, and `title_rank`/`titles_held`/`highest_title_rank` are deleted. What still reads it
+      is `title_domain`: world-gen (`harness/populated.py`) and two `Office.__post_init__` clauses.
+      The two 2026-09-02 rules, kept as the record of what the ruling replaced:
         · an ORDINARY office — *"a Duke can revoke office from any individual in that office so
           long as that office is for a holding under their purview"* — purview alone;
         · a TITLE — *"King/Queen cannot revoke title of Duke/Duchess if they do not have duchy is
@@ -960,10 +962,17 @@ rosters:
       Adding a kind means adding a row here; asking about a kind that has no row RAISES, because
       §42.2.1's worked example is exactly this table: *"a wear table that returns 20 for an
       unregistered site kind does not fail — it answers, plausibly and wrongly, forever."*
-      ⚠ THESE THREE ARE THE INSTRUMENT'S, NOT #353's, so `H-07` is `assumption`, not transcription.
+      ⚠ `harbour`, `seam` AND `body` ARE THE INSTRUMENT'S, NOT #353's, so `H-07` is `assumption`,
+      not transcription.
       ⚠⚠ `body` IS NOT A SITE. It is `(Person, body)`'s band row, here because `band_floors` keys on
       THIS roster and `H-38` ruled *"`Site.condition` is the model"* — no second scheme. See `p32`.
-    values: [harbour, seam, body]
+      ⚠ `dwelling` IS JORDAN'S, 2026-09-25 (`ED-SE-0055`, plan position `24d-i`): `ED-SE-0051`'s
+      `capacity(w, rung)` counts *"the rung's dwelling Sites"*, and he chose to make that phrase
+      literal rather than re-read it as the hearth rungs. `harness/populated.build_realm` mints one
+      per `hearth` rung. Adding it forced the `wear_per_season` and `band_floors` rows below
+      (`data/fixtures.py`'s `_load_matter_tables` refuses a site kind with no row); it has no
+      `site_yield` row, because a dwelling produces nothing and that table's `default_cell` is 0.
+    values: [harbour, seam, body, dwelling]
 
   matter_kinds:
     source: "#353 §10.4 VERBATIM: *It is a type parameter, not an enumeration. Grain, salt, timber, ore and coin are rows in a registry, not members of a closed set in a source file.*"
@@ -988,10 +997,28 @@ rosters:
       `shape.py` when these were literals (*"splitting them into rosters.yaml would put one
       declaration in two files"*) is answered by the fixture reading the data rather than
       restating it.
+      ⚠ `dwelling: 0` IS THE CONTROL ARM, SHIPPED DELIBERATELY (`24d-i`), and it is `H-07`'s own
+      *"no wear at all"* sweep point applied to one kind. ⚠ **NOT THE SAME SHAPE AS `body_step = 0`
+      AND `scar_step = 0`** (corrected 2026-09-26 — a prior version of this note claimed it was):
+      those two `continue` past the write itself (`loop/matter.py:305`), so nothing is emitted at
+      their control arm. `wear_per_season` carries no such skip — MATTER writes every Site every
+      season whatever its rate, so `dwelling: 0` still emits (see below). A dwelling sits AT a
+      hearth and persons live in hearths. A non-zero rate
+      together with any floor in `band_floors.dwelling` would let a dwelling's condition cross
+      it, reach Q3's `presence` branch in `queries/world_q.questions_for`, and hand every
+      resident a live `band_crossed` Question. That would bring `band_crossed` alive on the
+      populated world, and plan position `11a`'s premise (the source it deletes contributes 0,
+      so its control is an identity) would break. Either half at its control arm blocks the
+      crossing; both ship there. At 0 no dwelling's condition moves.
+      ⚠ ZERO IS NOT SILENT. `loop/matter.py`'s wear loop still WRITES every Site every season,
+      and `World.write` emits one `condition.worn` per write (`H-12`), so every dwelling emits
+      one wear Event a season, and its residents witness it (`co_located`) as a claim. A non-zero
+      rate is chosen with a consumer in front of it, at `24e`/`24f`, never here.
     rates:
-      harbour: 10
-      seam:    10
-      body:    10
+      harbour:  10
+      seam:     10
+      body:     10
+      dwelling: 0
 
   subsistence_weight:
     source: "`H-11` — *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*."
@@ -1334,6 +1361,43 @@ rosters:
       fixture"*. R7 (ED-IN-0205) moved it off `total`; this roster says nothing about that.
     values: [total, presence_only, all_five]
 
+  conferral_bases:
+    source: "JORDAN, ED-IN-0256 ruling (2), 2026-09-18, VERBATIM: *\"appointed, elected, annex\"* -- HOW A SEAT IS FILLED. Plan position `13d-i`."
+    open: false
+    note: >-
+      ⚠ THE VALUES ARE THE RULING'S, THE SHAPE IS r2's (`proposals/2026-09-17-governance-and-holdings-r2/03_SEATS_AND_CONTENT.md`
+      §A.4). r2 spelled this roster `[confer, determine, succeed]`, keyed on the ACT that opens
+      the hold; that list predates ED-IN-0256 and is superseded by it. The two vocabularies do not
+      correspond by name, so no r2 seat's value carries over -- a seat's basis is authored against
+      THIS list. `open: false`: a fourth way to fill a seat is a design change, not a table edit.
+      READ BY: `Office.__post_init__`, which refuses a declared basis off this list (the
+      `remit_acts` refusal's shape, so a typo is loud rather than a seat nobody can ever fill), and
+      `state/gate.py::has_conferral_basis` (moved from `loop/predicates.py` by G3, since the gate
+      asks it and may not import the loop; `predicates.py` re-imports the name), the ONE basis test
+      `_req_confer` and `_req_establish` share -- CORRECTED (antagonist pass, 2026-09-27), this
+      said `loop/predicates.py::has_conferral_basis`. ⚠ NOTHING DISCRIMINATES BETWEEN THE THREE YET: `confer` admits a seat
+      declaring any of them. Which act fills an `elected` or an `annex` seat is not ruled, and no
+      election or annexation verb exists; narrowing `confer` to `appointed` would leave the other
+      two seats fillable by nothing.
+    values: [appointed, elected, annex]
+
+  revocation_bases:
+    source: "JORDAN, ED-IN-0256 ruling (3), 2026-09-18, VERBATIM: *\"rung above of same faction\"* -- WHO MAY STRIP A SEAT. Plan position `13d-i`; closes the `is_title` branch (`H-109`)."
+    open: false
+    note: >-
+      ⚠ ONE VALUE, BECAUSE ONE RULE WAS RULED. The holder of a seat on the rung DIRECTLY ABOVE the
+      seat's own rung, in the SAME faction -- structural, NOT a rank comparison, and applied to
+      every seat alike. It replaces both of the 2026-09-02 rules the `titles` note above records
+      (purview for an office; purview + holdings + higher rank for a title) and r2's
+      `[purview, holdings, none]`. A seat with NO declared basis (`None`) is revocable by nobody,
+      which is what r2's `none` meant; it needs no member of its own.
+      ⚠ THIS ROSTER NAMES THE BASIS AND NOTHING ELSE -- the `fan_out_modes` split above. The rule
+      is BEHAVIOUR and lives in `state/gate.py` (`REVOCATION_RULES`, moved from `loop/predicates.py`
+      by G3 for the same reason as `has_conferral_basis` above -- CORRECTED, antagonist pass,
+      2026-09-27), which refuses at IMPORT if a member here has no rule there or the reverse, so
+      the roster cannot grow a value the resolver silently treats as another.
+    values: [rung_above_same_faction]
+
 tables:
 
   site_yield:
@@ -1379,6 +1443,18 @@ tables:
       ⚠ THE FLOORS ARE INVENTED. #353 states that a band edge crossing emits and may produce no
       outcome; it supplies no edges. `H-08` is the row, and until `W8` it was an `assumption` with
       no `site:` and no sweep at all — one of `PLAN.md` §1.5's unowned residue, now owned.
+      ⚠ `dwelling: {}` IS EMPTY ON PURPOSE (`24d-i`, the control arm beside `wear_per_season`'s
+      `dwelling: 0`). No floor means no band edge, so `loop/matter.py`'s `_crossings` fires
+      nothing for a dwelling at any wear. `halved` and `doubled` leave an empty cell empty.
+      ⚠ AN EMPTY CELL IS NOT A WORKABLE SITE, AND THE `floor` READ SAYS SO TYPED: `queries/
+      world_q.py`'s `floor` stem checks `if not floors:` before `min(floors.values())` and raises
+      a typed `Unspecified` (S12.1) rather than a bare `ValueError` on `{}` -- CORRECTED
+      (code-review pass on the accumulated Phase alpha+beta diff, 2026-09-27): this said the read
+      was untyped and would crash, which was true when `24d-i` first landed and is not true of the
+      tree today (`world_q.py`'s own comment at the guard names `dwelling`'s control-arm row by
+      id). It is unreached only while no question names a dwelling as a referent, since `work`
+      binds its `site` from the referent. None does at the control arm; `24d-i`'s test in
+      `engine/season/tests/test_governance_build.py` asserts it over one populated season.
     cells:
       harbour:
         bulk_shipping:   800
@@ -1390,6 +1466,7 @@ tables:
         full_operations: 800
         limited:         500
         withdrawal_only: 100
+      dwelling: {}
 
   # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this table was
   # `role_template_convictions:`; cells, `row:` and `default_cell:` are byte-identical.

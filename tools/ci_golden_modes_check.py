@@ -94,6 +94,14 @@ FIELD_PINS = {
     # for the same reason every Group C entry is: an ambient flip must produce a named red here,
     # not a mystery digest mismatch.
     'MB_CELL_EXCLUSION': '1',
+    # [A6, ED-MB-0067 Part A, 2026-09-26] Missile ammunition/resupply. Reclassified OUT of
+    # tests/valoria/test_field_golden_pins.py's _KNOWN_INERT (round 1 shipped the feature flag
+    # OFF, so it was genuinely inert at the time) and INTO this pin vector now that the default is
+    # ON: measured live on the legacy-lattice arm (a shooter's own pool reaches exactly 0 in
+    # 15/24 seeds of the battery's 'ranged' row), so an ambient flip here must produce a named red,
+    # not a mystery digest mismatch, the same reason every entry in this dict exists. See
+    # bat.py's EXPECTED comment (same ED, same date) for which mode(s) this re-recorded.
+    'MB_AMMO_ENABLED': '1', 'MB_VOLLEYS_START': '10', 'MB_VOLLEYS_RESUPPLY': '3',
 }
 
 # [ED-MB-0053 / plan-v2 §4a, 2026-07-29] Renamed from ci_field_golden_check.py: this tool is the

@@ -137,10 +137,10 @@ def _break_tenure_referent(w):
 # nothing else, or it proves the constructor works instead of the predicate.
 def _break_log_ids_unique(w):
     e = w.log[0]
-    w.log.append(Event(e.id, e.kind, e.subject, [], ["ROOT"], e.emitted_at))
+    w.log.append(Event(e.id, e.kind, [], ["ROOT"], e.emitted_at))
 
 def _break_log_not_from_the_future(w):
-    w.log.append(Event("mut_future", "probe", "p_carin", [], ["ROOT"], w.tick + 9))
+    w.log.append(Event("mut_future", "probe", [], ["ROOT"], w.tick + 9))
 
 def _break_claim_not_from_the_future(w):
     p = next(iter(w.persons.values()))

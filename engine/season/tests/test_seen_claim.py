@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import dataclasses
 
+from ..data.matrix import WriteClass
 from ..data.requires import REQUIRES_STEMS
 from ..data.rosters import OBSERVATION_TERMS, PERSON_PREDICATES, STRATA, TERMS_SUPPLIED_BY
 from ..decision.options import agreement
@@ -25,9 +26,10 @@ from ..epistemic import SEEN_PREDICATE, Seen, seen_subject
 from ..harness import headless as HL
 from ..harness import probes as P
 from ..loop import witness as WITNESS_MODULE
-from ..loop.driver import SeasonDriver
+from ..loop.driver import SeasonDriver, mint_token
 from ..queries.person_q import LedgerReader
 from ..queries.world_q import questions_for
+from ..state.attribution import anchor_of
 from ..state.carriers import Act, Claim, Tenure
 
 
@@ -47,8 +49,8 @@ def _speak_and_witness(extra_tenures=()):
     for t in extra_tenures:
         w.add_tenure(t)
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="r8_speak", actor=ACTOR, verb="speak", payload={"subject": ABOUT})],
+    d.matter(mint_token(w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="r8_speak", actor=ACTOR, verb="speak", payload={"subject": ABOUT})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "speech.made"), None)
     assert e is not None, (
@@ -64,7 +66,7 @@ def _speak_and_witness(extra_tenures=()):
     # tried to log a claim caused by an Event that was never itself logged.
     for ev in out:
         w.log.append(ev)
-    d.witness(out)
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
     return w, d, e
 
 
@@ -121,8 +123,12 @@ def test_r8_falsifier_a_seen_claim_raises_q2_for_everyone_in_the_rung():
         f"about {RUNG} the Q2 above is not evidence for the `seen` route")
 
     # MUTATION ARM -- subject the `seen` claim to the actor instead of the rung.
+    # ⚠ `anchor_of(w_, e_)`, NOT `e_.subject` -- `Event` CARRIES NO `subject` FIELD (`04 §A.3` row
+    # 6: "changes[] are gate receipts; place is a Query"). `anchor_of` is its replacement
+    # throughout `epistemic.py`, the actor for an act-caused Event. Found post-merge: this lambda
+    # predates that row landing on this branch and still read the deleted field.
     original = WITNESS_MODULE.seen_subject
-    WITNESS_MODULE.seen_subject = lambda w_, e_, pid_, mode_: e_.subject
+    WITNESS_MODULE.seen_subject = lambda w_, e_, pid_, mode_: anchor_of(w_, e_)
     try:
         w2, _d2, _e2 = _speak_and_witness()
     finally:
@@ -204,14 +210,14 @@ def test_r8_case_4_skulking_for_no_discernible_reason_produced_by_the_loop():
     `who`, so the withholding is the channel's and not the deposit's."""
     w = P.tiny_world()
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="r8_rel", actor="p_low", verb="release", payload={"subject": "p_mid"})],
+    d.matter(mint_token(w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="r8_rel", actor="p_low", verb="release", payload={"subject": "p_mid"})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "tenure.closed"), None)
     assert e is not None, f"the release did not execute: {[x.kind for x in out]}"
     for ev in out:
         w.log.append(ev)
-    d.witness(out)
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
     (far,) = _seen_claims(w.persons["p_king"])
     assert far.value == Seen(stratum=far.value.stratum) and far.value.stratum in STRATA, (
         f"a chronicle-only witness was shown {far.value}; case 4 is `stratum` alone")
@@ -237,8 +243,8 @@ def test_r8_4_a_hold_tenures_own_id_is_expanded_not_deposited_raw():
     w = P.tiny_world()
     w.add_tenure(Tenure("t_src", ACTOR, "S", "hold", since=0))
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="r8_4_rel", actor=ACTOR, verb="release", payload={"subject": "S"})],
+    d.matter(mint_token(w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="r8_4_rel", actor=ACTOR, verb="release", payload={"subject": "S"})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "tenure.closed"), None)
     assert e is not None, f"the release did not execute: {[x.kind for x in out]}"
@@ -256,7 +262,7 @@ def test_r8_4_a_hold_tenures_own_id_is_expanded_not_deposited_raw():
         "`_hold_tenure_ends` should resolve `t_src` to `(ACTOR, 'S')`")
     for ev in out:
         w.log.append(ev)
-    d.witness(out)
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
     assert [q for q in questions_for(w, w.persons[ACTOR], since=(w.tick, 0))
             if q.source == "claim_landed"], (
         f"the released Tenure's own actor got no Q2 from the `seen` claim about {subj!r} -- "
@@ -276,8 +282,8 @@ def test_r8_5_a_document_holder_saw_only_that_the_document_changed():
     w.add_tenure(Tenure("t_src", ACTOR, "S", "hold", since=0))
     w.add_tenure(Tenure("t_dst", "p_king", "Hh", "hold", since=0))
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="r8_tr", actor=ACTOR, verb="transfer",
+    d.matter(mint_token(w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="r8_tr", actor=ACTOR, verb="transfer",
                          payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 3})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "transfer.made"), None)
@@ -287,7 +293,7 @@ def test_r8_5_a_document_holder_saw_only_that_the_document_changed():
         "is only observable when the destination is not first")
     for ev in out:
         w.log.append(ev)
-    d.witness(out)
+    d.witness(mint_token(w, WriteClass.INTERIOR), out)
 
     mode = w.fixtures.get("fan_out_mode")
     (far,) = _seen_claims(w.persons["p_king"])
@@ -321,8 +327,8 @@ def test_r8_the_total_arm_subjects_a_multi_change_event_uniformly():
     w.add_tenure(Tenure("t_src", ACTOR, "S", "hold", since=0))
     w.add_tenure(Tenure("t_dst", "p_king", "Hh", "hold", since=0))
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="r8_tot_tr", actor=ACTOR, verb="transfer",
+    d.matter(mint_token(w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="r8_tot_tr", actor=ACTOR, verb="transfer",
                          payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 3})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "transfer.made"), None)
@@ -349,12 +355,12 @@ def test_r8_the_total_arm_shows_every_term_to_every_witness():
     for mode, expect in (("total", True), ("all_five", False)):
         w = P.tiny_world(DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
         d = SeasonDriver(w)
-        d.matter([])
-        out = d.resolve([Act(id="r8_tot", actor=ACTOR, verb="speak", payload={"subject": ABOUT})],
+        d.matter(mint_token(w, WriteClass.MATTER), [])
+        out = d.resolve(mint_token(w, WriteClass.ACTS), [Act(id="r8_tot", actor=ACTOR, verb="speak", payload={"subject": ABOUT})],
                         contest_max_depth=w.fixtures.get("contest_max_depth"))
         for ev in out:
             w.log.append(ev)
-        d.witness(out)
+        d.witness(mint_token(w, WriteClass.INTERIOR), out)
         got = [c.value for c in _seen_claims(w.persons["p_king"])]
         if not expect:
             assert not got, f"under {mode} p_king, admitted by no channel, holds {got}"

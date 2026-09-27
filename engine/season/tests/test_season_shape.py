@@ -37,7 +37,7 @@ from ..data.requires import (
     Observation, REQUIRES_OPERANDS, REQUIRES_STEMS, UNKNOWN, binding_from_act, binding_of, build_typed_requires, evaluate,
 )
 from ..data.rosters import (
-    BODY_FACTION, BODY_FUNCTION, CLAIM_SOURCES, CLAIM_SUBJECT_RULES, COMBAT_BANDS, PURSUIT_AXES, PURSUITS, FACTIONS, FELLED, QUESTION_SOURCES, REMIT_ACTS, ROLE_TEMPLATE_OF, ROSTERS_YAML, RUNG_KINDS, SCENE_PACKING_RULES, STRATA, TENURE_KINDS, TITLE_DOMAINS, UNTOUCHED, VIEW_BUILDER_RULES, WITNESS_CHANNELS, WOUNDED, _ROSTERS, load_yaml, office_faction, roster, roster_map, title_domain, title_rank,
+    BODY_FACTION, BODY_FUNCTION, CLAIM_SOURCES, CLAIM_SUBJECT_RULES, COMBAT_BANDS, PURSUIT_AXES, PURSUITS, FACTIONS, FELLED, QUESTION_SOURCES, REMIT_ACTS, ROLE_TEMPLATE_OF, ROSTERS_YAML, RUNG_KINDS, SCENE_PACKING_RULES, STRATA, TENURE_KINDS, TITLE_DOMAINS, UNTOUCHED, VIEW_BUILDER_RULES, WITNESS_CHANNELS, WOUNDED, _ROSTERS, load_yaml, office_faction, roster, roster_map, title_domain,
 )
 from ..data.verbs import (
     ALIGNMENT_SWEEP, PURSUIT_PROJECTION, NO_PRECONDITION, VERB_TABLE, VERB_TABLE_YAML, alignment_at, rows_without_a_producer, tenure_kinds_without_an_opener,
@@ -53,8 +53,8 @@ from ..epistemic import (
 )
 from ..gaps import Forbidden, InstrumentDefect, NoProducer, ShapeGap, Ungraded, Unspecified
 from ..loop.deliberate import sense
-from ..loop.driver import SeasonDriver, resolvable_verbs
-from ..loop.predicates import REQUIRES_PREDICATES, highest_title_rank, in_holdings, under_purview
+from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
+from ..loop.predicates import REQUIRES_PREDICATES, in_holdings
 from ..queries import world_q
 from ..queries.person_q import LedgerReader
 from ..queries.world_q import WorldReader
@@ -74,7 +74,9 @@ from ..queries import world_q
 from ..data.fixtures import Fixtures
 from ..data.matrix import Step, WriteClass
 from ..gaps import Forbidden, Unspecified
+from ..state.attribution import anchor_of
 from ..state.carriers import Event, Person, Proposition, Rung, Site, Tenure, View
+from ..state.gate import NotYours
 from ..state.world import World
 
 # ⚠ L5: THE LOOP IS `loop/`, NOT `driver.py`. Six step bodies left the driver for their own
@@ -185,7 +187,7 @@ def test_d1b_a_field_cannot_ride_on_another_fields_matrix_row():
     # genuinely does not carry. `(Person, mood)` is W2's own planted example, and the `thing`
     # argument is the parameter that CARRIED the defect -- passing `stance` for it must not help.
     with pytest.raises(Unspecified) as e:
-        w.write("stance", WriteClass.ACTS, lambda: None,
+        w.write("stance", mint_token(w, WriteClass.ACTS), lambda: None,
                 record_kind="Person", fieldname="mood", driver="Act")
     assert "Person" in str(e.value) and "mood" in str(e.value), (
         "the refusal did not NAME the pair, so a reader cannot tell which cell is unmarked")
@@ -204,7 +206,7 @@ def test_d1c_a_matter_write_to_person_pursuits_refuses_with_its_own_law_not_the_
     w = _w()
     w.step = Step.MATTER
     with pytest.raises(Forbidden) as e:
-        w.write("stance", WriteClass.MATTER, lambda: None,
+        w.write("stance", mint_token(w, WriteClass.MATTER), lambda: None,
                 record_kind="Person", fieldname="pursuits", driver="Event")
     assert e.value.where == "S3-L4", (
         f"refused at {e.value.where!r}, not S3-L4 -- the MATRIX_REFUSAL_LAW lookup for "
@@ -239,12 +241,12 @@ def test_d3b_the_gate_applies_the_write():
     # an antecedent. `[ROOT]` is said EXPLICITLY here because this synthetic write is the first
     # emission in its world — which is exactly the carve-out, and saying it is the point.
     # [JUSTIFIED: an ARBITRARY DECREMENT in a synthetic write, not a wear rate -- this test asserts that a MATTER write emits and logs, and any nonzero delta shows that. Nothing in the game reads it; `before - 7` and `before - 1` would test the same property]
-    w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", before - 7),
+    w.write("condition", mint_token(w, WriteClass.MATTER), lambda: setattr(site, "condition", before - 7),
             record_kind="Site", fieldname="condition", driver="Event",
             emits="condition.worn", subject=site.id, causes=[ROOT])
     # [JUSTIFIED: the same arbitrary decrement, read back -- this line exists to prove the lambda ran, not to pin a magnitude]
     assert site.condition == before - 7
-    assert w.log[-1].kind == "condition.worn" and w.log[-1].subject == site.id
+    assert w.log[-1].kind == "condition.worn" and anchor_of(w, w.log[-1]) == site.id
 
 
 def test_d4_contest_is_not_a_second_resolver():
@@ -350,7 +352,7 @@ def test_d8_one_doctrinal_condition_raises_one_kind():
     # correctly, because `(Rung, stores)` is on the table and `thing` is a trace label. The
     # unmarked cell has to be a real unmarked cell.
     with pytest.raises(Unspecified):
-        w.write("stores", WriteClass.ACTS, lambda: None,
+        w.write("stores", mint_token(w, WriteClass.ACTS), lambda: None,
                 record_kind="Rung", fieldname="no_such_field", driver="Act")
     with pytest.raises(Unspecified):
         partition_lookup("Record", "anything")
@@ -593,12 +595,12 @@ def test_h115_the_degree_branches_raise_unspecified_not_systemexit():
     d = SeasonDriver(w)
     act = Act(id="sweep_kw", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"})
     with pytest.raises(Unspecified):
-        d._fold(w, act)
+        d._fold(w, mint_token(w, WriteClass.ACTS), act)
     # THE CATCH LIST run_case ACTUALLY USES (corpus_run.py:350), not a copy of it (§8).
     act2 = Act(id="sweep_kw2", actor="p_low", verb="kill / wound", payload={"subject": "p_mid"})
     caught_as_gap = False
     try:
-        d._fold(w, act2)
+        d._fold(w, mint_token(w, WriteClass.ACTS), act2)
     except (ShapeGap, Unspecified, Forbidden, NoProducer):
         caught_as_gap = True
     assert caught_as_gap, (
@@ -806,7 +808,7 @@ def test_event_never_grows_a_target_or_an_actor():
     is for is an Event that cannot be misattributed, AND MISATTRIBUTION IS A FEATURE.'
 
     ⚠ THE BAN LIST IS THE INVARIANT; THE EXACT SET IS A RATCHET, AND `W-B` MOVED IT BY ONE.
-    `observed` is admitted and the other six are still banned, which is the distinction S19.3
+    `observed` is admitted and the six are still banned (seven since G1b added `subject`), which is the distinction S19.3
     actually draws: the three absent fields are about ATTRIBUTION and RECIPIENCY -- who did it, who
     it is for -- and each absence is a design decision. `observed` is neither. It is what the FOLD
     READ to reach its verdict, and §27.1 already makes reading the precondition the fold's
@@ -815,16 +817,18 @@ def test_event_never_grows_a_target_or_an_actor():
     NEW field still turns this red and has to be argued here. Loosening it to `banned & fields ==
     set()` would let the next field in silently, which is how `target` would eventually arrive."""
     fields = set(Event.__dataclass_fields__)
-    for banned in ("target", "actor", "source_actor", "recipient", "to", "stat_deltas"):
+    # G1b (2026-09-26) MOVED THE RATCHET THE OTHER WAY, BY ONE: `subject` is deleted -- `04:402`
+    # names it beside `actor` and `target` -- so it joins the ban list rather than leaving the
+    # exact set and nothing else.
+    for banned in ("target", "actor", "subject", "source_actor", "recipient", "to", "stat_deltas"):
         assert banned not in fields
-    assert fields == {"id", "kind", "subject", "changes", "causes", "emitted_at", "degree",
-                      "observed"}
+    assert fields == {"id", "kind", "changes", "causes", "emitted_at", "degree", "observed"}
 
 
 def test_causes_is_never_empty():
     with pytest.raises(Forbidden):
-        Event("i", "a.b", "s", [], [], 0)
-    assert Event("i", "a.b", "s", [], [ROOT], 0).causes == [ROOT]
+        Event("i", "a.b", [], [], 0)
+    assert Event("i", "a.b", [], [ROOT], 0).causes == [ROOT]
 
 
 def test_choose_receives_no_world():
@@ -911,19 +915,33 @@ def test_hold_cardinality_is_one_per_object():
 
 def test_the_partition_seam_is_bounded_by_causation_not_by_the_column():
     """S15.3: 'a plague that kills the praefect ends his tenure THROUGH THE DEATH; A STORM
-    CANNOT TOUCH IT.'"""
+    CANNOT TOUCH IT.'
+
+    ⚠ G3 (plan position 6) MADE THE SECOND HALF TRUE RATHER THAN DECLARED. It used to close the
+    duke's `hold` in a write that CLAIMED `caused_person_exists="p_high"` while `p_high` stayed
+    alive -- S15.3's pre-check takes the parameter at the caller's word. The gate's F3 clause admits
+    an actorless Tenure write only as a cascade from an existence change THE SAME WRITE caused, and
+    OBSERVES it: so the claim alone is now refused (`NotYours`, the second write here, with the edge
+    left live), and the write that ends the tenure is the one that kills."""
     w = _w()
     w.step = Step.MATTER
     t = next(x for x in w.tenures if x.kind == "hold")
     with pytest.raises(Forbidden):
-        w.write("Tenure", WriteClass.MATTER, lambda: setattr(t, "until", 0),
+        w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: setattr(t, "until", 0),
                 record_kind="Tenure", fieldname="until", driver="Event",
                 emits="tenure.closed", subject=t.object, causes=[ROOT])
-    w.write("Tenure", WriteClass.MATTER, lambda: setattr(t, "until", 0),
+    # The claimed-but-unperformed death: S15.3's pre-check passes on the parameter, F3 refuses it.
+    with pytest.raises(NotYours):
+        w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: setattr(t, "until", 0),
+                record_kind="Tenure", fieldname="until", driver="Event",
+                caused_person_exists="p_high",
+                emits="tenure.closed", subject=t.object, causes=[ROOT])
+    assert t.live and "p_high" in w.persons, "the refused write left the edge closed"
+    w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: w.remove_person("p_high"),
             record_kind="Tenure", fieldname="until", driver="Event",
             caused_person_exists="p_high",
-            emits="tenure.closed", subject=t.object, causes=[ROOT])
-    assert not t.live
+            emits="tenure.closed", subject="p_high", causes=[ROOT])
+    assert not t.live and "p_high" not in w.persons
 
 
 def test_a_missing_provider_is_a_boot_failure():
@@ -1198,7 +1216,7 @@ def test_r3_the_l4_limb_is_actually_exercised():
     w = _w()
     w.step = Step.RESOLVE
     with pytest.raises(Forbidden) as e:
-        w.write("stance", WriteClass.ACTS, lambda: None,
+        w.write("stance", mint_token(w, WriteClass.ACTS), lambda: None,
                 record_kind="Person", fieldname="stance", driver="Event")
     assert "social:true" in str(e.value)
 
@@ -2150,7 +2168,7 @@ def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
     w = _w()
     w.step = Step.RESOLVE
     with pytest.raises(Unspecified) as e:
-        w.write("stance", WriteClass.ACTS, lambda: None,
+        w.write("stance", mint_token(w, WriteClass.ACTS), lambda: None,
                 record_kind="Person", fieldname="mood", driver="Act")
     msg = str(e.value)
     assert "Person" in msg and "mood" in msg, f"the refusal did not name the pair: {msg}"
@@ -2414,7 +2432,7 @@ def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
     victim = next(v for v in missing)
     act = Act(id="a_x", actor="p_low", verb=victim)
     with pytest.raises(Unspecified) as e:
-        d._fold(w, act)
+        d._fold(w, mint_token(w, WriteClass.ACTS), act)
     assert "precondition" in str(e.value) or "no row" in str(e.value)
 
     # `work`'s precondition must be able to FAIL. A site below every floor is unworkable.
@@ -2434,24 +2452,25 @@ def test_w3_the_fold_refuses_rather_than_filling_and_the_gap_is_countable():
 def test_w3_the_write_class_check_still_refuses_a_wrong_class():
     """§30.2: *the write class is a PARAMETER of the store API, checked PER WRITE SITE.*
 
-    ⚠ HONEST LIMIT, NAMED RATHER THAN LEFT TO BE FOUND. For the FOLD's own writes the check is
-    CIRCULAR: `_apply_write` passes `mrow.write_class(step)` and `World.write` computes the same
-    expression from the same map, so `expect is wclass` always holds. That is not a defect to fix
-    by contriving a second opinion — a table-driven fold and its gate necessarily read one table —
-    but it does mean the per-site check no longer catches anything for the 32 table verbs, and the
-    coverage claim must not be made for them.
+    ⚠ THE HONEST LIMIT THIS NAMED IS CLOSED BY G2 (2026-09-26), AND THE RECORD STAYS SO THE CLOSURE
+    CAN BE CHECKED. It read: for the FOLD's own writes the check is CIRCULAR -- `_apply_write`
+    passed `mrow.write_class(step)` and `World.write` computed the same expression from the same
+    map, so `expect is wclass` always held and the per-site check caught nothing for the table
+    verbs. The fold now passes the ACTS `Token` the driver handed RESOLVE, which is a second
+    source, so a fold handed the wrong token IS refused --
+    `test_g2_token.py::test_g2_the_fold_is_no_longer_circular_a_wrong_token_is_refused` runs that.
 
-    What the gate DOES still enforce is that a caller passing a WRONG class is refused, which is
-    what the check is for. That is exercised here directly, since no fold write can exercise it."""
+    What is exercised HERE is the direct caller: a WRONG class is refused and the right one
+    admitted, on one row, so the refusal is about the class and not the row."""
     w = _w()
     w.step = Step.RESOLVE
     # `(Rung, stores)` at RESOLVE is the ACTS class. MATTER must be refused.
     with pytest.raises(Forbidden) as e:
-        w.write("stores", WriteClass.MATTER, lambda: None,
+        w.write("stores", mint_token(w, WriteClass.MATTER), lambda: None,
                 record_kind="Rung", fieldname="stores", driver="Act")
     assert "class" in str(e.value).lower(), str(e.value)
     # And the right class is admitted, so the refusal above is about the CLASS and not the row.
-    w.write("stores", WriteClass.ACTS, lambda: None,
+    w.write("stores", mint_token(w, WriteClass.ACTS), lambda: None,
             record_kind="Rung", fieldname="stores", driver="Act")
 
 
@@ -2593,7 +2612,7 @@ def test_w5_q_has_a_producer_across_all_four_sources():
             kind = next(k for k in floors_by_kind if k != "body")
             top = max(floors_by_kind[kind].values())
             w.sites["s_q3"] = Site("s_q3", here, kind, top + 5, [])
-            SeasonDriver(w).matter()
+            SeasonDriver(w).matter(mint_token(w, WriteClass.MATTER))
             assert w.crossings, "the fixture no longer crosses a floor -- Q3 has nothing to read"
             assert w.crossings[0][0] in w.sites, (
                 "a crossing is keyed on something that is not a site; the writer changed shape")
@@ -3259,9 +3278,27 @@ def test_w5_a_tenure_added_before_its_subject_still_reaches_its_owner():
     # [JUSTIFIED: matched half of the control pair immediately above]
     assert decision.budget(p, View(p.id, [], 12), fx.get("scene_budget"), fx) > base, (
         "rehoming did not change what `budget` reads, so the office is still invisible to it")
-    # and the barrier does it, so no caller has to remember. ⚠ THE DRIVER'S BARRIER, NOT
-    # DELIBERATE (2026-09-25, ED-IN-0206): rehoming MUTATES the tenure store, and DELIBERATE owns
-    # nothing (04:158) — so the driver calls it at barrier 2 (04:509), before it enters DELIBERATE.
+    # and the barrier does it, so no caller has to remember. ⚠ G2 MOVED THE BARRIER: this read
+    # `"_rehome" in getsource(SeasonDriver.deliberate)`, pinning the repair inside a step that owns
+    # no store and holds no token (`ED-IN-0206`). It is MATTER's now, and asserted by RUNNING MATTER
+    # on the same planted ordering rather than by reading its source -- a source match would pass on
+    # a call that never executes (§0.2). DELIBERATE's half -- that it no longer does this -- is
+    # `test_g2_token.py::test_g2_deliberate_mutates_no_store_by_any_route`.
+    # [JUSTIFIED: the same arbitrary structural seed as the world above]
+    w2 = World(7)
+    w2.add_tenure(Tenure("t_early", "p_late", "off_x", "hold", since=0))
+    w2.persons["p_late"] = Person("p_late", "Late")
+    assert not w2.persons["p_late"].tenures, "the second plant is not reproducing the ordering"
+    SeasonDriver(w2).matter(mint_token(w2, WriteClass.MATTER), [])
+    assert [t.id for t in w2.persons["p_late"].tenures] == ["t_early"], (
+        "the MATTER barrier did not rehome — every person-side reader in DELIBERATE is back to "
+        "depending on whether something else homed the Tenure first")
+    # ⚠ THE COMPLEMENTARY SOURCE-ORDER CHECK (merged from an independent Layer-1-conformance pass,
+    # 2026-09-25, ED-IN-0206), kept alongside the execution check above rather than in its place:
+    # running MATTER proves the barrier rehomes, but not that `season()` calls it BEFORE entering
+    # DELIBERATE on the SAME path a real season takes, nor that DELIBERATE's own body does not
+    # ALSO still rehome (a redundant call the execution check above cannot distinguish from a
+    # single correct one). Two different failure modes, so both checks stay.
     season_src = "".join(_code_only(inspect.getsource(SeasonDriver.season)).split())
     at_rehome, at_deliberate = season_src.find("w._rehome()"), season_src.find("self.deliberate(")
     assert at_rehome != -1 and at_deliberate != -1 and at_rehome < at_deliberate, (
@@ -3592,7 +3629,7 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
         return cur
 
     hers = [e for e in w.log
-            if (lambda o: o.subject == HL.CARIN
+            if (lambda o: anchor_of(w, o) == HL.CARIN
                 or any(c.subject == HL.CARIN for c in o.changes)
                 or o.kind == "record.created")(origin_of(e))]
     assert hers, "no Event in the log traces back to an act of Carin's at all"
@@ -3604,7 +3641,7 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
         cur = next((by_id[c] for c in cur.causes if c in by_id), None)
     print("\n  W9 check 2 — the longest causal chain:")
     for e in reversed(chain):
-        print(f"    t{e.emitted_at} {e.kind:16} {e.subject[:26]:26} causes={[c[:8] for c in e.causes]}")
+        print(f"    t{e.emitted_at} {e.kind:16} {(anchor_of(w, e) or '-')[:26]:26} causes={[c[:8] for c in e.causes]}")
     pub_by_id = {e.id: e for e in published.log}
 
     def pub_depth(e, seen=()):
@@ -3626,7 +3663,7 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
         return cur
 
     pub_hers = [e for e in published.log
-                if (lambda o: o.subject == HL.CARIN
+                if (lambda o: anchor_of(published, o) == HL.CARIN
                     or any(c.subject == HL.CARIN for c in o.changes)
                     or o.kind == "record.created")(pub_origin_of(e))]
     d_pub = max((pub_depth(e) for e in pub_hers), default=0)
@@ -3699,8 +3736,9 @@ def test_w9_check2_a_causal_chain_walks_from_her_act():
     assert all(e.causes for e in w.log), "an Event carries an empty causes[] (§19.4)"
     # and the chain must START at one of HER acts, not at a clock.
     origin = chain[-1]
-    assert origin.subject == HL.CARIN or any(c.subject == HL.CARIN for c in origin.changes) \
-        or origin.kind == "record.created", f"the chain's origin is {origin.kind} on {origin.subject}"
+    assert anchor_of(w, origin) == HL.CARIN or any(c.subject == HL.CARIN for c in origin.changes) \
+        or origin.kind == "record.created", (
+            f"the chain's origin is {origin.kind} on {anchor_of(w, origin)}")
 
 
 def test_w9_check3_every_fixture_read_resolves_to_a_register_site():
@@ -3814,7 +3852,7 @@ def test_w9_check5_every_declared_exercises_verb_runs_or_is_recorded_not_assesse
     # clause "with `causes[]` walking back to her act" was never executed. Walking to an ACT id
     # is the thing the plan asks for and is now what this tests.
     hers = {c for e in w.log for c in e.causes
-            if c not in by_id and c != "ROOT" and e.subject == HL.CARIN}
+            if c not in by_id and c != "ROOT" and anchor_of(w, e) == HL.CARIN}
 
     def walks_back(e, seen=()):
         if any(c in hers for c in e.causes):
@@ -3902,7 +3940,12 @@ def test_w4_a_band_crossing_walks_back_to_the_wear_that_caused_it():
         ante = by_id.get(c.causes[0])
         assert ante is not None and ante.kind == "condition.worn", (
             f"a crossing's antecedent is {ante.kind if ante else None!r}, not the wear")
-        assert ante.subject == c.subject and ante.emitted_at == c.emitted_at, (
+        # G1b: `Event.subject` is deleted. `anchor_of(w, c)` would INHERIT the wear's anchor
+        # through tier 3, so comparing the two anchors is true by construction; the site the
+        # crossing was EMITTED FOR is `w.crossings`' own record, written by `_crossings` from its
+        # argument, and that is what the wear's anchor must match.
+        crossed = next(sid for sid, _verb, _was, _now, eid in w.crossings if eid == c.id)
+        assert anchor_of(w, ante) == crossed and ante.emitted_at == c.emitted_at, (
             "the crossing names a wear Event about a different site or a different season")
 
 
@@ -3943,16 +3986,16 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
     site = list(w.sites.values())[0]
 
     with pytest.raises(Forbidden, match="emitted nothing"):
-        w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
+        w.write("condition", mint_token(w, WriteClass.MATTER), lambda: setattr(site, "condition", 1),
                 record_kind="Site", fieldname="condition", driver="Event")
     with pytest.raises(Forbidden, match="does not declare"):
-        w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
+        w.write("condition", mint_token(w, WriteClass.MATTER), lambda: setattr(site, "condition", 1),
                 record_kind="Site", fieldname="condition", driver="Event",
                 emits="site.exploded", subject=site.id, causes=[ROOT])
     # S19.4's own guard, in `Event.__post_init__` — NOT a second copy in `write()`. The first
     # version of `W4` re-implemented it there, which is §8's rule broken one constructor apart.
     with pytest.raises(Forbidden, match="causes="):
-        w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
+        w.write("condition", mint_token(w, WriteClass.MATTER), lambda: setattr(site, "condition", 1),
                 record_kind="Site", fieldname="condition", driver="Event",
                 emits="condition.worn", subject=site.id, causes=[])
 
@@ -3966,21 +4009,21 @@ def test_w4_every_matter_write_on_a_declaring_row_emits_or_is_registered_as_cond
     assert "Record.ttl" in roster("conditional_emission_rows")
     rec = Record("rec_w4", "S", "writ", ttl=2)
     w.records[rec.id] = rec
-    w.write("ttl", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
+    w.write("ttl", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "ttl", rec.ttl - 1),
             record_kind="Record", fieldname="ttl", driver="Event")
     assert rec.ttl == 1, "the exempt write did not apply"
-    assert not [e for e in w.log if e.subject == rec.id], (
+    assert not [e for e in w.log if anchor_of(w, e) == rec.id], (
         "the exempt row emitted anyway — `record.expired` on a non-terminal decrement asserts an "
         "expiry that has not happened")
     # AND THE EXEMPTION IS NARROW: an UNDECLARED kind is still refused on the same row.
     with pytest.raises(Forbidden, match="does not declare"):
-        w.write("ttl", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
+        w.write("ttl", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "ttl", rec.ttl - 1),
                 record_kind="Record", fieldname="ttl", driver="Event",
                 emits="record.vanished", subject=rec.id, causes=[ROOT])
     # AND `subject=` IS MANDATORY WHEN EMITTING — the trace-label fallback was the value that
     # made every site's wear emit under the subject `"condition"`.
     with pytest.raises(Forbidden, match="no `subject="):
-        w.write("condition", WriteClass.MATTER, lambda: setattr(site, "condition", 1),
+        w.write("condition", mint_token(w, WriteClass.MATTER), lambda: setattr(site, "condition", 1),
                 record_kind="Site", fieldname="condition", driver="Event",
                 emits="condition.worn", causes=[ROOT])
 
@@ -4026,8 +4069,8 @@ def test_w4_a_refused_attempt_names_the_attempt_not_the_campaign_seed():
     mult = w.fixtures.get("obstacle_refusal_multiple")
     a = Act(id="act_refused", actor=pid, verb="work")
     a.obstacle, a.pool = mult * 10 + 1, 1        # Ob > multiple x Pool -> S27.4 refuses
-    d.matter([])
-    out = d.resolve([a], contest_max_depth=2)
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [a], contest_max_depth=2)
     refused = [e for e in out if e.kind == "attempt.refused"]
     assert refused, "S27.4 did not refuse the over-obstacle attempt; the fixture no longer reaches it"
     for e in refused:
@@ -4130,7 +4173,7 @@ def test_w6_an_unrecognised_fan_out_mode_refuses_rather_than_falling_back():
     which is the failure mode that makes a sweep worse than no sweep."""
     from ..harness import headless as HL
     w = HL.build_world(0)
-    e = next(iter(w.log), None) or Event(H(w.world_seed, 0, "x", "t"), "speech.made", "x",
+    e = next(iter(w.log), None) or Event(H(w.world_seed, 0, "x", "t"), "speech.made",
                                            [], [ROOT], 0)
     with pytest.raises(Unspecified, match="not one of"):
         observers_for(w, e, "everyone_obviously", list(w.persons))
@@ -4562,7 +4605,18 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
     # incompleteness was invisible. The basis is supplied HERE rather than in `probes.py`, so no
     # other probe's world changes, and it is a fixture string rather than a design claim — Part E
     # says an office must HAVE a basis, not what any particular basis is.
-    w.offices["off_dicastery"].conferral = "the duke's remit (harness fixture)"
+    # ⚠ (`13d-i`, 2026-09-26) IT MUST NOW BE A ROSTERED ONE: `has_conferral_basis` is membership
+    # of `conferral_bases` (ED-IN-0256 ruling (2)), so the old free string refused. `appointed` is
+    # the value that names what a `confer` by the duke is; the other two would pass equally.
+    w.offices["off_dicastery"].conferral = "appointed"
+    # ⚠ G3 (plan position 6): THE SEAT CONFERRED NEEDS GROUND, AND EVERY ACT NAMES ITS SEAT. The
+    # conferral basis is asked of the seat EXERCISED (`Act.via`) and admits only where that seat's
+    # PURVIEW reaches the seat conferred (`ED-IN-0256` ruling (4), `state/gate.py::may_fill`). A
+    # rungless seat -- `off_dicastery` as `tiny_world` builds it, the S6.2 cluster -- is reached by
+    # no purview at all, so NOBODY may confer it; the fixture gives it the settlement under the
+    # duke's duchy, as `test_the_revocation_branch_executes_in_the_fold_...` below already does.
+    # And the three acts go out through `off_duke`, the seat whose grant carries all three remits.
+    w.offices["off_dicastery"].rung = "S"
 
     made = []
 
@@ -4576,17 +4630,17 @@ def test_the_governance_slice_executes_and_a_binding_decision_reaches_a_rung():
         # exactly what `confer`'s 1-per-object precondition requires.
         acts = [
             Act(id="g_confer", actor=duke, verb="confer",
-                  payload={"office": "off_dicastery", "to": "p_mid"}),
+                  payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke"),
             Act(id="g_convene", actor=duke, verb="convene",
-                  payload={"venue": "S", "when": w.tick + 1}),
+                  payload={"venue": "S", "when": w.tick + 1}, via="off_duke"),
             Act(id="g_dispatch", actor=duke, verb="dispatch",
-                  payload={"subject": "p_low"}),
+                  payload={"subject": "p_low"}, via="off_duke"),
         ]
         made.extend(acts)
         return acts
 
-    d.matter([])
-    out = d.resolve(made or choose(w.persons[duke], None, None, None),
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), made or choose(w.persons[duke], None, None, None),
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     kinds = {e.kind for e in out}
     assert "tenure.opened" in kinds, (
@@ -4627,14 +4681,17 @@ def _seat(w, person, office_id, post, rung, remit=("issue", "revoke"), first=Fal
     return office_id
 
 
-def test_the_title_ladder_is_total_over_the_rungs_and_rank_is_the_rung_ordinal():
+def test_the_title_ladder_is_total_over_the_rungs():
     """`H-90`. Jordan, 2026-09-02: *"realm = king/queen, duchy = duke/duchess, province =
     count/countess, territory = lord, settlement = mayor, community = community leader, hearth =
     family head, person = own autonomous individual."*
 
-    ⚠ RANK IS THE ORDINAL IN `rung_kinds`, NOT A SECOND SCALE. The ladder the tree already had is
-    the ladder, so a title names the rung kind it governs and the ordering falls out; minting a
-    separate rank number would be the `scale`-vs-`stratum` mistake one axis along.
+    ⚠ ~~RANK IS THE ORDINAL IN `rung_kinds`~~ — **THE RANK HALF IS DELETED WITH `title_rank`
+    (`13d-i`, 2026-09-26).** Its one decision was `_req_revoke`'s strictly-higher-rank conjunct,
+    and `ED-IN-0256` ruling (3) makes revocation *"rung above of same faction"*, *"not a rank
+    comparison"*. The name `..._and_rank_is_the_rung_ordinal` went with it. THE LADDER STAYS: it
+    is canon, and `title_domain` still reads it (world-gen seating; `Office`'s title-in-a-body
+    refusal) — r2 `03` SC-10's positive control, that deleting the readers leaves the roster whole.
 
     ⚠ AND THE LADDER IS TOTAL, which is the load-bearing half: every rung kind has a title, down
     to a person governing themselves. That bottom rung is why Part E's `own` eligibility is not a
@@ -4652,13 +4709,16 @@ def test_the_title_ladder_is_total_over_the_rungs_and_rank_is_the_rung_ordinal()
     assert set(domains.values()) == set(RUNG_KINDS), (
         f"the ladder is not total — rungs with no title: "
         f"{sorted(set(RUNG_KINDS) - set(domains.values()))}")
-    # rank IS the rung ordinal, in both directions
-    for ttl, dom in domains.items():
-        assert title_rank(ttl) == list(RUNG_KINDS).index(dom), (ttl, dom)
-    assert title_rank("King") > title_rank("Duke") > title_rank("Count") \
-        > title_rank("Lord") > title_rank("Mayor") > title_rank("Individual")
-    assert title_domain("Dicastery") is None and title_rank("Dicastery") == -1, (
-        "a non-title post reads as a rank; then an ordinary office confers governing authority")
+    assert all(title_domain(ttl) == dom for ttl, dom in domains.items()), (
+        "`title_domain` disagrees with the roster it reads")
+    assert title_domain("Dicastery") is None, (
+        "a non-title post reads as a title; then `Office` refuses an ordinary office in a body")
+    # ⚠ MOVED HERE FROM THE DELETED PURVIEW TEST (`13d-i`), because it guards `H-90`'s ruled-and-
+    # unbuilt third concept and has nothing to do with purview: a silent sovereignty relation on
+    # the World would make that row false.
+    assert not hasattr(P.tiny_world(), "sovereign"), (
+        "the World has grown a sovereignty relation; `H-90` records sovereign power as RULED and "
+        "NOT BUILT, and a silent one would make that row false")
     # ⚠ AND THE MAPPING MUST REFUSE WHEN ABSENT, NOT DEFAULT. `title_domain` read
     # `_ROSTERS.get("titles") or {}`, so deleting the roster returned `None` for every post and
     # `_req_revoke` fell back to purview-for-everything — a guard failing OPEN into the exact
@@ -4669,163 +4729,15 @@ def test_the_title_ladder_is_total_over_the_rungs_and_rank_is_the_rung_ordinal()
         roster_map("titles", "a_key_that_is_not_there")
 
 
-def test_purview_is_containment_and_stops_at_the_holders_own_domain():
-    """`H-90`. Jordan: *"a Duke can revoke office from any individual in that office so long as
-    that office is for a holding **under their purview**."*
-
-    So authority over a governance act is RANK + CONTAINMENT — a property of the ACTOR's title and
-    the containment tree — and NOT `remit:<act>`, which is a property of the target office.
-
-    ⚠ AND PURVIEW IS DIRECTIONAL. A duke's purview reaches DOWN into the duchy and stops; the
-    realm above him is not his.
-
-    ⚠ THE RANK HALF WAS UNOBSERVED AND THIS IS WHERE IT IS OBSERVED. Deleting the title check from
-    `under_purview` left all three governance tests green, because no test ever gave an actor a
-    NON-TITLE office and asked for its purview — the operative rule as tested was containment
-    alone, and `title_rank` had no caller outside its own assertion. The Dicastery case below is
-    the discriminating one: mutate the title conjunct away and it goes red."""
-    w = P.tiny_world()
-    duke = "p_high"          # holds `off_duke`, whose `rung` is the duchy `D`
-    assert w.offices["off_duke"].post == "Duke" and w.offices["off_duke"].rung == "D"
-    assert w.rungs["D"].kind == "duchy" and w.rungs["R"].kind == "realm"
-    for inside in ("D", "S", "Hh"):
-        assert under_purview(w, duke, inside), (
-            f"{inside} ({w.rungs[inside].kind}) is inside the duchy and is not under the duke")
-    assert not under_purview(w, duke, "R"), (
-        "the REALM is under the duke's purview — purview is reaching upward, so a duke could act "
-        "on the king's domain")
-    assert not under_purview(w, "p_low", "S"), (
-        "a person holding no title has purview; then governing authority is not a title at all")
-
-    # ⚠ THE RANK CONJUNCT, MADE OBSERVABLE. An ORDINARY office is not a title, so seating someone
-    # on one at the duchy confers no purview over anything inside it. Without this case the title
-    # check in `under_purview` is decorative and the suite cannot tell.
-    _seat(w, "p_mid", "off_clerk", "Dicastery", "D")
-    assert title_domain("Dicastery") is None, "the fixture stopped being a non-title"
-    assert not under_purview(w, "p_mid", "S"), (
-        "an ORDINARY office at the duchy confers purview over the settlement inside it — then "
-        "rank is not part of the rule and any office-holder governs everything beneath them")
-
-    # ⚠ TWO TITLES, AND THE OLD CODE TOOK WHICHEVER CAME FIRST IN AN INSERTION-ORDERED LIST.
-    # `Office.rung` is Optional (the office-cluster case), the old generator yielded that `None`
-    # as a value and stopped, so a Duke who was ALSO made a King lost purview over his own duchy.
-    w2 = P.tiny_world()
-    _seat(w2, "p_high", "off_king_cluster", "King", None, first=True)
-    for inside in ("D", "S", "Hh"):
-        assert under_purview(w2, "p_high", inside), (
-            f"the duke lost purview over {inside} by ALSO being made a King with a null rung — "
-            "the seat lookup is order-dependent and stops on the first title it meets")
-    # and a second, non-null title must ADD purview rather than replace it
-    w3 = P.tiny_world()
-    w3.rungs["P2"] = Rung("P2", "province")
-    w3.add_tenure(Tenure("t_p2", "P2", "R", "contain", 0))
-    _seat(w3, "p_high", "off_count", "Count", "P2", first=True)
-    assert under_purview(w3, "p_high", "P2") and under_purview(w3, "p_high", "S"), (
-        "holding a county elsewhere cost the duke his duchy (or the reverse) — purview is a "
-        "DISJUNCTION over every title held, not a lookup of one seat")
-
-    # ⚠ GOVERNING AUTHORITY, SOVEREIGNTY AND OWNERSHIP ARE THREE THINGS, AND THIS ASSERTION USED
-    # TO CHECK THE WRONG ONE. It read `not hasattr(w, "sovereign") and not hasattr(w, "holdings")`
-    # — a test on ATTRIBUTE NAMES, which passed because the holdings relation was added as a
-    # Tenure rather than as a field. Term-matching where the concept was meant, which is this
-    # repository's signature error. The concept check: purview and holdings must be able to
-    # DISAGREE, and here they do — the duke governs the settlement and owns none of it.
-    assert under_purview(w, duke, "S") and not in_holdings(w, duke, "S"), (
-        "governing authority and holdings answer alike here, so the two are one relation wearing "
-        "two names and `H-90`'s distinction is not modelled")
-    assert not hasattr(w, "sovereign"), (
-        "the World has grown a sovereignty relation; `H-90` records sovereign power as RULED and "
-        "NOT BUILT, and a silent one would make that row false")
-
-
-def test_revoking_a_title_needs_holdings_and_revoking_an_office_needs_purview():
-    """`H-90`. The two rules are different and which applies turns on whether the target is a
-    TITLE. Jordan, 2026-09-02:
-
-      · ordinary office — *"a Duke can revoke office from any individual in that office so long as
-        that office is for a holding **under their purview**"*;
-      · a title — *"King/Queen **cannot** revoke title of Duke/Duchess if they do not have duchy
-        is in their holdings. King/Queen **can** revoke title of Duke/Duchess if the duchy is one
-        of their holdings."*
-
-    ⚠ THE NEGATIVE CASE IS THE WHOLE POINT, AND THE FIRST VERSION OF IT WAS VACUOUS. It asserted
-    that a king could not revoke a duke's title without holding the duchy — in a world where
-    `p_king` held NO OFFICE AT ALL, so he had no governing authority either and every rule refuses
-    him. Mutating `_req_revoke` back to purview-for-everything left the assertion green: it could
-    not observe the failure it excluded (§0.1 pt 2). The hazard Jordan's fourth message names — a
-    King with realm-wide authority who does not hold the duchy — was constructed nowhere in the
-    suite. It is constructed here, and the discriminator is asserted directly: purview says YES
-    while the predicate says NO. Found by the governance-canon adversarial pass."""
-    w = P.tiny_world()
-    w.offices["off_duke"].revocation = "the crown's writ (harness fixture)"
-    king, duke_office = "p_king", "off_duke"
-    _seat(w, king, "off_king", "King", "R")
-    assert title_domain(w.offices[duke_office].post) is not None, "the target is not a title"
-    act = Act(id="k1", actor=king, verb="revoke", payload={"office": duke_office})
-
-    # THE DISCRIMINATOR: he HAS the governing authority, and it is not enough.
-    assert under_purview(w, king, "D") and highest_title_rank(w, king) > title_rank("Duke"), (
-        "the king has no authority over the duchy in this world, so the negative below is vacuous "
-        "— it would pass under the purview-only rule this ruling forbids")
-    assert not in_holdings(w, king, "D")
-    assert not REQUIRES_PREDICATES["revoke"](w, act), (
-        "the king can revoke the duke's TITLE without holding the duchy — purview is standing in "
-        "for holdings, which is the reading this ruling forbids")
-    # THE POSITIVE: the same act, once the duchy is in his holdings.
-    w.add_tenure(Tenure("t_land", king, "D", "hold", 0))
-    assert in_holdings(w, king, "D") and not in_holdings(w, king, "S")
-    assert REQUIRES_PREDICATES["revoke"](w, act), (
-        "the duchy is in the king's holdings and he still cannot revoke the title")
-
-    # ⚠ AND HOLDINGS ALONE MUST NOT BE ENOUGH EITHER — the mirror defect. The first conjunction
-    # tested `in_holdings` and nothing else, so a clerk who happened to hold a duchy could unmake
-    # its Duke. Governing authority and holdings are separate terms and BOTH are required.
-    #
-    # ⚠ THE DISCRIMINATING WORLD IS A FOREIGN KING, and the first version of this case was not it.
-    # It used a Dicastery clerk, who has rank -1, so the RANK term refused him and dropping the
-    # purview term changed nothing — the mutation ran green. A king of ANOTHER realm has the rank
-    # and holds the duchy outright, and still has no governing authority over it: his seat is
-    # `R2`, and walking up from `D` reaches `R` and stops. That is Jordan's separation of the
-    # three concepts in one world, and it is what makes the purview term load-bearing.
-    w4 = P.tiny_world()
-    w4.offices["off_duke"].revocation = "the crown's writ (harness fixture)"
-    w4.rungs["R2"] = Rung("R2", "realm")
-    _seat(w4, "p_mid", "off_foreign_king", "King", "R2")
-    w4.add_tenure(Tenure("t_foreign_land", "p_mid", "D", "hold", 0))
-    assert in_holdings(w4, "p_mid", "D"), "the fixture does not hold the duchy; the case is moot"
-    assert highest_title_rank(w4, "p_mid") > title_rank("Duke"), (
-        "the foreign king does not outrank the duke, so RANK would refuse him and the purview "
-        "term would again decide nothing — the same defect this case exists to close")
-    assert not under_purview(w4, "p_mid", "D"), "the foreign king governs the duchy after all"
-    assert not REQUIRES_PREDICATES["revoke"](
-        w4, Act(id="c1", actor="p_mid", verb="revoke", payload={"office": "off_duke"})), (
-        "a foreign king unmade a Duke by owning his duchy — holdings is standing in for governing "
-        "authority, which is the same conflation in the opposite direction")
-
-    # ⚠ AND NOBODY REVOKES THEIR OWN TITLE. A duke who holds his own duchy — the ordinary case,
-    # and the one Jordan's *"do not necessarily have all … in their holdings"* presupposes is
-    # common — satisfies purview and holdings on himself. Rank is what excludes it: strictly
-    # higher, never equal.
-    w5 = P.tiny_world()
-    w5.offices["off_duke"].revocation = "the crown's writ (harness fixture)"
-    w5.add_tenure(Tenure("t_selfland", "p_high", "D", "hold", 0))
-    assert under_purview(w5, "p_high", "D") and in_holdings(w5, "p_high", "D")
-    assert not REQUIRES_PREDICATES["revoke"](
-        w5, Act(id="s1", actor="p_high", verb="revoke", payload={"office": "off_duke"})), (
-        "the duke revoked his own title; equal rank is not excluded and the ladder decides nothing")
-
-    # AND AN ORDINARY OFFICE TAKES THE OTHER RULE: purview, no holding required.
-    w2 = P.tiny_world()
-    w2.offices["off_dicastery"].revocation = "the duke's writ (harness fixture)"
-    w2.offices["off_dicastery"].rung = "S"          # a settlement inside the duchy
-    w2.add_tenure(Tenure("t_dic", "p_mid", "off_dicastery", "hold", 0))
-    assert title_domain(w2.offices["off_dicastery"].post) is None, "the target IS a title"
-    assert not in_holdings(w2, "p_high", "S"), "the duke holds the settlement; the test is moot"
-    assert REQUIRES_PREDICATES["revoke"](
-        w2, Act(id="d1", actor="p_high", verb="revoke",
-                  payload={"office": "off_dicastery"})), (
-        "the duke cannot revoke an ordinary office in his own duchy — the holdings rule has "
-        "leaked onto offices, where the ruling asks only for purview")
+# ⚠ TWO TESTS WERE DELETED HERE (`13d-i`, 2026-09-26), and the reason is a ruling, not a cleanup:
+# `test_purview_is_containment_and_stops_at_the_holders_own_domain` and
+# `test_revoking_a_title_needs_holdings_and_revoking_an_office_needs_purview` pinned Jordan's
+# 2026-09-02 revocation model -- purview (title rank + containment) for an office; purview +
+# holdings + strictly higher rank for a title -- through `under_purview`, `titles_held`,
+# `highest_title_rank` and `title_rank`. `ED-IN-0256` ruling (3), *"rung above of same faction"*,
+# supersedes both rules, and all four functions are deleted with the `is_title` branch (`H-109`).
+# The falsifiers for the ruling that replaced them are in `test_governance_build.py`'s `13d-i`
+# section; the `sovereign` assertion moved to `test_the_title_ladder_is_total_over_the_rungs`.
 
 
 def test_the_revocation_branch_executes_in_the_fold_and_not_only_as_a_predicate():
@@ -4836,22 +4748,45 @@ def test_the_revocation_branch_executes_in_the_fold_and_not_only_as_a_predicate(
     the branch is ever reached — `off_duke`'s remit does not carry `revoke`. So the branch had
     never executed inside the resolver in any test or any run.
 
-    This drives the fold. The office is given the `revoke` remit so Part E's `remit:revoke`
-    eligibility is satisfied, and the act is resolved rather than asked about.
+    This drives the fold. The actor is seated on an office carrying the `revoke` remit so Part E's
+    `remit:revoke` eligibility is satisfied, and the act is resolved rather than asked about.
 
     ⚠ THE REMIT REQUIREMENT IS ITSELF `H-91`. Jordan's rule makes purview SUFFICIENT; Part E keeps
     `remit:revoke` necessary. This test satisfies both so the branch can be observed at all, and
-    the conflict between them is registered rather than settled here."""
+    the conflict between them is registered rather than settled here.
+
+    ⚠ **SEATED WITH THE REMIT, NOT HAND-MUTATED ONTO IT (CORRECTED 2026-09-26, position `13e`).**
+    The first writing mutated `off_duke.remit_acts` in place AFTER `tiny_world()` had already
+    seated `p_high` on it, which worked only because `_eligible` read the live office directly.
+    Position `13e` routed that read onto `t.granted_acts`, the snapshot `_grant_remit` takes AT
+    SEATING (`state/world.py`) — exactly the distinction `test_h71_the_grant_is_a_snapshot_not_a_
+    mirror` pins — so a hand-mutation after the fact no longer reaches the actor, which is §0.1
+    pt 1's read/write asymmetry hazard, caught by an antagonist pass over `13e` rather than by any
+    test run before it. `_seat` gives `p_high` a SECOND office whose remit already carries
+    `revoke` at construction, so the snapshot is correct when it is taken.
+
+    ⚠ **RE-SEATED FOR `ED-IN-0256` RULING (3) (`13d-i`, 2026-09-26).** The actor used to pass on
+    `off_duke`'s PURVIEW -- a Crown duke at `D` over a Church seat at `S` -- with a free-string
+    basis, and `off_marshal` (at `S`) supplied only the remit. Under *"rung above of same
+    faction"* neither holds: `off_duke` is Crown and `off_dicastery` is Church of Solmund, and a
+    seat at `S` is not above `S`. So the one seat `_seat` gives him is now a CHURCH seat at `D`,
+    the rung above, carrying `revoke` -- the eligibility and the ruling from one seat -- and the
+    basis is the rostered value."""
     w = P.tiny_world()
-    w.offices["off_dicastery"].revocation = "the duke's writ (harness fixture)"
+    w.offices["off_dicastery"].revocation = "rung_above_same_faction"
     w.offices["off_dicastery"].rung = "S"
     w.add_tenure(Tenure("t_dic", "p_mid", "off_dicastery", "hold", 0))
-    w.offices["off_duke"].remit_acts = list(w.offices["off_duke"].remit_acts) + ["revoke"]
-    act = Act(id="f1", actor="p_high", verb="revoke", payload={"office": "off_dicastery"})
+    _seat(w, "p_high", "off_vicar", "Vicar", "D", remit=("issue", "revoke"),
+          faction="Church of Solmund")
+    # G3: THROUGH THE VICAR'S SEAT, NAMED. `p_high` also holds `off_duke` (Crown, no `revoke`), and
+    # since G3 the act is judged on the ONE seat it exercises -- eligibility, ruling (3) and the
+    # write gate's T-o clause all ask `off_vicar`, never "any seat he holds".
+    act = Act(id="f1", actor="p_high", verb="revoke", payload={"office": "off_dicastery"},
+              via="off_vicar")
     before = [t.id for t in w.tenures if t.kind == "hold" and t.object == "off_dicastery" and t.live]
     assert before, "the fixture office is unheld; the fold would have nothing to close"
     w.step = Step.RESOLVE
-    events = SeasonDriver(w).resolve([act])
+    events = SeasonDriver(w).resolve(mint_token(w, WriteClass.ACTS), [act])
     kinds = [e.kind for e in events]
     assert "attempt.refused" not in kinds, (
         f"the fold refused a revocation whose preconditions all hold: {kinds}")
@@ -4948,8 +4883,8 @@ def test_w8_matter_draws_before_it_produces_which_is_353s_stated_order():
     w = P.tiny_world()
     d = SeasonDriver(w)
     w.step = Step.MATTER
-    evs = d.matter([])
-    order = [(e.kind, e.subject) for e in evs if e.kind in ("stores.changed", "yield.taken")]
+    evs = d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    order = [(e.kind, anchor_of(w, e)) for e in evs if e.kind in ("stores.changed", "yield.taken")]
     assert order, f"MATTER emitted no economy events at all: {[e.kind for e in evs]}"
     # `S` both draws (one person present) and produces (it owns both sites), so it is the one
     # rung where the order is observable at all.
@@ -4973,7 +4908,7 @@ def test_w8_a_worn_site_produces_less_and_a_dead_one_produces_nothing():
         for st in w.sites.values():
             st.condition = cond
         d = SeasonDriver(w); w.step = Step.MATTER
-        d.matter([])
+        d.matter(mint_token(d.w, WriteClass.MATTER), [])
         return sum(getattr(w.rungs["S"], "yield").values())
     full = produced(w0 := DEFAULT_FIXTURES.get("condition_scale"))
     half = produced(w0 // 2)
@@ -4996,7 +4931,7 @@ def test_w8_the_none_arm_is_a_real_control_and_the_loader_refuses_it_as_a_defaul
     try:
         for k in SITE_YIELD:
             SITE_YIELD[k] = {}
-        d.matter([])
+        d.matter(mint_token(d.w, WriteClass.MATTER), [])
         assert not getattr(w.rungs["S"], "yield"), (
             "the `none` arm still produced; then the control cannot break the claim")
     finally:
@@ -5023,7 +4958,9 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
     and blocked 21, and grain genuinely crosses between rungs. WHAT DID NOT: the hearth still
     starves on season 2 and never recovers, because the only economy that reaches it is
     subsistence OUT and no site produces INTO it — and `work`, the verb that would repair a
-    producer, still declares no delta (`test_w8_work_emits_a_success_while_repairing_nothing`).
+    producer, still declares no delta (`test_w8_work_emits_a_success_only_when_the_site_moves`,
+    which until G4 was `..._while_repairing_nothing` and pinned the success that delta-less
+    `work` falsely emitted; it is refused now, which changes nothing this paragraph measures).
     So the residual cause is the one `H-94` was masking: `work` writes `(Site, condition)` and
     Part E names the CELL and never the VALUE, which is `H-63`.
 
@@ -5227,25 +5164,99 @@ def test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason():
         "merely incomplete")
 
 
-def test_w8_work_emits_a_success_while_repairing_nothing(): 
-    """`H-94`'s worked case, and the sharpest single statement of it.
-
-    §27.3 defers `work`'s delta to the fold's accumulator and clamps once — correct, and the
-    reason `_eff_work` reports the site anyway is so the deferral does not read as a no-op. With
-    NO DELTA DECLARED nothing is accumulated, so `site.worked` is an emitted success for a repair
-    that did not happen. That is the rule this file states twice elsewhere (`_fold` refuses an
-    effect that touched nothing; `conditional_emission_rows` exempts `(Record, ttl)` on the same
-    argument) failing at the one place the fold cannot see it, because the effect DID report a
-    subject."""
+def _w8_work(acts_deltas, site_id="site_seam", condition=None):
+    """Fold `work` acts through the REAL `resolve()` -- the fold AND §27.3's accumulator, which is
+    where `work`'s change actually lands -- one act per `(act id, delta)`; `delta=None` declares
+    none. Returns `(events, condition before, condition after, the site id)`."""
     w = P.tiny_world()
-    site = w.sites["site_seam"]
+    site = w.sites[site_id]
+    if condition is not None:
+        site.condition = condition
     before = site.condition
     d = SeasonDriver(w); w.step = Step.RESOLVE
-    evs = d.resolve([Act(id="wk", actor="p_low", verb="work", payload={"site": site.id})])
+    acts = [Act(id=aid, actor="p_low", verb="work", payload={"site": site.id},
+                changes=([] if dv is None else
+                         [StateChange(site.id, "alter", "Act", "condition", dv)]))
+            for aid, dv in acts_deltas]
+    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), acts)
+    return evs, before, site.condition, site.id
+
+
+def _w8_site_receipts(evs, sid):
+    """Every gate-minted `set` receipt on `sid` any of these Events carries."""
+    return [c for e in evs for c in e.changes
+            if c.subject == sid and c.mode == "set" and type(c).__name__ == "Receipt"]
+
+
+def test_w8_work_emits_a_success_only_when_the_site_moves():
+    """⚠ THIS TEST FLIPPED AT G4 (plan position 7), AND THE FLIP IS F9 CLOSING. It was
+    `test_w8_work_emits_a_success_while_repairing_nothing`, and it asserted that a `work` naming
+    its site and declaring NO DELTA emitted `site.worked` while `site.condition` stayed where it
+    was -- `H-94`'s worked case, pinned as a defect, whose own assertion message said it would go
+    red *"the day `H-94` closes"*.
+
+    WHY THE OLD BEHAVIOUR WAS WRONG, in the design's own words: `04 §C.2`'s F9 note -- *"`work`
+    emitting `site.worked` while accumulating no delta, which is the instance `ID-9` is written
+    from, passes the check unchanged"*. The fold's old guard refused an effect that REPORTED
+    nothing; `_eff_work` reported its site to keep the deferral from reading as a no-op, so the
+    guard passed and a success Event carrying a gate-minted receipt shipped for a repair that did
+    not happen. The gate never compared anything.
+
+    WHAT HOLDS NOW, and each arm is a place the new rule could be wrong:
+      1. NO DELTA -> `work.unavailable`, the site unmoved, and NO `set` receipt on it anywhere.
+         Judged at the act's own write: it stages nothing, the staged cell does not move.
+      2. A DELTA OF EXACTLY 0 -> the same. A declared nothing is still nothing.
+      3. A REAL DELTA -> `site.worked`, the condition moved by EXACTLY that delta, and the success
+         carries the site's receipt. The control: without it arms 1-2 would pass for a `work`
+         that never succeeds at all, which is the plan's own warning (*"or `work` is refused
+         forever"*).
+      4. A REAL DELTA ON A SITE AT ITS CEILING -> refused. The act staged a non-zero delta, so its
+         own write moved; the SITE did not, because the clamp ate it. Judged at the accumulator's
+         write, where the change actually lands -- a gate that judged only per act passes this.
+      5. TWO DELTAS THAT CANCEL -> both refused, the site unmoved: the site did not change, so no
+         act changed it (sum-then-clamp-once has no per-act share to credit).
+      6. A REAL DELTA BESIDE A ZERO ONE on the same site -> the zero is refused and the real one
+         succeeds. A gate that judged only per SITE passes this -- it would credit the zero.
+
+    MUTATIONS, each a monkeypatch of `World.state_of` so the named reads never compare equal, run
+    against this tree (G4, 2026-09-26), each arm run on its own: (a) EVERY read -- the gate
+    compares nothing, which is the pre-G4 contract: arms 1, 2, 4, 5 and 6 go red, arm 3 (the
+    control) stays green; (b) only the SITE reads -- the
+    accumulator's write unjudged: arms 4 and 5 go red, 1 and 2 stay green; (c) only the STAGED
+    reads -- the per-act write unjudged: arms 1, 2 and 6 go red, 4 and 5 stay green. So each of
+    the two judgments is observed failing on its own, by the arms that name it."""
+    # 1. no delta
+    evs, before, after, sid = _w8_work([("wk0", None)])
+    assert [e.kind for e in evs] == ["work.unavailable"], [e.kind for e in evs]
+    assert after == before, (before, after)
+    assert _w8_site_receipts(evs, sid) == [], _w8_site_receipts(evs, sid)
+    # 2. a declared delta of zero
+    evs, before, after, sid = _w8_work([("wk0z", 0)])
+    assert [e.kind for e in evs] == ["work.unavailable"], [e.kind for e in evs]
+    assert after == before and _w8_site_receipts(evs, sid) == []
+    # 3. the control: a real repair succeeds and moves the site by exactly its delta
+    evs, before, after, sid = _w8_work([("wk5", 5)])
     assert [e.kind for e in evs] == ["site.worked"], [e.kind for e in evs]
-    assert site.condition == before, (
-        f"`work` moved condition {before} -> {site.condition} from an act declaring no delta; "
-        "`H-94` has closed and this test is the record of a defect that no longer exists")
+    assert after == before + 5, (before, after)
+    assert len(_w8_site_receipts(evs, sid)) == 1, _w8_site_receipts(evs, sid)
+    # 4. a real delta the clamp eats: the site is already at the scale's ceiling
+    scale = P.tiny_world().fixtures.get("condition_scale")
+    evs, before, after, sid = _w8_work([("wkc", 5)], site_id="site_harbour", condition=scale)
+    assert before == scale and after == scale, (before, after)
+    assert [e.kind for e in evs] == ["work.unavailable"], (
+        f"{[e.kind for e in evs]}: a `work` whose delta the clamp ate entirely published a success "
+        "-- the accumulator's write is not being judged, and F9 holds only per act")
+    assert _w8_site_receipts(evs, sid) == []
+    # 5. two deltas that cancel
+    evs, before, after, sid = _w8_work([("wkp", 3), ("wkm", -3)])
+    assert after == before
+    assert sorted(e.kind for e in evs) == ["work.unavailable", "work.unavailable"], (
+        [e.kind for e in evs])
+    # 6. a real delta beside a zero one, on the same site
+    evs, before, after, sid = _w8_work([("wkr", 4), ("wkz", None)])
+    assert after == before + 4, (before, after)
+    by_act = {e.causes[0]: e.kind for e in evs}
+    assert by_act == {"wkr": "site.worked", "wkz": "work.unavailable"}, by_act
 
 
 def test_a_holder_can_now_choose_the_governance_verbs_their_office_grants():
@@ -5389,30 +5400,49 @@ def test_h71_the_grant_is_a_snapshot_not_a_mirror():
     earlier writing of this docstring got it wrong.
 
     The payload is written at seating and never revisited, so mutating an office's `remit_acts`
-    afterwards does not reach a sitting holder, while `_eligible` (which has a `World`) sees it at
-    once. This test pins that BEHAVIOUR.
+    afterwards does not reach a sitting holder. ~~while `_eligible` (which has a `World`) sees it
+    at once~~ ⚠ **NO LONGER TRUE, since position `13e` (2026-09-26): `_eligible` now reads
+    `t.granted_acts` too** (`loop/resolve.py`), the same frozen snapshot this test pins, not the
+    live office — so a hand-mutation reaches NEITHER reading now, and the divergence this sentence
+    described is exactly what `13e` closed. This test pins that BEHAVIOUR.
 
     ⚠⚠ **IT DOES NOT PIN THE SEMANTICS, AND THE FIRST WRITING CLAIMED IT DID.** It rested on the
     register's *"an office whose remit changes does so by an ACT"* and called the snapshot a ruled
-    choice. **MEASURED, and the justification does not hold:** the only act that would change a
-    remit is `establish`, which DECLARES `writes: ["Office.exists", "Office.remit",
-    "Office.establishment"]` (`verb_table.yaml:229`) and **has no effect registered in
-    `loop/effects.py` at all**. The only writes to `remit_acts` anywhere in `engine/` are
-    `_grant_remit`'s own two payload writes; every other hit is a read, a roster validation or a
+    choice. **MEASURED AT THE TIME, and the justification did not hold:** the only act that would
+    change a remit was `establish`, which DECLARED `writes: ["Office.exists", "Office.remit",
+    "Office.establishment"]` (`verb_table.yaml:229`) and **had no effect registered in
+    `loop/effects.py` at all**. The only writes to `remit_acts` anywhere in `engine/` were then
+    `_grant_remit`'s own two payload writes; every other hit was a read, a roster validation or a
     docstring. `CLAUDE.md` §0.1 pt 3 row two -- *"a roster existing is not a roster being used"*.
+    ⚠ **NO LONGER TRUE, since plan position `13f` (2026-09-25): `_eff_establish` now writes
+    `remit_acts` too** (`loop/effects.py`) -- this paragraph is kept as the historical measurement
+    that motivated ruling the question below, not as a current fact.
 
-    **So snapshot and mirror are observationally IDENTICAL in every reachable run**, and this test
-    reaches the distinction only by hand-mutating an office, which no game path does. The choice is
-    therefore UNDECIDED by anything in the tree, and it is not this test's to decide. `establish`
-    is itself `remit:confer`-eligible -- one of the nine verbs `H-71` unblocks -- so the semantics
-    arrives WITH `establish`'s effect and should be ruled there.
+    **So snapshot and mirror WERE observationally IDENTICAL in every reachable run at the time**, and
+    this test reached the distinction only by hand-mutating an office, which no game path did. The
+    choice was therefore UNDECIDED by anything in the tree at that point, and was not this test's to
+    decide. `establish` is itself `remit:confer`-eligible -- one of the nine verbs `H-71` unblocks --
+    so the semantics arrived WITH `establish`'s effect and is ruled below.
+
+    ⚠ **DECIDED THERE, AT PLAN POSITION `13f` (2026-09-25), AND THIS TEST IS NOW ITS HALF.** The
+    answer is neither pure arm: the payload stays a SNAPSHOT, so a hand-mutation of the office --
+    this test -- still reaches no sitting holder, and `establish`'s effect re-stamps every live
+    `hold` on the office it writes, through `_grant_remit(force=True)`, so the grant changes by an
+    ACT and reaches sitting holders in the same act. The act half is
+    `test_13f_an_establish_on_an_existing_id_changes_the_remit_and_reaches_the_sitting_holder` in
+    `test_governance_build.py`; the two are the complement of each other and both must hold.
 
     ⚠ **AND THIS DOCSTRING NO LONGER FORECLOSES THE OTHER REPAIR.** It used to say a later session
     must not "fix" the snapshot into a mirror because that would put a `World` read into `choose`
     and undo `AX-2`. That was a false dichotomy: the other repair needs no `World` in `choose` --
-    route the two world-side readers (`resolve.py:56`, `epistemic.py:360`) onto `t.granted_acts`,
+    ~~route the two world-side readers (`resolve.py:56`, `epistemic.py:360`) onto `t.granted_acts`,
     which they can do because both already hold the Tenure. Two independent read-only reviews
-    rediscovered that repair; it is the open finding, not a forbidden one."""
+    rediscovered that repair; it is the open finding, not a forbidden one.~~ ⚠ **DONE 2026-09-26,
+    POSITION `13e`.** Both world-side readers -- `loop/resolve.py`'s `_eligible` and
+    `epistemic.py`'s `_ch_post_remit` -- now read `t.granted_acts`, deleting the `w.offices.get`
+    read each one carried. `decision/options.py`'s own reading was already correct and needed no
+    change. Three independent read-only reviews had rediscovered the duplication before this
+    landed; the finding is closed, not open."""
     w = P.tiny_world()
     duke = w.persons["p_high"]
     assert not person_side_eligible(duke, VERB_TABLE["revoke"]), "fixture: duke lacks `revoke`"
@@ -5456,11 +5486,13 @@ def test_a_binding_decision_lights_the_two_witness_channels_that_needed_one():
     # 'convene']` and carries no `revoke`, so a revoke by the duke is correctly INELIGIBLE — the
     # same trap the slice test fell into. The conferral basis is a harness fixture; Part E requires
     # an office to HAVE one and neither fixture office does.
-    w.offices["off_dicastery"].conferral = "the duke's remit (harness fixture)"
+    w.offices["off_dicastery"].conferral = "appointed"
+    # G3: ground for the seat conferred, and the duke's seat named -- see the governance-slice test.
+    w.offices["off_dicastery"].rung = "S"
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="g_conf", actor=duke, verb="confer",
-                           payload={"office": "off_dicastery", "to": "p_mid"})],
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_conf", actor=duke, verb="confer",
+                           payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke")],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "tenure.opened"), None)
     assert e is not None, (
@@ -5500,11 +5532,13 @@ def test_h71_others_half_a_witness_learns_who_was_seated_on_what():
     `chronicle` admits them (it is a `binding_decision` kind and fires unconditionally)."""
     def run(mode):
         w = P.tiny_world(DEFAULT_FIXTURES.sweep("fan_out_mode", mode))
-        w.offices["off_dicastery"].conferral = "the duke's remit (harness fixture)"
+        w.offices["off_dicastery"].conferral = "appointed"
+        # G3: ground for the seat conferred, and the duke's seat named -- see the slice test.
+        w.offices["off_dicastery"].rung = "S"
         d = SeasonDriver(w)
-        d.matter([])
-        out = d.resolve([Act(id="g_conf", actor="p_high", verb="confer",
-                             payload={"office": "off_dicastery", "to": "p_mid"})],
+        d.matter(mint_token(d.w, WriteClass.MATTER), [])
+        out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_conf", actor="p_high", verb="confer",
+                             payload={"office": "off_dicastery", "to": "p_mid"}, via="off_duke")],
                         contest_max_depth=w.fixtures.get("contest_max_depth"))
         e = next((x for x in out if x.kind == "tenure.opened"), None)
         assert e is not None, (
@@ -5524,7 +5558,7 @@ def test_h71_others_half_a_witness_learns_who_was_seated_on_what():
         # cannot resolve.
         for x in out:
             w.log.append(x)
-        d.witness(out)
+        d.witness(mint_token(d.w, WriteClass.INTERIOR), out)
         return w
 
     def holds(w, pid):
@@ -5580,8 +5614,8 @@ def test_h71_others_half_a_non_hold_tenure_release_stays_opaque():
                "p_mid", "prop_test", "commit", since=w.tick)
     w.add_tenure(ct)
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="g_rel", actor="p_mid", verb="release",
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="g_rel", actor="p_mid", verb="release",
                          payload={"subject": "prop_test"})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "tenure.closed"), None)
@@ -5592,7 +5626,7 @@ def test_h71_others_half_a_non_hold_tenure_release_stays_opaque():
         f"own id {ct.id!r}")
     for x in out:
         w.log.append(x)
-    d.witness(out)
+    d.witness(mint_token(d.w, WriteClass.INTERIOR), out)
     everyone_claims = {c for pid in w.persons for c in
                        {(c.subject, c.predicate, c.value) for c in w.persons[pid].ledger}}
     assert not any(subj == "prop_test" for subj, _, _ in everyone_claims), (
@@ -6891,22 +6925,41 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `release` 10 -> 9. `create_record`, `utter`, `reconstruct`, `research` and `dispatch` are
     # unmoved. Variety bought with somebody else's scene is still variety, and it is still a cost.
     # [GROUNDED: measured 2026-09-20 through `corpus_run.run_case` at seed 0 over the same 143 corpus cases, both arms, control from this tree with the five files of the admission stashed -- distinct executed sets 44 -> 57 over the same 89 live worlds; universal `{create_record, utter}` UNMOVED; `kill / wound` 0 -> 47 worlds and the seven displacements above]
-    # ⚠⚠ **57 -> 41 UNDER `R8.1`, AND THE DIRECTION IS THE LOSS THIS FILE HAS NAMED BEFORE (`U3`,
-    # G1a): DENSER Q2 COMPETES FOR THE SAME SCENE SLOTS AND WORLDS CONVERGE.** The `seen` deposit
-    # raises Q2 for every co-located witness on every event -- not just the acting person -- so the
-    # per-round candidate slate is denser corpus-wide in exactly the way `U3`'s projection and G1a's
-    # real maturation write once were, and the same mechanism this file already tracked twice
-    # produces the same DIRECTION a third time: variety falls as ranking discrimination narrows
-    # which verb wins a contested scene. `create_record` leaves the universal set here too, into
-    # `varying` at 88 of 89 (see below) rather than out of `ever` -- so this is the SAME shape as
-    # `U3`'s "discrimination within a person rose, difference between people fell", not a channel
-    # going dark. `dispatch` moves from executed-in-NPC-033 to refused-everywhere (`ever` loses it,
-    # `refused_only` gains it) -- the already-diagnosed `questions_for` content-hash perturbation
-    # this integration traced the `dispatch` regression to elsewhere in this file -- and the
-    # never-attempted set is UNCHANGED by it (`dispatch` lands in `refused_only`, not there),
-    # checked in the same breath at the assertion below.
-    # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- distinct executed sets 57 -> 41 over the same 89 live worlds; per-verb world counts: utter 89, create_record 88, reconstruct 86, tell 81, transfer 80, speak 75, surveil 66, research 64, move 62, kill / wound 35, interview 22, release 3, dispatch 0 (refused-only)]
-    assert len(by_sig) == 41, (
+    # ⚠ 57 -> 64, G4 (plan position 7, 2026-09-26): `NoOpReceipt` REFUSES THE SELF-TRANSFER.
+    # THE UNIT AND THE DIRECTION FIRST: variety ROSE, and the whole of the move is ONE verb's no-op
+    # refusal. 628 of the corpus's 900 `transfer` effect calls moved grain FROM A RUNG TO ITSELF --
+    # `operands_for` binds `to` from the question's referent, which is usually the giver's own
+    # hearth (`r_hearth -> r_hearth`) -- so the decrement and the increment landed on one store and
+    # cancelled, and each published `transfer.made` with two receipts over a store that did not
+    # move. That is F9's own shape (`04 §C.2`: a success Event for a write that did not happen),
+    # and G4's gate now refuses it: `transfer.refused`. A refused act is witnessed differently from
+    # a made one, so the worlds it touched then choose differently, and they stop sharing a
+    # signature.
+    # ⚠ ATTRIBUTED BY CONTROL, NOT BY ARGUMENT: the same corpus with the no-op judgment switched
+    # off FOR `transfer` ALONE (every other verb still judged) reproduces all 89 live worlds'
+    # executed sets EXACTLY and 57 signatures, and no other verb raised a single new no-op
+    # refusal anywhere in it (`work` never reaches its effect in the corpus: it is refused-only).
+    # ⚠ THE UNIVERSAL SET WAS CHECKED IN THE SAME BREATH: `{create_record, utter}` UNMOVED, and the
+    # varying set is the same eleven. THE COST, NAMED: `transfer` reaches 75 -> 59 worlds (the 16
+    # whose every transfer was a self-transfer), and the cascade moves `speak` 78 -> 81, `tell`
+    # 63 -> 60, `surveil` 55 -> 53, `interview` 46 -> 45, `kill / wound` 47 -> 46, `move` 47 -> 46,
+    # `release` 9 -> 8; `create_record`, `utter`, `reconstruct`, `research`, `dispatch` unmoved.
+    # ⚠ WHAT IT DOES NOT FIX: the self-transfer is still MINTED -- the derivation that names the
+    # giver's own hearth as the receiver is `H-94`'s lane (operands), not the gate's; G4 only stops
+    # it being reported as a transfer.
+    # [GROUNDED: measured 2026-09-26 through `corpus_run.run_case` at seed 0 over the same 143 corpus cases, both arms, control from a `git worktree` at 335d095 (the commit before G4) -- distinct executed sets 57 -> 64 over the same 89 live worlds, 28 of them with a different executed set; the transfer-exempt control arm on this tree reproduces 57 and every live world's executed set exactly; 628 new no-op refusals, all `transfer`]
+    # ⚠⚠ **MERGED WITH `R8.1`, AND BOTH MECHANISMS ARE NOW LIVE AT ONCE -- NEITHER 41 NOR 64 IS THE
+    # CURRENT VALUE.** `R8.1`'s `seen` deposit (denser Q2, narrowing which verb wins a contested
+    # scene -- the same direction `U3`/G1a already established) and G4's self-transfer refusal
+    # (widening variety by splitting `transfer` into made/refused) pull in OPPOSITE directions over
+    # the same 89 worlds, and only a fresh measurement on the fully-merged tree says where they
+    # land, not an arithmetic guess from the two deltas. `dispatch` moves from executed-in-NPC-033
+    # to refused-everywhere under `R8.1` alone (`ever` loses it, `refused_only` gains it) -- the
+    # already-diagnosed `questions_for` content-hash perturbation this integration traced the
+    # `dispatch` regression to elsewhere in this file -- and the never-attempted set is UNCHANGED
+    # by it, checked in the same breath at the assertion below.
+    # [GROUNDED: measured 2026-09-27 on this tree with BOTH `seen` (`R8.1`) and G4's self-transfer refusal live -- distinct executed sets 45 over the same 89 live worlds (not 41, not 64: neither delta alone); per-verb world counts: utter 89, create_record 88, reconstruct 86, tell 81, speak 77, surveil 66, research 61, move 60, transfer 51, kill / wound 32, interview 19, release 1; universal `{utter}`; `dispatch` refused-only]
+    assert len(by_sig) == 45, (
         f"the number of distinct behaviours moved to {len(by_sig)}; `H-96` must be re-derived. "
         "This is a SET IDENTITY over the live worlds, so a move is real rather than noise — say "
         "which unit moved it and in which direction before re-pinning, and check the universal "
@@ -7053,11 +7106,22 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # admitting them. `H-71` is closed and they are still never attempted -- which is why this set
     # keeps four members instead of emptying, and why closing a hole is not the same as reaching
     # the verbs behind it.
-    assert foldable_all - ever - refused_only == {"confer", "convene", "revoke",
+    # ⚠ FOUR -> FIVE: `establish` JOINED THIS SET, 2026-09-25 (plan position `13f`), AND IT
+    # ARRIVED HERE RATHER THAN IN `ever` OR `refused_only` FOR THE SAME REASON THE THREE ABOVE ARE
+    # HERE. `13f` gave it a predicate and an effect, so `resolvable_verbs()` now carries it -- but
+    # its eligibility is `remit:confer`, and no corpus overlay grants `confer`, so no person in any
+    # corpus world can form it. Nothing else in this test moved: `ever`, `refused_only`, the 57
+    # distinct sets and the universal and varying sets are all unchanged, because a verb nobody
+    # attempts changes no run. Where it IS formable (`tiny_world`'s duke, every seat of
+    # `build_realm` under `remit_default`) a computed `establish` carries no operands -- the row is
+    # untyped, so `operands_for` returns `{}` -- and `_req_establish` refuses it; it executes only
+    # from a hand-built Act until `15c` widens the operand vocabulary.
+    assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
                                               "destroy_record"}, (
-        f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Three of "
-        "the four are the governance verbs no corpus overlay grants; `H-71` is CLOSED, so the "
-        "reason is now the corpus's offices and not the eligibility branch")
+        f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Four of "
+        "the five are the governance verbs no corpus overlay grants (`establish` is "
+        "`remit:confer`-eligible); `H-71` is CLOSED, so the reason is now the corpus's offices and "
+        "not the eligibility branch")
 
 
 
@@ -7726,7 +7790,7 @@ def test_wa_the_fold_and_the_person_read_the_same_cell_with_opposite_polarities(
     assert verdict.value is UNKNOWN, verdict
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
-    kinds = [e.kind for e in d._fold(w, a)]
+    kinds = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), a)]
     assert kinds == ["transfer.refused"], (
         f"an operand-less `transfer` emitted {kinds}. UNKNOWN must refuse in the fold; admitting "
         "it would move grain the act never named -- `H-94` filled by accident")
@@ -7740,7 +7804,7 @@ def test_wa_the_fold_and_the_person_read_the_same_cell_with_opposite_polarities(
     # `LedgerReader`. So the guard is not deleted: it now asserts the field EXISTS and CARRIES THE
     # SAME READS THE VERDICT DID, which is the property that would break if `W-B` were reverted
     # halfway -- a field added and never populated is the dead carrier from the other direction.
-    ev = d._fold(w, Act(id="wa_t2", actor="p_low", verb="transfer", payload={"subject": "Hh"}))
+    ev = d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_t2", actor="p_low", verb="transfer", payload={"subject": "Hh"}))
     assert all(hasattr(e, "observed") for e in ev), (
         "an Event lost its `observed` field -- `W-B` attaches the fold's reads to every Event an "
         "act emits, and a missing field means the carrier was reverted")
@@ -7775,26 +7839,40 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
 
     MUTATION (run 2026-09-04): restore `_req_work`'s trailing `return True` by giving the cell an
     operand default (`site` bound to any fixture site) -- the operand-less act is admitted again
-    and this test goes RED on the first assertion. Unmutated it is GREEN."""
+    and this test goes RED on the first assertion. Unmutated it is GREEN.
+
+    ⚠ G4 (2026-09-26): EVERY ADMITTED ARM NOW DECLARES A DELTA OF 1, AND WITHOUT IT THIS TEST
+    WOULD STOP DISCRIMINATING. Before G4 a `work` with no delta emitted `site.worked`, so these
+    arms could assert the precondition admitted by reading the success kind. G4 refuses a `work`
+    that stages nothing (`NoOpReceipt` -> `work.unavailable`) -- the SAME kind the precondition
+    refuses with -- so an admitted-but-deltaless act and a precondition refusal became
+    indistinguishable here. A delta of 1 makes the admitted arms do something, and the kinds
+    discriminate again. ⚠ `_fold` ALONE: its `site.worked` is PROVISIONAL, because the delta is
+    only staged here and lands at `resolve()`'s summed write, which these direct calls never
+    reach. That is fine for what this test is about -- the precondition -- and the success-only-
+    when-the-site-moves property is `test_w8_work_emits_a_success_only_when_the_site_moves`'s."""
     w = P.tiny_world()
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
-    bare = [e.kind for e in d._fold(w, Act(id="wa_w0", actor="p_low", verb="work"))]
+    bare = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w0", actor="p_low", verb="work"))]
     assert bare == ["work.unavailable"], (
         f"a `work` naming no site emitted {bare}. It cannot have checked a condition against a "
         "floor, because it was never told whose condition")
+    one = lambda sid: [StateChange(sid, "alter", "Act", "condition", 1)]
     # AND IT STILL ADMITS A NAMED, WORKABLE SITE -- otherwise the refusal above is not the
     # polarity rule, it is the verb being broken (§0.1 point 2: the control the first arm needs).
-    ok = [e.kind for e in d._fold(w, Act(id="wa_w1", actor="p_low", verb="work",
-                                           payload={"site": "site_harbour"}))]
+    ok = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w1", actor="p_low", verb="work",
+                                           payload={"site": "site_harbour"},
+                                           changes=one("site_harbour")))]
     assert ok == ["site.worked"], f"a workable site was refused: {ok}"
     # AND IT REFUSES A SITE BELOW EVERY FLOOR, which is the failure §12.1's gate exists to
     # observe and the one `_req_work`'s FIRST version (`condition >= 0`) could not.
     site = w.sites["site_harbour"]
     kept, site.condition = site.condition, 0
     try:
-        dead = [e.kind for e in d._fold(w, Act(id="wa_w2", actor="p_low", verb="work",
-                                                 payload={"site": site.id}))]
+        dead = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w2", actor="p_low", verb="work",
+                                                 payload={"site": site.id},
+                                                 changes=one(site.id)))]
         assert dead == ["work.unavailable"], f"a site at condition 0 was worked: {dead}"
     finally:
         site.condition = kept
@@ -7810,8 +7888,9 @@ def test_wa_work_refuses_for_want_of_a_site_and_that_is_a_polarity_correction():
     assert min(fl.values()) <= seam.condition < max(fl.values()), (
         "the fixture no longer places `site_seam` between its loosest and strictest floor, so "
         "this pin no longer discriminates the three readings -- re-choose the site")
-    workable = [e.kind for e in d._fold(w, Act(id="wa_w3", actor="p_low", verb="work",
-                                                 payload={"site": seam.id}))]
+    workable = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), Act(id="wa_w3", actor="p_low", verb="work",
+                                                 payload={"site": seam.id},
+                                                 changes=one(seam.id)))]
     assert workable == ["site.worked"], (
         f"a seam at condition {seam.condition} was refused ({workable}); surface_gleaning's "
         f"floor is {min(fl.values())} and the generic verb reads the loosest")
@@ -8064,13 +8143,15 @@ def test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing():
     WHAT THE SWEEP SAYS, and it is two findings rather than one:
       * THE STORES MOVE WITH IT, exactly: at 1 the giver falls by 1 and the receiver rises by 1;
         at 3, by 3. So `_eff_transfer` rests entirely on this fixture.
-      * THE EMISSION DOES NOT. `transfer.made` at all three points, including 0 -- where the
-        precondition `stores >= 0` admits every giver and the effect changes no value. A verdict
-        that does not flip across a sweep is itself a finding (§42.2.1), and this one is: the
-        fold's *"an effect that touched nothing must not emit the success"* guard watches the IDS
+      * ~~THE EMISSION DOES NOT.~~ ⚠ CLOSED AT G4 (plan position 7, 2026-09-26). It read:
+        *"`transfer.made` at all three points, including 0 -- where the precondition `stores >= 0`
+        admits every giver and the effect changes no value ... the fold's guard watches the IDS
         an effect returns, not the values it changed, so a transfer of nothing publishes a
-        success. Recorded rather than fixed here -- the guard's polarity is the fold's business
-        and the default is 1, so this is the control arm reporting what a control arm is for.
+        success. Recorded rather than fixed here -- the guard's polarity is the fold's
+        business"*. G4 is that business: the gate now reads both rungs before and after the write
+        and refuses one that moved neither (`NoOpReceipt`), so at 0 the emission FLIPS to
+        `transfer.refused` and the two live arms keep `transfer.made`. The verdict now moves
+        with the sweep, which is what a control arm is for.
 
     MUTATION (run 2026-09-04): make `_derive_operand` return the literal `1` for `"amount"`
     instead of `fx.get("default_transfer_amount")` -- the fixture stops reaching the derivation,
@@ -8097,7 +8178,7 @@ def test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing():
         before = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
         d = SeasonDriver(w)
         w.step = Step.RESOLVE
-        kinds = [e.kind for e in d._fold(w, acts[0])]
+        kinds = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), acts[0])]
         after = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
         # ⚠ ZERO-VALUED KEYS ARE NOT MOVEMENT, AND THIS ARM WAS COUPLED TO THE KIND FIXTURE UNTIL
         # THE `W-C` ADVERSARIAL PASS. At `amount=0` the effect still runs
@@ -8121,9 +8202,11 @@ def test_wc_the_amount_sweep_runs_all_three_points_and_zero_spends_nothing():
         assert moved.get("Hh") == (8, 8 - amount) and moved.get("S") == (40, 40 + amount), (
             f"at amount={amount} the stores moved {moved}; §E3 gives `transfer` TWO "
             "`Rung.stores` writes, one per side, and they must be equal and opposite")
-    # AND THE EMISSION IS INVARIANT ACROSS THE SWEEP -- the second finding, pinned so it is a
-    # measurement rather than a surprise the next reader has to re-derive.
-    assert {a: k for a, (k, _m) in seen.items()} == {0: ["transfer.made"], 1: ["transfer.made"],
+    # AND THE EMISSION FOLLOWS THE STORES (G4) -- a transfer of nothing is refused, the two that
+    # move matter succeed. It was pinned INVARIANT (`transfer.made` at 0 too) as the record of the
+    # defect G4 closed; see the docstring.
+    assert {a: k for a, (k, _m) in seen.items()} == {0: ["transfer.refused"],
+                                                     1: ["transfer.made"],
                                                      3: ["transfer.made"]}, seen
 
 
@@ -8190,7 +8273,7 @@ def test_wc_the_store_kind_sweep_runs_all_three_arms_and_an_unstocked_kind_refus
         before = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
         d = SeasonDriver(w)
         w.step = Step.RESOLVE
-        emitted = [e.kind for e in d._fold(w, acts[0])]
+        emitted = [e.kind for e in d._fold(w, mint_token(w, WriteClass.ACTS), acts[0])]
         after = {r: dict(w.rungs[r].stores or {}) for r in w.rungs}
         moved = {r: (before[r].get(kind), after[r].get(kind))
                  for r in w.rungs if norm(before[r]) != norm(after[r])}
@@ -8660,12 +8743,12 @@ def _wb_fold_one(w, verb="transfer", actor="p_low", subject="S"):
     d = SeasonDriver(w)
     w.step = Step.RESOLVE
     a = Act(id=f"wb_{verb}", actor=actor, verb=verb, payload=dict(ops))
-    evs = d._fold(w, a)
+    evs = d._fold(w, mint_token(w, WriteClass.ACTS), a)
     for e in evs:
         w.log.append(e)
         d.act_of[e.id] = a
     w.step = Step.WITNESS
-    d.witness(evs)
+    d.witness(mint_token(d.w, WriteClass.INTERIOR), evs)
     return d, evs, ops, row, q
 
 
@@ -8718,12 +8801,12 @@ def test_wb_the_fold_attaches_the_verdicts_reads_to_every_event_the_act_emits():
     w3.step = Step.RESOLVE
     q3 = Question("q:wb3", "need", ("S",), "prop")
     typed_ops = operands_for(p3, VERB_TABLE["transfer"], q3, "S", w3.fixtures)
-    typed = d3._fold(w3, Act(id="wb_pre", actor="p_low", verb="transfer",
+    typed = d3._fold(w3, mint_token(w3, WriteClass.ACTS), Act(id="wb_pre", actor="p_low", verb="transfer",
                                payload=dict(typed_ops)))
     assert typed and typed[0].observed, (
         "the priming act read nothing, so the leak this asserts against cannot happen and the "
         "assertion below is vacuous")
-    untyped = d3._fold(w3, Act(id="wb_cr", actor="p_low", verb="create_record",
+    untyped = d3._fold(w3, mint_token(w3, WriteClass.ACTS), Act(id="wb_cr", actor="p_low", verb="create_record",
                                  payload={"subject": "S"}))
     assert untyped, "create_record emitted nothing — the fixture changed"
     assert all(e.observed == () for e in untyped), (
@@ -9141,7 +9224,7 @@ def test_wb_two_reads_of_one_cell_in_one_barrier_deposit_exactly_one_claim():
     evs = []
     for n in (1, 2):
         a = Act(id=f"wb_dedup_{n}", actor="p_low", verb="transfer", payload=dict(ops))
-        out = d._fold(w, a)
+        out = d._fold(w, mint_token(w, WriteClass.ACTS), a)
         for e in out:
             w.log.append(e)
             d.act_of[e.id] = a
@@ -9154,7 +9237,7 @@ def test_wb_two_reads_of_one_cell_in_one_barrier_deposit_exactly_one_claim():
         f"both reads returned the same value: {reads}. `_eff_transfer` no longer mutates "
         "`Rung.stores` during RESOLVE, so the same-tick collision this pins cannot arise")
     w.step = Step.WITNESS
-    d.witness(evs)
+    d.witness(mint_token(d.w, WriteClass.INTERIOR), evs)
     landed = [(c.subject, c.predicate, c.value, c.when, c.confidence) for c in p.ledger
               if c.predicate == "stores:grain"]
     assert len(landed) == 1, (
@@ -10299,7 +10382,8 @@ def test_wd_a_fork_changes_a_later_decision_at_the_shipped_default_and_far_less_
     # and the RATE is what moved.
     # [GROUNDED: measured 2026-09-20 through the season driver, both arms at seed 0 over the same cases, control from this tree with the five files of the `kill / wound` admission stashed -- W-D `total` arm: genuine 31 UNMOVED, diverged 7 -> 8; `none` 4 and `actor` 6 both unmoved. The denominator holding while the rate moves is the control: the fork population is the same and a contested act is the first verb whose outcome is drawn rather than computed]
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- `total` arm: genuine UNMOVED at 31, diverged 8 -> 6. Mechanism in the `none`-arm block above.]
-    assert (got["total"]["genuine"], got["total"]["diverged"]) == (31, 6), got
+    # [GROUNDED: measured 2026-09-27 after merging main's G4 (self-transfer refusal) on top -- `total` arm diverged 6 -> 7, `none` and `actor` unmoved at 2 and 6]
+    assert (got["total"]["genuine"], got["total"]["diverged"]) == (31, 7), got
     # AND THE TWO LAYERS ARE SEPARATED. The finding is the DECISION count above; this is the layer
     # beneath it — whether the fork moved the act stream at all.
     #
@@ -10682,7 +10766,8 @@ def test_wd_the_decision_fingerprint_is_verbs_only_and_the_control_is_not_100_pe
     # and the RATE is what moved.
     # [GROUNDED: measured 2026-09-20 through the season driver, both arms at seed 0 over the same cases, control from this tree with the five files of the `kill / wound` admission stashed -- W-D `total` arm: genuine 31 UNMOVED, diverged 7 -> 8; `none` 4 and `actor` 6 both unmoved. The denominator holding while the rate moves is the control: the fork population is the same and a contested act is the first verb whose outcome is drawn rather than computed]
     # [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- `total` arm: genuine UNMOVED at 31, wide 8 -> 6. Mechanism in the `none`-arm block above.]
-    assert (got["total"]["genuine"], got["total"]["wide"]) == (31, 6), got
+    # [GROUNDED: measured 2026-09-27 after merging main's G4 (self-transfer refusal) on top -- `total` arm wide 6 -> 7, `none` and `actor` unmoved at 2 and 6]
+    assert (got["total"]["genuine"], got["total"]["wide"]) == (31, 7), got
 
 
 # ===========================================================================
@@ -10709,7 +10794,7 @@ def _we_bands(model="scene_fraction", ids=range(24)):
         d = SeasonDriver(w)
         act = Act(id=f"we{i}", actor="p_low", verb="kill / wound",
                     payload={"subject": "p_mid"})
-        evs = d.resolve([act], w.fixtures.get("contest_max_depth"))
+        evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [act], w.fixtures.get("contest_max_depth"))
         deg = evs[0].degree if evs else None
         alive = "p_mid" in w.persons
         seen.setdefault(deg, dict(
@@ -10814,7 +10899,7 @@ def test_we_event_degree_is_assigned_and_stays_none_where_nothing_graded_it():
     # THE UNCONTESTED PATH. `speak` declares no `contests:`, so nothing graded it.
     w = _w(); w.step = Step.RESOLVE
     d = SeasonDriver(w)
-    evs = d.resolve([Act(id="we_sp", actor="p_low", verb="speak")], 2)
+    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we_sp", actor="p_low", verb="speak")], 2)
     assert evs and all(e.degree is None for e in evs), [(e.kind, e.degree) for e in evs]
 
 
@@ -11091,7 +11176,7 @@ def test_we_the_band_is_read_off_the_subject_and_not_off_the_loser():
 
     w2 = _w(); w2.step = Step.RESOLVE
     d = SeasonDriver(w2)
-    evs = d.resolve([Act(id="we0", actor="p_low", verb="kill / wound",
+    evs = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="we0", actor="p_low", verb="kill / wound",
                            payload={"subject": "p_mid"})], 2)
     assert [e.kind for e in evs] == ["body.changed"], [(e.kind, e.degree) for e in evs]
     assert "p_mid" in w2.persons, (
@@ -11121,14 +11206,17 @@ def test_r8_4_document_key_fires_for_a_non_author_holding_the_changed_record():
     w = P.tiny_world()
     author, holder, bystander = "p_low", "p_other", "p_mid"
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="r_mk", actor=author, verb="create_record", payload={})],
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="r_mk", actor=author, verb="create_record", payload={})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "record.created"), None)
     assert e is not None, f"the fold emitted {[x.kind for x in out]} — no `record.created`"
-    assert e.subject == author, (
-        f"`record.created`'s subject is {e.subject!r}, not the actor — then this test is no longer "
-        "exercising the shape `R8.4` is about, and the repair needs re-deriving, not re-asserting")
+    # G1b: `Event.subject` is deleted; what it held for a fold Event -- the ACTOR -- is
+    # `anchor_of`'s tier 1, so the shape this test needs is asserted through that.
+    assert anchor_of(w, e) == author, (
+        f"`record.created` anchors on {anchor_of(w, e)!r}, not the actor — then this test is no "
+        "longer exercising the shape `R8.4` is about, and the repair needs re-deriving, not "
+        "re-asserting")
     rec = next((c.subject for c in e.changes if c.subject), None)
     assert rec is not None and rec != author, (
         f"the fold wrote no record into `changes[]` (got {[c.subject for c in e.changes]}) — the "
@@ -11177,9 +11265,9 @@ def test_r8_4_document_key_reaches_a_non_author_through_a_store():
     This is the result the first writing of the `R8.4` repair MISSED and denied in its own
     docstring (*"the channel still fires for nobody but the author"*). That is true of Carin's
     world, which contains no `hold` over a rung, and false of the mechanism: `_eff_transfer`
-    returns `[src.id, dst.id]`, `_apply_write` subjects the `StateChange`s to those RUNGS, and the
-    fold puts them on the Event. So a person holding the DESTINATION witnesses a transfer they
-    took no part in.
+    names both rungs (G4: its `Change`'s subjects; it returned `[src.id, dst.id]` before), the gate
+    mints a receipt subjected to each RUNG that moved, and the fold puts them on the Event. So a
+    person holding the DESTINATION witnesses a transfer they took no part in.
 
     ⚠ WHY THIS MATTERS MORE THAN THE RECORD CASE. `H-84` blocks the RECORD route — nothing moves a
     Record to a second person — so the sibling test above has to construct its holder as a declared
@@ -11193,17 +11281,18 @@ def test_r8_4_document_key_reaches_a_non_author_through_a_store():
     w.add_tenure(Tenure("t_src", actor, "S", "hold", since=0))
     w.add_tenure(Tenure("t_dst", witness, "Hh", "hold", since=0))
     d = SeasonDriver(w)
-    d.matter([])
-    out = d.resolve([Act(id="tr1", actor=actor, verb="transfer",
+    d.matter(mint_token(d.w, WriteClass.MATTER), [])
+    out = d.resolve(mint_token(d.w, WriteClass.ACTS), [Act(id="tr1", actor=actor, verb="transfer",
                            payload={"from": "S", "to": "Hh", "kind": "grain", "amount": 3})],
                     contest_max_depth=w.fixtures.get("contest_max_depth"))
     e = next((x for x in out if x.kind == "transfer.made"), None)
     assert e is not None, (
         f"the fold emitted {[x.kind for x in out]} — a `transfer.refused` means the eligibility or "
         "the typed `scalar_threshold` cell rejected the act, and nothing below is about the channel")
-    assert e.subject == actor and {c.subject for c in e.changes} == {"S", "Hh"}, (
-        f"`transfer.made` carries subject={e.subject!r} changes={[c.subject for c in e.changes]} — "
-        "if the changes stop naming both rungs this test is no longer exercising the reach it claims")
+    assert anchor_of(w, e) == actor and {c.subject for c in e.changes} == {"S", "Hh"}, (
+        f"`transfer.made` anchors on {anchor_of(w, e)!r} with changes="
+        f"{[c.subject for c in e.changes]} — if the changes stop naming both rungs this test is no "
+        "longer exercising the reach it claims")
 
     doc = CHANNEL_PREDICATES["document_key"]
     assert doc(w, e, witness), (
@@ -11257,8 +11346,9 @@ def _u2_bailiff_sets(plant: bool, at_round: int = 0, stamp: bool = True):
     # that differs between the two arms is ONE CLAIM ARRIVING MID-SEASON.
     real_witness = SeasonDriver.witness
 
-    def witness_then_plant(self, events):
-        n = real_witness(self, events)
+    # G2: `witness` takes the driver's INTERIOR token first; the spy passes it straight through.
+    def witness_then_plant(self, token, events):
+        n = real_witness(self, token, events)
         if plant and self.round == at_round:
             b = w.persons[HL.BAILIFF]
             b.ledger.append(Claim(
@@ -11697,28 +11787,33 @@ def test_a_telling_deposits_what_was_told_and_the_teller_is_not_told_their_own_n
     this rule is the self-witness rule `witness`'s own REV 3 removed one channel along: a person
     holding a `told_by` copy of their own telling has been told the news by themselves.
 
-    ⚠⚠⚠ **THE FIXTURE MOVED FROM `HL.build_world(0)` TO THE CORPUS CASE `SCN-11` UNDER `R8.1`,
-    AND THE REASON IS `W27`'S OWN FINDING RECURRING IN A SMALLER WORLD, NOT A NEW DEFECT.** The
-    `seen` deposit lands a claim about a witnessed subject to EVERY co-located witness on EVERY
-    event, and `build_world(0)`'s 3 persons are close enough, all season, that by the time any
-    `tell` fires its recipients already hold the told content firsthand via `seen` — the dedup
-    guard below (the reason `175 of the first cut's 180 deposits were this`) correctly drops
-    every copy, and `told_by` measures **zero in that world at every seed 0-9** (checked). That is
-    the identical mechanism `corpus_run.build_at`'s all-in-one-rung worlds were already recorded
+    ⚠⚠⚠ **THE FIXTURE MOVED FROM `HL.build_world(0)` TO A CORPUS CASE UNDER `R8.1`, AND THE
+    REASON IS `W27`'S OWN FINDING RECURRING IN A SMALLER WORLD, NOT A NEW DEFECT.** The `seen`
+    deposit lands a claim about a witnessed subject to EVERY co-located witness on EVERY event,
+    and `build_world(0)`'s 3 persons are close enough, all season, that by the time any `tell`
+    fires its recipients already hold the told content firsthand via `seen` — the dedup guard
+    below (the reason `175 of the first cut's 180 deposits were this`) correctly drops every copy,
+    and `told_by` measures **zero in that world at every seed 0-9** (checked). That is the
+    identical mechanism `corpus_run.build_at`'s all-in-one-rung worlds were already recorded
     hitting (`test_wb_clause_four_…`'s corpus block: *"a corpus of co-located omniscient witnesses
     cannot exercise transmission"*) reaching `build_world` too, now that `seen` widens who counts
     as already-informed. **The channel is not dead**: measured across the live 89-world corpus,
-    `told_by` still lands 5 times over 3 worlds (`ARC-09`, `ARC-40`, `SCN-11`) — persons there are
-    NOT all co-located, so `tell` still crosses a boundary `seen` does not. `SCN-11` is the
-    cheapest of the three (2 seasons) and is what this test now builds, so the teller-attribution
-    and content-match assertions below execute against a real deposit again rather than iterating
-    an empty list.
-    [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- `build_world(0)` gives 0 `told_by` claims at every seed 0-9 over 4 seasons; `corpus_run.build_at(SCN-11, 0)` gives 2 over its 2 seasons, from 2 `tell` acts by `p_c` and `p_a`]"""
+    `told_by` still lands 5 times over 3 worlds — persons there are NOT all co-located, so `tell`
+    still crosses a boundary `seen` does not. This test now builds one of those worlds, so the
+    teller-attribution and content-match assertions below execute against a real deposit again
+    rather than iterating an empty list.
+    ⚠ **THE WORLD NAMED HERE MOVED AGAIN, 2026-09-27, MERGING MAIN's G4 (SELF-TRANSFER REFUSAL) ON
+    TOP.** `SCN-11` (2 told_by claims) went to zero under G4 too; the live set on the fully-merged
+    tree is `ARC-09` (1), `ARC-34` (2, 6 seasons) and `ARC-40` (2, 3 seasons) — `ARC-40` is the
+    cheapest of those and is what this test builds now. If it goes to zero again, re-measure
+    `told_holders` across the corpus rather than guessing the next case.
+    [GROUNDED: measured 2026-09-27 on this tree with `seen` (`R8.1`) live -- `build_world(0)` gives 0 `told_by` claims at every seed 0-9 over 4 seasons; `corpus_run.build_at(SCN-11, 0)` gives 2 over its 2 seasons, from 2 `tell` acts by `p_c` and `p_a`]
+    [GROUNDED: re-measured 2026-09-27 after merging main's G4 on top -- `SCN-11` falls to 0; `ARC-40` gives 2 `told_by` claims over its 3 seasons]"""
     from ..harness import corpus_run as CR
     from ..harness import run_cases as RC
     from ..state.carriers import Claim
 
-    case = next(c for c in RC.load_cases("ARC") if c["id"] == "SCN-11")
+    case = next(c for c in RC.load_cases("ARC") if c["id"] == "ARC-40")
     w = CR.build_at(case, 0)
     d = SeasonDriver(w)
     mint = lambda pid, verb, subj: H(w.world_seed, w.tick, pid, f"act:{verb}:{subj}")
@@ -11730,7 +11825,7 @@ def test_a_telling_deposits_what_was_told_and_the_teller_is_not_told_their_own_n
 
     told = [(pid, c) for pid, p in w.persons.items() for c in p.ledger if c.source == "told_by"]
     assert told, (
-        f"no `told_by` claim reached any ledger over {CR.seasons_for(case)} seasons of `SCN-11`. "
+        f"no `told_by` claim reached any ledger over {CR.seasons_for(case)} seasons of `ARC-40`. "
         "Either no `tell` succeeded — check `news.told` against `news.untold`, the degree decides "
         "it — or the deposit in `loop/witness.py` stopped firing, or `seen`'s reach widened enough "
         "to make even this non-co-located case omniscient (in which case find another corpus case "

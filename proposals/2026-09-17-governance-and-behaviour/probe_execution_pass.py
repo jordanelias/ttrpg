@@ -32,10 +32,12 @@ from engine.season.data import cast                                    # noqa: E
 from engine.season.data.rosters import FACTIONS                        # noqa: E402
 from engine.season.decision import budget                              # noqa: E402
 from engine.season.harness.populated import build_realm                # noqa: E402
-from engine.season.loop.driver import resolvable_verbs                 # noqa: E402
+from engine.season.data.matrix import WriteClass                       # noqa: E402
+from engine.season.loop.driver import mint_token, resolvable_verbs     # noqa: E402
 from engine.season.loop.predicates import in_holdings                  # noqa: E402
 from engine.season.queries import world_q                              # noqa: E402
 from engine.season.queries.world_q import provinces_of, sovereign_fraction  # noqa: E402
+from engine.season.state.attribution import anchor_of                  # noqa: E402
 from engine.season.state.carriers import Tenure, View                  # noqa: E402
 
 
@@ -143,8 +145,11 @@ def main() -> int:
     before = {rid: dict(r.stores or {}) for rid, r in ww.rungs.items()}
     ww.sites.clear()
     ww.step = Step.MATTER
-    evs = dd.matter([])
-    drew_at = [e.subject for e in evs if e.kind == "stores.changed"]
+    evs = dd.matter(mint_token(dd.w, WriteClass.MATTER), [])
+    # `Event.subject` DELETED (G1b, plan position 4, 2026-09-26); `anchor_of` reproduces it here
+    # (tier 2, the auto-emission block's own minted subject). Not in G1b's own WHERE; fixed as a
+    # consequence of the field's blast radius into this live-importing script.
+    drew_at = [anchor_of(ww, e) for e in evs if e.kind == "stores.changed"]
     after_short = ww._subsistence_shortfall
     print(f"  season 2's draw, isolated: eaters short {len(after_short)} · units unmet "
           f"{sum(sum(v.values()) for v in after_short.values())}   (§7.3c: 0 and 0)")
@@ -202,9 +207,12 @@ def main() -> int:
     b0, crossed = bud(), None
     for season in range(1, 40):
         tw.step = Step.MATTER
-        evs = td.matter([])
+        evs = td.matter(mint_token(td.w, WriteClass.MATTER), [])
         tw.tick += 1
-        if [e for e in evs if e.kind == "condition.band_crossed" and e.subject == who]:
+        # `Event.subject` DELETED (G1b, plan position 4, 2026-09-26); `anchor_of` reproduces it
+        # here via tier 3 (the crossing inherits its cause's anchor). Not in G1b's own WHERE;
+        # fixed as a consequence of the field's blast radius into this live-importing script.
+        if [e for e in evs if e.kind == "condition.band_crossed" and anchor_of(tw, e) == who]:
             crossed = season
             break
     print(f"  at body_step=10: {who} body {start} -> {tw.persons[who].body}, crossed a band at "
