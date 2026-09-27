@@ -12,7 +12,11 @@ stamp: `python tools/currency_consistency_check.py` (it exits 0 either way — r
 Old paths resolve through `references/restructure_ledger.md` via `python tools/pathres.py`. A
 ledger id's LAST row is its current state. History of this file: `git log -p CURRENT.md`.
 
-_Last reconciled: 2026-09-22 (rewritten to pointer form; every head re-checked for existence and supersession)._
+_Last reconciled: 2026-09-27 (currency drift on `engine/mc_v18.py`, `engine/season/`,
+`engine/season/data/`, `references/canonical_sources.yaml`, `references/restructure_ledger.md` and
+`systems/social_contest/sim/contest/` re-checked against their rows above; no row's POINTER changed
+— `engine/season/`'s R8.1 seen-claim work and the social-contest stub retirement both land under
+already-current heads, not new ones)._
 
 Design prose is quarantined in `.designs/` (ED-IN-0231). A row that names such a document gives its
 **bare filename only**, deliberately: it is reference, not a head, and not to be opened as authority.
