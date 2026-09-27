@@ -42,9 +42,13 @@ from ..gaps import (
     Collision, Forbidden, NoProducer, ShapeGap, Ungraded, Unowned, Unspecified, expect_refusal,
 )
 from ..loop.deliberate import sense
-from ..loop.driver import SeasonDriver, resolvable_verbs
+# G2: `mint_token` is the driver's one Token constructor. A probe that sets `w.step` by hand and
+# writes is standing in for the driver at a synthetic barrier, so it mints there rather than
+# building a `Token` itself -- `tests/test_g2_token.py` refuses a `Token(` anywhere but the driver.
+from ..loop.driver import SeasonDriver, mint_token, resolvable_verbs
 from ..queries.world_q import questions_for
 from ..seam import ContestError, contest
+from ..state.attribution import anchor_of
 from ..state.carriers import (
     Candidate, Claim, Event, Office, Person, Proposition, Question, Record, Rung, Scene, Sensation, Site, StateChange, Tenure, View,
 )
@@ -267,6 +271,37 @@ def chooser(w, only=None, verbs=None):
     return choose
 
 
+def about(subject: str) -> StateChange:
+    """THE CHANGE A HAND-BUILT EVENT CARRIES TO SAY WHAT IT IS ABOUT -- G1b's tier-2 carrier for
+    apparatus, and the one owner of its shape.
+
+    `Event.subject` is deleted (G1b), so an Event with no act among its causes, no change and no
+    antecedent anchors on NOTHING: `anchor_of` returns `None`, and WITNESS then places it nowhere
+    and deposits it to nobody. Every such Event in the tree was built here, in the probe corpus --
+    `plague.struck` is the class `state/attribution.py` named as the blocker -- so the apparatus
+    says what its Events concern the one way the carrier still allows: a change naming it.
+
+    ⚠ A BARE `StateChange`, NOT A `Receipt`, AND THAT IS THE TRANSITIONAL SEAM ON PURPOSE. No gate
+    write is open when a probe builds an Event, so there is no receipt to mint; `state/log.py`
+    admits a bare change and verifies only receipts (`test_a_bare_statechange_is_still_admitted_
+    and_this_is_the_transitional_seam`). When `G4` closes that seam, every Event built through
+    this function stops being admitted -- which is where they should go red, all at once, from
+    one owner, rather than from nine hand-written copies.
+
+    `field=None` and `delta=None`: it names the thing and asserts no value, so no reader that
+    keys on `field` (`probes.py`'s social-change check, `resolve`'s accumulator) mistakes it for a
+    write it did not make. ⚠ NARROWER THAN "NO READER MISTAKES IT," AND SAID SO 2026-09-26
+    (antagonist pass on G1b's own closure): a reader keying on `c.subject` ALONE, ignoring
+    `field` -- `epistemic._ch_document_key`, `matter.py`'s `term.matured` prior search,
+    `queries/world_q.py::occasioned_by`, `claim_subjects`' `per_change` rule -- treats this bare
+    change exactly as it would a real write's, because none of them ask `field` at all. Measured
+    inert today: `tiny_world`'s only `hold` is `p_high -> off_duke` and nothing in the probe
+    corpus reaches those readers through a hand-built Event's `about(...)` in a way that changes
+    a count (`W6` still reads 9 deposits, unmoved). Grows the transitional-seam population `G4`
+    closes; not a new hazard, the SAME one the paragraph above already names."""
+    return StateChange(subject, "set", "Event")
+
+
 def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
     """S33: `purpose` MUST BE UNIQUE PER DRAW, NOT PER OPERATION -- "or two draws inside one act
     collide".
@@ -280,9 +315,21 @@ def Ev(w, subj_seed, kind, subject, causes, changes=None, degree=None):
 
     A CONTENT-DERIVED draw was the second attempt and it collides whenever two draws in one tick
     are alike. The unit S33 names is the DRAW, so the ordinal lives on the World and is reset at
-    the start of every tick: unique within the tick, and identical across runs of the same seed."""
-    return Event(H(w.world_seed, w.tick, subj_seed, f"ev:{kind}:{w.new_draw()}"), kind, subject,
-                 changes or [], causes, w.tick, degree)
+    the start of every tick: unique within the tick, and identical across runs of the same seed.
+
+    ⚠ G1b: `subject` RIDES AS THE LEADING CHANGE, NOT AS A FIELD (`about`, above), so
+    `anchor_of` answers `subject` at tier 2 for every Event built here -- PROVIDED `causes` names
+    no act id, since tier 1 (actor) is checked first and would win over this change (corrected
+    2026-09-26, antagonist pass on G1b's own closure: "whatever its causes say" overclaimed this;
+    no current `Ev()` caller passes an act-id cause, so it is inert today, not false in practice).
+    LEADING, and not only when `changes` is empty, because tier 2 reads the FIRST change carrying
+    a subject: a caller's own changes appended after it cannot re-anchor the Event behind the
+    `subject` argument's back. And tier 2 rather than tier 3 for the chained ones too: A2's
+    `sitting.decided` is about `D` and is caused by a petition about `p_low`, so inheriting its
+    cause's anchor would have been wrong -- measured, it was the one corpus Event where tier 3
+    disagreed with the field."""
+    return Event(H(w.world_seed, w.tick, subj_seed, f"ev:{kind}:{w.new_draw()}"), kind,
+                 [about(subject)] + list(changes or []), causes, w.tick, degree)
 
 
 @probe("P2", "the scene budget is ~5 and the PERSON chooses what to leave undone", "S26.3",
@@ -401,7 +448,7 @@ def p5():
 def p6():
     w = tiny_world()
     w.step = Step.RESOLVE
-    w.write("stance", WriteClass.ACTS, lambda: None,
+    w.write("stance", mint_token(w, WriteClass.ACTS), lambda: None,
             record_kind="Person", fieldname="pursuits", driver="Act")
     # W2: this RAISED until Part D was loaded as data. `(Person, convictions)` had no row of its
     # own and the old gate was keyed on a THING, so the only way to write it was to ride on
@@ -423,7 +470,7 @@ def p7():
     # S54 item 21, verdict FOLD-IN amended: "a `(Person, scar[axis])` row, `social: true`,
     # written at RESOLVE in the ACTS class by the outcome that names the person". Reporting the
     # row as absent INVERTED THE SIGN ON A SEVEN-ARC FINDING.
-    w.write("stance", WriteClass.ACTS,
+    w.write("stance", mint_token(w, WriteClass.ACTS),
             lambda: scars.__setitem__("Mercy", scars.get("Mercy", 0) + 1),
             record_kind="Person", fieldname="scar", driver="Act")
     assert scars == {"Mercy": 1}
@@ -453,7 +500,9 @@ def p9():
     log = []
     def choose(p, v, s, ask_budget):
         if p.id == "p_high":
-            return [Act_(w, p, "dispatch", payload="p_mid")]
+            # G3: a remit act names the seat it is exercised through (`Act.via`); `dispatch` is
+            # the duke's by `off_duke`'s grant, so the order goes out through `off_duke`.
+            return [Act_(w, p, "dispatch", payload="p_mid", via="off_duke")]
         if p.id == "p_mid":
             log.append("ran-own-choose")
             return [Act_(w, p, "refuse")]
@@ -472,7 +521,7 @@ def p10():
     r = Record("rec1", "Hh", "copy", stages=[("half", 2), ("done", 4)])
     w.records[r.id] = r
     w.step = Step.RESOLVE
-    w.write("carrier_exists", WriteClass.ACTS, lambda: w.records.__setitem__(r.id, r),
+    w.write("carrier_exists", mint_token(w, WriteClass.ACTS), lambda: w.records.__setitem__(r.id, r),
             record_kind="Record", fieldname="stages", driver="Act")
     # W2: raised until Part D carried the `Record` rows (defect D7). It now lands -- and the
     # probe shows BOTH halves of what it claims, because declaring the stages is only the first.
@@ -483,7 +532,7 @@ def p10():
     # `W4`: a MATTER write on a row Part D gives an `emits:` must name one. `[ROOT]` is said
     # EXPLICITLY because this synthetic world has no antecedent -- which is the carve-out, and
     # saying it rather than defaulting to it is the point.
-    w.write("carrier_exists", WriteClass.MATTER, lambda: setattr(r, "matured", True),
+    w.write("carrier_exists", mint_token(w, WriteClass.MATTER), lambda: setattr(r, "matured", True),
             record_kind="Record", fieldname="matured", driver="Event",
             emits="term.matured", subject=r.id, causes=[ROOT])
     return ("PASS: `(Record, stages)` is ACT-DECLARED at RESOLVE and `(Record, matured)` is "
@@ -599,7 +648,9 @@ def p15():
     # IN p_high" -- nobody -- and `narrow` was EMPTY. The probe reported an exclusion mechanism
     # while demonstrating that nothing said anywhere reached anyone. §0.1 pt 2, and a repeat of a
     # conflation `witness` had already retracted once. Found by the `W6` adversarial pass.
-    e = Event(H(w.world_seed, w.tick, "p_low", "probe:p15"), "speech.made", "p_low", [],
+    # G1b: what the speech is about rides as a change (`about`), since `Event.subject` is gone;
+    # without it the Event anchors on nothing and every channel below answers "nobody".
+    e = Event(H(w.world_seed, w.tick, "p_low", "probe:p15"), "speech.made", [about("p_low")],
               [ROOT], w.tick)
     everyone = list(w.persons)
     total = observers_for(w, e, "total", everyone)
@@ -695,7 +746,7 @@ def p18():
         "CROSSINGS HAVE AN ANTECEDENT")
     antecedent = next((e for e in w.log if e.id == ev.causes[0]), None)
     assert antecedent is not None and antecedent.kind == "condition.worn" \
-        and antecedent.subject == site.id, (
+        and anchor_of(w, antecedent) == site.id, (
         f"the crossing names {ev.causes[0]!r}, which is not a `condition.worn` for {site.id}")
     assert verb in before and verb not in after
     social = [c for c in ev.changes if c.field in ("stance", "pursuits")]   # `beliefs` retired 2026-09-25
@@ -717,7 +768,7 @@ def p18():
 def p19():
     w = tiny_world()
     w.step = Step.MATTER
-    w.write("stance", WriteClass.MATTER, lambda: None,
+    w.write("stance", mint_token(w, WriteClass.MATTER), lambda: None,
             record_kind="Person", fieldname="stance", driver="Event")
     return "UNREACHABLE"
 
@@ -727,7 +778,7 @@ def p19():
 def p20():
     w = tiny_world()
     w.step = Step.CENSUS
-    w.write("carrier_exists", WriteClass.MATTER,
+    w.write("carrier_exists", mint_token(w, WriteClass.MATTER),
             lambda: w.persons.__setitem__("p_new", Person("p_new", "someone")),
             record_kind="Person", fieldname="exists", driver="Event",
             emits="person.individuated", subject="p_new", causes=[ROOT])   # `W4`
@@ -771,13 +822,16 @@ def p22():
     w = tiny_world()
     w.records["rec_writ"] = Record("rec_writ", "S", "writ")
     w.step = Step.RESOLVE
-    w.write("Tenure", WriteClass.ACTS,
+    w.write("Tenure", mint_token(w, WriteClass.ACTS),
             lambda: w.add_tenure(Tenure("t_hold", "p_low", "rec_writ", "hold", since=0)),
             # W2: this declared `(Record, held_by)`, which is not a Record field and is on no
             # Part D row. H-22 rules it: "the `hold` Tenure is the HOLDER'S". A hold is a
             # RELATIONSHIP, and modelling it as a field on one of its ends is the ride-on defect
             # pointing the other way. The pair is `(Tenure, since)`, which the table carries.
-            record_kind="Tenure", fieldname="since", driver="Act")
+            # ⚠ G3: AND THE HOLDER WRITES IT. The write named no actor, which the gate's F3 clause
+            # now refuses for any Tenure -- H-22's own reading makes this the holder's act, so it
+            # is admitted as `T-m` (the owner's discretion) with `p_low` as the actor.
+            record_kind="Tenure", fieldname="since", driver="Act", actor="p_low")
     # W2: THE BLOCKER MOVED, IT DID NOT CLOSE, and this probe must not report a pass for the
     # half that landed. Recording the hold is lawful now. Whether a hold GATES ANOTHER'S ACT is
     # Part E's `eligibility: hold:<record>`, and no verb table exists to evaluate it -- so no
@@ -807,7 +861,7 @@ def p22():
 def p23():
     w = tiny_world()
     w.step = Step.MATTER
-    w.write("carrier_exists", WriteClass.MATTER, lambda: w.persons.pop("p_low", None),
+    w.write("carrier_exists", mint_token(w, WriteClass.MATTER), lambda: w.persons.pop("p_low", None),
             record_kind="Person", fieldname="exists", driver="Event",
             emits="person.died", subject="p_low", causes=[ROOT])           # `W4`
     # W2: as P20. The row Part D adds is what lets a season end with no institution involved.
@@ -822,12 +876,20 @@ def p24():
     w.step = Step.MATTER
     held = [t for t in w.tenures if t.subject == "p_high"]
     assert held
-    for t in held:
-        w.write("Tenure", WriteClass.MATTER, lambda t=t: setattr(t, "until", w.tick),
-                record_kind="Tenure", fieldname="until", driver="Event",
-                caused_person_exists="p_high",
-                emits="tenure.closed", subject=t.object, causes=[ROOT])     # `W4`
-    assert all(not t.live for t in held)
+    # ⚠ G3 (plan position 6): THE DEATH HAPPENS IN THE WRITE, AND BEFORE G3 IT DID NOT. This closed
+    # each of `p_high`'s tenures in its own write, DECLARING `caused_person_exists="p_high"` -- and
+    # `p_high` never died: he was still in `w.persons` when the probe returned. S15.3's pre-check
+    # takes that parameter at the caller's word, so the seam passed on a death that was only
+    # claimed. `04 §C.2`'s F3 admits an actorless Tenure write only as `destroy's cascade` -- *"an
+    # existence change THIS SAME ACT caused"* -- and the gate now OBSERVES it (the ids the write
+    # removed) instead of taking the claim. So the write that ends the tenures is the write that
+    # kills: `World.remove_person`, MATTER's and `kill / wound`'s one cascade, inside the same
+    # `(Tenure, until)` row S15.3 bounds. One write, one emission, every edge naming him closed.
+    w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: w.remove_person("p_high"),
+            record_kind="Tenure", fieldname="until", driver="Event",
+            caused_person_exists="p_high",
+            emits="tenure.closed", subject="p_high", causes=[ROOT])         # `W4`
+    assert all(not t.live for t in held) and "p_high" not in w.persons
     return ("PASS: `(Tenure, until)` is social:false -- THE PARTITION'S ONE DECLARED SEAM, and the "
             "only Partition row ARCHITECTURE.md states -- and death's `until` write is the only "
             "Tenure write in the MATTER class. The cascade CROSSES OWNERS (S31.1 exception 2), "
@@ -840,7 +902,7 @@ def p25():
     w = tiny_world()
     w.step = Step.MATTER
     t = [x for x in w.tenures if x.subject == "p_high" and x.kind == "hold"][0]
-    w.write("Tenure", WriteClass.MATTER, lambda: setattr(t, "until", w.tick),
+    w.write("Tenure", mint_token(w, WriteClass.MATTER), lambda: setattr(t, "until", w.tick),
             record_kind="Tenure", fieldname="until", driver="Event")   # no causation supplied
     return "UNREACHABLE"
 
@@ -1104,6 +1166,19 @@ def f2():
     # is what it always was: ZERO LIVE `commit` EDGES to the Proposition. `S54 item 20`'s question
     # -- *when everyone abandons a cause, what it held must be able to be taken by someone else* --
     # is unchanged, and is arguably sharper this way: there is a person to take it FROM.
+    #
+    # ⚠⚠ G3 (plan position 6) TURNS THIS PROBE FROM PASS TO FORBIDDEN, AND THAT IS THE DESIGN
+    # ANSWERING, NOT THE PROBE BREAKING. Its first write closes `th_dead` -- `p_low`'s OWN holding --
+    # on behalf of somebody else, and before G3 the gate admitted it because the gate never asked
+    # who wrote a Tenure (it carried no actor at all). `04 §C.2`'s F3 now does, and a person's
+    # holding of a RUNG may be ended only by its owner (`T-m`), a declared term (`T-n`, unbuilt),
+    # a seat's revocation basis (`T-o` -- which a holding does not have: only a SEAT declares one),
+    # or a cascade from something ceasing to exist. The taker (`p_high`, written as the actor so the
+    # refusal names him rather than an absent author) has none of them. So S54 item 20, as this
+    # probe MODELS it for a holding of land, is FORBIDDEN by AX-4 clause 2: what a dead cause's
+    # holder held can pass by his release, by his death (a contest, and the cascade), or -- for a
+    # SEAT -- by `confer`'s displacement under T-o (`_req_confer`'s disjunct), and not by seizure.
+    # The unreachable lines after the write are left as the claim the probe USED to make.
     w = tiny_world()
     prop = Proposition("prop_dead", "OUGHT", "realm", "a dead cause", True, 0)
     w.propositions[prop.id] = prop
@@ -1114,11 +1189,11 @@ def f2():
     assert not [t for t in world_q.lateral(w, "faction", "commit") if t.object == prop.id]
     w.step = Step.RESOLVE
     old = world_q.hold_force(w, "S")
-    w.write("Tenure", WriteClass.ACTS, lambda: setattr(old, "until", w.tick),
-            record_kind="Tenure", fieldname="until", driver="Act")
-    w.write("Tenure", WriteClass.ACTS,
+    w.write("Tenure", mint_token(w, WriteClass.ACTS), lambda: setattr(old, "until", w.tick),
+            record_kind="Tenure", fieldname="until", driver="Act", actor="p_high")
+    w.write("Tenure", mint_token(w, WriteClass.ACTS),
             lambda: w.add_tenure(Tenure("th_new", "p_high", "S", "hold", since=w.tick)),
-            record_kind="Tenure", fieldname="since", driver="Act")
+            record_kind="Tenure", fieldname="since", driver="Act", actor="p_high")
     assert world_q.hold_force(w, "S").subject == "p_high"
     return ("PASS: `confer` on an object whose holder had ZERO live commit edges to the cause he "
             "held it for was eligible, and THE SUCCESSFUL CONFER wrote `until` -- an ACT, in the "
@@ -1334,13 +1409,25 @@ def f11():
        tests="a post must be able to be given and taken away by named people at named occasions")
 def f12():
     w = tiny_world()
+    # ⚠ G3 (plan position 6): "BY NAMED PEOPLE" NOW HAS TO MEAN A SEAT. These two writes close the
+    # duke's `hold` and open the clerk's -- both edges somebody ELSE owns -- and until G3 they were
+    # admitted with no actor at all, because the gate never asked who wrote a Tenure. `04 §C.2`'s F3
+    # admits the close as T-o (a seat whose revocation basis reaches the duke's) and the open as the
+    # conferral basis (a seat whose purview reaches the duchy), both through `Act.via`. So the probe
+    # seats a King on the realm, gives the duke's seat the two ruled bases (`ED-IN-0256` (2), (3)),
+    # and writes as him, through his seat. It was fixed by giving it a seat, not by loosening the
+    # gate -- the plan's instruction for every hand-built non-owner write.
+    w.offices["off_crown"] = Office("off_crown", "King", "R", ["confer", "revoke"], faction="Crown")
+    w.add_tenure(Tenure("t_crown", "p_king", "off_crown", "hold", since=0))
+    w.offices["off_duke"].conferral = "appointed"
+    w.offices["off_duke"].revocation = "rung_above_same_faction"
     w.step = Step.RESOLVE
     t = world_q.hold_force(w, "off_duke")
-    w.write("Tenure", WriteClass.ACTS, lambda: setattr(t, "until", w.tick),
-            record_kind="Tenure", fieldname="until", driver="Act")
-    w.write("Tenure", WriteClass.ACTS,
+    w.write("Tenure", mint_token(w, WriteClass.ACTS), lambda: setattr(t, "until", w.tick),
+            record_kind="Tenure", fieldname="until", driver="Act", actor="p_king", via="off_crown")
+    w.write("Tenure", mint_token(w, WriteClass.ACTS),
             lambda: w.add_tenure(Tenure("t_new", "p_mid", "off_duke", "hold", since=w.tick)),
-            record_kind="Tenure", fieldname="since", driver="Act")
+            record_kind="Tenure", fieldname="since", driver="Act", actor="p_king", via="off_crown")
     assert not t.live and world_q.hold_force(w, "off_duke").subject == "p_mid"
     # 30 is half of `entrenchment_seasons` (60), so entrenchment reads 500 of `condition_scale`
     # 1000 -- deliberately off BOTH boundaries, neither zero nor saturated -- and this probe
@@ -1361,7 +1448,7 @@ def f13():
     w = tiny_world()
     w.dates["d_conf"] = dict(due_at=0, holder="D", fired=False)
     w.dates["d_vacant"] = dict(due_at=0, holder=None, fired=False)
-    SeasonDriver(w).calendar()
+    SeasonDriver(w).calendar(mint_token(w, WriteClass.CALENDAR))
     assert w.dates["d_conf"]["fired"] and w.dates["d_vacant"]["fired"]
     assert len(w.docket) == 1
     return ("PASS: both dates FIRED; the vacant one ALLOCATED NOTHING AND LAPSED rather than "
@@ -1408,10 +1495,10 @@ def f16():
     # measuring AGAINST the design, which S0.1 point 4 rules is no more acceptable than flattery.
     rung = w.rungs["D"]
     w.step = Step.RESOLVE
-    w.write("stores", WriteClass.ACTS,
+    w.write("stores", mint_token(w, WriteClass.ACTS),
             lambda: rung.stores.__setitem__("coin", rung.stores.get("coin", 0) + 40),
             record_kind="Rung", fieldname="stores", driver="Act")
-    w.write("stores", WriteClass.ACTS,
+    w.write("stores", mint_token(w, WriteClass.ACTS),
             lambda: rung.stores.__setitem__("coin", rung.stores["coin"] - 15),
             record_kind="Rung", fieldname="stores", driver="Act")
     assert rung.stores["coin"] == 25
@@ -1560,7 +1647,7 @@ def w2():
 def w3():
     w = tiny_world()
     w.step = Step.MATTER
-    w.write("stance", WriteClass.MATTER, lambda: None,
+    w.write("stance", mint_token(w, WriteClass.MATTER), lambda: None,
             record_kind="Person", fieldname="stance", driver="Event")
     return "UNREACHABLE"
 
@@ -1609,7 +1696,7 @@ def w7():
     # non-terminal decrement of §13's licensed clock has no declared kind and the row is exempt
     # from the must-name-a-kind rule by `rosters.yaml: conditional_emission_rows`. Emitting the
     # terminal kind here would assert an expiry that has not happened.
-    w.write("carrier_exists", WriteClass.MATTER, lambda: setattr(rec, "ttl", rec.ttl - 1),
+    w.write("carrier_exists", mint_token(w, WriteClass.MATTER), lambda: setattr(rec, "ttl", rec.ttl - 1),
             record_kind="Record", fieldname="ttl", driver="Event")
     # W2: raised until Part D carried the five `Record` rows -- defect D7, under which EVERY
     # Record write was an unmarked cell. `(Record, ttl)` is MATTER-only, `social: false`,
@@ -1643,7 +1730,7 @@ def w9():
     r = w.rungs["S"]
     r.envelope = [100, 200, 150, 60]
     w.step = Step.MATTER
-    w.write("envelope", WriteClass.MATTER, lambda: r.envelope.__setitem__(0, r.envelope[0] + 5),
+    w.write("envelope", mint_token(w, WriteClass.MATTER), lambda: r.envelope.__setitem__(0, r.envelope[0] + 5),
             record_kind="Rung", fieldname="envelope", driver="Event",
             emits="envelope.changed", subject=r.id, causes=[ROOT])          # `W4`
     assert r.envelope[0] == 105
@@ -1692,7 +1779,7 @@ def w12():
        tests="the story must be able to be reconstructed from what caused what")
 def a1():
     w = tiny_world()
-    Event(H(1, 0, "x", "e"), "thing.happened", "x", [], [], 0)
+    Event(H(1, 0, "x", "e"), "thing.happened", [], [], 0)
     return "UNREACHABLE"
 
 
@@ -1728,7 +1815,7 @@ def a3():
     w = tiny_world()
     w.step = Step.MATTER
     # the crossing itself is lawful (P18); what is refused is the crossing PRODUCING AN OUTCOME.
-    w.write("stance", WriteClass.MATTER, lambda: None,
+    w.write("stance", mint_token(w, WriteClass.MATTER), lambda: None,
             record_kind="Person", fieldname="stance", driver="Event")
     return "UNREACHABLE"
 

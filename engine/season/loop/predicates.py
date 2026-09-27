@@ -1,4 +1,5 @@
-"""`season.loop.predicates` — the five `requires:` cells the grammar does not type.
+"""`season.loop.predicates` — the six `requires:` cells the grammar does not type (five until
+`establish` joined them at plan position `13f`, 2026-09-25; the count below is the older one).
 
 EXTRACTED, step 5 of the decomposition (a PURE MOVE but for two call sites, named below). The
 registry and its decorator travel with the functions they register, which is the rule step 3
@@ -24,9 +25,19 @@ from __future__ import annotations
 
 from typing import Optional
 
-from ..data.rosters import RELEASABLE_KINDS, title_domain, title_rank
+from ..data.rosters import RELEASABLE_KINDS
+from ..gaps import Forbidden, Unowned, Unspecified
 from ..queries import world_q
-from ..state.carriers import subject_of
+from ..state.carriers import Office, subject_of
+# G3: THE SEAT-AUTHORITY RULES LIVE WITH THE GATE THAT ENFORCES THEM. `seated_on_the_rung_above`,
+# `REVOCATION_RULES` and `has_conferral_basis` were defined here; the write gate's F3 clause now
+# evaluates the first two (T-o) and the third (the conferral basis), and `state/` may not import the
+# loop. They moved to `state/gate.py` UNCHANGED except that ruling (3)'s rule is asked of the SEAT
+# exercised instead of the actor (`04:332`). The names are imported, not copied, so a precondition
+# here and the gate there cannot disagree (`CLAUDE.md` §8) -- and a `monkeypatch` of this module's
+# `has_conferral_basis` still reaches both preconditions that call it by that name.
+from ..state.gate import (  # noqa: F401 -- `REVOCATION_RULES`, `seated_on_the_rung_above` re-exported
+    REVOCATION_RULES, has_conferral_basis, may_fill, may_revoke, seated_on_the_rung_above)
 
 
 # A `requires:` predicate. The table states preconditions in PROSE, which the fold cannot read --
@@ -95,72 +106,41 @@ def in_holdings(w: "World", actor: str, rung: Optional[str]) -> bool:
     is actually reachable: a `transfer` into a hearth now makes its holder a witness of an act they
     took no part in. `H-92` is not re-graded here — it is an `FI`/`IN` register row with its own
     owner, and this note exists so the next reader of it is not working from the retracted
-    mechanism. Found by the `R8.4` adversarial pass."""
+    mechanism. Found by the `R8.4` adversarial pass.
+
+    ⚠ **(`13d-i`, 2026-09-26) `_req_revoke` NO LONGER CALLS THIS.** The ruling quoted at the top
+    is superseded for revocation by `ED-IN-0256` ruling (3), *"rung above of same faction"*, which
+    is neither holdings nor purview (`seated_on_the_rung_above`, below). Kept, not deleted: the
+    `hold`-on-a-rung relation it names is live (item 16's re-homing, whose falsifiers read it), and
+    `ED-IN-0256` ruling (4) defines purview as *"owner of highest rung in chain of ownership"* --
+    an ownership walk, BUILT BY G3 as `state/gate.py::purview_reaches`, asked of the seat an act
+    exercises (`Act.via`) and not of anything the actor holds, this relation included."""
     if rung is None or rung not in w.rungs:
         return False
     return any(t.kind == "hold" and t.subject == actor and t.object == rung and t.live
                for t in w.tenures)
 
 
-def under_purview(w: "World", actor: str, holding: Optional[str]) -> bool:
-    """Is `holding` under the governing authority of a title `actor` holds?
-
-    ⚠ JORDAN, 2026-09-02: *"a Duke can revoke office from any individual in that office so long as
-    that office is for a holding under their purview."* So authority over a governance act is
-    **RANK + CONTAINMENT** — the actor holds a title whose domain contains the holding — and NOT
-    `remit:<act>` on the particular office. That is a different eligibility model from the one
-    Part E states, and the difference is registered rather than resolved here (`H-90`).
-
-    ⚠ GOVERNING AUTHORITY, NOT SOVEREIGNTY AND NOT OWNERSHIP. Jordan, same ruling: a King *"may
-    have governing authority over the country"* yet hold neither sovereign power over it nor all
-    of it in their holdings. This function answers the FIRST question only; the tree models
-    neither of the other two."""
-    if holding is None:
-        return False
-    # ⚠ EVERY SEAT, NOT THE FIRST. This read `next((... for t in w.tenures ...), None)` and took
-    # whichever title-hold appeared first in an INSERTION-ORDERED list, which was wrong twice
-    # over. `Office.rung` is Optional (the office-cluster case, S6.2), and the generator YIELDED
-    # `None` as a value -- so a title office with a null rung ended the scan and returned False,
-    # and a Duke who was also made a King LOST PURVIEW OVER HIS OWN DUCHY. And a person holding
-    # two titles got whichever the tenure list happened to hold first: a Count of P who is also
-    # Duke of D was refused purview over D, or over P, depending on insertion order.
-    #
-    # It is a DISJUNCTION over the seats: authority over a holding is authority from ANY title the
-    # actor holds. Taking the highest-ranked seat instead would be the same bug wearing a better
-    # argument -- a Duke of D who is also Count of an unrelated P would lose P. Found by the
-    # governance-canon adversarial pass.
-    for seat in [rung for _, rung in titles_held(w, actor) if rung is not None]:
-        # containment walks UP from the holding: a duchy's province is under the duke, a duchy's
-        # neighbour is not.
-        seen, cur = set(), holding
-        while cur is not None and cur not in seen:
-            if cur == seat:
-                return True
-            seen.add(cur)
-            cur = world_q.parent_of(w, cur)
-    return False
+# ---------------------------------------------------------------------------
+# ⚠ `under_purview`, `titles_held` AND `highest_title_rank` ARE DELETED (`13d-i`, 2026-09-26), with
+# `data/rosters.py::title_rank`. Their one game reader was `_req_revoke`'s `is_title` branch --
+# purview alone for an office; purview + holdings + strictly higher rank for a title (Jordan,
+# 2026-09-02) -- and `ED-IN-0256` ruling (3) replaces both rules with one structural rule over
+# every seat alike, *"rung above of same faction"*, which reads no title, no rank and no purview
+# (`H-109` closes: no `is_title` branch). `under_purview`'s whole body was `titles_held`'s seat
+# list walked by containment, so it could not outlive it, and nothing else called it. PURVIEW
+# ITSELF WAS NOT GONE, IT WAS UNBUILT, AND G3 BUILT IT: ruling (4), *"owner of highest rung in chain
+# of ownership"*, asked of `via.scope`, is `state/gate.py::purview_reaches` -- read by `_req_confer`
+# and `_req_establish` here through `may_fill`, and by the write gate's conferral basis.
+# ---------------------------------------------------------------------------
 
 
-def titles_held(w: "World", actor: str) -> list:
-    """Every TITLE this person holds, as `(post, rung)`. THE SINGLE OWNER of the question *what
-    does this person govern* -- `under_purview` reads it for containment and `highest_title_rank`
-    for rank, so the two cannot drift into different answers about the same person (§8)."""
-    out = []
-    for t in w.tenures:
-        if t.kind == "hold" and t.subject == actor and t.live and t.object in w.offices:
-            o = w.offices[t.object]
-            if title_domain(o.post) is not None:
-                out.append((o.post, o.rung))
-    return out
-
-
-def highest_title_rank(w: "World", actor: str) -> int:
-    """The best rank this person holds, or `-1` for someone holding no title at all.
-
-    ⚠ THIS IS WHAT MAKES `title_rank` LOAD-BEARING. Until the governance-canon pass, `title_rank`
-    had no caller outside its own test: the ladder was asserted and then decided nothing, which is
-    §0.05's reference-wearing-mechanism's clothes. It decides a revocation now."""
-    return max((title_rank(post) for post, _ in titles_held(w, actor)), default=-1)
+# ⚠ `seated_on_the_rung_above` (ruling (3)), `REVOCATION_RULES` and its import-time cross-check,
+# and `has_conferral_basis` (ruling (2)'s membership test) LIVED HERE UNTIL G3 and are now in
+# `state/gate.py`, imported above. The write gate evaluates them (T-o, the conferral basis), and the
+# gate may not import the loop. Their `13d-i` docstrings moved with them; the one behavioural change
+# is that ruling (3) is asked of the seat the act exercises (`Act.via`), not of every seat the actor
+# holds -- `04:332`, *"purview is asked of the seat exercised, not the actor"*.
 
 
 @requires_predicate("confer")
@@ -173,21 +153,162 @@ def _req_confer(w: "World", a: "Act") -> bool:
     rule stated structurally"*. Dropping a disjunct is an OVER-REFUSAL: an office whose
     holder-Proposition has no live commit was refused where Part E admits it. `G4` weighs that
     equally with an invention, and the docstring made it invisible. Found by the governance-slice
-    adversarial pass."""
+    adversarial pass.
+
+    ⚠ G3 (plan position 6) ADDS TWO CONJUNCTS, AND BOTH ARE THE WRITE GATE'S OWN RULES ASKED EARLY.
+    `_eff_confer` writes two Tenures that are somebody else's -- it OPENS the conferee's `hold` and,
+    on a held office, CLOSES the incumbent's -- and the gate now refuses both unless a basis admits
+    them (`04 §C.2` F3). A precondition that admitted what the gate refuses would turn a refusal
+    that EMITS (`confer.refused`, `§E2`) into a `NotYours` that kills the season, so this asks the
+    gate's own predicates, not a copy of them:
+      * the CONFERRAL basis -- the seat the act exercises (`Act.via`) has purview over the office
+        conferred (`may_fill`: ruling (4), `04:332`'s *"every purview walk uses `via.scope`"*);
+      * on a held office, T-o for the incumbent's edge -- `via`'s revocation authority over the
+        seat (`may_revoke`: ruling (3)) -- unless the incumbent IS the actor (T-m: his own edge).
+    `04 §C.2`'s own F3 note names `confer` beside `revoke` as *"writing `Tenure.until` on an edge
+    whose subject is somebody else"*, which is why the displacement is T-o and not a second reading
+    of the conferral basis."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     obj = d.get("office")
     if not obj or obj not in w.offices:
         return False
-    if not (w.offices[obj].conferral or "").strip():
+    off = w.offices[obj]
+    if not has_conferral_basis(off):
         return False                       # no conferral basis: the office cannot be conferred
+    if not may_fill(w, a.actor, a.via, off):
+        return False                       # G3: the seat exercised does not reach the seat conferred
     if not any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures):
         return True                        # 1-per-object satisfied
     # THE `or` DISJUNCT: a held office is still conferrable when the holder-Proposition carries
     # no live `commit`. §54 item 20.
     holder = next((t.subject for t in w.tenures
                    if t.kind == "hold" and t.object == obj and t.live), None)
-    return holder is not None and not any(
-        t.kind == "commit" and t.subject == holder and t.live for t in w.tenures)
+    if holder is None or any(t.kind == "commit" and t.subject == holder and t.live
+                             for t in w.tenures):
+        return False
+    # G3: displacing the holder CLOSES HIS EDGE -- T-o, through the seat exercised.
+    return holder == a.actor or may_revoke(w, a.actor, a.via, off)
+
+
+def office_described_by(a: "Act") -> "Optional[Office]":
+    """THE OFFICE AN `establish` ACT DESCRIBES, read once for the precondition and the effect.
+
+    The operands are the office overlay's own keys (`corpus_run._check_office`,
+    `populated.build_realm`): `office` (the id), `post`, `rung`, `remit`, `body` and/or `faction`,
+    `conferral`, `revocation`. `None` when the id, post, rung or remit is absent, or any operand is
+    not the shape the constructor takes -- which is every COMPUTED `establish` today, because the
+    row is untyped and `operands_for` carries nothing (`15c` is what changes that).
+
+    ⚠ OTHERWISE IT CONSTRUCTS THE `Office`, AND THE CONSTRUCTOR'S RAISES PROPAGATE. That is the
+    point: `Office.__post_init__` is where a remit act is checked against `REMIT_ACTS` (`Unowned`),
+    where `office_faction` refuses an unknown body or faction, a mismatch or an office belonging to
+    nothing (`Unspecified`/`Forbidden`), where a title seated in a body is refused
+    (`Forbidden`), and -- since `13d-i` -- where a declared `conferral` or `revocation` off its
+    roster is refused (`Unspecified`). `corpus_run._check_office` validates an overlay the same
+    way, for the reason it gives: *the validator is the constructor, not a second copy of its
+    rules*. The object returned
+    is held by nothing -- no `World` is read or written here."""
+    d = a.payload if isinstance(a.payload, dict) else {}
+    oid, post, rung, remit = d.get("office"), d.get("post"), d.get("rung"), d.get("remit")
+    if not all(isinstance(x, str) and x.strip() for x in (oid, post, rung)):
+        return None
+    if not isinstance(remit, (list, tuple)) or not all(isinstance(x, str) for x in remit):
+        return None
+    body, faction = d.get("body"), d.get("faction")
+    conferral, revocation = d.get("conferral"), d.get("revocation")
+    if not all(x is None or isinstance(x, str) for x in (body, faction, conferral, revocation)):
+        return None
+    return Office(oid, post, rung, list(remit), conferral=conferral, revocation=revocation,
+                  body=body, faction=faction)
+
+
+@requires_predicate("establish")
+def _req_establish(w: "World", a: "Act") -> bool:
+    """W3's row: *"the establishing office's conferral basis, and a rung to establish it at"*.
+
+    ⚠ THE READING, STATED BECAUSE THE PROSE ADMITS TWO: *the establishing office* is THE OFFICE
+    THE ACT DESCRIBES -- the one being founded, or re-remitted on an id that already exists -- and
+    NOT the office the actor sits in. The basis `_req_confer` tests is a property of the office
+    being FILLED (*"the office's conferral basis"*), so read the same way here it asks whether the
+    new seat declares how it is filled. The other reading makes the founder's own seat's basis
+    decide whether ANY office may be founded, which nothing in the row motivates; and it would let
+    an establish found a seat with no basis, which `_req_confer` then refuses forever -- an office
+    that exists and can never be filled. Eligibility (`remit:confer`) already says who may act.
+
+    FOUR CLAUSES, EACH A REFUSAL AND NONE A RAISE -- a raise from inside the effect's `apply()`
+    escapes the fold, and `establish.refused` would never be emitted:
+      1. the office resolves: `office_described_by` returns one, and the constructor's refusals
+         (the three it raises) are translated to False HERE, so each rule still lives once, in the
+         constructor. They remain the loud backstop inside the effect;
+      2. its rung is one the world holds;
+      3. it has a conferral basis, by the ONE basis test `_req_confer` also asks;
+      4. its id is new -- held by no collection (a `hold` opened on it early is what the effect
+         re-stamps) -- or it is an EXISTING office and the act changes its remit and nothing else.
+
+    ⚠ CLAUSE 4's SECOND ARM IS A REMIT CHANGE, NOT A REFUSAL. `establish` is the only verb whose
+    `writes:` name the office's remit, so refusing it on an existing id would leave no act able to
+    change a remit. Any other difference -- a different post, rung, body, faction, conferral or
+    revocation -- REFUSES: naming a different belonging for an existing id is re-founding, which
+    `writes:` does not declare. The act restates the office in full; an operand it omits is read
+    as the constructor reads it (`None`), never filled from the office it would replace.
+    ⚠ SO AN OFFICE WITH NO RUNG (`Office.rung` is Optional, the office-cluster case §6.2) cannot
+    have its remit changed by this verb: clause 2 requires a rung and clause 4 requires the same
+    one. That is the row's prose, applied, not a choice made here.
+
+    ⚠ CLAUSE 5 IS G3's, AND IT EXISTS BECAUSE `13f`'s RE-STAMP WRITES OTHER PEOPLE'S TENURES -- a
+    fourth live non-owner write the G3 plan text did not list beside `revoke`, `confer` and
+    `kill / wound`. `_eff_establish` re-stamps the grant (`Tenure.payload`) on every live `hold` on
+    the office, and a sitting holder's `hold` is HIS edge -- the ACTOR's OWN included, since T-m
+    never admits re-granting a seat-hold (`state/gate.py::tenure_write_basis`, corrected by G3's
+    own antagonist pass). The write gate admits the re-stamp only under the conferral basis -- the
+    authority that may fill a seat may re-grant it -- so this refuses first, with the gate's own
+    predicate, whenever ANY live hold exists on the office, self included: 5. the seat the act
+    exercises may fill the office (`may_fill`: purview over its rung, `via` not the office itself).
+    An office NOBODY sits in -- a founding -- is unaffected, since there is no hold yet for
+    `may_fill` to be asked about. ⚠ It is STRICTER THAN THE GATE by one case, deliberately: a
+    re-stamp that changes no grant writes nothing the gate would see, and this still asks for the
+    authority -- mirroring `_grant_remit`'s equal-grant test here would be a second copy of it
+    (§8). ⚠ CORRECTED (antagonist pass on the accumulated Phase alpha+beta diff, 2026-09-27): this
+    said "every live hold ... is the actor's own, OR the seat ... may fill the office" and "an
+    office nobody ELSE sits in is unaffected" -- both described the RETIRED rule, which excluded
+    the actor's own hold from needing `may_fill` at all. See the corrected comment on clause 5's
+    body below for the reproduction that found this."""
+    try:
+        off = office_described_by(a)
+    except (Unowned, Unspecified, Forbidden):
+        return False                       # the constructor refused it: translated, never filled
+    if off is None:
+        return False                       # an operand the office needs is not on the act
+    if off.rung not in w.rungs:
+        return False                       # "a rung to establish it at"
+    if not has_conferral_basis(off):
+        return False                       # "the establishing office's conferral basis"
+    held_as = w.class_of(off.id)
+    if held_as is not None:
+        if held_as != "Office":
+            return False                   # the id is a person's, a rung's... -- `class_of` ambiguity
+        cur = w.offices[off.id]
+        if not (off.post == cur.post and off.rung == cur.rung and off.body == cur.body
+                and off.faction == cur.faction and off.conferral == cur.conferral
+                and off.revocation == cur.revocation):
+            return False                   # re-founding, which `writes:` does not declare
+    # 5. G3 -- the re-stamp writes EVERY sitting holder's grant, the actor's own included.
+    #
+    # ⚠ CORRECTED (code-review pass on the accumulated Phase alpha+beta diff, 2026-09-27): this
+    # excluded `t.subject == a.actor` from the check, on the docstring's own reasoning -- "another
+    # person's needs the seat" -- but that reasoning stopped being true the moment G3's antagonist
+    # pass closed T-m for seat-hold re-grants (`state/gate.py::tenure_write_basis`, `04:330`): T-m
+    # NEVER admits re-granting a seat-hold, not even the actor's own, so a sole holder's re-stamp
+    # needs `may_fill` exactly as another person's does. REPRODUCED DIRECTLY before the fix:
+    # `p_king`, sole holder of `off_mayor`, re-establishing it via `off_mayor` itself passed this
+    # precondition (`others` was `False`) and then raised an UNCAUGHT `NotYours` inside `_fold`,
+    # which does not catch it -- a season-killing crash where the row's own `establish.refused`
+    # should have fired. ⚠ `held` IS `False` FOR A FOUNDING (no holder exists yet, self or other
+    # -- corrected 2026-09-27, this line previously said `True`), so founding a brand-new office
+    # short-circuits `not held` to `True` and is unaffected -- `may_fill` is only asked when a
+    # live `hold` already exists to re-stamp.
+    held = any(t.kind == "hold" and t.object == off.id and t.live for t in w.tenures)
+    return not held or may_fill(w, a.actor, a.via, off)
 
 
 @requires_predicate("release")
@@ -226,64 +347,36 @@ def _req_revoke(w: "World", a: "Act") -> bool:
     live `hold` on the payload's object with no check that the object IS AN OFFICE, and §13 makes
     possession of a Record a `hold` Tenure. So a holder of `remit:revoke` could revoke a person's
     possession of a book, and `_eff_revoke` would close it. Asymmetric with `confer`, which did
-    check. Found by the governance-slice adversarial pass."""
+    check. Found by the governance-slice adversarial pass.
+
+    ⚠ (`13d-i`, 2026-09-26) THE BASIS IS A ROSTERED VALUE AND IT SELECTS THE RULE -- no `is_title`
+    branch (`H-109`). This carried two rules chosen by whether the target's POST named a title:
+    purview alone for an office, purview + holdings + strictly higher rank for a title (Jordan,
+    2026-09-02, and two adversarial passes each corrected one conjunct). `ED-IN-0256` ruling (3),
+    *"rung above of same faction"*, replaces both with one structural rule over every seat, and it
+    arrives the way `H-109` asked: as the VALUE of the seat's declared `revocation` basis,
+    dispatched through `REVOCATION_RULES`, never as a code path computed from a name.
+
+    THREE CLAUSES: the office's basis is on `rosters.yaml: revocation_bases` (`None` or off-roster
+    refuses -- a seat declaring no basis is strippable by nobody); the actor satisfies the rule
+    that basis names; and a live `hold` exists to close.
+
+    ⚠ `remit:revoke` IS STILL NECESSARY, at eligibility. `H-91` registered that Jordan's 2026-09-02
+    *"so long as"* made PURVIEW sufficient while Part E kept the remit necessary. Ruling (3) is
+    silent on the remit, so the same question now reads *is the seat above sufficient?* -- still
+    `H-91`'s, still not resolved by editing the transcribed `eligibility:` column."""
     d = (a.payload or {}) if isinstance(a.payload, dict) else {}
     obj = d.get("office")
     if not obj or obj not in w.offices:
         return False
-    if not (w.offices[obj].revocation or "").strip():
+    off = w.offices[obj]
+    # ⚠ G3: THE WRITE GATE'S T-o PREDICATE, ASKED EARLY -- `may_revoke` is `seat_hold` (`via`
+    # present, the actor seated in it) + the basis on the roster (`None` or off-roster: the seat
+    # cannot be stripped) + the rule that basis names, asked of `via`'s seat. Before G3 the rule
+    # was asked of the ACTOR, over every seat they held; `04:332` asks it of the seat exercised.
+    # The same function refuses the write at the gate, so this cannot admit what the gate refuses.
+    if not may_revoke(w, a.actor, a.via, off):
         return False
-    # ⚠ TWO RULES, AND WHICH ONE APPLIES TURNS ON WHETHER THE TARGET IS A TITLE.
-    #
-    # An ORDINARY office — a governor, a council seat — is revocable by GOVERNING AUTHORITY.
-    # Jordan, 2026-09-02: *"a Duke can revoke office from any individual in that office so long as
-    # that office is for a holding UNDER THEIR PURVIEW."* Rank plus containment.
-    #
-    # A TITLE is revocable only from HOLDINGS. Jordan, same exchange: *"King/Queen cannot revoke
-    # title of Duke/Duchess if they do not have duchy is in their holdings. King/Queen can revoke
-    # title of Duke/Duchess if the duchy is one of their holdings."* So a king with governing
-    # authority over the entire realm STILL CANNOT unmake a duke whose duchy he does not hold.
-    # This is the distinction he drew at the start — governing authority, sovereign power and
-    # holdings are three different things — arriving as a branch rather than as prose.
-    #
-    # ⚠ AND PURVIEW ALONE WOULD HAVE BEEN WRONG HERE. The first version applied `under_purview` to
-    # every revocation, so a king could strip any duke in his realm. That is exactly the reading
-    # the ruling exists to forbid.
-    target_is_title = title_domain(w.offices[obj].post) is not None
-    domain = w.offices[obj].rung
-    if target_is_title:
-        # ⚠ A CONJUNCTION, AND THE FIRST VERSION WAS A SINGLE TERM. It tested `in_holdings`
-        # ALONE, which makes holdings SUFFICIENT — so a Dicastery clerk who happened to hold a
-        # duchy could unmake its Duke, and a Duke holding the realm could unmake the King. That is
-        # the MIRROR of the defect it was written to fix: the version before it conflated governing
-        # authority with holdings in one direction, and this conflated them in the other. Jordan's
-        # message states a NECESSARY condition on someone who already has the authority —
-        # *"King/Queen CANNOT revoke title of Duke/Duchess IF they do not have duchy is in their
-        # holdings"* — and message 1 separates the two concepts on purpose. Both terms,
-        # therefore, plus rank: the whole point of *"they do not necessarily have sovereign power"*
-        # is that holding the land is not the same as outranking the person who governs it. Found
-        # by the governance-canon adversarial pass.
-        if not under_purview(w, a.actor, domain):
-            return False                       # governing authority over the domain
-        if not in_holdings(w, a.actor, domain):
-            return False                       # AND the domain is one of the actor's holdings
-        if highest_title_rank(w, a.actor) <= title_rank(w.offices[obj].post):
-            # AND strictly higher rank — which also forbids revoking YOUR OWN title, an
-            # equal-rank case nothing else in the branch excluded, and which a Duke who holds his
-            # own duchy (the ordinary case) otherwise satisfied.
-            return False
-    elif not under_purview(w, a.actor, domain):
-        return False
-    #
-    # ⚠ THIS IS A DIFFERENT ELIGIBILITY MODEL FROM THE ONE PART E STATES, AND CALLING IT A
-    # COMPATIBLE NARROWING WAS WRONG — that is what this comment said, and it is false of
-    # Jordan's text. *"a Duke can revoke office from any individual in that office SO LONG AS that
-    # office is for a holding under their purview"* states a SUFFICIENT condition, so keeping Part
-    # E's `remit:revoke` as a necessary one on top means a Duke whose office lacks the `revoke`
-    # remit cannot revoke a governor inside his own duchy — an OVER-REFUSAL, which `G4` weighs
-    # equally with an invention. It is a narrowing relative to PART E, never relative to the
-    # ruling. The transcribed `eligibility:` column is not this item's to rewrite, so the conflict
-    # is REGISTERED (`H-91`) and named here rather than resolved by a quiet table edit.
     return any(t.kind == "hold" and t.object == obj and t.live for t in w.tenures)
 
 
@@ -332,4 +425,7 @@ def _req_convene(w: "World", a: "Act") -> bool:
 # is closed) and `04 §A.3` row 14 asks for a verb, not a form. The verb row states the same thing
 # at its `requires_typed_note:` and closes with the condition under which this stops being true:
 # *"IF AN `any` COMBINATOR IS EVER RULED, THIS CELL IS THE FIRST THING TO TYPE."*
+# ⚠ THE SIXTH IS `establish` (`13f`, 2026-09-25), `remit:`-eligible like the first four. Its
+# operands -- post, rung, remit, body/faction, conferral -- are not in `requires_operands`, and its
+# clauses ask the `Office` constructor and `World.class_of`, neither of which is a grammar form.
 # ---------------------------------------------------------------------------

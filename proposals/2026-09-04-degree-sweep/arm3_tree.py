@@ -16,6 +16,9 @@ from __future__ import annotations
 import copy, itertools
 import sweep_core as K
 from sweep_core import S, C, R, KW, LADDER_C, LADDER_D, Log
+# G2 (2026-09-26): `_fold` takes the driver's ACTS token after `w`; a bare call mints its own there.
+from engine.season.data.matrix import WriteClass
+from engine.season.loop.driver import mint_token
 
 _REAL_W = S.VerbRow.writes_at
 _REAL_E = S.VerbRow.emits_at
@@ -78,7 +81,7 @@ def fold_one(w, d, deg, aid: str, actor: str, target: str) -> dict:
     before = snap(w)
     try:
         with force_degree(deg):
-            evs = d._fold(w, act)
+            evs = d._fold(w, mint_token(w, WriteClass.ACTS), act)
         after = snap(w)
         return dict(degree=deg, verdict="ADMITTED",
                     events=[e.kind for e in evs], n_events=len(evs),

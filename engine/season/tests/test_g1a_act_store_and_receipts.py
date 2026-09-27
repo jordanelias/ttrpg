@@ -21,7 +21,7 @@ from engine.season.state.log import EventLog
 
 
 def _ev(eid, causes, changes=None):
-    return Event(id=eid, kind="test.kind", subject="s", changes=changes or [],
+    return Event(id=eid, kind="test.kind", changes=changes or [],
                  causes=list(causes), emitted_at=1)
 
 

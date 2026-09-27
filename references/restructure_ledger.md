@@ -2571,6 +2571,7 @@ above: a PR branch SHA does not survive a squash merge, so the fork ref must alr
 | `engine/tests/test_parliamentary_transfer_bridge.py` | `FORK:c6e82105` | FORKED |
 | `tests/valoria/test_faction_l_reconstruction.py` | `FORK:c6e82105` | FORKED |
 | `tests/valoria/_campaign.py` | `FORK:c6e82105` | FORKED |
+| `systems/social_contest/sim/contest_legacy_stub.py` | `FORK:10859d64` | FORKED (2026-09-26, `ED-SC-0033` clause 2 unit 3a — the deprecate-not-delete single-compare stub, deleted. Its only live content was five `PERSUASION_*` thresholds, now inlined in `systems/social_contest/sim/parliamentary_vote.py`, the sole live consumer; the rest had zero live callers outside the stub's own re-export chain. `resolve_exchange:132-190` was canon §4's only compare-model code (design fork `proposals/2026-09-04-social-contest-branches/11_FOUR_GAMES_AUDIT_AND_PLAN.md` §8 E1) — recoverable at this ref, not lost) |
 
 <!-- THREE RETIRED PATHS GET NO `FORK:` ROW, DELIBERATELY, and the omission is the honest answer
 rather than an oversight. `references/key_graph.json`, `references/KEY_INDEX.md` and

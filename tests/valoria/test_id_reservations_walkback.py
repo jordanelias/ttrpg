@@ -263,7 +263,19 @@ def test_the_2026_07_30_walkback_actually_moved_something():
     # PIN UPDATED 2026-09-20: WR 12 -> 13. ED-WR-0012 allocated to strike a review derivation that
     # had been promoted into live canon and never ruled (canon/philosophy/04_being_persistence.md §4.5's
     # 'rendered by many' clause), RULED by Jordan the same day. Lane-ledger row carries the provenance.
-    released = {'SC': 38, 'FA': 39, 'WR': 13, 'SE': 55}
+    # PIN UPDATED 2026-09-26: SC 38 -> 39. ED-SC-0038 allocated: Jordan confirmed two of his
+    # 2026-09-04 rulings (multi-matter/conditional adjudication; binding-in-scene), relayed only
+    # inside the scope-banned proposals/2026-09-04-social-contest-branches/ corpus, bind all twelve
+    # proceeding rows of proposals/2026-09-05-proceedings-subsystem/, not just negotiation where
+    # each was first raised. Reopens 19_PLAN.md PART I item 1 and P-14/D-8 for a build session.
+    # Entry in registers/editorial_ledger_sc.jsonl; ratifies nothing in the still-PROPOSED,
+    # HELD-BACK-IN-FULL successor directory.
+    # PIN UPDATED 2026-09-26: SE 55 -> 56. ED-SE-0055 allocated for the season-loop's dwelling-Site
+    # ruling (plan position 24d-i's substrate: Jordan chose the literal reading of ED-SE-0051/RR-2,
+    # a real dwelling Site kind rather than a hearth-rung reinterpretation). Lane ledger:
+    # registers/editorial_ledger_se.jsonl. Independent of the SC bump above -- two concurrent
+    # sessions' allocations, combined here rather than either overwriting the other.
+    released = {'SC': 39, 'FA': 39, 'WR': 13, 'SE': 56}
     checked = 0
     for lane, expected in released.items():
         assert nf[lane] == expected, (

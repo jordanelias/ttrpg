@@ -248,7 +248,7 @@ nothing but a report-only probe — `systems/overview/sim/accounting.py:53 _prob
 **`social_contest` — the Agôn kernel and the parliamentary vote.** The kernel resolves an exchange loop with stasis,
 reserves, faults, evidence and a terminal win-condition — `systems/social_contest/sim/contest/wrapper.py:248 resolve_contest`;
 separately a self-contained faction-scale vote resolves every season —
-`systems/social_contest/sim/parliamentary_vote.py:124 run_parliamentary_vote`. The subsystem emits no durable record
+`systems/social_contest/sim/parliamentary_vote.py:128 run_parliamentary_vote` (line advisory — was `:124` before the 2026-09-26 legacy-stub retirement added six lines above it, `ED-SC-0033` clause 2 unit 3a). The subsystem emits no durable record
 of a resolved contest: every wired output is a queued stat delta, and the one structured-record producer has no
 production caller — `systems/social_contest/sim/contest/narrative.py:112 summarize` (§3a).
 
