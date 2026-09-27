@@ -544,6 +544,13 @@ EXPECTED = {
     # MB_CELL_EXCLUSION=0).
     # [ED-IN-0187, 2026-08-14] RE-RECORDED — the ruled degree ladder; see the note above.
     # was da6d685e7f8c4e6ebe0076772b487f19c334c0a34226719484aac2181967dea8
+    # [A8, ED-MB-0067 Part A / ED-MB-0071, 2026-09-27] ROUT_CASCADE_FRAC default 1.0 -> 0.6 (config.py,
+    # chosen by workbench/rout_cascade_sweep.py) does NOT move this digest — confirmed by direct
+    # re-run at the shipped 0.6, not assumed: this mode's specific envelop/cannae/oblique matchups
+    # never cross the 0.6-1.0 boundary before resolving some other way (a 0.5 candidate tried during
+    # the sweep DID move it; 0.6 was chosen instead once adversarial review found 0.5 under-evidenced
+    # — see config.py's own comment — and 0.6 happens to be byte-identical to 1.0 here). unit_field_mor0
+    # (PER_CELL=0, same battery) also does not move, for the same "never crosses this boundary" reason.
     'cell_field_mor0': '41a2e98485f31420d70e248238d93a24695684dde33a04791ffbd2697ecffecd',
     # ─── [ED-MB-0053 / plan-v2 §4a, 2026-07-29] THE FIFTH MODE — freshly recorded ───────────────
     # PER_CELL=1 + MB_CELL_MORALE=1 (grid). The other four all run at MB_CELL_MORALE=0, where the
@@ -610,6 +617,10 @@ EXPECTED = {
     #      tree byte-for-byte identical to this tree before the flip -- the comparison this note
     #      rests on is controlled, not a single uncontrolled sample.
     # was 4cff46a32a54ce7586f851f55a138221c39ace8e24d9c8c44aa3c1ec3902b2c6
+    #
+    # [A8, ED-MB-0067 Part A / ED-MB-0071, 2026-09-27] ROUT_CASCADE_FRAC default 1.0 -> 0.6 does NOT
+    # move this digest either — see cell_field_mor0's note above for the mechanism and the 0.5-vs-0.6
+    # correction, identical reasoning here. Confirmed by direct re-run at the shipped 0.6.
     'cell_legacy_mor1': 'cc6ab475a5ebedec42d551aae42be77ec3d130a1e3ddd4d2924249cfa2e616df',
 }
 

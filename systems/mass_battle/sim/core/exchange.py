@@ -12,8 +12,9 @@ import os as _exch_os
 from systems.mass_battle.sim.config import *
 from systems.mass_battle.sim.geometry import cells_to_orig_coords
 
-__all__ = ['_stamina_pool_penalty', 'derive_command', 'command_base_pool', 'subunit_combat_pool',
-           'pair_pool_contribution', '_pair_engaged_troops', 'D_YIELD', 'YIELD_POOL_MULT']
+__all__ = ['_stamina_pool_penalty', 'derive_command', 'clamp_command', 'command_base_pool',
+           'subunit_combat_pool', 'pair_pool_contribution', '_pair_engaged_troops',
+           'D_YIELD', 'YIELD_POOL_MULT']
 
 # [DG-2, designs/proposals/mass_battle_fighting_withdrawal_v1.md §5, Jordan-ruled "build it now"
 # 2026-07-08] Both magnitudes below are explicitly flagged NOT independently derived, per the
@@ -39,6 +40,19 @@ def _stamina_pool_penalty(stamina):
     return STAMINA_EXHAUSTED_POOL_PENALTY
 
 
+def clamp_command(value):
+    """[A3, ED-MB-0067 Part A / ED-MB-0073, adversarial-review fix F3/F5] SINGLE OWNER of the Command
+    1-7 clamp (`params/factions/stats_1_7_scale.md`) — extracted from `derive_command`'s own tail so
+    `Officer` and the general's own `command` can share ONE clamp instead of each re-implementing it
+    (§8: never re-implement a rule). Before this fix, `Officer.__post_init__` had its own copy and
+    `Unit`/`build_army` had NONE at all — an unclamped general `command` (e.g. 20) combined with a
+    single, entirely UNREFERENCED officer let `build_army`'s span-of-control check pass an arbitrary
+    number of un-officered subunits, since providing any non-empty `officers` list also skipped the
+    flat `SUBUNIT_CAP` check that used to be the only ceiling. Closed by clamping both sides of every
+    Command comparison through this one function — see `build_army`'s own note."""
+    return max(1, min(7, int(value)))  # [canonical: params/factions/stats_1_7_scale.md — Command clamped 1-7]
+
+
 def derive_command(charisma, cognition):
     """Command DERIVED from Charisma (primary weight) + Cognition (secondary weight).
     [canonical: Jordan canon-structure directive] Command = leadership leverage:
@@ -47,8 +61,7 @@ def derive_command(charisma, cognition):
     """
     w = CMD_CHA_WEIGHT + CMD_COG_WEIGHT
     val = round((CMD_CHA_WEIGHT * charisma + CMD_COG_WEIGHT * cognition) / w)
-    # [canonical: params/factions/stats_1_7_scale.md — attributes on the 1-7 scale; Command clamped to it]
-    return max(1, min(7, int(val)))
+    return clamp_command(val)
 
 
 def command_base_pool(command, pen, stam_pen):

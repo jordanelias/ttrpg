@@ -54,7 +54,7 @@ MB_FACING_SLEW_BASE = float(_hu_os.environ.get('MB_FACING_SLEW_BASE', '60'))  # 
 MB_FACING_FOV_GATE = (_hu_os.environ.get('MB_FACING_FOV_GATE', '1') == '1')  # (c) rear blind arc GATES reaction/targeting; reuses REAR_BLIND_DEG/FOV_HALF_DEG
 MB_FACING_ROUT = (_hu_os.environ.get('MB_FACING_ROUT', '1') == '1')  # (d) routed body faces AWAY from the enemy
 
-__all__ = ['Subunit', 'Unit', 'Order', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
+__all__ = ['Subunit', 'Unit', 'Order', 'Officer', 'clamp_command', 'MB_ENVELOP_PATH', 'MB_SWEEP', 'FIELD_MOVEMENT', 'FIELD_CONTACT', 'CONTACT_REACH', 'COL_WIDTH',
            'MB_FACING_MODEL', 'MB_FACING_ATTENTION', 'MB_FACING_SLEW_BASE', 'MB_FACING_FOV_GATE', 'MB_FACING_ROUT',
            'CELL_RADIUS', 'standoff_from_reach', 'standoff', 'MB_REACH_FACING_GATE', 'resolve_toi_and_commit']
 
@@ -572,6 +572,13 @@ class Subunit:
     # None immediately -> byte-exact/inert for any existing Subunit that never receives a route.
     route: Tuple[Tuple[float, float], ...] = ()
     _route_idx: int = 0
+    # [A3, ED-MB-0067 Part A / ED-1090's own queued reconciliation, ED-MB-0073] Names the Officer
+    # (by Officer.name, in the parent Unit's `officers`) commanding this subunit, or None for a
+    # direct report to the general. Bookkeeping only -- validated once at build_army construction
+    # time (see build_army's own docstring); nothing currently reads this at resolution time, same
+    # inert-until-consumed shape as `role` before Stage D wired it. Default None -> byte-exact for
+    # every existing Subunit, which never sets it.
+    officer: Optional[str] = None
 
     def __post_init__(self):
         # Construction-time validation (arch review / stress-test hardening): turn the cryptic
@@ -2674,6 +2681,43 @@ def resolve_toi_and_commit(all_atoms_a, all_atoms_b):
         del atom._node_pending_target_centroid
         del atom._node_pending_discipline
 
+# ─── OFFICER ─────────────────────────────────────────────────────────────────
+# [A3, ED-MB-0067 Part A / ED-1090's own queued reconciliation, ED-MB-0073] ED-1090 (2026-07-02)
+# left this open: "the ratified Command formula clamps to 1..7, so reaching [more than Command]
+# commanded sub-units implies a future Command-exceeding mechanism (e.g. subordinate
+# officers/lieutenancy) -- a future ED, not silently invented in the constructor." This is that ED.
+# An Officer holds its own Command, derived the SAME way a general's is (`derive_command`, ED-899) --
+# no second formula for the same quantity one echelon down. C5 (ED-MB-0067 Part C, ruled 2026-09-25,
+# "one ladder... including the new officer post") is why: an officer's own span-of-control follows
+# the identical "max commanded = Command" rule as the general's, not the concept's separate
+# '3 + Cmd' ladder.
+
+@dataclass
+class Officer:
+    """A subordinate commander, holding its own Cmd, fielded over one or more Subunits so a
+    general's own span-of-control counts OFFICERS rather than every Subunit directly (build_army's
+    `officers=`/per-spec `'officer'` param does the counting; this class only holds the stat).
+
+    command defaults to 4 (tier-3 baseline) — the SAME default `build_army`'s own `command` parameter
+    already uses for a general with no explicit stats; deliberately not a new "quality tier" table
+    invented for this one post (Part A's own text: "a default by quality tier" -- reusing the
+    existing tier-3 baseline everywhere else in this file, rather than fabricating tier-specific
+    numbers nothing has ruled)."""
+    name: str
+    command: int = 4  # [canonical: sim_mb_06_v9_historical_spec.md — T3 baseline P4/C4/D5/M6, same as build_army/build_unit's own command=4 default]
+    charisma: Optional[int] = None
+    cognition: Optional[int] = None
+
+    def __post_init__(self):
+        if COMMAND_SIGMA_ENABLED and self.charisma is not None and self.cognition is not None:
+            self.command = derive_command(self.charisma, self.cognition)
+        # [F3/F5, adversarial-review fix] SHARED clamp (core/exchange.clamp_command) — was a second,
+        # inline copy of derive_command's own 1-7 clamp; see clamp_command's own docstring for why
+        # that duplication mattered (it let Unit's `command` go unclamped while Officer's clamped,
+        # an inconsistency build_army's span-of-control check now also closes on the general's side).
+        self.command = clamp_command(self.command)
+
+
 # ─── UNIT ────────────────────────────────────────────────────────────────────
 
 @dataclass
@@ -2742,6 +2786,11 @@ class Unit:
     # cross-Unit broadcast would naturally belong]). Default empty -> inert for any Unit that never
     # has a signal added -- no PRE-A4 test or production code constructs a 'signal:' trigger.
     fired_signals: Set[str] = field(default_factory=set)
+    # [A3, ED-MB-0067 Part A / ED-MB-0073] The officers fielded over this Unit's subunits (see
+    # Officer, above, and build_army's `officers=` param). Bookkeeping only, recorded for
+    # introspection/a future UI -- nothing at resolution time reads it. Default empty -> byte-exact
+    # for every existing Unit, which never sets it (matches `fired_signals`' own A4 precedent).
+    officers: Tuple['Officer', ...] = ()
 
     def __post_init__(self):
         # [canonical: Jordan directive 2026-06-02] Command DERIVED from Charisma (primary) +
@@ -2821,10 +2870,14 @@ class Unit:
         if self.routed:
             return
         # [ED-MB-0041] `all(...)` generalised to a contagion FRACTION of spawn strength -- see
-        # config.ROUT_CASCADE_FRAC for the mechanism and why the magnitude is deliberately unchosen.
-        # At the default 1.0 this is exactly `all(a.routed ...)`: every subunit must be broken, because
-        # the broken share can only reach 1.0 when none are left unbroken. So the generalisation is
-        # inert until the constant is moved, and the byte-exact goldens are untouched.
+        # config.ROUT_CASCADE_FRAC for the mechanism. [A8, ED-MB-0067 Part A / ED-MB-0071, corrected
+        # 2026-09-27 -- the paragraph this replaces called 1.0 "the default" and claimed the goldens
+        # were untouched; the value moved to 0.5 by sweep and IS live for any Unit with >1 subunit
+        # (byte-exact only for a single-subunit Unit, where the share is a 0/1 step function
+        # regardless of the threshold's value -- see config.py's own comment for the sweep and its
+        # campaign-inertness caveat).] At threshold 1.0 specifically, `share >= 1.0` is exactly
+        # `all(a.routed ...)`, since the share can only reach 1.0 when none are left unbroken --
+        # `test_rout_contagion.py::test_threshold_1_0_is_inert` pins that boundary directly.
         if self.command <= 0 or self._broken_share() >= ROUT_CASCADE_FRAC or self.agg_morale() <= 0:
             self.routed = True
             for a in self.subunits:

@@ -1,0 +1,258 @@
+"""A7 (ED-MB-0067 Part A / ED-780, ED-MB-0074) — terrain, battle-wide, from the strategic map.
+
+`mass_battle_v30.md` §A.9 ENVIRONMENTAL MODIFIERS names six canonical rows; its Phase-3 (ED-780)
+extension says a battle's terrain should be found by "querying the geography at battle coordinates
+... no separate declaration required". The engagement's own province tid IS that query key —
+`systems.mass_battle.sim.terrain.terrain_row_for_territory` reads
+`systems/settlements/valoria_geography_v30.yaml` directly (its `provinces:` and `terrain:` keys;
+canon's own citation, `designs/territory/...::terrain_polygons`, is stale in both path and key).
+
+Two things this file does NOT claim: (1) "dominant polygon by area weight" (ED-780's own wording) —
+this implementation point-tests each province's `anchor` against terrain polygons rather than
+computing true intersection area; disclosed in `terrain.py`'s own docstring, not re-litigated here.
+(2) full A.9 mechanical coverage — only FOREST_BROKEN's speed half ("Cavalry -> Standard") is wired
+into `resolve_mass_battle`; UPHILL/WALLS/NARROW_PASS/RIVER_CROSSING are identified by the lookup but
+not yet mechanically applied (see `massbattle.py:resolve_mass_battle`'s own docstring for why each
+one is deferred, not silently dropped).
+
+[CORRECTED, adversarial review 2026-09-27] `terrain_row_for_territory` no longer reads fortification
+from the geography YAML — it takes the live `fort_level` as a caller-supplied argument (see its own
+docstring for why: the YAML's authored copy and the engine's live, garrison-derived value disagree for
+real territories, and reading the authored copy forked a single-owned fact). Every call below that
+cares about fortification now passes `fort_level` explicitly rather than reading it off the fixture.
+"""
+import pytest
+
+from systems.mass_battle.sim.terrain import (
+    terrain_row_for_territory, _point_in_polygon, _load_geography, _TYPE_TO_ROW,
+    NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT,
+)
+
+
+# ─── the point-in-polygon primitive ──────────────────────────────────────────
+
+def test_point_in_polygon_basic_square():
+    square = [[0, 0], [10, 0], [10, 10], [0, 10]]
+    assert _point_in_polygon((5, 5), square)
+    assert not _point_in_polygon((15, 5), square)
+    assert not _point_in_polygon((-1, 5), square)
+
+
+def test_point_in_polygon_against_a_real_geography_entry():
+    """Not a synthetic square — one of the actual polygons this lookup will be tested against."""
+    geo = _load_geography()
+    entry = next(e for e in geo['terrain'] if e['id'] == 'terrain-pass-lowenskyst')
+    xs = [p[0] for p in entry['polygon']]
+    ys = [p[1] for p in entry['polygon']]
+    center = (sum(xs) / len(xs), sum(ys) / len(ys))
+    assert _point_in_polygon(center, entry['polygon']), \
+        "a polygon's own centroid must test as inside it"
+    far_outside = (xs[0] - 100000, ys[0] - 100000)
+    assert not _point_in_polygon(far_outside, entry['polygon'])
+
+
+# ─── the geography lookup, against the REAL committed file ──────────────────
+
+def test_every_real_province_resolves_to_one_of_the_six_rows():
+    """No province should fall through to something outside A.9's closed set -- a NULL-result alarm,
+    not a claim that every row actually occurs (RIVER_CROSSING never does; see terrain.py). Called at
+    fort_level=0 uniformly: fortification is a separate, already-isolated concern (the tests below),
+    and this test is specifically about the polygon lookup's own closed-set property."""
+    geo = _load_geography()
+    valid = {NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT,
+             'river_crossing'}  # not currently reachable, but still a valid A.9 row name
+    seen = set()
+    for tid in geo['provinces']:
+        row = terrain_row_for_territory(tid, fort_level=0)
+        assert row in valid, f"{tid} resolved to {row!r}, outside A.9's six rows"
+        seen.add(row)
+    assert len(seen) >= 2, "a lookup that always returns the same row for every province is not measuring anything"
+
+
+def test_every_geography_terrain_type_has_a_row_mapping():
+    """[adversarial review 2026-09-27] `_TYPE_TO_ROW.get(best_type, OPEN_FLAT)` silently falls back to
+    OPEN_FLAT for any `type:` this dict does not cover -- indistinguishable from a genuine open-flat
+    result. If the geography file ever gains a terrain type this module has not been told about, that
+    silent fallback is a real, unflagged mechanical error, not a documented gap like RIVER_CROSSING is
+    (which is absent from the FUNCTION'S REACHABLE SET, not from the file's own type vocabulary)."""
+    geo = _load_geography()
+    real_types = {entry['type'] for entry in geo['terrain']}
+    uncovered = real_types - set(_TYPE_TO_ROW)
+    assert not uncovered, f"geography terrain type(s) {uncovered} have no _TYPE_TO_ROW entry"
+
+
+@pytest.mark.parametrize('tid', ['T2', 'T4', 'T7'])
+def test_a_positive_fort_level_resolves_to_walls_regardless_of_terrain(tid):
+    """ED-780: fortification dominates whatever polygon surrounds it -- and, per this function's own
+    contract, `fort_level` is now the CALLER's value, not something read off this `tid` in the
+    geography file. T2/T4/T7 are real, known provinces with different terrain (see the pinned-row
+    tests below for what T4/T7 resolve to at fort_level=0); a positive fort_level must win regardless
+    of which terrain a `tid` would otherwise resolve to. NOT tested here: an UNKNOWN `tid` -- the
+    province-existence check runs first and returns OPEN_FLAT before `fort_level` is even looked at
+    (see `test_unknown_territory_falls_back_to_open_flat`), which is fine since every real caller's
+    `tid` already names a `world.territories` entry by construction."""
+    assert terrain_row_for_territory(tid, fort_level=2) == WALLS
+
+
+def test_zero_fort_level_falls_through_to_the_polygon_lookup():
+    """Companion boundary to the test above: fort_level=0 must NOT force WALLS -- confirms the
+    dominance check is a real `> 0` gate, not e.g. a falsy/None check that WALLS-locks a passed-but-
+    zero value too."""
+    assert terrain_row_for_territory('T4', fort_level=0) == UPHILL
+
+
+def test_unknown_territory_falls_back_to_open_flat():
+    assert terrain_row_for_territory('T-does-not-exist', fort_level=0) == OPEN_FLAT
+
+
+# ─── real committed provinces, pinned to their actual row (not just "some valid row") ────────────
+# [adversarial review 2026-09-27] the tests above establish the mechanism; these pin actual results
+# for actual data, so a regression in the polygon/type-mapping logic (e.g. forest silently resolving
+# to OPEN_FLAT) does not pass silently just because OPEN_FLAT is also a valid member of the closed set.
+
+@pytest.mark.parametrize('tid,expected', [
+    ('T4', UPHILL),          # terrain-highland-grauwald; anchor [1090,1430] inside [970-1170]x[1300-1480]
+    ('T7', FOREST_BROKEN),   # terrain-forest-rendstad; anchor [720,800] inside [420-970]x[700-1000]
+    ('T6', FOREST_BROKEN),   # terrain-marsh-stillhelm (marsh -> FOREST_BROKEN); anchor [1180,2300]
+])
+def test_real_unfortified_provinces_pin_to_their_actual_terrain_row(tid, expected):
+    assert terrain_row_for_territory(tid, fort_level=0) == expected
+
+
+def test_mountain_pass_polygon_maps_to_narrow_pass_directly(monkeypatch):
+    """THE 'DONE WHEN' CRITERION (Part A, A7): a battle placed in a mountain_pass polygon resolves
+    under A.9's narrow-pass row. [CORRECTED, adversarial review 2026-09-27] No real province pins
+    this today -- NOT because both mountain-pass provinces (T3, T10) are fortified (fortification is
+    orthogonal, tested separately above), but because each one's own `anchor` sits in ITS OWN
+    territory polygon, south of and geometrically DISJOINT from the pass polygon it "gates"
+    (`altonian_passes` in the geography file): T3's anchor is at y=380, its pass polygon spans
+    y=[80,290]; T10's anchor is at y=380, its pass polygon spans y=[80,290] too. Neither anchor is
+    a near-miss inside the pass -- it is entirely outside its y-range. So this pins the polygon->row
+    mapping directly with a synthetic province placed at the pass polygon's own centroid, isolating
+    the claim in question from that unrelated (and, for T3/T10, unrelated-twice-over) gap."""
+    geo = _load_geography()
+    pass_entry = next(e for e in geo['terrain'] if e['type'] == 'mountain_pass')
+    xs = [p[0] for p in pass_entry['polygon']]
+    ys = [p[1] for p in pass_entry['polygon']]
+    synthetic = dict(geo)
+    synthetic['provinces'] = dict(geo['provinces'])
+    synthetic['provinces']['T-synthetic-pass'] = {
+        'anchor': [sum(xs) / len(xs), sum(ys) / len(ys)],
+    }
+    import systems.mass_battle.sim.terrain as T
+    monkeypatch.setattr(T, '_cache', synthetic)
+    assert terrain_row_for_territory('T-synthetic-pass', fort_level=0) == NARROW_PASS
+
+
+def test_open_ground_resolves_unmodified(monkeypatch):
+    """The other half of the 'Done when' criterion: open ground resolves unmodified (OPEN_FLAT)."""
+    geo = _load_geography()
+    plains_entry = next(e for e in geo['terrain'] if e['type'] == 'plains')
+    xs = [p[0] for p in plains_entry['polygon']]
+    ys = [p[1] for p in plains_entry['polygon']]
+    synthetic = dict(geo)
+    synthetic['provinces'] = dict(geo['provinces'])
+    synthetic['provinces']['T-synthetic-plains'] = {
+        'anchor': [sum(xs) / len(xs), sum(ys) / len(ys)],
+    }
+    import systems.mass_battle.sim.terrain as T
+    monkeypatch.setattr(T, '_cache', synthetic)
+    assert terrain_row_for_territory('T-synthetic-plains', fort_level=0) == OPEN_FLAT
+
+
+# ─── the ONE mechanical effect wired so far: forest -> cavalry Standard speed ─
+
+def test_resolve_mass_battle_accepts_every_row_without_crashing():
+    """resolve_mass_battle's `terrain` parameter went from always-None (a [GAP], silently discarded)
+    to a real value -- every row this lookup can produce must be a safe, non-crashing input, even the
+    ones with no mechanical effect wired yet."""
+    from systems.mass_battle.sim.massbattle import resolve_mass_battle
+
+    class _F:
+        def __init__(self, name, Mil=4, Sta=4.0):
+            self.name, self.Mil, self.Sta = name, Mil, Sta
+
+    class _World:
+        rng = None
+
+    for row in (NARROW_PASS, UPHILL, FOREST_BROKEN, WALLS, OPEN_FLAT, 'river_crossing', None):
+        r = resolve_mass_battle(_F('A'), _F('B'), row, _World())
+        assert 'attacker_wins' in r
+
+
+def test_forest_broken_forces_a_fast_side_to_standard_speed():
+    """A.9: 'Forest / broken: Cavalry -> Standard' -- the one branch this pass wires inside
+    `resolve_mass_battle`. [CORRECTED, adversarial review 2026-09-27] This proves the FIELD WRITE
+    happens through the real function, not just in isolation -- it does NOT prove the write has any
+    downstream effect. It does not: `run_battle` (what this function actually calls) never reads
+    `.speed` at all, so this branch is inert on its own terms, independent of `_faction_to_unit` never
+    producing a Fast unit. See `resolve_mass_battle`'s own docstring for the full disclosure."""
+    from systems.mass_battle.sim.massbattle import resolve_mass_battle, _faction_to_unit
+    import systems.mass_battle.sim.massbattle as MB
+
+    class _F:
+        def __init__(self, name, Mil=4, Sta=4.0):
+            self.name, self.Mil, self.Sta = name, Mil, Sta
+
+    class _World:
+        rng = None
+
+    # Confirm the pre-condition this test depends on: _faction_to_unit's own armies are never
+    # Fast by construction (the mechanism is otherwise vacuous, as resolve_mass_battle's own
+    # docstring discloses) -- so patch a Fast side in after construction to actually exercise it.
+    baseline = _faction_to_unit(_F('A'))
+    assert baseline.speed != 'Fast', \
+        "if this ever changes, the FOREST_BROKEN branch stops being vacuous at the campaign seam " \
+        "and this test's own patching below becomes unnecessary -- not a failure, but worth noticing"
+
+    captured = {}
+    orig = MB._faction_to_unit
+
+    def _patched(faction):
+        u = orig(faction)
+        if faction.name == 'Cav':
+            u.speed = 'Fast'
+        captured[faction.name] = u
+        return u
+
+    import systems.mass_battle.sim.massbattle
+    old = systems.mass_battle.sim.massbattle._faction_to_unit
+    systems.mass_battle.sim.massbattle._faction_to_unit = _patched
+    try:
+        resolve_mass_battle(_F('Cav'), _F('Foot'), FOREST_BROKEN, _World())
+        assert captured['Cav'].speed == 'Standard', \
+            "a Fast side must be forced to Standard when terrain is forest_broken"
+    finally:
+        systems.mass_battle.sim.massbattle._faction_to_unit = old
+
+
+def test_open_flat_does_not_touch_speed():
+    """Control: the same Fast side, OPEN_FLAT terrain, must stay Fast (no modifier is A.9's own
+    definition of the open-flat row)."""
+    from systems.mass_battle.sim.massbattle import resolve_mass_battle
+    import systems.mass_battle.sim.massbattle as MB
+
+    class _F:
+        def __init__(self, name, Mil=4, Sta=4.0):
+            self.name, self.Mil, self.Sta = name, Mil, Sta
+
+    class _World:
+        rng = None
+
+    captured = {}
+    orig = MB._faction_to_unit
+
+    def _patched(faction):
+        u = orig(faction)
+        if faction.name == 'Cav':
+            u.speed = 'Fast'
+        captured[faction.name] = u
+        return u
+
+    old = MB._faction_to_unit
+    MB._faction_to_unit = _patched
+    try:
+        resolve_mass_battle(_F('Cav'), _F('Foot'), OPEN_FLAT, _World())
+        assert captured['Cav'].speed == 'Fast', "OPEN_FLAT must not touch speed (control)"
+    finally:
+        MB._faction_to_unit = old
