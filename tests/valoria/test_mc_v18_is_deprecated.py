@@ -67,7 +67,7 @@ ALLOWED_IMPORTERS = {
     #     the combat-under-flag-ON test, decoupled from mc_v18 — a first pass wrongly deleted it
     #     as "only mc_v18's dormant branch" when the branch it exercises is live scene_dispatch.py
     #     code with no other test reaching it; caught by an antagonist pass)
-    #   engine/tests/test_world_population.py - kept 6 tests, dropped 2, REWROTE 1 (the
+    #   engine/tests/test_world_population.py - kept 6 tests, dropped 3, REWROTE 1 (the
     #     world.knots deferral guard, which had no successor, now drives `run_season` directly
     #     instead of `run_campaign` — decoupled from mc_v18, not deleted)
     # `engine/tests/test_combat_bridge_seam.py` does NOT clear this round (stays above, roster

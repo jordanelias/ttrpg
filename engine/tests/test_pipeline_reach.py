@@ -43,9 +43,10 @@ assignment; this file does not alter or re-record that oracle's goldens.
 RETIRED 2026-09-27 (mc_v18-retirement plan M1): the `XFAIL_MANIFEST`/`_manifest_reason` bookkeeping
 this file used to carry, and the `world-npcs`/`world-knots`/`world-settlements` rows and tests that
 drove `engine.mc_v18.run_campaign`, are deleted along with the `engine.mc_v18` import.
-`world-npcs`/`world-knots` duplicated `test_f7_smoke_oracle.py`'s own `npcs_generated==0` golden and
-`test_world_population.py`'s honest-deferral guards (the latter kept, rewritten off mc_v18 — see
-that file). `world-settlements` is deleted for the same reason as its near-duplicate in
+`world-npcs` duplicated `test_f7_smoke_oracle.py`'s own `npcs_generated==0` golden; `world-knots`
+duplicated `test_world_population.py`'s own knots honest-deferral guard (that one kept, rewritten
+off mc_v18 — see that file; its own npcs guard was deleted alongside this row, for the same reason
+this row is). `world-settlements` is deleted for the same reason as its near-duplicate in
 `test_world_population.py`: settlements populate once, at `create_world` time, and `run_campaign`
 never re-derives them, so the world-gen-time falsifier
 (`test_settlements_populated_at_world_gen_matches_geography_source_exactly`, kept, in that other
