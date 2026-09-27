@@ -3148,7 +3148,10 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     asks for in the unflattering direction too."""
     affected = ["P31", "P36", "P11", "P12"]
     table = {}
-    saved = decision.choose.ALIGNMENT
+    # `decision.options`, where `align` is DEFINED (moved from `choose` to close the
+    # `choose <-> options` import cycle); a rebind anywhere else is the fabricated null this
+    # test's `uniform` arm exists to catch.
+    saved = decision.options.ALIGNMENT
 
     def fresh(pid):
         # ⚠ `run_probe` MEMOISES IN `_VERDICTS`, so calling it in a loop returns the FIRST run's
@@ -3160,10 +3163,10 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
 
     try:
         for point in ALIGNMENT_SWEEP:
-            decision.choose.ALIGNMENT = alignment_at(point)
+            decision.options.ALIGNMENT = alignment_at(point)
             table[point] = {pid: fresh(pid) for pid in affected}
     finally:
-        decision.choose.ALIGNMENT = saved
+        decision.options.ALIGNMENT = saved
         for pid in affected:
             fresh(pid)                           # restore the committed verdicts
 
@@ -3205,9 +3208,9 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
     p = w.persons["p_mid"]
     q = Question("q:sgn", "need", ("rec_writ",))
     v = View(p.id, [], w.fixtures.get("view_k"), q)
-    saved2 = decision.choose.ALIGNMENT
+    saved2 = decision.options.ALIGNMENT
     try:
-        decision.choose.ALIGNMENT = alignment_at("sign_only")
+        decision.options.ALIGNMENT = alignment_at("sign_only")
         ch = make_chooser(w.fixtures, lambda a, b, c: "x",
                          draw=draw_factory(w.world_seed, lambda: w.tick))
         # ⚠⚠ **`U3`: THE SCORE IS READ THROUGH THE PROJECTION, BECAUSE `Precedent` IS A CONVICTION
@@ -3242,7 +3245,7 @@ def test_w5_the_alignment_table_is_swept_at_three_points_and_every_flip_is_print
                 "tiebreak. Check `pursuit_projection[Precedent]` before `alignment`: a "
                 "conviction that projects to the zero vector cannot score any verb.")
     finally:
-        decision.choose.ALIGNMENT = saved2
+        decision.options.ALIGNMENT = saved2
         for pid in affected:
             fresh(pid)
 

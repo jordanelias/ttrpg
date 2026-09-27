@@ -575,11 +575,11 @@ def _scar(w: "World", p, verb: str) -> None:
         return None
     # ⚠⚠ `decision.align`, NOT A LOCAL `ALIGNMENT` READ, AND THE LOCAL READ WAS A REAL DEFECT
     # RATHER THAN A STYLE SLIP. This computed the cell inline off THIS module's own `ALIGNMENT`
-    # binding. `align()` reads the binding in `decision/choose.py`, which is the one the `H-66`
-    # alignment sweep REBINDS (`decision.ALIGNMENT = alignment_at(point)`) -- so the sweep moved
-    # `choose`'s scoring and could not move the scar at all. MEASURED before the fix: under the
-    # `uniform` arm `align('kill / wound','sacred')` read 1.0 while `_scar` still wrote 3.0 off
-    # the unrebound 0.3. The docstring above promises exactly what the inline read broke: no
+    # binding. `align()` reads the binding in `decision/options.py`, which is the one the `H-66`
+    # alignment sweep REBINDS (`decision.options.ALIGNMENT = alignment_at(point)`) -- so the
+    # sweep moved `choose`'s scoring and could not move the scar at all. MEASURED before the
+    # fix: under the `uniform` arm `align('kill / wound','sacred')` read 1.0 while `_scar`
+    # still wrote 3.0 off the unrebound 0.3. The docstring above promises exactly what the inline read broke: no
     # second table free to disagree with the one `choose` scores against. One owner, §8, and the
     # sweep now reaches both readers.
     from ..decision import align

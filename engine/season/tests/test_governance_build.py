@@ -1929,3 +1929,152 @@ def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_seas
     for c in added:
         assert c.subject == at.get(home.get(c.holder)), (
             f"an added claim is not a resident's claim on their own hearth's dwelling: {c}")
+# H2 -- `ED-IN-0261`'s DEONTOLOGICAL GATE, `H-129`. A refusal at `opening_set`, not a score term:
+# the person's projected weight on the gating axis IS the threshold, and a verb that axis engages
+# past it never forms a Candidate. Roster-generic: the axis is whatever `Fixtures refusal_axis`
+# names, so these tests take a rostered axis by position and name none.
+#
+# Falsifier (`proposals/2026-09-26-decision-layer-execution-plan/PROPOSAL.md` §3.2): a synthetic
+# projection/alignment injected through the rebinds the readers actually resolve --
+# `decision.options.ALIGNMENT` (the `H-66` sweep's own, `alignment_at`) and
+# `data.verbs.PURSUIT_PROJECTION` (read bare by `data.pursuits.to_axes`) -- must stop the refused
+# Candidate forming and leave every survivor's score untouched.
+# =================================================================================================
+
+
+def _h2_setup():
+    from ..state.carriers import Question
+    w = P.tiny_world()
+    p = w.persons["p_mid"]
+    q = Question("q:h2", "need", ("rec_writ",))
+    v = View(p.id, [], w.fixtures.get("view_k"), q)
+    return w, p, q, v
+
+
+def _h2_base(min_verbs=3):
+    """`_h2_setup` plus the option set it forms today, ungated -- shared by every `test_h2_*` so a
+    change to `opening_set`'s call shape or the minimum-verb guard is edited once, not per test."""
+    from ..decision import options as _options
+    w, p, q, v = _h2_setup()
+    base = {(c.verb, c.subject) for c in _options.opening_set(p, v, q, w.fixtures)}
+    verbs = sorted({vb for vb, _ in base})
+    assert len(verbs) >= min_verbs, (
+        f"only {verbs} form here; the H-129 gate tests need >= {min_verbs}")
+    return w, p, q, v, base, verbs
+
+
+def _h2_inject(p, axis, weight, cells):
+    """Rebind the projection and the alignment to synthetic tables; return a restore callable."""
+    from ..data import verbs as _verbs
+    from ..decision import options as _options
+    saved = (_verbs.PURSUIT_PROJECTION, _options.ALIGNMENT, dict(p.pursuits))
+    _verbs.PURSUIT_PROJECTION = {"h2_synthetic": {axis: weight}}
+    _options.ALIGNMENT = {axis: dict(cells)}
+    p.pursuits = {"h2_synthetic": 1.0}
+
+    def restore():
+        _verbs.PURSUIT_PROJECTION, _options.ALIGNMENT, p.pursuits = saved
+    return restore
+
+
+def test_h2_the_shipped_arm_is_the_control_and_refuses_nothing():
+    """`refusal_axis` ships unset, and unset is a no-op: the same synthetic tables that make the
+    gate refuse below form the full set here. Without this arm the refusal test cannot tell the
+    gate from some other change to `opening_set`."""
+    from ..data.fixtures import DEFAULT_FIXTURES
+    from ..data.rosters import PURSUIT_AXES
+    from ..decision import options as _options
+    assert DEFAULT_FIXTURES.get("refusal_axis") is None, (
+        "the shipped arm is no longer the control; `H-129` and this test disagree")
+
+    w, p, q, v, base, verbs = _h2_base()
+    restore = _h2_inject(p, sorted(PURSUIT_AXES)[0], -0.4, {vb: 0.9 for vb in verbs})
+    try:
+        got = {(c.verb, c.subject) for c in _options.opening_set(p, v, q, w.fixtures)}
+    finally:
+        restore()
+    assert got == base, f"the unset gate changed the option set: {sorted(base ^ got)}"
+
+
+def test_h2_a_verb_past_the_persons_weight_never_forms():
+    """THE FALSIFIER. Person weight `-0.4` on the axis (the NEG, refusing pole). Three engaged
+    verbs: `+0.3` and `-0.2` sit past `-0.4` toward the POS pole and are refused; `-0.6` does not
+    and survives. Every verb the axis does not engage survives -- only *certain actions* gate."""
+    from ..data.rosters import PURSUIT_AXES
+    from ..decision import options as _options
+
+    w, p, q, v, base, verbs = _h2_base()
+    refused_pos, refused_neg, tolerated = verbs[0], verbs[1], verbs[2]
+    axis = sorted(PURSUIT_AXES)[-1]
+    fx = w.fixtures.sweep("refusal_axis", axis)
+    restore = _h2_inject(p, axis, -0.4,
+                         {refused_pos: 0.3, refused_neg: -0.2, tolerated: -0.6})
+    try:
+        got = {(c.verb, c.subject) for c in _options.opening_set(p, v, q, fx)}
+    finally:
+        restore()
+
+    formed = {vb for vb, _ in got}
+    assert refused_pos not in formed and refused_neg not in formed, (
+        f"a verb whose `{axis}` cell exceeds the person's weight still formed: {sorted(formed)}")
+    assert tolerated in formed, f"{tolerated!r} sits below the weight and was refused anyway"
+    expected = {(vb, s) for vb, s in base if vb not in (refused_pos, refused_neg)}
+    assert got == expected, (
+        f"the gate moved candidates it does not govern: {sorted(expected ^ got)}")
+
+
+def test_h2_survivors_score_exactly_as_they_did_ungated():
+    """The gate filters and never re-weights: every Candidate that survives it reaches the score
+    with the value it had with the gate unset. Observed through `_sample_order`, the one place
+    `make_chooser` hands the scores on, so this reads the chooser's own numbers."""
+    from ..data.rosters import PURSUIT_AXES
+    from ..decision import choose as _choose
+    from ..decision import options as _options
+    from ..state.carriers import Sensation
+
+    w, p, q, v, base, verbs = _h2_base()
+    refused, tolerated = verbs[0], verbs[1]
+    axis = sorted(PURSUIT_AXES)[0]
+    fx0 = w.fixtures.sweep("choice_temperature", 0)
+
+    def scores(fx):
+        seen = {}
+        inner = _choose._sample_order
+
+        def spy(ranked, score, person, fx_, draw):
+            seen.update({(c.verb, c.subject): score(c) for c in ranked})
+            return inner(ranked, score, person, fx_, draw)
+        _choose._sample_order = spy
+        try:
+            _choose.make_chooser(fx, lambda a, b, c: f"{a}:{b}:{c}")(
+                p, v, Sensation(0), lambda: 1)
+        finally:
+            _choose._sample_order = inner
+        return seen
+
+    restore = _h2_inject(p, axis, -0.4, {refused: 0.5, tolerated: -0.9})
+    try:
+        ungated = scores(fx0)
+        gated = scores(fx0.sweep("refusal_axis", axis))
+    finally:
+        restore()
+    assert ungated and any(vb == refused for vb, _ in ungated), (
+        "the ungated arm scored nothing, or never scored the verb the gate should refuse")
+    assert not any(vb == refused for vb, _ in gated), f"{refused!r} reached the score gated"
+    assert set(gated) == {k for k in ungated if k[0] != refused}
+    moved = {k: (ungated[k], gated[k]) for k in gated if gated[k] != ungated[k]}
+    assert not moved, f"the gate changed survivors' scores: {moved}"
+    assert any(ungated[k] for k in gated), "every survivor scored 0; unchanged proves nothing"
+
+
+def test_h2_an_unrostered_axis_refuses_rather_than_gating_on_nothing():
+    """A name off `pursuit_axes` must raise `Unspecified`, not silently answer. (Without
+    `require_member` this would raise a bare `KeyError` inside `to_axes` instead -- still a raise,
+    just an unnamed one -- so this test also pins that the failure is the NAMED hole, not any
+    exception.)"""
+    from ..decision import options as _options
+    from ..gaps import Unspecified
+
+    w, p, q, v = _h2_setup()
+    with pytest.raises(Unspecified):
+        _options.opening_set(p, v, q, w.fixtures.sweep("refusal_axis", "h2_not_an_axis"))
