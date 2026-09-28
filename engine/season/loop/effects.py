@@ -791,8 +791,11 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     loser's body scales by the SAME survivor fraction the engine computed for their whole side,
     `attacker_size_pct`/`defender_size_pct`), `total` (every loser's body to 0 -- the control,
     re-running "losing costs everything" deliberately), `none` (body is not written at all -- the
-    second control, isolating the write from the band). The shipped default and its evidence are
-    set by measurement (M4 build step 8), not chosen here.
+    second control, isolating the write from the band). The default is settled by Jordan's
+    2026-09-04 ruling on `wound_harm_model` -- *"the combat engine determines the result there"*
+    -- applied to this magnitude too, not by a fresh measurement; `tools/balance_oracle.py` is
+    `mc_v18`-only and cannot observe an `engine/season`-only mechanic (`rosters.yaml`'s
+    `field_casualty_models` note).
 
     ⚠ THE STANCE ROWS FOLLOW THE SEEDED-LOYALTY SHAPE (`harness/data/cast.py`'s own
     `stance_from_loyalty`): a FIXED valence of `-1.0` (both are negative sentiments; the sign is

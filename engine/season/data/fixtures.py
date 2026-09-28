@@ -511,11 +511,13 @@ DEFAULT_FIXTURES = Fixtures(
     # M4 (`ED-IN-0279` clause (a)). `H-148`'s question asked of mass_battle's own result instead
     # of a scene's `WoundTracker` -- HOW MUCH `Person.body` A LOST FIELD COSTS. `total`/`none` are
     # the same two controls `wound_harm_model` ships above, for the same reason. Injection site:
-    # this line, read by `_eff_march` (M4 build step 7) once it exists; `total`/`none` swept and
-    # the shipped arm set by measurement at build step 8 (`tools/balance_oracle.py`), not guessed
-    # here. ⚠ NOT YET REGISTERED ON `hole_register.yaml`'s `site:` column -- `test_w9_check3`
-    # checks only fixtures a run actually READS, and nothing reads this one until step 7 lands;
-    # the register row lands in the SAME commit as that reader, never ahead of it.
+    # this line, read by `_eff_march` (`loop/effects.py`, M4 build step 7). The default is settled
+    # by `wound_harm_model`'s own precedent (Jordan, 2026-09-04: *"the combat engine determines
+    # the result there"*) applied to this magnitude too -- not by `tools/balance_oracle.py`, which
+    # is `mc_v18`-only and cannot observe an `engine/season`-only mechanic (`rosters.yaml`'s
+    # `field_casualty_models` note, M4 build step 8).
+    # ⚠ NOT YET REGISTERED ON `hole_register.yaml`'s `site:` column -- deferred to M4 build step 10,
+    # in the same pass as `field_morale_weight`/`field_grudge_weight` below.
     field_casualty_model="scaled_by_degree",  # `H-148`, swept scaled_by_degree / total / none
     # `H-148`, second half: HOW MUCH `Person.stance` A LOST FIELD MOVES against the winning
     # faction (the grudge) and against the loser's own creed (the morale hit) -- one weight for

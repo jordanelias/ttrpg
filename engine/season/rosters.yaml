@@ -592,10 +592,22 @@ rosters:
       whether the WRITE ITSELF, rather than its magnitude, is what a defeated side's later choices
       track (`CLAUDE.md` §0.1 pt 4 -- a number without a control is not a measurement in either
       direction).
-      ⚠ THE DEFAULT ARM'S NAME, VALUE AND EVIDENCE ARE SET BY MEASUREMENT (M4 build step 8,
-      `tools/balance_oracle.py`), NOT GUESSED HERE. This row ships `assumption`-graded until that
-      measurement lands and updates this note with its result, exactly as `wear_per_season`'s
-      non-zero rates were deferred past their own row's first commit, above.
+      ⚠ THE DEFAULT IS `scaled_by_degree`, SET THE SAME WAY `wound_harm_model`'s WAS: A READ, NOT
+      A CHOICE. Jordan's 2026-09-04 ruling on that row -- *"the combat engine determines the
+      result there"* -- is a general principle about who owns a magnitude the engine already
+      computed, and `attacker_size_pct`/`defender_size_pct` (`seam/wrappers/mass_battle.py`'s own
+      `resolve()` return, read from the real dice-pool engine call at `engine_resolve_field`, not
+      invented in this chain) is that same shape of number for a field battle. No fresh ruling
+      settles the magnitude, so this row still ships `assumption`-graded -- but the choice among
+      the three arms is settled by that precedent, not by a pending measurement.
+      ⚠ `tools/balance_oracle.py` DOES NOT APPLY TO THIS QUESTION AND MUST NOT BE RUN FOR IT.
+      That tool patches `mc_v18`/`dice_engine` and compares `mc_v18.run_campaign` arms; `march`
+      and `field_casualty_model` live entirely in `engine/season/`, which `mc_v18` cannot reach
+      (`CLAUDE.md` §0.2 -- `mc_v18` is deprecated in place, imported by nothing in game code).
+      Patching it would leave both of `balance_oracle.py`'s arms identical by construction --
+      exactly the "campaign-unreachable change" `CLAUDE.md` §7 names as **a fake control**, not a
+      measurement. If this arm is ever re-examined, the instrument is a `field_casualty_model`
+      sweep through `engine/season`'s own corpus (`corpus_run.run_case`), never this tool.
     values: [scaled_by_degree, total, none]
 
   march_target_kinds:
