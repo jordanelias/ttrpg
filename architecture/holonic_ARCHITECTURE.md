@@ -810,6 +810,12 @@ open.**
 **Six steps, four barriers, and the counts differ for two structural reasons:** DELIBERATE is a map,
 not a barrier; CENSUS shares WITNESS's join rather than opening its own.
 
+⚠ **POINTER, NOT A CORRECTION, 2026-09-28: SEVEN STEPS NOW.** M4 (`ED-IN-0279` clause (a)) added
+ENCOUNTER between RESOLVE and WITNESS, sharing barrier 3 — so "four barriers" is still true, and
+this section's own count/mapping is otherwise unchanged. Current: `04_CODE_ARCHITECTURE.md`
+§A.2/§C.1 and `03_VERBS_AND_LOOPS.md` §D.1. This doc's own step-count mentions elsewhere (§3, the
+`phase:` row, the written-thing table) are not individually re-walked; this is the one pointer.
+
 ### §23.1 The three vocabularies, and which one binds
 
 The chain carries a coarser three-phase tick and a retired seven-phase model. **The six steps are a

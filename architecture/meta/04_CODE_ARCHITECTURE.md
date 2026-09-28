@@ -131,7 +131,10 @@ state/       the owned stores · the gate · the log · the ledgers · the id mi
 data/        every closed set, table, fixture, the write matrix, the verb table — and the ONE loader
 queries/     ownerless functions: world_q (World first) · person_q (asker first) · cache (barrier-built)
 decision/    AX-2's island: questions · opening_set · choose · budget.   NO World in scope.
-loop/        driver + six steps.  The driver is the ONLY constructor of write tokens.
+loop/        driver + seven steps.  The driver is the ONLY constructor of write tokens.
+             ⚠ M4 (`ED-IN-0279` clause (a), 2026-09-28) added ENCOUNTER between RESOLVE and
+             WITNESS -- it shares barrier 3 (no new `TRACE.barrier()` call, so "four barriers"
+             stays true) and `WriteClass.ACTS` with RESOLVE. See its own row below and §C.1.
 seam/        contest() · ladder · one wrapper per deferred subsystem
 manifest/    role -> provider rows, resolved at boot
 port/        the Godot shell; nothing under it is simulation
@@ -157,6 +160,7 @@ tests/       falsifiers, including the two licensed guards
 | `loop/matter` | the three motions; maturation of declared terms | Sites, bodies, larders, ttl/term | per matrix row | MATTER |
 | `loop/deliberate` | **nothing.** Calls `sense()`, builds `View`, calls `choose` per person | frozen `World`, for `sense` only | — | **none** |
 | `loop/resolve` | every ACTS row, through the gate; the ordered fold | `World`, the verb table, the `Act[]` | each verb's `emits` / `emits_on_refusal` | ACTS |
+| `loop/encounter` | ACTS rows a prize row DEFERRED at RESOLVE, through the same gate | `World`, the verb table, RESOLVE's own `Event[]` (selects `degree == Declared`) | the same verb's `emits` / `emits_on_refusal`, at the real fought degree | ACTS (a second mint, same class) |
 | `loop/witness` | claim deposits into each holder's **own** ledger | this tick's log, presence cache, channel predicates, the act store | `claim.deposited` | INTERIOR |
 | `loop/census` | `(Person, exists)` on individuation, `weight`, `envelope` | post-eviction ledgers once; the log for demand kinds | `person.individuated` | MATTER |
 | `seam/contest` | **nothing.** Dispatches; enforces `max_depth`; returns Events + degree, or a typed refusal | a read-only projection | the contest's Events, **into the same log** | **none** |
@@ -510,6 +514,10 @@ season(w):
   cache = cache.build(w); frozen = w.frozen(cache)
   scenes = deliberate(frozen)                                 -- a MAP. No token exists in this scope
   act  = Token(ACTS,    t); resolve(w,act,scenes); drop      -- barrier 3
+  act2 = Token(ACTS,    t); encounter(w,act2,events)          -- M4 (`ED-IN-0279` (a), 2026-09-28):
+                                                                 folds RESOLVE's own deferrals
+                                                                 (`Event.degree == Declared`);
+                                                                 shares barrier 3, no new barrier
   cache = cache.build(w)
   intr = Token(INTERIOR,t); witness(w,intr,cache); drop      -- barrier 4
   mat2 = Token(MATTER,  t); census(w,mat2); drop
@@ -581,7 +589,15 @@ for a in acts:
   (ok, failed_conjunct) = eval(row.requires, world_as_predecessors_left_it)
   ok or emit(row.refusal_for(failed_conjunct)); continue   -- THE SCARCITY CHANNEL · ⚠ F7
   degree = FULL
-  if row.contests: degree, evs = seam.contest(...)         -- Refusal => emit refusal kind
+  if row.contests:
+    prize = manifest.resolve("contest", row.contests[0])
+    if prize.step and prize.step != token.step:            -- M4 (`ED-IN-0279` (a), 2026-09-28):
+      degree, evs = prize.declares, []                        the prize DEFERS to a later step;
+                                                                 fold now at its declared band,
+                                                                 writing nothing; the real fight
+                                                                 happens when this SAME fold runs
+                                                                 again from ENCOUNTER, at its step
+    else: degree, evs = seam.contest(...)                  -- Refusal => emit refusal kind
   receipts = [gate.write(..., actor=a.actor, via=a.via)
               for (k,f) in row.writes_at(degree)]          -- ⚠ F6 · DEGREE-KEYED
   emit(row.emits, changes=receipts, causes=[a.id]+occasion, degree)

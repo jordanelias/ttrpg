@@ -53,6 +53,11 @@ refusals**. 43 of 63 probe PASSes were raised by a gate, a type or a law in the 
 **A successor that rewrites Parts I–VI is a worse document.** The failures are not in the
 architecture; they are in what the architecture declines to say.
 
+⚠ **POINTER, NOT A CORRECTION: "the six steps" above is what #353 specified and this document
+inherited, and stays unedited.** M4 (`ED-IN-0279` clause (a), 2026-09-28) added a seventh step,
+ENCOUNTER, sharing barrier 3 — current count is `04_CODE_ARCHITECTURE.md` §A.2/§C.1 and
+`03_VERBS_AND_LOOPS.md` §D.1.
+
 ## What it changes
 
 - **Part D** — the write matrix keyed on **`(kind, field)`** rather than on things, 13 rows → 33,
