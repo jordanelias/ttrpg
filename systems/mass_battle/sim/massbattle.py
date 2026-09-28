@@ -43,6 +43,7 @@ from __future__ import annotations
 import math
 
 from systems.mass_battle.sim import rngsource
+from systems.mass_battle.sim.config import CELL_CAP
 from systems.mass_battle.sim.hierarchy.units import Subunit, Unit
 from systems.mass_battle.sim.orchestration import run_battle
 from systems.mass_battle.sim.terrain import FOREST_BROKEN
@@ -200,6 +201,28 @@ def _morale_start_from_stability(faction):
     return max(_STA_MORALE_FLOOR, min(_STA_MORALE_CEIL, _round_half_up(sta)))
 
 
+#: [canonical: mass_battle_integration_v30.md §4.10 sub-step 3 — the strategic entry point. ⚠ THE
+#:  VALUES BELOW ARE NOT CANON AND THIS COMMENT DOES NOT CLAIM THEY ARE. They are the pre-port
+#:  adapter's minimum-viable defaults, carried over FIELD-FOR-FIELD so the engine swap is a
+#:  single-variable experiment, and the [GAP] on both this module's construction paths is the
+#:  honest status: no canonical spec exists for army -> Unit construction of ANY kind. The
+#:  fabrication gate is right to ask; the answer is "inherited, with a recorded gap", not
+#:  "derived".] SHARED BY `_faction_to_unit` AND `_weighted_unit` (§8: one owner for the MVP
+#: shape, so the two construction paths cannot silently drift apart on a field neither has a
+#: reason to vary). `concentration` is deliberately NOT here -- it is continuous-mode-only
+#: (`_weighted_unit` sets it; `_faction_to_unit`'s tier-sized Subunit does not), a real
+#: difference between the two modes rather than something that drifted.
+_MVP_SUBUNIT_SHAPE = dict(shape='Line', troop_type='infantry', tier=2,
+                          starting_position=(8, 12), advance_dir=1,
+                          stance='balanced', unit_type='melee')
+
+#: SAME SHARING, FOR THE UNIT SIDE. `power`/`morale`/`morale_start` are NOT here: `power`'s
+#: SOURCE is the very thing the two construction paths differ on, and morale is derived
+#: (`_faction_to_unit`) vs. flat (`_weighted_unit`) for the same reason (no season-side Stability
+#: to derive from).
+_MVP_UNIT_COMMAND = dict(command=4, discipline=5, discipline_start=5)
+
+
 def _faction_to_unit(faction):
     """Build a canon-engine Unit from a strategic-layer faction.
 
@@ -209,44 +232,18 @@ def _faction_to_unit(faction):
     otherwise describes (a single-variable experiment on the RESOLUTION model) still holds for
     everything but morale.
     """
-    # [canonical: mass_battle_integration_v30.md §4.10 sub-step 3 — the strategic entry point. ⚠ THE
-    #  VALUES BELOW ARE NOT CANON AND THIS COMMENT DOES NOT CLAIM THEY ARE. They are the pre-port
-    #  adapter's minimum-viable defaults, carried over FIELD-FOR-FIELD so the engine swap is a
-    #  single-variable experiment, and the [GAP] on this function is the honest status: no canonical
-    #  spec exists for faction.Mil -> Unit construction. The fabrication gate is right to ask; the
-    #  answer is "inherited, with a recorded gap", not "derived". (Morale is now the one EXCEPTION —
-    #  see _morale_start_from_stability and its docstring above.)]
     power = max(1, int(round(faction.Mil)))
-    sub = Subunit(
-        shape='Line',
-        troop_type='infantry',
-        tier=2,                          # [canonical: inherited default — 200 troops, see GAP above]
-        starting_position=(8, 12),       # [canonical: inherited default — see GAP above]
-        advance_dir=1,
-        stance='balanced',
-        unit_type='melee',
-    )
+    sub = Subunit(**_MVP_SUBUNIT_SHAPE)
     m0 = _morale_start_from_stability(faction)
     return Unit(
         name=f'{faction.name}_force',
         faction=faction.name,
         power=power,
-        command=4,                       # [canonical: inherited default — see GAP above]
-        discipline=5,                    # [canonical: inherited default — see GAP above]
-        discipline_start=5,              # [canonical: inherited default — see GAP above]
+        **_MVP_UNIT_COMMAND,
         morale=m0,                       # [d.1, ED-MB-0068: derived from faction.Sta — see above]
         morale_start=m0,                 # [d.1, ED-MB-0068: derived from faction.Sta — see above]
         subunits=[sub],
     )
-
-
-class _RngShim:
-    """Carries `.rng` for `resolve_mass_battle`'s `getattr(world, 'rng', None)` read (used via
-    `rngsource.using`, above), without requiring a season `World` to grow a strategic-layer `.rng`
-    attribute it has no other use for."""
-
-    def __init__(self, rng):
-        self.rng = rng
 
 
 #: A season `Person` carries no troop-density signal at all -- `power` is a Unit-level QUALITY
@@ -278,36 +275,36 @@ def _weighted_unit(name, weight):
     `hierarchy/units.py`: "when `troops` is set the footprint is generated from (troops,
     concentration) ... `tier` becomes vestigial") rather than by `tier`'s fixed lookup table.
 
-    `tier=2` is still passed because `Subunit.__post_init__` requires SOME tier even in continuous
-    mode; it is inert here (troops overrides it), kept only so this call looks like every other
-    Subunit construction in this file rather than inventing a new required-field convention.
-    `concentration` is set to `config.CELL_CAP` -- pack as densely as the engine allows before it
-    would open a second cell, the smallest-footprint reading available and not a claim about real
-    troop density. Every other Subunit/Unit field is the SAME non-canonical inherited default
-    `_faction_to_unit` already discloses (single Line, infantry, `command=4`, `discipline=5`,
-    `morale=5`) -- this function changes WHICH NUMBER SIZES THE FORCE, not what else is carried
-    over unchanged."""
-    from systems.mass_battle.sim.config import CELL_CAP
-    sub = Subunit(shape='Line', troop_type='infantry', tier=2,
-                  troops=max(float(weight), _MIN_TROOPS), concentration=float(CELL_CAP),
-                  starting_position=(8, 12), advance_dir=1, stance='balanced', unit_type='melee')
-    return Unit(name=name, faction=name, power=_SEASON_FORCE_POWER,
-                command=4, discipline=5, discipline_start=5,
+    `_MVP_SUBUNIT_SHAPE`'s `tier=2` is still passed because `Subunit.__post_init__` requires SOME
+    tier even in continuous mode; it is inert here (troops overrides it). `concentration` is set
+    to `config.CELL_CAP` -- pack as densely as the engine allows before it would open a second
+    cell, the smallest-footprint reading available and not a claim about real troop density.
+    Every other Subunit/Unit field is the SAME non-canonical inherited default `_faction_to_unit`
+    uses, shared via `_MVP_SUBUNIT_SHAPE`/`_MVP_UNIT_COMMAND` -- this function changes WHICH
+    NUMBER SIZES THE FORCE, not what else is carried over unchanged."""
+    sub = Subunit(**_MVP_SUBUNIT_SHAPE, troops=max(float(weight), _MIN_TROOPS),
+                  concentration=float(CELL_CAP))
+    return Unit(name=name, faction=name, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
                 morale=5, morale_start=5, subunits=[sub])
 
 
-def _run_and_grade(unit_a, unit_b, terrain, world):
+def _run_and_grade(unit_a, unit_b, terrain, rng):
     """`run_battle` plus the survivor-ratio classification -- extracted from `resolve_mass_battle`
     so `resolve_field` shares it rather than re-deriving it (§8: the rule lives once). Identical to
     what `resolve_mass_battle` always did with its own two Units; see that function's docstring for
-    the terrain/RNG/degree-band caveats, which are unchanged and apply here too."""
+    the terrain/RNG/degree-band caveats, which are unchanged and apply here too.
+
+    Takes `rng` directly rather than a `world`-shaped object -- this is the only thing either
+    caller ever reads off `world`, so narrowing the parameter to what is actually used means
+    `resolve_field` (which has no `World`, only a bare `rng`) needs no adapter object to satisfy
+    an attribute it does not otherwise have."""
     if terrain == FOREST_BROKEN:
         if unit_a.speed == 'Fast':
             unit_a.speed = 'Standard'
         if unit_b.speed == 'Fast':
             unit_b.speed = 'Standard'
 
-    with rngsource.using(getattr(world, 'rng', None)):
+    with rngsource.using(rng):
         # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
         run_battle(unit_a, unit_b, max_turns=18)
 
@@ -361,7 +358,7 @@ def resolve_field(w, side_a, side_b, *, terrain=None, rng=None):
     weight_b = sum(w.persons[pid].weight for pid in side_b if pid in w.persons)
     unit_a = _weighted_unit("side_a", weight_a)
     unit_b = _weighted_unit("side_b", weight_b)
-    return _run_and_grade(unit_a, unit_b, terrain, _RngShim(rng))
+    return _run_and_grade(unit_a, unit_b, terrain, rng)
 
 
 def resolve_mass_battle(faction_a, faction_b, terrain, world):
@@ -433,4 +430,4 @@ def resolve_mass_battle(faction_a, faction_b, terrain, world):
         unit_b = _faction_to_unit(_GarrisonStub(name='Uncontrolled', Mil=1.5))
     else:
         unit_b = _faction_to_unit(faction_b)
-    return _run_and_grade(unit_a, unit_b, terrain, world)
+    return _run_and_grade(unit_a, unit_b, terrain, getattr(world, 'rng', None))
