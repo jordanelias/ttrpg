@@ -393,6 +393,28 @@ def build_realm(seed: int = 0, cap: int | None = None, from_roster: bool = True)
             w.sites[s_id] = Site(s_id, bid, "dwelling",
                                  condition=w.fixtures.get("condition_scale"))
 
+    # -- a garrison per settlement, at the settlement (M4, `ED-IN-0279` clause (a)) --------------
+    # Jordan ruled WHAT garrison strength is (2026-09-28, M4 planning round 2): a Site's own
+    # `condition` field, `world_q.fortification_of`'s reader. One per settlement is the ruling's
+    # own scope -- there is no second garrison-bearing rung kind to seed against, and `condition
+    # scale` matches every other Site's starting value, so a fresh realm starts every settlement
+    # equally (un)fortified rather than asserting a fortification level nobody has ruled.
+    # ⚠ NOTHING CONSULTS THIS YET (`H-150`, `hole_register.yaml`). `seam/wrappers/mass_battle.py`
+    # passes `terrain=None` unconditionally and has no other parameter to carry a fortification
+    # bonus through, so seeding this Site changes `w.sites`, `world_q.density`'s composition, and
+    # nothing else -- no fight's outcome moves. Wiring it is separate, unruled work: HOW MUCH a
+    # fortification level should shift a field battle is an invented magnitude, `H-148`'s own
+    # shape, and H-150 is where that stays tracked rather than guessed here.
+    # ⚠ `governance_spine.build`, `corpus_run.build_at`, `probes.tiny_world` and
+    # `headless.build_world` do NOT seed a garrison -- the dwelling precedent immediately above is
+    # `build_realm`-and-`governance_spine` together; H-150's own docstring and `fortification_of`'s
+    # both name only `harness/populated.py`'s build step 11, and widening past that is a separate
+    # decision, not this one.
+    for sid in geo["settlements"]:
+        s_id = f"s_{_slug(sid)}_garrison"
+        w.sites[s_id] = Site(s_id, f"set_{_slug(sid)}", "garrison",
+                             condition=w.fixtures.get("condition_scale"))
+
     # -- the cast ---------------------------------------------------------------
     # ⚠ **NPC CASES ARE PEOPLE; ARC CASES ARE NOT, AND THE FIRST CUT SEATED ALL 143.** The NPC
     # lane names persons -- "Carin Vedel", "Inge Baralta", "Orm". The ARC lane names SITUATIONS --
