@@ -156,9 +156,11 @@ def resolvable_verbs() -> frozenset:
         # THE TWO CLAUSES ARE THE GATE'S OWN GROUNDS, READ FORWARD:
         #   * **a provider is registered for the prize.** `manifest.has(role, module)` asks the
         #     CODE, not the data — a roster row may name a module the contracts file declares and
-        #     nothing may have registered a callable for it, which is `mass_battle` today. This is
-        #     the same resolution-by-declaration the rest of the unit is built on, and it keeps one
-        #     owner for the question rather than adding a fourth.
+        #     nothing may have registered a callable for it. `mass_battle` was exactly that until
+        #     ED-IN-0279 (M3) gave it a provider; every prize row has one as of that plan, but the
+        #     gate stays live rather than deleted, since a future row could land in the same state.
+        #     This is the same resolution-by-declaration the rest of the unit is built on, and it
+        #     keeps one owner for the question rather than adding a fourth.
         #   * **the verb is typed.** The paragraph above is the reason and it is unchanged:
         #     `operands_for` returns `{}` for an untyped row, so a computed contested act would
         #     reach the seam with ONE claimant and every case producing one would become a

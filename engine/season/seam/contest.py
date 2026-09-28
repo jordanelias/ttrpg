@@ -175,8 +175,10 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
             law="Jordan 2026-09-02 -- a contest is a call for a different subsystem. The three "
                 "are declared in references/module_contracts.yaml WITH resolvers, so the seam's "
                 "job is to DISPATCH; inventing a degree ladder here would be a second resolver, "
-                "which S27.2 names as its highest-value refusal. `personal_combat` is CALLED "
-                "above; mass_battle and social_contest still resolve to a name only")
+                "which S27.2 names as its highest-value refusal. As of ED-IN-0279 (M3) every "
+                "prize row has a registered provider; this branch fires only for a row naming a "
+                "module that HAS no provider row, which none does today -- kept live rather than "
+                "deleted, since a new prize could still land in that state")
     raise Unspecified(
         "the degree ladder's margin model",
         "S39.4",

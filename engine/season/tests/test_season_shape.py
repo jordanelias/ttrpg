@@ -11010,13 +11010,14 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     no `contests:` -- `rosters.yaml:505-508` rules that giving them a prize so the existing
     machinery can grade them is scripting drift -- and nothing produces a margin.
 
-    ⚠ **ONE PRIZE NOW ROUTES TO A SUBSYSTEM THE SEAM DOES NOT CALL, NOT THREE.** That sentence
-    read *THE THREE PRIZES THAT ARE NOT `the body`*, resting on Jordan's 2026-09-02 *"we don't
-    NEED to worry about them at this point in time."* `U1` spends his 2026-09-09 ruling instead --
-    *"we have the sigma leverage d10 resolver in engine to use"* -- so `a standing` and
-    `a proposition` acquire a provider and only `a field` still refuses, needing `faction_q.resolve`
-    (R-04/U9). The refusal is asserted below on the field that decides it, `provider:`, rather
-    than on the module name, which after `U1` no longer predicts whether anything runs.
+    ⚠ **ZERO PRIZES NOW ROUTE TO A SUBSYSTEM THE SEAM DOES NOT CALL, NOT ONE, NOT THREE.** That
+    sentence read *THE THREE PRIZES THAT ARE NOT `the body`*, resting on Jordan's 2026-09-02 *"we
+    don't NEED to worry about them at this point in time."* `U1` spent his 2026-09-09 ruling on two
+    of them -- *"we have the sigma leverage d10 resolver in engine to use"* -- and M3 of the
+    `mc_v18`-retirement plan (`ED-IN-0279`, 2026-09-27) gave the last one, `a field`, its provider
+    too, once `faction_q.resolve` existed to build its sides (R-04/U9, closed by M2 of that same
+    plan). The (now-empty) refusal set is asserted below on the field that decides it, `provider:`,
+    rather than on the module name, which after `U1` no longer predicts whether anything runs.
 
     ⚠⚠ **AND THE LADDER BRANCH HAS A PRODUCER.** That sentence read *nothing in this tracer
     produces a `net`*, and the scan at the foot of this test was its falsifier, written to go red
@@ -11059,11 +11060,16 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     prizes = roster_map("contest_subsystems", "prizes")
     assert prizes["the body"]["module"] == "personal_combat"
     assert prizes["the body"]["provider"] == "personal_combat"
-    # ⚠ **"THE SEAM REFUSES THE OTHER THREE" WAS TRUE BEFORE `U1` AND IS FALSE NOW — ONE REFUSES.**
-    # A prize refuses exactly when its row carries NO `provider:`, which is `a field` alone
-    # (`mass_battle` needs `faction_q.resolve`, i.e. R-04/U9). The loop is rewritten to split on
-    # the field that decides it rather than on the module name, because after `U1` the module name
-    # no longer predicts whether anything runs.
+    # ⚠ **"THE SEAM REFUSES THE OTHER THREE" WAS TRUE BEFORE `U1`, "ONE REFUSES" WAS TRUE AFTER
+    # IT, AND NEITHER IS TRUE NOW — ZERO REFUSE THIS WAY.** M3 of the mc_v18-retirement plan
+    # (`ED-IN-0279`) gave `a field` a `provider:` too (`seam/wrappers/mass_battle.py`, which
+    # resolves `subject` via `faction_q.resolve` -- the R-04/U9 gap this comment used to name).
+    # Every prize row now carries a `provider:`, so this loop finds nothing left to refuse BY
+    # THIS MECHANISM. That does not mean every call to every prize now succeeds -- `mass_battle`
+    # still refuses a call with no `subject` (PARTY-GAP, not "nothing connects the seam to it") --
+    # only that "unwired by the roster" is no longer how any of the four fails. See
+    # `test_mass_battle_provider.py` for that provider's own coverage; this loop's job is narrower
+    # than re-testing it -- keeping THIS set-equality honest as the roster changes under it.
     w = _w(); w.step = Step.RESOLVE
     refused = {}
     for prize, row in sorted(prizes.items()):
@@ -11074,12 +11080,10 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
         refused[prize] = row["module"]
         # [JUSTIFIED: `160` truncates an assertion MESSAGE so a failure prints readably; it is a display bound on a string, not a mechanical constant. The same slice length is used on the sibling assertions in this file]
         assert row["module"] in str(ei.value), (prize, str(ei.value)[:160])
-    # [GROUNDED: measured 2026-09-11 under `U1` -- of the four prize rows, `a field` alone carries no `provider:` and is the only one the seam still refuses by name]
-    assert set(refused) == {"a field"}, (
-        f"the refusing prizes are {sorted(refused)}. `a field` alone has no provider — it needs "
-        "`faction_q.resolve` (R-04/U9). If `a standing` or `a proposition` is refusing again, "
-        "`U1`'s `sigma_leverage` provider has stopped registering; if `a field` has stopped "
-        "refusing, something has been wired without a row saying so.")
+    # [GROUNDED: measured 2026-09-27 -- all four prize rows now carry `provider:`, so none is refused by this loop's mechanism (a missing `provider:`). See ED-IN-0279 (M3)]
+    assert set(refused) == set(), (
+        f"the refusing prizes are {sorted(refused)}. All four prize rows now carry a `provider:` "
+        "(`ED-IN-0279`, M3); if this is non-empty, a row lost its `provider:` field.")
 
     # ⚠⚠ **THE LADDER BRANCH HAS A PRODUCER NOW, AND THIS SCAN IS WHAT SAID SO.** It asserted
     # `not producers` with the message *"`W-E` published `the ladder branch has no producer` … that

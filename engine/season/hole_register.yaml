@@ -2343,8 +2343,13 @@ rows:
       `contest_subsystems.prizes` routes `the body` to personal_combat, `a field` to mass_battle,
       and `a standing` and `a proposition` to social_contest. Exactly ONE verb in the 32-row table
       carries a `contests:` column - `kill / wound`, on `the body`. So the social and mass-battle
-      seams are declared from the roster end and unclaimed from the verb end, and `contest()`'s
-      own refusal text says it - "mass_battle and social_contest still resolve to a name only".
+      seams are declared from the roster end and unclaimed from the verb end.
+      [UPDATED 2026-09-27/28, ED-IN-0279 M3] All four prize rows now have a registered PROVIDER
+      (mass_battle's landed this pass); `contest()`'s refusal text this row quoted no longer
+      applies to a name with no provider, since none is in that state today. The row's actual
+      claim - no VERB declares `contests:` on the other three prizes - is unchanged: `march`
+      (M4, "a field") is gated on Jordan's ruling and not yet built, and nothing here touches the
+      two social_contest prizes.
       NOT A PURE WIRING GAP - connecting `a proposition` would reach social_contest's `agon` game,
       which is WIRED; connecting an investigation would reach `inquiry`, which is a STUB. Jordan,
       2026-09-04 - "social contest is an unfinished engine."

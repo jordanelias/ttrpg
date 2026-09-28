@@ -222,8 +222,16 @@ def presence(w: World, rung_id: str) -> list[str]:
 # §22's `Nobody` row assigns FACTION, LEADERS, PRESENCE, DENSITY and FOOTPRINT to nobody, as
 # Queries stored nowhere, and §17 names each in the resolver-side list. Four of the five had no
 # body. They are written here rather than in a new module because `04 §A.2` types `queries/` as
-# `world_q · person_q · cache` -- a `polity_q.py` would be a fourth member and a conformance
-# defect, and these are world-first reads like every other function in this file.
+# `world_q · person_q · cache` -- a `polity_q.py` for THESE functions would be a fourth member and
+# a conformance defect, and these are world-first reads like every other function in this file.
+#
+# ⚠ `faction_q.py` IS NOT A COUNTEREXAMPLE TO THIS RULE; IT IS A DIFFERENT CASE, DISTINGUISHED AT
+# ITS OWN SITE. This paragraph's "no fourth module" holds for functions §A.2 does not name outside
+# this file -- exactly the case for `members`/`leaders`/`footprint` below, and for `WorldReader`
+# before unit L3 folded it in. `faction_q.resolve` is named by its OWN dotted path in §B.6.1 and
+# §C.5.1, both ratified, neither touched by this docstring's reasoning; see `faction_q.py`'s and
+# `queries/__init__.py`'s own docstrings for why that is a genuinely different ambiguity, named
+# rather than resolved the same way.
 #
 # ⚠ THE SEMANTICS ARE NOT TRANSCRIBED, BECAUSE §17 GIVES ONLY `name(w, ...)`. What IS transcribed
 # is the definition each rests on -- §14.2 for membership, §15's cardinality table for the edge

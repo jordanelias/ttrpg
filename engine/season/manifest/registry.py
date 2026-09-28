@@ -82,9 +82,11 @@ def has(role: str, module: str) -> bool:
 
     ⚠ IT IS A QUESTION ABOUT THE CODE, NOT ABOUT THE DATA, WHICH IS WHY IT IS SEPARATE FROM
     `resolve`. A roster row may name a module the contracts file declares and nothing may have
-    registered a callable for it — `mass_battle` is exactly that today. `resolve` answers *whose
-    prize is this*; this answers *can anybody actually run it*, and a verb is resolvable only on the
-    second.
+    registered a callable for it — `mass_battle` was exactly that until `ED-IN-0279` (M3) gave it
+    a provider; every prize row has one as of that plan, but this function stays the live check
+    rather than a historical note, since a future row could land unregistered again. `resolve`
+    answers *whose prize is this*; this answers *can anybody actually run it*, and a verb is
+    resolvable only on the second.
 
     ⚠ **IT NO LONGER IMPORTS ANYTHING TO MAKE THE ANSWER TRUE.** `_load_providers()` stood
     here and imported `seam/wrappers/*`, which was an import cycle -- see

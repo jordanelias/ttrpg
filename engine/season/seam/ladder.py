@@ -140,9 +140,12 @@ def degree_of(result: Any, subject: Optional[str] = None) -> str:
 
     ⚠ IT DECIDES NOTHING. Each branch hands the question to whoever already owns it -- the scene
     for combat, `degree_from_net` for a margin -- and a result carrying NEITHER refuses by name.
-    That refusal is the honest state of `mass_battle` and `social_contest`, which the seam
-    resolves and does not call (Jordan, 2026-09-02: *"we don't NEED to worry about them at this
-    point in time"*)."""
+    That refusal is the honest state of a call this function cannot grade: `mass_battle`'s
+    provider (`ED-IN-0279`, M3) returns neither shape (its result is a survivor-ratio
+    classification, not a margin -- see `seam/wrappers/mass_battle.py`'s own docstring for why
+    that gap is disclosed rather than closed), so `degree_of` still refuses it by name, now for a
+    called-but-ungradable result rather than for an uncalled one (Jordan, 2026-09-02, on the
+    original state of both: *"we don't NEED to worry about them at this point in time"*)."""
     if not isinstance(result, dict):
         raise Unspecified(
             f"a contest returned {type(result).__name__}, which carries no outcome to grade",

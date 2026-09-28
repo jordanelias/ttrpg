@@ -811,11 +811,15 @@ rosters:
         cite:     "H-88; the seam already calls it (seam/wrappers/combat.py)"
       "a field":
         module:   "mass_battle"
+        provider: "mass_battle"
         cite: >-
-          NO PROVIDER, AND THE ABSENCE IS THE ROW. It refuses by name exactly as it did under the
-          string form: sides need `faction_q.resolve` (`04 §C.5.1`), which is R-04/U9. A row with a
-          `module:` and no `provider:` is the shape that says *somebody owns this and nothing can
-          run it yet*, which the string form could not express at all.
+          M3 of the mc_v18-retirement plan (ED-IN-0279): the row had a `module:` and no `provider:`
+          because sides needed `faction_q.resolve` (`04 §C.5.1`), which M2 built. `provider:` now
+          names `seam/wrappers/mass_battle.py`, which resolves the `subject` side by proposition id
+          and calls `systems.mass_battle.sim.massbattle:resolve_field` through the
+          `mass_battle.resolve_field` composition role. What is STILL open: no `verb_table.yaml`
+          row declares `contests: "a field"` yet -- that is `march` (M4), gated on Jordan's ruling,
+          ED-IN-0279 clause (b).
       "a standing":
         module:   "social_contest"
         provider: "sigma_leverage"
