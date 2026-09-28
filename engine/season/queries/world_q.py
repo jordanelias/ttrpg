@@ -341,6 +341,44 @@ def density(w: World, rung_id: str, faction: str) -> tuple[int, int]:
     return sum(1 for p in present if p in inside), len(present)
 
 
+def mustered(w: World, rung_id: str, faction: str) -> list[str]:
+    """M4 (`ED-IN-0279` clause (a)). This faction's members present in `rung_id`'s subtree --
+    settlement plus everything under it, Jordan's ruling on what "present at the target" means
+    for a march (planning round 2). `density`'s own composition, one line above, minus the count:
+    person containment never terminates AT a settlement rung -- every person's `contain` targets a
+    `home` building beneath one (`harness/populated.py`) -- so a literal exact-rung read finds
+    nobody home, ever, and the subtree is the only reading that finds anyone at all.
+
+    Who a march may draw on at its origin, and who a field battle's defending side draws from at
+    its target -- both the same query, the faction and the rung simply swapped. `04 §C.5.1`'s own
+    pseudocode: *"squad combat: the squad is `members ∩ present-at-rung`"*."""
+    TRACE.query("mustered", "resolver")
+    here = {rung_id, *descendants(w, rung_id)}
+    inside = set(members(w, faction))
+    return sorted(t.subject for t in w.tenures
+                  if t.kind == "contain" and t.live
+                  and t.object in here and t.subject in inside)
+
+
+def fortification_of(w: World, rung_id: str) -> float:
+    """M4 (`ED-IN-0279` clause (a)). A settlement's defensive strength, `0.0` to `1.0`, read off
+    the `garrison` Site(s) in `rung_id`'s subtree -- `H-38`'s *"`Site.condition` is the model"*
+    applied to fortification, Jordan's choice over a cohort-Person alternative (planning round 2).
+    `0.0` with no garrison in the subtree: an unfortified settlement, not a refusal -- absence of
+    a garrison Site is a legitimate world state (`harness/populated.py`'s M4 build step 11 seeds
+    one per settlement, but nothing enforces that it must).
+
+    ⚠ MULTIPLE GARRISONS AVERAGE RATHER THAN SUM: one per settlement is what step 11 ships, and an
+    average keeps the return in `[0.0, 1.0]` regardless, which summing would not."""
+    TRACE.query("fortification_of", "resolver")
+    here = {rung_id, *descendants(w, rung_id)}
+    garrisons = [s for s in w.sites.values() if s.kind == "garrison" and s.rung in here]
+    if not garrisons:
+        return 0.0
+    scale = w.fixtures.get("condition_scale")
+    return sum(s.condition for s in garrisons) / (scale * len(garrisons))
+
+
 def sovereign_fraction(w: World, rung_id: str) -> tuple[float, int]:
     """§17's one Query with a DECLARED return type: `-> (fraction, undetermined_count)`.
 

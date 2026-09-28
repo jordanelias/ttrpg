@@ -4,15 +4,25 @@
   1. END TO END THROUGH `contest()`, not just the provider function in isolation -- proves the
      manifest row, the `@provider` registration, and the dispatch in `seam/contest.py` all agree,
      which a unit test calling `resolve()` directly could not.
-  2. `PARTY-GAP` ON AN EMPTY CLAIMANT LIST AND ON A MISSING `subject`, mirroring
+  2. `PARTY-GAP` ON AN EMPTY CLAIMANT LIST, A MISSING `subject` AND A MISSING `rung`, mirroring
      `seam/wrappers/combat.py`'s own PARTY-GAP discipline -- the provider derives a gap rather
      than fabricating a side.
-  3. AN UNRESOLVABLE `subject` DOES NOT CRASH OR REFUSE. `faction_q.resolve` returns an empty
-     `Faction` for an unknown proposition id (§B.6.1's own -- membership is `commit`, and there is
-     none to find); the provider does not special-case that into an auto-win or a second refusal
-     -- it is one more input to the battle math, exactly as this module's own docstring commits to.
+  3. AN UNRESOLVABLE `subject` DOES NOT CRASH OR REFUSE. `faction_q.resolve` (read through
+     `world_q.mustered`) returns an empty membership for an unknown proposition id (§B.6.1's own
+     -- membership is `commit`, and there is none to find), which is INDISTINGUISHABLE from a real
+     faction that mustered nobody at this `rung` -- both take the `Unopposed` path (M4,
+     `ED-IN-0279` clause (a)) rather than reaching `resolve_field`'s crash-avoidance floor. That
+     collapse is deliberate: an honest "nobody defended" beats a fabricated fight against a
+     floor-sized phantom unit, which is what the pre-M4 version of this test proved happened
+     instead -- superseded, not merely re-passing.
+  4. THE `rung` SCOPING (M4, `ED-IN-0279` clause (a)) GENUINELY NARROWS, RATHER THAN PASSING
+     VACUOUSLY. At `r_valoria` every member of `fac_guilds` happens to be present, so asserting
+     against `world_q.mustered` there would pass whether or not the intersection ran. `fac_crown`
+     at `set_s_002` is the falsifying case: 11 members total, exactly one present -- proving the
+     defending side is the mustered subset, not the full membership `faction_q.resolve` alone
+     would give.
 
-Block 4 (`resolve_field` sums `Person.weight` per side into army SIZE, not quality) lives in
+Block 5 (`resolve_field` sums `Person.weight` per side into army SIZE, not quality) lives in
 `tests/valoria/test_mass_battle_resolve_field.py`, not here: it needs `from systems.mass_battle...`
 at module scope to reach `massbattle` directly for monkeypatching, and
 `tests/valoria/test_engine_does_not_import_systems.py`'s `NESTED_BASELINE`/`BASELINE_TOTAL` ratchet
@@ -23,7 +33,7 @@ already imports `massbattle` the same way from that location; this follows it ra
 import random
 
 from engine.season.harness.populated import build_realm
-from engine.season.queries import faction_q
+from engine.season.queries import faction_q, world_q
 from engine.season.seam.contest import contest
 
 
@@ -41,23 +51,77 @@ def test_resolves_end_to_end_through_contest():
     assert r["result"]["degree"] in {"Overwhelming", "Success", "Partial", "Failure"}
     assert "degree" not in r
     assert set(r["parties"]["claimants"]) == set(crown.members)
-    assert set(r["parties"]["subject_members"]) == set(faction_q.resolve(w, "fac_guilds").members)
+    # `world_q.mustered`, not raw `faction_q.resolve(...).members` -- see test 4 below for why the
+    # distinction is checked on a case that can actually tell the two apart.
+    assert set(r["parties"]["subject_members"]) == set(world_q.mustered(w, "r_valoria", "fac_guilds"))
 
 
-def test_party_gap_on_empty_claimants_and_missing_subject():
+def test_party_gap_on_empty_claimants_missing_subject_and_missing_rung():
     from engine.season.seam.wrappers.mass_battle import resolve as provider_resolve
     w = build_realm(0)
-    empty = provider_resolve(w, [], ["c"], "a field", subject="fac_guilds")
+    empty = provider_resolve(w, [], ["c"], "a field", subject="fac_guilds", rung="r_valoria")
     assert empty["status"] == "PARTY-GAP"
-    missing_subject = provider_resolve(w, ["p_npc_008"], ["c"], "a field", subject=None)
+    missing_subject = provider_resolve(w, ["p_npc_008"], ["c"], "a field", subject=None,
+                                        rung="r_valoria")
     assert missing_subject["status"] == "PARTY-GAP"
+    missing_rung = provider_resolve(w, ["p_npc_008"], ["c"], "a field", subject="fac_guilds")
+    assert missing_rung["status"] == "PARTY-GAP"
 
 
 def test_unresolvable_subject_is_not_a_crash_or_a_second_refusal():
     from engine.season.seam.wrappers.mass_battle import resolve as provider_resolve
+    from engine.season.seam.ladder import field_degree
     w = build_realm(0)
     crown = faction_q.resolve(w, "fac_crown")
     r = provider_resolve(w, crown.members, ["c"], "a field", subject="fac_this_does_not_exist",
-                          rng=random.Random(3))
+                          rung="r_valoria", rng=random.Random(3))
     assert r["status"] == "RESOLVED"
+    assert r["parties"]["subject_members"] == []
+    # An unresolvable subject musters nobody, which is `Unopposed`, not a fought-and-won battle:
+    # the pre-M4 version of this test asserted this reached `resolve_field`'s crash-avoidance
+    # floor instead, which the `Unopposed` short-circuit now pre-empts (M4, `ED-IN-0279` clause
+    # (a)) -- checked here rather than only in the dedicated unopposed test, since this is the
+    # case that used to exercise the floor and must be shown to no longer need it.
+    assert r["attacker_wins"] is True and r["unopposed"] is True
+    assert field_degree(r) == "Unopposed"
+
+
+def test_rung_scoping_excludes_members_not_present_at_the_target():
+    """M4 (`ED-IN-0279` clause (a)), F6 of the planning pass, closed. `fac_crown` has 11 members
+    and exactly one -- `p_npc_020` -- is present at `set_s_002`'s subtree; asserting the defending
+    side equals the FULL faction would fail here where it would pass silently at `r_valoria` (test
+    1 above), which is why this case exists rather than reusing that one."""
+    from engine.season.seam.wrappers.mass_battle import resolve as provider_resolve
+    w = build_realm(0)
+    crown = faction_q.resolve(w, "fac_crown")
+    assert len(crown.members) > 1, "the fixture no longer gives fac_crown more than one member"
+    mustered = world_q.mustered(w, "set_s_002", "fac_crown")
+    assert 0 < len(mustered) < len(crown.members), (
+        f"set_s_002 no longer gives a strict subset of fac_crown's {len(crown.members)} members "
+        f"({mustered}); pick a rung/faction pair that still does")
+    r = provider_resolve(w, ["p_npc_008"], ["c"], "a field", subject="fac_crown",
+                          rung="set_s_002", rng=random.Random(11))
+    assert r["status"] == "RESOLVED"
+    assert set(r["parties"]["subject_members"]) == set(mustered)
+    assert set(r["parties"]["subject_members"]) != set(crown.members)
+
+
+def test_a_real_faction_that_musters_nobody_at_the_rung_is_unopposed():
+    """M4 (`ED-IN-0279` clause (a)). Distinct from the unresolvable-subject test above: `fac_crown`
+    genuinely exists and has members, but none is present at `set_s_003`'s subtree, so this is the
+    case a settlement-defence read actually meets -- a real holder faction whose people are
+    elsewhere, not a typo'd faction id."""
+    from engine.season.seam.wrappers.mass_battle import resolve as provider_resolve
+    from engine.season.seam.ladder import field_degree
+    w = build_realm(0)
+    crown = faction_q.resolve(w, "fac_crown")
+    assert crown.members, "fac_crown has no members at all; pick a faction that does"
+    mustered = world_q.mustered(w, "set_s_003", "fac_crown")
+    assert not mustered, (
+        f"set_s_003 no longer gives fac_crown zero mustered ({mustered}); pick a rung that does")
+    r = provider_resolve(w, ["p_npc_008"], ["c"], "a field", subject="fac_crown",
+                          rung="set_s_003", rng=random.Random(13))
+    assert r["status"] == "RESOLVED"
+    assert r["attacker_wins"] is True and r["unopposed"] is True
+    assert field_degree(r) == "Unopposed"
     assert r["parties"]["subject_members"] == []

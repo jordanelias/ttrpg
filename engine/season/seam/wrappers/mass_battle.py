@@ -4,23 +4,23 @@ season-facing entry point, `resolve_field`. Wired M3 of the `mc_v18`-retirement 
 whose own comment said the absence WAS the row -- *"sides need `faction_q.resolve` (04 §C.5.1)"*.
 M2 built `faction_q.resolve`; this is the call that reads it.
 
-⚠ **THE `claimants`/`subject` SPLIT BELOW IS THIS MODULE'S OWN PROPOSAL FOR WHAT `march` (M4) MUST
-SUPPLY, NOT AN ALREADY-AGREED CONVENTION -- CHECKED AGAINST THE ONLY REAL CALLER AND FOUND NOT YET
-SATISFIABLE BY IT.** `seam/contest.py`'s S39.1 is unconditional: *"claimant[] is PERSONS, ALWAYS.
-Not factions, not units, not sides"*, and `seam/wrappers/sigma.py` already types `subject` as
-sometimes naming something that is NOT a person. But the shared fold code that actually
-constructs every `contest()` call today -- `loop/resolve.py`'s `_target = payload.get("subject")`
-/ `_parties = [a.actor] + ([_target] if ...)` -- builds EXACTLY TWO claimants for ANY contested
-verb, and passes `subject` as that SAME second person, read by `sigma.py::_obstacle_of` to look up
-ONE entity's own capability. Reading `subject` as a whole FACTION whose members[] are pulled in as
-the opposing side is an EXPANSION this seam has never done before, not the sigma precedent
-extended -- named here rather than overclaimed. So: `claimants` = one side's already-resolved
-`PersonId[]` (per §C.5.1's "sides = (faction_q.resolve(proj,A), faction_q.resolve(proj,B)) --
-ONCE, before provider.run"), `subject` = the other side's faction Proposition id, resolved HERE.
-**Wiring `march` to call this provider will need to ALSO change `loop/resolve.py`'s shared
-`_parties`/`_target` construction** -- itself a change to code every OTHER contested verb runs
-through, so it is not a narrow addition. That is M4's work, gated on Jordan's ruling
-(`ED-IN-0279`); this module states the contract it would need, not a working integration.
+⚠ **THE `claimants`/`subject`/`rung` SPLIT BELOW IS SETTLED, AND WHAT STILL SUPPLIES IT IS NOT.**
+`seam/contest.py`'s S39.1 is unconditional: *"claimant[] is PERSONS, ALWAYS. Not factions, not
+units, not sides"*, and `seam/wrappers/sigma.py` already types `subject` as sometimes naming
+something that is NOT a person, so this module's shape needed no new seam-level concept: it reuses
+`subject` for the other side's faction Proposition id (as always) and, new at M4 (`ED-IN-0279`
+clause (a)), reads `rung` -- ALREADY a parameter of `contest()`, already passed at every call site,
+unused until now -- to scope that faction's `members` down to who is actually PRESENT at the
+target, via `world_q.mustered` (`04 §C.5.1`'s own *"squad combat: the squad is
+`members ∩ present-at-rung`"*). `claimants` stays one side's already-resolved `PersonId[]` per
+§C.5.1's *"sides = (faction_q.resolve(proj,A), faction_q.resolve(proj,B)) -- ONCE, before
+provider.run"*.
+**STILL OPEN: the shared fold code that actually constructs every `contest()` call --
+`loop/resolve.py`'s `_target = payload.get("subject")` / `_parties = [a.actor] + ([_target] if
+...)`, and its `rung=(a.payload if isinstance(a.payload, str) else None) or "R"` placeholder --
+builds EXACTLY TWO claimants and no real `rung` for ANY contested verb today.** Generalizing that,
+without changing `kill / wound`'s or `tell`'s existing behaviour, is M4 build step 5; this module's
+half of the contract is complete and callable, the caller that would actually satisfy it is not.
 
 ⚠ **THIS DOES NOT DECIDE WHO ATTACKS, WHO DEFENDS, WHAT A GARRISON IS, OR WHAT AN EMPTY DEFENDING
 SIDE MEANS.** Those are `march`'s own eligibility and effects (M4, still gated on Jordan's ruling,
@@ -29,17 +29,14 @@ not need M4 answered first: given a claimant side and a named opposing faction, 
 battle and return what the engine says, exactly as `seam/wrappers/combat.py` derives a party and
 calls the engine without deciding who picked the fight.
 
-⚠ **`degree_of` (`seam/ladder.py`) CANNOT GRADE THIS RESULT YET, AND THAT IS DISCLOSED, NOT
-HIDDEN.** It recognizes exactly two shapes: a `wound_state` (combat's scene) or a `net`/`ob` pair
-(the margin ladder). This provider's `result` carries neither -- `massbattle.py`'s own header
-already discloses that its survivor-ratio bands "are NOT the canonical degree ladder ... a
-bespoke post-hoc classification", and "reconciling the two is open MB-lane work, not a port
-concern". Manufacturing a `net`/`ob` from that classification without a real derivation would be
-the second resolver S27.2 refuses, so this does not attempt one. Consequence, stated plainly: if
-`loop/resolve.py:662` ever calls `degree_of` on this dict (which needs a verb declaring `contests:
-"a field"` -- M4, not built), it will raise `Unspecified("... neither a scene to read nor a margin
-to grade")`. Nothing calls this integration today, so the raise is a named forward gap, not a live
-defect; M4 inherits it alongside the `claimants`/`subject` gap above.
+⚠ **`degree_of` (`seam/ladder.py`) NOW GRADES THIS RESULT, THROUGH A THIRD BRANCH RATHER THAN BY
+MANUFACTURING A MARGIN (M4, `ED-IN-0279` clause (a)).** It does NOT grade `massbattle.py`'s own
+survivor-ratio classification, which is still disclosed as *"NOT the canonical degree ladder ... a
+bespoke post-hoc classification"* by that module's own header -- reconciling the two stays open
+MB-lane work. What it grades is the top-level `attacker_wins`/`unopposed` this function lifts,
+onto the three bands `march` writes on (`seam/ladder.py::field_degree`). Manufacturing a `net`/`ob`
+from the survivor-ratio classification would have been the second resolver S27.2 refuses; reading
+a marker this function already derives is not that.
 
 ⚠ **NO NEW `sys.path` SEAM.** `resolve_field` is reached through `composition.require`
 (`references/module_contracts.yaml`'s `mass_battle.resolve_field` role), not a direct
@@ -59,7 +56,7 @@ from typing import Any, Optional
 # re-exports from `registry.py`, which imports `seam/wrappers/*` to register them) would close the
 # import cycle `manifest/providers.py` exists to break.
 from ...manifest.providers import provider
-from ...queries import faction_q
+from ...queries import world_q
 
 
 def _resolver():
@@ -73,14 +70,19 @@ def _resolver():
 @provider("contest", "mass_battle")
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
-            rng: Optional[random.Random] = None) -> dict:
+            rng: Optional[random.Random] = None, rung: str = "") -> dict:
     """CALL the mass-battle engine. Returns what it said; decides nothing itself.
 
     `claimants`: one side's `PersonId[]`, expected already resolved (§C.5.1) by whoever called
     `contest()` -- see this module's docstring for why nothing does that yet.
-    `subject`: the OTHER side's faction Proposition id -- resolved here, via `faction_q.resolve`,
-    to that faction's `members` (the same function M2 built, single-owned: this does not
-    re-implement membership).
+    `subject`: the OTHER side's faction Proposition id.
+    `rung`: where the defence is scoped (M4, `ED-IN-0279` clause (a)) -- `subject`'s faction is
+    resolved to its `members` (`faction_q.resolve`, the same function M2 built) and THEN
+    INTERSECTED with presence at `rung`'s subtree (`queries/world_q.mustered`), per `04 §C.5.1`'s
+    own pseudocode: *"squad combat: the squad is `members ∩ present-at-rung`"*. Without the
+    intersection a field battle would defend with a faction's ENTIRE membership wherever it
+    stands -- the M4 planning pass's F6, closed here. REQUIRED: a caller with no rung has no
+    place to defend, which is a PARTY-GAP exactly like a caller with no claimants.
 
     `result` carries `massbattle.py`'s own non-canonical survivor-ratio classification under
     `result['degree']`, kept for introspection; it is NOT the token `degree_of` grades with (see
@@ -91,13 +93,38 @@ def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
     if subject is None:
         return dict(status="PARTY-GAP", why="a field battle needs a named opposing faction "
                     "(subject); none given", module="mass_battle")
-    other = faction_q.resolve(w, subject).members
+    if not rung:
+        return dict(status="PARTY-GAP", why="a field battle needs a place to scope the "
+                    "defending side to (rung); none given", module="mass_battle")
+    other = world_q.mustered(w, rung, subject)
+    if not other:
+        # ⚠ AN EMPTY DEFENDING SIDE IS `Unopposed`, NOT A CALL TO `resolve_field` (M4,
+        # `ED-IN-0279` clause (a)). `resolve_field`'s own docstring: *"AN EMPTY `side_b` gets
+        # `_MIN_TROOPS`' crash-avoidance floor, not an invented auto-win... what an empty
+        # defending force MEANS is eligibility policy for whichever verb calls this."* This
+        # wrapper is that caller's derivation half: it does not decide what an unopposed march
+        # means for the game, but it does not launder "nobody mustered" into a fabricated fight
+        # against a floor-sized phantom unit either. `attacker_wins`/`unopposed` are top-level so
+        # `seam/ladder.py::field_degree` can grade this without opening `result`.
+        return dict(status="RESOLVED", module="mass_battle", resolver="dice_pool",
+                    attacker_wins=True, unopposed=True,
+                    result=dict(attacker_wins=True, degree="Unopposed",
+                                attacker_size_pct=1.0, defender_size_pct=0.0),
+                    winner=claimants,
+                    parties={"claimants": claimants, "subject_members": other})
     try:
         engine_resolve_field = _resolver()
     except Exception as e:
         return dict(status="ENGINE-UNAVAILABLE", why=f"{type(e).__name__}: {e}", module="mass_battle")
     result = engine_resolve_field(w, claimants, other, terrain=None, rng=rng)
     return dict(status="RESOLVED", module="mass_battle", resolver="dice_pool",
+                # ⚠ LIFTED TO TOP LEVEL, NOT LEFT NESTED UNDER `result` (M4). `degree_of`
+                # (`seam/ladder.py`) reads a provider's return directly -- `wound_state` and
+                # `net`/`ob` are already top-level for the other two providers -- so a third,
+                # nested-only shape would be the one branch `degree_of` could not reach without
+                # a special case. `result['degree']` stays as `massbattle.py`'s own
+                # non-canonical classification, kept for introspection only; it is NOT this.
+                attacker_wins=result.get("attacker_wins"), unopposed=False,
                 result=result,
                 winner=(claimants if result.get("attacker_wins") else other),
                 parties={"claimants": claimants, "subject_members": other})

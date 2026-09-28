@@ -153,7 +153,14 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
         # unreachable and the repoint a code change.
         _run = _provider_for("contest", _sub.get("provider"))
         if _run is not None:
-            out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng)
+            # M4 (`ED-IN-0279` clause (a)). `rung` -- ALREADY A PARAMETER OF THIS FUNCTION, ALREADY
+            # PASSED AT EVERY CALL SITE, AND UNUSED UNTIL NOW -- is threaded to the provider for
+            # the same reason `verb`/`subject`/`rng` were: the seam's call is uniform, and which
+            # keyword a provider actually reads is the provider's business. `mass_battle` is the
+            # first to read it, to scope a derived defending side to presence at a place; every
+            # other provider accepts and ignores it, a deliberate non-change (`combat.py`'s own
+            # note on `rng` is the precedent for what that comment looks like).
+            out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng, rung=rung)
             if out.get("status") == "RESOLVED":
                 TRACE.decision(f"contest for {prize!r} dispatched", "S39",
                                chose=f"called {out['module']} (resolver {out['resolver']})",
