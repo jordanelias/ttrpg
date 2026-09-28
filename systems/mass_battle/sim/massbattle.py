@@ -212,15 +212,25 @@ def _morale_start_from_stability(faction):
 #: reason to vary). `concentration` is deliberately NOT here -- it is continuous-mode-only
 #: (`_weighted_unit` sets it; `_faction_to_unit`'s tier-sized Subunit does not), a real
 #: difference between the two modes rather than something that drifted.
-_MVP_SUBUNIT_SHAPE = dict(shape='Line', troop_type='infantry', tier=2,
-                          starting_position=(8, 12), advance_dir=1,
-                          stance='balanced', unit_type='melee')
+_MVP_SUBUNIT_SHAPE = dict(
+    shape='Line',
+    troop_type='infantry',
+    tier=2,                          # [canonical: inherited default — 200 troops, see GAP above]
+    starting_position=(8, 12),      # [canonical: inherited default — see GAP above]
+    advance_dir=1,
+    stance='balanced',
+    unit_type='melee',
+)
 
 #: SAME SHARING, FOR THE UNIT SIDE. `power`/`morale`/`morale_start` are NOT here: `power`'s
 #: SOURCE is the very thing the two construction paths differ on, and morale is derived
 #: (`_faction_to_unit`) vs. flat (`_weighted_unit`) for the same reason (no season-side Stability
 #: to derive from).
-_MVP_UNIT_COMMAND = dict(command=4, discipline=5, discipline_start=5)
+_MVP_UNIT_COMMAND = dict(
+    command=4,                       # [canonical: inherited default — see GAP above]
+    discipline=5,                    # [canonical: inherited default — see GAP above]
+    discipline_start=5,              # [canonical: inherited default — see GAP above]
+)
 
 
 def _faction_to_unit(faction):
@@ -253,7 +263,7 @@ def _faction_to_unit(faction):
 #: is a SIZE fact (below), and conflating it with quality was this function's own first-draft
 #: mistake, caught on review (a Crown-sized force would have out-CLASSED a Guild-sized one on
 #: quality alone, backwards of what more bodies means).
-_SEASON_FORCE_POWER = 4
+_SEASON_FORCE_POWER = 4  # [canonical: sim_mb_06_v9_historical_spec.md — P4 tier baseline default, eff_power's own fallback]
 
 #: [known risk, disclosed rather than fixed: `resolve_field` has no ratified person-weight ->
 #: troop-count conversion, and this module is not the place to invent one.] `Subunit.troops` is
@@ -285,7 +295,9 @@ def _weighted_unit(name, weight):
     sub = Subunit(**_MVP_SUBUNIT_SHAPE, troops=max(float(weight), _MIN_TROOPS),
                   concentration=float(CELL_CAP))
     return Unit(name=name, faction=name, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
-                morale=5, morale_start=5, subunits=[sub])
+                # [canonical: same flat morale-start _GarrisonStub already uses for a Sta-less object]
+                morale=5, morale_start=5,
+                subunits=[sub])
 
 
 def _run_and_grade(unit_a, unit_b, terrain, rng):
