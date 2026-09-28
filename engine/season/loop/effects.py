@@ -49,11 +49,13 @@ all twelve, and both exist to keep every hash that is not `work`'s where it was:
 from __future__ import annotations
 
 from ..data.rosters import (
-    PURSUIT_AXES, FELLED, RELEASABLE_KINDS, WOUND_HARM_MODELS, require_member,
+    DECLARED, FIELD_CASUALTY_MODELS, LOST, PURSUIT_AXES, FELLED, RELEASABLE_KINDS, UNOPPOSED, WON,
+    WOUND_HARM_MODELS, faction_prop_id, require_member,
 )
 
 from ..gaps import InstrumentDefect, Unspecified
 from ..loop.predicates import office_described_by
+from ..queries.world_q import holder_faction_of
 from ..state.carriers import Proposition, Record, Tenure
 from ..state.gate import NO_CHANGE, Change, Subject
 from ..state.ids import H
@@ -767,6 +769,92 @@ def _eff_kill(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
         # be refused and put back.
         w.remove_person(who)
     return Change((Subject.entity("persons", who, fields=("body",)),), perform)
+
+
+@effect_for("march")
+def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
+    """§E3 (M4, `ED-IN-0279` clause (a)): writes `(Person, body)` and `(Person, stance)` -- ON
+    THE LOSING SIDE ONLY, on either band. Jordan's ruling on clause (b): a loss writes *"casualties
+    only, decrease in morale, and a grudge token"* and nothing else -- the ruling is silent on the
+    winner because it was never asked, and this does not invent an answer for it.
+
+    ⚠ `Won`/`Lost` NAME THE ATTACKER'S OWN OUTCOME (`seam/ladder.py::field_degree`), NOT WHICH
+    SIDE THIS WRITE LANDS ON. `Won` means the DEFENDERS lost; `Lost` means the ATTACKER'S OWN
+    claimants lost. Reading both sides off `res.result["parties"]` and picking the loser by
+    `res.degree` is the whole of that translation. This is NOT `kill / wound`'s *"the band is
+    read off the ACT'S SUBJECT, never off `the loser` as a fixed party"* correction reapplied --
+    that correction was about a payload naming ONE person; a field battle genuinely has two
+    candidate losing SIDES and `res.degree` already names which one.
+
+    ⚠ THE MAGNITUDE IS READ FROM THE ENGINE, NOT INVENTED, ON `wound_harm_model`'s OWN PRECEDENT.
+    `field_casualty_model` (`H-148`) names three arms: `scaled_by_degree` (the default -- each
+    loser's body scales by the SAME survivor fraction the engine computed for their whole side,
+    `attacker_size_pct`/`defender_size_pct`), `total` (every loser's body to 0 -- the control,
+    re-running "losing costs everything" deliberately), `none` (body is not written at all -- the
+    second control, isolating the write from the band). The shipped default and its evidence are
+    set by measurement (M4 build step 8), not chosen here.
+
+    ⚠ THE STANCE ROWS FOLLOW THE SEEDED-LOYALTY SHAPE (`harness/data/cast.py`'s own
+    `stance_from_loyalty`): a FIXED valence of `-1.0` (both are negative sentiments; the sign is
+    not swept) and a WEIGHT that is (`field_morale_weight`/`field_grudge_weight`, `H-148`,
+    swept `0`/`1`/`3`). The grudge targets the WINNING faction; the morale hit targets the
+    LOSER'S OWN faction -- both re-derived from `a.via` (the office the act was exercised
+    through, `exercised_seat`'s own field) and `world_q.holder_faction_of` on the target rung,
+    exactly as `loop/sides.py::sides_of` derives them, because both are facts about the ACT and
+    re-deriving them here is cheaper and safer than threading a third value through `Resolution`
+    for one reader."""
+    if res is None or not isinstance(res.result, dict):
+        raise Unspecified(
+            f"`march` on {_operand(a, 'subject')!r} was folded with no result to read a "
+            f"casualty count from", "S39.4/H-98",
+            needs="a Resolution from `resolve()`'s seam branch -- the mass_battle provider",
+            law="M4 (`ED-IN-0279` clause (a)) -- the magnitude is READ from the engine's own "
+                "survivor ratio, never invented here")
+    if res.degree in (DECLARED, UNOPPOSED):
+        return NO_CHANGE
+    parties = res.result.get("parties") or {}
+    attackers = list(parties.get("claimants") or [])
+    defenders = list(parties.get("subject_members") or [])
+    engine_result = res.result.get("result") or {}
+    attacker_lost = res.degree == LOST
+    losers = attackers if attacker_lost else defenders
+    pct = engine_result.get("attacker_size_pct" if attacker_lost else "defender_size_pct")
+    touched = [pid for pid in losers if pid in w.persons]
+    if not touched:
+        return NO_CHANGE
+    model = w.fixtures.get("field_casualty_model")
+    require_member(
+        model, FIELD_CASUALTY_MODELS, f"field-casualty model {model!r} is not in the roster",
+        "H-148", law="`wound_harm_model`'s own precedent -- an unrecognised mode silently "
+        "falling back would make every measurement of this sweep read the control")
+    target = _operand(a, "subject")
+    office = w.offices.get(a.via)
+    attacker_faction = (faction_prop_id(office.faction)
+                        if office is not None and office.faction else None)
+    defender_faction = holder_faction_of(w, target)
+    winner_faction = attacker_faction if attacker_lost else defender_faction
+    loser_faction = defender_faction if attacker_lost else attacker_faction
+    if model == "none" and winner_faction is None and loser_faction is None:
+        return NO_CHANGE
+    morale_w = w.fixtures.get("field_morale_weight")
+    grudge_w = w.fixtures.get("field_grudge_weight")
+
+    def perform() -> None:
+        for pid in touched:
+            p = w.persons[pid]
+            if model == "total":
+                p.body = 0
+            elif model == "scaled_by_degree":
+                p.body = max(1, int(p.body * max(0.0, pct or 0.0)))
+            # `none`: the control arm -- body is not written at all.
+            rows = list(p.stance or [])
+            if winner_faction:
+                rows.append((winner_faction, -1.0, grudge_w))
+            if loser_faction:
+                rows.append((loser_faction, -1.0, morale_w))
+            p.stance = rows
+    fields = ("stance",) if model == "none" else ("body", "stance")
+    return Change(tuple(Subject.entity("persons", pid, fields=fields) for pid in touched), perform)
 
 
 @effect_for("utter")

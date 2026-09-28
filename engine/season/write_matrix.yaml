@@ -222,12 +222,12 @@ rows:
     social:  "true"
     by:      "DR-2"
     emits:   "`stance.moved`"
-    unproduced: "H-62: an interior write with no specified trigger; only an act may write it and the verb table carries none that does"
-    # ⚠ `ENC` ADDED BY M4 (`ED-IN-0279` clause (a), 2026-09-28): a field battle's loyalty/grudge
-    # effect writes stance at ENCOUNTER, not RESOLVE. `unproduced:` STAYS until M4 build step 7,
-    # where `march`'s verb row actually produces this write -- loader invariant 2 refuses a `RES`
-    # row with no producer that carries no `unproduced:`, and refuses one that carries it while a
-    # verb writes the row, so the tag and the producer land in the same commit, never apart.
+    # ⚠ `unproduced:` (H-62) DELETED HERE, IN THE SAME COMMIT AS ITS PRODUCER (M4, `ED-IN-0279`
+    # clause (a), build step 7): `march`'s `Won`/`Lost` bands write `Person.stance` (the loser's
+    # grudge against the winner and morale hit against their own side) via `_eff_march`, at
+    # ENCOUNTER. Loader invariant 2 refuses a row that keeps `unproduced:` once a verb writes it
+    # -- "the declaration is stale; delete it" -- which is exactly what caught this the moment
+    # `march`'s row was added, rather than trusting the plan's own note that this step was owed.
   - kind:    "Person"
     field:   "travel_leg"
     steps:   [MAT, RES]

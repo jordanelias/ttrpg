@@ -452,6 +452,24 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # is unsafe -- see `sides_of`'s own docstring for the corpus case that found this.
     _target = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
     _parties, _subject, _rung = sides_of(w, a, _target, contests[0])
+    # ⚠ AN EMPTY SIDE IS A REFUSAL HERE, NOT A RAISE (M4). `seam/contest.py`'s S39.1 -- *"claimant[]
+    # is PERSONS, ALWAYS"* -- refuses an EMPTY list exactly as it would a wrong-shaped one
+    # (`if not claimants: raise Forbidden(...)`), which every verb before M4 never triggered:
+    # `sides_of`'s non-`mass_battle` branch always seeds `_parties` with `a.actor`, so it is
+    # never empty. `march`'s army-muster branch genuinely CAN be -- an actor with no seat, or an
+    # origin that musters nobody -- and that is `march`'s own eligibility/effects question
+    # (`ED-IN-0279` clause (a)), not an instrument defect. Refusing it the same way `_admits`'s
+    # ineligibility already does, rather than letting `contest()`'s hard raise escape a caller
+    # that does not expect one, is what `_ten_seasons`-style tests (no `corpus_run.run_case`
+    # exception wrapper around them) found the hard way.
+    if not _parties:
+        row = VERB_TABLE.get(a.verb)
+        kinds = row.emits_on_refusal if row is not None else ()
+        produced = [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"), k, [], [a.id], w.tick)
+                    for k in kinds]
+        for _e in produced:
+            self.act_of[_e.id] = a
+        return produced
     # ⚠⚠ `U1`: THE DRIVER CONSTRUCTS THE GENERATOR, AND `04 §C.12`'s REJECTION 4 IS LOAD-BEARING.
     # `purpose` stays `roll:<prize>:<act id>`, provider-specific by design -- see `resolve()`'s
     # own history (`git log` on this file) for the fuller account of why.

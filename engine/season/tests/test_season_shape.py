@@ -2154,11 +2154,12 @@ def test_invariant_12_refuses_a_degree_keyed_emits_with_nothing_to_key_it_on():
 
     # AND THE CONTROL: the shipped table loads. Without this the two arms above would pass on a
     # loader that refused everything.
-    # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11. This is a CONTROL, not a claim about
+    # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11; 38 -> 39, `march` (M4,
+    # `ED-IN-0279` clause (a)), 2026-09-28. This is a CONTROL, not a claim about
     # the roster: its job is to fail if the loader started refusing everything, so it moves with
     # the table by construction and the number is read from the file rather than chosen.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops both arms above passing on a loader that refuses everything]
-    assert len(VERBS._load_verb_table()) == 38
+    assert len(VERBS._load_verb_table()) == 39
 
 
 def test_w2_a_planted_write_to_an_unruled_field_raises_and_names_the_pair():
@@ -5386,8 +5387,11 @@ def test_the_generic_remit_seats_every_office_and_unblocks_the_nine():
 
     gov = [v for v, r in VERB_TABLE.items()
            if any(a.startswith("remit:") for a in (r.eligibility or ()))]
-    # [GROUNDED: measured 2026-09-18 over `VERB_TABLE` -- nine rows carry a `remit:` alternative (confer, convene, determine, dispatch, establish, issue, levy, open_case, revoke), which is the same nine `H-71`'s `unblocks:` field names]
-    assert len(gov) == 9, f"{len(gov)} verbs carry a `remit:` alternative; H-71's nine has moved"
+    # [GROUNDED: measured 2026-09-18 over `VERB_TABLE` -- nine rows carry a `remit:` alternative (confer, convene, determine, dispatch, establish, issue, levy, open_case, revoke), which is the same nine `H-71`'s `unblocks:` field names.
+    #  M4 (`ED-IN-0279` clause (a)) added a tenth: `march`'s eligibility is `["remit:dispatch"]`,
+    #  the same `dispatch` act the existing `dispatch` verb already carries -- co-existing on one
+    #  remit, not a new act. H-71's own nine is unmoved; this count is wider than H-71's set.]
+    assert len(gov) == 10, f"{len(gov)} verbs carry a `remit:` alternative; expected H-71's nine plus march"
     formable = set()
     for t in held:
         p = w.persons.get(t.subject)
@@ -7119,12 +7123,20 @@ def test_the_corpus_runs_and_the_ranking_cannot_discriminate():
     # `build_realm` under `remit_default`) a computed `establish` carries no operands -- the row is
     # untyped, so `operands_for` returns `{}` -- and `_req_establish` refuses it; it executes only
     # from a hand-built Act until `15c` widens the operand vocabulary.
+    # ⚠ FIVE -> SIX: `march` JOINED THIS SET, M4 (`ED-IN-0279` clause (a)). Its eligibility is
+    # `remit:dispatch`, and `dispatch` IS granted in NPC-033 -- so the eligibility branch alone
+    # does not exclude it, unlike the four governance verbs above. It sits here for the same
+    # reason `establish` does: `operands_for` has no march-specific arm, so `operands_for`
+    # returns `{}` for it in every corpus world, and `_req_march`'s typed requirement (an
+    # existing Rung `subject`) then refuses the empty operand set. It executes only from a
+    # hand-built `Act` (`test_march.py`), not from anything the corpus forms on its own.
     assert foldable_all - ever - refused_only == {"confer", "convene", "revoke", "establish",
-                                              "destroy_record"}, (
-        f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Four of "
-        "the five are the governance verbs no corpus overlay grants (`establish` is "
-        "`remit:confer`-eligible); `H-71` is CLOSED, so the reason is now the corpus's offices and "
-        "not the eligibility branch")
+                                              "destroy_record", "march"}, (
+        f"the never-attempted set moved to {sorted(foldable_all - ever - refused_only)}. Five of "
+        "the six are the governance verbs no corpus overlay grants (`establish` is "
+        "`remit:confer`-eligible); the sixth, `march`, is eligible in NPC-033 but has no corpus "
+        "operands. `H-71` is CLOSED, so the governance five's reason is the corpus's offices, "
+        "and march's is its own missing `operands_for` arm, not the eligibility branch")
 
 
 
@@ -8397,13 +8409,19 @@ def test_wc_the_fold_binds_what_the_person_bound():
     # BINDING, so there is nothing for the divergence to be read by -- and it is asserted below
     # rather than argued, because the old reason was an argument nobody could check.
     all_typed = {vb for vb, r in VERB_TABLE.items() if r.requires_typed is not None}
-    # THE DECLARED EXCLUSION LIST, EMPTY TODAY AND NAMED SO IT CANNOT GROW SILENTLY. A typed verb
-    # belongs here only when something OTHER than this equality keeps it out of a person's option
-    # set -- `person_side_eligible` declining its only `eligibility:` alternative, say. The walk
-    # covers 9 of 9 as measured 2026-09-04, and the previous floor (`>= 5`) let four typed verbs
-    # drop out of the option set while this test stayed green and the claim "walked over every
-    # typed verb" stayed published.
-    WALK_EXCLUDES: frozenset = frozenset()
+    # THE DECLARED EXCLUSION LIST, NAMED SO IT CANNOT GROW SILENTLY. A typed verb belongs here
+    # only when something OTHER than this equality keeps it out of a person's option set --
+    # `person_side_eligible` declining its only `eligibility:` alternative, say. The walk covered
+    # 9 of 9 as measured 2026-09-04 with the list empty, and the previous floor (`>= 5`) let four
+    # typed verbs drop out of the option set while this test stayed green and the claim "walked
+    # over every typed verb" stayed published.
+    # ⚠ `march` ADDED (M4, `ED-IN-0279` clause (a), 2026-09-28), FOR EXACTLY THE LICENSED REASON
+    # ABOVE: its one `eligibility:` alternative is `remit:dispatch`, and `p_low` in this fixture
+    # (`P.tiny_world()`) holds no office at all (`p_low.tenures` is `[contain:Hh, tie:p_mid]`,
+    # verified directly) -- `person_side_eligible` declines it before the requirement is ever
+    # typed-bound, which is the SAME gate this test's own comment names as licensing an entry
+    # here, not a new exception invented for this verb.
+    WALK_EXCLUDES: frozenset = frozenset({"march"})
     cands = [c for c in decision.opening_set(p, v, q, w.fixtures)
              if VERB_TABLE[c.verb].requires_typed is not None]
     assert {c.verb for c in cands} == all_typed - WALK_EXCLUDES, (
@@ -11034,17 +11052,25 @@ def test_we_only_a_verb_that_declares_contests_can_be_graded_today():
     # that shows the rule still bites — `U1` could not give it a `contests:` because it is untyped
     # and its `requires:` is `—`, so R-05's contested count moves 1 -> 2 and not the plan's 1 -> 3.
     contested = {v: r.contests for v, r in VERB_TABLE.items() if r.contests}
-    assert contested == {"kill / wound": "the body", "tell": "a standing"}, (
+    # ⚠⚠ THE THIRD ENTRY, AND IT IS THE REAL WIDENING THE ASSERTION ABOVE WARNED ABOUT (M4,
+    # `ED-IN-0279` clause (a), 2026-09-28). `march.contests == "a field"` is gradable, not merely
+    # declared: `seam/ladder.py::field_degree` (M4 build step 3) reads `mass_battle`'s own
+    # top-level `attacker_wins`/`unopposed` onto `Won`/`Lost`/`Unopposed`, and `degree_of`'s third
+    # dispatch branch (`if "attacker_wins" in result`) routes to it. `test_march.py::
+    # test_a_lost_field_writes_casualties_and_stance_on_the_attacker_only` is the falsifier this
+    # comment's own demand for "its own measurement" asked for -- a real fight, through the real
+    # driver, whose degree actually selects `_eff_march`'s write set.
+    assert contested == {"kill / wound": "the body", "tell": "a standing", "march": "a field"}, (
         f"the set of contesting verbs moved: {contested}. Every claim `W-E` published about what "
-        "can be graded today is scoped to this set. A THIRD entry is a real widening and wants "
-        "its own measurement; losing `tell` means `U1`'s prize row or its verb row has gone.")
+        "can be graded today is scoped to this set. A FOURTH entry is a real widening and wants "
+        "its own measurement; losing one of these three means its prize row or its verb row has "
+        "gone.")
     # Pins the roster against silent growth.
-    # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11, AND THE PROPERTY THIS TEST GUARDS IS
-    # UNTOUCHED BY IT: `release` declares NO `contests:`, so the contested set asserted two lines
-    # above is unchanged and nothing new is gradeable. That assertion, not this count, is the
-    # claim — this line only stops the roster growing where nobody looked.
+    # ⚠ 37 -> 38, `release` (`04 §A.3` row 14), 2026-09-11; 38 -> 39, `march` (M4,
+    # `ED-IN-0279` clause (a)), 2026-09-28 -- AND THIS ONE DOES touch the contested set asserted
+    # above, per the note there.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen]
-    assert len(VERB_TABLE) == 38, len(VERB_TABLE)
+    assert len(VERB_TABLE) == 39, len(VERB_TABLE)
     # AND THE SIX ARE SIX, not a row that says six. This is the half of the pin that the old
     # count could not express: a table carrying the placeholder passed `== 32` while no act in it
     # could be formed, and `runs/CASELOG_NPC.md:64` reported the same case as a blocked one.

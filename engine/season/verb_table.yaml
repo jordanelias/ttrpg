@@ -398,6 +398,33 @@ verbs:
     eligibility_note: "⚠ W3 AUDIT: §E3's eligibility cell carried a PRECONDITION as well as the remit act — `remit:levy + ...`. The fold split on the first `:` and tested the whole tail against the remit roster, so it NEVER MATCHED and a holder of the remit was silently refused. The act is the eligibility; the basis is a `requires`."
     eligibility_substitution_note: "⚠ DECLARED 2026-09-03 rather than left silent. The source cell named `remit:levy`, and `levy` IS NOT IN `remit_acts` (issue · determine · confer · revoke · dispatch · convene, a CLOSED roster). W3 substituted `remit:issue` and wrote no note, which is an off-register fill under §42.2/G.4.8 — an instrument may fill exactly what the register declares. Either `levy` joins the roster (a ruling: it is a SEVENTH remit act) or `issue` is genuinely the remit a levy exercises (defensible — a levy is issued). Injected as `issue`, declared here, swept at the site. The same substitution is live on `establish`, which uses `remit:confer` and is likewise not a remit act."
     source:      "ARCHITECTURE_V2.md §E3, transcribed"
+  - verb:        "march"
+    scale:   "settlement"
+    scale_note: "a march targets a Rung -- the settlement marched on IS the subject, matching `levy`'s own scale/scale_note shape for the same reason: the write and the fight both land on a place, not on the actor."
+    stratum:     "contested_physical"
+    eligibility: ["remit:dispatch"]
+    beneficiary: "actor"
+    requires:    "the subject is an existing Rung"
+    requires_typed:
+      form: "existence"
+      of:   "subject"
+      kind: "Rung"
+    requires_typed_note: "M4 (`ED-IN-0279` clause (a)). Mirrors `kill / wound`'s own cell exactly, `kind: Rung` in place of `Person` -- `queries/world_q.py`'s `WorldReader.read` already answers `exists:Rung` generically (`arg.lower()+\"s\"` against `World._STATE_COLLECTIONS`), so this needed no new predicate. ⚠ DOES NOT NARROW TO `kind: settlement` (`march_target_kinds`, H-149): the five typed requirement forms answer *does an entity of this TYPE exist*, never a sub-kind filter, and inventing a sixth form for one row would be the second resolver S27.2 refuses at a smaller scale. `_eff_march` checks the settlement restriction itself, on `sides_of`/`world_q`'s own precedent (`_eff_transfer`'s \"a side that is not a rung means the transfer did not happen\", checked in the effect and not in `requires_typed`)."
+    contests:    "a field"
+    writes:
+      Declared:  []
+      Won:       ["Person.body", "Person.stance"]
+      Lost:      ["Person.body", "Person.stance"]
+      Unopposed: []
+    writes_grade_note: "M4 (`ED-IN-0279` clause (a)), Jordan's ruling on the second open clause: a loss writes \"casualties only, decrease in morale, and a grudge token\" -- nothing else, and nothing on the WINNING side. `Won`/`Lost` here are the ATTACKER's own outcome (`seam/ladder.py::field_degree`), so `_eff_march` reads which SIDE actually lost from `resolution.result`'s `parties` and writes there -- the defenders on `Won`, the attacker's own claimants on `Lost` -- never the winner, on either band. `Declared`/`Unopposed` write nothing: `Declared` is RESOLVE's own deferral fold (`loop/resolve.py::_contest`), and an unopposed march has no losing side to write on."
+    emits:
+      Declared:  ["march.declared"]
+      Won:       ["field.won"]
+      Lost:      ["field.lost"]
+      Unopposed: ["field.unopposed"]
+    emits_on_refusal: ["march.refused"]
+    grade:       "ruled"
+    source:      "M4 of the mc_v18-retirement plan (`ED-IN-0279`), Jordan's ruling on both open clauses of that row (verb name: `march`; loss effects: casualties/morale/grudge). No `ARCHITECTURE_V2.md` cell -- this verb does not exist in the chain."
   - verb:        "move"
     stratum:     "movement"
     eligibility: ["own"]

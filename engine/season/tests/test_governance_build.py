@@ -569,10 +569,11 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     roster."""
     from ..data.verbs import BENEFICIARY_KINDS, VERB_TABLE
 
-    # Same control as `test_season_shape.py`'s own `len(_load_verb_table()) == 38`: it is here so
+    # Same control as `test_season_shape.py`'s own `len(_load_verb_table()) == 39`: it is here so
     # that a table which SHRANK cannot let this census pass while examining a handful of rows.
+    # ⚠ 38 -> 39, `march` (M4, `ED-IN-0279` clause (a)), 2026-09-28.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
-    assert len(VERB_TABLE) == 38, "the verb count moved; this row's census is stale"
+    assert len(VERB_TABLE) == 39, "the verb count moved; this row's census is stale"
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()
