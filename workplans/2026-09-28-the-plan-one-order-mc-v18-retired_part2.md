@@ -1,6 +1,6 @@
 # THE PLAN — part 2: every `mc_v18` spine file, role and importer; the Layer-1 mapping; where every absorbed item went
 
-## Status: ADOPTED 2026-09-28 (`ED-IN-0280`) with the file this reads after, on the same instruction and with the same held-back list — see its `## Status:` line and its §7. **This part carries no Jordan decision of its own**: where a disposition waits on one, it names the item number in the main file's §5.1.
+## Status: ADOPTED 2026-09-28 (`ED-IN-0281`) with the file this reads after, on the same instruction and with the same held-back list — see its `## Status:` line and its §7. **This part carries no Jordan decision of its own**: where a disposition waits on one, it names the item number in the main file's §5.1.
 ## Reads after `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md`. That file owns the ORDER, the supersession verdict and the Jordan roster; this one owns the disposition detail behind Phase 4 and the mapping tables. For a position the 2026-09-18 plan already carried, the per-position INSTRUCTION / WHERE / FALSIFIER / GATE stay in `workplans/2026-09-18-governance-settlement-behaviour-plan_part2.md` §8, which is not superseded.
 ## Owner: infrastructure / cross-cutting (IN lane)
 ## Grade under CLAUDE.md §0.2: `paper` throughout. Every citation is as a read-only Fable 5.1 pass read it at HEAD `6f6ef84` over `ecacb57`'s code; line numbers drift, so re-derive by symbol.

@@ -284,29 +284,15 @@ This is the one claim here a session **cannot satisfy by writing**.
   code against the sim and record the contract; the doc may follow verified behaviour.
 - **A juncture done in code and open on the board is a BOARD defect, not a work item.**
 
-### 0.3 The loop this repository was in
+### 0.3 No SessionStart banner (RULED — a closed, measured experiment)
 
-| | what it is | how it fed the loop |
-|---|---|---|
-| **T3 — generator** | §0 mandates adversarial passes | passes emit findings → ledger rows → a generated start-of-session surface → **that surface defines the next session's work.** Closed loop, gain > 1, no human in it |
-| **T1 — amplifier** | what a session SEES at start | a queue of pending units, none about the game |
-| **T2 — reward** | what a session is graded on at Stop | clean tree · handoff · board · no regression — **all satisfiable without touching the game** |
-
-**The defect was subject-blindness, not the rules.** §0.1 pt 5 caught a real morale-model bug but
-quantified over *defects* rather than *subjects*, so every session minted more apparatus guards, ending
-in a guard on a guard on a guard — every rung a flawless application of the rule. Pt 5's predicate
-disarms **T3**; §0's adversarial-pass bound closes the prose reroute; §0.2 and §0's max-effort selection
-term aim the freed capacity at **T2** and the game.
-
-**T1 was tested and is closed:** the banner was reduced, then retired, and the session under the reduced
-banner still wrote apparatus and no game — **T1 fell and the freed capacity still went to apparatus,
-which says T2 had not moved. Do not build a replacement banner.**
-
-⚠ **A SessionStart hook is not automatically a banner, and the two were conflated.** The retired thing
-was a GENERATED CONTEXT SURFACE that spent tokens and defined a session's work. A hook that **prints
-nothing** spends nothing and steers nothing. `tools/session_provision.py` is the allowed shape: it
-installs the four packages §8 documents and writes zero bytes to stdout. **A SessionStart hook that
-PRINTS is the T1 regression; one that is silent is not.** If the diagnosis needs re-testing, **test T2**.
+⚠ **A SessionStart hook is not automatically a banner.** The retired banner was a GENERATED CONTEXT
+SURFACE that spent tokens and defined a session's work; a hook that **prints nothing** spends nothing
+and steers nothing. `tools/session_provision.py` is the allowed shape: it installs the four packages
+§8 documents and writes zero bytes to stdout. **A SessionStart hook that PRINTS is the regression; one
+that is silent is not. Do not build a replacement banner** — retiring it and testing whether the freed
+capacity reached the game is a closed experiment, diagnosed in full in `CLAUDE_RATIONALE.md` §0.3, not
+one to re-run from a hunch.
 
 ### 0.4 VERIFICATION CADENCE — the suite is a CLOSE step, not an inner loop (RULED)
 
@@ -618,6 +604,7 @@ pyyaml only, which is why the provisioner exists (§0.3). The cadence deciding W
 | Assembling a canonical artifact | `valoria-compiler` |
 | "Where are we?" / does the milestone run | `python tools/m1_acceptance.py --summary` — the only reading §0.2 accepts. Season loop: `--requirements` on the season register |
 | "What's the state of the repo?" | No tool, by design. `/currency`, then read the tree |
+| Verifying a nontrivial code change against its own stated plan, before close | `methodology` — a Sonnet agonist/antagonist pass, then `/code-review`+`/simplify`+`layer-conformance` fixed in sequence, then one terminal Opus critique |
 | Closing a commit | `/close` |
 | Reviewing a diff / a PR / your own just-finished work | the native `/code-review`, a fresh-context reviewer that never saw your reasoning. It is the only review surface; nothing grades repo-wide signals any more, and nothing is supposed to |
 | Many mechanical numbers before any judgment | `valoria-measure` on Haiku — batched only; one delegated grep loses the tier arithmetic |
@@ -715,12 +702,9 @@ never for the READS.**
   no Write or Edit, but `Bash` to measure with, so its no-writing rule is a control on those two tools
   and instruction only against `sed -i`. **The general lesson: removing a tool to enforce a process rule
   buys a CONTROL only where the rule IS the absence.** Elsewhere it buys a crippled lane.
-- **If you build an orchestrated run again**, four properties are worth re-deriving and nothing enforces
-  them: a **closed `stop_reason` set that is report-only** (RULED — a breaker halting a large audit on a
-  heuristic costs more than the defect it caught); a **null-result alarm** on any lens that returned
-  nothing, shipped *paired with* **rank-by-independent-rediscovery** so the alarm never becomes pressure
-  to manufacture findings; and **disagreement records with required adjudication**, where an out-of-lane
-  record is a terminal `observation` no later ruling can overwrite.
+- **If you build an orchestrated run again**, four unenforced properties are worth re-deriving —
+  `stop_reason`, the null-result alarm, rank-by-independent-rediscovery, disagreement records — detailed
+  in `CLAUDE_RATIONALE.md` §10 rather than restated here.
 
 ---
 
