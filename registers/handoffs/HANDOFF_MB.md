@@ -7,7 +7,7 @@
 |---|---|---|
 | Envelopment fork: combined-arms reframe vs gated seal-failure gradient | `ED-MB-0039` | Jordan rules (A) vs (B) |
 | Remaining Tier-3 design calls (depth cap, envelopment-as-morale-collapse, graded cavalry refusal, Command sigma-ceiling, yield split) | `ED-MB-0041` | Jordan rules per item |
-| `mass_battle` contract's `state: []` — empty, blocks port ripple/formula/pointer audits | `references/module_contracts.yaml:636` | Jordan rules whether/how to populate |
+| ~~`mass_battle` contract's `state: []` — empty, blocks port ripple/formula/pointer audits~~ **CLOSED 2026-09-28, not Jordan's** — `[]` is correct: `architecture/meta/04_CODE_ARCHITECTURE.md` §C.5.1 says a provider returns a Margin and owns no world state | `references/module_contracts.yaml:636`; `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §5.2 | nothing to rule |
 | CEV naming (rename to Clausewitz/Beyerchen friction?), dual 2:1 validation targets, emergence verdict | `ED-MB-0045` | Jordan rules each sub-item |
 | `config.py` comment contradicts the shipped default | `systems/mass_battle/sim/config.py:315-317` | edit comment to match `MB_FRICTION_CEV` default `'1'` |
 | R3 gauge scenario never engages (both sides `stance:'hold'`) | `tests/sim/gauge_mb.py:330-331` | apply the named one-line engineering fix (`ED-MB-0044`) |

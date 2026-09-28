@@ -25,7 +25,7 @@ Design prose is quarantined in `.designs/` (ED-IN-0231). A row that names such a
 |---|---|---|
 | **THE SEASON LOOP (game code)** | `engine/season/` — RATIFIED, ED-IN-0204 | `python -m engine.season.harness.register --requirements`; runtime registries `engine/season/data/`; Layer-1 conformance ED-IN-0206; lane `registers/handoffs/HANDOFF_IN.md` |
 | **THE CODE ARCHITECTURE (Layer 1)** | `architecture/` — RATIFIED, ED-IN-0204 | `skills/layer-conformance/SKILL.md` (Lens B checks `engine/season/` against `architecture/meta/04_CODE_ARCHITECTURE.md`) |
-| **The plan** | `workplans/2026-09-18-governance-settlement-behaviour-plan.md` — the single plan, ED-IN-0253 | its §3.1; unit detail `workplans/2026-09-13-work-order.md`; master workplan `workplans/valoria_master_workplan_v7.md` (ED-IN-0216) |
+| **The plan** | `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` (+ `_part2`) — the single plan, ED-IN-0280; supersedes `workplans/2026-09-18-governance-settlement-behaviour-plan.md` (ED-IN-0253) as the order, whose `_part2` stays the per-position content owner | its §3.1; Jordan items its §5.1; unit detail `workplans/2026-09-13-work-order.md`; master workplan `workplans/valoria_master_workplan_v7.md` (ED-IN-0216) |
 | **Character model / decision layer** | `proposals/2026-09-20-pursuit-basis-worksheet.yaml` — ruled, ED-IN-0261 | ED-IN-0261; conviction split ED-IN-0251 |
 | **Personal combat** | `systems/combat/combat_engine_v1/`; typed export `engine/engine_params/combat_engine_v1.json` (round-trip checked in CI) | `registers/handoffs/HANDOFF_PC.md`; design reference `combat_reference_v1.md`, lineage `combat_currency_v1.md` |
 | **Mass battle** | `mass_battle_v30.md` + `mass_battle_integration_v30.md` | `registers/handoffs/HANDOFF_MB.md` |
