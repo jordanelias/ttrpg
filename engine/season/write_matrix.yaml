@@ -167,11 +167,14 @@ rows:
     unproduced: "H-62: an interior write is a consequence of an outcome and no verb writes one yet -- no trigger for the axis counter is specified anywhere (its axis registry is H-20)"
   - kind:    "Person"
     field:   "body"
-    steps:   [MAT, RES]
+    steps:   [MAT, RES, ENC]
     class:   "MATTER/ACTS"
     social:  "false"
     by:      "DR-1"
     emits:   "`body.changed` · `person.died`"
+    # ⚠ `ENC` ADDED BY M4 (`ED-IN-0279` clause (a), 2026-09-28): a lost field battle writes body
+    # loss at the ENCOUNTER step, not RESOLVE -- `march`'s prize row defers there. `ENCOUNTER`
+    # shares RESOLVE's write class (`data/matrix.py`), so `class:` above is unchanged.
   - kind:    "Person"
     field:   "claim_ledger"
     steps:   [WIT]
@@ -214,12 +217,17 @@ rows:
     emits:   "`scar.taken`"
   - kind:    "Person"
     field:   "stance"
-    steps:   [RES]
+    steps:   [RES, ENC]
     class:   "ACTS"
     social:  "true"
     by:      "DR-2"
     emits:   "`stance.moved`"
     unproduced: "H-62: an interior write with no specified trigger; only an act may write it and the verb table carries none that does"
+    # ⚠ `ENC` ADDED BY M4 (`ED-IN-0279` clause (a), 2026-09-28): a field battle's loyalty/grudge
+    # effect writes stance at ENCOUNTER, not RESOLVE. `unproduced:` STAYS until M4 build step 7,
+    # where `march`'s verb row actually produces this write -- loader invariant 2 refuses a `RES`
+    # row with no producer that carries no `unproduced:`, and refuses one that carries it while a
+    # verb writes the row, so the tag and the producer land in the same commit, never apart.
   - kind:    "Person"
     field:   "travel_leg"
     steps:   [MAT, RES]

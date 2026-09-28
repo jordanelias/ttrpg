@@ -1856,7 +1856,7 @@
   1856  probe:P18            STEP      leave CENSUS  @S23
   1857  probe:P18            QUERY     verbs  @S17  side="resolver"
   1858  probe:P19            WRITE     stance  @S30  write_class="MATTER" step="MATTER" admitted=false
-  1859  probe:P19            GAP       [FORBIDDEN] (Person, stance) written during MATTER  @S3-L4  needs="one of ['RESOLVE']" law="L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say" expected=false
+  1859  probe:P19            GAP       [FORBIDDEN] (Person, stance) written during MATTER  @S3-L4  needs="one of ['ENCOUNTER', 'RESOLVE']" law="L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say" expected=false
   1860  probe:P20            WRITE     carrier_exists  @S30  write_class="MATTER" step="CENSUS" admitted=true
   1861  probe:P20            EVENT     person.individuated [656881b0c9217568]  @S19  causes=["ROOT"]
   1862  probe:P21            STEP      enter CALENDAR  @S23
@@ -4495,7 +4495,7 @@
   4495  probe:W2             DECISION  individuation  @S29  chose="demand-driven only; generated nobody" alternatives=["a clock that generates (forbidden)", "a world-gen roster (S54 item 18 -- not a clock, not folded in)"] not_implemented=[]
   4496  probe:W2             STEP      leave CENSUS  @S23
   4497  probe:W3             WRITE     stance  @S30  write_class="MATTER" step="MATTER" admitted=false
-  4498  probe:W3             GAP       [FORBIDDEN] (Person, stance) written during MATTER  @S3-L4  needs="one of ['RESOLVE']" law="L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say" expected=false
+  4498  probe:W3             GAP       [FORBIDDEN] (Person, stance) written during MATTER  @S3-L4  needs="one of ['ENCOUNTER', 'RESOLVE']" law="L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say" expected=false
   4499  probe:W4             STEP      enter CALENDAR  @S23
   4500  probe:W4             BARRIER   barrier 1 - CALENDAR  @S23
   4501  probe:W4             STEP      leave CALENDAR  @S23
@@ -5014,7 +5014,7 @@
   5014  probe:W10            GAP       [FORBIDDEN] Rung.morale assigned -- not a declared field of S10's record  @S10.1  needs="a Query over the containment subtree, owned by Nobody" law="L3 -- every aggregate is a function, never a field. S22.1 -- if the aggregate is a function it CANNOT go stale and CANNOT be initialised and then forgotten, because there is nothing to initialise" expected=false
   5015  probe:A1             GAP       [FORBIDDEN] Event thing.happened emitted with causes=[]  @S19.4  needs="causes: [ROOT] for an antecedent-free emission" law="S19.4 -- causes[] is REQUIRED AND NON-EMPTY; [ROOT] makes the empty list unrepresentable rather than merely discouraged" expected=false
   5016  probe:A3             WRITE     stance  @S30  write_class="MATTER" step="MATTER" admitted=false
-  5017  probe:A3             GAP       [FORBIDDEN] (Person, stance) written during MATTER  @S3-L4  needs="one of ['RESOLVE']" law="L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say" expected=false
+  5017  probe:A3             GAP       [FORBIDDEN] (Person, stance) written during MATTER  @S3-L4  needs="one of ['ENCOUNTER', 'RESOLVE']" law="L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say" expected=false
   5018  probe:A4             STEP      enter CALENDAR  @S23
   5019  probe:A4             BARRIER   barrier 1 - CALENDAR  @S23
   5020  probe:A4             STEP      leave CALENDAR  @S23
@@ -23714,7 +23714,7 @@
  23714  probe:A31b           STEP      leave CENSUS  @S23
  23715  probe:A31b           QUERY     verbs  @S17  side="resolver"
  23716  probe:A33            GAP       [COLLISION] emitter-side vs receiver-side refraction  @S37.4  needs="pick one, write it down beside the code, and expect the choice to be revisited" law="S37.4 -- R-2 says downward influence is 'EMITTING a refraction' (EMITTER-side); the act vocabulary puts the receiving-end act beside `comply`, `evade`, `defy`. THE CHAIN HAS NOT RECONCILED THESE and emitter-side and receiver-side distortion ARE DIFFERENT GAMES. \u26a0 NARROWED 2026-09-18: the receiving-end ACT is now `construe`, not `refract`, so the WORD no longer carries both senses -- `refraction` names only the phenomenon (the premises arriving distorted, ruled receiver-side 2026-09-02). The vocabulary collision this probe names is half gone; what survives is the SUBSTANTIVE question of which side distorts, which that ruling answers and S37.4 has not absorbed" expected=false
- 23717  probe:A34            GAP       [FORBIDDEN] a scheduled social recovery or decay  @S34  needs="a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs" law="S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT" expected=false
+ 23717  probe:A34            GAP       [FORBIDDEN] a scheduled social recovery or decay  @S34  needs="a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs" law="S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'ENCOUNTER', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT" expected=false
  23718  probe:A36            STEP      enter CALENDAR  @S23
  23719  probe:A36            BARRIER   barrier 1 - CALENDAR  @S23
  23720  probe:A36            STEP      leave CALENDAR  @S23

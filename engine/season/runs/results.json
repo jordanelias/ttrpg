@@ -9322,7 +9322,7 @@
    "kind": "FORBIDDEN",
    "section": "S3-L4",
    "title": "a threshold produces an outcome with nobody deciding",
-   "needs": "one of ['RESOLVE']",
+   "needs": "one of ['ENCOUNTER', 'RESOLVE']",
    "law": "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say",
    "by": "construction",
    "tests": "the story must be able to end when a counter reaches a value, with no person choosing"
@@ -9772,7 +9772,7 @@
    "kind": "FORBIDDEN",
    "section": "S3-L4",
    "title": "the world sours a mood",
-   "needs": "one of ['RESOLVE']",
+   "needs": "one of ['ENCOUNTER', 'RESOLVE']",
    "law": "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say",
    "by": "construction",
    "tests": "a bad season must be able to make people angrier without anyone acting"
@@ -9900,7 +9900,7 @@
    "kind": "FORBIDDEN",
    "section": "S3-L4",
    "title": "an arc ends at a counter with nobody deciding",
-   "needs": "one of ['RESOLVE']",
+   "needs": "one of ['ENCOUNTER', 'RESOLVE']",
    "law": "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say",
    "by": "construction",
    "tests": "the story must be able to conclude when a tracked quantity reaches a value"
@@ -10265,7 +10265,7 @@
    "section": "S34",
    "title": "a social quantity sinks by neglect alone",
    "needs": "a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs",
-   "law": "S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT",
+   "law": "S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'ENCOUNTER', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT",
    "by": "no-signature",
    "tests": "a relationship or a standing must be able to decay from nobody tending it"
   },
@@ -10718,7 +10718,7 @@
    "kind": "FORBIDDEN",
    "what": "(Person, stance) written during MATTER",
    "where": "S3-L4",
-   "needs": "one of ['RESOLVE']",
+   "needs": "one of ['ENCOUNTER', 'RESOLVE']",
    "law": "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say",
    "case": "probe:P19",
    "expected": false
@@ -10898,7 +10898,7 @@
    "kind": "FORBIDDEN",
    "what": "(Person, stance) written during MATTER",
    "where": "S3-L4",
-   "needs": "one of ['RESOLVE']",
+   "needs": "one of ['ENCOUNTER', 'RESOLVE']",
    "law": "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say",
    "case": "probe:W3",
    "expected": false
@@ -10934,7 +10934,7 @@
    "kind": "FORBIDDEN",
    "what": "(Person, stance) written during MATTER",
    "where": "S3-L4",
-   "needs": "one of ['RESOLVE']",
+   "needs": "one of ['ENCOUNTER', 'RESOLVE']",
    "law": "L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say",
    "case": "probe:A3",
    "expected": false
@@ -11142,7 +11142,7 @@
    "what": "a scheduled social recovery or decay",
    "where": "S34",
    "needs": "a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs",
-   "law": "S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT",
+   "law": "S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'ENCOUNTER', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT",
    "case": "probe:A34",
    "expected": false
   },
