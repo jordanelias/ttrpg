@@ -477,8 +477,9 @@ ci_checks:
     posture: harden
     role: >-
       M1 acceptance gate (CLAUDE.md §0.2's instrument) — the five falsifiable rows that say whether
-      a milestone juncture EXECUTES. Rows 1-2 run a seeded mc_v18 probe season and compare
-      KeyLog.content_hash() across two same-seed runs; neither can be satisfied by writing.
+      a milestone juncture EXECUTES. Rows 1-2 run a seeded one-season headless probe of
+      engine/season/ (the head; re-pointed from mc_v18 by ED-IN-0226) and compare its
+      content_hash across two same-seed runs; neither can be satisfied by writing.
     ci_job: validators-report
     notes: >-
       Wired directly into CI 2026-08-21 (ED-IN-0194) when culling wave 2 retired review_core.py,
