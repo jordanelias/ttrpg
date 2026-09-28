@@ -80,7 +80,29 @@ def sides_of(w: World, a: Act, target: Optional[str],
         origin = next((r for r in chain if w.rungs.get(r) is not None
                        and w.rungs[r].kind == "settlement"), None)
         claimants = mustered(w, origin, faction) if origin and faction else []
-        return (claimants, holder_faction_of(w, target) if target is not None else None, target or "R")
+        # ⚠ `H-149` (`march_target_kinds`, closed at `[settlement]`) IS ENFORCED HERE, NOT LEFT
+        # DECLARED-AND-UNREAD (found by `valoria-critic`: `_eff_march`'s own comment claimed this
+        # check and it did not exist). `requires_typed` only answers *does a Rung of this id
+        # exist*, never a sub-kind filter (`march`'s own `requires_typed_note` -- a sixth typed
+        # form is the second resolver S27.2 refuses), so the kind check has to live where the
+        # target's Rung object is already in scope. A non-settlement target forces `subject`
+        # `None`, which is the SAME shape `holder_faction_of` returning `None` already is --
+        # `_contest`'s PARTY-GAP catch (M4, found in the same pass) refuses it gracefully, one
+        # mechanism for both "no legitimate defending scope exists" causes rather than two.
+        target_kind = w.rungs[target].kind if target is not None and target in w.rungs else None
+        subject = (holder_faction_of(w, target)
+                   if target is not None and target_kind == "settlement" else None)
+        # ⚠ A TARGET HELD BY THE ACTOR'S OWN FACTION, WITH THAT FACTION'S OWN PEOPLE PRESENT TO
+        # MUSTER AS "DEFENDERS", IS NOT REFUSED HERE -- found in the same pass, NOT fixed, on
+        # purpose. Jordan's verbatim ruling frames march as meeting an OPPOSITION army, which a
+        # same-faction target is not; but `test_an_unopposed_march_writes_nothing_on_either_side`
+        # already relies, correctly, on a same-faction EMPTY target resolving `Unopposed` rather
+        # than refusing -- and this function has no cheap way to tell "empty" from "occupied by
+        # my own people" without calling `mustered` a second time (the wrapper's own job) just to
+        # decide. Refusing unconditionally on `subject == faction` breaks that test; refusing only
+        # when non-empty needs the duplicate call. Left OPEN rather than guessed either way --
+        # see `H-150`-adjacent note in `hole_register.yaml` (M4 review pass) for the disclosure.
+        return (claimants, subject, target or "R")
     # EVERY OTHER PRIZE: the pre-M4 fold's own construction, byte-for-byte.
     rung = a.payload if isinstance(a.payload, str) else None
     return ([a.actor] + ([target] if target and target != a.actor else []), target, rung or "R")

@@ -835,8 +835,8 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
     attacker_faction = (faction_prop_id(office.faction)
                         if office is not None and office.faction else None)
     defender_faction = holder_faction_of(w, target)
-    winner_faction = attacker_faction if attacker_lost else defender_faction
-    loser_faction = defender_faction if attacker_lost else attacker_faction
+    winner_faction = defender_faction if attacker_lost else attacker_faction
+    loser_faction = attacker_faction if attacker_lost else defender_faction
     if model == "none" and winner_faction is None and loser_faction is None:
         return NO_CHANGE
     morale_w = w.fixtures.get("field_morale_weight")
@@ -856,6 +856,16 @@ def _eff_march(w: "World", a: "Act", res: "Resolution | None" = None) -> Change:
             if loser_faction:
                 rows.append((loser_faction, -1.0, morale_w))
             p.stance = rows
+            # ⚠ `remove_person` ON THE `total` ARM'S OWN body==0, `_eff_kill`'s PRECEDENT
+            # (`_eff_kill` above: "the body goes to 0 ... `w.remove_person(who)`" whenever a write
+            # leaves `p.body <= 0`) -- found missing by `/code-review` on the M4 diff. Without it,
+            # `total` left a living person recorded at body 0, a state no other path in this
+            # engine produces (`_eff_kill` never does), and ED-IN-0279's own first row named
+            # `Person.exists` on participants as the recommended option this omitted.
+            # `scaled_by_degree` floors at 1 and never reaches this, on `wound_harm_model`'s own
+            # precedent that a wound (never total) cannot kill.
+            if p.body <= 0:
+                w.remove_person(pid)
     fields = ("stance",) if model == "none" else ("body", "stance")
     return Change(tuple(Subject.entity("persons", pid, fields=fields) for pid in touched), perform)
 

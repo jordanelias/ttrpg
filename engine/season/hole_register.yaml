@@ -3132,19 +3132,64 @@ rows:
     site:      "engine/season/queries/world_q.py -- `fortification_of` (built, M4 build step 4);
       no reader exists"
     sweep:     []
-    unblocks:  "garrison Sites (step 11) having any mechanical effect at all -- today seeding one
-      changes `w.sites`, `world_q.density`'s composition, and nothing else"
+    unblocks:  "garrison Sites (step 11) affecting a fight's OUTCOME. ⚠ CORRECTED (M4 review pass,
+      `valoria-critic`): the first writing of this field said seeding one \"changes `w.sites`,
+      `world_q.density`'s composition, and nothing else\" -- FALSE on both counts. `density`
+      (`queries/world_q.py:322-340`) counts PEOPLE via `contain` Tenures and reads no Site at all,
+      so a garrison Site never touches its composition either way. And it is not inert on the
+      LOG: MATTER writes every Site's `condition.worn` every season (`H-148`'s own note on
+      `dwelling` says the same), so each garrison Site adds one Event per season that WITNESS fans
+      out and a resident can deposit a firsthand claim about -- `test_governance_build.py`'s own
+      24d-i control-arm test measures this displacement for `dwelling` and needed the same
+      exclusion extended to `garrison` at step 11. What garrison seeding does NOT change is a
+      FIGHT'S outcome, which is the actual claim this row makes."
     cite:      "FOUND while correcting this module's own docstring at M4 build step 10, which had
       claimed clause (b)'s ruling closed 'what a garrison is' without checking whether that
-      definition reached the fight -- it does not. `test_march.py`'s fixture (`set_s_036`, 6
-      defenders) carries no garrison Site, so no existing test exercises this path either way;
-      the gap is real and unmeasured, not merely undocumented. FALSIFIER, TO BE WRITTEN: seed a
-      garrison Site at full condition on a march target, run the SAME seed through `_fold_one`
-      twice (garrisoned / ungarrisoned), and show the fight's own `attacker_size_pct` is identical
-      across both runs -- which is the defect this row names, made observable rather than
+      definition reached the fight -- it does not. ⚠ STALE, CORRECTED (M4 review pass): a first
+      writing said `test_march.py`'s fixture carries no garrison Site -- true when written, false
+      once step 11 landed in the SAME build (`populated.py` seeds `s_s_036_garrison` at
+      `set_s_036`, `test_march.py`'s own fixture). The garrison Site existing there changes
+      nothing about this row's claim, because nothing reads it regardless of whether one is
+      present -- but the citation itself needs correcting, not the claim. FALSIFIER, TO BE
+      WRITTEN: seed a garrison Site at full condition on a march target, run the SAME seed through
+      `_fold_one` twice (garrisoned / ungarrisoned), and show the fight's own `attacker_size_pct`
+      is identical across both runs -- which is the defect this row names, made observable rather than
       asserted."
     source:    "M4 of the mc_v18-retirement plan (`ED-IN-0279`), found by the orchestrator (Claude
       Sonnet 5) auditing its own build rather than ruled or reported by Jordan"
+
+  - id:        H-151
+    tier:      1
+    hole:      "MARCHING ON YOUR OWN FACTION'S SETTLEMENT, WHEN IT HOLDS TROOPS, FIGHTS THEM
+      AGAINST EACH OTHER. Jordan's verbatim ruling frames `march` as an army going out \"to meet
+      an OPPOSITION army\" -- a same-faction target is not that. `sides_of`
+      (`loop/sides.py`) does not refuse it: `subject == faction` proceeds exactly as an opposing
+      target would, mustering the target's OWN faction as `subject_members` and running a real
+      `resolve_field` call between two groups of the same faction's people."
+    kind:      "ABSENT_RULE"
+    owner:     "`loop/sides.py::sides_of`'s mass_battle branch -- where `subject` is decided"
+    grade:     "assumption"
+    default:   "NOT REFUSED. Attempted a fix in the same pass that found this (forcing `subject`
+      `None` whenever it equals the actor's own faction) and REVERTED it: it broke
+      `test_an_unopposed_march_writes_nothing_on_either_side`, which correctly relies on a
+      same-faction EMPTY target resolving `Unopposed`, not refused. The two cases -- same faction,
+      nobody there vs. same faction, an army there -- need different outcomes, and telling them
+      apart from `sides_of` needs calling `mustered` a second time (the wrapper's own job) just to
+      decide, which this row does not invent unasked."
+    site:      "engine/season/loop/sides.py -- `sides_of`, the `subject = holder_faction_of(...)`
+      line and the comment immediately after it naming this row"
+    sweep:     []
+    unblocks:  "march targeting being safe against every faction relationship, not only
+      opposition and emptiness"
+    cite:      "FOUND by `valoria-critic`'s adversarial pass on the M4 diff, M4 review stage.
+      Currently UNREACHABLE from the corpus either way: `march` is in `test_season_shape.py`'s
+      never-attempted-verb set (`operands_for` has no march arm), so this only matters for a
+      hand-built `Act`, exactly like `H-149`'s settlement restriction did before this same pass
+      enforced it. FALSIFIER, TO BE WRITTEN: a settlement held by the actor's own faction WITH
+      that faction's people present as the only occupants; march there and show the real fight
+      happens (or, once ruled, that it refuses)."
+    source:    "M4 review pass (`valoria-critic`), `ED-IN-0279` clause (a)'s own ruling text
+      supplying the reasoning, not a fresh Jordan ruling"
 
 
 discharges:

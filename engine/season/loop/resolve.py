@@ -244,7 +244,17 @@ def _fold(self, w: "World", token: Token, a: Act,
     degree map return the same flat tuples the fold has always applied. A CONTESTED act
     arrives here only from `resolve()`'s seam branch, carrying the band the subsystem's own
     result decided (`degree_of`)."""
-    self.resolved.append(a)      # observation only -- decides nothing, see `resolved`
+    # OBSERVATION ONLY, AND DEDUPED BY ID (M4 review pass, `/code-review` finding). `w.acts`'s own
+    # `append` is deliberately idempotent on a repeated id -- "the same act reached the store
+    # twice by two entry points ... harmless, and deliberate" -- because RESOLVE's own Declared
+    # fold and ENCOUNTER's real fold both call `_fold` for the SAME deferred act. `self.resolved`
+    # is a plain list with no such guard, so a march act (or any future verb folding at two
+    # steps) was recorded twice, inflating `len(self.resolved)` -- what `populated.py`'s own
+    # `out["acts"]` reports -- for one act that reached resolution once. Guarding it the same way
+    # `w.acts` already is closes the gap at its one owner rather than at every reader of the
+    # count.
+    if not any(r.id == a.id for r in self.resolved):
+        self.resolved.append(a)
     # G1a. AND THE STORE, which is NOT observation -- every Event this fold emits names `a.id`
     # in `causes[]`, and `state/log.py` refuses a cause that resolves to nothing. `resolve()`
     # already recorded it before its own refusal branches; this is idempotent on that same
@@ -452,7 +462,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # is unsafe -- see `sides_of`'s own docstring for the corpus case that found this.
     _target = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
     _parties, _subject, _rung = sides_of(w, a, _target, contests[0])
-    # ⚠ AN EMPTY SIDE IS A REFUSAL HERE, NOT A RAISE (M4). `seam/contest.py`'s S39.1 -- *"claimant[]
+    # ⚠ A PARTY-GAP IS A REFUSAL HERE, NOT A RAISE (M4). `seam/contest.py`'s S39.1 -- *"claimant[]
     # is PERSONS, ALWAYS"* -- refuses an EMPTY list exactly as it would a wrong-shaped one
     # (`if not claimants: raise Forbidden(...)`), which every verb before M4 never triggered:
     # `sides_of`'s non-`mass_battle` branch always seeds `_parties` with `a.actor`, so it is
@@ -462,7 +472,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # ineligibility already does, rather than letting `contest()`'s hard raise escape a caller
     # that does not expect one, is what `_ten_seasons`-style tests (no `corpus_run.run_case`
     # exception wrapper around them) found the hard way.
-    if not _parties:
+    def _party_gap_refusal() -> list:
         row = VERB_TABLE.get(a.verb)
         kinds = row.emits_on_refusal if row is not None else ()
         produced = [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"), k, [], [a.id], w.tick)
@@ -470,13 +480,31 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
         for _e in produced:
             self.act_of[_e.id] = a
         return produced
+    if not _parties:
+        return _party_gap_refusal()
     # ⚠⚠ `U1`: THE DRIVER CONSTRUCTS THE GENERATOR, AND `04 §C.12`'s REJECTION 4 IS LOAD-BEARING.
     # `purpose` stays `roll:<prize>:<act id>`, provider-specific by design -- see `resolve()`'s
     # own history (`git log` on this file) for the fuller account of why.
     _rng = draw_factory(w.world_seed, lambda: w.tick)(a.actor, f"roll:{contests[0]}:{a.id}")
-    r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
-                max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
-                rng=_rng)
+    # ⚠ `subject IS None` REACHES HERE TOO, AND IT IS THE SAME SHAPE OF GAP AS EMPTY `_parties`
+    # (M4, found by `valoria-critic`'s adversarial pass, not anticipated in the build). `sides_of`
+    # returns `subject = holder_faction_of(w, target)`, `None` for any Rung with no HELD ancestor
+    # -- `H-149` permits an unheld settlement as a march target, and the corpus has several
+    # (`populated.py`'s `Uncontrolled` provinces). Every wrapper (`combat.py`, `sigma.py`,
+    # `mass_battle.py`) reports that shape as `status="PARTY-GAP"`, and `seam/contest.py` raises
+    # `Unspecified(needs="PARTY-GAP", ...)` for ANY non-RESOLVED status -- uncaught here before
+    # this fix, so a march on an unheld target crashed the whole season. Caught by `needs`, not by
+    # pre-checking `_subject` before the call, because PARTY-GAP is the WRAPPER's own vocabulary
+    # for every shape of missing party (empty claimants, wrong-typed claimant, no subject, no
+    # rung) and a pre-check here would have to re-enumerate all of them to stay in sync.
+    try:
+        r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
+                    max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
+                    rng=_rng)
+    except Unspecified as e:
+        if e.needs == "PARTY-GAP":
+            return _party_gap_refusal()
+        raise
     if isinstance(r, ContestError):
         TRACE.note(f"contest returned {r}", "S39.3")
         return []

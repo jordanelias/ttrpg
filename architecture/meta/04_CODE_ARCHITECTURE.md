@@ -513,11 +513,12 @@ season(w):
   mat  = Token(MATTER,  t); matter(w,mat);   drop            -- barrier 2 · THE WORLD FREEZES
   cache = cache.build(w); frozen = w.frozen(cache)
   scenes = deliberate(frozen)                                 -- a MAP. No token exists in this scope
-  act  = Token(ACTS,    t); resolve(w,act,scenes); drop      -- barrier 3
-  act2 = Token(ACTS,    t); encounter(w,act2,events)          -- M4 (`ED-IN-0279` (a), 2026-09-28):
-                                                                 folds RESOLVE's own deferrals
-                                                                 (`Event.degree == Declared`);
-                                                                 shares barrier 3, no new barrier
+  act  = Token(ACTS,    t); events = resolve(w,act,scenes); drop -- barrier 3
+  act2 = Token(ACTS,    t); events += encounter(w,act2,events); drop -- M4 (`ED-IN-0279` (a),
+                                                              2026-09-28): folds RESOLVE's own
+                                                              deferrals (`Event.degree ==
+                                                              Declared`); shares barrier 3, no
+                                                              new barrier
   cache = cache.build(w)
   intr = Token(INTERIOR,t); witness(w,intr,cache); drop      -- barrier 4
   mat2 = Token(MATTER,  t); census(w,mat2); drop
@@ -590,9 +591,9 @@ for a in acts:
   ok or emit(row.refusal_for(failed_conjunct)); continue   -- THE SCARCITY CHANNEL · ⚠ F7
   degree = FULL
   if row.contests:
-    prize = manifest.resolve("contest", row.contests[0])
-    if prize.step and prize.step != token.step:            -- M4 (`ED-IN-0279` (a), 2026-09-28):
-      degree, evs = prize.declares, []                        the prize DEFERS to a later step;
+    prize = manifest.resolve("contest", row.contests[0])    -- a dict; `prize["step"]`, not `.step`
+    if prize.get("step") and prize["step"] != w.step.value: -- M4 (`ED-IN-0279` (a), 2026-09-28):
+      degree, evs = prize["declares"], []                     the prize DEFERS to a later step;
                                                                  fold now at its declared band,
                                                                  writing nothing; the real fight
                                                                  happens when this SAME fold runs
