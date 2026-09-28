@@ -520,6 +520,32 @@ def faction_holding(w: World, subject: str) -> "str | None":
     return next(iter(facs)) if len(facs) == 1 else None
 
 
+def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
+    """M4 (`ED-IN-0279` clause (a)). Which faction holds `rung_id` -- the faction Proposition id,
+    or `None` -- read up its own ancestry, since a SETTLEMENT is never itself the object of a
+    `hold` Tenure in this corpus (`hold_force` on one returns `None` always; every live `hold`
+    targets a `territory` or an `Office`). `nearest_store`'s own walk, applied to holding rather
+    than to a larder: the nearest rung AT OR ABOVE `rung_id` that IS held, then `faction_holding`
+    on ITS holder (a person) -- never on `rung_id` itself, which `faction_holding` cannot answer
+    for at all (`subject not in w.persons` returns `None` immediately; it takes the HOLDER, not
+    the held object -- confirmed against the live fixture before this was written, not assumed
+    from the name).
+
+    ⚠ `None` FOR "NOBODY HOLDS ANY RUNG UP THIS CHAIN" IS A SHORTFALL, NOT AN ERROR --
+    `nearest_store`'s own reading of an empty root. What a `march` targeting an unheld
+    (`Uncontrolled`) settlement means is `march`'s own eligibility to decide, not this Query's."""
+    TRACE.query("holder_faction_of", "resolver")
+    seen: set = set()
+    cur = rung_id
+    while cur is not None and cur in w.rungs and cur not in seen:
+        seen.add(cur)
+        t = hold_force(w, cur)
+        if t is not None:
+            return faction_holding(w, t.subject)
+        cur = parent_of(w, cur)
+    return None
+
+
 def establishment_of(w: World, office_id: str) -> list[str]:
     """§11 -- *"the named persons the office employs. Finite, contested, durable."*
 

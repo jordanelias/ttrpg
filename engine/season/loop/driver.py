@@ -486,7 +486,8 @@ from .calendar import calendar                                            # noqa
 from .census import census                                                # noqa: E402
 from .deliberate import deliberate                                        # noqa: E402
 from .matter import matter                                               # noqa: E402
-from .resolve import _admits, _apply_write, _eligible, _fold, _occasion_ids, resolve  # noqa: E402
+from .resolve import (_admits, _apply_write, _contest, _eligible, _fold,  # noqa: E402
+                       _occasion_ids, _survives, resolve)
 from .witness import witness                                              # noqa: E402
 
 SeasonDriver.calendar = calendar
@@ -503,3 +504,8 @@ SeasonDriver._admits = _admits
 SeasonDriver._occasion_ids = _occasion_ids
 SeasonDriver._fold = _fold
 SeasonDriver._apply_write = _apply_write
+# M4 (`ED-IN-0279` clause (a)): extracted from `resolve()`'s own loop so `loop/encounter.py`
+# shares both (§8) -- see their own docstrings in `resolve.py` for what each does and does not
+# re-check.
+SeasonDriver._survives = _survives
+SeasonDriver._contest = _contest

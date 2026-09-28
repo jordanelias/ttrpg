@@ -29,6 +29,8 @@ from ..data.verbs import NO_PRECONDITION, VERB_TABLE, VerbRow
 from ..gaps import Forbidden, Unspecified
 from ..loop.effects import EFFECTS
 from ..loop.predicates import REQUIRES_PREDICATES
+from ..loop.sides import sides_of
+from .. import manifest
 from ..queries.world_q import WorldReader, occasioned_by
 from ..seam import ContestError, Resolution, contest, degree_of
 from ..state.carriers import Act, Event, StateChange
@@ -40,6 +42,39 @@ from ..trace_log import TRACE
 
 
 # -- RESOLVE -- barrier 3 -- the ONLY writing step for acts (S27) -------
+
+def _canonical_order(w: "World", acts: list) -> list:
+    """S27/S32 rest 3: FIVE STRATA, then a CONTENT-DERIVED hash key within each -- extracted
+    from `resolve()`'s own sort (M4, `ED-IN-0279` clause (a)) so `loop/encounter.py` can fold a
+    SUBSET of a round's acts in the SAME canonical order, rather than re-deriving the rule or
+    skipping it (§8: it lives once). No `self`: the ordering is a pure function of the world's
+    seed/tick and the acts themselves, not of driver state."""
+    return sorted(acts, key=lambda a: (stratum_of(a),
+                                       H(w.world_seed, w.tick, a.actor, f"order:{a.verb}:{a.id}")))
+
+
+def _survives(self, w: "World", a: Act) -> list:
+    """S27.1: a predecessor act can remove the actor. `[]` if `a.actor` is still in `w.persons`
+    -- the caller folds normally. Otherwise an `act.ineligible` Event (already registered in
+    `self.act_of`) that the caller should emit INSTEAD of folding.
+
+    Extracted from `resolve()`'s own loop (M4) so `loop/encounter.py` shares the one check: a
+    predecessor's act can remove a person just as easily inside RESOLVE as inside an earlier act
+    of the SAME round's ENCOUNTER pass, and the reading is the fold's own rather than borrowed
+    (see the inline comment this replaced, still true of both callers)."""
+    if a.actor in w.persons:
+        return []
+    TRACE.decision(f"{a.actor} does not survive to act", "S27.1",
+                   chose="emit `act.ineligible`; a predecessor removed the actor",
+                   alternatives=["fold it anyway (the seam then sees a dead claimant)",
+                                 "drop it silently (its act id never resolves)"])
+    gone = [Event(H(w.world_seed, w.tick, a.actor, f"act.ineligible:{a.id}"),
+                  "act.ineligible", [], [a.id], w.tick)]
+    for _e in gone:
+        self.act_of[_e.id] = a
+    return gone
+
+
 def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
     """§E4: eligibility admits `own`, `remit:<act>`, `hold:<object>`, `presence:<rung>` -- and
     NEVER `capability`, which the table loader already refuses. The kinds are a DISJUNCTION:
@@ -377,6 +412,69 @@ def _fold(self, w: "World", token: Token, a: Act,
     # is `§8`: the rule lives once, on the one path every act-emission takes.
     return ev(kinds, [a.id] + self._occasion_ids(w, a), list(a.changes) + changed)
 
+
+def _contest(self, w: "World", token: Token, a: Act, contests: list,
+             contest_max_depth: Optional[int]) -> list:
+    """S39.2, and M4's deferral fork (`ED-IN-0279` clause (a)). Extracted from `resolve()`'s own
+    seam branch so RESOLVE and `loop/encounter.py` share the ONE body (§8) -- both call this for
+    the same act, at different steps, and the STEP is what decides which of the two things it
+    does.
+
+    ⚠ ASSUMES `_admits` HAS ALREADY PASSED FOR `a`, AND NEVER RE-CHECKS IT. `resolve()`'s loop
+    checks eligibility and `requires` once, before calling this, exactly as it always did; a
+    caller reaching this function has already been admitted. ENCOUNTER's own selection is by the
+    DECLARATION EVENT (`loop/encounter.py`), never by re-running this repo's own admission check
+    against a world the whole round has since moved -- `_fold`, below, still runs its OWN
+    internal `_admits` when it applies the writes, which is pre-existing behaviour on every
+    contested verb today and not something this function adds or removes.
+
+    TWO THINGS THIS DOES, chosen by comparing `w.step` to the prize's OWN manifest row:
+
+    - THE PRIZE ROW DECLARES A `step:` THAT IS NOT THE ONE RUNNING NOW (M4): fold at the row's
+      own `declares:` band, writing nothing -- the loop's own deferral token (`Declared`,
+      `field_degree_bands`). The real fight happens later, when this SAME function is called
+      again with `w.step` at the declared step.
+    - OTHERWISE (every prize before M4, and a deferred prize once its step arrives): dispatch to
+      the seam and fold at the degree the subsystem's own result decides, exactly as `resolve()`
+      always did."""
+    prize = manifest.resolve("contest", contests[0])
+    if prize is not None and prize.get("step") and prize["step"] != w.step.value:
+        return self._fold(w, token, a, Resolution(prize["declares"], {}))
+    if contest_max_depth is None:
+        raise Forbidden(
+            "a contest was reached with no caller-supplied max_depth", "S39.3",
+            law="S39.3 -- the depth cap has NO DEFAULT; a default is a number somebody made up "
+                "and it will be cited later as though it were measured")
+    # THE TARGET, AND WHICH SHAPE OF SIDES THE PRIZE NEEDS (M4). `sides_of` is the one place
+    # that decides, dispatched on the PRIZE's own manifest module -- NEVER on `a.verb`, and
+    # NEVER on what `_target` happens to look like: a candidate's subject binding to a Rung id
+    # is not unique to `march` (`tell` can name a place), so a shape-based dispatch on `_target`
+    # is unsafe -- see `sides_of`'s own docstring for the corpus case that found this.
+    _target = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
+    _parties, _subject, _rung = sides_of(w, a, _target, contests[0])
+    # ⚠⚠ `U1`: THE DRIVER CONSTRUCTS THE GENERATOR, AND `04 §C.12`'s REJECTION 4 IS LOAD-BEARING.
+    # `purpose` stays `roll:<prize>:<act id>`, provider-specific by design -- see `resolve()`'s
+    # own history (`git log` on this file) for the fuller account of why.
+    _rng = draw_factory(w.world_seed, lambda: w.tick)(a.actor, f"roll:{contests[0]}:{a.id}")
+    r = contest(w, rung=_rung, prize=contests[0], claimants=_parties, depth=0,
+                max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
+                rng=_rng)
+    if isinstance(r, ContestError):
+        TRACE.note(f"contest returned {r}", "S39.3")
+        return []
+    if not isinstance(r, dict):
+        return r
+    produced = self._fold(w, token, a, Resolution(degree_of(r, _target), r))
+    TRACE.decision(
+        f"contest for {contests[0]!r} resolved", "S39/H-98",
+        chose=f"read the degree off the scene and fold at it "
+              f"({produced[0].degree if produced else '?'})",
+        alternatives=["map winner -> person.died (S27.2: the second resolver)",
+                      "record that it ran and write nothing (the pre-`W-E` behaviour: "
+                      "a lost fight wrote exactly what a won one did)"])
+    return produced
+
+
 def _apply_write(self, w: "World", token: Token, a: Act, kind: str, fld: str, eff=None,
                  earned: Optional[set] = None,
                  resolution: "Resolution | None" = None) -> list:
@@ -465,9 +563,9 @@ def resolve(self, token: Token, acts: list[Act],
     # says of that roster "ORDER IS SEMANTIC HERE... editing the order changes which acts see
     # which world", which described a column no resolver read. Found by the `W9` adversarial
     # pass. An act that names its own stratum still wins, so a caller can still test the
-    # ordering directly (`A37`).
-    ordered = sorted(acts, key=lambda a: (stratum_of(a),
-                                          H(w.world_seed, w.tick, a.actor, f"order:{a.verb}:{a.id}")))
+    # ordering directly (`A37`). Extracted to `_canonical_order` (M4) so `loop/encounter.py`
+    # can fold a subset of a round's acts in the same order without a second copy of the rule.
+    ordered = _canonical_order(w, acts)
     TRACE.decision(f"ordering {len(acts)} acts", "S27/S32",
                    chose="five strata, then a content-derived hash key over one global array",
                    alternatives=["completion order", "rank", "per-container sort (voids the fold)"])
@@ -490,31 +588,10 @@ def resolve(self, token: Token, acts: list[Act],
         # PREDECESSOR CAN REMOVE THE ACTOR, and until a person could be killed inside the fold
         # nothing ever tested what the successor does. The answer is that he does not act: acts
         # are minted for everyone at DELIBERATE, resolved in stratum order at RESOLVE, and a man
-        # felled in the third act of the season is not there for the ninth.
-        #
-        # MEASURED, the day `kill / wound` was admitted to `resolvable_verbs()` (`ED-IN-0261`,
-        # amended): `ARC-10` and `ARC-12` reached `combat_seam` with a dead FIRST claimant --
-        # *"claimant not a person: 'p_c' / 'p_a'"* -- and published a whole-case DESIGN-GAP for
-        # it. The seam was right to refuse; the fold should never have offered it the act.
-        #
-        # ⚠ IT EMITS, AND THE KIND IS `act.ineligible` RATHER THAN THE ROW'S OWN REFUSAL. The act
-        # is in the store above, so its id is a live cause and something has to resolve it (the
-        # act store's header is the argument). And the reading is literal rather than borrowed:
-        # eligibility is the question *may this person do this*, and the answer for a dead man is
-        # no for every verb at once, which is why the kind is the fold's and not the table's.
-        #
-        # ⚠ NOT A GUARD OVER THE DEATH CASCADE, which is `World.remove_person`'s and stays there
-        # (§8). This is the fold reading its own world between acts -- the ONE thing §27.1 says
-        # the ordered fold is for.
-        if a.actor not in w.persons:
-            TRACE.decision(f"{a.actor} does not survive to act", "S27.1",
-                           chose="emit `act.ineligible`; a predecessor removed the actor",
-                           alternatives=["fold it anyway (the seam then sees a dead claimant)",
-                                         "drop it silently (its act id never resolves)"])
-            _gone = [Event(H(w.world_seed, w.tick, a.actor, f"act.ineligible:{a.id}"),
-                           "act.ineligible", [], [a.id], w.tick)]
-            for _e in _gone:
-                self.act_of[_e.id] = a
+        # felled in the third act of the season is not there for the ninth. Extracted to
+        # `_survives` (M4) so `loop/encounter.py` shares the one check.
+        _gone = self._survives(w, a)
+        if _gone:
             out.extend(_gone)
             continue
         # S27.4: an attempt at Ob > 2 x Pool is REFUSED, and the season is spent. An
@@ -568,105 +645,14 @@ def resolve(self, token: Token, acts: list[Act],
                     self.act_of[_e.id] = a
                 out.extend(produced)
                 continue
-            if contest_max_depth is None:
-                raise Forbidden("a contest was reached with no caller-supplied max_depth",
-                                "S39.3", law="S39.3 -- the depth cap has NO DEFAULT; a default is a number somebody made up and it will be cited later as though it were measured")
-            # S39.2 line 2: Events, into the same log, WITH causes[] NAMING THE ACTS.
-            # ⚠ REV 3. Rev 2 wrote `[a.id] if any(e.id == a.id for e in w.log) else [ROOT]`.
-            # `w.log` holds Events and an Act is never appended to it, so the predicate was
-            # PERMANENTLY FALSE and every contest was called with [ROOT]. Retraction 4
-            # replaced rev 1's fabricated cause with an unreachable branch rather than with
-            # the rule. The act id is named directly.
-            # ⚠ THE TARGET IS THE SECOND CLAIMANT, AND REV 1 NEVER PASSED IT, SO THE SEAM
-            # JORDAN RULED FOR COULD NOT BE REACHED FROM THE FOLD AT ALL. `claimants=[a.actor]`
-            # is one-claimant by construction; `combat_seam.resolve` refuses a party of one
-            # (correctly -- a fight needs two), so every `kill / wound` driven through
-            # `resolve()` raised `Unspecified: personal combat needs two parties; got 1`.
-            # The only test of the seam called `contest()` DIRECTLY with two claimants, so
-            # nothing observed the gap: the seam worked and the road to it did not.
-            # Reproduce the old failure by deleting `_target`:
-            #   d.resolve([Act("k","p_low","kill / wound",payload={"subject":"p_mid"})], 2)
-            _target = (a.payload or {}).get("subject") if isinstance(a.payload, dict) else None
-            _parties = [a.actor] + ([_target] if _target and _target != a.actor else [])
-            # ⚠⚠ **`U1`: THE DRIVER CONSTRUCTS THE GENERATOR, AND `04 §C.12`'s REJECTION 4 IS
-            # LOAD-BEARING FOR THE FIRST TIME.** That rejection reads, verbatim: *"When R-09's
-            # producer is built … **its generator must be constructed by the driver from the run
-            # seed and passed down exactly as `World` is.** This is the one rejection that is not
-            # yet load-bearing, because no roll exists yet."* It exists now, and this line is where
-            # it stops being a sentence.
-            # ⚠ *"THREADED LIKE `World`"* MEANS PASSED BY PARAMETER RATHER THAN REACHABLE BY A
-            # GLOBAL NAME — not one continuous stream, and the two readings diverge. `04 PART D
-            # row 35` settles it: `H(seed, tick, subject, purpose)`, *no counter, no service*, with
-            # `purpose` uniqueness a CONVENTION. A single stream threaded through the season would
-            # make every roll depend on the count of prior draws, so adding one contested verb
-            # would move every other verb's outcome.
-            # ⚠ AND `purpose` IS PROVIDER-SPECIFIC BY DESIGN. `seam/wrappers/combat.py` derives its
-            # own seed from `f"contest:{prize}:{causes[0]}"` with `claimants[0]` as the subject, and
-            # it IGNORES this generator for exactly that reason: consuming it would re-seed every
-            # existing `kill / wound` result and silently re-record the goldens under cover of a
-            # refactor. Row 35 needs purpose UNIQUENESS, not one spelling across providers.
-            # ⚠ THROUGH `draw_factory`, THE OWNER, AND IT IS THE SAME STREAM. This wrote
-            # `random.Random(int(H(w.world_seed, w.tick, a.actor, purpose), 16))` by hand, which is
-            # `draw_factory`'s inner `draw` character for character with the same four arguments —
-            # so routing through the owner moves NO golden, and keeping the copy bought nothing.
-            # The purpose stays `roll:<prize>:<act id>`: `04 PART D row 35` needs purpose
-            # UNIQUENESS, not one spelling across providers, and that is what is preserved here.
-            _rng = draw_factory(w.world_seed, lambda: w.tick)(
-                a.actor, f"roll:{_contests[0]}:{a.id}")
-            r = contest(w, rung=(a.payload if isinstance(a.payload, str) else None) or "R",
-                        prize=_contests[0],
-                        claimants=_parties, depth=0, max_depth=contest_max_depth,
-                        causes=[a.id], verb=a.verb, subject=_target, rng=_rng)
-            if isinstance(r, ContestError):
-                TRACE.note(f"contest returned {r}", "S39.3")
-                continue
-            if not isinstance(r, dict):
-                out.extend(r)
-                continue
-            # ⚠ THE SEAM RETURNS A SUBSYSTEM RESULT, NOT EVENTS, AND REV 1 EXTENDED THE
-            # EVENT LIST WITH ITS KEYS. `out.extend(r)` over a dict yields the STRINGS
-            # 'status', 'module', 'winner', ... so `resolve()` handed nine strings back to
-            # `season()` as if they were Events. Invisible until now only because the road
-            # to the seam was closed (the one-claimant bug above): the first act to reach
-            # the seam is the first act to hit this.
-            #
-            # ⚠ `W-E`, 2026-09-04 -- THIS BRANCH USED TO `continue`, AND THAT WAS THE FIRST
-            # OF THE THREE BROKEN LINKS. What stood here recorded THAT a contest ran, as a
-            # `contest.resolved` Event with `changes=[]`, and threw the outcome away: a lost
-            # fight and a won one produced the same Event, `Event.degree` was never assigned
-            # by anything, and `emits_at` had no caller anywhere in the tracer (`H-113`).
-            #
-            # ⚠ AND WHAT IT REFUSED TO DO IS STILL REFUSED. The old comment's argument was
-            # *"the subsystem returns a WINNER and a winner is not a degree; mapping one onto
-            # the other is the second resolver S27.2 forbids"*. That argument is CORRECT and
-            # is honoured: nothing here maps a winner. `degree_of` reads the band off the
-            # SCENE -- the engine's own `WoundTracker`, on the Combatants the seam still
-            # holds -- which is Jordan's 2026-09-03 ruling, *"kill/wound degrees should be
-            # directly taken from scene combat"*, and 2026-09-04, *"the combat engine
-            # determines the result there. your code just has to accept the result."*
-            # `winner` is not read by anything below.
-            #
-            # ⚠ AND THE BAND IS READ OFF THE ACT'S **SUBJECT**, NOT OFF THE LOSER.
-            # `kill / wound` writes on `payload["subject"]`, so reading the loser would kill
-            # the target whenever the ACTOR was the one felled. `verb_table.yaml`'s
-            # `writes_source_note:` cell (`writes_source:` until 2026-09-25) said
-            # `wound_state[loser]` and is corrected there.
-            #
-            # ⚠ `contest.resolved` IS GONE AND ITS REMOVAL IS A CLOSURE, NOT A LOSS. It was
-            # one of the three BODY LITERALS `README.md` records invariant 7 as refusing (a
-            # kind emitted by the fold that no `emits:` column declares). The outcome is now
-            # reported by the verb's OWN degree-keyed `emits:` -- `person.died` /
-            # `body.changed` / `contest.undecided` -- which is where invariant 7 says a kind
-            # is declared. Two body literals remain (`act.ineligible`, `act.refused`) and
-            # they are not this item's.
-            produced = self._fold(w, token, a, Resolution(degree_of(r, _target), r))
-            TRACE.decision(
-                f"contest for {_contests[0]!r} resolved", "S39/H-98",
-                chose=f"read the degree off the scene and fold at it "
-                      f"({produced[0].degree if produced else '?'})",
-                alternatives=["map winner -> person.died (S27.2: the second resolver)",
-                              "record that it ran and write nothing (the pre-`W-E` behaviour: "
-                              "a lost fight wrote exactly what a won one did)"])
+            # S39.2 line 2 onward: dispatch to the seam, or defer to ENCOUNTER, and fold at the
+            # degree either one decides. Extracted to `_contest` (M4, `ED-IN-0279` clause (a))
+            # so RESOLVE and `loop/encounter.py` share the one body -- see that function's own
+            # docstring for the deferral fork and why it does not re-check `_admits`, just
+            # confirmed above. `_contest` always returns a list -- a depth-capped
+            # `ContestError` is converted to `[]` inside it, once, so this loop and
+            # `loop/encounter.py`'s own do not each carry a second copy of that check.
+            produced = self._contest(w, token, a, _contests, contest_max_depth)
         else:
             # S27.1: CONTENTION IS AN ORDERED FOLD. Each act sees the world its predecessors
             # left. SEQUENCE, NOT SIMULTANEITY -- and NO ACT NEEDS TO KNOW ANOTHER EXISTED.
