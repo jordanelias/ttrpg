@@ -6,8 +6,9 @@ and the separation between them is deliberate:
   1. THE DECISION REGISTER -- every branch the shape took that could have gone another way,
      with the alternatives it did not take. This is the row that exists because A DECISION
      NOBODY RECORDS IS A DECISION NOBODY CAN AUDIT.
-  2. THE STEP SEQUENCE -- the loop as executed: six steps, four barriers, in order, with the
-     write class of every write that crossed the gate.
+  2. THE STEP SEQUENCE -- the loop as executed: seven steps (six until M4's `ENCOUNTER`,
+     `ED-IN-0279` clause (a)), four barriers, in order, with the write class of every write that
+     crossed the gate.
   3. THE PER-CASE LOG -- for each NPC and each arc: every `season_requires` row, the probe it
      routed onto, the verdict, and the section of ARCHITECTURE.md that governs it.
   4. THE PROBE LEDGER -- all probes, their verdicts, and HOW each verdict was reached

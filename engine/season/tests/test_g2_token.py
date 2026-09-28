@@ -41,9 +41,10 @@ DRIVER = "loop/driver.py"
 # Apparatus stands in for the driver at a synthetic barrier and may CALL the driver's minter; it
 # may not CONSTRUCT a token. Everything else under `engine/season/` is game code and may do neither.
 APPARATUS = ("harness/", "tests/")
-# The six steps, named, so the floor is on WHICH files the scan read and not only how many.
+# The seven steps (six until M4 added `encounter.py`, `ED-IN-0279` clause (a)), named, so the
+# floor is on WHICH files the scan read and not only how many.
 STEP_MODULES = {f"loop/{s}.py" for s in
-                ("calendar", "matter", "deliberate", "resolve", "witness", "census")}
+                ("calendar", "matter", "deliberate", "resolve", "encounter", "witness", "census")}
 
 
 # ======================================================================================
@@ -132,10 +133,11 @@ def test_g2_the_scan_reddens_on_a_planted_construction_in_deliberate():
     assert not bad and len(constructions) == 2, (bad, constructions)
 
 
-def test_g2_season_hands_five_steps_a_token_and_deliberate_none():
-    """`04 §C.1`, read off the driver's own `season()`: five barrier calls each receive a
-    `mint_token(...)` as their first argument, in the class §C.1 names, and `deliberate` receives
-    no `mint_token` at all."""
+def test_g2_season_hands_six_steps_a_token_and_deliberate_none():
+    """`04 §C.1`, read off the driver's own `season()`: six barrier calls each receive a
+    `mint_token(...)` as their first argument, in the class §C.1 names (`encounter` shares
+    RESOLVE's `WriteClass.ACTS`, M4, `ED-IN-0279` clause (a)), and `deliberate` receives no
+    `mint_token` at all."""
     tree = ast.parse(_tree_sources()[DRIVER])
     season = next(n for n in ast.walk(tree)
                   if isinstance(n, ast.FunctionDef) and n.name == "season")
@@ -153,6 +155,7 @@ def test_g2_season_hands_five_steps_a_token_and_deliberate_none():
     assert handed == {
         "calendar": "WriteClass.CALENDAR", "matter": "WriteClass.MATTER",
         "deliberate": None, "resolve": "WriteClass.ACTS",
+        "encounter": "WriteClass.ACTS",
         "witness": "WriteClass.INTERIOR", "census": "WriteClass.MATTER",
     }, handed
 

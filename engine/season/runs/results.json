@@ -11220,7 +11220,7 @@
   }
  ],
  "_trace_counts": {
-  "STEP": 5580,
+  "STEP": 7100,
   "BARRIER": 1871,
   "DECISION": 1887,
   "QUERY": 23087,
