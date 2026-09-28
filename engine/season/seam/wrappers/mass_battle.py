@@ -15,19 +15,32 @@ target, via `world_q.mustered` (`04 §C.5.1`'s own *"squad combat: the squad is
 `members ∩ present-at-rung`"*). `claimants` stays one side's already-resolved `PersonId[]` per
 §C.5.1's *"sides = (faction_q.resolve(proj,A), faction_q.resolve(proj,B)) -- ONCE, before
 provider.run"*.
-**STILL OPEN: the shared fold code that actually constructs every `contest()` call --
-`loop/resolve.py`'s `_target = payload.get("subject")` / `_parties = [a.actor] + ([_target] if
-...)`, and its `rung=(a.payload if isinstance(a.payload, str) else None) or "R"` placeholder --
-builds EXACTLY TWO claimants and no real `rung` for ANY contested verb today.** Generalizing that,
-without changing `kill / wound`'s or `tell`'s existing behaviour, is M4 build step 5; this module's
-half of the contract is complete and callable, the caller that would actually satisfy it is not.
+**M4 BUILD STEP 5 CLOSED THIS.** `loop/sides.py::sides_of`, dispatched on the PRIZE's own manifest
+`module` (never on `a.verb`, and never on what the target looks like -- see that module's own
+docstring for the corpus case that made a shape-based dispatch unsafe), now builds the REAL
+`claimants`/`subject`/`rung` for this prize: the actor's own muster at the origin, the target
+rung's holder faction (`queries/world_q.holder_faction_of`), and the target rung itself. `kill /
+wound` and `tell` keep their pre-M4 two-claimant shape unchanged, through `sides_of`'s other
+branch, which is what "generalizing without changing their behaviour" meant.
 
-⚠ **THIS DOES NOT DECIDE WHO ATTACKS, WHO DEFENDS, WHAT A GARRISON IS, OR WHAT AN EMPTY DEFENDING
-SIDE MEANS.** Those are `march`'s own eligibility and effects (M4, still gated on Jordan's ruling,
-`ED-IN-0279` clause (b)) -- the open half of that same row. This module's job is narrower and does
-not need M4 answered first: given a claimant side and a named opposing faction, resolve the field
-battle and return what the engine says, exactly as `seam/wrappers/combat.py` derives a party and
-calls the engine without deciding who picked the fight.
+⚠ **WHO ATTACKS, WHO DEFENDS, AND WHAT AN EMPTY DEFENDING SIDE MEANS ARE `march`'s OWN eligibility
+and effects, RULED AND BUILT (M4, `ED-IN-0279` clause (b), 2026-09-28)** -- an empty defending side
+is `Unopposed` (the branch at line ~99 below), never an auto-win manufactured here.
+
+⚠⚠ **WHAT A GARRISON IS, RULED, IS NOT THE SAME AS WHAT IT DOES TO THIS FIGHT, WHICH IS STILL
+OPEN, AND THIS MODULE IS WHERE THAT GAP LIVES.** Jordan's ruling (planning round 2) fixed garrison
+STRENGTH as a Site's `condition` field, and `queries/world_q.py::fortification_of` reads it -- but
+nothing calls that function. `resolve()` below calls `engine_resolve_field(w, claimants, other,
+terrain=None, rng=rng)` with `terrain` HARDCODED to `None`, so a heavily garrisoned settlement
+fights identically to an undefended one. `fortification_of`'s own docstring already discloses "one
+per settlement, but nothing enforces that it must" for step 11's seeding; what it does NOT
+disclose is that seeding one changes no outcome yet, because nothing reads its return. HOW MUCH a
+given fortification level should shift a field battle's margin is an invented magnitude no ruling
+states -- `H-148`'s own shape, not answered here. `H-150` (`hole_register.yaml`) is this gap's row;
+this module's job stays narrower and does not close it: given a claimant side and a named opposing
+faction, resolve the field battle and return what the engine says, exactly as
+`seam/wrappers/combat.py` derives a party and calls the engine without deciding who picked the
+fight.
 
 ⚠ **`degree_of` (`seam/ladder.py`) NOW GRADES THIS RESULT, THROUGH A THIRD BRANCH RATHER THAN BY
 MANUFACTURING A MARGIN (M4, `ED-IN-0279` clause (a)).** It does NOT grade `massbattle.py`'s own

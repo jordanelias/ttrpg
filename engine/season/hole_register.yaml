@@ -365,7 +365,7 @@ rows:
     site:      "epistemic.py `observers_for` -- read at WITNESS for every Event; the predicates are rosters.yaml witness_channel_predicates and the arm is the fan_out_mode fixture"
     sweep:     ["total (the CONTROL, and #353's specified behaviour -- no longer the default)", "presence-only", "all five predicates (the default since 2026-09-07, per R7)"]
     unblocks:  "1"
-    cite:      "PLAN §3.2. Shape derivable from the presence index (#353 :1004 -- \"compute its observer set from the presence index and the five channels\") and `hold` Tenures. ⚠ THE DEFAULT WAS THE FIVE PREDICATES AND IS CORRECTED TO TOTAL FAN-OUT: PLAN §6.3 (§6.2 before the 2026-09-02 rewrite moved it) states \"the `H-33` default at this milestone is TOTAL FAN-OUT... `sweep: [total, presence, five]`\", and §3.2 disagreed with it. G1 makes the instrument inject THE REGISTER'S default, so the five-predicate value would have given artifact 2's minimum work-item set W6's content -- a presence index and office-scope predicates -- without anyone deciding that. The five predicates stay as a SWEEP ARM, which is what §6.2 asks for. ⚠ EXECUTED BY W6, AND THE ROW STAYS `assumption`. shape.observers_for reads the five predicates from rosters.yaml witness_channel_predicates and the arm from the fan_out_mode fixture. The declared sweep RUNS: over three seasons, deposits fall 678 (total) -> 68 (presence_only) -> 71 (all_five), and ledgers go from pinned at the L=200 cap to 34/34/0. P15 flips to PASS BY CONSTRUCTION. What is NOT closed is the grade: #353 names the five channels and supplies NO predicate for any of them, so these are an injected default, `total` remains the default because it is the specified behaviour, and grading this row `ruled` would credit the design with an answer this session invented. `unblocks:` is left verbatim -- the transcription gate is right that an execution note is not a transcription. ⚠ THE DEFAULT MOVED OFF `total` ON 2026-09-07 AND THE GRADE DID NOT, WHICH IS THE WHOLE OF THE UPDATE. R7 rules WHICH ARM DOES NOT SHIP -- Jordan chose the architecture model over the echo model, so `total` is excluded and BETWEEN `presence_only` AND `all_five` THE RULING IS SILENT; that choice was made on measurement here and must not be cited as ruled. Jordan's words are, *legitimacy falls where the news has reached*, and `total` is that echo model arriving at the deposit layer -- and it rules NOTHING about what the five predicates ARE. #353 still names five channels and supplies no predicate for any of them, so the predicates remain an injected default and this row stays `assumption`; a session reading a ruled ARM as a ruled ROW would credit the design with five formulas nobody has written. MEASURED AT THE FLIP, build_world(0), 3 seasons: deposits 649 (total) -> 57 (presence_only) -> 60 (all_five); ledgers [200,200,200] -> [0,28,29] -> [0,28,32]; QUESTIONS RAISED 5/9/10 -> 5/8/8 -> 5/9/10. The last row is why the arm is `all_five` and not `presence_only`: the narrowest arm thins the claim->question link and the shipped one does not. ⚠ AND M-6'S INSTRUMENT CANNOT OBSERVE THE THIRD LINK: the corpus tallies (NPC R3 30/30, ARC 54/59) are identical across all three arms BOTH co-located AND dispersed to distinct rungs, because `_r3_propagates` walks Event.causes[] over driver.resolved and never reads a ledger. So M-6 as 19_PLAN.md specifies it CANNOT FAIL, and a check that cannot fail is not a measurement (§0.1 pt 2). ⚠ THE THIRD LINK ITSELF IS REAL, and a first writing of this note said it was inert -- true of build_world(0), where three persons seat one actor and the act set is identical under all three arms, and FALSE of tiny_world, five persons across four rungs, where the same flip takes 233 acts to 221 and makes suppressing `move` stop being larder-neutral. Caught by test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason within the hour, which is the suite doing the job the claim skipped. So this row's ID-16 flattening (question_aggregation_rule: first + the five-scene budget) bounds the GAIN, not the existence; measuring the gain is still H-106. ⭐⭐ DIAGNOSED 2026-09-07, AND THE DIAGNOSIS RETIRES THE ARM QUESTION RATHER THAN ANSWERING IT. A fork reaches a later decision by exactly one route -- §F1 clause 4 (engine/season/epistemic.py::belief_contradicts), a claim in the actor's own ledger contradicting a candidate's precondition. Counting that population over the same 89 worlds (wd_extra.corpus_drops) at observation_deposit_mode `actor`: total 37 drops / 62 divergences · all_five 0 / 0 · presence_only 114 / 229. THE DIVERGENCES TRACK THE DROPS EXACTLY, so the zero is not a property of this arm and not a channel defect: clause 4 never fires at the shipped configuration and a fork has nothing to change. Beliefs still form there (22 false-when-recorded) and never contradict anything. ⭐ AND EVERY CLAUSE-4 DROP IN THE WHOLE CORPUS, IN EVERY CELL, IS THE VERB `move` REFUSING ON A `contain.path:<person>` BELIEF -- *there is no road from here to there*, formed by witnessing travel.blocked and overturned by a later travel.moved. Nothing else in the corpus fires clause 4 at all. So this metric measures people BEING WRONG, and a wider channel set does not suppress propagation: it CORRECTS THE STALE BELIEF BEFORE IT CAN BITE. ⚠ THE ARM MUST THEREFORE NOT BE CHOSEN ON THIS METRIC IN EITHER DIRECTION -- it is a monoculture of one verb and one predicate, and tuning the design's whole knowledge layer to preserve `move`'s refusals would be protecting a single worked instance. THE DEFECT IT EXPOSES IS THAT §F1 CLAUSE 4 HAS EXACTLY ONE REACHABLE INSTANCE, which is a producer hole and is not this row's. The shipped arm stays 19_PLAN.md step 1's, which is also the only arm producing a secret between two co-located people. Falsifiers: test_r7_two_persons_hold_different_things_and_at_total_they_cannot and test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links, the second of which asserts the third link INERT so that the day it comes alive the test says so."
+    cite:      "PLAN §3.2. Shape derivable from the presence index (#353 :1010 -- \"compute its observer set from the presence index and the five channels\") ⚠ LINE NUMBER CORRECTED 2026-09-28, M4 build step 10: this row's own `holonic_ARCHITECTURE.md` §23 pointer note shifted every line after it by 6 (`ED-IN-0279` clause (a)'s ratified-doc amendments); the quote moved, the claim did not. and `hold` Tenures. ⚠ THE DEFAULT WAS THE FIVE PREDICATES AND IS CORRECTED TO TOTAL FAN-OUT: PLAN §6.3 (§6.2 before the 2026-09-02 rewrite moved it) states \"the `H-33` default at this milestone is TOTAL FAN-OUT... `sweep: [total, presence, five]`\", and §3.2 disagreed with it. G1 makes the instrument inject THE REGISTER'S default, so the five-predicate value would have given artifact 2's minimum work-item set W6's content -- a presence index and office-scope predicates -- without anyone deciding that. The five predicates stay as a SWEEP ARM, which is what §6.2 asks for. ⚠ EXECUTED BY W6, AND THE ROW STAYS `assumption`. shape.observers_for reads the five predicates from rosters.yaml witness_channel_predicates and the arm from the fan_out_mode fixture. The declared sweep RUNS: over three seasons, deposits fall 678 (total) -> 68 (presence_only) -> 71 (all_five), and ledgers go from pinned at the L=200 cap to 34/34/0. P15 flips to PASS BY CONSTRUCTION. What is NOT closed is the grade: #353 names the five channels and supplies NO predicate for any of them, so these are an injected default, `total` remains the default because it is the specified behaviour, and grading this row `ruled` would credit the design with an answer this session invented. `unblocks:` is left verbatim -- the transcription gate is right that an execution note is not a transcription. ⚠ THE DEFAULT MOVED OFF `total` ON 2026-09-07 AND THE GRADE DID NOT, WHICH IS THE WHOLE OF THE UPDATE. R7 rules WHICH ARM DOES NOT SHIP -- Jordan chose the architecture model over the echo model, so `total` is excluded and BETWEEN `presence_only` AND `all_five` THE RULING IS SILENT; that choice was made on measurement here and must not be cited as ruled. Jordan's words are, *legitimacy falls where the news has reached*, and `total` is that echo model arriving at the deposit layer -- and it rules NOTHING about what the five predicates ARE. #353 still names five channels and supplies no predicate for any of them, so the predicates remain an injected default and this row stays `assumption`; a session reading a ruled ARM as a ruled ROW would credit the design with five formulas nobody has written. MEASURED AT THE FLIP, build_world(0), 3 seasons: deposits 649 (total) -> 57 (presence_only) -> 60 (all_five); ledgers [200,200,200] -> [0,28,29] -> [0,28,32]; QUESTIONS RAISED 5/9/10 -> 5/8/8 -> 5/9/10. The last row is why the arm is `all_five` and not `presence_only`: the narrowest arm thins the claim->question link and the shipped one does not. ⚠ AND M-6'S INSTRUMENT CANNOT OBSERVE THE THIRD LINK: the corpus tallies (NPC R3 30/30, ARC 54/59) are identical across all three arms BOTH co-located AND dispersed to distinct rungs, because `_r3_propagates` walks Event.causes[] over driver.resolved and never reads a ledger. So M-6 as 19_PLAN.md specifies it CANNOT FAIL, and a check that cannot fail is not a measurement (§0.1 pt 2). ⚠ THE THIRD LINK ITSELF IS REAL, and a first writing of this note said it was inert -- true of build_world(0), where three persons seat one actor and the act set is identical under all three arms, and FALSE of tiny_world, five persons across four rungs, where the same flip takes 233 acts to 221 and makes suppressing `move` stop being larder-neutral. Caught by test_w8_the_proof_clause_is_still_not_met_and_h94_was_not_the_only_reason within the hour, which is the suite doing the job the claim skipped. So this row's ID-16 flattening (question_aggregation_rule: first + the five-scene budget) bounds the GAIN, not the existence; measuring the gain is still H-106. ⭐⭐ DIAGNOSED 2026-09-07, AND THE DIAGNOSIS RETIRES THE ARM QUESTION RATHER THAN ANSWERING IT. A fork reaches a later decision by exactly one route -- §F1 clause 4 (engine/season/epistemic.py::belief_contradicts), a claim in the actor's own ledger contradicting a candidate's precondition. Counting that population over the same 89 worlds (wd_extra.corpus_drops) at observation_deposit_mode `actor`: total 37 drops / 62 divergences · all_five 0 / 0 · presence_only 114 / 229. THE DIVERGENCES TRACK THE DROPS EXACTLY, so the zero is not a property of this arm and not a channel defect: clause 4 never fires at the shipped configuration and a fork has nothing to change. Beliefs still form there (22 false-when-recorded) and never contradict anything. ⭐ AND EVERY CLAUSE-4 DROP IN THE WHOLE CORPUS, IN EVERY CELL, IS THE VERB `move` REFUSING ON A `contain.path:<person>` BELIEF -- *there is no road from here to there*, formed by witnessing travel.blocked and overturned by a later travel.moved. Nothing else in the corpus fires clause 4 at all. So this metric measures people BEING WRONG, and a wider channel set does not suppress propagation: it CORRECTS THE STALE BELIEF BEFORE IT CAN BITE. ⚠ THE ARM MUST THEREFORE NOT BE CHOSEN ON THIS METRIC IN EITHER DIRECTION -- it is a monoculture of one verb and one predicate, and tuning the design's whole knowledge layer to preserve `move`'s refusals would be protecting a single worked instance. THE DEFECT IT EXPOSES IS THAT §F1 CLAUSE 4 HAS EXACTLY ONE REACHABLE INSTANCE, which is a producer hole and is not this row's. The shipped arm stays 19_PLAN.md step 1's, which is also the only arm producing a secret between two co-located people. Falsifiers: test_r7_two_persons_hold_different_things_and_at_total_they_cannot and test_r7_m6_the_narrowed_arm_does_not_starve_the_first_two_links, the second of which asserts the third link INERT so that the day it comes alive the test says so."
     source:    "ARCHITECTURE_V2.md §VII.2, transcribed verbatim | V2's grade cell: **absent** | V2's default cell: none. ⚠ **fan-out is total; nothing said in private is private** -- transcribed verbatim and now FALSE OF THE SHIPPED DEFAULT, by R7. The source cell records what V2 said, not what runs; the `default:` cell above is what runs"
   - id:        H-34
     tier:      1
@@ -3016,6 +3016,135 @@ rows:
       and reds it too; weakening that filter from `>` to `>=` moves NOTHING on this slice, recorded
       because it is the mutation that looks like it should fire and does not.
     source:    "W-B 2026-09-04 -- the write side of `H-116`, whose read side shipped in `W-A`"
+
+  - id:        H-147
+    tier:      1
+    hole:      "THE TOKEN `march`'s OWN FOLD WRITES ACROSS ITS DECLARE/DEFER SPLIT. No prior verb
+      folded twice at two different steps for one act, so no roster named the intermediate band a
+      RESOLVE-time deferral has to write nothing under, before ENCOUNTER fights it for real."
+    kind:      "RULING (roster) + SCHEMA_ROW"
+    owner:     "`seam/ladder.py::field_degree`, mirroring `combat_degree_bands`'s own shape"
+    grade:     "ruled"
+    default:   "`[Declared, Won, Lost, Unopposed]`, ORDERED and unpacked positionally. `Declared` is
+      RESOLVE's own deferral token (M4 planning round 2 -- Jordan chose the seventh-phase
+      ENCOUNTER design over synchronous resolution at RESOLVE, after the architectural cost was
+      disclosed twice); `Won`/`Lost`/`Unopposed` are read off `seam/wrappers/mass_battle.py`'s
+      lifted `attacker_wins`/`unopposed` fields."
+    site:      "engine/season/rosters.yaml -- `field_degree_bands`; bound in `data/rosters.py` as
+      `FIELD_BANDS`/`DECLARED`/`WON`/`LOST`/`UNOPPOSED`; read by `seam/ladder.py::field_degree` and
+      `loop/resolve.py::_contest` (the declare/defer check against a prize row's manifest `step`)"
+    sweep:     []
+    unblocks:  "`march`'s own fold existing at all -- without this token RESOLVE's deferral and
+      ENCOUNTER's real fight would have no shared vocabulary for which pass they are on"
+    cite:      "M4 build step 1 (`ED-IN-0279` clause (a)). `Won`/`Lost` NAME THE ATTACKER's OWN
+      OUTCOME, never which side a write lands on -- `Won` means the DEFENDERS lost; `Lost` means
+      the ATTACKER's OWN claimants lost. `_eff_march` (loop/effects.py) is the reader that turns
+      this into a side; `test_march.py` is the falsifier, folding a real fight through the driver
+      both cross-faction and unopposed."
+    source:    "M4 of the mc_v18-retirement plan (`ED-IN-0279`), Jordan's ruling on the ENCOUNTER
+      timing (M4 planning round 2)"
+
+  - id:        H-148
+    tier:      1
+    hole:      "HOW MUCH `Person.body` A LOST FIELD COSTS. `writes_grade_note` on the `march` row
+      names the CELL Jordan's ruling on clause (b) fixes -- casualties, a morale hit, a grudge
+      token, nothing else, nothing on the winner -- and never a magnitude; no ruling states one.
+      `wound_harm_models` (`H-123`) asked the identical question of a scene's `WoundTracker` and
+      this row asks it of mass_battle's own survivor-ratio result instead."
+    kind:      "FORMULA"
+    owner:     "`_eff_march` (loop/effects.py) -- the value the `Lost`/`Won` branches write to
+      `(Person, body)` on the LOSING side"
+    grade:     "assumption"
+    default:   "`scaled_by_degree` -- each loser's body scales by the survivor fraction the mass-
+      battle engine already computed for their own side (`attacker_size_pct`/`defender_size_pct`,
+      `seam/wrappers/mass_battle.py`'s own `resolve()` return), never invented in this chain -- the
+      same READ-NOT-CHOSEN move `wound_harm_model`'s `scene_fraction` makes off `WoundTracker`'s
+      `health_remaining`/`health_full`, on Jordan's 2026-09-04 ruling on that row (*\"the combat
+      engine determines the result there\"*) applied to this magnitude too."
+    site:      "engine/season/data/fixtures.py -- `DEFAULT_FIXTURES.field_casualty_model`, read by
+      `loop/effects.py::_eff_march`. Same row's second half, the stance-weight pair
+      `DEFAULT_FIXTURES.field_morale_weight` / `DEFAULT_FIXTURES.field_grudge_weight` (swept 0/1/3,
+      `_eff_march`'s morale-hit/grudge write), deferred to this row rather than a separate one --
+      one `(referent, valence, weight)` write, two weights, the same magnitude-not-ruled question."
+    sweep:     ["scaled_by_degree (the default)", "total (THE CONTROL: every loser's body to 0 --
+      re-running \"losing a field costs everything\" deliberately, `wound_harm_model`'s own first
+      control re-applied)", "none (the SECOND control: the body is not written at all, isolating
+      the write from the band, exactly as `wound_harm_model`'s `none` arm does)"]
+    unblocks:  "`march` having a real cost on its losing side rather than a token-only defeat"
+    cite:      "M4 build step 7-8 (`ED-IN-0279` clause (a)). ⚠ `tools/balance_oracle.py` DOES NOT
+      APPLY TO THIS QUESTION -- it patches `mc_v18`/`dice_engine` and compares
+      `mc_v18.run_campaign` arms; `march` lives entirely in `engine/season/`, which `mc_v18` cannot
+      reach (`mc_v18` is deprecated in place, `CLAUDE.md` §0.2 -- no game code imports it).
+      Patching it would leave both arms identical by construction, exactly the
+      \"campaign-unreachable change\" `CLAUDE.md` §7 names as a fake control, not a measurement.
+      The default is settled by the engine-reads-the-magnitude precedent above, not by a balance
+      question, so no such run was made. FALSIFIER: `test_march.py`'s
+      `test_the_total_casualty_model_zeroes_the_losing_side` and
+      `test_the_none_casualty_model_writes_stance_only`, the two controls run deliberately through
+      the real driver fold."
+    source:    "M4 of the mc_v18-retirement plan (`ED-IN-0279`), invented on `wound_harm_model`'s
+      own precedent -- no ruling states a magnitude, exactly as `H-123` records for that row"
+
+  - id:        H-149
+    tier:      1
+    hole:      "WHAT A `march` MAY TARGET. Person containment never terminates at a settlement rung
+      -- every person's `contain` targets a `home` building beneath one -- so \"the exact rung
+      marched to\" is vacuous read literally, and nothing in the chain names the unit a march
+      actually contests presence over."
+    kind:      "RULING (roster) + SCHEMA_ROW"
+    owner:     "`requires_typed` on the `march` verb row (`kind: Rung`) plus `_eff_march`'s own
+      settlement-subtree restriction"
+    grade:     "ruled"
+    default:   "`[settlement]` -- ONE MEMBER, NOT AN OPEN SET. Jordan's ruling (M4 planning round
+      2): \"present at the target\" for a march means the target settlement PLUS everything under
+      it (the whole subtree, not the rung alone) -- matching `world_q.density`'s existing
+      composition rather than inventing a new one."
+    site:      "engine/season/rosters.yaml -- `march_target_kinds`; bound in `data/rosters.py` as
+      `MARCH_TARGET_KINDS`"
+    sweep:     []
+    unblocks:  "`march`'s `requires_typed` -- without a named target kind the typed-existence check
+      (`kind: Rung`) would admit any rung, including ones with no settlement beneath them to
+      muster a defence from"
+    cite:      "M4 build step 1 (`ED-IN-0279` clause (a)). The roster is closed for a reason bound
+      elsewhere: `contain_ascends` (`state/world.py`) forbids a sideways move to a foreign
+      settlement, so no second target kind is invented here -- adding one later is a data edit the
+      moment a second kind is ruled, not a design choice made in this row."
+    source:    "M4 of the mc_v18-retirement plan (`ED-IN-0279`), Jordan's ruling on the march
+      target (M4 planning round 2)"
+
+  - id:        H-150
+    tier:      1
+    hole:      "GARRISON STRENGTH IS DEFINED AND UNREACHABLE. Jordan ruled WHAT garrison strength
+      IS (a Site's own `condition` field, M4 planning round 2) but never ruled WHAT IT DOES to a
+      field battle's outcome, and no code asks. `queries/world_q.py::fortification_of` reads the
+      ruled value correctly, in `[0.0, 1.0]`, and nothing calls it: `seam/wrappers/mass_battle.py`
+      passes `terrain=None` unconditionally to `resolve_field`, whose only two knobs are `terrain`
+      and `rng` -- neither a fortification channel. A settlement with a garrison at full condition
+      fights identically to one with none, or with no garrison Site at all."
+    kind:      "PRODUCER"
+    owner:     "no owner exists yet -- the candidate site is `seam/wrappers/mass_battle.py::resolve()`,
+      which would need either a new provider parameter or a pre-battle margin adjustment `contest()`
+      applies before the provider runs"
+    grade:     "assumption"
+    default:   "NONE SHIPPED. `fortification_of`'s return is computed and discarded; this row does
+      not invent a formula for what it should do, on the same discipline `H-148` follows -- a
+      magnitude nobody ruled is not guessed into the fold silently."
+    site:      "engine/season/queries/world_q.py -- `fortification_of` (built, M4 build step 4);
+      no reader exists"
+    sweep:     []
+    unblocks:  "garrison Sites (step 11) having any mechanical effect at all -- today seeding one
+      changes `w.sites`, `world_q.density`'s composition, and nothing else"
+    cite:      "FOUND while correcting this module's own docstring at M4 build step 10, which had
+      claimed clause (b)'s ruling closed 'what a garrison is' without checking whether that
+      definition reached the fight -- it does not. `test_march.py`'s fixture (`set_s_036`, 6
+      defenders) carries no garrison Site, so no existing test exercises this path either way;
+      the gap is real and unmeasured, not merely undocumented. FALSIFIER, TO BE WRITTEN: seed a
+      garrison Site at full condition on a march target, run the SAME seed through `_fold_one`
+      twice (garrisoned / ungarrisoned), and show the fight's own `attacker_size_pct` is identical
+      across both runs -- which is the defect this row names, made observable rather than
+      asserted."
+    source:    "M4 of the mc_v18-retirement plan (`ED-IN-0279`), found by the orchestrator (Claude
+      Sonnet 5) auditing its own build rather than ruled or reported by Jordan"
 
 
 discharges:
