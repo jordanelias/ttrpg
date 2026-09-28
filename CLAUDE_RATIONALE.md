@@ -166,6 +166,15 @@ existing sixteen ever move is a separate decision nobody has taken.
 
 ## §0.3 — the T1 experiment, and why a silent hook is not a banner
 
+**The feedback loop, named for reference (moved here in full 2026-09-28 — `CLAUDE.md` §0.3 now
+states only the rule):**
+
+| | what it is | how it fed the loop |
+|---|---|---|
+| **T3 — generator** | §0 mandates adversarial passes | passes emit findings → ledger rows → a generated start-of-session surface → **that surface defines the next session's work.** Closed loop, gain > 1, no human in it |
+| **T1 — amplifier** | what a session SEES at start | a queue of pending units, none about the game |
+| **T2 — reward** | what a session is graded on at Stop | clean tree · handoff · board · no regression — **all satisfiable without touching the game** |
+
 **T1 was tested, not assumed.** The start-of-session banner was reduced, then retired. The session
 running under the reduced banner still wrote apparatus and no game: **T1 fell and the freed capacity
 still went to apparatus, which says T2 had not moved.** That is why the instruction is to test T2 rather
@@ -290,6 +299,14 @@ that is the accretion §0.3 describes, and the repair is to cut it back to the m
 `PreToolUse` deny on multi-`Agent` dispatch was put to him as §11's shape applied to fan-out cost, and
 the answer was *"I want multiple agent dispatches."* Absent a ruling, a deny is apparatus looking for a
 rule.
+
+**Four properties for a future orchestrated run, never built, so listed rather than measured (moved
+here in full 2026-09-28).** A **closed `stop_reason` set that is report-only** (RULED — a breaker
+halting a large audit on a heuristic costs more than the defect it caught); a **null-result alarm**
+on any lens that returned nothing, shipped *paired with* **rank-by-independent-rediscovery** so the
+alarm never becomes pressure to manufacture findings; and **disagreement records with required
+adjudication**, where an out-of-lane record is a terminal `observation` no later ruling can
+overwrite. None of the four is enforced by anything that exists.
 
 **The critic/author asymmetry, and the general lesson.** `valoria-author`'s first version removed `Bash`
 and `Agent` and called the removal structural. Jordan ruled otherwise 2026-09-17: *"we still need agents
