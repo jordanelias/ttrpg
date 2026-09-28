@@ -166,19 +166,27 @@ def test_a_march_act_reaches_self_resolved_exactly_once_across_both_folds():
         "ENCOUNTER's real fold, not once")
 
 
-def test_a_march_on_an_unheld_target_refuses_rather_than_crashing_the_season():
+def test_a_march_on_an_unheld_settlement_refuses_rather_than_crashing_the_season():
     """FALSIFIER for the crash `valoria-critic` found in the adversarial pass on this build, not
-    anticipated while writing it: `march` on ANY Rung with no HELD ancestor (`H-149` permits an
-    unheld settlement or territory as a target; `r_valoria`, the campaign root, is one) sent
+    anticipated while writing it: `march` on a settlement Rung with no HELD ancestor sent
     `sides_of`'s `subject=None` into `mass_battle.py::resolve()`, which reports that shape as
     `status="PARTY-GAP"` -- and `seam/contest.py` raised an uncaught `Unspecified` for ANY
     non-RESOLVED status, crashing `encounter()` and the whole season. `loop/resolve.py::_contest`
     now catches `Unspecified(needs="PARTY-GAP")` around the `contest()` call and folds it as a
-    graceful refusal, the same shape the pre-existing empty-`_parties` check already produced."""
+    graceful refusal, the same shape the pre-existing empty-`_parties` check already produced.
+
+    ⚠ `set_s_037`, NOT `r_valoria` (M4 review pass, second correctional finding). The first
+    writing of this test used `r_valoria`, the campaign root -- kind `realm`, not `settlement`.
+    Once `sides_of`'s target-kind check (`H-149`) landed, `r_valoria` refuses through THAT branch
+    before ever reaching `holder_faction_of`, so this test stopped exercising the path it was
+    written for: a settlement that IS the right kind and genuinely has no held ancestor.
+    `set_s_037` is `build_realm(0)`'s one such settlement, asserted below rather than assumed."""
     w = build_realm(0)
-    assert world_q.holder_faction_of(w, "r_valoria") is None, (
-        "the campaign root is held after all; pick a genuinely unheld target")
-    act = _march_act("p_npc_033", "r_valoria", "off_npc_033")
+    assert w.rungs["set_s_037"].kind == "settlement", (
+        "set_s_037 is no longer a settlement; this test needs one that is")
+    assert world_q.holder_faction_of(w, "set_s_037") is None, (
+        "set_s_037 is held after all; pick a genuinely unheld settlement")
+    act = _march_act("p_npc_033", "set_s_037", "off_npc_033")
     events = _fold_one(w, act, contest_max_depth=2)
     kinds = [(e.kind, e.degree) for e in events]
     assert ("march.declared", "Declared") in kinds

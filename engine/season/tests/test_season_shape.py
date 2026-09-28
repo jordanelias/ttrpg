@@ -11712,7 +11712,16 @@ def test_u2_two_acts_by_one_person_on_one_subject_in_two_rounds_have_distinct_id
     **27 of 27 cases carried duplicate act ids (13-22 apiece) and duplicate Event ids.**
 
     ⚠ THE SLICE IS THE CORPUS LANE AND NOT ONE WORLD, because the duplication was universal and a
-    single world would make a universal property look like a lucky one."""
+    single world would make a universal property look like a lucky one.
+
+    ⚠ `dup_acts` IS NOW VACUOUS BY CONSTRUCTION, DISCLOSED RATHER THAN LEFT SILENT (M4 review
+    pass, correctional finding): `loop/resolve.py::_fold` dedupes `self.resolved` by id (M4,
+    `ED-IN-0279` clause (a) build step's own review round -- march's declare/defer split folds
+    the same Act twice), so `Counter(a.id for a in d.resolved)` can never show `n > 1` regardless
+    of whether `_qualify_by_round` still works. `dup_evs`, over `w.log` (never deduped by that
+    fix -- `d.resolved` and the log are separate structures), is what still catches the
+    regression this test names: a colliding act id still mints a colliding Event id, and that
+    collision lands in the log whether or not `_fold` dedupes the act itself."""
     from ..harness import corpus_run as C
     from ..harness import run_cases as R
     from collections import Counter

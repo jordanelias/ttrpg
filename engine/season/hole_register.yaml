@@ -3092,8 +3092,11 @@ rows:
       marched to\" is vacuous read literally, and nothing in the chain names the unit a march
       actually contests presence over."
     kind:      "RULING (roster) + SCHEMA_ROW"
-    owner:     "`requires_typed` on the `march` verb row (`kind: Rung`) plus `_eff_march`'s own
-      settlement-subtree restriction"
+    owner:     "`requires_typed` on the `march` verb row (`kind: Rung`) plus `loop/sides.py::sides_of`'s
+      own settlement-kind check, against `MARCH_TARGET_KINDS`. ⚠ CORRECTED, M4 review pass: this
+      field named `_eff_march` from the row's first writing through the check's actual build --
+      `_eff_march` never carried it, `sides_of` does (the same correction landed on
+      `verb_table.yaml`'s `requires_typed_note`)."
     grade:     "ruled"
     default:   "`[settlement]` -- ONE MEMBER, NOT AN OPEN SET. Jordan's ruling (M4 planning round
       2): \"present at the target\" for a march means the target settlement PLUS everything under
@@ -3190,6 +3193,50 @@ rows:
       happens (or, once ruled, that it refuses)."
     source:    "M4 review pass (`valoria-critic`), `ED-IN-0279` clause (a)'s own ruling text
       supplying the reasoning, not a fresh Jordan ruling"
+
+  - id:        H-152
+    tier:      1
+    hole:      "A `total`-CASUALTY-MODEL MARCH LOSS KILLS WITH NO `person.died` EVENT.
+      `_eff_march`'s `total` arm sets a loser's body to 0 and calls `w.remove_person`, on
+      `_eff_kill`'s own precedent (removal whenever a write leaves `body <= 0`) -- but
+      `_eff_kill`'s `Felled` band ALSO emits `person.died` (`verb_table.yaml`'s `kill / wound`
+      row), because `_fold` emits whatever the VERB TABLE declares per DEGREE, and `Felled`
+      always kills, so the declaration is unconditional. `march`'s `Lost`/`Won` bands emit only
+      `field.lost`/`field.won` (`verb_table.yaml`'s `march` row) -- fixed per DEGREE, not per
+      `field_casualty_model` arm, because the verb table has no mechanism for a degree's emitted
+      kinds to vary by a swept FIXTURE rather than by the fold's own band. A person can therefore
+      die under `total` with nothing in the log or WITNESS's fan-out saying so."
+    kind:      "PRODUCER"
+    owner:     "no owner exists yet -- the candidate site is `loop/effects.py::_eff_march`, which
+      would need either a runtime-conditional emission the verb-table schema does not currently
+      express, or `field_casualty_model`'s `total` arm ceasing to remove a person at all"
+    grade:     "assumption"
+    default:   "NONE SHIPPED. The gap is disclosed, not guessed closed: inventing a conditional
+      `emits:` mechanism keyed on a fixture rather than a degree is new plumbing this row does
+      not build unasked, and `total` is a CONTROL arm (`H-148`), not the shipped default
+      (`scaled_by_degree`, which floors at 1 and never reaches this path) -- so the gap is real
+      but low-frequency by construction."
+    site:      "engine/season/loop/effects.py -- `_eff_march`'s `total` branch, the
+      `w.remove_person(pid)` call added in the M4 review pass's correctional round"
+    sweep:     []
+    unblocks:  "a `total`-model march death being visible to anything that reads `person.died`
+      -- news propagation, faction-membership queries, obituary-shaped content, or any future
+      reader keying off that kind"
+    cite:      "FOUND by `valoria-critic`'s second correctional pass, on the review round's own
+      fix. ⚠ ONE HALF OF THAT REPORT'S FINDING IS NOT A REAL DEFECT, CHECKED RATHER THAN
+      REPEATED: the report also read `remove_person` as riding an illegal write against
+      `write_matrix.yaml`'s step column for `(Person, exists)`/`(Tenure, until)`. It does not --
+      `remove_person`'s own docstring is explicit that it MUTATES DIRECTLY and never calls
+      `w.write`, so `World.write`'s step check (`state/world.py`'s `if step not in allowed:
+      raise Forbidden`) never runs against it, exactly as it never runs when `_eff_kill` calls
+      the SAME function at RESOLVE. The write is not gated at all, at either step -- it is
+      OBSERVED by the gate's F3/G3 clause as `destroy's cascade` regardless of which step it
+      happens inside. What IS real is the missing `person.died` Event, which is this row.
+      FALSIFIER, TO BE WRITTEN: sweep `field_casualty_model=\"total\"`, fold a real march to
+      `Lost`, and show no `person.died` Event names the removed person's id in the round's
+      events, while `w.persons` no longer contains them."
+    source:    "M4 review pass (`valoria-critic`, second correctional round), on
+      `loop/effects.py::_eff_march`'s own `remove_person` fix from the first correctional round"
 
 
 discharges:

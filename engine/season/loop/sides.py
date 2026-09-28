@@ -27,7 +27,7 @@ from __future__ import annotations
 from typing import Optional
 
 from .. import manifest
-from ..data.rosters import faction_prop_id
+from ..data.rosters import MARCH_TARGET_KINDS, faction_prop_id
 from ..queries.world_q import ancestry, holder_faction_of, home_of, mustered
 from ..state.carriers import Act
 from ..state.world import World
@@ -97,9 +97,13 @@ def sides_of(w: World, a: Act, target: Optional[str],
         # is a target-kind constraint carried as DATA (a manifest or verb-row field, read the way
         # `manifest.resolve(...)["module"]` already is), not this `w.rungs[target].kind` check --
         # left for a future session, since `march` is still the only `mass_battle`-routed verb.
+        # ⚠ AGAINST THE ROSTER, NOT A HARDCODED `"settlement"` STRING (M4 review pass, a second
+        # correctional finding: the first writing checked the literal string, so extending
+        # `march_target_kinds` later would still change nothing here -- exactly the
+        # declared-but-unread defect this check exists to close, reintroduced one level down).
         target_kind = w.rungs[target].kind if target is not None and target in w.rungs else None
         subject = (holder_faction_of(w, target)
-                   if target is not None and target_kind == "settlement" else None)
+                   if target is not None and target_kind in MARCH_TARGET_KINDS else None)
         # ⚠ A TARGET HELD BY THE ACTOR'S OWN FACTION, WITH THAT FACTION'S OWN PEOPLE PRESENT TO
         # MUSTER AS "DEFENDERS", IS NOT REFUSED HERE -- found in the same pass, NOT fixed, on
         # purpose. Jordan's verbatim ruling frames march as meeting an OPPOSITION army, which a

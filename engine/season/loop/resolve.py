@@ -488,8 +488,13 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     # that does not expect one, is what `_ten_seasons`-style tests (no `corpus_run.run_case`
     # exception wrapper around them) found the hard way.
     def _party_gap_refusal() -> list:
+        # ⚠ `or ("act.refused",)`, MATCHING EVERY SIBLING FALLBACK (`_admits`, `_fold`,
+        # `_refuse_after_the_fact`) -- found missing in the M4 review pass's own correctional
+        # round: a verb with an empty `emits_on_refusal:` (or a hand-built Act naming no real
+        # verb row at all) produced ZERO Events here, a silent drop, where every other refusal
+        # path in this module already falls back.
         row = VERB_TABLE.get(a.verb)
-        kinds = row.emits_on_refusal if row is not None else ()
+        kinds = (row.emits_on_refusal if row is not None else ()) or ("act.refused",)
         produced = _act_events(w, a, kinds, [a.id])  # `_act_events` owns the id scheme (§8)
         for _e in produced:
             self.act_of[_e.id] = a
@@ -517,12 +522,16 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
                     rng=_rng)
     except Unspecified as e:
         # ⚠ ONLY `PARTY-GAP` IS CAUGHT, DELIBERATELY (M4 review pass, `/simplify` altitude
-        # finding raised the question). A wrapper's OTHER non-RESOLVED statuses --
-        # `ENGINE-UNAVAILABLE` (the subsystem failed to import/compose), a wrapper's own
-        # `REFUSED` -- are software or subsystem defects, not a normal world-state outcome the
-        # way an unheld or empty-sided target is. Swallowing those into a graceful `march.refused`
-        # would hide a real infrastructure failure behind a plausible-looking game Event; they
-        # stay uncaught and loud. `e.needs` is a free-text field elsewhere in this codebase
+        # finding, corrected once more by a second correctional pass). `ENGINE-UNAVAILABLE`
+        # (a wrapper's subsystem failed to import/compose) is a software defect and stays
+        # uncaught and loud on purpose -- swallowing it into a graceful `march.refused` would
+        # hide a real infrastructure failure behind a plausible-looking game Event.
+        # ⚠⚠ `sigma.py`'s own `REFUSED` (S27.4, `Ob > 2x Pool`) is NOT a software defect -- it is
+        # a normal game refusal, and mischaracterizing it as one was this comment's own first
+        # writing. It is PRE-EXISTING: `tell` already reaches an uncaught `Unspecified` on it
+        # today, unrelated to march, and this fix neither created nor closes that gap -- widening
+        # the catch to cover it is a `social_contest`-lane decision, outside what this pass may
+        # decide. `e.needs` is a free-text field elsewhere in this codebase
         # (`manifest/registry.py`, `harness/probes.py`), matched by string rather than a typed
         # exception subclass, because `seam/contest.py` forwards a wrapper's raw `status` value
         # verbatim only at this one raise site -- a real but separate seam-contract gap, not
