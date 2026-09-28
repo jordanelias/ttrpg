@@ -501,6 +501,39 @@ ci_checks:
       whoever greens the first row must restore a blocking form in the same commit, with a
       baseline, or the gate that defines `done` will be advisory at exactly the point it matters.
 
+  - path: tools/fold_ledger_to_latest.py
+    level: 5
+    subject: compliance
+    posture: harden
+    role: >-
+      The editorial-ledger queue instrument (plan position `1` CLOSE-PASS's own deliverable,
+      `workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md` §3.1 item 1). Folds every
+      `registers/editorial_ledger*.jsonl` row to the last row per id (the ED-IN-0149 precedent)
+      and reports `needs_jordan: true` at any status — HANDOFF.md's own definition of "rows
+      awaiting Jordan" — plus the narrower `∧ status: open` subset old plan position 1's own
+      OBSERVABLE text names, replacing four disagreeing hand counts (108/158, 151/105, 41/51/77,
+      37) with one reproducible command. A Phase-3 terminal critique of this tool's own first
+      cut found that reporting ONLY the narrower subset silently excludes real, live Jordan
+      items filed under a status other than `open` (`ED-IN-0210`/`ruled`, `ED-IN-0261`/`partial`,
+      `ED-IN-0247`/`resolved` all carry `needs_jordan: true` and are all still his) — a fifth
+      disagreeing figure rather than a retirement of the first four. Both counts are reported now.
+    ci_job: ""
+    notes: >-
+      DELIBERATELY NOT WIRED INTO CI, matching `tools/balance_oracle.py`'s precedent (two rows
+      above this one — `tools/m1_acceptance.py` sits directly above and IS wired into CI, so
+      "immediately above" would misname the sibling this matches): this is a measurement
+      instrument for a queue Jordan reviews by hand, not a gate over game state, and nothing
+      here should fail a build. Manual invocation only:
+      `python tools/fold_ledger_to_latest.py --queue`. Does NOT scan the older, pre-migration
+      `registers/archive/*.yaml` corpus, structurally separate from the `.jsonl` ledgers this
+      tool reads — a row resolved only there reads as "not found," not as resolved, to `--id`
+      (exact-id lookup only; it does not accept a fragment or a prefix). That corpus is not
+      reliably all-terminal either: `registers/archive/*.yaml`'s own ED-IN-0245 ruling archives a
+      row on EITHER of two criteria (pre-current-month OR terminal status, not terminal status
+      alone), so a live, flagged row can in principle sit there — benign today (every such row
+      checked has a later, terminal superseding row in the same file) but not something this tool
+      itself verifies.
+
 
 # ── Level 1-2 (text/skill, supervisory only) ─────────────────────────────────
 # Listed for completeness; promotion to Level 5 is the long-term direction. (Was

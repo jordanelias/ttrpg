@@ -40,7 +40,6 @@ USAGE
 """
 import argparse
 import collections
-import glob
 import json
 import os
 import re
@@ -170,22 +169,25 @@ def machine_read_inputs(root=None):
 
 
 def work_items(root=None):
-    """(file, entry) for every ledger id whose EFFECTIVE (last) row is unresolved or needs_jordan."""
-    root = root or ROOT
-    last = {}
-    for f in sorted(glob.glob(os.path.join(root, 'registers', 'editorial_ledger*.jsonl'))):
-        rel = os.path.relpath(f, root).replace(os.sep, '/')
-        for line in open(f, encoding='utf-8'):
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                e = json.loads(line)
-            except ValueError:
-                continue
-            if e.get('id'):
-                last[e['id']] = (rel, e)
-    return [(rel, e) for rel, e in last.values()
+    """(file, entry) for every ledger id whose EFFECTIVE (last) row is unresolved or needs_jordan.
+
+    Routes through `ci_common.fold_ledger_to_latest()` rather than hand-rolling the same
+    glob+parse+fold loop a second time (`CLAUDE.md` §8) -- verified delta-none by diffing this
+    function's own output, before and after, against the live tree.
+
+    `root` is accepted for parity with this module's other functions (`code_identifiers`,
+    `machine_read_inputs`, `triage` all take one), but every call in this tree passes `None`
+    (grepped) and `ci_common`'s reader has no way to point at a different tree. A genuinely
+    different `root` used to get a second, independent implementation that could (and did, in
+    two small ways) drift from this one; it now raises instead of silently reading `ROOT` or
+    silently disagreeing with the shared reader -- loud, not a maintained-for-no-caller branch.
+    """
+    if root is not None and root != ROOT:
+        raise NotImplementedError(
+            'work_items() only reads ci_common.REPO; no caller in this tree passes a '
+            'different root, and ci_common.fold_ledger_to_latest() has no way to point at one')
+    latest = ci_common.fold_ledger_to_latest()
+    return [(path, e) for path, _line_no, e in latest.values()
             if not V._is_resolved(e.get('status', '')) or e.get('needs_jordan')]
 
 

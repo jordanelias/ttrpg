@@ -771,3 +771,128 @@ def test_every_lane_display_map_is_total_over_the_owner():
         assert not os.path.exists(os.path.join(ROOT, retired)), (
             f'{retired} is back and historically carried its own lane map — the discovery above '
             f'will now find it, but confirm it is total rather than assuming')
+
+
+# ── the editorial ledger reader: editorial_ledger_paths, read_editorial_ledger_rows,
+#    fold_ledger_to_latest (plan position `1` CLOSE-PASS,
+#    workplans/2026-09-28-the-plan-one-order-mc-v18-retired.md §3.1 item 1) ───────────────────
+# Zero coverage existed for these when they shipped (Phase-1 methodology pass caught it,
+# CLAUDE.md §0.1 pt 3's falsifier discipline). This is that coverage.
+
+def test_editorial_ledger_paths_matches_the_real_ledger_population():
+    """20 files today: the flat live/archive pair, plus a live/archive pair per lane. The
+    function GLOBS (`/simplify` altitude finding: matches `sim_reference_roots()`'s own
+    precedent and two existing sibling globs, `triage_work_items.py` /
+    `currency_consistency_check.py`, rather than re-deriving a `LANE_CODES`-keyed list a
+    fourth time) — this checks the glob's result against the roster owner (`LANE_CODES`)
+    independently, not a hard-coded count, so it fails if a lane's files go missing or a
+    non-ledger file starts matching the glob."""
+    expected = {"registers/editorial_ledger.jsonl", "registers/editorial_ledger_archive.jsonl"}
+    for lane in ci_common.LANE_CODES:
+        expected.add(f"registers/editorial_ledger_{lane.lower()}.jsonl")
+        expected.add(f"registers/editorial_ledger_{lane.lower()}_archive.jsonl")
+    found = ci_common.editorial_ledger_paths()
+    assert set(found) == expected
+    assert len(found) == len(expected), 'no duplicate paths'
+    assert found == ci_common.editorial_ledger_paths(), 'deterministic run to run'
+    # Terminal critique (Phase 3): archive-before-live per lane, matching
+    # validate_ed_citations.load_ed_universe's precedent (archives first, active ledger last,
+    # so a last-write-wins fold lets the live row override a stale archived copy).
+    for lane in ('editorial_ledger', *(f'editorial_ledger_{lane.lower()}' for lane in ci_common.LANE_CODES)):
+        archive_i = found.index(f"registers/{lane}_archive.jsonl")
+        live_i = found.index(f"registers/{lane}.jsonl")
+        assert archive_i < live_i, f'{lane}: archive must sort before its own live sibling'
+
+
+def test_read_editorial_ledger_rows_degrades_per_file_not_globally(tmp_path):
+    """Empty file, blank-lines-only file, all-malformed-JSON file, a non-dict JSON line, and a
+    missing file each degrade to skipping that one line or file — never an exception, and never
+    silently dropping every OTHER file's genuine rows."""
+    good = tmp_path / 'good.jsonl'
+    good.write_text('{"id": "ED-X-0001", "status": "open"}\n', encoding='utf-8')
+
+    empty = tmp_path / 'empty.jsonl'
+    empty.write_text('', encoding='utf-8')
+
+    blank = tmp_path / 'blank.jsonl'
+    blank.write_text('\n\n   \n', encoding='utf-8')
+
+    malformed = tmp_path / 'malformed.jsonl'
+    malformed.write_text('not json\n{also not json\n', encoding='utf-8')
+
+    non_dict = tmp_path / 'non_dict.jsonl'
+    non_dict.write_text('"just a string"\n42\n["a", "list"]\n', encoding='utf-8')
+
+    missing = tmp_path / 'does_not_exist.jsonl'
+
+    rows = ci_common.read_editorial_ledger_rows(
+        paths=[str(good), str(empty), str(blank), str(malformed), str(non_dict), str(missing)])
+    assert len(rows) == 1
+    path, line_no, entry = rows[0]
+    assert entry == {"id": "ED-X-0001", "status": "open"}
+    assert line_no == 1
+
+
+def test_read_editorial_ledger_rows_resolves_relative_paths_against_repo_regardless_of_cwd(monkeypatch, tmp_path):
+    """CORRECTNESS finding (Phase-1 methodology pass): a bare `open(path)` on a repo-relative
+    path silently 404s -- and returns [] rather than raising -- if the caller's CWD is not the
+    repo root. This is the falsifier: chdir away from the repo, ask for a REAL repo-relative
+    ledger path, and require it still resolves."""
+    elsewhere = tmp_path / 'elsewhere'
+    elsewhere.mkdir()
+    monkeypatch.chdir(elsewhere)
+    assert os.getcwd() != ci_common.REPO
+    rows = ci_common.read_editorial_ledger_rows(paths=['registers/editorial_ledger_mb.jsonl'])
+    assert rows, (
+        'read_editorial_ledger_rows returned no rows for a real, non-empty ledger file when the '
+        'CWD was not the repo root -- the exact silent-false-zero failure CLAUDE.md §0.1 pt 3 '
+        'row 4 names ("a generator that no-ops... returns 0")')
+
+
+def test_fold_ledger_to_latest_is_last_one_wins_per_id():
+    """Hand-constructed rows, not a file read: isolates the fold's own dict-overwrite logic
+    from the reader. Two rows share an id (later one wins); a third id is untouched."""
+    rows = [
+        ('a.jsonl', 1, {'id': 'ED-X', 'v': 1}),
+        ('a.jsonl', 2, {'id': 'ED-X', 'v': 2}),
+        ('a.jsonl', 3, {'id': 'ED-Y', 'v': 1}),
+    ]
+    latest = ci_common.fold_ledger_to_latest(rows)
+    assert latest['ED-X'] == ('a.jsonl', 2, {'id': 'ED-X', 'v': 2})
+    assert latest['ED-Y'] == ('a.jsonl', 3, {'id': 'ED-Y', 'v': 1})
+    assert len(latest) == 2
+
+
+def test_fold_ledger_to_latest_skips_rows_with_no_id():
+    rows = [('a.jsonl', 1, {'status': 'open'}), ('a.jsonl', 2, {'id': 'ED-X'})]
+    latest = ci_common.fold_ledger_to_latest(rows)
+    assert set(latest) == {'ED-X'}
+
+
+def test_needs_jordan_queue_predicate_ignores_status():
+    """Terminal critique (Phase 3) finding, HIGH severity: an earlier version of this instrument
+    pinned `needs_jordan: true AND status: open == []` against the LIVE tree. That predicate
+    silently excludes real, live Jordan items whose status is anything else --
+    `ED-IN-0210` (`status: ruled`), `ED-IN-0261` (`partial`), `ED-IN-0247` (`resolved`) all
+    carry `needs_jordan: true` today and are all named as still his to answer elsewhere in this
+    repo's own planning documents (HANDOFF.md's own "rows awaiting Jordan" definition has no
+    status filter at all). Pinning an exact count against the real, human-owned ledger is also
+    fragile in the other direction -- the count moves every time an item is filed or resolved,
+    which is not a code regression. So this is a SYNTHETIC-data test of the mechanism instead:
+    `needs_jordan: true` must be counted at ANY status, never narrowed to `status == 'open'`."""
+    rows = [
+        ('a.jsonl', 1, {'id': 'ED-A', 'status': 'ruled', 'needs_jordan': True}),
+        ('a.jsonl', 2, {'id': 'ED-B', 'status': 'partial', 'needs_jordan': True}),
+        ('a.jsonl', 3, {'id': 'ED-C', 'status': 'resolved', 'needs_jordan': True}),
+        ('a.jsonl', 4, {'id': 'ED-D', 'status': 'open', 'needs_jordan': True}),
+        ('a.jsonl', 5, {'id': 'ED-E', 'status': 'open', 'needs_jordan': False}),
+        ('a.jsonl', 6, {'id': 'ED-F', 'status': 'resolved', 'needs_jordan': False}),
+    ]
+    latest = ci_common.fold_ledger_to_latest(rows)
+    needs_jordan = {eid for eid, (_p, _l, e) in latest.items() if e.get('needs_jordan') is True}
+    assert needs_jordan == {'ED-A', 'ED-B', 'ED-C', 'ED-D'}, (
+        'needs_jordan:true must be counted regardless of status -- narrowing to status==open '
+        'is the defect the Phase-3 terminal critique found')
+    open_subset = {eid for eid in needs_jordan if latest[eid][2].get('status') == 'open'}
+    assert open_subset == {'ED-D'}, 'the status:open subset is old plan position 1\'s literal ' \
+        'OBSERVABLE text -- report it beside the fuller count, never in its place'

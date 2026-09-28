@@ -1039,6 +1039,61 @@ These are explicitly held back:
   `registers/editorial_ledger_in_archive.jsonl:177` for `ED-IN-0261`. Moving that row (§8.1) makes the
   line number stale; the id still resolves.
 
+### 8.3 · Made at position `1`'s execution — a later commit than §8.1's, same day
+
+Position `1` (CLOSE-PASS) shipped its instrument (`tools/fold_ledger_to_latest.py`,
+`ci_common.fold_ledger_to_latest`) and used it before touching any row — §0.1 pt 3's discipline,
+not trusting the ten-day-old §2.1 table by eye. **The measurement corrects §2.1 itself, and the
+correction belongs here, not there:** the old plan's `_part2` §8 position 1 stays its content
+owner, and this table records what changed the facts underneath it since it was written.
+
+- **§2.1's own table was stale the day it was compiled.** Its ~97 "closable" rows were measured
+  2026-09-11. An internal pass the ledger itself labels **`ED-IN-0215 position 1`**, dated the same
+  day, had already closed the overwhelming majority of them — the same document's own earlier
+  execution of its own position 1, a day before that document's stated ratification
+  (`workplans/2026-09-13-work-order.md:176`, `## Status: RATIFIED 2026-09-12`), not a separate plan
+  generation. §2.1's compiler never reconciled against it. A second, independent instance of the
+  same pattern: the old plan's own §5 item 1 cites `ED-IN-0214`'s row as "still reads `status: open`
+  / `needs_jordan: true`" — true of the row at
+  `registers/archive/editorial_ledger_in_archive_pre-2026-09.yaml:2504`, but that file holds a
+  SECOND, later `ED-IN-0214` row at `:3678` (dated 2026-09-15, `status: ruled`,
+  `needs_jordan: false`) the old plan's own citation never checked for. By the append-only
+  convention both plans state (`CLAUDE.md` §1: "an id's LAST row is its current state"), `:3678`
+  governs: `ED-IN-0214` was already closed before either plan's §5 was written.
+- **§2.1's "13 not found" ids are not 13 unresolved citations.** All 13 resolve. Twelve
+  (`ED-IN-0030/0042/0049/0050/0086/0092/0123/0124/0148/0158/0159/0195`) are already terminal in
+  `registers/archive/editorial_ledger_in_archive_pre-2026-09.yaml` — the frozen, pre-migration
+  corpus `ci_common.editorial_ledger_paths()` does not scan, so they read as "not found," not as
+  "still open," to the new instrument (nine via a 2026-09-15 superseding row; three were already
+  `status: closed` at their original 2026-07/08 row, predating §2.1 entirely). The thirteenth,
+  cited as `ED-FA-0013c`, is a citation typo for **`ED-FA-0013`** (`registers/editorial_ledger_fa_archive.jsonl:12`)
+  — a live, in-scope, already-`status: superseded` row (2026-09-11, the same `ED-IN-0215 position 1`
+  pass). ⚠ **Corrected by a Phase-3 terminal critique:** it is NOT "findable by the same fragment
+  search this position's own instrument supports" — the shipped `--id` flag is an exact-id lookup
+  only and does not accept a fragment. The typo was caught by a manual, ad-hoc search run during
+  this session's own investigation, not by a feature of the instrument as shipped.
+- **The instrument's OWN first cut manufactured a fifth disagreeing figure, and a Phase-3 terminal
+  critique caught it before this landed.** `needs_jordan: true ∧ status: open`, old plan position
+  1's literal OBSERVABLE predicate, folds to **0** — the ≤ 12 acceptance line is met. But reporting
+  that alone as "the queue" is false: `ED-IN-0210` (`status: ruled`), `ED-IN-0261` (`status:
+  partial`) and `ED-IN-0247` (`status: resolved`) all carry `needs_jordan: true` in their current
+  row and are all independently named, elsewhere in THIS document, as still Jordan's to answer —
+  §5.1 items 6, 1–5 and 8 respectively. `needs_jordan: true` at ANY status, folded, is **41** —
+  overwhelmingly historical rows where the flag was never cleared after the row's own resolution
+  (a `resolved`/`ratified`/`executed` status with a lingering `needs_jordan: true` is bookkeeping
+  noise, not a live question; §5.1's own thirteen-item roster is the curated, ratified list of what
+  is actually still open). Neither raw count IS "the queue" on its own; `tools/fold_ledger_to_latest.py
+  --queue` now prints both, and §5.1 is the answer to "what does Jordan still owe."
+- **Net: this position's only ledger edit is the one row §5.2 already named**, `ED-MB-0075`
+  (appended to `registers/editorial_ledger_mb.jsonl`, `needs_jordan: false`, `status` stays `open`
+  — the design fork is settled, the build is `25`'s). The narrow OBSERVABLE predicate goes
+  **1 → 0**, meeting the ≤ 12 line old plan position 1 set; §5.1's roster is untouched by this
+  commit and remains open, exactly as its own header says it must.
+- **Ride-along, confirmed moot rather than silently skipped:** old plan `_part2` §8 position 1's
+  second ride-along, "strike `HANDOFF.md:463-469`'s 'THE STEP TO TAKE: S7'", has no live target —
+  root `HANDOFF.md` is 61 lines today, a pure pointer index with no such text anywhere (grepped).
+  An earlier, unrelated rewrite already removed it. Nothing to strike.
+
 ---
 
 ## 9. NOT VERIFIED IN THIS PASS

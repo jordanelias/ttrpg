@@ -10,8 +10,11 @@
 # to be one of the two surviving carriers by which a fully compliant session could hand itself
 # apparatus work — the reroute CLAUDE.md §0.3 predicts, in the file that was supposed to end it.
 #
-# WHAT TO READ INSTEAD: the SessionStart banner, then HANDOFF.md's "THE DELIVERABLE" block, then
-# CLAUDE.md §0.2. Your work is the current M1 juncture and nothing else (CLAUDE.md §0).
+# WHAT TO READ INSTEAD [CORRECTED 2026-09-28, plan position `1` CLOSE-PASS — the SessionStart
+# banner this used to name is itself retired (CLAUDE.md §0.3), and HANDOFF.md no longer carries a
+# "THE DELIVERABLE" block (it is a pointer index; see its own "Next actions" table)]:
+# CLAUDE.md §1 (currency), then HANDOFF.md and your lane's HANDOFF_<LANE>.md. Your work is the
+# current M1 juncture and nothing else (CLAUDE.md §0).
 #
 # WHY THIS FILE STILL EXISTS: it holds MEASURED FACTS worth keeping — the controlled compile
 # numbers, the gate tier, the failure decoder, and the residual record. It is a REFERENCE, not a
