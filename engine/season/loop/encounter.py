@@ -32,7 +32,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from .resolve import _canonical_order
+from .resolve import _canonical_order, _contests_of
 from ..data.matrix import Step
 from ..data.rosters import DECLARED
 from ..data.verbs import VERB_TABLE
@@ -68,7 +68,7 @@ def encounter(self, token: Token, events: list,
             out.extend(gone)
             continue
         row = VERB_TABLE.get(a.verb)
-        contests = list(a.contests or ()) or ([row.contests] if row and row.contests else [])
+        contests = _contests_of(a, row)
         produced = self._contest(w, token, a, contests, contest_max_depth)
         for e in produced:
             self.act_of[e.id] = a

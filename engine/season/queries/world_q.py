@@ -320,6 +320,14 @@ def footprint(w: World, faction: str) -> list[str]:
     return sorted(out)
 
 
+def _subtree(w: World, rung_id: str) -> set:
+    """`rung_id` plus everything under it, by containment (`descendants`). Extracted (M4 review
+    pass, `/simplify` reuse finding): `density`, `mustered` and `fortification_of` each wrote
+    `{rung_id, *descendants(w, rung_id)}` independently -- `mustered`'s own docstring already
+    named the duplication ("density's own composition, one line above") rather than ending it."""
+    return {rung_id, *descendants(w, rung_id)}
+
+
 def density(w: World, rung_id: str, faction: str) -> tuple[int, int]:
     """`(members of this faction present, persons present)` over the containment subtree.
 
@@ -333,7 +341,7 @@ def density(w: World, rung_id: str, faction: str) -> tuple[int, int]:
     other denominator is the other question; both are one line, and the caller should say which
     it means rather than this returning a bare ratio."""
     TRACE.query("density", "resolver")
-    here = {rung_id, *descendants(w, rung_id)}
+    here = _subtree(w, rung_id)
     inside = set(members(w, faction))
     present = [t.subject for t in w.tenures
                if t.kind == "contain" and t.live
@@ -353,7 +361,7 @@ def mustered(w: World, rung_id: str, faction: str) -> list[str]:
     its target -- both the same query, the faction and the rung simply swapped. `04 §C.5.1`'s own
     pseudocode: *"squad combat: the squad is `members ∩ present-at-rung`"*."""
     TRACE.query("mustered", "resolver")
-    here = {rung_id, *descendants(w, rung_id)}
+    here = _subtree(w, rung_id)
     inside = set(members(w, faction))
     return sorted(t.subject for t in w.tenures
                   if t.kind == "contain" and t.live
@@ -379,7 +387,7 @@ def fortification_of(w: World, rung_id: str) -> float:
     this gap's row: HOW MUCH a fortification level should shift a field battle is an invented
     magnitude no ruling states, on `H-148`'s own shape."""
     TRACE.query("fortification_of", "resolver")
-    here = {rung_id, *descendants(w, rung_id)}
+    here = _subtree(w, rung_id)
     garrisons = [s for s in w.sites.values() if s.kind == "garrison" and s.rung in here]
     if not garrisons:
         return 0.0
@@ -541,16 +549,17 @@ def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
 
     ⚠ `None` FOR "NOBODY HOLDS ANY RUNG UP THIS CHAIN" IS A SHORTFALL, NOT AN ERROR --
     `nearest_store`'s own reading of an empty root. What a `march` targeting an unheld
-    (`Uncontrolled`) settlement means is `march`'s own eligibility to decide, not this Query's."""
+    (`Uncontrolled`) settlement means is `march`'s own eligibility to decide, not this Query's.
+
+    ⚠ THE WALK IS `ancestry`, NOT A FOURTH HAND-ROLLED COPY (M4 review pass, `/simplify` reuse
+    finding). A first writing repeated `ancestry`'s own visited-set-guarded parent walk inline,
+    one screen away from `ancestry` itself in this same file -- exactly the duplication that
+    function's own docstring exists to end."""
     TRACE.query("holder_faction_of", "resolver")
-    seen: set = set()
-    cur = rung_id
-    while cur is not None and cur in w.rungs and cur not in seen:
-        seen.add(cur)
+    for cur in ancestry(w, rung_id):
         t = hold_force(w, cur)
         if t is not None:
             return faction_holding(w, t.subject)
-        cur = parent_of(w, cur)
     return None
 
 

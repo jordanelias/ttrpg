@@ -89,6 +89,14 @@ def sides_of(w: World, a: Act, target: Optional[str],
         # `None`, which is the SAME shape `holder_faction_of` returning `None` already is --
         # `_contest`'s PARTY-GAP catch (M4, found in the same pass) refuses it gracefully, one
         # mechanism for both "no legitimate defending scope exists" causes rather than two.
+        # ⚠ THE KIND CHECK IS INLINE, MARCH-SPECIFIC BUSINESS LOGIC IN A FUNCTION WHOSE OWN
+        # CONTRACT IS "DISPATCH BY THE PRIZE'S SUBSYSTEM, NEVER THE VERB" -- disclosed (M4 review
+        # pass, `/simplify` altitude finding), not fixed. `sides_of` takes `prize`, not `verb`,
+        # specifically so it stays verb-agnostic; a second `mass_battle`-routed verb with a
+        # different target-kind rule would have nowhere generic to read one from. The deeper fix
+        # is a target-kind constraint carried as DATA (a manifest or verb-row field, read the way
+        # `manifest.resolve(...)["module"]` already is), not this `w.rungs[target].kind` check --
+        # left for a future session, since `march` is still the only `mass_battle`-routed verb.
         target_kind = w.rungs[target].kind if target is not None and target in w.rungs else None
         subject = (holder_faction_of(w, target)
                    if target is not None and target_kind == "settlement" else None)

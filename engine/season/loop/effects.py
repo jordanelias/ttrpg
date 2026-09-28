@@ -49,7 +49,7 @@ all twelve, and both exist to keep every hash that is not `work`'s where it was:
 from __future__ import annotations
 
 from ..data.rosters import (
-    DECLARED, FIELD_CASUALTY_MODELS, LOST, PURSUIT_AXES, FELLED, RELEASABLE_KINDS, UNOPPOSED, WON,
+    DECLARED, FIELD_CASUALTY_MODELS, LOST, PURSUIT_AXES, FELLED, RELEASABLE_KINDS, UNOPPOSED,
     WOUND_HARM_MODELS, faction_prop_id, require_member,
 )
 

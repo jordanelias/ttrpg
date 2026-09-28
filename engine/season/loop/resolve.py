@@ -75,6 +75,15 @@ def _survives(self, w: "World", a: Act) -> list:
     return gone
 
 
+def _contests_of(a: Act, row: "VerbRow | None") -> list:
+    """Which prize (if any) `a` contests: `a.contests` if the act itself names one, else the
+    verb row's own `contests:` cell. Extracted (M4 review pass, `/simplify` finding): `resolve()`'s
+    own loop and `loop/encounter.py::encounter` each wrote this expression independently, the same
+    duplication `_canonical_order`/`_survives` were extracted to end (§8). No `self`: a pure
+    function of the act and its row, not of driver state."""
+    return list(a.contests or ()) or ([row.contests] if row and row.contests else [])
+
+
 def _eligible(self, w: "World", a: Act, row: "VerbRow") -> bool:
     """§E4: eligibility admits `own`, `remit:<act>`, `hold:<object>`, `presence:<rung>` -- and
     NEVER `capability`, which the table loader already refuses. The kinds are a DISJUNCTION:
@@ -253,7 +262,13 @@ def _fold(self, w: "World", token: Token, a: Act,
     # `out["acts"]` reports -- for one act that reached resolution once. Guarding it the same way
     # `w.acts` already is closes the gap at its one owner rather than at every reader of the
     # count.
-    if not any(r.id == a.id for r in self.resolved):
+    # ⚠ `self._resolved_ids` IS THE O(1) COMPANION, NOT A SECOND LIST SCAN (M4 review pass,
+    # `/simplify` efficiency finding). `resolved` is cumulative and NEVER RESET across a whole
+    # campaign's many seasons, so `any(r.id == a.id for r in self.resolved)` costs O(current
+    # length) on EVERY act's fold, not only march's -- O(N) per act over an N-act run,
+    # `ActStore._by_id`'s own reason for existing, applied here the same way.
+    if a.id not in self._resolved_ids:
+        self._resolved_ids.add(a.id)
         self.resolved.append(a)
     # G1a. AND THE STORE, which is NOT observation -- every Event this fold emits names `a.id`
     # in `causes[]`, and `state/log.py` refuses a cause that resolves to nothing. `resolve()`
@@ -475,8 +490,7 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
     def _party_gap_refusal() -> list:
         row = VERB_TABLE.get(a.verb)
         kinds = row.emits_on_refusal if row is not None else ()
-        produced = [Event(H(w.world_seed, w.tick, a.actor, f"{k}:{a.id}"), k, [], [a.id], w.tick)
-                    for k in kinds]
+        produced = _act_events(w, a, kinds, [a.id])  # `_act_events` owns the id scheme (§8)
         for _e in produced:
             self.act_of[_e.id] = a
         return produced
@@ -502,6 +516,17 @@ def _contest(self, w: "World", token: Token, a: Act, contests: list,
                     max_depth=contest_max_depth, causes=[a.id], verb=a.verb, subject=_subject,
                     rng=_rng)
     except Unspecified as e:
+        # ⚠ ONLY `PARTY-GAP` IS CAUGHT, DELIBERATELY (M4 review pass, `/simplify` altitude
+        # finding raised the question). A wrapper's OTHER non-RESOLVED statuses --
+        # `ENGINE-UNAVAILABLE` (the subsystem failed to import/compose), a wrapper's own
+        # `REFUSED` -- are software or subsystem defects, not a normal world-state outcome the
+        # way an unheld or empty-sided target is. Swallowing those into a graceful `march.refused`
+        # would hide a real infrastructure failure behind a plausible-looking game Event; they
+        # stay uncaught and loud. `e.needs` is a free-text field elsewhere in this codebase
+        # (`manifest/registry.py`, `harness/probes.py`), matched by string rather than a typed
+        # exception subclass, because `seam/contest.py` forwards a wrapper's raw `status` value
+        # verbatim only at this one raise site -- a real but separate seam-contract gap, not
+        # widened here.
         if e.needs == "PARTY-GAP":
             return _party_gap_refusal()
         raise
@@ -668,7 +693,7 @@ def resolve(self, token: Token, acts: list[Act],
         # Jordan, 2026-09-02: *"that…would trigger the personal combat scene. you can't just
         # kill or wound imo."* The design said so at `:434` and the instrument did not read it.
         _row = VERB_TABLE.get(a.verb)
-        _contests = list(a.contests or ()) or ([_row.contests] if _row and _row.contests else [])
+        _contests = _contests_of(a, _row)
         if _contests:
             # ⚠⚠ §E2's ORDER, RESTORED: ELIGIBILITY AND `requires` BEFORE THE SEAM, NOT AFTER IT.
             # This branch used to route straight into personal combat, so a contested act's

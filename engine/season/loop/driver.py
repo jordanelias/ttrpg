@@ -253,6 +253,15 @@ class SeasonDriver:
         # thing to DECIDE, and giving it back as a resolver parameter is how the second resolver
         # returns. This list is appended by the fold and read by nobody inside it.
         self.resolved: list[Act] = []
+        # ⚠ COMPANION SET, `ActStore._by_id`'s OWN SHAPE, FOR THE SAME REASON (M4 review pass,
+        # `/simplify` efficiency finding). `_fold` dedupes `resolved` by id -- a march act reaches
+        # it once from RESOLVE's Declared fold and once more from ENCOUNTER's real fold -- and a
+        # per-call `any(r.id == a.id for r in self.resolved)` scan is O(n) against a list that is
+        # NEVER RESET across a whole campaign's many `season()` calls, making every act's fold
+        # O(N) over the run's total act count instead of O(1). `_resolved_ids` is maintained
+        # alongside `resolved`, never read on its own, and exists only so the dedup check in
+        # `loop/resolve.py::_fold` is a set membership test.
+        self._resolved_ids: set = set()
         # ⚠ RESOLVER-SIDE, AND CUMULATIVE — like `resolved`, which is also never reset. The
         # Scene is the budgeted unit and carries the `occasion`, so the fold can name what
         # occasioned an act. No person-side Query reaches it, exactly as none reaches `resolved`.
