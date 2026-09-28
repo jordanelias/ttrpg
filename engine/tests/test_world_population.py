@@ -9,24 +9,33 @@ Covers, per the wave's own falsifier list:
   2. settlements serialization round-trip (serialize_world -> restore_world -> serialize_world,
      byte-equal dict).
   3. an NPE season over a POPULATED store asserting >= 1 npc action (assert checked >= 1).
-  4. the honest-deferral disposition this wave landed on for BOTH world.npcs (OI-05) and
-     world.knots (OI-07): re-verified against canon (investigation_systems_v30.md SYSTEM 1 /
-     knots_v30.md §3.1) that neither has a world-gen or season-tick TRIGGER specified — only
-     drift (simulate_npc_actions, already wired pre-this-wave via accounting.run_accounting) has
-     one. Pinned here as a guard: if either ever silently gains a live call site, this trips
-     loudly (same discipline as test_f7_smoke_oracle.py's npcs==0 guard) rather than the golden
-     moving unnoticed.
+  4. the honest-deferral disposition this wave landed on for world.knots (OI-07): re-verified
+     against canon (knots_v30.md §3.1) that it has no world-gen or season-tick TRIGGER specified.
+     Pinned here as a guard: if it ever silently gains a live call site, this trips loudly.
+
+RETIRED 2026-09-27 (mc_v18-retirement plan M1): three tests and the `engine.mc_v18` import they
+needed are gone.
+  - `test_generate_npc_has_no_automatic_call_site_this_wave` — its own docstring already named
+    `test_f7_smoke_oracle.py`'s `npcs_generated==0` golden as the mirror; that golden is the
+    surviving falsifier for world.npcs (OI-05).
+  - `test_npc_and_knot_deferral_stubs_fire_every_season` — tested `_faction_actions_callback`'s
+    OWN per-season stub-firing, internal to `engine.mc_v18` (frozen, deprecated in place,
+    ED-IN-0227; not load-bearing on the game or a Jordan decision, CLAUDE.md §0.1 pt 5).
+  - `test_settlements_populated_reachable_from_a_seeded_campaign` — settlements populate once, at
+    `create_world` time, and a campaign run never re-derives them; falsifier 1 above (world-gen
+    time) already covers the live claim, and the campaign-boundary half was mc_v18's own
+    serialization step, not a game property.
+`test_knots_stay_unpopulated_honest_deferral` (falsifier 4) is REWRITTEN, not deleted, below,
+since the claim it guards has no successor elsewhere — see that test's own docstring for how.
 """
 from __future__ import annotations
 
 import random
-import unittest.mock
 
 import yaml
 
 from engine.autoload import game_state, victory, scene_slate
-from engine.mc_v18 import _faction_actions_callback, run_campaign
-from engine.substrate import stubwire
+from engine.cross_scale import scene_dispatch
 from systems.overview.sim.season import run_season
 from systems.settlements.sim.registry import LEGAL_TYPES
 from systems.world.sim import npe
@@ -63,17 +72,6 @@ def test_settlements_populated_at_world_gen_matches_geography_source_exactly():
     assert checked == expected
 
 
-def test_settlements_populated_reachable_from_a_seeded_campaign():
-    """The same falsifier, but through the full campaign loop (run_campaign), not just
-    create_world directly — this is what test_pipeline_reach.py's world-settlements xfail row
-    exercises."""
-    expected = _geography_settlement_count()
-    r = run_campaign(seed=42)
-    settlements = r.final_state.get('settlements', {})
-    assert len(settlements) == expected, (
-        f"final_state['settlements'] has {len(settlements)} entries, expected {expected}")
-
-
 def test_settlements_serialization_round_trip():
     """Falsifier: serialization round-trip for settlements."""
     w = game_state.create_world(seed=7)
@@ -105,7 +103,8 @@ def test_settlements_population_does_not_consume_campaign_rng():
 
 
 # ═════════════════════════════════════════════════════════════════════════════════════════════
-# OI-05 — NPE (generation honest deferral + drift falsifier)
+# OI-05 — NPE (drift falsifier). The generation-honest-deferral half moved to
+# test_f7_smoke_oracle.py's npcs_generated==0 golden — see module docstring, RETIRED note.
 # ═════════════════════════════════════════════════════════════════════════════════════════════
 
 def test_npe_season_over_a_populated_store_produces_at_least_one_action():
@@ -139,91 +138,29 @@ def test_simulate_npc_actions_already_wired_every_season_via_accounting():
     assert 'simulate_npc_actions(world)' in src
 
 
-def test_generate_npc_has_no_automatic_call_site_this_wave():
-    """Honest-deferral guard (mirrors test_f7_smoke_oracle.py's npcs==0 assertion, but scoped to
-    THIS module so a silent future wire-up trips here first with the citation attached): neither
-    world-gen nor the season loop calls generate_npc, because investigation_systems_v30.md SYSTEM
-    1's Two-Tier Generation is scene-specification-driven only — no world-gen count and no
-    season-tick generation trigger exist in canon to cite (re-verified 2026-07-29). A seeded
-    campaign must therefore still show npcs_generated == 0, and the stubwire flag recorded in
-    mc_v18.py's _faction_actions_callback must fire once per season as the visible marker of the
-    deferral."""
-    r = run_campaign(seed=1, max_seasons=5)
-    assert r.npcs_generated == 0, (
-        "npcs_generated is no longer 0 — generate_npc may have gained a live call site; if this "
-        "is an intentional wire-up, update this test AND test_f7_smoke_oracle.py's golden together")
-
-
 def test_knots_stay_unpopulated_honest_deferral():
     """OI-07's world.knots half: form_knot's §3.1 prerequisites (Disposition, Bonds, TS) are
     personal-scale actor fields absent from the aggregate World — no world-gen/season formation
-    rule exists in canon. world.knots must stay empty after a seeded campaign, and the deferral
-    must be recorded via stubwire (not silent)."""
-    r = run_campaign(seed=1, max_seasons=5)
-    assert r.final_state.get('knots', {}) == {}, "world.knots is no longer empty — honest-deferral guard tripped"
+    rule exists in canon. world.knots must stay empty across several seasons of the season loop,
+    with the season's own scene-dispatch phase (where a fieldwork-mechanic call site is most
+    likely to eventually land — `_resolve_slot` already has a "fieldwork" branch) actually run.
 
-
-def test_npc_and_knot_deferral_stubs_fire_every_season():
-    """Both honest-deferral stub_resolve calls in mc_v18._faction_actions_callback fire exactly
-    once per season.
-
-    WAVE-2 REPAIR (critic 'missing', ED-IN-0091 plan §3 Wave 2 item 8 / CLAUDE.md §0.1 point 2):
-    the prior version of this test ran the whole campaign in one `run_campaign` call and then
-    asserted `checked = seasons; assert checked == seasons` — `checked` never depended on
-    anything observed per season, so the assert was decorative (it would pass even if the
-    callback fired zero times per season, or a wildly different number, as long as SOME season
-    ran at all). This version steps the season loop itself (mirrring `run_campaign`'s own
-    composition — `season.run_season(action_callback=mc_v18._faction_actions_callback)` — but
-    driven here so `stubwire.invocations` can be sampled BETWEEN seasons) and asserts a REAL
-    per-season delta, so a season that produced zero deflection-stub fires would fail this test,
-    not just the aggregate floor below.
-
-    W2 RE-CRITIC HARDENING (CLAUDE.md §0.1 point 2): the prior version below asserted only the
-    UNATTRIBUTED global `delta >= 2` — any two `stub_resolve` calls from anywhere would satisfy
-    it, so deleting ONE of the two named OI-05/OI-07 fires (`generate_npc`, `form_knot`) while a
-    THIRD, unrelated stub call happened to fire that same season would leave this test green.
-    `stubwire.invocations` (stubwire.py:51) is a bare module-level int, not keyed by module (per
-    stubwire.py:40-51's `StubResult` shape — `module`/`io_contract` live on the per-call return
-    value, not on the counter), so attribution requires capturing the actual `StubResult`s, not
-    just counting. This version wraps `stubwire.stub_resolve` (via `unittest.mock.patch.object`,
-    `side_effect=` the real function so behavior is unchanged) to record each call's
-    `(module, io_contract)`, then asserts the two call sites named in mc_v18.py — 'engine.mc_v18'
-    module / 'generate_npc(world-gen|season-tick)' + 'form_knot(world-gen|season-tick)'
-    io_contract — each appear at least once per season. Deleting either named fire now fails
-    here even if unrelated stubs fire in the same season."""
-    world = game_state.create_world(seed=3)
+    REWRITTEN 2026-09-27 (mc_v18-retirement plan M1, corrected by an antagonist pass same day):
+    previously drove `engine.mc_v18.run_campaign` to get a multi-season World. The FIRST rewrite
+    decoupled it by calling `run_season(world)` with NO action_callback — which really does run
+    (`engine_clock.run_tick`'s `advance_season` + `accounting.run_accounting`), but SILENTLY
+    NARROWED the guard: `run_tick` only invokes scene dispatch (`scene_dispatch.run_scene_phase`,
+    where the fieldwork branch actually lives) INSIDE a caller-supplied action_callback, and this
+    test supplied none. A guard that no longer watches the likeliest wiring site is not the same
+    guard. This version supplies `scene_dispatch.run_scene_phase` itself as the callback — the
+    same function `engine.mc_v18._faction_actions_callback` calls, but called directly, with none
+    of that callback's faction-action logic — so `run_season` drives the ACTUAL scene-dispatch
+    phase every season, still with no `engine.mc_v18` import. `victory.reset()`/`scene_slate.clear()`
+    guard against leaked module-level state from an earlier test in the same pytest process — both
+    are module-level singletons (`engine/autoload/{victory,scene_slate}.py`), not per-World."""
+    world = game_state.create_world(seed=1)
     victory.reset()
     scene_slate.clear()
-    seasons = 6
-    checked = 0
-    per_season_counts = []
-
-    _NPC_SITE = ('engine.mc_v18', 'generate_npc(world-gen|season-tick)')
-    _KNOT_SITE = ('engine.mc_v18', 'form_knot(world-gen|season-tick)')
-
-    real_stub_resolve = stubwire.stub_resolve
-    captured: list[tuple[str, str]] = []
-
-    def _capturing_stub_resolve(module, io_contract, *, reason):
-        captured.append((module, io_contract))
-        return real_stub_resolve(module, io_contract, reason=reason)
-
-    with unittest.mock.patch.object(
-            stubwire, 'stub_resolve', side_effect=_capturing_stub_resolve):
-        for _ in range(seasons):
-            captured.clear()
-            run_season(world, action_callback=_faction_actions_callback)
-            npc_fires = captured.count(_NPC_SITE)
-            knot_fires = captured.count(_KNOT_SITE)
-            per_season_counts.append((npc_fires, knot_fires))
-            # Real conditional check, attributed: a season missing EITHER named fire fails HERE,
-            # per-season, regardless of how many other stub_resolve calls fired that season.
-            assert npc_fires >= 1 and knot_fires >= 1, (
-                f"season missing an attributed deferral fire — generate_npc={npc_fires} "
-                f"form_knot={knot_fires} (expected >=1 each) — per-season (npc, knot) counts "
-                f"so far: {per_season_counts}")
-            checked += 1
-    assert checked == seasons  # assert-that-asserted (CLAUDE.md §0.1 point 2) — now load-bearing:
-    # `checked` only increments inside the loop body AFTER the real per-season attributed assert
-    # above ran and passed, so this confirms every one of the `seasons` iterations cleared that
-    # bar, not merely that the loop executed `seasons` times.
+    for _ in range(5):
+        run_season(world, action_callback=scene_dispatch.run_scene_phase)
+    assert world.knots == {}, "world.knots is no longer empty — honest-deferral guard tripped"

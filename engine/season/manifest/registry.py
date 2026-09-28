@@ -82,9 +82,11 @@ def has(role: str, module: str) -> bool:
 
     ⚠ IT IS A QUESTION ABOUT THE CODE, NOT ABOUT THE DATA, WHICH IS WHY IT IS SEPARATE FROM
     `resolve`. A roster row may name a module the contracts file declares and nothing may have
-    registered a callable for it — `mass_battle` is exactly that today. `resolve` answers *whose
-    prize is this*; this answers *can anybody actually run it*, and a verb is resolvable only on the
-    second.
+    registered a callable for it — `mass_battle` was exactly that until `ED-IN-0279` (M3) gave it
+    a provider; every prize row has one as of that plan, but this function stays the live check
+    rather than a historical note, since a future row could land unregistered again. `resolve`
+    answers *whose prize is this*; this answers *can anybody actually run it*, and a verb is
+    resolvable only on the second.
 
     ⚠ **IT NO LONGER IMPORTS ANYTHING TO MAKE THE ANSWER TRUE.** `_load_providers()` stood
     here and imported `seam/wrappers/*`, which was an import cycle -- see
@@ -148,10 +150,17 @@ def resolve(role: str, key: Any) -> Optional[dict]:
             law="a prize row names WHOSE contest it is before it names what runs it; a row with a "
                 "provider and no module says a thing can be rolled without saying what it is")
     provider_name = row.get("provider") if isinstance(row, dict) else None
+    # M4 (`ED-IN-0279` clause (a)). `step:` names WHEN this prize is fought -- absent means
+    # RESOLVE, the default every prize before M4 already had; `ENCOUNTER` defers to the seventh
+    # phase. `declares:` is the band RESOLVE's own admission-and-fold writes while deferred.
+    # Read here, once, because `04 §C.4`'s seam asks `manifest.resolve()` for both rather than
+    # reaching into the roster row a second way -- one reader, not two.
+    step = row.get("step") if isinstance(row, dict) else None
+    declares = row.get("declares") if isinstance(row, dict) else None
     contracts = files.MODULE_CONTRACTS_YAML
     if not contracts.exists():
         return dict(module=name, provider=provider_name, resolver="unknown",
-                    doc="module_contracts.yaml not found")
+                    doc="module_contracts.yaml not found", step=step, declares=declares)
     for m in _contracts():
         if m.get("module") == name:
             # ⚠ THE PYTHON, NOT THE MARKDOWN. Jordan, 2026-09-02: *"we aren't using the .md or
@@ -166,7 +175,8 @@ def resolve(role: str, key: Any) -> Optional[dict]:
                          else f"(no `sim_module:` in module_contracts.yaml; "
                               f"`doc:` is {m.get('doc')!r} and is out of date)")
             return dict(module=name, provider=provider_name,
-                        resolver=m.get("resolver") or "undeclared", doc=where)
+                        resolver=m.get("resolver") or "undeclared", doc=where,
+                        step=step, declares=declares)
     raise Unspecified(
         f"`{roster}` maps {key!r} to {name!r}, which is in no module contract", "S39",
         needs="a module named in references/module_contracts.yaml",
@@ -202,10 +212,45 @@ def check_rows() -> list:
     resolved nothing has reported clean over an unexamined registry (`CLAUDE.md` §0.1 pt 2)."""
     checked = []
     for role, (roster, column) in _ROLE_ROSTERS.items():
-        for key in roster_map(roster, column):
+        for key, row in roster_map(roster, column).items():
             resolve(role, key)
+            _check_step_declares(role, key, row)
             checked.append((role, key))
     return checked
+
+
+def _check_step_declares(role: str, key: Any, row: Any) -> None:
+    """M4 (`ED-IN-0279` clause (a)): a `step:`/`declares:` pair, or neither -- never one field
+    alone, and never a step or band the loop does not have. `04:1031`'s own done-condition --
+    *"a misspelled manifest row fails at boot naming the row"* -- extended to the two fields M4
+    added to a prize row.
+
+    ⚠ CALLED FROM `check_rows()`, NOT AT IMPORT, for `check_rows()`'s own reason: an import-time
+    read would make every reader of one manifest row pay to validate every row's timing fields."""
+    if not isinstance(row, dict):
+        return
+    step, declares = row.get("step"), row.get("declares")
+    if step is None and declares is None:
+        return
+    if (step is None) != (declares is None):
+        raise Unspecified(
+            f"{role}:{key!r} carries `step:` xor `declares:` ({step!r}, {declares!r})", "04:1031",
+            needs="both fields together, or neither",
+            law="a prize deferred to a later step must name the band its RESOLVE-time fold "
+                "writes; one field with no partner is a row nobody finished")
+    from ..data.matrix import Step
+    if step not in {s.value for s in Step}:
+        raise Unspecified(
+            f"{role}:{key!r} declares `step: {step!r}`, which is on no row of `Step`", "04:1031",
+            needs=f"one of {sorted(s.value for s in Step)}",
+            law="04:1031 -- a misspelled manifest row fails at boot naming the row")
+    from ..data.rosters import FIELD_BANDS
+    if declares not in FIELD_BANDS:
+        raise Unspecified(
+            f"{role}:{key!r} declares `declares: {declares!r}`, which is on no row of "
+            f"`field_degree_bands`", "04:1031",
+            needs=f"one of {sorted(FIELD_BANDS)}",
+            law="04:1031 -- a misspelled manifest row fails at boot naming the row")
 
 
 def unclaimed_contest_prizes() -> list:

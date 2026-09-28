@@ -202,6 +202,10 @@ composition_roles:
     needed_by: "NOBODY since 2026-09-16 (ED-IN-0232). Was engine/cross_scale/echo_transport.py — the §5.5 Accord Domain Echo's RS leg, which retired with the Key substrate. Kept for the same reason as territory_transfer_* above: the target resolves, the exporter imports it, and an orphaned role is more useful named than deleted."
     note: "A Pass 2l armature stub (OI-17): self-flags as a typed no-op via stubwire until RS is built. Routing it as a role does not make it live."
 
+  mass_battle.resolve_field:
+    target: "systems.mass_battle.sim.massbattle:resolve_field"
+    needed_by: "engine/season/seam/wrappers/mass_battle.py — the `a field` prize's provider (ED-IN-0279, M3). This is the sanctioned route into systems/mass_battle/sim/ from engine/season/: massbattle.py's own internal imports are already proper dotted `systems.mass_battle.sim.*` (no flat/bare-import problem the way combat_engine_v1 has), so this goes through composition_roles rather than adding a second PATH_SEAM_ALLOWED entry that this subsystem's shape does not need."
+
 modules:
 
   - module: faction_state

@@ -1,17 +1,19 @@
-"""`season.loop` — the driver, its six steps, and the two verb-keyed tables they dispatch on.
+"""`season.loop` — the driver, its seven steps, and the two verb-keyed tables they dispatch on.
 
   * `driver`     -- `SeasonDriver`, `season()`, and the four module functions around them
-  * `calendar` · `matter` · `deliberate` · `resolve` · `witness` · `census` -- THE SIX STEPS    L5
+  * `calendar` · `matter` · `deliberate` · `resolve` · `encounter` · `witness` · `census` --
+    THE SEVEN STEPS    L5 (six until M4's `encounter`, `ED-IN-0279` clause (a))
   * `predicates` -- `REQUIRES_PREDICATES`: the four hand-written `requires:` cells.   step 5
   * `effects`    -- `EFFECTS`: one body per verb that writes.                          step 5
+  * `sides`      -- `sides_of`: which shape a contest's parties take.                  M4
 
 `04_CODE_ARCHITECTURE.md` §A.2:134 names this module `loop/` and gives it *"driver + six steps. The
-driver is the ONLY constructor of write tokens."* **The six exist as of unit L5 (ED-IN-0206)**; they
-were methods on `SeasonDriver` and each body now has its own module, with the §A.2 table's owned
-state, `emits` and token quoted at the head of each.
+driver is the ONLY constructor of write tokens."* (AMENDED 2026-09-28 to seven). **The original six
+exist as of unit L5 (ED-IN-0206)**; they were methods on `SeasonDriver` and each body now has its own
+module, with the §A.2 table's owned state, `emits` and token quoted at the head of each.
 
 ⚠ **THE STEPS ARE BOUND ONTO THE CLASS, NOT DELEGATED TO.** `driver.py` ends with
-`SeasonDriver.witness = witness` and five siblings, so `SeasonDriver.witness` IS the module function
+`SeasonDriver.witness = witness` and six siblings, so `SeasonDriver.witness` IS the module function
 and `inspect.getsource` returns the MOVED BODY. Measured rather than argued: replace one binding
 with a delegating stub and `test_d2` and `test_d9b` go red **while
 `test_witness_writes_no_belief_and_no_conviction` — a pure NEGATIVE assertion — keeps PASSING over a

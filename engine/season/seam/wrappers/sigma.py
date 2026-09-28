@@ -125,11 +125,15 @@ def _obstacle_of(w: Any, subject: Optional[str], verb: str, fx: Any) -> float:
 @provider("contest", "sigma_leverage")
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
-            rng: Optional[random.Random] = None) -> dict:
+            rng: Optional[random.Random] = None, rung: str = "") -> dict:
     """Roll for one contested act. Returns a net/ob pair, NEVER a band.
 
     RESOLVED -> dict(status, module, resolver, pool, ob, net, leverage)
     REFUSED  -> dict(status, why, pool, ob)   # S27.4: ob > obstacle_refusal_multiple x pool
+
+    ⚠ `rung` IS ACCEPTED AND NOT USED HERE, THE SAME DELIBERATE NON-CHANGE AS IN `combat.py`
+    (M4, `ED-IN-0279` clause (a)). A leverage roll derives its obstacle from the parties
+    themselves, not from presence at a place.
 
     ⚠ THE RNG IS A PARAMETER AND IS NOT CONSTRUCTED HERE, WHICH IS `04 §C.12`'s REJECTION 4 BECOMING
     LOAD-BEARING FOR THE FIRST TIME: *"When R-09's producer is built … its generator must be

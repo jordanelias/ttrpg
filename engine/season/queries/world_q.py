@@ -222,8 +222,16 @@ def presence(w: World, rung_id: str) -> list[str]:
 # §22's `Nobody` row assigns FACTION, LEADERS, PRESENCE, DENSITY and FOOTPRINT to nobody, as
 # Queries stored nowhere, and §17 names each in the resolver-side list. Four of the five had no
 # body. They are written here rather than in a new module because `04 §A.2` types `queries/` as
-# `world_q · person_q · cache` -- a `polity_q.py` would be a fourth member and a conformance
-# defect, and these are world-first reads like every other function in this file.
+# `world_q · person_q · cache` -- a `polity_q.py` for THESE functions would be a fourth member and
+# a conformance defect, and these are world-first reads like every other function in this file.
+#
+# ⚠ `faction_q.py` IS NOT A COUNTEREXAMPLE TO THIS RULE; IT IS A DIFFERENT CASE, DISTINGUISHED AT
+# ITS OWN SITE. This paragraph's "no fourth module" holds for functions §A.2 does not name outside
+# this file -- exactly the case for `members`/`leaders`/`footprint` below, and for `WorldReader`
+# before unit L3 folded it in. `faction_q.resolve` is named by its OWN dotted path in §B.6.1 and
+# §C.5.1, both ratified, neither touched by this docstring's reasoning; see `faction_q.py`'s and
+# `queries/__init__.py`'s own docstrings for why that is a genuinely different ambiguity, named
+# rather than resolved the same way.
 #
 # ⚠ THE SEMANTICS ARE NOT TRANSCRIBED, BECAUSE §17 GIVES ONLY `name(w, ...)`. What IS transcribed
 # is the definition each rests on -- §14.2 for membership, §15's cardinality table for the edge
@@ -312,6 +320,14 @@ def footprint(w: World, faction: str) -> list[str]:
     return sorted(out)
 
 
+def _subtree(w: World, rung_id: str) -> set:
+    """`rung_id` plus everything under it, by containment (`descendants`). Extracted (M4 review
+    pass, `/simplify` reuse finding): `density`, `mustered` and `fortification_of` each wrote
+    `{rung_id, *descendants(w, rung_id)}` independently -- `mustered`'s own docstring already
+    named the duplication ("density's own composition, one line above") rather than ending it."""
+    return {rung_id, *descendants(w, rung_id)}
+
+
 def density(w: World, rung_id: str, faction: str) -> tuple[int, int]:
     """`(members of this faction present, persons present)` over the containment subtree.
 
@@ -325,12 +341,58 @@ def density(w: World, rung_id: str, faction: str) -> tuple[int, int]:
     other denominator is the other question; both are one line, and the caller should say which
     it means rather than this returning a bare ratio."""
     TRACE.query("density", "resolver")
-    here = {rung_id, *descendants(w, rung_id)}
+    here = _subtree(w, rung_id)
     inside = set(members(w, faction))
     present = [t.subject for t in w.tenures
                if t.kind == "contain" and t.live
                and t.object in here and t.subject in w.persons]
     return sum(1 for p in present if p in inside), len(present)
+
+
+def mustered(w: World, rung_id: str, faction: str) -> list[str]:
+    """M4 (`ED-IN-0279` clause (a)). This faction's members present in `rung_id`'s subtree --
+    settlement plus everything under it, Jordan's ruling on what "present at the target" means
+    for a march (planning round 2). `density`'s own composition, one line above, minus the count:
+    person containment never terminates AT a settlement rung -- every person's `contain` targets a
+    `home` building beneath one (`harness/populated.py`) -- so a literal exact-rung read finds
+    nobody home, ever, and the subtree is the only reading that finds anyone at all.
+
+    Who a march may draw on at its origin, and who a field battle's defending side draws from at
+    its target -- both the same query, the faction and the rung simply swapped. `04 §C.5.1`'s own
+    pseudocode: *"squad combat: the squad is `members ∩ present-at-rung`"*."""
+    TRACE.query("mustered", "resolver")
+    here = _subtree(w, rung_id)
+    inside = set(members(w, faction))
+    return sorted(t.subject for t in w.tenures
+                  if t.kind == "contain" and t.live
+                  and t.object in here and t.subject in inside)
+
+
+def fortification_of(w: World, rung_id: str) -> float:
+    """M4 (`ED-IN-0279` clause (a)). A settlement's defensive strength, `0.0` to `1.0`, read off
+    the `garrison` Site(s) in `rung_id`'s subtree -- `H-38`'s *"`Site.condition` is the model"*
+    applied to fortification, Jordan's choice over a cohort-Person alternative (planning round 2).
+    `0.0` with no garrison in the subtree: an unfortified settlement, not a refusal -- absence of
+    a garrison Site is a legitimate world state (`harness/populated.py`'s M4 build step 11 seeds
+    one per settlement, but nothing enforces that it must).
+
+    ⚠ MULTIPLE GARRISONS AVERAGE RATHER THAN SUM: one per settlement is what step 11 ships, and an
+    average keeps the return in `[0.0, 1.0]` regardless, which summing would not.
+
+    ⚠⚠ **NOTHING CALLS THIS FUNCTION.** `seam/wrappers/mass_battle.py::resolve()` passes
+    `terrain=None` unconditionally and has no other parameter to carry a fortification bonus
+    through -- `systems/mass_battle/sim/massbattle.py::resolve_field`'s only knobs are `terrain`
+    and `rng`. Seeding a garrison Site (step 11) changes no fight's outcome until something reads
+    this return AND the provider is given somewhere to put it. `H-150` (`hole_register.yaml`) is
+    this gap's row: HOW MUCH a fortification level should shift a field battle is an invented
+    magnitude no ruling states, on `H-148`'s own shape."""
+    TRACE.query("fortification_of", "resolver")
+    here = _subtree(w, rung_id)
+    garrisons = [s for s in w.sites.values() if s.kind == "garrison" and s.rung in here]
+    if not garrisons:
+        return 0.0
+    scale = w.fixtures.get("condition_scale")
+    return sum(s.condition for s in garrisons) / (scale * len(garrisons))
 
 
 def sovereign_fraction(w: World, rung_id: str) -> tuple[float, int]:
@@ -472,6 +534,33 @@ def faction_holding(w: World, subject: str) -> "str | None":
     facs = {t.object for t in w.persons[subject].tenures
             if t.kind == "commit" and t.live and t.object in FACTION_BY_PROP}
     return next(iter(facs)) if len(facs) == 1 else None
+
+
+def holder_faction_of(w: World, rung_id: str) -> Optional[str]:
+    """M4 (`ED-IN-0279` clause (a)). Which faction holds `rung_id` -- the faction Proposition id,
+    or `None` -- read up its own ancestry, since a SETTLEMENT is never itself the object of a
+    `hold` Tenure in this corpus (`hold_force` on one returns `None` always; every live `hold`
+    targets a `territory` or an `Office`). `nearest_store`'s own walk, applied to holding rather
+    than to a larder: the nearest rung AT OR ABOVE `rung_id` that IS held, then `faction_holding`
+    on ITS holder (a person) -- never on `rung_id` itself, which `faction_holding` cannot answer
+    for at all (`subject not in w.persons` returns `None` immediately; it takes the HOLDER, not
+    the held object -- confirmed against the live fixture before this was written, not assumed
+    from the name).
+
+    ⚠ `None` FOR "NOBODY HOLDS ANY RUNG UP THIS CHAIN" IS A SHORTFALL, NOT AN ERROR --
+    `nearest_store`'s own reading of an empty root. What a `march` targeting an unheld
+    (`Uncontrolled`) settlement means is `march`'s own eligibility to decide, not this Query's.
+
+    ⚠ THE WALK IS `ancestry`, NOT A FOURTH HAND-ROLLED COPY (M4 review pass, `/simplify` reuse
+    finding). A first writing repeated `ancestry`'s own visited-set-guarded parent walk inline,
+    one screen away from `ancestry` itself in this same file -- exactly the duplication that
+    function's own docstring exists to end."""
+    TRACE.query("holder_faction_of", "resolver")
+    for cur in ancestry(w, rung_id):
+        t = hold_force(w, cur)
+        if t is not None:
+            return faction_holding(w, t.subject)
+    return None
 
 
 def establishment_of(w: World, office_id: str) -> list[str]:

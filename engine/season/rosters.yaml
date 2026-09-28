@@ -564,6 +564,67 @@ rosters:
       still fights*), followed rather than reinvented.
     values: [scene_fraction, total, none]
 
+  field_degree_bands:
+    source: "M4, `ED-IN-0279` clause (a). The token every `march` fold writes -- `seam/ladder.py`'s `field_degree`, analogous to `combat_degree_bands` above."
+    row: H-147
+    note: >-
+      ⚠ ORDERED, AND UNPACKED POSITIONALLY LIKE `combat_degree_bands`. `Declared` is first because
+      it is the band ENCOUNTER's own declaration fold writes at RESOLVE (`04 §A.2`, amended
+      2026-09-28) -- the seventh-phase design's own deferral token, not a band any subsystem
+      grades. `Won` / `Lost` / `Unopposed` are read off `seam/wrappers/mass_battle.py`'s lifted
+      `attacker_wins`/`unopposed` fields, the shape `combat_degree` reads off a scene's own
+      `wound_state` one row above.
+      ⚠ `Declared` COSTS SOMETHING AND THE COST IS STATED HERE, NOT HIDDEN. `04 §C.4:621` fixes a
+      verb at five columns, none conditional on the outcome except through `contests:`; a prize row
+      that defers to ENCOUNTER folds once at RESOLVE writing nothing, under this band, because
+      nothing has been fought yet. That is the price of the seventh-phase timing Jordan chose
+      (M4 planning round 2) over synchronous resolution at RESOLVE, paid in the open rather than
+      smuggled into a verb row nobody reads twice.
+    values: [Declared, Won, Lost, Unopposed]
+
+  field_casualty_models:
+    source: "M4, `ED-IN-0279` clause (a). How much `Person.body` a lost field costs -- `wound_harm_models`'s question above, asked of mass_battle's survivor-ratio result instead of a scene's `WoundTracker`."
+    row: H-148
+    note: >-
+      ⚠ THE MODELS ARE INVENTED, AS `wound_harm_models`' WERE, AND FOR THE SAME REASON: no ruling
+      states a magnitude. `total` and `none` are the same two controls that row ships: `total`
+      re-runs "losing kills you exactly as winning it does" deliberately, and `none` isolates
+      whether the WRITE ITSELF, rather than its magnitude, is what a defeated side's later choices
+      track (`CLAUDE.md` §0.1 pt 4 -- a number without a control is not a measurement in either
+      direction).
+      ⚠ THE DEFAULT IS `scaled_by_degree`, SET THE SAME WAY `wound_harm_model`'s WAS: A READ, NOT
+      A CHOICE. Jordan's 2026-09-04 ruling on that row -- *"the combat engine determines the
+      result there"* -- is a general principle about who owns a magnitude the engine already
+      computed, and `attacker_size_pct`/`defender_size_pct` (`seam/wrappers/mass_battle.py`'s own
+      `resolve()` return, read from the real dice-pool engine call at `engine_resolve_field`, not
+      invented in this chain) is that same shape of number for a field battle. No fresh ruling
+      settles the magnitude, so this row still ships `assumption`-graded -- but the choice among
+      the three arms is settled by that precedent, not by a pending measurement.
+      ⚠ `tools/balance_oracle.py` DOES NOT APPLY TO THIS QUESTION AND MUST NOT BE RUN FOR IT.
+      That tool patches `mc_v18`/`dice_engine` and compares `mc_v18.run_campaign` arms; `march`
+      and `field_casualty_model` live entirely in `engine/season/`, which `mc_v18` cannot reach
+      (`CLAUDE.md` §0.2 -- `mc_v18` is deprecated in place, imported by nothing in game code).
+      Patching it would leave both of `balance_oracle.py`'s arms identical by construction --
+      exactly the "campaign-unreachable change" `CLAUDE.md` §7 names as **a fake control**, not a
+      measurement. If this arm is ever re-examined, the instrument is a `field_casualty_model`
+      sweep through `engine/season`'s own corpus (`corpus_run.run_case`), never this tool.
+    values: [scaled_by_degree, total, none]
+
+  march_target_kinds:
+    source: "M4, `ED-IN-0279` clause (a). What a `march` may target."
+    row: H-149
+    note: >-
+      ⚠ ONE MEMBER, NOT AN OPEN SET, AND THE ROSTER IS CLOSED FOR A REASON BOUND ELSEWHERE.
+      Person containment never terminates at a settlement rung -- every person's `contain` targets
+      a `home` building beneath one (`harness/populated.py`) -- and `contain_ascends`
+      (`state/world.py`) forbids a sideways move to a foreign settlement, so "the exact rung
+      marched to" is vacuous read literally. Jordan's ruling (M4 planning round 2) is "settlement
+      plus everything under it", which only a `Rung` of kind `settlement` can anchor -- a subtree
+      read, matching `world_q.density`'s existing composition rather than a new one. #353 names no
+      other march target and this roster does not invent one; adding a member later is a data edit
+      the moment a second target kind is ruled, not a design choice made here.
+    values: [settlement]
+
   witness_channel_predicates:
     source: "#353 §20 names the five witness channels and gives NONE of them a predicate. `S61`: *\"WITNESS AS SPECIFIED FANS EVERY EVENT TO EVERY PERSON. Nothing said in private is private.\"*"
     cite: "H-33"
@@ -811,11 +872,24 @@ rosters:
         cite:     "H-88; the seam already calls it (seam/wrappers/combat.py)"
       "a field":
         module:   "mass_battle"
+        provider: "mass_battle"
+        step:     "ENCOUNTER"
+        declares: "Declared"
         cite: >-
-          NO PROVIDER, AND THE ABSENCE IS THE ROW. It refuses by name exactly as it did under the
-          string form: sides need `faction_q.resolve` (`04 §C.5.1`), which is R-04/U9. A row with a
-          `module:` and no `provider:` is the shape that says *somebody owns this and nothing can
-          run it yet*, which the string form could not express at all.
+          M3 of the mc_v18-retirement plan (ED-IN-0279): the row had a `module:` and no `provider:`
+          because sides needed `faction_q.resolve` (`04 §C.5.1`), which M2 built. `provider:` now
+          names `seam/wrappers/mass_battle.py`, which resolves the `subject` side by proposition id
+          and calls `systems.mass_battle.sim.massbattle:resolve_field` through the
+          `mass_battle.resolve_field` composition role.
+          ⚠ `step:`/`declares:` ARE M4'S OWN FIELDS (ED-IN-0279 clause (a), 2026-09-28), read by
+          `manifest.resolve()` and validated at `check_rows()`. `step: ENCOUNTER` says this prize
+          is NOT fought where its verb is admitted: `march` (`verb_table.yaml`) declares
+          `contests: "a field"` and is admitted and DECLARED at RESOLVE, folding at the band
+          `declares:` names -- `Declared`, a member of `field_degree_bands` that no subsystem
+          reports -- and is actually fought at the new ENCOUNTER step, on the world the whole
+          round's fold left. A prize row with no `step:` (`the body`, `a standing`,
+          `a proposition`) fights at RESOLVE as it always has; `step:`'s absence is the default,
+          not a second code path.
       "a standing":
         module:   "social_contest"
         provider: "sigma_leverage"
@@ -972,7 +1046,17 @@ rosters:
       per `hearth` rung. Adding it forced the `wear_per_season` and `band_floors` rows below
       (`data/fixtures.py`'s `_load_matter_tables` refuses a site kind with no row); it has no
       `site_yield` row, because a dwelling produces nothing and that table's `default_cell` is 0.
-    values: [harbour, seam, body, dwelling]
+      ⚠ `garrison` IS JORDAN'S, 2026-09-28 (`ED-IN-0279` clause (a), M4): asked how a settlement's
+      fortification should be modelled, given he wants it build-able and upgradeable, he chose *"a
+      Site's condition"* over a cohort-Person alternative -- `H-38`'s *"`Site.condition` is the
+      model"* ruling applied to fortification rather than a second scheme invented for it. Adding
+      it forces the same two rows `dwelling` forced, for the same loader reason, and it has no
+      `site_yield` row for `dwelling`'s reason: a wall produces nothing. **UPGRADING ONE IS NOT
+      BUILT BY M4** -- the pre-existing, declared `restore` verb (`verb_table.yaml`,
+      `writes: Site.condition`) is the disclosed route and it ships this plan still unimplemented
+      (no `_eff_restore`, excluded from `resolvable_verbs()`); M4 only reads the field a field
+      battle already needs, at whatever condition a garrison was seeded with.
+    values: [harbour, seam, body, dwelling, garrison]
 
   matter_kinds:
     source: "#353 §10.4 VERBATIM: *It is a type parameter, not an enumeration. Grain, salt, timber, ore and coin are rows in a registry, not members of a closed set in a source file.*"
@@ -1014,11 +1098,19 @@ rosters:
       and `World.write` emits one `condition.worn` per write (`H-12`), so every dwelling emits
       one wear Event a season, and its residents witness it (`co_located`) as a claim. A non-zero
       rate is chosen with a consumer in front of it, at `24e`/`24f`, never here.
+      ⚠ `garrison: 0` IS `dwelling`'s CONTROL ARM APPLIED FOR THE SAME REASON, NOT A SEPARATE
+      CHOICE (M4, `ED-IN-0279` clause (a)): `restore` -- the declared writer of `Site.condition`
+      upward -- ships this plan unimplemented, so a non-zero rate here would erode every
+      garrison's condition every season with no consumer able to counteract it, silently drifting
+      every field battle's fortification term toward zero over a long campaign. That is exactly
+      the undisclosed drift `dwelling`'s note above refuses. A non-zero rate is chosen once
+      `restore` exists to answer it, never here.
     rates:
       harbour:  10
       seam:     10
       body:     10
       dwelling: 0
+      garrison: 0
 
   subsistence_weight:
     source: "`H-11` — *the subsistence formula over an OPEN MatterKind registry*. ARCHITECTURE_V2.md's default: *draw from the containing rung's stores, scaled by weight*."
@@ -1455,6 +1547,14 @@ tables:
       id). It is unreached only while no question names a dwelling as a referent, since `work`
       binds its `site` from the referent. None does at the control arm; `24d-i`'s test in
       `engine/season/tests/test_governance_build.py` asserts it over one populated season.
+      ⚠ `garrison: {}` IS EMPTY FOR THE SAME REASON, NOT A SEPARATE CHOICE (M4, `ED-IN-0279` clause
+      (a)). A field battle's fortification term reads `Site.condition` DIRECTLY -- `queries/
+      world_q.fortification_of` -- never through `floor`'s band-crossing read, so the empty cell
+      is never reached: nothing names a garrison as a `work`-style referent, and no march-battle
+      code calls `floor` on one. Filling this in would invent a band-crossed Question a garrison
+      cannot yet answer (no verb writes `Site.exists`/`condition` toward it from the field-battle
+      side except through the unbuilt `restore`), which is `wear_per_season`'s `garrison: 0` note
+      applied to the other half of the same table.
     cells:
       harbour:
         bulk_shipping:   800
@@ -1467,6 +1567,7 @@ tables:
         limited:         500
         withdrawal_only: 100
       dwelling: {}
+      garrison: {}
 
   # ⚠ RENAMED 2026-09-24 (`ED-IN-0261` item 1, rename half only): this table was
   # `role_template_convictions:`; cells, `row:` and `default_cell:` are byte-identical.

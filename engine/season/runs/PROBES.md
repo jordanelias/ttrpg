@@ -256,7 +256,7 @@ either** — they are listed individually below and should be discounted accordi
 ### `A3` — an arc ends at a counter with nobody deciding  ·  **FORBIDDEN**  ·  `S3-L4`  ·  by `construction`
 **what:** (Person, stance) written during MATTER
 
-**needs:** one of ['RESOLVE']
+**needs:** one of ['ENCOUNTER', 'RESOLVE']
 **law:** L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say
 
 ### `A30` — an ungraded value is used anyway  ·  **UNGRADED**  ·  `S42.2.1`  ·  by `construction`
@@ -281,7 +281,7 @@ either** — they are listed individually below and should be discounted accordi
 **what:** a scheduled social recovery or decay
 
 **needs:** a ruling -- S62 lists this as a LIVE DESIGN CHOICE affecting three arcs
-**law:** S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT
+**law:** S34 -- 'no scheduled social recovery' is STRUCTURAL BY PHASE MEMBERSHIP: of ['CALENDAR', 'MATTER', 'DELIBERATE', 'RESOLVE', 'ENCOUNTER', 'WITNESS', 'CENSUS'], MATTER moves no social quantity (L4), DELIBERATE writes nothing, RESOLVE needs an act, WITNESS writes only ledgers, CENSUS is demand-driven. THERE IS NO STEP IN WHICH A RESTORING TIMER COULD RUN, so a design that wanted one HAS NOWHERE TO PUT IT
 
 ### `A36` — a person's act order is the order it resolves in  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
 **what:** verb 'spend_treasury' is on no row of the verb table
@@ -400,7 +400,7 @@ either** — they are listed individually below and should be discounted accordi
 ### `P19` — a threshold produces an outcome with nobody deciding  ·  **FORBIDDEN**  ·  `S3-L4`  ·  by `construction`
 **what:** (Person, stance) written during MATTER
 
-**needs:** one of ['RESOLVE']
+**needs:** one of ['ENCOUNTER', 'RESOLVE']
 **law:** L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say
 
 ### `P2` — the scene budget is ~5 and the PERSON chooses what to leave undone  ·  **UNSPECIFIED**  ·  `S27/E2`  ·  by `construction`
@@ -513,7 +513,7 @@ either** — they are listed individually below and should be discounted accordi
 ### `W3` — the world sours a mood  ·  **FORBIDDEN**  ·  `S3-L4`  ·  by `construction`
 **what:** (Person, stance) written during MATTER
 
-**needs:** one of ['RESOLVE']
+**needs:** one of ['ENCOUNTER', 'RESOLVE']
 **law:** L4 / S25 -- NO SOCIAL QUANTITY MOVES AT MATTER. 'The world may silt a harbour; IT MAY NOT SOUR A TOWN'S MOOD.' This is the design refusing, not the design failing to say
 
 ### `W5` — yield is produced  ·  **UNOWNED**  ·  `S22.3`  ·  by `no-signature`

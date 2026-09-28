@@ -23,6 +23,11 @@
       "kind": "callable",
       "needed_by": "engine/mc_v18.py \u2014 per-season faction action dispatch, passed to the season driver"
     },
+    "mass_battle.resolve_field": {
+      "target": "systems.mass_battle.sim.massbattle:resolve_field",
+      "kind": "callable",
+      "needed_by": "engine/season/seam/wrappers/mass_battle.py \u2014 the `a field` prize's provider (ED-IN-0279, M3). This is the sanctioned route into systems/mass_battle/sim/ from engine/season/: massbattle.py's own internal imports are already proper dotted `systems.mass_battle.sim.*` (no flat/bare-import problem the way combat_engine_v1 has), so this goes through composition_roles rather than adding a second PATH_SEAM_ALLOWED entry that this subsystem's shape does not need."
+    },
     "parliamentary_motion": {
       "target": "systems.social_contest.sim.parliamentary_vote:Motion",
       "kind": "callable",

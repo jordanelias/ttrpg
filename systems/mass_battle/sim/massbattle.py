@@ -43,6 +43,7 @@ from __future__ import annotations
 import math
 
 from systems.mass_battle.sim import rngsource
+from systems.mass_battle.sim.config import CELL_CAP
 from systems.mass_battle.sim.hierarchy.units import Subunit, Unit
 from systems.mass_battle.sim.orchestration import run_battle
 from systems.mass_battle.sim.terrain import FOREST_BROKEN
@@ -168,11 +169,14 @@ def _morale_start_from_stability(faction):
     pre-existing `[GAP: faction -> unit construction lacks canonical spec]` this file already
     declares above, not a new one. This paragraph is about PP-711 alone.
 
-    Would become load-bearing at the strategic seam the moment a `Unit` persists across more than one
-    battle here — most plausibly the season loop's own mass-battle provider seam
-    (`engine/season/seam/contest.py`), which does not yet call this adapter at all
-    (`engine/season/rosters.yaml`: "NO PROVIDER"), rather than the deprecated `mc_v18` path. Not a
-    currently-open item.
+    Would become load-bearing at the strategic seam the moment a `Unit` persists across more than
+    one battle here. `engine/season/seam/contest.py` now HAS a provider for `"a field"`
+    (`ED-IN-0279`, M3, `engine/season/seam/wrappers/mass_battle.py`) — but that provider calls
+    `resolve_field`, not `resolve_mass_battle`/`_faction_to_unit` (season Persons carry no `.Sta`
+    to derive from; `_weighted_unit` builds morale flat, not via this function), and constructs a
+    fresh `Unit` on every call exactly as `_try_conquest`'s strategic path already does. So this
+    paragraph's premise — no `Unit` persists across battles — still holds on BOTH paths; still not
+    a currently-open item.
 
     [ASSUMPTION: rounded to the nearest int (half-up, see `_round_half_up`) and floored at 1 rather
     than 0 — basis: `mass_battle_v30.md:230-231` states canon's own Morale range directly ("Morale
@@ -197,6 +201,38 @@ def _morale_start_from_stability(faction):
     return max(_STA_MORALE_FLOOR, min(_STA_MORALE_CEIL, _round_half_up(sta)))
 
 
+#: [canonical: mass_battle_integration_v30.md §4.10 sub-step 3 — the strategic entry point. ⚠ THE
+#:  VALUES BELOW ARE NOT CANON AND THIS COMMENT DOES NOT CLAIM THEY ARE. They are the pre-port
+#:  adapter's minimum-viable defaults, carried over FIELD-FOR-FIELD so the engine swap is a
+#:  single-variable experiment, and the [GAP] on both this module's construction paths is the
+#:  honest status: no canonical spec exists for army -> Unit construction of ANY kind. The
+#:  fabrication gate is right to ask; the answer is "inherited, with a recorded gap", not
+#:  "derived".] SHARED BY `_faction_to_unit` AND `_weighted_unit` (§8: one owner for the MVP
+#: shape, so the two construction paths cannot silently drift apart on a field neither has a
+#: reason to vary). `concentration` is deliberately NOT here -- it is continuous-mode-only
+#: (`_weighted_unit` sets it; `_faction_to_unit`'s tier-sized Subunit does not), a real
+#: difference between the two modes rather than something that drifted.
+_MVP_SUBUNIT_SHAPE = dict(
+    shape='Line',
+    troop_type='infantry',
+    tier=2,                          # [canonical: inherited default — 200 troops, see GAP above]
+    starting_position=(8, 12),      # [canonical: inherited default — see GAP above]
+    advance_dir=1,
+    stance='balanced',
+    unit_type='melee',
+)
+
+#: SAME SHARING, FOR THE UNIT SIDE. `power`/`morale`/`morale_start` are NOT here: `power`'s
+#: SOURCE is the very thing the two construction paths differ on, and morale is derived
+#: (`_faction_to_unit`) vs. flat (`_weighted_unit`) for the same reason (no season-side Stability
+#: to derive from).
+_MVP_UNIT_COMMAND = dict(
+    command=4,                       # [canonical: inherited default — see GAP above]
+    discipline=5,                    # [canonical: inherited default — see GAP above]
+    discipline_start=5,              # [canonical: inherited default — see GAP above]
+)
+
+
 def _faction_to_unit(faction):
     """Build a canon-engine Unit from a strategic-layer faction.
 
@@ -206,35 +242,135 @@ def _faction_to_unit(faction):
     otherwise describes (a single-variable experiment on the RESOLUTION model) still holds for
     everything but morale.
     """
-    # [canonical: mass_battle_integration_v30.md §4.10 sub-step 3 — the strategic entry point. ⚠ THE
-    #  VALUES BELOW ARE NOT CANON AND THIS COMMENT DOES NOT CLAIM THEY ARE. They are the pre-port
-    #  adapter's minimum-viable defaults, carried over FIELD-FOR-FIELD so the engine swap is a
-    #  single-variable experiment, and the [GAP] on this function is the honest status: no canonical
-    #  spec exists for faction.Mil -> Unit construction. The fabrication gate is right to ask; the
-    #  answer is "inherited, with a recorded gap", not "derived". (Morale is now the one EXCEPTION —
-    #  see _morale_start_from_stability and its docstring above.)]
     power = max(1, int(round(faction.Mil)))
-    sub = Subunit(
-        shape='Line',
-        troop_type='infantry',
-        tier=2,                          # [canonical: inherited default — 200 troops, see GAP above]
-        starting_position=(8, 12),       # [canonical: inherited default — see GAP above]
-        advance_dir=1,
-        stance='balanced',
-        unit_type='melee',
-    )
+    sub = Subunit(**_MVP_SUBUNIT_SHAPE)
     m0 = _morale_start_from_stability(faction)
     return Unit(
         name=f'{faction.name}_force',
         faction=faction.name,
         power=power,
-        command=4,                       # [canonical: inherited default — see GAP above]
-        discipline=5,                    # [canonical: inherited default — see GAP above]
-        discipline_start=5,              # [canonical: inherited default — see GAP above]
+        **_MVP_UNIT_COMMAND,
         morale=m0,                       # [d.1, ED-MB-0068: derived from faction.Sta — see above]
         morale_start=m0,                 # [d.1, ED-MB-0068: derived from faction.Sta — see above]
         subunits=[sub],
     )
+
+
+#: A season `Person` carries no troop-density signal at all -- `power` is a Unit-level QUALITY
+#: stat (baseline for a subunit with no per-subunit override; `eff_power`'s own fallback, cited
+#: there as "[canonical: sim_mb_06_v9_historical_spec.md -- P4 tier baseline default]"), not
+#: something army headcount should feed. Re-used here rather than derived from weight -- headcount
+#: is a SIZE fact (below), and conflating it with quality was this function's own first-draft
+#: mistake, caught on review (a Crown-sized force would have out-CLASSED a Guild-sized one on
+#: quality alone, backwards of what more bodies means).
+_SEASON_FORCE_POWER = 4  # [canonical: sim_mb_06_v9_historical_spec.md — P4 tier baseline default, eff_power's own fallback]
+
+#: [known risk, disclosed rather than fixed: `resolve_field` has no ratified person-weight ->
+#: troop-count conversion, and this module is not the place to invent one.] `Subunit.troops` is
+#: fed the RAW weight sum with no scale factor -- honest as a NUMBER (weight is the one quantity a
+#: season Person carries that is a headcount), but this engine's own calibration
+#: (`config.py: SUBUNIT_ROUT_FLOOR`, "a subunit routs below SUBUNIT_ROUT_FLOOR total") targets
+#: battles of hundreds of troops, and a real corpus faction's weight sum (single/double digits,
+#: measured against `harness.populated.build_realm(0)`) routs on contact regardless of who wins.
+#: A season-Person-weight -> troop-count conversion is open work this function does not invent one
+#: of; until it lands, `resolve_field`'s outcomes are honest about their INPUT and not yet
+#: calibrated to the engine's own battle scale.
+_MIN_TROOPS = 1.0  # floor only -- `Unit.total_troops() == 0` divides by zero deep in
+                   # `orchestration.resolve_engagements`; this is the smallest value that avoids
+                   # that crash, not a claim about what a minimal army is.
+
+
+def _weighted_unit(name, weight):
+    """One `Unit`, one `Subunit`, sized by `troops=` (the Jordan-directed continuous-scale field,
+    `hierarchy/units.py`: "when `troops` is set the footprint is generated from (troops,
+    concentration) ... `tier` becomes vestigial") rather than by `tier`'s fixed lookup table.
+
+    `_MVP_SUBUNIT_SHAPE`'s `tier=2` is still passed because `Subunit.__post_init__` requires SOME
+    tier even in continuous mode; it is inert here (troops overrides it). `concentration` is set
+    to `config.CELL_CAP` -- pack as densely as the engine allows before it would open a second
+    cell, the smallest-footprint reading available and not a claim about real troop density.
+    Every other Subunit/Unit field is the SAME non-canonical inherited default `_faction_to_unit`
+    uses, shared via `_MVP_SUBUNIT_SHAPE`/`_MVP_UNIT_COMMAND` -- this function changes WHICH
+    NUMBER SIZES THE FORCE, not what else is carried over unchanged."""
+    sub = Subunit(**_MVP_SUBUNIT_SHAPE, troops=max(float(weight), _MIN_TROOPS),
+                  concentration=float(CELL_CAP))
+    return Unit(name=name, faction=name, power=_SEASON_FORCE_POWER, **_MVP_UNIT_COMMAND,
+                # [canonical: same flat morale-start _GarrisonStub already uses for a Sta-less object]
+                morale=5, morale_start=5,
+                subunits=[sub])
+
+
+def _run_and_grade(unit_a, unit_b, terrain, rng):
+    """`run_battle` plus the survivor-ratio classification -- extracted from `resolve_mass_battle`
+    so `resolve_field` shares it rather than re-deriving it (§8: the rule lives once). Identical to
+    what `resolve_mass_battle` always did with its own two Units; see that function's docstring for
+    the terrain/RNG/degree-band caveats, which are unchanged and apply here too.
+
+    Takes `rng` directly rather than a `world`-shaped object -- this is the only thing either
+    caller ever reads off `world`, so narrowing the parameter to what is actually used means
+    `resolve_field` (which has no `World`, only a bare `rng`) needs no adapter object to satisfy
+    an attribute it does not otherwise have."""
+    if terrain == FOREST_BROKEN:
+        if unit_a.speed == 'Fast':
+            unit_a.speed = 'Standard'
+        if unit_b.speed == 'Fast':
+            unit_b.speed = 'Standard'
+
+    with rngsource.using(rng):
+        # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
+        run_battle(unit_a, unit_b, max_turns=18)
+
+    a_size_pct = unit_a.effective_size / max(1, unit_a.size_max)
+    b_size_pct = unit_b.effective_size / max(1, unit_b.size_max)
+    attacker_wins = (not unit_a.routed) and (unit_b.routed or a_size_pct > b_size_pct)
+
+    if attacker_wins and a_size_pct >= OVERWHELMING_ATTACKER_MIN and b_size_pct <= OVERWHELMING_DEFENDER_MAX:
+        degree = 'Overwhelming'
+    elif attacker_wins:
+        degree = 'Success'
+    elif not unit_a.routed and a_size_pct >= PARTIAL_ATTACKER_MIN:
+        degree = 'Partial'
+    else:
+        degree = 'Failure'
+
+    return {
+        'attacker_wins': attacker_wins,
+        'degree': degree,
+        'attacker_size_pct': a_size_pct,
+        'defender_size_pct': b_size_pct,
+    }
+
+
+def resolve_field(w, side_a, side_b, *, terrain=None, rng=None):
+    """THE SEASON-FACING ENTRY POINT — `04 §C.5.1`'s roster contract, reconciled with this module's
+    OWN requirement for a `Unit` to hand `run_battle`.
+
+    §C.5.1: *"units = PersonId[] at weight — one type. There is NO unit class, at any scale."*
+    `side_a`/`side_b` are `PersonId[]`, weighed by `w.persons[pid].weight` (`state/carriers.py`:
+    "A COHORT IS A PERSON AT weight > 1"); no `Unit`/`Faction`-shaped object crosses this boundary.
+    Internally, `run_battle` still needs a `Unit` -- that requirement does not go away because the
+    caller's contract changed -- but `_faction_to_unit` is NOT reused here: that function reads
+    `faction.Mil` into `Unit.power`, a QUALITY stat, and headcount is a SIZE fact, not a quality
+    one (see `_weighted_unit`, and `_SEASON_FORCE_POWER`'s note on the mistake this corrects).
+    "No unit class, at any scale" is honoured at the SEAM this function's signature draws; it does
+    not reach inside an adapter whose whole job has always been "become a `Unit` for the engine
+    that only speaks one".
+
+    ⚠ **AN EMPTY `side_b` gets `_MIN_TROOPS`' crash-avoidance floor, not an invented auto-win.**
+    What an empty defending force MEANS is eligibility policy for whichever verb calls this (open,
+    per `ED-IN-0279` clause (a)'s live design fork on the season-side spatial join -- NOT yet
+    Jordan's ruling on an auto-win specifically, which this function does not attribute to that row)
+    -- the same discipline `seam/wrappers/*` already follows: derive what you can, decide nothing
+    you were not asked to. See `_MIN_TROOPS`' own docstring for the SCALE gap this does not solve
+    either -- a real corpus side's weight sum is nowhere near this engine's calibrated battle size,
+    and this function does not invent the missing conversion.
+
+    Returns exactly what `_run_and_grade` returns."""
+    weight_a = sum(w.persons[pid].weight for pid in side_a if pid in w.persons)
+    weight_b = sum(w.persons[pid].weight for pid in side_b if pid in w.persons)
+    unit_a = _weighted_unit("side_a", weight_a)
+    unit_b = _weighted_unit("side_b", weight_b)
+    return _run_and_grade(unit_a, unit_b, terrain, rng)
 
 
 def resolve_mass_battle(faction_a, faction_b, terrain, world):
@@ -286,15 +422,6 @@ def resolve_mass_battle(faction_a, faction_b, terrain, world):
     blank to fill in, and one that moves goldens once done. That translation work is deferred, not the
     number itself.
     """
-    unit_a = _faction_to_unit(faction_a)
-    if faction_b is None:
-        # Defenderless-territory garrison strength has no canonical spec; Mil=1.5 approximates the
-        # pre-mass-battle v17 Ob 2 vs Ob 4 single-roll spread. Carried over from the pre-port adapter.
-        # [canonical: inherited default — recorded [GAP], not canon; see the module header]
-        unit_b = _faction_to_unit(_GarrisonStub(name='Uncontrolled', Mil=1.5))
-    else:
-        unit_b = _faction_to_unit(faction_b)
-
     # [A7, ED-MB-0067 Part A / ED-MB-0074] A.9: "Forest / broken: Cavalry -> Standard; flanking
     # impossible." Only the speed half is attempted here (flanking-impossible would need the
     # envelopment pipeline, out of scope for this pass — see this function's own docstring).
@@ -304,32 +431,15 @@ def resolve_mass_battle(faction_a, faction_b, terrain, world):
     # unit run through THIS path would see no effect. Doubly inert today because `_faction_to_unit`
     # never sets `speed` either (its own [GAP] comment covers that half) — but fixing only that half
     # would not make this branch do anything. See this function's own docstring for the full disclosure.
-    if terrain == FOREST_BROKEN:
-        if unit_a.speed == 'Fast':
-            unit_a.speed = 'Standard'
-        if unit_b.speed == 'Fast':
-            unit_b.speed = 'Standard'
-
-    with rngsource.using(getattr(world, 'rng', None)):
-        # [canonical: mass_battle_v30.md §A.7 — 18-tick battle (3 phases x 6), the canon engine's own default]
-        run_battle(unit_a, unit_b, max_turns=18)
-
-    a_size_pct = unit_a.effective_size / max(1, unit_a.size_max)
-    b_size_pct = unit_b.effective_size / max(1, unit_b.size_max)
-    attacker_wins = (not unit_a.routed) and (unit_b.routed or a_size_pct > b_size_pct)
-
-    if attacker_wins and a_size_pct >= OVERWHELMING_ATTACKER_MIN and b_size_pct <= OVERWHELMING_DEFENDER_MAX:
-        degree = 'Overwhelming'
-    elif attacker_wins:
-        degree = 'Success'
-    elif not unit_a.routed and a_size_pct >= PARTIAL_ATTACKER_MIN:
-        degree = 'Partial'
+    #
+    # ⚠ THE BODY BELOW MOVED INTO `_run_and_grade`, EXTRACTED SO `resolve_field` (M3) SHARES IT
+    # RATHER THAN RE-DERIVING IT (§8). Byte-identical: same two calls, same order, same operands.
+    unit_a = _faction_to_unit(faction_a)
+    if faction_b is None:
+        # Defenderless-territory garrison strength has no canonical spec; Mil=1.5 approximates the
+        # pre-mass-battle v17 Ob 2 vs Ob 4 single-roll spread. Carried over from the pre-port adapter.
+        # [canonical: inherited default — recorded [GAP], not canon; see the module header]
+        unit_b = _faction_to_unit(_GarrisonStub(name='Uncontrolled', Mil=1.5))
     else:
-        degree = 'Failure'
-
-    return {
-        'attacker_wins': attacker_wins,
-        'degree': degree,
-        'attacker_size_pct': a_size_pct,
-        'defender_size_pct': b_size_pct,
-    }
+        unit_b = _faction_to_unit(faction_b)
+    return _run_and_grade(unit_a, unit_b, terrain, getattr(world, 'rng', None))

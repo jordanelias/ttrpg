@@ -463,6 +463,14 @@ TERMS_SUPPLIED_BY = roster_map("observation_terms", "supplied_by")
 COMBAT_BANDS = roster("combat_degree_bands", ordered=True)
 FELLED, WOUNDED, UNTOUCHED = COMBAT_BANDS
 WOUND_HARM_MODELS = roster("wound_harm_models")
+# M4 (`ED-IN-0279` clause (a)). `field_degree_bands`' own note: ordered and unpacked the same way,
+# `Declared` first because ENCOUNTER's declaration fold writes it at RESOLVE, before anything has
+# fought. `FIELD_CASUALTY_MODELS`/`MARCH_TARGET_KINDS` bound here for `TITLE_DOMAINS`' reason: an
+# unbound roster is the one whose absence goes unnoticed.
+FIELD_BANDS = roster("field_degree_bands", ordered=True)
+DECLARED, WON, LOST, UNOPPOSED = FIELD_BANDS
+FIELD_CASUALTY_MODELS = roster("field_casualty_models")
+MARCH_TARGET_KINDS = roster("march_target_kinds")
 # ⚠ BOUND AT IMPORT LIKE THE OTHERS, AND THAT IS THE POINT. `titles` was the ONE roster read
 # lazily through a bare `_ROSTERS.get(...) or {}`, so it alone got no existence refusal -- and
 # because `_req_revoke` fails OPEN into purview-for-everything when the mapping is empty, the one

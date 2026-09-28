@@ -1,6 +1,6 @@
 # THE STEP SEQUENCE
 
-**2798 step entries · 1871 barrier openings · 20422 writes through the gate.**
+**3558 step entries · 1871 barrier openings · 20422 writes through the gate.**
 
 ## Writes, by class and step (S30's matrix, checked PER WRITE SITE)
 

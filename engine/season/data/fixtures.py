@@ -508,6 +508,25 @@ DEFAULT_FIXTURES = Fixtures(
     # gate saw it; `corpus_run`'s R5 passed throughout because it matches on the fixture
     # KEY in a `site:`, never on the id a comment cites.
     wound_harm_model="scene_fraction",  # `H-123`, swept scene_fraction / total / none
+    # M4 (`ED-IN-0279` clause (a)). `H-148`'s question asked of mass_battle's own result instead
+    # of a scene's `WoundTracker` -- HOW MUCH `Person.body` A LOST FIELD COSTS. `total`/`none` are
+    # the same two controls `wound_harm_model` ships above, for the same reason. Injection site:
+    # this line, read by `_eff_march` (`loop/effects.py`, M4 build step 7). The default is settled
+    # by `wound_harm_model`'s own precedent (Jordan, 2026-09-04: *"the combat engine determines
+    # the result there"*) applied to this magnitude too -- not by `tools/balance_oracle.py`, which
+    # is `mc_v18`-only and cannot observe an `engine/season`-only mechanic (`rosters.yaml`'s
+    # `field_casualty_models` note, M4 build step 8).
+    # ⚠ NOT YET REGISTERED ON `hole_register.yaml`'s `site:` column -- deferred to M4 build step 10,
+    # in the same pass as `field_morale_weight`/`field_grudge_weight` below.
+    field_casualty_model="scaled_by_degree",  # `H-148`, swept scaled_by_degree / total / none
+    # `H-148`, second half: HOW MUCH `Person.stance` A LOST FIELD MOVES against the winning
+    # faction (the grudge) and against the loser's own creed (the morale hit) -- one weight for
+    # each, on the ruled shape `(referent, valence, weight)` `decision/choose.py::stance_toward`
+    # already sums. #353 states neither the referent's valence sign nor its magnitude; declared,
+    # defaulted and swept rather than chosen in a body. Injection site and register row: as
+    # `field_casualty_model` above, deferred to the same reader.
+    field_morale_weight=1,   # `H-148`, swept 0 / 1 / 3
+    field_grudge_weight=1,   # `H-148`, swept 0 / 1 / 3
     # `H-128` / §54 item 21. HOW DEEP A MORAL WOUND THE OUTCOME CUTS, per unit of the verb's own
     # alignment with an axis. Part D carries `(Person, scar[axis])` at `[RES] ACTS` and names NO
     # magnitude; no in-chain document supplies one either, so it is declared, defaulted and swept

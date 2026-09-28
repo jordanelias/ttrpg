@@ -9,23 +9,33 @@ dict. It NEVER pins a damage value, a win rate, or any other balance quantity co
 assertion in this file red; if one day it does, the assertion was written wrong (plan §0 "Seam
 terms for the wrapper", term 1) — fix the test, don't chase the PC session.
 
-Also covers, per the Wave 1 exit criteria: a byte-parity probe that DISPATCH_COMBAT_BRIDGE=OFF
-(the default) leaves campaign output completely unchanged from the pre-bridge behaviour, and that
-DISPATCH_COMBAT_BRIDGE=ON is *itself* a no-op on any currently-reachable campaign, because nothing
-in the live loop yet queues a `combat` scene_type (verified 2026-07-29 — see combat_bridge.py's
-module docstring). That second probe is a reachability guard, not a balance claim: it would trip
-the moment some future wave adds a combat-scene trigger, which is the intended signal.
+RETIRED 2026-09-27 (mc_v18-retirement plan M1): this file used to also carry a byte-parity probe,
+`test_no_params_equals_explicit_flag_off` (DISPATCH_COMBAT_BRIDGE=OFF leaves campaign output
+unchanged, via `engine.mc_v18.run_batch`). Deleted along with that half of the mc_v18 import: its
+own docstring said plainly that it duplicated coverage the retained goldens already carry
+(`test_f7_smoke_oracle.py`, `test_mc_v18_regression.py`), both of which run the flag OFF. The
+schema/determinism/winner-mapping tests below are unaffected — they call `combat_bridge` directly,
+never mc_v18.
+
+`test_flag_on_is_a_no_op_on_the_currently_reachable_campaign` (below) is KEPT, not deleted — a
+first pass wrongly grouped it with the byte-parity probe as "redundant with the goldens", but
+neither retained golden ever sets `DISPATCH_COMBAT_BRIDGE` (an antagonist pass caught this), and
+its claim — that nothing in the CURRENT campaign loop organically queues a `combat` scene_type, so
+flipping the flag changes no real output — has no decoupled substitute yet: proving that requires
+driving a full campaign through real, organic triggers, which only `engine.mc_v18.run_campaign`
+can currently do (`engine/season/` has no faction-scale triggers of its own — building those is
+this plan's own later stages, M2 onward). So this file does NOT clear `ALLOWED_IMPORTERS` this
+round; only the one genuinely-redundant test is gone.
 """
 from __future__ import annotations
 
-import os
 import random
 
 import pytest
 
 from engine.autoload import game_state
 from engine.cross_scale import combat_bridge
-from engine.mc_v18 import run_campaign, run_batch
+from engine.mc_v18 import run_campaign
 
 
 # ── derive_parties: schema + context-derivation-gap behaviour (never an outcome) ────────────────
@@ -162,27 +172,7 @@ def test_resolve_is_deterministic_under_a_fixed_seed():
     assert r1 == r2
 
 
-# ── flag-OFF byte-parity + flag-ON reachability no-op (Wave 1 exit criteria) ─────────────────────
-
-def test_no_params_equals_explicit_flag_off():
-    """Pins no-params ≡ explicit-OFF equivalence ONLY — it does NOT and cannot observe OFF-drift:
-    both arms of this comparison run the exact same post-bridge dispatch code (the flag is read
-    off `world`, defaulting False either way), so a regression that changed the OFF-path itself
-    would move both sides identically and this test would stay green. (Renamed from
-    `test_flag_off_is_the_default_and_byte_identical_to_no_params`, which claimed exactly that
-    "byte identical to [true, pre-bridge] no params" property this test cannot demonstrate.)
-    The TRUE OFF-parity instruments — the ones that actually pin PRE-bridge behaviour and would
-    catch OFF-path drift — are the pre-existing pinned goldens that run in the same gate:
-    `test_f7_smoke_oracle.py` (`GOLDEN_SCENES_RESOLVED=463` etc.), `test_mc_v18_regression.py`,
-    and `test_echo_transport.py`."""
-    assert os.environ.get('DISPATCH_COMBAT_BRIDGE') is None, (
-        "DISPATCH_COMBAT_BRIDGE must not be set in the test environment for this probe to be valid")
-    default = run_batch(n=3, base_seed=42)
-    explicit_off = run_batch(n=3, base_seed=42, params={'DISPATCH_COMBAT_BRIDGE': 0})
-    assert default.win_share == explicit_off.win_share
-    assert default.all_winners == explicit_off.all_winners
-    assert default.battles_mean == explicit_off.battles_mean
-
+# ── flag-ON reachability no-op (Wave 1 exit criteria) ─────────────────────────────────────────
 
 def test_flag_on_is_a_no_op_on_the_currently_reachable_campaign():
     """No live trigger queues a `combat` scene_type today (verified 2026-07-29 — see

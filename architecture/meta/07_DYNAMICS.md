@@ -69,8 +69,10 @@ another existed.**
 
 # §4 · Loops — and the one that matters has never run
 
-**The season loop:** `CALENDAR → MATTER → DELIBERATE → RESOLVE → WITNESS → CENSUS`. Six steps, four
-barriers, the world frozen between MATTER and RESOLVE.
+**The season loop:** `CALENDAR → MATTER → DELIBERATE → RESOLVE → ENCOUNTER → WITNESS → CENSUS`.
+Seven steps, four barriers, the world frozen between MATTER and RESOLVE. ENCOUNTER (M4,
+`ED-IN-0279` clause (a), 2026-09-28) shares barrier 3 and RESOLVE's write class rather than
+opening a fifth barrier — see `03_VERBS_AND_LOOPS.md` §D.1 and `04_CODE_ARCHITECTURE.md` §A.2/§C.1.
 
 **The contest nest:** the same loop, smaller person set, shorter clock, entered at exactly one place —
 RESOLVE — bounded by a caller-supplied cap.

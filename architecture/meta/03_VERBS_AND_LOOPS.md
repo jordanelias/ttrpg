@@ -125,7 +125,7 @@ A slice of play is bounded by three things at once, and they close on a single o
 |---|---|---|
 | **interaction** | one exchange resolving | the verb |
 | **SCENE** | attention · occasion · place | **the budget** — ~5 per character per season |
-| **season** | the six steps completing | the loop |
+| **season** | the seven steps completing | the loop |
 | **campaign** | a fixed point, or somebody's ending | nobody — and §D.4 |
 
 ⚠ **THE BUDGET COUNTS SCENES, NOT INTERACTIONS, AND THAT IS THE WHOLE OF WHY IT MATTERS.** At one
@@ -156,16 +156,25 @@ into its own contest. **The slice is the same object; only its rendering changes
 
 # PART D · THE SEASON LOOP
 
-## §D.1 · Six steps, four barriers, and what each is for
+## §D.1 · Seven steps, four barriers — one shared, and what each is for
 
 ```
 CALENDAR    occasions fire · nothing is decided
 MATTER      the world moves by its three motions · the world FREEZES at the end
 DELIBERATE  every person decides, from what they hold · a map, not a barrier
 RESOLVE     acts apply, as an ordered fold · the only writing step for acts
+ENCOUNTER   folds what RESOLVE itself deferred · shares barrier 3 and RESOLVE's write class
 WITNESS     one global fan-out · then each person deposits into their OWN ledger
 CENSUS      shares WITNESS's join · demand-driven individuation
 ```
+
+⚠ **ENCOUNTER JOINED 2026-09-28 (M4, `ED-IN-0279` clause (a)) AND IS NOT A FIFTH BARRIER.** It
+folds the same `Act[]` RESOLVE just processed, at the same `WriteClass.ACTS` — never a step of
+its own choosing, never a second ordering. A verb whose prize row names a `step:` it defers to
+writes nothing at RESOLVE (the roster's `Declared` band) and is picked up here by scanning
+RESOLVE's own `Event[]` for that band; every other verb never reaches ENCOUNTER at all. **Four
+barriers stays true because none of RESOLVE's is repeated** — ENCOUNTER is a second fold inside
+the same one.
 
 **The order is not arbitrary and each adjacency carries an argument:**
 
@@ -174,7 +183,8 @@ CENSUS      shares WITNESS's join · demand-driven individuation
 | CALENDAR before MATTER | a fact becomes an **occasion** before the world moves on it |
 | MATTER before DELIBERATE | people decide about a world that has already moved, **and it is frozen while they do** |
 | DELIBERATE before RESOLVE | everyone chooses **simultaneously**; nobody reacts to a same-season act |
-| RESOLVE before WITNESS | you cannot witness what has not happened |
+| RESOLVE before ENCOUNTER | ENCOUNTER folds only what RESOLVE itself declared and deferred — it has nothing to select from otherwise |
+| ENCOUNTER before WITNESS | you cannot witness what has not happened, and a deferred verb has not happened until ENCOUNTER folds it |
 | WITNESS before CENSUS | the population reconciles against **post-eviction** ledgers |
 
 ## §D.2 · The frozen world is the load-bearing property

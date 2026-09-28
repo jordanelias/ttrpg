@@ -569,10 +569,11 @@ def test_lb6d_every_verb_declares_a_rostered_beneficiary():
     roster."""
     from ..data.verbs import BENEFICIARY_KINDS, VERB_TABLE
 
-    # Same control as `test_season_shape.py`'s own `len(_load_verb_table()) == 38`: it is here so
+    # Same control as `test_season_shape.py`'s own `len(_load_verb_table()) == 39`: it is here so
     # that a table which SHRANK cannot let this census pass while examining a handful of rows.
+    # ⚠ 38 -> 39, `march` (M4, `ED-IN-0279` clause (a)), 2026-09-28.
     # [JUSTIFIED: the verb count is READ from verb_table.yaml, never chosen -- the control that stops this census passing over a loader that returned a subset]
-    assert len(VERB_TABLE) == 38, "the verb count moved; this row's census is stale"
+    assert len(VERB_TABLE) == 39, "the verb count moved; this row's census is stale"
     undeclared = [v for v, r in VERB_TABLE.items() if not r.beneficiary]
     assert not undeclared, f"verbs with no `beneficiary:`: {undeclared}"
     off_roster = [(v, r.beneficiary) for v, r in VERB_TABLE.items()
@@ -1777,16 +1778,23 @@ def test_24d_i_every_hearth_carries_exactly_one_dwelling_and_no_other_rung_carri
 
 def test_24d_i_the_realm_mint_adds_sites_and_displaces_no_producing_site():
     """The OBSERVABLE's census, derived rather than pinned. The producing Sites are still one per
-    producing kind per settlement, and the total is those plus one per hearth. A dwelling id that
-    collided with a producing Site's would overwrite it, and the first count would drop."""
+    producing kind per settlement, and the total is those plus one per hearth, plus one garrison
+    per settlement (M4, `ED-IN-0279` clause (a), build step 11 -- joined the same non-producing
+    shape `dwelling` already has: one per unit, `SITE_YIELD` never keys it, `wear_per_season`/
+    `band_floors` both ship it a control-arm `0`/`{}}`). A dwelling or garrison id that collided
+    with a producing Site's would overwrite it, and the first count would drop."""
     from ..data.fixtures import SITE_YIELD
     w = build_realm(0)
     settlements = [r for r in w.rungs.values() if r.kind == "settlement"]
     producing = [k for k in sorted(SITE_YIELD) if SITE_YIELD[k]]
     assert settlements and producing, "fixture: no settlement or no producing kind"
-    others = Counter(s.kind for s in w.sites.values() if s.kind != "dwelling")
+    others = Counter(s.kind for s in w.sites.values() if s.kind not in ("dwelling", "garrison"))
     assert others == Counter({k: len(settlements) for k in producing}), others
-    assert len(w.sites) == len(settlements) * len(producing) + len(_hearths(w)), len(w.sites)
+    garrisons = [s for s in w.sites.values() if s.kind == "garrison"]
+    assert len(garrisons) == len(settlements), (
+        f"{len(garrisons)} garrison Sites for {len(settlements)} settlements -- not one each")
+    assert len(w.sites) == (len(settlements) * len(producing) + len(_hearths(w))
+                             + len(settlements)), len(w.sites)
     assert not [s.id for s in w.sites.values() if s.id in w.rungs], "a Site id shadows a rung id"
 
 
@@ -1906,8 +1914,27 @@ def test_24d_i_the_control_arm_crosses_no_band_and_moves_no_question_in_one_seas
     # `claim.deposited` id differs even where the claim id does not.
     other = lambda log: {e.id for e in log if e.kind != "claim.deposited"}
     worn_ids = {e.id for e in w.log if e.kind == "condition.worn" and anchor_of(w, e) in dw}
-    assert other(w.log) - worn_ids == other(cw.log), (
-        f"{len(other(w.log) - worn_ids ^ other(cw.log))} non-deposit Events differ between arms")
+    # ⚠ GARRISON'S OWN WEAR ALSO EXCLUDED, AND FOR A DIFFERENT REASON THAN DWELLING'S (M4,
+    # `ED-IN-0279` clause (a), build step 11). Dwelling is absent from the control arm entirely,
+    # so nothing needs subtracting on that side. Garrison exists in BOTH arms, with the SAME
+    # subjects -- but `world.write`'s Event id is `H(seed, tick, subj, f"emit:{emits}#{draw}")`,
+    # and `draw` is a GLOBAL, SEQUENTIAL counter (`H`'s own docstring: "unique per DRAW, not per
+    # operation"). Garrison Sites are minted after dwellings in `populated.py`, so in the control
+    # arm -- dwellings deleted, fewer prior draws consumed -- every garrison wear Event lands at
+    # an earlier draw ordinal than its treatment-arm counterpart for the SAME subject, and gets a
+    # DIFFERENT id purely from that shift. This is not a garrison-specific defect: it is the
+    # pre-existing draw-ordinal property of every Event id, first exercised by this exact
+    # comparison now that a second "sometimes-present" Site kind sits after dwellings in
+    # `w.sites`'s insertion order. Measured: 37 garrison wear Events per arm (one per settlement),
+    # same subjects, disjoint ids.
+    garrison_ids = {s.id for s in w.sites.values() if s.kind == "garrison"}
+    w_garrison_worn = {e.id for e in w.log
+                       if e.kind == "condition.worn" and anchor_of(w, e) in garrison_ids}
+    cw_garrison_worn = {e.id for e in cw.log
+                        if e.kind == "condition.worn" and anchor_of(cw, e) in garrison_ids}
+    assert other(w.log) - worn_ids - w_garrison_worn == other(cw.log) - cw_garrison_worn, (
+        f"{len((other(w.log) - worn_ids - w_garrison_worn) ^ (other(cw.log) - cw_garrison_worn))} "
+        "non-deposit Events differ between arms")
 
     claims = {c.id: c for p in w.persons.values() for c in p.ledger}
     control = {c.id for p in cw.persons.values() for c in p.ledger}

@@ -1,10 +1,12 @@
 """`season.loop.driver` -- `SeasonDriver` and `season()`.
 
 `04_CODE_ARCHITECTURE.md` §A.2:134 -- *"loop/  driver + six steps. The driver is the ONLY constructor
-of write tokens."* This module is the DRIVER half. The six steps are `loop/{calendar,matter,
-deliberate,resolve,witness,census}.py` and are **bound onto the class at the foot of this file**, not
-delegated to -- `SeasonDriver.witness` IS `witness.witness`, so `inspect.getsource` reaches the real
-body and the eight tests that read a step's source keep working. See the note above the bindings.
+of write tokens."* (AMENDED 2026-09-28, `ED-IN-0279` clause (a), to SEVEN -- see the note at the
+bindings below). This module is the DRIVER half. The seven steps are `loop/{calendar,matter,
+deliberate,resolve,encounter,witness,census}.py` and are **bound onto the class at the foot of this
+file**, not delegated to -- `SeasonDriver.witness` IS `witness.witness`, so `inspect.getsource` reaches
+the real body and the eight tests that read a step's source keep working. See the note above the
+bindings.
 
 ⚠ **THIS DOCSTRING WAS STALE THE MOMENT L5 LANDED AND SAID SO FOR A DAY.** It listed `stratum_of`,
 `as_scenes`, `sense`, `names_a_verb` and `SOURCE_353_TEXT` as living here -- they moved to
@@ -84,8 +86,8 @@ def mint_token(w: World, wclass: WriteClass) -> Token:
     parameter, which is `04 §C.1` line for line: `cal = Token(CALENDAR,t); calendar(w,cal); drop`.
     DELIBERATE is called with none.
 
-    ⚠ IT IS A MODULE FUNCTION, NOT A `SeasonDriver` METHOD, AND THAT IS DELIBERATE. The six steps are
-    BOUND onto `SeasonDriver` (foot of this file), so a method here would be one `self.` away from
+    ⚠ IT IS A MODULE FUNCTION, NOT A `SeasonDriver` METHOD, AND THAT IS DELIBERATE. The seven steps
+    are BOUND onto `SeasonDriver` (foot of this file), so a method here would be one `self.` away from
     `deliberate`'s body. A module function is reachable only by importing it, and the same scan
     refuses any game module under `engine/season/` other than this one that calls it.
 
@@ -156,9 +158,11 @@ def resolvable_verbs() -> frozenset:
         # THE TWO CLAUSES ARE THE GATE'S OWN GROUNDS, READ FORWARD:
         #   * **a provider is registered for the prize.** `manifest.has(role, module)` asks the
         #     CODE, not the data — a roster row may name a module the contracts file declares and
-        #     nothing may have registered a callable for it, which is `mass_battle` today. This is
-        #     the same resolution-by-declaration the rest of the unit is built on, and it keeps one
-        #     owner for the question rather than adding a fourth.
+        #     nothing may have registered a callable for it. `mass_battle` was exactly that until
+        #     ED-IN-0279 (M3) gave it a provider; every prize row has one as of that plan, but the
+        #     gate stays live rather than deleted, since a future row could land in the same state.
+        #     This is the same resolution-by-declaration the rest of the unit is built on, and it
+        #     keeps one owner for the question rather than adding a fourth.
         #   * **the verb is typed.** The paragraph above is the reason and it is unchanged:
         #     `operands_for` returns `{}` for an untyped row, so a computed contested act would
         #     reach the seam with ONE claimant and every case producing one would become a
@@ -249,6 +253,15 @@ class SeasonDriver:
         # thing to DECIDE, and giving it back as a resolver parameter is how the second resolver
         # returns. This list is appended by the fold and read by nobody inside it.
         self.resolved: list[Act] = []
+        # ⚠ COMPANION SET, `ActStore._by_id`'s OWN SHAPE, FOR THE SAME REASON (M4 review pass,
+        # `/simplify` efficiency finding). `_fold` dedupes `resolved` by id -- a march act reaches
+        # it once from RESOLVE's Declared fold and once more from ENCOUNTER's real fold -- and a
+        # per-call `any(r.id == a.id for r in self.resolved)` scan is O(n) against a list that is
+        # NEVER RESET across a whole campaign's many `season()` calls, making every act's fold
+        # O(N) over the run's total act count instead of O(1). `_resolved_ids` is maintained
+        # alongside `resolved`, never read on its own, and exists only so the dedup check in
+        # `loop/resolve.py::_fold` is a set membership test.
+        self._resolved_ids: set = set()
         # ⚠ RESOLVER-SIDE, AND CUMULATIVE — like `resolved`, which is also never reset. The
         # Scene is the budgeted unit and carries the `occasion`, so the fold can name what
         # occasioned an act. No person-side Query reaches it, exactly as none reaches `resolved`.
@@ -406,6 +419,14 @@ class SeasonDriver:
             acts = self.deliberate(choose, question, subsistence,
                                    self._questions_at_barrier())        # a MAP: no token
             events = self.resolve(mint_token(w, WriteClass.ACTS), acts, contest_max_depth)
+            # M4 (`ED-IN-0279` clause (a), `04 §A.2:134` as amended 2026-09-28): the SEVENTH
+            # step, sharing barrier 3 -- no `TRACE.barrier(...)` call, so "four barriers" stays
+            # true. Fights whatever RESOLVE just declared and deferred; appended onto the SAME
+            # `events` list, before the bookkeeping below, so a field battle's own outcome
+            # counts toward `_realised` and reaches the log/WITNESS fan-out exactly as any other
+            # verb's events do -- ENCOUNTER is not a second, parallel accounting.
+            events = events + self.encounter(mint_token(w, WriteClass.ACTS), events,
+                                             contest_max_depth)
             # ⚠⚠ **WHAT WAS REALISED, AS OPPOSED TO WHAT WAS ATTEMPTED — AND IT CAN ONLY BE KNOWN
             # HERE, AFTER THE FOLD.** `deliberate` records an attempt at RELEASE, because that is
             # when the scene-action is spent and the budget does not care how it went. Whether the
@@ -459,12 +480,13 @@ class SeasonDriver:
                     deposits=deposits, hash=w.content_hash())
 
 # ---------------------------------------------------------------------------
-# THE SIX STEPS, BOUND BACK ONTO THE CLASS (unit L5, ED-IN-0206).
+# THE SEVEN STEPS, BOUND BACK ONTO THE CLASS (unit L5, ED-IN-0206; the seventh, `encounter`,
+# added M4 -- `ED-IN-0279` clause (a)).
 #
 # `04_CODE_ARCHITECTURE.md` §A.2:134 -- *"loop/  driver + six steps. The driver is the ONLY
-# constructor of write tokens."* -- and the §A.2 table gives each of the six its own owned state,
-# its own `emits`, and its own token. They were methods on this class; each body now lives in its
-# own module and is BOUND HERE.
+# constructor of write tokens."* (AMENDED 2026-09-28 to seven) -- and the §A.2 table gives each
+# step its own owned state, its own `emits`, and its own token. They were methods on this class;
+# each body now lives in its own module and is BOUND HERE.
 #
 # ⚠ **BOUND, NOT DELEGATED, AND THE DIFFERENCE IS LOAD-BEARING.** `SeasonDriver.witness` IS
 # `witness.witness` after this line runs, so `inspect.getsource(SeasonDriver.witness)` returns the
@@ -483,14 +505,19 @@ class SeasonDriver:
 from .calendar import calendar                                            # noqa: E402
 from .census import census                                                # noqa: E402
 from .deliberate import deliberate                                        # noqa: E402
+from .encounter import encounter                                         # noqa: E402
 from .matter import matter                                               # noqa: E402
-from .resolve import _admits, _apply_write, _eligible, _fold, _occasion_ids, resolve  # noqa: E402
+from .resolve import (_admits, _apply_write, _contest, _eligible, _fold,  # noqa: E402
+                       _occasion_ids, _survives, resolve)
 from .witness import witness                                              # noqa: E402
 
 SeasonDriver.calendar = calendar
 SeasonDriver.matter = matter
 SeasonDriver.deliberate = deliberate
 SeasonDriver.resolve = resolve
+# M4 (`ED-IN-0279` clause (a)): the seventh step, bound the same way as the original six --
+# `SeasonDriver.encounter` IS `encounter.encounter` after this line, not a delegating stub.
+SeasonDriver.encounter = encounter
 SeasonDriver.witness = witness
 SeasonDriver.census = census
 # RESOLVE's own machinery, bound for the same reason: `_fold` reaches all three through `self`, and
@@ -501,3 +528,8 @@ SeasonDriver._admits = _admits
 SeasonDriver._occasion_ids = _occasion_ids
 SeasonDriver._fold = _fold
 SeasonDriver._apply_write = _apply_write
+# M4 (`ED-IN-0279` clause (a)): extracted from `resolve()`'s own loop so `loop/encounter.py`
+# shares both (§8) -- see their own docstrings in `resolve.py` for what each does and does not
+# re-check.
+SeasonDriver._survives = _survives
+SeasonDriver._contest = _contest

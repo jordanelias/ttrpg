@@ -118,8 +118,12 @@ def derive_party(person: Any, fx: Any, label: str) -> Any:
 @provider("contest", "personal_combat")
 def resolve(w: Any, claimants: list, causes: list, prize: Any, *,
             verb: str = "", subject: Optional[str] = None,
-            rng: Optional[random.Random] = None) -> dict:
+            rng: Optional[random.Random] = None, rung: str = "") -> dict:
     """CALL the personal-combat engine. Returns what it said; decides nothing itself.
+
+    ⚠ `rung` IS ACCEPTED AND NOT USED HERE, THE SAME DELIBERATE NON-CHANGE AS `rng` BELOW (M4,
+    `ED-IN-0279` clause (a)). The seam's call is uniform; two duellists need no place to scope
+    a derivation over.
 
     The RNG is seeded from the WORLD's own clock and the causing act, so a contest is reproducible
     exactly as every other draw in this instrument is (`S33`: *unique per DRAW, not per
