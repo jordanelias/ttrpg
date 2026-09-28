@@ -153,7 +153,14 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
         # unreachable and the repoint a code change.
         _run = _provider_for("contest", _sub.get("provider"))
         if _run is not None:
-            out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng)
+            # M4 (`ED-IN-0279` clause (a)). `rung` -- ALREADY A PARAMETER OF THIS FUNCTION, ALREADY
+            # PASSED AT EVERY CALL SITE, AND UNUSED UNTIL NOW -- is threaded to the provider for
+            # the same reason `verb`/`subject`/`rng` were: the seam's call is uniform, and which
+            # keyword a provider actually reads is the provider's business. `mass_battle` is the
+            # first to read it, to scope a derived defending side to presence at a place; every
+            # other provider accepts and ignores it, a deliberate non-change (`combat.py`'s own
+            # note on `rng` is the precedent for what that comment looks like).
+            out = _run(w, claimants, causes, prize, verb=verb, subject=subject, rng=rng, rung=rung)
             if out.get("status") == "RESOLVED":
                 TRACE.decision(f"contest for {prize!r} dispatched", "S39",
                                chose=f"called {out['module']} (resolver {out['resolver']})",
@@ -175,8 +182,10 @@ def contest(w: World, rung: str, prize: Any, claimants: list[str],
             law="Jordan 2026-09-02 -- a contest is a call for a different subsystem. The three "
                 "are declared in references/module_contracts.yaml WITH resolvers, so the seam's "
                 "job is to DISPATCH; inventing a degree ladder here would be a second resolver, "
-                "which S27.2 names as its highest-value refusal. `personal_combat` is CALLED "
-                "above; mass_battle and social_contest still resolve to a name only")
+                "which S27.2 names as its highest-value refusal. As of ED-IN-0279 (M3) every "
+                "prize row has a registered provider; this branch fires only for a row naming a "
+                "module that HAS no provider row, which none does today -- kept live rather than "
+                "deleted, since a new prize could still land in that state")
     raise Unspecified(
         "the degree ladder's margin model",
         "S39.4",

@@ -22,7 +22,7 @@ import sys
 
 from typing import Any, Optional
 from ..data import files
-from ..data.rosters import FELLED, UNTOUCHED, WOUNDED
+from ..data.rosters import FELLED, LOST, UNOPPOSED, UNTOUCHED, WON, WOUNDED
 from ..gaps import Unspecified
 
 
@@ -135,14 +135,43 @@ def combat_degree(result: dict, subject: Optional[str]) -> str:
     return WOUNDED if st["wounds"] > 0 else UNTOUCHED
 
 
+def field_degree(result: dict) -> str:
+    """M4 (`ED-IN-0279` clause (a)). THE BAND `march` FOLDS ON, READ OFF THE MASS-BATTLE
+    PROVIDER'S OWN RESULT -- the shape `combat_degree` reads off a scene's `wound_state`, one
+    function above. `seam/wrappers/mass_battle.py` lifts `attacker_wins`/`unopposed` to the TOP
+    level of what it returns for exactly this read.
+
+    ⚠ NO `subject` PARAMETER, UNLIKE `combat_degree`. `kill / wound` grades one duellist; `march`
+    grades a SIDE, and there is no single person the band is read off of -- `Won`/`Lost` is the
+    attacker's own outcome, and every person on the losing side takes the same band's writes
+    (`04 §C.4`'s `writes_at(degree)`, unconditional on which person the write lands on). This
+    matches `degree_of`'s margin branch, which also carries no `subject` (`degree_from_net` reads
+    only `net`/`ob`).
+
+    ⚠ DOES NOT GRADE `massbattle.py`'s OWN NON-CANONICAL `result['degree']`
+    (Overwhelming/Success/Partial/Failure) -- that classification is disclosed as *"NOT the
+    canonical degree ladder... a bespoke post-hoc classification"* by its own module header, and
+    reconciling the two remains open MB-lane work, not M4's. `march` writes on THREE bands
+    (Won/Lost/Unopposed); the engine's finer four-way split is available under
+    `result['result']['degree']` for introspection and stays there."""
+    if result.get("unopposed"):
+        return UNOPPOSED
+    return WON if result.get("attacker_wins") else LOST
+
+
 def degree_of(result: Any, subject: Optional[str] = None) -> str:
     """THE ONE PLACE A SUBSYSTEM'S RESULT BECOMES THE TOKEN `writes_at` / `emits_at` KEY ON.
 
     ⚠ IT DECIDES NOTHING. Each branch hands the question to whoever already owns it -- the scene
-    for combat, `degree_from_net` for a margin -- and a result carrying NEITHER refuses by name.
-    That refusal is the honest state of `mass_battle` and `social_contest`, which the seam
-    resolves and does not call (Jordan, 2026-09-02: *"we don't NEED to worry about them at this
-    point in time"*)."""
+    for combat, `field_degree` for a mass battle, `degree_from_net` for a margin -- and a result
+    carrying NONE OF THE THREE refuses by name.
+    ⚠ `mass_battle` WAS THE UNGRADABLE THIRD SHAPE UNTIL M4 (`ED-IN-0279` clause (a)); it is not
+    any more. Its provider's result is still a survivor-ratio classification, not a margin -- see
+    `seam/wrappers/mass_battle.py`'s own docstring -- and `field_degree` does not grade THAT
+    classification either; it reads the top-level `attacker_wins`/`unopposed` markers the provider
+    lifts for exactly this purpose, onto the three bands `march` actually writes on
+    (Won/Lost/Unopposed). Reconciling the engine's own finer four-way split with the canonical
+    ladder stays open MB-lane work, unrelated to this."""
     if not isinstance(result, dict):
         raise Unspecified(
             f"a contest returned {type(result).__name__}, which carries no outcome to grade",
@@ -150,6 +179,11 @@ def degree_of(result: Any, subject: Optional[str] = None) -> str:
             law="S39.4 -- the degree is the SUBSYSTEM's, read off what it returned")
     if "wound_state" in result:
         return combat_degree(result, subject)
+    # M4 (`ED-IN-0279` clause (a)). `attacker_wins` is `mass_battle`'s own top-level marker,
+    # present on every RESOLVED result including the `unopposed` bypass -- neither a `wound_state`
+    # nor a `net`/`ob` pair, so it needed a third branch rather than fitting either existing one.
+    if "attacker_wins" in result:
+        return field_degree(result)
     if "net" in result and "ob" in result:
         lad = degree_ladder()
         if lad is None:

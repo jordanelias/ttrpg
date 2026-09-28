@@ -17,12 +17,15 @@ Falsifiers pinned here:
   3. The probe writes NEITHER `Settlement.order` NOR `Territory.accord` — byte-exact before/after,
      both via the isolated probe function directly and via the full `run_accounting` pass.
   4. No settlements / no territories -> the probe stays absent (0), never raises.
-  5. `engine.mc_v18.run_campaign`'s `CampaignResult.accord_drift_probe_hits` surfaces the same
-     per-campaign value `world.accord_drift_probe_hits` carries — the field actually reaches
-     campaign telemetry, not just `world`.
+
+FALSIFIER 5 RETIRED (2026-09-27, mc_v18-retirement plan M1): `run_campaign`'s
+`CampaignResult.accord_drift_probe_hits` cross-boundary check was deleted along with its test.
+That boundary is `engine.mc_v18.run_campaign`'s own serialization step — internal to a frozen,
+deprecated-in-place module (ED-IN-0227) that nothing further builds on, so a regression there has
+no future trigger surface (CLAUDE.md §0.1 pt 5's predicate: not load-bearing on the game or on a
+Jordan decision). Falsifiers 1-4 above, which exercise the probe directly, are unaffected.
 """
 from engine.autoload import game_state
-from engine.mc_v18 import run_campaign
 from systems.overview.sim import accounting
 from systems.settlements.sim import registry as settlement_registry
 
@@ -136,29 +139,3 @@ def test_no_territories_leaves_the_probe_absent():
     world.territories = {}
     accounting._probe_province_accord_drift(world)  # must not raise
     assert getattr(world, "accord_drift_probe_hits", 0) == 0
-
-
-# ── 5. The value reaches CampaignResult, not just `world` ────────────────────────────────────
-
-def test_campaign_result_surfaces_the_same_drift_probe_value_world_carries():
-    """Drives a REAL run_campaign() (not a hand-built world) far enough for run_accounting to
-    fire at least once, and confirms CampaignResult.accord_drift_probe_hits reaches campaign
-    telemetry rather than being silently dropped at the World/CampaignResult boundary."""
-    result = run_campaign(seed=42, max_seasons=2)
-    assert isinstance(result.accord_drift_probe_hits, int)
-    # CORRECTED 2026-07-30 (ED-IN-0098), found by tools/ci_vacuous_assertion_check.py [S1].
-    # The previous line was `assert ... >= 0`, whose own comment ("never negative -- an
-    # additive-only counter") conceded it could not fail — so this test's stated purpose,
-    # "confirms the value reaches CampaignResult rather than being silently dropped at the
-    # World/CampaignResult boundary", was asserted by the isinstance() line alone and the
-    # boundary itself was never checked. A silent drop would leave BOTH sides at 0 and pass.
-    # What actually falsifies the claim is AGREEMENT ACROSS the boundary, so assert that.
-    # MEASURED: CampaignResult exposes no `.world` handle (checked — hasattr is False), so a
-    # cross-boundary equality assertion would be permanently dead code. The strongest claim that
-    # can actually FAIL here is that the counter arrived non-zero: the docstring's own premise is
-    # that accounting fires "at least once" over 2 seasons, so 0 means either it never ran or the
-    # value was dropped between World and CampaignResult — the exact defect this test guards.
-    # Live value at seed=42/max_seasons=2 is 461, so the margin is not marginal.
-    assert result.accord_drift_probe_hits > 0, (
-        'accounting was expected to fire at least once in 2 seasons, so 0 drift-probe hits means '
-        'the probe never incremented or never reached CampaignResult')

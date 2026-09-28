@@ -58,6 +58,10 @@ Specifically inherited, and **not** re-argued here:
 **A successor that rewrites Parts I–VI is a worse document.** The failures this one fixes are not in
 the architecture; they are in what the architecture declines to say.
 
+⚠ **POINTER, NOT A CORRECTION: `§23`/`§31`'s "six steps" is what this document said and stays
+unedited.** M4 (`ED-IN-0279` clause (a), 2026-09-28) added a seventh step, ENCOUNTER, sharing
+barrier 3 — current count is `04_CODE_ARCHITECTURE.md` §A.2/§C.1 and `03_VERBS_AND_LOOPS.md` §D.1.
+
 ## §0.3 · What this document RETRACTS or AMENDS in #353
 
 Fourteen changes. Each is a place where #353, read strictly, **cannot be executed** — established by

@@ -1,7 +1,9 @@
 """`season.data.matrix` -- S23/S30's write matrix, extracted from `shape.py` (step 2 of the
 decomposition, a PURE MOVE: no behaviour changed, only where the code lives).
 
-Owns the six-step loop's `Step`/`WriteClass` enums, the STEP -> WRITE CLASS relation, and the
+Owns the seven-step loop's `Step`/`WriteClass` enums (six until M4 added `ENCOUNTER`,
+`04 §A.2:134` as amended 2026-09-28, `ED-IN-0279` clause (a)), the STEP -> WRITE CLASS relation,
+and the
 `(kind, field)` table loaded from `write_matrix.yaml` that says which step may write which record
 field, and how (S30's own rule: ANY UNMARKED CELL IS A WRITE-CLASS VIOLATION).
 
@@ -31,7 +33,7 @@ from .rosters import load_yaml
 
 
 # ===========================================================================
-# S23 -- THE SIX STEPS; S30 -- THE FOUR WRITE CLASSES
+# S23 -- THE SEVEN STEPS (SIX UNTIL M4's `ENCOUNTER`); S30 -- THE FOUR WRITE CLASSES
 # ===========================================================================
 
 class Step(enum.Enum):
@@ -39,6 +41,11 @@ class Step(enum.Enum):
     MATTER = "MATTER"
     DELIBERATE = "DELIBERATE"
     RESOLVE = "RESOLVE"
+    # M4 (`ED-IN-0279` clause (a), `04 §A.2:134` as amended 2026-09-28): the SEVENTH step, between
+    # RESOLVE and WITNESS. It holds no state between steps -- a deferred contest's declaration is
+    # an Event in the round's own list, the act is already in the act store -- and it shares
+    # barrier 3 (`04 §C.1`) rather than opening a fifth. See `loop/encounter.py`.
+    ENCOUNTER = "ENCOUNTER"
     WITNESS = "WITNESS"
     CENSUS = "CENSUS"
 
@@ -54,7 +61,7 @@ class WriteClass(enum.Enum):
 # MATTER class (§30's reconciliation is a world write), DELIBERATE in ACTS -- it returns an act
 # array and writes nothing else.
 # roster-exempt: MECHANISM, and the distinction is the one rosters.yaml states. The STEP NAMES
-# are `Step`'s own members — the six-step loop is the engine's shape, not the game's vocabulary —
+# are `Step`'s own members — the seven-step loop is the engine's shape, not the game's vocabulary —
 # and this maps each to its write class, which is a RELATION the code owns. Moving it would invite
 # someone to edit how the engine works while believing they were editing the game.
 _STEP_CLASS = {
@@ -62,6 +69,12 @@ _STEP_CLASS = {
     "MATTER": WriteClass.MATTER,
     "DELIBERATE": WriteClass.ACTS,
     "RESOLVE": WriteClass.ACTS,
+    # M4: ENCOUNTER shares RESOLVE's write class. Two steps sharing a class has precedent twice
+    # over already -- DELIBERATE/RESOLVE and CENSUS/MATTER -- and AX-3's split is INTERIOR-vs-ACTS
+    # (`04:117`); a deferred contest's writes (`Person.body`, `Person.stance`) are ACTS rows, so
+    # the phase belongs in that class. The STEP is the discriminator a matrix row's `steps:` still
+    # gates on, not the class.
+    "ENCOUNTER": WriteClass.ACTS,
     "WITNESS": WriteClass.INTERIOR,
     "CENSUS": WriteClass.MATTER,
 }
@@ -99,7 +112,7 @@ STEP_CLASS: dict = {Step[k]: v for k, v in _STEP_CLASS.items()}
 # roster-exempt: MECHANISM. The abbreviations `write_matrix.yaml`'s `steps:` column uses, mapped
 # to `Step`'s names. This is the FILE FORMAT, not a definition the game resolves from.
 _STEP_OF = {"CAL": "CALENDAR", "MAT": "MATTER", "DEL": "DELIBERATE",
-            "RES": "RESOLVE", "WIT": "WITNESS", "CEN": "CENSUS"}
+            "RES": "RESOLVE", "ENC": "ENCOUNTER", "WIT": "WITNESS", "CEN": "CENSUS"}
 
 
 @dataclass(frozen=True)

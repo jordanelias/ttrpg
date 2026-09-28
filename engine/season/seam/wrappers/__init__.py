@@ -2,10 +2,10 @@
 the §A.2 table's row for them is the shortest in the document: they own **"nothing, ever"**, they
 read the projection, and they emit a `Margin`.
 
-Two wrappers: `combat.py`, the IN-side of the personal-combat call `seam/contest.py` dispatches to,
-and `sigma.py`, the interim social provider `ED-SC-0037` rules (`engine/autoload/sigma_leverage.py`).
-`mass_battle` is resolved by the roster and not called (Jordan, 2026-09-02), so it has no wrapper
-here.
+Three wrappers: `combat.py`, the IN-side of the personal-combat call `seam/contest.py` dispatches
+to; `sigma.py`, the interim social provider `ED-SC-0037` rules (`engine/autoload/sigma_leverage.py`);
+and `mass_battle.py`, wired M3 of the `mc_v18`-retirement plan (`ED-IN-0279`) -- `rosters.yaml`'s
+"a field" row now has a `provider:`, closing the gap this docstring used to describe.
 ⚠⚠ **THIS PACKAGE IMPORTS ITS OWN WRAPPERS, AND THAT IS WHAT REGISTERS THEM.
 `manifest/registry.py` USED TO, AND IT WAS AN IMPORT CYCLE.** `U1` had
 `registry._load_providers()` import `seam/wrappers/*` so `@provider` would run; the wrappers import
@@ -36,5 +36,6 @@ declared `sys.path` seam invisible to the scan that bounds it.
 
 # Importing them IS the registration: each module carries `@provider(role, module)` on its
 # `resolve`. Order is irrelevant -- the decorator only writes one dict entry.
-from . import combat as _combat   # noqa: F401,E402
-from . import sigma as _sigma     # noqa: F401,E402
+from . import combat as _combat            # noqa: F401,E402
+from . import sigma as _sigma              # noqa: F401,E402
+from . import mass_battle as _mass_battle  # noqa: F401,E402
